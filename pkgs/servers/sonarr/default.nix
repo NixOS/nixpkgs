@@ -1,17 +1,15 @@
 { stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, ... }:
 
 stdenv.mkDerivation rec {
-  name = "sonarr-${version}";
-  version = "2.0.0.5301";
+  pname = "sonarr";
+  version = "2.0.0.5338";
 
   src = fetchurl {
     url = "https://download.sonarr.tv/v2/master/mono/NzbDrone.master.${version}.mono.tar.gz";
-    sha256 = "16jjxs0gj5jdy0r4ynhck36b2balphqj24n2gfabrlgxsc6g20jv";
+    sha256 = "05l7l4d1765m01c14iz8lcr61dnm4xd5p09sns4w8wmanks9jg3x";
   };
 
-  buildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out/bin

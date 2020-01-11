@@ -1,5 +1,5 @@
 { cairo, cmake, fetchFromGitHub, libXdmcp, libpthreadstubs, libxcb, pcre, pkgconfig
-, python2, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
+, python3, stdenv, xcbproto, xcbutil, xcbutilcursor, xcbutilimage
 , xcbutilrenderutil, xcbutilwm, xcbutilxrm, makeWrapper
 
 # optional packages-- override the variables ending in 'Support' to enable or
@@ -25,17 +25,19 @@ assert i3Support     -> ! i3GapsSupport && jsoncpp != null && i3      != null;
 assert i3GapsSupport -> ! i3Support     && jsoncpp != null && i3-gaps != null;
 
 stdenv.mkDerivation rec {
-    name = "polybar-${version}";
-    version = "3.3.0";
+    pname = "polybar";
+    version = "3.4.2";
+
     src = fetchFromGitHub {
-      owner = "jaagr";
-      repo = "polybar";
+      owner = pname;
+      repo = pname;
       rev = version;
-      sha256 = "18hrsbq62na2i4rlwbs2ih7v9shnayg76nw14i6az28wpf8kx4rr";
+      sha256 = "1ss4wzy68dpqr5a4m090nn36v8wsp4a7pj6whcxxdrrimgww5r88";
       fetchSubmodules = true;
     };
 
     meta = with stdenv.lib; {
+      homepage = "https://polybar.github.io/";
       description = "A fast and easy-to-use tool for creating status bars";
       longDescription = ''
         Polybar aims to help users build beautiful and highly customizable
@@ -43,12 +45,12 @@ stdenv.mkDerivation rec {
         having a black belt in shell scripting.
       '';
       license = licenses.mit;
-      maintainers = [ maintainers.afldcr ];
-      platforms = platforms.unix;
+      maintainers = with maintainers; [ afldcr filalex77 ];
+      platforms = platforms.linux;
     };
 
     buildInputs = [
-      cairo libXdmcp libpthreadstubs libxcb pcre python2 xcbproto xcbutil
+      cairo libXdmcp libpthreadstubs libxcb pcre python3 xcbproto xcbutil
       xcbutilcursor xcbutilimage xcbutilrenderutil xcbutilwm xcbutilxrm
 
       (if alsaSupport   then alsaLib       else null)
@@ -67,8 +69,8 @@ stdenv.mkDerivation rec {
     ];
 
     postConfigure = ''
-      substituteInPlace ../include/settings.hpp --replace \
-        "${stdenv.cc}" "${stdenv.cc.name}"
+      substituteInPlace generated-sources/settings.hpp \
+        --replace "${stdenv.cc}" "${stdenv.cc.name}"
     '';
 
     postInstall = if (i3Support || i3GapsSupport) then ''

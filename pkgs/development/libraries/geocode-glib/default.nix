@@ -1,18 +1,18 @@
-{ fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib }:
+{ fetchurl, stdenv, meson, ninja, pkgconfig, gettext, gtk-doc, docbook_xsl, gobject-introspection, gnome3, libsoup, json-glib, glib }:
 
 stdenv.mkDerivation rec {
   pname = "geocode-glib";
-  version = "3.26.0";
+  version = "3.26.1";
 
   outputs = [ "out" "dev" "devdoc" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/geocode-glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1vmydxs5xizcmaxpkfrq75xpj6pqrpdjizxyb30m00h54yqqch7a";
+    sha256 = "076ydfpyc4n5c9dbqmf26i4pilfi5jpw6cjcgrbgrjbndavnmajv";
   };
 
-  nativeBuildInputs = with gnome3; [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobject-introspection ];
-  buildInputs = with gnome3; [ glib libsoup json-glib ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gtk-doc docbook_xsl gobject-introspection ];
+  buildInputs = [ glib libsoup json-glib ];
 
   patches = [
     ./installed-tests-path.patch

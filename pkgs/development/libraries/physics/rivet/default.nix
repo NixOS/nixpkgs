@@ -1,30 +1,38 @@
-{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "rivet-${version}";
-  version = "2.7.0";
+  pname = "rivet";
+  version = "2.7.2";
 
   src = fetchurl {
     url = "https://www.hepforge.org/archive/rivet/Rivet-${version}.tar.bz2";
-    sha256 = "12mlj2j1glidjhiaxlr25qz2vfb865wip1vwwg8vlyd3yzisf533";
+    sha256 = "1bxcb99a3l5d2gl93zgfzgw6v95kx1ss5045mkz3ciyw8w5nmb9l";
   };
 
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
+    (fetchpatch {
+      url = "https://phab-files.hepforge.org/file/data/j3ja4jirrdyrovrmnbuh/PHID-FILE-6vnor4aoz3s2ejruisrg/file";
+      sha256 = "0flxv08wcd0m5di75s2zvm015k2k70nqgpcgcbq7m604z26pd6ab";
+    })
   ];
 
   latex = texlive.combine { inherit (texlive)
     scheme-basic
     collection-pstricks
     collection-fontsrecommended
+    l3kernel
+    l3packages
     mathastext
     pgf
     relsize
     sfmath
+    siunitx
     xcolor
     xkeyval
+    xstring
     ;};
-  buildInputs = [ hepmc imagemagick python2 latex makeWrapper ];
+  buildInputs = [ hepmc2 imagemagick python2 latex makeWrapper ];
   propagatedBuildInputs = [ fastjet ghostscript gsl yoda ];
 
   preConfigure = ''
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-fastjet=${fastjet}"
-    "--with-hepmc=${hepmc}"
+    "--with-hepmc=${hepmc2}"
     "--with-yoda=${yoda}"
   ];
 

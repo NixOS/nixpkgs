@@ -1,21 +1,22 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib
-, responses, mock, pytestcov, pytest, pytestcache, pytestpep8, coverage, six }:
+{ stdenv, buildPythonPackage, fetchFromGitHub
+, requests, requests_oauthlib, six
+, pytest, pytestpep8, pytestcache, pytestcov, responses, mock
+}:
 
 buildPythonPackage rec {
-  version = "0.9.3";
+  version = "0.10.0";
   pname = "mwclient";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "mwclient";
     repo = "mwclient";
     rev = "v${version}";
-    sha256 = "1kbrmq8zli2j93vmc2887bs7mqr4q1n908nbi1jjcci5v4cd4cqw";
+    sha256 = "1c3q6lwmb05yqywc4ya98ca7hsl15niili8rccl4n1yqp77c103v";
   };
 
-  buildInputs = [ mock responses pytestcov pytest pytestcache pytestpep8 coverage ];
+  checkInputs = [ pytest pytestpep8 pytestcache pytestcov responses mock ];
 
-  propagatedBuildInputs = [ six requests requests_oauthlib ];
+  propagatedBuildInputs = [ requests requests_oauthlib six ];
 
   checkPhase = ''
     py.test

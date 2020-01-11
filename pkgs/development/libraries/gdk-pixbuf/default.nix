@@ -1,31 +1,21 @@
-{ stdenv, fetchurl, fetchpatch, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
+{ stdenv, fetchurl, nixosTests, fixDarwinDylibNames, meson, ninja, pkgconfig, gettext, python3, libxml2, libxslt, docbook_xsl
 , docbook_xml_dtd_43, gtk-doc, glib, libtiff, libjpeg, libpng, libX11, gnome3
-, jasper, gobject-introspection, doCheck ? false, makeWrapper }:
+, gobject-introspection, doCheck ? false, makeWrapper }:
 
 let
   pname = "gdk-pixbuf";
-  version = "2.38.0";
+  version = "2.40.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0ixfmnxjylx06mjaw116apymwi1a8rnkmkbbvqaxxg2pfwy9fl6x";
+    sha256 = "1rnlx9yfw970maxi2x6niaxmih5la11q1ilr7gzshz2kk585k0hm";
   };
 
   patches = [
-    # TODO: since 2.36.8 gdk-pixbuf gets configured to use mime-type sniffing,
-    # which requires access to shared-mime-info files during runtime.
-    # For now, we are patching the build script to avoid the dependency.
-    ./no-mime-sniffing.patch
-
     # Move installed tests to a separate output
     ./installed-tests-path.patch
-
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gdk-pixbuf/commit/a7d582f75a71320554b881e063a65f4ced679c1c.patch;
-      sha256 = "0z0w52bh4hcrdllbgrqvh12iqzr7k1pb0wdr9vz2qslg1kjk4j92";
-    })
   ];
 
   outputs = [ "out" "dev" "man" "devdoc" "installedTests" ];
@@ -41,13 +31,13 @@ in stdenv.mkDerivation rec {
   ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  propagatedBuildInputs = [ glib libtiff libjpeg libpng jasper ];
+  propagatedBuildInputs = [ glib libtiff libjpeg libpng ];
 
   mesonFlags = [
     "-Ddocs=true"
-    "-Djasper=true"
     "-Dx11=true"
     "-Dgir=${if gobject-introspection != null then "true" else "false"}"
+    "-Dgio_sniffing=false"
   ];
 
   postPatch = ''
@@ -92,7 +82,10 @@ in stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = pname;
-      attrPath = "gdk_pixbuf";
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.gdk-pixbuf;
     };
 
     # gdk_pixbuf_moduledir variable from gdk-pixbuf-2.0.pc

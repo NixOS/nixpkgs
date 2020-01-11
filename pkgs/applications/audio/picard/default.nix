@@ -1,19 +1,19 @@
-{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint }:
+{ stdenv, python3Packages, fetchFromGitHub, gettext, chromaprint, qt5 }:
 
 let
   pythonPackages = python3Packages;
 in pythonPackages.buildPythonApplication rec {
   pname = "picard";
-  version = "2.1.2";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = pname;
     rev = "release-${version}";
-    sha256 = "1p2bvfzby0nk1vh04yfmsvjcldgkj6m6s1hcv9v13hc8q1cbdfk5";
+    sha256 = "0lb4pzl03mr5hrzrzva99rxqd5yfip62b7sjmlg4j0imw8mxaj16";
   };
 
-  buildInputs = [ gettext ];
+  nativeBuildInputs = [ gettext qt5.wrapQtAppsHook qt5.qtbase ];
 
   propagatedBuildInputs = with pythonPackages; [
     pyqt5
@@ -22,13 +22,14 @@ in pythonPackages.buildPythonApplication rec {
     discid
   ];
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-  '';
-
   prePatch = ''
     # Pesky unicode punctuation.
     substituteInPlace setup.cfg --replace "‘" "'"
+  '';
+
+  installPhase = ''
+    python setup.py install --prefix="$out"
+    wrapQtApp $out/bin/picard
   '';
 
   meta = with stdenv.lib; {

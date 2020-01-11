@@ -1,10 +1,12 @@
-{ buildPythonPackage, fetchPypi, lib, pythonOlder }:
+{ buildPythonPackage, fetchFromGitHub, lib, pythonOlder }:
 buildPythonPackage rec {
   pname = "typed-ast";
-  version = "1.1.2";
-  src = fetchPypi{
-    inherit pname version;
-    sha256 = "4304399ff89452871348f6fb7a7112454cd508fbe3eb49b5ed711cce9b99fe9e";
+  version = "1.4.0";
+  src = fetchFromGitHub{
+    owner = "python";
+    repo = "typed_ast";
+    rev = version;
+    sha256 = "0l0hz809f7i356kmqkvfsaswiidb98j9hs9rrjnfawzqcbffzgyb";
   };
   # Only works with Python 3.3 and newer;
   disabled = pythonOlder "3.3";

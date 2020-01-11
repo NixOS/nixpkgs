@@ -6,7 +6,7 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
 @@ -23,6 +23,9 @@
   * questions.
   */
- 
+
 +/* Use Infinality patches as default */
 +#define INFINALITY
 +
@@ -21,13 +21,13 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
 +#include FT_LCD_FILTER_H
 +#include <fontconfig/fontconfig.h>
 +#endif
- 
+
  #include "fontscaler.h"
- 
+
 @@ -676,6 +683,147 @@ static void CopyFTSubpixelVToSubpixel(co
      }
  }
- 
+
 +#ifdef INFINALITY
 +typedef struct {
 +    FT_Render_Mode ftRenderMode;
@@ -169,7 +169,7 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
 +    rp->ftLcdFilter = ftLcdFilter;
 +}
 +#endif
- 
+
  /*
   * Class:     sun_font_FreetypeFontScaler
 @@ -691,7 +839,9 @@ Java_sun_font_FreetypeFontScaler_getGlyp
@@ -180,28 +180,27 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
      int renderFlags = FT_LOAD_RENDER, target;
 +#endif
      FT_GlyphSlot ftglyph;
- 
+
      FTScalerContext* context =
-@@ -709,6 +859,11 @@ Java_sun_font_FreetypeFontScaler_getGlyp
+@@ -709,5 +859,10 @@ Java_sun_font_FreetypeFontScaler_getGlyp
          return ptr_to_jlong(getNullGlyphImage());
      }
- 
+
 +#ifdef INFINALITY
 +    RenderingProperties renderingProperties;
 +    readFontconfig((const FcChar8 *) scalerInfo->face->family_name,
 +                   context->ptsz, context->aaType, &renderingProperties);
 +#else
-     /* if algorithmic styling is required then we do not request bitmap */
-     if (context->doBold || context->doItalize) {
-         renderFlags =  FT_LOAD_DEFAULT;
+     if (!context->useSbits) {
+          renderFlags |= FT_LOAD_NO_BITMAP;
 @@ -731,10 +886,17 @@ Java_sun_font_FreetypeFontScaler_getGlyp
          target = FT_LOAD_TARGET_LCD_V;
      }
      renderFlags |= target;
 +#endif
- 
+
      glyph_index = FT_Get_Char_Index(scalerInfo->face, glyphCode);
- 
+
 +#ifdef INFINALITY
 +    FT_Library_SetLcdFilter(scalerInfo->library, renderingProperties.ftLcdFilter);
 +    error = FT_Load_Glyph(scalerInfo->face, glyphCode, renderingProperties.ftLoadFlags);
@@ -213,7 +212,7 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
          //do not destroy scaler yet.
          //this can be problem of particular context (e.g. with bad transform)
 @@ -753,9 +915,13 @@ Java_sun_font_FreetypeFontScaler_getGlyp
- 
+
      /* generate bitmap if it is not done yet
       e.g. if algorithmic styling is performed and style was added to outline */
 +#ifdef INFINALITY
@@ -223,7 +222,7 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
          FT_Render_Glyph(ftglyph, FT_LOAD_TARGET_MODE(target));
      }
 +#endif
- 
+
      width  = (UInt16) ftglyph->bitmap.width;
      height = (UInt16) ftglyph->bitmap.rows;
 @@ -969,7 +1135,9 @@ Java_sun_font_FreetypeFontScaler_getGlyp
@@ -239,7 +238,7 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
 @@ -984,11 +1152,22 @@ static FT_Outline* getFTOutline(JNIEnv*
          return NULL;
      }
- 
+
 +#ifdef INFINALITY
 +    RenderingProperties renderingProperties;
 +    readFontconfig((const FcChar8 *) scalerInfo->face->family_name,
@@ -247,9 +246,9 @@ diff -ur a/jdk/src/share/native/sun/font/freetypeScaler.c b/jdk/src/share/native
 +#else
      renderFlags = FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP;
 +#endif
- 
+
      glyph_index = FT_Get_Char_Index(scalerInfo->face, glyphCode);
- 
+
 +#ifdef INFINALITY
 +    error = FT_Load_Glyph(scalerInfo->face, glyphCode, renderingProperties.ftLoadFlags);
 +#else

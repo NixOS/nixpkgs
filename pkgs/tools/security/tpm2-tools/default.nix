@@ -1,32 +1,36 @@
-{ stdenv, fetchurl, fetchpatch, lib
-, cmocka, curl, pandoc, pkgconfig, openssl, tpm2-tss }:
+{ stdenv, fetchurl, lib
+, pandoc, pkgconfig, makeWrapper, curl, openssl, tpm2-tss
+, abrmdSupport ? true, tpm2-abrmd ? null }:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tools";
-  version = "3.1.3";
+  version = "4.1";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "05is1adwcg7y2p121yldd8m1gigdnzf9izbjazvsr6yg95pmg5fc";
+    sha256 = "1wnw4i2m6dkafqjjma8mxw9419py2v1knhn3zf1gaizdabskgkh7";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "tests-tss-2.2.0-compat.patch";
-      url = "https://patch-diff.githubusercontent.com/raw/tpm2-software/tpm2-tools/pull/1322.patch";
-      sha256 = "0yy5qbgbd13d7cl8pzsji95a6qnwiik5s2cyqj35jd8blymikqxh";
-    })
-  ];
-
-  nativeBuildInputs = [ pandoc pkgconfig ];
+  nativeBuildInputs = [ pandoc pkgconfig makeWrapper ];
   buildInputs = [
     curl openssl tpm2-tss
-    # For unit tests.
-    cmocka
   ];
 
-  configureFlags = [ "--enable-unit" ];
-  doCheck = true;
+  preFixup = let
+    ldLibraryPath = lib.makeLibraryPath ([
+      tpm2-tss
+    ] ++ (lib.optional abrmdSupport tpm2-abrmd));
+  in ''
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --suffix LD_LIBRARY_PATH : "${ldLibraryPath}"
+    done
+  '';
+
+
+  # Unit tests disabled, as they rely on a dbus session
+  #configureFlags = [ "--enable-unit" ];
+  doCheck = false;
 
   meta = with lib; {
     description = "Command line tools that provide access to a TPM 2.0 compatible device";

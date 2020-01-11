@@ -29,23 +29,23 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
-    "i686-linux" = {
+    i686-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb8-linux.tar.xz";
       sha256 = "08w2ik55dp3n95qikmrflc91lsiq01xp53ki3jlhnbj8fqnxfrwy";
     };
-    "x86_64-linux" = {
+    x86_64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
       sha256 = "0ahv26304pqi3dm7i78si4pxwvg5f5dc2jwsfgvcrhcx5g30bqj8";
     };
-    "armv7l-linux" = {
+    armv7l-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-armv7-deb8-linux.tar.xz";
       sha256 = "1jmv8qmnh5bn324fivbwdcaj55kvw7cb2zq9pafmlmv3qwwx7s46";
     };
-    "aarch64-linux" = {
+    aarch64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-deb8-linux.tar.xz";
       sha256 = "1k2amylcp1ad67c75h1pqf7czf9m0zj1i7hdc45ghjklnfq9hrk7";
     };
-    "x86_64-darwin" = {
+    x86_64-darwin = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "09swx71gh5habzbx55shz2xykgr96xkcy09nzinnm4z0yxicy3zr";
     };
@@ -107,6 +107,15 @@ stdenv.mkDerivation rec {
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
+    '' +
+    # We're kludging a glibc bindist into working with non-glibc...
+    # Here we patch up the use of `__strdup` (part of glibc binary ABI)
+    # to instead use `strdup` since musl doesn't provide __strdup
+    # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
+    # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
+    # Use objcopy magic to make the change:
+    stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
   configurePlatforms = [ ];
@@ -114,6 +123,7 @@ stdenv.mkDerivation rec {
   let
     gcc-clang-wrapper = substituteAll {
       inherit (stdenv) shell;
+      isExecutable = true;
       src = ./gcc-clang-wrapper.sh;
     };
   in

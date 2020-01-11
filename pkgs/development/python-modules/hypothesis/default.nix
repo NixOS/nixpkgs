@@ -1,15 +1,15 @@
 { lib, buildPythonPackage, fetchFromGitHub
-, isPy3k, attrs, coverage, enum34
+, isPy3k, attrs, coverage, enum34, pexpect
 , doCheck ? true, pytest, pytest_xdist, flaky, mock
 }:
 buildPythonPackage rec {
-  # http://hypothesis.readthedocs.org/en/latest/packaging.html
+  # https://hypothesis.readthedocs.org/en/latest/packaging.html
 
   # Hypothesis has optional dependencies on the following libraries
   # pytz fake_factory django numpy pytest
   # If you need these, you can just add them to your environment.
 
-  version = "3.79.3";
+  version = "4.56.1";
   pname = "hypothesis";
 
   # Use github tarballs that includes tests
@@ -17,14 +17,14 @@ buildPythonPackage rec {
     owner = "HypothesisWorks";
     repo = "hypothesis-python";
     rev = "hypothesis-python-${version}";
-    sha256 = "1ay0kwh5315scv7yz9xxrr7shynyx6flgplc1qzbz3j21cyx3yn7";
+    sha256 = "09bpwp4kdywkmzci969m57w0yy8c31kzwg60vg4mvrmmgyi2cfzv";
   };
 
   postUnpack = "sourceRoot=$sourceRoot/hypothesis-python";
 
-  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) [ enum34 ];
+  propagatedBuildInputs = [ attrs coverage ] ++ lib.optional (!isPy3k) enum34;
 
-  checkInputs = [ pytest pytest_xdist flaky mock ];
+  checkInputs = [ pytest pytest_xdist flaky mock pexpect ];
   inherit doCheck;
 
   checkPhase = ''

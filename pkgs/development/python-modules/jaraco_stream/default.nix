@@ -2,10 +2,10 @@
 
 buildPythonPackage rec {
   pname = "jaraco.stream";
-  version = "1.2";
+  version = "3.0.0";
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06qsjyab56vi0ikr819ghb7f8ymf09n92vla7gcn8j12113m2mib";
+    sha256 = "287e1cba9f278e0146fdded6bc40518930813a5584579769aeaa1d0bfd178a73";
   };
   doCheck = false;
   buildInputs = [ setuptools_scm ];

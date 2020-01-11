@@ -3,12 +3,12 @@
 , docbook_xsl, docbook_xml_dtd_43, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-keyring-${version}";
-  version = "3.28.2";
+  pname = "gnome-keyring";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0sk4las4ji8wv9nx8mldzqccmpmkvvr9pdwv9imj26r10xyin5w1";
+    url = "mirror://gnome/sources/gnome-keyring/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0hqrsh5g9q9lm190f0m85q4nki8k4ng7wphl6qbccdry59aakkg9";
   };
 
   outputs = [ "out" "dev" ];
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   ];
 
   configureFlags = [
-    "--with-pkcs11-config=${placeholder ''out''}/etc/pkcs11/" # installation directories
-    "--with-pkcs11-modules=${placeholder ''out''}/lib/pkcs11/"
+    "--with-pkcs11-config=${placeholder "out"}/etc/pkcs11/" # installation directories
+    "--with-pkcs11-modules=${placeholder "out"}/lib/pkcs11/"
   ];
 
   postPatch = ''
@@ -44,6 +44,16 @@ stdenv.mkDerivation rec {
     dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
       make check
+  '';
+
+  # Use wrapped gnome-keyring-daemon with cap_ipc_lock=ep
+  postFixup = ''
+    files=($out/etc/xdg/autostart/* $out/share/dbus-1/services/*)
+
+    for file in ''${files[*]}; do
+      substituteInPlace $file \
+        --replace "$out/bin/gnome-keyring-daemon" "/run/wrappers/bin/gnome-keyring-daemon"
+    done
   '';
 
   passthru = {

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "openjump-1.3.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     s=$out/bin/OpenJump
     dir=$(echo $out/openjump-*)
     cat >> $s << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $dir/bin
     exec ${stdenv.shell} openjump.sh
     EOF

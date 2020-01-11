@@ -11,6 +11,13 @@ let
 
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "iodined" "enable" ] [ "services" "iodine" "server" "enable" ])
+    (mkRenamedOptionModule [ "services" "iodined" "domain" ] [ "services" "iodine" "server" "domain" ])
+    (mkRenamedOptionModule [ "services" "iodined" "ip" ] [ "services" "iodine" "server" "ip" ])
+    (mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
+    (mkRemovedOptionModule [ "services" "iodined" "client" ] "")
+  ];
 
   ### configuration
 
@@ -63,7 +70,7 @@ in
             passwordFile = mkOption {
               type = types.str;
               default = "";
-              description = "File that containts password";
+              description = "File that contains password";
             };
           };
         }));
@@ -100,7 +107,7 @@ in
         passwordFile = mkOption {
           type = types.str;
           default = "";
-          description = "File that containts password";
+          description = "File that contains password";
         };
       };
 
@@ -120,7 +127,7 @@ in
         description = "iodine client - ${name}";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "-P $(cat \"${cfg.passwordFile}\")"} ${cfg.relay} ${cfg.server}";
+        script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "< \"${cfg.passwordFile}\""} ${cfg.relay} ${cfg.server}";
         serviceConfig = {
           RestartSec = "30s";
           Restart = "always";
@@ -136,12 +143,11 @@ in
         description = "iodine, ip over dns server daemon";
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        script = "${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "-P $(cat \"${cfg.server.passwordFile}\")"} ${cfg.server.ip} ${cfg.server.domain}";
+        script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "< \"${cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
       };
     };
 
-    users.users = singleton {
-      name = iodinedUser;
+    users.users.${iodinedUser} = {
       uid = config.ids.uids.iodined;
       description = "Iodine daemon user";
     };

@@ -360,7 +360,7 @@ index 30e6706..f72cf08 100755
 -        print >>sys.stderr, "       http://github.com/dagwieers/unoconv/issues"
 +        print("unoconv: Cannot find a suitable office installation on your system.", file=sys.stderr)
 +        print("ERROR: Please locate your office installation and send your feedback to:", file=sys.stderr)
-+        print("       http://github.com/dagwieers/unoconv/issues", file=sys.stderr)
++        print("       https://github.com/dagwieers/unoconv/issues", file=sys.stderr)
          sys.exit(1)
  
      ### Now that we have found a working pyuno library, let's import some classes

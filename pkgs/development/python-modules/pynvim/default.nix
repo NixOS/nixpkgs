@@ -7,22 +7,21 @@
 , trollius
 , pythonOlder
 , isPyPy
+, pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.3.2";
+  version = "0.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01dybk4vs452pljn1q3il5z2sd313ki0lgiglc0xmjc6wp290r6g";
+    sha256 = "1mp9ajsgrb9k2f3s8g7vdflj5mg02ii0d0wk4n6dmvjx52rqpzbi";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  nativeBuildInputs = [
+    pytestrunner
+  ];
 
   # Tests require pkgs.neovim,
   # which we cannot add because of circular dependency.
@@ -36,6 +35,6 @@ buildPythonPackage rec {
     description = "Python client for Neovim";
     homepage = "https://github.com/neovim/python-client";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ garbas ];
+    maintainers = with lib.maintainers; [ ];
   };
 }

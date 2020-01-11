@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, kernel, bc }:
+{ stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
 
 stdenv.mkDerivation rec {
   name = "rtl8812au-${kernel.version}-${version}";
-  version = "5.2.20.2_28373.20180619";
+  version = "5.2.20.2_28373.20190903";
 
   src = fetchFromGitHub {
     owner = "zebulon2";
     repo = "rtl8812au-driver-5.2.20";
-    rev = "2dad788f5d71d50df4f692b67a4428967ba3d42c";
-    sha256 = "17pn73j2xqya0g8f86hn1jyf9x9wp52md05yrg1md58ixsbh1kz3";
+    rev = "30d47a0a3f43ccb19e8fd59fe93d74a955147bf2";
+    sha256 = "1fy0f8ihxd0i5kr8gmky8v8xl0ns6bhxfdn64c97c5irzdvg37sr";
   };
 
-  nativeBuildInputs = [ bc ];
+  nativeBuildInputs = [ bc nukeReferences ];
   buildInputs = kernel.moduleBuildDependencies;
 
   hardeningDisable = [ "pic" "format" ];
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
+  '';
+
+  postInstall = ''
+    nuke-refs $out/lib/modules/*/kernel/net/wireless/*.ko
   '';
 
   meta = with stdenv.lib; {

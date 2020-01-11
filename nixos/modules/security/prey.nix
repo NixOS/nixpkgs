@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.prey;
-  myPrey = pkgs."prey-bash-client".override {
+  myPrey = pkgs.prey-bash-client.override {
     apiKey = cfg.apiKey;
     deviceKey = cfg.deviceKey;
   };

@@ -1,14 +1,14 @@
 { stdenv, meson, ninja, vala, gettext, itstool, fetchurl, pkgconfig, libxml2
-, gtk3, glib, gtksourceview3, wrapGAppsHook, gobject-introspection, python3
-, gnome3, mpfr, gmp, libsoup, libmpc }:
+, gtk3, glib, gtksourceview4, wrapGAppsHook, gobject-introspection, python3
+, gnome3, mpfr, gmp, libsoup, libmpc, gsettings-desktop-schemas, libgee }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-calculator-${version}";
-  version = "3.30.1";
+  pname = "gnome-calculator";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qkzcmj51cjmljxl1nc84h6jgq1a51xj4g6jwh3ymgm19m3sqypc";
+    url = "mirror://gnome/sources/gnome-calculator/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0lbh87255zzggqzai6543qg920y52bl4vs5m5h5087ghzg14hlsd";
   };
 
   nativeBuildInputs = [
@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gtk3 glib libxml2 gtksourceview3 mpfr gmp
-    gnome3.defaultIconTheme
-    gnome3.gsettings-desktop-schemas libsoup libmpc
+    gtk3 glib libxml2 gtksourceview4 mpfr gmp
+    gnome3.adwaita-icon-theme libgee
+    gsettings-desktop-schemas libsoup libmpc
   ];
 
   doCheck = true;

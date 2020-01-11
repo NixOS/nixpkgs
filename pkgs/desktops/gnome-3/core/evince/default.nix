@@ -1,54 +1,119 @@
-{ fetchurl, stdenv, pkgconfig, intltool, libxml2
-, glib, gtk3, pango, atk, gdk_pixbuf, shared-mime-info, itstool, gnome3
-, poppler, ghostscriptX, djvulibre, libspectre, libarchive, libsecret, wrapGAppsHook
-, librsvg, gobject-introspection, yelp-tools, gspell
-, recentListSize ? null # 5 is not enough, allow passing a different number
-, supportXPS ? false    # Open XML Paper Specification via libgxps
-, autoreconfHook, pruneLibtoolFiles
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, libxml2
+, appstream
+, glib
+, gtk3
+, pango
+, atk
+, gdk-pixbuf
+, shared-mime-info
+, itstool
+, gnome3
+, poppler
+, ghostscriptX
+, djvulibre
+, libspectre
+, libarchive
+, libsecret
+, wrapGAppsHook
+, librsvg
+, gobject-introspection
+, yelp-tools
+, gspell
+, adwaita-icon-theme
+, gsettings-desktop-schemas
+, gnome-desktop
+, dbus
+, python3
+, texlive
+, t1lib
+, gst_all_1
+, gtk-doc
+, docbook-xsl-nons
+, docbook_xml_dtd_43
+, supportMultimedia ? true # PDF multimedia
+, libgxps
+, supportXPS ? true # Open XML Paper Specification via libgxps
 }:
 
 stdenv.mkDerivation rec {
-  name = "evince-${version}";
-  version = "3.30.2";
+  pname = "evince";
+  version = "3.34.2";
+
+  outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0k7jln6dpg4bpv61niicjzkzyq6fhb3yfld7pc8ck71c8pmvsnx9";
+    url = "mirror://gnome/sources/evince/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "05q6v9lssd21623mnj2p49clj9v9csw9kay7n4nklki025grbh1w";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "evince"; };
-  };
+  postPatch = ''
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
+  '';
 
   nativeBuildInputs = [
-    pkgconfig gobject-introspection intltool itstool wrapGAppsHook yelp-tools autoreconfHook pruneLibtoolFiles
+    appstream
+    docbook-xsl-nons
+    docbook_xml_dtd_43
+    gettext
+    gobject-introspection
+    gtk-doc
+    itstool
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
+    yelp-tools
   ];
 
   buildInputs = [
-    glib gtk3 pango atk gdk_pixbuf libxml2
-    gnome3.gsettings-desktop-schemas
-    poppler ghostscriptX djvulibre libspectre libarchive
-    libsecret librsvg gnome3.adwaita-icon-theme gspell
-  ] ++ stdenv.lib.optional supportXPS gnome3.libgxps;
+    adwaita-icon-theme
+    atk
+    dbus # only needed to find the service directory
+    djvulibre
+    gdk-pixbuf
+    ghostscriptX
+    glib
+    gnome-desktop
+    gsettings-desktop-schemas
+    gspell
+    gtk3
+    libarchive
+    librsvg
+    libsecret
+    libspectre
+    libxml2
+    pango
+    poppler
+    t1lib
+    texlive.bin.core # kpathsea for DVI support
+  ] ++ stdenv.lib.optional supportXPS libgxps
+    ++ stdenv.lib.optionals supportMultimedia (with gst_all_1; [
+      gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad gst-plugins-ugly gst-libav ]);
 
-  configureFlags = [
-    "--disable-nautilus" # Do not build nautilus plugin
-    "--enable-introspection"
-    (if supportXPS then "--enable-xps" else "--disable-xps")
+  mesonFlags = [
+    "-Dnautilus=false"
+    "-Dps=enabled"
   ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
-
-  preConfigure = stdenv.lib.optionalString (recentListSize != null) ''
-    sed -i 's/\(gtk_recent_chooser_set_limit .*\)5)/\1${builtins.toString recentListSize})/' shell/ev-open-recent-action.c
-    sed -i 's/\(if (++n_items == \)5\(.*\)/\1${builtins.toString recentListSize}\2/' shell/ev-window.c
-  '';
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
   '';
 
-  enableParallelBuilding = true;
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Evince;

@@ -50,16 +50,16 @@ let
     filesystem = callLibs ./filesystem.nix;
 
     # back-compat aliases
-    platforms = systems.forMeta;
+    platforms = systems.doubles;
 
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
       lessThan listToAttrs pathExists readFile replaceStrings seq
       stringLength sub substring tail;
-    inherit (trivial) id const concat or and bitAnd bitOr bitXor bitNot
-      boolToString mergeAttrs flip mapNullable inNixShell min max
-      importJSON warn info nixpkgsVersion version mod compare
+    inherit (trivial) id const pipe concat or and bitAnd bitOr bitXor
+      bitNot boolToString mergeAttrs flip mapNullable inNixShell min max
+      importJSON warn info showWarnings nixpkgsVersion version mod compare
       splitByAndCompare functionArgs setFunctionArgs isFunction;
     inherit (fixedPoints) fix fix' converge extends composeExtensions
       makeExtensible makeExtensibleWithCustomName;
@@ -71,7 +71,7 @@ let
       zipAttrsWithNames zipAttrsWith zipAttrs recursiveUpdateUntil
       recursiveUpdate matchAttrs overrideExisting getOutput getBin
       getLib getDev chooseDevOutputs zipWithNames zip;
-    inherit (lists) singleton foldr fold foldl foldl' imap0 imap1
+    inherit (lists) singleton forEach foldr fold foldl foldl' imap0 imap1
       concatMap flatten remove findSingle findFirst any all count
       optional optionals toList range partition zipListsWith zipLists
       reverseList listDfs toposort sort naturalSort compareLists take
@@ -81,10 +81,11 @@ let
       intersperse concatStringsSep concatMapStringsSep
       concatImapStringsSep makeSearchPath makeSearchPathOutput
       makeLibraryPath makeBinPath optionalString
-      hasPrefix hasSuffix stringToCharacters stringAsChars escape
+      hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
-      removePrefix removeSuffix versionOlder versionAtLeast getVersion
+      removePrefix removeSuffix versionOlder versionAtLeast
+      getName getVersion
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;
@@ -100,8 +101,8 @@ let
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
       canCleanSource;
-    inherit (modules) evalModules closeModules unifyModuleSyntax
-      applyIfFunction unpackSubmodule packSubmodule mergeModules
+    inherit (modules) evalModules unifyModuleSyntax
+      applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
@@ -109,7 +110,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule mkAliasOptionModuleWithPriority doRename filterModules;
+      mkAliasOptionModule doRename;
     inherit (options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'
@@ -134,5 +135,7 @@ let
       mergeAttrsByFuncDefaultsClean mergeAttrBy
       fakeSha256 fakeSha512
       nixType imap;
+    inherit (versions)
+      splitVersion;
   });
 in lib

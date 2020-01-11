@@ -1,24 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, intltool, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk_pixbuf, gst_all_1, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, gettext, gobject-introspection, wrapGAppsHook, gjs, glib, gtk3, gdk-pixbuf, gst_all_1, gnome3
+, meson, ninja, python3, desktop-file-utils }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sound-recorder";
-  version = "3.28.2";
+  version = "3.34.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1k63xr3d16qbzi88md913ndaf2mzwmhmi6hipj0123sm7nsz1p94";
+    sha256 = "1i442qas2dkp5d9j9j1z1jicb4cb7jkgbcl4c36bmhvaq3hddwa9";
   };
 
-  patches = [
-    # Fix crash when trying to play recordings
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gnome-sound-recorder/commit/2b311ef67909bc20d0e87f334fe37bf5c4e9f29f.patch;
-      sha256 = "0hqmk846bxma0p66cqp94zd02zc1if836ywjq3sv5dsfwnz7jv3f";
-    })
+  nativeBuildInputs = [
+    pkgconfig gettext meson ninja gobject-introspection
+    wrapGAppsHook python3 desktop-file-utils
   ];
+  buildInputs = [ gjs glib gtk3 gdk-pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);
 
-  nativeBuildInputs = [ pkgconfig intltool gobject-introspection wrapGAppsHook ];
-  buildInputs = [ gjs glib gtk3 gdk_pixbuf ] ++ (with gst_all_1; [ gstreamer.dev gstreamer gst-plugins-base gst-plugins-good gst-plugins-bad ]);
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   # TODO: fix this in gstreamer
   # TODO: make stdenv.lib.getBin respect outputBin

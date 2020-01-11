@@ -7,11 +7,11 @@ let
     sha256 = "0qw2bgls8qsmp80j8vpd4c7s0c8anlrk0ac8z42w89bajcdbwk2f";
   };
 in stdenv.mkDerivation rec {
-  name = "apache-flex-sdk-${version}";
+  pname = "apache-flex-sdk";
   version = "4.16.1";
 
   src = fetchurl {
-    url = "https://www.apache.org/dist/flex/${version}/binaries/${name}-bin.tar.gz";
+    url = "https://www.apache.org/dist/flex/${version}/binaries/${pname}-${version}-bin.tar.gz";
     sha256 = "13iq16dqvgcpb0p35x66hzxsq5pkbr2lbwr766nnqiryinnagz8p";
   };
 

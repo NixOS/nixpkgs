@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = http://dendropy.org/;
+    homepage = https://dendropy.org/;
     description = "A Python library for phylogenetic computing";
     maintainers = with lib.maintainers; [ unode ];
     license = lib.licenses.bsd3;

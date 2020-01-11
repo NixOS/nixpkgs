@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, alsaLib, ffmpeg, libjack2, libX11, libXext, qtx11extras
-, libXfixes, libGLU_combined, pkgconfig, libpulseaudio, qtbase, cmake, ninja
+{ stdenv, mkDerivation, fetchurl, alsaLib, ffmpeg, libjack2, libX11, libXext, qtx11extras
+, libXfixes, libGLU, libGL, pkgconfig, libpulseaudio, qtbase, cmake, ninja
 }:
 
-stdenv.mkDerivation rec {
-  name = "simplescreenrecorder-${version}";
+mkDerivation rec {
+  pname = "simplescreenrecorder";
   version = "0.3.11";
 
   src = fetchurl {
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake ninja ];
   buildInputs = [
-    alsaLib ffmpeg libjack2 libX11 libXext libXfixes libGLU_combined
+    alsaLib ffmpeg libjack2 libX11 libXext libXfixes libGLU libGL
     libpulseaudio qtbase qtx11extras
   ];
 

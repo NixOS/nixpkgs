@@ -1,10 +1,10 @@
 { stdenv, fetchurl, ucl, zlib, perl }:
 
 stdenv.mkDerivation rec {
-  name = "upx-${version}";
+  pname = "upx";
   version = "3.95";
   src = fetchurl {
-    url = "https://github.com/upx/upx/releases/download/v${version}/${name}-src.tar.xz";
+    url = "https://github.com/upx/upx/releases/download/v${version}/${pname}-${version}-src.tar.xz";
     sha256 = "14jmgy7hvx4zqra20w8260wrcxmjf2h6ba2yrw7pcp18im35a3rv";
   };
 

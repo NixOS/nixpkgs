@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook
+{ stdenv, fetchgit, fetchpatch, autoreconfHook
 , pkgconfig, libtool, boost, SDL
 , glib, pango, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
@@ -6,7 +6,9 @@
 # renderers
 , enableAGG    ? true,  agg   ? null
 , enableCairo  ? false, cairo ? null
-, enableOpenGL ? false, libGLU_combined  ? null
+, enableOpenGL ? false
+, libGLU ? null
+, libGL  ? null
 
 # GUI toolkits
 , enableGTK ? true,  gtk2 ? null, gnome2 ? null
@@ -14,10 +16,10 @@
 , enableQt  ? false, qt4  ? null
 
 # media
-, enableFFmpeg    ? true,  ffmpeg_2 ? null
+, enableFFmpeg   ? true, ffmpeg_2 ? null
 
 # misc
-, enableJemalloc ? true, jemalloc  ? null
+, enableJemalloc ? true, jemalloc ? null
 , enableHwAccel  ? true
 , enablePlugins  ? false, xulrunner ? null, npapi_sdk ? null
 }:
@@ -45,7 +47,7 @@ in
 # renderers
 assert enableAGG    -> available agg;
 assert enableCairo  -> available cairo;
-assert enableOpenGL -> available libGLU_combined;
+assert enableOpenGL -> all available [ libGLU libGL ];
 
 # GUI toolkits
 assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome2.GConf ];
@@ -57,21 +59,21 @@ assert enableFFmpeg    -> available ffmpeg_2 ;
 
 # misc
 assert enableJemalloc -> available jemalloc;
-assert enableHwAccel  -> available libGLU_combined;
+assert enableHwAccel  -> all available [ libGLU libGL ];
 assert enablePlugins  -> all available [ xulrunner npapi_sdk ];
 
 assert length toolkits  == 0 -> throw "at least one GUI toolkit must be enabled";
 assert length renderers == 0 -> throw "at least one renderer must be enabled";
 
 
-stdenv.mkDerivation rec {
-  name = "gnash-${version}";
-  version = "0.8.11-2017-03-08";
+stdenv.mkDerivation {
+  pname = "gnash";
+  version = "0.8.11-2019-30-01";
 
   src = fetchgit {
     url = "git://git.sv.gnu.org/gnash.git";
-    rev = "8a11e60585db4ed6bc4eafadfbd9b3123ced45d9";
-    sha256 = "1qas084gc4s9cb2jbwi2s1h4hk7m92xmrsb596sd14h0i44dai02";
+    rev = "583ccbc1275c7701dc4843ec12142ff86bb305b4";
+    sha256 = "0fh0bljn0i6ypyh6l99afi855p7ki7lm869nq1qj6k8hrrwhmfry";
   };
 
   postPatch = ''
@@ -85,13 +87,20 @@ stdenv.mkDerivation rec {
     libpng libjpeg giflib pango atk
   ] ++ optional  enableAGG       agg
     ++ optional  enableCairo     cairo
-    ++ optional  enableOpenGL    libGLU_combined
     ++ optional  enableQt        qt4
     ++ optional  enableFFmpeg    ffmpeg_2
     ++ optional  enableJemalloc  jemalloc
-    ++ optional  enableHwAccel   libGLU_combined
+    ++ optional  enableHwAccel   [ libGL libGLU ]
+    ++ optionals enableOpenGL    [ libGL libGLU ]
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
     ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];
+
+  patches = [
+    (fetchpatch { # fix compilation due to bad detection of libgif version: https://savannah.gnu.org/patch/index.php?9873
+      url = "https://savannah.gnu.org/patch/download.php?file_id=47859";
+      sha256 = "0aimayzgi5065gkcfcr8d5lkd9c0471q7dqmln42hjzq847n6d5y";
+    })
+  ];
 
   configureFlags = with stdenv.lib; [
     "--with-boost-incl=${boost.dev}/include"

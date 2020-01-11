@@ -1,11 +1,11 @@
-{ stdenv, skawarePackages }:
+{ skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "utmps";
-  version = "0.0.2.0";
-  sha256 = "0fzq3qm88sm5ibl9k9k6ns6jd7iw72vh9k10bsfl5dxd2yi6iqyr";
+  version = "0.0.3.1";
+  sha256 = "1h4hgjdrai51qkalgcx2ff60drpnw0ich66z90p8wk74am0vgc0h";
 
   description = "A secure utmpx and wtmp implementation";
 

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "pathos";
-  version = "0.2.2.1";
+  version = "0.2.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "69486cfe8c9fbd028395df445e4205ea3001d7ca5608d8d0b67b67ce98bb8892";
+    sha256 = "21ae2cb1d5a76dcf57d5fe93ae8719c7339f467e246163650c08ccf35b87c846";
   };
 
   propagatedBuildInputs = [ dill pox ppft multiprocess ];
@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Parallel graph management and execution in heterogeneous computing";
-    homepage = http://www.cacr.caltech.edu/~mmckerns/pathos.htm;
+    homepage = https://github.com/uqfoundation/pathos/;
     license = licenses.bsd3;
   };
 

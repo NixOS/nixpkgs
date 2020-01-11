@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hardinfo-${version}";
+  pname = "hardinfo";
   version = "0.5.1";
 
   src = fetchurl {
@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     sed -i -e "s/^CFLAGS = \(.*\)/CFLAGS = \1 -std=gnu89/" Makefile.in
 
     substituteInPlace ./arch/linux/common/modules.h --replace /sbin/modinfo modinfo
+    substituteInPlace ./arch/linux/common/os.h --replace /lib/libc.so.6 ${stdenv.glibc.out}/lib/libc.so.6
   '';
 
   # Makefile supports DESTDIR but not PREFIX (it hardcodes $DESTDIR/usr/).
@@ -44,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
   };
 }

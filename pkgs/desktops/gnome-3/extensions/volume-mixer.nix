@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, glib }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-volume-mixer-${version}";
+  pname = "gnome-shell-volume-mixer";
   version = "844ed80ad448855d8f6218847183a80474b523c7";
 
   src = fetchFromGitHub {

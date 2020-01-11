@@ -44,7 +44,7 @@ rec {
   alloc_no_stdlib_1_3_0 = { features?(alloc_no_stdlib_1_3_0_features {}) }: alloc_no_stdlib_1_3_0_ {
     features = mkFeatures (features.alloc_no_stdlib_1_3_0 or {});
   };
-  alloc_no_stdlib_1_3_0_features = f: updateFeatures f (rec {
+  alloc_no_stdlib_1_3_0_features = f: updateFeatures f ({
     alloc_no_stdlib_1_3_0.default = (f.alloc_no_stdlib_1_3_0.default or true);
   }) [];
   brotli_2_5_0 = { features?(brotli_2_5_0_features {}) }: brotli_2_5_0_ {
@@ -52,20 +52,20 @@ rec {
     features = mkFeatures (features.brotli_2_5_0 or {});
   };
   brotli_2_5_0_features = f: updateFeatures f (rec {
-    alloc_no_stdlib_1_3_0."no-stdlib" =
-      (f.alloc_no_stdlib_1_3_0."no-stdlib" or false) ||
-      (brotli_2_5_0."no-stdlib" or false) ||
-      (f.brotli_2_5_0."no-stdlib" or false);
+    alloc_no_stdlib_1_3_0.no-stdlib =
+      (f.alloc_no_stdlib_1_3_0.no-stdlib or false) ||
+      (brotli_2_5_0.no-stdlib or false) ||
+      (f.brotli_2_5_0.no-stdlib or false);
     alloc_no_stdlib_1_3_0.default = true;
     brotli_2_5_0.default = (f.brotli_2_5_0.default or true);
-    brotli_decompressor_1_3_1."disable-timer" =
-      (f.brotli_decompressor_1_3_1."disable-timer" or false) ||
-      (brotli_2_5_0."disable-timer" or false) ||
-      (f.brotli_2_5_0."disable-timer" or false);
-    brotli_decompressor_1_3_1."no-stdlib" =
-      (f.brotli_decompressor_1_3_1."no-stdlib" or false) ||
-      (brotli_2_5_0."no-stdlib" or false) ||
-      (f.brotli_2_5_0."no-stdlib" or false);
+    brotli_decompressor_1_3_1.disable-timer =
+      (f.brotli_decompressor_1_3_1.disable-timer or false) ||
+      (brotli_2_5_0.disable-timer or false) ||
+      (f.brotli_2_5_0.disable-timer or false);
+    brotli_decompressor_1_3_1.no-stdlib =
+      (f.brotli_decompressor_1_3_1.no-stdlib or false) ||
+      (brotli_2_5_0.no-stdlib or false) ||
+      (f.brotli_2_5_0.no-stdlib or false);
     brotli_decompressor_1_3_1.benchmark =
       (f.brotli_decompressor_1_3_1.benchmark or false) ||
       (brotli_2_5_0.benchmark or false) ||
@@ -81,10 +81,10 @@ rec {
     features = mkFeatures (features.brotli_decompressor_1_3_1 or {});
   };
   brotli_decompressor_1_3_1_features = f: updateFeatures f (rec {
-    alloc_no_stdlib_1_3_0."no-stdlib" =
-      (f.alloc_no_stdlib_1_3_0."no-stdlib" or false) ||
-      (brotli_decompressor_1_3_1."no-stdlib" or false) ||
-      (f.brotli_decompressor_1_3_1."no-stdlib" or false);
+    alloc_no_stdlib_1_3_0.no-stdlib =
+      (f.alloc_no_stdlib_1_3_0.no-stdlib or false) ||
+      (brotli_decompressor_1_3_1.no-stdlib or false) ||
+      (f.brotli_decompressor_1_3_1.no-stdlib or false);
     alloc_no_stdlib_1_3_0.default = true;
     alloc_no_stdlib_1_3_0.unsafe =
       (f.alloc_no_stdlib_1_3_0.unsafe or false) ||

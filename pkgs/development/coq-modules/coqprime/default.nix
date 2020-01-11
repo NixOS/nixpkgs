@@ -13,8 +13,9 @@ let params =
     };
     "8.8" = v_8_8;
     "8.9" = v_8_8;
+    "8.10" = v_8_8;
     };
-  param = params."${coq.coq-version}"
+  param = params.${coq.coq-version}
 ; in
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ bignums ];
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
     description = "Library to certify primality using Pocklington certificate and Elliptic Curve Certificate";

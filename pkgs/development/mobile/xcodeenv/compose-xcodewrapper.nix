@@ -1,5 +1,5 @@
 {stdenv}:
-{version ? "10.1", xcodeBaseDir ? "/Applications/Xcode.app"}:
+{version ? "11.1", xcodeBaseDir ? "/Applications/Xcode.app"}:
 
 assert stdenv.isDarwin;
 
@@ -14,6 +14,9 @@ stdenv.mkDerivation {
     ln -s /usr/bin/xcrun
     ln -s /usr/bin/plutil
     ln -s /usr/bin/clang
+    ln -s /usr/bin/lipo
+    ln -s /usr/bin/file
+    ln -s /usr/bin/rev
     ln -s "${xcodeBaseDir}/Contents/Developer/usr/bin/xcodebuild"
     ln -s "${xcodeBaseDir}/Contents/Developer/Applications/Simulator.app/Contents/MacOS/Simulator"
 

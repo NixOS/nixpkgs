@@ -1,24 +1,29 @@
 { stdenv
 , buildPythonPackage
-, fetchurl
+, fetchFromGitHub
 , numpy
 , matplotlib
 , pillow
 , setuptools
+, pyproj
+, pyshp
+, six
 , pkgs
 }:
 
 buildPythonPackage rec {
   pname = "basemap";
-  version = "1.0.7";
+  version = "1.2.1";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/project/matplotlib/matplotlib-toolkits/basemap-1.0.7/basemap-1.0.7.tar.gz";
-    sha256 = "0ca522zirj5sj10vg3fshlmgi615zy5gw2assapcj91vsvhc4zp0";
+  src = fetchFromGitHub {
+    owner = "matplotlib";
+    repo = "basemap";
+    rev = "v${version}rel";
+    sha256 = "13lw1iwa8hadpvqdgb06nh881l8c17awzvvwbfwblvb9q9s0lnzp";
   };
 
-  propagatedBuildInputs = [ numpy matplotlib pillow ];
-  buildInputs = [ setuptools pkgs.geos pkgs.proj ];
+  propagatedBuildInputs = [ numpy matplotlib pillow pyproj pyshp six ];
+  buildInputs = [ setuptools pkgs.geos ];
 
   # Standard configurePhase from `buildPythonPackage` seems to break the setup.py script
   configurePhase = ''

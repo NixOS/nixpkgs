@@ -5,19 +5,18 @@
 , coverage
 , glibcLocales
 , flake8
-, stdenv
 }:
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.28.1";
+  version = "4.40.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5b4d5549984503050883bc126280b386f5f4ca87e6c023c5d015655ad75bdebb";
+    sha256 = "f0ab01cf3ae5673d18f918700c0165e5fad0f26b5ebe4b34f62ead92686b5340";
   };
 
-  buildInputs = [ nose coverage glibcLocales flake8 ];
+  checkInputs = [ nose coverage glibcLocales flake8 ];
 
   postPatch = ''
     # Remove performance testing.
@@ -27,7 +26,9 @@ buildPythonPackage rec {
 
   LC_ALL="en_US.UTF-8";
 
-  doCheck = !stdenv.isDarwin;
+#   doCheck = !stdenv.isDarwin;
+  # Test suite is too big and slow.
+  doCheck = false;
 
   meta = {
     description = "A Fast, Extensible Progress Meter";

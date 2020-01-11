@@ -1,16 +1,16 @@
 { stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc, makeWrapper }:
+, utillinux, asciidoc, asciidoctor, mbuffer, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "btrbk-${version}";
-  version = "0.27.1";
+  pname = "btrbk";
+  version = "0.29.0";
 
   src = fetchurl {
-    url = "https://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "040f6qzv188yd38n11zdiin3gaavrlld36xf1ks4hxhq921bh0jc";
+    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
+    sha256 = "1ki40jga09x361lj36hgzw3ahs0cg2w0s3rjwp209255fzyl89il";
   };
 
-  nativeBuildInputs = [ asciidoc makeWrapper ];
+  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
 
   buildInputs = with perlPackages; [ perl DateCalc ];
 
@@ -38,15 +38,15 @@ stdenv.mkDerivation rec {
   preFixup = ''
     wrapProgram $out/sbin/btrbk \
       --set PERL5LIB $PERL5LIB \
-      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash openssh ]}"
+      --prefix PATH ':' "${stdenv.lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
   '';
 
   meta = with stdenv.lib; {
     description = "A backup tool for btrfs subvolumes";
-    homepage = http://digint.ch/btrbk;
+    homepage = https://digint.ch/btrbk;
     license = licenses.gpl3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ asymmetric the-kenny ];
     inherit version;
   };
 }

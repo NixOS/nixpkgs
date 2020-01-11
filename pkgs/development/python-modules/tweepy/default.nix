@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, fetchpatch, requests, six, requests_oauthlib }:
+{ lib, buildPythonPackage, fetchPypi, requests, six, requests_oauthlib }:
 
 buildPythonPackage rec {
   pname = "tweepy";
-  version = "3.7.0";
+  version = "3.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe85a79f58a01dd335968523b91c5fce760e7fe78bf25a6e71c72204fe499d0b";
+    sha256 = "0sri92mzhkifn16klkk2mhc2vcrvdmfp2wvkpfss518sln5q5gca";
   };
 
   doCheck = false;
@@ -16,6 +16,6 @@ buildPythonPackage rec {
     homepage = https://github.com/tweepy/tweepy;
     description = "Twitter library for python";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

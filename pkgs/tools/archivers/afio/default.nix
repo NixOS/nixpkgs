@@ -1,21 +1,21 @@
 { stdenv, fetchurl } :
 
 stdenv.mkDerivation rec {
-  version = "2.5.1";
-  name = "afio-${version}";
+  version = "2.5.2";
+  pname = "afio";
 
   src = fetchurl {
-    url = "http://members.chello.nl/~k.holtman/${name}.tgz";
-    sha256 = "363457a5d6ee422d9b704ef56d26369ca5ee671d7209cfe799cab6e30bf2b99a";
+    url = "http://members.chello.nl/~k.holtman/${pname}-${version}.tgz";
+    sha256 = "1fa29wlqv76hzf8bxp1qpza1r23pm2f3m7rcf0jpwm6z150s2k66";
   };
 
   /*
    * A patch to simplify the installation and for removing the
    * hard coded dependency on GCC.
    */
-  patches = [ ./afio-2.5.1-install.patch ];
+  patches = [ ./0001-makefile-fix-installation.patch ];
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = {
     homepage = http://members.chello.nl/~k.holtman/afio.html;

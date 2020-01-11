@@ -13,8 +13,8 @@
 , zlib
 }:
 
-stdenv.mkDerivation rec {
-  name    = "llvm-${version}";
+stdenv.mkDerivation {
+  pname = "llvm";
   version = "3.6-mono-2017-02-15";
 
   src = fetchFromGitHub {

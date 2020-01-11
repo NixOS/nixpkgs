@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.0";
-  name = "vimer-${version}";
+  pname = "vimer";
 
   src = fetchFromGitHub {
     owner = "susam";
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       in an existing instance of GVim or MacVim.
     '';
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [ maintainers.matthiasbeyer ];
     platforms = platforms.linux;
   };
 

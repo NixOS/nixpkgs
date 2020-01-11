@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.13.1";
-  name = "h5utils-${version}";
+  pname = "h5utils";
 
   # fetchurl is used instead of fetchFromGitHub because the git repo version requires
   # additional tools to build compared to the tarball release; see the README for details.

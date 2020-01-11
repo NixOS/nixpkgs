@@ -10,7 +10,7 @@
 # Add a hook script in the managed etc directory, e.g.:
 #   etc = [
 #     { source = pkgs.writeScript "rtfkill.hook" ''
-#         #!${stdenv.shell}
+#         #!${pkgs.runtimeShell}
 #
 #         if [ "$RFKILL_STATE" -eq "1" ]; then
 #           exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-on
@@ -27,24 +27,24 @@
 let
   rfkillHook =
     substituteAll {
-    inherit (stdenv) shell;
-    src = ./rfkill-hook.sh;
-  };
+      inherit (stdenv) shell;
+      isExecutable = true;
+      src = ./rfkill-hook.sh;
+    };
 in stdenv.mkDerivation {
   name = "rfkill-udev";
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontBuild = true;
 
   installPhase = ''
     mkdir -p "$out/etc/udev/rules.d/";
     cat > "$out/etc/udev/rules.d/90-rfkill.rules" << EOF
-      SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh" 
+      SUBSYSTEM=="rfkill", ATTR{type}=="wlan", RUN+="$out/bin/rfkill-hook.sh"
     EOF
 
     mkdir -p "$out/bin/";
     cp ${rfkillHook} "$out/bin/rfkill-hook.sh"
-    chmod +x "$out/bin/rfkill-hook.sh";
   '';
 
   meta = {

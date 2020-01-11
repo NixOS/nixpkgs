@@ -24,12 +24,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "18.12.1";
-  name = "ejabberd-${version}";
+  version = "19.09.1";
+  pname = "ejabberd";
 
   src = fetchurl {
-    url = "https://www.process-one.net/downloads/ejabberd/${version}/${name}.tgz";
-    sha256 = "0mqzbjzcf0aqjzds6pxl1zy1ajn3f8c94dn47xf2i9qid0bsydgx";
+    url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
+    sha256 = "1lj0zahsdg6naq007h8wp5p8ksdfwam3as7wiagvbj9gy8dgdp8q";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -45,7 +45,8 @@ in stdenv.mkDerivation rec {
   LANG = "en_US.UTF-8";
 
   deps = stdenv.mkDerivation {
-    name = "ejabberd-deps-${version}";
+    pname = "ejabberd-deps";
+    inherit version;
 
     inherit src;
 
@@ -75,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "1ihg5jbvilfxacsw885ywgyf74r9hm8gcn17mrgbv6y7fcvcgcsr";
+    outputHash = "097c84qp00dq8x7ngfqcrv9fa0wm0k94grashmi1fxlasgbvxh18";
   };
 
   configureFlags =
@@ -114,7 +115,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = https://www.ejabberd.im;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ];
+    maintainers = with maintainers; [ sander abbradar ajs124 ];
     broken = withElixir;
   };
 }

@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftw }:
+{ stdenv, fetchurl, pkgconfig, libjack2, alsaLib, libsndfile, liblo, lv2, qt5, fftw, mkDerivation }:
 
-stdenv.mkDerivation rec {
-  name = "padthv1-${version}";
-  version = "0.9.4";
+mkDerivation rec {
+  pname = "padthv1";
+  version = "0.9.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/padthv1/${name}.tar.gz";
-    sha256 = "0k4vlg3clsn2i4k12imvcjiwlp9nx1mikwyrnarg9shxzzdzcf4y";
+    url = "mirror://sourceforge/padthv1/${pname}-${version}.tar.gz";
+    sha256 = "02yfwyirjqxa075yqdnci9b9k57kdmkjvn9gnpdbnjp887pds76g";
   };
 
   buildInputs = [ libjack2 alsaLib libsndfile liblo lv2 qt5.qtbase qt5.qttools fftw ];

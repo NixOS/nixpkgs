@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub, python2Packages, hexio
-, which, cmake, bash, arpa2cm, git, asn2quickder, pkgconfig }:
+, cmake, bash, arpa2cm, git, asn2quickder }:
 
 stdenv.mkDerivation rec {
   pname = "quickder";
-  name = "${pname}-${version}";
   version = "1.2-6";
 
   src = fetchFromGitHub {
@@ -13,20 +12,17 @@ stdenv.mkDerivation rec {
     repo = "quick-der";
   };
 
+  nativeBuildInputs = [ cmake ];
+
   buildInputs = with python2Packages; [
     arpa2cm
     asn1ate
-    bash
-    cmake
-    git
     hexio
     pyparsing
     python
     six
-    which
     asn1ate
     asn2quickder
-    pkgconfig
   ];
 
   postPatch = ''
@@ -40,9 +36,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DNO_TESTING=ON"
     "-DARPA2CM_TOOLCHAIN_DIR=$out/share/ARPA2CM/toolchain/"
-    "-DCMAKE_EXPORT_NO_PACKAGE_REGISTRY=ON"
-    "-DCMAKE_FIND_PACKAGE_NO_PACKAGE_REGISTRY=ON"
-    "-DPACKAGE_NO_PACKAGE_REGISTRY=ON"
   ];
 
   preConfigure = ''

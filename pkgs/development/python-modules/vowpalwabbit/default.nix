@@ -1,13 +1,13 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, boost, zlib, clang
+{ stdenv, lib, buildPythonPackage, fetchPypi, python, zlib, clang
 , ncurses, pytest, docutils, pygments, numpy, scipy, scikitlearn }:
 
 buildPythonPackage rec {
   pname = "vowpalwabbit";
-  version = "8.5.0";
+  version = "8.8.0";
 
   src = fetchPypi{
     inherit pname version;
-    sha256 = "0b517371fc64f1c728a0af42a31fa93def27306e9b4d25d6e5fd01bcff1b7304";
+    sha256 = "bd4c7e49a6ddaa1afedf97b22b822c7322328d686d45151b47a5127fc409c2af";
   };
 
   # Should be fixed in next Python release after 8.5.0:
@@ -22,7 +22,8 @@ buildPythonPackage rec {
     export HOME=$PWD
   '';
 
-  buildInputs = [ python.pkgs.boost zlib.dev clang ncurses pytest docutils pygments ];
+  nativeBuildInputs = [ clang ];
+  buildInputs = [ python.pkgs.boost zlib.dev ncurses pytest docutils pygments ];
   propagatedBuildInputs = [ numpy scipy scikitlearn ];
 
   # Python ctypes.find_library uses DYLD_LIBRARY_PATH.

@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "iouyap";
   version = "0.97";
 

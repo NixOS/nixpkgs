@@ -5,14 +5,14 @@
 let
   inherit ((import ./sources.nix).aqbanking) sha256 releaseId version;
 in stdenv.mkDerivation rec {
-  name = "aqbanking-${version}";
+  pname = "aqbanking";
   inherit version;
 
   src = let
     qstring = "package=03&release=${releaseId}&file=02";
     mkURLs = map (base: "${base}/sites/download/download.php?${qstring}");
   in fetchurl {
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     urls = mkURLs [ "http://www.aquamaniac.de" "http://www2.aquamaniac.de" ];
     inherit sha256;
   };

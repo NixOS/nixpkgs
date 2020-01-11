@@ -2,11 +2,11 @@
 makeWrapper, perl, pkgs, stdenv, which }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl8690cdwlpr-${version}";
+  pname = "mfcl8690cdwlpr";
   version = "1.3.0-0";
 
   src = fetchurl {
-    url = "http://download.brother.com/welcome/dlf103241/${name}.i386.deb";
+    url = "http://download.brother.com/welcome/dlf103241/${pname}-${version}.i386.deb";
     sha256 = "0x8zd4b1psmw1znp2ibncs37xm5mljcy9yza2rx8jm8lp0a3l85v";
   };
 

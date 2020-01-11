@@ -1,25 +1,32 @@
 { stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, librsvg, libcanberra-gtk3, intltool, itstool, libxml2, libgnome-games-support
-, libgee}:
+, librsvg, gsound, gettext, itstool, libxml2, libgnome-games-support
+, libgee, meson, ninja, python3, desktop-file-utils, adwaita-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-robots-${version}";
-  version = "3.22.3";
+  pname = "gnome-robots";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0dzcjd7rdmlzgr6rmljhrbccwif8wj0cr1xcrrj7malj33098wwk";
+    url = "mirror://gnome/sources/gnome-robots/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0ncghkv06x9qqfr5zyh6hdv28d0i6v9z4z365k05x9ji5pyzxiny";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "gnome-robots"; attrPath = "gnome3.gnome-robots"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [
-    gtk3 wrapGAppsHook intltool itstool librsvg libcanberra-gtk3
-    libxml2 gnome3.defaultIconTheme libgnome-games-support libgee
+  nativeBuildInputs = [
+    pkgconfig meson ninja python3
+    libxml2 wrapGAppsHook gettext itstool desktop-file-utils
   ];
+  buildInputs = [
+    gtk3 librsvg gsound libgnome-games-support libgee adwaita-icon-theme
+  ];
+
+  postPatch = ''
+    chmod +x build-aux/meson_post_install.py
+    patchShebangs build-aux/meson_post_install.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Apps/Robots;

@@ -51,6 +51,6 @@ buildPythonApplication rec {
     homepage = https://github.com/asciimoo/searx;
     description = "A privacy-respecting, hackable metasearch engine";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ matejc fpletz ];
+    maintainers = with maintainers; [ matejc fpletz globin ];
   };
 }

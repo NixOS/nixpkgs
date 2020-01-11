@@ -6,7 +6,7 @@ let
 in {
   options = {
     services.sssd = {
-      enable = mkEnableOption "the System Security Services Daemon.";
+      enable = mkEnableOption "the System Security Services Daemon";
 
       config = mkOption {
         type = types.lines;

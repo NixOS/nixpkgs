@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "20150908";
-  name = "m4rie-${version}";
+  pname = "m4rie";
 
   src = fetchFromBitbucket {
     owner = "malb";
@@ -34,6 +34,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

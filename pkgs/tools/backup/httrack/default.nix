@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.49.2";
-  name = "httrack-${version}";
+  pname = "httrack";
 
   src = fetchurl {
     url = "https://mirror.httrack.com/httrack-${version}.tar.gz";

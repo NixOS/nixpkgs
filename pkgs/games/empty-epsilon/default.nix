@@ -3,20 +3,20 @@
 let
 
   major = "2019";
-  minor = "01";
-  patch = "19";
+  minor = "11";
+  patch = "01";
 
   version = "${major}.${minor}.${patch}";
 
-  serious-proton = stdenv.mkDerivation rec {
-    name = "serious-proton-${version}";
+  serious-proton = stdenv.mkDerivation {
+    pname = "serious-proton";
     inherit version;
 
     src = fetchFromGitHub {
       owner = "daid";
       repo = "SeriousProton";
       rev = "EE-${version}";
-      sha256 = "1a5g16vvjrykmdgy5fc8x0v4ipfm0qdaimmy5jz84am14dqi3f8w";
+      sha256 = "1sc1z9n99jspa8jnk0pwdzynnadvcmb3pxl5cndw3z90xjwpzivw";
     };
 
     nativeBuildInputs = [ cmake ];
@@ -34,15 +34,15 @@ let
 in
 
 
-stdenv.mkDerivation rec {
-  name = "empty-epsilon-${version}";
+stdenv.mkDerivation {
+  pname = "empty-epsilon";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "daid";
     repo = "EmptyEpsilon";
     rev = "EE-${version}";
-    sha256 = "082v27w3n4jdm4a5884607rwsw4s00cnpqmh7bsdg9q3l29jpygn";
+    sha256 = "09jizc6h7jbsp8bzv05pvb5z24zadjzjx1slj5317axsb170v81p";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
     description = "Open source bridge simulator based on Artemis";
     homepage = https://daid.github.io/EmptyEpsilon/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz lheckemann ];
     platforms = platforms.linux;
   };
 }

@@ -1,8 +1,8 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "restic-${version}";
-  version = "0.9.4";
+  pname = "restic";
+  version = "0.9.6";
 
   goPackagePath = "github.com/restic/restic";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "restic";
     repo = "restic";
     rev = "v${version}";
-    sha256 = "15lx01w46bwn3hjwpmm8xy71m7ml9wdwddbbfvmk5in61gv1acr5";
+    sha256 = "0lydll93n1lcn1fl669b9cikmzz9d6vfpc8ky3ng5fi8kj3v1dz7";
   };
 
   buildPhase = ''

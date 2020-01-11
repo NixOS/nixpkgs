@@ -1,0 +1,113 @@
+From b0b784b1a57c0b06936e6f5d6560712b4b810cd3 Mon Sep 17 00:00:00 2001
+From: Brett Cornwall <brett@i--b.com>
+Date: Wed, 27 Feb 2019 00:08:33 -0700
+Subject: clip: Add support for wl-clipboard
+
+Edited to properly apply with
+`set-correct-program-name-for-sleep.patch`.
+
+---
+ README                |  4 +++-
+ man/pass.1            |  5 +++++
+ src/password-store.sh | 26 +++++++++++++++++++++-----
+ 3 files changed, 29 insertions(+), 6 deletions(-)
+
+diff --git a/README b/README
+index 6b59965..1a46242 100644
+--- a/README
++++ b/README
+@@ -19,8 +19,10 @@ Depends on:
+   http://www.gnupg.org/
+ - git
+   http://www.git-scm.com/
+-- xclip
++- xclip (for X11 environments)
+   http://sourceforge.net/projects/xclip/
++- wl-clipboard (for wlroots Wayland-based environments)
++  https://github.com/bugaevc/wl-clipboard
+ - tree >= 1.7.0
+   http://mama.indstate.edu/users/ice/tree/
+ - GNU getopt
+diff --git a/man/pass.1 b/man/pass.1
+index 01a3fbe..a555dcb 100644
+--- a/man/pass.1
++++ b/man/pass.1
+@@ -99,6 +99,8 @@ Decrypt and print a password named \fIpass-name\fP. If \fI--clip\fP or \fI-c\fP
+ is specified, do not print the password but instead copy the first (or otherwise specified)
+ line to the clipboard using
+ .BR xclip (1)
++or
++.BR wl-clipboard(1)
+ and then restore the clipboard after 45 (or \fIPASSWORD_STORE_CLIP_TIME\fP) seconds. If \fI--qrcode\fP
+ or \fI-q\fP is specified, do not print the password but instead display a QR code using
+ .BR qrencode (1)
+@@ -132,6 +134,8 @@ in generating passwords can be changed with the \fIPASSWORD_STORE_CHARACTER_SET\
+ If \fI--clip\fP or \fI-c\fP is specified, do not print the password but instead copy
+ it to the clipboard using
+ .BR xclip (1)
++or
++.BR wl-clipboard(1)
+ and then restore the clipboard after 45 (or \fIPASSWORD_STORE_CLIP_TIME\fP) seconds. If \fI--qrcode\fP
+ or \fI-q\fP is specified, do not print the password but instead display a QR code using
+ .BR qrencode (1)
+@@ -466,6 +470,7 @@ The location of the text editor used by \fBedit\fP.
+ .BR tr (1),
+ .BR git (1),
+ .BR xclip (1),
++.BR wl-clipboard (1),
+ .BR qrencode (1).
+ 
+ .SH AUTHOR
+diff --git a/src/password-store.sh b/src/password-store.sh
+index d89d455..284eabf 100755
+--- a/src/password-store.sh
++++ b/src/password-store.sh
+@@ -152,16 +152,32 @@ check_sneaky_paths() {
+ #
+ 
+ clip() {
++	if [[ -n $WAYLAND_DISPLAY ]]; then
++		local copy_cmd=( wl-copy )
++		local paste_cmd=( wl-paste -n )
++		if [[ $X_SELECTION == primary ]]; then
++			copy_cmd+=( --primary )
++			paste_cmd+=( --primary )
++		fi
++		local display_name="$WAYLAND_DISPLAY"
++	elif [[ -n $DISPLAY ]]; then
++		local copy_cmd=( xclip -selection "$X_SELECTION" )
++		local paste_cmd=( xclip -o -selection "$X_SELECTION" )
++		local display_name="$DISPLAY"
++	else
++		die "Error: No X11 or Wayland display detected"
++	fi
++	local sleep_argv0="password store sleep on display $display_name"
++
+ 	# This base64 business is because bash cannot store binary data in a shell
+ 	# variable. Specifically, it cannot store nulls nor (non-trivally) store
+ 	# trailing new lines.
+-	local sleep_argv0="password store sleep on display $DISPLAY"
+ 	pkill -P $(pgrep -f "^$sleep_argv0") 2>/dev/null && sleep 0.5
+-	local before="$(xclip -o -selection "$X_SELECTION" 2>/dev/null | $BASE64)"
+-	echo -n "$1" | xclip -selection "$X_SELECTION" || die "Error: Could not copy data to the clipboard"
++	local before="$("${paste_cmd[@]}" 2>/dev/null | $BASE64)"
++	echo -n "$1" | "${copy_cmd[@]}" || die "Error: Could not copy data to the clipboard"
+ 	(
+ 		( exec -a "$sleep_argv0" bash <(echo trap 'kill %1' TERM\; sleep "$CLIP_TIME & wait") )
+-		local now="$(xclip -o -selection "$X_SELECTION" | $BASE64)"
++		local now="$("${paste_cmd[@]}" | $BASE64)"
+ 		[[ $now != $(echo -n "$1" | $BASE64) ]] && before="$now"
+ 
+ 		# It might be nice to programatically check to see if klipper exists,
+@@ -173,7 +189,7 @@ clip() {
+ 		# so we axe it here:
+ 		qdbus org.kde.klipper /klipper org.kde.klipper.klipper.clearClipboardHistory &>/dev/null
+ 
+-		echo "$before" | $BASE64 -d | xclip -selection "$X_SELECTION"
++		echo "$before" | $BASE64 -d | "${copy_cmd[@]}"
+ 	) >/dev/null 2>&1 & disown
+ 	echo "Copied $2 to clipboard. Will clear in $CLIP_TIME seconds."
+ }
+-- 
+cgit v1.2.1-28-gf32c
+

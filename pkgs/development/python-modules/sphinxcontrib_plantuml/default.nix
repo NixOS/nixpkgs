@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "sphinxcontrib-plantuml";
-  version = "0.12";
+  version = "0.17.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95a453e1d912bfdd6a950f8df02f46608154676842d66f8a0d1db0b85a5ddfe5";
+    sha256 = "1amvczdin078ia1ax2379lklxr0bwjsrin96174dvssxpzjl04cc";
   };
 
   # No tests included.
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Provides a Sphinx domain for embedding UML diagram with PlantUML";
-    homepage = https://bitbucket.org/birkenfeld/sphinx-contrib;
+    homepage = "https://github.com/sphinx-contrib/plantuml/";
     license = with licenses; [ bsd2 ];
   };
 

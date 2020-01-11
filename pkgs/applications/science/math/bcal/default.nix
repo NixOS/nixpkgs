@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "bcal-${version}";
+  pname = "bcal";
   version = "1.9";
 
   src = fetchFromGitHub {

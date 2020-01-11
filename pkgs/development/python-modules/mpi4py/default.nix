@@ -1,24 +1,17 @@
-{ stdenv, fetchPypi, fetchpatch, python, buildPythonPackage, mpi, openssh }:
+{ stdenv, fetchPypi, python, buildPythonPackage, mpi, openssh }:
 
 buildPythonPackage rec {
   pname = "mpi4py";
-  version = "3.0.0";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mzgd26dfv4vwbci8gq77ss9f0x26i9aqzq9b9vs9ndxhlnv0mxl";
+    sha256 = "012d716c8b9ed1e513fcc4b18e5af16a8791f51e6d1716baccf988ad355c5a1f";
   };
 
   passthru = {
     inherit mpi;
   };
-
-  patches = [ (fetchpatch {
-    # Disable tests failing with 3.1.x and MPI_THREAD_MULTIPLE
-    url = "https://bitbucket.org/mpi4py/mpi4py/commits/c2b6b7e642a182f9b00a2b8e9db363214470548a/raw";
-    sha256 = "0n6bz3kj4vcqb6q7d0mlj5vl6apn7i2bvfc9mpg59vh3wy47119q";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace test/test_spawn.py --replace \
@@ -48,12 +41,12 @@ buildPythonPackage rec {
 
   setupPyBuildFlags = ["--mpicc=${mpi}/bin/mpicc"];
 
-  buildInputs = [ mpi openssh ];
+  nativeBuildInputs = [ mpi openssh ];
 
   meta = {
     description =
       "Python bindings for the Message Passing Interface standard";
-    homepage = http://code.google.com/p/mpi4py/;
+    homepage = "https://bitbucket.org/mpi4py/mpi4py/";
     license = stdenv.lib.licenses.bsd3;
   };
 }

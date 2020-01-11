@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
-, python, pythonPackages, orc, libusb1, boost }:
+, python, orc, libusb1, boost }:
 
 # You need these udev rules to not have to run as root (copied from
 # ${uhd}/share/uhd/utils/uhd-usrp.rules):
@@ -12,22 +12,23 @@ let
 
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "3.13.0.1";
+  version = "3.14.0.0";
 
   # Firmware images are downloaded (pre-built) from the respective release on Github
   uhdImagesSrc = fetchurl {
     url = "https://github.com/EttusResearch/uhd/releases/download/${uhdVer}/uhd-images_${version}.tar.xz";
-    sha256 = "0y9i93z188ch0hdlkvv0k9m0k7vns7rbxaqsnk35xnlqlxxgqdvj";
+    sha256 = "1fp37wgqkbr14cxg9l7ghfd4r92y2bxwgb7cfjzs96hbpd9s6al0";
   };
 
 in stdenv.mkDerivation {
-  name = "uhd-${version}";
+  pname = "uhd";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = "${uhdVer}";
-    sha256 = "0si49qk96zhpanmcrzlr3igc5s1y30x4p0z973q60dx9fhqsbb6k";
+    rev = uhdVer;
+    sha256 = "0y1hff4vslfv36vxgvjqajg4862a11d4wgr0vcb0visgh1bi8qgy";
   };
 
   enableParallelBuilding = true;
@@ -39,7 +40,12 @@ in stdenv.mkDerivation {
                [ (stdenv.lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ python pythonPackages.pyramid_mako orc libusb1 boost ];
+  buildInputs = [
+    (python.withPackages (ps: with ps; [ Mako six requests ]))
+    orc
+    libusb1
+    boost
+  ];
 
   # Build only the host software
   preConfigure = "cd host";

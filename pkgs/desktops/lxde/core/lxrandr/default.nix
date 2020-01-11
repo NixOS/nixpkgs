@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk2, libX11, xrandr, withGtk3 ? false, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "lxrandr-0.3.1";
+  name = "lxrandr-0.3.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/lxde/${name}.tar.xz";
-    sha256 = "6d98338485a90d9e47f6d08184df77ca0d9715517f8a45a914e861750589184e";
+    sha256 = "04n3vgh3ix12p8jfs4w0dyfq3anbjy33h7g53wbbqqc0f74xyplb";
   };
 
   configureFlags = stdenv.lib.optional withGtk3 "--enable-gtk3";

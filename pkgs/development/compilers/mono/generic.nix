@@ -1,14 +1,18 @@
-{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which, enableParallelBuilding ? true }:
+{ stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
+, enableParallelBuilding ? true
+, srcArchiveSuffix ? "tar.bz2"
+}:
 
 let
   llvm     = callPackage ./llvm.nix { };
 in
 stdenv.mkDerivation rec {
-  name = "mono-${version}";
+  pname = "mono";
+  inherit version;
 
   src = fetchurl {
     inherit sha256;
-    url = "https://download.mono-project.com/sources/mono/${name}.tar.bz2";
+    url = "https://download.mono-project.com/sources/mono/${pname}-${version}.${srcArchiveSuffix}";
   };
 
   buildInputs =
@@ -38,10 +42,6 @@ stdenv.mkDerivation rec {
     ./autogen.sh --prefix $out $configureFlags
   '';
 
-  # Attempt to fix this error when running "mcs --version":
-  # The file /nix/store/xxx-mono-2.4.2.1/lib/mscorlib.dll is an invalid CIL image
-  dontStrip = true;
-
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
   patches = [ ./pkgconfig-before-gac.patch ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   # Fix mono DLLMap so it can find libX11 to run winforms apps
   # libgdiplus is correctly handled by the --with-libgdiplus configure flag
   # Other items in the DLLMap may need to be pointed to their store locations, I don't think this is exhaustive
-  # http://www.mono-project.com/Config_DllMap
+  # https://www.mono-project.com/Config_DllMap
   postBuild = ''
     find . -name 'config' -type f | xargs \
     sed -i -e "s@libX11.so.6@${libX11.out}/lib/libX11.so.6@g"
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   inherit enableParallelBuilding;
 
   meta = with stdenv.lib; {
-    homepage = http://mono-project.com/;
+    homepage = https://mono-project.com/;
     description = "Cross platform, open source .NET development framework";
     platforms = with platforms; darwin ++ linux;
     maintainers = with maintainers; [ thoughtpolice obadz vrthra ];

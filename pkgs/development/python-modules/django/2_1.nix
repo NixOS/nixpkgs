@@ -6,13 +6,13 @@
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "2.1.5";
+  version = "2.1.15";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hwqqsfg8jgnn039yxrq6xrksk11y7vwpfvba6lk01c3v8c3jffn";
+    sha256 = "a794f7a2f4b7c928eecfbc4ebad03712ff27fb545abe269bf01aa8500781eb1c";
   };
 
   patches = stdenv.lib.optionals withGdal [
@@ -23,11 +23,6 @@ buildPythonPackage rec {
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
-
-  # patch only $out/bin to avoid problems with starter templates (see #3134)
-  postFixup = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-  '';
 
   propagatedBuildInputs = [ pytz ];
 

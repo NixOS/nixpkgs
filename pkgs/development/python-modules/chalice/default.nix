@@ -11,7 +11,6 @@
 , six
 , typing
 , wheel
-, pythonOlder
 , watchdog
 , pytest
 , hypothesis
@@ -20,11 +19,11 @@
 
 buildPythonPackage rec {
   pname = "chalice";
-  version = "1.6.2";
+  version = "1.12.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "96c22f95ccc91ed3e79cc4a9a88bf27f95a13a2caf5a55137ab081d371258f0f";
+    sha256 = "f8f929f26df77285a202fb93174400230f8912c5b9c1fb061c7836a78413e325";
   };
 
   checkInputs = [ watchdog pytest hypothesis mock ];

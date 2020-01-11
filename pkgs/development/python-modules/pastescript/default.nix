@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.0.2";
+  version = "3.2.0";
   pname = "PasteScript";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c03f249805538cc2328741ae8d262a9200ae1c993119b3d9bac4cd422cb476c0";
+    sha256 = "9b0f5c0f1c6a510a353fa7c3dc4fdaab9071462d60d24573de76a001fbc172ac";
   };
 
   buildInputs = [ nose ];
@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pluggable command-line frontend, including commands to setup package file layouts";
-    homepage = http://pythonpaste.org/script/;
+    homepage = https://github.com/cdent/pastescript/;
     license = licenses.mit;
   };
 

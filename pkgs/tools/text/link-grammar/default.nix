@@ -1,15 +1,14 @@
 { stdenv, fetchurl, pkgconfig, python3, sqlite, libedit, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "5.5.1";
+  version = "5.7.0";
   pname = "link-grammar";
 
   outputs = [ "bin" "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "http://www.abisource.com/downloads/${pname}/${version}/${name}.tar.gz";
-    sha256 = "1x8kj1yr3b7b6qrvc5b8mm90ff3m4qdbdqplvzii2xlkpvik92ff";
+    url = "http://www.abisource.com/downloads/${pname}/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0ak1v469k56v3511kxxkxvx1nw6zcxcl0f1kcvc82ffacqbr4y96";
   };
 
   nativeBuildInputs = [ pkgconfig python3 ];

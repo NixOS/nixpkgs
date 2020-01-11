@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.23";
-  name = "pynac-${version}";
+  version = "0.7.26";
+  pname = "pynac";
 
   src = fetchFromGitHub {
     owner = "pynac";
     repo = "pynac";
     rev = "pynac-${version}";
-    sha256 = "02yhl8v9l6aj3wl6dk9iacz4hdv08i1d750rxpygjp43nlgvvb2h";
+    sha256 = "09d2p74x1arkydlxy6pw4p4byi7r8q7f29w373h4d8a215kadc6d";
   };
 
   buildInputs = [
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage    = http://pynac.org;
     license = licenses.gpl3;
     maintainers = with maintainers; [ timokau ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

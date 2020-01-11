@@ -4,7 +4,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "asynkdev";
   pname = "caldavclientlibrary-asynk";
 

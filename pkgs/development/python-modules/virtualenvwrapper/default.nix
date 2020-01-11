@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "virtualenvwrapper";
-  version = "4.8.2";
+  version = "4.8.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "18d8e4c500c4c4ee794f704e050cf2bbb492537532a4521d1047e7dd1ee4e374";
+    sha256 = "51a1a934e7ed0ff221bdd91bf9d3b604d875afbb3aa2367133503fee168f5bfa";
   };
 
   # pip depend on $HOME setting

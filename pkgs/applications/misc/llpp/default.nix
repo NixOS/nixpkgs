@@ -1,16 +1,16 @@
 { stdenv, lib, substituteAll, makeWrapper, fetchgit, ocaml, mupdf, libX11,
-libGLU_combined, freetype, xclip }:
+libGLU, libGL, freetype, xclip, inotify-tools, procps }:
 
 assert lib.versionAtLeast (lib.getVersion ocaml) "4.07";
 
 stdenv.mkDerivation rec {
-  name = "llpp-${version}";
-  version = "30";
+  pname = "llpp";
+  version = "31";
 
   src = fetchgit {
     url = "git://repo.or.cz/llpp.git";
     rev = "v${version}";
-    sha256 = "0iilpzf12hs0zky58j55l4y5dvzv7fc53nsrg324n9vka92mppvd";
+    sha256 = "14ibsm1zzxfidjajcj30b5m9in10q3817izahsjvkmryrvvn6qsg";
     fetchSubmodules = false;
   };
 
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   });
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ ocaml mupdf libX11 libGLU_combined freetype ];
+  buildInputs = [ ocaml mupdf libX11 libGLU libGL freetype ];
 
   dontStrip = true;
 
@@ -34,11 +34,17 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    install -d $out/bin $out/lib
+    install -d $out/bin
     install build/llpp $out/bin
+    install misc/llpp.inotify $out/bin/llpp.inotify
+
     wrapProgram $out/bin/llpp \
-        --prefix CAML_LD_LIBRARY_PATH ":" "$out/lib" \
         --prefix PATH ":" "${xclip}/bin"
+
+    wrapProgram $out/bin/llpp.inotify \
+        --prefix PATH ":" "$out/bin" \
+        --prefix PATH ":" "${inotify-tools}/bin" \
+        --prefix PATH ":" "${procps}/bin"
   '';
 
   meta = with stdenv.lib; {

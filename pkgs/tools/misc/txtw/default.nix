@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "0.4";
-  name = "txtw-${version}";
+  pname = "txtw";
 
   src = fetchFromGitHub {
     owner = "baskerville";
     repo = "txtw";
-    rev = "${version}";
+    rev = version;
     sha256 = "17yjdgdd080fsf5r1wzgk6vvzwsa15gcwc9z64v7x588jm1ryy3k";
   };
 

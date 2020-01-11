@@ -1,4 +1,4 @@
-{ stdenv, pkgs, maven }:
+{ stdenv, pkgs }:
 
 with stdenv.lib;
 with pkgs.javaPackages;
@@ -8,7 +8,7 @@ let
   fetchMaven = pkgs.callPackage ./m2install.nix { };
   plugins = import ./mavenPlugins.nix { inherit pkgs; };
   poms = import ./poms.nix { inherit fetchMaven; };
-in rec {
+in {
   # Maven needs all of these to function
   mavenMinimal = flatten
     collections.mavenLibs_2_0_6

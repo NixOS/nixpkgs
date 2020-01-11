@@ -1,6 +1,6 @@
 # This module provides the proprietary NVIDIA X11 / OpenGL drivers.
 
-{ stdenv, config, lib, pkgs, ... }:
+{ config, lib, pkgs, ... }:
 
 with lib;
 
@@ -75,12 +75,20 @@ in
 
         Note that this configuration will only be successful when a display manager
         for which the <option>services.xserver.displayManager.setupCommands</option>
-        option is supported is used; notably, SLiM is not supported.
+        option is supported is used.
+      '';
+    };
+
+    hardware.nvidia.optimus_prime.allowExternalGpu = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Configure X to allow external NVIDIA GPUs when using optimus.
       '';
     };
 
     hardware.nvidia.optimus_prime.nvidiaBusId = lib.mkOption {
-      type = lib.types.string;
+      type = lib.types.str;
       default = "";
       example = "PCI:1:0:0";
       description = ''
@@ -90,7 +98,7 @@ in
     };
 
     hardware.nvidia.optimus_prime.intelBusId = lib.mkOption {
-      type = lib.types.string;
+      type = lib.types.str;
       default = "";
       example = "PCI:0:2:0";
       description = ''
@@ -103,9 +111,10 @@ in
   config = mkIf enabled {
     assertions = [
       {
-        assertion = with config.services.xserver.displayManager; gdm.enable -> !gdm.wayland;
-        message = "NVIDIA drivers don't support wayland, set services.xserver.displayManager.gdm.wayland=false";
+        assertion = with config.services.xserver.displayManager; gdm.nvidiaWayland -> cfg.modesetting.enable;
+        message = "You cannot use wayland with GDM without modesetting enabled for NVIDIA drivers, set `hardware.nvidia.modesetting.enable = true`";
       }
+
       {
         assertion = !optimusCfg.enable ||
           (optimusCfg.nvidiaBusId != "" && optimusCfg.intelBusId != "");
@@ -130,10 +139,10 @@ in
     services.xserver.drivers = singleton {
       name = "nvidia";
       modules = [ nvidia_x11.bin ];
-      libPath = [ nvidia_x11 ];
       deviceSection = optionalString optimusCfg.enable
         ''
           BusID "${optimusCfg.nvidiaBusId}"
+          ${optionalString optimusCfg.allowExternalGpu "Option \"AllowExternalGpus\""}
         '';
       screenSection =
         ''
@@ -172,6 +181,11 @@ in
     environment.systemPackages = [ nvidia_x11.bin nvidia_x11.settings ]
       ++ lib.filter (p: p != null) [ nvidia_x11.persistenced ];
 
+    systemd.tmpfiles.rules = optional config.virtualisation.docker.enableNvidia
+        "L+ /run/nvidia-docker/bin - - - - ${nvidia_x11.bin}/origBin"
+      ++ optional (nvidia_x11.persistenced != null && config.virtualisation.docker.enableNvidia)
+        "L+ /run/nvidia-docker/extras/bin/nvidia-persistenced - - - - ${nvidia_x11.persistenced}/origBin/nvidia-persistenced";
+
     boot.extraModulePackages = [ nvidia_x11.bin ];
 
     # nvidia-uvm is required by CUDA applications.
@@ -184,10 +198,11 @@ in
     # Create /dev/nvidia-uvm when the nvidia-uvm module is loaded.
     services.udev.extraRules =
       ''
-        KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c $(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 255'"
-        KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c $(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 254'"
-        KERNEL=="card*", SUBSYSTEM=="drm", DRIVERS=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%n c $(grep nvidia-frontend /proc/devices | cut -d \  -f 1) %n'"
-        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+        KERNEL=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidiactl c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 255'"
+        KERNEL=="nvidia_modeset", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-modeset c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) 254'"
+        KERNEL=="card*", SUBSYSTEM=="drm", DRIVERS=="nvidia", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia%n c $$(grep nvidia-frontend /proc/devices | cut -d \  -f 1) %n'"
+        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
+        KERNEL=="nvidia_uvm", RUN+="${pkgs.runtimeShell} -c 'mknod -m 666 /dev/nvidia-uvm-tools c $$(grep nvidia-uvm /proc/devices | cut -d \  -f 1) 0'"
       '';
 
     boot.blacklistedKernelModules = [ "nouveau" "nvidiafb" ];

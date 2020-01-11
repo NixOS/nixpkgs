@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, fetchpatch }:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "nextcloud-${version}";
-  version = "15.0.4";
+  pname = "nextcloud";
+  version = "17.0.2";
 
   src = fetchurl {
-    url = "https://download.nextcloud.com/server/releases/${name}.tar.bz2";
-    sha256 = "0xwg7p31y1pkjk1pzygh9shpqxnfkafrab52j7in7xblq53v0zgq";
+    url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
+    sha256 = "1qrxalyyfjlv3myzkn5z33smfpv8r1ph2w9ax6jqivspq3zrc9gk";
   };
 
   installPhase = ''

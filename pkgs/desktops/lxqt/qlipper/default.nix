@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qttools }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "qlipper";
   version = "5.1.1";
 
@@ -16,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase qttools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Cross-platform clipboard history applet";
     homepage = https://github.com/pvanek/qlipper;
     license = licenses.gpl2Plus;

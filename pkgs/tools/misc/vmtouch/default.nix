@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [perl];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Portable file system cache diagnostics and control";

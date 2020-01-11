@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, rustPlatform, libseccomp }:
+{ lib, fetchFromGitHub, rustPlatform, libseccomp }:
 
 rustPlatform.buildRustPackage rec {
-  name = "railcar-${version}";
+  pname = "railcar";
   version = "1.0.4";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "09zn160qxd7760ii6rs5nhr00qmaz49x1plclscznxh9hinyjyh9";
   };
 
-  cargoSha256 = "16f3ys0zzha8l5jdklmrqivl8hmrb9qgqgzcm3jn06v45hls9lan";
+  cargoSha256 = "1k4y37x783fsd8li17k56vlx5ziwmrz167a0w5mcb9sgyd2kc19a";
 
   buildInputs = [ libseccomp ];
 

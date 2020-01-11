@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fuse, pkgconfig, attr, uthash }:
 
 stdenv.mkDerivation rec {
-  name = "mhddfs-${version}";
+  pname = "mhddfs";
   version = "0.1.39";
 
   src = fetchurl {
@@ -15,6 +15,11 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-format-security-error.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/main.c --replace "attr/xattr.h" "sys/xattr.h"
+    substituteInPlace src/tools.c --replace "attr/xattr.h" "sys/xattr.h"
+  '';
 
   installPhase = ''
     mkdir -p $out/bin

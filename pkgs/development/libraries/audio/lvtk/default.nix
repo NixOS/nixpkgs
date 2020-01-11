@@ -1,7 +1,7 @@
 { stdenv, fetchurl, boost, gtkmm2, lv2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "lvtk-${version}";
+  pname = "lvtk";
   version = "1.2.0";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     sed -i '/target[ ]*= "ttl2c"/ ilib=["boost_system"],' tools/wscript_build
   '';
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"
   ];

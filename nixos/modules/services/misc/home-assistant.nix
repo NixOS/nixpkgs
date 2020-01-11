@@ -9,34 +9,38 @@ let
   configJSON = pkgs.writeText "configuration.json"
     (builtins.toJSON (if cfg.applyDefaultConfig then
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
-  configFile = pkgs.runCommand "configuration.yaml" { } ''
+  configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+    # Hack to support secrets, that are encoded as custom yaml objects,
+    # https://www.home-assistant.io/docs/configuration/secrets/
+    sed -i -e "s/'\!secret \(.*\)'/\!secret \1/" $out
   '';
 
   lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
     (builtins.toJSON cfg.lovelaceConfig);
-  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { } ''
+  lovelaceConfigFile = pkgs.runCommand "ui-lovelace.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${lovelaceConfigJSON} -o $out
   '';
 
-  availableComponents = pkgs.home-assistant.availableComponents;
+  availableComponents = cfg.package.availableComponents;
 
-  # Given component "parentConfig.platform", returns whether config.parentConfig
-  # is a list containing a set with set.platform == "platform".
+  usedPlatforms = config:
+    if isAttrs config then
+      optional (config ? platform) config.platform
+      ++ concatMap usedPlatforms (attrValues config)
+    else if isList config then
+      concatMap usedPlatforms config
+    else [ ];
+
+  # Given a component "platform", looks up whether it is used in the config
+  # as `platform = "platform";`.
   #
-  # For example, the component sensor.luftdaten is used as follows:
+  # For example, the component mqtt.sensor is used as follows:
   # config.sensor = [ {
-  #   platform = "luftdaten";
+  #   platform = "mqtt";
   #   ...
   # } ];
-  useComponentPlatform = component:
-    let
-      path = splitString "." component;
-      parentConfig = attrByPath (init path) null cfg.config;
-      platform = last path;
-    in isList parentConfig && any
-      (item: item.platform or null == platform)
-      parentConfig;
+  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
   # Returns whether component is used in config
   useComponent = component:
@@ -97,6 +101,10 @@ in {
         {
           homeassistant = {
             name = "Home";
+            latitude = "!secret latitude";
+            longitude = "!secret longitude";
+            elevation = "!secret elevation";
+            unit_system = "metric";
             time_zone = "UTC";
           };
           frontend = { };
@@ -107,6 +115,8 @@ in {
       description = ''
         Your <filename>configuration.yaml</filename> as a Nix attribute set.
         Beware that setting this option will delete your previous <filename>configuration.yaml</filename>.
+        <link xlink:href="https://www.home-assistant.io/docs/configuration/secrets/">Secrets</link>
+        are encoded as strings as shown in the example.
       '';
     };
 
@@ -223,6 +233,7 @@ in {
         KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;
+        AmbientCapabilities = "cap_net_raw,cap_net_admin+eip";
       };
       path = [
         "/run/wrappers" # needed for ping

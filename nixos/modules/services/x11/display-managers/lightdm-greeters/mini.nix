@@ -8,11 +8,6 @@ let
   ldmcfg = dmcfg.lightdm;
   cfg = ldmcfg.greeters.mini;
 
-  xgreeters = pkgs.linkFarm "lightdm-mini-greeter-xgreeters" [{
-    path = "${pkgs.lightdm-mini-greeter}/share/xgreeters/lightdm-mini-greeter.desktop";
-    name = "lightdm-mini-greeter.desktop";
-  }];
-
   miniGreeterConf = pkgs.writeText "lightdm-mini-greeter.conf"
     ''
     [greeter]
@@ -58,9 +53,8 @@ in
           Whether to enable lightdm-mini-greeter as the lightdm greeter.
 
           Note that this greeter starts only the default X session.
-          You can configure the default X session by
-          <option>services.xserver.desktopManager.default</option> and
-          <option>services.xserver.windowManager.default</option>.
+          You can configure the default X session using
+          <xref linkend="opt-services.xserver.displayManager.defaultSession"/>.
         '';
       };
 
@@ -90,7 +84,7 @@ in
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = xgreeters;
+      package = pkgs.lightdm-mini-greeter.xgreeters;
       name = "lightdm-mini-greeter";
     };
 

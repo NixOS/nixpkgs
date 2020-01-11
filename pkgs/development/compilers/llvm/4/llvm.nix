@@ -17,16 +17,20 @@
 }:
 
 let
+  # Used when creating a versioned symlinks of libLLVM.dylib
+  versionSuffixes = with stdenv.lib;
+    let parts = splitVersion release_version; in
+    imap (i: _: concatStringsSep "." (take i parts)) parts;
+in
+
+stdenv.mkDerivation ({
+  pname = "llvm";
+  inherit version;
+
   src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
 
-  # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with stdenv.lib;
-    concatStringsSep "." (take 2 (splitString "." release_version));
-in stdenv.mkDerivation (rec {
-  name = "llvm-${version}";
-
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
@@ -42,6 +46,21 @@ in stdenv.mkDerivation (rec {
   buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    (fetchpatch {
+      name = "0001-Fix-return-type-in-ORC-readMem-client-interface.patch";
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
+      sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
+    })
+    ./fix-gcc9.patch
+    (fetchpatch {
+      name = "llvm4-avoid-undefined-behavior-in-unittest.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/D32089-Avoid-undefined-behavior-in-unittest.patch?h=llvm40&id=f459b0bad8aa3b94bc2733d79d176071a32846a6";
+      sha256 = "0x5q6a8lk6xg4ns4qh75fxvvmfnifwvyrq17ck85q8c0753i1irf";
+      extraPrefix = "";
+    })
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -100,8 +119,8 @@ in stdenv.mkDerivation (rec {
     "-DCOMPILER_RT_INCLUDE_TESTS=OFF" # FIXME: requires clang source code
 
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
-    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.targetPlatform.config}"
-    "-DTARGET_TRIPLE=${stdenv.targetPlatform.config}"
+    "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
+    "-DTARGET_TRIPLE=${stdenv.hostPlatform.config}"
   ]
   ++ stdenv.lib.optional enableSharedLibraries
     "-DLLVM_LINK_LLVM_DYLIB=ON"
@@ -136,8 +155,9 @@ in stdenv.mkDerivation (rec {
   + stdenv.lib.optionalString (stdenv.isDarwin && enableSharedLibraries) ''
     substituteInPlace "$out/lib/cmake/llvm/LLVMExports-${if debugVersion then "debug" else "release"}.cmake" \
       --replace "\''${_IMPORT_PREFIX}/lib/libLLVM.dylib" "$lib/lib/libLLVM.dylib"
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
-    ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
+    ${stdenv.lib.concatMapStringsSep "\n" (v: ''
+      ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${v}.dylib
+    '') versionSuffixes}
   '';
 
   doCheck = stdenv.isLinux && (!stdenv.isi686);
@@ -145,8 +165,6 @@ in stdenv.mkDerivation (rec {
   checkTarget = "check-all";
 
   enableParallelBuilding = true;
-
-  passthru.src = src;
 
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
@@ -156,7 +174,7 @@ in stdenv.mkDerivation (rec {
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

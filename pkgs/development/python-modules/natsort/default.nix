@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "natsort";
-  version = "5.5.0";
+  version = "6.2.0";
 
   checkInputs = [
     pytest
@@ -26,13 +26,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e29031f37aa264145d6ad9acdab335479ce3636806fc7aa70b7675a2b2198d09";
+    sha256 = "58c6fb2f355117e88a19808394ec1ed30a2ff881bdd2c81c436952caebd30668";
   };
 
   # testing based on project's tox.ini
+  # natsort_keygen has pytest mock issues
   checkPhase = ''
     pytest --doctest-modules natsort
-    pytest
+    pytest --ignore=tests/test_natsort_keygen.py
   '';
 
   meta = {

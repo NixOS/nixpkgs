@@ -3,7 +3,7 @@
 , qtmultimedia, qtx11extras, qttools }:
 
 stdenv.mkDerivation rec {
-  name = "retroshare-${version}";
+  pname = "retroshare";
   version = "0.6.2";
 
   src = fetchFromGitHub {

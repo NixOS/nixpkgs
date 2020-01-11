@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xorgproto
+{ stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
 , libXi, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "box2d-${version}";
+  pname = "box2d";
   version = "2.3.1";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    unzip cmake libGLU_combined freeglut libX11 xorgproto libXi
+    unzip cmake libGLU libGL freeglut libX11 xorgproto libXi
   ];
 
   cmakeFlags = [

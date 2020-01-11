@@ -1,16 +1,15 @@
 { stdenv, buildPythonPackage, fetchurl, substituteAll,
-  pythonOlder,
   geos, gdal, pytz,
   withGdal ? false
 }:
 
 buildPythonPackage rec {
   pname = "Django";
-  version = "1.11.18";
+  version = "1.11.27";
 
   src = fetchurl {
     url = "https://www.djangoproject.com/m/releases/1.11/${pname}-${version}.tar.gz";
-    sha256 = "19b6f020als9hr4q1im5282yn2b1hzf586n9kjrlkrslq7da3k3k";
+    sha256 = "1f39c5af0lkls6mqw1fd2r9rf4mbshchqjy900ab3lcshs1i6490";
   };
 
   patches = stdenv.lib.optionals withGdal [
@@ -21,11 +20,6 @@ buildPythonPackage rec {
       extension = stdenv.hostPlatform.extensions.sharedLibrary;
     })
   ];
-
-  # patch only $out/bin to avoid problems with starter templates (see #3134)
-  postFixup = ''
-    wrapPythonProgramsIn $out/bin "$out $pythonPath"
-  '';
 
   propagatedBuildInputs = [ pytz ];
 

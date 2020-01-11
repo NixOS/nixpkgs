@@ -1,16 +1,15 @@
-{stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtkdoc, gettext
+{stdenv, fetchurl, fetchFromBitbucket, autoreconfHook, gtk-doc, gettext
 , pkgconfig, glib, libxml2, gobject-introspection, gnome-common, unzip
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "liblangtag";
   version = "0.6.1";
 
   src = fetchFromBitbucket {
     owner = "tagoh";
-    repo = "${pname}";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "19dk2qsg7f3ig9xz8d73jvikmf5kvrwi008wrz2psxinbdml442g";
   };
 
@@ -38,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gettext glib libxml2 gobject-introspection gnome-common
     unzip ];
-  nativeBuildInputs = [ autoreconfHook gtkdoc gettext pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkgconfig ];
 
   meta = {
     inherit version;

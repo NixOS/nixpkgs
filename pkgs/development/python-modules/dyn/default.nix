@@ -4,7 +4,6 @@
 buildPythonPackage rec {
   pname = "dyn";
   version = "1.8.1";
-  name  = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;
@@ -28,7 +27,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Dynect dns lib";
-    homepage = "http://dyn.readthedocs.org/en/latest/intro.html";
+    homepage = "https://dyn.readthedocs.org/en/latest/intro.html";
     license = licenses.bsd3;
   };
 }

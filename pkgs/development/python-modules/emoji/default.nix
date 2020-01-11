@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "emoji";
-  version = "0.5.1";
+  version = "0.5.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a9e9c08be9907c0042212c86dfbea0f61f78e9897d4df41a1d6307017763ad3e";
+    sha256 = "0x61xypwswhghchp5svs084didkgfwqpq2fbiapvirff5lx2srb0";
   };
 
   checkInputs = [ nose ];

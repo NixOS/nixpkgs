@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "qtconsole";
-  version = "4.4.3";
+  version = "4.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1b03n1ixzscm0jw97l4dq5iy4fslnqxq5bb8287xb7n2a1gs26xw";
+    sha256 = "654f423662e7dfe6a9b26fac8ec76aedcf742c339909ac49f1f0c1a1b744bcd1";
   };
 
-  buildInputs = [ nose ] ++ lib.optionals isPy27 [mock];
+  checkInputs = [ nose ] ++ lib.optionals isPy27 [mock];
   propagatedBuildInputs = [traitlets jupyter_core jupyter_client pygments ipykernel pyqt5];
 
   # : cannot connect to X server
@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter Qt console";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ fridh ];

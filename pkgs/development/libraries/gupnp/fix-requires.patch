@@ -1,9 +1,26 @@
---- a/gupnp-1.0.pc.in
-+++ b/gupnp-1.0.pc.in
-@@ -8,4 +8,5 @@
- Version: @VERSION@
- Libs: -L${libdir} -lgupnp-1.0
- Cflags: -I${includedir}/gupnp-1.0
--Requires.private: gssdp-1.0 libxml-2.0 libsoup-2.4 @UUID_LIBS@
-+Requires: glib-2.0 gobject-2.0 gssdp-1.0 libxml-2.0 libsoup-2.4
-+Requires.private: @UUID_LIBS@
+--- a/libgupnp/meson.build
++++ b/libgupnp/meson.build
+@@ -110,6 +110,7 @@ pkg.generate(
+     libraries : libgupnp,
+     subdirs: 'gupnp-1.2',
+     name : 'gupnp-1.2',
++    requires: requires,
+     description : 'GObject-based UPnP library',
+     version : meson.project_version(),
+     filebase : 'gupnp-1.2'
+--- a/meson.build
++++ a/meson.build
+@@ -18,6 +18,13 @@ add_global_arguments('-DHAVE_CONFIG_H=1', language : 'c')
+ 
+ guul = subproject('guul', default_options : ['default_library=static'])
+ 
++requires = [
++  dependency('glib-2.0', version : '>= 2.44'),
++  dependency('gssdp-1.2', version : '>= 1.1'),
++  dependency('libsoup-2.4', version : '>= 2.48.0'),
++  dependency('libxml-2.0')
++]
++
+ dependencies = [
+     dependency('glib-2.0', version : '>= 2.44'),
+     dependency('gio-2.0', version : '>= 2.44'),

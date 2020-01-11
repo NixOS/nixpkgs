@@ -43,8 +43,8 @@ buildPythonPackage rec {
   '';
 
   preConfigure = ''
-    [ -z "$dontPlacateNuget" ] && placate-nuget.sh
-    [ -z "$dontPlacatePaket" ] && placate-paket.sh
+    [ -z "''${dontPlacateNuget-}" ] && placate-nuget.sh
+    [ -z "''${dontPlacatePaket-}" ] && placate-paket.sh
   '';
 
   nativeBuildInputs = [
@@ -80,5 +80,6 @@ buildPythonPackage rec {
     homepage = https://pythonnet.github.io;
     license = licenses.mit;
     maintainers = with maintainers; [ jraygauthier ];
+    broken = true;
   };
 }

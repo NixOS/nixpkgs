@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "msgpack";
-  version = "0.5.6";
+  version = "0.6.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0ee8c8c85aa651be3aa0cd005b5931769eaa658c948ce79428766f1bd46ae2c3";
+    sha256 = "ea3c2f859346fcd55fc46e96885301d9c2f7a36d453f5d8f2967840efa1e1830";
   };
 
   checkPhase = ''

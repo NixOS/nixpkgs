@@ -1,8 +1,9 @@
-{ stdenv, fetchurl, m4, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt
+{ stdenv, fetchurl, m4
+, cxx ? !stdenv.hostPlatform.useAndroidPrebuilt && !stdenv.hostPlatform.isWasm
 , buildPackages
 , withStatic ? false }:
 
-let inherit (stdenv.lib) optional optionalString; in
+let inherit (stdenv.lib) optional; in
 
 let self = stdenv.mkDerivation rec {
   name = "gmp-6.1.2";
@@ -36,7 +37,9 @@ let self = stdenv.mkDerivation rec {
     "--build=${stdenv.buildPlatform.config}"
   ] ++ optional (cxx && stdenv.isDarwin) "CPPFLAGS=-fexceptions"
     ++ optional (stdenv.isDarwin && stdenv.is64bit) "ABI=64"
-    ++ optional (with stdenv.hostPlatform; useAndroidPrebuilt || useiOSPrebuilt) "--disable-assembly"
+    # to build a .dll on windows, we need --disable-static + --enable-shared
+    # see https://gmplib.org/manual/Notes-for-Particular-Systems.html
+    ++ optional (!withStatic && stdenv.hostPlatform.isWindows) "--disable-static --enable-shared"
     ;
 
   doCheck = true; # not cross;

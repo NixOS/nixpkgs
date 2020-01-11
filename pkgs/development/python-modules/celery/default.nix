@@ -1,52 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect,
-  pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ lib, buildPythonPackage, fetchPypi, libredirect
+, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.2.1";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
+    sha256 = "d3363bb5df72d74420986a435449f3c3979285941dff57d5d97ecba352a0e3e2";
   };
 
-  # See https://github.com/celery/celery/issues/4500
-  # TODO: Remove once upgraded to 4.3
-  disabled = isPy37;
-
-  patches = [
-    # Skip test_RedisBackend.test_timeouts_in_url_coerced
-    # See https://github.com/celery/celery/pull/4847
-    (fetchpatch {
-      url = https://github.com/celery/celery/commit/b2668607c909c61becd151905b4525190c19ff4a.patch;
-      sha256 = "11w0z2ycyh8kccj4y69zb7bxppiipcwwigg6jn1q9yrcsvz170jq";
-    })
-    # Allow usage of a newer pytest version
-    # See https://github.com/celery/celery/pull/4912
-    (fetchpatch {
-      url = https://github.com/celery/celery/commit/16f56fe6f84cac9f92affac3ad06a1f168a19798.patch;
-      sha256 = "0vz68rl32m34k51nhs898jcfdbj5m7cszzxx0w0j3j1fhn1wq594";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace requirements/test.txt --replace ",<3.9" ""
+    substituteInPlace requirements/test.txt \
+      --replace "moto==1.3.7" moto \
+      --replace "pytest>=4.3.1,<4.4.0" pytest
   '';
 
-  # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
-  preCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    export NIX_REDIRECTS=/etc/protocols=${iana-etc}/etc/protocols \
-      LD_PRELOAD=${libredirect}/lib/libredirect.so
-  '';
-  postCheck = stdenv.lib.optionalString stdenv.isLinux ''
-    unset NIX_REDIRECTS LD_PRELOAD
+  # ignore test that's incompatible with pytest5
+  # test_eventlet touches network
+  # test_mongodb requires pymongo
+  checkPhase = ''
+    pytest -k 'not restore_current_app_fallback and not msgpack' \
+      --ignore=t/unit/concurrency/test_eventlet.py \
+      --ignore=t/unit/backends/test_mongodb.py
   '';
 
-  checkInputs = [ pytest case ];
+  checkInputs = [ case pytest boto3 moto ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/celery/celery/;
     description = "Distributed task queue";
     license = licenses.bsd3;

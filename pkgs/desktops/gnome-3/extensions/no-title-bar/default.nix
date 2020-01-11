@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, substituteAll, glib, gettext, xorg }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-no-title-bar-${version}";
+  pname = "gnome-shell-extension-no-title-bar";
   version = "9";
 
   src = fetchFromGitHub {
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
     description = "Integrates maximized windows with the top panel";
     homepage = https://github.com/franglais125/no-title-bar;
     license = licenses.gpl2;
+    broken = true; # https://github.com/franglais125/no-title-bar/issues/114
     maintainers = with maintainers; [ jonafato svsdep ];
     platforms = platforms.linux;
   };

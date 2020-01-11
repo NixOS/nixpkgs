@@ -1,41 +1,36 @@
-{ stdenv, makeWrapper, python2Packages, fetchFromGitHub }:
+{ lib, fetchFromGitHub, python3 }:
 
-stdenv.mkDerivation rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "theHarvester";
-  version = "2.7.1";
-  name = "${pname}-${version}";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "laramies";
-    repo = "${pname}";
-    rev = "25553762d2d93a39083593adb08a34d5f5142c60";
-    sha256 = "0gnm598y6paz0knwvdv1cx0w6ngdbbpzkdark3q5vs66yajv24w4";
+    repo = pname;
+    rev = "V${version}";
+    sha256 = "0lxzxfa9wbzim50d2jmd27i57szd0grm1dfayhnym86jn01qpvn3";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = with python3.pkgs; [ 
+    aiodns beautifulsoup4 dns grequests netaddr
+    plotly pyyaml requests retrying shodan texttable
+  ];
 
-  # add dependencies
-  propagatedBuildInputs = [ python2Packages.requests ];
+  checkInputs = [ python3.pkgs.pytest ];
 
-  installPhase = ''
-    # create dirs
-    mkdir -p $out/share/${pname} $out/bin
+  checkPhase = "runHook preCheck ; pytest tests/test_myparser.py ; runHook postCheck";
+  # We don't run other tests (discovery modules) because they require network access
 
-    # move project code
-    mv * $out/share/${pname}/
-
-    # make project runnable
-    chmod +x $out/share/${pname}/theHarvester.py
-    ln -s $out/share/${pname}/theHarvester.py $out/bin
-
-    wrapProgram "$out/bin/theHarvester.py" --prefix PYTHONPATH : $out/share/${pname}:$PYTHONPATH
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Gather E-mails, subdomains and names from different public sources";
+    longDescription = ''
+      theHarvester is a very simple, yet effective tool designed to be used in the early
+      stages of a penetration test. Use it for open source intelligence gathering and
+      helping to determine an entity's external threat landscape on the internet. The tool
+      gathers emails, names, subdomains, IPs, and URLs using multiple public data sources.
+    '';
     homepage = "https://github.com/laramies/theHarvester";
-    platforms = platforms.all;
-    maintainers = with maintainers; [ treemo ];
+    maintainers = with maintainers; [ c0bw3b treemo ];
     license = licenses.gpl2;
   };
 }

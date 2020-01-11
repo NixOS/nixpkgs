@@ -6,13 +6,13 @@ buildRubyGem rec {
 
   name = "${gemName}-${version}";
   gemName = "bundix";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
-    owner = "manveru";
+    owner = "nix-community";
     repo = "bundix";
     rev = version;
-    sha256 = "175qmv7dj7v50v71b78dzn5pb4a35ml6p15asks9q1rrlkz0n4gn";
+    sha256 = "05y8sy6v9km1dwvpjzkjxpfzv95g6yzac1b5blac2f1r2kw167p8";
   };
 
   buildInputs = [ ruby bundler ];

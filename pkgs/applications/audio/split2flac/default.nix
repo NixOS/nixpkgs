@@ -18,7 +18,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "split2flac-${version}";
+  pname = "split2flac";
   version = "122";
 
   src = fetchFromGitHub {

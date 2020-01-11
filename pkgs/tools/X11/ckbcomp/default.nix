@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitLab, perl, xkeyboard_config }:
 
 stdenv.mkDerivation rec {
-  name = "ckbcomp-${version}";
-  version = "1.188";
+  pname = "ckbcomp";
+  version = "1.194";
 
   src = fetchFromGitLab {
     domain = "salsa.debian.org";
     owner = "installer-team";
     repo = "console-setup";
     rev = version;
-    sha256 = "1741mg2wc5wa63clkijmv04zd6jxhc7c6aq7mkhqw1r4dhfhih19";
+    sha256 = "0fkabv05j5dj10mfrpjyvv7lnxl9qaqkbjhwj72r18i9i4019vgh";
   };
 
   buildInputs = [ perl ];

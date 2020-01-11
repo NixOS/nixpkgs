@@ -1,7 +1,7 @@
 { stdenv, fetchsvn, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "welkin-${version}";
+  pname = "welkin";
   version = "1.1";
 
   src = fetchsvn {

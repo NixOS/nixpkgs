@@ -29,15 +29,15 @@ stdenv.mkDerivation rec {
   name = "ghc-${version}-binary";
 
   src = fetchurl ({
-    "i686-linux" = {
+    i686-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-i386-deb8-linux.tar.xz";
       sha256 = "0bw8a7fxcbskf93rb4m542ff66vrmx5i5kj77qx37cbhijx70w5m";
     };
-    "x86_64-linux" = {
+    x86_64-linux = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb8-linux.tar.xz";
       sha256 = "1m9gaga2pzi2cx5gvasg0rx1dlvr68gmi20l67652kag6xjsa719";
     };
-    "x86_64-darwin" = {
+    x86_64-darwin = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "1hbzk57v45176kxcx848p5jn5p1xbp2129ramkbzsk6plyhnkl3r";
     };
@@ -99,6 +99,15 @@ stdenv.mkDerivation rec {
 
       sed -i "s|/usr/bin/perl|perl\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
       sed -i "s|/usr/bin/gcc|gcc\x00        |" ghc-${version}/ghc/stage2/build/tmp/ghc-stage2
+    '' +
+    # We're kludging a glibc bindist into working with non-glibc...
+    # Here we patch up the use of `__strdup` (part of glibc binary ABI)
+    # to instead use `strdup` since musl doesn't provide __strdup
+    # (`__strdup` is defined to be an alias of `strdup` anyway[1]).
+    # [1] http://refspecs.linuxbase.org/LSB_4.0.0/LSB-Core-generic/LSB-Core-generic/baselib---strdup-1.html
+    # Use objcopy magic to make the change:
+    stdenv.lib.optionalString stdenv.hostPlatform.isMusl ''
+      find ./ghc-${version}/rts -name "libHSrts*.a" -exec ''${OBJCOPY:-objcopy} --redefine-sym __strdup=strdup {} \;
     '';
 
   configurePlatforms = [ ];

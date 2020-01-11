@@ -12,10 +12,10 @@ let
   mkFlag = flag: feature: (if flag then "--with-" else "--without-") + feature;
 
   self = stdenv.mkDerivation rec {
-    name = "libinfinity-${version}";
+    pname = "libinfinity";
     version = "0.7.1";
     src = fetchurl {
-      url = "http://releases.0x539.de/libinfinity/${name}.tar.gz";
+      url = "http://releases.0x539.de/libinfinity/${pname}-${version}.tar.gz";
       sha256 = "1jw2fhrcbpyz99bij07iyhy9ffyqdn87vl8cb1qz897y3f2f0vk2";
     };
 

@@ -1,38 +1,26 @@
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python36, fetchFromGitHub }:
+{ stdenv, python3, fetchFromGitHub }:
 
 let
-  python = if stable then python36.override {
+  python = python3.override {
     packageOverrides = self: super: {
-      async-timeout = super.async-timeout.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.1";
+      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
+        version = "5.6.3";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "1l3kg062m02mph6rf9rdv8r5c5n356clxa6b6mrn0i77vk9g9kq0";
+          sha256 = "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6";
         };
       });
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.10";
+      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
+          sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
         };
-        propagatedBuildInputs = with self; [ async-timeout attrs chardet multidict yarl idna-ssl ];
-        doCheck = false;
-      });
-      aiohttp-cors = super.aiohttp-cors.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.3";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "11b51mhr7wjfiikvj3nc5s8c7miin2zdhl3yrzcga4mbpkj892in";
-        };
-        propagatedBuildInputs = with self; [ aiohttp ]
-          ++ stdenv.lib.optional (pythonOlder "3.5") typing;
       });
     };
-  } else python36;
-
+  };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
   inherit version;
@@ -44,11 +32,18 @@ in python.pkgs.buildPythonPackage {
     sha256 = sha256Hash;
   };
 
+  postPatch = ''
+    # Only 2.x is problematic:
+    sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+    # yarl 1.4+ only requires Python 3.6+
+    sed -iE "s/yarl==1.3.0//" requirements.txt
+  '';
+
   propagatedBuildInputs = with python.pkgs; [
-    aiohttp-cors yarl aiohttp multidict
-    jinja2 psutil zipstream raven jsonschema typing
+    aiohttp-cors yarl aiohttp multidict setuptools
+    jinja2 psutil zipstream raven jsonschema distro async_generator aiofiles
     (python.pkgs.callPackage ../../../development/python-modules/prompt_toolkit/1.nix {})
-  ] ++ stdenv.lib.optional (!stable) python.pkgs.distro;
+  ];
 
   # Requires network access
   doCheck = false;

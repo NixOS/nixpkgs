@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytestrunner
 , pytest
 , py-cpuinfo
 , pythonOlder
@@ -20,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "1hslzzinpwc1zqhbpllqh3sllmiyk69pcycl7ahr0rz3micgwczj";
   };
 
-  propagatedBuildInputs = [ pytest py-cpuinfo ] ++ lib.optional (pythonOlder "3.4") [ pathlib statistics ];
+  propagatedBuildInputs = [ pytest py-cpuinfo ] ++ lib.optionals (pythonOlder "3.4") [ pathlib statistics ];
 
   meta = {
     description = "Py.test fixture for benchmarking code";

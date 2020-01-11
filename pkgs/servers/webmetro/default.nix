@@ -2,7 +2,6 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "webmetro";
-  name = "${pname}-${version}";
   version = "unstable-20180426";
 
   src = fetchFromGitHub {
@@ -12,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1n2c7ygs8qsd5zgii6fqqcwg427bsij082bg4ijnzkq5630dx651";
   };
 
-  cargoSha256 = "0drf331qic1gf58j7izwp0q2l4w0dyrhr19rd2y5k43cw4m1nq59";
+  cargoSha256 = "03ncwj9bn21590phcnqyclclcird7rikbhxbwhg8i9i0nad81aaa";
 
   meta = with stdenv.lib; {
     description = "Simple relay server for broadcasting a WebM stream";

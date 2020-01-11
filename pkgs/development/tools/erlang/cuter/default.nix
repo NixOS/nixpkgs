@@ -1,8 +1,8 @@
 { stdenv, autoreconfHook, which, writeText, makeWrapper, fetchFromGitHub, erlang
-, beamPackages, z3, python }:
+, z3, python }:
 
 stdenv.mkDerivation rec {
-  name = "cuter-${version}";
+  pname = "cuter";
   version = "0.1";
 
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook makeWrapper which ];
   buildInputs = [ python python.pkgs.setuptools z3.python erlang ];
 
-  buildFlags = "PWD=$(out)/lib/erlang/lib/cuter-${version} cuter_target";
+  buildFlags = [ "PWD=$(out)/lib/erlang/lib/cuter-${version}" "cuter_target" ];
   configurePhase = ''
     autoconf
     ./configure --prefix $out

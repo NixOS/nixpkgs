@@ -4,13 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "rabbitmq-server-${version}";
+  pname = "rabbitmq-server";
 
-  version = "3.7.11";
+  version = "3.8.2";
 
+  # when updating, consider bumping elixir version in all-packages.nix
   src = fetchurl {
-    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${name}.tar.xz";
-    sha256 = "04m9ikm7ywx63y68lf3rxds97nr9czdzg82c1m1f823m89kmpgi0";
+    url = "https://github.com/rabbitmq/rabbitmq-server/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "17gixahxass9n4d697my8sq4an51rw3cicb36fqvl8fbhnwjjrwc";
   };
 
   buildInputs =
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "man" "doc" ];
 
-  installFlags = "PREFIX=$(out) RMQ_ERLAPP_DIR=$(out)";
-  installTargets = "install install-man";
+  installFlags = [ "PREFIX=$(out)" "RMQ_ERLAPP_DIR=$(out)" ];
+  installTargets = [ "install" "install-man" ];
 
   runtimePath = stdenv.lib.makeBinPath [getconf erlang socat];
   postInstall = ''

@@ -11,7 +11,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "C runtime libraries of ANTLR v3";
-    homepage = http://www.antlr3.org/;
+    homepage = https://www.antlr3.org/;
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ vbgl ];

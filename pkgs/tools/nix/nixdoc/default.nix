@@ -1,7 +1,7 @@
-{ stdenv, callPackage, fetchFromGitHub, rustPlatform, darwin }:
+{ stdenv, fetchFromGitHub, rustPlatform, darwin }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "nixdoc-${version}";
+  pname = "nixdoc";
   version = "1.0.1";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =  stdenv.lib.optional stdenv.isDarwin [ darwin.Security ];
 
-  cargoSha256 = "1bfn1x1jhpyidai4cjwip5r1ibkqp26ivmqq3vjm71l00m6avb94";
+  cargoSha256 = "1hy8w73fir4wnqx7zfvfqh7s24w95x9nkw55kmizvrwf0glw9m4n";
 
   meta = with stdenv.lib; {
     description = "Generate documentation for Nix functions";

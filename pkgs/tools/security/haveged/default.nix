@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "haveged-${version}";
+  pname = "haveged";
   version = "1.9.2";
 
   src = fetchurl {

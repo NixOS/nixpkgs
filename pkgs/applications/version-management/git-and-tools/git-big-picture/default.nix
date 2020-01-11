@@ -4,8 +4,6 @@ python2Packages.buildPythonApplication rec {
   pname = "git-big-picture";
   version = "0.10.1";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "esc";
     repo = pname;
@@ -14,6 +12,8 @@ python2Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ git graphviz ];
+
+  checkInputs = [ git ];
 
   postFixup = ''
     wrapProgram $out/bin/git-big-picture \

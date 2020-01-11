@@ -1,26 +1,26 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, gpgme, lvm2 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dive";
-  version = "0.5.0";
-
-  goPackagePath = "github.com/wagoodman/dive";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
-    repo = "dive";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "159m36p7b0ygdp42qdmmz02rhrkymh8m6yl21m1ixd4c2pjkjhns";
+    sha256 = "0bqmrva7rx6al50fmy4gvf853csascc5mj6ihgg7ydsy0d99j5qn";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "0hb7bq8v6xr8xqni1iv3zkqdnknfy539sm0vxqal1mhvs5yg06m0";
 
-  doCheck = true;
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
 
   meta = with stdenv.lib; {
     description = "A tool for exploring each layer in a docker image";
     homepage = https://github.com/wagoodman/dive;
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam spacekookie ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, unzip, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "avr8-burn-omat-2.1.2";
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
     mkdir -p $out/{nix-support,bin}
     mv *.jar license_gpl-3.0.txt lib *.xml *.png $out/nix-support
     cat >> $out/bin/avr8-burn-omat << EOF
-      #!${stdenv.shell}
-      cd $out/nix-support; exec java -jar AVR8_Burn_O_Mat.jar
+    #!${runtimeShell}
+    cd $out/nix-support; exec java -jar AVR8_Burn_O_Mat.jar
     EOF
     chmod +x $out/bin/avr8-burn-omat
   '';

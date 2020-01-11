@@ -14,9 +14,9 @@ let
 minSdkVersion = "9.0";
 
 iosPlatformArch = { parsed, ... }: {
-  "armv7a"  = "armv7";
-  "aarch64" = "arm64";
-  "x86_64"  = "x86_64";
+  armv7a  = "armv7";
+  aarch64 = "arm64";
+  x86_64  = "x86_64";
 }.${parsed.cpu.name};
 
 in
@@ -43,6 +43,7 @@ rec {
     cc = clang-unwrapped;
     bintools = binutils;
     libc = targetIosSdkPkgs.libraries;
+    extraPackages = [ "${sdk}/System" ];
     extraBuildCommands = ''
       tr '\n' ' ' < $out/nix-support/cc-cflags > cc-cflags.tmp
       mv cc-cflags.tmp $out/nix-support/cc-cflags

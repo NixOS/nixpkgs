@@ -1,5 +1,4 @@
 { buildPackages
-, ncurses
 , callPackage
 , perl
 , bison ? null
@@ -32,6 +31,10 @@
   # indicates a kernel that provides Intel wireless support.  Used in
   # NixOS to implement kernel-specific behaviour.
   features ? {}
+
+, # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  # automatically extended with extra per-version and per-config values.
+  randstructSeed ? ""
 
 , # A list of patches to apply to the kernel.  Each element of this list
   # should be an attribute set {name, patch} where `name' is a
@@ -90,7 +93,8 @@ let
 
   configfile = stdenv.mkDerivation {
     inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
-    name = "linux-config-${version}";
+    pname = "linux-config";
+    inherit version;
 
     generateConfig = ./generate-config.pl;
 
@@ -147,8 +151,8 @@ let
       moduleStructuredConfig = (lib.evalModules {
         modules = [
           module
-          { settings = commonStructuredConfig; }
-          { settings = structuredExtraConfig; }
+          { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
+          { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
         ]
         ++  structuredConfigFromPatches
         ;
@@ -162,7 +166,7 @@ let
   }; # end of configfile derivation
 
   kernel = (callPackage ./manual-config.nix {}) {
-    inherit version modDirVersion src kernelPatches stdenv extraMeta configfile;
+    inherit version modDirVersion src kernelPatches randstructSeed stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
   };

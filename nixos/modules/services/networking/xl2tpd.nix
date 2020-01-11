@@ -8,13 +8,13 @@ with lib;
       enable = mkEnableOption "xl2tpd, the Layer 2 Tunnelling Protocol Daemon";
 
       serverIp = mkOption {
-        type        = types.string;
+        type        = types.str;
         description = "The server-side IP address.";
         default     = "10.125.125.1";
       };
 
       clientIpRange = mkOption {
-        type        = types.string;
+        type        = types.str;
         description = "The range from which client IPs are drawn.";
         default     = "10.125.125.2-11";
       };

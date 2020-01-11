@@ -6,31 +6,8 @@ with lib;
 
 {
 
-  ###### interface
-
-  options = {
-
-    services.pantheon.files = {
-
-      enable = mkEnableOption "pantheon files daemon";
-
-    };
-
-  };
-
-
-  ###### implementation
-
-  config = mkIf config.services.pantheon.files.enable {
-
-    environment.systemPackages = [
-      pkgs.pantheon.elementary-files
-    ];
-
-    services.dbus.packages = [
-      pkgs.pantheon.elementary-files
-    ];
-
-  };
+  imports = [
+    (mkRemovedOptionModule [ "services" "pantheon" "files" "enable" ] "Use `environment.systemPackages [ pkgs.pantheon.elementary-files ];`")
+  ];
 
 }

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "deis-${version}";
+  pname = "deis";
   version = "1.13.4";
   rev = "v${version}";
 
@@ -29,9 +29,8 @@ buildGoPackage rec {
     homepage = https://deis.io;
     description = "A command line utility used to interact with the Deis open source PaaS.";
     license = licenses.asl20;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [
-      jgeerds
     ];
   };
 }

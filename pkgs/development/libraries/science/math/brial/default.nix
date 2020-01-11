@@ -8,14 +8,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.2.4";
-  name = "brial-${version}";
+  version = "1.2.6";
+  pname = "brial";
 
   src = fetchFromGitHub {
     owner = "BRiAl";
     repo = "BRiAl";
     rev = version;
-    sha256 = "08skgmwz190mvpkh0ddx92ilva6bxidxwh1qg16ipi768x92193s";
+    sha256 = "1mc1zjr3mxcx6bg0js5k9jx65japg7644b0aj1al75m4nwh2ygab";
   };
 
   # FIXME package boost-test and enable checks
@@ -41,6 +41,6 @@ stdenv.mkDerivation rec {
     description = "Legacy version of PolyBoRi maintained by sagemath developers";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

@@ -5,7 +5,8 @@ let
   version = "2.3.1";
 
 in stdenv.mkDerivation {
-  name = "as31-${version}";
+  pname = "as31";
+  inherit version;
   src = fetchurl {
     name = "as31-${version}.tar.gz"; # Nix doesn't like the colons in the URL
     url = "http://wiki.erazor-zone.de/_media/wiki:projects:linux:as31:as31-${version}.tar.gz";

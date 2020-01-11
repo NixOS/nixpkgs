@@ -86,7 +86,8 @@ in
 
     services.fcron.systab = systemCronJobs;
 
-    environment.etc =
+    environment.etc = listToAttrs
+      (map (x: { name = x.target; value = x; })
       [ (allowdeny "allow" (cfg.allow))
         (allowdeny "deny" cfg.deny)
         # see man 5 fcron.conf
@@ -100,8 +101,8 @@ in
             in
             pkgs.writeText "fcron.conf" ''
               fcrontabs   =       /var/spool/fcron
-              pidfile     =       /var/run/fcron.pid
-              fifofile    =       /var/run/fcron.fifo
+              pidfile     =       /run/fcron.pid
+              fifofile    =       /run/fcron.fifo
               fcronallow  =       /etc/fcron.allow
               fcrondeny   =       /etc/fcron.deny
               shell       =       /bin/sh
@@ -112,7 +113,7 @@ in
           gid = config.ids.gids.fcron;
           mode = "0644";
         }
-      ];
+      ]);
 
     environment.systemPackages = [ pkgs.fcron ];
     users.users.fcron = {
@@ -143,7 +144,6 @@ in
     };
     systemd.services.fcron = {
       description = "fcron daemon";
-      after = [ "local-fs.target" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ pkgs.fcron ];

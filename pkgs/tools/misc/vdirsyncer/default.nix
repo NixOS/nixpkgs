@@ -1,4 +1,4 @@
-{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, glibcLocales, rustPlatform, pkgconfig, openssl, Security }:
+{ stdenv, python3Packages, fetchFromGitHub, fetchpatch, rustPlatform, pkgconfig, openssl, CoreServices, Security }:
 
 # Packaging documentation at:
 # https://github.com/untitaker/vdirsyncer/blob/master/docs/packaging.rst
@@ -8,18 +8,19 @@ python3Packages.buildPythonApplication rec {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = "pimutils";
+    owner = "spk";
     repo = pname;
-    rev = "ac45cf144b0ceb72cc2a9f454808688f3ac9ba4f";
-    sha256 = "0hqsjdpgvm7d34q5b2hzmrzfxk43ald1bx22mvgg559kw1ck54s9";
+    # fix-build-style branch, see https://github.com/pimutils/vdirsyncer/pull/798
+    rev = "2c62d03bd73f8b44a47c2e769ade046697896ae9";
+    sha256 = "1q6xvzz5rf5sqdaj3mdvhpgwy5b16isavgg7vardgjwqwv1yal28";
   };
 
   native = rustPlatform.buildRustPackage {
     name = "${name}-native";
     inherit src;
     sourceRoot = "source/rust";
-    cargoSha256 = "02fxxw4vr6rpdbslrc9c1zhzs704bw7i40akrmh5cxl26rsffdgk";
-    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
+    cargoSha256 = "1n1dxq3klsry5mmbfff2jv7ih8mr5zvpncrdgba6qs93wi77qi0y";
+    buildInputs = [ pkgconfig openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -32,23 +33,21 @@ python3Packages.buildPythonApplication rec {
     shippai
   ];
 
-  buildInputs = with python3Packages; [ setuptools_scm ];
+  nativeBuildInputs = with python3Packages; [ setuptools_scm ];
 
-  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ] ++ [ glibcLocales ];
+  checkInputs = with python3Packages; [ hypothesis pytest pytest-localserver pytest-subtesthack ];
 
   patches = [
-    # Fixes for hypothesis: https://github.com/pimutils/vdirsyncer/pull/779
     (fetchpatch {
-      url = https://github.com/pimutils/vdirsyncer/commit/22ad88a6b18b0979c5d1f1d610c1d2f8f87f4b89.patch;
-      sha256 = "0dbzj6jlxhdidnm3i21a758z83sdiwzhpd45pbkhycfhgmqmhjpl";
-    })
-    (fetchpatch {
-      url = https://github.com/pimutils/vdirsyncer/commit/29417235321c249c65904bc7948b066ef5683aee.patch;
-      sha256 = "0zvr0y88gm3vprjcdzs4m151laa9qhkyi61rvrfdjmf42fwhbm80";
+      url = "https://github.com/pimutils/vdirsyncer/commit/7b636e8e40d69c495901f965b9c0686513659e44.patch";
+      sha256 = "0vl942ii5iad47y63v0ngmhfp37n30nxyk4j7h64b95fk38vfwx9";
     })
   ];
 
   postPatch = ''
+    # see https://github.com/pimutils/vdirsyncer/pull/805
+    substituteInPlace setup.cfg --replace --duration --durations
+
     # for setuptools_scm:
     echo 'Version: ${version}' >PKG-INFO
 
@@ -60,19 +59,15 @@ python3Packages.buildPythonApplication rec {
     ln -s ${native}/lib/libvdirsyncer_rustext* rust/target/release/
   '';
 
-  LC_ALL = "en_US.utf8";
-
   checkPhase = ''
     rm -rf vdirsyncer
-    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
     make DETERMINISTIC_TESTS=true test
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/pimutils/vdirsyncer;
     description = "Synchronize calendars and contacts";
-    maintainers = with maintainers; [ jgeerds ];
-    platforms = platforms.all;
+    maintainers = with maintainers; [ matthiasbeyer gebner ];
     license = licenses.mit;
   };
 }

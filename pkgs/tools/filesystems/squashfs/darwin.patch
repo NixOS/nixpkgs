@@ -1,5 +1,11 @@
+Patch based on commits by Dave Vasilevsky <dave@vasilevsky.ca> and
+Blake Riley <blake.riley@gmail.com>, squashed into a single patch,
+with BSD-specific changes omitted.
+
+See also https://github.com/plougher/squashfs-tools/pull/69.
+
 diff --git a/squashfs-tools/action.c b/squashfs-tools/action.c
-index 4b06ccb..26365e7 100644
+index 4b06ccb..3cad2ab 100644
 --- a/squashfs-tools/action.c
 +++ b/squashfs-tools/action.c
 @@ -38,6 +38,10 @@
@@ -7,7 +13,7 @@ index 4b06ccb..26365e7 100644
  #include <errno.h>
  
 +#ifndef FNM_EXTMATCH /* glibc extension */
-+ #define FNM_EXTMATCH 0
++	#define FNM_EXTMATCH 0
 +#endif
 +
  #include "squashfs_fs.h"
@@ -28,21 +34,21 @@ index 4b06ccb..26365e7 100644
  
  /*
 diff --git a/squashfs-tools/info.c b/squashfs-tools/info.c
-index 7968c77..c8e4c52 100644
+index fe23d78..5c2f835 100644
 --- a/squashfs-tools/info.c
 +++ b/squashfs-tools/info.c
-@@ -134,31 +134,22 @@ void dump_state()
+@@ -144,31 +144,22 @@ void dump_state()
  void *info_thrd(void *arg)
  {
  	sigset_t sigmask;
 -	struct timespec timespec = { .tv_sec = 1, .tv_nsec = 0 };
 -	int sig, waiting = 0;
-+    int sig, err, waiting = 0;
++	int sig, err, waiting = 0;
  
  	sigemptyset(&sigmask);
  	sigaddset(&sigmask, SIGQUIT);
  	sigaddset(&sigmask, SIGHUP);
-+    sigaddset(&sigmask, SIGALRM);
++	sigaddset(&sigmask, SIGALRM);
  
  	while(1) {
 -		if(waiting)
@@ -64,11 +70,11 @@ index 7968c77..c8e4c52 100644
  				continue;
  			default:
 -				BAD_ERROR("sigtimedwait/sigwaitinfo failed "
-+				BAD_ERROR("sigwaitfailed "
++				BAD_ERROR("sigwait failed "
  					"because %s\n", strerror(errno));
  			}
  		}
-@@ -169,8 +160,12 @@ void *info_thrd(void *arg)
+@@ -179,8 +170,12 @@ void *info_thrd(void *arg)
  			/* set one second interval period, if ^\ received
  			   within then, dump queue and cache status */
  			waiting = 1;
@@ -83,119 +89,46 @@ index 7968c77..c8e4c52 100644
  }
  
 diff --git a/squashfs-tools/mksquashfs.c b/squashfs-tools/mksquashfs.c
-index d696a51..c86d1b3 100644
+index a45b77f..3607448 100644
 --- a/squashfs-tools/mksquashfs.c
 +++ b/squashfs-tools/mksquashfs.c
-@@ -50,6 +50,10 @@
+@@ -35,7 +35,12 @@
+ #include <stddef.h>
+ #include <sys/types.h>
+ #include <sys/stat.h>
++#ifndef linux
++#include <sys/sysctl.h>
++#else
++#include <sys/sysinfo.h>
+ #include <sys/sysmacros.h>
++#endif
+ #include <fcntl.h>
+ #include <errno.h>
+ #include <dirent.h>
+@@ -50,7 +55,10 @@
+ #include <sys/wait.h>
  #include <limits.h>
  #include <ctype.h>
- 
-+#ifndef FNM_EXTMATCH /* glibc extension */
-+    #define FNM_EXTMATCH 0
-+#endif
+-#include <sys/sysinfo.h>
 +
++#ifndef FNM_EXTMATCH /* glibc extension */
++	#define FNM_EXTMATCH 0
++#endif
+ 
  #ifndef linux
  #define __BYTE_ORDER BYTE_ORDER
- #define __BIG_ENDIAN BIG_ENDIAN
-@@ -831,13 +835,13 @@ char *subpathname(struct dir_ent *dir_ent)
- }
- 
- 
--inline unsigned int get_inode_no(struct inode_info *inode)
-+static inline unsigned int get_inode_no(struct inode_info *inode)
- {
- 	return inode->inode_number;
- }
- 
- 
--inline unsigned int get_parent_no(struct dir_info *dir)
-+static inline unsigned int get_parent_no(struct dir_info *dir)
- {
- 	return dir->depth ? get_inode_no(dir->dir_ent->inode) : inode_no;
- }
-@@ -2030,7 +2034,7 @@ struct file_info *duplicate(long long file_size, long long bytes,
- }
- 
- 
--inline int is_fragment(struct inode_info *inode)
-+static inline int is_fragment(struct inode_info *inode)
- {
- 	off_t file_size = inode->buf.st_size;
- 
-@@ -2999,13 +3003,13 @@ struct inode_info *lookup_inode2(struct stat *buf, int pseudo, int id)
- }
- 
- 
--inline struct inode_info *lookup_inode(struct stat *buf)
-+static inline struct inode_info *lookup_inode(struct stat *buf)
- {
- 	return lookup_inode2(buf, 0, 0);
- }
- 
- 
--inline void alloc_inode_no(struct inode_info *inode, unsigned int use_this)
-+static inline void alloc_inode_no(struct inode_info *inode, unsigned int use_this)
- {
- 	if (inode->inode_number == 0) {
- 		inode->inode_number = use_this ? : inode_no ++;
-@@ -3016,7 +3020,7 @@ inline void alloc_inode_no(struct inode_info *inode, unsigned int use_this)
- }
- 
- 
--inline struct dir_ent *create_dir_entry(char *name, char *source_name,
-+static inline struct dir_ent *create_dir_entry(char *name, char *source_name,
- 	char *nonstandard_pathname, struct dir_info *dir)
- {
- 	struct dir_ent *dir_ent = malloc(sizeof(struct dir_ent));
-@@ -3034,7 +3038,7 @@ inline struct dir_ent *create_dir_entry(char *name, char *source_name,
- }
- 
- 
--inline void add_dir_entry(struct dir_ent *dir_ent, struct dir_info *sub_dir,
-+static inline void add_dir_entry(struct dir_ent *dir_ent, struct dir_info *sub_dir,
- 	struct inode_info *inode_info)
- {
- 	struct dir_info *dir = dir_ent->our_dir;
-@@ -3050,7 +3054,7 @@ inline void add_dir_entry(struct dir_ent *dir_ent, struct dir_info *sub_dir,
- }
- 
- 
--inline void add_dir_entry2(char *name, char *source_name,
-+static inline void add_dir_entry2(char *name, char *source_name,
- 	char *nonstandard_pathname, struct dir_info *sub_dir,
- 	struct inode_info *inode_info, struct dir_info *dir)
- {
-@@ -3062,7 +3066,7 @@ inline void add_dir_entry2(char *name, char *source_name,
- }
- 
- 
--inline void free_dir_entry(struct dir_ent *dir_ent)
-+static inline void free_dir_entry(struct dir_ent *dir_ent)
- {
- 	if(dir_ent->name)
- 		free(dir_ent->name);
-@@ -3083,7 +3087,7 @@ inline void free_dir_entry(struct dir_ent *dir_ent)
- }
- 
- 
--inline void add_excluded(struct dir_info *dir)
-+static inline void add_excluded(struct dir_info *dir)
- {
- 	dir->excluded ++;
- }
-@@ -4200,6 +4204,7 @@ void initialise_threads(int readq, int fragq, int bwriteq, int fwriteq,
+@@ -4348,6 +4356,7 @@ void initialise_threads(int readq, int fragq, int bwriteq, int fwriteq,
  	sigemptyset(&sigmask);
  	sigaddset(&sigmask, SIGQUIT);
  	sigaddset(&sigmask, SIGHUP);
 +	sigaddset(&sigmask, SIGALRM);
- 	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) == -1)
+ 	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) != 0)
  		BAD_ERROR("Failed to set signal mask in intialise_threads\n");
  
-@@ -4987,6 +4992,36 @@ int parse_num(char *arg, int *res)
+@@ -5195,6 +5204,35 @@ int get_physical_memory()
+ 	long long page_size = sysconf(_SC_PAGESIZE);
+ 	int phys_mem;
  
- int get_physical_memory()
- {
-+	int phys_mem;
 +#ifndef linux
 +	#ifdef HW_MEMSIZE
 +		#define SYSCTL_PHYSMEM HW_MEMSIZE
@@ -223,50 +156,21 @@ index d696a51..c86d1b3 100644
 +		ERROR_EXIT("  Defaulting to least viable amount\n");
 +		phys_mem = SQUASHFS_LOWMEM;
 +	}
-+	#undef SYSCTL_PHYSMEM
++  #undef SYSCTL_PHYSMEM
 +#else
- 	/*
- 	 * Long longs are used here because with PAE, a 32-bit
- 	 * machine can have more than 4GB of physical memory
-@@ -4996,10 +5031,11 @@ int get_physical_memory()
- 	 */
- 	long long num_pages = sysconf(_SC_PHYS_PAGES);
- 	long long page_size = sysconf(_SC_PAGESIZE);
--	int phys_mem = num_pages * page_size >> 20;
-+	phys_mem = num_pages * page_size >> 20;
+ 	if(num_pages == -1 || page_size == -1) {
+ 		struct sysinfo sys;
+ 		int res = sysinfo(&sys);
+@@ -5207,6 +5245,7 @@ int get_physical_memory()
+ 	}
  
- 	if(num_pages == -1 || page_size == -1)
- 		return 0;
+ 	phys_mem = num_pages * page_size >> 20;
 +#endif
  
  	if(phys_mem < SQUASHFS_LOWMEM)
  		BAD_ERROR("Mksquashfs requires more physical memory than is "
-diff --git a/squashfs-tools/mksquashfs.h b/squashfs-tools/mksquashfs.h
-index 55708a3..d44d1fd 100644
---- a/squashfs-tools/mksquashfs.h
-+++ b/squashfs-tools/mksquashfs.h
-@@ -24,6 +24,7 @@
-  * mksquashfs.h
-  *
-  */
-+#include <pthread.h>
- 
- struct dir_info {
- 	char			*pathname;
-diff --git a/squashfs-tools/pseudo.c b/squashfs-tools/pseudo.c
-index cb74cf6..fe2b4bc 100644
---- a/squashfs-tools/pseudo.c
-+++ b/squashfs-tools/pseudo.c
-@@ -30,6 +30,7 @@
- #include <errno.h>
- #include <string.h>
- #include <stdlib.h>
-+#include <sys/stat.h>
- #include <sys/types.h>
- #include <sys/wait.h>
- #include <sys/stat.h>
 diff --git a/squashfs-tools/read_xattrs.c b/squashfs-tools/read_xattrs.c
-index 42106f5..837d3fb 100644
+index 4debedf..3257c30 100644
 --- a/squashfs-tools/read_xattrs.c
 +++ b/squashfs-tools/read_xattrs.c
 @@ -39,13 +39,13 @@
@@ -286,10 +190,10 @@ index 42106f5..837d3fb 100644
  extern int read_block(int, long long, long long *, int, void *);
  
 diff --git a/squashfs-tools/unsquashfs.c b/squashfs-tools/unsquashfs.c
-index f190e96..927e441 100644
+index 727f1d5..c1a6183 100644
 --- a/squashfs-tools/unsquashfs.c
 +++ b/squashfs-tools/unsquashfs.c
-@@ -32,7 +32,12 @@
+@@ -32,8 +32,12 @@
  #include "stdarg.h"
  #include "fnmatch_compat.h"
  
@@ -297,21 +201,40 @@ index f190e96..927e441 100644
 +#include <sys/sysctl.h>
 +#else
  #include <sys/sysinfo.h>
+ #include <sys/sysmacros.h>
 +#endif
-+
  #include <sys/types.h>
  #include <sys/time.h>
  #include <sys/resource.h>
-@@ -2185,6 +2190,7 @@ void initialise_threads(int fragment_buffer_size, int data_buffer_size)
+@@ -1080,7 +1084,7 @@ int create_inode(char *pathname, struct inode *i)
+ 			break;
+ 		case SQUASHFS_SYMLINK_TYPE:
+ 		case SQUASHFS_LSYMLINK_TYPE: {
+-			struct timespec times[2] = {
++			struct timeval times[2] = {
+ 				{ i->time, 0 },
+ 				{ i->time, 0 }
+ 			};
+@@ -1099,8 +1103,7 @@ int create_inode(char *pathname, struct inode *i)
+ 				goto failed;
+ 			}
+ 
+-			res = utimensat(AT_FDCWD, pathname, times,
+-					AT_SYMLINK_NOFOLLOW);
++			res = lutimes(pathname, times);
+ 			if(res == -1) {
+ 				EXIT_UNSQUASH_STRICT("create_inode: failed to set time on "
+ 					"%s, because %s\n", pathname,
+@@ -2235,6 +2238,7 @@ void initialise_threads(int fragment_buffer_size, int data_buffer_size)
  	sigemptyset(&sigmask);
  	sigaddset(&sigmask, SIGQUIT);
  	sigaddset(&sigmask, SIGHUP);
 +	sigaddset(&sigmask, SIGALRM);
- 	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) == -1)
+ 	if(pthread_sigmask(SIG_BLOCK, &sigmask, NULL) != 0)
  		EXIT_UNSQUASH("Failed to set signal mask in initialise_threads"
  			"\n");
 diff --git a/squashfs-tools/unsquashfs.h b/squashfs-tools/unsquashfs.h
-index 0edbd25..cea9caa 100644
+index 934618b..0e680ab 100644
 --- a/squashfs-tools/unsquashfs.h
 +++ b/squashfs-tools/unsquashfs.h
 @@ -46,6 +46,10 @@
@@ -319,7 +242,7 @@ index 0edbd25..cea9caa 100644
  #include <sys/time.h>
  
 +#ifndef FNM_EXTMATCH /* glibc extension */
-+    #define FNM_EXTMATCH 0
++	#define FNM_EXTMATCH 0
 +#endif
 +
  #ifndef linux
@@ -381,7 +304,7 @@ index c8e2b9b..7d4f7af 100644
  }
  
 diff --git a/squashfs-tools/unsquashfs_xattr.c b/squashfs-tools/unsquashfs_xattr.c
-index 59f4aae..13f0e35 100644
+index 7742dfe..f8cd3b6 100644
 --- a/squashfs-tools/unsquashfs_xattr.c
 +++ b/squashfs-tools/unsquashfs_xattr.c
 @@ -27,6 +27,11 @@
@@ -389,15 +312,15 @@ index 59f4aae..13f0e35 100644
  #include <sys/xattr.h>
  
 +#ifdef XATTR_NOFOLLOW /* Apple's xattrs */
-+    #define lsetxattr(path_, name_, val_, sz_, flags_) \
-+        setxattr(path_, name_, val_, sz_, 0, flags_ | XATTR_NOFOLLOW)
++	#define lsetxattr(path_, name_, val_, sz_, flags_) \
++		setxattr(path_, name_, val_, sz_, 0, flags_ | XATTR_NOFOLLOW)
 +#endif
 +
  #define NOSPACE_MAX 10
  
  extern int root_process;
 diff --git a/squashfs-tools/xattr.c b/squashfs-tools/xattr.c
-index b46550c..5b32eca 100644
+index 64dfd82..d82d186 100644
 --- a/squashfs-tools/xattr.c
 +++ b/squashfs-tools/xattr.c
 @@ -22,6 +22,14 @@
@@ -420,12 +343,15 @@ index b46550c..5b32eca 100644
  #include <sys/xattr.h>
  
 +#ifdef XATTR_NOFOLLOW /* Apple's xattrs */
-+    #define llistxattr(path_, buf_, sz_) \
-+        listxattr(path_, buf_, sz_, XATTR_NOFOLLOW)
-+    #define lgetxattr(path_, name_, val_, sz_) \
-+        getxattr(path_, name_, val_, sz_, 0, XATTR_NOFOLLOW)
++	#define llistxattr(path_, buf_, sz_) \
++		listxattr(path_, buf_, sz_, XATTR_NOFOLLOW)
++	#define lgetxattr(path_, name_, val_, sz_) \
++		getxattr(path_, name_, val_, sz_, 0, XATTR_NOFOLLOW)
 +#endif
 +
  #include "squashfs_fs.h"
  #include "squashfs_swap.h"
  #include "mksquashfs.h"
+-- 
+2.23.0
+

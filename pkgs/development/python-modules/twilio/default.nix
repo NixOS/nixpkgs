@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "twilio";
-  version = "6.24.0";
+  version = "6.35.1";
   # tests not included in PyPi, so fetch from github instead
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
     rev = version;
-    sha256 = "16lxns59fms75swfjz46484464q4b1fw3ybf8f2k56aas9gyzb2j";
+    sha256 = "10a1hqvxn0w6z696ay1bbxra6qn8bxg87d6g9iryd2hjnn8sfh4b";
   };
 
   buildInputs = [ nose mock ];

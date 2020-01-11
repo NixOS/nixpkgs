@@ -1,45 +1,32 @@
-{ stdenv, ruby, bundler, fetchFromGitLab, go }:
+{ stdenv, fetchFromGitLab, buildGoPackage, ruby }:
 
-stdenv.mkDerivation rec {
-  version = "8.4.4";
-  name = "gitlab-shell-${version}";
-
+buildGoPackage rec {
+  pname = "gitlab-shell-go";
+  version = "10.3.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitlab-shell";
     rev = "v${version}";
-    sha256 = "1a6p13g38f4gqqfjgymcvf09k4mnr2bfpj8mqz0x6rz7q67lllcq";
+    sha256 = "0kxbw2n5kabh0876xqn1dcjbxyrp82ms566rw065nqrb32g8c2hk";
   };
 
-  buildInputs = [ ruby bundler go ];
+  buildInputs = [ ruby ];
 
   patches = [ ./remove-hardcoded-locations.patch ];
 
-  installPhase = ''
-    ruby bin/compile
-    mkdir -p $out/
-    cp -R . $out/
+  goPackagePath = "gitlab.com/gitlab-org/gitlab-shell";
+  goDeps = ./deps.nix;
 
-    # Nothing to install ATM for non-development but keeping the
-    # install command anyway in case that changes in the future:
-    export HOME=$(pwd)
-    bundle install -j4 --verbose --local --deployment --without development test
-  '';
-
-  # gitlab-shell will try to read its config relative to the source
-  # code by default which doesn't work in nixos because it's a
-  # read-only filesystem
-  postPatch = ''
-    substituteInPlace lib/gitlab_config.rb --replace \
-       "File.join(ROOT_PATH, 'config.yml')" \
-       "'/run/gitlab/shell-config.yml'"
+  postInstall = ''
+    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/bin/* $bin/bin
+    cp -r "$NIX_BUILD_TOP/go/src/$goPackagePath"/{support,VERSION} $bin/
   '';
 
   meta = with stdenv.lib; {
     description = "SSH access and repository management app for GitLab";
     homepage = http://www.gitlab.com/;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz globin ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ fpletz globin talyz ];
     license = licenses.mit;
   };
 }

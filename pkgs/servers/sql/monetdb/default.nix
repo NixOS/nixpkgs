@@ -3,14 +3,15 @@
 }:
 
 let
-  version = "11.31.13";
-in stdenv.mkDerivation rec {
+  version = "11.35.3";
+in stdenv.mkDerivation {
 
-  name = "monetdb-${version}";
+  pname = "monetdb";
+  inherit version;
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "1dvqhjxd2lmnqjzj14n4dnlflca0525kshl9abi7qjv0ipcc6a4l";
+    sha256 = "185v8ph8jq8im77dmm20d64nwgjzzc01kz71rh09nb6x6rgcna2x";
   };
 
   postPatch = ''

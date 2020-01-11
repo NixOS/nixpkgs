@@ -9,12 +9,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.0.10";
-  name = "libtiff-${version}";
+  version = "4.1.0";
+  pname = "libtiff";
 
   src = fetchurl {
     url = "https://download.osgeo.org/libtiff/tiff-${version}.tar.gz";
-    sha256 = "1r4np635gr6zlc0bic38dzvxia6iqzcrary4n1ylarzpr8fd2lic";
+    sha256 = "0d46bdvxdiv59lxnb0xz9ywm8arsr6xsapi5s6y6vnys2wjz6aax";
   };
 
   outputs = [ "bin" "dev" "out" "man" "doc" ];

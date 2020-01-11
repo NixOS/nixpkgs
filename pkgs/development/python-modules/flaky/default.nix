@@ -2,22 +2,29 @@
 , buildPythonPackage
 , fetchPypi
 , mock
+, nose
 , pytest
 }:
 
 buildPythonPackage rec {
   pname = "flaky";
-  version = "3.4.0";
+  version = "3.6.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ad7880aef8c35a34ddb394d4fa33047765bca1e3d67d182bf6eba9c8eabf3a2";
+    sha256 = "8cd5455bb00c677f787da424eaf8c4a58a922d0e97126d3085db5b279a98b698";
   };
 
-  buildInputs = [ mock pytest ];
+  checkInputs = [ mock nose pytest ];
 
-  # waiting for feedback https://github.com/box/flaky/issues/97
-  doCheck = false;
+  checkPhase = ''
+    # based on tox.ini
+    pytest -k 'example and not options' --doctest-modules test/test_pytest/
+    pytest -k 'example and not options' test/test_pytest/
+    pytest -p no:flaky test/test_pytest/test_flaky_pytest_plugin.py
+    nosetests --with-flaky --force-flaky --max-runs 2 test/test_nose/test_nose_options_example.py
+    pytest --force-flaky --max-runs 2  test/test_pytest/test_pytest_options_example.py
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/box/flaky;

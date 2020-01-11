@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "libebml-${version}";
-  version = "1.3.6";
+  pname = "libebml";
+  version = "1.3.10";
 
   src = fetchFromGitHub {
     owner  = "Matroska-Org";
     repo   = "libebml";
     rev    = "release-${version}";
-    sha256 = "0fl8d35ywj9id93yp78qlxy7j81kjri957agq40r420kmwac3dzs";
+    sha256 = "1vn0g4hsygrm29qvnzhrblpwjcy2x6swf799ibxv3bzpi1j0gris";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

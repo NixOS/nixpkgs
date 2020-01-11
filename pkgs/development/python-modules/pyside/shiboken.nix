@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
+  nativeBuildInputs = [ cmake libxml2 libxslt pysideApiextractor pysideGeneratorrunner python sphinx qt4 ];
 
   preConfigure = ''
     echo "preConfigure: Fixing shiboken_generator install target."
@@ -27,13 +27,13 @@ buildPythonPackage rec {
   # gcc6 patch was also sent upstream: https://github.com/pyside/Shiboken/pull/86
   patches = [ ./gcc6.patch ] ++ (lib.optional (isPy35 || isPy36 || isPy37) ./shiboken_py35.patch);
 
-  cmakeFlags = if isPy3k then "-DUSE_PYTHON3=TRUE" else null;
+  cmakeFlags = lib.optional isPy3k "-DUSE_PYTHON3=TRUE";
 
   meta = {
     description = "Plugin (front-end) for pyside-generatorrunner, that generates bindings for C++ libraries using CPython source code";
     license = lib.licenses.gpl2;
     homepage = http://www.pyside.org/docs/shiboken/;
-    maintainers = [ lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = lib.platforms.all;
   };
 }

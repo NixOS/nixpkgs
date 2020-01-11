@@ -1,32 +1,43 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig
-, meson, ninja, vala, desktop-file-utils, libxml2
-, gtk3, python3, granite, libgee, gobject-introspection
-, elementary-icon-theme, appstream, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, libxml2
+, gtk3
+, python3
+, granite
+, libgee
+, elementary-icon-theme
+, appstream
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "calculator";
-  version = "1.5.1";
+  pname = "elementary-calculator";
+  version = "1.5.4";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "calculator";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0vc27kjmfkly2jkqjiyzlybxyjqhwal3xrxca5b4abfgb379yswa";
+    sha256 = "0053bdzn5viqlni6qg6q39nma6bsddmhnafa0mzggiv8l4qasbrx";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    gobject-introspection
     libxml2
     meson
     ninja

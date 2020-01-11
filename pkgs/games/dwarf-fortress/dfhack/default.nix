@@ -1,6 +1,6 @@
 { stdenv, buildEnv, lib, fetchFromGitHub, cmake, writeScriptBin
 , perl, XMLLibXML, XMLLibXSLT, zlib
-, enableStoneSense ? false,  allegro5, libGLU_combined
+, enableStoneSense ? false,  allegro5, libGLU, libGL
 , enableTWBT ? true, twbt
 , SDL
 , dfVersion
@@ -54,9 +54,6 @@ let
 
   version = release.dfHackRelease;
 
-  warning = if release.prerelease then builtins.trace "[DFHack] Version ${version} is a prerelease. Careful!"
-                                  else null;
-
   # revision of library/xml submodule
   xmlRev = release.xmlRev;
 
@@ -86,8 +83,9 @@ let
     fi
   '';
 
-  dfhack = stdenv.mkDerivation rec {
-    name = "dfhack-base-${version}";
+  dfhack = stdenv.mkDerivation {
+    pname = "dfhack-base";
+    inherit version;
 
     # Beware of submodules
     src = fetchFromGitHub {
@@ -102,7 +100,7 @@ let
     nativeBuildInputs = [ cmake perl XMLLibXML XMLLibXSLT fakegit ];
     # We don't use system libraries because dfhack needs old C++ ABI.
     buildInputs = [ zlib SDL ]
-               ++ lib.optionals enableStoneSense [ allegro5 libGLU_combined ];
+               ++ lib.optionals enableStoneSense [ allegro5 libGLU libGL ];
 
     preConfigure = ''
       # Trick build system into believing we have .git

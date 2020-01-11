@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, libX11 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2016-09-30";
-  name = "xcwd-${version}";
+  pname = "xcwd";
 
   src = fetchFromGitHub {
     owner   = "schischi";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 ];
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   installPhase = ''
     install -D xcwd "$out/bin/xcwd"

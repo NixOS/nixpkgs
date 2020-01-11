@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)" ];
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
 
   postInstall =
     ''

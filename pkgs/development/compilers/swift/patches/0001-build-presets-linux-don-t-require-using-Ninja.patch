@@ -11,8 +11,8 @@ diff --git a/utils/build-presets.ini b/utils/build-presets.ini
 index 7ee57ad2df..e6b0af3581 100644
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -717,7 +717,7 @@ swiftpm
- xctest
+@@ -721,7 +721,7 @@ swiftpm
+ 
  dash-dash
  
 -build-ninja

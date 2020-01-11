@@ -15,22 +15,38 @@
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3f18b87af4e94ccd073263dd58cd3eebabe9f5e4d6ab535b39d3af64811c7eda";
+    sha256 = "5273c2d958335e24b170fe59b689b13e4b1855b569626e18b1c7e420f5110cc6";
   };
 
-  LC_ALL = "en_US.UTF-8";
+  checkInputs = [
+    pytest
+    matplotlib
+    sympy
+    pytestcov
+  ];
 
   buildInputs = [ glibcLocales ];
-  checkInputs = [ matplotlib sympy pytestcov ];
-  propagatedBuildInputs = [ coverage ipykernel jupyter_client nbformat pytest six ];
 
+  propagatedBuildInputs = [
+    coverage
+    ipykernel
+    jupyter_client
+    nbformat
+    pytest
+    six
+  ];
+
+  # ignore impure tests
   checkPhase = ''
-    pytest tests --current-env --ignore tests/test_timeouts.py
+    pytest tests --ignore tests/test_timeouts.py
   '';
+
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
 
   meta = with lib; {
     description = "A py.test plugin to validate Jupyter notebooks";

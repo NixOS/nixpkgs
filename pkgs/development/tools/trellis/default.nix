@@ -7,29 +7,33 @@ let
   boostWithPython3 = boost.override { python = python3; enablePython = true; };
 in
 stdenv.mkDerivation rec {
-  name = "trellis-${version}";
-  version = "2018.12.20";
+  pname = "trellis";
+  version = "2019.10.13";
+  # git describe --tags
+  realVersion = with stdenv.lib; with builtins;
+    "1.0-95-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
-       owner  = "symbiflow";
+       owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "b947028a6ac6494b6000c6e1ab5aa0db813e8544";
-       sha256 = "14dcsl2drx3xaqvpawp0j7088cijxcr5018yji48rmbl85763aw9";
+       rev    = "e2e10bfdfaa29fed5d19e83dc7460be9880f5af4";
+       sha256 = "0l59nliv75rdxnajl2plilib0r0bzbr3qqzc88cdal841x1m0izs";
        name   = "trellis";
      })
     (fetchFromGitHub {
-      owner  = "symbiflow";
+      owner  = "SymbiFlow";
       repo   = "prjtrellis-db";
-      rev    = "670d04f0b8412193d5e974eea67f2bb7355aa1ec";
-      sha256 = "1hm385rg1jq9qbq63g5134gq9xpfadvpahxvzwpv0q543brkg730";
-      name   = "database";
+      rev    = "5b5bb70bae13e6b8c971b4b2d26931f4a64b51bc";
+      sha256 = "1fi963zdny3gxdvq564037qs22i7b4y7mxc3yij2a1ww8rzrnpdj";
+      name   = "trellis-database";
     })
   ];
   sourceRoot = "trellis";
 
   buildInputs = [ boostWithPython3 ];
   nativeBuildInputs = [ cmake python3 ];
+  cmakeFlags = [ "-DCURRENT_GIT_VERSION=${realVersion}" ];
 
   preConfigure = with builtins; ''
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
@@ -48,7 +52,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = https://github.com/symbiflow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with maintainers; [ q3k thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with maintainers; [ q3k thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

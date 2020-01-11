@@ -3,7 +3,7 @@
   pkgs ? import ../.. { inherit system config; }
 }:
 
-with import ../lib/testing.nix { inherit system pkgs; };
+with import ../lib/testing-python.nix { inherit system pkgs; };
 let
   mkSpec = { host, service ? null, action }: {
     inherit action;
@@ -123,17 +123,17 @@ in
       )));
     };
     testScript = ''
-      $machine->waitForUnit('cfssl.service');
-      $machine->waitUntilSucceeds('ls /tmp/decl.example.org-ca.pem');
-      $machine->waitUntilSucceeds('ls /tmp/decl.example.org-key.pem');
-      $machine->waitUntilSucceeds('ls /tmp/decl.example.org-cert.pem');
-      $machine->waitUntilSucceeds('ls /tmp/imp.example.org-ca.pem');
-      $machine->waitUntilSucceeds('ls /tmp/imp.example.org-key.pem');
-      $machine->waitUntilSucceeds('ls /tmp/imp.example.org-cert.pem');
-      $machine->waitForUnit('nginx.service');
-      $machine->succeed('[ "1" -lt "$(journalctl -u nginx | grep "Starting Nginx" | wc -l)" ]');
-      $machine->succeed('curl --cacert /tmp/imp.example.org-ca.pem https://imp.example.org');
-      $machine->succeed('curl --cacert /tmp/decl.example.org-ca.pem https://decl.example.org');
+      machine.wait_for_unit("cfssl.service")
+      machine.wait_until_succeeds("ls /tmp/decl.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /tmp/decl.example.org-key.pem")
+      machine.wait_until_succeeds("ls /tmp/decl.example.org-cert.pem")
+      machine.wait_until_succeeds("ls /tmp/imp.example.org-ca.pem")
+      machine.wait_until_succeeds("ls /tmp/imp.example.org-key.pem")
+      machine.wait_until_succeeds("ls /tmp/imp.example.org-cert.pem")
+      machine.wait_for_unit("nginx.service")
+      assert 1 < int(machine.succeed('journalctl -u nginx | grep "Starting Nginx" | wc -l'))
+      machine.succeed("curl --cacert /tmp/imp.example.org-ca.pem https://imp.example.org")
+      machine.succeed("curl --cacert /tmp/decl.example.org-ca.pem https://decl.example.org")
     '';
   };
 
@@ -143,8 +143,8 @@ in
       test = mkSpec { host = "command.example.org"; action = "touch /tmp/command.executed"; };
     };
     testScript = ''
-      $machine->waitForUnit('cfssl.service');
-      $machine->waitUntilSucceeds('stat /tmp/command.executed');
+      machine.wait_for_unit("cfssl.service")
+      machine.wait_until_succeeds("stat /tmp/command.executed")
     '';
   };
 

@@ -1,31 +1,31 @@
-{ stdenv, fetchFromGitHub, pkgconfig, ncurses, conf ? null }:
+{ stdenv, fetchFromGitHub, pkgconfig, ncurses, readline, conf ? null }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "nnn-${version}";
-  version = "2.2";
+  pname = "nnn";
+  version = "2.8.1";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = "nnn";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "01y2vkw1wakpnpzhzia3d44iir060i8vma3b3ww5wgwg7bfpzs4b";
+    sha256 = "0h7j0wcpwwd2fibggr1nwkqpvhv2i1qnk54c4x6hixx31yidy2l0";
   };
 
   configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
   preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ncurses ];
+  buildInputs = [ readline ncurses ];
 
   makeFlags = [ "DESTDIR=${placeholder "out"}" "PREFIX=" ];
 
   # shell completions
   postInstall = ''
-    install -Dm555 scripts/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 scripts/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 scripts/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
+    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
+    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
   '';
 
   meta = {

@@ -1,22 +1,24 @@
-{ stdenv, lib, fetchurl, fetchpatch, makeWrapper
+{ stdenv, lib, fetchFromGitHub, makeWrapper
 , coq, ocamlPackages, coq2html
 , tools ? stdenv.cc
 }:
 
 assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
-assert lib.versionAtLeast coq.coq-version "8.6.1";
+assert lib.versionAtLeast coq.coq-version "8.8.0";
 
 let
   ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
 in
 stdenv.mkDerivation rec {
-  name    = "compcert-${version}";
-  version = "3.4";
+  pname = "compcert";
+  version = "3.6";
 
-  src = fetchurl {
-    url    = "http://compcert.inria.fr/release/${name}.tgz";
-    sha256 = "12gchwvkzhd2bhrnwzfb4a06wc4hgv98z987k06vj7ga31ii763h";
+  src = fetchFromGitHub {
+    owner = "AbsInt";
+    repo = "CompCert";
+    rev = "v${version}";
+    sha256 = "1k9xhj7fgllhf7bn7rp3w6zfvs4clglnc4w39zp4678hrwvdcpha";
   };
 
   nativeBuildInputs = [ makeWrapper ];

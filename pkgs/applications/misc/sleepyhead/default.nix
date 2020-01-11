@@ -37,6 +37,7 @@ in stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.krav ];
+    broken = true;
   };
 
 }

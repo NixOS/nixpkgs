@@ -1,7 +1,6 @@
 { stdenv, fetchurl, qt4 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xkblayout-state";
   version = "1b";
 

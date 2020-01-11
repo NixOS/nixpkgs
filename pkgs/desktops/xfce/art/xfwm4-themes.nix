@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   name = "${p_name}-${ver_maj}.${ver_min}";
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/;
+    homepage = https://www.xfce.org/;
     description = "Themes for Xfce";
     license = licenses.gpl3;
     platforms = platforms.linux;

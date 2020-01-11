@@ -71,4 +71,7 @@ in {
       serviceConfig.Restart = "always";
     };
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
+
 }

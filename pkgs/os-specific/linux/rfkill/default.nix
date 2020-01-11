@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "01zs7p9kd92pxgcgwl5w46h3iyx4acfg6m1j5fgnflsaa350q5iy";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = http://wireless.kernel.org/en/users/Documentation/rfkill;

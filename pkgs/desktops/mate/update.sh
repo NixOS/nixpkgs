@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 root=../../..
 export NIXPKGS_ALLOW_UNFREE=1
 
-mate_version=1.20
+mate_version=1.22
 theme_version=3.22
 materepo=https://pub.mate-desktop.org/releases/${mate_version}
 themerepo=https://pub.mate-desktop.org/releases/themes/${theme_version}
@@ -19,6 +19,7 @@ version() {
 update_package() {
     local p=$1
     echo $p
+    echo "# $p" >> git-commits.txt
 
     local repo
     if [ "$p" = "mate-themes" ]; then
@@ -30,7 +31,14 @@ update_package() {
     local p_version_old=$(version mate.$p)
     local p_versions=$(curl -sS ${repo}/ | sed -rne "s/.*\"$p-([0-9]+\\.[0-9]+\\.[0-9]+)\\.tar\\.xz.*/\\1/p")
     local p_version=$(echo $p_versions | sed -e 's/ /\n/g' | sort -t. -k 1,1n -k 2,2n -k 3,3n | tail -n1)
-  
+
+    if [[ -z "$p_version" ]]; then
+        echo "unavailable $p"
+        echo "# $p not found" >> git-commits.txt
+        echo
+        return
+    fi
+
     if [[ "$p_version" = "$p_version_old" ]]; then
         echo "nothing to do, $p $p_version is current"
         echo
@@ -44,6 +52,8 @@ update_package() {
     local path=${prefetch[1]}
     echo "$p: $p_version_old -> $p_version"
     (cd "$root" && update-source-version mate.$p "$p_version" "$hash")
+    echo "   git add pkgs/desktops/mate/$p" >> git-commits.txt
+    echo "   git commit -m \"mate.$p: $p_version_old -> $p_version\"" >> git-commits.txt
     echo
 }
 

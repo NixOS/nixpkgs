@@ -5,6 +5,7 @@
 , glib
 , gtk3
 , itstool
+, libdazzle
 , libxml2
 , meson, ninja
 , pango
@@ -18,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "3.30.2";
+  version = "3.34.1";
 
   outputs = [ "out" "lib" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "02xsr3cxyws3cnbhvbxgcc9sn22mri3iv9d7f38pkg89lpjph279";
+    sha256 = "1l4kr1av7933vb4zql9c5lgzivlw64hyky4nr8xin1v5if6vnjw4";
   };
 
   nativeBuildInputs = [
@@ -37,9 +38,9 @@ stdenv.mkDerivation rec {
     pkgconfig
     shared-mime-info
     wrapGAppsHook
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
   ];
-  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib ];
+  buildInputs = [ glib gtk3 pango polkit systemd.dev systemd.lib libdazzle ];
 
   mesonFlags = [
     "-Dsystemdunitdir=lib/systemd/system"

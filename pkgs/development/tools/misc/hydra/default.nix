@@ -1,9 +1,9 @@
-{ stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
+{ stdenv, nix, perlPackages, buildEnv, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, pixz, lib, fetchpatch, boost, autoreconfHook
+, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook
 }:
 
 with stdenv;
@@ -13,15 +13,9 @@ if lib.versions.major nix.version == "1"
 else
 
 let
-  isGreaterNix20 = with lib.versions;
-    let
-      inherit (nix) version;
-      inherit (lib) toInt;
-    in major version == "2" && toInt (minor version) >= 1 || toInt (major version) > 2;
-
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages;
+    paths = with perlPackages; lib.closePropagation
       [ ModulePluggable
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -33,7 +27,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystRuntime
+        CatalystPluginUnicodeEncoding
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -57,6 +51,7 @@ let
         LWP
         LWPProtocolHttps
         NetAmazonS3
+        NetPrometheus
         NetStatsd
         PadWalker
         Readonly
@@ -64,6 +59,8 @@ let
         SetScalar
         Starman
         SysHostnameLong
+        TermSizeAny
+        TestMore
         TextDiff
         TextTable
         XMLSimple
@@ -73,17 +70,17 @@ let
         boehmgc
       ];
   };
-in releaseTools.nixBuild rec {
-  name = "hydra-${version}";
-  version = "2019-02-01";
+in stdenv.mkDerivation rec {
+  pname = "hydra";
+  version = "2019-11-13";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
-    repo = "hydra";
-    rev = "8b5948f4cf12424c04df67a6eb136c9846fb2cfd";
-    sha256 = "0ldk3li394vykl9c4v9bs8pir05pmad24s0rx9bzqgz569zfj2iv";
+    repo = pname;
+    rev = "20dd0bbe6a90d9066e635ee82e98efec23b17e51";
+    sha256 = "06chiaa7p54zxngmy2q3ps7bbiqpdv9h2rfmprh83qz36xps9rs2";
   };
 
   buildInputs =
@@ -93,7 +90,8 @@ in releaseTools.nixBuild rec {
       perlDeps perl nix
       postgresql # for running the tests
       nlohmann_json
-    ] ++ lib.optionals isGreaterNix20 [ boost ];
+      boost
+    ];
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
@@ -102,19 +100,9 @@ in releaseTools.nixBuild rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  # adds a patch which ensures compatibility with the API of Nix 2.0.
-  # it has been reverted in https://github.com/NixOS/hydra/commit/162d671c48a418bd10a8a171ca36787ef3695a44,
-  # for Nix 2.1/unstable compatibility. Reapplying helps if Nix 2.0 is used to keep the build functional.
-  patches = lib.optionals (!isGreaterNix20) [
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/commit/08de434bdd0b0a22abc2081be6064a6c846d3920.patch";
-      sha256 = "0kz77njp5ynn9l81g3q8zrryvnsr06nk3iw0a60187wxqzf5fmf8";
-    })
-  ];
-
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  NIX_CFLAGS_COMPILE = [ "-pthread" ];
+  NIX_CFLAGS_COMPILE = "-pthread";
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH

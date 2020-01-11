@@ -1,5 +1,4 @@
 { writeScript
-, stdenv
 , lib
 , xidel
 , common-updater-scripts
@@ -8,13 +7,14 @@
 , gnugrep
 , curl
 , attrPath
+, runtimeShell
 , baseUrl ? "http://archive.mozilla.org/pub/firefox/releases/"
 , versionSuffix ? ""
 , versionKey ? "version"
 }:
 
 writeScript "update-${attrPath}" ''
-  #!${stdenv.shell}
+  #!${runtimeShell}
   PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused xidel ]}
 
   url=${baseUrl}
@@ -31,5 +31,5 @@ writeScript "update-${attrPath}" ''
            sort --version-sort | \
            tail -n 1`
 
-  update-source-version ${attrPath} "$version" "" "" ${versionKey}
+  update-source-version ${attrPath} "$version" "" "" --version-key=${versionKey}
 ''

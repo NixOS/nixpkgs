@@ -3,12 +3,12 @@
 # Should be bumped along with EFL!
 
 buildPythonPackage rec {
-  name = "python-efl-${version}";
-  version = "1.21.0";
+  pname = "python-efl";
+  version = "1.23.0";
 
   src = fetchurl {
-    url = "http://download.enlightenment.org/rel/bindings/python/${name}.tar.xz";
-    sha256 = "08x2cv8hnf004c3711250wrax21ffj5y8951pvk77h98als4pq47";
+    url = "http://download.enlightenment.org/rel/bindings/python/${pname}-${version}.tar.xz";
+    sha256 = "16yn6a1b9167nfmryyi44ma40m20ansfpwgrvqzfvwix7qaz9pib";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -18,9 +18,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ python.pkgs.dbus-python ];
 
   preConfigure = ''
-    export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${python.pkgs.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
+    export NIX_CFLAGS_COMPILE="$(pkg-config --cflags efl) -I${stdenv.lib.getDev python.pkgs.dbus-python}/include/dbus-1.0 $NIX_CFLAGS_COMPILE"
   '';
-  
+
   preBuild = "${python.interpreter} setup.py build_ext";
 
   installPhase= "${python.interpreter} setup.py install --prefix=$out";
@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = https://phab.enlightenment.org/w/projects/python_bindings_for_efl/;
     platforms = platforms.linux;
     license = with licenses; [ gpl3 lgpl3 ];
-    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx ];
+    maintainers = with maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

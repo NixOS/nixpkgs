@@ -1,7 +1,7 @@
 { stdenv, fetchgit, cmake, zlib, boost }:
 
-stdenv.mkDerivation rec {
-  name = "avy-${version}";
+stdenv.mkDerivation {
+  pname = "avy";
   version = "2017.10.16";
 
   src = fetchgit {
@@ -12,14 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ cmake zlib boost.out boost.dev ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-narrowing" ]
+  NIX_CFLAGS_COMPILE = toString ([ "-Wno-narrowing" ]
     # Squelch endless stream of warnings on same few things
     ++ stdenv.lib.optionals stdenv.cc.isClang [
       "-Wno-empty-body"
       "-Wno-tautological-compare"
       "-Wc++11-compat-deprecated-writable-strings"
       "-Wno-deprecated"
-    ];
+    ]);
 
   prePatch = ''
     sed -i -e '1i#include <stdint.h>' abc/src/bdd/dsd/dsd.h

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "dpkg-${version}";
-  version = "1.19.4";
+  pname = "dpkg";
+  version = "1.19.7";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/d/dpkg/dpkg_${version}.tar.xz";
-    sha256 = "1bp0zq3h1ad6rzljmmalkh9ms4y6znk1gmgjpy39as2mhvlk8ln1";
+    sha256 = "1s4nlaqz4c3p5r85f4il8m21825sfy2s9wgz4ajhl332vzggw9sc";
   };
 
   configureFlags = [
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ perl zlib bzip2 xz ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper perl ];
 
   postInstall =
     ''

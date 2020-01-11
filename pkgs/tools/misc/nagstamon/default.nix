@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "nagstamon-${version}";
+  pname = "nagstamon";
   version = "3.2.1";
 
   src = fetchurl {

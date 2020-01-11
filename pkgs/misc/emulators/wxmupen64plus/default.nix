@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU_combined
+{ stdenv, fetchurl, python, wxGTK29, mupen64plus, SDL, libX11, libGLU, libGL
 , wafHook }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ wafHook ];
-  buildInputs = [ python wxGTK29 SDL libX11 libGLU_combined ];
+  buildInputs = [ python wxGTK29 SDL libX11 libGLU libGL ];
 
   preConfigure = ''
     tar xf ${mupen64plus.src}
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
     export CXXFLAGS="-I${libX11.dev}/include/X11 -DLIBDIR=\\\"${mupen64plus}/lib/\\\""
     export LDFLAGS="-lwx_gtk2u_adv-2.9"
 
-    configureFlagsArray+=("--mupenapi=$APIDIR" "--wxconfig=`type -P wx-config`")
+    wafConfigureFlagsArray+=("--mupenapi=$APIDIR" "--wxconfig=`type -P wx-config`")
   '';
 
   NIX_CFLAGS_COMPILE = "-fpermissive";

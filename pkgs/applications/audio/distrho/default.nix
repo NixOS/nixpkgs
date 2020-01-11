@@ -8,7 +8,7 @@ let
               else if stdenv.hostPlatform.isWindows then "mingw"
               else "linux";
 in stdenv.mkDerivation rec {
-  name = "distrho-ports-${version}";
+  pname = "distrho-ports";
   version = "2018-04-16";
 
   src = fetchFromGitHub {
@@ -37,7 +37,7 @@ in stdenv.mkDerivation rec {
     libXinerama libXrender ladspa-sdk
   ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = http://distrho.sourceforge.net;

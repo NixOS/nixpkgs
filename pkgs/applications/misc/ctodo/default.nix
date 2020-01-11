@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchurl, ncurses, readline }:
 
 stdenv.mkDerivation rec {
-  name = "ctodo-${version}";
+  pname = "ctodo";
   version = "1.3";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     homepage = http://ctodo.apakoh.dk/;
     description = "A simple ncurses-based task list manager";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = [ stdenv.lib.maintainers.matthiasbeyer ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

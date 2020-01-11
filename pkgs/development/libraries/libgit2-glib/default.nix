@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
-  version = "0.27.7";
+  version = "0.28.0.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1hpgs8dx0dk25mc8jsizi2cwwhnmahrn3dyry9p7a1g48mnxyc8i";
+    sha256 = "0a0g7aw66rfgnqr4z7fgbk5zzcjq66m4rp8v4val3a212941h0g7";
   };
 
   postPatch = ''

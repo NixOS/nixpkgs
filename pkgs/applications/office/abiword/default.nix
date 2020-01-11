@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, gtk3, fribidi
 , libpng, popt, libgsf, enchant, wv, librsvg, bzip2, libjpeg, perl
-, boost, libxslt, goffice, wrapGAppsHook, iconTheme
+, boost, libxslt, goffice, wrapGAppsHook, gnome3
 }:
 
 stdenv.mkDerivation rec {
-  name = "abiword-${version}";
+  pname = "abiword";
   version = "3.0.2";
 
   src = fetchurl {
-    url = "https://www.abisource.com/downloads/abiword/${version}/source/${name}.tar.gz";
+    url = "https://www.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
     sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
   };
 
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3 librsvg bzip2 fribidi libpng popt
-    libgsf enchant wv libjpeg perl boost libxslt goffice iconTheme
+    libgsf enchant wv libjpeg perl boost libxslt goffice gnome3.adwaita-icon-theme
   ];
 
   meta = with stdenv.lib; {

@@ -1,25 +1,25 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, pythonPackages }:
+{ stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "python-caja-${version}";
-  version = "1.20.2";
+  pname = "python-caja";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "16r8mz1b44qgs19d14zadwzshzrdc5sdwgjp9f9av3fa6g09yd7b";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "07hkvs4a6anrvh28zjsrj8anbcz32p19hslhq66yhcvh0hh4kvqk";
   };
 
   nativeBuildInputs = [
     pkgconfig
     intltool
-    pythonPackages.wrapPython
+    python3Packages.wrapPython
   ];
 
   buildInputs = [
     gtk3
     mate.caja
-    pythonPackages.python
-    pythonPackages.pygobject3
+    python3Packages.python
+    python3Packages.pygobject3
   ];
 
   configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];

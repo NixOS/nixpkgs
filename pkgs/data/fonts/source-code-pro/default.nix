@@ -1,4 +1,4 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2.030";
@@ -16,9 +16,9 @@ in fetchzip {
 
   meta = {
     description = "A set of monospaced OpenType fonts designed for coding environments";
-    maintainers = with stdenv.lib.maintainers; [ relrod ];
-    platforms = with stdenv.lib.platforms; all;
+    maintainers = with lib.maintainers; [ relrod ];
+    platforms = with lib.platforms; all;
     homepage = https://adobe-fonts.github.io/source-code-pro/;
-    license = stdenv.lib.licenses.ofl;
+    license = lib.licenses.ofl;
   };
 }

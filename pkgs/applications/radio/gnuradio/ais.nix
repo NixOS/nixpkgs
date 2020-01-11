@@ -1,25 +1,25 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, makeWrapper, cppunit, gnuradio-osmosdr
+, makeWrapper, cppunit, gr-osmosdr
 , pythonSupport ? true, python, swig
 }:
 
 assert pythonSupport -> python != null && swig != null;
 
-stdenv.mkDerivation rec {
-  name = "gnuradio-ais-${version}";
+stdenv.mkDerivation {
+  pname = "gr-ais";
   version = "2015-12-20";
 
   src = fetchFromGitHub {
     owner = "bistromath";
     repo = "gr-ais";
     # Upstream PR: https://github.com/bistromath/gr-ais/commit/8502d0252a2a1a9b8d1a71795eaeb5d820684054
-    "rev" = "8502d0252a2a1a9b8d1a71795eaeb5d820684054";
-    "sha256" = "1b9j0kc74cw12a7jv4lii77dgzqzg2s8ndzp4xmisxksgva1qfvh";
+    rev = "8502d0252a2a1a9b8d1a71795eaeb5d820684054";
+    sha256 = "1b9j0kc74cw12a7jv4lii77dgzqzg2s8ndzp4xmisxksgva1qfvh";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake boost gnuradio makeWrapper cppunit gnuradio-osmosdr
+    cmake boost gnuradio makeWrapper cppunit gr-osmosdr
   ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
 
   postInstall = ''

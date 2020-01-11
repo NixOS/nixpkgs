@@ -1,29 +1,26 @@
 { stdenv, fetchFromGitHub, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "tbb-${version}";
-  version = "2018_U5";
+  pname = "tbb";
+  version = "2019_U9";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "080df8h2whnly6n9pslpg07dc9vr0p45gqgy9qijpjvxkjwfkdkp";
+    sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
   };
 
-  makeFlags = concatStringsSep " " (
-    optional (compiler != null) "compiler=${compiler}" ++
-    optional (stdver != null) "stdver=${stdver}"
-  );
+  makeFlags = optional (compiler != null) "compiler=${compiler}"
+    ++ optional (stdver != null) "stdver=${stdver}";
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 
   installPhase = ''
-    mkdir -p $out/{lib,share/doc}
+    mkdir -p $out/lib
     cp "build/"*release*"/"*${stdenv.hostPlatform.extensions.sharedLibrary}* $out/lib/
     mv include $out/
     rm $out/include/index.html
-    mv doc/html $out/share/doc/tbb
   '';
 
   enableParallelBuilding = true;
@@ -41,6 +38,6 @@ with stdenv.lib; stdenv.mkDerivation rec {
       details and threading mechanisms for scalability and performance.
     '';
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ peti thoughtpolice dizfer ];
+    maintainers = with maintainers; [ thoughtpolice dizfer ];
   };
 }

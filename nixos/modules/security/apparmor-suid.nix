@@ -4,6 +4,9 @@ let
 in
 with lib;
 {
+  imports = [
+    (mkRenamedOptionModule [ "security" "virtualization" "flushL1DataCache" ] [ "security" "virtualisation" "flushL1DataCache" ])
+  ];
 
   options.security.apparmor.confineSUIDApplications = mkOption {
     default = true;

@@ -3,7 +3,7 @@ rec {
   baseName = ''cl-test-more'';
   version = ''prove-20171130-git'';
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."alexandria" args."anaphora" args."cl-ansi-text" args."cl-colors" args."cl-ppcre" args."let-plus" args."prove" ];
 
@@ -17,7 +17,7 @@ rec {
   asdFilesToKeep = ["cl-test-more.asd"];
   overrides = x: x;
 }
-/* (SYSTEM cl-test-more DESCRIPTION NIL SHA256
+/* (SYSTEM cl-test-more DESCRIPTION System lacks description SHA256
     13dmnnlk3r9fxxcvk6sqq8m0ifv9y80zgp1wg63nv1ykwdi7kyar URL
     http://beta.quicklisp.org/archive/prove/2017-11-30/prove-20171130-git.tgz
     MD5 630df4367537f799570be40242f8ed52 NAME cl-test-more FILENAME

@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute }:
+{ stdenv, lib, fetchFromGitHub, makeWrapper, curl, openssl, socat, iproute, unixtools }:
 stdenv.mkDerivation rec {
-  name = "acme.sh-${version}";
-  version = "2.8.0";
+  pname = "acme.sh";
+  version = "2.8.3";
 
   src = fetchFromGitHub {
     owner = "Neilpang";
     repo = "acme.sh";
     rev = version;
-    sha256 = "1h22bmx065v0lhwkr4zykybfl6ppjr2wibgwy2wnihy30g28zq7v";
+    sha256 = "0j9wn61jd107fq9ww79399s7adql0vf897s0xavlvv6chq8a6ajj";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -16,7 +16,14 @@ stdenv.mkDerivation rec {
     mkdir -p $out $out/bin $out/libexec
     cp -R $src/* $_
     makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
-      --prefix PATH : "${lib.makeBinPath [ socat openssl curl iproute ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          socat
+          openssl
+          curl
+          (if stdenv.isLinux then iproute else unixtools.netstat)
+        ]
+      }"
   '';
 
   meta = with stdenv.lib; {

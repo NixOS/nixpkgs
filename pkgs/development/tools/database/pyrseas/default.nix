@@ -1,7 +1,7 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
 
 let
-  pgdbconn = pythonPackages.buildPythonPackage rec {
+  pgdbconn = pythonPackages.buildPythonPackage {
     pname = "pgdbconn";
     version = "0.8.0";
     src = fetchFromGitHub {
@@ -19,7 +19,7 @@ let
   };
 in
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
   pname = "pyrseas";
   version = "0.8.0";
   src = fetchFromGitHub {

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "ibniz-${version}";
+  pname = "ibniz";
   version = "1.18";
 
   src = fetchurl {
-    url = "http://www.pelulamu.net/ibniz/${name}.tar.gz";
+    url = "http://www.pelulamu.net/ibniz/${pname}-${version}.tar.gz";
     sha256 = "10b4dka8zx7y84m1a58z9j2vly8mz9aw9wn8z9vx9av739j95wp2";
   };
 

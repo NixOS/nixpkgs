@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 
-buildGoPackage rec {
-  name = "yaml2json-${version}";
+buildGoPackage {
+  pname = "yaml2json";
   version = "unstable-2017-05-03";
   goPackagePath = "github.com/bronze1man/yaml2json";
 

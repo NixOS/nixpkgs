@@ -118,10 +118,10 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.pythonPackages.buildbot-worker;
-        defaultText = "pkgs.pythonPackages.buildbot-worker";
+        default = pkgs.python3Packages.buildbot-worker;
+        defaultText = "pkgs.python3Packages.buildbot-worker";
         description = "Package to use for buildbot worker.";
-        example = literalExample "pkgs.python3Packages.buildbot-worker";
+        example = literalExample "pkgs.python2Packages.buildbot-worker";
       };
 
       packages = mkOption {
@@ -137,18 +137,19 @@ in {
     services.buildbot-worker.workerPassFile = mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
 
     users.groups = optional (cfg.group == "bbworker") {
-      name = "bbworker";
+      bbworker = { };
     };
 
-    users.users = optional (cfg.user == "bbworker") {
-      name = "bbworker";
-      description = "Buildbot Worker User.";
-      isNormalUser = true;
-      createHome = true;
-      home = cfg.home;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
+    users.users = optionalAttrs (cfg.user == "bbworker") {
+      bbworker = {
+        description = "Buildbot Worker User.";
+        isNormalUser = true;
+        createHome = true;
+        home = cfg.home;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+      };
     };
 
     systemd.services.buildbot-worker = {

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub }: stdenv.mkDerivation rec {
-  name = "tt-rss-theme-feedly-${version}";
+  pname = "tt-rss-theme-feedly";
   version = "2.0.0";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@
   installPhase = ''
     mkdir $out
 
-    cp -ra feedly feedly.css $out
+    cp -ra feedly *.css $out
   '';
 
   meta = with stdenv.lib; {

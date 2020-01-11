@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pylev";
   version = "1.3.0";
 

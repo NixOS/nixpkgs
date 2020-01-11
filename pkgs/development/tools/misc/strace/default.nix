@@ -1,12 +1,12 @@
 { stdenv, fetchurl, perl, libunwind, buildPackages }:
 
 stdenv.mkDerivation rec {
-  name = "strace-${version}";
-  version = "4.26";
+  pname = "strace";
+  version = "5.4";
 
   src = fetchurl {
-    url = "https://strace.io/files/${version}/${name}.tar.xz";
-    sha256 = "070yz8xii8gnb4psiz628zwm5srh266sfb06f7f1qzagxzz2ykbw";
+    url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0hd7sb7l99y9rcj8jjc1b6m3ryds17krsymdg3dvd40jsla0bl7p";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -21,10 +21,10 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://strace.io/;
+    homepage = "https://strace.io/";
     description = "A system call tracer for Linux";
     license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jgeerds globin ];
+    maintainers = with maintainers; [ globin ];
   };
 }

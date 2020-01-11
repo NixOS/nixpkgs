@@ -86,9 +86,6 @@ expandResponseParams() {
                 #shellcheck disable=SC2034
                 readarray -d '' params < <("@expandResponseParams@" "$@")
                 return 0
-            else
-                echo "Response files aren't supported during bootstrapping" >&2
-                return 1
             fi
         fi
     done

@@ -4,7 +4,8 @@ let
   version = "22-1.1ubuntu1"; # Zesty
 
 in stdenv.mkDerivation {
-  name = "kmod-blacklist-${version}";
+  pname = "kmod-blacklist";
+  inherit version;
 
   src = fetchurl {
     url = "https://launchpad.net/ubuntu/+archive/primary/+files/kmod_${version}.debian.tar.xz";

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromBitbucket, python3 }:
+{ stdenv, fetchFromGitHub, python3 }:
 
 with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.0.5";
+  version = "3.2.4";
 
-  src = fetchFromBitbucket {
-    owner = "plas";
+  src = fetchFromGitHub {
+    owner = pname;
     repo = pname;
-    rev = "e5a1ad4ae9d24066a769489b1e168b4bd6e00b03";
-    sha256 = "1lrl5pj9dpw9i5ij863hd47gfd15nmvglqkl2ldwgfn7kgpsdkz5";
+    rev = "v${version}";
+    sha256 = "1hfpjw4fac0kq3n9jqwfzbys6h35qjbh5rpc4jzhlln200h6zvwj";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -21,6 +21,8 @@ buildPythonApplication rec {
     pylint
     mypy
     pyperclip
+    asttokens
+    send2trash
   ];
 
   preInstall = ''

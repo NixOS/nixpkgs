@@ -13,12 +13,11 @@ let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.14";
-  name = "${pname}-${version}";
+  version = "8.0.15";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0mz615drx18h0frc6fq9nknqbpq7lr0xlsfmxd5irw2jz629lj76";
+    sha256 = "0ca93azasya5xiw6j2map8drmxf445qqydpvrb512kjfqdiv67x6";
   };
 
   patches = [
@@ -37,6 +36,12 @@ in stdenv.mkDerivation rec {
       sudo = "${sudo}/bin/sudo";
     })
   ];
+
+  # have it look for 4.7.2 instead of 4.7.1
+  preConfigure = ''
+    substituteInPlace CMakeLists.txt \
+      --replace "antlr-4.7.1-complete.jar" "antlr-4.7.2-complete.jar"
+  '';
 
   nativeBuildInputs = [
     cmake ninja pkgconfig jre swig wrapGAppsHook
@@ -57,10 +62,8 @@ in stdenv.mkDerivation rec {
     patchShebangs tools/get_wb_version.sh
   '';
 
-  NIX_CFLAGS_COMPILE = [
     # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-    "-Wno-error=deprecated-declarations"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
@@ -86,8 +89,8 @@ in stdenv.mkDerivation rec {
     find -L "$out/bin" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
       if [[ "''${file}" != *-bin ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';

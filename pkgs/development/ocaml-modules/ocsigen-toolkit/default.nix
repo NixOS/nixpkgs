@@ -5,7 +5,7 @@
 stdenv.mkDerivation rec {
  pname = "ocsigen-toolkit";
  name = "ocaml${ocaml.version}-${pname}-${version}";
- version = "2.0.0";
+ version = "2.2.0";
 
  propagatedBuildInputs = [ calendar eliom js_of_ocaml-ppx_deriving_json ];
  buildInputs = [ ocaml findlib opaline ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     owner = "ocsigen";
     repo = pname;
     rev = version;
-    sha256 = "0gkiqw3xi31l9q9h89fnr5gfmxi9w9lg9rlv16h4ssjgrgq3y5cw";
+    sha256 = "0qy6501jf81qcmkbicgrb1x4pxsjkhr40plwdn09w37d8vx9va3s";
   };
 
   createFindlibDestdir = true;

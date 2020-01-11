@@ -9,13 +9,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sqlite-${version}";
-  version = "3.26.0";
+  pname = "sqlite";
+  version = "3.30.1";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
-    url = "https://sqlite.org/2018/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "0pdzszb4sp73hl36siiv3p300jvfvbcdxi2rrmkwgs6inwznmajx";
+    url = "https://sqlite.org/2019/sqlite-autoconf-${archiveVersion version}.tar.gz";
+    sha256 = "0q4f57a5995wz9c7dfiqy9zwl0kn0b900nxwinqa3llv13dm0nlc";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"
@@ -75,8 +75,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
-    downloadPage = http://sqlite.org/download.html;
-    homepage = http://www.sqlite.org/;
+    downloadPage = https://sqlite.org/download.html;
+    homepage = https://www.sqlite.org/;
     license = licenses.publicDomain;
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;

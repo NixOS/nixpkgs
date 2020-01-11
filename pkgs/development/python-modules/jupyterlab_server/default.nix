@@ -6,20 +6,21 @@
 , pythonOlder
 , requests
 , pytest
+, pyjson5
 }:
 
 buildPythonPackage rec {
   pname = "jupyterlab_server";
-  version = "0.2.0";
+  version = "1.0.6";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "72d916a73957a880cdb885def6d8664a6d1b2760ef5dca5ad665aa1e8d1bb783";
+    sha256 = "d0977527bfce6f47c782cb6bf79d2c949ebe3f22ac695fa000b730c671445dad";
   };
 
   checkInputs = [ requests pytest ];
-  propagatedBuildInputs = [ notebook jsonschema ];
+  propagatedBuildInputs = [ notebook jsonschema pyjson5 ];
 
   # test_listing test fails
   # this is a new package and not all tests pass
@@ -31,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "JupyterLab Server";
-    homepage = http://jupyter.org;
+    homepage = https://jupyter.org;
     license = licenses.bsdOriginal;
     maintainers = [ maintainers.costrouc ];
   };

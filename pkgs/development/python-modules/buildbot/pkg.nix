@@ -1,12 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools }:
+{ lib, buildPythonPackage, fetchPypi, isPy3k }:
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "1.8.1";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16gjdzkris6475bvsgvb0v6rkn4xb6f55s468q37n0l1r6n8snc3";
+    sha256 = "1g87pddsyas1r0f6z29047cwnz7ds4925f6n9g7b0pkj3k73ci06";
   };
 
   postPatch = ''
@@ -15,10 +15,12 @@ buildPythonPackage rec {
     substituteInPlace buildbot_pkg.py --replace "os.listdir = listdir" ""
   '';
 
+  disabled = !isPy3k;
+
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Packaging Helper";
-    maintainers = with maintainers; [ nand0p ryansydnor ];
+    maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;
   };
 }

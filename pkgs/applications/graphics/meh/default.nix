@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libX11, libXext, libjpeg, libpng, giflib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "meh-unstable-2015-04-11";
 
   src = fetchFromGitHub {

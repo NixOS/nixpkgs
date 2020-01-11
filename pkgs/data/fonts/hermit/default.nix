@@ -1,23 +1,20 @@
-{ stdenv, fetchurl }:
+{ lib, fetchzip }:
 
-stdenv.mkDerivation rec {
+let
   pname = "hermit";
   version = "2.0";
+in fetchzip rec {
+  name = "${pname}-${version}";
 
-  src = fetchurl {
-    url = "https://pcaro.es/d/otf-${pname}-${version}.tar.gz";
-    sha256 = "09rmy3sbf1j1hr8zidighjgqc8kp0wsra115y27vrnlf10ml6jy0";
-  };
+  url = "https://pcaro.es/d/otf-${name}.tar.gz";
 
-  sourceRoot = ".";
-
-  dontBuild = true;
-  installPhase = ''
-    mkdir -p $out/share/fonts/opentype
-    cp *.otf $out/share/fonts/opentype/
+  postFetch = ''
+    tar xf $downloadedFile
+    install -m444 -Dt $out/share/fonts/opentype *.otf
   '';
+  sha256 = "127hnpxicqya7v1wmzxxqafq3aj1n33i4j5ncflbw6gj5g3bizwl";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "monospace font designed to be clear, pragmatic and very readable";
     homepage = https://pcaro.es/p/hermit;
     license = licenses.ofl;

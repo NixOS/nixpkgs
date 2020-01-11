@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Keras_Preprocessing";
-  version = "1.0.8";
+  version = "1.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6e669aa713727f0bc08f756616f64e0dfa75d822226cfc0dcf33297ab05cef7d";
+    sha256 = "1r98nm4k1svsqjyaqkfk23i31bl1kcfcyp7094yyj3c43phfp3as";
   };
 
   propagatedBuildInputs = [

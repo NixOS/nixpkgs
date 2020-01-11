@@ -1,23 +1,30 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, cmake, llvmPackages, rapidjson }:
+{ stdenv, fetchFromGitHub
+, cmake, llvmPackages, rapidjson, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name    = "ccls-${version}";
-  version = "0.20181225.8";
+  pname = "ccls";
+  version = "0.20190823.5";
 
   src = fetchFromGitHub {
     owner = "MaskRay";
     repo = "ccls";
     rev = version;
-    sha256 = "05vih8wi2lzp4zqlqd18fs3va6s8p74ws8sx7vwpcc8vcsdzq5w9";
+    sha256 = "0b2pkpzn576b92zcxpwchpkyw2fww6s69818rx4g9z34kzm35zy5";
   };
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake ];
   buildInputs = with llvmPackages; [ clang-unwrapped llvm rapidjson ];
 
-  cmakeFlags = [ "-DSYSTEM_CLANG=ON" ];
+  cmakeFlags = [
+    "-DCCLS_VERSION=${version}"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
+  ];
 
-  shell = stdenv.shell;
+  preConfigure = ''
+    cmakeFlagsArray+=(-DCMAKE_CXX_FLAGS="-fvisibility=hidden -fno-rtti")
+  '';
+
+  shell = runtimeShell;
   postFixup = ''
     # We need to tell ccls where to find the standard library headers.
 
@@ -37,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A c/c++ language server powered by clang";
     homepage    = https://github.com/MaskRay/ccls;
     license     = licenses.asl20;
-    platforms   = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    platforms   = platforms.linux ++ platforms.darwin;
+    maintainers = with maintainers; [ mic92 tobim ];
   };
 }

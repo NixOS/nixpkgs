@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "rainicorn-${version}";
+  pname = "rainicorn";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ buildRustPackage rec {
     sha256 = "07vh4g120sx569wkzclq91blkkd7q7z582pl8vz0li1l9ij8md01";
   };
 
-  cargoSha256 = "14kd25mw6m20blqcr221cclcqxw0j229zxq8hsaay6q7jgv0c7a0";
+  cargoSha256 = "07zsj12g4ff0cdb9pwz302vxvajr8g6nl3bpz4vdyi84csfvmahz";
 
   meta = with stdenv.lib; {
     broken = true;

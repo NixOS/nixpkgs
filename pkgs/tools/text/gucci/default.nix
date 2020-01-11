@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gucci-${version}";
+  pname = "gucci";
   version = "0.1.0";
 
   goPackagePath = "github.com/noqcks/gucci";

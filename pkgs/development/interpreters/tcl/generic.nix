@@ -5,8 +5,9 @@
 , ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "tcl-${version}";
+stdenv.mkDerivation {
+  pname = "tcl";
+  inherit version;
 
   inherit src;
 
@@ -30,14 +31,17 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postInstall = let
+    dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
     make install-private-headers
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
+    ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
   '';
 
   meta = with stdenv.lib; {
-    description = "The Tcl scription language";
-    homepage = http://www.tcl.tk/;
+    description = "The Tcl scripting language";
+    homepage = https://www.tcl.tk/;
     license = licenses.tcltk;
     platforms = platforms.all;
     maintainers = with maintainers; [ vrthra ];

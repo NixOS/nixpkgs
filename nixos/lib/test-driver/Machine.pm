@@ -31,9 +31,17 @@ sub new {
 
     if (!$startCommand) {
         # !!! merge with qemu-vm.nix.
+        my $netBackend = "-netdev user,id=net0";
+        my $netFrontend = "-device virtio-net-pci,netdev=net0";
+
+        $netBackend .= "," . $args->{netBackendArgs}
+            if defined $args->{netBackendArgs};
+
+        $netFrontend .= "," . $args->{netFrontendArgs}
+            if defined $args->{netFrontendArgs};
+
         $startCommand =
-            "qemu-kvm -m 384 " .
-            "-net nic,model=virtio \$QEMU_OPTS ";
+            "qemu-kvm -m 384 $netBackend $netFrontend \$QEMU_OPTS ";
 
         if (defined $args->{hda}) {
             if ($args->{hdaInterface} eq "scsi") {

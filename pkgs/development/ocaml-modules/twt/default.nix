@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   dontBuild = true;
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   dontStrip = true;
 

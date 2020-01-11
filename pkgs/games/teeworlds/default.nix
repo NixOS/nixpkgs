@@ -1,15 +1,17 @@
-{ fetchFromGitHub, fetchurl, stdenv, bam, pkgconfig, makeWrapper, python, alsaLib
+{ fetchFromGitHub, stdenv, bam, pkgconfig, python, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
 }:
 
 stdenv.mkDerivation rec {
-  name = "teeworlds-0.7.2";
+  pname = "teeworlds";
+  version = "0.7.3.1";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
-    rev = "0.7.2";
-    sha256 = "15l988qcsqgb6rjais0qd5sd2rjanm2708jmzvkariqzz0d6pb93";
+    rev = version;
+    sha256 = "1hfj22xxswqnm1s74ln3dwl63rs4mk9g4yvpf75plswbxd0020la";
+    fetchSubmodules = true;
   };
 
   postPatch = ''

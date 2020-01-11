@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, libnfnetlink, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "libnetfilter_log-${version}";
+  pname = "libnetfilter_log";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "https://netfilter.org/projects/libnetfilter_log/files/${name}.tar.bz2";
+    url = "https://netfilter.org/projects/libnetfilter_log/files/${pname}-${version}.tar.bz2";
     sha256 = "089vjcfxl5qjqpswrbgklf4wflh44irmw6sk2k0kmfixfmszxq3l";
   };
 

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, cyrus_sasl, libevent }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libmemcached-1.0.18";
 
   src = fetchurl {
@@ -23,10 +23,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent ];
   propagatedBuildInputs = [ cyrus_sasl ];
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive"/*gcc7*/ ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = with stdenv.lib; {
-    homepage = http://libmemcached.org;
+    homepage = https://libmemcached.org;
     description = "Open source C/C++ client library and tools for the memcached server";
     license = licenses.bsd3;
     platforms = platforms.linux ++ platforms.darwin;

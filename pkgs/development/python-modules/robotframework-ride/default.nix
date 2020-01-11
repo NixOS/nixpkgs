@@ -4,10 +4,9 @@ buildPythonPackage rec {
   version = "1.2.3";
   pname = "robotframework-ride";
   disabled = isPy3k;
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "https://robotframework-ride.googlecode.com/files/${name}.tar.gz";
+    url = "https://robotframework-ride.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "1lf5f4x80f7d983bmkx12sxcizzii21kghs8kf63a1mj022a5x5j";
   };
 

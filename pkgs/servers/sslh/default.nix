@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre }:
 
 stdenv.mkDerivation rec {
-  name = "sslh-${version}";
+  pname = "sslh";
   version = "1.20";
 
   src = fetchurl {

@@ -7,7 +7,7 @@ ruby = File.join(ENV["ruby"], "bin", RbConfig::CONFIG['ruby_install_name'])
 out = ENV["out"]
 bin_path = File.join(ENV["out"], "bin")
 gem_home = ENV["GEM_HOME"]
-gem_path = ENV["GEM_PATH"].split(File::PATH_SEPARATOR)
+gem_path = ENV["GEM_PATH"].split(File::PATH_SEPARATOR).uniq
 install_path = Dir.glob("#{gem_home}/gems/*").first
 gemspec_path = ARGV[0]
 

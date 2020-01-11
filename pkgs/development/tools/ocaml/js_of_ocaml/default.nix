@@ -7,13 +7,14 @@ let version = if stdenv.lib.versionAtLeast ocaml.version "4.02"
 in
 
 stdenv.mkDerivation {
-  name = "js_of_ocaml-${version}";
+  pname = "js_of_ocaml";
+  inherit version;
   src = fetchurl {
     url = "https://github.com/ocsigen/js_of_ocaml/archive/${version}.tar.gz";
     sha256 = {
       "2.7" = "1dali1akyd4zmkwav0d957ynxq2jj6cc94r4xiaql7ca89ajz4jj";
       "2.8.4" = "098ph50s9kqw6rc3qjn39zv9b5swdf4qr44afwqfkkjgjs5d7vbl";
-    }."${version}";
+    }.${version};
   };
 
   buildInputs = [ ocaml findlib menhir ocsigen_deriving ocamlbuild

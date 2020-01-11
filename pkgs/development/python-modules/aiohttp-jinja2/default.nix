@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "aiohttp-jinja2";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aef9b6595f962182ad00c990095fb51d731c280e1d183e2b28cf0bdb5a942d0c";
+    sha256 = "2dfe29cfd278d07cd0a851afb98471bc8ce2a830968443e40d67636f3c035d79";
   };
 
   propagatedBuildInputs = [ aiohttp jinja2 ];

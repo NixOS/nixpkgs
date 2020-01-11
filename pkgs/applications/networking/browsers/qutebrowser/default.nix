@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, fetchzip, python3Packages
-, makeWrapper, wrapGAppsHook, qtbase, glib-networking
+, mkDerivationWith, wrapQtAppsHook, wrapGAppsHook, qtbase, glib-networking
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2
 , libxslt, gst_all_1 ? null
 , withPdfReader        ? true
@@ -10,23 +10,23 @@ assert withMediaPlayback -> gst_all_1 != null;
 
 let
   pdfjs = let
-    version = "1.10.100";
+    version = "2.3.200";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "04df4cf6i6chnggfjn6m1z9vb89f01a0l9fj5rk21yr9iirq9rkq";
+    sha256 = "1fpxsw0hzahccyng08acvc7g0gk29j2x701p6w6fg1718mvcrm1q";
     stripRoot = false;
   };
 
-in python3Packages.buildPythonApplication rec {
+in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.5.2";
+  version = "1.9.0";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ki19mynq91aih3kxhipnay3jmn56s7p6rilws0gq0k98li6a4my";
+    sha256 = "1y0yq1qfr6g1s7kf3w2crd0b025dv2dfknhlz3v0001ns3rgwj17";
   };
 
   # Needs tox
@@ -41,19 +41,28 @@ in python3Packages.buildPythonApplication rec {
   ]);
 
   nativeBuildInputs = [
-    makeWrapper wrapGAppsHook asciidoc
+    wrapQtAppsHook wrapGAppsHook asciidoc
     docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
   ];
 
   propagatedBuildInputs = with python3Packages; [
-    pyyaml pyqt5 jinja2 pygments
-    pypeg2 cssutils pyopengl attrs
+    pyyaml pyqt5 pyqtwebengine jinja2 pygments
+    pypeg2 cssutils pyopengl attrs setuptools
     # scripts and userscripts libs
     tldextract beautifulsoup4
     pyreadability pykeepass stem
   ];
 
+  patches = [
+    ./fix-restart.patch
+  ];
+
+  dontWrapGApps = true;
+  dontWrapQtApps = true;
+
   postPatch = ''
+    substituteInPlace qutebrowser/app.py --subst-var-by qutebrowser "$out/bin/qutebrowser"
+
     sed -i "s,/usr/share/,$out/share/,g" qutebrowser/utils/standarddir.py
   '' + lib.optionalString withPdfReader ''
     sed -i "s,/usr/share/pdf.js,${pdfjs},g" qutebrowser/browser/pdfjs.py
@@ -65,8 +74,8 @@ in python3Packages.buildPythonApplication rec {
 
   postInstall = ''
     install -Dm644 doc/qutebrowser.1 "$out/share/man/man1/qutebrowser.1"
-    install -Dm644 misc/qutebrowser.desktop \
-        "$out/share/applications/qutebrowser.desktop"
+    install -Dm644 misc/org.qutebrowser.qutebrowser.desktop \
+        "$out/share/applications/org.qutebrowser.qutebrowser.desktop"
 
     # Install icons
     for i in 16 24 32 48 64 128 256 512; do
@@ -89,10 +98,16 @@ in python3Packages.buildPythonApplication rec {
     done
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/qutebrowser \
+      "''${gappsWrapperArgs[@]}" \
+      "''${qtWrapperArgs[@]}"
+  '';
+
   meta = with stdenv.lib; {
     homepage    = https://github.com/The-Compiler/qutebrowser;
     description = "Keyboard-focused browser with a minimal GUI";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jagajaga rnhmjoj ];
+    maintainers = with maintainers; [ jagajaga rnhmjoj ebzzry ];
   };
 }

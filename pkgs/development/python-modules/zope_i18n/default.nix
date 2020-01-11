@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "zope.i18n";
-  version = "4.6.1";
+  version = "4.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14f7339f6d4fed5e94882a7f1b2e40fd90ad00b3c28a7f4353762101395e3304";
+    sha256 = "9fcc1adb4e5f6188769ab36f6f40a59b567bb5eef91f714584e0dfd0891be5d0";
   };
 
   propagatedBuildInputs = [ pytz zope_component ];
@@ -21,6 +21,7 @@ buildPythonPackage rec {
     description = "Zope Internationalization Support";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];
+    broken = true;
   };
 
 }

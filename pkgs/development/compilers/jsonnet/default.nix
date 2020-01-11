@@ -1,26 +1,28 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "jsonnet-${version}";
-  version = "0.12.1";
+  pname = "jsonnet";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "google";
     repo = "jsonnet";
-    sha256 = "13a0sf1k8ivxhc28w0d0axzr0sj3jccl9sjq6l0dkyzrnmbxzmkb";
+    sha256 = "012zapx0xvlkl2y7dljpdn18gymnmzc4mma2yagf9pxnr286lwrf";
   };
 
   enableParallelBuilding = true;
 
   makeFlags = [
     "jsonnet"
+    "jsonnetfmt"
     "libjsonnet.so"
   ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/include
     cp jsonnet $out/bin/
+    cp jsonnetfmt $out/bin/
     cp libjsonnet*.so $out/lib/
     cp -a include/*.h $out/include/
   '';

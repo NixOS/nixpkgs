@@ -27,8 +27,9 @@ let
     outputHash = "1p7yf97dn0nvr005cbs6vdk3i341s8fya4kfccj8qqad2qgxflif";
   };
 in
-stdenv.mkDerivation rec {
-  name = "gephi-${version}";
+stdenv.mkDerivation {
+  pname = "gephi";
+  inherit version;
 
   inherit src;
 

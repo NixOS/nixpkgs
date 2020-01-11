@@ -13,7 +13,6 @@
 , scipy
 , hdmedians
 , scikitlearn
-, pytest
 , coverage
 , python
 , isPy3k

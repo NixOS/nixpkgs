@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "parallel-rust-${version}";
+  pname = "parallel-rust";
   version = "0.11.3";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1bb1m3ckkrxlnw9w24ig70bd1zwyrbaw914q3xz5yv43c0l6pn9c";
   };
 
-  cargoSha256 = "0p3wpjz3jrqjasi39zq6q54dhpymc5jp0mfsnzbq6dvz18s8m588";
+  cargoSha256 = "0ssawp06fidsppvfzk0balf4fink2vym9688r7k7x7pb2z7cvyqc";
 
   patches = [ ./fix_cargo_lock_version.patch ];
 

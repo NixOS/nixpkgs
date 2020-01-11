@@ -1,28 +1,30 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ aiohttp astral async-timeout attrs certifi jinja2 pyjwt cryptography pip pytz pyyaml requests ruamel_yaml voluptuous python-slugify ])"
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ attrs ])
 #
 # This script downloads Home Assistant's source tarball.
-# Inside the homeassistant/components directory, each component has an associated .py file,
-# specifying required packages and other components it depends on:
+# Inside the homeassistant/components directory, each integration has an associated manifest.json,
+# specifying required packages and other integrations it depends on:
 #
-# REQUIREMENTS = [ 'package==1.2.3' ]
-# DEPENDENCIES = [ 'component' ]
+#     {
+#       "requirements": [ "package==1.2.3" ],
+#       "dependencies": [ "component" ]
+#     }
 #
-# By parsing the files, a dictionary mapping component to requirements and dependencies is created.
+# By parsing the files, a dictionary mapping integrations to requirements and dependencies is created.
 # For all of these requirements and the dependencies' requirements,
-# Nixpkgs' python3Packages are searched for appropriate names.
-# Then, a Nix attribute set mapping component name to dependencies is created.
+# nixpkgs' python3Packages are searched for appropriate names.
+# Then, a Nix attribute set mapping integration name to dependencies is created.
 
-from urllib.request import urlopen
-import tempfile
 from io import BytesIO
-import tarfile
-import importlib
-import subprocess
-import os
-import sys
 import json
+import pathlib
+import os
 import re
+import subprocess
+import sys
+import tempfile
+import tarfile
+from urllib.request import urlopen
 
 COMPONENT_PREFIX = 'homeassistant.components'
 PKG_SET = 'python3Packages'
@@ -31,33 +33,31 @@ PKG_SET = 'python3Packages'
 # the following can be used to choose one of them
 PKG_PREFERENCES = {
     # Use python3Packages.youtube-dl-light instead of python3Packages.youtube-dl
-    'youtube-dl': 'youtube-dl-light'
+    'youtube-dl': 'youtube-dl-light',
+    'tensorflow-bin': 'tensorflow',
+    'tensorflowWithoutCuda': 'tensorflow'
 }
 
 def get_version():
     with open(os.path.dirname(sys.argv[0]) + '/default.nix') as f:
-        m = re.search('hassVersion = "([\\d\\.]+)";', f.read())
+        # A version consists of digits, dots, and possibly a "b" (for beta)
+        m = re.search('hassVersion = "([\\d\\.b]+)";', f.read())
         return m.group(1)
 
 def parse_components(version='master'):
     components = {}
     with tempfile.TemporaryDirectory() as tmp:
-        with urlopen('https://github.com/home-assistant/home-assistant/archive/{}.tar.gz'.format(version)) as response:
+        with urlopen(f'https://github.com/home-assistant/home-assistant/archive/{version}.tar.gz') as response:
             tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
         # Use part of a script from the Home Assistant codebase
-        sys.path.append(tmp + '/home-assistant-{}'.format(version))
-        from script.gen_requirements_all import explore_module
-        for package in explore_module(COMPONENT_PREFIX, True):
-            # Remove 'homeassistant.components.' prefix
-            component = package[len(COMPONENT_PREFIX + '.'):]
-            try:
-                module = importlib.import_module(package)
-                components[component] = {}
-                components[component]['requirements'] = getattr(module, 'REQUIREMENTS', [])
-                components[component]['dependencies'] = getattr(module, 'DEPENDENCIES', [])
-            # If there is an ImportError, the imported file is not the main file of the component
-            except ImportError:
-                continue
+        sys.path.append(os.path.join(tmp, f'home-assistant-{version}'))
+        from script.hassfest.model import Integration
+        integrations = Integration.load_dir(pathlib.Path(
+            os.path.join(tmp, f'home-assistant-{version}', 'homeassistant/components')
+        ))
+        for domain in sorted(integrations):
+            integration = integrations[domain]
+            components[domain] = integration.manifest
     return components
 
 # Recursively get the requirements of a component and its dependencies
@@ -105,7 +105,9 @@ components = parse_components(version=version)
 build_inputs = {}
 for component in sorted(components.keys()):
     attr_paths = []
-    for req in sorted(get_reqs(components, component)):
+    missing_reqs = []
+    reqs = sorted(get_reqs(components, component))
+    for req in reqs:
         # Some requirements are specified by url, e.g. https://example.org/foobar#xyz==1.0.0
         # Therefore, if there's a "#" in the line, only take the part after it
         req = req[req.find('#') + 1:]
@@ -114,8 +116,14 @@ for component in sorted(components.keys()):
         if attr_path is not None:
             # Add attribute path without "python3Packages." prefix
             attr_paths.append(attr_path[len(PKG_SET + '.'):])
+        else:
+            missing_reqs.append(name)
     else:
         build_inputs[component] = attr_paths
+    n_diff = len(reqs) > len(build_inputs[component])
+    if n_diff > 0:
+        print("Component {} is missing {} dependencies".format(component, n_diff))
+        print("missing requirements: {}".format(missing_reqs))
 
 with open(os.path.dirname(sys.argv[0]) + '/component-packages.nix', 'w') as f:
     f.write('# Generated by parse-requirements.py\n')

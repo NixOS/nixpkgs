@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, autoreconfHook
-, libcxxabi, libuuid, llvm
+, libcxxabi, libuuid
 , libobjc ? null, maloader ? null
+, enableTapiSupport ? true, libtapi
 }:
 
 let
@@ -17,23 +18,24 @@ assert (!stdenv.hostPlatform.isDarwin) -> maloader != null;
 
 let
   baseParams = rec {
-    name = "${targetPrefix}cctools-port-${version}";
-    version = "895";
+    name = "${targetPrefix}cctools-port";
+    version = "927.0.2";
 
     src = fetchFromGitHub {
       owner  = "tpoechtrager";
       repo   = "cctools-port";
-      rev    = "07619027f8311fa61b4a549c75994b88739a82d8";
-      sha256 = "12g94hhz5v5bmy2w0zb6fb4bjlmn992gygc60h9nai15kshj2spi";
+      rev    = "8239a5211bcf07d6b9d359782e1a889ec1d7cce5";
+      sha256 = "0h8b1my0wf1jyjq63wbiqkl2clgxsf87f6i4fjhqs431fzlq8sac";
     };
 
     outputs = [ "out" "dev" ];
 
     nativeBuildInputs = [ autoconf automake libtool autoreconfHook ];
     buildInputs = [ libuuid ]
-      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ];
+      ++ stdenv.lib.optionals stdenv.isDarwin [ libcxxabi libobjc ]
+      ++ stdenv.lib.optional enableTapiSupport libtapi;
 
-    patches = [ ./ld-rpath-nonfinal.patch ./ld-ignore-rpath-link.patch ];
+    patches = [ ./ld-ignore-rpath-link.patch ./ld-rpath-nonfinal.patch ];
 
     __propagatedImpureHostDeps = [
       # As far as I can tell, otool from cctools is the only thing that depends on these two, and we should fix them
@@ -46,7 +48,11 @@ let
     # TODO(@Ericson2314): Always pass "--target" and always targetPrefix.
     configurePlatforms = [ "build" "host" ]
       ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
-    configureFlags = [ "--disable-clang-as" ];
+    configureFlags = [ "--disable-clang-as" ]
+      ++ stdenv.lib.optionals enableTapiSupport [
+        "--enable-tapi-support"
+        "--with-libtapi=${libtapi}"
+      ];
 
     postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace cctools/Makefile.am --replace libobjc2 ""
@@ -78,12 +84,6 @@ let
       cd cctools
     '';
 
-    # TODO: this builds an ld without support for LLVM's LTO. We need to teach it, but that's rather
-    # hairy to handle during bootstrap. Perhaps it could be optional?
-    preConfigure = ''
-      sh autogen.sh
-    '';
-
     preInstall = ''
       pushd include
       make DSTROOT=$out/include RC_OS=common install
@@ -99,6 +99,7 @@ let
       homepage = http://www.opensource.apple.com/source/cctools/;
       description = "MacOS Compiler Tools (cross-platform port)";
       license = stdenv.lib.licenses.apsl20;
+      maintainers = with stdenv.lib.maintainers; [ matthewbauer ];
     };
   };
 in stdenv.mkDerivation baseParams

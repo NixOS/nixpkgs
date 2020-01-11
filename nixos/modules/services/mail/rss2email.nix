@@ -30,7 +30,7 @@ in {
       };
 
       config = mkOption {
-        type = with types; attrsOf (either str (either int bool));
+        type = with types; attrsOf (oneOf [ str int bool ]);
         default = {};
         description = ''
           The configuration to give rss2email.
@@ -43,9 +43,8 @@ in {
           <literal>[DEFAULT]</literal> block along with the
           <literal>to</literal> parameter.
 
-          See
-          <literal>https://github.com/rss2email/rss2email/blob/master/r2e.1</literal>
-          for more information on which parameters are accepted.
+          See <literal>man r2e</literal> for more information on which
+          parameters are accepted.
         '';
       };
 
@@ -94,6 +93,10 @@ in {
 
     services.rss2email.config.to = cfg.to;
 
+    systemd.tmpfiles.rules = [
+      "d /var/rss2email 0700 rss2email rss2email - -"
+    ];
+
     systemd.services.rss2email = let
       conf = pkgs.writeText "rss2email.cfg" (lib.generators.toINI {} ({
           DEFAULT = cfg.config;
@@ -105,22 +108,16 @@ in {
     in
     {
       preStart = ''
-        mkdir -p /var/rss2email
-        chmod 700 /var/rss2email
-
         cp ${conf} /var/rss2email/conf.cfg
         if [ ! -f /var/rss2email/db.json ]; then
           echo '{"version":2,"feeds":[]}' > /var/rss2email/db.json
         fi
-
-        chown -R rss2email:rss2email /var/rss2email
       '';
       path = [ pkgs.system-sendmail ];
       serviceConfig = {
         ExecStart =
           "${pkgs.rss2email}/bin/r2e -c /var/rss2email/conf.cfg -d /var/rss2email/db.json run";
         User = "rss2email";
-        PermissionsStartOnly = "true";
       };
     };
 

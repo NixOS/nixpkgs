@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, ocaml, num, camlp5 }:
+{ stdenv, runtimeShell, fetchFromGitHub, ocaml, num, camlp5 }:
 
 let
   load_num =
@@ -11,7 +11,7 @@ let
 
   start_script =
     ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd $out/lib/hol_light
       exec ${ocaml}/bin/ocaml \
         -I \`${camlp5}/bin/camlp5 -where\` \
@@ -21,13 +21,13 @@ let
 in
 
 stdenv.mkDerivation {
-  name     = "hol_light-2018-09-30";
+  name     = "hol_light-2019-10-06";
 
   src = fetchFromGitHub {
     owner  = "jrh13";
     repo   = "hol-light";
-    rev    = "27e09dd27834de46e917057710e9d8ded51a4c9f";
-    sha256 = "1p0rm08wnc2lsrh3xzhlq3zdhzqcv1lbqnkwx3aybrqhbg1ixc1d";
+    rev    = "5c91b2ded8a66db571824ecfc18b4536c103b23e";
+    sha256 = "0sxsk8z08ba0q5aixdyczcx5l29lb51ba4ip3d2fry7y604kjsx6";
   };
 
   buildInputs = [ ocaml camlp5 ];
@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license     = licenses.bsd2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice z77z vbgl ];
+    maintainers = with maintainers; [ thoughtpolice maggesi vbgl ];
   };
 }

@@ -7,45 +7,47 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
-  crcmod, google-compute-engine, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, with-gce ? false }:
 
 let
-  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
-                 ++ lib.optional (with-gce) google-compute-engine;
-  pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
+  pythonEnv = python.withPackages (p: with p; [
+    cffi
+    cryptography
+    pyopenssl
+    crcmod
+  ] ++ lib.optional (with-gce) google-compute-engine);
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "03ymvfhk8azyvdm6j4pbqx2fsh178kw81yqwkycbhmm6mnyc8yv1";
+      sha256 = "10h0khh8npj2j5f7h3z86h46zbb1skbfs74firssich6jk7rx6km";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "1pw4w3v81mp8alm6vxq10242xxwv8rfs59bjxrmy0pfkjgsr4x4v";
+      sha256 = "182r9lgpks50ihcrkarc5w6l4rfmpdnx825lazamj5j2jsha73xw";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
-  name = "google-cloud-sdk-${version}";
-  version = "222.0.0";
+  pname = "google-cloud-sdk";
+  version = "268.0.0";
 
-  src = fetchurl (sources name stdenv.hostPlatform.system);
+  src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
 
-  phases = [ "installPhase" "fixupPhase" ];
+  patches = [
+    ./gcloud-path.patch
+  ];
 
   installPhase = ''
-    mkdir -p "$out"
-    tar -xzf "$src" -C "$out" google-cloud-sdk
+    mkdir -p $out/google-cloud-sdk
+    cp -R * .install $out/google-cloud-sdk/
 
-    mkdir $out/google-cloud-sdk/lib/surface/alpha
+    mkdir -p $out/google-cloud-sdk/lib/surface/{alpha,beta}
     cp ${./alpha__init__.py} $out/google-cloud-sdk/lib/surface/alpha/__init__.py
-
-    mkdir $out/google-cloud-sdk/lib/surface/beta
     cp ${./beta__init__.py} $out/google-cloud-sdk/lib/surface/beta/__init__.py
 
     # create wrappers with correct env
@@ -53,8 +55,9 @@ in stdenv.mkDerivation rec {
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
-            --set CLOUDSDK_PYTHON "${python}/bin/python" \
-            --prefix PYTHONPATH : "${pythonPath}"
+            --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
+            --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
@@ -68,8 +71,8 @@ in stdenv.mkDerivation rec {
     disable_update_check = true" >> $out/google-cloud-sdk/properties
 
     # setup bash completion
-    mkdir -p "$out/etc/bash_completion.d/"
-    mv "$out/google-cloud-sdk/completion.bash.inc" "$out/etc/bash_completion.d/gcloud.inc"
+    mkdir -p $out/etc/bash_completion.d
+    mv $out/google-cloud-sdk/completion.bash.inc $out/etc/bash_completion.d/gcloud.inc
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
@@ -82,7 +85,7 @@ in stdenv.mkDerivation rec {
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ stephenmw zimbatm ];
+    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

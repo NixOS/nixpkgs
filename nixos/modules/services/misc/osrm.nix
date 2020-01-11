@@ -59,6 +59,7 @@ in
       group = config.users.users.osrm.name;
       description = "OSRM user";
       createHome = false;
+      isSystemUser = true;
     };
 
     users.groups.osrm = { };

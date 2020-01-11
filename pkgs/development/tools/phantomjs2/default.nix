@@ -15,7 +15,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "phantomjs-${version}";
+  pname = "phantomjs";
   version = "2.1.1";
 
   src = fetchFromGitHub {
@@ -69,6 +69,10 @@ in stdenv.mkDerivation rec {
       --replace "QT_MINOR_VERSION, 5" "QT_MINOR_VERSION, 9"
   '';
 
+  # Avoids error in webpage.cpp:80:89:
+  # invalid suffix on literal; C++11 requires a space between litend identifier
+  NIX_CFLAGS_COMPILE = "-Wno-reserved-user-defined-literal";
+
   __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
 
   enableParallelBuilding = true;
@@ -105,7 +109,7 @@ in stdenv.mkDerivation rec {
       - Network Monitoring
     '';
 
-    homepage = http://phantomjs.org/;
+    homepage = https://phantomjs.org/;
     license = licenses.bsd3;
 
     maintainers = [ maintainers.aflatter ];

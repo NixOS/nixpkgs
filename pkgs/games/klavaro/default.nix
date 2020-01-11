@@ -1,16 +1,16 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig, intltool, curl, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "klavaro-${version}";
-  version = "3.03";
+  pname = "klavaro";
+  version = "3.08";
 
   src = fetchurl {
-    url = "mirror://sourceforge/klavaro/${name}.tar.bz2";
-    sha256 = "1dc75jd5bx5w3rr4zaqyf2cci3vzgac18fia0h04fzsfwlhrz5g0";
+    url = "mirror://sourceforge/klavaro/${pname}-${version}.tar.bz2";
+    sha256 = "0qmvr6d8wshwp0xvk5wbig4vlzxzcxrakhyhd32v8v3s18nhqsrc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper intltool curl gtk3 ];
+  nativeBuildInputs = [ intltool makeWrapper pkgconfig ];
+  buildInputs = [ curl gtk3 ];
 
   postInstall = ''
     wrapProgram $out/bin/klavaro \
@@ -25,6 +25,6 @@ stdenv.mkDerivation rec {
     homepage = http://klavaro.sourceforge.net/;
     license = stdenv.lib.licenses.gpl3Plus;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.mimadrid];
+    maintainers = [stdenv.lib.maintainers.mimame];
   };
 }

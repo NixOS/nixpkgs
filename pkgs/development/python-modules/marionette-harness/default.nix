@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "marionette-harness";
-  version = "4.5.0";
+  version = "5.0.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "241c7f6032d01b0d78f5c0d13ea691935ddce9f8fce991319cc4fe860d61a7c4";
+    sha256 = "041cd779ae383fb5c56f2bb44824f4e80ba895febd9a3f21570ac274221c82e0";
   };
 
   propagatedBuildInputs = [ mozprofile mozversion browsermob-proxy moztest 

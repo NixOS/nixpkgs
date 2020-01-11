@@ -3,7 +3,6 @@
 , fetchPypi
 , webob
 , six
-, jinja2
 }:
 
 buildPythonPackage rec {

@@ -2,12 +2,12 @@
 
 ## various stuff that can be plugged in
 , flashplayer, hal-flash
-, MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2
-, jrePlugin, icedtea_web
+, MPlayerPlugin, ffmpeg, xorg, libpulseaudio, libcanberra-gtk2, libglvnd
+, jrePlugin, adoptopenjdk-icedtea-web
 , bluejeans, djview4, adobe-reader
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
-, esteidfirefoxplugin
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
+, tridactyl-native
 , udev
 , kerberos
 }:
@@ -18,8 +18,9 @@ browser:
 
 let
   wrapper =
-    { browserName ? browser.browserName or (builtins.parseDrvName browser.name).name
-    , name ? (browserName + "-" + (builtins.parseDrvName browser.name).version)
+    { browserName ? browser.browserName or (lib.getName browser)
+    , pname ? browserName
+    , version ? lib.getVersion browser
     , desktopName ? # browserName with first letter capitalized
       (lib.toUpper (lib.substring 0 1 browserName) + lib.substring 1 (-1) browserName)
     , nameSuffix ? ""
@@ -27,12 +28,12 @@ let
     , extraPlugins ? []
     , extraNativeMessagingHosts ? []
     , gdkWayland ? false
+    , cfg ? config.${browserName} or {}
     }:
 
     assert gdkWayland -> (browser ? gtk3); # Can only use the wayland backend if gtk3 is being used
 
     let
-      cfg = config.${browserName} or {};
       enableAdobeFlash = cfg.enableAdobeFlash or false;
       ffmpegSupport = browser.ffmpegSupport or false;
       gssSupport = browser.gssSupport or false;
@@ -54,19 +55,19 @@ let
           ++ lib.optional (cfg.enableDjvu or false) (djview4)
           ++ lib.optional (cfg.enableMPlayer or false) (MPlayerPlugin browser)
           ++ lib.optional (supportsJDK && jre && jrePlugin ? mozillaPlugin) jrePlugin
-          ++ lib.optional icedtea icedtea_web
+          ++ lib.optional icedtea adoptopenjdk-icedtea-web
           ++ lib.optional (cfg.enableGoogleTalkPlugin or false) google_talk_plugin
           ++ lib.optional (cfg.enableFriBIDPlugin or false) fribid
           ++ lib.optional (cfg.enableGnomeExtensions or false) gnome3.gnome-shell
           ++ lib.optional (cfg.enableBluejeans or false) bluejeans
           ++ lib.optional (cfg.enableAdobeReader or false) adobe-reader
-          ++ lib.optional (cfg.enableEsteid or false) esteidfirefoxplugin
           ++ extraPlugins
         );
       nativeMessagingHosts =
         ([ ]
           ++ lib.optional (cfg.enableBrowserpass or false) (lib.getBin browserpass)
           ++ lib.optional (cfg.enableBukubrow or false) bukubrow
+          ++ lib.optional (cfg.enableTridactylNative or false) tridactyl-native
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
@@ -75,6 +76,7 @@ let
       libs =   lib.optional stdenv.isLinux udev
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport kerberos
+            ++ lib.optional gdkWayland libglvnd
             ++ lib.optionals (cfg.enableQuakeLive or false)
             (with xorg; [ stdenv.cc libX11 libXxf86dga libXxf86vm libXext libXt alsaLib zlib ])
             ++ lib.optional (enableAdobeFlash && (cfg.enableAdobeFlashDRM or false)) hal-flash
@@ -82,7 +84,7 @@ let
       gtk_modules = [ libcanberra-gtk2 ];
 
     in stdenv.mkDerivation {
-      inherit name;
+      inherit pname version;
 
       desktopItem = makeDesktopItem {
         name = browserName;
@@ -127,11 +129,14 @@ let
             --suffix PATH ':' "$out${browser.execdir or "/bin"}" \
             --set MOZ_APP_LAUNCHER "${browserName}${nameSuffix}" \
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
+            --set SNAP_NAME "firefox" \
+            --set MOZ_LEGACY_PROFILES 1 \
+            --set MOZ_ALLOW_DOWNGRADE 1 \
             ${lib.optionalString gdkWayland ''
               --set GDK_BACKEND "wayland" \
             ''}${lib.optionalString (browser ? gtk3)
                 ''--prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-                  --suffix XDG_DATA_DIRS : '${gnome3.defaultIconTheme}/share'
+                  --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share'
                 ''
             }
 

@@ -32,5 +32,6 @@ buildPythonPackage rec {
     description = "Pipeline is an asset packaging library for Django";
     homepage = https://github.com/cyberdelia/django-pipeline;
     license = licenses.mit;
+    broken = true;
   };
 }

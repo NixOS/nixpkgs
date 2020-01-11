@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
-stdenv.mkDerivation rec {
-  name = "gpp-${version}";
+stdenv.mkDerivation {
+  pname = "gpp";
   version = "2.25";
 
   src = fetchFromGitHub {

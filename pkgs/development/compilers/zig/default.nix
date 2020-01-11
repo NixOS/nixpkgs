@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, cmake, llvmPackages, libxml2, zlib }:
 
 stdenv.mkDerivation rec {
-  version = "0.3.0";
-  name = "zig-${version}";
+  version = "0.5.0";
+  pname = "zig";
 
   src = fetchFromGitHub {
     owner = "ziglang";
-    repo = "zig";
-    rev = "${version}";
-    sha256 = "089ywagxjjh7gxv8h8yg7jpmryzjf7n4m5irhdkhp2966d03kyxm";
+    repo = pname;
+    rev = version;
+    sha256 = "0xyl0riakh6kwb3yvxihb451kqs4ai4q0aygqygnlb2rlr1dn1zb";
   };
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmPackages.clang-unwrapped llvmPackages.llvm libxml2 zlib ];
 
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
-  ];
+  preBuild = ''
+    export HOME=$TMPDIR;
+  '';
 
   meta = with stdenv.lib; {
     description = "Programming languaged designed for robustness, optimality, and clarity";

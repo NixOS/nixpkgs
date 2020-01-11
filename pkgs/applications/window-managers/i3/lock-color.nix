@@ -5,7 +5,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.12.c";
-  name = "i3lock-color-${version}";
+  pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
     libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm ];
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
   preInstall = ''
     mkdir -p $out/share/man/man1
   '';
-  installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc MANDIR=\${out}/share/man";
+  installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" "MANDIR=\${out}/share/man" ];
   postInstall = ''
     mv $out/bin/i3lock $out/bin/i3lock-color
     mv $out/share/man/man1/i3lock.1 $out/share/man/man1/i3lock-color.1
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
         - keyboard-layout
     '';
     homepage = https://github.com/PandorasFox/i3lock-color;
-    maintainers = with maintainers; [ garbas malyn ];
+    maintainers = with maintainers; [ malyn ];
     license = licenses.bsd3;
 
     # Needs the SSE2 instruction set. See upstream issue

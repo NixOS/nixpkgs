@@ -1,24 +1,24 @@
 { lib, stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, libX11, libXcomposite, libXft, libXmu, pam, apacheHttpd, imagemagick
-, pamtester, xscreensaver, xset }:
+, libX11, libXcomposite, libXft, libXmu, libXrandr, libXext, libXScrnSaver
+, pam, apacheHttpd, imagemagick, pamtester, xscreensaver, xset }:
 
 stdenv.mkDerivation rec {
-  name = "xsecurelock-${version}";
-  version = "1.2";
+  pname = "xsecurelock";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "xsecurelock";
     rev = "v${version}";
-    sha256 = "1vaw2m3yyfazj1x7xdwppmm0ch075q399g5vzrmhhrkzdrs53r1x";
+    sha256 = "0zdwszscdw0p7kwpqqv1dywn00bq1wak2x602lb6hdmkffspi8bg";
   };
 
   nativeBuildInputs = [
     autoreconfHook pkgconfig
   ];
   buildInputs = [
-    libX11 libXcomposite libXft libXmu pam
-    apacheHttpd imagemagick pamtester
+    libX11 libXcomposite libXft libXmu libXrandr libXext libXScrnSaver
+    pam apacheHttpd imagemagick pamtester
   ];
 
   configureFlags = [
@@ -30,11 +30,6 @@ stdenv.mkDerivation rec {
     cat > version.c <<'EOF'
       const char *const git_version = "${version}";
     EOF
-  '';
-
-  preInstall = ''
-    substituteInPlace helpers/saver_blank \
-      --replace 'protect xset' 'protect ${xset}/bin/xset'
   '';
 
   meta = with lib; {

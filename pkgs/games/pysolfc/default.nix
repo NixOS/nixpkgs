@@ -1,39 +1,48 @@
-{ fetchurl, python2, stdenv }:
-
-with python2.pkgs;
+{ stdenv, fetchzip, buildPythonApplication, python3Packages
+  , desktop-file-utils, freecell-solver }:
 
 buildPythonApplication rec {
   pname = "PySolFC";
-  version = "2.0";
+  version = "2.6.4";
 
-  src = fetchurl {
-    url = "mirror://sourceforge/pysolfc/${pname}-${version}.tar.bz2";
-    sha256 = "0v0v8iflw55f5mghglkw80j8b7lv1hffjassfhqc4y84dmz8xjyv";
+  src = fetchzip {
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
+    sha256 = "1bd84law5b1yga3pryggdvlfvm0l62gci2q8y3q79cysdk3z4w3z";
   };
+
+  cardsets = fetchzip {
+    url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC-Cardsets/PySolFC-Cardsets-2.0/PySolFC-Cardsets-2.0.tar.bz2";
+    sha256 = "0h0fibjv47j8lkc1bwnlbbvrx2nr3l2hzv717kcgagwhc7v2mrqh";
+  };
+
+  propagatedBuildInputs = with python3Packages; [
+    tkinter six random2
+    # optional :
+    pygame freecell-solver pillow
+  ];
 
   patches = [
     ./pysolfc-datadir.patch
   ];
 
-  propagatedBuildInputs = [
-    tkinter
-  ];
+  nativeBuildInputs = [ desktop-file-utils ];
+  postPatch = ''
+    desktop-file-edit --set-key Icon --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
+    desktop-file-edit --set-key Comment --set-value "${meta.description}" data/pysol.desktop
+  '';
+
+  postInstall = ''
+    mkdir $out/share/PySolFC/cardsets
+    cp -r $cardsets/* $out/share/PySolFC/cardsets
+  '';
 
   # No tests in archive
   doCheck = false;
 
-  postInstall = ''
-    # executables should not have an extension
-    pushd $out/bin
-    mv pysol.py pysol
-    rm pysol.pyc
-    popd
-  '';
-
   meta = with stdenv.lib; {
     description = "A collection of more than 1000 solitaire card games";
-    homepage = http://pysolfc.sourceforge.net/;
+    homepage = https://pysolfc.sourceforge.io;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ kierdavis ];
+    maintainers = with maintainers; [ kierdavis genesis ];
   };
 }

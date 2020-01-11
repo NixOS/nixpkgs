@@ -1,14 +1,20 @@
-{ stdenv, config, libGLSupported, fetchurl, pkgconfig
+{ stdenv, config, fetchurl, pkgconfig
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , openglSupport ? libGLSupported, libGL
-, alsaSupport ? stdenv.isLinux, alsaLib
-, x11Support ? !stdenv.isCygwin, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor, libXinerama, libXext, libXxf86vm, libXrandr
-, waylandSupport ? stdenv.isLinux, wayland, wayland-protocols, libxkbcommon
-, dbusSupport ? stdenv.isLinux, dbus
+, alsaSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, alsaLib
+, x11Support ? !stdenv.isCygwin && !stdenv.hostPlatform.isAndroid
+, libX11, xorgproto, libICE, libXi, libXScrnSaver, libXcursor
+, libXinerama, libXext, libXxf86vm, libXrandr
+, waylandSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, wayland, wayland-protocols, libxkbcommon
+, dbusSupport ? stdenv.isLinux && !stdenv.hostPlatform.isAndroid, dbus
 , udevSupport ? false, udev
 , ibusSupport ? false, ibus
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio
+, fcitxSupport ? false, fcitx
+, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid
+, libpulseaudio
 , AudioUnit, Cocoa, CoreAudio, CoreServices, ForceFeedback, OpenGL
-, audiofile, cf-private, libiconv
+, audiofile, libiconv
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -16,22 +22,26 @@
 
 with stdenv.lib;
 
-assert !stdenv.isDarwin -> alsaSupport || pulseaudioSupport;
-assert openglSupport -> (stdenv.isDarwin || x11Support && libGL != null);
-
 stdenv.mkDerivation rec {
-  name = "SDL2-${version}";
-  version = "2.0.9";
+  pname = "SDL2";
+  version = "2.0.10";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/release/${name}.tar.gz";
-    sha256 = "1c94ndagzkdfqaa838yqg589p1nnqln8mv0hpwfhrkbfczf8cl95";
+    url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
+    sha256 = "0mqxp6w5jhbq6y1j690g9r3gpzwjxh4czaglw8x05l7hl49nqrdl";
   };
 
   outputs = [ "out" "dev" ];
   outputBin = "dev"; # sdl-config
 
   patches = [ ./find-headers.patch ];
+
+  # Fix with mesa 19.2: https://bugzilla.libsdl.org/show_bug.cgi?id=4797
+  postPatch = ''
+    substituteInPlace include/SDL_opengl_glext.h \
+      --replace "typedef ptrdiff_t GLsizeiptr;" "typedef signed long int khronos_ssize_t; typedef khronos_ssize_t GLsizeiptr;" \
+      --replace "typedef ptrdiff_t GLintptr;" "typedef signed long int khronos_intptr_t; typedef khronos_intptr_t GLintptr;"
+  '';
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -44,21 +54,18 @@ stdenv.mkDerivation rec {
     ++ optionals x11Support [ libX11 xorgproto ];
 
   dlopenBuildInputs = [ ]
-    ++ optional  alsaSupport alsaLib
+    ++ optionals  alsaSupport [ alsaLib audiofile ]
     ++ optional  dbusSupport dbus
     ++ optional  pulseaudioSupport libpulseaudio
     ++ optional  udevSupport udev
     ++ optionals waylandSupport [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support [ libICE libXi libXScrnSaver libXcursor libXinerama libXext libXrandr libXxf86vm ];
 
-  buildInputs = [ audiofile libiconv ]
+  buildInputs = [ libiconv ]
     ++ dlopenBuildInputs
     ++ optional  ibusSupport ibus
-    ++ optionals stdenv.isDarwin [
-      AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optional  fcitxSupport fcitx
+    ++ optionals stdenv.isDarwin [ AudioUnit Cocoa CoreAudio CoreServices ForceFeedback OpenGL ];
 
   enableParallelBuilding = true;
 
@@ -68,9 +75,21 @@ stdenv.mkDerivation rec {
     ++ optional alsaSupport "--with-alsa-prefix=${alsaLib.out}/lib"
     ++ optional stdenv.isDarwin "--disable-sdltest";
 
+  # We remove libtool .la files when static libs are requested,
+  # because they make the builds of downstream libs like `SDL_tff`
+  # fail with `cannot find -lXext, `-lXcursor` etc. linker errors
+  # because the `.la` files are not pruned if static libs exist
+  # (see https://github.com/NixOS/nixpkgs/commit/fd97db43bcb05e37f6bb77f363f1e1e239d9de53)
+  # and they also don't carry the necessary `-L` paths of their
+  # X11 dependencies.
+  # For static linking, it is better to rely on `pkg-config` `.pc`
+  # files.
   postInstall = ''
-    moveToOutput lib/libSDL2main.a "$dev"
-    rm $out/lib/*.a
+    if [ "$dontDisableStatic" -eq "1" ]; then
+      rm $out/lib/*.la
+    else
+      rm $out/lib/*.a
+    fi
     moveToOutput bin/sdl2-config "$dev"
   '';
 

@@ -7,7 +7,7 @@
 , sphinx
 , flake8
 , pytestpep8
-, pytestflakes
+, pytest-flakes
 , pytestcov
 , pytestcache
 , pytestrunner
@@ -16,22 +16,17 @@
 
 buildPythonPackage rec {
   pname = "progressbar2";
-  version = "3.39.2";
+  version = "3.47.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6eb5135b987caca4212d2c7abc2923d4ad5ba18bb34ccbe7044b3628f52efc2c";
+    sha256 = "7538d02045a1fd3aa2b2834bfda463da8755bd3ff050edc6c5ddff3bc616215f";
   };
-
-  postPatch = ''
-    rm -r tests/__pycache__
-    rm tests/*.pyc
-  '';
 
   propagatedBuildInputs = [ python-utils ];
   nativeBuildInputs = [ pytestrunner ];
   checkInputs = [
-    pytest sphinx flake8 pytestpep8 pytestflakes pytestcov
+    pytest sphinx flake8 pytestpep8 pytest-flakes pytestcov
     pytestcache freezegun
   ];
   # ignore tests on the nix wrapped setup.py and don't flake .eggs directory

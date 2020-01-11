@@ -2,7 +2,16 @@
 , withLinuxHeaders ? true
 , profilingLibraries ? false
 , withGd ? false
+, buildPackages
 }:
+
+let
+  gdCflags = [
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=missing-attributes"
+    "-Wno-error=array-bounds"
+  ];
+in
 
 callPackage ./common.nix { inherit stdenv; } {
     name = "glibc" + stdenv.lib.optionalString withGd "-gd";
@@ -39,6 +48,22 @@ callPackage ./common.nix { inherit stdenv; } {
     #      limit rebuilds by only disabling pie w/musl
       ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
+    NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " "
+      (if !stdenv.hostPlatform.isMusl
+        # TODO: This (returning a string or `null`, instead of a list) is to
+        #       not trigger a mass rebuild due to the introduction of the
+        #       musl-specific flags below.
+        #       At next change to non-musl glibc builds, remove this `then`
+        #       and the above condition, instead keeping only the `else` below.
+        then (stdenv.lib.optionals withGd gdCflags)
+        else
+          (builtins.concatLists [
+            (stdenv.lib.optionals withGd gdCflags)
+            # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
+            # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
+            (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+          ]));
+
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
     # store path than that determined when built (as a source for the
@@ -55,9 +80,29 @@ callPackage ./common.nix { inherit stdenv; } {
       fi
     '';
 
-    postInstall = ''
+    postInstall = (if stdenv.hostPlatform == stdenv.buildPlatform then ''
       echo SUPPORTED-LOCALES=C.UTF-8/UTF-8 > ../glibc-2*/localedata/SUPPORTED
       make -j''${NIX_BUILD_CORES:-1} -l''${NIX_BUILD_CORES:-1} localedata/install-locales
+    '' else stdenv.lib.optionalString stdenv.buildPlatform.isLinux ''
+      # This is based on http://www.linuxfromscratch.org/lfs/view/development/chapter06/glibc.html
+      # Instead of using their patch to build a build-native localedef,
+      # we simply use the one from buildPackages
+      pushd ../glibc-2*/localedata
+      export I18NPATH=$PWD GCONV_PATH=$PWD/../iconvdata
+      mkdir -p $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale
+      ${stdenv.lib.getBin buildPackages.glibc}/bin/localedef \
+        --alias-file=../intl/locale.alias \
+        -i locales/C \
+        -f charmaps/UTF-8 \
+        --prefix $NIX_BUILD_TOP \
+        ${if stdenv.hostPlatform.parsed.cpu.significantByte.name == "littleEndian" then
+            "--little-endian"
+          else
+            "--big-endian"} \
+        C.UTF-8
+      cp -r $NIX_BUILD_TOP/${buildPackages.glibc}/lib/locale $out/lib
+      popd
+    '') + ''
 
       test -f $out/etc/ld.so.cache && rm $out/etc/ld.so.cache
 

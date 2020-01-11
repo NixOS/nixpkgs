@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "readline-6.3p08";
 
   src = fetchurl {
@@ -12,18 +12,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
-  configureFlags =
-    stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
-    [ # This test requires running host code
-      "bash_cv_wcwidth_broken=no"
-    ];
+  configureFlags = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    # This test requires running host code
+    "bash_cv_wcwidth_broken=no";
 
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only-6.3.patch
-    ]
+    ] ++ stdenv.lib.optional stdenv.hostPlatform.useAndroidPrebuilt ./android.patch
     ++
     (let
        patch = nr: sha256:

@@ -1,17 +1,17 @@
 { stdenv, fetchurl, file, openssl, mlton
-, mysql, postgresql, sqlite, gcc
+, libmysqlclient, postgresql, sqlite, gcc, icu
 }:
 
 stdenv.mkDerivation rec {
-  name = "urweb-${version}";
-  version = "20180616";
+  pname = "urweb";
+  version = "20190217";
 
   src = fetchurl {
-    url = "https://github.com/urweb/urweb/releases/download/${version}/${name}.tar.gz";
-    sha256 = "04iy2ky78q6w0d2xyfz2a1k26g2yrwsh1hw1bgs5ia9v3ih965r1";
+    url = "https://github.com/urweb/urweb/releases/download/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1cl0x0sy7w1lazszc8q06q3wx0x0rczxh27vimrsw54s6s9y096s";
   };
 
-  buildInputs = [ openssl mlton mysql.connector-c postgresql sqlite ];
+  buildInputs = [ openssl mlton libmysqlclient postgresql sqlite icu ];
 
   prePatch = ''
     sed -e 's@/usr/bin/file@${file}/bin/file@g' -i configure
@@ -21,13 +21,13 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export PGHEADER="${postgresql}/include/libpq-fe.h";
-    export MSHEADER="${mysql.connector-c}/include/mysql/mysql.h";
+    export MSHEADER="${libmysqlclient}/include/mysql/mysql.h";
     export SQHEADER="${sqlite.dev}/include/sqlite3.h";
 
     export CC="${gcc}/bin/gcc";
     export CCARGS="-I$out/include \
                    -L${openssl.out}/lib \
-                   -L${mysql.connector-c}/lib \
+                   -L${libmysqlclient}/lib \
                    -L${postgresql.lib}/lib \
                    -L${sqlite.out}/lib";
   '';

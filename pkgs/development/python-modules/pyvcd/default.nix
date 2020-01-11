@@ -6,12 +6,12 @@
 , pytest }:
 
 buildPythonPackage rec {
-  version = "0.1.4";
+  version = "0.1.6";
   pname = "pyvcd";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0dv9wac5y5z9j54ypyc59csxdiy9ybpphw9ipxp1k8nfg65q9jxx";
+    sha256 = "285fcd96c3ee482e7b222bdd01d5dd19c2f5a0ad9b8e950baa98d386a2758c8f";
   };
 
   buildInputs = [ setuptools_scm ];

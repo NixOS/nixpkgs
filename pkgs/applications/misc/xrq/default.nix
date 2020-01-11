@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libX11}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "xrq-unstable-2016-01-15";
 
   src = fetchFromGitHub {

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "wabt-${version}";
-  version = "1.0.8";
+  pname = "wabt";
+  version = "1.0.12";
 
   src = fetchFromGitHub {
     owner  = "WebAssembly";
     repo   = "wabt";
     rev    = version;
-    sha256 = "018sb7p8xlvv8p2fdbnl0v98zh78zc8ha74ldw5c8z0i7xzgzj9w";
+    sha256 = "1zlv3740wkqj4mn6sr84h0x6wk2lcp4pwwmqsh5yyqp1j1glbsa0";
   };
 
   nativeBuildInputs = [ cmake ];

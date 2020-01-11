@@ -1,8 +1,8 @@
 { stdenv, fetchurl, lua5 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.6.2";
-  name = "lua-filesystem-${version}";
+  pname = "lua-filesystem";
   isLibrary = true;
   src = fetchurl {
     url = "https://github.com/keplerproject/luafilesystem/archive/v1_6_2.tar.gz";

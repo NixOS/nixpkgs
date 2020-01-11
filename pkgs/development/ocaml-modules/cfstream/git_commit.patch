@@ -1,0 +1,13 @@
+diff --git a/lib/jbuild b/lib/jbuild
+index fcc5a39..d72d50c 100644
+--- a/lib/jbuild
++++ b/lib/jbuild
+@@ -10,7 +10,7 @@
+ (rule (
+   (targets (GIT_COMMIT))
+   (deps (../bin/git_commit.sh))
+-  (action (with-stdout-to ${@} (run ${<})))
++  (action (with-stdout-to ${@} (run echo "None")))
+ ))
+ 
+ (rule (

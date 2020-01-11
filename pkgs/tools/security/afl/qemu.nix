@@ -1,19 +1,16 @@
-{ stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, ncurses, perl
-, attr, libcap, vde2, texinfo, libuuid, flex, bison, lzo, snappy
-, libaio, libcap_ng, gnutls, pixman, autoconf
-, writeText
+{ stdenv, fetchurl, afl, python2, zlib, pkgconfig, glib, perl
+, texinfo, libuuid, flex, bison, pixman, autoconf
 }:
 
 with stdenv.lib;
 
 let
   qemuName = "qemu-2.10.0";
-  aflName = afl.name;
   cpuTarget = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64-linux-user"
     else if stdenv.hostPlatform.system == "i686-linux" then "i386-linux-user"
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "afl-${qemuName}";
 
   srcs = [
@@ -27,12 +24,12 @@ stdenv.mkDerivation rec {
   sourceRoot = qemuName;
 
   postUnpack = ''
-    cp ${aflName}/types.h $sourceRoot/afl-types.h
-    substitute ${aflName}/config.h $sourceRoot/afl-config.h \
+    cp ${afl.src.name}/types.h $sourceRoot/afl-types.h
+    substitute ${afl.src.name}/config.h $sourceRoot/afl-config.h \
       --replace "types.h" "afl-types.h"
-    substitute ${aflName}/qemu_mode/patches/afl-qemu-cpu-inl.h $sourceRoot/afl-qemu-cpu-inl.h \
+    substitute ${afl.src.name}/qemu_mode/patches/afl-qemu-cpu-inl.h $sourceRoot/afl-qemu-cpu-inl.h \
       --replace "../../config.h" "afl-config.h"
-    substituteInPlace ${aflName}/qemu_mode/patches/cpu-exec.diff \
+    substituteInPlace ${afl.src.name}/qemu_mode/patches/cpu-exec.diff \
       --replace "../patches/afl-qemu-cpu-inl.h" "afl-qemu-cpu-inl.h"
   '';
 
@@ -41,20 +38,20 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    zlib glib pixman ncurses attr libcap
-    vde2 libuuid lzo snappy libcap_ng gnutls
-  ] ++ optionals (stdenv.isLinux) [ libaio ];
+    zlib glib pixman libuuid
+  ];
 
   enableParallelBuilding = true;
 
   patches = [
     # patches extracted from afl source
-    "../${aflName}/qemu_mode/patches/cpu-exec.diff"
-    "../${aflName}/qemu_mode/patches/elfload.diff"
-    "../${aflName}/qemu_mode/patches/syscall.diff"
+    "../${afl.src.name}/qemu_mode/patches/cpu-exec.diff"
+    "../${afl.src.name}/qemu_mode/patches/elfload.diff"
+    "../${afl.src.name}/qemu_mode/patches/syscall.diff"
+    "../${afl.src.name}/qemu_mode/patches/configure.diff"
+    "../${afl.src.name}/qemu_mode/patches/memfd.diff"
     # nix-specific patches to make installation more well-behaved
     ./qemu-patches/no-etc-install.patch
-    ./qemu-patches/qemu-2.10.0-glibc-2.27.patch
   ];
 
   configureFlags =
@@ -63,9 +60,9 @@ stdenv.mkDerivation rec {
       "--disable-gtk"
       "--disable-sdl"
       "--disable-vnc"
+      "--disable-kvm"
       "--target-list=${cpuTarget}"
       "--enable-pie"
-      "--enable-kvm"
       "--sysconfdir=/etc"
       "--localstatedir=/var"
     ];

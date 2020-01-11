@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "pdfcrack-${version}";
-  version = "0.16";
+  pname = "pdfcrack";
+  version = "0.18";
 
   src = fetchurl {
     url = "mirror://sourceforge/pdfcrack/pdfcrack/pdfcrack-${version}.tar.gz";
-    sha256 = "1vvkrg3niinz0j9wwm31laxgmd7wdz201kn82b3dbksc0w1v4rbq";
+    sha256 = "035s3jzrs3ci0i53x04dzpqp9225c4s52cd722d6zqra5b2sw8w2";
   };
 
   installPhase = ''

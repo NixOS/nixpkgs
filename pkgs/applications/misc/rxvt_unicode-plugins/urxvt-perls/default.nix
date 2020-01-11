@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "urxvt-perls-${version}";
+  pname = "urxvt-perls";
   version = "2.2";
 
   src = fetchFromGitHub {

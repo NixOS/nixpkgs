@@ -1,10 +1,12 @@
-{ config, lib, pkgs, baseModules, ... }:
+{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
 
 let
 
   cfg = config.documentation;
+
+  manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
 
   /* For the purpose of generating docs, evaluate options with each derivation
     in `pkgs` (recursively) replaced by a fake with path "\${pkgs.attribute.path}".
@@ -18,9 +20,12 @@ let
     options =
       let
         scrubbedEval = evalModules {
-          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ baseModules;
+          modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
-          specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
+          specialArgs = {
+            pkgs = scrubDerivations "pkgs" pkgs;
+            inherit modulesPath;
+          };
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
@@ -47,11 +52,7 @@ let
       if [ -z "$browser" ]; then
         browser="$(type -P xdg-open || true)"
         if [ -z "$browser" ]; then
-          browser="$(type -P w3m || true)"
-          if [ -z "$browser" ]; then
-            echo "$0: unable to start a web browser; please set \$BROWSER"
-            exit 1
-          fi
+          browser="${pkgs.w3m-nographics}/bin/w3m"
         fi
       fi
       exec "$browser" ${manual.manualHTMLIndex}
@@ -69,6 +70,11 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
+    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+  ];
 
   options = {
 
@@ -146,6 +152,17 @@ in
         '';
       };
 
+      nixos.includeAllModules = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Whether the generated NixOS's documentation should include documentation for all
+          the options from all the NixOS modules included in the current
+          <literal>configuration.nix</literal>. Disabling this will make the manual
+          generator to ignore options defined outside of <literal>baseModules</literal>.
+        '';
+      };
+
     };
 
   };
@@ -174,8 +191,6 @@ in
     })
 
     (mkIf cfg.doc.enable {
-      # TODO(@oxij): put it here and remove from profiles?
-      # environment.systemPackages = [ pkgs.w3m ]; # w3m-nox?
       environment.pathsToLink = [ "/share/doc" ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })

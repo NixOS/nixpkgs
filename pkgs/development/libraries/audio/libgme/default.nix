@@ -2,7 +2,8 @@
 let
   version = "0.6.2";
 in stdenv.mkDerivation {
-  name = "libgme-${version}";
+  pname = "libgme";
+  inherit version;
 
   meta = with stdenv.lib; {
     description = "A collection of video game music chip emulators";

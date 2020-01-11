@@ -1,25 +1,25 @@
-{stdenv, fetchFromGitHub, python}:
+{ stdenv, fetchFromGitHub, python }:
 
 stdenv.mkDerivation rec {
-  version = "3.7.1";
-  name = "googler-${version}";
+  pname = "googler";
+  version = "4.0";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = "googler";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0dcszpz85h3yjnr55ixf8mzsdv46w3g27frhgcsl5zlsgk6vl8kw";
+    sha256 = "13jj15ph0vmbyxjslzl6z4h5b7wyllvhwgsrb6zf7qlkcmkd4vwy";
   };
 
   propagatedBuildInputs = [ python ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/jarun/googler;
+    homepage = "https://github.com/jarun/googler";
     description = "Google Search, Google Site Search, Google News from the terminal";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ koral ];
+    maintainers = with maintainers; [ koral filalex77 ];
     platforms = platforms.unix;
   };
 }

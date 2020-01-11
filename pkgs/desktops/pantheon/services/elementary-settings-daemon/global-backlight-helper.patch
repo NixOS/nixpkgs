@@ -1,0 +1,26 @@
+diff --git a/plugins/power/gpm-common.c b/plugins/power/gpm-common.c
+index e83f1549..15890053 100644
+--- a/plugins/power/gpm-common.c
++++ b/plugins/power/gpm-common.c
+@@ -452,7 +452,7 @@ run_backlight_helper (enum BacklightHelperCommand   command,
+         gchar *argv[5] = { 0 };
+ 
+         argv[0] = "pkexec";
+-        argv[1] = LIBEXECDIR "/gsd-backlight-helper";
++        argv[1] = "/run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper";
+         argv[2] = helper_args[command];
+         argv[3] = value;
+ 
+diff --git a/plugins/power/org.gnome.settings-daemon.plugins.power.policy.in.in b/plugins/power/org.gnome.settings-daemon.plugins.power.policy.in.in
+index f16300f8..f19bba3e 100644
+--- a/plugins/power/org.gnome.settings-daemon.plugins.power.policy.in.in
++++ b/plugins/power/org.gnome.settings-daemon.plugins.power.policy.in.in
+@@ -25,7 +25,7 @@
+       <allow_inactive>no</allow_inactive>
+       <allow_active>yes</allow_active>
+     </defaults>
+-    <annotate key="org.freedesktop.policykit.exec.path">@libexecdir@/gsd-backlight-helper</annotate>
++    <annotate key="org.freedesktop.policykit.exec.path">/run/current-system/sw/bin/elementary-settings-daemon/gsd-backlight-helper</annotate>
+   </action>
+ 
+ </policyconfig>

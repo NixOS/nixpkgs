@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "snabb-${version}";
+  pname = "snabb";
   version = "2018.01.2";
 
   src = fetchFromGitHub {
@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
   patchPhase = ''
     patchShebangs .

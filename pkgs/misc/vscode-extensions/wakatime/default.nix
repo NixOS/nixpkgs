@@ -1,4 +1,5 @@
-{ stdenv, wakatime, vscode-utils }:
+{ stdenv
+, wakatime, vscode-utils }:
 
 let
   inherit (vscode-utils) buildVscodeMarketplaceExtension;
@@ -7,14 +8,13 @@ in
     mktplcRef = {
       name = "vscode-wakatime";
       publisher = "WakaTime";
-      version = "1.2.5";
-      sha256 = "011yx3pwqbcz5fmzani57k0axgh458r4ipqwbjlklnrwbrkjhzra";
+      version = "2.2.1";
+      sha256 = "18hdmx993wvhcv13z9p8ylp3lf480axv4lyl0qx52pw2y2jgj1z8";
     };
 
     postPatch = ''
-      mkdir -p out/wakatime-master
-
-      cp -rt out/wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
+      mkdir -p wakatime-master
+      cp -rt wakatime-master --no-preserve=all ${wakatime}/lib/python*/site-packages/wakatime
     '';
 
     meta = with stdenv.lib; {

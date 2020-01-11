@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libcue-${version}";
+  pname = "libcue";
   version = "2.2.1";
 
   src = fetchFromGitHub {

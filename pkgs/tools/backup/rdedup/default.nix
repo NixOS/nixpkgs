@@ -3,7 +3,7 @@
 , Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rdedup-${version}";
+  pname = "rdedup";
   version = "3.1.1";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
   };
 
-  cargoSha256 = "0p19qcz2ph6axfccjwc6z72hrlb48l7sf1n0hc1gfq8hj2s3k2s1";
+  cargoSha256 = "19j1xscchnckqq1nddx9nr9wxxv124ab40l4mdalqbkli4zd748j";
 
   patches = [
     ./v3.1.1-fix-Cargo.lock.patch

@@ -7,7 +7,7 @@ with lib;
 
 let
 
-  requiredPackages = map lib.lowPrio
+  requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
     [ config.nix.package
       pkgs.acl
       pkgs.attr
@@ -135,6 +135,9 @@ in
       # outputs TODO: note that the tools will often not be linked by default
       postBuild =
         ''
+          # Remove wrapped binaries, they shouldn't be accessible via PATH.
+          find $out/bin -maxdepth 1 -name ".*-wrapped" -type l -delete
+
           if [ -x $out/bin/glib-compile-schemas -a -w $out/share/glib-2.0/schemas ]; then
               $out/bin/glib-compile-schemas $out/share/glib-2.0/schemas
           fi

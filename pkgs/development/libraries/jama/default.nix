@@ -1,7 +1,7 @@
 {stdenv, fetchurl, unzip, tnt}:
 
 stdenv.mkDerivation rec {
-  name = "jama-${version}";
+  pname = "jama";
   version = "1.2.5";
 
   src = fetchurl {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ tnt ];
 
   unpackPhase = ''
-      mkdir "${name}"
+      mkdir "${pname}-${version}"
       unzip "$src"
   '';
   installPhase = ''

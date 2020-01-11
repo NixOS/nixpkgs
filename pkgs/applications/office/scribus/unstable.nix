@@ -1,33 +1,40 @@
-{ stdenv, fetchsvn, makeWrapper, pkgconfig, cmake, qtbase, cairo, pixman,
+{ stdenv, fetchurl, fetchpatch, mkDerivation, pkgconfig, cmake, qtbase, cairo, pixman,
 boost, cups, fontconfig, freetype, hunspell, libjpeg, libtiff, libxml2, lcms2,
-podofo, poppler, poppler_data, python2, harfbuzz, qtimageformats, qttools }:
+podofo, poppler, poppler_data, python2, qtimageformats, qttools, harfbuzzFull }:
 
 let
   pythonEnv = python2.withPackages(ps: [ps.tkinter ps.pillow]);
-  revision = "22806";
-in 
-stdenv.mkDerivation rec {
-  name = "scribus-unstable-${version}";
-  version = "2019-01-16";
+in
+mkDerivation rec {
+  pname = "scribus";
+  version = "1.5.5";
 
-  src = fetchsvn {
-    url = "svn://scribus.net/trunk/Scribus";
-    rev = revision;
-    sha256 = "16xpsbp6kca78jf48n6zdmyjras38xr11paan839hgy4ik83ncn0";
+  src = fetchurl {
+    url = "mirror://sourceforge/${pname}/${pname}-devel/${pname}-${version}.tar.xz";
+    sha256 = "eQiyGmzoQyafWM7fX495GJMlfmIBzOX73ccNrKL+P3E=";
   };
+
+  patches = [
+    # fix build with Poppler 0.82
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/6db15ec1af791377b28981601f8c296006de3c6f.patch";
+      sha256 = "1y6g3avmsmiyaj8xry1syaz8sfznsavh6l2rp13pj2bwsxfcf939";
+    })
+    # fix build with Poppler 0.83
+    (fetchpatch {
+      url = "https://github.com/scribusproject/scribus/commit/b51c2bab4d57d685f96d427d6816bdd4ecfb4674.patch";
+      sha256 = "031yy9ylzksczfnpcc4glfccz025sn47zg6fqqzjnqqrc16bgdlx";
+    })
+  ];
 
   enableParallelBuilding = true;
 
+  nativeBuildInputs = [ pkgconfig cmake  ];
   buildInputs = [
-    makeWrapper pkgconfig cmake qtbase cairo pixman boost cups fontconfig
+    qtbase cairo pixman boost cups fontconfig
     freetype hunspell libjpeg libtiff libxml2 lcms2 podofo poppler
-    poppler_data pythonEnv harfbuzz qtimageformats qttools
+    poppler_data pythonEnv qtimageformats qttools harfbuzzFull
   ];
-
-  postFixup = ''
-    wrapProgram $out/bin/scribus \
-      --prefix QT_PLUGIN_PATH : "${qtbase}/${qtbase.qtPluginPrefix}"
-  '';
 
   meta = {
     maintainers = [ stdenv.lib.maintainers.erictapen ];

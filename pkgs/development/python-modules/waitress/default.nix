@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "waitress";
-  version = "1.1.0";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d33cd3d62426c0f1b3cd84ee3d65779c7003aae3fc060dee60524d10a57f05a9";
+    sha256 = "278e09d6849acc1365404bbf7d790d0423b159802e850c726e8cd0a126a2dac7";
   };
 
   doCheck = false;
@@ -18,7 +18,7 @@ buildPythonPackage rec {
      homepage = https://github.com/Pylons/waitress;
      description = "Waitress WSGI server";
      license = licenses.zpl20;
-     maintainers = with maintainers; [ garbas domenkozar ];
+     maintainers = with maintainers; [ domenkozar ];
   };
 
 }

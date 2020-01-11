@@ -1,11 +1,11 @@
 { stdenv, fetchurl, expat }:
 
 stdenv.mkDerivation rec {
-  name = "docbook2mdoc-${version}";
+  pname = "docbook2mdoc";
   version = "0.0.9";
 
   src = fetchurl {
-    url = "http://mdocml.bsd.lv/docbook2mdoc/snapshots/${name}.tgz";
+    url = "http://mdocml.bsd.lv/docbook2mdoc/snapshots/${pname}-${version}.tgz";
     sha256 = "07il80sg89xf6ym4bry6hxdacfzqgbwkxzyf7bjaihmw5jj0lclk";
   };
 

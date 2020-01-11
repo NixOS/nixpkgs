@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/ghickman/django-cache-url;
+    homepage = https://github.com/ghickman/django-cache-url;
     description = "Use Cache URLs in your Django application";
     license = licenses.mit;
     maintainers = [ maintainers.costrouc ];

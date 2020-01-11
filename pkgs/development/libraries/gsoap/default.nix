@@ -4,7 +4,7 @@ let
   majorVersion = "2.8";
 
 in stdenv.mkDerivation rec {
-  name = "gsoap-${version}";
+  pname = "gsoap";
   version = "${majorVersion}.53";
 
   src = fetchurl {

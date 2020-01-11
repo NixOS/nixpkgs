@@ -1,18 +1,18 @@
-{ lib, python3Packages, fetchFromGitLab, gtk3, cairo
+{ lib, python3Packages, gtk3, cairo
 , aspellDicts, buildEnv
-, gnome3, hicolor-icon-theme, librsvg
+, gnome3, librsvg
 , xvfb_run, dbus, libnotify
 }:
 
 python3Packages.buildPythonApplication rec {
   inherit (python3Packages.paperwork-backend) version src;
-  name = "paperwork-${version}";
+  pname = "paperwork";
 
   sourceRoot = "source/paperwork-gtk";
 
   # Patch out a few paths that assume that we're using the FHS:
   postPatch = ''
-    themeDir="$(echo "${gnome3.defaultIconTheme}/share/icons/"*)"
+    themeDir="$(echo "${gnome3.adwaita-icon-theme}/share/icons/"*)"
     sed -i -e "s,/usr/share/icons/gnome,$themeDir," src/paperwork/deps.py
 
     sed -i -e 's,sys\.prefix,"",g' \
@@ -46,9 +46,9 @@ python3Packages.buildPythonApplication rec {
     paths = lib.collect lib.isDerivation aspellDicts;
   }}/lib/aspell";
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb_run dbus.daemon ] ++ (with python3Packages; [ paperwork-backend ]);
   buildInputs = [
-    gnome3.defaultIconTheme hicolor-icon-theme libnotify librsvg
+    gnome3.adwaita-icon-theme libnotify librsvg
   ];
 
   # A few parts of chkdeps need to have a display and a dbus session, so we not
@@ -61,7 +61,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = with python3Packages; [
-    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil
+    paperwork-backend pypillowfight gtk3 cairo pyxdg dateutil setuptools pandas
   ];
 
   makeWrapperArgs = [

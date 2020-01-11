@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.2";
+  version = "0.8.6";
   pname = "tabulate";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e4ca13f26d0a6be2a2915428dc21e732f1e44dad7f76d7030b2ef1ec251cf7f2";
+    sha256 = "5470cc6687a091c7042cee89b2946d9235fe9f6d49c193a4ae2ac7bf386737c8";
   };
 
   checkInputs = [ nose ];

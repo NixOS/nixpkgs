@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "boltons";
-  version = "2019-01-07";
+  version = "19.3.0";
 
   # No tests in PyPi Tarball
   src = fetchFromGitHub {
     owner = "mahmoud";
     repo = "boltons";
-    rev = "3584ac9399f227a2a11b74153140ee171fd49783";
-    sha256 = "13xngjw249sk4vmr5kqqnia0npw0kpa0gm020a4dqid0cjyvj0rv";
+    rev = version;
+    sha256 = "0pgqr2hf7lxag8nc8wnh8hpp8fd2lxccq9h0bb8lb9x8npnzhnbn";
   };
 
   checkInputs = [ pytest ];

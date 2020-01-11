@@ -1,6 +1,6 @@
 --- a/src/gnome-shell/extension.js
 +++ b/src/gnome-shell/extension.js
-@@ -7,6 +7,8 @@
+@@ -6,6 +6,8 @@
  
  const Config = imports.misc.config;
  
@@ -11,45 +11,27 @@
  imports.gi.versions.GPaste = '1.0';
 --- a/src/gnome-shell/prefs.js
 +++ b/src/gnome-shell/prefs.js
-@@ -7,6 +7,8 @@
+@@ -6,6 +6,8 @@
  
  const Gettext = imports.gettext;
  
 +imports.gi.GIRepository.Repository.prepend_search_path('@typelibPath@');
 +
- const GPaste = imports.gi.GPaste;
+ const { GPaste } = imports.gi;
  
  const ExtensionUtils = imports.misc.extensionUtils;
 --- a/src/libgpaste/settings/gpaste-settings.c
 +++ b/src/libgpaste/settings/gpaste-settings.c
-@@ -22,6 +22,8 @@
- 
- typedef struct
- {
-+    GSettingsSchemaSource *schema_source;
-+    GSettingsSchema *schema;
-     GSettings *settings;
-     GSettings *shell_settings;
- 
-@@ -919,6 +921,8 @@
-     {
-         g_signal_handler_disconnect (settings, priv->c_signals[C_CHANGED]);
-         g_clear_object (&priv->settings);
-+        g_settings_schema_unref (priv->schema);
-+        g_settings_schema_source_unref (priv->schema_source);
+@@ -1013,7 +1013,11 @@
      }
+     else
+     {
+-        return g_settings_new (G_PASTE_SETTINGS_NAME);
++        // library used by introspection requires schemas but we cannot set XDG_DATA_DIRS for the library
++        GSettingsSchemaSource *schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
++        g_autoptr (GSettingsSchema) schema = g_settings_schema_source_lookup (schema_source, G_PASTE_SETTINGS_NAME, FALSE);
++        g_settings_schema_source_unref (schema_source);
++        return g_settings_new_full (schema, NULL, NULL);
+     }
+ }
  
-     if (shell_settings)
-@@ -1000,7 +1004,11 @@
- g_paste_settings_init (GPasteSettings *self)
- {
-     GPasteSettingsPrivate *priv = g_paste_settings_get_instance_private (self);
--    GSettings *settings = priv->settings = g_settings_new (G_PASTE_SETTINGS_NAME);
-+
-+    // library used by introspection requires schemas but we cannot set XDG_DATA_DIRS for the library
-+    GSettingsSchemaSource *schema_source = priv->schema_source = g_settings_schema_source_new_from_directory ("@gschemasCompiled@", NULL, FALSE, NULL);
-+    priv->schema = g_settings_schema_source_lookup (schema_source, G_PASTE_SETTINGS_NAME, FALSE);
-+    GSettings *settings = priv->settings = g_settings_new_full (priv->schema, NULL, NULL);
- 
-     priv->history_name = NULL;
-     priv->launch_ui = NULL;

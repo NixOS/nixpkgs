@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./tools/
   '';
 
-  configureFlags = [
+  wafConfigureFlags = [
     "--optimize"
     "--docs"
     "--with-backends=jack,alsa,dummy"

@@ -18,7 +18,7 @@ with lib;
 
   };
 
-  config = rec {
+  config = {
     # Don't build the GRUB menu builder script, since we don't need it
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
@@ -65,8 +65,7 @@ with lib;
       [ config.system.build.toplevel ];
 
     # Create the squashfs image that contains the Nix store.
-    system.build.squashfsStore = import ../../../lib/make-squashfs.nix {
-      inherit (pkgs) stdenv squashfsTools closureInfo;
+    system.build.squashfsStore = pkgs.callPackage ../../../lib/make-squashfs.nix {
       storeContents = config.netboot.storeContents;
     };
 
@@ -85,7 +84,7 @@ with lib;
 
     system.build.netbootIpxeScript = pkgs.writeTextDir "netboot.ipxe" ''
       #!ipxe
-      kernel ${pkgs.stdenv.hostPlatform.platform.kernelTarget} init=${config.system.build.toplevel}/init ${toString config.boot.kernelParams}
+      kernel ${pkgs.stdenv.hostPlatform.platform.kernelTarget} init=${config.system.build.toplevel}/init initrd=initrd ${toString config.boot.kernelParams}
       initrd initrd
       boot
     '';

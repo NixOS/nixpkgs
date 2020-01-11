@@ -6,14 +6,17 @@
 , scipy
 , smart_open
 , scikitlearn, testfixtures, unittest2
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "gensim";
-  version = "3.6.0";
+  version = "3.8.1";
+  disabled = !isPy3k;
+
   src = fetchPypi {
     inherit pname version;
-    sha256 = "24adaca52e8d821a2f5d5e6fe2e37cf321b1fafb505926ea79a7c2f019ce5b07";
+    sha256 = "33277fc0a8d7b0c7ce70fcc74bb82ad39f944c009b334856c6e86bf552b1dfdc";
   };
 
   propagatedBuildInputs = [ smart_open numpy six scipy ];

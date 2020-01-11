@@ -1,15 +1,15 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, gnome3, mate, hicolor-icon-theme, wrapGAppsHook
+  desktop-file-utils, dconf, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  name = "mate-control-center-${version}";
-  version = "1.20.4";
+  pname = "mate-control-center";
+  version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "1rjxndikj0w516nlvyzcss31l9qjwkzvns7ygasnjbl02bgml9a4";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1ybdjibi6wgqn3587a66ckxp2qkvl4mcvv2smhflyxksl5djrjgh";
   };
 
   nativeBuildInputs = [
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
     libcanberra-gtk3
     librsvg
     libappindicator-gtk3
-    gnome3.gtk
-    gnome3.dconf
+    gtk3
+    dconf
     hicolor-icon-theme
     mate.mate-desktop
     mate.libmatekbd
@@ -37,7 +37,23 @@ stdenv.mkDerivation rec {
     mate.mate-settings-daemon
   ];
 
+  patches = [
+    # see https://github.com/mate-desktop/mate-control-center/pull/528
+    ./0001-Search-system-themes-in-system-data-dirs.patch
+    # look up keyboard shortcuts in system data dirs
+    ./mate-control-center.keybindings-dir.patch
+  ];
+
   configureFlags = [ "--disable-update-mimedb" ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # WM keyboard shortcuts
+      --prefix XDG_DATA_DIRS : "${mate.marco}/share"
+    )
+  '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the MATE desktop";

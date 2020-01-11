@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "python-telegram-bot";
-  version = "11.1.0";
+  version = "12.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cca4e32ebb8da7fdf35ab2fa2b3edd441211364819c5592fc253acdb7561ea5b";
+    sha256 = "346d42771c2b23384c59f5f41e05bd7e801a0ce118d8dcb95209bb73d5f694c5";
   };
 
   prePatch = ''

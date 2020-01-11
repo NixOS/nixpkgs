@@ -6,7 +6,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "deskcon-0.3";
   disabled = isPy3k;
 

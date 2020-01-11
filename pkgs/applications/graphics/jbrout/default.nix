@@ -3,7 +3,7 @@
 let
   inherit (pythonPackages) python;
 in pythonPackages.buildPythonApplication rec {
-  name = "jbrout-${version}";
+  pname = "jbrout";
   version = "338";
 
   src = fetchsvn {
@@ -34,7 +34,7 @@ in pythonPackages.buildPythonApplication rec {
   propagatedBuildInputs = with pythonPackages; [ pillow lxml pyGtkGlade pyexiv2 fbida ];
 
   meta = {
-    homepage = http://manatlan.com/jbrout/;
+    homepage = https://manatlan.com/jbrout/;
     description = "Photo manager";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.gpl2Plus;

@@ -2,12 +2,12 @@
 librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xineLib, ghostscript, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "eaglemode-${version}";
-  version = "0.94.0";
+  pname = "eaglemode";
+  version = "0.94.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/eaglemode/${name}.tar.bz2";
-    sha256 = "1sr3bd9y9j2svqvdwhrak29yy9cxf92w9vq2cim7a8hzwi9qfy9k";
+    url = "mirror://sourceforge/eaglemode/${pname}-${version}.tar.bz2";
+    sha256 = "10zxih7gmyhq0az1mnsw2x563l4bbwcns794s4png8rf4d6hjszm";
   };
 
   nativeBuildInputs = [ pkgconfig ];

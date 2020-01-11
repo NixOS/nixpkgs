@@ -1,12 +1,12 @@
 { stdenv, fetchurl, libgcrypt, curl, gnutls, pkgconfig, libiconv, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "libmicrohttpd-${version}";
-  version = "0.9.62";
+  pname = "libmicrohttpd";
+  version = "0.9.69";
 
   src = fetchurl {
-    url = "mirror://gnu/libmicrohttpd/${name}.tar.gz";
-    sha256 = "0jfvi1fb4im3a3m8qishbmzx3zch993c0mhvl2k92l1zf1yhjgmx";
+    url = "mirror://gnu/libmicrohttpd/${pname}-${version}.tar.gz";
+    sha256 = "0zp34zgcahym5kp2r83gfb5wnr8yf643a26k6zk96x3qica6p6zv";
   };
 
   outputs = [ "out" "dev" "devdoc" "info" ];

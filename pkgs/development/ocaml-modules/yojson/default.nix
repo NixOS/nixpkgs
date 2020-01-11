@@ -3,10 +3,10 @@ let
   pname = "yojson";
   param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then rec {
-    version = "1.6.0";
+    version = "1.7.0";
     url = "https://github.com/ocaml-community/yojson/releases/download/${version}/yojson-${version}.tbz";
-    sha256 = "1h73zkgqs6cl9y7p2l0cgjwyqa1fzcrnzv3k6w7wyq2p1q5m84xh";
-    buildInputs = [ dune ];
+    sha256 = "08llz96if8bcgnaishf18si76cv11zbkni0aldb54k3cn7ipiqvd";
+    nativeBuildInputs = [ dune ];
     extra = { inherit (dune) installPhase; };
   } else rec {
     version = "1.2.3";
@@ -15,7 +15,7 @@ let
     extra = {
       createFindlibDestdir = true;
 
-      makeFlags = "PREFIX=$(out)";
+      makeFlags = [ "PREFIX=$(out)" ];
 
       preBuild = "mkdir $out/bin";
     };
@@ -29,13 +29,14 @@ stdenv.mkDerivation ({
     inherit (param) url sha256;
   };
 
-  buildInputs = [ ocaml findlib ] ++ (param.buildInputs or []);
-
-  propagatedBuildInputs = [ cppo easy-format biniou ];
+  nativeBuildInputs = [ ocaml findlib ] ++ (param.nativeBuildInputs or []);
+  propagatedNativeBuildInputs = [ cppo ];
+  propagatedBuildInputs = [ easy-format biniou ];
+  configurePlatforms = [];
 
   meta = with stdenv.lib; {
     description = "An optimized parsing and printing library for the JSON format";
-    homepage = "http://mjambon.com/${pname}.html";
+    homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];

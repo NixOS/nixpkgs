@@ -1,14 +1,19 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k }:
+{ lib, fetchPypi, buildPythonPackage, nose }:
 
 buildPythonPackage rec {
-  version = "1.10";
+  version = "1.12";
   pname = "python-stdnum";
-  # Failing tests and dependency issue on Py3k
-  disabled = isPy3k;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0prs63q8zdgwr5cxc5a43zvsm66l0gf9jk19qdf85m6isnp5186a";
+    sha256 = "19fb5asv0ngnbpiz1bqzq2jhgn845kv9hjcjajsgzgfp2k24f4sc";
   };
+
+  checkInputs = [ nose ];
+
+  checkPhase = ''
+    nosetests
+  '';
+
   meta = {
     homepage = https://arthurdejong.org/python-stdnum/;
     description = "Python module to handle standardized numbers and codes";

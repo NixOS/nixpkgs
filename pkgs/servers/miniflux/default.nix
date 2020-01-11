@@ -1,24 +1,22 @@
-{ stdenv , buildGoPackage , fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   pname = "miniflux";
-  version = "2.0.14";
-
-  goPackagePath = "miniflux.app";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
-    owner = "miniflux";
-    repo = "miniflux";
+    owner = pname;
+    repo = pname;
     rev = version;
-    sha256 = "1wd52zk7i07k0b5rlwqd4qszq42shdb4ss8871jqlf9zlbq85a0v";
+    sha256 = "121qy1af1qbc09c3yfwhpk6r3hwmh3jg6gjx8ygfv3hfrss9yfll";
   };
 
-  goDeps = ./deps.nix;
+  goPackagePath = "miniflux.app";
 
   doCheck = true;
 
   buildFlagsArray = ''
-    -ldflags=-X ${goPackagePath}/version.Version=${version}
+    -ldflags=-X miniflux.app/version.Version=${version}
   '';
 
   postInstall = ''

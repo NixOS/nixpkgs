@@ -1,15 +1,15 @@
 { stdenv, fetchurl, file, zlib, libgnurx }:
 
 stdenv.mkDerivation rec {
-  name = "file-${version}";
-  version = "5.35";
+  pname = "file";
+  version = "5.38";
 
   src = fetchurl {
     urls = [
-      "ftp://ftp.astron.com/pub/file/${name}.tar.gz"
-      "https://distfiles.macports.org/file/${name}.tar.gz"
+      "ftp://ftp.astron.com/pub/file/${pname}-${version}.tar.gz"
+      "https://distfiles.macports.org/file/${pname}-${version}.tar.gz"
     ];
-    sha256 = "0ijm1fabm68ykr1zbx0bxnka5jr3n42sj8y5mbkrnxs0fj0mxi1h";
+    sha256 = "0d7s376b4xqymnrsjxi3nsv3f5v89pzfspzml2pcajdk5by2yg2r";
   };
 
   nativeBuildInputs = stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) file;
@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  makeFlags = if stdenv.hostPlatform.isWindows then "FILE_COMPILE=file"
-              else null;
+  makeFlags = stdenv.lib.optional stdenv.hostPlatform.isWindows "FILE_COMPILE=file";
 
   meta = with stdenv.lib; {
     homepage = https://darwinsys.com/file;

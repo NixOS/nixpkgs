@@ -2,26 +2,27 @@
 , buildPythonPackage
 , fetchPypi
 , six
-, pytest
+, pytest_4
 , hypothesis
 , pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "pyrsistent";
-  version = "0.14.9";
+  version = "0.15.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xwaqjjn665wd1rllqzndmlc8yzfw2wxakpfwlh6ir6kgbajff2s";
+    sha256 = "f3b280d030afb652f79d67c5586157c5c1355c9a58dfc7940566e28d28f3df1b";
   };
 
   propagatedBuildInputs = [ six ];
 
-  checkInputs = [ pytestrunner pytest hypothesis ];
+  checkInputs = [ pytestrunner pytest_4 hypothesis ];
 
-  # pytestrunner is only needed to run tests
-  patches = [ ./no-setup-requires-pytestrunner.patch ];
+  postPatch = ''
+    substituteInPlace setup.py --replace 'pytest<5' 'pytest'
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tobgu/pyrsistent/;

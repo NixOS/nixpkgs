@@ -1,7 +1,6 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, fetchpatch
 , pytest
 , python-rapidjson
 , pretend
@@ -14,11 +13,11 @@
 
 buildPythonPackage rec {
   pname = "structlog";
-  version = "18.2.0";
+  version = "19.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e361edb3b9aeaa85cd38a1bc9ddbb60cda8a991fc29de9db26832f6300e81eb4";
+    sha256 = "4287058cf4ce1a59bc5dea290d6386d37f29a37529c9a51cdf7387e51710152b";
   };
 
   checkInputs = [ pytest pretend freezegun simplejson twisted ]

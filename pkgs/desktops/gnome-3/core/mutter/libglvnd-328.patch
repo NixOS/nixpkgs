@@ -1,0 +1,63 @@
+diff --git a/cogl/configure.ac b/cogl/configure.ac
+index 3be282f..d338cd1 100644
+--- a/cogl/configure.ac
++++ b/cogl/configure.ac
+@@ -490,6 +490,11 @@ AS_IF([test "x$enable_gles1" = "xyes"],
+ #include <EGL/eglext.h>"],
+                              [],
+                              [$COGL_EGL_INCLUDES])
++            AC_CHECK_HEADERS([EGL/eglmesaext.h],
++                             [COGL_EGL_INCLUDES="$COGL_EGL_INCLUDE
++#include <EGL/eglmesaext.h>"],
++                             [],
++                             [$COGL_EGL_INCLUDES])
+ 
+             # Check for a GLES 1.x Common Profile library with/without EGL.
+             #
+@@ -759,7 +764,9 @@ AS_IF([test "x$NEED_EGL" = "xyes" && test "x$EGL_CHECKED" != "xyes"],
+           )
+ 
+         COGL_EGL_INCLUDES="#include <EGL/egl.h>
+-#include <EGL/eglext.h>"
++#include <EGL/eglext.h>
++#include <EGL/eglmesaext.h>
++"
+         AC_SUBST([COGL_EGL_INCLUDES])
+       ])
+ 
+diff --git a/src/backends/meta-egl-ext.h b/src/backends/meta-egl-ext.h
+index 8705e7d..db0b74f 100644
+--- a/src/backends/meta-egl-ext.h
++++ b/src/backends/meta-egl-ext.h
+@@ -29,6 +29,7 @@
+ 
+ #include <EGL/egl.h>
+ #include <EGL/eglext.h>
++#include <EGL/eglmesaext.h>
+ 
+ /*
+  * This is a little different to the tests shipped with EGL implementations,
+diff --git a/src/backends/meta-egl.c b/src/backends/meta-egl.c
+index 755ec49..bd253c9 100644
+--- a/src/backends/meta-egl.c
++++ b/src/backends/meta-egl.c
+@@ -31,6 +31,7 @@
+ 
+ #include <EGL/egl.h>
+ #include <EGL/eglext.h>
++#include <EGL/eglmesaext.h>
+ #include <gio/gio.h>
+ #include <glib.h>
+ #include <glib-object.h>
+diff --git a/src/backends/meta-egl.h b/src/backends/meta-egl.h
+index 060c7cd..2fef264 100644
+--- a/src/backends/meta-egl.h
++++ b/src/backends/meta-egl.h
+@@ -27,6 +27,7 @@
+ 
+ #include <EGL/egl.h>
+ #include <EGL/eglext.h>
++#include <EGL/eglmesaext.h>
+ #include <glib-object.h>
+ 
+ #define META_EGL_ERROR meta_egl_error_quark ()

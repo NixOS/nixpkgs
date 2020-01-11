@@ -4,14 +4,14 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio }:
 
 stdenv.mkDerivation rec {
-  name = "pcaudiolib-${version}";
-  version = "2016-07-19";
+  pname = "pcaudiolib";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "rhdunn";
     repo = "pcaudiolib";
-    rev = "4f836ea909bdaa8a6e0e89c587efc745b546b459";
-    sha256 = "0z99nh4ibb9md2cd21762n1dmv6jk988785s1cxd8lsy4hp4pwfa";
+    rev = "${version}";
+    sha256 = "0c55hlqqh0m7bcb3nlgv1s4a22s5bgczr1cakjh3767rjb10khi0";
   };
 
   nativeBuildInputs = [ autoconf automake which libtool pkgconfig ];

@@ -1,19 +1,19 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
+, isPy3k
 , nose
 }:
 
 buildPythonPackage rec {
   pname = "munkres";
-  version = "1.0.12";
+  version = "1.1.2";
 
-  # No sdist for 1.0.12, see https://github.com/bmc/munkres/issues/25
-  src = fetchFromGitHub {
-    owner = "bmc";
-    repo = pname;
-    rev = "release-${version}";
-    sha256 = "0m3rkn0z3ialndxmyg26xn081znna34i5maa1i4nkhy6nf0ixdjm";
+  disabled = !isPy3k;
+
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "81e9ced40c3d0ffc48be4b6da5cfdfaa49041faaaba8075b159974ec47926aea";
   };
 
   checkInputs = [ nose ];

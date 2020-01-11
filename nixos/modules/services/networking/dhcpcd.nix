@@ -162,7 +162,7 @@ in
 
         wantedBy = [ "multi-user.target" ] ++ optional (!hasDefaultGatewaySet) "network-online.target";
         wants = [ "network.target" "systemd-udev-settle.service" ];
-        before = [ "network.target" ];
+        before = [ "network-online.target" ];
         after = [ "systemd-udev-settle.service" ];
 
         # Stopping dhcpcd during a reconfiguration is undesirable
@@ -185,11 +185,7 @@ in
 
     environment.systemPackages = [ dhcpcd ];
 
-    environment.etc =
-      [ { source = exitHook;
-          target = "dhcpcd.exit-hook";
-        }
-      ];
+    environment.etc."dhcpcd.exit-hook".source = exitHook;
 
     powerManagement.resumeCommands = mkIf config.systemd.services.dhcpcd.enable
       ''

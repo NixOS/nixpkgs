@@ -22,7 +22,7 @@ let params = {
     sha256 = "0qvar8gfbrcs9fmvkph5asqz4l5fi63caykx3bsn8zf0xllkwv0n";
   };
 };
-param = params."${coq.coq-version}";
+param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation {
@@ -41,10 +41,10 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
   '';
 
-  installFlags = ''
-    COQLIB=$(out)/lib/coq/${coq.coq-version}/
-    BINDIR=$(out)/bin
-  '';
+  installFlags = [
+    "COQLIB=$(out)/lib/coq/${coq.coq-version}/"
+    "BINDIR=$(out)/bin"
+  ];
 
   meta = {
     description = "Build dependency graphs between Coq objects";

@@ -30,6 +30,9 @@ in rec {
     #                         but we don't use /usr with nix, so remove only 2 items.
     patches = [ ./irods_root_path.patch ];
 
+    # fix build with recent llvm versions
+    NIX_CFLAGS_COMPILE = "-Wno-deprecated-register -Wno-deprecated-declarations";
+
     preConfigure = common.preConfigure + ''
       patchShebangs ./test
       substituteInPlace plugins/database/CMakeLists.txt --replace "COMMAND cpp" "COMMAND ${gcc.cc}/bin/cpp"
@@ -59,7 +62,7 @@ in rec {
      version = "4.2.2";
      name = "irods-icommands-${version}";
      src = fetchurl {
-       url = "http://github.com/irods/irods_client_icommands/archive/${version}.tar.gz";
+       url = "https://github.com/irods/irods_client_icommands/archive/${version}.tar.gz";
        sha256 = "15zcxrx0q5c3rli3snd0b2q4i0hs3zzcrbpnibbhsip855qvs77h";
      };
 
@@ -81,6 +84,7 @@ in rec {
        description = common.meta.description + " CLI clients";
        longDescription = common.meta.longDescription + ''
          This package provides the CLI clients, called 'icommands'.'';
+       broken = true;
      };
   });
 }

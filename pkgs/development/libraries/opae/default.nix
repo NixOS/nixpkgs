@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "opae-${version}";
+  pname = "opae";
   version = "1.0.0";
 
   # the tag has a silly name for some reason. drop this in the future if
@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
   };
 
   doCheck = false;
+
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format-truncation"
+    "-Wno-error=address-of-packed-member"
+  ];
 
   nativeBuildInputs = [ cmake doxygen perl python2Packages.sphinx ];
   buildInputs = [ libuuid json_c python2 ];

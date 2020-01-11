@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, gitMinimal, python2Packages }:
 
 stdenv.mkDerivation rec {
-  name = "git-hub-${version}";
-  version = "1.0.1";
+  pname = "git-hub";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
-    sha256 = "1lizjyi8vac1p1anbnh6qrr176rwxp5yjc1787asw437sackkwza";
-    rev = "v${version}";
-    repo = "git-hub";
     owner = "sociomantic-tsunami";
+    repo = "git-hub";
+    rev = "v${version}";
+    sha256 = "0jkzg7vjvgb952qncndhki7n70714w61flbzf4mdcjc286lqjvwb";
   };
 
   buildInputs = [ python2Packages.python ];

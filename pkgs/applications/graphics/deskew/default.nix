@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "deskew-${version}";
+  pname = "deskew";
   version = "1.25";
 
   src = fetchFromBitbucket {

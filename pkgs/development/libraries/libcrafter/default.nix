@@ -1,7 +1,7 @@
 { stdenv, fetchzip, autoconf, automake, libtool, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "libcrafter-${version}";
+  pname = "libcrafter";
   version = "0.3";
 
   src = fetchzip {

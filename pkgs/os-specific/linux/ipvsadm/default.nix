@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libnl, popt, gnugrep }:
 
 stdenv.mkDerivation rec {
-  name = "ipvsadm-${version}";
-  version = "1.29";
+  pname = "ipvsadm";
+  version = "1.31";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/kernel/ipvsadm/${name}.tar.xz";
-    sha256 = "c3de4a21d90a02c621f0c72ee36a7aa27374b6f29fd4178f33fbf71b4c66c149";
+    url = "mirror://kernel/linux/utils/kernel/ipvsadm/${pname}-${version}.tar.xz";
+    sha256 = "1nyzpv1hx75k9lh0vfxfhc0p2fpqaqb38xpvs8sn88m1nljmw2hs";
   };
 
   postPatch = ''

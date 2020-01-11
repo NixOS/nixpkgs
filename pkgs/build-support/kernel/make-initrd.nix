@@ -12,17 +12,26 @@
 # `contents = {object = ...; symlink = /init;}' is a typical
 # argument.
 
-{ stdenv, perl, cpio, contents, compressor, prepend, ubootTools
+{ stdenvNoCC, perl, cpio, contents, ubootTools
+, name ? "initrd"
+, compressor ? "gzip -9n"
+, prepend ? []
+, lib
 }:
+let
+  # !!! Move this into a public lib function, it is probably useful for others
+  toValidStoreName = x: with builtins;
+    lib.concatStringsSep "-" (filter (x: !(isList x)) (split "[^a-zA-Z0-9_=.?-]+" x));
 
-stdenv.mkDerivation rec {
-  name = "initrd";
+in stdenvNoCC.mkDerivation rec {
+  inherit name;
+
   builder = ./make-initrd.sh;
 
-  makeUInitrd = stdenv.hostPlatform.platform.kernelTarget == "uImage";
+  makeUInitrd = stdenvNoCC.hostPlatform.platform.kernelTarget == "uImage";
 
   nativeBuildInputs = [ perl cpio ]
-    ++ stdenv.lib.optional makeUInitrd ubootTools;
+    ++ stdenvNoCC.lib.optional makeUInitrd ubootTools;
 
   # !!! should use XML.
   objects = map (x: x.object) contents;
@@ -33,7 +42,10 @@ stdenv.mkDerivation rec {
   # Note: we don't use closureInfo yet, as that won't build with nix-1.x.
   # See #36268.
   exportReferencesGraph =
-    map (x: [("closure-" + baseNameOf x.symlink) x.object]) contents;
+    lib.zipListsWith
+      (x: i: [("closure-${toValidStoreName (baseNameOf x.symlink)}-${toString i}") x.object])
+      contents
+      (lib.range 0 (lib.length contents - 1));
   pathsFromGraph = ./paths-from-graph.pl;
 
   inherit compressor prepend;

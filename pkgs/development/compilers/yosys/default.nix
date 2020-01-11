@@ -1,21 +1,22 @@
 { stdenv, fetchFromGitHub
 , pkgconfig, bison, flex
 , tcl, readline, libffi, python3
-, protobuf
+, protobuf, zlib
+, verilog
 }:
 
 with builtins;
 
 stdenv.mkDerivation rec {
-  name = "yosys-${version}";
-  version = "2019.01.08";
+  pname = "yosys";
+  version = "2019.10.18";
 
   srcs = [
     (fetchFromGitHub {
       owner  = "yosyshq";
       repo   = "yosys";
-      rev    = "2a2e0a4722ded7628b71f436b94a06aebd57bb62";
-      sha256 = "19wzh7yssk90s58l2f89m0q5bjjrjpkhvikf5zc0563wccvl712c";
+      rev    = "3c41599ee1f62e4d77ba630fa1a245ef3fe236fa";
+      sha256 = "0jg2g8v08ax1q6qlvn8c1h147m03adzrgf21043xwbh4c7s5k137";
       name   = "yosys";
     })
 
@@ -25,8 +26,8 @@ stdenv.mkDerivation rec {
     (fetchFromGitHub {
       owner  = "berkeley-abc";
       repo   = "abc";
-      rev    = "2ddc57d8760d94e86699be39a628178cff8154f8";
-      sha256 = "0da7nnnnl9cq2r7s301xgdc8nlr6hqmqpvd9zn4b58m125sp0scl";
+      rev    = "623b5e82513d076a19f864c01930ad1838498894";
+      sha256 = "1mrfqwsivflqdzc3531r6mzp33dfyl6dnqjdwfcq137arqh36m67";
       name   = "yosys-abc";
     })
   ];
@@ -34,17 +35,22 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ tcl readline libffi python3 bison flex protobuf ];
+  buildInputs = [ tcl readline libffi python3 bison flex protobuf zlib ];
 
   makeFlags = [ "ENABLE_PROTOBUF=1" ];
 
   patchPhase = ''
     substituteInPlace ../yosys-abc/Makefile \
-      --replace 'CC   := gcc' ""
+      --replace 'CC   := gcc' "" \
+      --replace 'CXX  := g++' ""
     substituteInPlace ./Makefile \
       --replace 'CXX = clang' "" \
-      --replace 'ABCMKARGS = CC="$(CXX)"' 'ABCMKARGS =' \
+      --replace 'LD = clang++' 'LD = $(CXX)' \
+      --replace 'CXX = gcc' "" \
+      --replace 'LD = gcc' 'LD = $(CXX)' \
+      --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
       --replace 'echo UNKNOWN' 'echo ${substring 0 10 (elemAt srcs 0).rev}'
+    patchShebangs tests
   '';
 
   preBuild = ''
@@ -57,6 +63,13 @@ stdenv.mkDerivation rec {
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
   '';
+
+  doCheck = true;
+  checkInputs = [ verilog ];
+  # checkPhase defaults to VERBOSE=y, which gets passed down to abc,
+  # which then does $(VERBOSE)gcc, which then complains about not
+  # being able to find ygcc. Life is pain.
+  checkFlags = [ " " ];
 
   meta = {
     description = "Framework for RTL synthesis tools";
@@ -71,7 +84,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://www.clifford.at/yosys/;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.unix;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

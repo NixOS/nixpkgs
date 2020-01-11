@@ -1,21 +1,26 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, libpng, libjpeg
 , guiSupport ? false, libX11
+
+  # see http://dlib.net/compile.html
+, avxSupport ? true
 }:
 
 stdenv.mkDerivation rec {
-  version = "19.16";
-  name = "dlib-${version}";
+  pname = "dlib";
+  version = "19.19";
 
   src = fetchFromGitHub {
     owner = "davisking";
     repo = "dlib";
     rev ="v${version}";
-    sha256 = "0ix52npsxfm6324jli7y0zkyijl5yirv2yzfncyd4sq0r9fcwb4p";
+    sha256 = "0574p46zf85nx33cam4yqcg20g94kkmrvi5689r1xshprr0szghp";
   };
 
   postPatch = ''
     rm -rf dlib/external
   '';
+
+  cmakeFlags = [ "-DUSE_AVX_INSTRUCTIONS=${if avxSupport then "yes" else "no"}" ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ cmake pkgconfig ];

@@ -1,5 +1,5 @@
 { buildPackages, runCommand, nettools, bc, bison, flex, perl, rsync, gmp, libmpc, mpfr, openssl
-, libelf
+, libelf, cpio
 , utillinux
 , writeTextFile
 }:
@@ -30,6 +30,9 @@ in {
   # Manually specified nixexpr representing the config
   # If unspecified, this will be autodetected from the .config
   config ? stdenv.lib.optionalAttrs allowImportFromDerivation (readConfig configfile),
+  # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
+  # automatically extended with extra per-version and per-config values.
+  randstructSeed ? "",
   # Use defaultMeta // extraMeta
   extraMeta ? {},
   # Whether to utilize the controversial import-from-derivation feature to parse the config
@@ -91,7 +94,9 @@ let
       patches =
         map (p: p.patch) kernelPatches
         # Required for deterministic builds along with some postPatch magic.
-        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch;
+        ++ optional (stdenv.lib.versionAtLeast version "4.13") ./randstruct-provide-seed.patch
+        # Fixes determinism by normalizing metadata for the archive of kheaders
+        ++ optional (stdenv.lib.versionAtLeast version "5.2" && stdenv.lib.versionOlder version "5.4") ./gen-kheaders-metadata.patch;
 
       prePatch = ''
         for mf in $(find -name Makefile -o -name Makefile.include -o -name install.sh); do
@@ -111,7 +116,7 @@ let
         if [ -f scripts/gcc-plugins/gen-random-seed.sh ]; then
           substituteInPlace scripts/gcc-plugins/gen-random-seed.sh \
             --replace NIXOS_RANDSTRUCT_SEED \
-            $(echo ${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
+            $(echo ${randstructSeed}${src} ${configfile} | sha256sum | cut -d ' ' -f 1 | tr -d '\n')
         fi
       '';
 
@@ -159,6 +164,10 @@ let
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
+      preInstall = ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+      '';
+
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [ (
         if platform ? kernelInstallTarget then platform.kernelInstallTarget
@@ -174,7 +183,7 @@ let
       '' else "") + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
-        if [ -z "$dontStrip" ]; then
+        if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \
@@ -187,13 +196,16 @@ let
         # To save space, exclude a bunch of unneeded stuff when copying.
         (cd .. && rsync --archive --prune-empty-dirs \
             --exclude='/build/' \
-            --exclude='/Documentation/' \
             * $dev/lib/modules/${modDirVersion}/source/)
 
         cd $dev/lib/modules/${modDirVersion}/source
 
         cp $buildRoot/{.config,Module.symvers} $dev/lib/modules/${modDirVersion}/build
         make modules_prepare $makeFlags "''${makeFlagsArray[@]}" O=$dev/lib/modules/${modDirVersion}/build
+
+        # For reproducibility, removes accidental leftovers from a `cc1` call
+        # from a `try-run` call from the Makefile
+        rm -f $dev/lib/modules/${modDirVersion}/build/.[0-9]*.d
 
         # Keep some extra files on some arches (powerpc, aarch64)
         for f in arch/powerpc/lib/crtsavres.o arch/arm64/kernel/ftrace-mod.o; do
@@ -271,16 +283,18 @@ in
 assert stdenv.lib.versionAtLeast version "4.14" -> libelf != null;
 assert stdenv.lib.versionAtLeast version "4.15" -> utillinux != null;
 stdenv.mkDerivation ((drvAttrs config stdenv.hostPlatform.platform kernelPatches configfile) // {
-  name = "linux-${version}";
+  pname = "linux";
+  inherit version;
 
   enableParallelBuilding = true;
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ perl bc nettools openssl rsync gmp libmpc mpfr ]
-      ++ optional (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
-      ++ optional (stdenv.lib.versionAtLeast version "4.14") libelf
-      ++ optional (stdenv.lib.versionAtLeast version "4.15") utillinux
+      ++ optional  (stdenv.hostPlatform.platform.kernelTarget == "uImage") buildPackages.ubootTools
+      ++ optional  (stdenv.lib.versionAtLeast version "4.14") libelf
+      ++ optional  (stdenv.lib.versionAtLeast version "4.15") utillinux
       ++ optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ]
+      ++ optional  (stdenv.lib.versionAtLeast version "5.2")  cpio
       ;
 
   hardeningDisable = [ "bindnow" "format" "fortify" "stackprotector" "pic" "pie" ];

@@ -1,17 +1,22 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, glib, pkgconfig, udev, libgudev }:
+{ stdenv, fetchFromGitHub, meson, ninja, glib, pkgconfig, udev, libgudev }:
 
 stdenv.mkDerivation rec {
-  name = "libwacom-${version}";
-  version = "0.32";
+  pname = "libwacom";
+  version = "1.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "linuxwacom";
     repo = "libwacom";
     rev = "libwacom-${version}";
-    sha256 = "15fz2z2h2awh2l08cv663s1zk4z8bmvvivwnnfvx2q8lkqgfkr7f";
+    sha256 = "037vnyfg7nim6h3f4m04w6a9pr6hi04df14qpys580kf5xnf87nz";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  nativeBuildInputs = [ pkgconfig meson ninja ];
+
+  mesonFlags = [ "-Dtests=false" ];
+
   buildInputs = [ glib udev libgudev ];
 
   meta = with stdenv.lib; {

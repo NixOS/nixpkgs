@@ -7,15 +7,17 @@
 , pytest-benchmark
 , sortedcollections
 , sortedcontainers
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "bidict";
-  version = "0.17.5";
+  version = "0.18.3";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1icj0fnfx47n6i33pj5gfrmd1rzpvah1jihhdhqiqx2cy9rs6x4c";
+    sha256 = "1742a25a9ef1b1ac4000683406879a3e1a6577faa02f31e482e6c84e2e3bf628";
   };
 
   nativeBuildInputs = [ setuptools_scm ];

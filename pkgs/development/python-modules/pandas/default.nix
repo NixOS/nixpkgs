@@ -20,6 +20,7 @@
 , openpyxl
 , tables
 , xlwt
+, runtimeShell
 , libcxx ? null
 }:
 
@@ -29,11 +30,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.24.1";
+  version = "0.25.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "435821cb2501eabbcee7e83614bd710940dc0cf28b5afbc4bdb816c31cec71af";
+    sha256 = "52da74df8a9c9a103af0a72c9d5fdc8e0183a90884278db7f386b5692a2220a4";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -83,6 +84,9 @@ in buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
+    # ordering logic has changed
+    "numpy_ufuncs_other"
+    "order_without_freq"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
@@ -97,8 +101,8 @@ in buildPythonPackage rec {
   #       Until then we disable the tests.
   + optionalString isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
-    echo "#!${stdenv.shell}" > pbcopy
-    echo "#!${stdenv.shell}" > pbpaste
+    echo "#!${runtimeShell}" > pbcopy
+    echo "#!${runtimeShell}" > pbpaste
     chmod a+x pbcopy pbpaste
     export PATH=$(pwd):$PATH
   '' + ''
@@ -110,7 +114,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = http://pandas.pydata.org/;
+    homepage = https://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

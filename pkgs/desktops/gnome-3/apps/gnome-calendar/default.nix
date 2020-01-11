@@ -1,16 +1,16 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, wrapGAppsHook, libdazzle, libgweather, geoclue2, geocode-glib, python3
-, gettext, libxml2, gnome3, gtk, evolution-data-server, libsoup
+, gettext, libxml2, gnome3, gtk3, evolution-data-server, libsoup
 , glib, gnome-online-accounts, gsettings-desktop-schemas }:
 
 let
   pname = "gnome-calendar";
-  version = "3.30.1";
+  version = "3.34.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1avi7a29y8d8kzwslp51nwy6s692alms7917454j0xpfc6hnw62s";
+    sha256 = "1bnmd191044zn2kr6f5vg7sm5q59qf7z652awll1f7s6ahijr8rw";
   };
 
   passthru = {
@@ -22,8 +22,8 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext libxml2 wrapGAppsHook python3 ];
   buildInputs = [
-    gtk evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
-    gsettings-desktop-schemas gnome3.defaultIconTheme
+    gtk3 evolution-data-server libsoup glib gnome-online-accounts libdazzle libgweather geoclue2 geocode-glib
+    gsettings-desktop-schemas gnome3.adwaita-icon-theme
   ];
 
   postPatch = ''

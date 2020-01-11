@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.0";
-  name = "LASzip-${version}";
+  pname = "LASzip";
 
   src = fetchurl {
     url = "https://github.com/LASzip/LASzip/archive/v${version}.tar.gz";

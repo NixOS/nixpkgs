@@ -9,7 +9,7 @@ let
   '';
 in
 stdenv.mkDerivation rec {
-  name = "Sil-${version}";
+  pname = "Sil";
   version = "1.3.0";
 
   src = fetchzip {

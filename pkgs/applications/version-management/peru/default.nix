@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "buildinspace";
     repo = "peru";
-    rev = "${version}";
+    rev = version;
     sha256 = "0p4j51m89glx12cd65lcnbwpvin0v49wkhrx06755skr7v37pm2a";
   };
 

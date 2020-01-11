@@ -9,15 +9,17 @@
 }:
 
 disabledIf (isPy3k || isPyPy)
-  (buildPythonPackage rec {
+  (buildPythonPackage {
     # TODO: Qt5 support
-    name = "qscintilla-${version}";
+    pname = "qscintilla";
     version = pkgs.qscintilla.version;
     format = "other";
 
     src = pkgs.qscintilla.src;
 
-    buildInputs = [ pkgs.xorg.lndir pyqt4.qt pyqt4 ];
+    nativeBuildInputs = [ pkgs.xorg.lndir ];
+
+    buildInputs = [ pyqt4.qt pyqt4 ];
 
     preConfigure = ''
       mkdir -p $out

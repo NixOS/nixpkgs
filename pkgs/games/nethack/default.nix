@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, coreutils, ncurses, gzip, flex, bison
-, less, makeWrapper
+, less
 , buildPackages
-, x11Mode ? false, qtMode ? false, libXaw, libXext, bdftopcf, mkfontdir, pkgconfig, qt5
+, x11Mode ? false, qtMode ? false, libXaw, libXext, libXpm, bdftopcf, mkfontdir, pkgconfig, qt5
 }:
 
 let
@@ -19,25 +19,25 @@ let
   binPath = lib.makeBinPath [ coreutils less ];
 
 in stdenv.mkDerivation rec {
-  version = "3.6.1";
+  version = "3.6.2";
   name = if x11Mode then "nethack-x11-${version}"
          else if qtMode then "nethack-qt-${version}"
          else "nethack-${version}";
 
   src = fetchurl {
-    url = "https://nethack.org/download/3.6.1/nethack-361-src.tgz";
-    sha256 = "1dha0ijvxhx7c9hr0452h93x81iiqsll8bc9msdnp7xdqcfbz32b";
+    url = "https://nethack.org/download/3.6.2/nethack-362-src.tgz";
+    sha256 = "07fvkm3v11a4pjrq2f66vjslljsvk6raal53skn4gqsfdbd0ml7v";
   };
 
   buildInputs = [ ncurses ]
-                ++ lib.optionals x11Mode [ libXaw libXext ]
+                ++ lib.optionals x11Mode [ libXaw libXext libXpm ]
                 ++ lib.optionals qtMode [ gzip qt5.qtbase.bin qt5.qtmultimedia.bin ];
 
   nativeBuildInputs = [ flex bison ]
                       ++ lib.optionals x11Mode [ mkfontdir bdftopcf ]
                       ++ lib.optionals qtMode [
                            pkgconfig mkfontdir qt5.qtbase.dev
-                           qt5.qtmultimedia.dev makeWrapper
+                           qt5.qtmultimedia.dev qt5.wrapQtAppsHook
                            bdftopcf
                          ];
 
@@ -72,6 +72,7 @@ in stdenv.mkDerivation rec {
       -e 's,CFLAGS.*QtGui.*,CFLAGS += `pkg-config Qt5Gui --cflags`,' \
       -e 's,CFLAGS+=-DCOMPRESS.*,CFLAGS+=-DCOMPRESS=\\"${gzip}/bin/gzip\\" \\\
         -DCOMPRESS_EXTENSION=\\".gz\\",' \
+      -e 's,moc-qt4,moc,' \
       -i sys/unix/hints/linux-qt4
     ''}
     ${lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform)
@@ -95,6 +96,10 @@ in stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
+
+  preFixup = stdenv.lib.optionalString qtMode ''
+    wrapQtApp "$out/games/nethack"
+  '';
 
   postInstall = ''
     mkdir -p $out/games/lib/nethackuserdir
@@ -134,11 +139,6 @@ in stdenv.mkDerivation rec {
     ${lib.optionalString qtMode "mv $out/bin/nethack $out/bin/nethack-qt"}
     install -Dm 555 util/{makedefs,dgn_comp,lev_comp} -t $out/libexec/nethack/
     ${lib.optionalString (!(x11Mode || qtMode)) "install -Dm 555 util/dlb -t $out/libexec/nethack/"}
-  '';
-
-  postFixup = lib.optionalString qtMode ''
-    wrapProgram $out/bin/nethack-qt \
-      --prefix QT_PLUGIN_PATH : "${qt5.qtbase}/${qt5.qtbase.qtPluginPrefix}"
   '';
 
   meta = with stdenv.lib; {

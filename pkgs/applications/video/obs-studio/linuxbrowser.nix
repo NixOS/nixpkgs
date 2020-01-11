@@ -5,18 +5,19 @@
 # mkdir -p ~/.config/obs-studio/plugins
 # ln -s ~/.nix-profile/share/obs/obs-plugins/obs-linuxbrowser ~/.config/obs-studio/plugins/
 
-{ stdenv, fetchFromGitHub, obs-studio, cmake, libcef
-}:
+{ stdenv, fetchFromGitHub, obs-studio, cmake, libcef }:
 
 stdenv.mkDerivation rec {
-  name = "obs-linuxbrowser-${version}";
-  version = "0.6.0";
+  pname = "obs-linuxbrowser";
+  version = "0.6.1-6-gf86dba6";
+
   src = fetchFromGitHub {
     owner = "bazukas";
     repo = "obs-linuxbrowser";
     rev = version;
-    sha256 = "000ngkiwfjjl25v4hz6lh6mdkf119pnq0qv3jwdmmp6fpd0dxcgh";
+    sha256 = "08d7qz0721va88bcyia8p0ycw50f6x3yk97s3vzhsc9xpq691kpi";
   };
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ obs-studio ];
   postUnpack = ''

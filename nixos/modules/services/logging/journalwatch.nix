@@ -4,6 +4,8 @@ with lib;
 let
   cfg = config.services.journalwatch;
   user = "journalwatch";
+  # for journal access
+  group = "systemd-journal";
   dataDir = "/var/lib/${user}";
 
   journalwatchConfig = pkgs.writeText "config" (''
@@ -30,6 +32,17 @@ let
     ${block.filters}
 
   '') filterBlocks);
+
+  # can't use joinSymlinks directly, because when we point $XDG_CONFIG_HOME
+  # to the /nix/store path, we still need the subdirectory "journalwatch" inside that
+  # to match journalwatch's expectations
+  journalwatchConfigDir = pkgs.runCommand "journalwatch-config"
+    { preferLocalBuild = true; allowSubstitutes = false; }
+    ''
+      mkdir -p $out/journalwatch
+      ln -sf ${journalwatchConfig} $out/journalwatch/config
+      ln -sf ${journalwatchPatterns} $out/journalwatch/patterns
+    '';
 
 
 in {
@@ -199,33 +212,38 @@ in {
 
     users.users.${user} = {
       isSystemUser = true;
-      createHome = true;
       home = dataDir;
-      # for journal access
-      group = "systemd-journal";
+      group = group;
     };
 
+    systemd.tmpfiles.rules = [
+      # present since NixOS 19.09: remove old stateful symlink join directory,
+      # which has been replaced with the journalwatchConfigDir store path
+      "R ${dataDir}/config"
+    ];
+
     systemd.services.journalwatch = {
+
       environment = {
+        # journalwatch stores the last processed timpestamp here
+        # the share subdirectory is historic now that config home lives in /nix/store,
+        # but moving this in a backwards-compatible way is much more work than what's justified
+        # for cleaning that up.
         XDG_DATA_HOME = "${dataDir}/share";
-        XDG_CONFIG_HOME = "${dataDir}/config";
+        XDG_CONFIG_HOME = journalwatchConfigDir;
       };
       serviceConfig = {
         User = user;
+        Group = group;
         Type = "oneshot";
-        PermissionsStartOnly = true;
+        # requires a relative directory name to create beneath /var/lib
+        StateDirectory = user;
+        StateDirectoryMode = 0750;
         ExecStart = "${pkgs.python3Packages.journalwatch}/bin/journalwatch mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
         Nice=19;
         IOSchedulingPriority=7;
       };
-      preStart = ''
-        chown -R ${user}:systemd-journal ${dataDir}
-        chmod -R u+rwX,go-w ${dataDir}
-        mkdir -p ${dataDir}/config/journalwatch
-        ln -sf ${journalwatchConfig} ${dataDir}/config/journalwatch/config
-        ln -sf ${journalwatchPatterns} ${dataDir}/config/journalwatch/patterns
-      '';
     };
 
     systemd.timers.journalwatch = {

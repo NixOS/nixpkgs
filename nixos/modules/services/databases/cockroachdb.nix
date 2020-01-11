@@ -7,7 +7,7 @@ let
   crdb = cfg.package;
 
   escape    = builtins.replaceStrings ["%"] ["%%"];
-  ifNotNull = v: s: optionalString (!isNull v) s;
+  ifNotNull = v: s: optionalString (v != null) s;
 
   startupCommand = lib.concatStringsSep " "
     [ # Basic startup
@@ -164,24 +164,24 @@ in
 
   config = mkIf config.services.cockroachdb.enable {
     assertions = [
-      { assertion = !cfg.insecure -> !(isNull cfg.certsDir);
+      { assertion = !cfg.insecure -> cfg.certsDir != null;
         message = "CockroachDB must have a set of SSL certificates (.certsDir), or run in Insecure Mode (.insecure = true)";
       }
     ];
 
     environment.systemPackages = [ crdb ];
 
-    users.users = optionalAttrs (cfg.user == "cockroachdb") (singleton
-      { name        = "cockroachdb";
+    users.users = optionalAttrs (cfg.user == "cockroachdb") {
+      cockroachdb = {
         description = "CockroachDB Server User";
         uid         = config.ids.uids.cockroachdb;
         group       = cfg.group;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "cockroachdb") (singleton
-      { name = "cockroachdb";
-        gid  = config.ids.gids.cockroachdb;
-      });
+    users.groups = optionalAttrs (cfg.group == "cockroachdb") {
+      cockroachdb.gid = config.ids.gids.cockroachdb;
+    };
 
     networking.firewall.allowedTCPPorts = lib.optionals cfg.openPorts
       [ cfg.http.port cfg.listen.port ];

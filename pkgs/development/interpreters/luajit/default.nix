@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, fetchurl, buildPackages
 , name ? "luajit-${version}"
 , isStable
 , sha256
@@ -20,24 +20,23 @@ stdenv.mkDerivation rec {
 
   luaversion = "5.1";
 
-  patchPhase = ''
-    substituteInPlace Makefile \
-      --replace /usr/local "$out"
-
-    substituteInPlace src/Makefile --replace gcc cc
-  '' + stdenv.lib.optionalString (stdenv.cc.libc != null)
-  ''
-    substituteInPlace Makefile \
-      --replace ldconfig ${stdenv.cc.libc.bin or stdenv.cc.libc}/bin/ldconfig
+  postPatch = ''
+    substituteInPlace Makefile --replace ldconfig :
   '';
 
   configurePhase = false;
 
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DEFAULT_CC=cc"
+    "CROSS=${stdenv.cc.targetPrefix}"
+    # TODO: when pointer size differs, we would need e.g. -m32
+    "HOST_CC=${buildPackages.stdenv.cc}/bin/cc"
+  ];
   buildFlags = [ "amalg" ]; # Build highly optimized version
   enableParallelBuilding = true;
 
-  installPhase   = ''
-      make install PREFIX="$out"
+  postInstall = ''
       ( cd "$out/include"; ln -s luajit-*/* . )
       ln -s "$out"/bin/luajit-* "$out"/bin/lua
     ''
@@ -63,12 +62,12 @@ stdenv.mkDerivation rec {
     interpreter = "${self}/bin/lua";
   };
 
-  meta = with stdenv.lib; extraMeta // {
+  meta = with stdenv.lib; {
     description = "High-performance JIT compiler for Lua 5.1";
     homepage    = http://luajit.org;
     license     = licenses.mit;
     platforms   = platforms.linux ++ platforms.darwin;
     maintainers = with maintainers; [ thoughtpolice smironov vcunat andir ];
-  };
+  } // extraMeta;
 }
 

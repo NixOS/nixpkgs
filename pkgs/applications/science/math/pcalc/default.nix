@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pcalc-${version}";
+  pname = "pcalc";
   version = "20141224";
 
   src = fetchgit {

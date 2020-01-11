@@ -4,8 +4,8 @@ with haskellLib;
 
 self: super: {
 
-  # This compiler version needs llvm 5.x.
-  llvmPackages = pkgs.llvmPackages_5;
+  # This compiler version needs llvm 6.x.
+  llvmPackages = pkgs.llvmPackages_6;
 
   # Disable GHC 8.6.x core libraries.
   array = null;
@@ -41,11 +41,14 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Needs Cabal 3.0.x.
+  cabal-install = super.cabal-install.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
+  jailbreak-cabal = super.jailbreak-cabal.override { Cabal = self.Cabal_3_0_0_0; };
+
   # https://github.com/tibbe/unordered-containers/issues/214
   unordered-containers = dontCheck super.unordered-containers;
 
   # Test suite does not compile.
-  cereal = dontCheck super.cereal;
   data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
   dates = doJailbreak super.dates; # base >=4.9 && <4.12
   Diff = dontCheck super.Diff;
@@ -54,7 +57,6 @@ self: super: {
   hpc-coveralls = doJailbreak super.hpc-coveralls; # https://github.com/guillaume-nargeot/hpc-coveralls/issues/82
   http-api-data = doJailbreak super.http-api-data;
   persistent-sqlite = dontCheck super.persistent-sqlite;
-  psqueues = dontCheck super.psqueues;    # won't cope with QuickCheck 2.12.x
   system-fileio = dontCheck super.system-fileio;  # avoid dependency on broken "patience"
   unicode-transforms = dontCheck super.unicode-transforms;
   wl-pprint-extras = doJailbreak super.wl-pprint-extras; # containers >=0.4 && <0.6 is too tight; https://github.com/ekmett/wl-pprint-extras/issues/17
@@ -68,5 +70,15 @@ self: super: {
 
   # Break out of "yaml >=0.10.4.0 && <0.11": https://github.com/commercialhaskell/stack/issues/4485
   stack = doJailbreak super.stack;
+
+  # Newer versions don't compile.
+  resolv = self.resolv_0_1_1_2;
+
+  # cabal2nix needs the latest version of Cabal, and the one
+  # hackage-db uses must match, so take the latest
+  cabal2nix = super.cabal2nix.overrideScope (self: super: {
+    Cabal = self.Cabal_3_0_0_0;
+    hackage-db = self.hackage-db_2_1_0;
+  });
 
 }

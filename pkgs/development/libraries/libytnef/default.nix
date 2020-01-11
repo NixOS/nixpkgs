@@ -3,7 +3,7 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "libytnef-${version}";
+  pname = "libytnef";
   version = "1.9.3";
 
   src = fetchFromGitHub {

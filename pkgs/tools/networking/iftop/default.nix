@@ -1,6 +1,6 @@
 {stdenv, fetchurl, ncurses, libpcap, automake}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "iftop-1.0pre4";
 
   src = fetchurl {

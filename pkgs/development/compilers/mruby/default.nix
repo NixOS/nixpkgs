@@ -1,19 +1,15 @@
 { stdenv, ruby, bison, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mruby-${version}";
-  version = "2.0.0";
+  pname = "mruby";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner   = "mruby";
     repo    = "mruby";
     rev     = version;
-    sha256  = "1r6w1asjshff43ymdwa6xmrkggza99mi2kw88k7ic6ag2j81hcj5";
+    sha256  = "1y072c7dh9jf8xwy7kia6cb4dkpspq4zf24ssn7zm5f46p4waxni";
   };
-
-  patches = [
-    ./0001-Disables-IO-isatty-test-for-sandboxed-builds.patch
-  ];
 
   nativeBuildInputs = [ ruby bison ];
 

@@ -1,11 +1,11 @@
-{ stdenv, skawarePackages }:
+{ skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "skalibs";
-  version = "2.7.0.0";
-  sha256 = "0mnprdf4w4ami0db22rwd111m037cdmn2p8xa4i8cbwxcrv4sjcn";
+  version = "2.9.1.0";
+  sha256 = "19c6s3f7vxi96l2yqzjk9x9i4xkfg4fdzxhn1jg6bfb2qjph9cnk";
 
   description = "A set of general-purpose C programming libraries";
 
@@ -18,6 +18,9 @@ buildPackage {
     "--dynlibdir=\${lib}/lib"
     "--includedir=\${dev}/include"
     "--sysdepdir=\${lib}/lib/skalibs/sysdeps"
+    # Empty the default path, which would be "/usr/bin:bin".
+    # It would be set when PATH is empty. This hurts hermeticity.
+    "--with-default-path="
   ];
 
   postInstall = ''

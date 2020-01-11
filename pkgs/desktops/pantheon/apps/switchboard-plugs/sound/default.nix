@@ -1,26 +1,37 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig
-, vala, libgee, granite, gtk3, pulseaudio, libcanberra, libcanberra-gtk3
-, switchboard, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, pulseaudio
+, libcanberra
+, libcanberra-gtk3
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sound";
-  version = "2.1.3";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0dvxmjziifffa2rm7h43ca5grhlcpih3rgik50mz808mqfxr4l1q";
+    sha256 = "1aa9wgaz34glrrnilnqis3k0bnx2a2ir38j493y4d0klkjkwyn5k";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -36,8 +47,6 @@ stdenv.mkDerivation rec {
     pulseaudio
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Sound Plug";

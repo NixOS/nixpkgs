@@ -1,19 +1,15 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "openldap";
 
   machine = { pkgs, ... }: {
     services.openldap = {
       enable = true;
-      extraConfig = ''
-        include ${pkgs.openldap}/etc/schema/core.schema
-        include ${pkgs.openldap}/etc/schema/cosine.schema
-        include ${pkgs.openldap}/etc/schema/inetorgperson.schema
-        include ${pkgs.openldap}/etc/schema/nis.schema
-        database bdb
-        suffix dc=example
+      suffix = "dc=example";
+      rootdn = "cn=root,dc=example";
+      rootpw = "notapassword";
+      database = "bdb";
+      extraDatabaseConfig = ''
         directory /var/db/openldap
-        rootdn cn=root,dc=example
-        rootpw notapassword
       '';
       declarativeContents = ''
         dn: dc=example
@@ -28,8 +24,10 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    $machine->waitForUnit('openldap.service');
-    $machine->succeed('systemctl status openldap.service');
-    $machine->succeed('ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"');
+    machine.wait_for_unit("openldap.service")
+    machine.succeed(
+        "systemctl status openldap.service",
+        'ldapsearch -LLL -D "cn=root,dc=example" -w notapassword -b "dc=example"',
+    )
   '';
 }

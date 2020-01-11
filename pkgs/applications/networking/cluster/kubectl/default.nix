@@ -1,4 +1,4 @@
-{ stdenv, lib, kubernetes }:
+{ stdenv, kubernetes }:
 
 stdenv.mkDerivation {
   name = "kubectl-${kubernetes.version}";
@@ -8,8 +8,6 @@ stdenv.mkDerivation {
   src = kubernetes;
 
   outputs = [ "out" "man" ];
-
-  doBuild = false;
 
   installPhase = ''
     mkdir -p \

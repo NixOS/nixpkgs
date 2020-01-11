@@ -61,6 +61,15 @@ in {
         };
     };
 
+    system.nssHosts = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [ "mdns" ];
+      description = ''
+        List of host entries to configure in <filename>/etc/nsswitch.conf</filename>.
+      '';
+    };
+
   };
 
   config = {
@@ -85,7 +94,7 @@ in {
       group:     ${concatStringsSep " " passwdArray}
       shadow:    ${concatStringsSep " " shadowArray}
 
-      hosts:     ${concatStringsSep " " hostArray}
+      hosts:     ${concatStringsSep " " config.system.nssHosts}
       networks:  files
 
       ethers:    files
@@ -93,6 +102,8 @@ in {
       protocols: files
       rpc:       files
     '';
+
+    system.nssHosts = hostArray;
 
     # Systemd provides nss-myhostname to ensure that our hostname
     # always resolves to a valid IP address.  It returns all locally

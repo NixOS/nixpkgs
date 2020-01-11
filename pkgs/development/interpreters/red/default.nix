@@ -1,7 +1,7 @@
 { stdenv, stdenv_32bit, pkgsi686Linux, fetchFromGitHub, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "red-${version}";
+  pname = "red";
   version = "0.6.3";
   src = fetchFromGitHub {
     rev = "6a43c767fa2e85d668b83f749158a18e62c30f70";
@@ -55,13 +55,13 @@ stdenv.mkDerivation rec {
     rm -rf $out/opt/red/rebol
     install -Dm755 console $out/bin/red
     install -Dm644 BSD-3-License.txt                          \
-        $out/share/licenses/${name}/BSD-3-License.txt
+        $out/share/licenses/${pname}-${version}/BSD-3-License.txt
     install -Dm644 BSL-License.txt                            \
-        $out/share/licenses/${name}/BSL-License.txt
+        $out/share/licenses/${pname}-${version}/BSL-License.txt
     install -Dm644 docs/red-system-quick-test.html            \
-        $out/share/doc/${name}/red-system-quick-test.html
+        $out/share/doc/${pname}-${version}/red-system-quick-test.html
     install -Dm644 docs/red-system-specs.html                 \
-        $out/share/doc/${name}/red-system-specs.html
+        $out/share/doc/${pname}-${version}/red-system-specs.html
 
     # PathElf
     patchelf --set-interpreter                            \

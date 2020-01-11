@@ -6,7 +6,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   name = "slob";
   verison = "unstable-2016-11-03";
   disabled = !isPy3k;

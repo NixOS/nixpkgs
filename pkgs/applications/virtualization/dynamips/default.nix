@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libelf, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "dynamips";
-  version = "0.2.19";
+  version = "0.2.21";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0x63m37vjyp57900x09gfvw02cwg85b33918x7fjj9x37wgmi5qf";
+    sha256 = "0pvdqs6kjz0x0wqb5f1k3r25dg82wssm7wz4psm0m6bxsvf5l0i5";
   };
 
   nativeBuildInputs = [ cmake ];

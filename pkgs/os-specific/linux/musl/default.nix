@@ -29,11 +29,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "musl";
-  version = "1.1.21";
+  version = "1.1.24";
 
   src = fetchurl {
     url    = "https://www.musl-libc.org/releases/${pname}-${version}.tar.gz";
-    sha256 = "0i2z52zgc86af1n1gjiz43hgd85mxjgvgn345zsybja9dxpvchn7";
+    sha256 = "18r2a00k82hz0mqdvgm7crzc7305l36109c0j9yjmkxj2alcjw0k";
   };
 
   enableParallelBuilding = true;
@@ -110,11 +110,11 @@ stdenv.mkDerivation rec {
 
   passthru.linuxHeaders = linuxHeaders;
 
-  meta = {
+  meta = with lib; {
     description = "An efficient, small, quality libc implementation";
     homepage    = "http://www.musl-libc.org";
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.linux;
-    maintainers = [ lib.maintainers.thoughtpolice ];
+    license     = licenses.mit;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice dtzWill ];
   };
 }

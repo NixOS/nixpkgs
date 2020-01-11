@@ -24,7 +24,7 @@ let
         # Name appended to menuentry defaults to params if no specific name given.
         option.name or (if option ? params then "(${option.params})" else "")
         }' ${if option ? class then " --class ${option.class}" else ""} {
-          linux ${defaults.image} ${defaults.params} ${
+          linux ${defaults.image} \''${isoboot} ${defaults.params} ${
             option.params or ""
           }
           initrd ${defaults.initrd}
@@ -88,7 +88,7 @@ let
   #     result in incorrect boot entries.
 
   baseIsolinuxCfg = ''
-    SERIAL 0 38400
+    SERIAL 0 115200
     TIMEOUT ${builtins.toString syslinuxTimeout}
     UI vesamenu.c32
     MENU TITLE NixOS
@@ -166,6 +166,8 @@ let
       "# No refind for ${targetArch}"
   ;
 
+  grubPkgs = if config.boot.loader.grub.forcei686 then pkgs.pkgsi686Linux else pkgs;
+
   grubMenuCfg = ''
     #
     # Menu configuration
@@ -196,7 +198,7 @@ let
     fi
 
     ${ # When there is a theme configured, use it, otherwise use the background image.
-    if (!isNull config.isoImage.grubTheme) then ''
+    if config.isoImage.grubTheme != null then ''
       # Sets theme.
       set theme=(hd0)/EFI/boot/grub-theme/theme.txt
       # Load theme fonts
@@ -241,7 +243,7 @@ let
     # Modules that may or may not be available per-platform.
     echo "Adding additional modules:"
     for mod in efi_uga; do
-      if [ -f ${pkgs.grub2_efi}/lib/grub/${pkgs.grub2_efi.grubTarget}/$mod.mod ]; then
+      if [ -f ${grubPkgs.grub2_efi}/lib/grub/${grubPkgs.grub2_efi.grubTarget}/$mod.mod ]; then
         echo " - $mod"
         MODULES+=" $mod"
       fi
@@ -249,9 +251,9 @@ let
 
     # Make our own efi program, we can't rely on "grub-install" since it seems to
     # probe for devices, even with --skip-fs-probe.
-    ${pkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${pkgs.grub2_efi.grubTarget} \
+    ${grubPkgs.grub2_efi}/bin/grub-mkimage -o $out/EFI/boot/boot${targetArch}.efi -p /EFI/boot -O ${grubPkgs.grub2_efi.grubTarget} \
       $MODULES
-    cp ${pkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
+    cp ${grubPkgs.grub2_efi}/share/grub/unicode.pf2 $out/EFI/boot/
 
     cat <<EOF > $out/EFI/boot/grub.cfg
 
@@ -265,6 +267,12 @@ let
     clear
     set timeout=10
     ${grubMenuCfg}
+
+    # If the parameter iso_path is set, append the findiso parameter to the kernel
+    # line. We need this to allow the nixos iso to be booted from grub directly.
+    if [ \''${iso_path} ] ; then
+      set isoboot="findiso=\''${iso_path}"
+    fi
 
     #
     # Menu entries
@@ -280,6 +288,14 @@ let
       submenu "Suggests resolution @1080p" --class hidpi-1080p {
         ${grubMenuCfg}
         ${buildMenuAdditionalParamsGrub2 config "video=1920x1080@60"}
+      }
+
+      # If we boot into a graphical environment where X is autoran
+      # and always crashes, it makes the media unusable. Allow the user
+      # to disable this.
+      submenu "Disable display-manager" --class quirk-disable-displaymanager {
+        ${grubMenuCfg}
+        ${buildMenuAdditionalParamsGrub2 config "systemd.mask=display-manager.service"}
       }
 
       # Some laptop and convertibles have the panel installed in an
@@ -362,7 +378,7 @@ let
 
   # Name used by UEFI for architectures.
   targetArch =
-    if pkgs.stdenv.isi686 then
+    if pkgs.stdenv.isi686 || config.boot.loader.grub.forcei686 then
       "ia32"
     else if pkgs.stdenv.isx86_64 then
       "x64"
@@ -506,7 +522,7 @@ in
     # here and it causes a cyclic dependency.
     boot.loader.grub.enable = false;
 
-    environment.systemPackages = [ pkgs.grub2 pkgs.grub2_efi ]
+    environment.systemPackages =  [ grubPkgs.grub2 grubPkgs.grub2_efi ]
       ++ optional canx86BiosBoot pkgs.syslinux
     ;
 
@@ -560,8 +576,6 @@ in
 
     boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" ];
 
-    boot.blacklistedKernelModules = [ "nouveau" ];
-
     boot.initrd.kernelModules = [ "loop" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
@@ -589,9 +603,6 @@ in
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
-        }
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -616,13 +627,20 @@ in
         { source = "${efiDir}/EFI";
           target = "/EFI";
         }
+        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
+          target = "/boot/grub";
+        }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
           target = "/boot/memtest.bin";
         }
-      ] ++ optionals (!isNull config.isoImage.grubTheme) [
+      ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
+        }
+      ] ++ [
+        { source = config.isoImage.efiSplashImage;
+          target = "/EFI/boot/efi-background.png";
         }
       ];
 

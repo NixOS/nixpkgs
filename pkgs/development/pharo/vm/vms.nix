@@ -7,7 +7,7 @@
 , openssl
 , gcc
 , libgit2
-, libGLU_combined
+, libGLU, libGL
 , freetype
 , xorg
 , alsaLib
@@ -17,6 +17,7 @@
 , gcc48
 , fetchFromGitHub
 , makeWrapper
+, runtimeShell
 } @args:
 
 let
@@ -26,7 +27,7 @@ in
 
 let suffix = if stdenv.is64bit then "64" else "32"; in
 
-rec {
+{
   # Build the latest VM
   spur = pharo-vm-build rec {
     name = "pharo-spur${suffix}";
@@ -62,4 +63,3 @@ rec {
   };
 
 }
-

@@ -12,20 +12,21 @@
 , dask
 , cloudpickle
 , pytest
+, imageio
 }:
 
 buildPythonPackage rec {
   pname = "scikit-image";
-  version = "0.14.1";
+  version = "0.16.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "86a9b3b4f74f231e0a6bcfd3235dcf3f0118df25dac21201da5e064d681e2c50";
+    sha256 = "dd7fbd32da74d4e9967dc15845f731f16e7966cee61f5dc0e12e2abb1305068c";
   };
 
   buildInputs = [ cython ];
 
-  propagatedBuildInputs = [ numpy scipy matplotlib networkx six pillow pywavelets dask cloudpickle ];
+  propagatedBuildInputs = [ numpy scipy matplotlib networkx six pillow pywavelets dask cloudpickle imageio ];
 
   checkInputs = [ pytest ];
 
@@ -34,7 +35,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Image processing routines for SciPy";
-    homepage = http://scikit-image.org;
+    homepage = https://scikit-image.org;
     license = lib.licenses.bsd3;
   };
 }

@@ -1,6 +1,6 @@
 { stdenv, buildGoPackage, fetchFromGitLab }:
 buildGoPackage rec {
-  name = "loccount-${version}";
+  pname = "loccount";
   version = "1.2";
 
   goPackagePath = "gitlab.com/esr/loccount";
@@ -30,6 +30,6 @@ buildGoPackage rec {
     downloadPage="https://gitlab.com/esr/loccount/tree/master";
     license = licenses.bsd2;
     maintainers = with maintainers; [ calvertvl ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

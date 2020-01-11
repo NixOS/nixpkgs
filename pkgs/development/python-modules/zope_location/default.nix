@@ -23,7 +23,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/zopefoundation/zope.location/;
+    homepage = https://github.com/zopefoundation/zope.location/;
     description = "Zope Location";
     license = licenses.zpl20;
     maintainers = with maintainers; [ goibhniu ];

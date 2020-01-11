@@ -3,7 +3,7 @@
 , perlPackages, python27 }:
 
 stdenv.mkDerivation rec {
-  name    = "styx-${version}";
+  pname = "styx";
   version = "0.7.1";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "01lklz7l9klqmmsncikwjnk3glzyz15c30118s82yd1chwpwhpfl";
   };
 
-  server = "${caddy.bin}/bin/caddy";
+  server = "${caddy}/bin/caddy";
   linkcheck = "${linkchecker}/bin/linkchecker";
 
   nativeBuildInputs = [ asciidoctor ];

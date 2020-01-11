@@ -1,12 +1,11 @@
 { stdenv, fetchFromGitHub, faust2jaqt, faust2lv2 }:
 stdenv.mkDerivation rec {
   pname = "Tambura";
-  name = "${pname}-${version}";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "olilarkin";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     sha256 = "1w80cmiyzca1wirf5gypg3hcix1ky777id8wnd3k92mn1jf4a24y";
   };
