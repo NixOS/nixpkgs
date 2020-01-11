@@ -274,6 +274,8 @@ in
 
   pet = callPackage ../development/tools/pet { };
 
+  run = callPackage ../development/tools/run { };
+
   mod = callPackage ../development/tools/mod { };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
