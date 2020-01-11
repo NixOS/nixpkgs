@@ -166,8 +166,8 @@ stdenv.mkDerivation (rec {
   ++ lib.optionals (!isTorBrowserLike) [
     "-I${nss.dev}/include/nss"
   ]
-  ++ lib.optional (pname == "firefox-esr" && lib.versionAtLeast ffversion "68"
-                                          && lib.versionOlder ffversion "69")
+  ++ lib.optional (lib.versionAtLeast ffversion "68"
+                  && lib.versionOlder ffversion "69")
     "-Wno-error=format-security");
 
   postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
