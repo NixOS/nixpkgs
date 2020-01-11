@@ -5,7 +5,6 @@ with lib;
 let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
-  spamassassin-init-pre = pkgs.writeText "init.pre" cfg.initPreConf;
 
   spamdEnv = pkgs.buildEnv {
     name = "spamd-env";
@@ -65,8 +64,9 @@ in
       };
 
       initPreConf = mkOption {
-        type = types.str;
+        type = with types; either str path;
         description = "The SpamAssassin init.pre config.";
+        apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''
           #

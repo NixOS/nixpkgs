@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A pluggable command-line frontend, including commands to setup package file layouts";
-    homepage = http://pythonpaste.org/script/;
+    homepage = https://github.com/cdent/pastescript/;
     license = licenses.mit;
   };
 

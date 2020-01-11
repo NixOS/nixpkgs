@@ -7,14 +7,6 @@ self: super:
 
 let
 
-  addSetupTools = drv: if drv == null then null else drv.overrideAttrs (
-    old: {
-      buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
-      ];
-    }
-  );
-
   getAttrDefault = attribute: set: default:
     if builtins.hasAttr attribute set
     then builtins.getAttr attribute set
@@ -22,15 +14,6 @@ let
 
 in
 {
-
-  asciimatics = super.asciimatics.overrideAttrs (
-    old: {
-      buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
-      ];
-    }
-  );
-
   av = super.av.overrideAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -59,10 +42,6 @@ in
       ];
     }
   );
-
-  configparser = addSetupTools super.configparser;
-
-  cbor2 = addSetupTools super.cbor2;
 
   cryptography = super.cryptography.overrideAttrs (
     old: {
@@ -105,22 +84,6 @@ in
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
     }
   );
-
-  hypothesis = addSetupTools super.hypothesis;
-
-  importlib-metadata = addSetupTools super.importlib-metadata;
-
-  inflect = super.inflect.overrideAttrs (
-    old: {
-      buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
-      ];
-    }
-  );
-
-  jsonschema = addSetupTools super.jsonschema;
-
-  keyring = addSetupTools super.keyring;
 
   lap = super.lap.overrideAttrs (
     old: {
@@ -243,7 +206,7 @@ in
     in
       {
         nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
-        buildInputs = old.buildInputs ++ [ blas ];
+        buildInputs = old.buildInputs ++ [ blas self.cython ];
         enableParallelBuilding = true;
         preBuild = ''
           ln -s ${cfg} site.cfg
@@ -262,8 +225,6 @@ in
     }
   );
 
-  pluggy = addSetupTools super.pluggy;
-
   psycopg2 = super.psycopg2.overrideAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
@@ -275,8 +236,6 @@ in
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
     }
   );
-
-  py = addSetupTools super.py;
 
   pyarrow = super.pyarrow.overrideAttrs (
     old: {
@@ -334,16 +293,9 @@ in
     }
   );
 
-  pytest = addSetupTools super.pytest;
-
-  pytest-mock = addSetupTools super.pytest-mock;
-
-  python-dateutil = addSetupTools super.python-dateutil;
-
   python-prctl = super.python-prctl.overrideAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
         pkgs.libcap
       ];
     }
@@ -380,8 +332,6 @@ in
     }
   );
 
-  six = addSetupTools super.six;
-
   urwidtrees = super.urwidtrees.overrideAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -390,7 +340,7 @@ in
     }
   );
 
-  # TODO: Figure out getting rid of this hack
+  # Stop infinite recursion by using bootstrapped pkg from nixpkgs
   wheel = (
     pkgs.python3.pkgs.override {
       python = self.python;
@@ -401,5 +351,4 @@ in
     }
   );
 
-  zipp = addSetupTools super.zipp;
 }

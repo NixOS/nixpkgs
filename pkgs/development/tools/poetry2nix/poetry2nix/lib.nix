@@ -1,6 +1,12 @@
 { lib, pkgs }:
 let
-  inherit (import ./semver.nix { inherit lib; }) satisfiesSemver;
+  inherit (import ./semver.nix { inherit lib ireplace; }) satisfiesSemver;
+  inherit (builtins) genList length;
+
+  # Replace a list entry at defined index with set value
+  ireplace = idx: value: list: (
+    genList (i: if i == idx then value else (builtins.elemAt list i)) (length list)
+  );
 
   # Returns true if pythonVersion matches with the expression in pythonVersions
   isCompatible = pythonVersion: pythonVersions:

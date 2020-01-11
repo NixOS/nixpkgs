@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1i4arhwbc05iz8hl7kk843m2f49i3ysby1kxcm9qfhpk7z9nyzj4";
+      sha256 = "0s8sv6h90l2a9xdabj0nirhpr6d2k8s5cddjdkm50x395i014w31";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1261,7 +1261,7 @@ self: super: {
 
   # The LTS-14.x version of their dependencies are too old.
   cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
@@ -1325,7 +1325,7 @@ self: super: {
   });
 
   # Needs the corresponding version of haskell-src-exts.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # https://github.com/Daniel-Diaz/HaTeX/issues/144
   HaTeX = dontCheck super.HaTeX;
@@ -1360,5 +1360,13 @@ self: super: {
 
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
+
+  # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
+  ormolu = doJailbreak (super.ormolu.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_8_1_20191204;
+  });
+
+  # krank-0.1.0 does not accept PyF-0.9.0.0.
+  krank = doJailbreak super.krank;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

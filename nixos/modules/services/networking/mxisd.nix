@@ -104,7 +104,6 @@ in {
 
     users.groups.mxisd =
       {
-        name = "";
         gid = config.ids.gids.mxisd;
       };
 

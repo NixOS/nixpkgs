@@ -19,6 +19,12 @@ let
       key = "AQBEEJNac00kExAAXEgy943BGyOpVH1LLlHafQ==";
       uuid = "5e97a838-85b6-43b0-8950-cb56d554d1e5";
     };
+    osd2 = {
+      name = "2";
+      ip = "192.168.1.4";
+      key = "AQAdyhZeIaUlARAAGRoidDAmS6Vkp546UFEf5w==";
+      uuid = "ea999274-13d0-4dd5-9af9-ad25a324f72f";
+    };
   };
   generateCephConfig = { daemonConfig }: {
     enable = true;
@@ -72,35 +78,20 @@ let
     };
   }; };
 
-  networkOsd0 = {
+  networkOsd = osd: {
     dhcpcd.enable = false;
     interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-      { address = cfg.osd0.ip; prefixLength = 24; }
+      { address = osd.ip; prefixLength = 24; }
     ];
     firewall = {
       allowedTCPPortRanges = [ { from = 6800; to = 7300; } ];
     };
   };
-  cephConfigOsd0 = generateCephConfig { daemonConfig = {
-    osd = {
-      enable = true;
-      daemons = [ cfg.osd0.name ];
-    };
-  }; };
 
-  networkOsd1 = {
-    dhcpcd.enable = false;
-    interfaces.eth1.ipv4.addresses = pkgs.lib.mkOverride 0 [
-      { address = cfg.osd1.ip; prefixLength = 24; }
-    ];
-    firewall = {
-      allowedTCPPortRanges = [ { from = 6800; to = 7300; } ];
-    };
-  };
-  cephConfigOsd1 = generateCephConfig { daemonConfig = {
+  cephConfigOsd = osd: generateCephConfig { daemonConfig = {
     osd = {
       enable = true;
-      daemons = [ cfg.osd1.name ];
+      daemons = [ osd.name ];
     };
   }; };
 
@@ -114,6 +105,7 @@ let
     monA.wait_for_unit("network.target")
     osd0.wait_for_unit("network.target")
     osd1.wait_for_unit("network.target")
+    osd2.wait_for_unit("network.target")
 
     # Bootstrap ceph-mon daemon
     monA.succeed(
@@ -145,8 +137,9 @@ let
     monA.succeed("cp /etc/ceph/ceph.client.admin.keyring /tmp/shared")
     osd0.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
     osd1.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
+    osd2.succeed("cp /tmp/shared/ceph.client.admin.keyring /etc/ceph")
 
-    # Bootstrap both OSDs
+    # Bootstrap OSDs
     osd0.succeed(
         "mkfs.xfs /dev/vdb",
         "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd0.name}",
@@ -161,6 +154,13 @@ let
         "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd1.name}/keyring --name osd.${cfg.osd1.name} --add-key ${cfg.osd1.key}",
         'echo \'{"cephx_secret": "${cfg.osd1.key}"}\' | ceph osd new ${cfg.osd1.uuid} -i -',
     )
+    osd2.succeed(
+        "mkfs.xfs /dev/vdb",
+        "mkdir -p /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
+        "mount /dev/vdb /var/lib/ceph/osd/ceph-${cfg.osd2.name}",
+        "ceph-authtool --create-keyring /var/lib/ceph/osd/ceph-${cfg.osd2.name}/keyring --name osd.${cfg.osd2.name} --add-key ${cfg.osd2.key}",
+        'echo \'{"cephx_secret": "${cfg.osd2.key}"}\' | ceph osd new ${cfg.osd2.uuid} -i -',
+    )
 
     # Initialize the OSDs with regular filestore
     osd0.succeed(
@@ -173,7 +173,12 @@ let
         "chown -R ceph:ceph /var/lib/ceph/osd",
         "systemctl start ceph-osd-${cfg.osd1.name}",
     )
-    monA.wait_until_succeeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'")
+    osd2.succeed(
+        "ceph-osd -i ${cfg.osd2.name} --mkfs --osd-uuid ${cfg.osd2.uuid}",
+        "chown -R ceph:ceph /var/lib/ceph/osd",
+        "systemctl start ceph-osd-${cfg.osd2.name}",
+    )
+    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
 
@@ -196,16 +201,18 @@ let
     monA.crash()
     osd0.crash()
     osd1.crash()
+    osd2.crash()
 
     # Start it up
     osd0.start()
     osd1.start()
+    osd2.start()
     monA.start()
 
     # Ensure the cluster comes back up again
     monA.succeed("ceph -s | grep 'mon: 1 daemons'")
     monA.wait_until_succeeds("ceph -s | grep 'quorum ${cfg.monA.name}'")
-    monA.wait_until_succeeds("ceph osd stat | grep -e '2 osds: 2 up[^,]*, 2 in'")
+    monA.wait_until_succeeds("ceph osd stat | grep -e '3 osds: 3 up[^,]*, 3 in'")
     monA.wait_until_succeeds("ceph -s | grep 'mgr: ${cfg.monA.name}(active,'")
     monA.wait_until_succeeds("ceph -s | grep 'HEALTH_OK'")
   '';
@@ -217,8 +224,9 @@ in {
 
   nodes = {
     monA = generateHost { pkgs = pkgs; cephConfig = cephConfigMonA; networkConfig = networkMonA; };
-    osd0 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd0; networkConfig = networkOsd0; };
-    osd1 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd1; networkConfig = networkOsd1; };
+    osd0 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd cfg.osd0; networkConfig = networkOsd cfg.osd0; };
+    osd1 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd cfg.osd1; networkConfig = networkOsd cfg.osd1; };
+    osd2 = generateHost { pkgs = pkgs; cephConfig = cephConfigOsd cfg.osd2; networkConfig = networkOsd cfg.osd2; };
   };
 
   testScript = testscript;

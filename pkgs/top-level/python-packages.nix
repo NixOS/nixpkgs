@@ -108,7 +108,7 @@ in {
   inherit buildSetupcfg;
 
   inherit (callPackage ../development/interpreters/python/hooks { })
-    flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
+    eggUnpackHook eggBuildHook eggInstallHook flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
 
   # helpers
 
@@ -548,9 +548,13 @@ in {
 
   connexion = callPackage ../development/python-modules/connexion { };
 
+  coordinates = callPackage ../development/python-modules/coordinates { };
+
   cozy = callPackage ../development/python-modules/cozy { };
 
   codespell = callPackage ../development/python-modules/codespell { };
+
+  crc32c = callPackage ../development/python-modules/crc32c { };
 
   curio = callPackage ../development/python-modules/curio { };
 
@@ -757,6 +761,8 @@ in {
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
+  ihatemoney = callPackage ../development/python-modules/ihatemoney { };
+
   imutils = callPackage ../development/python-modules/imutils { };
 
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
@@ -772,6 +778,8 @@ in {
   janus = callPackage ../development/python-modules/janus { };
 
   jira = callPackage ../development/python-modules/jira { };
+
+  junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
 
@@ -1019,6 +1027,8 @@ in {
   pycryptodomex = callPackage ../development/python-modules/pycryptodomex { };
 
   PyChromecast = callPackage ../development/python-modules/pychromecast { };
+
+  pycm = callPackage ../development/python-modules/pycm { };
 
   py-cpuinfo = callPackage ../development/python-modules/py-cpuinfo { };
 
@@ -1379,6 +1389,8 @@ in {
   stumpy = callPackage ../development/python-modules/stumpy { };
 
   stups-cli-support = callPackage ../development/python-modules/stups-cli-support { };
+
+  stups-fullstop = callPackage ../development/python-modules/stups-fullstop { };
 
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 
@@ -1798,6 +1810,8 @@ in {
 
   colour = callPackage ../development/python-modules/colour {};
 
+  colormath = callPackage ../development/python-modules/colormath {};
+
   configshell = callPackage ../development/python-modules/configshell { };
 
   consonance = callPackage ../development/python-modules/consonance { };
@@ -1849,6 +1863,8 @@ in {
   debian = callPackage ../development/python-modules/debian {};
 
   defusedxml = callPackage ../development/python-modules/defusedxml {};
+
+  dodgy = callPackage ../development/python-modules/dodgy { };
 
   dugong = callPackage ../development/python-modules/dugong {};
 
@@ -3726,6 +3742,8 @@ in {
 
   hvac = callPackage ../development/python-modules/hvac { };
 
+  hydra = callPackage ../development/python-modules/hydra { };
+
   hypothesis = callPackage ../development/python-modules/hypothesis { };
 
   colored = callPackage ../development/python-modules/colored { };
@@ -3984,6 +4002,8 @@ in {
   py_scrypt = callPackage ../development/python-modules/py_scrypt { };
 
   python_magic = callPackage ../development/python-modules/python-magic { };
+
+  m3u8 = callPackage ../development/python-modules/m3u8 { };
 
   magic = callPackage ../development/python-modules/magic { };
 
@@ -4388,6 +4408,8 @@ in {
   ordereddict = callPackage ../development/python-modules/ordereddict { };
 
   od = callPackage ../development/python-modules/od { };
+
+  omegaconf = callPackage ../development/python-modules/omegaconf { };
 
   orderedset = callPackage ../development/python-modules/orderedset { };
 
@@ -4802,6 +4824,8 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
+
   pyomo = callPackage ../development/python-modules/pyomo { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
@@ -5123,6 +5147,8 @@ in {
   reikna = callPackage ../development/python-modules/reikna { };
 
   repocheck = callPackage ../development/python-modules/repocheck { };
+
+  restrictedpython = callPackage ../development/python-modules/restrictedpython { };
 
   restview = callPackage ../development/python-modules/restview { };
 
@@ -6295,6 +6321,8 @@ in {
 
   xlsx2csv = callPackage ../development/python-modules/xlsx2csv { };
 
+  xmodem = callPackage ../development/python-modules/xmodem {};
+
   xmpppy = callPackage ../development/python-modules/xmpppy {};
 
   xstatic = callPackage ../development/python-modules/xstatic {};
@@ -6637,6 +6665,10 @@ in {
   pyspark = callPackage ../development/python-modules/pyspark { };
 
   pysensors = callPackage ../development/python-modules/pysensors { };
+
+  python-toolbox = callPackage ../development/python-modules/python-toolbox { };
+
+  pysnooper = callPackage ../development/python-modules/pysnooper { };
 
   sseclient = callPackage ../development/python-modules/sseclient { };
 

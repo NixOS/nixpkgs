@@ -65,6 +65,11 @@ rec {
       # definition values and locations (e.g. [ { file = "/foo.nix";
       # value = 1; } { file = "/bar.nix"; value = 2 } ]).
       merge ? mergeDefaultOption
+    , # Whether this type has a value representing nothingness. If it does,
+      # this should be a value of the form { value = <the nothing value>; }
+      # If it doesn't, this should be {}
+      # This may be used when a value is required for `mkIf false`. This allows the extra laziness in e.g. `lazyAttrsOf`.
+      emptyValue ? {}
     , # Return a flat list of sub-options.  Used to generate
       # documentation.
       getSubOptions ? prefix: {}
@@ -88,7 +93,7 @@ rec {
       functor ? defaultFunctor name
     }:
     { _type = "option-type";
-      inherit name check merge getSubOptions getSubModules substSubModules typeMerge functor;
+      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor;
       description = if description == null then name else description;
     };
 
@@ -225,6 +230,7 @@ rec {
       description = "attribute set";
       check = isAttrs;
       merge = loc: foldl' (res: def: mergeAttrs res def.value) {};
+      emptyValue = { value = {}; };
     };
 
     # derivation is a reserved keyword.
@@ -265,6 +271,7 @@ rec {
             ) def.value
           else
             throw "The option value `${showOption loc}` in `${def.file}` is not a list.") defs)));
+      emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["*"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: listOf (elemType.substSubModules m);
@@ -273,7 +280,10 @@ rec {
 
     nonEmptyListOf = elemType:
       let list = addCheck (types.listOf elemType) (l: l != []);
-      in list // { description = "non-empty " + list.description; };
+      in list // {
+        description = "non-empty " + list.description;
+        # Note: emptyValue is left as is, because another module may define an element.
+      };
 
     attrsOf = elemType: mkOptionType rec {
       name = "attrsOf";
@@ -285,9 +295,34 @@ rec {
           )
           # Push down position info.
           (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs)));
+      emptyValue = { value = {}; };
       getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
       getSubModules = elemType.getSubModules;
       substSubModules = m: attrsOf (elemType.substSubModules m);
+      functor = (defaultFunctor name) // { wrapped = elemType; };
+    };
+
+    # A version of attrsOf that's lazy in its values at the expense of
+    # conditional definitions not working properly. E.g. defining a value with
+    # `foo.attr = mkIf false 10`, then `foo ? attr == true`, whereas with
+    # attrsOf it would correctly be `false`. Accessing `foo.attr` would throw an
+    # error that it's not defined. Use only if conditional definitions don't make sense.
+    lazyAttrsOf = elemType: mkOptionType rec {
+      name = "lazyAttrsOf";
+      description = "lazy attribute set of ${elemType.description}s";
+      check = isAttrs;
+      merge = loc: defs:
+        zipAttrsWith (name: defs:
+          let merged = mergeDefinitions (loc ++ [name]) elemType defs;
+          # mergedValue will trigger an appropriate error when accessed
+          in merged.optionalValue.value or elemType.emptyValue.value or merged.mergedValue
+        )
+        # Push down position info.
+        (map (def: mapAttrs (n: v: { inherit (def) file; value = v; }) def.value) defs);
+      emptyValue = { value = {}; };
+      getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name>"]);
+      getSubModules = elemType.getSubModules;
+      substSubModules = m: lazyAttrsOf (elemType.substSubModules m);
       functor = (defaultFunctor name) // { wrapped = elemType; };
     };
 
@@ -339,6 +374,7 @@ rec {
         description = "list or attribute set of ${elemType.description}s";
         check = x: isList x || isAttrs x;
         merge = loc: defs: attrOnly.merge loc (convertAllLists loc defs);
+        emptyValue = { value = {}; };
         getSubOptions = prefix: elemType.getSubOptions (prefix ++ ["<name?>"]);
         getSubModules = elemType.getSubModules;
         substSubModules = m: loaOf (elemType.substSubModules m);
@@ -350,6 +386,7 @@ rec {
       name = "uniq";
       inherit (elemType) description check;
       merge = mergeOneOption;
+      emptyValue = elemType.emptyValue;
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: uniq (elemType.substSubModules m);
@@ -367,6 +404,7 @@ rec {
         else if nrNulls != 0 then
           throw "The option `${showOption loc}` is defined both null and not null, in ${showFiles (getFiles defs)}."
         else elemType.merge loc defs;
+      emptyValue = { value = null; };
       getSubOptions = elemType.getSubOptions;
       getSubModules = elemType.getSubModules;
       substSubModules = m: nullOr (elemType.substSubModules m);
@@ -407,6 +445,7 @@ rec {
             args.name = last loc;
             prefix = loc;
           }).config;
+        emptyValue = { value = {}; };
         getSubOptions = prefix: (evalModules
           { inherit modules prefix specialArgs;
             # This is a work-around due to the fact that some sub-modules,
@@ -515,6 +554,7 @@ rec {
               if finalType.check val then val
               else coerceFunc val;
           in finalType.merge loc (map (def: def // { value = coerceVal def.value; }) defs);
+        emptyValue = finalType.emptyValue;
         getSubOptions = finalType.getSubOptions;
         getSubModules = finalType.getSubModules;
         substSubModules = m: coercedTo coercedType coerceFunc (finalType.substSubModules m);
