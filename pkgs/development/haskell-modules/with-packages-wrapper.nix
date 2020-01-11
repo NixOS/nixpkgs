@@ -1,4 +1,4 @@
-{ lib, stdenv, ghc, llvmPackages, packages, symlinkJoin, makeWrapper
+{ lib, stdenv, ghc, llvmPackages, packages, buildEnv, makeWrapper
 , withLLVM ? false
 , postBuild ? ""
 , ghcLibdir ? null # only used by ghcjs, when resolving plugins
@@ -51,14 +51,24 @@ let
                    ++ lib.optional stdenv.targetPlatform.isDarwin llvmPackages.clang);
 in
 if paths == [] && !withLLVM then ghc else
-symlinkJoin {
+buildEnv {
   # this makes computing paths from the name attribute impossible;
   # if such a feature is needed, the real compiler name should be saved
   # as a dedicated drv attribute, like `compiler-name`
   name = ghc.name + "-with-packages";
   paths = paths ++ [ghc];
+  extraOutputsToInstall = ["doc"];
   postBuild = ''
     . ${makeWrapper}/nix-support/setup-hook
+
+    # We make changes to ghc binaries in $out/bin. buildEnv gives a
+    # symlink if only one of the paths has the subdirectory. If so,
+    # we need to remove it for our new wrappers.
+
+    if [ -L "$out/bin" ]; then
+      rm -f "$out/bin"
+      mkdir -p "$out/bin"
+    fi
 
     # wrap compiler executables with correct env variables
 

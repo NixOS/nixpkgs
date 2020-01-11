@@ -16,10 +16,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "71.0";
+    ffversion = "72.0.1";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0hfjlhwdhfdfzd27d6p3h8ff5m2jphlaipv4zym48bn6g95if1x98q2lb87617bxfm31di4rckjvqb70g9sm3smil6p6bnw2dsvnq1g";
+      sha512 = "37ryimi6yfpcha4c9mcv8gjk38kia1lr5xrj2lglwsr1jai7qxrcd8ljcry8bg87qfwwb9fa13prmn78f5pzpxr7jf8gnsbvr6adxld";
     };
 
     patches = [
@@ -88,6 +88,7 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended around October 2019." ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-60-unwrapped";
@@ -98,10 +99,10 @@ rec {
 
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
-    ffversion = "68.3.0esr";
+    ffversion = "68.4.1esr";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "31zisy4l07hhm9yvxz7sx04kz1f5rl20z1w072jxaabi42sw07xr6lcflv88gwl21y902n7vwd1q1zfavpnipn65wap4i0vm8c4m6pr";
+      sha512 = "3nqchvyr95c9xvz23z0kcqqyx8lskw0lxa3rahiagc7b71pnrk8l40c7327q1wd4y5g16lix0fg04xiy6lqjfycjsrjlfr2y6b51n4d";
     };
 
     patches = [
@@ -173,6 +174,7 @@ in {
       ./no-buildconfig.patch
       missing-documentation-patch
     ];
+    meta.knownVulnerabilities = [ "Support ended around October 2019." ];
   };
 
   # Similarly to firefox-esr-52 above.
@@ -260,6 +262,7 @@ in rec {
       rev   = "95bb92d552876a1f4260edf68fda5faa3eb36ad8";
       sha256 = "1ykn3yg4s36g2cpzxbz7s995c33ij8kgyvghx38z4i8siaqxdddy";
     };
+    meta.knownVulnerabilities = [ "Support ended in August 2018." ];
   }).override {
     gtk3Support = false;
   };
@@ -276,6 +279,7 @@ in rec {
       rev   = "0489ae3158cd8c0e16c2e78b94083d8cbf0209dc";
       sha256 = "0y5s7d8pg8ak990dp8d801j9823igaibfhv9hsa79nib5yllifzs";
     };
+    meta.knownVulnerabilities = [ "Support ended around October 2019." ];
 
     patches = [
       missing-documentation-patch

@@ -33,7 +33,7 @@
 , alex, happy, git, gnumake, autoconf, patch
 , automake, libtool
 , cryptohash
-, haddock, hspec, xhtml, pkgs
+, haddock, hspec, xhtml, pkgs, pkgsHostHost
 , coreutils
 , libiconv
 
@@ -137,7 +137,7 @@ in mkDerivation ({
     isCross = true;
     isGhcjs = true;
     inherit nodejs ghcjsBoot;
-    socket-io = pkgs.nodePackages."socket.io";
+    socket-io = pkgsHostHost.nodePackages."socket.io";
     haskellCompilerName = "ghcjs-${version}";
 
     # let us assume ghcjs is never actually cross compiled

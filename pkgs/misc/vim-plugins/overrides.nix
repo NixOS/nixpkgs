@@ -14,11 +14,14 @@
 # coc-go dependency
 , go
 
-# vim-go denpencies
+# vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# direnv-vim dependencies
+, direnv
 
 # vCoolor dependency
 , gnome3
@@ -105,6 +108,14 @@ self: super: {
 
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
+    '';
+  });
+
+  direnv-vim = super.direnv-vim.overrideAttrs(oa: {
+    preFixup = oa.preFixup or "" + ''
+      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+        --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
   });
 
@@ -390,6 +401,9 @@ self: super: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
 
+  vim-terraform = super.vim-terraform.overrideAttrs(oa: {
+    patches = (oa.patches or []) ++ lib.singleton ./vim-terraform-fix-event.patch;
+  });
 
   vim-wakatime = super.vim-wakatime.overrideAttrs(old: {
     buildInputs = [ python ];

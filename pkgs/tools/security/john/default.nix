@@ -31,7 +31,10 @@ stdenv.mkDerivation rec {
     export AS=$CC
     export LD=$CC
   '';
-  configureFlags = [ "--disable-native-macro" ];
+  configureFlags = [
+    "--disable-native-tests"
+    "--with-systemwide"
+  ];
 
   buildInputs = [ openssl nss nspr kerberos gmp zlib libpcap re2 gcc pythonPackages.wrapPython perl makeWrapper ];
   propagatedBuildInputs = (with pythonPackages; [ dpkt scapy lxml ]) ++ # For pcap2john.py
@@ -42,8 +45,6 @@ stdenv.mkDerivation rec {
   # gcc -DAC_BUILT -Wall vncpcap2john.o memdbg.o -g    -lpcap -fopenmp -o ../run/vncpcap2john
   # gcc: error: memdbg.o: No such file or directory
   enableParallelBuilding = false;
-
-  NIX_CFLAGS_COMPILE = [ "-DJOHN_SYSTEMWIDE=1" ];
 
   postInstall = ''
     mkdir -p "$out/bin" "$out/etc/john" "$out/share/john" "$out/share/doc/john"

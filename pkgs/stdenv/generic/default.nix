@@ -1,6 +1,15 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ name ? "stdenv", preHook ? "", initialPath, cc, shell
+{ name ? "stdenv", preHook ? "", initialPath
+
+, # If we don't have a C compiler, we might either have `cc = null` or `cc =
+  # throw ...`, but if we do have a C compiler we should definiely have `cc !=
+  # null`.
+  #
+  # TODO(@Ericson2314): Add assert without creating infinite recursion
+  hasCC ? cc != null, cc
+
+, shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -57,7 +66,8 @@ let
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-      cc
+      # TODO use lib.optional instead
+      (if hasCC then cc else null)
     ];
 
   defaultBuildInputs = extraBuildInputs;
@@ -145,7 +155,7 @@ let
 
       inherit overrides;
 
-      inherit cc;
+      inherit cc hasCC;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

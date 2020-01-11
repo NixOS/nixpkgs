@@ -135,6 +135,11 @@ in
   /* Linux on the fuloong */
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
 
+  /* Javacript */
+  ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
+    haskell.packages.ghcjs.hello = nativePlatforms;
+  };
+
   /* Linux on Raspberrypi */
   rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
   rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
