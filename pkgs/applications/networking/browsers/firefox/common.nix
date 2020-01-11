@@ -282,6 +282,11 @@ stdenv.mkDerivation (rec {
     "--enable-bundled-fonts"
   ])
 
+  ++ lib.optionals (isTorBrowserLike && lib.versionAtLeast tbversion "9") ([
+      "--enable-proxy-bypass-protection"
+      "MOZ_TELEMETRY_REPORTING="
+  ])
+
   ++ flag alsaSupport "alsa"
   ++ flag pulseaudioSupport "pulseaudio"
   ++ flag ffmpegSupport "ffmpeg"

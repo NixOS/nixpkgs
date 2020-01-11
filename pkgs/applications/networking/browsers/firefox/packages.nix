@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
+{ lib, callPackage, fetchurl, fetchpatch, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
 
 let
 
@@ -289,6 +289,35 @@ in rec {
     meta.knownVulnerabilities = [ "Support ended around October 2019." ];
   };
 
-  tor-browser = tor-browser-8-5;
+  tor-browser-9-0 = tbcommon {
+    ffversion = "68.4.1esr";
+    tbversion = "9.0.4";
+
+    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
+    src = fetchFromGitHub {
+      owner = "SLNOS";
+      repo  = "tor-browser";
+      # branch "tor-browser-68.4.1esr-9.0-1-slnos"
+      rev   = "04e6899d28554656b18be5e02bfe58d4e430161b";
+      fetchSubmodules = true;
+      sha256 = "0vzkrs69agq4v89hz05mbz70hdh05qjf5z5j5i0ynkvn5n4a1w9f";
+    };
+
+    # tor-browser versions > 9.0 integrate tor-launcher and tor-button, which this derivation does not need
+    # but disabling it with the following configure flag does not actually work, hence the rather hacky patch
+    patches = [
+      (fetchpatch {
+        url = "https://github.com/SLNOS/tor-browser/commit/87c24c7709e2c7657f8a304635e7fb18429229de.patch";
+        sha256 = "1x5w3854w8ngms8kip8pwf621r1b4z4jm03s3j50nxi382gpdmn0";
+      })
+    ];
+
+    extraConfigureFlags = [
+      "--disable-tor-launcher"
+    ];
+
+  };
+
+  tor-browser = tor-browser-9-0;
 
 })
