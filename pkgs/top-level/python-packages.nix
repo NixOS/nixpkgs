@@ -779,6 +779,8 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  junit-xml = callPackage ../development/python-modules/junit-xml { };
+
   junitparser = callPackage ../development/python-modules/junitparser { };
 
   jwcrypto = callPackage ../development/python-modules/jwcrypto { };
@@ -1387,6 +1389,8 @@ in {
   stumpy = callPackage ../development/python-modules/stumpy { };
 
   stups-cli-support = callPackage ../development/python-modules/stups-cli-support { };
+
+  stups-fullstop = callPackage ../development/python-modules/stups-fullstop { };
 
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 

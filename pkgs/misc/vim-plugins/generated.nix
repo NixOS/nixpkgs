@@ -1441,6 +1441,17 @@ let
     };
   };
 
+  increment-activator = buildVimPluginFrom2Nix {
+    pname = "increment-activator";
+    version = "2019-05-09";
+    src = fetchFromGitHub {
+      owner = "nishigori";
+      repo = "increment-activator";
+      rev = "f341baf93b172aee646c90ff2ce28de0f897561b";
+      sha256 = "0hda6h3qz6ynpl996rk1rm6xnxgkaz108v28qg0w6wm7qzynbmnv";
+    };
+  };
+
   incsearch-easymotion-vim = buildVimPluginFrom2Nix {
     pname = "incsearch-easymotion-vim";
     version = "2016-01-18";
@@ -3464,6 +3475,17 @@ let
       repo = "vim-commentary";
       rev = "f8238d70f873969fb41bf6a6b07ca63a4c0b82b1";
       sha256 = "09d81q9na7pvvrmxxqy09ffdzsx5v5dikinb704c9wm4ys2bidr9";
+    };
+  };
+
+  vim-cool = buildVimPluginFrom2Nix {
+    pname = "vim-cool";
+    version = "2018-01-11";
+    src = fetchFromGitHub {
+      owner = "romainl";
+      repo = "vim-cool";
+      rev = "06918c36b3396af0bec1e87e748a5dba55be87b9";
+      sha256 = "099sbjdk944bnivqgqgbjplczfm3k84583ryrmpqf3lgrq6pl8wr";
     };
   };
 

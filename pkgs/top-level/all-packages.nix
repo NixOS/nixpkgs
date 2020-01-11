@@ -274,6 +274,8 @@ in
 
   pet = callPackage ../development/tools/pet { };
 
+  run = callPackage ../development/tools/run { };
+
   mod = callPackage ../development/tools/mod { };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
@@ -6114,7 +6116,9 @@ in
 
   routino = callPackage ../tools/misc/routino { };
 
-  rq = callPackage ../development/tools/rq { };
+  rq = callPackage ../development/tools/rq {
+    inherit (darwin) libiconv;
+  };
 
   rsnapshot = callPackage ../tools/backup/rsnapshot { };
 
@@ -6792,11 +6796,6 @@ in
   tor-arm = callPackage ../tools/security/tor/tor-arm.nix { };
 
   tor-browser-bundle-bin = callPackage ../applications/networking/browsers/tor-browser-bundle-bin { };
-
-  tor-browser-bundle = callPackage ../applications/networking/browsers/tor-browser-bundle {
-    stdenv = stdenvNoCC;
-    tor-browser-unwrapped = firefoxPackages.tor-browser;
-  };
 
   touchegg = callPackage ../tools/inputmethods/touchegg { };
 
@@ -9603,7 +9602,7 @@ in
   apacheAnt_1_9 = callPackage ../development/tools/build-managers/apache-ant/1.9.nix { };
   ant = apacheAnt;
 
-  apacheKafka = apacheKafka_2_3;
+  apacheKafka = apacheKafka_2_4;
   apacheKafka_0_9 = callPackage ../servers/apache-kafka { majorVersion = "0.9"; };
   apacheKafka_0_10 = callPackage ../servers/apache-kafka { majorVersion = "0.10"; };
   apacheKafka_0_11 = callPackage ../servers/apache-kafka { majorVersion = "0.11"; };
@@ -9613,6 +9612,7 @@ in
   apacheKafka_2_1 = callPackage ../servers/apache-kafka { majorVersion = "2.1"; };
   apacheKafka_2_2 = callPackage ../servers/apache-kafka { majorVersion = "2.2"; };
   apacheKafka_2_3 = callPackage ../servers/apache-kafka { majorVersion = "2.3"; };
+  apacheKafka_2_4 = callPackage ../servers/apache-kafka { majorVersion = "2.4"; };
 
   kt = callPackage ../tools/misc/kt {};
 
@@ -19036,7 +19036,6 @@ in
   firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52;
   firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
-  tor-browser-unwrapped = firefoxPackages.tor-browser;
   icecat-unwrapped = firefoxPackages.icecat;
 
   firefox = wrapFirefox firefox-unwrapped { };

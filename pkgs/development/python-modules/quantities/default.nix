@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Quantities is designed to handle arithmetic and";
-    homepage = http://python-quantities.readthedocs.io/;
+    homepage = https://python-quantities.readthedocs.io/;
     license = lib.licenses.bsd2;
   };
 }

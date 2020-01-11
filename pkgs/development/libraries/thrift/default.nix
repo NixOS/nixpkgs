@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, boost, zlib, libevent, openssl, python, cmake, pkgconfig
+{ stdenv, fetchurl, fetchpatch, boost, zlib, libevent, openssl, python, cmake, pkgconfig
 , bison, flex, twisted, static ? false }:
 
 stdenv.mkDerivation rec {
@@ -9,6 +9,15 @@ stdenv.mkDerivation rec {
     url = "https://archive.apache.org/dist/thrift/${version}/${pname}-${version}.tar.gz";
     sha256 = "0yai9c3bdsrkkjshgim7zk0i7malwfprg00l9774dbrkh2w4ilvs";
   };
+
+  patches = [
+    # Fix a failing test on darwin
+    # https://issues.apache.org/jira/browse/THRIFT-4976
+    (fetchpatch {
+      url = "https://github.com/apache/thrift/commit/6701dbb8e89f6550c7843e9b75b118998df471c3.diff";
+      sha256 = "14rqma2b2zv3zxkkl5iv9kvyp3zihvad6fdc2gcdqv37nqnswx9d";
+    })
+  ];
 
   # Workaround to make the python wrapper not drop this package:
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
@@ -32,7 +41,9 @@ stdenv.mkDerivation rec {
   doCheck = !static;
   checkPhase = ''
     runHook preCheck
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib ctest -E PythonTestSSLSocket
+
+    ${stdenv.lib.optionalString stdenv.isDarwin "DY"}LD_LIBRARY_PATH=$PWD/lib ctest -E PythonTestSSLSocket
+
     runHook postCheck
   '';
   enableParallelChecking = false;

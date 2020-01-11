@@ -532,4 +532,9 @@ mapAliases ({
 
   # added 2019-10-28
   gnatsd = nats-server;
+
+  # added 2020-01-10
+  tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+  # added 2020-01-10
+  tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
 })
