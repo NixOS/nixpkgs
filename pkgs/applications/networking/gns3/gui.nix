@@ -1,26 +1,36 @@
+# This package required qt5Full to launch
 { stable, branch, version, sha256Hash }:
 
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub 
+, packageOverrides ? self: super: {
+
+}}:
 
 let
-  python = python3.override {
-    packageOverrides = self: super: {
-      psutil = super.psutil.overridePythonAttrs (oldAttrs: rec {
-        version = "5.6.3";
+
+  defaultOverrides = [
+        (mkOverride "psutil" "5.6.3"
+      "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6")
+        (mkOverride "jsonschema" "5.6.3"
+      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
+  ];
+
+  mkOverride = attrname: version: sha256:
+    self: super: {
+      ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+        inherit version;
         src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6";
+          inherit version sha256;
         };
-      });
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
-        };
+
       });
     };
+
+  python = python3.override {
+    # Put packageOverrides at the start so they are applied after defaultOverrides
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([ packageOverrides ] ++ defaultOverrides);
   };
+    
 in python.pkgs.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-gui";
