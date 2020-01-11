@@ -4,19 +4,12 @@
 
 buildPythonPackage rec {
   pname = "mautrix";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03m59d683nr547v5xr80wc3j07das2d2sc3i4bf03dpbkfg0h17w";
+    sha256 = "0mfxfc1y317h90h1jx7amsk09jwzxbvfc75qxzl9nf8ah432yfpr";
   };
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-python/commit/ac46f3bb1bea11d22d8a486cc4821604c844da5e.patch";
-      sha256 = "198g63s0iv8g1w22g4g5hb54y41ws82wraglibz33qhrwsfn8axn";
-    })
-  ];
 
   propagatedBuildInputs = [
     aiohttp
