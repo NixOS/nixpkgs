@@ -206,12 +206,12 @@ in {
     unpackPhase = ''
       # fetchFromGitHub produces ro sources, root dir gets a name that
       # is too long for shebangs. fixing
-      cp -a $src tor-browser
+      cp -R --no-dereference --preserve=mode $src tor-browser
       chmod -R +w tor-browser
       cd tor-browser
 
       # set times for xpi archives
-      find . -exec touch -d'2010-01-01 00:00' {} \;
+      find . -print0 | xargs -0 -n 1024 -- touch -d'2010-01-01 00:00'
     '';
 
     meta = (args.meta or {}) // {
