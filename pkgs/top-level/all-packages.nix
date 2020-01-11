@@ -6888,6 +6888,8 @@ in
 
   ttylog = callPackage ../tools/misc/ttylog { };
 
+  tuir = callPackage ../applications/misc/tuir { };
+
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
   oysttyer = callPackage ../applications/networking/instant-messengers/oysttyer { };
