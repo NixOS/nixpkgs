@@ -1485,4 +1485,13 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
+  # hackage version does not support newer servant api
+  hoggl = overrideSrc super.hoggl {
+    src = pkgs.fetchFromGitHub {
+      owner = "markus1189";
+      repo = "hoggl";
+      rev = "3078887d4de16b54f798cd6f97a4e4906ed4f318";
+      sha256 = "14k25fbwbbbfgyjgxn6vjgfki0sm1al52b4lahcvv4fzq8gsa607";
+    };
+  };
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
