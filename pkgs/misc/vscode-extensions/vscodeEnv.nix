@@ -1,4 +1,4 @@
-#use vscodeWithConfiguration and vscodeExts2nix to create vscode exetuable that when exits(vscode) will update the mutable extension file, which is imported when getting evaluated by nix.
+#Use vscodeWithConfiguration and vscodeExts2nix to create a vscode executable. When the executable exits, it updates the mutable extension file, which is imported when evaluated by Nix later.
 { lib
 , buildEnv
 , writeShellScriptBin
