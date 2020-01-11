@@ -72,9 +72,7 @@ self: super:
 
   mkfontdir = self.mkfontscale;
 
-  libxcb = (super.libxcb.override {
-    python = python3;
-  }).overrideAttrs (attrs: {
+  libxcb = super.libxcb.overrideAttrs (attrs: {
     configureFlags = [ "--enable-xkb" "--enable-xinput" ];
     outputs = [ "out" "dev" "man" "doc" ];
   });
@@ -306,10 +304,6 @@ self: super:
   x11perf = super.x11perf.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ freetype fontconfig ];
   });
-
-  xcbproto = super.xcbproto.override {
-    python = python3;
-  };
 
   xcbutil = super.xcbutil.overrideAttrs (attrs: {
     outputs = [ "out" "dev" ];
