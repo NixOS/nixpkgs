@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "jxrlib";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0rk3hbh00nw0wgbfbqk1szrlfg3yq7w6ar16napww3nrlm9cj65w";
   };
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python2 ];
 
   makeFlags = [ "DIR_INSTALL=$(out)" "SHARED=1" ];
 
