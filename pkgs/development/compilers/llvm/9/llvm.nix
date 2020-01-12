@@ -1,7 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, python
+, python2
 , libffi
 , libbfd
 , libpfm
@@ -43,11 +43,11 @@ in stdenv.mkDerivation (rec {
     mv polly-* $sourceRoot/tools/polly
   '';
 
-  outputs = [ "out" "python" ]
+  outputs = [ "out" "python2" ]
     ++ optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ optionals enableManpages [ python.pkgs.sphinx python.pkgs.recommonmark ];
+  nativeBuildInputs = [ cmake python2 ]
+    ++ optionals enableManpages [ python2.pkgs.sphinx python2.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
