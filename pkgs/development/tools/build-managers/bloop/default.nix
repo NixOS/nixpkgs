@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, coursier, python, makeWrapper }:
+{ stdenv, lib, fetchurl, coursier, python2, makeWrapper }:
 
 let
   baseName = "bloop";
@@ -66,7 +66,7 @@ stdenv.mkDerivation {
     cp ${client} $out/bloop
     chmod +x $out/bloop
     makeWrapper $out/bloop $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ python ]}
+      --prefix PATH : ${lib.makeBinPath [ python2 ]}
   '';
 
   meta = with stdenv.lib; {
