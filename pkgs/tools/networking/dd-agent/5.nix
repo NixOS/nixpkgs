@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, python
+{ stdenv, fetchFromGitHub, python2
 , unzip, makeWrapper }:
 let
-  python' = python.override {
+  python2' = python2.override {
     packageOverrides = self: super: {
       docker = self.buildPythonPackage rec {
         name = "docker-${version}";
@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     unzip
     makeWrapper
-  ] ++ (with python'.pkgs; [
+  ] ++ (with python2'.pkgs; [
     requests
     psycopg2
     psutil
@@ -66,7 +66,7 @@ in stdenv.mkDerivation rec {
     consul
     docker
   ]);
-  propagatedBuildInputs = with python'.pkgs; [ python tornado ];
+  propagatedBuildInputs = with python2'.pkgs; [ python2 tornado ];
 
   buildCommand = ''
     mkdir -p $out/bin
@@ -83,7 +83,7 @@ in stdenv.mkDerivation rec {
 
     cat > $out/bin/dd-jmxfetch <<EOF
     #!/usr/bin/env bash
-    exec ${python}/bin/python $out/agent/jmxfetch.py $@
+    exec ${python2}/bin/python $out/agent/jmxfetch.py $@
     EOF
     chmod a+x $out/bin/dd-jmxfetch
 
