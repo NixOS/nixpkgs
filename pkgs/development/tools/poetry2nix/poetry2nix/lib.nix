@@ -30,7 +30,25 @@ let
     in
       (builtins.foldl' combine initial tokens).state;
 
-  readTOML = path: builtins.fromTOML (builtins.readFile path);
+  fromTOML = toml: if builtins.hasAttr "fromTOML" builtins then builtins.fromTOML toml else
+    builtins.fromJSON (
+      builtins.readFile (
+        pkgs.runCommand "from-toml"
+          {
+            inherit toml;
+            allowSubstitutes = false;
+            preferLocalBuild = true;
+          }
+          ''
+            ${pkgs.remarshal}/bin/remarshal \
+              -if toml \
+              -i <(echo "$toml") \
+              -of json \
+              -o $out
+          ''
+      )
+    );
+  readTOML = path: fromTOML (builtins.readFile path);
 
   #
   # Returns the appropriate manylinux dependencies and string representation for the file specified

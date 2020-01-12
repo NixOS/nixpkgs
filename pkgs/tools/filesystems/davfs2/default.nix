@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, neon, zlib }:
+{ stdenv
+, fetchurl
+, neon
+, procps
+, substituteAll
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   name = "davfs2-1.5.6";
@@ -10,11 +16,21 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ neon zlib ];
 
-  patches = [ ./isdir.patch ./fix-sysconfdir.patch ];
+  patches = [
+    ./isdir.patch
+    ./fix-sysconfdir.patch
+    (substituteAll {
+      src = ./0001-umount_davfs-substitute-ps-command.patch;
+      ps = "${procps}/bin/ps";
+    })
+  ];
 
   configureFlags = [ "--sysconfdir=/etc" ];
 
-  makeFlags = ["sbindir=$(out)/sbin" "ssbindir=$(out)/sbin"];
+  makeFlags = [
+    "sbindir=$(out)/sbin"
+    "ssbindir=$(out)/sbin"
+  ];
 
   meta = {
     homepage = https://savannah.nongnu.org/projects/davfs2;

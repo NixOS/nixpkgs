@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxl";
-  version = "3.8.7";
+  version = "3.8.8";
 
   src = fetchurl {
     url = "http://www.libxl.com/download/${pname}-lin-${version}.tar.gz";
-    sha256 = "0mfi2mlsgqjw9ki3c5bsb6nr2aqym7s1priw70f69r12azzxfqw3";
+    sha256 = "08jarfcl8l5mrmkx6bcifi3ghkaja9isz77zgggl84yl66js5pc3";
   };
 
   dontConfigure = true;
