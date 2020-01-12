@@ -1,5 +1,5 @@
 { config, stdenv, fetchFromGitHub
-, fetchpatch, pkgconfig, perl, python, which
+, fetchpatch, pkgconfig, perl, python2, which
 , libX11, libxcb, libGLU, libGL
 , qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake, makeWrapper
 , libchardet
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
                    ++ optional cddaSupport "--enable-cdda"
                    ;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig perl python which qttools qmake ];
+  nativeBuildInputs = [ makeWrapper pkgconfig perl python2 which qttools qmake ];
 
   meta = with stdenv.lib; {
     description = "Powerful and easy-to-use multimedia player";
