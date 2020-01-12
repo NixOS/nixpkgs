@@ -1,11 +1,11 @@
-{ lib, fetchFromGitHub, python }:
+{ lib, fetchFromGitHub, python2 }:
 
-python.pkgs.buildPythonApplication rec {
+python2.pkgs.buildPythonApplication rec {
   pname = "gixy";
   version = "0.1.20";
 
-  # package is only compatible with python 2.7 and 3.5+
-  disabled = with python.pkgs; !(pythonAtLeast "3.5" || isPy27);
+  # package is only compatible with python2 2.7 and 3.5+
+  disabled = with python2.pkgs; !(pythonAtLeast "3.5" || isPy27);
 
   # fetching from GitHub because the PyPi source is missing the tests
   src = fetchFromGitHub {
@@ -19,7 +19,7 @@ python.pkgs.buildPythonApplication rec {
     sed -ie '/argparse/d' setup.py
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = with python2.pkgs; [
     cached-property
     ConfigArgParse
     pyparsing
