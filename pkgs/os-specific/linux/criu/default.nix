@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, protobuf, protobufc, asciidoc, iptables
 , xmlto, docbook_xsl, libpaper, libnl, libcap, libnet, pkgconfig
-, which, python, makeWrapper, docbook_xml_dtd_45 }:
+, which, python2, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
   pname = "criu";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig docbook_xsl which makeWrapper docbook_xml_dtd_45 ];
-  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python iptables ];
+  buildInputs = [ protobuf protobufc asciidoc xmlto libpaper libnl libcap libnet python2 iptables ];
 
   postPatch = ''
     substituteInPlace ./Documentation/Makefile --replace "2>/dev/null" ""
