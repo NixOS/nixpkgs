@@ -1392,6 +1392,8 @@ in {
 
   stups-fullstop = callPackage ../development/python-modules/stups-fullstop { };
 
+  stups-pierone = callPackage ../development/python-modules/stups-pierone { };
+
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 
   stups-zign = callPackage ../development/python-modules/stups-zign { };
