@@ -2102,6 +2102,17 @@ let
     };
   };
 
+  nvim-gdb = buildVimPluginFrom2Nix {
+    pname = "nvim-gdb";
+    version = "2019-10-28";
+    src = fetchFromGitHub {
+      owner = "sakhnik";
+      repo = "nvim-gdb";
+      rev = "aa343ab3089cb520289a614a7b7c71f43134b34a";
+      sha256 = "0qn0mq59x8jdkjvv47g2fjxnagvpa7pb01vl4jjrdwq34639i1bg";
+    };
+  };
+
   nvim-hs-vim = buildVimPluginFrom2Nix {
     pname = "nvim-hs-vim";
     version = "2019-04-14";
