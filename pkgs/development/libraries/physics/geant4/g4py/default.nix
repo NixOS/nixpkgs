@@ -28,7 +28,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     # Fix for boost 1.67+
     substituteInPlace CMakeLists.txt \
-    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings ["."] [""] python.pythonVersion})"
+    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings ["."] [""] python2.pythonVersion})"
     for f in `find . -name CMakeLists.txt`; do
       substituteInPlace "$f" \
         --replace "boost_python" "\''${Boost_LIBRARIES}"
