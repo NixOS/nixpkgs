@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
-, python, libconfig, lit, gdb, unzip, darwin, bash
+, python2, libconfig, lit, gdb, unzip, darwin, bash
 , callPackage, makeWrapper, runCommand, targetPackages
 , bootstrapVersion ? false
 , version ? "1.17.0"
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja makeWrapper unzip ]
     ++ stdenv.lib.optionals (!bootstrapVersion) [
-      bootstrapLdc python lit
+      bootstrapLdc python2 lit
     ]
     ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin)
       # https://github.com/NixOS/nixpkgs/issues/57120
