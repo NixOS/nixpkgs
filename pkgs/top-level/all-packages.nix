@@ -1862,6 +1862,8 @@ in
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
+  jwt-cli = callPackage ../tools/security/jwt-cli { };
+
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
   kisslicer = callPackage ../tools/misc/kisslicer { };
@@ -6885,6 +6887,8 @@ in
   ttygif = callPackage ../tools/misc/ttygif { };
 
   ttylog = callPackage ../tools/misc/ttylog { };
+
+  tuir = callPackage ../applications/misc/tuir { };
 
   turses = callPackage ../applications/networking/instant-messengers/turses { };
 
@@ -20702,7 +20706,9 @@ in
     ffmpeg = ffmpeg_2;
   };
 
-  pcsx2 = pkgsi686Linux.callPackage ../misc/emulators/pcsx2 { };
+  pcsx2 = pkgsi686Linux.callPackage ../misc/emulators/pcsx2 {
+    wxGTK = pkgsi686Linux.wxGTK30;
+  };
 
   pekwm = callPackage ../applications/window-managers/pekwm { };
 
@@ -20932,7 +20938,7 @@ in
 
   qmetro = callPackage ../applications/misc/qmetro { };
 
-  qmidinet = callPackage ../applications/audio/qmidinet { };
+  qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
 
