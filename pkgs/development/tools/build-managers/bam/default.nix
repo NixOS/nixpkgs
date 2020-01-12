@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lua5_3, python }:
+{ stdenv, fetchFromGitHub, lua5_3, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "bam";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "13br735ig7lygvzyfd15fc2rdygrqm503j6xj5xkrl1r7w2wipq6";
   };
 
-  buildInputs = [ lua5_3 python ];
+  buildInputs = [ lua5_3 python2 ];
 
   buildPhase = ''${stdenv.shell} make_unix.sh'';
 
-  checkPhase = ''${python.interpreter} scripts/test.py'';
+  checkPhase = ''${python2.interpreter} scripts/test.py'';
 
   installPhase = ''
     mkdir -p "$out/share/bam"
