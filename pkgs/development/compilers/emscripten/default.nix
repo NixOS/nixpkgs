@@ -1,4 +1,4 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python, nodejs, closurecompiler
+{ emscriptenVersion, stdenv, fetchFromGitHub, emscriptenfastcomp, python2, nodejs, closurecompiler
 , jre, binaryen, enableWasm ? true ,  cmake
 }:
 
@@ -18,13 +18,13 @@ stdenv.mkDerivation {
     inherit rev;
   };
 
-  buildInputs = [ nodejs cmake python ];
+  buildInputs = [ nodejs cmake python2 ];
 
   buildCommand = ''
     mkdir -p $out/${appdir}
     cp -r $src/* $out/${appdir}
     chmod -R +w $out/${appdir}
-    grep -rl '^#!/usr.*python' $out/${appdir} | xargs sed -i -s 's@^#!/usr.*python.*@#!${python}/bin/python@'
+    grep -rl '^#!/usr.*python' $out/${appdir} | xargs sed -i -s 's@^#!/usr.*python.*@#!${python2}/bin/python@'
     sed -i -e "s,EM_CONFIG = '~/.emscripten',EM_CONFIG = '$out/${appdir}/config'," $out/${appdir}/tools/shared.py
     sed -i -e 's,^.*did not see a source tree above the LLVM.*$,      return True,' $out/${appdir}/tools/shared.py
     sed -i -e 's,def check_sanity(force=False):,def check_sanity(force=False):\n  return,' $out/${appdir}/tools/shared.py
@@ -35,7 +35,7 @@ stdenv.mkDerivation {
 
     echo "EMSCRIPTEN_ROOT = '$out/${appdir}'" > $out/${appdir}/config
     echo "LLVM_ROOT = '${emscriptenfastcomp}/bin'" >> $out/${appdir}/config
-    echo "PYTHON = '${python}/bin/python'" >> $out/${appdir}/config
+    echo "PYTHON = '${python2}/bin/python'" >> $out/${appdir}/config
     echo "NODE_JS = '${nodejs}/bin/node'" >> $out/${appdir}/config
     echo "JS_ENGINES = [NODE_JS]" >> $out/${appdir}/config
     echo "COMPILER_ENGINE = NODE_JS" >> $out/${appdir}/config
@@ -55,8 +55,8 @@ stdenv.mkDerivation {
     cp $out/${appdir}/config $HOME/.emscripten
     export PATH=$PATH:$out/bin
 
-    #export EMCC_DEBUG=2  
-    ${python}/bin/python $src/tests/runner.py test_hello_world
+    #export EMCC_DEBUG=2
+    ${python2}/bin/python $src/tests/runner.py test_hello_world
     echo "--------------- /running test -----------------"
   '';
 
