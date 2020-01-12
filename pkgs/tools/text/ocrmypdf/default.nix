@@ -70,8 +70,8 @@ in buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace src/ocrmypdf/leptonica.py \
-      --replace "lept = ffi.dlopen(_libpath)" \
-      'lept = ffi.dlopen("${stdenv.lib.makeLibraryPath [leptonica]}/liblept${stdenv.hostPlatform.extensions.sharedLibrary}")'
+      --replace '_libpath = find_library(libname)' \
+                '_libpath = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   # The tests take potentially 20+ minutes, depending on machine
