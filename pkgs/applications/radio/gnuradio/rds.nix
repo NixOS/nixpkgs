@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, makeWrapper, pythonSupport ? true, python, swig
+, makeWrapper, pythonSupport ? true, python2, swig
 }:
 
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python2 != null && swig != null;
 
 stdenv.mkDerivation rec {
   pname = "gr-rds";
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     cmake boost gnuradio makeWrapper
-  ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
+  ] ++ stdenv.lib.optionals pythonSupport [ python2 swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do
