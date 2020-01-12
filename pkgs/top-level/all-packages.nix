@@ -5730,6 +5730,8 @@ in
 
   parallel = callPackage ../tools/misc/parallel { };
 
+  parallel-full = callPackage ../tools/misc/parallel/wrapper.nix { };
+
   parastoo-fonts = callPackage ../data/fonts/parastoo-fonts { };
 
   parcellite = callPackage ../tools/misc/parcellite { };
