@@ -8,18 +8,17 @@
 
 stdenv.mkDerivation rec {
   pname = "bash-my-aws";
-  version = "20191231";
+  version = "20200111";
 
   src = fetchgit {
     url = "https://github.com/bash-my-aws/bash-my-aws";
-    rev = "ef93bd1bf8692dc2fe9f475e7c8a309eb25ef7a6";
-    sha256 = "c57e8327a3dfa24f0c40b8c94eab55fa232f87044e7d59f7bc4b40e5012e83ed";
+    rev = "5a97ce2c22affca1299022a5afa109d7b62242ba";
+    sha256 = "459bda8b244af059d96c7c8b916cf956b01cb2732d1c2888a3ae06a4d660bea6";
   };
 
   dontConfigure = true;
   dontBuild = true;
 
-  # Why does it propagate packages that are used for testing?
   propagatedBuildInputs = [
     awscli
     jq
@@ -27,7 +26,6 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ installShellFiles ];
 
-  #Checks are failing due to missing TTY, which won't exist.
   checkPhase = ''
     pushd test
     ./shared-spec.sh
@@ -40,26 +38,27 @@ stdenv.mkDerivation rec {
   '';
   postFixup = ''
     pushd $out
-    # substituteInPlace scripts/build \
-    #     --replace '~/.bash-my-aws' $out
-    # substituteInPlace scripts/build-completions \
-    #     --replace "{HOME}" $out \
-    #     --replace '~/.bash-my-aws' $out
-    # ./scripts/build
-    # ./scripts/build-completions
-    # substituteInPlace bash_completion.sh \
-    #     --replace "{HOME}" $out \
-    #     --replace .bash-my-aws ""
-    # substituteInPlace bin/bma \
-    #     --replace '~/.bash-my-aws' $out
-    # installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
-    # chmod +x $out/lib/*
-    # patchShebangs --host $out/lib
-    # cat > $out/bin/bma-init <<EOF
-    # echo source $out/aliases
-    # echo source $out/bash
-    # EOF
-    # chmod +x $out/bin/bma-init
+    substituteInPlace scripts/build \
+        --replace '~/.bash-my-aws' $out
+    substituteInPlace scripts/build-completions \
+        --replace "{HOME}" $out \
+        --replace '~/.bash-my-aws' $out
+    ./scripts/build
+    ./scripts/build-completions
+    substituteInPlace bash_completion.sh \
+        --replace "{HOME}" $out \
+        --replace .bash-my-aws ""
+    substituteInPlace bin/bma \
+        --replace '~/.bash-my-aws' $out
+    installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
+    chmod +x $out/lib/*
+    patchShebangs --host $out/lib
+    installShellCompletion --bash --name bash-my-aws.bash bash_completion.sh
+    cat > $out/bin/bma-init <<EOF
+    echo source $out/aliases
+    echo source $out/bash_completion.sh
+    EOF
+    chmod +x $out/bin/bma-init
     popd
   '';
 
