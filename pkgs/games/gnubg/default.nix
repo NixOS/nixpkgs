@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, glib, python, gtk2, readline }:
+{ stdenv, fetchurl, pkgconfig, glib, python2, gtk2, readline }:
 
 let version = "1.06.002"; in
 stdenv.mkDerivation {
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python glib gtk2 readline ];
+  buildInputs = [ python2 glib gtk2 readline ];
 
   configureFlags = [ "--with-gtk" "--with--board3d" ];
 
