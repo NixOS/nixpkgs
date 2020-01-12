@@ -39,8 +39,9 @@ stdenv.mkDerivation rec {
     "--disable-offline-update"
     "--localstatedir=/var"
     "--sysconfdir=/etc"
-    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-dbus-sys=${placeholder "out"}/etc/dbus-1/system.d"
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
   ]
   ++ lib.optional enableNixBackend "--enable-nix"
   ++ lib.optional (!enableBashCompletion) "--disable-bash-completion"
@@ -49,7 +50,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installFlags = [
-    "sysconfdir=\${out}/etc"
+    "sysconfdir=${placeholder "out"}/etc"
     "localstatedir=\${TMPDIR}"
   ];
 
