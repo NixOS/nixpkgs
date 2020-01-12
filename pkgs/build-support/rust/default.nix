@@ -14,13 +14,13 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
-, # Set to true to verify if the cargo dependencies are up to date.
-  # This will change the value of cargoSha256.
-  verifyCargoDeps ? false
+  # Please set to true on any Rust package updates. Once all packages set this
+  # to true, we will delete and make it the default. For details, see the Rust
+  # section on the manual.
+, verifyCargoDeps ? false
 , buildType ? "release"
 , meta ? {}
 , target ? null
-
 , cargoVendorDir ? null
 , ... } @ args:
 
@@ -40,8 +40,7 @@ let
   setupVendorDir = if cargoVendorDir == null
     then ''
       unpackFile "$cargoDeps"
-      cargoDepsCopy=$(stripHash $(basename $cargoDeps))
-      chmod -R +w "$cargoDepsCopy"
+      cargoDepsCopy=$(stripHash $cargoDeps)
     ''
     else ''
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
@@ -95,14 +94,13 @@ stdenv.mkDerivation (args // {
     ''}
     EOF
 
-    unset cargoDepsCopy
     export RUST_LOG=${logLevel}
   '' + stdenv.lib.optionalString verifyCargoDeps ''
-    if ! diff source/Cargo.lock $cargoDeps/Cargo.lock ; then
+    if ! diff source/Cargo.lock $cargoDepsCopy/Cargo.lock ; then
       echo
       echo "ERROR: cargoSha256 is out of date"
       echo
-      echo "Cargo.lock is not the same in $cargoDeps"
+      echo "Cargo.lock is not the same in $cargoDepsCopy"
       echo
       echo "To fix the issue:"
       echo '1. Use "1111111111111111111111111111111111111111111111111111" as the cargoSha256 value'
@@ -112,6 +110,8 @@ stdenv.mkDerivation (args // {
 
       exit 1
     fi
+  '' + ''
+    unset cargoDepsCopy
   '' + (args.postUnpack or "");
 
   configurePhase = args.configurePhase or ''

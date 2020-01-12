@@ -29,12 +29,12 @@ in
 , ...
 } @ args:
 stdenv.mkDerivation ({
-  name = "${name}-vendor";
+  name = "${name}-vendor.tar.gz";
   nativeBuildInputs = [ cacert git cargo-vendor-normalise cargo ];
 
-  phases = "unpackPhase patchPhase installPhase";
+  phases = "unpackPhase patchPhase buildPhase installPhase";
 
-  installPhase = ''
+  buildPhase = ''
     if [[ ! -f Cargo.lock ]]; then
         echo
         echo "ERROR: The Cargo.lock file doesn't exist"
@@ -54,24 +54,27 @@ stdenv.mkDerivation ({
 
     ${cargoUpdateHook}
 
-    mkdir -p $out
-    cargo vendor $out | cargo-vendor-normalise > $CARGO_CONFIG
+    mkdir -p $name
+
+    cargo vendor $name | cargo-vendor-normalise > $CARGO_CONFIG
     # fetchcargo used to never keep the config output by cargo vendor
     # and instead hardcode the config in ./fetchcargo-default-config.toml.
     # This broke on packages needing git dependencies, so now we keep the config.
     # But not to break old cargoSha256, if the previous behavior was enough,
     # we don't store the config.
     if ! cmp $CARGO_CONFIG ${./fetchcargo-default-config.toml} > /dev/null; then
-      install -D $CARGO_CONFIG $out/.cargo/config;
+      install -D $CARGO_CONFIG $name/.cargo/config;
     fi;
 
-  '' + stdenv.lib.optionalString copyLockfile ''
-    # add the Cargo.lock to allow hash invalidation
-    cp Cargo.lock.orig $out/Cargo.lock
+    # Add the Cargo.lock to allow hash invalidation
+    cp Cargo.lock.orig $name/Cargo.lock
+  '';
+
+  installPhase = ''
+   tar -czvf $out $name
   '';
 
   outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
   outputHash = sha256;
 
   impureEnvVars = stdenv.lib.fetchers.proxyImpureEnvVars;
