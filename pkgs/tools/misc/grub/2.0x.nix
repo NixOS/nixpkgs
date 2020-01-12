@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, flex, bison, python, autoconf, automake, gnulib, libtool
+{ stdenv, fetchgit, flex, bison, python2, autoconf, automake, gnulib, libtool
 , gettext, ncurses, libusb, freetype, qemu, lvm2, unifont, pkgconfig
 , fuse # only needed for grub-mount
 , zfs ? null
@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
     ./fix-bash-completion.patch
   ];
 
-  nativeBuildInputs = [ bison flex python pkgconfig autoconf automake ];
+  nativeBuildInputs = [ bison flex python2 pkgconfig autoconf automake ];
   buildInputs = [ ncurses libusb freetype gettext lvm2 fuse libtool ]
     ++ optional doCheck qemu
     ++ optional zfsSupport zfs;
