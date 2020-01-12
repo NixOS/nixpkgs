@@ -1,4 +1,4 @@
-{ stdenv, rustPlatform, fetchFromGitHub, coreutils }:
+{ stdenv, rustPlatform, fetchFromGitHub, coreutils, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "broot";
@@ -13,8 +13,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "09gnyj97akychin1axp9kcww3c04xx7x1qnplhs2yxfki62r4y2b";
 
+  nativeBuildInputs = [ installShellFiles ];
+
   postPatch = ''
     substituteInPlace src/verb_store.rs --replace '"/bin/' '"${coreutils}/bin/'
+  '';
+
+  postInstall = ''
+    # install shell completion files
+    OUT_DIR=target/release/build/broot-*/out
+
+    installShellCompletion --bash $OUT_DIR/{br,broot}.bash
+    installShellCompletion --fish $OUT_DIR/{br,broot}.fish
+    installShellCompletion --zsh $OUT_DIR/{_br,_broot}
   '';
 
   meta = with stdenv.lib; {
