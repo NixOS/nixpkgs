@@ -367,18 +367,6 @@ rec {
                 { path = [ "services" "geoclue2" "appConfig" ];
                   name = "desktopID";
                 }
-                { path = [ "home-manager" "users" anyString "programs" "ssh" "matchBlocks" ];
-                  name = "host"; # https://github.com/rycee/home-manager/blob/e8dbc3561373b68d12decb3c0d7c1ba245f138f7/modules/programs/ssh.nix#L265
-                }
-                { path = [ "home-manager" "users" anyString "home" "file" ];
-                  name = "target"; # https://github.com/rycee/home-manager/blob/0e9b7aab3c6c27bf020402e0e2ef20b65c040552/modules/files.nix#L33
-                }
-                { path = [ "home-manager" "users" anyString "xdg" "configFile" ];
-                  name = "target"; # https://github.com/rycee/home-manager/blob/54de0e1d79a1370e57a8f23bef89f99f9b92ab67/modules/misc/xdg.nix#L41
-                }
-                { path = [ "home-manager" "users" anyString "xdg" "dataFile" ];
-                  name = "target"; # https://github.com/rycee/home-manager/blob/54de0e1d79a1370e57a8f23bef89f99f9b92ab67/modules/misc/xdg.nix#L58
-                }
               ];
               matched = let
                 equals = a: b: b == anyString || a == b;
