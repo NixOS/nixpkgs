@@ -430,14 +430,16 @@ rec {
           else unify (if shorthandOnlyDefinesConfig then { config = value; } else value);
 
         allModules = defs: modules ++ imap1 (n: { value, file }:
-          # Annotate the value with the location of its definition for better error messages
-          coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+          if isAttrs value || isFunction value then
+            # Annotate the value with the location of its definition for better error messages
+            coerce (lib.modules.unifyModuleSyntax file "${toString file}-${toString n}") value
+          else value
         ) defs;
 
       in
       mkOptionType rec {
         name = "submodule";
-        check = x: isAttrs x || isFunction x;
+        check = x: isAttrs x || isFunction x || path.check x;
         merge = loc: defs:
           (evalModules {
             modules = allModules defs;
