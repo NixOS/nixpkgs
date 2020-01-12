@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python2 }:
 
 stdenv.mkDerivation rec {
   name = "geos-3.7.3";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   meta = with stdenv.lib; {
     description = "C++ port of the Java Topology Suite (JTS)";
