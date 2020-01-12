@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, makeWrapper, gawk, bash, getopt, procps
+{ stdenv, fetchurl, python2, makeWrapper, gawk, bash, getopt, procps
 , which, jre, version, sha256, coreutils, ...
 }:
 
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       fi
     done
 
-    wrapProgram $out/bin/cqlsh --prefix PATH : ${python}/bin
+    wrapProgram $out/bin/cqlsh --prefix PATH : ${python2}/bin
     '';
 
   meta = with stdenv.lib; {
