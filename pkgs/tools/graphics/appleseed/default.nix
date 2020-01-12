@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, guile,
-eigen, libpng, python, libGLU, qt4, openexr, openimageio,
+eigen, libpng, python2, libGLU, qt4, openexr, openimageio,
 opencolorio, xercesc, ilmbase, osl, seexpr, makeWrapper
 }:
 
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
     sha256 = "1sq9s0rzjksdn8ayp1g17gdqhp7fqks8v1ddd3i5rsl96b04fqx5";
   };
   buildInputs = [
-    cmake pkgconfig boost_static guile eigen libpng python
+    cmake pkgconfig boost_static guile eigen libpng python2
     libGLU qt4 openexr openimageio opencolorio xercesc
     osl seexpr makeWrapper
   ];
@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
   # Work around a bug in the CMake build:
   postInstall = ''
     chmod a+x $out/bin/*
-    wrapProgram $out/bin/appleseed.studio --set PYTHONHOME ${python}
+    wrapProgram $out/bin/appleseed.studio --set PYTHONHOME ${python2}
   '';
 }
 
