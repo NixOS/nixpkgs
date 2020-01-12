@@ -3,7 +3,7 @@
 , pkgconfig
 , gstreamer
 , gst-plugins-base
-, python
+, python2
 , gobject-introspection
 , json-glib
 }:
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python2
     json-glib
   ];
 
