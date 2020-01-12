@@ -1,6 +1,6 @@
-{ stdenv, python, fetchpatch }:
+{ stdenv, python2, fetchpatch }:
 
-with python.pkgs;
+with python2.pkgs;
 
 buildPythonApplication rec {
   pname = "haxor-news";
@@ -31,7 +31,7 @@ buildPythonApplication rec {
   checkInputs = [ mock ];
 
   checkPhase = ''
-    ${python.interpreter} -m unittest discover -s tests -v
+    ${python2.interpreter} -m unittest discover -s tests -v
   '';
 
   meta = with stdenv.lib; {
