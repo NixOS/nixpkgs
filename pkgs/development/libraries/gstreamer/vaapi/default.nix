@@ -16,7 +16,7 @@
 , gst-plugins-bad
 , nasm
 , libvpx
-, python
+, python2
 }:
 
 stdenv.mkDerivation rec {
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     libGLU
     nasm
     libvpx
-    python
+    python2
   ];
 
   mesonFlags = [
