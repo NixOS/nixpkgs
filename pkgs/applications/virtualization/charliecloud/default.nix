@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python }:
+{ stdenv, fetchFromGitHub, python2 }:
 
 stdenv.mkDerivation rec {
 
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "177rcf1klcxsp6x9cw75cmz3y2izgd1hvi1rb9vc6iz9qx1nmk3v";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   preConfigure = ''
     substituteInPlace Makefile --replace '/bin/bash' '${stdenv.shell}'
