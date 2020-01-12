@@ -7,7 +7,7 @@
 , flex
 , llvmPackages_8
 , opencl-clang
-, python
+, python2
 , spirv-llvm-translator
 
 , buildWithPatches ? true
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     sha256 = "1d3vxq4v8jdjgl5jdm9qpxzgaw98r84dzs9lk9ph02khfkajqhjm";
   };
 
-  nativeBuildInputs = [ clang cmake bison flex llvm python ];
+  nativeBuildInputs = [ clang cmake bison flex llvm python2 ];
 
   buildInputs = [ clang opencl-clang spirv-llvm-translator ];
 
