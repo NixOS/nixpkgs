@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, pythonSupport ? true, python, swig, limesuite
+, pythonSupport ? true, python2, swig, limesuite
 } :
 
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python2 != null && swig != null;
 
 let
   version = "2.0.0";
@@ -25,7 +25,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     boost gnuradio limesuite
-  ] ++ stdenv.lib.optionals pythonSupport [ python ];
+  ] ++ stdenv.lib.optionals pythonSupport [ python2 ];
 
 
   enableParallelBuilding = true;
