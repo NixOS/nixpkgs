@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, python
+{ stdenv, fetchFromGitHub, cmake, gmp, mpfr, python2
 , gperftools, ninja, makeWrapper }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
     sha256 = "1xv3j487zhh1zf2b4v19xzw63s2sgjhg8d62a0kxxyknfmdf3khl";
   };
 
-  buildInputs = [ gmp mpfr cmake python gperftools ninja makeWrapper ];
+  buildInputs = [ gmp mpfr cmake python2 gperftools ninja makeWrapper ];
   enableParallelBuilding = true;
 
   preConfigure = ''
