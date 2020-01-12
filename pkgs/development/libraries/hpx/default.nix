@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkgconfig, python }:
+{ stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkgconfig, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "hpx";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ boost hwloc gperftools ];
-  nativeBuildInputs = [ cmake pkgconfig python ];
+  nativeBuildInputs = [ cmake pkgconfig python2 ];
 
   enableParallelBuilding = true;
 
