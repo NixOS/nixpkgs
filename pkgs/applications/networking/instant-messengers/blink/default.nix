@@ -1,7 +1,7 @@
-{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+{ stdenv, fetchdarcs, python2Packages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
 
-mkDerivationWith pythonPackages.buildPythonApplication rec {
+mkDerivationWith python2Packages.buildPythonApplication rec {
 
   pname = "blink";
   version = "3.2.0";
@@ -12,21 +12,21 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
     sha256 = "19rcwr5scw48qnj79q1pysw95fz9h98nyc3161qy2kph5g7dwkc3";
   };
 
-  patches = [ ./pythonpath.patch ];
+  patches = [ ./python2path.patch ];
   postPatch = ''
     sed -i 's|@out@|'"''${out}"'|g' blink/resources.py
   '';
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     pyqt5_with_qtwebkit
     cjson
     sipsimple
     twisted
-    google_api_python_client
+    google_api_python2_client
   ];
 
   buildInputs = [
-    pythonPackages.cython
+    python2Packages.cython
     zlib
     libvncserver
     libvpx
