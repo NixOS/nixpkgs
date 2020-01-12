@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, buildPythonPackage, pykickstart, pyparted, pyblock
-, pyudev, six, libselinux, cryptsetup, multipath-tools, lsof, utillinux
+, pyudev, six, libselinux, cryptsetup, multipath-tools, lsof, utillinux, libselinux
 }:
 
 let
@@ -31,7 +31,7 @@ in buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pykickstart pyparted pyblock pyudev libselinux cryptsetupWithPython
-    six
+    six libselinux
   ];
 
   # Tests are in nixos/tests/blivet.nix.
