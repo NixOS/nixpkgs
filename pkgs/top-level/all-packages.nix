@@ -9973,7 +9973,7 @@ in
 
   dolt = callPackage ../servers/sql/dolt { };
 
-  dot2tex = pythonPackages.dot2tex;
+  dot2tex = python2Packages.dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
