@@ -3091,7 +3091,7 @@ in
   epsxe = callPackage ../misc/emulators/epsxe { };
 
   escrotum = callPackage ../tools/graphics/escrotum {
-    inherit (pythonPackages) buildPythonApplication pygtk numpy;
+    inherit (python2Packages) buildPythonApplication pygtk numpy;
   };
 
   etcher = callPackage ../tools/misc/etcher { };
