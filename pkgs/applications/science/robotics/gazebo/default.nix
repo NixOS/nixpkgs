@@ -2,7 +2,7 @@
   , boost-build, boost_process
   , xorg_sys_opengl, tbb, ogre, tinyxml-2
   , libtar, glxinfo,  libusb, libxslt, ignition
-  , pythonPackages, utillinux
+  , python2Packages, utillinux
 
   # these deps are hidden; cmake doesn't catch them
   , gazeboSimulator, sdformat ? gazeboSimulator.sdformat, curl, tinyxml, qt4
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
     libxslt
     ignition.math2
     sdformat
-    pythonPackages.pyopengl
+    python2Packages.pyopengl
 
     # TODO: add these hidden deps to cmake configuration & submit upstream
     curl
