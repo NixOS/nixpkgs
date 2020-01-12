@@ -258,7 +258,8 @@ in
                 apath = "/var/lib/${lpath}";
                 spath = "/var/lib/acme/.lego";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                globalOpts = [ "-d" data.domain "--email" data.email "--path" "." ]
+                email = if data.email == null then cfg.email else data.email;
+                globalOpts = [ "-d" data.domain "--email" email "--path" "." ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
                           ++ optionals (data.dnsProvider != null && !cfg.dnsPropagationCheck) [ "--dns.disable-cp" ]
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
