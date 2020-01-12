@@ -1,4 +1,4 @@
-{ stdenv, cmake, python, fetchFromGitHub, emscriptenRev ? null }:
+{ stdenv, cmake, python2, fetchFromGitHub, emscriptenRev ? null }:
 
 let
   defaultVersion = "89";
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     inherit rev;
   };
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python2 ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/WebAssembly/binaryen;
