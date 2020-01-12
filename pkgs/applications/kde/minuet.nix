@@ -1,5 +1,5 @@
 { mkDerivation
-, lib, extra-cmake-modules, gettext, python
+, lib, extra-cmake-modules, gettext, python2
 , drumstick, fluidsynth
 , kcoreaddons, kcrash, kdoctools
 , qtquickcontrols2, qtsvg, qttools, qtdeclarative
@@ -12,7 +12,7 @@ mkDerivation {
     maintainers = with maintainers; [ peterhoeg HaoZeke ];
   };
 
-  nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python qtdeclarative ];
+  nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python2 qtdeclarative ];
 
   propagatedBuildInputs = [
     drumstick fluidsynth
