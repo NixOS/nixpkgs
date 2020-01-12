@@ -1,5 +1,5 @@
 { lib, stdenv, callPackage, fetchurl
-, python
+, python2
 , jdk, cmake, libxml2, zlib, python3, ncurses5
 }:
 
@@ -179,7 +179,7 @@ let
         platforms = platforms.linux;
       };
     }).override {
-      propagatedUserEnvPkgs = [ python ];
+      propagatedUserEnvPkgs = [ python2 ];
     };
 
   buildRider = { name, version, src, license, description, wmClass, ... }:
