@@ -19,5 +19,6 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ magnetophon ];
     license = with licenses; [ mit ];
     platforms = platforms.all;
+    broken = true;
   };
 }
