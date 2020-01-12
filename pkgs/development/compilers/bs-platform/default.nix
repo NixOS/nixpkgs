@@ -4,7 +4,7 @@ let
     description = "A JavaScript backend for OCaml focused on smooth integration and clean generated code.";
     homepage = https://bucklescript.github.io;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ turbomack gamb ];
+    maintainers = with maintainers; [ turbomack gamb anmonteiro ];
     platforms = platforms.all;
   };
 in
