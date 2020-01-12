@@ -1,4 +1,4 @@
-{ stdenv, runtimeShell, lib, fetchurl, python, pythonPackages, unzip }:
+{ stdenv, runtimeShell, lib, fetchurl, python2, python2Packages, unzip }:
 
 # This package uses a precompiled "binary" distribution of CuraByDagoma,
 # distributed by the editor.
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
   unpackCmd = "unzip $curSrc && tar zxf CuraByDagoma_amd64.tar.gz";
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ python pythonPackages.pyopengl pythonPackages.wxPython pythonPackages.pyserial pythonPackages.numpy ];
+  buildInputs = [ python2 python2Packages.pyopengl python2Packages.wxPython python2Packages.pyserial python2Packages.numpy ];
 
   # Compile all pyc files because the included pyc files may be older than the
   # py files. However, Python doesn't realize that because the packages
@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     cat > $out/bin/curabydago <<EOF
     #!${runtimeShell}
     export PYTHONPATH=$PYTHONPATH
-    ${python.out}/bin/python $out/curabydago/cura.py
+    ${python2.out}/bin/python $out/curabydago/cura.py
     EOF
     chmod a+x $out/bin/curabydago
 
