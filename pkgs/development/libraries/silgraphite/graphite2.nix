@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, freetype, cmake, python }:
+{ stdenv, fetchurl, pkgconfig, freetype, cmake, python2 }:
 
 stdenv.mkDerivation rec {
   version = "1.3.13";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   patches = stdenv.lib.optionals stdenv.isDarwin [ ./macosx.patch ];
 
-  checkInputs = [ python ];
+  checkInputs = [ python2 ];
   doCheck = false; # fails, probably missing something
 
   meta = with stdenv.lib; {
