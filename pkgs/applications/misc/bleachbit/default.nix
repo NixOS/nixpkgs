@@ -1,5 +1,5 @@
 { stdenv
-, pythonPackages
+, python2Packages
 , fetchurl
 , gettext
 , gobject-introspection
@@ -9,7 +9,7 @@
 , libnotify
 }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "bleachbit";
   version = "3.0";
 
@@ -32,7 +32,7 @@ pythonPackages.buildPythonApplication rec {
     libnotify
   ];
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     chardet
     pygobject3
     requests
