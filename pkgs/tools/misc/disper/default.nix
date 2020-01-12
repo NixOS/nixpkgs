@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, xorg, makeWrapper }:
+{ stdenv, fetchFromGitHub, python2, xorg, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "disper";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   preConfigure = ''
     export makeFlags="PREFIX=$out"
