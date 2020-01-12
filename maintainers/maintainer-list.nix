@@ -505,6 +505,12 @@
     githubId = 750786;
     name = "Justin Wood";
   };
+  anmonteiro = {
+    email = "anmonteiro@gmail.com";
+    github = "anmonteiro";
+    githubId = 661909;
+    name = "Antonio Nuno Monteiro";
+  };
   anpryl = {
     email = "anpryl@gmail.com";
     github = "anpryl";
