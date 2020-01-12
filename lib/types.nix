@@ -340,18 +340,80 @@ rec {
             let
               padWidth = stringLength (toString (length def.value));
               unnamed = i: unnamedPrefix + fixedWidthNumber padWidth i;
+              anyString = placeholder "name";
+              nameAttrs = [
+                { path = [ "environment" "etc" ];
+                  name = "target";
+                }
+                { path = [ "containers" anyString "bindMounts" ];
+                  name = "mountPoint";
+                }
+                { path = [ "programs" "ssh" "knownHosts" ];
+                  # hostNames is actually a list so we would need to handle it only when singleton
+                  name = "hostNames";
+                }
+                { path = [ "fileSystems" ];
+                  name = "mountPoint";
+                }
+                { path = [ "boot" "specialFileSystems" ];
+                  name = "mountPoint";
+                }
+                { path = [ "services" "znapzend" "zetup" ];
+                  name = "dataset";
+                }
+                { path = [ "services" "znapzend" "zetup" anyString "destinations" ];
+                  name = "label";
+                }
+                { path = [ "services" "geoclue2" "appConfig" ];
+                  name = "desktopID";
+                }
+                { path = [ "home-manager" "users" anyString "programs" "ssh" "matchBlocks" ];
+                  name = "host"; # https://github.com/rycee/home-manager/blob/e8dbc3561373b68d12decb3c0d7c1ba245f138f7/modules/programs/ssh.nix#L265
+                }
+                { path = [ "home-manager" "users" anyString "home" "file" ];
+                  name = "target"; # https://github.com/rycee/home-manager/blob/0e9b7aab3c6c27bf020402e0e2ef20b65c040552/modules/files.nix#L33
+                }
+                { path = [ "home-manager" "users" anyString "xdg" "configFile" ];
+                  name = "target"; # https://github.com/rycee/home-manager/blob/54de0e1d79a1370e57a8f23bef89f99f9b92ab67/modules/misc/xdg.nix#L41
+                }
+                { path = [ "home-manager" "users" anyString "xdg" "dataFile" ];
+                  name = "target"; # https://github.com/rycee/home-manager/blob/54de0e1d79a1370e57a8f23bef89f99f9b92ab67/modules/misc/xdg.nix#L58
+                }
+              ];
+              matched = let
+                equals = a: b: b == anyString || a == b;
+                fallback = { name = "name"; };
+              in findFirst ({ path, ... }: all (v: v == true) (zipListsWith equals loc path)) fallback nameAttrs;
+              nameAttr = matched.name;
+              nameValueOld = value:
+                if isList value then
+                  if length value > 0 then
+                    "[ " + concatMapStringsSep " " escapeNixString value + " ]"
+                  else
+                    "[ ]"
+                else
+                  escapeNixString value;
+              nameValueNew = value: unnamed:
+                if isList value then
+                  if length value > 0 then
+                    head value
+                  else
+                    unnamed
+                else
+                  value;
               res =
                 { inherit (def) file;
                   value = listToAttrs (
                     imap1 (elemIdx: elem:
-                      { name  = elem.name or (unnamed elemIdx);
+                      { name  = nameValueNew (elem.${nameAttr} or (unnamed elemIdx)) (unnamed elemIdx);
                         value = elem;
                       }) def.value);
                 };
               option = concatStringsSep "." loc;
               sample = take 3 def.value;
-              list = concatMapStrings (x: ''{ name = "${x.name or "unnamed"}"; ...} '') sample;
-              set = concatMapStrings (x: ''${x.name or "unnamed"} = {...}; '') sample;
+              more = lib.optionalString (length def.value > 3) "... ";
+              list = concatMapStrings (x: ''{ ${nameAttr} = ${nameValueOld (x.${nameAttr} or "unnamed")}; ...} '') sample;
+              set = concatMapStrings (x: ''${nameValueNew (x.${nameAttr} or "unnamed") "unnamed"} = {...}; '') sample;
               msg = ''
                 In file ${def.file}
                 a list is being assigned to the option config.${option}.
@@ -359,10 +421,10 @@ rec {
                 See https://git.io/fj2zm for more information.
                 Do
                   ${option} =
-                    { ${set}...}
+                    { ${set}${more}}
                 instead of
                   ${option} =
-                    [ ${list}...]
+                    [ ${list}${more}]
               '';
             in
               lib.warn msg res
