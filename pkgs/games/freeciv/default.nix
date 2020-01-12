@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python
+{ stdenv, fetchFromGitHub, autoreconfHook, lua5_3, pkgconfig, python2
 , zlib, bzip2, curl, lzma, gettext, libiconv
 , sdlClient ? true, SDL, SDL_mixer, SDL_image, SDL_ttf, SDL_gfx, freetype, fluidsynth
 , gtkClient ? false, gtk3
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     for f in {common,utility}/*.py; do
       substituteInPlace $f \
-        --replace '/usr/bin/env python' ${python.interpreter}
+        --replace '/usr/bin/env python' ${python2.interpreter}
     done
   '';
 
