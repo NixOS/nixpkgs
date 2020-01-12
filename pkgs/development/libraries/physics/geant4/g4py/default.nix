@@ -4,14 +4,14 @@
 , geant4
 
 # Python (obviously) and boost::python for wrapping.
-, python
+, python2
 , boost
 }:
 
 let
   # g4py does not support MT and will fail to build against MT geant
   geant4_nomt = geant4.override { enableMultiThreading = false; };
-  boost_python = boost.override { enablePython = true; inherit python; };
+  boost_python = boost.override { enablePython = true; inherit python2; };
 in
 
 stdenv.mkDerivation {
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   sourceRoot = "geant4.10.05.p01/environments/g4py";
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ geant4_nomt xercesc boost_python python ];
+  buildInputs = [ geant4_nomt xercesc boost_python python2 ];
 
   GEANT4_INSTALL = geant4_nomt;
 
