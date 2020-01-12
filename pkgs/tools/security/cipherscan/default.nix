@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, openssl, makeWrapper, python, coreutils }:
+{ stdenv, lib, fetchFromGitHub, openssl, makeWrapper, python2, coreutils }:
 
 stdenv.mkDerivation rec {
   pname = "cipherscan";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   buildPhase = ''
     substituteInPlace cipherscan --replace '$0' 'cipherscan'
