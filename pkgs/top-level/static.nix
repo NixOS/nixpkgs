@@ -163,12 +163,7 @@ in {
   nix = super.nix.override { withAWS = false; };
   openssl = (super.openssl_1_1.override { static = true; }).overrideAttrs (o: {
     # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
-    # Instead, there's a specific `no-shared` configure flag.
-    # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
-    # for a comprehensive list.
-    configureFlags = (removeUnknownConfigureFlags o.configureFlags) ++ [
-      "no-shared"
-    ];
+    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
   });
   arrow-cpp = super.arrow-cpp.override {
     enableShared = false;
