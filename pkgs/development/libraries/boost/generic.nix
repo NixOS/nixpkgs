@@ -1,4 +1,4 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv, icu, expat, zlib, bzip2, python2, fixDarwinDylibNames, libiconv
 , which
 , buildPackages
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
@@ -89,7 +89,7 @@ let
   ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
-    ++ optional (!enablePython) "--without-python"
+    ++ optional (!enablePython) "--without-python2"
     ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
@@ -146,15 +146,15 @@ stdenv.mkDerivation {
   buildInputs = [ expat zlib bzip2 libiconv ]
     ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
     ++ optional stdenv.isDarwin fixDarwinDylibNames
-    ++ optional enablePython python
-    ++ optional enableNumpy python.pkgs.numpy;
+    ++ optional enablePython python2
+    ++ optional enableNumpy python2.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
   configurePlatforms = [];
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
-  ] ++ optional enablePython "--with-python=${python.interpreter}"
+  ] ++ optional enablePython "--with-python2=${python2.interpreter}"
     ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
