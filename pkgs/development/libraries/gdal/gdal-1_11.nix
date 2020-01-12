@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql57, libgeotiff, python, pythonPackages, proj, geos, openssl
+, postgresql, mysql57, libgeotiff, python2, python2Packages, proj, geos, openssl
 , libpng }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0hphxzvy23v3vqxx1y22hhhg4cypihrb8555y12nb4mrhzlw7zfl";
   };
 
-  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng python pythonPackages.numpy proj openssl ];
+  buildInputs = [ unzip libjpeg libtiff libgeotiff libpng python2 python2Packages.numpy proj openssl ];
 
   patches = [
     # This ensures that the python package is installed into gdal's prefix,
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   #   TEST FAILED: /nix/store/xkrmb8xnvqxzjwsdmasqmsdh1a5y2y99-gdal-1.11.2/lib/python2.7/site-packages/ does NOT support .pth files
   #   error: bad install directory or PYTHONPATH
   preBuild = ''
-    pythonInstallDir=$out/lib/${python.libPrefix}/site-packages
+    pythonInstallDir=$out/lib/${python2.libPrefix}/site-packages
     mkdir -p $pythonInstallDir
     export PYTHONPATH=''${PYTHONPATH:+''${PYTHONPATH}:}$pythonInstallDir
   '';
