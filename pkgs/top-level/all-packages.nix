@@ -1862,7 +1862,9 @@ in
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
-  jwt-cli = callPackage ../tools/security/jwt-cli { };
+  jwt-cli = callPackage ../tools/security/jwt-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
