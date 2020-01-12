@@ -4,7 +4,7 @@
 , meson
 , ninja
 , pkgconfig
-, python
+, python2
 , gst-plugins-base
 , libxml2
 , flex
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     gettext
     gobject-introspection
-    python
+    python2
     flex
     perl
   ];
