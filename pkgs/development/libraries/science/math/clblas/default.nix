@@ -4,7 +4,7 @@
 , gfortran
 , blas
 , boost
-, python
+, python2
 , ocl-icd
 , opencl-headers
 , Accelerate, CoreGraphics, CoreVideo, OpenCL
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     cmake
     gfortran
     blas
-    python
+    python2
     boost
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [
     ocl-icd
