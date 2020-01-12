@@ -1,5 +1,5 @@
 { stdenv, autoreconfHook, which, writeText, makeWrapper, fetchFromGitHub, erlang
-, z3, python }:
+, z3, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "cuter";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ autoreconfHook makeWrapper which ];
-  buildInputs = [ python python.pkgs.setuptools z3.python erlang ];
+  buildInputs = [ python2 python2.pkgs.setuptools z3.python erlang ];
 
   buildFlags = [ "PWD=$(out)/lib/erlang/lib/cuter-${version}" "cuter_target" ];
   configurePhase = ''
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
     cp -r * "$out/lib/erlang/lib/cuter-${version}"
     cp cuter "$out/bin/cuter"
     wrapProgram $out/bin/cuter \
-      --prefix PATH : "${python}/bin" \
-      --suffix PYTHONPATH : "${z3}/${python.sitePackages}" \
+      --prefix PATH : "${python2}/bin" \
+      --suffix PYTHONPATH : "${z3}/${python2.sitePackages}" \
       --suffix ERL_LIBS : "$out/lib/erlang/lib"
   '';
 
