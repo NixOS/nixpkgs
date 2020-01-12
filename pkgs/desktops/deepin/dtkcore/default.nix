@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, python2Packages, deepin }:
 
 mkDerivation rec {
   pname = "dtkcore";
@@ -14,7 +14,7 @@ mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     qmake
-    pythonPackages.wrapPython
+    python2Packages.wrapPython
     deepin.setupHook
   ];
 
