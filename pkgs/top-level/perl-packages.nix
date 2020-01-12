@@ -21056,6 +21056,10 @@ let
       url = mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.52.tar.gz;
       sha256 = "1bc0hrz4jp6199hi29sdxmb9gyy45whla9hd19yqfasgq8k5ixzy";
     };
+    postInstall = ''
+      mkdir -p $out/bin
+      cp tools/xml_grep/xml_grep $out/bin
+    '';
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;  # requires lots of extra packages
   };
