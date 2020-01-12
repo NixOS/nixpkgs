@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper, rofi, mpc_cli, perl,
-utillinux, pythonPackages, libnotify }:
+utillinux, python2Packages, libnotify }:
 
 stdenv.mkDerivation {
   name = "clerk-2016-10-14";
@@ -11,7 +11,7 @@ stdenv.mkDerivation {
     sha256 = "0y045my65hr3hjyx13jrnyg6g3wb41phqb1m7azc4l6vx6r4124b";
   };
 
-  buildInputs = [ makeWrapper pythonPackages.mpd2 ];
+  buildInputs = [ makeWrapper python2Packages.mpd2 ];
 
   dontBuild = true;
 
