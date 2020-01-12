@@ -1,4 +1,4 @@
-{stdenv, fetchurl, which, autoreconfHook, pkgconfig, vala, python, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
+{stdenv, fetchurl, which, autoreconfHook, pkgconfig, vala, python2, libsearpc, libzdb, libuuid, libevent, sqlite, openssl}:
 
 stdenv.mkDerivation rec {
   version = "6.1.8";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0qlpnrz30ldrqnvbj59d54qdghxpxc5lsq6kf3dw2b93jnzkcmmm";
   };
 
-  nativeBuildInputs = [ pkgconfig which autoreconfHook vala python ];
+  nativeBuildInputs = [ pkgconfig which autoreconfHook vala python2 ];
   propagatedBuildInputs = [ libsearpc libzdb libuuid libevent sqlite openssl ];
 
   configureFlags = [ "--enable-server" ];
