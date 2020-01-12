@@ -1,6 +1,7 @@
 { stdenv, lib, fetchurl, makeWrapper, gnused, db, openssl, cyrus_sasl, libnsl
 , coreutils, findutils, gnugrep, gawk, icu, pcre, m4
 , buildPackages
+, nixosTests
 , withLDAP ? true, openldap
 , withPgSQL ? false, postgresql
 , withMySQL ? false, libmysqlclient
@@ -84,6 +85,8 @@ in stdenv.mkDerivation rec {
   installTargets = [ "non-interactive-package" ];
 
   installFlags = [ "install_root=installdir" ];
+
+  passthru.tests.dovecot = nixosTests.dovecot;
 
   postInstall = ''
     mkdir -p $out
