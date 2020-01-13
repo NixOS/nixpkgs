@@ -21994,8 +21994,6 @@ in
     pythonPackages = python3Packages;
   };
 
-  way-cooler = callPackage ../applications/window-managers/way-cooler {};
-
   waypipe = callPackage ../applications/networking/remote/waypipe { };
 
   wayv = callPackage ../tools/X11/wayv {};
