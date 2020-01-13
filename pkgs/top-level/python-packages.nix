@@ -761,6 +761,8 @@ in {
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
+  ignite = callPackage ../development/python-modules/ignite { };
+
   ihatemoney = callPackage ../development/python-modules/ihatemoney { };
 
   imutils = callPackage ../development/python-modules/imutils { };
