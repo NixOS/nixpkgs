@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
     (fetchpatch {
-      url = "https://phab-files.hepforge.org/file/data/j3ja4jirrdyrovrmnbuh/PHID-FILE-6vnor4aoz3s2ejruisrg/file";
-      sha256 = "0flxv08wcd0m5di75s2zvm015k2k70nqgpcgcbq7m604z26pd6ab";
+      url = "https://gitlab.com/hepcedar/rivet/commit/37bd34f52cce66946ebb311a8fe61bfc5f69cc00.diff";
+      sha256 = "0wj3ilpfq2gpc33bj3800l9vyvc9lrrlj1x9ss5qki0yiqd8i2aa";
     })
   ];
 
