@@ -378,6 +378,7 @@ ryanoasis/vim-devicons
 Rykka/riv.vim
 ryvnf/readline.vim
 sakhnik/nvim-gdb
+saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
 scrooloose/nerdcommenter
