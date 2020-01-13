@@ -1,7 +1,7 @@
 { config, fetchurl, stdenv, wrapGAppsHook, autoreconfHook
 , curl, dbus, dbus-glib, enchant, gtk2, gnutls, gnupg, gpgme
 , libarchive, libcanberra-gtk2, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info
+, openldap, perl, pkgconfig, poppler, python2, shared-mime-info
 , glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
 # Build options
 # TODO: A flag to build the manual.
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # autotools check tries to dlopen libpython as a requirement for the python plugin
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${python}/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${python2}/lib
   '';
 
   postPatch = ''
@@ -51,8 +51,8 @@ stdenv.mkDerivation rec {
         --subst-var-by MIMEROOTDIR ${shared-mime-info}/share
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python.pkgs.wrapPython ];
-  propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook python2.pkgs.wrapPython ];
+  propagatedBuildInputs = with python2.pkgs; [ python2 ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
     [ curl dbus dbus-glib gtk2 gnutls gsettings-desktop-schemas
@@ -90,7 +90,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  pythonPath = with python.pkgs; [ pygobject2 pygtk ];
+  pythonPath = with python2.pkgs; [ pygobject2 pygtk ];
 
   preFixup = ''
     buildPythonPath "$out $pythonPath"

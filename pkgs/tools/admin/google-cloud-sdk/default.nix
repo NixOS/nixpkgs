@@ -7,10 +7,10 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python2, openssl, with-gce ? false }:
 
 let
-  pythonEnv = python.withPackages (p: with p; [
+  pythonEnv = python2.withPackages (p: with p; [
     cffi
     cryptography
     pyopenssl
@@ -36,7 +36,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
-  buildInputs = [ python makeWrapper ];
+  buildInputs = [ python2 makeWrapper ];
 
   patches = [
     ./gcloud-path.patch
@@ -56,7 +56,7 @@ in stdenv.mkDerivation rec {
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
             --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
-            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python2.sitePackages}" \
             --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin

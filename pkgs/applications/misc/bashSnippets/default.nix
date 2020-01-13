@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
-, curl, python, bind, iproute, bc, gitMinimal }:
+, curl, python2, bind, iproute, bc, gitMinimal }:
 let
   version = "1.17.3";
   deps = lib.makeBinPath [
     curl
-    python
+    python2
     bind.dnsutils
     iproute
     bc

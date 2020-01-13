@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, iasl, python }:
+{ stdenv, fetchurl, iasl, python2 }:
 
 stdenv.mkDerivation rec {
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "1xwvp77djxbxbxg82hzj26pv6zka3556vkdcp09hnfwapcp46av2";
   };
 
-  buildInputs = [ iasl python ];
+  buildInputs = [ iasl python2 ];
 
   hardeningDisable = [ "pic" "stackprotector" "fortify" ];
 

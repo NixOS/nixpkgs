@@ -1,6 +1,6 @@
 { stdenv, fetchgit, cmake, pkgconfig, makeWrapper
 , boost
-, pythonSupport ? true, python, swig
+, pythonSupport ? true, python2, swig
 , airspy
 , gnuradio
 , hackrf
@@ -10,7 +10,7 @@
 , uhd
 }:
 
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python2 != null && swig != null;
 
 stdenv.mkDerivation rec {
   pname = "gr-osmosdr";
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cmake makeWrapper boost
     airspy gnuradio hackrf libbladeRF rtl-sdr uhd
   ] ++ stdenv.lib.optionals stdenv.isLinux [ soapysdr-with-plugins ]
-    ++ stdenv.lib.optionals pythonSupport [ python swig ];
+    ++ stdenv.lib.optionals pythonSupport [ python2 swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do

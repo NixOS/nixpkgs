@@ -1,6 +1,6 @@
 { fetchurl, fetchpatch, stdenv,
   cmake, netcdf, gfortran, libpng, openjpeg,
-  enablePython ? false, pythonPackages }:
+  enablePython ? false, python2Packages }:
 
 stdenv.mkDerivation rec{
   pname = "grib-api";
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec{
                   libpng
                   openjpeg
                 ] ++ stdenv.lib.optionals enablePython [
-                  pythonPackages.python
+                  python2Packages.python2
                 ];
 
   propagatedBuildInputs = stdenv.lib.optionals enablePython [
-                  pythonPackages.numpy
+                  python2Packages.numpy
                 ];
 
   cmakeFlags = [ "-DENABLE_PYTHON=${if enablePython then "ON" else "OFF"}"

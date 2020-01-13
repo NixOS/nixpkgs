@@ -4,7 +4,7 @@
 , withCoreText ? false
 , withIcu ? false # recommended by upstream as default, but most don't needed and it's big
 , withGraphite2 ? true # it is small and major distros do include it
-, python
+, python2
 }:
 
 let
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     ++ optional withGraphite2 graphite2
     ++ optionals withIcu [ icu harfbuzz ];
 
-  checkInputs = [ python ];
+  checkInputs = [ python2 ];
   doInstallCheck = false; # fails, probably a bug
 
   # Slightly hacky; some pkgs expect them in a single directory.

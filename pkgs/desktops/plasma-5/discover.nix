@@ -1,6 +1,6 @@
 {
   mkDerivation,
-  extra-cmake-modules, gettext, kdoctools, python,
+  extra-cmake-modules, gettext, kdoctools, python2,
   appstream-qt, discount, flatpak, fwupd, ostree, packagekit-qt, pcre, utillinux,
   qtquickcontrols2,
   karchive, kconfig, kcrash, kdbusaddons, kdeclarative, kio, kirigami2, kitemmodels,
@@ -9,7 +9,7 @@
 
 mkDerivation {
   name = "discover";
-  nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python ];
+  nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python2 ];
   buildInputs = [
     # discount is needed for libmarkdown
     appstream-qt discount flatpak fwupd ostree packagekit-qt pcre utillinux

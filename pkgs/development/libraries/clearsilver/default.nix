@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, python }:
+{ stdenv, fetchurl, fetchpatch, python2 }:
 
 stdenv.mkDerivation rec {
   name = "clearsilver-0.10.5";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   PYTHON_SITE = "$(out)/site-packages";
 
   configureFlags = [
-    "--with-python=${python}/bin/python"
+    "--with-python=${python2}/bin/python"
     "--disable-apache"
     "--disable-perl"
     "--disable-ruby"

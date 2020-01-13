@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, pkgconfig
-, zip, python, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
+, zip, python2, zlib, which, icu, libmicrohttpd, lzma, aria2, wget, bc
 , libuuid, libX11, libXext, libXt, libXrender, glib, dbus, dbus-glib
 , gtk2, gdk-pixbuf, pango, cairo, freetype, fontconfig, alsaLib, atk, cmake
 , xapian, ctpp2, zimlib
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    zip python zlib xapian which icu libmicrohttpd
+    zip python2 zlib xapian which icu libmicrohttpd
     lzma zimlib ctpp2 aria2 wget bc libuuid makeWrapper pugixml
   ];
 

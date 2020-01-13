@@ -1,4 +1,4 @@
-{stdenv, fetchurl, unzip, which, python, perl}:
+{stdenv, fetchurl, unzip, which, python2, perl}:
 
 stdenv.mkDerivation rec {
   pname = "hisat2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip which ];
-  buildInputs = [ python perl ];
+  buildInputs = [ python2 perl ];
 
   installPhase = ''
     mkdir -p $out/bin

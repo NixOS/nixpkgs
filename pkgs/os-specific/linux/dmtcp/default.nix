@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, bash, perl, python }:
+{ stdenv, fetchFromGitHub, bash, perl, python2 }:
 
 stdenv.mkDerivation rec {
   pname = "dmtcp";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     substituteInPlace test/autotest.py \
       --replace /bin/bash ${bash}/bin/bash \
       --replace /usr/bin/perl ${perl}/bin/perl \
-      --replace /usr/bin/python ${python}/bin/python \
+      --replace /usr/bin/python ${python2}/bin/python \
       --replace "os.environ['USER']" "\"nixbld1\"" \
       --replace "os.getenv('USER')" "\"nixbld1\""
   '';

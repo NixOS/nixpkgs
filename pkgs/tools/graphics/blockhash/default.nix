@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python, pkgconfig, imagemagick, wafHook }:
+{ stdenv, fetchFromGitHub, python2, pkgconfig, imagemagick, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "blockhash";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0m7ikppl42iicgmwsb7baajmag7v0p1ab06xckifvrr0zm21bq9p";
   };
 
-  nativeBuildInputs = [ python pkgconfig wafHook ];
+  nativeBuildInputs = [ python2 pkgconfig wafHook ];
   buildInputs = [ imagemagick ];
 
   meta = with stdenv.lib; {

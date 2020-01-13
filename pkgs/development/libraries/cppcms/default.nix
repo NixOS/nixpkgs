@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pcre, zlib, python, openssl }:
+{ stdenv, fetchurl, cmake, pcre, zlib, python2, openssl }:
 
 stdenv.mkDerivation rec {
   pname = "cppcms";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  buildInputs = [ cmake pcre zlib python openssl ];
+  buildInputs = [ cmake pcre zlib python2 openssl ];
 
   cmakeFlags = [
     "--no-warn-unused-cli"

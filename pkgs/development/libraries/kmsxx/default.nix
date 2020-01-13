@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, libdrm
-, withPython ? false, python }:
+, withPython ? false, python2 }:
 
 stdenv.mkDerivation {
   pname = "kmsxx";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   cmakeFlags = stdenv.lib.optional (!withPython) "-DKMSXX_ENABLE_PYTHON=OFF";
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libdrm python ];
+  buildInputs = [ libdrm python2 ];
 
   meta = with stdenv.lib; {
     description = "C++11 library, utilities and python bindings for Linux kernel mode setting";

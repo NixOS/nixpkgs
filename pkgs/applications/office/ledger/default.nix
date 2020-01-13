@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python
+{ stdenv, fetchFromGitHub, cmake, boost, gmp, mpfr, libedit, python2
 , texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     (boost.override { enablePython = usePython; })
-    gmp mpfr libedit python texinfo gnused
+    gmp mpfr libedit python2 texinfo gnused
   ];
 
   nativeBuildInputs = [ cmake ];

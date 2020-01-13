@@ -1,6 +1,6 @@
-{ lib, fetchurl, pythonPackages, gettext }:
+{ lib, fetchurl, python2Packages, gettext }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "cherrytree";
   version = "0.38.10";
 
@@ -11,7 +11,7 @@ pythonPackages.buildPythonApplication rec {
 
   nativeBuildInputs = [ gettext ];
 
-  propagatedBuildInputs = with pythonPackages; [ pygtk dbus-python pygtksourceview ];
+  propagatedBuildInputs = with python2Packages; [ pygtk dbus-python2 pygtksourceview ];
 
   patches = [ ./subprocess.patch ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, cmake, python }:
+{ stdenv, fetchFromGitHub, fetchpatch, unzip, cmake, python2 }:
 
 stdenv.mkDerivation {
   name = "flann-1.9.1";
@@ -18,7 +18,7 @@ stdenv.mkDerivation {
     })
   ];
 
-  buildInputs = [ unzip cmake python ];
+  buildInputs = [ unzip cmake python2 ];
 
   meta = {
     homepage = http://people.cs.ubc.ca/~mariusm/flann/;

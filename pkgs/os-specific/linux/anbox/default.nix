@@ -14,7 +14,7 @@
 , properties-cpp
 , protobuf
 , protobufc
-, python
+, python2
 , lxc
 , writeText
 , writeScript
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     cmake pkgconfig dbus boost libcap gtest systemd mesa glib
-    SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
+    SDL2 SDL2_image protobuf protobufc properties-cpp lxc python2
     libGL
   ];
 

@@ -19,7 +19,7 @@
 
 , enableUnfree    ? false
 , enableIpp       ? false
-, enablePython    ? false, pythonPackages
+, enablePython    ? false, python2Packages
 , enableGtk2      ? false, gtk2
 , enableGtk3      ? false, gtk3
 , enableVtk       ? false, vtk
@@ -176,7 +176,7 @@ stdenv.mkDerivation {
   buildInputs =
        [ zlib pcre hdf5 glog boost gflags ]
     ++ lib.optional useSystemProtobuf protobuf
-    ++ lib.optional enablePython pythonPackages.python
+    ++ lib.optional enablePython python2Packages.python2
     ++ lib.optional enableGtk2 gtk2
     ++ lib.optional enableGtk3 gtk3
     ++ lib.optional enableVtk vtk
@@ -204,7 +204,7 @@ stdenv.mkDerivation {
     ++ lib.optionals stdenv.isDarwin [ bzip2 AVFoundation Cocoa VideoDecodeAcceleration ]
     ++ lib.optionals enableDocs [ doxygen graphviz-nox ];
 
-  propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
+  propagatedBuildInputs = lib.optional enablePython python2Packages.numpy;
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchFromGitLab
 , llvmPackages
 , cmake, boehmgc, gmp, zlib, ncurses, boost, libelf
-, python, git, sbcl
+, python2, git, sbcl
 , wafHook
 }:
 let
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake python git sbcl wafHook ] ++
+  nativeBuildInputs = [ cmake python2 git sbcl wafHook ] ++
     (with llvmPackages; [ llvm clang ]);
 
   buildInputs = with llvmPackages;

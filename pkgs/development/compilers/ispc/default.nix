@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages,
+{stdenv, fetchFromGitHub, which, m4, python2, bison, flex, llvmPackages,
 testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = with llvmPackages; [
     which
     m4
-    python
+    python2
     bison
     flex
     llvm

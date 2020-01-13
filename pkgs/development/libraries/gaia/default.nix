@@ -8,7 +8,7 @@
 , wafHook
 , makeWrapper
 , qt4
-, pythonPackages
+, python2Packages
 , pythonSupport ? false
 # Default to false since it breaks the build, see https://github.com/MTG/gaia/issues/11
 , stlfacadeSupport ? false
@@ -16,7 +16,7 @@
 , cyclopsSupport ? true
 }:
 
-assert pythonSupport -> pythonPackages != null;
+assert pythonSupport -> python2Packages != null;
 
 stdenv.mkDerivation rec {
   pname = "gaia";
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     # The gaiafusion binary inside $out/bin needs a shebangs patch, and
     # wrapping with the appropriate $PYTHONPATH
     ++ lib.optionals (pythonSupport) [
-      pythonPackages.wrapPython
+      python2Packages.wrapPython
     ]
   ;
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (pythonSupport) [
       # This is not exactly specified in upstream's README but it's needed by the
       # resulting $out/bin/gaiafusion script
-      pythonPackages.pyyaml
+      python2Packages.pyyaml
     ]
   ;
 

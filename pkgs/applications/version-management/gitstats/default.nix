@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, perl, python, gnuplot, coreutils, gnugrep }:
+{ stdenv, fetchzip, perl, python2, gnuplot, coreutils, gnugrep }:
 
 stdenv.mkDerivation rec {
   pname = "gitstats";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}" + "-src";
   };
 
-  buildInputs = [ perl python ];
+  buildInputs = [ perl python2 ];
 
   postPatch = ''
     sed -e "s|gnuplot_cmd = .*|gnuplot_cmd = '${gnuplot}/bin/gnuplot'|" \

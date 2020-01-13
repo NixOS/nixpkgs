@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, emacsPackages }:
+{ stdenv, fetchurl, python2, emacsPackages }:
 
 stdenv.mkDerivation rec {
   pname = "cask";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     s f dash ansi ecukes servant ert-runner el-mock
     noflet ert-async shell-split-string git package-build
   ] ++ [
-    python
+    python2
   ];
 
   buildPhase = ''

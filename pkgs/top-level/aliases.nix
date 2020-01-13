@@ -340,6 +340,10 @@ mapAliases ({
   procps-ng = procps; # added 2018-06-08
   pygmentex = texlive.bin.pygmentex; # added 2019-12-15
   pyo3-pack = maturin;
+  python = python2;
+  pythonFull = python.override{x11Support=true;};
+  pythonPackages = python.pkgs;
+  pypyPackages = pypy.pkgs;
   pmenu = throw "pmenu has been removed from nixpkgs, as its maintainer is no longer interested in the package."; # added 2019-12-10
   pulseaudioLight = pulseaudio; # added 2018-04-25
   phonon-backend-gstreamer = throw "Please use libsForQt5.phonon-backend-gstreamer, as Qt4 support in this package has been removed."; # added 2019-11-22

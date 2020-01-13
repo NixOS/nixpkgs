@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
 , makeWrapper, cppunit, gr-osmosdr
-, pythonSupport ? true, python, swig
+, pythonSupport ? true, python2, swig
 }:
 
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python2 != null && swig != null;
 
 stdenv.mkDerivation {
   pname = "gr-ais";
@@ -20,7 +20,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     cmake boost gnuradio makeWrapper cppunit gr-osmosdr
-  ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
+  ] ++ stdenv.lib.optionals pythonSupport [ python2 swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do

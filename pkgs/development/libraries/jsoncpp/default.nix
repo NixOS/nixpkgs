@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
+{ stdenv, fetchFromGitHub, cmake, python2, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     export LD_LIBRARY_PATH="`pwd`/src/lib_json:$LD_LIBRARY_PATH"
   '';
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python2 ];
 
   # fix inverted sense in isAnyCharRequiredQuoting on aarch64. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
   patches = stdenv.lib.optionals stdenv.isAarch64 [

@@ -3,7 +3,7 @@
 , fetchpatch
 , git
 , go
-, python
+, python2
 , stdenv
 }:
 
@@ -33,7 +33,7 @@ buildBazelPackage rec {
     sha256 = "17z4nqqsdrainbh8fmhf6sgrxwf7aknadmn94z1yqpxa7kb9x33v";
   };
 
-  nativeBuildInputs = [ go git python ];
+  nativeBuildInputs = [ go git python2 ];
 
   bazelTarget = "//ibazel";
 

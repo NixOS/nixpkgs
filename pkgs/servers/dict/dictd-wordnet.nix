@@ -1,10 +1,10 @@
-{stdenv, python, wordnet, writeScript}:
+{stdenv, python2, wordnet, writeScript}:
 
 stdenv.mkDerivation rec {
   version = "542";
   pname = "dict-db-wordnet";
 
-  buildInputs = [python wordnet];
+  buildInputs = [python2 wordnet];
   convert = ./wordnet_structures.py;
 
   builder = writeScript "builder.sh" ''

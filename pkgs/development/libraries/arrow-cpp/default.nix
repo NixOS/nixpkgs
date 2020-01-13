@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames, autoconf, boost
 , brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl
-, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd
+, python2, rapidjson, snappy, thrift, uriparser, which, zlib, zstd
 , enableShared ? true }:
 
 let
@@ -33,7 +33,7 @@ in stdenv.mkDerivation rec {
   };
 
   patches = [
-    # patch to fix python-test
+    # patch to fix python2-test
     ./darwin.patch
   ] ++ lib.optionals (!enableShared) [
     # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
@@ -60,8 +60,8 @@ in stdenv.mkDerivation rec {
     uriparser
     zlib
     zstd
-    python.pkgs.python
-    python.pkgs.numpy
+    python2.pkgs.python
+    python2.pkgs.numpy
   ];
 
   preConfigure = ''

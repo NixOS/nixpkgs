@@ -1,5 +1,5 @@
 { lib, stdenv, fetchFromGitHub
-, pythonPackages
+, python2Packages
 , cmake
 , llvmPackages
 , libffi, libxml2, zlib
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qpgr5hyb692h7l5igmq53m6a6vi4d9qp8ks893cflfx9955h3ip";
   };
 
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ pythonPackages.sphinx ];
+  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optionals withMan [ python2Packages.sphinx ];
 
   clangVersion = lib.getVersion llvmPackages.clang;
 

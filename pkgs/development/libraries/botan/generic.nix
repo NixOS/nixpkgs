@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python, bzip2, zlib, gmp, openssl, boost
+{ stdenv, fetchurl, python2, bzip2, zlib, gmp, openssl, boost
 # Passed by version specific builders
 , baseVersion, revision, sha256
 , extraConfigureFlags ? ""
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
   inherit postPatch;
 
-  buildInputs = [ python bzip2 zlib gmp openssl boost ]
+  buildInputs = [ python2 bzip2 zlib gmp openssl boost ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
   configurePhase = ''

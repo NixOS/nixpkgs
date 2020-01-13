@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
 , makeWrapper, cppunit, libosmocore, gr-osmosdr
-, pythonSupport ? true, python, swig
+, pythonSupport ? true, python2, swig
 }:
 
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python2 != null && swig != null;
 
 stdenv.mkDerivation {
   pname = "gr-gsm";
@@ -19,11 +19,11 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     cmake boost gnuradio makeWrapper cppunit libosmocore gr-osmosdr
-  ] ++ stdenv.lib.optionals pythonSupport [ python swig ];
+  ] ++ stdenv.lib.optionals pythonSupport [ python2 swig ];
 
   postInstall = ''
     for prog in "$out"/bin/*; do
-        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:${gr-osmosdr}/lib/${python.libPrefix}/site-packages:$(toPythonPath "$out")
+        wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:${gr-osmosdr}/lib/${python2.libPrefix}/site-packages:$(toPythonPath "$out")
     done
   '';
 

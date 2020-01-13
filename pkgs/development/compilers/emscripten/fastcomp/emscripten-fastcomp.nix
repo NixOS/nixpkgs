@@ -1,4 +1,4 @@
-{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python, gtest, ... }:
+{ emscriptenVersion, stdenv, fetchFromGitHub, cmake, python2, gtest, ... }:
 
 let
   rev = emscriptenVersion;
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     inherit rev;
   };
 
-  nativeBuildInputs = [ cmake python gtest ];
+  nativeBuildInputs = [ cmake python2 gtest ];
   preConfigure = ''
     cp -Lr ${srcFL} tools/clang
     chmod +w -R tools/clang

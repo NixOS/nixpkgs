@@ -1084,7 +1084,7 @@ in
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
 
-  backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
+  backblaze-b2 = python2.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
   bandwhich = callPackage ../tools/networking/bandwhich {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -3093,7 +3093,7 @@ in
   epsxe = callPackage ../misc/emulators/epsxe { };
 
   escrotum = callPackage ../tools/graphics/escrotum {
-    inherit (pythonPackages) buildPythonApplication pygtk numpy;
+    inherit (python2Packages) buildPythonApplication pygtk numpy;
   };
 
   etcher = callPackage ../tools/misc/etcher { };
@@ -9276,7 +9276,6 @@ in
   # Python interpreters. All standard library modules are included except for tkinter, which is
   # available as `pythonPackages.tkinter` and can be used as any other Python package.
   # When switching these sets, please update docs at ../../doc/languages-frameworks/python.md
-  python = python2;
   python2 = python27;
   python3 = python37;
   pypy = pypy2;
@@ -9285,7 +9284,6 @@ in
 
   # Python interpreter that is build with all modules, including tkinter.
   # These are for compatibility and should not be used inside Nixpkgs.
-  pythonFull = python.override{x11Support=true;};
   python2Full = python2.override{x11Support=true;};
   python27Full = python27.override{x11Support=true;};
   python3Full = python3.override{x11Support=true;};
@@ -9296,7 +9294,7 @@ in
   python39Full = python38.override{x11Support=true;};
 
   # pythonPackages further below, but assigned here because they need to be in sync
-  pythonPackages = python.pkgs;
+
   python2Packages = python2.pkgs;
   python3Packages = python3.pkgs;
 
@@ -9310,7 +9308,6 @@ in
   python37Packages = recurseIntoAttrs python37.pkgs;
   python38Packages = recurseIntoAttrs python38.pkgs;
   python39Packages = python39.pkgs;
-  pypyPackages = pypy.pkgs;
   pypy2Packages = pypy2.pkgs;
   pypy27Packages = pypy27.pkgs;
   pypy3Packages = pypy3.pkgs;
@@ -9980,7 +9977,7 @@ in
 
   dolt = callPackage ../servers/sql/dolt { };
 
-  dot2tex = pythonPackages.dot2tex;
+  dot2tex = python2Packages.dot2tex;
 
   doxygen = callPackage ../development/tools/documentation/doxygen {
     qt4 = null;
@@ -10066,7 +10063,7 @@ in
 
   jdepend = callPackage ../development/tools/analysis/jdepend { };
 
-  fedpkg = pythonPackages.callPackage ../development/tools/fedpkg { };
+  fedpkg = python2Packages.callPackage ../development/tools/fedpkg { };
 
   flex_2_5_35 = callPackage ../development/tools/parsing/flex/2.5.35.nix { };
   flex = callPackage ../development/tools/parsing/flex { };

@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python }:
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python2 }:
 
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
@@ -18,7 +18,7 @@ let
 
     nativeBuildInputs = [ cmake ];
 
-    buildInputs = [ libxml2 llvm python ];
+    buildInputs = [ libxml2 llvm python2 ];
 
     cmakeFlags = [
       "-DCMAKE_CXX_FLAGS=-std=c++11"

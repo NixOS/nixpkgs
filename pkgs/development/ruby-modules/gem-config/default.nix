@@ -17,7 +17,7 @@
 # This seperates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python, stdenv, which
+{ lib, fetchurl, writeScript, ruby, kerberos, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, v8, clang, sqlite, zlib, imagemagick
 , pkgconfig , ncurses, xapian, gpgme, utillinux, tzdata, icu, libffi
 , cmake, libssh2, openssl, libmysqlclient, darwin, git, perl, pcre, gecode_3, curl
@@ -292,7 +292,7 @@ in
   # otherwise the gem will fail to link to the libv8 binary.
   # see: https://github.com/cowboyd/libv8/pull/161
   libv8 = attrs: {
-    buildInputs = [ which v8 python ];
+    buildInputs = [ which v8 python2 ];
     buildFlags = [ "--with-system-v8=true" ];
   };
 

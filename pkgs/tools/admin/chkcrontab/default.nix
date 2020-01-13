@@ -1,6 +1,6 @@
-{ python, stdenv }:
+{ python2, stdenv }:
 
-with python.pkgs;
+with python2.pkgs;
 
 buildPythonApplication rec {
   pname = "chkcrontab";

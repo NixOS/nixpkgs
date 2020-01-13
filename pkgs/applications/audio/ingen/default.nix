@@ -1,5 +1,5 @@
 { stdenv, fetchgit, boost, ganv, glibmm, gtkmm2, libjack2, lilv
-, lv2Unstable, makeWrapper, pkgconfig, python, raul, rdflib, serd, sord, sratom
+, lv2Unstable, makeWrapper, pkgconfig, python2, raul, rdflib, serd, sord, sratom
 , wafHook
 , suil
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation  rec {
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
     boost ganv glibmm gtkmm2 libjack2 lilv lv2Unstable makeWrapper
-    python raul serd sord sratom suil
+    python2 raul serd sord sratom suil
   ];
 
   preConfigure = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation  rec {
     for program in ingenams ingenish
     do
       wrapProgram $out/bin/$program \
-        --prefix PYTHONPATH : $out/${python.sitePackages}:$PYTHONPATH
+        --prefix PYTHONPATH : $out/${python2.sitePackages}:$PYTHONPATH
     done
   '';
 
