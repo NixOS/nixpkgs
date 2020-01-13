@@ -6581,6 +6581,8 @@ in {
     cudaSupport = true;
   };
 
+  tensorly = callPackage ../development/python-modules/tensorly { };
+
   tflearn = callPackage ../development/python-modules/tflearn { };
 
   simpleai = callPackage ../development/python-modules/simpleai { };
