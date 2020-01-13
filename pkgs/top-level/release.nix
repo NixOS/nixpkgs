@@ -105,7 +105,6 @@ let
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
               jobs.thunderbird.x86_64-linux
-              jobs.unar.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
