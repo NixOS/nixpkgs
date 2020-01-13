@@ -5338,6 +5338,8 @@ in
 
   safecopy = callPackage ../tools/system/safecopy { };
 
+  safenet-authentication-client = callPackage ../tools/security/safenet-authentication-client { };
+
   safe-rm = callPackage ../tools/system/safe-rm { };
 
   safeeyes = callPackage ../applications/misc/safeeyes { };
