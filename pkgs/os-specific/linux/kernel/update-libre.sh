@@ -20,7 +20,7 @@ sha256="$(QUIET=1 nix-prefetch-svn "$svn_url" "$rev" | tail -1)"
 sed -i -e "s/rev = \".*\"/rev = \"$rev\"/" \
     -e "s/sha256 = \".*\"/sha256 = \"$sha256\"/" "$path"
 
-if [ -n "$COMMIT" ]; then
+if [ -n "${COMMIT-}" ]; then
     git commit -qm "linux_latest-libre: $old_rev -> $rev" "$path"
     echo "Updated linux_latest-libre $old_rev -> $rev"
 fi
