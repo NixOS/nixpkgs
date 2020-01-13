@@ -32,17 +32,17 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
 
 ```
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.4.0";
+  pname = "ripgrep";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
-    rev = "${version}";
-    sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
+    repo = pname;
+    rev = version;
+    sha256 = "1iga3320mgi7m853la55xip514a3chqsdi1a1rwv25lr9b1p7vd3";
   };
 
-  cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
   verifyCargoDeps = true;
 
   meta = with stdenv.lib; {
@@ -66,7 +66,11 @@ added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
 When `verifyCargoDeps` is set to `true`, the build will also verify that the
-`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the `cargoDeps` and `src`. Note that this option changes the value of `cargoSha256` since it also copies the `Cargo.lock` in it. To avoid breaking backward-compatibility this option is not enabled by default but hopefully will be in the future.
+`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the
+`cargoDeps` and `src`. Note that this option changes the value of `cargoSha256`
+since it also copies the `Cargo.lock` in it. To avoid breaking
+backward-compatibility this option is not enabled by default but hopefully will
+be in the future.
 
 ### Building a crate for a different target
 

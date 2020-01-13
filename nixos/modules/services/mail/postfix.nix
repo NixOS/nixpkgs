@@ -612,10 +612,7 @@ in
     {
 
       environment = {
-        etc = singleton
-          { source = "/var/lib/postfix/conf";
-            target = "postfix";
-          };
+        etc.postfix.source = "/var/lib/postfix/conf";
 
         # This makes it comfortable to run 'postqueue/postdrop' for example.
         systemPackages = [ pkgs.postfix ];

@@ -505,6 +505,12 @@
     githubId = 750786;
     name = "Justin Wood";
   };
+  anmonteiro = {
+    email = "anmonteiro@gmail.com";
+    github = "anmonteiro";
+    githubId = 661909;
+    name = "Antonio Nuno Monteiro";
+  };
   anpryl = {
     email = "anpryl@gmail.com";
     github = "anpryl";
@@ -4429,6 +4435,12 @@
     github = "mcmtroffaes";
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
+  };
+  McSinyx = {
+    email = "vn.mcsinyx@gmail.com";
+    github = "McSinyx";
+    githubId = 13689192;
+    name = "Nguyễn Gia Phong";
   };
   mdaiter = {
     email = "mdaiter8121@gmail.com";

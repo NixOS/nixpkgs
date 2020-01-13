@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "cln";
-  version = "1.3.5";
+  version = "1.3.6";
 
   src = fetchurl {
     url = "${meta.homepage}${pname}-${version}.tar.bz2";
-    sha256 = "0bc43v4fyxwik9gjkvm8jan74bkx9bjssv61lfh9jhhblmj010bq";
+    sha256 = "0jlq9l4hphk7qqlgqj9ihjp4m3rwjbhk6q4v00lsbgbri07574pl";
   };
 
   buildInputs = [ gmp ];
