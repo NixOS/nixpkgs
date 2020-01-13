@@ -28,15 +28,20 @@ let
   ];
 in rec {
   commonPreHook = ''
-    export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+    export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
+    export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
-    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    export MACOSX_DEPLOYMENT_TARGET=10.12
-    export SDKROOT=
     export CMAKE_OSX_ARCHITECTURES=x86_64
+    export SDKROOT=
+
+    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
+    export MACOSX_DEPLOYMENT_TARGET=10.12
+    export NIX_LDFLAGS+=" -macosx_version_min 10.12 -sdk_version 10.12 -no_uuid"
+
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
+
+    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
   bootstrapTools = derivation {
