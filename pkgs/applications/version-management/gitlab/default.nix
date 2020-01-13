@@ -51,6 +51,7 @@ let
     # One of the patches uses this variable - if it's unset, execution
     # of rake tasks fails.
     GITLAB_LOG_PATH = "log";
+    FOSS_ONLY = !gitlabEnterprise;
 
     configurePhase = ''
       runHook preConfigure
