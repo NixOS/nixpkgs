@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DCCLS_VERSION=${version}"
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
+    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.macosVersionMin or ""}"
   ];
 
   preConfigure = ''
