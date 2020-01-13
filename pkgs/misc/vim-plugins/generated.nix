@@ -2498,6 +2498,17 @@ let
     };
   };
 
+  salt-vim = buildVimPluginFrom2Nix {
+    pname = "salt-vim";
+    version = "2017-07-01";
+    src = fetchFromGitHub {
+      owner = "saltstack";
+      repo = "salt-vim";
+      rev = "6ca9e3500cc39dd417b411435d58a1b720b331cc";
+      sha256 = "0r79bpl98xcsmkw6dg83cf1ghn89rzsr011zirk3v1wfxclri2c4";
+    };
+  };
+
   self = buildVimPluginFrom2Nix {
     pname = "self";
     version = "2014-05-28";
