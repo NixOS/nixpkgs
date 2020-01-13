@@ -954,7 +954,9 @@ in {
 
   pims = callPackage ../development/python-modules/pims { };
 
-  poetry = callPackage ../development/python-modules/poetry { };
+  poetry = pkgs.poetry.override {
+    inherit python;
+  };
 
   polyline = callPackage ../development/python-modules/polyline { };
 
