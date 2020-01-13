@@ -15196,6 +15196,10 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
+  gobetween = callPackage ../servers/gobetween {
+    buildGoModule = buildGo112Module;
+  };
+
   h2o = callPackage ../servers/http/h2o { };
 
   haka = callPackage ../tools/security/haka { };
