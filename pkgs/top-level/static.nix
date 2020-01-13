@@ -280,4 +280,6 @@ in {
   ) super.ocaml-ng;
 
   python27 = super.python27.override { static = true; };
+
+  libev = super.libev.override { static = true; };
 }

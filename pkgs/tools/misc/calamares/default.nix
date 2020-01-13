@@ -6,12 +6,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.2.16";
+  version = "3.2.17.1";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/${pname}/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ygmw03n8knczq9a9whslxcpmgyz0ksqwl0k8f7hyf96b9n8inc2";
+    sha256 = "156zpjyw8w4y23aa60mvg3d3mr0kzfq5jkl7ixgahq33zpc17ms8";
   };
 
   buildInputs = [

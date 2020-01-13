@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, perl, static ? false }:
+{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, gflags, perl, static ? false }:
 
 stdenv.mkDerivation rec {
   pname = "glog";
@@ -20,7 +20,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  postPatch = lib.optionalString stdenv.isDarwin ''
+    # A path clash on case-insensitive file systems blocks creation of the build directory.
+    # The file in question is specific to bazel and does not influence the build result.
+    rm BUILD
+  '';
+
   nativeBuildInputs = [ cmake ];
+
+  propagatedBuildInputs = [ gflags ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ];
 

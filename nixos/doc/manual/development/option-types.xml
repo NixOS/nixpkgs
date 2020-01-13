@@ -257,9 +257,9 @@
     <listitem>
      <para>
       A set of sub options <replaceable>o</replaceable>.
-      <replaceable>o</replaceable> can be an attribute set or a function
-      returning an attribute set. Submodules are used in composed types to
-      create modular options. This is equivalent to
+      <replaceable>o</replaceable> can be an attribute set, a function
+      returning an attribute set, or a path to a file containing such a value. Submodules are used in
+      composed types to create modular options. This is equivalent to
       <literal>types.submoduleWith { modules = toList o; shorthandOnlyDefinesConfig = true; }</literal>.
       Submodules are detailed in
       <xref
@@ -352,6 +352,36 @@
       An attribute set of where all the values are of
       <replaceable>t</replaceable> type. Multiple definitions result in the
       joined attribute set.
+      <note><para>
+       This type is <emphasis>strict</emphasis> in its values, which in turn
+       means attributes cannot depend on other attributes. See <varname>
+       types.lazyAttrsOf</varname> for a lazy version.
+      </para></note>
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term>
+     <varname>types.lazyAttrsOf</varname> <replaceable>t</replaceable>
+    </term>
+    <listitem>
+     <para>
+      An attribute set of where all the values are of
+      <replaceable>t</replaceable> type. Multiple definitions result in the
+      joined attribute set. This is the lazy version of <varname>types.attrsOf
+      </varname>, allowing attributes to depend on each other.
+      <warning><para>
+       This version does not fully support conditional definitions! With an
+       option <varname>foo</varname> of this type and a definition
+       <literal>foo.attr = lib.mkIf false 10</literal>, evaluating
+       <literal>foo ? attr</literal> will return <literal>true</literal>
+       even though it should be false. Accessing the value will then throw
+       an error. For types <replaceable>t</replaceable> that have an
+       <literal>emptyValue</literal> defined, that value will be returned
+       instead of throwing an error. So if the type of <literal>foo.attr</literal>
+       was <literal>lazyAttrsOf (nullOr int)</literal>, <literal>null</literal>
+       would be returned instead for the same <literal>mkIf false</literal> definition.
+      </para></warning>
      </para>
     </listitem>
    </varlistentry>

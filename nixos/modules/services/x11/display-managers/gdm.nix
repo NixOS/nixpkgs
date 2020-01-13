@@ -159,21 +159,20 @@ in
           GDM_X_SESSION_WRAPPER = "${xSessionWrapper}";
         };
         execCmd = "exec ${gdm}/bin/gdm";
-        preStart = optionalString config.hardware.pulseaudio.enable ''
-          mkdir -p /run/gdm/.config/pulse
-          ln -sf ${pulseConfig} /run/gdm/.config/pulse/default.pa
-          chown -R gdm:gdm /run/gdm/.config
-        '' + optionalString config.services.gnome3.gnome-initial-setup.enable ''
-          # Create stamp file for gnome-initial-setup to prevent run.
-          mkdir -p /run/gdm/.config
-          cat - > /run/gdm/.config/gnome-initial-setup-done <<- EOF
-          yes
-          EOF
-        '' + optionalString (defaultSessionName != null) ''
+        preStart = optionalString (defaultSessionName != null) ''
           # Set default session in session chooser to a specified values – basically ignore session history.
           ${setSessionScript}/bin/set-session ${cfg.sessionData.autologinSession}
         '';
       };
+
+    systemd.tmpfiles.rules = [
+      "d /run/gdm/.config 0711 gdm gdm -"
+    ] ++ optionals config.hardware.pulseaudio.enable [
+      "L+ /run/gdm/.config/pulse - - - - ${pulseConfig}"
+    ] ++ optionals config.services.gnome3.gnome-initial-setup.enable [
+      # Create stamp file for gnome-initial-setup to prevent it starting in GDM.
+      "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
+    ];
 
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines

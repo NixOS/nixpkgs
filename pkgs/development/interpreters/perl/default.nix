@@ -96,8 +96,7 @@ let
         "-Dprefix=${placeholder "out"}"
         "-Dman1dir=${placeholder "out"}/share/man/man1"
         "-Dman3dir=${placeholder "out"}/share/man/man3"
-      ]
-      ++ optional (stdenv.isAarch32 || stdenv.isMips) "-Dldflags=\"-lm -lrt\"";
+      ];
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 

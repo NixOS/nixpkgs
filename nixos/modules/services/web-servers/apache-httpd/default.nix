@@ -606,17 +606,17 @@ in
       }
     ];
 
-    users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
-      { name = "wwwrun";
+    users.users = optionalAttrs (mainCfg.user == "wwwrun") {
+      wwwrun = {
         group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
-      { name = "wwwrun";
-        gid = config.ids.gids.wwwrun;
-      });
+    users.groups = optionalAttrs (mainCfg.group == "wwwrun") {
+      wwwrun.gid = config.ids.gids.wwwrun;
+    };
 
     security.acme.certs = mapAttrs (name: hostOpts: {
       user = mainCfg.user;

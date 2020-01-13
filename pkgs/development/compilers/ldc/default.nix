@@ -1,6 +1,6 @@
 { stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
-, callPackage, makeWrapper, targetPackages
+, callPackage, makeWrapper, runCommand, targetPackages
 , bootstrapVersion ? false
 , version ? "1.17.0"
 , ldcSha256 ? "1aag5jfrng6p4ms0fs90hjbv9bcj3hj8h52r68c3cm6racdajbva"
@@ -18,6 +18,11 @@ let
   else
     "";
 
+  pathConfig = runCommand "ldc-lib-paths" {} ''
+    mkdir $out
+    echo ${tzdata}/share/zoneinfo/ > $out/TZDatabaseDirFile
+    echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > $out/LibcurlPathFile
+  '';
 in
 
 stdenv.mkDerivation rec {
@@ -42,17 +47,14 @@ stdenv.mkDerivation rec {
       rm ldc-${version}-src/tests/d2/dmd-testsuite/fail_compilation/mixin_gc.d
       rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/xtest46_gc.d
       rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/testptrref_gc.d
+
+      # test depends on current year
+      rm ldc-${version}-src/tests/d2/dmd-testsuite/compilable/ddocYear.d
   ''
 
   + stdenv.lib.optionalString (!bootstrapVersion && stdenv.hostPlatform.isDarwin) ''
       # https://github.com/NixOS/nixpkgs/issues/34817
       rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
-  ''
-
-  + stdenv.lib.optionalString (!bootstrapVersion) ''
-      echo ${tzdata}/share/zoneinfo/ > ldc-${version}-src/TZDatabaseDirFile
-
-      echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > ldc-${version}-src/LibcurlPathFile
   '';
 
   postPatch = ''
@@ -98,7 +100,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ curl tzdata ];
 
   cmakeFlags = stdenv.lib.optionals (!bootstrapVersion) [
-    "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J$PWD"
+    "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J${pathConfig}"
     "-DCMAKE_BUILD_TYPE=Release"
   ];
 

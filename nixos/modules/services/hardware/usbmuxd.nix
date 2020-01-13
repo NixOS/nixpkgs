@@ -43,15 +43,16 @@ in
 
   config = mkIf cfg.enable {
 
-    users.users = optional (cfg.user == defaultUserGroup) {
-      name = cfg.user;
-      description = "usbmuxd user";
-      group = cfg.group;
-      isSystemUser = true;
+    users.users = optionalAttrs (cfg.user == defaultUserGroup) {
+      ${cfg.user} = {
+        description = "usbmuxd user";
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
-    users.groups = optional (cfg.group == defaultUserGroup) {
-      name = cfg.group;
+    users.groups = optionalAttrs (cfg.group == defaultUserGroup) {
+      ${cfg.group} = { };
     };
 
     # Give usbmuxd permission for Apple devices

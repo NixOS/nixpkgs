@@ -86,16 +86,16 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
-      users.users = optionalAttrs (cfg.user == "dspam") (singleton
-        { name = "dspam";
+      users.users = optionalAttrs (cfg.user == "dspam") {
+        dspam = {
           group = cfg.group;
           uid = config.ids.uids.dspam;
-        });
+        };
+      };
 
-      users.groups = optionalAttrs (cfg.group == "dspam") (singleton
-        { name = "dspam";
-          gid = config.ids.gids.dspam;
-        });
+      users.groups = optionalAttrs (cfg.group == "dspam") {
+        dspam.gid = config.ids.gids.dspam;
+      };
 
       environment.systemPackages = [ dspam ];
 

@@ -505,6 +505,12 @@
     githubId = 750786;
     name = "Justin Wood";
   };
+  anmonteiro = {
+    email = "anmonteiro@gmail.com";
+    github = "anmonteiro";
+    githubId = 661909;
+    name = "Antonio Nuno Monteiro";
+  };
   anpryl = {
     email = "anpryl@gmail.com";
     github = "anpryl";
@@ -1764,6 +1770,12 @@
     githubId = 11946442;
     name = "Dipin Hora";
   };
+  dirkx = {
+    email = "dirkx@webweaving.org";
+    github = "dirkx";
+    githubId = 392583;
+    name = "Dirk-Willem van Gulik";
+  };
   disassembler = {
     email = "disasm@gmail.com";
     github = "disassembler";
@@ -1982,6 +1994,12 @@
     github = "edef1c";
     githubId = 50854;
     name = "edef";
+  };
+  emantor = {
+    email = "rouven+nixos@czerwinskis.de";
+    github = "emantor";
+    githubId = 934284;
+    name = "Rouven Czerwinski";
   };
   embr = {
     email = "hi@liclac.eu";
@@ -2420,6 +2438,12 @@
     github = "fluffynukeit";
     githubId = 844574;
     name = "Daniel Austin";
+  };
+  flyfloh = {
+    email = "nix@halbmastwurf.de";
+    github = "flyfloh";
+    githubId = 74379;
+    name = "Florian Pester";
   };
   fmthoma = {
     email = "f.m.thoma@googlemail.com";
@@ -4418,6 +4442,12 @@
     githubId = 158568;
     name = "Matthias C. M. Troffaes";
   };
+  McSinyx = {
+    email = "vn.mcsinyx@gmail.com";
+    github = "McSinyx";
+    githubId = 13689192;
+    name = "Nguyễn Gia Phong";
+  };
   mdaiter = {
     email = "mdaiter8121@gmail.com";
     github = "mdaiter";
@@ -4429,6 +4459,12 @@
     github = "mdevlamynck";
     githubId = 4378377;
     name = "Matthias Devlamynck";
+  };
+  mdlayher = {
+    email = "mdlayher@gmail.com";
+    github = "mdlayher";
+    githubId = 1926905;
+    name = "Matt Layher";
   };
   meditans = {
     email = "meditans@gmail.com";
@@ -4573,6 +4609,12 @@
     github = "mikoim";
     githubId = 3958340;
     name = "Eshin Kunishima";
+  };
+  mildlyincompetent = {
+    email = "nix@kch.dev";
+    github = "mildlyincompetent";
+    githubId = 19479662;
+    name = "Kajetan Champlewski";
   };
   miltador = {
     email = "miltador@yandex.ua";
@@ -5045,6 +5087,12 @@
     github = "nixy";
     githubId = 7588406;
     name = "Andrew R. M.";
+  };
+  nloomans = {
+    email = "noah@nixos.noahloomans.com";
+    github = "nloomans";
+    githubId = 7829481;
+    name = "Noah Loomans";
   };
   nmattia = {
     email = "nicolas@nmattia.com";
@@ -6841,6 +6889,11 @@
     githubId = 863327;
     name = "Tyler Benster";
   };
+  tckmn = {
+    email = "andy@tck.mn";
+    github = "tckmn";
+    name = "Andy Tockman";
+  };
   teh = {
     email = "tehunger@gmail.com";
     github = "teh";
@@ -6990,6 +7043,11 @@
     email = "tim@gfxmonk.net";
     github = "timbertson";
     name = "Tim Cuthbertson";
+  };
+  timma = {
+    email = "kunduru.it.iitb@gmail.com";
+    github = "ktrsoft";
+    name = "Timma";
   };
   timokau = {
     email = "timokau@zoho.com";
@@ -7847,5 +7905,11 @@
     github = "waiting-for-dev";
     githubId = 52650;
     name = "Marc Busqué";
+  };
+  snglth = {
+    email = "illia@ishestakov.com";
+    github = "snglth";
+    githubId = 8686360;
+    name = "Illia Shestakov";
   };
 }

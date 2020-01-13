@@ -59,18 +59,15 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.users = singleton
-      { name = "radicale";
-        uid = config.ids.uids.radicale;
+    users.users.radicale =
+      { uid = config.ids.uids.radicale;
         description = "radicale user";
         home = "/var/lib/radicale";
         createHome = true;
       };
 
-    users.groups = singleton
-      { name = "radicale";
-        gid = config.ids.gids.radicale;
-      };
+    users.groups.radicale =
+      { gid = config.ids.gids.radicale; };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";

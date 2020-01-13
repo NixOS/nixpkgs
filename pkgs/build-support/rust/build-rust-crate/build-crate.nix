@@ -4,6 +4,7 @@
   crateFeatures, crateRenames, libName, release, libPath,
   crateType, metadata, crateBin, hasCrateBin,
   extraRustcOpts, verbose, colors,
+  buildTests
 }:
 
   let
@@ -30,6 +31,7 @@
       baseRustcOpts
     );
 
+    build_bin = if buildTests then "build_bin_test" else "build_bin";
   in ''
     runHook preBuild
     ${echo_build_heading colors}
@@ -48,12 +50,16 @@
     setup_link_paths
 
     if [[ -e "$LIB_PATH" ]]; then
-       build_lib $LIB_PATH
+       build_lib "$LIB_PATH"
+       ${lib.optionalString buildTests ''build_lib_test "$LIB_PATH"''}
     elif [[ -e src/lib.rs ]]; then
        build_lib src/lib.rs
+       ${lib.optionalString buildTests "build_lib_test src/lib.rs"}
     elif [[ -e "src/$LIB_NAME.rs" ]]; then
        build_lib src/$LIB_NAME.rs
+       ${lib.optionalString buildTests ''build_lib_test "src/$LIB_NAME.rs"''}
     fi
+
 
 
     ${lib.optionalString (lib.length crateBin > 0) (lib.concatMapStringsSep "\n" (bin: ''
@@ -65,19 +71,39 @@
       '' else ''
         BIN_PATH='${bin.path}'
       ''}
-      build_bin "$BIN_NAME" "$BIN_PATH"
+        ${build_bin} "$BIN_NAME" "$BIN_PATH"
     '') crateBin)}
+
+    ${lib.optionalString buildTests ''
+    # When tests are enabled build all the files in the `tests` directory as
+    # test binaries.
+    if [ -d tests ]; then
+      # find all the .rs files (or symlinks to those) in the tests directory, no subdirectories
+      find tests -maxdepth 1 \( -type f -o -type l \) -a -name '*.rs' -print0 | while IFS= read -r -d ''' file; do
+        mkdir -p target/bin
+        build_bin_test_file "$file"
+      done
+
+      # find all the subdirectories of tests/ that contain a main.rs file as
+      # that is also a test according to cargo
+      find tests/ -mindepth 1 -maxdepth 2 \( -type f -o -type l \) -a -name 'main.rs' -print0 | while IFS= read -r -d ''' file; do
+        mkdir -p target/bin
+        build_bin_test_file "$file"
+      done
+
+    fi
+    ''}
 
     # If crateBin is empty and hasCrateBin is not set then we must try to
     # detect some kind of bin target based on some files that might exist.
     ${lib.optionalString (lib.length crateBin == 0 && !hasCrateBin) ''
       if [[ -e src/main.rs ]]; then
         mkdir -p target/bin
-        build_bin ${crateName} src/main.rs
+        ${build_bin} ${crateName} src/main.rs
       fi
       for i in src/bin/*.rs; do #*/
         mkdir -p target/bin
-        build_bin "$(basename $i .rs)" "$i"
+        ${build_bin} "$(basename $i .rs)" "$i"
       done
     ''}
     # Remove object files to avoid "wrong ELF type"

@@ -367,17 +367,17 @@ in
 
     };
 
-    users.users = optionalAttrs (cfg.user == "redmine") (singleton
-      { name = "redmine";
+    users.users = optionalAttrs (cfg.user == "redmine") {
+      redmine = {
         group = cfg.group;
         home = cfg.stateDir;
         uid = config.ids.uids.redmine;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "redmine") (singleton
-      { name = "redmine";
-        gid = config.ids.gids.redmine;
-      });
+    users.groups = optionalAttrs (cfg.group == "redmine") {
+      redmine.gid = config.ids.gids.redmine;
+    };
 
     warnings = optional (cfg.database.password != "")
       ''config.services.redmine.database.password will be stored as plaintext

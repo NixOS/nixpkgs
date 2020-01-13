@@ -5,32 +5,7 @@
 
 self: super:
 
-let
-
-  addSetupTools = drv: if drv == null then null else drv.overrideAttrs (
-    old: {
-      buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
-      ];
-    }
-  );
-
-  getAttrDefault = attribute: set: default:
-    if builtins.hasAttr attribute set
-    then builtins.getAttr attribute set
-    else default;
-
-in
 {
-
-  asciimatics = super.asciimatics.overrideAttrs (
-    old: {
-      buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
-      ];
-    }
-  );
-
   av = super.av.overrideAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -60,10 +35,6 @@ in
     }
   );
 
-  configparser = addSetupTools super.configparser;
-
-  cbor2 = addSetupTools super.cbor2;
-
   cryptography = super.cryptography.overrideAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
@@ -73,7 +44,7 @@ in
   django = (
     super.django.overrideAttrs (
       old: {
-        propagatedNativeBuildInputs = (getAttrDefault "propagatedNativeBuildInputs" old [])
+        propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [])
         ++ [ pkgs.gettext ];
       }
     )
@@ -85,7 +56,7 @@ in
         if ! test -e LICENSE; then
           touch LICENSE
         fi
-      '' + (getAttrDefault "configurePhase" old "");
+      '' + (old.configurePhase or "");
     }
   );
 
@@ -106,21 +77,12 @@ in
     }
   );
 
-  hypothesis = addSetupTools super.hypothesis;
-
-  importlib-metadata = addSetupTools super.importlib-metadata;
-
-  inflect = super.inflect.overrideAttrs (
+  # importlib-metadata has an incomplete dependency specification
+  importlib-metadata = super.importlib-metadata.overrideAttrs (
     old: {
-      buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
-      ];
+      propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional self.python.isPy2 self.pathlib2;
     }
   );
-
-  jsonschema = addSetupTools super.jsonschema;
-
-  keyring = addSetupTools super.keyring;
 
   lap = super.lap.overrideAttrs (
     old: {
@@ -191,6 +153,11 @@ in
     }
   );
 
+  # Calls Cargo at build time for source builds and is really tricky to package
+  maturin = super.maturin.override {
+    preferWheel = true;
+  };
+
   mccabe = super.mccabe.overrideAttrs (
     old: {
       postPatch = ''
@@ -243,7 +210,7 @@ in
     in
       {
         nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
-        buildInputs = old.buildInputs ++ [ blas ];
+        buildInputs = old.buildInputs ++ [ blas self.cython ];
         enableParallelBuilding = true;
         preBuild = ''
           ln -s ${cfg} site.cfg
@@ -262,8 +229,6 @@ in
     }
   );
 
-  pluggy = addSetupTools super.pluggy;
-
   psycopg2 = super.psycopg2.overrideAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
@@ -275,8 +240,6 @@ in
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
     }
   );
-
-  py = addSetupTools super.py;
 
   pyarrow = super.pyarrow.overrideAttrs (
     old: {
@@ -334,16 +297,96 @@ in
     }
   );
 
-  pytest = addSetupTools super.pytest;
+  pyqt5 = super.pyqt5.overridePythonAttrs (
+    old: {
+      format = "other";
 
-  pytest-mock = addSetupTools super.pytest-mock;
+      nativeBuildInputs = old.nativeBuildInputs ++ [
+        pkgs.pkgconfig
+        pkgs.qt5.qmake
+        pkgs.xorg.lndir
+        pkgs.qt5.qtbase
+        pkgs.qt5.qtsvg
+        pkgs.qt5.qtdeclarative
+        pkgs.qt5.qtwebchannel
+        # self.pyqt5-sip
+        self.sip
+      ];
 
-  python-dateutil = addSetupTools super.python-dateutil;
+      buildInputs = old.buildInputs ++ [
+        pkgs.dbus
+        pkgs.qt5.qtbase
+        pkgs.qt5.qtsvg
+        pkgs.qt5.qtdeclarative
+        self.sip
+      ];
+
+      # Fix dbus mainloop
+      inherit (pkgs.python3.pkgs.pyqt5) patches;
+
+      configurePhase = ''
+        runHook preConfigure
+
+        export PYTHONPATH=$PYTHONPATH:$out/${self.python.sitePackages}
+
+        mkdir -p $out/${self.python.sitePackages}/dbus/mainloop
+        ${self.python.executable} configure.py  -w \
+          --confirm-license \
+          --no-qml-plugin \
+          --bindir=$out/bin \
+          --destdir=$out/${self.python.sitePackages} \
+          --stubsdir=$out/${self.python.sitePackages}/PyQt5 \
+          --sipdir=$out/share/sip/PyQt5 \
+          --designer-plugindir=$out/plugins/designer
+
+        runHook postConfigure
+      '';
+
+      postInstall = ''
+        ln -s ${self.pyqt5-sip}/${self.python.sitePackages}/PyQt5/sip.* $out/${self.python.sitePackages}/PyQt5/
+        for i in $out/bin/*; do
+          wrapProgram $i --prefix PYTHONPATH : "$PYTHONPATH"
+        done
+
+        # # Let's make it a namespace package
+        # cat << EOF > $out/${self.python.sitePackages}/PyQt5/__init__.py
+        # from pkgutil import extend_path
+        # __path__ = extend_path(__path__, __name__)
+        # EOF
+      '';
+
+      installCheckPhase = let
+        modules = [
+          "PyQt5"
+          "PyQt5.QtCore"
+          "PyQt5.QtQml"
+          "PyQt5.QtWidgets"
+          "PyQt5.QtGui"
+        ];
+        imports = lib.concatMapStrings (module: "import ${module};") modules;
+      in
+        ''
+          echo "Checking whether modules can be imported..."
+          ${self.python.interpreter} -c "${imports}"
+        '';
+
+      doCheck = true;
+
+      enableParallelBuilding = true;
+    }
+  );
+
+  pytest-datadir = super.pytest-datadir.overrideAttrs (
+    old: {
+      postInstall = ''
+        rm -f $out/LICENSE
+      '';
+    }
+  );
 
   python-prctl = super.python-prctl.overrideAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
-        self.setuptools_scm
         pkgs.libcap
       ];
     }
@@ -380,8 +423,6 @@ in
     }
   );
 
-  six = addSetupTools super.six;
-
   urwidtrees = super.urwidtrees.overrideAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -390,7 +431,15 @@ in
     }
   );
 
-  # TODO: Figure out getting rid of this hack
+  vose-alias-method = super.pytest-datadir.overrideAttrs (
+    old: {
+      postInstall = ''
+        rm -f $out/LICENSE
+      '';
+    }
+  );
+
+  # Stop infinite recursion by using bootstrapped pkg from nixpkgs
   wheel = (
     pkgs.python3.pkgs.override {
       python = self.python;
@@ -401,5 +450,4 @@ in
     }
   );
 
-  zipp = addSetupTools super.zipp;
 }

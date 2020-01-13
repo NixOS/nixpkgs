@@ -1,22 +1,22 @@
 { stdenv, rustPlatform, fetchFromGitHub, makeWrapper
 , cmake, pkgconfig
 , xorg ? null
-, vulkan-loader ? null }:
+, libGL ? null }:
 
 with stdenv.lib;
 
 rustPlatform.buildRustPackage rec {
   pname = "rx";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0mhpq9x54d884ydmfv1358sgc4jc7bghfx2y0k7p879hyyxr52v1";
+    sha256 = "1n5s7v2z13550gkqz7w6dw62jdy60wdi8w1lfa23609b4yhg4w94";
   };
 
-  cargoSha256 = "0fnrgijfkvapj1yyy9grnqh2vkciisf029af0gfwyzsxzdi62gg5";
+  cargoSha256 = "173jfjvdag97f6jvfg366hjk9v3cz301cbzpcahy51rbf1cip1w1";
 
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = optional stdenv.isLinux ''
     mkdir -p $out/share/applications
     cp $src/rx.desktop $out/share/applications
-    wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${vulkan-loader}/lib
+    wrapProgram $out/bin/rx --prefix LD_LIBRARY_PATH : ${libGL}/lib
   '';
 
   meta = {

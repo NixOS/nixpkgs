@@ -61,11 +61,18 @@ in
         configuration defaults in a way incompatible with stateful
         data. For instance, if the default version of PostgreSQL
         changes, the new version will probably be unable to read your
-        existing databases. To prevent such breakage, you can set the
+        existing databases. To prevent such breakage, you should set the
         value of this option to the NixOS release with which you want
-        to be compatible. The effect is that NixOS will option
+        to be compatible. The effect is that NixOS will use
         defaults corresponding to the specified release (such as using
         an older version of PostgreSQL).
+        It‘s perfectly fine and recommended to leave this value at the
+        release version of the first install of this system.
+        Changing this option will not upgrade your system. In fact it
+        is meant to stay constant exactly when you upgrade your system.
+        You should only bump this option, if you are sure that you can
+        or have migrated all state on your system which is affected
+        by this option.
       '';
     };
 
@@ -84,8 +91,8 @@ in
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
       version = mkDefault (cfg.release + cfg.versionSuffix);
-      revision      = mkIf (pathIsDirectory gitRepo) (mkDefault            gitCommitId);
-      versionSuffix = mkIf (pathIsDirectory gitRepo) (mkDefault (".git." + gitCommitId));
+      revision      = mkIf (pathExists gitRepo) (mkDefault            gitCommitId);
+      versionSuffix = mkIf (pathExists gitRepo) (mkDefault (".git." + gitCommitId));
     };
 
     # Generate /etc/os-release.  See

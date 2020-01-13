@@ -1,6 +1,12 @@
 { lib, pkgs }:
 let
-  inherit (import ./semver.nix { inherit lib; }) satisfiesSemver;
+  inherit (import ./semver.nix { inherit lib ireplace; }) satisfiesSemver;
+  inherit (builtins) genList length;
+
+  # Replace a list entry at defined index with set value
+  ireplace = idx: value: list: (
+    genList (i: if i == idx then value else (builtins.elemAt list i)) (length list)
+  );
 
   # Returns true if pythonVersion matches with the expression in pythonVersions
   isCompatible = pythonVersion: pythonVersions:
@@ -24,7 +30,27 @@ let
     in
       (builtins.foldl' combine initial tokens).state;
 
-  readTOML = path: builtins.fromTOML (builtins.readFile path);
+  fromTOML = builtins.fromTOML or
+    (
+      toml: builtins.fromJSON (
+        builtins.readFile (
+          pkgs.runCommand "from-toml"
+            {
+              inherit toml;
+              allowSubstitutes = false;
+              preferLocalBuild = true;
+            }
+            ''
+              ${pkgs.remarshal}/bin/remarshal \
+                -if toml \
+                -i <(echo "$toml") \
+                -of json \
+                -o $out
+            ''
+        )
+      )
+    );
+  readTOML = path: fromTOML (builtins.readFile path);
 
   #
   # Returns the appropriate manylinux dependencies and string representation for the file specified

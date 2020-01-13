@@ -49,7 +49,7 @@ let
       # puts a reference to the C compiler in the binary.
       # This might be required by some gems at runtime,
       # but we allow to strip it out for smaller closure size.
-      , removeReferencesTo, removeReferenceToCC ? false
+      , removeReferencesTo, removeReferenceToCC ? true
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
