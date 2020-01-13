@@ -49,7 +49,9 @@ callPackage ./common.nix { inherit stdenv; } {
       ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
     NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " "
-      (if !stdenv.hostPlatform.isMusl
+      (stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform)
+        [ "-Wno-error=missing-attributes" "-Wno-error=array-bounds" ]
+      ++ (if !stdenv.hostPlatform.isMusl
         # TODO: This (returning a string or `null`, instead of a list) is to
         #       not trigger a mass rebuild due to the introduction of the
         #       musl-specific flags below.
@@ -62,7 +64,7 @@ callPackage ./common.nix { inherit stdenv; } {
             # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
             # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
             (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-          ]));
+          ])));
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new
