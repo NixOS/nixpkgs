@@ -2689,7 +2689,7 @@
     name = "Robin Gloster";
   };
   gnidorah = {
-    email = "gnidorah@yandex.com";
+    email = "gnidorah@users.noreply.github.com";
     github = "gnidorah";
     githubId = 12064730;
     name = "Alex Ivanov";
