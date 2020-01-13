@@ -5634,6 +5634,10 @@ in {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  yoda = toPythonModule (pkgs.yoda.override {
+    inherit python;
+  });
+
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 
   youtube-dl-light = callPackage ../tools/misc/youtube-dl {
