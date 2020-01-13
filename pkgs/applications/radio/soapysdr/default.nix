@@ -8,7 +8,7 @@
 
 let
 
-  version = "0.7.1";
+  version = "0.7.2";
   modulesVersion = with lib; versions.major version + "." + versions.minor version;
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapySDR";
     rev = "soapy-sdr-${version}";
-    sha256 = "1rbnd3w12kzsh94fiywyn4vch7h0kf75m88fi6nq992b3vnmiwvl";
+    sha256 = "102wnpjxrwba20pzdh1vvx0yg1h8vqd8z914idxflg9p14r6v5am";
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
