@@ -24626,7 +24626,9 @@ in
 
   thepeg = callPackage ../development/libraries/physics/thepeg { };
 
-  yoda = callPackage ../development/libraries/physics/yoda { };
+  yoda = callPackage ../development/libraries/physics/yoda {
+    python = python2;
+  };
   yoda-with-root = lowPrio (yoda.override {
     withRootSupport = true;
   });
