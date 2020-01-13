@@ -23023,6 +23023,8 @@ in
 
   megaglest = callPackage ../games/megaglest {};
 
+  mindustry = callPackage ../games/mindustry { };
+
   minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
