@@ -11,7 +11,7 @@ buildPythonPackage rec {
 
 
   # disable test_fetch and the doctests (which also invoke fetch)
-  patchPhase = ''
+  postPatch = ''
     sed -i -e "/def test_fetch/i\\
     \\t@unittest.skip('requires internet')" -e "/def additional_tests():/,+1d" tests.py
   '';
