@@ -2326,10 +2326,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "065k7vffdki73f4nz89lxi6wxmcw5dlf593831pgvlbralll6x3r";
+      sha256 = "18rf9v20i0dk5dblr7m22di959xpch2h7gsx0cl585cryr7apwp3";
       type = "gem";
     };
-    version = "1.9.4";
+    version = "1.11.0";
   };
   json-schema = {
     dependencies = ["addressable"];
@@ -3365,10 +3365,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0immyg4as0isyj2dcjf44n0avg1jv5kx1qk0asrgb5ayzwmjqg1k";
+      sha256 = "00d2c79xhz5k3fcclarjr1ffxbrvc6236f4rrvriad9kwqr7c1mp";
       type = "gem";
     };
-    version = "0.9.10";
+    version = "0.10.0";
   };
   pry = {
     dependencies = ["coderay" "method_source"];
