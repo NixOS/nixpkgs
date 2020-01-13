@@ -1,6 +1,9 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-
+# The version of darwin.apple_sdk used for sources provided by apple.
+, appleSdkVersion ? "10.12"
+# Minimum required macOS version, used both for compatibility as well as reproducability.
+, macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
@@ -35,8 +38,8 @@ in rec {
     export SDKROOT=
 
     # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
-    export MACOSX_DEPLOYMENT_TARGET=10.12
-    export NIX_LDFLAGS+=" -macosx_version_min 10.12 -sdk_version 10.12 -no_uuid"
+    export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
+    export NIX_LDFLAGS+=" -macosx_version_min ${macosVersionMin} -sdk_version ${appleSdkVersion} -no_uuid"
 
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
@@ -135,8 +138,7 @@ in rec {
         __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
-          inherit platform;
-          parent = last;
+          inherit macosVersionMin appleSdkVersion platform;
         };
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -405,9 +407,9 @@ in rec {
     extraBuildInputs = [ pkgs.darwin.CF ];
 
     extraAttrs = {
-      inherit platform bootstrapTools;
-      libc         = pkgs.darwin.Libsystem;
+      libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
+      inherit macosVersionMin appleSdkVersion platform bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [
