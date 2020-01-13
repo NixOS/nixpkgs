@@ -103,6 +103,33 @@ let
         fi
         return 0
     }
+
+    wait_fido2key () {
+        local secs="''${1:-10}"
+
+        fido2luks connected 1>/dev/null 2>&1
+        if [ $? != 0 ]; then
+            echo -n "Waiting $secs seconds for the FIDO2 key to appear..."
+            local success=false
+            for try in $(seq $secs); do
+                echo -n .
+                sleep 1
+                fido2luks connected 1>/dev/null 2>&1
+                if [ $? == 0 ]; then
+                    success=true
+                    break
+                fi
+            done
+            if [ $success == true ]; then
+                echo " - success";
+                return 0
+            else
+                echo " - failure";
+                return 1
+            fi
+        fi
+        return 0
+    }
   '';
 
   preCommands = ''
@@ -139,7 +166,7 @@ let
     umount /crypt-ramfs 2>/dev/null
   '';
 
-  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fallbackToPassword, ... }: assert name' == name;
+  openCommand = name': { name, device, header, keyFile, keyFileSize, keyFileOffset, allowDiscards, yubikey, gpgCard, fido2, fallbackToPassword, ... }: assert name' == name;
   let
     csopen   = "cryptsetup luksOpen ${device} ${name} ${optionalString allowDiscards "--allow-discards"} ${optionalString (header != null) "--header=${header}"}";
     cschange = "cryptsetup luksChangeKey ${device} ${optionalString (header != null) "--header=${header}"}";
@@ -387,7 +414,29 @@ let
     }
     ''}
 
-    ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) then ''
+    ${optionalString (luks.fido2Support && (fido2.credential != null)) ''
+
+    open_with_hardware() {
+      local passsphrase
+
+      if wait_fido2key ${toString fido2.gracePeriod}; then
+          ${if fido2.passwordLess then ''
+            export passphrase=""
+          '' else ''
+            echo -n "FIDO2 salt for ${device}: "
+            read -rs passphrase
+            echo
+          ''}
+            echo "Waiting for your FIDO2 device..."
+            fido2luks -i open ${device} ${name} ${fido2.credential} --salt string:$passphrase
+        else
+            echo "No FIDO2 key found, falling back to normal open procedure"
+            open_normally
+        fi
+    }
+    ''}
+
+    ${if (luks.yubikeySupport && (yubikey != null)) || (luks.gpgSupport && (gpgCard != null)) || (luks.fido2Support && (fido2.credential != null)) then ''
     open_with_hardware
     '' else ''
     open_normally
@@ -608,6 +657,31 @@ in
             });
           };
 
+          fido2 = {
+            credential = mkOption {
+              default = null;
+              example = "f1d00200d8dc783f7fb1e10ace8da27f8312d72692abfca2f7e4960a73f48e82e1f7571f6ebfcee9fb434f9886ccc8fcc52a6614d8d2";
+              type = types.str;
+              description = "The FIDO2 credential ID.";
+            };
+
+            gracePeriod = mkOption {
+              default = 10;
+              type = types.int;
+              description = "Time in seconds to wait for the FIDO2 key.";
+            };
+
+            passwordLess = mkOption {
+              default = false;
+              type = types.bool;
+              description = ''
+                Defines whatever to use an empty string as a default salt.
+
+                Enable only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+              '';
+            };
+          };
+
           yubikey = mkOption {
             default = null;
             description = ''
@@ -706,6 +780,15 @@ in
             and a Yubikey to work with this feature.
           '';
     };
+
+    boot.initrd.luks.fido2Support = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables support for authenticating with FIDO2 devices.
+      '';
+    };
+
   };
 
   config = mkIf (luks.devices != {} || luks.forceLuksSupportInInitrd) {
@@ -713,6 +796,14 @@ in
     assertions =
       [ { assertion = !(luks.gpgSupport && luks.yubikeySupport);
           message = "Yubikey and GPG Card may not be used at the same time.";
+        }
+
+        { assertion = !(luks.gpgSupport && luks.fido2Support);
+          message = "FIDO2 and GPG Card may not be used at the same time.";
+        }
+
+        { assertion = !(luks.fido2Support && luks.yubikeySupport);
+          message = "FIDO2 and Yubikey may not be used at the same time.";
         }
       ];
 
@@ -753,6 +844,11 @@ in
         chmod +x $out/bin/openssl-wrap
       ''}
 
+      ${optionalString luks.fido2Support ''
+        copy_bin_and_libs ${pkgs.fido2luks}/bin/fido2luks
+      ''}
+
+
       ${optionalString luks.gpgSupport ''
         copy_bin_and_libs ${pkgs.gnupg}/bin/gpg
         copy_bin_and_libs ${pkgs.gnupg}/bin/gpg-agent
@@ -782,6 +878,9 @@ in
         $out/bin/gpg --version
         $out/bin/gpg-agent --version
         $out/bin/scdaemon --version
+      ''}
+      ${optionalString luks.fido2Support ''
+        $out/bin/fido2luks --version
       ''}
     '';
 
