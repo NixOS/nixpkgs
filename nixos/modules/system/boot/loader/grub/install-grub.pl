@@ -475,6 +475,9 @@ if ($grubVersion == 2) {
     }
 }
 
+# extraPrepareConfig could refer to @bootPath@, which we have to substitute
+$extraPrepareConfig =~ s/\@bootPath\@/$bootPath/g;
+
 # Run extraPrepareConfig in sh
 if ($extraPrepareConfig ne "") {
   system((get("shell"), "-c", $extraPrepareConfig));

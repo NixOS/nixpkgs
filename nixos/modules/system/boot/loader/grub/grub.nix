@@ -630,7 +630,7 @@ in
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
+          ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
         '') config.boot.loader.grub.extraFiles);
 
       assertions = [
