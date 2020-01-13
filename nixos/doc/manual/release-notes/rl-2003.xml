@@ -170,6 +170,12 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
+     The Way Cooler wayland compositor has been removed, as the project has been officially canceled.
+     There are no more <literal>way-cooler</literal> attribute and <literal>programs.way-cooler</literal> options.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
       The BEAM package set has been deleted. You will only find there the different interpreters.
       You should now use the different build tools coming with the languages with sandbox mode disabled.
     </para>
