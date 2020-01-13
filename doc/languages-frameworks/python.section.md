@@ -833,6 +833,7 @@ used in `buildPythonPackage`.
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A `venv` is created if it does not yet exist.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed with the `pipInstallHook`.
 
 ### Development mode
