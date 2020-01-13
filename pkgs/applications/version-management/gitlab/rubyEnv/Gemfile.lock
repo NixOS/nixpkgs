@@ -531,8 +531,8 @@ GEM
       regexp_parser (~> 1.1)
       regexp_property_values (~> 0.3)
     json (1.8.6)
-    json-jwt (1.9.4)
-      activesupport
+    json-jwt (1.11.0)
+      activesupport (>= 4.2)
       aes_key_wrap
       bindata
     json-schema (2.8.0)
@@ -746,7 +746,7 @@ GEM
       parser
       unparser
     procto (0.0.3)
-    prometheus-client-mmap (0.9.10)
+    prometheus-client-mmap (0.10.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -1283,7 +1283,7 @@ DEPENDENCIES
   peek (~> 1.1)
   pg (~> 1.1)
   premailer-rails (~> 1.10.3)
-  prometheus-client-mmap (~> 0.9.10)
+  prometheus-client-mmap (~> 0.10.0)
   pry-byebug (~> 3.5.1)
   pry-rails (~> 0.3.4)
   rack (~> 2.0.7)
