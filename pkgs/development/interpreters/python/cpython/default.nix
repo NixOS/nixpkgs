@@ -208,9 +208,6 @@ in with passthru; stdenv.mkDerivation {
 
     ln -s "$out/include/${executable}m" "$out/include/${executable}"
 
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
-
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.
     find "$out" -name 'wininst*.exe' | xargs -r rm -f

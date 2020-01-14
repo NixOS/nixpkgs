@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with ocamlPackages; [ ocaml ocamlbuild ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A quite complete and fast LATEX to HTML translator";

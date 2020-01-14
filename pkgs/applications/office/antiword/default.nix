@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   patches = [ ./10_fix_buffer_overflow_wordole_c.patch ];
 
-  installTargets = "global_install";
+  installTargets = [ "global_install" ];
 
   meta = {
     homepage = http://www.winfield.demon.nl/;

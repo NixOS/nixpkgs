@@ -1,15 +1,15 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -p python3 -p nix-prefetch-git -i python
+#! nix-shell -p nix-prefetch-git "python3.withPackages (ps: with ps; [ lxml ])"
+#! nix-shell -i python
 
 import base64
-import csv
 import json
 import re
 import subprocess
-import xml.etree.ElementTree as ElementTree
 from codecs import iterdecode
-from operator import itemgetter
 from os.path import dirname, splitext
+from lxml import etree
+from lxml.etree import HTMLParser
 from urllib.request import urlopen
 
 # ChromiumOS components required to build crosvm.
@@ -27,13 +27,19 @@ buildspecs_url = f'{manifest_versions}/+/refs/heads/master/paladin/buildspecs/'
 # branch branches are used for fixes for specific devices.  So for
 # Chromium OS they will always be 0.  This is a best guess, and is not
 # documented.
-with urlopen('https://cros-omahaproxy.appspot.com/all') as resp:
-    versions = csv.DictReader(iterdecode(resp, 'utf-8'))
-    stables = filter(lambda v: v['track'] == 'stable-channel', versions)
-    stable = sorted(stables, key=itemgetter('chrome_version'), reverse=True)[0]
+with urlopen('https://cros-updates-serving.appspot.com/') as resp:
+    document = etree.parse(resp, HTMLParser())
+    # bgcolor="lightgreen" is set on the most up-to-date version for
+    # each channel, so find a lightgreen cell in the "Stable" column.
+    (platform_version, chrome_version) = document.xpath("""
+        (//table[@id="cros-updates"]/tr/td[1 + count(
+            //table[@id="cros-updates"]/thead/tr[1]/th[text() = "Stable"]
+            /preceding-sibling::*)
+        ][@bgcolor="lightgreen"])[1]/text()
+    """)
 
-chrome_major_version = re.match(r'\d+', stable['chrome_version'])[0]
-chromeos_tip_build = re.match(r'\d+', stable['chromeos_version'])[0]
+chrome_major_version = re.match(r'\d+', chrome_version)[0]
+chromeos_tip_build = re.match(r'\d+', platform_version)[0]
 
 # Find the most recent buildspec for the stable Chrome version and
 # Chromium OS build number.  Its branch build and branch branch build
@@ -52,8 +58,8 @@ revisions = {}
 
 # Read the buildspec, and extract the git revisions for each component.
 with urlopen(f'{buildspecs_url}{chrome_major_version}/{buildspec}.xml?format=TEXT') as resp:
-    xml = base64.decodebytes(resp.read()).decode('utf-8')
-    root = ElementTree.fromstring(xml)
+    xml = base64.decodebytes(resp.read())
+    root = etree.fromstring(xml)
     for project in root.findall('project'):
         revisions[project.get('name')] = project.get('revision')
 

@@ -168,16 +168,12 @@ in
         })
     ) cfg.servers;
 
-    users.users = [{
-      uid = config.ids.uids.bepasty;
-      name = user;
-      group = group;
-      home = default_home;
-    }];
+    users.users.${user} =
+      { uid = config.ids.uids.bepasty;
+        group = group;
+        home = default_home;
+      };
 
-    users.groups = [{
-      name = group;
-      gid = config.ids.gids.bepasty;
-    }];
+    users.groups.${group}.gid = config.ids.gids.bepasty;
   };
 }

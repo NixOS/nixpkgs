@@ -3,7 +3,7 @@
 , meson
 , ninja
 , pkgconfig
-, python
+, python3
 , gst-plugins-base
 , orc
 , bzip2
@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    python
+    python3
     meson
     ninja
     gettext

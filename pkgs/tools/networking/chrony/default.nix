@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" ]
-    ++ stdenv.lib.optional stdenv.isLinux [ "--enable-scfilter" ];
+    ++ stdenv.lib.optional stdenv.isLinux "--enable-scfilter";
 
   meta = with stdenv.lib; {
     description = "Sets your computer's clock from time servers on the Net";

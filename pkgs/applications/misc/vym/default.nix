@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "vym";
-  version = "2.7.0";
+  version = "2.7.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/vym/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "1rnrfqlff7wv6yni8bvff8n90pmn82k82zd4sn1jsx9r1n3qsfkh";
+    sha256 = "0lyf0m4y5kn5s47z4sg10215f3jsn3k1bl389jfbh2f5v4srav4g";
   };
 
   # Hardcoded paths scattered about all have form share/vym

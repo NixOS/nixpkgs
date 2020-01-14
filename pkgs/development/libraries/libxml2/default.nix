@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
-  propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
+  propagatedBuildOutputs = [ "out" "bin" ] ++ lib.optional pythonSupport "py";
 
   buildInputs = lib.optional pythonSupport python
     ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
@@ -64,8 +64,8 @@ stdenv.mkDerivation rec {
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optionalString pythonSupport
-    ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
+  installFlags = lib.optional pythonSupport
+    "pythondir=\"${placeholder ''py''}/lib/${python.libPrefix}/site-packages\"";
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"

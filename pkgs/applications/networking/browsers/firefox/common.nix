@@ -110,12 +110,16 @@ let
       url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
-  ] ++ lib.optional (lib.versionAtLeast ffversion "71") ./fix-ff71-lto.patch
+  ]
+  ++ lib.optional (lib.versionAtLeast ffversion "71") (fetchpatch {
+    url = "https://phabricator.services.mozilla.com/D56873?download=true";
+    sha256 = "183949phd2n27nhiq85a04j4fjn0jxmldic6wcjrczsd8g2rrr5k";
+  })
   ++ patches;
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   name = "${pname}-unwrapped-${version}";
   version = browserVersion;
 
@@ -156,12 +160,15 @@ stdenv.mkDerivation rec {
                                      AVFoundation MediaToolbox CoreLocation
                                      Foundation libobjc AddressBook cups ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString ([
     "-I${glib.dev}/include/gio-unix-2.0"
   ]
   ++ lib.optionals (!isTorBrowserLike) [
     "-I${nss.dev}/include/nss"
-  ];
+  ]
+  ++ lib.optional (pname == "firefox-esr" && lib.versionAtLeast ffversion "68"
+                                          && lib.versionOlder ffversion "69")
+    "-Wno-error=format-security");
 
   postPatch = lib.optionalString (lib.versionAtLeast ffversion "63.0" && !isTorBrowserLike) ''
     substituteInPlace third_party/prio/prio/rand.c --replace 'nspr/prinit.h' 'prinit.h'
@@ -173,7 +180,7 @@ stdenv.mkDerivation rec {
     [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
-    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
+    ++ lib.optional  (lib.versionAtLeast ffversion "61.0") python3
     ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
@@ -360,4 +367,18 @@ stdenv.mkDerivation rec {
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
-}
+} //
+# the build system verifies checksums of the bundled rust sources
+# ./third_party/rust is be patched by our libtool fixup code in stdenv
+# unfortunately we can't just set this to `false` when we do not want it.
+# See https://github.com/NixOS/nixpkgs/issues/77289 for more details
+lib.optionalAttrs (lib.versionAtLeast ffversion "72") {
+  # Ideally we would figure out how to tell the build system to not
+  # care about changed hashes as we are already doing that when we
+  # fetch the sources. Any further modifications of the source tree
+  # is on purpose by some of our tool (or by accident and a bug?).
+  dontFixLibtool = true;
+
+  # on aarch64 this is also required
+  dontUpdateAutotoolsGnuConfigScripts = true;
+})

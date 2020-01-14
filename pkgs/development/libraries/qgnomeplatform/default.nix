@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, pkgconfig, gtk3, qtbase, qmake, qtx11extras }:
+{ mkDerivation, lib, fetchFromGitHub, pkgconfig, gtk3, qtbase, qmake, qtx11extras, pantheon }:
 
 mkDerivation rec {
   pname = "qgnomeplatform";
@@ -29,6 +29,12 @@ mkDerivation rec {
     substituteInPlace theme/theme.pro \
       --replace "\$\$[QT_INSTALL_PLUGINS]" "$out/$qtPluginPrefix"
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with lib; {
     description = "QPlatformTheme for a better Qt application inclusion in GNOME";

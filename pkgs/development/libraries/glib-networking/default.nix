@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.62.1";
+  version = "2.62.2";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "043imcynl3rwdz79wvpdfhkmqmgdhr34z0vac3x7jymdf5kswm9w";
+    sha256 = "0i2mw75297ql72h47vyvff3hqa0kcmqybblj52fqrarb0kfbhi06";
   };
 
   patches = [

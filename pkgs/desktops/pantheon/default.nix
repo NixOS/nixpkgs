@@ -3,37 +3,6 @@
 
 lib.makeScope pkgs.newScope (self: with self; {
 
-  apps = [
-    elementary-calculator elementary-calendar
-    elementary-camera elementary-code elementary-files
-    elementary-music elementary-photos elementary-screenshot-tool
-    elementary-terminal elementary-videos switchboard-with-plugs
-  ];
-
-  artwork = [
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-sound-theme
-    elementary-wallpapers
-  ];
-
-  desktop = [
-    elementary-default-settings
-    elementary-session-settings
-    elementary-shortcut-overlay
-    gala
-    wingpanel-with-indicators
-  ];
-
-  services = [
-    cerbere
-    elementary-capnet-assist
-    elementary-settings-daemon
-    elementary-dpms-helper
-    pantheon-agent-geoclue2
-    pantheon-agent-polkit
-  ];
-
   switchboardPlugs = [
     switchboard-plug-a11y switchboard-plug-about
     switchboard-plug-applications switchboard-plug-bluetooth

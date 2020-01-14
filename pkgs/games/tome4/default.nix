@@ -18,11 +18,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.6.1";
+  version = "1.6.5";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0c5a2bdyfccwkqnb6yqvzggyi2nk032v01kfc00zlgpdfzljcb9i";
+    sha256 = "0ifi057idid8xq7af8ybs99b6939hyfif1ml1ihjpx02vinmd419";
   };
 
   prePatch = ''
@@ -41,11 +41,7 @@ in stdenv.mkDerivation rec {
   # disable parallel building as it caused sporadic build failures
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${SDL2_image}/include/SDL2"
-    "-I${SDL2_ttf}/include/SDL2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_ttf}/include/SDL2";
 
   makeFlags = [ "config=release" ];
 

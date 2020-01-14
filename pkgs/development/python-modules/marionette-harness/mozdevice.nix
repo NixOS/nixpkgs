@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, mozlog
 , moznetwork
 , mozprocess
 }:
@@ -12,11 +13,11 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4cbeb4558f952cb08f53c4b57a405981b5683f38df0b293f0e7d20b6f4c17d84";
+    sha256 = "1gw2lk16fz2n1953i29hgw47s2h0c6z911zzg8am1in8qq2318xv";
     format = "wheel";
   };
 
-  propagatedBuildInputs = [ moznetwork mozprocess ];
+  propagatedBuildInputs = [ mozlog moznetwork mozprocess ];
 
   meta = {
     description = "Mozilla-authored device management";

@@ -52,7 +52,7 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ stdenv.lib.optional (xorg == null) [ "--without-x" ];
+  ] ++ stdenv.lib.optional (xorg == null) "--without-x";
 
   inherit patches;
 

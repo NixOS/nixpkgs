@@ -64,11 +64,13 @@ in
     enabledConfigs = filter (f: f.enable) (attrValues cfg.peers);
 
     mkEtc = peerCfg: {
-      "ppp/peers/${peerCfg.name}".text = peerCfg.config;
+      name = "ppp/peers/${peerCfg.name}";
+      value.text = peerCfg.config;
     };
 
     mkSystemd = peerCfg: {
-      "pppd-${peerCfg.name}" = {
+      name = "pppd-${peerCfg.name}";
+      value = {
         restartTriggers = [ config.environment.etc."ppp/peers/${peerCfg.name}".source ];
         before = [ "network.target" ];
         wants = [ "network.target" ];
@@ -124,8 +126,8 @@ in
       };
     };
 
-    etcFiles = map mkEtc enabledConfigs;
-    systemdConfigs = map mkSystemd enabledConfigs;
+    etcFiles = listToAttrs (map mkEtc enabledConfigs);
+    systemdConfigs = listToAttrs (map mkSystemd enabledConfigs);
 
   in mkIf cfg.enable {
     environment.etc = mkMerge etcFiles;

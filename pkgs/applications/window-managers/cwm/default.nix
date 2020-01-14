@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname = "cwm";
-  version = "6.3";
+  version = "6.6";
 
   src = fetchFromGitHub {
     owner = "leahneukirchen";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m08gd6nscwfx6040zbg2zl89m4g73im68iflzcihd6pdc8rzzs4";
+    sha256 = "1rvb4y37vw3bpkqa6fbizgc74x3nrlkk6yf5hlm0hf8qz0c17vbl";
   };
 
   nativeBuildInputs = [ pkgconfig ];

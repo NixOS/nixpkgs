@@ -20,7 +20,6 @@ buildPythonPackage rec {
     sha256 = "308ce876354924fb6c540b41d5d6d08acfc946984bf0c97777c1ddcb42e0b2f5";
   };
 
-  checkInputs = [ nose ];
   propagatedBuildInputs = [
     jupyter_client
     ipython
@@ -28,6 +27,12 @@ buildPythonPackage rec {
     prompt_toolkit
     pygments
   ];
+  checkInputs = [ nose ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "prompt_toolkit>=2.0.0,<2.1.0" "prompt_toolkit"
+  '';
 
   # ValueError: underlying buffer has been detached
   doCheck = false;

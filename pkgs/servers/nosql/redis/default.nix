@@ -23,7 +23,8 @@ stdenv.mkDerivation rec {
   # Note: this enables libc malloc as a temporary fix for cross-compiling.
   # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
-  makeFlags = "PREFIX=$(out)" + stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) " AR=${stdenv.cc.targetPrefix}ar RANLIB=${stdenv.cc.targetPrefix}ranlib MALLOC=libc";
+  makeFlags = [ "PREFIX=$(out)" ]
+    ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ];
 
   enableParallelBuilding = true;
 

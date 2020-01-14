@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libjack2 gtk2 lv2 faust ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   # remove lv2 until https://github.com/sampov2/foo-yc20/issues/6 is resolved
   postInstallFixup = "rm -rf $out/lib/lv2";

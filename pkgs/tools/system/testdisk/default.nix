@@ -37,7 +37,7 @@ assert enableQt -> qwt != null;
   ]
   ++ stdenv.lib.optional enableNtfs ntfs3g
   ++ stdenv.lib.optional enableExtFs e2fsprogs
-  ++ stdenv.lib.optional enableQt [ qtbase qttools qwt ];
+  ++ stdenv.lib.optionals enableQt [ qtbase qttools qwt ];
 
   nativeBuildInputs = [ pkgconfig ];
 

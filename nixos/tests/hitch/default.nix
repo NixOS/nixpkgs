@@ -16,7 +16,7 @@ import ../make-test-python.nix ({ pkgs, ... }:
 
     services.httpd = {
       enable = true;
-      documentRoot = ./example;
+      virtualHosts.localhost.documentRoot = ./example;
       adminAddr = "noone@testing.nowhere";
     };
   };

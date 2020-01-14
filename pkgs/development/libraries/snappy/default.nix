@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, static ? false }:
 
 stdenv.mkDerivation rec {
   pname = "snappy";
@@ -17,7 +17,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DCMAKE_SKIP_BUILD_RPATH=OFF" ];
+  cmakeFlags = [
+    "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+  ];
 
   postInstall = ''
     substituteInPlace "$out"/lib/cmake/Snappy/SnappyTargets.cmake \
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   meta = with stdenv.lib; {
-    homepage = https://google.github.io/snappy/;
+    homepage = "https://google.github.io/snappy/";
     license = licenses.bsd3;
     description = "Compression/decompression library for very high speeds";
     platforms = platforms.all;

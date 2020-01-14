@@ -419,4 +419,23 @@ machine.wait_for_unit("xautolock.service", "x-session-user")
   <literal>wait_for_unit</literal>, <literal>start_job</literal> and
   <literal>stop_job</literal>.
  </para>
+
+ <para>
+  For faster dev cycles it's also possible to disable the code-linters (this shouldn't
+  be commited though):
+<programlisting>
+import ./make-test-python.nix {
+  skipLint = true;
+  machine =
+    { config, pkgs, ... }:
+    { <replaceable>configuration…</replaceable>
+    };
+
+  testScript =
+    ''
+      <replaceable>Python code…</replaceable>
+    '';
+}
+</programlisting>
+ </para>
 </section>

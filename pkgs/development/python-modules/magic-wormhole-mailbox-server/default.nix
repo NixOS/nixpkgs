@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, attrs, twisted, pyopenssl, service-identity, autobahn, treq, mock }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, six, attrs, twisted, pyopenssl, service-identity, autobahn, treq, mock, pytest }:
 
 buildPythonPackage rec {
   version = "0.4.1";
@@ -10,10 +10,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six attrs twisted pyopenssl service-identity autobahn ];
-  checkInputs = [ treq mock ];
 
+  # zope.interface import issue
+  doCheck = !isPy27;
+  checkInputs = [ treq mock pytest ];
   checkPhase = ''
-    trial wormhole_mailbox_server
+    pytest
   '';
 
   meta = with stdenv.lib; {

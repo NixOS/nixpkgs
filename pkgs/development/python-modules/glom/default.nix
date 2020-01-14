@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "glom";
-  version = "19.2.0";
+  version = "19.10.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c277f34e5e498834a63c2114a25a6c67b5cf0b92f96bb65cba063d861c3d1da6";
+    sha256 = "c8a50cb9fcf0c84807836c6a73cf61285557834b9050d7bde7732b936aceb7dd";
   };
 
   propagatedBuildInputs = [ boltons attrs face ];

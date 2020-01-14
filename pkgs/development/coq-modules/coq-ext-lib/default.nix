@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/coq-ext-lib/coq-ext-lib;

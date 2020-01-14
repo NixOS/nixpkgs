@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     git
     python3
   ];
-  NIX_LDFLAGS = [ "-lz" ];
+  NIX_LDFLAGS = "-lz";
 
   postInstall = "wrapProgram $out/bin/texmacs --suffix PATH : " +
         (if ghostscriptX == null then "" else "${ghostscriptX}/bin:") +

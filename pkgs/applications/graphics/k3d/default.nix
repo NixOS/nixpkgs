@@ -39,9 +39,7 @@ stdenv.mkDerivation rec {
 
   #doCheck = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-deprecated-declarations"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";

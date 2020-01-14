@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       sha256 = "0nqyhznnnvpgfa6rfv8rapjfpw99b67n97jfqp9r3hpib1b3ja6p";
     })
   ];
-  makeFlags = "PREFIX=${placeholder "out"}";
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
   dontUseSconsInstall = true;
   meta = {
     inherit (s) version;

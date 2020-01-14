@@ -30,13 +30,9 @@ stdenv.mkDerivation rec {
     "--disable-bundled-md5"
     "--disable-dynamic-load"
     "--enable-shared"
-  ] ++ stdenv.lib.optional (libmaxminddb != null ) [
-    "--enable-mmdb"
-  ] ++ stdenv.lib.optional (geolite-legacy != null) [
-    "--with-geoip-db=${geolite-legacy}/share/GeoIP"
-  ] ++ stdenv.lib.optional (ip2location-c != null ) [
-    "--enable-ip2location"
-  ];
+  ] ++ stdenv.lib.optional (libmaxminddb != null) "--enable-mmdb"
+    ++ stdenv.lib.optional (geolite-legacy != null) "--with-geoip-db=${geolite-legacy}/share/GeoIP"
+    ++ stdenv.lib.optional (ip2location-c != null) "--enable-ip2location";
 
   enableParallelBuilding = true;
 

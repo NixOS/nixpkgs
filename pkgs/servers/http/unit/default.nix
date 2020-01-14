@@ -9,6 +9,7 @@
 , withRuby_2_4 ? false, ruby_2_4
 , withRuby_2_5 ? false, ruby_2_5
 , withRuby_2_6 ? true, ruby_2_6
+, withRuby_2_7 ? true, ruby_2_7
 , withSSL ? true, openssl ? null
 , withIPv6 ? true
 , withDebug ? false
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     ++ optional withRuby_2_4 ruby_2_4
     ++ optional withRuby_2_5 ruby_2_5
     ++ optional withRuby_2_6 ruby_2_6
+    ++ optional withRuby_2_7 ruby_2_7
     ++ optional withSSL openssl;
 
   configureFlags = [
@@ -47,9 +49,9 @@ stdenv.mkDerivation rec {
     "--pid=/run/unit/unit.pid"
     "--user=unit"
     "--group=unit"
-  ] ++ optional withSSL     [ "--openssl" ]
-    ++ optional (!withIPv6) [ "--no-ipv6" ]
-    ++ optional withDebug   [ "--debug" ];
+  ] ++ optional withSSL     "--openssl"
+    ++ optional (!withIPv6) "--no-ipv6"
+    ++ optional withDebug   "--debug";
 
   postConfigure = ''
     ${optionalString withPython2    "./configure python --module=python2  --config=${python2}/bin/python2-config  --lib-path=${python2}/lib"}
@@ -62,6 +64,7 @@ stdenv.mkDerivation rec {
     ${optionalString withRuby_2_4   "./configure ruby   --module=ruby24   --ruby=${ruby_2_4}/bin/ruby"}
     ${optionalString withRuby_2_5   "./configure ruby   --module=ruby25   --ruby=${ruby_2_5}/bin/ruby"}
     ${optionalString withRuby_2_6   "./configure ruby   --module=ruby26   --ruby=${ruby_2_6}/bin/ruby"}
+    ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}
   '';
 
   meta = {

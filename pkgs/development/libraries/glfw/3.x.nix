@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3";
+  version = "3.3.1";
   pname = "glfw";
 
   src = fetchFromGitHub {
     owner = "glfw";
     repo = "GLFW";
     rev = version;
-    sha256 = "1f1hqpqffzg46z33ybs2c3akmkly7b3qmgp5byk50nvad6g2pm4p";
+    sha256 = "0c7nlrhq84gdq10diyv6nshjbv8410bmn0vging815pfvis208xc";
   };
 
   enableParallelBuilding = true;

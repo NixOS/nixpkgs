@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "zope.i18nmessageid";
-  version = "4.3.1";
+  version = "5.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e511edff8e75d3a6f84d8256e1e468c85a4aa9d89c2ea264a919334fae7081e3";
+    sha256 = "03318270df5320c57b3416744f9cb2a85160a8d00345c07ac35d2b7ac01ff50c";
   };
 
   propagatedBuildInputs = [ six ];

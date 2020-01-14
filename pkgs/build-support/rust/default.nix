@@ -4,6 +4,7 @@
 , cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, unpackPhase ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -29,7 +30,7 @@ assert buildType == "release" || buildType == "debug";
 let
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
-        inherit name src srcs sourceRoot cargoUpdateHook;
+        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         copyLockfile = verifyCargoDeps;
         patches = cargoPatches;
         sha256 = cargoSha256;
@@ -99,9 +100,9 @@ stdenv.mkDerivation (args // {
   '' + stdenv.lib.optionalString verifyCargoDeps ''
     if ! diff source/Cargo.lock $cargoDeps/Cargo.lock ; then
       echo
-      echo "ERROR: cargoSha256 is out of date."
+      echo "ERROR: cargoSha256 is out of date"
       echo
-      echo "Cargo.lock is not the same in $cargoDeps."
+      echo "Cargo.lock is not the same in $cargoDeps"
       echo
       echo "To fix the issue:"
       echo '1. Use "1111111111111111111111111111111111111111111111111111" as the cargoSha256 value'

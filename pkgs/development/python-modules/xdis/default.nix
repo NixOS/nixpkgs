@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "xdis";
-  version = "4.1.3";
+  version = "4.2.2";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "rocky";
     repo = "python-xdis";
     rev = version;
-    sha256 = "0ixx9svyi0kw3z2i51cv1cyg4l5z8hy432kxgsvz20mr9a8z5c91";
+    sha256 = "0d286myx6z6cbih77h8z5p9vscxvww3gy59lmi1w6y2nq6c8sqzb";
   };
 
   checkInputs = [ pytest ];
@@ -28,5 +28,4 @@ buildPythonPackage rec {
     homepage = https://github.com/rocky/python-xdis/;
     license = licenses.gpl2;
   };
-
 }

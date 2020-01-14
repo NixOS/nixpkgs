@@ -9,10 +9,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXaw ];
 
-  preBuild = ''
-    substituteInPlace Makefile \
-      --replace /usr/local $out
-  '';
+  makeFlags = [
+    "INSTDIR=${placeholder ''out''}"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.gedanken.org.uk/software/xbomb/;

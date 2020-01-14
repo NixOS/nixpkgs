@@ -84,6 +84,9 @@ in buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
+    # ordering logic has changed
+    "numpy_ufuncs_other"
+    "order_without_freq"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"

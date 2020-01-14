@@ -8,6 +8,7 @@
 # See https://github.com/xianyi/OpenBLAS/blob/develop/TargetList.txt
 , target ? null
 , enableStatic ? false
+, enableShared ? true
 }:
 
 with stdenv.lib;
@@ -60,7 +61,7 @@ let
       TARGET = setTarget "ATHLON";
       DYNAMIC_ARCH = true;
       NO_AVX512 = true;
-      USE_OPENMP = true;
+      USE_OPENMP = !stdenv.hostPlatform.isMusl;
     };
   };
 in
@@ -115,6 +116,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     perl
     which
+  ];
+
+  depsBuildBuild = [
     buildPackages.gfortran
     buildPackages.stdenv.cc
   ];
@@ -126,6 +130,7 @@ stdenv.mkDerivation rec {
     NUM_THREADS = 64;
     INTERFACE64 = blas64;
     NO_STATIC = !enableStatic;
+    NO_SHARED = !enableShared;
     CROSS = stdenv.hostPlatform != stdenv.buildPlatform;
     HOSTCC = "cc";
     # Makefile.system only checks defined status

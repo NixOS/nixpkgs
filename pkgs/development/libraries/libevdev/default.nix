@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python }:
+{ stdenv, fetchurl, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "libevdev";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "04a2klvii0in9ln8r85mk2cm73jq8ry2m3yzmf2z8xyjxzjcmlr0";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   meta = with stdenv.lib; {
     description = "Wrapper library for evdev devices";

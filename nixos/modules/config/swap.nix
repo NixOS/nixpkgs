@@ -58,7 +58,7 @@ let
       device = mkOption {
         example = "/dev/sda3";
         type = types.str;
-        description = "Path of the device.";
+        description = "Path of the device or swap file.";
       };
 
       label = mkOption {

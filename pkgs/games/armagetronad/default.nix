@@ -14,7 +14,7 @@ stdenv.mkDerivation {
     sha256 = "157pp84wf0q3bdb72rnbm3ck0czwx2ply6lyhj8z7kfdc7csdbr3";
   };
 
-  NIX_LDFLAGS = [ "-lSDL_image" ];
+  NIX_LDFLAGS = "-lSDL_image";
 
   enableParallelBuilding = true;
 

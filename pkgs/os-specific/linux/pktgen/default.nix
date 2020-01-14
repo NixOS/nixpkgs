@@ -1,40 +1,39 @@
-{ stdenv, lib, fetchurl, pkgconfig
-, dpdk, libpcap, lua5_3, numactl, utillinux
+{ stdenv, lib, fetchurl, meson, ninja, pkgconfig
+, dpdk, libbsd, libpcap, lua5_3, numactl, utillinux
 , gtk2, which, withGtk ? false
 }:
 
 stdenv.mkDerivation rec {
   pname = "pktgen";
-  version = "3.7.2";
+  version = "19.12.0";
 
   src = fetchurl {
     url = "http://dpdk.org/browse/apps/pktgen-dpdk/snapshot/${pname}-${version}.tar.xz";
-    sha256 = "03k7h4j2lsrh6b7477hgn87ljrjh2673ncffx9v261bx1ns54y7w";
+    sha256 = "1clfviz1qa4hysslcg6i29vsxwl9f6j1y7zf9wwx9br3yq08x956";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs =
-    [ dpdk libpcap lua5_3 numactl which ]
+    [ dpdk libbsd libpcap lua5_3 numactl which ]
     ++ stdenv.lib.optionals withGtk [gtk2];
 
-  RTE_SDK = "${dpdk}/share/dpdk";
-  RTE_TARGET = "x86_64-native-linuxapp-gcc";
+  RTE_SDK = dpdk;
   GUI = stdenv.lib.optionalString withGtk "true";
 
-  NIX_CFLAGS_COMPILE = [ "-msse3" ];
+  NIX_CFLAGS_COMPILE = "-msse3";
 
-  postPatch = let dpdkMajor = lib.versions.major dpdk.version; in ''
+  patches = [ ./configure.patch ];
+
+  postPatch = ''
     substituteInPlace lib/common/lscpu.h --replace /usr/bin/lscpu ${utillinux}/bin/lscpu
   '';
 
-  installPhase = ''
-    install -d $out/bin
-    install -m 0755 app/${RTE_TARGET}/pktgen $out/bin
-    install -m 0644 Pktgen.lua $out/bin
+  postInstall = ''
+    # meson installs unneeded files with conflicting generic names, such as
+    # include/cli.h and lib/liblua.so.
+    rm -rf $out/include $out/lib
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Traffic generator powered by DPDK";

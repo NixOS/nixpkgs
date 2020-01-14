@@ -10,5 +10,5 @@ buildDunePackage rec {
   checkInputs = [ alcotest ];
   propagatedBuildInputs = [ eigen stdio stdlib-shims openblasCompat owl-base ];
 
-  # tests not enabled for now due to owlbarn/owl/issues/460
+  doCheck = !stdenv.isDarwin;  # https://github.com/owlbarn/owl/issues/462
 }

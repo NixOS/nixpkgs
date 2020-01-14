@@ -27,7 +27,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ]
     ++ optional pamSupport pam;
 
-  buildFlags = "-tags";
+  buildFlags = [ "-tags" ];
 
   buildFlagsArray =
     (  optional sqliteSupport "sqlite"

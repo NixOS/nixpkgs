@@ -31,8 +31,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "117ymdz1by2nkfq1c2p9m4050dp848kbjbiv6nsfj8hzy9f5d86n";
-  polly_src = fetch "polly" "0cyl2gsibf1dhqvkyw1qb0f8q58ib6cihzyh4f9kj9g77ll95ym4";
+  src = fetch pname "16hwp3qa54c3a3v7h8nlw0fh5criqh0hlr1skybyk0cz70gyx880";
+  polly_src = fetch "polly" "1kqg0isv0kicnylrdp5iajlgd6alc0zx1l3cxc9hs8r3z6fwcjls";
 
   unpackPhase = ''
     unpackFile $src
@@ -126,7 +126,7 @@ in stdenv.mkDerivation (rec {
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm_7}/bin/llvm-tblgen"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_9}/bin/llvm-tblgen"
   ];
 
   postBuild = ''

@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "pyenchant: Python bindings for the Enchant spellchecker";
-    homepage = https://pythonhosted.org/pyenchant/;
+    homepage = https://github.com/pyenchant/pyenchant;
     license = licenses.lgpl21;
     badPlatforms = [ "x86_64-darwin" ];
   };

@@ -91,7 +91,12 @@ let
       ]
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
-      ++ optional enableThreading "-Dusethreads";
+      ++ optional enableThreading "-Dusethreads"
+      ++ optionals (!crossCompiling) [
+        "-Dprefix=${placeholder "out"}"
+        "-Dman1dir=${placeholder "out"}/share/man/man1"
+        "-Dman3dir=${placeholder "out"}/share/man/man3"
+      ];
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
@@ -102,10 +107,6 @@ let
     preConfigure = ''
         substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
         substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
-      '' + optionalString (!crossCompiling) ''
-        configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-      '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
-        configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
@@ -144,7 +145,7 @@ let
         substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
           --replace "${libcInc}" /no-such-path \
           --replace "${
-              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+              if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path

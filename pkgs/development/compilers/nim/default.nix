@@ -14,13 +14,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = [
-    "-lcrypto"
-    "-lpcre"
-    "-lreadline"
-    "-lgc"
-    "-lsqlite3"
-  ];
+  NIX_LDFLAGS = "-lcrypto -lpcre -lreadline -lgc -lsqlite3";
 
   # we could create a separate derivation for the "written in c" version of nim
   # used for bootstrapping, but koch insists on moving the nim compiler around

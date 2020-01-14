@@ -11,6 +11,11 @@
       patch = ./request-key-helper.patch;
     };
 
+  request_key_helper_updated =
+    { name = "request-key-helper-updated";
+      patch = ./request-key-helper-updated.patch;
+    };
+
   p9_fixes =
     { name = "p9-fixes";
       patch = ./p9-fixes.patch;

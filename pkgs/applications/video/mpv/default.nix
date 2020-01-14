@@ -52,7 +52,7 @@
 , zimgSupport        ? true,           zimg          ? null
 , archiveSupport     ? false,          libarchive    ? null
 , jackaudioSupport   ? false,          libjack2      ? null
-, openalSupport      ? true,          openalSoft    ? null
+, openalSupport      ? true,           openalSoft    ? null
 , vapoursynthSupport ? false,          vapoursynth   ? null
 }:
 
@@ -105,13 +105,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.30.0";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "17mxjgcfljlv6h0ik3332xsqbs0ybvk6dkwflyl0cjh15vl1iv6f";
+    sha256 = "138m09l4wi6ifbi15z76j578plmxkclhlzfryasfcdp8hswhs59r";
   };
 
   postPatch = ''
@@ -197,7 +197,6 @@ in stdenv.mkDerivation rec {
 
   # Ensure youtube-dl is available in $PATH for mpv
   wrapperFlags =
-
     ''--prefix PATH : "${luaEnv}/bin" \''
   + optionalString youtubeSupport ''
       --prefix PATH : "${youtube-dl}/bin" \
@@ -235,7 +234,7 @@ in stdenv.mkDerivation rec {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = https://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fpletz globin ivan ];
+    maintainers = with maintainers; [ AndersonTorres fpletz globin ivan ma27 tadeokondrak ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = "sed -e 's,/usr/bin/install,install,g' -i src/Makefile";
   preBuild = "cd src";
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     license = licenses.gpl3Plus;

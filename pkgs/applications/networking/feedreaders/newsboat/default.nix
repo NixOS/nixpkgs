@@ -1,16 +1,18 @@
-{ stdenv, rustPlatform, fetchurl, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
+{ stdenv, rustPlatform, fetchFromGitHub, stfl, sqlite, curl, gettext, pkgconfig, libxml2, json_c, ncurses
 , asciidoc, docbook_xml_dtd_45, libxslt, docbook_xsl, libiconv, Security, makeWrapper }:
 
 rustPlatform.buildRustPackage rec {
   pname = "newsboat";
-  version = "2.17.1";
+  version = "2.18";
 
-  src = fetchurl {
-    url = "https://newsboat.org/releases/${version}/${pname}-${version}.tar.xz";
-    sha256 = "15qr2y35yvl0hzsf34d863n8v042v78ks6ksh5p1awvi055x5sy1";
+  src = fetchFromGitHub {
+    owner = "newsboat";
+    repo = "newsboat";
+    rev = "r${version}";
+    sha256 = "1bg2qjkzdawn4fnn0w7jhw1dk6191w8axnqra43z21pinfyim6da";
   };
 
-  cargoSha256 = "0db4j6y43gacazrvcmq823fzl5pdfdlg8mkjpysrw6h9fxisq83f";
+  cargoSha256 = "0q0iqd8y9rph8pwild5i2kv00h217a166c88hxpmbrigq9w960lp";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""
@@ -29,8 +31,8 @@ rustPlatform.buildRustPackage rec {
     make
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=sign-compare" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = "-Wno-error=sign-compare"
+    + stdenv.lib.optionalString stdenv.isDarwin " -Wno-error=format-security";
 
   doCheck = true;
 

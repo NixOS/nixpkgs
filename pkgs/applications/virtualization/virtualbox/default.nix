@@ -23,6 +23,16 @@ let
   # guest-additions/default.nix as well.
   main = "036x2mvkk22lbg72cz6pik9z538j1ag6mmwjjmfikgrq1i7v24jy";
   version = "6.0.14";
+
+  iasl' = iasl.overrideAttrs (old: rec {
+    inherit (old) pname;
+    version = "20190108";
+    src = fetchurl {
+      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
+    };
+    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
+  });
 in stdenv.mkDerivation {
   pname = "virtualbox";
   inherit version;
@@ -41,7 +51,7 @@ in stdenv.mkDerivation {
   dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk

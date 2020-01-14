@@ -36,12 +36,14 @@ stdenv.mkDerivation rec {
     "--enable-early-chroot"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    (lib.optional stdenv.isLinux "--with-randomdev=/dev/random")
-  ] ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
+  ] ++ lib.optional stdenv.isLinux "--with-randomdev=/dev/random"
+    ++ stdenv.lib.optionals (openldap != null) [ "--with-ldap" "--with-ldapcrypto" ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = builtins.toString [
     "-Wno-error=pointer-compare"
     "-Wno-error=format-truncation"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=format-overflow"
   ];
 
   installFlags = [ "DESTDIR=\${out}" ];
@@ -80,7 +82,7 @@ stdenv.mkDerivation rec {
       client, and relay agent.
    '';
 
-    homepage = http://www.isc.org/products/DHCP/;
+    homepage = "https://www.isc.org/dhcp/";
     license = licenses.isc;
     platforms = platforms.unix;
   };

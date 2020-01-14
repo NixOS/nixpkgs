@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "pywinrm";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "799fc3e33fec8684443adf5778860388289102ea4fa1458f1bf307d167855573";
+    sha256 = "4ede5c6c85b53780ad0dbf9abef2fa2ea58f44c82256a84a63eae5f1205cea81";
   };
 
   checkInputs = [ mock pytest ];

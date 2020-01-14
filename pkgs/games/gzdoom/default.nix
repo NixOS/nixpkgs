@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gzdoom";
-  version = "4.2.4";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "1mkfpa3mx1rpd6lywdcqcf0y9ydzr1jxpk330kl9lxw59xihk0pc";
+    sha256 = "1fpdwgm6qx66q1kqg1x32lcm61hk3a033lhagk819kicdsib90b7";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
+  NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
   preConfigure = ''
     sed -i \

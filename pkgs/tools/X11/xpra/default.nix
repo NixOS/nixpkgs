@@ -60,10 +60,8 @@ in buildPythonApplication rec {
     ipaddress idna
   ];
 
-  NIX_CFLAGS_COMPILE = [
     # error: 'import_cairo' defined but not used
-    "-Wno-error=unused-function"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
     "--with-Xdummy"

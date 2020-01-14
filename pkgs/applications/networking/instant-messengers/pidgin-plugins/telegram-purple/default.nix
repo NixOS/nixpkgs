@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0p93jpjpx7hszwffzgixw04zkrpsiyzz4za3gfr4j07krc4771fp";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=cast-function-type" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pidgin libwebp libgcrypt gettext ];

@@ -92,14 +92,15 @@ in
     warnings = optional options.services.matterbridge.configFile.isDefined
       "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
-    users.users = optional (cfg.user == "matterbridge")
-      { name = "matterbridge";
-        group = "matterbridge";
-        isSystemUser = true;
+    users.users = optionalAttrs (cfg.user == "matterbridge")
+      { matterbridge = {
+          group = "matterbridge";
+          isSystemUser = true;
+        };
       };
 
-    users.groups = optional (cfg.group == "matterbridge")
-      { name = "matterbridge";
+    users.groups = optionalAttrs (cfg.group == "matterbridge")
+      { matterbridge = { };
       };
 
     systemd.services.matterbridge = {

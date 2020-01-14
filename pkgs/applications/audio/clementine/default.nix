@@ -77,7 +77,7 @@ let
     inherit src patches nativeBuildInputs postPatch;
 
     # gst_plugins needed for setup-hooks
-    buildInputs = buildInputs ++ [ makeWrapper gst_plugins ];
+    buildInputs = buildInputs ++ [ makeWrapper ] ++ gst_plugins;
 
     cmakeFlags = [ "-DUSE_SYSTEM_PROJECTM=ON" ];
 

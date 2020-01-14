@@ -65,7 +65,7 @@ stdenv.mkDerivation {
   doCheck = false; # requires root
 
   # To prevent make install from failing.
-  preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
+  installFlags = [ "OWNER=" "GROUP=" "confdir=$(out)/etc" ];
 
   # Install systemd stuff.
   #installTargets = "install install_systemd_generators install_systemd_units install_tmpfiles_configuration";

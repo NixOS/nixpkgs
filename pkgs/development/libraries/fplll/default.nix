@@ -9,23 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "fplll";
-  version = "5.3.0";
+  version = "5.3.1";
 
   src = fetchFromGitHub {
     owner = "fplll";
     repo = "fplll";
     rev = version;
-    sha256 = "0wxa4xs7as7y47h7i6prmk5r0srabdvrlkvza3j50pixir5swgvh";
+    sha256 = "1bzlqavbch5smra75znh4ljr490wyx5v6hax8r9rjbgk605i33ns";
   };
-
-  patches = [
-    # https://github.com/fplll/fpylll/issues/161
-    (fetchpatch {
-      name = "fix-out-of-bounds-access.patch";
-      url = "https://github.com/fplll/fplll/pull/398/commits/f68e257228bf073ef380f996326d02197ce7b0e4.patch";
-      sha256 = "1rapkcf389lf579va6kbnvhzyv36n4l4d9n0vg2zxprvql8wvm7m";
-    })
-  ];
 
   nativeBuildInputs = [
     gettext

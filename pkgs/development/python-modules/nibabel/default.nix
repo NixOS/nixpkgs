@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, isPy27
 , bz2file
 , mock
 , nose
@@ -11,11 +12,12 @@
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "2.5.1";
+  version = "3.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "83ecac4773ece02c49c364d99b465644c17cc66f1719560117e74991d9eb566b";
+    sha256 = "0f5bc325c9cb203c6f0ab876ba1a5ada811284bb3a4c5d063eeaafaefbad873d";
   };
 
   propagatedBuildInputs = [

@@ -61,6 +61,7 @@ mapAliases ({
   buildPerlPackage = perlPackages.buildPerlPackage; # added 2018-10-12
   bundler_HEAD = bundler; # added 2015-11-15
   cantarell_fonts = cantarell-fonts; # added 2018-03-03
+  catfish = xfce.catfish; # added 2019-12-22
   checkbashism = checkbashisms; # added 2016-08-16
   cide = throw "deprecated in 2019-09-11: abandoned by upstream";
   cinepaint = throw "cinepaint has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10
@@ -70,6 +71,7 @@ mapAliases ({
   clawsMail = claws-mail; # added 2016-04-29
   clutter_gtk = clutter-gtk; # added 2018-02-25
   conkerorWrapper = conkeror; # added 2015-01
+  compton = picom; # added 2019-12-02
   compton-git = compton; # added 2019-05-20
   conntrack_tools = conntrack-tools; # added 2018-05
   cool-old-term = cool-retro-term; # added 2015-01-31
@@ -109,6 +111,7 @@ mapAliases ({
   evolution_data_server = evolution-data-server; # added 2018-02-25
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
+  facette = throw "facette has been removed."; # added 2020-01-06
   ffadoFull = ffado; # added 2018-05-01
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
@@ -191,6 +194,7 @@ mapAliases ({
   keepassx-reboot = keepassx-community; # added 2017-02-01
   keepassx2-http = keepassx-reboot; # added 2016-10-17
   keybase-go = keybase;  # added 2016-08-24
+  kicad-with-packages3d = kicad; # added 2019-11-25
   krename-qt5 = krename; # added 2017-02-18
   keymon = throw "keymon has been removed from nixpkgs, as it's abandoned and archived."; # 2019-12-10
   kvm = qemu_kvm; # added 2018-04-25
@@ -393,6 +397,7 @@ mapAliases ({
   smbclient = samba; # added 2018-04-25
   slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
   slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
+  net_snmp = net-snmp; # added 2019-12-21
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25
   speedtest_cli = speedtest-cli;  # added 2015-02-17
@@ -527,4 +532,9 @@ mapAliases ({
 
   # added 2019-10-28
   gnatsd = nats-server;
+
+  # added 2020-01-10
+  tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+  # added 2020-01-10
+  tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
 })

@@ -17,6 +17,8 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "pic" "stackprotector" ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+
   configurePhase = ''
     for a in lcptools utils tb_polgen; do
       substituteInPlace $a/Makefile --replace /usr/sbin /sbin
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
     substituteInPlace docs/Makefile --replace /usr/share /share
   '';
 
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A pre-kernel/VMM module that uses Intel(R) TXT to perform a measured and verified launch of an OS kernel/VMM";

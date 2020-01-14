@@ -657,19 +657,17 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users = [
-      { name = "matrix-synapse";
+    users.users.matrix-synapse = { 
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.matrix-synapse;
-      } ];
+      };
 
-    users.groups = [
-      { name = "matrix-synapse";
-        gid = config.ids.gids.matrix-synapse;
-      } ];
+    users.groups.matrix-synapse = {
+      gid = config.ids.gids.matrix-synapse;
+    };
 
     services.postgresql = mkIf (usePostgresql && cfg.create_local_database) {
       enable = mkDefault true;

@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , django
+, six
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "d1232bade3094de07dcc205fc833204384e71ba9d30caadcb5bb2882ce8e8d31";
   };
 
-  propagatedBuildInputs = [ django ];
+  propagatedBuildInputs = [ django six ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/django/django-contrib-comments;

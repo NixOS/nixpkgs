@@ -2,6 +2,8 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
+, six
+, wxPython
 }:
 
 buildPythonPackage rec {
@@ -10,14 +12,18 @@ buildPythonPackage rec {
   disabled = isPy3k;
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "b16ce5950cbfa63e3284015095293cd26ed5e26045fd14d488fb825b4f95e9a8";
+    pname = "SquareMap";
+    inherit version;
+    sha256 = "1a79jm7mp0pvi3a19za5c3idavnj7hlral01hhr3x9mz1jayav5i";
   };
+
+  propagatedBuildInputs = [ six wxPython ];
 
   meta = with stdenv.lib; {
     description = "Hierarchic visualization control for wxPython";
     homepage = https://launchpad.net/squaremap;
     license = licenses.bsd3;
+    broken = true; # wxPython doesn't seem to be able to be detected by pip
   };
 
 }

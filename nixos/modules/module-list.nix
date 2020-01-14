@@ -95,6 +95,7 @@
   ./programs/adb.nix
   ./programs/atop.nix
   ./programs/autojump.nix
+  ./programs/bandwhich.nix
   ./programs/bash/bash.nix
   ./programs/bcc.nix
   ./programs/browserpass.nix
@@ -691,10 +692,13 @@
   ./services/networking/skydns.nix
   ./services/networking/shadowsocks.nix
   ./services/networking/shairport-sync.nix
+  ./services/networking/shorewall.nix
+  ./services/networking/shorewall6.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
+  ./services/networking/spacecookie.nix
   ./services/networking/spiped.nix
   ./services/networking/squid.nix
   ./services/networking/sslh.nix
@@ -731,6 +735,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
+  ./services/networking/xandikos.nix
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
   ./services/networking/xrdp.nix
@@ -802,6 +807,7 @@
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
+  ./services/web-apps/ihatemoney
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix
@@ -815,6 +821,7 @@
   ./services/web-apps/restya-board.nix
   ./services/web-apps/tt-rss.nix
   ./services/web-apps/trac.nix
+  ./services/web-apps/trilium.nix
   ./services/web-apps/selfoss.nix
   ./services/web-apps/shiori.nix
   ./services/web-apps/virtlyst.nix
@@ -849,7 +856,7 @@
   ./services/x11/extra-layouts.nix
   ./services/x11/clight.nix
   ./services/x11/colord.nix
-  ./services/x11/compton.nix
+  ./services/x11/picom.nix
   ./services/x11/unclutter.nix
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/desktop-managers/default.nix

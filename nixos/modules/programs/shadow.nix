@@ -76,22 +76,18 @@ in
         config.users.defaultUserShell;
 
     environment.etc =
-      [ { # /etc/login.defs: global configuration for pwdutils.  You
-          # cannot login without it!
-          source = pkgs.writeText "login.defs" loginDefs;
-          target = "login.defs";
-        }
+      { # /etc/login.defs: global configuration for pwdutils.  You
+        # cannot login without it!
+        "login.defs".source = pkgs.writeText "login.defs" loginDefs;
 
-        { # /etc/default/useradd: configuration for useradd.
-          source = pkgs.writeText "useradd"
-            ''
-              GROUP=100
-              HOME=/home
-              SHELL=${utils.toShellPath config.users.defaultUserShell}
-            '';
-          target = "default/useradd";
-        }
-      ];
+        # /etc/default/useradd: configuration for useradd.
+        "default/useradd".source = pkgs.writeText "useradd"
+          ''
+            GROUP=100
+            HOME=/home
+            SHELL=${utils.toShellPath config.users.defaultUserShell}
+          '';
+      };
 
     security.pam.services =
       { chsh = { rootOK = true; };

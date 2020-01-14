@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric willibutz globin ];
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

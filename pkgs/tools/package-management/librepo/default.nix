@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  cmakeFlags="-DPYTHON_DESIRED=${stdenv.lib.substring 0 1 python.pythonVersion}";
+  cmakeFlags = ["-DPYTHON_DESIRED=${stdenv.lib.substring 0 1 python.pythonVersion}" ];
 
   buildInputs = [ python libxml2 glib openssl curl check gpgme ];
 

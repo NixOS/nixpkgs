@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "azure-mgmt-datamigration";
-  version = "3.0.0";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0pc5pf7jpkpdrad5hafh2hki01dpx5773whp6kpxp71gh265mm5n";
+    sha256 = "1efda568d67af911156591eb308432b5f9a56075b57ac0a5dd9f7aee17d79217";
   };
 
   propagatedBuildInputs = [
@@ -27,9 +27,10 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  # still needed when overriding to previous versions
+  # E.g. azure-cli
   postInstall = lib.optionalString isPy3k ''
-    rm $out/${python.sitePackages}/azure/__init__.py
-    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
   '';
 
   # has no tests

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , pkgconfig, autoreconfHook
-, gmp, python, iptables, ldns, unbound, openssl, pcsclite, glib
+, gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
 , curl
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
-    [ curl gmp python ldns unbound openssl pcsclite ]
+    [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])

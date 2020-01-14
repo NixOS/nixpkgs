@@ -17,5 +17,6 @@ buildPythonPackage rec {
     homepage = "https://pythonhosted.org/caldav/";
     license = licenses.asl20;
     maintainers = with maintainers; [ marenz ];
+    broken = true; # missing xandikos package
   };
 }

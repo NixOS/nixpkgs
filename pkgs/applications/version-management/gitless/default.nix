@@ -1,13 +1,14 @@
-{ fetchFromGitHub, pythonPackages, stdenv }:
+{ fetchFromGitHub, python, stdenv }:
 
-pythonPackages.buildPythonApplication rec {
-  ver = "0.8.6";
-  name = "gitless-${ver}";
+with python.pkgs;
+buildPythonApplication rec {
+  pname = "gitless";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "sdg-mit";
     repo = "gitless";
-    rev = "v${ver}";
+    rev = "v${version}";
     sha256 = "1q6y38f8ap6q1livvfy0pfnjr0l8b68hyhc9r5v87fmdyl7y7y8g";
   };
 

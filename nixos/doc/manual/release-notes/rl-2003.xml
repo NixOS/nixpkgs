@@ -266,6 +266,14 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
+     The <literal>kresd</literal> services deprecates the <literal>interfaces</literal> option
+     in favor of the <literal>listenPlain</literal> option which requires full
+     <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.socket.html#ListenStream=">systemd.socket compatible</link>
+     declaration which always include a port.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Virtual console options have been reorganized and can be found under
      a single top-level attribute: <literal>console</literal>.
      The full set of changes is as follows:
@@ -314,6 +322,84 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
        </para>
       </listitem>
     </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-services.awstats.enable">awstats</link> module has been rewritten
+     to serve stats via static html pages, updated on a timer, over <link linkend="opt-services.nginx.virtualHosts">nginx</link>,
+     instead of dynamic cgi pages over <link linkend="opt-services.httpd.enable">apache</link>.
+    </para>
+    <para>
+     Minor changes will be required to migrate existing configurations. Details of the
+     required changes can seen by looking through the <link linkend="opt-services.awstats.enable">awstats</link>
+     module.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The httpd module no longer provides options to support serving web content without defining a virtual host. As a
+      result of this the <link linkend="opt-services.httpd.logPerVirtualHost">services.httpd.logPerVirtualHost</link>
+      option now defaults to <literal>true</literal> instead of <literal>false</literal>. Please update your
+      configuration to make use of <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts</link>.
+    </para>
+    <para>
+      The <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;</link>
+      option has changed type from a list of submodules to an attribute set of submodules, better matching
+      <link linkend="opt-services.nginx.virtualHosts">services.nginx.virtualHosts.&lt;name&gt;</link>.
+    </para>
+    <para>
+      This change comes with the addition of the following options which mimic the functionality of their <literal>nginx</literal> counterparts:
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.addSSL</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.forceSSL</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.onlySSL</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.enableACME</link>,
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.acmeRoot</link>, and
+      <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.&lt;name&gt;.useACMEHost</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     For NixOS configuration options, the <literal>loaOf</literal> type has
+     been deprecated and will be removed in a future release. In nixpkgs,
+     options of this type will be changed to <literal>attrsOf</literal>
+     instead. If you were using one of these in your configuration, you will
+     see a warning suggesting what changes will be required.
+    </para>
+    <para>
+     For example, <link linkend="opt-users.users">users.users</link> is a
+     <literal>loaOf</literal> option that is commonly used as follows:
+     <programlisting>
+users.users =
+  [ { name = "me";
+      description = "My personal user.";
+      isNormalUser = true;
+    }
+  ];
+     </programlisting>
+     This should be rewritten by removing the list and using the
+     value of <literal>name</literal> as the name of the attribute set:
+     <programlisting>
+users.users.me =
+  { description = "My personal user.";
+    isNormalUser = true;
+  };
+     </programlisting>
+    </para>
+    <para>
+     For more information on this change have look at these links:
+     <link xlink:href="https://github.com/NixOS/nixpkgs/issues/1800">issue #1800</link>,
+     <link xlink:href="https://github.com/NixOS/nixpkgs/pull/63103">PR #63103</link>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     For NixOS modules, the types <literal>types.submodule</literal> and <literal>types.submoduleWith</literal> now support
+     paths as allowed values, similar to how <literal>imports</literal> supports paths.
+     Because of this, if you have a module that defines an option of type
+     <literal>either (submodule ...) path</literal>, it will break since a path
+     is now treated as the first type instead of the second. To fix this, change
+     the type to <literal>either path (submodule ...)</literal>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

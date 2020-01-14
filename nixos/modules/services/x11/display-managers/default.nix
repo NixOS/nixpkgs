@@ -380,7 +380,7 @@ in
         wms = filter (s: s.manage == "window") cfg.displayManager.session;
 
         # Script responsible for starting the window manager and the desktop manager.
-        xsession = wm: dm: pkgs.writeScript "xsession" ''
+        xsession = dm: wm: pkgs.writeScript "xsession" ''
           #! ${pkgs.bash}/bin/bash
 
           # Legacy session script used to construct .desktop files from

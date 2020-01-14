@@ -1,15 +1,15 @@
-{stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib }:
+{stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "mupen64plus";
-  version = "2.5";
+  version = "2.5.9";
 
   src = fetchurl {
     url = "https://github.com/mupen64plus/mupen64plus-core/releases/download/${version}/mupen64plus-bundle-src-${version}.tar.gz";
-    sha256 = "0rmsvfn4zfvbhz6gf1xkb7hnwflv6sbklwjz2xk4dlpj4vcbjxcw";
+    sha256 = "1a21n4gqdvag6krwcjm5bnyw5phrlxw6m0mk73jy53iq03f3s96m";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig nasm ];
   buildInputs = [ boost dash freetype libpng SDL which zlib ];
 
   buildPhase = ''
@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
     dash m64p_install.sh DESTDIR="$out" PREFIX=""
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A Nintendo 64 Emulator";
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     homepage = http://www.mupen64plus.org/;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.linux;
+    maintainers = [ maintainers.sander ];
+    platforms = [ "x86_64-linux" ];
   };
 }

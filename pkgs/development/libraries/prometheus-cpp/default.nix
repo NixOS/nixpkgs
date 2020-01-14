@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
     "-DUSE_THIRDPARTY_LIBRARIES=OFF"
     "-DCIVETWEB_INCLUDE_DIR=${civetweb.dev}/include"
     "-DCIVETWEB_CXX_LIBRARY=${civetweb}/lib/libcivetweb${stdenv.targetPlatform.extensions.sharedLibrary}"
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  NIX_LDFLAGS = [ "-ldl" ];
+  NIX_LDFLAGS = "-ldl";
 
   meta = {
     description = "Prometheus Client Library for Modern C++";

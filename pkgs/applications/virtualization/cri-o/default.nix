@@ -15,7 +15,10 @@
 , pkgconfig
 }:
 
-buildGoPackage rec {
+let
+  makeFlags = "BUILDTAGS=\"apparmor seccomp selinux
+    containers_image_ostree_stub\"";
+in buildGoPackage rec {
   project = "cri-o";
   version = "1.16.1";
   name = "${project}-${version}${flavor}";
@@ -34,9 +37,6 @@ buildGoPackage rec {
   buildInputs = [ btrfs-progs gpgme libapparmor libassuan libgpgerror
                  libseccomp libselinux lvm2 ]
                 ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
-
-  makeFlags = ''BUILDTAGS="apparmor seccomp selinux
-    containers_image_ostree_stub"'';
 
   buildPhase = ''
     pushd go/src/${goPackagePath}

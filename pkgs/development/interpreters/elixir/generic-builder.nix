@@ -10,7 +10,7 @@
 } @ args:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast;
+  inherit (stdenv.lib) getVersion versionAtLeast optional;
 
 in
   assert versionAtLeast (getVersion erlang) minimumOTPVersion;
@@ -29,9 +29,7 @@ in
 
     inherit debugInfo;
 
-    buildFlags = if debugInfo
-      then "ERL_COMPILER_OPTIONS=debug_info"
-      else "";
+    buildFlags = optional debugInfo "ERL_COMPILER_OPTIONS=debug_info";
 
     preBuild = ''
       # The build process uses ./rebar. Link it to the nixpkgs rebar

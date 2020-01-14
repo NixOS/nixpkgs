@@ -62,6 +62,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Simple Mastodon client designed for elementary OS";
     homepage = https://github.com/bleakgrey/tootle;

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   cmakeFlags = [ "-DLLVM_INCLUDE_TESTS=OFF" ];
 
-  buildFlags = "libtapi";
+  buildFlags = [ "libtapi" ];
 
   installTarget = "install-libtapi";
 

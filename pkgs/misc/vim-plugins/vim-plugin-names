@@ -47,6 +47,7 @@ chriskempson/base16-vim
 christoomey/vim-sort-motion
 christoomey/vim-tmux-navigator
 ckarnell/antonys-macro-repeater
+ckipp01/coc-metals
 cloudhead/neovim-fuzzy
 CoatiSoftware/vim-sourcetrail
 cocopon/iceberg.vim
@@ -192,6 +193,8 @@ KeitaNakamura/neodark.vim
 keith/swift.vim
 kien/rainbow_parentheses.vim
 konfekt/fastfold
+kristijanhusak/defx-icons
+kristijanhusak/defx-git
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 lambdalisue/vim-gista
@@ -206,6 +209,7 @@ lervag/vimtex
 lfilho/cosco.vim
 lifepillar/vim-mucomplete
 lilydjwg/colorizer
+liuchengxu/vista.vim
 LnL7/vim-nix
 LucHermitte/lh-brackets
 LucHermitte/lh-vim-lib
@@ -320,6 +324,7 @@ neovim/nvim-lsp
 neutaaaaan/iosvkem
 nfnty/vim-nftables
 nicoe/deoplete-khard
+nishigori/increment-activator
 nixprime/cpsm
 NLKNguyen/papercolor-theme
 noc7c9/vim-iced-coffee-script
@@ -362,6 +367,7 @@ rhysd/vim-grammarous
 rhysd/vim-operator-surround
 Rip-Rip/clang_complete
 rodjek/vim-puppet
+romainl/vim-cool
 ron89/thesaurus_query.vim
 roxma/nvim-cm-racer
 roxma/nvim-completion-manager
@@ -371,6 +377,8 @@ rust-lang/rust.vim
 ryanoasis/vim-devicons
 Rykka/riv.vim
 ryvnf/readline.vim
+sakhnik/nvim-gdb
+saltstack/salt-vim
 samoshkin/vim-mergetool
 sbdchd/neoformat
 scrooloose/nerdcommenter
@@ -426,6 +434,7 @@ thinca/vim-visualstar
 thirtythreeforty/lessspace.vim
 thosakwe/vim-flutter
 tikhomirov/vim-glsl
+tmsvg/pear-tree
 tmux-plugins/vim-tmux
 tmux-plugins/vim-tmux-focus-events
 tomasr/molokai
@@ -437,7 +446,9 @@ tomtom/tcomment_vim
 tomtom/tlib_vim
 tpope/vim-abolish
 tpope/vim-commentary
+tpope/vim-dadbod
 tpope/vim-dispatch
+tpope/vim-endwise
 tpope/vim-eunuch
 tpope/vim-fireplace
 tpope/vim-flagship

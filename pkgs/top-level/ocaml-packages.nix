@@ -16,6 +16,8 @@ let
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
+    buildDune2Package = buildDunePackage.override { dune = dune_2; };
+
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
@@ -189,6 +191,8 @@ let
 
     cppo = callPackage ../development/tools/ocaml/cppo { };
 
+    cpu = callPackage ../development/ocaml-modules/cpu { };
+
     cpuid = callPackage ../development/ocaml-modules/cpuid { };
 
     crunch = callPackage ../development/tools/ocaml/crunch { };
@@ -238,6 +242,12 @@ let
     duff = callPackage ../development/ocaml-modules/duff { };
 
     dune = callPackage ../development/tools/ocaml/dune { };
+
+    dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
+
+    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { buildDunePackage = buildDune2Package; };
+
+    dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { buildDunePackage = buildDune2Package; };
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
@@ -327,6 +337,8 @@ let
       if lib.versionOlder "4.02" ocaml.version
       then callPackage ../development/ocaml-modules/ipaddr { }
       else ipaddr_p4;
+
+    irmin_1 = callPackage ../development/ocaml-modules/irmin/1.4.nix { };
 
     iso8601 = callPackage ../development/ocaml-modules/iso8601 { };
 
@@ -456,6 +468,8 @@ let
 
     lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
 
+    lens = callPackage ../development/ocaml-modules/lens { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {
@@ -493,6 +507,8 @@ let
     lwt_ssl = callPackage ../development/ocaml-modules/lwt_ssl {
       lwt = ocaml_lwt;
     };
+
+    macaddr = callPackage ../development/ocaml-modules/macaddr { };
 
     macaque = callPackage ../development/ocaml-modules/macaque { };
 
@@ -753,6 +769,8 @@ let
     pa_bench = callPackage ../development/ocaml-modules/pa_bench { };
 
     pa_test = callPackage ../development/ocaml-modules/pa_test { };
+
+    parany = callPackage ../development/ocaml-modules/parany { };
 
     pipebang = callPackage ../development/ocaml-modules/pipebang { };
 

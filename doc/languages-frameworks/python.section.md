@@ -496,8 +496,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python35`, `python36` and `python37`. The aliases
+Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
+respectively `python27`, `python35`, `python36`, `python37` and `python38`. The aliases
 `python2` and `python3` correspond to respectively `python27` and
 `python37`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
@@ -821,6 +821,9 @@ should be used with `ignoreCollisions = true`.
 The following are setup hooks specifically for Python packages. Most of these are
 used in `buildPythonPackage`.
 
+- `eggUnpackhook` to move an egg to the correct folder so it can be installed with the `eggInstallHook`
+- `eggBuildHook` to skip building for eggs.
+- `eggInstallHook` to install eggs.
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pipInstallHook` to install wheels.

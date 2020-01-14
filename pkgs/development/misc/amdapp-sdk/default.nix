@@ -46,7 +46,7 @@ in stdenv.mkDerivation {
 
   patches = stdenv.lib.attrByPath [version "patches"] [] src_info;
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   buildInputs = [ makeWrapper perl libGLU libGL xorg.libX11 xorg.libXext xorg.libXaw xorg.libXi xorg.libXxf86vm ];
   propagatedBuildInputs = [ stdenv.cc ];
   NIX_LDFLAGS = "-lX11 -lXext -lXmu -lXi -lXxf86vm";

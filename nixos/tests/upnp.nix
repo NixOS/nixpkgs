@@ -56,9 +56,11 @@ in
           networking.firewall.enable = false;
 
           services.httpd.enable = true;
-          services.httpd.listen = [{ ip = "*"; port = 9000; }];
-          services.httpd.adminAddr = "foo@example.org";
-          services.httpd.documentRoot = "/tmp";
+          services.httpd.virtualHosts.localhost = {
+            listen = [{ ip = "*"; port = 9000; }];
+            adminAddr = "foo@example.org";
+            documentRoot = "/tmp";
+          };
         };
 
       client2 =

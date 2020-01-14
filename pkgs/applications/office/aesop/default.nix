@@ -46,6 +46,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "The simplest PDF viewer around";
     homepage = https://github.com/lainsce/aesop;
