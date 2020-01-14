@@ -468,12 +468,12 @@ let
 
   coc-python = buildVimPluginFrom2Nix {
     pname = "coc-python";
-    version = "2019-11-26";
+    version = "2020-01-14";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc-python";
-      rev = "714ae8de45ab756d5b65f0be0b616153220b9257";
-      sha256 = "17gb0xbvczkqxzs2abknr460v0rcvgsi0m7pc4v0waggr690z53l";
+      rev = "d43f0b5af4e620b925642082270be02812136ba3";
+      sha256 = "1227kclfjhj3528zn09n924alm8hqg08nq34c8g3n4dcpijjxa5d";
     };
   };
 
@@ -880,8 +880,8 @@ let
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "denite.nvim";
-      rev = "22dd7524bef3468af674fb1ecfb3e55ee679ebc0";
-      sha256 = "03cf90kvq337mj151y5m0w5px6h3y6hanfj2bcxwnpwifmjdinij";
+      rev = "dd831acc7a22217b3b8085307f1041fac3fcf736";
+      sha256 = "0yw55kcy0vr3jhrgi8zlvpyjgdc1sj4fmb0ridzimbc15alp9ii7";
     };
   };
 
@@ -1245,12 +1245,12 @@ let
 
   fzf-vim = buildVimPluginFrom2Nix {
     pname = "fzf-vim";
-    version = "2020-01-10";
+    version = "2020-01-14";
     src = fetchFromGitHub {
       owner = "junegunn";
       repo = "fzf.vim";
-      rev = "8a6894d6a560497bd35947f55ece381bf4f2d9ed";
-      sha256 = "17f64c3z03g45iw68ir9wszq3bjlk661ccy87g0wxvl2pkcmnk53";
+      rev = "dc4c4c22715c060a2babd5a5187004bdecbcdea7";
+      sha256 = "0vd5jj0b0sdgawmadxkfl3s2d6m7nwgprhwnah4k7in8lcgq0jz1";
     };
   };
 
