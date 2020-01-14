@@ -3989,10 +3989,10 @@ let
 
   DataICal = buildPerlPackage {
     pname = "Data-ICal";
-    version = "0.23";
+    version = "0.24";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BP/BPS/Data-ICal-0.23.tar.gz;
-      sha256 = "937c23b30b07ff00243a739df1760b1992117a074ff31852ec33f9b009c556eb";
+      url = mirror://cpan/authors/id/B/BP/BPS/Data-ICal-0.24.tar.gz;
+      sha256 = "7331c7c84886c53337c0db823615e0e7134a8f13efd284e5c20726d5bcd52dff";
     };
     buildInputs = [ TestLongString TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ ClassReturnValue TextvFileasData ];
