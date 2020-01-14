@@ -6719,10 +6719,10 @@ let
 
   FCGI = buildPerlPackage {
     pname = "FCGI";
-    version = "0.78";
+    version = "0.79";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.78.tar.gz;
-      sha256 = "1cxavhzg4gyw4gl9kirpbdimjr8gk1rjc3pqs3xrnh1gjybld5xa";
+      url = mirror://cpan/authors/id/E/ET/ETHER/FCGI-0.79.tar.gz;
+      sha256 = "1r1lzd74lzzdl2brcanw4n70m37nd8n6gv9clb55m3gv2hdlxylc";
     };
     postPatch = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
       sed -i '/use IO::File/d' Makefile.PL
