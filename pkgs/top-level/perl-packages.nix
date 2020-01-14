@@ -12510,10 +12510,10 @@ let
 
   MooseXDaemonize = buildPerlModule {
     pname = "MooseX-Daemonize";
-    version = "0.21";
+    version = "0.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Daemonize-0.21.tar.gz;
-      sha256 = "111f391221d00f8b09cdcc6c806ab114324cf7f529d12f627fb97d054da42225";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-Daemonize-0.22.tar.gz;
+      sha256 = "8a7fb999dca9b802a85136a10141b2d3378a3ecde0527c1df73d55edb28e59b3";
     };
     buildInputs = [ DevelCheckOS ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ MooseXGetopt MooseXTypesPathClass ];
