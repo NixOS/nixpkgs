@@ -4906,6 +4906,8 @@ in
 
   mandoc = callPackage ../tools/misc/mandoc { };
 
+  marktext = callPackage ../applications/misc/marktext { };
+
   mawk = callPackage ../tools/text/mawk { };
 
   mb2md = callPackage ../tools/text/mb2md { };
