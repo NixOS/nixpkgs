@@ -2034,10 +2034,10 @@ let
 
   CGI = buildPerlPackage {
     pname = "CGI";
-    version = "4.44";
+    version = "4.45";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.44.tar.gz;
-      sha256 = "12435fb7ebd3585c47b6d60ee4f5c7d6a7c114a2827d2b5acf3d62aa9fcf1208";
+      url = mirror://cpan/authors/id/L/LE/LEEJO/CGI-4.45.tar.gz;
+      sha256 = "f6c1513740ee502e947d30131da18a5595dbcd19962d3dd0ff5dedf3cd1ed407";
     };
     buildInputs = [ TestDeep TestNoWarnings TestWarn ];
     propagatedBuildInputs = [ HTMLParser ];
