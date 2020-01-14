@@ -1,6 +1,8 @@
 .docbook .xref img[src^=images\/callouts\/],
 .screen img,
-.programlisting img {
+.programlisting img,
+.literallayout img,
+.synopsis img {
     width: 1em;
 }
 
@@ -8,7 +10,11 @@
     width: 1.5em;
 }
 
-.prompt {
+.prompt,
+.screen img,
+.programlisting img,
+.literallayout img,
+.synopsis img {
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
