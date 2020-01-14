@@ -632,6 +632,19 @@ let
     };
   };
 
+  AsyncPing = buildPerlPackage {
+    pname = "AsyncPing";
+    version = "2016.1207";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/X/XI/XINFWANG/AsyncPing-2016.1207.tar.gz;
+      sha256 = "0nn9k79gihzr9wfksi03jmdgc2ihsb4952ddz1v70xvsq7z9mgkg";
+    };
+    meta = {
+      description = "ping a huge number of servers in several seconds";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+    };
+  };
+
   ArchiveCpio = buildPerlPackage {
     pname = "Archive-Cpio";
     version = "0.10";
