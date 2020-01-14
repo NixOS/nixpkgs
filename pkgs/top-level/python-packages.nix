@@ -4943,6 +4943,8 @@ in {
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
 
+  pynvml = callPackage ../development/python-modules/pynvml { };
+
   pynzb = callPackage ../development/python-modules/pynzb { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
