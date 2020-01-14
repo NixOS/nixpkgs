@@ -2408,6 +2408,19 @@ let
     };
   };
 
+  ClassGomor = buildPerlModule {
+    pname = "Class-Gomor";
+    version = "1.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GO/GOMOR/Class-Gomor-1.03.tar.gz;
+      sha256 = "02r0zylv8c5cb34j0w2kmf8hfw6g6bymfif7z65skzz9kkm3rns7";
+    };
+    meta = {
+      description = "another class and object builder";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   ClassInspector = buildPerlPackage {
     pname = "Class-Inspector";
     version = "1.36";
@@ -7491,6 +7504,20 @@ let
     };
   };
 
+  Future = buildPerlModule {
+    pname = "Future";
+    version = "0.43";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Future-0.43.tar.gz;
+      sha256 = "191qvn3jz5pk5zxykwsg1i17s45kc82rfd6kgzsv9nki1c04dzaf";
+    };
+    buildInputs = [ TestFatal TestIdentity TestRefcount ];
+    meta = {
+      description = "represent an operation awaiting completion";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   GamesSolitaireVerify = buildPerlModule {
     pname = "Games-Solitaire-Verify";
     version = "0.2202";
@@ -9016,6 +9043,21 @@ let
     meta = {
       homepage = "https://github.com/ingydotnet/io-all-pm";
       description = "IO::All of it to Graham and Damian!";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  IOAsync = buildPerlModule {
+    pname = "IO-Async";
+    version = "0.75";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/IO-Async-0.75.tar.gz;
+      sha256 = "1mi6gfbl11rimvzgzyj8kiqf131cg1w9nwxi47fwm9sbs0x6rkjb";
+    };
+    propagatedBuildInputs = [ Future StructDumb ];
+    buildInputs = [ TestFatal TestIdentity TestRefcount ];
+    meta = {
+      description = "Asynchronous event-driven programming";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -10868,6 +10910,19 @@ let
        description = "Email message exchange";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  MathBase85 = buildPerlPackage {
+    pname = "Math-Base85";
+    version = "0.4";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PT/PTC/Math-Base85-0.4.tar.gz;
+      sha256 = "03cbp5ls98zcj183wjzlzjcrhbc96mw3p1hagzy1yplj1xh5ia4y";
+    };
+    meta = {
+      description = "Perl extension for base 85 numbers, as referenced by RFC 1924";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
   };
 
   MathLibm = buildPerlPackage {
@@ -13126,6 +13181,22 @@ let
     };
   };
 
+  NetAsyncPing = buildPerlPackage {
+    pname = "Net-Async-Ping";
+    version = "0.004001";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AB/ABRAXXA/Net-Async-Ping-0.004001.tar.gz;
+      sha256 = "0nz9i9fp7wp620f4i9z8fip1zhcaz34ckhd00ymksw8cfr8fhmwh";
+    };
+    propagatedBuildInputs = [ IOAsync Moo NetFrameLayerIPv6 namespaceclean ];
+    buildInputs = [ TestFatal ];
+    meta = {
+      description = "asyncronously check remote host for reachability";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/frioux/Net-Async-Ping";
+    };
+  };
+
   NetAMQP = buildPerlModule {
     pname = "Net-AMQP";
     version = "0.06";
@@ -13257,6 +13328,34 @@ let
      };
   };
 
+  NetFrame = buildPerlModule {
+    pname = "Net-Frame";
+    version = "1.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GO/GOMOR/Net-Frame-1.21.tar.gz;
+      sha256 = "0ffphcw52dgn07k7q02di77zq2zzc0p3vlv2gnphr7v3ifi5gcxw";
+    };
+    propagatedBuildInputs = [ BitVector ClassGomor NetIPv6Addr ];
+    meta = {
+      description = "the base framework for frame crafting";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
+  NetFrameLayerIPv6 = buildPerlModule {
+    pname = "Net-Frame-Layer-IPv6";
+    version = "1.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GO/GOMOR/Net-Frame-Layer-IPv6-1.08.tar.gz;
+      sha256 = "1mzp778jmjn23990gj0mibhr9mrwmaw85nh7wf25hzzkx0mqabds";
+    };
+    propagatedBuildInputs = [ NetFrame ];
+    meta = {
+      description = "Internet Protocol v6 layer object";
+      license = with stdenv.lib.licenses; [ artistic1 ];
+    };
+  };
+
   NetHTTP = buildPerlPackage {
     pname = "Net-HTTP";
     version = "6.19";
@@ -13310,6 +13409,31 @@ let
     };
     meta = {
       description = "Perl extension for manipulating IPv4/IPv6 addresses";
+    };
+  };
+
+  NetIPv4Addr = buildPerlPackage {
+    pname = "Net-IPv4Addr";
+    version = "0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/F/FR/FRAJULAC/Net-IPv4Addr-0.10.tar.gz;
+      sha256 = "1zk3591822dg187sgkwjjvg18qmvkn3yib1c34mq8z5i617xwi9q";
+    };
+    meta = {
+    };
+  };
+
+  NetIPv6Addr = buildPerlPackage {
+    pname = "Net-IPv6Addr";
+    version = "0.96";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BK/BKB/Net-IPv6Addr-0.96.tar.gz;
+      sha256 = "1y6dpv3gafvjcw9c5ldxminykz6aggwqdj6l93h9w2hncz8fa0iv";
+    };
+    propagatedBuildInputs = [ MathBase85 MathBigInt NetIPv4Addr ];
+    meta = {
+      description = "Check and manipulate IPv6 addresses";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -17821,6 +17945,19 @@ let
      };
   };
 
+  TestIdentity = buildPerlModule {
+    pname = "Test-Identity";
+    version = "0.01";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Test-Identity-0.01.tar.gz;
+      sha256 = "08szivpqfwxnf6cfh0f0rfs4f7xbaxis3bra31l2c5gdk800a0ig";
+    };
+    meta = {
+      description = "assert the referential identity of a reference";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   TestHTTPServerSimple = buildPerlPackage {
     pname = "Test-HTTP-Server-Simple";
     version = "0.11";
@@ -18235,6 +18372,19 @@ let
     };
     meta = {
       description = "Check file names portability";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestRefcount = buildPerlModule {
+    pname = "Test-Refcount";
+    version = "0.10";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Test-Refcount-0.10.tar.gz;
+      sha256 = "1chf6zizi7x128l3qm1bdqzwjjqm2j4gzajgghaksisn945c4mq4";
+    };
+    meta = {
+      description = "assert reference counts on objects";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
