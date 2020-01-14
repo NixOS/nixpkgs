@@ -5,13 +5,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libsrtp";
-  version = "2.2.0";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "libsrtp";
     rev = "v${version}";
-    sha256 = "1ac7xs1djb03j131f1gmqyfmrplblid9qqyxahs0shdy707r5ll6";
+    sha256 = "1f7i3jdh1wzdv7zjlz7gs3xw5jqig9zw8z9awsqqcp54f94xdpvd";
   };
 
   outputs = [ "out" "dev" ];
