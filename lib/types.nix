@@ -590,7 +590,7 @@ rec {
         tail' = tail ts;
       in foldl' either head' tail';
 
-    # Either value of type `finalType` or `coercedType`, the latter is
+    # Either value of type `coercedType` or `finalType`, the former is
     # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
       assert lib.assertMsg (coercedType.getSubModules == null)
@@ -599,12 +599,12 @@ rec {
       mkOptionType rec {
         name = "coercedTo";
         description = "${finalType.description} or ${coercedType.description} convertible to it";
-        check = x: finalType.check x || (coercedType.check x && finalType.check (coerceFunc x));
+        check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
         merge = loc: defs:
           let
             coerceVal = val:
-              if finalType.check val then val
-              else coerceFunc val;
+              if coercedType.check val then coerceFunc val
+              else val;
           in finalType.merge loc (map (def: def // { value = coerceVal def.value; }) defs);
         emptyValue = finalType.emptyValue;
         getSubOptions = finalType.getSubOptions;
