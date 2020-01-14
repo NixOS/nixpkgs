@@ -38,10 +38,10 @@ stdenv.mkDerivation rec {
   configureScript = ''../configure'';
   configureFlags = [
     "CFLAGS=-O"
-    "--docdir=${placeholder "prefix"}/share/doc"
-    "--mandir=${placeholder "prefix"}/share/doc/man"
-    "--datadir=${placeholder "prefix"}/share"
-    "--lw-initdir=${placeholder "prefix"}/etc/init.d"
+    "--docdir=${placeholder "out"}/share/doc"
+    "--mandir=${placeholder "out"}/share/doc/man"
+    "--datadir=${placeholder "out"}/share"
+    "--lw-initdir=${placeholder "out"}/etc/init.d"
     "--selinux=no" # NixOS does not support SELinux
     "--build-isas=x86_64" # [lwbase] endianness (host/x86_32): [lwbase] ERROR: could not determine endianness
     "--fail-on-warn=no"
