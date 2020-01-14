@@ -9290,11 +9290,11 @@ let
   };
 
   IOStringy = buildPerlPackage {
-    pname = "IO-stringy";
-    version = "2.111";
+    pname = "IO-Stringy";
+    version = "2.112";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DS/DSKOLL/IO-stringy-2.111.tar.gz;
-      sha256 = "178rpx0ym5l2m9mdmpnr92ziscvchm541w94fd7ygi6311kgsrwc";
+      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.112.tar.gz;
+      sha256 = "0rgp0b0yi0yszxwjh52y5n8s35f3gx7mxcvplwj9xiv5lvsjh8w7";
     };
   };
 
