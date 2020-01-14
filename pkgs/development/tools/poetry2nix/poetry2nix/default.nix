@@ -20,16 +20,10 @@ let
 
   getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-  getAttrDefault = attribute: set: default: (
-    if builtins.hasAttr attribute set
-    then builtins.getAttr attribute set
-    else default
-  );
-
   # Map SPDX identifiers to license names
   spdxLicenses = lib.listToAttrs (lib.filter (pair: pair.name != null) (builtins.map (v: { name = if lib.hasAttr "spdxId" v then v.spdxId else null; value = v; }) (lib.attrValues lib.licenses)));
   # Get license by id falling back to input string
-  getLicenseBySpdxId = spdxId: getAttrDefault spdxId spdxLicenses spdxId;
+  getLicenseBySpdxId = spdxId: spdxLicenses.${spdxId} or spdxId;
 
   #
   # Returns an attrset { python, poetryPackages } for the given lockfile
@@ -65,7 +59,7 @@ let
       # closure as python can only ever have one version of a dependency
       baseOverlay = self: super:
         let
-          getDep = depName: if builtins.hasAttr depName self then self."${depName}" else throw "foo";
+          getDep = depName: self.${depName};
 
           lockPkgs = builtins.listToAttrs (
             builtins.map (
@@ -74,7 +68,7 @@ let
                 value = self.mkPoetryDep (
                   pkgMeta // {
                     inherit pwd;
-                    source = getAttrDefault "source" pkgMeta null;
+                    source = pkgMeta.source or null;
                     files = lockFiles.${name};
                     pythonPackages = self;
                   }
@@ -159,12 +153,12 @@ let
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
       getDeps = depAttr: let
-        deps = getAttrDefault depAttr pyProject.tool.poetry {};
+        deps = pyProject.tool.poetry.${depAttr} or {};
         depAttrs = builtins.map (d: lib.toLower d) (builtins.attrNames deps);
       in
         builtins.map (dep: py.pkgs."${dep}") depAttrs;
 
-      getInputs = attr: getAttrDefault attr attrs [];
+      getInputs = attr: attrs.${attr} or [];
       mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
 
       buildSystemPkgs = poetryLib.getBuildSystemPkgs {
@@ -189,7 +183,7 @@ let
             python = py;
           };
 
-          postPatch = (getAttrDefault "postPatch" passedAttrs "") + ''
+          postPatch = (passedAttrs.postPatch or "") + ''
             # Tell poetry not to resolve the path dependencies. Any version is
             # fine !
             yj -tj < pyproject.toml | python ${./pyproject-without-path.py} > pyproject.json
@@ -199,7 +193,7 @@ let
 
           meta = meta // {
             inherit (pyProject.tool.poetry) description homepage;
-            license = getLicenseBySpdxId (getAttrDefault "license" pyProject.tool.poetry "unknown");
+            license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
           };
 
         }

@@ -2439,6 +2439,12 @@
     githubId = 844574;
     name = "Daniel Austin";
   };
+  flyfloh = {
+    email = "nix@halbmastwurf.de";
+    github = "flyfloh";
+    githubId = 74379;
+    name = "Florian Pester";
+  };
   fmthoma = {
     email = "f.m.thoma@googlemail.com";
     github = "fmthoma";
@@ -5082,6 +5088,12 @@
     githubId = 7588406;
     name = "Andrew R. M.";
   };
+  nloomans = {
+    email = "noah@nixos.noahloomans.com";
+    github = "nloomans";
+    githubId = 7829481;
+    name = "Noah Loomans";
+  };
   nmattia = {
     email = "nicolas@nmattia.com";
     github = "nmattia";
@@ -7025,6 +7037,11 @@
     email = "tim@gfxmonk.net";
     github = "timbertson";
     name = "Tim Cuthbertson";
+  };
+  timma = {
+    email = "kunduru.it.iitb@gmail.com";
+    github = "ktrsoft";
+    name = "Timma";
   };
   timokau = {
     email = "timokau@zoho.com";
