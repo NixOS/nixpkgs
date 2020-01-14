@@ -4984,11 +4984,11 @@ let
 
   DBFile = buildPerlPackage {
     pname = "DB_File";
-    version = "1.852";
+    version = "1.853";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/DB_File-1.852.tar.gz;
-      sha256 = "14c30xyqx9c1hxw40bqbzls41al8gmklxv5jbk2kknmn4dsrbdrs";
+      url = mirror://cpan/authors/id/P/PM/PMQS/DB_File-1.853.tar.gz;
+      sha256 = "1y967si45vj0skip1hnhicbv9da29fv6qcfwnsbnvj06n36mkj6h";
     };
 
     preConfigure = ''
