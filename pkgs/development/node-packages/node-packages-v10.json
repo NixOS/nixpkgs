@@ -17,6 +17,7 @@
 , "browserify"
 , "castnow"
 , "clean-css"
+, "clubhouse-cli"
 , "coffee-script"
 , "coinmon"
 , "configurable-http-proxy"
