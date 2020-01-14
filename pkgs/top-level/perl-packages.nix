@@ -2875,10 +2875,10 @@ let
 
   ConfigAutoConf = buildPerlPackage {
     pname = "Config-AutoConf";
-    version = "0.317";
+    version = "0.318";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RE/REHSACK/Config-AutoConf-0.317.tar.gz;
-      sha256 = "1qcwib4yaml5z2283qy5khjcydyibklsnk8zrk9wzdzc5wnv5r01";
+      url = mirror://cpan/authors/id/R/RE/REHSACK/Config-AutoConf-0.318.tar.gz;
+      sha256 = "0d5bxsax2x3xy8bgqrbzs0562x7bpglan8m23hjxw0rhxkz31j9k";
     };
     propagatedBuildInputs = [ CaptureTiny ];
     meta = {
