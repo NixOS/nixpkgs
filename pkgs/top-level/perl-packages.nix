@@ -7768,10 +7768,10 @@ let
 
   GlibObjectIntrospection = buildPerlPackage {
     pname = "Glib-Object-Introspection";
-    version = "0.047";
+    version = "0.048";
     src = fetchurl {
-      url = mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.047.tar.gz;
-      sha256 = "1sk32pcv4ik3sniqbjrz8nlw7f2a76l87wx1rwdjypv6h9pjnrnk";
+      url = mirror://cpan/authors/id/X/XA/XAOC/Glib-Object-Introspection-0.048.tar.gz;
+      sha256 = "01dx5w6r4nl3rgnz7wvgvqfaa48xmzy90p95d5k6315q44610kx6";
     };
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     meta = {
