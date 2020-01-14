@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, glib, pkgconfig, gettext, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
+{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, gettext, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
 , libgcrypt, gobject-introspection, vala, gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
@@ -9,6 +9,14 @@ stdenv.mkDerivation rec {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0hxfpm8f4rlx685igd4bv89wb80v2952h373g3w6l42kniq7667i";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "rename-internal-functions-to-avoid-conflicts-and-fix-build.patch";
+      url = "https://gitlab.gnome.org/GNOME/libsecret/commit/cf21ad50b62f7c8e4b22ef374f0a73290a99bdb8.patch";
+      sha256 = "1n9nyzq5qrvw7s6sj5gzj33ia3rrx719jpys1cfhfbayg2sxyd4n";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
