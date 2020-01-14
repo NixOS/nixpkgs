@@ -1,0 +1,14 @@
+diff --git a/etc/systemd/system/Makefile.am b/etc/systemd/system/Makefile.am
+index 130c6c757..9249f15eb 100644
+--- a/etc/systemd/system/Makefile.am
++++ b/etc/systemd/system/Makefile.am
+@@ -31,9 +31,5 @@ $(systemdunit_DATA) $(systemdpreset_DATA):%:%.in
+		-e 's,@sysconfdir\@,$(sysconfdir),g' \
+		$< >'$@'
+
+-install-data-hook:
+-	$(MKDIR_P) "$(DESTDIR)$(systemdunitdir)"
+-	ln -sf /dev/null "$(DESTDIR)$(systemdunitdir)/zfs-import.service"
+-
+ distclean-local::
+	-$(RM) $(systemdunit_DATA) $(systemdpreset_DATA)

@@ -40,9 +40,18 @@ let
         inherit rev sha256;
       };
 
-      patches = extraPatches;
+      patches = [ ./null-systemd.patch ] ++ extraPatches;
 
-      postPatch = optionalString buildKernel ''
+      postPatch = ''
+        substituteInPlace ./contrib/initramfs/Makefile.am \
+          --replace "/usr/share/initramfs-tools" "$out/share/initramfs-tools"
+        substituteInPlace ./contrib/initramfs/hooks/Makefile.am \
+          --replace "/usr/share/initramfs-tools/hooks" "$out/share/initramfs-tools/hooks"
+        substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts" "$out/share/initramfs-tools/scripts"
+        substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/share/initramfs-tools/scripts/local-top"
+      '' + optionalString buildKernel ''
         patchShebangs scripts
         # The arrays must remain the same length, so we repeat a flag that is
         # already part of the command and therefore has no effect.
@@ -56,6 +65,7 @@ let
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d"
         substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
         substituteInPlace ./cmd/zed/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
+
         substituteInPlace ./etc/systemd/system/zfs-share.service.in \
           --replace "/bin/rm " "${coreutils}/bin/rm "
 
@@ -163,9 +173,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.2";
+    version = "0.8.3";
 
-    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
+    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
   };
 
   zfsUnstable = common {
@@ -173,9 +183,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.2";
+    version = "0.8.3";
 
-    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
+    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
     isUnstable = true;
   };
 }
