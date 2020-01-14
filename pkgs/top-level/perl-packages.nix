@@ -14434,17 +14434,18 @@ let
 
   Pegex = buildPerlPackage {
     pname = "Pegex";
-    version = "0.70";
+    version = "0.72";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/Pegex-0.70.tar.gz;
-      sha256 = "fd3521321026048f493a88d43ce4b8e054f5d7acfec6a1db32fcaabe4dfda0fd";
+      url = mirror://cpan/authors/id/I/IN/INGY/Pegex-0.72.tar.gz;
+      sha256 = "a3ff9faa61a7becdc480aa010abcfb2c291826447d5c51f2bd4dfaf855a567ec";
     };
-    buildInputs = [ FileShareDirInstall YAMLLibYAML ];
+    buildInputs = [ TestPod TieIxHash ];
     meta = {
       homepage = https://github.com/ingydotnet/pegex-pm;
       description = "Acmeist PEG Parser Framework";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ FileShareDirInstall JSONXS XXX YAMLLibYAML ];
   };
 
   PerconaToolkit = callPackage ../development/perl-modules/Percona-Toolkit { };
@@ -20920,6 +20921,21 @@ let
     meta = {
       description = "XS pointer backed objects using sv_magic";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  XXX = buildPerlPackage {
+    pname = "XXX";
+    version = "0.33";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TI/TINITA/XXX-0.33.tar.gz;
+      sha256 = "00b0kxidb3wha9v2a915y5x8mfna7z54ck36f82kr8x29sb7by7w";
+    };
+    propagatedBuildInputs = [ YAML ];
+    meta = {
+      description = "See Your Data in the Nude";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/ingydotnet/xxx-pm";
     };
   };
 
