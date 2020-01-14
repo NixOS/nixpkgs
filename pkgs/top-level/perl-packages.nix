@@ -17230,10 +17230,10 @@ let
 
   TemplateToolkit = buildPerlPackage {
     pname = "Template-Toolkit";
-    version = "2.29";
+    version = "3.003";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-2.29.tar.gz;
-      sha256 = "0ya7c49q2rd2gdjf28y60iq8wsr2afphsy1labyhbf0zyhfdgp9b";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Template-Toolkit-3.003.tar.gz;
+      sha256 = "1g8d8b77sd1bifvmhn9v44n9ljf2hyihsk3rmzh12jwmysw07ih7";
     };
     propagatedBuildInputs = [ AppConfig ];
     doCheck = !stdenv.isDarwin;
