@@ -12102,10 +12102,10 @@ let
 
   Moose = buildPerlPackage {
     pname = "Moose";
-    version = "2.2011";
+    version = "2.2012";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2011.tar.gz;
-      sha256 = "973d0a35d9f39bf93bbc5206c25f5ec3651f96356f082d31873c0ac9a5c1cd82";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Moose-2.2012.tar.gz;
+      sha256 = "46bbe47a9d16379c355b3a263214eb69bf0edca6a0ef75499a012236f5153569";
     };
     buildInputs = [ CPANMetaCheck TestCleanNamespaces TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassLoadXS DevelGlobalDestruction DevelOverloadInfo DevelStackTrace EvalClosure ModuleRuntimeConflicts PackageDeprecationManager PackageStashXS SubExporter ];
