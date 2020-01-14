@@ -15032,10 +15032,10 @@ let
 
   ProtocolRedis = buildPerlPackage {
     pname = "Protocol-Redis";
-    version = "1.0010";
+    version = "1.0011";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-1.0010.tar.gz";
-      sha256 = "e787236e46b1f0738a98113ea0dfbee4c695723bb37dce8d6936fd9a519e5343";
+      url = mirror://cpan/authors/id/U/UN/UNDEF/Protocol-Redis-1.0011.tar.gz;
+      sha256 = "7ceb6bd80067c904465d4fd1f1715724388c9bdc37c6c2c003a20ce569b7f4e8";
     };
     meta = {
       homepage = "https://github.com/und3f/protocol-redis";
