@@ -18,8 +18,11 @@ buildPythonPackage rec {
     mock
   ];
 
-  propagatedBuildInputs = [
+  propagatedNativeBuildInputs = [
     cudatoolkit
+  ];
+
+  propagatedBuildInputs = [
     cudnn
     linuxPackages.nvidia_x11
     nccl
