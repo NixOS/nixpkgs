@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
       url = "https://github.com/GNUAspell/aspell/commit/8089fa02122fed0a.diff";
       sha256 = "1b3p1zy2lqr2fknddckm58hyk95hw4scf6hzjny1v9iaic2p37ix";
     })
+    (fetchpatch {
+      name = "CVE-2019-17544.patch";
+      url = "https://github.com/GNUAspell/aspell/commit/80fa26c74279fced8d778351cff19d1d8f44fe4e.patch";
+      sha256 = "0k5dnh8gcb7chnyx7jgkksqmz2hm05hmrvcd0znsfib975pvp4rg";
+    })
   ] ++ stdenv.lib.optional searchNixProfiles ./data-dirs-from-nix-profiles.patch;
 
   postPatch = ''
