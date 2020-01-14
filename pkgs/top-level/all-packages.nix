@@ -4812,6 +4812,8 @@ in
 
   pcsc-cyberjack = callPackage ../tools/security/pcsc-cyberjack { };
 
+  pcsc-safenet = callPackage ../tools/security/pcsc-safenet { };
+
   pcsc-scm-scl011 = callPackage ../tools/security/pcsc-scm-scl011 { };
   ifdnfc = callPackage ../tools/security/ifdnfc { };
 
@@ -5337,8 +5339,6 @@ in
   sablotron = callPackage ../tools/text/xml/sablotron { };
 
   safecopy = callPackage ../tools/system/safecopy { };
-
-  safenet-authentication-client = callPackage ../tools/security/safenet-authentication-client { };
 
   safe-rm = callPackage ../tools/system/safe-rm { };
 

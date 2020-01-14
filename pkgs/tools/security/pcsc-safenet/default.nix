@@ -4,12 +4,13 @@
   gtk2,
   fetchurl, 
   lib,
+  openssl,
   pcsclite,
   stdenv
 }:
 stdenv.mkDerivation rec {
 
-  pname = "safenet-authentication-client";
+  pname = "pcsc-safenet";
   version = "9.0.43-0";
 
   src = fetchurl {
@@ -24,7 +25,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk2
+    openssl
     pcsclite
+  ];
+
+  runtimeDependencies = [
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -33,12 +39,20 @@ stdenv.mkDerivation rec {
 
 
   installPhase = ''
-    # Delete usr. It's just symlinks
-    rm -r usr/lib
-    # Move bin out
+    # Set up for pcsc drivers
+    mkdir -p pcsc/drivers
+    mv usr/share/eToken/drivers/* pcsc/drivers/
+    rm -r usr/share/eToken/drivers
+    
+    # Move binaries  out
     mv usr/bin bin
-    mkdir -p $out
-    cp -r . $out/
+
+    # Move UI to bin
+    mv usr/share/SAC/SACUIProcess bin/
+    rm -r usr/share/SAC
+
+    mkdir $out
+    cp -r {bin,etc,lib,pcsc,usr,var} $out/
   '';
 
   meta = with lib; {
