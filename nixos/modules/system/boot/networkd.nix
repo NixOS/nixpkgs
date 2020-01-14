@@ -49,7 +49,7 @@ let
     (assertValueOneOf "Kind" [
       "bond" "bridge" "dummy" "gre" "gretap" "ip6gre" "ip6tnl" "ip6gretap" "ipip"
       "ipvlan" "macvlan" "macvtap" "sit" "tap" "tun" "veth" "vlan" "vti" "vti6"
-      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim"
+      "vxlan" "geneve" "vrf" "vcan" "vxcan" "wireguard" "netdevsim" "xfrm"
     ])
     (assertByteFormat "MTUBytes")
     (assertMacAddress "MACAddress")
@@ -172,6 +172,14 @@ let
     (assertValueOneOf "AllSlavesActive" boolValues)
   ];
 
+  checkXfrm = checkUnitConfig "Xfrm" [
+    (assertOnlyFields [
+      "InterfaceId" "Independent"
+    ])
+    (assertRange "InterfaceId" 1 4294967295)
+    (assertValueOneOf "Independent" boolValues)
+  ];
+
   checkNetwork = checkUnitConfig "Network" [
     (assertOnlyFields [
       "Description" "DHCP" "DHCPServer" "LinkLocalAddressing" "IPv4LLRoute"
@@ -182,7 +190,7 @@ let
       "IPv6HopLimit" "IPv4ProxyARP" "IPv6ProxyNDP" "IPv6ProxyNDPAddress"
       "IPv6PrefixDelegation" "IPv6MTUBytes" "Bridge" "Bond" "VRF" "VLAN"
       "IPVLAN" "MACVLAN" "VXLAN" "Tunnel" "ActiveSlave" "PrimarySlave"
-      "ConfigureWithoutCarrier"
+      "ConfigureWithoutCarrier" "Xfrm"
     ])
     # Note: For DHCP the values both, none, v4, v6 are deprecated
     (assertValueOneOf "DHCP" ["yes" "no" "ipv4" "ipv6" "both" "none" "v4" "v6"])
@@ -477,6 +485,18 @@ let
       '';
     };
 
+    xfrmConfig = mkOption {
+      default = {};
+      example = { InterfaceId = 1; };
+      type = types.addCheck (types.attrsOf unitOption) checkXfrm;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[Xfrm]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
   };
 
   addressOptions = {
@@ -712,6 +732,16 @@ let
       '';
     };
 
+    xfrm = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        A list of xfrm interfaces to be added to the network section of the
+        unit.  See <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     addresses = mkOption {
       default = [ ];
       type = with types; listOf (submodule addressOptions);
@@ -810,6 +840,11 @@ let
             ${attrsToSection def.bondConfig}
 
           ''}
+          ${optionalString (def.xfrmConfig != { }) ''
+            [Xfrm]
+            ${attrsToSection def.xfrmConfig}
+
+          ''}
           ${optionalString (def.wireguardConfig != { }) ''
             [WireGuard]
             ${attrsToSection def.wireguardConfig}
@@ -847,6 +882,7 @@ let
           ${concatStringsSep "\n" (map (s: "MACVLAN=${s}") def.macvlan)}
           ${concatStringsSep "\n" (map (s: "VXLAN=${s}") def.vxlan)}
           ${concatStringsSep "\n" (map (s: "Tunnel=${s}") def.tunnel)}
+          ${concatStringsSep "\n" (map (s: "Xfrm=${s}") def.xfrm)}
 
           ${optionalString (def.dhcpConfig != { }) ''
             [DHCP]
