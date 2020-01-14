@@ -38,8 +38,12 @@ in
 
           # We need Apache on the tracker to serve the torrents.
           services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
-          services.httpd.documentRoot = "/tmp";
+          services.httpd.virtualHosts = {
+            "torrentserver.org" = {
+              adminAddr = "foo@example.org";
+              documentRoot = "/tmp";
+            };
+          };
 
           networking.firewall.enable = false;
 
