@@ -7245,10 +7245,10 @@ let
 
   FilesysNotifySimple = buildPerlPackage {
     pname = "Filesys-Notify-Simple";
-    version = "0.13";
+    version = "0.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Filesys-Notify-Simple-0.13.tar.gz;
-      sha256 = "18jv96k1pf8wqf4vn2ahs7dv44lc9cyqj0bja9z17qici3dx7qxd";
+      url = mirror://cpan/authors/id/M/MI/MIYAGAWA/Filesys-Notify-Simple-0.14.tar.gz;
+      sha256 = "192m0l4cnfskdmhgaxk3bm1rvbmzxzwgcdgdb60qdqd59cnp3nhz";
     };
     meta = {
       description = "Simple and dumb file system watcher";
