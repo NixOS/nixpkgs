@@ -1128,10 +1128,10 @@ let
 
   BusinessISBN = buildPerlPackage {
     pname = "Business-ISBN";
-    version = "3.004";
+    version = "3.005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-3.004.tar.gz;
-      sha256 = "07l3zfv8hagv37i3clvj5a1zc2jarr5phg80c93ks35zaz6llx9i";
+      url = mirror://cpan/authors/id/B/BD/BDFOY/Business-ISBN-3.005.tar.gz;
+      sha256 = "0aifzqj3xvxi8x0103ddpb2bagfsz15c71k69vdpcqy582pgnc35";
     };
     propagatedBuildInputs = [ BusinessISBNData ];
     meta = {
