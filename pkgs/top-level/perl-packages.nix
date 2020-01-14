@@ -14973,12 +14973,11 @@ let
 
   ProcFind = buildPerlPackage {
     pname = "Proc-Find";
-    version = "0.04";
+    version = "0.051";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PERLANCAR/Proc-Find-0.04.tar.gz;
-      sha256 = "07d715c2b8644dc6d5b5a36ffcd2f02da017bf86a00027387aa47c53e2347a81";
+      url = mirror://cpan/authors/id/P/PE/PERLANCAR/Proc-Find-0.051.tar.gz;
+      sha256 = "64d39071ec94d7b66a7cab5a950246f0fff013b5a200a63d1176432987e5a135";
     };
-    buildInputs = [ Perlosnames ];
     propagatedBuildInputs = [ ProcProcessTable ];
     meta = {
       description = "Find processes by name, PID, or some other attributes";
