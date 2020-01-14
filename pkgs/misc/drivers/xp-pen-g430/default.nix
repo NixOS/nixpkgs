@@ -38,6 +38,6 @@ stdenv.mkDerivation rec {
     description = "Driver for the XP-PEN G430 drawing tablet";
     license = licenses.unfree;
     platforms = platforms.linux;
-    maintainers = [ Yvar192 ];
+    maintainers = with maintainers; [ Yvar192 ];
   };
 }
