@@ -11110,6 +11110,17 @@ let
     buildInputs = [ DataFloat MathBigIntLite NumberFraction ];
   };
 
+  MathRandom = buildPerlPackage {
+    pname = "Math-Random";
+    version = "0.72";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/G/GR/GROMMEL/Math-Random-0.72.tar.gz;
+      sha256 = "0k15pk2qx9wrp5xqzhymm1ph4nb314ysrsyr0pjnvn8ii0r241dy";
+    };
+    meta = {
+    };
+  };
+
   MathRandomISAAC = buildPerlPackage {
     pname = "Math-Random-ISAAC";
     version = "1.004";
