@@ -23915,6 +23915,8 @@ in
 
   nasc = callPackage ../applications/science/math/nasc { };
 
+  nota = haskellPackages.callPackage ../applications/science/math/nota { };
+
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
@@ -25799,5 +25801,4 @@ in
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kcli = callPackage ../development/tools/kcli {};
-
 }
