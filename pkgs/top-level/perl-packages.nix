@@ -14596,8 +14596,8 @@ let
     pname = "Perl-Tidy";
     version = "20200110";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-${version}.tar.gz";
-      sha256 = "11l0isqr7ysrm1y07lrla0ns1x3wvjw8im4kk50rsh22iyw3mhf8";
+      url = mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20200110.tar.gz;
+      sha256 = "c8c13ab88f42409d419993d488b8dc7cf4a02d5034d3037ca859fb93b18e8086";
     };
     meta = {
       description = "Indent and reformat perl scripts";
