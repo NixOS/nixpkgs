@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, unzip, darwin }:
+{ lib, stdenv, dos2unix, fetchurl, unzip, darwin, patchutils }:
 
+let
+  patchVersion = "1.6.37";
+
+  patch_apng = fetchurl {
+    url = "mirror://sourceforge/libpng-apng/libpng-${patchVersion}-apng.patch.gz";
+    sha256 = "1dh0250mw9b2hx7cdmnb2blk7ddl49n6vx8zz7jdmiwxy38v4fw2"; # patch.gz
+  };
+  arm_patch_src = fetchurl {
+    url = "mirror://sourceforge/apng/libpng-${patchVersion}-apng.patch.gz";
+    sha256 = "0g38frllvg6a2x2g0b6irgc2xvhbgi9bfpimkfkqgcz2c35y1n8h";
+  };
+in
 stdenv.mkDerivation {
   name = "freeimage-3.18.0";
 
@@ -10,7 +22,7 @@ stdenv.mkDerivation {
 
   patches = lib.optional stdenv.isDarwin ./dylib.patch;
 
-  buildInputs = [ unzip ] ++ lib.optional stdenv.isDarwin darwin.cctools;
+  buildInputs = [ unzip dos2unix ] ++ lib.optional stdenv.isDarwin darwin.cctools;
 
   prePatch = if stdenv.isDarwin then ''
     sed -e 's/$(shell xcrun -find clang)/clang/g' \
@@ -28,6 +40,16 @@ stdenv.mkDerivation {
         -e 's@-o root -g root@@' \
         -e 's@ldconfig@echo not running ldconfig@' \
         -i Makefile.gnu Makefile.fip
+  '' + ''
+    (
+      cd ./Source/LibPNG
+      find . -type f -print0 | xargs -0 dos2unix
+      gunzip < ${patch_apng} >patch
+      cat ${patch_arm} >patch3
+      ${patchutils}/bin/filterdiff -p1 --exclude '*scripts/*' > patch2
+      patch -Np1 <patch2
+      patch -Np1 <patch3
+    )
   '';
 
   postBuild = lib.optionalString (!stdenv.isDarwin) ''
@@ -52,3 +74,4 @@ stdenv.mkDerivation {
     platforms = with lib.platforms; unix;
   };
 }
+
