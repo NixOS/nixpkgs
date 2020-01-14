@@ -1,12 +1,12 @@
-{ lib, fetchurl, ppx_deriving, ppxfind, buildDunePackage }:
+{ lib, fetchzip, ppx_deriving, ppxfind, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "lens";
   version = "1.2.3";
 
-  src = fetchurl {
+  src = fetchzip {
     url = "https://github.com/pdonadeo/ocaml-lens/archive/v${version}.tar.gz";
-    sha256 = "0mg4lfjp3c5fy68j822kbw4i1jz82msfwxxbb7jklga7jvfpcs95";
+    sha256 = "09k2vhzysx91syjhgv6w1shc9mgzi0l4bhwpx1g5pi4r4ghjp07y";
   };
 
   minimumOCamlVersion = "4.04.1";
