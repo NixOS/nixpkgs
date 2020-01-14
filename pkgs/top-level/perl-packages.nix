@@ -4804,10 +4804,10 @@ let
 
   DevelPPPort = buildPerlPackage {
     pname = "Devel-PPPort";
-    version = "3.55";
+    version = "3.56";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.55.tar.gz;
-      sha256 = "bac0421ed1ba02f118f2bc1b1a760616847a0c60cb0184651f3f076f46d0946e";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.56.tar.gz;
+      sha256 = "628476dbfeb7be92471e48f75fe0d36659b92493669ebd02cf04e3a13429521b";
     };
     meta = {
       description = "Perl/Pollution/Portability";
