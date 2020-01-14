@@ -14474,10 +14474,10 @@ let
 
   PerlCritic = buildPerlModule {
     pname = "Perl-Critic";
-    version = "1.134";
+    version = "1.136";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.134.tar.gz;
-      sha256 = "90ec87ed8d49dd5fd686a0e4c8ef77268962faf14b18b43f2385db79e34085eb";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/Perl-Critic-1.136.tar.gz;
+      sha256 = "53a2891473ecb6df422025945fe007035bd1bfe13629940f9d6b4d44b770ef5e";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ BKeywords ConfigTiny FileWhich ModulePluggable PPIxQuoteLike PPIxRegexp PPIxUtilities PerlTidy PodSpell StringFormat ];
