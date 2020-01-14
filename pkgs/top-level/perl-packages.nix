@@ -11648,10 +11648,10 @@ let
 
   ModuleFind = buildPerlPackage {
     pname = "Module-Find";
-    version = "0.13";
+    version = "0.15";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.13.tar.gz;
-      sha256 = "0s45y5lvd9k89g7lds83c0bn1p29c13hfsbrd7x64jfaf8h8cisa";
+      url = mirror://cpan/authors/id/C/CR/CRENZ/Module-Find-0.15.tar.gz;
+      sha256 = "0pm8v398rv4sy7sn7zzfbq4szxw6p1q4963ancsi17iyzskq4m2w";
     };
     meta = {
       description = "Find and use installed modules in a (sub)category";
