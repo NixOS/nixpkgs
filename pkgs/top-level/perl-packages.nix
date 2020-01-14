@@ -11945,10 +11945,10 @@ let
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "2.18";
+    version = "2.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-2.18.tar.gz;
-      sha256 = "340afe815e6195bc0ed5abcf5bcd0fdedf0be62656cede1768cfd99b62633d23";
+      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-2.20.tar.gz;
+      sha256 = "53e7c02d9786ae9559f02cfde4e5f2e1433c8288f548ec7449b9cd04549be1fb";
     };
     propagatedBuildInputs = [ JSONValidator ];
     meta = {
