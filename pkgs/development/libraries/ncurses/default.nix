@@ -112,18 +112,18 @@ stdenv.mkDerivation rec {
             if [ "ncurses" = "$library" ]
             then
               # make libtinfo symlinks
-              ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo$newsuffix.$dylibtype
-              ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/libtinfo$newsuffix.${abiVersion-extension}
+              ln -svf lib''${library}$suffix.$dylibtype $out/lib/libtinfo${if unicode then "w" else ""}$newsuffix.$dylibtype
+              ln -svf lib''${library}$suffix.${abiVersion-extension} $out/lib/libtinfo${if unicode then "w" else ""}$newsuffix.${abiVersion-extension}
             fi
           fi
         done
         for statictype in a dll.a la; do
           if [ -e "$out/lib/lib''${library}$suffix.$statictype" ]; then
-            ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library$newsuffix.$statictype
+            ln -svf lib''${library}$suffix.$statictype $out/lib/lib$library${if unicode then "w" else ""}$newsuffix.$statictype
             if [ "ncurses" = "$library" ]
             then
               # make libtinfo symlinks
-              ln -svf lib''${library}$suffix.$statictype $out/lib/libtinfo$newsuffix.$statictype
+              ln -svf lib''${library}$suffix.$statictype $out/lib/libtinfo${if unicode then "w" else ""}$newsuffix.$statictype
             fi
           fi
         done
