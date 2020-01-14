@@ -6,7 +6,7 @@
 # Dependencies
 , bzip2
 , zlib
-, openssl_1_0_2
+, openssl
 , expat
 , libffi
 , ncurses
@@ -44,13 +44,21 @@ let
   deps = [
     bzip2
     zlib
-    openssl_1_0_2
+    openssl
     expat
-    libffi
+    libffi6
     ncurses
     tcl
     tk
   ];
+
+  libffi6 = libffi.overrideAttrs(oldAttrs: rec {
+    name = "libffi-3.2.1";
+    src = fetchurl {
+      url = "https://sourceware.org/pub/libffi/${name}.tar.gz";
+      sha256 = "0dya49bnhianl0r65m65xndz6ls2jn1xngyn72gd28ls3n7bnvnh";
+    };
+  });
 
 in with passthru; stdenv.mkDerivation {
   inherit pname version;
@@ -60,7 +68,7 @@ in with passthru; stdenv.mkDerivation {
     inherit sha256;
   };
 
-  buildInputs = [ which ];
+  nativeBuildInputs = [ which ];
 
   installPhase = ''
     mkdir -p $out/lib
