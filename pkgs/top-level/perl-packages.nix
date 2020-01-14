@@ -19105,12 +19105,12 @@ let
 
   TextHogan = buildPerlPackage {
     pname = "Text-Hogan";
-    version = "2.02";
+    version = "2.03";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAORU/Text-Hogan-2.02.tar.gz;
-      sha256 = "0b3hzl4fz1bypmdh225wwx9lcmjx4bxz8l2p800x5vy8r2w7ngd3";
+      url = mirror://cpan/authors/id/K/KA/KAORU/Text-Hogan-2.03.tar.gz;
+      sha256 = "0yk1qn457jqknds4g2khlhi5vk2li1njbfwvxy44i665wknj7naq";
     };
-    propagatedBuildInputs = [ Clone TextTrim ];
+    propagatedBuildInputs = [ Clone RefUtil TextTrim ];
     buildInputs = [ DataVisitor PathTiny TryTiny YAML ];
     meta = {
       description = "Text::Hogan - A mustache templating engine statement-for-statement cloned from hogan.js";
