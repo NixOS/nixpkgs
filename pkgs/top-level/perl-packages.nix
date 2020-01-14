@@ -13294,10 +13294,10 @@ let
 
   NetDBus = buildPerlPackage {
     pname = "Net-DBus";
-    version = "1.1.0";
+    version = "1.2.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANBERR/Net-DBus-1.1.0.tar.gz;
-      sha256 = "8391696db9e96c374b72984c0bad9c7d1c9f3b4efe68f9ddf429a77548e0e269";
+      url = mirror://cpan/authors/id/D/DA/DANBERR/Net-DBus-1.2.0.tar.gz;
+      sha256 = "e7a1ac9ef4a1235b3fdbd5888f86c347182306467bd79abc9b0756a64b441cbc";
     };
     nativeBuildInputs = [ pkgs.buildPackages.pkgconfig ];
     buildInputs = [ pkgs.dbus TestPod TestPodCoverage ];
