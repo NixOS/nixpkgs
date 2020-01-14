@@ -6195,10 +6195,10 @@ let
 
   Encode = buildPerlPackage {
     pname = "Encode";
-    version = "3.01";
+    version = "3.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.01.tar.gz;
-      sha256 = "d4555f570491648dbbd602bce7966672834b4c8f45acaa6757de474fca3a4d87";
+      url = mirror://cpan/authors/id/D/DA/DANKOGAI/Encode-3.02.tar.gz;
+      sha256 = "5865be4951870f62f43722818d076d7724306c75c8f268346b282351cbc820a8";
     };
     meta = {
       description = "Character encodings in Perl";
