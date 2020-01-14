@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
   version = "0.4.0";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $out/bin pfetch
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pretty system information tool written in POSIX sh";
     homepage = https://github.com/dylanaraps/pfetch;
     license = licenses.mit;
