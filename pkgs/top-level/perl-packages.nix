@@ -18813,10 +18813,10 @@ let
 
   TestWarnings = buildPerlPackage {
     pname = "Test-Warnings";
-    version = "0.027";
+    version = "0.028";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.027.tar.gz;
-      sha256 = "118dd9f48408557555f0af5478e0e873f9df0952cf5911f697a4ce5165880864";
+      url = mirror://cpan/authors/id/E/ET/ETHER/Test-Warnings-0.028.tar.gz;
+      sha256 = "26fda9f8d279e943d27e43a4a3a5cea8a6592cd36e7308695f8dc6602262c0e0";
     };
     buildInputs = [ CPANMetaCheck PadWalker ];
     meta = {
