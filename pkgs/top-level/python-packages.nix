@@ -4941,6 +4941,8 @@ in {
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};
 
+  pynrrd = callPackage ../development/python-modules/pynrrd { };
+
   pynzb = callPackage ../development/python-modules/pynzb { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
