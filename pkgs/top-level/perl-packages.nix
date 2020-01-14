@@ -7847,7 +7847,7 @@ let
       sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
     };
     buildInputs = [ pkgs.gnupg1orig ];
-    doCheck = !stdenv.isAarch64;
+    doCheck = false;
   };
 
   GnuPGInterface = buildPerlPackage {
@@ -13373,6 +13373,7 @@ let
       sha256 = "0ffphcw52dgn07k7q02di77zq2zzc0p3vlv2gnphr7v3ifi5gcxw";
     };
     propagatedBuildInputs = [ BitVector ClassGomor NetIPv6Addr ];
+    preCheck = "rm t/13-gethostsubs.t"; # it performs DNS queries
     meta = {
       description = "the base framework for frame crafting";
       license = with stdenv.lib.licenses; [ artistic1 ];
