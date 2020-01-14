@@ -1,5 +1,5 @@
 { lib, fetchurl, stdenv, ncurses,
-IOKit, python }:
+IOKit, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "htop";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mrwpb3cpn3ai7ar33m31yklj64c3pp576vh1naqff6f21pq5mnr";
   };
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
   buildInputs =
     [ ncurses ] ++
     lib.optionals stdenv.isDarwin [ IOKit ];
