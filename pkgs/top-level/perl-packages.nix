@@ -283,6 +283,18 @@ let
     };
   };
 
+  AnyEventFastPing = buildPerlPackage {
+    pname = "AnyEvent-FastPing";
+    version = "2.1";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/AnyEvent-FastPing-2.1.tar.gz;
+      sha256 = "0b3ha864nw0qk22ybhzfgz0r0p69iyj01bi500x9hp6kga7ip4p5";
+    };
+    propagatedBuildInputs = [ AnyEvent commonsense ];
+    meta = {
+    };
+  };
+
   AnyEventHTTP = buildPerlPackage {
     pname = "AnyEvent-HTTP";
     version = "2.24";
