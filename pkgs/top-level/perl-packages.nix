@@ -673,10 +673,10 @@ let
 
   ArchiveExtract = buildPerlPackage {
     pname = "Archive-Extract";
-    version = "0.80";
+    version = "0.86";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Archive-Extract-0.80.tar.gz;
-      sha256 = "25cbc2d5626c14d39a0b5e4fe8383941e085c9a7e0aa873d86e81b6e709025f4";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Archive-Extract-0.86.tar.gz;
+      sha256 = "9acd09cdb8e8cf0b6d08210a3b80342300c89a359855319bf6b00c14c4aab687";
     };
     meta = {
       description = "Generic archive extracting mechanism";
