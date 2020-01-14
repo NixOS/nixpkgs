@@ -87,11 +87,11 @@ let
 
   ack = buildPerlPackage {
     pname = "ack";
-    version = "3.2.0";
+    version = "3.3.0";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.2.0.tar.gz;
-      sha256 = "00yvhkr974akdlhiyxkcz4rmfjyhvpikxf6k49b6q6iwa5a0j1ss";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.3.0.tar.gz;
+      sha256 = "0h57fi5cardvjdj2dxncnxgww0p6y2vmrvan2wjcvmg30h6m9c5l";
     };
 
     outputs = ["out" "man"];
