@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     # We install msg2pdf to bin/msg2pdf, fix its location in elisp
     substituteInPlace mu4e/mu4e-actions.el \
-      --replace "/toys/msg2pdf/msg2pdf" "/bin/msg2pdf"
+      --replace "/toys/msg2pdf/" "/bin/"
   '';
 
   # Install mug and msg2pdf
