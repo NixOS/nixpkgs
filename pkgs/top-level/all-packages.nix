@@ -1298,7 +1298,7 @@ in
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
-  bs-platform = (callPackage ../development/compilers/bs-platform {}).bs-platform-621;
+  bs-platform = callPackage ../development/compilers/bs-platform {};
 
   c3d = callPackage ../applications/graphics/c3d {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -13653,6 +13653,10 @@ in
     buildPythonApplication click future six;
   };
 
+  prospector = callPackage ../development/tools/prospector {
+    python = python37;
+  };
+
   protobuf = protobuf3_7;
 
   protobuf3_11 = callPackage ../development/libraries/protobuf/3.11.nix { };
@@ -18211,7 +18215,9 @@ in
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
-  blender = callPackage  ../applications/misc/blender { };
+  blender = callPackage  ../applications/misc/blender {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
+  };
 
   bluefish = callPackage ../applications/editors/bluefish {
     gtk = gtk3;
@@ -18553,6 +18559,7 @@ in
   docker-machine-kvm2 = callPackage ../applications/networking/cluster/docker-machine/kvm2.nix { };
   docker-machine-xhyve = callPackage ../applications/networking/cluster/docker-machine/xhyve.nix {
     inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
+    inherit (darwin) cctools;
   };
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
@@ -23915,6 +23922,8 @@ in
 
   nasc = callPackage ../applications/science/math/nasc { };
 
+  nota = haskellPackages.callPackage ../applications/science/math/nota { };
+
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
   # A version of OpenBLAS using 32-bit integers on all platforms for compatibility with
@@ -25799,5 +25808,4 @@ in
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kcli = callPackage ../development/tools/kcli {};
-
 }

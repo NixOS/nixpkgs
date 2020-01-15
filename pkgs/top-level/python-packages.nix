@@ -108,7 +108,7 @@ in {
   inherit buildSetupcfg;
 
   inherit (callPackage ../development/interpreters/python/hooks { })
-    eggUnpackHook eggBuildHook eggInstallHook flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
+    eggUnpackHook eggBuildHook eggInstallHook flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook venvShellHook wheelUnpackHook;
 
   # helpers
 
@@ -4831,6 +4831,12 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pylint-celery = callPackage ../development/python-modules/pylint-celery { };
+
+  pylint-django = callPackage ../development/python-modules/pylint-django { };
+
+  pylint-flask = callPackage ../development/python-modules/pylint-flask { };
+
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
@@ -4940,6 +4946,8 @@ in {
   };
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};
+
+  pynrrd = callPackage ../development/python-modules/pynrrd { };
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
