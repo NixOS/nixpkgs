@@ -996,6 +996,8 @@ in {
 
   pymupdf = callPackage ../development/python-modules/pymupdf { };
 
+  pynamecheap = callPackage ../development/python-modules/pynamecheap { };
+
   Pmw = callPackage ../development/python-modules/Pmw { };
 
   py_stringmatching = callPackage ../development/python-modules/py_stringmatching { };
