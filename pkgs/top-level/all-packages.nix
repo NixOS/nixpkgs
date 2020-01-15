@@ -3242,6 +3242,8 @@ in
     stdenv = gccStdenv;
   };
 
+  fluidasserts = with python37Packages; toPythonApplication fluidasserts;
+
   flux = callPackage ../development/compilers/flux { };
 
   fido2luks = callPackage ../tools/security/fido2luks {};
