@@ -75,7 +75,6 @@ buildPythonPackage rec {
     substituteInPlace ./setup.py \
       --replace 'tlslite-ng==0.8.0-alpha36' 'tlslite-ng==0.7.5' \
       --replace 'boto3==1.11.7' 'boto3==1.10.1' \
-      --replace 'cfn-flip==1.2.2' 'cfn-flip==1.1.0.post1' \
       --replace 'typed-ast==1.4.1' 'typed-ast==1.4.0' \
       --replace 'pillow==7.0.0' 'pillow==6.2.1' \
 
