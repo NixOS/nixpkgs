@@ -4691,6 +4691,8 @@ in
 
   latexrun = callPackage ../tools/typesetting/tex/latexrun { };
 
+  lcdf-typetools = callPackage ../tools/misc/lcdf-typetools { };
+
   ldapvi = callPackage ../tools/misc/ldapvi { };
 
   ldns = callPackage ../development/libraries/ldns { };
