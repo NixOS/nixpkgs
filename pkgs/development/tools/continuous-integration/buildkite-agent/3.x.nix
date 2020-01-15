@@ -5,9 +5,9 @@ callPackage ./generic.nix (args // rec {
     owner = "buildkite";
     repo = "agent";
     rev = "v${version}";
-    sha256 = "0sr1rxl92d4wdipl66f1yymx5bmyj1y85v6k22v57rzr6yhyfmsf";
+    sha256 = "0a7x919kxnpdn0pnhc5ilx1z6ninx8zgjvsd0jcg4qwh0qqp5ppr";
   };
-  version = "3.8.4";
+  version = "3.17.0";
   hasBootstrapScript = false;
   postPatch = ''
     substituteInPlace bootstrap/shell/shell.go --replace /bin/bash ${bash}/bin/bash
