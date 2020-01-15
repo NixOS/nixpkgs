@@ -1,44 +1,56 @@
-{ stdenv, fetchurl, openssl, libbsd }:
+{ stdenv, fetchurl, fetchpatch, openssl, libbsd, libuuid }:
 
-let version = "332.25";
-    package_name = "hfsprogs"; in
-stdenv.mkDerivation {
-  name = "${package_name}-${version}";
+stdenv.mkDerivation rec {
+  pname = "hfsprogs";
+  version = "540.1.linux3";
   srcs = [
     (fetchurl {
-      url = "http://ftp.de.debian.org/debian/pool/main/h/hfsprogs/${package_name}_${version}-11.debian.tar.gz";
-      sha256 = "62d9b8599c66ebffbc57ce5d776e20b41341130d9b27341d63bda08460ebde7c";
-    })
-    (fetchurl {
-      url = "https://opensource.apple.com/tarballs/diskdev_cmds/diskdev_cmds-${version}.tar.gz";
-      sha256 = "74c9aeca899ed7f4bf155c65fc45bf0f250c0f6d57360ea953b1d536d9aa45e6";
+      url = "http://cavan.codon.org.uk/~mjg59/diskdev_cmds/diskdev_cmds-${version}.tar.gz";
+      sha256 = "15sl9z1dafykj3b249z6a82p74ljqpgkvh97l0vbz8zrjwx206xh";
     })
   ];
 
   sourceRoot = "diskdev_cmds-" + version;
-  patches = [ "../debian/patches/*.patch" ];
+  patches = [
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hfsplus-tools/raw/6eec8fe28f8aaaa895d4e30fa06397ec7403fd7f/f/hfsplus-tools-no-blocks.patch";
+      sha256 = "13lz7rr2ydwcxl7vvc0rf563clfkvq1ngism3xf25f7ispi0y6xx";
+    })
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/hfsplus-tools/raw/6eec8fe28f8aaaa895d4e30fa06397ec7403fd7f/f/hfsplus-tools-learn-to-stdarg.patch";
+      sha256 = "1gsqxmk5piq73d7mykccmapnls1fb865njjz9pk4fkhifvdmpjss";
+    })
 
-  buildInputs = [ openssl libbsd ];
-  makefile = "Makefile.lnx";
+  ];
 
-  # Inspired by PKGBUILD of https://www.archlinux.org/packages/community/x86_64/hfsprogs/
+  buildInputs = [ openssl libbsd libuuid ];
+
+  postPatch = ''
+    # Fixup man pages to match install utilitied names
+    sed -i -e 's/[F|f]sck_hfs/fsck.hfsplus/g' fsck_hfs.tproj/fsck_hfs.8
+    sed -i -e 's/[N|n]ewfs_hfs/mkfs.hfsplus/g' newfs_hfs.tproj/newfs_hfs.8
+
+    # Remove errant execute bits.
+    find . -type f -name '*.[ch]' -exec chmod -c -x {} +
+  '';
+
+  # Inspired by Arch and Fedora's very similar installation snippets
+  # Note fsck util works for both hfs and hfsplus, but mkfs only for hfsplus.
   installPhase = ''
-    # Create required package directories
-    install -m 755 -d "$out/bin"
-    install -m 755 -d "$out/share/${package_name}"
-    install -m 755 -d "$out/share/man/man8/"
     # Copy executables
-    install -m 755 "newfs_hfs.tproj/newfs_hfs" "$out/bin/mkfs.hfsplus"
-    install -m 755 "fsck_hfs.tproj/fsck_hfs" "$out/bin/fsck.hfsplus"
-    # Copy shared data
-    install -m 644 "newfs_hfs.tproj/hfsbootdata.img" "$out/share/${package_name}/hfsbootdata"
+    install -Dm755 newfs_hfs.tproj/newfs_hfs $out/bin/mkfs.hfsplus
+    install -Dm755 fsck_hfs.tproj/fsck_hfs $out/bin/fsck.hfsplus
+    ln -sr $out/bin/fsck.hfsplus $out/bin/fsck.hfs
+
     # Copy man pages
-    install -m 644 "newfs_hfs.tproj/newfs_hfs.8" "$out/share/man/man8/mkfs.hfsplus.8"
-    install -m 644 "fsck_hfs.tproj/fsck_hfs.8" "$out/share/man/man8/fsck.hfsplus.8"
+    install -Dm644 newfs_hfs.tproj/newfs_hfs.8 $out/share/man/man8/mkfs.hfsplus.8
+    install -Dm644 fsck_hfs.tproj/fsck_hfs.8 $out/share/man/man8/fsck.hfsplus.8
+    ln -sr $out/share/man/man8/fsck.hfsplus.8 $out/share/man/man8/fsck.hfs.8
   '';
 
   meta = {
-    description = "HFS/HFS+ user space utils";
+    description = "Tools to create/check Apple HFS+ filesystems";
+    homepage = "https://src.fedoraproject.org/rpms/hfsplus-tools";
     license = stdenv.lib.licenses.apsl20;
     platforms = stdenv.lib.platforms.linux;
   };
