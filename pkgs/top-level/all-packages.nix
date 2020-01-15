@@ -1381,6 +1381,8 @@ in
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
+  cassowary = callPackage ../tools/networking/cassowary { };
+
   croc = callPackage ../tools/networking/croc { };
 
   cddl = callPackage ../development/tools/cddl { };
