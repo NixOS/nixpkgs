@@ -1,23 +1,23 @@
 { stdenv, darwin, fetchurl, makeWrapper, pkgconfig
 , harfbuzz, icu
 , fontconfig, lua, libiconv
-, makeFontsConf, gentium, gentium-book-basic, dejavu_fonts
+, makeFontsConf, gentium
 }:
 
 with stdenv.lib;
 
 let
-  luaEnv = lua.withPackages(ps: with ps;[ lpeg luaexpat lua-zlib luafilesystem luasocket luasec]);
+  luaEnv = lua.withPackages(ps: with ps;[cassowary linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
 
 in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.9.5.1";
+  version = "0.10.0";
 
   src = fetchurl {
-    url = "https://github.com/simoncozens/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "0fh0jbpsyqyq0hzq4midn7yw2z11hqdgqb9mmgz766cp152wrkb0";
+    url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
+    sha256 = "b0353b88793d68bf3e800f87bff51e8161ce39d250e22dff11385712caf332b6";
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
@@ -34,8 +34,6 @@ stdenv.mkDerivation rec {
   FONTCONFIG_FILE = makeFontsConf {
     fontDirectories = [
       gentium
-      gentium-book-basic
-      dejavu_fonts
     ];
   };
 
@@ -46,11 +44,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   checkPhase = ''
-    make documentation/developers.pdf documentation/sile.pdf
+    make documentation examples
   '';
 
   postInstall = ''
-    install -D -t $out/share/doc/sile documentation/*.pdf
+    install -D -t $out/share/doc/sile documentation/sile.pdf
+    install -D -t $out/share/doc/sile examples
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
