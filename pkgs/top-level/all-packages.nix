@@ -23124,9 +23124,7 @@ in
 
   openxcom = callPackage ../games/openxcom { };
 
-  openxray = callPackage ../games/openxray {
-    stdenv = gcc8Stdenv;
-  };
+  openxray = callPackage ../games/openxray { };
 
   orthorobot = callPackage ../games/orthorobot { };
 
