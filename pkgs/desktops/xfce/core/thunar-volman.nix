@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = http://goodies.xfce.org/projects/thunar-plugins/thunar-volman;
+    homepage = https://goodies.xfce.org/projects/thunar-plugins/thunar-volman;
     description = "Thunar extension for automatic management of removable drives and media";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;

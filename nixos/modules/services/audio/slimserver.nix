@@ -42,15 +42,17 @@ in {
 
   config = mkIf cfg.enable {
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - slimserver slimserver - -"
+    ];
+
     systemd.services.slimserver = {
       after = [ "network.target" ];
       description = "Slim Server for Logitech Squeezebox Players";
       wantedBy = [ "multi-user.target" ];
 
-      preStart = "mkdir -p ${cfg.dataDir} && chown -R slimserver:slimserver ${cfg.dataDir}";
       serviceConfig = {
         User = "slimserver";
-        PermissionsStartOnly = true;
         # Issue 40589: Disable broken image/video support (audio still works!)
         ExecStart = "${cfg.package}/slimserver.pl --logdir ${cfg.dataDir}/logs --prefsdir ${cfg.dataDir}/prefs --cachedir ${cfg.dataDir}/cache --noimage --novideo";
       };

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''misc-extensions'';
   version = ''20150608-git'';
 

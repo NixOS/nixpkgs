@@ -12,9 +12,10 @@ let
 
   # We need a few things in the environment for the greeter to run with
   # fonts/icons.
-  wrappedEnsoGreeter = pkgs.runCommand "lightdm-enso-os-greeter"
-    { buildInputs = [ pkgs.makeWrapper ]; }
-    ''
+  wrappedEnsoGreeter = pkgs.runCommand "lightdm-enso-os-greeter" {
+      buildInputs = [ pkgs.makeWrapper ];
+      preferLocalBuild = true;
+    } ''
       # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm-enso-os-greeter}/bin/pantheon-greeter \
         $out/greeter \

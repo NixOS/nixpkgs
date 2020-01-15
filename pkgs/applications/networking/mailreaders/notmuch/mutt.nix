@@ -1,7 +1,7 @@
 { stdenv, lib, perl, perlPackages, makeWrapper, coreutils, notmuch }:
 
 stdenv.mkDerivation rec {
-  name = "notmuch-mutt-${version}";
+  pname = "notmuch-mutt";
   version = notmuch.version;
 
   outputs = [ "out" ];

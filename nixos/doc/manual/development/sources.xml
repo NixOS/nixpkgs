@@ -11,10 +11,10 @@
   modify NixOS, however, you should check out the latest sources from Git. This
   is as follows:
 <screen>
-$ git clone https://github.com/NixOS/nixpkgs
-$ cd nixpkgs
-$ git remote add channels https://github.com/NixOS/nixpkgs-channels
-$ git remote update channels
+<prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs
+<prompt>$ </prompt>cd nixpkgs
+<prompt>$ </prompt>git remote add channels https://github.com/NixOS/nixpkgs-channels
+<prompt>$ </prompt>git remote update channels
 </screen>
   This will check out the latest Nixpkgs sources to
   <filename>./nixpkgs</filename> the NixOS sources to
@@ -32,23 +32,23 @@ $ git remote update channels
   not have caught up yet and you’ll have to rebuild everything from source.
   So you may want to create a local branch based on your current NixOS version:
 <screen>
-$ nixos-version
+<prompt>$ </prompt>nixos-version
 17.09pre104379.6e0b727 (Hummingbird)
 
-$ git checkout -b local 6e0b727
+<prompt>$ </prompt>git checkout -b local 6e0b727
 </screen>
   Or, to base your local branch on the latest version available in a NixOS
   channel:
 <screen>
-$ git remote update channels
-$ git checkout -b local channels/nixos-17.03
+<prompt>$ </prompt>git remote update channels
+<prompt>$ </prompt>git checkout -b local channels/nixos-17.03
 </screen>
   (Replace <literal>nixos-17.03</literal> with the name of the channel you want
   to use.) You can use <command>git merge</command> or <command>git
   rebase</command> to keep your local branch in sync with the channel, e.g.
 <screen>
-$ git remote update channels
-$ git merge channels/nixos-17.03
+<prompt>$ </prompt>git remote update channels
+<prompt>$ </prompt>git merge channels/nixos-17.03
 </screen>
   You can use <command>git cherry-pick</command> to copy commits from your
   local branch to the upstream branch.
@@ -58,7 +58,7 @@ $ git merge channels/nixos-17.03
   tell <command>nixos-rebuild</command> about them using the
   <option>-I</option> flag:
 <screen>
-# nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
+<prompt># </prompt>nixos-rebuild switch -I nixpkgs=<replaceable>/my/sources</replaceable>/nixpkgs
 </screen>
  </para>
  <para>
@@ -67,7 +67,7 @@ $ git merge channels/nixos-17.03
   <replaceable>/my/sources</replaceable>/nixpkgs</command>, or change the
   default by adding a symlink in <filename>~/.nix-defexpr</filename>:
 <screen>
-$ ln -s <replaceable>/my/sources</replaceable>/nixpkgs ~/.nix-defexpr/nixpkgs
+<prompt>$ </prompt>ln -s <replaceable>/my/sources</replaceable>/nixpkgs ~/.nix-defexpr/nixpkgs
 </screen>
   You may want to delete the symlink
   <filename>~/.nix-defexpr/channels_root</filename> to prevent root’s NixOS

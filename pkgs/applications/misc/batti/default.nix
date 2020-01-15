@@ -1,24 +1,24 @@
 { stdenv, fetchurl
 , pkgconfig, gettext, pythonPackages
-, gtk2, gdk_pixbuf, upower
+, gtk2, gdk-pixbuf, upower
 , makeWrapper }:
 
 let
   inherit (pythonPackages) dbus-python pygtk python;
 in stdenv.mkDerivation rec {
 
-  name = "batti-${version}";
+  pname = "batti";
   version = "0.3.8";
 
   src = fetchurl {
-    url = "https://batti-gtk.googlecode.com/files/${name}.tar.gz";
+    url = "https://batti-gtk.googlecode.com/files/${pname}-${version}.tar.gz";
     sha256 = "072d92gpsiiin631589nj77i2w1425p6db0qxyml7myscfy9jgx6";
   };
 
   buildInputs = with stdenv.lib;
-  [ pkgconfig gettext python gtk2 pygtk dbus-python gdk_pixbuf upower makeWrapper ];
+  [ pkgconfig gettext python gtk2 pygtk dbus-python gdk-pixbuf upower makeWrapper ];
 
-  configurePhase = "true";
+  dontConfigure = true;
 
   buildPhase = ''
     python setup.py build
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     license = licenses.lgpl2Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
-    broken = true;  # see https://github.com/NixOS/nixpkgs/pull/4031#issuecomment-56283520 
+    broken = true;  # see https://github.com/NixOS/nixpkgs/pull/4031#issuecomment-56283520
   };
 }
 

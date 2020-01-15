@@ -6,7 +6,7 @@
 # https://github.com/Homebrew/homebrew-core/blob/21834573f690407d34b0bbf4250b82ec38dda4d6/Formula/latex2html.rb
 
 stdenv.mkDerivation rec {
-  name = "latex2html-${version}";
+  pname = "latex2html";
   version = "2018";
 
   src = fetchurl {

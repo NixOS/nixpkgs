@@ -1,18 +1,20 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, dune }:
+{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, camomile, react, dune, charInfo_width }:
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.02" then
   {
-    version = "1.6";
-    sha256 = "00hhxcjf3bj3w2qm8nzs9x6vrqkadf4i0277s5whzy2rmiknj63v";
+    version = "2.0.3";
+    sha256 = "0pa9awinqr0plp4b2az78dwpvh01pwaljnn5ydg8mc6hi7rmir55";
     buildInputs = [ dune ];
+    propagatedBuildInputs = [ charInfo_width ];
     extra = {
      buildPhase = "dune build -p zed";
      inherit (dune) installPhase; };
   } else {
     version = "1.4";
     sha256 = "0d8qfy0qiydrrqi8qc9rcwgjigql6vx9gl4zp62jfz1lmjgb2a3w";
-    buildInputs = [];
+    buildInputs = [ ocamlbuild ];
+    propagatedBuildInputs = [ camomile ];
     extra = { createFindlibDestdir = true; };
   }
 ; in
@@ -26,9 +28,9 @@ stdenv.mkDerivation (rec {
     inherit (param) sha256;
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild ] ++ param.buildInputs;
+  buildInputs = [ ocaml findlib ] ++ param.buildInputs;
 
-  propagatedBuildInputs = [ react camomile ];
+  propagatedBuildInputs = [ react ] ++ param.propagatedBuildInputs;
 
   meta = {
     description = "Abstract engine for text edition in OCaml";

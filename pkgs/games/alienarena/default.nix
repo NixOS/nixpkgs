@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, libjpeg, libX11, libXxf86vm, curl, libogg
 , libvorbis, freetype, openal, libGLU_combined }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "alienarena-7.65";
 
   src = fetchurl {

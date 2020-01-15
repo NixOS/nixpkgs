@@ -16,7 +16,7 @@
   <literal>systemd</literal> hierarchy, which is what systemd uses to keep
   track of the processes belonging to each service or user session:
 <screen>
-$ systemd-cgls
+<prompt>$ </prompt>systemd-cgls
 ├─user
 │ └─eelco
 │   └─c1

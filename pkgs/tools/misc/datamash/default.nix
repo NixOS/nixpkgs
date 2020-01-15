@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "datamash-${version}";
+  pname = "datamash";
   version = "1.4";
 
   src = fetchurl {
-    url = "mirror://gnu/datamash/${name}.tar.gz";
+    url = "mirror://gnu/datamash/${pname}-${version}.tar.gz";
     sha256 = "fa44dd2d5456bcb94ef49dfc6cfe62c83fd53ac435119a85d34e6812f6e6472a";
   };
 

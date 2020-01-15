@@ -2,7 +2,7 @@
 , pkgconfig, zlib, geoip }:
 
 buildGoPackage rec {
-  name = "mirrorbits-${version}";
+  pname = "mirrorbits";
   version = "0.4";
   rev = "v${version}";
 

@@ -10,12 +10,12 @@ rec {
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
   makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.string.check content);
+    assert lib.or (types.path.check content) (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommand name (if (types.string.check content) then {
+    pkgs.runCommand name (if (types.str.check content) then {
       inherit content interpreter;
       passAsFile = [ "content" ];
     } else {
@@ -24,6 +24,9 @@ rec {
     }) ''
       echo "#! $interpreter" > $out
       cat "$contentPath" >> $out
+      ${optionalString (check != "") ''
+        ${check} $out
+      ''}
       chmod +x $out
       ${optionalString (types.path.check nameOrPath) ''
         mv $out tmp
@@ -39,11 +42,11 @@ rec {
   #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
   makeBinWriter = { compileScript }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.string.check content);
+    assert lib.or (types.path.check content) (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.string.check content) then {
+    pkgs.runCommand name (if (types.str.check content) then {
       inherit content;
       passAsFile = [ "content" ];
     } else {
@@ -94,8 +97,8 @@ rec {
         ]}
         gcc \
             ${optionalString (libraries != [])
-              "$(pkgs.pkgconfig}/bin/pkg-config --cflags --libs ${
-                concatMapStringsSep " " (lib: escapeShellArg (builtins.parseDrvName lib.name).name) (libraries)
+              "$(pkg-config --cflags --libs ${
+                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \*.pc -exec basename {} \;)") libraries
               })"
             } \
             -O \
@@ -177,6 +180,23 @@ rec {
   # writeJSBin takes the same arguments as writeJS but outputs a directory (like writeScriptBin)
   writeJSBin = name:
     writeJS "/bin/${name}";
+
+  awkFormatNginx = builtins.toFile "awkFormat-nginx.awk" ''
+    awk -f
+    {sub(/^[ \t]+/,"");idx=0}
+    /\{/{ctx++;idx=1}
+    /\}/{ctx--}
+    {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
+   '';
+
+  writeNginxConfig = name: text: pkgs.runCommand name {
+    inherit text;
+    passAsFile = [ "text" ];
+  } /* sh */ ''
+    # nginx-config-formatter has an error - https://github.com/1connect/nginx-config-formatter/issues/16
+    ${pkgs.gawk}/bin/awk -f ${awkFormatNginx} "$textPath" | ${pkgs.gnused}/bin/sed '/^\s*$/d' > $out
+    ${pkgs.gixy}/bin/gixy $out
+  '';
 
   # writePerl takes a name an attributeset with libraries and some perl sourcecode and
   # returns an executable

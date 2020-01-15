@@ -111,16 +111,20 @@ class Plugin:
         return copy
 
 
-GET_PLUGINS = """(with import <localpkgs> {};
+GET_PLUGINS = f"""(with import <localpkgs> {{}};
 let
+  inherit (vimUtils.override {{inherit vim;}}) buildVimPluginFrom2Nix;
+  generated = callPackage {ROOT}/generated.nix {{
+    inherit buildVimPluginFrom2Nix;
+  }};
   hasChecksum = value: lib.isAttrs value && lib.hasAttrByPath ["src" "outputHash"] value;
   getChecksum = name: value:
-    if hasChecksum value then {
+    if hasChecksum value then {{
       submodules = value.src.fetchSubmodules or false;
       sha256 = value.src.outputHash;
       rev = value.src.rev;
-    } else null;
-  checksums = lib.mapAttrs getChecksum vimPlugins;
+    }} else null;
+  checksums = lib.mapAttrs getChecksum generated;
 in lib.filterAttrs (n: v: v != null) checksums)"""
 
 

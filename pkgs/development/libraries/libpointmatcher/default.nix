@@ -1,17 +1,18 @@
-{stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo}:
+{ stdenv, fetchFromGitHub, cmake, eigen, boost, libnabo }:
 
 stdenv.mkDerivation rec {
-  version = "2016-09-11";
-  name = "libpointmatcher-${version}";
+  pname = "libpointmatcher";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "ethz-asl";
-    repo = "libpointmatcher";
-    rev = "75044815d40ff934fe0bb7e05ed8bbf18c06493b";
-    sha256 = "1s7ilvg3lhr1fq8sxw05ydmbd3kl46496jnyxprhnpgvpmvqsbzl";
+    repo = pname;
+    rev = version;
+    sha256 = "0lai6sr3a9dj1j4pgjjyp7mx10wixy5wpvbka8nsc2danj6xhdyd";
   };
 
-  buildInputs = [cmake eigen boost libnabo];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ eigen boost libnabo ];
 
   enableParallelBuilding = true;
 
@@ -19,11 +20,11 @@ stdenv.mkDerivation rec {
     -DEIGEN_INCLUDE_DIR=${eigen}/include/eigen3
   ";
 
-  checkPhase = ''
-  export LD_LIBRARY_PATH=$PWD
-  ./utest/utest --path ../examples/data/
-  '';
   doCheck = true;
+  checkPhase = ''
+    export LD_LIBRARY_PATH=$PWD
+    ./utest/utest --path ../examples/data/
+  '';
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

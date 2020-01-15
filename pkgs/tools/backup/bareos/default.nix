@@ -11,14 +11,14 @@ let
   withGlusterfs = "\${with_glusterfs_directory}";
 in
 stdenv.mkDerivation rec {
-  name = "bareos-${version}";
+  pname = "bareos";
   version = "17.2.7";
 
   src = fetchFromGitHub {
     owner = "bareos";
     repo = "bareos";
     rev = "Release/${version}";
-    name = "${name}-src";
+    name = "${pname}-${version}-src";
     sha256 = "1awf5i4mw2nfd7z0dmqnywapnx9nz6xwqv8rxp0y2mnrhzdpbrbz";
   };
 
@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
     "--with-working-dir=/var/lib/bareos"
     "--with-bsrdir=/var/lib/bareos"
     "--with-logdir=/var/log/bareos"
-    "--with-pid-dir=/var/run/bareos"
-    "--with-subsys-dir=/var/run/bareos"
+    "--with-pid-dir=/run/bareos"
+    "--with-subsys-dir=/run/bareos"
     "--enable-ndmp"
     "--enable-lmdb"
     "--enable-batch-insert"

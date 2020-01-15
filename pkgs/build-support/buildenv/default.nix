@@ -2,7 +2,7 @@
 # a fork of the buildEnv in the Nix distribution.  Most changes should
 # eventually be merged back into the Nix distribution.
 
-{ buildPackages, runCommand, lib }:
+{ buildPackages, runCommand, lib, substituteAll }:
 
 lib.makeOverridable
 ({ name
@@ -43,6 +43,13 @@ lib.makeOverridable
 , meta ? {}
 }:
 
+let
+  builder = substituteAll {
+    src = ./builder.pl;
+    inherit (builtins) storeDir;
+  };
+in
+
 runCommand name
   rec {
     inherit manifest ignoreCollisions checkCollisionContents passthru
@@ -63,10 +70,11 @@ runCommand name
       priority = drv.meta.priority or 5;
     }) paths);
     preferLocalBuild = true;
+    allowSubstitutes = false;
     # XXX: The size is somewhat arbitrary
     passAsFile = if builtins.stringLength pkgs >= 128*1024 then [ "pkgs" ] else null;
   }
   ''
-    ${buildPackages.perl}/bin/perl -w ${./builder.pl}
+    ${buildPackages.perl}/bin/perl -w ${builder}
     eval "$postBuild"
   '')

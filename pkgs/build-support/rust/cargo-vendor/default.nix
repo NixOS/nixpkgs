@@ -1,10 +1,10 @@
 { callPackage, fetchFromGitHub }:
 
-(callPackage ./cargo-vendor.nix {}).cargo_vendor_0_1_13.overrideAttrs (attrs: {
+((callPackage ./cargo-vendor.nix {}).cargo_vendor {}).overrideAttrs (attrs: {
   src = fetchFromGitHub {
     owner = "alexcrichton";
     repo = "cargo-vendor";
-    rev = "0.1.13";
-    sha256 = "0ljh2d65zpxp26a95b3czy5ai2z2dm87x7ndfdc1s0v1fsy69kn4";
+    rev = "9355661303ce2870d68a69d99953fce22581e31e";
+    sha256 = "0d4j3r09am3ynwhczimzv39264f5xz37jxa9js123y46w5by3wd2";
   };
 })

@@ -29,10 +29,10 @@ let
     sha256 = "085jpp9mpv5kw00zds9sywmfq31mrlbrgahnwcjkx0z9i22amz4g";
   };
 in stdenv.mkDerivation rec {
-  name = "gcs-${version}";
+  pname = "gcs";
   version = "4.8.0";
 
-  src = runCommand "${name}-src" { preferLocalBuild = true; } ''
+  src = runCommand "${pname}-${version}-src" { preferLocalBuild = true; } ''
     mkdir -p $out
     cd $out
 

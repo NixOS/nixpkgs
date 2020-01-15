@@ -117,6 +117,17 @@ import unittest
 from pprint import pprint
 from collections import defaultdict
 
+
+def debug(msg, *args, **kwargs):
+    if False:
+        print(
+            "DEBUG: {}".format(
+                msg.format(*args, **kwargs)
+            ),
+            file=sys.stderr
+        )
+
+
 # Find paths in the original dataset which are never referenced by
 # any other paths
 def find_roots(closures):
@@ -327,10 +338,23 @@ class TestMakeLookup(unittest.TestCase):
 #                   /nix/store/tux: {}
 #   }
 # }
+subgraphs_cache = {}
 def make_graph_segment_from_root(root, lookup):
+    global subgraphs_cache
     children = {}
     for ref in lookup[root]:
-        children[ref] = make_graph_segment_from_root(ref, lookup)
+        # make_graph_segment_from_root is a pure function, and will
+        # always return the same result based on a given input. Thus,
+        # cache computation.
+        #
+        # Python's assignment will use a pointer, preventing memory
+        # bloat for large graphs.
+        if ref not in subgraphs_cache:
+            debug("Subgraph Cache miss on {}".format(ref))
+            subgraphs_cache[ref] = make_graph_segment_from_root(ref, lookup)
+        else:
+            debug("Subgraph Cache hit on {}".format(ref))
+        children[ref] = subgraphs_cache[ref]
     return children
 
 class TestMakeGraphSegmentFromRoot(unittest.TestCase):
@@ -381,12 +405,27 @@ class TestMakeGraphSegmentFromRoot(unittest.TestCase):
 #   /nix/store/baz: 4
 #   /nix/store/tux: 6
 # ]
+popularity_cache = {}
 def graph_popularity_contest(full_graph):
+    global popularity_cache
     popularity = defaultdict(int)
     for path, subgraph in full_graph.items():
         popularity[path] += 1
-        subcontest = graph_popularity_contest(subgraph)
+        # graph_popularity_contest is a pure function, and will
+        # always return the same result based on a given input. Thus,
+        # cache computation.
+        #
+        # Python's assignment will use a pointer, preventing memory
+        # bloat for large graphs.
+        if path not in popularity_cache:
+            debug("Popularity Cache miss on {}", path)
+            popularity_cache[path] = graph_popularity_contest(subgraph)
+        else:
+            debug("Popularity Cache hit on {}", path)
+
+        subcontest = popularity_cache[path]
         for subpath, subpopularity in subcontest.items():
+            debug("Calculating popularity for {}", subpath)
             popularity[subpath] += subpopularity + 1
 
     return popularity
@@ -474,6 +513,7 @@ def main():
     filename = sys.argv[1]
     key = sys.argv[2]
 
+    debug("Loading from {}", filename)
     with open(filename) as f:
         data = json.load(f)
 
@@ -497,14 +537,21 @@ def main():
     # ]
     graph = data[key]
 
+    debug("Finding roots from {}", key)
     roots = find_roots(graph);
+    debug("Making lookup for {}", key)
     lookup = make_lookup(graph)
 
     full_graph = {}
     for root in roots:
+        debug("Making full graph for {}", root)
         full_graph[root] = make_graph_segment_from_root(root, lookup)
 
-    ordered = order_by_popularity(graph_popularity_contest(full_graph))
+    debug("Running contest")
+    contest = graph_popularity_contest(full_graph)
+    debug("Ordering by popularity")
+    ordered = order_by_popularity(contest)
+    debug("Checking for missing paths")
     missing = []
     for path in all_paths(graph):
         if path not in ordered:

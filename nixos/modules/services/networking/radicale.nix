@@ -41,7 +41,7 @@ in
     };
 
     services.radicale.config = mkOption {
-      type = types.string;
+      type = types.str;
       default = "";
       description = ''
         Radicale configuration, this will set the service
@@ -50,7 +50,7 @@ in
     };
 
     services.radicale.extraArgs = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = "Extra arguments passed to the Radicale daemon.";
     };

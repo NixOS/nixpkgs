@@ -1,16 +1,16 @@
 { stdenv, fetchurl, coreutils, bash, btrfs-progs, openssh, perl, perlPackages
-, utillinux, asciidoc, makeWrapper }:
+, utillinux, asciidoc, asciidoctor, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "btrbk-${version}";
-  version = "0.27.1";
+  pname = "btrbk";
+  version = "0.28.3";
 
   src = fetchurl {
-    url = "https://digint.ch/download/btrbk/releases/${name}.tar.xz";
-    sha256 = "040f6qzv188yd38n11zdiin3gaavrlld36xf1ks4hxhq921bh0jc";
+    url = "https://digint.ch/download/btrbk/releases/${pname}-${version}.tar.xz";
+    sha256 = "0s69pcjkjxg77cgyjahwyg2w81ckgzwz1ds4ifjw7z0zhjxy7miz";
   };
 
-  nativeBuildInputs = [ asciidoc makeWrapper ];
+  nativeBuildInputs = [ asciidoc asciidoctor makeWrapper ];
 
   buildInputs = with perlPackages; [ perl DateCalc ];
 

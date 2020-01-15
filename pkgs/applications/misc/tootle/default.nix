@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, python3
+, meson, ninja, pkgconfig, python3, libgee, gsettings-desktop-schemas
 , gnome3, pantheon, gobject-introspection, wrapGAppsHook
 , gtk3, json-glib, glib, glib-networking, hicolor-icon-theme
 }:
@@ -7,7 +7,7 @@
 let
   pname = "tootle";
   version = "0.2.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
   ];
   buildInputs = [
     gtk3 pantheon.granite json-glib glib glib-networking hicolor-icon-theme
-    gnome3.libgee gnome3.libsoup gnome3.gsettings-desktop-schemas
+    libgee gnome3.libsoup gsettings-desktop-schemas
   ];
 
   postPatch = ''

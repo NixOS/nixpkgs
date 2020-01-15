@@ -1,6 +1,5 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , autoreconfHook
 , pari
 , ntl
@@ -14,18 +13,17 @@
 assert withFlint -> flint != null;
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "eclib";
-  version = "20180815"; # upgrade might break the sage interface
+  version = "20190226"; # upgrade might break the sage interface
   # sage tests to run:
   # src/sage/interfaces/mwrank.py
   # src/sage/libs/eclib
   # ping @timokau for more info
   src = fetchFromGitHub {
     owner = "JohnCremona";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "12syn83lnzx0xc4r1v3glfimbzndyilkpdmx50xrihbjz1hzczif";
+    sha256 = "1910np1xzyjzszay24xn4b81qhpsvhp5aix9vdpknplni2mq8kwb";
   };
   buildInputs = [
     pari

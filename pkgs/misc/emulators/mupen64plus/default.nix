@@ -1,7 +1,7 @@
 {stdenv, fetchurl, boost, dash, freetype, libpng, pkgconfig, SDL, which, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "mupen64plus-${version}";
+  pname = "mupen64plus";
   version = "2.5";
 
   src = fetchurl {

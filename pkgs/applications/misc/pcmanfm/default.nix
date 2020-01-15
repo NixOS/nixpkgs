@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0mb8hg76x1z0szdyl0w7jpz0bdblc6a29is1vvnh79z37qxh8138";
   };
 
-  buildInputs = [ glib gtk libfm' libX11 pango gnome3.defaultIconTheme ];
+  buildInputs = [ glib gtk libfm' libX11 pango gnome3.adwaita-icon-theme ];
   nativeBuildInputs = [ pkgconfig wrapGAppsHook intltool ];
 
   configureFlags = optional withGtk3 "--with-gtk=3";
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://blog.lxde.org/category/pcmanfm/;
     license = licenses.gpl2Plus;
-    description = "File manager with GTK+ interface";
+    description = "File manager with GTK interface";
     maintainers = [ maintainers.ttuegel ];
     platforms = platforms.linux;
   };

@@ -1,6 +1,6 @@
 {
   mkDerivation, lib,
-  extra-cmake-modules, kio, libkexiv2, libkdcraw
+  extra-cmake-modules, karchive, kio, libkexiv2, libkdcraw
 }:
 
 mkDerivation {
@@ -10,5 +10,5 @@ mkDerivation {
     maintainers = [ lib.maintainers.ttuegel ];
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kio libkexiv2 libkdcraw ];
+  buildInputs = [ karchive kio libkexiv2 libkdcraw ];
 }

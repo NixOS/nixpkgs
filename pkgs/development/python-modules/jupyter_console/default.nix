@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Jupyter terminal console";
-    homepage = "http://jupyter.org/";
+    homepage = "https://jupyter.org/";
     license = lib.licenses.bsd3;
   };
 }

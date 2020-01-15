@@ -3,7 +3,7 @@
 
 in {
   options.services.nullidentdmod = with types; {
-    enable = mkEnableOption "Enable the nullidentdmod identd daemon";
+    enable = mkEnableOption "the nullidentdmod identd daemon";
 
     userid = mkOption {
       type = nullOr str;

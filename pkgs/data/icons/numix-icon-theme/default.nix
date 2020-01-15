@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "numix-icon-theme";
   version = "18.07.17";
 
@@ -31,6 +30,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo jgeerds ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

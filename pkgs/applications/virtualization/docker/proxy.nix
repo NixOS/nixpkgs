@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, docker }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
   name = "docker-proxy-${rev}";

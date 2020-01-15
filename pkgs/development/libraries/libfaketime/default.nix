@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, bash, perl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "libfaketime-${version}";
+  pname = "libfaketime";
   version = "0.9.7";
 
   src = fetchurl {
@@ -21,9 +21,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preBuild = ''
-    makeFlagsArray+=(PREFIX="$out" LIBDIRNAME=/lib)
-  '';
+  PREFIX = placeholder "out";
+  LIBDIRNAME = "/lib";
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=cast-function-type -Wno-error=format-truncation";
 
   checkInputs = [ perl ];
 

@@ -3,7 +3,7 @@
 import ./make-test.nix ({ pkgs, ...} : {
   name = "containers-tmpfs";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ ckampka ];
+    maintainers = [ kampka ];
   };
 
   machine =

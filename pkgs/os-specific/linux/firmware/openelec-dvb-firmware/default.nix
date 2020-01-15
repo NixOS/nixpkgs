@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "openelec-dvb-firmware-${version}";
+  pname = "openelec-dvb-firmware";
   version = "0.0.51";
 
   src = fetchurl {

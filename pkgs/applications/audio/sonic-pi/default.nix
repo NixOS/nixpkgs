@@ -21,7 +21,7 @@ let
 
 in stdenv.mkDerivation rec {
   version = "3.1.0";
-  name = "sonic-pi-${version}";
+  pname = "sonic-pi";
 
   src = fetchFromGitHub {
     owner = "samaaron";

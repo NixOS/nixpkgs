@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 fetchzip rec {
   name = "freefont-ttf-20120503";
@@ -20,8 +20,8 @@ fetchzip rec {
       10646/Unicode UCS (Universal Character Set).
     '';
     homepage = https://www.gnu.org/software/freefont/;
-    license = stdenv.lib.licenses.gpl3Plus;
-    platforms = stdenv.lib.platforms.all;
+    license = lib.licenses.gpl3Plus;
+    platforms = lib.platforms.all;
     maintainers = [];
   };
 }

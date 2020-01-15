@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, zlib, cups }:
 
 stdenv.mkDerivation rec {
-  name = "brlaser-${version}";
+  pname = "brlaser";
   version = "4";
 
   src = fetchFromGitHub {

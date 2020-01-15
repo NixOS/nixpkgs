@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, mkfontscale, mkfontdir }:
+{ lib, fetchzip, mkfontscale, mkfontdir }:
 
 let
   version = "0.2.20080216.2";
@@ -18,7 +18,7 @@ in {
 
     sha256 = "0xi5ycm7ydzpn7cqxv1kcj9vd70nr9wn8v27hmibyjc25y2qdmzl";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "CJK Unicode font Kai style";
       homepage = https://www.freedesktop.org/wiki/Software/CJKUnifonts/;
 
@@ -43,7 +43,7 @@ in {
 
     sha256 = "16jybvj1cxamm682caj6nsm6l5c60x9mgchp1l2izrw2rvc8x38d";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       description = "CJK Unicode font Ming style";
       homepage = https://www.freedesktop.org/wiki/Software/CJKUnifonts/;
 

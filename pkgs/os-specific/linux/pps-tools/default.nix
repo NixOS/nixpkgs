@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "redlab-i";
-    repo = "${baseName}";
+    repo = baseName;
     rev = "v${version}";
     sha256 = "1yh9g0l59dkq4ci0wbb03qin3c3cizfngmn9jy1vwm5zm6axlxhf";
   };

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoconf, automake, libtool, bison, flex, rdma-core }:
 
 stdenv.mkDerivation rec {
-  name = "opensm-${version}";
-  version = "3.3.21";
+  pname = "opensm";
+  version = "3.3.22";
 
   src = fetchFromGitHub {
     owner = "linux-rdma";
     repo = "opensm";
-    rev = "${version}";
-    sha256 = "0iikw28vslxq3baq9qmmw08yay7l524wciz7dv7km09ylcbx23b7";
+    rev = version;
+    sha256 = "1nb6zl93ffbgb8z8728j0dxrmvk3pm0i6a1sn7mpn8ki1vkf2y0j";
   };
 
   nativeBuildInputs = [ autoconf automake libtool bison flex ];

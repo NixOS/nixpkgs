@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
-  name = "jitterentropy-${version}";
+  pname = "jitterentropy";
   version = "2.1.2";
 
   src = fetchFromGitHub {

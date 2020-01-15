@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, intltool, autoreconfHook
+{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook
 , libsndfile, libtool, makeWrapper
 , xorg, libcap, alsaLib, glib, gnome3
 , avahi, libjack2, libasyncns, lirc, dbus
@@ -59,7 +59,21 @@ stdenv.mkDerivation rec {
       ++ lib.optionals bluetoothSupport [ bluez5 sbc ]
       ++ lib.optional remoteControlSupport lirc
       ++ lib.optional zeroconfSupport  avahi
-    );
+  );
+
+  patches = [
+    # The following two patches fix alsalib headers move, remove after the next release
+    (fetchpatch {
+      name = "alsa-asoundlib-include.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/993d3fd89e5611997f1e165bf03edefb0204b0a4.patch";
+      sha256 = "17icnf8026947j1dqw4k16f91vy6zyg7q41zv2j6pxh9fncb1s71";
+    })
+    (fetchpatch {
+      name = "alsa-use-case-include.patch";
+      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/b89d33bb182c42db5ad3987b0e91b7bf62f421e8.patch";
+      sha256 = "0jccpc0dgkb0v4xrkyca2pm2k4i6pvahs9bq4hbg34173p23g5nb";
+    })
+  ];
 
   preConfigure = ''
     # Performs and autoreconf

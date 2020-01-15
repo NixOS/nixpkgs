@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, unzip, libGLU_combined, libX11, SDL, openal }:
+{ stdenv, fetchurl, unzip, libGLU_combined, libX11, SDL, openal, runtimeShell }:
 stdenv.mkDerivation rec {
-  name = "tremulous-${version}";
+  pname = "tremulous";
   version = "1.1.0";
   src1 = fetchurl {
-    url = "mirror://sourceforge/tremulous/${name}.zip";
+    url = "mirror://sourceforge/tremulous/${pname}-${version}.zip";
     sha256 = "11w96y7ggm2sn5ncyaffsbg0vy9pblz2av71vqp9725wbbsndfy7";
   };
   # http://tremulous.net/wiki/Client_versions
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
     for b in tremulous tremded
     do
         cat << EOF > $out/bin/$b
-    #!${stdenv.shell}
+    #!${runtimeShell}
     cd $out/opt/tremulous
     exec ./$b.$arch "\$@"
     EOF

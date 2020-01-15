@@ -13,13 +13,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xiphos-${version}";
+  pname = "xiphos";
   version = "4.0.7";
 
   src = fetchFromGitHub {
     owner = "crosswire";
     repo = "xiphos";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vwf1ps6nrajxl1qbs6v1cgykmq5wn4j09j10gbcd3b2nvrprf3g";
   };
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     export SWORD_HOME=${sword};
   '';
 
-  configureFlags= [ "--enable-webkit2" ];
+  wafConfigureFlags = [ "--enable-webkit2" ];
 
   meta = with stdenv.lib; {
     description = "A GTK Bible study tool";

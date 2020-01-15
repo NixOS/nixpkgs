@@ -2,8 +2,8 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "b2sum-${version}";
+stdenv.mkDerivation {
+  pname = "b2sum";
   version = "unstable-2018-06-11";
 
   src = fetchzip {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openmp ];
 
-  buildFlags = [ (optional (isNull openmp) "NO_OPENMP=1") ];
+  buildFlags = [ (optional (openmp == null) "NO_OPENMP=1") ];
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = {

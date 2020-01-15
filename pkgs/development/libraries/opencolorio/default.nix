@@ -3,14 +3,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "opencolorio-${version}";
-  version = "1.1.0";
+  pname = "opencolorio";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "imageworks";
     repo = "OpenColorIO";
     rev = "v${version}";
-    sha256 = "0cjsyn681xsg89lirlll5pqlsqg2vnk1278iiicmzjy2a2v8x7zq";
+    sha256 = "12srvxca51czpfjl0gabpidj9n84mw78ivxy5w75qhq2mmc798sb";
   };
 
   outputs = [ "bin" "out" "dev" ];

@@ -5,7 +5,6 @@
 stdenv.mkDerivation rec {
   pname = "rankwidth";
   version = "0.7";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sageupstream/rw/rw-${version}.tar.gz";

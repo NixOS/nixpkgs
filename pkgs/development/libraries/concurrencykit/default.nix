@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name    = "concurrencykit-${version}";
+  pname = "concurrencykit";
   version = "0.6.0";
 
   src = fetchurl {

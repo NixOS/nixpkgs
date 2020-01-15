@@ -5,11 +5,11 @@ let
 in fetchzip {
   name = "stix-two-${version}";
 
-  url = "mirror://sourceforge/stixfonts/Current%20Release/STIXv${version}.zip";
+  url = "https://github.com/stipub/stixfonts/archive/${version}.zip";
 
   postFetch = ''
     mkdir -p $out/share/fonts
-    unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
+    unzip -j $downloadedFile '*/OTF/*.otf' -d $out/share/fonts/opentype
   '';
 
   sha256 = "19i30d2xjk52bjj7xva1hnlyh58yd5phas1njcc8ldcz87a1lhql";

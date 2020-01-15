@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''circular-streams'';
   version = ''20161204-git'';
 

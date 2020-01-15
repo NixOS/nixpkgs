@@ -4,7 +4,7 @@ with stdenv;
 with stdenv.lib;
 
 mkDerivation rec {
-  name = "wraith-${version}";
+  pname = "wraith";
   version = "1.4.7";
   src = fetchurl {
     url = "mirror://sourceforge/wraithbotpack/wraith-v${version}.tar.gz";

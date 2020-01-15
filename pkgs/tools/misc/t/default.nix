@@ -1,18 +1,17 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
-bundlerEnv {
-  name = "t-3.1.0";
+bundlerApp {
+  pname = "t";
+  gemdir = ./.;
+  exes = [ "t" ];
 
-  inherit ruby;
-  gemfile = ./Gemfile;
-  lockfile = ./Gemfile.lock;
-  gemset = ./gemset.nix;
+  passthru.updateScript = bundlerUpdateScript "t";
 
   meta = with lib; {
     description = "A command-line power tool for Twitter";
     homepage    = http://sferik.github.io/t/;
     license     = licenses.asl20;
-    maintainers = with maintainers; [ offline ];
+    maintainers = with maintainers; [ offline manveru nicknovitski ];
     platforms   = platforms.unix;
   };
 }

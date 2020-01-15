@@ -1,6 +1,5 @@
 {stdenv, fetchFromGitHub}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "clac";
   version = "0.0.0.20170503";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, pkgconfig, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "screen-message-${version}";
+  pname = "screen-message";
   version = "0.25";
 
   src = fetchurl {

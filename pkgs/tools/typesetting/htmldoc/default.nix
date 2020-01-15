@@ -8,7 +8,7 @@ assert stdenv.isDarwin -> SystemConfiguration != null
 
 stdenv.mkDerivation rec {
   version = "1.8.29";
-  name = "htmldoc-${version}";
+  pname = "htmldoc";
   src = fetchurl {
     url = "https://github.com/michaelrsweet/htmldoc/releases/download"
       + "/release-${version}/htmldoc-${version}-source.tar.gz";

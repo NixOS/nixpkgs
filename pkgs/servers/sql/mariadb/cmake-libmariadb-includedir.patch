@@ -1,0 +1,21 @@
+diff --git a/libmariadb/mariadb_config/mariadb_config.c.in b/libmariadb/mariadb_config/mariadb_config.c.in
+index 703c9466..c6d3f1bc 100644
+--- a/libmariadb/mariadb_config/mariadb_config.c.in
++++ b/libmariadb/mariadb_config/mariadb_config.c.in
+@@ -5,13 +5,13 @@
+ 
+ static char *mariadb_progname;
+ 
+-#define INCLUDE "-I@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@ -I@CMAKE_INSTALL_PREFIX@/@INSTALL_INCLUDEDIR@/mysql"
+-#define LIBS    "-L@CMAKE_INSTALL_PREFIX@/@INSTALL_LIBDIR@/ -lmariadb"
++#define INCLUDE "-I@CMAKE_INSTALL_PREFIX_DEV@/@INSTALL_INCLUDEDIR@ -I@CMAKE_INSTALL_PREFIX_DEV@/@INSTALL_INCLUDEDIR@/mysql"
++#define LIBS    "-L@CMAKE_INSTALL_PREFIX_DEV@/@INSTALL_LIBDIR@/ -lmariadb"
+ #define LIBS_SYS "@extra_dynamic_LDFLAGS@"
+ #define CFLAGS  INCLUDE
+ #define VERSION "@MARIADB_CLIENT_VERSION@"
+ #define CC_VERSION "@CPACK_PACKAGE_VERSION@"
+-#define PLUGIN_DIR "@CMAKE_INSTALL_PREFIX@/@INSTALL_PLUGINDIR@"
++#define PLUGIN_DIR "@CMAKE_INSTALL_PREFIX_DEV@/@INSTALL_PLUGINDIR@"
+ #define SOCKET  "@MARIADB_UNIX_ADDR@"
+ #define PORT "@MARIADB_PORT@"
+ #define TLS_LIBRARY_VERSION "@TLS_LIBRARY_VERSION@"

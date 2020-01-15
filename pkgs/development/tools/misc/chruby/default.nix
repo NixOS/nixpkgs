@@ -8,7 +8,7 @@ let
   '';
 
 in stdenv.mkDerivation rec {
-  name = "chruby-${version}";
+  pname = "chruby";
 
   version = "0.3.9";
 

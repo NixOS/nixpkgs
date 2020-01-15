@@ -1,13 +1,13 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
-  name = "mmc-utils-${version}";
-  version = "2018-03-27";
+stdenv.mkDerivation {
+  pname = "mmc-utils";
+  version = "2018-12-14";
 
   src = fetchgit {
     url = "git://git.kernel.org/pub/scm/linux/kernel/git/cjb/mmc-utils.git";
-    rev = "b4fe0c8c0e57a74c01755fa9362703b60d7ee49d";
-    sha256 = "01llwan5j40mv5p867f31lm87qh0hcyhy892say60y5pxc0mzpyn";
+    rev = "aef913e31b659462fe6b9320d241676cba97f67b";
+    sha256 = "1mak9rqjp6yvqk2h5hfil5a9gfx138h62n3cryckfbhr6fmaylm7";
   };
 
   makeFlags = "CC=${stdenv.cc.targetPrefix}cc";

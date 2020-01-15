@@ -2,7 +2,7 @@
 , libXaw, libXext, libSM, libICE, libXpm, libXp
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "vncrec-0.2"; # version taken from Arch AUR
 
   src = fetchurl {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libxcb, xcbutil, xcbutilwm }:
 
 stdenv.mkDerivation rec {
-   name = "xdo-${version}";
+   pname = "xdo";
    version = "0.5.7";
 
    src = fetchFromGitHub {

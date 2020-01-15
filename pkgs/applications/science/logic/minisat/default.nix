@@ -1,11 +1,11 @@
 { stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "minisat-${version}";
+  pname = "minisat";
   version = "2.2.0";
 
   src = fetchurl {
-    url = "http://minisat.se/downloads/${name}.tar.gz";
+    url = "http://minisat.se/downloads/${pname}-${version}.tar.gz";
     sha256 = "023qdnsb6i18yrrawlhckm47q8x0sl7chpvvw3gssfyw3j2pv5cj";
   };
 

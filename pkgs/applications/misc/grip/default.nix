@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    description = "GTK+-based audio CD player/ripper";
+    description = "GTK-based audio CD player/ripper";
     homepage = http://nostatic.org/grip;
     license = stdenv.lib.licenses.gpl2;
 

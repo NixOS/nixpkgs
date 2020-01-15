@@ -1,8 +1,8 @@
-{ stdenv, fetchzip }:
+{ lib, fetchzip }:
 
 let
   version = "2.0.10";
-in fetchzip rec {
+in fetchzip {
   name = "weather-icons-${version}";
 
   url = "https://github.com/erikflowers/weather-icons/archive/${version}.zip";
@@ -14,7 +14,7 @@ in fetchzip rec {
 
   sha256 = "10zny9987wybq55sm803hrjkp33dq1lgmnxc15kssr8yb81g6qrl";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Weather Icons";
     longDescription = ''
       Weather Icons is the only icon font and CSS with 222 weather themed icons,

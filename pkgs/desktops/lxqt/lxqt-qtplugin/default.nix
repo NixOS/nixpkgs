@@ -1,10 +1,10 @@
 {
-  stdenv, fetchFromGitHub,
+  lib, mkDerivation, fetchFromGitHub,
   cmake, lxqt-build-tools,
   qtbase, qtx11extras, qttools, qtsvg, libdbusmenu, libqtxdg, libfm-qt
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lxqt-qtplugin";
   version = "0.14.0";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       --replace "DESTINATION \"\''${QT_PLUGINS_DIR}" "DESTINATION \"$qtPluginPrefix"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "LXQt Qt platform integration plugin";
     homepage = https://github.com/lxqt/lxqt-qtplugin;
     license = licenses.lgpl21;

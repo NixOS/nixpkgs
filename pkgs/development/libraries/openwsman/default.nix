@@ -2,7 +2,7 @@
 , curl, libxml2, pam, sblim-sfcc }:
 
 stdenv.mkDerivation rec {
-  name = "openwsman-${version}";
+  pname = "openwsman";
   version = "2.6.9";
 
   src = fetchFromGitHub {

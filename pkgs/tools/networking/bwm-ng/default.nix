@@ -4,10 +4,11 @@ let
   version = "0.6.1";
 in
 stdenv.mkDerivation rec {
-  name = "bwm-ng-${version}";
+  pname = "bwm-ng";
+  inherit version;
 
   src = fetchurl {
-    url = "https://www.gropp.org/bwm-ng/${name}.tar.gz";
+    url = "https://www.gropp.org/bwm-ng/${pname}-${version}.tar.gz";
     sha256 = "1w0dwpjjm9pqi613i8glxrgca3rdyqyp3xydzagzr5ndc34z6z02";
   };
 

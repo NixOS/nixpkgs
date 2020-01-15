@@ -1,7 +1,7 @@
 { stdenv, fetchurl, check }:
 
 stdenv.mkDerivation rec {
-  name = "ding-libs-${version}";
+  pname = "ding-libs";
   version = "0.6.1";
 
   src = fetchurl {

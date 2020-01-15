@@ -19,7 +19,7 @@ let
   ]));
 
 in stdenv.mkDerivation rec {
-  name = "screenFetch-${version}";
+  pname = "screenFetch";
   version = "3.8.0";
 
   src = fetchFromGitHub {

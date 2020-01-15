@@ -1,14 +1,17 @@
 { stdenv, fetchFromGitHub, cmake, doxygen }:
 
-stdenv.mkDerivation {
-  name = "uri-2017-07-16";
+stdenv.mkDerivation rec {
+  name = "uri-${version}";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "cpp-netlib";
     repo = "uri";
-    rev = "ac30f19cc7a4745667a8ebd3eac68d5e70b9a4a6";
-    sha256 = "0ys295ij071rilwkk3xq1p3sdzgb0gyybvd3f0cahh67kh8hyk6n";
+    rev = "v${version}";
+    sha256 = "148361pixrm94q6v04k13s1msa04bx9yc3djb0lxpa7dlw19vhcd";
   };
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=parentheses" ];
 
   nativeBuildInputs = [ cmake doxygen ];
 

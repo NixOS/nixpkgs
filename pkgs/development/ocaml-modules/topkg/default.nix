@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   version = "1.0.0";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
+    url = "https://erratique.ch/software/topkg/releases/topkg-${version}.tbz";
     sha256 = "1df61vw6v5bg2mys045682ggv058yqkqb67w7r2gz85crs04d5fw";
   };
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   passthru = { inherit run; };
 
   meta = {
-    homepage = http://erratique.ch/software/topkg;
+    homepage = https://erratique.ch/software/topkg;
     license = stdenv.lib.licenses.isc;
     maintainers = [ stdenv.lib.maintainers.vbgl ];
     description = "A packager for distributing OCaml software";

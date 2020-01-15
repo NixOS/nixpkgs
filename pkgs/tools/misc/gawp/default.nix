@@ -3,7 +3,7 @@
 with builtins;
 
 buildGoPackage rec {
-  name = "gawp-${version}";
+  pname = "gawp";
   version = "20160121-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "5db2d8faa220e8d6eaf8677354bd197bf621ff7f";
   

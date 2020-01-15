@@ -12,7 +12,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "1.9.0";
-  name = "tigervnc-${version}";
+  pname = "tigervnc";
 
   src = fetchFromGitHub {
     owner = "TigerVNC";

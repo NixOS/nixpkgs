@@ -1,6 +1,6 @@
 { stdenv, fetchgit, python, libev, wafHook }:
 stdenv.mkDerivation rec {
-  name = "weighttp-${version}";
+  pname = "weighttp";
   version = "0.4";
 
   src = fetchgit {

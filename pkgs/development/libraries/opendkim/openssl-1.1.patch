@@ -1,0 +1,81 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -864,26 +864,28 @@
+ 	AC_SEARCH_LIBS([ERR_peek_error], [crypto], ,
+ 	               AC_MSG_ERROR([libcrypto not found]))
+ 
+-	AC_SEARCH_LIBS([SSL_library_init], [ssl], ,
+-		[
+-			if test x"$enable_shared" = x"yes"
+-			then
+-				AC_MSG_ERROR([Cannot build shared opendkim
+-				              against static openssl libraries.
+-				              Configure with --disable-shared
+-				              to get this working or obtain a
+-				              shared libssl library for
+-				              opendkim to use.])
+-			fi
+-
+-			# avoid caching issue - last result of SSL_library_init
+-			# shouldn't be cached for this next check
+-			unset ac_cv_search_SSL_library_init
+-			LIBCRYPTO_LIBS="$LIBCRYPTO_LIBS -ldl"
+-			AC_SEARCH_LIBS([SSL_library_init], [ssl], ,
+-			               AC_MSG_ERROR([libssl not found]), [-ldl])
+-		]
+-	)
++
++	AC_LINK_IFELSE(
++		       [AC_LANG_PROGRAM([[#include <openssl/ssl.h>]],
++					[[SSL_library_init();]])],
++					[od_have_ossl="yes";],
++					[od_have_ossl="no";])
++	if test x"$od_have_ossl" = x"no"
++	then
++		if test x"$enable_shared" = x"yes"
++		then
++			AC_MSG_ERROR([Cannot build shared opendkim
++			              against static openssl libraries.
++			              Configure with --disable-shared
++			              to get this working or obtain a
++			              shared libssl library for
++			              opendkim to use.])
++		fi
++
++		LIBCRYPTO_LIBS="$LIBCRYPTO_LIBS -ldl"
++		AC_SEARCH_LIBS([SSL_library_init], [ssl], ,
++		               AC_MSG_ERROR([libssl not found]), [-ldl])
++	fi
+ 
+ 	AC_CHECK_DECL([SHA256_DIGEST_LENGTH],
+                       AC_DEFINE([HAVE_SHA256], 1,
+--- a/opendkim/opendkim-crypto.c
++++ b/opendkim/opendkim-crypto.c
+@@ -222,7 +222,11 @@
+ 	{
+ 		assert(pthread_setspecific(id_key, ptr) == 0);
+ 
++#if OPENSSL_VERSION_NUMBER >= 0x10100000
++		OPENSSL_thread_stop();
++#else
+ 		ERR_remove_state(0);
++#endif
+ 
+ 		free(ptr);
+ 
+@@ -392,11 +396,15 @@
+ {
+ 	if (crypto_init_done)
+ 	{
++#if OPENSSL_VERSION_NUMBER >= 0x10100000
++		OPENSSL_thread_stop();
++#else
+ 		CRYPTO_cleanup_all_ex_data();
+ 		CONF_modules_free();
+ 		EVP_cleanup();
+ 		ERR_free_strings();
+ 		ERR_remove_state(0);
++#endif
+ 
+ 		if (nmutexes > 0)
+ 		{

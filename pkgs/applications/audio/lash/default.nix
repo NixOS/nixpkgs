@@ -4,11 +4,11 @@
 assert libuuid != null;
 
 stdenv.mkDerivation  rec {
-  name = "lash-${version}";
+  pname = "lash";
   version = "0.5.4";
 
   src = fetchurl {
-    url = "mirror://savannah/lash/${name}.tar.gz";
+    url = "mirror://savannah/lash/${pname}-${version}.tar.gz";
     sha256 = "05kc4brcx8mncai0rj2gz4s4bsrsy9q8xlnaddf75i0m8jl7snhh";
   };
 

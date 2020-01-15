@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libroxml, proj, libyamlcpp, boost } :
 
 stdenv.mkDerivation rec {
-  name = "osm2xmap-${version}";
+  pname = "osm2xmap";
   version = "2.0";
 
   src = fetchFromGitHub {
@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     "INSTALL_MANDIR=$(out)/share/man/man1"
     "INSTALL_SHAREDIR=$(out)/share/"
   ];
+
+  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 

@@ -2,7 +2,7 @@
 { lib, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gcsfuse-${version}";
+  pname = "gcsfuse";
   version = "0.23.0";
   rev = "v${version}";
 
@@ -16,7 +16,7 @@ buildGoPackage rec {
 
   meta = {
     license = lib.licenses.asl20;
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
     maintainers = [];
     homepage = https://cloud.google.com/storage/docs/gcs-fuse;
     description =

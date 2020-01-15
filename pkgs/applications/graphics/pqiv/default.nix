@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation (rec {
-  name = "pqiv-${version}";
+  pname = "pqiv";
   version = "2.11";
 
   src = fetchFromGitHub {

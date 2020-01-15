@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "singular-${version}";
+  pname = "singular";
   version = "4.1.1p2";
 
   src = let

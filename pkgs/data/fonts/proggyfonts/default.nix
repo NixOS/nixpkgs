@@ -2,7 +2,7 @@
 
 # adapted from https://aur.archlinux.org/packages/proggyfonts/
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "proggyfonts-0.1";
 
   src = fetchurl {

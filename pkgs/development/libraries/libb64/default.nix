@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "libb64-${version}";
+  pname = "libb64";
   version = "1.2";
 
   src = fetchurl {

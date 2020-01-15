@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 stdenv.mkDerivation rec {
-  name = "caps-${version}";
+  pname = "caps";
   version = "0.9.26";
   src = fetchurl {
     url = "http://www.quitte.de/dsp/caps_${version}.tar.bz2";

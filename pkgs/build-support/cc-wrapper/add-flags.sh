@@ -6,6 +6,7 @@
 
 var_templates_list=(
     NIX+CFLAGS_COMPILE
+    NIX+CFLAGS_COMPILE_BEFORE
     NIX+CFLAGS_LINK
     NIX+CXXSTDLIB_COMPILE
     NIX+CXXSTDLIB_LINK
@@ -41,6 +42,10 @@ fi
 
 if [ -e @out@/nix-support/cc-ldflags ]; then
     NIX_@infixSalt@_LDFLAGS+=" $(< @out@/nix-support/cc-ldflags)"
+fi
+
+if [ -e @out@/nix-support/cc-cflags-before ]; then
+    NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE="$(< @out@/nix-support/cc-cflags-before) $NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE"
 fi
 
 # That way forked processes will not extend these environment variables again.

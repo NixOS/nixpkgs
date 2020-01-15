@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libzip-${version}";
+  pname = "libzip";
   version = "1.3.0";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${name}.tar.gz";
+    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
     sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
   };
 

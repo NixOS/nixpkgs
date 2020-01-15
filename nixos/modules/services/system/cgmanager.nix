@@ -14,7 +14,6 @@ in {
   config = mkIf cfg.enable {
     systemd.services.cgmanager = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "local-fs.target" ];
       description = "Cgroup management daemon";
       restartIfChanged = false;
       serviceConfig = {

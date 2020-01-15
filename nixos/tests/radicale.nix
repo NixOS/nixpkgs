@@ -85,7 +85,7 @@ in
       $radicale->succeed('mv /tmp/collections-new/collection-root /tmp/collections');
       $radicale->succeed('${switchToConfig "radicale2_verify"} >&2');
       $radicale->waitUntilFails('systemctl status radicale');
-      my ($retcode, $logs) = $radicale->execute('journalctl -u radicale -n 5');
+      my ($retcode, $logs) = $radicale->execute('journalctl -u radicale -n 10');
       if ($retcode != 0 || index($logs, 'Verifying storage') == -1) {
         die "Radicale 2 didn't verify storage"
       }

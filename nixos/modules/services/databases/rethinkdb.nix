@@ -41,7 +41,7 @@ in
       };
 
       pidpath = mkOption {
-        default = "/var/run/rethinkdb";
+        default = "/run/rethinkdb";
         description = "Location where each instance's pid file is located.";
       };
 

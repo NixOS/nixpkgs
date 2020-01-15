@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pidgin, glib, json-glib, nss, nspr, libgnome-keyring } :
 
-stdenv.mkDerivation rec {
-  name = "pidgin-opensteamworks-${version}";
+stdenv.mkDerivation {
+  pname = "pidgin-opensteamworks";
   version = "unstable-2018-08-02";
 
   src = fetchFromGitHub {

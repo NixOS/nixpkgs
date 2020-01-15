@@ -1,39 +1,36 @@
-{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, meson, ninja, python3
+{ stdenv, fetchFromGitHub, pkgconfig, meson, ninja, python3
 , gtk3, desktop-file-utils, gtksourceview, webkitgtk, gtkspell3, pantheon
-, gnome3, discount, gobject-introspection, wrapGAppsHook }:
+, libgee, discount, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "quilter";
-  version = "1.6.8";
-
-  name = "${pname}-${version}";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "07i9pivpddgixn1wzbr15gvzf0n5pklx0gkjjaa35kvj2z8k31x5";
+    sha256 = "119ri6lkzqapi5k0v818qkhg1916jj9s6bh72yqvc2wmyjnn2dbw";
   };
 
   nativeBuildInputs = [
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
+    pantheon.vala
     pkgconfig
     python3
-    pantheon.vala
     wrapGAppsHook
   ];
 
   buildInputs = [
     discount
-    pantheon.elementary-icon-theme
-    pantheon.granite
-    gnome3.libgee
     gtk3
     gtksourceview
     gtkspell3
+    libgee
+    pantheon.elementary-icon-theme
+    pantheon.granite
     webkitgtk
   ];
 
@@ -46,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "Focus on your writing - designed for elementary OS";
     homepage = https://github.com/lainsce/quilter;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ worldofpeace ];
+    maintainers = pantheon.maintainers;
     platforms = platforms.linux;
   };
 }

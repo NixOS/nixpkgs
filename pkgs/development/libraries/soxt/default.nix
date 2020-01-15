@@ -1,15 +1,18 @@
-{ fetchurl, stdenv, coin3d, motif, xlibsWrapper, libGLU_combined }:
+{ fetchhg, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU_combined }:
 
-stdenv.mkDerivation rec {
-  name = "soxt-${version}";
-  version = "1.3.0";
+stdenv.mkDerivation {
+  pname = "soxt";
+  version = "unstable-2019-06-14";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/Coin3D/coin/downloads/SoXt-${version}.tar.gz";
-    sha256= "f5443aadafe8e2222b9b5a23d1f228bb0f3e7d98949b8ea8676171b7ea5bf013";
+  src = fetchhg {
+    url = "https://bitbucket.org/Coin3D/soxt";
+    rev = "85e135bb266fbb17e47fc336b876a576a239c15c";
+    sha256 = "0vk5cgn53yqf7csqdnlnyyhi4mbgx4wlsq70613p5fgxlvxzhcym";
+    fetchSubrepos = true;
   };
 
-  buildInputs = [ coin3d motif xlibsWrapper libGLU_combined ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ coin3d motif xlibsWrapper libGLU_combined libXmu ];
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;

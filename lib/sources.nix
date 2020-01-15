@@ -12,8 +12,8 @@ rec {
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
-    # Filter out Subversion and CVS directories.
-    (type == "directory" && (baseName == ".git" || baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
+    # Filter out version control software files/directories
+    (baseName == ".git" || type == "directory" && (baseName == ".svn" || baseName == "CVS" || baseName == ".hg")) ||
     # Filter out editor backup / swap files.
     lib.hasSuffix "~" baseName ||
     builtins.match "^\\.sw[a-z]$" baseName != null ||
@@ -36,29 +36,62 @@ rec {
   # allowing you to chain multiple calls together without any
   # intermediate copies being put in the nix store.
   #
-  #     lib.cleanSourceWith f (lib.cleanSourceWith g ./.)     # Succeeds!
-  #     builtins.filterSource f (builtins.filterSource g ./.) # Fails!
-  cleanSourceWith = { filter, src }:
+  #     lib.cleanSourceWith {
+  #       filter = f;
+  #       src = lib.cleanSourceWith {
+  #         filter = g;
+  #         src = ./.;
+  #       };
+  #     }
+  #     # Succeeds!
+  #
+  #     builtins.filterSource f (builtins.filterSource g ./.)
+  #     # Fails!
+  #
+  # Parameters:
+  #
+  #   src:      A path or cleanSourceWith result to filter and/or rename.
+  #
+  #   filter:   A function (path -> type -> bool)
+  #             Optional with default value: constant true (include everything)
+  #             The function will be combined with the && operator such
+  #             that src.filter is called lazily.
+  #             For implementing a filter, see
+  #             https://nixos.org/nix/manual/#builtin-filterSource
+  #
+  #   name:     Optional name to use as part of the store path.
+  #             This defaults `src.name` or otherwise `baseNameOf src`.
+  #             We recommend setting `name` whenever `src` is syntactically `./.`.
+  #             Otherwise, you depend on `./.`'s name in the parent directory,
+  #             which can cause inconsistent names, defeating caching.
+  #
+  cleanSourceWith = { filter ? _path: _type: true, src, name ? null }:
     let
       isFiltered = src ? _isLibCleanSourceWith;
       origSrc = if isFiltered then src.origSrc else src;
       filter' = if isFiltered then name: type: filter name type && src.filter name type else filter;
+      name' = if name != null then name else if isFiltered then src.name else baseNameOf src;
     in {
       inherit origSrc;
       filter = filter';
-      outPath = builtins.filterSource filter' origSrc;
+      outPath = builtins.path { filter = filter'; path = origSrc; name = name'; };
       _isLibCleanSourceWith = true;
+      name = name';
     };
 
   # Filter sources by a list of regular expressions.
   #
   # E.g. `src = sourceByRegex ./my-subproject [".*\.py$" "^database.sql$"]`
-  sourceByRegex = src: regexes: cleanSourceWith {
-    filter = (path: type:
-      let relPath = lib.removePrefix (toString src + "/") (toString path);
-      in lib.any (re: builtins.match re relPath != null) regexes);
-    inherit src;
-  };
+  sourceByRegex = src: regexes:
+    let
+      isFiltered = src ? _isLibCleanSourceWith;
+      origSrc = if isFiltered then src.origSrc else src;
+    in lib.cleanSourceWith {
+      filter = (path: type:
+        let relPath = lib.removePrefix (toString origSrc + "/") (toString path);
+        in lib.any (re: builtins.match re relPath != null) regexes);
+      inherit src;
+    };
 
   # Get all files ending with the specified suffices from the given
   # directory or its descendants.  E.g. `sourceFilesBySuffices ./dir
@@ -83,7 +116,7 @@ rec {
                  # Sometimes git stores the commitId directly in the file but
                  # sometimes it stores something like: «ref: refs/heads/branch-name»
                  matchRef    = match "^ref: (.*)$" fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then fileContent
                 else readCommitFromFile (lib.head matchRef) path
            # Sometimes, the file isn't there at all and has been packed away in the
@@ -92,7 +125,7 @@ rec {
            then
              let fileContent = readFile packedRefsName;
                  matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if   isNull matchRef
+             in if   matchRef == null
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef
            else throw ("Not a .git directory: " + path);

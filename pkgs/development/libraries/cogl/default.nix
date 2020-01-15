@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk_pixbuf, xorg, libintl
+{ stdenv, fetchurl, fetchpatch, pkgconfig, libGL, glib, gdk-pixbuf, xorg, libintl
 , pangoSupport ? true, pango, cairo, gobject-introspection, wayland, gnome3
-, mesa_noglu
+, mesa
 , gstreamerSupport ? true, gst_all_1 }:
 
 let
   pname = "cogl";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.22.2";
+  version = "1.22.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "03f0ha3qk7ca0nnkkcr1garrm1n1vvfqhkz9lwjm592fnv6ii9rr";
+    sha256 = "1q0drs82a8f6glg1v29bb6g2nf15fw0rvdx3d0rgcgfarfaby5sj";
   };
 
   patches = [
@@ -44,7 +44,7 @@ in stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!stdenv.isDarwin) [ "--enable-gles1" "--enable-gles2" ];
 
   propagatedBuildInputs = with xorg; [
-      glib gdk_pixbuf gobject-introspection wayland mesa_noglu
+      glib gdk-pixbuf gobject-introspection wayland mesa
       libGL libXrandr libXfixes libXcomposite libXdamage
     ]
     ++ stdenv.lib.optionals gstreamerSupport [ gst_all_1.gstreamer

@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  configurePhase = "true"; # skip configure
+  dontConfigure = true; # skip configure
 
   installPhase = "make prefix=$out install";
 

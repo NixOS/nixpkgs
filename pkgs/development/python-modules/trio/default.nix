@@ -9,18 +9,19 @@
 , pyopenssl
 , trustme
 , sniffio
+, stdenv
 , jedi
 , pylint
 }:
 
 buildPythonPackage rec {
   pname = "trio";
-  version = "0.10.0";
+  version = "0.11.0";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1c1snnhjg8l87ygf5p9z2qjcq090mws5w7pr9aaiava0yqawq8yk";
+    sha256 = "3796774aedbf5be581c68f98c79b565654876de6e9a01c6a95e3ec6cd4e4b4c3";
   };
 
   checkInputs = [ pytest pyopenssl trustme jedi pylint ];
@@ -36,6 +37,9 @@ buildPythonPackage rec {
     outcome
     sniffio
   ] ++ lib.optionals (pythonOlder "3.7") [ contextvars ];
+
+  # tests are failing on Darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     description = "An async/await-native I/O library for humans and snake people";

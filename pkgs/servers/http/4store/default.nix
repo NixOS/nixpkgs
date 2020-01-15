@@ -7,7 +7,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "4store-${version}";
+  pname = "4store";
   version = "1.1.6";
 
   src = fetchFromGitHub {

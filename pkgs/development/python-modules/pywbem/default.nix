@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, fetchPypi, libxml2
-, m2crypto, ply, pyyaml, six, pbr, pythonOlder, isPy37, python
+, m2crypto, ply, pyyaml, six, pbr, pythonOlder, isPy37
 , httpretty, lxml, mock, pytest, requests, decorator, unittest2
 }:
 

@@ -200,8 +200,9 @@ swapDevices = [ { device = "/dev/disk/by-label/swap"; } ];
 <xref linkend="opt-services.postgresql.package"/> = pkgs.postgresql_10;
 </programlisting>
       The latter option definition changes the default PostgreSQL package used
-      by NixOS’s PostgreSQL service to 10.x. For more information on packages,
-      including how to add new ones, see <xref linkend="sec-custom-packages"/>.
+      by NixOS’s PostgreSQL service to 10.x. For more information on
+      packages, including how to add new ones, see
+      <xref linkend="sec-custom-packages"/>.
      </para>
     </listitem>
    </varlistentry>

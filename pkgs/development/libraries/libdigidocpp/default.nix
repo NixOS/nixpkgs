@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.13.7";
-  name = "libdigidocpp-${version}";
+  pname = "libdigidocpp";
 
   src = fetchurl {
      url = "https://github.com/open-eid/libdigidocpp/releases/download/v${version}/libdigidocpp-${version}.tar.gz";

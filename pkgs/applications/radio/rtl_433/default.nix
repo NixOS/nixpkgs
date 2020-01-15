@@ -1,8 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, libusb1, rtl-sdr }:
-stdenv.mkDerivation rec {
+{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+, libusb1, rtl-sdr, soapysdr-with-plugins
+}:
+
+stdenv.mkDerivation {
 
   version = "18.12";
-  name = "rtl_433-${version}";
+  pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
@@ -13,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  buildInputs = [ libusb1 rtl-sdr ];
+  buildInputs = [ libusb1 rtl-sdr soapysdr-with-plugins ];
 
   meta = with stdenv.lib; {
     description = "Decode traffic from devices that broadcast on 433.9 MHz";

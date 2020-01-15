@@ -352,7 +352,10 @@ quicklisp-to-nix."
         (remove name (mapcar 'name ql-sibling-systems)
                 :test 'equal))
        (dependencies raw-dependencies)
-       (description (asdf:system-description (asdf:find-system system)))
+       (description
+         (or
+           (ignore-errors (asdf:system-description (asdf:find-system system)))
+           "System lacks description"))
        (release-name (short-description ql-release)))
     (list
      :system system

@@ -1,6 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchgit
+, fetchFromGitHub
 , click
 , watchdog
 , exifread
@@ -12,35 +12,47 @@
 , flask
 , pyopenssl
 , ndg-httpsclient
-, pkgs
+, pytest
+, pytestcov
+, pytest-mock
+, pytest-pylint
+, pytest-click
+, isPy27
+, functools32
 }:
 
 buildPythonPackage rec {
   pname = "lektor";
-  version = "2.3";
+  version = "3.1.3";
 
-  src = fetchgit {
-    url = "https://github.com/lektor/lektor";
-    rev = "refs/tags/${version}";
-    sha256 = "1n0ylh1sbpvi9li3g6a7j7m28njfibn10y6s2gayjxwm6fpphqxy";
+  src = fetchFromGitHub {
+    owner = "lektor";
+    repo = "lektor";
+    rev = version;
+    sha256 = "16qw68rz5q77w84lwyhjpfd3bm4mfrhcjrnxwwnz3vmi610h68hx";
   };
 
-  buildInputs = [ pkgs.glibcLocales ];
   propagatedBuildInputs = [
     click watchdog exifread requests mistune inifile Babel jinja2
     flask pyopenssl ndg-httpsclient
+  ] ++ lib.optionals isPy27 [ functools32 ];
+
+  checkInputs = [
+    pytest pytestcov pytest-mock pytest-pylint pytest-click
   ];
 
-  LC_ALL="en_US.UTF-8";
+  checkPhase = ''
+    pytest
+  '';
 
-  # No tests included in archive
+  # many errors -- tests assume inside of git repo, linting errors 13/317 fail
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A static content management system";
     homepage    = "https://www.getlektor.com/";
     license     = licenses.bsd0;
-    maintainers = with maintainers; [ vozz ];
+    maintainers = with maintainers; [ vozz costrouc ];
   };
 
 }

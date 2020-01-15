@@ -2,7 +2,7 @@
 
 # BLCR version 0.8.6 should works with linux kernel up to version 3.17.x
 
-assert builtins.compareVersions "3.18" kernel.version == 1;
+assert stdenv.lib.versionOlder "3.18" kernel.version;
 
 stdenv.mkDerivation {
   name = "blcr_${kernel.version}-0.8.6pre4";

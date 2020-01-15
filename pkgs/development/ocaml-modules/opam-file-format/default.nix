@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ocaml";
     repo = "opam-file-format";
-    rev = "${version}";
+    rev = version;
     sha256 = "0fqb99asnair0043hhc8r158d6krv5nzvymd0xwycr5y72yrp0hv";
   };
 

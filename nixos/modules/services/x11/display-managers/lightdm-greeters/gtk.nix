@@ -18,9 +18,10 @@ let
   # The default greeter provided with this expression is the GTK greeter.
   # Again, we need a few things in the environment for the greeter to run with
   # fonts/icons.
-  wrappedGtkGreeter = pkgs.runCommand "lightdm-gtk-greeter"
-    { buildInputs = [ pkgs.makeWrapper ]; }
-    ''
+  wrappedGtkGreeter = pkgs.runCommand "lightdm-gtk-greeter" {
+      buildInputs = [ pkgs.makeWrapper ];
+      preferLocalBuild = true;
+    } ''
       # This wrapper ensures that we actually get themes
       makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
         $out/greeter \
@@ -95,8 +96,8 @@ in
 
         package = mkOption {
           type = types.package;
-          default = pkgs.gnome3.defaultIconTheme;
-          defaultText = "pkgs.gnome3.defaultIconTheme";
+          default = pkgs.gnome3.adwaita-icon-theme;
+          defaultText = "pkgs.gnome3.adwaita-icon-theme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';
@@ -115,8 +116,8 @@ in
       cursorTheme = {
 
         package = mkOption {
-          default = pkgs.gnome3.defaultIconTheme;
-          defaultText = "pkgs.gnome3.defaultIconTheme";
+          default = pkgs.gnome3.adwaita-icon-theme;
+          defaultText = "pkgs.gnome3.adwaita-icon-theme";
           description = ''
             The package path that contains the cursor theme given in the name option.
           '';

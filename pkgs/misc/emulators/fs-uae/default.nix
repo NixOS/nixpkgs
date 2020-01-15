@@ -4,11 +4,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "fs-uae-${version}";
+  pname = "fs-uae";
   version = "2.8.4";
 
   src = fetchurl {
-    url = "https://fs-uae.net/fs-uae/stable/${version}/${name}.tar.gz";
+    url = "https://fs-uae.net/fs-uae/stable/${version}/${pname}-${version}.tar.gz";
     sha256 = "19ccb3gbpjwwazqc9pyin3jicjl27m2gyvy5bb5zysq0mxpzassj";
   };
 

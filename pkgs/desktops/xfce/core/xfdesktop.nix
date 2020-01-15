@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://www.xfce.org/projects/xfdesktop;
+    homepage = https://www.xfce.org/projects/xfdesktop;
     description = "Xfce desktop manager";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;

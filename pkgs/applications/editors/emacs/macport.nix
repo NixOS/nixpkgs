@@ -1,22 +1,22 @@
 { stdenv, fetchurl, ncurses, pkgconfig, texinfo, libxml2, gnutls, gettext, autoconf, automake
-, cf-private, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
+, AppKit, Carbon, Cocoa, IOKit, OSAKit, Quartz, QuartzCore, WebKit
 , ImageCaptureCore, GSS, ImageIO # These may be optional
 }:
 
 stdenv.mkDerivation rec {
-  emacsVersion = "26.1";
+  emacsVersion = "26.3";
   emacsName = "emacs-${emacsVersion}";
-  macportVersion = "7.4";
+  macportVersion = "7.7";
   name = "emacs-mac-${emacsVersion}-${macportVersion}";
 
   src = fetchurl {
     url = "mirror://gnu/emacs/${emacsName}.tar.xz";
-    sha256 = "0b6k1wq44rc8gkvxhi1bbjxbz3cwg29qbq8mklq2az6p1hjgrx0w";
+    sha256 = "119ldpk7sgn9jlpyngv5y4z3i7bb8q3xp4p0qqi7i5nq39syd42d";
   };
 
   macportSrc = fetchurl {
     url = "ftp://ftp.math.s.chiba-u.ac.jp/emacs/${emacsName}-mac-${macportVersion}.tar.gz";
-    sha256 = "1xl3rfqw1f3jil20xf6iy0f1hdk9adj8rnv7xhcjq4pymj4w8ka6";
+    sha256 = "18jadknm47ymbl7skrgc7y8xsdldcbgnlfl7qpgzm1ym8d92as6j";
   };
 
   hiresSrc = fetchurl {
@@ -33,8 +33,6 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses libxml2 gnutls texinfo gettext
     AppKit Carbon Cocoa IOKit OSAKit Quartz QuartzCore WebKit
     ImageCaptureCore GSS ImageIO   # may be optional
-    # Needed for CFNotificationCenterAddObserver symbols.
-    cf-private
   ];
 
   postUnpack = ''
@@ -68,7 +66,7 @@ stdenv.mkDerivation rec {
     "--enable-mac-app=$$out/Applications"
   ];
 
-  CFLAGS = "-O3 -DMAC_OS_X_VERSION_MAX_ALLOWED=MAC_OS_X_VERSION_10_10 -DMAC_OS_X_VERSION_MIN_REQUIRED=MAC_OS_X_VERSION_10_10";
+  CFLAGS = "-O3";
   LDFLAGS = "-O3 -L${ncurses.out}/lib";
 
   postInstall = ''

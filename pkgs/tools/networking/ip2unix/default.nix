@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ip2unix-${version}";
-  version = "2.0.0";
+  pname = "ip2unix";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "nixcloud";
     repo = "ip2unix";
     rev = "v${version}";
-    sha256 = "0xxwx1ip5jhkq93b91gcqd1i4njlvl9c4vjzijbdhjrrzz971iwk";
+    sha256 = "1hbc7csicgza1w43aq1q189w8gzwkc2v5mxpnhaiwggwsa5vvkl0";
   };
 
   nativeBuildInputs = [

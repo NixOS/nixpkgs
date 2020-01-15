@@ -22,4 +22,5 @@ stdenv.mkDerivation ({
     eval "$postInstall"
   '';
   preferLocalBuild = true;
+  allowSubstitutes = false;
 } // args)

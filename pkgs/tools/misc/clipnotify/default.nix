@@ -1,6 +1,6 @@
 { libX11, libXfixes, stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
-  name = "clipnotify-${version}";
+  pname = "clipnotify";
   version = "git-2018-02-20";
 
   src = fetchFromGitHub {

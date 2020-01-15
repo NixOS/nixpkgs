@@ -1,32 +1,28 @@
-{ fetchurl, stdenv, pkgconfig, gnome3, intltool, gobject-introspection, upower, cairo
+{ fetchurl, fetchpatch, substituteAll, stdenv, pkgconfig, gnome3, gettext, gobject-introspection, upower, cairo
 , pango, cogl, clutter, libstartup_notification, zenity, libcanberra-gtk3
-, libtool, makeWrapper, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
-, pipewire, libgudev, libwacom, xwayland, autoreconfHook }:
+, ninja, xkeyboard_config, libxkbfile, libxkbcommon, libXtst, libinput
+, gsettings-desktop-schemas, glib, gtk3, gnome-desktop
+, geocode-glib, pipewire, libgudev, libwacom, xwayland, meson
+, gnome-settings-daemon
+, xorgserver
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  name = "mutter-${version}";
-  version = "3.30.2";
+  pname = "mutter";
+  version = "3.32.2";
+
+  outputs = [ "out" "dev" "man" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0qr3w480p31nbiad49213rj9rk6p9fl82a68pzznpz36p30dq96z";
+    url = "mirror://gnome/sources/mutter/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1h577i2ap7dpfy1jg101jvc6nzccc0csgvd55ahydlr8f94frcva";
   };
 
-  passthru = {
-    updateScript = gnome3.updateScript { packageName = "mutter"; attrPath = "gnome3.mutter"; };
-  };
-
-  configureFlags = [
-    "--with-x"
-    "--disable-static"
-    "--enable-remote-desktop"
-    "--enable-shape"
-    "--enable-sm"
-    "--enable-startup-notification"
-    "--enable-xsync"
-    "--enable-verbose-mode"
-    "--with-libcanberra"
-    "--with-xwayland-path=${xwayland}/bin/Xwayland"
+  mesonFlags = [
+    "-Dxwayland-path=${xwayland}/bin/Xwayland"
+    "-Dinstalled_tests=false" # TODO: enable these
   ];
 
   propagatedBuildInputs = [
@@ -34,22 +30,56 @@ stdenv.mkDerivation rec {
     libXtst
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig intltool libtool makeWrapper ];
-
-  buildInputs = with gnome3; [
-    glib gobject-introspection gtk gsettings-desktop-schemas upower
-    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
-    gnome3.geocode-glib libinput libgudev libwacom
-    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
-    libxkbcommon pipewire
+  nativeBuildInputs = [
+    meson
+    pkgconfig
+    gettext
+    ninja
+    python3
+    # for cvt command
+    xorgserver
+    wrapGAppsHook
   ];
 
-  preFixup = ''
-    wrapProgram "$out/bin/mutter" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
+  buildInputs = [
+    glib gobject-introspection gtk3 gsettings-desktop-schemas upower
+    gnome-desktop cairo pango cogl clutter zenity libstartup_notification
+    geocode-glib libinput libgudev libwacom
+    libcanberra-gtk3 zenity xkeyboard_config libxkbfile
+    libxkbcommon pipewire xwayland
+    gnome-settings-daemon
+  ];
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit zenity;
+    })
+    # Fix a segmentation fault in dri_flush_front_buffer() upon
+    # suspend/resume. This change should be removed when Mutter
+    # is updated to 3.34.
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/mutter/commit/8307c0f7ab60760de53f764e6636893733543be8.diff";
+      sha256 = "1hzfva71xdqvvnx5smjsrjlgyrmc7dj94mpylkak0gwda5si0h2n";
+    })
+  ];
+
+  postPatch = ''
+    patchShebangs src/backends/native/gen-default-modes.py
+  '';
+
+  postInstall = ''
+    ${glib.dev}/bin/glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
   enableParallelBuilding = true;
+
+  passthru = {
+    updateScript = gnome3.updateScript {
+      packageName = "mutter";
+      attrPath = "gnome3.mutter";
+    };
+  };
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

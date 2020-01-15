@@ -12,7 +12,9 @@ python2.pkgs.buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ file intltool wrapGAppsHook gobject-introspection ];
-  buildInputs = [ gtk3 vte libnotify keybinder3 ];
+  buildInputs = [ gtk3 vte libnotify keybinder3
+    gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
+  ];
   propagatedBuildInputs = with python2.pkgs; [ pygobject3 psutil pycairo ];
 
   postPatch = ''
@@ -33,7 +35,7 @@ python2.pkgs.buildPythonApplication rec {
     '';
     homepage = https://gnometerminator.blogspot.no/p/introduction.html;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ bjornfor globin ];
+    maintainers = with maintainers; [ bjornfor ];
     platforms = platforms.linux;
   };
 }

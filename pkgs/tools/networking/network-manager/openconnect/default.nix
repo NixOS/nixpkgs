@@ -1,10 +1,10 @@
 { stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, networkmanager, libsecret
-, withGnome ? true, gnome3, kmod }:
+, gtk3, withGnome ? true, gnome3, kmod }:
 
 let
   pname   = "NetworkManager-openconnect";
   version = "1.2.4";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ openconnect networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gnome3.gtk libsecret ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret ];
 
   nativeBuildInputs = [ intltool pkgconfig ];
 

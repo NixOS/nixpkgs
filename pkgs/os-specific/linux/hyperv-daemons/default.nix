@@ -1,8 +1,8 @@
 { stdenv, lib, python, kernel, makeWrapper, writeText }:
 
 let
-  daemons = stdenv.mkDerivation rec {
-    name = "hyperv-daemons-bin-${version}";
+  daemons = stdenv.mkDerivation {
+    pname = "hyperv-daemons-bin";
     inherit (kernel) src version;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -54,8 +54,8 @@ let
       WantedBy=hyperv-daemons.target
     '';
 
-in stdenv.mkDerivation rec {
-  name    = "hyperv-daemons-${version}";
+in stdenv.mkDerivation {
+  pname = "hyperv-daemons";
 
   inherit (kernel) version;
 

@@ -23,7 +23,7 @@ let
         }
       ];
 
-    environment.etc."${connAuthFile}" = {
+    environment.etc.${connAuthFile} = {
       enable = true;
       text = "ThisIsALousySecret";
       mode = "0600";
@@ -47,7 +47,7 @@ let
       ];
 
     environment.systemPackages = with pkgs; [ beegfs ];
-    environment.etc."${connAuthFile}" = {
+    environment.etc.${connAuthFile} = {
       enable = true;
       text = "ThisIsALousySecret";
       mode = "0600";
@@ -57,7 +57,7 @@ let
     services.beegfs.default = {
       mgmtdHost = "mgmt";
       connAuthFile = "/etc/${connAuthFile}";
-      "${service}" = {
+      ${service} = {
         enable = true;
         storeDir = "/data";
       };

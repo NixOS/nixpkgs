@@ -1,37 +1,31 @@
 { mkDerivation, lib, fetchFromGitHub, cmake, antlr
-, qtbase, qttools, qscintilla, sqlite }:
+, qtbase, qttools, sqlite }:
 
 mkDerivation rec {
-  version = "3.10.1";
-  name = "sqlitebrowser-${version}";
+  version = "3.11.2";
+  pname = "sqlitebrowser";
 
   src = fetchFromGitHub {
-    repo   = "sqlitebrowser";
-    owner  = "sqlitebrowser";
+    repo   = pname;
+    owner  = pname;
     rev    = "v${version}";
-    sha256 = "1brzam8yv6sbdmbqsp7vglhd6wlx49g2ap8llr271zrkld4k3kar";
+    sha256 = "0ydd5fg76d5d23byac1f7f8mzx3brmd0cnnkd58qpmlzi7p9hcvx";
   };
 
-  buildInputs = [ qtbase qscintilla sqlite ];
+  buildInputs = [ qtbase sqlite ];
 
   nativeBuildInputs = [ cmake antlr qttools ];
+
+  # Use internal `qscintilla` rather than our package to fix the build
+  # (https://github.com/sqlitebrowser/sqlitebrowser/issues/1348#issuecomment-374170936).
+  # This can probably be removed when https://github.com/NixOS/nixpkgs/pull/56034 is merged.
+  cmakeFlags = [ "-DFORCE_INTERNAL_QSCINTILLA=ON" ];
 
   NIX_LDFLAGS = [
     "-lQt5PrintSupport"
   ];
 
   enableParallelBuilding = true;
-
-  # We have to patch out Test and PrintSupport to make this work with Qt 5.9
-  # It can go when the application supports 5.9
-  postPatch = ''
-    substituteInPlace CMakeLists.txt \
-      --replace Test         "" \
-      --replace PrintSupport ""
-
-    substituteInPlace libs/qcustomplot-source/CMakeLists.txt \
-      --replace PrintSupport ""
-  '';
 
   meta = with lib; {
     description = "DB Browser for SQLite";

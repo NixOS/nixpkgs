@@ -1,6 +1,7 @@
 { buildPythonPackage, fetchPypi, isPy3k
 , six, jaraco_logging, jaraco_text, jaraco_stream, pytz, jaraco_itertools
-, setuptools_scm }:
+, setuptools_scm, jaraco_collections
+}:
 
 buildPythonPackage rec {
   pname = "irc";
@@ -23,5 +24,6 @@ buildPythonPackage rec {
     jaraco_stream
     pytz
     jaraco_itertools
+    jaraco_collections
   ];
 }

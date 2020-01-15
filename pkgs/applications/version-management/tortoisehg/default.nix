@@ -1,13 +1,30 @@
-{lib, fetchurl, mercurial, python2Packages}:
+{ lib, fetchurl, python2Packages
+, mercurial
+}@args:
+let
+  tortoisehgSrc = fetchurl rec {
+    meta.name = "tortoisehg-${meta.version}";
+    meta.version = "5.0.2";
+    url = "https://bitbucket.org/tortoisehg/targz/downloads/${meta.name}.tar.gz";
+    sha256 = "1fkawx4ymaacah2wpv2w7rxmv1mx08mg4x4r4fxh41jz1njjb8sz";
+  };
 
-python2Packages.buildPythonApplication rec {
-    name = "tortoisehg-${version}";
-    version = "4.8.2";
+  mercurial =
+    if args.mercurial.meta.version == tortoisehgSrc.meta.version
+      then args.mercurial
+      else args.mercurial.override {
+        mercurialSrc = fetchurl rec {
+          meta.name = "mercurial-${meta.version}";
+          meta.version = tortoisehgSrc.meta.version;
+          url = "https://mercurial-scm.org/release/${meta.name}.tar.gz";
+          sha256 = "1y60hfc8gh4ha9sw650qs7hndqmvbn0qxpmqwpn4q18z5xwm1f19";
+        };
+      };
 
-    src = fetchurl {
-      url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "02av8k241rn7b68g4kl22s7jqmlq545caah1a5rvbgy41y7zzjvh";
-    };
+in python2Packages.buildPythonApplication {
+
+    inherit (tortoisehgSrc.meta) name version;
+    src = tortoisehgSrc;
 
     pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
 
@@ -28,9 +45,11 @@ python2Packages.buildPythonApplication rec {
       $out/bin/thg version
     '';
 
+    passthru.mercurial = mercurial;
+
     meta = {
       description = "Qt based graphical tool for working with Mercurial";
-      homepage = http://tortoisehg.bitbucket.org/;
+      homepage = https://tortoisehg.bitbucket.io/;
       license = lib.licenses.gpl2;
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ danbst ];

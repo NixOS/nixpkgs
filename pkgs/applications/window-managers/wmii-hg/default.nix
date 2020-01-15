@@ -4,7 +4,7 @@
 stdenv.mkDerivation rec {
   rev = "2823";
   version = "hg-2012-12-09";
-  name = "wmii-${version}";
+  pname = "wmii";
 
   src = fetchurl {
     url = https://storage.googleapis.com/google-code-archive-source/v2/code.google.com/wmii/source-archive.zip;

@@ -6,8 +6,9 @@
   }
 }:
 
-stdenv.mkDerivation rec {
-  name = "sphinxsearch-${version}";
+stdenv.mkDerivation {
+  pname = "sphinxsearch";
+  inherit version;
   src = mainSrc;
 
   configureFlags = [

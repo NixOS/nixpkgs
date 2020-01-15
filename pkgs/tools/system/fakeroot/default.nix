@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.23";
-  name = "fakeroot-${version}";
+  pname = "fakeroot";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/f/fakeroot/fakeroot_${version}.orig.tar.xz";
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     ;
 
   postUnpack = ''
-    sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${name}/scripts/fakeroot.in
+    sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${pname}-${version}/scripts/fakeroot.in
   '';
 
   meta = {

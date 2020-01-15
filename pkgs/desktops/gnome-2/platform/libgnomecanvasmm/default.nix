@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libgnomecanvas, gtkmm }:
+{ stdenv, fetchurl, pkgconfig, libgnomecanvas, gtkmm2 }:
 
 stdenv.mkDerivation {
   name = "libgnomecanvasmm-2.26.0";
@@ -9,5 +9,5 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libgnomecanvas gtkmm ];
+  buildInputs = [ libgnomecanvas gtkmm2 ];
 }

@@ -42,6 +42,8 @@ in
     configText = mkOption {
       default = "";
       example = ''
+        source-filter=''${pkgs.cgit}/lib/cgit/filters/syntax-highlighting.py
+        about-filter=''${pkgs.cgit}/lib/cgit/filters/about-formatting.sh
         cache-size=1000
         scan-path=/srv/git
       '';

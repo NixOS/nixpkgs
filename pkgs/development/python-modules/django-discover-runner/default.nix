@@ -19,7 +19,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = http://github.com/jezdez/django-discover-runner;
+    homepage = https://github.com/jezdez/django-discover-runner;
     description = "A Django test runner based on unittest2's test discovery";
     license = licenses.bsd0;
     maintainers = [ maintainers.costrouc ];

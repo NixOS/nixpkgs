@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "iprange-${version}";
+  pname = "iprange";
   version = "1.0.4";
 
   src = fetchurl {

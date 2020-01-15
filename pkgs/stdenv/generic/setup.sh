@@ -182,10 +182,8 @@ addToSearchPathWithCustomDelimiter() {
     fi
 }
 
-PATH_DELIMITER=':'
-
 addToSearchPath() {
-    addToSearchPathWithCustomDelimiter "${PATH_DELIMITER}" "$@"
+    addToSearchPathWithCustomDelimiter ":" "$@"
 }
 
 # Add $1/lib* into rpaths.
@@ -212,6 +210,18 @@ isELF() {
     read -r -n 4 -u "$fd" magic
     exec {fd}<&-
     if [ "$magic" = $'\177ELF' ]; then return 0; else return 1; fi
+}
+
+# Return success if the specified file is an ELF object
+# and its e_type is ET_EXEC (executable file)
+isELFExec() {
+    grep -ao -P '^\177ELF.{11}\x00\x02' "$1" >/dev/null
+}
+
+# Return success if the specified file is an ELF object
+# and its e_type is ET_DYN (shared object file)
+isELFDyn() {
+    grep -ao -P '^\177ELF.{11}\x00\x03' "$1" >/dev/null
 }
 
 # Return success if the specified file is a script (i.e. starts with
@@ -508,7 +518,7 @@ activatePackage() {
     fi
 
     if [[ "$hostOffset" -eq 0 && -d "$pkg/bin" ]]; then
-        addToSearchPath HOST_PATH "$pkg/bin"
+        addToSearchPath _HOST_PATH "$pkg/bin"
     fi
 
     if [[ -f "$pkg/nix-support/setup-hook" ]]; then
@@ -617,9 +627,14 @@ fi
 
 
 PATH="${_PATH-}${_PATH:+${PATH:+:}}$PATH"
+HOST_PATH="${_HOST_PATH-}${_HOST_PATH:+${HOST_PATH:+:}}$HOST_PATH"
 if (( "${NIX_DEBUG:-0}" >= 1 )); then
     echo "final path: $PATH"
+    echo "final host path: $HOST_PATH"
 fi
+
+unset _PATH
+unset _HOST_PATH
 
 
 # Make GNU Make produce nested output.
@@ -643,10 +658,13 @@ fi
 export NIX_BUILD_CORES
 
 
-# Prevent OpenSSL-based applications from using certificates in
-# /etc/ssl.
-# Leave it in shells for convenience.
-if [ -z "${SSL_CERT_FILE:-}" ] && [ -z "${IN_NIX_SHELL:-}" ]; then
+# Prevent SSL libraries from using certificates in /etc/ssl, unless set explicitly.
+# Leave it in impure shells for convenience.
+if [ -z "${NIX_SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
+  export NIX_SSL_CERT_FILE=/no-cert-file.crt
+fi
+# Another variant left for compatibility.
+if [ -z "${SSL_CERT_FILE:-}" ] && [ "${IN_NIX_SHELL:-}" != "impure" ]; then
   export SSL_CERT_FILE=/no-cert-file.crt
 fi
 
@@ -1277,6 +1295,8 @@ genericBuild() {
     fi
 
     for curPhase in $phases; do
+        if [[ "$curPhase" = unpackPhase && -n "${dontUnpack:-}" ]]; then continue; fi
+        if [[ "$curPhase" = configurePhase && -n "${dontConfigure:-}" ]]; then continue; fi
         if [[ "$curPhase" = buildPhase && -n "${dontBuild:-}" ]]; then continue; fi
         if [[ "$curPhase" = checkPhase && -z "${doCheck:-}" ]]; then continue; fi
         if [[ "$curPhase" = installPhase && -n "${dontInstall:-}" ]]; then continue; fi

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "rubymarshal";
-  version = "1.0.3";
+  version = "1.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "131lbc18s3rlmby2dpbvi4msz13gqw6xvx067mh4zcx9npygn9r2";
+    sha256 = "0gq344jlb9wkapzpxj7jqwjlc5ccdhhspkw6rfb1d0rammq6hpf6";
   };
 
   propagatedBuildInputs = [ hypothesis ];

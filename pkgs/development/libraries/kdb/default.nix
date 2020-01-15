@@ -6,12 +6,11 @@
 
 mkDerivation rec {
   pname = "kdb";
-  version = "3.1.0";
-  name = "${pname}-${version}";
+  version = "3.2.0";
 
   src = fetchurl {
-    url = "mirror://kde/stable/${pname}/src/${name}.tar.xz";
-    sha256 = "1wi9z7j0nr9wi6aqqkdcpnr38ixyxbv00sblya7pakdf96hlamhp";
+    url = "mirror://kde/stable/${pname}/src/${pname}-${version}.tar.xz";
+    sha256 = "0s909x34a56n3xwhqz27irl2gbzidax0685w2kf34f0liny872cg";
   };
 
   nativeBuildInputs = [ extra-cmake-modules ];

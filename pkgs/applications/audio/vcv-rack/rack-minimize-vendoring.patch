@@ -1,0 +1,14 @@
+diff -ru a/Makefile b/Makefile
+--- a/Makefile	1970-01-01 01:00:01.000000000 +0100
++++ b/Makefile	1970-01-01 01:00:01.000000000 +0100
+@@ -21,8 +21,8 @@
+ build/dep/osdialog/osdialog_gtk2.c.o: FLAGS += $(shell pkg-config --cflags gtk+-2.0)
+ 
+ 	LDFLAGS += -rdynamic \
+-		dep/lib/libglfw3.a dep/lib/libGLEW.a dep/lib/libjansson.a dep/lib/libspeexdsp.a dep/lib/libzip.a dep/lib/libz.a dep/lib/librtmidi.a dep/lib/librtaudio.a dep/lib/libcurl.a dep/lib/libssl.a dep/lib/libcrypto.a \
+-		-lpthread -lGL -ldl -lX11 -lasound -ljack \
++		-lGLEW -ljansson -lspeexdsp -lzip -lz -lrtmidi -lrtaudio -lcurl -lssl -lcrypto \
++		-lpthread -lGL -ldl -lX11 -lasound -ljack -lglfw \
+ 		$(shell pkg-config --libs gtk+-2.0)
+ 	TARGET := Rack
+ endif

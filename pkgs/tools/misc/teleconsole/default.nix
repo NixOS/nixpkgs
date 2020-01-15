@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "teleconsole-${version}";
+  pname = "teleconsole";
   version = "0.4.0";
 
   goPackagePath = "github.com/gravitational/teleconsole";

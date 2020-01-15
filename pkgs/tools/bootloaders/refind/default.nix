@@ -2,8 +2,9 @@
 
 let
   archids = {
-    "x86_64-linux" = { hostarch = "x86_64"; efiPlatform = "x64"; };
-    "i686-linux" = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
+    i686-linux = rec { hostarch = "ia32"; efiPlatform = hostarch; };
+    aarch64-linux = { hostarch = "aarch64"; efiPlatform = "aa64"; };
   };
 
   inherit
@@ -12,7 +13,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "refind-${version}";
+  pname = "refind";
   version = "0.11.4";
   srcName = "refind-src-${version}";
 
@@ -20,6 +21,10 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
     sha256 = "1bjd0dl77bc5k6g3kc7s8m57vpbg2zscph9qh84xll9rc10g3fir";
   };
+
+  patches = [
+    ./0001-toolchain.patch
+  ];
 
   buildInputs = [ gnu-efi ];
 
@@ -32,6 +37,7 @@ stdenv.mkDerivation rec {
       "GNUEFILIB=${gnu-efi}/lib"
       "EFICRT0=${gnu-efi}/lib"
       "HOSTARCH=${hostarch}"
+      "ARCH=${hostarch}"
     ];
 
   buildFlags = [ "gnuefi" "fs_gnuefi" ];
@@ -116,7 +122,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://refind.sourceforge.net/;
     maintainers = [ maintainers.AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
     license = licenses.gpl3Plus;
   };
 

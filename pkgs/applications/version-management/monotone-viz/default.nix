@@ -9,12 +9,12 @@ let graphviz_2_0 = import ./graphviz-2.0.nix {
     }; in
 stdenv.mkDerivation rec {
   version = "1.0.2";
-  name = "monotone-viz-${version}";
+  pname = "monotone-viz";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ocaml lablgtk libgnomecanvas glib graphviz_2_0 makeWrapper camlp4];
   src = fetchurl {
-    url = "http://oandrieu.nerim.net/monotone-viz/${name}-nolablgtk.tar.gz";
+    url = "http://oandrieu.nerim.net/monotone-viz/${pname}-${version}-nolablgtk.tar.gz";
     sha256 = "1l5x4xqz5g1aaqbc1x80mg0yzkiah9ma9k9mivmn08alkjlakkdk";
   };
 

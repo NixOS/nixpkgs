@@ -1,14 +1,16 @@
 { stdenv, fetchurl, openssl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "iperf-3.6";
+  name = "iperf-3.7";
 
   src = fetchurl {
     url = "https://downloads.es.net/pub/iperf/${name}.tar.gz";
-    sha256 = "0vllfmyqiy6nxgbagsx1zrs4pmfawyalzm5l1xcwqq64dpj52pfy";
+    sha256 = "033is7b5grfbiil98jxlz4ixp9shm44x6hy8flpsyz1i4h108inq";
   };
 
   buildInputs = [ openssl ];
+
+  outputs = [ "out" "man" ];
 
   patches = stdenv.lib.optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {
@@ -19,7 +21,8 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    ln -s iperf3 $out/bin/iperf
+    ln -s $out/bin/iperf3 $out/bin/iperf
+    ln -s $man/share/man/man1/iperf3.1 $man/share/man/man1/iperf.1
   '';
 
   meta = with stdenv.lib; {

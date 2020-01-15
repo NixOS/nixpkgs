@@ -14,11 +14,11 @@ assert stdenv.isDarwin -> !enableCredentialStorage;
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "webkitgtk-${version}";
+  pname = "webkitgtk";
   version = "2.4.11";
 
   meta = with stdenv.lib; {
-    description = "Web content rendering engine, GTK+ port";
+    description = "Web content rendering engine, GTK port";
     homepage = http://webkitgtk.org/;
     license = licenses.bsd2;
     platforms = with platforms; linux ++ darwin;
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   };
 
   src = fetchurl {
-    url = "https://webkitgtk.org/releases/${name}.tar.xz";
+    url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
     sha256 = "1xsvnvyvlywwyf6m9ainpsg87jkxjmd37q6zgz9cxb7v3c2ym2jq";
   };
 

@@ -23,7 +23,7 @@ let cfg = config.services.drbd; in
 
     services.drbd.config = mkOption {
       default = "";
-      type = types.string;
+      type = types.lines;
       description = ''
         Contents of the <filename>drbd.conf</filename> configuration file.
       '';

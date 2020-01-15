@@ -4,7 +4,7 @@
         version="5.0"
         xml:id="ch-development">
  <title>Development</title>
- <partintro>
+ <partintro xml:id="ch-development-intro">
   <para>
    This chapter describes how you can modify and extend NixOS.
   </para>

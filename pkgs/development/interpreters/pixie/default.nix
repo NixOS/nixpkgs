@@ -30,13 +30,13 @@ let
   bin-path = stdenv.lib.concatStringsSep ":"
                (map (p: "${p}/bin") [ gcc ]);
   build = {flags, target}: stdenv.mkDerivation rec {
-    name = "pixie-${version}";
+    pname = "pixie";
     version = "0-r${commit-count}-${variant}";
     nativeBuildInputs = [ makeWrapper pkgconfig ];
     buildInputs = libs;
     PYTHON = if buildWithPypy
       then "${pypy}/pypy-c/pypy-c"
-      else "${python2.interpreter}";
+      else python2.interpreter;
     unpackPhase = ''
       cp -R ${pixie-src} pixie-src
       mkdir pypy-src

@@ -1,20 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, libpthreadstubs, libpciaccess, valgrind-light }:
+{ stdenv, lib, fetchurl, pkgconfig, meson, ninja, libpthreadstubs, libpciaccess
+, withValgrind ? valgrind-light.meta.available, valgrind-light
+}:
 
 stdenv.mkDerivation rec {
-  name = "libdrm-2.4.96";
+  pname = "libdrm";
+  version = "2.4.99";
 
   src = fetchurl {
-    url = "https://dri.freedesktop.org/libdrm/${name}.tar.bz2";
-    sha256 = "14xkip83qgljjaahzq40qgl60j54q7k00la1hbf5kk5lgg7ilmhd";
+    url = "https://dri.freedesktop.org/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0pnsw4bmajzdbz8pk4wswdmw93shhympf2q9alhbnpfjgsf57gsd";
   };
 
   outputs = [ "out" "dev" "bin" ];
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libpthreadstubs libpciaccess valgrind-light ];
-    # libdrm as of 2.4.70 does not actually do anything with udev.
+  nativeBuildInputs = [ pkgconfig meson ninja ];
+  buildInputs = [ libpthreadstubs libpciaccess ]
+    ++ lib.optional withValgrind valgrind-light;
 
-  patches = stdenv.lib.optional stdenv.isDarwin ./libdrm-apple.patch;
+  patches = [ ./cross-build-nm-path.patch ];
 
   postPatch = ''
     for a in */*-symbol-check ; do
@@ -22,20 +25,21 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  preConfigure = stdenv.lib.optionalString stdenv.isDarwin
-    "echo : \\\${ac_cv_func_clock_gettime=\'yes\'} > config.cache";
+  mesonFlags = [
+    "-Dnm-path=${stdenv.cc.targetPrefix}nm"
+    "-Dinstall-test-programs=true"
+    "-Domap=true"
+  ] ++ lib.optionals (stdenv.isAarch32 || stdenv.isAarch64) [
+    "-Dtegra=true"
+    "-Detnaviv=true"
+  ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "-Dintel=false";
 
-  configureFlags = [ "--enable-install-test-programs" ]
-    ++ stdenv.lib.optionals (stdenv.isAarch32 || stdenv.isAarch64)
-      [ "--enable-tegra-experimental-api" "--enable-etnaviv-experimental-api" ]
-    ++ stdenv.lib.optional stdenv.isDarwin "-C"
-    ++ stdenv.lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-intel"
-    ;
+  enableParallelBuilding = true;
 
   meta = {
     homepage = https://dri.freedesktop.org/libdrm/;
     description = "Library for accessing the kernel's Direct Rendering Manager";
     license = "bsd";
-    platforms = stdenv.lib.platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

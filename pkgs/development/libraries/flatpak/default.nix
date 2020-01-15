@@ -1,18 +1,18 @@
 { stdenv, fetchurl, autoreconfHook, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43, docbook_xsl, which, libxml2
 , gobject-introspection, gtk-doc, intltool, libxslt, pkgconfig, xmlto, appstream-glib, substituteAll, glibcLocales, yacc, xdg-dbus-proxy, p11-kit
-, bubblewrap, bzip2, dbus, glib, gpgme, json-glib, libarchive, libcap, libseccomp, coreutils, gettext, python2, hicolor-icon-theme
-, libsoup, lzma, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking, wrapGAppsHook, gnome3 }:
+, bubblewrap, bzip2, dbus, glib, gpgme, json-glib, libarchive, libcap, libseccomp, coreutils, gettext, hicolor-icon-theme, fuse
+, libsoup, lzma, ostree, polkit, python3, systemd, xorg, valgrind, glib-networking, wrapGAppsHook, gnome3, gsettings-desktop-schemas, librsvg }:
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.1.3";
+  version = "1.4.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "12xqhszx50pmw2nx7n1pym7n47z95ddwwkyx35bfgmxsd9hjpmh2";
+    sha256 = "08nmpp26mgv0vp3mlwk97rnp0j7i108h4hr9nllja19sjxnrlygj";
   };
 
   patches = [
@@ -25,9 +25,15 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       p11 = p11-kit;
     })
+    (substituteAll {
+      src = ./bubblewrap-paths.patch;
+      inherit (builtins) storeDir;
+    })
     # patch taken from gtk_doc
     ./respect-xml-catalog-files-var.patch
     ./use-flatpak-from-path.patch
+    ./unset-env-vars.patch
+    ./validate-icon-pixbuf.patch
   ];
 
   nativeBuildInputs = [
@@ -37,8 +43,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     bubblewrap bzip2 dbus gnome3.dconf glib gpgme json-glib libarchive libcap libseccomp
-    libsoup lzma ostree polkit python3 systemd xorg.libXau
-    gnome3.gsettings-desktop-schemas glib-networking
+    libsoup lzma ostree polkit python3 systemd xorg.libXau fuse
+    gsettings-desktop-schemas glib-networking
+    librsvg # for flatpak-validate-icon
   ];
 
   checkInputs = [ valgrind ];

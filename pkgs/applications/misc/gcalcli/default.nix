@@ -5,31 +5,25 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "gcalcli";
-  version = "4.0.3";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner  = "insanum";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "15hpm7b09p5qnha0hpp0mgdl2pgsyq2sjcqihk3fsv7arngdbr5q";
+    sha256 = "1qlmslywm4dfimggly4p0ckn2gj165mq1p0wkry9jpb3sg1m5fdf";
   };
 
   postPatch = lib.optionalString stdenv.isLinux ''
-    substituteInPlace gcalcli/argparsers.py --replace \
-      "command = 'notify-send -u critical" \
-      "command = '${libnotify}/bin/notify-send -u critical"
+    substituteInPlace gcalcli/argparsers.py \
+      --replace "'notify-send" "'${libnotify}/bin/notify-send"
   '';
 
   propagatedBuildInputs = [
     dateutil gflags httplib2 parsedatetime six vobject
     google_api_python_client oauth2client uritemplate
+    libnotify
   ] ++ lib.optional (!isPy3k) futures;
-
-  postInstall = lib.optionalString stdenv.isLinux ''
-    substituteInPlace $out/bin/gcalcli --replace \
-      "command = 'notify-send -u critical -a gcalcli %s'" \
-      "command = '${libnotify}/bin/notify-send -i view-calendar-upcoming-events -u critical -a Calendar %s'"
-  '';
 
   # There are no tests as of 4.0.0a4
   doCheck = false;

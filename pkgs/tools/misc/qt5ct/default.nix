@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, qtbase, qttools, qmake }:
+{ mkDerivation, lib, fetchurl, qtbase, qttools, qmake }:
 
-let inherit (stdenv.lib) getDev; in
+let inherit (lib) getDev; in
 
-stdenv.mkDerivation rec {
-  name = "qt5ct-${version}";
-  version = "0.37";
+mkDerivation rec {
+  pname = "qt5ct";
+  version = "0.39";
 
   src = fetchurl {
-    url = "mirror://sourceforge/qt5ct/${name}.tar.bz2";
-    sha256 = "0n8csvbpislxjr2s1xi8r5a4q4bqn4kylcy2zws6w7z4m8pdzrny";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "069y6c17gfics8rz3rdsn2x2hb39m4qka08ygwpxa8gqppffqs9p";
   };
 
   nativeBuildInputs = [ qmake qttools ];
 
   buildInputs = [ qtbase ];
+
+  # Wayland needs to know the desktop file name in order to show the app name and icon.
+  # Patch has been upstreamed and can be removed in the future.
+  # See: https://sourceforge.net/p/qt5ct/code/549/
+  patches = [ ./wayland.patch ];
 
   qmakeFlags = [
     "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
@@ -25,7 +30,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Qt5 Configuration Tool";
     homepage = https://www.opendesktop.org/content/show.php?content=168066;
     platforms = platforms.linux;

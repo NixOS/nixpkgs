@@ -2,11 +2,11 @@
 
 pythonPackages.buildPythonApplication rec {
   version = "1.9.1";
-  name = "gmvault-${version}";
+  pname = "gmvault";
 
   src = fetchurl {
     url = "https://bitbucket.org/gaubert/gmvault-official-download/downloads/gmvault-v${version}-src.tar.gz";
-    name = "${name}.tar.bz";
+    name = "${pname}-${version}.tar.bz";
     sha256 = "0ffp8df3gdf6lf3pj75hzsmxmvmscppb6bjda58my1n4ppxp1rji";
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, acl, attr, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libisofs-${version}";
+  pname = "libisofs";
   version = "1.5.0";
 
   src = fetchurl {
-    url = "http://files.libburnia-project.org/releases/${name}.tar.gz";
+    url = "http://files.libburnia-project.org/releases/${pname}-${version}.tar.gz";
     sha256 = "001l3akf3wb6msl9man776w560iqyvsbwwzs7d7y7msx13irspys";
   };
 

@@ -3,12 +3,12 @@
 , wrapGAppsHook
 }:
 stdenv.mkDerivation rec {
-  name = "solvespace-2.3-20180906";
-  rev = "258545a334098cf25c1c9f4cd59b778dfe0b0d29";
+  name = "solvespace-2.3-20190501";
+  rev = "e7b75f19c34c923780db776592b47152650d8f22";
   src = fetchgit {
     url = https://github.com/solvespace/solvespace;
     inherit rev;
-    sha256 = "1wimh6l0zpk0vywcsd2minijjf6g550z8i3l8lpmfnl5przymc2v";
+    sha256 = "07k4mbzxf0dmzwdhjx5nc09y7rn1schkaypsw9kz0l7ppylprpp2";
     fetchSubmodules = true;
   };
 

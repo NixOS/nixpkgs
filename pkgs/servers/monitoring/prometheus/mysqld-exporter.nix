@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mysqld_exporter-${version}";
-  version = "0.10.0";
+  pname = "mysqld_exporter";
+  version = "0.11.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/prometheus/mysqld_exporter";
@@ -11,14 +11,14 @@ buildGoPackage rec {
     inherit rev;
     owner = "prometheus";
     repo = "mysqld_exporter";
-    sha256 = "1133bgyp5vljz2qvfh0qzq8h8bkc8vci3jnmbr633bh3jpaqm2py";
+    sha256 = "1684jf96dy5bs0y0689vlcw82lqw8kw2phlnp6pq1cq56fcwdxjn";
   };
 
   meta = with stdenv.lib; {
     description = "Prometheus exporter for MySQL server metrics";
     homepage = https://github.com/prometheus/mysqld_exporter;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley ];
+    maintainers = with maintainers; [ benley globin ];
     platforms = platforms.unix;
   };
 }

@@ -1,5 +1,6 @@
 { stdenv, fetchFromGitHub, writeScript, glibcLocales, diffPlugins
 , pythonPackages, imagemagick, gobject-introspection, gst_all_1
+, runtimeShell
 , fetchpatch
 
 # Attributes needed for tests of the external plugins
@@ -140,18 +141,21 @@ in pythonPackages.buildPythonApplication rec {
     ++ optional enableAlternatives  plugins.alternatives
     ++ optional enableCopyArtifacts plugins.copyartifacts;
 
-  buildInputs = with pythonPackages; [
-    beautifulsoup4
+  buildInputs = [
     imagemagick
-    mock
-    nose
-    rarfile
-    responses
   ] ++ (with gst_all_1; [
     gst-plugins-base
     gst-plugins-good
     gst-plugins-ugly
   ]);
+
+  checkInputs = with pythonPackages; [
+    beautifulsoup4
+    mock
+    nose
+    rarfile
+    responses
+  ];
 
   patches = [
     ./replaygain-default-bs1770gain.patch
@@ -212,9 +216,7 @@ in pythonPackages.buildPythonApplication rec {
     LOCALE_ARCHIVE=${assert stdenv.isLinux; glibcLocales}/lib/locale/locale-archive \
     BEETS_TEST_SHELL="${testShell}" \
     BASH_COMPLETION_SCRIPT="${completion}" \
-    HOME="$(mktemp -d)" \
-      # Exclude failing test https://github.com/beetbox/beets/issues/2652
-      nosetests -v --exclude=test_single_month_nonmatch_ --exclude=test_asciify_variable --exclude=test_asciify_character_expanding_to_slash
+    HOME="$(mktemp -d)" nosetests -v
 
     runHook postCheck
   '';
@@ -227,7 +229,7 @@ in pythonPackages.buildPythonApplication rec {
     tmphome="$(mktemp -d)"
 
     EDITOR="${writeScript "beetconfig.sh" ''
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cat > "$1" <<CFG
       plugins: ${concatStringsSep " " allEnabledPlugins}
       CFG

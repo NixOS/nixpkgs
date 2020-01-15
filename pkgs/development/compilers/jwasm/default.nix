@@ -2,8 +2,8 @@
 , cmake }:
 
 with stdenv.lib;
-stdenv.mkDerivation rec {
-  name = "jwasm-${version}";
+stdenv.mkDerivation {
+  pname = "jwasm";
   version = "git-2017-11-22";
 
   src = fetchFromGitHub {

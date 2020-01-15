@@ -4,7 +4,7 @@
 , pyusb
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "openant-unstable";
   version = "2017-02-11";
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/Tigge/openant";
     description = "ANT and ANT-FS Python Library";
     license = licenses.mit;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 
 }

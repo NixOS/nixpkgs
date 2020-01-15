@@ -1,5 +1,6 @@
-{ fetchurl, stdenv, pkgconfig, libgcrypt, libassuan, libksba
-, libiconv, npth, gettext, texinfo, pcsclite, sqlite
+{ fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
+, libgpgerror, libiconv, npth, gettext, texinfo, pcsclite, sqlite
+, buildPackages
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
@@ -13,15 +14,16 @@ with stdenv.lib;
 assert guiSupport -> pinentry != null;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-${version}";
+  pname = "gnupg";
 
-  version = "2.2.12";
+  version = "2.2.17";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "1jw282iy27j1qygym52aa44zxy7ly4bdadhd628hwr4q9j5hy0yv";
+    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    sha256 = "056mgy09lvsi03531a437qj58la1j2x1y1scvfi53diris3658mg";
   };
 
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     libgcrypt libassuan libksba libiconv npth gettext texinfo
@@ -30,13 +32,23 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-libusb-include-path.patch
+    ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
   ];
-  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
+  postPatch = ''
+    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
+        configure doc/dirmngr.texi doc/gnupg.info-1
+  '' + stdenv.lib.optionalString stdenv.isLinux ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
   pinentryBinaryPath = pinentry.binaryPath or "bin/pinentry";
-  configureFlags = optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
+  configureFlags = [
+    "--with-libgpg-error-prefix=${libgpgerror.dev}"
+    "--with-libgcrypt-prefix=${libgcrypt.dev}"
+    "--with-libassuan-prefix=${libassuan.dev}"
+    "--with-ksba-prefix=${libksba.dev}"
+    "--with-npth-prefix=${npth}"
+  ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
   postInstall = ''
     mkdir -p $out/lib/systemd/user

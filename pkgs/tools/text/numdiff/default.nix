@@ -2,7 +2,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "numdiff-${version}";
+  pname = "numdiff";
   version = "5.9.0";
 
   src = fetchurl {

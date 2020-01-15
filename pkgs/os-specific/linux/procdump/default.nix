@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, bash, coreutils, gdb, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "procdump-${version}";
+  pname = "procdump";
   version = "1.0.1";
 
   src = fetchFromGitHub {

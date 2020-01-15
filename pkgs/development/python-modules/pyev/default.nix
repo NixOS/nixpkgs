@@ -3,10 +3,9 @@
 buildPythonPackage rec {
   pname = "pyev";
   version = "0.9.0";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/p/pyev/${name}.tar.gz";
+    url = "mirror://pypi/p/pyev/${pname}-${version}.tar.gz";
     sha256 = "0rf603lc0s6zpa1nb25vhd8g4y337wg2wyz56i0agsdh7jchl0sx";
   };
 

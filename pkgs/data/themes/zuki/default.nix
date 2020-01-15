@@ -1,24 +1,21 @@
-{ stdenv, fetchFromGitHub, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, meson, ninja, sassc, gdk-pixbuf, librsvg, gtk_engines, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "zuki-themes";
-  version = "3.30-1";
+  version = "3.32-4";
 
   src = fetchFromGitHub {
     owner = "lassekongo83";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d7i0jhjiarqnwkc1k505bw8r9bvbwk3x8yzqmc3vnwcd7mr3m9x";
+    sha256 = "0kqhk9qy5hwsd6g0bmq2dg6yj9gbv7l514ripsfiqyllmf4h818h";
   };
 
-  buildInputs = [ gdk_pixbuf librsvg ];
+  nativeBuildInputs = [ meson ninja sassc ];
+
+  buildInputs = [ gdk-pixbuf librsvg gtk_engines ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
-
-  installPhase = ''
-    install -dm 755 $out/share/themes
-    cp -a Zuki* $out/share/themes/
-  '';
 
   meta = with stdenv.lib; {
     description = "Themes for GTK3, gnome-shell and more";

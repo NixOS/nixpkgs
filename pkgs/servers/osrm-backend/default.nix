@@ -1,7 +1,7 @@
 {stdenv, fetchFromGitHub, cmake, pkgconfig, bzip2, libxml2, libzip, boost, lua, luabind, tbb, expat}:
 
 stdenv.mkDerivation rec {
-  name = "osrm-backend-${version}";
+  pname = "osrm-backend";
   version = "5.22.0";
 
   src = fetchFromGitHub {

@@ -12,7 +12,8 @@ neovim:
 
 let
   wrapper = {
-      withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
+      extraMakeWrapperArgs ? ""
+    , withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
     , withNodeJs? false
     , withRuby ? true
@@ -99,7 +100,7 @@ let
         # Only display the log on error since it will contain a few normally
         # irrelevant messages.
         if ! $out/bin/nvim \
-          -u ${vimUtils.vimrcFile (configure // { customRC = ""; })} \
+          -u ${vimUtils.vimrcFile (configure // { customRC = ""; beforePlugins = ''filetype indent plugin on | syn on''; })} \
           -i NONE -n \
           -E -V1rplugins.log -s \
           +UpdateRemotePlugins +quit! > outfile 2>&1; then
@@ -113,7 +114,7 @@ let
         # https://github.com/neovim/neovim/issues/9413
         wrapProgram $out/bin/nvim \
           --set NVIM_SYSTEM_RPLUGIN_MANIFEST $out/rplugin.vim \
-          --add-flags "-u ${vimUtils.vimrcFile configure}"
+          --add-flags "-u ${vimUtils.vimrcFile configure}" ${extraMakeWrapperArgs}
       '';
 
     preferLocalBuild = true;

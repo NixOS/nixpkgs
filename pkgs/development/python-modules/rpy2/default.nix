@@ -58,6 +58,10 @@ buildPythonPackage rec {
       tidyr
     ]) ++ extraRPackages ++ rWrapper.recommendedPackages;
 
+    nativeBuildInputs = [
+      R # needed at setup time to detect R_HOME (alternatively set R_HOME explicitly)
+    ];
+
     patches = [
       # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
       # This patch sets R_LIBS_SITE when rpy2 is imported.
@@ -98,7 +102,7 @@ buildPythonPackage rec {
       homepage = http://rpy.sourceforge.net/rpy2;
       description = "Python interface to R";
       license = lib.licenses.gpl2Plus;
-      platforms = lib.platforms.linux;
+      platforms = lib.platforms.unix;
       maintainers = with lib.maintainers; [ joelmo ];
     };
   }

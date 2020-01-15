@@ -1,37 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy37, fetchpatch, iana-etc, libredirect,
-  pytest, case, kombu, billiard, pytz, anyjson, amqp, eventlet
+{ stdenv, buildPythonPackage, fetchPypi, iana-etc, libredirect
+, case, pytest, boto3, moto, kombu, billiard, pytz, anyjson, amqp, eventlet
 }:
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y66rz7z8dfcgs3s0qxmdddlaq57bzbgxgfz896nbp14grkv9nkp";
+    sha256 = "4c4532aa683f170f40bd76f928b70bc06ff171a959e06e71bf35f2f9d6031ef9";
   };
 
-  # See https://github.com/celery/celery/issues/4500
-  # TODO: Remove once upgraded to 4.3
-  disabled = isPy37;
-
-  patches = [
-    # Skip test_RedisBackend.test_timeouts_in_url_coerced
-    # See https://github.com/celery/celery/pull/4847
-    (fetchpatch {
-      url = https://github.com/celery/celery/commit/b2668607c909c61becd151905b4525190c19ff4a.patch;
-      sha256 = "11w0z2ycyh8kccj4y69zb7bxppiipcwwigg6jn1q9yrcsvz170jq";
-    })
-    # Allow usage of a newer pytest version
-    # See https://github.com/celery/celery/pull/4912
-    (fetchpatch {
-      url = https://github.com/celery/celery/commit/16f56fe6f84cac9f92affac3ad06a1f168a19798.patch;
-      sha256 = "0vz68rl32m34k51nhs898jcfdbj5m7cszzxx0w0j3j1fhn1wq594";
-    })
-  ];
-
   postPatch = ''
-    substituteInPlace requirements/test.txt --replace ",<3.9" ""
+    substituteInPlace requirements/test.txt \
+      --replace "moto==1.3.7" moto \
+      --replace "pytest>=4.3.1,<4.4.0" pytest
   '';
 
   # make /etc/protocols accessible to fix socket.getprotobyname('tcp') in sandbox
@@ -43,7 +26,7 @@ buildPythonPackage rec {
     unset NIX_REDIRECTS LD_PRELOAD
   '';
 
-  checkInputs = [ pytest case ];
+  checkInputs = [ case pytest boto3 moto ];
   propagatedBuildInputs = [ kombu billiard pytz anyjson amqp eventlet ];
 
   meta = with stdenv.lib; {

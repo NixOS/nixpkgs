@@ -7,7 +7,8 @@ let
 
 in stdenv.mkDerivation {
 
-  name = "welle-io-${version}";
+  pname = "welle-io";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "AlbrechtL";

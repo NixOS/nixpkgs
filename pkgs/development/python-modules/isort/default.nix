@@ -1,22 +1,24 @@
-{ lib, buildPythonPackage, fetchPypi, isPy27, futures, mock, pytest }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, futures, backports_functools_lru_cache, mock, pytest }:
 
-buildPythonPackage rec {
+let
+  skipTests = [ "test_requirements_finder" "test_pipfile_finder" ] ++ lib.optional isPy27 "test_standard_library_deprecates_user_issue_778";
+  testOpts = lib.concatMapStringsSep " " (t: "--deselect test_isort.py::${t}") skipTests;
+in buildPythonPackage rec {
   pname = "isort";
-  version = "4.3.4";
+  version = "4.3.20"; # Note 4.x is the last version that supports Python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1y0yfv56cqyh9wyg7kxxv9y5wmfgcq18n7a49mp7xmzka2bhxi5r";
+    sha256 = "c40744b6bc5162bbb39c1257fe298b7a393861d50978b565f3ccd9cb9de0182a";
   };
 
-  propagatedBuildInputs = lib.optional isPy27 futures;
+  propagatedBuildInputs = lib.optionals isPy27 [ futures backports_functools_lru_cache ];
 
   checkInputs = [ mock pytest ];
 
+  # isort excludes paths that contain /build/, so test fixtures don't work with TMPDIR=/build/
   checkPhase = ''
-    py.test test_isort.py -k "not test_long_line_comments \
-                          and not test_import_case_produces_inconsistent_results_issue_472 \
-                          and not test_no_extra_lines_issue_557"
+    PATH=$out/bin:$PATH TMPDIR=/tmp/ pytest ${testOpts}
   '';
 
   meta = with lib; {

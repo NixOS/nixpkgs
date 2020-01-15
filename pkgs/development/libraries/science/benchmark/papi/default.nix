@@ -2,16 +2,16 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "5.6.0";
-  name = "papi-${version}";
+  pname = "papi";
 
   src = fetchurl {
     url = "https://bitbucket.org/icl/papi/get/papi-5-6-0-t.tar.gz";
     sha256 = "13mngf9kl0y2wfxqvkad0smdaag7k8fvw82b4312gx62nwhc1i6r";
   };
 
-  buildInputs = [ stdenv ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" ];
 
   preConfigure = ''
     cd src

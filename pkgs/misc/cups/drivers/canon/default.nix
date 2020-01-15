@@ -13,7 +13,7 @@ let
 in
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "canon-cups-ufr2-2.90";
   src = src_canon;
 

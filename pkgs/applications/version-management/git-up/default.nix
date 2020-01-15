@@ -2,10 +2,10 @@
 
 python2Packages.buildPythonApplication rec {
   version = "1.4.2";
-  name = "git-up-${version}";
+  pname = "git-up";
 
   src = fetchurl {
-    url = "mirror://pypi/g/git-up/${name}.zip";
+    url = "mirror://pypi/g/git-up/${pname}-${version}.zip";
     sha256 = "121ia5gyjy7js6fbsx9z98j2qpq7rzwpsj8gnfvsbz2d69g0vl7q";
   };
 

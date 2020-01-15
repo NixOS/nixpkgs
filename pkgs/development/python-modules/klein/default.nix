@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchPypi, fetchpatch
 , six, twisted, werkzeug, incremental
 , mock }:
 
@@ -11,9 +11,17 @@ buildPythonPackage rec {
     sha256 = "30aaf0d78a987d5dbfe0968a07367ad0c73e02823cc8eef4c54f80ab848370d0";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "tests-expect-werkzeug-308.patch";
+      url = https://github.com/twisted/klein/commit/e2a5835b83e37a2bc5faefbfe1890c529b18b9c6.patch;
+      sha256 = "03j0bj3l3hnf7f96rb27i4bzy1iih79ll5bcah7gybdi1wpznh8w";
+    })
+  ];
+
   propagatedBuildInputs = [ six twisted werkzeug incremental ];
 
-  checkInputs = [ mock ];
+  checkInputs = [ mock twisted ];
 
   checkPhase = ''
     trial klein

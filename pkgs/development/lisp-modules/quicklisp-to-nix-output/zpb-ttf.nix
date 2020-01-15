@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''zpb-ttf'';
   version = ''1.0.3'';
 

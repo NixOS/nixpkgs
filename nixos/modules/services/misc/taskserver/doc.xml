@@ -105,7 +105,7 @@
    Now in order to import the <literal>alice</literal> user to another machine
    <literal>alicebox</literal>, all we need to do is something like this:
 <screen>
-$ ssh server nixos-taskserver user export my-company alice | sh
+<prompt>$ </prompt>ssh server nixos-taskserver user export my-company alice | sh
 </screen>
    Of course, if no SSH daemon is available on the server you can also copy
    &amp; paste it directly into a shell.

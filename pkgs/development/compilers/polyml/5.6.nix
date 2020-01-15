@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "polyml-${version}";
+  pname = "polyml";
+  inherit version;
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++

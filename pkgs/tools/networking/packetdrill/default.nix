@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bison, flex }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.0";
-  name = "packetdrill-${version}";
+  pname = "packetdrill";
   src = fetchFromGitHub {
     owner = "google";
     repo = "packetdrill";

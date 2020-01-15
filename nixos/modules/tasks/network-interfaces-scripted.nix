@@ -103,16 +103,18 @@ let
 
             script =
               ''
-                # Set the static DNS configuration, if given.
-                ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
-                ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
-                  domain ${cfg.domain}
+                ${optionalString config.networking.resolvconf.enable ''
+                  # Set the static DNS configuration, if given.
+                  ${pkgs.openresolv}/sbin/resolvconf -m 1 -a static <<EOF
+                  ${optionalString (cfg.nameservers != [] && cfg.domain != null) ''
+                    domain ${cfg.domain}
+                  ''}
+                  ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
+                  ${flip concatMapStrings cfg.nameservers (ns: ''
+                    nameserver ${ns}
+                  '')}
+                  EOF
                 ''}
-                ${optionalString (cfg.search != []) ("search " + concatStringsSep " " cfg.search)}
-                ${flip concatMapStrings cfg.nameservers (ns: ''
-                  nameserver ${ns}
-                '')}
-                EOF
 
                 # Set the default gateway.
                 ${optionalString (cfg.defaultGateway != null && cfg.defaultGateway.address != "") ''
@@ -496,8 +498,8 @@ let
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {
-           "network-setup" = networkSetup;
-           "network-local-commands" = networkLocalCommands;
+           network-setup = networkSetup;
+           network-local-commands = networkLocalCommands;
          };
 
     services.udev.extraRules =

@@ -1,12 +1,11 @@
 { stdenv, fetchurl, htslib, zlib, bzip2, lzma, curl, perl, python, bash }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "bcftools";
   version = "1.9";
 
   src = fetchurl {
-    url = "https://github.com/samtools/bcftools/releases/download/${version}/${name}.tar.bz2";
+    url = "https://github.com/samtools/bcftools/releases/download/${version}/${pname}-${version}.tar.bz2";
     sha256 = "1j3h638i8kgihzyrlnpj82xg1b23sijibys9hvwari3fy7kd0dkg";
   };
 

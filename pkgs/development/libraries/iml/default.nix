@@ -1,6 +1,6 @@
 {stdenv, autoreconfHook, fetchurl, gmp, openblas}:
 stdenv.mkDerivation rec {
-  name = "iml-${version}";
+  pname = "iml";
   version = "1.0.5";
   src = fetchurl {
     url = "http://www.cs.uwaterloo.ca/~astorjoh/iml-${version}.tar.bz2";

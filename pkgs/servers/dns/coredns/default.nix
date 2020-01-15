@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "coredns-${version}";
+  pname = "coredns";
   version = "1.3.1";
 
   goPackagePath = "github.com/coredns/coredns";

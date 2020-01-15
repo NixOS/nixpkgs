@@ -4,7 +4,7 @@
   }:
 stdenv.mkDerivation rec{
   version = "0.0pre20160820";
-  name = "torch-${version}";
+  pname = "torch";
   buildInputs = [
     luajit openblas imagemagick cmake curl fftw gnuplot unzip qt4
     libjpeg zeromq3 ncurses openssl libpng readline pkgconfig

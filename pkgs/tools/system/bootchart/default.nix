@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.14.8";
-  name = "bootchart-${version}";
+  pname = "bootchart";
 
   src = fetchFromGitHub {
     owner = "mmeeks";

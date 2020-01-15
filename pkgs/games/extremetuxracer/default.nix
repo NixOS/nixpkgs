@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.7.5";
-  name = "extremetuxracer-${version}";
+  pname = "extremetuxracer";
 
   src = fetchurl {
     url = "mirror://sourceforge/extremetuxracer/etr-${version}.tar.xz";

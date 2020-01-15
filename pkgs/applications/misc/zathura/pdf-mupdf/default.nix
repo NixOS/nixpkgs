@@ -1,9 +1,9 @@
-{ stdenv, lib, meson, ninja, fetchurl, fetchFromGitHub
+{ stdenv, lib, meson, ninja, fetchFromGitHub
 , pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
 
 stdenv.mkDerivation rec {
   version = "0.3.4";
-  name = "zathura-pdf-mupdf-${version}";
+  pname = "zathura-pdf-mupdf";
 
   # pwmt.org server was down at the time of last update
   # src = fetchurl {
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     zathura_core girara mupdf cairo
-  ] ++ stdenv.lib.optional stdenv.isDarwin [
-    gtk-mac-integration
-  ];
+  ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
 

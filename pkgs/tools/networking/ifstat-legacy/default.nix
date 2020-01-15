@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, net_snmp }:
 
 stdenv.mkDerivation rec {
-  name = "ifstat-legacy-${version}";
+  pname = "ifstat-legacy";
   version = "1.1";
 
   src = fetchurl {

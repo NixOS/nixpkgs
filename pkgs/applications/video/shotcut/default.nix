@@ -1,24 +1,23 @@
-{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, pkgconfig, qtbase
-, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets, qtquickcontrols
-, qtgraphicaleffects, libmlt
-, qmake, makeWrapper, qttools }:
+{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, mkDerivation
+, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
+, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools }:
 
 assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
 assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
 
-stdenv.mkDerivation rec {
-  name = "shotcut-${version}";
-  version = "18.12.23";
+mkDerivation rec {
+  pname = "shotcut";
+  version = "19.08.16";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1i6gkqvg31q7g5s3zgqzg4i5kyas7k4svclgbk459i5h1ar3v5vn";
+    sha256 = "0alnnfgimfs8fjddkcfx4pzyijwz5dgnqic5qazaza6f4kf60801";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ makeWrapper pkgconfig qmake ];
+  nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
     SDL2 frei0r gettext mlt libmlt
     qtbase qtmultimedia qtwebkit qtx11extras qtwebsockets qtquickcontrols
@@ -35,10 +34,15 @@ stdenv.mkDerivation rec {
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
   '';
 
+  qtWrapperArgs = [
+    "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2 ]}"
+    "--prefix PATH : ${mlt}/bin"
+    ];
+
   postInstall = ''
     mkdir -p $out/share/shotcut
     cp -r src/qml $out/share/shotcut/
-    wrapProgram $out/bin/shotcut --prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1 --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ jack1 SDL2 ]} --prefix PATH : ${mlt}/bin
   '';
 
   meta = with stdenv.lib; {

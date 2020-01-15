@@ -1,16 +1,24 @@
-{ stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig
+{ stdenv, cmake, fetchurl, gnumake, makeWrapper, pkgconfig, fetchpatch
 , autopanosiftc, boost, cairo, enblend-enfuse, exiv2, fftw, flann, gettext
 , glew, ilmbase, lcms2, lensfun, libjpeg, libpng, libtiff, libX11, libXi
 , libXmu, libGLU_combined, openexr, panotools, perlPackages, sqlite, vigra, wxGTK, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "hugin-2018.0.0";
+  name = "hugin-2019.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/hugin/${name}.tar.bz2";
-    sha256 = "1jv5wpqbq49fhbl5g521g1qxhdm1rm7acxd18fr3n3n5d830vbyk";
+    sha256 = "1l925qslp98gg7yzmgps10h6dq0nb60wbfk345anlxsv0g2ifizr";
   };
+
+  patches = [
+    # Fixes build with exiv2 0.27.1
+    (fetchpatch {
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/hugin-exiv2-0.27.1.patch?h=packages/hugin";
+      sha256 = "1yxvlpvrhyrfd2w6kwx1w3mncsvlzdhp0w7xchy8q6kc2kd5nf7r";
+    })
+  ];
 
   buildInputs = [
     boost cairo exiv2 fftw flann gettext glew ilmbase lcms2 lensfun libjpeg

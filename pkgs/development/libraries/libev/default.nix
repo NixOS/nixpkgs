@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libev-${version}";
-  version="4.24";
+  pname = "libev";
+  version="4.27";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/libev/Attic/${name}.tar.gz";
-    sha256 = "08gqsza1czx0nf62nkk183jb0946yzjsymaacxbzdgcs8z9r6dcp";
+    url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";
+    sha256 = "0kil23cgsp0r5shvnwwbsy7fzxb62sxqzqbkbkfp5w54ipy2cm9d";
   };
 
   meta = {

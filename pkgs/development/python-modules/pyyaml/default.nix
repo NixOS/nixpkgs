@@ -1,17 +1,22 @@
-{ lib, buildPythonPackage, fetchPypi, libyaml, buildPackages }:
+{ lib, buildPythonPackage, fetchPypi, cython, libyaml, buildPackages }:
 
 buildPythonPackage rec {
   pname = "PyYAML";
-  version = "3.13";
+  version = "5.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+    sha256 = "b4bb4d3f5e232425e25dda21c070ce05168a786ac9eda43768ab7f3ac2770955";
   };
 
-  nativeBuildInputs = [ buildPackages.stdenv.cc ];
+  # force regeneration using Cython
+  postPatch = ''
+    rm ext/_yaml.c
+  '';
 
-  propagatedBuildInputs = [ libyaml ];
+  nativeBuildInputs = [ cython buildPackages.stdenv.cc ];
+
+  buildInputs = [ libyaml ];
 
   meta = with lib; {
     description = "The next generation YAML parser and emitter for Python";

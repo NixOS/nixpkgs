@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-l10n'';
   version = ''20161204-darcs'';
 

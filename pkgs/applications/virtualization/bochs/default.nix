@@ -18,11 +18,11 @@ assert curlSupport -> (curl != null);
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "bochs-${version}";
+  pname = "bochs";
   version = "2.6.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/bochs/bochs/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/bochs/bochs/${version}/${pname}-${version}.tar.gz";
     sha256 = "1379cq4cnfprhw8mgh60i0q9j8fz8d7n3d5fnn2g9fdiv5znfnzf";
   };
 

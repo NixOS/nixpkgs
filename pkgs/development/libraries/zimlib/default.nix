@@ -1,11 +1,11 @@
 { stdenv, fetchurl, lzma }:
 
 stdenv.mkDerivation rec {
-  name = "zimlib-${version}";
+  pname = "zimlib";
   version = "1.4";
 
   src = fetchurl {
-    url = "http://www.openzim.org/download/${name}.tar.gz";
+    url = "http://www.openzim.org/download/${pname}-${version}.tar.gz";
     sha256 = "14ra3iq42x53k1nqxb5lsg4gadlkpkgv6cbjjl6305ajmbrghcdq";
   };
 

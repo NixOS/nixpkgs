@@ -1,15 +1,10 @@
-{ mkDerivation, stdenv,
-  fetchFromGitHub,
-  cmake, extra-cmake-modules, gnumake,
+{ mkDerivation, lib, fetchFromGitHub, fetchpatch, cmake, extra-cmake-modules
+, kauth, krunner
+, pass, pass-otp ? null }:
 
-  pass, pass-otp ? null, krunner,
-}:
-let
+mkDerivation rec {
   pname = "krunner-pass";
   version = "1.3.0";
-in
-mkDerivation rec {
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "akermu";
@@ -19,22 +14,26 @@ mkDerivation rec {
   };
 
   buildInputs  = [
-    pass
-    pass-otp
-    krunner
+    kauth krunner
+    pass pass-otp
   ];
 
-  nativeBuildInputs = [cmake extra-cmake-modules gnumake];
+  nativeBuildInputs = [ cmake extra-cmake-modules ];
 
   patches = [
+    (fetchpatch {
+      url = https://github.com/peterhoeg/krunner-pass/commit/be2695f4ae74b0cccec8294defcc92758583d96b.patch;
+      sha256 = "098dqnal57994p51p2srfzg4lgcd6ybp29h037llr9cdv02hdxvl";
+      name = "fix_build.patch";
+    })
     ./pass-path.patch
   ];
 
   CXXFLAGS = [
-    ''-DNIXPKGS_PASS=\"${stdenv.lib.getBin pass}/bin/pass\"''
+    ''-DNIXPKGS_PASS=\"${lib.getBin pass}/bin/pass\"''
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Integrates krunner with pass the unix standard password manager (https://www.passwordstore.org/)";
     homepage = https://github.com/akermu/krunner-pass;
     license = licenses.gpl3;

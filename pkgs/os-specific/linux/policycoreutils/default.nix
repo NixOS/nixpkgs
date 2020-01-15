@@ -1,13 +1,13 @@
 { stdenv, fetchurl, gettext, libsepol, libselinux, libsemanage }:
 
 stdenv.mkDerivation rec {
-  name = "policycoreutils-${version}";
-  version = "2.7";
+  pname = "policycoreutils";
+  version = "2.9";
   inherit (libsepol) se_release se_url;
 
   src = fetchurl {
     url = "${se_url}/${se_release}/policycoreutils-${version}.tar.gz";
-    sha256 = "1x742c7lkw30namhkw87yg7z384qzqjz0pvmqs0lk19v6958l6qa";
+    sha256 = "0yqg5ws5gbl1cbn8msxdk1c3ilmmx58qg5dx883kqyq0517k8g65";
   };
 
   postPatch = ''
@@ -20,13 +20,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext ];
   buildInputs = [ libsepol libselinux libsemanage ];
 
-  preBuild = ''
-    makeFlagsArray+=("PREFIX=$out")
-    makeFlagsArray+=("DESTDIR=$out")
-    makeFlagsArray+=("BASHCOMPLETIONDIR=$out/share/bash-completion/completions")
-    makeFlagsArray+=("LOCALEDIR=$out/share/locale")
-    makeFlagsArray+=("MAN5DIR=$out/share/man/man5")
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(out)/sbin"
+    "ETCDIR=$(out)/etc"
+    "BASHCOMPLETIONDIR=$out/share/bash-completion/completions"
+    "LOCALEDIR=$(out)/share/locale"
+    "MAN5DIR=$(out)/share/man/man5"
+  ];
 
   meta = with stdenv.lib; {
     description = "SELinux policy core utilities";

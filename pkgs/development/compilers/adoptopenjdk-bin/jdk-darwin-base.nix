@@ -6,7 +6,7 @@ sourcePerArch:
 }:
 
 let cpuName = stdenv.hostPlatform.parsed.cpu.name;
-    result = stdenv.mkDerivation rec {
+    result = stdenv.mkDerivation {
   name = if sourcePerArch.packageType == "jdk"
     then "adoptopenjdk-${sourcePerArch.vmType}-bin-${sourcePerArch.${cpuName}.version}"
     else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${sourcePerArch.${cpuName}.version}";
@@ -45,9 +45,6 @@ let cpuName = stdenv.hostPlatform.parsed.cpu.name;
   passthru.jre = result;
 
   passthru.home = result;
-
-  # for backward compatibility
-  passthru.architecture = "";
 
   meta = with stdenv.lib; {
     license = licenses.gpl2Classpath;

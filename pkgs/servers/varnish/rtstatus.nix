@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, varnish, python, docutils }:
+{ stdenv, fetchurl, pkgconfig, varnish, docutils }:
 
 stdenv.mkDerivation rec {
   version = "1.2.0";
@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "0hll1aspgpv1daw5sdbn5w1d6birchxgapzb6zi1nhahjlimy4ly";
   };
 
-  nativeBuildInputs = [ pkgconfig docutils ];
-  buildInputs = [ varnish python ];
+  nativeBuildInputs = [ pkgconfig docutils varnish.python ];
+  buildInputs = [ varnish ];
   configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];
 
   meta = with stdenv.lib; {

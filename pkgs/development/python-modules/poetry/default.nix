@@ -29,20 +29,24 @@ let
   });
 
   jsonschema3 = callPackage ./jsonschema.nix { };
+  glob2 = callPackage ./glob2.nix { };
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "0.12.10";
+  version = "0.12.17";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00npb0jlimnk4r01zkhfmns4843j1hfhd388s326da5pd8n0dq7l";
+    sha256 = "0gxwcd65qjmzqzppf53x51sic1rbcd9py6cdzx3aprppipimslvf";
   };
 
   postPatch = ''
-    substituteInPlace pyproject.toml --replace "3.0a3" "3.0.0a3"
-    substituteInPlace setup.py --replace "3.0a3" "3.0.0a3"
+    substituteInPlace setup.py --replace \
+      "requests-toolbelt>=0.8.0,<0.9.0" \
+      "requests-toolbelt>=0.8.0,<0.10.0"
   '';
+
+  format = "pyproject";
 
   propagatedBuildInputs = [
     cleo6
@@ -57,8 +61,17 @@ in buildPythonPackage rec {
     html5lib
     shellingham
     tomlkit
-  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 ]
+  ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
     ++ lib.optionals isPy27 [ virtualenv functools32 ];
+
+  postInstall = ''
+    mkdir -p "$out/share/bash-completion/completions"
+    "$out/bin/poetry" completions bash > "$out/share/bash-completion/completions/poetry"
+    mkdir -p "$out/share/zsh/vendor-completions"
+    "$out/bin/poetry" completions zsh > "$out/share/zsh/vendor-completions/_poetry"
+    mkdir -p "$out/share/fish/vendor_completions.d"
+    "$out/bin/poetry" completions fish > "$out/share/fish/vendor_completions.d/poetry.fish"
+  '';
 
   # No tests in Pypi tarball
   doCheck = false;

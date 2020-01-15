@@ -6,29 +6,30 @@ Subject: [PATCH] disk_cache: include dri driver path in cache key
 This fixes invalid cache hits on NixOS where all shared library
 timestamps in /nix/store are zero.
 ---
- src/util/Makefile.am  | 3 +++
+ meson_options.txt     | 6 ++++++
  src/util/disk_cache.c | 3 +++
- 2 files changed, 6 insertions(+)
+ src/util/meson.build  | 7 ++++++-
+ 3 files changed, 15 insertions(+), 1 deletion(-)
 
-diff --git a/src/util/Makefile.am b/src/util/Makefile.am
-index bafb57439a..a22e2e41eb 100644
---- a/src/util/Makefile.am
-+++ b/src/util/Makefile.am
-@@ -35,6 +35,9 @@ noinst_LTLIBRARIES = \
- 	libmesautil.la \
- 	libxmlconfig.la
- 
-+AM_CFLAGS = \
-+	-DDISK_CACHE_KEY=\"$(drivers)\"
-+
- AM_CPPFLAGS = \
- 	$(PTHREAD_CFLAGS) \
- 	-I$(top_srcdir)/include
+diff --git a/meson_options.txt b/meson_options.txt
+index a723b5406cf..65a8954291f 100644
+--- a/meson_options.txt
++++ b/meson_options.txt
+@@ -330,3 +330,9 @@ option(
+   value : true,
+   description : 'Enable direct rendering in GLX and EGL for DRI',
+ )
++option(
++  'disk-cache-key',
++  type : 'string',
++  value : '',
++  description : 'Mesa cache key.'
++)
 diff --git a/src/util/disk_cache.c b/src/util/disk_cache.c
-index 368ec41792..071220b2ba 100644
+index 0aa2646a9bb..bd784d38e21 100644
 --- a/src/util/disk_cache.c
 +++ b/src/util/disk_cache.c
-@@ -388,8 +388,10 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
+@@ -389,8 +389,10 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
  
     /* Create driver id keys */
     size_t id_size = strlen(driver_id) + 1;
@@ -39,7 +40,7 @@ index 368ec41792..071220b2ba 100644
     cache->driver_keys_blob_size += gpu_name_size;
  
     /* We sometimes store entire structs that contains a pointers in the cache,
-@@ -410,6 +412,7 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
+@@ -411,6 +413,7 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
     uint8_t *drv_key_blob = cache->driver_keys_blob;
     DRV_KEY_CPY(drv_key_blob, &cache_version, cv_size)
     DRV_KEY_CPY(drv_key_blob, driver_id, id_size)
@@ -47,6 +48,24 @@ index 368ec41792..071220b2ba 100644
     DRV_KEY_CPY(drv_key_blob, gpu_name, gpu_name_size)
     DRV_KEY_CPY(drv_key_blob, &ptr_size, ptr_size_size)
     DRV_KEY_CPY(drv_key_blob, &driver_flags, driver_flags_size)
+diff --git a/src/util/meson.build b/src/util/meson.build
+index 397c2228129..77013563e5d 100644
+--- a/src/util/meson.build
++++ b/src/util/meson.build
+@@ -120,7 +120,12 @@ libmesa_util = static_library(
+   [files_mesa_util, format_srgb],
+   include_directories : inc_common,
+   dependencies : [dep_zlib, dep_clock, dep_thread, dep_atomic, dep_m],
+-  c_args : [c_msvc_compat_args, c_vis_args],
++  c_args : [
++    c_msvc_compat_args, c_vis_args,
++    '-DDISK_CACHE_KEY="@0@"'.format(
++      get_option('disk-cache-key')
++    ),
++  ],
+   build_by_default : false
+ )
+ 
 -- 
-2.19.1
+2.19.2
 

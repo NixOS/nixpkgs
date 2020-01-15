@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, gtk, libGLU_combined, pango, pangox_compat, xorg }:
+{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, gtk2, libGLU_combined, pango, pangox_compat, xorg }:
 
 stdenv.mkDerivation rec {
   name = "gtkglext-1.2.0";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with xorg;
-    [ pkgconfig glib gtk libGLU_combined pango libX11 libXmu ];
+    [ pkgconfig glib gtk2 libGLU_combined pango libX11 libXmu ];
   propagatedBuildInputs = [ pangox_compat ];
 
   patches = [
@@ -29,14 +29,14 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://projects.gnome.org/gtkglext/;
-    description = "GtkGLExt, an OpenGL extension to GTK+";
-    longDescription =
-      '' GtkGLExt is an OpenGL extension to GTK+. It provides additional GDK
-         objects which support OpenGL rendering in GTK+ and GtkWidget API
-         add-ons to make GTK+ widgets OpenGL-capable.  In contrast to Janne
-         Löf's GtkGLArea, GtkGLExt provides a GtkWidget API that enables
-         OpenGL drawing for standard and custom GTK+ widgets.
-      '';
+    description = "GtkGLExt, an OpenGL extension to GTK";
+    longDescription = ''
+      GtkGLExt is an OpenGL extension to GTK. It provides additional GDK
+      objects which support OpenGL rendering in GTK and GtkWidget API
+      add-ons to make GTK widgets OpenGL-capable.  In contrast to Janne
+      Löf's GtkGLArea, GtkGLExt provides a GtkWidget API that enables
+      OpenGL drawing for standard and custom GTK widgets.
+    '';
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
   };

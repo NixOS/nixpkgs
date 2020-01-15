@@ -10,7 +10,8 @@ let
 
 in stdenv.mkDerivation {
 
-  name = "opentx-${version}";
+  pname = "opentx";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "opentx";

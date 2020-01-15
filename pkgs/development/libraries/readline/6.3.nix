@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "readline-6.3p08";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only-6.3.patch
-    ]
+    ] ++ stdenv.lib.optional stdenv.hostPlatform.useAndroidPrebuilt ./android.patch
     ++
     (let
        patch = nr: sha256:

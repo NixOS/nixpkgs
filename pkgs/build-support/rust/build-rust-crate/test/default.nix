@@ -1,4 +1,4 @@
-{ lib, stdenv, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
+{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
 let
   mkCrate = args: let
       p = {

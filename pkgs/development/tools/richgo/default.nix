@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "richgo-${version}";
+  pname = "richgo";
   version = "0.2.8";
   goPackagePath = "github.com/kyoh86/richgo";
 

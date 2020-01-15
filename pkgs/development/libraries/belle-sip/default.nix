@@ -9,8 +9,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "BelledonneCommunications";
-    repo = "${baseName}";
-    rev = "${version}";
+    repo = baseName;
+    rev = version;
     sha256 = "0q70db1klvhca1af29bm9paka3gyii5hfbzrj4178gclsg7cj8fk";
   };
 
@@ -18,7 +18,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=format-truncation"
+    "-Wno-error=cast-function-type"
+  ];
 
   propagatedBuildInputs = [ antlr3_4 libantlr3c polarssl bctoolbox ];
 
@@ -26,7 +30,8 @@ stdenv.mkDerivation rec {
     "--with-polarssl=${polarssl}"
   ];
 
-  enableParallelBuilding = true;
+  # Fails to build with lots of parallel jobs
+  enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
     homepage = http://www.linphone.org/index.php/eng;

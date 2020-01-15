@@ -1,27 +1,24 @@
-{ stdenv, fetchurl, pkgconfig, ocaml, findlib, gtk3, gtkspell3, gtksourceview }:
+{ lib, fetchurl, pkgconfig, buildDunePackage, gtk3, cairo2 }:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4.05"
-then throw "lablgtk3 is not available for OCaml ${ocaml.version}"
-else
+buildDunePackage rec {
+  version = "3.0.beta6";
+  pname = "lablgtk3";
 
-stdenv.mkDerivation rec {
-  version = "3.0.beta3";
-  name = "ocaml${ocaml.version}-lablgtk3-${version}";
+  minimumOCamlVersion = "4.05";
+
   src = fetchurl {
-    url = https://forge.ocamlcore.org/frs/download.php/1775/lablgtk-3.0.beta3.tar.gz;
-    sha256 = "174mwwdz1s91a6ycbas7nc0g87c2l6zqv68zi5ab33yb76l46a6w";
+    url = "https://github.com/garrigue/lablgtk/releases/download/${version}/lablgtk3-${version}.tbz";
+    sha256 = "1jni5cbp54qs7y0dc5zkm28v2brpfwy5miighv7cy0nmmxrsq520";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ ocaml findlib gtk3 gtkspell3 gtksourceview ];
-
-  buildFlags = "world";
+  buildInputs = [ gtk3 ];
+  propagatedBuildInputs = [ cairo2 ];
 
   meta = {
-    description = "OCaml interface to gtk+-3";
+    description = "OCaml interface to GTK 3";
     homepage = "http://lablgtk.forge.ocamlcore.org/";
-    license = stdenv.lib.licenses.lgpl21;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    inherit (ocaml.meta) platforms;
+    license = lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

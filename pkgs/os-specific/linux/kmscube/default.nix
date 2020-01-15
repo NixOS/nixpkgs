@@ -1,6 +1,6 @@
-{ stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa_noglu, pkgconfig }:
+{ stdenv, fetchgit, autoreconfHook, libdrm, libX11, libGL, mesa, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kmscube-2018-06-17";
 
   src = fetchgit {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ libdrm libX11 libGL mesa_noglu ];
+  buildInputs = [ libdrm libX11 libGL mesa ];
 
   meta = with stdenv.lib; {
     description = "Example OpenGL app using KMS/GBM";

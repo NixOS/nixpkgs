@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkgconfig, autoreconfHook,
+{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook,
   glib, gtk3, pcsclite, lua5_2, curl, readline }:
 let
   version = "0.8.4";
 in
   stdenv.mkDerivation {
-    name = "cardpeek-${version}";
+    pname = "cardpeek";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "L1L1";

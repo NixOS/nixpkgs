@@ -32,7 +32,7 @@ python2Packages.buildPythonApplication rec {
   buildInputs = [
     atk
     gtk3
-    gnome3.defaultIconTheme
+    gnome3.adwaita-icon-theme
     gtkspell3
     goocanvas2
   ];

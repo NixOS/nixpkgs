@@ -4,7 +4,6 @@
 , setuptoolsDarcs
 , setuptoolsTrial
 , simplejson
-, zbase32
 , twisted
 , isPyPy
 }:

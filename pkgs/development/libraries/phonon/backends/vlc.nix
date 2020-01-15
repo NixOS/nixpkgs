@@ -7,7 +7,7 @@
 with lib;
 
 let
-  v = "0.10.1";
+  v = "0.10.2";
   pname = "phonon-backend-vlc";
 in
 
@@ -15,7 +15,7 @@ assert withQt4 -> qt4 != null;
 assert !withQt4 -> qtbase != null;
 assert !withQt4 -> qtx11extras != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${if withQt4 then "qt4" else "qt5"}-${v}";
 
   meta = with stdenv.lib; {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://kde/stable/phonon/${pname}/${v}/${pname}-${v}.tar.xz";
-    sha256 = "0b87mzkw9fdkrwgnh1kw5i5wnrd05rl42hynlykb7cfymsk6v5h9";
+    sha256 = "163jqq5p9n0yfw2fqk0cqn3c6mqycxsvc4956zhkw5345g81a2a9";
   };
 
   buildInputs =

@@ -41,7 +41,7 @@ is_ignored_file() {
 	return 1
 }
 
-VERSION=$(@coreutils@/bin/basename $0)" ver. 0.91-ubuntu1"
+VERSION=$(@coreutils@/bin/basename $0)" ver. 19-04"
 USAGE="Usage: "$(@coreutils@/bin/basename $0)" < option > | --status-all | \
 [ service_name [ command | --full-restart ] ]"
 SERVICE=
@@ -133,29 +133,6 @@ while [ $# -gt 0 ]; do
    esac
 done
 
-# Operate against system upstart, not session
-unset UPSTART_SESSION
-if [ -r "/etc/init/${SERVICE}.conf" ] && which initctl >/dev/null \
-   && initctl version 2>/dev/null | grep -q upstart \
-   && initctl status ${SERVICE} 2>/dev/null 1>/dev/null
-then
-   # Upstart configuration exists for this job and we're running on upstart
-   case "${ACTION}" in
-      start|stop|status|reload)
-         # Action is a valid upstart action
-         exec ${ACTION} ${SERVICE} ${OPTIONS}
-      ;;
-      restart|force-reload)
-        # Map restart to the usual sysvinit behavior.
-        # Map force-reload to restart as per Debian policy 9.3.2,
-        # since there is no way to know if "reload" is supported
-         stop ${SERVICE} ${OPTIONS} || :
-         exec start ${SERVICE} ${OPTIONS}
-      ;;
-   esac
-fi
-
-
 run_via_sysvinit() {
    # Otherwise, use the traditional sysvinit
    if [ -x "${SERVICEDIR}/${SERVICE}" ]; then
@@ -198,7 +175,7 @@ then
    fi
 
    case "${ACTION}" in
-      restart|status)
+      restart|status|try-restart)
          exec systemctl $sctl_args ${ACTION} ${UNIT}
       ;;
       start|stop)
@@ -214,7 +191,7 @@ then
          exec systemctl $sctl_args ${ACTION} ${UNIT}
       ;;
       reload)
-         _canreload="$(SYSTEMCTL -p CanReload show ${UNIT} 2>/dev/null)"
+         _canreload="$(systemctl -p CanReload show ${UNIT} 2>/dev/null)"
          if [ "$_canreload" = "CanReload=no" ]; then
             # The reload action falls back to the sysv init script just in case
             # the systemd service file does not (yet) support reload for a

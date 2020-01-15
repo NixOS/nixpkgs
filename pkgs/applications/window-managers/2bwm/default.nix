@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2";
-  name = "2bwm-${version}";
+  pname = "2bwm";
 
   src = fetchFromGitHub {
     owner  = "venam";

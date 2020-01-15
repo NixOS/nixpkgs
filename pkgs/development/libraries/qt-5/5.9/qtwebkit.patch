@@ -1,16 +1,3 @@
-diff --git a/Source/WTF/WTF.pri b/Source/WTF/WTF.pri
-index 69e4cd1f3..3f729a75e 100644
---- a/Source/WTF/WTF.pri
-+++ b/Source/WTF/WTF.pri
-@@ -12,7 +12,7 @@ mac {
-     # Mac OS does ship libicu but not the associated header files.
-     # Therefore WebKit provides adequate header files.
-     INCLUDEPATH = $${ROOT_WEBKIT_DIR}/Source/WTF/icu $$INCLUDEPATH
--    LIBS += -licucore
-+    LIBS += /usr/lib/libicucore.dylib
- } else:!use?(wchar_unicode): {
-     win32 {
-         CONFIG(static, static|shared) {
 diff --git a/Source/WebCore/plugins/qt/PluginPackageQt.cpp b/Source/WebCore/plugins/qt/PluginPackageQt.cpp
 index a923d49aa..46772a4bb 100644
 --- a/Source/WebCore/plugins/qt/PluginPackageQt.cpp

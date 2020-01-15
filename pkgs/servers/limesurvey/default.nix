@@ -1,17 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, writeText, makeWrapper, php }:
+{ stdenv, fetchFromGitHub, writeText }:
 
 stdenv.mkDerivation rec {
-  name = "limesurvey-${version}";
-  version = "2.05_plus_141210";
+  pname = "limesurvey";
+  version = "3.17.12+190823";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    sha256 = "1b5yixrlrjm055ag07c7phk84mk1892v20nsss1y0xzvgn6s14gq";
+    sha256 = "1i7jpxndrbya5ggl4babscwzmxx4c0jwri5kpl7h2ihqrn90m4b5";
   };
-
-  buildInputs = [ makeWrapper ];
 
   phpConfig = writeText "config.php" ''
   <?php
@@ -19,23 +17,20 @@ stdenv.mkDerivation rec {
   ?>
   '';
 
-  patchPhase = ''
-    substituteInPlace application/core/LSYii_Application.php \
-      --replace "'basePath" "//'basePath"
-  '';
-
   installPhase = ''
-    mkdir -p $out/{bin,share/limesurvey}
-    cp -R . $out/share/limesurvey
+    runHook preInstall
+
+    mkdir -p $out/share/limesurvey
+    cp -r . $out/share/limesurvey
     cp ${phpConfig} $out/share/limesurvey/application/config/config.php
-    makeWrapper ${php}/bin/php $out/bin/limesurvey-console \
-      --add-flags "$out/share/limesurvey/application/commands/console.php"
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Open source survey application";
     license = licenses.gpl2;
-    homepage = https://www.limesurvey.org;
+    homepage = "https://www.limesurvey.org";
     maintainers = with maintainers; [offline];
     platforms = with platforms; unix;
   };

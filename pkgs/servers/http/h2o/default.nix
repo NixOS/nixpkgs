@@ -6,14 +6,14 @@
 with builtins;
 
 stdenv.mkDerivation rec {
-  name = "h2o-${version}";
-  version = "2.2.5";
+  pname = "h2o";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner  = "h2o";
     repo   = "h2o";
     rev    = "refs/tags/v${version}";
-    sha256 = "0jyvbp6cjiirj44nxqa2fi5y473gnc8awfn8zv82hb1y9rlxqfyv";
+    sha256 = "0qni676wqvxx0sl0pw9j0ph7zf2krrzqc1zwj73mgpdnsr8rsib7";
   };
 
   # We have to fix up some function prototypes, because despite upstream h2o

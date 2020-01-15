@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.17";
-  name = "scanmem-${version}";
+  pname = "scanmem";
 
   src = fetchFromGitHub {
     owner  = "scanmem";

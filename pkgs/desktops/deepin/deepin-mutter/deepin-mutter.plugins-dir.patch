@@ -1,0 +1,41 @@
+From 8eeb4febcae517080d6638f8953e02335df79f01 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Sat, 20 Apr 2019 00:28:47 -0300
+Subject: [PATCH] Get plugins dir from environment variable
+
+---
+ src/compositor/meta-plugin-manager.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
+
+diff --git a/src/compositor/meta-plugin-manager.c b/src/compositor/meta-plugin-manager.c
+index ac5716db..d000100b 100644
+--- a/src/compositor/meta-plugin-manager.c
++++ b/src/compositor/meta-plugin-manager.c
+@@ -56,14 +56,22 @@ meta_plugin_manager_set_plugin_type (GType gtype)
+ void
+ meta_plugin_manager_load (const gchar       *plugin_name)
+ {
+-  const gchar *dpath = MUTTER_PLUGIN_DIR "/";
++  const gchar *env_var;
++  const gchar *dpath;
+   gchar       *path;
+   MetaModule  *module;
+ 
++  env_var = g_getenv ("DEEPIN_MUTTER_PLUGINS_DIR");
++  g_debug ("$DEEPIN_MUTTER_PLUGINS_DIR: %s\n", env_var);
++
++  dpath = env_var == NULL || strlen (env_var) == 0 ? MUTTER_PLUGIN_DIR : env_var;
++  g_debug ("dpath: %s\n", dpath);
++
+   if (g_path_is_absolute (plugin_name))
+     path = g_strdup (plugin_name);
+   else
+-    path = g_strconcat (dpath, plugin_name, ".so", NULL);
++    path = g_strconcat (dpath, "/", plugin_name, ".so", NULL);
++  g_debug ("path: %s\n", path);
+ 
+   module = g_object_new (META_TYPE_MODULE, "path", path, NULL);
+   if (!module || !g_type_module_use (G_TYPE_MODULE (module)))
+-- 
+2.21.0
+

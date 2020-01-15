@@ -1,32 +1,25 @@
-From c21cc756b69a5f33c8a7758b746a816f40f55932 Mon Sep 17 00:00:00 2001
-From: Leon Isenberg <ljli@users.noreply.github.com>
-Date: Sat, 28 Oct 2017 17:58:17 +0200
-Subject: [PATCH] nix customization: patchelf installed binaries
-
----
- src/rustup-dist/src/component/package.rs | 21 ++++++++++++++++++++-
- 1 file changed, 20 insertions(+), 1 deletion(-)
-
-diff --git a/src/rustup-dist/src/component/package.rs b/src/rustup-dist/src/component/package.rs
-index 70c54dcd..f0318986 100644
---- a/src/rustup-dist/src/component/package.rs
-+++ b/src/rustup-dist/src/component/package.rs
-@@ -100,7 +100,10 @@ impl Package for DirectoryPackage {
-             let src_path = root.join(&path);
- 
+diff --git a/src/dist/component/package.rs b/src/dist/component/package.rs
+index e0fdea28..38d9d0e4 100644
+--- a/src/dist/component/package.rs
++++ b/src/dist/component/package.rs
+@@ -104,10 +104,11 @@ impl Package for DirectoryPackage {
              match &*part.0 {
--                "file" => builder.copy_file(path.clone(), &src_path)?,
-+                "file" => {
-+                    builder.copy_file(path.clone(), &src_path)?;
+                 "file" => {
+                     if self.copy {
+-                        builder.copy_file(path.clone(), &src_path)?
++                        builder.copy_file(path.clone(), &src_path)?;
+                     } else {
+-                        builder.move_file(path.clone(), &src_path)?
++                        builder.move_file(path.clone(), &src_path)?;
+                     }
 +                    nix_patchelf_if_needed(&target.prefix().path().join(path.clone()), &src_path)
-+                }
-                 "dir" => builder.copy_dir(path.clone(), &src_path)?,
-                 _ => return Err(ErrorKind::CorruptComponent(name.to_owned()).into()),
-             }
-@@ -118,6 +121,22 @@ impl Package for DirectoryPackage {
+                 }
+                 "dir" => {
+                     if self.copy {
+@@ -132,6 +133,22 @@ impl Package for DirectoryPackage {
      }
  }
- 
+
 +fn nix_patchelf_if_needed(dest_path: &Path, src_path: &Path) {
 +    let is_bin = if let Some(p) = src_path.parent() {
 +        p.ends_with("bin")
@@ -46,6 +39,3 @@ index 70c54dcd..f0318986 100644
  // On Unix we need to set up the file permissions correctly so
  // binaries are executable and directories readable. This shouldn't be
  // necessary: the source files *should* have the right permissions,
--- 
-2.17.1
-

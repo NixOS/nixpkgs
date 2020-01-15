@@ -29,8 +29,8 @@ let
     fi
   '');
 
-in buildPythonApplication rec {
-  name = "pykms-${version}";
+in buildPythonApplication {
+  pname = "pykms";
   version = "20180208";
 
   src = fetchFromGitHub {

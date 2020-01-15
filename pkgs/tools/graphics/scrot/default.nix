@@ -1,32 +1,25 @@
-{ stdenv, fetchurl, fetchzip, giblib, xlibsWrapper }:
+{ stdenv, fetchFromGitHub, giblib, xlibsWrapper, autoreconfHook
+, autoconf-archive, libXfixes, libXcursor }:
 
-let
-  debPatch = fetchzip {
-    url = mirror://debian/pool/main/s/scrot/scrot_0.8-18.debian.tar.xz;
-    sha256 = "1m8m8ad0idf3nzw0k57f6rfbw8n7dza69a7iikriqgbrpyvxqybx";
-  };
-in
 stdenv.mkDerivation rec {
-  name = "scrot-0.8-18";
+  pname = "scrot";
+  version = "1.2";
 
-  src = fetchurl {
-    url = "http://linuxbrit.co.uk/downloads/${name}.tar.gz";
-    sha256 = "1wll744rhb49lvr2zs6m93rdmiq59zm344jzqvijrdn24ksiqgb1";
+  src = fetchFromGitHub {
+    owner = "resurrecting-open-source-projects";
+    repo = pname;
+    rev = version;
+    sha256 = "08gkdby0ysx2mki57z81zlm7vfnq9c1gq692xw67cg5vv2p3320w";
   };
 
-  postPatch = ''
-    for patch in $(cat ${debPatch}/patches/series); do
-      patch -p1 < "${debPatch}/patches/$patch"
-    done
-  '';
-
-  buildInputs = [ giblib xlibsWrapper ];
+  nativeBuildInputs = [ autoreconfHook autoconf-archive ];
+  buildInputs = [ giblib xlibsWrapper libXfixes libXcursor ];
 
   meta = with stdenv.lib; {
     homepage = http://linuxbrit.co.uk/scrot/;
     description = "A command-line screen capture utility";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ globin ];
     license = licenses.mit;
   };
 }

@@ -119,7 +119,6 @@ let # packageJSON=./package.json;
 
 
     cljdeps   = import ./deps.nix { inherit pkgs; };
-    cljpaths  = cljdeps.makePaths {};
     classp    = cljdeps.makeClasspaths {
                   extraClasspaths=["src/js" "src/cljs/bundled" "src/cljs/snapshot"];
                 };
@@ -127,9 +126,9 @@ let # packageJSON=./package.json;
 
     getJarPath = jarName: (lib.findFirst (p: p.name == jarName) null cljdeps.packages).path.jar;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   inherit version;
-  name = "lumo-${version}";
+  pname = "lumo";
 
   src = fetchurl {
     url    = "https://github.com/anmonteiro/lumo/archive/${version}.tar.gz";

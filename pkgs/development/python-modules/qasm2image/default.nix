@@ -8,9 +8,10 @@
 , svgwrite
 , colorama
 , python
+, pythonOlder
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "qasm2image";
   version = "0.8.0";
 
@@ -20,6 +21,8 @@ buildPythonPackage rec {
     rev = "2c01756946ba9782973359dbd7bbf6651af6bee5";
     sha256 = "1bnkzv7wrdvrq71dmsqanb3v2hcsxh5zaglfcxm2d9zzpmvb4a2n";
   };
+
+  disabled = pythonOlder "3.5";
 
   propagatedBuildInputs = [
     cairocffi

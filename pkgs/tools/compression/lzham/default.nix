@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake } :
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "lzham-1.0";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "e17gtk-${version}";
+  pname = "e17gtk";
   version = "3.22.2";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description = "An Enlightenment-like GTK+ theme with sharp corners";
+    description = "An Enlightenment-like GTK theme with sharp corners";
     homepage = https://github.com/tsujan/E17gtk;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.unix;

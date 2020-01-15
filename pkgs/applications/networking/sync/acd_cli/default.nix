@@ -3,7 +3,6 @@
 , fusepy, sqlalchemy }:
 
 buildPythonApplication rec {
-  name = pname + "-" + version;
   pname = "acd_cli";
   version = "0.3.2";
 

@@ -5,14 +5,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "mlt-${version}";
-  version = "6.10.0";
+  pname = "mlt";
+  version = "6.16.0";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "mlt";
     rev = "v${version}";
-    sha256 = "0ki86yslr5ywa6sz8pjrgd9a4rn2rr4mss2zkmqi7pq8prgsm1fr";
+    sha256 = "1362fv63p34kza9v4b71b6wakgvsa2vdx9y0g28x3yh4cp4k97kx";
   };
 
   buildInputs = [

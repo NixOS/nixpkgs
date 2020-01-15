@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qtbase, qttools, qmake }:
 
-stdenv.mkDerivation rec {
-  name = "librepcb-${version}";
+stdenv.mkDerivation {
+  pname = "librepcb";
   version = "0.1.0";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A free EDA software to develop printed circuit boards";
-    homepage = http://librepcb.org/;
+    homepage = https://librepcb.org/;
     maintainers = with maintainers; [ luz ];
     license = licenses.gpl3;
     platforms = platforms.linux;

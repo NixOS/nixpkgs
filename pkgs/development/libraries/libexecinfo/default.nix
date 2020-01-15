@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "libexecinfo-${version}";
+  pname = "libexecinfo";
   version = "1.1";
 
   src = fetchurl {
-    url = "http://distcache.freebsd.org/local-distfiles/itetcu/${name}.tar.bz2";
+    url = "http://distcache.freebsd.org/local-distfiles/itetcu/${pname}-${version}.tar.bz2";
     sha256 = "07wvlpc1jk1sj4k5w53ml6wagh0zm9kv2l1jngv8xb7xww9ik8n9";
   };
 

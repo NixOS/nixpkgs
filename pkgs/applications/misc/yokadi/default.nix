@@ -1,13 +1,13 @@
 { stdenv, fetchurl, buildPythonApplication, dateutil,
-  sqlalchemy, setproctitle, icalendar, pycrypto }:
+  sqlalchemy, setproctitle, icalendar }:
 
 buildPythonApplication rec {
   pname = "yokadi";
-  version = "1.1.1";
+  version = "1.2.0";
 
   src = fetchurl {
-    url = "https://yokadi.github.io/download/${pname}-${version}.tar.bz2";
-    sha256 = "af201da66fd3a8435b2ccd932082ab9ff13f5f2e3d6cd3624f1ab81c577aaf17";
+    url = "https://yokadi.github.io/download/${pname}-${version}.tar.gz";
+    sha256 = "681c8aa52b2e4b5255e1311e76b4b81dcb63ee7f6ca3a47178e684c06baf330f";
   };
 
   propagatedBuildInputs = [
@@ -15,7 +15,6 @@ buildPythonApplication rec {
     sqlalchemy
     setproctitle
     icalendar
-    pycrypto
   ];
 
   # Yokadi doesn't have any tests

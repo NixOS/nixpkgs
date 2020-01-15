@@ -1,24 +1,24 @@
-{ stdenv, fetchFromGitHub, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
   pname = "qogir-theme";
-  version = "2018-11-12";
+  version = "2019-08-31";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
     rev = version;
-    sha256 = "16hzgdl7d6jrd3gq0kmxad46gijc4hlxzy2rs3gqsfxqfj32nhqz";
+    sha256 = "1pqfnqc2c6f5cidg6c3y492hqlyn5ma4b7ra2lchw7g2dxfvq8w1";
   };
 
-  buildInputs = [ gdk_pixbuf librsvg ];
+  buildInputs = [ gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
   installPhase = ''
     patchShebangs .
     mkdir -p $out/share/themes
-    name= ./Install -d $out/share/themes
+    name= ./install.sh -d $out/share/themes
   '';
 
   meta = with stdenv.lib; {

@@ -1,11 +1,11 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''cl-interpol'';
   version = ''20180711-git'';
 
   parasites = [ "cl-interpol-test" ];
 
-  description = '''';
+  description = ''System lacks description'';
 
   deps = [ args."cl-ppcre" args."cl-unicode" args."flexi-streams" args."named-readtables" ];
 
@@ -19,7 +19,7 @@ rec {
   asdFilesToKeep = ["cl-interpol.asd"];
   overrides = x: x;
 }
-/* (SYSTEM cl-interpol DESCRIPTION NIL SHA256
+/* (SYSTEM cl-interpol DESCRIPTION System lacks description SHA256
     1s88m5kci9y9h3ycvqm0xjzbkbd8zhm9rxp2a674hmgrjfqras0r URL
     http://beta.quicklisp.org/archive/cl-interpol/2018-07-11/cl-interpol-20180711-git.tgz
     MD5 b2d6893ef703c5b6e5736fa33ba0794e NAME cl-interpol FILENAME cl-interpol

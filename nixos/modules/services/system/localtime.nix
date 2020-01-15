@@ -20,35 +20,24 @@ in {
   };
 
   config = mkIf cfg.enable {
-    services.geoclue2.enable = true;
+    services.geoclue2 = {
+      enable = true;
+      appConfig.localtime = {
+        isAllowed = true;
+        isSystem = true;
+      };
+    };
 
-    # so polkit will pick up the rules
-    environment.systemPackages = [ pkgs.localtime ];
-
-    users.users = [{
-      name = "localtimed";
-      description = "Taskserver user";
-    }];
+    # We use the 'out' output, since localtime has its 'bin' output
+    # first, so that is what we get if we use the derivation bare.
+    # Install the polkit rules.
+    environment.systemPackages = [ pkgs.localtime.out ];
+    # Install the systemd unit.
+    systemd.packages = [ pkgs.localtime.out ];
 
     systemd.services.localtime = {
-      description = "localtime service";
       wantedBy = [ "multi-user.target" ];
-      partOf = [ "geoclue.service "];
-
-      serviceConfig = {
-        Restart                 = "on-failure";
-        # TODO: make it work with dbus
-        #DynamicUser             = true;
-        Nice                    = 10;
-        User                    = "localtimed";
-        PrivateTmp              = "yes";
-        PrivateDevices          = true;
-        PrivateNetwork          = "yes";
-        NoNewPrivileges         = "yes";
-        ProtectSystem           = "strict";
-        ProtectHome             = true;
-        ExecStart               = "${pkgs.localtime}/bin/localtimed";
-      };
+      serviceConfig.Restart = "on-failure";
     };
   };
 }

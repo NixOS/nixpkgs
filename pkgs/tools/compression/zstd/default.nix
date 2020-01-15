@@ -1,24 +1,46 @@
-{ stdenv, fetchFromGitHub, gnugrep
+{ stdenv, fetchFromGitHub, fetchpatch, gnugrep
 , fixDarwinDylibNames
 , file
 , legacySupport ? false }:
 
 stdenv.mkDerivation rec {
-  name = "zstd-${version}";
-  version = "1.3.8";
+  pname = "zstd";
+  version = "1.4.3";
 
   src = fetchFromGitHub {
-    sha256 = "03jfbjzgqy5gvpym28r2phphdn536zvwfc6cw58ffk5ssm6blnqd";
+    sha256 = "0mmgs98cfh92gcbjyv37vz8nq7x4x7fbzymlxyqd9awwpv9v0i5n";
     rev = "v${version}";
     repo = "zstd";
     owner = "facebook";
   };
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  patches = [
+    # All 3 from https://github.com/facebook/zstd/pull/1883
+    (fetchpatch {
+      url = "https://github.com/facebook/zstd/commit/106278e7e5fafaea3b7deb4147bdc8071562d2f0.diff";
+      sha256 = "13z7id1qbc05cv1rmak7c8xrchp7jh1i623bq5pwcihg57wzcyr8";
+    })
+    (fetchpatch {
+      url = "https://github.com/facebook/zstd/commit/0ede342acc2c26f87ae962fa88e158904d4198c4.diff";
+      sha256 = "12l5xbvnzkvr76mvl1ls767paqfwbd9q1pzq44ckacfpz4f6iaap";
+      excludes = [
+        # I think line endings are causing problems, or something like that
+        "programs/windres/generate_res.bat"
+      ];
+    })
+    (fetchpatch {
+      url = "https://github.com/facebook/zstd/commit/10552eaffef84c011f67af0e04f0780b50a5ab26.diff";
+      sha256 = "1s27ravar3rn7q8abybp9733jhpsfcaci51k04da94ahahvxwiqw";
+    })
+  ] # This I didn't upstream because if you use posix threads with MinGW it will
+    # work find, and I'm not sure how to write the condition.
+    ++ stdenv.lib.optional stdenv.hostPlatform.isWindows ./mcfgthreads-no-pthread.patch;
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   makeFlags = [
     "ZSTD_LEGACY_SUPPORT=${if legacySupport then "1" else "0"}"
-  ];
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isWindows "OS=Windows";
 
   checkInputs = [ file ];
   doCheck = true;
@@ -33,12 +55,14 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace programs/zstdgrep \
-      --replace "=grep" "=${gnugrep}/bin/grep" \
-      --replace "=zstdcat" "=$out/bin/zstdcat"
+      --replace ":-grep" ":-${gnugrep}/bin/grep" \
+      --replace ":-zstdcat" ":-$out/bin/zstdcat"
 
     substituteInPlace programs/zstdless \
       --replace "zstdcat" "$out/bin/zstdcat"
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Zstandard real-time compression algorithm";
@@ -52,10 +76,9 @@ stdenv.mkDerivation rec {
       property shared by most LZ compression algorithms, such as zlib.
     '';
     homepage = https://facebook.github.io/zstd/;
-    # The licence of the CLI programme is GPLv2+, that of the library BSD-2.
-    license = with licenses; [ gpl2Plus bsd2 ];
+    license = with licenses; [ bsd3 ]; # Or, at your opinion, GPL-2.0-only.
 
-    platforms = platforms.unix;
+    platforms = platforms.all;
     maintainers = with maintainers; [ orivej ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "re2c-${version}";
+  pname = "re2c";
   version = "1.0.3";
 
   sourceRoot = "${src.name}/re2c";

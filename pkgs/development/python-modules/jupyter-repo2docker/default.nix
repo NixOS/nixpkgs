@@ -16,13 +16,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.6.0";
+  version = "0.7.0";
   pname = "jupyter-repo2docker";
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "32c6dc6fd2402d6f5a955f8ab59299097bb5f4972c7dcc6fe2a8fe4c96dcab27";
+    sha256 = "cf93ddf283de8c6b8f4ad983f8bf9b7b2a2c37812e387c245f8ba229d4f180c4";
   };
 
   checkInputs = [ pytest pyyaml wheel pytestcov ];

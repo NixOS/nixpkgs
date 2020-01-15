@@ -2,18 +2,18 @@
 
 stdenv.mkDerivation rec {
   version = "4.10.1";
-  name = "libpfm-${version}";
+  pname = "libpfm";
 
   src = fetchurl {
-    url = "mirror://sourceforge/perfmon2/libpfm4/${name}.tar.gz";
+    url = "mirror://sourceforge/perfmon2/libpfm4/${pname}-${version}.tar.gz";
     sha256 = "0jabhjx77yppr7x38bkfww6n2a480gj62rw0qp7prhdmg19mf766";
   };
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "LDCONFIG=true"
-    "ARCH=${stdenv.targetPlatform.uname.processor}"
-    "SYS=${stdenv.targetPlatform.uname.system}"
+    "ARCH=${stdenv.hostPlatform.uname.processor}"
+    "SYS=${stdenv.hostPlatform.uname.system}"
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error" ];

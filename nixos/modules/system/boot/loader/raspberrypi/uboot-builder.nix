@@ -18,17 +18,18 @@ let
 
   extlinuxConfBuilder =
     import ../generic-extlinux-compatible/extlinux-conf-builder.nix {
-      pkgs = pkgs.buildPackages;
+      inherit pkgs;
     };
 in
 pkgs.substituteAll {
   src = ./uboot-builder.sh;
   isExecutable = true;
-  inherit (pkgs.buildPackages) bash;
-  path = with pkgs.buildPackages; [coreutils gnused gnugrep];
+  inherit (pkgs) bash;
+  path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
   firmware = pkgs.raspberrypifw;
   inherit uboot;
   inherit configTxt;
   inherit extlinuxConfBuilder;
   inherit version;
 }
+

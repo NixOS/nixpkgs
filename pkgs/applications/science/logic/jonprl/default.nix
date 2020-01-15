@@ -1,7 +1,7 @@
 { fetchgit, stdenv, smlnj, which }:
 
 stdenv.mkDerivation rec {
-  name    = "jonprl-${version}";
+  pname = "jonprl";
   version = "0.1.0";
 
   src = fetchgit {

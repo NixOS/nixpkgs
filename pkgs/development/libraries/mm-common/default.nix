@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "Common build files of GLib/GTK+ C++ bindings";
+    description = "Common build files of GLib/GTK C++ bindings";
     longDescription = ''
       The mm-common module provides the build infrastructure and utilities
       shared among the GNOME C++ binding libraries. It is only a required
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
       control repository. An installation of mm-common is not required for
       building tarball releases, unless configured to use maintainer-mode.
     '';
-    homepage = http://www.gtkmm.org;
+    homepage = https://www.gtkmm.org;
     license = licenses.gpl2Plus;
     maintainers = gnome3.maintainers;
     platforms = platforms.linux;

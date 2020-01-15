@@ -1,7 +1,7 @@
 {stdenv, fetchurl, ocaml, findlib, lablgtk}:
 
 stdenv.mkDerivation rec {
-  name = "ocamlgraph-${version}";
+  pname = "ocamlgraph";
   version = "1.8.8";
 
   src = fetchurl {

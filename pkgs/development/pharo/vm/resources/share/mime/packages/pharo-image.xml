@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<mime-info xmlns='http://www.freedesktop.org/standards/shared-mime-info'>
-  <mime-type type="application/x-pharo-image">
-    <comment>Pharo image file</comment>
-    <comment xml:lang="fr">Fichier d'image Pharo</comment>
-    <glob pattern="*.image"/>
-    <icon name="pharo"/>
-  </mime-type>
-</mime-info>

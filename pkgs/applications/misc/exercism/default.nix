@@ -1,8 +1,8 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name    = "exercism-${version}";
-  version = "3.0.9";
+  pname = "exercism";
+  version = "3.0.11";
 
   goPackagePath = "github.com/exercism/cli";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "exercism";
     repo   = "cli";
     rev    = "v${version}";
-    sha256 = "0nr3dzipylicrbplh25dw0w84qklr0xcyq442i9aswzibqrb2vc6";
+    sha256 = "1wg23bvibsk6j4iqwyw35wl9plfwdqxiql81zci7r1x4d5cp26av";
   };
 
   goDeps = ./deps.nix;

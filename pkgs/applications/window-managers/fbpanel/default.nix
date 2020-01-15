@@ -3,10 +3,10 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fbpanel-${version}";
+  pname = "fbpanel";
   version = "6.1";
   src = fetchurl {
-    url = "mirror://sourceforge/fbpanel/${name}.tbz2";
+    url = "mirror://sourceforge/fbpanel/${pname}-${version}.tbz2";
     sha256 = "e14542cc81ea06e64dd4708546f5fd3f5e01884c3e4617885c7ef22af8cf3965";
   };
   buildInputs =

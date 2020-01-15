@@ -1,7 +1,6 @@
 { stdenv, lib, rustPlatform, fetchFromGitLab, pkgconfig, file, perl, curl, cmake, openssl, libssh2, libgit2, libzip, Security }:
 rustPlatform.buildRustPackage rec {
   pname = "powerline-rs";
-  name = "${pname}-${version}";
   version = "0.1.9";
 
   src = fetchFromGitLab {
@@ -15,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1mxkw6ydnqjyplbki2j9pbnlhxmkw9qqw54443a3cjmn2g08jyzp";
   };
 
-  cargoSha256 = "1sr9vbfk5bb3n0lv93y19in1clyvbj0w3p1gmp4sbw8lx84zwxhc";
+  cargoSha256 = "1d0f1c1vp1r9r3ic921xkcr59f4a45y2xbxm4gl6grhb9z6p5k7l";
 
   nativeBuildInputs = [ pkgconfig file perl cmake curl ];
   buildInputs = [ openssl libssh2 libgit2 libzip ] ++ lib.optional stdenv.isDarwin Security;

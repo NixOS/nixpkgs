@@ -10,10 +10,9 @@ assert gestures -> libstroke != null;
 stdenv.mkDerivation rec {
   pname = "fvwm";
   version = "2.6.8";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "https://github.com/fvwmorg/fvwm/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/fvwmorg/fvwm/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0hgkkdzcqjnaabvv9cnh0bz90nnjskbhjg9qnzpi2x0mbliwjdpv";
   };
 

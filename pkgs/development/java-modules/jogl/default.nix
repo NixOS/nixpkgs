@@ -15,8 +15,9 @@ in
         sha256 = "00hybisjwqs88p24dds652bzrwbbmhn2dpx56kp4j6xpadkp33d0";
         fetchSubmodules = true;
       };
-    in stdenv.mkDerivation rec {
-      name = "jogl-${version}";
+    in stdenv.mkDerivation {
+      pname = "jogl";
+      inherit version;
 
       src = fetchgit {
         url = git://jogamp.org/srv/scm/jogl.git;
@@ -58,7 +59,7 @@ in
 
       meta = with stdenv.lib; {
         description = "Java libraries for 3D Graphics, Multimedia and Processing";
-        homepage = http://jogamp.org/;
+        homepage = https://jogamp.org/;
         license = licenses.bsd3;
         platforms = [ "x86_64-linux" ];
       };

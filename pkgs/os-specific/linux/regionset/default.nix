@@ -2,7 +2,8 @@
 
 let version = "0.2"; in
 stdenv.mkDerivation {
-  name = "regionset-${version}";
+  pname = "regionset";
+  inherit version;
 
   src = fetchurl {
     url = "http://linvdr.org/download/regionset/regionset-${version}.tar.gz";

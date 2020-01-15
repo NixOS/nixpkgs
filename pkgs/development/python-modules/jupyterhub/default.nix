@@ -13,6 +13,7 @@
 , tornado
 , traitlets
 , requests
+, notebook
 , pythonOlder
 , nodePackages
 }:
@@ -106,7 +107,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     alembic ipython jinja2 pamela python-oauth2 requests sqlalchemy tornado
-    traitlets prometheus_client async_generator
+    traitlets prometheus_client async_generator notebook
   ];
 
   # Disable tests because they take an excessive amount of time to complete.
@@ -115,7 +116,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Serves multiple Jupyter notebook instances";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = licenses.bsd3;
     maintainers = with maintainers; [ ixxie cstrahan ];
   };

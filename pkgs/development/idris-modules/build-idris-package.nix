@@ -1,5 +1,5 @@
 # Build an idris package
-{ stdenv, lib, idrisPackages, gmp }:
+{ stdenv, lib, gmp, prelude, base, with-packages, idris }:
   { idrisDeps ? []
   , noPrelude ? false
   , noBase ? false
@@ -7,19 +7,23 @@
   , version
   , ipkgName ? name
   , extraBuildInputs ? []
+  , idrisBuildOptions ? []
+  , idrisTestOptions ? []
+  , idrisInstallOptions ? []
+  , idrisDocOptions ? []
   , ...
   }@attrs:
 let
   allIdrisDeps = idrisDeps
-    ++ lib.optional (!noPrelude) idrisPackages.prelude
-    ++ lib.optional (!noBase) idrisPackages.base;
-  idris-with-packages = idrisPackages.with-packages allIdrisDeps;
+    ++ lib.optional (!noPrelude) prelude
+    ++ lib.optional (!noBase) base;
+  idris-with-packages = with-packages allIdrisDeps;
   newAttrs = builtins.removeAttrs attrs [
     "idrisDeps" "noPrelude" "noBase"
     "name" "version" "ipkgName" "extraBuildInputs"
   ] // {
     meta = attrs.meta // {
-      platforms = attrs.meta.platforms or idrisPackages.idris.meta.platforms;
+      platforms = attrs.meta.platforms or idris.meta.platforms;
     };
   };
 in
@@ -39,22 +43,34 @@ stdenv.mkDerivation ({
 
   buildPhase = ''
     runHook preBuild
-    idris --build ${ipkgName}.ipkg
+    idris --build ${ipkgName}.ipkg ${lib.escapeShellArgs idrisBuildOptions}
     runHook postBuild
   '';
 
   checkPhase = ''
     runHook preCheck
     if grep -q tests ${ipkgName}.ipkg; then
-      idris --testpkg ${ipkgName}.ipkg
+      idris --testpkg ${ipkgName}.ipkg ${lib.escapeShellArgs idrisTestOptions}
     fi
     runHook postCheck
   '';
 
   installPhase = ''
     runHook preInstall
-    idris --install ${ipkgName}.ipkg --ibcsubdir $out/libs
-    IDRIS_DOC_PATH=$out/doc idris --installdoc ${ipkgName}.ipkg || true
+
+    idris --install ${ipkgName}.ipkg --ibcsubdir $out/libs ${lib.escapeShellArgs idrisInstallOptions}
+
+    IDRIS_DOC_PATH=$out/doc idris --installdoc ${ipkgName}.ipkg ${lib.escapeShellArgs idrisDocOptions} || true
+
+    # If the ipkg file defines an executable, install that
+    executable=$(grep -Po '^executable = \K.*' ${ipkgName}.ipkg || true)
+    # $executable intentionally not quoted because it must be quoted correctly
+    # in the ipkg file already
+    if [ ! -z "$executable" ] && [ -f $executable ]; then
+      mkdir -p $out/bin
+      mv $executable $out/bin/$executable
+    fi
+
     runHook postInstall
   '';
 

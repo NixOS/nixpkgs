@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages, help2man }:
 
 python2Packages.buildPythonApplication rec {
-  name = "crudini-${version}";
+  pname = "crudini";
   version = "0.9";
 
   src = fetchFromGitHub {

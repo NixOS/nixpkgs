@@ -14,14 +14,14 @@ let binPath = stdenv.lib.makeBinPath [
     wget
   ];
 in stdenv.mkDerivation rec {
-  name = "debootstrap-${version}";
-  version = "1.0.114";
+  pname = "debootstrap";
+  version = "1.0.115";
 
   src = fetchurl {
     # git clone git://git.debian.org/d-i/debootstrap.git
     # I'd like to use the source. However it's lacking the lanny script ? (still true?)
-    url = "mirror://debian/pool/main/d/debootstrap/debootstrap_${version}.tar.gz";
-    sha256 = "14lw18bhxap1g15q0rhslacj1bcrl69wrqcx6azmbvd92rl4bqd8";
+    url = "mirror://debian/pool/main/d/${pname}/${pname}_${version}.tar.gz";
+    sha256 = "1s6ln7r6y91f0xmzbf9x4yx53hzcpiaa76i9dbmpy0ibw1ji30g4";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -57,11 +57,11 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Tool to create a Debian system in a chroot";
     homepage = https://wiki.debian.org/Debootstrap;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.marcweber ];
-    platforms = stdenv.lib.platforms.linux;
+    license = licenses.mit;
+    maintainers = with maintainers; [ marcweber ];
+    platforms = platforms.linux;
   };
 }

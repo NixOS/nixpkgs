@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub }:
   
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "frogatto-data";
   version = "unstable-2018-12-18";
   

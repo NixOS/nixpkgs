@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "surf-${version}";
+  pname = "surf";
   version = "2.0";
 
   src = fetchurl {
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
-    description = "A simple web browser based on WebKit/GTK+";
+    description = "A simple web browser based on WebKit/GTK";
     longDescription = ''
-      Surf is a simple web browser based on WebKit/GTK+. It is able to display
+      Surf is a simple web browser based on WebKit/GTK. It is able to display
       websites and follow links. It supports the XEmbed protocol which makes it
       possible to embed it in another application. Furthermore, one can point
       surf to another URI by setting its XProperties.

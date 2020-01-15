@@ -4,7 +4,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "rmlint-${version}";
+  pname = "rmlint";
   version = "2.8.0";
 
   src = fetchFromGitHub {

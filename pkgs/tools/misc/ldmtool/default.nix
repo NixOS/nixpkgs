@@ -2,7 +2,7 @@
   libtool, readline, gobject-introspection, json-glib, lvm2, libxslt, docbook_xsl }:
 
 stdenv.mkDerivation rec {
-   name = "ldmtool-${version}";
+   pname = "ldmtool";
    version = "0.2.4";
 
    src = fetchFromGitHub {

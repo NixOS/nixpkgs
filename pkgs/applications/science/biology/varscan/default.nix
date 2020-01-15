@@ -1,7 +1,7 @@
 {stdenv, fetchurl, jre, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "varscan-${version}";
+  pname = "varscan";
   version = "2.4.2";
 
   src = fetchurl {

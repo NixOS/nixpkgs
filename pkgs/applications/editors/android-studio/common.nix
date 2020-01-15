@@ -40,10 +40,10 @@
 let
   drvName = "android-studio-${channel}-${version}";
   androidStudio = stdenv.mkDerivation {
-    name = drvName;
+    name = "${drvName}-unwrapped";
 
     src = fetchurl {
-      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.zip";
+      url = "https://dl.google.com/dl/android/studio/ide-zips/${version}/android-studio-ide-${build}-linux.tar.gz";
       sha256 = sha256Hash;
     };
 
@@ -55,7 +55,7 @@ let
       cp -r . $out
       wrapProgram $out/bin/studio.sh \
         --set ANDROID_EMULATOR_USE_SYSTEM_LIBS 1 \
-        --set PATH "${stdenv.lib.makeBinPath [
+        --prefix PATH : "${stdenv.lib.makeBinPath [
 
           # Checked in studio.sh
           coreutils
@@ -133,7 +133,7 @@ let
     multiPkgs = pkgs: [ pkgs.ncurses5 ];
   };
 in runCommand
-  "${drvName}-wrapper"
+  drvName
   {
     startScript = ''
       #!${bash}/bin/bash
@@ -141,6 +141,9 @@ in runCommand
     '';
     preferLocalBuild = true;
     allowSubstitutes = false;
+    passthru = {
+      unwrapped = androidStudio;
+    };
     meta = with stdenv.lib; {
       description = "The Official IDE for Android (${channel} channel)";
       longDescription = ''

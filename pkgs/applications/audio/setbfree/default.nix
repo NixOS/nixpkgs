@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation  rec {
-  name = "setbfree-${version}";
+  pname = "setbfree";
   version = "0.8.8";
 
   src = fetchurl {

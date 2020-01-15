@@ -1,12 +1,12 @@
 { stdenv, lib, zlib, glib, alsaLib, dbus, gtk3, atk, pango, freetype, fontconfig
-, libgnome-keyring3, gdk_pixbuf, cairo, cups, expat, libgpgerror, nspr
+, libgnome-keyring3, gdk-pixbuf, cairo, cups, expat, libgpgerror, nspr
 , gconf, nss, xorg, libcap, systemd, libnotify, libsecret
 }:
 
 let
   packages = [
     stdenv.cc.cc zlib glib dbus gtk3 atk pango freetype libgnome-keyring3
-    fontconfig gdk_pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
+    fontconfig gdk-pixbuf cairo cups expat libgpgerror alsaLib nspr gconf nss
     xorg.libXrender xorg.libX11 xorg.libXext xorg.libXdamage xorg.libXtst
     xorg.libXcomposite xorg.libXi xorg.libXfixes xorg.libXrandr
     xorg.libXcursor xorg.libxkbfile xorg.libXScrnSaver libcap systemd libnotify

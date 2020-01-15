@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python2Packages }:
 
 python2Packages.buildPythonApplication rec {
-  name = "gitfs-${version}";
+  pname = "gitfs";
   version = "0.4.5.1";
 
   src = fetchFromGitHub {

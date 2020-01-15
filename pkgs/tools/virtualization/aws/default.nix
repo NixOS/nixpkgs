@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "aws-1.75";
-  
+
   src = fetchurl {
     url = https://raw.github.com/timkay/aws/2f2ff99f9f5111ea708ae6cd14d20e264748e72b/aws;
     sha256 = "0d5asv73a58yb1bb1jpsw3c7asd62y86z5fwpg4llhjzkx79maj6";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase =
     ''

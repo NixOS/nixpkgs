@@ -1,26 +1,22 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dive";
-  version = "0.5.0";
-
-  goPackagePath = "github.com/wagoodman/dive";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
-    repo = "dive";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "159m36p7b0ygdp42qdmmz02rhrkymh8m6yl21m1ixd4c2pjkjhns";
+    sha256 = "1pyrdff5qqc0l3h4nssa9a7qnfqwy2p6ywc8nbwyc7wvzgdiczb8";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "1fk9z7a6wghrs15pc28g5ri7rkbb1ifjb91rscwqsmh10r2wik4w";
 
-  doCheck = true;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for exploring each layer in a docker image";
     homepage = https://github.com/wagoodman/dive;
     license = licenses.mit;
-    maintainers = [ maintainers.marsam ];
+    maintainers = with maintainers; [ marsam spacekookie ];
   };
 }

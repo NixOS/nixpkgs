@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "chipmunk-${version}";
+  pname = "chipmunk";
   majorVersion = "7";
   version = "${majorVersion}.0.1";
 

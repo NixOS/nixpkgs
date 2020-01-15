@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, libselinux, libuuid, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "f2fs-tools-${version}";
+  pname = "f2fs-tools";
   version = "1.11.0";
 
   src = fetchgit {

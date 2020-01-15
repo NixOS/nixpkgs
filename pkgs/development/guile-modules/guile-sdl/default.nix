@@ -3,12 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "guile-sdl";
   version = "0.5.2";
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${name}.tar.xz";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.xz";
     sha256 = "0cjgs012a9922hn6xqwj66w6qmfs3nycnm56hyykx5n3g5p7ag01";
   };
 

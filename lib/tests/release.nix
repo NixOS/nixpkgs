@@ -1,11 +1,9 @@
 { pkgs ? import ((import ../.).cleanSource ../..) {} }:
 
-pkgs.stdenv.mkDerivation {
-  name = "nixpkgs-lib-tests";
-  buildInputs = [ pkgs.nix ];
+pkgs.runCommandNoCC "nixpkgs-lib-tests" {
+  buildInputs = [ pkgs.nix (import ./check-eval.nix) ];
   NIX_PATH="nixpkgs=${pkgs.path}";
-
-  buildCommand = ''
+} ''
     datadir="${pkgs.nix}/share"
     export TEST_ROOT=$(pwd)/test-tmp
     export NIX_BUILD_HOOK=
@@ -22,10 +20,5 @@ pkgs.stdenv.mkDerivation {
     cd ${pkgs.path}/lib/tests
     bash ./modules.sh
 
-    [[ "$(nix-instantiate --eval --strict misc.nix)" == "[ ]" ]]
-
-    [[ "$(nix-instantiate --eval --strict systems.nix)" == "[ ]" ]]
-
     touch $out
-  '';
-}
+''

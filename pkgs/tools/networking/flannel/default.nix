@@ -3,7 +3,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "flannel-${version}";
+  pname = "flannel";
   version = "0.11.0";
   rev = "v${version}";
 

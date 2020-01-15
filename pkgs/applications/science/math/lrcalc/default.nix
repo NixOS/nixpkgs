@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   version = "1.2";
   pname = "lrcalc";
-  name = "${pname}-${version}";
 
   src = fetchFromBitbucket {
     owner = "asbuch";

@@ -1,10 +1,10 @@
 { stdenv, fetchurl, emacs, texinfo }:
 
 stdenv.mkDerivation rec {
-  name = "tramp-2.3.0";
+  name = "tramp-2.4.2";
   src = fetchurl {
     url = "mirror://gnu/tramp/${name}.tar.gz";
-    sha256 = "1srwm24lwyf00w1661wbx03xg6j943dk05jhwnwdjf99m82cqbgi";
+    sha256 = "082nwvi99y0bvpl1yhn4yjc8a613jh1pdck253lxn062lkcxxw61";
   };
   buildInputs = [ emacs texinfo ];
   meta = {

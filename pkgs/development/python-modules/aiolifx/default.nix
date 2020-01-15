@@ -23,7 +23,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ bitstring ifaddr ];
 
   meta = with lib; {
-    homepage = http://github.com/frawau/aiolifx;
+    homepage = https://github.com/frawau/aiolifx;
     license = licenses.mit;
     description = "API for local communication with LIFX devices over a LAN with asyncio";
     maintainers = with maintainers; [ netixx ];

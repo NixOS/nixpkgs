@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.3.0";
-  name = "slic3r-${version}";
+  pname = "slic3r";
 
   src = fetchgit {
     url = "git://github.com/alexrj/Slic3r";

@@ -9,7 +9,7 @@ in
 {
   name = "mumble";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ thoughtpolice eelco chaoflow ];
+    maintainers = [ thoughtpolice eelco ];
   };
 
   nodes = {

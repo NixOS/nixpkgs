@@ -92,7 +92,7 @@ in
         restartIfChanged = false;
       };
 
-    systemd.services."console-getty" =
+    systemd.services.console-getty =
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM")

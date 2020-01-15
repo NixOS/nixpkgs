@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, makeself, yasm, fuse, wxGTK, lvm2 }:
+{ stdenv, fetchurl, pkgconfig, makeself, yasm, fuse, unzip, wxGTK, lvm2 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "veracrypt";
-  name = "${pname}-${version}";
   version = "1.23";
+  minorVersion = "-Hotfix-2";
 
   src = fetchurl {
-    url = "https://launchpad.net/${pname}/trunk/${version}/+download/VeraCrypt_${version}_Source.tar.bz2";
-    sha256 = "009lqi43n2w272sxv7y7dz9sqx15qkx6lszkswr8mwmkpgkm0px1";
+    url = "https://launchpad.net/${pname}/trunk/${version}/+download/VeraCrypt_${version}${minorVersion}_Source.zip";
+    sha256 = "229de81b2478cfa5fa73e74e60798a298cd616e9852b9f47b484c80bc2a2c259";
   };
 
   sourceRoot = "src";
 
   nativeBuildInputs = [ makeself pkgconfig yasm ];
-  buildInputs = [ fuse lvm2 wxGTK ];
+  buildInputs = [ fuse lvm2 unzip wxGTK ];
 
   enableParallelBuilding = true;
 

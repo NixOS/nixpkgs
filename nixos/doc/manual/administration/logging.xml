@@ -11,14 +11,14 @@
   The command <literal>journalctl</literal> allows you to see the contents of
   the journal. For example,
 <screen>
-$ journalctl -b
+<prompt>$ </prompt>journalctl -b
 </screen>
   shows all journal entries since the last reboot. (The output of
   <command>journalctl</command> is piped into <command>less</command> by
   default.) You can use various options and match operators to restrict output
   to messages of interest. For instance, to get all messages from PostgreSQL:
 <screen>
-$ journalctl -u postgresql.service
+<prompt>$ </prompt>journalctl -u postgresql.service
 -- Logs begin at Mon, 2013-01-07 13:28:01 CET, end at Tue, 2013-01-08 01:09:57 CET. --
 ...
 Jan 07 15:44:14 hagbard postgres[2681]: [2-1] LOG:  database system is shut down
@@ -29,7 +29,7 @@ Jan 07 15:45:13 hagbard postgres[2500]: [1-1] LOG:  database system is ready to 
   Or to get all messages since the last reboot that have at least a
   “critical” severity level:
 <screen>
-$ journalctl -b -p crit
+<prompt>$ </prompt>journalctl -b -p crit
 Dec 17 21:08:06 mandark sudo[3673]: pam_unix(sudo:auth): auth could not identify password for [alice]
 Dec 29 01:30:22 mandark kernel[6131]: [1053513.909444] CPU6: Core temperature above threshold, cpu clock throttled (total events = 1)
 </screen>

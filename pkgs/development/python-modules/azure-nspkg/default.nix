@@ -1,6 +1,8 @@
-{ pkgs
+{ lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 }:
 
 buildPythonPackage rec {
@@ -13,10 +15,12 @@ buildPythonPackage rec {
     sha256 = "e7d3cea6af63e667d87ba1ca4f8cd7cb4dfca678e4c55fc1cedb320760e39dd0";
   };
 
-  meta = with pkgs.lib; {
+  doCheck = false;
+
+  meta = with lib; {
     description = "Microsoft Azure SDK for Python";
-    homepage = "https://azure.microsoft.com/en-us/develop/python/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ olcai ];
+    homepage = https://github.com/Azure/azure-sdk-for-python;
+    license = licenses.mit;
+    maintainers = with maintainers; [ olcai mwilsoninsight ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "sonic-${version}";
+stdenv.mkDerivation {
+  pname = "sonic";
   version = "2016-03-01";
 
   src = fetchFromGitHub {

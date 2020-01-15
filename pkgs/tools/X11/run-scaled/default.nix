@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, makeWrapper, bc, xorgserver, xpra, xrandr }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2018-06-03";
-  name = "run-scaled-${version}";
+  pname = "run-scaled";
 
   src = fetchFromGitHub {
     owner  = "kaueraal";

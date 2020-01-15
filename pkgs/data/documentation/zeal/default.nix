@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
-, qtbase, qtimageformats, qtwebkit, qtx11extras
+, qtbase, qtimageformats, qtwebkit, qtx11extras, mkDerivation
 , libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
 
-stdenv.mkDerivation rec {
-  name = "zeal-${version}";
+mkDerivation rec {
+  pname = "zeal";
   version = "0.6.1";
 
   src = fetchFromGitHub {

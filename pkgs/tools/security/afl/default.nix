@@ -8,11 +8,11 @@ let
     else if stdenv.hostPlatform.system == "i686-linux" then "qemu-i386"
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
   afl = stdenv.mkDerivation rec {
-    name    = "afl-${version}";
+    pname = "afl";
     version = "2.52b";
 
     src = fetchurl {
-      url    = "http://lcamtuf.coredump.cx/afl/releases/${name}.tgz";
+      url    = "http://lcamtuf.coredump.cx/afl/releases/${pname}-${version}.tgz";
       sha256 = "0ig0ij4n1pwry5dw1hk4q88801jzzy2cric6y2gd6560j55lnqa3";
     };
     enableParallelBuilding = true;
@@ -69,7 +69,7 @@ let
       homepage    = "http://lcamtuf.coredump.cx/afl/";
       license     = stdenv.lib.licenses.asl20;
       platforms   = ["x86_64-linux" "i686-linux"];
-      maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+      maintainers = with stdenv.lib.maintainers; [ thoughtpolice ris ];
     };
   };
 in afl

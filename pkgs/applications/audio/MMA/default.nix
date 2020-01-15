@@ -2,7 +2,7 @@
 
   stdenv.mkDerivation rec {
   version = "16.06";
-  name = "mma-${version}";
+  pname = "mma";
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";

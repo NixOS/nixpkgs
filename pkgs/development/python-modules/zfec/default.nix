@@ -3,13 +3,11 @@
 , fetchPypi
 , setuptoolsDarcs
 , pyutil
-, isPyPy
 }:
 
 buildPythonPackage rec {
   pname = "zfec";
   version = "1.5.3";
-  disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;

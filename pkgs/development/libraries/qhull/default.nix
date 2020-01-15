@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "qhull-2016.1";
 
   src = fetchFromGitHub {

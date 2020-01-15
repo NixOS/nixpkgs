@@ -6,11 +6,10 @@ buildPythonPackage rec {
   version = "2.2.0";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "0ikx21nm7cch4lz9agv5h1hx6zvg2alkpfdrl01khqgilhsicdhi";
+    pname = "python-${pname}";
+    inherit version;
+    sha256 = "0x3jjb1g5bgjdj0jf0jmcg80hn5x2isf49frwvf2ykdl3fxd5gxc";
   };
-
-  patches = [ ./checkPhase-fix-cookie-compare.patch ];
 
   buildInputs = [ pep8 coverage logilab_common ];
   propagatedBuildInputs = [ requests ];
@@ -21,10 +20,10 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://fedorahosted.org/python-bugzilla/;
+    homepage = https://github.com/python-bugzilla/python-bugzilla;
     description = "Bugzilla XMLRPC access module";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pierron ];
+    maintainers = with maintainers; [ pierron peti ];
   };
 }

@@ -14,7 +14,7 @@ let pythonEnv = python2.buildEnv.override {
 };
 
 in stdenv.mkDerivation rec {
-  name    = "cups-googlecloudprint-${version}";
+  pname = "cups-googlecloudprint";
   version = "20160502";
 
   src = fetchFromGitHub {

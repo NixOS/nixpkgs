@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "c14-cli-${version}";
+  pname = "c14-cli";
   version = "0.3";
 
   goPackagePath = "github.com/online-net/c14-cli";
@@ -9,7 +9,7 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "online-net";
     repo = "c14-cli";
-    rev = "${version}";
+    rev = version;
     sha256 = "0b1piviy6vvdbak8y8bc24rk3c1fi67vv3352pmnzvrhsar2r5yf";
   };
 

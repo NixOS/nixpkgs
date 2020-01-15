@@ -7,7 +7,6 @@
 } :
 
 pythonPackages.buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "devpi-client";
   version = "4.1.0";
 
@@ -17,7 +16,7 @@ pythonPackages.buildPythonApplication rec {
   };
 
   checkInputs = with pythonPackages; [
-                    pytest pytestflakes webtest mock
+                    pytest pytest-flakes webtest mock
                     devpi-server tox
                     sphinx wheel git mercurial detox
                     setuptools

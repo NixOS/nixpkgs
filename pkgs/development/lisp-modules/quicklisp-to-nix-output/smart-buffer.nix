@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''smart-buffer'';
   version = ''20160628-git'';
 

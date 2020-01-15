@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "backward-${version}";
+  pname = "backward";
   version = "1.3";
 
   src = fetchFromGitHub {

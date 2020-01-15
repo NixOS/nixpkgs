@@ -1,0 +1,14 @@
+--- a/internal/syscallcompat/unix2syscall_darwin.go
++++ b/internal/syscallcompat/unix2syscall_darwin.go
+@@ -19,8 +19,8 @@ func Unix2syscall(u unix.Stat_t) syscall.Stat_t {
+ 		Size:      u.Size,
+ 		Blksize:   u.Blksize,
+ 		Blocks:    u.Blocks,
+-		Atimespec: syscall.Timespec(u.Atimespec),
+-		Mtimespec: syscall.Timespec(u.Mtimespec),
+-		Ctimespec: syscall.Timespec(u.Ctimespec),
++		Atimespec: syscall.Timespec(u.Atim),
++		Mtimespec: syscall.Timespec(u.Mtim),
++		Ctimespec: syscall.Timespec(u.Ctim),
+ 	}
+ }

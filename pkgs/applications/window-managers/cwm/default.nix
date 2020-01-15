@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libX11, libXinerama, libXrandr, libXft, yacc, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cwm-5.6";
 
   src = fetchFromGitHub {

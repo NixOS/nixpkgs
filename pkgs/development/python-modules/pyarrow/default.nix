@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, fetchurl, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytest, pkgconfig, setuptools_scm, six }:
+{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytest, pkgconfig, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { inherit python; };
@@ -16,6 +16,7 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis pandas pytest ];
 
   PYARROW_BUILD_TYPE = "release";
+  PYARROW_WITH_PARQUET = true;
   PYARROW_CMAKE_OPTIONS = [
     "-DCMAKE_INSTALL_RPATH=${ARROW_HOME}/lib"
 
@@ -23,6 +24,10 @@ buildPythonPackage rec {
     # ourselves
     "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
+
+  preBuild = ''
+    export PYARROW_PARALLEL=$NIX_BUILD_CORES
+  '';
 
   preCheck = ''
     rm pyarrow/tests/test_jvm.py
@@ -43,12 +48,14 @@ buildPythonPackage rec {
     # when it is not intended to be imported at all
     rm pyarrow/tests/deserialize_buffer.py
     substituteInPlace pyarrow/tests/test_feather.py --replace "test_deserialize_buffer_in_different_process" "_disabled"
+
+    # Fails to bind a socket
+    # "PermissionError: [Errno 1] Operation not permitted"
+    substituteInPlace pyarrow/tests/test_ipc.py --replace "test_socket_" "_disabled"
   '';
 
   ARROW_HOME = _arrow-cpp;
   PARQUET_HOME = _arrow-cpp;
-
-  setupPyBuildFlags = ["--with-parquet" ];
 
   checkPhase = ''
     mv pyarrow/tests tests

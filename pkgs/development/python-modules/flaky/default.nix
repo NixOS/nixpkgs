@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "flaky";
-  version = "3.4.0";
+  version = "3.5.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ad7880aef8c35a34ddb394d4fa33047765bca1e3d67d182bf6eba9c8eabf3a2";
+    sha256 = "12bd5e41f372b2190e8d754b6e5829c2f11dbc764e10b30f57e59f829c9ca1da";
   };
 
   buildInputs = [ mock pytest ];

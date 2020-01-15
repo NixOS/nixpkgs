@@ -1,6 +1,6 @@
 { rustPlatform, fetchFromGitHub, lib, makeWrapper, gst_all_1, libsixel }:
 rustPlatform.buildRustPackage rec {
-  name = "termplay-${version}";
+  pname = "termplay";
   version = "2.0.4";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = ["--features" "bin"];
-  cargoSha256 = "1ghvp4n6mvckamvn3hk672wh29jlrwmhrd4hv3mh98li1x9ssbmf";
+  cargoSha256 = "06vf2lhdsp7vsln8007zd1xcswn5akk9gnhh7582x1siiijksmn7";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

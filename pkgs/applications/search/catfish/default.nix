@@ -1,5 +1,5 @@
 { stdenv, fetchurl, file, which, intltool, gobject-introspection,
-  findutils, xdg_utils, gnome3, pythonPackages, hicolor-icon-theme,
+  findutils, xdg_utils, gnome3, gtk3, pythonPackages, hicolor-icon-theme,
   wrapGAppsHook
 }:
 
@@ -24,7 +24,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   buildInputs = [
-    gnome3.gtk
+    gtk3
     gnome3.dconf
     pythonPackages.pyxdg
     pythonPackages.ptyprocess
@@ -56,7 +56,7 @@ pythonPackages.buildPythonApplication rec {
     description = "A handy file search tool";
     longDescription = ''
       Catfish is a handy file searching tool. The interface is
-      intentionally lightweight and simple, using only GTK+3.
+      intentionally lightweight and simple, using only GTK 3.
       You can configure it to your needs by using several command line
       options.
     '';

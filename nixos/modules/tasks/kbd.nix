@@ -15,6 +15,7 @@ let
   optimizedKeymap = pkgs.runCommand "keymap" {
     nativeBuildInputs = [ pkgs.buildPackages.kbd ];
     LOADKEYS_KEYMAP_PATH = "${kbdEnv}/share/keymaps/**";
+    preferLocalBuild = true;
   } ''
     loadkeys -b ${optionalString isUnicode "-u"} "${config.i18n.consoleKeyMap}" > $out
   '';
@@ -72,7 +73,7 @@ in
 
   config = mkMerge [
     (mkIf (!setVconsole) {
-      systemd.services."systemd-vconsole-setup".enable = false;
+      systemd.services.systemd-vconsole-setup.enable = false;
     })
 
     (mkIf setVconsole (mkMerge [
@@ -82,7 +83,7 @@ in
         # virtual consoles.
         environment.etc."vconsole.conf".source = vconsoleConf;
         # Provide kbd with additional packages.
-        environment.etc."kbd".source = "${kbdEnv}/share";
+        environment.etc.kbd.source = "${kbdEnv}/share";
 
         boot.initrd.preLVMCommands = mkBefore ''
           kbd_mode ${if isUnicode then "-u" else "-a"} -C /dev/console
@@ -98,7 +99,7 @@ in
           '') config.i18n.consoleColors}
         '';
 
-        systemd.services."systemd-vconsole-setup" =
+        systemd.services.systemd-vconsole-setup =
           { before = [ "display-manager.service" ];
             after = [ "systemd-udev-settle.service" ];
             restartTriggers = [ vconsoleConf kbdEnv ];

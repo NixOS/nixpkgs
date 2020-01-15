@@ -9,7 +9,7 @@ in {
   meta.maintainers = with lib.maintainers; [ peterhoeg ];
 
   options = {
-    services.pykms = rec {
+    services.pykms = {
       enable = mkOption {
         type = types.bool;
         default = false;

@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "ecdsa";
-  version = "0.13";
+  version = "0.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yj31j0asmrx4an9xvsaj2icdmzy6pw0glfpqrrkrphwdpi1xkv4";
+    sha256 = "5c034ffa23413ac923541ceb3ac14ec15a0d2530690413bff58c12b80e56d884";
   };
 
   # Only needed for tests

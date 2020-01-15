@@ -10,8 +10,9 @@ let
   version = "1.16.3";
   rev = "v${version}";
 
-in mkDerivation rec {
-  name = "qtox-${version}";
+in mkDerivation {
+  pname = "qtox";
+  inherit version;
 
   src = fetchFromGitHub {
     owner  = "qTox";
@@ -44,7 +45,7 @@ in mkDerivation rec {
     description = "Qt Tox client";
     homepage    = https://tox.chat;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ jgeerds akaWolf peterhoeg ];
+    maintainers = with maintainers; [ akaWolf peterhoeg ];
     platforms   = platforms.all;
   };
 }

@@ -1,4 +1,20 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3, meson, ninja, vala, pkgconfig, gobject-introspection, libgee, pantheon, gtk3, glib, gettext, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, python3
+, meson
+, ninja
+, vala
+, pkgconfig
+, libgee
+, pantheon
+, gtk3
+, glib
+, gettext
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "granite";
@@ -50,9 +66,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "An extension to GTK+ used by elementary OS";
+    description = "An extension to GTK used by elementary OS";
     longDescription = ''
-      Granite is a companion library for GTK+ and GLib. Among other things, it provides complex widgets and convenience functions
+      Granite is a companion library for GTK and GLib. Among other things, it provides complex widgets and convenience functions
       designed for use in apps built for elementary OS.
     '';
     homepage = https://github.com/elementary/granite;

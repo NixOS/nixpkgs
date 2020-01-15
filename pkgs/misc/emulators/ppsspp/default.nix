@@ -5,7 +5,7 @@ assert withGamepads -> (SDL2 != null);
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "ppsspp-${version}";
+  pname = "ppsspp";
   version = "1.4.2";
 
   src = fetchFromGitHub {

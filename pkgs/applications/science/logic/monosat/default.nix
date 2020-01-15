@@ -20,7 +20,7 @@ let
     inherit rev sha256;
   };
 
-  core = stdenv.mkDerivation rec {
+  core = stdenv.mkDerivation {
     name = "${pname}-${version}";
     inherit src;
     buildInputs = [ cmake zlib gmp jdk8 ];

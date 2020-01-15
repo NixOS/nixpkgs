@@ -48,6 +48,16 @@ let
         '';
       };
 
+      yubicoAuth = mkOption {
+        default = config.security.pam.yubico.enable;
+        type = types.bool;
+        description = ''
+          If set, users listed in
+          <filename>~/.yubico/authorized_yubikeys</filename>
+          are able to log in with the asociated Yubikey tokens.
+        '';
+      };
+
       googleAuthenticator = {
         enable = mkOption {
           default = false;
@@ -129,6 +139,18 @@ let
           <filename>~/.ssh/authorized_keys</filename>.  This is useful
           for <command>sudo</command> on password-less remote systems.
         '';
+      };
+
+      duoSecurity = {
+        enable = mkOption {
+          default = false;
+          type = types.bool;
+          description = ''
+            If set, use the Duo Security pam module
+            <literal>pam_duo</literal> for authentication.  Requires
+            configuration of <option>security.duosec</option> options.
+          '';
+        };
       };
 
       startSession = mkOption {
@@ -328,6 +350,8 @@ let
               "auth sufficient ${pkgs.pam_usb}/lib/security/pam_usb.so"}
           ${let oath = config.security.pam.oath; in optionalString cfg.oathAuth
               "auth requisite ${pkgs.oathToolkit}/lib/security/pam_oath.so window=${toString oath.window} usersfile=${toString oath.usersFile} digits=${toString oath.digits}"}
+          ${let yubi = config.security.pam.yubico; in optionalString cfg.yubicoAuth
+              "auth ${yubi.control} ${pkgs.yubico-pam}/lib/security/pam_yubico.so id=${toString yubi.id} ${optionalString yubi.debug "debug"}"}
         '' +
           # Modules in this block require having the password set in PAM_AUTHTOK.
           # pam_unix is marked as 'sufficient' on NixOS which means nothing will run
@@ -340,7 +364,8 @@ let
             || cfg.pamMount
             || cfg.enableKwallet
             || cfg.enableGnomeKeyring
-            || cfg.googleAuthenticator.enable)) ''
+            || cfg.googleAuthenticator.enable
+            || cfg.duoSecurity.enable)) ''
               auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
@@ -350,9 +375,11 @@ let
                 ("auth optional ${pkgs.plasma5.kwallet-pam}/lib/security/pam_kwallet5.so" +
                  " kwalletd=${pkgs.libsForQt5.kwallet.bin}/bin/kwalletd5")}
               ${optionalString cfg.enableGnomeKeyring
-                ("auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so")}
+                "auth optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so"}
               ${optionalString cfg.googleAuthenticator.enable
-                  "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
+                "auth required ${pkgs.googleAuthenticator}/lib/security/pam_google_authenticator.so no_increment_hotp"}
+              ${optionalString cfg.duoSecurity.enable
+                "auth required ${pkgs.duo-unix}/lib/security/pam_duo.so"}
             '') + ''
           ${optionalString cfg.unixAuth
               "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
@@ -383,6 +410,8 @@ let
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
           ${optionalString config.services.samba.syncPasswordsByPam
               "password optional ${pkgs.samba}/lib/security/pam_smbpass.so nullok use_authtok try_first_pass"}
+          ${optionalString cfg.enableGnomeKeyring
+              "password optional ${pkgs.gnome3.gnome-keyring}/lib/security/pam_gnome_keyring.so use_authtok"}
 
           # Session management.
           ${optionalString cfg.setEnvironment ''
@@ -617,6 +646,54 @@ in
           If you set this option to <literal>true</literal>,
           <literal>cue</literal> option is added to <literal>pam-u2f</literal>
           module and reminder message will be displayed.
+        '';
+      };
+    };
+
+    security.pam.yubico = {
+      enable = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Enables Yubico PAM (<literal>yubico-pam</literal>) module.
+
+          If set, users listed in
+          <filename>~/.yubico/authorized_yubikeys</filename>
+          are able to log in with the associated Yubikey tokens.
+
+          The file must have only one line:
+          <literal>username:yubikey_token_id1:yubikey_token_id2</literal>
+          More information can be found <link
+          xlink:href="https://developers.yubico.com/yubico-pam/">here</link>.
+        '';
+      };
+      control = mkOption {
+        default = "sufficient";
+        type = types.enum [ "required" "requisite" "sufficient" "optional" ];
+        description = ''
+          This option sets pam "control".
+          If you want to have multi factor authentication, use "required".
+          If you want to use Yubikey instead of regular password, use "sufficient".
+
+          Read
+          <citerefentry>
+            <refentrytitle>pam.conf</refentrytitle>
+            <manvolnum>5</manvolnum>
+          </citerefentry>
+          for better understanding of this option.
+        '';
+      };
+      id = mkOption {
+        example = "42";
+        type = types.str;
+        description = "client id";
+      };
+
+      debug = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Debug output to stderr.
         '';
       };
     };

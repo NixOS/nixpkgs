@@ -13,7 +13,7 @@
 , libmemcached, cyrus_sasl
 , libmicrohttpd
 , libmodbus
-, libnotify, gdk_pixbuf
+, libnotify, gdk-pixbuf
 , liboping
 , libpcap
 , libsigrok
@@ -42,10 +42,10 @@
 }:
 stdenv.mkDerivation rec {
   version = "5.8.1";
-  name = "collectd-${version}";
+  pname = "collectd";
 
   src = fetchurl {
-    url = "https://collectd.org/files/${name}.tar.bz2";
+    url = "https://collectd.org/files/${pname}-${version}.tar.bz2";
     sha256 = "1njk8hh56gb755xafsh7ahmqr9k2d4lam4ddj7s7fqz0gjigv5p7";
   };
 
@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     curl libdbi libgcrypt libmemcached
-    cyrus_sasl libnotify gdk_pixbuf liboping libpcap libvirt
+    cyrus_sasl libnotify gdk-pixbuf liboping libpcap libvirt
     libxml2 postgresql protobufc rrdtool
     varnish yajl jdk libtool python hiredis libmicrohttpd
     riemann_c_client mosquitto rdkafka mongoc

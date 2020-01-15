@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "logrotate-${version}";
+  pname = "logrotate";
   version = "3.15.0";
 
   src = fetchFromGitHub {

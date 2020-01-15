@@ -1,5 +1,5 @@
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   specs:
     bcat (0.6.2)
       rack (~> 1.0)
@@ -12,4 +12,4 @@ DEPENDENCIES
   bcat
 
 BUNDLED WITH
-   1.16.4
+   1.17.2

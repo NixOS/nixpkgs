@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "boolector-${version}";
+  pname = "boolector";
   version = "3.0.0";
 
   src = fetchFromGitHub {

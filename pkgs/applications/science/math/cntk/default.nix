@@ -17,17 +17,15 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "CNTK-${version}";
-  version = "2.4";
+  pname = "CNTK";
+  version = "2.7";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/Microsoft/CNTK";
     rev = "v${version}";
-    sha256 = "0m28wb0ljixcpi14g3gcfiraimh487yxqhd9yrglgyvjb69x597y";
+    sha256 = "18l9k7s966a26ywcf7flqyhm61788pcb9fj3wk61jrmgkhy2pcns";
   };
-
-  patches = [ ./fix_std_bind.patch ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -87,6 +85,7 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/Microsoft/CNTK;
     description = "An open source deep-learning toolkit";
     license = if onebitSGDSupport then licenses.unfreeRedistributable else licenses.mit;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ abbradar ];
   };
 }

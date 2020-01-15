@@ -1,4 +1,4 @@
-{ stdenv, python3, glibcLocales, fetchpatch }:
+{ stdenv, python3, glibcLocales }:
 
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
@@ -6,7 +6,6 @@ in
 buildPythonApplication rec {
   pname = "todoman";
   version = "3.5.0";
-  name = "${pname}-${version}";
 
   src = fetchPypi {
     inherit pname version;

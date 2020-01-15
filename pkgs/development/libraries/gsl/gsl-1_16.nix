@@ -8,9 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0lrgipi0z6559jqh82yx8n4xgnxkhzj46v96dl77hahdp58jzg3k";
   };
 
+  # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
+  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.isx86_64 "-mno-fma";
+
   patches = [
-    # ToDo: there might be more impurities than FMA support check
-    ./disable-fma.patch # https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html
     (fetchpatch {
       name = "bug-39055.patch";
       url = "https://git.savannah.gnu.org/cgit/gsl.git/patch/?id=9cc12d";

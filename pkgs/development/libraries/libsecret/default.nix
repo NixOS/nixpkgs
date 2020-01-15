@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.18.7";
+  version = "0.18.8";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11ylmcfx6ff7xd1gpi58i2nbma83lz2xg0g2dq23w6snqhgzwrhd";
+    sha256 = "058x64689k55wxfkdp4svhnwvv8jmqm7z5mrynybl38f4sfqiyiv";
   };
 
   postPatch = ''
@@ -20,6 +20,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl gobject-introspection vala gtk-doc ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
+
+  configureFlags = [
+    "--with-libgcrypt-prefix=${libgcrypt.dev}"
+  ];
 
   enableParallelBuilding = true;
 

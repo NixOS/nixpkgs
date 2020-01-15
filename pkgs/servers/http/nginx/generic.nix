@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, openssl, zlib, pcre, libxml2, libxslt
-, gd, geoip
+, substituteAll, gd, geoip
 , withDebug ? false
 , withStream ? true
 , withMail ? false
@@ -9,8 +9,20 @@
 
 with stdenv.lib;
 
+let
+
+  mapModules = attrPath: flip concatMap modules
+    (mod:
+      let supports = mod.supports or (_: true);
+      in
+        if supports version then mod.${attrPath} or []
+        else throw "Module at ${toString mod.src} does not support nginx version ${version}!");
+
+in
+
 stdenv.mkDerivation {
-  name = "nginx-${version}";
+  pname = "nginx";
+  inherit version;
 
   src = fetchurl {
     url = "https://nginx.org/download/nginx-${version}.tar.gz";
@@ -18,7 +30,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip ]
-    ++ concatMap (mod: mod.inputs or []) modules;
+    ++ mapModules "inputs";
 
   configureFlags = [
     "--with-http_ssl_module"
@@ -58,13 +70,21 @@ stdenv.mkDerivation {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = [
+    "-I${libxml2.dev}/include/libxml2"
+    "-Wno-error=implicit-fallthrough"
+  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
 
   configurePlatforms = [];
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
-  patches = stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  patches = stdenv.lib.singleton (substituteAll {
+    src = ./nix-etag-1.15.4.patch;
+    preInstall = ''
+      export nixStoreDir="$NIX_STORE" nixStoreDirLen="''${#NIX_STORE}"
+    '';
+  }) ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/102-sizeof_test_fix.patch";
       sha256 = "0i2k30ac8d7inj9l6bl0684kjglam2f68z8lf3xggcc2i5wzhh8a";
@@ -77,7 +97,7 @@ stdenv.mkDerivation {
       url = "https://raw.githubusercontent.com/openwrt/packages/master/net/nginx/patches/103-sys_nerr.patch";
       sha256 = "0s497x6mkz947aw29wdy073k8dyjq8j99lax1a1mzpikzr4rxlmd";
     })
-  ];
+  ] ++ mapModules "patches";
 
   hardeningEnable = optional (!stdenv.isDarwin) "pie";
 
@@ -94,6 +114,6 @@ stdenv.mkDerivation {
     homepage    = http://nginx.org;
     license     = licenses.bsd2;
     platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice raskin fpletz ];
+    maintainers = with maintainers; [ thoughtpolice raskin fpletz globin ];
   };
 }

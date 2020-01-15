@@ -103,7 +103,7 @@ in
     }];
 
     systemd = {
-      timers."mysql-backup" = {
+      timers.mysql-backup = {
         description = "Mysql backup timer";
         wantedBy = [ "timers.target" ];
         timerConfig = {
@@ -112,19 +112,17 @@ in
           Unit = "mysql-backup.service";
         };
       };
-      services."mysql-backup" = {
+      services.mysql-backup = {
         description = "Mysql backup service";
         enable = true;
         serviceConfig = {
           User = cfg.user;
-          PermissionsStartOnly = true;
         };
-        preStart = ''
-          mkdir -m 0700 -p ${cfg.location}
-          chown -R ${cfg.user} ${cfg.location}
-        '';
         script = backupScript;
       };
+      tmpfiles.rules = [
+        "d ${cfg.location} 0700 ${cfg.user} - - -"
+      ];
     };
   };
 

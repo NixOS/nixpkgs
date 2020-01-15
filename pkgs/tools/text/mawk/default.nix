@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Interpreter for the AWK Programming Language";
-    homepage = http://invisible-island.net/mawk/mawk.html;
+    homepage = https://invisible-island.net/mawk/mawk.html;
     license = licenses.gpl2;
     maintainers = with maintainers; [ ehmry ];
     platforms = with platforms; unix;

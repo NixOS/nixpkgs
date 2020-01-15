@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, dpkg }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "raspberrypi-wireless-firmware-${version}";
+stdenv.mkDerivation {
+  pname = "raspberrypi-wireless-firmware";
   version = "2018-08-20";
 
   srcs = [

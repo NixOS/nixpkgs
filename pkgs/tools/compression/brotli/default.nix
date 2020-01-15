@@ -3,7 +3,7 @@
 # ?TODO: there's also python lib in there
 
 stdenv.mkDerivation rec {
-  name = "brotli-${version}";
+  pname = "brotli";
   version = "1.0.7";
 
   src = fetchFromGitHub {

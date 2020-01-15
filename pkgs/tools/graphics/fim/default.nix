@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fim-${version}";
+  pname = "fim";
   version = "0.6";
 
   src = fetchurl {
-    url = "mirror://savannah/fbi-improved/${name}-trunk.tar.gz";
+    url = "mirror://savannah/fbi-improved/${pname}-${version}-trunk.tar.gz";
     sha256 = "124b7c4flx5ygmy5sqq0gpvxqzafnknbcj6f45ddnbdxik9lazzp";
   };
 

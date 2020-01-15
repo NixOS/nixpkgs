@@ -135,7 +135,7 @@ source @out@/nix-support/add-hardening.sh
 
 # Add the flags for the C compiler proper.
 extraAfter=($NIX_@infixSalt@_CFLAGS_COMPILE)
-extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"})
+extraBefore=(${hardeningCFlags[@]+"${hardeningCFlags[@]}"} $NIX_@infixSalt@_CFLAGS_COMPILE_BEFORE)
 
 if [ "$dontLink" != 1 ]; then
 

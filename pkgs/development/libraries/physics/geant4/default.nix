@@ -35,9 +35,9 @@
 , libXmu
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "10.4.1";
-  name = "geant4-${version}";
+  pname = "geant4";
 
   src = fetchurl{
     url = "http://cern.ch/geant4-data/releases/geant4.10.04.p01.tar.gz";
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals enableGDML [ xercesc ]
     ++ stdenv.lib.optionals enableXM [ motif ]
     ++ stdenv.lib.optionals enableQT [ qtbase ]
-    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt ];
+    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.

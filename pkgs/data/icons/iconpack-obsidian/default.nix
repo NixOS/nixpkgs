@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gtk3 }:
 
 stdenv.mkDerivation rec {
-  name = "iconpack-obsidian-${version}";
+  pname = "iconpack-obsidian";
   version = "4.3";
 
   src = fetchFromGitHub {

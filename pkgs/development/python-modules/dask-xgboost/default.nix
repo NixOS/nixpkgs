@@ -6,7 +6,6 @@
 , distributed
 , pytest
 , scikitlearn
-, scipy
 }:
 
 buildPythonPackage rec {

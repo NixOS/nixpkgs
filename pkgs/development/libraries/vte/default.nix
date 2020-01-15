@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.54.3";
+  version = "0.56.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zgb8jgi6sr4km58zfml8zkm24qipbngl2h7s5razhi5a0a84dk9";
+    sha256 = "0j166gic5znssdb9r45qazq4kb4v9fial82czand5wa8i2yd988p";
   };
 
   passthru = {
@@ -34,10 +34,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     homepage = https://www.gnome.org/;
-    description = "A library implementing a terminal emulator widget for GTK+";
+    description = "A library implementing a terminal emulator widget for GTK";
     longDescription = ''
       VTE is a library (libvte) implementing a terminal emulator widget for
-      GTK+, and a minimal sample application (vte) using that.  Vte is
+      GTK, and a minimal sample application (vte) using that.  Vte is
       mainly used in gnome-terminal, but can also be used to embed a
       console/terminal in games, editors, IDEs, etc. VTE supports Unicode and
       character set conversion, as well as emulating any terminal known to

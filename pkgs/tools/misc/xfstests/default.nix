@@ -1,7 +1,7 @@
 { stdenv, acl, attr, autoconf, automake, bash, bc, coreutils, e2fsprogs
 , fetchgit, fio, gawk, keyutils, killall, lib, libaio, libcap, libtool
 , libuuid, libxfs, lvm2, openssl, perl, procps, quota
-, time, utillinux, which, writeScript, xfsprogs }:
+, time, utillinux, which, writeScript, xfsprogs, runtimeShell }:
 
 stdenv.mkDerivation {
   name = "xfstests-2018-04-11";
@@ -78,7 +78,7 @@ stdenv.mkDerivation {
   # wants to write temporary files there. So create a temporary
   # to run from and symlink the runtime files to it.
   wrapperScript = writeScript "xfstests-check" ''
-    #!${stdenv.shell}
+    #!${runtimeShell}
     set -e
     export RESULT_BASE="$(pwd)/results"
 

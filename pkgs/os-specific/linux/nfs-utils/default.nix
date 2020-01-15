@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, lib, pkgconfig, utillinux, libcap, libtirpc, libevent
 , sqlite, kerberos, kmod, libuuid, keyutils, lvm2, systemd, coreutils, tcp_wrappers
-, buildEnv, python3
+, python3, buildPackages
 }:
 
 let
@@ -8,19 +8,19 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "nfs-utils-${version}";
-  version = "2.3.3";
+  pname = "nfs-utils";
+  version = "2.4.1";
 
   src = fetchurl {
-    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${name}.tar.xz";
-    sha256 = "08k36d7l8yqylscnln3p85lcfwi7r7g6n3bnslgmzc1i71wk92zn";
+    url = "https://kernel.org/pub/linux/utils/nfs-utils/${version}/${pname}-${version}.tar.xz";
+    sha256 = "0dkp11a7i01c378ri68bf6k56z27kz8zzvpqm7mip6s7jkd4l9w5";
   };
 
   # libnfsidmap is built together with nfs-utils from the same source,
   # put it in the "lib" output, and the headers in "dev"
   outputs = [ "out" "dev" "lib" "man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig buildPackages.stdenv.cc ];
 
   buildInputs = [
     libtirpc libcap libevent sqlite lvm2
@@ -36,8 +36,6 @@ stdenv.mkDerivation rec {
         --replace '$dir/include/gssapi' ${lib.getDev kerberos}/include/gssapi \
         --replace '$dir/bin/krb5-config' ${lib.getDev kerberos}/bin/krb5-config
     '';
-
-  #configureScript = "bash -x configure";
 
   configureFlags =
     [ "--enable-gss"
@@ -100,7 +98,9 @@ stdenv.mkDerivation rec {
     '';
 
   # One test fails on mips.
-  doCheck = !stdenv.isMips;
+  # doCheck = !stdenv.isMips;
+  # https://bugzilla.kernel.org/show_bug.cgi?id=203793
+  doCheck = false;
 
   disallowedReferences = [ (lib.getDev kerberos) ];
 

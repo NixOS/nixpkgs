@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qtbase, qtserialport, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "cutecom-${version}";
+  pname = "cutecom";
   version = "0.50.0";
   src = fetchFromGitHub {
     owner = "neundorf";

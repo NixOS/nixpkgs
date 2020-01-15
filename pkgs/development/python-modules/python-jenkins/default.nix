@@ -1,16 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
 , mock
 , pbr
 , pyyaml
 , six
 , multi_key_dict
-, testtools
 , testscenarios
-, testrepository
-, kerberos
 , requests
 , unittest2
 , requests-mock

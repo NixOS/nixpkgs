@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "open-iscsi-${version}";
+  pname = "open-iscsi";
   version = "2.0.877";
 
   nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];

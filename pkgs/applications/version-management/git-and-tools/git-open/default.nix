@@ -1,7 +1,7 @@
 {stdenv, git, xdg_utils, gnugrep, fetchFromGitHub, makeWrapper}:
 
 stdenv.mkDerivation rec {
-  name = "git-open-${version}";
+  pname = "git-open";
   version = "2.0.0";
 
   src = fetchFromGitHub {

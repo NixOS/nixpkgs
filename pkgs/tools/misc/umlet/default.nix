@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, jre, unzip }:
+{ stdenv, fetchurl, jre, unzip, runtimeShell }:
 
 stdenv.mkDerivation rec {
   major = "14";
   minor = "3";
   version = "${major}.${minor}.0";
-  name = "umlet-${version}";
+  pname = "umlet";
 
   src = fetchurl {
     url = "http://www.umlet.com/umlet_${major}_${minor}/umlet-standalone-${version}.zip";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     cp -R * "$out/lib"
 
     cat > "$out/bin/umlet" << EOF
-    #!${stdenv.shell}
+    #!${runtimeShell}
 
     programDir="$out/lib"
     cd "\$programDir"

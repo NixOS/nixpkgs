@@ -15,14 +15,14 @@
 , }:
 
 stdenv.mkDerivation rec {
-  name = "pwndbg-${version}";
-  version = "2018.07.29";
+  pname = "pwndbg";
+  version = "2019.01.25";
 
   src = fetchFromGitHub {
     owner = "pwndbg";
     repo = "pwndbg";
     rev = version;
-    sha256 = "1illk1smknaaa0ck8mwvig15c8al5w7fdp42a748xvm8wvxqxdsc";
+    sha256 = "0k7n6pcrj62ccag801yzf04a9mj9znghpkbnqwrzz0qn3rs42vgs";
   };
 
   nativeBuildInputs = [ makeWrapper ];

@@ -3,7 +3,7 @@
 with import pkgspath { inherit system; };
 
 let
-  llvmPackages = llvmPackages_5;
+  llvmPackages = llvmPackages_7;
 in rec {
   coreutils_ = coreutils.override (args: {
     # We want coreutils without ACL support.
@@ -12,9 +12,7 @@ in rec {
     singleBinary = false;
   });
 
-  # We want a version of cctools without LLVM, because the LTO support ends up making
-  # the bootstrap tools huge and isn't really necessary for bootstrap
-  cctools_ = darwin.cctools.override { llvm = null; };
+  cctools_ = darwin.cctools;
 
   # Avoid debugging larger changes for now.
   bzip2_ = bzip2.override (args: { linkStatic = true; });
@@ -80,14 +78,14 @@ in rec {
       cp -d ${libxml2.out}/lib/libxml2*.dylib $out/lib
 
       # Copy what we need of clang
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang++ $out/bin
-      cp -d ${llvmPackages.clang-unwrapped}/bin/clang-[0-9].[0-9] $out/bin
+      cp -d ${llvmPackages.clang-unwrapped}/bin/clang* $out/bin
 
       cp -rL ${llvmPackages.clang-unwrapped}/lib/clang $out/lib
 
       cp -d ${llvmPackages.libcxx}/lib/libc++*.dylib $out/lib
       cp -d ${llvmPackages.libcxxabi}/lib/libc++abi*.dylib $out/lib
+      cp -d ${llvmPackages.llvm.lib}/lib/libLLVM.dylib $out/lib
+      cp -d ${libffi}/lib/libffi*.dylib $out/lib
 
       mkdir $out/include
       cp -rd ${llvmPackages.libcxx}/include/c++     $out/include

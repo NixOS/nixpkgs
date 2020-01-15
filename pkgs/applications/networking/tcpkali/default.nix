@@ -3,7 +3,8 @@
 let version = "1.1.1"; in
 
 stdenv.mkDerivation rec {
-  name = "tcpkali-${version}";
+  pname = "tcpkali";
+  inherit version;
   src = fetchFromGitHub {
     owner = "machinezone";
     repo = "tcpkali";

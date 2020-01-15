@@ -1,6 +1,6 @@
 {stdenv, fetchurl, protobuf}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libosmpbf-1.3.3";
 
   src = fetchurl {

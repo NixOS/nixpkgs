@@ -1,7 +1,7 @@
 { stdenv, fetchzip, bzip2, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "imgpatchtools-${version}";
+  pname = "imgpatchtools";
   version = "0.3";
 
   src = fetchzip {

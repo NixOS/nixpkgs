@@ -47,7 +47,7 @@ in
 
       client1 =
         { pkgs, nodes, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc pkgs.netcat ];
+        { environment.systemPackages = [ pkgs.miniupnpc_2 pkgs.netcat ];
           virtualisation.vlans = [ 2 ];
           networking.defaultGateway = internalRouterAddress;
           networking.interfaces.eth1.ipv4.addresses = [
@@ -63,7 +63,7 @@ in
 
       client2 =
         { pkgs, ... }:
-        { environment.systemPackages = [ pkgs.miniupnpc ];
+        { environment.systemPackages = [ pkgs.miniupnpc_2 ];
           virtualisation.vlans = [ 1 ];
           networking.interfaces.eth1.ipv4.addresses = [
             { address = externalClient2Address; prefixLength = 24; }

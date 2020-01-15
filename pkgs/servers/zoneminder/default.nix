@@ -1,7 +1,6 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, nettools, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
-, avahi, dbus, gettext, git, gnutar, gzip, bzip2, libiconv, openssl, python
 , coreutils, procps, psmisc }:
 
 # NOTES:
@@ -78,7 +77,7 @@ let
   perlBin = "${perl}/bin/perl";
 
 in stdenv.mkDerivation rec {
-  name = "zoneminder-${version}";
+  pname = "zoneminder";
   version = "1.32.3";
 
   src = fetchFromGitHub {
@@ -90,6 +89,8 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./default-to-http-1dot1.patch
+    # Explicitly link with dynamic linking library to fix build
+    ./link-with-libdl.patch
   ];
 
   postPatch = ''
@@ -142,9 +143,10 @@ in stdenv.mkDerivation rec {
     curl ffmpeg glib libjpeg libselinux libsepol mp4v2 mysql pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
+    # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
-    # runtime dependencies not checked at build-time
-    JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    # run-time dependencies not checked at build-time
+    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];

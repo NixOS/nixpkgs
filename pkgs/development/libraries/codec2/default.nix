@@ -4,7 +4,8 @@ let
   version = "0.8";
 
 in stdenv.mkDerivation {
-  name = "codec2-${version}";
+  pname = "codec2";
+  inherit version;
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/freetel/code/codec2/branches/${version}";

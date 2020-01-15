@@ -49,13 +49,13 @@ in
 
       user = mkOption {
         default = "tss";
-        type = types.string;
+        type = types.str;
         description = "User account under which tcsd runs.";
       };
 
       group = mkOption {
         default = "tss";
-        type = types.string;
+        type = types.str;
         description = "Group account under which tcsd runs.";
       };
 
@@ -65,19 +65,19 @@ in
         description = ''
           The location of the system persistent storage file.
           The system persistent storage file holds keys and data across
-          restarts of the TCSD and system reboots. 
+          restarts of the TCSD and system reboots.
         '';
       };
 
       firmwarePCRs = mkOption {
         default = "0,1,2,3,4,5,6,7";
-        type = types.string;
+        type = types.str;
         description = "PCR indices used in the TPM for firmware measurements.";
       };
 
       kernelPCRs = mkOption {
         default = "8,9,10,11,12";
-        type = types.string;
+        type = types.str;
         description = "PCR indices used in the TPM for kernel measurements.";
       };
 

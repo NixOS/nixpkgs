@@ -9,12 +9,12 @@
 
 buildPythonPackage rec {
   pname = "pycapnp";
-  version = "0.6.3";
+  version = "0.6.4";
   disabled = isPyPy || isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b3c5a1fcc93fd02fdc070aeccb89654b87f20bdc740f643cc6378925ed6d4c17";
+    sha256 = "44e14a5ace399cf1753acb8bbce558b8c895c48fd2102d266c34eaff286824cf";
   };
 
   buildInputs = [ capnproto cython ];

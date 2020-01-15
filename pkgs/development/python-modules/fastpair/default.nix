@@ -11,7 +11,7 @@ buildPythonPackage {
     sha256 = "1pv9sxycxdk567s5gs947rhlqngrb9nn9yh4dhdvg1ix1i8dca71";
   };
 
-  buildInputs = [ pytestrunner ];
+  nativeBuildInputs = [ pytestrunner ];
 
   checkInputs = [ pytest ];
 
@@ -19,8 +19,11 @@ buildPythonPackage {
     scipy
   ];
 
+  # Does not support pytest 4 https://github.com/carsonfarmer/fastpair/issues/14
+  doCheck = false;
+
   checkPhase = ''
-    py.test fastpair
+    pytest fastpair
   '';
 
   meta = with stdenv.lib; {

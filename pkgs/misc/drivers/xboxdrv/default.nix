@@ -4,7 +4,8 @@
 let
   version = "0.8.8";
 in stdenv.mkDerivation {
-  name = "xboxdrv-${version}";
+  pname = "xboxdrv";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/xboxdrv/xboxdrv/archive/v${version}.tar.gz";

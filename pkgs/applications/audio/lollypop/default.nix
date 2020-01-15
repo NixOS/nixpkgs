@@ -1,11 +1,26 @@
-{ stdenv, fetchgit, meson, ninja, pkgconfig
-, python3, gtk3, gst_all_1, libsecret, libsoup
-, appstream-glib, desktop-file-utils, totem-pl-parser
-, gobject-introspection, wrapGAppsHook }:
+{ lib
+, fetchgit
+, meson
+, ninja
+, pkgconfig
+, python3
+, gtk3
+, gst_all_1
+, libsecret
+, libsoup
+, appstream-glib
+, desktop-file-utils
+, totem-pl-parser
+, hicolor-icon-theme
+, gobject-introspection
+, wrapGAppsHook
+, lastFMSupport ? true
+, youtubeSupport ? true
+}:
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "0.9.915";
+  version = "1.1.4.14";
 
   format = "other";
   doCheck = false;
@@ -14,7 +29,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "133qmqb015ghif4d4zh6sf8585fpfgbq00rv6qdj5xn13wziipwh";
+    sha256 = "004cwbnxss6vmdsc6i0y83h3xbc2bzc0ra4z99pkizkky2mz6swj";
   };
 
   nativeBuildInputs = [
@@ -28,6 +43,7 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
+    gobject-introspection
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -35,20 +51,20 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    libsecret
+    hicolor-icon-theme
     libsoup
     totem-pl-parser
-  ];
+  ] ++ lib.optional lastFMSupport libsecret;
 
   propagatedBuildInputs = with python3.pkgs; [
     beautifulsoup4
-    gst-python
     pillow
     pycairo
-    pydbus
     pygobject3
-    pylast
-  ];
+  ]
+  ++ lib.optional lastFMSupport pylast
+  ++ lib.optional youtubeSupport youtube-dl
+  ;
 
   postPatch = ''
     chmod +x meson_post_install.py
@@ -60,10 +76,20 @@ python3.pkgs.buildPythonApplication rec  {
     patchPythonScript "$out/libexec/lollypop-sp"
   '';
 
-  meta = with stdenv.lib; {
+  # Produce only one wrapper using wrap-python passing
+  # gappsWrapperArgs to wrap-python additional wrapper
+  # argument
+  dontWrapGApps = true;
+
+  makeWrapperArgs = [
+    "\${gappsWrapperArgs[@]}"
+  ];
+
+  meta = with lib; {
     description = "A modern music player for GNOME";
     homepage = https://wiki.gnome.org/Apps/Lollypop;
     license = licenses.gpl3Plus;
+    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;
   };

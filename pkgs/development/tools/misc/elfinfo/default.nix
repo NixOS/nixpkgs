@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "elfinfo-${version}";
+  pname = "elfinfo";
   version = "0.7.5";
 
   goPackagePath = "github.com/xyproto/elfinfo";

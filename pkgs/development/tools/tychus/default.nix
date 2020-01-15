@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, buildGoPackage, CoreFoundation }:
 
 buildGoPackage rec {
-  name = "tychus-${version}";
+  pname = "tychus";
   version = "0.6.3";
 
   goPackagePath = "github.com/devlocker/tychus";

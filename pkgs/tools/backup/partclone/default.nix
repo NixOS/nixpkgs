@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "partclone-${version}";
+  pname = "partclone";
   version = "0.3.11";
 
   src = fetchFromGitHub {

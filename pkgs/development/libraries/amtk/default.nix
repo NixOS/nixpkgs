@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, gtk3
 , pkgconfig, gnome3, dbus, xvfb_run }:
 let
   version = "5.0.0";
@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    gnome3.gtk
+    gtk3
   ];
 
   doCheck = stdenv.isLinux;
@@ -32,7 +32,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/Projects/Amtk;
-    description = "Actions, Menus and Toolbars Kit for GTK+ applications";
+    description = "Actions, Menus and Toolbars Kit for GTK applications";
     maintainers = [ maintainers.manveru ];
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;

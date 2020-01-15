@@ -5,10 +5,9 @@
 stdenv.mkDerivation rec {
   version = "2.0.2";
   pname = "gksu";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "http://people.debian.org/~kov/gksu/${name}.tar.gz";
+    url = "http://people.debian.org/~kov/gksu/${pname}-${version}.tar.gz";
     sha256 = "0npfanlh28daapkg25q4fncxd89rjhvid5fwzjaw324x0g53vpm1";
   };
 
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A graphical frontend for libgksu";
     longDescription = ''
-      GKSu is a library that provides a Gtk+ frontend to su and sudo.
+      GKSu is a library that provides a GTK frontend to su and sudo.
       It supports login shells and preserving environment when acting as
       a su frontend. It is useful to menu items or other graphical
       programs that need to ask a user's password to run another program

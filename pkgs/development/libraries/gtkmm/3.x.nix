@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gtkmm";
-  version = "3.24.0";
+  version = "3.24.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hxaq4x9jqj8vvnv3sb6nwapz83v8lclbm887qqci0g50llcjpyg";
+    sha256 = "1zfj89spr8ianib5y10wcw63ybdmyjy58a15vqs0m8jq4knl5znx";
   };
 
   outputs = [ "out" "dev" ];
@@ -29,11 +29,11 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "C++ interface to the GTK+ graphical user interface library";
+    description = "C++ interface to the GTK graphical user interface library";
 
     longDescription = ''
       gtkmm is the official C++ interface for the popular GUI library
-      GTK+.  Highlights include typesafe callbacks, and a
+      GTK.  Highlights include typesafe callbacks, and a
       comprehensive set of widgets that are easily extensible via
       inheritance.  You can create user interfaces either in code or
       with the Glade User Interface designer, using libglademm.

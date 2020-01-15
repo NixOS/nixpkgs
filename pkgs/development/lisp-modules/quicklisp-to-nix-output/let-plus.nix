@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''let-plus'';
   version = ''20171130-git'';
 

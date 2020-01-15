@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "nsjail-${version}";
+  pname = "nsjail";
   version = "2.8";
 
   src = fetchFromGitHub {

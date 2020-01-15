@@ -3,8 +3,8 @@ libxml2, gettext, python, libxml2Python, docbook5, docbook_xsl,
 libxslt, intltool, libart_lgpl, withGNOME ? false, libgnomeui, hicolor-icon-theme,
 gtk-mac-integration-gtk2 }:
 
-stdenv.mkDerivation rec {
-  name = "dia-${version}";
+stdenv.mkDerivation {
+  pname = "dia";
   version = "0.97.3.20170622";
 
   src = fetchgit {

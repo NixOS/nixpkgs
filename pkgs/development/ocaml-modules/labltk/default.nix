@@ -25,7 +25,7 @@ let param = {
     key = "1764";
     sha256 = "0wgx65y1wkgf22ihpqmspqfp95fqbj3pldhp1p3b1mi8rmc37zwj";
   };
-}."${builtins.substring 0 4 ocaml.version}";
+}.${builtins.substring 0 4 ocaml.version};
 in
 
 stdenv.mkDerivation rec {

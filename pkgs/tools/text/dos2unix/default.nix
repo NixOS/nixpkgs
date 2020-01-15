@@ -1,11 +1,11 @@
 {stdenv, fetchurl, perl, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "dos2unix-${version}";
+  pname = "dos2unix";
   version = "7.4.0";
 
   src = fetchurl {
-    url = "https://waterlan.home.xs4all.nl/dos2unix/${name}.tar.gz";
+    url = "https://waterlan.home.xs4all.nl/dos2unix/${pname}-${version}.tar.gz";
     sha256 = "12h4c61g376bhq03y5g2xszkrkrj5hwd928rly3xsp6rvfmnbixs";
   };
 

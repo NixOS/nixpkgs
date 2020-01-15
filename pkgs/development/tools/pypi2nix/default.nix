@@ -24,7 +24,8 @@ let
   };
 
 in stdenv.mkDerivation rec {
-  name = "pypi2nix-${version}";
+  pname = "pypi2nix";
+  inherit version;
   srcs = [
     src
     click
@@ -43,7 +44,7 @@ in stdenv.mkDerivation rec {
     mv click-*/click                    $out/pkgs/click
     mv requests-*/requests              $out/pkgs/
 
-    if [ "$IN_NIX_SHELL" != "1" ]; then
+    if [ -z "$IN_NIX_SHELL" ]; then
       if [ -e git-export ]; then
         mv git-export/src/pypi2nix      $out/pkgs/pypi2nix
       else
@@ -101,6 +102,6 @@ in stdenv.mkDerivation rec {
   meta = {
     homepage = https://github.com/garbas/pypi2nix;
     description = "A tool that generates nix expressions for your python packages, so you don't have to.";
-    maintainers = with stdenv.lib.maintainers; [ garbas ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

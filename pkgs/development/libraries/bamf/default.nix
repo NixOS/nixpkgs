@@ -1,9 +1,9 @@
 { stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
 , libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2 }:
+, xorgserver, dbus, python2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "bamf-${version}";
+  pname = "bamf";
   version = "0.5.4";
 
   outputs = [ "out" "dev" "devdoc" ];
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     python2.pkgs.libxml2
     dbus
     xorgserver
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -54,8 +55,8 @@ stdenv.mkDerivation rec {
 
   # fix paths
   makeFlags = [
-    "INTROSPECTION_GIRDIR=${placeholder ''dev''}/share/gir-1.0/"
-    "INTROSPECTION_TYPELIBDIR=${placeholder ''out''}/lib/girepository-1.0"
+    "INTROSPECTION_GIRDIR=${placeholder "dev"}/share/gir-1.0/"
+    "INTROSPECTION_TYPELIBDIR=${placeholder "out"}/lib/girepository-1.0"
   ];
 
   preConfigure = ''

@@ -3,7 +3,7 @@
 , libappindicator-gtk2, xflux, librsvg, wrapGAppsHook
 }:
 pythonPackages.buildPythonApplication rec {
-  name = "xflux-gui-${version}";
+  pname = "xflux-gui";
   version = "1.1.10";
 
   src = fetchFromGitHub {

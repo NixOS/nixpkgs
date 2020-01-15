@@ -1,0 +1,24 @@
+From 95a75c95c5c4e641ce7cda0ded968d66f07f822a Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@protonmail.ch>
+Date: Sat, 18 May 2019 14:44:08 -0400
+Subject: [PATCH] highlight: fix permission on file style
+
+---
+ gtkdoc/highlight.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gtkdoc/highlight.py b/gtkdoc/highlight.py
+index 8f6e470..d11c432 100644
+--- a/gtkdoc/highlight.py
++++ b/gtkdoc/highlight.py
+@@ -47,6 +47,6 @@ def highlight_code(code, lang='c'):
+ 
+ 
+ def append_style_defs(css_file_name):
+-    os.chmod(css_file_name, stat.S_IWRITE)
++    os.chmod(css_file_name, 0o664)
+     with open(css_file_name, 'at', newline='\n', encoding='utf-8') as css:
+         css.write(HTML_FORMATTER.get_style_defs())
+-- 
+2.21.0
+

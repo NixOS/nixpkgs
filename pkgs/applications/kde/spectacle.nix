@@ -4,7 +4,7 @@
   ki18n, xcb-util-cursor,
   kconfig, kcoreaddons, kdbusaddons, kdeclarative, kio, kipi-plugins,
   knotifications, kscreen, kwidgetsaddons, kwindowsystem, kxmlgui, libkipi,
-  qtx11extras, knewstuff
+  qtx11extras, knewstuff, qttools
 }:
 
 mkDerivation {
@@ -16,5 +16,9 @@ mkDerivation {
     kscreen kwidgetsaddons kwindowsystem kxmlgui libkipi qtx11extras xcb-util-cursor
     knewstuff
   ];
+  postPatch = ''
+    substituteInPlace desktop/org.kde.spectacle.desktop \
+      --replace "Exec=qdbus" "Exec=${lib.getBin qttools}/bin/qdbus"
+  '';
   propagatedUserEnvPkgs = [ kipi-plugins libkipi ];
 }

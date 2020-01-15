@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bash, perl, python }:
 
 stdenv.mkDerivation rec {
-  name = "dmtcp-${version}";
+  pname = "dmtcp";
   version = "2.5.2";
 
   src = fetchFromGitHub {

@@ -1,18 +1,22 @@
-{ stdenv, fetchurl
-, gmp, readline, libX11, tex, perl
+{ stdenv
+, fetchurl
+, gmp
+, readline
+, libX11
+, tex
+, perl
 , withThread ? true, libpthreadstubs
 }:
 
 assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
-
-  name = "pari-${version}";
-  version = "2.11.1";
+  pname = "pari";
+  version = "2.11.2";
 
   src = fetchurl {
-    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${name}.tar.gz";
-    sha256 = "1jfax92jpydjd02fwl30r6b8kfzqqd6sm4yx94gidyz9lqjb7a94";
+    url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
+    sha256 = "0fck8ssmirl8fy7s4mspgrxjs5sag76xbshqlqzkcl3kqyrk4raa";
   };
 
   buildInputs = [
@@ -70,7 +74,7 @@ stdenv.mkDerivation rec {
     homepage    = http://pari.math.u-bordeaux.fr;
     downloadPage = http://pari.math.u-bordeaux.fr/download.html;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ertes raskin AndersonTorres ];
+    maintainers = with maintainers; [ ertes raskin AndersonTorres timokau ];
     platforms   = platforms.linux ++ platforms.darwin;
     updateWalker = true;
   };

@@ -1,19 +1,19 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
-, desktop-file-utils, python3, wrapGAppsHook , gtk, gnome3, gnome-autoar
+, desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
 , glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
-, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
-, substituteAll, bubblewrap
+, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk-pixbuf
+, substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
 }:
 
 let
   pname = "nautilus";
-  version = "3.30.5";
+  version = "3.32.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "144r4py9b8w9ycsg6fggjg05kwvymh003qsb3h6apgpch5y3zgnv";
+    sha256 = "1x9crzbj6rrrf8w5dkcx0c14j40byr4ijpzkwd5dcrbfvvdy1r01";
   };
 
   nativeBuildInputs = [
@@ -22,9 +22,9 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib-networking shared-mime-info libexif gtk exempi libnotify libselinux
-    tracker tracker-miners gexiv2 libseccomp bubblewrap
-    gnome3.adwaita-icon-theme gnome3.gsettings-desktop-schemas
+    glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
+    tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
+    gnome3.adwaita-icon-theme gsettings-desktop-schemas
   ];
 
   propagatedBuildInputs = [ gnome-autoar ];
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )

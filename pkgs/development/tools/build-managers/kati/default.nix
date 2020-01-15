@@ -1,7 +1,7 @@
 { fetchgit, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "kati-unstable-${version}";
+  pname = "kati-unstable";
   version = "2017-05-23";
   rev = "2dde61e46ab789f18956ff3b7c257dd8eb97993f";
 

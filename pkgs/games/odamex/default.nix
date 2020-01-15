@@ -1,6 +1,6 @@
 { stdenv, cmake, fetchurl, pkgconfig, SDL, SDL_mixer, SDL_net }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "odamex-0.7.0";
   src = fetchurl {
     url = mirror://sourceforge/odamex/odamex-src-0.7.0.tar.bz2;

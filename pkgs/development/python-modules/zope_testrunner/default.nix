@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ zope_interface zope_exceptions zope_testing six ];
 
+  doCheck = !stdenv.isDarwin;
+
   meta = with stdenv.lib; {
     description = "A flexible test runner with layer support";
     homepage = https://pypi.python.org/pypi/zope.testrunner;

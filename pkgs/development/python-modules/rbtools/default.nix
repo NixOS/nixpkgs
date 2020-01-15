@@ -6,7 +6,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "rbtools";
   version = "0.7.2";
   disabled = isPy3k;
@@ -16,10 +16,10 @@ buildPythonPackage rec {
     sha256 = "1ng8l8cx81cz23ls7fq9wz4ijs0zbbaqh4kj0mj6plzcqcf8na4i";
   };
 
-  buildInputs = [ nose ];
+  checkInputs = [ nose ];
   propagatedBuildInputs = [ six ];
 
-  checkPhase = "nosetests";
+  checkPhase = "LC_ALL=C nosetests";
 
   meta = with stdenv.lib; {
     homepage = https://www.reviewboard.org/docs/rbtools/dev/;

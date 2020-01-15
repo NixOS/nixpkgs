@@ -18,7 +18,7 @@
 let
   pname = "Transporter";
   version = "1.3.3";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

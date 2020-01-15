@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, qtbase }:
 
 stdenv.mkDerivation rec {
-  name = "boomerang-${version}";
+  pname = "boomerang";
   version = "0.4.0-alpha-2018-07-03";
 
   src = fetchFromGitHub {

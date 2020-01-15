@@ -13,7 +13,7 @@
 assert withGf2x -> gf2x != null;
 
 stdenv.mkDerivation rec {
-  name = "ntl-${version}";
+  pname = "ntl";
   version = "11.3.2";
 
   src = fetchurl {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     perl # needed for ./configure
   ];
 
-  sourceRoot = "${name}/src";
+  sourceRoot = "${pname}-${version}/src";
 
   enableParallelBuilding = true;
 

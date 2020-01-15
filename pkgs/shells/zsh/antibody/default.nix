@@ -1,19 +1,19 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
-  name = "antibody-${version}";
-  version = "4.0.2";
+buildGoModule rec {
+  pname = "antibody";
+  version = "4.1.2";
 
   goPackagePath = "github.com/getantibody/antibody";
 
   src = fetchFromGitHub {
-    owner  = "getantibody";
-    repo   = "antibody";
+    owner = "getantibody";
+    repo = "antibody";
     rev = "v${version}";
-    sha256 = "1lq0bd2l928bgwqiq3fa5ippjhnsfgwdqn6nd3hfis8bijrwc5jv";
+    sha256 = "1csanmvix7b2sa7nsy8nh3jq6gmhp8i51xivsabm1lj2y30c0ly3";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "1p9cw92ivwgpkvjxvwd9anbd1vzhpicm9il4pg37z2kgr2ihhnyh";
 
   meta = with lib; {
     description = "The fastest shell plugin manager";

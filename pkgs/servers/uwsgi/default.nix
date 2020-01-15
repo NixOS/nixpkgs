@@ -48,12 +48,12 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "
 in
 
 stdenv.mkDerivation rec {
-  name = "uwsgi-${version}";
-  version = "2.0.17.1";
+  pname = "uwsgi";
+  version = "2.0.18";
 
   src = fetchurl {
-    url = "https://projects.unbit.it/downloads/${name}.tar.gz";
-    sha256 = "0xxjb9dyivq5531birvxq2gnyxf2x5q7gz54440acra6qwsq4cfj";
+    url = "https://projects.unbit.it/downloads/${pname}-${version}.tar.gz";
+    sha256 = "10zmk4npknigmbqcq1wmhd461dk93159px172112vyq0i19sqwj9";
   };
 
   nativeBuildInputs = [ python3 pkgconfig ];
@@ -95,7 +95,7 @@ stdenv.mkDerivation rec {
     homepage = https://uwsgi-docs.readthedocs.org/en/latest/;
     description = "A fast, self-healing and developer/sysadmin-friendly application container server coded in pure C";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ abbradar schneefux ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ abbradar schneefux globin ];
+    platforms = platforms.unix;
   };
 }

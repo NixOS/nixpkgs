@@ -7,7 +7,7 @@ let
   crdb = cfg.package;
 
   escape    = builtins.replaceStrings ["%"] ["%%"];
-  ifNotNull = v: s: optionalString (!isNull v) s;
+  ifNotNull = v: s: optionalString (v != null) s;
 
   startupCommand = lib.concatStringsSep " "
     [ # Basic startup
@@ -164,7 +164,7 @@ in
 
   config = mkIf config.services.cockroachdb.enable {
     assertions = [
-      { assertion = !cfg.insecure -> !(isNull cfg.certsDir);
+      { assertion = !cfg.insecure -> cfg.certsDir != null;
         message = "CockroachDB must have a set of SSL certificates (.certsDir), or run in Insecure Mode (.insecure = true)";
       }
     ];

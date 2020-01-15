@@ -18,7 +18,8 @@ let
   version = "build01475";
 
   freenet-jars = stdenv.mkDerivation {
-    name = "freenet-jars-${version}";
+    pname = "freenet-jars";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "freenet";

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, cf-private, AppKit, GSS, ImageIO
+, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
 , withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null
@@ -62,11 +62,7 @@ stdenv.mkDerivation rec {
     ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
     ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib-networking ]
-    ++ lib.optionals stdenv.isDarwin [
-      AppKit GSS ImageIO
-      # Needed for CFNotificationCenterAddObserver symbols.
-      cf-private
-    ];
+    ++ lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
 
@@ -116,7 +112,7 @@ stdenv.mkDerivation rec {
     description = "The extensible, customizable GNU text editor";
     homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chaoflow lovek323 peti the-kenny jwiegley ];
+    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
     platforms   = platforms.all;
 
     longDescription = ''

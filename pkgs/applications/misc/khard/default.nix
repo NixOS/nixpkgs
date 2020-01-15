@@ -17,13 +17,13 @@ let
   };
 
 in with python.pkgs; buildPythonApplication rec {
-  version = "0.13.0";
-  name = "khard-${version}";
+  version = "0.14.0";
+  pname = "khard";
   namePrefix = "";
 
   src = fetchurl {
     url = "https://github.com/scheibler/khard/archive/v${version}.tar.gz";
-    sha256 = "06b9xcdg1na6mxa2pnlh0wfsk02k2h6hlki089aaikbg8k8ykj8f";
+    sha256 = "0m1pc67jz663yfc0xzfpknymn8jj2bpfxaph3pl0mjd3h1zjfyaq";
   };
 
   # setup.py reads the UTF-8 encoded readme.
@@ -50,6 +50,6 @@ in with python.pkgs; buildPythonApplication rec {
     homepage = https://github.com/scheibler/khard;
     description = "Console carddav client";
     license = stdenv.lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
   };
 }

@@ -24,36 +24,6 @@ diff -ur cmake-3.12.1/Utilities/cmlibuv/CMakeLists.txt cmake-3.12.1-patched/Util
  endif()
  
  if(CMAKE_SYSTEM_NAME STREQUAL "Linux")
-diff -ur cmake-3.12.1/Utilities/cmlibuv/src/unix/darwin-proctitle.c cmake-3.12.1-patched/Utilities/cmlibuv/src/unix/darwin-proctitle.c
---- cmake-3.12.1/Utilities/cmlibuv/src/unix/darwin-proctitle.c	2018-08-09 21:14:08.000000000 +0900
-+++ cmake-3.12.1-patched/Utilities/cmlibuv/src/unix/darwin-proctitle.c	2018-08-13 10:01:29.000000000 +0900
-@@ -26,9 +26,7 @@
- #include <stdlib.h>
- #include <string.h>
- 
--#include <TargetConditionals.h>
--
--#if !TARGET_OS_IPHONE
-+#if HAVE_APPLICATIONSERVICES_APPLICATIONSERVICES_H
- # include <CoreFoundation/CoreFoundation.h>
- # include <ApplicationServices/ApplicationServices.h>
- #endif
-@@ -58,7 +56,7 @@
- 
- 
- int uv__set_process_title(const char* title) {
--#if TARGET_OS_IPHONE
-+#if !HAVE_APPLICATIONSERVICES_APPLICATIONSERVICES_H
-   return uv__pthread_setname_np(title);
- #else
-   CFStringRef (*pCFStringCreateWithCString)(CFAllocatorRef,
-@@ -205,5 +203,5 @@
-     dlclose(application_services_handle);
- 
-   return err;
--#endif  /* !TARGET_OS_IPHONE */
-+#endif  /* HAVE_APPLICATIONSERVICES_APPLICATIONSERVICES_H */
- }
 diff -ur cmake-3.12.1/Utilities/cmlibuv/src/unix/fsevents.c cmake-3.12.1-patched/Utilities/cmlibuv/src/unix/fsevents.c
 --- cmake-3.12.1/Utilities/cmlibuv/src/unix/fsevents.c	2018-08-09 21:14:08.000000000 +0900
 +++ cmake-3.12.1-patched/Utilities/cmlibuv/src/unix/fsevents.c	2018-08-13 10:01:29.000000000 +0900

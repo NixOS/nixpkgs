@@ -18,7 +18,7 @@ let
 
 in
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "PyLD";
   version = "0.7.2";
 

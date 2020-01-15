@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pybase64";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d415057b17bd8acf65e7a2f5d25e468b5b39df3290c7d9dbb75c0785afbdf3cf";
+    sha256 = "b26263fb6aff11b1e62965c3bac205c4ebe147f37c213191384acafea7f8ab50";
   };
 
   propagatedBuildInputs = [ six ];

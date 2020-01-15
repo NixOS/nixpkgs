@@ -2,7 +2,7 @@
 , libgee, libsoup, fcgi }:
 
 stdenv.mkDerivation rec {
-  name = "valum-${version}";
+  pname = "valum";
   version = "0.3.15";
 
   src = fetchFromGitHub {

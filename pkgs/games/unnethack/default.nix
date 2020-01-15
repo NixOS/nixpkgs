@@ -1,12 +1,13 @@
 { stdenv, fetchgit, utillinux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "unnethack-5.3.1";
+  pname = "unnethack";
+  version = "5.2.0";
 
   src = fetchgit {
     url = "https://github.com/UnNetHack/UnNetHack";
-    rev = "63677eb256b5a75430f190cfb0f76bdd9bd0b9dd";
-    sha256 = "0w6vyg0j2xdvr5vdlyf3dwliyxjzcr5fdbx5maygxiql44j104v3";
+    rev = "refs/tags/${version}";
+    sha256 = "088gd2c7v95f2pm9ky38i28sz73mnsksr2p2hhhflkchxncd21f1";
   };
 
   buildInputs = [ ncurses ];
@@ -21,6 +22,8 @@ stdenv.mkDerivation rec {
                    ];
 
   makeFlags = [ "GAMEPERM=744" ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     cp -r /tmp/unnethack $out/share/unnethack/profile

@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, isPy27
 , fetchPypi
 , six
 , pillow

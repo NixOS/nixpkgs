@@ -1,24 +1,3 @@
-diff --git a/python-package/setup.py b/python-package/setup.py
-index e6c3386f..4ed0a8bd 100644
---- a/python-package/setup.py
-+++ b/python-package/setup.py
-@@ -16,8 +16,6 @@ libpath_py = os.path.join(CURRENT_DIR, 'xgboost/libpath.py')
- libpath = {'__file__': libpath_py}
- exec(compile(open(libpath_py, "rb").read(), libpath_py, 'exec'), libpath, libpath)
- 
--LIB_PATH = [os.path.relpath(libfile, CURRENT_DIR) for libfile in libpath['find_lib_path']()]
--print("Install libxgboost from: %s" % LIB_PATH)
- # Please use setup_pip.py for generating and deploying pip installation
- # detailed instruction in setup_pip.py
- setup(name='xgboost',
-@@ -35,7 +33,6 @@ setup(name='xgboost',
-       # this will use MANIFEST.in during install where we specify additional files,
-       # this is the golden line
-       include_package_data=True,
--      data_files=[('xgboost', LIB_PATH)],
-       license='Apache-2.0',
-       classifiers=['License :: OSI Approved :: Apache Software License'],
-       url='https://github.com/dmlc/xgboost')
 diff --git a/python-package/xgboost/libpath.py b/python-package/xgboost/libpath.py
 index d87922c0..859a30fb 100644
 --- a/python-package/xgboost/libpath.py
@@ -56,4 +35,4 @@ index d87922c0..859a30fb 100644
 -            'did you install compilers and run build.sh in root path?\n'
 -            'List of candidates:\n' + ('\n'.join(dll_path)))
 -    return lib_path
-+    return ["@libpath@/libxgboost.so"]
++    return ["@libpath@/libxgboost@extention@"]

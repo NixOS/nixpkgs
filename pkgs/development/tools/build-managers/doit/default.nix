@@ -15,7 +15,9 @@ in python3Packages.buildPythonApplication {
 
   buildInputs = with python3Packages; [ mock pytest ];
 
-  propagatedBuildInputs = with python3Packages; [ cloudpickle pyinotify ];
+  propagatedBuildInputs = with python3Packages; [ cloudpickle ]
+    ++ stdenv.lib.optional stdenv.isLinux pyinotify
+    ++ stdenv.lib.optional stdenv.isDarwin macfsevents;
 
   # Tests fail due to mysterious gdbm.open() resource temporarily
   # unavailable errors.
@@ -23,7 +25,7 @@ in python3Packages.buildPythonApplication {
   checkPhase = "py.test";
 
   meta = with stdenv.lib; {
-    homepage = http://pydoit.org/;
+    homepage = https://pydoit.org/;
     description = "A task management & automation tool";
     license = licenses.mit;
     longDescription = ''

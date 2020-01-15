@@ -2,7 +2,7 @@
 , perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "swh-plugins-${version}";
+  pname = "swh-plugins";
   version = "0.4.17";
 
 

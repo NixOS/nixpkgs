@@ -1,7 +1,7 @@
 { stdenv, fetchgit, openldap, openssl, popt, glib, ncurses, readline, pkgconfig, cyrus_sasl, autoconf, automake }:
 
-stdenv.mkDerivation rec {
-  name = "ldapvi-${version}";
+stdenv.mkDerivation {
+  pname = "ldapvi";
   version = "0lz1sb5r0y9ypy8d7hm0l2wfa8l69f8ll0i5c78c0apz40nyjqkg";
 
   # use latest git, it includes some important patches since 2007 release

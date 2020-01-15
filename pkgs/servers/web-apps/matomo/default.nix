@@ -1,14 +1,12 @@
 { stdenv, fetchurl, makeWrapper, php }:
 
 stdenv.mkDerivation rec {
-  name = "matomo-${version}";
-  version = "3.8.1";
+  pname = "matomo";
+  version = "3.11.0";
 
   src = fetchurl {
-    # TODO: As soon as the tarballs are renamed as well on future releases, this should be enabled again
-    # url = "https://builds.matomo.org/${name}.tar.gz";
-    url = "https://builds.matomo.org/piwik-${version}.tar.gz";
-    sha256 = "0ca4fkg2jpkfg0r9hxl45ad5xzz0gxhf404i96j059bn3c41kfi0";
+    url = "https://builds.matomo.org/matomo-${version}.tar.gz";
+    sha256 = "1fbnmmzzsi3dfm9qm30wypxjcazl37mryaik9mlrb19hnp2md40q";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -41,8 +39,8 @@ stdenv.mkDerivation rec {
     cp -ra * $out/share/
     # tmp/ is created by matomo in PIWIK_USER_PATH
     rmdir $out/share/tmp
-    # config/ needs to be copied to PIWIK_USER_PATH anyway
-    mv $out/share/config $out/
+    # config/ needs to be accessed by PIWIK_USER_PATH anyway
+    ln -s $out/share/config $out/
 
     makeWrapper ${php}/bin/php $out/bin/matomo-console \
       --add-flags "$out/share/console"

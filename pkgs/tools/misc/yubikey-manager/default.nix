@@ -2,11 +2,12 @@
   yubikey-personalization, libu2f-host, libusb1 }:
 
 python3Packages.buildPythonPackage rec {
-  name = "yubikey-manager-2.0.0";
+  pname = "yubikey-manager";
+  version = "3.1.0";
 
   srcs = fetchurl {
-    url = "https://developers.yubico.com/yubikey-manager/Releases/${name}.tar.gz";
-    sha256 = "1x36pyg9g3by2pa11j6d73d79sdlb7qy98lwwn05f43fjm74qnz9";
+    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
+    sha256 = "0nb3qzpggyp61lchvprnklby5mf5n0xpn9z8vlhh99pz1k9sqdq1";
   };
 
   propagatedBuildInputs =
@@ -30,8 +31,15 @@ python3Packages.buildPythonPackage rec {
   ];
 
   postInstall = ''
+    mkdir -p "$out/man/man1"
+    cp man/ykman.1 "$out/man/man1"
+
     mkdir -p $out/share/bash-completion/completions
     _YKMAN_COMPLETE=source $out/bin/ykman > $out/share/bash-completion/completions/ykman || :
+    mkdir -p $out/share/zsh/site-functions/
+    _YKMAN_COMPLETE=source_zsh "$out/bin/ykman" > "$out/share/zsh/site-functions/_ykman" || :
+    substituteInPlace "$out/share/zsh/site-functions/_ykman" \
+      --replace 'compdef _ykman_completion ykman;' '_ykman_completion "$@"'
   '';
 
   # See https://github.com/NixOS/nixpkgs/issues/29169

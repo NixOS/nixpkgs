@@ -5,13 +5,14 @@
 
 python.buildPythonPackage rec {
   pname = "snakemake";
-  version = "5.2.2";
+  version = "5.4.4";
 
   propagatedBuildInputs = with python; [
     appdirs
     ConfigArgParse
     datrie
     docutils
+    GitPython
     jsonschema
     pyyaml
     ratelimiter
@@ -21,7 +22,7 @@ python.buildPythonPackage rec {
 
   src = python.fetchPypi {
     inherit pname version;
-    sha256 = "adffe7e24b4a613a9e8bf0a2a320b3cea236d86afb9132bb0bbbc08b8e35a3a3";
+    sha256 = "157323e0e1be34302edbbf399b2acbe25a4291bceffd47a0469963a970c9375f";
   };
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json

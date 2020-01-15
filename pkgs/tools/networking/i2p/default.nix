@@ -1,7 +1,7 @@
 { stdenv, ps, coreutils, fetchurl, jdk, jre, ant, gettext, which }:
 
 let wrapper = stdenv.mkDerivation rec {
-  name = "wrapper-${version}";
+  pname = "wrapper";
   version = "3.5.35";
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
@@ -27,10 +27,10 @@ let wrapper = stdenv.mkDerivation rec {
 in
 
 stdenv.mkDerivation rec {
-  name = "i2p-0.9.38";
+  name = "i2p-0.9.41";
   src = fetchurl {
     url = "https://github.com/i2p/i2p.i2p/archive/${name}.tar.gz";
-    sha256 = "0fxn8q6ccpjxr41s97nmjxg7hx12dzwrm5a7gyxgr44r7l77qlv6";
+    sha256 = "0adrj56i3pcc9ainj22akjrrvy73carz5jk29qa1h2b9q03di73b";
   };
   buildInputs = [ jdk ant gettext which ];
   patches = [ ./i2p.patch ];

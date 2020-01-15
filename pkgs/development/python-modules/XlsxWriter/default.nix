@@ -1,12 +1,17 @@
-{lib, buildPythonPackage, fetchPypi}:
+{lib, buildPythonPackage, fetchFromGitHub}:
 
 buildPythonPackage rec {
-  pname = "XlsxWriter";
-  version = "1.1.2";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0dmznx6q3b5xkvlqpw4vqinxh5ynzz8i7hlpz9syiff51y56a8mf";
+  pname = "XlsxWriter";
+  version = "1.2.0";
+
+  # PyPI release tarball doesn't contain tests so let's use GitHub. See:
+  # https://github.com/jmcnamara/XlsxWriter/issues/327
+  src = fetchFromGitHub{
+    owner = "jmcnamara";
+    repo = pname;
+    rev = "RELEASE_${version}";
+    sha256 = "0w9ggzi887w4z6i5mz24kcy7qbkd4d7gycqi0dhqgaj9lzxh7jjh";
   };
 
   meta = {
@@ -15,4 +20,5 @@ buildPythonPackage rec {
     maintainers = with lib.maintainers; [ jluttine ];
     license = lib.licenses.bsd2;
   };
+
 }

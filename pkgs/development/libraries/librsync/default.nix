@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, perl, zlib, bzip2, popt }:
 
 stdenv.mkDerivation rec {
-  name = "librsync-${version}";
+  pname = "librsync";
   version = "2.0.2";
 
   src = fetchFromGitHub {

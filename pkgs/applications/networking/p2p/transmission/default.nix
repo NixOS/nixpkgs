@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       on top of a cross-platform back-end.
       Feature spotlight:
         * Uses fewer resources than other clients
-        * Native Mac, GTK+ and Qt GUI clients
+        * Native Mac, GTK and Qt GUI clients
         * Daemon ideal for servers, embedded systems, and headless use
         * All these can be remote controlled by Web and Terminal clients
         * Bluetack (PeerGuardian) blocklists with automatic updates

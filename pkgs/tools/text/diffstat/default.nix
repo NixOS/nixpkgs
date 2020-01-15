@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
       insertions, deletions, and modifications per-file. It is useful for
       reviewing large, complex patch files.
     '';
-    homepage = http://invisible-island.net/diffstat/;
+    homepage = https://invisible-island.net/diffstat/;
     license = licenses.mit;
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];

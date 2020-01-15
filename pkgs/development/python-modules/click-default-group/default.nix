@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "click-default-group";
-  version = "1.2";
+  version = "1.2.1";
 
   # No tests in Pypi tarball
   src = fetchFromGitHub {
     owner = "click-contrib";
     repo = "click-default-group";
     rev = "v${version}";
-    sha256 = "0lm2k4jvy4ilvv91niawklfnp5mp7wa8c1bicsqdfzrxmw7jliwp";
+    sha256 = "1wdmabfpmzxpiww0slinvxm9xjyxql250dn1pvjijq675pxafiz4";
   };
 
   propagatedBuildInputs = [ click ];

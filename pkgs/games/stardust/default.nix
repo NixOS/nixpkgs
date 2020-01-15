@@ -2,11 +2,11 @@
 , libXi, libXmu, libXext, libGLU_combined }:
 
 stdenv.mkDerivation rec {
-  name = "stardust-${version}";
+  pname = "stardust";
   version = "0.1.13";
 
   src = fetchurl {
-    url = "http://iwar.free.fr/IMG/gz/${name}.tar.gz";
+    url = "http://iwar.free.fr/IMG/gz/${pname}-${version}.tar.gz";
     sha256 = "19rs9lz5y5g2yiq1cw0j05b11digw40gar6rw8iqc7bk3s8355xp";
   };
 

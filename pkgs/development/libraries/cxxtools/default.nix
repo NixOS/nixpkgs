@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.2.1";
-  name = "cxxtools-${version}";
+  pname = "cxxtools";
 
   src = fetchurl {
-    url = "http://www.tntnet.org/download/${name}.tar.gz";
+    url = "http://www.tntnet.org/download/${pname}-${version}.tar.gz";
     sha256 = "0hp3qkyhidxkdf8qgkwrnqq5bpahink55mf0yz23rjd7rpbbdswc";
   };
 

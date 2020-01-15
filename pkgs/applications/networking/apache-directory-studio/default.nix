@@ -17,7 +17,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "apache-directory-studio-${version}";
+  pname = "apache-directory-studio";
   version = "2.0.0.v20170904-M13";
 
   src =

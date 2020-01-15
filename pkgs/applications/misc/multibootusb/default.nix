@@ -1,4 +1,4 @@
-{ stdenv, python36Packages, fetchFromGitHub, libxcb, mtools, p7zip, parted, procps, utillinux, qt5 }:
+{ stdenv, python36Packages, fetchFromGitHub, libxcb, mtools, p7zip, parted, procps, utillinux, qt5, runtimeShell }:
 python36Packages.buildPythonApplication rec {
   pname = "multibootusb";
   name = "${pname}-${version}";
@@ -40,7 +40,7 @@ python36Packages.buildPythonApplication rec {
 
     mkdir "$out/bin"
     cat > "$out/bin/${pname}" <<EOF
-      #!${stdenv.shell}
+      #!${runtimeShell}
       cd "$share"
       export PYTHONPATH="$PYTHONPATH:$share"
       export PATH="$PATH:${parted}/bin:${procps}/bin"

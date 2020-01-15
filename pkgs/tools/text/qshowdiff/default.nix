@@ -1,7 +1,7 @@
 {stdenv, fetchurl, qt4, perl, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "qshowdiff-${version}";
+  pname = "qshowdiff";
   version = "1.2";
 
   src = fetchurl {

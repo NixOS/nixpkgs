@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchpatch, buildPackages, fetchurl, gettext
+{ stdenv, lib, buildPackages, fetchurl, gettext, fetchpatch
 , genPosixLockObjOnly ? false
 }: let
   genPosixLockObjOnlyAttrs = lib.optionalAttrs genPosixLockObjOnly {
@@ -16,15 +16,26 @@
     outputBin = "out";
   };
 in stdenv.mkDerivation (rec {
-  name = "libgpg-error-${version}";
-  version = "1.34";
+  pname = "libgpg-error";
+  version = "1.36";
 
   src = fetchurl {
-    url = "mirror://gnupg/libgpg-error/${name}.tar.bz2";
-    sha256 = "10cc76y7zi6wsdmpy1abf3i0q17bj59q5ysy8cpnpf3ixsfpk006";
+    url = "mirror://gnupg/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0z696dmhfxm2n6pmr8b857wwljq9h633yi99bhbn7h88f91rigds";
   };
 
+  # Remove gawk buildfix on > 1.36
+  patches = [
+    (fetchpatch {
+      url = "https://dev.gnupg.org/rE7865041c77f4f7005282f10f9b6666b19072fbdf?diff=1";
+      sha256 = "0hs4rpwqq2afpsbqliq451jjaysq2iyzxvd9sx3992b4vnllgqqq";
+    })
+  ];
+
   postPatch = ''
+    # Remove on > 1.36 release: gawk upgrade fix didn't include Makefile regeneration
+    sed 's/-v namespace=errnos_/-v pkg_namespace=errnos_/' -i src/Makefile.in
+
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
     ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h

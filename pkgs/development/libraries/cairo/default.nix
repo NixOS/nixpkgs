@@ -1,8 +1,9 @@
 { config, stdenv, fetchurl, fetchpatch, pkgconfig, libiconv
-, libintl, expat, zlib, libpng, pixman, fontconfig, freetype, xorg
+, libintl, expat, zlib, libpng, pixman, fontconfig, freetype
+, x11Support? !stdenv.isDarwin, libXext, libXrender
 , gobjectSupport ? true, glib
-, xcbSupport ? true # no longer experimental since 1.12
-, libGLSupported
+, xcbSupport ? x11Support, libxcb, xcbutil # no longer experimental since 1.12
+, libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
 , glSupport ? config.cairo.gl or (libGLSupported && stdenv.isLinux && !stdenv.isAarch32 && !stdenv.isMips)
 , libGL ? null # libGLU_combined is no longer a big dependency
 , pdfSupport ? true
@@ -15,10 +16,11 @@ let
   version = "1.16.0";
   inherit (stdenv.lib) optional optionals;
 in stdenv.mkDerivation rec {
-  name = "cairo-${version}";
+  pname = "cairo";
+  inherit version;
 
   src = fetchurl {
-    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${name}.tar.xz";
+    url = "https://cairographics.org/${if stdenv.lib.mod (builtins.fromJSON (stdenv.lib.versions.minor version)) 2 == 0 then "releases" else "snapshots"}/${pname}-${version}.tar.xz";
     sha256 = "0c930mk5xr2bshbdljv005j3j8zr47gqmkry3q6qgvqky6rjjysy";
   };
 
@@ -40,6 +42,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
+  ];
+
+  buildInputs = [
     libiconv
     libintl
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -49,8 +54,8 @@ in stdenv.mkDerivation rec {
     Carbon
   ]);
 
-  propagatedBuildInputs =
-    with xorg; [ libXext fontconfig expat freetype pixman zlib libpng libXrender ]
+  propagatedBuildInputs = [ fontconfig expat freetype pixman zlib libpng ]
+    ++ optionals x11Support [ libXext libXrender ]
     ++ optionals xcbSupport [ libxcb xcbutil ]
     ++ optional gobjectSupport glib
     ++ optional glSupport libGL
@@ -83,6 +88,7 @@ in stdenv.mkDerivation rec {
     # `-I' flags to be propagated.
     sed -i "src/cairo.pc.in" \
         -es'|^Cflags:\(.*\)$|Cflags: \1 -I${freetype.dev}/include/freetype2 -I${freetype.dev}/include|g'
+    substituteInPlace configure --replace strings $STRINGS
     '';
 
   enableParallelBuilding = true;

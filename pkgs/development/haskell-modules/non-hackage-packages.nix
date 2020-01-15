@@ -12,4 +12,5 @@ self: super: {
 
   # https://github.com/channable/vaultenv/issues/1
   vaultenv = self.callPackage ../tools/haskell/vaultenv { };
+
 }

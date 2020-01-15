@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "websocket++-${version}";
+  pname = "websocket++";
   version = "0.8.1";
 
   src = fetchFromGitHub {

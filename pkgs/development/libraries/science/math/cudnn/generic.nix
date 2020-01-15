@@ -7,9 +7,10 @@
 , lib
 , cudatoolkit
 , fetchurl
+, addOpenGLRunpath
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cudatoolkit-${cudatoolkit.majorVersion}-cudnn-${version}";
 
   inherit version;
@@ -18,6 +19,8 @@ stdenv.mkDerivation rec {
     url = "https://developer.download.nvidia.com/compute/redist/cudnn/v${version}/${srcName}";
     inherit sha256;
   };
+
+  nativeBuildInputs = [ addOpenGLRunpath ];
 
   installPhase = ''
     function fixRunPath {
@@ -29,6 +32,12 @@ stdenv.mkDerivation rec {
     mkdir -p $out
     cp -a include $out/include
     cp -a lib64 $out/lib64
+  '';
+
+  # Set RUNPATH so that libcuda in /run/opengl-driver(-32)/lib can be found.
+  # See the explanation in addOpenGLRunpath.
+  postFixup = ''
+    addOpenGLRunpath $out/lib/lib*.so
   '';
 
   propagatedBuildInputs = [

@@ -3,7 +3,7 @@
 # preferences -> Folders -> Plug-ins
 # same applies for the scripts
 
-{ pkgs, gimp }:
+{ config, pkgs, gimp }:
 let
   inherit (pkgs) stdenv fetchurl pkgconfig intltool glib fetchFromGitHub;
   inherit (gimp) targetPluginDir targetScriptDir;
@@ -23,7 +23,7 @@ let
   }
   // a
   // {
-      name = "gimp-plugin-${a.name}";
+      name = "gimp-plugin-${a.name or "${a.pname}-${a.version}"}";
       buildInputs = [ gimp gimp.gtk glib ] ++ (a.buildInputs or []);
       nativeBuildInputs = [ pkgconfig intltool ] ++ (a.nativeBuildInputs or []);
     }
@@ -35,7 +35,8 @@ let
   };
 
 in
-rec {
+
+stdenv.lib.makeScope pkgs.newScope (self: with self; {
   gap = pluginDerivation {
     /* menu:
        Video
@@ -90,42 +91,26 @@ rec {
     meta.broken = true;
   };
 
-  resynthesizer = pluginDerivation {
+  resynthesizer = pluginDerivation rec {
     /* menu:
-      Filters/Map/Resynthesize
-      Filters/Enhance/Smart enlarge
-      Filters/Enhance/Smart sharpen
-      Filters/Enhance/Smart remove selection
+      Edit/Fill with pattern seamless...
+      Filters/Enhance/Heal selection...
+      Filters/Enhance/Heal transparency...
+      Filters/Enhance/Sharpen by synthesis...
+      Filters/Enhance/Uncrop...
+      Filters/Map/Style...
+      Filters/Render/Texture...
     */
-    name = "resynthesizer-0.16";
-    buildInputs = with pkgs; [ fftw ];
-    src = fetchurl {
-      url = http://www.logarithmic.net/pfh-files/resynthesizer/resynthesizer-0.16.tar.gz;
-      sha256 = "1k90a1jzswxmajn56rdxa4r60v9v34fmqsiwfdxqcvx3yf4yq96x";
-    };
-
-    installPhase = "
-      installPlugins resynth
-      installScripts smart-{enlarge,remove}.scm
-    ";
-  };
-
-  resynthesizer2 = pluginDerivation {
-    /* menu:
-      Filters/Map/Resynthesize
-      Filters/Enhance/Smart enlarge
-      Filters/Enhance/Smart sharpen
-      Filters/Enhance/Smart remove selection
-    */
-    name = "resynthesizer-2.0.1";
+    pname = "resynthesizer";
+    version = "2.0.3";
     buildInputs = with pkgs; [ fftw ];
     nativeBuildInputs = with pkgs; [ autoreconfHook ];
-    makeFlags = "GIMP_LIBDIR=$out/lib/gimp/2.0/";
+    makeFlags = [ "GIMP_LIBDIR=${placeholder "out"}/lib/gimp/2.0" ];
     src = fetchFromGitHub {
       owner = "bootchk";
       repo = "resynthesizer";
-      rev = "2.0.1";
-      sha256 = "1d214s0jsqxz83l9dd8vhnz3siw9fyw7xdhhir25ra7jiwxc99hd";
+      rev = "v${version}";
+      sha256 = "1jwc8bhhm21xhrgw56nzbma6fwg59gc8anlmyns7jdiw83y0zx3j";
     };
   };
 
@@ -172,17 +157,17 @@ rec {
   ufraw = pkgs.ufraw.gimpPlugin;
 
   gimplensfun = pluginDerivation rec {
-    version = "0.2.4";
+    version = "unstable-2018-10-21";
     name = "gimplensfun-${version}";
 
     src = fetchFromGitHub {
       owner = "seebk";
       repo = "GIMP-Lensfun";
-      rev = version;
-      sha256 = "0zlmp9v732qmzj083mnk5z421s57mnckmpjhiw890wmmwzj2lhxz";
+      rev = "1c5a5c1534b5faf098b7441f8840d22835592f17";
+      sha256 = "1jj3n7spkjc63aipwdqsvq9gi07w13bb1v8iqzvxwzld2kxa3c8w";
     };
 
-    buildInputs = with pkgs; [ lensfun exiv2 ];
+    buildInputs = with pkgs; [ lensfun gexiv2 ];
 
     installPhase = "
       installPlugins gimp-lensfun
@@ -242,4 +227,8 @@ rec {
   };
   */
 
-}
+} // stdenv.lib.optionalAttrs (config.allowAliases or true) {
+
+  resynthesizer2 = resynthesizer;
+
+})

@@ -4,7 +4,8 @@ let
   version = "0.6.3";
 in
 stdenv.mkDerivation {
-  name = "ndn-cxx-${version}";
+  pname = "ndn-cxx";
+  inherit version;
   src = fetchFromGitHub {
     owner = "named-data";
     repo = "ndn-cxx";
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
-  configureFlags = [
+  wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"
     "--boost-libs=${boost.out}/lib"

@@ -12,7 +12,7 @@
 assert withBlas -> openblas != null;
 
 stdenv.mkDerivation rec {
-  name = "flint-${version}";
+  pname = "flint";
   version = "2.5.2"; # remove libflint.so.MAJOR patch when updating
   src = fetchurl {
     url = "http://www.flintlib.org/flint-${version}.tar.gz";

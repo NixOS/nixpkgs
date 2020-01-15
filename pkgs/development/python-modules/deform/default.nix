@@ -36,6 +36,6 @@ buildPythonPackage rec {
     description = "Form library with advanced features like nested forms";
     homepage = https://docs.pylonsproject.org/projects/deform/en/latest/;
     license = licenses.free; # http://www.repoze.org/LICENSE.txt
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 }

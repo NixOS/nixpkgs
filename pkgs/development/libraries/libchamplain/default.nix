@@ -1,23 +1,27 @@
-{ fetchurl, stdenv, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
+{ fetchurl, stdenv, meson, ninja, vala, gtk-doc, docbook_xsl, docbook_xml_dtd_412, pkgconfig, glib, gtk3, cairo, sqlite, gnome3
 , clutter-gtk, libsoup, gobject-introspection /*, libmemphis */ }:
 
-let
-  pname = "libchamplain";
-  version = "0.12.16";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "libchamplain";
+  version = "0.12.19";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "13chvc2n074i0jw5jlb8i7cysda4yqx58ca6y3mrlrl9g37k2zja";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "191aid1qsfkab5whbzj2r3g63dpdgrwp5141mfywvqyvdhr2x11n";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [ "out" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala gtk-doc docbook_xsl docbook_xml_dtd_412 ];
 
-  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk sqlite libsoup ];
+  buildInputs = [ sqlite libsoup ];
+
+  propagatedBuildInputs = [ glib gtk3 cairo clutter-gtk ];
+
+  mesonFlags = [
+    "-Dgtk_doc=true"
+    "-Dvapi=true"
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -33,7 +37,7 @@ stdenv.mkDerivation rec {
 
     longDescription = ''
       libchamplain is a C library providing a ClutterActor to display
-       maps.  It also provides a Gtk+ widget to display maps in Gtk+
+       maps.  It also provides a GTK widget to display maps in GTK
        applications.  Python and Perl bindings are also available.  It
        supports numerous free map sources such as OpenStreetMap,
        OpenCycleMap, OpenAerialMap, and Maps for free.

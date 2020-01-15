@@ -2,11 +2,11 @@
 , proj, boost, cmake, python2, doxygen, graphviz, gmp }:
 
 stdenv.mkDerivation rec {
-  name = "gplates-${version}";
+  pname = "gplates";
   version = "2.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gplates/${name}-unixsrc.tar.bz2";
+    url = "mirror://sourceforge/gplates/${pname}-${version}-unixsrc.tar.bz2";
     sha256 = "02scnjj5nlc2d2c8lbx0xvj8gg1bgkjliv3wxsx564c55a9x69qw";
   };
 

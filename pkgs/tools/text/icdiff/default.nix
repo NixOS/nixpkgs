@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "icdiff-${version}";
+  pname = "icdiff";
   version = "1.9.4";
 
   src = fetchFromGitHub {

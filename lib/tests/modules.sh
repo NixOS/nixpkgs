@@ -71,6 +71,15 @@ checkConfigError 'The option value .* in .* is not of type.*positive integer.*' 
 checkConfigOutput "42" config.value ./declare-int-between-value.nix ./define-value-int-positive.nix
 checkConfigError 'The option value .* in .* is not of type.*between.*-21 and 43.*inclusive.*' config.value ./declare-int-between-value.nix ./define-value-int-negative.nix
 
+# Check either types
+# types.either
+checkConfigOutput "42" config.value ./declare-either.nix ./define-value-int-positive.nix
+checkConfigOutput "\"24\"" config.value ./declare-either.nix ./define-value-string.nix
+# types.oneOf
+checkConfigOutput "42" config.value ./declare-oneOf.nix ./define-value-int-positive.nix
+checkConfigOutput "[ ]" config.value ./declare-oneOf.nix ./define-value-list.nix
+checkConfigOutput "\"24\"" config.value ./declare-oneOf.nix ./define-value-string.nix
+
 # Check mkForce without submodules.
 set -- config.enable ./declare-enable.nix ./define-enable.nix
 checkConfigOutput "true" "$@"
@@ -149,7 +158,7 @@ checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-long-list.ni
 # Check loaOf with many merges of lists.
 checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-merges.nix
 
-# Check mkAliasOptionModuleWithPriority.
+# Check mkAliasOptionModule.
 checkConfigOutput "true" config.enable ./alias-with-priority.nix
 checkConfigOutput "true" config.enableAlias ./alias-with-priority.nix
 checkConfigOutput "false" config.enable ./alias-with-priority-can-override.nix

@@ -15,7 +15,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "lightstep-tracer-cpp-${version}";
+  pname = "lightstep-tracer-cpp";
   version = "0.8.1";
 
   src = fetchFromGitHub {

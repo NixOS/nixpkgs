@@ -36,7 +36,7 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
-    environment.etc."npmrc".text = cfg.npmrc;
+    environment.etc.npmrc.text = cfg.npmrc;
 
     environment.variables.NPM_CONFIG_GLOBALCONFIG = "/etc/npmrc";
 

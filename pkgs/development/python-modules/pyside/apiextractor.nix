@@ -19,7 +19,7 @@ in stdenv.mkDerivation {
     description = "Eases the development of bindings of Qt-based libraries for high level languages by automating most of the process";
     license = stdenv.lib.licenses.gpl2;
     homepage = http://www.pyside.org/docs/apiextractor/;
-    maintainers = [ stdenv.lib.maintainers.chaoflow ];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

@@ -67,7 +67,7 @@ in with stdenv.lib.licenses;
     buildPhase = "make";
   };
 
-  beetle-pce-fast = let der = (mkLibRetroCore rec {
+  beetle-pce-fast = let der = (mkLibRetroCore {
     core = "mednafen-pce-fast";
     src = fetchRetro {
       repo = "beetle-pce-fast-libretro";
@@ -81,7 +81,7 @@ in with stdenv.lib.licenses;
     name = "beetle-pce-fast-${der.version}";
   };
 
-  beetle-psx = let der = (mkLibRetroCore rec {
+  beetle-psx = let der = (mkLibRetroCore {
     core = "mednafen-psx";
     src = fetchRetro {
       repo = "beetle-psx-libretro";
@@ -95,7 +95,7 @@ in with stdenv.lib.licenses;
     name = "beetle-psx-${der.version}";
   };
 
-  beetle-saturn = let der = (mkLibRetroCore rec {
+  beetle-saturn = let der = (mkLibRetroCore {
     core = "mednafen-saturn";
     src = fetchRetro {
       repo = "beetle-saturn-libretro";
@@ -110,7 +110,7 @@ in with stdenv.lib.licenses;
     meta.platforms = [ "x86_64-linux" ];
   };
 
-  bsnes-mercury = let bname = "bsnes-mercury"; in (mkLibRetroCore rec {
+  bsnes-mercury = let bname = "bsnes-mercury"; in (mkLibRetroCore {
     core = bname + "-accuracy";
     src = fetchRetro {
       repo = bname;
@@ -204,7 +204,7 @@ in with stdenv.lib.licenses;
     license = gpl2;
   };
 
-  genesis-plus-gx = mkLibRetroCore rec {
+  genesis-plus-gx = mkLibRetroCore {
     core = "genesis-plus-gx";
     src = fetchRetro {
       repo = "Genesis-Plus-GX";
@@ -215,7 +215,7 @@ in with stdenv.lib.licenses;
     license = "Non-commercial";
   };
 
-  higan-sfc = (mkLibRetroCore rec {
+  higan-sfc = (mkLibRetroCore {
     core = "higan-sfc";
     src = fetchFromGitLab {
       owner = "higan";
@@ -346,7 +346,7 @@ in with stdenv.lib.licenses;
     buildPhase = "make";
   };
 
-  quicknes = (mkLibRetroCore rec {
+  quicknes = (mkLibRetroCore {
     core = "quicknes";
     src = fetchRetro {
       repo = "QuickNES_Core";

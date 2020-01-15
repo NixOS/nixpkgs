@@ -3,7 +3,6 @@
 pythonPackages.buildPythonApplication rec {
   pname = "http-prompt";
   version = "1.0.0";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     rev = "v${version}";
@@ -29,7 +28,7 @@ pythonPackages.buildPythonApplication rec {
     description = "An interactive command-line HTTP client featuring autocomplete and syntax highlighting";
     homepage = https://github.com/eliangcs/http-prompt;
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
-    platforms = platforms.linux; # can only test on linux
+    maintainers = with maintainers; [ matthiasbeyer ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''lisp-namespace'';
   version = ''20171130-git'';
 

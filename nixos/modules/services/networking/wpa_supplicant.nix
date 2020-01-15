@@ -6,7 +6,7 @@ let
   cfg = config.networking.wireless;
   configFile = if cfg.networks != {} then pkgs.writeText "wpa_supplicant.conf" ''
     ${optionalString cfg.userControlled.enable ''
-      ctrl_interface=DIR=/var/run/wpa_supplicant GROUP=${cfg.userControlled.group}
+      ctrl_interface=DIR=/run/wpa_supplicant GROUP=${cfg.userControlled.group}
       update_config=1''}
     ${cfg.extraConfig}
     ${concatStringsSep "\n" (mapAttrsToList (ssid: config: with config; let
@@ -204,6 +204,7 @@ in {
     environment.systemPackages =  [ pkgs.wpa_supplicant ];
 
     services.dbus.packages = [ pkgs.wpa_supplicant ];
+    services.udev.packages = [ pkgs.crda ];
 
     # FIXME: start a separate wpa_supplicant instance per interface.
     systemd.services.wpa_supplicant = let

@@ -166,24 +166,6 @@ while (my ($unit, $state) = each %{$activePrev}) {
 
     if (-e $prevUnitFile && ($state->{state} eq "active" || $state->{state} eq "activating")) {
         if (! -e $newUnitFile || abs_path($newUnitFile) eq "/dev/null") {
-            # Ignore (i.e. never stop) these units:
-            if ($unit eq "system.slice") {
-                # TODO: This can be removed a few months after 18.09 is out
-                # (i.e. after everyone switched away from 18.03).
-                # Problem: Restarting (stopping) system.slice would not only
-                # stop X11 but also most system units/services. We obviously
-                # don't want this happening to users when they switch from 18.03
-                # to 18.09 or nixos-unstable.
-                # Reason: The following change in systemd:
-                # https://github.com/systemd/systemd/commit/d8e5a9338278d6602a0c552f01f298771a384798
-                # The commit adds system.slice to the perpetual units, which
-                # means removing the unit file and adding it to the source code.
-                # This is done so that system.slice can't be stopped anymore but
-                # in our case it ironically would cause this script to stop
-                # system.slice because the unit was removed (and an older
-                # systemd version is still running).
-                next;
-            }
             my $unitInfo = parseUnit($prevUnitFile);
             $unitsToStop{$unit} = 1 if boolIsTrue($unitInfo->{'X-StopOnRemoval'} // "yes");
         }

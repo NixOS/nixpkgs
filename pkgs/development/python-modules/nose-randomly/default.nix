@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "nose-randomly";
-  version = "1.2.5";
+  version = "1.2.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "361f4c2fbb090ec2bc8e5e4151e21409a09ac13f364e3448247cc01f326d89b3";
+    sha256 = "7e483a3d79e13ae760d6ade57ae07ae45bb4b223b61a805e958b4c077116c67c";
   };
 
   checkInputs = [ numpy nose ];

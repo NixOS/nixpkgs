@@ -1,9 +1,10 @@
 { runCommand, lib, fontconfig, fontDirectories }:
 
 runCommand "fc-cache"
-  rec {
+  {
     buildInputs = [ fontconfig.bin ];
     preferLocalBuild = true;
+    allowSubstitutes = false;
     passAsFile = [ "fontDirs" ];
     fontDirs = ''
       <!-- Font directories -->

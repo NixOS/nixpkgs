@@ -8,7 +8,7 @@ let
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
-    icon = "${pname}";
+    icon = pname;
     terminal = "False";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";

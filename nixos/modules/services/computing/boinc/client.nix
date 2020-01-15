@@ -105,19 +105,18 @@ in
         isSystemUser = true;
       };
 
+      systemd.tmpfiles.rules = [
+        "d '${cfg.dataDir}' - boinc - - -"
+      ];
+
       systemd.services.boinc = {
         description = "BOINC Client";
-        after = ["network.target" "local-fs.target"];
+        after = ["network.target"];
         wantedBy = ["multi-user.target"];
-        preStart = ''
-          mkdir -p ${cfg.dataDir}
-          chown boinc ${cfg.dataDir}
-        '';
         script = ''
           ${fhsEnvExecutable} --dir ${cfg.dataDir} --redirectio ${allowRemoteGuiRpcFlag}
         '';
         serviceConfig = {
-          PermissionsStartOnly = true; # preStart must be run as root
           User = "boinc";
           Nice = 10;
         };
