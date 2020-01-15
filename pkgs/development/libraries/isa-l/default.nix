@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, yasm }:
+{ stdenv, fetchFromGitHub, nasm }:
 
 stdenv.mkDerivation rec {
   pname = "isa-l";
-  version = "2.27.0";
+  version = "2.28.0";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "isa-l";
     rev = "v${version}";
-    sha256 = "15578isyinikw0ypfrag27ccipcl3djbgfqhidjn11r93pwb5r7z";
+    sha256 = "0zswmyi3r7i7n1k0s3jkkmd3xgjpd5chnqf2ffmz3zk46w8imj15";
   };
 
-  nativeBuildInputs = [ yasm ];
+  nativeBuildInputs = [ nasm ];
   configurePhase = "cp Makefile.unx Makefile";
   makeFlags = [ "prefix=$(out)" ];
 
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/intel/isa-l;
     license = licenses.bsd3;
     maintainers = [ maintainers.volth ];
-    platforms = [ "x86_64-linux" ];
+    platforms = platforms.linux;
   };
 }
