@@ -1396,6 +1396,8 @@ in {
     usePython = true;
   });
 
+  softlayer = callPackage ../development/python-modules/softlayer { };
+
   sparse = callPackage ../development/python-modules/sparse { };
 
   spglib = callPackage ../development/python-modules/spglib { };
