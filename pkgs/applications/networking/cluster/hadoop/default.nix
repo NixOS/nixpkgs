@@ -3,7 +3,7 @@
 }:
 
 let
-  common = { version, sources-sha256, dependencies-sha256, tomcat ? null, opensslPkg, extraBuildInputs ? [], patches ? [] }:
+  common = { version, sources-sha256, dependencies-sha256, tomcat ? null, opensslPkg, extraBuildInputs ? [], patchFlags ? [], patches ? [] }:
     let
       src = fetchurl {
         url = "mirror://apache/hadoop/common/hadoop-${version}/hadoop-${version}-src.tar.gz";
@@ -20,7 +20,7 @@ let
       # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
       fetched-maven-deps = stdenv.mkDerivation {
         pname = "hadoop-maven-deps";
-        inherit version src postUnpack nativeBuildInputs buildInputs patches;
+        inherit version src postUnpack nativeBuildInputs buildInputs patches patchFlags;
         dontConfigure = true; # do not trigger cmake hook
         buildPhase = ''
           while mvn package -Dmaven.repo.local=$out/.m2 ${stdenv.lib.escapeShellArgs mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
@@ -37,7 +37,7 @@ let
       # compile the hadoop tarball from sources, it requires some patches
       binary-distributon = stdenv.mkDerivation {
         pname = "hadoop-bin";
-        inherit version src postUnpack nativeBuildInputs buildInputs patches;
+        inherit version src postUnpack nativeBuildInputs buildInputs patches patchFlags;
         # most of the hardcoded pathes are fixed in 2.9.x and 3.0.0, this list of patched files might be reduced when 2.7.x and 2.8.x will be deprecated
         postPatch = ''
           for file in hadoop-common-project/hadoop-common/src/main/java/org/apache/hadoop/fs/HardLink.java \
@@ -162,11 +162,20 @@ let
     };
   };
 
+  tomcat_8_5_43 = rec {
+    version = "8.5.43";
+    src = fetchurl {
+      # do not use "mirror://apache/" here, tomcat-8 is legacy and has been removed from the mirrors
+      url = "https://archive.apache.org/dist/tomcat/tomcat-8/v${version}/bin/apache-tomcat-${version}.tar.gz";
+      sha256 = "00xf5g55klmkv3lc6nlzpj8qdkg92r1qrnk1j6pirrxnqh6anljk";
+    };
+  };
+
 in {
   hadoop_2_7 = common {
     version = "2.7.7";
     sources-sha256 = "1ahv67f3lwak3kbjvnk1gncq56z6dksbajj872iqd0awdsj3p5rf";
-    dependencies-sha256 = "13xlnj54q3xq247pa50mmvfc2w1pdlbk1a07nm9s27vw6jrllgww";
+    dependencies-sha256 = "02bwcjya6mh2nxyvfb28arj7y5q42naxiyr4zikk2h7pjcxxln43";
     tomcat = tomcat_6_0_48;
     opensslPkg = openssl_1_0_2;
   };
@@ -185,24 +194,32 @@ in {
     opensslPkg = openssl_1_0_2;
     extraBuildInputs = [ zstd ];
   };
+  hadoop_2_10 = common {
+    version             = "2.10.0";
+    sources-sha256      = "1h5iv24735mh377sgfffcpx63sr4nghm7adskwhfnc4s6ljv3ads";
+    dependencies-sha256 = "1qgdl00yrhn39z2k7pjn5q5jk275nx1mlnghsa05f94n8p0kjc3h";
+    tomcat              = tomcat_8_5_43;
+    opensslPkg          = openssl_1_0_2;
+    extraBuildInputs    = [ zstd ];
+    patchFlags          = [ "-p0" ];
+    patches             = [
+      # fix javadoc build, will be included in 2.10.1
+      (fetchurl { url    = https://issues.apache.org/jira/secure/attachment/12984557/YARN-9945-branch-2.001.patch;
+                  sha256 = "1vfkgf61705xcpscfsm02l1l76dx7dwj6p8zlb57rbhqdnpjcwha"; })
+    ];
+  };
   hadoop_3_1 = common {
-    version = "3.1.2";
-    sources-sha256 = "1dn6pqwpq9jm5123fpmb85w6chds1pinpvcpfqyb3m3mzk4pgwh2";
-    dependencies-sha256 = "0ml0ywn8fpjc14263f144d0vyhbn271pwamyml7d9jhvjk3qnh1h";
+    version             = "3.1.3";
+    sources-sha256      = "023qd4xdnfjf739c8z4wzmsxzp4w5q8yrww9w0k1wihqw6j2yjs4";
+    dependencies-sha256 = "070kbphxymk3ci9794c55zrssr1sn4vrsxg07jvbwd5h4sd5hxzg";
     opensslPkg = openssl_1_1;
     extraBuildInputs = [ zstd isa-l ];
   };
   hadoop_3_2 = common {
-    version = "3.2.0";
-    sources-sha256 = "0s2mfdph2psih6wynck59g7c909zgfg1ip7gjbl1id8j6y6l83f3";
-    dependencies-sha256 = "1njvfa05d8170kd54wq9igv2vjfzh6sx5g0zaz9v1g29as8n6gb9";
+    version             = "3.2.1";
+    sources-sha256      = "0903fpbgvx4fzccza9xagkw3ck2zbd0g2v9m337qbgs7q1bi7lrv";
+    dependencies-sha256 = "09rq1d3v0cwia8lllpb6jxdma27f3f90pnkh96f5aj7ahyds8r66";
     opensslPkg = openssl_1_1;
     extraBuildInputs = [ zstd isa-l cyrus_sasl ];
-    patches = [
-      # fix build of oom-killer
-      # https://issues.apache.org/jira/browse/YARN-8498?focusedCommentId=16722705&page=com.atlassian.jira.plugin.system.issuetabpanels%3Acomment-tabpanel#comment-16722705
-      (fetchurl { url    = https://issues.apache.org/jira/secure/attachment/12951988/YARN-8948-01.patch;
-                  sha256 = "1b51miimkv5ycgf9cpvhlxqfc285qa56w1h2mj5hnym6digk8zfm"; })
-    ];
   };
 }

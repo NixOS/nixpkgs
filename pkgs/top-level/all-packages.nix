@@ -8591,6 +8591,7 @@ in
     hadoop_2_7
     hadoop_2_8
     hadoop_2_9
+    hadoop_2_10
     hadoop_3_1
     hadoop_3_2;
   hadoop = hadoop_2_7;
