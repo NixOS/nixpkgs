@@ -662,6 +662,7 @@
   ./services/networking/ocserv.nix
   ./services/networking/ofono.nix
   ./services/networking/oidentd.nix
+  ./services/networking/onedrive.nix
   ./services/networking/openfire.nix
   ./services/networking/openvpn.nix
   ./services/networking/ostinato.nix
