@@ -8456,13 +8456,9 @@ in
 
   oraclejdk8 = pkgs.oraclejdk8distro true false;
 
-  oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
-
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
-
-  oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
   jrePlugin = jre8Plugin;
 
@@ -8472,13 +8468,7 @@ in
 
   oraclejdk8distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix {
-        inherit installjdk pluginSupport;
-      });
-
-  oraclejdk8psu_distro = installjdk: pluginSupport:
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix {
+      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix {
         inherit installjdk pluginSupport;
       });
 
