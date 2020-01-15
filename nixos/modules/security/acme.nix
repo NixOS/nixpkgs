@@ -7,7 +7,8 @@ let
   certOpts = { name, ... }: {
     options = {
       webroot = mkOption {
-        type = types.str;
+        type = types.nullOr types.str;
+        default = null;
         example = "/var/lib/acme/acme-challenges";
         description = ''
           Where the webroot of the HTTP vhost is located.
@@ -98,8 +99,8 @@ let
 
       dnsProvider = mkOption {
         type = types.nullOr types.str;
-        example = "route53";
         default = null;
+        example = "route53";
         description = "DNS Challenge provider";
       };
 
@@ -261,7 +262,7 @@ in
                 email = if data.email == null then cfg.email else data.email;
                 globalOpts = [ "-d" data.domain "--email" email "--path" "." ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
-                          ++ optionals (data.dnsProvider != null && !cfg.dnsPropagationCheck) [ "--dns.disable-cp" ]
+                          ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
                           ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http" "--http.webroot" data.webroot ])
                           ++ optionals (cfg.server != null || data.server != null) ["--server" (if data.server == null then cfg.server else data.server)];
@@ -373,8 +374,7 @@ in
           servicesAttr;
 
       systemd.tmpfiles.rules =
-        flip mapAttrsToList cfg.certs
-        (cert: data: "d ${data.webroot}/.well-known/acme-challenge - ${data.user} ${data.group}");
+        map (data: "d ${data.webroot}/.well-known/acme-challenge - ${data.user} ${data.group}") (filter (data: data.webroot != null) (attrValues cfg.certs));
 
       systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
