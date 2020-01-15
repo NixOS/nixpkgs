@@ -210,6 +210,9 @@ in
         ##     don't end up in the Nix store.
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
+          metaData = if cfg.meta-data == ""
+            then ""
+            else "meta-data=${cfg.meta-data}";
         in
           ''
             mkdir -m 0700 -p "${sshDir}"
@@ -220,7 +223,7 @@ in
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
-            meta-data="${cfg.meta-data}"
+            ${metaData}
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
@@ -228,7 +231,7 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${pkgs.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
+          { ExecStart = "${cfg.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
