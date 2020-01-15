@@ -18,7 +18,7 @@ in {
         description = "Enable chrome multitouch input (cmt). Touchpad drivers that are configured for chromebooks.";
       };
       models = mkOption {
-        type = types.enum [ "atlas" "banjo" "candy" "caroline" "cave" "celes" "clapper" "cyan" "daisy" "elan" "elm" "enguarde" "eve" "expresso" "falco" "gandof" "glimmer" "gnawty" "heli" "kevin" "kip" "leon" "lulu" "orco" "pbody" "peppy" "pi" "pit" "puppy" "quawks" "rambi" "samus" "snappy" "spring" "squawks" "swanky" "winky" "wolf" "auron_paine" "auron_yuna" "daisy_skate" "nyan_big" "nyan_blaze" "veyron_jaq" "veyron_jerry" "veyron_mighty" "veyron_minnie" "veyron_speedy" ];
+        type = types.enum [ "atlas" "banjo" "candy" "caroline" "cave" "celes" "clapper" "cyan" "daisy" "elan" "elm" "enguarde" "eve" "expresso" "falco" "gandof" "glimmer" "gnawty" "grunt" "heli" "kevin" "kip" "leon" "lulu" "octopus" "orco" "pbody" "peppy" "pi" "pit" "puppy" "quawks" "rambi" "samus" "snappy" "spring" "squawks" "swanky" "winky" "wolf" "auron_paine" "auron_yuna" "daisy_skate" "nyan_big" "nyan_blaze" "veyron_jaq" "veyron_jerry" "veyron_mighty" "veyron_minnie" "veyron_speedy" ];
         example = "banjo";
         description = ''
           Which models to enable cmt for. Enter the Code Name for your Chromebook.
