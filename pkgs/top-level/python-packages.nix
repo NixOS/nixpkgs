@@ -108,7 +108,7 @@ in {
   inherit buildSetupcfg;
 
   inherit (callPackage ../development/interpreters/python/hooks { })
-    eggUnpackHook eggBuildHook eggInstallHook flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook wheelUnpackHook;
+    eggUnpackHook eggBuildHook eggInstallHook flitBuildHook pipBuildHook pipInstallHook pytestCheckHook pythonCatchConflictsHook pythonImportsCheckHook pythonRemoveBinBytecodeHook setuptoolsBuildHook setuptoolsCheckHook venvShellHook wheelUnpackHook;
 
   # helpers
 
@@ -903,6 +903,8 @@ in {
 
   oauthenticator = callPackage ../development/python-modules/oauthenticator { };
 
+  onnx = callPackage ../development/python-modules/onnx { };
+
   ordered-set = callPackage ../development/python-modules/ordered-set { };
 
   ortools = (toPythonModule (pkgs.or-tools.override {
@@ -1392,6 +1394,8 @@ in {
 
   stups-fullstop = callPackage ../development/python-modules/stups-fullstop { };
 
+  stups-pierone = callPackage ../development/python-modules/stups-pierone { };
+
   stups-tokens = callPackage ../development/python-modules/stups-tokens { };
 
   stups-zign = callPackage ../development/python-modules/stups-zign { };
@@ -1668,6 +1672,8 @@ in {
   avro = callPackage ../development/python-modules/avro {};
 
   avro3k = callPackage ../development/python-modules/avro3k {};
+
+  avro-python3 = callPackage ../development/python-modules/avro-python3 {};
 
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
@@ -2651,6 +2657,8 @@ in {
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
   gpsoauth = callPackage ../development/python-modules/gpsoauth { };
+
+  gpxpy = callPackage ../development/python-modules/gpxpy { };
 
   grip = callPackage ../development/python-modules/grip { };
 
@@ -4824,6 +4832,12 @@ in {
   pylint = if isPy3k then callPackage ../development/python-modules/pylint { }
            else callPackage ../development/python-modules/pylint/1.9.nix { };
 
+  pylint-celery = callPackage ../development/python-modules/pylint-celery { };
+
+  pylint-django = callPackage ../development/python-modules/pylint-django { };
+
+  pylint-flask = callPackage ../development/python-modules/pylint-flask { };
+
   pylint-plugin-utils = callPackage ../development/python-modules/pylint-plugin-utils { };
 
   pyomo = callPackage ../development/python-modules/pyomo { };
@@ -4934,6 +4948,8 @@ in {
 
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};
 
+  pynrrd = callPackage ../development/python-modules/pynrrd { };
+
   pynzb = callPackage ../development/python-modules/pynzb { };
 
   process-tests = callPackage ../development/python-modules/process-tests { };
@@ -5007,6 +5023,8 @@ in {
   pysvn = callPackage ../development/python-modules/pysvn { };
 
   python-markdown-math = callPackage ../development/python-modules/python-markdown-math { };
+
+  python-miio = callPackage ../development/python-modules/python-miio { };
 
   python-pipedrive = callPackage ../development/python-modules/python-pipedrive { };
 

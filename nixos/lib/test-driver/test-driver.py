@@ -704,7 +704,8 @@ class Machine:
 
         def process_serial_output() -> None:
             for _line in self.process.stdout:
-                line = _line.decode("unicode_escape").replace("\r", "").rstrip()
+                # Ignore undecodable bytes that may occur in boot menus
+                line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 

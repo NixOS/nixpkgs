@@ -735,6 +735,7 @@
   ./services/networking/wicd.nix
   ./services/networking/wireguard.nix
   ./services/networking/wpa_supplicant.nix
+  ./services/networking/xandikos.nix
   ./services/networking/xinetd.nix
   ./services/networking/xl2tpd.nix
   ./services/networking/xrdp.nix

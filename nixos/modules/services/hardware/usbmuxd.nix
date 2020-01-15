@@ -51,7 +51,7 @@ in
       };
     };
 
-    users.groups = optional (cfg.group == defaultUserGroup) {
+    users.groups = optionalAttrs (cfg.group == defaultUserGroup) {
       ${cfg.group} = { };
     };
 

@@ -50,7 +50,7 @@ in {
   };
 
   config = mkIf (cfg.enable && !masterCfg.enable) {
-    users.groups = optional (cfg.group == "jenkins") {
+    users.groups = optionalAttrs (cfg.group == "jenkins") {
       jenkins.gid = config.ids.gids.jenkins;
     };
 

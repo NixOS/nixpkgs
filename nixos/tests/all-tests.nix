@@ -295,6 +295,7 @@ in
   wireguard-generated = handleTest ./wireguard/generated.nix {};
   wireguard-namespaces = handleTest ./wireguard/namespaces.nix {};
   wordpress = handleTest ./wordpress.nix {};
+  xandikos = handleTest ./xandikos.nix {};
   xautolock = handleTest ./xautolock.nix {};
   xfce = handleTest ./xfce.nix {};
   xmonad = handleTest ./xmonad.nix {};
