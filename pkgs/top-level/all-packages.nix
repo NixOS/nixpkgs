@@ -18082,6 +18082,8 @@ in
 
   autotrace = callPackage ../applications/graphics/autotrace {};
 
+  aview = callPackage ../applications/graphics/aview { };
+
   avocode = callPackage ../applications/graphics/avocode {};
 
   azpainter = callPackage ../applications/graphics/azpainter { };
