@@ -674,6 +674,8 @@ in {
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
+  fluidasserts = callPackage ../development/python-modules/fluidasserts { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
