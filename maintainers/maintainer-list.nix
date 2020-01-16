@@ -828,6 +828,12 @@
     githubId = 24027;
     name = "Bruno Bigras";
   };
+  bbuscarino = {
+    email = "foss@busc.dev";
+    github = "bbuscarino";
+    githubId = 2858049;
+    name = "Ben Buscarino";
+  };
   bcarrell = {
     email = "brandoncarrell@gmail.com";
     github = "bcarrell";
