@@ -15,6 +15,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ jemalloc zlib ];
 
+  # Note: tcmalloc and mimalloc are also supported (and normal malloc)
+  cmakeFlags = [ "-DUSE_ALTERNATIVE_MALLOC=jemalloc" ];
+
   meta = with stdenv.lib; {
     description = "Lightweight high-performance multi-threaded web server";
     longDescription = "A lightweight and speedy web server with a low memory
