@@ -162,7 +162,7 @@
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
 # VimPlugins
-/pkgs/misc/vim-plugins         @jonringer
+/pkgs/misc/vim-plugins         @jonringer @softinio
 
 # VsCode Extensions
 /pkgs/misc/vscode-extensions   @jonringer
