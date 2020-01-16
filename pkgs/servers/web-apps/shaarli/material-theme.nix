@@ -26,10 +26,13 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
+    # This package has not been updated for the new build process
+    # introduced in 0.10.3 which depends on npm and gulp.
+    broken = true;
     description = "A theme base on Google's Material Design for Shaarli, the superfast delicious clone";
     license = licenses.mit;
     homepage = https://github.com/kalvn/Shaarli-Material;
-    maintainers = with maintainers; [ schneefux ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 }
