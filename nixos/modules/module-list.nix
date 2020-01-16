@@ -127,6 +127,7 @@
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
+  ./programs/liboping.nix
   ./programs/light.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
