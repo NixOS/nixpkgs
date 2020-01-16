@@ -75,12 +75,30 @@ in
       };
 
       meta-data = mkOption {
-        type = types.str;
-        default = "";
-        example = "queue=default,docker=true,ruby2=true";
+        type = types.attrsOf types.str;
+        default = {};
+        example = {
+          queue = "default";
+          docker = "true";
+          ruby2 = "true";
+        };
         description = ''
-          Meta data for the agent. This is a comma-separated list of
-          <code>key=value</code> pairs.
+          Meta data for the agent. If you are using version 3 of buildkite
+          agent, use "tags" instead.
+        '';
+      };
+
+      tags = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        example = {
+          queue = "default";
+          docker = "true";
+          ruby2 = "true";
+        };
+        description = ''
+          Meta data for the agent. If you are using version 2 of buildkite
+          agent, use "meta-data" instead.
         '';
       };
 
@@ -95,7 +113,8 @@ in
 
       openssh =
         { privateKeyPath = mkOption {
-            type = types.path;
+            type = types.nullOr types.path;
+            default = null;
             description = ''
               Private agent key.
 
@@ -104,7 +123,8 @@ in
             '';
           };
           publicKeyPath = mkOption {
-            type = types.path;
+            type = types.nullOr types.path;
+            default = null;
             description = ''
               Public agent key.
 
@@ -210,20 +230,36 @@ in
         ##     don't end up in the Nix store.
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
-          metaData = if cfg.meta-data == ""
+          renderTags = xs:
+            concatStringsSep "," (mapAttrsToList (k: v: "${k}=${v}") xs);
+          metaData = if cfg.meta-data == {}
             then ""
-            else "meta-data=${cfg.meta-data}";
+            else "meta-data=\"${renderTags cfg.meta-data}\"";
+          tags = if cfg.tags == {}
+            then ""
+            else "tags=\"${renderTags cfg.tags}\"";
+          copyPrivateKey = if cfg.openssh.privateKeyPath == null
+            then ""
+            else ''
+            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
+            chmod 600 "{sshDir}"/id_rsa
+            '';
+          copyPublicKey = if cfg.openssh.publicKeyPath == null
+            then ""
+            else ''
+            cp -f "${toString cfg.openssh.publicKeyPath}"  "${sshDir}/id_rsa.pub"
+            chmod 600 "{sshDir}"/id_rsa.pub
+            '';
         in
           ''
             mkdir -m 0700 -p "${sshDir}"
-            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
-            cp -f "${toString cfg.openssh.publicKeyPath}"  "${sshDir}/id_rsa.pub"
-            chmod 600 "${sshDir}"/id_rsa*
-
+            ${copyPrivateKey}
+            ${copyPublicKey}
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
             ${metaData}
+            ${tags}
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
@@ -231,7 +267,7 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${cfg.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
+          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
