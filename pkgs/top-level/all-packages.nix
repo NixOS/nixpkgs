@@ -17483,6 +17483,8 @@ in
 
   iwona = callPackage ../data/fonts/iwona { };
 
+  jetbrains-mono = callPackage ../data/fonts/jetbrains-mono { };
+
   jost = callPackage ../data/fonts/jost { };
 
   joypixels = callPackage ../data/fonts/joypixels { };
