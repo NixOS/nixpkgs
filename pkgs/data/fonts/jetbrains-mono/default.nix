@@ -4,7 +4,7 @@ let version = "1.0.0";
 in fetchzip {
   name = "jetbrains-mono";
   url = "https://download.jetbrains.com/fonts/JetBrainsMono-${version}.zip";
-  sha256 = "1znw1xihk4139bi1gacdpx5a3l3rpvhcmg3c2vwaj1g3kvhnyhnp";
+  sha256 = "0mwqi66d56v4ml1w7wjsiidrh153jvh0czafyic47rkvmxhnrrhv";
   stripRoot = false;
 
   postFetch = ''
