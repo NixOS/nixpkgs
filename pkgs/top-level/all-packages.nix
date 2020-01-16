@@ -4008,6 +4008,8 @@ in
 
   hfsprogs = callPackage ../tools/filesystems/hfsprogs { };
 
+  hfsutils = callPackage ../tools/filesystems/hfsutils { };
+
   highlight = callPackage ../tools/text/highlight ({
     lua = lua5;
   });
