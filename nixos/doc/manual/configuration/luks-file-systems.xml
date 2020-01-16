@@ -37,4 +37,38 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
   on an encrypted partition, it is necessary to add the following grub option:
 <programlisting><xref linkend="opt-boot.loader.grub.enableCryptodisk"/> = true;</programlisting>
  </para>
+  <section xml:id="sec-luks-file-systems-fido2">
+  <title>FIDO2</title>
+
+  <para>
+   NixOS also supports unlocking your LUKS-Encrypted file system using a FIDO2 compatible token. In the following example, we will create a new FIDO2 credential
+   and add it as a new key to our existing device <filename>/dev/sda2</filename>:
+
+   <screen>
+# export FIDO2_LABEL="/dev/sda2 @ $HOSTNAME"
+# fido2luks credential "$FIDO2_LABEL"
+f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7
+
+# fido2luks -i add-key /dev/sda2 f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7
+Password:
+Password (again):
+Old password:
+Old password (again):
+Added to key to device /dev/sda2, slot: 2
+</screen>
+
+  To ensure that this file system is decrypted using the FIDO2 compatible key, add the following to <filename>configuration.nix</filename>:
+<programlisting>
+<link linkend="opt-boot.initrd.luks.fido2Support">boot.initrd.luks.fido2Support</link> = true;
+<link linkend="opt-boot.initrd.luks.devices._name__.fido2.credential">boot.initrd.luks.devices."/dev/sda2".fido2.credential</link> = "f1d00200108b9d6e849a8b388da457688e3dd653b4e53770012d8f28e5d3b269865038c346802f36f3da7278b13ad6a3bb6a1452e24ebeeaa24ba40eef559b1b287d2a2f80b7";
+</programlisting>
+
+  You can also use the FIDO2 passwordless setup, but for security reasons, you might want to enable it only when your device is PIN protected, such as <link xlink:href="https://trezor.io/">Trezor</link>.
+
+<programlisting>
+<link linkend="opt-boot.initrd.luks.devices._name__.fido2.passwordLess">boot.initrd.luks.devices."/dev/sda2".fido2.passwordLess</link> = true;
+</programlisting>
+  </para>
+ </section>
+
 </section>
