@@ -6218,6 +6218,8 @@ in
 
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
 
+  saldl = callPackage ../tools/networking/saldl { };
+
   salt = callPackage ../tools/admin/salt {};
 
   salut_a_toi = callPackage ../applications/networking/instant-messengers/salut-a-toi {};
