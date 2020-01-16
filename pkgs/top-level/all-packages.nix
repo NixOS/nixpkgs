@@ -2044,6 +2044,8 @@ in
 
   staccato = callPackage ../tools/text/staccato { };
 
+  stacer = libsForQt5.callPackage ../tools/admin/stacer { };
+
   stagit = callPackage ../development/tools/stagit { };
 
   step-ca = callPackage ../tools/security/step-ca { };
