@@ -1,4 +1,4 @@
-{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
+{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
       p = {
@@ -211,9 +211,12 @@ let
       test -e ${pkg}/bin/brotli-decompressor && touch $out
     '';
   };
-  test = runCommand "run-buildRustCrate-tests" {
-    nativeBuildInputs = builtins.attrValues tests;
-  } "
-    touch $out
-  ";
+  test = releaseTools.aggregate {
+    name = "buildRustCrate-tests";
+    meta = {
+      description = "Test cases for buildRustCrate";
+      maintainers = [ lib.maintainers.andir ];
+    };
+    constituents = builtins.attrValues tests;
+  };
 }
