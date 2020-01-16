@@ -1040,6 +1040,8 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
+  pydicom = callPackage ../development/python-modules/pydicom { };
+
   pydocstyle =
     if isPy27 then
       callPackage ../development/python-modules/pydocstyle/2.nix { }
