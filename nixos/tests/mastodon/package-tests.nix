@@ -4,7 +4,7 @@ import ../make-test-python.nix ({ pkgs, ...} :
 {
   name = "mastodon-package-tests";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [];
+    maintainers = [ happy-river ];
   };
 
   nodes = let

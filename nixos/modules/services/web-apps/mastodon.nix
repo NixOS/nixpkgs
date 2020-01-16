@@ -523,4 +523,6 @@ in {
     users.groups.mastodon = lib.mkIf (cfg.group == "mastodon") { };
   };
 
+  meta.maintainers = with lib.maintainers; [ happy-river ];
+
 }

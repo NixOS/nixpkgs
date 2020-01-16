@@ -3260,6 +3260,12 @@
     githubId = 4336207;
     name = "Rohit Goswami";
   };
+  happy-river = {
+    email = "happyriver93@runbox.com";
+    github = "happy-river";
+    githubId = 54728477;
+    name = "Happy River";
+  };
   haslersn = {
     email = "haslersn@fius.informatik.uni-stuttgart.de";
     github = "haslersn";
