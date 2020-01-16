@@ -49,6 +49,7 @@ in stdenv.mkDerivation rec {
         patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
         patchelf --set-rpath "${rpath}" $out/dotnet
         find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
+        find $out -type f -name "apphost" -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
     '';
 
     doInstallCheck = true;
