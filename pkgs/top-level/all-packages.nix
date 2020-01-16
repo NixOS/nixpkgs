@@ -20354,6 +20354,8 @@ in
 
   gnunet_git = lowPrio (callPackage ../applications/networking/p2p/gnunet/git.nix { });
 
+  gnunet-gtk = callPackage ../applications/networking/p2p/gnunet-gtk { };
+
   gocr = callPackage ../applications/graphics/gocr { };
 
   gobby5 = callPackage ../applications/editors/gobby { };
