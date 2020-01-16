@@ -29,6 +29,7 @@ let
         '';
         # keep only *.{pom,jar,xml,sha1,so,dll,dylib} and delete all ephemeral files with lastModified timestamps inside
         installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
+        dontFixup = true; # do not shrink .so files
         outputHashAlgo = "sha256";
         outputHashMode = "recursive";
         outputHash = dependencies-sha256;
@@ -65,8 +66,8 @@ let
 
           # Hadoop-3.2+ produces libhdfs at new location
           ${stdenv.lib.optionalString (stdenv.lib.versionAtLeast version "3.2") ''
-              cp -d hadoop-hdfs-project/hadoop-hdfs-native-client/target/target/usr/local/lib/libhdfs.{a,so*}    $out/lib/native/
-              cp -d hadoop-hdfs-project/hadoop-hdfs-native-client/target/main/native/libhdfspp/libhdfspp.{a,so*} $out/lib/native/
+              cp -d hadoop-hdfs-project/hadoop-hdfs-native-client/target/native/target/usr/local/lib/libhdfs.{a,so*}  $out/lib/native/
+              cp -d hadoop-hdfs-project/hadoop-hdfs-native-client/target/main/native/libhdfspp/libhdfspp.{a,so*}      $out/lib/native/
             ''}
 
           install -Dm755 hadoop-hdfs-project/${if stdenv.lib.versionOlder version "2.8" then
