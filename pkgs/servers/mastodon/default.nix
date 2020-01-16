@@ -1,27 +1,38 @@
 { nodejs-slim, mkYarnPackage, fetchFromGitHub, bundlerEnv,
-  stdenv, yarn, callPackage, imagemagick, ffmpeg, file, ... }:
+  stdenv, yarn, callPackage, imagemagick, ffmpeg, file,
+
+  # Allow building a fork or custom version of Mastodon:
+  pname ? "mastodon",
+  version ? import ./version.nix,
+  srcOverride ? null,
+  dependenciesDir ? ./.,  # Should contain gemset.nix, yarn.nix and package.json.
+
+  ... }:
 
 let
-  version = import ./version.nix;
-  src = callPackage ./source-patched.nix {};
+in stdenv.mkDerivation rec {
+  inherit pname version;
+
+  # Using overrideAttrs on src does not build the gems and modules with the overridden src.
+  # Putting the callPackage up in the arguments list also does not work.
+  src = if srcOverride != null then srcOverride else callPackage ./source-patched.nix {};
 
   mastodon-gems = bundlerEnv {
-    name = "mastodon-gems-${version}";
+    name = "${pname}-gems-${version}";
     inherit version;
     gemdir = src;
-    gemset = ./gemset.nix;
+    gemset = dependenciesDir + "/gemset.nix";
   };
 
   mastodon-js-modules = mkYarnPackage {
-    pname = "mastodon-modules";
-    yarnNix = ./yarn.nix;
-    packageJSON = ./package.json;
-    inherit src;
-    inherit version;
+    pname = "${pname}-modules";
+    yarnNix = dependenciesDir + "/yarn.nix";
+    packageJSON = dependenciesDir + "/package.json";
+    inherit src version;
   };
 
   mastodon-assets = stdenv.mkDerivation {
-    pname = "mastodon-assets";
+    pname = "${pname}-assets";
     inherit src version;
 
     buildInputs = [
@@ -29,7 +40,13 @@ let
     ];
 
     buildPhase = ''
-      cp -r ${mastodon-js-modules}/libexec/*/mastodon/node_modules "node_modules"
+      # Support Mastodon forks which don't call themselves 'mastodon' or which
+      # omit the organization name from package.json.
+      if [ "$(ls ${mastodon-js-modules}/libexec/* | grep node_modules)" ]; then
+          cp -r ${mastodon-js-modules}/libexec/*/node_modules node_modules
+      else
+          cp -r ${mastodon-js-modules}/libexec/*/*/node_modules node_modules
+      fi
       chmod -R u+w node_modules
       rake assets:precompile
     '';
@@ -41,14 +58,14 @@ let
     '';
   };
 
-in stdenv.mkDerivation {
-  pname = "mastodon";
-  inherit src version;
-
   passthru.updateScript = ./update.sh;
 
   buildPhase = ''
-    ln -s ${mastodon-js-modules}/libexec/*/mastodon/node_modules node_modules
+    if [ "$(ls ${mastodon-js-modules}/libexec/* | grep node_modules)" ]; then
+        ln -s ${mastodon-js-modules}/libexec/*/node_modules node_modules
+    else
+        ln -s ${mastodon-js-modules}/libexec/*/*/node_modules node_modules
+    fi
     ln -s ${mastodon-assets}/public/assets public/assets
     ln -s ${mastodon-assets}/public/packs public/packs
 
