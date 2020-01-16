@@ -18,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
-  checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
+  checkInputs = [ gdk-pixbuf ] ++ (with python3.pkgs; [ pytest pytest_xdist polib xvfb_run dbus.daemon glibcLocales ]);
 
   buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
@@ -35,11 +35,11 @@ python3.pkgs.buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
-    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
+    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS" \
       HOME=$(mktemp -d) \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-        py.test${stdenv.lib.optionalString (xineBackend || !withGstPlugins) " --ignore=tests/plugin/test_replaygain.py"}
+        py.test ${stdenv.lib.optionalString (xineBackend || !withGstPlugins) " --ignore=tests/plugin/test_replaygain.py"} --ignore=tests/quality
     runHook postCheck
   '';
 
@@ -65,6 +65,5 @@ python3.pkgs.buildPythonApplication rec {
 
     maintainers = with maintainers; [ coroa sauyon ];
     homepage = https://quodlibet.readthedocs.io/en/latest/;
-    broken = true;
   };
 }
