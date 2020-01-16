@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, fts }:
 
 stdenv.mkDerivation rec {
   pname = "fpart";
@@ -12,6 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
+  buildInputs = [ fts ];
 
   postInstall = ''
     sed "s|^FPART_BIN=.*|FPART_BIN=\"$out/bin/fpart\"|" \
