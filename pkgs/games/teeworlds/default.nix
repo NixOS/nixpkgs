@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, bam, pkgconfig, python, alsaLib
+{ fetchFromGitHub, stdenv, cmake, pkgconfig, python, alsaLib
 , libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
 }:
 
@@ -21,34 +21,11 @@ stdenv.mkDerivation rec {
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ bam pkgconfig ];
-
-  configurePhase = ''
-    runHook preConfigure
-    bam config
-    runHook postConfigure
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-    bam conf=release
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/share/teeworlds
-    cp build/x86_64/release/teeworlds{,_srv} $out/bin
-    cp -r build/x86_64/release/data $out/share/teeworlds
-  '';
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
     python alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
   ];
-
-  postInstall = ''
-    mkdir -p $out/share/doc/teeworlds
-    cp -v *.txt $out/share/doc/teeworlds/
-  '';
 
   meta = {
     description = "Retro multiplayer shooter game";
