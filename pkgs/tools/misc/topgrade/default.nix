@@ -20,6 +20,6 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ filalex77 hugoreeves ];
   };
 }
