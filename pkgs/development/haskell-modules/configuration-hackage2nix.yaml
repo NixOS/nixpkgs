@@ -1198,6 +1198,8 @@ default-package-overrides:
   - l10n ==0.1.0.1
   - labels ==0.3.3
   - lackey ==1.0.10
+  - lambdabot-core ==5.2
+  - lambdabot-irc-plugins ==5.2
   - LambdaHack ==0.9.5.0
   - lame ==0.2.0
   - language-c ==0.8.3
