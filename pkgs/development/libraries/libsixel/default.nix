@@ -1,14 +1,20 @@
 {stdenv, fetchFromGitHub}:
 stdenv.mkDerivation rec {
-  version = "1.8.2";
+  version = "1.8.4";
   pname = "libsixel";
 
   src = fetchFromGitHub {
     repo = "libsixel";
     rev = "v${version}";
     owner = "saitoha";
-    sha256 = "1jn5z2ylccjkp9i12n5x53x2zzhhsgmgs6xxi7aja6qimfw90h1n";
+    sha256 = "1zckahfl0j7k68jf87iwdc4yx7fkfhxwa7lrf22dnz36d2iq785v";
   };
+
+  configureFlags = [
+    "--enable-tests"
+  ];
+
+  doCheck = true;
 
   meta = with stdenv.lib; {
     description = "The SIXEL library for console graphics, and converter programs";
