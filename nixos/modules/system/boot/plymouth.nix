@@ -5,17 +5,20 @@ with lib;
 let
 
   inherit (pkgs) plymouth;
+  inherit (pkgs) nixos-icons;
 
   cfg = config.boot.plymouth;
 
-  breezePlymouth = pkgs.breeze-plymouth.override {
-    nixosBranding = true;
-    nixosVersion = config.system.nixos.release;
+  nixosBreezePlymouth = pkgs.breeze-plymouth.override {
+    logoFile = cfg.logo;
+    logoName = "nixos";
+    osName = "NixOS";
+    osVersion = config.system.nixos.release;
   };
 
   themesEnv = pkgs.buildEnv {
     name = "plymouth-themes";
-    paths = [ plymouth breezePlymouth ] ++ cfg.themePackages;
+    paths = [ plymouth ] ++ cfg.themePackages;
   };
 
   configFile = pkgs.writeText "plymouthd.conf" ''
@@ -35,7 +38,7 @@ in
       enable = mkEnableOption "Plymouth boot splash screen";
 
       themePackages = mkOption {
-        default = [];
+        default = [ nixosBreezePlymouth ];
         type = types.listOf types.package;
         description = ''
           Extra theme packages for plymouth.
@@ -52,10 +55,7 @@ in
 
       logo = mkOption {
         type = types.path;
-        default = pkgs.fetchurl {
-          url = "https://nixos.org/logo/nixos-hires.png";
-          sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
-        };
+        default = "${nixos-icons}/share/icons/hicolor/128x128/apps/nix-snowflake.png";
         defaultText = ''pkgs.fetchurl {
           url = "https://nixos.org/logo/nixos-hires.png";
           sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
