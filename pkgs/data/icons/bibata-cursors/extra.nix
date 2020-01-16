@@ -1,25 +1,33 @@
-{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen }:
+{ stdenvNoCC, fetchFromGitHub, gnome-themes-extra, inkscape, xcursorgen, python3 }:
 
-stdenvNoCC.mkDerivation rec {
+let
+  py = python3.withPackages(ps: [ ps.pillow ]);
+in stdenvNoCC.mkDerivation rec {
   pname = "bibata-extra-cursors";
-  version = "unstable-2018-10-28";
-  
+  version = "0.3";
+
   src = fetchFromGitHub {
     owner = "KaizIqbal";
     repo = "Bibata_Extra_Cursor";
-    rev = "66fb64b8dbe830e3f7ba2c2bdc4dacae7c438789";
-    sha256 = "1xb7v06sbxbwzd7cnghv9c55lpbbkcaf1nswdrqy87gd0bnpdd2n";
+    rev = "v${version}";
+    sha256 = "1bh945hvakbh985jkr6g6x0myw3k49pvn24m1clvqdv35v65nfxk";
   };
 
   postPatch = ''
     patchShebangs .
-    substituteInPlace build.sh --replace "gksu " ""
+    substituteInPlace build.sh --replace "sudo" ""
+
+    # Don't generate windows cursors,
+    # they aren't used and aren't installed
+    # by the project's install script anyway.
+    echo "exit 0" > w32-make.sh
   '';
 
   nativeBuildInputs  = [
     gnome-themes-extra
     inkscape
     xcursorgen
+    py
   ];
 
   buildPhase = ''
@@ -28,7 +36,9 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     install -dm 0755 $out/share/icons
-    cp -pr Bibata_* $out/share/icons/
+    for x in Bibata_*; do
+      cp -pr $x/out/X11/$x $out/share/icons/
+    done
   '';
 
   meta = with stdenvNoCC.lib; {
