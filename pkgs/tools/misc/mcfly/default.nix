@@ -2,13 +2,12 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "v0.3.1";
-  rev = version;
+  version = "0.3.1";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "cantino";
     repo = "mcfly";
+    rev = "v${version}";
     sha256 = "0pmyw21zns4zn7pffji4yvbj63fx3g15cx81pk4bs6lzyz5zbdc2";
   };
 
