@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "edwinb";
     repo = "Idris2";
-    rev = "bf5b2298e068ebeaddd70b695426f52ebe67c1ab";
-    sha256 = "1ixmdy4zbllmpwmvmmqv1rj9a2y243pggf42pdqkvrkjw50zqlyj";
+    rev = "751fd1f36a55dfe17eccd4732d603796e1705ab";
+    sha256 = "097wyj8k4aavsw8b11gq1dgcjsycw2zf9vhzrazzjmxmpcyh1sz3";
   };
 
-  version = "0.0.0";
+  version = "2020-01-11";
 
   nativeBuildInputs = [ idris makeWrapper ];
 
