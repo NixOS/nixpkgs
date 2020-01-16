@@ -518,6 +518,8 @@ in {
 
   cadquery = callPackage ../development/python-modules/cadquery { };
 
+  caiman = callPackage ../development/python-modules/caiman { };
+
   catalogue = callPackage ../development/python-modules/catalogue { };
 
   cdecimal = callPackage ../development/python-modules/cdecimal { };
@@ -622,6 +624,8 @@ in {
 
   parver = callPackage ../development/python-modules/parver { };
   arpeggio = callPackage ../development/python-modules/arpeggio { };
+  hdmf = callPackage ../development/python-modules/hdmf { };
+
   invoke = callPackage ../development/python-modules/invoke { };
 
   distorm3 = callPackage ../development/python-modules/distorm3 { };
@@ -941,6 +945,10 @@ in {
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  peakutils = callPackage ../development/python-modules/peakutils { };
+
+  pynwb = callPackage ../development/python-modules/pynwb { };
 
   pyperf = callPackage ../development/python-modules/pyperf { };
 
