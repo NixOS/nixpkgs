@@ -1133,6 +1133,8 @@ in {
     inherit (pkgs) cmake qt5 llvmPackages;
   });
 
+  seqnmf = callPackage ../development/python-modules/seqnmf { };
+
   simplefix = callPackage ../development/python-modules/simplefix { };
 
   pyside2-tools = toPythonModule (callPackage ../development/python-modules/pyside2-tools {
