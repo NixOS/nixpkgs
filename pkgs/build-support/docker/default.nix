@@ -589,6 +589,8 @@ rec {
           if tag == null
           then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
           else lib.toLower tag;
+        # Docker can't be made to run darwin binaries
+        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${if (tag == null) then ''
           outName="$(basename "$out")"
@@ -719,6 +721,8 @@ rec {
         layerClosure = writeReferencesToFile layer;
         passthru.buildArgs = args;
         passthru.layer = layer;
+        # Docker can't be made to run darwin binaries
+        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"
