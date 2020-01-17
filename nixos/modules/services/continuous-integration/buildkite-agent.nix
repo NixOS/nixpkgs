@@ -228,6 +228,9 @@ in
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
+            # set a long timeout to give buildkite-agent a chance to finish current builds
+            TimeoutStopSec = "2 min";
+            KillMode = "mixed";
           };
       };
 
