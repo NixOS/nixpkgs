@@ -3,7 +3,6 @@
 , fetchurl
 , gcc48
 , gcc49
-, gcc5
 , gcc6
 , gcc7
 }:
@@ -49,7 +48,7 @@ in rec {
         sha256 = "1iaz5rrsnsb1p99qiqvxn6j3ksc7ry8xlr397kqcjzxqbljbqn9d";
       })
     ];
-    gcc = gcc5;
+    gcc = gcc6;
   };
 
   cudatoolkit_9_0 = common {
