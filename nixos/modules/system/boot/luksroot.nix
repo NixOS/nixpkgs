@@ -4,6 +4,7 @@ with lib;
 
 let
   luks = config.boot.initrd.luks;
+  kernelPackages = config.boot.kernelPackages;
 
   commonFunctions = ''
     die() {
@@ -88,33 +89,6 @@ let
                 echo -n .
                 sleep 1
                 gpg --card-status > /dev/null 2> /dev/null
-                if [ $? == 0 ]; then
-                    success=true
-                    break
-                fi
-            done
-            if [ $success == true ]; then
-                echo " - success";
-                return 0
-            else
-                echo " - failure";
-                return 1
-            fi
-        fi
-        return 0
-    }
-
-    wait_fido2key () {
-        local secs="''${1:-10}"
-
-        fido2luks connected 1>/dev/null 2>&1
-        if [ $? != 0 ]; then
-            echo -n "Waiting $secs seconds for the FIDO2 key to appear..."
-            local success=false
-            for try in $(seq $secs); do
-                echo -n .
-                sleep 1
-                fido2luks connected 1>/dev/null 2>&1
                 if [ $? == 0 ]; then
                     success=true
                     break
@@ -419,19 +393,21 @@ let
     open_with_hardware() {
       local passsphrase
 
-      if wait_fido2key ${toString fido2.gracePeriod}; then
-          ${if fido2.passwordLess then ''
-            export passphrase=""
-          '' else ''
-            echo -n "FIDO2 salt for ${device}: "
-            read -rs passphrase
-            echo
-          ''}
-            echo "Waiting for your FIDO2 device..."
-            fido2luks -i open ${device} ${name} ${fido2.credential} --salt string:$passphrase
-        else
-            echo "No FIDO2 key found, falling back to normal open procedure"
-            open_normally
+        ${if fido2.passwordLess then ''
+          export passphrase=""
+        '' else ''
+          read -rsp "FIDO2 salt for ${device}: " passphrase
+          echo
+        ''}
+        ${optionalString (lib.versionOlder kernelPackages.kernel.version "5.4") ''
+          echo "On systems with Linux Kernel < 5.4, it might take a while to initialize the CRNG, you might want to use linuxPackages_latest."
+          echo "Please move your mouse to create needed randomness."
+        ''}
+          echo "Waiting for your FIDO2 device..."
+          fido2luks -i open ${device} ${name} ${fido2.credential} --await-dev ${toString fido2.gracePeriod} --salt string:$passphrase
+        if [ $? -ne 0 ]; then
+          echo "No FIDO2 key found, falling back to normal open procedure"
+          open_normally
         fi
     }
     ''}
