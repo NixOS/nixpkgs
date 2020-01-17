@@ -15,13 +15,18 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ isort ];
-  buildInputs = [ coverage mock ];
   propagatedBuildInputs = [
     robot-detection django_extensions rjsmin cssmin django-mailman3
     django-haystack flufl_lock networkx dateutil defusedxml
     django-paintstore djangorestframework django django-q
-    django_compressor beautifulsoup4 six psycopg2 whoosh isort elasticsearch
+    django_compressor six psycopg2 isort
   ];
+
+  # Some of these are optional runtime dependencies that are not
+  # listed as dependencies in setup.py.  To use these, they should be
+  # dependencies of the Django Python environment, but not of
+  # HyperKitty so they're not included for people who don't need them.
+  checkInputs = [ beautifulsoup4 coverage elasticsearch mock whoosh ];
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot
