@@ -7949,7 +7949,6 @@ in
   };
 
   gcc49Stdenv = overrideCC gccStdenv buildPackages.gcc49;
-  gcc5Stdenv = overrideCC gccStdenv buildPackages.gcc5;
   gcc6Stdenv = overrideCC gccStdenv buildPackages.gcc6;
   gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
@@ -8067,18 +8066,6 @@ in
     cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
   }));
 
-  gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
-  }));
-
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
     inherit noSysDirs;
 
@@ -8150,14 +8137,6 @@ in
   });
 
   gfortran49 = wrapCC (gcc49.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran5 = wrapCC (gcc5.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
