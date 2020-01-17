@@ -9725,10 +9725,6 @@ in
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
 
-  avarice = callPackage ../development/tools/misc/avarice {
-    gcc = gcc49;
-  };
-
   babeltrace = callPackage ../development/tools/misc/babeltrace { };
 
   bam = callPackage ../development/tools/build-managers/bam {};
