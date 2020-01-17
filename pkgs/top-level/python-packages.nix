@@ -2452,6 +2452,8 @@ in {
 
   dash-renderer = callPackage ../development/python-modules/dash-renderer { };
 
+  dash-table = callPackage ../development/python-modules/dash-table { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
