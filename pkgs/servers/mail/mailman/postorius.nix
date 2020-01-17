@@ -11,8 +11,8 @@ buildPythonPackage rec {
     sha256 = "1722lnscxfl8wdigf5d80d1qmd5gblr439wa989jxlww0wkjg9fl";
   };
 
-  buildInputs = [ beautifulsoup4 vcrpy mock ];
   propagatedBuildInputs = [ django-mailman3 ];
+  checkInputs = [ beautifulsoup4 vcrpy mock ];
 
   checkPhase = ''
     cd $NIX_BUILD_TOP/$sourceRoot
