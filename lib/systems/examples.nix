@@ -118,6 +118,12 @@ rec {
     config = "avr";
   };
 
+  vc4 = {
+    config = "vc4-elf";
+    libc = "newlib";
+    platform = {};
+  };
+
   arm-embedded = {
     config = "arm-none-eabi";
     libc = "newlib";
@@ -164,8 +170,8 @@ rec {
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -174,8 +180,8 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -184,8 +190,8 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};
@@ -194,8 +200,8 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};

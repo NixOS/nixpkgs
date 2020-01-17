@@ -93,13 +93,21 @@ mkDerivation rec {
       --replace "/bin/systemctl" "${systemd}/bin/systemctl"
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     # debuging
     searchForUnresolvedDLL $out
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Control panel of Deepin Desktop Environment";

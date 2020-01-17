@@ -15,7 +15,7 @@ buildPythonPackage rec {
   # Judging from SyntaxError
   disabled = isPy3k;
 
-  makeFlags = "DESTDIR=$(out)";
+  makeFlags = [ "DESTDIR=$(out)" ];
 
   postInstall = ''
     mv $out/usr/* $out/

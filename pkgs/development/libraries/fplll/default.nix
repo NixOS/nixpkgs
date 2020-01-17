@@ -1,22 +1,46 @@
-{stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, autoreconfHook
-, gmp, mpfr
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, gettext
+, autoreconfHook
+, gmp
+, mpfr
 }:
+
 stdenv.mkDerivation rec {
   pname = "fplll";
-  version = "5.2.1";
+  version = "5.3.1";
+
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fplll";
+    repo = "fplll";
     rev = version;
-    sha256 = "015qmrd7nfaysbv1hbwiprz9g6hnww1y1z1xw8f43ysb7k1b5nbg";
+    sha256 = "1bzlqavbch5smra75znh4ljr490wyx5v6hax8r9rjbgk605i33ns";
   };
-  nativeBuildInputs = [autoconf automake libtool gettext autoreconfHook];
-  buildInputs = [gmp mpfr];
-  meta = {
-    inherit version;
+
+  nativeBuildInputs = [
+    gettext
+    autoreconfHook
+  ];
+
+  buildInputs = [
+    gmp
+    mpfr
+  ];
+
+  meta = with stdenv.lib; {
     description = ''Lattice algorithms using floating-point arithmetic'';
-    license = stdenv.lib.licenses.lgpl21Plus;
-    maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.unix;
+    changelog = [
+      # Some release notes are added to the github tags, though they are not
+      # always complete.
+      "https://github.com/fplll/fplll/releases/tag/${version}"
+      # Releases are announced on this mailing list. Unfortunately it is not
+      # possible to generate a direct link to the most recent announcement, but
+      # this search should find it.
+      "https://groups.google.com/forum/#!searchin/fplll-devel/FPLLL$20${version}"
+    ];
+    license = licenses.lgpl21Plus;
+    maintainers = with maintainers; [raskin timokau];
+    platforms = platforms.unix;
   };
 }

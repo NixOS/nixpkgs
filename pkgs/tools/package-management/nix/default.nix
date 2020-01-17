@@ -57,7 +57,7 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
@@ -94,9 +94,9 @@ common =
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = "profiledir=$(out)/etc/profile.d";
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
 
-      installFlags = "sysconfdir=$(out)/etc";
+      installFlags = [ "sysconfdir=$(out)/etc" ];
 
       doInstallCheck = true; # not cross
 
@@ -174,10 +174,10 @@ in rec {
   };
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3.1";
+    name = "nix-2.3.2";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "bb6578e9f20eebab6d78469ecc59c450ac54f276e5a86a882015d98fecb1bc7b";
+      sha256 = "9fea4b52db0b296dcf05d36f7ecad9f48396af3a682bb21e31f8d04c469beef8";
     };
 
     inherit storeDir stateDir confDir boehmgc;

@@ -1,7 +1,57 @@
-diff --git i/prnt/hpcups/HPCupsFilter.cpp w/prnt/hpcups/HPCupsFilter.cpp
+From 207aa582477dd874d1651db2d0654c5d6adb6e0a Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Fri, 20 Dec 2019 13:13:52 +0000
+Subject: [PATCH] remove imageprocessor
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ Makefile.am                  |  4 ++--
+ Makefile.in                  |  2 +-
+ prnt/hpcups/HPCupsFilter.cpp | 19 -------------------
+ 3 files changed, 3 insertions(+), 22 deletions(-)
+
+diff --git a/Makefile.am b/Makefile.am
+index 891660d..484a051 100644
+--- a/Makefile.am
++++ b/Makefile.am
+@@ -166,7 +166,7 @@ if !HPLIP_CLASS_DRIVER
+ dist_hplip_SCRIPTS = hpssd.py __init__.py hpdio.py
+ endif #HPLIP_CLASS_DRIVER
+ 
+-dist_noinst_DATA += prnt/drv/hpijs.drv.in.template prnt/drv/hpcups.drv.in.template prnt/hpcups/libImageProcessor-x86_64.so prnt/hpcups/libImageProcessor-x86_32.so
++dist_noinst_DATA += prnt/drv/hpijs.drv.in.template prnt/drv/hpcups.drv.in.template
+ dist_noinst_SCRIPTS += dat2drv.py install.py  hplip-install init-suse-firewall init-iptables-firewall class_rpm_build.sh hplipclassdriver.spec createPPD.sh Makefile_dat2drv hpijs-drv
+ 
+ if !HPLIP_CLASS_DRIVER
+@@ -594,7 +594,7 @@ hpcups_SOURCES = prnt/hpcups/HPCupsFilter.cpp prnt/hpcups/HPCupsFilter.h prnt/hp
+ 	prnt/hpcups/ImageProcessor.h
+ 
+ hpcups_CXXFLAGS = $(APDK_ENDIAN_FLAG) $(DBUS_CFLAGS)
+-hpcups_LDADD = -L./prnt/hpcups/ -ljpeg -ldl -lImageProcessor -lcups -lcupsimage -lz $(DBUS_LIBS)
++hpcups_LDADD = -L./prnt/hpcups/ -ljpeg -ldl -lcups -lcupsimage -lz $(DBUS_LIBS)
+ #else
+ #hpcupsdir = $(cupsfilterdir)
+ #hpcups_PROGRAMS = hpcups
+diff --git a/Makefile.in b/Makefile.in
+index 16c39f0..46a767e 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -4814,7 +4814,7 @@ libapdk_la_CFLAGS = $(libapdk_la_CXXFLAGS) -Iprnt/hpijs
+ @HPCUPS_INSTALL_TRUE@	prnt/hpcups/ImageProcessor.h
+ 
+ @HPCUPS_INSTALL_TRUE@hpcups_CXXFLAGS = $(APDK_ENDIAN_FLAG) $(DBUS_CFLAGS)
+-@HPCUPS_INSTALL_TRUE@hpcups_LDADD = -L./prnt/hpcups/ -ljpeg -ldl -lImageProcessor -lcups -lcupsimage -lz $(DBUS_LIBS)
++@HPCUPS_INSTALL_TRUE@hpcups_LDADD = -L./prnt/hpcups/ -ljpeg -ldl -lcups -lcupsimage -lz $(DBUS_LIBS)
+ #else
+ #hpcupsdir = $(cupsfilterdir)
+ #hpcups_PROGRAMS = hpcups
+diff --git a/prnt/hpcups/HPCupsFilter.cpp b/prnt/hpcups/HPCupsFilter.cpp
 index 5b282d8..153ee3a 100644
---- i/prnt/hpcups/HPCupsFilter.cpp
-+++ w/prnt/hpcups/HPCupsFilter.cpp
+--- a/prnt/hpcups/HPCupsFilter.cpp
++++ b/prnt/hpcups/HPCupsFilter.cpp
 @@ -31,7 +31,6 @@
  \*****************************************************************************/
  
@@ -60,3 +110,6 @@ index 5b282d8..153ee3a 100644
      unlink(hpPreProcessedRasterFile);
      return ret_status;
  }
+-- 
+2.24.1
+

@@ -32,7 +32,7 @@ let
     'dbcollation' => 'utf8mb4_unicode_ci',
   );
 
-  $CFG->wwwroot   = '${if cfg.virtualHost.enableSSL then "https" else "http"}://${cfg.virtualHost.hostName}';
+  $CFG->wwwroot   = '${if cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL then "https" else "http"}://${cfg.virtualHost.hostName}';
   $CFG->dataroot  = '${stateDir}';
   $CFG->admin     = 'admin';
 
@@ -140,19 +140,15 @@ in
     };
 
     virtualHost = mkOption {
-      type = types.submodule ({
-        options = import ../web-servers/apache-httpd/per-server-options.nix {
-          inherit lib;
-          forMainServer = false;
-        };
-      });
-      example = {
-        hostName = "moodle.example.org";
-        enableSSL = true;
-        adminAddr = "webmaster@example.org";
-        sslServerCert = "/var/lib/acme/moodle.example.org/full.pem";
-        sslServerKey = "/var/lib/acme/moodle.example.org/key.pem";
-      };
+      type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
+      example = literalExample ''
+        {
+          hostName = "moodle.example.org";
+          adminAddr = "webmaster@example.org";
+          forceSSL = true;
+          enableACME = true;
+        }
+      '';
       description = ''
         Apache configuration can be done by adapting <option>services.httpd.virtualHosts</option>.
         See <xref linkend="opt-services.httpd.virtualHosts"/> for further information.
@@ -241,22 +237,20 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = [ (mkMerge [
-        cfg.virtualHost {
-          documentRoot = mkForce "${cfg.package}/share/moodle";
-          extraConfig = ''
-            <Directory "${cfg.package}/share/moodle">
-              <FilesMatch "\.php$">
-                <If "-f %{REQUEST_FILENAME}">
-                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-                </If>
-              </FilesMatch>
-              Options -Indexes
-              DirectoryIndex index.php
-            </Directory>
-          '';
-        }
-      ]) ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${cfg.package}/share/moodle";
+        extraConfig = ''
+          <Directory "${cfg.package}/share/moodle">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
+            Options -Indexes
+            DirectoryIndex index.php
+          </Directory>
+        '';
+      } ];
     };
 
     systemd.tmpfiles.rules = [

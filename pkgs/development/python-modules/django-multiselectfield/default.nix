@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "django-multiselectfield";
-  version = "0.1.9";
+  version = "0.1.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "54fa3886884cbc5d9c2f523e0e4af2cc3b976bd077718b2b443a5be44eb481ec";
+    sha256 = "043fa1aaddceb9b170c64c0745dc3a059165dcbc74946a434340778f63efa3c2";
   };
 
   propagatedBuildInputs = [ django ];

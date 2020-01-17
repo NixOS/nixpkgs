@@ -27,20 +27,14 @@ in
         example = "vlc";
         description = "Phonon audio backend to install.";
       };
-
-      enableQt4Support = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Enable support for Qt 4-based applications. Particularly, install a
-          default backend for Phonon.
-        '';
-      };
-
     };
 
   };
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "plasma5" "enableQt4Support" ] "Phonon no longer supports Qt 4.")
+    (mkRenamedOptionModule [ "services" "xserver" "desktopManager" "kde5" ] [ "services" "xserver" "desktopManager" "plasma5" ])
+  ];
 
   config = mkMerge [
     (mkIf cfg.enable {
@@ -173,12 +167,10 @@ in
 
         # Phonon audio backend
         ++ lib.optional (cfg.phononBackend == "gstreamer") libsForQt5.phonon-backend-gstreamer
-        ++ lib.optional (cfg.phononBackend == "gstreamer" && cfg.enableQt4Support) pkgs.phonon-backend-gstreamer
         ++ lib.optional (cfg.phononBackend == "vlc") libsForQt5.phonon-backend-vlc
-        ++ lib.optional (cfg.phononBackend == "vlc" && cfg.enableQt4Support) pkgs.phonon-backend-vlc
 
         # Optional hardware support features
-        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt ]
+        ++ lib.optionals config.hardware.bluetooth.enable [ bluedevil bluez-qt openobex obexftp ]
         ++ lib.optional config.networking.networkmanager.enable plasma-nm
         ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
         ++ lib.optional config.powerManagement.enable powerdevil
@@ -191,10 +183,7 @@ in
         "/share"
       ];
 
-      environment.etc = singleton {
-        source = xcfg.xkbDir;
-        target = "X11/xkb";
-      };
+      environment.etc."X11/xkb".source = xcfg.xkbDir;
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];

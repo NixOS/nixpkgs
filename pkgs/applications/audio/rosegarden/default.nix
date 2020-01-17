@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools
+{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
 , dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2
 , liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
 
@@ -15,7 +15,8 @@ stdenv.mkDerivation (rec {
     substituteInPlace src/CMakeLists.txt --replace svnheader svnversion
   '';
 
-  nativeBuildInputs = [ cmake makedepend perl pkgconfig qttools ];
+  nativeBuildInputs =
+    [ cmake makedepend perl pkgconfig qttools wrapQtAppsHook ];
 
   buildInputs = [
     dssi

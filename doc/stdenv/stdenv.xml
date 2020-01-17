@@ -1123,6 +1123,16 @@ preBuild = ''
 
    <variablelist>
     <title>Variables controlling the install phase</title>
+     <varlistentry>
+     <term>
+       <varname>dontInstall</varname>
+     </term>
+     <listitem>
+      <para>
+       Set to true to skip the install phase.
+      </para>
+     </listitem>
+    </varlistentry>
     <varlistentry>
      <term>
       <varname>makeFlags</varname> / <varname>makeFlagsArray</varname> / <varname>makefile</varname>
@@ -1717,7 +1727,7 @@ someVar=$(stripHash $name)
   </para>
 
   <para>
-   The most typical use of the setup hook is actually to add other hooks which are then run (i.e. after all the setup hooks) on each dependency. For example, the C compiler wrapper's setup hook feeds itself flags for each dependency that contains relevant libraries and headers. This is done by defining a bash function, and appending its name to one of <envar>envBuildBuildHooks</envar>`, <envar>envBuildHostHooks</envar>`, <envar>envBuildTargetHooks</envar>`, <envar>envHostHostHooks</envar>`, <envar>envHostTargetHooks</envar>`, or <envar>envTargetTargetHooks</envar>`. These 6 bash variables correspond to the 6 sorts of dependencies by platform (there's 12 total but we ignore the propagated/non-propagated axis).
+   The most typical use of the setup hook is actually to add other hooks which are then run (i.e. after all the setup hooks) on each dependency. For example, the C compiler wrapper's setup hook feeds itself flags for each dependency that contains relevant libraries and headers. This is done by defining a bash function, and appending its name to one of <envar>envBuildBuildHooks</envar>, <envar>envBuildHostHooks</envar>, <envar>envBuildTargetHooks</envar>, <envar>envHostHostHooks</envar>, <envar>envHostTargetHooks</envar>, or <envar>envTargetTargetHooks</envar>. These 6 bash variables correspond to the 6 sorts of dependencies by platform (there's 12 total but we ignore the propagated/non-propagated axis).
   </para>
 
   <para>

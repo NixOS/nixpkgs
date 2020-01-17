@@ -54,9 +54,6 @@
 
 # Extra preferences
 , extraPrefs ? ""
-
-# For meta
-, tor-browser-bundle
 }:
 
 with stdenv.lib;
@@ -93,19 +90,19 @@ let
   fteLibPath = makeLibraryPath [ stdenv.cc.cc gmp ];
 
   # Upstream source
-  version = "9.0.1";
+  version = "9.0.4";
 
   lang = "en-US";
 
   srcs = {
     x86_64-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux64-${version}_${lang}.tar.xz";
-      sha256 = "09iasj13wn3d1dygpxn4www4rx8wnxxlm9h6df9lzf4wll15px55";
+      sha256 = "14zlf02i447hcdr4qap8af1k4aziznfp9m2ygqz05zsy8icm1j2k";
     };
 
     i686-linux = fetchurl {
       url = "https://dist.torproject.org/torbrowser/${version}/tor-browser-linux32-${version}_${lang}.tar.xz";
-      sha256 = "1vz3pvqi114c9lkyhqy754ngi90708c187xwiyr9786ff89sjw5i";
+      sha256 = "1bmih91gsh698fp2mbnjcq8vmwhg822wanmn99r0xhkmgpi4zw2s";
     };
   };
 in
@@ -394,10 +391,18 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tor Browser Bundle built by torproject.org";
-    longDescription = tor-browser-bundle.meta.longDescription;
+    longDescription = ''
+      Tor Browser Bundle is a bundle of the Tor daemon, Tor Browser (heavily patched version of
+      Firefox), several essential extensions for Tor Browser, and some tools that glue those
+      together with a convenient UI.
+
+      `tor-browser-bundle-bin` package is the official version built by torproject.org patched with
+      `patchelf` to work under nix and with bundled scripts adapted to the read-only nature of
+      the `/nix/store`.
+    '';
     homepage = "https://www.torproject.org/";
     platforms = attrNames srcs;
-    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 ];
+    maintainers = with maintainers; [ offline matejc doublec thoughtpolice joachifm hax404 cap ];
     hydraPlatforms = [];
     # MPL2.0+, GPL+, &c.  While it's not entirely clear whether
     # the compound is "libre" in a strict sense (some components place certain

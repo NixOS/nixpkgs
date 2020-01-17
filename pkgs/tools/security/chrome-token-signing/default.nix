@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
+{ mkDerivation, fetchFromGitHub, qmake, pcsclite, pkgconfig, opensc }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "chrome-token-signing";
   version = "1.0.7";
 

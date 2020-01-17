@@ -34,8 +34,8 @@ let
   targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
                                         (targetPlatform.config + "-");
 
-  bintoolsVersion = (builtins.parseDrvName bintools.name).version;
-  bintoolsName = (builtins.parseDrvName bintools.name).name;
+  bintoolsVersion = stdenv.lib.getVersion bintools;
+  bintoolsName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName bintools);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -66,16 +66,16 @@ let
     else null;
 
   expand-response-params =
-    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    if buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
 in
 
 stdenv.mkDerivation {
-  name = targetPrefix
-    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${bintoolsName}-wrapper")
-    + (stdenv.lib.optionalString (bintools != null && bintoolsVersion != "") "-${bintoolsVersion}");
+  pname = targetPrefix
+    + (if name != "" then name else "${bintoolsName}-wrapper");
+  version = if bintools == null then null else bintoolsVersion;
 
   preferLocalBuild = true;
 
@@ -184,6 +184,7 @@ stdenv.mkDerivation {
       else if targetPlatform.isMsp430 then "msp430"
       else if targetPlatform.isAvr then "avr"
       else if targetPlatform.isAlpha then "alpha"
+      else if targetPlatform.isVc4 then "vc4"
       else throw "unknown emulation for platform: ${targetPlatform.config}";
     in if targetPlatform.useLLVM or false then ""
        else targetPlatform.platform.bfdEmulation or (fmt + sep + arch);

@@ -25,19 +25,21 @@ let
     accept_env_factor=${boolToStr cfg.acceptEnvFactor}
   '';
 
-  loginCfgFile = optional cfg.ssh.enable
-    { source = pkgs.writeText "login_duo.conf" configFileLogin;
-      mode   = "0600";
-      user   = "sshd";
-      target = "duo/login_duo.conf";
-    };
+  loginCfgFile = optionalAttrs cfg.ssh.enable {
+    "duo/login_duo.conf" =
+      { source = pkgs.writeText "login_duo.conf" configFileLogin;
+        mode   = "0600";
+        user   = "sshd";
+      };
+  };
 
-  pamCfgFile = optional cfg.pam.enable
-    { source = pkgs.writeText "pam_duo.conf" configFilePam;
-      mode   = "0600";
-      user   = "sshd";
-      target = "duo/pam_duo.conf";
-    };
+  pamCfgFile = optional cfg.pam.enable {
+    "duo/pam_duo.conf" =
+      { source = pkgs.writeText "pam_duo.conf" configFilePam;
+        mode   = "0600";
+        user   = "sshd";
+      };
+  };
 in
 {
   options = {
@@ -186,7 +188,7 @@ in
      environment.systemPackages = [ pkgs.duo-unix ];
 
      security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
-     environment.etc = loginCfgFile ++ pamCfgFile;
+     environment.etc = loginCfgFile // pamCfgFile;
 
      /* If PAM *and* SSH are enabled, then don't do anything special.
      If PAM isn't used, set the default SSH-only options. */

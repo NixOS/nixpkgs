@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, boost165, pkgconfig, python35
 , tbb, openimageio, libjpeg, libpng, zlib, libtiff, ilmbase
 , freetype, openexr, libXdmcp, libxkbcommon, epoxy, at-spi2-core
-, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, gtk3, pcre
+, dbus, doxygen, qt5, c-blosc, libGLU, gnome3, dconf, gtk3, pcre
 , bison, flex, libpthreadstubs, libX11
 , embree2, makeWrapper, gsettings-desktop-schemas, glib
 , withOpenCL ? true , opencl-headers, ocl-icd, opencl-clhpp
@@ -35,7 +35,7 @@ in stdenv.mkDerivation {
      # needed for XDG_ICON_DIRS
      gnome3.adwaita-icon-theme
      makeWrapper
-     (stdenv.lib.getLib gnome3.dconf)
+     (stdenv.lib.getLib dconf)
    ] ++ stdenv.lib.optionals withOpenCL [opencl-headers ocl-icd opencl-clhpp];
 
   cmakeFlags = [
@@ -66,7 +66,7 @@ in stdenv.mkDerivation {
     wrapProgram "$out/bin/luxcoreui" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --suffix XDG_DATA_DIRS : '${gnome3.adwaita-icon-theme}/share' \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = with stdenv.lib; {

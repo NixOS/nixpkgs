@@ -6,6 +6,7 @@
 buildPythonPackage rec {
   pname = "ics";
   version = "0.6";
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "C4ptainCrunch";
@@ -15,9 +16,16 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ tatsu arrow ];
-  checkInputs = [ pytest-sugar pytestpep8 pytest-flakes pytestcov ];
 
-  disabled = pythonOlder "3.6";
+  postPatch = ''
+    substituteInPlace requirements.txt \
+      --replace "arrow>=0.11,<0.15" "arrow"
+  '';
+
+  checkInputs = [ pytest-sugar pytestpep8 pytest-flakes pytestcov ];
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with stdenv.lib; {
     description = "Pythonic and easy iCalendar library (RFC 5545)";

@@ -85,7 +85,7 @@ in {
     systemd.tmpfiles.rules = [
       "d '${cfg.stateDir}' 0750 ${cfg.user} ${cfg.group} - -"
       "d '${cfg.logDir}' 0750 ${cfg.user} ${cfg.group} - -"
-     ];
+    ];
 
     systemd.services.unit = {
       description = "Unit App Server";
@@ -93,34 +93,50 @@ in {
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [ curl ];
       preStart = ''
-        test -f '/run/unit/control.unit.sock' || rm -f '/run/unit/control.unit.sock'
+        test -f '${cfg.stateDir}/conf.json' || rm -f '${cfg.stateDir}/conf.json'
       '';
       postStart = ''
         curl -X PUT --data-binary '@${configFile}' --unix-socket '/run/unit/control.unit.sock' 'http://localhost/config'
       '';
       serviceConfig = {
-        User = cfg.user;
-        Group = cfg.group;
-        AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID";
-        CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_SETGID CAP_SETUID";
         ExecStart = ''
           ${cfg.package}/bin/unitd --control 'unix:/run/unit/control.unit.sock' --pid '/run/unit/unit.pid' \
                                    --log '${cfg.logDir}/unit.log' --state '${cfg.stateDir}' --no-daemon \
                                    --user ${cfg.user} --group ${cfg.group}
         '';
+        # User and group
+        User = cfg.user;
+        Group = cfg.group;
+        # Capabilities
+        AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
+        # Security
+        NoNewPrivileges = true;
+        # Sanboxing
+        ProtectSystem = "full";
+        ProtectHome = true;
         RuntimeDirectory = "unit";
         RuntimeDirectoryMode = "0750";
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        PrivateMounts = true;
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "unit") (singleton {
-      name = "unit";
-      group = cfg.group;
+    users.users = optionalAttrs (cfg.user == "unit") {
+      unit.group = cfg.group;
       isSystemUser = true;
-    });
+    };
 
-    users.groups = optionalAttrs (cfg.group == "unit") (singleton {
-      name = "unit";
-    });
+    users.groups = optionalAttrs (cfg.group == "unit") {
+      unit = { };
+    };
+
   };
 }

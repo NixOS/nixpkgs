@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "coq_makefile -f _CoqProject -o Makefile";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
     homepage = https://mattam82.github.io/Coq-Equations/;

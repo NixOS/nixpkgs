@@ -40,8 +40,8 @@ stdenv.mkDerivation {
 
   meta = {
     description = "A set of tools for running in EC2";
-    homepage = https://aws.amazon.com/amazon-linux-ami/;
-    license = lib.licenses.apsl20;
+    homepage = "https://aws.amazon.com/amazon-linux-ami/";
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ thefloweringash ];
   };
 }

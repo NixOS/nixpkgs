@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales }:
+{ stdenv, buildPythonPackage, fetchPypi, python, pytest, glibcLocales, isPy37 }:
 
 buildPythonPackage rec {
-  version = "3.6.1";
+  version = "3.7.1";
   pname = "pyfakefs";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2654c665500ea8117b55cab51d4683a83ec1c76ddfae13640e509e4aac64b308";
+    sha256 = "1eb68bb250cc14310a6e33c197cbe2c8d93832b543f534e29b58286712f7e2b2";
   };
 
   postPatch = ''
@@ -24,6 +24,8 @@ buildPythonPackage rec {
       --replace "test_rename_dir_to_existing_dir" "notest_rename_dir_to_existing_dir"
   '');
 
+  # https://github.com/jmcgeheeiv/pyfakefs/issues/508
+  doCheck = !isPy37;
   checkInputs = [ pytest glibcLocales ];
 
   checkPhase = ''

@@ -50,7 +50,10 @@ with lib;
       ${config.services.timesyncd.extraConfig}
     '';
 
-    users.users.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.users.systemd-timesync = {
+      uid = config.ids.uids.systemd-timesync;
+      group = "systemd-timesync";
+    };
     users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
 
     system.activationScripts.systemd-timesyncd-migration = mkIf (versionOlder config.system.stateVersion "19.09") ''

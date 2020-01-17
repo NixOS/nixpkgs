@@ -8,15 +8,11 @@ let
 
   mysql = cfg.package;
 
-  isMariaDB =
-    let
-      pName = _p: (builtins.parseDrvName (_p.name)).name;
-    in pName mysql == pName pkgs.mariadb;
+  isMariaDB = lib.getName mysql == lib.getName pkgs.mariadb;
+
   isMysqlAtLeast57 =
-    let
-      pName = _p: (builtins.parseDrvName (_p.name)).name;
-    in (pName mysql == pName pkgs.mysql57)
-       && ((builtins.compareVersions mysql.version "5.7") >= 0);
+    (lib.getName mysql == lib.getName pkgs.mysql57)
+     && (builtins.compareVersions mysql.version "5.7" >= 0);
 
   mysqldOptions =
     "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
@@ -28,6 +24,10 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "mysql" "pidDir" ] "Don't wait for pidfiles, describe dependencies through systemd")
+    (mkRemovedOptionModule [ "services" "mysql" "rootPassword" ] "Use socket authentication or set the password outside of the nix store.")
+  ];
 
   ###### interface
 
@@ -320,6 +320,8 @@ in
           Type = if hasNotify then "notify" else "simple";
           RuntimeDirectory = "mysqld";
           RuntimeDirectoryMode = "0755";
+          Restart = "on-abort";
+          RestartSec = "5s";
           # The last two environment variables are used for starting Galera clusters
           ExecStart = "${mysql}/bin/mysqld --defaults-file=/etc/my.cnf ${mysqldOptions} $_WSREP_NEW_CLUSTER $_WSREP_START_POSITION";
           ExecStartPost =

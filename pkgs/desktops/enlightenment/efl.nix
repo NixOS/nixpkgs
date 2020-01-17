@@ -10,11 +10,11 @@
 
 stdenv.mkDerivation rec {
   pname = "efl";
-  version = "1.23.2";
+  version = "1.23.3";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/libs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "14yljnnmb89s8j6ip08ip5d01zkgzbzr1h4fr4bwk9lh8r59x3ds";
+    sha256 = "00b9lp3h65254kdb1ys15fv7p3ln7qsvf15jkw4kli5ymagadkjk";
   };
 
   nativeBuildInputs = [
@@ -128,7 +128,7 @@ stdenv.mkDerivation rec {
     source "$setupHook"
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
   postInstall = ''
     # fix use of $out variable

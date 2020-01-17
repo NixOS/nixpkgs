@@ -1,32 +1,28 @@
-{ stdenv, fetchFromGitHub, fetchpatch, libnfnetlink, libnl, net_snmp, openssl, pkgconfig }:
+{ stdenv, fetchFromGitHub, nixosTests
+, libnfnetlink, libnl, net-snmp, openssl
+, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
-  version = "1.4.5";
+  version = "2.0.19";
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
     rev = "v${version}";
-    sha256 = "12r80rcfxrys826flaqcdlfhcr7q4ccsd62ra1svy9545vf02qmx";
+    sha256 = "05jgr0f04z69x3zf3b9z04wczl15fnh69bs6j0yw55fij1k9nj4d";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2018-19115.patch";
-      url = "https://github.com/acassen/keepalived/pull/961/commits/f28015671a4b04785859d1b4b1327b367b6a10e9.patch";
-      sha256 = "1jnwk7x4qdgv7fb4jzw6sihv62n8wv04myhgwm2vxn8nfkcgd1mm";
-    })
-  ];
 
   buildInputs = [
     libnfnetlink
     libnl
-    net_snmp
+    net-snmp
     openssl
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  passthru.tests.keepalived = nixosTests.keepalived;
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   configureFlags = [
     "--enable-sha1"

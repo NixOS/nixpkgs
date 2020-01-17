@@ -4,13 +4,13 @@
 
 let
   pname = "eog";
-  version = "3.34.1";
+  version = "3.34.2";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0b7ld4azs9xbdjsk9b91ywhdzvxgajhndiwiivxjzbr0hjgp7c7x";
+    sha256 = "1lx96nn8q61ajk2m5454s9b5v5wyn7jbz2sf3k1irv8waiq0aavg";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobject-introspection python3 ];

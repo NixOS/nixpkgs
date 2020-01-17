@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "catch2";
-  version = "2.10.2";
+  version = "2.11.1";
 
   src = fetchFromGitHub {
     owner = "catchorg";
     repo = "Catch2";
     rev = "v${version}";
-    sha256="01ldfv4337s3vdhsx415d49jchpvqy61c77dhnri30ip5af0ipjs";
+    sha256="1jijj72cas6k5hckkxqppbv1inlwbca37p0ixzs3vzm2jhnd7z31";
   };
 
   nativeBuildInputs = [ cmake ];

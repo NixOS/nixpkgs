@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.007";
+  version = "1.008";
 in fetchzip {
   name = "public-sans-${version}";
 
@@ -16,7 +16,7 @@ in fetchzip {
     unzip -j $downloadedFile binaries/webfonts/\*.woff2 -d $out/share/fonts/woff2
   '';
 
-  sha256 = "1yzraw08qm1ig7ks850b329xp6zv2znjwl610dppax34kwhqghsm";
+  sha256 = "1s4xmliri3r1gcn1ws3wa6davj6giliqjdbcv0bh9ryg3dfpjz74";
 
   meta = with lib; {
     description = "A strong, neutral, principles-driven, open source typeface for text or display";

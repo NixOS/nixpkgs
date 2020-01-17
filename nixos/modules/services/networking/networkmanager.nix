@@ -308,6 +308,7 @@ in {
 
                 if [ "$2" != "up" ]; then
                     logger "exit: event $2 != up"
+                    exit
                 fi
 
                 # coreutils and iproute are in PATH too
@@ -336,6 +337,7 @@ in {
   };
 
   imports = [
+    (mkRenamedOptionModule [ "networking" "networkmanager" "useDnsmasq" ] [ "networking" "networkmanager" "dns" ])
     (mkRemovedOptionModule ["networking" "networkmanager" "dynamicHosts"] ''
       This option was removed because allowing (multiple) regular users to
       override host entries affecting the whole system opens up a huge attack
@@ -360,62 +362,59 @@ in {
       }
     ];
 
-    environment.etc = with pkgs; [
-      { source = configFile;
-        target = "NetworkManager/NetworkManager.conf";
+    environment.etc = with pkgs; {
+      "NetworkManager/NetworkManager.conf".source = configFile;
+
+      "NetworkManager/VPN/nm-openvpn-service.name".source =
+        "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
+
+      "NetworkManager/VPN/nm-vpnc-service.name".source =
+        "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
+
+      "NetworkManager/VPN/nm-openconnect-service.name".source =
+        "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
+
+      "NetworkManager/VPN/nm-fortisslvpn-service.name".source =
+        "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
+
+      "NetworkManager/VPN/nm-l2tp-service.name".source =
+        "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
+
+      "NetworkManager/VPN/nm-iodine-service.name".source =
+        "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
       }
-      { source = "${networkmanager-openvpn}/lib/NetworkManager/VPN/nm-openvpn-service.name";
-        target = "NetworkManager/VPN/nm-openvpn-service.name";
-      }
-      { source = "${networkmanager-vpnc}/lib/NetworkManager/VPN/nm-vpnc-service.name";
-        target = "NetworkManager/VPN/nm-vpnc-service.name";
-      }
-      { source = "${networkmanager-openconnect}/lib/NetworkManager/VPN/nm-openconnect-service.name";
-        target = "NetworkManager/VPN/nm-openconnect-service.name";
-      }
-      { source = "${networkmanager-fortisslvpn}/lib/NetworkManager/VPN/nm-fortisslvpn-service.name";
-        target = "NetworkManager/VPN/nm-fortisslvpn-service.name";
-      }
-      { source = "${networkmanager-l2tp}/lib/NetworkManager/VPN/nm-l2tp-service.name";
-        target = "NetworkManager/VPN/nm-l2tp-service.name";
-      }
-      { source = "${networkmanager-iodine}/lib/NetworkManager/VPN/nm-iodine-service.name";
-        target = "NetworkManager/VPN/nm-iodine-service.name";
-      }
-    ] ++ optional (cfg.appendNameservers != [] || cfg.insertNameservers != [])
-           { source = overrideNameserversScript;
-             target = "NetworkManager/dispatcher.d/02overridedns";
-           }
-      ++ lib.imap1 (i: s: {
-        inherit (s) source;
-        target = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
-        mode = "0544";
-      }) cfg.dispatcherScripts
-      ++ optional cfg.enableStrongSwan
-           { source = "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
-             target = "NetworkManager/VPN/nm-strongswan-service.name";
-           };
+      // optionalAttrs (cfg.appendNameservers != [] || cfg.insertNameservers != [])
+         {
+           "NetworkManager/dispatcher.d/02overridedns".source = overrideNameserversScript;
+         }
+      // optionalAttrs cfg.enableStrongSwan
+         {
+           "NetworkManager/VPN/nm-strongswan-service.name".source =
+             "${pkgs.networkmanager_strongswan}/lib/NetworkManager/VPN/nm-strongswan-service.name";
+         }
+      // listToAttrs (lib.imap1 (i: s:
+         {
+            name = "NetworkManager/dispatcher.d/${dispatcherTypesSubdirMap.${s.type}}03userscript${lib.fixedWidthNumber 4 i}";
+            value = { mode = "0544"; inherit (s) source; };
+         }) cfg.dispatcherScripts);
 
     environment.systemPackages = cfg.packages;
 
-    users.groups = [{
-      name = "networkmanager";
-      gid = config.ids.gids.networkmanager;
-    }
-    {
-      name = "nm-openvpn";
-      gid = config.ids.gids.nm-openvpn;
-    }];
-    users.users = [{
-      name = "nm-openvpn";
-      uid = config.ids.uids.nm-openvpn;
-      extraGroups = [ "networkmanager" ];
-    }
-    {
-      name = "nm-iodine";
-      isSystemUser = true;
-      group = "networkmanager";
-    }];
+    users.groups = {
+      networkmanager.gid = config.ids.gids.networkmanager;
+      nm-openvpn.gid = config.ids.gids.nm-openvpn;
+    };
+
+    users.users = {
+      nm-openvpn = {
+        uid = config.ids.uids.nm-openvpn;
+        extraGroups = [ "networkmanager" ];
+      };
+      nm-iodine = {
+        isSystemUser = true;
+        group = "networkmanager";
+      };
+    };
 
     systemd.packages = cfg.packages;
 

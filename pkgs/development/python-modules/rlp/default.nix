@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "rlp";
-  version = "1.1.0";
+  version = "1.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0742hdnhwcx1bm7pdk83290rxfcb0i2xskgl8yn6lg8fql1hms7b";
+    sha256 = "27273fc2dbc3513c1e05ea6b8af28aac8745fb09c164e39e2ed2807bf7e1b342";
   };
 
   checkInputs = [ pytest hypothesis ];

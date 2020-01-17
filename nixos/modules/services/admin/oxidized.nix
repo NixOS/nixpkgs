@@ -111,6 +111,7 @@ in
         Restart  = "always";
         WorkingDirectory = cfg.dataDir;
         KillSignal = "SIGKILL";
+        PIDFile = "${cfg.dataDir}/.config/oxidized/pid";
       };
     };
   };

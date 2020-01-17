@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "neo4j";
 
   nodes = {
@@ -11,10 +11,10 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $master->waitForUnit("neo4j");
-    $master->sleep(20); # Hopefully this is long enough!!
-    $master->succeed("curl http://localhost:7474/");
+    master.wait_for_unit("neo4j")
+    master.wait_for_open_port(7474)
+    master.succeed("curl http://localhost:7474/")
   '';
 }

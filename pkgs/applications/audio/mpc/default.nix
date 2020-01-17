@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, mpd_clientlib, sphinx, libiconv }:
 
 stdenv.mkDerivation rec {
   pname = "mpc";
-  version = "0.31";
+  version = "0.33";
 
   src = fetchFromGitHub {
     owner  = "MusicPlayerDaemon";
     repo   = "mpc";
     rev    = "v${version}";
-    sha256 = "06wn5f24bgkqmhh2p8rbizmqibzqr4x1q7c6zl0pfq7mdy49g5ds";
+    sha256 = "1qbi0i9cq54rj8z2kapk8x8g1jkw2jz781niwb9i7kw4xfhvy5zx";
   };
 
-  buildInputs = [ mpd_clientlib ];
+  buildInputs = [ mpd_clientlib ] ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeBuildInputs = [ meson ninja pkgconfig sphinx ];
 

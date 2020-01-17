@@ -12,10 +12,8 @@ let
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://salsa.debian.org/ssh-team/openssh/raw/"
-      + "e50a98bda787a3b9f53ed67bdccbbac0bde1f9ae"
-      + "/debian/patches/gssapi.patch";
-    sha256 = "14j9cabb3gkhkjc641zbiv29mbvsmgsvis3fbj8ywsd21zc7m2hv";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%258.1p1-2/debian/patches/gssapi.patch";
+    sha256 = "0zfxx46a5lpjp317z354yyswa2wvmb1pp5p0nxsbhsrzw94jvxsj";
   };
 
 in
@@ -61,11 +59,9 @@ stdenv.mkDerivation rec {
       substituteInPlace Makefile.in --replace '$(INSTALL) -m 4711' '$(INSTALL) -m 0711'
     '';
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
   buildInputs = [ zlib openssl libedit pam ]
-    ++ optional withKerberos kerberos
-    ++ optional hpnSupport autoreconfHook
-    ;
+    ++ optional withKerberos kerberos;
 
   preConfigure = ''
     # Setting LD causes `configure' and `make' to disagree about which linker

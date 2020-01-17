@@ -496,8 +496,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python35`, `python36` and `python37`. The aliases
+Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
+respectively `python27`, `python35`, `python36`, `python37` and `python38`. The aliases
 `python2` and `python3` correspond to respectively `python27` and
 `python37`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
@@ -821,6 +821,9 @@ should be used with `ignoreCollisions = true`.
 The following are setup hooks specifically for Python packages. Most of these are
 used in `buildPythonPackage`.
 
+- `eggUnpackhook` to move an egg to the correct folder so it can be installed with the `eggInstallHook`
+- `eggBuildHook` to skip building for eggs.
+- `eggInstallHook` to install eggs.
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pipInstallHook` to install wheels.
@@ -830,6 +833,7 @@ used in `buildPythonPackage`.
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A `venv` is created if it does not yet exist.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed with the `pipInstallHook`.
 
 ### Development mode
@@ -1034,7 +1038,10 @@ Create this `default.nix` file, together with a `requirements.txt` and simply ex
 
 ```nix
 with import <nixpkgs> {};
-with python27Packages;
+
+let
+  pythonPackages = python27Packages;
+in
 
 stdenv.mkDerivation {
   name = "impurePythonEnv";
@@ -1044,9 +1051,8 @@ stdenv.mkDerivation {
   buildInputs = [
     # these packages are required for virtualenv and pip to work:
     #
-    python27Full
-    python27Packages.virtualenv
-    python27Packages.pip
+    pythonPackages.virtualenv
+    pythonPackages.pip
     # the following packages are related to the dependencies of your python
     # project.
     # In this particular example the python modules listed in the
@@ -1059,14 +1065,13 @@ stdenv.mkDerivation {
     libxml2
     libxslt
     libzip
-    stdenv
     zlib
   ];
 
   shellHook = ''
     # set SOURCE_DATE_EPOCH so that we can use python wheels
     SOURCE_DATE_EPOCH=$(date +%s)
-    virtualenv --no-setuptools venv
+    virtualenv --python=${pythonPackages.python.interpreter} --no-setuptools venv
     export PATH=$PWD/venv/bin:$PATH
     pip install -r requirements.txt
   '';

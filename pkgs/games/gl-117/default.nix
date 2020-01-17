@@ -1,5 +1,5 @@
 { stdenv, fetchurl
-, libGLU_combined, SDL, freeglut, SDL_mixer, autoconf, automake, libtool
+, libGLU, libGL, SDL, freeglut, SDL_mixer, autoconf, automake, libtool
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1yvg1rp1yijv0b45cz085b29x5x0g5fkm654xdv5qwh2l6803gb4";
   };
 
-  buildInputs = [ libGLU_combined SDL freeglut SDL_mixer autoconf automake libtool ];
+  buildInputs = [ libGLU libGL SDL freeglut SDL_mixer autoconf automake libtool ];
 
   meta = with stdenv.lib; {
     description = "An air combat simulator";

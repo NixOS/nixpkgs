@@ -57,7 +57,7 @@ let
     dst = "pybind11";
   };
 
-  ccVersion = (builtins.parseDrvName stdenv.cc.name).version;
+  ccVersion = lib.getVersion stdenv.cc;
 in
 
 stdenv.mkDerivation rec {

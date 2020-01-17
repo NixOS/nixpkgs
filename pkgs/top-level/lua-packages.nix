@@ -23,7 +23,7 @@ let
   isLua51 = (lib.versions.majorMinor lua.version) == "5.1";
   isLua52 = (lib.versions.majorMinor lua.version) == "5.2";
   isLua53 = lua.luaversion == "5.3";
-  isLuaJIT = (builtins.parseDrvName lua.name).name == "luajit";
+  isLuaJIT = lib.getName lua == "luajit";
 
   lua-setup-hook = callPackage ../development/interpreters/lua-5/setup-hook.nix { };
 

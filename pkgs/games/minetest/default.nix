@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, sqlite, luajit
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, graphviz, xorg
 , leveldb, postgresql, hiredis
 }:
@@ -40,15 +40,15 @@ let
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
 
-    NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
 
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU_combined openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optional buildServer [
+      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+    ] ++ optionals buildServer [
       leveldb postgresql hiredis
     ];
 

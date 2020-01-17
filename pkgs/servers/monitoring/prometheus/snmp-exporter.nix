@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, net_snmp }:
+{ stdenv, buildGoPackage, fetchFromGitHub, net-snmp }:
 
 buildGoPackage rec {
   pname = "snmp_exporter";
@@ -13,7 +13,7 @@ buildGoPackage rec {
     sha256 = "1cnz1wapxs3fkghzy6v90s56vd0ngynypyapcpbmx5y66rlpdxx6";
   };
 
-  buildInputs = [ net_snmp ];
+  buildInputs = [ net-snmp ];
 
   doCheck = true;
 

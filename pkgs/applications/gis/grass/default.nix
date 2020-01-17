@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
   # directory
   patches = [ ./no_symbolic_links.patch ];
 
+  # Correct mysql_config query
+  patchPhase = ''
+      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
+  '';
+
   configureFlags = [
     "--with-proj-share=${proj}/share/proj"
     "--with-proj-includes=${proj.dev}/include"
@@ -80,7 +85,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1" ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   postInstall = ''
     wrapProgram $out/bin/grass76 \

@@ -14,13 +14,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "19.7.3";
+  version = "19.11.1";
   pname = "BoltzTraP2";
   disabled = pythonOlder "3.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hambr925ml2v2zcxnmnpi39395gl2928yac4p2kghk9xicymraw";
+    sha256 = "3927ae782b7329dede2bf85ff5ff328c88f0514ecb592267e28912340f395d3e";
   };
 
   dontUseCmakeConfigure = true;
@@ -37,7 +37,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.boltztrap.org/;
+    homepage = "http://www.boltztrap.org/";
     description = "Band-structure interpolator and transport coefficient calculator";
     license = licenses.gpl3;
     maintainers = [ maintainers.costrouc ];

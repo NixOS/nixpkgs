@@ -4,8 +4,11 @@
 # generated image is sized to only fit its contents, with the expectation
 # that a script resizes the filesystem at boot time.
 { pkgs
+, lib
 # List of derivations to be included
 , storePaths
+# Whether or not to compress the resulting image with zstd
+, compressImage ? false, zstd
 # Shell commands to populate the ./files directory.
 # All files in that directory are copied to the root of the FS.
 , populateImageCommands ? ""
@@ -20,18 +23,20 @@
 let
   sdClosureInfo = pkgs.buildPackages.closureInfo { rootPaths = storePaths; };
 in
-
 pkgs.stdenv.mkDerivation {
-  name = "ext4-fs.img";
+  name = "ext4-fs.img${lib.optionalString compressImage ".zst"}";
 
-  nativeBuildInputs = [e2fsprogs.bin libfaketime perl lkl];
+  nativeBuildInputs = [ e2fsprogs.bin libfaketime perl lkl ]
+  ++ lib.optional compressImage zstd;
 
   buildCommand =
     ''
+      ${if compressImage then "img=temp.img" else "img=$out"}
       (
       mkdir -p ./files
       ${populateImageCommands}
       )
+
       # Add the closures of the top-level store objects.
       storePaths=$(cat ${sdClosureInfo}/store-paths)
 
@@ -42,28 +47,26 @@ pkgs.stdenv.mkDerivation {
       bytes=$((2 * 4096 * $numInodes + 4096 * $numDataBlocks))
       echo "Creating an EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks)"
 
-      truncate -s $bytes $out
-      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U ${uuid} $out
+      truncate -s $bytes $img
+      faketime -f "1970-01-01 00:00:01" mkfs.ext4 -L ${volumeLabel} -U ${uuid} $img
 
       # Also include a manifest of the closures in a format suitable for nix-store --load-db.
       cp ${sdClosureInfo}/registration nix-path-registration
-      cptofs -t ext4 -i $out nix-path-registration /
+      cptofs -t ext4 -i $img nix-path-registration /
 
       # Create nix/store before copying paths
       faketime -f "1970-01-01 00:00:01" mkdir -p nix/store
-      cptofs -t ext4 -i $out nix /
+      cptofs -t ext4 -i $img nix /
 
       echo "copying store paths to image..."
-      cptofs -t ext4 -i $out $storePaths /nix/store/
+      cptofs -t ext4 -i $img $storePaths /nix/store/
 
-      (
       echo "copying files to image..."
-      cd ./files
-      cptofs -t ext4 -i $out ./* /
-      )
+      cptofs -t ext4 -i $img ./files/* /
+
 
       # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
-      if ! fsck.ext4 -n -f $out; then
+      if ! fsck.ext4 -n -f $img; then
         echo "--- Fsck failed for EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
         cat errorlog
         return 1
@@ -71,9 +74,9 @@ pkgs.stdenv.mkDerivation {
 
       (
         # Resizes **snugly** to its actual limits (or closer to)
-        free=$(dumpe2fs $out | grep '^Free blocks:')
-        blocksize=$(dumpe2fs $out | grep '^Block size:')
-        blocks=$(dumpe2fs $out | grep '^Block count:')
+        free=$(dumpe2fs $img | grep '^Free blocks:')
+        blocksize=$(dumpe2fs $img | grep '^Block size:')
+        blocks=$(dumpe2fs $img | grep '^Block count:')
         blocks=$((''${blocks##*:})) # format the number.
         blocksize=$((''${blocksize##*:})) # format the number.
         # System can't boot with 0 blocks free.
@@ -82,10 +85,15 @@ pkgs.stdenv.mkDerivation {
         size=$(( blocks - ''${free##*:} + fudge ))
 
         echo "Resizing from $blocks blocks to $size blocks. (~ $((size*blocksize/1024/1024))MiB)"
-        EXT2FS_NO_MTAB_OK=yes resize2fs $out -f $size
+        EXT2FS_NO_MTAB_OK=yes resize2fs $img -f $size
       )
 
       # And a final fsck, because of the previous truncating.
-      fsck.ext4 -n -f $out
+      fsck.ext4 -n -f $img
+
+      if [ ${builtins.toString compressImage} ]; then
+        echo "Compressing image"
+        zstd -v --no-progress ./$img -o $out
+      fi
     '';
 }

@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
     pantheon.granite
   ];
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Download torrents in style with this speedy, minimalist torrent client for elementary OS";
     homepage = https://github.com/davidmhewitt/torrential;

@@ -22,7 +22,7 @@ stdenv.mkDerivation {
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man"
   ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "VNC recorder";

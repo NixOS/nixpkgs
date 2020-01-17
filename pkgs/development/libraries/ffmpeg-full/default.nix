@@ -104,7 +104,7 @@
 #, opencl ? null # OpenCL code
 , opencore-amr ? null # AMR-NB de/encoder & AMR-WB decoder
 #, opencv ? null # Video filtering
-, openglExtlib ? false, libGLU_combined ? null # OpenGL rendering
+, openglExtlib ? false, libGL ? null, libGLU ? null # OpenGL rendering
 #, openh264 ? null # H.264/AVC encoder
 , openjpeg ? null # JPEG 2000 de/encoder
 , opensslExtlib ? false, openssl ? null
@@ -234,16 +234,16 @@ assert gnutls != null -> !opensslExtlib;
 assert libxcbshmExtlib -> libxcb != null;
 assert libxcbxfixesExtlib -> libxcb != null;
 assert libxcbshapeExtlib -> libxcb != null;
-assert openglExtlib -> libGLU_combined != null;
+assert openglExtlib -> libGL != null && libGLU != null;
 assert opensslExtlib -> gnutls == null && openssl != null && nonfreeLicensing;
 
 stdenv.mkDerivation rec {
   pname = "ffmpeg-full";
-  version = "4.2.1";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "https://www.ffmpeg.org/releases/ffmpeg-${version}.tar.xz";
-    sha256 = "1m5nkc61ihgcf0b2wabm0zyqa8sj3c0w8fi6kr879lb0kdzciiyf";
+    sha256 = "176jn1lcdf0gk7sa5l2mv0faqp5dsqdhx1gqcrgymqhfmdal4xfb";
   };
 
   patches = [ ./prefer-libdav1d-over-libaom.patch ];
@@ -353,6 +353,7 @@ stdenv.mkDerivation rec {
     #(enableFeature (cdio-paranoia != null && gplLicensing) "libcdio")
     (enableFeature (if isLinux then libdc1394 != null && libraw1394 != null else false) "libdc1394")
     (enableFeature (libiconv != null) "iconv")
+    (enableFeature (libjack2 != null) "libjack")
     #(enableFeature (if isLinux then libiec61883 != null && libavc1394 != null && libraw1394 != null else false) "libiec61883")
     (enableFeature (if isLinux && !isAarch64 then libmfx != null else false) "libmfx")
     (enableFeature (libmodplug != null) "libmodplug")
@@ -424,7 +425,7 @@ stdenv.mkDerivation rec {
     libxcb libXv libXext lzma openal openjpeg libpulseaudio rtmpdump opencore-amr
     samba SDL2 soxr speex vid-stab vo-amrwbenc wavpack x264 x265 xavs xvidcore
     zeromq4 zlib
-  ] ++ optional openglExtlib libGLU_combined
+  ] ++ optionals openglExtlib [ libGL libGLU ]
     ++ optionals nonfreeLicensing [ fdk_aac openssl ]
     ++ optional ((isLinux || isFreeBSD) && libva != null) libva
     ++ optional (!isAarch64 && libvmaf != null && version3Licensing) libvmaf
@@ -466,6 +467,6 @@ stdenv.mkDerivation rec {
         licenses.lgpl21Plus
     );
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel fuuzetsu ];
+    maintainers = with maintainers; [ codyopel ];
   };
 }

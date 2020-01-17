@@ -15,9 +15,11 @@ stdenv.mkDerivation rec {
   # requires optimisation but memory operations are compiled with -O0
   hardeningDisable = ["fortify"];
 
-  makeFlags = if stdenv.cc.isClang then [ "CC=cc" ] else null;
+  makeFlags = stdenv.lib.optional stdenv.cc.isClang "CC=cc";
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [
+    "PREFIX=${placeholder ''out''}"
+  ];
 
   meta = {
     description = "Implements double cryptographic ratchet and Megolm ratchet";

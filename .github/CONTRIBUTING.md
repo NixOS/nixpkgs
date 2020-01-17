@@ -6,9 +6,8 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 ## Opening issues
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
-* [Submit an issue](https://github.com/NixOS/nixpkgs/issues) - assuming one does not already exist.
-  * Clearly describe the issue including steps to reproduce when it is a bug.
-  * Include information what version of nixpkgs and Nix are you using (nixos-version or git revision).
+* Make sure there is no open issue on the topic
+* [Submit a new issue](https://github.com/NixOS/nixpkgs/issues/new/choose) by choosing the kind of topic and fill out the template
 
 ## Submitting changes
 

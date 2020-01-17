@@ -1,14 +1,14 @@
-{ stdenv , fetchFromGitHub , cmake , python }:
+{ stdenv, fetchFromGitHub, cmake, python, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "jsoncpp";
-  version = "1.9.1";
+  version = "1.9.2";
 
   src = fetchFromGitHub {
     owner = "open-source-parsers";
     repo = "jsoncpp";
     rev = version;
-    sha256 = "00g356iv3kcp0gadj7gbyzf9jn9avvx9vxbxc7c2i5nnry8z72wj";
+    sha256 = "037d1b1qdmn3rksmn1j71j26bv4hkjv7sn7da261k853xb5899sg";
   };
 
   /* During darwin bootstrap, we have a cp that doesn't understand the
@@ -29,6 +29,14 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake python ];
+
+  # fix inverted sense in isAnyCharRequiredQuoting on aarch64. See: https://github.com/open-source-parsers/jsoncpp/pull/1120
+  patches = stdenv.lib.optionals stdenv.isAarch64 [
+    (fetchpatch {
+      url = "https://github.com/open-source-parsers/jsoncpp/commit/9093358efae9e5981aa60013487fc7215f040a59.patch";
+      sha256 = "1wiqp70sck2md14sfc0zdkblqk9750cl55ykf9d6b9vs1ifzzzq5";
+     })
+  ];
 
   cmakeFlags = [
     "-DBUILD_SHARED_LIBS=ON"

@@ -19,14 +19,17 @@
 , enableNixHacks ? false
 , gcc-unwrapped
 , autoPatchelfHook
+, file
+, substituteAll
+, writeTextFile
 }:
 
 let
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1awm5wa4y4c37zy7d1ass83amwq5992wydkj5v9jx0zp7b4shrjb";
+    sha256 = "1fvc7lakdczim1i99hrwhwx2w75afd3q9fgbhrx7i3pnav3a6kbj";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -46,11 +49,11 @@ let
       srcs.io_bazel_rules_sass
       srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs."java_tools_javac11_darwin-v6.1.zip"
-       else srcs."java_tools_javac11_linux-v6.1.zip")
+       then srcs."java_tools_javac11_darwin-v7.0.zip"
+       else srcs."java_tools_javac11_linux-v7.0.zip")
       srcs."coverage_output_generator-v2.0.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.11.tar.gz"
+      srcs."android_tools_pkg-0.12.tar.gz"
       srcs."0.28.3.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
@@ -91,7 +94,7 @@ let
     #        ],
     #     )
     #
-    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip file zip ];
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
@@ -107,7 +110,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v6.1.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v7.0.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -121,6 +124,18 @@ let
     installPhase = ''
       cp -Ra * $out/
       touch $out/WORKSPACE
+    '';
+  };
+
+  bazelRC = writeTextFile {
+    name = "bazel-rc";
+    text = ''
+      build --override_repository=${remote_java_tools.name}=${remote_java_tools}
+      build --distdir=${distDir}
+      startup --server_javabase=${runJdk}
+
+      # load default location for the system wide configuration
+      try-import /etc/bazel.bazelrc
     '';
   };
 
@@ -145,6 +160,24 @@ stdenv.mkDerivation rec {
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
     ./trim-last-argument-to-gcc-if-empty.patch
+
+    # --experimental_strict_action_env (which may one day become the default
+    # see bazelbuild/bazel#2574) hardcodes the default
+    # action environment to a non hermetic value (e.g. "/usr/local/bin").
+    # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
+    # So we are replacing this bazel paths by defaultShellPath,
+    # improving hermeticity and making it work in nixos.
+    (substituteAll {
+      src = ./strict_action_env.patch;
+      strictActionEnvPatch = defaultShellPath;
+    })
+
+    # bazel reads its system bazelrc in /etc
+    # override this path to a builtin one
+    (substituteAll {
+      src = ./bazel_rc.patch;
+      bazelSystemBazelRCPath = bazelRC;
+    })
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
 
@@ -390,14 +423,6 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
           -i scripts/bootstrap/compile.sh
 
-      # --experimental_strict_action_env (which will soon become the
-      # default, see bazelbuild/bazel#2574) hardcodes the default
-      # action environment to a value that on NixOS at least is bogus.
-      # So we hardcode it to something useful.
-      substituteInPlace \
-        src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java \
-        --replace /bin:/usr/bin ${defaultShellPath}
-
       # This is necessary to avoid:
       # "error: no visible @interface for 'NSDictionary' declares the selector
       # 'initWithContentsOfURL:error:'"
@@ -413,12 +438,6 @@ stdenv.mkDerivation rec {
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
       patchShebangs .
-
-      # bazel reads its system bazelrc in /etc
-      # override this path to a builtin one
-      substituteInPlace \
-        src/main/cpp/option_processor.cc \
-        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"$out/etc/bazelrc\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
@@ -469,15 +488,6 @@ stdenv.mkDerivation rec {
     # if it can’t find something in tools, it calls $out/bin/bazel-real
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
     mv ./bazel_src/output/bazel $out/bin/bazel-real
-
-    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
-
-    # generates the system bazelrc
-    # warning: the name of the repository depends on the system, hence
-    # the reference to .name
-    mkdir $out/etc
-    echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
-    echo "build --distdir=${distDir}" >> $out/etc/bazelrc
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ gstreamer gst-plugins-base gtk3 libgee poppler
     libpthreadstubs librsvg pcre ];
 
-  cmakeFlags = stdenv.lib.optionalString stdenv.isDarwin "-DMOVIES=OFF";
+  cmakeFlags = stdenv.lib.optional stdenv.isDarwin "-DMOVIES=OFF";
 
   patches = [
     # Fix build vala 0.46

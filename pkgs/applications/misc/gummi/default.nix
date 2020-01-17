@@ -1,4 +1,4 @@
-{ stdenv, pkgs, makeWrapper
+{ stdenv, pkgs, makeWrapper, pango
 , glib, gnome2, gnome3, gtk2-x11, gtkspell2, poppler
 , pkgconfig, intltool, autoreconfHook, wrapGAppsHook
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     pkgconfig intltool autoreconfHook makeWrapper wrapGAppsHook
   ];
   buildInputs = [
-    glib gnome2.gtksourceview gnome2.pango gtk2-x11 gtkspell2 poppler
+    glib gnome2.gtksourceview pango gtk2-x11 gtkspell2 poppler
     gnome3.adwaita-icon-theme
   ];
 

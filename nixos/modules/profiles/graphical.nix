@@ -9,7 +9,6 @@
     displayManager.sddm.enable = true;
     desktopManager.plasma5 = {
       enable = true;
-      enableQt4Support = false;
     };
     libinput.enable = true; # for touchpad support on many laptops
   };

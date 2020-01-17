@@ -37,6 +37,7 @@ rec {
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
         else if final.isMsp430              then "newlib"
+        else if final.isVc4                 then "newlib"
         else if final.isAvr                 then "avrlibc"
         else if final.isNetBSD              then "nblibc"
         # TODO(@Ericson2314) think more about other operating systems

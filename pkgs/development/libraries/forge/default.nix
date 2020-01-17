@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
 , arrayfire, expat, fontconfig, freeimage, freetype, boost
-, mesa, libGLU_combined, glfw3, SDL2, cudatoolkit
+, mesa, libGLU, libGL, glfw3, SDL2, cudatoolkit
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     boost.dev
     freeimage
     mesa
-    libGLU_combined
+    libGLU libGL
     glfw3
     SDL2
     cudatoolkit

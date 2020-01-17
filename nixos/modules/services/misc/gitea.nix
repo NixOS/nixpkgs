@@ -364,7 +364,7 @@ in
           ''}
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
-              -e "s,#jwtsecet#,$JWTSECET,g" \
+              -e "s,#jwtsecret#,$JWTSECRET,g" \
               -e "s,#mailerpass#,$MAILERPASSWORD,g" \
               -i ${runConfig}
           chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
@@ -394,6 +394,26 @@ in
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${gitea.bin}/bin/gitea web";
         Restart = "always";
+
+        # Filesystem
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        ReadWritePaths = cfg.stateDir;
+        # Caps
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        # Misc.
+        LockPersonality = true;
+        RestrictRealtime = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
 
       environment = {
@@ -453,4 +473,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
+  meta.maintainers = with lib.maintainers; [ srhb ];
 }

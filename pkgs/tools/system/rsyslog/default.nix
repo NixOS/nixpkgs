@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
-, libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
+, libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.1910.0";
+  version = "8.1911.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "14qczsj12spx0m3dz1pkxnacwi5njr0syamnmi1rg8ri5xlyw682";
+    sha256 = "01713vwz3w5fx9b97286h1rx9hxhjsdah96nyhh75bb23impgx71";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -24,13 +24,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
-    postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
+    postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
     rabbitmq-c hiredis mongoc
   ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
-
-  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
     (mkFlag (libmysqlclient != null)  "mysql")
     (mkFlag (postgresql != null)      "pgsql")
     (mkFlag (libdbi != null)          "libdbi")
-    (mkFlag (net_snmp != null)        "snmp")
+    (mkFlag (net-snmp != null)        "snmp")
     (mkFlag (libuuid != null)         "uuid")
     (mkFlag (curl != null)            "elasticsearch")
     (mkFlag (gnutls != null)          "gnutls")
@@ -95,9 +93,7 @@ stdenv.mkDerivation rec {
     (mkFlag (hadoop != null)          "omhdfs")
     (mkFlag (rdkafka != null)         "omkafka")
     (mkFlag (libmongo-client != null) "ommongodb")
-    (mkFlag (czmq != null)            "imzmq3")
     (mkFlag (czmq != null)            "imczmq")
-    (mkFlag (czmq != null)            "omzmq3")
     (mkFlag (czmq != null)            "omczmq")
     (mkFlag (rabbitmq-c != null)      "omrabbitmq")
     (mkFlag (hiredis != null)         "omhiredis")

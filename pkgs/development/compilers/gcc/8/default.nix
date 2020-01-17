@@ -64,13 +64,14 @@ let majorVersion = "8";
 
     /* Cross-gcc settings (build == host != target) */
     crossMingw = targetPlatform != hostPlatform && targetPlatform.libc == "msvcrt";
-    stageNameAddon = if crossStageStatic then "-stage-static" else "-stage-final";
-    crossNameAddon = if targetPlatform != hostPlatform then "-${targetPlatform.config}" + stageNameAddon else "";
+    stageNameAddon = if crossStageStatic then "stage-static" else "stage-final";
+    crossNameAddon = optionalString (targetPlatform != hostPlatform) "${targetPlatform.config}-${stageNameAddon}-";
 
 in
 
 stdenv.mkDerivation ({
-  name = crossNameAddon + "${name}${if stripped then "" else "-debug"}-${version}";
+  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
+  inherit version;
 
   builder = ../builder.sh;
 
@@ -207,10 +208,7 @@ stdenv.mkDerivation ({
 
   dontStrip = !stripped;
 
-  installTargets =
-    if stripped
-    then "install-strip"
-    else "install";
+  installTargets = optional stripped "install-strip";
 
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";

@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "gotty";
-  version = "0.0.13";
+  version = "2.0.0-alpha.3";
   rev = "v${version}";
 
   goPackagePath = "github.com/yudai/gotty";
@@ -11,10 +11,8 @@ buildGoPackage rec {
     inherit rev;
     owner = "yudai";
     repo = "gotty";
-    sha256 = "1hsfjyjjzr1zc9m8bnhid1ag6ipcbx59111y9p7k8az8jiyr112g";
+    sha256 = "1vhhs7d4k1vpkf2k69ai2r3bp3zwnwa8l9q7vza0rck69g4nmz7a";
   };
-
-  goDeps = ./deps.nix;
 
   meta = with stdenv.lib; {
     description = "Share your terminal as a web application";

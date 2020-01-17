@@ -1,11 +1,11 @@
-{ stdenv, lib, fetchgit, pkgconfig, libssh2
+{ stdenv, lib, fetchFromGitHub, fetchFromGitiles, pkgconfig, libssh2
 , qtbase, qtdeclarative, qtgraphicaleffects, qtimageformats, qtquickcontrols
 , qtsvg, qttools, qtquick1, qtcharts
 , qmake
 }:
 
 let
-  breakpad_lss = fetchgit {
+  breakpad_lss = fetchFromGitiles {
     url = "https://chromium.googlesource.com/linux-syscall-support";
     rev = "08056836f2b4a5747daff75435d10d649bed22f6";
     sha256 = "1ryshs2nyxwa0kn3rlbnd5b3fhna9vqm560yviddcfgdm2jyg0hz";
@@ -17,10 +17,11 @@ stdenv.mkDerivation rec {
   pname = "redis-desktop-manager";
   version = "0.9.1";
 
-  src = fetchgit {
-    url = "https://github.com/uglide/RedisDesktopManager.git";
+  src = fetchFromGitHub {
+    owner = "uglide";
+    repo = "RedisDesktopManager";
     fetchSubmodules = true;
-    rev = "refs/tags/${version}";
+    rev = version;
     sha256 = "0yd4i944d4blw8jky0nxl7sfkkj975q4d328rdcbhizwvf6dx81f";
   };
 
@@ -31,6 +32,8 @@ stdenv.mkDerivation rec {
   ];
 
   dontUseQmakeConfigure = true;
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated" ];
 
   # Disable annoying update reminder
   postPatch = ''

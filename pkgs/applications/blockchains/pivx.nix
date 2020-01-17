@@ -10,13 +10,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   name = "pivx-${version}";
-  version = "3.4.0";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "PIVX-Project";
     repo= "PIVX";
     rev = "v${version}";
-    sha256 = "1fqccdqhbwyvix0ihhbgg2w048i6bhfmazr36h2cn4j65n1fgmi2";
+    sha256 = "0m85nc7c8cppdysqz4m12rgmzacrcbwnvf7wy90wzfvfr3xkbapd";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ] ++ optionals withGui [ wrapQtAppsHook ];

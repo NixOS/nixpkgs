@@ -45,8 +45,7 @@ mkDerivation rec {
     dtkwidget
     ffmpegthumbnailer
     file
-    glib.bin
-    glib.dev
+    glib
     gnugrep
     gsettings-qt
     gvfs
@@ -233,6 +232,14 @@ mkDerivation rec {
     export LD_LIBRARY_PATH="$LD_LIBRARY_PATH:${libX11}/lib";
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     # debuging
     unset LD_LIBRARY_PATH
@@ -240,7 +247,7 @@ mkDerivation rec {
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "File manager and desktop module for Deepin Desktop Environment";

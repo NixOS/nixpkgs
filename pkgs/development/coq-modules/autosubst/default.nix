@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   patches = [./0001-changes-to-work-with-Coq-8.6.patch];
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.ps.uni-saarland.de/autosubst/;

@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

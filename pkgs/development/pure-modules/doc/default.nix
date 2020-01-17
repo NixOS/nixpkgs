@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ pure ];
-  makeFlags = "libdir=$(out)/lib prefix=$(out)/";
+  makeFlags = [ "libdir=$(out)/lib" "prefix=$(out)/" ];
 
   meta = {
     description = "A simple utility for literate programming and documenting source code written in the Pure programming language";

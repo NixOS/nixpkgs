@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "power-calibrate";
-  version = "0.01.28";
+  version = "0.01.29";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1miyjs0vngzfdlsxhn5gndcalzkh28grg4m6faivvp1c6mjp794m";
+    sha256 = "1v8wvhjqglkvk9cl2b48lkcwhbc6nsdi3hjd7sap4hyvd6703pgs";
   };
 
   installFlags = [

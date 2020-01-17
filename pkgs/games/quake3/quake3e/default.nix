@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "Quake3e";
-  version = "2019-09-09";
+  version = "2019-11-29";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = pname;
     rev = version;
-    sha256 = "0i9flw8h87lagdpbci6vgqkriv05p3bidgqb4pwrxls947zwfcw8";
+    sha256 = "1gpfl72rzwiawhcj3ir38sqdb95y7w7lm7wgj44lbn99z7bvkcn3";
   };
 
   buildInputs = [ curl libGL libX11 libXxf86dga alsaLib libXrandr libXxf86vm libXext ];

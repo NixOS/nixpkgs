@@ -16,11 +16,11 @@ stdenv.mkDerivation rec {
     cd ../build
   '';
 
-  cmakeFlags = ''
-    -DGDCM_BUILD_APPLICATIONS=ON
-    -DGDCM_BUILD_SHARED_LIBS=ON
-    -DGDCM_USE_VTK=ON
-  '';
+  cmakeFlags = [
+    "-DGDCM_BUILD_APPLICATIONS=ON"
+    "-DGDCM_BUILD_SHARED_LIBS=ON"
+    "-DGDCM_USE_VTK=ON"
+  ];
 
   enableParallelBuilding = true;
   buildInputs = [ cmake vtk ] ++ stdenv.lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.ApplicationServices darwin.apple_sdk.frameworks.Cocoa ];

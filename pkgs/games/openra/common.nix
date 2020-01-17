@@ -69,7 +69,7 @@ in {
       python
     ];
 
-    makeFlags = "prefix=$(out)";
+    makeFlags = [ "prefix=$(out)" ];
 
     doCheck = true;
 

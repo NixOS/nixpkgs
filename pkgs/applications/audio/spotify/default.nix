@@ -159,7 +159,7 @@ stdenv.mkDerivation {
     homepage = https://www.spotify.com/;
     description = "Play music from the Spotify music service";
     license = licenses.unfree;
-    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ];
+    maintainers = with maintainers; [ eelco ftrvxmtrx sheenobu mudri timokau ma27 ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -39,6 +39,7 @@ let
 
     # misc
     asserts = callLibs ./asserts.nix;
+    cli = callLibs ./cli.nix;
     debug = callLibs ./debug.nix;
     generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
@@ -84,7 +85,8 @@ let
       hasInfix hasPrefix hasSuffix stringToCharacters stringAsChars escape
       escapeShellArg escapeShellArgs replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
-      removePrefix removeSuffix versionOlder versionAtLeast getVersion
+      removePrefix removeSuffix versionOlder versionAtLeast
+      getName getVersion
       nameFromURL enableFeature enableFeatureAs withFeature
       withFeatureAs fixedWidthString fixedWidthNumber isStorePath
       toInt readPathsFromFile fileContents;
@@ -99,9 +101,9 @@ let
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource;
-    inherit (modules) evalModules closeModules unifyModuleSyntax
-      applyIfFunction unpackSubmodule packSubmodule mergeModules
+      canCleanSource pathIsRegularFile;
+    inherit (modules) evalModules unifyModuleSyntax
+      applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
@@ -109,7 +111,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule doRename filterModules;
+      mkAliasOptionModule doRename;
     inherit (options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'
@@ -119,6 +121,7 @@ let
       isOptionType mkOptionType;
     inherit (asserts)
       assertMsg assertOneOf;
+    inherit (cli) encodeGNUCommandLine toGNUCommandLine;
     inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal

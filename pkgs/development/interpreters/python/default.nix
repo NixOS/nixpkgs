@@ -79,10 +79,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "6";
-      patch = "9";
+      patch = "10";
       suffix = "";
     };
-    sha256 = "1nkh70azbv866aw5a9bbxsxarsf40233vrzpjq17z3rz9ramybsy";
+    sha256 = "1pj0mz1xl27khi250p29c0y99vxg662js8zp71aprkf8i8wkr0qa";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -92,10 +92,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "7";
-      patch = "5";
+      patch = "6";
       suffix = "";
     };
-    sha256 = "154xc6dxww21qkmphg66pfks8987a17cl3vqq5g4hv1xkzm7cnp8";
+    sha256 = "0gskry19ylw91p38pdq36qcgk6h3x5i4ia0ik977kw2943kwr8jm";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -105,10 +105,10 @@ in {
     sourceVersion = {
       major = "3";
       minor = "8";
-      patch = "0";
+      patch = "1";
       suffix = "";
     };
-    sha256 = "110d0did9rxn7rg85kf2fwli5hqq44xv2d8bi7d92m7v2d728mmk";
+    sha256 = "1s4lwn5vzsajlc88m6hkghsvnjw4d00l2dsgng0m2w6vyqbl32bm";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
@@ -119,26 +119,17 @@ in {
       major = "3";
       minor = "9";
       patch = "0";
-      suffix = "a1";
+      suffix = "a2";
     };
-    sha256 = "02b337kvzb6ncqab21xnayh562zpz6bqzjmh35iy9l48zgpkvf1n";
+    sha256 = "02a301bdcldin05ksdg8xw8xr6gdkpf73p0cabvn9rdl6yhkr3q8";
     inherit (darwin) CF configd;
     inherit passthruFun;
   };
 
   # Minimal versions of Python (built without optional dependencies)
-  python3Minimal = (callPackage ./cpython {
+  python3Minimal = (python37.override {
     self = python3Minimal;
-    sourceVersion = {
-      major = "3";
-      minor = "7";
-      patch = "4";
-      suffix = "";
-    };
-    sha256 = "0gxiv5617zd7dnqm5k9r4q2188lk327nf9jznwq9j6b8p0s92ygv";
-    inherit (darwin) CF configd;
-    inherit passthruFun;
-
+    pythonForBuild = pkgs.buildPackages.python3Minimal;
     # strip down that python version as much as possible
     openssl = null;
     readline = null;

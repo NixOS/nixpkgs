@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl ];
+  configureFlags = [
+    "--with-openssl=${openssl.dev}"
+  ];
 
   outputs = [ "out" "man" ];
 
@@ -29,7 +32,7 @@ stdenv.mkDerivation rec {
     homepage = http://software.es.net/iperf/;
     description = "Tool to measure IP bandwidth using UDP or TCP";
     platforms = platforms.unix;
-    license = "as-is";
+    license = licenses.bsd3;
     maintainers = with maintainers; [ fpletz ];
   };
 }

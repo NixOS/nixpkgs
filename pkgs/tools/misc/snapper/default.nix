@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, utillinux, fetchpatch }:
+, lvm2, pam, python, utillinux, fetchpatch, json_c }:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
-  version = "0.8.5";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "1h8qpkfcp04xpnaki2hmc7h3536dnjli2cczhzma6q9m985y45kr";
+    sha256 = "0wpf82xf61r9r20whhb83wk3408wac1if8awqm3bb36b9j7ni5jr";
   };
 
   nativeBuildInputs = [
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python utillinux
+    lvm2 pam python utillinux json_c
   ];
 
   patches = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts}/Makefile.am; do
+    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \
@@ -49,9 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${libxml2.dev}/include/libxml2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*

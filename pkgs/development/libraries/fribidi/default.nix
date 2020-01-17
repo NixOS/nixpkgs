@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "0pckda4fcn0aw32lpycwdp25r2m7vca8zspq815ppi9gkwgg5das";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-18397.patch";
+      url = "https://github.com/fribidi/fribidi/commit/034c6e9a1d296286305f4cfd1e0072b879f52568.patch";
+      sha256 = "102xrbf1l5gvavkxd6csx8pj3rlgcw10c0y4h4d40yhn84b1p0y8";
+    })
+  ];
+
   postPatch = ''
     patchShebangs test
   '';

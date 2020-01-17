@@ -4,14 +4,14 @@ with stdenv.lib;
 
 pythonPackages.buildPythonApplication rec {
   pname = "neovim-remote";
-  version = "2.2.2";
+  version = "2.4.0";
   disabled = !pythonPackages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "mhinz";
     repo = "neovim-remote";
     rev = "v${version}";
-    sha256 = "129yjpwn6480rd5na866h4mcr6rf60rqv651hks5fn3ws112n751";
+    sha256 = "0jlw0qksak4bdzddpsj74pm2f2bgpj3cwrlspdjjy0j9qzg0mpl9";
   };
 
   propagatedBuildInputs = with pythonPackages; [ pynvim psutil ];

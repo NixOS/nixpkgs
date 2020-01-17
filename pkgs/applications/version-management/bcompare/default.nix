@@ -1,4 +1,4 @@
-{ autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, gnome2, gtk2, kcoreaddons, ki18n, kio, kservice, lib, qt4, qt511, qtbase, stdenv, runtimeShell }:
+{ autoPatchelfHook, bzip2, cairo, coreutils, fetchurl, gdk-pixbuf, gnome2, gtk2, kcoreaddons, ki18n, kio, kservice, lib, qt4, qtbase, stdenv, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "bcompare";

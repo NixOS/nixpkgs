@@ -220,7 +220,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -375,15 +374,13 @@ in
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
 
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       description = "rspamd daemon";
       uid = config.ids.uids.rspamd;
       group = cfg.group;
     };
 
-    users.groups = singleton {
-      name = cfg.group;
+    users.groups.${cfg.group} = {
       gid = config.ids.gids.rspamd;
     };
 
@@ -414,5 +411,6 @@ in
 	     "Socket activation never worked correctly and could at this time not be fixed and so was removed")
     (mkRenamedOptionModule [ "services" "rspamd" "bindSocket" ] [ "services" "rspamd" "workers" "normal" "bindSockets" ])
     (mkRenamedOptionModule [ "services" "rspamd" "bindUISocket" ] [ "services" "rspamd" "workers" "controller" "bindSockets" ])
+    (mkRemovedOptionModule [ "services" "rmilter" ] "Use services.rspamd.* instead to set up milter service")
   ];
 }

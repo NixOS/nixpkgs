@@ -1,6 +1,6 @@
 {
 stdenv, fetchFromGitHub, cmake, makeWrapper
-,qtbase, qttools, python, libGLU_combined
+,qtbase, qttools, python, libGLU, libGL
 ,libXt, qtx11extras, qtxmlpatterns
 , mkDerivation
 }:
@@ -43,7 +43,7 @@ mkDerivation rec {
   buildInputs = [
     python
     python.pkgs.numpy
-    libGLU_combined
+    libGLU libGL
     libXt
     qtbase
     qtx11extras

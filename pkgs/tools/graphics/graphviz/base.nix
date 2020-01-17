@@ -7,7 +7,7 @@
 assert stdenv.isDarwin -> ApplicationServices != null;
 
 let
-  inherit (stdenv.lib) optionals optionalString;
+  inherit (stdenv.lib) optional optionals optionalString;
   raw_patch =
     # https://gitlab.com/graphviz/graphviz/issues/1367 CVE-2018-10196
     fetchpatch {
@@ -17,11 +17,13 @@ let
       excludes = ["tests/*"]; # we don't run them and they don't apply
     };
   # the patch needs a small adaption for older versions
-  patch = if stdenv.lib.versionAtLeast version "2.37" then raw_patch else
+  patchToUse = if stdenv.lib.versionAtLeast version "2.37" then raw_patch else
   stdenv.mkDerivation {
     inherit (raw_patch) name;
     buildCommand = "sed s/dot_root/agroot/g ${raw_patch} > $out";
   };
+  # 2.42 has the patch included
+  patches = optional (stdenv.lib.versionOlder version "2.42") patchToUse;
 in
 
 stdenv.mkDerivation {
@@ -50,11 +52,9 @@ stdenv.mkDerivation {
   configureFlags = [
     "--with-ltdl-lib=${libtool.lib}/lib"
     "--with-ltdl-include=${libtool}/include"
-  ] ++ stdenv.lib.optional (xorg == null) [ "--without-x" ];
+  ] ++ stdenv.lib.optional (xorg == null) "--without-x";
 
-  patches = [
-    patch
-  ];
+  inherit patches;
 
   postPatch = ''
     for f in $(find . -name Makefile.in); do

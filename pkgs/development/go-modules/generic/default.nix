@@ -10,7 +10,14 @@
 # A function to override the go-modules derivation
 , overrideModAttrs ? (_oldAttrs : {})
 
+# path to go.mod and go.sum directory
+, modRoot ? "./"
+
 # modSha256 is the sha256 of the vendored dependencies
+#
+# CAUTION: if `null` is used as a value, the derivation won't be a
+# fixed-output derivation but disable the build sandbox instead. Don't use
+# this in nixpkgs as Hydra won't build those packages.
 , modSha256
 
 # We want parallel builds by default
@@ -58,7 +65,7 @@ let
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
       mkdir -p "''${GOPATH}/pkg/mod/cache/download"
-
+      cd "${modRoot}"
       runHook postConfigure
     '';
 
@@ -81,10 +88,16 @@ let
     '';
 
     dontFixup = true;
-    outputHashMode = "recursive";
-    outputHashAlgo = "sha256";
-    outputHash = modSha256;
-  }; in modArgs // overrideModAttrs modArgs);
+  }; in modArgs // (
+    if modSha256 == null then
+      { __noChroot = true; }
+    else
+      {
+        outputHashMode = "recursive";
+        outputHashAlgo = "sha256";
+        outputHash = modSha256;
+      }
+  ) // overrideModAttrs modArgs);
 
   package = go.stdenv.mkDerivation (args // {
     nativeBuildInputs = [ removeReferencesTo go ] ++ nativeBuildInputs;
@@ -98,7 +111,10 @@ let
 
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
+      export GOSUMDB=off
       export GOPROXY=file://${go-modules}
+
+      cd "$modRoot"
 
       runHook postConfigure
     '';

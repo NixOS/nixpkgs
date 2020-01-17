@@ -1,4 +1,4 @@
-import ./make-test.nix ({pkgs, lib, ...}:
+import ./make-test-python.nix ({pkgs, lib, ...}:
 let
   gpgKeyring = (pkgs.runCommand "gpg-keyring" { buildInputs = [ pkgs.gnupg ]; } ''
     mkdir -p $out
@@ -32,7 +32,7 @@ let
     gpg --batch --sign --detach-sign --output SHA256SUMS.gpg SHA256SUMS
   '');
 in {
-  name = "opensmtpd";
+  name = "systemd-nspawn";
 
   nodes = {
     server = { pkgs, ... }: {
@@ -48,11 +48,13 @@ in {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $server->waitForUnit("nginx.service");
-    $client->waitForUnit("network-online.target");
-    $client->succeed("machinectl pull-raw --verify=signature http://server/testimage.raw");
-    $client->succeed("cmp /var/lib/machines/testimage.raw ${nspawnImages}/testimage.raw");
+    server.wait_for_unit("nginx.service")
+    client.wait_for_unit("network-online.target")
+    client.succeed("machinectl pull-raw --verify=signature http://server/testimage.raw")
+    client.succeed(
+        "cmp /var/lib/machines/testimage.raw ${nspawnImages}/testimage.raw"
+    )
   '';
 })

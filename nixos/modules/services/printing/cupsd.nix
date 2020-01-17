@@ -112,6 +112,15 @@ in
 
 {
 
+  imports = [
+    (mkChangedOptionModule [ "services" "printing" "gutenprint" ] [ "services" "printing" "drivers" ]
+      (config:
+        let enabled = getAttrFromPath [ "services" "printing" "gutenprint" ] config;
+        in if enabled then [ pkgs.gutenprint ] else [ ]))
+    (mkRemovedOptionModule [ "services" "printing" "cupsFilesConf" ] "")
+    (mkRemovedOptionModule [ "services" "printing" "cupsdConf" ] "")
+  ];
+
   ###### interface
 
   options = {
@@ -279,9 +288,8 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.users = singleton
-      { name = "cups";
-        uid = config.ids.uids.cups;
+    users.users.cups =
+      { uid = config.ids.uids.cups;
         group = "lp";
         description = "CUPS printing services";
       };

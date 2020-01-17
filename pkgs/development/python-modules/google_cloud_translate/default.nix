@@ -3,24 +3,27 @@
 , fetchPypi
 , google_api_core
 , google_cloud_core
+, grpcio
 , pytest
 , mock
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-translate";
-  version = "1.7.0";
+  version = "2.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "55b6563121883acce5d80afbf61a59e50d52c429e6ebbfe81a1c8f2734b75e8c";
+    sha256 = "0nfc628nr2k6kd3q9qpgwz7c12l0191rv5x4pvca8q82jl96gip5";
   };
 
-  checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_api_core google_cloud_core ];
+  # google_cloud_core[grpc] -> grpcio
+  propagatedBuildInputs = [ google_api_core google_cloud_core grpcio ];
 
+  checkInputs = [ pytest mock ];
   checkPhase = ''
-    pytest tests/unit
+    cd tests # prevent local google/__init__.py from getting loaded
+    pytest unit
   '';
 
   meta = with stdenv.lib; {

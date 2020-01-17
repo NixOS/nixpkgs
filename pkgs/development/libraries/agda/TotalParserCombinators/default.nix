@@ -20,7 +20,7 @@ agda.mkDerivation (self: rec {
     description = "A monadic parser combinator library which guarantees termination of parsing";
     license = stdenv.lib.licenses.mit;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     broken = true;
   };
 })

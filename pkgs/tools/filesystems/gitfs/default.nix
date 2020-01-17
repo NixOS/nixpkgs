@@ -2,13 +2,13 @@
 
 python2Packages.buildPythonApplication rec {
   pname = "gitfs";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "PressLabs";
     repo = "gitfs";
     rev = version;
-    sha256 = "04plfdaai7bvnz39lw0yyda6ahbwx0wkws9fjnxxx43dzm3sjl98";
+    sha256 = "1jzwdwan8ndvp2lw6j7zbvg5k9rgf2d8dcxjrwc6bwyk59xdxn4p";
   };
 
   patchPhase = ''

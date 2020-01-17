@@ -19,7 +19,7 @@ let
         pcre libxslt groff ncurses readline libedit makeWrapper python3
       ];
 
-      buildFlags = "localstatedir=/var/spool";
+      buildFlags = [ "localstatedir=/var/spool" ];
 
       postInstall = ''
         wrapProgram "$out/sbin/varnishd" --prefix PATH : "${stdenv.lib.makeBinPath [ stdenv.cc ]}"

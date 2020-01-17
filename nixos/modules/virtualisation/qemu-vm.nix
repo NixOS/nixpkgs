@@ -620,7 +620,7 @@ in
 
     # Wireless won't work in the VM.
     networking.wireless.enable = mkVMOverride false;
-    networking.connman.enable = mkVMOverride false;
+    services.connman.enable = mkVMOverride false;
 
     # Speed up booting by not waiting for ARP.
     networking.dhcpcd.extraConfig = "noarp";

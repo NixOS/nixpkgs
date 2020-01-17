@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, rpmextract, makeWrapper, patchelf, qt4, zlib, libX11, libXt, libSM, libICE, libXext, libGLU_combined }:
+{ stdenv, fetchurl, rpmextract, makeWrapper, patchelf, qt4, zlib, libX11, libXt, libSM, libICE, libXext, libGLU, libGL }:
 
 with stdenv.lib;
 stdenv.mkDerivation {
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   '';
 
   postInstall = let
-    libs = stdenv.lib.makeLibraryPath [ qt4 zlib stdenv.cc.cc libSM libICE libX11 libXext libXt libGLU_combined ];
+    libs = stdenv.lib.makeLibraryPath [ qt4 zlib stdenv.cc.cc libSM libICE libX11 libXext libXt libGLU libGL ];
   in ''
     ${patchelf}/bin/patchelf \
       --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \

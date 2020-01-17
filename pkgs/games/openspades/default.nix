@@ -57,7 +57,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_LINK = [ "-lopenal" ];
+  NIX_CFLAGS_LINK = "-lopenal";
 
   meta = with stdenv.lib; {
     description = "A compatible client of Ace of Spades 0.75";

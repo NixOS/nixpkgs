@@ -82,7 +82,7 @@ let
       # Disable platform specific features if needed
       # using libmad to decode mp3 files on darwin is causing a segfault -- there
       # is probably a solution, but I'm disabling it for now
-      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smb" ]
+      platformMask = lib.optionals stdenv.isDarwin [ "mad" "pulse" "jack" "nfs" "smbclient" ]
                   ++ lib.optionals (!stdenv.isLinux) [ "alsa" "systemd" "syslog" ];
 
       knownFeatures = builtins.attrNames featureDependencies;
@@ -102,18 +102,18 @@ let
 
     in stdenv.mkDerivation rec {
       pname = "mpd";
-      version = "0.21.16";
+      version = "0.21.18";
 
       src = fetchFromGitHub {
         owner  = "MusicPlayerDaemon";
         repo   = "MPD";
         rev    = "v${version}";
-        sha256 = "0yfzn1hcyww8z5pp70n7iinycz097vjc6q9fzmfrc6ikvz3db8f4";
+        sha256 = "04kzdxigg6yhf5km66hxk6y8n7gl72bxnv2bc5zy274fzqf4cy9p";
       };
 
       buildInputs = [ glib boost ]
         ++ (lib.concatLists (lib.attrVals features_ featureDependencies))
-        ++ lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.AudioToolbox;
+        ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.AudioToolbox darwin.apple_sdk.frameworks.AudioUnit ];
 
       nativeBuildInputs = [ meson ninja pkgconfig ];
 
@@ -132,7 +132,7 @@ let
         description = "A flexible, powerful daemon for playing music";
         homepage    = http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki;
         license     = licenses.gpl2;
-        maintainers = with maintainers; [ astsmtl fuuzetsu ehmry fpletz tobim ];
+        maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
         platforms   = platforms.unix;
 
         longDescription = ''

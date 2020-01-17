@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     sha256 = "1svhbjibm448ybq6gnjjzj0ak42srhihssafj0w402aj71lgaq4a";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=misleading-indentation" "-Wno-error=pointer-compare" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=misleading-indentation -Wno-error=pointer-compare";
 
   hardeningDisable = [ "format" ];
 

@@ -4,10 +4,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ nequissimus ];
   };
 
-  machine = { lib, pkgs, ... }: {
+  machine = { pkgs, ... }: {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
     services.xserver.displayManager.auto.user = "alice";
-    services.xserver.windowManager.default = lib.mkForce "xmonad";
+    services.xserver.displayManager.defaultSession = "none+xmonad";
     services.xserver.windowManager.xmonad = {
       enable = true;
       enableContribAndExtras = true;
@@ -27,13 +27,13 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     machine.wait_for_x()
     machine.wait_for_file("${user.home}/.Xauthority")
     machine.succeed("xauth merge ${user.home}/.Xauthority")
-    machine.send_chars("alt-ctrl-x")
+    machine.send_key("alt-ctrl-x")
     machine.wait_for_window("${user.name}.*machine")
     machine.sleep(1)
     machine.screenshot("terminal")
     machine.wait_until_succeeds("xmonad --restart")
     machine.sleep(3)
-    machine.send_chars("alt-shift-ret")
+    machine.send_key("alt-shift-ret")
     machine.wait_for_window("${user.name}.*machine")
     machine.sleep(1)
     machine.screenshot("terminal")

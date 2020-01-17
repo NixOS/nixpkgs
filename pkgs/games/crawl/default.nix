@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
+, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU, libGL, freetype, pngcrush, advancecomp
 , tileMode ? false, enableSound ? tileMode
 
 # MacOS / Darwin builds
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
                 ++ (with python3.pkgs; [ pyyaml ])
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU libGL ]
                 ++ lib.optional enableSound SDL2_mixer
                 ++ (lib.optionals stdenv.isDarwin (
                   assert (lib.assertMsg (darwin != null) "Must have darwin frameworks available for darwin builds");

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onedrive";
-  version = "2.3.11";
+  version = "2.3.12";
 
   src = fetchFromGitHub {
     owner = "abraunegg";
     repo = "onedrive";
     rev = "v${version}";
-    sha256 = "08k5b3izqzk9mjjny5y47i3q5sl0w37xdqrhaacjxwm0jib9w0mh";
+    sha256 = "0605nb3blvnncjx09frg2liarrd6pw8ph5jhnh764qcx0hyxcgs6";
   };
 
   nativeBuildInputs = [

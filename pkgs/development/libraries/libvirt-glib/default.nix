@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libvirt-glib-2.0.0";
+  name = "libvirt-glib-3.0.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://libvirt.org/sources/glib/${name}.tar.gz";
-    sha256 = "0six9ckmvlwwyavyjkgc262qkpvfqgi8rjij7cyk00bmqq8c9s4l";
+    sha256 = "1zpbv4ninc57c9rw4zmmkvvqn7154iv1qfr20kyxn8xplalqrzvz";
   };
 
   nativeBuildInputs = [ pkgconfig intltool vala gobject-introspection ];

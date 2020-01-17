@@ -2,11 +2,11 @@
 , curl, cdparanoia, libid3tag, ncurses, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "grip-4.0.0";
+  name = "grip-4.0.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/grip/${name}.tar.gz";
-    sha256 = "1k4mnzz2ky3wps147sdpxx7pz87zpfws2hdyl3x68iji54697qi0";
+    sha256 = "0blh5j3d4g16bhsqmhv71qhbsyyzcqywzpqsjjiiw465mjlwxka6";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   meta = {
     description = "GTK-based audio CD player/ripper";

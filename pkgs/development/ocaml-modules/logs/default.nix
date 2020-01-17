@@ -10,15 +10,16 @@ then throw "logs is not available for OCaml ${ocaml.version}"
 else
 
 stdenv.mkDerivation rec {
-  name = "ocaml-${pname}-${version}";
-  version = "0.6.3";
+  name = "ocaml${ocaml.version}-${pname}-${version}";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "${webpage}/releases/${pname}-${version}.tbz";
-    sha256 = "1lkhr7i44xw4kpfbhgj3rbqy3dv5bfm4kyrbl8a9rfafddcxlwss";
+    sha256 = "1jnmd675wmsmdwyb5mx5b0ac66g4c6gpv5s4mrx2j6pb0wla1x46";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg fmt cmdliner lwt ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ findlib topkg fmt cmdliner lwt ];
   propagatedBuildInputs = [ result ];
 
   buildPhase = "${topkg.run} build --with-js_of_ocaml false";

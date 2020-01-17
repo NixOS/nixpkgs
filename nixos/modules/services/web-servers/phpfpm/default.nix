@@ -146,6 +146,10 @@ let
     };
 
 in {
+  imports = [
+    (mkRemovedOptionModule [ "services" "phpfpm" "poolConfigs" ] "Use services.phpfpm.pools instead.")
+    (mkRemovedOptionModule [ "services" "phpfpm" "phpIni" ] "")
+  ];
 
   options = {
     services.phpfpm = {
@@ -262,6 +266,7 @@ in {
         in {
           Slice = "phpfpm.slice";
           PrivateDevices = true;
+          PrivateTmp = true;
           ProtectSystem = "full";
           ProtectHome = true;
           # XXX: We need AF_NETLINK to make the sendmail SUID binary from postfix work

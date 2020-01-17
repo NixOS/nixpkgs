@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DESTDIR=$(out)"];
 
-  installFlags = ''PREFIX=""'';
+  installFlags = [ "PREFIX=\"\"" ];
 
   meta = with stdenv.lib; {
     homepage = https://sourceforge.net/projects/linuxconsole/;

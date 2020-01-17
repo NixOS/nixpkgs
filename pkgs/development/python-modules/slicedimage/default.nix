@@ -12,15 +12,16 @@
 , six
 , pytest
 , isPy27
+, tifffile
 }:
 
 buildPythonPackage rec {
   pname = "slicedimage";
-  version = "4.0.5";
+  version = "4.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c8e8759a013a0936ec9f7ffcd37fc64df69af913b4f26342c2501b8c3663d9bb";
+    sha256 = "7369f1d7fa09f6c9969625c4b76a8a63d2507a94c6fc257183da1c10261703e9";
   };
 
   propagatedBuildInputs = [
@@ -31,14 +32,16 @@ buildPythonPackage rec {
     requests
     scikitimage
     six
+    tifffile
   ] ++ lib.optionals isPy27 [ pathlib enum34 ];
 
   checkInputs = [
     pytest
   ];
 
+  # ignore tests which require setup
   checkPhase = ''
-    pytest
+    pytest --ignore tests/io_
   '';
 
   meta = with lib; {

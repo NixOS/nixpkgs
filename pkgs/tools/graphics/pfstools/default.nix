@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, pkgconfig, darwin
-, openexr, zlib, imagemagick, libGLU_combined, freeglut, fftwFloat
+, openexr, zlib, imagemagick, libGLU, libGL, freeglut, fftwFloat
 , fftw, gsl, libexif, perl, opencv, qt5, netpbm
 }:
 
@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man"];
 
-  cmakeFlags = ''
-    -DWITH_MATLAB=false 
-  '';
+  cmakeFlags = [ "-DWITH_MATLAB=false" ];
 
   preConfigure = ''
     rm cmake/FindNETPBM.cmake
@@ -34,7 +32,7 @@ stdenv.mkDerivation rec {
   ] ++ (if stdenv.isDarwin then (with darwin.apple_sdk.frameworks; [
     OpenGL GLUT
   ]) else [
-    libGLU_combined freeglut
+    libGLU libGL freeglut
   ]);
 
   patches = [ ./threads.patch ./pfstools.patch ./pfsalign.patch ];

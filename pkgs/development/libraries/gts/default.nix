@@ -1,17 +1,20 @@
-{ fetchurl, stdenv, glib, pkgconfig, gettext }:
+{ fetchurl, stdenv, pkgconfig, autoreconfHook, gettext, glib }:
 
 
 stdenv.mkDerivation rec {
   pname = "gts";
   version = "0.7.6";
 
+  outputs = [ "bin" "dev" "out" ];
+
   src = fetchurl {
     url = "mirror://sourceforge/gts/${pname}-${version}.tar.gz";
     sha256 = "07mqx09jxh8cv9753y2d2jsv7wp8vjmrd7zcfpbrddz3wc9kx705";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ glib gettext ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
+  buildInputs = [ gettext ];
+  propagatedBuildInputs = [ glib ];
 
   doCheck = false; # fails with "permission denied"
 

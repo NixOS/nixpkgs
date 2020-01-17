@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     ++ opt midiSupport timidity
     ++ opt modplugSupport libmodplug
     ++ opt mp3Support libmad
-    ++ opt musepackSupport [ libmpc libmpcdec taglib ]
+    ++ stdenv.lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
     ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg

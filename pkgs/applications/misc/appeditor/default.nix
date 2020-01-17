@@ -50,6 +50,12 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Edit the Pantheon desktop application menu";
     homepage = https://github.com/donadigo/appeditor;

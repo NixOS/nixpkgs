@@ -21,11 +21,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    $roundcube->start;
-    $roundcube->waitForUnit("postgresql.service");
-    $roundcube->waitForUnit("roundcube-setup.service");
-    $roundcube->waitForUnit("phpfpm-roundcube.service");
-    $roundcube->waitForUnit("nginx.service");
-    $roundcube->succeed("curl -sSfL http://roundcube/ | grep 'Keep me logged in'");
+    roundcube.start
+    roundcube.wait_for_unit("postgresql.service")
+    roundcube.wait_for_unit("phpfpm-roundcube.service")
+    roundcube.wait_for_unit("nginx.service")
+    roundcube.succeed("curl -sSfL http://roundcube/ | grep 'Keep me logged in'")
   '';
 })

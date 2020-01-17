@@ -7,41 +7,43 @@
 , gobject-introspection
 , spidermonkey_60
 , pango
+, cairo
 , readline
 , glib
 , libxml2
 , dbus
 , gdk-pixbuf
 , makeWrapper
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.58.1";
+  version = "1.58.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1xf68rbagkflb9yi3visfw8cbxqlzd717y8jakgw0y6whzm1dpxl";
+    sha256 = "1bkksx362007zs8c31ydygb29spwa5g5kch1ad2grc2sp53wv7ya";
   };
 
-  outputs = [ "out" "installedTests" ];
+  outputs = [ "out" "dev" "installedTests" ];
 
   nativeBuildInputs = [
     pkgconfig
     makeWrapper
+    libxml2 # for xml-stripblanks
   ];
 
   buildInputs = [
-    libxml2
     gobject-introspection
-    glib
-    pango
+    cairo
     readline
-    dbus
+    spidermonkey_60
+    dbus # for dbus-run-session
   ];
 
   propagatedBuildInputs = [
-    spidermonkey_60
+    glib
   ];
 
   configureFlags = [
@@ -55,8 +57,6 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    sed 's|-lreadline|-L${readline.out}/lib -lreadline|g' -i $out/lib/libgjs.la
-
     moveToOutput "share/installed-tests" "$installedTests"
     moveToOutput "libexec/gjs/installed-tests" "$installedTests"
 
@@ -67,6 +67,10 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   passthru = {
+    tests = {
+      installed-tests = nixosTests.installed-tests.gjs;
+    };
+
     updateScript = gnome3.updateScript {
       packageName = "gjs";
     };

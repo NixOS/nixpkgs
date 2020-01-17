@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec{
   pname = "clj-kondo";
-  version = "2019.11.03";
+  version = "2019.12.14";
 
   reflectionJson = fetchurl {
     name = "reflection.json";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec{
 
   src = fetchurl {
     url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-standalone.jar";
-    sha256 = "1chvdfczlxyy1jspyf4yv1kmgz6fq4fih5qvfarvcyw7nlxlj2np";
+    sha256 = "1mprwqc5ydqn2wkssrj2g3wbpjss7flv584wss9j0jjfgy7jc4s1";
   };
 
   dontUnpack = true;

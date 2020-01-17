@@ -100,11 +100,15 @@ let
               map (up: "${up}/${urlName}.tar.xz") urlPrefixes
             );
 
-      # Upstream refuses to distribute stable tarballs,
-      # so we host snapshots on IPFS or on our own servers.
-      # Common packages should get served from the binary cache anyway.
-      # See discussions, e.g. https://github.com/NixOS/nixpkgs/issues/24683
+      # The tarballs on CTAN mirrors for the current release are constantly
+      # receiving updates, so we can't use those directly. Stable snapshots
+      # need to be used instead. Ideally, for the release branches of NixOS we
+      # should be switching to the tlnet-final versions
+      # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
+        # Snapshots hosted by one of the texlive release managers
+        https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
+
         # Mirror hosted by @veprbl
         http://146.185.144.154/texlive-2019
 

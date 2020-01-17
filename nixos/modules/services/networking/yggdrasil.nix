@@ -12,11 +12,11 @@ let
   configFileProvided = (cfg.configFile != null);
   generateConfig = (
     if configProvided && configFileProvided then
-      "${pkgs.jq}/bin/jq -s add /run/yggdrasil/configFile.json ${configAsFile}"
+      "${pkgs.jq}/bin/jq -s add ${configAsFile} ${cfg.configFile}"
     else if configProvided then
       "cat ${configAsFile}"
     else if configFileProvided then
-      "cat /run/yggdrasil/configFile.json"
+      "cat ${cfg.configFile}"
     else
       "${cfg.package}/bin/yggdrasil -genconf"
   );
@@ -147,7 +147,7 @@ in {
         RuntimeDirectory = "yggdrasil";
         RuntimeDirectoryMode = "0700";
         BindReadOnlyPaths = mkIf configFileProvided
-          [ "${cfg.configFile}:/run/yggdrasil/configFile.json" ];
+          [ "${cfg.configFile}" ];
 
         # TODO: as of yggdrasil 0.3.8 and systemd 243, yggdrasil fails
         # to set up the network adapter when DynamicUser is set.  See

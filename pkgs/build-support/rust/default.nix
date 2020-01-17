@@ -1,9 +1,10 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages, windows }:
+{ stdenv, cacert, git, rust, cargo, rustc, fetchcargo, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, unpackPhase ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -29,7 +30,7 @@ assert buildType == "release" || buildType == "debug";
 let
   cargoDeps = if cargoVendorDir == null
     then fetchcargo {
-        inherit name src srcs sourceRoot cargoUpdateHook;
+        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         copyLockfile = verifyCargoDeps;
         patches = cargoPatches;
         sha256 = cargoSha256;
@@ -46,12 +47,7 @@ let
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  hostConfig = stdenv.hostPlatform.config;
-
-  rustHostConfig = {
-    x86_64-pc-mingw32 = "x86_64-pc-windows-gnu";
-  }.${hostConfig} or hostConfig;
-  rustTarget = if target == null then rustHostConfig else target;
+  rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
@@ -87,7 +83,7 @@ stdenv.mkDerivation (args // {
       --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     cat >> .cargo/config <<'EOF'
-    [target."${stdenv.buildPlatform.config}"]
+    [target."${rust.toRustTarget stdenv.buildPlatform}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
     [target."${rustTarget}"]
@@ -104,9 +100,9 @@ stdenv.mkDerivation (args // {
   '' + stdenv.lib.optionalString verifyCargoDeps ''
     if ! diff source/Cargo.lock $cargoDeps/Cargo.lock ; then
       echo
-      echo "ERROR: cargoSha256 is out of date."
+      echo "ERROR: cargoSha256 is out of date"
       echo
-      echo "Cargo.lock is not the same in $cargoDeps."
+      echo "Cargo.lock is not the same in $cargoDeps"
       echo
       echo "To fix the issue:"
       echo '1. Use "1111111111111111111111111111111111111111111111111111" as the cargoSha256 value'
@@ -129,10 +125,10 @@ stdenv.mkDerivation (args // {
     (
     set -x
     env \
-      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
-      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
-      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
-      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
+      "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
+      "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
+      "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
+      "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
       cargo build \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${rustTarget} \

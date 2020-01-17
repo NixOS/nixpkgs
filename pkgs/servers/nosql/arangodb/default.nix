@@ -17,7 +17,7 @@ let
 
     # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
     dontFixCmake       =                     lib.versionAtLeast version "3.5";
-    NIX_CFLAGS_COMPILE = lib.optionals      (lib.versionAtLeast version "3.5") [ "-Wno-error" ];
+    NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
     preConfigure       = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
 
     postPatch = ''

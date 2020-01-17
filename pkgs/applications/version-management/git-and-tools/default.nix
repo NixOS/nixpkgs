@@ -46,7 +46,7 @@ let
   gitFull = gitBase.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = !stdenv.isDarwin;
+    sendEmailSupport = true;
     withLibsecret = !stdenv.isDarwin;
   };
 
@@ -103,6 +103,8 @@ let
 
   git-imerge = callPackage ./git-imerge { };
 
+  git-machete = python3Packages.callPackage ./git-machete { };
+
   git-octopus = callPackage ./git-octopus { };
 
   git-open = callPackage ./git-open { };
@@ -126,6 +128,8 @@ let
   git-stree = callPackage ./git-stree { };
 
   git-subrepo = callPackage ./git-subrepo { };
+
+  git-subtrac = callPackage ./git-subtrac { };
 
   git-sync = callPackage ./git-sync { };
 

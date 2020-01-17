@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "0yd6bl6qw675sxa81nxw6plhpjf9d2ywlm8a5z66zyjf28sl7sds";
   };
 
-  installFlags = "INSTBASEDIR=$(out)";
+  installFlags = [ "INSTBASEDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A library for parsing command line options";

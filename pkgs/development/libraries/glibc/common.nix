@@ -98,7 +98,10 @@ stdenv.mkDerivation ({
       # https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=f51c8367685dc888a02f7304c729ed5277904aff
       ./CVE-2018-11237.patch
     ]
-    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
+    ++ lib.optionals stdenv.isx86_64 [
+      ./fix-x64-abi.patch
+      ./2.27-CVE-2019-19126.patch
+    ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
 

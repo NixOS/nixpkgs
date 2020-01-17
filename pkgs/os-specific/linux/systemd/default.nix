@@ -30,16 +30,16 @@ let gnupg-minimal = gnupg.override {
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "243";
+  version = "243.3";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "nixos";
     repo = "systemd";
-    rev = "d25cf413c6bff1b5a9d216a8830e3a90c9cad1de";
-    sha256 = "0ilvrnh3m7g0yflxl16fk52gkb1z0fwwk9ba5gs4005nzpl0c7i0";
+    rev = "d8853d39a28b9884e0acd3ae5732a1e7caaf08af";
+    sha256 = "1wqm51i2czbbb3nara11mnxzqng4na1l8fvz7qnbxcrjsqm7hz18";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -180,18 +180,18 @@ in stdenv.mkDerivation {
       --replace "SYSTEMD_CGROUP_AGENT_PATH" "_SYSTEMD_CGROUP_AGENT_PATH"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    [ # Can't say ${polkit.bin}/bin/pkttyagent here because that would
-      # lead to a cyclic dependency.
-      "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
+  NIX_CFLAGS_COMPILE = toString [
+    # Can't say ${polkit.bin}/bin/pkttyagent here because that would
+    # lead to a cyclic dependency.
+    "-UPOLKIT_AGENT_BINARY_PATH" "-DPOLKIT_AGENT_BINARY_PATH=\"/run/current-system/sw/bin/pkttyagent\""
 
-      # Set the release_agent on /sys/fs/cgroup/systemd to the
-      # currently running systemd (/run/current-system/systemd) so
-      # that we don't use an obsolete/garbage-collected release agent.
-      "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
+    # Set the release_agent on /sys/fs/cgroup/systemd to the
+    # currently running systemd (/run/current-system/systemd) so
+    # that we don't use an obsolete/garbage-collected release agent.
+    "-USYSTEMD_CGROUP_AGENT_PATH" "-DSYSTEMD_CGROUP_AGENT_PATH=\"/run/current-system/systemd/lib/systemd/systemd-cgroups-agent\""
 
-      "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
-    ];
+    "-USYSTEMD_BINARY_PATH" "-DSYSTEMD_BINARY_PATH=\"/run/current-system/systemd/lib/systemd/systemd\""
+  ];
 
   doCheck = false; # fails a bunch of tests
 
@@ -263,6 +263,6 @@ in stdenv.mkDerivation {
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
     priority = 10;
-    maintainers = with maintainers; [ eelco andir mic92 ];
+    maintainers = with maintainers; [ andir eelco flokli mic92 ];
   };
 }

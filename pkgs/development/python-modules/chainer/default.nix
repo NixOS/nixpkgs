@@ -1,17 +1,25 @@
-{ stdenv, lib
-, buildPythonPackage, fetchPypi, isPy3k
-, filelock, protobuf, numpy, pytest, mock
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
+, filelock, protobuf, numpy, pytest, mock, typing-extensions
 , cupy, cudaSupport ? false
 }:
 
 buildPythonPackage rec {
   pname = "chainer";
-  version = "6.4.0";
+  version = "6.5.0";
+  disabled = !isPy3k; # python2.7 abandoned upstream
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "dacbcaa361cebdfbf6f212d138570333611b8f5de553093b1752c578b022a774";
+  # no tests in Pypi tarball
+  src = fetchFromGitHub {
+    owner = "chainer";
+    repo = "chainer";
+    rev = "v${version}";
+    sha256 = "0ha9fbl6sa3fbnsz3y1pg335iiskdbxw838m5j06zgzy156zna1x";
   };
+
+  # remove on 7.0 or 6.6 release
+  postPatch = ''
+    sed -i '/typing/d' setup.py
+  '';
 
   checkInputs = [
     pytest
@@ -22,12 +30,15 @@ buildPythonPackage rec {
     filelock
     protobuf
     numpy
+    typing-extensions
   ] ++ lib.optionals cudaSupport [ cupy ];
 
-  # In python3, test was failed...
-  doCheck = !isPy3k;
+  # avoid gpu tests
+  checkPhase = ''
+    pytest tests/chainer_tests/utils_tests -k 'not gpu and not cupy'
+  '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A flexible framework of neural networks for deep learning";
     homepage = https://chainer.org/;
     license = licenses.mit;

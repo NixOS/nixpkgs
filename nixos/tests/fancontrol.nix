@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... } : {
   name = "fancontrol";
 
   machine =
@@ -19,7 +19,10 @@ import ./make-test.nix ({ pkgs, ... } : {
 
   # This configuration cannot be valid for the test VM, so it's expected to get an 'outdated' error.
   testScript = ''
-    $machine->waitForUnit("fancontrol.service");
-    $machine->waitUntilSucceeds("journalctl -eu fancontrol | grep 'Configuration appears to be outdated'");
+    start_all()
+    machine.wait_for_unit("fancontrol.service")
+    machine.wait_until_succeeds(
+        "journalctl -eu fancontrol | grep 'Configuration appears to be outdated'"
+    )
   '';
 })

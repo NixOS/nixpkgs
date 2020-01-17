@@ -311,7 +311,6 @@ let
     rgdal = [ pkgs.proj.dev pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
-    rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
@@ -404,6 +403,7 @@ let
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
+    rgl = [ pkgs.libGLU pkgs.libGLU.dev pkgs.libGL pkgs.xlibsWrapper ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
@@ -849,6 +849,11 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
+    });
+
+    websocket = old.websocket.overrideDerivation (attrs: {
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
+  desktop-file-utils, dconf, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1ybdjibi6wgqn3587a66ckxp2qkvl4mcvv2smhflyxksl5djrjgh";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     librsvg
     libappindicator-gtk3
     gtk3
-    gnome3.dconf
+    dconf
     hicolor-icon-theme
     mate.mate-desktop
     mate.libmatekbd
@@ -38,6 +38,8 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
+    # see https://github.com/mate-desktop/mate-control-center/pull/528
+    ./0001-Search-system-themes-in-system-data-dirs.patch
     # look up keyboard shortcuts in system data dirs
     ./mate-control-center.keybindings-dir.patch
   ];

@@ -2,7 +2,7 @@
 , p7zip, pkgconfig
 , libX11, libXv
 , udev
-, libGLU_combined, SDL
+, libGLU, libGL, SDL
 , libao, openal, libpulseaudio
 , gtk2, gtksourceview
 , runtimeShell }:
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   postPatch = "sed '1i#include <cmath>' -i higan/fc/ppu/ppu.cpp";
 
   buildInputs =
-  [ p7zip pkgconfig libX11 libXv udev libGLU_combined
+  [ p7zip pkgconfig libX11 libXv udev libGLU libGL
     SDL libao openal libpulseaudio gtk2 gtksourceview ];
 
   unpackPhase = ''

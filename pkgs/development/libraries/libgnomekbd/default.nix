@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, file, intltool, glib, gtk3, libxklavier, makeWrapper, gnome3 }:
+{ stdenv, fetchurl, pkgconfig, file, intltool, glib, gtk3, libxklavier, wrapGAppsHook, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libgnomekbd";
@@ -13,13 +13,19 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript { packageName = pname; };
   };
 
-  nativeBuildInputs = [ pkgconfig file intltool makeWrapper ];
-  buildInputs = [ glib gtk3 libxklavier ];
+  nativeBuildInputs = [
+    file
+    intltool
+    pkgconfig
+    wrapGAppsHook
+  ];
 
-  preFixup = ''
-    wrapProgram $out/bin/gkbd-keyboard-display \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
-  '';
+  # Requires in libgnomekbd.pc
+  propagatedBuildInputs = [
+    gtk3
+    libxklavier
+    glib
+  ];
 
   meta = with stdenv.lib; {
     description = "Keyboard management library";

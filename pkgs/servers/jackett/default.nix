@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "jackett";
-  version = "0.11.751";
+  version = "0.12.907";
 
   src = fetchurl {
     url = "https://github.com/Jackett/Jackett/releases/download/v${version}/Jackett.Binaries.LinuxAMDx64.tar.gz";
-    sha256 = "09y9pck35pj2g89936zallxr3hanmbgp8jc42nj2js68l0z64qz3";
+    sha256 = "0f88zjd8abkr72sjbzm51npxsjbk6xklfqd7iyaq3j0l5hxh6b8w";
   };
 
   buildInputs = [ makeWrapper ];

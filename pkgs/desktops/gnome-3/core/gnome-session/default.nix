@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
-  version = "3.34.1";
+  version = "3.34.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q366pns99f6wka5ikahqpasnsm72q9pg0c0nnfb2ld7spi1z06p";
+    sha256 = "1qgqp97f8k2zi2ydvhds14zsjzfj7cv521r6wx5sw0qacn0p7dwb";
   };
 
   patches = [
@@ -55,6 +55,7 @@ stdenv.mkDerivation rec {
       packageName = "gnome-session";
       attrPath = "gnome3.gnome-session";
     };
+    providedSessions = [ "gnome" "gnome-xorg" ];
   };
 
   meta = with stdenv.lib; {

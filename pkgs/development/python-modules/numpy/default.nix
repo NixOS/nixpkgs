@@ -1,4 +1,15 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile, isPyPy }:
+{ lib
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, blas
+, writeTextFile
+, isPyPy
+, cython
+, setuptoolsBuildHook
+ }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
@@ -16,15 +27,16 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.17.4";
+  version = "1.18.0";
+  format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "f58913e9227400f1395c7b800503ebfdb0772f1c33ff8cb4d6451c06cabdf316";
+    sha256 = "a9d72d9abaf65628f0f31bbb573b7d9304e43b1e6bbae43149c17737a42764c4";
   };
 
-  nativeBuildInputs = [ gfortran pytest ];
+  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
   buildInputs = [ blas ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -66,7 +78,7 @@ in buildPythonPackage rec {
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = https://numpy.org/;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

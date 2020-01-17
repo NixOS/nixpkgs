@@ -20,8 +20,7 @@ let
   '';
 
 in {
-  runInWindowsVM = drv: let
-  in pkgs.lib.overrideDerivation drv (attrs: let
+  runInWindowsVM = drv: pkgs.lib.overrideDerivation drv (attrs: let
     bootstrap = bootstrapper attrs.windowsImage;
   in {
     requiredSystemFeatures = [ "kvm" ];

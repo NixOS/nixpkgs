@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "granite";
-  version = "5.2.5";
+  version = "5.3.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0z40vhcp2w8s8rnc56pzvjc4s77bln8k84rwwypivjmk3lhpw1vi";
+    sha256 = "1gvrk8gh959bmq8w0kaym7sx13v763lk8x5hck00msgmyrsarfwa";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

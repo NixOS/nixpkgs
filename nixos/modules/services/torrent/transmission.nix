@@ -7,6 +7,7 @@ let
   apparmor = config.security.apparmor.enable;
 
   homeDir = cfg.home;
+  downloadDirPermissions = cfg.downloadDirPermissions;
   downloadDir = "${homeDir}/Downloads";
   incompleteDir = "${homeDir}/.incomplete";
 
@@ -16,16 +17,14 @@ let
   # for users in group "transmission" to have access to torrents
   fullSettings = { umask = 2; download-dir = downloadDir; incomplete-dir = incompleteDir; } // cfg.settings;
 
-  # Directories transmission expects to exist and be ug+rwx.
-  directoriesToManage = [ homeDir settingsDir fullSettings.download-dir fullSettings.incomplete-dir ];
-
   preStart = pkgs.writeScript "transmission-pre-start" ''
     #!${pkgs.runtimeShell}
     set -ex
-    for DIR in ${escapeShellArgs directoriesToManage}; do
+    for DIR in "${homeDir}" "${settingsDir}" "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"; do
       mkdir -p "$DIR"
-      chmod 770 "$DIR"
     done
+    chmod 700 "${homeDir}" "${settingsDir}"
+    chmod ${downloadDirPermissions} "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
 in
@@ -71,6 +70,16 @@ in
         '';
       };
 
+      downloadDirPermissions = mkOption {
+        type = types.str;
+        default = "770";
+        example = "775";
+        description = ''
+          The permissions to set for download-dir and incomplete-dir.
+          They will be applied on every service start.
+        '';
+      };
+
       port = mkOption {
         type = types.int;
         default = 9091;
@@ -109,7 +118,7 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = preStart;
-      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
+      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port} --config-dir ${settingsDir}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = cfg.user;
       serviceConfig.Group = cfg.group;
@@ -120,19 +129,23 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.users = optionalAttrs (cfg.user == "transmission") (singleton
-      { name = "transmission";
+    users.users = optionalAttrs (cfg.user == "transmission") ({
+      transmission = {
+        name = "transmission";
         group = cfg.group;
         uid = config.ids.uids.transmission;
         description = "Transmission BitTorrent user";
         home = homeDir;
         createHome = true;
-      });
+      };
+    });
 
-    users.groups = optionalAttrs (cfg.group == "transmission") (singleton
-      { name = "transmission";
+    users.groups = optionalAttrs (cfg.group == "transmission") ({
+      transmission = {
+        name = "transmission";
         gid = config.ids.gids.transmission;
-      });
+      };
+    });
 
     # AppArmor profile
     security.apparmor.profiles = mkIf apparmor [

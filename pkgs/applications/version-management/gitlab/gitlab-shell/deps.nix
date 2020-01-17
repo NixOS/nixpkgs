@@ -163,6 +163,15 @@
     };
   }
   {
+    goPackagePath = "github.com/golang/lint";
+    fetch = {
+      type = "git";
+      url = "https://github.com/golang/lint";
+      rev = "06c8688daad7";
+      sha256 = "0xi94dwvz50a66bq1hp9fyqkym5mcpdxdb1hrfvicldgjf37lc47";
+    };
+  }
+  {
     goPackagePath = "github.com/golang/mock";
     fetch = {
       type = "git";
@@ -250,6 +259,15 @@
       url = "https://github.com/kelseyhightower/envconfig";
       rev = "v1.3.0";
       sha256 = "1zcq480ig7wbg4378qcfxznp2gzqmk7x6rbxizflvg9v2f376vrw";
+    };
+  }
+  {
+    goPackagePath = "github.com/kisielk/gotool";
+    fetch = {
+      type = "git";
+      url = "https://github.com/kisielk/gotool";
+      rev = "v1.0.0";
+      sha256 = "14af2pa0ssyp8bp2mvdw184s5wcysk6akil3wzxmr05wwy951iwn";
     };
   }
   {
@@ -370,21 +388,12 @@
     };
   }
   {
-    goPackagePath = "github.com/otiai10/curr";
-    fetch = {
-      type = "git";
-      url = "https://github.com/otiai10/curr";
-      rev = "f5a3d24e5776";
-      sha256 = "01k33ifs9n0pnhwhbfb9ws3q5sa37fi7dhir5vjakpfzdin07y4w";
-    };
-  }
-  {
     goPackagePath = "github.com/otiai10/mint";
     fetch = {
       type = "git";
       url = "https://github.com/otiai10/mint";
-      rev = "v1.2.4";
-      sha256 = "1mf7b8h3akxbpj1rf3nk0ccqk5idd6z2gh9gm31phr7ll4gykn2m";
+      rev = "v1.2.3";
+      sha256 = "00slgv9mw2m22ix5prz2a98ji6kpzr0ap6bqs568rfdmk6hm5f0k";
     };
   }
   {
@@ -644,8 +653,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/DataDog/dd-trace-go.v1";
-      rev = "v1.9.0";
-      sha256 = "1zfbsmm8fbcwhd6j28q3ijyswn1d3dyhydx3ckqpkkp6qiam3c2j";
+      rev = "v1.7.0";
+      sha256 = "0j45skiiayfsaw8id4g20k51zfr0raj47a03q2icka5xrh3qj6yq";
     };
   }
   {

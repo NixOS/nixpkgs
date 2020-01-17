@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     dconf
     gtk3
-    gobject-introspection
     ibus
     (python3.withPackages (pypkgs: with pypkgs; [
       pygobject3
@@ -44,7 +43,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     docbook2x
     pkgconfig
-    python3.pkgs.wrapPython
+    gobject-introspection
     wrapGAppsHook
   ];
 

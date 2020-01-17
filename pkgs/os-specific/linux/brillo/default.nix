@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "brillo";
-  version = "1.4.8";
+  version = "1.4.9";
 
   src = fetchFromGitLab {
     owner= "cameronnemo";
     repo= "brillo";
     rev= "v${version}";
-    sha256 = "0wxvg541caiwm3bjwbmk7xcng7jd9xsiga2agxwp7gpkrlp74j9f";
+    sha256 = "0ab7s60zcgl6hvm0a9rlwq35p25n3jnw6r9256pwl4cdwyjyybsb";
   };
 
   patches = [
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "AADIR=$(out)/etc/apparmor.d" ];
 
-  installTargets = "install-dist";
+  installTargets = [ "install-dist" ];
 
   meta = with stdenv.lib; {
     description = "Backlight and Keyboard LED control tool";

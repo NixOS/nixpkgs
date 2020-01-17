@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook }:
+{ stdenv, fetchurl, python3Packages, gtk3, gobject-introspection, wrapGAppsHook, gnome3 }:
 
 #
 # TODO: Declare configuration options for the following optional dependencies:
@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1n3gmg7g86s8iwcx0i7rvvfdfs1fzmc9awr9qzjd2rckw4bkxad1";
   };
 
-  buildInputs = [ gtk3 gobject-introspection wrapGAppsHook ];
+  buildInputs = [ gtk3 gobject-introspection wrapGAppsHook gnome3.adwaita-icon-theme ];
   propagatedBuildInputs = with python3Packages; [ pyxdg pygobject3 ];
 
 

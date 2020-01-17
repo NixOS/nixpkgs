@@ -88,10 +88,7 @@ stdenv.mkDerivation rec {
 
   # These are the defines that'd you'd get with --enable-debug=minimum (default).
   # See: https://developer.gnome.org/gtk3/stable/gtk-building.html#extra-configuration-options
-  NIX_CFLAGS_COMPILE = [
-    "-DG_ENABLE_DEBUG"
-    "-DG_DISABLE_CAST_CHECKS"
-  ];
+  NIX_CFLAGS_COMPILE = "-DG_ENABLE_DEBUG -DG_DISABLE_CAST_CHECKS";
 
   postPatch = ''
     files=(
@@ -118,8 +115,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     sassc
-    setupHooks
-  ] ++ optionals withGtkDoc [
+  ] ++ setupHooks ++ optionals withGtkDoc [
     docbook_xml_dtd_43
     docbook_xsl
     gtk-doc

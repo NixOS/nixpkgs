@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "ase";
-  version = "3.18.1";
+  version = "3.17.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e21948dbf79011cc796d772885a8aafb255a6f365d112fe6a3bd26198c6cac7f";
+    sha256 = "1d4gxypaahby45zcpl0rffcn2z7n55dg9lcd8sv6jjsmbbf9vr4g";
   };
 
   propagatedBuildInputs = [ numpy scipy matplotlib flask pillow psycopg2 ];

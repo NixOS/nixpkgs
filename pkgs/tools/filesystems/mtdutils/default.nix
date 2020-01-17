@@ -9,13 +9,16 @@ stdenv.mkDerivation rec {
     sha256 = "1lijl89l7hljx8xx70vrz9srd3h41v5gh4b0lvqnlv831yvyh5cd";
   };
 
-  nativeBuildInputs = [ autoreconfHook cmocka pkgconfig ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ] ++ stdenv.lib.optional doCheck cmocka;
   buildInputs = [ acl libuuid lzo zlib zstd ];
 
-  configureFlags = [ "--enable-unit-tests" "--enable-tests" ];
+  configureFlags = [
+    (stdenv.lib.enableFeature doCheck "unit-tests")
+    (stdenv.lib.enableFeature doCheck "tests")
+  ];
   enableParallelBuilding = true;
 
-  doCheck = true;
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
   meta = {
     description = "Tools for MTD filesystems";

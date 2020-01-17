@@ -17,6 +17,7 @@
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , buildPackages
+, pythonForBuild ? buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"}
 , sourceVersion
 , sha256
 , passthruFun
@@ -63,7 +64,7 @@ let
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+  inherit pythonForBuild;
 
   pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
@@ -206,9 +207,6 @@ in with passthru; stdenv.mkDerivation {
     touch $out/lib/${libPrefix}/test/__init__.py
 
     ln -s "$out/include/${executable}m" "$out/include/${executable}"
-
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.

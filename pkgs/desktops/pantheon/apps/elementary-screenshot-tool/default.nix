@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
-  version = "1.6.2";
+  version = "1.7.0";
 
   repoName = "screenshot";
 
@@ -25,13 +25,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1z61j96jk9zjr3bn5hgsp25m4v8h1rqwxm0kg8c34bvl06f13v8q";
+    sha256 = "09jcyy4drzpfxb1blln7hyjg5b7r8w5j5v7va2qhq31y7vzczh62";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

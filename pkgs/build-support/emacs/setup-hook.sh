@@ -1,6 +1,8 @@
 addEmacsVars () {
-  if [[ -d "$1/share/emacs/site-lisp" ]]; then
-      export EMACSLOADPATH="$1/share/emacs/site-lisp${EMACSLOADPATH:+:}${EMACSLOADPATH-}"
+  if test -d $1/share/emacs/site-lisp; then
+      # it turns out, that the trailing : is actually required
+      # see https://www.gnu.org/software/emacs/manual/html_node/elisp/Library-Search.html
+      export EMACSLOADPATH="$1/share/emacs/site-lisp:${EMACSLOADPATH-}"
   fi
 }
 

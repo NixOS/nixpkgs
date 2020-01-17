@@ -103,7 +103,7 @@ let
     setOutputFlags = false;
 
     # alltools to build smaller tools, incl. aviocat, ismindex, qt-faststart, etc.
-    buildFlags = "all alltools install-man";
+    buildFlags = [ "all" "alltools" "install-man" ];
 
 
     postInstall = ''

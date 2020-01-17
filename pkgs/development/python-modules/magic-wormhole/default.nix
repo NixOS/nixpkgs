@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , spake2
 , pynacl
 , six
@@ -41,6 +42,8 @@ buildPythonPackage rec {
     install -Dm644 docs/wormhole.1 $out/share/man/man1/wormhole.1
   '';
 
+  # zope.interface issue
+  doCheck = !isPy27;
   preCheck = ''
     export PATH=$out/bin:$PATH
     export LANG="en_US.UTF-8"
@@ -55,6 +58,9 @@ buildPythonPackage rec {
     description = "Securely transfer data between computers";
     homepage = https://github.com/warner/magic-wormhole;
     license = licenses.mit;
+    # Currently broken on Python 2.7. See
+    # https://github.com/NixOS/nixpkgs/issues/71826
+    broken = isPy27;
     maintainers = with maintainers; [ asymmetric ];
   };
 }

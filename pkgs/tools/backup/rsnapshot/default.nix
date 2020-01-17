@@ -1,11 +1,11 @@
 { fetchurl, stdenv, perl, openssh, rsync, logger }:
 
 stdenv.mkDerivation rec {
-  name = "rsnapshot-1.4.2";
+  name = "rsnapshot-1.4.3";
 
   src = fetchurl {
     url = "http://rsnapshot.org/downloads/${name}.tar.gz";
-    sha256 = "05jfy99a0xs6lvsjfp3wz21z0myqhmwl2grn3jr9clijbg282ah4";
+    sha256 = "1lavqmmsf53pim0nvming7fkng6p0nk2a51k2c2jdq0l7snpl31b";
   };
 
   propagatedBuildInputs = [perl openssh rsync logger];

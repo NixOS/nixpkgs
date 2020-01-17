@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.namesys.com/;
     description = "Support library for Reiser4";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

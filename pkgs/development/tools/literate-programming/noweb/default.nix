@@ -39,7 +39,7 @@ let noweb = stdenv.mkDerivation rec {
     mkdir -p "$tex/tex/latex/noweb"
   '';
 
-  installTargets = "install-code install-tex install-elisp";
+  installTargets = [ "install-code" "install-tex" "install-elisp" ];
 
   postInstall = ''
     substituteInPlace "$out/bin/cpif" --replace "PATH=/bin:/usr/bin" ""
@@ -57,7 +57,7 @@ let noweb = stdenv.mkDerivation rec {
 
     # HACK: This is ugly, but functional.
     PATH=$out/bin:$PATH make -BC xdoc
-    make $installFlags install-man
+    make "''${installFlags[@]}" install-man
 
     ln -s "$tex" "$out/share/texmf"
   '';

@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, python
 , fetchPypi
 , msrest
 , msrestazure
@@ -25,6 +26,11 @@ buildPythonPackage rec {
   ] ++ lib.optionals (!isPy3k) [
     azure-mgmt-nspkg
   ];
+
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+  '';
 
   # has no tests
   doCheck = false;

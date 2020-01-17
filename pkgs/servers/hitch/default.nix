@@ -1,11 +1,11 @@
 { stdenv, fetchurl, docutils, libev, openssl, pkgconfig }:
 stdenv.mkDerivation rec {
-  version = "1.5.0";
+  version = "1.5.2";
   pname = "hitch";
 
   src = fetchurl {
     url = "https://hitch-tls.org/source/${pname}-${version}.tar.gz";
-    sha256 = "02sd2p3jsbnqmldsjwzk5qcjc45k9n1x4ygjkx0kxxwjj9lm9hhf";
+    sha256 = "1nnzqqigfw78nqhp81a72x1s8d6v49ayw4w5df0zzm2cb1jgv95i";
   };
 
   nativeBuildInputs = [ pkgconfig ];

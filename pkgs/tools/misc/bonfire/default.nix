@@ -3,9 +3,8 @@
 with python3Packages;
 
 buildPythonApplication rec {
-  version = "2017-01-19";
   pname = "bonfire";
-  name = "${pname}-unstable-${version}";
+  version = "unstable-2017-01-19";
 
   # use latest git version with --endpoint flag
   # https://github.com/blue-yonder/bonfire/pull/18
@@ -25,7 +24,7 @@ buildPythonApplication rec {
     # pip fails when encountering the git hash for the package version
     substituteInPlace setup.py \
       --replace "version=version," "version='${version}',"
-    # remove extraneous files  
+    # remove extraneous files
     substituteInPlace setup.cfg \
       --replace "data_files = *.rst, *.txt" ""
   '';
@@ -45,6 +44,6 @@ buildPythonApplication rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.womfoo ];
     platforms = platforms.linux;
+    broken = true; # no longer compatible with new arrow package
   };
-
 }

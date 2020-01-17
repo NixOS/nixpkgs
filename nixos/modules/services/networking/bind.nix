@@ -178,9 +178,8 @@ in
 
     networking.resolvconf.useLocalResolver = mkDefault true;
 
-    users.users = singleton
-      { name = bindUser;
-        uid = config.ids.uids.bind;
+    users.users.${bindUser} =
+      { uid = config.ids.uids.bind;
         description = "BIND daemon user";
       };
 

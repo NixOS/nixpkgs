@@ -1,4 +1,4 @@
-{stdenv, fetchsvn, SDL, libGLU_combined, openal, libvorbis, freealut, SDL_image}:
+{stdenv, fetchsvn, SDL, libGLU, libGL, openal, libvorbis, freealut, SDL_image}:
 
 stdenv.mkDerivation {
   name = "blackshades-svn-110";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   NIX_LDFLAGS = "-lSDL_image";
 
-  buildInputs = [ SDL SDL_image libGLU_combined openal libvorbis freealut ];
+  buildInputs = [ SDL SDL_image libGLU libGL openal libvorbis freealut ];
 
   patchPhase = ''
     sed -i -e s,Data/,$out/opt/$name/Data/,g \

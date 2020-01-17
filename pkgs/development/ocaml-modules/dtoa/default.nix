@@ -2,13 +2,13 @@
 
 buildDunePackage rec {
   pname = "dtoa";
-  version = "0.3.1";
+  version = "0.3.2";
 
   minimumOCamlVersion = "4.02";
 
   src = fetchurl {
-    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-${version}.tbz";
-    sha256 = "0rzysj07z2q6gk0yhjxnjnba01vmdb9x32wwna10qk3rrb8r2pnn";
+    url = "https://github.com/flowtype/ocaml-${pname}/releases/download/v${version}/${pname}-v${version}.tbz";
+    sha256 = "0zkhn0rdq82g6gamsv6nkx6i44s8104nh6jg5xydazl9jl1704xn";
   };
 
   hardeningDisable = stdenv.lib.optional stdenv.isDarwin "strictoverflow";

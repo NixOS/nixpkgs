@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "gplaycli";
-  version = "3.25";
+  version = "3.26";
 
   src = fetchFromGitHub {
     owner = "matlink";
     repo = "gplaycli";
     rev = version;
-    sha256 = "1rygx5cg4b1vwpkiaq6jcpbc1ly7cspslv3sy7x8n8ba61ryq6h4";
+    sha256 = "188237d40q35dp5xs7hg4ybhvsyxi0bsqx5dk4ws9007n596in5f";
   };
 
   disabled = !isPy3k;
@@ -21,6 +21,6 @@ buildPythonPackage rec {
     homepage = https://github.com/matlink/gplaycli;
     description = "Google Play Downloader via Command line";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

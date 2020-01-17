@@ -1,37 +1,26 @@
-{ lib, buildGoPackage, fetchFromGitHub, go-bindata, go-bindata-assetfs }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "documize-community";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "documize";
     repo = "community";
     rev = "v${version}";
-    sha256 = "1y38lgkxhyrga44wj216vl08fzyv8wbk02a85flnihrb4b1092x0";
+    sha256 = "0wic4j7spw9ya1m6yz0mkpqi1px6jd2vk60w8ldx0m0k606wy6ir";
   };
 
-  goPackagePath = "github.com/documize/community";
+  modSha256 = "1z0v7n8klaxcqv7mvzf3jzgrp78zb4yiibx899ppk6i5qnj4xiv0";
 
   buildInputs = [ go-bindata-assetfs go-bindata ];
 
-  buildPhase = ''
-    runHook preBuild
+  subPackages = [ "edition/community.go" ];
 
-    pushd go/src/github.com/documize/community
-    GO111MODULE=off go build -gcflags="all=-trimpath=$GOPATH" -o bin/documize ./edition/community.go
-    popd
-
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
-    mkdir -p $bin/bin
-    cp go/src/github.com/documize/community/bin/documize $bin/bin
-
-    runHook postInstall
+  postInstall = ''
+    # `buildGoModule` calls `go install` (without `go build` first), so
+    # `-o bin/documize` doesn't work.
+    mv $out/bin/community $out/bin/documize
   '';
 
   meta = with lib; {

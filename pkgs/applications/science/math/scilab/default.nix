@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withXaw3d) "--with-local-xaw"
   ;
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
 
   meta = {
     homepage = http://www.scilab.org/;

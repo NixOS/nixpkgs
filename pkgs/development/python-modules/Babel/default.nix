@@ -11,13 +11,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytz ];
 
-  checkInputs = [ pytest freezegun glibcLocales ];
+  checkInputs = [ pytest freezegun ];
 
   doCheck = !stdenv.isDarwin;
-
-  preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
 
   meta = with lib; {
     homepage = http://babel.edgewall.org;

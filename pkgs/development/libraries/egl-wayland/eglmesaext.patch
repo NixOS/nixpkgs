@@ -1,0 +1,12 @@
+diff --git a/src/wayland-eglsurface.c b/src/wayland-eglsurface.c
+index 01c9cb3..45736b0 100644
+--- a/src/wayland-eglsurface.c
++++ b/src/wayland-eglsurface.c
+@@ -37,6 +37,7 @@
+ #include <sys/types.h>
+ #include <netinet/in.h>
+ #include <fcntl.h>
++#include <EGL/eglmesaext.h>
+ 
+ #define WL_EGL_WINDOW_DESTROY_CALLBACK_SINCE 3
+ 

@@ -246,9 +246,9 @@ if test -z "$libsOnly"; then
   ( # build and install fgl_glxgears
     cd fgl_glxgears;
     gcc -DGL_ARB_texture_multisample=1 -g \
-    -I$libGLU_combined/include \
+    -I$libGL/include -I$libGLU/include \
     -I$out/include \
-    -L$libGLU_combined/lib -lGL -lGLU -lX11 -lm \
+    -L$libGL/lib -L$libGLU/lib -lGL -lGLU -lX11 -lm \
     -o $out/bin/fgl_glxgears -Wall fgl_glxgears.c
   )
 

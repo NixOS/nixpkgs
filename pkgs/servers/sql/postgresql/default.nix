@@ -44,7 +44,7 @@ let
 
     buildFlags = [ "world" ];
 
-    NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+    NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
     # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
     preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
@@ -180,41 +180,41 @@ let
 in self: {
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.19";
+    version = "9.5.20";
     psqlSchema = "9.5";
-    sha256 = "1cqvbsyfs9048wbvdv0vhhaksjyjqv2vvh6ij4vqmjibc4kal34n";
+    sha256 = "03fygn3nn6l6ar66sldy5akdg1gynny3yxbrpvmmp5ygfnrm2mwj";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.15";
+    version = "9.6.16";
     psqlSchema = "9.6";
-    sha256 = "02hp69h2p02asfblkaahblzdz2zmawd2r11h6237y5j7yadgxn9w";
+    sha256 = "1rr2dgv4ams8r2lp13w85c77rkmzpb88fjlc28mvlw6zq2fblv2w";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.10";
+    version = "10.11";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0lzj46dwd9cw94gnqm36bxd7jlhfdyqjrfzr3c4xd3prfn2rnkxd";
+    sha256 = "02fcmvbh0mhplj3s2jd24s642ysx7bggnf0h8bs5amh7dgzi8p8d";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.5";
+    version = "11.6";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "106ikalvrilihlvhq7xj7snq98hgbgq6qsgjrd252wgw1c327pvz";
+    sha256 = "0w1iq488kpzfgfnlw4k32lz5by695mpnkq461jrgsr99z5zlz4j9";
     this = self.postgresql_11;
     inherit self;
   };
 
   postgresql_12 = self.callPackage generic {
-    version = "12.0";
+    version = "12.1";
     psqlSchema = "12";
-    sha256 = "1ijm13gx1d9ai09n26nbdc77n9b8akh6pj21yy9vfn7p2mr3k8nd";
+    sha256 = "1vc3hjcbgkdfczc1ipkk02rahabn7fabpb7qs203jxpnpamz76x0";
     this = self.postgresql_12;
     inherit self;
   };

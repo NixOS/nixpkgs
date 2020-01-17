@@ -6,11 +6,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "feh";
-  version = "3.2.1";
+  version = "3.3";
 
   src = fetchurl {
     url = "https://feh.finalrewind.org/${pname}-${version}.tar.bz2";
-    sha256 = "070axq8jpibcabmjfv4fmjmpk3k349vzvh4qhsi4n62bkcwl35wg";
+    sha256 = "04c8cgwzkax481sz7lbzy23mk79bqmjy3qpvr7vxa4c14mc9k5gk";
   };
 
   outputs = [ "out" "man" "doc" ];
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     description = "A light-weight image viewer";
     homepage = "https://feh.finalrewind.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ viric willibutz globin ];
+    maintainers = with maintainers; [ viric willibutz globin ma27 ];
     platforms = platforms.unix;
   };
 }

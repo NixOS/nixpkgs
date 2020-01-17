@@ -1,17 +1,17 @@
-{ buildPythonApplication, lib, fetchPypi, isPy3k, fetchpatch
+{ buildPythonApplication, lib, fetchPypi, isPy3k
 , cli-helpers, click, configobj, humanize, prompt_toolkit, psycopg2
 , pygments, sqlparse, pgspecial, setproctitle, keyring, pytest, mock
 }:
 
 buildPythonApplication rec {
   pname = "pgcli";
-  version = "2.1.1";
+  version = "2.2.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jmnb8izsdjmq9cgajhfapr31wlhvcml4lakz2mcmjn355x83q44";
+    sha256 = "54138a31e6736a34c63b84a6d134c9292c9a73543cc0f66e80a0aaf79259d39b";
   };
 
   propagatedBuildInputs = [
@@ -19,11 +19,17 @@ buildPythonApplication rec {
     pygments sqlparse pgspecial setproctitle keyring
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "prompt_toolkit>=2.0.6,<3.0.0" "prompt_toolkit"
+  '';
+
   checkInputs = [ pytest mock ];
 
-  # One test fails: https://github.com/dbcli/pgcli/issues/1104
-  doCheck = false;
-  checkPhase = "pytest";
+  # `test_application_name_db_uri` fails: https://github.com/dbcli/pgcli/issues/1104
+  checkPhase = ''
+    pytest --deselect=tests/test_main.py::test_application_name_db_uri
+  '';
 
   meta = with lib; {
     description = "Command-line interface for PostgreSQL";

@@ -1,28 +1,30 @@
-{stdenv, fetchurl, cmake, sword, qt4, boost, clucene_core}:
+{ stdenv, fetchurl, cmake, pkgconfig, sword, boost, clucene_core
+, qtbase, qttools, qtsvg, qtwebkit
+}:
 
 stdenv.mkDerivation rec {
 
-  version = "2.10.1";
+  version = "2.11.2";
 
   pname = "bibletime";
 
   src = fetchurl {
     url = "mirror://sourceforge/bibletime/${pname}-${version}.tar.xz";
-    sha256 = "14fayy5h1ffjxin669q56fflxn4ij1irgn60cygwx2y02cwxbll6";
+    sha256 = "1s5bvmwbz1gyp3ml8sghpc00h8nhdvx2iyq96iri30kwx1y1jy6i";
   };
 
-  prePatch = ''
-    patchShebangs .;
-  '';
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [
+   sword boost clucene_core
+   qtbase qttools qtsvg qtwebkit
+ ];
 
   preConfigure =  ''
     export CLUCENE_HOME=${clucene_core};
     export SWORD_HOME=${sword};
   '';
 
-  buildInputs = [ cmake sword qt4 boost clucene_core ];
-
-  cmakeFlags = "-DUSE_QT_WEBKIT=ON -DCMAKE_BUILD_TYPE=Debug";
+  cmakeFlags = [ "-DUSE_QT_WEBKIT=ON" "-DCMAKE_BUILD_TYPE=Debug" ];
 
   meta = {
     description = "A Qt4 Bible study tool";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, xorg
-, glib, libGLU_combined, libpulseaudio, zlib, dbus, fontconfig, freetype
+, glib, libGLU, libGL, libpulseaudio, zlib, dbus, fontconfig, freetype
 , gtk3, pango
 , makeWrapper , python2Packages, lib
 , lsof, curl, libuuid, cups, mesa
@@ -19,7 +19,7 @@ let
   # used of both wrappers and libpath
   libPath = lib.makeLibraryPath (with xorg; [
     mesa.drivers
-    libGLU_combined
+    libGLU libGL
     fontconfig
     freetype
     libpulseaudio

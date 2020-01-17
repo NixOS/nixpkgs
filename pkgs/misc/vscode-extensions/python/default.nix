@@ -23,14 +23,14 @@ let
     else throw "Only x86_64 Linux and Darwin are supported.";
 
   languageServerSha256 = {
-    linux-x64 = "1w3y0sn6ijk1vspi4lailg1q1iy9lwslhx92c7jbrrkiaszvaqwn";
-    osx-x64 = "11l4fic8cvgh1l3dq6qxi51pwhcic79zf13rhyajl5w5g13caafp";
+    linux-x64 = "159xfhpvqw6k8s5bk5jw3aydn6v61fbanq2mvddxcrf5hwf8cj8h";
+    osx-x64 = "0xjh1h77axbbyxikqkhq885n97srm0f15s4976pm1rka03zvd0bg";
   }.${arch};
 
   # version is languageServerVersion in the package.json
   languageServer = extractNuGet rec {
     name = "Python-Language-Server";
-    version = "0.4.24";
+    version = "0.4.71";
 
     src = fetchurl {
       url = "https://pvsc.azureedge.net/python-language-server-stable/${name}-${arch}.${version}.nupkg";

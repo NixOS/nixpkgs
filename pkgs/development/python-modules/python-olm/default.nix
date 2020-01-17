@@ -1,5 +1,5 @@
 { lib, buildPythonPackage, olm,
-  cffi, future, typing }:
+  cffi, future, isPy3k, typing }:
 
 buildPythonPackage {
   pname = "python-olm";
@@ -15,8 +15,7 @@ buildPythonPackage {
   propagatedBuildInputs = [
     cffi
     future
-    typing
-  ];
+  ] ++ lib.optionals (!isPy3k) [ typing ];
 
   doCheck = false;
 

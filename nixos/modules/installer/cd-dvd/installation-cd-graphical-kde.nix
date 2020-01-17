@@ -11,7 +11,6 @@ with lib;
   services.xserver = {
     desktopManager.plasma5 = {
       enable = true;
-      enableQt4Support = false;
     };
 
     # Automatically login as nixos.
