@@ -27,6 +27,7 @@ bkad/camelcasemotion
 bling/vim-bufferline
 blueyed/vim-diminactive
 bogado/file-line
+bohlender/vim-smt2
 brennanfee/vim-gui-position
 bronson/vim-trailing-whitespace
 brooth/far.vim
@@ -196,8 +197,8 @@ KeitaNakamura/neodark.vim
 keith/swift.vim
 kien/rainbow_parentheses.vim
 konfekt/fastfold
-kristijanhusak/defx-icons
 kristijanhusak/defx-git
+kristijanhusak/defx-icons
 kristijanhusak/vim-hybrid-material
 kshenoy/vim-signature
 lambdalisue/vim-gista
