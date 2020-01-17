@@ -93,26 +93,19 @@ in
         '';
       };
 
-      openssh =
-        { privateKeyPath = mkOption {
-            type = types.path;
-            description = ''
-              Private agent key.
+      privateSshKeyPath = mkOption {
+        type = types.path;
+        ## maximum care is taken so that secrets (ssh keys and the CI token)
+        ## don't end up in the Nix store.
+        apply = final: if final == null then null else toString final;
 
-              A run-time path to the key file, which is supposed to be provisioned
-              outside of Nix store.
-            '';
-          };
-          publicKeyPath = mkOption {
-            type = types.path;
-            description = ''
-              Public agent key.
+        description = ''
+          OpenSSH private key
 
-              A run-time path to the key file, which is supposed to be provisioned
-              outside of Nix store.
-            '';
-          };
-        };
+          A run-time path to the key file, which is supposed to be provisioned
+          outside of Nix store.
+        '';
+      };
 
       hooks = mkHookOptions [
         { name = "checkout";
@@ -217,7 +210,6 @@ in
           ''
             mkdir -m 0700 -p "${sshDir}"
             cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
-            cp -f "${toString cfg.openssh.publicKeyPath}"  "${sshDir}/id_rsa.pub"
             chmod 600 "${sshDir}"/id_rsa*
 
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
@@ -249,8 +241,10 @@ in
     ];
   };
   imports = [
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                [ "services" "buildkite-agent" "tokenPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ] [ "services" "buildkite-agent" "openssh" "privateKeyPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]  [ "services" "buildkite-agent" "openssh" "publicKeyPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                    [ "services" "buildkite-agent" "tokenPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ]     [ "services" "buildkite-agent" "privateSshKeyPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKeyPath" ] [ "services" "buildkite-agent" "privateSshKeyPath" ])
+    (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]      "SSH public keys aren't necessary to clone private repos.")
+    (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKeyPath" ]  "SSH public keys aren't necessary to clone private repos.")
   ];
 }
