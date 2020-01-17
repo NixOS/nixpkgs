@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, libnotify }:
+{ stdenv, fetchFromGitHub, pkgconfig, gettext, glib, gtk3, libnotify, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "cbatticon";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ivm2dzhsa9ir25ry418r2qg2llby9j7a6m3arbvq5c3kaj8m9jr";
   };
 
-  nativeBuildInputs = [ pkgconfig gettext ];
+  nativeBuildInputs = [ pkgconfig gettext wrapGAppsHook ];
 
   buildInputs =  [ glib gtk3 libnotify ];
 
