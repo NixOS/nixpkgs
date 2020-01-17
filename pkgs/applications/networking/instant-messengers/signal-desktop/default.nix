@@ -87,6 +87,7 @@ in stdenv.mkDerivation rec {
 
   dontBuild = true;
   dontConfigure = true;
+  dontPatchELF = true;
 
   installPhase = ''
     mkdir -p $out/lib
@@ -94,19 +95,20 @@ in stdenv.mkDerivation rec {
     mv usr/share $out/share
     mv opt/Signal $out/lib
 
-    chmod -R g-w $out
-
     # Symlink to bin
     mkdir -p $out/bin
     ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }"
+      ${customLanguageWrapperArgs}
+    )
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
-  '';
-
-  preFixup = ''
-    gappsWrapperArgs+=(${customLanguageWrapperArgs})
   '';
 
   meta = {
