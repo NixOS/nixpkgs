@@ -2434,6 +2434,8 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  dash = callPackage ../development/python-modules/dash { };
+
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
 
   dash-html-components = callPackage ../development/python-modules/dash-html-components { };
