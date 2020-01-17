@@ -2448,6 +2448,8 @@ in {
 
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
 
+  dash-html-components = callPackage ../development/python-modules/dash-html-components { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
