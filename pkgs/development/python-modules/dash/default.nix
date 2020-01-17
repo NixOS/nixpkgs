@@ -57,6 +57,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Python framework for building analytical web applications";
     homepage = https://dash.plot.ly/;
-    license = with lib.licenses; [ mit ];
+    license = licenses.mit;
+    maintainers = [ maintainers.antoinerg ];
   };
 }
