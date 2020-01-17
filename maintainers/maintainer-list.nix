@@ -2914,6 +2914,16 @@
     githubId = 896431;
     name = "Chris Hodapp";
   };
+  holliswu = {
+    name = "Hollis Wu";
+    email = "whyhollis@gmail.com";
+    github = "holi0317";
+    githubId = 6838982;
+    keys = [{
+      longkeyid = "rsa4096/0x93A6D27F21E51CD4";
+      fingerprint = "5EED 66CC 6B4E E911 01C9  2FBD 93A6 D27F 21E5 1CD4";
+    }];
+  };
   hrdinka = {
     email = "c.nix@hrdinka.at";
     github = "hrdinka";
