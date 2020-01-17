@@ -1052,17 +1052,17 @@ self: super: {
   # This raises the lower bound on prettyprinter to 1.5.1 since
   # `removeTrailingWhitespace` is buggy in earlier versions.
   # This will probably be able to be removed when we update to LTS-15.
-  dhall_1_28_0 =
-    dontCheck (super.dhall_1_28_0.override {
+  dhall_1_29_0 =
+    dontCheck (super.dhall_1_29_0.override {
       prettyprinter = self.prettyprinter_1_5_1;
       prettyprinter-ansi-terminal =
         self.prettyprinter-ansi-terminal.override {
           prettyprinter = self.prettyprinter_1_5_1;
         };
     });
-  dhall-bash_1_0_25 = super.dhall-bash_1_0_25.override { dhall = self.dhall_1_28_0; };
-  dhall-json_1_6_0 = super.dhall-json_1_6_0.override {
-    dhall = self.dhall_1_28_0;
+  dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
+  dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
+    dhall = self.dhall_1_29_0;
     prettyprinter = self.prettyprinter_1_5_1;
     prettyprinter-ansi-terminal =
       self.prettyprinter-ansi-terminal.override {
@@ -1228,8 +1228,7 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_28_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_28_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_29_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
