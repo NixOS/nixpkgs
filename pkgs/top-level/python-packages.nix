@@ -2434,6 +2434,8 @@ in {
 
   daphne = callPackage ../development/python-modules/daphne { };
 
+  dash-core-components = callPackage ../development/python-modules/dash-core-components { };
+
   dateparser = callPackage ../development/python-modules/dateparser { };
 
   # Actual name of package
