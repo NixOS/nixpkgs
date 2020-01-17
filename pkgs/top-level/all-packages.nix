@@ -3620,10 +3620,6 @@ in
 
   gnash = callPackage ../misc/gnash { };
 
-  gnaural = callPackage ../applications/audio/gnaural {
-    stdenv = gcc49Stdenv;
-  };
-
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
   gnome-builder = callPackage ../applications/editors/gnome-builder { };
