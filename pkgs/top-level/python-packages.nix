@@ -2942,6 +2942,8 @@ in {
 
   plexauth = callPackage ../development/python-modules/plexauth { };
 
+  plexwebsocket = callPackage ../development/python-modules/plexwebsocket { };
+
   plotly = callPackage ../development/python-modules/plotly { };
 
   plyfile = callPackage ../development/python-modules/plyfile { };
