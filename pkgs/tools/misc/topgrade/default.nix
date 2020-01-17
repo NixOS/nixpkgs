@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, lib, fetchFromGitHub, rustPlatform, Foundation }:
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
@@ -13,11 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1y85hl7xl60vsj3ivm6pyd6bvk39wqg25bqxfx00r9myha94iqmd";
 
-  meta = with stdenv.lib; {
+  buildInputs = lib.optional stdenv.isDarwin Foundation;
+
+  meta = with lib; {
     description = "Upgrade all the things";
     homepage = "https://github.com/r-darwish/topgrade";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ filalex77 hugoreeves ];
   };
 }

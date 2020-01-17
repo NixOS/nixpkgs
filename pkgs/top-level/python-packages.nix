@@ -674,6 +674,8 @@ in {
 
   flufl_lock = callPackage ../development/python-modules/flufl/lock.nix { };
 
+  fluidasserts = callPackage ../development/python-modules/fluidasserts { };
+
   foxdot = callPackage ../development/python-modules/foxdot { };
 
   fsspec = callPackage ../development/python-modules/fsspec { };
@@ -1040,6 +1042,8 @@ in {
 
   pydbus = callPackage ../development/python-modules/pydbus { };
 
+  pydicom = callPackage ../development/python-modules/pydicom { };
+
   pydocstyle =
     if isPy27 then
       callPackage ../development/python-modules/pydocstyle/2.nix { }
@@ -1189,6 +1193,8 @@ in {
   pyssim = callPackage ../development/python-modules/pyssim { };
 
   pystache = callPackage ../development/python-modules/pystache { };
+
+  pytelegrambotapi = callPackage ../development/python-modules/pyTelegramBotAPI { };
 
   pytesseract = callPackage ../development/python-modules/pytesseract { };
 
@@ -1894,8 +1900,6 @@ in {
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
   pyepsg = callPackage ../development/python-modules/pyepsg { };
-
-  pyezminc = callPackage ../development/python-modules/pyezminc { };
 
   billiard = callPackage ../development/python-modules/billiard { };
 
@@ -6855,6 +6859,8 @@ in {
   managesieve = callPackage ../development/python-modules/managesieve { };
 
   pony = callPackage ../development/python-modules/pony { };
+
+  rxv     = callPackage ../development/python-modules/rxv     { };
 
 });
 

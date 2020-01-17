@@ -46,7 +46,7 @@ let
   gitFull = gitBase.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = !stdenv.isDarwin;
+    sendEmailSupport = true;
     withLibsecret = !stdenv.isDarwin;
   };
 

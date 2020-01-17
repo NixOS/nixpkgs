@@ -127,6 +127,7 @@
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
+  ./programs/liboping.nix
   ./programs/light.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
@@ -577,6 +578,7 @@
   ./services/networking/connman.nix
   ./services/networking/consul.nix
   ./services/networking/coredns.nix
+  ./services/networking/corerad.nix
   ./services/networking/coturn.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix

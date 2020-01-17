@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "teeworlds";
-  version = "0.7.3.1";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "teeworlds";
     repo = "teeworlds";
     rev = version;
-    sha256 = "1hfj22xxswqnm1s74ln3dwl63rs4mk9g4yvpf75plswbxd0020la";
+    sha256 = "1llrzcc9p8pswk58rj4qh4g67nlji8q2kw3hxh3qpli85jvkdmyx";
     fetchSubmodules = true;
   };
 
@@ -24,11 +24,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ bam pkgconfig ];
 
   configurePhase = ''
+    runHook preConfigure
     bam config
+    runHook postConfigure
   '';
 
   buildPhase = ''
+    runHook preBuild
     bam conf=release
+    runHook postBuild
   '';
 
   installPhase = ''
