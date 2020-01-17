@@ -492,6 +492,8 @@ in {
 
   boltons = callPackage ../development/python-modules/boltons { };
 
+  braviarc = callPackage ../development/python-modules/braviarc-homeassistant { };
+
   braintree = callPackage ../development/python-modules/braintree { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
