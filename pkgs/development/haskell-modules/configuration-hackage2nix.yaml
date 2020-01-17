@@ -2778,6 +2778,7 @@ broken-packages:
   - accelerate-fftw
   - accelerate-fourier
   - accelerate-kullback-liebler
+  - accelerate-llvm
   - accelerate-llvm-native
   - accelerate-random
   - accelerate-typelits
@@ -2884,6 +2885,7 @@ broken-packages:
   - algebra
   - algebra-sql
   - algebraic
+  - algebraic-classes
   - algebraic-graphs
   - algebraic-prelude
   - algo-s
@@ -2912,6 +2914,7 @@ broken-packages:
   - AMI
   - ampersand
   - amqp-conduit
+  - amqp-utils
   - analyze
   - analyze-client
   - anansi-pandoc
@@ -3014,6 +3017,7 @@ broken-packages:
   - ariadne
   - arion
   - arith-encode
+  - arithmetic-circuits
   - armada
   - armor
   - arpa
@@ -3107,6 +3111,7 @@ broken-packages:
   - avl-static
   - AvlTree
   - avr-shake
+  - avro-piper
   - awesome-prelude
   - awesomium
   - awesomium-glut
@@ -4243,6 +4248,7 @@ broken-packages:
   - dictionaries
   - dictparser
   - diet
+  - diff
   - diffcabal
   - difference-monoid
   - DifferenceLogic
@@ -4462,6 +4468,7 @@ broken-packages:
   - elevator
   - elision
   - elliptic-curve
+  - elm-street
   - elm-websocket
   - elsa
   - elynx-seq
@@ -4498,6 +4505,7 @@ broken-packages:
   - EnumMap
   - enummapmap
   - enummapset-th
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -4574,6 +4582,7 @@ broken-packages:
   - exact-real
   - exact-real-positional
   - except-exceptions
+  - exception-hierarchy
   - exception-monads-fd
   - exchangerates
   - execs
@@ -4604,6 +4613,7 @@ broken-packages:
   - extended-categories
   - extensible-data
   - extensible-effects-concurrent
+  - extensible-skeleton
   - Extra
   - extract-dependencies
   - extractelf
@@ -4839,6 +4849,7 @@ broken-packages:
   - freddy
   - free-category
   - free-concurrent
+  - free-functors
   - free-game
   - free-http
   - free-operational
@@ -5041,6 +5052,7 @@ broken-packages:
   - ghci-lib
   - ghci-ng
   - ghci-pretty
+  - ghcide
   - ghcjs-base-stub
   - ghcjs-dom-jsffi
   - ghcjs-fetch
@@ -5051,6 +5063,7 @@ broken-packages:
   - ghcprofview
   - ght
   - gi-cairo-again
+  - gi-gdkx11
   - gi-graphene
   - gi-gsk
   - gi-gstpbutils
@@ -5076,6 +5089,7 @@ broken-packages:
   - git-fmt
   - git-gpush
   - git-jump
+  - git-mediate
   - git-object
   - git-remote-ipfs
   - git-repair
@@ -5249,6 +5263,7 @@ broken-packages:
   - gstreamer
   - GTALib
   - gtfs
+  - gtfs-realtime
   - gtk-serialized-event
   - gtk-toy
   - gtk2hs-hello
@@ -5495,6 +5510,7 @@ broken-packages:
   - haskell-src-exts-prisms
   - haskell-src-exts-qq
   - haskell-src-exts-sc
+  - haskell-src-exts-simple
   - haskell-src-meta-mwotton
   - haskell-stack-trace-plugin
   - haskell-token-utils
@@ -5786,6 +5802,7 @@ broken-packages:
   - hiccup
   - hichi
   - hid-examples
+  - hie-bios
   - hie-core
   - hieraclus
   - hierarchical-clustering
@@ -5971,6 +5988,7 @@ broken-packages:
   - hpaste
   - hpasteit
   - HPath
+  - hpath-io
   - hpc-tracer
   - hPDB
   - hPDB-examples
@@ -6223,6 +6241,8 @@ broken-packages:
   - http-shed
   - http-streams
   - http-wget
+  - http2-client
+  - http2-client-exe
   - http2-client-grpc
   - http2-grpc-proto3-wire
   - https-everywhere-rules
@@ -6250,6 +6270,7 @@ broken-packages:
   - hunt-searchengine
   - hunt-server
   - hurdle
+  - hurl
   - hurriyet
   - husk-scheme
   - husk-scheme-libs
@@ -6413,6 +6434,7 @@ broken-packages:
   - indieweb-algorithms
   - inf-interval
   - infer-upstream
+  - infernal
   - infernu
   - infinity
   - infix
@@ -6435,6 +6457,7 @@ broken-packages:
   - instapaper-sender
   - instinct
   - int-multimap
+  - intcode
   - integer-pure
   - integreat
   - intel-aes
@@ -6847,6 +6870,7 @@ broken-packages:
   - Level0
   - levmar
   - levmar-chart
+  - lex-applicative
   - lfst
   - lgtk
   - lha
@@ -6962,6 +6986,7 @@ broken-packages:
   - llvm-general
   - llvm-general-pure
   - llvm-general-quote
+  - llvm-hs
   - llvm-hs-pretty
   - llvm-ht
   - llvm-pkg-config
@@ -7413,6 +7438,9 @@ broken-packages:
   - mtl-tf
   - mtlx
   - mtp
+  - mu-grpc-client
+  - mu-grpc-server
+  - mu-protobuf
   - MuCheck
   - MuCheck-Hspec
   - MuCheck-HUnit
@@ -7549,6 +7577,7 @@ broken-packages:
   - network-anonymous-tor
   - network-api-support
   - network-arbitrary
+  - network-bitcoin
   - network-builder
   - network-bytestring
   - network-connection
@@ -7792,6 +7821,7 @@ broken-packages:
   - Paillier
   - pairing
   - pam
+  - pan-os-syslog
   - panda
   - pandoc-citeproc-preamble
   - pandoc-crossref
@@ -7832,6 +7862,7 @@ broken-packages:
   - parco-parsec
   - parconc-examples
   - pareto
+  - parquet-hs
   - Parry
   - parse-help
   - parseargs
@@ -8137,6 +8168,7 @@ broken-packages:
   - presto-hdbc
   - pretty-ncols
   - pretty-relative-time
+  - prettyprinter-graphviz
   - prettyprinter-vty
   - preview
   - prim-array
@@ -8388,6 +8420,7 @@ broken-packages:
   - reactive-glut
   - reactive-thread
   - reactor
+  - read-ctags
   - read-io
   - reader-soup
   - readline-statevar
@@ -8431,10 +8464,13 @@ broken-packages:
   - reflex-basic-host
   - reflex-dom-retractable
   - reflex-dom-svg
+  - reflex-fsnotify
+  - reflex-ghci
   - reflex-gloss
   - reflex-gloss-scene
   - reflex-libtelnet
   - reflex-orphans
+  - reflex-process
   - reflex-sdl2
   - reflex-transformers
   - reflex-vty
@@ -8447,6 +8483,7 @@ broken-packages:
   - reg-alloc-graph-color
   - regex-deriv
   - regex-dfa
+  - regex-do
   - regex-generator
   - regex-parsec
   - regex-pderiv
@@ -8762,6 +8799,7 @@ broken-packages:
   - seclib
   - second-transfer
   - secp256k1
+  - secp256k1-haskell
   - secp256k1-legacy
   - secret-santa
   - secret-sharing
@@ -8926,6 +8964,7 @@ broken-packages:
   - shellmate-extras
   - shh
   - shh-extras
+  - shine-examples
   - shivers-cfg
   - shoap
   - shopify
@@ -8981,6 +9020,7 @@ broken-packages:
   - simplenote
   - simpleprelude
   - SimpleServer
+  - simplest-sqlite
   - simseq
   - singleton-dict
   - singleton-typelits
@@ -9315,6 +9355,7 @@ broken-packages:
   - streaming-postgresql-simple
   - streaming-process
   - streaming-sort
+  - streamly-fsnotify
   - strelka
   - strict-data
   - StrictBench
@@ -9437,6 +9478,7 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
+  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -9602,6 +9644,7 @@ broken-packages:
   - thumbnail-plus
   - thumbnail-polish
   - tic-tac-toe
+  - ticker
   - tickle
   - TicTacToe
   - tictactoe3d
@@ -9661,6 +9704,7 @@ broken-packages:
   - todos
   - tofromxml
   - toilet
+  - token-search
   - tokenify
   - tokstyle
   - toktok
@@ -9750,6 +9794,7 @@ broken-packages:
   - tripLL
   - trivia
   - tropical
+  - tropical-geometry
   - truelevel
   - trurl
   - tsession
@@ -9983,7 +10028,9 @@ broken-packages:
   - vcsgui
   - vcswrapper
   - Vec-Boolean
+  - vec-lens
   - Vec-OpenGLRaw
+  - vec-optics
   - Vec-Transform
   - vect-floating
   - vect-floating-accelerate
@@ -10104,6 +10151,7 @@ broken-packages:
   - warp-dynamic
   - warp-grpc
   - warp-static
+  - warp-systemd
   - WashNGo
   - wasm
   - watcher
