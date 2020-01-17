@@ -562,6 +562,8 @@ in {
 
   dendropy = callPackage ../development/python-modules/dendropy { };
 
+  denonavr = callPackage ../development/python-modules/denonavr { };
+
   dependency-injector = callPackage ../development/python-modules/dependency-injector { };
 
   btchip = callPackage ../development/python-modules/btchip { };
