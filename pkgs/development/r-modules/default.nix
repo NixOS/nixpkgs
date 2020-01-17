@@ -363,7 +363,7 @@ let
     topicmodels = [ pkgs.gsl_1 ];
     udunits2 = [ pkgs.udunits pkgs.expat ];
     units = [ pkgs.udunits ];
-    V8 = [ pkgs.v8_3_14 ];
+    V8 = [ pkgs.v8 ];
     WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
@@ -849,11 +849,16 @@ let
     });
 
     V8 = old.V8.overrideDerivation (attrs: {
+      postPatch = ''
+        substituteInPlace configure \
+          --replace " -lv8_libplatform" ""
+      '';
+
       preConfigure = ''
-        export INCLUDE_DIR=${pkgs.v8_3_14}/include
-        export LIB_DIR=${pkgs.v8_3_14}/lib
+        export INCLUDE_DIR=${pkgs.v8}/include
+        export LIB_DIR=${pkgs.v8}/lib
         patchShebangs configure
-        '';
+      '';
     });
 
     acs = old.acs.overrideDerivation (attrs: {
