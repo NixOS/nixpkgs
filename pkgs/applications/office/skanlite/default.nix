@@ -21,8 +21,6 @@ in mkDerivation rec {
     libksane
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "KDE simple image scanning application";
     homepage    = http://www.kde.org/applications/graphics/skanlite/;
