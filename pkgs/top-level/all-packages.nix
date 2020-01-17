@@ -215,6 +215,8 @@ in
 
   dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
 
+  dracut = callPackage ../os-specific/linux/dracut { };
+
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
   umoci = callPackage ../applications/virtualization/umoci {};
