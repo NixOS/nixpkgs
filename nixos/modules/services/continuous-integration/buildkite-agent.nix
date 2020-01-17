@@ -223,7 +223,7 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${cfg.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
+          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
