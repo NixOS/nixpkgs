@@ -105,6 +105,7 @@ self: super: {
   skylighting = self.skylighting_0_8_3;
   skylighting-core = self.skylighting-core_0_8_3;
   sop-core = self.sop-core_0_5_0_0;
+  tls-session-manager = self.tls-session-manager_0_0_4;
   texmath = self.texmath_0_12;
   th-desugar = self.th-desugar_1_10;
   tls = self.tls_1_5_3;
