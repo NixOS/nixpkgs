@@ -14562,13 +14562,6 @@ in
     gnutls = gnutls;
   });
 
-  # 3.14 is needed for R V8 module in ../development/r-modules/default.nix
-  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
-    inherit (python2Packages) python gyp;
-    cctools = darwin.cctools;
-    stdenv = gcc5Stdenv;
-  };
-
   v8_5_x = callPackage ../development/libraries/v8/5_x.nix ({
     inherit (python2Packages) python gyp;
     icu = icu58; # v8-5.4.232 fails against icu4c-59.1
