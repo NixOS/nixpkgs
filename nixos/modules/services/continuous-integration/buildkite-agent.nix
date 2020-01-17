@@ -74,13 +74,12 @@ in
         '';
       };
 
-      meta-data = mkOption {
-        type = types.str;
-        default = "";
-        example = "queue=default,docker=true,ruby2=true";
+      tags = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        example = { queue = "default"; docker = "true"; ruby2 ="true"; };
         description = ''
-          Meta data for the agent. This is a comma-separated list of
-          <code>key=value</code> pairs.
+          Tags for the agent.
         '';
       };
 
@@ -211,9 +210,7 @@ in
         ##     don't end up in the Nix store.
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
-          metaData = if cfg.meta-data == ""
-            then ""
-            else "meta-data=${cfg.meta-data}";
+          tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
         in
           ''
             mkdir -m 0700 -p "${sshDir}"
@@ -223,8 +220,8 @@ in
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
-            ${metaData}
             shell="${cfg.shell}"
+            tags="${tagStr}"
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
@@ -258,5 +255,6 @@ in
     (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKeyPath" ] [ "services" "buildkite-agent" "privateSshKeyPath" ])
     (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]      "SSH public keys aren't necessary to clone private repos.")
     (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKeyPath" ]  "SSH public keys aren't necessary to clone private repos.")
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"]                 [ "services" "buildkite-agent" "tags" ])
   ];
 }
