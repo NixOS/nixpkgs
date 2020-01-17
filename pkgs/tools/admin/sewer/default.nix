@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sewer";
-  version = "0.7.0";
+  version = "0.7.3";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "16j4npqj3fdj3g2z7nqb0cvvxd85xk20g9c43f3q8a1k5psf1fmq";
+    sha256 = "12z4xvblis4xcmm2zbq4dkhjx5lsmcxx80gik2g1pqd2809rxsmy";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
