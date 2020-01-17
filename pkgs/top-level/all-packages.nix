@@ -213,7 +213,9 @@ in
 
   dotnetbuildhelpers = callPackage ../build-support/dotnetbuildhelpers { };
 
-  dotnet-sdk = callPackage ../development/compilers/dotnet/sdk { };
+  dotnetCorePackages = recurseIntoAttrs (callPackage ../development/compilers/dotnet {});
+
+  dotnet-sdk = dotnetCorePackages.sdk_2_2;
 
   dumb-init = callPackage ../applications/virtualization/dumb-init {};
 
