@@ -11,9 +11,11 @@ let
 in rec {
   combinePackages = attrs: callPackage (import ./combinePackages.nix attrs) {};
 
+  # v2.1.15 (LTS)
+
   aspnetcore_2_1 = buildAspNetCore {
-    version = "2.1.13";
-    sha512 = "0i9r9pq9avixv08vwcp796kdwplz90lip07y4f50s0jqwpww070qsydplnv3pixi9dfn4s169qd97c7km3qs1snvn9yasigg1vv2wqx";
+    version = "2.1.15";
+    sha512 = "a557f175cca92bb1dd66cf638ff84fe85750fab67028bd4472748b22ef0591f5f3812446a3dbe21c3d1be28c47d459d854d690dbace1b95bc7136b248af87334";
   };
 
   netcore_2_1 = buildNetCore {
