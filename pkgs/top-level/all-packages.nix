@@ -7765,7 +7765,6 @@ in
 
   avian = callPackage ../development/compilers/avian {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
-    stdenv = if stdenv.cc.isGNU then gcc49Stdenv else stdenv;
   };
 
   bigloo = callPackage ../development/compilers/bigloo { };
