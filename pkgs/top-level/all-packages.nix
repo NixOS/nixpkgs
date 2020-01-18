@@ -2944,6 +2944,10 @@ in
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
+  rage = callPackage ../tools/security/rage {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   s-tar = callPackage ../tools/archivers/s-tar {};
 
   sonota = callPackage ../tools/misc/sonota { };
