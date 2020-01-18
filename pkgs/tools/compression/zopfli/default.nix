@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ bobvanderlinden ];
+    maintainers = with maintainers; [ bobvanderlinden edef ];
   };
 }
