@@ -7827,7 +7827,6 @@ in
   clang_6  = llvmPackages_6.clang;
   clang_5  = llvmPackages_5.clang;
   clang_4  = llvmPackages_4.clang;
-  clang_39 = llvmPackages_39.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_latest;
@@ -8546,17 +8545,8 @@ in
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
   llvm_4  = llvmPackages_4.llvm;
-  llvm_39 = llvmPackages_39.llvm;
 
   llvmPackages = recurseIntoAttrs llvmPackages_7;
-
-  llvmPackages_39 = callPackage ../development/compilers/llvm/3.9 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_39.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_39.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv;
-  });
 
   llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
     inherit (stdenvAdapters) overrideCC;
