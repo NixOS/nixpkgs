@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl
 , python-setup-hook
-, self
 , which
 # Dependencies
 , bzip2
@@ -52,75 +51,77 @@ let
     tk
   ];
 
-in with passthru; stdenv.mkDerivation {
-  inherit pname version;
+  self = with passthru; stdenv.mkDerivation {
+    inherit pname version;
 
-  src = fetchurl {
-    url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
-    inherit sha256;
+    src = fetchurl {
+      url = "https://bitbucket.org/pypy/pypy/downloads/pypy${pythonVersion}-v${version}-linux64.tar.bz2";
+      inherit sha256;
+    };
+
+    buildInputs = [ which ];
+
+    installPhase = ''
+      mkdir -p $out/lib
+      echo "Moving files to $out"
+      mv -t $out bin include lib-python lib_pypy site-packages
+
+      mv $out/bin/libpypy*-c.so $out/lib/
+
+      rm $out/bin/*.debug
+
+      echo "Patching binaries"
+      interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
+      patchelf --set-interpreter $interpreter \
+               --set-rpath $out/lib \
+               $out/bin/pypy*
+
+      pushd $out
+      find {lib,lib_pypy*} -name "*.so" -exec patchelf --replace-needed "libbz2.so.1.0" "libbz2.so.1" {} \;
+      find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${stdenv.lib.makeLibraryPath deps} {} \;
+
+      echo "Removing bytecode"
+      find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
+      popd
+
+      # Include a sitecustomize.py file
+      cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+
+    '';
+
+    doInstallCheck = true;
+
+    # Check whether importing of (extension) modules functions
+    installCheckPhase = let
+      modules = [
+        "ssl"
+        "sys"
+        "curses"
+      ] ++ optionals (!isPy3k) [
+        "Tkinter"
+      ] ++ optionals isPy3k [
+        "tkinter"
+      ];
+      imports = concatMapStringsSep "; " (x: "import ${x}") modules;
+    in ''
+      echo "Testing whether we can import modules"
+      $out/bin/${executable} -c '${imports}'
+    '';
+
+    setupHook = python-setup-hook sitePackages;
+
+    donPatchElf = true;
+    dontStrip = true;
+
+    inherit passthru;
+
+    meta = with stdenv.lib; {
+      homepage = http://pypy.org/;
+      description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
+      license = licenses.mit;
+      platforms = [ "x86_64-linux" ];
+    };
+
   };
 
-  buildInputs = [ which ];
-
-  installPhase = ''
-    mkdir -p $out/lib
-    echo "Moving files to $out"
-    mv -t $out bin include lib-python lib_pypy site-packages
-
-    mv $out/bin/libpypy*-c.so $out/lib/
-
-    rm $out/bin/*.debug
-
-    echo "Patching binaries"
-    interpreter=$(patchelf --print-interpreter $(readlink -f $(which patchelf)))
-    patchelf --set-interpreter $interpreter \
-             --set-rpath $out/lib \
-             $out/bin/pypy*
-
-    pushd $out
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --replace-needed "libbz2.so.1.0" "libbz2.so.1" {} \;
-    find {lib,lib_pypy*} -name "*.so" -exec patchelf --set-rpath ${stdenv.lib.makeLibraryPath deps} {} \;
-
-    echo "Removing bytecode"
-    find . -name "__pycache__" -type d -depth -exec rm -rf {} \;
-    popd
-
-    # Include a sitecustomize.py file
-    cp ${../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
-
-  '';
-
-  doInstallCheck = true;
-
-  # Check whether importing of (extension) modules functions
-  installCheckPhase = let
-    modules = [
-      "ssl"
-      "sys"
-      "curses"
-    ] ++ optionals (!isPy3k) [
-      "Tkinter"
-    ] ++ optionals isPy3k [
-      "tkinter"
-    ];
-    imports = concatMapStringsSep "; " (x: "import ${x}") modules;
-  in ''
-    echo "Testing whether we can import modules"
-    $out/bin/${executable} -c '${imports}'
-  '';
-
-  setupHook = python-setup-hook sitePackages;
-
-  donPatchElf = true;
-  dontStrip = true;
-
-  inherit passthru;
-
-  meta = with stdenv.lib; {
-    homepage = http://pypy.org/;
-    description = "Fast, compliant alternative implementation of the Python language (${pythonVersion})";
-    license = licenses.mit;
-    platforms = [ "x86_64-linux" ];
-  };
-
-}
+in self

@@ -3,7 +3,6 @@
 , graalvm8
 , passthruFun
 , packageOverrides ? (self: super: {})
-, self
 }:
 
 let
@@ -18,4 +17,5 @@ let
     hasDistutilsCxxPatch = false;
     pythonForBuild = pkgs.buildPackages.pythonInterpreters.graalpython37;
   };
-in lib.extendDerivation true passthru graalvm8
+  self = lib.extendDerivation true passthru graalvm8;
+in self

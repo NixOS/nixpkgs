@@ -49,7 +49,6 @@ with pkgs;
 in {
 
   python27 = callPackage ./cpython/2.7 {
-    self = python27;
     sourceVersion = {
       major = "2";
       minor = "7";
@@ -62,7 +61,6 @@ in {
   };
 
   python35 = callPackage ./cpython {
-    self = python35;
     sourceVersion = {
       major = "3";
       minor = "5";
@@ -75,7 +73,6 @@ in {
   };
 
   python36 = callPackage ./cpython {
-    self = python36;
     sourceVersion = {
       major = "3";
       minor = "6";
@@ -88,7 +85,6 @@ in {
   };
 
   python37 = callPackage ./cpython {
-    self = python37;
     sourceVersion = {
       major = "3";
       minor = "7";
@@ -101,7 +97,6 @@ in {
   };
 
   python38 = callPackage ./cpython {
-    self = python38;
     sourceVersion = {
       major = "3";
       minor = "8";
@@ -114,7 +109,6 @@ in {
   };
 
   python39 = callPackage ./cpython {
-    self = python39;
     sourceVersion = {
       major = "3";
       minor = "9";
@@ -128,7 +122,6 @@ in {
 
   # Minimal versions of Python (built without optional dependencies)
   python3Minimal = (python37.override {
-    self = python3Minimal;
     pythonForBuild = pkgs.buildPackages.python3Minimal;
     # strip down that python version as much as possible
     openssl = null;
@@ -150,7 +143,6 @@ in {
   });
 
   pypy27 = callPackage ./pypy {
-    self = pypy27;
     sourceVersion = {
       major = "7";
       minor = "1";
@@ -164,7 +156,6 @@ in {
   };
 
   pypy36 = callPackage ./pypy {
-    self = pypy36;
     sourceVersion = {
       major = "7";
       minor = "1";
@@ -178,8 +169,6 @@ in {
   };
 
   pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {
-    # Not included at top-level
-    self = pythonInterpreters.pypy27_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "1";
@@ -192,8 +181,6 @@ in {
   };
 
   pypy36_prebuilt = callPackage ./pypy/prebuilt.nix {
-    # Not included at top-level
-    self = pythonInterpreters.pypy36_prebuilt;
     sourceVersion = {
       major = "7";
       minor = "1";
@@ -206,7 +193,6 @@ in {
   };
 
   graalpython37 = callPackage ./graalpython/default.nix {
-    self = pythonInterpreters.graalpython37;
     inherit passthruFun;
   };
 

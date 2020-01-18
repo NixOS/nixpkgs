@@ -10,7 +10,6 @@
 , sqlite
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
-, self
 , CF, configd, coreutils
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
@@ -197,7 +196,7 @@ let
   # Build the basic Python interpreter without modules that have
   # external dependencies.
 
-in with passthru; stdenv.mkDerivation ({
+  self = with passthru; stdenv.mkDerivation ({
     pname = "python";
     inherit version;
 
@@ -281,4 +280,6 @@ in with passthru; stdenv.mkDerivation ({
       # in case both 2 and 3 are installed.
       priority = -100;
     };
-  } // crossCompileEnv)
+  } // crossCompileEnv);
+
+in self
