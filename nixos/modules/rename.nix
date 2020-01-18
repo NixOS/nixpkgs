@@ -27,6 +27,8 @@ with lib;
     (mkRemovedOptionModule [ "services.osquery" ] "The osquery module has been removed")
     (mkRemovedOptionModule [ "services.fourStore" ] "The fourStore module has been removed")
     (mkRemovedOptionModule [ "services.fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
+    (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
+      "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
 
     # Do NOT add any option renames here, see top of the file
   ];

@@ -159,7 +159,6 @@
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
-  ./programs/way-cooler.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix
   ./programs/x2goserver.nix
