@@ -23788,7 +23788,7 @@ in
   aragorn = callPackage ../applications/science/biology/aragorn { };
 
   archimedes = callPackage ../applications/science/electronics/archimedes {
-    stdenv = gcc49Stdenv;
+    stdenv = gcc6Stdenv;
   };
 
   bayescan = callPackage ../applications/science/biology/bayescan { };
