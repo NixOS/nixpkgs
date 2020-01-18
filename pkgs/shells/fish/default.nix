@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, coreutils, utillinux,
+{ stdenv, fetchurl, fetchpatch, coreutils, utillinux,
   which, gnused, gnugrep,
   groff, man-db, getent, libiconv, pcre2,
   gettext, ncurses, python3,
@@ -100,6 +100,14 @@ let
       url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.gz";
       sha256 = "03j3jl9jzlnhq4p86zj8wqsh5sx45j1d1fvfa80ks1cfdg68qwhl";
     };
+
+    patches = [
+      # completions/systemctl: Harden version comparison
+      (fetchpatch {
+        url = "https://github.com/fish-shell/fish-shell/commit/c6ec4235136e82c709e8d7b455f7c463f9714b48.patch";
+        sha256 = "02m6pkhhx6y21csydznsxkbpnwhcpzyz99xgd9ryh7s03v7wbigw";
+      })
+    ];
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ ncurses libiconv pcre2 ];
