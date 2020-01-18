@@ -19,8 +19,8 @@ in rec {
   };
 
   netcore_2_1 = buildNetCore {
-    version = "2.1.13";
-    sha512 = "2gkawhm4vk74qmdlpa9128brirwqxpa1b6w8jmcyd6j4i8lpnkp83jhmjjrjr4jdihchapp8qxb7sa1qdj21yswbpn03n86g8l3gh0h";
+    version = "2.1.15";
+    sha512 = "cfd7f7caea7e896dd4d68a05c827c86f38595f24e854edb3f934715ee1268e2623f17ff768215e465fe596cd474497384be2b1381f04ddd6d555665a341f65f6";
   };
 
   sdk_2_1 = buildNetCoreSdk {
