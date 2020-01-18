@@ -27,6 +27,14 @@ in rec {
     version = "2.1.803";
     sha512 = "57d48d6ca1bd92ac348dc05220d984811c0cf005774d7afdfbbf125a842acb0a26572146ed25a7eb26f4e0404fe840b70d1e7ec1fb7c9a5c6cfe81fefc41b363";
   };
+
+  # v3.0.2 (Maintenance)
+
+  aspnetcore_3_0 = buildAspNetCore {
+    version = "3.0.2";
+    sha512 = "84dcc2a2a9e43afbc166771153d85b19cb09f964c85c787d77b362fd1d9e076345ae153305fa9040999846a56b69041eb89282804587478b926179d2613d259d";
+  };
+
   sdk_3_0 = buildNetCoreSdk {
     version = "3.0.100";
     sha512 = "766da31f9a0bcfbf0f12c91ea68354eb509ac2111879d55b656f19299c6ea1c005d31460dac7c2a4ef82b3edfea30232c82ba301fb52c0ff268d3e3a1b73d8f7";
