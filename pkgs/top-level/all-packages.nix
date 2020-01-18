@@ -8727,9 +8727,7 @@ in
 
   pforth = callPackage ../development/compilers/pforth {};
 
-  picat = callPackage ../development/compilers/picat {
-    stdenv = gcc49Stdenv;
-  };
+  picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
     llvm = llvm_7;
