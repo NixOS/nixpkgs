@@ -48,6 +48,7 @@ in mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
+    broken = true; # has been abandoned upstream: https://socially.whimsic.al/objects/56db0963-ca22-4bf0-be50-88f7e4d4c7ed
   };
 }
 
