@@ -14340,6 +14340,8 @@ in
 
   svrcore = callPackage ../development/libraries/svrcore { };
 
+  svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
+
   swiftclient = python3.pkgs.callPackage ../tools/admin/swiftclient { };
 
   sword = callPackage ../development/libraries/sword { };
