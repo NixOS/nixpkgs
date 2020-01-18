@@ -5465,6 +5465,8 @@ in {
     inherit (pkgs) pkgconfig systemd;
   };
 
+  sysv_ipc = callPackage ../development/python-modules/sysv_ipc { };
+
   tabulate = callPackage ../development/python-modules/tabulate { };
 
   tadasets = callPackage ../development/python-modules/tadasets { };
