@@ -18,13 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "ad6562c48c38e922a314cb45a90996843d81045595c4917f66b02a6c2dfe8058";
   };
 
+  perlDeps = with perlPackages; [ libintl_perl GetoptLong ModuleBuild SysVirt ];
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig ];
   buildInputs = [
     ncurses cpio gperf jansson
     cdrkit flex bison qemu pcre augeas libxml2 acl libcap libcap_ng libconfig
     systemd fuse yajl libvirt gmp readline file hivex
-    numactl xen libapparmor getopt perlPackages.ModuleBuild
-  ] ++ (with perlPackages; [ perl libintl_perl GetoptLong SysVirt ])
+    numactl xen libapparmor getopt
+    perlPackages.perl
+  ] ++ perlDeps
     ++ (with ocamlPackages; [ ocaml findlib ocamlbuild ocaml_libvirt ocaml_gettext ounit ])
     ++ stdenv.lib.optional javaSupport jdk;
 
@@ -53,6 +55,7 @@ stdenv.mkDerivation rec {
     for bin in $out/bin/*; do
       wrapProgram "$bin" \
         --prefix PATH     : "$out/bin:${hivex}/bin:${qemu}/bin" \
+        --prefix PERL5LIB : "${perlPackages.makePerlPath (perlDeps ++ [ hivex ])}" \
         --prefix PERL5LIB : "$out/${perlPackages.perl.libPrefix}"
     done
   '';
