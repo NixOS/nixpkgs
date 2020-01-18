@@ -32,10 +32,10 @@ mkDerivation rec {
       improved/extended version of the Twitch web chat. Chatterino 2 is
       the second installment of the Twitch chat client series
       "Chatterino".
-  '';
-    homepage = "https://github.com/fourtf/chatterino2";
+    '';
+    homepage = "https://github.com/Chatterino/chatterino2";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rexim ];
+    maintainers = with maintainers; [ ldesgoui rexim ];
   };
 }
