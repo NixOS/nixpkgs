@@ -59,7 +59,7 @@ in stdenv.mkDerivation rec {
     description = "A strongly-typed functional programming language that compiles to JavaScript";
     homepage = http://www.purescript.org/;
     license = licenses.bsd3;
-    maintainers = [ maintainers.justinwoo ];
+    maintainers = [ maintainers.justinwoo maintainers.mbbx6spp ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }
