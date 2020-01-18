@@ -1,6 +1,6 @@
-{ stdenv, pkgconfig, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl }:
+{ stdenv, pkgconfig, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl, mkDerivation }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "chatterino2";
   version = "unstable-2019-05-11";
   src = fetchFromGitHub {
@@ -10,8 +10,20 @@ stdenv.mkDerivation rec {
     sha256 = "0i2385hamhd9i7jdy906cfrd81cybw524j92l87c8pzrkxphignk";
     fetchSubmodules = true;
   };
-  nativeBuildInputs = [ qmake pkgconfig ];
-  buildInputs = [ qtbase qtsvg qtmultimedia boost openssl ];
+
+  nativeBuildInputs = [
+    qmake
+    pkgconfig
+  ];
+
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtmultimedia
+    boost
+    openssl
+  ];
+
   meta = with stdenv.lib; {
     description = "A chat client for Twitch chat";
     longDescription = ''
