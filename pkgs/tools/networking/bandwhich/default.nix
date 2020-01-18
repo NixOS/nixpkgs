@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = version;
-    sha256 = "0gjk84a4ks5107vrchwwnslpbcrprmznjy3sqn2mrwfvw5biycb3";
+    sha256 = "0xq2lv06dx7g00b4amk131krlsb6acsz7b228pn3iz6gy31fhz3y";
   };
 
   cargoSha256 = "1sa81570cvvpqgdcpnb08b0q4c6ap8a2wxfp2z336jzbv0zgv8a6";
