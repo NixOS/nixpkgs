@@ -3,7 +3,7 @@
 , pkgconfig, gtk3, glib, gobject-introspection, totem-pl-parser
 , wrapGAppsHook, itstool, libxml2, vala, gnome3, grilo, grilo-plugins
 , libpeas, adwaita-icon-theme, gnome-desktop, gsettings-desktop-schemas
-, gdk-pixbuf, tracker, nautilus, xvfb_run }:
+, gdk-pixbuf, tracker, nautilus, xvfb-run }:
 
 stdenv.mkDerivation rec {
   pname = "totem";
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
   '';
 
-  checkInputs = [ xvfb_run ];
+  checkInputs = [ xvfb-run ];
 
   checkPhase = ''
     xvfb-run -s '-screen 0 800x600x24' \

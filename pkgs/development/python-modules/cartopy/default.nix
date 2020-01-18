@@ -3,7 +3,7 @@
 , cython, isPy27
 , six, pyshp, shapely, geos, numpy
 , gdal, pillow, matplotlib, pyepsg, pykdtree, scipy, owslib, fiona
-, xvfb_run
+, xvfb-run
 , proj_5 # see https://github.com/SciTools/cartopy/pull/1252 for status on proj 6 support
 }:
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   # also py2.7's tk is over-eager in trying to open an x display,
   # so give it xvfb
   checkPhase = let
-    maybeXvfbRun = lib.optionalString isPy27 "${xvfb_run}/bin/xvfb-run";
+    maybeXvfbRun = lib.optionalString isPy27 "${xvfb-run}/bin/xvfb-run";
   in ''
     export HOME=$(mktemp -d)
     ${maybeXvfbRun} pytest --pyargs cartopy \

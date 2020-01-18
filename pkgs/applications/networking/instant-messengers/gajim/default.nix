@@ -4,7 +4,7 @@
 , python3, gtk3, gobject-introspection, gnome3
 
 # Test dependencies
-, xvfb_run, dbus
+, xvfb-run, dbus
 
 # Optional dependencies
 , enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly, libnice
@@ -50,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]
     ++ extraPythonPackages python3.pkgs;
 
-  checkInputs = [ xvfb_run dbus.daemon ];
+  checkInputs = [ xvfb-run dbus.daemon ];
 
   checkPhase = ''
     xvfb-run dbus-run-session \

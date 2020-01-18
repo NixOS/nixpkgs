@@ -16,7 +16,7 @@
 , vala
 , wrapGAppsHook
 , xorg
-, xvfb_run
+, xvfb-run
 , libxml2
 }:
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    xvfb_run
+    xvfb-run
   ];
 
   mesonFlags = [

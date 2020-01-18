@@ -8,7 +8,7 @@
 , gobject-introspection
 , wrapGAppsHook
 , gtk3
-, xvfb_run
+, xvfb-run
 , webkitgtk
 , glib-networking
 , glibcLocales
@@ -62,7 +62,7 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = [
     gobject-introspection
     wrapGAppsHook
-    xvfb_run
+    xvfb-run
   ];
 
   buildInputs = [
