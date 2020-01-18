@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, jre, makeWrapper }:
+{ stdenv, fetchurl, jre, makeWrapper, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "solr";
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/solr --set JAVA_HOME "${jre}"
     wrapProgram $out/bin/post --set JAVA_HOME "${jre}"
   '';
+
+  passthru.tests = {
+    inherit (nixosTests) solr;
+  };
 
   meta = with stdenv.lib; {
     homepage = "https://lucene.apache.org/solr/";
