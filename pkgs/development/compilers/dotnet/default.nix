@@ -52,6 +52,11 @@ in rec {
     sha512 = "cc27828cacbc783ef83cc1378078e14ac558aec30726b36c4f154fad0d08ff011e7e1dfc17bc851926ea3b0da9c7d71496af14ee13184bdf503856eca30a89ae";
   };
 
+  netcore_3_1 = buildNetCore {
+    version = "3.1.1";
+    sha512 = "991a89ac7b52d3bf6c00359ce94c5a3f7488cd3d9e4663ba0575e1a5d8214c5fcc459e2cb923c369c2cdb789a96f0b1dfb5c5aae1a04df6e7f1f365122072611";
+  };
+
   sdk_3_1 = buildNetCoreSdk {
     version = "3.1.100";
     sha512 = "0hvshwsgbm6v5hc1plzdzx8bwsdna2167fnfhxpysqs5mz7crsa4f13m4cxhrbn64lasqz2007nhdrlpgaqvgll6q8736h884aaw5sj";
