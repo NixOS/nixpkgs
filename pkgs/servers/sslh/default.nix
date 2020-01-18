@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre }:
+{ stdenv, fetchurl, libcap, libconfig, perl, tcp_wrappers, pcre, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "sslh";
@@ -18,6 +18,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "PREFIX=$(out)" ];
 
   hardeningDisable = [ "format" ];
+
+  passthru.tests = {
+    inherit (nixosTests) sslh;
+  };
 
   meta = with stdenv.lib; {
     description = "Applicative Protocol Multiplexer (e.g. share SSH and HTTPS on the same port)";

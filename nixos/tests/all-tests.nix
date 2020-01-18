@@ -302,6 +302,7 @@ in
   spacecookie = handleTest ./spacecookie.nix {};
   spike = handleTest ./spike.nix {};
   sonarr = handleTest ./sonarr.nix {};
+  sslh = handleTest ./sslh.nix {};
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
