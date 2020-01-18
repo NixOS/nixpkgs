@@ -22,6 +22,6 @@ stdenv.mkDerivation rec{
     homepage = "https://github.com/wavewave/nixos-shell" ;
     description = "Spawn ephemeral development environments in containers";
     license = licenses.free;
-    platform = platforms.linux;
+    platforms = platforms.linux;
   };
 }
