@@ -61,7 +61,8 @@ stdenv.mkDerivation rec {
     ln -s -r --force $out/bin/far2l $out/share/far2l/far2l_askpass
     ln -s -r --force $out/bin/far2l $out/share/far2l/far2l_sudoapp
 
-    sed "s,/usr/bin/,$out/bin/," ../far2l/DE/far2l.desktop > $out/share/applications/far2l.desktop
+    cp ../far2l/DE/far2l.desktop $out/share/applications/far2l.desktop
+    substituteInPlace $out/share/applications/far2l.desktop --replace \''${CMAKE_INSTALL_PREFIX} "$out"
 
     cp ../far2l/DE/icons/hicolor/1024x1024/apps/far2l.svg $out/share/icons/hicolor/scalable/apps/
     convert -size 128x128 ../far2l/DE/icons/far2l.svg $out/share/icons/far2l.png
