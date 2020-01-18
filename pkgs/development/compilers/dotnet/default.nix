@@ -41,8 +41,8 @@ in rec {
   };
 
   sdk_3_0 = buildNetCoreSdk {
-    version = "3.0.100";
-    sha512 = "766da31f9a0bcfbf0f12c91ea68354eb509ac2111879d55b656f19299c6ea1c005d31460dac7c2a4ef82b3edfea30232c82ba301fb52c0ff268d3e3a1b73d8f7";
+    version = "3.0.102";
+    sha512 = "77bc287d9c20630976ac4c0736192ba4899154c9e7cc5b87bc9d94d5d8abafdd832cfe8f385b6ba584c702d9261566109df15ab46b0d62bd218d950d3b47893e";
   };
   sdk_3_1 = buildNetCoreSdk {
     version = "3.1.100";
