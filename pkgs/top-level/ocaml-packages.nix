@@ -839,6 +839,8 @@ let
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
 
+    sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
+
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
     spelll = callPackage ../development/ocaml-modules/spelll { };
