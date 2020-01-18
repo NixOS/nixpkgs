@@ -92,7 +92,7 @@ let
     ps.pyyaml
   ]);
 
-  version = "14.2.5";
+  version = "14.2.6";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -100,7 +100,7 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0wbkdplxs8higmlj57a7rydmx9rq08h0arjrmxmp0s80bn0v5x2c";
+      sha256 = "0qkyrb25r2a57n6k8ncb43x7hvhkmpi7abhfyi98mlz2lhmhzlm1";
     };
 
     patches = [
