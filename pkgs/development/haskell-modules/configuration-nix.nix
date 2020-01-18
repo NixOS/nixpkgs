@@ -282,20 +282,6 @@ self: super: builtins.intersectAttrs super {
   # Uses OpenGL in testing
   caramia = dontCheck super.caramia;
 
-  llvm-general =
-    # Supports only 3.5 for now, https://github.com/bscarlet/llvm-general/issues/142
-    let base = super.llvm-general.override { llvm-config = pkgs.llvm_35; };
-    in if !pkgs.stdenv.isDarwin then base else overrideCabal base (
-      drv: {
-        preConfigure = ''
-          sed -i llvm-general.cabal \
-              -e 's,extra-libraries: stdc++,extra-libraries: c++,'
-        '';
-        configureFlags = (drv.configureFlags or []) ++ ["--extra-include-dirs=${pkgs.libcxx}/include/c++/v1"];
-        librarySystemDepends = [ pkgs.libcxx ] ++ drv.librarySystemDepends or [];
-      }
-    );
-
   llvm-hs =
     let llvmHsWithLlvm8 = super.llvm-hs.override { llvm-config = pkgs.llvm_8; };
     in
