@@ -1,0 +1,13 @@
+diff --git a/src/Services/GraphViz.vala b/src/Services/GraphViz.vala
+index 213d4e5..192b8dd 100644
+--- a/src/Services/GraphViz.vala
++++ b/src/Services/GraphViz.vala
+@@ -76,7 +76,7 @@ namespace GraphUI.Services {
+             }
+             output_image = GraphUIApp.instance.CACHE_FOLDER + "/output.svg";
+ 
+-            string[] spawn_args = {format, "-T%s".printf (type), "%s".printf (output_txt), "-o", "%s".printf (output_image)};
++            string[] spawn_args = {"@graphviz@" + format, "-T%s".printf (type), "%s".printf (output_txt), "-o", "%s".printf (output_image)};
+             string[] spawn_env = Environ.get ();
+ 
+             string processout = "";
