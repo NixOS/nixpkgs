@@ -28,6 +28,10 @@ in rec {
     sha512 = "57d48d6ca1bd92ac348dc05220d984811c0cf005774d7afdfbbf125a842acb0a26572146ed25a7eb26f4e0404fe840b70d1e7ec1fb7c9a5c6cfe81fefc41b363";
   };
 
+  # v2.2
+
+  sdk_2_2 = throw "Dotnet SDK 2.2 is EOL, please use 3.1";
+
   # v3.0.2 (Maintenance)
 
   aspnetcore_3_0 = buildAspNetCore {
