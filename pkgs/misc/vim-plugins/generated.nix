@@ -1020,6 +1020,17 @@ let
     };
   };
 
+  deoplete-zsh = buildVimPluginFrom2Nix {
+    pname = "deoplete-zsh";
+    version = "2019-11-10";
+    src = fetchFromGitHub {
+      owner = "deoplete-plugins";
+      repo = "deoplete-zsh";
+      rev = "92b7afc3804dd17a849b207e184359558ab8f444";
+      sha256 = "0zsbkl82kny1vmfv06iz576xsclbik0xr7ndzpb0ddhw5nfnicfx";
+    };
+  };
+
   deoplete-nvim = buildVimPluginFrom2Nix {
     pname = "deoplete-nvim";
     version = "2020-01-10";
