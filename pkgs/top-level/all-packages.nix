@@ -15886,6 +15886,8 @@ in
     unifiStable;
   unifi = unifiStable;
 
+  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
+
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
 
   virtuoso6 = callPackage ../servers/sql/virtuoso/6.x.nix {
