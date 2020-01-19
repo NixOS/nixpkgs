@@ -7826,7 +7826,6 @@ in
   clang_7  = llvmPackages_7.clang;
   clang_6  = llvmPackages_6.clang;
   clang_5  = llvmPackages_5.clang;
-  clang_4  = llvmPackages_4.clang;
 
   clang-tools = callPackage ../development/tools/clang-tools {
     llvmPackages = llvmPackages_latest;
@@ -8521,7 +8520,6 @@ in
   lizardfs = callPackage ../tools/filesystems/lizardfs { };
 
   lld = llvmPackages.lld;
-  lld_4 = llvmPackages_4.lld;
   lld_5 = llvmPackages_5.lld;
   lld_6 = llvmPackages_6.lld;
   lld_7 = llvmPackages_7.lld;
@@ -8529,7 +8527,6 @@ in
   lld_9 = llvmPackages_9.lld;
 
   lldb = llvmPackages.lldb;
-  lldb_4 = llvmPackages_4.lldb;
   lldb_5 = llvmPackages_5.lldb;
   lldb_6 = llvmPackages_6.lldb;
   lldb_7 = llvmPackages_7.lldb;
@@ -8544,17 +8541,8 @@ in
   llvm_7  = llvmPackages_7.llvm;
   llvm_6  = llvmPackages_6.llvm;
   llvm_5  = llvmPackages_5.llvm;
-  llvm_4  = llvmPackages_4.llvm;
 
   llvmPackages = recurseIntoAttrs llvmPackages_7;
-
-  llvmPackages_4 = callPackage ../development/compilers/llvm/4 ({
-    inherit (stdenvAdapters) overrideCC;
-    buildLlvmTools = buildPackages.llvmPackages_4.tools;
-    targetLlvmLibraries = targetPackages.llvmPackages_4.libraries;
-  } // stdenv.lib.optionalAttrs (stdenv.hostPlatform.isi686 && stdenv.cc.isGNU) {
-    stdenv = gcc6Stdenv;
-  });
 
   llvmPackages_5 = callPackage ../development/compilers/llvm/5 ({
     inherit (stdenvAdapters) overrideCC;
