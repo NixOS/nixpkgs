@@ -21,16 +21,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "hakuneko";
-  version = "5.0.8";
+  version = "6.1.7";
 
   src = {
     "x86_64-linux" = fetchurl {
       url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_amd64.deb";
-      sha256 = "924df1d7a0ab54b918529165317e4428b423c9045548d1e36bd634914f7957f0";
+      sha256 = "06bb17d7a06bb0601053eaaf423f9176f06ff3636cc43ffc024438e1962dcd02";
     };
     "i686-linux" = fetchurl {
       url = "https://github.com/manga-download/hakuneko/releases/download/v${version}/hakuneko-desktop_${version}_linux_i386.deb";
-      sha256 = "988d8b0e8447dcd0a8d85927f5877bca9efb8e4b09ed3c80a6788390e54a48d2";
+      sha256 = "32017d26bafffaaf0a83dd6954d3926557014af4022a972371169c56c0e3d98b";
     };
   }."${stdenv.hostPlatform.system}";
 
