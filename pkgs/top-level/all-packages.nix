@@ -6660,6 +6660,8 @@ in
 
   t1utils = callPackage ../tools/misc/t1utils { };
 
+  tailscale = callPackage ../servers/tailscale {};
+
   talkfilters = callPackage ../misc/talkfilters {};
 
   znapzend = callPackage ../tools/backup/znapzend { };
