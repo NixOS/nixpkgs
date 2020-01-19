@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://www.tailscale.com";
     description = "A mesh VPN that makes it easy to connect your devices, wherever they are";
     license = licenses.unfree;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ danderson ];
   };
 }
