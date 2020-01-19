@@ -407,6 +407,44 @@ users.users.me =
      the type to <literal>either path (submodule ...)</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.buildkite-agent.enable">Buildkite Agent</link>
+      module and corresponding packages have been updated to 3.x.
+      While doing so, the following options have been changed:
+    </para>
+    <itemizedlist>
+      <listitem>
+       <para>
+         <literal>services.buildkite-agent.meta-data</literal> has been renamed to
+         <link linkend="opt-services.buildkite-agent.tags">services.buildkite-agent.tags</link>,
+         to match upstreams naming for 3.x.
+         Its type has also changed - it now accepts an attrset of strings.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         The<literal>services.buildkite-agent.openssh.publicKeyPath</literal> option
+         has been removed, as it's not necessary to deploy public keys to clone private
+         repositories.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <literal>services.buildkite-agent.openssh.privateKeyPath</literal>
+         has been renamed to
+         <link linkend="opt-services.buildkite-agent.privateSshKeyPath">buildkite-agent.privateSshKeyPath</link>,
+         as the whole <literal>openssh</literal> now only contained that single option.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+         <link linkend="opt-services.buildkite-agent.shell">services.buildkite-agent.shell</link>
+         has been introduced, allowing to specify a custom shell to be used.
+       </para>
+      </listitem>
+    </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
