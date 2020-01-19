@@ -2603,6 +2603,8 @@ package-maintainers:
     - streaming-wai
   kiwi:
     - glirc
+    - matterhorn
+    - Unique
   psibi:
     - path-pieces
     - persistent
@@ -7171,7 +7173,6 @@ broken-packages:
   - mathlink
   - matrix-as-xyz
   - matsuri
-  - matterhorn
   - maude
   - maxent
   - maxent-learner-hw
@@ -9923,7 +9924,6 @@ broken-packages:
   - uniform-io
   - union
   - union-map
-  - Unique
   - uniqueid
   - uniquely-represented-sets
   - units-attoparsec

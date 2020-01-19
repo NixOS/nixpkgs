@@ -1339,6 +1339,18 @@ self: super: {
   # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
   glirc = doJailbreak super.glirc;
 
+  # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
+  # multiple versions of them were being pulled in by the others which is not allowed.
+  # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
+  matterhorn = doJailbreak (super.matterhorn.override {
+    brick-skylighting = self.brick-skylighting.override {
+      brick = self.brick_0_50_1;
+    };
+  });
+
+  # 2020-01-19 - because of QuickCheck bounds | was broken anyway and is needed for matterhorn -- kiwi
+  Unique = doJailbreak super.Unique;
+
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
   snap-server = overrideCabal super.snap-server (drv: {
