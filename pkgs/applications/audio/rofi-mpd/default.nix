@@ -2,16 +2,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rofi-mpd";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "Rofi_MPD";
     rev = "v${version}";
-    sha256 = "0pdra1idgas3yl9z9v7b002igwg2c1mv0yw2ffb8rsbx88x4gbai";
+    sha256 = "0qn2jwvil5csp423r523wjbgwpb781li2bgaz1mby3prscrlz8mg";
   };
 
-  propagatedBuildInputs = with python3Packages; [ mutagen mpd2 ];
+  propagatedBuildInputs = with python3Packages; [ mutagen mpd2 toml appdirs ];
 
   # upstream doesn't contain a test suite
   doCheck = false;
