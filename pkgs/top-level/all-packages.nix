@@ -11267,7 +11267,7 @@ in
   };
 
   far2l = callPackage ../applications/misc/far2l {
-    stdenv = if stdenv.cc.isClang then llvmPackages_4.stdenv else stdenv;
+    stdenv = if stdenv.cc.isClang then llvmPackages.stdenv else stdenv;
   };
 
   farbfeld = callPackage ../development/libraries/farbfeld { };
