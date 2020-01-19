@@ -221,6 +221,8 @@ in
 
   dotnet-sdk_2 = dotnetCorePackages.sdk_2_1;
 
+  dotnet-sdk_3 = dotnetCorePackages.sdk_3_1;
+
   dotnet-netcore = dotnetCorePackages.netcore_2_1;
 
   dotnet-aspnetcore = dotnetCorePackages.aspnetcore_2_1;
