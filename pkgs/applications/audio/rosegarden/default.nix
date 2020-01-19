@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
-, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2
+, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
 , liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
 
 stdenv.mkDerivation (rec {
@@ -30,6 +30,7 @@ stdenv.mkDerivation (rec {
     libsndfile
     lirc
     qtbase
+    alsaLib
   ];
 
   enableParallelBuilding = true;
