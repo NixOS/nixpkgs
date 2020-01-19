@@ -21304,6 +21304,8 @@ in
 
   setbfree = callPackage ../applications/audio/setbfree { };
 
+  sfizz = callPackage ../applications/audio/sfizz { };
+
   sfxr = callPackage ../applications/audio/sfxr { };
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
