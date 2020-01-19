@@ -16,6 +16,5 @@ python3Packages.buildPythonApplication rec {
     description = "ACME client";
     license = licenses.mit;
     maintainers = with maintainers; [ kevincox ];
-    platforms = platforms.linux;
   };
 }
