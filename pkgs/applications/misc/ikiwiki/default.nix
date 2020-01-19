@@ -19,7 +19,7 @@ assert mercurialSupport -> (mercurial != null);
 
 let
   name = "ikiwiki";
-  version = "3.20170111";
+  version = "3.20190228";
 
   lib = stdenv.lib;
 in
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
   name = "${name}-${version}";
 
   src = fetchurl {
-    url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.tar.xz";
-    sha256 = "00d7yzv426fvqbhvzyafddv7fa6b4j2647b0wi371wd5yjj9j3sz";
+    url = "mirror://debian/pool/main/i/ikiwiki/${name}_${version}.orig.tar.xz";
+    sha256 = "17pyblaqhkb61lxl63bzndiffism8k859p54k3k4sghclq6lsynh";
   };
 
   buildInputs = [ which ]
@@ -44,7 +44,11 @@ stdenv.mkDerivation {
     ++ lib.optionals subversionSupport [subversion]
     ++ lib.optionals mercurialSupport [mercurial];
 
-  patchPhase = ''
+  # A few markdown tests fail, but this is expected when using Text::Markdown
+  # instead of Text::Markdown::Discount.
+  patches = [ ./remove-markdown-tests.patch ];
+
+  postPatch = ''
     sed -i s@/usr/bin/perl@${perlPackages.perl}/bin/perl@ pm_filter mdwn2man
     sed -i s@/etc/ikiwiki@$out/etc@ Makefile.PL
     sed -i /ENV{PATH}/d ikiwiki.in
@@ -83,6 +87,5 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.peti ];
-    broken = true; # https://ikiwiki.info/bugs/imagemagick_6.9.8_test_suite_failure/
   };
 }
