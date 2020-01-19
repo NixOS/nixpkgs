@@ -5699,6 +5699,8 @@ in
 
   peco = callPackage ../tools/text/peco { };
 
+  pg_checksums = callPackage ../development/tools/database/pg_checksums { };
+
   pg_flame = callPackage ../tools/misc/pg_flame { };
 
   pg_top = callPackage ../tools/misc/pg_top { };
