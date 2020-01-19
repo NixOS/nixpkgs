@@ -35,7 +35,6 @@ stdenv.mkDerivation rec {
     description = "A mesh VPN that makes it easy to connect your devices, wherever they are";
     license = licenses.unfree;
     platforms = platforms.linux;
-    architectures = [ "amd64" ];
     maintainers = with maintainers; [ danderson ];
   };
 }
