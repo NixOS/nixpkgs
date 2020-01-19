@@ -53,6 +53,63 @@ in
             When set to <literal>false</literal> the wallpaper is duplicated to all screens.
           '';
         };
+
+        fallbackXsetrootParam = mkOption {
+          type = types.oneOf
+            (types.submodule { options = {
+              solidColor = mkOption {
+                type = types.string;
+                default = "black";
+                example = "red";
+                description = ''
+                  See man 1 xsetroot option -solid.
+                '';
+              };
+            };})
+            (types.submodule { options = {
+              fgColor = mkOption {
+                type = types.string;
+                default = "black";
+                example = "#444";
+                description = ''
+                  See man 1 xsetroot option -fg and -mod.
+                '';
+              };
+              bgColor = mkOption {
+                type = types.string;
+                default = "white";
+                example = "#555";
+                description = ''
+                  See man 1 xsetroot option -bg and -mod.
+                '';
+              };
+              mod = mkOption {
+                type = types.submodule { options = let
+                  xy = mkOption {
+                    type = types.ints.between 1 16;
+                    default = 1;
+                    example = 4;
+                    description = ''
+                      See man 1 xsetroot option -mod.
+                    '';
+                  }; in { x = xy; y=xy; };
+              };
+            })
+            types.path
+            (types.enum [ "gray" ]);
+          default = { solidColor = "black"; };
+          example = {
+            fgColor = "#444";
+            bgColor = "#555";
+            mod = { x = 4; y = 4; };
+          };
+          description = ''
+            See man 1 xsetroot.
+
+            If a path, then it's -bitmap option.
+          '';
+          # apply = # convert to "-solid color"/"-fg color -bg color -mod x y"/"-bitmap filename"/"-gray"
+        };
       };
 
       session = mkOption {
@@ -77,7 +134,7 @@ in
                 ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
               else
                 # Use a solid black background as fallback
-                ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
+                ${pkgs.xorg.xsetroot}/bin/xsetroot ${cfg.fallbackXsetrootParam.apply}
               fi
             '';
           }) list;
