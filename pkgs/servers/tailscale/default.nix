@@ -20,14 +20,14 @@ stdenv.mkDerivation rec {
     libPath = lib.makeLibraryPath [ glibc ];
     ldLinux = "${libPath}/ld-linux-x86-64.so.2";
   in ''
-    mkdir -p $out/usr/sbin
+    mkdir -p $out/sbin
     cd usr/sbin
-    cp * $out/usr/sbin
+    cp * $out/sbin
 
-    patchelf --set-rpath "${libPath}" $out/usr/sbin/relaynode
-    patchelf --set-interpreter "${ldLinux}" $out/usr/sbin/relaynode
-    patchelf --set-rpath "${libPath}" $out/usr/sbin/taillogin
-    patchelf --set-interpreter "${ldLinux}" $out/usr/sbin/taillogin
+    patchelf --set-rpath "${libPath}" $out/sbin/relaynode
+    patchelf --set-interpreter "${ldLinux}" $out/sbin/relaynode
+    patchelf --set-rpath "${libPath}" $out/sbin/taillogin
+    patchelf --set-interpreter "${ldLinux}" $out/sbin/taillogin
   '';
 
   meta = with stdenv.lib; {
