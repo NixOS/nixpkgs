@@ -28,6 +28,10 @@ buildPythonPackage rec {
     curl
   ];
 
+  # Tests are very flakey, occasionally failing
+  # See https://github.com/NixOS/nixpkgs/issues/77304
+  doCheck = false;
+
   checkInputs = [
     bottle
     pytest
