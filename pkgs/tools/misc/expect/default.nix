@@ -22,12 +22,7 @@ stdenv.mkDerivation rec {
     "--with-tcl=${tcl}/lib"
     "--with-tclinclude=${tcl}/include"
     "--exec-prefix=\${out}"
-  ] ++ (stdenv.lib.optionals stdenv.isAarch64 [
-    # FIXME(ma27) not entirely sure why this breaks now,
-    # we should at least find the cause before merging the glibc 2.30
-    # update.
-    "--build=aarch64-unknown-linux-gnu"
-  ]);
+  ];
 
   postInstall = ''
     for i in $out/bin/*; do
