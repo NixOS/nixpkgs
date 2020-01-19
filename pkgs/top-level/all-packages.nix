@@ -1536,6 +1536,8 @@ in
 
   dante = callPackage ../servers/dante { };
 
+  dasher = callPackage ../applications/accessibility/dasher { };
+
   datamash = callPackage ../tools/misc/datamash { };
 
   datasette = with python3Packages; toPythonApplication datasette;
