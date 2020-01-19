@@ -9,6 +9,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ openssl ];
+  configureFlags = [
+    "--with-openssl=${openssl.dev}"
+  ];
 
   outputs = [ "out" "man" ];
 

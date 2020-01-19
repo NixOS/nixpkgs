@@ -53,6 +53,7 @@ stdenv.mkDerivation rec {
     "-DWITH_ZLIB=1"
     "-DWITH_ZSTD=1"
     "-DWITH_GFLAGS=0"
+    "-DUSE_RTTI=1"
     "-DROCKSDB_INSTALL_ON_WINDOWS=YES" # harmless elsewhere
     (stdenv.lib.optional
         (stdenv.hostPlatform.isx86 && stdenv.hostPlatform.isLinux)
