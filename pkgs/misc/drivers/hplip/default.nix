@@ -12,11 +12,18 @@
 let
 
   name = "hplip-${version}";
-  version = "3.19.12";
+  # 2020-01-19 - plugin for 3.19.12 does not exist at this time -- kiwi
+  # There is a long running issue where the plugin is not released with new versions so this happens often
+  # https://bugs.launchpad.net/hplip/+bug/1644932
+  version = if withPlugin
+    then "3.19.6"
+    else "3.19.12";
 
   src = fetchurl {
     url = "mirror://sourceforge/hplip/${name}.tar.gz";
-    sha256 = "0mdj0sqgfxjqa550adiw1gn4z9n6wcvn55slivgf0ndn5x89iwxp";
+    sha256 = if withPlugin
+      then "0vfnc6pg7wzs68qn5mlk3cyl969d8n55bydgydq2wzfikvpfvnpw"
+      else "0mdj0sqgfxjqa550adiw1gn4z9n6wcvn55slivgf0ndn5x89iwxp";
   };
 
   plugin = fetchurl {
