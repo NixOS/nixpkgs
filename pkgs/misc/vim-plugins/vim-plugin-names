@@ -98,6 +98,7 @@ floobits/floobits-neovim
 freitass/todo.txt-vim
 frigoeu/psc-ide-vim
 fsharp/vim-fsharp
+fszymanski/deoplete-emoji
 garbas/vim-snipmate
 gentoo/gentoo-syntax
 gibiansky/vim-textobj-haskell
