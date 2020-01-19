@@ -97,18 +97,33 @@ let
         '';
       };
 
+      keyType = mkOption {
+        type = types.str;
+        default = "ec384";
+        description = ''
+          Key type to use for private keys.
+          For an up to date list of supported values check the --key-type option
+          at https://go-acme.github.io/lego/usage/cli/#usage.
+        '';
+      };
+
       dnsProvider = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "route53";
-        description = "DNS Challenge provider";
+        description = ''
+          DNS Challenge provider. For a list of supported providers, see the "code"
+          field of the DNS providers listed at https://go-acme.github.io/lego/dns/.
+        '';
       };
 
       credentialsFile = mkOption {
-        type = types.str;
+        type = types.path;
         description = ''
-          File containing DNS provider credentials passed as environment variables.
-          See https://go-acme.github.io/lego/dns/ for more information.
+          Path to an EnvironmentFile for the cert's service containing any required and
+          optional environment variables for your selected dnsProvider.
+          To find out what values you need to set, consult the documentation at
+          https://go-acme.github.io/lego/dns/ for the corresponding dnsProvider.
         '';
         example = "/var/src/secrets/example.org-route53-api-token";
       };
@@ -117,8 +132,8 @@ let
         type = types.bool;
         default = true;
         description = ''
-          Toggles LEGo DNS propagation check, which is used alongside DNS-01
-          challenge to ensure the DNS entries required are available
+          Toggles lego DNS propagation check, which is used alongside DNS-01
+          challenge to ensure the DNS entries required are available.
         '';
       };
     };
@@ -192,10 +207,10 @@ in
 
       acceptTerms = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
-          Accept the current Let's Encrypt terms of service.
-          See https://letsencrypt.org/repository/
+          Accept the CA's terms of service. The default provier is Let's Encrypt,
+          you can find their ToS at https://letsencrypt.org/repository/
         '';
       };
 
@@ -247,6 +262,14 @@ in
             `security.acme.email` to register with the CA.
           '';
         }
+        {
+          assertion = cfg.acceptTerms;
+          message = ''
+            You must accept the CA's terms of service before using
+            the ACME module by setting `security.acme.acceptTerms`
+            to `true`. For Let's Encrypt's ToS see https://letsencrypt.org/repository/
+          '';
+        }
       ];
 
       systemd.services = let
@@ -260,7 +283,7 @@ in
                 spath = "/var/lib/acme/.lego";
                 rights = if data.allowKeysForGroup then "750" else "700";
                 email = if data.email == null then cfg.email else data.email;
-                globalOpts = [ "-d" data.domain "--email" email "--path" "." ]
+                globalOpts = [ "-d" data.domain "--email" email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
                           ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
