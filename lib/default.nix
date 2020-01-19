@@ -101,7 +101,7 @@ let
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource pathIsRegularFile;
+      canCleanSource pathIsRegularFile pathIsGitRepo;
     inherit (modules) evalModules unifyModuleSyntax
       applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
