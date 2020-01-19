@@ -225,8 +225,8 @@ in
         in
           ''
             mkdir -m 0700 -p "${sshDir}"
-            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
-            chmod 600 "${sshDir}"/id_rsa*
+            cp -f "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
+            chmod 600 "${sshDir}"/id_rsa
 
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
