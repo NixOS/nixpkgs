@@ -58,16 +58,17 @@ let
 
     outputs = [ "out" "lib" "bin" ];
 
-    # we are almost able to run the full test suite now
     postPatch = ''
       substituteInPlace src/crystal/system/unix/time.cr \
         --replace /usr/share/zoneinfo ${tzdata}/share/zoneinfo
 
       ln -s spec/compiler spec/std
 
+      mkdir /tmp/crystal
       substituteInPlace spec/std/file_spec.cr \
         --replace '/bin/ls' '${coreutils}/bin/ls' \
-        --replace '/usr/share' '/tmp/test'
+        --replace '/usr/share' '/tmp/crystal' \
+        --replace '/usr' '/tmp'
 
       substituteInPlace spec/std/process_spec.cr \
         --replace '/bin/cat' '${coreutils}/bin/cat' \
@@ -76,8 +77,23 @@ let
         --replace '"env"' '"${coreutils}/bin/env"' \
         --replace '"/usr"' '"/tmp"'
 
+      substituteInPlace spec/std/socket/tcp_server_spec.cr \
+        --replace '{% if flag?(:gnu) %}"listen: "{% else %}"bind: "{% end %}' '"bind: "'
+
       substituteInPlace spec/std/system_spec.cr \
         --replace '`hostname`' '`${nettools}/bin/hostname`'
+
+      # See https://github.com/crystal-lang/crystal/pull/8640
+      substituteInPlace spec/std/http/cookie_spec.cr \
+        --replace '01 Jan 2020' '01 Jan #{Time.utc.year + 2}'
+
+      # See https://github.com/crystal-lang/crystal/issues/8629
+      substituteInPlace spec/std/socket/udp_socket_spec.cr \
+        --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
+
+      # See https://github.com/crystal-lang/crystal/pull/8699
+      substituteInPlace spec/std/xml/xml_spec.cr \
+        --replace 'it "handles errors"' 'pending "handles errors"'
     '';
 
     buildInputs = commonBuildInputs extraBuildInputs;
@@ -250,9 +266,8 @@ in rec {
   };
 
   crystal_0_32 = generic {
-    version = "0.32.0";
-    sha256  = "0cmhsg54rm00f1ismpzz0aafj7s5c9k1gxh168q1y2pp5v8llkvv";
-    doCheck = false; # 5 checks are failing now
+    version = "0.32.1";
+    sha256  = "120ndi3nhh2r52hjvhwfb49cdggr1bzdq6b8xg7irzavhjinfza6";
     binary = binaryCrystal_0_31;
   };
 
