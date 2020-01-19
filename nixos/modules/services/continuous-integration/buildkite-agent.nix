@@ -52,8 +52,8 @@ in
       };
 
       runtimePackages = mkOption {
-        default = [ pkgs.bash pkgs.nix ];
-        defaultText = "[ pkgs.bash pkgs.nix ]";
+        default = [ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ];
+        defaultText = "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
         description = "Add programs to the buildkite-agent environment";
         type = types.listOf types.package;
       };
