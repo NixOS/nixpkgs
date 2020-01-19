@@ -1337,7 +1337,15 @@ self: super: {
 
   # 2019-12-19 - glirc wants regex-tdfa >=1.3 which results in errors with regex-base which errors more
   # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
-  glirc = doJailbreak super.glirc;
+  # 2020-01-17 - as of recently the basic doJailbreak is not enough and have to override regex-tdfa which needs an override for regex-base
+
+  glirc = doJailbreak (super.glirc.override {
+    regex-tdfa = self.regex-tdfa_1_3_1_0;
+  });
+
+  regex-tdfa_1_3_1_0 = doJailbreak (super.regex-tdfa_1_3_1_0.override {
+    regex-base = self.regex-base_0_94_0_0;
+  });
 
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
