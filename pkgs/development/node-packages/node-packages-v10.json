@@ -119,6 +119,7 @@
 , "snyk"
 , "socket.io"
 , "speed-test"
+, "ssb-room"
 , "ssb-server"
 , "stackdriver-statsd-backend"
 , "stf"
