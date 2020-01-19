@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${name}/trunk";
 
+  patches = [ ./0001-Fix-build-for-glibc-2.28.patch ];
+
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ glib jansson ];
