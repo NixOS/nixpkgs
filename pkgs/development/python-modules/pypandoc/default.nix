@@ -28,6 +28,6 @@ buildPythonPackage rec {
     description = "Thin wrapper for pandoc";
     homepage = https://github.com/bebraw/pypandoc;
     license = licenses.mit;
-    maintainers = with maintainers; [ bennofs ];
+    maintainers = with maintainers; [ sternenseemann bennofs ];
   };
 }
