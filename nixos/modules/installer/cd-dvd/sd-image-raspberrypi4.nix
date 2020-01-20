@@ -18,14 +18,22 @@
 
   sdImage = {
     firmwareSize = 128;
-    # This is a hack to avoid replicating config.txt from boot.loader.raspberryPi
-    populateFirmwareCommands =
-      "${config.system.build.installBootLoader} ${config.system.build.toplevel} -d ./firmware";
-    # As the boot process is done entirely in the firmware partition.
-    populateRootCommands = "";
+    # /var/empty is needed for some services, such as sshd
+    populateRootCommands = "mkdir -p ./files/var/empty";
   };
 
   # the installation media is also the installation target,
   # so we don't want to provide the installation configuration.nix.
   installer.cloneConfig = false;
+
+	fileSystems = lib.mkForce {
+		"/boot" = {
+			device = "/dev/disk/by-label/FIRMWARE";
+			fsType = "vfat";
+		};
+		"/" = {
+			device = "/dev/disk/by-label/NIXOS_SD";
+			fsType = "ext4";
+		};
+	};
 }
