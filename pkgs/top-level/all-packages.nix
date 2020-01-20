@@ -21472,6 +21472,8 @@ in
 
   telepathy-idle = callPackage ../applications/networking/instant-messengers/telepathy/idle {};
 
+  teleprompter = callPackage ../applications/misc/teleprompter {};
+
   tendermint = callPackage ../tools/networking/tendermint {
     buildGoModule = buildGo112Module;
   };
