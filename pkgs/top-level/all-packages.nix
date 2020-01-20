@@ -5103,6 +5103,8 @@ in
 
   multitime = callPackage ../tools/misc/multitime { };
 
+  sta = callPackage ../tools/misc/sta {};
+
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
