@@ -1,13 +1,46 @@
 --- a/setup.py
 +++ b/setup.py
-@@ -92,10 +92,6 @@ class TestCommand(test):
+@@ -100,10 +100,6 @@ class TestCommand(test):
                  except Exception:
                      pass
 
--        os.environ['PATH'] = "%s:%s" % (
+-        os.environ[u'PATH'] = u"%s:%s" % (
 -            os.path.abspath(build_scripts_cmd.build_dir),
--            os.environ.get('PATH'))
+-            os.environ.get(u'PATH'))
 -
          test.run(self)
 
      def run_tests(self):
+--- a/testing/functional/__init__.py
++++ b/testing/functional/__init__.py
+@@ -107,7 +107,7 @@
+         if basepython is not None:
+             cmd_list.extend([basepython])
+             cmd_list.extend([u"-m", u"coverage", u"run", u"--source=duplicity", u"-p"])
+-        cmd_list.extend([u"../bin/duplicity"])
++        cmd_list.extend([u"duplicity"])
+         cmd_list.extend(options)
+         cmd_list.extend([u"-v0"])
+         cmd_list.extend([u"--no-print-statistics"])
+--- a/testing/functional/test_log.py
++++ b/testing/functional/test_log.py
+@@ -47,7 +47,7 @@
+         if basepython is not None:
+             os.system(u"%s ../bin/duplicity --log-file=/tmp/duplicity.log >/dev/null 2>&1" % (basepython,))
+         else:
+-            os.system(u"../bin/duplicity --log-file=/tmp/duplicity.log >/dev/null 2>&1")
++            os.system(u"duplicity --log-file=/tmp/duplicity.log >/dev/null 2>&1")
+
+         # The format of the file should be:
+         # """ERROR 2
+--- a/testing/functional/test_rdiffdir.py
++++ b/testing/functional/test_rdiffdir.py
+@@ -38,7 +38,7 @@
+
+     def run_rdiffdir(self, argstring):
+         u"""Run rdiffdir with given arguments"""
+-        self.run_cmd(u"../bin/rdiffdir " + argstring)
++        self.run_cmd(u"rdiffdir " + argstring)
+
+     def run_cycle(self, dirname_list):
+         u"""Run diff/patch cycle on directories in dirname_list"""
