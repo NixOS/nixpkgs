@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.0.31";
+  version = "3.1.10";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "b9edd905556c77b40046b5d7a27151b76a1c9a8c43a4e4153279ad42a784844e";
+    sha256 = "d16c519630350dd1ca867529970b47438950f078e16f9f1d37bc3f027666bda4";
   };
 
   postPatch = ''
@@ -39,6 +39,7 @@ python3Packages.buildPythonApplication rec {
     jinja2
     jsonschema
     loguru
+    more-itertools
     progressbar
     pynzb
     pyparsing
