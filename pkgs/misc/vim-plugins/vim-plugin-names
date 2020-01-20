@@ -223,6 +223,7 @@ luochen1990/rainbow
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
 machakann/vim-swap
+machakann/vim-sandwich
 majutsushi/tagbar
 maksimr/vim-jsbeautify
 MarcWeber/vim-addon-actions

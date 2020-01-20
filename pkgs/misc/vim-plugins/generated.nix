@@ -5008,6 +5008,17 @@ let
     };
   };
 
+  vim-sandwich = buildVimPluginFrom2Nix {
+    pname = "vim-sandwich";
+    version = "2019-12-06";
+    src = fetchFromGitHub {
+      owner = "machakann";
+      repo = "vim-sandwich";
+      rev = "a0cde9cfb20d9aff10a09b7fc776231f7856abef";
+      sha256 = "0dzrzz9ngprh2zd3wnnbr9qcs7ilgchadw4l39ncny6x43fk2ckd";
+    };
+  };
+
   vim-sayonara = buildVimPluginFrom2Nix {
     pname = "vim-sayonara";
     version = "2017-03-13";
