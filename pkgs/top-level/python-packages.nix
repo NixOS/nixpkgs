@@ -4851,6 +4851,8 @@ in {
 
   pyproj = callPackage ../development/python-modules/pyproj { };
 
+  pyproj1 = callPackage ../development/python-modules/pyproj/1.9.6.nix { proj = null;};
+
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
 
   pyrabbit2 = callPackage ../development/python-modules/pyrabbit2 { };
