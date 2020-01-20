@@ -18919,6 +18919,8 @@ in
 
   flrig = callPackage ../applications/radio/flrig { };
 
+  fluxus = callPackage ../applications/graphics/fluxus { };
+
   flwrap = callPackage ../applications/radio/flwrap { };
 
   fluidsynth = callPackage ../applications/audio/fluidsynth {
