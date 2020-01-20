@@ -20,9 +20,11 @@ stdenv.mkDerivation rec {
     libPath = lib.makeLibraryPath [ glibc ];
     ldLinux = "${libPath}/ld-linux-x86-64.so.2";
   in ''
-    mkdir -p $out/sbin
+    mkdir -p $out/sbin $out/etc
     cd usr/sbin
     cp * $out/sbin
+    cd ../../etc/tailscale
+    cp acl.json $out/etc/acl.json
 
     patchelf --set-rpath "${libPath}" $out/sbin/relaynode
     patchelf --set-interpreter "${ldLinux}" $out/sbin/relaynode
