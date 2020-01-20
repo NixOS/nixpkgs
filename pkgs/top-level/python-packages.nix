@@ -466,6 +466,8 @@ in {
 
   azure-multiapi-storage = callPackage ../development/python-modules/azure-multiapi-storage { };
 
+	b2sdk = callPackage ../development/python-modules/b2sdk {};
+
   backports_csv = callPackage ../development/python-modules/backports_csv {};
 
   backports-shutil-which = callPackage ../development/python-modules/backports-shutil-which {};
