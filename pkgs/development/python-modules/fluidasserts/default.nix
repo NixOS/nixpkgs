@@ -57,13 +57,13 @@
 
 buildPythonPackage rec {
   pname = "fluidasserts";
-  version = "20.1.22554";
+  version = "20.1.28253";
   disabled = !isPy37;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0j7zppwingi9m58z51phy40d69jlskx1vgyz1gj9miqhbjfdymhi";
+    sha256 = "1d2smx9ywd1azsiwgavp69vlixmvwaabshprm192wnmprbghsp6c";
   };
 
   patchPhase = ''
@@ -82,6 +82,7 @@ buildPythonPackage rec {
       --replace "'pymssql==2.1.4'," "" \
       --replace "'pytesseract==0.3.0'," "" \
       --replace "'pywinrm==0.4.1'," "" \
+      --replace "'mitmproxy==5.0.1'," "" \
 
   '';
 
@@ -145,34 +146,13 @@ buildPythonPackage rec {
     rm test/conftest.py
 
     pytest \
-      test/test_cloud_aws_cloudformation_cloudfront.py \
-      test/test_cloud_aws_cloudformation_dynamodb.py \
-      test/test_cloud_aws_cloudformation_ec2.py \
-      test/test_cloud_aws_cloudformation_elb.py \
-      test/test_cloud_aws_cloudformation_elb2.py \
-      test/test_cloud_aws_cloudformation_fsx.py \
-      test/test_cloud_aws_cloudformation_iam.py \
-      test/test_cloud_aws_cloudformation_kms.py \
-      test/test_cloud_aws_cloudformation_rds.py \
-      test/test_cloud_aws_cloudformation_s3.py \
-      test/test_cloud_aws_cloudformation_secretsmanager.py \
-      test/test_format_apk.py \
-      test/test_format_file.py \
-      test/test_format_jks.py \
-      test/test_format_jwt.py \
-      test/test_format_pdf.py \
-      test/test_format_pkcs12.py \
-      test/test_format_string.py \
-      test/test_helper_asynchronous.py \
-      test/test_helper_crypto.py \
-      test/test_lang_core.py \
-      test/test_lang_csharp.py \
-      test/test_lang_docker.py \
-      test/test_lang_dotnetconfig.py \
-      test/test_lang_html.py \
-      test/test_lang_php.py \
-      test/test_lang_python.py \
-      test/test_lang_rpgle.py \
+      test/test_cloud_aws_cloudformation_{cloudfront,dynamodb,ec2,elb,elb2}.py \
+      test/test_cloud_aws_cloudformation_{fsx,iam,kms,rds,s3,secretsmanager}.py \
+      test/test_format_{apk,file,jks,jwt,pdf,pkcs12,string}.py \
+      test/test_helper_{asynchronous,crypto}.py \
+      test/test_lang_{javascript,java}.py \
+      test/test_lang_{core,csharp,docker,dotnetconfig,html,php,python,rpgle}.py \
+      test/test_utils_generic.py
 
   '';
 
