@@ -23,7 +23,8 @@ let
     for DIR in "${homeDir}" "${settingsDir}" "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"; do
       mkdir -p "$DIR"
     done
-    chmod 700 "${homeDir}" "${settingsDir}"
+    chmod 755 "${homeDir}"
+    chmod 700 "${settingsDir}"
     chmod ${downloadDirPermissions} "${fullSettings.download-dir}" "${fullSettings.incomplete-dir}"
     cp -f ${settingsFile} ${settingsDir}/settings.json
   '';
