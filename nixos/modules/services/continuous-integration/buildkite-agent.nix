@@ -243,6 +243,7 @@ in
         serviceConfig =
           { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = cfg.user;
+            StateDirectory = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
