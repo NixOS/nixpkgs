@@ -29,6 +29,11 @@ with lib;
     (mkRemovedOptionModule [ "services.fourStoreEndpoint" ] "The fourStoreEndpoint module has been removed")
     (mkRemovedOptionModule [ "programs" "way-cooler" ] ("way-cooler is abandoned by its author: " +
       "https://way-cooler.org/blog/2020/01/09/way-cooler-post-mortem.html"))
+    (mkRemovedOptionModule [ "services" "xserver" "multitouch" ] ''
+      services.xserver.multitouch (which uses xf86_input_mtrack) has been removed
+      as the underlying package isn't being maintained. Working alternatives are
+      libinput and synaptics.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];

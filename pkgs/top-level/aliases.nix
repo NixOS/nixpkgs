@@ -475,6 +475,9 @@ mapAliases ({
   xbmcPlugins = kodiPlugins; # added 2018-04-25
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
+  xf86_input_mtrack = throw ("xf86_input_mtrack has been removed from nixpkgs as it hasn't been maintained"
+    + "and is broken. Working alternatives are libinput and synaptics.");
+  xf86_input_multitouch = throw "xf86_input_multitouch has been removed from nixpkgs."; # added 2020-01-20
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
