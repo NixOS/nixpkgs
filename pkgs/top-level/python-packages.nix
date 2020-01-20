@@ -1662,6 +1662,8 @@ in {
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
+  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };  
+
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
