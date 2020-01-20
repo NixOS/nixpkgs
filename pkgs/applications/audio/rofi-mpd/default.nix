@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rofi-mpd";
-  version = "2.0.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "JakeStanger";
     repo = "Rofi_MPD";
     rev = "v${version}";
-    sha256 = "0qn2jwvil5csp423r523wjbgwpb781li2bgaz1mby3prscrlz8mg";
+    sha256 = "12zzx0m2nwyzxzzqgzq30a27k015kcw4ylvs7cyalf5gf6sg27kl";
   };
 
   propagatedBuildInputs = with python3Packages; [ mutagen mpd2 toml appdirs ];
