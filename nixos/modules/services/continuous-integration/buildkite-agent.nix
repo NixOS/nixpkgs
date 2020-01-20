@@ -104,7 +104,8 @@ in
       };
 
       privateSshKeyPath = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         ## maximum care is taken so that secrets (ssh keys and the CI token)
         ## don't end up in the Nix store.
         apply = final: if final == null then null else toString final;
@@ -223,11 +224,11 @@ in
           sshDir = "${cfg.dataDir}/.ssh";
           tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
         in
-          ''
+          optionalString (cfg.privateSshKeyPath != null) ''
             mkdir -m 0700 -p "${sshDir}"
             cp -f "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
             chmod 600 "${sshDir}"/id_rsa
-
+          '' + ''
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
