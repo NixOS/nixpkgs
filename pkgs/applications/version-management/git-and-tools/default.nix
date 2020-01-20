@@ -174,6 +174,8 @@ let
 
   svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
 
+  thicket = callPackage ./thicket { };
+
   tig = callPackage ./tig { };
 
   topGit = callPackage ./topgit { };
