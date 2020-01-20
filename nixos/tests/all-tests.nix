@@ -155,6 +155,7 @@ in
   # not on other platforms.
   hibernate = handleTestOn ["x86_64-linux"] ./hibernate.nix {};
   hitch = handleTest ./hitch {};
+  hledger-web = handleTest ./hledger-web.nix {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   home-assistant = handleTest ./home-assistant.nix {};
   hostname = handleTest ./hostname.nix {};
