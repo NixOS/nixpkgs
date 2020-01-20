@@ -5630,6 +5630,12 @@
     email = "markus@wotringer.de";
     name = "Markus Wotringer";
   };
+  marijanp = {
+    name = "Marijan Petričević";
+    email = "marijan.petricevic94@gmail.com";
+    github = "marijanp";
+    githubId = 13599169;
+  };
   marius851000 = {
     email = "mariusdavid@laposte.net";
     name = "Marius David";
