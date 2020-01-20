@@ -19,9 +19,8 @@ with stdenv.lib;
 let
   python = python3;
   buildType = "release";
-  # Remember to change the extpackRev and version in extpack.nix and
-  # guest-additions/default.nix as well.
-  main = "59f8f5774473f593e3eb5940e2a337e0674bcd9854164b2578fd43f896260c99";
+  # Use maintainers/scripts/update.nix to update the version and all related hashes or
+  # change the hashes in extpack.nix and guest-additions/default.nix as well manually.
   version = "6.1.4";
 
   iasl' = iasl.overrideAttrs (old: rec {
@@ -39,7 +38,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
-    sha256 = main;
+    sha256 = "59f8f5774473f593e3eb5940e2a337e0674bcd9854164b2578fd43f896260c99";
   };
 
   outputs = [ "out" "modsrc" ];
@@ -216,6 +215,7 @@ in stdenv.mkDerivation {
   passthru = {
     inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
+    updateScript = ./update.sh;
   };
 
   meta = {
