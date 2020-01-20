@@ -33,6 +33,7 @@ in
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
   #blivet = handleTest ./blivet.nix {};   # broken since 2017-07024
+  buildkite-agent = handleTest ./buildkite-agent.nix {};
   boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};

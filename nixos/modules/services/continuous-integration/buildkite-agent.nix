@@ -29,6 +29,8 @@ let
     ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
   '';
 
+  defaultUser = "buildkite-agent";
+
 in
 
 {
@@ -50,10 +52,19 @@ in
       };
 
       runtimePackages = mkOption {
-        default = [ pkgs.bash pkgs.nix ];
-        defaultText = "[ pkgs.bash pkgs.nix ]";
+        default = [ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ];
+        defaultText = "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
         description = "Add programs to the buildkite-agent environment";
         type = types.listOf types.package;
+      };
+
+      user = mkOption {
+        type = types.str;
+        default = defaultUser;
+        description = ''
+          Set this option when you want to run the buildkite agent as something else
+          than the default user "buildkite-agent".
+        '';
       };
 
       tokenPath = mkOption {
@@ -93,7 +104,8 @@ in
       };
 
       privateSshKeyPath = mkOption {
-        type = types.path;
+        type = types.nullOr types.path;
+        default = null;
         ## maximum care is taken so that secrets (ssh keys and the CI token)
         ## don't end up in the Nix store.
         apply = final: if final == null then null else toString final;
@@ -185,14 +197,14 @@ in
   };
 
   config = mkIf config.services.buildkite-agent.enable {
-    users.users.buildkite-agent =
-      { name = "buildkite-agent";
-        home = cfg.dataDir;
-        createHome = true;
-        description = "Buildkite agent user";
-        extraGroups = [ "keys" ];
-        isSystemUser = true;
-      };
+    users.users.buildkite-agent = mkIf (cfg.user == defaultUser) {
+      name = "buildkite-agent";
+      home = cfg.dataDir;
+      createHome = true;
+      description = "Buildkite agent user";
+      extraGroups = [ "keys" ];
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -212,11 +224,11 @@ in
           sshDir = "${cfg.dataDir}/.ssh";
           tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
         in
-          ''
+          optionalString (cfg.privateSshKeyPath != null) ''
             mkdir -m 0700 -p "${sshDir}"
-            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
-            chmod 600 "${sshDir}"/id_rsa*
-
+            cp -f "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
+            chmod 600 "${sshDir}"/id_rsa
+          '' + ''
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
@@ -230,7 +242,7 @@ in
 
         serviceConfig =
           { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
-            User = "buildkite-agent";
+            User = cfg.user;
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
