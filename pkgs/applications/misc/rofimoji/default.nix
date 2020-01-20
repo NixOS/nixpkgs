@@ -3,34 +3,35 @@
 
 stdenv.mkDerivation rec {
   pname = "rofimoji";
-  version = "unstable-2017-10-31";
+  version = "unstable-2020-01-12";
 
   src = fetchFromGitHub {
     owner = "fdw";
     repo = "rofimoji";
-    rev = "8c2278b29b0f982936027022cab37e67d0811144";
-    sha256 = "18h901i1pqs3n4y3pl3aj5n0j694xlwrxrk742qy0mggh9r4djnc";
+    rev = "f211333bf90006c8742559a273e5eda26cf437ef";
+    sha256 = "1msx4clnrp9lzp0ap8rsdhhacynhfbi797vpjp93jj62sb08ahnc";
   };
 
   dontBuild = true;
 
-  buildInputs = [ python3 ];
-
-  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = [
+    makeWrapper
+    (python3.withPackages (pkgs: with pkgs; [
+      ConfigArgParse
+      pyxdg
+    ]))
+  ];
 
   installPhase = ''
-    install -vD rofimoji.py $out/bin/rofimoji
-  '';
-
-  postInstall = ''
-    wrapProgram $out/bin/rofimoji \
-      --prefix PATH : ${lib.makeBinPath [ xdotool xsel ]}
+    cp . -R $out
+    makeWrapper $out/src/picker/rofimoji.py $out/bin/rofimoji \
+      --prefix PATH : ${lib.makeBinPath [ xdotool xsel rofi ]}
   '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/fdw/rofimoji;
     description = "A simple emoji picker for rofi";
     license = licenses.mit;
-    maintainers = with maintainers; [ wedens ];
+    maintainers = with maintainers; [ siers ];
   };
 }
