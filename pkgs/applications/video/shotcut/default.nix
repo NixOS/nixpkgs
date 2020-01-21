@@ -17,6 +17,8 @@ mkDerivation rec {
     sha256 = "1vwgah8pp2kbd0iaz952d3bwxphk06yxqc0pi4hk1mklkh87qzm9";
   };
 
+  patches = [ ./0001-encodedock.cpp-connect-to-VAAPI-via-DRM-not-X11.patch ];
+
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
   buildInputs = [
