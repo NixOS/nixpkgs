@@ -2958,6 +2958,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  rar2fs = callPackage ../tools/filesystems/rar2fs { };
+
   s-tar = callPackage ../tools/archivers/s-tar {};
 
   sonota = callPackage ../tools/misc/sonota { };
