@@ -124,8 +124,7 @@ in {
 
     environment.systemPackages = [cfg.package];
 
-    users.users = singleton {
-      name = "apache-kafka";
+    users.users.apache-kafka = {
       uid = config.ids.uids.apache-kafka;
       description = "Apache Kafka daemon user";
       home = head cfg.logDirs;

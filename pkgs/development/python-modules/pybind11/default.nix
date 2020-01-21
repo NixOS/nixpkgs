@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchFromGitHub
 , fetchpatch
@@ -28,7 +29,7 @@ buildPythonPackage rec {
 
   cmakeFlags = [
     "-DEIGEN3_INCLUDE_DIR=${eigen}/include/eigen3"
-  ] ++ lib.optionals (python.isPy3k) [
+  ] ++ lib.optionals (python.isPy3k && !stdenv.cc.isClang) [
   # Enable some tests only on Python 3. The "test_string_view" test
   # 'testTypeError: string_view16_chars(): incompatible function arguments'
   # fails on Python 2.

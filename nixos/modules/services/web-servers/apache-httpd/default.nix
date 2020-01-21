@@ -567,7 +567,7 @@ in
 
       sslProtocols = mkOption {
         type = types.str;
-        default = "All -SSLv2 -SSLv3 -TLSv1";
+        default = "All -SSLv2 -SSLv3 -TLSv1 -TLSv1.1";
         example = "All -SSLv2 -SSLv3";
         description = "Allowed SSL/TLS protocol versions.";
       };
@@ -606,17 +606,17 @@ in
       }
     ];
 
-    users.users = optionalAttrs (mainCfg.user == "wwwrun") (singleton
-      { name = "wwwrun";
+    users.users = optionalAttrs (mainCfg.user == "wwwrun") {
+      wwwrun = {
         group = mainCfg.group;
         description = "Apache httpd user";
         uid = config.ids.uids.wwwrun;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (mainCfg.group == "wwwrun") (singleton
-      { name = "wwwrun";
-        gid = config.ids.gids.wwwrun;
-      });
+    users.groups = optionalAttrs (mainCfg.group == "wwwrun") {
+      wwwrun.gid = config.ids.gids.wwwrun;
+    };
 
     security.acme.certs = mapAttrs (name: hostOpts: {
       user = mainCfg.user;
@@ -628,6 +628,9 @@ in
     }) (filterAttrs (name: hostOpts: hostOpts.enableACME) mainCfg.virtualHosts);
 
     environment.systemPackages = [httpd];
+
+    # required for "apachectl configtest"
+    environment.etc."httpd/httpd.conf".source = httpdConf;
 
     services.httpd.phpOptions =
       ''

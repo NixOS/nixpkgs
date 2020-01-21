@@ -302,7 +302,7 @@ lib.attrsets.attrValues { a = 1; b = 2; c = 3; }
  <section xml:id="function-library-lib.attrsets.catAttrs">
   <title><function>lib.attrsets.catAttrs</function></title>
 
-  <subtitle><literal>catAttrs :: String -> AttrSet -> [Any]</literal>
+  <subtitle><literal>catAttrs :: String -> [AttrSet] -> [Any]</literal>
   </subtitle>
 
   <xi:include href="./locations.xml" xpointer="lib.attrsets.catAttrs" />

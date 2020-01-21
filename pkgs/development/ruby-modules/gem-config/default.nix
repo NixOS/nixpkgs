@@ -39,6 +39,15 @@ let
 in
 
 {
+  asciidoctor-diagram = { version, ruby, ... }: {
+    postInstall = ''
+      # Delete vendored JAR files unless using JRuby.
+      if ruby -e 'exit(RUBY_PLATFORM != "java")'; then
+          rm -v $out/${ruby.gemPath}/gems/$gemName-${version}/lib/*.jar
+      fi
+    '';
+  };
+
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkgconfig ];
@@ -314,6 +323,14 @@ in
 
     # The ruby build script takes care of this
     dontUseCmakeConfigure = true;
+
+    postInstall = ''
+      # Reduce output size by a lot, and remove some unnecessary references.
+      # The ext directory should only be required at build time, so
+      # can be deleted now.
+      rm -r $out/${ruby.gemPath}/gems/mathematical-${attrs.version}/ext \
+            $out/${ruby.gemPath}/extensions/*/*/mathematical-${attrs.version}/gem_make.out
+    '';
 
     # For some reason 'mathematical.so' is missing cairo and glib in its RPATH, add them explicitly here
     postFixup = lib.optionalString stdenv.isLinux ''

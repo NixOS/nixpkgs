@@ -1,21 +1,35 @@
 { lib
 , buildPythonPackage
-, fetchPypi
-, tox
+, fetchFromGitHub
+, pytest
+, pytestcov
+, pytest_xdist
+, pytest-django
+, mock
 }:
 
 buildPythonPackage rec {
   pname = "diskcache";
   version = "4.1.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "bcee5a59f9c264e2809e58d01be6569a3bbb1e36a1e0fb83f7ef9b2075f95ce0";
+  src = fetchFromGitHub {
+    owner = "grantjenks";
+    repo = "python-diskcache";
+    rev = "v${version}";
+    sha256 = "0xy2vpk4hixb4gg871d9sx9wxdz8pi0pmnfdwg4bf8jqfjg022w8";
   };
 
   checkInputs = [
-    tox
+    pytest
+    pytestcov
+    pytest_xdist
+    pytest-django
+    mock
   ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     description = "Disk and file backed persistent cache";

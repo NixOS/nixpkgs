@@ -1,5 +1,5 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools
-, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2
+{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
+, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
 , liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
 
 stdenv.mkDerivation (rec {
@@ -15,7 +15,8 @@ stdenv.mkDerivation (rec {
     substituteInPlace src/CMakeLists.txt --replace svnheader svnversion
   '';
 
-  nativeBuildInputs = [ cmake makedepend perl pkgconfig qttools ];
+  nativeBuildInputs =
+    [ cmake makedepend perl pkgconfig qttools wrapQtAppsHook ];
 
   buildInputs = [
     dssi
@@ -29,6 +30,7 @@ stdenv.mkDerivation (rec {
     libsndfile
     lirc
     qtbase
+    alsaLib
   ];
 
   enableParallelBuilding = true;

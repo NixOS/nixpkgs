@@ -20,7 +20,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xapps";
-  version = "1.6.8";
+  version = "1.6.10";
 
   outputs = [ "out" "dev" ];
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "09f77vsydv8r6r43py8hrpq7pb4a1pfivy19zgijjy2241i7059v";
+    sha256 = "1jkxvqv9fxf9il5qfyddn4j4nkxgbxlil8vizbx99xz0kafb81vp";
   };
 
   # TODO: https://github.com/NixOS/nixpkgs/issues/36468

@@ -310,36 +310,32 @@ in
      ++ optional cfg.enablePop3 "pop3"
      ++ optional cfg.enableLmtp "lmtp";
 
-    users.users = [
-      { name = "dovenull";
-        uid = config.ids.uids.dovenull2;
-        description = "Dovecot user for untrusted logins";
-        group = "dovenull";
-      }
-    ] ++ optional (cfg.user == "dovecot2")
-         { name = "dovecot2";
-           uid = config.ids.uids.dovecot2;
+    users.users = {
+      dovenull =
+        { uid = config.ids.uids.dovenull2;
+          description = "Dovecot user for untrusted logins";
+          group = "dovenull";
+        };
+    } // optionalAttrs (cfg.user == "dovecot2") {
+      dovecot2 =
+         { uid = config.ids.uids.dovecot2;
            description = "Dovecot user";
            group = cfg.group;
-         }
-      ++ optional (cfg.createMailUser && cfg.mailUser != null)
-         ({ name = cfg.mailUser;
-            description = "Virtual Mail User";
-         } // optionalAttrs (cfg.mailGroup != null) {
-           group = cfg.mailGroup;
-         });
+         };
+    } // optionalAttrs (cfg.createMailUser && cfg.mailUser != null) {
+      ${cfg.mailUser} =
+        { description = "Virtual Mail User"; } //
+        optionalAttrs (cfg.mailGroup != null)
+          { group = cfg.mailGroup; };
+    };
 
-    users.groups = optional (cfg.group == "dovecot2")
-      { name = "dovecot2";
-        gid = config.ids.gids.dovecot2;
-      }
-    ++ optional (cfg.createMailUser && cfg.mailGroup != null)
-      { name = cfg.mailGroup;
-      }
-    ++ singleton
-      { name = "dovenull";
-        gid = config.ids.gids.dovenull2;
-      };
+    users.groups = {
+      dovenull.gid = config.ids.gids.dovenull2;
+    } // optionalAttrs (cfg.group == "dovecot2") {
+      dovecot2.gid = config.ids.gids.dovecot2;
+    } // optionalAttrs (cfg.createMailUser && cfg.mailGroup != null) {
+      ${cfg.mailGroup} = { };
+    };
 
     environment.etc."dovecot/modules".source = modulesDir;
     environment.etc."dovecot/dovecot.conf".source = cfg.configFile;

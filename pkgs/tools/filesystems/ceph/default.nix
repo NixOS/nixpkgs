@@ -10,6 +10,7 @@
 , cunit, snappy
 , rocksdb, makeWrapper
 , leveldb, oathToolkit
+, libnl, libcap_ng
 
 # Optional Dependencies
 , yasm ? null, fcgi ? null, expat ? null
@@ -88,9 +89,10 @@ let
     ps.webob
     ps.bcrypt
     ps.six
+    ps.pyyaml
   ]);
 
-  version = "14.2.4";
+  version = "14.2.6";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -98,7 +100,7 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "1y6hixh6srd5aswhzq0sf0dbygwhx0ardx3w3f7qazf5rapvd03i";
+      sha256 = "0qkyrb25r2a57n6k8ncb43x7hvhkmpi7abhfyi98mlz2lhmhzlm1";
     };
 
     patches = [
@@ -116,7 +118,7 @@ in rec {
     buildInputs = cryptoLibsMap.${cryptoStr} ++ [
       boost ceph-python-env libxml2 optYasm optLibatomic_ops optLibs3
       malloc zlib openldap lttng-ust babeltrace gperf gtest cunit
-      snappy rocksdb lz4 oathToolkit leveldb
+      snappy rocksdb lz4 oathToolkit leveldb libnl libcap_ng
     ] ++ optionals stdenv.isLinux [
       linuxHeaders utillinux libuuid udev keyutils optLibaio optLibxfs optZfs
       # ceph 14

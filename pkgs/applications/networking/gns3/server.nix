@@ -1,18 +1,17 @@
-{ stable, branch, version, sha256Hash }:
+{ stable, branch, version, sha256Hash, mkOverride }:
 
-{ stdenv, python3, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 let
+  defaultOverrides = [
+    (mkOverride "psutil" "5.6.3"
+      "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6")
+    (mkOverride "jsonschema" "2.6.0"
+      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
+  ];
+
   python = python3.override {
-    packageOverrides = self: super: {
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "2.6.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
-        };
-      });
-    };
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
 in python.pkgs.buildPythonPackage {
   pname = "gns3-server";
@@ -28,6 +27,8 @@ in python.pkgs.buildPythonPackage {
   postPatch = ''
     # Only 2.x is problematic:
     sed -iE "s/prompt-toolkit==1.0.15/prompt-toolkit<2.0.0/" requirements.txt
+    # yarl 1.4+ only requires Python 3.6+
+    sed -iE "s/yarl==1.3.0//" requirements.txt
   '';
 
   propagatedBuildInputs = with python.pkgs; [

@@ -1,5 +1,5 @@
 { abiCompat ? null,
-  stdenv, makeWrapper, fetchurl, fetchpatch, buildPackages,
+  stdenv, makeWrapper, fetchurl, fetchpatch, fetchFromGitLab, buildPackages,
   automake, autoconf, gettext, libiconv, libtool, intltool,
   freetype, tradcpp, fontconfig, meson, ninja, ed,
   libGL, spice-protocol, zlib, libGLU, dbus, libunwind, libdrm,
@@ -745,11 +745,14 @@ self: super:
 
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
     # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2018-12-03";
-    src = fetchurl {
-      url = "http://cgit.freedesktop.org/xorg/driver/xf86-video-intel/snapshot/"
-          + "e5ff8e1828f97891c819c919d7115c6e18b2eb1f.tar.gz";
-      sha256 = "01136zljk6liaqbk8j9m43xxzqj6xy4v50yjgi7l7g6pp8pw0gx6";
+    name = "xf86-video-intel-2019-12-09";
+    src = fetchFromGitLab {
+      domain = "gitlab.freedesktop.org";
+      group = "xorg";
+      owner = "driver";
+      repo = "xf86-video-intel";
+      rev = "f66d39544bb8339130c96d282a80f87ca1606caf";
+      sha256 = "14rwbbn06l8qpx7s5crxghn80vgcx8jmfc7qvivh72d81r0kvywl";
     };
     buildInputs = attrs.buildInputs ++ [self.libXfixes self.libXScrnSaver self.pixman];
     nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook self.utilmacros];

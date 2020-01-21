@@ -6102,8 +6102,12 @@ let
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs --build util
+    '';
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang util/sendmail
     '';
     meta = {
       homepage = https://github.com/rjbs/Email-Sender;
@@ -19541,6 +19545,8 @@ let
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-2.30.tar.gz;
       sha256 = "11lf54akr9nbivqkjrhvkmfdgkbhw85sq0q4mak56n6bf542bgbm";
     };
+    # https://rt.cpan.org/Public/Bug/Display.html?id=124509
+    patches = [ ../development/perl-modules/timedate-2020.patch ];
   };
 
   TimeDuration = buildPerlPackage {

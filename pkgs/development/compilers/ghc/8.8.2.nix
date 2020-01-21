@@ -86,12 +86,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.8.1.20191211";
+  version = "8.8.2";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/8.8.2-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "1gl4fzakjbhd94v1saxmr9sfzgk22m1b95jq51rxm93b2g4cixl4";
+    url = "https://downloads.haskell.org/ghc/8.8.2/ghc-${version}-src.tar.xz";
+    sha256 = "02qa6wgjpxgakg7hv4zfdlrx9k7zxa5i02wnr6y9fsv8j16sbkh1";
   };
 
   enableParallelBuilding = true;

@@ -84,7 +84,7 @@ CHAR_TO_KEY = {
 
 # Forward references
 nr_tests: int
-nr_succeeded: int
+failed_tests: list
 log: "Logger"
 machines: "List[Machine]"
 
@@ -221,7 +221,7 @@ class Machine:
             return path
 
         self.state_dir = create_dir("vm-state-{}".format(self.name))
-        self.shared_dir = create_dir("{}/xchg".format(self.state_dir))
+        self.shared_dir = create_dir("shared-xchg")
 
         self.booted = False
         self.connected = False
@@ -576,7 +576,7 @@ class Machine:
         vm_src = pathlib.Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
             shared_temp = pathlib.Path(shared_td)
-            vm_shared_temp = pathlib.Path("/tmp/xchg") / shared_temp.name
+            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
             # Copy the file to the shared directory inside VM
@@ -704,7 +704,8 @@ class Machine:
 
         def process_serial_output() -> None:
             for _line in self.process.stdout:
-                line = _line.decode("unicode_escape").replace("\r", "").rstrip()
+                # Ignore undecodable bytes that may occur in boot menus
+                line = _line.decode(errors="ignore").replace("\r", "").rstrip()
                 eprint("{} # {}".format(self.name, line))
                 self.logger.enqueue({"msg": line, "machine": self.name})
 
@@ -841,23 +842,31 @@ def run_tests() -> None:
             machine.execute("sync")
 
     if nr_tests != 0:
+        nr_succeeded = nr_tests - len(failed_tests)
         eprint("{} out of {} tests succeeded".format(nr_succeeded, nr_tests))
-        if nr_tests > nr_succeeded:
+        if len(failed_tests) > 0:
+            eprint(
+                "The following tests have failed:\n - {}".format(
+                    "\n - ".join(failed_tests)
+                )
+            )
             sys.exit(1)
 
 
 @contextmanager
 def subtest(name: str) -> Iterator[None]:
     global nr_tests
-    global nr_succeeded
+    global failed_tests
 
     with log.nested(name):
         nr_tests += 1
         try:
             yield
-            nr_succeeded += 1
             return True
         except Exception as e:
+            failed_tests.append(
+                'Test "{}" failed with error: "{}"'.format(name, str(e))
+            )
             log.log("error: {}".format(str(e)))
 
     return False
@@ -879,7 +888,7 @@ if __name__ == "__main__":
     exec("\n".join(machine_eval))
 
     nr_tests = 0
-    nr_succeeded = 0
+    failed_tests = []
 
     @atexit.register
     def clean_up() -> None:

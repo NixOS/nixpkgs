@@ -1,19 +1,17 @@
-{ stdenv, fetchFromGitHub, rustPlatform, llvmPackages, v8 }:
+{ lib, fetchFromGitHub, rustPlatform, libiconv, llvmPackages, v8 }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "rq";
-  version = "0.10.4";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "dflemstr";
-    repo = "rq";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "066f6sdy0vrp113wlg18q9p0clyrg9iqbj17ly0yn8dxr5iar002";
+    sha256 = "0km9d751jr6c5qy4af6ks7nv3xfn13iqi03wq59a1c73rnf0zinp";
   };
 
-  cargoSha256 = "1n92d82l9wqrpsbkqiir6zsgf12xp4xb6bxq2nywg4lmwrnyapbh";
+  cargoSha256 = "0z971fpyj4v5hjp6q4yxgxv069h9idkpkcixb14gxi7kpiswprvz";
 
   buildInputs = [ llvmPackages.clang-unwrapped v8 ];
 
@@ -22,12 +20,11 @@ buildRustPackage rec {
     export V8_SOURCE="${v8}"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool for doing record analysis and transformation";
-    homepage = https://github.com/dflemstr/rq ;
+    homepage = "https://github.com/dflemstr/rq";
     license = with licenses; [ asl20 ];
-    maintainers = [ maintainers.aristid ];
+    maintainers = with maintainers; [ aristid filalex77 ];
     platforms = platforms.all;
-    broken = true;
   };
 }

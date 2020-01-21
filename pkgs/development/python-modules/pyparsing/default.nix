@@ -12,7 +12,7 @@ buildPythonPackage rec {
     doCheck = false;
 
     meta = with stdenv.lib; {
-      homepage = http://pyparsing.wikispaces.com/;
+      homepage = https://pyparsing.wikispaces.com/;
       description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
       license = licenses.mit;
     };

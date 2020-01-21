@@ -78,8 +78,6 @@ stdenv.mkDerivation rec {
     libjpeg
     tremor
     libGL
-  ] ++ lib.optional (!stdenv.isDarwin) [
-    libvisual
   ] ++ lib.optionals stdenv.isDarwin [
     pango
     darwin.apple_sdk.frameworks.OpenGL
@@ -91,7 +89,8 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals enableWayland [
     wayland
     wayland-protocols
-  ] ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
+  ] ++ lib.optional (!stdenv.isDarwin) libvisual
+    ++ lib.optional enableCocoa darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional enableCdparanoia cdparanoia;
 
   propagatedBuildInputs = [

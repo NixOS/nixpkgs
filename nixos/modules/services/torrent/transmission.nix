@@ -118,7 +118,7 @@ in
       # 1) Only the "transmission" user and group have access to torrents.
       # 2) Optionally update/force specific fields into the configuration file.
       serviceConfig.ExecStartPre = preStart;
-      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port}";
+      serviceConfig.ExecStart = "${pkgs.transmission}/bin/transmission-daemon -f --port ${toString config.services.transmission.port} --config-dir ${settingsDir}";
       serviceConfig.ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       serviceConfig.User = cfg.user;
       serviceConfig.Group = cfg.group;
@@ -129,19 +129,23 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.users = optionalAttrs (cfg.user == "transmission") (singleton
-      { name = "transmission";
+    users.users = optionalAttrs (cfg.user == "transmission") ({
+      transmission = {
+        name = "transmission";
         group = cfg.group;
         uid = config.ids.uids.transmission;
         description = "Transmission BitTorrent user";
         home = homeDir;
         createHome = true;
-      });
+      };
+    });
 
-    users.groups = optionalAttrs (cfg.group == "transmission") (singleton
-      { name = "transmission";
+    users.groups = optionalAttrs (cfg.group == "transmission") ({
+      transmission = {
+        name = "transmission";
         gid = config.ids.gids.transmission;
-      });
+      };
+    });
 
     # AppArmor profile
     security.apparmor.profiles = mkIf apparmor [

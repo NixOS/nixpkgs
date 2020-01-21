@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The official Todoist Python API library";
-    homepage = http://todoist-python.readthedocs.io/en/latest/;
+    homepage = https://todoist-python.readthedocs.io/en/latest/;
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ the-kenny ];
   };

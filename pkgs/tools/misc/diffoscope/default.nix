@@ -35,11 +35,14 @@ python3Packages.buildPythonApplication rec {
   #
   # Still missing these tools: abootimg docx2txt dumpxsb enjarify js-beautify lipo oggDump otool procyon-decompiler Rscript wasm2wat zipnode
   # Also these libraries: python3-guestfs
-  pythonPath = with python3Packages; [ debian libarchive-c python_magic tlsh rpm pyxattr ] ++ [
-      acl binutils-unwrapped bzip2 cdrkit colordiff coreutils cpio db diffutils
+  pythonPath = [
+      binutils-unwrapped bzip2 colordiff coreutils cpio db diffutils
       dtc e2fsprogs file findutils fontforge-fonttools gettext gnutar gzip
-      libarchive libcaca lz4 pgpdump progressbar33 sng sqlite squashfsTools unzip xxd xz
-    ] ++ lib.optionals enableBloat [
+      libarchive libcaca lz4 pgpdump sng sqlite squashfsTools unzip xxd xz
+    ]
+    ++ (with python3Packages; [ debian libarchive-c python_magic tlsh rpm progressbar33 ])
+    ++ lib.optionals stdenv.isLinux [ python3Packages.pyxattr acl cdrkit ]
+    ++ lib.optionals enableBloat [
       apktool cbfstool colord fpc ghc ghostscriptX giflib gnupg gnumeric imagemagick
       llvm jdk mono openssh pdftk poppler_utils tcpdump unoconv
       python3Packages.guestfs
@@ -69,6 +72,6 @@ python3Packages.buildPythonApplication rec {
     homepage    = https://wiki.debian.org/ReproducibleBuilds;
     license     = licenses.gpl3Plus;
     maintainers = with maintainers; [ dezgeg ];
-    platforms   = platforms.linux;
+    platforms   = platforms.unix;
   };
 }

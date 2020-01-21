@@ -1,7 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , futures
-, isPy3k
+, isPy27
 , isPyPy
 , jinja2
 , lib
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c60d38a41a777b8147ee4134e6142cea8026b5eebf48149e370c44689869dce7";
+    sha256 = "1rywd6c6hi0c6yg18j5zxssjd07a5hafcd21xr3q2yvp3aj3h3f6";
   };
 
   patches = [
@@ -39,7 +39,12 @@ buildPythonPackage rec {
 
   disabled = isPyPy;
 
-  checkInputs = [ mock pytest pillow selenium ];
+  checkInputs = [
+    mock
+    pytest
+    pillow
+    selenium
+  ];
 
   propagatedBuildInputs = [
     pillow
@@ -51,7 +56,9 @@ buildPythonPackage rec {
     numpy
     packaging
   ]
-  ++ lib.optionals ( !isPy3k ) [ futures ];
+  ++ lib.optionals ( isPy27 ) [
+    futures
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s bokeh/tests

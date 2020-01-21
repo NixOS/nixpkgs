@@ -10,11 +10,24 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "95d18aa13ceb1b18a6109433b42d054e13b9a295cba96c08ab719f864f589d68";
+    sha256 = "0s4xb17qd7vimc46rafbjnibj4sf0lnv8cwl22k1h6zb7jhqmlcm";
   };
 
-  checkInputs = [ pytest ];
-  propagatedBuildInputs = [ numpy cython ];
+  nativeBuildInputs = [
+    cython
+  ];
+
+  checkInputs = [
+    pytest
+  ];
+
+  propagatedBuildInputs = [
+    numpy
+  ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with lib; {
     description = "Block-oriented, in-memory buffer transformation, compression, and decompression functions";

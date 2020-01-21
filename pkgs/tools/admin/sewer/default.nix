@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "sewer";
-  version = "0.7.0";
+  version = "0.7.9";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "16j4npqj3fdj3g2z7nqb0cvvxd85xk20g9c43f3q8a1k5psf1fmq";
+    sha256 = "c083223d8aa66d4fc6801452d291a98540d1ee41557ce3e1754c62e73f7c9738";
   };
 
   propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
@@ -16,6 +16,5 @@ python3Packages.buildPythonApplication rec {
     description = "ACME client";
     license = licenses.mit;
     maintainers = with maintainers; [ kevincox ];
-    platforms = platforms.linux;
   };
 }

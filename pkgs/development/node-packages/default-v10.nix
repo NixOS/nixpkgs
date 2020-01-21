@@ -21,7 +21,7 @@ nodePackages // {
   };
 
   dat = nodePackages.dat.override {
-    buildInputs = [ nodePackages.node-gyp-build ];
+    buildInputs = [ nodePackages.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
   };
 
   dnschain = nodePackages.dnschain.override {
@@ -30,6 +30,10 @@ nodePackages // {
       wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
     '';
   };
+
+  bitwarden-cli = pkgs.lib.overrideDerivation nodePackages."@bitwarden/cli" (drv: {
+    name = "bitwarden-cli-${drv.version}";
+  });
 
   ios-deploy = nodePackages.ios-deploy.override (drv: {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
@@ -93,10 +97,6 @@ nodePackages // {
       makeWrapper '${nodejs}/bin/node' "$out/bin/tedicross" \
         --add-flags "$out/lib/node_modules/tedicross/main.js"
     '';
-  };
-
-  texlab-citeproc-build-deps = nodePackages."texlab-citeproc-build-deps-../tools/misc/texlab/citeproc".override {
-    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.CoreServices ];
   };
 
   webtorrent-cli = nodePackages.webtorrent-cli.override {

@@ -496,8 +496,8 @@ and in this case the `python35` interpreter is automatically used.
 
 ### Interpreters
 
-Versions 2.7, 3.5, 3.6 and 3.7 of the CPython interpreter are available as
-respectively `python27`, `python35`, `python36` and `python37`. The aliases
+Versions 2.7, 3.5, 3.6, 3.7 and 3.8 of the CPython interpreter are available as
+respectively `python27`, `python35`, `python36`, `python37` and `python38`. The aliases
 `python2` and `python3` correspond to respectively `python27` and
 `python37`. The default interpreter, `python`, maps to `python2`. The PyPy
 interpreters compatible with Python 2.7 and 3 are available as `pypy27` and
@@ -821,6 +821,9 @@ should be used with `ignoreCollisions = true`.
 The following are setup hooks specifically for Python packages. Most of these are
 used in `buildPythonPackage`.
 
+- `eggUnpackhook` to move an egg to the correct folder so it can be installed with the `eggInstallHook`
+- `eggBuildHook` to skip building for eggs.
+- `eggInstallHook` to install eggs.
 - `flitBuildHook` to build a wheel using `flit`.
 - `pipBuildHook` to build a wheel using `pip` and PEP 517. Note a build system (e.g. `setuptools` or `flit`) should still be added as `nativeBuildInput`.
 - `pipInstallHook` to install wheels.
@@ -830,6 +833,7 @@ used in `buildPythonPackage`.
 - `pythonRemoveBinBytecode` to remove bytecode from the `/bin` folder.
 - `setuptoolsBuildHook` to build a wheel using `setuptools`.
 - `setuptoolsCheckHook` to run tests with `python setup.py test`.
+- `venvShellHook` to source a Python 3 `venv` at the `venvDir` location. A `venv` is created if it does not yet exist.
 - `wheelUnpackHook` to move a wheel to the correct folder so it can be installed with the `pipInstallHook`.
 
 ### Development mode
@@ -1025,36 +1029,43 @@ If you want to create a Python environment for development, then the recommended
 method is to use `nix-shell`, either with or without the `python.buildEnv`
 function.
 
-### How to consume python modules using pip in a virtualenv like I am used to on other Operating Systems ?
+### How to consume python modules using pip in a virtual environment like I am used to on other Operating Systems?
 
-This is an example of a `default.nix` for a `nix-shell`, which allows to consume a `virtualenv` environment,
+While this approach is not very idiomatic from Nix perspective, it can still be useful when dealing with pre-existing
+projects or in situations where it's not feasible or desired to write derivations for all required dependencies.
+
+This is an example of a `default.nix` for a `nix-shell`, which allows to consume a virtual environment created by `venv`,
 and install python modules through `pip` the traditional way.
 
 Create this `default.nix` file, together with a `requirements.txt` and simply execute `nix-shell`.
 
 ```nix
-with import <nixpkgs> {};
+with import <nixpkgs> { };
 
 let
-  pythonPackages = python27Packages;
-in
-
-stdenv.mkDerivation {
+  pythonPackages = python3Packages;
+in pkgs.mkShell rec {
   name = "impurePythonEnv";
-
-  src = null;
-
+  venvDir = "./.venv";
   buildInputs = [
-    # these packages are required for virtualenv and pip to work:
-    #
-    pythonPackages.virtualenv
-    pythonPackages.pip
+    # A python interpreter including the 'venv' module is required to bootstrap
+    # the environment.
+    pythonPackages.python
+
+    # This execute some shell code to initialize a venv in $venvDir before
+    # dropping into the shell
+    pythonPackages.venvShellHook
+
+    # Those are dependencies that we would like to use from nixpkgs, which will
+    # add them to PYTHONPATH and thus make them accessible from within the venv.
+    pythonPackages.numpy
+    pythonPackages.requests
+
     # the following packages are related to the dependencies of your python
     # project.
     # In this particular example the python modules listed in the
     # requirements.txt require the following packages to be installed locally
     # in order to compile any binary extensions they may require.
-    #
     taglib
     openssl
     git
@@ -1064,11 +1075,47 @@ stdenv.mkDerivation {
     zlib
   ];
 
+  # Now we can execute any commands within the virtual environment
+  postShellHook = ''
+    pip install -r requirements.txt
+  '';
+
+}
+```
+
+In case the supplied venvShellHook is insufficient, or when python 2 support is needed,
+you can define your own shell hook and adapt to your needs like in the following example:
+
+```nix
+with import <nixpkgs> { };
+
+let
+  venvDir = "./.venv";
+in pkgs.mkShell rec {
+  name = "impurePythonEnv";
+  buildInputs = [
+    python3Packages.python
+    python3Packages.virtualenv
+    ...
+  ];
+
+  # This is very close to how venvShellHook is implemented, but
+  # adapted to use 'virtualenv'
   shellHook = ''
-    # set SOURCE_DATE_EPOCH so that we can use python wheels
     SOURCE_DATE_EPOCH=$(date +%s)
-    virtualenv --python=${pythonPackages.python.interpreter} --no-setuptools venv
-    export PATH=$PWD/venv/bin:$PATH
+
+    if [ -d "${venvDir}" ]; then
+      echo "Skipping venv creation, '${venvDir}' already exists"
+    else
+      echo "Creating new venv environment in path: '${venvDir}'"
+      ${pythonPackages.python.interpreter} -m venv "${venvDir}"
+    fi
+
+    # Under some circumstances it might be necessary to add your virtual
+    # environment to PYTHONPATH, which you can do here too;
+    # PYTHONPATH=$PWD/${venvDir}/${python.sitePackages}/:$PYTHONPATH
+
+    source "${venvDir}/bin/activate"
     pip install -r requirements.txt
   '';
 }

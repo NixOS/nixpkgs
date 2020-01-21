@@ -68,7 +68,7 @@ let
           destinationPorts = if (m == null) then throw "bad ip:ports `${fwd.destination}'" else elemAt m 1;
         in ''
           # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
-          iptables -w -t nat -A OUTPUT \
+          iptables -w -t nat -A nixos-nat-out \
             -d ${loopbackip} -p ${fwd.proto} \
             --dport ${builtins.toString fwd.sourcePort} \
             -j DNAT --to-destination ${fwd.destination}

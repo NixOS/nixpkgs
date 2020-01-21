@@ -22,6 +22,8 @@ let
 in
   callPackage ./generic.nix rec {
     inherit sourceRoot;
+    # The update script doesn't correctly change the hash for darwin, so please:
+    # nixpkgs-update: no auto update
 
     version = "1.41.1";
     pname = "vscodium";

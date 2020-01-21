@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ lib, stdenv, fetchFromGitHub, rustPlatform, makeWrapper, perf
 , Security
 }:
 
@@ -15,11 +15,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0kmw2n4j5bisac0bv3npbwfz2z00ncd6w8ichwaz5hac5mi1a72f";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.isLinux [ makeWrapper ];
+  buildInputs = lib.optionals stdenv.isDarwin [
     Security
   ];
 
-  meta = with stdenv.lib; {
+  postFixup = lib.optionalString stdenv.isLinux ''
+    wrapProgram $out/bin/cargo-flamegraph \
+      --suffix PATH ':' ${perf}/bin
+    wrapProgram $out/bin/flamegraph \
+      --suffix PATH ':' ${perf}/bin
+  '';
+
+  meta = with lib; {
     description = "Easy flamegraphs for Rust projects and everything else, without Perl or pipes <3";
     homepage = https://github.com/ferrous-systems/flamegraph;
     license = with licenses; [ asl20 /* or */ mit ];

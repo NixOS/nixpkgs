@@ -11,7 +11,7 @@
 /.github/CODEOWNERS @edolstra
 
 # Libraries
-/lib                        @edolstra @nbp
+/lib                        @edolstra @nbp @infinisil
 /lib/systems                @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
@@ -30,9 +30,9 @@
 /pkgs/build-support/setup-hooks       @Ericson2314
 
 # NixOS Internals
-/nixos/default.nix          @nbp
-/nixos/lib/from-env.nix     @nbp
-/nixos/lib/eval-config.nix  @nbp
+/nixos/default.nix          @nbp @infinisil
+/nixos/lib/from-env.nix     @nbp @infinisil
+/nixos/lib/eval-config.nix  @nbp @infinisil
 /nixos/doc/manual/configuration/abstractions.xml      @nbp
 /nixos/doc/manual/configuration/config-file.xml       @nbp
 /nixos/doc/manual/configuration/config-syntax.xml     @nbp
@@ -62,7 +62,7 @@
 
 # Haskell
 /pkgs/development/compilers/ghc                       @basvandijk @cdepillabout
-/pkgs/development/haskell-modules                     @basvandijk @cdepillabout
+/pkgs/development/haskell-modules                     @basvandijk @cdepillabout @infinisil
 /pkgs/development/haskell-modules/default.nix         @basvandijk @cdepillabout
 /pkgs/development/haskell-modules/generic-builder.nix @basvandijk @cdepillabout
 /pkgs/development/haskell-modules/hoogle.nix          @basvandijk @cdepillabout
@@ -82,6 +82,7 @@
 
 # Rust
 /pkgs/development/compilers/rust @Mic92 @LnL7
+/pkgs/build-support/rust @andir
 
 # Darwin-related
 /pkgs/stdenv/darwin         @NixOS/darwin-maintainers

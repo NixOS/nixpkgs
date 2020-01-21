@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, python, wafHook }:
+{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "mda-lv2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ fftwSinglePrec lv2 python ];
+  buildInputs = [ fftwSinglePrec lv2 ];
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/mda-lv2/;

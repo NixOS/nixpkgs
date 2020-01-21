@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1i4arhwbc05iz8hl7kk843m2f49i3ysby1kxcm9qfhpk7z9nyzj4";
+      sha256 = "0s8sv6h90l2a9xdabj0nirhpr6d2k8s5cddjdkm50x395i014w31";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1052,17 +1052,17 @@ self: super: {
   # This raises the lower bound on prettyprinter to 1.5.1 since
   # `removeTrailingWhitespace` is buggy in earlier versions.
   # This will probably be able to be removed when we update to LTS-15.
-  dhall_1_28_0 =
-    dontCheck (super.dhall_1_28_0.override {
+  dhall_1_29_0 =
+    dontCheck (super.dhall_1_29_0.override {
       prettyprinter = self.prettyprinter_1_5_1;
       prettyprinter-ansi-terminal =
         self.prettyprinter-ansi-terminal.override {
           prettyprinter = self.prettyprinter_1_5_1;
         };
     });
-  dhall-bash_1_0_25 = super.dhall-bash_1_0_25.override { dhall = self.dhall_1_28_0; };
-  dhall-json_1_6_0 = super.dhall-json_1_6_0.override {
-    dhall = self.dhall_1_28_0;
+  dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
+  dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
+    dhall = self.dhall_1_29_0;
     prettyprinter = self.prettyprinter_1_5_1;
     prettyprinter-ansi-terminal =
       self.prettyprinter-ansi-terminal.override {
@@ -1228,8 +1228,7 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_28_0; };
-  dhall-to-cabal = super.dhall-to-cabal.override { dhall = self.dhall_1_28_0; };
+  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_29_0; };
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1239,7 +1238,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_1_20191204; };
+  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
@@ -1261,7 +1260,7 @@ self: super: {
 
   # The LTS-14.x version of their dependencies are too old.
   cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
@@ -1325,7 +1324,7 @@ self: super: {
   });
 
   # Needs the corresponding version of haskell-src-exts.
-  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_22_0; };
+  haskell-src-exts-simple = super.haskell-src-exts-simple.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # https://github.com/Daniel-Diaz/HaTeX/issues/144
   HaTeX = dontCheck super.HaTeX;
@@ -1360,5 +1359,13 @@ self: super: {
 
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
+
+  # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
+  ormolu = doJailbreak (super.ormolu.override {
+    ghc-lib-parser = self.ghc-lib-parser_8_8_2;
+  });
+
+  # krank-0.1.0 does not accept PyF-0.9.0.0.
+  krank = doJailbreak super.krank;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

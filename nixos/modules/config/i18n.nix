@@ -80,14 +80,11 @@ with lib;
     };
 
     # ‘/etc/locale.conf’ is used by systemd.
-    environment.etc = singleton
-      { target = "locale.conf";
-        source = pkgs.writeText "locale.conf"
-          ''
-            LANG=${config.i18n.defaultLocale}
-            ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
-          '';
-      };
+    environment.etc."locale.conf".source = pkgs.writeText "locale.conf"
+      ''
+        LANG=${config.i18n.defaultLocale}
+        ${concatStringsSep "\n" (mapAttrsToList (n: v: ''${n}=${v}'') config.i18n.extraLocaleSettings)}
+      '';
 
   };
 }

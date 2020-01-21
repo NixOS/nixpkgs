@@ -33,7 +33,7 @@ callPackage ./common.nix { inherit stdenv; } {
           #       musl-specific flags below.
           #       At next change to non-musl glibc builds, remove this `then`
           #       and the above condition, instead keeping only the `else` below.
-          then stdenv.lib.optional withGd "-Wno-error=stringop-truncation"
+          then (stdenv.lib.optional withGd gdCflags)
           else
             builtins.concatLists [
               (stdenv.lib.optionals withGd gdCflags)

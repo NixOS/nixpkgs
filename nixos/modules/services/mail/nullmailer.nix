@@ -201,15 +201,12 @@ with lib;
     };
 
     users = {
-      users = singleton {
-        name = cfg.user;
+      users.${cfg.user} = {
         description = "Nullmailer relay-only mta user";
         group = cfg.group;
       };
 
-      groups = singleton {
-        name = cfg.group;
-      };
+      groups.${cfg.group} = { };
     };
 
     systemd.tmpfiles.rules = [

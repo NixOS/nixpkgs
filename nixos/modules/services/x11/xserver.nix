@@ -331,9 +331,9 @@ in
       };
 
       xkbOptions = mkOption {
-        type = types.str;
+        type = types.commas;
         default = "terminate:ctrl_alt_bksp";
-        example = "grp:caps_toggle, grp_led:scroll";
+        example = "grp:caps_toggle,grp_led:scroll";
         description = ''
           X keyboard options; layout switching goes here.
         '';
@@ -590,19 +590,15 @@ in
     ];
 
     environment.etc =
-      (optionals cfg.exportConfiguration
-        [ { source = "${configFile}";
-            target = "X11/xorg.conf";
-          }
-          # -xkbdir command line option does not seems to be passed to xkbcomp.
-          { source = "${cfg.xkbDir}";
-            target = "X11/xkb";
-          }
-        ])
-      # localectl looks into 00-keyboard.conf
-      ++ [
+      (optionalAttrs cfg.exportConfiguration
         {
-          text = ''
+          "X11/xorg.conf".source = "${configFile}";
+          # -xkbdir command line option does not seems to be passed to xkbcomp.
+          "X11/xkb".source = "${cfg.xkbDir}";
+        })
+      # localectl looks into 00-keyboard.conf
+      //{
+          "X11/xorg.conf.d/00-keyboard.conf".text = ''
             Section "InputClass"
               Identifier "Keyboard catchall"
               MatchIsKeyboard "on"
@@ -612,16 +608,12 @@ in
               Option "XkbVariant" "${cfg.xkbVariant}"
             EndSection
           '';
-          target = "X11/xorg.conf.d/00-keyboard.conf";
         }
-      ]
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
-      ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
-        [{
-          source = xorg.xf86inputevdev.out + "/share" + cfgPath;
-          target = cfgPath;
-        }]
-      );
+      // (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
+        {
+          ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
+        });
 
     environment.systemPackages =
       [ xorg.xorgserver.out

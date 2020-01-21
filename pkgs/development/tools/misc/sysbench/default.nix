@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "sysbench";
-  version = "1.0.18";
+  version = "1.0.19";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libmysqlclient libaio ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "akopytov";
     repo = pname;
     rev = version;
-    sha256 = "1r6lkyfp65xqklj1rdfw551srqqyak144agi8x3wjz3wmsbqls19";
+    sha256 = "1zgqb9cr7ld3vw4a3jhq1mlszhcyjlpr0c8q1jcp1d27l9dcvd1w";
   };
 
   enableParallelBuilding = true;

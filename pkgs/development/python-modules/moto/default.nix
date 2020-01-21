@@ -22,29 +22,17 @@
 , sure
 , werkzeug
 , xmltodict
-, isPy38
+, parameterized
 }:
 
 buildPythonPackage rec {
   pname = "moto";
-  version = "1.3.13";
+  version = "1.3.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rhbjvqi1khp80gfnl3x632kwlpq3k7m8f13nidznixdpa78vm4m";
+    sha256 = "0fm09074qic24h8rw9a0paklygyb7xd0ch4890y4v8lj2pnsxbkr";
   };
-
-  # 3.8 is not yet support
-  # https://github.com/spulec/moto/pull/2519
-  disabled = isPy38;
-
-  # Backported fix from 1.3.14.dev for compatibility with botocore >= 1.9.198.
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/spulec/moto/commit/e4a4e6183560489e98b95e815b439c7a1cf3566c.diff";
-      sha256 = "1fixr7riimnldiikv33z4jwjgcsccps0c6iif40x8wmpvgcfs0cb";
-    })
-  ];
 
   postPatch = ''
     substituteInPlace setup.py \
@@ -74,13 +62,21 @@ buildPythonPackage rec {
     xmltodict
   ] ++ lib.optionals isPy27 [ backports_tempfile ];
 
-  checkInputs = [ boto3 freezegun nose sure ];
+  checkInputs = [ boto3 freezegun nose sure parameterized ];
 
-  checkPhase = ''nosetests -v ./tests/ \
-                  -e test_invoke_function_from_sns \
-                  -e test_invoke_requestresponse_function \
-                  -e test_context_manager \
-                  -e test_decorator_start_and_stop'';
+  checkPhase = ''
+    nosetests -v ./tests/ \
+              -e test_invoke_function_from_sns \
+              -e test_invoke_requestresponse_function \
+              -e test_context_manager \
+              -e test_decorator_start_and_stop \
+              -e test_invoke_event_function \
+              -e test_invoke_function_from_dynamodb \
+              -e test_invoke_function_from_sqs \
+              -e test_invoke_lambda_error \
+              -e test_invoke_async_function \
+              -e test_passthrough_requests
+  '';
 
   meta = with lib; {
     description = "Allows your tests to easily mock out AWS Services";

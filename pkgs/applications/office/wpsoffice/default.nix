@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec{
   pname = "wpsoffice";
-  version = "11.1.0.8865";
+  version = "11.1.0.9080";
 
   src = fetchurl {
-    url = "https://wdl1.cache.wps.cn/wps/download/ep/Linux2019/8865/wps-office_11.1.0.8865_amd64.deb";
-    sha256 = "0pxx3j02cm8d08iakg30azjvl3a50y4avyrf08ddgaavqnvkypfj";
+    url = "http://wdl1.pcfg.cache.wpscdn.com/wpsdl/wpsoffice/download/linux/9080/wps-office_11.1.0.9080.XA_amd64.deb";
+    sha256 = "1731e9aea22ef4e558ad66b1373d863452b4f570aecf09d448ae28a821333454";
   };
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
@@ -75,20 +75,16 @@ stdenv.mkDerivation rec{
     mkdir -p $out
     cp -r opt $out
     cp -r usr/* $out
-
     # Avoid forbidden reference error due use of patchelf
     rm -r *
-
     for i in wps wpp et wpspdf; do
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --force-rpath --set-rpath "$(patchelf --print-rpath $prefix/office6/$i):${stdenv.cc.cc.lib}/lib64:${libPath}" \
         $prefix/office6/$i
-
       substituteInPlace $out/bin/$i \
         --replace /opt/kingsoft/wps-office $prefix
     done
-
     for i in $out/share/applications/*;do
       substituteInPlace $i \
         --replace /usr/bin $out/bin \

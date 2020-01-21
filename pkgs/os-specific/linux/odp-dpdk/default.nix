@@ -5,7 +5,7 @@
     version = "18.11.5";
     src = fetchurl {
       url = "https://fast.dpdk.org/rel/dpdk-${version}.tar.xz";
-      sha256 = "0000000000000000000000000000000000000000000000000000";
+      sha256 = "1n6nfaj7703l19jcw540lm8avni48hj9q1rq4mfp8b8gd4zjprj0";
     };
   });
 
@@ -34,6 +34,8 @@ in stdenv.mkDerivation rec {
     jansson
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
+
   # for some reason, /build/odp-dpdk-1.22.0.0_DPDK_18.11/lib/.libs ends up in all binaries,
   # while it should be $out/lib instead.
   # prepend rpath with the proper location, the /build will get removed during rpath shrinking
@@ -45,6 +47,8 @@ in stdenv.mkDerivation rec {
 
   # binaries will segfault otherwise
   dontStrip = true;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Open Data Plane optimized for DPDK";

@@ -56,6 +56,13 @@
    </arg>
 
    <arg>
+     <arg choice='plain'>
+       <option>--channel</option>
+     </arg>
+     <replaceable>channel</replaceable>
+   </arg>
+
+   <arg>
     <arg choice='plain'>
      <option>--no-channel-copy</option>
     </arg>
@@ -125,6 +132,12 @@
       It runs Nix in <filename>/mnt</filename> to build the NixOS configuration
       specified in <filename>/mnt/etc/nixos/configuration.nix</filename>.
      </para>
+    </listitem>
+    <listitem>
+      <para>
+        It installs the current channel <quote>nixos</quote> in the target channel
+        profile (unless <option>--no-channel-copy</option> is specified).
+      </para>
     </listitem>
     <listitem>
      <para>
@@ -201,6 +214,18 @@
       --no-out-link</command>
      </para>
     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+       <option>--channel</option>
+     </term>
+     <listitem>
+       <para>
+         If this option is provided, do not copy the current
+         <quote>nixos</quote> channel to the target host. Instead, use the
+         specified derivation.
+       </para>
+     </listitem>
    </varlistentry>
    <varlistentry>
     <term>

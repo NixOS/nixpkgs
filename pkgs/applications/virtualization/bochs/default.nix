@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./bochs-2.6.10-glibc-2.26.patch ];
 
-  buildInputs = with stdenv.lib;
+  buildInputs =
   [ pkgconfig libtool gtk2 libGLU libGL readline libX11 libXpm docbook_xml_dtd_45 docbook_xsl ]
   ++ optionals termSupport [ ncurses ]
   ++ optionals sdlSupport [ SDL2 ]
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
       in C++, that runs on most popular platforms. It includes emulation of the
       Intel x86 CPU, common I/O devices, and a custom BIOS.
     '';
-    homepage = http://bochs.sourceforge.net/;
+    homepage = "http://bochs.sourceforge.net/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;

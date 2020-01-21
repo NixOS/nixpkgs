@@ -33,7 +33,7 @@ buildPythonPackage rec {
     })
   ];
 
-  checkInputs = [ pytestCheckHook nose ];
+  checkInputs = [ pytestCheckHook nose flaky ];
   dontUseSetuptoolsCheck = true;
   preCheck = ''
     export HOME=$(mktemp -d)

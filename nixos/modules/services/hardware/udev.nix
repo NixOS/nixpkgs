@@ -281,13 +281,10 @@ in
     boot.kernelParams = mkIf (!config.networking.usePredictableInterfaceNames) [ "net.ifnames=0" ];
 
     environment.etc =
-      [ { source = udevRules;
-          target = "udev/rules.d";
-        }
-        { source = hwdbBin;
-          target = "udev/hwdb.bin";
-        }
-      ];
+      {
+        "udev/rules.d".source = udevRules;
+        "udev/hwdb.bin".source = hwdbBin;
+      };
 
     system.requiredKernelConfig = with config.lib.kernelConfig; [
       (isEnabled "UNIX")

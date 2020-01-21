@@ -13,16 +13,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nushell";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "09kcyvhnhf5qsaivgrw58l9jh48rx40i9lkf10cpmk7jvqxgqyks";
+    sha256 = "1hw9fazf5m80p39wgjqjcxafkfjxh0rkjmiznn2p66gccjnkddm6";
   };
 
-  cargoSha256 = "0bdxlbl33kilp9ai40dvdzlx9vcl8r21br82r5ljs2pg521jd66p";
+  cargoSha256 = "17hx02g9m3l2kgxba0n6wmixdbd9g8443h085v8shd70c6vln2v8";
 
   nativeBuildInputs = [ pkg-config ]
     ++ stdenv.lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 marsam ];
+    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 
   passthru = {

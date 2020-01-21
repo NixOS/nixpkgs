@@ -46,7 +46,7 @@ let
               jobs.go.x86_64-darwin
               jobs.mariadb.x86_64-darwin
               jobs.nix.x86_64-darwin
-              jobs.nox.x86_64-darwin
+              jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.openssh.x86_64-darwin
@@ -60,6 +60,7 @@ let
               jobs.stack.x86_64-darwin
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
+              jobs.cachix.x86_64-darwin
 
               # UI apps
               # jobs.firefox-unwrapped.x86_64-darwin
@@ -97,14 +98,14 @@ let
               jobs.pandoc.x86_64-linux
               jobs.python.x86_64-linux
               jobs.python3.x86_64-linux
-              # Needed by travis-ci to test PRs
-              jobs.nox.x86_64-linux
+              # Needed by contributors to test PRs (by inclusion of the PR template)
+              jobs.nixpkgs-review.x86_64-linux
               # Needed for support
               jobs.nix-info.x86_64-linux
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
               jobs.thunderbird.x86_64-linux
-              jobs.unar.x86_64-linux
+              jobs.cachix.x86_64-linux
 
               /*
               jobs.tests.cc-wrapper.x86_64-linux
@@ -134,7 +135,7 @@ let
               jobs.stdenv.x86_64-darwin
               jobs.python.x86_64-darwin
               jobs.python3.x86_64-darwin
-              jobs.nox.x86_64-darwin
+              jobs.nixpkgs-review.x86_64-darwin
               jobs.nix-info.x86_64-darwin
               jobs.nix-info-tested.x86_64-darwin
               jobs.git.x86_64-darwin
@@ -189,6 +190,8 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;
+
+      tests = packagePlatforms pkgs.tests;
 
       # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
 

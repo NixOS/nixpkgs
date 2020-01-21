@@ -479,7 +479,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.14-201912100610/org.eclipse.jdt-4.14.zip;
-      sha256 = "16c5v59mkb0cyfhf2475ds1ajma65bhqfxjr6v59hianqxq9h9la";
+      sha256 = "1c2a23qviv58xljpq3yb37ra8cqw7jh52hmzqlg1nij2sdxb6hm5";
     };
 
     meta = with stdenv.lib; {

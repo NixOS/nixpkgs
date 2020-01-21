@@ -36,15 +36,13 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    name="${pname}-${version}"
-
     cp $src/bin/fzf-tmux $out/bin
 
     mkdir -p $man/share/man
     cp -r $src/man/man1 $man/share/man
 
-    mkdir -p $out/share/vim-plugins/$name
-    cp -r $src/plugin $out/share/vim-plugins/$name
+    mkdir -p $out/share/vim-plugins/${pname}
+    cp -r $src/plugin $out/share/vim-plugins/${pname}
 
     cp -R $src/shell $out/share/fzf
     cat <<SCRIPT > $out/bin/fzf-share

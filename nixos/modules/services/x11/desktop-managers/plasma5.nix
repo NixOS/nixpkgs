@@ -183,10 +183,7 @@ in
         "/share"
       ];
 
-      environment.etc = singleton {
-        source = xcfg.xkbDir;
-        target = "X11/xkb";
-      };
+      environment.etc."X11/xkb".source = xcfg.xkbDir;
 
       # Enable GTK applications to load SVG icons
       services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];
