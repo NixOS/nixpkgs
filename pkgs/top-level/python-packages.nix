@@ -550,6 +550,8 @@ in {
 
   cocotb = callPackage ../development/python-modules/cocotb { };
 
+  commentjson = callPackage ../development/python-modules/commentjson { };
+
   compiledb = callPackage ../development/python-modules/compiledb { };
 
   connexion = callPackage ../development/python-modules/connexion { };
