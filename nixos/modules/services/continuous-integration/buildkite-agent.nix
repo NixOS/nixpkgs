@@ -29,8 +29,6 @@ let
     ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
   '';
 
-  defaultUser = "buildkite-agent";
-
 in
 
 {
@@ -56,15 +54,6 @@ in
         defaultText = "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
         description = "Add programs to the buildkite-agent environment";
         type = types.listOf types.package;
-      };
-
-      user = mkOption {
-        type = types.str;
-        default = defaultUser;
-        description = ''
-          Set this option when you want to run the buildkite agent as something else
-          than the default user "buildkite-agent".
-        '';
       };
 
       tokenPath = mkOption {
@@ -197,7 +186,7 @@ in
   };
 
   config = mkIf config.services.buildkite-agent.enable {
-    users.users.buildkite-agent = mkIf (cfg.user == defaultUser) {
+    users.users.buildkite-agent = {
       name = "buildkite-agent";
       home = cfg.dataDir;
       createHome = true;
@@ -242,7 +231,7 @@ in
 
         serviceConfig =
           { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
-            User = cfg.user;
+            User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
