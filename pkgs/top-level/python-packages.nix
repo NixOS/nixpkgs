@@ -7062,6 +7062,8 @@ in {
 
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
 
+  qiskit-ignis = callPackage ../development/python-modules/qiskit-ignis { };
+
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
 
   qasm2image = callPackage ../development/python-modules/qasm2image { };
