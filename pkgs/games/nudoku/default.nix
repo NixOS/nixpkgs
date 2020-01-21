@@ -11,6 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0rj8ajni7gssj0qbf1jn51699sadxwsr6ca2718w74psv7acda8h";
   };
 
+  # Allow gettext 0.20
+  postPatch = ''
+    substituteInPlace configure.ac --replace 0.19 0.20
+  '';
+
   nativeBuildInputs = [ autoreconfHook pkgconfig gettext ];
   buildInputs = [ ncurses ];
 
