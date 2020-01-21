@@ -91,6 +91,7 @@ let
     ps.six
     ps.pyyaml
   ]);
+  sitePackages = ceph-python-env.python.sitePackages;
 
   version = "14.2.6";
 in rec {
@@ -135,7 +136,8 @@ in rec {
 
       # for pybind/rgw to find internal dep
       export LD_LIBRARY_PATH="$PWD/build/lib:$LD_LIBRARY_PATH"
-      # install target needs to be in PYTHONPATH for "*.pth support" check to succeed
+      # set PYTHONPATH, so the build system doesn't silently skip installing ceph-volume and others
+      export PYTHONPATH=${ceph-python-env}/${sitePackages}:$lib/${sitePackages}:$out/${sitePackages}
 
       patchShebangs src/script src/spdk src/test src/tools
     '';
@@ -159,6 +161,10 @@ in rec {
     postFixup = ''
       wrapPythonPrograms
       wrapProgram $out/bin/ceph-mgr --prefix PYTHONPATH ":" "$(toPythonPath ${placeholder "out"}):$(toPythonPath ${ceph-python-env})"
+
+      # Test that ceph-volume exists since the build system has a tendency to
+      # silently drop it with misconfigurations.
+      test -f $out/bin/ceph-volume
     '';
 
     enableParallelBuilding = true;
@@ -187,11 +193,11 @@ in rec {
         platforms = [ "x86_64-linux" ];
       };
     } ''
-      mkdir -p $out/{bin,etc,lib/python3.7/site-packages}
+      mkdir -p $out/{bin,etc,${sitePackages}}
       cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
       cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
       cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/lib/python3.7/site-packages $out/lib/python3.7/
+      cp -r ${ceph}/${sitePackages} $out/${sitePackages}
       cp -r ${ceph}/etc/bash_completion.d $out/etc
       # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
       substituteInPlace $out/bin/ceph          --replace ${ceph} $out
