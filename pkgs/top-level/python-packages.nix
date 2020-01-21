@@ -2960,6 +2960,8 @@ in {
 
   plaster-pastedeploy = callPackage ../development/python-modules/plaster-pastedeploy {};
 
+  plexapi = callPackage ../development/python-modules/plexapi { };
+
   plotly = callPackage ../development/python-modules/plotly { };
 
   plyfile = callPackage ../development/python-modules/plyfile { };
