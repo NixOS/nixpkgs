@@ -2548,6 +2548,8 @@ in {
 
   docloud = callPackage ../development/python-modules/docloud { };
 
+  docplex = callPackage ../development/python-modules/docplex { };
+
   docopt = callPackage ../development/python-modules/docopt { };
 
   doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
