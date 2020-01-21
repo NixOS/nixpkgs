@@ -1,15 +1,15 @@
-{ stdenv, fetchzip, qt5 }:
+{ stdenv, fetchzip, qt5, mkDerivation }:
 
 let
-  version = "1.40.41";
+  version = "1.40.43";
 in
-stdenv.mkDerivation {
+mkDerivation {
   pname = "qtbitcointrader";
   inherit version;
 
   src = fetchzip {
     url = "https://github.com/JulyIGHOR/QtBitcoinTrader/archive/v${version}.tar.gz";
-    sha256 = "0v2rqzswqxfhxvkj1i7b48sd6kbj3w9issvn05yhp7bx75gwns4p";
+    sha256 = "07xbsi78cykpyxidp1bw5ahmymdrs2afg7b0lla7dfhagz18lzxv";
   };
 
   buildInputs = [ qt5.qtbase qt5.qtmultimedia qt5.qtscript ];

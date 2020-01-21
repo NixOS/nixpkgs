@@ -1,3 +1,4 @@
+cl-prevalence
 3bmd
 alexandria
 array-utils
@@ -26,6 +27,7 @@ cl-dbi
 cl-emb
 cl-fuse
 cl-fuse-meta-fs
+cl-hooks
 cl-html-parse
 cl-html5-parser
 cl-jpeg

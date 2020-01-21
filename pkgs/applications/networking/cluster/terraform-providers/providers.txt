@@ -9,14 +9,10 @@
 # include all terraform-providers
 terraform-providers terraform-provider- terraform-provider-\\(azure-classic\\|scaffolding\\)
 
-# include terraform-provider-matchbox
-poseidon/terraform-provider-matchbox
-
-# include terraform-provider-nixos
-tweag/terraform-provider-nixos
-
-# include terraform-provider-secret
-tweag/terraform-provider-secret
-
-# include terraform-provider-segment
+# include providers from individual repos
 ajbosco/terraform-provider-segment
+camptocamp/terraform-provider-pass
+poseidon/terraform-provider-matchbox
+spaceapegames/terraform-provider-wavefront
+tweag/terraform-provider-nixos
+tweag/terraform-provider-secret

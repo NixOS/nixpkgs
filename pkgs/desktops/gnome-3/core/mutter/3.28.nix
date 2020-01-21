@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
     })
     # See patch commit message
     ./0001-Revert-ClutterActor-Preserve-valid-paint-volumes-til.patch
+    # Fix build with libglvnd provided headers
+    ./libglvnd-328.patch
   ];
 
   configureFlags = [

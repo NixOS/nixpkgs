@@ -1,5 +1,5 @@
 { stdenv, fetchurl, wrapQtAppsHook
-, freeglut, freealut, libGLU_combined, libICE, libjpeg, openal, openscenegraph, plib
+, freeglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
 , libSM, libunwind, libX11, xorgproto, libXext, libXi
 , libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
 , makeDesktopItem, qtbase, qtdeclarative, glew
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
-    freeglut freealut libGLU_combined libICE libjpeg openal openscenegraph plib
+    freeglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
     libSM libunwind libX11 xorgproto libXext libXi
     libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
     glew qtdeclarative

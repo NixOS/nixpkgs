@@ -86,7 +86,7 @@ in
           ${xmonadBin}
           waitPID=$!
         '' else ''
-          ${xmonad}/bin/xmonad &
+          systemd-cat -t xmonad ${xmonad}/bin/xmonad &
           waitPID=$!
         '';
       }];

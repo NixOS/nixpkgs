@@ -33,6 +33,9 @@ with lib;
       pkgs.system-config-printer
     ];
 
+    # for $out/bin/install-printer-driver
+    services.packagekit.enable = true;
+
   };
 
 }

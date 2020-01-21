@@ -127,6 +127,11 @@ let
     nativeBuildInputs = [ makeMinimal ];
     buildInputs = [ zlib ];
 
+    # the build system re-runs `./configure` with `HOST_CC` (which is their
+    # name for Build CC) as a compiler to make `defs.mk`, which is installed
+    depsBuildBuild = [ buildPackages.stdenv.cc ] ++ buildInputs;
+    HOST_CC = "${buildPackages.stdenv.cc.targetPrefix}cc";
+
     # temporarily use gnuinstall for bootstrapping
     # bsdinstall will be built later
     makeFlags = [
@@ -218,9 +223,9 @@ let
     ];
     skipIncludesPhase = true;
     buildPhase = ''
-      cc  -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
+      "$CC" -c -Iinclude -Ilib/libc/include lib/libc/gen/fts.c \
           -o lib/libc/gen/fts.o
-      ar -rsc libfts.a lib/libc/gen/fts.o
+      "$AR" -rsc libfts.a lib/libc/gen/fts.o
     '';
     installPhase = ''
       runHook preInstall

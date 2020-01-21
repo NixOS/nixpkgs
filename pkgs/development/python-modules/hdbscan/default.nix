@@ -7,21 +7,22 @@
 , scikitlearn
 , fetchPypi
 , joblib
+, six
 }:
 
 buildPythonPackage rec {
   pname = "hdbscan";
-  version = "0.8.22";
+  version = "0.8.24";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5cfdc25375123eb9a72363449979141cc928c1953f220f0f81d7baabcaccec2d";
+    sha256 = "fe31a7ea0ce2c9babd190a195e491834ff9f64c74daa4ca94fa65a88f701269a";
   };
 
   checkInputs = [ nose ];
 
   nativeBuildInputs = [ cython ];
-  propagatedBuildInputs = [ numpy scipy scikitlearn joblib ];
+  propagatedBuildInputs = [ numpy scipy scikitlearn joblib six ];
 
   meta = with lib; {
     description = "Hierarchical Density-Based Spatial Clustering of Applications with Noise, a clustering algorithm with a scikit-learn compatible API";

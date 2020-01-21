@@ -6,8 +6,8 @@
       };
 
       "elm/json" = {
-        sha256 = "1g0hafkqf2q633r7ir9wxpb1lnlzskhpsyi0h5bkzj0gl072zfnb";
-        version = "1.0.0";
+        sha256 = "1a107nmm905dih4w4mjjkkpdcjbgaf5qjvr7fl30kkpkckfjjnrw";
+        version = "1.1.2";
       };
 
       "elm/html" = {
@@ -16,8 +16,8 @@
       };
 
       "elm/svg" = {
-        sha256 = "08x0v8p9wm699jjmsnbq69pxv3jh60j4f6fg7y6hyr7xxj85y390";
-        version = "1.0.0";
+        sha256 = "1cwcj73p61q45wqwgqvrvz3aypjyy3fw732xyxdyj6s256hwkn0k";
+        version = "1.0.1";
       };
 
       "elm/project-metadata-utils" = {
@@ -26,23 +26,33 @@
       };
 
       "elm/browser" = {
-        sha256 = "1apmvyax93nvmagwj00y16zx10kfv640cxpi64xgqbgy7d2wphy4";
-        version = "1.0.0";
+        sha256 = "1zlmx672glg7fdgkvh5jm47y85pv7pdfr5mkhg6x7ar6k000vyka";
+        version = "1.0.1";
       };
 
       "elm/core" = {
-        sha256 = "10kr86h4v5h4p0586q406a5wbl8xvr1jyrf6097zp2wb8sv21ylw";
-        version = "1.0.0";
+        sha256 = "1l0qdbczw91kzz8sx5d5zwz9x662bspy7p21dsr3f2rigxiix2as";
+        version = "1.0.2";
       };
 
       "elm/http" = {
-        sha256 = "1igmm89ialzrjib1j8xagkxalq1x2gj4l0hfxcd66mpwmvg7psl8";
-        version = "1.0.0";
+        sha256 = "008bs76mnp48b4dw8qwjj4fyvzbxvlrl4xpa2qh1gg2kfwyw56v1";
+        version = "2.0.0";
+      };
+
+      "elm/bytes" = {
+        sha256 = "040d7irrawcbnq9jxhzx8p9qacdlw5bncy6lgndd6inm53rvvwbp";
+        version = "1.0.7";
+      };
+
+      "elm/file" = {
+        sha256 = "15vw1ilbg0msimq2k9magwigp8lwqrgvz3vk6qia6b3ldahvw8jr";
+        version = "1.0.1";
       };
 
       "elm/parser" = {
-        sha256 = "0k4zlq30lrvawqvzwbvsl0hrmwf9s832mb41z7fdspm4549dj7wc";
-        version = "1.0.0";
+        sha256 = "0a3cxrvbm7mwg9ykynhp7vjid58zsw03r63qxipxp3z09qks7512";
+        version = "1.1.0";
       };
 
       "elm/url" = {
@@ -56,7 +66,7 @@
       };
 
       "elm/virtual-dom" = {
-        sha256 = "0hm8g92h7z39km325dlnhk8n00nlyjkqp3r3jppr37k2k13md6aq";
-        version = "1.0.0";
+        sha256 = "0q1v5gi4g336bzz1lgwpn5b1639lrn63d8y6k6pimcyismp2i1yg";
+        version = "1.0.2";
       };
 }

@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.6.0";
 
   src = fetchurl {
-    url = "https://github.com/red-eclipse/base/releases/download/v${version}/redeclipse_${version}_nix.tar.bz2";
+    url = "https://github.com/redeclipse/base/releases/download/v${version}/redeclipse_${version}_nix.tar.bz2";
     sha256 = "0j98zk7nivdsap4y50dlqnql17hdila1ikvps6vicwaqb3l4gaa8";
   };
 

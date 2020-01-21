@@ -16,16 +16,16 @@ with rustPlatform;
 
 buildRustPackage rec {
   pname = "ffsend";
-  version = "0.2.52";
+  version = "0.2.58";
 
   src = fetchFromGitLab {
     owner = "timvisee";
     repo = "ffsend";
     rev = "v${version}";
-    sha256 = "0bz0pgv7vdcha6sx2csx3mhkj4ph90w32p7h1wjvcgg3wlk1cgsf";
+    sha256 = "0yqigqh5vldzmp7wc1mxi5a4bxzm81xycx5h0ghak74vbjibps49";
   };
 
-  cargoSha256 = "01sgk4101ad0zk1k8zz89fsk2iq6j2vr8xd0wi6h88g2lgxvffzf";
+  cargoSha256 = "1wwdnm6a5g4gpd1f89qii8v4f6mcfc1bif1v6mdlcbrpwax5skh4";
 
   nativeBuildInputs = [ cmake pkgconfig installShellFiles ];
   buildInputs = [ openssl ]
@@ -55,7 +55,7 @@ buildRustPackage rec {
     '';
     homepage = https://gitlab.com/timvisee/ffsend;
     license = licenses.gpl3;
-    maintainers = [ maintainers.lilyball ];
+    maintainers = with maintainers; [ lilyball equirosa ];
     platforms = platforms.unix;
   };
 }

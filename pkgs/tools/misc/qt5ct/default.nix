@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl, qtbase, qttools, qmake }:
+{ mkDerivation, lib, fetchurl, qtbase, qtsvg, qttools, qmake }:
 
 let inherit (lib) getDev; in
 
@@ -13,15 +13,12 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake qttools ];
 
-  buildInputs = [ qtbase ];
+  buildInputs = [ qtbase qtsvg ];
 
   qmakeFlags = [
     "LRELEASE_EXECUTABLE=${getDev qttools}/bin/lrelease"
+    "PLUGINDIR=${placeholder "out"}/${qtbase.qtPluginPrefix}"
   ];
-
-  preConfigure = ''
-    qmakeFlags+=" PLUGINDIR=$out/$qtPluginPrefix"
-  '';
 
   enableParallelBuilding = true;
 

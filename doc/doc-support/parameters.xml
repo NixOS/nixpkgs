@@ -8,7 +8,7 @@
  <xsl:param name="html.script" select="'./highlightjs/highlight.pack.js ./highlightjs/loader.js'" />
  <xsl:param name="xref.with.number.and.title" select="1" />
  <xsl:param name="use.id.as.filename" select="1" />
- <xsl:param name="toc.section.depth" select="3" />
+ <xsl:param name="toc.section.depth" select="0" />
  <xsl:param name="admon.style" select="''" />
  <xsl:param name="callout.graphics.extension" select="'.svg'" />
 </xsl:stylesheet>

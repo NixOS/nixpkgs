@@ -1,5 +1,5 @@
 { stdenv, lib, fetchgit, flex, bison, pkgconfig, which
-, pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform, python, swig
+, pythonSupport ? false, python, swig
 }:
 
 stdenv.mkDerivation rec {

@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zsh ];
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Fish shell like syntax highlighting for Zsh";

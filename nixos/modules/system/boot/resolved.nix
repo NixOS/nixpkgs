@@ -136,6 +136,8 @@ in
       }
     ];
 
+    users.users.resolved.group = "systemd-resolve";
+
     systemd.additionalUpstreamSystemUnits = [
       "systemd-resolved.service"
     ];

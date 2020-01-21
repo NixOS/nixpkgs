@@ -56,7 +56,7 @@ rec {
   binaries = runCommand "ndk-gcc-binutils" {
     isClang = true; # clang based cc, but bintools ld
     nativeBuildInputs = [ makeWrapper ];
-    propgatedBuildInputs = [ androidndk ];
+    propagatedBuildInputs = [ androidndk ];
   } ''
     mkdir -p $out/bin
 

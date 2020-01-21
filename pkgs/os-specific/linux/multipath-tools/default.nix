@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "multipath-tools";
-  version = "0.8.2";
+  version = "0.8.3";
 
   src = fetchurl {
     name = "${pname}-${version}.tar.gz";
     url = "https://git.opensvc.com/gitweb.cgi?p=multipath-tools/.git;a=snapshot;h=refs/tags/${version};sf=tgz";
-    sha256 = "0x6cjlb9mjrmpaqk5v6v47qz6n9zyqmw13i7pq5x6ppwyqdxhn5s";
+    sha256 = "1mgjylklh1cx8px8ffgl12kyc0ln3445vbabd2sy8chq31rpiiq8";
   };
 
   postPatch = ''
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "LIB=lib"
     "prefix=$(out)"
-    "mandir=$(out)/share/man/man8"
+    "man8dir=$(out)/share/man/man8"
     "man5dir=$(out)/share/man/man5"
     "man3dir=$(out)/share/man/man3"
-    "unitdir=$(out)/lib/systemd/system"
+    "SYSTEMDPATH=lib"
   ];
 
   meta = with stdenv.lib; {

@@ -95,7 +95,7 @@ $ nix-build
 
 The Android SDK gets deployed with all desired plugin versions.
 
-We can also deploy subsets of the Android SDK. For example, to only the the
+We can also deploy subsets of the Android SDK. For example, to only the
 `platform-tools` package, you can evaluate the following expression:
 
 ```nix

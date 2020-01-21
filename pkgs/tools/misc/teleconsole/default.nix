@@ -16,7 +16,7 @@ buildGoPackage rec {
   goDeps = ./deps.nix;
 
   CGO_ENABLED = 1;
-  buildFlags = "-ldflags";
+  buildFlags = [ "-ldflags" ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.teleconsole.com/";

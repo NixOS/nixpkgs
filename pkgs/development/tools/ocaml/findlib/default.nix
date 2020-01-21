@@ -32,13 +32,13 @@ stdenv.mkDerivation rec {
   setupHook = writeText "setupHook.sh" ''
     addOCamlPath () {
         if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib"; then
-            export OCAMLPATH="''${OCAMLPATH}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/"
+            export OCAMLPATH="''${OCAMLPATH-}''${OCAMLPATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/"
         fi
         if test -d "''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"; then
-            export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"
+            export CAML_LD_LIBRARY_PATH="''${CAML_LD_LIBRARY_PATH-}''${CAML_LD_LIBRARY_PATH:+:}''$1/lib/ocaml/${ocaml.version}/site-lib/stublibs"
         fi
         export OCAMLFIND_DESTDIR="''$out/lib/ocaml/${ocaml.version}/site-lib/"
-        if test -n "$createFindlibDestdir"; then
+        if test -n "''${createFindlibDestdir-}"; then
           mkdir -p $OCAMLFIND_DESTDIR
         fi
     }
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
       stdenv.lib.maintainers.vbmithr
     ];
   };

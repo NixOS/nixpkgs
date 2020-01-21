@@ -112,6 +112,8 @@ rec {
     msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
 
+    vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
+
     js       = { bits = 32; significantByte = littleEndian; family = "js"; };
   };
 
@@ -208,6 +210,9 @@ rec {
   vendors = setTypes types.openVendor {
     apple = {};
     pc = {};
+    # Actually matters, unlocking some MinGW-w64-specific options in GCC. See
+    # bottom of https://sourceforge.net/p/mingw-w64/wiki2/Unicode%20apps/
+    w64 = {};
 
     none = {};
     unknown = {};
@@ -327,6 +332,7 @@ rec {
         }
       ];
     };
+    gnuabi64     = { abi = "64"; };
 
     musleabi     = { float = "soft"; };
     musleabihf   = { float = "hard"; };

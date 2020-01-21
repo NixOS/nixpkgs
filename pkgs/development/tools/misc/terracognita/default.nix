@@ -2,16 +2,20 @@
 
 buildGoModule rec {
   pname = "terracognita";
-  version = "0.1.6";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "cycloidio";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ljh9dyn919k5f0yaca5an2vczj8cd5cb6qb4i5bdgmlh3wijiag";
+    sha256 = "1d5yi2jxmk04wcz8rjwa5kz9525j8s90d4rj2d4cbgd3lbbk45qq";
   };
 
-  modSha256 = "1ssz6rhdqma79x75qsxpa9is5zw1nlc0rv1h23dfsk8vla3p84ml";
+  modSha256 = "0xlhp8pa5g6an10m56g237pixc4h6ay89hkp1ijdz45iyfn9fk91";
+
+  subPackages = [ "." ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/cycloidio/terracognita/cmd.Version=${version}" ];
 
   meta = with lib; {
     description = "Reads from existing Cloud Providers (reverse Terraform) and generates your infrastructure as code on Terraform configuration";

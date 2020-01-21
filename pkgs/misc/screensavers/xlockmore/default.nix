@@ -2,11 +2,11 @@
 , libXdmcp, libXt }:
 
 stdenv.mkDerivation rec {
-  name = "xlockmore-5.58";
+  name = "xlockmore-5.61";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/${name}.tar.xz";
-    sha256 = "1va11sbv5lbkxkp0i0msz5md3n2n82nzppk27rzdrw7y79vq37zw";
+    sha256 = "012wsfcphahwwylyfk9c848nwj1v08hpnja2yfs0j8pnq7milnva";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 

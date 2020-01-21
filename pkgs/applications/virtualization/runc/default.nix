@@ -5,13 +5,13 @@ with lib;
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc8";
+  version = "1.0.0-rc9";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "05s4p12mgmdcy7gjralh41wlgds6m69zdgwbpdn1xjj2487dmhxf";
+    sha256 = "1ss5b46cbbckyqlwgj8dbd5l59c5y0kp679hcpc0ybaj53pmwxj7";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
@@ -22,14 +22,14 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];
 
-  makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
+  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
     substituteInPlace libcontainer/apparmor/apparmor.go \
       --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
-    make ${makeFlags} runc
+    make ${toString makeFlags} runc
   '';
 
   installPhase = ''
@@ -53,7 +53,7 @@ buildGoPackage rec {
     homepage = https://runc.io/;
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester saschagrunert ];
     platforms = platforms.linux;
   };
 }

@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, flex, bison }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "fluent-bit";
-  version = "1.0.6";
+  version = "1.3.6";
 
   src = fetchFromGitHub {
     owner = "fluent";
     repo = "fluent-bit";
-    rev = "8cc3a1887c3fcd6dd95a4a475fb213a0e399c222";
-    sha256 = "0rmdbrhhrim80d0hwbz56d5f8rypm6h62ks3xnr0b4w987w10653";
+    rev = "v${version}";
+    sha256 = "0gkn5axjxaa52f3w2qxwwab4m46xrxymbkcpw1v1jihil34pxw7a";
   };
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake flex bison ];
 
   postPatch = ''
     substituteInPlace src/CMakeLists.txt \

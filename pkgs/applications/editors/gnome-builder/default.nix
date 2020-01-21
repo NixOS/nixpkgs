@@ -5,6 +5,7 @@
 , docbook_xsl
 , docbook_xml_dtd_43
 , fetchurl
+, fetchpatch
 , flatpak
 , gnome3
 , libgit2-glib
@@ -13,7 +14,6 @@
 , gtk-doc
 , gtk3
 , gtksourceview4
-, hicolor-icon-theme
 , json-glib
 , jsonrpc-glib
 , libdazzle
@@ -46,6 +46,18 @@ stdenv.mkDerivation rec {
     sha256 = "19018pq94cxf6fywd7fsmy98x56by5zfmh140pl530gaaw84cvhb";
   };
 
+  patches = [
+    # Fix build with Meson 0.52
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/c8b862b491cfbbb4f79b24d7cd90e4fb1f37cb9f.patch";
+      sha256 = "0n8kg7nnjqmbnyag1ps6dvrlqrxc94djjncqx10d6y7ijwdxf4w8";
+    })
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-builder/commit/da26dfbf78468f5ed724e022b300a07862a95833.patch";
+      sha256 = "0psa65bzjpjj7vc5rknv2w2dz3p50jjv10s6j2fd6lpw8j2800k4";
+    })
+  ];
+
   nativeBuildInputs = [
     appstream-glib
     desktop-file-utils
@@ -53,7 +65,6 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
     gobject-introspection
     gtk-doc
-    hicolor-icon-theme
     (meson.override ({ inherit stdenv; }))
     ninja
     pkgconfig

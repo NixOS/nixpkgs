@@ -430,7 +430,7 @@ rec {
         set +o pipefail
         for i in $rpms; do
             echo "$i..."
-            ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories --unconditional --extract-over-symlinks
+            ${rpm}/bin/rpm2cpio "$i" | chroot /mnt ${cpio}/bin/cpio -i --make-directories --unconditional
         done
 
         eval "$preInstall"

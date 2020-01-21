@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , glib
 , gtk3
-, hicolor-icon-theme
+, vala
 , json-glib
 , libgee
 , meson
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    pantheon.vala
+    vala
     python3
     wrapGAppsHook
   ];
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    hicolor-icon-theme
     json-glib
     libgee
     pantheon.granite
@@ -47,6 +46,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Plot out your own timetable for the week and organize it";

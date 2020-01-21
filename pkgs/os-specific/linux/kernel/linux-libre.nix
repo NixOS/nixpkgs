@@ -1,11 +1,8 @@
 { stdenv, lib, fetchsvn, linux
 , scripts ? fetchsvn {
     url = "https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/";
-
-    # Update this if linux_latest-libre fails to build.
-    # $ curl https://www.fsfla.org/svn/fsfla/software/linux-libre/releases/branches/ | grep -Eo 'Revision [0-9]+'
-    rev = "16794";
-    sha256 = "1lpaka4hs7yrpnrzfybd6radjylwvw2p4aly68pypykqs2srvm7j";
+    rev = "17198";
+    sha256 = "0cr7jpag6kr3iili5zmv1iimi5a1c175dcj8qvhcspwkbv7f17mp";
   }
 , ...
 }:
@@ -35,6 +32,8 @@ in linux.override {
         cp -r . "$out"
       '';
     };
+
+    passthru.updateScript = ./update-libre.sh;
 
     maintainers = [ lib.maintainers.qyliss ];
   };

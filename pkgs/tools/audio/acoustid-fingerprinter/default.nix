@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake qt4 taglib chromaprint ffmpeg ];
 
-  cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${(builtins.parseDrvName taglib.name).version}" ];
+  cmakeFlags = [ "-DTAGLIB_MIN_VERSION=${stdenv.lib.getVersion taglib}" ];
 
   patches = [
     (fetchpatch {

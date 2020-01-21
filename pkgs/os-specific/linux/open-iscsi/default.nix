@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
-  version = "2.0.878";
+  version = "2.1.0";
 
   nativeBuildInputs = [ autoconf automake gettext libtool perl pkgconf ];
   buildInputs = [ kmod openisns.lib openssl systemd utillinux ];
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "open-iscsi";
     repo = "open-iscsi";
     rev = version;
-    sha256 = "0hkprlni0z1zdkrmhd897knyfws0l95bz67fgp0vvf63ag08b5ly";
+    sha256 = "0z7rnbfa48j3r4ij7335xgjfb835gnnp10v7q6lvwg7bq6v5xvih";
   };
 
   DESTDIR = "$(out)";
@@ -28,6 +28,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     cp usr/iscsistart $out/sbin/
     $out/sbin/iscsistart -v
+  '';
+
+  postFixup = ''
+    sed -i "s|/sbin/iscsiadm|$out/bin/iscsiadm|" $out/bin/iscsi_fw_login
   '';
 
   meta = with stdenv.lib; {

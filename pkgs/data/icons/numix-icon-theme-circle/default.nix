@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, gtk3, numix-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, numix-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "numix-icon-theme-circle";
@@ -13,12 +13,22 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gtk3 numix-icon-theme ];
 
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
+
   installPhase = ''
     install -dm 755 $out/share/icons
     cp -dr --no-preserve='ownership' Numix-Circle{,-Light} $out/share/icons/
   '';
 
   postFixup = ''
+    for panel in $out/share/icons/*/*/panel; do
+      ln -sf $(realpath ${numix-icon-theme}/share/icons/Numix/16/$(readlink $panel)) $panel
+    done
+
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done

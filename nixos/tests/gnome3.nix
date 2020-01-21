@@ -44,7 +44,7 @@ import ./make-test.nix ({ pkgs, ...} : {
       $machine->waitForUnit("default.target","alice");
 
       # Check that logging in has given the user ownership of devices.
-      $machine->succeed("getfacl /dev/snd/timer | grep -q alice");
+      $machine->succeed("getfacl -p /dev/snd/timer | grep -q alice");
 
       # Wait for the wayland server
       $machine->waitForFile("/run/user/1000/wayland-0");

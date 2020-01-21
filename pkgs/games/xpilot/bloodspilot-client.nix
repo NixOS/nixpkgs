@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libX11, SDL, libGLU_combined, expat, zlib, SDL_ttf, SDL_image }:
+{ stdenv, fetchurl, libX11, SDL, libGLU, libGL, expat, zlib, SDL_ttf, SDL_image }:
 
 stdenv.mkDerivation rec {
   version = "1.5.0";
@@ -10,10 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 SDL SDL_ttf SDL_image libGLU_combined expat zlib
+    libX11 SDL SDL_ttf SDL_image libGLU libGL expat zlib
   ];
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
 
   meta = {
     description = ''A multiplayer space combat game (client part)'';

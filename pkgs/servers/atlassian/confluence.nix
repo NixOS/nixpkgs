@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "atlassian-confluence";
-  version = "6.15.8";
+  version = "7.2.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/confluence/downloads/${pname}-${version}.tar.gz";
-    sha256 = "17pcgjv6rj2jxzmwx82941zhrrmprkchjhnnadnxq4709zsyb4q3";
+    sha256 = "1srwxk9c26hp1j3v6v1hr16l4dqaaiwrli5a9n9a44hkl7qy8yzl";
   };
 
   buildPhase = ''
@@ -37,8 +37,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Team collaboration software written in Java and mainly used in corporate environments";
-    homepage = https://www.atlassian.com/software/confluence;
+    homepage = "https://www.atlassian.com/software/confluence";
     license = licenses.unfree;
-    maintainers = with maintainers; [ fpletz globin ];
+    maintainers = with maintainers; [ fpletz globin willibutz ];
   };
 }

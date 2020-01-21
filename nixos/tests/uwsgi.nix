@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 {
   name = "uwsgi";
   meta = with pkgs.stdenv.lib.maintainers; {
@@ -30,9 +30,9 @@ import ./make-test.nix ({ pkgs, ... }:
 
   testScript =
     ''
-      $machine->waitForUnit('multi-user.target');
-      $machine->waitForUnit('uwsgi.service');
-      $machine->waitForOpenPort(8000);
-      $machine->succeed('curl -v 127.0.0.1:8000 | grep "Hello World!"');
+      machine.wait_for_unit("multi-user.target")
+      machine.wait_for_unit("uwsgi.service")
+      machine.wait_for_open_port(8000)
+      assert "Hello World" in machine.succeed("curl -v 127.0.0.1:8000")
     '';
 })

@@ -1,23 +1,21 @@
 { stdenv, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
-, django-mailman3, mailmanclient
+, django-mailman3, mailmanclient, readme_renderer
 }:
 
 buildPythonPackage rec {
   pname = "postorius";
-  version = "1.2.4";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1722lnscxfl8wdigf5d80d1qmd5gblr439wa989jxlww0wkjg9fl";
+    sha256 = "0wrm0hda7ym9qaygxirqaaii66ndmgyy7gx8wqdg07pfx14zcyja";
   };
 
-  buildInputs = [ beautifulsoup4 vcrpy mock ];
-  propagatedBuildInputs = [ django-mailman3 ];
+  propagatedBuildInputs = [ django-mailman3 readme_renderer ];
+  checkInputs = [ beautifulsoup4 vcrpy mock ];
 
-  checkPhase = ''
-    cd $NIX_BUILD_TOP/$sourceRoot
-    PYTHONPATH=.:$PYTHONPATH python example_project/manage.py test --settings=test_settings postorius
-  '';
+  # Tries to connect to database.
+  doCheck = false;
 
   meta = {
     homepage = https://www.gnu.org/software/mailman/;

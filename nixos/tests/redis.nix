@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "redis";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ flokli ];
@@ -15,12 +15,10 @@ import ./make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
-
-    $machine->waitForUnit("redis");
-    $machine->waitForOpenPort("6379");
-
-    $machine->succeed("redis-cli ping | grep PONG");
-    $machine->succeed("redis-cli -s /run/redis/redis.sock ping | grep PONG");
+    start_all()
+    machine.wait_for_unit("redis")
+    machine.wait_for_open_port("6379")
+    machine.succeed("redis-cli ping | grep PONG")
+    machine.succeed("redis-cli -s /run/redis/redis.sock ping | grep PONG")
   '';
 })

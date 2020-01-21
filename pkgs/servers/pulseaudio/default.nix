@@ -1,6 +1,6 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkgconfig, intltool, autoreconfHook
-, libsndfile, libtool, makeWrapper
-, xorg, libcap, alsaLib, glib, gnome3
+{ lib, stdenv, fetchurl, pkgconfig, autoreconfHook
+, libsndfile, libtool, makeWrapper, perlPackages
+, xorg, libcap, alsaLib, glib, dconf
 , avahi, libjack2, libasyncns, lirc, dbus
 , sbc, bluez5, udev, openssl, fftwFloat
 , speexdsp, systemd, webrtc-audio-processing
@@ -31,16 +31,16 @@
 
 stdenv.mkDerivation rec {
   name = "${if libOnly then "lib" else ""}pulseaudio-${version}";
-  version = "12.2";
+  version = "13.0";
 
   src = fetchurl {
     url = "http://freedesktop.org/software/pulseaudio/releases/pulseaudio-${version}.tar.xz";
-    sha256 = "0ma0p8iry7fil7qb4pm2nx2pm65kq9hk9xc4r5wkf14nqbzni5l0";
+    sha256 = "0mw0ybrqj7hvf8lqs5gjzip464hfnixw453lr0mqzlng3b5266wn";
   };
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig intltool autoreconfHook makeWrapper ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook makeWrapper perlPackages.perl perlPackages.XMLParser ];
 
   propagatedBuildInputs =
     lib.optionals stdenv.isLinux [ libcap ];
@@ -61,25 +61,10 @@ stdenv.mkDerivation rec {
       ++ lib.optional zeroconfSupport  avahi
   );
 
-  patches = [
-    # The following two patches fix alsalib headers move, remove after the next release
-    (fetchpatch {
-      name = "alsa-asoundlib-include.patch";
-      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/993d3fd89e5611997f1e165bf03edefb0204b0a4.patch";
-      sha256 = "17icnf8026947j1dqw4k16f91vy6zyg7q41zv2j6pxh9fncb1s71";
-    })
-    (fetchpatch {
-      name = "alsa-use-case-include.patch";
-      url = "https://gitlab.freedesktop.org/pulseaudio/pulseaudio/commit/b89d33bb182c42db5ad3987b0e91b7bf62f421e8.patch";
-      sha256 = "0jccpc0dgkb0v4xrkyca2pm2k4i6pvahs9bq4hbg34173p23g5nb";
-    })
-  ];
-
-  preConfigure = ''
-    # Performs and autoreconf
-    export NOCONFIGURE="yes"
+  autoreconfPhase = ''
+    # Performs an autoreconf
     patchShebangs bootstrap.sh
-    ./bootstrap.sh
+    NOCONFIGURE=1 ./bootstrap.sh
 
     # Move the udev rules under $(prefix).
     sed -i "src/Makefile.in" \
@@ -99,11 +84,11 @@ stdenv.mkDerivation rec {
     [ "--localstatedir=/var"
       "--sysconfdir=/etc"
       "--with-access-group=audio"
-      "--with-bash-completion-dir=\${out}/share/bash-completions/completions"
+      "--with-bash-completion-dir=${placeholder "out"}/share/bash-completions/completions"
     ]
     ++ lib.optional (jackaudioSupport && !libOnly) "--enable-jack"
     ++ lib.optional stdenv.isDarwin "--with-mac-sysroot=/"
-    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=\${out}/lib/systemd/user";
+    ++ lib.optional (stdenv.isLinux && useSystemd) "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user";
 
   enableParallelBuilding = true;
 
@@ -115,8 +100,8 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I/usr/include";
 
   installFlags =
-    [ "sysconfdir=$(out)/etc"
-      "pulseconfdir=$(out)/etc/pulse"
+    [ "sysconfdir=${placeholder "out"}/etc"
+      "pulseconfdir=${placeholder "out"}/etc/pulse"
     ];
 
   postInstall = lib.optionalString libOnly ''
@@ -128,7 +113,7 @@ stdenv.mkDerivation rec {
   preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/libexec/pulse/gsettings-helper \
      --prefix XDG_DATA_DIRS : "$out/share/gsettings-schemas/${name}" \
-     --prefix GIO_EXTRA_MODULES : "${lib.getLib gnome3.dconf}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = {

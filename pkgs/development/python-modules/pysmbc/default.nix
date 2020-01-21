@@ -3,13 +3,13 @@
 , setuptools }:
 
 buildPythonPackage rec {
-  version = "1.0.16";
+  version = "1.0.18";
   pname = "pysmbc";
 
   src = fetchPypi {
     inherit pname version;
     extension = "tar.bz2";
-    sha256 = "62199b5cca02c05d5f3b9edbc9a864fb8a2cbe47a465c0b9461642eb3b6f5aca";
+    sha256 = "5da8aef1e3edaaffb1fbe2afe3772ba0a5f5bf666a28ae5db7b59ef96e465bdf";
   };
 
   nativeBuildInputs = [ pkgconfig ];

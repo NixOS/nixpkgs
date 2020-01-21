@@ -32,7 +32,8 @@ in stdenv.mkDerivation rec {
     ++ (if withQt5 then [ qmake ] else [ qmake4Hook ])
     ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  patches = lib.optional (stdenv.isDarwin && withQt5) [ xcodePatch ];
+  patches = (lib.optional (stdenv.isDarwin && withQt5) xcodePatch) ++
+            (lib.optional (!withQt5) ./fix-qt4-build.patch );
 
   # Make sure that libqscintilla2.so is available in $out/lib since it is expected
   # by some packages such as sqlitebrowser
@@ -72,6 +73,5 @@ in stdenv.mkDerivation rec {
     license = with licenses; [ gpl2 gpl3 ]; # and commercial
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;
-    broken = !withQt5;
   };
 }

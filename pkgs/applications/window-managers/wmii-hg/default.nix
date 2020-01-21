@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
                   libX11 libXrender libXext libXinerama libXrandr libXft ];
 
   # For some reason including mercurial in buildInputs did not help
-  makeFlags = "WMII_HGVERSION=hg${rev}";
+  makeFlags = [ "WMII_HGVERSION=hg${rev}" ];
 
   meta = {
     homepage = https://suckless.org/; # https://wmii.suckless.org/ does not exist anymore

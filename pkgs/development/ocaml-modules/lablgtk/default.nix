@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib gtk2 libgnomecanvas libglade gtksourceview ];
 
   configureFlags = [ "--with-libdir=$(out)/lib/ocaml/${ocaml.version}/site-lib" ];
-  buildFlags = "world";
+  buildFlags = [ "world" ];
 
   preInstall = ''
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z roconnor vbgl
+      maggesi roconnor vbgl
     ];
     homepage = http://lablgtk.forge.ocamlcore.org/;
     description = "An OCaml interface to GTK";

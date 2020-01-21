@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , fetchpatch
 , pantheon
+, vala
 , pkgconfig
 , meson
 , ninja
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook
@@ -61,6 +62,13 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
 
   meta = with stdenv.lib; {
     description = "Find the most beautiful wallpapers for your desktop";

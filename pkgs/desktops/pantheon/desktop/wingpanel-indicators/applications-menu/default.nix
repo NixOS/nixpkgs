@@ -26,7 +26,7 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-applications-menu";
-  version = "2.4.3";
+  version = "2.5.0";
 
   repoName = "applications-menu";
 
@@ -34,13 +34,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "15mwfynaa57jii43x77iaz5gqjlylh5zxc70am8zgp8vhgzflvyd";
+    sha256 = "1zry9xvcljsn5fnl8qs21x7q8rpwv0sxvp2dmnx3ddqnvj4q2m7d";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -73,13 +72,10 @@ stdenv.mkDerivation rec {
     "--sysconfdir=${placeholder "out"}/etc"
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
-
   patches = [
     (substituteAll {
-      src = ./bc.patch;
-      exec = "${bc}/bin/bc";
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
     })
   ];
 

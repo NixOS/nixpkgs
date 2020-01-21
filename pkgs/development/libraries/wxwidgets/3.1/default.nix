@@ -5,15 +5,16 @@
 , withMesa ? libGLSupported, libGLU ? null, libGL ? null
 , compat28 ? false, compat30 ? true, unicode ? true
 , withGtk2 ? true
-, withWebKit ? false, webkitgtk24x-gtk2 ? null, webkitgtk ? null
+, withWebKit ? false, webkitgtk ? null
 , AGL ? null, Carbon ? null, Cocoa ? null, Kernel ? null, QTKit ? null
 }:
 
+with stdenv.lib;
 
 assert withMesa -> libGLU != null && libGL != null;
-assert withWebKit -> (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk) != null;
+assert withWebKit -> webkitgtk != null;
 
-with stdenv.lib;
+assert assertMsg (withGtk2 -> withWebKit == false) "wxGTK31: You cannot enable withWebKit when using withGtk2.";
 
 stdenv.mkDerivation rec {
   version = "3.1.2";
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
     [ (if withGtk2 then gtk2 else gtk3) libXinerama libSM libXxf86vm xorgproto gstreamer
       gst-plugins-base GConf ]
     ++ optional withMesa libGLU
-    ++ optional withWebKit (if withGtk2 then webkitgtk24x-gtk2 else webkitgtk)
+    ++ optional withWebKit webkitgtk
     ++ optionals stdenv.isDarwin [ setfile Carbon Cocoa Kernel QTKit ];
 
   nativeBuildInputs = [ pkgconfig ];

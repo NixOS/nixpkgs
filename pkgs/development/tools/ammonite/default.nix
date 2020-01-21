@@ -8,7 +8,7 @@ let
 common = { scalaVersion, sha256 }:
 stdenv.mkDerivation rec {
   pname = "ammonite";
-  version = "1.7.1";
+  version = "1.7.4";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/Ammonite/releases/download/${version}/${scalaVersion}-${version}";
@@ -22,6 +22,7 @@ stdenv.mkDerivation rec {
     sed -i '0,/java/{s|java|${jre}/bin/java|}' $out/bin/amm
   '' + optionalString (disableRemoteLogging) ''
     sed -i '0,/ammonite.Main/{s|ammonite.Main|ammonite.Main --no-remote-logging|}' $out/bin/amm
+    sed -i '1i #!/bin/sh' $out/bin/amm
   '';
 
   meta = {
@@ -39,6 +40,6 @@ stdenv.mkDerivation rec {
   };
 };
 in {
-  ammonite_2_12 = common { scalaVersion = "2.12"; sha256 = "0isg9flnzc2ldbx6q0lg0xyg9lnvqkd8qhgfln8p1hbzdq0n6jd0"; };
-  ammonite_2_13 = common { scalaVersion = "2.13"; sha256 = "01dyc6bilhcr1mwrpmhjc8nhzfqgjh44bx36gd3gk9mkvlbys5mp"; };
+  ammonite_2_12 = common { scalaVersion = "2.12"; sha256 = "0d2xjhxrly4cv5fpjv1i0a74ayij7c2x5sb6lsgzxpq7jj0bk1m6"; };
+  ammonite_2_13 = common { scalaVersion = "2.13"; sha256 = "0hmdizzf8l8i07vdfik24iby39xg1vjfp1cwgjpbcmxv8klf50b0"; };
 }

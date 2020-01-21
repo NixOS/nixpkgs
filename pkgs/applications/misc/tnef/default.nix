@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  version = "1.4.17";
+  version = "1.4.18";
   pname = "tnef";
 
   src = fetchFromGitHub {
     owner  = "verdammelt";
     repo   = "tnef";
     rev    = version;
-    sha256 = "0cq2xh5wd74qn6k2nnw5rayxgqhjl3jbzf4zlc4babcwxrv32ldh";
+    sha256 = "104g48mcm00bgiyzas2vf86331w7bnw7h3bc11ib4lp7rz6zqfck";
   };
 
   doCheck = true;

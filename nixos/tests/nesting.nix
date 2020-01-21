@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "nesting";
   nodes =  {
     clone = { pkgs, ... }: {
@@ -19,24 +19,26 @@ import ./make-test.nix {
     };
   };
   testScript = ''
-    $clone->waitForUnit("default.target");
-    $clone->succeed("cowsay hey");
-    $clone->fail("hello");
+    clone.wait_for_unit("default.target")
+    clone.succeed("cowsay hey")
+    clone.fail("hello")
 
-    # Nested clones do inherit from parent
-    $clone->succeed("/run/current-system/fine-tune/child-1/bin/switch-to-configuration test");
-    $clone->succeed("cowsay hey");
-    $clone->succeed("hello");
+    with subtest("Nested clones do inherit from parent"):
+        clone.succeed(
+            "/run/current-system/fine-tune/child-1/bin/switch-to-configuration test"
+        )
+        clone.succeed("cowsay hey")
+        clone.succeed("hello")
     
+        children.wait_for_unit("default.target")
+        children.succeed("cowsay hey")
+        children.fail("hello")
 
-    $children->waitForUnit("default.target");
-    $children->succeed("cowsay hey");
-    $children->fail("hello");
-
-    # Nested children do not inherit from parent
-    $children->succeed("/run/current-system/fine-tune/child-1/bin/switch-to-configuration test");
-    $children->fail("cowsay hey");
-    $children->succeed("hello");
-
+    with subtest("Nested children do not inherit from parent"):
+        children.succeed(
+            "/run/current-system/fine-tune/child-1/bin/switch-to-configuration test"
+        )
+        children.fail("cowsay hey")
+        children.succeed("hello")
   '';
 }

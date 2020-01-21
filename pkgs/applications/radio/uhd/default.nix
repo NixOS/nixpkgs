@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
-, python, pythonPackages, orc, libusb1, boost }:
+, python, orc, libusb1, boost }:
 
 # You need these udev rules to not have to run as root (copied from
 # ${uhd}/share/uhd/utils/uhd-usrp.rules):
@@ -40,7 +40,12 @@ in stdenv.mkDerivation {
                [ (stdenv.lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ];
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ python pythonPackages.pyramid_mako orc libusb1 boost ];
+  buildInputs = [
+    (python.withPackages (ps: with ps; [ Mako six requests ]))
+    orc
+    libusb1
+    boost
+  ];
 
   # Build only the host software
   preConfigure = "cd host";

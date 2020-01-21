@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nss, python
+{ stdenv, fetchurl, nss, python3
 , blacklist ? []
 , includeEmail ? false
 }:
@@ -22,7 +22,7 @@ stdenv.mkDerivation {
 
   outputs = [ "out" "unbundled" ];
 
-  nativeBuildInputs = [ python ];
+  nativeBuildInputs = [ python3 ];
 
   configurePhase = ''
     ln -s nss/lib/ckfw/builtins/certdata.txt

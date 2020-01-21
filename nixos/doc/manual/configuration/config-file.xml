@@ -27,7 +27,7 @@
 
 { <xref linkend="opt-services.httpd.enable"/> = true;
   <xref linkend="opt-services.httpd.adminAddr"/> = "alice@example.org";
-  <xref linkend="opt-services.httpd.documentRoot"/> = "/webroot";
+  <link linkend="opt-services.httpd.virtualHosts">services.httpd.virtualHosts.localhost.documentRoot</link> = "/webroot";
 }
 </programlisting>
   defines a configuration with three option definitions that together enable
@@ -50,7 +50,11 @@
     httpd = {
       enable = true;
       adminAddr = "alice@example.org";
-      documentRoot = "/webroot";
+      virtualHosts = {
+        localhost = {
+          documentRoot = "/webroot";
+        };
+      };
     };
   };
 }

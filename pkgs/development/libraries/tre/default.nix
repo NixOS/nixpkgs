@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
+    description = "Lightweight and robust POSIX compliant regexp matching library";
+    homepage = "https://laurikari.net/tre/";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.bsd2;
   };

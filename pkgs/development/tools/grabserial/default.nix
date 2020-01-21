@@ -2,13 +2,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "grabserial";
-  version = "1.9.8";
+  version = "1.9.9";
 
   src = fetchFromGitHub {
     owner = "tbird20d";
     repo = "grabserial";
     rev = "v${version}";
-    sha256 = "1xmy3js4hzsxlkxc172hkjzxsc34mmg3vfz61h24c7svmfzyhbd5";
+    sha256 = "0cwrajkh605gfhshrlpbc32gmx86a8kv3pq7cv713k60sgqrgpqx";
   };
 
   propagatedBuildInputs = [ pythonPackages.pyserial ];

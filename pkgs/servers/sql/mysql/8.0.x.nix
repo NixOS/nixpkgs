@@ -5,10 +5,11 @@
 
 let
 self = stdenv.mkDerivation rec {
-  name = "mysql-8.0.17";
+  pname = "mysql";
+  version = "8.0.17";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${name}.tar.gz";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
     sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
   };
 

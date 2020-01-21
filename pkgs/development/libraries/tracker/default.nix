@@ -1,18 +1,18 @@
 { stdenv, fetchurl, gettext, meson, ninja, pkgconfig, gobject-introspection, python3
 , gtk-doc, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_43, glibcLocales
 , libxml2, upower, glib, wrapGAppsHook, vala, sqlite, libxslt, libstemmer
-, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, systemd
+, gnome3, icu, libuuid, networkmanager, libsoup, json-glib, systemd, dbus
 , substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "tracker";
-  version = "2.3.0";
+  version = "2.3.1";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0yxzqvjm3ij28p6g8jc4pd90yhhslmykcvi1cnyb069lm16m611c";
+    sha256 = "1888vyz2l5n46ywb70fryd0qipyh3x5n6q0mk56jzbb5whk8fx5n";
   };
 
   nativeBuildInputs = [
@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
     gtk-doc docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_43 glibcLocales
     python3 # for data-generators
     systemd # used for checks to install systemd user service
+    dbus # used for checks and pkgconfig to install dbus service/s
   ];
 
   buildInputs = [

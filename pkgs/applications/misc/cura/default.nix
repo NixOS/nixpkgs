@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "cura";
-  version = "4.3.0";
+  version = "4.4.0";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "Cura";
-    rev = version;
-    sha256 = "1qnai8vmgy5lx3lapw96j41i8mw9p6r99i3qzs709l9yzrix6l86";
+    rev = "v${version}";
+    sha256 = "131n36qhdfky584wr3zv73ckjjprwaqb5fih8yln2syf8b7ziwlz";
   };
 
   materials = fetchFromGitHub {

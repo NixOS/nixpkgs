@@ -46,6 +46,7 @@ in mkDerivation {
     "-DQT_IMPORTS_DIR=${placeholder "out"}/${qtbase.qtQmlPrefix}"
     "-DCMAKE_INSTALL_SYSCONFDIR=${placeholder "out"}/etc"
     "-DSYSTEMD_SYSTEM_UNIT_DIR=${placeholder "out"}/lib/systemd/system"
+    "-DDBUS_CONFIG_DIR=${placeholder "out"}/share/dbus-1/system.d"
   ];
 
   postInstall = ''

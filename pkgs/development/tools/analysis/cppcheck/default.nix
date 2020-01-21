@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ pcre ];
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
-  makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg HAVE_RULES=yes'';
+  makeFlags = [ "PREFIX=$(out)" "CFGDIR=$(out)/cfg" "HAVE_RULES=yes" ];
 
   outputs = [ "out" "man" ];
 

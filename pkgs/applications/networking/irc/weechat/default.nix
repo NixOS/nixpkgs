@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib
-, ncurses, openssl, aspell, gnutls
+, ncurses, openssl, aspell, gnutls, gettext
 , zlib, curl, pkgconfig, libgcrypt
 , cmake, makeWrapper, libobjc, libresolv, libiconv
 , asciidoctor # manpages
@@ -27,12 +27,12 @@ let
   in
     assert lib.all (p: p.enabled -> ! (builtins.elem null p.buildInputs)) plugins;
     stdenv.mkDerivation rec {
-      version = "2.6";
+      version = "2.7";
       pname = "weechat";
 
       src = fetchurl {
         url = "https://weechat.org/files/src/weechat-${version}.tar.bz2";
-        sha256 = "1narazk28m7lmn1vqi7bhyvnr8apjrmaa4w1hbadn64hwr8ya1hb";
+        sha256 = "00hzchzw1w2181kczcrrnj8ngml3bwk7qciha3higxq3qynf0h8c";
       };
 
       outputs = [ "out" "man" ] ++ map (p: p.name) enabledPlugins;
@@ -41,13 +41,15 @@ let
       cmakeFlags = with stdenv.lib; [
         "-DENABLE_MAN=ON"
         "-DENABLE_DOC=ON"
+        "-DENABLE_JAVASCRIPT=OFF"  # Requires v8 <= 3.24.3, https://github.com/weechat/weechat/issues/360
+        "-DENABLE_PHP=OFF"
       ]
         ++ optionals stdenv.isDarwin ["-DICONV_LIBRARY=${libiconv}/lib/libiconv.dylib" "-DCMAKE_FIND_FRAMEWORK=LAST"]
         ++ map (p: "-D${p.cmakeFlag}=" + (if p.enabled then "ON" else "OFF")) plugins
         ;
 
       buildInputs = with stdenv.lib; [
-          ncurses openssl aspell gnutls zlib curl pkgconfig
+          ncurses openssl aspell gnutls gettext zlib curl pkgconfig
           libgcrypt makeWrapper cmake asciidoctor
           ]
         ++ optionals stdenv.isDarwin [ libobjc libresolv ]

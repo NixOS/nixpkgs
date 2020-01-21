@@ -1,5 +1,5 @@
-{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, zlib
-, Security, libiconv
+{ stdenv, rustPlatform, fetchFromGitHub, llvmPackages, pkgconfig, less
+, Security, libiconv, installShellFiles, makeWrapper
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,15 +16,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "0d7h0kn41w6wm4w63vjy2i7r19jkansfvfjn7vgh2gqh5m60kal2";
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang zlib ];
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security libiconv ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   postInstall = ''
-    install -m 444 -Dt $out/share/man/man1 doc/bat.1
-    install -m 444 -Dt $out/share/fish/vendor_completions.d assets/completions/bat.fish
+    installManPage doc/bat.1
+    installShellCompletion assets/completions/bat.fish
+  '';
+
+  # Insert Nix-built `less` into PATH because the system-provided one may be too old to behave as
+  # expected with certain flag combinations.
+  postFixup = ''
+    wrapProgram "$out/bin/bat" \
+      --prefix PATH : "${stdenv.lib.makeBinPath [ less ]}"
   '';
 
   meta = with stdenv.lib; {

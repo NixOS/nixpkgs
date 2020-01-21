@@ -1,5 +1,5 @@
 { stdenv, fetchurl, substituteAll, pkgconfig, glib, itstool, libxml2, xorg
-, accountsservice, libX11, gnome3, systemd, autoreconfHook
+, accountsservice, libX11, gnome3, systemd, autoreconfHook, dconf
 , gtk3, libcanberra-gtk3, pam, libtool, gobject-introspection, plymouth
 , librsvg, coreutils, xwayland, nixos-icons, fetchpatch }:
 
@@ -31,17 +31,19 @@ stdenv.mkDerivation rec {
     substituteInPlace ./configure --replace "/usr/bin/X" "${xorg.xorgserver.out}/bin/X"
   '';
 
+  initialVT = "7";
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--with-plymouth=yes"
     "--enable-gdm-xsession"
-    # "--with-initial-vt=7"
+    "--with-initial-vt=${initialVT}"
     "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
     "--with-udevdir=$(out)/lib/udev"
   ];
 
-  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool gnome3.dconf ];
+  nativeBuildInputs = [ pkgconfig libxml2 itstool autoreconfHook libtool dconf ];
   buildInputs = [
     glib accountsservice systemd
     gobject-introspection libX11 gtk3

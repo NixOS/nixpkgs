@@ -1,14 +1,8 @@
-From f6a978f024d01202f954483423af1b2d5d5159a6 Mon Sep 17 00:00:00 2001
-From: Yegor Timoshenko <yegortimoshenko@riseup.net>
-Date: Fri, 28 Sep 2018 03:27:04 +0000
-Subject: [PATCH] If root is in Nix store, set ETag to its path hash
-
----
- src/http/ngx_http_core_module.c | 56 +++++++++++++++++++++++++++++----
- 1 file changed, 50 insertions(+), 6 deletions(-)
+This patch makes it possible to serve static content from Nix store paths, by
+using the hash of the store path for the ETag header.
 
 diff --git a/src/http/ngx_http_core_module.c b/src/http/ngx_http_core_module.c
-index c57ec00c..b7992de2 100644
+index cb49ef74..f88dc77c 100644
 --- a/src/http/ngx_http_core_module.c
 +++ b/src/http/ngx_http_core_module.c
 @@ -1583,6 +1583,7 @@ ngx_http_set_etag(ngx_http_request_t *r)
@@ -19,7 +13,7 @@ index c57ec00c..b7992de2 100644
  
      clcf = ngx_http_get_module_loc_conf(r, ngx_http_core_module);
  
-@@ -1598,16 +1599,61 @@ ngx_http_set_etag(ngx_http_request_t *r)
+@@ -1598,16 +1599,62 @@ ngx_http_set_etag(ngx_http_request_t *r)
      etag->hash = 1;
      ngx_str_set(&etag->key, "ETag");
  
@@ -68,6 +62,7 @@ index c57ec00c..b7992de2 100644
 +        }
 +
 +        ngx_memcpy(etag->value.data, ptr1, etag->value.len);
++        ngx_http_clear_last_modified(r);
 +    } else {
 +        etag->value.data = ngx_pnalloc(r->pool, NGX_OFF_T_LEN + NGX_TIME_T_LEN + 3);
 +
@@ -87,6 +82,3 @@ index c57ec00c..b7992de2 100644
  
      r->headers_out.etag = etag;
  
--- 
-2.19.0
-

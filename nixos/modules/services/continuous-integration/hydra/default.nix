@@ -167,7 +167,7 @@ in
 
       buildMachinesFiles = mkOption {
         type = types.listOf types.path;
-        default = [ "/etc/nix/machines" ];
+        default = optional (config.nix.buildMachines != []) "/etc/nix/machines";
         example = [ "/etc/nix/machines" "/var/lib/hydra/provisioner/machines" ];
         description = "List of files containing build machines.";
       };
@@ -242,8 +242,8 @@ in
     environment.variables = hydraEnv;
 
     nix.extraOptions = ''
-      gc-keep-outputs = true
-      gc-keep-derivations = true
+      keep-outputs = true
+      keep-derivations = true
 
       # The default (`true') slows Nix down a lot since the build farm
       # has so many GC roots.
@@ -333,7 +333,7 @@ in
           IN_SYSTEMD = "1"; # to get log severity levels
         };
         serviceConfig =
-          { ExecStart = "@${cfg.package}/bin/hydra-queue-runner hydra-queue-runner -v --option build-use-substitutes ${boolToString cfg.useSubstitutes}";
+          { ExecStart = "@${cfg.package}/bin/hydra-queue-runner hydra-queue-runner -v";
             ExecStopPost = "${cfg.package}/bin/hydra-queue-runner --unlock";
             User = "hydra-queue-runner";
             Restart = "always";

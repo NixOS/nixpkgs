@@ -177,9 +177,6 @@ in {
         NoNewPrivileges = "true";
         PrivateDevices = "true";
         MemoryDenyWriteExecute = "true";
-
-        # Permission for preStart
-        PermissionsStartOnly = "true";
       };
     };
     users.users.${cfg.user} = {
@@ -187,6 +184,7 @@ in {
       group = cfg.group;
       description = "Bitcoin daemon user";
       home = cfg.dataDir;
+      isSystemUser = true;
     };
     users.groups.${cfg.group} = {
       name = cfg.group;

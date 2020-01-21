@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "07m45bn9lzgbfihmxic23wqp73nxg5ihrvkigr450jq6gzvgwawq";
   };
 
-  makeFlags = "-C src";
+  makeFlags = [ "-C" "src" ];
 
   installPhase = ''
     install -vD bin/* -t $out/bin

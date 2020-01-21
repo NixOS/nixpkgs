@@ -1,45 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, darwin
+{ stdenv, fetchurl, fetchpatch, darwin, callPackage
 , autoreconfHook
 , pkgconfig
-, curl
-, iptables
-, jdk
-, libapparmor
-, libatasmart
-, libcap_ng
-, libcredis
-, libdbi
-, libgcrypt
-, libmemcached, cyrus_sasl
-, libmicrohttpd
-, libmodbus
-, libnotify, gdk-pixbuf
-, liboping
-, libpcap
-, libsigrok
-, libvirt
-, libxml2
 , libtool
-, lm_sensors
-, lvm2
-, libmysqlclient
-, numactl
-, postgresql
-, protobufc
-, python
-, rabbitmq-c
-, riemann_c_client
-, rrdtool
-, udev
-, varnish
-, yajl
-, net_snmp
-, hiredis
-, libmnl
-, mosquitto
-, rdkafka
-, mongoc
-}:
+, ...
+}@args:
+let
+  plugins = callPackage ./plugins.nix args;
+in
 stdenv.mkDerivation rec {
   version = "5.8.1";
   pname = "collectd";
@@ -58,27 +25,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    curl libdbi libgcrypt libmemcached
-    cyrus_sasl libnotify gdk-pixbuf liboping libpcap libvirt
-    libxml2 postgresql protobufc rrdtool
-    varnish yajl jdk libtool python hiredis libmicrohttpd
-    riemann_c_client mosquitto rdkafka mongoc
-  ] ++ stdenv.lib.optionals (libmysqlclient != null) [ libmysqlclient
-  ] ++ stdenv.lib.optionals stdenv.isLinux [
-    iptables libatasmart libcredis libmodbus libsigrok
-    lm_sensors lvm2 rabbitmq-c udev net_snmp libmnl
-    # those might be no longer required when https://github.com/NixOS/nixpkgs/pull/51767
-    # is merged
-    libapparmor numactl libcap_ng
+    libtool
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
     darwin.apple_sdk.frameworks.ApplicationServices
-  ];
+  ] ++ plugins.buildInputs;
 
   configureFlags = [
     "--localstatedir=/var"
     "--disable-werror"
-  ];
+  ] ++ plugins.configureFlags;
 
   # do not create directories in /var during installPhase
   postConfigure = ''

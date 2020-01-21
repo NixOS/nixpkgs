@@ -137,9 +137,6 @@ in with passthru; stdenv.mkDerivation rec {
     # verify cffi modules
     $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}
 
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
-
     # Include a sitecustomize.py file
     cp ${../sitecustomize.py} $out/lib/${libPrefix}/${sitePackages}/sitecustomize.py
   '';

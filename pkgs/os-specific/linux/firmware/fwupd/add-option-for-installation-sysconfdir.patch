@@ -1,30 +1,21 @@
 diff --git a/data/meson.build b/data/meson.build
-index 61664cd6..f10abbba 100644
+index 25db9509..f394eb25 100644
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -11,7 +11,7 @@ if get_option('daemon')
+@@ -13,7 +13,7 @@
+ if build_daemon
+   subdir('installed-tests')
+   install_data(['daemon.conf'],
+-    install_dir : join_paths(sysconfdir, 'fwupd')
++    install_dir : join_paths(sysconfdir_install, 'fwupd')
+   )
  endif
  
- install_data(['daemon.conf'],
--  install_dir : join_paths(sysconfdir, 'fwupd')
-+  install_dir : join_paths(sysconfdir_install, 'fwupd')
- )
- 
- install_data(['org.freedesktop.fwupd.metainfo.xml'],
-@@ -23,7 +23,7 @@ install_data(['org.freedesktop.fwupd.svg'],
- )
- 
- install_data(['org.freedesktop.fwupd.conf'],
--  install_dir : join_paths(sysconfdir, 'dbus-1', 'system.d')
-+  install_dir : join_paths(sysconfdir_install, 'dbus-1', 'system.d')
- )
- 
- if get_option('daemon')
 diff --git a/data/pki/meson.build b/data/pki/meson.build
 index eefcc914..dc801fa1 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
-@@ -4,14 +4,14 @@ if get_option('gpg')
+@@ -4,14 +4,14 @@
        'GPG-KEY-Linux-Foundation-Firmware',
        'GPG-KEY-Linux-Vendor-Firmware-Service',
      ],
@@ -41,7 +32,7 @@ index eefcc914..dc801fa1 100644
    )
  endif
  
-@@ -19,12 +19,12 @@ if get_option('pkcs7')
+@@ -19,12 +19,12 @@
    install_data([
        'LVFS-CA.pem',
      ],
@@ -57,10 +48,10 @@ index eefcc914..dc801fa1 100644
  endif
  
 diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
-index a27c31ef..374e09b6 100644
+index 826a3c1d..b78db663 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
-@@ -3,7 +3,7 @@ if get_option('daemon') and get_option('lvfs')
+@@ -3,7 +3,7 @@
        'lvfs.conf',
        'lvfs-testing.conf',
      ],
@@ -69,7 +60,7 @@ index a27c31ef..374e09b6 100644
    )
    i18n.merge_file(
      input: 'lvfs.metainfo.xml',
-@@ -37,12 +37,12 @@ configure_file(
+@@ -37,12 +37,12 @@
    output : 'vendor.conf',
    configuration : con2,
    install: true,
@@ -85,10 +76,10 @@ index a27c31ef..374e09b6 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index a89f9b3f..736896eb 100644
+index 8e1de887..a5bb1fe6 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -145,6 +145,12 @@ localstatedir = join_paths(prefix, get_option('localstatedir'))
+@@ -158,6 +158,12 @@
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -99,13 +90,13 @@ index a89f9b3f..736896eb 100644
 +endif
 +
  gio = dependency('gio-2.0', version : '>= 2.45.8')
+ giounix = dependency('gio-unix-2.0', version : '>= 2.45.8')
  if gio.version().version_compare ('>= 2.55.0')
-   conf.set('HAVE_GIO_2_55_0', '1')
 diff --git a/meson_options.txt b/meson_options.txt
-index 5d4163e8..db81fd1f 100644
+index 71b50c6a..561c2031 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -21,6 +21,7 @@ option('plugin_modem_manager', type : 'boolean', value : false, description : 'e
+@@ -24,6 +24,7 @@
  option('systemd', type : 'boolean', value : true, description : 'enable systemd support')
  option('systemdunitdir', type: 'string', value: '', description: 'Directory for systemd units')
  option('elogind', type : 'boolean', value : false, description : 'enable elogind support')
@@ -117,7 +108,7 @@ diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
 index cb9f4555..b972d7fb 100644
 --- a/plugins/dell-esrt/meson.build
 +++ b/plugins/dell-esrt/meson.build
-@@ -36,5 +36,5 @@ configure_file(
+@@ -36,5 +36,5 @@
    output : 'dell-esrt.conf',
    configuration : con2,
    install: true,
@@ -128,7 +119,7 @@ diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
 index 5c88504e..7706da71 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -26,7 +26,7 @@ shared_module('fu_plugin_redfish',
+@@ -26,7 +26,7 @@
  )
  
  install_data(['redfish.conf'],
@@ -137,11 +128,24 @@ index 5c88504e..7706da71 100644
  )
  
  if get_option('tests')
+diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
+index 42718abf..bc815491 100644
+--- a/plugins/thunderbolt/meson.build
++++ b/plugins/thunderbolt/meson.build
+@@ -46,7 +46,7 @@
+ )
+ 
+ install_data(['thunderbolt.conf'],
+-  install_dir:  join_paths(sysconfdir, 'fwupd')
++  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+ )
+ # we use functions from 2.52 in the tests
+ if get_option('tests') and umockdev.found() and gio.version().version_compare('>= 2.52')
 diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
-index ac9f5dd8..1ab51b5e 100644
+index 45b18d7d..ef8e0b04 100644
 --- a/plugins/uefi/meson.build
 +++ b/plugins/uefi/meson.build
-@@ -79,7 +79,7 @@ executable(
+@@ -85,7 +85,7 @@
  )
  
  install_data(['uefi.conf'],

@@ -20,18 +20,18 @@
 
 stdenv.mkDerivation rec {
   pname = "wingpanel";
-  version = "2.2.5";
+  version = "2.2.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "15pl3km8jfmlgrrb2fcabdd0rkc849arz6sc3vz6azzpln7gxbq7";
+    sha256 = "0q5jhg3gpcjfzfi7g33fv8pb916cqsgk6543b82yy97c20902ap9";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

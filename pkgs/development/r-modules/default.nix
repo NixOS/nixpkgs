@@ -277,6 +277,7 @@ let
     KFKSDS = [ pkgs.gsl_1 ];
     kza = [ pkgs.fftw.dev ];
     magick = [ pkgs.imagemagick.dev ];
+    ModelMetrics = lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     mvabund = [ pkgs.gsl_1 ];
     mwaved = [ pkgs.fftw.dev ];
     ncdf4 = [ pkgs.netcdf ];
@@ -310,7 +311,6 @@ let
     rgdal = [ pkgs.proj.dev pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
-    rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
@@ -357,6 +357,7 @@ let
     stringi = [ pkgs.icu.dev ];
     survSNP = [ pkgs.gsl_1 ];
     sysfonts = [ pkgs.zlib pkgs.libpng pkgs.freetype.dev ];
+    systemfonts = [ pkgs.fontconfig.dev pkgs.freetype.dev ];
     TAQMNGR = [ pkgs.zlib.dev ];
     tesseract = [ pkgs.tesseract pkgs.leptonica ];
     tiff = [ pkgs.libtiff.dev ];
@@ -402,6 +403,7 @@ let
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
+    rgl = [ pkgs.libGLU pkgs.libGLU.dev pkgs.libGL pkgs.xlibsWrapper ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
@@ -424,6 +426,7 @@ let
     spate = [ pkgs.pkgconfig ];
     stringi = [ pkgs.pkgconfig ];
     sysfonts = [ pkgs.pkgconfig ];
+    systemfonts = [ pkgs.pkgconfig ];
     tesseract = [ pkgs.pkgconfig ];
     Cairo = [ pkgs.pkgconfig ];
     Rsymphony = [ pkgs.pkgconfig pkgs.doxygen pkgs.graphviz pkgs.subversion ];
@@ -451,6 +454,7 @@ let
     randomForest = [ pkgs.libiconv ];
     sundialr = [ pkgs.libiconv ];
     ucminf = [ pkgs.libiconv ];
+    glmnet = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
@@ -733,6 +737,11 @@ let
         + lib.optionalString stdenv.isDarwin " -fopenmp";
     });
 
+    ModelMetrics = old.ModelMetrics.overrideDerivation (attrs: {
+      NIX_CFLAGS_COMPILE = attrs.NIX_CFLAGS_COMPILE
+        + lib.optionalString stdenv.isDarwin " -fopenmp";
+    });
+
     rpf = old.rpf.overrideDerivation (attrs: {
       patchPhase = "patchShebangs configure";
     });
@@ -844,6 +853,11 @@ let
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });
 
+    websocket = old.websocket.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
+    });
+
     Rserve = old.Rserve.overrideDerivation (attrs: {
       patches = [ ./patches/Rserve.patch ];
       configureFlags = [
@@ -944,6 +958,10 @@ let
     });
 
     rlang = old.rlang.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
+    });
+
+    systemfonts = old.systemfonts.overrideDerivation (attrs: {
       preConfigure = "patchShebangs configure";
     });
 

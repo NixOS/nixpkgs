@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "clifford";
-  version = "1.0.4";
+  version = "1.2.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7fc5aa76b4f73c697c0ebd2f86c5233e7ca0a5109b80147f4e711bc3de4b3f2c";
+    sha256 = "b27fdec70574ac928c91fe333a70ece153d75cd0499cce09acea5980ae349bee";
   };
 
   propagatedBuildInputs = [

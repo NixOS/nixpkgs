@@ -9,7 +9,7 @@ flitBuildPhase () {
     echo "Finished executing flitBuildPhase"
 }
 
-if [ -z "$dontUseFlitBuild" ] && [ -z "$buildPhase" ]; then
+if [ -z "${dontUseFlitBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using flitBuildPhase"
     buildPhase=flitBuildPhase
 fi

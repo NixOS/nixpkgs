@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmbim";
-  version = "1.20.0";
+  version = "1.20.4";
 
   src = fetchurl {
     url = "https://www.freedesktop.org/software/libmbim/${pname}-${version}.tar.xz";
-    sha256 = "0rm8j4zh9gnb3yi324cnxy91gdimc1vg5gv1kxc2m5lymb3wdxrc";
+    sha256 = "1s6k6vm4hyma7nafm1gjssl9lq9nkkiska462xpiz7xh16j0h9xc";
   };
 
   outputs = [ "out" "dev" "man" ];

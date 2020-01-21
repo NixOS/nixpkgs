@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools, darwin
 
 , curl
 , glibcLocales
@@ -7,7 +7,6 @@
 , libargon2
 , libgcrypt
 , libgpgerror
-, libmicrohttpd
 , libsodium
 , libyubikey
 , pkg-config
@@ -26,19 +25,21 @@
 , withKeePassKeeShareSecure ? true
 , withKeePassSSHAgent ? true
 , withKeePassNetworking ? false
+, withKeePassTouchID ? true
+, withKeePassFDOSecrets ? true
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "keepassxc";
-  version = "2.4.3";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
     rev = version;
-    sha256 = "1r63bl0cam04rps1bjr107qvwsmay4254nv00gwhh9n45s6cslac";
+    sha256 = "0z5bd17qaq7zpv96gw6qwv6rb4xx7xjq86ss6wm5zskcrraf7r7n";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -69,6 +70,8 @@ stdenv.mkDerivation rec {
   ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (optional (withKeePassTouchID && stdenv.isDarwin) "-DWITH_XC_TOUCHID=ON")
+  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
@@ -89,7 +92,6 @@ stdenv.mkDerivation rec {
     libargon2
     libgcrypt
     libgpgerror
-    libmicrohttpd
     libsodium
     libyubikey
     pkg-config
@@ -101,7 +103,8 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
-  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
+  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
+  ++ stdenv.lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
   preFixup = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
@@ -114,6 +117,6 @@ stdenv.mkDerivation rec {
     homepage = https://keepassxc.org/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ jonafato ];
-    platforms = with platforms; linux ++ darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

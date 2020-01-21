@@ -1,16 +1,14 @@
-{ stdenv, fetchurl, python, pythonPackages, libxslt, libxml2, makeWrapper }:
-
-let
-  rev = "9de21094a8cf565bdfcf75688e121a5ad1f5397b";
-in
+{ stdenv, fetchFromGitHub, python, pythonPackages, libxslt, libxml2, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "venus-${rev}";
+  pname = "venus";
+  version = "unstable-2011-02-18";
 
-  src = fetchurl {
-    url = "https://github.com/rubys/venus/tarball/${rev}";
-    name = "${name}.tar.bz";
-    sha256 = "0lsc9d83grbi3iwm8ppaig4h9vbmd5h4vvz83lmpnyp7zqfka7dy";
+  src = fetchFromGitHub {
+    owner = "rubys";
+    repo = "venus";
+    rev = "9de21094a8cf565bdfcf75688e121a5ad1f5397b";
+    sha256 = "10yyx4jaxxbwhica12aiw119aywghcr7b24gs9lrmafpa6xd3an2";
   };
 
   preConfigure = ''

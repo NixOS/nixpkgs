@@ -74,7 +74,7 @@ in {
         default = false;
         description = ''
           Whether to enable test remote. This is used by
-          <link xlink:href="https://github.com/hughsie/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
+          <link xlink:href="https://github.com/fwupd/fwupd/blob/master/data/installed-tests/README.md">installed tests</link>.
         '';
       };
 
@@ -115,10 +115,6 @@ in {
     services.udev.packages = [ cfg.package ];
 
     systemd.packages = [ cfg.package ];
-
-    systemd.tmpfiles.rules = [
-      "d /var/lib/fwupd 0755 root root -"
-    ];
   };
 
   meta = {

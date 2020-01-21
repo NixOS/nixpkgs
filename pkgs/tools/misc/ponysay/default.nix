@@ -26,7 +26,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Cowsay reimplemention for ponies";
-    homepage = http://erkin.co/ponysay/;
+    homepage = "https://github.com/erkin/ponysay";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ bodil ];
     platforms = with stdenv.lib.platforms; unix;

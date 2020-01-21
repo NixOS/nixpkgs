@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, libgnomecanvas, camlp4, glib, pkgconfig, makeWrapper
+{ stdenv, fetchurl, ocamlPackages, gnome2, pkgconfig, makeWrapper
 , libtool, libpng, yacc, expat, fontconfig, gd, pango, libjpeg, libwebp, xlibsWrapper, libXaw
 }:
 # We need an old version of Graphviz for format compatibility reasons.
@@ -7,6 +7,8 @@ let graphviz_2_0 = import ./graphviz-2.0.nix {
       inherit stdenv fetchurl pkgconfig xlibsWrapper libpng libjpeg expat libXaw
         yacc libtool fontconfig pango gd libwebp;
     }; in
+let inherit (gnome2) libgnomecanvas glib; in
+let inherit (ocamlPackages) ocaml lablgtk camlp4; in
 stdenv.mkDerivation rec {
   version = "1.0.2";
   pname = "monotone-viz";

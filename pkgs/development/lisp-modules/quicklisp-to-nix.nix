@@ -6,9 +6,6 @@ let quicklisp-to-nix-packages = rec {
   buildLispPackage = callPackage ./define-package.nix;
   qlOverrides = callPackage ./quicklisp-to-nix-overrides.nix {};
 
-  "simple-date_slash_postgres-glue" = quicklisp-to-nix-packages."simple-date";
-
-
   "xpath_slash_test" = quicklisp-to-nix-packages."xpath";
 
 
@@ -255,7 +252,6 @@ let quicklisp-to-nix-packages = rec {
          inherit fetchurl;
            "fiveam" = quicklisp-to-nix-packages."fiveam";
            "md5" = quicklisp-to-nix-packages."md5";
-           "simple-date_slash_postgres-glue" = quicklisp-to-nix-packages."simple-date_slash_postgres-glue";
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
            "usocket" = quicklisp-to-nix-packages."usocket";
        }));
@@ -949,6 +945,22 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "s-xml" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."s-xml" or (x: {}))
+       (import ./quicklisp-to-nix-output/s-xml.nix {
+         inherit fetchurl;
+       }));
+
+
+  "s-sysdeps" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."s-sysdeps" or (x: {}))
+       (import ./quicklisp-to-nix-output/s-sysdeps.nix {
+         inherit fetchurl;
+       }));
+
+
   "yason" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."yason" or (x: {}))
@@ -972,9 +984,7 @@ let quicklisp-to-nix-packages = rec {
        (qlOverrides."xmls" or (x: {}))
        (import ./quicklisp-to-nix-output/xmls.nix {
          inherit fetchurl;
-           "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
            "fiveam" = quicklisp-to-nix-packages."fiveam";
-           "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
        }));
 
 
@@ -1643,19 +1653,16 @@ let quicklisp-to-nix-packages = rec {
            "cl-fad" = quicklisp-to-nix-packages."cl-fad";
            "cl-ppcre" = quicklisp-to-nix-packages."cl-ppcre";
            "cl-who" = quicklisp-to-nix-packages."cl-who";
-           "cxml-stp" = quicklisp-to-nix-packages."cxml-stp";
            "drakma" = quicklisp-to-nix-packages."drakma";
            "flexi-streams" = quicklisp-to-nix-packages."flexi-streams";
            "md5" = quicklisp-to-nix-packages."md5";
            "rfc2388" = quicklisp-to-nix-packages."rfc2388";
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
-           "swank" = quicklisp-to-nix-packages."swank";
            "trivial-backtrace" = quicklisp-to-nix-packages."trivial-backtrace";
            "trivial-features" = quicklisp-to-nix-packages."trivial-features";
            "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
            "trivial-gray-streams" = quicklisp-to-nix-packages."trivial-gray-streams";
            "usocket" = quicklisp-to-nix-packages."usocket";
-           "xpath" = quicklisp-to-nix-packages."xpath";
        }));
 
 
@@ -2558,6 +2565,20 @@ let quicklisp-to-nix-packages = rec {
        }));
 
 
+  "cl-hooks" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-hooks" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-hooks.nix {
+         inherit fetchurl;
+           "alexandria" = quicklisp-to-nix-packages."alexandria";
+           "anaphora" = quicklisp-to-nix-packages."anaphora";
+           "closer-mop" = quicklisp-to-nix-packages."closer-mop";
+           "fiveam" = quicklisp-to-nix-packages."fiveam";
+           "let-plus" = quicklisp-to-nix-packages."let-plus";
+           "trivial-garbage" = quicklisp-to-nix-packages."trivial-garbage";
+       }));
+
+
   "cl-fuse-meta-fs" = buildLispPackage
     ((f: x: (x // (f x)))
        (qlOverrides."cl-fuse-meta-fs" or (x: {}))
@@ -2988,6 +3009,16 @@ let quicklisp-to-nix-packages = rec {
            "alexandria" = quicklisp-to-nix-packages."alexandria";
            "esrap" = quicklisp-to-nix-packages."esrap";
            "split-sequence" = quicklisp-to-nix-packages."split-sequence";
+       }));
+
+
+  "cl-prevalence" = buildLispPackage
+    ((f: x: (x // (f x)))
+       (qlOverrides."cl-prevalence" or (x: {}))
+       (import ./quicklisp-to-nix-output/cl-prevalence.nix {
+         inherit fetchurl;
+           "s-sysdeps" = quicklisp-to-nix-packages."s-sysdeps";
+           "s-xml" = quicklisp-to-nix-packages."s-xml";
        }));
 
 

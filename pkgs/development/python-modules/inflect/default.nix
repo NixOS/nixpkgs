@@ -1,15 +1,15 @@
-{ buildPythonPackage, fetchPypi, setuptools_scm, nose, six }:
+{ buildPythonPackage, fetchPypi, setuptools_scm, nose, six, importlib-metadata }:
 
 buildPythonPackage rec {
   pname = "inflect";
-  version = "2.1.0";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ded1b2a6fcf0fc0397419c7727f131a93b67b80d899f2973be7758628e12b73";
+    sha256 = "ee7c9b7c3376d06828b205460afb3c447b5d25dd653171db249a238f3fc2c18a";
   };
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ six importlib-metadata ];
   checkInputs = [ nose ];
-  propagatedBuildInputs = [ six ];
 }

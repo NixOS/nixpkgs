@@ -2,19 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tokei";
-  version = "10.0.1";
+  version = "10.1.1";
 
   src = fetchFromGitHub {
     owner = "XAMPPRocky";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0g8p4f8g9zb1fqzzb1qi28idskahi5nldsma6rydjyrgi9gynpa0";
+    sha256 = "0wndjb4rvj8548wz0svwgnk94qlg5w2fv75fn2jgriq6fh6v43yg";
   };
 
-  cargoSha256 = "0pwq1scll5ga8rw4lx97s915zvp7v171b6316cin54f2zzpbrxx5";
-
-  # Patch for v10.0.1 Cargo.lock issue
-  patches = [ ./Cargo.lock.patch ];
+  cargoSha256 = "1lpa4xfh3bcm51amwxvkzpvmi4b2c4q5qwxxigcbzw76l7rqp2w9";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security

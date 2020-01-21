@@ -42,5 +42,10 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     license = licenses.jasper;
     maintainers = with maintainers; [ pSub ];
+    knownVulnerabilities = [
+      "Numerous CVE unsolved upstream"
+      "See: https://github.com/NixOS/nixpkgs/pull/57681#issuecomment-475857499"
+      "See: https://github.com/mdadams/jasper/issues/208"
+    ];
   };
 }

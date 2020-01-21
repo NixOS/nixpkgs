@@ -15,6 +15,26 @@
   <cmdsynopsis>
    <command>nixos-install</command>
    <arg>
+    <group choice='req'>
+     <arg choice='plain'>
+      <option>--verbose</option>
+     </arg>
+     <arg choice='plain'>
+      <option>-v</option>
+     </arg>
+    </group>
+   </arg>
+   <arg>
+    <group choice='req'>
+     <arg choice='plain'>
+      <option>--print-build-logs</option>
+     </arg>
+     <arg choice='plain'>
+      <option>-L</option>
+     </arg>
+    </group>
+   </arg>
+   <arg>
     <arg choice='plain'>
      <option>-I</option>
     </arg>
@@ -33,6 +53,13 @@
      <option>--system</option>
     </arg>
      <replaceable>path</replaceable>
+   </arg>
+
+   <arg>
+     <arg choice='plain'>
+       <option>--channel</option>
+     </arg>
+     <replaceable>channel</replaceable>
    </arg>
 
    <arg>
@@ -107,6 +134,12 @@
      </para>
     </listitem>
     <listitem>
+      <para>
+        It installs the current channel <quote>nixos</quote> in the target channel
+        profile (unless <option>--no-channel-copy</option> is specified).
+      </para>
+    </listitem>
+    <listitem>
      <para>
       It installs the GRUB boot loader on the device specified in the option
       <option>boot.loader.grub.device</option> (unless
@@ -134,6 +167,23 @@
    This command accepts the following options:
   </para>
   <variablelist>
+   <varlistentry>
+    <term><option>--verbose</option> / <option>-v</option></term>
+    <listitem>
+     <para>Increases the level of verbosity of diagnostic messages
+     printed on standard error.  For each Nix operation, the information
+     printed on standard output is well-defined; any diagnostic
+     information is printed on standard error, never on standard
+     output.</para>
+     <para>Please note that this option may be specified repeatedly.</para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><option>--print-build-logs</option> / <option>-L</option></term>
+    <listitem>
+     <para>Print the full build logs of <command>nix build</command> to stderr.</para>
+    </listitem>
+   </varlistentry>
    <varlistentry>
     <term>
      <option>--root</option>
@@ -164,6 +214,18 @@
       --no-out-link</command>
      </para>
     </listitem>
+   </varlistentry>
+   <varlistentry>
+     <term>
+       <option>--channel</option>
+     </term>
+     <listitem>
+       <para>
+         If this option is provided, do not copy the current
+         <quote>nixos</quote> channel to the target host. Instead, use the
+         specified derivation.
+       </para>
+     </listitem>
    </varlistentry>
    <varlistentry>
     <term>

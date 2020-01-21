@@ -27,13 +27,13 @@ in
 stdenv.mkDerivation {
   pname = "macvim";
 
-  version = "8.1.1722";
+  version = "8.1.2234";
 
   src = fetchFromGitHub {
     owner = "macvim-dev";
     repo = "macvim";
-    rev = "snapshot-157";
-    sha256 = "1gmgc4pwaqy78gj4p7iib94n7j52ir0aa03ks595h3vy1hkcwwky";
+    rev = "snapshot-161";
+    sha256 = "1hp3y85pj1icz053g627a1wp5pnwgxhk07pyd4arwcxs2103agw4";
   };
 
   enableParallelBuilding = true;
@@ -76,6 +76,7 @@ stdenv.mkDerivation {
       "--with-tclsh=${tcl}/bin/tclsh"
       "--with-tlib=ncurses"
       "--with-compiledby=Nix"
+      "LDFLAGS=-headerpad_max_install_names"
   ];
 
   makeFlags = ''PREFIX=$(out) CPPFLAGS="-Wno-error"'';
@@ -106,9 +107,6 @@ stdenv.mkDerivation {
     substituteInPlace src/auto/config.mk --replace "PERL_CFLAGS	=" "PERL_CFLAGS	= -I${darwin.libutil}/include"
 
     substituteInPlace src/MacVim/vimrc --subst-var-by CSCOPE ${cscope}/bin/cscope
-
-    # Work around weird code-signing issue
-    substituteInPlace src/auto/config.mk --replace "XCODEFLAGS''\t=" "XCODEFLAGS''\t= CODE_SIGN_IDENTITY="
   '';
 
   postInstall = ''
@@ -136,11 +134,21 @@ stdenv.mkDerivation {
     find $out/share/man \( -name eVim.1 -or -name xxd.1 \) -delete
   '';
 
+  # We rely on the user's Xcode install to build. It may be located in an arbitrary place, and
+  # it's not clear what system-level components it may require, so for now we'll just allow full
+  # filesystem access. This way the package still can't access the network.
+  sandboxProfile = ''
+    (allow file-read* file-write* process-exec mach-lookup)
+    ; block homebrew dependencies
+    (deny file-read* file-write* process-exec mach-lookup (subpath "/usr/local") (with no-log))
+  '';
+
   meta = with stdenv.lib; {
     description = "Vim - the text editor - for macOS";
     homepage    = https://github.com/macvim-dev/macvim;
     license = licenses.vim;
     maintainers = with maintainers; [ cstrahan lilyball ];
     platforms   = platforms.darwin;
+    hydraPlatforms = []; # hydra can't build this as long as we rely on Xcode and sandboxProfile
   };
 }

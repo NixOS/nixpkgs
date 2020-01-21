@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libseccomp";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "1s06h2cgk0xxwmhwj72z33bllafc1xqnxzk2yyra2rmg959778qw";
+    sha256 = "0nsq81acrbkdr8zairxbwa33bj2a6126npp76b4srjl472sjfkxm";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];

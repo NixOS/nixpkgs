@@ -2,12 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "trousers";
-  version = "0.3.13";
+  version = "0.3.14";
 
   src = fetchurl {
     url = "mirror://sourceforge/trousers/trousers/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1lvnla1c1ig2w3xvvrqg2w9qm7a1ygzy1j2gg8j7p8c87i58x45v";
+    sha256 = "0iwgsbrbb7nfqgl61x8aailwxm8akxh9gkcwxhsvf50x4qx72l6f";
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ];
@@ -16,21 +18,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-usercheck" ];
 
-  # Attempt to remove -std=gnu89 when updating if using gcc5
-  NIX_CFLAGS_COMPILE = "-std=gnu89 -DALLOW_NON_TSS_CONFIG_FILE";
-  NIX_LDFLAGS = "-lgcc_s";
-
-  # Fix broken libtool file
-  preFixup = stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    sed 's,-lcrypto,-L${openssl.out}/lib -lcrypto,' -i $out/lib/libtspi.la
-  '';
+  NIX_CFLAGS_COMPILE = [ "-DALLOW_NON_TSS_CONFIG_FILE" ];
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Trusted computing software stack";
     homepage    = http://trousers.sourceforge.net/;
-    license     = licenses.cpl10;
+    license     = licenses.bsd3;
     maintainers = [ maintainers.ak ];
     platforms   = platforms.linux;
   };
 }
-

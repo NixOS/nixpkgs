@@ -64,18 +64,13 @@ let
   };
 in
 {
-  v3-mysql = mysqlTest pkgs.redmine // {
-    name = "v3-mysql";
+  mysql = mysqlTest pkgs.redmine // {
+    name = "mysql";
     meta.maintainers = [ maintainers.aanderse ];
   };
 
-  v4-mysql = mysqlTest pkgs.redmine_4 // {
-    name = "v4-mysql";
-    meta.maintainers = [ maintainers.aanderse ];
-  };
-
-  v4-pgsql = pgsqlTest pkgs.redmine_4 // {
-    name = "v4-pgsql";
+  pgsql = pgsqlTest pkgs.redmine // {
+    name = "pgsql";
     meta.maintainers = [ maintainers.aanderse ];
   };
 }

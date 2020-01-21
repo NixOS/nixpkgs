@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
       --replace 'PYTHONPATH=lib' 'PYTHONPATH=lib:$PYTHONPATH'
   '';
 
-  makeFlags = "PREFIX=$(out) SYSCONFDIR=$(out)/etc PYTHON=${python.interpreter}";
+  makeFlags = [ "PREFIX=$(out)" "SYSCONFDIR=$(out)/etc" "PYTHON=${python.interpreter}" ];
 
   postInstall = ''
     wrapProgram "$out/bin/svtplay-dl" \
@@ -44,6 +44,5 @@ in stdenv.mkDerivation rec {
     license = licenses.mit;
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ maintainers.rycee ];
-    broken = true;
   };
 }

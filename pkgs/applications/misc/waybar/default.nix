@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja
-, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog
+{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, wrapGAppsHook
+, wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? false, libpulseaudio
 , nlSupport    ? true,  libnl
@@ -9,21 +9,21 @@
 }:
   stdenv.mkDerivation rec {
     pname = "waybar";
-    version = "0.8.0";
+    version = "0.9.0";
 
     src = fetchFromGitHub {
       owner = "Alexays";
       repo = "Waybar";
       rev = version;
-      sha256 = "0s8ck7qxka0l91ayma6amp9sc8cidi43byqgzcavi3a6id983r1z";
+      sha256 = "1w8a6jih872ry288k8ic6mjfi9ccf1jwc24wnh9p5c7w73247c2c";
     };
 
     nativeBuildInputs = [
-      meson ninja pkgconfig scdoc
+      meson ninja pkgconfig scdoc wrapGAppsHook
     ];
 
     buildInputs = with stdenv.lib;
-      [ wayland wlroots gtkmm3 libinput libsigcxx jsoncpp fmt spdlog ]
+      [ wayland wlroots gtkmm3 libinput libsigcxx jsoncpp fmt spdlog gtk-layer-shell ]
       ++ optional  traySupport  libdbusmenu-gtk3
       ++ optional  pulseSupport libpulseaudio
       ++ optional  nlSupport    libnl
@@ -42,6 +42,7 @@
       }
     ) ++ [
       "-Dout=${placeholder "out"}"
+      "-Dsystemd=disabled"
     ];
 
     meta = with stdenv.lib; {

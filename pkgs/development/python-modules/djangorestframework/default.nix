@@ -1,11 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, django }:
+{ stdenv, buildPythonPackage, fetchPypi, django, isPy27 }:
+
 buildPythonPackage rec {
-  version = "3.9.4";
+  version = "3.11.0";
   pname = "djangorestframework";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c12869cfd83c33d579b17b3cb28a2ae7322a53c3ce85580c2a2ebe4e3f56c4fb";
+    sha256 = "e782087823c47a26826ee5b6fa0c542968219263fb3976ec3c31edab23a4001f";
   };
 
   # Test settings are missing

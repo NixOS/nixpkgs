@@ -7,24 +7,25 @@
 , vala
 , gtk3
 , libgee
+, granite
 , polkit
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-polkit";
-  version = "0.1.6";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1g9l2jzpvv0dbvxh93w98a7ijsfqv3s3382li4s256179gihhd67";
+    sha256 = "1yybblprcn0cgcf9j76yckqcimm4h8l41cczxjvgp789p1pki3bn";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -37,6 +38,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    granite
     gtk3
     libgee
     polkit

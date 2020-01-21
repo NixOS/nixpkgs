@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "0.4.0";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1khh02z6wryrnrxlx2wrxzhaqsg5hlgypy0643rvi4zcqanvdpym";
+    sha256 = "d69257d317e86f34a7f230a2fd1f021fd2a1b944137f40d8cdbb23bd334cd0c4";
   };
 
   nativeBuildInputs = [

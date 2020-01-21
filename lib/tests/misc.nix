@@ -18,6 +18,31 @@ runTests {
     expected = 2;
   };
 
+  testPipe = {
+    expr = pipe 2 [
+      (x: x + 2) # 2 + 2 = 4
+      (x: x * 2) # 4 * 2 = 8
+    ];
+    expected = 8;
+  };
+
+  testPipeEmpty = {
+    expr = pipe 2 [];
+    expected = 2;
+  };
+
+  testPipeStrings = {
+    expr = pipe [ 3 4 ] [
+      (map toString)
+      (map (s: s + "\n"))
+      concatStrings
+    ];
+    expected = ''
+      3
+      4
+    '';
+  };
+
   /*
   testOr = {
     expr = or true false;
@@ -416,4 +441,25 @@ runTests {
     expected  = "«foo»";
   };
 
+  testRenderOptions = {
+    expr =
+       encodeGNUCommandLine
+         { }
+         { data = builtins.toJSON { id = 0; };
+
+           X = "PUT";
+
+           retry = 3;
+
+           retry-delay = null;
+
+           url = [ "https://example.com/foo" "https://example.com/bar" ];
+
+           silent = false;
+
+           verbose = true;
+         };
+
+    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+  };
 }

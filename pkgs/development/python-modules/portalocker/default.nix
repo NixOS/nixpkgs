@@ -1,6 +1,7 @@
 { buildPythonPackage
 , fetchPypi
 , lib
+, fetchpatch
 , sphinx
 , flake8
 , pytest
@@ -10,12 +11,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.1";
+  version = "1.5.2";
   pname = "portalocker";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "08d8vm373fbx90wrql2i7025d4ir54sq8ahx6g1pw9h793zqrn0y";
+    sha256 = "17rfgmgwyxyng8q7bvn369cncadqws2wgkg45q6v8337wm9jxins";
   };
 
   checkInputs = [

@@ -3,7 +3,7 @@
 
 set -eu -o pipefail
 
-oldVersion="$(nix-instantiate --eval -E "with import ./. {}; slack-theme-black.version or (builtins.parseDrvName slack-theme-black.name).version" | tr -d '"')"
+oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion slack-theme-black" | tr -d '"')"
 latestSha="$(curl -L -s https://api.github.com/repos/laCour/slack-night-mode/commits\?sha\=master\&since\=${oldVersion} | jq -r '.[0].sha')"
 
 if [ ! "null" = "${latestSha}" ]; then

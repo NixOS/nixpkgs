@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy";
-  version = "0.3.2";
+  version = "0.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "acc653210e7d8d5c72845a5248f00fd33f4f3379ca13fe56cfc7b749b5655c3e";
+    sha256 = "5a5338cecff17f005b181546a13e282761754b481225df37f33d37f86ac5b304";
   };
 
   propagatedBuildInputs = [ pytest mypy ];

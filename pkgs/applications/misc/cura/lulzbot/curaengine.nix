@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "curaengine-lulzBot";
-  version = "3.6.18";
+  version = "3.6.21";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/curaengine-lulzbot.git;

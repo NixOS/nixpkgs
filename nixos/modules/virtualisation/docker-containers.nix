@@ -186,7 +186,7 @@ let
         ++ map escapeShellArg container.cmd
       );
       ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
-      ExecStop = "${pkgs.docker}/bin/docker stop %n";
+      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop %n"'';
       ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
 
       ### There is no generalized way of supporting `reload` for docker

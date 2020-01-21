@@ -28,14 +28,14 @@ let
 
 in buildPythonApplication rec {
   pname = "ocrmypdf";
-  version = "9.0.3";
+  version = "9.2.0";
   disabled = ! python3Packages.isPy3k;
 
   src = fetchFromGitHub {
     owner = "jbarlow83";
     repo = "OCRmyPDF";
     rev = "v${version}";
-    sha256 = "1qnjdcbwkxxqfahylzl0wj1gk51yi9m8akd4d1rrq37vg2vwdkjy";
+    sha256 = "1mvc6x5nn242z65pxv39ch71vaikgi89bb0sjbfy2jbw91vk41xa";
   };
 
   nativeBuildInputs = with python3Packages; [
@@ -53,7 +53,6 @@ in buildPythonApplication rec {
     pikepdf
     pillow
     reportlab
-    ruffus
     setuptools
     tqdm
   ];
@@ -71,8 +70,8 @@ in buildPythonApplication rec {
 
   postPatch = ''
     substituteInPlace src/ocrmypdf/leptonica.py \
-      --replace "ffi.dlopen(find_library('lept'))" \
-      'ffi.dlopen("${stdenv.lib.makeLibraryPath [leptonica]}/liblept${stdenv.hostPlatform.extensions.sharedLibrary}")'
+      --replace "lept = ffi.dlopen(_libpath)" \
+      'lept = ffi.dlopen("${stdenv.lib.makeLibraryPath [leptonica]}/liblept${stdenv.hostPlatform.extensions.sharedLibrary}")'
   '';
 
   # The tests take potentially 20+ minutes, depending on machine

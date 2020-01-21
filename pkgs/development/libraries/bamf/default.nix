@@ -1,6 +1,25 @@
-{ stdenv, autoconf, automake, libtool, gnome3, which, fetchgit, libgtop, libwnck3, glib, vala, pkgconfig
-, libstartup_notification, gobject-introspection, gtk-doc, docbook_xsl
-, xorgserver, dbus, python2, wrapGAppsHook }:
+{ stdenv
+, pantheon
+, autoconf
+, automake
+, libtool
+, gnome3
+, which
+, fetchgit
+, libgtop
+, libwnck3
+, glib
+, vala
+, pkgconfig
+, libstartup_notification
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, xorgserver
+, dbus
+, python3
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "bamf";
@@ -9,14 +28,16 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchgit {
-    url = https://git.launchpad.net/~unity-team/bamf;
+    url = "https://git.launchpad.net/~unity-team/bamf";
     rev = version;
     sha256 = "1klvij1wyhdj5d8sr3b16pfixc1yk8ihglpjykg7zrr1f50jfgsz";
   };
 
   nativeBuildInputs = [
+    (python3.withPackages (ps: with ps; [ lxml ])) # Tests
     autoconf
     automake
+    dbus
     docbook_xsl
     gnome3.gnome-common
     gobject-introspection
@@ -25,13 +46,8 @@ stdenv.mkDerivation rec {
     pkgconfig
     vala
     which
-    # Tests
-    python2
-    python2.pkgs.libxslt
-    python2.pkgs.libxml2
-    dbus
-    xorgserver
     wrapGAppsHook
+    xorgserver
   ];
 
   buildInputs = [
@@ -39,6 +55,11 @@ stdenv.mkDerivation rec {
     libgtop
     libstartup_notification
     libwnck3
+  ];
+
+  patches = [
+    # Port tests and checks to python3 lxml.
+    ./gtester2xunit-python3.patch
   ];
 
   # Fix hard-coded path
@@ -49,8 +70,8 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--enable-headless-tests"
     "--enable-gtk-doc"
+    "--enable-headless-tests"
   ];
 
   # fix paths
@@ -67,7 +88,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   meta = with stdenv.lib; {
     description = "Application matching framework";
@@ -78,6 +99,6 @@ stdenv.mkDerivation rec {
     homepage = https://launchpad.net/bamf;
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ davidak ];
+    maintainers = with maintainers; [ davidak ] ++ pantheon.maintainers;
   };
 }

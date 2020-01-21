@@ -9,6 +9,9 @@ rec {
   # Returns true if the path exists and is a directory, false otherwise
   pathIsDirectory = p: if builtins.pathExists p then (pathType p) == "directory" else false;
 
+  # Returns true if the path exists and is a regular file, false otherwise
+  pathIsRegularFile = p: if builtins.pathExists p then (pathType p) == "regular" else false;
+
   # Bring in a path as a source, filtering out all Subversion and CVS
   # directories, as well as backup files (*~).
   cleanSourceFilter = name: type: let baseName = baseNameOf (toString name); in ! (
@@ -110,24 +113,45 @@ rec {
       with builtins;
         let fileName       = toString path + "/" + file;
             packedRefsName = toString path + "/packed-refs";
-        in if lib.pathExists fileName
+            absolutePath   = base: path:
+              if lib.hasPrefix "/" path
+              then path
+              else toString (/. + "${base}/${path}");
+        in if pathIsRegularFile path
+           # Resolve git worktrees. See gitrepository-layout(5)
+           then
+             let m   = match "^gitdir: (.*)$" (lib.fileContents path);
+             in if m == null
+                then throw ("File contains no gitdir reference: " + path)
+                else
+                  let gitDir     = absolutePath (dirOf path) (lib.head m);
+                      commonDir' = if pathIsRegularFile "${gitDir}/commondir"
+                                   then lib.fileContents "${gitDir}/commondir"
+                                   else gitDir;
+                      commonDir  = absolutePath gitDir commonDir';
+                      refFile    = lib.removePrefix "${commonDir}/" "${gitDir}/${file}";
+                  in readCommitFromFile refFile commonDir
+
+           else if pathIsRegularFile fileName
+           # Sometimes git stores the commitId directly in the file but
+           # sometimes it stores something like: «ref: refs/heads/branch-name»
            then
              let fileContent = lib.fileContents fileName;
-                 # Sometimes git stores the commitId directly in the file but
-                 # sometimes it stores something like: «ref: refs/heads/branch-name»
                  matchRef    = match "^ref: (.*)$" fileContent;
-             in if   matchRef == null
+             in if  matchRef == null
                 then fileContent
                 else readCommitFromFile (lib.head matchRef) path
+
+           else if pathIsRegularFile packedRefsName
            # Sometimes, the file isn't there at all and has been packed away in the
            # packed-refs file, so we have to grep through it:
-           else if lib.pathExists packedRefsName
            then
              let fileContent = readFile packedRefsName;
                  matchRef    = match (".*\n([^\n ]*) " + file + "\n.*") fileContent;
-             in if   matchRef == null
+             in if  matchRef == null
                 then throw ("Could not find " + file + " in " + packedRefsName)
                 else lib.head matchRef
+
            else throw ("Not a .git directory: " + path);
     in readCommitFromFile "HEAD";
 

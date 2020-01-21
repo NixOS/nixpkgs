@@ -16,6 +16,5 @@ buildPythonApplication rec {
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [ stdenv.lib.maintainers.aszlig ];
     platforms = stdenv.lib.platforms.linux;
-    broken = true;
   };
 }

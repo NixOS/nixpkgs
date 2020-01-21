@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitHub
+, vala
 , meson
 , ninja
 , pkgconfig
@@ -8,7 +9,6 @@
 , gettext
 , glib
 , gtk3
-, hicolor-icon-theme
 , libgee
 , wrapGAppsHook }:
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook
@@ -36,15 +36,25 @@ stdenv.mkDerivation rec {
   buildInputs = [
     glib
     gtk3
-    hicolor-icon-theme
     pantheon.granite
     libgee
+  ];
+
+  patches = [
+    # See: https://github.com/donadigo/appeditor/issues/88
+    ./fix-build-vala-0.46.patch
   ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Edit the Pantheon desktop application menu";

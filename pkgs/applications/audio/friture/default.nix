@@ -4,13 +4,13 @@ let
   py = python3Packages;
 in py.buildPythonApplication rec {
   pname = "friture";
-  version = "0.36";
+  version = "0.37";
 
   src = fetchFromGitHub {
     owner = "tlecomte";
-    repo = "friture";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1pz8v0qbzqq3ig9w33cp027s6c8rj316x5sy8pqs5nsiny9ddnk6";
+    sha256 = "1ivy5qfd90w1s1icsphvvdnnqz563v3fhg5pws2zn4483cgnzc2y";
   };
 
   # module imports scipy.misc.factorial, but it has been removed since scipy
@@ -37,8 +37,9 @@ in py.buildPythonApplication rec {
 
   meta = with lib; {
     description = "A real-time audio analyzer";
-    homepage = http://friture.org/;
+    homepage = "http://friture.org/";
     license = licenses.gpl3;
+    platforms = platforms.linux; # fails on Darwin
     maintainers = [ maintainers.laikq ];
   };
 }

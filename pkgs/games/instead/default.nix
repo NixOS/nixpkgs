@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, SDL, SDL_ttf, SDL_image, SDL_mixer, pkgconfig, lua, zlib, unzip }:
+{ stdenv, fetchurl, SDL2, SDL2_ttf, SDL2_image, SDL2_mixer, pkgconfig, lua, zlib, unzip }:
 
 let
-  version = "3.3.0";
+  version = "3.3.1";
 
   # I took several games at random from http://instead.syscall.ru/games/
   games = [
@@ -33,13 +33,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/instead/instead/${version}/instead_${version}.tar.gz";
-    sha256 = "0kskwrq2gy1gpp97134sjrw08ip1h6i5dc64zrbl9yv7jaz4by69";
+    sha256 = "10bppcdjnd0all71l5akdvy7fx0c8s8x0za9qxszs8cjmlv9z1q0";
   };
 
   NIX_LDFLAGS = "-llua -lgcc_s";
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ SDL SDL_ttf SDL_image SDL_mixer lua zlib unzip ];
+  nativeBuildInputs = [ pkgconfig unzip ];
+  buildInputs = [ SDL2 SDL2_ttf SDL2_image SDL2_mixer lua zlib ];
 
   configurePhase = ''
     { echo 2; echo $out; } | ./configure.sh
@@ -47,15 +47,15 @@ stdenv.mkDerivation {
 
   inherit games;
 
-  installPhase = ''
-    make install
-
+  postInstall = ''
     pushd $out/share/instead/games
     for a in $games; do
       unzip $a
     done
     popd
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Simple text adventure interpreter for Unix and Windows";

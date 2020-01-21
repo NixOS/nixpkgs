@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "aioesphomeapi";
-  version = "2.2.0";
+  version = "2.6.1";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0znal1hi964acc8bl3z0ikscax7zziks838ld099rjsbffjwmwn5";
+    sha256 = "139d1d348fcfe2f34926a210a32dff069935d17167c4e1cb66e8b039cbb4d6c1";
   };
 
   propagatedBuildInputs = [ attrs protobuf zeroconf ];

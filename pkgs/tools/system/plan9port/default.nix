@@ -53,7 +53,7 @@ stdenv.mkDerivation {
     xorgproto libX11 libXext libXt fontconfig
     freetype # fontsrv wants ft2build.h provides system fonts for acme and sam.
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    darwin.cf-private Carbon Cocoa IOKit Metal QuartzCore
+    Carbon Cocoa IOKit Metal QuartzCore
   ]);
 
   builder = ./builder.sh;

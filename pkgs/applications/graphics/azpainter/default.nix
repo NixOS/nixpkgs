@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "azpainter";
-  version = "2.1.4";
+  version = "2.1.5";
 
   src = fetchFromGitHub {
     owner = "Symbian9";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "1hrr9lhsbjyzar3nxvli6cazr7zhyzh0p8hwpg4g9ga6njs8vi8m";
+    sha256 = "0x5jmsprjissqcvwq75pqq9wgv4k9b7cy507hai8xk6xs3vxwgba";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

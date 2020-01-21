@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, python, wafHook }:
+{ stdenv, fetchurl, fftwSinglePrec, lv2, pkgconfig, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "mda-lv2";
-  version = "1.2.2";
+  version = "1.2.4";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "0hh40c5d2m0k5gb3vw031l6lqn59dg804an3mkmhkc7qv4gc6xm4";
+    sha256 = "1a3cv6w5xby9yn11j695rbh3c4ih7rxfxmkca9s1324ljphh06m8";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ fftwSinglePrec lv2 python ];
+  buildInputs = [ fftwSinglePrec lv2 ];
 
   meta = with stdenv.lib; {
     homepage = http://drobilla.net/software/mda-lv2/;

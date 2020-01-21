@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pyspotify";
-  version = "2.0.5";
+  version = "2.1.2";
 
   src = fetchurl {
     url = "https://github.com/mopidy/pyspotify/archive/v${version}.tar.gz";
-    sha256 = "1ilbz2w1gw3f1bpapfa09p84dwh08bf7qcrkmd3aj0psz57p2rls";
+    sha256 = "0g3dvwpaz7pqrdx53kyzkh31arlmdzz1hb7jp8m488lbsf47w6nd";
   };
 
   propagatedBuildInputs = [ cffi ];

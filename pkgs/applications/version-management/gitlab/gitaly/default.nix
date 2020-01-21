@@ -17,15 +17,19 @@ let
       };
   };
 in buildGoPackage rec {
-  version = "1.65.1";
+  version = "1.77.1";
   pname = "gitaly";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "gitaly";
     rev = "v${version}";
-    sha256 = "1a39i723na2xk4363a7v48ba23vi04qpg0119dw09g13m0k5hjc3";
+    sha256 = "08xc9lxlvga36yq1wdvb1h4zk70c36qspyd7azhkw84kzwfrif1c";
   };
+
+  # Fix a check which assumes that hook files are writeable by their
+  # owner.
+  patches = [ ./fix-executable-check.patch ];
 
   goPackagePath = "gitlab.com/gitlab-org/gitaly";
 
@@ -55,7 +59,7 @@ in buildGoPackage rec {
   meta = with stdenv.lib; {
     homepage = https://gitlab.com/gitlab-org/gitaly;
     description = "A Git RPC service for handling all the git calls made by GitLab";
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ roblabla globin fpletz ];
     license = licenses.mit;
   };

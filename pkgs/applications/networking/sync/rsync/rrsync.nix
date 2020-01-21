@@ -8,8 +8,7 @@ stdenv.mkDerivation {
 
   src = base.src;
 
-  buildInputs = [ rsync ];
-  nativeBuildInputs = [perl];
+  buildInputs = [ rsync perl ];
 
   # Skip configure and build phases.
   # We just want something from the support directory

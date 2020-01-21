@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "dovecot";
 
   machine = { pkgs, ... }: {
@@ -66,12 +66,12 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    $machine->waitForUnit('postfix.service');
-    $machine->waitForUnit('dovecot2.service');
-    $machine->succeed('send-testmail');
-    $machine->succeed('send-lda');
-    $machine->waitUntilFails('[ "$(postqueue -p)" != "Mail queue is empty" ]');
-    $machine->succeed('test-imap');
-    $machine->succeed('test-pop');
+    machine.wait_for_unit("postfix.service")
+    machine.wait_for_unit("dovecot2.service")
+    machine.succeed("send-testmail")
+    machine.succeed("send-lda")
+    machine.wait_until_fails('[ "$(postqueue -p)" != "Mail queue is empty" ]')
+    machine.succeed("test-imap")
+    machine.succeed("test-pop")
   '';
 }

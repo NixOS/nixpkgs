@@ -28,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.1.1";
+  version = "7.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0gkz4q53ps3vzz0ww154y0dv6nri5sli8yflh7c26maawvz8wiv8";
+    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -64,11 +64,6 @@ buildPythonPackage rec {
     mock
     pytest
   ];
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
-  '';
 
   # Cannot find cython modules.
   doCheck = false;

@@ -3,8 +3,6 @@
 
 let
 
-  getDesktopFileName = drvName: (builtins.parseDrvName drvName).name;
-
   # TODO: Should we move this to `lib`? Seems like its would be useful in many cases.
   extensionOf = filePath:
     lib.concatStringsSep "." (lib.tail (lib.splitString "." (builtins.baseNameOf filePath)));
@@ -15,15 +13,15 @@ let
   '') icons);
 
   mkSweetHome3D =
-  { name, module, version, src, license, description, desktopName, icons }:
+  { pname, module, version, src, license, description, desktopName, icons }:
 
   stdenv.mkDerivation rec {
-    inherit name version src description;
+    inherit pname version src description;
     exec = stdenv.lib.toLower module;
     sweethome3dItem = makeDesktopItem {
       inherit exec desktopName;
-      name = getDesktopFileName name;
-      icon = getDesktopFileName name;
+      name = pname;
+      icon = pname;
       comment =  description;
       genericName = "Computer Aided (Interior) Design";
       categories = "Application;Graphics;2DGraphics;3DGraphics;";
@@ -49,7 +47,7 @@ let
       mkdir -p $out/bin
       cp install/${module}-${version}.jar $out/share/java/.
 
-      ${installIcons (getDesktopFileName name) icons}
+      ${installIcons pname icons}
 
       cp "${sweethome3dItem}/share/applications/"* $out/share/applications
 
@@ -74,9 +72,9 @@ let
 in {
 
   application = mkSweetHome3D rec {
+    pname = stdenv.lib.toLower module + "-application";
     version = "6.2";
     module = "SweetHome3D";
-    name = stdenv.lib.toLower module + "-application-" + version;
     description = "Design and visualize your future home";
     license = stdenv.lib.licenses.gpl2Plus;
     src = fetchsvn {

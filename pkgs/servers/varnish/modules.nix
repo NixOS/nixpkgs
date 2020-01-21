@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, docutils, removeReferencesTo }:
 
 stdenv.mkDerivation rec {
-  version = "0.14.0";
+  version = "0.15.0";
   name = "${varnish.name}-modules-${version}";
 
   src = fetchFromGitHub {
     owner = "varnish";
     repo = "varnish-modules";
     rev = version;
-    sha256 = "17fkbr4i70qgdqsrx1x28ag20xkfyz1v3q3d3ywmv409aczqhm40";
+    sha256 = "00p9syl765lfg1d2ka7da6h46dfl388f8h36x9cmrjix95rg0yr8";
   };
 
   nativeBuildInputs = [

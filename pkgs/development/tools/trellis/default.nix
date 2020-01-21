@@ -8,25 +8,25 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2019.09.27";
+  version = "2019.10.13";
   # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-71-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-95-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
-       owner  = "symbiflow";
+       owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "06904938dfe8f52392e73f7c8b1e034327887c27";
-       sha256 = "1yk13pipj7wp2mma0qcss4sa0wx8h60x0l0x9awh8g2iyk1y8nfw";
+       rev    = "e2e10bfdfaa29fed5d19e83dc7460be9880f5af4";
+       sha256 = "0l59nliv75rdxnajl2plilib0r0bzbr3qqzc88cdal841x1m0izs";
        name   = "trellis";
      })
     (fetchFromGitHub {
-      owner  = "symbiflow";
+      owner  = "SymbiFlow";
       repo   = "prjtrellis-db";
-      rev    = "b4d626b6402c131e9a035470ffe4cf33ccbe7986";
-      sha256 = "0k26lq6c049ja8hhqcljwjb1y5k4gcici23l2n86gyp83jr03ilx";
-      name   = "database";
+      rev    = "5b5bb70bae13e6b8c971b4b2d26931f4a64b51bc";
+      sha256 = "1fi963zdny3gxdvq564037qs22i7b4y7mxc3yij2a1ww8rzrnpdj";
+      name   = "trellis-database";
     })
   ];
   sourceRoot = "trellis";

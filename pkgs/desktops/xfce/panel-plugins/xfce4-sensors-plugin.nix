@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome2, libxfce4ui,
+{ stdenv, fetchurl, pkgconfig, intltool, gtk2, libxfce4ui,
   libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu
 }:
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    gnome2.gtk
+    gtk2
     libxfce4ui
     libxfce4util
     xfce4-panel

@@ -14,6 +14,7 @@
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , mpi ? null
+, extraB2Args ? []
 
 # Attributes inherit from specific versions
 , version, src
@@ -92,7 +93,8 @@ let
     ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
-  ]);
+  ] ++ extraB2Args
+  );
 
 in
 
@@ -101,7 +103,7 @@ stdenv.mkDerivation {
 
   inherit src version;
 
-  patchFlags = "";
+  patchFlags = [];
 
   patches = patches
   ++ optional stdenv.isDarwin (

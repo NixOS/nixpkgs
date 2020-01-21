@@ -37,9 +37,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome_python_desktop = callPackage ./bindings/gnome-python-desktop { };
 
-  gnome_vfs = callPackage ./platform/gnome-vfs {
-    openssl = pkgs.openssl_1_0_2;
-  };
+  gnome_vfs = callPackage ./platform/gnome-vfs { };
 
   libgnome = callPackage ./platform/libgnome { };
 

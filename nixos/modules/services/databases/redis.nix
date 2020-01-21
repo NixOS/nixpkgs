@@ -32,6 +32,13 @@ let
   '';
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "redis" "user" ] "The redis module now is hardcoded to the redis user.")
+    (mkRemovedOptionModule [ "services" "redis" "dbpath" ] "The redis module now uses /var/lib/redis as data directory.")
+    (mkRemovedOptionModule [ "services" "redis" "dbFilename" ] "The redis module now uses /var/lib/redis/dump.rdb as database dump location.")
+    (mkRemovedOptionModule [ "services" "redis" "appendOnlyFilename" ] "This option was never used.")
+    (mkRemovedOptionModule [ "services" "redis" "pidFile" ] "This option was removed.")
+  ];
 
   ###### interface
 
@@ -185,26 +192,21 @@ in
   ###### implementation
 
   config = mkIf config.services.redis.enable {
-
-    boot.kernel.sysctl = mkIf cfg.vmOverCommit {
-      "vm.overcommit_memory" = "1";
-    };
+    boot.kernel.sysctl = (mkMerge [
+      { "vm.nr_hugepages" = "0"; }
+      ( mkIf cfg.vmOverCommit { "vm.overcommit_memory" = "1"; } )
+    ]);
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];
     };
 
-    users.users.redis.description = "Redis database user";
+    users.users.redis = {
+      description = "Redis database user";
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ cfg.package ];
-
-    systemd.services.disable-transparent-huge-pages = {
-      description = "Disable Transparent Huge Pages (required by Redis)";
-      before = [ "redis.service" ];
-      wantedBy = [ "redis.service" ];
-      script = "echo never > /sys/kernel/mm/transparent_hugepage/enabled";
-      serviceConfig.Type = "oneshot";
-    };
 
     systemd.services.redis =
       { description = "Redis Server";

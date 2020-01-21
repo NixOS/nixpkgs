@@ -76,7 +76,10 @@ in {
   };
 
   config = mkIf (cfg.instances != {}) {
-    users.users.errbot.group = "errbot";
+    users.users.errbot = {
+      group = "errbot";
+      isSystemUser = true;
+    };
     users.groups.errbot = {};
 
     systemd.services = mapAttrs' (name: instanceCfg: nameValuePair "errbot-${name}" (

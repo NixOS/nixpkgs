@@ -4,13 +4,13 @@
 , curl, git, unzip, gnutar, coreutils, sqlite }:
 
 let
-  name = "pakcs-2.1.1";
+  name = "pakcs-2.2.0";
 
   # Don't switch to development release without a reason, because its
   # source updates without version bump. Prefer current release instead.
   src = fetchurl {
     url = "https://www.informatik.uni-kiel.de/~pakcs/download/${name}-src.tar.gz";
-    sha256 = "112v9ynqfbbm4x770mcfrai9v5bh7c3zn7jka80pv6v4y65r778c";
+    sha256 = "0c0a6cp9lwha5i90kv9ya2zi1ggnvkf4gwjfzbffgwwa77s2wz2l";
   };
 
   curry-frontend = (haskellPackages.override {
@@ -43,9 +43,14 @@ in stdenv.mkDerivation {
     # Since we can't expand $out in `makeFlags`
     #makeFlags="$makeFlags PAKCSINSTALLDIR=$out/pakcs"
 
-    substituteInPlace currytools/cpm/src/CPM/Repository.curry \
-      --replace "/bin/rm" "rm"
-  '';
+    for file in currytools/cpm/src/CPM/Repository.curry \
+                currytools/cpm/src/CPM/Repository/CacheDB.curry \
+                scripts/compile-all-libs.sh \
+                scripts/cleancurry.sh \
+                examples/test.sh testsuite/test.sh lib/test.sh; do
+        substituteInPlace $file --replace "/bin/rm" "rm"
+    done
+  '' ;
 
   # cypm new: EXISTENCE ERROR: source_sink
   # "/tmp/nix-build-pakcs-2.0.2.drv-0/pakcs-2.0.2/currytools/cpm/templates/LICENSE"

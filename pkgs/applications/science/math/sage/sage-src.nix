@@ -104,6 +104,27 @@ stdenv.mkDerivation rec {
       url = "https://git.sagemath.org/sage.git/patch?id=d27dc479a5772d59e4bc85d805b6ffd595284f1d";
       sha256 = "1nf1s9y7n30lhlbdnam7sghgaq9nasmv96415gl5jlcf7a3hlxk3";
     })
+
+    # ignore a deprecation warning for usage of `cmp` in the attrs library in the doctests
+    ./patches/ignore-cmp-deprecation.patch
+
+    # Werkzeug has deprecated ImmutableDict, but it is still used in legacy
+    # sagenb. That's no big issue since sagenb will be removed soon anyways.
+    ./patches/ignore-werkzeug-immutable-dict-deprecation.patch
+
+    # threejs r109 (#28560)
+    (fetchpatch {
+      name = "threejs-r109.patch";
+      url = "https://git.sagemath.org/sage.git/patch?id=fcc11d6effa39f375bc5f4ea5831fb7a2f2767da";
+      sha256 = "0hnmc8ld3bblks0hcjvjjaydkgwdr1cs3dbl2ys4gfq964pjgqwc";
+    })
+
+    # https://trac.sagemath.org/ticket/28911
+    (fetchpatch {
+      name = "sympy-1.5.patch";
+      url = "https://git.sagemath.org/sage.git/patch/?h=c6d0308db15efd611211d26cfcbefbd180fc0831";
+      sha256 = "0nwai2jr22h49km4hx3kwafs3mzsc5kwsv7mqwjf6ibwfx2bbgyq";
+    })
   ];
 
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;

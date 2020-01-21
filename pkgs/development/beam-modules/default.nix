@@ -14,16 +14,11 @@ let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
     in
-      import ./hex-packages.nix {
-        inherit pkgs stdenv callPackage;
-      } // rec {
+      rec {
         inherit callPackage erlang;
         beamPackages = self;
 
-        hexRegistrySnapshot = callPackage ./hex-registry-snapshot.nix { };
-
         rebar = callPackage ../tools/build-managers/rebar { };
-        rebar3-open = callPackage ../tools/build-managers/rebar3 { };
         rebar3 = callPackage ../tools/build-managers/rebar3 { };
 
         # rebar3 port compiler plugin is required by buildRebar3
@@ -79,9 +74,6 @@ let
         hex = callPackage ./hex {};
         webdriver = callPackage ./webdriver {};
         relxExe = callPackage ../tools/erlang/relx-exe {};
-
-        # The tool used to upgrade hex-packages.nix.
-        hex2nix = callPackage ../tools/erlang/hex2nix {};
 
         # An example of Erlang/C++ package.
         cuter = callPackage ../tools/erlang/cuter {};

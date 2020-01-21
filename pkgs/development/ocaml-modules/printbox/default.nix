@@ -13,7 +13,7 @@ buildDunePackage rec {
     sha256 = "16nwwpp13hzlcm9xqfxc558afm3i5s802dkj69l9s2vp04lgms5n";
   };
 
-  checkInputs = lib.optional doCheck mdx;
+  checkInputs = lib.optional doCheck mdx.bin;
 
   doCheck = !lib.versionAtLeast ocaml.version "4.08";
 

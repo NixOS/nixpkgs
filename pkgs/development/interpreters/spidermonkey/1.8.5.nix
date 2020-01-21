@@ -35,7 +35,7 @@ stdenv.mkDerivation {
     ./1.8.5-arm-flags.patch
   ];
 
-  patchFlags = "-p3";
+  patchFlags = [ "-p3" ];
 
   # fixes build on gcc8
   postPatch = ''

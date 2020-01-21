@@ -1,5 +1,9 @@
 { stdenv, fetchzip, which, ocaml, ocamlbuild }:
 
+if stdenv.lib.versionAtLeast ocaml.version "4.09"
+then throw "camlp4 is not available for OCaml ${ocaml.version}"
+else
+
 let param = {
   "4.02" = {
      version = "4.02+6";
@@ -51,9 +55,9 @@ stdenv.mkDerivation rec {
     --replace +camlp4 $out/lib/ocaml/${ocaml.version}/site-lib/camlp4
   '';
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
 
-  installTargets = "install install-META";
+  installTargets = [ "install" "install-META" ];
 
   dontStrip = true;
 

@@ -7,14 +7,12 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "mycli";
-  version = "1.19.0";
+  version = "1.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0x5vzl4vvirqy03fnjwkamhzrqkknlajamwz1rmbnqh4bfmijh9m";
+    sha256 = "0vhwaqkx4njarm0wy8zg2hvzr2yl92y8gnwipcn7p59sazw4whfl";
   };
-
-  patches = [ ./fix-tests.patch ];
 
   propagatedBuildInputs = [
     pymysql configobj sqlparse prompt_toolkit pygments click pycrypto cli-helpers
@@ -38,5 +36,6 @@ buildPythonApplication rec {
     '';
     homepage = http://mycli.net;
     license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.jojosch ];
   };
 }

@@ -2,20 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "1.6.2";
+  version = "1.6.4";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ajjsh1fw7w0k28r6qq7kh3qcr87gzzjp8s890algbglynlafzfw";
+    sha256 = "1yrjm8lvvz3v4h5af6m9qzq6z4lbgd7qbvq5rz7sjhdsh7g6qibd";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel libdrm ];
 
-  makeFlags = [ "KVER=${kernel.modDirVersion}" "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
+  makeFlags = [
+    "KDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
+    "KVER=${kernel.modDirVersion}"
+  ];
 
   hardeningDisable = [ "format" "pic" "fortify" ];
 
@@ -26,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Extensible Virtual Display Interface";
-    platforms = platforms.linux;
+    homepage = "https://www.displaylink.com/";
     license = with licenses; [ lgpl21 gpl2 ];
-    homepage = https://www.displaylink.com/;
-    broken = versionOlder kernel.version "4.9" || versionAtLeast kernel.version "5.3" || stdenv.isAarch64;
+    platforms = platforms.linux;
+    broken = versionOlder kernel.version "4.9" || stdenv.isAarch64;
   };
 }

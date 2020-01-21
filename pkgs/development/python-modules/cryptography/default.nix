@@ -5,7 +5,6 @@
 , openssl
 , cryptography_vectors
 , darwin
-, asn1crypto
 , packaging
 , six
 , pythonOlder
@@ -22,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.7"; # Also update the hash in vectors.nix
+  version = "2.8"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1inlnr36kl36551c9rcad99jmhk81v33by3glkadwdcgmi17fd76";
+    sha256 = "0l8nhw14npknncxdnp7n4hpmjyscly6g7fbivyxkjwvlv071zniw";
   };
 
   outputs = [ "out" "dev" ];
@@ -34,7 +33,6 @@ buildPythonPackage rec {
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
-    asn1crypto
     packaging
     six
   ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
@@ -54,13 +52,6 @@ buildPythonPackage rec {
   checkPhase = ''
     py.test --disable-pytest-warnings tests -k 'not load_ecdsa_no_named_curve'
   '';
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/pyca/cryptography/commit/e575e3d482f976c4a1f3203d63ea0f5007a49a2a.patch";
-      sha256 = "0vg9prqsizd6gzh5j7lscsfxzxlhz7pacvzhgqmj1vhdhjwbblcp";
-    })
-  ];
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we
   # can do until nix 1.11's release

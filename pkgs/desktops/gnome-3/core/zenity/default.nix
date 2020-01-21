@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, libxslt, gnome3, gtk3
-, gnome-doc-utils, intltool, libX11, which, itstool, wrapGAppsHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxml2
+, gnome3
+, gtk3
+, yelp-tools
+, gettext
+, libX11
+, itstool
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "zenity";
@@ -10,13 +20,19 @@ stdenv.mkDerivation rec {
     sha256 = "15fdh8xfdhnwcynyh4byx3mrjxbyprqnwxzi7qn3g5wwaqryg1p7";
   };
 
-  preBuild = ''
-    mkdir -p $out/include
-  '';
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    yelp-tools
+    itstool
+    libxml2
+    wrapGAppsHook
+  ];
 
-  buildInputs = [ gtk3 libxml2 libxslt libX11 itstool ];
-
-  nativeBuildInputs = [ pkgconfig intltool gnome-doc-utils which wrapGAppsHook ];
+  buildInputs = [
+    gtk3
+    libX11
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -26,6 +42,8 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
+    description = "Tool to display dialogs from the commandline and shell scripts";
+    homepage = "https://wiki.gnome.org/Projects/Zenity";
     platforms = platforms.linux;
     maintainers = gnome3.maintainers;
   };

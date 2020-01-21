@@ -1,18 +1,22 @@
 { stdenv, pythonPackages }:
 
-pythonPackages.buildPythonApplication rec {
+with pythonPackages;
+
+let
+  cerberus_1_1 = callPackage ./cerberus.nix { };
+in buildPythonApplication rec {
   pname = "pyditz";
   version = "0.10.3";
 
-  src = pythonPackages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
     sha256 = "0hxxz7kxv9gsrr86ccsc31g7bc2agw1ihbxhd659c2m6nrqq5qaf";
   };
-  nativeBuildInputs = [ pythonPackages.setuptools_scm ];
-  propagatedBuildInputs = with pythonPackages; [ pyyaml six jinja2 cerberus11 ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ pyyaml six jinja2 cerberus_1_1 ];
 
   checkPhase = ''
-    ${pythonPackages.python.interpreter} -m unittest discover
+    ${python.interpreter} -m unittest discover
   '';
 
   meta = with stdenv.lib; {

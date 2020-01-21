@@ -13,7 +13,7 @@
 , miniupnpc
 , libmicrohttpd
 , gmp
-, libGLU_combined
+, libGLU, libGL
 , extraCmakeFlags ? []
 }:
 stdenv.mkDerivation rec {
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     miniupnpc
     libmicrohttpd
     gmp
-    libGLU_combined
+    libGLU libGL
   ];
 
   dontStrip = true;

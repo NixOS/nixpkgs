@@ -1,11 +1,12 @@
 { lib, mkDerivation, fetchurl, qmake, qtscript }:
 
 mkDerivation rec {
-  name = "smplayer-19.5.0";
+  pname = "smplayer";
+  version = "19.10.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/smplayer/${name}.tar.bz2";
-    sha256 = "1xda9pbrc3dfbs71n5l8yszlcywz9456mwkv52vmn8lszhvjpjxm";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "0i2c15yxk4by2zyjhb7n08larz9pmpa6zw383aybjxqh0nd9zv9p";
   };
 
   buildInputs = [ qtscript ];
@@ -13,13 +14,12 @@ mkDerivation rec {
 
   dontUseQmakeConfigure = true;
 
-  preConfigure = ''
-    makeFlags="PREFIX=$out"
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = {
     description = "A complete front-end for MPlayer";
-    homepage = http://smplayer.sourceforge.net/;
+    longDescription = "Either mplayer or mpv should also be installed for smplayer to play medias";
+    homepage = https://www.smplayer.info;
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
   };

@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     homepage    = http://www.cl.cam.ac.uk/~jrh13/hol-light/;
     license     = licenses.bsd2;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice z77z vbgl ];
+    maintainers = with maintainers; [ thoughtpolice maggesi vbgl ];
   };
 }

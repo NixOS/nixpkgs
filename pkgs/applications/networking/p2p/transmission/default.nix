@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib, hicolor-icon-theme
+, openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ]
-    ++ optionals enableGTK3 [ hicolor-icon-theme ];
+    ++ optionals stdenv.isLinux [ inotify-tools ];
 
   postPatch = ''
     substituteInPlace ./configure \

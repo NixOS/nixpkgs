@@ -33,7 +33,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-photos";
-  version = "2.6.4";
+  version = "2.6.5";
 
   repoName = "photos";
 
@@ -41,13 +41,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "17r9658s0pqy6s45ysi3915sm8hpvmsp7cw2jahqvjc61r4qpdc1";
+    sha256 = "0r6d9y936nw4bn0jvixi1p62dy8qsgl2bx8g3889fndnhfnhbjv0";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

@@ -5,7 +5,6 @@ with lib;
 let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
-  spamassassin-init-pre = pkgs.writeText "init.pre" cfg.initPreConf;
 
   spamdEnv = pkgs.buildEnv {
     name = "spamd-env";
@@ -65,8 +64,9 @@ in
       };
 
       initPreConf = mkOption {
-        type = types.str;
+        type = with types; either str path;
         description = "The SpamAssassin init.pre config.";
+        apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''
           #
@@ -124,19 +124,17 @@ in
     # Allow users to run 'spamc'.
 
     environment = {
-      etc = singleton { source = spamdEnv; target = "spamassassin"; };
+      etc.spamassassin.source = spamdEnv;
       systemPackages = [ pkgs.spamassassin ];
     };
 
-    users.users = singleton {
-      name = "spamd";
+    users.users.spamd = {
       description = "Spam Assassin Daemon";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
 
-    users.groups = singleton {
-      name = "spamd";
+    users.groups.spamd = {
       gid = config.ids.gids.spamd;
     };
 

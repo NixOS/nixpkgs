@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, dataPath ? "/etc/rainloop" }: let
   common = { edition, sha256 }:
     stdenv.mkDerivation (rec {
-      name = "rainloop-${edition}-${version}";
+      pname = "rainloop${stdenv.lib.optionalString (edition != "") "-${edition}"}";
       version = "1.13.0";
 
       buildInputs = [ unzip ];
@@ -26,8 +26,8 @@
       meta = with stdenv.lib; {
         description = "Simple, modern & fast web-based email client";
         homepage = "https://www.rainloop.net";
-        downloadPage = https://github.com/RainLoop/rainloop-webmail/releases;
-        license = licenses.agpl3;
+        downloadPage = "https://github.com/RainLoop/rainloop-webmail/releases";
+        license = with licenses; if edition == "" then unfree else agpl3;
         platforms = platforms.all;
         maintainers = with maintainers; [ das_j ];
       };

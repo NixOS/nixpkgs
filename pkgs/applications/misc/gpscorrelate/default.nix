@@ -3,16 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "gpscorrelate";
-  version = "unstable-2019-09-03";
+  version = "2.0";
 
   src = fetchFromGitHub {
     owner = "dfandrich";
     repo = pname;
-    rev = "e1dd44a34f67b1ab7201440e60a840258ee448d2";
-    sha256 = "0gjwwdqh9dprzylmmnk3gm41khka9arkij3i9amd8y7d49pm9rlv";
+    rev = version;
+    sha256 = "1wkpb0nqnm0ik46hp2sibf96h2gxi6n951zm8c72scgmh4ciq4fl";
   };
-
-  patches = [ ./fix-localedir.diff ];
 
   nativeBuildInputs = [
     desktop-file-utils
@@ -30,7 +28,6 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "prefix=${placeholder "out"}"
-    "GTK=3"
     "CC=cc"
     "CXX=c++"
     "CFLAGS=-DENABLE_NLS"
@@ -60,7 +57,7 @@ stdenv.mkDerivation rec {
     '';
 
     license = licenses.gpl2Plus;
-    homepage = "https://github.com/dfandrich/gpscorrelate";
+    homepage = "https://dfandrich.github.io/gpscorrelate/";
     platforms = platforms.linux;
     maintainers = with maintainers; [ sikmir ];
   };

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, openssl, zlib, pcre, libxml2, libxslt
+{ stdenv, fetchFromGitHub, openssl, zlib, pcre, libxml2, libxslt
 , gd, geoip, gperftools, jemalloc
 , withDebug ? false
 , withMail ? false
@@ -10,12 +10,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "2.3.1";
+  version = "2.3.2";
   pname = "tengine";
 
-  src = fetchurl {
-    url = "https://github.com/alibaba/tengine/archive/${version}.tar.gz";
-    sha256 = "075blm2d62a0bdixc3vngrxpgr7ngl1s4y8hm20pbvc07f0kzn9x";
+  src = fetchFromGitHub {
+    owner = "alibaba";
+    repo = pname;
+    rev = version;
+    sha256 = "04xfnbc0qlk8vi6bb8sl38nxnx9naxh550xsgrb4hql6jdi0wv7l";
   };
 
   buildInputs =
@@ -51,23 +53,23 @@ stdenv.mkDerivation rec {
     "--with-poll_module"
     "--with-google_perftools_module"
     "--with-jemalloc"
-  ] ++ optional withDebug [
+  ] ++ optionals withDebug [
     "--with-debug"
-  ] ++ optional withMail [
+  ] ++ optionals withMail [
     "--with-mail"
     "--with-mail_ssl_module"
-  ] ++ optional (!withMail) [
+  ] ++ optionals (!withMail) [
     "--without-mail_pop3_module"
     "--without-mail_imap_module"
     "--without-mail_smtp_module"
-  ] ++ optional withStream [
+  ] ++ optionals withStream [
     "--with-stream"
     "--with-stream_ssl_module"
     "--with-stream_realip_module"
     "--with-stream_geoip_module"
     "--with-stream_ssl_preread_module"
     "--with-stream_sni"
-  ] ++ optional (!withStream) [
+  ] ++ optionals (!withStream) [
     "--without-stream_limit_conn_module"
     "--without-stream_access_module"
     "--without-stream_geo_module"
@@ -82,9 +84,8 @@ stdenv.mkDerivation rec {
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ map (mod: "--add-module=${mod.src}") modules;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${libxml2.dev}/include/libxml2"
-  ] ++ optional stdenv.isDarwin "-Wno-error=deprecated-declarations";
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2 -Wno-error=implicit-fallthrough"
+    + optionalString stdenv.isDarwin " -Wno-error=deprecated-declarations";
 
   preConfigure = (concatMapStringsSep "\n" (mod: mod.preConfigure or "") modules);
 
@@ -102,6 +103,5 @@ stdenv.mkDerivation rec {
     license     = licenses.bsd2;
     platforms   = platforms.all;
     maintainers = with maintainers; [ izorkin ];
-    broken = true;
   };
 }

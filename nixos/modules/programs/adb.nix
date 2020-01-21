@@ -23,7 +23,8 @@ with lib;
   ###### implementation
   config = mkIf config.programs.adb.enable {
     services.udev.packages = [ pkgs.android-udev-rules ];
-    environment.systemPackages = [ pkgs.androidenv.androidPkgs_9_0.platform-tools ];
+    # Give platform-tools lower priority so mke2fs+friends are taken from other packages first
+    environment.systemPackages = [ (lowPrio pkgs.androidenv.androidPkgs_9_0.platform-tools) ];
     users.groups.adbusers = {};
   };
 }

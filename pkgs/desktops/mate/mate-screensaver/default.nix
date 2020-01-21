@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "1.22.2";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1y8828g4bys8y4r5y478z6i7dgdqm2wkymi5fq75vxx4lzq919cb";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--without-console-kit" ];
 
-  makeFlags = "DBUS_SESSION_SERVICE_DIR=$(out)/etc";
+  makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
 
   meta = with stdenv.lib; {
     description = "Screen saver and locker for the MATE desktop";

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "handout";
-  version = "1.0.0";
+  version = "1.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16y1wqx8j4kf6fa94x22njrkdfb2cfi0dvc7a4q2qsa8m3ri0b43";
+    sha256 = "52daaf1f9a4cb2ceb88c1dedf85d22ef449b9422b424a2534d21f941e57bc915";
   };
 
   propagatedBuildInputs = [ imageio imageio-ffmpeg ];

@@ -19,7 +19,7 @@ in mkDerivation rec {
 
   buildInputs = [ perlPackages.perl ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace scripts/scripts.pro \
       --replace /bin/true ${coreutils}/bin/true
 
@@ -37,9 +37,8 @@ in mkDerivation rec {
     substituteInPlace src/StdCleanup.cpp \
       --replace /bin/bash ${bash}/bin/bash
   '';
-  postPatch = ''
-    export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
-  '';
+
+  qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/qdirstat-cache-writer \

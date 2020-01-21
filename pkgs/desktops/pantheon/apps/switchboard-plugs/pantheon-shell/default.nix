@@ -4,18 +4,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-pantheon-shell";
-  version = "2.8.1";
+  version = "2.8.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1vrnzxqzl84k8gbrais4j1jyap10kvil4cr769jpr3q3bkbblwrw";
+    sha256 = "0l4js2gqvn8lmky5b3jjqw6mzxcv9i2gjqr1vka0z40px6vfzf0z";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -36,29 +36,15 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    gala
+    wingpanel
     plank
     switchboard
   ];
 
   patches = [
     ./backgrounds.patch # Having https://github.com/elementary/switchboard-plug-pantheon-shell/issues/166 would make this patch uneeded
-    ./hardcode-gsettings.patch
-    # Fixes https://github.com/elementary/switchboard-plug-pantheon-shell/issues/172
-    (fetchpatch {
-      url = "https://github.com/elementary/switchboard-plug-pantheon-shell/commit/e4f86df6a6be402db4c979a4b005573618b744d1.patch";
-      sha256 = "0sa8611k6sqg96mnp2plmxd30w6zq76bfwszl8ankr9kwsgyc66y";
-    })
   ];
-
-  postPatch = ''
-    substituteInPlace src/Views/Appearance.vala \
-      --subst-var-by GALA_GSETTINGS_PATH ${glib.getSchemaPath gala}
-    substituteInPlace src/Views/Appearance.vala \
-      --subst-var-by WINGPANEL_GSETTINGS_PATH ${glib.getSchemaPath wingpanel}
-  '';
-
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Desktop Plug";

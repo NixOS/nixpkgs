@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "packr";
-  version = "2.6.0";
+  version = "2.7.1";
 
   src = fetchFromGitHub {
     owner = "gobuffalo";
     repo = pname;
     rev = "v${version}";
-    sha256 = "11bd0s3hyzvhcg1q0iahv2w9f0w1k57jfxgswhz7dyndxvvr2b8i";
+    sha256 = "0m5kl2fq8gf1v4vllgag2xl8fd382sdgqrcdb8f5alsnrdn08kb9";
   };
 
   subPackages = [ "packr" "v2/packr2" ];

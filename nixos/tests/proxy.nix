@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} : 
+import ./make-test.nix ({ pkgs, ...} :
 
 let
 
@@ -7,7 +7,7 @@ let
 
     { services.httpd.enable = true;
       services.httpd.adminAddr = "foo@example.org";
-      services.httpd.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+      services.httpd.virtualHosts.localhost.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
       networking.firewall.allowedTCPPorts = [ 80 ];
     };
 
@@ -26,11 +26,11 @@ in
         { services.httpd.enable = true;
           services.httpd.adminAddr = "bar@example.org";
           services.httpd.extraModules = [ "proxy_balancer" "lbmethod_byrequests" ];
-
-          services.httpd.extraConfig =
-            ''
-              ExtendedStatus on
-
+          services.httpd.extraConfig = ''
+            ExtendedStatus on
+          '';
+          services.httpd.virtualHosts.localhost = {
+            extraConfig = ''
               <Location /server-status>
                 Require all granted
                 SetHandler server-status
@@ -50,6 +50,7 @@ in
               # For testing; don't want to wait forever for dead backend servers.
               ProxyTimeout      5
             '';
+          };
 
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
