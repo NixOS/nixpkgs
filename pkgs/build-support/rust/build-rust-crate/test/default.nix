@@ -185,7 +185,20 @@ let
           "test tests_bar ... ok"
         ];
       };
-
+      linkAgainstRlibCrate = {
+        crateName = "foo";
+        src = mkFile  "src/main.rs" ''
+          extern crate somerlib;
+          fn main() {}
+        '';
+        dependencies = [
+          (mkCrate {
+            crateName = "somerlib";
+            type = [ "rlib" ];
+            src = mkLib "src/lib.rs";
+          })
+        ];
+      };
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
   in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {
