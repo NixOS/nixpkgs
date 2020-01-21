@@ -1,17 +1,17 @@
 { lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
-      p = {
-        crateName = "nixtestcrate";
-        version = "0.1.0";
-        authors = [ "Test <test@example.com>" ];
-      } // args;
-    in buildRustCrate p;
+    p = {
+      crateName = "nixtestcrate";
+      version = "0.1.0";
+      authors = [ "Test <test@example.com>" ];
+    } // args;
+  in buildRustCrate p;
 
-    mkFile = destination: text: writeTextFile {
-      name = "src";
-      destination = "/${destination}";
-      inherit text;
+  mkFile = destination: text: writeTextFile {
+    name = "src";
+    destination = "/${destination}";
+    inherit text;
   };
 
   mkBin = name: mkFile name ''
