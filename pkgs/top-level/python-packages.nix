@@ -7058,6 +7058,8 @@ in {
 
   qiskit = callPackage ../development/python-modules/qiskit { };
 
+  qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
+
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
 
   qiskit-terra = callPackage ../development/python-modules/qiskit-terra { };
