@@ -111,7 +111,7 @@ in {
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
         # Security
         NoNewPrivileges = true;
-        # Sanboxing
+        # Sandboxing
         ProtectSystem = "full";
         ProtectHome = true;
         RuntimeDirectory = "unit";
