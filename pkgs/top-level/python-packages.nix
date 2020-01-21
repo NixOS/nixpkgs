@@ -5019,6 +5019,8 @@ in {
 
   pyqtgraph = callPackage ../development/python-modules/pyqtgraph { };
 
+  pyscf = callPackage ../development/python-modules/pyscf { };
+
   PyStemmer = callPackage ../development/python-modules/pystemmer {};
 
   # Missing expression?
