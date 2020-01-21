@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../../.. { inherit system config; }
+  overlays ? [],
+  pkgs ? import ../../.. { inherit system config overlays; }
 }:
 {
   basic = import ./basic.nix { inherit system pkgs; };

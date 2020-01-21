@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; },
+  overlays ? [],
+  pkgs ? import ../.. { inherit system config overlays; },
   debug ? false,
   enableUnfree ? false,
   # Nested KVM virtualization (https://www.linux-kvm.org/page/Nested_Guests)

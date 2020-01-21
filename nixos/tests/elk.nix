@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem,
   config ? {},
-  pkgs ? import ../.. { inherit system config; },
+  overlays ? [],
+  pkgs ? import ../.. { inherit system config overlays; }
   enableUnfree ? false
   # To run the test on the unfree ELK use the folllowing command:
   # NIXPKGS_ALLOW_UNFREE=1 nix-build nixos/tests/elk.nix -A ELK-6 --arg enableUnfree true

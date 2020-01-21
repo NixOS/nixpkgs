@@ -1,6 +1,7 @@
 { system ? builtins.currentSystem
 , config ? {}
-, pkgs ? import ../.. { inherit system config; }
+, overlays ? []
+, pkgs ? import ../.. { inherit system config overlays; }
 , channelMap ? {
     stable = pkgs.chromium;
     beta   = pkgs.chromiumBeta;
