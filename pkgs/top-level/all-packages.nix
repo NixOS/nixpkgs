@@ -12608,6 +12608,8 @@ in
 
   libicns = callPackage ../development/libraries/libicns { };
 
+  libieee1284 = callPackage ../development/libraries/libieee1284 { };
+
   libimobiledevice = callPackage ../development/libraries/libimobiledevice { };
 
   libindicator-gtk2 = libindicator.override { gtkVersion = "2"; };
