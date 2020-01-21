@@ -584,6 +584,8 @@ in {
 
   datashader = callPackage ../development/python-modules/datashader { };
 
+  data_hacks = callPackage ../development/python-modules/data_hacks { };
+
   dbf = callPackage ../development/python-modules/dbf { };
 
   dbfread = callPackage ../development/python-modules/dbfread { };
