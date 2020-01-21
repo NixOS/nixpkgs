@@ -110,6 +110,8 @@ let
     inherit packageName buildType buildPath;
 
     src = upstream-info.main;
+    # Enable parallel building
+    enableParallelBuilding = true;
 
     nativeBuildInputs = [
       ninja which python2Packages.python perl pkgconfig
