@@ -560,6 +560,8 @@ in {
 
   codespell = callPackage ../development/python-modules/codespell { };
 
+  cpplint = callPackage ../development/python-modules/cpplint { };
+
   crc32c = callPackage ../development/python-modules/crc32c { };
 
   curio = callPackage ../development/python-modules/curio { };
