@@ -23,7 +23,7 @@ python3Packages.buildPythonApplication rec {
     homepage = https://github.com/JimmXinu/FanFicFare;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
     inherit version;
   };
 }
