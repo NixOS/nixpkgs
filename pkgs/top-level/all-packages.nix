@@ -7031,6 +7031,8 @@ in
   zpaqd = callPackage ../tools/archivers/zpaq/zpaqd.nix { };
 
   zsh-autoenv = callPackage ../tools/misc/zsh-autoenv { };
+  
+  zsh-bd = callPackage ../shells/zsh/zsh-bd { };
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
