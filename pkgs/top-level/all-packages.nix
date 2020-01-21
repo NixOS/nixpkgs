@@ -18092,6 +18092,8 @@ in
 
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
+  apngasm = callPackage ../applications/graphics/apngasm {};
+
   appeditor = callPackage ../applications/misc/appeditor { };
 
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
