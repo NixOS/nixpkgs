@@ -5129,6 +5129,8 @@ in
 
   munt = libsForQt5.callPackage ../applications/audio/munt { };
 
+  mutagen = callPackage ../tools/misc/mutagen { };
+
   mycli = callPackage ../tools/admin/mycli { };
 
   mydumper = callPackage ../tools/backup/mydumper { };
