@@ -7113,6 +7113,8 @@ in {
 
   qiskit-aer = callPackage ../development/python-modules/qiskit-aer { };
 
+  qiskit-aqua = callPackage ../development/python-modules/qiskit-aqua { };
+
   qiskit-ibmq-provider = callPackage ../development/python-modules/qiskit-ibmq-provider { };
 
   qiskit-ignis = callPackage ../development/python-modules/qiskit-ignis { };
