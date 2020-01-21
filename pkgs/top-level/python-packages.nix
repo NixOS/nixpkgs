@@ -835,6 +835,8 @@ in {
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
 
+  mimesis = callPackage ../development/python-modules/mimesis { };
+  
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
 
   mkl-service = callPackage ../development/python-modules/mkl-service { };
