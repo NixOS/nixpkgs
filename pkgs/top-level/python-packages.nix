@@ -3327,6 +3327,8 @@ in {
 
   djangorestframework-jwt = callPackage ../development/python-modules/djangorestframework-jwt { };
 
+  djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
+
   django-raster = callPackage ../development/python-modules/django-raster { };
 
   django_redis = callPackage ../development/python-modules/django_redis { };
