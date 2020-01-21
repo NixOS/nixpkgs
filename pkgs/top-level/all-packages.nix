@@ -18093,6 +18093,7 @@ in
   apache-directory-studio = callPackage ../applications/networking/apache-directory-studio {};
 
   apngasm = callPackage ../applications/graphics/apngasm {};
+  apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix {};
 
   appeditor = callPackage ../applications/misc/appeditor { };
 
