@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
-, xorg, autoPatchelfHook, systemd, libnotify
+, xorg, autoPatchelfHook, systemd, libnotify, iproute
 }:
 
 let deps = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     autoPatchelfHook
     dpkg
+    makeWrapper
   ];
 
   buildInputs = deps;
@@ -72,7 +73,10 @@ stdenv.mkDerivation rec {
 
     sed -i 's|\/opt\/Mullvad.*VPN|'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
 
-    ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
+    wrapProgram $out/share/mullvad/resources/mullvad-daemon \
+        --suffix PATH : ${iproute}/bin
+
+    ln -s $out/share/mullvad/mullvad-vpn $out/bin/mullvad-vpn
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
 
     runHook postInstall
