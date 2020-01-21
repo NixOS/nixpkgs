@@ -6276,6 +6276,12 @@
     github = "scubed2";
     name = "Sterling Stein";
   };
+  sdier = {
+    email = "scott@dier.name";
+    github = "sdier";
+    githubId = 11613056;
+    name = "Scott Dier";
+  };
   sdll = {
     email = "sasha.delly@gmail.com";
     github = "sdll";
