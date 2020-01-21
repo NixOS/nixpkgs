@@ -112,6 +112,12 @@ in {
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
   };
 
+  ubootAmx335xEVM = buildUBoot {
+    defconfig = "am335x_evm_defconfig";
+    extraMeta.platforms = ["armv7l-linux"];
+    filesToInstall = ["MLO" "u-boot.img"];
+  };
+
   ubootBananaPi = buildUBoot {
     defconfig = "Bananapi_defconfig";
     extraMeta.platforms = ["armv7l-linux"];
@@ -129,12 +135,6 @@ in {
     extraMeta.platforms = ["aarch64-linux"];
     BL31 = "${armTrustedFirmwareAllwinner}/bl31.bin";
     filesToInstall = ["u-boot-sunxi-with-spl.bin"];
-  };
-
-  ubootBeagleboneBlack = buildUBoot {
-    defconfig = "am335x_boneblack_defconfig";
-    extraMeta.platforms = ["armv7l-linux"];
-    filesToInstall = ["MLO" "u-boot.img"];
   };
 
   # http://git.denx.de/?p=u-boot.git;a=blob;f=board/solidrun/clearfog/README;hb=refs/heads/master
