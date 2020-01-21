@@ -68,6 +68,9 @@ let
       done
       cp -pv ${pdftoepdf} texk/web2c/pdftexdir/pdftoepdf.cc
       cp -pv ${pdftosrc} texk/web2c/pdftexdir/pdftosrc.cc
+
+      # poppler 0.84 compat fixups, use 0.83 files otherwise
+      patch -p1 -i ${./poppler84.patch}
     '';
 
     # remove when removing synctex-missing-header.patch
