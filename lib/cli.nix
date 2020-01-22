@@ -43,29 +43,26 @@ rec {
     options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
 
   toGNUCommandLine =
-    { renderKey ?
-        key:
-          if builtins.stringLength key == 1
-          then "-${key}"
-          else "--${key}"
+    { mkKey ?
+        k: if builtins.stringLength k == 1
+           then "-${k}"
+           else "--${k}"
 
-    , renderOption ?
-        key: value:
-          if value == null
-          then []
-          else [ (renderKey key) (builtins.toString value) ]
+    , mkOption ?
+        k: v: if v == null
+              then []
+              else [ (mkKey k) (builtins.toString v) ]
 
-    , renderBool ? key: value: lib.optional value (renderKey key)
+    , mkBool ? k: v: lib.optional v (mkKey k)
 
-    , renderList ? key: value: lib.concatMap (renderOption key) value
+    , mkList ? k: v: lib.concatMap (mkOption k) v
     }:
     options:
       let
-        render =
-          key: value:
-            if      builtins.isBool value then renderBool key value
-            else if builtins.isList value then renderList key value
-            else renderOption key value;
+        render = k: v:
+          if      builtins.isBool v then mkBool k v
+          else if builtins.isList v then mkList k v
+          else mkOption k v;
 
       in
         builtins.concatLists (lib.mapAttrsToList render options);
