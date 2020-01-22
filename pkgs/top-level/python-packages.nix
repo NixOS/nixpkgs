@@ -678,6 +678,8 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
+  flower = callPackage ../development/python-modules/flower { };
+
   flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
 
   flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
