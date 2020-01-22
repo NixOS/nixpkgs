@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "7.0.0";
+  version = "7.1.0";
   pname = "azure-mgmt-storage";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7f5e6b18dee267c99f08f6a716a93173bbae433c8665f5c59153fb1a963bc105";
+    sha256 = "03yjvw1dwkwsadsv60i625mr9zpdryy7ywvh7p8fg60djszh1p5l";
   };
 
   postInstall = if isPy3k then "" else ''
