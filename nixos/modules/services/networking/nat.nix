@@ -50,8 +50,8 @@ let
 
     # NAT packets coming from the internal IPs.
     ${concatMapStrings (range: ''
-      iptables -w -t nat -A nixos-nat-post \
-        -s '${range}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
+      iptables -w -t nat -A nixos-nat-post -s '${range}' \
+        ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
     '') cfg.internalIPs}
 
     # NAT from external ports to internal ports.
@@ -79,10 +79,18 @@ let
             --dport ${builtins.toString fwd.sourcePort} \
             -j DNAT --to-destination ${fwd.destination}
 
-          iptables -w -t nat -A nixos-nat-post \
-            -d ${destinationIP} -p ${fwd.proto} \
-            --dport ${destinationPorts} \
-            -j SNAT --to-source ${loopbackip}
+          ${optionalString (cfg.internalInterfaces != []) ''
+            iptables -w -t nat -A nixos-nat-post -m mark --mark 1 \
+              -d ${destinationIP} -p ${fwd.proto} \
+              --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
+           ''}
+          ${concatMapStrings (range: ''
+            iptables -w -t nat -A nixos-nat-post -s ${range} \
+              -d ${destinationIP} -p ${fwd.proto} \
+              --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
+          '') cfg.internalIPs}
         '') fwd.loopbackIPs}
     '') cfg.forwardPorts}
 
