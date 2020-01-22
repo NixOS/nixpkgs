@@ -6236,6 +6236,8 @@ in
 
   safeeyes = callPackage ../applications/misc/safeeyes { };
 
+  safety = callPackage ../tools/security/safety { };
+
   sahel-fonts = callPackage ../data/fonts/sahel-fonts { };
 
   saldl = callPackage ../tools/networking/saldl { };
