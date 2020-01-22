@@ -71,7 +71,7 @@ in openmw.overrideAttrs (oldAttrs: rec {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
     homepage = https://tes3mp.com/;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
 })
