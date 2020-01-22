@@ -777,6 +777,8 @@ in {
 
   imutils = callPackage ../development/python-modules/imutils { };
 
+  inotify = callPackage ../development/python-modules/inotify { };
+
   inotify-simple = callPackage ../development/python-modules/inotify-simple { };
 
   intake = callPackage ../development/python-modules/intake { };
