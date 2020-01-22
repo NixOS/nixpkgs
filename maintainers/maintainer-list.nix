@@ -594,6 +594,12 @@
     githubId = 1296771;
     name = "Anders Riutta";
   };
+  arnoldfarkas = {
+    email = "arnold.farkas@gmail.com";
+    github = "arnoldfarkas";
+    githubId = 59696216;
+    name = "Arnold Farkas";
+  };
   arobyn = {
     email = "shados@shados.net";
     github = "shados";
