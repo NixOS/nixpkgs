@@ -4,13 +4,13 @@
 
 buildDunePackage rec {
   pname = "ppxlib";
-  version = "0.8.1";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "ocaml-ppx";
     repo = pname;
     rev = version;
-    sha256 = "0vm0jajmg8135scbg0x60ivyy5gzv4abwnl7zls2mrw23ac6kml6";
+    sha256 = "1cg0is23c05k1rc94zcdz452p9zn11dpqxm1pnifwx5iygz3w0a1";
   };
 
   propagatedBuildInputs = [
