@@ -4303,6 +4303,8 @@ in {
 
   names = callPackage ../development/python-modules/names { };
 
+  nbconflux = callPackage ../development/python-modules/nbconflux { };
+
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
   nbformat = callPackage ../development/python-modules/nbformat { };
