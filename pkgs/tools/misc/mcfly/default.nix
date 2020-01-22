@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mcfly";
-  version = "0.3.1";
+  version = "0.3.6";
 
   src = fetchFromGitHub {
     owner = "cantino";
     repo = "mcfly";
     rev = "v${version}";
-    sha256 = "0pmyw21zns4zn7pffji4yvbj63fx3g15cx81pk4bs6lzyz5zbdc2";
+    sha256 = "1g3n7ll0yg7w7hb3jgp25mlnqwsdzv0608f41z7q5gmsskdm3v1j";
   };
 
   preInstall = ''
