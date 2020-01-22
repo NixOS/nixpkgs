@@ -57,5 +57,6 @@ in stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;
+    broken = true;
   };
 }
