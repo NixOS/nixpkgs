@@ -164,10 +164,12 @@ let
       };
     };
 
-  mkService = name: container: {
+  mkService = name: container: rec {
     wantedBy = [ "multi-user.target" ];
-    after = [ "docker.service" "docker.socket" ];
-    requires = [ "docker.service" "docker.socket" ];
+    requires =
+        [ "docker.service" "docker.socket" ] ++
+        (if config.services.kubernetes.kubelet.enable then [ "kubelet.service" ] else []);
+    after = requires;
     serviceConfig = {
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
