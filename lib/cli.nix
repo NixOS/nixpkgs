@@ -10,49 +10,44 @@ rec {
      `toGNUCommandLineShell` returns an escaped shell string.
 
      Example:
-       toGNUCommandLine
-         { }
-         { data = builtins.toJSON { id = 0; };
+       cli.toGNUCommandLine {} {
+         data = builtins.toJSON { id = 0; };
+         X = "PUT";
+         retry = 3;
+         retry-delay = null;
+         url = [ "https://example.com/foo" "https://example.com/bar" ];
+         silent = false;
+         verbose = true;
+       }
+       => [
+         "-X" "PUT"
+         "--data" "{\"id\":0}"
+         "--retry" "3"
+         "--url" "https://example.com/foo"
+         "--url" "https://example.com/bar"
+         "--verbose"
+       ]
 
-           X = "PUT";
-
-           retry = 3;
-
-           retry-delay = null;
-
-           url = [ "https://example.com/foo" "https://example.com/bar" ];
-
-           silent = false;
-
-           verbose = true;
-         };
-       => [ "-X" "PUT" "--data" "{\"id\":0}" "--retry" "3" "--url" "https://example.com/foo" "--url" "https://example.com/bar" "--verbose" ]
-
-       toGNUCommandLineShell
-         { }
-         { data = builtins.toJSON { id = 0; };
-
-           X = "PUT";
-
-           retry = 3;
-
-           retry-delay = null;
-
-           url = [ "https://example.com/foo" "https://example.com/bar" ];
-
-           silent = false;
-
-           verbose = true;
-         };
-       => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'"
-
+       cli.toGNUCommandLineShell {} {
+         data = builtins.toJSON { id = 0; };
+         X = "PUT";
+         retry = 3;
+         retry-delay = null;
+         url = [ "https://example.com/foo" "https://example.com/bar" ];
+         silent = false;
+         verbose = true;
+       }
+       => "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
   */
   toGNUCommandLineShell =
     options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
 
   toGNUCommandLine =
     { renderKey ?
-        key: if builtins.stringLength key == 1 then "-${key}" else "--${key}"
+        key:
+          if builtins.stringLength key == 1
+          then "-${key}"
+          else "--${key}"
 
     , renderOption ?
         key: value:
@@ -66,11 +61,10 @@ rec {
     }:
     options:
       let
-        render = key: value:
-                 if builtins.isBool value
-            then renderBool key value
-            else if builtins.isList value
-            then renderList key value
+        render =
+          key: value:
+            if      builtins.isBool value then renderBool key value
+            else if builtins.isList value then renderList key value
             else renderOption key value;
 
       in
