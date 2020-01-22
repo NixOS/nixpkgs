@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "libnacl";
-  version = "1.6.1";
+  version = "1.7.1";
 
   src = fetchFromGitHub {
     owner = "saltstack";
     repo = pname;
     rev = "v${version}";
-    sha256 = "05iamhbsqm8binqhc2zchfqdkajlx2icf8xl5vkd5fbrhw6yylad";
+    sha256 = "10rpim9lf0qd861a3miq8iqg8w87slqwqni7nq66h72jdk130axg";
   };
 
   checkInputs = [ pytest ];
