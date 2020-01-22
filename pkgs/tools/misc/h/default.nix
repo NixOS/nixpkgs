@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     cp up $out/bin/up
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "faster shell navigation of projects";
     homepage = "https://github.com/zimbatm/h";
     license = stdenv.lib.licenses.mit;
