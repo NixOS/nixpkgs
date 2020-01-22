@@ -3451,6 +3451,8 @@ in {
 
   et_xmlfile = callPackage ../development/python-modules/et_xmlfile { };
 
+  etesync = callPackage ../development/python-modules/etesync { };
+
   eventlet = callPackage ../development/python-modules/eventlet { };
 
   exifread = callPackage ../development/python-modules/exifread { };
