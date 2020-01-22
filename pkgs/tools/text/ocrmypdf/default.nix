@@ -10,6 +10,7 @@
 , stdenv
 , tesseract4
 , unpaper
+, substituteAll
 }:
 
 let
@@ -68,11 +69,12 @@ in buildPythonApplication rec {
     setuptools
   ] ++ runtimeDeps;
 
-  postPatch = ''
-    substituteInPlace src/ocrmypdf/leptonica.py \
-      --replace '_libpath = find_library(libname)' \
-                '_libpath = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}"'
-  '';
+  patches = [
+    (substituteAll {
+      src = ./liblept.patch;
+      liblept = "${stdenv.lib.getLib leptonica}/lib/liblept${stdenv.hostPlatform.extensions.sharedLibrary}";
+    })
+  ];
 
   # The tests take potentially 20+ minutes, depending on machine
   doCheck = false;
