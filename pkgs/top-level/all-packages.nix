@@ -18939,6 +18939,8 @@ in
 
   eteroj.lv2 = libsForQt5.callPackage ../applications/audio/eteroj.lv2 { };
 
+  etesync-dav = callPackage ../applications/misc/etesync-dav {};
+
   etherape = callPackage ../applications/networking/sniffers/etherape { };
 
   evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
