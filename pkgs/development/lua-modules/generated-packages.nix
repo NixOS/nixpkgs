@@ -1173,7 +1173,7 @@ luautf8 = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/starwing/luautf8";
+    homepage = "https://github.com/starwing/luautf8";
     description = "A UTF-8 support module for Lua";
     maintainers = with maintainers; [ pstn ];
     license = {
@@ -1212,7 +1212,7 @@ lua-yajl = buildLuarocksPackage {
   propagatedBuildInputs = [ lua ];
 
   meta = with stdenv.lib; {
-    homepage = "http://github.com/brimworks/lua-yajl";
+    homepage = "https://github.com/brimworks/lua-yajl";
     description = "Integrate the yajl JSON library with Lua.";
     maintainers = with maintainers; [ pstn ];
     license = {
