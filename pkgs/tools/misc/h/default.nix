@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     description = "faster shell navigation of projects";
     homepage = "https://github.com/zimbatm/h";
     license = licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.zimbatm ];
+    maintainers = [ maintainers.zimbatm ];
   };
 }
