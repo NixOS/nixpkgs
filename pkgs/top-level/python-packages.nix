@@ -5929,6 +5929,10 @@ in {
 
   python_statsd = callPackage ../development/python-modules/python_statsd { };
 
+  stestr = callPackage ../development/python-modules/stestr {
+    pythonSubunit = self.subunit;
+  };
+
   stompclient = callPackage ../development/python-modules/stompclient { };
 
   subdownloader = callPackage ../development/python-modules/subdownloader { };
