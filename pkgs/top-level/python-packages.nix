@@ -704,6 +704,8 @@ in {
 
   gin-config = callPackage ../development/python-modules/gin-config { };
 
+  gitlab = callPackage ../development/python-modules/gitlab { };
+  
   globus-sdk = callPackage ../development/python-modules/globus-sdk { };
 
   glymur = callPackage ../development/python-modules/glymur { };
