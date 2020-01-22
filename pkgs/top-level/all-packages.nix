@@ -25231,6 +25231,8 @@ in
 
   redprl = callPackage ../applications/science/logic/redprl { };
 
+  renderizer = pkgs.callPackage ../development/tools/renderizer {};
+
   retroarchBare = callPackage ../misc/emulators/retroarch {
     inherit (darwin) libobjc;
     inherit (darwin.apple_sdk.frameworks) AppKit Foundation;
