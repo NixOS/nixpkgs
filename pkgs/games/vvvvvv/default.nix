@@ -54,7 +54,7 @@ in stdenv.mkDerivation rec {
       idea - what if you reversed gravity instead of jumping? 
     '';
     homepage = "https://thelettervsixtim.es";
-    license = licenses.unfree;
+    license = if fullGame then licenses.unfree else licenses.unfreeRedistributable;
     maintainers = [ maintainers.dkudriavtsev ];
     platforms = platforms.all;
   };
