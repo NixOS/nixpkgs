@@ -189,6 +189,8 @@ in {
 
   aria2p = callPackage ../development/python-modules/aria2p { inherit (pkgs) aria2 poetry; };
 
+  argparse = callPackage ../development/python-modules/argparse { };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   asana = callPackage ../development/python-modules/asana { };
