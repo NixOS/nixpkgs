@@ -32,7 +32,9 @@ in
     };
 
   };
-  serviceOpts = {
+  serviceOpts = rec {
+    after = [ "nginx.service" ];
+    requires = after;
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-nginx-exporter}/bin/nginx-prometheus-exporter \
