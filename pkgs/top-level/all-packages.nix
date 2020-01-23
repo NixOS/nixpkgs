@@ -1930,6 +1930,8 @@ in
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync { };
 
+  megacmd = callPackage ../applications/misc/megacmd { };
+
   meritous = callPackage ../games/meritous { };
 
   opendune = callPackage ../games/opendune { };
