@@ -174,8 +174,7 @@ checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.
 checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
 
 ## Paths should be allowed as values and work as expected
-# Temporarily disabled until https://github.com/NixOS/nixpkgs/pull/76861
-#checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
+checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
 
 # Check that disabledModules works recursively and correctly
 checkConfigOutput "true" config.enable ./disable-recursive/main.nix

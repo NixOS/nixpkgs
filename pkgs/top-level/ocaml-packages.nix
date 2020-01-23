@@ -468,6 +468,8 @@ let
 
     lambdaTerm = callPackage ../development/ocaml-modules/lambda-term { };
 
+    lens = callPackage ../development/ocaml-modules/lens { };
+
     linenoise = callPackage ../development/ocaml-modules/linenoise { };
 
     llvm = callPackage ../development/ocaml-modules/llvm {

@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--enable-release" ];
   doCheck = true;
   checkPhase = ''
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:${llvm}/lib make check
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}${llvm}/lib make check
   '';
   postInstall = ''
     wrapProgram $out/bin/pure --prefix LD_LIBRARY_PATH : ${llvm}/lib

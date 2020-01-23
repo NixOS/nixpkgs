@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
   '';
 
   preBuild = ''
-    export LD_LIBRARY_PATH=$(pwd):$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$(pwd)''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=unknown-warning-option";

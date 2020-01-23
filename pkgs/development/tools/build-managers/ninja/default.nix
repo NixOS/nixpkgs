@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
+{ stdenv, fetchFromGitHub, fetchpatch, python3, buildDocs ? true, asciidoc, docbook_xml_dtd_45, docbook_xsl, libxslt, re2c }:
 
 with stdenv.lib;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       sha256 = "0zsg46jflsh644jccrcgyfalr7fkzrv041kyi8644nyk923gcrl9";
     })
     # https://github.com/ninja-build/ninja/issues/1510 - fix w/musl, possibly BSDs?
-    # 
+    #
     (fetchpatch {
       name = "fix-issue-1510.patch";
       url = https://github.com/makepost/ninja/commit/567815df38a2ff54ad7478a90bd75c91e434236a.patch;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ python re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
+  nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
 
   buildPhase = ''
     python configure.py --bootstrap

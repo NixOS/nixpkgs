@@ -9,7 +9,7 @@
 , libxml2
 , llvm
 , clang-unwrapped
-, python
+, python3
 , version
 , darwin
 , lit
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./lldb-procfs.patch ];
 
-  nativeBuildInputs = [ cmake python which swig lit ];
+  nativeBuildInputs = [ cmake python3 which swig lit ];
   buildInputs = [
     ncurses
     zlib

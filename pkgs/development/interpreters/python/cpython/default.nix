@@ -11,7 +11,7 @@
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , zlib
 , self
-, CF, configd
+, configd
 , python-setup-hook
 , nukeReferences
 # For the Python package set
@@ -57,10 +57,10 @@ let
     pythonForBuild
   ];
 
-  buildInputs = filter (p: p != null) [
+  buildInputs = filter (p: p != null) ([
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optionals stdenv.isDarwin [ configd ]);
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 

@@ -1298,7 +1298,7 @@ in
 
   burpsuite = callPackage ../tools/networking/burpsuite {};
 
-  bs-platform = (callPackage ../development/compilers/bs-platform {}).bs-platform-621;
+  bs-platform = callPackage ../development/compilers/bs-platform {};
 
   c3d = callPackage ../applications/graphics/c3d {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -1860,7 +1860,9 @@ in
 
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
-  jwt-cli = callPackage ../tools/security/jwt-cli { };
+  jwt-cli = callPackage ../tools/security/jwt-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kapacitor = callPackage ../servers/monitoring/kapacitor { };
 
@@ -3235,6 +3237,8 @@ in
   };
 
   flux = callPackage ../development/compilers/flux { };
+
+  fido2luks = callPackage ../tools/security/fido2luks {};
 
   fierce = callPackage ../tools/security/fierce { };
 
@@ -8380,7 +8384,13 @@ in
   jre = jre8;
   jre_headless = jre8_headless;
 
-  inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
+  inherit (callPackages ../development/compilers/graalvm {
+    gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
+    inherit (darwin.apple_sdk.frameworks)
+      CoreFoundation Foundation JavaNativeFoundation
+      JavaVM JavaRuntimeSupport Cocoa;
+    inherit (darwin) libiconv libobjc libresolv;
+  }) mx jvmci8 graalvm8;
 
   graalvm8-ee = callPackage ../development/compilers/graalvm/enterprise-edition.nix { };
 
@@ -10481,6 +10491,8 @@ in
 
   rman = callPackage ../development/tools/misc/rman { };
 
+  rnix-lsp = callPackage ../development/tools/rnix-lsp { };
+
   rolespec = callPackage ../development/tools/misc/rolespec { };
 
   rr = callPackage ../development/tools/analysis/rr { };
@@ -10770,6 +10782,8 @@ in
 
   alure = callPackage ../development/libraries/alure { };
 
+  alure2 = callPackage ../development/libraries/alure2 { };
+
   agg = callPackage ../development/libraries/agg { };
 
   allegro = allegro4;
@@ -11053,9 +11067,8 @@ in
 
   cpp-ipfs-api = callPackage ../development/libraries/cpp-ipfs-api { };
 
-  cpp-netlib = callPackage ../development/libraries/cpp-netlib {
-    openssl = openssl_1_0_2;
-  };
+  cpp-netlib = callPackage ../development/libraries/cpp-netlib {};
+
   uri = callPackage ../development/libraries/uri { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
@@ -13105,7 +13118,7 @@ in
   libxmi = callPackage ../development/libraries/libxmi { };
 
   libxml2 = callPackage ../development/libraries/libxml2 {
-    python = if stdenv.isDarwin then python2 else python3;
+    python = python3;
   };
 
   libxml2Python = let
@@ -13640,6 +13653,10 @@ in
   proselint = callPackage ../tools/text/proselint {
     inherit (python3Packages)
     buildPythonApplication click future six;
+  };
+
+  prospector = callPackage ../development/tools/prospector {
+    python = python37;
   };
 
   protobuf = protobuf3_7;
@@ -15666,7 +15683,9 @@ in
     libtool = darwin.cctools;
   };
 
-  rippled = callPackage ../servers/rippled { };
+  rippled = callPackage ../servers/rippled {
+    boost = boost17x;
+  };
 
   rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix {
     boost = boost167.override {
@@ -16338,14 +16357,6 @@ in
       ];
   };
 
-  linux_5_3 = callPackage ../os-specific/linux/kernel/linux-5.3.nix {
-    kernelPatches = [
-      kernelPatches.bridge_stp_helper
-      kernelPatches.request_key_helper
-      kernelPatches.export_kernel_fpu_functions."5.3"
-    ];
-  };
-
   linux_5_4 = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
     kernelPatches = [
       kernelPatches.bridge_stp_helper
@@ -16568,7 +16579,6 @@ in
   linuxPackages_4_9 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_9);
   linuxPackages_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_14);
   linuxPackages_4_19 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_4_19);
-  linuxPackages_5_3 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_3);
   linuxPackages_5_4 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_5_4);
 
   # When adding to this list:
@@ -18207,7 +18217,9 @@ in
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
 
-  blender = callPackage  ../applications/misc/blender { };
+  blender = callPackage  ../applications/misc/blender {
+    inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
+  };
 
   bluefish = callPackage ../applications/editors/bluefish {
     gtk = gtk3;
@@ -18549,6 +18561,7 @@ in
   docker-machine-kvm2 = callPackage ../applications/networking/cluster/docker-machine/kvm2.nix { };
   docker-machine-xhyve = callPackage ../applications/networking/cluster/docker-machine/xhyve.nix {
     inherit (darwin.apple_sdk.frameworks) Hypervisor vmnet;
+    inherit (darwin) cctools;
   };
 
   docker-distribution = callPackage ../applications/virtualization/docker/distribution.nix { };
@@ -23016,6 +23029,8 @@ in
 
   megaglest = callPackage ../games/megaglest {};
 
+  mindustry = callPackage ../games/mindustry { };
+
   minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
@@ -23906,6 +23921,8 @@ in
   mkl = callPackage ../development/libraries/science/math/mkl { };
 
   nasc = callPackage ../applications/science/math/nasc { };
+
+  nota = haskellPackages.callPackage ../applications/science/math/nota { };
 
   openblas = callPackage ../development/libraries/science/math/openblas { };
 
@@ -25791,5 +25808,4 @@ in
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
   kcli = callPackage ../development/tools/kcli {};
-
 }
