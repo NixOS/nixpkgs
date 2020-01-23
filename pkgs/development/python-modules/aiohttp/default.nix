@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
+, pythonAtLeast
 , attrs
 , chardet
 , multidict
@@ -25,13 +26,13 @@
 buildPythonPackage rec {
   pname = "aiohttp";
   version = "3.6.2";
+  # https://github.com/aio-libs/aiohttp/issues/4525 python3.8 failures
+  disabled = pythonOlder "3.5" || pythonAtLeast "3.8";
 
   src = fetchPypi {
     inherit pname version;
     sha256 = "09pkw6f1790prnrq0k8cqgnf1qy57ll8lpmc6kld09q7zw4vi6i5";
   };
-
-  disabled = pythonOlder "3.5";
 
   checkInputs = [
     pytestrunner pytest gunicorn pytest-timeout async_generator pytest_xdist
