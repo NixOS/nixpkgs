@@ -4,6 +4,7 @@
 
 let
   dataZip = if fullGame then requireFile {
+    # the data file for the full game
     name = "data.zip";
     sha256 = "1q2pzscrglmwfgdl8yj300wymwskh51iq66l4xcd0qk0q3g3rbkg";
     message = ''
@@ -14,12 +15,16 @@ let
       nix-prefetch-url file://\$PWD/data.zip
     '';
   } else fetchurl {
+    # the data file for the free Make and Play edition
     url = https://thelettervsixtim.es/makeandplay/data.zip;
     sha256 = "1q2pzscrglmwfgdl8yj300wymwskh51iq66l4xcd0qk0q3g3rbkg";
   };
+
+  # if the user does not own the full game, build the Make and Play edition
+  flags = if fullGame then [] else [ "-DMAKEANDPLAY" ];
 in stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.3-git-2a514b2";
+  version = "2.3-git-2020-01-22";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
@@ -28,26 +33,27 @@ in stdenv.mkDerivation rec {
     sha256 = "1bq7kj33pw1dwsgh0s0pqayfyhpnbvpgw2c1w9scpl5l0hkhg44p";
   };
 
+  CFLAGS = flags;
+  CXXFLAGS = flags;
+
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ SDL2 SDL2_mixer ];
 
-  preConfigure = ''
-    cd desktop_version
-  '';
+  sourceRoot = "source/desktop_version";
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -t $out/bin VVVVVV
-    cp ${dataZip} $out/bin/data.zip
+    install -d $out/bin
+    install -t $out/bin VVVVVV
+    install -T ${dataZip} $out/bin/data.zip
   '';
 
   meta = with stdenv.lib; {
-    description = "A platform game based on flipping gravity";
+    description = "A retro-styled platform game";
     longDescription = ''
       VVVVVV is a platform game all about exploring one simple mechanical
       idea - what if you reversed gravity instead of jumping? 
     '';
-    homepage = https://thelettervsixtim.es;
+    homepage = "https://thelettervsixtim.es";
     license = licenses.unfree;
     maintainers = [ maintainers.dkudriavtsev ];
     platforms = platforms.all;
