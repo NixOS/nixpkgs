@@ -9402,6 +9402,8 @@ in
     inherit pkgs lib;
   };
 
+  pipdeptree = callPackage ../development/tools/pipdeptree { };
+
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
