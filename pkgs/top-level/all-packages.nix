@@ -201,6 +201,8 @@ in
 
   onesixtyone = callPackage ../tools/security/onesixtyone {};
 
+  creddump = callPackage ../tools/security/creddump {};
+
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
