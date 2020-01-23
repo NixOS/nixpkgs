@@ -330,9 +330,8 @@ let
         );
       in
       ''
-        set packpath-=~/.vim/after
-        set packpath+=${packDir packages}
-        set packpath+=~/.vim/after
+        set packpath^=${packDir packages}
+        set runtimepath^=${packDir packages}
 
         filetype indent plugin on | syn on
       '');
