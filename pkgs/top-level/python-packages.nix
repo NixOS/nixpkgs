@@ -4656,6 +4656,8 @@ in {
 
   pipdate = callPackage ../development/python-modules/pipdate { };
 
+  pipdeptree = callPackage ../development/python-modules/pipdeptree { };
+
   pika = callPackage ../development/python-modules/pika { };
 
   pika-pool = callPackage ../development/python-modules/pika-pool { };
