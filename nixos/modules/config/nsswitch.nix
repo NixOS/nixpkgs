@@ -14,6 +14,7 @@ let
   nsswins = canLoadExternalModules && config.services.samba.nsswins;
   ldap = canLoadExternalModules && (config.users.ldap.enable && config.users.ldap.nsswitch);
   sssd = canLoadExternalModules && config.services.sssd.enable;
+  lsass = canLoadExternalModules && config.services.pbis.enable;
   resolved = canLoadExternalModules && config.services.resolved.enable;
   googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
@@ -29,6 +30,7 @@ let
   passwdArray = [ "files" ]
     ++ optional sssd "sss"
     ++ optional ldap "ldap"
+    ++ optional lsass "lsass"
     ++ optional mymachines "mymachines"
     ++ optional googleOsLogin "cache_oslogin oslogin"
     ++ [ "systemd" ];

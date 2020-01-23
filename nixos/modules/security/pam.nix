@@ -324,6 +324,10 @@ let
               "account sufficient ${pkgs.sssd}/lib/security/pam_sss.so"}
           ${optionalString (config.services.sssd.enable && cfg.sssdStrictAccess)
               "account [default=bad success=ok user_unknown=ignore] ${pkgs.sssd}/lib/security/pam_sss.so"}
+          ${optionalString config.services.pbis.enable ''
+            account optional ${config.services.pbis.package.sys}/lib/security/pam_lsass.so unknown_ok
+            account sufficient ${config.services.pbis.package.sys}/lib/security/pam_lsass.so
+          ''}
           ${optionalString config.krb5.enable
               "account sufficient ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.googleOsLoginAccountVerification ''
@@ -389,6 +393,8 @@ let
               "auth sufficient ${pam_ldap}/lib/security/pam_ldap.so use_first_pass"}
           ${optionalString config.services.sssd.enable
               "auth sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_first_pass"}
+          ${optionalString config.services.pbis.enable
+              "auth sufficient ${config.services.pbis.package.sys}/lib/security/pam_lsass.so use_first_pass smartcard"}
           ${optionalString config.krb5.enable ''
             auth [default=ignore success=1 service_err=reset] ${pam_krb5}/lib/security/pam_krb5.so use_first_pass
             auth [default=die success=done] ${pam_ccreds}/lib/security/pam_ccreds.so action=validate use_first_pass
@@ -406,6 +412,8 @@ let
               "password sufficient ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.services.sssd.enable
               "password sufficient ${pkgs.sssd}/lib/security/pam_sss.so use_authtok"}
+          ${optionalString config.services.pbis.enable
+              "password sufficient ${config.services.pbis.package.sys}/lib/security/pam_lsass.so try_first_pass"}
           ${optionalString config.krb5.enable
               "password sufficient ${pam_krb5}/lib/security/pam_krb5.so use_first_pass"}
           ${optionalString config.services.samba.syncPasswordsByPam
@@ -432,6 +440,8 @@ let
               "session optional ${pam_ldap}/lib/security/pam_ldap.so"}
           ${optionalString config.services.sssd.enable
               "session optional ${pkgs.sssd}/lib/security/pam_sss.so"}
+          ${optionalString config.services.pbis.enable
+              "session optional ${config.services.pbis.package.sys}/lib/security/pam_lsass.so"}
           ${optionalString config.krb5.enable
               "session optional ${pam_krb5}/lib/security/pam_krb5.so"}
           ${optionalString cfg.otpwAuth

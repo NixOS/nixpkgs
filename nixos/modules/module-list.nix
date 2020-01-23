@@ -772,6 +772,7 @@
   ./services/security/nginx-sso.nix
   ./services/security/oauth2_proxy.nix
   ./services/security/oauth2_proxy_nginx.nix
+  ./services/security/pbis.nix
   ./services/security/physlock.nix
   ./services/security/shibboleth-sp.nix
   ./services/security/sks.nix
