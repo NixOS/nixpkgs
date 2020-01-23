@@ -3,7 +3,7 @@
 with lib;
 
 let
-  cfg = config.services.buildkite-agent;
+  cfg = config.services.buildkite-agents;
 
   mkHookOption = { name, description, example ? null }: {
     inherit name;
@@ -15,7 +15,7 @@ let
   };
   mkHookOptions = hooks: listToAttrs (map mkHookOption hooks);
 
-  hooksDir = let
+  hooksDir = cfg: let
     mkHookEntry = name: value: ''
       cat > $out/${name} <<'EOF'
       #! ${pkgs.runtimeShell}
@@ -29,12 +29,13 @@ let
     ${concatStringsSep "\n" (mapAttrsToList mkHookEntry (filterAttrs (n: v: v != null) cfg.hooks))}
   '';
 
-in
-
-{
-  options = {
-    services.buildkite-agent = {
-      enable = mkEnableOption "buildkite-agent";
+  buildkiteOptions = { name ? "", config, ... }: {
+    options = {
+      enable = mkOption {
+        default = true;
+        type = types.bool;
+        description = "Whether to enable this buildkite agent";
+      };
 
       package = mkOption {
         default = pkgs.buildkite-agent;
@@ -44,7 +45,7 @@ in
       };
 
       dataDir = mkOption {
-        default = "/var/lib/buildkite-agent";
+        default = "/var/lib/buildkite-agent-${name}";
         description = "The workdir for the agent";
         type = types.str;
       };
@@ -68,9 +69,9 @@ in
 
       name = mkOption {
         type = types.str;
-        default = "%hostname-%n";
+        default = "%hostname-${name}-%n";
         description = ''
-          The name of the agent.
+          The name of the agent as seen in the buildkite dashboard.
         '';
       };
 
@@ -166,11 +167,11 @@ in
 
       hooksPath = mkOption {
         type = types.path;
-        default = hooksDir;
-        defaultText = "generated from services.buildkite-agent.hooks";
+        default = hooksDir config;
+        defaultText = "generated from services.buildkite-agents.<name>.hooks";
         description = ''
           Path to the directory storing the hooks.
-          Consider using <option>services.buildkite-agent.hooks.&lt;name&gt;</option>
+          Consider using <option>services.buildkite-agents.&lt;name&gt;.hooks.&lt;name&gt;</option>
           instead.
         '';
       };
@@ -184,24 +185,38 @@ in
       };
     };
   };
+  enabledAgents = lib.filterAttrs (n: v: v.enable) cfg;
+  mapAgents = function: lib.mkMerge (lib.mapAttrsToList function enabledAgents);
+in
+{
+  options.services.buildkite-agents = mkOption {
+    type = types.attrsOf (types.submodule buildkiteOptions);
+    default = {};
+    description = ''
+      Attribute set of buildkite agents.
+      The attribute key is combined with the hostname and a unique integer to
+      create the final agent name. This can be overridden by setting the `name`
+      attribute.
+    '';
+  };
 
-  config = mkIf config.services.buildkite-agent.enable {
-    users.users.buildkite-agent = {
-      name = "buildkite-agent";
+  config.users.users = mapAgents (name: cfg: {
+    "buildkite-agent-${name}" = {
+      name = "buildkite-agent-${name}";
       home = cfg.dataDir;
       createHome = true;
       description = "Buildkite agent user";
       extraGroups = [ "keys" ];
       isSystemUser = true;
     };
+  });
 
-    environment.systemPackages = [ cfg.package ];
-
-    systemd.services.buildkite-agent =
+  config.systemd.services = mapAgents (name: cfg: {
+    "buildkite-agent-${name}" =
       { description = "Buildkite Agent";
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
-        path = cfg.runtimePackages ++ [ pkgs.coreutils ];
+        path = cfg.runtimePackages ++ [ cfg.package pkgs.coreutils ];
         environment = config.networking.proxy.envVars // {
           HOME = cfg.dataDir;
           NIX_REMOTE = "daemon";
@@ -230,8 +245,8 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
-            User = "buildkite-agent";
+          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config ${cfg.dataDir}/buildkite-agent.cfg";
+            User = "buildkite-agent-${name}";
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
@@ -240,22 +255,18 @@ in
             KillMode = "mixed";
           };
       };
+  });
 
-    assertions = [
+  config.assertions = mapAgents (name: cfg: [
       { assertion = cfg.hooksPath == hooksDir || all (v: v == null) (attrValues cfg.hooks);
         message = ''
-          Options `services.buildkite-agent.hooksPath' and
-          `services.buildkite-agent.hooks.<name>' are mutually exclusive.
+          Options `services.buildkite-agents.${name}.hooksPath' and
+          `services.buildkite-agents.${name}.hooks.<name>' are mutually exclusive.
         '';
       }
-    ];
-  };
+  ]);
+
   imports = [
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                    [ "services" "buildkite-agent" "tokenPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ]     [ "services" "buildkite-agent" "privateSshKeyPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKeyPath" ] [ "services" "buildkite-agent" "privateSshKeyPath" ])
-    (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]      "SSH public keys aren't necessary to clone private repos.")
-    (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKeyPath" ]  "SSH public keys aren't necessary to clone private repos.")
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"]                 [ "services" "buildkite-agent" "tags" ])
+    (mkRemovedOptionModule [ "services" "buildkite-agent"] "services.buildkite-agent has been moved to an attribute set at services.buildkite-agents")
   ];
 }
