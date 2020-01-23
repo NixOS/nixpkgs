@@ -11,6 +11,7 @@
 , "@webassemblyjs/wast-refmt"
 , "alloy"
 , "asar"
+, "asciidoctor-plantuml"
 , "bash-language-server"
 , "bower"
 , "bower2nix"
