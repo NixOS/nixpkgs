@@ -302,12 +302,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2019.3.1"; /* updated by script */
+    version = "2019.3.2"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "0rb726nh2c7zxnpjcf6fyrpl29y9wgr6qhpb6hjxia2gzxab9jz0"; /* updated by script */
+      sha256 = "09lgdd7gkx94warjc7wah9w7s9lj81law8clavjjyjas8bhhf1hz"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
