@@ -278,14 +278,24 @@ let
     '';
 
     buildPhase = let
-      # Build paralelism: on Hydra the build was frequently running into memory
-      # exhaustion, and even other users might be running into similar issues.
-      # -j is halved to avoid memory problems, and -l is slightly increased
-      # so that the build gets slight preference before others
-      # (it will often be on "critical path" and at risk of timing out)
+      coresExpr =
+        if stdenv.isAarch64 then
+          # The hydra aarch64 builders have a lot of memory (typically 128gb) and
+          # optimize for parallelism for many builds with each build using few
+          # cores. Halving the number of cores will cause build timeouts, even with
+          # the 2 day limit.
+          "-j$NIX_BUILD_CORES -l$NIX_BUILD_CORES"
+        else
+          # Build paralelism: on Hydra the build was frequently running into memory
+          # exhaustion, and even other users might be running into similar issues.
+          # -j is halved to avoid memory problems, and -l is slightly increased
+          # so that the build gets slight preference before others
+          # (it will often be on "critical path" and at risk of timing out)
+          "-j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 ))";
+
       buildCommand = target: ''
         ninja -C "${buildPath}"  \
-          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
+          ${coresExpr} \
           "${target}"
         (
           source chrome/installer/linux/common/installer.include
