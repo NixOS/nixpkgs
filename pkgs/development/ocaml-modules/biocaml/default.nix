@@ -23,7 +23,7 @@ buildDunePackage rec {
 
   meta = with stdenv.lib; {
     description = "Bioinformatics library for Ocaml";
-    homepage = "http://${owner}.github.io/${pname}";
+    homepage = http://biocaml.org/;
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.gpl2;
   };
