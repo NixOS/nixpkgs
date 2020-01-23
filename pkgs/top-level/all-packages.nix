@@ -25899,4 +25899,6 @@ in
   unstick = callPackage ../os-specific/linux/unstick {};
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
+
+  dat = callPackage ../applications/networking/dat { };
 }
