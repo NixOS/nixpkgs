@@ -25880,6 +25880,8 @@ in
 
   pxlib = callPackage ../development/libraries/pxlib {};
 
+  pxview = callPackage ../development/tools/pxview {};
+
   unstick = callPackage ../os-specific/linux/unstick {};
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
