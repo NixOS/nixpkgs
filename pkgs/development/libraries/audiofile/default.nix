@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   # fix build with gcc9
-  NIX_CFLAGS_LINK = lib.optional (stdenv.system == "i686-linux") "-lgcc";
+  env.NIX_CFLAGS_LINK = lib.optionalString (stdenv.system == "i686-linux") "-lgcc";
 
   patches = [
     ./gcc-6.patch
