@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "089r6i40lxcwzp60553b18f130asspnzqldlpii53smz52kvpirx";
   };
 
+  patches = [ ./glibc-fix.patch ];
+
   configureFlags = [
     "--with-bash-path=${pkgs.bash}/bin/bash"
   ];
