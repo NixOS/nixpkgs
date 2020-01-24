@@ -6548,6 +6548,8 @@ in {
 
   irc = callPackage ../development/python-modules/irc { };
 
+  python-irodsclient = callPackage ../development/python-modules/python-irodsclient { };
+
   jaraco_logging = callPackage ../development/python-modules/jaraco_logging { };
 
   jaraco_text = callPackage ../development/python-modules/jaraco_text { };
