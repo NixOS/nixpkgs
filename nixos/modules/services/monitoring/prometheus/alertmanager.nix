@@ -133,8 +133,10 @@ in {
         default = null;
         example = "/root/alertmanager.env";
         description = ''
-          File to load as environment file. Useful to insert secrets
-          into the configuration (via envsubst).
+          File to load as environment file. Environment variables
+          from this file will be interpolated into the config file
+          using envsubst with this syntax:
+          <literal>$ENVIRONMENT ''${VARIABLE}</literal>
         '';
       };
     };
