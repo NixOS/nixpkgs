@@ -37,11 +37,13 @@ let
     licenses = callLibs ./licenses.nix;
     systems = callLibs ./systems;
 
+    # serialization
+    cli = callLibs ./cli.nix;
+    generators = callLibs ./generators.nix;
+
     # misc
     asserts = callLibs ./asserts.nix;
-    cli = callLibs ./cli.nix;
     debug = callLibs ./debug.nix;
-    generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
 
     # domain-specific
@@ -121,7 +123,6 @@ let
       isOptionType mkOptionType;
     inherit (asserts)
       assertMsg assertOneOf;
-    inherit (cli) encodeGNUCommandLine toGNUCommandLine;
     inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
       traceXMLVal traceXMLValMarked traceSeq traceSeqN traceValSeq
       traceValSeqFn traceValSeqN traceValSeqNFn traceShowVal
