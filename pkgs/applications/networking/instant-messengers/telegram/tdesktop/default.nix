@@ -18,14 +18,14 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.9.7";
+  version = "1.9.8";
   # Note: Due to our strong dependency on the Arch patches it's probably best
   # to also wait for the Arch update (especially if the patches don't apply).
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1hj7bv11alc8cfffy0k3za4missdr44cdmia93xn77w012qjn8a4";
+    sha256 = "1rq3180l4ly0n0jj08cxy9l2d07scwp9hasmliva2xspyv7i9ksd";
   };
 
   # Arch patches (svn export telegram-desktop/trunk)
