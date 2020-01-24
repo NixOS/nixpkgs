@@ -1,15 +1,10 @@
-{ stdenv, fetchurl, makeDesktopItem
+{ lib, stdenv, fetchurl, fetchFromGitHub, makeDesktopItem
 , python3, python3Packages
-, glew, freeglut, libpng, libxml2, tk, freetype, msgpack }:
+, glew, glm, freeglut, libpng, libxml2, tk, freetype, msgpack }:
 
-
-with stdenv.lib;
 
 let
   pname = "pymol";
-  ver_maj = "2";
-  ver_min = "1";
-  version = "${ver_maj}.${ver_min}.0";
   description = "A Python-enhanced molecular graphics tool";
 
   desktopItem = makeDesktopItem {
@@ -22,15 +17,20 @@ let
     categories = "Graphics;Education;Science;Chemistry;";
   };
 in
-python3Packages.buildPythonApplication {
-  name = "pymol-${version}";
-  src = fetchurl {
-    url = "mirror://sourceforge/project/pymol/pymol/${ver_maj}/pymol-v${version}.tar.bz2";
-    sha256 = "1qpacd5w4r9a0nm5iqmkd92ym3ai00dp7v61cwd6jgakk6wfps3s";
+python3Packages.buildPythonApplication rec {
+  inherit pname;
+  version = "2.3.0";
+  src = fetchFromGitHub {
+    owner = "schrodinger";
+    repo = "pymol-open-source";
+    rev = "v${version}";
+    sha256 = "175cqi6gfmvv49i3ws19254m7ljs53fy6y82fm1ywshq2h2c93jh";
   };
 
-  buildInputs = [ python3Packages.numpy glew freeglut libpng libxml2 tk freetype msgpack ];
-  NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
+  buildInputs = [ python3Packages.numpy glew glm freeglut libpng libxml2 tk freetype msgpack ];
+  NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2 -Wno-error=format-security";
+
+  setupPyBuildFlags = [ "--glut" ];
 
   installPhase = ''
     python setup.py install --home=$out
@@ -40,13 +40,12 @@ python3Packages.buildPythonApplication {
 
   postInstall = with python3Packages; ''
     wrapProgram $out/bin/pymol \
-      --prefix PYTHONPATH : ${makeSearchPathOutput "lib" python3.sitePackages [ Pmw tkinter ]}
+      --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages [ Pmw tkinter ]}
   '';
 
   meta = {
     description = description;
     homepage = https://www.pymol.org/;
-    license = licenses.psfl;
-    broken = true;
+    license = lib.licenses.psfl;
   };
 }
