@@ -16257,7 +16257,8 @@ in
 
   iproute_mptcp = callPackage ../os-specific/linux/iproute/mptcp.nix { };
 
-  iputils = callPackage ../os-specific/linux/iputils { };
+  iputils = hiPrio (callPackage ../os-specific/linux/iputils { });
+  # hiPrio for collisions with inetutils (ping and tftpd.8.gz)
 
   iptables = iptables-legacy;
   iptables-legacy = callPackage ../os-specific/linux/iptables { };
