@@ -267,6 +267,6 @@ in
   ]);
 
   imports = [
-    (mkRemovedOptionModule [ "services" "buildkite-agent"] "services.buildkite-agent has been moved to an attribute set at services.buildkite-agents")
+    (mkRemovedOptionModule [ "services" "buildkite-agent"] "services.buildkite-agent has been upgraded from version 2 to version 3 and moved to an attribute set at services.buildkite-agents. Please consult the 20.03 release notes for more information.")
   ];
 }
