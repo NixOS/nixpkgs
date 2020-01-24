@@ -1054,10 +1054,10 @@ self: super: {
   # This will probably be able to be removed when we update to LTS-15.
   dhall_1_29_0 =
     dontCheck (super.dhall_1_29_0.override {
-      prettyprinter = self.prettyprinter_1_5_1;
+      prettyprinter = self.prettyprinter_1_6_0;
       prettyprinter-ansi-terminal =
         self.prettyprinter-ansi-terminal.override {
-          prettyprinter = self.prettyprinter_1_5_1;
+          prettyprinter = self.prettyprinter_1_6_0;
         };
     });
   dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
@@ -1387,5 +1387,8 @@ self: super: {
 
   # krank-0.1.0 does not accept PyF-0.9.0.0.
   krank = doJailbreak super.krank;
+
+  # prettyprinter-1.6.0 fails its doctest suite.
+  prettyprinter_1_6_0 = dontCheck super.prettyprinter_1_6_0;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
