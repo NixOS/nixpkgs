@@ -13,11 +13,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.0";
+  version = "0.10.1";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "b0353b88793d68bf3e800f87bff51e8161ce39d250e22dff11385712caf332b6";
+    sha256 = "a5ec924bfe8a629ec4b4d09754d822cab1cf48d28bc6ce649faa5c597a108666";
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
