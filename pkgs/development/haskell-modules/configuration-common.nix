@@ -1237,8 +1237,8 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
+  # Use a matching version of ghc-lib-parser.
+  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
