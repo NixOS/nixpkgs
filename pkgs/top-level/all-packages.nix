@@ -22735,6 +22735,9 @@ in
 
   sumokoin = callPackage ../applications/blockchains/sumokoin.nix { boost = boost165; };
 
+  vertcoin  = libsForQt5.callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = true; };
+  vertcoind = callPackage ../applications/blockchains/vertcoin.nix { boost = boost165; withGui = false; };
+
   wasabiwallet = callPackage ../applications/blockchains/wasabiwallet { };
 
   wownero = callPackage ../applications/blockchains/wownero.nix {};
