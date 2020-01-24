@@ -933,9 +933,24 @@ luadoc = buildLuarocksPackage {
   meta = with stdenv.lib; {
     homepage = "http://luadoc.luaforge.net/";
     description = "LuaDoc is a documentation tool for Lua source code";
-    license = {
-      fullName = "MIT/X11";
-    };
+    license.fullName = "MIT/X11";
+  };
+};
+luaepnf = buildLuarocksPackage {
+  pname = "luaepnf";
+  version = "0.3-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/luaepnf-0.3-1.src.rock;
+    sha256 = "12z7radxk1dkyjqflr85sghywgc82xdg4mzb9mbwbrrqbnjw8mp5";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua lpeg ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://siffiejoe.github.io/lua-luaepnf/";
+    description = "Extended PEG Notation Format (easy grammars for LPeg)";
+    license.fullName = "MIT";
   };
 };
 luaevent = buildLuarocksPackage {
