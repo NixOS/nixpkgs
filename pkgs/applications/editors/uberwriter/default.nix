@@ -2,7 +2,7 @@
 , wrapGAppsHook, pkgconfig, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
-, haskellPackages}:
+, shared-mime-info, haskellPackages}:
 
 let
   pythonEnv = pythonPackages.python.withPackages(p: with p;
@@ -41,6 +41,7 @@ in stdenv.mkDerivation rec {
       --prefix PYTHONPATH : "$out/lib/python${pythonEnv.pythonVersion}/site-packages/"
       --prefix PATH : "${texliveDist}/bin"
       --prefix PATH : "${haskellPackages.pandoc-citeproc}/bin"
+      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
   '';
 
