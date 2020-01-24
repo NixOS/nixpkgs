@@ -47,5 +47,6 @@ python3Packages.buildPythonApplication rec {
     description = description;
     homepage = https://www.pymol.org/;
     license = lib.licenses.psfl;
+    maintainers = with lib.maintainers; [ samlich ];
   };
 }
