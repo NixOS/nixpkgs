@@ -402,6 +402,31 @@ lgi = buildLuarocksPackage {
     };
   };
 };
+linenoise = buildLuarocksPackage {
+  pname = "linenoise";
+  version = "0.9-1";
+
+  knownRockspec = (fetchurl {
+    url    = mirror://luarocks/linenoise-0.9-1.rockspec;
+    sha256 = "0wic8g0d066pj9k51farsvcdbnhry2hphvng68w9k4lh0zh45yg4";
+  }).outPath;
+
+  src = fetchurl {
+    url    = https://github.com/hoelzro/lua-linenoise/archive/0.9.tar.gz;
+    sha256 = "177h6gbq89arwiwxah9943i8hl5gvd9wivnd1nhmdl7d8x0dn76c";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/hoelzro/lua-linenoise";
+    description = "A binding for the linenoise command line library";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
 ljsyscall = buildLuarocksPackage {
   pname = "ljsyscall";
   version = "0.12-1";
