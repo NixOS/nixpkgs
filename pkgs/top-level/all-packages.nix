@@ -20798,6 +20798,7 @@ in
     mopidy-mpd
     mopidy-mpris
     mopidy-musicbox-webclient
+    mopidy-somafm
     mopidy-soundcloud
     mopidy-spotify
     mopidy-spotify-tunigo

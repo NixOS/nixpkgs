@@ -28,6 +28,8 @@ let
 
     mopidy-mpris = callPackage ./mpris.nix { };
 
+    mopidy-somafm = callPackage ./somafm.nix { };
+
     mopidy-spotify-tunigo = callPackage ./spotify-tunigo.nix { };
 
     mopidy-youtube = callPackage ./youtube.nix { };
