@@ -21599,10 +21599,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  tangogps = callPackage ../applications/misc/tangogps {
-    gconf = gnome2.GConf;
-  };
-
   tambura = callPackage ../applications/audio/tambura { };
 
   teams = callPackage ../applications/networking/instant-messengers/teams { };
