@@ -1083,9 +1083,30 @@ luaposix = buildLuarocksPackage {
     homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with maintainers; [ vyp lblasc ];
-    license = {
-      fullName = "MIT/X11";
-    };
+    license.fullName = "MIT/X11";
+  };
+};
+luarepl = buildLuarocksPackage {
+  pname = "luarepl";
+  version = "0.9-1";
+
+  knownRockspec = (fetchurl {
+    url    = mirror://luarocks/luarepl-0.9-1.rockspec;
+    sha256 = "1409lanxv4s8kq5rrh46dvld77ip33qzfn3vac3i9zpzbmgb5i8z";
+  }).outPath;
+
+  src = fetchurl {
+    url    = https://github.com/hoelzro/lua-repl/archive/0.9.tar.gz;
+    sha256 = "04xka7b84d9mrz3gyf8ywhw08xp65v8jrnzs8ry8k9540aqs721w";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/hoelzro/lua-repl";
+    description = "A reusable REPL component for Lua, written in Lua";
+    license.fullName = "MIT/X11";
   };
 };
 luasec = buildLuarocksPackage {

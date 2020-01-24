@@ -52,6 +52,7 @@ luafilesystem,,,1.7.0-2,,flosse vcunat
 lualogging,,,,,
 luaossl,,,,lua5_1,vcunat
 luaposix,,,,,vyp lblasc
+luarepl,,,,,
 luasec,,,,,flosse
 luasocket,,,,,
 luasql-sqlite3,,,,,vyp
