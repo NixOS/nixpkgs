@@ -139,13 +139,8 @@ in ''
        | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
 
      set -e
-     if [[ -n "$(ls target/build/${crateName}.out)" ]]; then
-
-        if [[ -e "${libPath}" ]]; then
-           cp -r target/build/${crateName}.out/* $(dirname ${libPath}) #*/
-        else
-           cp -r target/build/${crateName}.out/* src #*/
-        fi
+     if [[ -n "$(ls target/build/${crateName}.out)" && -e "${libPath}" ]]; then
+       cp -r target/build/${crateName}.out/* $(dirname ${libPath}) #*/
      fi
   fi
   runHook postConfigure
