@@ -13303,6 +13303,8 @@ in
 
   matio = callPackage ../development/libraries/matio { };
 
+  matterhorn = haskell.lib.justStaticExecutables haskellPackages.matterhorn;
+
   mbedtls = callPackage ../development/libraries/mbedtls { };
 
   mdds = callPackage ../development/libraries/mdds { };

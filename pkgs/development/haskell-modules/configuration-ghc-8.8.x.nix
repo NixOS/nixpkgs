@@ -93,7 +93,7 @@ self: super: {
   optparse-applicative = self.optparse-applicative_0_15_1_0;
   pandoc = self.pandoc_2_9_1_1;
   pandoc-types = self.pandoc-types_1_20;
-  prettyprinter = self.prettyprinter_1_5_1;
+  prettyprinter = self.prettyprinter_1_6_0;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
   regex-base = self.regex-base_0_94_0_0;
   regex-compat = self.regex-compat_0_95_2_0;
@@ -102,10 +102,9 @@ self: super: {
   regex-tdfa = self.regex-tdfa_1_3_1_0;
   shelly = self.shelly_1_9_0;
   singletons = self.singletons_2_6;
-  skylighting = self.skylighting_0_8_3;
-  skylighting-core = self.skylighting-core_0_8_3;
+  skylighting = self.skylighting_0_8_3_2;
+  skylighting-core = self.skylighting-core_0_8_3_2;
   sop-core = self.sop-core_0_5_0_0;
-  tls-session-manager = self.tls-session-manager_0_0_4;
   texmath = self.texmath_0_12;
   th-desugar = self.th-desugar_1_10;
   tls = self.tls_1_5_3;
