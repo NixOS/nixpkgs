@@ -13045,6 +13045,8 @@ in
 
   libtap = callPackage ../development/libraries/libtap { };
 
+  libtgvoip = callPackage ../development/libraries/libtgvoip { };
+
   libtsm = callPackage ../development/libraries/libtsm { };
 
   libtxc_dxtn = callPackage ../development/libraries/libtxc_dxtn { };
