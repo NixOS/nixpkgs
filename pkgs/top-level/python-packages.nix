@@ -1272,6 +1272,8 @@ in {
 
   python-packer = callPackage ../development/python-modules/python-packer { };
 
+  python-pam = callPackage ../development/python-modules/python-pam { };
+
   python-periphery = callPackage ../development/python-modules/python-periphery { };
 
   python-prctl = callPackage ../development/python-modules/python-prctl { };
