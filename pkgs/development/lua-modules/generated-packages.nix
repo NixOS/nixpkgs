@@ -266,28 +266,18 @@ cyrussasl = buildLuarocksPackage {
 };
 digestif = buildLuarocksPackage {
   pname = "digestif";
-  version = "scm-1";
+  version = "0.2-1";
 
-  knownRockspec = (fetchurl {
-    url    = http://luarocks.org/dev/digestif-scm-1.rockspec;
-    sha256 = "18rixbni4hmrmh3qj3vpjbsphzdvchswajphc9ysm52ccpyzh687";
-  }).outPath;
-
-  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-  "url": "git://github.com/astoff/digestif",
-  "rev": "51c321f1b68b77f648fa6adf356de48925f69fe0",
-  "date": "2019-06-08T15:03:33+02:00",
-  "sha256": "1c9cl81vfzirc325wipdy992yn20b8xv8nqzl5mdhyz8zfp84hs7",
-  "fetchSubmodules": true
-}
- '') ["date"]) ;
-
+  src = fetchurl {
+    url    = mirror://luarocks/digestif-0.2-1.src.rock;
+    sha256 = "03blpj5lxlhmxa4hnj21sz7sc84g96igbc7r97yb2smmlbyq8hxd";
+  };
   disabled = (luaOlder "5.3");
   propagatedBuildInputs = [ lua lpeg dkjson ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/astoff/digestif/";
-    description = "Code analyzer for TeX.";
+    description = "A code analyzer for TeX";
     license = {
       fullName = "MIT";
     };

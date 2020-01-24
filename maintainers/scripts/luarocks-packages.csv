@@ -11,7 +11,7 @@ compat53,,,,,vcunat
 coxpcall,,,1.17.0-1,,
 cqueues,,,,,vcunat
 cyrussasl,,,,,vcunat
-digestif,,http://luarocks.org/dev,,lua5_3,
+digestif,,,,lua5_3,
 dkjson,,,,,
 fifo,,,,,
 http,,,,,vcunat
