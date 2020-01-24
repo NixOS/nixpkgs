@@ -1536,9 +1536,23 @@ stdlib = buildLuarocksPackage {
     homepage = "http://lua-stdlib.github.io/lua-stdlib";
     description = "General Lua Libraries";
     maintainers = with maintainers; [ vyp ];
-    license = {
-      fullName = "MIT/X11";
-    };
+    license.fullName = "MIT/X11";
+  };
+};
+vstruct = buildLuarocksPackage {
+  pname = "vstruct";
+  version = "2.0.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/vstruct-2.0.2-1.src.rock;
+    sha256 = "05k1685618wh7vg8av92mh1i1rjqg15x12gifbp9kyqzc2nk3kzq";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.3");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/ToxicFrog/vstruct";
+    description = "Lua library to manipulate binary data";
   };
 };
 
