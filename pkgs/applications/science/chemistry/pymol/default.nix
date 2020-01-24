@@ -13,6 +13,7 @@ let
     desktopName = "PyMol Molecular Graphics System";
     genericName = "Molecular Modeler";
     comment = description;
+    icon = pname;
     mimeType = "chemical/x-pdb;chemical/x-mdl-molfile;chemical/x-mol2;chemical/seq-aa-fasta;chemical/seq-na-fasta;chemical/x-xyz;chemical/x-mdl-sdf;";
     categories = "Graphics;Education;Science;Chemistry;";
   };
@@ -33,14 +34,17 @@ python3Packages.buildPythonApplication rec {
   setupPyBuildFlags = [ "--glut" ];
 
   installPhase = ''
-    python setup.py install --home=$out
-    cp -r ${desktopItem}/share/ $out/
+    python setup.py install --home="$out"
     runHook postInstall
   '';
 
   postInstall = with python3Packages; ''
     wrapProgram $out/bin/pymol \
       --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages [ Pmw tkinter ]}
+
+    mkdir -p "$out/share/icons/"
+    ln -s ../../lib/python/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
+    cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';
 
   meta = {
