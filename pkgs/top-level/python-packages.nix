@@ -4887,6 +4887,8 @@ in {
 
   pyotp = callPackage ../development/python-modules/pyotp { };
 
+  pypattyrn = callPackage ../development/python-modules/pypattyrn { };
+
   pyproj = callPackage ../development/python-modules/pyproj { };
 
   pyqrcode = callPackage ../development/python-modules/pyqrcode { };
