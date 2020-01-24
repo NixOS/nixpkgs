@@ -39,6 +39,6 @@ buildPythonPackage rec {
     description = "This library provides a pure Python interface for the Telegram Bot API.";
     homepage = https://python-telegram-bot.org;
     license = licenses.lgpl3;
-    maintainers = with maintainers; [ veprbl ];
+    maintainers = with maintainers; [ veprbl pingiun ];
   };
 }
