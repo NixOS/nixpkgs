@@ -1222,6 +1222,8 @@ in {
 
   pytest-flask = callPackage ../development/python-modules/pytest-flask { };
 
+  pytest-memprof = callPackage ../development/python-modules/pytest-memprof { };
+
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
