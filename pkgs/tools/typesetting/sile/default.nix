@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   checkPhase = ''
-    make documentation examples
+    make examples
   '';
 
   postInstall = ''
