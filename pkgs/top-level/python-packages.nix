@@ -3084,6 +3084,8 @@ in {
 
   pylama = callPackage ../development/python-modules/pylama { };
 
+  pylatexenc = callPackage ../development/python-modules/pylatexenc { };
+
   pymbolic = callPackage ../development/python-modules/pymbolic { };
 
   pymediainfo = callPackage ../development/python-modules/pymediainfo { };
