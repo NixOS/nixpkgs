@@ -312,6 +312,8 @@ in {
 
   azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
 
+  azure-storage-file-share = callPackage ../development/python-modules/azure-storage-file-share { };
+
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
   azure-mgmt-nspkg = callPackage ../development/python-modules/azure-mgmt-nspkg { };
