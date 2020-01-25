@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , python3
-, gettext
+, locale
 , gobject-introspection
 , wrapGAppsHook
 , gtk3
@@ -31,7 +31,7 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   nativeBuildInputs = [
-    gettext
+    locale
     gobject-introspection
     wrapGAppsHook
     python3.pkgs.pip
