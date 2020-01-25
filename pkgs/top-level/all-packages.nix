@@ -11190,6 +11190,8 @@ in
     kerberos = if stdenv.isFreeBSD then libheimdal else kerberos;
   };
 
+  date = callPackage ../development/libraries/date {  };
+
   # Make bdb5 the default as it is the last release under the custom
   # bsd-like license
   db = db5;
