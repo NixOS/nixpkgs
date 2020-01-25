@@ -2757,6 +2757,10 @@ in
   deluge = callPackage ../applications/networking/p2p/deluge {
     pythonPackages = python2Packages;
   };
+  deluge2 = callPackage ../applications/networking/p2p/deluge/2.nix {
+    pythonPackages = python3Packages;
+    libtorrentRasterbar = callPackage ../development/libraries/libtorrent-rasterbar { python = python3; };
+  };
 
   desktop-file-utils = callPackage ../tools/misc/desktop-file-utils { };
 
