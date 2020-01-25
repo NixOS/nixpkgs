@@ -397,7 +397,7 @@ in {
         };
         host = mkOption {
           type = types.str;
-          default = services.gitlab.host;
+          default = config.services.gitlab.host;
           description = "GitLab container registry host name.";
         };
         port = mkOption {
