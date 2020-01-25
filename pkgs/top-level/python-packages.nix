@@ -3435,6 +3435,8 @@ in {
 
   ecdsa = callPackage ../development/python-modules/ecdsa { };
 
+  ecos = callPackage ../development/python-modules/ecos { };
+
   effect = callPackage ../development/python-modules/effect {};
 
   enum = callPackage ../development/python-modules/enum { };
