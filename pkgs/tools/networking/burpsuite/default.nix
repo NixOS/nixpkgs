@@ -1,19 +1,17 @@
-{ stdenv, fetchurl, jre, runtimeShell }:
+{ stdenv, fetchurl, jdk12, runtimeShell }:
 
-let
+stdenv.mkDerivation rec {
+  pname = "burpsuite";
   version = "2.1.07";
   jar = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "0811pkxmwl9d58lgqbvyfi2q79ni5w8hs61jycxkvkqxrinpgki3";
+    sha256 = "23ce776dcc1dcf3d3bf332180d112fd1a68345747e2ffc282a2d515efbbc2120";
   };
   launcher = ''
     #!${runtimeShell}
-    exec ${jre}/bin/java -jar ${jar} "$@"
+    exec ${jdk12}/bin/java -jar ${jar} "$@"
   '';
-in stdenv.mkDerivation {
-  pname = "burpsuite";
-  inherit version;
   buildCommand = ''
     mkdir -p $out/bin
     echo "${launcher}" > $out/bin/burpsuite
@@ -22,7 +20,7 @@ in stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An integrated platform for performing security testing of web applications";
     longDescription = ''
       Burp Suite is an integrated platform for performing security testing of web applications.
@@ -30,11 +28,11 @@ in stdenv.mkDerivation {
       initial mapping and analysis of an application's attack surface, through to finding and
       exploiting security vulnerabilities.
     '';
-    homepage = https://portswigger.net/burp/;
-    downloadPage = "https://portswigger.net/burp/freedownload";
-    license = [ stdenv.lib.licenses.unfree ];
-    platforms = jre.meta.platforms;
+    homepage = "https://portswigger.net/burp/";
+    downloadPage = "https://portswigger.net/burp/communitydownload";
+    license = [ licenses.unfree ];
+    platforms = jdk12.meta.platforms;
     hydraPlatforms = [];
-    maintainers = with stdenv.lib.maintainers; [ bennofs ];
+    maintainers = [ maintainers.bennofs ];
   };
 }
