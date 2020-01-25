@@ -179,6 +179,8 @@ in
 
   deviceTree = callPackage ../os-specific/linux/device-tree {};
 
+  enum4linux = callPackage ../tools/security/enum4linux {};
+
   device-tree_rpi = callPackage ../os-specific/linux/device-tree/raspberrypi.nix {};
 
   diffPlugins = (callPackage ../build-support/plugins.nix {}).diffPlugins;
