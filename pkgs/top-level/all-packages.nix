@@ -1907,6 +1907,8 @@ in
 
   lepton = callPackage ../tools/graphics/lepton { };
 
+  lexicon = callPackage ../tools/admin/lexicon { };
+
   lief = callPackage ../development/libraries/lief {};
 
   libndtypes = callPackage ../development/libraries/libndtypes { };
