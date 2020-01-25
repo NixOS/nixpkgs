@@ -29,7 +29,8 @@ python3Packages.buildPythonApplication rec {
   };
 
   buildInputs = [ python3Packages.numpy glew glm freeglut libpng libxml2 tk freetype msgpack ];
-  NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2 -Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
+  hardeningDisable = [ "format" ];
 
   setupPyBuildFlags = [ "--glut" ];
 
@@ -47,10 +48,10 @@ python3Packages.buildPythonApplication rec {
     cp -r "${desktopItem}/share/applications/" "$out/share/"
   '';
 
-  meta = {
+  meta = with lib; {
     description = description;
     homepage = https://www.pymol.org/;
-    license = lib.licenses.psfl;
-    maintainers = with lib.maintainers; [ samlich ];
+    license = licenses.mit;
+    maintainers = with maintainers; [ samlich ];
   };
 }
