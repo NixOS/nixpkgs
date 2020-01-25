@@ -24,6 +24,11 @@ stdenv.mkDerivation rec {
     sha256 = "09rcmlf04aka0yzr25imadi0fl4nlbsxcahs7fhvzx4nql4halqw";
   };
 
+  postPatch = ''
+    substituteInPlace main.cpp \
+      --replace "<stropts.h>" "<sys/ioctl.h>"
+  '';
+
   hardeningDisable = [ "format" ];
 
   buildInputs = [
