@@ -1,39 +1,18 @@
-{ stdenv, lib, fetchurl, coursier, python, makeWrapper }:
+{ stdenv, lib, fetchurl, coursier, python, makeWrapper, zlib }:
 
 let
   baseName = "bloop";
-  version = "1.3.4";
-  nailgunCommit = "d7ed5db"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
-
-  client = stdenv.mkDerivation {
-    name = "${baseName}-client-${version}";
-
-    src = fetchurl {
-      url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-      sha256 = "0lrj25m0nvphz2i5mqjwccpyrd7gn8a5k22k5khrpdh6ldxqis8a";
-    };
-
-    phases = [ "installPhase" ];
-
-    installPhase = ''cp $src $out'';
-  };
+  version = "1.4.1";
 
   server = stdenv.mkDerivation {
     name = "${baseName}-server-${version}";
     buildCommand = ''
-      mkdir -p $out/bin
-
       export COURSIER_CACHE=$(pwd)
-      ${coursier}/bin/coursier bootstrap ch.epfl.scala:bloop-frontend_2.12:${version} \
-        -r "bintray:scalameta/maven" \
-        -r "bintray:scalacenter/releases" \
-        -r "https://oss.sonatype.org/content/repositories/staging" \
-        --deterministic \
-        -f --main bloop.Server -o $out/bin/blp-server
+      ${coursier}/bin/coursier install bloop:${version} --dir $out
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1z33ip6hgfwiixm2gimz819p5cnxn1fmxb3ryyf77jzwsx7py718";
+    outputHash     = "095w2yhb7ixlg3qzspn2c6ff6571gdnl4crwxh1cijf2nabq5kjk";
   };
 
   zsh = stdenv.mkDerivation {
@@ -56,17 +35,21 @@ stdenv.mkDerivation {
 
   phases = [ "installPhase" ];
 
-  installPhase = ''
+  installPhase = let
+    libPath = lib.makeLibraryPath [stdenv.cc.cc zlib] ;
+  in ''
     mkdir -p $out/bin
     mkdir -p $out/share/zsh/site-functions
 
-    ln -s ${server}/bin/blp-server $out/blp-server
+    cp ${server}/.bloop.aux ./.bloop.aux
+    chmod +w .bloop.aux
+    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" .bloop.aux
+    patchelf --set-rpath ${libPath} .bloop.aux
+    chmod 555 .bloop.aux
+    cp .bloop.aux $out/bin/.bloop.aux
+    cat ${server}/bloop | sed -e 's#\$(cd "\$(dirname "\$0")"; pwd)/.bloop.aux#'"$out"'/bin/.bloop.aux#' > $out/bin/bloop
+    chmod +x $out/bin/bloop
     ln -s ${zsh} $out/share/zsh/site-functions/_bloop
-
-    cp ${client} $out/bloop
-    chmod +x $out/bloop
-    makeWrapper $out/bloop $out/bin/bloop \
-      --prefix PATH : ${lib.makeBinPath [ python ]}
   '';
 
   meta = with stdenv.lib; {
