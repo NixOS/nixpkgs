@@ -6187,6 +6187,16 @@
     githubId = 6022042;
     name = "Sam Parkinson";
   };
+  samlich = {
+    email = "nixos@samli.ch";
+    github = "samlich";
+    githubId = 1349989;
+    name = "samlich";
+    keys = [{
+      longkeyid = "rsa4096/B1568953B1939F1C";
+      fingerprint = "AE8C 0836 FDF6 3FFC 9580  C588 B156 8953 B193 9F1C";
+    }];
+  };
   samrose = {
    email = "samuel.rose@gmail.com";
    github = "samrose";
