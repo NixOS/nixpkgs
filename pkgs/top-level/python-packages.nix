@@ -6760,6 +6760,8 @@ in {
 
   tldextract = callPackage ../development/python-modules/tldextract { };
 
+  transip = callPackage ../development/python-modules/transip { };
+
   pyemd  = callPackage ../development/python-modules/pyemd { };
 
   pulp  = callPackage ../development/python-modules/pulp { };
