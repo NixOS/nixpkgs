@@ -24,6 +24,7 @@ stdenv.mkDerivation rec {
     sed -e '38i#include <string.h>' -i wrudf/wrudf-cdrw.c
     sed -e '12i#include <string.h>' -i wrudf/wrudf-cdr.c
     sed -e '37i#include <stdlib.h>' -i wrudf/ide-pc.c
+    sed -e '46i#include <sys/sysmacros.h>' -i mkudffs/main.c
 
     sed -e "s@\$(DESTDIR)/lib/udev/rules.d@$out/lib/udev/rules.d@" -i pktsetup/Makefile.am
   '';
