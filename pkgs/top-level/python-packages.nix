@@ -6902,6 +6902,8 @@ in {
     inherit python;
   })).python;
 
+  localzone = callPackage ../development/python-modules/localzone { };
+
   scour = callPackage ../development/python-modules/scour { };
 
   pymssql = callPackage ../development/python-modules/pymssql { };
