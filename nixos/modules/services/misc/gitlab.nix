@@ -393,27 +393,27 @@ in {
         enable = mkOption {
           type = types.bool;
           default = false;
-          description = "Enable GitLab-Container Registry";
+          description = "Enable gitLab container registry.";
         };
         host = mkOption {
           type = types.str;
-          default = "registry." + config.networking.hostName;
-          description = "Gitlab-Contaier Registry host name.";
+          default = services.gitlab.host;
+          description = "GitLab container registry host name.";
         };
         port = mkOption {
           type = types.int;
           default = 4567;
-          description = "GitLab-Container Registry port.";
+          description = "GitLab container registry port.";
         };
         certFile = mkOption {
           type = types.path;
           default = null;
-          description = "Path to registry certificate.";
+          description = "Path to gitLab container registry certificate.";
         };
         keyFile = mkOption {
           type = types.path;
           default = null;
-          description = "Path to registry certificate-key.";
+          description = "Path to gitLab container registry certificate-key.";
         };
       };
 
@@ -670,7 +670,7 @@ in {
     services.postfix.enable = mkDefault true;
 
     # Enable Docker Registry, if GitLab-Container Registry is enabled
-    services.dockerRegistry = {
+    services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = cfg.registry.enable;
       listenAddress = "127.0.0.1";
       port = 5000;
