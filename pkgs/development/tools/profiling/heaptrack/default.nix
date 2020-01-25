@@ -1,7 +1,8 @@
 {
   stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
   zlib, boost, libunwind, elfutils, sparsehash,
-  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
+  qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram,
+  wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
     sha256 = "0vgwldl5n41r4y3pv8w29gmyln0k2w6m59zrfw9psm4hkxvivzlx";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
   buildInputs = [
     zlib boost libunwind elfutils sparsehash
     qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
