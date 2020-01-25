@@ -153,9 +153,23 @@ busted = buildLuarocksPackage {
   meta = with stdenv.lib; {
     homepage = "http://olivinelabs.com/busted/";
     description = "Elegant Lua unit testing.";
-    license = {
-      fullName = "MIT <http://opensource.org/licenses/MIT>";
-    };
+    license.fullName = "MIT <http://opensource.org/licenses/MIT>";
+  };
+};
+cassowary = buildLuarocksPackage {
+  pname = "cassowary";
+  version = "2.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cassowary-2.2-1.src.rock;
+    sha256 = "0laghzk5jbap5rfd8sasnrdrbda649sfciarba8rhygm0qni1azy";
+  };
+  propagatedBuildInputs = [ lua penlight ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/simoncozens/cassowary.lua";
+    description = "The cassowary constraint solver.";
+    license.fullName = "Apache 2";
   };
 };
 cjson = buildLuarocksPackage {
