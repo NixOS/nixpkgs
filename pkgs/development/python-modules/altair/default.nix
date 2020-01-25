@@ -47,6 +47,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     export LANG=en_US.UTF-8
+    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
+    rm altair/examples/histogram_responsive.py
     pytest --doctest-modules altair
   '';
 
