@@ -294,6 +294,9 @@ with super;
     };
   });
 
+  pulseaudio = super.pulseaudio.override({
+    nativeBuildInputs = [ pkgs.pulseaudio pkgs.pkg-config ];
+  });
 
   rapidjson = super.rapidjson.override({
     preBuild = ''
