@@ -15,7 +15,7 @@ import ./make-test-python.nix ({ pkgs, ...} :
     ];
 
     services.xserver.enable = true;
-    services.xserver.displayManager.auto.user = "alice";
+    test-support.displayManager.auto.user = "alice";
     environment.systemPackages = [ pkgs.signal-desktop ];
   };
 
