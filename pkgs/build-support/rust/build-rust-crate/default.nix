@@ -67,7 +67,7 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
 
     # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
     
-    endencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
+    makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
 
     # crate2nix has a hack for the old bash based build script that did split
     # entries at `,`. No we have to work around that hack.
