@@ -97,7 +97,7 @@ stdenv.mkDerivation (rec {
     name = "rust_${crate.crateName}-${crate.version}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
-    dontStrip = stdenv.hostPlatform.isDarwin;
+    dontStrip = stdenv.hostPlatform.isDarwin; # See issue #27370
     dependencies =
       builtins.map
         (dep: lib.getLib (dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; }))
