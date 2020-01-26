@@ -55,8 +55,6 @@ in stdenv.mkDerivation {
     ./0011-Fix-hwdb-paths.patch
     ./0012-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0013-localectl-use-etc-X11-xkb-for-list-x11.patch
-    ./0014-catalog-don-t-update-on-install.patch
-    ./0015-hwdb-don-t-run-update-on-install.patch
     ./0016-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
     ./0017-Fix-mount-option-x-initrd.mount-handling-35268-16.patch
     ./0018-Install-default-configuration-into-out-share-factory.patch
@@ -219,6 +217,11 @@ in stdenv.mkDerivation {
   ];
 
   doCheck = false; # fails a bunch of tests
+
+  # trigger the test -n "$DESTDIR" || mutate in upstreams build system
+  preInstall = ''
+    export DESTDIR=/
+  '';
 
   postInstall = ''
     # sysinit.target: Don't depend on
