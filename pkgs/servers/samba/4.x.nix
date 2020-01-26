@@ -20,11 +20,11 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "samba";
-  version = "4.11.3";
+  version = "4.11.5";
 
   src = fetchurl {
     url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
-    sha256 = "0id1n7774cchbiql2d6jjdi38aq582nlg1b3xm2hnvjl9nhy9jqs";
+    sha256 = "0gyr773dl0krcra6pvyp8i9adj3r16ihrrm2b71c0974cbzrkqpk";
   };
 
   outputs = [ "out" "dev" "man" ];
