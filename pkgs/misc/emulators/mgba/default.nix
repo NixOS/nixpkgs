@@ -15,13 +15,13 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.7.3";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "1wrmwh50rv8bd328r8cisrihq6h90kx2bfb0vmjfbsd3l1jvgrgm";
+    sha256 = "0m3rgcdv32ms98j7rrmk2hphvn462bwsd6xfz2ssy05398pj4ljh";
   };
 
   enableParallelBuilding = true;
