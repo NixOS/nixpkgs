@@ -1,0 +1,27 @@
+From f3a6f3056e69808ebbc7e72b1d03b85c750a3cae Mon Sep 17 00:00:00 2001
+From: Eelco Dolstra <eelco.dolstra@logicblox.com>
+Date: Wed, 16 Apr 2014 00:35:14 +0200
+Subject: [PATCH 27/27] Start getty on lxc
+
+---
+ units/getty@.service.m4 | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/units/getty@.service.m4 b/units/getty@.service.m4
+index 80e793bb73..0daba10f2a 100644
+--- a/units/getty@.service.m4
++++ b/units/getty@.service.m4
+@@ -31,7 +31,9 @@ Before=rescue.service
+ # On systems without virtual consoles, don't start any getty. Note
+ # that serial gettys are covered by serial-getty@.service, not this
+ # unit.
+-ConditionPathExists=/dev/tty0
++ConditionPathExists=|/dev/tty0
++ConditionVirtualization=|lxc
++ConditionVirtualization=|lxc-libvirt
+ 
+ [Service]
+ # the VT is cleared by TTYVTDisallocate
+-- 
+2.24.1
+

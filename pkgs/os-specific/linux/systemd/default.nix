@@ -36,11 +36,39 @@ in stdenv.mkDerivation {
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "nixos";
-    repo = "systemd";
-    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
-    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
+    owner = "systemd";
+    repo = "systemd-stable";
+    rev = "f8dd0f2f15a566ede668c59e3c810c61f9d62c51";
+    sha256 = "1alvvciddg36by1bgzi8aarnms4crzqqyizj3nhlddh35pgpwvdk";
   };
+
+  patches = [
+    ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
+    ./0002-sysinit.target-Drop-the-dependency-on-local-fs.targe.patch
+    ./0003-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0004-Fix-NixOS-containers.patch
+    ./0005-kmod-static-nodes.service-Don-t-require-lib-modules.patch
+    ./0006-Look-for-fsck-in-the-right-place.patch
+    ./0007-Add-some-NixOS-specific-unit-directories.patch
+    ./0008-Don-t-try-to-unmount-nix-or-nix-store.patch
+    ./0009-Get-rid-of-a-useless-message-in-user-sessions.patch
+    ./0010-hostnamed-localed-timedated-disable-methods-that-cha.patch
+    ./0011-Fix-hwdb-paths.patch
+    ./0012-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
+    ./0013-localectl-use-etc-X11-xkb-for-list-x11.patch
+    ./0014-catalog-don-t-update-on-install.patch
+    ./0015-hwdb-don-t-run-update-on-install.patch
+    ./0016-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
+    ./0017-Fix-mount-option-x-initrd.mount-handling-35268-16.patch
+    ./0018-Install-default-configuration-into-out-share-factory.patch
+    ./0019-inherit-systemd-environment-when-calling-generators.patch
+    ./0020-reintroduce-the-no-such-path-PATH-that-was-dropped-s.patch
+    ./0021-add-rootprefix-to-lookup-dir-paths.patch
+    ./0022-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
+    ./0023-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0024-Revert-sysinit.target-Drop-the-dependency-on-local-f.patch
+    ./0027-Start-getty-on-lxc.patch
+  ];
 
   outputs = [ "out" "lib" "man" "dev" ];
 

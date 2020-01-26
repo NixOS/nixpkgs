@@ -1,0 +1,41 @@
+From 95c4e1ffd2249a52ca02e4fbe46aa4e51c5abd17 Mon Sep 17 00:00:00 2001
+From: Andreas Rammhold <andreas@rammhold.de>
+Date: Fri, 2 Nov 2018 20:56:49 +0100
+Subject: [PATCH 20/27] reintroduce the /no-such-path PATH that was dropped
+ some versions ago
+
+Originally eelco set the DEFAULT_PATH_NORMAL to "/no-such-path" since we
+do not need that in NixOS and usually refer to all our executables with
+an absolute path. This commit reintroduces this change.
+---
+ src/basic/path-util.h | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
+
+diff --git a/src/basic/path-util.h b/src/basic/path-util.h
+index 71fb7041a3..b856e782a8 100644
+--- a/src/basic/path-util.h
++++ b/src/basic/path-util.h
+@@ -28,13 +28,13 @@
+ #  define PATH_SBIN_BIN_NULSTR(x) PATH_NORMAL_SBIN_BIN_NULSTR(x)
+ #endif
+ 
+-#define DEFAULT_PATH_NORMAL PATH_SBIN_BIN("/usr/local/") ":" PATH_SBIN_BIN("/usr/")
+-#define DEFAULT_USER_PATH_NORMAL PATH_BIN_SBIN("/usr/local/") ":" PATH_BIN_SBIN("/usr/")
+-#define DEFAULT_PATH_NORMAL_NULSTR PATH_SBIN_BIN_NULSTR("/usr/local/") PATH_SBIN_BIN_NULSTR("/usr/")
+-#define DEFAULT_PATH_SPLIT_USR DEFAULT_PATH_NORMAL ":" PATH_SBIN_BIN("/")
+-#define DEFAULT_USER_PATH_SPLIT_USR DEFAULT_PATH_NORMAL ":" PATH_BIN_SBIN("/")
+-#define DEFAULT_PATH_SPLIT_USR_NULSTR DEFAULT_PATH_NORMAL_NULSTR PATH_SBIN_BIN_NULSTR("/")
+-#define DEFAULT_PATH_COMPAT PATH_SPLIT_SBIN_BIN("/usr/local/") ":" PATH_SPLIT_SBIN_BIN("/usr/") ":" PATH_SPLIT_SBIN_BIN("/")
++#define DEFAULT_PATH_NORMAL "/no-such-path"
++#define DEFAULT_USER_PATH_NORMAL "/no-such-path"
++#define DEFAULT_PATH_NORMAL_NULSTR "/no-such-path\0"
++#define DEFAULT_PATH_SPLIT_USR DEFAULT_PATH_NORMAL
++#define DEFAULT_USER_PATH_SPLIT_USR DEFAULT_PATH_NORMAL DEFAULT_PATH_NORMAL
++#define DEFAULT_PATH_SPLIT_USR_NULSTR DEFAULT_PATH_NORMAL_NULSTR
++#define DEFAULT_PATH_COMPAT DEFAULT_PATH_NORMAL
+ 
+ #if HAVE_SPLIT_USR
+ #  define DEFAULT_PATH DEFAULT_PATH_SPLIT_USR
+-- 
+2.24.1
+

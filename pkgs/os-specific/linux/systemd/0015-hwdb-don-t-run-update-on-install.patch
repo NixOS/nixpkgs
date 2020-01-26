@@ -1,0 +1,27 @@
+From 8a383521425d7a59e9b1850d1547d47fa5e8a952 Mon Sep 17 00:00:00 2001
+From: Franz Pletz <fpletz@fnordicwalking.de>
+Date: Sun, 11 Feb 2018 04:01:35 +0100
+Subject: [PATCH 15/27] hwdb: don't run update on install
+
+---
+ hwdb/meson.build | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/hwdb/meson.build b/hwdb/meson.build
+index 31ee3e7409..badf39f555 100644
+--- a/hwdb/meson.build
++++ b/hwdb/meson.build
+@@ -27,10 +27,6 @@ if conf.get('ENABLE_HWDB') == 1
+ 
+         meson.add_install_script('sh', '-c',
+                                  mkdir_p.format(join_paths(sysconfdir, 'udev/hwdb.d')))
+-
+-        meson.add_install_script('sh', '-c',
+-                                 'test -n "$DESTDIR" || @0@/systemd-hwdb update'
+-                                 .format(rootbindir))
+ endif
+ 
+ ############################################################
+-- 
+2.24.1
+

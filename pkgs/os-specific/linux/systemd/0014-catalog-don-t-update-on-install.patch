@@ -1,0 +1,24 @@
+From 8e7aec49a387d8229b85cfc3ea2f2c1c9a45f6d0 Mon Sep 17 00:00:00 2001
+From: Franz Pletz <fpletz@fnordicwalking.de>
+Date: Wed, 17 Jan 2018 05:10:36 +0100
+Subject: [PATCH 14/27] catalog: don't update on install
+
+---
+ catalog/meson.build | 4 ----
+ 1 file changed, 4 deletions(-)
+
+diff --git a/catalog/meson.build b/catalog/meson.build
+index 3db8e390f2..7004618750 100644
+--- a/catalog/meson.build
++++ b/catalog/meson.build
+@@ -28,7 +28,3 @@ foreach file : in_files
+                 install : true,
+                 install_dir : catalogdir)
+ endforeach
+-
+-meson.add_install_script('sh', '-c',
+-                         'test -n "$DESTDIR" || @0@/journalctl --update-catalog'
+-                         .format(rootbindir))
+-- 
+2.24.1
+
