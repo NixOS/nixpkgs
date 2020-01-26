@@ -65,7 +65,6 @@ in stdenv.mkDerivation {
     ./0021-add-rootprefix-to-lookup-dir-paths.patch
     ./0022-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
     ./0023-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
-    ./0027-Start-getty-on-lxc.patch
   ];
 
   outputs = [ "out" "lib" "man" "dev" ];
