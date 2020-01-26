@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, libtool }:
 
 stdenv.mkDerivation rec {
-  version = "3.2p1";
+  version = "3.2p3";
   pname = "libow";
 
   src = fetchFromGitHub {
     owner = "owfs";
     repo = "owfs";
     rev = "v${version}";
-    sha256 = "17jhhvlqzndf7q3xnb8bjf4j0j905c420cbxabwpz8xac3z62vb8";
+    sha256 = "02l3r4ixhicph5iqxdjanck2gbqkfs9vnnac112bzlvlw3x9r03m";
   };
 
   nativeBuildInputs = [ autoconf automake pkgconfig ];
