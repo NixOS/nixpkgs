@@ -12,6 +12,8 @@
 # any build is allowed, so this parameter acts as a simple whitelist.
 # Takes the package version and returns the build version.
 , makeBuildVersion ? (v: v)
+, enableClient ? true
+, enableServer ? true
 }:
 
 let
@@ -52,6 +54,9 @@ let
     pname = "${pname}-deps";
     inherit version src postPatch;
     nativeBuildInputs = [ gradle_5 perl ];
+    # Here we build both the server and the client so we only have to specify
+    # one hash for 'deps'. Deps can be garbage collected after the build,
+    # so this is not really an issue.
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon desktop:dist -Pbuildversion=${buildVersion}
@@ -68,30 +73,48 @@ let
     outputHash = "16k058fw9yk89adx8j1708ynfri5yizmmvh49prls9slw4hipffb";
   };
 
-in stdenv.mkDerivation rec {
+  # Separate commands for building and installing the server and the client
+  buildClient = ''
+    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
+  '';
+  buildServer = ''
+    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+  '';
+  installClient = ''
+    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/mindustry \
+      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
+      --add-flags "-jar $out/share/mindustry.jar"
+    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+    install -Dm644 ${desktopItem}/share/applications/Mindustry.desktop $out/share/applications/Mindustry.desktop
+  '';
+  installServer = ''
+    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+    mkdir -p $out/bin
+    makeWrapper ${jre}/bin/java $out/bin/mindustry-server \
+      --add-flags "-jar $out/share/mindustry-server.jar"
+  '';
+
+in
+assert stdenv.lib.assertMsg (enableClient || enableServer)
+  "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
+stdenv.mkDerivation rec {
   inherit pname version src postPatch;
 
   nativeBuildInputs = [ gradle_5 makeWrapper ];
 
-  buildPhase = ''
+  buildPhase = with stdenv.lib; ''
     export GRADLE_USER_HOME=$(mktemp -d)
     # point to offline repo
     sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
-    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
+    ${optionalString enableClient buildClient}
+    ${optionalString enableServer buildServer}
   '';
 
-  installPhase = ''
-    install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-    install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-    mkdir $out/bin
-    makeWrapper ${jre}/bin/java $out/bin/mindustry \
-      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib \
-      --add-flags "-jar $out/share/mindustry.jar"
-    makeWrapper ${jre}/bin/java $out/bin/mindustry-server \
-      --add-flags "-jar $out/share/mindustry-server.jar"
-    install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
-    install -Dm644 ${desktopItem}/share/applications/Mindustry.desktop $out/share/applications/Mindustry.desktop
+  installPhase = with stdenv.lib; ''
+    ${optionalString enableClient installClient}
+    ${optionalString enableServer installServer}
   '';
 
   meta = with stdenv.lib; {
