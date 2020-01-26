@@ -34,6 +34,13 @@ with lib;
       as the underlying package isn't being maintained. Working alternatives are
       libinput and synaptics.
     '')
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "auto" ] ''
+      The services.xserver.displayManager.auto module has been removed
+      because it was only intended for use in internal NixOS tests, and gave the
+      false impression of it being a special display manager when it's actually
+      LightDM. Please use the services.xserver.displayManager.lightdm.autoLogin options
+      instead, or any other display manager in NixOS as they all support auto-login.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];
