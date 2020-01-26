@@ -1,4 +1,4 @@
-{ stdenv, fetchurl
+{ stdenv, fetchurl, fetchpatch
 # native deps.
 , runCommand, pkgconfig, meson, ninja, makeWrapper
 # build+runtime deps.
@@ -16,14 +16,37 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "4.3.0";
+  version = "5.0.0";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "0ca0f171ae2b2d76830967a5150eb0fa496b48b2a48f41b2be65d3743aaece25";
+    sha256 = "ca6023cd0c18b11f4a0cff0c8e882c7f3a5ad6653e9aa95acdbedafc5a53a5ed";
   };
 
   outputs = [ "out" "dev" ];
+
+  patches = [
+    (fetchpatch { # TODO: included in the next release.
+      name = "fix-GC-path.patch";
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/b723dbbe0.diff";
+      sha256 = "1hrwbv9vjybnwm083jxcinzw3fmwlsf1dgxrly7mhjs8d3jhqc4z";
+    })
+  ];
+
+  # Path fixups for the NixOS service.
+  postPatch = ''
+    patch meson.build <<EOF
+    @@ -50,2 +50,2 @@
+    -systemd_work_dir = join_paths(prefix, get_option('localstatedir'), 'lib', 'knot-resolver')
+    -systemd_cache_dir = join_paths(prefix, get_option('localstatedir'), 'cache', 'knot-resolver')
+    +systemd_work_dir  = '/var/lib/knot-resolver'
+    +systemd_cache_dir = '/var/cache/knot-resolver'
+    EOF
+
+    # ExecStart can't be overwritten in overrides.
+    # We need that to use wrapped executable and correct config file.
+    sed '/^ExecStart=/d' -i systemd/kresd@.service.in
+  '';
 
   preConfigure = ''
     patchShebangs scripts/
@@ -45,11 +68,13 @@ unwrapped = stdenv.mkDerivation rec {
   ]
   ++ optional doInstallCheck "-Dunit_tests=enabled"
   ++ optional (doInstallCheck && !stdenv.isDarwin) "-Dconfig_tests=enabled"
+  ++ optional stdenv.isLinux "-Dsystemd_files=enabled" # used by NixOS service
     #"-Dextra_tests=enabled" # not suitable as in-distro tests; many deps, too.
   ;
 
   postInstall = ''
     rm "$out"/lib/libkres.a
+    rm "$out"/lib/knot-resolver/upgrade-4-to-5.lua # not meaningful on NixOS
   '';
 
   doInstallCheck = with stdenv; hostPlatform == buildPlatform;
@@ -71,20 +96,22 @@ wrapped-full = runCommand unwrapped.name
   {
     nativeBuildInputs = [ makeWrapper ];
     buildInputs = with luajitPackages; [
-      luasec luasocket # trust anchor bootstrap, prefill module
-      luafilesystem # prefill module
-      http # for http module; brings lots of deps; some are useful elsewhere
+      # For http module, prefill module, trust anchor bootstrap.
+      # It brings lots of deps; some are useful elsewhere (e.g. cqueues).
+      http
+      # psl isn't in nixpkgs yet, but policy.slice_randomize_psl() seems not important.
     ];
     preferLocalBuild = true;
     allowSubstitutes = false;
   }
   ''
-    mkdir -p "$out"/{bin,share}
+    mkdir -p "$out"/bin
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
       --set LUA_CPATH "$LUA_CPATH"
 
-    ln -sr '${unwrapped}/share/man' "$out"/share/
+    ln -sr '${unwrapped}/share' "$out"/
+    ln -sr '${unwrapped}/lib'   "$out"/ # useful in NixOS service
     ln -sr "$out"/{bin,sbin}
 
     echo "Checking that 'http' module loads, i.e. lua search paths work:"
