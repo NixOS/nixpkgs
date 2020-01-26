@@ -24,7 +24,7 @@ let
         in (if lib.lists.any (x: x == "lib") dep.crateType then
            if linked then
               " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
-	   else
+           else
 	      " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rmeta"
          else
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
