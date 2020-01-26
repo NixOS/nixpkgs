@@ -608,6 +608,14 @@ self: super: {
     (bustle: bustle.override { hgettext = null; })
     (bustle: disableCabalFlag bustle "hgettext")
 
+    # Bustle specifies OtherLicense even though the code is actually LGPL
+    # https://gitlab.freedesktop.org/bustle/bustle/merge_requests/17
+    (bustle: bustle.overrideAttrs (attrs: {
+      meta = builtins.removeAttrs attrs.meta [ "hydraPlatforms" ] // {
+        license = pkgs.lib.licenses.lgpl21Plus;
+      };
+    }))
+
     # Install icons, metadata and cli program.
     (bustle: overrideCabal bustle (drv: {
       buildDepends = [ pkgs.libpcap ];
