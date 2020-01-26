@@ -2261,6 +2261,8 @@ in
 
   bgs = callPackage ../tools/X11/bgs { };
 
+  bibclean = callPackage ../tools/typesetting/bibclean { };
+
   biber = callPackage ../tools/typesetting/biber { };
 
   biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
