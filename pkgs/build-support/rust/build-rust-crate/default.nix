@@ -25,7 +25,7 @@ let
            if linked then
               " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
            else
-	      " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rmeta"
+             " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rmeta"
          else
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies);
