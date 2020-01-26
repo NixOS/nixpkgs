@@ -241,6 +241,8 @@ let
 
     duff = callPackage ../development/ocaml-modules/duff { };
 
+    dum = callPackage ../development/ocaml-modules/dum { };
+
     dune = callPackage ../development/tools/ocaml/dune { };
 
     dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
