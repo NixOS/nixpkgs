@@ -1,17 +1,24 @@
-{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy}:
+{lib, fetchPypi, python, buildPythonPackage, gfortran, nose, pytest, numpy, pybind11}:
 
-buildPythonPackage rec {
+let
+  pybind = pybind11.overridePythonAttrs(oldAttrs: {
+    cmakeFlags = oldAttrs.cmakeFlags ++ [
+      "-DPYBIND11_TEST=off"
+    ];
+    doCheck = false; # Circular test dependency
+  });
+in buildPythonPackage rec {
   pname = "scipy";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a03939b431994289f39373c57bbe452974a7da724ae7f9620a1beee575434da4";
+    sha256 = "dee1bbf3a6c8f73b6b218cb28eed8dd13347ea2f87d572ce19b289d6fd3fbc59";
   };
 
   checkInputs = [ nose pytest ];
   nativeBuildInputs = [ gfortran ];
-  buildInputs = [ numpy.blas ];
+  buildInputs = [ numpy.blas pybind ];
   propagatedBuildInputs = [ numpy ];
 
   # Remove tests because of broken wrapper
@@ -19,9 +26,7 @@ buildPythonPackage rec {
     rm scipy/linalg/tests/test_lapack.py
   '';
 
-  # INTERNALERROR, solved with https://github.com/scipy/scipy/pull/8871
-  # however, it does not apply cleanly.
-  doCheck = false;
+  doCheck = true;
 
   preConfigure = ''
     sed -i '0,/from numpy.distutils.core/s//import setuptools;from numpy.distutils.core/' setup.py

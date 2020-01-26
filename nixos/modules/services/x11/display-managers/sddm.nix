@@ -50,8 +50,8 @@ let
     MinimumVT=${toString (if xcfg.tty != null then xcfg.tty else 7)}
     ServerPath=${xserverWrapper}
     XephyrPath=${pkgs.xorg.xorgserver.out}/bin/Xephyr
-    SessionCommand=${dmcfg.session.wrapper}
-    SessionDir=${dmcfg.session.desktops}/share/xsessions
+    SessionCommand=${dmcfg.sessionData.wrapper}
+    SessionDir=${dmcfg.sessionData.desktops}/share/xsessions
     XauthPath=${pkgs.xorg.xauth}/bin/xauth
     DisplayCommand=${Xsetup}
     DisplayStopCommand=${Xstop}
@@ -59,26 +59,27 @@ let
 
     [Wayland]
     EnableHidpi=${if cfg.enableHidpi then "true" else "false"}
-    SessionDir=${dmcfg.session.desktops}/share/wayland-sessions
+    SessionDir=${dmcfg.sessionData.desktops}/share/wayland-sessions
 
     ${optionalString cfg.autoLogin.enable ''
     [Autologin]
     User=${cfg.autoLogin.user}
-    Session=${defaultSessionName}.desktop
+    Session=${autoLoginSessionName}.desktop
     Relogin=${boolToString cfg.autoLogin.relogin}
     ''}
 
     ${cfg.extraConfig}
   '';
 
-  defaultSessionName =
-    let
-      dm = xcfg.desktopManager.default;
-      wm = xcfg.windowManager.default;
-    in dm + optionalString (wm != "none") ("+" + wm);
+  autoLoginSessionName = dmcfg.sessionData.autologinSession;
 
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "sddm" "themes" ]
+      "Set the option `services.xserver.displayManager.sddm.package' instead.")
+  ];
+
   options = {
 
     services.xserver.displayManager.sddm = {
@@ -205,11 +206,9 @@ in
           SDDM auto-login requires services.xserver.displayManager.sddm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> elem defaultSessionName dmcfg.session.names;
+      { assertion = cfg.autoLogin.enable -> autoLoginSessionName != null;
         message = ''
-          SDDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowManager.default are set to valid values. The current
-          default session: ${defaultSessionName} is not valid.
+          SDDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
     ];

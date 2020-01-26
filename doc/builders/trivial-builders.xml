@@ -7,7 +7,7 @@
   Nixpkgs provides a couple of functions that help with building derivations. The most important one, <function>stdenv.mkDerivation</function>, has already been documented above. The following functions wrap <function>stdenv.mkDerivation</function>, making it easier to use in certain cases.
  </para>
  <variablelist>
-  <varlistentry>
+  <varlistentry xml:id="trivial-builder-runCommand">
    <term>
     <literal>runCommand</literal>
    </term>
@@ -40,7 +40,7 @@
 </programlisting>
    </listitem>
   </varlistentry>
-  <varlistentry>
+  <varlistentry xml:id="trivial-builder-runCommandCC">
    <term>
     <literal>runCommandCC</literal>
    </term>
@@ -50,7 +50,20 @@
     </para>
    </listitem>
   </varlistentry>
-  <varlistentry>
+  <varlistentry xml:id="trivial-builder-runCommandLocal">
+   <term>
+    <literal>runCommandLocal</literal>
+   </term>
+   <listitem>
+    <para>
+     Variant of <literal>runCommand</literal> that forces the derivation to be built locally, it is not substituted. This is intended for very cheap commands (&lt;1s execution time). It saves on the network roundrip and can speed up a build.
+    </para>
+    <note><para>
+      This sets <link xlink:href="https://nixos.org/nix/manual/#adv-attr-allowSubstitutes"><literal>allowSubstitutes</literal> to <literal>false</literal></link>, so only use <literal>runCommandLocal</literal> if you are certain the user will always have a builder for the <literal>system</literal> of the derivation. This should be true for most trivial use cases (e.g. just copying some files to a different location or adding symlinks), because there the <literal>system</literal> is usually the same as <literal>builtins.currentSystem</literal>.
+    </para></note>
+   </listitem>
+  </varlistentry>
+  <varlistentry xml:id="trivial-builder-writeText">
    <term>
     <literal>writeTextFile</literal>, <literal>writeText</literal>, <literal>writeTextDir</literal>, <literal>writeScript</literal>, <literal>writeScriptBin</literal>
    </term>
@@ -63,7 +76,7 @@
     </para>
    </listitem>
   </varlistentry>
-  <varlistentry>
+  <varlistentry xml:id="trivial-builder-symlinkJoin">
    <term>
     <literal>symlinkJoin</literal>
    </term>

@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "PyGithub";
-  version = "1.44";
+  version = "1.45";
 
   src = fetchFromGitHub {
     owner = "PyGithub";
     repo = "PyGithub";
     rev = "v${version}";
-    sha256 = "067iyarllgdp40bzjxskzrixvmz350yj1qf8wvbddka504bcbh9r";
+    sha256 = "1aiyqwdxpcr7yzz7aqmmjn1g2ajs5bpbln4sax5zw19dqi6qgp9z";
   };
 
   propagatedBuildInputs = [ python-jose pyjwt requests deprecated httpretty ];

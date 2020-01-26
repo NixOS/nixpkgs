@@ -53,9 +53,7 @@ rec {
       patchPhase = ''
       '';
 
-      NIX_CFLAGS_COMPILE = [
-        "-DMINIMAL=ON"
-      ];
+      NIX_CFLAGS_COMPILE = "-DMINIMAL=ON";
     });
   in
     stdenv.mkDerivation ((optionalAttrs (stdenv.isLinux) {
@@ -208,9 +206,9 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.4";
-    rev = "9013bf583a215dc1488d941f9b6f7f11e1ea899f";
-    sha256 = "094d6d93jd7g1vw362cqbv9qbyv8h6pb6dj750pgqvnf1bn1mffb";
+    version = "19.03.5";
+    rev = "633a0ea838f10e000b7c6d6eed1623e6e988b5bc";
+    sha256 = "1cs38ffh5xn8c40rln4pvd53iahvi4kys9an6kpclvvciqfc2cxs";
     runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
     runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
     containerdRev = "b34a5c8af56e510852c35414db4c1f4fa6172339";

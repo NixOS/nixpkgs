@@ -29,6 +29,7 @@
 
 # External plugins
 , enableAlternatives   ? false
+, enableCheck          ? false, liboggz ? null
 , enableCopyArtifacts  ? false
 
 , bashInteractive, bash-completion
@@ -37,6 +38,7 @@
 assert enableAbsubmit    -> essentia-extractor            != null;
 assert enableAcoustid    -> pythonPackages.pyacoustid     != null;
 assert enableBadfiles    -> flac != null && mp3val != null;
+assert enableCheck       -> flac != null && mp3val != null && liboggz != null;
 assert enableConvert     -> ffmpeg != null;
 assert enableDiscogs     -> pythonPackages.discogs_client != null;
 assert enableFetchart    -> pythonPackages.responses      != null;
@@ -106,6 +108,7 @@ let
 
   plugins = {
     alternatives = callPackage ./alternatives-plugin.nix pluginArgs;
+    check = callPackage ./check-plugin.nix pluginArgs;
     copyartifacts = callPackage ./copyartifacts-plugin.nix pluginArgs;
   };
 
@@ -142,6 +145,7 @@ in pythonPackages.buildPythonApplication rec {
               || enableSubsonicupdate
               || enableAcousticbrainz)
                                     pythonPackages.requests
+    ++ optional enableCheck         plugins.check
     ++ optional enableConvert       ffmpeg
     ++ optional enableDiscogs       pythonPackages.discogs_client
     ++ optional enableGmusic        pythonPackages.gmusicapi
@@ -245,6 +249,10 @@ in pythonPackages.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [ "--set GI_TYPELIB_PATH \"$GI_TYPELIB_PATH\"" "--set GST_PLUGIN_SYSTEM_PATH_1_0 \"$GST_PLUGIN_SYSTEM_PATH_1_0\"" ];
+
+  passthru = {
+    externalPlugins = plugins;
+  };
 
   meta = {
     description = "Music tagger and library organizer";

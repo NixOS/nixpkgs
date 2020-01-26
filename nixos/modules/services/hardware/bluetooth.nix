@@ -72,11 +72,11 @@ in {
       };
     };
 
-    environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
+    environment.systemPackages = [ bluez-bluetooth ];
 
-    environment.etc = singleton {
-      source = pkgs.writeText "main.conf" (generators.toINI { } cfg.config + optionalString (cfg.extraConfig != null) cfg.extraConfig);
-      target = "bluetooth/main.conf";
+    environment.etc."bluetooth/main.conf"= {
+      source = pkgs.writeText "main.conf"
+        (generators.toINI { } cfg.config + optionalString (cfg.extraConfig != null) cfg.extraConfig);
     };
 
     services.udev.packages = [ bluez-bluetooth ];

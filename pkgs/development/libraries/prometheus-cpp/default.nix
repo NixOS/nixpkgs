@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prometheus-cpp";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "jupp0r";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15bda1q1jbvixbx1qf41ykcdmsywhhwmi4xgsha12r5m9fh8jzxj";
+    sha256 = "0j12ir8skw3y2q8n743zql4ddp7v1j4h030pjcsqn0xqrqw7m5hg";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -28,9 +28,10 @@ stdenv.mkDerivation rec {
     "-DUSE_THIRDPARTY_LIBRARIES=OFF"
     "-DCIVETWEB_INCLUDE_DIR=${civetweb.dev}/include"
     "-DCIVETWEB_CXX_LIBRARY=${civetweb}/lib/libcivetweb${stdenv.targetPlatform.extensions.sharedLibrary}"
+    "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  NIX_LDFLAGS = [ "-ldl" ];
+  NIX_LDFLAGS = "-ldl";
 
   meta = {
     description = "Prometheus Client Library for Modern C++";

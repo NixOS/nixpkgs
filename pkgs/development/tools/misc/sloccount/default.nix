@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = "PREFIX=$(out) CC=cc";
+  makeFlags = [ "PREFIX=$(out)" "CC=cc" ];
 
   doCheck = true;
   checkPhase = ''HOME="$TMPDIR" PATH="$PWD:$PATH" make test'';

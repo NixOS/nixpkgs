@@ -2,10 +2,14 @@
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version;
-  src = fetch pname "03ni43lbkp63lr3p6sc94dphqmvnz5av5mml0xmk930xvnbcvr2n";
+  src = fetch pname "0xwh79g3zggdabxgnd0bphry75asm1qz7mv3hcqihqwqr6aspgy2";
 
   nativeBuildInputs = [ cmake python llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+
+  NIX_CFLAGS_COMPILE = [
+    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+  ];
 
   cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"

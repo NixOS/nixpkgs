@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
 , cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
-, net_snmp, openssl, nettools
+, net-snmp, openssl, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false
@@ -55,7 +55,7 @@ python2Packages.buildPythonApplication {
     libusb1
     sane-backends
     dbus
-    net_snmp
+    net-snmp
     openssl
   ];
 

@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU_combined, openexr }:
+{ stdenv, fetchFromGitHub, unzip, re2, openfx, zlib, ilmbase, libGLU, libGL, openexr }:
 
 stdenv.mkDerivation {
   pname = "openexrid-unstable";
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
                        -I${openfx.dev}/include/OpenFX
                       '';
 
-  buildInputs = [ unzip re2 openfx zlib ilmbase libGLU_combined openexr ];
+  buildInputs = [ unzip re2 openfx zlib ilmbase libGLU libGL openexr ];
 
   enableParallelBuilding = true;
 

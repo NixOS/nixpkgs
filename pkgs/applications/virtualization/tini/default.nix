@@ -13,10 +13,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = "sed -i /tini-static/d CMakeLists.txt";
 
-  NIX_CFLAGS_COMPILE = [
-    "-DPR_SET_CHILD_SUBREAPER=36"
-    "-DPR_GET_CHILD_SUBREAPER=37"
-  ];
+  NIX_CFLAGS_COMPILE = "-DPR_SET_CHILD_SUBREAPER=36 -DPR_GET_CHILD_SUBREAPER=37";
 
   buildInputs = [ cmake glibc glibc.static ];
 

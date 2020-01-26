@@ -1,13 +1,13 @@
 { stdenv
 , libopcodes, libbfd, libelf
-, linuxPackages_latest
+, linuxPackages_latest, zlib
 }:
 
 stdenv.mkDerivation {
   pname = "bpftool";
   inherit (linuxPackages_latest.kernel) version src;
 
-  buildInputs = [ libopcodes libbfd libelf ];
+  buildInputs = [ libopcodes libbfd libelf zlib ];
 
   preConfigure = ''
     cd tools/bpf/bpftool

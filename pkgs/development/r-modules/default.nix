@@ -264,7 +264,6 @@ let
     gmp = [ pkgs.gmp.dev ];
     graphscan = [ pkgs.gsl_1 ];
     gsl = [ pkgs.gsl_1 ];
-    h5 = [ pkgs.hdf5-cpp pkgs.which ];
     haven = [ pkgs.libiconv pkgs.zlib.dev ];
     h5vc = [ pkgs.zlib.dev ];
     HiCseg = [ pkgs.gsl_1 ];
@@ -293,7 +292,6 @@ let
     phytools = [ pkgs.which ];
     PKI = [ pkgs.openssl.dev ];
     png = [ pkgs.libpng.dev ];
-    PopGenome = [ pkgs.zlib.dev ];
     proj4 = [ pkgs.proj ];
     protolite = [ pkgs.protobuf ];
     qtbase = [ pkgs.qt4 ];
@@ -311,14 +309,12 @@ let
     rgdal = [ pkgs.proj.dev pkgs.gdal ];
     rgeos = [ pkgs.geos ];
     rggobi = [ pkgs.ggobi pkgs.gtk2.dev pkgs.libxml2.dev ];
-    rgl = [ pkgs.libGLU_combined pkgs.xlibsWrapper ];
     Rglpk = [ pkgs.glpk ];
     RGtk2 = [ pkgs.gtk2.dev ];
     rhdf5 = [ pkgs.zlib ];
     Rhdf5lib = [ pkgs.zlib ];
     Rhpc = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.openmpi pkgs.pcre.dev ];
     Rhtslib = [ pkgs.zlib.dev pkgs.automake pkgs.autoconf ];
-    RJaCGH = [ pkgs.zlib.dev ];
     rjags = [ pkgs.jags ];
     rJava = [ pkgs.zlib pkgs.bzip2.dev pkgs.icu pkgs.lzma.dev pkgs.pcre.dev pkgs.jdk pkgs.libzip ];
     Rlibeemd = [ pkgs.gsl_1 ];
@@ -368,7 +364,6 @@ let
     udunits2 = [ pkgs.udunits pkgs.expat ];
     units = [ pkgs.udunits ];
     V8 = [ pkgs.v8_3_14 ];
-    VBLPCM = [ pkgs.gsl_1 ];
     WhopGenome = [ pkgs.zlib.dev ];
     XBRL = [ pkgs.zlib pkgs.libxml2.dev ];
     xml2 = [ pkgs.libxml2.dev ] ++ lib.optionals stdenv.isDarwin [ pkgs.perl ];
@@ -393,7 +388,6 @@ let
     # sort -t '=' -k 2
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
-    nat_nblast = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
     pbdZMQ = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     RMark = [ pkgs.which ];
@@ -404,6 +398,7 @@ let
     RCurl = [ pkgs.curl.dev ];
     R2SWF = [ pkgs.pkgconfig ];
     rggobi = [ pkgs.pkgconfig ];
+    rgl = [ pkgs.libGLU pkgs.libGLU.dev pkgs.libGL pkgs.xlibsWrapper ];
     RGtk2 = [ pkgs.pkgconfig ];
     RProtoBuf = [ pkgs.pkgconfig ];
     Rpoppler = [ pkgs.pkgconfig ];
@@ -413,7 +408,6 @@ let
     fftw = [ pkgs.pkgconfig ];
     geoCount = [ pkgs.pkgconfig ];
     gdtools = [ pkgs.pkgconfig ];
-    JuniperKernel = lib.optionals stdenv.isDarwin [ pkgs.darwin.binutils ];
     jqr = [ pkgs.jq.lib ];
     kza = [ pkgs.pkgconfig ];
     magick = [ pkgs.pkgconfig ];
@@ -435,8 +429,6 @@ let
     rPython = [ pkgs.which ];
     gridGraphics = [ pkgs.which ];
     adimpro = [ pkgs.which pkgs.xorg.xdpyinfo ];
-    PET = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
-    dti = [ pkgs.which pkgs.xorg.xdpyinfo pkgs.imagemagick ];
     mzR = [ pkgs.netcdf ];
     cluster = [ pkgs.libiconv ];
     KernSmooth = [ pkgs.libiconv ];
@@ -524,7 +516,6 @@ let
     "fscaret"
     "fSRM"
     "gcmr"
-    "GeoGenetix"
     "geomorph"
     "geoR"
     "geoRglm"
@@ -571,7 +562,6 @@ let
     "mritc"
     "multgee"
     "multibiplotGUI"
-    "nodiv"
     "OligoSpecificitySystem"
     "onemap"
     "OpenRepGrid"
@@ -644,7 +634,6 @@ let
     "rsgcc"
     "RSurvey"
     "RunuranGUI"
-    "sharpshootR"
     "simba"
     "Simile"
     "SimpleTable"
@@ -668,7 +657,6 @@ let
     "SYNCSA"
     "SyNet"
     "tcltk2"
-    "TED"
     "TestScorer"
     "TIMP"
     "titan"
@@ -768,17 +756,6 @@ let
       '';
     });
 
-    JuniperKernel = old.JuniperKernel.overrideDerivation (attrs: {
-      postPatch = lib.optionalString stdenv.isDarwin ''
-        for file in {R,src}/*.R; do
-            sed -i 's#system("which \(otool\|install_name_tool\)"[^)]*)#"${pkgs.darwin.cctools}/bin/\1"#g' $file
-        done
-      '';
-      preConfigure = ''
-        patchShebangs configure
-      '';
-    });
-
     jqr = old.jqr.overrideDerivation (attrs: {
       preConfigure = ''
         patchShebangs configure
@@ -849,6 +826,11 @@ let
     });
 
     openssl = old.openssl.overrideDerivation (attrs: {
+      PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
+      PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
+    });
+
+    websocket = old.websocket.overrideDerivation (attrs: {
       PKGCONFIG_CFLAGS = "-I${pkgs.openssl.dev}/include";
       PKGCONFIG_LIBS = "-Wl,-rpath,${pkgs.openssl.out}/lib -L${pkgs.openssl.out}/lib -lssl -lcrypto";
     });

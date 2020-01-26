@@ -28,6 +28,11 @@ let
 
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
+      "Set the option `virtualisation.libvirtd.qemuPackage' instead.")
+  ];
+
   ###### interface
 
   options.virtualisation.libvirtd = {

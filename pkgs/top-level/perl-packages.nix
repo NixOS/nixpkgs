@@ -87,11 +87,11 @@ let
 
   ack = buildPerlPackage {
     pname = "ack";
-    version = "3.1.3";
+    version = "3.2.0";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.1.3.tar.gz;
-      sha256 = "0bxsrs6lv98sjdww5q6bcsm2qk4w6l5falpzjijvj1i2if123gb1";
+      url = mirror://cpan/authors/id/P/PE/PETDANCE/ack-v3.2.0.tar.gz;
+      sha256 = "00yvhkr974akdlhiyxkcz4rmfjyhvpikxf6k49b6q6iwa5a0j1ss";
     };
 
     outputs = ["out" "man"];
@@ -158,10 +158,10 @@ let
 
   AlienBuild = buildPerlPackage {
     pname = "Alien-Build";
-    version = "1.89";
+    version = "1.92";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-1.89.tar.gz;
-      sha256 = "1jr740v95hdhjxkj5kcpwb022y6iqzmsax50fa69qbiwnjjnzqzz";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Build-1.92.tar.gz;
+      sha256 = "0y8a0ircxc93qqic1i76sspbcr4pdjg6j8ha4zbvv279f8x1g5fd";
     };
     propagatedBuildInputs = [ CaptureTiny FFICheckLib FileWhich Filechdir PathTiny PkgConfig ];
     buildInputs = [ DevelHide Test2Suite ];
@@ -221,7 +221,7 @@ let
     installPhase = "./Build install --prefix $out";
 
     SDL_INST_DIR = pkgs.SDL.dev;
-    buildInputs = [ ArchiveExtract ArchiveZip TextPatch pkgs.SDL ];
+    buildInputs = [ pkgs.SDL ArchiveExtract ArchiveZip TextPatch ];
     propagatedBuildInputs = [ CaptureTiny FileShareDir FileWhich ];
 
     meta = {
@@ -347,10 +347,10 @@ let
 
   ApacheAuthCookie = buildPerlPackage {
     pname = "Apache-AuthCookie";
-    version = "3.27";
+    version = "3.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Apache-AuthCookie-3.27.tar.gz;
-      sha256 = "58daeb3e44c681ff88f8fb00e4aabaa7a40cbee73dbdb84fcf6c285b15d357bd";
+      url = mirror://cpan/authors/id/M/MS/MSCHOUT/Apache-AuthCookie-3.28.tar.gz;
+      sha256 = "bcd795a7f654a94ae0a6bd734ba4d8ba1085371fca486229dba49f1c2d62142b";
     };
     buildInputs = [ ApacheTest ];
     propagatedBuildInputs = [ ClassLoad HTTPBody HashMultiValue WWWFormUrlEncoded ];
@@ -360,7 +360,7 @@ let
     doCheck = !stdenv.isLinux;
 
     meta = {
-      homepage = http://search.cpan.org/dist/Apache-AuthCookie/;
+      homepage = "https://github.com/mschout/apache-authcookie";
       description = "Perl Authentication and Authorization via cookies";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -368,10 +368,10 @@ let
 
   ApacheLogFormatCompiler = buildPerlModule {
     pname = "Apache-LogFormat-Compiler";
-    version = "0.35";
+    version = "0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.35.tar.gz;
-      sha256 = "06i70ydxk2wa2rcqn16842kra2qz3jwk0vk1abq8lah4180c0m0n";
+      url = mirror://cpan/authors/id/K/KA/KAZEBURO/Apache-LogFormat-Compiler-0.36.tar.gz;
+      sha256 = "05xcl7j65vakx7x79jqjikyw0nzf60bc2w6hhc0q5sklxq1ral4l";
     };
     buildInputs = [ HTTPMessage ModuleBuildTiny TestMockTime TestRequires TryTiny URI ];
     propagatedBuildInputs = [ POSIXstrftimeCompiler ];
@@ -507,10 +507,10 @@ let
 
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
-    version = "0.86";
+    version = "0.87";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.86.tar.gz;
-      sha256 = "11qh94am7fghizmjaf5c7w868svjbv9g4ffirykj8qa6q40zdspp";
+      url = mirror://cpan/authors/id/G/GU/GUGOD/App-perlbrew-0.87.tar.gz;
+      sha256 = "0zcczp1dq116ym05yhjpmzv5qmkwfd9lzcwiy51i8ii13qq5hja7";
     };
     buildInputs = [ pkgs.curl FileWhich IOAll ModuleBuildTiny PathClass TestException TestNoWarnings TestOutput TestSpec TestTempDirTiny ];
     propagatedBuildInputs = [ CPANPerlReleases CaptureTiny DevelPatchPerl locallib ];
@@ -1183,7 +1183,7 @@ let
       sha256 = "0z4lnc3jfqx8rykm998q2jy5wkhb8p5pir80g9lqpi4lb0ilic6c";
     };
     propagatedBuildInputs = [ Furl URI ];
-    buildInputs = [ FileWhich TestTCP TestRequires TestSharedFork ];
+    buildInputs = [ FileWhich TestRequires TestSharedFork TestTCP ];
     meta = {
       description = "KyotoTycoon client library";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -2478,7 +2478,7 @@ let
     };
     buildInputs = [ TestFatal TestNeeds ];
     meta = {
-      homepage = https://github.com/sartak/Class-Method-Modifiers/tree;
+      homepage = "https://github.com/moose/Class-Method-Modifiers";
       description = "Provides Moose-like method modifiers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -2769,10 +2769,10 @@ let
 
   CompressRawBzip2 = buildPerlPackage {
     pname = "Compress-Raw-Bzip2";
-    version = "2.087";
+    version = "2.090";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.087.tar.gz;
-      sha256 = "1yqcy26dlcgy5gkl6rvvj60f83kgd99y8qylynibjx84vbyhvfvp";
+      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Bzip2-2.090.tar.gz;
+      sha256 = "0yi972il6i0ya65qar0767mm3sb2wbsrllsgx6296s5myh2838p6";
     };
 
     # Don't build a private copy of bzip2.
@@ -2788,11 +2788,11 @@ let
 
   CompressRawZlib = buildPerlPackage {
     pname = "Compress-Raw-Zlib";
-    version = "2.087";
+    version = "2.090";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.087.tar.gz;
-      sha256 = "13gfbfhaw1iiz2vmgpjggrcd704czqx3jk5alw765cw6wghwk0cc";
+      url = mirror://cpan/authors/id/P/PM/PMQS/Compress-Raw-Zlib-2.090.tar.gz;
+      sha256 = "0ndgkv7z4zi3ffail9abp02x62dx1j3pnxn3rjw91py7pjd4kj7j";
     };
 
     preConfigure = ''
@@ -3049,10 +3049,10 @@ let
 
   Connector = buildPerlPackage {
     pname = "Connector";
-    version = "1.27";
+    version = "1.28";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.27.tar.gz;
-      sha256 = "98ff4700fde2b7872d89566a3308d03c2899c88cb6317af901869513bdbfb603";
+      url = mirror://cpan/authors/id/M/MR/MRSCOTTY/Connector-1.28.tar.gz;
+      sha256 = "0cd1575bab80e78294aa79809904f40d2f534d99b78e0161454f037625c6bf7d";
     };
     buildInputs = [ ConfigMerge ConfigStd ConfigVersioned DBDSQLite DBI ProcSafeExec TemplateToolkit YAML ];
     propagatedBuildInputs = [ LogLog4perl Moose ];
@@ -3234,10 +3234,10 @@ let
 
   CpanelJSONXS = buildPerlPackage {
     pname = "Cpanel-JSON-XS";
-    version = "4.14";
+    version = "4.17";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.14.tar.gz;
-      sha256 = "6e63bf65cd7e94f08fb8ae7ccd6f94fb3447852865882bba9aaa155c9eea5938";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Cpanel-JSON-XS-4.17.tar.gz;
+      sha256 = "fa80ae47caa9beee6db9b12df2c04482e98df1d62041a114ccd82b681a8706fb";
     };
     meta = {
       description = "CPanel fork of JSON::XS, fast and correct serializing";
@@ -3316,10 +3316,10 @@ let
 
   CPANPerlReleases = buildPerlPackage {
     pname = "CPAN-Perl-Releases";
-    version = "4.14";
+    version = "4.22";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-4.14.tar.gz;
-      sha256 = "0ki6bc0wdc047nyx2j4byk8nsrnm18vn0nr1s1x9wh3xi0wasn7r";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/CPAN-Perl-Releases-4.22.tar.gz;
+      sha256 = "1gwa1jzcv08fjg282jxakh24zni6ajgwhgraz6hjxk1j2hiaykjd";
     };
     meta = {
       homepage = https://github.com/bingos/cpan-perl-releases;
@@ -3776,10 +3776,10 @@ let
 
   CryptX = buildPerlPackage {
     pname = "CryptX";
-    version = "0.064";
+    version = "0.066";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MI/MIK/CryptX-0.064.tar.gz;
-      sha256 = "176ef4d2eac80731b360db04289431f0b96acc2568a1fec856abed4a51779a47";
+      url = mirror://cpan/authors/id/M/MI/MIK/CryptX-0.066.tar.gz;
+      sha256 = "e7e823ac4db0b452e885b0e0d5adfc8a9c5f688938f1adf3f1d91432b3238335";
     };
     meta = {
       description = "Crypto toolkit";
@@ -3817,12 +3817,12 @@ let
 
   DataCompare = buildPerlPackage {
     pname = "Data-Compare";
-    version = "1.26";
+    version = "1.27";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.26.tar.gz;
-      sha256 = "03g0z2w8hz7750x6wkl6zq7shk12fry44gkzrz7b904s5fmphl4p";
+      url = mirror://cpan/authors/id/D/DC/DCANTRELL/Data-Compare-1.27.tar.gz;
+      sha256 = "1gg8rqbv3x6a1lrpabv6vnlab53zxmpwz2ygad9fcx4gygqj12l1";
     };
-    propagatedBuildInputs = [ FileFindRule ];
+    propagatedBuildInputs = [ Clone FileFindRule ];
   };
 
   DataDump = buildPerlPackage {
@@ -4362,10 +4362,10 @@ let
 
   DateTimeCalendarJulian = buildPerlPackage {
     pname = "DateTime-Calendar-Julian";
-    version = "0.101";
+    version = "0.102";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WY/WYANT/DateTime-Calendar-Julian-0.101.tar.gz;
-      sha256 = "1q7zflwv44yybyz5nd01bc69zw5m540qg4fnh4xlj2icbm3sf7br";
+      url = mirror://cpan/authors/id/W/WY/WYANT/DateTime-Calendar-Julian-0.102.tar.gz;
+      sha256 = "0j95dhma66spjyb04zi6rwy7l33hibnrx02mn0znd9m89aiq52s6";
     };
     meta = {
       description = "Dates in the Julian calendar";
@@ -4615,10 +4615,10 @@ let
 
   DateTimeTimeZone = buildPerlPackage {
     pname = "DateTime-TimeZone";
-    version = "2.37";
+    version = "2.38";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.37.tar.gz;
-      sha256 = "6c12dfa6ad190191d437a7661c644fc38aaf109001e1d958c95dbb0aa143c421";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/DateTime-TimeZone-2.38.tar.gz;
+      sha256 = "0e5c99ef22471f4d262ac590ce5ce8177094d7a92f380d8eea6219f5a12dc0cd";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ ClassSingleton ParamsValidationCompiler Specio namespaceautoclean ];
@@ -4703,12 +4703,12 @@ let
 
   DevelChecklib = buildPerlPackage {
     pname = "Devel-CheckLib";
-    version = "1.13";
+    version = "1.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.13.tar.gz;
-      sha256 = "1a19qkwxwz3wqb16cdabymfbf9kiydiifw90nd5srpq5hy8gvb94";
+      url = mirror://cpan/authors/id/M/MA/MATTN/Devel-CheckLib-1.14.tar.gz;
+      sha256 = "15621qh5gaan1sgmk9y9svl70nm8viw17x5h1kf0zknkk8lmw77j";
     };
-    buildInputs = [ IOCaptureOutput MockConfig ];
+    buildInputs = [ CaptureTiny MockConfig ];
   };
 
   DevelCheckOS = buildPerlPackage {
@@ -4721,12 +4721,26 @@ let
     propagatedBuildInputs = [ DataCompare ];
   };
 
+  DevelLeak = buildPerlPackage rec {
+    pname = "Devel-Leak";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NI/NI-S/Devel-Leak-${version}.tar.gz";
+      sha256 = "0lkj2xwc3lhxv7scl43r8kfmls4am0b98sqf5vmf7d72257w6hkg";
+    };
+    meta = {
+      homepage = "https://metacpan.org/release/Devel-Leak";
+      description = "Utility for looking for perl objects that are not reclaimed";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ]; # According to Debian
+    };
+  };
+
   DevelPatchPerl = buildPerlPackage {
     pname = "Devel-PatchPerl";
-    version = "1.64";
+    version = "1.80";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-1.64.tar.gz;
-      sha256 = "16fl04m0b9jccq30h7myaj6hsv4ivx53i3q5klq0d0q6w0k5sb4v";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Devel-PatchPerl-1.80.tar.gz;
+      sha256 = "0nffiyfa1dx1ypg2chckpzh7syx47z10rxg6fjf4sb5d1gryxmmf";
     };
     propagatedBuildInputs = [ Filepushd ModulePluggable ];
     meta = {
@@ -4752,10 +4766,10 @@ let
 
   DevelPPPort = buildPerlPackage {
     pname = "Devel-PPPort";
-    version = "3.54";
+    version = "3.55";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.54.tar.gz;
-      sha256 = "f30fbbef7bdd6fb12348caf39e795c19c1639b8156e2e2f2927205140e35b0a9";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/Devel-PPPort-3.55.tar.gz;
+      sha256 = "bac0421ed1ba02f118f2bc1b1a760616847a0c60cb0184651f3f076f46d0946e";
     };
     meta = {
       description = "Perl/Pollution/Portability";
@@ -4811,10 +4825,10 @@ let
 
   DBDMock = buildPerlModule {
     pname = "DBD-Mock";
-    version = "1.49";
+    version = "1.52";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.49.tar.gz;
-      sha256 = "3c88bd9322d3d1a215b0c8dad8b27f06885a063f8f47fb8747f6e86f8b9d7116";
+      url = mirror://cpan/authors/id/J/JL/JLCOOPER/DBD-Mock-1.52.tar.gz;
+      sha256 = "c33ac1118ff4e6a542e62e0fc56d9c0d4abecc442c7acb59c0975fc376812442";
     };
     propagatedBuildInputs = [ DBI ];
     buildInputs = [ ModuleBuildTiny TestException ];
@@ -5026,7 +5040,7 @@ let
       sha256 = "d705f85825aced299020534349778537524526d64f524217ca362787f683c3bd";
     };
     buildInputs = [ DBDSQLite TestDeep TestException TestWarn ];
-    propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage ModuleFind PathClass SQLAbstract ScopeGuard SubName namespaceclean ];
+    propagatedBuildInputs = [ ClassAccessorGrouped ClassC3Componentised ConfigAny ContextPreserve DBI DataDumperConcise DataPage DevelGlobalDestruction ModuleFind PathClass SQLAbstract ScopeGuard SubName namespaceclean ];
     meta = {
       homepage = https://metacpan.org/pod/DBIx::Class;
       description = "Extensible and flexible object <-> relational mapper";
@@ -5094,10 +5108,10 @@ let
 
   DBIxClassHelpers = buildPerlPackage {
     pname = "DBIx-Class-Helpers";
-    version = "2.034000";
+    version = "2.034001";
     src = fetchurl {
-      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.034000.tar.gz;
-      sha256 = "bf92b5495fddd50daa15126e015d5d210a44b6bb43baa8859b5adaa57cd96c59";
+      url = mirror://cpan/authors/id/F/FR/FREW/DBIx-Class-Helpers-2.034001.tar.gz;
+      sha256 = "5bdbe716a32eec30d12fd743169a8d99b7358eaef8b153224ca61aa543c283c9";
     };
     buildInputs = [ DBDSQLite DateTimeFormatSQLite TestDeep TestFatal TestRoo aliased ];
     propagatedBuildInputs = [ CarpClan DBIxClassCandy DBIxIntrospector SafeIsa TextBrew ];
@@ -6088,8 +6102,12 @@ let
     };
     buildInputs = [ CaptureTiny ];
     propagatedBuildInputs = [ EmailAbstract EmailAddress MooXTypesMooseLike SubExporter Throwable TryTiny ];
+    nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
     postPatch = ''
       patchShebangs --build util
+    '';
+    preCheck = stdenv.lib.optionalString stdenv.isDarwin ''
+      shortenPerlShebang util/sendmail
     '';
     meta = {
       homepage = https://github.com/rjbs/Email-Sender;
@@ -6270,6 +6288,20 @@ let
     };
   };
 
+  EnvSanctify = buildPerlPackage {
+    pname = "Env-Sanctify";
+    version = "1.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/B/BI/BINGOS/Env-Sanctify-1.12.tar.gz;
+      sha256 = "0prj51c9w4k6nrpnpfw6an96953vna74g698kyk78m163ikbbqr0";
+    };
+    meta = {
+      description = "Lexically scoped sanctification of %ENV";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/bingos/env-sanctify";
+    };
+  };
+
   Error = buildPerlModule {
     pname = "Error";
     version = "0.17028";
@@ -6281,10 +6313,10 @@ let
 
   EV = buildPerlPackage {
     pname = "EV";
-    version = "4.27";
+    version = "4.29";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.27.tar.gz;
-      sha256 = "55750e5422d8cac7a2d0c89feeaca7d840ab2268f4c537655cdda0085e0d0cbc";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.29.tar.gz;
+      sha256 = "cbed1824ac9ef0740325140393216be55a6eb8f16a5996395fab243ee28da78e";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
@@ -6363,7 +6395,7 @@ let
     buildInputs = [ FennecLite TestException ];
     propagatedBuildInputs = [ MetaBuilder aliased ];
     meta = {
-      homepage = http://open-exodus.net/projects/Exporter-Declare;
+      homepage = "https://metacpan.org/release/Exporter-Declare";
       description = "Exporting done right";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -6404,7 +6436,7 @@ let
     meta = {
       description = "Compile and link C code for Perl modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
-      homepage = "http://search.cpan.org/dist/ExtUtils-CBuilder";
+      homepage = "https://metacpan.org/release/ExtUtils-CBuilder";
     };
   };
 
@@ -6708,7 +6740,7 @@ let
       sha256 = "dce28e3932762c2ff92aa52d90405c06e898e81cb7b164ccae8966ae77f1dcab";
     };
     meta = {
-      homepage = http://open-exodus.net/projects/Fennec-Lite;
+      homepage = "https://metacpan.org/release/Fennec-Lite";
       description = "Minimalist Fennec, the commonly used bits";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7126,7 +7158,7 @@ let
     };
     propagatedBuildInputs = [ FileShareDir ];
     meta = {
-      homepage = https://github.com/ingydotnet/file-share-pm/tree;
+      homepage = "https://github.com/ingydotnet/file-share-pm";
       description = "Extend File::ShareDir to Local Libraries";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7320,7 +7352,7 @@ let
       sha256 = "b79dc2244b2d97b6f27167fc3b7799ef61a179040f3abd76ce1e0a3b0bc4e078";
     };
     meta = {
-      homepage = http://perl.wdlabs.com/File-Which;
+      homepage = "https://metacpan.org/release/File-Which";
       description = "Perl implementation of the which utility as an API";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -7451,8 +7483,8 @@ let
       url = "mirror://cpan/authors/id/T/TO/TOKUHIROM/Furl-3.13.tar.gz";
       sha256 = "1wxa2v9yjzvnzp62p1jvcx8x61z5qvlvzyah853vvaywpjxwyyl8";
     };
-    propagatedBuildInputs = [ HTTPParserXS ModuleBuildTiny ClassAccessorLite ];
-    buildInputs = [ HTTPBody HTTPProxy NetIDNEncode Plack PlackMiddlewareDeflater Starlet TestRequires TestTCP TestSharedFork ];
+    propagatedBuildInputs = [ ClassAccessorLite HTTPParserXS MozillaCA ];
+    buildInputs = [ HTTPCookieJar HTTPProxy ModuleBuildTiny Plack Starlet TestFakeHTTPD TestRequires TestSharedFork TestTCP TestValgrind URI ];
     meta = {
       description = "Lightning-fast URL fetcher";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -7763,6 +7795,7 @@ let
       sha256 = "af53f2d3f63297e046676eae14a76296afdd2910e09723b6b113708622b7989b";
     };
     buildInputs = [ pkgs.gnupg1orig ];
+    doCheck = !stdenv.isAarch64;
   };
 
   GnuPGInterface = buildPerlPackage {
@@ -8547,12 +8580,28 @@ let
     };
   };
 
+  HTTPCookieJar = buildPerlPackage {
+    pname = "HTTP-CookieJar";
+    version = "0.008";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/HTTP-CookieJar-0.008.tar.gz;
+      sha256 = "0rfw6avcralggs7bf7n86flvhaahxjnqzvpwszp0sk4z4wwy01wm";
+    };
+    propagatedBuildInputs = [ HTTPDate ];
+    buildInputs = [ TestDeep TestRequires URI ];
+    meta = {
+      description = "A minimalist HTTP user agent cookie jar";
+      license = with stdenv.lib.licenses; [ asl20 ];
+      homepage = "https://github.com/dagolden/HTTP-CookieJar";
+    };
+  };
+
   HTTPCookies = buildPerlPackage {
     pname = "HTTP-Cookies";
-    version = "6.04";
+    version = "6.07";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.04.tar.gz;
-      sha256 = "1m0kxcirbvbkrm2c59p1bkbvzlcdymg8fdpa7wlxijlx0xwz1iqc";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Cookies-6.07.tar.gz;
+      sha256 = "0apa7smnlzanh1gdrm7id42iv64vy5skj53ank2rsk07avg8qbva";
     };
     propagatedBuildInputs = [ HTTPMessage ];
     meta = {
@@ -8577,23 +8626,24 @@ let
 
   HTTPDate = buildPerlPackage {
     pname = "HTTP-Date";
-    version = "6.02";
+    version = "6.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GA/GAAS/HTTP-Date-6.02.tar.gz;
-      sha256 = "0cz357kafhhzw7w59iyi0wvhw7rlh5g1lh38230ckw7rl0fr9fg8";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/HTTP-Date-6.05.tar.gz;
+      sha256 = "0awjdbz7x0jd5pna55dwxhs3k6xp3sw6b2zg3p2yndxxvya64p9n";
     };
     meta = {
       description = "Date conversion routines";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ TimeDate TimeLocal ];
   };
 
   HTTPEntityParser = buildPerlModule {
      pname = "HTTP-Entity-Parser";
-     version = "0.21";
+     version = "0.22";
      src = fetchurl {
-       url = mirror://cpan/authors/id/K/KA/KAZEBURO/HTTP-Entity-Parser-0.21.tar.gz;
-       sha256 = "1n7qhyscllialds5jsk1k8x2vmfbjvisa3342as5x15hpm13wkf1";
+       url = mirror://cpan/authors/id/K/KA/KAZEBURO/HTTP-Entity-Parser-0.22.tar.gz;
+       sha256 = "1j6nxs0nmx160ip0xw9gb3l19ii8pz9x1ay1y15q7rmllbr1rzlk";
      };
      propagatedBuildInputs = [ HTTPMultiPartParser HashMultiValue JSONMaybeXS StreamBuffered WWWFormUrlEncoded ];
      buildInputs = [ HTTPMessage ModuleBuildTiny ];
@@ -8848,10 +8898,10 @@ let
 
   ImageInfo = buildPerlPackage {
     pname = "Image-Info";
-    version = "1.41";
+    version = "1.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.41.tar.gz;
-      sha256 = "c546d27414686660dbc3cd8501537128c5285a8db0faf742c2dc12b9a29ba3db";
+      url = mirror://cpan/authors/id/S/SR/SREZIC/Image-Info-1.42.tar.gz;
+      sha256 = "2bca560c3f71b3c1cd63ac3a974e62f3baeb986b7ffaa026b929081b914a8f4f";
     };
     propagatedBuildInputs = [ IOStringy ];
     meta = {
@@ -8862,10 +8912,10 @@ let
 
   ImageSane = buildPerlPackage {
     pname = "Image-Sane";
-    version = "4";
+    version = "5";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RA/RATCLIFFE/Image-Sane-4.tar.gz;
-      sha256 = "f970a0314e554f6fe29dcc651aec5bd45b32d547801d304434ae80b4b806896b";
+      url = mirror://cpan/authors/id/R/RA/RATCLIFFE/Image-Sane-5.tar.gz;
+      sha256 = "229aa0e9f049efa760f3c2f6e61d9d539af43d8f764b50a6e03064b4729a35ff";
     };
     buildInputs = [ pkgs.sane-backends ExtUtilsDepends ExtUtilsPkgConfig TestRequires TryTiny ];
     propagatedBuildInputs = [ ExceptionClass Readonly ];
@@ -8964,7 +9014,7 @@ let
       sha256 = "0nsd9knlbd7if2v6zwj4q978axq0w5hk8ymp61z14a821hjivqjl";
     };
     meta = {
-      homepage = https://github.com/ingydotnet/io-all-pm/tree;
+      homepage = "https://github.com/ingydotnet/io-all-pm";
       description = "IO::All of it to Graham and Damian!";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -8984,10 +9034,10 @@ let
 
   IOCaptureOutput = buildPerlPackage {
     pname = "IO-CaptureOutput";
-    version = "1.1104";
+    version = "1.1105";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1104.tar.gz;
-      sha256 = "fcc732fcb438f97a72b30e8c7796484bef2562e374553b207028e2fbf73f8330";
+      url = mirror://cpan/authors/id/D/DA/DAGOLDEN/IO-CaptureOutput-1.1105.tar.gz;
+      sha256 = "ae99009fca1273800f169ecb82f4ed1cc6c76795f156bee5c0093005d572f487";
     };
     meta = {
       homepage = https://github.com/dagolden/IO-CaptureOutput;
@@ -8998,10 +9048,10 @@ let
 
   IOCompress = buildPerlPackage {
     pname = "IO-Compress";
-    version = "2.087";
+    version = "2.090";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.087.tar.gz;
-      sha256 = "94f792775d0496fffe862363c76637e74ff5b46c40cf47042547686d164e23cb";
+      url = mirror://cpan/authors/id/P/PM/PMQS/IO-Compress-2.090.tar.gz;
+      sha256 = "4c12e54a83f993372d43dd67389a1ca92b5c33c108c7f86768a4797cd994e987";
     };
     propagatedBuildInputs = [ CompressRawBzip2 CompressRawZlib ];
     meta = {
@@ -9535,10 +9585,10 @@ let
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "3.15";
+    version = "3.16";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.15.tar.gz";
-      sha256 = "ce14ed018b9843ef022c4c14e2171545d3da92e533c8f122b8e33f27444b2a6c";
+      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.16.tar.gz;
+      sha256 = "d20775cf5fb1a61a6054a5bd3ce45b5371ac8ed483efca3cb8dc8a09937efe4e";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
@@ -10027,10 +10077,10 @@ let
 
   ListSomeUtils = buildPerlPackage {
     pname = "List-SomeUtils";
-    version = "0.56";
+    version = "0.58";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/List-SomeUtils-0.56.tar.gz;
-      sha256 = "eaa7d99ce86380c0389876474c8eb84acc0a6bfeef1b0fc23a292592de6f89f7";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/List-SomeUtils-0.58.tar.gz;
+      sha256 = "96eafb359339d22bf2a2de421298847a3c40f6a28b6d44005d0965da86a5469d";
     };
     buildInputs = [ TestLeakTrace ];
     propagatedBuildInputs = [ ModuleImplementation ];
@@ -10288,10 +10338,10 @@ let
 
   LogDispatch = buildPerlPackage {
     pname = "Log-Dispatch";
-    version = "2.68";
+    version = "2.69";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.68.tar.gz;
-      sha256 = "1bxd3bhrn1h2q9f8r65z3101a32nl2kdb7l40bxg4vbsk4wk0ynh";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Log-Dispatch-2.69.tar.gz;
+      sha256 = "0xsjb0j3dzs8ym8jbgi29kia4pz5vl8jzkmpxxrhhqjc1h54qqjq";
     };
     propagatedBuildInputs = [ DevelGlobalDestruction ParamsValidationCompiler Specio namespaceautoclean ];
     meta = {
@@ -10308,12 +10358,12 @@ let
       url = "mirror://cpan/authors/id/M/MS/MSCHOUT/Log-Dispatch-FileRotate-1.36.tar.gz";
       sha256 = "0vlmi17p7fky3x58rs7r5mdxi6l5jla8zhlb55kvssxc1w5v2b27";
     };
-    propagatedBuildInputs = [ DateManip LogDispatch PathTiny ];
+    propagatedBuildInputs = [ DateManip LogDispatch ];
     meta = {
       description = "Log to Files that Archive/Rotate Themselves";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    buildInputs = [ TestFatal TestNeeds TestWarn ];
+    buildInputs = [ PathTiny TestWarn ];
   };
 
   LogHandler = buildPerlModule {
@@ -10433,7 +10483,7 @@ let
       url = "mirror://cpan/authors/id/L/LK/LKUNDRAK/Log-Journald-${version}.tar.gz";
       sha256 = "55992cf9a1e1fb833f428300525bfa7cf7ed46b83ec414f82a091789b37d08a3";
     };
-    buildInputs = [ ModuleBuild pkgs.pkgconfig pkgs.systemd ];
+    buildInputs = [ pkgs.pkgconfig pkgs.systemd ];
     postPatch = ''
       substituteInPlace Build.PL \
         --replace "libsystemd-journal" "libsystemd"
@@ -10460,10 +10510,10 @@ let
 
   LWP = buildPerlPackage {
     pname = "libwww-perl";
-    version = "6.39";
+    version = "6.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.39.tar.gz;
-      sha256 = "9a8d7747938aa75d7d524c71574ae7f99ca66a5dac8255a7f7759f373e7774d5";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/libwww-perl-6.42.tar.gz;
+      sha256 = "34253337a3404c4209d0e45377c9176d0ab6ea4b4570e3a597e26157181741d1";
     };
     propagatedBuildInputs = [ FileListing HTMLParser HTTPCookies HTTPDaemon HTTPNegotiate NetHTTP TryTiny WWWRobotRules ];
     # support cross-compilation by avoiding using `has_module` which does not work in miniperl (it requires B native module)
@@ -10550,6 +10600,22 @@ let
        description = "Legacy HTTP/1.0 support for LWP";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
      };
+  };
+
+  LWPUserAgentDNSHosts = buildPerlModule {
+    pname = "LWP-UserAgent-DNS-Hosts";
+    version = "0.13";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MASAKI/LWP-UserAgent-DNS-Hosts-0.13.tar.gz;
+      sha256 = "0piwcsb0m1xpzxbakhr9zq45a9hq3rx7s55lrjg66nd4x5n7xs5y";
+    };
+    propagatedBuildInputs = [ LWP ScopeGuard ];
+    buildInputs = [ ModuleBuildTiny TestFakeHTTPD TestSharedFork TestTCP TestUseAllModules ];
+    meta = {
+      description = "Override LWP HTTP/HTTPS request's host like /etc/hosts";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/masaki/p5-LWP-UserAgent-DNS-Hosts";
+    };
   };
 
   LWPUserAgentDetermined = buildPerlPackage {
@@ -10677,10 +10743,10 @@ let
 
   MailDKIM = buildPerlPackage {
     pname = "Mail-DKIM";
-    version = "0.57";
+    version = "0.58";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.57.tar.gz;
-      sha256 = "0fmfhwn4sh98w62rc8j584l23vlhr7vii8glm2njx14f81a56lvb";
+      url = mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-0.58.tar.gz;
+      sha256 = "0cgkal65qqcy57b21lgij90ba36wl66byw9i76g5yhwaa8ms8hqa";
     };
     propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNSResolverMock YAMLLibYAML ];
     doCheck = false; # tries to access the domain name system
@@ -11180,7 +11246,7 @@ let
 
     outputs = [ "out" "dev" ]; # no "devdoc"
 
-    installTargets = "install";
+    installTargets = [ "install" ];
 
     meta = with stdenv.lib; {
       homepage = "https://www.mhonarc.org/";
@@ -11232,10 +11298,10 @@ let
 
   MIMELite = buildPerlPackage {
     pname = "MIME-Lite";
-    version = "3.030";
+    version = "3.031";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.030.tar.gz;
-      sha256 = "8f39901bc580bc3dce69e10415305e4435ff90264c63d29f707b4566460be962";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/MIME-Lite-3.031.tar.gz;
+      sha256 = "f1235866482b67f00858b3edaa4ff4cf909ef900f1d15d889948bf9c03a591e0";
     };
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
@@ -11756,10 +11822,10 @@ let
 
   Mojolicious = buildPerlPackage {
     pname = "Mojolicious";
-    version = "8.25";
+    version = "8.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.25.tar.gz;
-      sha256 = "0yr5vpgwg9x435npzc6v477y260dgbj2yl9lxdjimmr6n5jryv1n";
+      url = mirror://cpan/authors/id/S/SR/SRI/Mojolicious-8.26.tar.gz;
+      sha256 = "17x3phc4ch85398kdybsz6cbraszby9dvlvcj6a6xscb20x35k4i";
     };
     meta = {
       homepage = https://mojolicious.org;
@@ -11787,10 +11853,10 @@ let
 
   MojoliciousPluginOpenAPI = buildPerlPackage {
     pname = "Mojolicious-Plugin-OpenAPI";
-    version = "2.17";
+    version = "2.18";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-2.17.tar.gz";
-      sha256 = "c20f8b07fb8582fdbf0b540f4cfc5fe95f262743522a160526024342a7f0a1f0";
+      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/Mojolicious-Plugin-OpenAPI-2.18.tar.gz;
+      sha256 = "340afe815e6195bc0ed5abcf5bcd0fdedf0be62656cede1768cfd99b62633d23";
     };
     propagatedBuildInputs = [ JSONValidator ];
     meta = {
@@ -11835,10 +11901,10 @@ let
 
   MojoSQLite = buildPerlModule {
     pname = "Mojo-SQLite";
-    version = "3.003";
+    version = "3.002";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.003.tar.gz";
-      sha256 = "d96c00dcf45e2becc8e8181df074853d42616f2a660703455d0e0a2741478092";
+      url = mirror://cpan/authors/id/D/DB/DBOOK/Mojo-SQLite-3.002.tar.gz;
+      sha256 = "d7c6588599cfe30b24b3953927f23cfe0f9f5d3e77eeab1562249b48c205b699";
     };
     buildInputs = [ ModuleBuildTiny ];
     propagatedBuildInputs = [ DBDSQLite Mojolicious SQLAbstract URIdb ];
@@ -11929,13 +11995,13 @@ let
 
   Moo = buildPerlPackage {
     pname = "Moo";
-    version = "2.003004";
+    version = "2.003006";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-2.003004.tar.gz;
-      sha256 = "f8bbb625f8e963eabe05cff9048fdd72bdd26777404ff2c40bc690f558be91e1";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Moo-2.003006.tar.gz;
+      sha256 = "bcb2092ab18a45005b5e2e84465ebf3a4999d8e82a43a09f5a94d859ae7f2472";
     };
     buildInputs = [ TestFatal ];
-    propagatedBuildInputs = [ ClassMethodModifiers DevelGlobalDestruction ModuleRuntime RoleTiny SubQuote ];
+    propagatedBuildInputs = [ ClassMethodModifiers ModuleRuntime RoleTiny SubQuote ];
     meta = {
       description = "Minimalist Object Orientation (with Moose compatibility)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -12181,10 +12247,10 @@ let
 
   MooXlate = buildPerlPackage {
     pname = "MooX-late";
-    version = "0.015";
+    version = "0.016";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.015.tar.gz;
-      sha256 = "175326af3076fa8698669f289fad1322724978cddaf40ea04e600fcd7f6afbbf";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/MooX-late-0.016.tar.gz;
+      sha256 = "1fb6393e8b77c0ec1e99229bc6f5b9db362eedc172fa940b37defd9bb3415e4e";
     };
     buildInputs = [ TestFatal TestRequires ];
     propagatedBuildInputs = [ Moo TypeTiny ];
@@ -12218,6 +12284,21 @@ let
     meta = {
       description = "Do use_ok() for all the MANIFESTed modules";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  TestValgrind = buildPerlPackage {
+    pname = "Test-Valgrind";
+    version = "1.19";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/V/VP/VPIT/Test-Valgrind-1.19.tar.gz;
+      sha256 = "06w1c0ddmmdkhhvv9pxq2nv5i40nbqf4cssfkq38yypfbyhsff0q";
+    };
+    propagatedBuildInputs = [ EnvSanctify FileHomeDir PerlDestructLevel XMLTwig ];
+    meta = {
+      description = "Generate suppressions, analyse and test any command with valgrind.";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "http://search.cpan.org/dist/Test-Valgrind/";
     };
   };
 
@@ -12424,7 +12505,7 @@ let
     buildInputs = [ ModuleBuildTiny TestFatal ];
     propagatedBuildInputs = [ Moose aliased namespaceautoclean ];
     meta = {
-      homepage = https://github.com/karenetheridge/moosex-lazyrequire;
+      homepage = "https://github.com/moose/MooseX-LazyRequire";
       description = "Required attributes which fail only when trying to use them";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12525,7 +12606,7 @@ let
     buildInputs = [ CPANMetaCheck ModuleBuildTiny TestFatal TestNeeds ];
     propagatedBuildInputs = [ Moose namespaceautoclean ];
     meta = {
-      homepage = https://github.com/sartak/MooseX-Role-Parameterized/tree;
+      homepage = "https://github.com/moose/MooseX-Role-Parameterized";
       description = "Roles with composition parameters";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -12909,7 +12990,7 @@ let
       url = "mirror://cpan/authors/id/E/ES/ESTRABD/MySQL-Diff-0.60.tar.gz";
       sha256 = "5d7080a4bd5714ff9ef536aa774a7adb3c6f0e760215ca6c39d8a3545344f956";
     };
-    propagatedBuildInputs = [ FileSlurp StringShellQuote pkgs.mysql-client ];
+    propagatedBuildInputs = [ pkgs.mysql-client FileSlurp StringShellQuote ];
     meta = {
       homepage = "https://github.com/estrabd/mysqldiff";
       description = "Generates a database upgrade instruction set";
@@ -13702,8 +13783,8 @@ let
       sha256 = "1q3lz168q081iwl9jg21fbzhp9la79gav9mv6nmh2jab83s2l3mj";
     };
 
-    # FIXME: try with libGL + libGLU instead of libGLU_combined
-    buildInputs = [ pkgs.libGLU_combined pkgs.libGLU pkgs.freeglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
+    # FIXME: try with libGL + libGLU instead of libGLU libGL
+    buildInputs = [ pkgs.libGLU pkgs.libGL pkgs.libGLU pkgs.freeglut pkgs.xorg.libX11 pkgs.xorg.libXi pkgs.xorg.libXmu pkgs.xorg.libXext pkgs.xdummy ];
 
     patches = [ ../development/perl-modules/perl-opengl.patch ];
 
@@ -14045,10 +14126,10 @@ let
 
   ParsePMFile = buildPerlPackage {
      pname = "Parse-PMFile";
-     version = "0.41";
+     version = "0.42";
      src = fetchurl {
-       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-PMFile-0.41.tar.gz;
-       sha256 = "1ffv9msp4xjfaylay2zfqangxhgyr5xk993k5n1k08hh6qagq8df";
+       url = mirror://cpan/authors/id/I/IS/ISHIGAKI/Parse-PMFile-0.42.tar.gz;
+       sha256 = "0v3k5jslbl29735hs32x9si546v55cyy6sb58aib8vmq684wgxp7";
      };
      buildInputs = [ ExtUtilsMakeMakerCPANfile ];
      meta = {
@@ -14242,6 +14323,17 @@ let
       homepage = http://perlcritic.com;
       description = "Critique Perl source code for best-practices";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  PerlDestructLevel = buildPerlPackage {
+    pname = "Perl-Destruct-Level";
+    version = "0.02";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/R/RG/RGARCIA/Perl-Destruct-Level-0.02.tar.gz;
+      sha256 = "0fyiysrq874ncscgdjg522fs29gvqads6ynyhwxwwq1b545srd20";
+    };
+    meta = {
     };
   };
 
@@ -14697,10 +14789,10 @@ let
 
   ProcBackground = buildPerlPackage {
     pname = "Proc-Background";
-    version = "1.10";
+    version = "1.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BZ/BZAJAC/Proc-Background-1.10.tar.gz;
-      sha256 = "1ce0dd78c0bb8393a2431b385a27b99fcc623a41ebec57b3cc09cc38cdb708ee";
+      url = mirror://cpan/authors/id/N/NE/NERDVANA/Proc-Background-1.21.tar.gz;
+      sha256 = "91b6a5aeb841b1c313498c78fad08e37d17595702dc6205b5ad38ef69949b7ee";
     };
     meta = {
     };
@@ -14821,11 +14913,11 @@ let
 
   ProtocolHTTP2 = buildPerlModule {
     pname = "Protocol-HTTP2";
-    version = "1.09";
+    version = "1.10";
 
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.09.tar.gz;
-      sha256 = "1bc0ybkqhv81dscgzlbr62w4zqjsidcikmkbjanzn83g2b6ia9nc";
+      url = mirror://cpan/authors/id/C/CR/CRUX/Protocol-HTTP2-1.10.tar.gz;
+      sha256 = "0jm6jq1wszjrrcypyi642m2i8wgni50wdnzh9dzfkyjazdc00sn2";
     };
     buildInputs = [ AnyEvent ModuleBuildTiny NetSSLeay TestLeakTrace TestSharedFork TestTCP ];
   };
@@ -15154,10 +15246,10 @@ let
 
   PodSimple = buildPerlPackage {
     pname = "Pod-Simple";
-    version = "3.39";
+    version = "3.40";
     src = fetchurl {
-      url = mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.39.tar.gz;
-      sha256 = "0qh43griaz3i21ca745irrnjbksv5q07h4wdjv28nqpcc55pva8m";
+      url = mirror://cpan/authors/id/K/KH/KHW/Pod-Simple-3.40.tar.gz;
+      sha256 = "0384k8k18srsdj2a2j10gbvv19lnvynq359y9kb4zn5bv2wqqfh6";
     };
   };
 
@@ -15497,10 +15589,10 @@ let
 
   RoleTiny = buildPerlPackage {
     pname = "Role-Tiny";
-    version = "2.001003";
+    version = "2.001004";
     src = fetchurl {
-      url = mirror://cpan/authors/id/H/HA/HAARG/Role-Tiny-2.001003.tar.gz;
-      sha256 = "6cef8d6371342a94a6a04c1be5bd7a3f2bd6ea36f1a21b4649b08d5b88b28eeb";
+      url = mirror://cpan/authors/id/H/HA/HAARG/Role-Tiny-2.001004.tar.gz;
+      sha256 = "92ba5712850a74102c93c942eb6e7f62f7a4f8f483734ed289d08b324c281687";
     };
     meta = {
       description = "Roles. Like a nouvelle cuisine portion size slice of Moose";
@@ -15563,10 +15655,10 @@ let
 
   ScalarListUtils = buildPerlPackage {
     pname = "Scalar-List-Utils";
-    version = "1.52";
+    version = "1.53";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.52.tar.gz;
-      sha256 = "279d78cef84acae280da4dfb95eff0c9865d1611b1a3b026baddf42d1ba01de4";
+      url = mirror://cpan/authors/id/P/PE/PEVANS/Scalar-List-Utils-1.53.tar.gz;
+      sha256 = "bd4086b066fb3b18a0be2e7d9bc100a99aa0f233ad659492340415c7b2bdae99";
     };
     meta = {
       description = "Common Scalar and List utility subroutines";
@@ -15634,6 +15726,28 @@ let
     meta = {
       description = "SDL bindings to Perl";
       license = stdenv.lib.licenses.lgpl21Plus;
+    };
+  };
+
+  SearchXapian = buildPerlPackage rec {
+    pname = "Search-Xapian";
+    version = "1.2.25.2";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/O/OL/OLLY/Search-Xapian-${version}.tar.gz";
+      sha256 = "0hpa8gi38j0ibq8af6dy69lm1bl5jnq76nsa69dbrzbr88l5m594";
+    };
+    patches = [
+      (fetchpatch {
+        url = "https://git.xapian.org/?p=xapian;a=patch;h=69ad652b7ad7912801e686db2da55d73f79fbf75";
+        name = "fix-automated-testing-false-negative";
+        sha256 = "1241mpyf8mgx7szyl5sxa6wl388rzph3q51mn9v4yjbm0k5l0sxr";
+        stripLen = 1;
+      })
+    ];
+    buildInputs = [ pkgs.xapian ExtUtilsMakeMaker DevelLeak ];
+    meta = {
+      description = "Perl XS frontend to the Xapian C++ search library";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
@@ -16234,10 +16348,10 @@ let
 
   StringCRC32 = buildPerlPackage {
     pname = "String-CRC32";
-    version = "1.7";
+    version = "1.8";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-1.7.tar.gz;
-      sha256 = "1j1bwbxcgxfbgw708rfrni3spwnnmnf717vq9s64nd63jmc4w5lg";
+      url = mirror://cpan/authors/id/L/LE/LEEJO/String-CRC32-1.8.tar.gz;
+      sha256 = "0vvwlf50vylx1m7nrjphkz309nsl2k2yqyldn3942337kiipjnmn";
     };
   };
 
@@ -16746,10 +16860,10 @@ let
 
   SysSyslog = buildPerlPackage {
     pname = "Sys-Syslog";
-    version = "0.35";
+    version = "0.36";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SAPER/Sys-Syslog-0.35.tar.gz;
-      sha256 = "fe28e47b70b77aaae754385fe1470d174289e7b6908efa247d2e52486516fbb7";
+      url = mirror://cpan/authors/id/S/SA/SAPER/Sys-Syslog-0.36.tar.gz;
+      sha256 = "ed42a9e5ba04ad4856cc0cb5d38d289c3c5d3764543ec04efafc4af7e3378df8";
     };
     meta = {
       description = "Perl interface to the UNIX syslog(3) calls";
@@ -17164,10 +17278,10 @@ let
 
   TermTable = buildPerlPackage {
     pname = "Term-Table";
-    version = "0.014";
+    version = "0.015";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.014.tar.gz;
-      sha256 = "167a0669e2ef8c6386ea4dd213495e445049493ce1d5097d5632c0e928b7426d";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Term-Table-0.015.tar.gz;
+      sha256 = "d8a18b2801f91f0e5d747147ce786964a76f91d18568652908a3dc06a9b948d5";
     };
     propagatedBuildInputs = [ Importer ];
     meta = {
@@ -17241,10 +17355,10 @@ let
 
   Test2Suite = buildPerlPackage {
     pname = "Test2-Suite";
-    version = "0.000126";
+    version = "0.000127";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000126.tar.gz;
-      sha256 = "370db8171c9105480872ae8948745dbd798b9d751aacc8aa0fc36266eeda79e3";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test2-Suite-0.000127.tar.gz;
+      sha256 = "09443e7c99f9bef2c3f5999b919800db7d265b2c55f177726d3e5a61d8dbe690";
     };
     propagatedBuildInputs = [ ModulePluggable ScopeGuard SubInfo TermTable TestSimple13 ];
     meta = {
@@ -17422,10 +17536,10 @@ let
 
   TestCompile = buildPerlModule {
     pname = "Test-Compile";
-    version = "2.3.0";
+    version = "2.3.1";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v2.3.0.tar.gz;
-      sha256 = "f61549769e55a9b251f83617b901c0461659b1360243ef046d4f112f7f4e4a8f";
+      url = mirror://cpan/authors/id/E/EG/EGILES/Test-Compile-v2.3.1.tar.gz;
+      sha256 = "1174cff010011ae43e6462755ccd8a6cf0372ca506705c60586f7b1748ff4ddf";
     };
     propagatedBuildInputs = [ UNIVERSALrequire ];
     meta = {
@@ -17563,6 +17677,22 @@ let
     meta = {
       description = "Add test failures if warnings are caught";
       license = stdenv.lib.licenses.asl20;
+    };
+  };
+
+  TestFakeHTTPD = buildPerlModule {
+    pname = "Test-Fake-HTTPD";
+    version = "0.08";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/M/MA/MASAKI/Test-Fake-HTTPD-0.08.tar.gz;
+      sha256 = "1jkflkcjzrdvnlxff1xqfhfdcpsmvvjqzayl7hk3whavsxdrf9yh";
+    };
+    propagatedBuildInputs = [ HTTPDaemon Plack ];
+    buildInputs = [ LWP ModuleBuildTiny TestException TestSharedFork TestTCP TestUseAllModules ];
+    meta = {
+      description = "a fake HTTP server";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      homepage = "https://github.com/masaki/Test-Fake-HTTPD";
     };
   };
 
@@ -17841,10 +17971,10 @@ let
 
   TestMockModule = buildPerlModule {
     pname = "Test-MockModule";
-    version = "0.170.0";
+    version = "0.171.0";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.170.0.tar.gz;
-      sha256 = "0pggwrlqj6k44qayhbpjqkzry1r626iy2vf30zlf2jdhbjbvlycz";
+      url = mirror://cpan/authors/id/G/GF/GFRANKS/Test-MockModule-v0.171.0.tar.gz;
+      sha256 = "1arqgb1773zym5dqlwm6kz48bfrccjhb5bjfsif0vkalwq2gvm7b";
     };
     propagatedBuildInputs = [ SUPER ];
     buildInputs = [ TestWarnings ];
@@ -18310,10 +18440,10 @@ let
 
   TestScript = buildPerlPackage {
     pname = "Test-Script";
-    version = "1.25";
+    version = "1.26";
     src = fetchurl {
-      url = mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.25.tar.gz;
-      sha256 = "199s78hh77zwwqba6pa1ngzjnzrdj2ka6qv5w0i286aafh93705n";
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Test-Script-1.26.tar.gz;
+      sha256 = "1dvkb8dvidnycd6ws2h2iy262h37fjakflv6z90xrw72xix26hkd";
     };
 
     buildInputs = [ Test2Suite ];
@@ -18338,10 +18468,10 @@ let
 
   TestSimple13 = buildPerlPackage {
     pname = "Test-Simple";
-    version = "1.302168";
+    version = "1.302169";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302168.tar.gz;
-      sha256 = "02f6132b2062abb23474b0fc02e70a0fbbf7bf581a6010e64c08891530447ffa";
+      url = mirror://cpan/authors/id/E/EX/EXODIST/Test-Simple-1.302169.tar.gz;
+      sha256 = "411704776f0f787b1c2e4fb0e612162650a80b0dc0a719d84abc1070025ac723";
     };
     meta = {
       description = "Basic utilities for writing tests";
@@ -18431,10 +18561,10 @@ let
 
   TestTime = buildPerlPackage {
     pname = "Test-Time";
-    version = "0.05";
+    version = "0.08";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SA/SATOH/Test-Time-0.05.tar.gz;
-      sha256 = "abef8885a811440114bfe067edc32f08500fbfd624902f8c3a81fc224ac4b410";
+      url = mirror://cpan/authors/id/S/SA/SATOH/Test-Time-0.08.tar.gz;
+      sha256 = "b8bc3b074bb2247e8588399c1e55d071f049cf6ce1c8b4192c38cf3c24559548";
     };
     meta = {
       description = "Overrides the time() and sleep() core functions for testing";
@@ -18760,7 +18890,7 @@ let
       sha256 = "bb8a3b8ff515c85101baf553a769337f944a05cde81f111ae78aff416bf4ae2b";
     };
     meta = {
-      homepage = https://www.shlomifish.org/open-source/projects/Text-Format/;
+      homepage = "https://metacpan.org/release/Text-Format";
       description = "Format text";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ bcdarwin ];
@@ -19119,7 +19249,7 @@ let
       sha256 = "0avk50kia78kxryh2whmaj5l18q2wvmkdyqyjsf6kwr4kgy6x3i7";
     };
     # https://rt.cpan.org/Public/Bug/Display.html?id=124815
-    NIX_CFLAGS_COMPILE = [ "-DHAS_VPRINTF" ];
+    NIX_CFLAGS_COMPILE = "-DHAS_VPRINTF";
   };
 
   TextUnidecode = buildPerlPackage {
@@ -19139,7 +19269,7 @@ let
       sha256 = "ef371b1769cd8d36d2d657e8321723d94c8f8d89e7fd7437c6648c5dc6711b7a";
     };
     meta = {
-      homepage = https://github.com/2shortplanks/Test-utf8/tree;
+      homepage = "https://github.com/2shortplanks/Test-utf8";
       description = "Handy utf8 tests";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -19415,6 +19545,8 @@ let
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-2.30.tar.gz;
       sha256 = "11lf54akr9nbivqkjrhvkmfdgkbhw85sq0q4mak56n6bf542bgbm";
     };
+    # https://rt.cpan.org/Public/Bug/Display.html?id=124509
+    patches = [ ../development/perl-modules/timedate-2020.patch ];
   };
 
   TimeDuration = buildPerlPackage {
@@ -19630,16 +19762,17 @@ let
 
   TypeTiny = buildPerlPackage {
     pname = "Type-Tiny";
-    version = "1.004004";
+    version = "1.006000";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.004004.tar.gz;
-      sha256 = "081281ea004cdd89003d938aa52c1398e24411dd8f7163b14d0977a13f7062be";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Type-Tiny-1.006000.tar.gz;
+      sha256 = "d5a60013df0b4a108e5755cfea84a8e81b1eacd4a91f6f17a5515a864ed7fd00";
     };
     propagatedBuildInputs = [ ExporterTiny ];
     meta = {
       description = "Tiny, yet Moo(se)-compatible type constraint";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    buildInputs = [ TestMemoryCycle ];
   };
 
   TypesSerialiser = buildPerlPackage {
@@ -19893,7 +20026,7 @@ let
     };
     propagatedBuildInputs = [ URI ];
     meta = {
-      homepage = http://perl.wdlabs.com/URI-ws/;
+      homepage = "https://metacpan.org/release/URI-ws";
       description = "WebSocket support for URI package";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -20032,15 +20165,15 @@ let
 
   WWWMechanize = buildPerlPackage {
     pname = "WWW-Mechanize";
-    version = "1.94";
+    version = "1.95";
     src = fetchurl {
-      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.94.tar.gz;
-      sha256 = "00hh5iaxyfmfgh5irz23v5qpc40hff2v78jyi93assi7a4amfl68";
+      url = mirror://cpan/authors/id/O/OA/OALDERS/WWW-Mechanize-1.95.tar.gz;
+      sha256 = "1w121x0xsn1bm699ncanyxqv3njqam3zzjkq8p54bqmzpikn5crs";
     };
     propagatedBuildInputs = [ HTMLForm HTMLTree LWP ];
     doCheck = false;
     meta = {
-      homepage = https://github.com/bestpractical/www-mechanize;
+      homepage = "https://github.com/libwww-perl/WWW-Mechanize";
       description = "Handy web browsing in a Perl object";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
@@ -20205,7 +20338,7 @@ let
     AUTOMATED_TESTING = false;
     buildInputs = [ pkgs.xorg.libxcb pkgs.xorg.xcbproto pkgs.xorg.xcbutil pkgs.xorg.xcbutilwm ExtUtilsDepends ExtUtilsPkgConfig TestDeep TestException XSObjectMagic ];
     propagatedBuildInputs = [ DataDump MouseXNativeTraits XMLDescent XMLSimple ];
-    NIX_CFLAGS_LINK = [ "-lxcb" "-lxcb-util" "-lxcb-xinerama" "-lxcb-icccm" ];
+    NIX_CFLAGS_LINK = "-lxcb -lxcb-util -lxcb-xinerama -lxcb-icccm";
     doCheck = false; # requires an X server
     meta = {
       description = "XCB bindings for X";
@@ -20367,10 +20500,10 @@ let
 
   XMLParser = buildPerlPackage {
     pname = "XML-Parser";
-    version = "2.46";
+    version = "2.44";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.46.tar.gz;
-      sha256 = "0pai3ik47q7rgnix9644c673fwydz52gqkxr9kxwq765j4j36cfk";
+      url = mirror://cpan/authors/id/T/TO/TODDR/XML-Parser-2.44.tar.gz;
+      sha256 = "05ij0g6bfn27iaggxf8nl5rhlwx6f6p6xmdav6rjcly3x5zd1s8s";
     };
     patchPhase = stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
       substituteInPlace Expat/Makefile.PL --replace 'use English;' '#'
@@ -20482,7 +20615,7 @@ let
      };
      propagatedBuildInputs = [ XMLParser XMLSAX ];
      # Avoid creating perllocal.pod, which contains a timestamp
-     installTargets = "pure_install";
+     installTargets = [ "pure_install" ];
      meta = {
        description = "SAX Driver for Expat";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -20610,7 +20743,7 @@ let
     buildInputs = [ TestBase TestDeep TestYAML ];
 
     meta = {
-      homepage = https://github.com/ingydotnet/yaml-pm/tree;
+      homepage = "https://github.com/ingydotnet/yaml-pm";
       description = "YAML Ain't Markup Language (tm)";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };

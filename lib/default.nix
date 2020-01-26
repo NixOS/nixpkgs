@@ -37,10 +37,13 @@ let
     licenses = callLibs ./licenses.nix;
     systems = callLibs ./systems;
 
+    # serialization
+    cli = callLibs ./cli.nix;
+    generators = callLibs ./generators.nix;
+
     # misc
     asserts = callLibs ./asserts.nix;
     debug = callLibs ./debug.nix;
-    generators = callLibs ./generators.nix;
     misc = callLibs ./deprecated.nix;
 
     # domain-specific
@@ -100,9 +103,9 @@ let
     inherit (sources) pathType pathIsDirectory cleanSourceFilter
       cleanSource sourceByRegex sourceFilesBySuffices
       commitIdFromGitRepo cleanSourceWith pathHasContext
-      canCleanSource;
-    inherit (modules) evalModules closeModules unifyModuleSyntax
-      applyIfFunction unpackSubmodule packSubmodule mergeModules
+      canCleanSource pathIsRegularFile pathIsGitRepo;
+    inherit (modules) evalModules unifyModuleSyntax
+      applyIfFunction mergeModules
       mergeModules' mergeOptionDecls evalOptionValue mergeDefinitions
       pushDownProperties dischargeProperties filterOverrides
       sortProperties fixupOptionType mkIf mkAssert mkMerge mkOverride
@@ -110,7 +113,7 @@ let
       mkFixStrictness mkOrder mkBefore mkAfter mkAliasDefinitions
       mkAliasAndWrapDefinitions fixMergeModules mkRemovedOptionModule
       mkRenamedOptionModule mkMergedOptionModule mkChangedOptionModule
-      mkAliasOptionModule doRename filterModules;
+      mkAliasOptionModule doRename;
     inherit (options) isOption mkEnableOption mkSinkUndeclaredOptions
       mergeDefaultOption mergeOneOption mergeEqualOption getValues
       getFiles optionAttrSetToDocList optionAttrSetToDocList'

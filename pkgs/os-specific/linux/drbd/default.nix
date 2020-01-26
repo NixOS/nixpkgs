@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
       substituteInPlace scripts/drbd.rules --replace /usr/sbin/drbdadm $out/sbin/drbdadm
     '';
 
-  makeFlags = "SHELL=${stdenv.shell}";
+  makeFlags = [ "SHELL=${stdenv.shell}" ];
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
+  installFlags = [
+    "localstatedir=$(TMPDIR)/var"
+    "sysconfdir=$(out)/etc"
+    "INITDIR=$(out)/etc/init.d"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.drbd.org/;

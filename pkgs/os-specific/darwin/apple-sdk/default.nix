@@ -12,13 +12,12 @@ let
     #  3. ???
     #  4. Profit
     src = fetchurl {
-      url    = "http://swcdn.apple.com/content/downloads/28/09/091-29862/pafhn2u002b9slnrxzy9p86rpedycnjhb5/DevSDK_OSX1012.pkg";
-      sha256 = "1sggc70rypqwcjwr7ciavw8sczwll16cwqxdxrbw7r2qvy3b0nhx";
+      url    = "http://swcdn.apple.com/content/downloads/33/36/041-90419-A_7JJ4H9ZHO2/xs88ob5wjz6riz7g6764twblnvksusg4ps/DevSDK_OSX1012.pkg";
+      sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
     buildInputs = [ xar cpio python pbzx ];
 
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
@@ -52,7 +51,7 @@ let
   framework = name: deps: stdenv.mkDerivation {
     name = "apple-framework-${name}";
 
-    phases = [ "installPhase" "fixupPhase" ];
+    dontUnpack = true;
 
     # because we copy files from the system
     preferLocalBuild = true;
@@ -137,7 +136,7 @@ in rec {
   libs = {
     xpc = stdenv.mkDerivation {
       name   = "apple-lib-xpc";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include
@@ -150,7 +149,7 @@ in rec {
 
     Xplugin = stdenv.mkDerivation {
       name   = "apple-lib-Xplugin";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       # Not enough
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
@@ -168,7 +167,7 @@ in rec {
 
     utmp = stdenv.mkDerivation {
       name   = "apple-lib-utmp";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include

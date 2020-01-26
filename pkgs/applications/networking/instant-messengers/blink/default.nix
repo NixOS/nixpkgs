@@ -44,16 +44,18 @@ mkDerivationWith pythonPackages.buildPythonApplication rec {
 
   dontWrapQtApps = true;
 
-  makeWrapperArgs = [
-    "\${qtWrapperArgs[@]}"
-    "--prefix LD_LIBRARY_PATH: ${gnutls.out}/lib"
-  ];
-
   postInstall = ''
     mkdir -p "$out/share/applications"
     mkdir -p "$out/share/pixmaps"
     cp "$desktopItem"/share/applications/* "$out/share/applications"
     cp "$out"/share/blink/icons/blink.* "$out/share/pixmaps"
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      --prefix "LD_LIBRARY_PATH" ":" "${gnutls.out}/lib"
+      "''${qtWrapperArgs[@]}"
+    )
   '';
 
   meta = with stdenv.lib; {

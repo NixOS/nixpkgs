@@ -1,8 +1,24 @@
-{ buildPythonPackage, fetchPypi, stdenv
-, nose, pillow, prettytable, pyyaml, dateutil, gdata
-, requests, mechanize, feedparser, lxml, gnupg, pyqt5
-, libyaml, simplejson, cssselect, pdfminer
-, termcolor, google_api_python_client, html2text
+{ lib, buildPythonPackage, fetchPypi, isPy27
+, cssselect
+, dateutil
+, feedparser
+, futures
+, gdata
+, gnupg
+, google_api_python_client
+, html2text
+, libyaml
+, lxml
+, mechanize
+, nose
+, pdfminer
+, pillow
+, prettytable
+, pyqt5
+, pyyaml
+, requests
+, simplejson
+, termcolor
 , unidecode
 }:
 
@@ -34,10 +50,27 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pyqt5 ];
 
-  propagatedBuildInputs = [ pillow prettytable pyyaml dateutil
-    gdata requests mechanize feedparser lxml gnupg pyqt5 libyaml
-    simplejson cssselect pdfminer termcolor
-    google_api_python_client html2text unidecode ];
+  propagatedBuildInputs = [
+    cssselect
+    dateutil
+    feedparser
+    gdata
+    gnupg
+    google_api_python_client
+    html2text
+    libyaml
+    lxml
+    mechanize
+    pdfminer
+    pillow
+    prettytable
+    pyqt5
+    pyyaml
+    requests
+    simplejson
+    termcolor
+    unidecode
+  ] ++ lib.optionals isPy27 [ futures ];
 
   checkPhase = ''
     nosetests
@@ -46,6 +79,6 @@ buildPythonPackage rec {
   meta = {
     homepage = http://weboob.org;
     description = "Collection of applications and APIs to interact with websites without requiring the user to open a browser";
-    license = stdenv.lib.licenses.agpl3;
+    license = lib.licenses.agpl3;
   };
 }

@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = http://pysam.readthedocs.io/;
+    homepage = https://pysam.readthedocs.io/;
     description = "A python module for reading, manipulating and writing genome data sets";
     maintainers = with lib.maintainers; [ unode ];
     license = lib.licenses.mit;

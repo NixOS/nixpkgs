@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     description = "Gradle tab completion for bash and zsh";
     homepage = https://github.com/gradle/gradle-completion;
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

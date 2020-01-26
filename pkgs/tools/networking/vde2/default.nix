@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     }
   );
 
-  configureFlags = stdenv.lib.optional (!withPython) [ "--disable-python" ];
+  configureFlags = stdenv.lib.optional (!withPython) "--disable-python";
 
   buildInputs = [ openssl libpcap ]
     ++ stdenv.lib.optional withPython python2;

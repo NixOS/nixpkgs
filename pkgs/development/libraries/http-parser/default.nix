@@ -16,7 +16,7 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-Wno-error";
   patches = [ ./build-shared.patch ];
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
-  buildFlags = "library";
+  buildFlags = [ "library" ];
   doCheck = true;
   checkTarget = "test";
 

@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxml2";
-  version = "2.9.9";
+  version = "2.9.10";
 
   src = fetchurl {
     url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
-    sha256 = "0wd881jzvqayx0ihzba29jl80k06xj9ywp16kxacdqs3064p1ywl";
+    sha256 = "07xynh8hcxb2yb1fs051xrgszjvj37wnxvxgsj10rzmqzy9y3zma";
   };
   patches = [
     # Upstream bugs:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
-  propagatedBuildOutputs = "out bin" + lib.optionalString pythonSupport " py";
+  propagatedBuildOutputs = [ "out" "bin" ] ++ lib.optional pythonSupport "py";
 
   buildInputs = lib.optional pythonSupport python
     ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
@@ -53,13 +53,19 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # disable test that's problematic with newer pythons: see
+  # https://mail.gnome.org/archives/xml/2017-August/msg00014.html
+  preCheck = lib.optionalString (pythonSupport && !(python?pythonOlder && python.pythonOlder "3.5")) ''
+    echo "" > python/tests/tstLastError.py
+  '';
+
   doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
     stdenv.hostPlatform.libc != "musl";
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';
-  installFlags = lib.optionalString pythonSupport
-    ''pythondir="$(py)/lib/${python.libPrefix}/site-packages"'';
+  installFlags = lib.optional pythonSupport
+    "pythondir=\"${placeholder ''py''}/lib/${python.libPrefix}/site-packages\"";
 
   postFixup = ''
     moveToOutput bin/xml2-config "$dev"

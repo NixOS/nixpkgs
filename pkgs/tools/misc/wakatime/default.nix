@@ -3,13 +3,13 @@
 with python3Packages;
 buildPythonApplication rec {
   pname = "wakatime";
-  version = "13.0.1";
+  version = "13.0.3";
 
   src = fetchFromGitHub {
     owner = "wakatime";
     repo = "wakatime";
     rev = version;
-    sha256 = "1a188n763hg39s8wa20mb1bj6f3vs8h7knvm4ys7q8bhsib0pyrd";
+    sha256 = "16g23nm1x1a142rmnljdclq03c5anfzyiiazxaxyka8bggzhfmmc";
   };
 
   # needs more dependencies from https://github.com/wakatime/wakatime/blob/191b302bfb5f272ae928c6d3867d06f3dfcba4a8/dev-requirements.txt

@@ -1,7 +1,7 @@
 { stdenv, lib, perl, fetchurl, python2
 , pkgconfig, spidermonkey_38, boost, icu, libxml2, libpng, libsodium
 , libjpeg, zlib, curl, libogg, libvorbis, enet, miniupnpc
-, openal, libGLU_combined, xorgproto, libX11, libXcursor, nspr, SDL2
+, openal, libGLU, libGL, xorgproto, libX11, libXcursor, nspr, SDL2
 , gloox, nvidia-texture-tools
 , withEditor ? true, wxGTK ? null
 }:
@@ -22,11 +22,11 @@ stdenv.mkDerivation rec {
   buildInputs = [
     spidermonkey_38 boost icu libxml2 libpng libjpeg
     zlib curl libogg libvorbis enet miniupnpc openal
-    libGLU_combined xorgproto libX11 libXcursor nspr SDL2 gloox
+    libGLU libGL xorgproto libX11 libXcursor nspr SDL2 gloox
     nvidia-texture-tools libsodium
   ] ++ lib.optional withEditor wxGTK;
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-I${xorgproto}/include/X11"
     "-I${libX11.dev}/include/X11"
     "-I${libXcursor.dev}/include/X11"

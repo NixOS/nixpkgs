@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
-, libevent, readline, net_snmp, openssl
+, libevent, readline, net-snmp, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
-  buildInputs = [ libevent readline net_snmp openssl ];
+  buildInputs = [ libevent readline net-snmp openssl ];
 
   enableParallelBuilding = true;
 

@@ -6,7 +6,7 @@ buildcpath() {
     case $1 in
         -isystem)
             shift
-            path=$path${path':'}$1
+            path=$path${path:+':'}$1
     esac
     shift
   done

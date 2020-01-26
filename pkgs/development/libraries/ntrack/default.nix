@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig python ];
 
   # error: ISO C does not support '__FUNCTION__' predefined identifier [-Werror=pedantic]
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   configureFlags = [ "--without-gobject" "CFLAGS=--std=gnu99" ];
 

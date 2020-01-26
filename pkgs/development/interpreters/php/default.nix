@@ -4,7 +4,7 @@
 , openssl, pcre, pcre2, sqlite, config, libjpeg, libpng, freetype
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
-, libzip, valgrind
+, libzip, valgrind, oniguruma
 }:
 
 with lib;
@@ -78,6 +78,7 @@ let
       buildInputs = [ ]
         ++ optional (versionOlder version "7.3") pcre
         ++ optional (versionAtLeast version "7.3") pcre2
+        ++ optional (versionAtLeast version "7.4") oniguruma
         ++ optional withSystemd systemd
         ++ optionals imapSupport [ uwimap openssl pam ]
         ++ optionals curlSupport [ curl openssl ]
@@ -94,8 +95,8 @@ let
         ++ optional postgresqlSupport postgresql
         ++ optional pdo_odbcSupport unixODBC
         ++ optional pdo_pgsqlSupport postgresql
-        ++ optional pdo_mysqlSupport mysqlBuildInputs
-        ++ optional mysqliSupport mysqlBuildInputs
+        ++ optionals pdo_mysqlSupport mysqlBuildInputs
+        ++ optionals mysqliSupport mysqlBuildInputs
         ++ optional gmpSupport gmp
         ++ optional gettextSupport gettext
         ++ optional intlSupport icu
@@ -108,13 +109,14 @@ let
         ++ optional libzipSupport libzip
         ++ optional valgrindSupport valgrind;
 
-      CXXFLAGS = optional stdenv.cc.isClang "-std=c++11";
+      CXXFLAGS = optionalString stdenv.cc.isClang "-std=c++11";
 
       configureFlags = [
         "--with-config-file-scan-dir=/etc/php.d"
       ]
-      ++ optional (versionOlder version "7.3") "--with-pcre-regex=${pcre.dev} PCRE_LIBDIR=${pcre}"
-      ++ optional (versionAtLeast version "7.3") "--with-pcre-regex=${pcre2.dev} PCRE_LIBDIR=${pcre2}"
+      ++ optionals (versionOlder version "7.3") [ "--with-pcre-regex=${pcre.dev}" "PCRE_LIBDIR=${pcre}" ]
+      ++ optionals (versions.majorMinor version == "7.3") [ "--with-pcre-regex=${pcre2.dev}" "PCRE_LIBDIR=${pcre2}" ]
+      ++ optionals (versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" "PCRE_LIBDIR=${pcre2}" ]
       ++ optional stdenv.isDarwin "--with-iconv=${libiconv}"
       ++ optional withSystemd "--with-fpm-systemd"
       ++ optionals imapSupport [
@@ -127,16 +129,17 @@ let
         "LDAP_INCDIR=${openldap.dev}/include"
         "LDAP_LIBDIR=${openldap.out}/lib"
       ]
-      ++ optional (ldapSupport && stdenv.isLinux)   "--with-ldap-sasl=${cyrus_sasl.dev}"
+      ++ optional (ldapSupport && stdenv.isLinux) "--with-ldap-sasl=${cyrus_sasl.dev}"
       ++ optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
       ++ optional embedSupport "--enable-embed"
       ++ optional mhashSupport "--with-mhash"
       ++ optional curlSupport "--with-curl=${curl.dev}"
       ++ optional zlibSupport "--with-zlib=${zlib.dev}"
-      ++ optional libxml2Support "--with-libxml-dir=${libxml2.dev}"
+      ++ optional (libxml2Support && (versionOlder version "7.4")) "--with-libxml-dir=${libxml2.dev}"
       ++ optional (!libxml2Support) [
         "--disable-dom"
         "--disable-libxml"
+        (if (versionOlder version "7.4") then "--disable-libxml" else "--without-libxml")
         "--disable-simplexml"
         "--disable-xml"
         "--disable-xmlreader"
@@ -156,7 +159,12 @@ let
       ++ optional ( pdo_mysqlSupport || mysqliSupport ) "--with-mysql-sock=/run/mysqld/mysqld.sock"
       ++ optional bcmathSupport "--enable-bcmath"
       # FIXME: Our own gd package doesn't work, see https://bugs.php.net/bug.php?id=60108.
-      ++ optionals gdSupport [
+      ++ optionals (gdSupport && versionAtLeast version "7.4") [
+        "--enable-gd"
+        "--with-jpeg=${libjpeg.dev}"
+        "--with-freetype=${freetype.dev}"
+        "--enable-gd-jis-conv"
+      ] ++ optionals (gdSupport && versionOlder version "7.4") [
         "--with-gd"
         "--with-freetype-dir=${freetype.dev}"
         "--with-png-dir=${libpng.dev}"
@@ -173,7 +181,8 @@ let
       ++ optional xslSupport "--with-xsl=${libxslt.dev}"
       ++ optional mcryptSupport "--with-mcrypt=${libmcrypt'}"
       ++ optional bz2Support "--with-bz2=${bzip2.dev}"
-      ++ optional zipSupport "--enable-zip"
+      ++ optional (zipSupport && (versionOlder version "7.4")) "--enable-zip"
+      ++ optional (zipSupport && (versionAtLeast version "7.4")) "--with-zip"
       ++ optional ftpSupport "--enable-ftp"
       ++ optional fpmSupport "--enable-fpm"
       ++ optional ztsSupport "--enable-maintainer-zts"
@@ -181,7 +190,7 @@ let
       ++ optional sodiumSupport "--with-sodium=${libsodium.dev}"
       ++ optional tidySupport "--with-tidy=${html-tidy}"
       ++ optional argon2Support "--with-password-argon2=${libargon2}"
-      ++ optional libzipSupport "--with-libzip=${libzip.dev}"
+      ++ optional (libzipSupport && (versionOlder version "7.4")) "--with-libzip=${libzip.dev}"
       ++ optional phpdbgSupport "--enable-phpdbg"
       ++ optional (!phpdbgSupport) "--disable-phpdbg"
       ++ optional (!cgiSupport) "--disable-cgi"
@@ -254,18 +263,23 @@ let
 
 in {
   php72 = generic {
-    version = "7.2.24";
-    sha256 = "00znhjcn6k4mbxz6jqlqf6bzr4cqdf8pnbmxkg6bns1hnr6r6yd0";
+    version = "7.2.26";
+    sha256 = "0yw49v3rk3cd0fb4gsli74pgd4qrykhn9c37dyfr3zsprzp8cvgk";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
   php73 = generic {
-    version = "7.3.11";
-    sha256 = "1rxm256vhnvyabfwmyv51sqrkjlid1g8lczcy4skc2f72d5zzlcj";
+    version = "7.3.13";
+    sha256 = "1g376b9caw21mw8738z354llbzb3shzgc60m7naw7wql5038jysw";
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
+  };
+
+  php74 = generic {
+    version = "7.4.1";
+    sha256 = "0klfwhm2935ariwzqdri1fwh4a0vbrk3jis53qzi18isp3qa073b";
   };
 }

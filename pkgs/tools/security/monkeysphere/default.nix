@@ -36,10 +36,10 @@ in stdenv.mkDerivation rec {
       ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
-  makeFlags = ''
-    PREFIX=/
-    DESTDIR=$(out)
-  '';
+  makeFlags = [
+    "PREFIX=/"
+    "DESTDIR=$(out)"
+  ];
 
   # The tests should be run (and succeed) when making changes to this package
   # but they aren't enabled by default because they "drain" entropy (GnuPG

@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.5.1";
+  version = "1.5.2";
   pname = "maxminddb";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0y9giw81k4wdmpryr4k42w50z292mf364a6vs1vxf83ksc9ig6j4";
+    sha256 = "d0ce131d901eb11669996b49a59f410efd3da2c6dbe2c0094fe2fef8d85b6336";
   };
 
   propagatedBuildInputs = [ ipaddress ];

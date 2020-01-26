@@ -3,6 +3,7 @@
 , karchive, kconfig, kconfigwidgets, kio, frameworkintegration
 , kguiaddons, ki18n, kwindowsystem, kdelibs4support, kiconthemes
 , libpthreadstubs, pcre, libXdmcp, libX11, libXau # X11 dependencies
+, fetchpatch
 }:
 
 let
@@ -14,6 +15,13 @@ in mkDerivation {
     url = "https://download.kde.org/stable/qtcurve/qtcurve-${version}.tar.xz";
     sha256 = "169gdny1cdld0qnx3nqvx568zjzdba4pwp3gxapc1hdh2cymw7r8";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/KDE/qtcurve/commit/ee2228ea2f18ac5da9b434ee6089381df815aa94.patch";
+      sha256 = "1vz5frsrsps93awn84gk8d7injrqfcyhc1rji6s0gsgsp5z9sl34";
+    })
+  ];
 
   enableParallelBuilding = true;
 

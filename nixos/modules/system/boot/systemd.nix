@@ -240,7 +240,7 @@ let
   serviceConfig = { name, config, ... }: {
     config = mkMerge
       [ { # Default path for systemd services.  Should be quite minimal.
-          path =
+          path = mkAfter
             [ pkgs.coreutils
               pkgs.findutils
               pkgs.gnugrep
@@ -408,7 +408,6 @@ let
 in
 
 {
-
   ###### interface
 
   options = {
@@ -1006,5 +1005,7 @@ in
     [ (mkRenamedOptionModule [ "boot" "systemd" "sockets" ] [ "systemd" "sockets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "targets" ] [ "systemd" "targets" ])
       (mkRenamedOptionModule [ "boot" "systemd" "services" ] [ "systemd" "services" ])
+      (mkRenamedOptionModule [ "jobs" ] [ "systemd" "services" ])
+      (mkRemovedOptionModule [ "systemd" "generator-packages" ] "Use systemd.packages instead.")
     ];
 }

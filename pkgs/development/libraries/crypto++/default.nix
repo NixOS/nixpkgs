@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   preInstall = "rm libcryptopp.a"; # built for checks but we don't install static lib into the nix store
-  installTargets = "install-lib";
+  installTargets = [ "install-lib" ];
   installFlags = [ "LDCONF=true" ];
   postInstall = optionalString (!stdenv.hostPlatform.isDarwin) ''
     ln -sr $out/lib/libcryptopp.so.${version} $out/lib/libcryptopp.so.${versions.majorMinor version}

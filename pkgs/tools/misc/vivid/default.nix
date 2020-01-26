@@ -2,20 +2,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vivid";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "13x0295v5blvv8dxhimbdjh81l7xl0vm6zni3qjd85psfn61371q";
+    sha256 = "00xxk1ipr3hndd717q52j7s2wfxis1p4glaa9lvp72gwwzmv5k9w";
   };
 
   postPatch = ''
     substituteInPlace src/main.rs --replace /usr/share $out/share
   '';
 
-  cargoSha256 = "125392a7x0h9jgcqc4wcaky0494xmr82iacxwl883kf0g227rv2y";
+  cargoSha256 = "04xx26ngz7hx7bv5g01q9h6dqa96xkx0xm3jb0qk6c3hp6500zpn";
 
   postInstall = ''
     mkdir -p $out/share/${pname}

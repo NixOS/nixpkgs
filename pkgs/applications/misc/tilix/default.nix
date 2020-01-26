@@ -6,7 +6,7 @@
 , python3
 , pkgconfig
 , dmd
-, gnome3
+, dconf
 , dbus
 , gsettings-desktop-schemas
 , desktop-file-utils
@@ -47,7 +47,7 @@ stdenv.mkDerivation {
   buildInputs = [
     dbus
     gettext
-    gnome3.dconf
+    dconf
     gsettings-desktop-schemas
     gtkd
     libsecret

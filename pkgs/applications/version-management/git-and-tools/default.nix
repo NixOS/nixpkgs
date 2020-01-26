@@ -46,7 +46,7 @@ let
   gitFull = gitBase.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = !stdenv.isDarwin;
+    sendEmailSupport = true;
     withLibsecret = !stdenv.isDarwin;
   };
 
@@ -173,6 +173,8 @@ let
   };
 
   svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
+
+  thicket = callPackage ./thicket { };
 
   tig = callPackage ./tig { };
 

@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--enable-audio=oss,alsa,jack" "--enable-alsaseq" "--with-default-output=alsa" "--enable-ncurses" ];
 
-  NIX_LDFLAGS = ["-ljack -L${libjack2}/lib"];
+  NIX_LDFLAGS = "-ljack -L${libjack2}/lib";
 
   instruments = fetchurl {
     url = http://www.csee.umbc.edu/pub/midia/instruments.tar.gz;

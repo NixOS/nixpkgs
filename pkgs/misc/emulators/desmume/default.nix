@@ -5,7 +5,7 @@
 , tinyxml
 , agg, alsaLib, soundtouch, openal
 , desktop-file-utils
-, gtk2, gtkglext, libglade, pangox_compat
+, gtk2, gtkglext, libglade
 , libGLU, libpcap, SDL, zziplib }:
 
 with stdenv.lib;
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop-file-utils gtk2 gtkglext libglade pangox_compat
+    openal desktop-file-utils gtk2 gtkglext libglade
     libGLU libpcap SDL zziplib tinyxml ];
 
   configureFlags = [

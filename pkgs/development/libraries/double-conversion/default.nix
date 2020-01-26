@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Binary-decimal and decimal-binary routines for IEEE doubles";
-    homepage = https://github.com/google/double-conversion;
+    homepage = "https://github.com/google/double-conversion";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ abbradar ];

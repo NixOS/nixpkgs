@@ -266,28 +266,18 @@ cyrussasl = buildLuarocksPackage {
 };
 digestif = buildLuarocksPackage {
   pname = "digestif";
-  version = "scm-1";
+  version = "0.2-1";
 
-  knownRockspec = (fetchurl {
-    url    = http://luarocks.org/dev/digestif-scm-1.rockspec;
-    sha256 = "18rixbni4hmrmh3qj3vpjbsphzdvchswajphc9ysm52ccpyzh687";
-  }).outPath;
-
-  src = fetchgit ( removeAttrs (builtins.fromJSON ''{
-  "url": "git://github.com/astoff/digestif",
-  "rev": "51c321f1b68b77f648fa6adf356de48925f69fe0",
-  "date": "2019-06-08T15:03:33+02:00",
-  "sha256": "1c9cl81vfzirc325wipdy992yn20b8xv8nqzl5mdhyz8zfp84hs7",
-  "fetchSubmodules": true
-}
- '') ["date"]) ;
-
+  src = fetchurl {
+    url    = mirror://luarocks/digestif-0.2-1.src.rock;
+    sha256 = "03blpj5lxlhmxa4hnj21sz7sc84g96igbc7r97yb2smmlbyq8hxd";
+  };
   disabled = (luaOlder "5.3");
   propagatedBuildInputs = [ lua lpeg dkjson ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/astoff/digestif/";
-    description = "Code analyzer for TeX.";
+    description = "A code analyzer for TeX";
     license = {
       fullName = "MIT";
     };
@@ -407,6 +397,31 @@ lgi = buildLuarocksPackage {
   meta = with stdenv.lib; {
     homepage = "https://github.com/pavouk/lgi";
     description = "Lua bindings to GObject libraries";
+    license = {
+      fullName = "MIT/X11";
+    };
+  };
+};
+linenoise = buildLuarocksPackage {
+  pname = "linenoise";
+  version = "0.9-1";
+
+  knownRockspec = (fetchurl {
+    url    = mirror://luarocks/linenoise-0.9-1.rockspec;
+    sha256 = "0wic8g0d066pj9k51farsvcdbnhry2hphvng68w9k4lh0zh45yg4";
+  }).outPath;
+
+  src = fetchurl {
+    url    = https://github.com/hoelzro/lua-linenoise/archive/0.9.tar.gz;
+    sha256 = "177h6gbq89arwiwxah9943i8hl5gvd9wivnd1nhmdl7d8x0dn76c";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/hoelzro/lua-linenoise";
+    description = "A binding for the linenoise command line library";
     license = {
       fullName = "MIT/X11";
     };
@@ -918,9 +933,24 @@ luadoc = buildLuarocksPackage {
   meta = with stdenv.lib; {
     homepage = "http://luadoc.luaforge.net/";
     description = "LuaDoc is a documentation tool for Lua source code";
-    license = {
-      fullName = "MIT/X11";
-    };
+    license.fullName = "MIT/X11";
+  };
+};
+luaepnf = buildLuarocksPackage {
+  pname = "luaepnf";
+  version = "0.3-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/luaepnf-0.3-1.src.rock;
+    sha256 = "12z7radxk1dkyjqflr85sghywgc82xdg4mzb9mbwbrrqbnjw8mp5";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.4");
+  propagatedBuildInputs = [ lua lpeg ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://siffiejoe.github.io/lua-luaepnf/";
+    description = "Extended PEG Notation Format (easy grammars for LPeg)";
+    license.fullName = "MIT";
   };
 };
 luaevent = buildLuarocksPackage {
@@ -1053,9 +1083,30 @@ luaposix = buildLuarocksPackage {
     homepage = "https://github.com/luaposix/luaposix/";
     description = "Lua bindings for POSIX";
     maintainers = with maintainers; [ vyp lblasc ];
-    license = {
-      fullName = "MIT/X11";
-    };
+    license.fullName = "MIT/X11";
+  };
+};
+luarepl = buildLuarocksPackage {
+  pname = "luarepl";
+  version = "0.9-1";
+
+  knownRockspec = (fetchurl {
+    url    = mirror://luarocks/luarepl-0.9-1.rockspec;
+    sha256 = "1409lanxv4s8kq5rrh46dvld77ip33qzfn3vac3i9zpzbmgb5i8z";
+  }).outPath;
+
+  src = fetchurl {
+    url    = https://github.com/hoelzro/lua-repl/archive/0.9.tar.gz;
+    sha256 = "04xka7b84d9mrz3gyf8ywhw08xp65v8jrnzs8ry8k9540aqs721w";
+  };
+
+  disabled = (luaOlder "5.1");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/hoelzro/lua-repl";
+    description = "A reusable REPL component for Lua, written in Lua";
+    license.fullName = "MIT/X11";
   };
 };
 luasec = buildLuarocksPackage {
@@ -1485,9 +1536,23 @@ stdlib = buildLuarocksPackage {
     homepage = "http://lua-stdlib.github.io/lua-stdlib";
     description = "General Lua Libraries";
     maintainers = with maintainers; [ vyp ];
-    license = {
-      fullName = "MIT/X11";
-    };
+    license.fullName = "MIT/X11";
+  };
+};
+vstruct = buildLuarocksPackage {
+  pname = "vstruct";
+  version = "2.0.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/vstruct-2.0.2-1.src.rock;
+    sha256 = "05k1685618wh7vg8av92mh1i1rjqg15x12gifbp9kyqzc2nk3kzq";
+  };
+  disabled = (luaOlder "5.1") || (luaAtLeast "5.3");
+  propagatedBuildInputs = [ lua ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/ToxicFrog/vstruct";
+    description = "Lua library to manipulate binary data";
   };
 };
 

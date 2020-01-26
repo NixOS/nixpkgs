@@ -363,6 +363,7 @@ let
       SECURITY_APPARMOR                = yes;
       DEFAULT_SECURITY_APPARMOR        = yes;
 
+      SECURITY_LOCKDOWN_LSM            = whenAtLeast "5.4" yes;
     } // optionalAttrs (!stdenv.hostPlatform.isAarch32) {
 
       # Detect buffer overflows on the stack
@@ -716,6 +717,9 @@ let
 
       # Enable AMD's ROCm GPU compute stack
       HSA_AMD = whenAtLeast "4.20" yes;
+      ZONE_DEVICE = whenAtLeast "5.3" yes;
+      HMM_MIRROR = whenAtLeast "5.3" yes;
+      DRM_AMDGPU_USERPTR = whenAtLeast "5.3" yes;
 
       PREEMPT = no;
       PREEMPT_VOLUNTARY = yes;

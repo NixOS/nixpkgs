@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tlf";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "${pname}-${version}";
-    sha256 = "0gniysjm8aq5anq0a0az31vd6h1vyg56bifc7rpf53lsh9hkzmgc";
+    sha256 = "0f97hxiwc6blp5haik871q6zzvwy0b3p2jg8ad2dvaxg07xc76l0";
   };
 
   nativeBuildInputs = [ autoreconfHook autoconf automake pkgconfig perl ];

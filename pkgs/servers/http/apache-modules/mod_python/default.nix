@@ -16,8 +16,9 @@ stdenv.mkDerivation rec {
         --replace '-$GIT' ""
   '';
 
+  installFlags = [ "LIBEXECDIR=${placeholder "out"}/modules" ];
+
   preInstall = ''
-    installFlags="LIBEXECDIR=$out/modules $installFlags"
     mkdir -p $out/modules $out/bin
   '';
 

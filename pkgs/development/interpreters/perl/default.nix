@@ -91,7 +91,12 @@ let
       ]
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
-      ++ optional enableThreading "-Dusethreads";
+      ++ optional enableThreading "-Dusethreads"
+      ++ optionals (!crossCompiling) [
+        "-Dprefix=${placeholder "out"}"
+        "-Dman1dir=${placeholder "out"}/share/man/man1"
+        "-Dman3dir=${placeholder "out"}/share/man/man3"
+      ];
 
     configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
@@ -102,10 +107,6 @@ let
     preConfigure = ''
         substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
         substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
-      '' + optionalString (!crossCompiling) ''
-        configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-      '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
-        configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
@@ -144,7 +145,7 @@ let
         substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
           --replace "${libcInc}" /no-such-path \
           --replace "${
-              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+              if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
@@ -181,11 +182,11 @@ let
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
   } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "980998f7d11baf97284426ca91f84681d49a08f5"; # Jul 20, 2019
+    crossVersion = "ba90816ef2c24dc06fd6cd2c854abcfa1aae00a3"; # Nov 22, 2019
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1hg3k2rhjs5gclrm05z87nvlh4j9pg7mkm9998h9gy6mzk8224q5";
+      sha256 = "19jq5fz6l64s0v6j64n5mkk5v2srpyfn9sc09hwbpkp9n74q82j4";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -213,15 +214,15 @@ in {
   perl530 = common {
     perl = pkgs.perl530;
     buildPerl = buildPackages.perl530;
-    version = "5.30.0";
-    sha256 = "1wkmz6xn3fswpqhz29akiklcxclnlykhp96a8bqcz36rak3i64l5";
+    version = "5.30.1";
+    sha256 = "0r7r8a7pkgxp3w5lza559ahxczw6hzpwvhkpc4c99vpi3xbjagdz";
   };
 
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.31.2";
-    sha256 = "00bdh9lmjb0m7dhk8mj7kab7cg2zn9zgw82y4hgkwydzg6d1jis0";
+    version = "5.31.6";
+    sha256 = "08n3c8xm1brxpckqy8i1xgjrpl4afrhcva9bhxswr938n675x71k";
   };
 }

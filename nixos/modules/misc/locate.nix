@@ -7,6 +7,11 @@ let
   isMLocate = hasPrefix "mlocate" cfg.locate.name;
   isFindutils = hasPrefix "findutils" cfg.locate.name;
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "locate" "period" ] [ "services" "locate" "interval" ])
+    (mkRemovedOptionModule [ "services" "locate" "includeStore" ] "Use services.locate.prunePaths" )
+  ];
+
   options.services.locate = with types; {
     enable = mkOption {
       type = bool;

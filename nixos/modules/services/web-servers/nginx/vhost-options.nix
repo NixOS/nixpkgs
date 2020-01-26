@@ -207,6 +207,7 @@ with lib;
       default = null;
       description = ''
         Basic Auth password file for a vhost.
+        Can be created via: <command>htpasswd -c &lt;filename&gt; &lt;username&gt;</command>
       '';
     };
 

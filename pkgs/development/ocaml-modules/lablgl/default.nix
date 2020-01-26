@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU_combined, freeglut, camlp4 } :
+{stdenv, fetchurl, ocaml, lablgtk, findlib, libGLU, libGL, freeglut, camlp4 } :
 
 let
   pname = "lablgl";
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ocaml findlib lablgtk freeglut camlp4];
-  propagatedBuildInputs = [ libGLU_combined ];
+  propagatedBuildInputs = [ libGLU libGL ];
 
   patches = [ ./Makefile.config.patch ./META.patch ];
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildFlags = "lib libopt glut glutopt";
+  buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
 
   postInstall = ''
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl

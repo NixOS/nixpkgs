@@ -35,7 +35,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   caribou = callPackage ./core/caribou { };
 
-  dconf = callPackage ./core/dconf { };
   dconf-editor = callPackage ./core/dconf-editor { };
 
   empathy = callPackage ./core/empathy { };
@@ -136,10 +135,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   };
 
   networkmanager-iodine = pkgs.networkmanager-iodine.override {
-    withGnome = true;
-  };
-
-  networkmanagerapplet = pkgs.networkmanagerapplet.override {
     withGnome = true;
   };
 
@@ -359,4 +354,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) gjs; # added 2019-01-05
 
   inherit (pkgs) yelp-tools; # added 2019-11-20
+
+  inherit (pkgs) dconf; # added 2019-11-30
+
+  inherit (pkgs) networkmanagerapplet; # added 2019-12-12
 })

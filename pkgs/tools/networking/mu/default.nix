@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, sqlite, pkgconfig, autoreconfHook, pmccabe
 , xapian, glib, gmime3, texinfo , emacs, guile
-, gtk3, webkitgtk24x-gtk3, libsoup, icu
+, gtk3, webkitgtk, libsoup, icu
 , withMug ? false }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     sqlite xapian glib gmime3 texinfo emacs guile libsoup icu
-  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk24x-gtk3 ];
+  ] ++ stdenv.lib.optionals withMug [ gtk3 webkitgtk ];
 
   nativeBuildInputs = [ pkgconfig autoreconfHook pmccabe ];
 
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
     # We install msg2pdf to bin/msg2pdf, fix its location in elisp
     substituteInPlace mu4e/mu4e-actions.el \
-      --replace "/toys/msg2pdf/msg2pdf" "/bin/msg2pdf"
+      --replace "/toys/msg2pdf/" "/bin/"
   '';
 
   # Install mug and msg2pdf

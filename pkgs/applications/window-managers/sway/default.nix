@@ -3,18 +3,18 @@
 , pkgconfig, scdoc
 , wayland, libxkbcommon, pcre, json_c, dbus, libevdev
 , pango, cairo, libinput, libcap, pam, gdk-pixbuf
-, wlroots, wayland-protocols, swaybg
+, wlroots, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
-  pname = "sway";
-  version = "1.2";
+  pname = "sway-unwrapped";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "0vch2zm5afc76ia78p3vg71zr2fyda67l9hd2h0x1jq3mnvfbxnd";
+    sha256 = "11qf89y3q92g696a6f4d23qb44gqixg6qxq740vwv2jw59ms34ja";
   };
 
   patches = [
@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
     ./load-configuration-from-etc.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja scdoc makeWrapper ];
+  nativeBuildInputs = [
+    pkgconfig meson ninja scdoc
+  ];
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
@@ -37,15 +39,11 @@ stdenv.mkDerivation rec {
     "-Dtray=enabled" "-Dman-pages=enabled"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/sway --prefix PATH : "${swaybg}/bin"
-  '';
-
   meta = with stdenv.lib; {
     description = "i3-compatible tiling Wayland compositor";
     homepage    = https://swaywm.org;
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

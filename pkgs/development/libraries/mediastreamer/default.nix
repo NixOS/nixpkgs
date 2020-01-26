@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, intltool, alsaLib, libpulseaudio, speex, gsm
-, libopus, ffmpeg, libX11, libXv, libGLU_combined, glew, libtheora, libvpx, SDL, libupnp
+, libopus, ffmpeg, libX11, libXv, libGLU, libGL, glew, libtheora, libvpx, SDL, libupnp
 , ortp, libv4l, libpcap, srtp, fetchFromGitHub, cmake, bctoolbox, doxygen
 , python, libXext, libmatroska, fetchpatch
 }:
@@ -28,14 +28,16 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [
     alsaLib libpulseaudio speex gsm libopus
-    ffmpeg libX11 libXv libGLU_combined glew libtheora libvpx SDL libupnp
+    ffmpeg libX11 libXv libGLU libGL glew libtheora libvpx SDL libupnp
     ortp libv4l libpcap srtp bctoolbox libXext libmatroska
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DGIT_VERSION=\"v${version}\""
     "-Wno-error=deprecated-declarations"
     "-Wno-error=cast-function-type"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=stringop-overflow"
   ];
   NIX_LDFLAGS = "-lXext";
 

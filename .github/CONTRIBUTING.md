@@ -6,9 +6,8 @@ under the terms of [COPYING](../COPYING), which is an MIT-like license.
 ## Opening issues
 
 * Make sure you have a [GitHub account](https://github.com/signup/free)
-* [Submit an issue](https://github.com/NixOS/nixpkgs/issues) - assuming one does not already exist.
-  * Clearly describe the issue including steps to reproduce when it is a bug.
-  * Include information what version of nixpkgs and Nix are you using (nixos-version or git revision).
+* Make sure there is no open issue on the topic
+* [Submit a new issue](https://github.com/NixOS/nixpkgs/issues/new/choose) by choosing the kind of topic and fill out the template
 
 ## Submitting changes
 
@@ -48,6 +47,15 @@ See the nixpkgs manual for more details on [standard meta-attributes](https://ni
 In addition to writing properly formatted commit messages, it's important to include relevant information so other developers can later understand *why* a change was made. While this information usually can be found by digging code, mailing list/Discourse archives, pull request discussions or upstream changes, it may require a lot of work.
 
 For package version upgrades and such a one-line commit message is usually sufficient.
+
+## Backporting changes
+
+To [backport a change into a release branch](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches):
+
+1. Take note of the commit in which the change was introduced into `master`.
+2. Check out the target _release branch_, e.g. `release-19.09`. Do not use a _channel branch_ like `nixos-19.09` or `nixpkgs-19.09`.
+3. Use `git cherry-pick -x <original commit>`.
+4. Open your backport PR. Make sure to select the release branch (e.g. `release-19.09`) as the target branch of the PR, and link to the PR in which the original change was made to `master`.
 
 ## Reviewing contributions
 

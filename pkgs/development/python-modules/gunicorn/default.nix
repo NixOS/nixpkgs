@@ -1,14 +1,22 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, mock, pytestcov, coverage }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, coverage
+, mock
+, pytest
+, pytestcov
+, setuptools
+}:
 
 buildPythonPackage rec {
   pname = "gunicorn";
-  version = "19.9.0";
+  version = "20.0.4";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fa2662097c66f920f53f70621c6c58ca4a3c4d3434205e608e121b5b3b71f4f3";
+    sha256 = "1904bb2b8a43658807108d59c3f3d56c2b6121a701161de0ddf9ad140073c626";
   };
+
+  propagatedBuildInputs = [ setuptools ];
 
   checkInputs = [ pytest mock pytestcov coverage ];
 
@@ -17,9 +25,12 @@ buildPythonPackage rec {
       --replace "coverage>=4.0,<4.4" "coverage"
   '';
 
-  # Test failures but patch does not apply cleanly
-  # https://github.com/benoitc/gunicorn/commit/f38f717539b1b7296720805b8ae3969c3509b9c1
-  doCheck = false;
+  # better than no tests
+  checkPhase = ''
+    $out/bin/gunicorn --help > /dev/null
+  '';
+
+  pythonImportsCheck = [ "gunicorn" ];
 
   meta = with stdenv.lib; {
     homepage = https://pypi.python.org/pypi/gunicorn;

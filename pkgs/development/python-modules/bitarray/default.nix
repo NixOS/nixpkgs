@@ -1,12 +1,12 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "1.0.1";
+  version = "1.2.1";
   pname = "bitarray";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3eb500f8b9cde19e14472fcbee0195dbf0fbac006f8406a03f0cfb495dff20a0";
+    sha256 = "1kxrlxfj9nrx512sfwifwl9z4v6ky3qschl0zmk3s3dvc3s7bmif";
   };
 
   meta = with lib; {

@@ -1,12 +1,12 @@
 { theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
 cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio
+at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio, xdg_utils
 }:
 
 let
 
-  version = "4.1.2";
+  version = "4.2.0";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
@@ -53,7 +53,7 @@ let
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "https://downloads.slack-edge.com/linux_releases/slack-desktop-${version}-amd64.deb";
-        sha256 = "0a1b2k81hm1lfrdb47gmd07jqb7hva9sxsiph7b3iwzpzw8pjrkh";
+        sha256 = "01b2klhky04fijdqcpfafgdqx2c5nh2fpnzvzgvz10hv7h16cinv";
       }
     else
       throw "Slack is not supported on ${stdenv.hostPlatform.system}";
@@ -93,7 +93,8 @@ in stdenv.mkDerivation {
     # Replace the broken bin/slack symlink with a startup wrapper
     rm $out/bin/slack
     makeWrapper $out/lib/slack/slack $out/bin/slack \
-      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+      --prefix PATH : ${xdg_utils}/bin
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \

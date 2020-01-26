@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cmake libpfm zlib python2Packages.python python2Packages.pexpect which procps gdb capnproto
   ];
+  propagatedBuildInputs = [ gdb ]; # needs GDB to replay programs at runtime
   cmakeFlags = [
     "-DCMAKE_C_FLAGS_RELEASE:STRING="
     "-DCMAKE_CXX_FLAGS_RELEASE:STRING="

@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , python3Packages
 , bashInteractive
@@ -6,6 +7,7 @@
 
 stdenv.mkDerivation rec {
   pname = "bash-completion";
+  # TODO: Remove musl patch below upon next release!
   version = "2.9";
 
   src = fetchFromGitHub {
@@ -26,6 +28,14 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./0001-Revert-build-Do-cmake-pc-and-profile-variable-replac.patch
+    # TODO: Remove when https://github.com/scop/bash-completion/commit/2cdac1b9f24df62a1fa80c1824ee8524c9b02393
+    #       is availabe in a release in nixpkgs. see https://github.com/scop/bash-completion/issues/312.
+    # Fixes a test failure with musl.
+    (fetchpatch {
+     url = "https://github.com/scop/bash-completion/commit/2cdac1b9f24df62a1fa80c1824ee8524c9b02393.patch";
+     name = "bash-completion-musl-test_iconv-skip-option-completion-if-help-fails";
+     sha256 = "1l53d62zf01k625nzw3vcrxky93h7bzdpchgk4argxalrn17ckvb";
+    })
   ];
 
   # ignore ip_addresses because it tries to touch network

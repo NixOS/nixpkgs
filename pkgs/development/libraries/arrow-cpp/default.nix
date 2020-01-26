@@ -1,6 +1,7 @@
-{ stdenv, fetchurl, fetchFromGitHub, fixDarwinDylibNames, autoconf, boost
+{ stdenv, lib, fetchurl, fetchFromGitHub, fixDarwinDylibNames, autoconf, boost
 , brotli, cmake, double-conversion, flatbuffers, gflags, glog, gtest, lz4, perl
-, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd }:
+, python, rapidjson, snappy, thrift, uriparser, which, zlib, zstd
+, enableShared ? true }:
 
 let
   parquet-testing = fetchFromGitHub {
@@ -34,13 +35,16 @@ in stdenv.mkDerivation rec {
   patches = [
     # patch to fix python-test
     ./darwin.patch
+  ] ++ lib.optionals (!enableShared) [
+    # The shared jemalloc lib is unused and breaks in static mode due to missing -fpic.
+    ./jemalloc-disable-shared.patch
   ];
 
   nativeBuildInputs = [
     cmake
     autoconf # for vendored jemalloc
     flatbuffers
-  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
   buildInputs = [
     boost
     brotli
@@ -71,21 +75,26 @@ in stdenv.mkDerivation rec {
     "-DARROW_DEPENDENCY_SOURCE=SYSTEM"
     "-DARROW_PARQUET=ON"
     "-DARROW_PLASMA=ON"
-    "-DARROW_PYTHON=ON"
+    # Disable Python for static mode because openblas is currently broken there.
+    "-DARROW_PYTHON=${if enableShared then "ON" else "OFF"}"
     "-Duriparser_SOURCE=SYSTEM"
-  ] ++ stdenv.lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
+  ] ++ lib.optionals (!enableShared) [
+    "-DARROW_BUILD_SHARED=OFF"
+    "-DARROW_TEST_LINKAGE=static"
+    "-DOPENSSL_USE_STATIC_LIBS=ON"
+  ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];
-  installCheckPhase = (stdenv.lib.optionalString stdenv.isDarwin ''
+  installCheckPhase = (lib.optionalString stdenv.isDarwin ''
     for f in release/*test{,s}; do
       install_name_tool -add_rpath "$out"/lib  "$f"
     done
   '')
   + (let
-    excludedTests = stdenv.lib.optionals stdenv.isDarwin [
+    excludedTests = lib.optionals stdenv.isDarwin [
       # Some plasma tests need to be patched to use a shorter AF_UNIX socket
       # path on Darwin. See https://github.com/NixOS/nix/pull/1085
       "plasma-external-store-tests"
@@ -99,8 +108,8 @@ in stdenv.mkDerivation rec {
   meta = {
     description = "A  cross-language development platform for in-memory data";
     homepage = "https://arrow.apache.org/";
-    license = stdenv.lib.licenses.asl20;
-    platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ tobim veprbl ];
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ tobim veprbl ];
   };
 }

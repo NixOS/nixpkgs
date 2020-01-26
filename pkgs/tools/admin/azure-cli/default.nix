@@ -1,16 +1,16 @@
-{ lib, python, fetchFromGitHub, installShellFiles }:
+{ stdenv, lib, python, fetchFromGitHub, installShellFiles }:
 
 let
-  version = "2.0.76";
+  version = "2.0.80";
   src = fetchFromGitHub {
     owner = "Azure";
     repo = "azure-cli";
     rev = "azure-cli-${version}";
-    sha256 = "0zfy8nhw4nx0idh94qidr06vsfxgdk2ky0ih76s27121pdwr05aa";
+    sha256 = "05j74cfxjpi3w79w0i5av3h2m81bavbsc581vvh773ixivndds1k";
   };
 
   # put packages that needs to be overriden in the py package scope
-  py = import ./python-packages.nix { inherit python lib src version; };
+  py = import ./python-packages.nix { inherit stdenv python lib src version; };
 in
 py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
   pname = "azure-cli";
@@ -45,6 +45,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     azure-functions-devops-build
     azure-graphrbac
     azure-keyvault
+    azure-loganalytics
     azure-mgmt-advisor
     azure-mgmt-apimanagement
     azure-mgmt-applicationinsights
@@ -173,6 +174,7 @@ py.pkgs.toPythonApplication (py.pkgs.buildAzureCliPackage {
     "azure_functions_devops_build"
     "azure.graphrbac"
     "azure.keyvault"
+    "azure.loganalytics"
     "azure.mgmt.advisor"
     "azure.mgmt.apimanagement"
     "azure.mgmt.applicationinsights"

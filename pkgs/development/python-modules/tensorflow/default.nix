@@ -25,6 +25,8 @@
 , sse42Support ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") ["westmere" "sandybridge" "ivybridge" "haswell" "broadwell" "skylake" "skylake-avx512"]
 , avx2Support  ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
 , fmaSupport   ? builtins.elem (stdenv.hostPlatform.platform.gcc.arch or "default") [                                     "haswell" "broadwell" "skylake" "skylake-avx512"]
+# Darwin deps
+, Foundation, Security
 }:
 
 assert cudaSupport -> nvidia_x11 != null
@@ -122,6 +124,10 @@ let
         sha256 = "077cpj0kzyqxzdya1dwh8df17zfzhqn7c685hx6iskvw2979zg2n";
       })
       ./lift-gast-restriction.patch
+
+      # cuda 10.2 does not have "-bin2c-path" option anymore
+      # https://github.com/tensorflow/tensorflow/issues/34429
+      ./cuda-10.2-no-bin2c-path.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -157,6 +163,9 @@ let
       cudatoolkit
       cudnn
       nvidia_x11
+    ] ++ lib.optionals stdenv.isDarwin [
+      Foundation
+      Security
     ];
 
     # arbitrarily set to the current latest bazel version, overly careful
@@ -261,7 +270,7 @@ let
     '';
 
     # FIXME: Tensorflow uses dlopen() for CUDA libraries.
-    NIX_LDFLAGS = lib.optionals cudaSupport [ "-lcudart" "-lcublas" "-lcufft" "-lcurand" "-lcusolver" "-lcusparse" "-lcudnn" ];
+    NIX_LDFLAGS = lib.optionalString cudaSupport "-lcudart -lcublas -lcufft -lcurand -lcusolver -lcusparse -lcudnn";
 
     hardeningDisable = [ "format" ];
 
@@ -326,7 +335,7 @@ let
       homepage = http://tensorflow.org;
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
-      platforms = platforms.linux;
+      platforms = with platforms; linux ++ darwin;
       # The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
       # https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
       broken = !(xlaSupport -> cudaSupport) || !isPy3k;

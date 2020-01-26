@@ -66,16 +66,16 @@ let
     else null;
 
   expand-response-params =
-    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    if buildPackages ? stdenv && buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
 
 in
 
 stdenv.mkDerivation {
-  name = targetPrefix
-    + (if name != "" then name else "${bintoolsName}-wrapper")
-    + (stdenv.lib.optionalString (bintools != null && bintoolsVersion != "") "-${bintoolsVersion}");
+  pname = targetPrefix
+    + (if name != "" then name else "${bintoolsName}-wrapper");
+  version = if bintools == null then null else bintoolsVersion;
 
   preferLocalBuild = true;
 

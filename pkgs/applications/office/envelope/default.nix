@@ -64,6 +64,12 @@ stdenv.mkDerivation rec {
     patchShebangs data/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Personal finance manager for elementary OS";
     homepage = "https://github.com/cjfloss/envelope";

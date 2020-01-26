@@ -509,14 +509,14 @@ let self = rec {
 
   vfs-sftp = mkKodiABIPlugin rec {
     namespace = "vfs.sftp";
-    version = "1.0.1";
+    version = "1.0.5";
     plugin = namespace;
 
     src = fetchFromGitHub {
       owner = "xbmc";
       repo = namespace;
       rev = "${version}-${rel}";
-      sha256 = "1l9igrl168s91c15v9klyaaz226ik3xlbzjk2f1346fvzmp87g9v";
+      sha256 = "10l2rwim574012vzjrkr0b153gk5q81fq48p47mijk294l7g100d";
     };
 
     meta = with stdenv.lib; {

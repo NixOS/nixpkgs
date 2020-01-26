@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, rustPlatform
+{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.8.13";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yy41v2crds9500fa4r0kqiddciqkilr2h13nrjqy44ckvw2mi5y";
+    sha256 = "1lprxfy733rs39fg8yif3p8vz9szk7d529ahn1kn70zm8i3mqpch";
   };
 
-  cargoSha256 = "1gnl97h0l9k8xnrwl6807qlbx13vd45kmla02mk9p1h52sr0din5";
+  cargoSha256 = "11l2dggvkk2vx4xap2q02qrr576i4mswf67plhg23azr43fpi0r5";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 

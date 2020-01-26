@@ -1,22 +1,25 @@
-{ stdenv, fetchurl, gradle_2_5, perl, makeWrapper, jre, makeDesktopItem, writeText, runtimeShell }:
+{ stdenv, fetchFromGitHub, jre, jdk, gradle, makeDesktopItem, perl, writeText, runtimeShell }:
 
 let
-  version = "1.4.0";
-  name = "jd-gui-${version}";
+  pname = "jd-gui";
+  version = "1.6.6";
 
-  src = fetchurl {
-    url    = "https://github.com/java-decompiler/jd-gui/archive/v${version}.tar.gz";
-    sha256 = "0anz7szlr5kgmsmkyv34jdynsnk8v6kvibcyz98jsd96fh725lax";
+  src = fetchFromGitHub {
+    owner = "java-decompiler";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "010bd3q2m4jy4qz5ahdx86b5f558s068gbjlbpdhq3bhh4yrjy20";
   };
 
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
+    name = "${pname}-deps";
     inherit src;
-    nativeBuildInputs = [ gradle_2_5 perl ];
+
+    nativeBuildInputs = [ jdk perl gradle ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
-      gradle --no-daemon build
+      gradle --no-daemon jar
     '';
 
     # Mavenize dependency paths
@@ -29,7 +32,7 @@ let
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1apmqiphnav79m4rdii58h7f4qslpfig4qybyyl2fr7zk92gv3l9";
+    outputHash = "1qil12s0daxpxj5xj5dj6s2k89is0kiir2vcafkm3lasc41acmk3";
   };
 
   # Point to our local deps repo
@@ -59,14 +62,16 @@ let
     comment = "Java Decompiler JD-GUI";
     desktopName = "JD-GUI";
     genericName = "Java Decompiler";
-    mimeType = "application/x-java-archive;application/x-java";
+    mimeType = "application/java;application/java-vm;application/java-archive";
     categories = "Development;Debugger;";
+    extraEntries="StartupWMClass=org-jd-gui-App";
   };
 
-in stdenv.mkDerivation {
-  inherit name version src;
+in stdenv.mkDerivation rec {
+  inherit pname version src;
+  name = "${pname}-${version}";
 
-  nativeBuildInputs = [ gradle_2_5 perl makeWrapper ];
+  nativeBuildInputs = [ jdk gradle ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
@@ -83,18 +88,16 @@ in stdenv.mkDerivation {
     cat > $out/bin/jd-gui <<EOF
     #!${runtimeShell}
     export JAVA_HOME=${jre}
-    ${jre}/bin/java -jar ${jar} $@
+    exec ${jre}/bin/java -jar ${jar} "\$@"
     EOF
     chmod +x $out/bin/jd-gui
 
     ${(desktopItem "$out/bin/jd-gui").buildCommand}
   '';
 
-  dontStrip = true;
-
   meta = with stdenv.lib; {
     description = "Fast Java Decompiler with powerful GUI";
-    homepage    = "http://jd.benow.ca/";
+    homepage    = "https://java-decompiler.github.io/";
     license     = licenses.gpl3;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice ];

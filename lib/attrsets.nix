@@ -60,7 +60,7 @@ rec {
       [ { name = head attrPath; value = setAttrByPath (tail attrPath) value; } ];
 
 
-  /* Like `getAttrPath' without a default value. If it doesn't find the
+  /* Like `attrByPath' without a default value. If it doesn't find the
      path it will throw.
 
      Example:

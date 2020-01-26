@@ -127,6 +127,9 @@ in
       "https://acme-staging-v02.api.letsencrypt.org/directory".
     ''
     )
+    (mkRemovedOptionModule [ "security" "acme" "directory"] "ACME Directory is now hardcoded to /var/lib/acme and its permisisons are managed by systemd. See https://github.com/NixOS/nixpkgs/issues/53852 for more info.")
+    (mkRemovedOptionModule [ "security" "acme" "preDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
+    (mkRemovedOptionModule [ "security" "acme" "activationDelay"] "This option has been removed. If you want to make sure that something executes before certificates are provisioned, add a RequiredBy=acme-\${cert}.service to the service you want to execute before the cert renewal")
   ];
   options = {
     security.acme = {
@@ -238,9 +241,9 @@ in
                     StateDirectoryMode = rights;
                     WorkingDirectory = "/var/lib/${lpath}";
                     ExecStart = "${pkgs.simp_le}/bin/simp_le ${escapeShellArgs cmdline}";
-                    ExecStopPost =
+                    ExecStartPost =
                       let
-                        script = pkgs.writeScript "acme-post-stop" ''
+                        script = pkgs.writeScript "acme-post-start" ''
                           #!${pkgs.runtimeShell} -e
                           ${data.postRun}
                         '';

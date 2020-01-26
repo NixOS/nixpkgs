@@ -27,7 +27,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin gettext
     ++ stdenv.lib.optional enableCapabilities libcap;
 
-  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ];
+  configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ]
+   ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake
-, boost, eigen2, lua, luabind, libGLU_combined, SDL }:
+, boost, eigen2, lua, luabind, libGLU, libGL, SDL }:
 
 stdenv.mkDerivation rec {
   pname = "soi";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ boost lua luabind libGLU_combined SDL ];
+  buildInputs = [ boost lua luabind libGLU libGL SDL ];
 
   cmakeFlags = [
     "-DEIGEN_INCLUDE_DIR=${eigen2}/include/eigen2"

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python2
+{ stdenv, fetchurl, pkgconfig, udev, dbus, perl, python3
 , IOKit ? null }:
 
 stdenv.mkDerivation rec {
@@ -35,8 +35,8 @@ stdenv.mkDerivation rec {
     moveToOutput bin/pcsc-spy "$dev"
   '';
 
-  nativeBuildInputs = [ pkgconfig perl python2 ];
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
+  nativeBuildInputs = [ pkgconfig perl ];
+  buildInputs = [ python3 ] ++ stdenv.lib.optionals stdenv.isLinux [ udev dbus ]
              ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   meta = with stdenv.lib; {

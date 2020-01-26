@@ -7,6 +7,7 @@
 , msgpack
 , pytest
 , python
+, gcc8
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools_scm
     cython
+    gcc8
   ];
 
   propagatedBuildInputs = [

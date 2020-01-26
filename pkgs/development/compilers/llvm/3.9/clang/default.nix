@@ -27,7 +27,10 @@ let
     (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
     (stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include");
 
-    patches = [ ./purity.patch ];
+    patches = [
+      ./purity.patch
+      ./0001-Fix-compilation-w-gcc9.patch
+    ];
 
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp

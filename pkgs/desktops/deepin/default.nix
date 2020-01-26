@@ -50,6 +50,7 @@ let
     qcef = callPackage ./qcef { };
     qt5dxcb-plugin = callPackage ./qt5dxcb-plugin { };
     qt5integration = callPackage ./qt5integration { };
+    startdde = callPackage ./startdde { };
     udisks2-qt5 = callPackage ./udisks2-qt5 { };
 
   };

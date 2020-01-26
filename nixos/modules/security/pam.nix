@@ -475,14 +475,18 @@ let
 
   motd = pkgs.writeText "motd" config.users.motd;
 
-  makePAMService = pamService:
-    { source = pkgs.writeText "${pamService.name}.pam" pamService.text;
-      target = "pam.d/${pamService.name}";
+  makePAMService = name: service:
+    { name = "pam.d/${name}";
+      value.source = pkgs.writeText "${name}.pam" service.text;
     };
 
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "security" "pam" "enableU2F" ] [ "security" "pam" "u2f" "enable" ])
+  ];
 
   ###### interface
 
@@ -707,7 +711,7 @@ in
 
           Use "challenge-response" for offline validation using YubiKeys with HMAC-SHA-1
           Challenge-Response configurations. See the man-page ykpamcfg(1) for further
-          details on how to configure offline Challenge-Response validation. 
+          details on how to configure offline Challenge-Response validation.
 
           More information can be found <link
           xlink:href="https://developers.yubico.com/yubico-pam/Authentication_Using_Challenge-Response.html">here</link>.
@@ -756,8 +760,7 @@ in
       };
     };
 
-    environment.etc =
-      mapAttrsToList (n: v: makePAMService v) config.security.pam.services;
+    environment.etc = mapAttrs' makePAMService config.security.pam.services;
 
     security.pam.services =
       { other.text =
@@ -773,11 +776,8 @@ in
           '';
 
         # Most of these should be moved to specific modules.
-        cups = {};
-        ftp = {};
         i3lock = {};
         i3lock-color = {};
-        screen = {};
         vlock = {};
         xlock = {};
         xscreensaver = {};

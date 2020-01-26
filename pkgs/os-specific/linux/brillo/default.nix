@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)" "AADIR=$(out)/etc/apparmor.d" ];
 
-  installTargets = "install-dist";
+  installTargets = [ "install-dist" ];
 
   meta = with stdenv.lib; {
     description = "Backlight and Keyboard LED control tool";

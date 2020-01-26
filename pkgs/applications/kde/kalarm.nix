@@ -6,7 +6,7 @@
   kguiaddons, ki18n, kiconthemes, kjobwidgets, kcmutils, kdelibs4support, kio,
   knotifications, kservice, kwidgetsaddons, kwindowsystem, kxmlgui, phonon,
 
-  kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalcore, kcalutils,
+  kimap, akonadi, akonadi-contacts, akonadi-mime, kalarmcal, kcalendarcore, kcalutils,
   kholidays, kidentitymanagement, libkdepim, mailcommon, kmailtransport, kmime,
   pimcommon, kpimtextedit, kdepim-apps-libs, messagelib,
 
@@ -27,7 +27,7 @@ mkDerivation {
     kguiaddons ki18n kiconthemes kjobwidgets kcmutils kdelibs4support kio
     knotifications kservice kwidgetsaddons kwindowsystem kxmlgui phonon
 
-    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalcore kcalutils
+    kimap akonadi akonadi-contacts akonadi-mime kalarmcal kcalendarcore kcalutils
     kholidays kidentitymanagement libkdepim mailcommon kmailtransport kmime
     pimcommon kpimtextedit kdepim-apps-libs messagelib
 

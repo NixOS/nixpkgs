@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "facter";
-  version = "3.14.6";
+  version = "3.14.7";
 
   src = fetchFromGitHub {
-    sha256 = "1zfff1mpdwnlnm8dmmlvysw2zdsnglgk5nvhhzx8zyk0zyz0nj54";
+    sha256 = "1x71ynnp8l5bf6m1a56rwcjya2swrhpxmd0cg9ndjplam6zys2v7";
     rev = version;
     repo = pname;
     owner = "puppetlabs";
@@ -14,10 +14,12 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive -Wno-error=catch-value";
   NIX_LDFLAGS = "-lblkid";
 
-  cmakeFlags = [ 
+  cmakeFlags = [
     "-DFACTER_RUBY=${ruby}/lib/libruby.so"
     "-DRUBY_LIB_INSTALL=${placeholder "out"}/lib/ruby"
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-copy";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost cpp-hocon curl leatherman libwhereami libyamlcpp openssl ruby utillinux ];

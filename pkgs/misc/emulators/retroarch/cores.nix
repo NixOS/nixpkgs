@@ -720,7 +720,7 @@ in with stdenv.lib.licenses;
     license = gpl2;
     extraBuildInputs = [ cmake libGLU libGL ffmpeg python37 xorg.libX11 ];
   }).override {
-    cmakeFlags = "-DLIBRETRO=ON";
+    cmakeFlags = [ "-DLIBRETRO=ON" ];
     makefile = "Makefile";
     buildPhase = ''
       make \
@@ -786,10 +786,11 @@ in with stdenv.lib.licenses;
 
   snes9x = (mkLibRetroCore rec {
     core = "snes9x";
-    src = fetchRetro {
+    src = fetchFromGitHub {
+      owner = "snes9xgit";
       repo = core;
-      rev = "29b78df8c9f0f48ed4605d08a187a134b3b316d6";
-      sha256 = "004h1pkxvbn4zlh8bqs6z17k04jw5wzbwklpgvmb7hbxshsi4qid";
+      rev = "04692e1ee45cc647423774ee17c63208c2713638";
+      sha256 = "09p9m85fxwrrrapjb08rcxknpgq5d6a87arrm1jn94r56glxlcfa";
     };
     description = "Port of SNES9x git to libretro";
     license = "Non-commercial";

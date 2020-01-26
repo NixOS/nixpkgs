@@ -10,16 +10,16 @@
 # Needed for running tests:
 , qtbase, xvfb_run
 
-, python3Packages
+, python2, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.0.7";
+  version = "5.0.8";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "1h5mzvgpfyl2j66b3nsw17yxvg0ja1qhjlcmfkz62221vcqsrp6m";
+    sha256 = "1h6l01a08f1xgk4dfpndl7rmgbp9npm58qi760jwl2gggprwwsxc";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -28,8 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python3Packages.wrapPython
-    wrapQtAppsHook
+    doxygen extra-cmake-modules graphviz kdoctools python2
+    python3Packages.wrapPython wrapQtAppsHook
   ];
 
   buildInputs = [

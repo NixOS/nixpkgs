@@ -3,11 +3,11 @@
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "2.5.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "05c8q6ykharry4lv47imh6agq55fxar8a9ldwx46clb480qwyc43";
+    sha256 = "0hr42fp3sw6c59qahihm9440618z7prwsy4z0ax553zvw47pc22l";
   };
 
   propagatedBuildInputs = [ twisted future ];

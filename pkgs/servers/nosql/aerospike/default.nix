@@ -15,7 +15,12 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake libtool ];
   buildInputs = [ openssl zlib ];
 
-  NIX_CFLAGS_COMPILE = "-Wno-error=format-truncation";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format-truncation"
+    "-Wno-error=address-of-packed-member"
+    "-Wno-error=format-overflow"
+    "-Wno-error=stringop-truncation"
+  ];
 
   preBuild = ''
     patchShebangs build/gen_version

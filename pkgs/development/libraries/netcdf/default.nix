@@ -9,11 +9,12 @@ let
   mpiSupport = hdf5.mpiSupport;
   mpi = hdf5.mpi;
 in stdenv.mkDerivation rec {
-  name = "netcdf-4.6.1";
+  pname = "netcdf";
+  version = "4.7.3";
 
   src = fetchurl {
-    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${name}.tar.gz";
-    sha256 = "0hi61cdihwwvz5jz1l7yq712j7ca1cj4bhr8x0x7c2vlb1s9biw9";
+    url = "https://www.unidata.ucar.edu/downloads/netcdf/ftp/${pname}-c-${version}.tar.gz";
+    sha256 = "12s4w2s96p51hlsa81lw92w56rdx8i3mk21pz2ydwcamw579z34f";
   };
 
   postPatch = ''
@@ -37,8 +38,11 @@ in stdenv.mkDerivation rec {
       "--enable-netcdf-4"
       "--enable-dap"
       "--enable-shared"
+      "--disable-dap-remote-tests"
   ]
   ++ (stdenv.lib.optionals mpiSupport [ "--enable-parallel-tests" "CC=${mpi}/bin/mpicc" ]);
+
+  doCheck = !mpiSupport;
 
   meta = {
       description = "Libraries for the Unidata network Common Data Format";

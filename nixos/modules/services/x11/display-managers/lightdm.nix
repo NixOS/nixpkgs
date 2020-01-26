@@ -8,10 +8,9 @@ let
   dmcfg = xcfg.displayManager;
   xEnv = config.systemd.services.display-manager.environment;
   cfg = dmcfg.lightdm;
+  sessionData = dmcfg.sessionData;
 
-  dmDefault = xcfg.desktopManager.default;
-  wmDefault = xcfg.windowManager.default;
-  hasDefaultUserSession = dmDefault != "none" || wmDefault != "none";
+  setSessionScript = pkgs.callPackage ./account-service-util.nix { };
 
   inherit (pkgs) lightdm writeScript writeText;
 
@@ -45,22 +44,19 @@ let
         greeter-user = ${config.users.users.lightdm.name}
         greeters-directory = ${cfg.greeter.package}
       ''}
-      sessions-directory = ${dmcfg.session.desktops}/share/xsessions
+      sessions-directory = ${dmcfg.sessionData.desktops}/share/xsessions:${dmcfg.sessionData.desktops}/share/wayland-sessions
       ${cfg.extraConfig}
 
       [Seat:*]
       xserver-command = ${xserverWrapper}
-      session-wrapper = ${dmcfg.session.wrapper}
+      session-wrapper = ${dmcfg.sessionData.wrapper}
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
       ${optionalString cfg.autoLogin.enable ''
         autologin-user = ${cfg.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
-        autologin-session = ${defaultSessionName}
-      ''}
-      ${optionalString hasDefaultUserSession ''
-        user-session=${defaultSessionName}
+        autologin-session = ${sessionData.autologinSession}
       ''}
       ${optionalString (dmcfg.setupCommands != "") ''
         display-setup-script=${pkgs.writeScript "lightdm-display-setup" ''
@@ -71,7 +67,6 @@ let
       ${cfg.extraSeatDefaults}
     '';
 
-  defaultSessionName = dmDefault + optionalString (wmDefault != "none") ("+" + wmDefault);
 in
 {
   # Note: the order in which lightdm greeter modules are imported
@@ -199,11 +194,9 @@ in
           LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
         '';
       }
-      { assertion = cfg.autoLogin.enable -> dmDefault != "none" || wmDefault != "none";
+      { assertion = cfg.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
-          LightDM auto-login requires that services.xserver.desktopManager.default and
-          services.xserver.windowManager.default are set to valid values. The current
-          default session: ${defaultSessionName} is not valid.
+          LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
       { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
@@ -212,6 +205,20 @@ in
           is set to zero.
         '';
       }
+    ];
+
+    # Set default session in session chooser to a specified values – basically ignore session history.
+    # Auto-login is already covered by a config value.
+    services.xserver.displayManager.job.preStart = optionalString (!cfg.autoLogin.enable && dmcfg.defaultSession != null) ''
+      ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
+    '';
+
+    # setSessionScript needs session-files in XDG_DATA_DIRS
+    services.xserver.displayManager.job.environment.XDG_DATA_DIRS = "${dmcfg.sessionData.desktops}/share/";
+
+    # setSessionScript wants AccountsService
+    systemd.services.display-manager.wants = [
+      "accounts-daemon.service"
     ];
 
     # lightdm relaunches itself via just `lightdm`, so needs to be on the PATH

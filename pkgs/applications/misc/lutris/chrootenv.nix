@@ -5,7 +5,7 @@
 let
 
   qt5Deps = pkgs: with pkgs.qt5; [ qtbase qtmultimedia ];
-  gnome3Deps = pkgs: with pkgs.gnome3; [ zenity gtksourceview gnome-desktop libgnome-keyring webkitgtk ];
+  gnome3Deps = pkgs: with pkgs; [ gnome3.zenity gtksourceview gnome3.gnome-desktop gnome3.libgnome-keyring webkitgtk ];
   xorgDeps = pkgs: with pkgs.xorg; [
     libX11 libXrender libXrandr libxcb libXmu libpthreadstubs libXext libXdmcp
     libXxf86vm libXinerama libSM libXv libXaw libXi libXcursor libXcomposite
@@ -23,7 +23,7 @@ in buildFHSUserEnv {
     allegro dumb
 
     # Desmume
-    lua agg soundtouch openal desktop-file-utils pangox_compat atk
+    lua agg soundtouch openal desktop-file-utils atk
 
     # DGen // TODO: libarchive is broken
 
@@ -92,12 +92,12 @@ in buildFHSUserEnv {
   multiPkgs = pkgs: with pkgs; [
     # Common
     libsndfile libtheora libogg libvorbis libopus libGLU libpcap libpulseaudio
-    libao libusb libevdev libudev libgcrypt libxml2 libusb libpng libmpeg2 libv4l
+    libao libusb libevdev udev libgcrypt libxml2 libusb libpng libmpeg2 libv4l
     libjpeg libxkbcommon libass libcdio libjack2 libsamplerate libzip libmad libaio
     libcap libtiff libva libgphoto2 libxslt libtxc_dxtn libsndfile giflib zlib glib
     alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
     readline gcc SDL SDL2 curl graphite2 gtk2 gtk3 udev ncurses wayland libglvnd
-    vulkan-loader xdg_utils sqlite
+    vulkan-loader xdg_utils sqlite gnutls
 
     # PCSX2 // TODO: "libgobject-2.0.so.0: wrong ELF class: ELFCLASS64"
 

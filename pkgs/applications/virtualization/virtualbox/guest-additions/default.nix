@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, patchelf, cdrkit, kernel, which, makeWrapper
-, zlib, xorg, dbus, virtualbox, dos2unix }:
+, zlib, xorg, dbus, virtualbox, dos2unix, fetchpatch, findutils, patchutils }:
 
 let
   version = virtualbox.version;
@@ -21,12 +21,12 @@ let
     { name = "libXfixes.so"; pkg = xorg.libXfixes; }
   ];
 
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   name = "VirtualBox-GuestAdditions-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "http://download.virtualbox.org/virtualbox/${version}/VBoxGuestAdditions_${version}.iso";
-    sha256 = "0hflsbx70dli34mpx94vd33p55ycfs3ahzwcdzqxdiwiiskjpykq";
+    sha256 = "1c9ysx0fhxxginmp607b4fk74dvlr32n6w52gawm06prf4xg90nb";
   };
 
   KERN_DIR = "${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
@@ -43,13 +43,67 @@ in stdenv.mkDerivation {
   prePatch = ''
     substituteInPlace src/vboxguest-${version}/vboxvideo/vbox_ttm.c \
       --replace "<ttm/" "<drm/ttm/"
-    ${dos2unix}/bin/dos2unix src/vboxguest-${version}/vboxguest/r0drv/linux/mp-r0drv-linux.c
+    
+    echo ${lib.escapeShellArgs patches} | \
+      ${findutils}/bin/xargs -n1 ${patchutils}/bin/lsdiff --strip=1 --addprefix=src/vboxguest-${version}/ | \
+      ${findutils}/bin/xargs ${dos2unix}/bin/dos2unix
   '';
 
   patchFlags = [ "-p1" "-d" "src/vboxguest-${version}" ];
-  # Kernel 5.3 fix, should be fixed with VirtualBox 6.0.14
-  # https://www.virtualbox.org/ticket/18911
-  patches = [ ./kernel-5.3-fix.patch ];
+  # Kernel 5.4 fix, should be fixed with next upstream release
+  # https://www.virtualbox.org/ticket/18945
+  patches = lib.concatLists (lib.mapAttrsToList (changeset: args:
+    map (arg:
+      fetchpatch ({
+        name = "kernel-5.4-fix-${changeset}.patch";
+        url = "https://www.virtualbox.org/changeset/${changeset}/vbox?format=diff";
+      } // arg)) args) {
+        "81586" = [{
+          sha256 = "126z67x6vy65w6jlqbh4z4f1cffxnycwb69vns0154bawbsbxsiw";
+          stripLen = 5;
+          extraPrefix = "vboxguest/";
+        }];
+        "81587" = [
+          {
+            sha256 = "0simzswnl0wvnc2i9gixz99rfc7lxk1nrnskksrlrrl9hqnh0lva";
+            stripLen = 5;
+            extraPrefix = "vboxsf/";
+            includes = [ "*/the-linux-kernel.h" ];
+          }
+          {
+            sha256 = "0a8r9h3x3lcjq2fykgqhdaykp00rnnkbxz8xnxg847zgvca15y02";
+            stripLen = 5;
+            extraPrefix = "vboxguest/";
+            includes = [ "*/the-linux-kernel.h" ];
+          }
+        ];
+        "81649" = [
+          {
+            sha256 = "1p1skxlvqigydxr4sk7w51lpk7nxg0d9lppq39sdnfmgi1z0h0sc";
+            stripLen = 2;
+            extraPrefix = "vboxguest/";
+            includes = [ "*/cdefs.h" ];
+          }
+          {
+            sha256 = "1j060ggdnndyjdhkfvs15306gl7g932sim9xjmx2mnx8gjdmg37f";
+            stripLen = 2;
+            extraPrefix = "vboxsf/";
+            includes = [ "*/cdefs.h" ];
+          }
+          {
+            sha256 = "060h3a5k2yklbvlg0hyg4x87xrg37cvv3rjb67xizlwvlyy6ykkg";
+            stripLen = 5;
+            extraPrefix = "vboxguest/";
+            includes = [ "*/thread2-r0drv-linux.c" ];
+          }
+          {
+            sha256 = "0cxlkf7cy751gl8dgzr7vkims1kmx5pgzsrxyk8w18zyp5nk9glw";
+            stripLen = 7;
+            extraPrefix = "vboxvideo/";
+            includes = [ "*/vbox_*.c" ];
+          }
+        ];
+      });
 
   unpackPhase = ''
     ${if stdenv.hostPlatform.system == "i686-linux" || stdenv.hostPlatform.system == "x86_64-linux" then ''

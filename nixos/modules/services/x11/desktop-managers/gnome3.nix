@@ -144,7 +144,7 @@ in
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.gnome3.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -171,7 +171,7 @@ in
     })
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.extraSessionFilePackages =  map
+      services.xserver.displayManager.sessionPackages =  map
         (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
           inherit (wm) wmName wmLabel wmCommand;
         }) (optional cfg.flashback.enableMetacity {
@@ -249,11 +249,17 @@ in
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
 
-      systemd.packages = with pkgs.gnome3; [ vino gnome-session ];
+      systemd.packages = with pkgs.gnome3; [
+        gnome-session
+        gnome-shell
+        vino
+      ];
 
       services.avahi.enable = mkDefault true;
 
-      xdg.portal.extraPortals = [ pkgs.gnome3.gnome-shell ];
+      xdg.portal.extraPortals = [
+        pkgs.gnome3.gnome-shell
+      ];
 
       services.geoclue2.enable = mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent

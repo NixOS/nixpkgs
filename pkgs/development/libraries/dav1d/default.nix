@@ -9,14 +9,14 @@ assert useVulkan -> withExamples;
 
 stdenv.mkDerivation rec {
   pname = "dav1d";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "videolan";
     repo = pname;
     rev = version;
-    sha256 = "08cgccp7xvwn24w9iab4fzi18x3m6xyvvnz36qf7clcz0aqbfb9w";
+    sha256 = "0acxlgyz6c8ckw8vfgn60y2zg2n00l5xsq5jlxvwbh5w5pkc3ahf";
   };
 
   nativeBuildInputs = [ meson ninja nasm pkgconfig ];

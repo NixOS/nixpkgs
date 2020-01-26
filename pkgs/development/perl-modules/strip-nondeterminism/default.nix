@@ -27,6 +27,7 @@ buildPerlPackage rec {
 
   meta = with lib; {
     description = "A Perl module for stripping bits of non-deterministic information";
+    homepage = "https://reproducible-builds.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
   };

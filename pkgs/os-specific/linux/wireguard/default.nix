@@ -1,11 +1,18 @@
-{ stdenv, kernel, wireguard-tools, perl }:
+{ stdenv, fetchzip, kernel, perl, wireguard-tools }:
 
 # module requires Linux >= 3.10 https://www.wireguard.io/install/#kernel-requirements
 assert stdenv.lib.versionAtLeast kernel.version "3.10";
+# wireguard upstreamed since 5.6 https://lists.zx2c4.com/pipermail/wireguard/2019-December/004704.html
+assert stdenv.lib.versionOlder kernel.version "5.6";
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "wireguard";
-  inherit (wireguard-tools) src version;
+  version = "0.0.20200121";
+
+  src = fetchzip {
+    url = "https://git.zx2c4.com/wireguard-linux-compat/snapshot/wireguard-linux-compat-${version}.tar.xz";
+    sha256 = "0h8jq8ki998jw4fynb7if4hcgnl0w6lbd5zwiy0xljj3mfqxdxvv";
+  };
 
   preConfigure = ''
     cd src
@@ -27,6 +34,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     inherit (wireguard-tools.meta) homepage license maintainers;
     description = "Kernel module for the WireGuard secure network tunnel";
+    downloadPage = "https://git.zx2c4.com/wireguard-linux-compat/refs/";
     platforms = platforms.linux;
   };
 }

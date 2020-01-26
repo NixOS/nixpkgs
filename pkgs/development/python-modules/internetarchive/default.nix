@@ -1,17 +1,17 @@
 { buildPythonPackage, fetchFromGitHub, pytest, six, clint, pyyaml, docopt
 , requests, jsonpatch, args, schema, responses, backports_csv, isPy3k
-, lib, glibcLocales }:
+, lib, glibcLocales, setuptools }:
 
 buildPythonPackage rec {
   pname = "internetarchive";
-  version = "1.8.1";
+  version = "1.9.0";
 
   # Can't use pypi, data files for tests missing
   src = fetchFromGitHub {
     owner = "jjjake";
     repo = "internetarchive";
     rev = "v${version}";
-    sha256 = "1fdb0kr9hzgyh0l8d02khcjpsgyd63nbablhc49ncdsav3dhhr3f";
+    sha256 = "1h344c04ipzld4s7xk8d84f80samjjlgzvv3y8zsv0n1c895gymb";
   };
 
   propagatedBuildInputs = [
@@ -23,7 +23,9 @@ buildPythonPackage rec {
     jsonpatch
     args
     schema
-  ] ++ lib.optional (!isPy3k) backports_csv;
+    setuptools
+    backports_csv
+  ];
 
   checkInputs = [ pytest responses glibcLocales ];
 

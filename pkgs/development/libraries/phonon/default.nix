@@ -1,6 +1,16 @@
-{ stdenv, lib, fetchurl, cmake, libGLU_combined, pkgconfig, libpulseaudio
-, extra-cmake-modules, qtbase, qttools
-, debug ? false }:
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, libGLU
+, libGL
+, pkgconfig
+, libpulseaudio
+, extra-cmake-modules
+, qtbase
+, qttools
+, debug ? false
+}:
 
 with lib;
 
@@ -27,7 +37,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libGLU_combined
+    libGLU
+    libGL
     libpulseaudio
     qtbase
     qttools

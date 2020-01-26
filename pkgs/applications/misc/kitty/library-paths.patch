@@ -1,0 +1,32 @@
+--- a/glfw/egl_context.c
++++ b/glfw/egl_context.c
+@@ -314,7 +314,7 @@ bool _glfwInitEGL(void)
+ #elif defined(__CYGWIN__)
+         "libEGL-1.so",
+ #else
+-        "libEGL.so.1",
++        "@libEGL@",
+ #endif
+         NULL
+     };
+
+--- a/kitty/desktop.c
++++ b/kitty/desktop.c
+@@ -30,7 +30,7 @@
+ static PyObject*
+ init_x11_startup_notification(PyObject UNUSED *self, PyObject *args) {
+     static bool done = false;
+-    static const char* libname = "libstartup-notification-1.so";
++    static const char* libname = "@libstartup_notification@";
+     // some installs are missing the .so symlink, so try the full name
+     static const char* libname2 = "libstartup-notification-1.so.0";
+     static const char* libname3 = "libstartup-notification-1.so.0.0.0";
+@@ -105,7 +105,7 @@ load_libcanberra_functions(void) {
+ 
+ static void
+ load_libcanberra(void) {
+-    static const char* libname = "libcanberra.so";
++    static const char* libname = "@libcanberra@";
+     // some installs are missing the .so symlink, so try the full name
+     static const char* libname2 = "libcanberra.so.0";
+     static const char* libname3 = "libcanberra.so.0.2.5";

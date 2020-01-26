@@ -4,11 +4,11 @@
 set -eu -o pipefail
 
 oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion oh-my-zsh" | tr -d '"')"
-latestSha="$(curl -L -s https://api.github.com/repos/robbyrussell/oh-my-zsh/commits\?sha\=master\&since\=${oldVersion} | jq -r '.[0].sha')"
+latestSha="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits\?sha\=master\&since\=${oldVersion} | jq -r '.[0].sha')"
 url="$(nix-instantiate --eval -E "with import ./. {}; oh-my-zsh.src.url" | tr -d '"')"
 
 if [ ! "null" = "${latestSha}" ]; then
-  latestDate="$(curl -L -s https://api.github.com/repos/robbyrussell/oh-my-zsh/commits/${latestSha} | jq '.commit.author.date' | sed 's|"\(.*\)T.*|\1|g')"
+  latestDate="$(curl -L -s https://api.github.com/repos/ohmyzsh/ohmyzsh/commits/${latestSha} | jq '.commit.author.date' | sed 's|"\(.*\)T.*|\1|g')"
   update-source-version oh-my-zsh "${latestSha}" --version-key=rev
   update-source-version oh-my-zsh "${latestDate}" --ignore-same-hash
   nixpkgs="$(git rev-parse --show-toplevel)"

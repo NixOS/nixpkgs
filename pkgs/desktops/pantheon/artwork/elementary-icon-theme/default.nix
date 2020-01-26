@@ -6,11 +6,13 @@
 , ninja
 , hicolor-icon-theme
 , gtk3
+, inkscape
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "5.1.0";
+  version = "5.2.0";
 
   repoName = "icons";
 
@@ -18,21 +20,22 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1yrf92ysjh1yfm42wznlw0lh9zsm5whghwzx3b3wcdkwdhkdg24z";
+    sha256 = "1irkjj8xfpgkl5p56xhqa3w2s98b8lav7d1lxxrabdi87cjv3n33";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     gtk3
+    inkscape
     meson
     ninja
     python3
+    xorg.xcursorgen
   ];
 
   propagatedBuildInputs = [

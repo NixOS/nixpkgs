@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gtk2, libsndfile, pkgconfig, python, wafHook }:
+{ stdenv, fetchurl, gtk2, libsndfile, pkgconfig, python3, wafHook }:
 
 stdenv.mkDerivation rec {
   pname = "lv2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ gtk2 libsndfile python ];
+  buildInputs = [ gtk2 libsndfile python3 ];
 
   meta = with stdenv.lib; {
     homepage = http://lv2plug.in;

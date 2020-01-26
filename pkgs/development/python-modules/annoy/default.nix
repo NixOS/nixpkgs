@@ -1,17 +1,20 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, h5py
 , nose
 }:
 
 buildPythonPackage rec {
-  version = "1.16.2";
+  version = "1.16.3";
   pname = "annoy";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "41348e813fe7125eda3e2229a075eba3d065173ba6c5f20c545bb9c2932633fa";
+    sha256 = "fe2779664bd8846f2d67191a7e6010b8df890ac4586336748fd0697f31654379";
   };
+
+  nativeBuildInputs = [ h5py ];
 
   checkInputs = [
     nose

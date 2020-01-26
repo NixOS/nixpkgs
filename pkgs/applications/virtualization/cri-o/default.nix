@@ -15,7 +15,9 @@
 , pkgconfig
 }:
 
-buildGoPackage rec {
+let
+  buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
+in buildGoPackage rec {
   project = "cri-o";
   version = "1.16.1";
   name = "${project}-${version}${flavor}";
@@ -35,9 +37,6 @@ buildGoPackage rec {
                  libseccomp libselinux lvm2 ]
                 ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
 
-  makeFlags = ''BUILDTAGS="apparmor seccomp selinux
-    containers_image_ostree_stub"'';
-
   buildPhase = ''
     pushd go/src/${goPackagePath}
 
@@ -47,7 +46,7 @@ buildGoPackage rec {
     # Build the crio binaries
     function build() {
       go build \
-        -tags ${makeFlags} \
+        -tags "${buildTags}" \
         -o bin/"$1" \
         -buildmode=pie \
         -ldflags '-s -w ${ldflags}' \

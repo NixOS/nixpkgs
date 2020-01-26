@@ -1,5 +1,5 @@
 { lib, fetchPypi, buildPythonPackage
-, pyaes, pycrc }:
+, cryptography, pyaes, pycrc }:
 
 buildPythonPackage rec {
   pname = "broadlink";
@@ -15,7 +15,7 @@ buildPythonPackage rec {
       --replace pyaes==1.6.0 pyaes
     '';
 
-  propagatedBuildInputs = [ pyaes pycrc ];
+  propagatedBuildInputs = [ cryptography pyaes pycrc ];
 
   # no tests available
   doCheck = false;

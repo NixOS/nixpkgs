@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
 , entrypoints
 , glibcLocales
 , ipython
@@ -18,11 +18,12 @@
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "3.2.0";
+  version = "4.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "098macm0sw54xqijdy1c8cppcgw79wn52qdc71qqb51nibc17gls";
+    sha256 = "92dcd7b84c715f8e02bbdf37e36193a4af8138b5b064c05f237e6ed41573880a";
   };
 
   propagatedBuildInputs = [
@@ -46,6 +47,8 @@ buildPythonPackage rec {
 
   checkPhase = ''
     export LANG=en_US.UTF-8
+    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
+    rm altair/examples/histogram_responsive.py
     pytest --doctest-modules altair
   '';
 

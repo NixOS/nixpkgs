@@ -657,57 +657,42 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users = [
-      { name = "matrix-synapse";
+    users.users.matrix-synapse = { 
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.matrix-synapse;
-      } ];
+      };
 
-    users.groups = [
-      { name = "matrix-synapse";
-        gid = config.ids.gids.matrix-synapse;
-      } ];
+    users.groups.matrix-synapse = {
+      gid = config.ids.gids.matrix-synapse;
+    };
 
-    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
+    services.postgresql = mkIf (usePostgresql && cfg.create_local_database) {
+      enable = mkDefault true;
+      ensureDatabases = [ cfg.database_name ];
+      ensureUsers = [{
+        name = cfg.database_user;
+        ensurePermissions = { "DATABASE \"${cfg.database_name}\"" = "ALL PRIVILEGES"; };
+      }];
+    };
 
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service" ;
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
-      '' + optionalString (usePostgresql && cfg.create_local_database) ''
-        if ! test -e "${cfg.dataDir}/db-created"; then
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createuser \
-            --login \
-            --no-createdb \
-            --no-createrole \
-            --encrypted \
-            ${cfg.database_user}
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createdb \
-            --owner=${cfg.database_user} \
-            --encoding=UTF8 \
-            --lc-collate=C \
-            --lc-ctype=C \
-            --template=template0 \
-            ${cfg.database_name}
-          touch "${cfg.dataDir}/db-created"
-        fi
       '';
       serviceConfig = {
         Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
-        PermissionsStartOnly = true;
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }

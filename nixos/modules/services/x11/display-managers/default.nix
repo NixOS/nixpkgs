@@ -27,16 +27,7 @@ let
     Xft.hintstyle: hintslight
   '';
 
-  mkCases = session:
-    concatStrings (
-      mapAttrsToList (name: starts: ''
-                       (${name})
-                         ${concatMapStringsSep "\n  " (n: n.start) starts}
-                         ;;
-                     '') (lib.groupBy (n: n.name) session)
-    );
-
-  # file provided by services.xserver.displayManager.session.wrapper
+  # file provided by services.xserver.displayManager.sessionData.wrapper
   xsessionWrapper = pkgs.writeScript "xsession-wrapper"
     ''
       #! ${pkgs.bash}/bin/bash
@@ -116,98 +107,47 @@ let
           # Run the supplied session command. Remove any double quotes with eval.
           eval exec "$@"
       else
-          # Fall back to the default window/desktopManager
-          exec ${cfg.displayManager.session.script}
+          # TODO: Do we need this? Should not the session always exist?
+          echo "error: unknown session $1" 1>&2
+          exit 1
       fi
     '';
 
-  # file provided by services.xserver.displayManager.session.script
-  xsession = wm: dm: pkgs.writeScript "xsession"
-    ''
-      #! ${pkgs.bash}/bin/bash
-
-      # Legacy session script used to construct .desktop files from
-      # `services.xserver.displayManager.session` entries. Called from
-      # `sessionWrapper`.
-
-      # Expected parameters:
-      #   $1 = <desktop-manager>+<window-manager>
-
-      # The first argument of this script is the session type.
-      sessionType="$1"
-      if [ "$sessionType" = default ]; then sessionType=""; fi
-
-      # The session type is "<desktop-manager>+<window-manager>", so
-      # extract those (see:
-      # http://wiki.bash-hackers.org/syntax/pe#substring_removal).
-      windowManager="''${sessionType##*+}"
-      : ''${windowManager:=${cfg.windowManager.default}}
-      desktopManager="''${sessionType%%+*}"
-      : ''${desktopManager:=${cfg.desktopManager.default}}
-
-      # Start the window manager.
-      case "$windowManager" in
-        ${mkCases wm}
-        (*) echo "$0: Window manager '$windowManager' not found.";;
-      esac
-
-      # Start the desktop manager.
-      case "$desktopManager" in
-        ${mkCases dm}
-        (*) echo "$0: Desktop manager '$desktopManager' not found.";;
-      esac
-
-      ${optionalString cfg.updateDbusEnvironment ''
-        ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
-      ''}
-
-      test -n "$waitPID" && wait "$waitPID"
-
-      ${config.systemd.package}/bin/systemctl --user stop graphical-session.target
-
-      exit 0
-    '';
-
-  # Desktop Entry Specification:
-  # - https://standards.freedesktop.org/desktop-entry-spec/latest/
-  # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
-  mkDesktops = names: pkgs.runCommand "desktops"
+  installedSessions = pkgs.runCommand "desktops"
     { # trivial derivation
       preferLocalBuild = true;
       allowSubstitutes = false;
     }
     ''
-      mkdir -p "$out/share/xsessions"
-      ${concatMapStrings (n: ''
-        cat - > "$out/share/xsessions/${n}.desktop" << EODESKTOP
-        [Desktop Entry]
-        Version=1.0
-        Type=XSession
-        TryExec=${cfg.displayManager.session.script}
-        Exec=${cfg.displayManager.session.script} "${n}"
-        Name=${n}
-        Comment=
-        EODESKTOP
-      '') names}
+      mkdir -p "$out/share/"{xsessions,wayland-sessions}
 
       ${concatMapStrings (pkg: ''
+        for n in ${concatStringsSep " " pkg.providedSessions}; do
+          if ! test -f ${pkg}/share/wayland-sessions/$n.desktop -o \
+                    -f ${pkg}/share/xsessions/$n.desktop; then
+            echo "Couldn't find provided session name, $n.desktop, in session package ${pkg.name}:"
+            echo "  ${pkg}"
+            return 1
+          fi
+        done
+
         if test -d ${pkg}/share/xsessions; then
           ${xorg.lndir}/bin/lndir ${pkg}/share/xsessions $out/share/xsessions
         fi
-      '') cfg.displayManager.extraSessionFilePackages}
-
-      ${concatMapStrings (pkg: ''
         if test -d ${pkg}/share/wayland-sessions; then
-          mkdir -p "$out/share/wayland-sessions"
           ${xorg.lndir}/bin/lndir ${pkg}/share/wayland-sessions $out/share/wayland-sessions
         fi
-      '') cfg.displayManager.extraSessionFilePackages}
+      '') cfg.displayManager.sessionPackages}
     '';
+
+  dmDefault = cfg.desktopManager.default;
+  wmDefault = cfg.windowManager.default;
+
+  defaultSessionFromLegacyOptions = concatStringsSep "+" (filter (s: s != null) ([ dmDefault ] ++ optional (wmDefault != "none") wmDefault));
 
 in
 
 {
-
   options = {
 
     services.xserver.displayManager = {
@@ -262,11 +202,24 @@ in
         '';
       };
 
-      extraSessionFilePackages = mkOption {
-        type = types.listOf types.package;
+      sessionPackages = mkOption {
+        type = with types; listOf (package // {
+          description = "package with provided sessions";
+          check = p: assertMsg
+            (package.check p && p ? providedSessions
+            && p.providedSessions != [] && all isString p.providedSessions)
+            ''
+              Package, '${p.name}', did not specify any session names, as strings, in
+              'passthru.providedSessions'. This is required when used as a session package.
+
+              The session names can be looked up in:
+                ${p}/share/xsessions
+                ${p}/share/wayland-sessions
+           '';
+        });
         default = [];
         description = ''
-          A list of packages containing xsession files to be passed to the display manager.
+          A list of packages containing x11 or wayland session files to be passed to the display manager.
         '';
       };
 
@@ -297,16 +250,48 @@ in
           inside the display manager with the desktop manager name
           followed by the window manager name.
         '';
-        apply = list: rec {
-          wm = filter (s: s.manage == "window") list;
-          dm = filter (s: s.manage == "desktop") list;
-          names = flip concatMap dm
-            (d: map (w: d.name + optionalString (w.name != "none") ("+" + w.name))
-              (filter (w: d.name != "none" || w.name != "none") wm));
-          desktops = mkDesktops names;
-          script = xsession wm dm;
+      };
+
+      sessionData = mkOption {
+        description = "Data exported for display managers’ convenience";
+        internal = true;
+        default = {};
+        apply = val: {
           wrapper = xsessionWrapper;
+          desktops = installedSessions;
+          sessionNames = concatMap (p: p.providedSessions) cfg.displayManager.sessionPackages;
+          # We do not want to force users to set defaultSession when they have only single DE.
+          autologinSession =
+            if cfg.displayManager.defaultSession != null then
+              cfg.displayManager.defaultSession
+            else if cfg.displayManager.sessionData.sessionNames != [] then
+              head cfg.displayManager.sessionData.sessionNames
+            else
+              null;
         };
+      };
+
+      defaultSession = mkOption {
+        type = with types; nullOr str // {
+          description = "session name";
+          check = d:
+            assertMsg (d != null -> (str.check d && elem d cfg.displayManager.sessionData.sessionNames)) ''
+                Default graphical session, '${d}', not found.
+                Valid names for 'services.xserver.displayManager.defaultSession' are:
+                  ${concatStringsSep "\n  " cfg.displayManager.sessionData.sessionNames}
+              '';
+        };
+        default =
+          if dmDefault != null || wmDefault != null then
+            defaultSessionFromLegacyOptions
+          else
+            null;
+        example = "gnome";
+        description = ''
+          Graphical session to pre-select in the session chooser (only effective for GDM and LightDM).
+
+          On GDM, LightDM and SDDM, it will also be used as a session for auto-login.
+        '';
       };
 
       job = {
@@ -357,6 +342,27 @@ in
   };
 
   config = {
+    assertions = [
+      {
+        assertion = cfg.desktopManager.default != null || cfg.windowManager.default != null -> cfg.displayManager.defaultSession == defaultSessionFromLegacyOptions;
+        message = "You cannot use both services.xserver.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";
+      }
+    ];
+
+    warnings =
+      mkIf (dmDefault != null || wmDefault != null) [
+        ''
+          The following options are deprecated:
+            ${concatStringsSep "\n  " (map ({c, t}: t) (filter ({c, t}: c != null) [
+            { c = dmDefault; t = "- services.xserver.desktopManager.default"; }
+            { c = wmDefault; t = "- services.xserver.windowManager.default"; }
+            ]))}
+          Please use
+            services.xserver.displayManager.defaultSession = "${concatStringsSep "+" (filter (s: s != null) [ dmDefault wmDefault ])}";
+          instead.
+        ''
+      ];
+
     services.xserver.displayManager.xserverBin = "${xorg.xorgserver.out}/bin/X";
 
     systemd.user.targets.graphical-session = {
@@ -365,11 +371,75 @@ in
         StopWhenUnneeded = false;
       };
     };
+
+    # Create desktop files and scripts for starting sessions for WMs/DMs
+    # that do not have upstream session files (those defined using services.{display,desktop,window}Manager.session options).
+    services.xserver.displayManager.sessionPackages =
+      let
+        dms = filter (s: s.manage == "desktop") cfg.displayManager.session;
+        wms = filter (s: s.manage == "window") cfg.displayManager.session;
+
+        # Script responsible for starting the window manager and the desktop manager.
+        xsession = dm: wm: pkgs.writeScript "xsession" ''
+          #! ${pkgs.bash}/bin/bash
+
+          # Legacy session script used to construct .desktop files from
+          # `services.xserver.displayManager.session` entries. Called from
+          # `sessionWrapper`.
+
+          # Start the window manager.
+          ${wm.start}
+
+          # Start the desktop manager.
+          ${dm.start}
+
+          ${optionalString cfg.updateDbusEnvironment ''
+            ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
+          ''}
+
+          test -n "$waitPID" && wait "$waitPID"
+
+          ${config.systemd.package}/bin/systemctl --user stop graphical-session.target
+
+          exit 0
+        '';
+      in
+        # We will generate every possible pair of WM and DM.
+        concatLists (
+          crossLists
+            (dm: wm: let
+              sessionName = "${dm.name}${optionalString (wm.name != "none") ("+" + wm.name)}";
+              script = xsession dm wm;
+            in
+              optional (dm.name != "none" || wm.name != "none")
+                (pkgs.writeTextFile {
+                  name = "${sessionName}-xsession";
+                  destination = "/share/xsessions/${sessionName}.desktop";
+                  # Desktop Entry Specification:
+                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/
+                  # - https://standards.freedesktop.org/desktop-entry-spec/latest/ar01s06.html
+                  text = ''
+                    [Desktop Entry]
+                    Version=1.0
+                    Type=XSession
+                    TryExec=${script}
+                    Exec=${script}
+                    Name=${sessionName}
+                  '';
+                } // {
+                  providedSessions = [ sessionName ];
+                })
+            )
+            [dms wms]
+          );
   };
 
   imports = [
-   (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "desktopManagerHandlesLidAndPower" ]
      "The option is no longer necessary because all display managers have already delegated lid management to systemd.")
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "job" "logsXsession" ] [ "services" "xserver" "displayManager" "job" "logToFile" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "logToJournal" ] [ "services" "xserver" "displayManager" "job" "logToJournal" ])
+    (mkRenamedOptionModule [ "services" "xserver" "displayManager" "extraSessionFilesPackages" ] [ "services" "xserver" "displayManager" "sessionPackages" ])
   ];
 
 }

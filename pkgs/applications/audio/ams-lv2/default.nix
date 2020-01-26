@@ -17,7 +17,7 @@ stdenv.mkDerivation  rec {
 
   meta = with stdenv.lib; {
     description = "An LV2 port of the internal modules found in Alsa Modular Synth";
-    homepage = http://objectivewave.wordpress.com/ams-lv2;
+    homepage = "https://github.com/blablack/ams-lv2";
     license = licenses.gpl3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;

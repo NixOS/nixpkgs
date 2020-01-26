@@ -9,13 +9,13 @@ with stdenv.lib;
 
 let
   pname = "pango";
-  version = "1.43.0";
+  version = "1.44.7";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1lnxldmv1a12dq5h0dlq5jyzl4w75k76dp8cn360x2ijlm9w5h6j";
+    sha256 = "07qvxa2sk90chp1l12han6vxvy098mc37sdqcznyywyv2g6bd9b6";
   };
 
   # FIXME: docs fail on darwin
@@ -26,31 +26,18 @@ in stdenv.mkDerivation rec {
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
-    harfbuzz fribidi
+    fribidi
   ] ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
     ApplicationServices
     Carbon
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl ] ++
+  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
     optional x11Support libXft;
 
-  patches = [
-    (fetchpatch {
-      # Add gobject-2 to .pc file
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/546f4c242d6f4fe312de3b7c918a848e5172e18d.patch";
-      sha256 = "1cqhy4xbwx3ad7z5d1ks7smf038b9as8c6qy84rml44h0fgiq4m2";
-    })
-    (fetchpatch {
-      # Fixes CVE-2019-1010238
-      url = "https://gitlab.gnome.org/GNOME/pango/commit/490f8979a260c16b1df055eab386345da18a2d54.diff";
-      sha256 = "1s0qclbaknkx3dkc3n6mlmx3fnhlr2pkncqjkywprpvahmmypr7k";
-    })
-  ];
-
   mesonFlags = [
-    "-Denable_docs=${if stdenv.isDarwin then "false" else "true"}"
+    "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"
   ];
 
   enableParallelBuilding = true;

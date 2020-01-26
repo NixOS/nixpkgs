@@ -34,7 +34,7 @@
 , libgnome
 , libgnomeui
 , gnome3
-, libGLU_combined
+, libGLU, libGL
 , nspr
 , nss
 , pango
@@ -116,7 +116,7 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango
@@ -185,7 +185,7 @@ stdenv.mkDerivation {
       free = false;
       url = http://www.mozilla.org/en-US/foundation/trademarks/policy/;
     };
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = platforms.linux;
   };
 }

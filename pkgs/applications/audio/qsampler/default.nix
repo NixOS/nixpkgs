@@ -3,11 +3,11 @@
 
 mkDerivation rec {
   pname = "qsampler";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/qsampler/${pname}-${version}.tar.gz";
-    sha256 = "1krhjyd67hvnv6sgndwq81lfvnb4qkhc7da1119fn2lzl7hx9wh3";
+    sha256 = "1wr7k739zx2nz00b810f60g9k3y92w05nfci987hw7y2sks9rd8j";
   };
 
   nativeBuildInputs = [ autoconf automake libtool pkgconfig qttools ];

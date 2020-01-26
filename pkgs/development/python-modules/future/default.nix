@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "future";
-  version = "0.18.1";
+  version = "0.18.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "858e38522e8fd0d3ce8f0c1feaf0603358e366d5403209674c7b617fa0c24093";
+    sha256 = "b1bead90b70cf6ec3f0710ae53a525360fa360d306a86583adc6bf83a4db537d";
   };
 
   doCheck = false;

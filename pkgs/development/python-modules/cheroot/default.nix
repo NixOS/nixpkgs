@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, pythonAtLeast
+{ stdenv, fetchPypi, buildPythonPackage, pythonAtLeast, isPy3k
 , more-itertools, six, setuptools_scm, setuptools-scm-git-archive
 , pytest, pytestcov, portend, pytest-testmon, pytest-mock
 , backports_unittest-mock, pyopenssl, requests, trustme, requests-unixsocket
@@ -9,6 +9,8 @@ let inherit (stdenv) lib; in
 buildPythonPackage rec {
   pname = "cheroot";
   version = "8.2.1";
+
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

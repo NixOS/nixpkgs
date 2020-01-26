@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.13.4";
+  version = "1.13.6";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "093n5v0bipaan0qqc02wash18r625y74r4zhmjwlc9zf8asfmnwm";
+    sha256 = "03220q6n4wlpmz6zz3mw48kl3pjxia6pxdvf03wbqh6w9favxrda";
   };
 
   # perl is used for testing go vet
@@ -57,8 +57,8 @@ stdenv.mkDerivation rec {
       --replace '#!/usr/bin/env bash' '#!${runtimeShell}'
 
     # Patch the mimetype database location which is missing on NixOS.
-    substituteInPlace src/mime/type_unix.go \
-      --replace '/etc/mime.types' '${mailcap}/etc/mime.types'
+    # but also allow static binaries built with NixOS to run outside nix
+    sed -i 's,\"/etc/mime.types,"${mailcap}/etc/mime.types\"\,\n\t&,' src/mime/type_unix.go
 
     # Disabling the 'os/http/net' tests (they want files not available in
     # chroot builds)
@@ -97,7 +97,10 @@ stdenv.mkDerivation rec {
     rm src/net/cgo_unix_test.go
 
   '' + optionalString stdenv.isLinux ''
-    sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
+    # prepend the nix path to the zoneinfo files but also leave the original value for static binaries
+    # that run outside a nix server
+    sed -i 's,\"/usr/share/zoneinfo/,"${tzdata}/share/zoneinfo/\"\,\n\t&,' src/time/zoneinfo_unix.go
+
   '' + optionalString stdenv.isAarch32 ''
     echo '#!${runtimeShell}' > misc/cgo/testplugin/test.bash
   '' + optionalString stdenv.isDarwin ''
@@ -135,8 +138,11 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+  ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
-    ./skip-test-extra-files-on-386.patch
+    (if stdenv.isAarch32
+    then ./skip-test-extra-files-on-aarch32.patch
+    else ./skip-test-extra-files-on-386.patch)
   ];
 
   postPatch = ''

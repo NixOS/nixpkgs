@@ -23,4 +23,8 @@ buildRustPackage rec {
     platforms = platforms.all;
     broken = stdenv.isDarwin;
   };
+
+  passthru = {
+	  shellPath = "/bin/ion";
+  };
 }

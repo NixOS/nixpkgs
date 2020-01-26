@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "nbval";
-  version = "0.9.3";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0613drjl740ppam3spm4b8mdcwwvl1lfmqy3vkgznbvzfxfpb3zj";
+    sha256 = "5273c2d958335e24b170fe59b689b13e4b1855b569626e18b1c7e420f5110cc6";
   };
 
   checkInputs = [

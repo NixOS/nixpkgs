@@ -7,17 +7,17 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "485.1";
+  version = "520.30";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
-      url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_4-linux-x64-b${version}.tar.gz";
-      sha256 = "18jnn0dra9nsnyllwq0ljxzr58k2pg8d0kg10y39vnxwccic4f76";
+      url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_5-linux-x64-b${version}.tar.gz";
+      sha256 = "0xmr5jjnr4af7byz5w01phyrrdyizfhqmwhs4k8ih566fkhyzj02";
     }
   else if stdenv.hostPlatform.system == "x86_64-darwin" then
     fetchurl {
-      url = "https://bintray.com/jetbrains/intellij-jdk/download_file?file_path=jbrsdk-11_0_2-osx-x64-b${version}.tar.gz";
-      sha256 = "1ly6kf59knvzbr2pjkc9fqyzfs28pdvnqg5pfffr8zp14xm44zmd";
+      url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_5-osx-x64-b${version}.tar.gz";
+      sha256 = "0wfcw66wv5rkkjzyzi9j7zk7c2fgi33ny09drgihxi2kdzyfrpcb";
     }
   else
     throw "unsupported system: ${stdenv.hostPlatform.system}";

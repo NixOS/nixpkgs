@@ -10,20 +10,21 @@
 let
   # See https://mesonbuild.com/Reference-tables.html#cpu-families
   cpuFamilies = {
-    aarch64 = "aarch64";
-    armv6l  = "arm";
-    armv7l  = "arm";
-    i686    = "x86";
-    x86_64  = "x86_64";
+    aarch64  = "aarch64";
+    armv5tel = "arm";
+    armv6l   = "arm";
+    armv7l   = "arm";
+    i686     = "x86";
+    x86_64   = "x86_64";
   };
 in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.51.2";
+  version = "0.52.1";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0cqhkjbab1mbvxmbjvyfrbjfkm7bh436svqpjapca36c2k9h1vwr";
+    sha256 = "02fnrk1fjf3yiix0ak0m9vgbpl4h97fafii5pmw7phmvnlv9fyan";
   };
 
   postFixup = ''
@@ -69,14 +70,6 @@ python3Packages.buildPythonApplication rec {
       url = "https://github.com/mesonbuild/meson/commit/972ede1d14fdf17fe5bb8fb99be220f9395c2392.patch";
       sha256 = "19bfsylhpy0b2xv3ks8ac9x3q6vvvyj1wjcy971v9d5f1455xhbb";
     })
-  ] ++ lib.optionals stdenv.isDarwin [
-    # We use custom Clang, which makes Meson think *not Apple*, while still
-    # relying on system linker. When it detects standard Clang, Meson will
-    # pass it `-Wl,-O1` flag but optimizations are not recognized by
-    # Mac linker.
-    # https://github.com/mesonbuild/meson/issues/4784
-    # Should be fixed in 0.52
-    ./fix-objc-linking.patch
   ];
 
   setupHook = ./setup-hook.sh;

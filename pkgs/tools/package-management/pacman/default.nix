@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, autoreconfHook, pkgconfig, perl, libarchive, openssl,
-zlib, bzip2, lzma, curl, runtimeShell }:
+{ stdenv, lib, fetchurl, pkgconfig, m4, perl, libarchive, openssl, zlib, bzip2,
+lzma, curl, runtimeShell }:
 
 stdenv.mkDerivation rec {
   pname = "pacman";
-  version = "5.1.3";
+  version = "5.2.1";
 
   src = fetchurl {
-    url = "https://git.archlinux.org/pacman.git/snapshot/pacman-${version}.tar.gz";
-    sha256 = "108xp6dhvp02jnzskhgzjmp9jvrxhhkffvmpvs3rrif7vj47xd76";
+    url = "https://sources.archlinux.org/other/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "04pkb8qvkldrayfns8cx4fljl4lyys1dqvlf7b5kkl2z4q3w8c0r";
   };
 
   enableParallelBuilding = true;
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "sysconfdir=${placeholder "out"}/etc" ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig ];
+  nativeBuildInputs = [ pkgconfig m4 ];
   buildInputs = [ curl perl libarchive openssl zlib bzip2 lzma ];
 
   postFixup = ''

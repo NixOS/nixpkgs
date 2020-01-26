@@ -10,12 +10,11 @@
   # Apple dependencies
 , CoreServices
 , Security
-, cf-private
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lorri";
-  version = "unstable-2019-10-30";
+  version = "unstable-2020-01-09";
 
   meta = with stdenv.lib; {
     description = "Your project's nix-env";
@@ -28,19 +27,19 @@ rustPlatform.buildRustPackage rec {
     owner = "target";
     repo = pname;
     # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
-    rev = "03f10395943449b1fc5026d3386ab8c94c520ee3";
-    sha256 = "0fcl79ndaziwd8d74mk1lsijz34p2inn64b4b4am3wsyk184brzq";
+    rev = "7b84837b9988d121dd72178e81afd440288106c5";
+    sha256 = "0rkga944jl6i0051vbsddfqbvzy12168cbg4ly2ng1rk0x97dbr8";
   };
 
-  cargoSha256 = "1daff4plh7hwclfp21hkx4fiflh9r80y2c7k2sd3zm4lmpy0jpfz";
+  cargoSha256 = "0k7l0zhk2vzf4nlwv4xr207irqib2dqjxfdjk1fprff84c4kblx8";
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
   RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix {};
 
-  nativeBuildInputs = with pkgs; [ nix direnv which ];
+  nativeBuildInputs = with pkgs; [ rustPackages.rustfmt ];
   buildInputs =
-    stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security cf-private ];
+    stdenv.lib.optionals stdenv.isDarwin [ CoreServices Security ];
 
   passthru = {
     updater = with builtins; writeScript "copy-runtime-nix.sh" ''

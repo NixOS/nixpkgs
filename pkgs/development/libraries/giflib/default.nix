@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2 }:
+{ stdenv, fetchurl, fetchpatch, xmlto, docbook_xml_dtd_412, docbook_xsl, libxml2, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   name = "giflib-5.2.1";
@@ -21,13 +21,15 @@ stdenv.mkDerivation rec {
       --replace 'PREFIX = /usr/local' 'PREFIX = ${builtins.placeholder "out"}'
   '';
 
+  nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
+
   buildInputs = [ xmlto docbook_xml_dtd_412 docbook_xsl libxml2 ];
 
   meta = {
     description = "A library for reading and writing gif images";
     platforms = stdenv.lib.platforms.unix;
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     branch = "5.2";
   };
 }

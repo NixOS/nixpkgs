@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
-  libcanberra-gtk3, libnotify, nss, polkit, gnome3, gtk3, mate,
+  libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
   wrapGAppsHook, fetchpatch, autoreconfHook }:
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
   version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0idw02z0iig0pfxvlhc4dq4sr7kl1w50xscvg0jzzswnxid2l4ip";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     nss
     polkit
     gtk3
-    gnome3.dconf
+    dconf
     mate.mate-desktop
     mate.libmatekbd
     mate.libmatemixer

@@ -63,6 +63,13 @@ stdenv.mkDerivation rec {
     patchShebangs meson/post_install.py
   '';
 
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
+
+
   meta = with stdenv.lib; {
     description = "Find the most beautiful wallpapers for your desktop";
     homepage = https://github.com/calo001/fondo;

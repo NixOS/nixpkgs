@@ -12,9 +12,6 @@ buildPythonPackage rec {
     sha256 = "7342017cc82dd6178e3b19377389b8a8d1f8b429d9cdb315cfb1094e34a0f526";
   };
 
-  # Fixes incorrect specified requirement (part of next release)
-  patches = [ ./fix_pytestrunner_req.patch ];
-
   propagatedBuildInputs = [ wheel setuptools packaging ];
   checkInputs = [ 
     cmake ninja cython codecov coverage six pathpy

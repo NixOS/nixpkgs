@@ -104,16 +104,24 @@ mkDerivation rec {
     # - do not wrap dde-dman-portal related files: it appears it has been removed: https://github.com/linuxdeepin/dde-session-ui/commit/3bd028cf135ad22c784c0146e447ef34a69af768
   '';
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
-    # wrapGAppsHook does not work with binaries outside of $out/bin or $out/libexec
+    # wrapGAppsHook or wrapQtAppsHook does not work with binaries outside of $out/bin or $out/libexec
     for binary in $out/lib/deepin-daemon/*; do
-      wrapProgram $binary "''${qtWrapperArgs[@]}"
+      wrapProgram $binary "''${gappsWrapperArgs[@]}"
     done
 
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin desktop-environment - Session UI module";

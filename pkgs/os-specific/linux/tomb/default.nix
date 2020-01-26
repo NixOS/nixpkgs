@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tomb";
-  version = "2.6";
+  version = "2.7";
 
   src = fetchFromGitHub {
     owner  = "dyne";
     repo   = "Tomb";
     rev    = "v${version}";
-    sha256 = "0pr0lw1byxwkgv857zfmd8yqa03a7mckhzklrf9rkv1l6nisz0z0";
+    sha256 = "1vzkpzci6cp1r1q2n34pcgcns78i726k8d89dd6pibyj0vfnkl57";
   };
 
   buildInputs = [ sudo zsh pinentry ];

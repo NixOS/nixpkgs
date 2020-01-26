@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "odo";
-  version= "unstable-2019-07-16";
+  version= "unstable-2018-09-21";
 
   src = fetchFromGitHub {
     owner = "blaze";
@@ -54,5 +54,6 @@ buildPythonPackage rec {
     description = "Data migration utilities";
     license = licenses.bsdOriginal;
     maintainers = with maintainers; [ fridh costrouc ];
+    broken = true; # no longer compatible with dask>=2.0
   };
 }

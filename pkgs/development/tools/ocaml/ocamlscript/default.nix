@@ -10,8 +10,8 @@ stdenv.mkDerivation {
 
   patches = [ ./Makefile.patch ];
 
-  buildFlags = "PREFIX=$(out)";
-  installFlags = "PREFIX=$(out)";
+  buildFlags = [ "PREFIX=$(out)" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   preInstall = "mkdir $out/bin";
   createFindlibDestdir = true;
