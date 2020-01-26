@@ -561,6 +561,7 @@ in {
                 add_header X-Robots-Tag none;
                 add_header X-Download-Options noopen;
                 add_header X-Permitted-Cross-Domain-Policies none;
+                add_header X-Frame-Options sameorigin;
                 add_header Referrer-Policy no-referrer;
                 access_log off;
               '';
@@ -575,6 +576,7 @@ in {
               add_header X-Robots-Tag none;
               add_header X-Download-Options noopen;
               add_header X-Permitted-Cross-Domain-Policies none;
+              add_header X-Frame-Options sameorigin;
               add_header Referrer-Policy no-referrer;
               add_header Strict-Transport-Security "max-age=15552000; includeSubDomains" always;
               error_page 403 /core/templates/403.php;
