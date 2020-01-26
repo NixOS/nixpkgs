@@ -1,5 +1,5 @@
 { stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala
-, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
+, dockbarx, gtk2, gnome2, xfce, pythonPackages, wafHook }:
 
 stdenv.mkDerivation rec {
   ver = "0.5";
@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     wrapPythonProgramsIn "$out/share/xfce4/panel/plugins" "$out $pythonPath"
   '';
 
+  propagatedUserEnvPkgs = [ gnome2.GConf.out ];
+  
   meta = with stdenv.lib; {
     homepage = https://github.com/TiZ-EX1/xfce4-dockbarx-plugin;
     description = "A plugins to embed DockbarX into xfce4-panel";
