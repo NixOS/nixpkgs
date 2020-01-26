@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , python3
-, gettext
+, glibcLocales
 , gobject-introspection
 , wrapGAppsHook
 , gtk3
@@ -31,13 +31,13 @@ python3.pkgs.buildPythonApplication rec {
   strictDeps = false;
 
   nativeBuildInputs = [
-    gettext
     gobject-introspection
     wrapGAppsHook
     python3.pkgs.pip
   ];
 
   buildInputs = [
+    glibcLocales
     gtk3
     keybinder3
     libnotify
@@ -45,6 +45,8 @@ python3.pkgs.buildPythonApplication rec {
     python3
     vte
   ];
+
+  makeWrapperArgs = [ "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive" ];
 
   propagatedBuildInputs = with python3.pkgs; [
     dbus-python
