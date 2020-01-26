@@ -23133,6 +23133,11 @@ in
 
   mindustry = callPackage ../games/mindustry { };
 
+  mindustry-server = callPackage ../games/mindustry {
+    enableClient = false;
+    enableServer = true;
+  };
+
   minecraft = callPackage ../games/minecraft { };
 
   minecraft-server = callPackage ../games/minecraft-server { };
