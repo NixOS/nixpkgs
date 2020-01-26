@@ -37,9 +37,9 @@ stdenv.mkDerivation rec {
       Flag.  You can even design your own maps!
     '';
 
-    homepage = https://teeworlds.com/;
+    homepage = "https://teeworlds.com/";
     license = "BSD-style, see `license.txt'";
     maintainers = with stdenv.lib.maintainers; [ astsmtl ];
-    platforms = ["x86_64-linux" "i686-linux"];
+    platforms = stdenv.lib.platforms.linux;
   };
 }
