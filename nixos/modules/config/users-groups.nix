@@ -171,6 +171,15 @@ let
         '';
       };
 
+      copySkel = mkOption {
+        type = types.bool;
+        default = config.createHome;
+        description = ''
+          If this is true, createHome is true, and environment.etc.skel is set, the skel directory's contents
+          will be copied into the home directory when it is first created.
+        '';
+      };
+
       useDefaultShell = mkOption {
         type = types.bool;
         default = false;
@@ -383,7 +392,8 @@ let
     inherit (cfg) mutableUsers;
     users = mapAttrsToList (_: u:
       { inherit (u)
-          name uid group description home createHome isSystemUser
+          name uid group description isSystemUser
+          home createHome copySkel
           password passwordFile hashedPassword
           initialPassword initialHashedPassword;
         shell = utils.toShellPath u.shell;
@@ -394,6 +404,7 @@ let
           filterAttrs (n: u: elem g.name u.extraGroups) cfg.users
         ));
       }) cfg.groups;
+    skel = "${config.system.build.etc}/etc/skel";
   });
 
   systemShells =
