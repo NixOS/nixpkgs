@@ -5,6 +5,7 @@
 , AppKit
 , withGui ? true, libevent
 , qtbase, qttools
+, zeromq
 }:
 
 with stdenv.lib;
@@ -22,7 +23,7 @@ mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
-  buildInputs = [ openssl db48 boost zlib
+  buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc glib protobuf utillinux libevent ]
                   ++ optionals stdenv.isDarwin [ AppKit ]
                   ++ optionals withGui [ qtbase qttools qrencode ];
