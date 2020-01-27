@@ -75,7 +75,7 @@ in {
       default = [];
       example = [ "198.51.100.1:443" "[2001:db8::1]:443" "443" ];
       description = ''
-        Addresses and ports on which kresd should provide DNS over HTTPS (see RFC 7858).
+        Addresses and ports on which kresd should provide DNS over HTTPS (see RFC 8484).
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
