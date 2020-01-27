@@ -412,7 +412,8 @@ rec {
       if isDefined then
         foldl' (res: def:
           if type.check def.value then res
-          else throw "The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'."
+          else throw ("The option value `${showOption loc}' in `${def.file}' is not of type `${type.description}'. "
+            + (type.checkFailedMessage or (x: "")) def.value)
         ) (type.merge loc defsFinal) defsFinal
       else
         # (nixos-option detects this specific error message and gives it special
