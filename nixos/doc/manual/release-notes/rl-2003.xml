@@ -485,6 +485,12 @@ users.users.me =
        now uses the short rather than full version string.
      </para>
    </listitem>
+    <listitem>
+    <para>
+    It is now possible to unlock LUKS-Encrypted file systems using a FIDO2 token
+    via <option>boot.initrd.luks.fido2Support</option>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
