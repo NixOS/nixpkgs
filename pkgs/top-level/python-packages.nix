@@ -2460,6 +2460,8 @@ in {
 
   dash-core-components = callPackage ../development/python-modules/dash-core-components { };
 
+  dash-daq = callPackage ../development/python-modules/dash-daq { };
+
   dash-html-components = callPackage ../development/python-modules/dash-html-components { };
 
   dash-renderer = callPackage ../development/python-modules/dash-renderer { };
