@@ -21,6 +21,9 @@ let
           description = ''
             Path to an image file to load instead of pulling from a registry.
             If defined, do not pull from registry.
+
+            You still need to set the <literal>image</literal> attribute, as it
+            will be used as the image name for docker to start a container.
           '';
           example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
         };
