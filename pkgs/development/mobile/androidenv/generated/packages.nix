@@ -1012,6 +1012,32 @@
       
     };
   };
+
+  "emulator"."29.3.6".macosx = {
+    name = "emulator";
+    path = "emulator";
+    revision = "29.3.6";
+    displayName = "Android Emulator";
+    archives = {
+      macosx = fetchurl {
+        url = https://dl.google.com/android/repository/emulator-darwin-6137948.zip;
+        sha1 = "cc6388d71b1266dc366a972abea7a9d98ee34d33";
+      };
+    };
+  };
+
+  "emulator"."29.3.6".linux = {
+    name = "emulator";
+    path = "emulator";
+    revision = "29.3.6";
+    displayName = "Android Emulator";
+    archives = {
+      linux = fetchurl {
+        url = https://dl.google.com/android/repository/emulator-linux-6137948.zip;
+        sha1 = "f275185f2d8d627141c03d1ffdcac96d9f4ea035";
+      };
+    };
+  };
   
   "lldb"."2.0.2558144" = {
     
