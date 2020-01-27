@@ -1394,6 +1394,8 @@ in {
 
   sparse = callPackage ../development/python-modules/sparse { };
 
+  spavro =  callPackage ../development/python-modules/spavro { };
+
   spglib = callPackage ../development/python-modules/spglib { };
 
   sshpubkeys = callPackage ../development/python-modules/sshpubkeys { };
