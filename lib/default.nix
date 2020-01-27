@@ -120,7 +120,7 @@ let
       scrubOptionValue literalExample showOption showFiles
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
-      isOptionType mkOptionType;
+      isOptionType mkOptionType secretInNixStore;
     inherit (asserts)
       assertMsg assertOneOf;
     inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
