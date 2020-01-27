@@ -4,7 +4,7 @@
 let
   inherit (builtins) head tail length;
   inherit (lib.trivial) and;
-  inherit (lib.strings) concatStringsSep;
+  inherit (lib.strings) concatStringsSep sanitizeDerivationName;
   inherit (lib.lists) fold concatMap concatLists;
 in
 
@@ -310,7 +310,7 @@ rec {
       path' = builtins.storePath path;
       res =
         { type = "derivation";
-          name = builtins.unsafeDiscardStringContext (builtins.substring 33 (-1) (baseNameOf path'));
+          name = sanitizeDerivationName (builtins.substring 33 (-1) (baseNameOf path'));
           outPath = path';
           outputs = [ "out" ];
           out = res;
