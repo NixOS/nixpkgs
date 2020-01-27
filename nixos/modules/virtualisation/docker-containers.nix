@@ -222,9 +222,8 @@ let
 
       ExecStartPre = ["-${pkgs.docker}/bin/docker rm -f ${name}"
                       "-${pkgs.docker}/bin/docker image prune -f"] ++
-        (if (container.imageFile != null)
-                then ["${pkgs.docker}/bin/docker load -i ${container.imageFile}"]
-                else ["${pkgs.docker}/bin/docker pull ${container.image}"]);
+        (optional (container.imageFile != null)
+                ["${pkgs.docker}/bin/docker load -i ${container.imageFile}"]);
 
       ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop ${name}"'';
       ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${name}";
