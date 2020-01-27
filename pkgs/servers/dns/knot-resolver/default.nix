@@ -60,8 +60,7 @@ unwrapped = stdenv.mkDerivation rec {
     rm "$out"/lib/libkres.a
   '';
 
-  # aarch64: see https://github.com/wahern/cqueues/issues/223
-  doInstallCheck = with stdenv; hostPlatform == buildPlatform && !hostPlatform.isAarch64;
+  doInstallCheck = with stdenv; hostPlatform == buildPlatform;
   installCheckInputs = [ cmocka which cacert ];
   installCheckPhase = ''
     meson test --print-errorlogs
