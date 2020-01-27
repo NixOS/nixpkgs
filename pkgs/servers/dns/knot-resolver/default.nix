@@ -11,15 +11,8 @@ let # un-indented, over the whole file
 
 result = if extraFeatures then wrapped-full else unwrapped;
 
-inherit (stdenv.lib) optional optionals concatStringsSep;
+inherit (stdenv.lib) optional optionals;
 lua = luajitPackages;
-
-# FIXME: remove these usages once resolving
-# https://github.com/NixOS/nixpkgs/pull/63108#issuecomment-508670438
-exportLuaPathsFor = luaPkgs: ''
-  export LUA_PATH='${ concatStringsSep ";" (map lua.getLuaPath  luaPkgs)}'
-  export LUA_CPATH='${concatStringsSep ";" (map lua.getLuaCPath luaPkgs)}'
-'';
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
@@ -34,8 +27,7 @@ unwrapped = stdenv.mkDerivation rec {
 
   preConfigure = ''
     patchShebangs scripts/
-  ''
-    + stdenv.lib.optionalString doInstallCheck (exportLuaPathsFor [ lua.cqueues lua.basexx ]);
+  '';
 
   nativeBuildInputs = [ pkgconfig meson ninja ];
 
@@ -61,7 +53,7 @@ unwrapped = stdenv.mkDerivation rec {
   '';
 
   doInstallCheck = with stdenv; hostPlatform == buildPlatform;
-  installCheckInputs = [ cmocka which cacert ];
+  installCheckInputs = [ cmocka which cacert lua.cqueues lua.basexx ];
   installCheckPhase = ''
     meson test --print-errorlogs
   '';
@@ -75,26 +67,18 @@ unwrapped = stdenv.mkDerivation rec {
   };
 };
 
-# FIXME: revert this back after resolving
-# https://github.com/NixOS/nixpkgs/pull/63108#issuecomment-508670438
-wrapped-full =
-  with stdenv.lib;
-  with luajitPackages;
-  let
-    luaPkgs = [
+wrapped-full = runCommand unwrapped.name
+  {
+    nativeBuildInputs = [ makeWrapper ];
+    buildInputs = with luajitPackages; [
       luasec luasocket # trust anchor bootstrap, prefill module
       luafilesystem # prefill module
       http # for http module; brings lots of deps; some are useful elsewhere
-      cqueues fifo lpeg lpeg_patterns luaossl compat53 basexx binaryheap
     ];
-  in runCommand unwrapped.name
-  {
-    nativeBuildInputs = [ makeWrapper ];
     preferLocalBuild = true;
     allowSubstitutes = false;
   }
-  (exportLuaPathsFor luaPkgs
-  + ''
+  ''
     mkdir -p "$out"/{bin,share}
     makeWrapper '${unwrapped}/bin/kresd' "$out"/bin/kresd \
       --set LUA_PATH  "$LUA_PATH" \
@@ -106,6 +90,6 @@ wrapped-full =
     echo "Checking that 'http' module loads, i.e. lua search paths work:"
     echo "modules.load('http')" > test-http.lua
     echo -e 'quit()' | env -i "$out"/bin/kresd -a 127.0.0.1#53535 -c test-http.lua
-  '');
+  '';
 
 in result
