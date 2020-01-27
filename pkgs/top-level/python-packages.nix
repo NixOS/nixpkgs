@@ -2985,6 +2985,8 @@ in {
 
   oscrypto = callPackage ../development/python-modules/oscrypto { };
 
+  osqp = callPackage ../development/python-modules/osqp { };
+
   oyaml = callPackage ../development/python-modules/oyaml { };
 
   pamela = callPackage ../development/python-modules/pamela { };
