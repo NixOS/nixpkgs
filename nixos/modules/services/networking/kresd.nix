@@ -96,6 +96,15 @@ in {
         For detailed syntax see ListenStream in man systemd.socket.
       '';
     };
+    instances = mkOption {
+      type = types.ints.unsigned;
+      default = 1;
+      description = ''
+        The number of instances to start.  They will be called kresd@{1,2,...}.service.
+        Knot Resolver uses no threads, so this is the way to scale.
+        You can dynamically start/stop them at will, so this is just system default.
+      '';
+    };
     # TODO: perhaps options for more common stuff like cache size or forwarding
   };
 
@@ -112,9 +121,10 @@ in {
 
     systemd.packages = [ package ]; # the units are patched inside the package a bit
 
-    systemd.targets.kresd = {
+    systemd.targets.kresd = { # configure units started by default
       wantedBy = [ "multi-user.target" ];
-      wants = [ "kres-cache-gc.service" "kresd@1.service" ];
+      wants = [ "kres-cache-gc.service" ]
+        ++ map (i: "kresd@${toString i}.service") (range 1 cfg.instances);
     };
     systemd.services."kresd@".serviceConfig = {
       ExecStart = "${package}/bin/kresd --noninteractive "
