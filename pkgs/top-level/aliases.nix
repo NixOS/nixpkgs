@@ -412,6 +412,7 @@ mapAliases ({
   system_config_printer = system-config-printer;  # added 2016-01-03
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
+  tangogps = foxtrotgps; # added 2020-01-26
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
   telepathy_glib = telepathy-glib; # added 2018-02-25

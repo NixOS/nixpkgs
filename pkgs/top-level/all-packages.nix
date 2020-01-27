@@ -19230,6 +19230,8 @@ in
 
   formatter = callPackage ../applications/misc/formatter { };
 
+  foxtrotgps = callPackage ../applications/misc/foxtrotgps { };
+
   fractal = callPackage ../applications/networking/instant-messengers/fractal { };
 
   freecad = qt5.callPackage ../applications/graphics/freecad { mpi = openmpi; };
@@ -21655,10 +21657,6 @@ in
 
   taizen = callPackage ../applications/misc/taizen {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
-  tangogps = callPackage ../applications/misc/tangogps {
-    gconf = gnome2.GConf;
   };
 
   tambura = callPackage ../applications/audio/tambura { };
