@@ -6042,6 +6042,8 @@ in {
 
   yappi = callPackage ../development/python-modules/yappi { };
 
+  yq = callPackage ../development/python-modules/yq { };
+
   zbase32 = callPackage ../development/python-modules/zbase32 { };
 
   zdaemon = callPackage ../development/python-modules/zdaemon { };
