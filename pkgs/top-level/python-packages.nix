@@ -5419,6 +5419,8 @@ in {
 
   supervisor = callPackage ../development/python-modules/supervisor {};
 
+  superlance = callPackage ../development/python-modules/superlance { };
+
   subprocess32 = callPackage ../development/python-modules/subprocess32 { };
 
   spark_parser = callPackage ../development/python-modules/spark_parser { };
