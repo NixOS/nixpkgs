@@ -83,14 +83,24 @@ let
   # This function also performs variable substitution, replacing environment markers with their explicit values
   transformExpressions = exprs: let
     variables = {
-      os_name = "posix"; # TODO: Check other platforms
+      os_name = (
+        if python.pname == "jython" then "java"
+        else "posix"
+      );
       sys_platform = (
         if stdenv.isLinux then "linux"
         else if stdenv.isDarwin then "darwin"
         else throw "Unsupported platform"
       );
       platform_machine = stdenv.platform.kernelArch;
-      platform_python_implementation = "CPython"; # Only CPython supported for now
+      platform_python_implementation = let
+        impl = python.passthru.implementation;
+      in
+        (
+          if impl == "cpython" then "CPython"
+          else if impl == "pypy" then "PyPy"
+          else throw "Unsupported implementation ${impl}"
+        );
       platform_release = ""; # Field not reproducible
       platform_system = (
         if stdenv.isLinux then "Linux"
@@ -100,7 +110,7 @@ let
       platform_version = ""; # Field not reproducible
       python_version = python.passthru.pythonVersion;
       python_full_version = python.version;
-      implementation_name = "cpython"; # Only cpython supported for now
+      implementation_name = python.implementation;
       implementation_version = python.version;
       extra = "";
     };
