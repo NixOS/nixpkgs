@@ -1314,6 +1314,8 @@ in {
 
   pyvoro = callPackage ../development/python-modules/pyvoro { };
 
+  redo = callPackage ../development/python-modules/redo { };
+  
   relatorio = callPackage ../development/python-modules/relatorio { };
 
   reproject = callPackage ../development/python-modules/reproject { };
