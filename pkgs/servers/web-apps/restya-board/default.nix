@@ -1,46 +1,53 @@
-{ stdenv, fetchurl, unzip }:
+{ stdenv, fetchurl, fetchFromGitHub }:
 
 let
 
-  hide-card-id = fetchurl {
-    url = "https://github.com/RestyaPlatform/board-apps/releases/download/v2/r_hide_card_id-v0.1.2.zip";
-    sha256 = "1scm696rs8wx0z2y0g6r9vf01b0yay79azw8n785c6zdvrbqw7dp";
-  };
-
-  togetherjs = fetchurl {
-    url = "https://github.com/RestyaPlatform/board-apps/releases/download/v2/r_togetherjs-v0.1.2.zip";
-    sha256 = "1kms7z0ci15plwbs6nxvz15w0ym3in39msbncaj3cn0p72kvx5cm";
+  board-apps = fetchFromGitHub {
+    owner = "RestyaPlatform";
+    repo = "board-apps";
+    rev = "v1";
+    sha256 = "038qq0x547xzr9v1sa6cd3pagi2z4sfy80lcjn3qqgp5h39mb02x";
   };
 
 in
 
 stdenv.mkDerivation rec {
-  pname = "rstya-board";
-  version = "0.6";
+  pname = "restya-board";
+  version = "0.6.7";
 
-  src = fetchurl {
-    url = "https://github.com/RestyaPlatform/board/releases/download/v${version}/board-v${version}.zip";
-    sha256 = "1js8c69qmga7bikp66fqhch3n2vw49918z32q88lz3havqzai8gd";
+  src = fetchFromGitHub {
+    owner = "RestyaPlatform";
+    repo = "board";
+    rev = "v${version}";
+    sha256 = "0vba8qrg28a5g2ax7xzdp5j2wgl4v7cgasbzhhdji29qjfrldgbf";
   };
 
-  nativeBuildInputs = [ unzip ];
+  nativeBuildInputs = [ ];
+
+  outputs = [ "out" ];
 
   buildCommand = ''
     mkdir $out
-    unzip -d $out $src
+    mkdir -p $out/client/apps
+    cp -r $src/* $out
 
     cd $out
-    patch -p1 < ${./fix_request-uri.patch}
 
     chmod +x $out/server/php/shell/*.sh
 
-    mkdir $out/client/apps
-    unzip -d $out/client/apps ${hide-card-id}
-    unzip -d $out/client/apps ${togetherjs}
+    cp -r ${board-apps}/r_hide_card_id $out/client/apps
+    cp -r ${board-apps}/r_togetherjs $out/client/apps
   '';
 
   meta = with stdenv.lib; {
     description = "Web-based kanban board";
+    longDescription = ''
+      An open Source Trello-like Kanban-Board based on the Restya platform.
+      Please note: When updating this software, you have to run the database
+      migration scripts manually. You can find them at in the source repository
+      under /sql. More detailed instructions can be found at
+      https://github.com/RestyaPlatform/board/tree/v0.6.7#upgrade
+    '';
     license = licenses.osl3;
     homepage = http://restya.com;
     maintainers = with maintainers; [ tstrobel ];
