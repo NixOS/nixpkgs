@@ -1432,6 +1432,8 @@ in {
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
 
+  thriftpy2 = callPackage ../development/python-modules/thriftpy2 { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   trustme = callPackage ../development/python-modules/trustme {};
