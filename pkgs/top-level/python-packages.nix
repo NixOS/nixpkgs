@@ -5080,6 +5080,8 @@ in {
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
   python_simple_hipchat = self.python-simple-hipchat;
 
+  scs = callPackage ../development/python-modules/scs { scs = pkgs.scs; };
+
   python_keyczar = callPackage ../development/python-modules/python_keyczar { };
 
   python-language-server = callPackage ../development/python-modules/python-language-server {};
