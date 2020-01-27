@@ -64,6 +64,22 @@ in
         '';
     };
 
+    services.minidlna.announceInterval = mkOption {
+      type = types.int;
+      default = 895;
+      description =
+        ''
+          The interval between announces (in seconds).
+
+          By default miniDLNA will announce its presence on the network
+          approximately every 15 minutes.
+
+          Many people prefer shorter announce intervals (e.g. 60 seconds)
+          on their home networks, especially when DLNA clients are
+          started on demand.
+        '';
+    };
+
     services.minidlna.config = mkOption {
       type = types.lines;
       description = "The contents of MiniDLNA's configuration file.";
@@ -82,6 +98,7 @@ in
         ${concatMapStrings (dir: ''
           media_dir=${dir}
         '') cfg.mediaDirs}
+        notify_interval=${toString cfg.announceInterval}
       '';
 
     users.users.minidlna = {
