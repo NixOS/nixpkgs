@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
       - history mechanism
       - job control
     '';
-    homepage = http://www.tcsh.org/;
+    homepage = https://www.tcsh.org/;
     license = licenses.bsd2;
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.linux ++ platforms.darwin;

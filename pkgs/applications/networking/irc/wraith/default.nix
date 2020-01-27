@@ -40,7 +40,7 @@ mkDerivation rec {
       The binary will not run when moved onto non-NixOS systems; use patchelf
       to fix its runtime dependenices.
     '';
-    homepage = http://wraith.botpack.net/;
+    homepage = https://wraith.botpack.net/;
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ elitak ];
     platforms = platforms.linux;

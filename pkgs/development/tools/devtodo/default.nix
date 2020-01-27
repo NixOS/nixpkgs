@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://swapoff.org/devtodo1.html;
+    homepage = https://swapoff.org/devtodo1.html;
     description = "A hierarchical command-line task manager";
     license = licenses.gpl2;
     maintainers = [ maintainers.woffs ];
