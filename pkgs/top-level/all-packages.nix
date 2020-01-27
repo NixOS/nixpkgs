@@ -791,6 +791,9 @@ in
   bitwarden_rs = callPackage ../tools/security/bitwarden_rs {
     inherit (darwin.apple_sdk.frameworks) Security CoreServices;
   };
+  bitwarden_rs-sqlite = bitwarden_rs;
+  bitwarden_rs-mysql = bitwarden_rs.override { dbBackend = "mysql"; };
+  bitwarden_rs-postgresql = bitwarden_rs.override { dbBackend = "postgresql"; };
 
   bitwarden_rs-vault = callPackage ../tools/security/bitwarden_rs/vault.nix { };
 
