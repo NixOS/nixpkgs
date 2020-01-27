@@ -64,20 +64,6 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${minizip}/include/minizip"
-    # See Telegram/gyp/qt.gypi
-    "-I${getDev qtbase}/mkspecs/linux-g++"
-  ] ++ concatMap (x: [
-    "-I${getDev qtbase}/include/${x}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
-    "-I${getDev libopus}/include/opus"
-    "-I${getDev alsaLib}/include/alsa"
-    "-I${getDev libpulseaudio}/include/pulse"
-    ]) [ "QtCore" "QtGui" "QtDBus" ];
-  CPPFLAGS = NIX_CFLAGS_COMPILE;
-
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
     #"-DTDESKTOP_API_TEST=ON" # TODO: Officiall API credentials for Nixpkgs
