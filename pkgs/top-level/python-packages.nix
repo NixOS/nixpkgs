@@ -6115,6 +6115,8 @@ in {
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
 
+  untangle = callPackage ../development/python-modules/untangle { };
+
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
   trackpy = callPackage ../development/python-modules/trackpy { };
