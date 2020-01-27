@@ -16601,6 +16601,8 @@ in
 
     facetimehd = callPackage ../os-specific/linux/facetimehd { };
 
+    tuxedo-keyboard = callPackage ../os-specific/linux/tuxedo-keyboard { };
+
     jool = callPackage ../os-specific/linux/jool { };
 
     mba6x_bl = callPackage ../os-specific/linux/mba6x_bl { };
