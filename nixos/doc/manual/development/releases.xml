@@ -237,7 +237,7 @@
    experience.
   </para>
   <para>
-   Release managers for current NixOS release are tracked by GitHub team
+   Release managers for the current NixOS release are tracked by GitHub team
    <link xlink:href="https://github.com/orgs/NixOS/teams/nixos-release-managers/members"><literal>@NixOS/nixos-release-managers</literal></link>.
   </para>
   <para>
