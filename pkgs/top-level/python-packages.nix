@@ -1496,7 +1496,7 @@ in {
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
-  
+
   wrf-python = callPackage ../development/python-modules/wrf-python { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
@@ -1690,7 +1690,7 @@ in {
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
-  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };  
+  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };
 
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
@@ -1903,6 +1903,8 @@ in {
   cx_oracle = callPackage ../development/python-modules/cx_oracle {};
 
   cvxopt = callPackage ../development/python-modules/cvxopt { };
+
+  cvxpy = callPackage ../development/python-modules/cvxpy { };
 
   cycler = callPackage ../development/python-modules/cycler { };
 
@@ -4406,7 +4408,7 @@ in {
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
-  nbformat = if isPy3k then 
+  nbformat = if isPy3k then
     callPackage ../development/python-modules/nbformat { }
   else callPackage ../development/python-modules/nbformat/2.nix { };
 
