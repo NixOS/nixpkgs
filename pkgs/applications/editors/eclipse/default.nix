@@ -99,6 +99,18 @@ in rec {
       };
   };
 
+  ### Eclipse Committers
+
+  eclipse-committers = buildEclipse {
+    name = "eclipse-committers-${platform_major}.${platform_minor}";
+    description = "Eclipse IDE for Eclipse Committers and Eclipse Platform Plugin Developers";
+    src =
+      fetchurl {
+        url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/technology/epp/downloads/release/${year}-${month}/R/eclipse-committers-${year}-${month}-R-linux-gtk-x86_64.tar.gz";
+        sha512 = "1l0gc7srpvn3r0yrbrp1pjv1a3n1y7q5fqww5fmzyw1d6j3hjkqj74c9bff16579cpf7z6d4wmj6kr7z89p0ignrx319gc8p0hivi1y";
+      };
+  };
+
   ### Environments
 
   # Function that assembles a complete Eclipse environment from an
