@@ -32,7 +32,6 @@ let
     llvm-polly = callPackage ./llvm.nix { enablePolly = true; };
 
     clang-unwrapped = callPackage ./clang {
-      inherit (tools) lld;
       inherit clang-tools-extra_src;
     };
     clang-polly-unwrapped = callPackage ./clang {
