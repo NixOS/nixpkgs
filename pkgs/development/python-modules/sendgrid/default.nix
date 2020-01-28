@@ -28,5 +28,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Twilio SendGrid library for Python";
     homepage = https://pypi.org/project/sendgrid/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ xfoxawy ];
   };
 }
