@@ -22679,6 +22679,9 @@ in
   bitcoin-classic  = libsForQt5.callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = true; };
   bitcoind-classic = callPackage ../applications/blockchains/bitcoin-classic.nix { boost = boost165; withGui = false; };
 
+  bitcoin-gold = libsForQt5.callPackage ../applications/blockchains/bitcoin-gold.nix { boost = boost165; withGui = true; };
+  bitcoind-gold = callPackage ../applications/blockchains/bitcoin-gold.nix { boost = boost165; withGui = false; };
+
   btc1 = callPackage ../applications/blockchains/btc1.nix {
     inherit (darwin.apple_sdk.frameworks) AppKit;
     boost = boost165;
