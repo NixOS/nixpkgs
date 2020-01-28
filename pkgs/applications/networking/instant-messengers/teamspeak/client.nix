@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The TeamSpeak voice communication tool";
-    homepage = http://teamspeak.com/;
+    homepage = https://teamspeak.com/;
     license = {
       fullName = "Teamspeak client license";
       url = http://sales.teamspeakusa.com/licensing.php;

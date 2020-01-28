@@ -36,7 +36,7 @@ in
     '';
 
     meta = with stdenv.lib; {
-      homepage = http://www.redmine.org/;
+      homepage = https://www.redmine.org/;
       platforms = platforms.linux;
       maintainers = [ maintainers.aanderse ];
       license = licenses.gpl2;

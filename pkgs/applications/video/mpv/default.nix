@@ -105,13 +105,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mpv";
-  version = "0.31.0";
+  version = "0.32.0";
 
   src = fetchFromGitHub {
     owner  = "mpv-player";
     repo   = "mpv";
     rev    = "v${version}";
-    sha256 = "138m09l4wi6ifbi15z76j578plmxkclhlzfryasfcdp8hswhs59r";
+    sha256 = "0kmy1q0hp87vq4rpv7py04x8bpg1wmlzaibavmkf713jqp6qy596";
   };
 
   postPatch = ''
@@ -234,7 +234,7 @@ in stdenv.mkDerivation rec {
     description = "A media player that supports many video formats (MPlayer and mplayer2 fork)";
     homepage = https://mpv.io;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ AndersonTorres fpletz globin ivan ma27 tadeokondrak ];
+    maintainers = with maintainers; [ AndersonTorres fpletz globin ma27 tadeokondrak ];
     platforms = platforms.darwin ++ platforms.linux;
 
     longDescription = ''

@@ -187,7 +187,7 @@
     </listitem>
     <listitem>
      <para>
-      Update "Chapter 4. Upgrading NixOS" section of the manual to match 
+      Update "Chapter 4. Upgrading NixOS" section of the manual to match
       new stable release version.
      </para>
     </listitem>
@@ -235,6 +235,10 @@
    manager who already has managed one release and one release manager being
    introduced to their role, making it easier to pass on knowledge and
    experience.
+  </para>
+  <para>
+   Release managers for the current NixOS release are tracked by GitHub team
+   <link xlink:href="https://github.com/orgs/NixOS/teams/nixos-release-managers/members"><literal>@NixOS/nixos-release-managers</literal></link>.
   </para>
   <para>
    A release manager's role and responsibilities are:

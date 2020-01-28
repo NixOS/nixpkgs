@@ -111,7 +111,7 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart = "${pkgs.matterbridge.bin}/bin/matterbridge -conf ${matterbridgeConfToml}";
+        ExecStart = "${pkgs.matterbridge}/bin/matterbridge -conf ${matterbridgeConfToml}";
         Restart = "always";
         RestartSec = "10";
       };

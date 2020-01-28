@@ -14,7 +14,9 @@
 /lib                        @edolstra @nbp @infinisil
 /lib/systems                @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
+/lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
+/lib/asserts.nix            @edolstra @nbp @Profpatsch
 
 # Nixpkgs Internals
 /default.nix                          @nbp

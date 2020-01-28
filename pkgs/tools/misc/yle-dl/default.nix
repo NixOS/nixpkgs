@@ -11,7 +11,9 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "0k93p9csyjm0w33diwl5s22kzs3g78jl3n9k8nxxpqrybfjl912f";
   };
 
-  propagatedBuildInputs = with pythonPackages; [ lxml pyamf pycrypto requests future ffmpeg ];
+  propagatedBuildInputs = with pythonPackages; [
+    lxml pyamf pycrypto requests future ffmpeg setuptools
+  ];
   pythonPath = [ rtmpdump php ];
 
   doCheck = false; # tests require network access

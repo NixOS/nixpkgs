@@ -74,7 +74,7 @@ in
                                           then "--systemd.slice ${cfg.systemd.slice}"
                                           else "--systemd.unit ${cfg.systemd.unit}")
           ++ optional (cfg.systemd.enable && (cfg.systemd.journalPath != null))
-                       "--systemd.jounal_path ${cfg.systemd.journalPath}"
+                       "--systemd.journal_path ${cfg.systemd.journalPath}"
           ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${cfg.logfilePath}")}
       '';
     };

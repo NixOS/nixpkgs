@@ -67,7 +67,9 @@ core-packages:
 # comment saying "# LTS Haskell x.y". Any changes after that commend will be
 # lost the next time `update-stackage.sh` runs.
 default-package-overrides:
-  # LTS Haskell 14.20
+  # pandoc-2.9 does not accept the 0.3 version yet
+  - doclayout < 0.3
+  # LTS Haskell 14.21
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -163,10 +165,10 @@ default-package-overrides:
   - avers ==0.0.17.1
   - avers-api ==0.1.0
   - avers-server ==0.1.0.1
-  - avro ==0.4.5.4
+  - avro ==0.4.6.0
   - avwx ==0.3.0.2
   - aws-cloudfront-signed-cookies ==0.2.0.1
-  - aws-lambda-haskell-runtime ==2.0.2
+  - aws-lambda-haskell-runtime ==2.0.3
   - backprop ==0.2.6.3
   - bank-holidays-england ==0.2.0.2
   - barbies ==1.1.3.0
@@ -174,7 +176,7 @@ default-package-overrides:
   - base16-bytestring ==0.1.1.6
   - base32string ==0.9.1
   - base58string ==0.10.0
-  - base64-bytestring ==1.0.0.2
+  - base64-bytestring ==1.0.0.3
   - base64-bytestring-type ==1.0.1
   - base64-string ==0.2
   - base-compat ==0.10.5
@@ -195,7 +197,7 @@ default-package-overrides:
   - beam-sqlite ==0.4.0.0
   - bench ==1.0.12
   - benchpress ==0.2.2.12
-  - bench-show ==0.3.0
+  - bench-show ==0.3.1
   - bencode ==0.6.0.0
   - bencoding ==0.4.5.2
   - between ==0.11.0.0
@@ -321,8 +323,8 @@ default-package-overrides:
   - ChannelT ==0.0.0.7
   - charset ==0.3.7.1
   - charsetdetect-ae ==1.1.0.4
-  - Chart ==1.9.1
-  - Chart-diagrams ==1.9.2
+  - Chart ==1.9.3
+  - Chart-diagrams ==1.9.3
   - chaselev-deque ==0.5.0.5
   - cheapskate ==0.1.1.1
   - cheapskate-highlight ==0.1.0.0
@@ -338,7 +340,7 @@ default-package-overrides:
   - chronos-bench ==0.2.0.2
   - chunked-data ==0.3.1
   - cipher-aes ==0.2.11
-  - cipher-aes128 ==0.7.0.4
+  - cipher-aes128 ==0.7.0.5
   - cipher-blowfish ==0.0.3
   - cipher-camellia ==0.0.2
   - cipher-des ==0.0.6
@@ -368,7 +370,7 @@ default-package-overrides:
   - codo-notation ==0.5.2
   - coercible-utils ==0.0.0
   - co-log ==0.3.0.0
-  - co-log-core ==0.2.0.0
+  - co-log-core ==0.2.1.0
   - colonnade ==1.2.0.2
   - colorful-monoids ==0.2.1.2
   - colorize-haskell ==1.0.1
@@ -438,7 +440,7 @@ default-package-overrides:
   - credential-store ==0.1.2
   - criterion ==1.5.6.1
   - criterion-measurement ==0.1.2.0
-  - cron ==0.6.1
+  - cron ==0.6.2
   - crypto-api ==0.13.3
   - crypto-api-tests ==0.3
   - cryptocipher ==0.6.2
@@ -479,7 +481,7 @@ default-package-overrides:
   - currency ==0.2.0.0
   - cusparse ==0.2.0.0
   - cutter ==0.0
-  - cyclotomic ==1.0
+  - cyclotomic ==1.0.1
   - czipwith ==1.0.1.2
   - data-accessor ==0.2.2.8
   - data-accessor-mtl ==0.2.0.4
@@ -515,7 +517,7 @@ default-package-overrides:
   - data-textual ==0.3.0.3
   - data-tree-print ==0.1.0.2
   - dataurl ==0.1.0.0
-  - DAV ==1.3.3
+  - DAV ==1.3.4
   - dbcleaner ==0.1.3
   - DBFunctor ==0.1.1.1
   - dbus ==1.2.7
@@ -722,7 +724,7 @@ default-package-overrides:
   - foldable1 ==0.1.0.0
   - fold-debounce ==0.2.0.9
   - fold-debounce-conduit ==0.2.0.4
-  - foldl ==1.4.5
+  - foldl ==1.4.6
   - folds ==0.7.5
   - follow-file ==0.0.3
   - FontyFruity ==0.5.3.5
@@ -779,7 +781,7 @@ default-package-overrides:
   - genvalidity-hspec-cereal ==0.2.0.3
   - genvalidity-hspec-hashable ==0.2.0.4
   - genvalidity-hspec-optics ==0.1.1.1
-  - genvalidity-path ==0.3.0.2
+  - genvalidity-path ==0.3.0.3
   - genvalidity-property ==0.4.0.0
   - genvalidity-scientific ==0.2.1.0
   - genvalidity-text ==0.6.0.0
@@ -801,8 +803,8 @@ default-package-overrides:
   - ghc-paths ==0.1.0.12
   - ghc-prof ==1.4.1.6
   - ghc-syntax-highlighter ==0.0.4.1
-  - ghc-tcplugins-extra ==0.3
-  - ghc-typelits-extra ==0.3.1
+  - ghc-tcplugins-extra ==0.3.2
+  - ghc-typelits-extra ==0.3.2
   - ghc-typelits-knownnat ==0.6
   - ghc-typelits-natnormalise ==0.6.2
   - ghost-buster ==0.1.1.0
@@ -839,7 +841,7 @@ default-package-overrides:
   - gloss-rendering ==1.13.1.1
   - GLURaw ==2.0.0.4
   - GLUT ==2.7.0.15
-  - gnuplot ==0.5.6
+  - gnuplot ==0.5.6.1
   - google-isbn ==1.0.3
   - google-oauth2-jwt ==0.3.2
   - gpolyline ==0.1.0.1
@@ -914,7 +916,7 @@ default-package-overrides:
   - heap ==1.0.4
   - heaps ==0.3.6.1
   - hebrew-time ==0.1.2
-  - hedgehog ==1.0.1
+  - hedgehog ==1.0.2
   - hedgehog-corpus ==0.1.0
   - hedgehog-fn ==1.0
   - hedis ==0.12.11
@@ -981,7 +983,7 @@ default-package-overrides:
   - HSet ==0.0.1
   - hset ==2.2.0
   - hsexif ==0.6.1.6
-  - hs-functors ==0.1.4.0
+  - hs-functors ==0.1.5.0
   - hs-GeoIP ==0.3
   - hsini ==0.5.1.2
   - hsinstall ==2.2
@@ -1198,6 +1200,8 @@ default-package-overrides:
   - l10n ==0.1.0.1
   - labels ==0.3.3
   - lackey ==1.0.10
+  - lambdabot-core ==5.2
+  - lambdabot-irc-plugins ==5.2
   - LambdaHack ==0.9.5.0
   - lame ==0.2.0
   - language-c ==0.8.3
@@ -1207,7 +1211,7 @@ default-package-overrides:
   - language-haskell-extract ==0.2.4
   - language-java ==0.2.9
   - language-javascript ==0.6.0.14
-  - language-puppet ==1.4.6
+  - language-puppet ==1.4.6.1
   - lapack ==0.3.1
   - lapack-carray ==0.0.3
   - lapack-comfort-array ==0.0.0.1
@@ -1223,7 +1227,7 @@ default-package-overrides:
   - leancheck ==0.9.1
   - leancheck-instances ==0.0.3
   - leapseconds-announced ==2017.1.0.1
-  - learn-physics ==0.6.4
+  - learn-physics ==0.6.5
   - lens ==4.17.1
   - lens-action ==0.2.4
   - lens-aeson ==1.0.2
@@ -1308,7 +1312,7 @@ default-package-overrides:
   - matplotlib ==0.7.5
   - matrices ==0.5.0
   - matrix ==0.3.6.1
-  - matrix-market-attoparsec ==0.1.0.8
+  - matrix-market-attoparsec ==0.1.1.3
   - matrix-static ==0.2.1
   - maximal-cliques ==0.1.1
   - mbox ==0.3.4
@@ -1383,7 +1387,7 @@ default-package-overrides:
   - monad-peel ==0.2.1.2
   - monad-products ==4.0.1
   - MonadPrompt ==1.0.0.5
-  - MonadRandom ==0.5.1.1
+  - MonadRandom ==0.5.1.2
   - monad-skeleton ==0.1.5
   - monad-st ==0.2.4.1
   - monads-tf ==0.1.0.3
@@ -1519,7 +1523,7 @@ default-package-overrides:
   - options ==1.2.1.1
   - optparse-applicative ==0.14.3.0
   - optparse-enum ==1.0.0.0
-  - optparse-generic ==1.3.0
+  - optparse-generic ==1.3.1
   - optparse-simple ==0.1.1.2
   - optparse-text ==0.1.1.0
   - ordered-containers ==0.2.2
@@ -1552,8 +1556,8 @@ default-package-overrides:
   - partial-handler ==1.0.3
   - partial-isomorphisms ==0.2.2.1
   - partial-semigroup ==0.5.1.1
-  - password ==0.1.0.0
-  - password-instances ==0.3.0.0
+  - password ==0.1.0.1
+  - password-instances ==0.3.0.1
   - path ==0.6.1
   - path-extra ==0.2.0
   - path-io ==1.4.2
@@ -1640,7 +1644,7 @@ default-package-overrides:
   - postgresql-orm ==0.5.1
   - postgresql-schema ==0.1.14
   - postgresql-simple ==0.6.2
-  - postgresql-simple-migration ==0.1.14.0
+  - postgresql-simple-migration ==0.1.15.0
   - postgresql-simple-queue ==1.0.1
   - postgresql-simple-url ==0.2.1.0
   - postgresql-transactional ==1.1.1
@@ -1700,7 +1704,7 @@ default-package-overrides:
   - psqueues ==0.2.7.2
   - pureMD5 ==2.1.3
   - purescript-bridge ==0.13.0.0
-  - pure-zlib ==0.6.6
+  - pure-zlib ==0.6.7
   - pushbullet-types ==0.4.1.0
   - pusher-http-haskell ==1.5.1.11
   - qchas ==1.1.0.1
@@ -1811,7 +1815,7 @@ default-package-overrides:
   - rhine ==0.5.1.0
   - rhine-gloss ==0.5.1.0
   - rigel-viz ==0.2.0.0
-  - rio ==0.1.12.0
+  - rio ==0.1.13.0
   - rio-orphans ==0.1.1.0
   - rio-prettyprint ==0.1.0.0
   - roc-id ==0.1.0.0
@@ -1847,8 +1851,8 @@ default-package-overrides:
   - say ==0.1.0.1
   - sbp ==2.6.3
   - sbv ==8.3
-  - scalpel ==0.6.0
-  - scalpel-core ==0.6.0
+  - scalpel ==0.6.1
+  - scalpel-core ==0.6.1
   - scanf ==0.1.0.0
   - scanner ==0.3.1
   - scheduler ==1.4.2.1
@@ -1860,7 +1864,7 @@ default-package-overrides:
   - sdl2-image ==2.0.0
   - sdl2-mixer ==1.1.0
   - sdl2-ttf ==2.1.0
-  - secp256k1-haskell ==0.1.6
+  - secp256k1-haskell ==0.1.8
   - securemem ==0.1.10
   - selda ==0.4.0.0
   - selda-json ==0.1.1.0
@@ -2006,7 +2010,7 @@ default-package-overrides:
   - statestack ==0.2.0.5
   - StateVar ==1.2
   - static-text ==0.2.0.4
-  - statistics ==0.15.1.1
+  - statistics ==0.15.2.0
   - stb-image-redux ==0.2.1.3
   - step-function ==0.2
   - stm-chans ==3.0.0.4
@@ -2027,7 +2031,7 @@ default-package-overrides:
   - streaming-attoparsec ==1.0.0.1
   - streaming-bytestring ==0.1.6
   - streaming-cassava ==0.1.0.1
-  - streaming-commons ==0.2.1.1
+  - streaming-commons ==0.2.1.2
   - streaming-wai ==0.1.1
   - streamly ==0.6.1
   - streamproc ==1.6.2
@@ -2093,7 +2097,7 @@ default-package-overrides:
   - tasty-discover ==4.2.1
   - tasty-expected-failure ==0.11.1.2
   - tasty-golden ==2.3.2
-  - tasty-hedgehog ==1.0.0.1
+  - tasty-hedgehog ==1.0.0.2
   - tasty-hspec ==1.1.5.1
   - tasty-hunit ==0.10.0.2
   - tasty-kat ==0.0.3
@@ -2189,7 +2193,7 @@ default-package-overrides:
   - tldr ==0.4.0.2
   - tls ==1.4.1
   - tls-debug ==0.4.5
-  - tls-session-manager ==0.0.3
+  - tls-session-manager ==0.0.4
   - tmapchan ==0.0.3
   - tmapmvar ==0.0.4
   - tmp-postgres ==0.2.0.0
@@ -2244,7 +2248,7 @@ default-package-overrides:
   - typerep-map ==0.3.2
   - type-spec ==0.4.0.0
   - tz ==0.1.3.3
-  - tzdata ==0.1.20190325.0
+  - tzdata ==0.1.20190911.0
   - ua-parser ==0.7.5.1
   - ucam-webauth ==0.1.0.0
   - ucam-webauth-types ==0.1.0.0
@@ -2331,7 +2335,7 @@ default-package-overrides:
   - vector-split ==1.0.0.2
   - vector-th-unbox ==0.2.1.7
   - verbosity ==0.3.0.0
-  - versions ==3.5.1.1
+  - versions ==3.5.2
   - ViennaRNAParser ==1.3.3
   - viewprof ==0.0.0.32
   - vinyl ==0.11.0
@@ -2341,14 +2345,14 @@ default-package-overrides:
   - void ==0.7.3
   - vty ==5.25.1
   - wai ==3.2.2.1
-  - wai-app-static ==3.1.6.3
+  - wai-app-static ==3.1.7.1
   - wai-cli ==0.2.1
   - wai-conduit ==3.0.0.4
   - wai-cors ==0.2.7
   - wai-enforce-https ==0.0.1
   - wai-eventsource ==3.0.0
-  - wai-extra ==3.0.28
-  - wai-handler-launch ==3.0.2.4
+  - wai-extra ==3.0.29
+  - wai-handler-launch ==3.0.3.1
   - wai-logger ==2.3.5
   - wai-middleware-auth ==0.1.2.1
   - wai-middleware-caching ==0.1.0.2
@@ -2451,7 +2455,7 @@ default-package-overrides:
   - yesod ==1.6.0
   - yesod-alerts ==0.1.3.0
   - yesod-auth ==1.6.8
-  - yesod-auth-hashdb ==1.7.1.1
+  - yesod-auth-hashdb ==1.7.1.2
   - yesod-auth-oauth2 ==0.6.1.2
   - yesod-bin ==1.6.0.4
   - yesod-core ==1.6.17
@@ -2510,6 +2514,7 @@ extra-packages:
   - dbus <1                             # for xmonad-0.26
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
   - dhall == 1.27.0                     # required for spago 0.13.0.  Probably can be removed when next version of spago is available.
+  - doctemplates == 0.8                 # required by pandoc-2.9.x
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock == 2.22.*                   # required on GHC 8.0.x
@@ -2598,6 +2603,8 @@ package-maintainers:
     - streaming-wai
   kiwi:
     - glirc
+    - matterhorn
+    - Unique
   psibi:
     - path-pieces
     - persistent
@@ -2776,6 +2783,7 @@ broken-packages:
   - accelerate-fftw
   - accelerate-fourier
   - accelerate-kullback-liebler
+  - accelerate-llvm
   - accelerate-llvm-native
   - accelerate-random
   - accelerate-typelits
@@ -2882,6 +2890,7 @@ broken-packages:
   - algebra
   - algebra-sql
   - algebraic
+  - algebraic-classes
   - algebraic-graphs
   - algebraic-prelude
   - algo-s
@@ -2910,6 +2919,7 @@ broken-packages:
   - AMI
   - ampersand
   - amqp-conduit
+  - amqp-utils
   - analyze
   - analyze-client
   - anansi-pandoc
@@ -3012,6 +3022,7 @@ broken-packages:
   - ariadne
   - arion
   - arith-encode
+  - arithmetic-circuits
   - armada
   - armor
   - arpa
@@ -3105,6 +3116,7 @@ broken-packages:
   - avl-static
   - AvlTree
   - avr-shake
+  - avro-piper
   - awesome-prelude
   - awesomium
   - awesomium-glut
@@ -4241,6 +4253,7 @@ broken-packages:
   - dictionaries
   - dictparser
   - diet
+  - diff
   - diffcabal
   - difference-monoid
   - DifferenceLogic
@@ -4460,6 +4473,7 @@ broken-packages:
   - elevator
   - elision
   - elliptic-curve
+  - elm-street
   - elm-websocket
   - elsa
   - elynx-seq
@@ -4496,6 +4510,7 @@ broken-packages:
   - EnumMap
   - enummapmap
   - enummapset-th
+  - env-extra
   - env-parser
   - envstatus
   - epanet-haskell
@@ -4572,6 +4587,7 @@ broken-packages:
   - exact-real
   - exact-real-positional
   - except-exceptions
+  - exception-hierarchy
   - exception-monads-fd
   - exchangerates
   - execs
@@ -4602,6 +4618,7 @@ broken-packages:
   - extended-categories
   - extensible-data
   - extensible-effects-concurrent
+  - extensible-skeleton
   - Extra
   - extract-dependencies
   - extractelf
@@ -4837,6 +4854,7 @@ broken-packages:
   - freddy
   - free-category
   - free-concurrent
+  - free-functors
   - free-game
   - free-http
   - free-operational
@@ -5039,6 +5057,7 @@ broken-packages:
   - ghci-lib
   - ghci-ng
   - ghci-pretty
+  - ghcide
   - ghcjs-base-stub
   - ghcjs-dom-jsffi
   - ghcjs-fetch
@@ -5049,6 +5068,7 @@ broken-packages:
   - ghcprofview
   - ght
   - gi-cairo-again
+  - gi-gdkx11
   - gi-graphene
   - gi-gsk
   - gi-gstpbutils
@@ -5074,6 +5094,7 @@ broken-packages:
   - git-fmt
   - git-gpush
   - git-jump
+  - git-mediate
   - git-object
   - git-remote-ipfs
   - git-repair
@@ -5247,6 +5268,7 @@ broken-packages:
   - gstreamer
   - GTALib
   - gtfs
+  - gtfs-realtime
   - gtk-serialized-event
   - gtk-toy
   - gtk2hs-hello
@@ -5493,6 +5515,7 @@ broken-packages:
   - haskell-src-exts-prisms
   - haskell-src-exts-qq
   - haskell-src-exts-sc
+  - haskell-src-exts-simple
   - haskell-src-meta-mwotton
   - haskell-stack-trace-plugin
   - haskell-token-utils
@@ -5784,6 +5807,7 @@ broken-packages:
   - hiccup
   - hichi
   - hid-examples
+  - hie-bios
   - hie-core
   - hieraclus
   - hierarchical-clustering
@@ -5969,6 +5993,7 @@ broken-packages:
   - hpaste
   - hpasteit
   - HPath
+  - hpath-io
   - hpc-tracer
   - hPDB
   - hPDB-examples
@@ -6221,6 +6246,8 @@ broken-packages:
   - http-shed
   - http-streams
   - http-wget
+  - http2-client
+  - http2-client-exe
   - http2-client-grpc
   - http2-grpc-proto3-wire
   - https-everywhere-rules
@@ -6248,6 +6275,7 @@ broken-packages:
   - hunt-searchengine
   - hunt-server
   - hurdle
+  - hurl
   - hurriyet
   - husk-scheme
   - husk-scheme-libs
@@ -6411,6 +6439,7 @@ broken-packages:
   - indieweb-algorithms
   - inf-interval
   - infer-upstream
+  - infernal
   - infernu
   - infinity
   - infix
@@ -6433,6 +6462,7 @@ broken-packages:
   - instapaper-sender
   - instinct
   - int-multimap
+  - intcode
   - integer-pure
   - integreat
   - intel-aes
@@ -6583,6 +6613,7 @@ broken-packages:
   - json-pointer-hasql
   - json-python
   - json-schema
+  - json-syntax
   - json-togo
   - json-tokens
   - json-tools
@@ -6834,6 +6865,7 @@ broken-packages:
   - legion-extra
   - leksah-server
   - lendingclub
+  - lens-core
   - lens-filesystem
   - lens-prelude
   - lens-text-encoding
@@ -6845,6 +6877,7 @@ broken-packages:
   - Level0
   - levmar
   - levmar-chart
+  - lex-applicative
   - lfst
   - lgtk
   - lha
@@ -6960,6 +6993,7 @@ broken-packages:
   - llvm-general
   - llvm-general-pure
   - llvm-general-quote
+  - llvm-hs
   - llvm-hs-pretty
   - llvm-ht
   - llvm-pkg-config
@@ -7141,7 +7175,6 @@ broken-packages:
   - mathlink
   - matrix-as-xyz
   - matsuri
-  - matterhorn
   - maude
   - maxent
   - maxent-learner-hw
@@ -7411,6 +7444,9 @@ broken-packages:
   - mtl-tf
   - mtlx
   - mtp
+  - mu-grpc-client
+  - mu-grpc-server
+  - mu-protobuf
   - MuCheck
   - MuCheck-Hspec
   - MuCheck-HUnit
@@ -7454,6 +7490,7 @@ broken-packages:
   - musicxml
   - musicxml2
   - mustache-haskell
+  - mutable
   - mutable-iter
   - MutationOrder
   - mute-unmute
@@ -7547,6 +7584,7 @@ broken-packages:
   - network-anonymous-tor
   - network-api-support
   - network-arbitrary
+  - network-bitcoin
   - network-builder
   - network-bytestring
   - network-connection
@@ -7790,6 +7828,7 @@ broken-packages:
   - Paillier
   - pairing
   - pam
+  - pan-os-syslog
   - panda
   - pandoc-citeproc-preamble
   - pandoc-crossref
@@ -7830,6 +7869,7 @@ broken-packages:
   - parco-parsec
   - parconc-examples
   - pareto
+  - parquet-hs
   - Parry
   - parse-help
   - parseargs
@@ -8135,6 +8175,7 @@ broken-packages:
   - presto-hdbc
   - pretty-ncols
   - pretty-relative-time
+  - prettyprinter-graphviz
   - prettyprinter-vty
   - preview
   - prim-array
@@ -8386,6 +8427,7 @@ broken-packages:
   - reactive-glut
   - reactive-thread
   - reactor
+  - read-ctags
   - read-io
   - reader-soup
   - readline-statevar
@@ -8429,10 +8471,13 @@ broken-packages:
   - reflex-basic-host
   - reflex-dom-retractable
   - reflex-dom-svg
+  - reflex-fsnotify
+  - reflex-ghci
   - reflex-gloss
   - reflex-gloss-scene
   - reflex-libtelnet
   - reflex-orphans
+  - reflex-process
   - reflex-sdl2
   - reflex-transformers
   - reflex-vty
@@ -8445,6 +8490,7 @@ broken-packages:
   - reg-alloc-graph-color
   - regex-deriv
   - regex-dfa
+  - regex-do
   - regex-generator
   - regex-parsec
   - regex-pderiv
@@ -8760,6 +8806,7 @@ broken-packages:
   - seclib
   - second-transfer
   - secp256k1
+  - secp256k1-haskell
   - secp256k1-legacy
   - secret-santa
   - secret-sharing
@@ -8924,6 +8971,7 @@ broken-packages:
   - shellmate-extras
   - shh
   - shh-extras
+  - shine-examples
   - shivers-cfg
   - shoap
   - shopify
@@ -8979,6 +9027,7 @@ broken-packages:
   - simplenote
   - simpleprelude
   - SimpleServer
+  - simplest-sqlite
   - simseq
   - singleton-dict
   - singleton-typelits
@@ -9313,6 +9362,7 @@ broken-packages:
   - streaming-postgresql-simple
   - streaming-process
   - streaming-sort
+  - streamly-fsnotify
   - strelka
   - strict-data
   - StrictBench
@@ -9435,6 +9485,7 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
+  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -9458,6 +9509,7 @@ broken-packages:
   - tamarin-prover-utils
   - tamper
   - Tape
+  - tar-bytestring
   - target
   - tart
   - task
@@ -9600,6 +9652,7 @@ broken-packages:
   - thumbnail-plus
   - thumbnail-polish
   - tic-tac-toe
+  - ticker
   - tickle
   - TicTacToe
   - tictactoe3d
@@ -9645,6 +9698,8 @@ broken-packages:
   - tip-haskell-frontend
   - tip-lib
   - titan
+  - titan-debug-yampa
+  - titan-record-yampa
   - Titim
   - tkhs
   - tkyprof
@@ -9659,6 +9714,7 @@ broken-packages:
   - todos
   - tofromxml
   - toilet
+  - token-search
   - tokenify
   - tokstyle
   - toktok
@@ -9748,6 +9804,7 @@ broken-packages:
   - tripLL
   - trivia
   - tropical
+  - tropical-geometry
   - truelevel
   - trurl
   - tsession
@@ -9873,7 +9930,6 @@ broken-packages:
   - uniform-io
   - union
   - union-map
-  - Unique
   - uniqueid
   - uniquely-represented-sets
   - units-attoparsec
@@ -9981,7 +10037,9 @@ broken-packages:
   - vcsgui
   - vcswrapper
   - Vec-Boolean
+  - vec-lens
   - Vec-OpenGLRaw
+  - vec-optics
   - Vec-Transform
   - vect-floating
   - vect-floating-accelerate
@@ -10102,6 +10160,7 @@ broken-packages:
   - warp-dynamic
   - warp-grpc
   - warp-static
+  - warp-systemd
   - WashNGo
   - wasm
   - watcher

@@ -221,7 +221,7 @@ class Machine:
             return path
 
         self.state_dir = create_dir("vm-state-{}".format(self.name))
-        self.shared_dir = create_dir("{}/xchg".format(self.state_dir))
+        self.shared_dir = create_dir("shared-xchg")
 
         self.booted = False
         self.connected = False
@@ -395,7 +395,7 @@ class Machine:
         status_code_pattern = re.compile(r"(.*)\|\!EOF\s+(\d+)")
 
         while True:
-            chunk = self.shell.recv(4096).decode()
+            chunk = self.shell.recv(4096).decode(errors="ignore")
             match = status_code_pattern.match(chunk)
             if match:
                 output += match[1]
@@ -576,7 +576,7 @@ class Machine:
         vm_src = pathlib.Path(source)
         with tempfile.TemporaryDirectory(dir=self.shared_dir) as shared_td:
             shared_temp = pathlib.Path(shared_td)
-            vm_shared_temp = pathlib.Path("/tmp/xchg") / shared_temp.name
+            vm_shared_temp = pathlib.Path("/tmp/shared") / shared_temp.name
             vm_intermediate = vm_shared_temp / vm_src.name
             intermediate = shared_temp / vm_src.name
             # Copy the file to the shared directory inside VM

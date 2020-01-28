@@ -339,7 +339,7 @@
     "hyperion" = ps: with ps; [  ];
     "ialarm" = ps: with ps; [  ];
     "iaqualink" = ps: with ps; [  ];
-    "icloud" = ps: with ps; [  ];
+    "icloud" = ps: with ps; [ pyicloud ];
     "idteck_prox" = ps: with ps; [  ];
     "ifttt" = ps: with ps; [ aiohttp-cors pyfttt ];
     "iglo" = ps: with ps; [  ];

@@ -18,8 +18,7 @@ import ./make-test-python.nix (
               [[interfaces]]
               name = "eth1"
               send_advertisements = true
-                [[interfaces.plugins]]
-                name = "prefix"
+                [[interfaces.prefix]]
                 prefix = "::/64"
             '';
           };

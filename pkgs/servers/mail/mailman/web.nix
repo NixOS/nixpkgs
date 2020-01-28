@@ -1,4 +1,4 @@
-{ stdenv, python, hyperkitty, postorius, buildPythonPackage
+{ stdenv, python, hyperkitty, postorius, buildPythonPackage, isPy3k
 , serverEMail ? "postmaster@example.org"
 , archiverKey ? "SecretArchiverAPIKey"
 , allowedHosts ? []
@@ -17,6 +17,7 @@ in
 
 buildPythonPackage {
   name = "mailman-web-0";
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [ hyperkitty postorius ];
 

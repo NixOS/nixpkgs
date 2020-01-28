@@ -22,7 +22,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library for deferring decorator actions";
-    homepage = http://pylonsproject.org/;
+    homepage = https://pylonsproject.org/;
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };

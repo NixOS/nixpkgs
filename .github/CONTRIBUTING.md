@@ -48,6 +48,15 @@ In addition to writing properly formatted commit messages, it's important to inc
 
 For package version upgrades and such a one-line commit message is usually sufficient.
 
+## Backporting changes
+
+To [backport a change into a release branch](https://nixos.org/nixpkgs/manual/#submitting-changes-stable-release-branches):
+
+1. Take note of the commit in which the change was introduced into `master`.
+2. Check out the target _release branch_, e.g. `release-19.09`. Do not use a _channel branch_ like `nixos-19.09` or `nixpkgs-19.09`.
+3. Use `git cherry-pick -x <original commit>`.
+4. Open your backport PR. Make sure to select the release branch (e.g. `release-19.09`) as the target branch of the PR, and link to the PR in which the original change was made to `master`.
+
 ## Reviewing contributions
 
 See the nixpkgs manual for more details on how to [Review contributions](https://nixos.org/nixpkgs/manual/#chap-reviewing-contributions).

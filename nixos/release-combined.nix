@@ -54,7 +54,7 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        nixos.iso_graphical.x86_64-linux or []
+        nixos.iso_plasma5.x86_64-linux or []
         nixos.iso_minimal.aarch64-linux or []
         nixos.iso_minimal.i686-linux or []
         nixos.iso_minimal.x86_64-linux or []
