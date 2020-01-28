@@ -8232,6 +8232,13 @@ in
   gcc-arm-embedded-9 = callPackage ../development/compilers/gcc-arm-embedded/9 {};
   gcc-arm-embedded = gcc-arm-embedded-9;
 
+  gcc-arm-bin-9 = { target } : callPackage ../development/compilers/gcc-arm-bin/9 { target = target; };
+  gcc-arm-bin-arm = gcc-arm-bin-9 { target = "arm"; };
+  gcc-arm-bin-armhf = gcc-arm-bin-9 { target = "armhf"; };
+  gcc-arm-bin-aarch64 = gcc-arm-bin-9 { target = "aarch64"; };
+  gcc-arm-bin-aarch64-gnu = gcc-arm-bin-9 { target = "aarch64-gnu"; };
+  gcc-arm-bin-aarch64be-gnu = gcc-arm-bin-9 { target = "aarch64be-gnu"; };
+
   gforth = callPackage ../development/compilers/gforth {};
 
   gleam = callPackage ../development/compilers/gleam {
