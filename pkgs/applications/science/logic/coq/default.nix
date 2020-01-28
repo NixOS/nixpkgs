@@ -7,7 +7,7 @@
 
 { stdenv, fetchFromGitHub, writeText, pkgconfig
 , ocamlPackages, ncurses
-, buildIde ? true
+, buildIde ? !(stdenv.isDarwin && stdenv.lib.versionAtLeast version "8.10")
 , glib, gnome3, wrapGAppsHook
 , darwin
 , csdp ? null
