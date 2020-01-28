@@ -164,8 +164,10 @@ let
           ${optionalString cfg.shareNixStore ''
             -virtfs local,path=/nix/store,security_model=none,mount_tag=store \
           ''} \
-          -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
-          -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+          ${optionalString cfg.shareExchangeDir ''
+            -virtfs local,path=$TMPDIR/xchg,security_model=none,mount_tag=xchg \
+            -virtfs local,path=''${SHARED_DIR:-$TMPDIR/xchg},security_model=none,mount_tag=shared \
+          ''} \
           ${drivesCmdLine config.virtualisation.qemu.drives} \
           ${toString config.virtualisation.qemu.options} \
           $QEMU_OPTS \
@@ -347,6 +349,17 @@ in
             Specify the number of cores the guest is permitted to use.
             The number can be higher than the available cores on the
             host system.
+          '';
+      };
+
+    virtualisation.shareExchangeDir =
+      mkOption {
+        default = true;
+        type = types.bool;
+        description =
+          ''
+            Share /tmp/shared and /tmp/xchg with the host.  These are used
+            for runInMachine, copy_from_{host,vm}, and coverage-data.
           '';
       };
 
@@ -712,7 +725,8 @@ in
             # Sync with systemd's tmp.mount;
             options = [ "mode=1777" "strictatime" "nosuid" "nodev" ];
           };
-        "/tmp/xchg" =
+      } // optionalAttrs cfg.shareExchangeDir
+      { "/tmp/xchg" =
           { device = "xchg";
             fsType = "9p";
             options = [ "trans=virtio" "version=9p2000.L" ];
