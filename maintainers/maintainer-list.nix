@@ -2550,6 +2550,12 @@
     githubId = 1943632;
     name = "fro_ozen";
   };
+  Frostman = {
+    email = "me@slukjanov.name";
+    github = "Frostman";
+    githubId = 134872;
+    name = "Sergei Lukianov";
+  };
   frontsideair = {
     email = "photonia@gmail.com";
     github = "frontsideair";
