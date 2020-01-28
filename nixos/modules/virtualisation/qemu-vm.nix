@@ -542,23 +542,16 @@ in
     ];
 
     virtualisation.qemu.drives = mkMerge [
+      [{
+        file = "$NIX_DISK_IMAGE";
+        driveExtraOpts.cache = "writeback";
+        driveExtraOpts.werror = "report";
+      }]
       (mkIf cfg.useBootLoader [
-        {
-          file = "$NIX_DISK_IMAGE";
-          driveExtraOpts.cache = "writeback";
-          driveExtraOpts.werror = "report";
-        }
         {
           file = "$TMPDIR/disk.img";
           driveExtraOpts.media = "disk";
           deviceExtraOpts.bootindex = "1";
-        }
-      ])
-      (mkIf (!cfg.useBootLoader) [
-        {
-          file = "$NIX_DISK_IMAGE";
-          driveExtraOpts.cache = "writeback";
-          driveExtraOpts.werror = "report";
         }
       ])
       (imap0 (idx: _: {
