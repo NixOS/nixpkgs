@@ -18,6 +18,9 @@
 , chardet
 }:
 
+if stdenv.lib.versionOlder django.version "1.11" || stdenv.lib.versionAtLeast django.version "2.0"
+then throw "mezzanine requires django-1.11. Consider overriding python package set to use django_1_11"
+else
 buildPythonPackage rec {
   version = "4.3.1";
   pname = "Mezzanine";

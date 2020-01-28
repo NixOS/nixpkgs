@@ -1,6 +1,9 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python,
   django, six
 }:
+if stdenv.lib.versionAtLeast django.version "2.0"
+then throw "django-compat requires django < 2.0"
+else
 buildPythonPackage rec {
   pname = "django-compat";
   version = "1.0.15";

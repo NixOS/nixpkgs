@@ -6,6 +6,7 @@
 , pytest_xdist
 , pytest-django
 , mock
+, django
 }:
 
 buildPythonPackage rec {
@@ -36,5 +37,6 @@ buildPythonPackage rec {
     homepage = "http://www.grantjenks.com/docs/diskcache/";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
+    broken = lib.versionAtLeast django.version "2.0";
   };
 }

@@ -3214,7 +3214,7 @@ in {
 
   crayons = callPackage ../development/python-modules/crayons{ };
 
-  django = self.django_1_11;
+  django = self.django_lts;
 
   django_lts = self.django_2_2;
 
