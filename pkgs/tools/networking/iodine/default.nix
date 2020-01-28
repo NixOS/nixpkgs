@@ -1,11 +1,14 @@
-{ stdenv, fetchurl, zlib, nettools }:
+{ stdenv, fetchFromGitHub, zlib, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "iodine-0.7.0";
+  pname = "iodine";
+  version = "unstable-2019-09-27";
 
-  src = fetchurl {
-    url = "https://code.kryo.se/iodine/${name}.tar.gz";
-    sha256 = "0gh17kcxxi37k65zm4gqsvbk3aw7yphcs3c02pn1c4s2y6n40axd";
+  src = fetchFromGitHub {
+    owner = "yarrick";
+    repo = "iodine";
+    rev = "8e14f18";
+    sha256 = "0k8m99qfjd5n6n56jnq85y7q8h2i2b8yw6ba0kxsz4jyx97lavg3";
   };
 
   buildInputs = [ zlib ];
