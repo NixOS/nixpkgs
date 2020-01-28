@@ -1,15 +1,18 @@
-{ stdenv, fetchurl, substituteAll, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
+{ stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
 , withGnome ? true, gnome3, fetchpatch, networkmanagerapplet }:
 
 let
   pname = "NetworkManager-iodine";
-  version = "1.2.0";
+  version = "unstable-2019-11-05";
 in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
-  src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0njdigakidji6mfmbsp8lfi8wl88z1dk8cljbva2w0xazyddbwyh";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    owner = "GNOME";
+    repo = "network-manager-iodine";
+    rev = "2ef0abf089b00a0546f214dde0d45e63f2990b79";
+    sha256 = "1ps26fr9b1yyafj7lrzf2kmaxb0ipl0mhagch5kzrjdsc5xkajz7";
   };
 
   patches = [
@@ -27,11 +30,12 @@ in stdenv.mkDerivation {
   buildInputs = [ iodine networkmanager ]
     ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [ intltool autoreconfHook pkgconfig ];
 
   # glib-2.62 deprecations
   NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
+  preConfigure = "intltoolize";
   configureFlags = [
     "--without-libnm-glib"
     "--with-gnome=${if withGnome then "yes" else "no"}"
