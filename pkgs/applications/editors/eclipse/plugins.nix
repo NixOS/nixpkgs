@@ -259,7 +259,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.10/${name}/${name}.zip";
-      sha256 = "0rjm91j0h1aq9lq4sdwgp9b2yp4w9lr13n82z32dw3gz3nby1mvi";
+      sha256 = "11nbrcvgbg9l3cmp3v3y8y0vldzcf6qlpp185a6dzabdcij6gz5m";
     };
 
     meta = with stdenv.lib; {
@@ -479,7 +479,7 @@ rec {
     src = fetchzip {
       stripRoot = false;
       url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.14-201912100610/org.eclipse.jdt-4.14.zip;
-      sha256 = "16c5v59mkb0cyfhf2475ds1ajma65bhqfxjr6v59hianqxq9h9la";
+      sha256 = "1c2a23qviv58xljpq3yb37ra8cqw7jh52hmzqlg1nij2sdxb6hm5";
     };
 
     meta = with stdenv.lib; {

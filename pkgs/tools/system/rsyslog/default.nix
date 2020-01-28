@@ -4,6 +4,7 @@
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
+, libmaxminddb ? null
 }:
 
 with stdenv.lib;
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
     fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
     postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
-    rabbitmq-c hiredis mongoc
+    rabbitmq-c hiredis mongoc libmaxminddb
   ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
 
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
     (mkFlag true                      "rsyslogd")
     (mkFlag true                      "mail")
     (mkFlag (liblognorm != null)      "mmnormalize")
+    (mkFlag (libmaxminddb != null)    "mmdblookup")
     (mkFlag true                      "mmjsonparse")
     (mkFlag true                      "mmaudit")
     (mkFlag true                      "mmanon")

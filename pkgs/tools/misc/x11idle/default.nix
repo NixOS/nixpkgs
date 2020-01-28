@@ -25,7 +25,7 @@ stdenv.mkDerivation {
     longDescription = ''
       Idle time passes when the user does not act, i.e. when the user doesn't move the mouse or use the keyboard.
     '';
-    homepage = http://orgmode.org/;
+    homepage = https://orgmode.org/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = [ maintainers.swflint ];

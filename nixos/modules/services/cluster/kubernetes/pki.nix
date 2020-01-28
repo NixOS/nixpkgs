@@ -20,6 +20,7 @@ let
         size = 2048;
     };
     CN = top.masterAddress;
+    hosts = cfg.cfsslAPIExtraSANs;
   });
 
   cfsslAPITokenBaseName = "apitoken.secret";
@@ -64,6 +65,15 @@ in
       '';
       default = true;
       type = bool;
+    };
+
+    cfsslAPIExtraSANs = mkOption {
+      description = ''
+        Extra x509 Subject Alternative Names to be added to the cfssl API webserver TLS cert.
+      '';
+      default = [];
+      example = [ "subdomain.example.com" ];
+      type = listOf str;
     };
 
     genCfsslAPIToken = mkOption {

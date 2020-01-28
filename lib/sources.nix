@@ -105,6 +105,7 @@ rec {
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in cleanSourceWith { inherit filter; src = path; };
 
+  pathIsGitRepo = path: (builtins.tryEval (commitIdFromGitRepo path)).success;
 
   # Get the commit id of a git repo
   # Example: commitIdFromGitRepo <nixpkgs/.git>
@@ -113,6 +114,10 @@ rec {
       with builtins;
         let fileName       = toString path + "/" + file;
             packedRefsName = toString path + "/packed-refs";
+            absolutePath   = base: path:
+              if lib.hasPrefix "/" path
+              then path
+              else toString (/. + "${base}/${path}");
         in if pathIsRegularFile path
            # Resolve git worktrees. See gitrepository-layout(5)
            then
@@ -120,13 +125,11 @@ rec {
              in if m == null
                 then throw ("File contains no gitdir reference: " + path)
                 else
-                  let gitDir     = lib.head m;
+                  let gitDir     = absolutePath (dirOf path) (lib.head m);
                       commonDir' = if pathIsRegularFile "${gitDir}/commondir"
                                    then lib.fileContents "${gitDir}/commondir"
                                    else gitDir;
-                      commonDir  = if lib.hasPrefix "/" commonDir'
-                                   then commonDir'
-                                   else toString (/. + "${gitDir}/${commonDir'}");
+                      commonDir  = absolutePath gitDir commonDir';
                       refFile    = lib.removePrefix "${commonDir}/" "${gitDir}/${file}";
                   in readCommitFromFile refFile commonDir
 

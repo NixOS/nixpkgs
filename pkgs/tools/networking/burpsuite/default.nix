@@ -1,11 +1,11 @@
 { stdenv, fetchurl, jre, runtimeShell }:
 
 let
-  version = "1.7.36";
+  version = "2.1.07";
   jar = fetchurl {
     name = "burpsuite.jar";
     url = "https://portswigger.net/Burp/Releases/Download?productId=100&version=${version}&type=Jar";
-    sha256 = "12m4fn04yd89r6x4m4yd668p5v0bs9b1h6p239bjj11ykyi3g51a";
+    sha256 = "0811pkxmwl9d58lgqbvyfi2q79ni5w8hs61jycxkvkqxrinpgki3";
   };
   launcher = ''
     #!${runtimeShell}
@@ -35,6 +35,6 @@ in stdenv.mkDerivation {
     license = [ stdenv.lib.licenses.unfree ];
     platforms = jre.meta.platforms;
     hydraPlatforms = [];
-    maintainers = [ stdenv.lib.maintainers.bennofs ];
+    maintainers = with stdenv.lib.maintainers; [ bennofs ];
   };
 }

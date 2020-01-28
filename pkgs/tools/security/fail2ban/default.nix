@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, fetchpatch, python3, gamin }:
+{ stdenv, fetchFromGitHub, python3, gamin }:
 
-let version = "0.10.4"; in
+let version = "0.10.5"; in
 
 python3.pkgs.buildPythonApplication {
   pname = "fail2ban";
@@ -10,17 +10,8 @@ python3.pkgs.buildPythonApplication {
     owner  = "fail2ban";
     repo   = "fail2ban";
     rev    = version;
-    sha256 = "07ik6rm856q0ic2r7vbg6j3hsdcdgkv44hh5ck0c2y21fqwrck3l";
+    sha256 = "1s8g46vkwhqnagj69v4wvcasypzkmq7awhfbxahffrypcpad5ach";
   };
-
-  patches = [
-    # 0.10.3 supports Python 3 but somehow this got into the way
-    # https://github.com/fail2ban/fail2ban/issues/2255
-    (fetchpatch {
-      url = "https://github.com/fail2ban/fail2ban/commit/657b147c0d7830f3600f3dc7feaa4815a7e19fde.patch";
-      sha256 = "1hrk2x7ssrfhab1wrjk5xw1sxhiv2735glfcp6qcj8x4dss3q7f7";
-    })
-  ];
 
   pythonPath = with python3.pkgs;
     stdenv.lib.optionals stdenv.isLinux [

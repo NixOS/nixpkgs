@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq, rapidcheck
+{ stdenv, fetchurl, pkgconfig, autoreconfHook, openssl, db48, boost, zeromq, rapidcheck, hexdump
 , zlib, miniupnpc, qtbase ? null, qttools ? null, wrapQtAppsHook ? null, utillinux, python3, qrencode, libevent
 , withGui }:
 
@@ -31,6 +31,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     [ pkgconfig autoreconfHook ]
+    ++ optional stdenv.isDarwin hexdump
     ++ optional withGui wrapQtAppsHook;
   buildInputs = [ openssl db48 boost zlib zeromq
                   miniupnpc libevent]
@@ -75,7 +76,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.bitcoin.org/;
     maintainers = with maintainers; [ roconnor AndersonTorres ];
     license = licenses.mit;
-    # bitcoin needs hexdump to build, which doesn't seem to build on darwin at the moment.
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

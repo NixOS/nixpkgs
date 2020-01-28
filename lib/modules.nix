@@ -764,12 +764,15 @@ rec {
       fromOpt = getAttrFromPath from options;
       toOf = attrByPath to
         (abort "Renaming error: option `${showOption to}' does not exist.");
+      toType = let opt = attrByPath to {} options; in opt.type or null;
     in
     {
       options = setAttrByPath from (mkOption {
         inherit visible;
         description = "Alias of <option>${showOption to}</option>.";
         apply = x: use (toOf config);
+      } // optionalAttrs (toType != null) {
+        type = toType;
       });
       config = mkMerge [
         {

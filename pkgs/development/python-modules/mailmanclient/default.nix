@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, httplib2, requests }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
 
 buildPythonPackage rec {
   pname = "mailmanclient";
   version = "3.3.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;

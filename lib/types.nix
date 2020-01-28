@@ -406,7 +406,7 @@ rec {
                 In file ${def.file}
                 a list is being assigned to the option config.${option}.
                 This will soon be an error as type loaOf is deprecated.
-                See https://git.io/fj2zm for more information.
+                See https://github.com/NixOS/nixpkgs/pull/63103 for more information.
                 Do
                   ${option} =
                     { ${set}${more}}

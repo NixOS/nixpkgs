@@ -62,6 +62,7 @@
   ./hardware/printers.nix
   ./hardware/raid/hpsa.nix
   ./hardware/steam-hardware.nix
+  ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
   ./hardware/video/amdgpu.nix
@@ -127,6 +128,7 @@
   ./programs/java.nix
   ./programs/kbdlight.nix
   ./programs/less.nix
+  ./programs/liboping.nix
   ./programs/light.nix
   ./programs/mosh.nix
   ./programs/mininet.nix
@@ -152,13 +154,13 @@
   ./programs/system-config-printer.nix
   ./programs/thefuck.nix
   ./programs/tmux.nix
+  ./programs/traceroute.nix
   ./programs/tsm-client.nix
   ./programs/udevil.nix
   ./programs/usbtop.nix
   ./programs/venus.nix
   ./programs/vim.nix
   ./programs/wavemon.nix
-  ./programs/way-cooler.nix
   ./programs/waybar.nix
   ./programs/wireshark.nix
   ./programs/x2goserver.nix
@@ -577,6 +579,7 @@
   ./services/networking/connman.nix
   ./services/networking/consul.nix
   ./services/networking/coredns.nix
+  ./services/networking/corerad.nix
   ./services/networking/coturn.nix
   ./services/networking/dante.nix
   ./services/networking/ddclient.nix
@@ -803,6 +806,7 @@
   ./services/web-apps/codimd.nix
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
+  ./services/web-apps/dokuwiki.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
@@ -870,7 +874,6 @@
   ./services/x11/display-managers/xpra.nix
   ./services/x11/fractalart.nix
   ./services/x11/hardware/libinput.nix
-  ./services/x11/hardware/multitouch.nix
   ./services/x11/hardware/synaptics.nix
   ./services/x11/hardware/wacom.nix
   ./services/x11/hardware/digimend.nix

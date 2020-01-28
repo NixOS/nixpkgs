@@ -2,20 +2,15 @@
 
 stdenv.mkDerivation rec {
   pname = "txr";
-  version = "230";
+  version = "231";
 
   src = fetchurl {
     url = "http://www.kylheku.com/cgit/txr/snapshot/${pname}-${version}.tar.bz2";
-    sha256 = "03ab9drdqvkfq240pkrx6197jjvvjizjwfx9psjmm6lixksw0kjx";
+    sha256 = "0mcglb84zfmrai2bcdg9j0ck8jp8h7ii2rf4m38yjggy0dvii2lc";
   };
 
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ libffi ];
-
-  # fix usage of off_t without include
-  postPatch = ''
-    sed -i '1i#include <sys/types.h>' sysif.h
-  '';
 
   enableParallelBuilding = true;
 

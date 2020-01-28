@@ -21,11 +21,11 @@ defmodule NixpkgsGitHubUpdate.GitHubLatestVersion do
   end
 
   defp get_token do
-    String.to_charlist("#{System.get_env("OAUTH_TOKEN")}")
+    System.get_env("OAUTH_TOKEN")
   end
 
-  defp put_token(headers, token) when is_list(token) do
-    Map.put_new(headers, 'Authorization', 'token #{token}')
+  defp put_token(headers, token) when token != nil do
+    Map.put_new(headers, 'Authorization', 'token #{String.to_charlist(token)}')
   end
 
   defp put_token(headers, _), do: headers

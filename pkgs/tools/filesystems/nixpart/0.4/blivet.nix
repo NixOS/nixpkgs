@@ -35,7 +35,7 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    pykickstart pyparted pyblock libselinux.py cryptsetup
+    pykickstart pyparted pyblock libselinux cryptsetup
   ] ++ stdenv.lib.optional useNixUdev systemd;
 
   # tests are currently _heavily_ broken upstream

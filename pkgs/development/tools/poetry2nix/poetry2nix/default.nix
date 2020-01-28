@@ -39,7 +39,11 @@ let
       lockData = readTOML poetrylock;
       lockFiles = lib.getAttrFromPath [ "metadata" "files" ] lockData;
 
-      specialAttrs = [ "poetrylock" "overrides" ];
+      specialAttrs = [
+        "overrides"
+        "poetrylock"
+        "pwd"
+      ];
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
       evalPep508 = mkEvalPep508 python;
@@ -87,6 +91,8 @@ let
                 inherit pkgs lib python poetryLib;
               };
               poetry = poetryPkg;
+              # The canonical name is setuptools-scm
+              setuptools-scm = super.setuptools_scm;
             }
           )
           # Null out any filtered packages, we don't want python.pkgs from nixpkgs
@@ -149,7 +155,12 @@ let
 
       pyProject = readTOML pyproject;
 
-      specialAttrs = [ "pyproject" "poetrylock" "overrides" ];
+      specialAttrs = [
+        "overrides"
+        "poetrylock"
+        "pwd"
+        "pyproject"
+      ];
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
       getDeps = depAttr: let
@@ -174,9 +185,9 @@ let
 
           format = "pyproject";
 
-          nativeBuildInputs = [ pkgs.yj ];
           buildInputs = mkInput "buildInputs" buildSystemPkgs;
           propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
+          nativeBuildInputs = mkInput "nativeBuildInputs" [ pkgs.yj ];
           checkInputs = mkInput "checkInputs" (getDeps "dev-dependencies");
 
           passthru = {
@@ -186,7 +197,7 @@ let
           postPatch = (passedAttrs.postPatch or "") + ''
             # Tell poetry not to resolve the path dependencies. Any version is
             # fine !
-            yj -tj < pyproject.toml | python ${./pyproject-without-path.py} > pyproject.json
+            yj -tj < pyproject.toml | ${python.interpreter} ${./pyproject-without-path.py} > pyproject.json
             yj -jt < pyproject.json > pyproject.toml
             rm pyproject.json
           '';
