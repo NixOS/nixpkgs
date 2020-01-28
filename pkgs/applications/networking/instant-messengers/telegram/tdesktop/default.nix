@@ -18,12 +18,12 @@ with lib;
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.9.8";
+  version = "1.9.9";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1rq3180l4ly0n0jj08cxy9l2d07scwp9hasmliva2xspyv7i9ksd";
+    sha256 = "08bxlqiapj9yqj9ywni33n5k7n3ckgfhv200snjqyqy9waqph1i6";
   };
 
   postPatch = ''
@@ -83,7 +83,6 @@ mkDerivation rec {
     install -Dm755 bin/telegram-desktop $out/bin/telegram-desktop
 
     mkdir -p $out/share/{kservices5,applications,metainfo}
-    sed "s,/usr/bin,$out/bin,g" "../lib/xdg/tg.protocol" > "$out/share/kservices5/tg.protocol"
     install -m444 "../lib/xdg/telegramdesktop.desktop" "$out/share/applications/telegram-desktop.desktop"
     install -m644 "../lib/xdg/telegramdesktop.appdata.xml" "$out/share/metainfo/telegramdesktop.metainfo.xml"
 
