@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   version = "0.72.0";
 
   src = fetchurl {
-    url = "http://zim-wiki.org/downloads/${name}.tar.gz";
+    url = "https://zim-wiki.org/downloads/${name}.tar.gz";
     sha256 = "1n3gmg7g86s8iwcx0i7rvvfdfs1fzmc9awr9qzjd2rckw4bkxad1";
   };
 

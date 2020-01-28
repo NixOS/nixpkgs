@@ -35,11 +35,12 @@ stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    node scripts/ninja.js build
+    # This is an unfortunate name, but it's actually how to build a release
+    # binary for BuckleScript
+    node scripts/install.js
   '';
 
   installPhase = ''
-    node scripts/install.js
     mkdir -p $out/bin
     cp -rf jscomp lib vendor odoc_gen native $out
     cp bsconfig.json package.json $out

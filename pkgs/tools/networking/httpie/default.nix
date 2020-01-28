@@ -2,22 +2,18 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "httpie";
-  version = "1.0.3";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "jakubroztocil";
     repo = "httpie";
     rev = version;
-    sha256 = "0y30sp0x3nmgzi4dqw1rc3705hnn36ij0zlyyx7g6fqdq8bd8p5q";
+    sha256 = "0d0rsn5i973l9y0ws3xmnzaw4jwxdlryyjbasnlddph5mvkf7dq0";
   };
 
   propagatedBuildInputs = with python3Packages; [ pygments requests setuptools ];
   dontUseSetuptoolsCheck = true;
-
-  disabledTests = [
-    "test_current_version"
-    "test_error"
-  ];
+  patches = [ ./strip-venv.patch ];
 
   checkInputs = with python3Packages; [
     mock

@@ -10,8 +10,7 @@ let
   esUrl = "http://localhost:9200";
 
   mkElkTest = name : elk :
-   let elasticsearchGe7 = builtins.compareVersions elk.elasticsearch.version "7" >= 0;
-   in import ./make-test-python.nix ({
+    import ./make-test-python.nix ({
     inherit name;
     meta = with pkgs.stdenv.lib.maintainers; {
       maintainers = [ eelco offline basvandijk ];
@@ -91,8 +90,7 @@ let
               };
 
               elasticsearch-curator = {
-                # The current version of curator (5.6) doesn't support elasticsearch >= 7.0.0.
-                enable = !elasticsearchGe7;
+                enable = true;
                 actionYAML = ''
                 ---
                 actions:
@@ -173,7 +171,7 @@ let
           one.wait_until_succeeds(
               total_hits("Supercalifragilisticexpialidocious") + " | grep -v 0"
           )
-    '' + pkgs.lib.optionalString (!elasticsearchGe7) ''
+
       with subtest("Elasticsearch-curator works"):
           one.systemctl("stop logstash")
           one.systemctl("start elasticsearch-curator")

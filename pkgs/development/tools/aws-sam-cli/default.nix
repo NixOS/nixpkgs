@@ -24,6 +24,29 @@ let
         doCheck = false;
       });
 
+      cookiecutter = super.cookiecutter.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.0";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0glsvaz8igi2wy1hsnhm9fkn6560vdvdixzvkq6dn20z3hpaa5hk";
+        };
+      });
+
+      boto3 = super.boto3.overridePythonAttrs (oldAttrs: rec {
+        version = "1.10.50";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "199nr61ivm4bychn3rxyzzyca5f8wlwags3s43rdv9yn048xa02w";
+        };
+      });
+
+      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
+        version = "1.13.50";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1m3lbi13d9gcp6wfhv0pkwg8akasxlhv49y34ybj74ppgximqnkn";
+        };
+      });
     };
   };
 
@@ -33,11 +56,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.34.0";
+  version = "0.40.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1ndgcbd6zr23lvmqn4wikgvnlwl0gj0wgyawaspwm3b0jlvxadik";
+    sha256 = "1vlg5fdkq5xr4v3a86gyxbbrx4rzdspbv62ki7q8yq8xdja1qz05";
   };
 
   # Tests are not included in the PyPI package

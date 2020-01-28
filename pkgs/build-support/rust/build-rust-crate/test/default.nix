@@ -1,4 +1,4 @@
-{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
+{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
       p = {
@@ -92,7 +92,17 @@ let
     cases = {
       libPath =  { libPath = "src/my_lib.rs"; src = mkLib "src/my_lib.rs"; };
       srcLib =  { src = mkLib "src/lib.rs"; };
-      customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
+
+      # This used to be supported by cargo but as of 1.40.0 I can't make it work like that with just cargo anymore.
+      # This might be a regression or deprecated thing they finally removed…
+      # customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
+      # rustLibTestsCustomLibName = {
+      #   libName = "test_lib";
+      #   src = mkTestFile "src/test_lib.rs" "foo";
+      #   buildTests = true;
+      #   expectedTestOutputs = [ "test foo ... ok" ];
+      # };
+
       customLibNameAndLibPath =  { libName = "test_lib"; libPath = "src/best-lib.rs"; src = mkLib "src/best-lib.rs"; };
       crateBinWithPath =  { crateBin = [{ name = "test_binary1"; path = "src/foobar.rs"; }]; src = mkBin "src/foobar.rs"; };
       crateBinNoPath1 =  { crateBin = [{ name = "my-binary2"; }]; src = mkBin "src/my_binary2.rs"; };
@@ -121,12 +131,6 @@ let
         src = mkTestFile "src/lib.rs" "baz";
         buildTests = true;
         expectedTestOutputs = [ "test baz ... ok" ];
-      };
-      rustLibTestsCustomLibName = {
-        libName = "test_lib";
-        src = mkTestFile "src/test_lib.rs" "foo";
-        buildTests = true;
-        expectedTestOutputs = [ "test foo ... ok" ];
       };
       rustLibTestsCustomLibPath = {
         libPath = "src/test_path.rs";
@@ -207,9 +211,12 @@ let
       test -e ${pkg}/bin/brotli-decompressor && touch $out
     '';
   };
-  test = runCommand "run-buildRustCrate-tests" {
-    nativeBuildInputs = builtins.attrValues tests;
-  } "
-    touch $out
-  ";
+  test = releaseTools.aggregate {
+    name = "buildRustCrate-tests";
+    meta = {
+      description = "Test cases for buildRustCrate";
+      maintainers = [ lib.maintainers.andir ];
+    };
+    constituents = builtins.attrValues tests;
+  };
 }

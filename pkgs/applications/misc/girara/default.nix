@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "girara";
-  version = "0.3.3";
+  version = "0.3.4";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://git.pwmt.org/pwmt/${pname}/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "13vr62kkkqs2xsrmsn114n6c6084ix1qyjksczqsc3s2y3bdsmj4";
+    sha256 = "08zdsr4zwi49facsl5596l0g1xqqv2jk3sqk841gkxwawcggim44";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig gettext check dbus xvfb_run ];

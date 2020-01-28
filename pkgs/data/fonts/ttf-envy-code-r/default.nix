@@ -17,7 +17,7 @@ in fetchzip {
   sha256 = "0x0r07nax68cmz7490x2crzzgdg4j8fg63wppcmjqm0230bggq2z";
 
   meta = with lib; {
-    homepage = http://damieng.com/blog/tag/envy-code-r;
+    homepage = https://damieng.com/blog/tag/envy-code-r;
     description = "Free scalable coding font by DamienG";
     license = licenses.unfree;
     maintainers = [ maintainers.lyt ];

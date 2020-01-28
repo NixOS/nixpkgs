@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "html2text";
-  version = "2019.9.26";
+  version = "2020.1.16";
   disabled = pythonOlder "3.5";
 
   src = fetchFromGitHub {
     owner = "Alir3z4";
     repo = pname;
     rev = version;
-    sha256 = "1gzcx4n6q71plq4zvb1z0fy3brrln0qqrd6jc89iiqn7r1ix8h87";
+    sha256 = "1y924clp2hiqg3a9437z808p29mqcx537j5fmz71plx8qrcm5jf9";
   };
 
   # python setup.py test is broken, use pytest

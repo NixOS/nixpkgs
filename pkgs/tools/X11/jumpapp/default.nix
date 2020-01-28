@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "jumpapp";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchFromGitHub {
     owner = "mkropat";
     repo = "jumpapp";
     rev = "v${version}";
-    sha256 = "11ibh51q4vcjkz9fqyw5dy9qrkqxm42hpdccas1s6h2dk9z62kfb";
+    sha256 = "1jrk4mm42sz6ca2gkb6w3dad53d4im4shpgsq8s4vr6xpl3b43ry";
   };
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -16,12 +16,6 @@ cargo
 into the `environment.systemPackages` or bring them into
 scope with `nix-shell -p rustc cargo`.
 
-> If you are using NixOS and you want to use rust without a nix expression you
-> probably want to add the following in your `configuration.nix` to build
-> crates with C dependencies.
->
->     environment.systemPackages = [binutils gcc gnumake openssl pkgconfig]
-
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
 overlay](#using-the-rust-nightlies-overlay).
