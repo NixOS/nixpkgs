@@ -10,9 +10,22 @@ let
       options = {
 
         image = mkOption {
-          type = types.str;
+          type = with types; str;
           description = "Docker image to run.";
           example = "library/hello-world";
+        };
+
+        imageFile = mkOption {
+          type = with types; nullOr package;
+          default = null;
+          description = ''
+            Path to an image file to load instead of pulling from a registry.
+            If defined, do not pull from registry.
+
+            You still need to set the <literal>image</literal> attribute, as it
+            will be used as the image name for docker to start a container.
+          '';
+          example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
         };
 
         cmd = mkOption {
@@ -153,6 +166,24 @@ let
           example = "/var/lib/hello_world";
         };
 
+        dependsOn = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Define which other containers this one depends on. They will be added to both After and Requires for the unit.
+
+            Use the same name as the attribute under <literal>services.docker-containers</literal>.
+          '';
+          example = literalExample ''
+            services.docker-containers = {
+              node1 = {};
+              node2 = {
+                dependsOn = [ "node1" ];
+              }
+            }
+          '';
+        };
+
         extraDockerOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -164,15 +195,18 @@ let
       };
     };
 
-  mkService = name: container: {
+  mkService = name: container: let
+    mkAfter = map (x: "docker-${x}.service") container.dependsOn;
+  in rec {
     wantedBy = [ "multi-user.target" ];
-    after = [ "docker.service" "docker.socket" ];
-    requires = [ "docker.service" "docker.socket" ];
+    after = [ "docker.service" "docker.socket" ] ++ mkAfter;
+    requires = after;
+
     serviceConfig = {
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
         "--rm"
-        "--name=%n"
+        "--name=${name}"
         "--log-driver=${container.log-driver}"
       ] ++ optional (container.entrypoint != null)
         "--entrypoint=${escapeShellArg container.entrypoint}"
@@ -185,9 +219,14 @@ let
         ++ [container.image]
         ++ map escapeShellArg container.cmd
       );
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop %n"'';
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
+
+      ExecStartPre = ["-${pkgs.docker}/bin/docker rm -f ${name}"
+                      "-${pkgs.docker}/bin/docker image prune -f"] ++
+        (optional (container.imageFile != null)
+                ["${pkgs.docker}/bin/docker load -i ${container.imageFile}"]);
+
+      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop ${name}"'';
+      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${name}";
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
