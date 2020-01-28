@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -22,7 +22,7 @@ let
     nativeBuildInputs = [ cmake python3 ]
       ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ]
+    buildInputs = [ libxml2 llvm lld ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
@@ -38,7 +38,11 @@ let
       "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
 
-    patches = [ ./purity.patch ];
+    patches = [
+      ./purity.patch
+      # make clang -xhip use $PATH to find executables
+      ./HIP-use-PATH-7.patch
+    ];
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
