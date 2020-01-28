@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "telegraf";
@@ -20,6 +20,8 @@ buildGoPackage rec {
   buildFlagsArray = [ ''-ldflags=
     -w -s -X main.version=${version}
   '' ];
+
+  passthru.tests = { inherit (nixosTests) telegraf; };
 
   goDeps = ./deps.nix;
 
