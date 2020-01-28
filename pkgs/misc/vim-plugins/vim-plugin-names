@@ -68,6 +68,7 @@ deoplete-plugins/deoplete-jedi
 deoplete-plugins/deoplete-zsh
 derekelkins/agda-vim
 derekwyatt/vim-scala
+dhruvasagar/vim-prosession
 dhruvasagar/vim-table-mode
 digitaltoad/vim-jade
 direnv/direnv.vim
