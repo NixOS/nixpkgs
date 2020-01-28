@@ -166,7 +166,7 @@ let
           example = "/var/lib/hello_world";
         };
 
-        containerDependencies = mkOption {
+        dependsOn = mkOption {
           type = with types; listOf str;
           default = [];
           description = ''
@@ -178,7 +178,7 @@ let
             services.docker-containers = {
               node1 = {};
               node2 = {
-                containerDependencies = [ "node1" ];
+                dependsOn = [ "node1" ];
               }
             }
           '';
@@ -196,7 +196,7 @@ let
     };
 
   mkService = name: container: let
-    mkAfter = map (x: "docker-${x}.service") container.containerDependencies;
+    mkAfter = map (x: "docker-${x}.service") container.dependsOn;
   in rec {
     wantedBy = [ "multi-user.target" ];
     after = [ "docker.service" "docker.socket" ] ++ mkAfter;
