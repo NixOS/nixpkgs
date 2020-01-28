@@ -74,6 +74,16 @@ let
 
   drivesCmdLine = drives: concatStringsSep " " (imap1 driveCmdline drives);
 
+  # Creates a device name from a 1-based a numerical index, e.g.
+  # * `driveDeviceName 1` -> `/dev/vda`
+  # * `driveDeviceName 2` -> `/dev/vdb`
+  driveDeviceName = idx:
+    let letter = elemAt lowerChars (idx - 1);
+    in if cfg.qemu.diskInterface == "scsi" then
+      "/dev/sd${letter}"
+    else
+      "/dev/vd${letter}";
+
   # Shell script to start the VM.
   startVM =
     ''
@@ -512,8 +522,7 @@ in
       optional cfg.writableStore "overlay"
       ++ optional (cfg.qemu.diskInterface == "scsi") "sym53c8xx";
 
-    virtualisation.bootDevice =
-      mkDefault (if cfg.qemu.diskInterface == "scsi" then "/dev/sda" else "/dev/vda");
+    virtualisation.bootDevice = mkDefault (driveDeviceName 1);
 
     virtualisation.pathsInNixDB = [ config.system.build.toplevel ];
 
@@ -601,7 +610,7 @@ in
           };
       } // optionalAttrs cfg.useBootLoader
       { "/boot" =
-          { device = "/dev/vdb2";
+          { device = "${driveDeviceName 1}2";
             fsType = "vfat";
             options = [ "ro" ];
             noCheck = true; # fsck fails on a r/o filesystem
