@@ -2387,13 +2387,6 @@ in
 
   circus = callPackage ../tools/networking/circus { };
 
-  # Cleanup before 20.03:
-  citrix_receiver = throw "citrix_receiver has been discontinued by Citrix (https://docs.citrix.com/en-us/citrix-workspace-app.html). Please use citrix_workspace.";
-  citrix_receiver_13_10_0 = citrix_receiver;
-  citrix_receiver_13_9_1  = citrix_receiver;
-  citrix_receiver_13_9_0  = citrix_receiver;
-  citrix_receiver_13_8_0  = citrix_receiver;
-
   citrix_workspace_unwrapped = callPackage ../applications/networking/remote/citrix-workspace { };
   citrix_workspace_unwrapped_19_12_0 = citrix_workspace_unwrapped.override { version = "19.12.0"; };
   citrix_workspace_unwrapped_19_10_0 = citrix_workspace_unwrapped.override { version = "19.10.0"; };
