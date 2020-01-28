@@ -18067,6 +18067,8 @@ in
 
   agedu = callPackage ../tools/misc/agedu { };
 
+  agenda = callPackage ../applications/office/agenda { };
+
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
   airwave = callPackage ../applications/audio/airwave { };
