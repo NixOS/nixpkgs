@@ -218,11 +218,13 @@ in
           type = with types; submodule {
             options = {
               globally = mkOption {
+                description = "Additional entries to add to the mail_plugins variable for all protocols";
                 type = plugins "top-level";
                 example = { enable = [ "virtual" ]; };
                 default = { enable = []; };
               };
               perProtocol = mkOption {
+                description = "Additional entries to add to the mail_plugins variable, per protocol";
                 type = attrsOf (plugins "corresponding per-protocol");
                 default = {};
                 example = { imap = [ "imap_acl" ]; };
