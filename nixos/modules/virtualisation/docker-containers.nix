@@ -57,17 +57,16 @@ let
         };
 
         log-driver = mkOption {
-          type = types.str;
-          default = "none";
+          type = with types; nullOr (enum [
+            "none" "json-file" "syslog" "journald" "gelf"
+            "fluentd" "awslogs" "splunk" "etwlogs" "gcplogs"
+          ]);
+          default = null;
           description = ''
-            Logging driver for the container.  The default of
-            <literal>"none"</literal> means that the container's logs will be
-            handled as part of the systemd unit.  Setting this to
-            <literal>"journald"</literal> will result in duplicate logging, but
-            the container's logs will be visible to the <command>docker
-            logs</command> command.
+            This option determines which Docker log driver to use for the container.
+            Set to <literal>null</literal> for default driver.
 
-            For more details and a full list of logging drivers, refer to the
+            For more details refer to the
             <link xlink:href="https://docs.docker.com/engine/reference/run/#logging-drivers---log-driver">
             Docker engine documentation</link>
           '';
@@ -172,7 +171,7 @@ let
           description = ''
             Define which other containers this one depends on. They will be added to both After and Requires for the unit.
 
-            Use the same name as the attribute under <literal>services.docker-containers</literal>.
+            Use the same name as the attribute under <literal>docker-containers</literal>.
           '';
           example = literalExample ''
             services.docker-containers = {
@@ -192,6 +191,15 @@ let
             ["--network=host"]
           '';
         };
+
+        restart = mkOption {
+          type = types.enum [ "no" "on-failure" "always" "unless-stopped" ];
+          default = "always";
+          description = ''
+            When to restart the container.
+            See <link xlink:href="https://docs.docker.com/config/containers/start-containers-automatically/#use-a-restart-policy">docker documentation</link> for more info.
+            '';
+        };
       };
     };
 
@@ -205,11 +213,13 @@ let
     serviceConfig = {
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
-        "--rm"
+        "--detach"
+        "--restart=${container.restart}"
         "--name=${name}"
-        "--log-driver=${container.log-driver}"
       ] ++ optional (container.entrypoint != null)
         "--entrypoint=${escapeShellArg container.entrypoint}"
+        ++ optional (container.log-driver != null)
+        "--log-driver=${container.log-driver}"
         ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
         ++ map (p: "-p ${escapeShellArg p}") container.ports
         ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
@@ -244,9 +254,10 @@ let
       # ExecReload = ...;
       ###
 
-      TimeoutStartSec = 0;
+      Restart = "on-failure";
+      RestartSec = 3;
+      RemainAfterExit = true;
       TimeoutStopSec = 120;
-      Restart = "always";
     };
   };
 
