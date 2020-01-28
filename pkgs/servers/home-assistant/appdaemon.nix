@@ -1,18 +1,14 @@
-{ lib, python3 }:
+{ lib, python3, fetchFromGitHub }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-
-      aiohttp = super.aiohttp.overridePythonAttrs (oldAttrs: rec {
-        version = "2.3.10";
+      bcrypt = super.bcrypt.overridePythonAttrs (oldAttrs: rec {
+        version = "3.1.4";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "8adda6583ba438a4c70693374e10b60168663ffa6564c5c75d3c7a9055290964";
+          sha256 = "13cyrnqwkhc70rs6dg65z4yrrr3dc42fhk11804fqmci9hvimvb7";
         };
-        # TODO: remove after pinning aiohttp to a newer version
-        propagatedBuildInputs = with self; [ chardet multidict async-timeout yarl idna-ssl ];
-        doCheck = false;
       });
 
       yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
@@ -43,23 +39,26 @@ let
 
 in python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
-  version = "3.0.5";
+  version = "4.0.1";
 
-  src = python.pkgs.fetchPypi {
-    inherit pname version;
-    sha256 = "623897ce08dc2efe24d04380df36e4b7fb35c0e4007e882857d4047f0b60349d";
+  src = fetchFromGitHub {
+    owner = "home-assistant";
+    repo = "appdaemon";
+    rev = version;
+    sha256 = "13qzjv11b0c7s1c66j70qmc222a78805n10lv2svj9yyk1v4xhjv";
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    daemonize astral requests sseclient websocket_client aiohttp yarl jinja2
+    daemonize astral requests websocket_client aiohttp yarl jinja2
     aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt setuptools
+    deepdiff dateutil bcrypt python-socketio pid
   ];
 
   # no tests implemented
   doCheck = false;
 
   postPatch = ''
-    substituteInPlace setup.py --replace "pyyaml==5.1" "pyyaml"
+    substituteInPlace requirements.txt --replace "pyyaml==5.1" "pyyaml"
   '';
 
   meta = with lib; {
