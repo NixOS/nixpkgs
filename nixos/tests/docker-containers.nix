@@ -15,7 +15,7 @@ import ./make-test.nix ({ pkgs, lib, ... }:
 
         docker-containers.nginx = {
           image = "nginx-container";
-          imageFile = pkgs.dockerTools.examples.nginx
+          imageFile = pkgs.dockerTools.examples.nginx;
           ports = ["8181:80"];
         };
       };
