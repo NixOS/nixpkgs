@@ -1,5 +1,6 @@
 { rustcVersion
 , rustcSha256
+, enableRustcDev ? true
 , bootstrapVersion
 , bootstrapHashes
 , selectRustPackage
@@ -70,6 +71,7 @@
       rustc = self.callPackage ./rustc.nix ({
         version = rustcVersion;
         sha256 = rustcSha256;
+        inherit enableRustcDev;
 
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;

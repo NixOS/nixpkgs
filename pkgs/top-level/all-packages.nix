@@ -1726,9 +1726,7 @@ in
 
   fdroidserver = python3Packages.callPackage ../development/tools/fdroidserver { };
 
-  filebench = callPackage ../tools/misc/filebench {
-    bison = bison2;
-  };
+  filebench = callPackage ../tools/misc/filebench { };
 
   fileshare = callPackage ../servers/fileshare {};
 
@@ -9803,9 +9801,7 @@ in
     };
   });
 
-  bison2 = callPackage ../development/tools/parsing/bison/2.x.nix { };
-  bison3 = callPackage ../development/tools/parsing/bison/3.x.nix { };
-  bison = bison3;
+  bison = callPackage ../development/tools/parsing/bison { };
   yacc = bison; # TODO: move to aliases.nix
 
   blackmagic = callPackage ../development/tools/misc/blackmagic { };
@@ -13209,7 +13205,7 @@ in
   libxmi = callPackage ../development/libraries/libxmi { };
 
   libxml2 = callPackage ../development/libraries/libxml2 {
-    python = if stdenv.isDarwin then python2 else python3;
+    python = python3;
   };
 
   libxml2Python = let
@@ -13837,7 +13833,7 @@ in
     (import ../development/libraries/qt-5/5.12) {
       inherit newScope;
       inherit stdenv fetchurl fetchpatch fetchFromGitHub makeSetupHook makeWrapper;
-      bison = bison2; # error: too few arguments to function 'int yylex(...
+      inherit bison;
       inherit cups;
       inherit dconf;
       inherit harfbuzz;
@@ -16784,7 +16780,7 @@ in
   keyutils = callPackage ../os-specific/linux/keyutils { };
 
   libselinux = callPackage ../os-specific/linux/libselinux {
-    python = python3;
+    python = python37;
   };
 
   libsemanage = callPackage ../os-specific/linux/libsemanage {
@@ -19673,7 +19669,7 @@ in
     stdenv = gccStdenv;
   };
 
-  ike = callPackage ../applications/networking/ike { bison = bison2; };
+  ike = callPackage ../applications/networking/ike { };
 
   ikiwiki = callPackage ../applications/misc/ikiwiki {
     inherit (perlPackages.override { pkgs = pkgs // { imagemagick = imagemagickBig;}; }) PerlMagick;
@@ -21549,9 +21545,7 @@ in
 
   inherit (ocamlPackages) stog;
 
-  stp = callPackage ../applications/science/logic/stp {
-    bison = bison2;
-  };
+  stp = callPackage ../applications/science/logic/stp { };
 
   stretchly = callPackage ../applications/misc/stretchly {
     inherit (gnome2) GConf;

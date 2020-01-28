@@ -53,6 +53,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh

@@ -29,7 +29,7 @@ in llvmPackages.stdenv.mkDerivation {
   # To handle the lack of 'local' RPATH; required, as they call one of
   # their built binaries requiring their libs, in the build process.
   preBuild = ''
-    export LD_LIBRARY_PATH="$(pwd)/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$(pwd)/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
   '';
 
   enableParallelBuilding = true;
