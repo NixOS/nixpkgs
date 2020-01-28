@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "brook";
-  version = "20190601";
+  version = "20200102";
 
   goPackagePath = "github.com/txthinking/brook";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "txthinking";
     repo = pname;
     rev = "v${version}";
-    sha256 = "04gx1p447wabw3d18s9sm8ynlvj2bp8ac9dsgs08kd1dyrsjlljk";
+    sha256 = "17h74p4apghljiyqjxgk6c4hqnyqs4lsn15gbysx26r4cvzglpx6";
   };
 
   goDeps = ./deps.nix;
