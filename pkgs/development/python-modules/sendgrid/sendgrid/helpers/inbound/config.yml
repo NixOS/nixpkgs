@@ -1,0 +1,34 @@
+# Incoming Parse endpoint
+endpoint: '/inbound'
+
+# Port to listen on
+port: 5000
+
+# Flask debug mode
+# Set this to False in production
+# Reference: http://flask.pocoo.org/docs/0.11/api/#flask.Flask.run
+debug_mode: True
+
+# List all Incoming Parse fields you would like parsed
+# Reference: https://sendgrid.com/docs/Classroom/Basics/Inbound_Parse_Webhook/setting_up_the_inbound_parse_webhook.html
+keys:
+ - from
+ - attachments
+ - headers
+ - text
+ - envelope
+ - to
+ - html
+ - sender_ip
+ - attachment-info
+ - subject
+ - dkim
+ - SPF
+ - charsets
+ - content-ids
+ - spam_report
+ - spam_score
+ - email
+
+# URL that the sender will POST to
+host: 'http://127.0.0.1:5000/inbound'
