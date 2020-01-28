@@ -1,0 +1,151 @@
+<chapter xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         version="5.0"
+         xml:id="module-services-mastodon">
+ <title>Mastodon</title>
+ <para>
+  Mastodon is self-hosted, globally interconnected microblogging software.
+ </para>
+ <section xml:id="module-services-mastodon-configuring">
+  <title>Configuring</title>
+
+  <para>
+   Mastodon depends on both PostgreSQL and Redis and will by default
+   automatically enable both services. In the case of PostgreSQL, a
+   database and a role can be automatically created as well.
+  </para>
+
+  <para>
+   The default state directory for the service is
+   <literal>/var/lib/mastodon</literal>. Uploaded media attachments
+   will be stored in the <literal>public-system</literal>
+   subdirectory, unless configured differently using <link
+   linkend="opt-services.mastodon.extraConfig">services.mastodon.extraConfig</link>.
+  </para>
+
+  <para>
+   A basic configuration with some custom settings could look like this:
+<programlisting>
+services.mastodon = {
+  <link linkend="opt-services.mastodon.enable">enable</link> = true;
+  <link linkend="opt-services.mastodon.configureNginx">configureNginx</link> = true;
+  <link linkend="opt-services.mastodon.localDomain">localDomain</link> = "example.com";
+  smtp = {
+    <link linkend="opt-services.mastodon.smtp.host">host</link> = "smtp.example.com";
+    <link linkend="opt-services.mastodon.smtp.port">port</link> = 587;
+    <link linkend="opt-services.mastodon.smtp.user">user</link> = "mailer@mail.example.com";
+    <link linkend="opt-services.mastodon.enable">fromAddress</link> = "Administrator &lt;admin@mail.example.com&gt;";
+  };
+</programlisting>
+   In order for this example instance to successfully send mail, you
+   would need to place the SMTP password in the file
+   <literal>/var/lib/mastodon/secrets/smtp-password</literal> or
+   another location specified by <link
+   linkend="opt-services.mastodon.smtp.passwordFile">services.mastodon.smtp.passwordFile</link>.
+  </para>
+
+  <para>
+   Mastodon instances communicate using cryptographic secrets.
+   The first time the Mastodon service is launched, it will create new
+   secrets if they are not specified by the options <link
+   linkend="opt-services.mastodon.vapidPublicKeyFile">services.mastodon.vapidPublicKeyFile</link>,
+   <link
+   linkend="opt-services.mastodon.vapidPrivateKeyFile">services.mastodon.vapidPrivateKeyFile</link>,
+   <link
+   linkend="opt-services.mastodon.otpSecretFile">services.mastodon.otpSecretFile</link>,
+   and <link
+   linkend="opt-services.mastodon.secretKeyBaseFile">services.mastodon.secretKeyBaseFile</link>.
+   If you allow the service to create the secrets, they will be found
+   after its launch in <literal>/var/lib/mastodon/secrets</literal>,
+   and you should back them up.
+  </para>
+
+  <para>
+   Refer to <xref linkend="ch-options" /> for all available configuration
+   options for the
+   <link linkend="opt-services.mastodon.enable">services.mastodon</link> module.
+  </para>
+ </section>
+ <section xml:id="module-services-mastodon-custom-package">
+  <title>Customizing and Updating Mastodon</title>
+  <para>
+   Mastodon has complex dependencies which are built by automatically
+   generated Nix expressions, so the Mastodon package includes a
+   script for updating those expressions for new versions of Mastodon.
+   The script can also be used to generate Nix expressions for forks
+   or customized versions of Mastodon.  To run the script you will
+   need the URL of a git repository, anything acceptable to
+   <literal>git clone</literal>, and a commit hash or tag acceptable
+   to <literal>git checkout</literal>.  The URL defaults to Mastodon's
+   repository, so to create the dependency files for a version of
+   Mastodon use:
+<screen>
+ <prompt>$ </prompt>nix run -f '&lt;nixpkgs&gt;' mastodon.updateScript -c update.sh --ver v3.0.1
+</screen>
+and to create them for a recent version of the Mastodon fork Soapbox, use:
+<screen>
+ <prompt>$ </prompt>nix run -f '&lt;nixpkgs&gt;' mastodon.updateScript -c update.sh \
+ --url https://gitlab.com/soapbox-pub/soapbox.git --ver v1.0.0rc1
+</screen>
+   The <literal>update.sh</literal> script will
+   create several Nix files and a patched version of Mastodon's
+   <literal>package.json</literal> in the directory in which you run
+   it.
+  </para>
+  <para>
+   Once the dependency Nix expressions have been generated, a server
+   using the modified or forked version of Mastodon may be created.
+  </para>
+  <para>
+   As an example, to create a Soapbox instance, first run the above
+   <literal>update.sh</literal> command in a subdirectory called
+   <literal>soapbox</literal> of the directory containing your
+   configuration files, and then include in your package overlays:
+<programlisting>
+self: super: {
+  soapbox = self.mastodon.override {
+    pname = "soapbox";
+    srcOverride = pkgs.callPackage ./soapbox/source.nix { };
+    dependenciesDir = ./soapbox;
+    version = "1.0.0rc1";
+  };
+}
+</programlisting>
+   You can then make the Mastodon service use your Soapbox package
+   instead of the default Mastodon package by adding to your
+   configuration:
+<programlisting>
+<link linkend="opt-services.mastodon.package">services.mastodon.package</link> = pkgs.soapbox;
+</programlisting>
+  </para>
+ </section>
+ <section xml:id="module-services-mastodon-maintenance">
+  <title>Maintenance</title>
+
+  <para>
+   You can run Mastodon's command line administration tasks with the
+   <literal>tootctl</literal> command, which will be available on the
+   system when the Mastodon service is enabled. You will have to run
+   the command as the user that you configured to run the Mastodon
+   service (see <link
+   linkend="opt-services.mastodon.user">services.mastodon.user</link>).
+   A shell script <literal>mastodon-env</literal> is provided to set
+   up the environment variables for <literal>rake</literal> and
+   <literal>tootctl</literal> to match those used by the Mastodon
+   service.
+  </para>
+
+  <para>
+   For example, to close registrations on a Mastodon instance:
+<screen>
+ <prompt># </prompt>su - mastodon -s /bin/sh -c "mastodon-env tootctl settings registrations close"
+</screen>
+   The Mastodon service defaults to doing automatic database
+   migrations. If you would prefer to run them manually, use:
+<screen>
+ <prompt># </prompt>su - mastodon -s /bin/sh -c "mastodon-env rake db:migrate"
+</screen>
+  </para>
+ </section>
+</chapter>

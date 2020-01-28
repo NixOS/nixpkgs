@@ -532,5 +532,6 @@ in {
   };
 
   meta.maintainers = with lib.maintainers; [ happy-river ];
+  meta.doc = ./mastodon.xml;
 
 }
