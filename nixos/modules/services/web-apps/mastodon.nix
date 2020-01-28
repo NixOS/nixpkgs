@@ -521,6 +521,7 @@ in {
       (lib.mkIf (cfg.user == "mastodon") {
         mastodon = {
           isSystemUser = true;
+          home = cfg.package;
           inherit (cfg) group;
         };
       })
