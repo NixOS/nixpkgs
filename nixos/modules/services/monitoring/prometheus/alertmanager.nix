@@ -157,8 +157,8 @@ in {
         wantedBy = [ "multi-user.target" ];
         after    = [ "network.target" ];
         preStart = ''
-           ${lib.getBin pkgs.envsubst}/bin/envsubst -o /tmp/alert-manager-substituted.yaml" \
-                                                    -i ${alertmanagerYml}"
+           ${lib.getBin pkgs.envsubst}/bin/envsubst -o "/tmp/alert-manager-substituted.yaml" \
+                                                    -i "${alertmanagerYml}"
         '';
         serviceConfig = {
           Restart  = "always";

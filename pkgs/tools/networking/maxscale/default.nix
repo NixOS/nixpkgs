@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, glibc
-, bison2, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, libmysqlclient
+, bison, curl, flex, gperftools, jansson, jemalloc, kerberos, lua, libmysqlclient
 , ncurses, openssl, pcre, pcre2, perl, rabbitmq-c, sqlite, tcl
 , libaio, libedit, libtool, libui, libuuid, zlib
 }:
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    bison2 curl flex gperftools jansson jemalloc kerberos lua libmysqlclient
+    bison curl flex gperftools jansson jemalloc kerberos lua libmysqlclient
     ncurses openssl pcre pcre2 perl rabbitmq-c sqlite tcl
     libaio libedit libtool libui libuuid zlib
   ];

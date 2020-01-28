@@ -445,6 +445,13 @@ users.users.me =
       </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>citrix_workspace_19_3_0</literal> package has been removed as
+     it will be EOLed within the lifespan of 20.03. For further information,
+     please refer to the <link xlink:href="https://www.citrix.com/de-de/support/product-lifecycle/milestones/receiver.html">support and maintenance information</link> from upstream.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -484,6 +491,12 @@ users.users.me =
        <literal>PRETTY_NAME</literal> in <literal>/etc/os-release</literal>
        now uses the short rather than full version string.
      </para>
+   </listitem>
+    <listitem>
+    <para>
+    It is now possible to unlock LUKS-Encrypted file systems using a FIDO2 token
+    via <option>boot.initrd.luks.fido2Support</option>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

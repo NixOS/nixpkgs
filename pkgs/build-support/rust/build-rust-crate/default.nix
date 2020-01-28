@@ -23,7 +23,7 @@ let
             lib.strings.replaceStrings ["-"] ["_"] crateRenames.${dep.crateName}
           else
             extern;
-        in (if lib.any (x: x == "lib") dep.crateType then
+        in (if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
            if linked then
               " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
            else

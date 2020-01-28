@@ -123,7 +123,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # allow ecore_con to find libcurl.so, which is a runtime dependency (it is dlopened)
-    export LD_LIBRARY_PATH="${curl.out}/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="${curl.out}/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
 
     source "$setupHook"
   '';

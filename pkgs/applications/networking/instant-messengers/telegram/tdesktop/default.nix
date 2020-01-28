@@ -10,37 +10,21 @@
 with lib;
 
 # Main reference:
-# - This package is based on the Arch package:
+# - This package was originally based on the Arch package but all patches are now upstreamed:
 #   https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/telegram-desktop
-# Other references that could be useful (but we should try to stick to Arch):
+# Other references that could be useful:
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 mkDerivation rec {
   pname = "telegram-desktop";
   version = "1.9.8";
-  # Note: Due to our strong dependency on the Arch patches it's probably best
-  # to also wait for the Arch update (especially if the patches don't apply).
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
     sha256 = "1rq3180l4ly0n0jj08cxy9l2d07scwp9hasmliva2xspyv7i9ksd";
   };
-
-  # Arch patches (svn export telegram-desktop/trunk)
-  archPatches = fetchsvn {
-    url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
-    # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "554983";
-    sha256 = "02gk5dlrmxvyl7w1yxmwclknk1k9drpx6rxqc6vmmw85l763m95j";
-  };
-
-  # Note: It would be best if someone could get as many patches upstream as
-  # possible (we currently depend a lot on custom patches...).
-  patches = [
-    "${archPatches}/0005-Use-system-wide-fonts.patch"
-  ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
@@ -64,25 +48,11 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${minizip}/include/minizip"
-    # See Telegram/gyp/qt.gypi
-    "-I${getDev qtbase}/mkspecs/linux-g++"
-  ] ++ concatMap (x: [
-    "-I${getDev qtbase}/include/${x}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
-    "-I${getDev libopus}/include/opus"
-    "-I${getDev alsaLib}/include/alsa"
-    "-I${getDev libpulseaudio}/include/pulse"
-    ]) [ "QtCore" "QtGui" "QtDBus" ];
-  CPPFLAGS = NIX_CFLAGS_COMPILE;
-
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
-    #"-DTDESKTOP_API_TEST=ON" # TODO: Officiall API credentials for Nixpkgs
-    "-DTDESKTOP_API_ID=17349" # See: https://github.com/NixOS/nixpkgs/issues/55271
-    "-DTDESKTOP_API_HASH=344583e45741c457fe1862106095a5eb"
+    # TODO: Officiall API credentials for Nixpkgs
+    # (see: https://github.com/NixOS/nixpkgs/issues/55271):
+    "-DTDESKTOP_API_TEST=ON"
     "-DDESKTOP_APP_USE_GLIBC_WRAPS=OFF"
     "-DDESKTOP_APP_USE_PACKAGED=ON"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"

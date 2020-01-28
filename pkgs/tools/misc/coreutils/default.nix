@@ -15,7 +15,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "coreutils";
   version = "8.31";
 
@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
          # To be removed in coreutils-8.32.
          ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
          # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
-         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch;
+         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch
+         # Fix compilation in android-cross environments. To be removed in coreutils-8.32.
+         ++ [ ./coreutils-8.31-android-cross.patch ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -143,8 +145,9 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.eelco ];
   };
-
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-}
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+  NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
+})

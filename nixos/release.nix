@@ -149,9 +149,9 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
-    type = "graphical";
+  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix;
+    type = "plasma5";
     inherit system;
   });
 

@@ -32,7 +32,6 @@ stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" "man" "doc" ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
-  propagatedBuildOutputs = [ "out" "bin" ] ++ lib.optional pythonSupport "py";
 
   buildInputs = lib.optional pythonSupport python
     ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
