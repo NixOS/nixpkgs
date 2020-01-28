@@ -445,6 +445,13 @@ users.users.me =
       </listitem>
     </itemizedlist>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>citrix_workspace_19_3_0</literal> package has been removed as
+     it will be EOLed within the lifespan of 20.03. For further information,
+     please refer to the <link xlink:href="https://www.citrix.com/de-de/support/product-lifecycle/milestones/receiver.html">support and maintenance information</link> from upstream.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
