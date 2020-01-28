@@ -1,7 +1,11 @@
 { buildPythonPackage, lib, fetchgit, isPy3k
 , git, makeWrapper, sassc, hyperkitty, postorius, whoosh
+, django
 }:
 
+if lib.versionOlder "2.2" django.version
+then throw "mailman-web requires django < 2.2"
+else
 buildPythonPackage rec {
   pname = "mailman-web-unstable";
   version = "2019-09-29";
