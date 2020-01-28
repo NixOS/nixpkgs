@@ -7974,4 +7974,10 @@
     githubId = 8686360;
     name = "Illia Shestakov";
   };
+  foxit64 = {
+    email = "o4nsxy05@gmail.com";
+    github = "foxit64";
+    githubId = 56247270;
+    name = "Foxit";
+  };
 }
