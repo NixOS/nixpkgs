@@ -202,7 +202,7 @@ in
         options = {
           globally = mkOption {
             type = plugins "top-level";
-            example = { enable =[ "virtual" ]; };
+            example = { enable = [ "virtual" ]; };
             default = { enable = []; };
           };
           perProtocol = mkOption {
