@@ -183,6 +183,8 @@ in {
 
   arrayqueues = callPackage ../development/python-modules/arrayqueues { };
 
+  arch = callPackage ../development/python-modules/arch { };
+
   aresponses = callPackage ../development/python-modules/aresponses { };
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
