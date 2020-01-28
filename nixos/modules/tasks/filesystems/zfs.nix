@@ -366,6 +366,10 @@ in
           message = "ZFS requires networking.hostId to be set";
         }
         {
+          assertion = !config.boot.loader.grub.enable || config.boot.loader.grub.copyKernels;
+          message = "ZFS requires boot.loader.grub.copyKernels to be enabled";
+        }
+        {
           assertion = !cfgZfs.forceImportAll || cfgZfs.forceImportRoot;
           message = "If you enable boot.zfs.forceImportAll, you must also enable boot.zfs.forceImportRoot";
         }
