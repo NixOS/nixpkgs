@@ -500,6 +500,8 @@ in {
 
   braintree = callPackage ../development/python-modules/braintree { };
 
+  deepdiff = callPackage ../development/python-modules/deepdiff { };
+
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   breathe = callPackage ../development/python-modules/breathe { };
