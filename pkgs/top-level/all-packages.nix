@@ -8905,6 +8905,8 @@ in
 
   serialdv = callPackage ../development/libraries/serialdv {  };
 
+  serialosc = callPackage ../development/libraries/serialosc { };
+
   serpent = callPackage ../development/compilers/serpent { };
 
   shmig = callPackage ../development/tools/database/shmig { };
