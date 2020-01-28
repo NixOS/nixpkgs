@@ -12558,6 +12558,8 @@ in
 
   liblo = callPackage ../development/libraries/liblo { };
 
+  libmonome = callPackage ../development/libraries/libmonome { };
+
   liblscp = callPackage ../development/libraries/liblscp { };
 
   libe-book = callPackage ../development/libraries/libe-book {};
