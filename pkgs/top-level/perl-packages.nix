@@ -1990,10 +1990,10 @@ let
 
   CDB_File = buildPerlPackage {
     pname = "CDB_File";
-    version = "0.99";
+    version = "1.01";
     src = fetchurl {
-      url = "mirror://cpan/authors/id/T/TO/TODDR/CDB_File-0.99.tar.gz";
-      sha256 = "1c32b30131871e8a7b23f47d8f65d9cdeb87069fa4c221781a03416496f91f16";
+      url = mirror://cpan/authors/id/T/TO/TODDR/CDB_File-1.01.tar.gz;
+      sha256 = "9a1af86fa3a3011396e33c0a046e637c442effcb05b4991378d349287ff7f4f7";
     };
     meta = {
       homepage = "https://github.com/toddr/CDB_File";
