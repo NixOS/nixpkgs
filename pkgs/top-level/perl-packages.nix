@@ -9323,10 +9323,10 @@ let
 
   IOTty = buildPerlPackage {
     pname = "IO-Tty";
-    version = "1.12";
+    version = "1.14";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.12.tar.gz;
-      sha256 = "0399anjy3bc0w8xzsc3qx5vcyqryc9gc52lc7wh7i49hsdq8gvx2";
+      url = mirror://cpan/authors/id/T/TO/TODDR/IO-Tty-1.14.tar.gz;
+      sha256 = "1dcmxdhrapxvvzlfp6yzz7655f3c6x8jrw0md8ndp2qj27iy9wsi";
     };
     doCheck = !stdenv.isDarwin;  # openpty fails in the sandbox
   };
