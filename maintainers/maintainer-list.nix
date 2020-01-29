@@ -1812,6 +1812,12 @@
     githubId = 10913120;
     name = "Dje4321";
   };
+  djmaze = {
+    email = "maze@strahlungsfrei.de";
+    github = "djmaze";
+    githubId = 7229;
+    name = "Martin Honermeyer";
+  };
   dkabot = {
     email = "dkabot@dkabot.com";
     github = "dkabot";
