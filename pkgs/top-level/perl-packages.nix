@@ -20939,10 +20939,10 @@ let
 
   YAML = buildPerlPackage {
     pname = "YAML";
-    version = "1.29";
+    version = "1.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.29.tar.gz;
-      sha256 = "0gl5ssvrdajlbc85cy6z873n9cwlssk5q8z97a31vyiikhw5fp4w";
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-1.30.tar.gz;
+      sha256 = "1kbrfksjg4k4vmx1i337m5n69m00m0m5bgsh61c15bzzrgbacc2h";
     };
 
     buildInputs = [ TestBase TestDeep TestYAML ];
