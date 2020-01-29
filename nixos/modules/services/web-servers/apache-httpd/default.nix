@@ -681,6 +681,15 @@ in
       "access_compat"
     ];
 
+    systemd.tmpfiles.rules =
+      let
+        svc = config.systemd.services.httpd.serviceConfig;
+      in
+        [
+          "d '${cfg.logDir}' 0700 ${svc.User} ${svc.Group}"
+          "Z '${cfg.logDir}' - ${svc.User} ${svc.Group}"
+        ];
+
     systemd.services.httpd =
       let
         vhostsACME = filter (hostOpts: hostOpts.enableACME) vhosts;
@@ -701,8 +710,6 @@ in
 
         preStart =
           ''
-            mkdir -m 0700 -p ${cfg.logDir}
-
             # Get rid of old semaphores.  These tend to accumulate across
             # server restarts, eventually preventing it from restarting
             # successfully.
@@ -715,6 +722,7 @@ in
           ExecStart = "@${pkg}/bin/httpd httpd -f ${httpdConf}";
           ExecStop = "${pkg}/bin/httpd -f ${httpdConf} -k graceful-stop";
           ExecReload = "${pkg}/bin/httpd -f ${httpdConf} -k graceful";
+          User = "root";
           Group = cfg.group;
           Type = "forking";
           PIDFile = "${runtimeDir}/httpd.pid";
