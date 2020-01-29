@@ -16873,7 +16873,7 @@ let
       url = mirror://cpan/authors/id/I/IN/INGY/Swim-0.1.48.tar.gz;
       sha256 = "a5f72fd2f22917fa2b4acbb2ee2c3d32903d97ee5b0e449b0f387018c77f4f0c";
     };
-    propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat ];
+    propagatedBuildInputs = [ HTMLEscape HashMerge IPCRun Pegex TextAutoformat YAMLLibYAML ];
     meta = {
       homepage = https://github.com/ingydotnet/swim-pm;
       description = "See What I Mean?!";
