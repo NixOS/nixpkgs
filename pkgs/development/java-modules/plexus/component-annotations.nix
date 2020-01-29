@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusComponentAnnotations_1_5_5 = map (obj: fetchMaven {
     version = "1.5.5";
     artifactId = "plexus-component-annotations";

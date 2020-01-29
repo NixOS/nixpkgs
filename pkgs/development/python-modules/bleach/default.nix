@@ -5,6 +5,7 @@
 , pytestrunner
 , six
 , html5lib
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,10 +18,15 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pytestrunner ];
-  propagatedBuildInputs = [ six html5lib ];
+  propagatedBuildInputs = [ six html5lib setuptools ];
 
   postPatch = ''
     substituteInPlace setup.py --replace ",<3dev" ""
+  '';
+
+  # Disable network tests
+  checkPhase = ''
+    pytest -k "not protocols"
   '';
 
   meta = {

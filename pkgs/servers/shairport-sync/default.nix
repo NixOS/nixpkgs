@@ -2,11 +2,11 @@
 , libdaemon, popt, pkgconfig, libconfig, libpulseaudio, soxr }:
 
 stdenv.mkDerivation rec {
-  version = "3.3";
-  name = "shairport-sync-${version}";
+  version = "3.3.5";
+  pname = "shairport-sync";
 
   src = fetchFromGitHub {
-    sha256 = "0d3cvf408i2rm5h21z264gs8mqdnwavqrwhrkcvypv8gs5rcdw2z";
+    sha256 = "1qaxx1g4dvdx54mc1kw07hm445zij37w6qmkdcwymy13krvsfd4b";
     rev = version;
     repo = "shairport-sync";
     owner = "mikebrady";

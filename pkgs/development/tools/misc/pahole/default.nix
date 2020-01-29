@@ -1,12 +1,12 @@
 { stdenv, fetchgit, cmake, elfutils, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "pahole-${version}";
-  version = "1.12";
+  pname = "pahole";
+  version = "1.16";
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/devel/pahole/pahole.git;
-    sha256 = "1a8xfwqdc2j3ydh9bk2pkvsaf3lrkbxj66vj991c7knc31ix8kpw";
     rev = "v${version}";
+    sha256 = "1gfc9v4dgs811v1zjk0d9hsgmizllw2hibc83ykmakzysimaxsy3";
   };
 
   nativeBuildInputs = [ cmake ];

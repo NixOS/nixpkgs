@@ -19,17 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "0h4wgngn2yl35hapbjs24amkjfbzsvnna4ixfhn87snjnq5lmjbc"; # v0.9.1
   };
 
-  patches = if withQt5 then null else [ ./0001-Fixes-build-with-Qt4.patch ];
+  patches = (if withQt5 then [] else [ ./0001-Fixes-build-with-Qt4.patch ]) ++ (if stdenv.isDarwin then [ ./0002-Fix-install-name-Darwin.patch ] else []);
 
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
   ;
 
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
-    ++ stdenv.lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Security
     ])
   ;

@@ -1,29 +1,33 @@
-{ stdenv, lib, fetchgit, perl, cdrkit, syslinux, xz, openssl, gnu-efi
+{ stdenv, lib, fetchFromGitHub, perl, cdrkit, syslinux, xz, openssl, gnu-efi, mtools
 , embedScript ? null
+, additionalTargets ? {}
 }:
 
 let
-  date = "20190318";
-  rev = "ebf2eaf515e46abd43bc798e7e4ba77bfe529218";
-  targets = [
-    "bin-x86_64-efi/ipxe.efi"
-    "bin/ipxe.dsk"
-    "bin/ipxe.usb"
-    "bin/ipxe.iso"
-    "bin/ipxe.lkrn"
-    "bin/undionly.kpxe"
-  ];
+  targets = additionalTargets // lib.optionalAttrs stdenv.isx86_64 {
+    "bin-x86_64-efi/ipxe.efi" = null;
+    "bin-x86_64-efi/ipxe.efirom" = null;
+    "bin-x86_64-efi/ipxe.usb" = "ipxe-efi.usb";
+  } // {
+    "bin/ipxe.dsk" = null;
+    "bin/ipxe.usb" = null;
+    "bin/ipxe.iso" = null;
+    "bin/ipxe.lkrn" = null;
+    "bin/undionly.kpxe" = null;
+  };
 in
 
-stdenv.mkDerivation {
-  name = "ipxe-${date}-${builtins.substring 0 7 rev}";
+stdenv.mkDerivation rec {
+  pname = "ipxe";
+  version = "1.20.1";
 
-  buildInputs = [ perl cdrkit syslinux xz openssl gnu-efi ];
+  nativeBuildInputs = [ perl cdrkit syslinux xz openssl gnu-efi mtools ];
 
-  src = fetchgit {
-    url = https://git.ipxe.org/ipxe.git;
-    sha256 = "0if3m8h1nfxy4n37cwlfbc5kand52290v80m4zvjppc81im3nr5g";
-    inherit rev;
+  src = fetchFromGitHub {
+    owner = "ipxe";
+    repo = "ipxe";
+    rev = "v${version}";
+    sha256 = "0w7h7y97gj9nqvbmsg1zp6zj5mpbbpckqbbx7bpp6k3ahy5fk8zp";
   };
 
   # not possible due to assembler code
@@ -38,7 +42,12 @@ stdenv.mkDerivation {
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
 
 
-  enabledOptions = [ "DOWNLOAD_PROTO_HTTPS" ];
+  enabledOptions = [
+    "PING_CMD"
+    "IMAGE_TRUST_CMD"
+    "DOWNLOAD_PROTO_HTTP"
+    "DOWNLOAD_PROTO_HTTPS"
+  ];
 
   configurePhase = ''
     runHook preConfigure
@@ -50,11 +59,14 @@ stdenv.mkDerivation {
 
   preBuild = "cd src";
 
-  buildFlags = targets;
+  buildFlags = lib.attrNames targets;
 
   installPhase = ''
     mkdir -p $out
-    cp ${lib.concatStringsSep " " targets} $out
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (from: to:
+      if to == null
+      then "cp -v ${from} $out"
+      else "cp -v ${from} $out/${to}") targets)}
 
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.
@@ -65,9 +77,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib;
     { description = "Network boot firmware";
-      homepage = http://ipxe.org/;
+      homepage = https://ipxe.org/;
       license = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];
-      platforms = platforms.all;
+      platforms = [ "x86_64-linux" "i686-linux" ];
     };
 }

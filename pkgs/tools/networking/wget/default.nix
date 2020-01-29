@@ -5,11 +5,11 @@
 , openssl ? null }:
 
 stdenv.mkDerivation rec {
-  name = "wget-${version}";
+  pname = "wget";
   version = "1.20.3";
 
   src = fetchurl {
-    url = "mirror://gnu/wget/${name}.tar.lz";
+    url = "mirror://gnu/wget/${pname}-${version}.tar.lz";
     sha256 = "1frajd86ds8vz2hprq30wq8ya89z9dcxnwm8nwk12bbc47l7qq39";
   };
 

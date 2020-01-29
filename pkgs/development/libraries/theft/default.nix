@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.4.5";
-  name = "theft-${version}";
+  pname = "theft";
 
   src = fetchFromGitHub {
     owner  = "silentbicycle";

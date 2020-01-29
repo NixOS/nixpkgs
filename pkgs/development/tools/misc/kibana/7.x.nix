@@ -18,12 +18,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1mzycd0ljnkslz9p9jhq279bkpk35r7svhngxjnmsh11ampsvxb8";
-      "x86_64-darwin" = "1bz409njdpmsagh5dg062114wpa96w7pmxwfjsizwksqyyjdwdv7";
+      x86_64-linux  = "1wq4fc2fifkg1qz7nxdfb4yi2biay8cgdz7kl5k0p37sxn0sbkja";
+      x86_64-darwin = "06346kj7bv49py49pmmnmh8m24322m88v1af19909pj9cxgd0p6v";
     }
     else {
-      "x86_64-linux"  = "1x3gjc9xa03m4jfnl5vjxigzcnb8ysnhxgd8618v85x4l0010v38";
-      "x86_64-darwin" = "1nsbmrswv2jv2z7686i2sf6rrmxysbqi5ih6jjrbrqnk64xi18j2";
+      x86_64-linux  = "0ygpmcm6wdcnvw8azwqc5257lyic7yw31rqvm2pw3afhpha62lpj";
+      x86_64-darwin = "0xy81g0bhxp47p29kkkh5llfzqkzqzr5dk50ap2hy0hjw33ld6g1";
     };
 
 in stdenv.mkDerivation rec {
@@ -32,14 +32,14 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/kibana/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [
     # Kibana specifies it specifically needs nodejs 10.15.2 but nodejs in nixpkgs is at 10.15.3.
     # The <nixpkgs/nixos/tests/elk.nix> test succeeds with this newer version so lets just
     # disable the version check.
-    ./disable-nodejs-version-check.patch
+    ./disable-nodejs-version-check-7.patch
   ];
 
   buildInputs = [ makeWrapper ];
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     description = "Visualize logs and time-stamped data";
     homepage = http://www.elasticsearch.org/overview/kibana;
     license = if enableUnfree then licenses.elastic else licenses.asl20;
-    maintainers = with maintainers; [ offline rickynils basvandijk ];
+    maintainers = with maintainers; [ offline basvandijk ];
     platforms = with platforms; unix;
   };
 }

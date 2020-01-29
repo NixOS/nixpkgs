@@ -1,12 +1,12 @@
 {stdenv, fetchFromGitHub, qmake}:
 stdenv.mkDerivation rec {
   pname = "qview";
-  version = "2.0";
+  version = "3.0";
   src = fetchFromGitHub {
     owner = "jurplel";
     repo = "qView";
     rev = version;
-    sha256 = "1s29hz44rb5dwzq8d4i4bfg77dr0v3ywpvidpa6xzg7hnnv3mhi5";
+    sha256 = "15a91bs3wcqhgf76wzigbn10hayg628j84pq4j2vaxar94ak0vk7";
   };
   nativeBuildInputs = [ qmake ];
   patchPhase = ''

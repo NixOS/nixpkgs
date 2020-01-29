@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "lint-${version}";
+  pname = "lint";
   version = "20181026-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "c67002cb31c3a748b7688c27f20d8358b4193582";
   

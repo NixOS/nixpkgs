@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "engrampa-${version}";
-  version = "1.22.1";
+  pname = "engrampa";
+  version = "1.22.3";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "06z38vfs15f5crrrgvcsqfb557fhpq1mqkj5fd9wb0hvi77hasrk";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "17pn1qgr1a13jxv50qcnzqcw8gr96g7jz2z2y1wbwy7i44bknv6n";
   };
 
   nativeBuildInputs = [

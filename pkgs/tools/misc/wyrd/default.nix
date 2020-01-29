@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
-  name = "wyrd-${version}";
+  pname = "wyrd";
 
   src = fetchurl {
     url = "http://pessimization.com/software/wyrd/wyrd-${version}.tar.gz";
     sha256 = "0zlrg602q781q8dij62lwdprpfliyy9j1rqfqcz8p2wgndpivddj";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   preConfigure = ''
     substituteInPlace curses/curses.ml --replace 'pp gcc' "pp $CC"

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, expat }:
 
 stdenv.mkDerivation rec {
-  name = "bloodspilot-xpilot-fxi-server-${version}";
+  pname = "bloodspilot-xpilot-fxi-server";
   version = "1.4.6";
 
   src = fetchurl {

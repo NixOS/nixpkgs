@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec
 {
-  name = "openvdb-${version}";
-  version = "6.0.0";
+  pname = "openvdb";
+  version = "6.2.1";
 
   src = fetchFromGitHub {
     owner = "dreamworksanimation";
     repo = "openvdb";
     rev = "v${version}";
-    sha256 = "07m012a966l821f09jmrrhs25cs2rcmhlxcicywibllaac10wk5k";
+    sha256 = "1ypkzdkgsbcczfvrqblnxfzm13w0mdkskgqmgvmbfi66vpaazdrf";
   };
 
   outputs = [ "out" ];
@@ -20,21 +20,22 @@ stdenv.mkDerivation rec
     sourceRoot=$(echo */openvdb)
   '';
 
-  installTargets = "install_lib";
+  installTargets = [ "install_lib" ];
 
   enableParallelBuilding = true;
 
-  buildFlags = ''lib
-    DESTDIR=$(out)
-    HALF_LIB=-lHalf
-    TBB_LIB=-ltbb
-    BLOSC_LIB=-lblosc
-    LOG4CPLUS_LIB=
-    BLOSC_INCLUDE_DIR=${c-blosc}/include/
-    BLOSC_LIB_DIR=${c-blosc}/lib/
-  '';
+  buildFlags = [
+    "lib"
+    "DESTDIR=$(out)"
+    "HALF_LIB=-lHalf"
+    "TBB_LIB=-ltbb"
+    "BLOSC_LIB=-lblosc"
+    "LOG4CPLUS_LIB="
+    "BLOSC_INCLUDE_DIR=${c-blosc}/include/"
+    "BLOSC_LIB_DIR=${c-blosc}/lib/"
+  ];
 
-  installFlags = ''DESTDIR=$(out)'';
+  installFlags = [ "DESTDIR=$(out)" ];
 
   NIX_CFLAGS_COMPILE="-I${openexr.dev}/include/OpenEXR -I${ilmbase.dev}/include/OpenEXR/";
   NIX_LDFLAGS="-lboost_iostreams";

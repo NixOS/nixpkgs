@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "orthorobot";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Robot game";
     desktopName = "Orthorobot";
     genericName = "orthorobot";
@@ -21,7 +21,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

@@ -5,17 +5,16 @@ stdenv.mkDerivation rec {
   pname = "global-platform-pro";
   version = "18.09.14";
   GPPRO_VERSION = "18.09.14-0-gb439b52"; # git describe --tags --always --long --dirty
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "martinpaljak";
     repo = "GlobalPlatformPro";
-    rev = "${version}";
+    rev = version;
     sha256 = "1vws6cbgm3mrwc2xz9j1y262vw21x3hjc9m7rqc4hn3m7gjpwsvg";
   };
 
   deps = stdenv.mkDerivation {
-    name = "${name}-deps";
+    name = "${pname}-${version}-deps";
     inherit src;
     nativeBuildInputs = [ jdk maven ];
     installPhase = ''

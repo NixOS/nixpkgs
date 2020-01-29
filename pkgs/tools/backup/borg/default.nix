@@ -17,8 +17,8 @@ python3.pkgs.buildPythonApplication rec {
     libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
   propagatedBuildInputs = with python3.pkgs; [
-    cython
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
+    cython llfuse
+  ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
@@ -66,6 +66,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = https://www.borgbackup.org;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli dotlambda ];
+    maintainers = with maintainers; [ flokli dotlambda globin ];
   };
 }

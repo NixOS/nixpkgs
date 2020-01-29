@@ -24,6 +24,8 @@ let
 
   darcsToGit = callPackage ./darcs-to-git { };
 
+  delta = callPackage ./delta { };
+
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
   ghq = callPackage ./ghq { };
@@ -44,7 +46,7 @@ let
   gitFull = gitBase.override {
     svnSupport = true;
     guiSupport = true;
-    sendEmailSupport = !stdenv.isDarwin;
+    sendEmailSupport = true;
     withLibsecret = !stdenv.isDarwin;
   };
 
@@ -72,6 +74,8 @@ let
 
   git-annex-remote-rclone = callPackage ./git-annex-remote-rclone { };
 
+  git-annex-utils = callPackage ./git-annex-utils { };
+
   git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
@@ -89,11 +93,17 @@ let
 
   git-extras = callPackage ./git-extras { };
 
+  git-gone = callPackage ./git-gone {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-hub = callPackage ./git-hub { };
 
   git-ignore = callPackage ./git-ignore { };
 
   git-imerge = callPackage ./git-imerge { };
+
+  git-machete = python3Packages.callPackage ./git-machete { };
 
   git-octopus = callPackage ./git-octopus { };
 
@@ -116,6 +126,10 @@ let
   git-standup = callPackage ./git-standup { };
 
   git-stree = callPackage ./git-stree { };
+
+  git-subrepo = callPackage ./git-subrepo { };
+
+  git-subtrac = callPackage ./git-subtrac { };
 
   git-sync = callPackage ./git-sync { };
 
@@ -141,7 +155,9 @@ let
 
   lab = callPackage ./lab { };
 
-  pre-commit = callPackage ./pre-commit { };
+  lefthook = callPackage ./lefthook { };
+
+  pre-commit = pkgs.python3Packages.toPythonApplication pkgs.python3Packages.pre-commit;
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 
@@ -157,6 +173,8 @@ let
   };
 
   svn-all-fast-export = libsForQt5.callPackage ./svn-all-fast-export { };
+
+  thicket = callPackage ./thicket { };
 
   tig = callPackage ./tig { };
 

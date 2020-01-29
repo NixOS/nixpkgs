@@ -1,23 +1,20 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, pytest_xdist, flaky, tornado, pycurl }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, pytest, setuptools, structlog, pytest-asyncio, flaky, tornado, pycurl, pytest-httpbin }:
 
 buildPythonPackage rec {
   pname = "nvchecker";
-  version = "1.4.3";
+  version = "1.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v340wkq4sn9pvcpjh076l8mcqkn3nrn7if8p6iysk02bjxvknbv";
+    sha256 = "0973f7c3ea5ad65fb19837e8915882a9f2c2f21f5c2589005478697391fea2fd";
   };
 
   propagatedBuildInputs = [ setuptools structlog tornado pycurl ];
-  checkInputs = [ pytest pytest-asyncio pytest_xdist flaky ];
+  checkInputs = [ pytest pytest-asyncio flaky pytest-httpbin ];
 
-  # Disable tests for now, because our version of pytest seems to be too new
-  # https://github.com/lilydjwg/nvchecker/commit/42a02efec84824a073601e1c2de30339d251e4c7
-  doCheck = false;
-
+  # disable `test_ubuntupkg` because it requires network
   checkPhase = ''
-    py.test
+    py.test -m "not needs_net" --ignore=tests/test_ubuntupkg.py
   '';
 
   disabled = pythonOlder "3.5";

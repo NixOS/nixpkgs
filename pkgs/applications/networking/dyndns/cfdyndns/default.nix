@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "cfdyndns-${version}";
+  pname = "cfdyndns";
   version = "0.0.1";
   src = fetchFromGitHub {
     owner = "colemickens";

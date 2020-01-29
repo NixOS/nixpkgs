@@ -12,15 +12,17 @@ let
 
 in
 buildGoPackage rec {
-  name = "cockroach-${version}";
-  version = "19.1.1";
+  pname = "cockroach";
+  version = "19.1.5";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "1vbz5j0y9ri8c99k8fc5rnwigay478p1mac5g402639ilkqd41fc";
+    sha256 = "1pnzzmxxb7qxiiy8qpl2sifk4qrijjbhmzy47bnjj5ssdsjjjcqy";
   };
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
 
   inherit nativeBuildInputs buildInputs;
 

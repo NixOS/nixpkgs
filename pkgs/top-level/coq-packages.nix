@@ -16,6 +16,8 @@ let
       category-theory = callPackage ../development/coq-modules/category-theory { };
       Cheerios = callPackage ../development/coq-modules/Cheerios {};
       CoLoR = callPackage ../development/coq-modules/CoLoR {};
+      coq-bits = callPackage ../development/coq-modules/coq-bits {};
+      coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
       coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-extensible-records = callPackage ../development/coq-modules/coq-extensible-records {};
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
@@ -27,6 +29,7 @@ let
       equations = callPackage ../development/coq-modules/equations { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
+      gappalib = callPackage ../development/coq-modules/gappalib {};
       heq = callPackage ../development/coq-modules/heq {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
@@ -53,17 +56,17 @@ let
         mathcomp-ssreflect_1_9 mathcomp-fingroup_1_9 mathcomp-algebra_1_9
         mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9;
       inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
-        mathcompExtraGen multinomials
+        mathcompExtraGen multinomials coqeal
 
         mathcomp-finmap mathcomp-bigenough mathcomp-analysis
-        mathcomp-multinomials mathcomp-real-closed
+        mathcomp-multinomials mathcomp-real-closed mathcomp-coqeal
 
         mathcomp_1_7-finmap mathcomp_1_7-bigenough mathcomp_1_7-analysis
         mathcomp_1_7-multinomials mathcomp_1_7-real-closed
         mathcomp_1_7-finmap_1_0
 
         mathcomp_1_8-finmap mathcomp_1_8-bigenough mathcomp_1_8-analysis
-        mathcomp_1_8-multinomials mathcomp_1_8-real-closed
+        mathcomp_1_8-multinomials mathcomp_1_8-real-closed mathcomp_1_8-coqeal
 
         mathcomp_1_9-finmap mathcomp_1_9-bigenough mathcomp_1_9-analysis
         mathcomp_1_9-multinomials mathcomp_1_9-real-closed;
@@ -125,7 +128,10 @@ in rec {
     version = "8.9.1";
   };
   coq_8_10 = callPackage ../applications/science/logic/coq {
-    version = "8.10+beta1";
+    version = "8.10.2";
+  };
+  coq_8_11 = callPackage ../applications/science/logic/coq {
+    version = "8.11+beta1";
   };
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
@@ -134,8 +140,9 @@ in rec {
   coqPackages_8_8 = mkCoqPackages coq_8_8;
   coqPackages_8_9 = mkCoqPackages coq_8_9;
   coqPackages_8_10 = mkCoqPackages coq_8_10;
+  coqPackages_8_11 = mkCoqPackages coq_8_11;
   coqPackages = recurseIntoAttrs (lib.mapDerivationAttrset lib.dontDistribute
-    coqPackages_8_8
+    coqPackages_8_9
   );
   coq = coqPackages.coq;
 

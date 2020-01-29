@@ -1,33 +1,54 @@
-{ lib
-, fetchPypi
-, buildPythonPackage
-, numpy
-, uproot-methods
+{ lib, fetchPypi, buildPythonPackage, isPy27
 , awkward
+, backports_lzma
 , cachetools
-, pythonOlder
+, lz4
+, pandas
 , pytestrunner
 , pytest
 , pkgconfig
-, lz4
 , mock
+, numpy
 , requests
-, backports_lzma
+, uproot-methods
+, xxhash
 }:
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "3.4.19";
+  version = "3.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1df24d1f193b044cc4d6ef98e183a853655b568b7b15173d88b0d2a79e1226da";
+    sha256 = "1m6yjvdbffyk32gmfki7h01frlg9vhqf8g734m4gxyyf8m8g60zd";
   };
 
   nativeBuildInputs = [ pytestrunner ];
-  checkInputs = [ pytest pkgconfig lz4 mock requests ]
-    ++ lib.optionals (pythonOlder "3.3") [ backports_lzma ];
-  propagatedBuildInputs = [ numpy cachetools uproot-methods awkward ];
+
+  checkInputs = [
+    lz4
+    mock
+    pandas
+    pkgconfig
+    pytest
+    requests
+    xxhash
+  ] ++ lib.optional isPy27 backports_lzma;
+
+  propagatedBuildInputs = [
+    numpy
+    cachetools
+    uproot-methods
+    awkward
+  ];
+
+  # skip tests which do network calls
+  # test_compression.py is missing zstandard package
+  checkPhase = ''
+    pytest tests -k 'not hist_in_tree \
+      and not branch_auto_interpretation' \
+      --ignore=tests/test_compression.py
+  '';
 
   meta = with lib; {
     homepage = https://github.com/scikit-hep/uproot;

@@ -2,7 +2,7 @@
 , qtbase, qtdeclarative, qtlocation, qtmultimedia, qtsensors, qtwebchannel
 , fontconfig, gtk2, libwebp, libxml2, libxslt
 , sqlite, systemd, glib, gst_all_1, cmake
-, bison2, flex, gdb, gperf, perl, pkgconfig, python2, ruby
+, bison, flex, gdb, gperf, perl, pkgconfig, python2, ruby
 , darwin
 , flashplayerFix ? false
 }:
@@ -28,10 +28,10 @@ qtModule {
     ++ optional (stdenv.isDarwin && lib.versionAtLeast qtbase.version "5.9.0") qtmultimedia
     ++ optional usingAnnulenWebkitFork qtwebchannel;
   buildInputs = [ fontconfig libwebp libxml2 libxslt sqlite glib gst_all_1.gstreamer gst_all_1.gst-plugins-base ]
-    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ cf-private ICU OpenGL ])
+    ++ optionals (stdenv.isDarwin) (with darwin; with apple_sdk.frameworks; [ ICU OpenGL ])
     ++ optional usingAnnulenWebkitFork hyphen;
   nativeBuildInputs = [
-    bison2 flex gdb gperf perl pkgconfig python2 ruby
+    bison flex gdb gperf perl pkgconfig python2 ruby
   ] ++ optional usingAnnulenWebkitFork cmake;
 
   cmakeFlags = optionals usingAnnulenWebkitFork ([ "-DPORT=Qt" ]
@@ -50,9 +50,12 @@ qtModule {
     export qmakeFlags="$qmakeFlags CONFIG+=silent"
   '';
 
-  NIX_CFLAGS_COMPILE =
-    # with gcc7 this warning blows the log over Hydra's limit
-    [ "-Wno-expansion-to-defined" ]
+  NIX_CFLAGS_COMPILE = [
+      # with gcc7 this warning blows the log over Hydra's limit
+      "-Wno-expansion-to-defined"
+    ]
+    # with gcc8, -Wclass-memaccess became part of -Wall and this too exceeds the logging limit
+    ++ optional stdenv.cc.isGNU "-Wno-class-memaccess"
     # with clang this warning blows the log over Hydra's limit
     ++ optional stdenv.isDarwin "-Wno-inconsistent-missing-override"
     ++ optionals flashplayerFix

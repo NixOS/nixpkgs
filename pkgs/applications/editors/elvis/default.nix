@@ -1,6 +1,6 @@
 { fetchurl, fetchpatch, stdenv, ncurses }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "elvis-2.2_0";
 
   src = fetchurl {

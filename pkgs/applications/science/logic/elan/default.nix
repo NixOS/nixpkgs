@@ -1,10 +1,10 @@
 { stdenv, pkgconfig, curl, openssl, zlib, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "elan-${version}";
+  pname = "elan";
   version = "0.7.5";
 
-  cargoSha256 = "0lc320m3vw76d6pa5wp6c9jblac6lmyf9qqnxmsnkn4ixdhnghsd";
+  cargoSha256 = "0q0xlvyyf88dbz43r7kk9v8rrp6hj0nl5i2i9mg6ibk2gphgdv6v";
 
   src = fetchFromGitHub {
     owner = "kha";

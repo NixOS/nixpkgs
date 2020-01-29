@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, vala
-, libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info }:
+{ stdenv, fetchurl, pkgconfig, atk, cairo, glib, gtk3, pango, fribidi, vala
+, libxml2, perl, gettext, gnome3, gobject-introspection, dbus, xvfb_run, shared-mime-info
+, meson, ninja }:
 
 stdenv.mkDerivation rec {
-  name = "gtksourceview-${version}";
-  version = "4.2.0";
+  pname = "gtksourceview";
+  version = "4.4.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0xgnjj7jd56wbl99s76sa1vjq9bkz4mdsxwgwlcphg689liyncf4";
+    url = "mirror://gnome/sources/gtksourceview/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "16k8kqw9w775f1ijsk898hp210an5mv4yfyrmik9m8khxx593nwx";
   };
 
   propagatedBuildInputs = [
@@ -19,11 +20,11 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ pkgconfig gettext perl gobject-introspection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext perl gobject-introspection vala ];
 
   checkInputs = [ xvfb_run dbus ];
 
-  buildInputs = [ atk cairo glib pango libxml2 ];
+  buildInputs = [ atk cairo glib pango fribidi libxml2 ];
 
   patches = [ ./4.x-nix_share_path.patch ];
 
@@ -31,11 +32,10 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.isLinux;
   checkPhase = ''
-    NO_AT_BRIDGE=1 \
     XDG_DATA_DIRS="$XDG_DATA_DIRS:${shared-mime-info}/share" \
     xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
       --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-      make check
+      meson test --no-rebuild --print-errorlogs
   '';
 
   passthru = {

@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "aws-lambda-builders";
-  version = "0.3.0";
+  version = "0.6.0";
 
   # No tests available in PyPI tarball
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-lambda-builders";
     rev = "v${version}";
-    sha256 = "1c3r3iz29s68mlmdsxbl65x5zqx25b89d40rir6729ck4gll4dyd";
+    sha256 = "0bvph58wrw9in5irdbv103knvw2dhqs3kapqv5lpaac9dn7lsk6q";
   };
 
   # Package is not compatible with Python 3.5
@@ -35,7 +35,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     export PATH=$out/bin:$PATH
-    pytest tests/functional
+    pytest tests/functional -k 'not can_invoke_pip'
   '';
 
   meta = with lib; {

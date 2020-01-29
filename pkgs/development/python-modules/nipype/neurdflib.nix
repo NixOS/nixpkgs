@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "neurdflib";
-  version = "5.0.0.post1";
+  version = "5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1qgmprixqxycxpjk9wjdmjykma14qqa2wcbx4nsldxi0ga7i7vv5";
+    sha256 = "d34493cee15029ff5db16157429585ff863ba5542675a4d8a94a0da1bc6e3a50";
   };
 
   propagatedBuildInputs = [ isodate html5lib SPARQLWrapper ];

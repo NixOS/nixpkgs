@@ -4,13 +4,13 @@
    cat <<'EOF'
  start_service()
  {
--  systemctl start dlm
+-  systemctl start displaylink-driver
 +  @systemd@/bin/systemctl start --no-block dlm
  }
  
  stop_service()
  {
--  systemctl stop dlm
+-  systemctl stop displaylink-driver
 +  @systemd@/bin/systemctl stop dlm
  }
  

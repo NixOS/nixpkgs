@@ -59,8 +59,8 @@ in {
 
       package = mkOption {
         type = types.package;
-        default = pkgs.altcoins.bitcoind;
-        defaultText = "pkgs.altcoins.bitcoind";
+        default = pkgs.bitcoind;
+        defaultText = "pkgs.bitcoind";
         description = "The package providing bitcoin binaries.";
       };
       configFile = mkOption {
@@ -177,9 +177,6 @@ in {
         NoNewPrivileges = "true";
         PrivateDevices = "true";
         MemoryDenyWriteExecute = "true";
-
-        # Permission for preStart
-        PermissionsStartOnly = "true";
       };
     };
     users.users.${cfg.user} = {
@@ -187,6 +184,7 @@ in {
       group = cfg.group;
       description = "Bitcoin daemon user";
       home = cfg.dataDir;
+      isSystemUser = true;
     };
     users.groups.${cfg.group} = {
       name = cfg.group;

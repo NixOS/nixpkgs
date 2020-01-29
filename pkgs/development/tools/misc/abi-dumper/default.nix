@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ctags, perl, elfutils, vtable-dumper }:
 
 stdenv.mkDerivation rec {
-  name = "abi-dumper-${version}";
+  pname = "abi-dumper";
   version = "1.1";
 
   src = fetchFromGitHub {

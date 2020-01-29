@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, help2man }:
 
 stdenv.mkDerivation rec {
-  name = "postsrsd-${version}";
+  pname = "postsrsd";
   version = "1.6";
 
   src = fetchFromGitHub {

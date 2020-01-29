@@ -6,19 +6,25 @@
 , google_cloud_core
 , pytest
 , mock
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.15.0";
+  version = "1.23.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "13b9ah54z6g3w8p74a1anmyz84nrxy27snqv6vp95wsizp8zwsyn";
+    sha256 = "c66e876ae9547884fa42566a2ebfec51d280f488d7a058af9611ba90c78bed78";
   };
 
+  propagatedBuildInputs = [
+    google_resumable_media
+    google_api_core
+    google_cloud_core
+    setuptools
+  ];
   checkInputs = [ pytest mock ];
-  propagatedBuildInputs = [ google_resumable_media google_api_core google_cloud_core ];
 
   checkPhase = ''
    pytest tests/unit

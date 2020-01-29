@@ -2,16 +2,17 @@
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl }:
 let
-  version = "2.1.0";
+  version = "2.1.2";
  in
 stdenv.mkDerivation rec {
-  name = "argyllcms-${version}";
+  pname = "argyllcms";
+  inherit version;
 
   src = fetchzip {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "02zxy6ipp84hrd1p5nspp3f9dzphr0qwlq8s557jn746cf866bv3";
+    sha256 = "1bsi795kphr1a8l2kvvm9qfkvgfpimds4ijalnmg23wnr8691md1";
 
     # The argyllcms web server doesn't like curl ...
     curlOpts = "--user-agent 'Mozilla/5.0'";
@@ -93,9 +94,11 @@ stdenv.mkDerivation rec {
     libXrender libXScrnSaver libXdmcp libXau openssl
   ];
 
-  buildFlags = "PREFIX=$(out) all";
+  buildFlags = [ "all" ];
 
-  installFlags = "PREFIX=$(out)";
+  makeFlags = [
+    "PREFIX=${placeholder ''out''}"
+  ];
 
   # Install udev rules, but remove lines that set up the udev-acl
   # stuff, since that is handled by udev's own rules (70-udev-acl.rules)
@@ -115,7 +118,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.argyllcms.com;
     description = "Color management system (compatible with ICC)";
     license = licenses.gpl3;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 }

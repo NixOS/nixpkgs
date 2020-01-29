@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "unixODBC-${version}";
+  pname = "unixODBC";
   version = "2.3.7";
 
   src = fetchurl {
-    url = "ftp://ftp.unixodbc.org/pub/unixODBC/${name}.tar.gz";
+    url = "ftp://ftp.unixodbc.org/pub/unixODBC/${pname}-${version}.tar.gz";
     sha256 = "0xry3sg497wly8f7715a7gwkn2k36bcap0mvzjw74jj53yx6kwa5";
   };
 

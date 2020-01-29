@@ -2,11 +2,11 @@
 , girara, gettext, libarchive }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-cb-${version}";
+  pname = "zathura-cb";
   version = "0.1.8";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/plugins/download/${name}.tar.xz";
+    url = "https://pwmt.org/projects/zathura/plugins/download/${pname}-${version}.tar.xz";
     sha256 = "1i6cf0vks501cggwvfsl6qb7mdaf3sszdymphimfvnspw810faj5";
   };
 

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "appstream-${version}";
+  pname = "appstream";
   version = "0.12.6";
 
   src = fetchFromGitHub {

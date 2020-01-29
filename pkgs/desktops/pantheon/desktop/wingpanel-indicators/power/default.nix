@@ -1,6 +1,19 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3
-, ninja, vala, gtk3, granite, bamf, libgtop, udev, wingpanel
-, libgee, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, gtk3
+, granite
+, bamf
+, libgtop
+, udev
+, wingpanel
+, libgee
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-power";
@@ -15,7 +28,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -25,12 +38,10 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
     bamf
-    elementary-icon-theme
     granite
     gtk3
     libgee
@@ -39,7 +50,7 @@ stdenv.mkDerivation rec {
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   postPatch = ''
     chmod +x meson/post_install.py

@@ -1,32 +1,46 @@
-{lib, fetchurl, mercurial, python2Packages}:
+{ lib, fetchurl, python3Packages
+, mercurial, qt5
+}@args:
+let
+  tortoisehgSrc = fetchurl rec {
+    meta.name = "tortoisehg-${meta.version}";
+    meta.version = "5.2.1";
+    url = "https://bitbucket.org/tortoisehg/thg/get/14221e991a5b623e0072d3bd340b759dbe9072ca.tar.gz";
+    sha256 = "01rpzf5z99izcdda1ps9bhqvhw6qghagd8c1y7x19rv223zi05dv";
+  };
 
-python2Packages.buildPythonApplication rec {
-    name = "tortoisehg-${version}";
-    version = "4.9.1";
-
+  tortoiseMercurial = mercurial.overridePythonAttrs (old: rec {
+    inherit (tortoisehgSrc.meta) version;
     src = fetchurl {
-      url = "https://bitbucket.org/tortoisehg/targz/downloads/${name}.tar.gz";
-      sha256 = "0c5gp5wyaiyh8w2zzy1q0f2qv8aa3219shb6swpsdzqr2j9gkk4b";
+      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
+      sha256 = "1pxkd37b0a1mi2zakk1hi122lgz1ffy2fxdnbs8acwlqpw55bc8q";
     };
+  });
 
-    pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
+in python3Packages.buildPythonApplication {
+    inherit (tortoisehgSrc.meta) name version;
+    src = tortoisehgSrc;
 
-    propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
+    propagatedBuildInputs = with python3Packages; [
+      tortoiseMercurial qscintilla-qt5 iniparse
+    ];
+    nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
     doCheck = false; # tests fail with "thg: cannot connect to X server"
-    dontStrip = true;
-    buildPhase = "";
-    installPhase = ''
-      ${python2Packages.python.executable} setup.py install --prefix=$out
+    postInstall = ''
       mkdir -p $out/share/doc/tortoisehg
-      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt.gz
-      ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
+      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
+      # convenient alias
+      ln -s $out/bin/thg $out/bin/tortoisehg
+      wrapQtApp $out/bin/thg
     '';
 
     checkPhase = ''
       echo "test: thg version"
       $out/bin/thg version
     '';
+
+    passthru.mercurial = tortoiseMercurial;
 
     meta = {
       description = "Qt based graphical tool for working with Mercurial";

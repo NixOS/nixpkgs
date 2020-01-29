@@ -1,4 +1,5 @@
 { stdenv
+, pkgsHostHost
 , callPackage
 , fetchgit
 , ghcjsSrcJson ? null
@@ -14,7 +15,6 @@
 , pkgconfig
 , gcc
 , lib
-, nodePackages
 , ghcjsDepOverrides ? (_:_:{})
 , haskell
 }:
@@ -34,7 +34,6 @@ let
 
       (callPackage ./common-overrides.nix {
         inherit haskellLib;
-        inherit (bootPkgs) alex happy;
       })
       ghcjsDepOverrides
     ]);
@@ -47,7 +46,7 @@ let
 
     enableShared = true;
 
-    socket-io = nodePackages."socket.io";
+    socket-io = pkgsHostHost.nodePackages."socket.io";
 
     # Relics of the old GHCJS build system
     stage1Packages = [];
@@ -105,5 +104,4 @@ in stdenv.mkDerivation {
 
     meta.platforms = passthru.bootPkgs.ghc.meta.platforms;
     meta.maintainers = [lib.maintainers.elvishjerricco];
-    meta.hydraPlatforms = [];
   }

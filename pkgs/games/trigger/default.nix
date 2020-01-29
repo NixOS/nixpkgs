@@ -1,5 +1,5 @@
 { fetchurl, stdenv, runtimeShell
-, SDL2, freealut, SDL2_image, openal, physfs, zlib, libGLU_combined, glew }:
+, SDL2, freealut, SDL2_image, openal, physfs, zlib, libGLU, libGL, glew }:
 
 stdenv.mkDerivation rec {
   name = "trigger-rally-0.6.6";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "08qa2f2s8zyn42ff6jb1gsi64d916020ixkzvl16kbb88rabqra8";
   };
 
-  buildInputs = [ SDL2 freealut SDL2_image openal physfs zlib libGLU_combined glew ];
+  buildInputs = [ SDL2 freealut SDL2_image openal physfs zlib libGLU libGL glew ];
 
   preConfigure = ''
     sed s,/usr/local,$out, -i bin/*defs

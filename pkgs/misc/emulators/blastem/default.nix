@@ -2,8 +2,8 @@
 
 let
   vasm =
-    stdenv.mkDerivation rec {
-      name = "vasm-${version}";
+    stdenv.mkDerivation {
+      pname = "vasm";
       version = "1.8c";
       src = fetchFromGitHub {
         owner = "mbitsnbites";
@@ -11,15 +11,15 @@ let
         rev = "244f8bbbdf64ae603f9f6c09a3067943837459ec";
         sha256 = "0x4y5q7ygxfjfy2wxijkps9khsjjfb169sbda410vaw0m88wqj5p";
       };
-      makeFlags = "CPU=m68k SYNTAX=mot";
+      makeFlags = [ "CPU=m68k" "SYNTAX=mot" ];
       installPhase = ''
         mkdir -p $out/bin
         cp vasmm68k_mot $out/bin
       '';
     };
 in
-stdenv.mkDerivation rec {
-  name = "blastem-${version}";
+stdenv.mkDerivation {
+  pname = "blastem";
   version = "0.5.1";
   src = fetchurl {
     url = "https://www.retrodev.com/repos/blastem/archive/3d48cb0c28be.tar.gz";

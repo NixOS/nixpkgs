@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "pick-${version}";
+  pname = "pick";
   version = "2.0.2";
 
   src = fetchFromGitHub {

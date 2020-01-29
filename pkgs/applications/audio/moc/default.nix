@@ -30,7 +30,7 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "moc-${version}";
+  pname = "moc";
   version = "2.5.2";
 
   src = fetchurl {
@@ -57,7 +57,7 @@ in stdenv.mkDerivation rec {
     ++ opt midiSupport timidity
     ++ opt modplugSupport libmodplug
     ++ opt mp3Support libmad
-    ++ opt musepackSupport [ libmpc libmpcdec taglib ]
+    ++ stdenv.lib.optionals musepackSupport [ libmpc libmpcdec taglib ]
     ++ opt vorbisSupport libvorbis
     ++ opt speexSupport speex
     ++ opt (ffmpegSupport && !withffmpeg4) ffmpeg

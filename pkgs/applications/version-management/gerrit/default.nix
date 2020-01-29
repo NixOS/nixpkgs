@@ -1,17 +1,13 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gerrit-${version}";
-  version = "2.14.6";
+  pname = "gerrit";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    sha256 = "0fsqwfsnyb4nbxgb1i1mp0vshl0mk8bwqlddzqr9x2v99mbca28q";
+    sha256 = "16zh2dczjnzwzrzg0xkqs7bfd6bzk7s42gyb59z3206zpvh5kq9k";
   };
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "1qrmvqqnlbabqz4yx06vi030ci12v0063iq2palxmbj3whrzv9la";
 
   buildCommand = ''
     mkdir -p "$out"/webapps/
@@ -19,7 +15,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.gerritcodereview.com/index.md;
+    homepage = "https://www.gerritcodereview.com/index.md";
     license = licenses.asl20;
     description = "A web based code review and repository management for the git version control system";
     maintainers = with maintainers; [ jammerful ];

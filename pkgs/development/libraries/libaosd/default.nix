@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.7-9-g177589f";
-  name = "libaosd-${version}";
+  pname = "libaosd";
 
   src = fetchFromGitHub {
     owner  = "atheme-legacy";
     repo   = "libaosd";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "1cn7k0n74p6jp25kxwcyblhmbdvgw3mikvj0m2jh4c6xccfrgb9a";
   };
 

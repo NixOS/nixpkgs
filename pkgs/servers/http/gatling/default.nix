@@ -4,10 +4,11 @@ let
   version = "0.15";
 in
 stdenv.mkDerivation rec {
-  name = "gatling-${version}";
+  pname = "gatling";
+  inherit version;
 
   src = fetchurl {
-    url = "https://www.fefe.de/gatling/${name}.tar.xz";
+    url = "https://www.fefe.de/gatling/${pname}-${version}.tar.xz";
     sha256 = "194srqyja3pczpbl6l169zlvx179v7ln0m6yipmhvj6hrv82k8vg";
   };
 

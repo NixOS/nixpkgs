@@ -17,6 +17,6 @@ stdenv.mkDerivation {
     description = "Applicative events and signals for OCaml";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];
-    maintainers = with maintainers; [ z77z vbmithr gal_bolle];
+    maintainers = with maintainers; [ maggesi vbmithr gal_bolle];
   };
 }

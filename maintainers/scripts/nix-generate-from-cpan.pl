@@ -226,7 +226,7 @@ sub pkg_to_attr {
 
 sub get_pkg_name {
     my ($module) = @_;
-    return $module->package_name . '-' . $module->package_version;
+    return ( $module->package_name, $module->package_version =~ s/^v(\d)/$1/r );
 }
 
 sub read_meta {
@@ -375,13 +375,13 @@ die "module $module_name not found\n" if scalar @modules == 0;
 die "multiple packages that match module $module_name\n" if scalar @modules > 1;
 my $module = $modules[0];
 
-my $pkg_name  = get_pkg_name $module;
+my ($pkg_name, $pkg_version) = get_pkg_name $module;
 my $attr_name = pkg_to_attr $module;
 
 INFO( "attribute name: ", $attr_name );
 INFO( "module: ",         $module->module );
 INFO( "version: ",        $module->version );
-INFO( "package: ", $module->package, " (", $pkg_name, ", ", $attr_name, ")" );
+INFO( "package: ", $module->package, " (", "$pkg_name-$pkg_version", ", ", $attr_name, ")" );
 INFO( "path: ",    $module->path );
 
 my $tar_path = $module->fetch();
@@ -436,10 +436,11 @@ my $build_fun = -e "$pkg_path/Build.PL"
 print STDERR "===\n";
 
 print <<EOF;
-  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun rec {
-    name = "$pkg_name";
+  ${\(is_reserved($attr_name) ? "\"$attr_name\"" : $attr_name)} = $build_fun {
+    pname = "$pkg_name";
+    version = "$pkg_version";
     src = fetchurl {
-      url = "mirror://cpan/${\$module->path}/\${name}.${\$module->package_extension}";
+      url = "mirror://cpan/${\$module->path}/${\$module->package}";
       sha256 = "${\$module->status->checksum_value}";
     };
 EOF

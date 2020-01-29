@@ -20,6 +20,18 @@ with lib;
           The set of NTP servers from which to synchronise.
         '';
       };
+      extraConfig = mkOption {
+        default = "";
+        type = types.lines;
+        example = ''
+          PollIntervalMaxSec=180
+        '';
+        description = ''
+          Extra config options for systemd-timesyncd. See
+          <link xlink:href="https://www.freedesktop.org/software/systemd/man/timesyncd.conf.html">
+          timesyncd.conf(5)</link> for available options.
+        '';
+      };
     };
   };
 
@@ -35,9 +47,13 @@ with lib;
     environment.etc."systemd/timesyncd.conf".text = ''
       [Time]
       NTP=${concatStringsSep " " config.services.timesyncd.servers}
+      ${config.services.timesyncd.extraConfig}
     '';
 
-    users.users.systemd-timesync.uid = config.ids.uids.systemd-timesync;
+    users.users.systemd-timesync = {
+      uid = config.ids.uids.systemd-timesync;
+      group = "systemd-timesync";
+    };
     users.groups.systemd-timesync.gid = config.ids.gids.systemd-timesync;
 
     system.activationScripts.systemd-timesyncd-migration = mkIf (versionOlder config.system.stateVersion "19.09") ''

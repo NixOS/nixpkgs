@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "httperf";
-  name = "${pname}-${version}";
   version = "0.9.1";
 
   src = fetchFromGitHub {

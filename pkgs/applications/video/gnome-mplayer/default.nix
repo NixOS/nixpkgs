@@ -2,7 +2,7 @@
 , libnotify, libpulseaudio, mplayer, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-mplayer-${version}";
+  pname = "gnome-mplayer";
   version = "1.0.9";
 
   src = fetchFromGitHub {

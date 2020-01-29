@@ -1,8 +1,8 @@
 diff --git a/icon-validator/validate-icon.c b/icon-validator/validate-icon.c
-index 6e23d9f2..f0659a78 100644
+index 9e885070..44fea035 100644
 --- a/icon-validator/validate-icon.c
 +++ b/icon-validator/validate-icon.c
-@@ -193,6 +193,8 @@ rerun_in_sandbox (const char *arg_width,
+@@ -200,6 +200,8 @@ rerun_in_sandbox (const char *arg_width,
      add_args (args, "--setenv", "G_MESSAGES_DEBUG", g_getenv ("G_MESSAGES_DEBUG"), NULL);
    if (g_getenv ("G_MESSAGES_PREFIXED"))
      add_args (args, "--setenv", "G_MESSAGES_PREFIXED", g_getenv ("G_MESSAGES_PREFIXED"), NULL);

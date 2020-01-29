@@ -3,7 +3,7 @@
 let
   pname = "vazir-fonts";
   version = "19.2.0";
-in fetchFromGitHub rec {
+in fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "rastikerdar";

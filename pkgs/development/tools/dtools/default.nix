@@ -1,7 +1,7 @@
 {stdenv, lib, fetchFromGitHub, dmd, curl}:
 
 stdenv.mkDerivation rec {
-  name = "dtools-${version}";
+  pname = "dtools";
   version = "2.085.1";
 
   srcs = [

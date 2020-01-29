@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   version = "3.1.0";
-  name = "rucksack-${version}";
+  pname = "rucksack";
 
   src = fetchFromGitHub {
     owner = "andrewrk";
     repo = "rucksack";
-    rev = "${version}";
+    rev = version;
     sha256 = "0bcm20hqxqnq1j0zghb9i7z9frri6bbf7rmrv5g8dd626sq07vyv";
   };
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Texture packer and resource bundler";
-    platforms = platforms.unix;
+    platforms = [ "i686-linux" "x86_64-linux" ]; # fails on Darwin and AArch64
     homepage = https://github.com/andrewrk/rucksack;
     license = licenses.mit;
     maintainers = [ maintainers.andrewrk ];

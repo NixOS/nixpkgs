@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, fcitx, gettext, libchewing, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-chewing-${version}";
+  pname = "fcitx-chewing";
   version = "0.2.3";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-chewing/${name}.tar.xz";
+    url = "http://download.fcitx-im.org/fcitx-chewing/${pname}-${version}.tar.xz";
     sha256 = "1w5smp5zvjx681cp1znjypyr9sw5x6v0wnsk8a7ncwxi9q9wf4xk";
   };
 

@@ -1,40 +1,45 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, perl, pkgconfig, zlib
-, darwin, libiconv
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, cmake, perl, pkgconfig, zlib
+, darwin, libiconv, installShellFiles
 }:
 
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "exa-${version}";
-  version = "0.8.0";
+  pname = "exa";
+  version = "0.9.0";
 
-  cargoSha256 = "0kaldln4fb9n53190m2r130mcblkjx32glzj9rk8hrz6dd6yhfb0";
+  cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";
 
   src = fetchFromGitHub {
     owner = "ogham";
     repo = "exa";
     rev = "v${version}";
-    sha256 = "0jy11a3xfnfnmyw1kjmv4ffavhijs8c940kw24vafklnacx5n88m";
+    sha256 = "14qlm9zb9v22hxbbi833xaq2b7qsxnmh15s317200vz5f1305hhw";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig perl ];
+  patches = [
+    (fetchpatch {
+      # https://github.com/ogham/exa/pull/584
+      name = "fix-panic-on-broken-symlink-in-git-repository.patch";
+      url = "https://github.com/ogham/exa/pull/584/commits/a7a8e99cf3a15992afb2383435da0231917ffb54.patch";
+      sha256 = "0n5q483sz300jkp0sbb350hdinmkw7s6bmigdyr6ypz3fvygd9hx";
+    })
+  ];
+
+  nativeBuildInputs = [ cmake pkgconfig perl installShellFiles ];
   buildInputs = [ zlib ]
   ++ stdenv.lib.optionals stdenv.isDarwin [
     libiconv darwin.apple_sdk.frameworks.Security ]
   ;
 
+  outputs = [ "out" "man" ];
+
   postInstall = ''
-    mkdir -p $out/share/man/man1
-    cp contrib/man/exa.1 $out/share/man/man1/
-
-    mkdir -p $out/share/bash-completion/completions
-    cp contrib/completions.bash $out/share/bash-completion/completions/exa
-
-    mkdir -p $out/share/fish/vendor_completions.d
-    cp contrib/completions.fish $out/share/fish/vendor_completions.d/exa.fish
-
-    mkdir -p $out/share/zsh/site-functions
-    cp contrib/completions.zsh $out/share/zsh/site-functions/_exa
+    installManPage contrib/man/exa.1
+    installShellCompletion \
+      --name exa contrib/completions.bash \
+      --name exa.fish contrib/completions.fish \
+      --name _exa contrib/completions.zsh
   '';
 
   # Some tests fail, but Travis ensures a proper build
@@ -52,6 +57,6 @@ buildRustPackage rec {
     '';
     homepage = https://the.exa.website;
     license = licenses.mit;
-    maintainers = [ maintainers.ehegnes ];
+    maintainers = with maintainers; [ ehegnes lilyball globin ];
   };
 }

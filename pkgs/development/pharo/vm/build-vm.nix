@@ -5,7 +5,7 @@
 , glibc
 , openssl
 , libgit2
-, libGLU_combined
+, libGLU, libGL
 , freetype
 , xorg
 , alsaLib
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
     libs = [
       cairo
       libgit2
-      libGLU_combined
+      libGLU libGL
       freetype
       openssl
       libuuid
@@ -117,7 +117,7 @@ stdenv.mkDerivation rec {
     cat > "$out/bin/${cmd}" <<EOF
     #!${runtimeShell}
     set -f
-    LD_LIBRARY_PATH="\$LD_LIBRARY_PATH:$libs" exec $out/pharo "\$@"
+    LD_LIBRARY_PATH="\$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$libs" exec $out/pharo "\$@"
     EOF
     chmod +x "$out/bin/${cmd}"
     ln -s ${libgit2}/lib/libgit2.so* "$out/"
@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     glibc
     openssl
     gcc48
-    libGLU_combined
+    libGLU libGL
     freetype
     xorg.libX11
     xorg.libICE

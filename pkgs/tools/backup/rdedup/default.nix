@@ -3,7 +3,7 @@
 , Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rdedup-${version}";
+  pname = "rdedup";
   version = "3.1.1";
 
   src = fetchFromGitHub {

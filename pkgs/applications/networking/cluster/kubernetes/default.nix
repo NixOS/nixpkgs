@@ -14,14 +14,14 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "kubernetes-${version}";
-  version = "1.14.3";
+  pname = "kubernetes";
+  version = "1.16.5";
 
   src = fetchFromGitHub {
     owner = "kubernetes";
     repo = "kubernetes";
     rev = "v${version}";
-    sha256 = "1r31ssf8bdbz8fdsprhkc34jqhz5rcs3ixlf0mbjcbq0xr7y651z";
+    sha256 = "12ks79sjgbd0c97pipid4j3l5fwiimaxa25rvmf2vccdrw4ngx4m";
   };
 
   buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
@@ -29,7 +29,10 @@ stdenv.mkDerivation rec {
   outputs = ["out" "man" "pause"];
 
   postPatch = ''
-    substituteInPlace "hack/lib/golang.sh" --replace "_cgo" ""
+    # go env breaks the sandbox
+    substituteInPlace "hack/lib/golang.sh" \
+      --replace 'echo "$(go env GOHOSTOS)/$(go env GOHOSTARCH)"' 'echo "${go.GOOS}/${go.GOARCH}"'
+
     substituteInPlace "hack/update-generated-docs.sh" --replace "make" "make SHELL=${stdenv.shell}"
     # hack/update-munge-docs.sh only performs some tests on the documentation.
     # They broke building k8s; disabled for now.
@@ -38,7 +41,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT="${concatStringsSep " " components}";
+  WHAT=concatStringsSep " " components;
 
   postBuild = ''
     ./hack/update-generated-docs.sh
@@ -52,12 +55,11 @@ stdenv.mkDerivation rec {
     cp build/pause/pause "$pause/bin/pause"
     cp -R docs/man/man1 "$man/share/man"
 
-    cp cluster/addons/addon-manager/namespace.yaml $out/share
     cp cluster/addons/addon-manager/kube-addons.sh $out/bin/kube-addons
     patchShebangs $out/bin/kube-addons
-    substituteInPlace $out/bin/kube-addons \
-      --replace /opt/namespace.yaml $out/share/namespace.yaml
     wrapProgram $out/bin/kube-addons --set "KUBECTL_BIN" "$out/bin/kubectl"
+
+    cp ${./mk-docker-opts.sh} $out/bin/mk-docker-opts.sh
 
     $out/bin/kubectl completion bash > $out/share/bash-completion/completions/kubectl
     $out/bin/kubectl completion zsh > $out/share/zsh/site-functions/_kubectl
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = https://kubernetes.io;
-    maintainers = with maintainers; [johanot offline];
+    maintainers = with maintainers; [johanot offline saschagrunert];
     platforms = platforms.unix;
   };
 }

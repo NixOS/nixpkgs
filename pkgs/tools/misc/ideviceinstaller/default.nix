@@ -4,8 +4,6 @@ stdenv.mkDerivation rec {
   pname = "ideviceinstaller";
   version = "2018-10-01";
 
-  name = "${pname}-${version}";
-
   src = fetchFromGitHub {
     owner = "libimobiledevice";
     repo = pname;

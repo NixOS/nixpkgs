@@ -6,7 +6,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "fmod-${version}";
+  pname = "fmod";
   version = "4.44.64";
   shortVersion = builtins.replaceStrings [ "." ] [ "" ] version;
 

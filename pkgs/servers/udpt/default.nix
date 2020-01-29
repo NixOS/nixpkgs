@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, boost, sqlite, cmake, gtest }:
 
-stdenv.mkDerivation rec {
-  name = "udpt-${version}";
+stdenv.mkDerivation {
+  pname = "udpt";
   version = "2017-09-27";
 
   enableParallelBuilding = true;

@@ -1,6 +1,6 @@
 { callPackage, fetchFromGitHub, autoreconfHook, ... } @ args:
 
-callPackage ./generic.nix (args // rec {
+callPackage ./generic.nix (args // {
   version = "1.0";
 
   src = fetchFromGitHub {

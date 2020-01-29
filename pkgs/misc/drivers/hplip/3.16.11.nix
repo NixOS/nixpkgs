@@ -1,7 +1,7 @@
 { stdenv, fetchurl, substituteAll
 , pkgconfig
-, cups, libjpeg, libusb1, pythonPackages, sane-backends, dbus, usbutils
-, net_snmp, openssl, nettools
+, cups, libjpeg, libusb1, python2Packages, sane-backends, dbus, usbutils
+, net-snmp, openssl, nettools
 , bash, coreutils, utillinux
 , qtSupport ? true
 , withPlugin ? false
@@ -28,14 +28,14 @@ let
   };
 
   hplipPlatforms = {
-    "i686-linux"    = "x86_32";
-    "x86_64-linux"  = "x86_64";
-    "armv6l-linux"  = "arm32";
-    "armv7l-linux"  = "arm32";
-    "aarch64-linux" = "arm64";
+    i686-linux    = "x86_32";
+    x86_64-linux  = "x86_64";
+    armv6l-linux  = "arm32";
+    armv7l-linux  = "arm32";
+    aarch64-linux = "arm64";
   };
 
-  hplipArch = hplipPlatforms."${stdenv.hostPlatform.system}"
+  hplipArch = hplipPlatforms.${stdenv.hostPlatform.system}
     or (throw "HPLIP not supported on ${stdenv.hostPlatform.system}");
 
   pluginArches = [ "x86_32" "x86_64" "arm32" "arm64" ];
@@ -45,7 +45,7 @@ in
 assert withPlugin -> builtins.elem hplipArch pluginArches
   || throw "HPLIP plugin not supported on ${stdenv.hostPlatform.system}";
 
-pythonPackages.buildPythonApplication {
+python2Packages.buildPythonApplication {
   inherit name src;
   format = "other";
 
@@ -55,7 +55,7 @@ pythonPackages.buildPythonApplication {
     libusb1
     sane-backends
     dbus
-    net_snmp
+    net-snmp
     openssl
   ];
 
@@ -63,7 +63,7 @@ pythonPackages.buildPythonApplication {
     pkgconfig
   ];
 
-  pythonPath = with pythonPackages; [
+  pythonPath = with python2Packages; [
     dbus
     pillow
     pygobject2
@@ -142,8 +142,6 @@ pythonPackages.buildPythonApplication {
 
     mkdir -p $out/etc/sane.d/dll.d
     mv $out/etc/sane.d/dll.conf $out/etc/sane.d/dll.d/hpaio.conf
-
-    rm $out/etc/udev/rules.d/56-hpmud.rules
   '';
 
   # The installed executables are just symlinks into $out/share/hplip,
@@ -171,12 +169,12 @@ pythonPackages.buildPythonApplication {
 
   postFixup = ''
     substituteInPlace $out/etc/hp/hplip.conf --replace /usr $out
-  '' + stdenv.lib.optionalString (!withPlugin) ''
-    # A udev rule to notify users that they need the binary plugin.
-    # Needs a lot of patching but might save someone a bit of confusion:
+    # Patch udev rules:
+    # with plugin, they upload firmware to printers,
+    # without plugin, they complain about the missing plugin.
     substituteInPlace $out/etc/udev/rules.d/56-hpmud.rules \
       --replace {,${bash}}/bin/sh \
-      --replace {/usr,${coreutils}}/bin/nohup \
+      --replace /usr/bin/nohup "" \
       --replace {,${utillinux}/bin/}logger \
       --replace {/usr,$out}/bin
   '';
@@ -184,6 +182,7 @@ pythonPackages.buildPythonApplication {
   meta = with stdenv.lib; {
     description = "Print, scan and fax HP drivers for Linux";
     homepage = http://hplipopensource.com/;
+    downloadPage = https://sourceforge.net/projects/hplip/files/hplip/;
     license = if withPlugin
       then licenses.unfree
       else with licenses; [ mit bsd2 gpl2Plus ];

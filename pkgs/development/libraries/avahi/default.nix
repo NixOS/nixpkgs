@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     [ "--disable-qt3" "--disable-gdbm" "--disable-mono"
-      "--disable-gtk"
+      "--disable-gtk" "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
       (stdenv.lib.enableFeature gtk3Support "gtk3")
       "--${if qt4Support then "enable" else "disable"}-qt4"
       (stdenv.lib.enableFeature withPython "python")
@@ -49,6 +49,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional withLibdnssdCompat "--enable-compat-libdns_sd"
     # autoipd won't build on darwin
     ++ stdenv.lib.optional stdenv.isDarwin "--disable-autoipd";
+
+  NIX_CFLAGS_COMPILE = "-DAVAHI_SERVICE_DIR=\"/etc/avahi/services\"";
 
   preBuild = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i '20 i\
@@ -71,7 +73,7 @@ stdenv.mkDerivation rec {
     homepage    = http://avahi.org;
     license     = licenses.lgpl2Plus;
     platforms   = platforms.unix;
-    maintainers = with maintainers; [ lovek323 ];
+    maintainers = with maintainers; [ lovek323 globin ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

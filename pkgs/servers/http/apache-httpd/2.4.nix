@@ -16,12 +16,12 @@ assert ldapSupport -> aprutil.ldapSupport && openldap != null;
 assert http2Support -> nghttp2 != null;
 
 stdenv.mkDerivation rec {
-  version = "2.4.39";
-  name = "apache-httpd-${version}";
+  version = "2.4.41";
+  pname = "apache-httpd";
 
   src = fetchurl {
     url = "mirror://apache/httpd/httpd-${version}.tar.bz2";
-    sha256 = "18ngvsjq65qxk3biggnkhkq8jlll9dsg9n3csra9p99sfw2rvjml";
+    sha256 = "0h7a31yxwyh7h521frnmlppl0h7sh9icc3ka6vlmlcg5iwllhg8k";
   };
 
   # FIXME: -dev depends on -doc
@@ -39,14 +39,11 @@ stdenv.mkDerivation rec {
   prePatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
+    sed -i support/apachectl.in -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
 
   # Required for ‘pthread_cancel’.
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";
-
-  preConfigure = ''
-    configureFlags="$configureFlags --includedir=$dev/include"
-  '';
 
   configureFlags = [
     "--with-apr=${apr.dev}"
@@ -60,6 +57,7 @@ stdenv.mkDerivation rec {
     "--enable-cern-meta"
     "--enable-imagemap"
     "--enable-cgi"
+    "--includedir=${placeholder "dev"}/include"
     (stdenv.lib.enableFeature proxySupport "proxy")
     (stdenv.lib.enableFeature sslSupport "ssl")
     (stdenv.lib.withFeatureAs libxml2Support "libxml2" "${libxml2.dev}/include/libxml2")

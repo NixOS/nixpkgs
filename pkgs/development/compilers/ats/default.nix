@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gmp }:
 
 stdenv.mkDerivation rec {
-  name    = "ats-${version}";
+  pname = "ats";
   version = "0.2.12";
 
   src = fetchurl {

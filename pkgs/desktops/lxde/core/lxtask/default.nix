@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, libintl }:
 
 stdenv.mkDerivation rec {
-  name = "lxtask-${version}";
+  pname = "lxtask";
   version = "0.1.9";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lxde/${name}.tar.xz";
+    url = "mirror://sourceforge/lxde/${pname}-${version}.tar.xz";
     sha256 = "0cv4hx5dg01hbyi5p10pl78n0a40xajpq4wx9c7886pkmpq8isj1";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       with all xfce4 dependencies removed, some bugs fixed, and some
       improvement of UI. Although being part of LXDE, the Lightweight X11
       Desktop Environment, it's totally desktop independent and only
-      requires pure gtk+.
+      requires pure GTK.
     '';
     homepage = https://wiki.lxde.org/en/LXTask;
     license = stdenv.lib.licenses.gpl2Plus;

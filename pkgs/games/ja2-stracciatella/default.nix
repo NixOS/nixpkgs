@@ -26,8 +26,8 @@ let
     doCheck = false;
   };
 in
-stdenv.mkDerivation rec {
-  name = "ja2-stracciatella-${version}";
+stdenv.mkDerivation {
+  pname = "ja2-stracciatella";
   inherit src;
   inherit version;
 

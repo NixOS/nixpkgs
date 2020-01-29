@@ -1,28 +1,32 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala
-, libgee, granite, gtk3, switchboard, elementary-settings-daemon }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+, elementary-settings-daemon
+, glib
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0mr25p7j5hl8zmvz5i3g30s4xbdhk6d22lw2akch3si40il9q5fv";
+    sha256 = "1ls5jxzmd7cmbv8h67q6mcmfrfksgwjndqd6r9gxivsz2lcji3x7";
   };
-
-  patches = [
-    ./hardcode-settings-daemon-gsettings.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/Views/General.vala --subst-var-by GSD_GSETTINGS ${elementary-settings-daemon}/share/gsettings-schemas/${elementary-settings-daemon.name}/glib-2.0/schemas
-  '';
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -34,13 +38,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
     granite
     gtk3
     libgee
+    elementary-settings-daemon
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";

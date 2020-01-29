@@ -7,7 +7,7 @@
 , xvfb_run, dbus
 
 # Optional dependencies
-, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly
+, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-ugly, libnice
 , enableE2E ? true
 , enableSecrets ? true, libsecret
 , enableRST ? true, docutils
@@ -33,18 +33,18 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   buildInputs = [
-    gobject-introspection gtk3 gnome3.adwaita-icon-theme
-  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly ]
+    gobject-introspection gtk3 gnome3.adwaita-icon-theme wrapGAppsHook
+  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-ugly libnice ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
     ++ lib.optional enableUPnP gupnp-igd;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook
+    gettext
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pyasn1 pygobject3 dbus-python pillow cssutils precis-i18n keyring
+    nbxmpp pyasn1 pygobject3 dbus-python pillow cssutils precis-i18n keyring setuptools
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]

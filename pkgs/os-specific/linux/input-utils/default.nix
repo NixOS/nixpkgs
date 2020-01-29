@@ -1,7 +1,7 @@
 { stdenv, fetchurl, linuxHeaders }:
 
 stdenv.mkDerivation rec {
-  name = "input-utils-${version}";
+  pname = "input-utils";
   version = "1.3";
   
   src = fetchurl {

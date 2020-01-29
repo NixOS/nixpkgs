@@ -1,9 +1,9 @@
 { fetchgit, stdenv, pkgconfig, libtool, autoconf, automake
 , curl, ncurses, ocl-icd, opencl-headers, xorg, jansson }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.7.2";
-  name = "cgminer-${version}";
+  pname = "cgminer";
 
   src = fetchgit {
     url = "https://github.com/ckolivas/cgminer.git";

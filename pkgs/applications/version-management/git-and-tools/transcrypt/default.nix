@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, git, makeWrapper, openssl, coreutils, utillinux, gnugrep, gnused, gawk }:
 
 stdenv.mkDerivation rec {
-  name = "transcrypt-${version}";
+  pname = "transcrypt";
   version = "1.1.0";
 
   src = fetchFromGitHub {

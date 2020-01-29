@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 let version = "20141203"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "hdapsd-"+version;
 
   src = fetchurl {

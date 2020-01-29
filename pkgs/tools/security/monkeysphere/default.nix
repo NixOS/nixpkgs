@@ -13,7 +13,7 @@ let
     patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
   });
 in stdenv.mkDerivation rec {
-  name = "monkeysphere-${version}";
+  pname = "monkeysphere";
   version = "0.44";
 
   # The patched OpenSSH binary MUST NOT be used (except in the check phase):
@@ -36,10 +36,10 @@ in stdenv.mkDerivation rec {
       ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
       (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
-  makeFlags = ''
-    PREFIX=/
-    DESTDIR=$(out)
-  '';
+  makeFlags = [
+    "PREFIX=/"
+    "DESTDIR=$(out)"
+  ];
 
   # The tests should be run (and succeed) when making changes to this package
   # but they aren't enabled by default because they "drain" entropy (GnuPG
@@ -97,7 +97,7 @@ in stdenv.mkDerivation rec {
       familiar with, such as your web browser0 or secure shell.
     '';
     license = licenses.gpl3Plus;
-    platforms = platforms.all;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "xmonad-log-${version}";
+  pname = "xmonad-log";
   version = "0.1.0";
 
   goPackagePath = "github.com/xintron/xmonad-log";

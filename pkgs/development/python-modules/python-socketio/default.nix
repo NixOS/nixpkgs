@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "python-socketio";
-  version = "3.1.2";
+  version = "4.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aa702157694d55a743fb6f1cc0bd1af58fbfda8a7d71d747d4b12d6dac29cab3";
+    sha256 = "48cba5b827ac665dbf923a4f5ec590812aed5299a831fc43576a9af346272534";
   };
 
   propagatedBuildInputs = [

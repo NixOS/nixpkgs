@@ -2,7 +2,6 @@
 buildPythonPackage rec {
     pname = "augeas";
     version = "1.0.3";
-    name = pname + "-" + version;
 
     src = fetchFromGitHub {
       owner = "hercules-team";

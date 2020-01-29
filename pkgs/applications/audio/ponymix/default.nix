@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libpulseaudio, libnotify, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ponymix-${version}";
+  pname = "ponymix";
   version = "5";
 
   src = fetchFromGitHub {

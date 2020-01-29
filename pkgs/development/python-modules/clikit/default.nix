@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "clikit";
-  version = "0.2.3";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zr1s0xhk62p9a6zcp5whvsb27lddyk8gx03k9l8q18jp7y3igbv";
+    sha256 = "8ae4766b974d7b1983e39d501da9a0aadf118a907a0c9b50714d027c8b59ea81";
   };
 
   propagatedBuildInputs = [

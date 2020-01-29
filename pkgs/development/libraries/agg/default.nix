@@ -10,6 +10,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ autoconf automake libtool freetype SDL libX11 ];
 
+  postPatch = ''
+    substituteInPlace include/agg_renderer_outline_aa.h \
+      --replace 'line_profile_aa& profile() {' 'const line_profile_aa& profile() {'
+  '';
+
   # fix build with new automake, from Gentoo ebuild
   preConfigure = ''
     sed -i '/^AM_C_PROTOTYPES/d' configure.in

@@ -7,7 +7,7 @@ let
   inherit (lib) concatStringsSep optionalString;
 
   cfg = config.services.hylafax;
-  mapModems = lib.flip map (lib.attrValues cfg.modems);
+  mapModems = lib.forEach (lib.attrValues cfg.modems);
 
   mkConfigFile = name: conf:
     # creates hylafax config file,
@@ -68,7 +68,7 @@ let
     inherit (cfg) spoolAreaPath;
   };
 
-  sockets."hylafax-hfaxd" = {
+  sockets.hylafax-hfaxd = {
     description = "HylaFAX server socket";
     documentation = [ "man:hfaxd(8)" ];
     wantedBy = [ "multi-user.target" ];
@@ -77,7 +77,7 @@ let
     socketConfig.Accept = true;
   };
 
-  paths."hylafax-faxq" = {
+  paths.hylafax-faxq = {
     description = "HylaFAX queue manager sendq watch";
     documentation = [ "man:faxq(8)" "man:sendq(5)" ];
     wantedBy = [ "multi-user.target" ];
@@ -87,11 +87,11 @@ let
   timers = mkMerge [
     (
       mkIf (cfg.faxcron.enable.frequency!=null)
-      { "hylafax-faxcron".timerConfig.Persistent = true; }
+      { hylafax-faxcron.timerConfig.Persistent = true; }
     )
     (
       mkIf (cfg.faxqclean.enable.frequency!=null)
-      { "hylafax-faxqclean".timerConfig.Persistent = true; }
+      { hylafax-faxqclean.timerConfig.Persistent = true; }
     )
   ];
 
@@ -121,7 +121,7 @@ let
     in
       service: service // { serviceConfig = apply service; };
 
-  services."hylafax-spool" = {
+  services.hylafax-spool = {
     description = "HylaFAX spool area preparation";
     documentation = [ "man:hylafax-server(4)" ];
     script = ''
@@ -140,7 +140,7 @@ let
     unitConfig.RequiresMountsFor = [ cfg.spoolAreaPath ];
   };
 
-  services."hylafax-faxq" = {
+  services.hylafax-faxq = {
     description = "HylaFAX queue manager";
     documentation = [ "man:faxq(8)" ];
     requires = [ "hylafax-spool.service" ];
@@ -178,7 +178,7 @@ let
     serviceConfig.PrivateNetwork = null;
   };
 
-  services."hylafax-faxcron" = rec {
+  services.hylafax-faxcron = rec {
     description = "HylaFAX spool area maintenance";
     documentation = [ "man:faxcron(8)" ];
     after = [ "hylafax-spool.service" ];
@@ -194,7 +194,7 @@ let
     ];
   };
 
-  services."hylafax-faxqclean" = rec {
+  services.hylafax-faxqclean = rec {
     description = "HylaFAX spool area queue cleaner";
     documentation = [ "man:faxqclean(8)" ];
     after = [ "hylafax-spool.service" ];

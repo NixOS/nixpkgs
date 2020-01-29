@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, SDL, freetype }:
 
 stdenv.mkDerivation rec {
-  name = "SDL_ttf-${version}";
+  pname = "SDL_ttf";
   version = "2.0.11";
 
   src = fetchurl {
-    url = "https://www.libsdl.org/projects/SDL_ttf/release/${name}.tar.gz";
+    url = "https://www.libsdl.org/projects/SDL_ttf/release/${pname}-${version}.tar.gz";
     sha256 = "1dydxd4f5kb1288i5n5568kdk2q7f8mqjr7i7sd33nplxjaxhk3j";
   };
 

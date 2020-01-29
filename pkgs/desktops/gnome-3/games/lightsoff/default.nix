@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk_pixbuf, librsvg, wrapGAppsHook
+{ stdenv, fetchurl, vala, pkgconfig, gtk3, gnome3, gdk-pixbuf, librsvg, wrapGAppsHook
 , gettext, itstool, clutter, clutter-gtk, libxml2, appstream-glib
 , meson, ninja, python3 }:
 
 stdenv.mkDerivation rec {
-  name = "lightsoff-${version}";
-  version = "3.32.0";
+  pname = "lightsoff";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vc3ibjs9ynnm0gxlhhin7jpnsx22vnn4ygaybxwmv9w2q49cs9f";
+    url = "mirror://gnome/sources/lightsoff/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1yyq0962fv16rab3alq5saf4gpii9xvcfy5vbq85hhhgjpbqrfns";
   };
 
   nativeBuildInputs = [
     vala pkgconfig wrapGAppsHook itstool gettext appstream-glib libxml2
     meson ninja python3
   ];
-  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk_pixbuf librsvg clutter clutter-gtk ];
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme gdk-pixbuf librsvg clutter clutter-gtk ];
 
   postPatch = ''
     chmod +x build-aux/meson_post_install.py

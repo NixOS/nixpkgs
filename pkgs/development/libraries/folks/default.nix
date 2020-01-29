@@ -21,7 +21,6 @@
 , libsecret
 , db
 , python3
-, python
 , readline
 , gtk3
 }:
@@ -30,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.12.1";
+  version = "0.13.1";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xfl6rnzhdbmw1q26xiq34cdiy7a9karpi2r7wyplnnz1zaz5a9w";
+    sha256 = "0pda8sx4ap3lyri5fdrnakl29la1zkhwlc9bmnp13qigp1iwdw9x";
   };
 
   mesonFlags = [
@@ -51,7 +50,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    python
     python3
     vala
   ];

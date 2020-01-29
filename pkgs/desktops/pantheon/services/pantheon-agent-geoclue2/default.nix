@@ -1,20 +1,32 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, glib
-, gtk3, libgee, desktop-file-utils, geoclue2, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, glib
+, gtk3
+, libgee
+, desktop-file-utils
+, geoclue2
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "pantheon-agent-geoclue2";
-  version = "1.0.1";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0fww65dnbg9zn0gy1q2db39kjra50ykzw05pmn9iwxkijyxi8hm5";
+    sha256 = "1fhgdcykn0ykn8fp7inn2akygpglhdwfpdkpnih86kqmqj8siahv";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

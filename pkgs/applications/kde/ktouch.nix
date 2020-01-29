@@ -3,7 +3,8 @@
 , kconfig, kconfigwidgets, kcoreaddons, kdeclarative, ki18n
 , kitemviews, kcmutils, kio, knewstuff, ktexteditor, kwidgetsaddons
 , kwindowsystem, kxmlgui, qtscript, qtdeclarative, kqtquickcharts
-, qtx11extras, qtgraphicaleffects, qtxmlpatterns, xorg
+, qtx11extras, qtgraphicaleffects, qtxmlpatterns, qtquickcontrols2
+, xorg
 }:
 
 
@@ -19,7 +20,7 @@
       kconfig kconfigwidgets kcoreaddons kdeclarative ki18n
       kitemviews kcmutils kio knewstuff ktexteditor kwidgetsaddons
       kwindowsystem kxmlgui qtscript qtdeclarative kqtquickcharts
-      qtx11extras qtgraphicaleffects qtxmlpatterns
+      qtx11extras qtgraphicaleffects qtxmlpatterns qtquickcontrols2
       xorg.libxkbfile xorg.libxcb
     ];
 

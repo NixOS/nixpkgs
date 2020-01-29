@@ -27,7 +27,6 @@ assert stdenv.hostPlatform.system == "x86_64-linux";
 stdenv.mkDerivation rec {
   pname = "saleae-logic";
   version = "1.2.18";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     name = "saleae-logic-${version}-64bit.zip";
@@ -90,7 +89,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Software for Saleae logic analyzers";
-    homepage = http://www.saleae.com/;
+    homepage = https://www.saleae.com/;
     license = licenses.unfree;
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];

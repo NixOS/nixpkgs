@@ -8,15 +8,16 @@ stdenv.mkDerivation rec {
     sha256 = "1ccawxrni8brcvwhygy12iprkvz409hbr9xkk1bd03gnm2fplz21";
   };
 
-  # Perl is needed for `cg_annotate'.
-  nativeBuildInputs = [ perl ];
-
   outputs = [ "out" "dev" "man" "doc" ];
 
   hardeningDisable = [ "stackprotector" ];
 
   # GDB is needed to provide a sane default for `--db-command'.
-  buildInputs = [ gdb ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  # Perl is needed for `callgrind_{annotate,control}'.
+  buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+
+  # Perl is also a native build input.
+  nativeBuildInputs = [ perl ];
 
   enableParallelBuilding = true;
   separateDebugInfo = stdenv.isLinux;

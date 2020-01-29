@@ -1,7 +1,7 @@
 { stdenv, fetchzip, Carbon, Cocoa, ScriptingBridge }:
 
 stdenv.mkDerivation rec {
-  name = "chunkwm-${version}";
+  pname = "chunkwm";
   version = "0.4.9";
   src = fetchzip {
     url = "http://github.com/koekeishiya/chunkwm/archive/v${version}.tar.gz";

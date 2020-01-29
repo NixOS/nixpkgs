@@ -1,11 +1,27 @@
-{ thinkpad ? false, stdenv, fetchFromGitHub, fetchurl, pkgconfig, meson, ninja, libusb, pixman, glib, nss, gtk3
-, coreutils, gtk-doc, docbook_xsl, docbook_xml_dtd_43, openssl ? null }:
+{ thinkpad ? false
+, stdenv
+, fetchFromGitHub
+, fetchurl
+, pkgconfig
+, meson
+, ninja
+, libusb
+, pixman
+, glib
+, nss
+, gtk3
+, coreutils
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, openssl ? null
+}:
 
 assert thinkpad -> openssl != null;
 
 stdenv.mkDerivation rec {
   pname = "libfprint" + stdenv.lib.optionalString thinkpad "-thinkpad";
-  version = "0.99.0";
+  version = "1.0";
 
   src = {
     libfprint-thinkpad =
@@ -16,19 +32,36 @@ stdenv.mkDerivation rec {
         sha256 = "1vps1wrp7hskf13f7jrv0dwry2fcid76x2w463wplngp63cj7b3b";
       };
     libfprint = fetchurl {
-      url = "https://gitlab.freedesktop.org/libfprint/libfprint/uploads/82ba3cef5bdf72997df711eacdb13c0f/libfprint-${version}.tar.xz";
-      sha256 = "16r4nl40y0jri57jiqmdz4s87byblx22lbhyvqpljd6mqm5rg187";
+      url = "https://gitlab.freedesktop.org/libfprint/libfprint/uploads/aff93e9921d1cff53d7c070944952ff9/libfprint-${version}.tar.xz";
+      sha256 = "0v84pd12v016m8iimhq39fgzamlarqccsr7d98cvrrwrzrgcixrd";
     };
   }.${pname};
 
-  buildInputs = [ libusb pixman glib nss gtk3 ]
-    ++ stdenv.lib.optional thinkpad openssl;
+  nativeBuildInputs = [
+    pkgconfig
+    meson
+    ninja
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja gtk-doc docbook_xsl docbook_xml_dtd_43 ];
+  buildInputs = [
+    libusb
+    pixman
+    glib
+    nss
+    gtk3
+  ]
+  ++ stdenv.lib.optional thinkpad openssl
+  ;
 
-  mesonFlags = [ "-Dudev_rules_dir=lib/udev/rules.d" "-Dx11-examples=false" ];
+  mesonFlags = [
+    "-Dudev_rules_dir=${placeholder "out"}/lib/udev/rules.d"
+    "-Dx11-examples=false"
+  ];
 
-  preConfigure = ''
+  postPatch = ''
     substituteInPlace libfprint/meson.build \
       --replace /bin/echo ${coreutils}/bin/echo
   '';

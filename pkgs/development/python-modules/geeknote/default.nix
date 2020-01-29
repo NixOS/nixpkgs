@@ -10,7 +10,7 @@
 , evernote
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   version = "2015-05-11";
   pname = "geeknote";
   disabled = ! isPy27;

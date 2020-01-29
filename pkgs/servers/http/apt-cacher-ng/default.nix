@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "apt-cacher-ng-${version}";
+  pname = "apt-cacher-ng";
   version = "3.2";
 
   src = fetchurl {

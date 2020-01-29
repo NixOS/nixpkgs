@@ -1,8 +1,19 @@
-{buildPythonPackage, stdenv, fetchurl, pkgconfig
- , libXext, libXxf86vm, libX11, libXrandr, libXinerama, libXScrnSaver
- , argyllcms, wxPython, numpy
+{ python2
+, stdenv
+, fetchurl
+, pkgconfig
+, libXext
+, libXxf86vm
+, libX11
+, libXrandr
+, libXinerama
+, libXScrnSaver
+, argyllcms
  }:
-buildPythonPackage {
+
+let
+  inherit (python2.pkgs) buildPythonApplication wxPython numpy;
+in buildPythonApplication {
   pname = "displaycal";
   version = "3.5.0.0";
 

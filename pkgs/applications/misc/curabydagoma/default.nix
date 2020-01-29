@@ -14,7 +14,7 @@
 # If, however, someone needs it, we certainly can find a solution.
 
 stdenv.mkDerivation rec {
-  name = "curabydagoma-${version}";
+  pname = "curabydagoma";
   # Version is the date, UNIX format
   version = "1520506579";
   # Hash of the user's choice: os, arch, package type...

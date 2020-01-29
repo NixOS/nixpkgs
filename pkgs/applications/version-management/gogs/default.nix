@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gogs-${version}";
+  pname = "gogs";
   version = "0.11.86";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ]
     ++ optional pamSupport pam;
 
-  buildFlags = "-tags";
+  buildFlags = [ "-tags" ];
 
   buildFlagsArray =
     (  optional sqliteSupport "sqlite"

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "alsa-plugins";
-  version = "1.1.9";
+  version = "1.2.1";
 
   src = fetchurl {
     url = "mirror://alsa/plugins/${pname}-${version}.tar.bz2";
-    sha256 = "01zrg0h2jw9dlj9233vjsn916yf4f2s667yry6xsn8d57lq745qn";
+    sha256 = "1nj8cpbi05rb62yzs01c1k7lymdn1ch229b599hbhd0psixdx52d";
   };
 
   # ToDo: a52, etc.?

@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ makeWrapper jdk ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase =
     ''

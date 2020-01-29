@@ -19,7 +19,7 @@ in
       };
 
       bindAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "0.0.0.0";
         description = ''
           IP address where nix-serve will bind its listening socket.
@@ -44,7 +44,7 @@ in
       };
 
       extraParams = mkOption {
-        type = types.string;
+        type = types.separatedString " ";
         default = "";
         description = ''
           Extra command line parameters for nix-serve.

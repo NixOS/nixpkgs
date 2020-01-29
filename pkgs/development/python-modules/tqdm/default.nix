@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "tqdm";
-  version = "4.31.1";
+  version = "4.40.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e22977e3ebe961f72362f6ddfb9197cc531c9737aaf5f607ef09740c849ecd05";
+    sha256 = "f0ab01cf3ae5673d18f918700c0165e5fad0f26b5ebe4b34f62ead92686b5340";
   };
 
-  buildInputs = [ nose coverage glibcLocales flake8 ];
+  checkInputs = [ nose coverage glibcLocales flake8 ];
 
   postPatch = ''
     # Remove performance testing.

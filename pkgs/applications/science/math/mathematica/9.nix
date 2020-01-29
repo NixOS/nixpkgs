@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   name = "mathematica-9.0.0";
 
-  src = requireFile rec {
+  src = requireFile {
     name = "Mathematica_9.0.0_LINUX.sh";
     message = '' 
       This nix expression requires that Mathematica_9.0.0_LINUX.sh is

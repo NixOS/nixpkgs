@@ -3,7 +3,8 @@
 let
   version = "2.9.2";
 in stdenv.mkDerivation {
-  name = "http-parser-${version}";
+  pname = "http-parser";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "nodejs";
@@ -15,7 +16,7 @@ in stdenv.mkDerivation {
   NIX_CFLAGS_COMPILE = "-Wno-error";
   patches = [ ./build-shared.patch ];
   makeFlags = [ "DESTDIR=" "PREFIX=$(out)" ];
-  buildFlags = "library";
+  buildFlags = [ "library" ];
   doCheck = true;
   checkTarget = "test";
 

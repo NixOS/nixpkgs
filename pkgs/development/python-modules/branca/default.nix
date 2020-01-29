@@ -5,6 +5,7 @@
 , jinja2
 , selenium
 , six
+, setuptools
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest selenium ];
-  propagatedBuildInputs = [ jinja2 six ];
+  propagatedBuildInputs = [ jinja2 six setuptools ];
 
   # Seems to require a browser
   doCheck = false;

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, xlibsWrapper, ncurses }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
 
-  name = "metaocaml-${version}";
+  pname = "metaocaml";
   version = "3.09-alpha-30";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation (rec {
 
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
-  buildFlags = "world bootstrap world.opt";
+  buildFlags = [ "world" "bootstrap" "world.opt" ];
   buildInputs = [xlibsWrapper ncurses];
   installTargets = "install installopt";
   patchPhase = ''

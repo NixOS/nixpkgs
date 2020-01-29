@@ -7,11 +7,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sonic-visualiser-${version}";
+  pname = "sonic-visualiser";
   version = "2.4.1";
 
   src = fetchurl {
-    url = "https://code.soundsoftware.ac.uk/attachments/download/1185/${name}.tar.gz";
+    url = "https://code.soundsoftware.ac.uk/attachments/download/1185/${pname}-${version}.tar.gz";
     sha256 = "06nlha70kgrby16nyhngrv5q846xagnxdinv608v7ga7vpywwmyb";
   };
 
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "View and analyse contents of music audio files";
-    homepage = http://www.sonicvisualiser.org/;
+    homepage = https://www.sonicvisualiser.org/;
     license = licenses.gpl2Plus;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
     platforms = platforms.linux;

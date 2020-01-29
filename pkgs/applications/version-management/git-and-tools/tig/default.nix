@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45
+{ stdenv, fetchFromGitHub, ncurses, asciidoc, xmlto, docbook_xsl, docbook_xml_dtd_45, fetchpatch
 , readline, makeWrapper, git, libiconv, autoreconfHook, findXMLCatalogs, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
   pname = "tig";
-  version = "2.4.1";
-  name = "${pname}-${version}";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "jonas";
     repo = pname;
-    rev = name;
-    sha256 = "0i26yfn2vjgsg1kdvhhv55jwzds7ih7cnad1xqvilqm83zh47ksd";
+    rev = "${pname}-${version}";
+    sha256 = "1lrzgnq8ywq28qd4xyd0y5qfv3j25ra81lcbdqqfywasl8lwz3lf";
   };
 
   nativeBuildInputs = [ makeWrapper autoreconfHook asciidoc xmlto docbook_xsl docbook_xml_dtd_45 findXMLCatalogs pkgconfig ];
@@ -25,6 +24,14 @@ stdenv.mkDerivation rec {
   postPatch = ''
       rm -f contrib/config.make-*
   '';
+
+  patches = [
+    # Fix memory leak. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/jonas/tig/commit/6202c6032f17438a2facb23f02e330b9d0566d9d.patch";
+      sha256 = "15zn8hw9y7bqa1np4mj0qnm2z86nif7qwh7wc4vgy2rwxdil85bd";
+    })
+  ];
 
   enableParallelBuilding = true;
 
@@ -46,7 +53,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://jonas.github.io/tig/;
     description = "Text-mode interface for git";
-    maintainers = with maintainers; [ garbas bjornfor domenkozar qknight ];
+    maintainers = with maintainers; [ bjornfor domenkozar qknight globin ];
     license = licenses.gpl2;
     platforms = platforms.unix;
   };

@@ -3,7 +3,7 @@
 
 stdenv.mkDerivation (rec {
 
-  name = "unison-${version}";
+  pname = "unison";
   version = "2.51.2";
   src = fetchFromGitHub {
     owner = "bcpierce00";
@@ -37,7 +37,7 @@ stdenv.mkDerivation (rec {
   dontStrip = !ocaml.nativeCompilers;
 
   meta = {
-    homepage = http://www.cis.upenn.edu/~bcpierce/unison/;
+    homepage = https://www.cis.upenn.edu/~bcpierce/unison/;
     description = "Bidirectional file synchronizer";
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [viric];

@@ -1,17 +1,17 @@
 { stdenv, fetchurl, meson, ninja, gettext, python3, pkgconfig, gnome3, gtk3
-, gobject-introspection, gdk_pixbuf, librsvg, libgweather
+, gobject-introspection, gdk-pixbuf, librsvg, libgweather
 , geoclue2, wrapGAppsHook, folks, libchamplain, gfbgraph, libsoup, gsettings-desktop-schemas
 , webkitgtk, gjs, libgee, geocode-glib, evolution-data-server, gnome-online-accounts }:
 
 let
   pname = "gnome-maps";
-  version = "3.32.2.1";
+  version = "3.34.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1m191iq1gjaqz79ci3dkbmwrkxp7pzknngimlf5bqib5x8yairlb";
+    sha256 = "1p58il8dqj96nlv41gf926y8nw6ya15vmv9yr52025sizxaqzydw";
   };
 
   doCheck = true;
@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
     gobject-introspection
     gtk3 geoclue2 gjs libgee folks gfbgraph
     geocode-glib libchamplain libsoup
-    gdk_pixbuf librsvg libgweather
+    gdk-pixbuf librsvg libgweather
     gsettings-desktop-schemas evolution-data-server
     gnome-online-accounts gnome3.adwaita-icon-theme
     webkitgtk

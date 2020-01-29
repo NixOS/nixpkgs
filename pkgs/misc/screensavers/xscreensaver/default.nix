@@ -1,20 +1,20 @@
 { stdenv, fetchurl, pkgconfig, bc, perl, perlPackages, pam, libXext, libXScrnSaver, libX11
-, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU_combined, gtk2
+, libXrandr, libXmu, libXxf86vm, libXrender, libXxf86misc, libjpeg, libGLU, libGL, gtk2
 , libxml2, libglade, intltool, xorg, makeWrapper, gle
 , forceInstallAllHacks ? false
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.40";
-  name = "xscreensaver-${version}";
+  version = "5.43";
+  pname = "xscreensaver";
 
   src = fetchurl {
-    url = "https://www.jwz.org/xscreensaver/${name}.tar.gz";
-    sha256 = "1q2sr7h6ps6d3hk8895g12rrcqiihjl7py1ly077ikv4866r181h";
+    url = "https://www.jwz.org/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "1571pj1a9998sq14y9366s2rw9wd2kq3l3dvvsk610vyd0fki3qm";
   };
 
   buildInputs =
-    [ pkgconfig bc perl libjpeg libGLU_combined gtk2 libxml2 libglade pam
+    [ pkgconfig bc perl libjpeg libGLU libGL gtk2 libxml2 libglade pam
       libXext libXScrnSaver libX11 libXrandr libXmu libXxf86vm libXrender
       libXxf86misc intltool xorg.appres makeWrapper gle
     ];

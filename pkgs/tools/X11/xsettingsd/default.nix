@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, scons, pkgconfig, libX11 }:
 
 stdenv.mkDerivation rec {
-  name = "xsettingsd-${version}";
+  pname = "xsettingsd";
   version = "1.0.0";
 
   src = fetchFromGitHub {

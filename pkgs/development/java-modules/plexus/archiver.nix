@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   plexusArchiver_1_0_alpha7 = map (obj: fetchMaven {
     version = "1.0-alpha-7";
     artifactId = "plexus-archiver";

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, makeWrapper, libpcap }:
 
 stdenv.mkDerivation rec {
-  name = "masscan-${version}";
+  pname = "masscan";
   version = "1.0.5";
 
   src = fetchFromGitHub {
     owner  = "robertdavidgraham";
     repo   = "masscan";
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0q0c7bsf0pbl8napry1qyg0gl4pd8wn872h4mz9b56dx4rx90vqg";
   };
 

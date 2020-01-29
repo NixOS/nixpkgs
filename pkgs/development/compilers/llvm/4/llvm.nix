@@ -2,7 +2,7 @@
 , fetch
 , fetchpatch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libxml2
@@ -17,19 +17,20 @@
 }:
 
 let
-  src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
-
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
-    let parts = splitString "." release_version; in
+    let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
 
-stdenv.mkDerivation (rec {
-  name = "llvm-${version}";
+stdenv.mkDerivation ({
+  pname = "llvm";
+  inherit version;
+
+  src = fetch "llvm" "0l9bf7kdwhlj0kq1hawpyxhna1062z3h7qcz2y8nfl9dz2qksy6s";
 
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
     unpackFile ${compiler-rt_src}
@@ -39,12 +40,27 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" ]
     ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+  nativeBuildInputs = [ cmake python3 ]
+    ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    (fetchpatch {
+      name = "0001-Fix-return-type-in-ORC-readMem-client-interface.patch";
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
+      sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
+    })
+    ./fix-gcc9.patch
+    (fetchpatch {
+      name = "llvm4-avoid-undefined-behavior-in-unittest.patch";
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/D32089-Avoid-undefined-behavior-in-unittest.patch?h=llvm40&id=f459b0bad8aa3b94bc2733d79d176071a32846a6";
+      sha256 = "0x5q6a8lk6xg4ns4qh75fxvvmfnifwvyrq17ck85q8c0753i1irf";
+      extraPrefix = "";
+    })
+  ];
 
   # TSAN requires XPC on Darwin, which we have no public/free source files for. We can depend on the Apple frameworks
   # to get it, but they're unfree. Since LLVM is rather central to the stdenv, we patch out TSAN support so that Hydra
@@ -127,7 +143,7 @@ stdenv.mkDerivation (rec {
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = stdenv.lib.optionalString enableSharedLibraries ''
@@ -150,8 +166,6 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  passthru.src = src;
-
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
     homepage    = http://llvm.org/;
@@ -160,7 +174,7 @@ stdenv.mkDerivation (rec {
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

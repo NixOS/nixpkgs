@@ -5,8 +5,6 @@ in let
   # SuiteSparse must use the same openblas
   suitesparse = suitesparse_.override { inherit openblas; };
 in stdenv.mkDerivation rec {
-
-  name = "${pname}-${version}";
   pname = "cholmod-extra";
   version = "1.2.0";
 

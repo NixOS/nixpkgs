@@ -1,11 +1,20 @@
-{ stable, branch, version, sha256Hash }:
+{ stable, branch, version, sha256Hash, mkOverride }:
 
-{ stdenv, python3Packages, fetchFromGitHub }:
+{ lib, stdenv, python3, fetchFromGitHub }:
 
 let
-  pythonPackages = python3Packages;
+  # TODO: This package requires qt5Full to launch
+  defaultOverrides = [
+    (mkOverride "psutil" "5.6.3"
+      "1wv31zly44qj0rp2acg58xbnc7bf6ffyadasq093l455q30qafl6")
+    (mkOverride "jsonschema" "2.6.0"
+      "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg")
+  ];
 
-in pythonPackages.buildPythonPackage rec {
+  python = python3.override {
+    packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
+  };
+in python.pkgs.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-gui";
 
@@ -16,11 +25,11 @@ in pythonPackages.buildPythonPackage rec {
     sha256 = sha256Hash;
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python.pkgs; [
     raven psutil jsonschema # tox for check
     # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; })
-  ] ++ stdenv.lib.optional (!stable) pythonPackages.distro;
+    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+  ];
 
   doCheck = false; # Failing
 

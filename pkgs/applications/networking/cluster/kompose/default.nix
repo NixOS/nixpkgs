@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "kompose-${version}";
+  pname = "kompose";
   version = "1.18.0";
 
   goPackagePath = "github.com/kubernetes/kompose";

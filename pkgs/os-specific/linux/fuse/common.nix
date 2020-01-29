@@ -10,12 +10,13 @@
 let
   isFuse3 = stdenv.lib.hasPrefix "3" version;
 in stdenv.mkDerivation rec {
-  name = "fuse-${version}";
+  pname = "fuse";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "libfuse";
     repo = "libfuse";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = sha256Hash;
   };
 
@@ -38,7 +39,10 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ stdenv.lib.optional isFuse3 "common";
 
-  mesonFlags = stdenv.lib.optional isFuse3 "-Dudevrulesdir=etc/udev/rules.d";
+  mesonFlags = stdenv.lib.optionals isFuse3 [
+    "-Dudevrulesdir=/udev/rules.d"
+    "-Duseroot=false"
+  ];
 
   preConfigure = ''
     export MOUNT_FUSE_PATH=$out/sbin

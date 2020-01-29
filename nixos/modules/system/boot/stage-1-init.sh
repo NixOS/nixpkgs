@@ -44,13 +44,13 @@ EOF
   *) to ignore the error and continue
 EOF
 
-    read reply
+    read -n 1 reply
 
     if [ -n "$allowShell" -a "$reply" = f ]; then
         exec setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console"
     elif [ -n "$allowShell" -a "$reply" = i ]; then
         echo "Starting interactive shell..."
-        setsid @shell@ -c "@shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
+        setsid @shell@ -c "exec @shell@ < /dev/$console >/dev/$console 2>/dev/$console" || fail
     elif [ "$reply" = r ]; then
         echo "Rebooting..."
         reboot -f
@@ -182,6 +182,12 @@ for o in $(cat /proc/cmdline); do
             ;;
         copytoram)
             copytoram=1
+            ;;
+        findiso=*)
+            # if an iso name is supplied, try to find the device where
+            # the iso resides on
+            set -- $(IFS==; echo $o)
+            isoPath=$2
             ;;
     esac
 done
@@ -442,6 +448,27 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
     fi
 fi
 
+# If we have a path to an iso file, find the iso and link it to /dev/root
+if [ -n "$isoPath" ]; then
+  mkdir -p /findiso
+
+  for delay in 5 10; do
+    blkid | while read -r line; do
+      device=$(echo "$line" | sed 's/:.*//')
+      type=$(echo "$line" | sed 's/.*TYPE="\([^"]*\)".*/\1/')
+
+      mount -t "$type" "$device" /findiso
+      if [ -e "/findiso$isoPath" ]; then
+        ln -sf "/findiso$isoPath" /dev/root
+        break 2
+      else
+        umount /findiso
+      fi
+    done
+
+    sleep "$delay"
+  done
+fi
 
 # Try to find and mount the root device.
 mkdir -p $targetRoot

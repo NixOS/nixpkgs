@@ -7,7 +7,7 @@ index afadf53..80b7533 100644
      # "ProductVersion:    10.10.5"   "10.10"
      # "ProductVersion:    10.11"     "10.11"
 -        prodvers=`sw_vers|awk '/^ProductVersion:/{print $2}'|awk -F. '{print $1"."$2}'`
-+        prodvers="10.10"
++        prodvers="${MACOSX_DEPLOYMENT_TARGET:-10.12}"
      case "$prodvers" in
      10.*)
        add_macosx_version_min ccflags $prodvers

@@ -11,17 +11,12 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.4.0";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "21fc6729909dba4ba8c9a84b7fadd293322cc2594d15ac73b0f66a5ceffd1f98";
+    sha256 = "71d446f469b424cb190bc896e78d0415b2bbebf17c6e5b024ed1a73b4448f8f4";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "testpath<0.4" "testpath"
-  '';
 
   propagatedBuildInputs = [
     bokeh
@@ -37,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A high level dashboarding library for python visualization libraries";
-    homepage = http://pyviz.org;
+    homepage = https://pyviz.org;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

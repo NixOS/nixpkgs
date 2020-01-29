@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "collectd-exporter-${version}";
+  pname = "collectd-exporter";
   version = "0.3.1";
   rev = version;
 

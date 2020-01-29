@@ -4,35 +4,15 @@
  <title>OCaml</title>
 
  <para>
-  OCaml libraries should be installed in
-  <literal>$(out)/lib/ocaml/${ocaml.version}/site-lib/</literal>. Such
-  directories are automatically added to the <literal>$OCAMLPATH</literal>
-  environment variable when building another package that depends on them or
-  when opening a <literal>nix-shell</literal>.
+  OCaml libraries should be installed in <literal>$(out)/lib/ocaml/${ocaml.version}/site-lib/</literal>. Such directories are automatically added to the <literal>$OCAMLPATH</literal> environment variable when building another package that depends on them or when opening a <literal>nix-shell</literal>.
  </para>
 
  <para>
-  Given that most of the OCaml ecosystem is now built with dune, nixpkgs
-  includes a convenience build support function called
-  <literal>buildDunePackage</literal> that will build an OCaml package using
-  dune, OCaml and findlib and any additional dependencies provided as
-  <literal>buildInputs</literal> or <literal>propagatedBuildInputs</literal>.
+  Given that most of the OCaml ecosystem is now built with dune, nixpkgs includes a convenience build support function called <literal>buildDunePackage</literal> that will build an OCaml package using dune, OCaml and findlib and any additional dependencies provided as <literal>buildInputs</literal> or <literal>propagatedBuildInputs</literal>.
  </para>
 
  <para>
-  Here is a simple package example. It defines an (optional) attribute
-  <literal>minimumOCamlVersion</literal> that will be used to throw a
-  descriptive evaluation error if building with an older OCaml is attempted. It
-  uses the <literal>fetchFromGitHub</literal> fetcher to get its source. It
-  sets the <literal>doCheck</literal> (optional) attribute to
-  <literal>true</literal> which means that tests will be run with <literal>dune
-  runtest -p angstrom</literal> after the build (<literal>dune build -p
-  angstrom</literal>) is complete. It uses <literal>alcotest</literal> as a
-  build input (because it is needed to run the tests) and
-  <literal>bigstringaf</literal> and <literal>result</literal> as propagated
-  build inputs (thus they will also be available to libraries depending on this
-  library). The library will be installed using the
-  <literal>angstrom.install</literal> file that dune generates.
+  Here is a simple package example. It defines an (optional) attribute <literal>minimumOCamlVersion</literal> that will be used to throw a descriptive evaluation error if building with an older OCaml is attempted. It uses the <literal>fetchFromGitHub</literal> fetcher to get its source. It sets the <literal>doCheck</literal> (optional) attribute to <literal>true</literal> which means that tests will be run with <literal>dune runtest -p angstrom</literal> after the build (<literal>dune build -p angstrom</literal>) is complete. It uses <literal>alcotest</literal> as a build input (because it is needed to run the tests) and <literal>bigstringaf</literal> and <literal>result</literal> as propagated build inputs (thus they will also be available to libraries depending on this library). The library will be installed using the <literal>angstrom.install</literal> file that dune generates.
  </para>
 
 <programlisting>
@@ -62,14 +42,10 @@ buildDunePackage rec {
     maintainers = with stdenv.lib.maintainers; [ sternenseemann ];
   };
 }
- </programlisting>
+</programlisting>
 
  <para>
-  Here is a second example, this time using a source archive generated with
-  <literal>dune-release</literal>. It is a good idea to use this archive when
-  it is available as it will usually contain substituted variables such as a
-  <literal>%%VERSION%%</literal> field. This library does not depend on any
-  other OCaml library and no tests are run after building it.
+  Here is a second example, this time using a source archive generated with <literal>dune-release</literal>. It is a good idea to use this archive when it is available as it will usually contain substituted variables such as a <literal>%%VERSION%%</literal> field. This library does not depend on any other OCaml library and no tests are run after building it.
  </para>
 
 <programlisting>
@@ -93,5 +69,5 @@ buildDunePackage rec {
     maintainers = [ maintainers.eqyiel ];
   };
 }
- </programlisting>
+</programlisting>
 </section>

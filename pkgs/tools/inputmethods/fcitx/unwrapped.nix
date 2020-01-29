@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, cmake, intltool, gettext
-, libxml2, enchant1, isocodes, icu, libpthreadstubs
+, libxml2, enchant2, isocodes, icu, libpthreadstubs
 , pango, cairo, libxkbfile, libXau, libXdmcp, libxkbcommon
 , dbus, gtk2, gtk3, qt4, extra-cmake-modules
 , xkeyboard_config, pcre, libuuid
@@ -36,7 +36,7 @@ let
   };
 in
 stdenv.mkDerivation rec {
-  name = "fcitx-${version}";
+  pname = "fcitx";
   version = "4.2.9.6";
 
   src = fetchFromGitLab {
@@ -59,6 +59,8 @@ stdenv.mkDerivation rec {
   ''
   ;
 
+  patches = [ ./find-enchant-lib.patch ];
+
   postPatch = ''
     substituteInPlace src/frontend/qt/CMakeLists.txt \
       --replace $\{QT_PLUGINS_DIR} $out/lib/qt4/plugins
@@ -69,24 +71,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake extra-cmake-modules intltool pkgconfig pcre ];
 
   buildInputs = [
-    xkeyboard_config enchant1 gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile
+    xkeyboard_config enchant2 gettext isocodes icu libpthreadstubs libXau libXdmcp libxkbfile
     libxkbcommon libxml2 dbus cairo gtk2 gtk3 pango qt4 libuuid
   ];
 
-  cmakeFlags = ''
-    -DENABLE_QT_IM_MODULE=ON
-    -DENABLE_GTK2_IM_MODULE=ON
-    -DENABLE_GTK3_IM_MODULE=ON
-    -DENABLE_GIR=OFF
-    -DENABLE_OPENCC=OFF
-    -DENABLE_PRESAGE=OFF
-    -DENABLE_XDGAUTOSTART=OFF
-    -DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}
-    -DENABLE_TABLE=ON
-    -DENABLE_SPELL=ON
-    -DENABLE_QT_GUI=ON
-    -DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'
-    '';
+  cmakeFlags = [
+    "-DENABLE_QT_IM_MODULE=ON"
+    "-DENABLE_GTK2_IM_MODULE=ON"
+    "-DENABLE_GTK3_IM_MODULE=ON"
+    "-DENABLE_GIR=OFF"
+    "-DENABLE_OPENCC=OFF"
+    "-DENABLE_PRESAGE=OFF"
+    "-DENABLE_XDGAUTOSTART=OFF"
+    "-DENABLE_PINYIN=${if withPinyin then "ON" else "OFF"}"
+    "-DENABLE_TABLE=ON"
+    "-DENABLE_SPELL=ON"
+    "-DENABLE_QT_GUI=ON"
+    "-DXKB_RULES_XML_FILE='${xkeyboard_config}/share/X11/xkb/rules/evdev.xml'"
+  ];
 
   meta = with stdenv.lib; {
     homepage    = https://github.com/fcitx/fcitx;

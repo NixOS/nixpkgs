@@ -1,43 +1,44 @@
-{ stdenv, fetchFromGitHub, pkgconfig, gtk2, lua, perl, python2
-, libtool, pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, libsexy, enchant1, libnotify, openssl, intltool
-, desktop-file-utils, hicolor-icon-theme
-, autoconf, automake, autoconf-archive
+{ stdenv, fetchFromGitHub, fetchpatch, pkgconfig, gtk2, lua, perl, python3
+, pciutils, dbus-glib, libcanberra-gtk2, libproxy
+, enchant2, libnotify, openssl, isocodes
+, desktop-file-utils
+, meson, ninja
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.4";
-  name = "hexchat-${version}";
+  pname = "hexchat";
+  version = "2.14.3";
 
   src = fetchFromGitHub {
     owner = "hexchat";
     repo = "hexchat";
     rev = "v${version}";
-    sha256 = "1z8v7jg1mc2277k3jihnq4rixw1q27305aw6b6rpb1x7vpiy2zr3";
+    sha256 = "08kvp0dcn3bvmlqcfp9312075bwkqkpa8m7zybr88pfp210gfl85";
   };
 
-  nativeBuildInputs = [
-    pkgconfig libtool intltool
-    autoconf autoconf-archive automake
-  ];
+  nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
-    gtk2 lua perl python2 pciutils dbus-glib libcanberra-gtk2 libproxy
-    libsexy libnotify openssl desktop-file-utils hicolor-icon-theme
+    gtk2 lua perl python3 pciutils dbus-glib libcanberra-gtk2 libproxy
+    libnotify openssl desktop-file-utils
+    isocodes
   ];
 
-  enableParallelBuilding = true;
-
-  #hexchat and heachat-text loads enchant spell checking library at run time and so it needs to have route to the path
-  patchPhase = ''
-    sed -i "s,libenchant.so.1,${enchant1}/lib/libenchant.so.1,g" src/fe-gtk/sexy-spell-entry.c
+  #hexchat and hexchat-text loads enchant spell checking library at run time and so it needs to have route to the path
+  postPatch = ''
+    sed -i "s,libenchant-2.so.2,${enchant2}/lib/libenchant-2.so.2,g" src/fe-gtk/sexy-spell-entry.c
+    sed -i "/flag.startswith('-I')/i if flag.contains('no-such-path')\ncontinue\nendif" plugins/perl/meson.build
+    chmod +x meson_post_install.py
+    for f in meson_post_install.py \
+             src/common/make-te.py \
+             plugins/perl/generate_header.py \
+             po/validate-textevent-translations
+    do
+      patchShebangs $f
+    done
   '';
 
-  preConfigure = ''
-    ./autogen.sh
-  '';
-
-  configureFlags = [ "--enable-shm" "--enable-textfe" ];
+  mesonFlags = [ "-Dwith-lua=lua" "-Dwith-text=true" ];
 
   meta = with stdenv.lib; {
     description = "A popular and easy to use graphical IRC (chat) client";

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   createFindlibDestdir = true;
 
-  configurePhase = "true";      # Skip configure
+  dontConfigure = true;      # Skip configure
   # De facto, option minimal=1 seems to be the default.  See the README.
   buildPhase     = "make ${if minimal then "minimal=1" else ""} build";
   installPhase   = "make ${if minimal then "minimal=1" else ""} install";

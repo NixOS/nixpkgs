@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libX11 libXrandr libXinerama ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/jceb/srandrd";

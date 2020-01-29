@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "limesurvey";
-  version = "3.17.1+190408";
+  version = "3.17.12+190823";
 
   src = fetchFromGitHub {
     owner = "LimeSurvey";
     repo = "LimeSurvey";
     rev = version;
-    sha256 = "0d6dgw9af492vn5yg2hq82ipq4p80c19lhky0dpwrm5kv67kxbhv";
+    sha256 = "1i7jpxndrbya5ggl4babscwzmxx4c0jwri5kpl7h2ihqrn90m4b5";
   };
 
   phpConfig = writeText "config.php" ''
@@ -18,9 +18,13 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/share/limesurvey
     cp -r . $out/share/limesurvey
     cp ${phpConfig} $out/share/limesurvey/application/config/config.php
+
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {

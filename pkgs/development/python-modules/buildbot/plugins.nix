@@ -1,23 +1,31 @@
-{ lib, buildPythonPackage, fetchPypi, buildbot, buildbot-pkg }:
+{ lib, buildPythonPackage, fetchPypi, buildbot-pkg, mock }:
 
 {
   www = buildPythonPackage rec {
-    pname = "buildbot_www";
+    pname = "buildbot-www";
     inherit (buildbot-pkg) version;
 
-    # NOTE: wheel is used due to buildbot circular dependency
-    format = "wheel";
-
     src = fetchPypi {
-      inherit pname version format;
-      python = "py3";
-      sha256 = "134b8y498bq5fp4863hj9058wr7mcw0xgl74br0f1dy9n7jdcl39";
+      inherit pname version;
+      sha256 = "0njix8g6g1dgfviick55p9calm82nnkhhgkikh7a5yvqk524cprg";
     };
 
+    # Remove unneccessary circular dependency on buildbot
+    postPatch = ''
+      sed -i setup.py \
+        -e "/import buildbot/d" \
+        -e "s/'buildbot',//"
+    '';
+
+    buildInputs = [ buildbot-pkg mock ];
+
+    # No tests
+    doCheck = false;
+
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot UI";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
+      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };
@@ -28,16 +36,18 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1yh8xij3wizz0f88chjpdijm7i35ql87g84ph3f76sqyr6aj6ckw";
+      sha256 = "1wmay9bbb1wwf0zh9rw95swmdc7bxabgvx2n6dyyzs4p8k92px10";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
-    checkInputs = [ buildbot ];
+    buildInputs = [ buildbot-pkg ];
+
+    # No tests
+    doCheck = false;
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot Console View Plugin";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
+      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };
@@ -48,16 +58,18 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "04iihy1s9r4n5jlk57pdjy3yvp6zym2iv2bgqjhw6fy0hff5j8ys";
+      sha256 = "14b28vpkk68yk6zmdd64n7izb1r3barb7y711n4g37skqd13jygb";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
-    checkInputs = [ buildbot ];
+    buildInputs = [ buildbot-pkg ];
+
+    # No tests
+    doCheck = false;
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot Waterfall View Plugin";
-      maintainers = with maintainers; [ nand0p ryansydnor ];
+      maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;
     };
   };
@@ -68,16 +80,18 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0bcilhcz9xnr8799d5j4sm6qz8pdjlckdck7a282nfs64liajsrh";
+      sha256 = "1m8kbycjq7jsl72xbrzjj48hb65r53lfxx78yvlnhc2f9ian5vnh";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
-    checkInputs = [ buildbot ];
+    buildInputs = [ buildbot-pkg ];
+
+    # No tests
+    doCheck = false;
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot Grid View Plugin";
-      maintainers = with maintainers; [ nand0p ];
+      maintainers = with maintainers; [ nand0p lopsided98 ];
       license = licenses.gpl2;
     };
   };
@@ -88,16 +102,18 @@
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "13lr7lzi9sv0s6xrfalq0dkcys6fp7hn0787rjhnz9gc7x83aqjv";
+      sha256 = "1sbp13qimv8kc7dp0xz1pmda1x1n4948zgrz2pc45rwlbbn5h69r";
     };
 
-    propagatedBuildInputs = [ buildbot-pkg ];
-    checkInputs = [ buildbot ];
+    buildInputs = [ buildbot-pkg ];
+
+    # No tests
+    doCheck = false;
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot WSGI dashboards Plugin";
-      maintainers = with maintainers; [ ];
+      maintainers = with maintainers; [ lopsided98 ];
       license = licenses.gpl2;
     };
   };

@@ -2,7 +2,6 @@
 , dateutil, pyyaml, openpyxl, xlrd, h5py, fonttools, lxml, pandas, pyshp
 }:
 buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "visidata";
   version = "1.5.2";
 

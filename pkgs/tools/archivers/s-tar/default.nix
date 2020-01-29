@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "s-tar-${version}";
+  pname = "s-tar";
   version = "1.6";
   src = fetchurl {
     url = "mirror://sourceforge/s-tar/star-${version}.tar.bz2";

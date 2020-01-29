@@ -7,7 +7,7 @@ let
 
 in
 
-lib.mapAttrs (n: v: v // { shortName = n; }) rec {
+lib.mapAttrs (n: v: v // { shortName = n; }) {
   /* License identifiers from spdx.org where possible.
    * If you cannot find your license here, then look for a similar license or
    * add it to this list. The URL mentioned above is a good source for inspiration.
@@ -218,9 +218,9 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName = "Common Public License 1.0";
   };
 
-  curl = {
-    fullName = "MIT/X11 derivate";
-    url = "https://curl.haxx.se/docs/copyright.html";
+  curl = spdx {
+    spdxId = "curl";
+    fullName = "curl License";
   };
 
   doc = spdx {
@@ -536,11 +536,6 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
     fullName  = "University of Illinois/NCSA Open Source License";
   };
 
-  notion_lgpl = {
-    url = "https://raw.githubusercontent.com/raboof/notion/master/LICENSE";
-    fullName = "Notion modified LGPL";
-  };
-
   nposl3 = spdx {
     spdxId = "NPOSL-3.0";
     fullName = "Non-Profit Open Software License 3.0";
@@ -611,6 +606,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) rec {
   purdueBsd = {
     fullName = " Purdue BSD-Style License"; # also know as lsof license
     url = https://enterprise.dejacode.com/licenses/public/purdue-bsd;
+  };
+
+  qhull = spdx {
+    spdxId = "Qhull";
+    fullName = "Qhull License";
   };
 
   qpl = spdx {

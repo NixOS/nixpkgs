@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, readline, libedit, bc }:
 
 stdenv.mkDerivation rec {
-  name = "j-${version}";
+  pname = "j";
   version = "807";
   jtype = "release";
   src = fetchFromGitHub {

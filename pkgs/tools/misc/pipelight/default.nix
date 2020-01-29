@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU_combined, wine-staging }:
+{ stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL, wine-staging }:
 
 let
   wine_custom = wine-staging;
@@ -10,16 +10,16 @@ in stdenv.mkDerivation rec {
 
   version = "0.2.8.2";
 
-  name = "pipelight-${version}";
+  pname = "pipelight";
 
   src = fetchurl {
     url = "https://bitbucket.org/mmueller2012/pipelight/get/v${version}.tar.gz";
     sha256 = "1kyy6knkr42k34rs661r0f5sf6l1s2jdbphdg89n73ynijqmzjhk";
   };
 
-  buildInputs = [ wine_custom libX11 libGLU_combined curl ];
+  buildInputs = [ wine_custom libX11 libGLU libGL curl ];
 
-  propagatedbuildInputs = [ curl cabextract ];
+  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
 
   patches = [ ./pipelight.patch ];
 

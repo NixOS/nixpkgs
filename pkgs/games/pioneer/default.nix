@@ -1,24 +1,24 @@
 { fetchFromGitHub, stdenv, cmake, pkgconfig, curl, libsigcxx, SDL2
-, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU_combined
+, SDL2_image, freetype, libvorbis, libpng, assimp, libGLU, libGL
 , glew
 }:
 
 stdenv.mkDerivation rec {
   pname = "pioneer";
-  version = "20190203";
+  version = "20191117";
 
   src = fetchFromGitHub{
     owner = "pioneerspacesim";
     repo = "pioneer";
     rev = version;
-    sha256 = "1g34wvgyvz793dhm1k64kl82ib0cavkbg0f2p3fp05b457ycljff";
+    sha256 = "0ka5w1sfp56bs3njiwyr6ffy34qvqbzcvmra9cqwyvi7famn8b49";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
     curl libsigcxx SDL2 SDL2_image freetype libvorbis libpng
-    assimp libGLU_combined glew
+    assimp libGLU libGL glew
   ];
 
   preConfigure = ''

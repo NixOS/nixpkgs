@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "davmail";
-  version = "5.2.0";
+  version = "5.4.0";
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-2961.zip";
-    sha256 = "0jw6sjg7k7zg8ab0srz6cjjj5hnw5ppxx1w35sw055dlg54fh2m5";
+    url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}-3135.zip";
+    sha256 = "05n2j5canh046744arvni6yfdsandvjkld93w3p7rg116jrh19gq";
   };
 
   sourceRoot = ".";

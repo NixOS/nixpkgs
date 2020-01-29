@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, wxGTK30, libav, lua5_1, curl
-, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU_combined
+, libpng, xorg, pkgconfig, flam3, libgtop, boost, tinyxml, freeglut, libGLU, libGL
 , glee }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "electricsheep";
   version = "2.7b33-2017-10-20";
 
@@ -18,7 +17,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     wxGTK30 libav lua5_1 curl libpng xorg.libXrender
-    flam3 libgtop boost tinyxml freeglut libGLU_combined glee
+    flam3 libgtop boost tinyxml freeglut libGLU libGL glee
   ];
 
   preAutoreconf = ''

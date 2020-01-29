@@ -19,7 +19,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://github.com/tlocke/pg8000;
     description = "PostgreSQL interface library, for asyncio";
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.unix;
   };
 

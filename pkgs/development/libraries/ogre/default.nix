@@ -1,5 +1,5 @@
 { fetchurl, stdenv, lib
-, cmake, libGLU_combined
+, cmake, libGLU, libGL
 , freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
 , libX11, libXmu, libSM, pkgconfig
@@ -10,12 +10,12 @@
 , withSamples ? false }:
 
 stdenv.mkDerivation rec {
-  name = "ogre-${version}";
-  version = "1.12.0";
+  pname = "ogre";
+  version = "1.12.1";
 
   src = fetchurl {
      url = "https://github.com/OGRECave/ogre/archive/v${version}.zip";
-     sha256 = "1hkkg5prixppiq1p5jz7wz1npm5s7kwm1s86079280waccvr2v6x";
+     sha256 = "1iv6k0dwdzg5nnzw2mcgcl663q4f7p2kj7nhs8afnsikrzxxgsi4";
   };
 
   cmakeFlags = [ "-DOGRE_BUILD_SAMPLES=${toString withSamples}" ]
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-   [ cmake libGLU_combined
+   [ cmake libGLU libGL
      freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
      libX11 libXmu libSM pkgconfig

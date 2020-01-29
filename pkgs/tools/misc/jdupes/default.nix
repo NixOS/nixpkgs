@@ -1,21 +1,26 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "jdupes-${version}";
-  version = "1.13";
+  pname = "jdupes";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner = "jbruchon";
     repo  = "jdupes";
     rev   = "v${version}";
-    sha256 = "1apqc4ylx6jmpkaypi8323063g5685kl8nbjna2291lzf2pc4r9f";
+    sha256 = "18hn25f7cdz1li0vvx74al7a8z2220xhzjp9j6idhldsmjnscgq8";
     # Unicode file names lead to different checksums on HFS+ vs. other
     # filesystems because of unicode normalisation. The testdir
     # directories have such files and will be removed.
     extraPostFetch = "rm -r $out/testdir";
   };
 
-  makeFlags = [ "PREFIX=$(out)" ] ++ stdenv.lib.optional stdenv.isLinux "ENABLE_BTRFS=1";
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ] ++ stdenv.lib.optionals stdenv.isLinux [
+    "ENABLE_DEDUPE=1"
+    "STATIC_DEDUPE_H=1"
+  ];
 
   enableParallelBuilding = true;
 
@@ -32,7 +37,7 @@ stdenv.mkDerivation rec {
       duplicate files. This fork known as 'jdupes' is heavily modified
       from and improved over the original.
     '';
-    homepage = https://github.com/jbruchon/jdupes;
+    homepage = "https://github.com/jbruchon/jdupes";
     license = licenses.mit;
     maintainers = with maintainers; [ romildo ];
     platforms = platforms.all;

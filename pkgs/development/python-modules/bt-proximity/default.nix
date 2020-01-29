@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub
 , pybluez }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "bt-proximity";
   version = "0.0.20180217";
 

@@ -24,27 +24,27 @@ rec {
     platform = platforms.powernv;
   };
 
-  sheevaplug = rec {
+  sheevaplug = {
     config = "armv5tel-unknown-linux-gnueabi";
     platform = platforms.sheevaplug;
   };
 
-  raspberryPi = rec {
+  raspberryPi = {
     config = "armv6l-unknown-linux-gnueabihf";
     platform = platforms.raspberrypi;
   };
 
-  armv7l-hf-multiplatform = rec {
+  armv7l-hf-multiplatform = {
     config = "armv7l-unknown-linux-gnueabihf";
     platform = platforms.armv7l-hf-multiplatform;
   };
 
-  aarch64-multiplatform = rec {
+  aarch64-multiplatform = {
     config = "aarch64-unknown-linux-gnu";
     platform = platforms.aarch64-multiplatform;
   };
 
-  armv7a-android-prebuilt = rec {
+  armv7a-android-prebuilt = {
     config = "armv7a-unknown-linux-androideabi";
     sdkVer = "24";
     ndkVer = "18b";
@@ -52,7 +52,7 @@ rec {
     useAndroidPrebuilt = true;
   };
 
-  aarch64-android-prebuilt = rec {
+  aarch64-android-prebuilt = {
     config = "aarch64-unknown-linux-android";
     sdkVer = "24";
     ndkVer = "18b";
@@ -65,17 +65,17 @@ rec {
     inherit (platform.gcc) fpu;
   };
 
-  pogoplug4 = rec {
+  pogoplug4 = {
     config = "armv5tel-unknown-linux-gnueabi";
     platform = platforms.pogoplug4;
   };
 
-  ben-nanonote = rec {
+  ben-nanonote = {
     config = "mipsel-unknown-linux-uclibc";
     platform = platforms.ben_nanonote;
   };
 
-  fuloongminipc = rec {
+  fuloongminipc = {
     config = "mipsel-unknown-linux-gnu";
     platform = platforms.fuloong2f_n32;
   };
@@ -97,6 +97,18 @@ rec {
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
+  riscv64-embedded = {
+    config = "riscv64-none-elf";
+    libc = "newlib";
+    platform = platforms.riscv-multiplatform "64";
+  };
+
+  riscv32-embedded = {
+    config = "riscv32-none-elf";
+    libc = "newlib";
+    platform = platforms.riscv-multiplatform "32";
+  };
+
   msp430 = {
     config = "msp430-elf";
     libc = "newlib";
@@ -104,6 +116,12 @@ rec {
 
   avr = {
     config = "avr";
+  };
+
+  vc4 = {
+    config = "vc4-elf";
+    libc = "newlib";
+    platform = {};
   };
 
   arm-embedded = {
@@ -152,8 +170,8 @@ rec {
   iphone64 = {
     config = "aarch64-apple-ios";
     # config = "aarch64-apple-darwin14";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -162,8 +180,8 @@ rec {
   iphone32 = {
     config = "armv7a-apple-ios";
     # config = "arm-apple-darwin10";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneOS";
     useiOSPrebuilt = true;
     platform = {};
@@ -172,8 +190,8 @@ rec {
   iphone64-simulator = {
     config = "x86_64-apple-ios";
     # config = "x86_64-apple-darwin14";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};
@@ -182,8 +200,8 @@ rec {
   iphone32-simulator = {
     config = "i686-apple-ios";
     # config = "i386-apple-darwin11";
-    sdkVer = "10.2";
-    xcodeVer = "8.2";
+    sdkVer = "12.4";
+    xcodeVer = "10.3";
     xcodePlatform = "iPhoneSimulator";
     useiOSPrebuilt = true;
     platform = {};
@@ -195,7 +213,7 @@ rec {
 
   # 32 bit mingw-w64
   mingw32 = {
-    config = "i686-pc-mingw32";
+    config = "i686-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
@@ -203,7 +221,7 @@ rec {
   # 64 bit mingw-w64
   mingwW64 = {
     # That's the triplet they use in the mingw-w64 docs.
-    config = "x86_64-pc-mingw32";
+    config = "x86_64-w64-mingw32";
     libc = "msvcrt"; # This distinguishes the mingw (non posix) toolchain
     platform = {};
   };
@@ -224,4 +242,9 @@ rec {
     useLLVM = true;
   };
 
+  # Ghcjs
+  ghcjs = {
+    config = "js-unknown-ghcjs";
+    platform = {};
+  };
 }

@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools,
+{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools,
   qtx11extras, qtsvg, xorg, lxqt-build-tools, libfm-qt, libexif }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "lximage-qt";
   version = "0.14.1";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libexif
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The image viewer and screenshot tool for lxqt";
     homepage = https://github.com/lxqt/lximage-qt;
     license = licenses.gpl2;

@@ -1,19 +1,19 @@
 { stdenv, fetchurl, pkgconfig, intltool, gnome3
-, iconnamingutils, gtk3, gdk_pixbuf, librsvg, hicolor-icon-theme }:
+, iconnamingutils, gtk3, gdk-pixbuf, librsvg, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "adwaita-icon-theme-${version}";
-  version = "3.32.0";
+  pname = "adwaita-icon-theme";
+  version = "3.34.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "11ij35na8nisvxx3qh527iz33h6z2q1a7iinqyp7p65v0zjbd3b9";
+    url = "mirror://gnome/sources/adwaita-icon-theme/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "025rj1fskw1y448hiar4a9icyzpyr242nlh9xhsmyp8jb71dihp7";
   };
 
   # For convenience, we can specify adwaita-icon-theme only in packages
   propagatedBuildInputs = [ hicolor-icon-theme ];
 
-  buildInputs = [ gdk_pixbuf librsvg ];
+  buildInputs = [ gdk-pixbuf librsvg ];
 
   nativeBuildInputs = [ pkgconfig intltool iconnamingutils gtk3 ];
 

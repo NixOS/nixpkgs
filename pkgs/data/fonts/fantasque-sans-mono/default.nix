@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "1.7.2";
+  version = "1.8.0";
 in
 
 fetchzip rec {
@@ -15,7 +15,7 @@ fetchzip rec {
     unzip -j $downloadedFile README.md -d $out/share/doc/${name}
   '';
 
-  sha256 = "1fwvbqfrgb539xybwdawvwa8cg4f215kw905rgl9a6p0iwa1nxqk";
+  sha256 = "07y2w6xzkbaj6vr95fvvnmwq1pw9jib4z02xf8937dx812yic9ni";
 
   meta = with lib; {
     homepage = https://github.com/belluzj/fantasque-sans;

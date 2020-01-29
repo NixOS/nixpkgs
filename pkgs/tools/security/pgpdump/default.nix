@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pgpdump-${version}";
+  pname = "pgpdump";
   version = "0.33";
 
   src = fetchFromGitHub {

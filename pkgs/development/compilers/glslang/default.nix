@@ -1,16 +1,29 @@
-{ stdenv, fetchFromGitHub, cmake, bison, jq, python, spirv-tools, spirv-headers }:
+{ stdenv, fetchFromGitHub
+, bison
+, cmake
+, jq
+, python3
+, spirv-headers
+, spirv-tools
+}:
+
 stdenv.mkDerivation rec {
-  name = "glslang-${version}";
-  version = "7.11.3113";
+  pname = "glslang";
+  version = "7.11.3214";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "glslang";
-    rev = "${version}";
-    sha256 = "1kzv2b4q1fddxd7c0hc754nd6rw6y9vijb9fsi13xzzq9dficgb6";
+    rev = version;
+    sha256 = "0dqjga0lcza006fhac26zp2plbq4gx8a6nsmrwkqlzji6lw1jins";
   };
 
-  nativeBuildInputs = [ cmake python bison jq ];
+  # These get set at all-packages, keep onto them for child drvs
+  passthru = {
+    inherit spirv-tools spirv-headers;
+  };
+
+  nativeBuildInputs = [ cmake python3 bison jq ];
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -18,6 +31,7 @@ stdenv.mkDerivation rec {
     ln -s "${spirv-headers.src}" External/spirv-tools/external/spirv-headers
   '';
 
+  # Ensure spirv-headers and spirv-tools match exactly to what is expected
   preConfigure = ''
     HEADERS_COMMIT=$(jq -r < known_good.json '.commits|map(select(.name=="spirv-tools/external/spirv-headers"))[0].commit')
     TOOLS_COMMIT=$(jq -r < known_good.json '.commits|map(select(.name=="spirv-tools"))[0].commit')

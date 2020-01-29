@@ -1,4 +1,4 @@
-{ writeText, bazel, bazelTest, runLocal }:
+{ writeText, bazel, bazelTest, runLocal, distDir }:
 
 let
   WORKSPACE = writeText "WORKSPACE" ''
@@ -45,7 +45,7 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         run \
-          --host_javabase='@local_jdk//:jdk' \
+      --distdir=${distDir} \
           //python:bin
     '';
   };

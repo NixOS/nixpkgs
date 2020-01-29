@@ -3,7 +3,7 @@
 
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "pdf2htmlEX-0.14.6";
 
   src = fetchFromGitHub {

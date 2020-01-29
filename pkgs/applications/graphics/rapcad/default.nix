@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.8";
-  name = "rapcad-${version}";
+  pname = "rapcad";
 
   src = fetchFromGitHub {
     owner = "gilesbathgate";

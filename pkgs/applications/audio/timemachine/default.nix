@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "timemachine";
-  version = "0.3.3";
+  version = "0.3.4";
   src = fetchFromGitHub {
     owner = "swh";
     repo = "timemachine";
     rev = "v${version}";
-    sha256 = "1jsvd29wiqigxyqxl2xjklla11fwyjy68vqivcnlr9f2af4ylym8";
+    sha256 = "16fgyw6jnscx9279dczv72092dddghwlp53rkfw469kcgvjhwx0z";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./autogen.sh";
 
-  NIX_LDFLAGS =  [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
   meta = {
     description = "JACK audio recorder";

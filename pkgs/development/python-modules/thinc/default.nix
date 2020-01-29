@@ -8,7 +8,7 @@
 , cymem
 , darwin
 , msgpack-numpy
-, msgpack-python
+, msgpack
 , preshed
 , numpy
 , murmurhash
@@ -28,11 +28,11 @@
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.0.4";
+  version = "7.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "14v8ygjrkj63dwd4pi490ld6i2d8n8wzcf15hnacjjfwij93pa1q";
+    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
    cython
    cymem
    msgpack-numpy
-   msgpack-python
+   msgpack
    preshed
    numpy
    murmurhash
@@ -65,11 +65,6 @@ buildPythonPackage rec {
     pytest
   ];
 
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6"
-  '';
-
   # Cannot find cython modules.
   doCheck = false;
 
@@ -81,6 +76,6 @@ buildPythonPackage rec {
     description = "Practical Machine Learning for NLP in Python";
     homepage = https://github.com/explosion/thinc;
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu danieldk sdll ];
     };
 }

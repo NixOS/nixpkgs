@@ -3,10 +3,13 @@
 let
   gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
   self = stdenv.mkDerivation {
-    name = "clang-${version}";
+    pname = "clang";
+    inherit version;
+
+    src = fetch "cfe" "0qsyyb40iwifhhlx9a3drf8z6ni6zwyk3bvh0kx2gs6yjsxwxi76";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0qsyyb40iwifhhlx9a3drf8z6ni6zwyk3bvh0kx2gs6yjsxwxi76"}
+      unpackFile $src
       mv cfe-${version}.src clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
@@ -24,7 +27,10 @@ let
     (stdenv.lib.optional stdenv.isLinux "-DGCC_INSTALL_PREFIX=${gcc}") ++
     (stdenv.lib.optional (stdenv.cc.libc != null) "-DC_INCLUDE_DIRS=${stdenv.cc.libc}/include");
 
-    patches = [ ./purity.patch ];
+    patches = [
+      ./purity.patch
+      ./0001-Fix-compilation-w-gcc9.patch
+    ];
 
     postPatch = ''
       sed -i -e 's/Args.hasArg(options::OPT_nostdlibinc)/true/' lib/Driver/Tools.cpp

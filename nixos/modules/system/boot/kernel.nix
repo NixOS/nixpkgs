@@ -36,6 +36,7 @@ in
 
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
+      type = types.unspecified // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
           inherit randstructSeed;
@@ -107,7 +108,7 @@ in
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
+      example = literalExample "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
@@ -196,7 +197,7 @@ in
     # (so you don't need to reboot to have changes take effect).
     boot.kernelParams =
       [ "loglevel=${toString config.boot.consoleLogLevel}" ] ++
-      optionals config.boot.vesa [ "vga=0x317" ];
+      optionals config.boot.vesa [ "vga=0x317" "nomodeset" ];
 
     boot.kernel.sysctl."kernel.printk" = mkDefault config.boot.consoleLogLevel;
 
@@ -255,12 +256,11 @@ in
 
     # Create /etc/modules-load.d/nixos.conf, which is read by
     # systemd-modules-load.service to load required kernel modules.
-    environment.etc = singleton
-      { target = "modules-load.d/nixos.conf";
-        source = kernelModulesConf;
+    environment.etc =
+      { "modules-load.d/nixos.conf".source = kernelModulesConf;
       };
 
-    systemd.services."systemd-modules-load" =
+    systemd.services.systemd-modules-load =
       { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ kernelModulesConf ];
         serviceConfig =

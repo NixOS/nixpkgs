@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qtdeclarative , qttools, qtbase, qmake }:
 
 stdenv.mkDerivation rec {
-  name = "qtinstaller-${version}";
+  pname = "qtinstaller";
 
   propagatedBuildInputs = [ qtdeclarative qttools ];
   nativeBuildInputs = [ qmake ];

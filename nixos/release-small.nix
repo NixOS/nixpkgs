@@ -11,7 +11,7 @@ let
 
   nixpkgsSrc = nixpkgs; # urgh
 
-  pkgs = import ./.. {};
+  pkgs = import ./.. { system = "x86_64-linux"; };
 
   lib = pkgs.lib;
 
@@ -32,8 +32,7 @@ in rec {
     tests = {
       inherit (nixos'.tests)
         containers-imperative
-        containers-ipv4
-        containers-ipv6
+        containers-ip
         firewall
         ipv6
         login

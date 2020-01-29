@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "jpeginfo-${version}";
+  pname = "jpeginfo";
   version = "1.6.1";
 
   src = fetchurl {
-    url = "https://www.kokkonen.net/tjko/src/${name}.tar.gz";
+    url = "https://www.kokkonen.net/tjko/src/${pname}-${version}.tar.gz";
     sha256 = "0lvn3pnylyj56158d3ix9w1gas1s29klribw9bz1xym03p7k37k2";
   };
 

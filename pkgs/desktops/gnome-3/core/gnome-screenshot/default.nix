@@ -4,13 +4,13 @@
 
 let
   pname = "gnome-screenshot";
-  version = "3.32.0";
+  version = "3.34.0";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "09ha7dizjm5ymqpjyrqd10ijfb3xlqc1mwg9ajkrbfry11q9yq4b";
+    sha256 = "1rmiq890j7gfn5mcz31xy6jfnnxgc17dq67bhn2k9m5ylbvza2n8";
   };
 
   doCheck = true;
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "${pname}";
+      packageName = pname;
       attrPath = "gnome3.${pname}";
     };
   };

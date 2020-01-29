@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, libelf, which, pkgconfig, freeglut
 , avrgcc, avrlibc
-, libGLU_combined
+, libGLU, libGL
 , GLUT }:
 
 stdenv.mkDerivation rec {
-  name = "simavr-${version}";
+  pname = "simavr";
   version = "1.5";
 
   src = fetchFromGitHub {
@@ -22,8 +22,10 @@ stdenv.mkDerivation rec {
     "AVR=avr-"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
+
   nativeBuildInputs = [ which pkgconfig avrgcc ];
-  buildInputs = [ libelf freeglut libGLU_combined ]
+  buildInputs = [ libelf freeglut libGLU libGL ]
     ++ stdenv.lib.optional stdenv.isDarwin GLUT;
 
   # Hack to avoid TMPDIR in RPATHs.

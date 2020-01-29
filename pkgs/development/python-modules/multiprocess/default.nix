@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "multiprocess";
-  version = "0.70.7";
+  version = "0.70.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "46479a327388df8e77ad268892f2e73eac06d6271189b868ce9d4f95474e58e3";
+    sha256 = "9fd5bd990132da77e73dec6e9613408602a4612e1d73caf2e2b813d2b61508e5";
   };
 
   propagatedBuildInputs = [ dill ];

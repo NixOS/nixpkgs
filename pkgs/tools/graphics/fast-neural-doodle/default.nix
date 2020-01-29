@@ -2,7 +2,7 @@
   , python, numpy, scipy, h5py, scikitlearn, pillow
   }:
 stdenv.mkDerivation rec {
-  name = "fast-neural-doodle-${version}";
+  pname = "fast-neural-doodle";
   version = "0.0pre2016-07-01";
   buildInputs = [
     torch torch-hdf5 python numpy h5py scikitlearn scipy pillow

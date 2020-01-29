@@ -2,10 +2,11 @@
 
 let version = "0.2.4"; in
 stdenv.mkDerivation rec {
-  name = "mpc123-${version}";
+  pname = "mpc123";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/mpc123/version%20${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/mpc123/version%20${version}/${pname}-${version}.tar.gz";
     sha256 = "0sf4pns0245009z6mbxpx7kqy4kwl69bc95wz9v23wgappsvxgy1";
   };
 

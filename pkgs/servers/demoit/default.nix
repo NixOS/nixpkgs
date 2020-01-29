@@ -3,7 +3,7 @@
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
+buildGoPackage {
   pname = "demoit";
   version = "unstable-2019-05-10";
   goPackagePath = "github.com/dgageot/demoit";

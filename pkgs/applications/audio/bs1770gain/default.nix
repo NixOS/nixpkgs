@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ffmpeg, sox }:
 
 stdenv.mkDerivation rec {
-  name = "bs1770gain-${version}";
+  pname = "bs1770gain";
   version = "0.5.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/bs1770gain/${name}.tar.gz";
+    url = "mirror://sourceforge/bs1770gain/${pname}-${version}.tar.gz";
     sha256 = "1p6yz5q7czyf9ard65sp4kawdlkg40cfscr3b24znymmhs3p7rbk";
   };
 

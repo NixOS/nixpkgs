@@ -5,10 +5,11 @@ let
 
   inherit (python3.pkgs) python pygobject3 requests;
 in stdenv.mkDerivation rec {
-  name = "chrome-gnome-shell-${version}";
+  pname = "chrome-gnome-shell";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://gnome/sources/chrome-gnome-shell/${version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/chrome-gnome-shell/${version}/${pname}-${version}.tar.xz";
     sha256 = "0f54xyamm383ypbh0ndkza0pif6ljddg2f947p265fkqj3p4zban";
   };
 
@@ -34,7 +35,7 @@ in stdenv.mkDerivation rec {
     description = "GNOME Shell integration for Chrome";
     homepage = https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome;
     longDescription = ''
-      To use the integration, install the <link xlink:href="https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome/Installation">browser extension</link>, and then set <option>services.gnome3.chrome-gnome-shell.enable</option> to <literal>true</literal>. For Firefox based browsers, you will also need to build the wrappers with <option>nixpkgs.config.firefox.enableGnomeExtensions</option> set to <literal>true</literal>.
+      To use the integration, install the <link xlink:href="https://wiki.gnome.org/Projects/GnomeShellIntegrationForChrome/Installation">browser extension</link>, and then set <option>services.gnome3.chrome-gnome-shell.enable</option> to <literal>true</literal>.
     '';
     license = licenses.gpl3;
     maintainers = gnome3.maintainers;

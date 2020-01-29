@@ -21,13 +21,13 @@
 
 buildPythonPackage rec {
   pname = "qiskit";
-  version = "0.7.3";
+  version = "0.14.0";
 
   disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "63e7a7c3033fe955d715cc825b3fb61d27c25ad66e1761493ca2243b5dbfb4f9";
+    sha256 = "d086a21d0eee61bb12e1f2cd6148a7292005fd10584ca33d6c404dd5c53ba95f";
   };
 
   buildInputs = [ cmake ]
@@ -59,5 +59,7 @@ buildPythonPackage rec {
     maintainers = with stdenv.lib.maintainers; [
       pandaman
     ];
+    # Needs to be updated and have its new dependencies added
+    broken = true;
   };
 }

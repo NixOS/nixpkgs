@@ -1,10 +1,10 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python, pbzx, lib }:
+{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib }:
 
 let
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
     version = "10.12";
-    name    = "MacOS_SDK-${version}";
+    pname = "MacOS_SDK";
 
     # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
     #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version
@@ -12,13 +12,12 @@ let
     #  3. ???
     #  4. Profit
     src = fetchurl {
-      url    = "http://swcdn.apple.com/content/downloads/28/09/091-29862/pafhn2u002b9slnrxzy9p86rpedycnjhb5/DevSDK_OSX1012.pkg";
-      sha256 = "1sggc70rypqwcjwr7ciavw8sczwll16cwqxdxrbw7r2qvy3b0nhx";
+      url    = "http://swcdn.apple.com/content/downloads/33/36/041-90419-A_7JJ4H9ZHO2/xs88ob5wjz6riz7g6764twblnvksusg4ps/DevSDK_OSX1012.pkg";
+      sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    buildInputs = [ xar cpio python pbzx ];
+    nativeBuildInputs = [ xar cpio python3 pbzx ];
 
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
@@ -52,7 +51,7 @@ let
   framework = name: deps: stdenv.mkDerivation {
     name = "apple-framework-${name}";
 
-    phases = [ "installPhase" "fixupPhase" ];
+    dontUnpack = true;
 
     # because we copy files from the system
     preferLocalBuild = true;
@@ -137,7 +136,7 @@ in rec {
   libs = {
     xpc = stdenv.mkDerivation {
       name   = "apple-lib-xpc";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include
@@ -150,13 +149,13 @@ in rec {
 
     Xplugin = stdenv.mkDerivation {
       name   = "apple-lib-Xplugin";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       # Not enough
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
 
       propagatedBuildInputs = with frameworks; [
-        OpenGL ApplicationServices Carbon IOKit pkgs.darwin.CF CoreGraphics CoreServices CoreText
+        OpenGL ApplicationServices Carbon IOKit CoreGraphics CoreServices CoreText
       ];
 
       installPhase = ''
@@ -168,7 +167,7 @@ in rec {
 
     utmp = stdenv.mkDerivation {
       name   = "apple-lib-utmp";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include
@@ -185,6 +184,10 @@ in rec {
       __propagatedImpureHostDeps = drv.__propagatedImpureHostDeps ++ [
         "/System/Library/PrivateFrameworks/"
       ];
+    });
+
+    CoreFoundation = stdenv.lib.overrideDerivation super.CoreFoundation (drv: {
+      setupHook = ./cf-setup-hook.sh;
     });
 
     CoreMedia = stdenv.lib.overrideDerivation super.CoreMedia (drv: {
@@ -211,11 +214,18 @@ in rec {
           --replace "QuartzCore/../Frameworks/CoreImage.framework/Headers" "CoreImage"
       '';
     });
+
+    MetalKit = stdenv.lib.overrideDerivation super.MetalKit (drv: {
+      installPhase = drv.installPhase + ''
+        mkdir -p $out/include/simd
+        cp ${lib.getDev sdk}/include/simd/*.h $out/include/simd/
+      '';
+    });
   };
 
   bareFrameworks = stdenv.lib.mapAttrs framework (import ./frameworks.nix {
     inherit frameworks libs;
-    inherit (pkgs.darwin) CF cf-private libobjc;
+    inherit (pkgs.darwin) libobjc;
   });
 
   frameworks = bareFrameworks // overrides bareFrameworks;

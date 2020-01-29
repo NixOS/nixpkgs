@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, qttools, lxqt-build-tools }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, qttools, lxqt-build-tools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qtermwidget";
   version = "0.14.1";
 
@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake lxqt-build-tools ];
 
-  buildInputs = [ qtbase qttools];
+  buildInputs = [ qtbase qttools ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A terminal emulator widget for Qt 5";
     homepage = https://github.com/lxqt/qtermwidget;
     license = licenses.gpl2;

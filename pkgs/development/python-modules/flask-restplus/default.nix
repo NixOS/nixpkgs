@@ -18,11 +18,11 @@
 
 buildPythonPackage rec {
   pname = "flask-restplus";
-  version = "0.12.1";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3fad697e1d91dfc13c078abcb86003f438a751c5a4ff41b84c9050199d2eab62";
+    sha256 = "0p4zz8b5bwbw7w0vhbyihl99d2gw13cb81rxzj4z626a1cnl8vm6";
   };
 
   checkInputs = [ nose blinker tzlocal mock rednose ];

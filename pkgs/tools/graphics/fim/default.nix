@@ -10,11 +10,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fim-${version}";
+  pname = "fim";
   version = "0.6";
 
   src = fetchurl {
-    url = "mirror://savannah/fbi-improved/${name}-trunk.tar.gz";
+    url = "mirror://savannah/fbi-improved/${pname}-${version}-trunk.tar.gz";
     sha256 = "124b7c4flx5ygmy5sqq0gpvxqzafnknbcj6f45ddnbdxik9lazzp";
   };
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     ++ optional jpegSupport libjpeg
     ++ optional pngSupport libpng;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional x11Support "-lSDL";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString x11Support "-lSDL";
 
   meta = with stdenv.lib; {
     description = "A lightweight, highly customizable and scriptable image viewer";

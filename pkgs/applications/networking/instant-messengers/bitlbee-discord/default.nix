@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "bitlbee-discord-${version}";
+  pname = "bitlbee-discord";
   version = "0.4.2";
 
   src = fetchFromGitHub {

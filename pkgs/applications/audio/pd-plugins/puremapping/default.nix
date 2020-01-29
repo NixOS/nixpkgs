@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, puredata }:
 
 stdenv.mkDerivation rec {
-  name = "puremapping-${version}";
+  pname = "puremapping";
   version = "20160130";
 
   src = fetchurl {

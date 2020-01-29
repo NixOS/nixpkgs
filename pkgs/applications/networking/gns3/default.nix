@@ -1,16 +1,27 @@
 { callPackage }:
 
 let
-  stableVersion = "2.1.21";
-  previewVersion = "2.2.0b3";
+  stableVersion = "2.2.5";
+  previewVersion = stableVersion;
   addVersion = args:
     let version = if args.stable then stableVersion else previewVersion;
         branch = if args.stable then "stable" else "preview";
     in args // { inherit version branch; };
-  mkGui = args: callPackage (import ./gui.nix (addVersion args)) { };
-  mkServer = args: callPackage (import ./server.nix (addVersion args)) { };
-  guiSrcHash = "1ydmib302r1cpm2z9pzsfp4ygxrbmskwszsip397n92qx3l9a9v3";
-  serverSrcHash = "1ahn1xq1f0wx46i0c8idz96dxfbakk37pqi6amy91594mdlp8yr4";
+  extraArgs = {
+    mkOverride = attrname: version: sha256:
+      self: super: {
+        ${attrname} = super.${attrname}.overridePythonAttrs (oldAttrs: {
+          inherit version;
+          src = oldAttrs.src.override {
+            inherit version sha256;
+          };
+        });
+      };
+  };
+  mkGui = args: callPackage (import ./gui.nix (addVersion args // extraArgs)) { };
+  mkServer = args: callPackage (import ./server.nix (addVersion args // extraArgs)) { };
+  guiSrcHash = "1yxwbz93x9hn5y6dir8v7bdfsmfgppvjg4z88l8gx82hhf2476fx";
+  serverSrcHash = "1d3m8qrz82g8ii6q6j015wqwp6j0415fbqbjvw43zhdx5mnn962d";
 in {
   guiStable = mkGui {
     stable = true;
@@ -18,7 +29,7 @@ in {
   };
   guiPreview = mkGui {
     stable = false;
-    sha256Hash = "1bzy95zqinwrrga7qj6gvpzvz34w4ddhvgmpgq3p1lwzixpqg1w7";
+    sha256Hash = guiSrcHash;
   };
 
   serverStable = mkServer {
@@ -27,6 +38,6 @@ in {
   };
   serverPreview = mkServer {
     stable = false;
-    sha256Hash = "1bq4ww6qhhl0qw6yj7cf7yg54yb4y8mxlnwss6hgbyfv5fz9rxjp";
+    sha256Hash = serverSrcHash;
   };
 }

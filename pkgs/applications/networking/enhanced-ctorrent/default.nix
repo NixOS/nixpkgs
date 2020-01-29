@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "3.3.2";
   pname = "enhanced-ctorrent-dhn";
 

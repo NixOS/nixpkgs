@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-timepp-${version}";
+  pname = "gnome-shell-extension-timepp";
   version = "unstable-2019-03-30";
 
   src = fetchFromGitHub {
@@ -22,5 +22,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/zagortenay333/timepp__gnome;
     license = licenses.gpl3;
     maintainers = with maintainers; [ svsdep ];
+    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Dosen't support 3.34 https://github.com/zagortenay333/timepp__gnome/issues/113
   };
 }

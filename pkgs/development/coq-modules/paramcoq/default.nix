@@ -15,7 +15,7 @@ let params =
       sha256 = "002xabhjlph394vydw3dx8ipv5ry2nq3py4440bk9a18ljx0w6ll";
     };
   };
-  param = params."${coq.coq-version}";
+  param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   ++ (with coq.ocamlPackages; [ ocaml findlib camlp5 ])
   ;
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   passthru = {
     compatibleCoqVersions = v: builtins.hasAttr v params;

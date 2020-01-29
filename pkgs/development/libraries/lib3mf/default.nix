@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, libuuid, gtest }:
+{ stdenv, fetchFromGitHub, cmake, ninja, libuuid, libossp_uuid, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "lib3mf";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ libuuid ];
+  buildInputs = if stdenv.isDarwin then [ libossp_uuid ] else [ libuuid ];
 
   postPatch = ''
     rmdir UnitTests/googletest

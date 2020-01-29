@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-faulthandler";
-  version = "1.5.0";
+  version = "2.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf8634c3fd6309ef786ec03b913a5366163fdb094ebcfdebc35626400d790e0d";
+    sha256 = "ed72bbce87ac344da81eb7d882196a457d4a1026a3da4a57154dacd85cd71ae5";
   };
 
   nativeBuildInputs = [ setuptools_scm pytest ];

@@ -36,7 +36,7 @@ in {
     };
 
     config = mkOption {
-      type = attrsOf (nullOr (either (either bool int) str));
+      type = attrsOf (nullOr (oneOf [ bool int str ]));
       default = {};
       example = literalExample ''
         {
@@ -74,7 +74,10 @@ in {
       webVaultEnabled = mkDefault true;
     };
 
-    users.users.bitwarden_rs = { inherit group; };
+    users.users.bitwarden_rs = {
+      inherit group;
+      isSystemUser = true;
+    };
     users.groups.bitwarden_rs = { };
 
     systemd.services.bitwarden_rs = {

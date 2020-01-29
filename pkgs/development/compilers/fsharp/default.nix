@@ -3,7 +3,7 @@
 { stdenv, fetchurl, mono, pkgconfig, dotnetbuildhelpers, autoconf, automake, which }:
 
 stdenv.mkDerivation rec {
-  name = "fsharp-${version}";
+  pname = "fsharp";
   version = "4.0.1.1";
 
   src = fetchurl {

@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala
-, gtk3, granite, wingpanel, libgee, libxml2, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, gtk3
+, granite
+, wingpanel
+, libgee
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-nightlight";
@@ -14,7 +25,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -24,18 +35,16 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     vala
-    wrapGAppsHook
   ];
 
   buildInputs = [
-    elementary-icon-theme
     granite
     gtk3
     libgee
     wingpanel
   ];
 
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
+  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder "out"}/lib/wingpanel";
 
   meta = with stdenv.lib; {
     description = "Night Light Indicator for Wingpanel";

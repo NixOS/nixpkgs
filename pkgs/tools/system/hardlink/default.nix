@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pcre2 }:
 
 
-stdenv.mkDerivation rec {
-  name = "hardlink-${version}";
+stdenv.mkDerivation {
+  pname = "hardlink";
   version = "1.3-4";
 
   src = fetchurl {

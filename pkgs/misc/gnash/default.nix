@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, autoreconfHook
+{ stdenv, fetchgit, fetchpatch, autoreconfHook
 , pkgconfig, libtool, boost, SDL
 , glib, pango, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
@@ -6,7 +6,9 @@
 # renderers
 , enableAGG    ? true,  agg   ? null
 , enableCairo  ? false, cairo ? null
-, enableOpenGL ? false, libGLU_combined  ? null
+, enableOpenGL ? false
+, libGLU ? null
+, libGL  ? null
 
 # GUI toolkits
 , enableGTK ? true,  gtk2 ? null, gnome2 ? null
@@ -45,7 +47,7 @@ in
 # renderers
 assert enableAGG    -> available agg;
 assert enableCairo  -> available cairo;
-assert enableOpenGL -> available libGLU_combined;
+assert enableOpenGL -> all available [ libGLU libGL ];
 
 # GUI toolkits
 assert enableGTK -> all available [ gtk2 gnome2.gtkglext gnome2.GConf ];
@@ -57,15 +59,15 @@ assert enableFFmpeg    -> available ffmpeg_2 ;
 
 # misc
 assert enableJemalloc -> available jemalloc;
-assert enableHwAccel  -> available libGLU_combined;
+assert enableHwAccel  -> all available [ libGLU libGL ];
 assert enablePlugins  -> all available [ xulrunner npapi_sdk ];
 
 assert length toolkits  == 0 -> throw "at least one GUI toolkit must be enabled";
 assert length renderers == 0 -> throw "at least one renderer must be enabled";
 
 
-stdenv.mkDerivation rec {
-  name = "gnash-${version}";
+stdenv.mkDerivation {
+  pname = "gnash";
   version = "0.8.11-2019-30-01";
 
   src = fetchgit {
@@ -85,13 +87,20 @@ stdenv.mkDerivation rec {
     libpng libjpeg giflib pango atk
   ] ++ optional  enableAGG       agg
     ++ optional  enableCairo     cairo
-    ++ optional  enableOpenGL    libGLU_combined
     ++ optional  enableQt        qt4
     ++ optional  enableFFmpeg    ffmpeg_2
     ++ optional  enableJemalloc  jemalloc
-    ++ optional  enableHwAccel   libGLU_combined
+    ++ optional  enableHwAccel   [ libGL libGLU ]
+    ++ optionals enableOpenGL    [ libGL libGLU ]
     ++ optionals enablePlugins   [ xulrunner npapi_sdk ]
     ++ optionals enableGTK       [ gtk2 gnome2.gtkglext gnome2.GConf ];
+
+  patches = [
+    (fetchpatch { # fix compilation due to bad detection of libgif version: https://savannah.gnu.org/patch/index.php?9873
+      url = "https://savannah.gnu.org/patch/download.php?file_id=47859";
+      sha256 = "0aimayzgi5065gkcfcr8d5lkd9c0471q7dqmln42hjzq847n6d5y";
+    })
+  ];
 
   configureFlags = with stdenv.lib; [
     "--with-boost-incl=${boost.dev}/include"

@@ -18,7 +18,7 @@ let # The gnu-smalltalk project has a dependency to the libsigsegv library.
 in stdenv.mkDerivation rec {
 
   version = "3.2.5";
-  name = "gnu-smalltalk-${version}";
+  pname = "gnu-smalltalk";
 
   src = fetchurl {
     url = "mirror://gnu/smalltalk/smalltalk-${version}.tar.xz";

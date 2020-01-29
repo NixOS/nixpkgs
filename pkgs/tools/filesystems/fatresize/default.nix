@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
 
   version = "1.0.2";
-  name = "fatresize-${version}";
+  pname = "fatresize";
 
   src = fetchurl {
     url = "mirror://sourceforge/fatresize/fatresize-${version}.tar.bz2";
@@ -25,9 +25,7 @@ stdenv.mkDerivation rec {
 
   # Filesystem resize functions were reintroduced in parted 3.1 due to no other available free alternatives
   # but in a sepparate library -> libparted-fs-resize --- that's why the added LDFLAG
-  makeFlags = ''
-    LDFLAGS=-lparted-fs-resize
-  '';
+  makeFlags = [ "LDFLAGS=-lparted-fs-resize" ];
 
   propagatedBuildInputs = [ parted utillinux ];
 

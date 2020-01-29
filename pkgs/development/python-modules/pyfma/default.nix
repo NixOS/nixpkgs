@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "pyfma";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "79514717f8e632a0fb165e3d61222ed61202bea7b0e082f7b41c91e738f1fbc9";
+    sha256 = "2c9ea44c5e30ca8318ca794ff1e3941d3dc7958901b1a9c430d38734bf7b6f8d";
   };
 
   buildInputs = [

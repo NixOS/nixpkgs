@@ -1,0 +1,25 @@
+From 7bb0d507cbb0122f167127b9f6460bd53d8234de Mon Sep 17 00:00:00 2001
+From: worldofpeace <worldofpeace@users.noreply.github.com>
+Date: Sat, 16 Mar 2019 16:07:24 -0400
+Subject: [PATCH] 'sysconfdir' will be etc not /etc for install
+
+---
+ data/meson.build | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/data/meson.build b/data/meson.build
+index fd54b75..b1120ae 100644
+--- a/data/meson.build
++++ b/data/meson.build
+@@ -20,7 +20,7 @@ i18n.merge_file (
+ 
+ install_data(
+     meson.project_name() + '.conf',
+-    install_dir: join_paths(get_option('sysconfdir'), 'lightdm')
++    install_dir: join_paths(get_option('prefix'), 'etc', 'lightdm')
+ )
+ 
+ test (
+-- 
+2.19.2
+

@@ -12,7 +12,8 @@ in
 with stdenv.lib;
 with perlPackages;
 stdenv.mkDerivation {
-  name = "lbdb-${version}";
+  pname = "lbdb";
+  inherit version;
   src = fetchurl {
     url = "http://www.spinnaker.de/lbdb/download/lbdb_${version}.tar.gz";
     sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";

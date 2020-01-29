@@ -1,7 +1,7 @@
 {
   stdenv, fetchurl, lib,
-  libxslt, pandoc, asciidoctor, pkgconfig,
-  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf, qtbase, qttools, qtsvg,
+  pkgconfig, libxslt, libxml2, docbook_xml_dtd_45, docbook_xsl, asciidoc,
+  dbus-glib, libcap_ng, libqb, libseccomp, polkit, protobuf,
   audit,
   libgcrypt ? null,
   libsodium ? null
@@ -12,21 +12,23 @@ with stdenv.lib;
 assert libgcrypt != null -> libsodium == null;
 
 stdenv.mkDerivation rec {
-  version = "0.7.4";
-  name = "usbguard-${version}";
+  version = "0.7.6";
+  pname = "usbguard";
 
   repo = "https://github.com/USBGuard/usbguard";
 
   src = fetchurl {
-    url = "${repo}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "1qkskd6q5cwlh2cpcsbzmmmgk6w63z0825wlb2sjwqq3kfgwjb3k";
+    url = "${repo}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "0gzhs8s4aka86mkcjib36z54si939ki4bmk46p6v8kln1fixad3j";
   };
 
   nativeBuildInputs = [
-    libxslt
-    asciidoctor
-    pandoc # for rendering documentation
+    asciidoc
     pkgconfig
+    libxslt # xsltproc
+    libxml2 # xmllint
+    docbook_xml_dtd_45
+    docbook_xsl
   ];
 
   buildInputs = [
@@ -37,10 +39,6 @@ stdenv.mkDerivation rec {
     polkit
     protobuf
     audit
-
-    qtbase
-    qtsvg
-    qttools
   ]
   ++ (lib.optional (libgcrypt != null) libgcrypt)
   ++ (lib.optional (libsodium != null) libsodium);
@@ -49,7 +47,6 @@ stdenv.mkDerivation rec {
     "--with-bundled-catch"
     "--with-bundled-pegtl"
     "--with-dbus"
-    "--with-gui-qt=qt5"
     "--with-polkit"
   ]
   ++ (lib.optional (libgcrypt != null) "--with-crypto-library=gcrypt")

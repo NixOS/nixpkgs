@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "interfacer-unstable-${version}";
+  pname = "interfacer-unstable";
   version = "2018-08-31";
   rev = "c20040233aedb03da82d460eca6130fcd91c629a";
 

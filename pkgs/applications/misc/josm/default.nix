@@ -1,12 +1,12 @@
 { fetchurl, stdenv, makeDesktopItem, makeWrapper, unzip, jdk11, libXxf86vm }:
 
 stdenv.mkDerivation rec {
-  name = "josm-${version}";
-  version = "15155";
+  pname = "josm";
+  version = "15628";
 
   src = fetchurl {
     url = "https://josm.openstreetmap.de/download/josm-snapshot-${version}.jar";
-    sha256 = "0qws5bgv7mm1iynsdrn7cdi16rd8k4139iia3bnjpm04xn69i5im";
+    sha256 = "19yn311h9x1434832i0awpv2n9vhbhkk1j1mi9zggy9f256f80c6";
   };
 
   buildInputs = [ jdk11 makeWrapper ];

@@ -1,27 +1,26 @@
-{ stdenv, fetchFromGitHub, qmake, qttools }:
+{ mkDerivation, lib, fetchFromGitHub, qmake, qttools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "gpxsee";
-  version = "7.8";
+  version = "7.20";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "1ymqz4wrl9ghkyyqi2vrnlyvz3fc84s3p8a1dkiqlvyvj360ck9j";
+    sha256 = "08scvhhdadzz9iydhpkn2k618bgw26z09y6nydi3hi8fc3xfnb8d";
   };
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qttools ];
 
   preConfigure = ''
-    substituteInPlace src/common/programpaths.cpp --replace /usr/share/ $out/share/
     lrelease lang/*.ts
   '';
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://www.gpxsee.org/;
     description = "GPS log file viewer and analyzer";
     longDescription = ''
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
       all common GPS log file formats.
     '';
     license = licenses.gpl3;
-    maintainers = [ maintainers.womfoo ];
+    maintainers = with maintainers; [ womfoo sikmir ];
     platforms = platforms.linux;
   };
 }

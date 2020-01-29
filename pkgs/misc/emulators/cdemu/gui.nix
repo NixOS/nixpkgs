@@ -1,15 +1,15 @@
 { callPackage, makeWrapper, gobject-introspection, cmake
-, python3Packages, gtk3, glib, libnotify, intltool, gnome3, gdk_pixbuf, librsvg }:
+, python3Packages, gtk3, glib, libnotify, intltool, gnome3, gdk-pixbuf, librsvg }:
 let
   pkg = import ./base.nix {
-    version = "3.2.1";
+    version = "3.2.3";
     pkgName = "gcdemu";
-    pkgSha256 = "0lmyvhbf57wcm8k2a33j2dhy4gblaiycy33q070gdrxi37xk7w5g";
+    pkgSha256 = "19vy1awha8s7cfja3a6npaf3rfy3pl3cbsh4vd609q9jz4v4lyg4";
   };
   inherit (python3Packages) python pygobject3;
 in callPackage pkg {
   buildInputs = [ python pygobject3 gtk3 glib libnotify intltool makeWrapper
-                  gnome3.adwaita-icon-theme gdk_pixbuf librsvg ];
+                  gnome3.adwaita-icon-theme gdk-pixbuf librsvg ];
   drvParams = {
     nativeBuildInputs = [ gobject-introspection cmake ];
     postFixup = ''

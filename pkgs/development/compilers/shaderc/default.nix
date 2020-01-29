@@ -24,7 +24,7 @@ let
     sha256 = "0qdnj34bkagszyvci6ifpqd7iqvybhmqzvc9lvqnls44qg90aqh2";
   };
 in stdenv.mkDerivation rec {
-  name = "shaderc-${version}";
+  pname = "shaderc";
   version = "2019.0";
 
   outputs = [ "out" "lib" "bin" "dev" "static" ];
@@ -47,10 +47,6 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     moveToOutput "lib/*.a" $static
   '';
-
-  preConfigure = ''cmakeFlags="$cmakeFlags -DCMAKE_INSTALL_BINDIR=$bin/bin"'';
-
-  enableParallelBuilding = true;
 
   cmakeFlags = [ "-DSHADERC_SKIP_TESTS=ON" ];
 

@@ -10,17 +10,10 @@
   # to run 32-bit guests.
   useKvmNestedVirt ? false,
   # Whether to run 64-bit guests instead of 32-bit. Requires nested KVM.
-  use64bitGuest ? false,
-  # Whether to enable the virtual UART in VirtualBox guests, allowing to see
-  # the guest console. There is currently a bug in VirtualBox where this will
-  # cause a crash if running with SW virtualization
-  # (https://www.virtualbox.org/ticket/18632). If you need to debug the tests
-  # then enable this and nested KVM to work around the crash (see above).
-  enableVBoxUART ? false
+  use64bitGuest ? false
 }:
 
 assert use64bitGuest -> useKvmNestedVirt;
-assert enableVBoxUART -> useKvmNestedVirt; # VirtualBox bug, see above
 
 with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
@@ -64,9 +57,6 @@ let
       "boot.trace" "panic=1" "boot.panic_on_fail"
       "init=${pkgs.writeScript "mini-init.sh" miniInit}"
     ];
-
-    # XXX: Remove this once TSS location detection has been fixed in VirtualBox
-    boot.kernelPackages = pkgs.linuxPackages_4_9;
 
     fileSystems."/" = {
       device = "vboxshare";
@@ -162,11 +152,9 @@ let
       "--register"
     ];
 
-    vmFlags = mkFlags (
-      (optionals enableVBoxUART [
-        "--uart1 0x3F8 4"
-        "--uartmode1 client /run/virtualbox-log-${name}.sock"
-      ]) ++ [
+    vmFlags = mkFlags ([
+      "--uart1 0x3F8 4"
+      "--uartmode1 client /run/virtualbox-log-${name}.sock"
       "--memory 768"
       "--audio none"
     ] ++ (attrs.vmFlags or []));
@@ -199,7 +187,7 @@ let
     ];
   in {
     machine = {
-      systemd.sockets."vboxtestlog-${name}" = mkIf enableVBoxUART {
+      systemd.sockets."vboxtestlog-${name}" = {
         description = "VirtualBox Test Machine Log Socket For ${name}";
         wantedBy = [ "sockets.target" ];
         before = [ "multi-user.target" ];
@@ -207,7 +195,7 @@ let
         socketConfig.Accept = true;
       };
 
-      systemd.services."vboxtestlog-${name}@" = mkIf enableVBoxUART {
+      systemd.services."vboxtestlog-${name}@" = {
         description = "VirtualBox Test Machine Log For ${name}";
         serviceConfig.StandardInput = "socket";
         serviceConfig.StandardOutput = "syslog";

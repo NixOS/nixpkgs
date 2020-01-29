@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.6";
-  name = "txt2tags-${version}";
+  pname = "txt2tags";
 
   dontBuild = true;
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   src = fetchurl {
-    url = "http://txt2tags.googlecode.com/files/${name}.tgz";
+    url = "http://txt2tags.googlecode.com/files/${pname}-${version}.tgz";
     sha256 = "0p5hql559pk8v5dlzgm75yrcxwvz4z30f1q590yzng0ghvbnf530";
   };
 

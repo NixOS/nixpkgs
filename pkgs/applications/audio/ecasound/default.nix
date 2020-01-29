@@ -14,12 +14,12 @@
 # TODO: fix readline, ncurses, lilv, liblo, liboil and python. See configure log.
 
 stdenv.mkDerivation rec {
-  name = "ecasound-${version}";
-  version = "2.9.1";
+  pname = "ecasound";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://ecasound.seul.org/download/ecasound-${version}.tar.gz";
-    sha256 = "1wyws3xc4f9pglrrqv6k9137sarv4asizqrxz8h0dn44rnzfiz1r";
+    sha256 = "1m7njfjdb7sqf0lhgc4swihgdr4snkg8v02wcly08wb5ar2fr2s6";
   };
 
   buildInputs = [ alsaLib audiofile libjack2 liblo liboil libsamplerate libsndfile lilv lv2 ];

@@ -42,15 +42,14 @@ in
 
     security.polkit.adminIdentities = mkOption {
       type = types.listOf types.str;
-      default = [ "unix-user:0" "unix-group:wheel" ];
+      default = [ "unix-group:wheel" ];
       example = [ "unix-user:alice" "unix-group:admin" ];
       description =
         ''
           Specifies which users are considered “administrators”, for those
           actions that require the user to authenticate as an
           administrator (i.e. have an <literal>auth_admin</literal>
-          value).  By default, this is the <literal>root</literal>
-          user and all users in the <literal>wheel</literal> group.
+          value).  By default, this is all users in the <literal>wheel</literal> group.
         '';
     };
 
@@ -85,7 +84,7 @@ in
 
     security.wrappers = {
       pkexec.source = "${pkgs.polkit.bin}/bin/pkexec";
-      "polkit-agent-helper-1".source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
+      polkit-agent-helper-1.source = "${pkgs.polkit.out}/lib/polkit-1/polkit-agent-helper-1";
     };
 
     systemd.tmpfiles.rules = [

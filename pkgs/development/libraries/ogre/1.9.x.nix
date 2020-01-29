@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, lib
-, cmake, libGLU_combined
+, cmake, libGLU, libGL
 , freetype, freeimage, zziplib, xorgproto, libXrandr
 , libXaw, freeglut, libXt, libpng, boost, ois
 , libX11, libXmu, libSM, pkgconfig
@@ -11,7 +11,6 @@
 stdenv.mkDerivation rec {
   pname = "ogre";
   version = "1.9.1";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "OGRECave";
@@ -28,7 +27,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs =
-   [ cmake libGLU_combined
+   [ cmake libGLU libGL
      freetype freeimage zziplib xorgproto libXrandr
      libXaw freeglut libXt libpng boost ois
      libX11 libXmu libSM pkgconfig

@@ -49,6 +49,11 @@
   </listitem>
   <listitem>
    <para>
+    Click on Settings / Display / Screen and select VBoxVGA as Graphics Controller
+   </para>
+  </listitem>
+  <listitem>
+   <para>
     Save the settings, start the virtual machine, and continue installation
     like normal
    </para>

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, perl, icmake, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "yodl-${version}";
+  pname = "yodl";
   version = "4.02.01";
 
   nativeBuildInputs = [ icmake ];

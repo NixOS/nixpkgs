@@ -4,7 +4,6 @@
 stdenv.mkDerivation rec {
   pname = "leiningen";
   version = "2.9.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
@@ -13,13 +12,13 @@ stdenv.mkDerivation rec {
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
-    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${name}-standalone.zip";
+    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.zip";
     sha256 = "1y2mva5s2w2szzn1b9rhz0dvkffls4ravii677ybcf2w9wd86z7a";
   };
 
-  JARNAME = "${name}-standalone.jar";
+  JARNAME = "${pname}-${version}-standalone.jar";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ jdk ];

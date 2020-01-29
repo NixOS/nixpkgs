@@ -7,7 +7,7 @@
 
 let
   overrides = import ./overrides.nix;
-  baseName = (builtins.parseDrvName name).name;
+  baseName = stdenv.lib.getName name;
   override = if builtins.hasAttr baseName overrides
    then
      builtins.getAttr baseName overrides

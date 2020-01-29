@@ -1,4 +1,5 @@
 { stdenv, lib, fetchurl, doxygen, extra-cmake-modules, graphviz, kdoctools
+, wrapQtAppsHook
 
 , akonadi, alkimia, aqbanking, gmp, gwenhywfar, kactivities, karchive
 , kcmutils, kcontacts, kdewebkit, kdiagram, kholidays, kidentitymanagement
@@ -9,17 +10,16 @@
 # Needed for running tests:
 , qtbase, xvfb_run
 
-# For weboob, which only supports Python 2.x:
-, python2Packages
+, python2, python3Packages
 }:
 
 stdenv.mkDerivation rec {
-  name = "kmymoney-${version}";
-  version = "5.0.4";
+  pname = "kmymoney";
+  version = "5.0.8";
 
   src = fetchurl {
-    url = "mirror://kde/stable/kmymoney/${version}/src/${name}.tar.xz";
-    sha256 = "06lbavhl9b8cybnss2mmy3g5w8qn2vl6zhipvbl11lsr3j9bsa8q";
+    url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
+    sha256 = "1h6l01a08f1xgk4dfpndl7rmgbp9npm58qi760jwl2gggprwwsxc";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2Packages.wrapPython
+    doxygen extra-cmake-modules graphviz kdoctools python2
+    python3Packages.wrapPython wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -39,10 +40,10 @@ stdenv.mkDerivation rec {
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
-    python2Packages.weboob
+    python3Packages.weboob
   ];
 
-  weboobPythonPath = [ python2Packages.weboob ];
+  weboobPythonPath = [ python3Packages.weboob ];
 
   postInstall = ''
     buildPythonPath "$weboobPythonPath"
@@ -57,13 +58,11 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = stdenv.hostPlatform == stdenv.buildPlatform;
   installCheckInputs = [ xvfb_run ];
-  installCheckPhase = let
-    pluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}";
-  in lib.optionalString doInstallCheck ''
-    QT_PLUGIN_PATH=${lib.escapeShellArg pluginPath} \
+  installCheckPhase =
+    lib.optionalString doInstallCheck ''
       xvfb-run -s '-screen 0 1024x768x24' make test \
-      ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
-  '';
+        ARGS="-E '(reports-chart-test)'" # Test fails, so exclude it for now.
+    '';
 
   meta = {
     description = "Personal finance manager for KDE";

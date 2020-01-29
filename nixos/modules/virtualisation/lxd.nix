@@ -35,6 +35,18 @@ in
           with nixos.
         '';
       };
+      recommendedSysctlSettings = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          enables various settings to avoid common pitfalls when
+          running containers requiring many file operations.
+          Fixes errors like "Too many open files" or
+          "neighbour: ndisc_cache: neighbor table overflow!".
+          See https://lxd.readthedocs.io/en/latest/production-setup/
+          for details.
+        '';
+      };
     };
   };
 
@@ -69,8 +81,11 @@ in
         ExecStart = "@${pkgs.lxd.bin}/bin/lxd lxd --group lxd";
         Type = "simple";
         KillMode = "process"; # when stopping, leave the containers alone
+        LimitMEMLOCK = "infinity";
+        LimitNOFILE = "1048576";
+        LimitNPROC = "infinity";
+        TasksMax = "infinity";
       };
-
     };
 
     users.groups.lxd.gid = config.ids.gids.lxd;
@@ -78,6 +93,17 @@ in
     users.users.root = {
       subUidRanges = [ { startUid = 1000000; count = 65536; } ];
       subGidRanges = [ { startGid = 1000000; count = 65536; } ];
+    };
+
+    boot.kernel.sysctl = mkIf cfg.recommendedSysctlSettings {
+      "fs.inotify.max_queued_events" = 1048576;
+      "fs.inotify.max_user_instances" = 1048576;
+      "fs.inotify.max_user_watches" = 1048576;
+      "vm.max_map_count" = 262144;
+      "kernel.dmesg_restrict" = 1;
+      "net.ipv4.neigh.default.gc_thresh3" = 8192;
+      "net.ipv6.neigh.default.gc_thresh3" = 8192;
+      "kernel.keys.maxkeys" = 2000;
     };
   };
 }

@@ -24,7 +24,7 @@
 
 
 stdenv.mkDerivation rec {
-  name = "clickshare-csc1-${version}";
+  pname = "clickshare-csc1";
   version = "01.07.00.033";
   src = fetchurl {
     name = "clickshare-csc1-${version}.zip";

@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "google-music-proto";
-  version = "2.4.0";
+  version = "2.5.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "798ac14408593525d1865f608b30f71cce291b1a239f4d63f14bb4dcf79d7528";
+    sha256 = "94cd205b3cb0d9e36f3724ace259d4c6de04db97e095577a26a5cfa5e35844c6";
   };
 
   propagatedBuildInputs = [

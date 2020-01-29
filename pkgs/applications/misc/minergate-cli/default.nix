@@ -1,8 +1,8 @@
 { fetchurl, stdenv, dpkg, makeWrapper, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "8.2";
-  name = "minergate-cli-${version}";
+  pname = "minergate-cli";
   src = fetchurl {
     url = "https://minergate.com/download/ubuntu-cli";
     sha256 = "393c5ba236f6f92c449496fcda9509f4bfd3887422df98ffa59b3072124a99d8";

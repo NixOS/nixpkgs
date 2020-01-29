@@ -17,16 +17,17 @@
 , pexpect
 , appnope
 , backcall
+, fetchpatch
 }:
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.2.0";
-  disabled = pythonOlder "3.5";
+  version = "7.10.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6a9496209b76463f1dec126ab928919aaf1f55b38beb9219af3fe202f6bbdd12";
+    sha256 = "762d79a62b6aa96b04971e920543f558dfbeedc0468b899303c080c8068d4ac2";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -56,10 +57,14 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "IPython"
+  ];
+
+  meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

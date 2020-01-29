@@ -1,6 +1,6 @@
 { lib, buildPythonPackage, fetchFromGitHub, pytest }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "zxcvbn";
   version = "4.4.28";
 
