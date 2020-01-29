@@ -15636,10 +15636,10 @@ let
 
   RegexpParser = buildPerlPackage {
     pname = "Regexp-Parser";
-    version = "0.22";
+    version = "0.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.22.tar.gz;
-      sha256 = "d6d3c711657a380f1cb24d8b54a1cd20f725f7f54665189e9e67bb0b877109a3";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Regexp-Parser-0.23.tar.gz;
+      sha256 = "f739dab8df2b06aae5c48f9971251b73704464a32d07d8d025f3c0f869544e89";
     };
     meta = {
       homepage = https://github.com/toddr/Regexp-Parser;
