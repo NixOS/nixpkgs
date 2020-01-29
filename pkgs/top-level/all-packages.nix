@@ -24930,7 +24930,7 @@ in
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
 
-  muse = callPackage ../applications/audio/muse { };
+  muse = libsForQt5.callPackage ../applications/audio/muse { };
 
   musly = callPackage ../applications/audio/musly { };
 
