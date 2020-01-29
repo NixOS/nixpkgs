@@ -3368,10 +3368,10 @@ let
 
   CPANPLUS = buildPerlPackage {
     pname = "CPANPLUS";
-    version = "0.9904";
+    version = "0.9906";
     src = fetchurl {
-      url = mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9904.tar.gz;
-      sha256 = "1l5af2kbkm4pdmlplb6mqf4qkdrlf80w8grbwxkfdpk7rs7ql81a";
+      url = mirror://cpan/authors/id/B/BI/BINGOS/CPANPLUS-0.9906.tar.gz;
+      sha256 = "0w1gi4w7xriqhh44ssgg2abk5dfxchshqfab4cs3j4ab6p8vf9j5";
     };
     propagatedBuildInputs = [ ArchiveExtract ModulePluggable ObjectAccessor PackageConstants TermUI ];
     meta = {
