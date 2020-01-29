@@ -9291,10 +9291,10 @@ let
 
   IOStringy = buildPerlPackage {
     pname = "IO-Stringy";
-    version = "2.112";
+    version = "2.113";
     src = fetchurl {
-      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.112.tar.gz;
-      sha256 = "0rgp0b0yi0yszxwjh52y5n8s35f3gx7mxcvplwj9xiv5lvsjh8w7";
+      url = mirror://cpan/authors/id/C/CA/CAPOEIRAB/IO-Stringy-2.113.tar.gz;
+      sha256 = "0kpycb56l6ilvmdx9swx9wpj1x3vfnqdflfjd6dn6spnz750y8ji";
     };
   };
 
