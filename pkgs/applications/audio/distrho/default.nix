@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, alsaLib, fftwSinglePrec, freetype, libjack2
 , pkgconfig, ladspa-sdk, premake3
 , libX11, libXcomposite, libXcursor, libXext, libXinerama, libXrender
-, fetchpatch
 }:
 
 let
@@ -26,13 +25,6 @@ in stdenv.mkDerivation rec {
 
     runHook postConfigure
   '';
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/DISTRHO/DISTRHO-Ports/commit/00ad25fd574c1724bbc974308aa5e88306969009.patch";
-      sha256 = "0hdnnvn35g76q7133azwalbm1dxs8dm2yg3zjjb1kzq0x6qrazx5";
-    })
-  ];
 
   postPatch = ''
     sed -e "s#@./scripts#sh scripts#" -i Makefile
