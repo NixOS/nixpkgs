@@ -40,6 +40,7 @@ in ''
     # $2 is the target path
     i=$1
     ln -s -f $i/lib/*.rlib $2 #*/
+    ln -s -f $i/lib/*.rmeta $2 #*/
     ln -s -f $i/lib/*.so $i/lib/*.dylib $2 #*/
     if [ -e "$i/lib/link" ]; then
         cat $i/lib/link >> target/link

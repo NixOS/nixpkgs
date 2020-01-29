@@ -15,7 +15,7 @@ let
 
     # Create rustc arguments to link against the given list of dependencies and
     # renames
-    mkRustcDepArgs = dependencies: crateRenames:
+    mkRustcDepArgs = linked: dependencies: crateRenames:
       lib.concatMapStringsSep " " (dep:
         let
           extern = lib.replaceStrings ["-"] ["_"] dep.libName;
@@ -24,7 +24,10 @@ let
           else
             extern;
         in (if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
-           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
+           if linked then
+              " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
+           else
+             " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rmeta"
          else
            " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
       ) dependencies;
@@ -63,6 +66,7 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     buildTests_ = buildTests;
 
     # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
+    
     makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
 
     # crate2nix has a hack for the old bash based build script that did split
@@ -93,6 +97,7 @@ stdenv.mkDerivation (rec {
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
+    dontStrip = stdenv.hostPlatform.isDarwin; # See issue #27370
     dependencies = makeDependencies dependencies_;
     buildDependencies = makeDependencies buildDependencies_;
 

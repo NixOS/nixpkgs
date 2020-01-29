@@ -11,7 +11,6 @@
     baseRustcOpts =
       [(if release then "-C opt-level=3" else "-C debuginfo=2")]
       ++ ["-C codegen-units=$NIX_BUILD_CORES"]
-      ++ [(mkRustcDepArgs dependencies crateRenames)]
       ++ [crateFeatures]
       ++ extraRustcOpts
       ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--target ${rust.toRustTarget stdenv.hostPlatform} -C linker=${stdenv.hostPlatform.config}-gcc"
@@ -23,12 +22,14 @@
     # crates
     libRustcOpts = lib.concatStringsSep " " (
       baseRustcOpts
+      ++ [(mkRustcDepArgs false dependencies crateRenames)]
       ++ [rustcMeta]
       ++ (map (x: "--crate-type ${x}") crateType)
     );
 
     binRustcOpts = lib.concatStringsSep " " (
       baseRustcOpts
+      ++ [(mkRustcDepArgs true dependencies crateRenames)]
     );
 
     build_bin = if buildTests then "build_bin_test" else "build_bin";
