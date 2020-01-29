@@ -33,8 +33,21 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-libusb-include-path.patch
     ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
+    ./0001-mkdefsinc-use-a-substitutable-SOURCE_DATE_EPOCH.patch
   ];
   postPatch = ''
+    configureFlags="$configureFlags --enable-build-timestamp=$(date -u +%Y-%m-%dT%H:%M+0000 --date=@$SOURCE_DATE_EPOCH)"
+
+    # set the value directly. The resulting line looks like date=`date +20191207-110505`, but
+    # maybe slightly less brittle?
+    sed -i 's#+%Y%m%d-%H%M%S#'"+$(date -u +%Y%m%d-%H%M%S --date=@$SOURCE_DATE_EPOCH)"'#' m4/autobuild.m4 configure
+
+    substituteInPlace ./doc/mkdefsinc.c \
+      --replace "@SOURCE_DATE_EPOCH@" "$SOURCE_DATE_EPOCH"
+
+    # see https://build.opensuse.org/request/show/639831
+    find doc -type f -name '*.texi' -print0 | xargs -0 touch -d@$SOURCE_DATE_EPOCH
+
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
         configure doc/dirmngr.texi doc/gnupg.info-1
   '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''

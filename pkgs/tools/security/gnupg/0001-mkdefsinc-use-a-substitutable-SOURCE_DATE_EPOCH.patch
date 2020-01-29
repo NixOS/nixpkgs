@@ -1,0 +1,50 @@
+From: Graham Christensen <graham@grahamc.com>
+Date: Wed, 29 Jan 2020 12:42:43 -0500
+Subject: [PATCH] mkdefsinc: use a substitutable SOURCE_DATE_EPOCH for
+ timestamps
+
+For reproducibility, of course.
+---
+ doc/mkdefsinc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/doc/mkdefsinc.c b/doc/mkdefsinc.c
+index b8fbed6..1d7ee09 100644
+--- a/doc/mkdefsinc.c
++++ b/doc/mkdefsinc.c
+@@ -105,6 +105,7 @@ get_date_from_files (char **files)
+   struct tm *tp;
+   int errors = 0;
+   time_t stamp = 0;
++  time_t source_date_stamp = @SOURCE_DATE_EPOCH@;
+   char *result;
+
+   for (; (file = *files); files++)
+@@ -130,7 +131,7 @@ get_date_from_files (char **files)
+   if (usedfile)
+     fprintf (stderr, PGM ": taking date from '%s'\n", usedfile);
+
+-  tp = gmtime (&stamp);
++  tp = gmtime (&source_date_stamp);
+   if (!tp)
+     return NULL;
+   result = xmalloc (4+1+2+1+2+1);
+@@ -232,6 +233,7 @@ main (int argc, char **argv)
+
+   if (opt_date && *opt_date)
+     {
++      time_t source_date_stamp = @SOURCE_DATE_EPOCH@;
+       time_t stamp;
+       struct tm *tp;
+
+@@ -241,7 +243,7 @@ main (int argc, char **argv)
+           opt_date[10] = 0;
+         }
+       else if ((stamp = strtoul (opt_date, NULL, 10)) > 0
+-               && (tp = gmtime (&stamp)))
++               && (tp = gmtime (&source_date_stamp)))
+         {
+           p = xmalloc (4+1+2+1+2+1);
+           snprintf (p, 4+1+2+1+2+1, "%04d-%02d-%02d",
+--
+2.23.1
