@@ -584,6 +584,11 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      <xref linkend="opt-services.dnscrypt-proxy2.enable"/> to use the supported version.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <literal>qesteidutil</literal> has been deprecated in favor of <literal>qdigidoc</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
