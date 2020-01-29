@@ -1,0 +1,23 @@
+{
+  "dependencies": {
+    "node-fetch": "^2.6.0",
+    "semver": "^7.1.1"
+  },
+  "bin": {
+    "gh_update": "./gh_update.js"
+  },
+  "name": "gh_update",
+  "version": "0.0.1",
+  "description": "Script to get latest version from github by semver matching",
+  "main": "gh_update.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "github",
+    "nixpkgs",
+    "update"
+  ],
+  "author": "Maciej Krüger <mkg20001@gmail.com>",
+  "license": "MPL-2.0"
+}

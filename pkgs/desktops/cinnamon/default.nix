@@ -1,6 +1,8 @@
 { pkgs, lib }:
 
 lib.makeScope pkgs.newScope (self: with self; {
+  updateScript = callPackage ./update.nix { };
+
   cinnamon-desktop = callPackage ./cinnamon-desktop { };
   cinnamon-menus = callPackage ./cinnamon-menus { };
   cinnamon-translations = callPackage ./cinnamon-translations { };
