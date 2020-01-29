@@ -24779,6 +24779,8 @@ in
 
   dumb = callPackage ../misc/dumb { };
 
+  ecdsatool = callPackage ../tools/security/ecdsatool { };
+
   emulationstation = callPackage ../misc/emulators/emulationstation { };
 
   electricsheep = callPackage ../misc/screensavers/electricsheep { };
