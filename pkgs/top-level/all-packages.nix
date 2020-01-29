@@ -10235,6 +10235,8 @@ in
     guile = guile_2_0;
   };
 
+  hadolint = haskell.lib.justStaticExecutables haskellPackages.hadolint;
+
   hcloud = callPackage ../development/tools/hcloud { };
 
   help2man = callPackage ../development/tools/misc/help2man { };
