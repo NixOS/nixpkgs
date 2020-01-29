@@ -5545,10 +5545,10 @@ let
 
   DirManifest = buildPerlModule {
     pname = "Dir-Manifest";
-    version = "0.6.0";
+    version = "0.6.1";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Dir-Manifest-0.6.0.tar.gz;
-      sha256 = "0xapcmgvcdw8v91m9byxf3li4v0qish575rcw31sv0bvf6ny3rkv";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Dir-Manifest-0.6.1.tar.gz;
+      sha256 = "01g54wlvp647zvhn0sxl2pqajly17044qd3pxib8cpixhwk75zw4";
     };
     propagatedBuildInputs = [ Moo PathTiny ];
     meta = {
