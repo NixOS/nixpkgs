@@ -6466,10 +6466,10 @@ let
 
   ExtUtilsCBuilder = buildPerlPackage {
     pname = "ExtUtils-CBuilder";
-    version = "0.280231";
+    version = "0.280234";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-CBuilder-0.280231.tar.gz;
-      sha256 = "1szfbq3vw9q3h3pff23p9pzfj21rkcmbljhdnl5w2s04r932brz6";
+      url = mirror://cpan/authors/id/A/AM/AMBS/ExtUtils-CBuilder-0.280234.tar.gz;
+      sha256 = "1hzixkg85mys94a2i658pdr28xhzyrisvknsps691d183zm9a06q";
     };
     meta = {
       description = "Compile and link C code for Perl modules";
@@ -6530,10 +6530,10 @@ let
 
   ExtUtilsCppGuess = buildPerlPackage {
     pname = "ExtUtils-CppGuess";
-    version = "0.20";
+    version = "0.21";
     src = fetchurl {
-      url = mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.20.tar.gz;
-      sha256 = "0q9ynigk600fv95xac6aslrg2k19m6qbzf5hqfsnall8113r3gqj";
+      url = mirror://cpan/authors/id/E/ET/ETJ/ExtUtils-CppGuess-0.21.tar.gz;
+      sha256 = "0ls1y9bb2nff9djli91s86541r7ajcjp22gqhcdmj7hs69w92qpz";
     };
     nativeBuildInputs = [ pkgs.ld-is-cc-hook ];
     propagatedBuildInputs = [ CaptureTiny ];
