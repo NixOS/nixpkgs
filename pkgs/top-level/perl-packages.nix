@@ -16599,10 +16599,10 @@ let
 
   StringRewritePrefix = buildPerlPackage {
     pname = "String-RewritePrefix";
-    version = "0.007";
+    version = "0.008";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.007.tar.gz;
-      sha256 = "18nxl1vgkcx0r7ifkmbl9fp73f8ihiqhqqf3vq6sj5b3cgawrfsw";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/String-RewritePrefix-0.008.tar.gz;
+      sha256 = "1sq8way03gxb990n232y201grnh0jj0xhj7g4b3mz3sfj7b32np4";
     };
     propagatedBuildInputs = [ SubExporter ];
     meta = {
