@@ -9046,10 +9046,10 @@ let
 
   IO = buildPerlPackage {
     pname = "IO";
-    version = "1.39";
+    version = "1.42";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/IO-1.39.tar.gz;
-      sha256 = "4f0502e7f123ac824188eb8873038aaf2ddcc29f8babc1a0b2e1cd34b55a1fca";
+      url = mirror://cpan/authors/id/T/TO/TODDR/IO-1.42.tar.gz;
+      sha256 = "eec5cc33a6cddba8b5d2425b60752882add7e4d41b7431a0ea4dcd73cc1f8cca";
     };
     doCheck = false;
     meta = {
