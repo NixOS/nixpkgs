@@ -1,14 +1,14 @@
-{ stdenv, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
+{ stdenv, mkDerivation, fetchgit, fetchurl, cmake, darkhttpd, gettext, makeWrapper, pkgconfig
 , libdigidocpp, opensc, openldap, openssl, pcsclite, qtbase, qttranslations, qtsvg }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qdigidoc";
-  version = "4.1.0";
+  version = "4.2.3";
 
   src = fetchgit {
     url = "https://github.com/open-eid/DigiDoc4-Client";
     rev = "v${version}";
-    sha256 = "1iry36h3pfnw2gqjnfhv53i2svybxj8jf18qh486djyai84hjr4d";
+    sha256 = "1hj49vvg8vrayr9kpz73fafa7k298hmiamkyd8c3ipy6s51xh6q4";
     fetchSubmodules = true;
   };
 
