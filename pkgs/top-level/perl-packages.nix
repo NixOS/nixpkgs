@@ -19725,10 +19725,10 @@ let
 
   TimeDate = buildPerlPackage {
     pname = "TimeDate";
-    version = "2.30";
+    version = "2.31";
     src = fetchurl {
-      url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-2.30.tar.gz;
-      sha256 = "11lf54akr9nbivqkjrhvkmfdgkbhw85sq0q4mak56n6bf542bgbm";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/TimeDate-2.31.tar.gz;
+      sha256 = "10ad6l4ii2iahdpw8h0xqwasc1jblan31h597q3js4j5nbnhywjw";
     };
     patches = [
       # https://rt.cpan.org/Public/Bug/Display.html?id=124509
