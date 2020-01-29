@@ -14435,10 +14435,10 @@ let
 
   Pegex = buildPerlPackage {
     pname = "Pegex";
-    version = "0.72";
+    version = "0.74";
     src = fetchurl {
-      url = mirror://cpan/authors/id/I/IN/INGY/Pegex-0.72.tar.gz;
-      sha256 = "a3ff9faa61a7becdc480aa010abcfb2c291826447d5c51f2bd4dfaf855a567ec";
+      url = mirror://cpan/authors/id/I/IN/INGY/Pegex-0.74.tar.gz;
+      sha256 = "31f0889695d79a3ab79a6315a8a08baeb1268592bc6596c3feffb424d982dfdf";
     };
     buildInputs = [ TestPod TieIxHash ];
     meta = {
@@ -14446,7 +14446,7 @@ let
       description = "Acmeist PEG Parser Framework";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
-    propagatedBuildInputs = [ FileShareDirInstall JSONXS XXX YAMLLibYAML ];
+    propagatedBuildInputs = [ FileShareDirInstall XXX ];
   };
 
   PerconaToolkit = callPackage ../development/perl-modules/Percona-Toolkit { };
