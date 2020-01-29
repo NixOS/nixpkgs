@@ -16033,10 +16033,10 @@ let
 
   SetObject = buildPerlPackage {
     pname = "Set-Object";
-    version = "1.39";
+    version = "1.40";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RU/RURBAN/Set-Object-1.39.tar.gz;
-      sha256 = "5effcfeb104da334f413a20dee9cdc5e874246096c3b282190a5f44453401810";
+      url = mirror://cpan/authors/id/R/RU/RURBAN/Set-Object-1.40.tar.gz;
+      sha256 = "1c4d8464c13e6d94957cf021ce603c961b08f52db6a9eaf5a5b0d37868cd37b7";
     };
     meta = {
       description = "Unordered collections (sets) of Perl Objects";
