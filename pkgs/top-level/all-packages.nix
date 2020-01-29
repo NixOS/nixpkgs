@@ -21186,6 +21186,8 @@ in
 
   ries = callPackage ../applications/science/math/ries { };
 
+  ringcentral-meetings = libsForQt5.callPackage ../applications/networking/instant-messengers/ringcentral-meetings { };
+
   ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
