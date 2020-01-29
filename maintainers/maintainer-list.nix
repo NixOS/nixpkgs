@@ -5720,6 +5720,16 @@
     githubId = 108072;
     name = "Slawomir Gonet";
   };
+  oxalica = {
+    email = "oxalicc@pm.me";
+    github = "oxalica";
+    githubId = 14816024;
+    name = "oxalica";
+    keys = [{
+      longkeyid = "rsa4096/0xCED392DE0C483D00";
+      fingerprint = "5CB0 E9E5 D5D5 71F5 7F54  0FEA CED3 92DE 0C48 3D00";
+    }];
+  };
   oxij = {
     email = "oxij@oxij.org";
     github = "oxij";
