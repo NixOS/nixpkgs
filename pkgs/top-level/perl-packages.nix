@@ -20651,12 +20651,12 @@ let
 
   XMLLibXSLT = buildPerlPackage {
     pname = "XML-LibXSLT";
-    version = "1.97";
+    version = "1.99";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.97.tar.gz;
-      sha256 = "0pvaizyqxrzjz0lcpqbr1imf70axx6hk66ym8ya3yd2hp7jdzy12";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXSLT-1.99.tar.gz;
+      sha256 = "1w7pn0wb88nma6biy4h05ak3j4ykma6vz1wbkrxy8qgvfyl1fzhj";
     };
-    buildInputs = [ pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
+    buildInputs = [ pkgs.pkgconfig pkgs.zlib pkgs.libxml2 pkgs.libxslt ];
     propagatedBuildInputs = [ XMLLibXML ];
   };
 
