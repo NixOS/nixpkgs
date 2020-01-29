@@ -6351,10 +6351,10 @@ let
 
   EV = buildPerlPackage {
     pname = "EV";
-    version = "4.29";
+    version = "4.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.29.tar.gz;
-      sha256 = "cbed1824ac9ef0740325140393216be55a6eb8f16a5996395fab243ee28da78e";
+      url = mirror://cpan/authors/id/M/ML/MLEHMANN/EV-4.32.tar.gz;
+      sha256 = "b82a8b89bb9cca475f6242c8621dc2c48f24851ca61558e1bd592b8506752936";
     };
     buildInputs = [ CanaryStability ];
     propagatedBuildInputs = [ commonsense ];
