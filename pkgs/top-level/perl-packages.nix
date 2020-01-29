@@ -20956,10 +20956,10 @@ let
 
   YAMLSyck = buildPerlPackage {
     pname = "YAML-Syck";
-    version = "1.31";
+    version = "1.32";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.31.tar.gz;
-      sha256 = "14420hp7vxhrs0hgsmrfc9s9dassw1bns4jbmdq55b735xrwbbfp";
+      url = mirror://cpan/authors/id/T/TO/TODDR/YAML-Syck-1.32.tar.gz;
+      sha256 = "1fz9r9vvsmjkzvcbznxw65b319vkmwzd0ck09q9nwip00gn907fv";
     };
     meta = {
       description = "Fast, lightweight YAML loader and dumper";
