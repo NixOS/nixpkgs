@@ -19769,10 +19769,10 @@ let
 
   TimeLocal = buildPerlPackage {
     pname = "Time-Local";
-    version = "1.28";
+    version = "1.30";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/Time-Local-1.28.tar.gz;
-      sha256 = "9278b9e5cc99dcbb0fd27a43e914828b59685601edae082889b5ee7266afe10e";
+      url = mirror://cpan/authors/id/D/DR/DROLSKY/Time-Local-1.30.tar.gz;
+      sha256 = "c7744f6b2986b946d3e2cf034df371bee16cdbafe53e945abb1a542c4f8920cb";
     };
     meta = {
       description = "Efficiently compute time from local and GMT time";
