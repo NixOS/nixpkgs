@@ -15207,10 +15207,10 @@ let
 
   PodElemental = buildPerlPackage {
     pname = "Pod-Elemental";
-    version = "0.103004";
+    version = "0.103005";
     src = fetchurl {
-      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-0.103004.tar.gz;
-      sha256 = "43625cde7241fb174ad9c7eb45387fba410dc141d7de2323855eeab3590072c9";
+      url = mirror://cpan/authors/id/R/RJ/RJBS/Pod-Elemental-0.103005.tar.gz;
+      sha256 = "824336ec18326e3b970e7815922b3921b0a821d2ee0e50b0c5b2bc327f99615e";
     };
     buildInputs = [ TestDeep TestDifferences ];
     propagatedBuildInputs = [ MooseXTypes PodEventual StringRewritePrefix StringTruncate ];
