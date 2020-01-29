@@ -3432,9 +3432,7 @@ in
 
   fusuma = callPackage ../tools/inputmethods/fusuma {};
 
-  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb {
-    stdenv49 = gcc49Stdenv;
-  });
+  fdbPackages = dontRecurseIntoAttrs (callPackage ../servers/foundationdb { });
 
   inherit (fdbPackages)
     foundationdb51
@@ -3619,10 +3617,6 @@ in
   gmvault = callPackage ../tools/networking/gmvault { };
 
   gnash = callPackage ../misc/gnash { };
-
-  gnaural = callPackage ../applications/audio/gnaural {
-    stdenv = gcc49Stdenv;
-  };
 
   gnirehtet = callPackage ../tools/networking/gnirehtet { };
 
@@ -7769,7 +7763,6 @@ in
 
   avian = callPackage ../development/compilers/avian {
     inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
-    stdenv = if stdenv.cc.isGNU then gcc49Stdenv else stdenv;
   };
 
   bigloo = callPackage ../development/compilers/bigloo { };
@@ -7948,8 +7941,6 @@ in
     extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
   };
 
-  gcc49Stdenv = overrideCC gccStdenv buildPackages.gcc49;
-  gcc5Stdenv = overrideCC gccStdenv buildPackages.gcc5;
   gcc6Stdenv = overrideCC gccStdenv buildPackages.gcc6;
   gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
@@ -8067,18 +8058,6 @@ in
     cloog = if !stdenv.isDarwin then cloog_0_18_0 else null;
   }));
 
-  gcc5 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/5 {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
-
-    isl = if !stdenv.isDarwin then isl_0_14 else null;
-  }));
-
   gcc6 = lowPrio (wrapCC (callPackage ../development/compilers/gcc/6 {
     inherit noSysDirs;
 
@@ -8150,14 +8129,6 @@ in
   });
 
   gfortran49 = wrapCC (gcc49.cc.override {
-    name = "gfortran";
-    langFortran = true;
-    langCC = false;
-    langC = false;
-    profiledCompiler = false;
-  });
-
-  gfortran5 = wrapCC (gcc5.cc.override {
     name = "gfortran";
     langFortran = true;
     langCC = false;
@@ -8752,9 +8723,7 @@ in
 
   pforth = callPackage ../development/compilers/pforth {};
 
-  picat = callPackage ../development/compilers/picat {
-    stdenv = gcc49Stdenv;
-  };
+  picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
     llvm = llvm_7;
@@ -9749,10 +9718,6 @@ in
   automoc4 = callPackage ../development/tools/misc/automoc4 { };
 
   avrdude = callPackage ../development/tools/misc/avrdude { };
-
-  avarice = callPackage ../development/tools/misc/avarice {
-    gcc = gcc49;
-  };
 
   babeltrace = callPackage ../development/tools/misc/babeltrace { };
 
@@ -14563,13 +14528,6 @@ in
     gnutls = gnutls;
   });
 
-  # 3.14 is needed for R V8 module in ../development/r-modules/default.nix
-  v8_3_14 = callPackage ../development/libraries/v8/3.14.nix {
-    inherit (python2Packages) python gyp;
-    cctools = darwin.cctools;
-    stdenv = gcc5Stdenv;
-  };
-
   v8_5_x = callPackage ../development/libraries/v8/5_x.nix ({
     inherit (python2Packages) python gyp;
     icu = icu58; # v8-5.4.232 fails against icu4c-59.1
@@ -15271,8 +15229,8 @@ in
 
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
-  firebird = callPackage ../servers/firebird { icu = null; stdenv = gcc5Stdenv; };
-  firebirdSuper = firebird.override { icu = icu58; superServer = true; stdenv = gcc5Stdenv; };
+  firebird = callPackage ../servers/firebird { icu = null; /*stdenv = gcc5Stdenv;*/ };
+  firebirdSuper = firebird.override { icu = icu58; superServer = true; /*stdenv = gcc5Stdenv;*/ };
 
   frab = callPackage ../servers/web-apps/frab { };
 
@@ -18102,7 +18060,6 @@ in
   afterstep = callPackage ../applications/window-managers/afterstep {
     fltk = fltk13;
     gtk = gtk2;
-    stdenv = gcc49Stdenv;
   };
 
   agedu = callPackage ../tools/misc/agedu { };
@@ -18387,7 +18344,6 @@ in
 
   calf = callPackage ../applications/audio/calf {
       inherit (gnome2) libglade;
-      stdenv = gcc5Stdenv;
   };
 
   calcurse = callPackage ../applications/misc/calcurse { };
@@ -23843,7 +23799,7 @@ in
   aragorn = callPackage ../applications/science/biology/aragorn { };
 
   archimedes = callPackage ../applications/science/electronics/archimedes {
-    stdenv = gcc49Stdenv;
+    stdenv = gcc6Stdenv;
   };
 
   bayescan = callPackage ../applications/science/biology/bayescan { };
