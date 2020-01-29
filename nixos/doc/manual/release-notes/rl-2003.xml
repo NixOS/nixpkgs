@@ -452,6 +452,11 @@ users.users.me =
      please refer to the <link xlink:href="https://www.citrix.com/de-de/support/product-lifecycle/milestones/receiver.html">support and maintenance information</link> from upstream.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>gcc5</literal> and <literal>gfortran5</literal> packages have been removed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
