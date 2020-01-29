@@ -9484,7 +9484,7 @@ let
       url = mirror://cpan/authors/id/T/TI/TINITA/Inline-C-0.81.tar.gz;
       sha256 = "f185258d9050d7f79b4f00f12625cc469c2f700ff62d3e831cb18d80d2c87aac";
     };
-    buildInputs = [ FileCopyRecursive TestWarn ];
+    buildInputs = [ FileCopyRecursive TestWarn YAMLLibYAML ];
     propagatedBuildInputs = [ Inline ParseRecDescent Pegex ];
     postPatch = ''
       # this test will fail with chroot builds
