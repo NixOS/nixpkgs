@@ -13123,10 +13123,10 @@ let
 
   NetIdent = buildPerlPackage {
     pname = "Net-Ident";
-    version = "1.24";
+    version = "1.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Net-Ident-1.24.tar.gz;
-      sha256 = "5f5f1142185a67b87406a3fb31f221564f61838a70ef4c07284a66c55e82ad05";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Net-Ident-1.25.tar.gz;
+      sha256 = "2e5bd58b01c2a66e8049a2f8d9c93e1b5f6dce53e0ee3a481ce6a6f411f2c8f8";
     };
     meta = {
       homepage = https://github.com/toddr/Net-Ident;
