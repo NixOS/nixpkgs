@@ -19614,10 +19614,10 @@ let
 
   TieFile = buildPerlPackage {
     pname = "Tie-File";
-    version = "1.00";
+    version = "1.05";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/Tie-File-1.00.tar.gz;
-      sha256 = "7ca9c8a957cf743d3a98d0eb5deb767b1e14b4f00bc9d03da83d466fcb76bd44";
+      url = mirror://cpan/authors/id/T/TO/TODDR/Tie-File-1.05.tar.gz;
+      sha256 = "8a980b577ff4b10fe11062ed8c774857fa8c9833c5305f2e8bfb3347af63f139";
     };
     meta = {
       description = "Access the lines of a disk file via a Perl array";
