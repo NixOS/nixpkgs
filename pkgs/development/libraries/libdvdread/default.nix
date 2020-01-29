@@ -1,11 +1,11 @@
 {stdenv, fetchurl, libdvdcss}:
 
 stdenv.mkDerivation rec {
-  name = "libdvdread-${version}";
+  pname = "libdvdread";
   version = "6.0.1";
 
   src = fetchurl {
-    url = "http://get.videolan.org/libdvdread/${version}/${name}.tar.bz2";
+    url = "http://get.videolan.org/libdvdread/${version}/${pname}-${version}.tar.bz2";
     sha256 = "1gfmh8ii3s2fw1c8vn57piwxc0smd3va4h7xgp9s8g48cc04zki8";
   };
 

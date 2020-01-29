@@ -36,17 +36,25 @@ in {
         '';
       };
 
+      config = mkOption {
+        type = with types; attrsOf (attrsOf (oneOf [ bool int str ]));
+        example = {
+          General = {
+            ControllerMode = "bredr";
+          };
+        };
+        description = "Set configuration for system-wide bluetooth (/etc/bluetooth/main.conf).";
+      };
+
       extraConfig = mkOption {
-        type = types.lines;
-        default = "";
+        type = with types; nullOr lines;
+        default = null;
         example = ''
           [General]
           ControllerMode = bredr
         '';
         description = ''
           Set additional configuration for system-wide bluetooth (/etc/bluetooth/main.conf).
-
-          NOTE: We already include [Policy], so any configuration under the Policy group should come first.
         '';
       };
     };
@@ -56,17 +64,19 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
+    warnings = optional (cfg.extraConfig != null) "hardware.bluetooth.`extraConfig` is deprecated, please use hardware.bluetooth.`config`.";
 
-    environment.systemPackages = [ bluez-bluetooth pkgs.openobex pkgs.obexftp ];
+    hardware.bluetooth.config = {
+      Policy = {
+        AutoEnable = mkDefault cfg.powerOnBoot;
+      };
+    };
 
-    environment.etc = singleton {
-      source = pkgs.writeText "main.conf" ''
-        [Policy]
-        AutoEnable=${lib.boolToString cfg.powerOnBoot}
+    environment.systemPackages = [ bluez-bluetooth ];
 
-        ${cfg.extraConfig}
-      '';
-      target = "bluetooth/main.conf";
+    environment.etc."bluetooth/main.conf"= {
+      source = pkgs.writeText "main.conf"
+        (generators.toINI { } cfg.config + optionalString (cfg.extraConfig != null) cfg.extraConfig);
     };
 
     services.udev.packages = [ bluez-bluetooth ];

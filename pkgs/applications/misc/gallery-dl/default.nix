@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gallery_dl";
-  version = "1.8.5";
+  version = "1.12.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "ee5b14e83080b6390f9bf8d9bbfab03f628aebe863efd16a4b2f8536b149cc4f";
+    sha256 = "013bavyqvnay38c844n1jvirsmj807f0wg2qlclkdghkj316p1pz";
   };
 
   doCheck = false;

@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, xlibsWrapper
+{ stdenv, mkDerivation, fetchurl, cmake, pkgconfig, xlibsWrapper
 , qtbase, qttools, qtmultimedia, qtx11extras
 # transports
 , curl, libmms
@@ -28,12 +28,12 @@
 # Qmmp installs working .desktop file(s) all by itself, so we don't need to
 # handle that.
 
-stdenv.mkDerivation rec {
-  name = "qmmp-1.3.2";
+mkDerivation rec {
+  name = "qmmp-1.3.6";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "1rh063kcyg7gs9yj2r4v5irpnq4pjaxaxsgrw30mdr21xhhc15cz";
+    sha256 = "0dihy6v6j1cfx4qgwgajdn8rx6nf8x5srk8yjki9xh1mlcaanhp8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

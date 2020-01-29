@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, openssh, makeWrapper }:
 
 buildGoPackage rec {
-  name = "assh-${version}";
+  pname = "assh";
   version = "2.7.0";
 
   goPackagePath = "github.com/moul/advanced-ssh-config";

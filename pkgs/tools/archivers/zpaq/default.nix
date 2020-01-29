@@ -1,16 +1,15 @@
-{ stdenv, fetchurl, perl, unzip }:
+{ stdenv, fetchFromGitHub, perl, unzip }:
+
 stdenv.mkDerivation rec {
-  name = "zpaq-${version}";
-  version = "715";
+  pname = "zpaq";
+  version = "7.15";
 
-  src = let
-    mungedVersion = with stdenv.lib; concatStrings (splitString "." version);
-  in fetchurl {
-    sha256 = "066l94yyladlfzri877nh2dhkvspagjn3m5bmv725fmhkr9c4pp8";
-    url = "http://mattmahoney.net/dc/zpaq${mungedVersion}.zip";
+  src = fetchFromGitHub {
+    owner = "zpaq";
+    repo = "zpaq";
+    rev = version;
+    sha256 = "0v44rlg9gvwc4ggr2lhcqll8ppal3dk7zsg5bqwcc5lg3ynk2pz4";
   };
-
-  sourceRoot = ".";
 
   nativeBuildInputs = [ perl /* for pod2man */ ];
   buildInputs = [ unzip ];

@@ -1,0 +1,26 @@
+diff -ur glibc-2.27/locale/weightwc.h glibc-2.27-patched/locale/weightwc.h
+--- glibc-2.27/locale/weightwc.h	2018-02-02 01:17:18.000000000 +0900
++++ glibc-2.27-patched/locale/weightwc.h	2020-01-12 04:54:16.044440602 +0900
+@@ -94,19 +94,19 @@
+ 	    if (cp[cnt] != usrc[cnt])
+ 	      break;
+ 
+-	  if (cnt < nhere - 1)
++	  if (cnt < nhere - 1 || cnt == len)
+ 	    {
+ 	      cp += 2 * nhere;
+ 	      continue;
+ 	    }
+ 
+-	  if (cp[nhere - 1] > usrc[nhere -1])
++	  if (cp[nhere - 1] > usrc[nhere - 1])
+ 	    {
+ 	      cp += 2 * nhere;
+ 	      continue;
+ 	    }
+ 
+-	  if (cp[2 * nhere - 1] < usrc[nhere -1])
++	  if (cp[2 * nhere - 1] < usrc[nhere - 1])
+ 	    {
+ 	      cp += 2 * nhere;
+ 	      continue;

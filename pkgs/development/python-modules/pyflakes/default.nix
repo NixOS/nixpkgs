@@ -15,6 +15,6 @@ buildPythonPackage rec {
     homepage = https://launchpad.net/pyflakes;
     description = "A simple program which checks Python source files for errors";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

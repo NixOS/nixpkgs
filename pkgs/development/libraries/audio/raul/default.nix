@@ -1,13 +1,15 @@
 { stdenv, fetchgit, boost, gtk2, pkgconfig, python, wafHook }:
 
 stdenv.mkDerivation rec {
-  name = "raul-unstable-${rev}";
-  rev = "2017-07-23";
+  pname = "raul";
+  version = "unstable-2019-12-09";
+  name = "${pname}-${version}";
 
   src = fetchgit {
-    url = "http://git.drobilla.net/cgit.cgi/raul.git";
-    rev = "4db870b2b20b0a608ec0283139056b836c5b1624";
-    sha256 = "04fajrass3ymr72flx5js5vxc601ccrmx8ny8scp0rw7j0igyjdr";
+    url = "https://gitlab.com/drobilla/raul.git";
+    fetchSubmodules = true;
+    rev = "e87bb398f025912fb989a09f1450b838b251aea1";
+    sha256 = "1z37jb6ghc13b8nv8a8hcg669gl8vh4ni9djvfgga9vcz8rmcg8l";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];

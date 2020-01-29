@@ -2,7 +2,7 @@
   fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go2nix-${version}";
+  pname = "go2nix";
   version = "1.3.0";
   rev = "v${version}";
 

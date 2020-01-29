@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "newrelic-sysmond-${version}";
+  pname = "newrelic-sysmond";
   version = "2.3.0.132";
 
   src = fetchurl {

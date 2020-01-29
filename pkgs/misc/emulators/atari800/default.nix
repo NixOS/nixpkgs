@@ -1,17 +1,17 @@
 { stdenv, fetchurl
-, unzip, zlib, SDL, readline, libGLU_combined, libX11 }:
+, unzip, zlib, SDL, readline, libGLU, libGL, libX11 }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec{
-  name = "atari800-${version}";
+  pname = "atari800";
   version = "4.0.0";
 
   src = fetchurl {
-    url = "mirror://sourceforge/atari800/atari800/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/atari800/atari800/${version}/${pname}-${version}.tar.gz";
     sha256 = "1dcynsf8i52y7zyg62bkbhl3rdd22ss95zs2s9jm4y5jvn4vks88";
   };
 
-  buildInputs = [ unzip zlib SDL readline libGLU_combined libX11 ];
+  buildInputs = [ unzip zlib SDL readline libGLU libGL libX11 ];
 
   configureFlags = [
     "--target=default"

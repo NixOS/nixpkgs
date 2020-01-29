@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     description = "A multi-platform programmer's library designed to allow a developer to create robust software";
     homepage = http://www.jedsoft.org/slang/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

@@ -11,15 +11,15 @@ let
       sha256 = "0n75jq3xgq46hfmjkaaxz3gic77shs4fzajq40c8gk043i84xbdh";
     };
     "2" = {
-      fluidsynthVersion = "2.0.5";
-      sha256 = "0rv0apxbj0cgm8f8sqf5xr6kdi4q58ph92ip6cg716ha0ca5lr8y";
+      fluidsynthVersion = "2.0.6";
+      sha256 = "0nas9pp9r8rnziznxm65x2yzf1ryg98zr3946g0br3s38sjf8l3a";
     };
   };
 in
 
 with versionMap.${version};
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation  {
   name = "fluidsynth-${fluidsynthVersion}";
   version = fluidsynthVersion;
 

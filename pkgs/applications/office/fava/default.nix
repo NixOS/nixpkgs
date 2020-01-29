@@ -5,15 +5,14 @@ let
 in
 buildPythonApplication rec {
   pname = "fava";
-  version = "1.10";
+  version = "1.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "145995nzgr06qsn619zap0xqa8ckfrp5azga41smyszq97pd01sj";
+    sha256 = "0309y25l7aijk7il9hpjia23yc5dfac0h78xdmzb0w0ynxbjsmi6";
   };
 
-  doCheck = false;
-
+  checkInputs = [ python3.pkgs.pytest ];
   propagatedBuildInputs = with python3.pkgs;
     [ 
       Babel
@@ -26,7 +25,14 @@ buildPythonApplication rec {
       markdown2
       ply
       simplejson
+      werkzeug
+      jaraco_functools
     ];
+
+  # CLI test expects fava on $PATH.  Not sure why static_url fails.
+  checkPhase = ''
+    py.test tests -k 'not cli and not static_url'
+  '';
 
   meta = {
     homepage = https://beancount.github.io/fava;

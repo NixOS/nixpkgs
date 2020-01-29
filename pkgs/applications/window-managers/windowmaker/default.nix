@@ -3,7 +3,7 @@
 , imagemagick, libpng, libjpeg, libexif, libtiff, libungif, libwebp }:
 
 stdenv.mkDerivation rec {
-  name = "windowmaker-${version}";
+  pname = "windowmaker";
   version = "0.95.8";
   srcName = "WindowMaker-${version}";
 

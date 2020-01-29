@@ -1,61 +1,44 @@
-{ stdenv, lib, fetchFromGitHub, openssl, zlib, libpcap, boost, cairo, automake, autoconf, useCairo ? false }:
+{ stdenv, lib, fetchFromGitHub, automake, autoconf
+, openssl, zlib, libpcap, boost
+, useCairo ? false, cairo
+}:
 
 stdenv.mkDerivation rec {
-  baseName = "tcpflow";
-  version  = "1.4.6";
-  name     = "${baseName}-${version}";
+  pname   = "tcpflow";
+  version = "1.5.2";
 
   src = fetchFromGitHub {
     owner  = "simsong";
-    repo   = "tcpflow";
-    rev    = "017687365b8233d16260f4afd7572c8ad8873cf6";
-    sha256 = "002cqmn786sjysf59xnbb7lgr23nqqslb2gvy29q2xpnq6my9w38";
+    repo   = pname;
+    rev    = "${pname}-${version}";
+    sha256 = "063n3pfqa0lgzcwk4c0h01g2y5c3sli615j6a17dxpg95aw1zryy";
+    fetchSubmodules = true;
   };
 
-  be13_api = fetchFromGitHub {
-    owner  = "simsong";
-    repo   = "be13_api";
-    rev    = "8f4f4b3fe0b4815babb3a6fb595eb9a6d07e8a2e";
-    sha256 = "1dlys702x3m8cr9kf4b9j8n28yh6knhwgqkm6a5yhh1grd8r3ksm";
-  };
-
-  dfxml = fetchFromGitHub {
-    owner  = "simsong";
-    repo   = "dfxml";
-    rev    = "13a8cc22189a8336d16777f2897ada6ae2ee59de";
-    sha256 = "0wzhbkp4c8sp6wrk4ilz3skxp14scdnm3mw2xmxxrsifymzs2f5n";
-  };
-
-  httpparser = fetchFromGitHub {
-    owner  = "nodejs";
-    repo   = "http-parser";
-    rev    = "8d9e5db981b623fffc93657abacdc80270cbee58";
-    sha256 = "0x17wwhrc7b2ngiqy0clnzn1zz2gbcz5n9m29pcyrcplly782k52";
-  };
-
-  buildInputs = [ openssl zlib libpcap boost automake autoconf ] ++ lib.optional useCairo cairo;
-
-  postUnpack = ''
-    pushd "$sourceRoot/src"
-    cp -rv ${be13_api}/* be13_api/
-    cp -rv ${dfxml}/* dfxml/
-    cp -rv ${httpparser}/* http-parser/
-    chmod -R u+w dfxml
-    popd
-  '';
+  nativeBuildInputs = [ automake autoconf ];
+  buildInputs = [ openssl zlib libpcap boost ]
+    ++ lib.optional useCairo cairo;
 
   prePatch = ''
-    substituteInPlace ./bootstrap.sh \
-      --replace \ git 'echo git' \
-      --replace /bin/rm rm
+    substituteInPlace bootstrap.sh \
+      --replace ".git" "" \
+      --replace "/bin/rm" "rm"
+    substituteInPlace configure.ac \
+      --replace "1.5.1" "1.5.2"
   '';
 
   preConfigure = "bash ./bootstrap.sh";
 
   meta = with stdenv.lib; {
-    description = ''TCP stream extractor'';
-    license     = licenses.gpl3 ;
-    maintainers = with maintainers; [ raskin obadz ];
+    description = "TCP stream extractor";
+    longDescription = ''
+      tcpflow is a program that captures data transmitted as part of TCP
+      connections (flows), and stores the data in a way that is convenient for
+      protocol analysis and debugging.
+    '';
+    inherit (src.meta) homepage;
+    license     = licenses.gpl3;
+    maintainers = with maintainers; [ primeos raskin obadz ];
     platforms   = platforms.linux;
   };
 }

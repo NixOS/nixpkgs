@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "4.7";
-  name = "seaview-${version}";
+  pname = "seaview";
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";

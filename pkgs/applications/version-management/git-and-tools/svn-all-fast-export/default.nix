@@ -4,7 +4,8 @@ let
   version = "1.0.16";
 in
 stdenv.mkDerivation {
-  name = "svn-all-fast-export-${version}";
+  pname = "svn-all-fast-export";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "svn-all-fast-export";
@@ -22,9 +23,7 @@ stdenv.mkDerivation {
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
 
-  NIX_LDFLAGS = [
-    "-lsvn_fs-1"
-  ];
+  NIX_LDFLAGS = "-lsvn_fs-1";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/svn-all-fast-export/svn2git;

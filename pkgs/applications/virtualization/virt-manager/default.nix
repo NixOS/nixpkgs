@@ -1,7 +1,8 @@
 { stdenv, fetchurl, python3Packages, intltool, file
 , wrapGAppsHook, gtk-vnc, vte, avahi, dconf
 , gobject-introspection, libvirt-glib, system-libvirt
-, gsettings-desktop-schemas, glib, libosinfo, gnome3, gtk3
+, gsettings-desktop-schemas, glib, libosinfo, gnome3
+, gtksourceview4
 , spiceSupport ? true, spice-gtk ? null
 , cpio, e2fsprogs, findutils, gzip
 }:
@@ -9,23 +10,23 @@
 with stdenv.lib;
 
 python3Packages.buildPythonApplication rec {
-  name = "virt-manager-${version}";
-  version = "2.1.0";
-  namePrefix = "";
+  pname = "virt-manager";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "1m038kyngmxlgz91c7z8g73lb2wy0ajyah871a3g3wb5cnd0dsil";
+    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
+    sha256 = "06ws0agxlip6p6n3n43knsnjyd91gqhh2dadgc33wl9lx1k8vn6g";
   };
 
   nativeBuildInputs = [
-    wrapGAppsHook intltool file
+    intltool file
     gobject-introspection # for setup hook populating GI_TYPELIB_PATH
   ];
 
   buildInputs = [
+    wrapGAppsHook
     libvirt-glib vte dconf gtk-vnc gnome3.adwaita-icon-theme avahi
-    gsettings-desktop-schemas libosinfo gtk3
+    gsettings-desktop-schemas libosinfo gtksourceview4
     gobject-introspection # Temporary fix, see https://github.com/NixOS/nixpkgs/issues/56943
   ] ++ optional spiceSupport spice-gtk;
 
@@ -43,9 +44,7 @@ python3Packages.buildPythonApplication rec {
     ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
-  postInstall = ''
-    ${glib.dev}/bin/glib-compile-schemas "$out"/share/glib-2.0/schemas
-  '';
+  setupPyGlobalFlags = [ "--no-update-icon-cache" ];
 
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
@@ -67,6 +66,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
     platforms = platforms.linux;
-    maintainers = with maintainers; [ qknight offline fpletz ];
+    maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

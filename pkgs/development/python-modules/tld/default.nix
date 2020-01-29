@@ -2,27 +2,32 @@
 
 python.pkgs.buildPythonPackage rec {
   pname   = "tld";
-  version = "0.9.3";
+  version = "0.11.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0i0prgwrmm157h6fa5bx9wm0m70qq2nhzp743374a94p9s766rpp";
+    sha256 = "c5fe79df74b68ebc33406dfadc69f6484dee8005035a129fdb40b8fabfd06e9f";
   };
 
   propagatedBuildInputs = with python.pkgs; [ six ];
-  checkInputs = with python.pkgs; [ factory_boy faker pytest pytestcov tox ];
+  checkInputs = with python.pkgs; [ factory_boy faker pytestcov tox pytestCheckHook];
 
   # https://github.com/barseghyanartur/tld/issues/54
-  disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
+  disabledTests = [
     "test_1_update_tld_names"
     "test_1_update_tld_names_command"
     "test_2_update_tld_names_module"
-  ]);
+  ];
 
-  checkPhase = ''
-      export PATH="$PATH:$out/bin"
-      py.test -k '${disabledTests}'
+  preCheck = ''
+    export PATH="$PATH:$out/bin"
   '';
+
+  dontUseSetuptoolsCheck = true;
+
+  pythonImportsCheck = [
+    "tld"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/barseghyanartur/tld;

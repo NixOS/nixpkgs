@@ -1,9 +1,11 @@
 # Test Docker containers as systemd units
 
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test.nix ({ pkgs, lib, ... }:
+
+{
   name = "docker-containers";
   meta = {
-    maintainers = with lib.maintainers; [ benley ];
+    maintainers = with lib.maintainers; [ benley mkaito ];
   };
 
   nodes = {
@@ -11,10 +13,9 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
       {
         virtualisation.docker.enable = true;
 
-        virtualisation.dockerPreloader.images = [ pkgs.dockerTools.examples.nginx ];
-
         docker-containers.nginx = {
           image = "nginx-container";
+          imageFile = pkgs.dockerTools.examples.nginx;
           ports = ["8181:80"];
         };
       };

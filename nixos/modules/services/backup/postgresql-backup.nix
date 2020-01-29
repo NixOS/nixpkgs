@@ -35,6 +35,13 @@ let
 
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
+       A systemd timer is now used instead of cron.
+       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+    '')
+  ];
+
   options = {
     services.postgresqlBackup = {
       enable = mkOption {
@@ -81,8 +88,8 @@ in {
       };
 
       pgdumpOptions = mkOption {
-        type = types.string;
-        default = "-Cbo";
+        type = types.separatedString " ";
+        default = "-C";
         description = ''
           Command line options for pg_dump. This options is not used
           if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.

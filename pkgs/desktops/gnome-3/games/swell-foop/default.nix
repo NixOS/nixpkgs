@@ -3,13 +3,13 @@
 
 let
   pname = "swell-foop";
-  version = "3.32.0";
+  version = "3.34.1";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0jpci3c1wyzbvsq86j30rcl166skhi2wf12001amfgh0dmmwipci";
+    sha256 = "1032psxm59nissi268bh3j964m4a0n0ah4dy1pf0ph27j3zvdik1";
   };
 
   passthru = {

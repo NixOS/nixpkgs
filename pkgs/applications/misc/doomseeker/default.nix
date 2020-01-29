@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
 
-stdenv.mkDerivation rec {
-  name = "doomseeker-${version}";
+stdenv.mkDerivation {
+  pname = "doomseeker";
   version = "2018-03-05";
 
   src = fetchFromBitbucket {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 
   meta = with stdenv.lib; {
     homepage = http://doomseeker.drdteam.org/;

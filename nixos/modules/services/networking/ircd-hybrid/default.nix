@@ -112,16 +112,15 @@ in
 
   config = mkIf config.services.ircdHybrid.enable {
 
-    users.users = singleton
-      { name = "ircd";
-        description = "IRCD owner";
+    users.users.ircd =
+      { description = "IRCD owner";
         group = "ircd";
         uid = config.ids.uids.ircd;
       };
 
     users.groups.ircd.gid = config.ids.gids.ircd;
 
-    systemd.services."ircd-hybrid" = {
+    systemd.services.ircd-hybrid = {
       description = "IRCD Hybrid server";
       after = [ "started networking" ];
       wantedBy = [ "multi-user.target" ];

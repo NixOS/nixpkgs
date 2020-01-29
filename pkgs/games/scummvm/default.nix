@@ -1,21 +1,23 @@
 { stdenv, fetchurl, nasm
-, alsaLib, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU_combined, SDL2, zlib
+, alsaLib, curl, flac, fluidsynth, freetype, libjpeg, libmad, libmpeg2, libogg, libvorbis, libGLU, libGL, SDL2, zlib
 }:
 
 stdenv.mkDerivation rec {
-  name = "scummvm-${version}";
-  version = "2.0.0";
+  pname = "scummvm";
+  version = "2.1.0";
 
   src = fetchurl {
-    url = "http://scummvm.org/frs/scummvm/${version}/${name}.tar.xz";
-    sha256 = "0q6aiw97wsrf8cjw9vjilzhqqsr2rw2lll99s8i5i9svan6l314p";
+    url = "http://scummvm.org/frs/scummvm/${version}/${pname}-${version}.tar.xz";
+    sha256 = "6b50c6596a1536b52865f556dc05ded20f86b6ffabe4bccbd746b5587b15f727";
   };
 
   nativeBuildInputs = [ nasm ];
 
   buildInputs = [
-    alsaLib freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis libGLU_combined SDL2 zlib
+    alsaLib curl freetype flac fluidsynth libjpeg libmad libmpeg2 libogg libvorbis libGLU libGL SDL2 zlib
   ];
+
+  dontDisableStatic = true;
 
   enableParallelBuilding = true;
 

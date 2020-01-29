@@ -2,35 +2,35 @@
 
 buildGoPackage rec {
   pname = "dex";
-  version = "2.16.0";
-
-  goPackagePath = "github.com/dexidp/dex";
+  version = "2.17.0";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
     owner = "dexidp";
     repo = pname;
-    sha256 = "0w8nl7inqp4grbaq320dgynmznbrln8vihd799dwb2cx86laxsi1";
+    rev = "v${version}";
+    sha256 = "1z94svpiwrs64m83gpfnniv0ac1fnmvywvl05f20ind1wlf8bvwn";
   };
+
+  goPackagePath = "github.com/dexidp/dex";
 
   subPackages = [
     "cmd/dex"
   ];
 
   buildFlagsArray = [
-    "-ldflags=-w -X ${goPackagePath}/version.Version=${src.rev}"
+    "-ldflags=-w -X github.com/dexidp/dex/version.Version=${src.rev}"
   ];
 
   postInstall = ''
-    mkdir -p $out/share
-    cp -r go/src/${goPackagePath}/web $out/share/web
+    mkdir -p $bin/share
+    cp -r $src/web $bin/share/web
   '';
 
-  meta = {
+  meta = with lib; {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
-    license = lib.licenses.asl20;
-    homepage = https://github.com/dexidp/dex;
-    maintainers = with lib.maintainers; [benley];
-    platforms = lib.platforms.unix;
+    homepage = "https://github.com/dexidp/dex";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ benley ];
+    platforms = platforms.unix;
   };
 }

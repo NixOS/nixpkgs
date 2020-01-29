@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   sisuInjectPlexus_2_1_1 = map (obj: fetchMaven {
     version = "2.1.1";
     artifactId = "sisu-inject-plexus";

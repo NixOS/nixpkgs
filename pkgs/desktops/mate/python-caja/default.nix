@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, python3Packages }:
 
 stdenv.mkDerivation rec {
-  name = "python-caja-${version}";
-  version = "1.22.0";
+  pname = "python-caja";
+  version = "1.22.1";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1zwdjvxci72j0181nlfq6912lw3aq8j3746brlp7wlzn22qp7b0k";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "07hkvs4a6anrvh28zjsrj8anbcz32p19hslhq66yhcvh0hh4kvqk";
   };
 
   nativeBuildInputs = [

@@ -1,35 +1,29 @@
-{ stdenv, fetchurl, perl, zlib }:
+{ stdenv, fetchurl, cmake, perl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libzip-${version}";
-  version = "1.3.0";
+  pname = "libzip";
+  version = "1.5.2";
 
   src = fetchurl {
-    url = "https://www.nih.at/libzip/${name}.tar.gz";
-    sha256 = "1633dvjc08zwwhzqhnv62rjf1abx8y5njmm8y16ik9iwd07ka6d9";
+    url = "https://www.nih.at/libzip/${pname}-${version}.tar.gz";
+    sha256 = "05ay8cbm882br0ir2cmzrvdq8q5mr1bnf53l4305xzigpd54lsdy";
   };
 
+  # Fix pkgconfig file paths
   postPatch = ''
-    patchShebangs test-driver
-    patchShebangs man/handle_links
+    sed -i CMakeLists.txt \
+      -e 's#\\''${exec_prefix}/''${CMAKE_INSTALL_LIBDIR}#''${CMAKE_INSTALL_FULL_LIBDIR}#' \
+      -e 's#\\''${prefix}/''${CMAKE_INSTALL_INCLUDEDIR}#''${CMAKE_INSTALL_FULL_INCLUDEDIR}#'
   '';
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ cmake perl ];
   propagatedBuildInputs = [ zlib ];
 
   preCheck = ''
-    # regress/runtests is a generated file
+    # regress/runtest is a generated file
     patchShebangs regress
-  '';
-
-  # At least mysqlWorkbench cannot find zipconf.h; I think also openoffice
-  # had this same problem.  This links it somewhere that mysqlworkbench looks.
-  postInstall = ''
-    mkdir -p $dev/lib
-    mv $out/lib/libzip $dev/lib/libzip
-    ( cd $dev/include ; ln -s ../lib/libzip/include/zipconf.h zipconf.h )
   '';
 
   meta = with stdenv.lib; {

@@ -29,6 +29,11 @@ python2Packages.buildPythonApplication rec {
     };
   };
 
+  postFixup = ''
+    # Do not propagate Python
+    rm $out/nix-support/propagated-build-inputs
+  '';
+
   meta = with stdenv.lib; {
     description = "Collection of documentation utilities for the GNOME project";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-doc-utils";

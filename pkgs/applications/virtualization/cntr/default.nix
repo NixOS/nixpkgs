@@ -1,14 +1,14 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cntr-${version}";
-  version = "1.2.0";
+  pname = "cntr";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "cntr";
     rev = version;
-    sha256 = "0lmbsnjia44h4rskqkv9yc7xb6f3qjgbg8kcr9zqnr7ivr5fjcxg";
+    sha256 = "0dhfz7aj3cqi974ybf0axchih40rzrs9m8bxhwz1hgig57aisfc0";
   };
 
   cargoSha256 = "0xkwza9fx61pvlsm0s3dxc9i09mqp6c9df8w63fyiq7174vjxryx";

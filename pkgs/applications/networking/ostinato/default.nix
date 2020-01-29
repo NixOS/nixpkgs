@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name    = "ostinato-${version}";
+  pname = "ostinato";
   version = "0.9";
 
   src = fetchFromGitHub  {

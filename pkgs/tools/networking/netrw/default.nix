@@ -8,7 +8,7 @@ assert checksumType == "mhash" -> libmhash != null;
 assert checksumType == "openssl" -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "netrw-${version}";
+  pname = "netrw";
   version = "1.3.2";
 
   configureFlags = [

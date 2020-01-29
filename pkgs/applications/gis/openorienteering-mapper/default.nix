@@ -1,28 +1,25 @@
 { stdenv, fetchFromGitHub, gdal, cmake, ninja, proj, clipper, zlib, qtbase, qttools
-  , qtlocation, qtsensors, doxygen, cups, makeWrapper, qtimageformats
+, qtlocation, qtsensors, doxygen, cups, wrapQtAppsHook, qtimageformats
 }:
 
 stdenv.mkDerivation rec {
-  name = "OpenOrienteering-Mapper-${version}";
-  version = "0.8.4";
+  pname = "OpenOrienteering-Mapper";
+  version = "0.9.1";
 
   buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
                   qtsensors clipper zlib proj doxygen cups];
 
-  nativeBuildInputs = [ cmake makeWrapper ninja ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook ninja ];
 
   src = fetchFromGitHub {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "0rw34kp2vd1la97vnk9plwvis6lvyib2bvs7lgkhpnm4p5l7dp1g";
+    sha256 = "1fyhvf2y89hj7wj89kxccx3dqcja6ndy3w4rx1vmzrp246jpz7wb";
   };
 
   cmakeFlags =
     [
-    # Required by the build to be specified
-    "-DPROJ4_ROOT=${proj}"
-
     # Building the manual and bundling licenses fails
     "-DLICENSING_PROVIDER:BOOL=OFF"
     "-DMapper_MANUAL_QTHELP:BOOL=OFF"
@@ -43,14 +40,11 @@ stdenv.mkDerivation rec {
     "-DMapper_PACKAGE_GDAL=0"
     ]);
 
-
   postInstall =
     stdenv.lib.optionalString stdenv.isDarwin ''
     # Fixes "This application failed to start because it could not find or load the Qt
     # platform plugin "cocoa"."
-    wrapProgram $out/Mapper.app/Contents/MacOS/Mapper \
-      --set QT_QPA_PLATFORM_PLUGIN_PATH ${qtbase.bin}/lib/qt-*/plugins/platforms \
-      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtimageformats}/${qtbase.qtPluginPrefix}
+    wrapQtApp $out/Mapper.app/Contents/MacOS/Mapper
     mkdir -p $out/bin
     ln -s $out/Mapper.app/Contents/MacOS/Mapper $out/bin/mapper
     '';
@@ -63,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.openorienteering.org/apps/mapper/;
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [mpickering];
+    maintainers = with maintainers; [ mpickering sikmir ];
   };
 }

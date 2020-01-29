@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, gnutls, glib, pkgconfig, check, libotr, python
+{ fetchurl, fetchpatch, stdenv, gnutls, glib, pkgconfig, check, libotr, python
 , enableLibPurple ? false, pidgin ? null
 , enablePam ? false, pam ? null
 }:
@@ -24,6 +24,14 @@ stdenv.mkDerivation rec {
     "--pidfile=/var/lib/bitlbee/bitlbee.pid"
   ] ++ optional enableLibPurple "--purple=1"
     ++ optional enablePam "--pam=1";
+
+  patches = [
+    # This should be dropped once the issue is fixed upstream.
+    (fetchpatch {
+      url = "https://github.com/bitlbee/bitlbee/commit/6ff651b3ec93e5fd74f80766d5e9714d963137bc.diff";
+      sha256 = "144dpm4kq7c268fpww1q3n88ayg068n73fbabr5arh1zryw48qfv";
+    })
+  ];
 
   installTargets = [ "install" "install-dev" ];
 

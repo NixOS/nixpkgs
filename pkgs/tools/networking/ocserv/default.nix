@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ocserv-${version}";
-  version = "0.12.3";
+  pname = "ocserv";
+  version = "0.12.6";
 
   src = fetchFromGitLab {
     owner = "openconnect";
     repo = "ocserv";
     rev = "ocserv_${stdenv.lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "072256099l1c6p7dvvzp0gyafh1zvmmgmnpy0fcmv9sy80qg3p44";
+    sha256 = "0k7sx9sg8akxwfdl51cvdqkdrx9qganqddgri2yhcgznc3f3pz5b";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -21,6 +21,6 @@ stdenv.mkDerivation rec {
     homepage = https://gitlab.com/openconnect/ocserv;
     license = licenses.gpl2;
     description = "This program is openconnect VPN server (ocserv), a server for the openconnect VPN client.";
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 }

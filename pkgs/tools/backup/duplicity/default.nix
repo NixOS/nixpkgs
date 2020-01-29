@@ -2,14 +2,15 @@
 , gnutar
 , par2cmdline
 , utillinux
-, rsync, makeWrapper }:
+, rsync
+, backblaze-b2, makeWrapper }:
 
 python2Packages.buildPythonApplication rec {
-  name = "duplicity-${version}";
+  pname = "duplicity";
   version = "0.7.19";
 
   src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${name}.tar.gz";
+    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "0ag9dknslxlasslwfjhqgcqbkb1mvzzx93ry7lch2lfzcdd91am6";
   };
   patches = [
@@ -40,10 +41,10 @@ python2Packages.buildPythonApplication rec {
   ];
 
   buildInputs = [ librsync makeWrapper python2Packages.wrapPython ];
-  propagatedBuildInputs = with python2Packages; [
+  propagatedBuildInputs = [ backblaze-b2 ] ++ (with python2Packages; [
     boto cffi cryptography ecdsa enum idna pygobject3 fasteners
-    ipaddress lockfile paramiko pyasn1 pycrypto six
-  ];
+    ipaddress lockfile paramiko pyasn1 pycrypto six pydrive
+  ]);
   checkInputs = [
     gnupg  # Add 'gpg' to PATH.
     gnutar  # Add 'tar' to PATH.

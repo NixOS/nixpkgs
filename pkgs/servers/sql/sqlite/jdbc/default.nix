@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "sqlite-jdbc";
-  name = "${pname}-${version}";
   version = "3.25.2";
 
   src = fetchMavenArtifact {
@@ -15,7 +14,7 @@ stdenv.mkDerivation rec {
   phases = [ "installPhase" ];
 
   installPhase = ''
-    install -m444 -D ${src}/share/java/*${name}.jar "$out/share/java/${name}.jar"
+    install -m444 -D ${src}/share/java/*${pname}-${version}.jar "$out/share/java/${pname}-${version}.jar"
   '';
 
   meta = with stdenv.lib; {

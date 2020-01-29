@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, buildGoModule }:
 buildGoModule rec {
-  name = "terraform-provider-elasticsearch-${version}";
+  pname = "terraform-provider-elasticsearch";
   version = "0.7.0";
 
   src = fetchFromGitHub {

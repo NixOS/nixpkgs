@@ -5,7 +5,7 @@ python3Packages.buildPythonApplication rec {
   name = "grab-site-${version}";
 
   src = fetchFromGitHub {
-    rev = "${version}";
+    rev = version;
     owner = "ArchiveTeam";
     repo = "grab-site";
     sha256 = "01n3mi9q593sd2bbmbbp5pn2c3pkwj7iqmy02zbh8ciqskraja4z";

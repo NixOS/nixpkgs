@@ -46,6 +46,11 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+  ];
+
   options = {
     services.murmur = {
       enable = mkOption {
@@ -234,7 +239,7 @@ in
       extraConfig = mkOption {
         type = types.lines;
         default = "";
-        description = "Extra configuration to put into mumur.ini.";
+        description = "Extra configuration to put into murmur.ini.";
       };
     };
   };

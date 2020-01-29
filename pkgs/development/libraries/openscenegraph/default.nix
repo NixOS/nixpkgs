@@ -1,8 +1,8 @@
 { stdenv, lib, fetchFromGitHub, cmake, pkgconfig, doxygen,
-  libX11, libXinerama, libXrandr, libGLU_combined,
+  libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? true, jasper,
+  jasperSupport ? false, jasper,  # disable jasper by default (many CVE)
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -26,20 +26,20 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "openscenegraph-${version}";
-  version = "3.6.3";
+  pname = "openscenegraph";
+  version = "3.6.4";
 
   src = fetchFromGitHub {
     owner = "openscenegraph";
     repo = "OpenSceneGraph";
-    rev = "d011ca4e8d83549a3688bf6bb8cd468dd9684822";
-    sha256 = "0h32z15sa8sbq276j0iib0n707m8bs4p5ji9z2ah411446paad9q";
+    rev = "OpenSceneGraph-${version}";
+    sha256 = "0x8hdbzw0b71j91fzp9cwmy9a7ava8v8wwyj8nxijq942vdx1785";
   };
 
   nativeBuildInputs = [ pkgconfig cmake doxygen ];
 
   buildInputs = [
-    libX11 libXinerama libXrandr libGLU_combined
+    libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
     ++ lib.optional jasperSupport jasper
@@ -64,14 +64,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withExamples [ fltk wxGTK ]
   ;
 
-  enableParallelBuilding = true;
-
   cmakeFlags = lib.optional (!withApps) "-DBUILD_OSG_APPLICATIONS=OFF" ++ lib.optional withExamples "-DBUILD_OSG_EXAMPLES=ON";
 
   meta = with stdenv.lib; {
     description = "A 3D graphics toolkit";
     homepage = http://www.openscenegraph.org/;
-    maintainers = [ maintainers.raskin ];
+    maintainers = with maintainers; [ aanderse raskin ];
     platforms = platforms.linux;
     license = "OpenSceneGraph Public License - free LGPL-based license";
   };

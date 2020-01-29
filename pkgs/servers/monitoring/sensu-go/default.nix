@@ -1,22 +1,24 @@
-{ buildGoPackage, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 let
   generic = { subPackages, pname, postInstall ? "" }:
-    buildGoPackage rec {
+    buildGoModule rec {
       inherit pname;
-      version = "5.9.0";
-      shortRev = "078f625"; # for internal version info
+      version = "5.14.1";
+      shortRev = "1f6d16b"; # for internal version info
 
       goPackagePath = "github.com/sensu/sensu-go";
 
       src = fetchFromGitHub {
         owner = "sensu";
         repo = "sensu-go";
-        rev = version;
-        sha256 = "1rivnq7m4p44zz1fl46j06aakb0yjsjb3mjqyfq4r0235xr01ajw";
+        rev = "v${version}";
+        sha256 = "1fhvw2hrn2zqpz3ypsx6i1zrn83pdifvsyzpbhzxmff6l9a290bq";
       };
 
       inherit subPackages postInstall;
+
+      modSha256 = "0c0cj0ylhifyb7l9kjmgdlfzcz8528fzw8kr3c5y7j5h6pih06sy";
 
       buildFlagsArray = let
         versionPkg = "github.com/sensu/sensu-go/version";
@@ -44,7 +46,14 @@ in
         "''${!outputBin}/share/zsh/site-functions"
 
       ''${!outputBin}/bin/sensuctl completion bash > ''${!outputBin}/share/bash-completion/completions/sensuctl
-      ''${!outputBin}/bin/sensuctl completion zsh > ''${!outputBin}/share/zsh/site-functions/_sensuctl
+
+      # https://github.com/sensu/sensu-go/issues/3132
+      (
+        echo "#compdef sensuctl"
+        ''${!outputBin}/bin/sensuctl completion zsh
+        echo '_complete sensuctl 2>/dev/null'
+      ) > ''${!outputBin}/share/zsh/site-functions/_sensuctl
+
     '';
   };
 

@@ -4,13 +4,13 @@ with python3.pkgs;
 
 buildPythonApplication rec {
   pname = "thonny";
-  version = "3.1.2";
+  version = "3.2.4";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1simqqxm72k5zhavhllkinsyw8ggy6fjs5ppj82g3l5g3919pfna";
+    sha256 = "1hfpjw4fac0kq3n9jqwfzbys6h35qjbh5rpc4jzhlln200h6zvwj";
   };
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -22,6 +22,7 @@ buildPythonApplication rec {
     mypy
     pyperclip
     asttokens
+    send2trash
   ];
 
   preInstall = ''

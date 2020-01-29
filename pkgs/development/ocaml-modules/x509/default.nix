@@ -1,28 +1,23 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg
-, asn1-combinators, astring, nocrypto, ppx_sexp_conv
-, ounit, cstruct-unix
+{ lib, fetchurl, buildDunePackage, ocaml
+, alcotest, cstruct-unix
+, asn1-combinators, domain-name, fmt, gmap, nocrypto, rresult
 }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-x509-${version}";
-  version = "0.6.1";
+buildDunePackage rec {
+  pname = "x509";
+  version = "0.7.1";
 
   src = fetchurl {
-    url = "https://github.com/mirleft/ocaml-x509/releases/download/${version}/x509-${version}.tbz";
-    sha256 = "1c62mw9rnzq0rs3ihbhfs18nv4mdzwag7893hlqgji3wmaai70pk";
+    url = "https://github.com/mirleft/ocaml-x509/releases/download/v${version}/x509-v${version}.tbz";
+    sha256 = "0hnklgdm1fwwqi0nfvpdbp7ddqvrh9h8697mr99bxqdfhg6sxh1w";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg ppx_sexp_conv ounit cstruct-unix ];
-  propagatedBuildInputs = [ asn1-combinators astring nocrypto ];
+  buildInputs = lib.optionals doCheck [ alcotest cstruct-unix ];
+  propagatedBuildInputs = [ asn1-combinators domain-name fmt gmap nocrypto rresult ];
 
-  buildPhase = "${topkg.run} build --tests true";
+  doCheck = lib.versionAtLeast ocaml.version "4.06";
 
-  doCheck = true;
-  checkPhase = "${topkg.run} test";
-
-  inherit (topkg) installPhase;
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/mirleft/ocaml-x509;
     description = "X509 (RFC5280) handling in OCaml";
     license = licenses.bsd2;

@@ -1,23 +1,36 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
-, desktop-file-utils, gtk3, granite, libgee, gcr, webkitgtk, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, gcr
+, webkitgtk
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "capnet-assist";
-  version = "2.2.3";
+  pname = "elementary-capnet-assist";
+  version = "2.2.4";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "capnet-assist";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
+    sha256 = "0yz827gs1qv6csgv4v993rjmqzc6dbymbvznsy45ghlh19l4l7j1";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -40,7 +53,9 @@ stdenv.mkDerivation rec {
   ];
 
   # Not useful here or in elementary - See: https://github.com/elementary/capnet-assist/issues/3
-  patches = [ ./remove-capnet-test.patch ];
+  patches = [
+    ./remove-capnet-test.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

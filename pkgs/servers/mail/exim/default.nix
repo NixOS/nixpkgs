@@ -1,27 +1,28 @@
 { coreutils, db, fetchurl, openssl, pcre, perl, pkgconfig, stdenv
 , enableLDAP ? false, openldap
-, enableMySQL ? false, mysql, zlib
+, enableMySQL ? false, libmysqlclient, zlib
 , enableAuthDovecot ? false, dovecot
 , enablePAM ? false, pam
+, enableSPF ? true, libspf2
 }:
 
 stdenv.mkDerivation rec {
-  name = "exim-4.92";
+  name = "exim-4.92.3";
 
   src = fetchurl {
     url = "https://ftp.exim.org/pub/exim/exim4/${name}.tar.xz";
-    sha256 = "0qhxxwl0nhzgp0w3pjkhx9z9lqfpk8id25q5ghf9ay2f90mydjba";
+    sha256 = "1zfj4zblv5881qxpzkrg3f6a96pbcq270s9p6p1w85lfxjsknif4";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ coreutils db openssl perl pcre ]
     ++ stdenv.lib.optional enableLDAP openldap
-    ++ stdenv.lib.optionals enableMySQL [ mysql zlib ]
+    ++ stdenv.lib.optionals enableMySQL [ libmysqlclient zlib ]
     ++ stdenv.lib.optional enableAuthDovecot dovecot
-    ++ stdenv.lib.optional enablePAM pam;
+    ++ stdenv.lib.optional enablePAM pam
+    ++ stdenv.lib.optional enableSPF libspf2;
 
   preBuild = ''
-    ${stdenv.lib.optionalString enableMySQL "PKG_CONFIG_PATH=$PKG_CONFIG_PATH:${mysql}/share/mysql/pkgconfig/"}
     sed '
       s:^\(BIN_DIRECTORY\)=.*:\1='"$out"'/bin:
       s:^\(CONFIGURE_FILE\)=.*:\1=/etc/exim.conf:
@@ -52,10 +53,10 @@ stdenv.mkDerivation rec {
       ''}
       ${stdenv.lib.optionalString enableMySQL ''
         s:^# \(LOOKUP_MYSQL=yes\)$:\1:
-        s:^# \(LOOKUP_MYSQL_PC=mariadb\)$:\1:
-        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient:
-        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql}/include/mysql/:
+        s:^# \(LOOKUP_MYSQL_PC=libmysqlclient\)$:\1:
+        s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${libmysqlclient}/lib/mysql -lssl -ldl -lm -lpthread -lz:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${libmysqlclient}/include/mysql/:
       ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
@@ -64,6 +65,10 @@ stdenv.mkDerivation rec {
         s:^# \(SUPPORT_PAM\)=.*:\1=yes:
         s:^\(EXTRALIBS_EXIM\)=\(.*\):\1=\2 -lpam:
         s:^# \(EXTRALIBS_EXIM\)=.*:\1=-lpam:
+      ''}
+      ${stdenv.lib.optionalString enableSPF ''
+        s:^# \(SUPPORT_SPF\)=.*:\1=yes:
+        s:^# \(LDFLAGS += -lspf2\):\1:
       ''}
       #/^\s*#.*/d
       #/^\s*$/d

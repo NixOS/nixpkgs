@@ -3,16 +3,17 @@
 , libwebp, quantumdepth ? 8, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
-  name = "graphicsmagick-${version}";
-  version = "1.3.31";
+  pname = "graphicsmagick";
+  version = "1.3.32";
 
   src = fetchurl {
     url = "mirror://sourceforge/graphicsmagick/GraphicsMagick-${version}.tar.xz";
-    sha256 = "0y22740f25qxsqqqg26xqlfp920dm57b7hrgaqmx7azksrcvnsq9";
+    sha256 = "1qclp9i31idpcbbqswmnq2q11lmv0a7cvdb1y72xcky8sshaahmq";
   };
 
   patches = [
     ./disable-popen.patch
+    ./1.3.32-darwin-png-strlcat-fix.patch
   ];
 
   configureFlags = [

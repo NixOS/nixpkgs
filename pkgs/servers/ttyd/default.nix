@@ -5,21 +5,15 @@
 
 with builtins;
 
-let
-  # ttyd hasn't seen a release in quite a while. remove all this
-  # junk when a new one happens (eventually)
-  revCount = 174;
+stdenv.mkDerivation rec {
+  pname = "ttyd";
+  version = "1.5.2";
   src = fetchFromGitHub {
-    owner  = "tsl0922";
-    repo   = "ttyd";
-    rev    = "6df6ac3e03b705ddd46109c2ac43a1cba439c0df";
-    sha256 = "0g5jlfa7k6qd59ysdagczlhwgjfjspb3sfbd8b790hcil933qrxm";
+    owner = "tsl0922";
+    repo = pname;
+    rev = "refs/tags/${version}";
+    sha256 = "16nngc3dqrsgpapzvl34c0msgdd1fyp3k8r1jj1m9bch6z2p50bl";
   };
-
-in stdenv.mkDerivation rec {
-  name = "ttyd-${version}";
-  version = "1.4.2_pre${toString revCount}_${substring 0 8 src.rev}";
-  inherit src;
 
   nativeBuildInputs = [ pkgconfig cmake xxd ];
   buildInputs = [ openssl libwebsockets json_c libuv ];

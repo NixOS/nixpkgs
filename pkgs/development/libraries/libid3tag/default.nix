@@ -1,7 +1,7 @@
 {stdenv, fetchurl, zlib, gperf}:
 
 stdenv.mkDerivation rec {
-  name = "libid3tag-${version}";
+  pname = "libid3tag";
   version = "0.15.1b";
 
   src = fetchurl {
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "ID3 tag manipulation library";
     homepage = http://mad.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

@@ -1,24 +1,38 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, vala, python3
-, desktop-file-utils, gtk3, granite, libgee, clutter-gst, clutter-gtk, gst_all_1
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, clutter-gst
+, clutter-gtk
+, gst_all_1
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "videos";
-  version = "2.6.3";
+  pname = "elementary-videos";
+  version = "2.7.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "videos";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1ncm8kh6dcy83p8pmpilnk03b4dx3b1jm8w13izq2dkglfgdwvqx";
+    sha256 = "1b6dqqmxa83fwlh9r0v918ikxd3mnwk0j5xssw1wk5l7q72s43w7";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 

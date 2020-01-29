@@ -5,7 +5,8 @@
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "asio-${version}";
+  pname = "asio";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/asio/asio-${version}.tar.bz2";

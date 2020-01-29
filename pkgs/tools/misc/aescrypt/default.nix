@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.14";
-  name = "aescrypt-${version}";
+  pname = "aescrypt";
 
   src = fetchurl {
-    url = "https://www.aescrypt.com/download/v3/linux/${name}.tgz";
+    url = "https://www.aescrypt.com/download/v3/linux/${pname}-${version}.tgz";
     sha256 = "1iziymcbpc64d44djgqfifpblsly4sr5bxsp5g29jgxz552kjlah";
   };
 

@@ -3,7 +3,7 @@
 , libsndfile, mpg123 }:
 
 stdenv.mkDerivation rec {
-  name = "zdoom-${version}";
+  pname = "zdoom";
   majorVersion = "2.8";
   version = "${majorVersion}.1";
 

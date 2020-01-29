@@ -1,17 +1,27 @@
-{ stdenv, fetchzip, openresolv ? null, libmnl ? null, procps ? null, iproute ? null, makeWrapper ? null, wireguard-go ? null }:
+{
+  stdenv, fetchzip,
+
+  iptables ? null,
+  iproute ? null,
+  libmnl ? null,
+  makeWrapper ? null,
+  openresolv ? null,
+  procps ? null,
+  wireguard-go ? null,
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "wireguard-tools-${version}";
-  version = "0.0.20190601";
+  pname = "wireguard-tools";
+  version = "1.0.20200121";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "0glcshf4dk2kfdkqc0x6ds45kpw6amsi8p2m81bfpmgnaglcbp7c";
+    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
+    sha256 = "0s82i8ibf0zj2wka625vh4rihdwmvlkv1v3bilrlcscwgfvzjfhf";
   };
 
-  sourceRoot = "source/src/tools";
+  sourceRoot = "source/src";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = optional stdenv.isLinux libmnl;
@@ -29,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute iptables openresolv]}
     done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
@@ -39,12 +49,12 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = ./update.sh;
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Tools for the WireGuard secure network tunnel";
-    downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    homepage = https://www.wireguard.com/;
+    downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
+    homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 xwvvvvwx ];
     platforms = platforms.unix;
   };
 }

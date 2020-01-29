@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "fritzbox-exporter-${version}";
+  pname = "fritzbox-exporter";
   version = "v1.0-32-g90fc0c5";
   rev = "90fc0c572d3340803f7c2aafc4b097db7af1f871";
 

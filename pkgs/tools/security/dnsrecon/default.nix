@@ -39,6 +39,6 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/darkoperator/dnsrecon";
     license = licenses.gpl2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ c0bw3b globin ];
+    maintainers = with maintainers; [ c0bw3b ];
   };
 }

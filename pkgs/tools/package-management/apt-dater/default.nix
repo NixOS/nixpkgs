@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "apt-dater-${version}";
+  pname = "apt-dater";
   version = "1.0.4";
 
   src = fetchFromGitHub {

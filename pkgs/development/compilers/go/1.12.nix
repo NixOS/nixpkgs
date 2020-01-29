@@ -17,24 +17,24 @@ let
   '';
 
   goarch = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
+    i686 = "386";
+    x86_64 = "amd64";
+    aarch64 = "arm64";
+    arm = "arm";
+    armv5tel = "arm";
+    armv6l = "arm";
+    armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
 
 in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.5";
+  version = "1.12.15";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1s034pr60h20lsw171vbzqxqvcqn0s04dxfyqczyfcmkrf4g199a";
+    sha256 = "1hw4xjywcl883dnvfbb92w85sy8n231fdri4aynj8xajgr0p9fla";
   };
 
   # perl is used for testing go vet
@@ -96,6 +96,12 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
+    # Disable TestGcSys because it's flakey in our tests, but the failure is not
+    # reproducible by multiple people in other environments.
+    # See https://github.com/NixOS/nixpkgs/issues/68361#issuecomment-537849272 and following
+    # NOTE: Try re-enabling for releases newer than 1.12.9
+    sed -i '/TestGcSys/areturn' src/runtime/gc_test.go
+
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
@@ -135,8 +141,11 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+  ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
-    ./skip-test-extra-files-on-386.patch
+    (if stdenv.isAarch32
+    then ./skip-test-extra-files-on-aarch32.patch
+    else ./skip-test-extra-files-on-386.patch)
   ];
 
   postPatch = ''
@@ -233,7 +242,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 ];
+    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

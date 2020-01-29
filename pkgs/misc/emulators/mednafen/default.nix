@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, freeglut, libGLU_combined, libcdio, libjack2
+{ stdenv, fetchurl, pkgconfig, freeglut, libGLU, libGL, libcdio, libjack2
 , libsamplerate, libsndfile, libX11, SDL, SDL_net, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "mednafen-${version}";
+  pname = "mednafen";
   version = "0.9.48";
 
   src = fetchurl {
-    url = "https://mednafen.github.io/releases/files/${name}.tar.xz";
+    url = "https://mednafen.github.io/releases/files/${pname}-${version}.tar.xz";
     sha256 = "00i12mywhp43274aq466fwavglk5b7d8z8bfdna12ra9iy1hrk6k";
   };
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     freeglut
-    libGLU_combined
+    libGLU libGL
     libcdio
     libjack2
     libsamplerate

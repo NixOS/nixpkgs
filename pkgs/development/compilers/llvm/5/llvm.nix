@@ -1,7 +1,8 @@
 { stdenv
 , fetch
+, fetchpatch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libxml2
@@ -15,19 +16,20 @@
 }:
 
 let
-  src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
-
   # Used when creating a versioned symlinks of libLLVM.dylib
   versionSuffixes = with stdenv.lib;
-    let parts = splitString "." release_version; in
+    let parts = splitVersion release_version; in
     imap (i: _: concatStringsSep "." (take i parts)) parts;
 in
 
-stdenv.mkDerivation (rec {
-  name = "llvm-${version}";
+stdenv.mkDerivation ({
+  pname = "llvm";
+  inherit version;
+
+  src = fetch "llvm" "0g1bbj2n6xv4p1n6hh17vj3vpvg56wacipc81dgwga9mg2lys8nm";
 
   unpackPhase = ''
-    unpackFile ${src}
+    unpackFile $src
     mv llvm-${version}* llvm
     sourceRoot=$PWD/llvm
   '';
@@ -35,13 +37,27 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "python" ]
     ++ stdenv.lib.optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+  nativeBuildInputs = [ cmake python3 ]
+    ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ];
 
   propagatedBuildInputs = [ ncurses zlib ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://bugzilla.redhat.com/attachment.cgi?id=1389687";
+      name = "llvm-gcc8-type-mismatch.patch";
+      sha256 = "0ga2123aclq3x9w72d0rm0az12m8c1i4r1106vh701hf4cghgbch";
+    })
+    ./fix-gcc9.patch
+    #(fetchpatch {
+    #  name = "llvm-fix-gcc9.patch";
+    #  url = "https://reviews.llvm.org/file/data/zs3ck5ryvc5n672fd2kw/PHID-FILE-byoqefzwmkd7qnlip4v2/file";
+    #  sha256 = "0injj1hqgrbcbihhwp2nbal88jfykad30r54f2cdcx7gws2fcy8i";
+    #  stripLen = 1;
+    #})
+  ];
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
@@ -103,7 +119,7 @@ stdenv.mkDerivation (rec {
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''
@@ -132,8 +148,6 @@ stdenv.mkDerivation (rec {
 
   enableParallelBuilding = true;
 
-  passthru.src = src;
-
   requiredSystemFeatures = [ "big-parallel" ];
   meta = {
     description = "Collection of modular and reusable compiler and toolchain technologies";
@@ -143,7 +157,7 @@ stdenv.mkDerivation (rec {
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

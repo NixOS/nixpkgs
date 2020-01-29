@@ -1,7 +1,7 @@
 { androidenv, buildPackages, pkgs, targetPackages
 }:
 
-rec {
+{
   "18b" =
     let
       ndkVersion = "18.1.5063045";

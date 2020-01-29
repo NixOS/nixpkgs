@@ -1,22 +1,22 @@
-{stdenv, fetchurl, which, perl, ocaml, findlib, javalib, camlp4 }:
+{stdenv, fetchurl, which, perl, ocaml, findlib, javalib }:
 
 assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "3.12";
 
 let
   pname = "sawja";
-  version = "1.5.6";
+  version = "1.5.7";
   webpage = "http://sawja.inria.fr/";
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
   src = fetchurl {
-    url = https://gforge.inria.fr/frs/download.php/file/37819/sawja-1.5.6.tar.bz2;
-    sha256 = "0dkfdc8h94r7kj4p8q57fz7fssypgmjrix8xff0va7x1nya5sdp3";
+    url = https://gforge.inria.fr/frs/download.php/file/38117/sawja-1.5.7.tar.bz2;
+    sha256 = "08xv1bq4pragc1g93w4dnbn0mighcjwfp3ixj9jzmhka2vzqm4cc";
   };
 
-  buildInputs = [ which perl ocaml findlib camlp4 ];
+  buildInputs = [ which perl ocaml findlib ];
 
   patches = [ ./configure.sh.patch ./Makefile.config.example.patch ];
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A library written in OCaml, relying on Javalib to provide a high level representation of Java bytecode programs";
-    homepage = "${webpage}";
+    homepage = webpage;
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.vbgl ];
     platforms = ocaml.meta.platforms or [];

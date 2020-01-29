@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.9.2";
-  name = "djvu2pdf-${version}";
+  pname = "djvu2pdf";
 
   src = fetchurl {
     url = "http://0x2a.at/site/projects/djvu2pdf/djvu2pdf-${version}.tar.gz";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Convert DjVu files to PDF files";
-    homepage = http://0x2a.at/s/projects/djvu2pdf;
+    homepage = https://0x2a.at/s/projects/djvu2pdf;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.all;
     inherit version;

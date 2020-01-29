@@ -1,18 +1,18 @@
 { stdenv, fetchFromGitHub, python3, python3Packages, intltool
 , glibcLocales, gnome3, gtk3, wrapGAppsHook
-, ipodSupport ? false, libgpod, gobject-introspection
+, gobject-introspection
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gpodder";
-  version = "3.10.8";
+  version = "3.10.11";
   format = "other";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0sx5z9qjl76fi0m8vmars0yasfaq6znq434d8zjwla22k5wflmwm";
+    sha256 = "15f5z3cnch9lpzbz73l4wjykv9n74y8djz5db53la2ql4ihaxfz9";
   };
 
   patches = [
@@ -50,7 +50,7 @@ python3Packages.buildPythonApplication rec {
     podcastparser
     html5lib
     gtk3
-  ] ++ stdenv.lib.optional ipodSupport libgpod;
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

@@ -3,13 +3,12 @@
 
 mkDerivation rec {
   pname = "latte-dock";
-  version = "0.8.8";
-  name = "${pname}-${version}";
+  version = "0.9.7";
 
   src = fetchurl {
-    url = "https://download.kde.org/stable/${pname}/${name}.tar.xz";
-    sha256 = "137s7rx35a5qrfww3q8bllj4zyjfa7l709snvdfj34y7jbq7p6cd";
-    name = "${name}.tar.xz";
+    url = "https://download.kde.org/stable/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "1b8yz6r6x46xajx900m8s0sjfwiwbpp6nfb780ygfcz6inb1234q";
+    name = "${pname}-${version}.tar.xz";
   };
 
   buildInputs = [ plasma-framework xorg.libpthreadstubs xorg.libXdmcp xorg.libSM ];

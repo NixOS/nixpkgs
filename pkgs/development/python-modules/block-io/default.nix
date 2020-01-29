@@ -1,4 +1,4 @@
-{ stdenv, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six }:
+{ stdenv, fetchPypi, buildPythonPackage, base58, ecdsa, pycryptodome, requests, six, setuptools }:
 
 buildPythonPackage rec {
   pname = "block-io";
@@ -15,6 +15,7 @@ buildPythonPackage rec {
     pycryptodome
     requests
     six
+    setuptools
   ];
 
   preConfigure = ''

@@ -1,13 +1,13 @@
 { stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify,
-  libappindicator-gtk3, gst_all_1, gtk3, gnome3, wrapGAppsHook, aria2 ? null
+  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
 }:
 
 stdenv.mkDerivation rec {
-  name = "uget-${version}";
+  pname = "uget";
   version = "2.2.2";
 
   src = fetchurl {
-    url = "mirror://sourceforge/urlget/${name}.tar.gz";
+    url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
     sha256 = "1hmzk907blgzc1z6wv4zbzqrwad06zfm1rqc3svh5garxw8z7xsw";
   };
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libnotify
     libappindicator-gtk3
     gtk3
-    (stdenv.lib.getLib gnome3.dconf)
+    (stdenv.lib.getLib dconf)
   ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
   ++ (stdenv.lib.optional (aria2 != null) aria2);
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
                ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
   meta = with stdenv.lib; {
-    description = "Download manager using gtk+ and libcurl";
+    description = "Download manager using GTK and libcurl";
     longDescription = ''
       uGet is a VERY Powerful download manager application with a large
       inventory of features but is still very light-weight and low on

@@ -1,18 +1,18 @@
 { stdenv, fetchurl, rpmextract }:
 
 stdenv.mkDerivation rec {
-  name = "libsane-dsseries-${version}";
+  pname = "libsane-dsseries";
   version = "1.0.5-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf100974/${name}.x86_64.rpm";
+    url = "https://download.brother.com/welcome/dlf100974/${pname}-${version}.x86_64.rpm";
     sha256 = "1wfdbfbf51cc7njzikdg48kwpnpc0pg5s6p0s0y3z0q7y59x2wbq";
   };
 
   nativeBuildInputs = [ rpmextract ];
 
   unpackCmd = ''
-    mkdir ${name} && pushd ${name}
+    mkdir ${pname}-${version} && pushd ${pname}-${version}
     rpmextract $curSrc
     popd
   '';

@@ -110,7 +110,7 @@ in {
   proto = let
     toolName = "bitscope-proto";
     version = "0.9.FG13B";
-  in mkBitscope rec {
+  in mkBitscope {
     inherit toolName version;
     # NOTE: this is meant as a demo by BitScope
     # NOTE: clicking on logo produces error

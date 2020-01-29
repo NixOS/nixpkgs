@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.5.2";
+  version = "0.5.3";
   pname = "imutils";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d2bdf373e3e6cfbdc113d4e91547d3add3774d8722c8d4f225fa39586fb8076";
+    sha256 = "857af6169d90e4a0a814130b9b107f5d611150ce440107e1c1233521c6fb1e2b";
   };
 
   propagatedBuildInputs = [ opencv3 ];

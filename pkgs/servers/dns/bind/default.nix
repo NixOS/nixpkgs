@@ -8,14 +8,13 @@
 assert enableSeccomp -> libseccomp != null;
 assert enablePython -> python3 != null;
 
-let version = "9.14.2"; in
-
 stdenv.mkDerivation rec {
-  name = "bind-${version}";
+  pname = "bind";
+  version = "9.14.10";
 
   src = fetchurl {
-    url = "https://ftp.isc.org/isc/bind9/${version}/${name}.tar.gz";
-    sha256 = "033zqajnj5ys45g899132xkhh9f0hsh76ffv7302wl166xbjfh0f";
+    url = "https://ftp.isc.org/isc/bind9/${version}/${pname}-${version}.tar.gz";
+    sha256 = "0nkkc2phkkzwgl922xg41gx5pc5f4safabqslaw3880hwdf8vfaa";
   };
 
   outputs = [ "out" "lib" "dev" "man" "dnsutils" "host" ];
@@ -23,12 +22,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./dont-keep-configure-flags.patch
     ./remove-mkdir-var.patch
-    # Fix build on armv6l
-    (fetchpatch {
-      url = "https://gitlab.isc.org/isc-projects/bind9/commit/f546769b8b1077a0ebfe270b8a283469ea3158d0.patch";
-      sha256 = "060f35lj6rr2qg7sy9pwy3946q2bsps4m9knmw15x6n6nmzvxrcv";
-      excludes = [ "CHANGES" ];
-    })
   ];
 
   nativeBuildInputs = [ perl ];
@@ -36,8 +29,6 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux libcap
     ++ lib.optional enableSeccomp libseccomp
     ++ lib.optional enablePython (python3.withPackages (ps: with ps; [ ply ]));
-
-  STD_CDEFINES = [ "-DDIG_SIGCHASE=1" ]; # support +sigchase
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
@@ -72,6 +63,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/host $host
 
     moveToOutput bin/dig $dnsutils
+    moveToOutput bin/delv $dnsutils
     moveToOutput bin/nslookup $dnsutils
     moveToOutput bin/nsupdate $dnsutils
 
@@ -82,13 +74,13 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # requires root and the net
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = https://www.isc.org/downloads/bind/;
     description = "Domain name server";
-    license = stdenv.lib.licenses.mpl20;
+    license = licenses.mpl20;
 
-    maintainers = with stdenv.lib.maintainers; [peti];
-    platforms = with stdenv.lib.platforms; unix;
+    maintainers = with maintainers; [ peti globin ];
+    platforms = platforms.unix;
 
     outputsToInstall = [ "out" "dnsutils" "host" ];
   };

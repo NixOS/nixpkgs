@@ -1,29 +1,21 @@
-{ stdenv, go, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "cadvisor-${version}";
-  version = "0.33.1";
+buildGoPackage rec {
+  pname = "cadvisor";
+  version = "0.35.0";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "cadvisor";
     rev = "v${version}";
-    sha256 = "15wddg0xwkz42n5y2f72yq3imhbvnp83g1jq6p81ddw9qzbz62zs";
+    sha256 = "1652yf2a4ng9z0jq8q6jnzh6svj5nwar9j8q7sssgy36bi03ixqa";
   };
 
-  nativeBuildInputs = [ go ];
+  goPackagePath = "github.com/google/cadvisor";
 
-  buildPhase = ''
-    export GOCACHE="$TMPDIR/go-cache"
-    mkdir -p Godeps/_workspace/src/github.com/google/
-    ln -s $(pwd) Godeps/_workspace/src/github.com/google/cadvisor
-    GOPATH=$(pwd)/Godeps/_workspace go build -v -o cadvisor github.com/google/cadvisor
-  '';
+  subPackages = [ "." ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    mv cadvisor $out/bin
-  '';
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/google/cadvisor/version.Version=${version}" ];
 
   meta = with stdenv.lib; {
     description = "Analyzes resource usage and performance characteristics of running docker containers";

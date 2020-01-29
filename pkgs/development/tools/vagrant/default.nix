@@ -4,9 +4,9 @@
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.3";
+  version = "2.2.6";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1j00glqn8b1zsgqg2nyk5as405a6s6vclswg2ri0a229hnsiabvs";
+  sha256 = "0nssq2i4riif0q72h5qp7dlxd4shqcyvm1bx9adppcacb77gpnhv";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -25,6 +25,19 @@ let
         inherit version;
       };
     } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+
+    # This replaces the gem symlinks with directories, resolving this
+    # error when running vagrant (I have no idea why):
+    # /nix/store/p4hrycs0zaa9x0gsqylbk577ppnryixr-vagrant-2.2.6/lib/ruby/gems/2.6.0/gems/i18n-1.1.1/lib/i18n/config.rb:6:in `<module:I18n>': uninitialized constant I18n::Config (NameError)
+    postBuild = ''
+      for gem in "$out"/lib/ruby/gems/*/gems/*; do
+        cp -a "$gem/" "$gem.new"
+        rm "$gem"
+        # needed on macOS, otherwise the mv yields permission denied 
+        chmod +w "$gem.new"
+        mv "$gem.new" "$gem"
+      done
+    '';
   };
 
 in buildRubyGem rec {
@@ -55,7 +68,7 @@ in buildRubyGem rec {
   postInstall =
     let
       pathAdditions = lib.makeSearchPath "bin"
-        (map (x: "${lib.getBin x}") ([
+        (map (x: lib.getBin x) ([
           libarchive
         ] ++ lib.optionals withLibvirt [
           libguestfs
@@ -68,6 +81,9 @@ in buildRubyGem rec {
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
+
+    mkdir -p $out/share/bash-completion/completions/
+    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
   '' +
   lib.optionalString withLibvirt ''
     substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
@@ -76,12 +92,14 @@ in buildRubyGem rec {
   '';
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/vagrant" --version)" == "Vagrant ${version}" ]]; then
-      echo 'Vagrant smoke check passed'
-    else
-      echo 'Vagrant smoke check failed'
-      return 1
-    fi
+    HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null
+  '';
+
+  # `patchShebangsAuto` patches this one script which is intended to run
+  # on foreign systems.
+  postFixup = ''
+    sed -i -e '1c#!/bin/sh -' \
+      $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   passthru = {

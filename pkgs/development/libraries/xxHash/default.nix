@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "xxHash-${version}";
-  version = "0.7.0";
+  pname = "xxHash";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
     rev = "v${version}";
-    sha256 = "19iyr7x0s7in9kp9wrj4iimdx58nv6jndz9x5ndnl07gd90y7jxb";
+    sha256 = "1f9gl0cymmi92ihsfan0p4zmyf2hxwx4arjimpbmbp719nbcvdsx";
   };
 
   outputs = [ "out" "dev" ];

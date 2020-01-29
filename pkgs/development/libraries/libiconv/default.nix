@@ -6,11 +6,11 @@
 # assert !stdenv.hostPlatform.isLinux || stdenv.hostPlatform != stdenv.buildPlatform; # TODO: improve on cross
 
 stdenv.mkDerivation rec {
-  name = "libiconv-${version}";
+  pname = "libiconv";
   version = "1.16";
 
   src = fetchurl {
-    url = "mirror://gnu/libiconv/${name}.tar.gz";
+    url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
     sha256 = "016c57srqr0bza5fxjxfrx6aqxkqy0s3gkhcg7p7fhk5i6sv38g6";
   };
 

@@ -1,14 +1,16 @@
 { stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
-, expat, libxml2, openssl }:
+, expat, libxml2, openssl, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
-  name = "squid-3.5.28";
+  name = "squid-4.9";
 
   src = fetchurl {
-    url = "http://www.squid-cache.org/Versions/v3/3.5/${name}.tar.xz";
-    sha256 = "1n4f55g56b11qz4fazrnvgzx5wp6b6637c4qkbd1lrjwwqibchgx";
+    url = "http://www.squid-cache.org/Versions/v4/${name}.tar.xz";
+    sha256 = "188znkbpr315yxbpvpvbpb5sbsn15zmg8l207a55dc43cs687c8w";
   };
 
+  nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
     perl openldap db cyrus_sasl expat libxml2 openssl
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap pam ];
@@ -30,6 +32,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.squid-cache.org;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz raskin ];
   };
 }

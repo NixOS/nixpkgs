@@ -21,7 +21,7 @@ let
      sha256 = "1cj9fjhdng6yllajjm3gkk04ag9bwyb3n70hrb5nk6c292v8a45c";
   };
 
-in mkDerivation rec {
+in mkDerivation {
   version = "18.3.4.8";
   sha256 = "16c0h25hh5yvkv436ks5jbd7qmxzb6ndvk64mr404347a20iib0g";
 

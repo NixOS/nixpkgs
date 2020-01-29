@@ -2,18 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "cppcheck";
-  version = "1.87";
-  name = "${pname}-${version}";
+  version = "1.88";
 
   src = fetchurl {
-    url = "mirror://sourceforge/${pname}/${name}.tar.bz2";
-    sha256 = "1jl1qlr8la1rix1ffcvl6s4arv2n9fvx85sl4zgp29428xks9c73";
+    url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.bz2";
+    sha256 = "1jiqv9pzzy2gxkdhxv3gqjarwgbvc7kxyc66dm3i6xwp94bl89dv";
   };
 
   buildInputs = [ pcre ];
   nativeBuildInputs = [ libxslt docbook_xsl docbook_xml_dtd_45 ];
 
-  makeFlags = ''PREFIX=$(out) CFGDIR=$(out)/cfg HAVE_RULES=yes'';
+  makeFlags = [ "PREFIX=$(out)" "CFGDIR=$(out)/cfg" "HAVE_RULES=yes" ];
 
   outputs = [ "out" "man" ];
 

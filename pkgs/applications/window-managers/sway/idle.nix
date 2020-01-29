@@ -4,18 +4,19 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "swayidle-${version}";
-  version = "1.3";
+  pname = "swayidle";
+  version = "1.6";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swayidle";
     rev = version;
-    sha256 = "04agcbhc473jkk7npb40i94ny8naykxzpjcw2lvl05kxv65y5d9v";
+    sha256 = "1nd3v8r9549lykdwh4krldfl59lzaspmmai5k1icy7dvi6kkr18r";
   };
 
   postPatch = ''
-    sed -iE "s/version: '1\.2',/version: '${version}',/" meson.build
+    substituteInPlace meson.build \
+      --replace "version: '1.5'" "version: '${version}'"
   '';
 
   nativeBuildInputs = [ meson ninja pkgconfig scdoc ];

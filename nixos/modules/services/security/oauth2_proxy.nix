@@ -284,7 +284,7 @@ in
     ####################################################
     # UPSTREAM Configuration
     upstream = mkOption {
-      type = with types; coercedTo string (x: [x]) (listOf string);
+      type = with types; coercedTo str (x: [x]) (listOf str);
       default = [];
       description = ''
         The http url(s) of the upstream endpoint or <literal>file://</literal>
@@ -523,7 +523,7 @@ in
     };
 
     keyFile = mkOption {
-      type = types.nullOr types.string;
+      type = types.nullOr types.path;
       default = null;
       description = ''
         oauth2_proxy allows passing sensitive configuration via environment variables.
@@ -546,6 +546,7 @@ in
 
     users.users.oauth2_proxy = {
       description = "OAuth2 Proxy";
+      isSystemUser = true;
     };
 
     systemd.services.oauth2_proxy = {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, barcode, gnome3, autoreconfHook
 , gtk3, gtk-doc, libxml2, librsvg , libtool, libe-book, gsettings-desktop-schemas
-, intltool, itstool, makeWrapper, pkgconfig, hicolor-icon-theme
+, intltool, itstool, makeWrapper, pkgconfig, yelp-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -14,10 +14,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig makeWrapper intltool ];
   buildInputs = [
-    barcode gtk3 gtk-doc gnome3.yelp-tools
+    barcode gtk3 gtk-doc yelp-tools
     gnome3.gnome-common gsettings-desktop-schemas
     itstool libxml2 librsvg libe-book libtool
-    hicolor-icon-theme
   ];
 
   preFixup = ''

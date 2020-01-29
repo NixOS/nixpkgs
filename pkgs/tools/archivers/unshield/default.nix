@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "unshield-${version}";
+  pname = "unshield";
   version = "1.4.3";
 
   src = fetchFromGitHub {

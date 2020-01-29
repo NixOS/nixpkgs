@@ -3,16 +3,14 @@
 
 buildPythonPackage rec {
   pname = "cleo";
-  version = "0.7.2";
+  version = "0.7.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "091nzpfp5incd2fzqych78rvyx4i3djr50cnizbjzr3dc7g00l3s";
+    sha256 = "99cf342406f3499cec43270fcfaf93c126c5164092eca201dfef0f623360b409";
   };
 
   propagatedBuildInputs = [
-    pylev
-    pastel
     clikit
   ];
 

@@ -4,7 +4,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "mednaffe-${version}";
+  pname = "mednaffe";
   version = "0.8.6";
 
   src = fetchFromGitHub {

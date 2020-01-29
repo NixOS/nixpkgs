@@ -4,7 +4,8 @@ let
   version = "2.6.2";
   SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
 in stdenv.mkDerivation {
-  name = "tinyxml-${version}";
+  pname = "tinyxml";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/tinyxml/tinyxml/${version}/tinyxml_2_6_2.zip";
@@ -27,7 +28,7 @@ in stdenv.mkDerivation {
   hardeningDisable = [ "format" ];
 
   NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional stdenv.isDarwin "-mmacosx-version-min=10.9";
+    stdenv.lib.optionalString stdenv.isDarwin "-mmacosx-version-min=10.9";
 
   buildInputs = [ unzip ];
   buildPhase = ''

@@ -1,31 +1,39 @@
-{ stdenv, fetchurl, pkgconfig
-, gtk
-, thunar-bare, python2, hicolor-icon-theme
-, wafHook
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, gtk3
+, thunar
+, cmake
+, ninja
 }:
 
 stdenv.mkDerivation rec {
-  p_name  = "thunar-dropbox-plugin";
-  ver_maj = "0.2";
-  ver_min = "1";
-  name = "${p_name}-${ver_maj}.${ver_min}";
+  pname  = "thunar-dropbox";
+  version = "0.3.1";
 
-  src = fetchurl {
-    url = "http://softwarebakery.com/maato/files/thunar-dropbox/thunar-dropbox-${ver_maj}.${ver_min}.tar.bz2";
-    sha256 = "08vhzzzwshyz371yl7fzfylmhvchhv3s5kml3dva4v39jhvrpnkf";
+  src = fetchFromGitHub {
+    owner = "Jeinzi";
+    repo = "thunar-dropbox";
+    rev = version;
+    sha256 = "1fshjvh542ffa8npfxv3cassgn6jclb2ix9ir997y4k0abzp1fxb";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [
+    pkgconfig
+    cmake
+    ninja
+  ];
+
   buildInputs = [
-    gtk
-    thunar-bare python2 hicolor-icon-theme
+    thunar
+    gtk3
   ];
 
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://softwarebakery.com/maato/thunar-dropbox.html;
-    description = "A plugin for thunar that adds context-menu items from dropbox";
+    homepage = "https://github.com/Jeinzi/thunar-dropbox";
+    description = "A plugin that adds context-menu items for Dropbox to Thunar";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

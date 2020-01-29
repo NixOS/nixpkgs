@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
+{ mkDerivation, lib, fetchFromGitHub, cmake, ninja, flex, bison, proj, geos, xlibsWrapper, sqlite, gsl
 , qwt, fcgi, python3Packages, libspatialindex, libspatialite, postgresql
-, txt2tags, openssl, libzip, hdf5, netcdf
+, txt2tags, openssl, libzip, hdf5, netcdf, exiv2
 , qtbase, qtwebkit, qtsensors, qca-qt5, qtkeychain, qscintilla, qtserialport, qtxmlpatterns
 , withGrass ? true, grass
 }:
@@ -9,13 +9,16 @@ let
   pythonBuildInputs = with python3Packages;
     [ qscintilla-qt5 gdal jinja2 numpy psycopg2
       chardet dateutil pyyaml pytz requests urllib3 pygments pyqt5 sip owslib six ];
-in stdenv.mkDerivation rec {
-  version = "3.4.8";
-  name = "qgis-unwrapped-${version}";
+in mkDerivation rec {
+  version = "3.10.1";
+  pname = "qgis";
+  name = "${pname}-unwrapped-${version}";
 
-  src = fetchurl {
-    url = "http://qgis.org/downloads/qgis-${version}.tar.bz2";
-    sha256 = "13dy9y7ipv25x3k31njhjljdav36xay6s82g6ywaqf1xxh3s567w";
+  src = fetchFromGitHub {
+    owner = "qgis";
+    repo = "QGIS";
+    rev = "final-${lib.replaceStrings ["."] ["_"] version}";
+    sha256 = "0xq0nnp7zdqaihqvh5rsi1129g23vnk5ijkpxfzaggafgmhf5hgz";
   };
 
   passthru = {
@@ -23,10 +26,10 @@ in stdenv.mkDerivation rec {
     inherit python3Packages;
   };
 
-  buildInputs = [ openssl proj geos xlibsWrapper sqlite gsl qwt
+  buildInputs = [ openssl proj geos xlibsWrapper sqlite gsl qwt exiv2
     fcgi libspatialindex libspatialite postgresql txt2tags libzip hdf5 netcdf
     qtbase qtwebkit qtsensors qca-qt5 qtkeychain qscintilla qtserialport qtxmlpatterns] ++
-    (stdenv.lib.optional withGrass grass) ++ pythonBuildInputs;
+    (lib.optional withGrass grass) ++ pythonBuildInputs;
 
   nativeBuildInputs = [ cmake flex bison ninja ];
 
@@ -36,19 +39,19 @@ in stdenv.mkDerivation rec {
   # build to use PYQT5_SIP_DIR consistently.
   postPatch = ''
      substituteInPlace cmake/FindPyQt5.py \
-       --replace 'pyqtcfg.pyqt_sip_dir' '"${python3Packages.pyqt5}/share/sip/PyQt5"'
+       --replace 'sip_dir = cfg.default_sip_dir' 'sip_dir = "${python3Packages.pyqt5}/share/sip/PyQt5"'
    '';
 
   cmakeFlags = [ "-DCMAKE_SKIP_BUILD_RPATH=OFF"
                  "-DPYQT5_SIP_DIR=${python3Packages.pyqt5}/share/sip/PyQt5"
                  "-DQSCI_SIP_DIR=${python3Packages.qscintilla-qt5}/share/sip/PyQt5" ] ++
-                 stdenv.lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
+                 lib.optional withGrass "-DGRASS_PREFIX7=${grass}/${grass.name}";
 
   meta = {
     description = "A Free and Open Source Geographic Information System";
     homepage = http://www.qgis.org;
-    license = stdenv.lib.licenses.gpl2Plus;
-    platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [ lsix ];
+    license = lib.licenses.gpl2Plus;
+    platforms = with lib.platforms; linux;
+    maintainers = with lib.maintainers; [ lsix ];
   };
 }

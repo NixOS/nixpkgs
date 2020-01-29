@@ -1,24 +1,36 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, python3, desktop-file-utils, gtk3, granite, libgee
-, libcanberra, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, python3
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, libcanberra
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
-  version = "1.6.2";
+  pname = "elementary-screenshot-tool"; # This will be renamed to "screenshot" soon. See -> https://github.com/elementary/screenshot/pull/93
+  version = "1.7.1";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "screenshot";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = "screenshot";
+    repo = repoName;
     rev = version;
-    sha256 = "1z61j96jk9zjr3bn5hgsp25m4v8h1rqwxm0kg8c34bvl06f13v8q";
+    sha256 = "179ib2ldvhdx3hks5lqyx2cvlkk3j1qccvlfwh2yd2bl79zpk3ma";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = "screenshot";
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 

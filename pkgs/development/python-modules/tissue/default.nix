@@ -21,7 +21,7 @@ buildPythonPackage rec {
     homepage = https://github.com/WoLpH/tissue;
     description = "Tissue - automated pep8 checker for nose";
     license = licenses.lgpl2;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

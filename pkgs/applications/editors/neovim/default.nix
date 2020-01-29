@@ -2,7 +2,6 @@
 , libuv, lua, ncurses, pkgconfig
 , unibilium, xsel, gperf
 , libvterm-neovim
-, withJemalloc ? true, jemalloc
 , glibcLocales ? null, procps ? null
 
 # now defaults to false because some tests can be flaky (clipboard etc)
@@ -13,21 +12,21 @@ with stdenv.lib;
 
 let
   neovimLuaEnv = lua.withPackages(ps:
-    (with ps; [ mpack lpeg luabitop ]
+    (with ps; [ lpeg luabitop mpack ]
     ++ optionals doCheck [
         nvim-client luv coxpcall busted luafilesystem penlight inspect
       ]
     ));
 in
   stdenv.mkDerivation rec {
-    name = "neovim-unwrapped-${version}";
-    version = "0.3.7";
+    pname = "neovim-unwrapped";
+    version = "0.4.3";
 
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
       rev = "v${version}";
-      sha256 = "1j6w5jvq5v7kf7diad91qs1acr427nidnk9s24yyrz0hwdd1c2lh";
+      sha256 = "03p7pic7hw9yxxv7fbgls1f42apx3lik2k6mpaz1a109ngyc5kaj";
     };
 
     patches = [
@@ -41,16 +40,16 @@ in
     enableParallelBuilding = true;
 
     buildInputs = [
+      gperf
       libtermkey
       libuv
+      libvterm-neovim
+      lua.pkgs.luv.libluv
       msgpack
       ncurses
-      libvterm-neovim
-      unibilium
-      gperf
       neovimLuaEnv
-    ] ++ optional withJemalloc jemalloc
-      ++ optional stdenv.isDarwin libiconv
+      unibilium
+    ] ++ optional stdenv.isDarwin libiconv
       ++ optionals doCheck [ glibcLocales procps ]
     ;
 
@@ -77,9 +76,12 @@ in
     disallowedReferences = [ stdenv.cc ];
 
     cmakeFlags = [
-      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
       "-DGPERF_PRG=${gperf}/bin/gperf"
+      "-DLUA_PRG=${neovimLuaEnv.interpreter}"
     ]
+    # FIXME: this is verry messy and strange.
+    ++ optional (!stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv}/lib/lua/${lua.luaversion}/luv.so"
+    ++ optional (stdenv.isDarwin) "-DLIBLUV_LIBRARY=${lua.pkgs.luv.libluv}/lib/lua/${lua.luaversion}/libluv.dylib"
     ++ optional doCheck "-DBUSTED_PRG=${neovimLuaEnv}/bin/busted"
     ++ optional (!lua.pkgs.isLuaJIT) "-DPREFER_LUA=ON"
     ;
@@ -88,16 +90,11 @@ in
     hardeningDisable = [ "fortify" ];
 
     preConfigure = stdenv.lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=${jemalloc}/lib
       substituteInPlace src/nvim/CMakeLists.txt --replace "    util" ""
     '';
 
     postInstall = stdenv.lib.optionalString stdenv.isLinux ''
       sed -i -e "s|'xsel|'${xsel}/bin/xsel|g" $out/share/nvim/runtime/autoload/provider/clipboard.vim
-    '' + stdenv.lib.optionalString (withJemalloc && stdenv.isDarwin) ''
-      install_name_tool -change libjemalloc.1.dylib \
-                ${jemalloc}/lib/libjemalloc.1.dylib \
-                $out/bin/nvim
     '';
 
     # export PATH=$PWD/build/bin:${PATH}
@@ -122,7 +119,7 @@ in
       # those contributions were copied from Vim (identified in the commit logs
       # by the vim-patch token). See LICENSE for details."
       license = with licenses; [ asl20 vim ];
-      maintainers = with maintainers; [ manveru garbas rvolosatovs ];
+      maintainers = with maintainers; [ manveru rvolosatovs ma27 ];
       platforms   = platforms.unix;
     };
   }

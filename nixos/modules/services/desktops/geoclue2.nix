@@ -188,43 +188,50 @@ in
 
     systemd.packages = [ package ];
 
-    users.users.geoclue = {
-      isSystemUser = true;
-      home = "/var/lib/geoclue";
-      group = "geoclue";
-      description = "Geoinformation service";
+    # we cannot use DynamicUser as we need the the geoclue user to exist for the dbus policy to work
+    users = {
+      users.geoclue = {
+        isSystemUser = true;
+        home = "/var/lib/geoclue";
+        group = "geoclue";
+        description = "Geoinformation service";
+      };
+
+      groups.geoclue = {};
     };
 
-    users.groups.geoclue = {};
-
-    systemd.tmpfiles.rules = [
-      "d /var/lib/geoclue 0755 geoclue geoclue"
-    ];
-
-    # restart geoclue service when the configuration changes
-    systemd.services."geoclue".restartTriggers = [
-      config.environment.etc."geoclue/geoclue.conf".source
-    ];
+    systemd.services.geoclue = {
+      # restart geoclue service when the configuration changes
+      restartTriggers = [
+        config.environment.etc."geoclue/geoclue.conf".source
+      ];
+      serviceConfig.StateDirectory = "geoclue";
+    };
 
     # this needs to run as a user service, since it's associated with the
     # user who is making the requests
     systemd.user.services = mkIf cfg.enableDemoAgent {
-      "geoclue-agent" = {
+      geoclue-agent = {
         description = "Geoclue agent";
-        script = "${package}/libexec/geoclue-2.0/demos/agent";
         # this should really be `partOf = [ "geoclue.service" ]`, but
         # we can't be part of a system service, and the agent should
         # be okay with the main service coming and going
         wantedBy = [ "default.target" ];
+        serviceConfig = {
+          Type = "exec";
+          ExecStart = "${package}/libexec/geoclue-2.0/demos/agent";
+          Restart = "on-failure";
+          PrivateTmp = true;
+        };
       };
     };
 
-    services.geoclue2.appConfig."epiphany" = {
+    services.geoclue2.appConfig.epiphany = {
       isAllowed = true;
       isSystem = false;
     };
 
-    services.geoclue2.appConfig."firefox" = {
+    services.geoclue2.appConfig.firefox = {
       isAllowed = true;
       isSystem = false;
     };
@@ -256,4 +263,6 @@ in
         };
       } // mapAttrs' appConfigToINICompatible cfg.appConfig);
   };
+
+  meta.maintainers = with lib.maintainers; [ worldofpeace ];
 }

@@ -23,9 +23,8 @@
 }:
 
 buildGoPackage rec {
-  name = "${pname}-${version}";
   pname = "dde-api";
-  version = "3.18.3";
+  version = "5.0.0";
 
   goPackagePath = "pkg.deepin.io/dde/api";
 
@@ -33,7 +32,7 @@ buildGoPackage rec {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0sbzjpjy2d7j22v5sw3mf472lcnsy81n2rgly87k79r5gk9x89ar";
+    sha256 = "0iv4krj6dqdknwvmax7aj40k1h96259kqcfnljadrwpl7cvsvp5p";
   };
 
   goDeps = ./deps.nix;
@@ -114,7 +113,7 @@ buildGoPackage rec {
     searchHardCodedPaths $out  # debugging
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Go-lang bindings for dde-daemon";

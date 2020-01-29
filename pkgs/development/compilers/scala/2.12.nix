@@ -1,11 +1,11 @@
 { stdenv, fetchurl, makeWrapper, jre, gnugrep, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "scala-2.12.8";
+  name = "scala-2.12.10";
 
   src = fetchurl {
     url = "https://www.scala-lang.org/files/archive/${name}.tgz";
-    sha256 = "18w0vdbsp0q5rxglgalwlgkggld926bqi1fxc598rn4gh46a03j4";
+    sha256 = "0sk5n3ir5zkgr8jayq5pn4l87ia5zmjr2zzwchgxkv8g62ivs4iv";
   };
 
   propagatedBuildInputs = [ jre ] ;
@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     # put docs in correct subdirectory
     mkdir -p $out/share/doc
     mv $out/doc $out/share/doc/scala
+    mv $out/{LICENSE,NOTICE} $out/share/doc/scala
 
     for p in $(ls $out/bin/) ; do
       wrapProgram $out/bin/$p \

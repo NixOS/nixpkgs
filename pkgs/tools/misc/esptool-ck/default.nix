@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "esptool-ck-${version}";
+  pname = "esptool-ck";
   version = "0.4.13";
 
   src = fetchFromGitHub {

@@ -112,6 +112,32 @@ let
           Determines whether to add allowed IPs as routes or not.
         '';
       };
+
+      socketNamespace = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        example = "container";
+        description = ''The pre-existing network namespace in which the
+        WireGuard interface is created, and which retains the socket even if the
+        interface is moved via <option>interfaceNamespace</option>. When
+        <literal>null</literal>, the interface is created in the init namespace.
+        See <link
+        xlink:href="https://www.wireguard.com/netns/">documentation</link>.
+        '';
+      };
+
+      interfaceNamespace = mkOption {
+        default = null;
+        type = with types; nullOr str;
+        example = "init";
+        description = ''The pre-existing network namespace the WireGuard
+        interface is moved to. The special value <literal>init</literal> means
+        the init namespace. When <literal>null</literal>, the interface is not
+        moved.
+        See <link
+        xlink:href="https://www.wireguard.com/netns/">documentation</link>.
+        '';
+      };
     };
 
   };
@@ -239,6 +265,10 @@ let
         if peer.presharedKey != null
           then pkgs.writeText "wg-psk" peer.presharedKey
           else peer.presharedKeyFile;
+      src = interfaceCfg.socketNamespace;
+      dst = interfaceCfg.interfaceNamespace;
+      ip = nsWrap "ip" src dst;
+      wg = nsWrap "wg" src dst;
     in nameValuePair "wireguard-${interfaceName}-peer-${unitName}"
       {
         description = "WireGuard Peer - ${interfaceName} - ${peer.publicKey}";
@@ -255,16 +285,16 @@ let
         };
 
         script = let
-          wg_setup = "wg set ${interfaceName} peer ${peer.publicKey}" +
+          wg_setup = "${wg} set ${interfaceName} peer ${peer.publicKey}" +
             optionalString (psk != null) " preshared-key ${psk}" +
             optionalString (peer.endpoint != null) " endpoint ${peer.endpoint}" +
             optionalString (peer.persistentKeepalive != null) " persistent-keepalive ${toString peer.persistentKeepalive}" +
             optionalString (peer.allowedIPs != []) " allowed-ips ${concatStringsSep "," peer.allowedIPs}";
           route_setup =
-            optionalString (interfaceCfg.allowedIPsAsRoutes != false)
+            optionalString interfaceCfg.allowedIPsAsRoutes
               (concatMapStringsSep "\n"
                 (allowedIP:
-                  "ip route replace ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                  "${ip} route replace ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
                 ) peer.allowedIPs);
         in ''
           ${wg_setup}
@@ -272,13 +302,13 @@ let
         '';
 
         postStop = let
-          route_destroy = optionalString (interfaceCfg.allowedIPsAsRoutes != false)
+          route_destroy = optionalString interfaceCfg.allowedIPsAsRoutes
             (concatMapStringsSep "\n"
               (allowedIP:
-                "ip route delete ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
+                "${ip} route delete ${allowedIP} dev ${interfaceName} table ${interfaceCfg.table}"
               ) peer.allowedIPs);
         in ''
-          wg set ${interfaceName} peer ${peer.publicKey} remove
+          ${wg} set ${interfaceName} peer ${peer.publicKey} remove
           ${route_destroy}
         '';
       };
@@ -287,6 +317,13 @@ let
     # exactly one way to specify the private key must be set
     #assert (values.privateKey != null) != (values.privateKeyFile != null);
     let privKey = if values.privateKeyFile != null then values.privateKeyFile else pkgs.writeText "wg-key" values.privateKey;
+        src = values.socketNamespace;
+        dst = values.interfaceNamespace;
+        ipPreMove  = nsWrap "ip" src null;
+        ipPostMove = nsWrap "ip" src dst;
+        wg = nsWrap "wg" src dst;
+        ns = if dst == "init" then "1" else dst;
+
     in
     nameValuePair "wireguard-${name}"
       {
@@ -307,26 +344,33 @@ let
 
           ${values.preSetup}
 
-          ip link add dev ${name} type wireguard
+          ${ipPreMove} link add dev ${name} type wireguard
+          ${optionalString (values.interfaceNamespace != null && values.interfaceNamespace != values.socketNamespace) "${ipPreMove} link set ${name} netns ${ns}"}
 
           ${concatMapStringsSep "\n" (ip:
-            "ip address add ${ip} dev ${name}"
+            "${ipPostMove} address add ${ip} dev ${name}"
           ) values.ips}
 
-          wg set ${name} private-key ${privKey} ${
+          ${wg} set ${name} private-key ${privKey} ${
             optionalString (values.listenPort != null) " listen-port ${toString values.listenPort}"}
 
-          ip link set up dev ${name}
+          ${ipPostMove} link set up dev ${name}
 
           ${values.postSetup}
         '';
 
         postStop = ''
-          ip link del dev ${name}
+          ${ipPostMove} link del dev ${name}
           ${values.postShutdown}
         '';
       };
 
+  nsWrap = cmd: src: dst:
+    let
+      nsList = filter (ns: ns != null) [ src dst ];
+      ns = last nsList;
+    in
+      if (length nsList > 0 && ns != "init") then "ip netns exec ${ns} ${cmd}" else cmd;
 in
 
 {

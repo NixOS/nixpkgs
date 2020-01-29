@@ -28,5 +28,6 @@ buildPythonPackage rec {
     homepage    = "https://github.com/ecederstrand/exchangelib";
     license     = licenses.bsd2;
     maintainers = with maintainers; [ catern ];
+    broken = true;
   };
 }

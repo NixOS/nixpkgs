@@ -1,17 +1,19 @@
-{ fetchurl, stdenv, coin3d, qt4, pkgconfig }:
+{ fetchhg, stdenv, coin3d, qt5, cmake, pkgconfig }:
 
-stdenv.mkDerivation rec {
-  name = "soqt-${version}";
-  version = "1.5.0";
+stdenv.mkDerivation {
+  pname = "soqt";
+  version = "1.6.0a";
 
-  src = fetchurl {
-    url = "https://bitbucket.org/Coin3D/coin/downloads/SoQt-${version}.tar.gz";
-    sha256 = "14dbh8ynzjcgwgxjc6530c5plji7vn62kbdf447w0dp53564p8zn";
+  src = fetchhg {
+    url = "https://bitbucket.org/Coin3D/soqt";
+    rev = "5f2afb4890e0059eb27e1671f980d10ebfb9e762";
+    sha256 = "0j9lsci4cx95v16l0jaky0vzh4lbdliwz7wc17442ihjaqiqmv8m";
+    fetchSubrepos = true;
   };
 
-  buildInputs = [ coin3d qt4 ];
+  buildInputs = [ coin3d qt5.qtbase ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   meta = {
     homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, intltool, xorg, pcre, gst_all_1, glib
-, xosd, libnotify, enchant, wrapGAppsHook, gdk_pixbuf }:
+, xosd, libnotify, enchant, wrapGAppsHook, gdk-pixbuf }:
 
-stdenv.mkDerivation rec {
-   name = "xneur-${version}";
+stdenv.mkDerivation {
+   pname = "xneur";
    version = "0.20.0";
 
   src = fetchurl {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     xorg.libX11 xorg.libXtst pcre gst_all_1.gstreamer glib
     xosd xorg.libXext xorg.libXi libnotify
-    enchant gdk_pixbuf
+    enchant gdk-pixbuf
     gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
   ];
 

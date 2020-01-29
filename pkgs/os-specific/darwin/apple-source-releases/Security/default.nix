@@ -5,7 +5,7 @@ appleDerivation {
   # buildInputs = [ Foundation xpc darling ];
   buildInputs = [ xpc xnu ];
 
-  xcbuildFlags = "-target Security_frameworks_osx";
+  xcbuildFlags = [ "-target" "Security_frameworks_osx" ];
 
   # NIX_CFLAGS_COMPILE = "-Wno-error -I${xnu}/include/libkern -DPRIVATE -I${xnu}/Library/Frameworks/System.framework/Headers";
 

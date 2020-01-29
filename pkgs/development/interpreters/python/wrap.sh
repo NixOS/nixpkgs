@@ -81,7 +81,15 @@ wrapPythonProgramsIn() {
 
                     # Add any additional arguments provided by makeWrapperArgs
                     # argument to buildPythonPackage.
-                    local -a user_args="($makeWrapperArgs)"
+                    # We need to support both the case when makeWrapperArgs
+                    # is an array and a IFS-separated string.
+                    # TODO: remove the string branch when __structuredAttrs are used.
+                    if [[ "${makeWrapperArgs+defined}" == "defined" && "$(declare -p makeWrapperArgs)" =~ ^'declare -a makeWrapperArgs=' ]]; then
+                        local -a user_args=("${makeWrapperArgs[@]}")
+                    else
+                        local -a user_args="(${makeWrapperArgs:-})"
+                    fi
+
                     local -a wrapProgramArgs=("${wrap_args[@]}" "${user_args[@]}")
                     wrapProgram "${wrapProgramArgs[@]}"
                 fi

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, python, runtimeShell }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "cmdstan-2.17.1";
 
   src = fetchurl {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1vq1cnrkvrvbfl40j6ajc60jdrjcxag1fi6kff5pqmadfdz9564j";
   };
 
-  buildFlags = "build";
+  buildFlags = [ "build" ];
   enableParallelBuilding = true;
 
   doCheck = true;

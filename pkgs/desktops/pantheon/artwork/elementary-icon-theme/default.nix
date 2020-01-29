@@ -1,34 +1,48 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, python3,ninja, hicolor-icon-theme, gtk3 }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, python3
+, ninja
+, hicolor-icon-theme
+, gtk3
+, inkscape
+, xorg
+}:
 
 stdenv.mkDerivation rec {
-  pname = "icons";
-  version = "5.0.3";
+  pname = "elementary-icon-theme";
+  version = "5.2.0";
 
-  name = "elementary-icon-theme-${version}";
+  repoName = "icons";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0wpv7yirf44bfqfmyshzfw9605j1idm7c9jqg68k3nmymmd6iqzf";
+    sha256 = "1irkjj8xfpgkl5p56xhqa3w2s98b8lav7d1lxxrabdi87cjv3n33";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-icon-theme";
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
+    gtk3
+    inkscape
     meson
     ninja
     python3
+    xorg.xcursorgen
   ];
 
-  buildInputs = [ gtk3 ];
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
 
-  propagatedBuildInputs = [ hicolor-icon-theme ];
+  dontDropIconThemeCache = true;
 
   mesonFlags = [
     "-Dvolume_icons=false" # Tries to install some icons to /

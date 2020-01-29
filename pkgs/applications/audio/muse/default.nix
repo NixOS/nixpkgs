@@ -16,12 +16,12 @@
 , gitAndTools
 }:
 
-stdenv.mkDerivation rec {
-  name = "muse-sequencer-${version}";
+stdenv.mkDerivation {
+  pname = "muse-sequencer";
   version = "3.1pre1";
 
   meta = with stdenv.lib; {
-    homepage = http://www.muse-sequencer.org;
+    homepage = "https://www.muse-sequencer.org/";
     description = "MIDI/Audio sequencer with recording and editing capabilities";
     longDescription = ''
       MusE is a MIDI/Audio sequencer with recording and editing capabilities

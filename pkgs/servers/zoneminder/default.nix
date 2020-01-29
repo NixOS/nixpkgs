@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
 , coreutils, procps, psmisc }:
 
@@ -77,7 +77,7 @@ let
   perlBin = "${perl}/bin/perl";
 
 in stdenv.mkDerivation rec {
-  name = "zoneminder-${version}";
+  pname = "zoneminder";
   version = "1.32.3";
 
   src = fetchFromGitHub {
@@ -89,6 +89,8 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./default-to-http-1dot1.patch
+    # Explicitly link with dynamic linking library to fix build
+    ./link-with-libdl.patch
   ];
 
   postPatch = ''
@@ -121,7 +123,7 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mysql}/bin/mysqldump
+      --replace /usr/bin/mysqldump ${mysql.client}/bin/mysqldump
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
@@ -138,13 +140,13 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 mysql pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
     DateManip DBI DBDmysql LWP SysMmap
     # run-time dependencies not checked at build-time
-    ClassStdFast DataDump JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
@@ -160,6 +162,10 @@ in stdenv.mkDerivation rec {
     "-DZM_CONFIG_DIR=${placeholder "out"}/etc/zoneminder"
     "-DZM_WEB_USER=${user}"
     "-DZM_WEB_GROUP=${user}"
+
+    # Workaround issue in CMakeLists.txt where ZM_CGIDIR set to ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}/zoneminder/cgi-bin
+    # But CMAKE_INSTALL_LIBEXECDIR is already an absolute path from cmake setup-hook
+    "-DZM_CGIDIR=${placeholder "out"}/libexec/zoneminder/cgi-bin"
   ];
 
   passthru = { inherit dirName; };
@@ -172,6 +178,7 @@ in stdenv.mkDerivation rec {
       perlFlags="$perlFlags -I$i"
     done
 
+    mkdir -p $out/libexec
     for f in $out/bin/*.pl ; do
       mv $f $out/libexec/
       makeWrapper ${perlBin} $f \
@@ -184,7 +191,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Video surveillance software system";
-    homepage = https://zoneminder.com;
+    homepage = "https://zoneminder.com";
     license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
     platforms = platforms.unix;

@@ -1,7 +1,7 @@
 { stdenv, fetchgit, utillinux, ncurses, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "unnethack-${version}";
+  pname = "unnethack";
   version = "5.2.0";
 
   src = fetchgit {

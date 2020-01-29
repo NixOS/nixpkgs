@@ -35,10 +35,10 @@ in
       };
 
       localAddress = mkOption {
-        type = types.str;
-        default = "0.0.0.0";
+        type = types.coercedTo types.str singleton (types.listOf types.str);
+        default = [ "[::0]" "0.0.0.0" ];
         description = ''
-          Local address to which the server binds.
+          Local addresses to which the server binds.
         '';
       };
 

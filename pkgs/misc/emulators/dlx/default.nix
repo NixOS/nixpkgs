@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ unzip ];
 
-  makeFlags = "LINK=gcc CFLAGS=-O2";
+  makeFlags = [ "LINK=gcc" "CFLAGS=-O2" ];
 
   hardeningDisable = [ "format" ];
 

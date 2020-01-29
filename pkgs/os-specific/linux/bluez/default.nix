@@ -1,55 +1,83 @@
-{ stdenv, fetchurl, pkgconfig, dbus, glib, alsaLib,
-  python3, readline, udev, libical, systemd,
-  enableWiimote ? false, enableMidi ? false, enableSixaxis ? false }:
+{ stdenv
+, lib
+, fetchurl
+, alsaLib
+, dbus
+, glib
+, json_c
+, libical
+, pkgconfig
+, python3
+, readline
+, systemd
+, udev
+}:
 
 stdenv.mkDerivation rec {
-  name = "bluez-5.50";
+  pname = "bluez";
+  version = "5.52";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/bluetooth/${name}.tar.xz";
-    sha256 = "048r91vx9gs5nwwbah2s0xig04nwk14c5s0vb7qmaqdvighsmz2z";
+    url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
+    sha256 = "02jng21lp6fb3c2bh6vf9y7cj4gaxwk29dfc32ncy0lj0gi4q57p";
   };
 
   pythonPath = with python3.pkgs; [
-    dbus-python pygobject2 pygobject3 recursivePthLoader
+    dbus-python
+    pygobject3
+    recursivePthLoader
   ];
 
   buildInputs = [
-    dbus glib alsaLib python3 python3.pkgs.wrapPython
-    readline udev libical
+    alsaLib
+    dbus
+    glib
+    json_c
+    libical
+    python3
+    readline
+    udev
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [
+    pkgconfig
+    python3.pkgs.wrapPython
+  ];
 
   outputs = [ "out" "dev" "test" ];
 
-  patches = [ ./bluez-5.37-obexd_without_systemd-1.patch ];
-
-  postConfigure = ''
+  postPatch = ''
     substituteInPlace tools/hid2hci.rules \
       --replace /sbin/udevadm ${systemd}/bin/udevadm \
       --replace "hid2hci " "$out/lib/udev/hid2hci "
   '';
 
-  configureFlags = (with stdenv.lib; [
+  configureFlags = [
     "--localstatedir=/var"
     "--enable-library"
     "--enable-cups"
     "--enable-pie"
-    "--with-dbusconfdir=$(out)/etc"
-    "--with-dbussystembusdir=$(out)/share/dbus-1/system-services"
-    "--with-dbussessionbusdir=$(out)/share/dbus-1/services"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-systemduserunitdir=$(out)/etc/systemd/user"
-    "--with-udevdir=$(out)/lib/udev"
-    ] ++ optional enableWiimote [ "--enable-wiimote" ]
-      ++ optional enableMidi    [ "--enable-midi" ]
-      ++ optional enableSixaxis [ "--enable-sixaxis" ]);
+    "--with-dbusconfdir=${placeholder "out"}/share"
+    "--with-dbussystembusdir=${placeholder "out"}/share/dbus-1/system-services"
+    "--with-dbussessionbusdir=${placeholder "out"}/share/dbus-1/services"
+    "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/etc/systemd/user"
+    "--with-udevdir=${placeholder "out"}/lib/udev"
+    "--enable-health"
+    "--enable-mesh"
+    "--enable-midi"
+    "--enable-nfc"
+    "--enable-sap"
+    "--enable-sixaxis"
+    "--enable-wiimote"
+  ];
 
   # Work around `make install' trying to create /var/lib/bluetooth.
-  installFlags = "statedir=$(TMPDIR)/var/lib/bluetooth";
+  installFlags = [ "statedir=$(TMPDIR)/var/lib/bluetooth" ];
 
-  makeFlags = "rulesdir=$(out)/lib/udev/rules.d";
+  makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
+
+  doCheck = stdenv.hostPlatform.isx86_64;
 
   postInstall = ''
     mkdir -p $test/{bin,test}

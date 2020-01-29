@@ -4,7 +4,7 @@
 # This can be useful for deploying packages with NixOps, and to share
 # binary dependencies between projects.
 
-{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc }:
+{ lib, stdenv, defaultCrateOverrides, fetchCrate, rustc, rust }:
 
 let
     # This doesn't appear to be officially documented anywhere yet.
@@ -13,55 +13,38 @@ let
       then "macos"
       else stdenv.hostPlatform.parsed.kernel.name;
 
-    makeDeps = dependencies:
-      (lib.concatMapStringsSep " " (dep:
-        let extern = lib.strings.replaceStrings ["-"] ["_"] dep.libName; in
-        (if lib.lists.any (x: x == "lib") dep.crateType then
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}.rlib"
+    # Create rustc arguments to link against the given list of dependencies and
+    # renames
+    mkRustcDepArgs = dependencies: crateRenames:
+      lib.concatMapStringsSep " " (dep:
+        let
+          extern = lib.replaceStrings ["-"] ["_"] dep.libName;
+          name = if lib.hasAttr dep.crateName crateRenames then
+            lib.strings.replaceStrings ["-"] ["_"] crateRenames.${dep.crateName}
+          else
+            extern;
+        in (if lib.any (x: x == "lib" || x == "rlib") dep.crateType then
+           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}.rlib"
          else
-           " --extern ${extern}=${dep.out}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
-      ) dependencies);
+           " --extern ${name}=${dep.lib}/lib/lib${extern}-${dep.metadata}${stdenv.hostPlatform.extensions.sharedLibrary}")
+      ) dependencies;
 
-    echo_build_heading = colors: ''
-      echo_build_heading() {
-       start=""
-       end=""
-       if [[ "${colors}" == "always" ]]; then
-         start="$(printf '\033[0;1;32m')" #set bold, and set green.
-         end="$(printf '\033[0m')" #returns to "normal"
-       fi
-       if (( $# == 1 )); then
-         echo "$start""Building $1""$end"
-       else
-         echo "$start""Building $1 ($2)""$end"
-       fi
-      }
-    '';
-    noisily = colors: verbose: ''
-      noisily() {
-        start=""
-        end=""
-        if [[ "${colors}" == "always" ]]; then
-          start="$(printf '\033[0;1;32m')" #set bold, and set green.
-          end="$(printf '\033[0m')" #returns to "normal"
-        fi
-	${lib.optionalString verbose ''
-            echo -n "$start"Running "$end"
-            echo $@
-	''}
-	$@
-      }
-    '';
+   inherit (import ./log.nix { inherit lib; }) noisily echo_build_heading;
 
-    configureCrate = import ./configure-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
-    buildCrate = import ./build-crate.nix { inherit lib stdenv echo_build_heading noisily makeDeps; };
-    installCrate = import ./install-crate.nix;
+   configureCrate = import ./configure-crate.nix {
+     inherit lib stdenv echo_build_heading noisily mkRustcDepArgs;
+   };
 
-    in
+   buildCrate = import ./build-crate.nix {
+     inherit lib stdenv echo_build_heading noisily mkRustcDepArgs rust;
+   };
+
+   installCrate = import ./install-crate.nix { inherit stdenv; };
+in
 
 crate_: lib.makeOverridable ({ rust, release, verbose, features, buildInputs, crateOverrides,
-  dependencies, buildDependencies,
-  extraRustcOpts,
+  dependencies, buildDependencies, crateRenames,
+  extraRustcOpts, buildTests,
   preUnpack, postUnpack, prePatch, patches, postPatch,
   preConfigure, postConfigure, preBuild, postBuild, preInstall, postInstall }:
 
@@ -70,61 +53,68 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     buildDependencies_ = buildDependencies;
     processedAttrs = [
       "src" "buildInputs" "crateBin" "crateLib" "libName" "libPath"
-      "buildDependencies" "dependencies" "features"
+      "buildDependencies" "dependencies" "features" "crateRenames"
       "crateName" "version" "build" "authors" "colors" "edition"
+      "buildTests"
     ];
-    extraDerivationAttrs = lib.filterAttrs (n: v: ! lib.elem n processedAttrs) crate;
+    extraDerivationAttrs = builtins.removeAttrs crate processedAttrs;
     buildInputs_ = buildInputs;
     extraRustcOpts_ = extraRustcOpts;
+    buildTests_ = buildTests;
+
+    # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
+    makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
+
+    # crate2nix has a hack for the old bash based build script that did split
+    # entries at `,`. No we have to work around that hack.
+    # https://github.com/kolloch/crate2nix/blame/5b19c1b14e1b0e5522c3e44e300d0b332dc939e7/crate2nix/templates/build.nix.tera#L89
+    crateBin = lib.filter (bin: !(bin ? name && bin.name == ",")) (crate.crateBin or []);
+    hasCrateBin = crate ? crateBin;
 in
 stdenv.mkDerivation (rec {
 
     inherit (crate) crateName;
-    inherit preUnpack postUnpack prePatch patches postPatch preConfigure postConfigure preBuild postBuild preInstall postInstall;
+    inherit
+      preUnpack
+      postUnpack
+      prePatch
+      patches
+      postPatch
+      preConfigure
+      postConfigure
+      preBuild
+      postBuild
+      preInstall
+      postInstall
+      buildTests
+    ;
 
-    src = if lib.hasAttr "src" crate then
-        crate.src
-      else
-        fetchCrate { inherit (crate) crateName version sha256; };
-    name = "rust_${crate.crateName}-${crate.version}";
+    src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
+    name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
-    dependencies =
-      builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
-        dependencies_;
+    dependencies = makeDependencies dependencies_;
+    buildDependencies = makeDependencies buildDependencies_;
 
-    buildDependencies =
-      builtins.map
-        (dep: dep.override { rust = rust; release = release; verbose = verbose; crateOverrides = crateOverrides; })
-        buildDependencies_;
-
-    completeDeps = lib.lists.unique (dependencies ++ lib.lists.concatMap (dep: dep.completeDeps) dependencies);
-    completeBuildDeps = lib.lists.unique (
+    completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
+    completeBuildDeps = lib.unique (
       buildDependencies
-      ++ lib.lists.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
+      ++ lib.concatMap (dep: dep.completeBuildDeps ++ dep.completeDeps) buildDependencies
     );
 
-    crateFeatures = if crate ? features then
-        lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features) #"
-      else "";
+    crateFeatures = lib.optionalString (crate ? features)
+      (lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features));
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";
 
-    depsMetadata = builtins.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
-    metadata = builtins.substring 0 10 (builtins.hashString "sha256" (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata ));
-
-    crateBin = if crate ? crateBin then
-       builtins.foldl' (bins: bin: let
-            name = (if bin ? name then bin.name else crateName);
-            path = if bin ? path then bin.path else "";
-          in
-          bins + (if bin == "" then "" else ",") + "${name} ${path}"
-
-       ) "" crate.crateBin
-    else "";
-    hasCrateBin = crate ? crateBin;
+    # Seed the symbol hashes with something unique every time.
+    # https://doc.rust-lang.org/1.0.0/rustc/metadata/loader/index.html#frobbing-symbols
+    metadata = let
+      depsMetadata = lib.foldl' (str: dep: str + dep.metadata) "" (dependencies ++ buildDependencies);
+      hashedMetadata = builtins.hashString "sha256"
+        (crateName + "-" + crateVersion + "___" + toString crateFeatures + "___" + depsMetadata);
+      in lib.substring 0 10 hashedMetadata;
 
     build = crate.build or "";
     workspace_member = crate.workspace_member or ".";
@@ -137,23 +127,32 @@ stdenv.mkDerivation (rec {
       if lib.attrByPath ["plugin"] false crate then ["dylib"] else
         (crate.type or ["lib"]);
     colors = lib.attrByPath [ "colors" ] "always" crate;
-    extraLinkFlags = builtins.concatStringsSep " " (crate.extraLinkFlags or []);
+    extraLinkFlags = lib.concatStringsSep " " (crate.extraLinkFlags or []);
     edition = crate.edition or null;
-    extraRustcOpts = (if crate ? extraRustcOpts then crate.extraRustcOpts else []) ++ extraRustcOpts_ ++ (lib.optional (edition != null) "--edition ${edition}");
+    extraRustcOpts =
+      lib.optionals (crate ? extraRustcOpts) crate.extraRustcOpts
+      ++ extraRustcOpts_
+      ++ (lib.optional (edition != null) "--edition ${edition}");
+
 
     configurePhase = configureCrate {
       inherit crateName buildDependencies completeDeps completeBuildDeps crateDescription
-              crateFeatures libName build workspace_member release libPath crateVersion
+              crateFeatures crateRenames libName build workspace_member release libPath crateVersion
               extraLinkFlags extraRustcOpts
               crateAuthors crateHomepage verbose colors target_os;
     };
     buildPhase = buildCrate {
       inherit crateName dependencies
-              crateFeatures libName release libPath crateType
-              metadata crateBin hasCrateBin verbose colors
-              extraRustcOpts;
+              crateFeatures crateRenames libName release libPath crateType
+              metadata hasCrateBin crateBin verbose colors
+              extraRustcOpts buildTests;
     };
-    installPhase = installCrate crateName metadata;
+    installPhase = installCrate crateName metadata buildTests;
+
+    # depending on the test setting we are either producing something with bins
+    # and libs or just test binaries
+    outputs = if buildTests then [ "out" ] else [ "out" "lib" ];
+    outputDev = if buildTests then [ "out" ] else  [ "lib" ];
 
 } // extraDerivationAttrs
 )) {
@@ -177,4 +176,6 @@ stdenv.mkDerivation (rec {
   postInstall = crate_.postInstall or "";
   dependencies = crate_.dependencies or [];
   buildDependencies = crate_.buildDependencies or [];
+  crateRenames = crate_.crateRenames or {};
+  buildTests = crate_.buildTests or false;
 }

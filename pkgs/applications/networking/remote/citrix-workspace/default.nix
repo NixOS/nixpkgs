@@ -9,10 +9,11 @@
 , makeDesktopItem
 , tzdata
 , cacert
+, dconf
 , glib
 , gtk2
 , atk
-, gdk_pixbuf
+, gdk-pixbuf
 , cairo
 , pango
 , gnome3
@@ -22,55 +23,82 @@
 , fontconfig
 , gtk_engines
 , alsaLib
-, libidn
 , zlib
-, version ? "19.3.0"
+, version ? "19.12.0"
 }:
 
 let
-  # In 56e1bdc7f9c (libidn: 1.34 -> 1.35), libidn.so.11 became libidn.so.12.
-  # Citrix looks for the former so we build version 1.34 to please the binary
-  libidn_134 = libidn.overrideDerivation (_: rec {
-    name = "libidn-1.34";
-    src = fetchurl {
-      url = "mirror://gnu/libidn/${name}.tar.gz";
-      sha256 = "0g3fzypp0xjcgr90c5cyj57apx1cmy0c6y9lvw2qdcigbyby469p";
-    };
-  });
-
   versionInfo = let
     supportedVersions = {
-      "19.3.0" = {
+      "19.6.0" = {
         major     = "19";
-        minor     = "3";
+        minor     = "6";
         patch     = "0";
-        x64hash   = "0mhpp29ca3dw9hx72i0qawdq35wcc7qzgxwzlx4aicwnm1gbil5c";
-        x86hash   = "1hxgj5lk5ghbpssbqjd404qr84gls967vwrh8ww5hg3pn86kyf8w";
-        x64suffix = "5";
-        x86suffix = "5";
-        homepage  = https://www.citrix.com/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
+        x64hash   = "0szqlfmigzgf0309i6ikxkizxaf4ri7qmhys75m0zi3bpwx6hzhs";
+        x86hash   = "16v3kgavrh62z6vxcbw6mn7h0bfishpl7m92k7g1p2882r1f8vaf";
+        x64suffix = "60";
+        x86suffix = "60";
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest.html;
+      };
+
+      "19.8.0" = {
+        major     = "19";
+        minor     = "8";
+        patch     = "0";
+        x64hash   = "0f8djw8lp5wihb23y09yac1mh09w1qp422h72r6zfx9k1lqfsdbw";
+        x86hash   = "0afcqirb4q349r3izy88vqkszg6y2wg14iwypk6nrmvwgvcl6jdn";
+        x64suffix = "20";
+        x86suffix = "20";
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1908.html;
+      };
+
+      "19.10.0" = {
+        major     = "19";
+        minor     = "10";
+        patch     = "0";
+        x64hash   = "1l4q4pmfiw9gmml6j5b3hls2101xf5m8p6855nhfhvqlisrj9h14";
+        x86hash   = "000zjik8wf8b6fadnsai0p77b4n2l95544zx503iyrb9pv53bj3y";
+        x64suffix = "15";
+        x86suffix = "15";
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1910.html;
+      };
+
+      "19.12.0" = {
+        major     = "19";
+        minor     = "12";
+        patch     = "0";
+        x64hash   = "1si5mkxbgb8m99bkvgc3l80idjfdp0kby6pv47s07nn43dbr1j7a";
+        x86hash   = "07rfp90ksnvr8zv7ix7f0z6a59n48s7bd4kqbzilfwxgs4ddqmcy";
+        x64suffix = "19";
+        x86suffix = "19";
+        homepage  = https://www.citrix.com/de-de/downloads/workspace-app/linux/workspace-app-for-linux-latest.html;
       };
     };
 
     # Copied this file largely from the citrix-receiver package
     # Leaving this here even though there are no deprecations yet
-    # for ease of future maintenance
+    # for ease of future maintenance.
+    #
+    # The lifespans of Citrix products can be found here:
+    # https://www.citrix.com/support/product-lifecycle/milestones/receiver.html
     deprecatedVersions = let
-      versions = [ ];
+      versions = [ "19.3.0" ];
     in
       lib.listToAttrs
-        (lib.flip map versions
+        (lib.forEach versions
           (v: lib.nameValuePair v (throw "Unsupported citrix_workspace version: ${v}")));
   in
     deprecatedVersions // supportedVersions;
 
   citrixWorkspaceForVersion = { major, minor, patch, x64hash, x86hash, x64suffix, x86suffix, homepage }:
     stdenv.mkDerivation rec {
-      name     = "citrix-workspace-${version}";
+      pname = "citrix-workspace";
       version  = "${major}.${minor}.${patch}";
       inherit homepage;
 
       prefixWithBitness = if stdenv.is64bit then "linuxx64" else "linuxx86";
+
+      preferLocalBuild = true;
 
       src = requireFile rec {
         name    = if stdenv.is64bit then "${prefixWithBitness}-${version}.${x64suffix}.tar.gz" else "${prefixWithBitness}-${version}.${x86suffix}.tar.gz";
@@ -100,24 +128,23 @@ let
         busybox
         file
         gtk2
-        gdk_pixbuf
+        gdk-pixbuf
       ];
 
       libPath = stdenv.lib.makeLibraryPath [
         glib
         gtk2
         atk
-        gdk_pixbuf
+        gdk-pixbuf
         cairo
         pango
-        gnome3.dconf
+        dconf
         xorg.libX11
         xorg.libXext
         xorg.libXrender
         xorg.libXinerama
         xorg.libXfixes
         libpng12
-        libidn_134
         zlib
         gtk_engines
         freetype
@@ -208,6 +235,7 @@ let
         inherit homepage;
         description = "Citrix Workspace";
         platforms   = platforms.linux;
+        maintainers = with maintainers; [ ma27 ];
       };
     };
 

@@ -10,7 +10,7 @@
 , runtimeShell
 
 # apple frameworks
-, CoreServices, CoreData, Cocoa, Foundation, libobjc, cf-private
+, CoreServices, CoreData, Cocoa, Foundation, libobjc
 
 , features          ? "huge" # One of tiny, small, normal, big or huge
 , wrapPythonDrv     ? false
@@ -68,12 +68,12 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "vim_configurable-${version}";
+  pname = "vim_configurable";
 
   inherit (common) version postPatch hardeningDisable enableParallelBuilding meta;
 
   src = builtins.getAttr source {
-    "default" = common.src; # latest release
+    default = common.src; # latest release
   };
 
   patches = [ ./cflags-prune.diff ] ++ stdenv.lib.optional ftNixSupport ./ft-nix-support.patch;
@@ -132,7 +132,7 @@ in stdenv.mkDerivation rec {
     libXmu glib libICE ]
     ++ stdenv.lib.optional (guiSupport == "gtk2") gtk2-x11
     ++ stdenv.lib.optional (guiSupport == "gtk3") gtk3-x11
-    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc cf-private ]
+    ++ stdenv.lib.optionals darwinSupport [ CoreServices CoreData Cocoa Foundation libobjc ]
     ++ stdenv.lib.optional luaSupport lua
     ++ stdenv.lib.optional pythonSupport python
     ++ stdenv.lib.optional tclSupport tcl
@@ -145,7 +145,12 @@ in stdenv.mkDerivation rec {
       cp ${vimPlugins.vim-nix.src}/syntax/nix.vim runtime/syntax/nix.vim
     '';
 
+  preInstall = ''
+    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
+  '';
+
   postInstall = ''
+    ln -s $out/bin/vim $out/bin/vi
   '' + stdenv.lib.optionalString stdenv.isLinux ''
     patchelf --set-rpath \
       "$(patchelf --print-rpath $out/bin/vim):${stdenv.lib.makeLibraryPath buildInputs}" \
@@ -177,9 +182,5 @@ in stdenv.mkDerivation rec {
     rewrap gvimdiff -gd
   '';
 
-  preInstall = ''
-    mkdir -p $out/share/applications $out/share/icons/{hicolor,locolor}/{16x16,32x32,48x48}/apps
-  '';
-
-  dontStrip = 1;
+  dontStrip = true;
 }

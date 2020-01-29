@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }: 
 
   buildGoPackage rec {
-    name = "git-town-${version}";
+    pname = "git-town";
     version = "7.2.0";
 
     goPackagePath = "github.com/Originate/git-town";

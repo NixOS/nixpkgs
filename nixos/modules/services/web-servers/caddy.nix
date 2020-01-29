@@ -27,13 +27,13 @@ in {
     ca = mkOption {
       default = "https://acme-v02.api.letsencrypt.org/directory";
       example = "https://acme-staging-v02.api.letsencrypt.org/directory";
-      type = types.string;
+      type = types.str;
       description = "Certificate authority ACME server. The default (Let's Encrypt production server) should be fine for most people.";
     };
 
     email = mkOption {
       default = "";
-      type = types.string;
+      type = types.str;
       description = "Email address (for Let's Encrypt certificate)";
     };
 
@@ -70,7 +70,7 @@ in {
         { CADDYPATH = cfg.dataDir; };
       serviceConfig = {
         ExecStart = ''
-          ${cfg.package.bin}/bin/caddy -root=/var/tmp -conf=${configFile} \
+          ${cfg.package}/bin/caddy -root=/var/tmp -conf=${configFile} \
             -ca=${cfg.ca} -email=${cfg.email} ${optionalString cfg.agree "-agree"}
         '';
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";

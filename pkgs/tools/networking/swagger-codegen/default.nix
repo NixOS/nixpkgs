@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   version = "2.3.1";
   pname = "swagger-codegen";
-  name = "${pname}-${version}";
 
   jarfilename = "${pname}-cli-${version}.jar";
 

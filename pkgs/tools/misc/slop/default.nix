@@ -1,10 +1,10 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig
-, glew, glm, libGLU_combined, libX11, libXext, libXrender, icu
+, glew, glm, libGLU, libGL, libX11, libXext, libXrender, icu
 , cppcheck
 }:
 
 stdenv.mkDerivation rec {
-  name = "slop-${version}";
+  pname = "slop";
   version = "7.4";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ glew glm libGLU_combined libX11 libXext libXrender icu ]
+  buildInputs = [ glew glm libGLU libGL libX11 libXext libXrender icu ]
                 ++ stdenv.lib.optional doCheck cppcheck;
 
   doCheck = false;

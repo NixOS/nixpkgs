@@ -26,7 +26,7 @@ in
 stdenv.mkDerivation rec {
   version = "10.0.2";
 
-  name = "mathematica-${version}";
+  pname = "mathematica";
 
   src = requireFile rec {
     name = "Mathematica_${version}_LINUX.sh";

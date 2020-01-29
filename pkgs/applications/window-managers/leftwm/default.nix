@@ -6,13 +6,13 @@ in
 
 rustPlatform.buildRustPackage rec {
     pname = "leftwm";
-    version = "0.1.9";
+    version = "0.1.10";
 
     src = fetchFromGitHub {
         owner = "leftwm";
         repo = "leftwm";
-        rev = "${version}";
-        sha256 = "0ji7m2npkdg27gm33b19rxr50km0gm1h9czi1f425vxq65mlkl4y";
+        rev = version;
+        sha256 = "190lc48clkh9vzlsfg2a70w405k7xyyw7avnxwna1glfwmbyy2ag";
     };
 
     buildInputs = [ makeWrapper libX11 libXinerama ];
@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
 
     cargoSha256 = "0mpvfix7bvc84vanha474l4gaq97ac1zy5l77z83m9jg0246yxd6";
 
-    # https://github.com/leftwm/leftwm/pull/37
+    # patch wrong version in Cargo.lock
     cargoPatches = [ ./cargo-lock.patch ];
 
     meta = {

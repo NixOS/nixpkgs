@@ -1,7 +1,8 @@
-{ lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version }:
 
-stdenv.mkDerivation rec {
-  name = "libc++-${version}";
+stdenv.mkDerivation {
+  pname = "libc++";
+  inherit version;
 
   src = fetch "libcxx" "0rzw4qvxp6qx4l4h9amrq02gp7hbg8lw4m0sy3k60f50234gnm3n";
 
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python;
+  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python3;
 
   buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 

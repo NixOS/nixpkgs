@@ -1,9 +1,9 @@
 { stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
 , python, libconfig, lit, gdb, unzip, darwin, bash
-, callPackage, makeWrapper, targetPackages
+, callPackage, makeWrapper, runCommand, targetPackages
 , bootstrapVersion ? false
-, version ? "1.15.0"
-, ldcSha256 ? "1qnfy2q8zkywvby7wa8jm20mlpghn28x6w357cpc8hi56g7y1q6p"
+, version ? "1.17.0"
+, ldcSha256 ? "1aag5jfrng6p4ms0fs90hjbv9bcj3hj8h52r68c3cm6racdajbva"
 }:
 
 let
@@ -18,10 +18,16 @@ let
   else
     "";
 
+  pathConfig = runCommand "ldc-lib-paths" {} ''
+    mkdir $out
+    echo ${tzdata}/share/zoneinfo/ > $out/TZDatabaseDirFile
+    echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > $out/LibcurlPathFile
+  '';
 in
 
 stdenv.mkDerivation rec {
-  name = "ldc-${version}";
+  pname = "ldc";
+  inherit version;
 
   enableParallelBuilding = true;
 
@@ -34,24 +40,21 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "fortify" ];
 
   postUnpack = ''
-      patchShebangs .
+    patchShebangs .
   ''
 
   + stdenv.lib.optionalString (!bootstrapVersion) ''
       rm ldc-${version}-src/tests/d2/dmd-testsuite/fail_compilation/mixin_gc.d
       rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/xtest46_gc.d
       rm ldc-${version}-src/tests/d2/dmd-testsuite/runnable/testptrref_gc.d
+
+      # test depends on current year
+      rm ldc-${version}-src/tests/d2/dmd-testsuite/compilable/ddocYear.d
   ''
 
   + stdenv.lib.optionalString (!bootstrapVersion && stdenv.hostPlatform.isDarwin) ''
       # https://github.com/NixOS/nixpkgs/issues/34817
       rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
-  ''
-
-  + stdenv.lib.optionalString (!bootstrapVersion) ''
-      echo ${tzdata}/share/zoneinfo/ > ldc-${version}-src/TZDatabaseDirFile
-
-      echo ${curl.out}/lib/libcurl${stdenv.hostPlatform.extensions.sharedLibrary} > ldc-${version}-src/LibcurlPathFile
   '';
 
   postPatch = ''
@@ -75,47 +78,31 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ninja makeWrapper unzip ]
-
-  ++ stdenv.lib.optional (!bootstrapVersion) [
-    bootstrapLdc python lit
-  ]
-
-  ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin) [
-    # https://github.com/NixOS/nixpkgs/issues/57120
-    # https://github.com/NixOS/nixpkgs/pull/59197#issuecomment-481972515
-    llvm_5
-  ]
-
-  ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) [
-    llvm_8
-  ]
-
-  ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin) [
-    # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
-    gdb
-  ]
-
-  ++ stdenv.lib.optional (bootstrapVersion) [
-    libconfig llvm_5
-  ]
-
-  ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Foundation
-  ]);
+    ++ stdenv.lib.optionals (!bootstrapVersion) [
+      bootstrapLdc python lit
+    ]
+    ++ stdenv.lib.optional (!bootstrapVersion && stdenv.hostPlatform.isDarwin)
+      # https://github.com/NixOS/nixpkgs/issues/57120
+      # https://github.com/NixOS/nixpkgs/pull/59197#issuecomment-481972515
+      llvm_5
+    ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin)
+      llvm_8
+    ++ stdenv.lib.optional (!bootstrapVersion && !stdenv.hostPlatform.isDarwin)
+      # https://github.com/NixOS/nixpkgs/pull/36378#issuecomment-385034818
+      gdb
+    ++ stdenv.lib.optionals (bootstrapVersion) [
+      libconfig llvm_5
+    ]
+    ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin
+      darwin.apple_sdk.frameworks.Foundation;
 
 
   buildInputs = [ curl tzdata ];
 
-  cmakeFlagsString = stdenv.lib.optionalString (!bootstrapVersion) ''
-    "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J$PWD"
+  cmakeFlags = stdenv.lib.optionals (!bootstrapVersion) [
+    "-DD_FLAGS=-d-version=TZDatabaseDir;-d-version=LibcurlPath;-J${pathConfig}"
     "-DCMAKE_BUILD_TYPE=Release"
-  '';
-
-  preConfigure = stdenv.lib.optionalString (!bootstrapVersion) ''
-    cmakeFlagsArray=(
-      ${cmakeFlagsString}
-    )
-  '';
+  ];
 
   postConfigure = ''
     export DMD=$PWD/bin/ldmd2
@@ -123,7 +110,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DMD=$DMD" ];
 
-  fixNames = if stdenv.hostPlatform.isDarwin then ''
+  fixNames = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin  ''
     fixDarwinDylibNames() {
       local flags=()
 
@@ -140,15 +127,11 @@ stdenv.mkDerivation rec {
 
     fixDarwinDylibNames $(find "$(pwd)/lib" -name "*.dylib")
     export DYLD_LIBRARY_PATH=$(pwd)/lib
-  ''
-  else
-    "";
+  '';
 
   # https://github.com/ldc-developers/ldc/issues/2497#issuecomment-459633746
-  additionalExceptions = if stdenv.hostPlatform.isDarwin then
-    "|druntime-test-shared"
-  else
-    "";
+  additionalExceptions = stdenv.lib.optionalString stdenv.hostPlatform.isDarwin
+    "|druntime-test-shared";
 
   doCheck = !bootstrapVersion;
 

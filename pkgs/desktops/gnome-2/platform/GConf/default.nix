@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python2, intltool }:
+{ stdenv, fetchurl, pkgconfig, dbus-glib, glib, ORBit2, libxml2, polkit, python3, intltool }:
 
 stdenv.mkDerivation rec {
-  name = "gconf-${version}";
+  pname = "gconf";
   version = "3.2.6";
 
   src = fetchurl {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man" ];
 
-  buildInputs = [ ORBit2 libxml2 python2 ]
+  buildInputs = [ ORBit2 libxml2 python3 ]
     # polkit requires pam, which requires shadow.h, which is not available on
     # darwin
     ++ stdenv.lib.optional (!stdenv.isDarwin) polkit;
@@ -23,6 +23,10 @@ stdenv.mkDerivation rec {
   configureFlags =
     # fixes the "libgconfbackend-oldxml.so is not portable" error on darwin
     stdenv.lib.optional stdenv.isDarwin [ "--enable-static" ];
+
+  postPatch = ''
+    2to3 --write --nobackup gsettings/gsettings-schema-convert
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://projects.gnome.org/gconf/;

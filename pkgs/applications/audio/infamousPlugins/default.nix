@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, cairomm, cmake, lv2, libpthreadstubs, libXdmcp, libXft, ntk, pcre, fftwFloat, zita-resampler }:
 
 stdenv.mkDerivation rec {
-  name = "infamousPlugins-${version}";
+  pname = "infamousPlugins";
   version = "0.3.0";
 
   src = fetchFromGitHub {

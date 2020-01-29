@@ -1,5 +1,5 @@
 { fetchFromGitHub, stdenv, autoconf, automake, pkgconfig, m4, curl,
-libGLU_combined, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
+libGLU, libGL, libXmu, libXi, freeglut, libjpeg, libtool, wxGTK30, xcbutil,
 sqlite, gtk2, patchelf, libXScrnSaver, libnotify, libX11, libxcb }:
 
 let
@@ -9,10 +9,10 @@ in
 
 stdenv.mkDerivation rec {
   version = "${majorVersion}.${minorVersion}";
-  name = "boinc-${version}";
+  pname = "boinc";
 
   src = fetchFromGitHub {
-    name = "${name}-src";
+    name = "${pname}-${version}-src";
     owner = "BOINC";
     repo = "boinc";
     rev = "client_release/${majorVersion}/${version}";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ libtool automake autoconf m4 pkgconfig ];
 
   buildInputs = [
-    curl libGLU_combined libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
+    curl libGLU libGL libXmu libXi freeglut libjpeg wxGTK30 sqlite gtk2 libXScrnSaver
     libnotify patchelf libX11 libxcb xcbutil
   ];
 

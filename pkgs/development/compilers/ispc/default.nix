@@ -1,5 +1,5 @@
 {stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages,
-testedTargets ? ["sse2" "host"] # the default test target is sse4, but that is not supported by all Hydra agents
+testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
 stdenv.mkDerivation rec {
@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
 
   inherit testedTargets;
 
-  name = "ispc-${version}";
+  pname = "ispc";
 
   src = fetchFromGitHub {
     owner = "ispc";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   # there are missing dependencies in the Makefile, causing sporadic build failures
   enableParallelBuilding = false;
 
-  doCheck = true;
+  doCheck = stdenv.isLinux;
 
   buildInputs = with llvmPackages; [
     which
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     homepage = https://ispc.github.io/ ;
     description = "Intel 'Single Program, Multiple Data' Compiler, a vectorised language";
     license = licenses.bsd3;
-    platforms = ["x86_64-linux"]; # TODO: buildable on more platforms?
+    platforms = ["x86_64-linux" "x86_64-darwin"]; # TODO: buildable on more platforms?
     maintainers = [ maintainers.aristid ];
   };
 }

@@ -86,16 +86,16 @@ in {
 
   config = mkIf cfg.enable (mkMerge [
     {
-      users.users = optionalAttrs (cfg.user == "dspam") (singleton
-        { name = "dspam";
+      users.users = optionalAttrs (cfg.user == "dspam") {
+        dspam = {
           group = cfg.group;
           uid = config.ids.uids.dspam;
-        });
+        };
+      };
 
-      users.groups = optionalAttrs (cfg.group == "dspam") (singleton
-        { name = "dspam";
-          gid = config.ids.gids.dspam;
-        });
+      users.groups = optionalAttrs (cfg.group == "dspam") {
+        dspam.gid = config.ids.gids.dspam;
+      };
 
       environment.systemPackages = [ dspam ];
 
@@ -113,19 +113,14 @@ in {
           Group = cfg.group;
           RuntimeDirectory = optional (cfg.domainSocket == defaultSock) "dspam";
           RuntimeDirectoryMode = optional (cfg.domainSocket == defaultSock) "0750";
-          PermissionsStartOnly = true;
+          StateDirectory = "dspam";
+          StateDirectoryMode = "0750";
+          LogsDirectory = "dspam";
+          LogsDirectoryMode = "0750";
           # DSPAM segfaults on just about every error
           Restart = "on-abort";
           RestartSec = "1s";
         };
-
-        preStart = ''
-          mkdir -m750 -p /var/lib/dspam
-          chown -R "${cfg.user}:${cfg.group}" /var/lib/dspam
-
-          mkdir -m750 -p /var/log/dspam
-          chown -R "${cfg.user}:${cfg.group}" /var/log/dspam
-        '';
       };
     }
 

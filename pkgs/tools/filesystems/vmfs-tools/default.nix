@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig
 , asciidoc, docbook_xsl, fuse, libuuid, libxslt }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "vmfs-tools";
 
   src = fetchFromGitHub {

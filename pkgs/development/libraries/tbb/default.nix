@@ -1,20 +1,18 @@
 { stdenv, fetchFromGitHub, compiler ? if stdenv.cc.isClang then "clang" else null, stdver ? null }:
 
 with stdenv.lib; stdenv.mkDerivation rec {
-  name = "tbb-${version}";
-  version = "2019_U7";
+  pname = "tbb";
+  version = "2019_U9";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "0hf8vkb1g2dqihqw7fzhc90i1p7yvp45gbamj0mnnhffz2ablz1b";
+    sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
   };
 
-  makeFlags = concatStringsSep " " (
-    optional (compiler != null) "compiler=${compiler}" ++
-    optional (stdver != null) "stdver=${stdver}"
-  );
+  makeFlags = optional (compiler != null) "compiler=${compiler}"
+    ++ optional (stdver != null) "stdver=${stdver}";
 
   patches = stdenv.lib.optional stdenv.hostPlatform.isMusl ./glibc-struct-mallinfo.patch;
 

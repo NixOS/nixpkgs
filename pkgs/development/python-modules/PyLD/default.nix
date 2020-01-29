@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python, gnugrep }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, python, requests, gnugrep }:
 
 let
 
@@ -19,15 +19,17 @@ let
 in
 
 buildPythonPackage rec {
-  pname = "PyLD";
-  version = "0.7.2";
+  pname = "pyld";
+  version = "1.0.5";
 
   src = fetchFromGitHub {
     owner = "digitalbazaar";
-    repo = "pyld";
-    rev = "652473f828e9a396d4c1db9addbd294fb7db1797";
-    sha256 = "1bmpz4s6j7by6l45wwxy7dn7hmrhxc26kbx2hbfy41x29vbjg6j9";
+    repo = pname;
+    rev = version;
+    sha256 = "0z2vkllw8bvzxripwb6l757r7av5qwhzsiy4061gmlhq8z8gq961";
   };
+
+  propagatedBuildInputs = [ requests ];
 
   # Unfortunately PyLD does not pass all testcases in the JSON-LD corpus. We
   # check for at least a minimum amount of successful tests so we know it's not

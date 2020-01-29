@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ubridge-${version}";
+  pname = "ubridge";
   version = "0.9.16";
 
   src = fetchFromGitHub {

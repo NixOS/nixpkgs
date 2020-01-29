@@ -1,7 +1,7 @@
 { buildPythonPackage, stdenv, lxml, click, fetchFromGitHub, pytest, isPy3k }:
 
 buildPythonPackage rec {
-  version = "0.3.15";
+  version = "0.3.24";
   pname = "pyaxmlparser";
 
   # the PyPI tarball doesn't ship tests.
@@ -9,7 +9,7 @@ buildPythonPackage rec {
     owner = "appknox";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0p4x21rg8h7alrg2zk6rbgc3fj77fiyky4zzvziz2bp5jpx1pvzp";
+    sha256 = "0fys26p7xhbnbdzp80zm6n3mragp38p08nyrsnilfgnlpi6rjpg0";
   };
 
   disabled = !isPy3k;

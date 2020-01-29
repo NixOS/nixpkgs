@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk }:
+{ stdenv, fetchFromGitHub, pkgconfig, vte, gtk, pcre2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "stupidterm";
   version = "2019-03-26";
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ vte gtk ];
+  buildInputs = [ vte gtk pcre2 ];
 
   src = fetchFromGitHub {
     owner = "esmil";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1f73wvqqvj5pr3fvb7jjc4bi1iwgkkknz24k8n69mdb75jnfjipp";
   };
 
-  makeFlags = "PKGCONFIG=${pkgconfig}/bin/pkg-config binary=stupidterm";
+  makeFlags = [ "PKGCONFIG=${pkgconfig}/bin/pkg-config" "binary=stupidterm" ];
 
   installPhase = ''
     install -D stupidterm $out/bin/stupidterm
@@ -27,10 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Simple wrapper around the VTE terminal emulator widget for GTK+";
-    longDescription = ''
-      Simple wrapper around the VTE terminal emulator widget for GTK+
-    '';
+    description = "Simple wrapper around the VTE terminal emulator widget for GTK";
     homepage = https://github.com/esmil/stupidterm;
     license = licenses.lgpl3Plus;
     maintainers = [ maintainers.etu ];

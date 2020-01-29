@@ -6,11 +6,11 @@
 , enablePNG ? true, libpng
 , enableTIFF ? true, libtiff
 , enableEXR ? (!stdenv.isDarwin), openexr, ilmbase
-, enableJPEG2K ? true, jasper
+, enableJPEG2K ? false, jasper  # disable jasper by default (many CVE)
 , enableFfmpeg ? false, ffmpeg
 , enableGStreamer ? false, gst_all_1
 , enableEigen ? true, eigen
-, cf-private, Cocoa, QTKit
+, Cocoa, QTKit
 }:
 
 let
@@ -19,7 +19,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "opencv-${version}";
+  pname = "opencv";
   version = "2.4.13";
 
   src = fetchFromGitHub {
@@ -54,14 +54,14 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableFfmpeg ffmpeg
     ++ lib.optionals enableGStreamer (with gst_all_1; [ gstreamer gst-plugins-base ])
     ++ lib.optional enableEigen eigen
-    ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit cf-private /* For NSDefaultRunLoopMode */ ]
+    ++ lib.optionals stdenv.isDarwin [ Cocoa QTKit ]
     ;
 
   propagatedBuildInputs = lib.optional enablePython pythonPackages.numpy;
 
   nativeBuildInputs = [ cmake pkgconfig unzip ];
 
-  NIX_CFLAGS_COMPILE = lib.optional enableEXR "-I${ilmbase.dev}/include/OpenEXR";
+  NIX_CFLAGS_COMPILE = lib.optionalString enableEXR "-I${ilmbase.dev}/include/OpenEXR";
 
   cmakeFlags = [
     (opencvFlag "TIFF" enableTIFF)

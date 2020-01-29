@@ -2,15 +2,15 @@
 , meson, ninja, gettext, pkgconfig, wrapGAppsHook, itstool, desktop-file-utils
 , vala, gobject-introspection, libxml2, gtk3, glib, gsound, sound-theme-freedesktop
 , gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, geocode-glib
-, gnome3, gdk_pixbuf, geoclue2, libgweather }:
+, gnome3, gdk-pixbuf, geoclue2, libgweather }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-clocks-${version}";
-  version = "3.32.0";
+  pname = "gnome-clocks";
+  version = "3.34.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1w6lgjdak3x76c9gyhd1lqrdmjfh8q77sjnrkcimylsg0jq913bc";
+    url = "mirror://gnome/sources/gnome-clocks/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0g7hjk55smhkd09hwa9kag3h5a12l494wj89w9smpdk3ghsmy6b1";
   };
 
   passthru = {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     gobject-introspection # for finding vapi files
   ];
   buildInputs = [
-    gtk3 glib gsettings-desktop-schemas gdk_pixbuf adwaita-icon-theme
+    gtk3 glib gsettings-desktop-schemas gdk-pixbuf adwaita-icon-theme
     gnome-desktop geocode-glib geoclue2 libgweather gsound
   ];
 

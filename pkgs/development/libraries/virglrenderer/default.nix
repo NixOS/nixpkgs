@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, libGLU, epoxy, libX11, libdrm, mesa_noglu }:
+{ stdenv, fetchurl, pkgconfig, libGLU, epoxy, libX11, libdrm, mesa }:
 
 
 stdenv.mkDerivation rec {
 
-  name = "virglrenderer-${version}";
+  pname = "virglrenderer";
   version = "0.7.0";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/virgl/${name}.tar.bz2";
+    url = "https://www.freedesktop.org/software/virgl/${pname}-${version}.tar.bz2";
     sha256 = "041agg1d6i8hg250y30f08n3via0hs9rbijxdrfifb8ara805v0m";
   };
 
-  buildInputs = [ libGLU epoxy libX11 libdrm mesa_noglu ];
+  buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
 
   nativeBuildInputs = [ pkgconfig ];
 

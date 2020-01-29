@@ -1,7 +1,7 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebkit, openssl, xkeyboard_config, makeWrapper }:
+{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtscript, qtsensors, qtwebkit, openssl_1_0_2, xkeyboard_config, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "p4v-${version}";
+  pname = "p4v";
   version = "2017.3.1601999";
 
   src = fetchurl {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   dontBuild = true;
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   ldLibraryPath = lib.makeLibraryPath [
       stdenv.cc.cc.lib
@@ -19,9 +19,10 @@ stdenv.mkDerivation rec {
       qtscript
       qtsensors
       qtwebkit
-      openssl
+      openssl_1_0_2
   ];
 
+  dontWrapQtApps = true;
   installPhase = ''
     mkdir $out
     cp -r bin $out
@@ -31,10 +32,9 @@ stdenv.mkDerivation rec {
     for f in $out/bin/*.bin ; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
 
-      wrapProgram $f \
+      wrapQtApp $f \
         --suffix LD_LIBRARY_PATH : ${ldLibraryPath} \
-        --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb \
-        --suffix QT_PLUGIN_PATH : ${qtbase.bin}/${qtbase.qtPluginPrefix}
+        --suffix QT_XKB_CONFIG_ROOT : ${xkeyboard_config}/share/X11/xkb
     done
   '';
 
@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.perforce.com;
     license = stdenv.lib.licenses.unfreeRedistributable;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ stdenv.lib.maintainers.nioncode ];
+    maintainers = with stdenv.lib.maintainers; [ nathyong nioncode ];
   };
 }

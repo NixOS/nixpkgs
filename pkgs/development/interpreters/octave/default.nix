@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
-, libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, libGLU_combined, fltk
-, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp
+, libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, libGL, libGLU, fltk
+, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp, gl2ps
 , qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
 , suitesparse ? null, gnuplot ? null, jdk ? null, python ? null, overridePlatforms ? null
 }:
@@ -19,15 +19,15 @@ in
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
-  name = "octave-${version}";
+  pname = "octave";
   src = fetchurl {
-    url = "mirror://gnu/octave/${name}.tar.gz";
+    url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
     sha256 = "15blrldzwyxma16rnd4n01gnsrriii0dwmyca6m7qz62r8j12sz3";
   };
 
   buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
     graphicsmagick pcre pkgconfig fltk zlib curl openblas libsndfile fftw
-    fftwSinglePrec portaudio qrupdate arpack libwebp ]
+    fftwSinglePrec portaudio qrupdate arpack libwebp gl2ps ]
     ++ (stdenv.lib.optional (qt != null) qt)
     ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
     ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optional (jdk != null) jdk)
     ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
     ++ (stdenv.lib.optional (python != null) python)
-    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGLU_combined libX11 ])
+    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
     ;
 
   # makeinfo is required by Octave at runtime to display help
@@ -68,7 +68,7 @@ stdenv.mkDerivation rec {
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
   postInstall = ''
-    cp test/fntests.log $out/share/octave/${name}-fntests.log || true
+    cp test/fntests.log $out/share/octave/${pname}-${version}-fntests.log || true
   '';
 
   passthru = {

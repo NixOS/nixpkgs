@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "libva-utils-${version}";
+  pname = "libva-utils";
   inherit (libva) version;
 
   src = fetchFromGitHub {
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     description = "VAAPI tools: Video Acceleration API";
     homepage = http://www.freedesktop.org/wiki/Software/vaapi;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

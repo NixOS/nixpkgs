@@ -1,7 +1,6 @@
-{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme }:
+{ stdenv, fetchFromGitHub, meson, ninja, gtk3, python3, faba-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "moka-icon-theme";
   version = "5.4.0";
 
@@ -13,6 +12,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ meson ninja gtk3 python3 faba-icon-theme ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   postPatch = ''
     patchShebangs meson/post_install.py

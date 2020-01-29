@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "howl-${version}";
+  pname = "howl";
   version = "0.6";
 
   # Use the release tarball containing pre-downloaded dependencies sources

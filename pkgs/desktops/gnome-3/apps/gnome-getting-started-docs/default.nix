@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gnome3, intltool, itstool, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-getting-started-docs-${version}";
-  version = "3.32.1";
+  pname = "gnome-getting-started-docs";
+  version = "3.34.1";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-getting-started-docs/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0g4zaafj442gpir0hxv5hya37ax1ai40slls7sa2a02fdarilrjf";
+    url = "mirror://gnome/sources/gnome-getting-started-docs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "00in6yc02pdalyx8g0fncmch0l7nr819587ngjm83ara9qa8z6fa";
   };
 
   passthru = {

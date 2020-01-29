@@ -1,15 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, curl, fribidi, rlwrap, gawk, groff, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "translate-shell";
-  version = "0.9.6.10";
+  version = "0.9.6.11";
 
   src = fetchFromGitHub {
     owner = "soimort";
     repo = "translate-shell";
     rev = "v${version}";
-    sha256 = "1dmh3flldfhnqfay3a6c5hanqcjwrmbly1bq8mlk022qfi1fv33y";
+    sha256 = "137fz3ahzf65hfqcs4k7hhrmfjlhlw7wr3gfsvk88bnyqkyw44sm";
   };
 
   buildInputs = [ makeWrapper ];

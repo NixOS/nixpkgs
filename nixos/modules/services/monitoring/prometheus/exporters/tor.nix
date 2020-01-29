@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -26,7 +26,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-tor-exporter}/bin/prometheus-tor-exporter \
           -b ${cfg.listenAddress} \

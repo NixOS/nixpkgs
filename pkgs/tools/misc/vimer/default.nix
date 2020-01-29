@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.2.0";
-  name = "vimer-${version}";
+  pname = "vimer";
 
   src = fetchFromGitHub {
     owner = "susam";

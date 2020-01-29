@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "wallabag-${version}";
+  pname = "wallabag";
   version = "2.3.8";
 
   # remember to rm -r var/cache/* after a rebuild or unexpected errors will occur

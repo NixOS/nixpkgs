@@ -10,12 +10,12 @@ rec {
   #   makeScriptWriter { interpreter = "${pkgs.dash}/bin/dash"; } "hello" "echo hello world"
   makeScriptWriter = { interpreter, check ? "" }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.string.check content);
+    assert lib.or (types.path.check content) (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommand name (if (types.string.check content) then {
+    pkgs.runCommand name (if (types.str.check content) then {
       inherit content interpreter;
       passAsFile = [ "content" ];
     } else {
@@ -42,11 +42,11 @@ rec {
   #   writeSimpleC = makeBinWriter { compileScript = name: "gcc -o $out $contentPath"; }
   makeBinWriter = { compileScript }: nameOrPath: content:
     assert lib.or (types.path.check nameOrPath) (builtins.match "([0-9A-Za-z._])[0-9A-Za-z._-]*" nameOrPath != null);
-    assert lib.or (types.path.check content) (types.string.check content);
+    assert lib.or (types.path.check content) (types.str.check content);
     let
       name = last (builtins.split "/" nameOrPath);
     in
-    pkgs.runCommand name (if (types.string.check content) then {
+    pkgs.runCommand name (if (types.str.check content) then {
       inherit content;
       passAsFile = [ "content" ];
     } else {
@@ -92,13 +92,15 @@ rec {
         PATH=${makeBinPath [
           pkgs.binutils-unwrapped
           pkgs.coreutils
+          pkgs.findutils
           pkgs.gcc
           pkgs.pkgconfig
         ]}
+        export PKG_CONFIG_PATH=${concatMapStringsSep ":" (pkg: "${pkg}/lib/pkgconfig") libraries}
         gcc \
             ${optionalString (libraries != [])
               "$(pkg-config --cflags --libs ${
-                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgsconfig -name \*.pc -exec basename {} \;)") libraries
+                concatMapStringsSep " " (pkg: "$(find ${escapeShellArg pkg}/lib/pkgconfig -name \\*.pc)") libraries
               })"
             } \
             -O \
@@ -146,6 +148,7 @@ rec {
         cp $contentPath tmp.hs
         ${ghc.withPackages (_: libraries )}/bin/ghc tmp.hs
         mv tmp $out
+        ${pkgs.binutils-unwrapped}/bin/strip --strip-unneeded "$out"
       '';
     } name;
 

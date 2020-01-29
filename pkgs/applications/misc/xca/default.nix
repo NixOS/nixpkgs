@@ -2,7 +2,7 @@
 , libtool, openssl, qtbase, qttools }:
 
 mkDerivation rec {
-  name = "xca-${version}";
+  pname = "xca";
   version = "2.1.2";
 
   src = fetchFromGitHub {

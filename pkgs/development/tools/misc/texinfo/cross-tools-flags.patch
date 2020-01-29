@@ -1,0 +1,12 @@
+diff -ur texinfo-6.5/configure texinfo-6.5-patched/configure
+--- texinfo-6.5/configure	2017-09-13 03:50:18.000000000 +0900
++++ texinfo-6.5-patched/configure	2019-12-28 17:39:06.692818866 +0900
+@@ -23281,7 +23281,7 @@
+   # env -i gives this build host configure a clean environment;
+   # consequently, we have to re-initialize $PATH.
+   env -i CC="$BUILD_CC" AR="$BUILD_AR" RANLIB="$BUILD_RANLIB" \
+-      PATH="$PATH" \
++      PATH="$PATH" CFLAGS="$NATIVE_TOOLS_CFLAGS" LDFLAGS="$NATIVE_TOOLS_LDFLAGS" \
+       tools_only=1 \
+     ${confdir}/configure --build=${build} --host=${build} \
+                          --disable-rpath --disable-nls

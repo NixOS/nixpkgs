@@ -7,18 +7,18 @@ let
 in
 
 stdenv.mkDerivation rec {
-  
-  name = "ocaml-${version}";
+
+  pname = "ocaml";
   version = "3.12.1";
-  
+
   src = fetchurl {
-    url = "https://caml.inria.fr/pub/distrib/ocaml-3.12/${name}.tar.bz2";
+    url = "https://caml.inria.fr/pub/distrib/ocaml-3.12/${pname}-${version}.tar.bz2";
     sha256 = "13cmhkh7s6srnlvhg3s9qzh3a5dbk2m9qr35jzq922sylwymdkzd";
   };
 
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
-  buildFlags = "world" + optionalString useNativeCompilers " bootstrap world.opt";
+  buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
   buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   patches = optionals stdenv.isDarwin [ ./3.12.1-darwin-fix-configure.patch ];

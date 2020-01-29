@@ -1,6 +1,6 @@
 { stdenv, zlib, glucose }:
 stdenv.mkDerivation rec {
-  name = "glucose-syrup-${version}";
+  pname = "glucose-syrup";
   version = glucose.version;
 
   src = glucose.src;
@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
   makeFlags = [ "r" ];
   installPhase = ''
     install -Dm0755 glucose-syrup_release $out/bin/glucose-syrup
-    mkdir -p "$out/share/doc/${name}/"
-    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${name}/"
+    mkdir -p "$out/share/doc/${pname}-${version}/"
+    install -Dm0755 ../{LICEN?E,README*,Changelog*} "$out/share/doc/${pname}-${version}/"
   '';
 
   meta = with stdenv.lib; {

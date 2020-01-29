@@ -31,5 +31,7 @@ stdenv.mkDerivation {
 
   meta = {
     platforms = stdenv.lib.platforms.windows;
+
+    broken = true;
   };
 }

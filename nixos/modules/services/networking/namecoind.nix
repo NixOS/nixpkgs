@@ -154,16 +154,14 @@ in
       config = ${configFile}
     '';
 
-    users.users = singleton {
-      name = "namecoin";
+    users.users.namecoin = {
       uid  = config.ids.uids.namecoin;
       description = "Namecoin daemon user";
       home = dataDir;
       createHome = true;
     };
 
-    users.groups = singleton {
-      name = "namecoin";
+    users.groups.namecoin = {
       gid  = config.ids.gids.namecoin;
     };
 
@@ -175,7 +173,7 @@ in
       serviceConfig = {
         User  = "namecoin";
         Group = "namecoin";
-        ExecStart  = "${pkgs.altcoins.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
+        ExecStart  = "${pkgs.namecoind}/bin/namecoind -conf=${configFile} -datadir=${dataDir} -printtoconsole";
         ExecStop   = "${pkgs.coreutils}/bin/kill -KILL $MAINPID";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Nice = "10";
@@ -200,5 +198,7 @@ in
     };
 
   };
+
+  meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 
 }

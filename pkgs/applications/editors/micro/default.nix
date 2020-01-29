@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage  rec {
-  name = "micro-${version}";
+  pname = "micro";
   version = "1.4.1";
 
   goPackagePath = "github.com/zyedidia/micro";

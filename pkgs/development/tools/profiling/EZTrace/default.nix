@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1-7";
-  name = "EZTrace-${version}";
+  pname = "EZTrace";
 
   src = fetchurl {
     url = "https://gforge.inria.fr/frs/download.php/file/37155/eztrace-${version}.tar.gz";
@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Tool that aims at generating automatically execution trace from HPC programs";
     license = stdenv.lib.licenses.cecill-b;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

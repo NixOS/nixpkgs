@@ -246,9 +246,9 @@ if test -z "$libsOnly"; then
   ( # build and install fgl_glxgears
     cd fgl_glxgears;
     gcc -DGL_ARB_texture_multisample=1 -g \
-    -I$libGLU_combined/include \
+    -I$libGL/include -I$libGLU/include \
     -I$out/include \
-    -L$libGLU_combined/lib -lGL -lGLU -lX11 -lm \
+    -L$libGL/lib -L$libGLU/lib -lGL -lGLU -lX11 -lm \
     -o $out/bin/fgl_glxgears -Wall fgl_glxgears.c
   )
 
@@ -285,7 +285,7 @@ if test -z "$libsOnly"; then
     for prog in $BIN/*; do
       cp -f $prog $out/bin &&
       patchelf --set-interpreter $(echo $glibcDir/lib/ld-linux*.so.2) $out/bin/$(basename $prog) &&
-      wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib/:$gcc/lib/:$out/share/ati/:$libXinerama/lib/:$libXrandr/lib/:$libfontconfig/lib/:$libfreetype/lib/:$LD_LIBRARY_PATH
+      wrapProgram $out/bin/$(basename $prog) --prefix LD_LIBRARY_PATH : $out/lib/:$gcc/lib/:$out/share/ati/:$libXinerama/lib/:$libXrandr/lib/:$libfontconfig/lib/:$libfreetype/lib/${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     done
   }
 

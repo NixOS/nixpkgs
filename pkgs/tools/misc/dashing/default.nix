@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "dashing-unstable-${version}";
+  pname = "dashing-unstable";
   version = "2018-02-15";
   rev = "0e0519d76ed6bbbe02b00ee1d1ac24697d349f49";
 

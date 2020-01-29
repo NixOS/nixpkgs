@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace "install -m" "install -Dm"
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "A user-level daemon that monitors NUMA topology and processes resource consumption to facilitate good NUMA resource access";

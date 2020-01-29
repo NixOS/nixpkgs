@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec{
   version="1.28";
-  name = "mxt-app-${version}";
+  pname = "mxt-app";
 
   src = fetchFromGitHub {
     owner = "atmel-maxtouch";

@@ -1,0 +1,35 @@
+From 21526a507df8f1b2e37492193a754534d8938c0b Mon Sep 17 00:00:00 2001
+From: Andreas Schwab <schwab@suse.de>
+Date: Tue, 24 Jul 2018 14:08:34 +0200
+Subject: [PATCH] Fix out-of-bounds access in IBM-1390 converter (bug 23448)
+
+The IBM-1390 converter can consume/produce two UCS4 characters in each
+loop.
+---
+ ChangeLog           | 6 ++++++
+ iconvdata/ibm1364.c | 2 ++
+ 2 files changed, 8 insertions(+)
+
+diff --git a/iconvdata/ibm1364.c b/iconvdata/ibm1364.c
+index b833273..517fe60 100644
+--- a/iconvdata/ibm1364.c
++++ b/iconvdata/ibm1364.c
+@@ -150,6 +150,7 @@ enum
+ #define MIN_NEEDED_INPUT  	MIN_NEEDED_FROM
+ #define MAX_NEEDED_INPUT  	MAX_NEEDED_FROM
+ #define MIN_NEEDED_OUTPUT 	MIN_NEEDED_TO
++#define MAX_NEEDED_OUTPUT 	MAX_NEEDED_TO
+ #define LOOPFCT 		FROM_LOOP
+ #define BODY \
+   {									      \
+@@ -296,6 +297,7 @@ enum
+ 
+ /* Next, define the other direction.  */
+ #define MIN_NEEDED_INPUT	MIN_NEEDED_TO
++#define MAX_NEEDED_INPUT  	MAX_NEEDED_TO
+ #define MIN_NEEDED_OUTPUT	MIN_NEEDED_FROM
+ #define MAX_NEEDED_OUTPUT	MAX_NEEDED_FROM
+ #define LOOPFCT			TO_LOOP
+-- 
+2.9.3
+

@@ -8,7 +8,7 @@ let param =
   };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "coq${coq.coq-version}-StructTact-${param.version}";
 
   src = fetchFromGitHub {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = "patchShebangs ./configure";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   passthru = {
     compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.5";

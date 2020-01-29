@@ -1,28 +1,36 @@
-{ stdenv, buildPythonPackage, fetchPypi, python
-, nose, mock, vcversioner, functools32 }:
+{ lib, buildPythonPackage, fetchPypi, python, isPy27
+, attrs
+, functools32
+, importlib-metadata
+, mock
+, nose
+, pyperf
+, pyrsistent
+, setuptools_scm
+, twisted
+, vcversioner
+}:
 
 buildPythonPackage rec {
   pname = "jsonschema";
-  version = "2.6.0";
+  version = "3.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00kf3zmpp9ya4sydffpifn0j0mzm342a2vzh82p6r0vh10cg7xbg";
+    sha256 = "c8a85b28d377cc7737e46e2d9f2b4f44ee3c0e1deac6bf46ddefc7187d30797a";
   };
 
-  checkInputs = [ nose mock vcversioner ];
-  propagatedBuildInputs = [ functools32 ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [ attrs importlib-metadata functools32 pyrsistent ];
+  checkInputs = [ nose mock pyperf twisted vcversioner ];
 
-  postPatch = ''
-    substituteInPlace jsonschema/tests/test_jsonschema_test_suite.py \
-      --replace "python" "${python.pythonForBuild.interpreter}"
-  '';
-
+  # zope namespace collides on py27
+  doCheck = !isPy27;
   checkPhase = ''
     nosetests
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/Julian/jsonschema;
     description = "An implementation of JSON Schema validation for Python";
     license = licenses.mit;

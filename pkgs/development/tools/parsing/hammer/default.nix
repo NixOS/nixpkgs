@@ -1,7 +1,7 @@
 { stdenv, fetchgit, glib, pkgconfig, python, scons }:
 
-stdenv.mkDerivation rec {
-  name = "hammer-${version}";
+stdenv.mkDerivation {
+  pname = "hammer";
   version = "e7aa734";
 
   src = fetchgit {

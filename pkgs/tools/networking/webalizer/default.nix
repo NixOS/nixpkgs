@@ -19,7 +19,6 @@ stdenv.mkDerivation {
   configureFlags = [
     "--enable-dns"
     "--enable-geoip"
-    "--disable-static"
     "--enable-shared"
   ];
 

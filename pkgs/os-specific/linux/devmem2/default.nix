@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "devmem2-2004-08-05";
 
   src = fetchurl {

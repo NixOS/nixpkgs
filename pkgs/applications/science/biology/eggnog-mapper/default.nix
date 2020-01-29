@@ -7,7 +7,7 @@ python27Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "eggnogdb";
     repo = "eggnog-mapper";
-    rev = "${version}";
+    rev = version;
     sha256 = "1aaaflppy84bhkh2hb5gnzm4xgrz0rz0cgfpadr9w8cva8p0sqdv";
   };
 

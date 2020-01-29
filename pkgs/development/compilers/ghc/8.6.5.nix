@@ -10,7 +10,7 @@
 , # GHC can be built with system libffi or a bundled one.
   libffi ? null
 
-, useLLVM ? !stdenv.targetPlatform.isx86
+, useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -73,7 +73,7 @@ let
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
     ++ [libffi]
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
@@ -104,7 +104,7 @@ stdenv.mkDerivation (rec {
      name = "D5123.diff";
      sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
     })
-    (fetchpatch rec { # https://github.com/haskell/haddock/issues/900
+    (fetchpatch { # https://github.com/haskell/haddock/issues/900
      url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
      name = "loadpluginsinmodules.diff";
      sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";
@@ -125,7 +125,7 @@ stdenv.mkDerivation (rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString (targetPlatform.isLinux && !(targetPlatform.useLLVM or false)) ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -167,9 +167,9 @@ stdenv.mkDerivation (rec {
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
   ] ++ stdenv.lib.optionals (libffi != null) ["--with-system-libffi" "--with-ffi-includes=${targetPackages.libffi.dev}/include" "--with-ffi-libraries=${targetPackages.libffi.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
@@ -207,6 +207,10 @@ stdenv.mkDerivation (rec {
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
+  # See #63511 - the only unstripped file is the debug rts which isn't meant to
+  # be stripped.
+  dontStrip = true;
+
   checkTarget = "test";
 
   hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
@@ -221,6 +225,10 @@ stdenv.mkDerivation (rec {
       egrep --quiet '^#!' <(head -n 1 $i) || continue
       sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
     done
+  ''
+  # Temporary work-around for https://github.com/NixOS/nixpkgs/issues/66277
+  + stdenv.lib.optionalString hostPlatform.isAarch64 ''
+    rm -rf "$doc/share/doc/ghc/html/libraries"
   '';
 
   passthru = {

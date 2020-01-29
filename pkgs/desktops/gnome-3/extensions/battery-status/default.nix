@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-battery-status-${version}";
+  pname = "gnome-shell-extension-battery-status";
   version = "6";
 
   src = fetchFromGitHub {

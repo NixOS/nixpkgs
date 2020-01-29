@@ -1,15 +1,15 @@
-{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU_combined, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
+{ fetchurl, stdenv, cmake, xlibsWrapper, libGLU, libGL, SDL, openal, freealut, libogg, libvorbis, runtimeShell }:
 
 stdenv.mkDerivation rec {
   version = "1.3.2";
-  name = "astromenace-${version}";
+  pname = "astromenace";
 
   src = fetchurl {
     url = "mirror://sourceforge/openastromenace/astromenace-src-${version}.tar.bz2";
     sha256 = "1rkz6lwjcd5mwv72kf07ghvx6z46kf3xs250mjbmnmjpn7r5sxwv";
   };
 
-  buildInputs = [ cmake xlibsWrapper libGLU_combined SDL openal freealut libogg libvorbis ];
+  buildInputs = [ cmake xlibsWrapper libGLU libGL SDL openal freealut libogg libvorbis ];
 
   buildPhase = ''
     cmake ./

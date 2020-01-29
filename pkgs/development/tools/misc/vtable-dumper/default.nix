@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libelf }:
 
 stdenv.mkDerivation rec {
-  name = "vtable-dumper-${version}";
+  pname = "vtable-dumper";
   version = "1.2";
 
   src = fetchFromGitHub {

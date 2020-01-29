@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "parlatype";
-  version = "1.6-beta";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner  = "gkarsay";
     repo   = pname;
     rev    = "v${version}";
-    sha256 = "0bi0djic9kf178s7vl3y83v4rzhvynlvyf64n94fy80n2f100dj9";
+    sha256 = "157423f40l8nd5da6y0qjmg4l3125zailp98w2hda3mxxn1j5ix3";
   };
 
   nativeBuildInputs = [

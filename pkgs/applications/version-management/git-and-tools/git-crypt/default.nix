@@ -1,16 +1,19 @@
-{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, stdenv }:
+{ fetchFromGitHub, git, gnupg, makeWrapper, openssl, stdenv
+, libxslt, docbook_xsl
+}:
 
 stdenv.mkDerivation rec {
-  name = "git-crypt-${version}";
+  pname = "git-crypt";
   version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "AGWA";
-    repo = "git-crypt";
-    rev = "${version}";
+    repo = pname;
+    rev = version;
     sha256 = "13m9y0m6gc3mlw3pqv9x4i0him2ycbysizigdvdanhh514kga602";
-    inherit name;
   };
+
+  nativeBuildInputs = [ libxslt ];
 
   buildInputs = [ openssl makeWrapper ];
 
@@ -19,9 +22,14 @@ stdenv.mkDerivation rec {
       --replace '(escape_shell_arg(our_exe_path()))' '= "git-crypt"'
   '';
 
-  installPhase = ''
-    make install PREFIX=$out
-    wrapProgram $out/bin/* --prefix PATH : $out/bin:${git}/bin:${gnupg}/bin
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "ENABLE_MAN=yes"
+    "DOCBOOK_XSL=${docbook_xsl}/share/xml/docbook-xsl-nons/manpages/docbook.xsl"
+  ];
+
+  postFixup = ''
+    wrapProgram $out/bin/git-crypt --prefix PATH : $out/bin:${git}/bin:${gnupg}/bin
   '';
 
   meta = with stdenv.lib; {

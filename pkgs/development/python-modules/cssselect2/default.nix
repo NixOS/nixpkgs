@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "cssselect2";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "505d2ce3d3a1d390ddb52f7d0864b7efeb115a5b852a91861b498b92424503ab";
+    sha256 = "0skymzb4ncrm2zdsy80f53vi0arf776lvbp51hzh4ayp1il5lj3h";
   };
 
   # We're not interested in code quality tests

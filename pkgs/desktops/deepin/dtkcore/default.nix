@@ -1,15 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dtkcore";
-  version = "2.0.12.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1akfzkdhgsndm6rlr7snhpznxj0w351v6rr8vvnr6ka2dw75xsl4";
+    sha256 = "0xdh6mmrv8yr6mjmlwj0fv037parkkwfwlaibcbrskwxqp9iri1y";
   };
 
   nativeBuildInputs = [
@@ -30,20 +29,24 @@ stdenv.mkDerivation rec {
     sed -i tools/script/dtk-translate.py -e "s,#!env,#!/usr/bin/env,"
   '';
 
-  qmakeFlags = [ "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs" ];
+  qmakeFlags = [
+    "DTK_VERSION=${version}"
+    "LIB_INSTALL_DIR=${placeholder "out"}/lib"
+    "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs"
+  ];
 
   postFixup = ''
-    chmod +x $out/lib/dtk2/*.py
-    wrapPythonProgramsIn "$out/lib/dtk2" "$out $pythonPath"
+    chmod +x $out/lib/libdtk-${version}/DCore/bin/*.py
+    wrapPythonProgramsIn "$out/lib/libdtk-${version}/DCore/bin" "$out $pythonPath"
     searchHardCodedPaths $out  # debugging
   '';
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
-    description = "Deepin tool kit core modules";
+    description = "Deepin tool kit core library";
     homepage = https://github.com/linuxdeepin/dtkcore;
     license = licenses.gpl3;
     platforms = platforms.linux;

@@ -1,9 +1,9 @@
 { stdenv, collectd }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (collectd) meta version;
 
-  name = "collectd-data-${version}";
+  pname = "collectd-data";
 
   phases = [ "installPhase" ];
 

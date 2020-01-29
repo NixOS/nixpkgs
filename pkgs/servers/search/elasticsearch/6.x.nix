@@ -19,8 +19,8 @@ stdenv.mkDerivation (rec {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}.tar.gz";
     sha256 =
       if enableUnfree
-      then "1a88yyl0x4bsx92m3wjsz1fgm76gbfdzcd4bzp2x652rha667vfh"
-      else "04fa0fk25d5yxcjdj0bwqvdrswgwj31fwjvbq4gpg66c6bqwzcn6";
+      then "09dy3iyzk460vra6na6vk7d3mzpbv4cl0pl7kjmybxy947j7hh42"
+      else "0s04xz3j4psyhawvy503sp2nl5s0gswmpd9wfvwnavgcrr23wk39";
   };
 
   patches = [ ./es-home-6.x.patch ];

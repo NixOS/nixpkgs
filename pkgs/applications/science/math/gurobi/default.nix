@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, autoPatchelfHook, python }:
+{ stdenv, lib, fetchurl, autoPatchelfHook, python }:
 
-stdenv.mkDerivation rec {
-  name = "gurobi-${version}";
-  version = "8.1.0";
+let
+  majorVersion = "8.1";
+in stdenv.mkDerivation rec {
+  pname = "gurobi";
+  version = "${majorVersion}.0";
 
   src = with stdenv.lib; fetchurl {
     url = "http://packages.gurobi.com/${versions.majorMinor version}/gurobi${version}_linux64.tar.gz";
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     ln -s $out/lib/gurobi.jar $out/share/java/
     ln -s $out/lib/gurobi-javadoc.jar $out/share/java/
   '';
+
+  passthru.libSuffix = lib.replaceStrings ["."] [""] majorVersion;
 
   meta = with stdenv.lib; {
     description = "Optimization solver for mathematical programming";

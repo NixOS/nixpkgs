@@ -2,20 +2,22 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, isPy27
+, bz2file
+, mock
+, nose
 , numpy
 , six
-, bz2file
-, nose
-, mock
 }:
 
 buildPythonPackage rec {
   pname = "nibabel";
-  version = "2.4.1";
+  version = "3.0.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f165ff1cb4464902d6594eb2694e2cfb6f8b9fe233b856c976c3cff623ee0e17";
+    sha256 = "0f5bc325c9cb203c6f0ab876ba1a5ada811284bb3a4c5d063eeaafaefbad873d";
   };
 
   propagatedBuildInputs = [
@@ -25,16 +27,8 @@ buildPythonPackage rec {
 
   checkInputs = [ nose mock ];
 
-  checkPhase = let
-    excludeTests = lib.optionals isPy3k [
-      # https://github.com/nipy/nibabel/issues/691
-      "nibabel.gifti.tests.test_giftiio.test_read_deprecated"
-      "nibabel.gifti.tests.test_parse_gifti_fast.test_parse_dataarrays"
-      "nibabel.tests.test_minc1.test_old_namespace"
-    ];
-  # TODO: Add --with-doctest once all doctests pass
-  in ''
-    nosetests ${lib.concatMapStrings (test: "-e '${test}' ") excludeTests}
+  checkPhase = ''
+    nosetests
   '';
 
   meta = with lib; {

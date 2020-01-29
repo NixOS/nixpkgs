@@ -1,6 +1,6 @@
 {stdenv, fetchurl, SDL, SDL_image, SDL_mixer, SDL_net }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "njam-1.25";
 
   src = fetchurl {

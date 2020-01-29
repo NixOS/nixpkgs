@@ -1,38 +1,34 @@
-{ stdenv, fetchFromGitHub, pythonPackages, makeWrapper }:
+{ stdenv, fetchFromGitLab, python3Packages, glib, gobject-introspection, wrapGAppsHook }:
 
-stdenv.mkDerivation rec {
-  name = "connman-notify-${version}";
-  version = "2014-06-23";
+python3Packages.buildPythonApplication {
+  pname = "connman-notify";
+  version = "2019-10-05";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "wavexx";
     repo = "connman-notify";
-    rev = "0ed9b5e4a0e1f03c83c4589cabf410cac66cd11d";
-    sha256 = "0lhk417fdg3qxs1marpqp277bdxhwnbyrld9xj224bfk5v7xi4bg";
+    rev = "24b10a51721b54d932f4cd61ef2756423768c015";
+    sha256 = "1k5b5y6114yna2cm0cq82xilicran63hrhlklgv7k3p89057xh8j";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  format = "other";
 
-  buildInputs = [
-    pythonPackages.python
-    pythonPackages.dbus-python
-    pythonPackages.pygobject2
-    pythonPackages.pygtk
-    pythonPackages.notify
-  ];
+  nativeBuildInputs = [ gobject-introspection wrapGAppsHook ];
+
+  buildInputs = [ glib ];
+
+  pythonPath = with python3Packages; [ dbus-python pygobject3 ];
+
+  strictDeps = false;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp -vai connman-notify $out/bin/
+    install -D -t $out/bin connman-notify
+    install -D -t $out/share/doc README.rst
   '';
-
-  preFixup = ''
-    wrapProgram $out/bin/connman-notify --prefix PYTHONPATH : "$PYTHONPATH"
-  '';  
 
   meta = with stdenv.lib; {
     description = "Desktop notification integration for connman";
-    homepage = https://github.com/wavexx/connman-notify;
+    homepage = https://gitlab.com/wavexx/connman-notify;
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

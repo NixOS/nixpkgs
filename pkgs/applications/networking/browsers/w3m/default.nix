@@ -15,7 +15,7 @@ assert mouseSupport -> gpm-ncurses != null;
 with stdenv.lib;
 
 let
-  mktable = buildPackages.stdenv.mkDerivation rec {
+  mktable = buildPackages.stdenv.mkDerivation {
     name = "w3m-mktable";
     inherit (w3m) src;
     nativeBuildInputs = [ pkgconfig boehmgc ];

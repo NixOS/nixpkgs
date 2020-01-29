@@ -11,7 +11,7 @@
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
 , self
-, CF, configd, coreutils
+, configd, coreutils
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
@@ -79,6 +79,12 @@ let
         sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
       })
 
+      # Fix race-condition during pyc creation. Has a slight backwards
+      # incompatible effect: pyc symlinks will now be overridden
+      # (https://bugs.python.org/issue17222). Included in python >= 3.4,
+      # backported in debian since 2013.
+      # https://bugs.python.org/issue13146
+      ./atomic_pyc.patch
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
@@ -174,7 +180,7 @@ let
     ++ optional stdenv.hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+    ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
     optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python ];
@@ -228,9 +234,6 @@ in with passthru; stdenv.mkDerivation ({
         ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
 
-        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
-
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
 
         # Determinism: Windows installers were not deterministic.
@@ -249,6 +252,11 @@ in with passthru; stdenv.mkDerivation ({
       '';
 
     inherit passthru;
+
+    postFixup = ''
+      # Include a sitecustomize.py file. Note it causes an error when it's in postInstall with 2.7.
+      cp ${../../sitecustomize.py} $out/${sitePackages}/sitecustomize.py
+    '';
 
     enableParallelBuilding = true;
 

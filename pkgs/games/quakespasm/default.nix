@@ -1,6 +1,6 @@
 { stdenv, SDL, fetchurl, gzip, libvorbis, libmad }:
 stdenv.mkDerivation rec {
-  name = "quakespasm-${version}";
+  pname = "quakespasm";
   majorVersion = "0.93";
   version = "${majorVersion}.1";
 
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1bimv18f6rzhyjz78yvw2vqr5n0kdqbcqmq7cb3m951xgsxfcgpd";
   };
 
-  sourceRoot = "${name}/Quake";
+  sourceRoot = "${pname}-${version}/Quake";
 
   buildInputs = [
     gzip SDL libvorbis libmad

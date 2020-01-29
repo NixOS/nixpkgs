@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "snd-19.3";
+  name = "snd-19.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/${name}.tar.gz";
-    sha256 = "16j3fqyw361wdsr1076f0p3va2y7wdzq1lvr4ijz1ajmbxdlc723";
+    sha256 = "13s8fahpsjygjdrcwmprcrz23ny3klaj2rh2xzdv3bfs69gxvhys";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = http://ccrma.stanford.edu/software/snd;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 
 

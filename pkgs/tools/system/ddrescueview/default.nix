@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fpc, lazarus, atk, cairo, gdk_pixbuf, glib, gtk2, libX11, pango }:
+{ stdenv, lib, fetchurl, fpc, lazarus, atk, cairo, gdk-pixbuf, glib, gtk2, libX11, pango }:
 
 stdenv.mkDerivation rec {
   name = "ddrescueview-0.4alpha3";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ fpc lazarus ];
 
-  buildInputs = [ atk cairo gdk_pixbuf glib gtk2 libX11 pango ];
+  buildInputs = [ atk cairo gdk-pixbuf glib gtk2 libX11 pango ];
 
   sourceRoot = "source";
 

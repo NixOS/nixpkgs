@@ -1,25 +1,45 @@
-{ stdenv, fetchFromGitHub, pantheon, substituteAll, meson, ninja, python3
-, pkgconfig, vala, granite, libgee, gettext, gtk3, appstream, gnome-menus
-, json-glib, plank, bamf, switchboard, libunity, libsoup, wingpanel, zeitgeist
-, bc }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, substituteAll
+, meson
+, ninja
+, python3
+, pkgconfig
+, vala
+, granite
+, libgee
+, gettext
+, gtk3
+, appstream
+, gnome-menus
+, json-glib
+, plank
+, bamf
+, switchboard
+, libunity
+, libsoup
+, wingpanel
+, zeitgeist
+, bc
+}:
 
 stdenv.mkDerivation rec {
-  pname = "applications-menu";
-  version = "2.4.3";
+  pname = "wingpanel-applications-menu";
+  version = "2.5.0";
 
-  name = "wingpanel-${pname}-${version}";
+  repoName = "applications-menu";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "15mwfynaa57jii43x77iaz5gqjlylh5zxc70am8zgp8vhgzflvyd";
+    sha256 = "1zry9xvcljsn5fnl8qs21x7q8rpwv0sxvp2dmnx3ddqnvj4q2m7d";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "wingpanel-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -49,16 +69,13 @@ stdenv.mkDerivation rec {
    ];
 
   mesonFlags = [
-    "--sysconfdir=${placeholder ''out''}/etc"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
-
-  PKG_CONFIG_WINGPANEL_2_0_INDICATORSDIR = "${placeholder ''out''}/lib/wingpanel";
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
 
   patches = [
     (substituteAll {
-      src = ./bc.patch;
-      exec = "${bc}/bin/bc";
+      src = ./fix-paths.patch;
+      bc = "${bc}/bin/bc";
     })
   ];
 

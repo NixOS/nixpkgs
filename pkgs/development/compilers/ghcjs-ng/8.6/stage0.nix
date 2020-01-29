@@ -59,20 +59,21 @@
     }) {};
 
   ghc-api-ghcjs = callPackage
-    ({ mkDerivation, array, base, binary, bytestring, containers
+    ({ mkDerivation, alex, array, base, binary, bytestring, containers
     , deepseq, directory, filepath, ghc-boot, ghc-boot-th, ghc-heap
-    , ghci-ghcjs, hpc, process, stdenv, template-haskell-ghcjs
+    , ghci-ghcjs, happy, hpc, process, stdenv, template-haskell-ghcjs
     , terminfo, time, transformers, unix
     }:
     mkDerivation {
       pname = "ghc-api-ghcjs";
-      version = "8.6.2";
+      version = "8.6.5";
       src = configuredSrc + /lib/ghc-api-ghcjs;
       libraryHaskellDepends = [
         array base binary bytestring containers deepseq directory filepath
         ghc-boot ghc-boot-th ghc-heap ghci-ghcjs hpc process
         template-haskell-ghcjs terminfo time transformers unix
       ];
+      libraryToolDepends = [ alex happy ];
       homepage = "http://www.haskell.org/ghc/";
       description = "The GHC API (customized for GHCJS)";
       license = stdenv.lib.licenses.bsd3;
@@ -107,7 +108,7 @@
         base binary bytestring containers ghc-prim ghci-ghcjs
         template-haskell-ghcjs
       ];
-      homepage = "https://github.com/ghcjs";
+      homepage = "http://github.com/ghcjs";
       license = stdenv.lib.licenses.mit;
     }) {};
 

@@ -1,7 +1,7 @@
 {stdenv, fetchurl, makeWrapper, libiconv, ncurses, perl, fortune}:
 
 stdenv.mkDerivation rec {
-  name = "gtypist-${version}";
+  pname = "gtypist";
   version = "2.9.5";
 
   src = fetchurl {

@@ -5,11 +5,9 @@
 , hicolor-icon-theme
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "libhandy";
-  version = "0.0.9";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "0.0.12";
 
   outputs = [ "out" "dev" "devdoc" "glade" ];
   outputBin = "dev";
@@ -19,7 +17,7 @@ in stdenv.mkDerivation rec {
     owner = "Librem5";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0smfnvfba6cnxbrcm1vh3zbr1hww43qcxhawka3hzn2hjr06rfzn";
+    sha256 = "09wlknarzsbk9hr5ws6s7x5kibkhx9ayrbhshfqib4zkhq2f76hw";
   };
 
   nativeBuildInputs = [
@@ -49,7 +47,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A library full of GTK+ widgets for mobile phones";
+    description = "A library full of GTK widgets for mobile phones";
     homepage = https://source.puri.sm/Librem5/libhandy;
     license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ jtojnar ];

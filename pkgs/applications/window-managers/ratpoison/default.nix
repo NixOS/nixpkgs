@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ratpoison-${version}";
+  pname = "ratpoison";
   version = "1.4.9";
 
   src = fetchurl {
-    url = "mirror://savannah/ratpoison/${name}.tar.xz";
+    url = "mirror://savannah/ratpoison/${pname}-${version}.tar.xz";
     sha256 = "1wfir1gvh5h7izgvx2kd1pr2k7wlncd33zq7qi9s9k2y0aza93yr";
   };
 

@@ -15,7 +15,6 @@ let
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
       (mkOverride "flask"       "0.10.1" "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc")
       (mkOverride "flask_login" "0.2.11" "1rg3rsjs1gwi2pw6vr9jmhaqm9b3vc9c4hfcsvp4y8agbh7g3mc3")
-      (mkOverride "sarge"       "0.1.4"  "08s8896973bz1gg0pkr592w6g4p6v47bkfvws5i91p9xf8b35yar")
       (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
 
       # Octoprint holds back jinja2 to 2.8.1 due to breaking changes.
@@ -57,17 +56,18 @@ let
     "websocket-client"
     "wrapt"
     "sentry-sdk"
+    "werkzeug" # 0.16 just deprecates some stuff
   ];
 
 in py.pkgs.buildPythonApplication rec {
   pname = "OctoPrint";
-  version = "1.3.11";
+  version = "1.3.12";
 
   src = fetchFromGitHub {
     owner  = "foosel";
     repo   = "OctoPrint";
     rev    = version;
-    sha256 = "1102ki1819wsmkfg4riz4i0hjlr3w6nsvk8wrzqq0lc0s5ycf4jx";
+    sha256 = "1lmqssgwjyhknjf3x58g7cr0fqz7fs5a3rl07r69wfpch63ranyd";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -76,7 +76,7 @@ in py.pkgs.buildPythonApplication rec {
     psutil pyserial flask_login netaddr markdown sockjs-tornado
     pylru pyyaml sarge feedparser netifaces click websocket_client
     scandir chainmap future futures wrapt monotonic emoji
-    frozendict cachelib sentry-sdk typing
+    frozendict cachelib sentry-sdk typing filetype
   ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
 
   checkInputs = with py.pkgs; [ nose mock ddt ];
@@ -97,6 +97,6 @@ in py.pkgs.buildPythonApplication rec {
     homepage = https://octoprint.org/;
     description = "The snappy web interface for your 3D printer";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }

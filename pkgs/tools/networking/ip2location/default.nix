@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ip2location-${version}";
+  pname = "ip2location";
   version = "7.0.0";
 
   src = fetchurl {

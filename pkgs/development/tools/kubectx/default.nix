@@ -4,13 +4,13 @@ with lib;
 
 stdenv.mkDerivation rec {
   pname = "kubectx";
-  version = "0.6.3";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "ahmetb";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0nb867llpvjmkxv5bbqnyjrc4z74kibqg1d3dw7m47d5a5hn8525";
+    sha256 = "0mv40jh94by99i5wkf3p52wk4l68hvly1k5gnn7zsy9avc8fjd0p";
   };
 
   buildInputs = [ makeWrapper ];

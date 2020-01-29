@@ -5,19 +5,20 @@
 , six
 , mock
 , nose
+, pytest
 }:
 
 buildPythonPackage rec {
   pname = "freezegun";
-  version = "0.3.11";
+  version = "0.3.12";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e839b43bfbe8158b4d62bb97e6313d39f3586daf48e1314fb1083d2ef17700da";
+    sha256 = "2a4d9c8cd3c04a201e20c313caf8b6338f1cfa4cda43f46a94cc4a9fd13ea5e7";
   };
 
   propagatedBuildInputs = [ dateutil six ];
-  checkInputs = [ mock nose ];
+  checkInputs = [ mock nose pytest ];
 
   meta = with stdenv.lib; {
     description = "FreezeGun: Let your Python tests travel through time";

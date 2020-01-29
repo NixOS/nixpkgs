@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "20171104";
-  name = "libewf-${version}";
+  pname = "libewf";
 
   src = fetchurl {
     url = "https://github.com/libyal/libewf/releases/download/${version}/libewf-experimental-${version}.tar.gz";

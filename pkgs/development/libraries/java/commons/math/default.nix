@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.6.1";
-  name    = "commons-math-${version}";
+  pname = "commons-math";
 
   src = fetchurl {
     url    = "mirror://apache/commons/math/binaries/commons-math3-${version}-bin.tar.gz";

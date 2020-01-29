@@ -4,11 +4,11 @@ with lib;
 
 let
   hpssacli = pkgs.stdenv.mkDerivation rec {
-    name = "hpssacli-${version}";
+    pname = "hpssacli";
     version = "2.40-13.0";
 
     src = pkgs.fetchurl {
-      url = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/${name}_amd64.deb";
+      url = "https://downloads.linux.hpe.com/SDR/downloads/MCP/Ubuntu/pool/non-free/${pname}-${version}_amd64.deb";
       sha256 = "11w7fwk93lmfw0yya4jpjwdmgjimqxx6412sqa166g1pz4jil4sw";
     };
 

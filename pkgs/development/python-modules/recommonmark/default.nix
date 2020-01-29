@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-, pytest
+, pytestCheckHook
 , CommonMark
 , docutils
 , sphinx
@@ -9,22 +9,26 @@
 
 buildPythonPackage rec {
   pname = "recommonmark";
-  version = "0.5.0";
+  version = "0.6.0";
 
   # PyPI tarball is missing some test files: https://github.com/rtfd/recommonmark/pull/128
   src = fetchFromGitHub {
     owner = "rtfd";
     repo = pname;
     rev = version;
-    sha256 = "04bjqx2hczmg7rnj2rpsjk7h24diwk83s6fhgrxk00k40w2bpz5j";
+    sha256 = "0m6qk17irka448vcz5b39yck1qsq90k98dmkx80mni0w00yq9ggd";
   };
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytestCheckHook ];
   propagatedBuildInputs = [ CommonMark docutils sphinx ];
 
-  checkPhase = ''
-    py.test
-  '';
+  dontUseSetuptoolsCheck = true;
+
+  disabledTests = [
+    # https://github.com/readthedocs/recommonmark/issues/164
+    "test_lists"
+    "test_integration"
+  ];
 
   meta = {
     description = "A docutils-compatibility bridge to CommonMark";

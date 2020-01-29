@@ -1,19 +1,22 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, cacert, curl }:
+{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, openssl, cacert, curl
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
-  name = "tealdeer-${version}";
-  version = "1.1.0";
+  pname = "tealdeer";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "dbrgn";
     repo = "tealdeer";
     rev = "v${version}";
-    sha256 = "055pjxgiy31j69spq66w80ig469yi075dk8ad38z6rlvjmf74k71";
+    sha256 = "1v9wq4k7k4lmdz6xy6kabchjpbx9lds20yh6va87shypdh9iva29";
   };
 
-  cargoSha256 = "0yrz2pq4zdv6hzc8qc1zskpkq556mzpwvzl7qzbfzx8b6g31ak19";
+  cargoSha256 = "0y1y74fgxcv8a3cmyf30p6gg12r79ln7inir8scj88wbmwgkbxsp";
 
-  buildInputs = [ openssl cacert curl ];
+  buildInputs = [ openssl cacert curl ]
+    ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   nativeBuildInputs = [ pkgconfig ];
   

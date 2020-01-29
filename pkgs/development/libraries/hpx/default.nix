@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, boost, cmake, hwloc, gperftools, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
-  name = "hpx-${version}";
-  version = "1.2.1";
+  pname = "hpx";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "STEllAR-GROUP";
     repo = "hpx";
-    rev = "${version}";
-    sha256 = "18dk9413qcgljdlw2jfkk21lwi4iwc57s41yqnc3jp8vdj96w32s";
+    rev = version;
+    sha256 = "1wkipk7240vqpy8and2r8n7wnqyl4dcn41cyla4zcns2jhbr23vb";
   };
 
   buildInputs = [ boost hwloc gperftools ];

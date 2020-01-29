@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.6";
-  name = "acsccid-${version}";
+  pname = "acsccid";
 
   src = fetchFromGitHub {
     owner = "acshk";

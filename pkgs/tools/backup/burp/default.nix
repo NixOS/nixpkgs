@@ -2,7 +2,7 @@
 , acl, librsync, ncurses, openssl, zlib, uthash }:
 
 stdenv.mkDerivation rec {
-  name = "burp-${version}";
+  pname = "burp";
   version = "2.2.18";
 
   src = fetchFromGitHub {

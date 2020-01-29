@@ -31,10 +31,21 @@ stdenv.mkDerivation rec {
 
   patches = debianPatches;
 
-  meta = {
+  postPatch = ''
+    substituteInPlace urlview.c \
+      --replace '/etc/urlview/url_handler.sh' "$out/etc/urlview/url_handler.sh"
+  '';
+
+  postInstall = ''
+    install -Dm755 url_handler.sh $out/etc/urlview/url_handler.sh
+    patchShebangs $out/etc/urlview
+  '';
+
+  meta = with stdenv.lib; {
     description = "Extract URLs from text";
     homepage = https://packages.qa.debian.org/u/urlview.html;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
+    license = licenses.gpl2;
+    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ ma27 ];
   };
 }
