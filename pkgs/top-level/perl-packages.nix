@@ -20644,10 +20644,10 @@ let
 
   XMLLibXMLSimple = buildPerlPackage {
     pname = "XML-LibXML-Simple";
-    version = "0.99";
+    version = "1.01";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MARKOV/XML-LibXML-Simple-0.99.tar.gz;
-      sha256 = "14fe45c9fcb36c1cf14ac922da4439f1f83d451a5e70aa7177cb6edb705c9e44";
+      url = mirror://cpan/authors/id/M/MA/MARKOV/XML-LibXML-Simple-1.01.tar.gz;
+      sha256 = "cd98c8104b70d7672bfa26b4513b78adf2b4b9220e586aa8beb1a508500365a6";
     };
     propagatedBuildInputs = [ XMLLibXML ];
     meta = {
