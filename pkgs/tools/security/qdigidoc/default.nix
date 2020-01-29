@@ -42,9 +42,9 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Qt-based UI for signing and verifying DigiDoc documents";
-    homepage = https://www.id.ee/;
+    homepage = "https://www.id.ee/";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ yegortimoshenko ];
+    maintainers = with maintainers; [ yegortimoshenko mmahut ];
   };
 }
