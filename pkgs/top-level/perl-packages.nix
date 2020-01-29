@@ -20924,12 +20924,12 @@ let
 
   XXX = buildPerlPackage {
     pname = "XXX";
-    version = "0.33";
+    version = "0.35";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TI/TINITA/XXX-0.33.tar.gz;
-      sha256 = "00b0kxidb3wha9v2a915y5x8mfna7z54ck36f82kr8x29sb7by7w";
+      url = mirror://cpan/authors/id/I/IN/INGY/XXX-0.35.tar.gz;
+      sha256 = "1azk2h3d2vxc84zpa34gr0dvhvf5qkwbaidy3ks0gkkx9463crm6";
     };
-    propagatedBuildInputs = [ YAML ];
+    propagatedBuildInputs = [ YAMLPP ];
     meta = {
       description = "See Your Data in the Nude";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -20982,6 +20982,20 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/T/TI/TINITA/YAML-LibYAML-0.81.tar.gz;
       sha256 = "1rwmy4kywaa0hypy329gb8wbqdk01bv4179bbnjbg66kzl5ndpvh";
+    };
+  };
+
+  YAMLPP = buildPerlPackage {
+    pname = "YAML-PP";
+    version = "0.018";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/T/TI/TINITA/YAML-PP-0.018.tar.gz;
+      sha256 = "1s957svv1z4sz62s53n5ym3c0liafs2gl8r0m7xq9qgcb9dyvblx";
+    };
+    buildInputs = [ TestDeep TestWarn ];
+    meta = {
+      description = "YAML Framework";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
 
