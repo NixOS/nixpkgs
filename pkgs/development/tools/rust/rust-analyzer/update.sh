@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl jq nix-prefetch-github
+#!nix-shell -i bash -p curl jq nix-prefetch-github nodePackages.node2nix
 set -euo pipefail
 cd "$(dirname "$0")"
 owner=rust-analyzer
@@ -37,3 +37,26 @@ echo "cargoSha256: $cargo_sha256"
 sed "s/cargoSha256 = \".*\"/cargoSha256 = \"$cargo_sha256\"/" \
     --in-place ./default.nix
 
+# Update vscode extension
+
+echo "Generating node lock"
+node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"
+pushd "$nixpkgs/pkgs/misc/vscode-extensions/rust-analyzer"
+ext_version=$(jq '.version' "$node_src/package.json" --raw-output)
+ext_publisher=$(jq '.publisher' "$node_src/package.json" --raw-output)
+echo "Extension version: $ext_version"
+[[ "$ext_publisher" == "matklad" ]]
+node2nix \
+    --nodejs-12 \
+    --development \
+    --input "$node_src/package.json" \
+    --lock "$node_src/package-lock.json" \
+    --output ./node-packages.nix \
+    --composition ./node-composition.nix \
+    --no-copy-node-env \
+    --node-env ../../../development/node-packages/node-env.nix
+sed -e 's_^.*src = [./]*/nix/store.*__g' \
+    --in-place ./node-packages.nix
+sed -e "s/version = \".*\"/version = \"$ext_version\"/" \
+    --in-place ./default.nix
+popd

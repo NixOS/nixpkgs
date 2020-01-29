@@ -140,6 +140,8 @@ in
     };
   };
 
+  matklad.rust-analyzer = callPackage ./rust-analyzer {};
+
   scala-lang.scala = buildVscodeMarketplaceExtension {
     mktplcRef = {
       name = "scala";
