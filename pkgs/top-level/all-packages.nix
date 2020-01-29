@@ -7943,6 +7943,7 @@ in
     extraBuildInputs = lib.optional stdenv.hostPlatform.isDarwin clang.cc;
   };
 
+  gcc49Stdenv = overrideCC gccStdenv buildPackages.gcc49;
   gcc6Stdenv = overrideCC gccStdenv buildPackages.gcc6;
   gcc7Stdenv = overrideCC gccStdenv buildPackages.gcc7;
   gcc8Stdenv = overrideCC gccStdenv buildPackages.gcc8;
