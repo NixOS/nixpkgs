@@ -11,12 +11,17 @@ assert builtins.elem type [ "aspnetcore" "netcore" "sdk"];
 , libuuid
 , zlib
 , curl
-}: 
+}:
 let pname = if type == "aspnetcore" then "aspnetcore-runtime" else if type == "netcore" then "dotnet-runtime" else "dotnet-sdk";
+    platformNames = {
+      "x86_64-darwin" = "osx";
+      "x86_64-linux" = "linux";
+    };
+    platform = builtins.getAttr stdenv.system platformNames;
     urls = {
-        aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-linux-x64.tar.gz";
-        netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-linux-x64.tar.gz";
-        sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-linux-x64.tar.gz";
+        aspnetcore = "https://dotnetcli.azureedge.net/dotnet/aspnetcore/Runtime/${version}/${pname}-${version}-${platform}-x64.tar.gz";
+        netcore = "https://dotnetcli.azureedge.net/dotnet/Runtime/${version}/${pname}-${version}-${platform}-x64.tar.gz";
+        sdk = "https://dotnetcli.azureedge.net/dotnet/Sdk/${version}/${pname}-${version}-${platform}-x64.tar.gz";
     };
     descriptions = {
         aspnetcore = "ASP .NET Core runtime ${version}";
@@ -45,12 +50,12 @@ in stdenv.mkDerivation rec {
         runHook postInstall
     '';
 
-    postFixup = ''
+    postFixup = if stdenv.isLinux then ''
         patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" $out/dotnet
         patchelf --set-rpath "${rpath}" $out/dotnet
         find $out -type f -name "*.so" -exec patchelf --set-rpath '$ORIGIN:${rpath}' {} \;
         find $out -type f -name "apphost" -exec patchelf --set-interpreter "${stdenv.cc.bintools.dynamicLinker}" --set-rpath '$ORIGIN:${rpath}' {} \;
-    '';
+    '' else null;
 
     doInstallCheck = true;
     installCheckPhase = ''
@@ -60,7 +65,7 @@ in stdenv.mkDerivation rec {
     meta = with stdenv.lib; {
         homepage = https://dotnet.github.io/;
         description = builtins.getAttr type descriptions;
-        platforms = [ "x86_64-linux" ];
+        platforms = [ "x86_64-linux" "x86_64-darwin" ];
         maintainers = with maintainers; [ kuznero ];
         license = licenses.mit;
     };
