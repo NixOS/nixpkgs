@@ -4092,10 +4092,10 @@ let
 
   DataPerl = buildPerlPackage {
     pname = "Data-Perl";
-    version = "0.002009";
+    version = "0.002011";
     src = fetchurl {
-      url = mirror://cpan/authors/id/M/MA/MATTP/Data-Perl-0.002009.tar.gz;
-      sha256 = "b62b2225870c2c3b16fb78c429f8729ddb8ed0e342f4209ec3c261b764c36f8b";
+      url = mirror://cpan/authors/id/T/TO/TOBYINK/Data-Perl-0.002011.tar.gz;
+      sha256 = "8d34dbe314cfa2d99bd9aae546bbde94c38bb05b74b07c89bde1673a6f6c55f4";
     };
     buildInputs = [ TestDeep TestFatal TestOutput ];
     propagatedBuildInputs = [ ClassMethodModifiers ListMoreUtils ModuleRuntime RoleTiny strictures ];
