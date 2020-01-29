@@ -14923,10 +14923,10 @@ let
 
   PPIxRegexp = buildPerlModule {
     pname = "PPIx-Regexp";
-    version = "0.067";
+    version = "0.068";
     src = fetchurl {
-      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.067.tar.gz;
-      sha256 = "1aa8dee5bdefdfdbfedd3d829932cedc57502552572739766148c6ac6cc6c3f0";
+      url = mirror://cpan/authors/id/W/WY/WYANT/PPIx-Regexp-0.068.tar.gz;
+      sha256 = "b5444b699a3c7ad79506c796559449c6f858dc62deb60e08249f96782636e5f4";
     };
     propagatedBuildInputs = [ ListMoreUtils PPI ];
     meta = {
