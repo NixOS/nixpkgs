@@ -69,7 +69,7 @@ core-packages:
 default-package-overrides:
   # pandoc-2.9 does not accept the 0.3 version yet
   - doclayout < 0.3
-  # LTS Haskell 14.21
+  # LTS Haskell 14.22
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
   - abstract-par ==0.3.3
@@ -132,7 +132,7 @@ default-package-overrides:
   - arrow-extras ==0.1.0.1
   - asciidiagram ==1.3.3.3
   - ascii-progress ==0.3.3.0
-  - asif ==6.0.3
+  - asif ==6.0.4
   - asn1-encoding ==0.9.6
   - asn1-parse ==0.9.5
   - asn1-types ==0.3.3
@@ -326,7 +326,7 @@ default-package-overrides:
   - Chart ==1.9.3
   - Chart-diagrams ==1.9.3
   - chaselev-deque ==0.5.0.5
-  - cheapskate ==0.1.1.1
+  - cheapskate ==0.1.1.2
   - cheapskate-highlight ==0.1.0.0
   - cheapskate-lucid ==0.1.0.0
   - check-email ==1.0.2
@@ -423,8 +423,8 @@ default-package-overrides:
   - control-monad-omega ==0.3.2
   - convertible ==1.1.1.0
   - cookie ==0.4.5
-  - core-data ==0.2.1.4
-  - core-text ==0.2.2.6
+  - core-data ==0.2.1.5
+  - core-text ==0.2.3.3
   - countable ==1.0
   - country ==0.1.6
   - courier ==0.1.1.5
@@ -587,7 +587,7 @@ default-package-overrides:
   - download ==0.3.2.7
   - drinkery ==0.4
   - dsp ==0.2.5
-  - dual ==0.1.0.3
+  - dual ==0.1.1.1
   - dual-tree ==0.2.2.1
   - dublincore-xml-conduit ==0.1.0.2
   - dunai ==0.5.1
@@ -669,7 +669,7 @@ default-package-overrides:
   - extractable-singleton ==0.0.1
   - extrapolate ==0.3.3
   - fail ==4.9.0.0
-  - failable ==1.2.2.0
+  - failable ==1.2.4.0
   - fakedata ==0.2.2
   - farmhash ==0.1.0.5
   - fast-builder ==0.1.2.0
@@ -900,7 +900,7 @@ default-package-overrides:
   - haskey-btree ==0.3.0.1
   - haskintex ==0.8.0.0
   - haskoin-core ==0.9.8
-  - hasql ==1.4.0.1
+  - hasql ==1.4.1
   - hasql-optparse-applicative ==0.3.0.5
   - hasql-pool ==0.5.1
   - hasql-transaction ==0.7.2
@@ -983,7 +983,7 @@ default-package-overrides:
   - HSet ==0.0.1
   - hset ==2.2.0
   - hsexif ==0.6.1.6
-  - hs-functors ==0.1.5.0
+  - hs-functors ==0.1.6.0
   - hs-GeoIP ==0.3
   - hsini ==0.5.1.2
   - hsinstall ==2.2
@@ -1037,13 +1037,13 @@ default-package-overrides:
   - http-common ==0.8.2.0
   - http-conduit ==2.3.7.3
   - http-date ==0.0.8
-  - http-directory ==0.1.5
+  - http-directory ==0.1.7
   - http-download ==0.1.0.1
   - httpd-shed ==0.4.1.1
   - http-link-header ==1.0.3.1
   - http-media ==0.8.0.0
   - http-reverse-proxy ==0.6.0
-  - http-streams ==0.8.6.1
+  - http-streams ==0.8.7.1
   - http-types ==0.12.3
   - human-readable-duration ==0.2.1.4
   - HUnit ==1.6.0.0
@@ -1059,7 +1059,7 @@ default-package-overrides:
   - hw-dsv ==0.3.5
   - hweblib ==0.6.3
   - hw-eliasfano ==0.1.1.0
-  - hw-excess ==0.2.2.1
+  - hw-excess ==0.2.2.2
   - hw-fingertree ==0.1.1.1
   - hw-fingertree-strict ==0.1.1.3
   - hw-hedgehog ==0.1.0.5
@@ -1300,13 +1300,13 @@ default-package-overrides:
   - mainland-pretty ==0.7.0.1
   - main-tester ==0.2.0.1
   - makefile ==1.1.0.0
-  - managed ==1.0.6
+  - managed ==1.0.7
   - markdown ==0.1.17.4
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
-  - massiv ==0.4.4.0
+  - massiv ==0.4.5.0
   - massiv-io ==0.1.9.0
-  - massiv-test ==0.1.1
+  - massiv-test ==0.1.2
   - mathexpr ==0.3.0.0
   - math-functions ==0.3.3.0
   - matplotlib ==0.7.5
@@ -1452,7 +1452,7 @@ default-package-overrides:
   - network-anonymous-i2p ==0.10.0
   - network-attoparsec ==0.12.2
   - network-bsd ==2.8.0.0
-  - network-byte-order ==0.1.2.0
+  - network-byte-order ==0.1.3.0
   - network-conduit-tls ==1.3.2
   - network-house ==0.1.0.2
   - network-info ==0.2.0.10
@@ -1496,7 +1496,7 @@ default-package-overrides:
   - ObjectName ==1.1.0.1
   - oblivious-transfer ==0.1.0
   - odbc ==0.2.2
-  - oeis ==0.3.9
+  - oeis ==0.3.10
   - oeis2 ==1.0.3
   - ofx ==0.4.4.0
   - old-locale ==1.0.0.7
@@ -1742,7 +1742,7 @@ default-package-overrides:
   - Ranged-sets ==0.4.0
   - range-set-list ==0.1.3.1
   - rank1dynamic ==0.4.0
-  - rank2classes ==1.3.1.2
+  - rank2classes ==1.3.2.1
   - Rasterific ==0.7.5
   - rasterific-svg ==0.3.3.2
   - ratel ==1.0.9
@@ -1900,13 +1900,13 @@ default-package-overrides:
   - servant-elm ==0.6.1
   - servant-foreign ==0.15
   - servant-http-streams ==0.16.0.1
-  - servant-js ==0.9.4
+  - servant-js ==0.9.4.1
   - servant-JuicyPixels ==0.3.0.5
   - servant-kotlin ==0.1.1.9
   - servant-lucid ==0.9
   - servant-machines ==0.15
   - servant-mock ==0.8.5
-  - servant-multipart ==0.11.4
+  - servant-multipart ==0.11.5
   - servant-pipes ==0.15.1
   - servant-rawm ==0.3.2.0
   - servant-ruby ==0.9.0.0
@@ -2187,7 +2187,7 @@ default-package-overrides:
   - timer-wheel ==0.2.0.1
   - timezone-olson ==0.1.9
   - timezone-series ==0.1.9
-  - tintin ==1.10.0
+  - tintin ==1.10.1
   - tinylog ==0.15.0
   - titlecase ==1.0.1
   - tldr ==0.4.0.2
@@ -2229,7 +2229,7 @@ default-package-overrides:
   - tuples-homogenous-h98 ==0.1.1.0
   - tuple-sop ==0.3.1.0
   - tuple-th ==0.2.5
-  - turtle ==1.5.15
+  - turtle ==1.5.16
   - TypeCompose ==0.9.14
   - typed-process ==0.2.6.0
   - type-errors ==0.2.0.0
@@ -2242,7 +2242,7 @@ default-package-overrides:
   - typelits-witnesses ==0.4.0.0
   - type-map ==0.1.6.0
   - typenums ==0.1.2.1
-  - type-of-html ==1.5.0.0
+  - type-of-html ==1.5.1.0
   - type-of-html-static ==0.1.0.2
   - type-operators ==0.2.0.0
   - typerep-map ==0.3.2
@@ -2383,7 +2383,7 @@ default-package-overrides:
   - websockets ==0.12.7.0
   - websockets-snap ==0.10.3.1
   - weigh ==0.0.16
-  - wide-word ==0.1.0.9
+  - wide-word ==0.1.1.0
   - wikicfp-scraper ==0.1.0.11
   - wild-bind ==0.1.2.5
   - wild-bind-x11 ==0.2.0.9
