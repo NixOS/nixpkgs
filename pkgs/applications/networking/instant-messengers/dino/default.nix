@@ -3,7 +3,7 @@
 , gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee, utillinux, libselinux, libsepol, libpsl, brotli
-, libsignal-protocol-c
+, librsvg, libsignal-protocol-c
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     libpsl
     brotli
     libsignal-protocol-c
+    librsvg
   ];
 
   meta = with stdenv.lib; {
