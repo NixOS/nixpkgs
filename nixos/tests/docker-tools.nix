@@ -80,5 +80,8 @@ import ./make-test.nix ({ pkgs, ... }: {
       # This is to be sure the order of layers of the parent image is preserved
       $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer2 | grep -q layer2");
       $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer3 | grep -q layer3");
+
+      # Ensure image with only 2 layers can be loaded
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.two-layered-image}'");
     '';
 })
