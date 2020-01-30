@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation {
   pname = "saga";
-  version = "7.3.0";
+  version = "7.5.0";
 
   # See https://groups.google.com/forum/#!topic/nix-devel/h_vSzEJAPXs
   # for why the have additional buildInputs on darwin
@@ -18,8 +18,8 @@ stdenv.mkDerivation {
   CXXFLAGS = stdenv.lib.optionalString stdenv.cc.isClang "-std=c++11 -Wno-narrowing";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/saga-gis/files/SAGA%20-%207/SAGA%20-%207.3.0/saga-7.3.0.tar.gz";
-    sha256 = "1g7v6vx7b8mfhbbg03pdk4kyks20maqbcdbasnxazhs8pl2zih7k";
+    url = "https://sourceforge.net/projects/saga-gis/files/SAGA%20-%207/SAGA%20-%207.5.0/saga-7.5.0.tar.gz";
+    sha256 = "0s5195802xwlkb2w4i4vd9ys95d7fnzn5cnnixh1csaqc2x1qp6r";
   };
 
   meta = with stdenv.lib; {
