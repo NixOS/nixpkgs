@@ -24512,6 +24512,8 @@ in
 
   pspp = callPackage ../applications/science/math/pspp { };
 
+  ssw = callPackage ../applications/misc/ssw { };
+
   pynac = callPackage ../applications/science/math/pynac { };
 
   singular = callPackage ../applications/science/math/singular { };
