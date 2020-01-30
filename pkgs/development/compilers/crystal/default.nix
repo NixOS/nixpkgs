@@ -189,6 +189,15 @@ in rec {
     };
   };
 
+  binaryCrystal_0_30 = genericBinary {
+    version = "0.30.1";
+    sha256s = {
+      x86_64-linux  = "1k2mb74jh3ns3m7y73j4wpf571sayn73zbn6d7q81d09r280zrma";
+      i686-linux    = "0vsq1ayf922spydp2g2mmimc797jmm7nl5nljhfppcclrwygdyk2";
+      x86_64-darwin = "1p3s4lwdgykb7h7aysjhrs7vm0zhinzw5d7rfv6jsyin4j8yxhzz";
+    };
+  };
+
   crystal_0_25 = generic {
     version = "0.25.1";
     sha256  = "15xmbkalsdk9qpc6wfpkly3sifgw6a4ai5jzlv78dh3jp7glmgyl";
@@ -228,7 +237,7 @@ in rec {
     version = "0.31.1";
     sha256  = "1dswxa32w16gnc6yjym12xj7ibg0g6zk3ngvl76lwdjqb1h6lwz8";
     doCheck = false; # 5 checks are failing now
-    binary = crystal_0_30;
+    binary = binaryCrystal_0_30;
   };
 
   crystal_0_32 = generic {
