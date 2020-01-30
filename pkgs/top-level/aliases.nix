@@ -540,4 +540,21 @@ mapAliases ({
   tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
   # added 2020-01-10
   tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+
+    /* Cleanup before 20.09 */
+  llvm_4 = throw ''
+    The LLVM versions 3.5, 3.9 and 4.0 have been removed in NixOS 20.03
+    due to a lack of compatibility with glibc 2.30!
+  '';
+  llvm_39 = llvm_4;
+  llvm_35 = llvm_4;
+  lld_4 = llvm_4;
+
+  llvmPackages_4 = llvm_4;
+  llvmPackages_39 = llvm_4;
+  llvmPackages_35 = llvm_4;
+
+  clang_39 = llvm_4;
+  clang_35 = llvm_4;
+  clang_4 = llvm_4;
 })
