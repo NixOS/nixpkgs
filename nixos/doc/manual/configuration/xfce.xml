@@ -28,7 +28,7 @@
  <para>
   Some Xfce programs are not installed automatically. To install them manually
   (system wide), put them into your
-  <xref linkend="opt-environment.systemPackages"/>.
+  <xref linkend="opt-environment.systemPackages"/> from <literal>pkgs.xfce</literal>.
  </para>
  <simplesect xml:id="sec-xfce-thunar-plugins">
   <title>Thunar Plugins</title>
