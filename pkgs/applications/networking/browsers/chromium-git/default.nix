@@ -1,5 +1,5 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand
-, python2, gn, ninja, llvmPackages_latest, nodejs, jre8, bison, gperf, pkg-config, protobuf
+, python2, gn, ninja, llvmPackages_latest, nodejs, bison, gperf, pkg-config, protobuf
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
 , glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
@@ -51,6 +51,7 @@ let
     link_pulseaudio = gnFlags.use_pulseaudio;
     enable_widevine = false;
     enable_swiftshader = false;
+    closure_compile = false; # Disable type-checking for the Web UI to avoid a Java dependency.
 
     # enable support for the H.264 codec
     proprietary_codecs = true;
@@ -100,7 +101,7 @@ let
       pname = "chromium-git";
       inherit version src;
 
-      nativeBuildInputs = [ gn ninja python2 pkg-config jre8 gperf bison ];
+      nativeBuildInputs = [ gn ninja python2 pkg-config gperf bison ];
       buildInputs = [
         dbus at-spi2-atk atk at-spi2-core nspr nss pciutils utillinux kerberos
         gdk-pixbuf glib gtk3 alsaLib libXScrnSaver libXcursor libXtst libGLU libGL libXdamage
