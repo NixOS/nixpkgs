@@ -14,11 +14,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "planner";
+  pname = "elementary-planner";
   version = "2.1.1";
   src = fetchFromGitHub {
     owner = "alainm23";
-    repo = pname;
+    repo = "planner";
     rev = version;
     sha256 = "0swj94pqf00wwzsgjap8z19k33gg1wj2b78ba1aj9h791j8lmaim";
   };
