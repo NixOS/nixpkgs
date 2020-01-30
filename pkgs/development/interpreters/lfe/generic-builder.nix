@@ -9,7 +9,7 @@
 }:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast versions;
+  inherit (stdenv.lib) assertMsg getVersion versionAtLeast versions;
 
   mainVersion = versions.major (getVersion erlang);
 
@@ -25,7 +25,9 @@ let
   };
 
 in
-assert versionAtLeast maximumOTPVersion mainVersion;
+assert (assertMsg (versionAtLeast maximumOTPVersion mainVersion)) ''
+  LFE ${version} is supported on OTP <=${maximumOTPVersion}, not ${mainVersion}.
+'';
 
 buildRebar3 {
   name = baseName;
