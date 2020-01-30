@@ -545,6 +545,9 @@ rec {
     # believe the actual maximum is 128.
     maxLayers ? 100
   }:
+    assert
+      (lib.assertMsg (maxLayers > 1)
+      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
     let
       baseName = baseNameOf name;
       contentsEnv = symlinkJoin {
