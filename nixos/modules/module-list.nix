@@ -20,6 +20,7 @@
   ./config/krb5/default.nix
   ./config/ldap.nix
   ./config/locale.nix
+  ./config/lsb.nix
   ./config/malloc.nix
   ./config/networking.nix
   ./config/no-x-libs.nix
