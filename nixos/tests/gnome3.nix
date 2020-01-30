@@ -49,14 +49,14 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       with subtest("Login to GNOME with GDM"):
           # wait for gdm to start
           machine.wait_for_unit("display-manager.service")
+          # wait for the wayland server
+          machine.wait_for_file("/run/user/${uid}/wayland-0")
           # wait for alice to be logged in
           machine.wait_for_unit("default.target", "${user.name}")
           # check that logging in has given the user ownership of devices
           assert "alice" in machine.succeed("getfacl -p /dev/snd/timer")
 
       with subtest("Wait for GNOME Shell"):
-          # wait for the wayland server
-          machine.wait_for_file("/run/user/${uid}/wayland-0")
           # correct output should be (true, 'false')
           machine.wait_until_succeeds(
               "${startingUp} | grep -q 'true,..false'"
