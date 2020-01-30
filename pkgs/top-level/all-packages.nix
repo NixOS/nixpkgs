@@ -18732,6 +18732,8 @@ in
 
   electrum-ltc = callPackage ../applications/misc/electrum/ltc.nix { };
 
+  elementary-planner = callPackage ../applications/office/elementary-planner { };
+
   elinks = callPackage ../applications/networking/browsers/elinks {
     openssl = openssl_1_0_2;
   };
