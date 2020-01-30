@@ -126,7 +126,7 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    <listitem>
     <para>
      The <literal>dynamicHosts</literal> option has been removed from the
-     <link linkend="opt-networking.networkmanager.enable">networkd</link>
+     <link linkend="opt-networking.networkmanager.enable">NetworkManager</link>
      module. Allowing (multiple) regular users to override host entries
      affecting the whole system opens up a huge attack vector.
      There seem to be very rare cases where this might be useful.
