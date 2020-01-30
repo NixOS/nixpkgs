@@ -9039,6 +9039,8 @@ in
     inherit bintools libc;
   } // extraArgs; in self);
 
+  yaml-language-server = nodePackages.yaml-language-server;
+
   # prolog
   yap = callPackage ../development/compilers/yap { };
 

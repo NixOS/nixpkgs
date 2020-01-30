@@ -163,6 +163,7 @@
 , "webtorrent-cli"
 , "wring"
 , "write-good"
+, "yaml-language-server"
 , "yarn"
 , "yo"
 ]

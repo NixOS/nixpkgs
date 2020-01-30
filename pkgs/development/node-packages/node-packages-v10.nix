@@ -23614,6 +23614,15 @@ let
         sha512 = "hk/69oAeaIzchq/v3lS50PXuzn5O2ynldopMC+SWBql7J2WtdptfB9dy8Y7+Og5rPkTCpn83zTiO8FMcqlXJ/g==";
       };
     };
+    "jsonc-parser-2.2.1" = {
+      name = "jsonc-parser";
+      packageName = "jsonc-parser";
+      version = "2.2.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/jsonc-parser/-/jsonc-parser-2.2.1.tgz";
+        sha512 = "o6/yDBYccGvTz1+QFevz6l6OBZ2+fMVu2JZ9CIhzsYRX4mjaK5IyX9eldUdCmga16zlgQxyrj5pt9kzuj2C02w==";
+      };
+    };
     "jsonfile-1.0.1" = {
       name = "jsonfile";
       packageName = "jsonfile";
@@ -35961,6 +35970,15 @@ let
         sha1 = "6c1711a5407fb94a114219563e44145bcbf4723a";
       };
     };
+    "request-light-0.2.5" = {
+      name = "request-light";
+      packageName = "request-light";
+      version = "0.2.5";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/request-light/-/request-light-0.2.5.tgz";
+        sha512 = "eBEh+GzJAftUnex6tcL6eV2JCifY0+sZMIUpUPOVXbs2nV5hla4ZMmO3icYKGuGVuQ2zHE9evh4OrRcH4iyYYw==";
+      };
+    };
     "request-progress-2.0.1" = {
       name = "request-progress";
       packageName = "request-progress";
@@ -44872,6 +44890,15 @@ let
         sha512 = "mIb5VMXM5jI97HzCk2eadI1K//rCEZXte0wBqA7PGXsyJH4KTyJUaYk9MR+mbfpUl2vMi3HZw9GUOLGYLc6l5w==";
       };
     };
+    "vscode-json-languageservice-3.5.1" = {
+      name = "vscode-json-languageservice";
+      packageName = "vscode-json-languageservice";
+      version = "3.5.1";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/vscode-json-languageservice/-/vscode-json-languageservice-3.5.1.tgz";
+        sha512 = "F8jPqcAC1mbQOMKvGYS4dGEw9JCZxVEi7tc5ASZLfcfwKq2URZKB4fOtdy1GEsTLsrW11tVrBjEPntpXzqp/NA==";
+      };
+    };
     "vscode-jsonrpc-3.6.0" = {
       name = "vscode-jsonrpc";
       packageName = "vscode-jsonrpc";
@@ -45952,6 +45979,15 @@ let
         sha512 = "AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==";
       };
     };
+    "write-file-atomic-3.0.3" = {
+      name = "write-file-atomic";
+      packageName = "write-file-atomic";
+      version = "3.0.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/write-file-atomic/-/write-file-atomic-3.0.3.tgz";
+        sha512 = "AvHcyZ5JnSfq3ioSyjrBkH9yW4m7Ayk8/9My/DD9onKeu/94fwrMocemO2QAJFAlnnDN+ZDS+ZjAR5ua1/PV/Q==";
+      };
+    };
     "write-good-0.11.3" = {
       name = "write-good";
       packageName = "write-good";
@@ -46527,6 +46563,15 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/yaml-ast-parser/-/yaml-ast-parser-0.0.43.tgz";
         sha512 = "2PTINUwsRqSd+s8XxKaJWQlUuEMHJQyEuh2edBbW8KNJz0SJPwUSD2zRWqezFEdN7IzAgeuYHFUCF7o8zRdZ0A==";
+      };
+    };
+    "yaml-ast-parser-custom-tags-0.0.43" = {
+      name = "yaml-ast-parser-custom-tags";
+      packageName = "yaml-ast-parser-custom-tags";
+      version = "0.0.43";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/yaml-ast-parser-custom-tags/-/yaml-ast-parser-custom-tags-0.0.43.tgz";
+        sha512 = "R5063FF/JSAN6qXCmylwjt9PcDH6M0ExEme/nJBzLspc6FJDmHHIqM7xh2WfEmsTJqClF79A9VkXjkAqmZw9SQ==";
       };
     };
     "yaml-front-matter-3.4.1" = {
@@ -79471,6 +79516,57 @@ in
     meta = {
       description = "Naive linter for English prose";
       homepage = "https://github.com/btford/write-good#readme";
+      license = "MIT";
+    };
+    production = true;
+    bypassCache = true;
+    reconstructLock = true;
+  };
+  yaml-language-server = nodeEnv.buildNodePackage {
+    name = "yaml-language-server";
+    packageName = "yaml-language-server";
+    version = "0.7.2";
+    src = fetchurl {
+      url = "https://registry.npmjs.org/yaml-language-server/-/yaml-language-server-0.7.2.tgz";
+      sha512 = "3jBsYrtnlaI5H6psW+0qzVh9LoQ21fuvC8KIupjPbQURb6cAMUGH5aElKREAevSSpgs7VIoqU1ZMCglIHm32OA==";
+    };
+    dependencies = [
+      sources."agent-base-4.3.0"
+      sources."argparse-1.0.10"
+      sources."debug-3.1.0"
+      sources."es6-promise-4.2.8"
+      sources."es6-promisify-5.0.0"
+      sources."esprima-4.0.1"
+      sources."http-proxy-agent-2.1.0"
+      sources."https-proxy-agent-2.2.4"
+      sources."js-yaml-3.13.1"
+      sources."jsonc-parser-2.2.1"
+      sources."ms-2.0.0"
+      sources."prettier-1.19.1"
+      sources."request-light-0.2.5"
+      sources."sprintf-js-1.0.3"
+      sources."vscode-json-languageservice-3.5.1"
+      sources."vscode-jsonrpc-4.0.0"
+      (sources."vscode-languageserver-5.2.1" // {
+        dependencies = [
+          sources."vscode-uri-1.0.8"
+        ];
+      })
+      (sources."vscode-languageserver-protocol-3.14.1" // {
+        dependencies = [
+          sources."vscode-languageserver-types-3.14.0"
+        ];
+      })
+      sources."vscode-languageserver-textdocument-1.0.1"
+      sources."vscode-languageserver-types-3.15.1"
+      sources."vscode-nls-4.1.1"
+      sources."vscode-uri-2.1.1"
+      sources."yaml-ast-parser-custom-tags-0.0.43"
+    ];
+    buildInputs = globalBuildInputs;
+    meta = {
+      description = "YAML language server";
+      homepage = "https://github.com/redhat-developer/yaml-language-server#readme";
       license = "MIT";
     };
     production = true;
