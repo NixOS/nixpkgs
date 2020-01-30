@@ -2,13 +2,13 @@
 
 with stdenv.lib; stdenv.mkDerivation rec {
   pname = "tbb";
-  version = "2019_U9";
+  version = "2020_U1";
 
   src = fetchFromGitHub {
     owner = "01org";
     repo = "tbb";
     rev = version;
-    sha256 = "1a39nflw7b2n51jfp3fdprnkpgzaspzww1dckfvaigflfli9s8rj";
+    sha256 = "1vrh1mr9jmj46as9y8j5q1hpvihzd1iq4jr1y4x9a19dw8b7yk56";
   };
 
   makeFlags = optional (compiler != null) "compiler=${compiler}"
