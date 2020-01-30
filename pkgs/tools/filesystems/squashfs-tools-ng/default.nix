@@ -1,20 +1,17 @@
-{ stdenv, lib, fetchurl, fetchpatch, autoreconfHook, doxygen, graphviz, perl
-, pkgconfig, lz4, xz, zlib, zstd
+{ stdenv, lib, fetchurl, doxygen, graphviz, perl, pkgconfig
+, lz4, xz, zlib, zstd
 }:
 
 stdenv.mkDerivation rec {
   pname = "squashfs-tools-ng";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchurl {
     url = "https://infraroot.at/pub/squashfs/squashfs-tools-ng-${version}.tar.xz";
-    sha256 = "01yn621dnsfhrah3qj1xh6ynag7r3nvihc510sa5frapkyg9nw8n";
+    sha256 = "1km18qm9kgmm39aj9yq2aaq99708nmj9cpa9lqf5bp1y617bhh7y";
   };
 
-  patches = lib.optional (!stdenv.isLinux) ./0001-Fix-build-on-BSD-systems.patch;
-
-  nativeBuildInputs = [ doxygen graphviz pkgconfig perl ]
-                      ++ lib.optional (!stdenv.isLinux) autoreconfHook;
+  nativeBuildInputs = [ doxygen graphviz pkgconfig perl ];
   buildInputs = [ zlib xz lz4 zstd ];
 
   meta = with lib; {
@@ -22,5 +19,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ qyliss ];
     platforms = platforms.unix;
+    broken = stdenv.isDarwin;
   };
 }

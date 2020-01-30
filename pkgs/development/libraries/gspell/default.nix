@@ -2,7 +2,7 @@
 
 let
   pname = "gspell";
-  version = "1.8.2";
+  version = "1.8.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -11,7 +11,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1miybm1z5cl91i25l7mfqlxhv7j8yy8rcgi0s1bgbb2vm71rb4dv";
+    sha256 = "1s1dns070pz8dg04ppshdbx1r86n9406vkxcfs8hdghn0bfi9ras";
   };
 
   propagatedBuildInputs = [ enchant2 ]; # required for pkgconfig
