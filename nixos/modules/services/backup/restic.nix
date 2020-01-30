@@ -163,37 +163,19 @@ in
           extraOptions = concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
           resticCmd = "${pkgs.restic}/bin/restic${extraOptions}";
           filesFromTmpFile = "/run/restic-backups-${name}/includes";
-          preStartInit = if backup.initialize
-                         then "${resticCmd} snapshots || ${resticCmd} init"
-                         else "";
-          dynamicFilesFromScript = pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom;
-          preStartFiles = if backup.dynamicFilesFrom != null
-                          then "${dynamicFilesFromScript} > ${filesFromTmpFile}"
-                          else "";
-          preStartAttr = if (backup.initialize || backup.dynamicFilesFrom != null)
-                         then {
-                           preStart = ''
-                             ${preStartInit}
-                             ${preStartFiles}
-                           '';
-                         }
-                         else {};
           backupPaths = if (backup.dynamicFilesFrom == null)
                         then concatStringsSep " " backup.paths
                         else "--files-from ${filesFromTmpFile}";
-          pruneCmd = if (builtins.length backup.pruneOpts > 0)
-                     then [ ( resticCmd + " forget --prune " +
-                              (concatStringsSep " " backup.pruneOpts) )
-                            ( resticCmd + " check" ) ]
-                     else [];
+          pruneCmd = optional (builtins.length backup.pruneOpts > 0) [
+            ( resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts) )
+            ( resticCmd + " check" )
+          ];
         in nameValuePair "restic-backups-${name}" ({
           environment = {
             RESTIC_PASSWORD_FILE = backup.passwordFile;
             RESTIC_REPOSITORY = backup.repository;
           };
-          path = with pkgs; [
-            openssh
-          ];
+          path = [ pkgs.openssh ];
           restartIfChanged = false;
           serviceConfig = {
             Type = "oneshot";
@@ -203,9 +185,16 @@ in
           } // optionalAttrs (backup.s3CredentialsFile != null) {
             EnvironmentFile = backup.s3CredentialsFile;
           };
-        }
-        // preStartAttr
-        // optionalAttrs (backup.dynamicFilesFrom != null) {
+        } // optionalAttrs (backup.initialize || backup.dynamicFilesFrom != null) {
+          preStart = ''
+            ${optionalString (backup.initialize) ''
+              ${resticCmd} snapshots || ${resticCmd} init
+            ''}
+            ${optionalString (backup.dynamicFilesFrom != null) ''
+              ${pkgs.writeScript "dynamicFilesFromScript" backup.dynamicFilesFrom} > ${filesFromTmpFile}
+            ''}
+          '';
+        } // optionalAttrs (backup.dynamicFilesFrom != null) {
           postStart = ''
             rm ${filesFromTmpFile}
           '';
