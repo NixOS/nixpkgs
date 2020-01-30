@@ -40,15 +40,6 @@
    into your <emphasis>configuration.nix</emphasis>.
   </para>
  </simplesect>
- <simplesect xml:id="sec-xfce-polkit">
-  <title>Polkit Authentication Agent</title>
-  <para>
-   There is no authentication agent automatically installed alongside Xfce. To
-   allow mounting of local (non-removable) filesystems, you will need to
-   install one. Installing <emphasis>polkit_gnome</emphasis>, a rebuild, logout
-   and login did the trick.
-  </para>
- </simplesect>
  <simplesect xml:id="sec-xfce-troubleshooting">
   <title>Troubleshooting</title>
   <para>
