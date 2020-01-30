@@ -2,8 +2,9 @@
 , freetype, libid3tag
 , x11Support ? true, xlibsWrapper ? null }:
 
-with stdenv.lib;
-
+let
+  inherit (stdenv.lib) optional;
+in
 stdenv.mkDerivation rec {
   pname = "imlib2";
   version = "1.6.1";
@@ -36,7 +37,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/imlib2-config "$dev"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -47,8 +48,8 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    homepage = http://docs.enlightenment.org/api/imlib2/html;
-    license = licenses.free;
+    homepage = "https://docs.enlightenment.org/api/imlib2/html";
+    license = licenses.mit;
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };
