@@ -76,7 +76,8 @@ in stdenv.mkDerivation rec {
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
-    rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod
+    rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod \
+          $out/google-cloud-sdk/platform/gsutil/third_party/crcmod_osx
   '';
 
   meta = with stdenv.lib; {
