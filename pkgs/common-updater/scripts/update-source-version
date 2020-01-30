@@ -117,21 +117,6 @@ else
     die "Couldn't figure out where out where to patch in new version in '$attr'!"
 fi
 
-# Replace new version
-sed -i.bak "$nixFile" -re "$pattern"
-if cmp -s "$nixFile" "$nixFile.bak"; then
-    die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
-fi
-
-# Replace new URL
-if [[ -n "$newUrl" ]]; then
-    sed -i "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
-
-    if cmp -s "$nixFile" "$nixFile.bak"; then
-        die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
-    fi
-fi
-
 if [[ "$oldHash" =~ ^(sha256|sha512)[:-] ]]; then
     # Handle the possible SRI-style hash attribute (in the form ${type}${separator}${hash})
     # True SRI uses dash as a separator and only supports base64, whereas Nix’s SRI-style format uses a colon and supports all the same encodings like regular hashes (16/32/64).
@@ -157,6 +142,21 @@ if [[ -n "$sri" ]]; then
     # SRI hashes only support base64
     # SRI hashes need to declare the hash type as part of the hash
     tempHash="$(nix to-sri --type "$oldHashAlgo" "$tempHash")"
+fi
+
+# Replace new version
+sed -i.bak "$nixFile" -re "$pattern"
+if cmp -s "$nixFile" "$nixFile.bak"; then
+    die "Failed to replace version '$oldVersion' to '$newVersion' in '$attr'!"
+fi
+
+# Replace new URL
+if [[ -n "$newUrl" ]]; then
+    sed -i "$nixFile" -re "s|\"$oldUrlEscaped\"|\"$newUrl\"|"
+
+    if cmp -s "$nixFile" "$nixFile.bak"; then
+        die "Failed to replace source URL '$oldUrl' to '$newUrl' in '$attr'!"
+    fi
 fi
 
 sed -i "$nixFile" -re "s|\"$oldHash\"|\"$tempHash\"|"
