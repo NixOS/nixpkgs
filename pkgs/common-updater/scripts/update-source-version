@@ -132,7 +132,19 @@ if [ -n "$newUrl" ]; then
     fi
 fi
 
+if [[ "$oldHash" =~ ^(sha256|sha512)[:-] ]]; then
+    # Handle the possible SRI-style hash attribute (in the form ${type}${separator}${hash})
+    # True SRI uses dash as a separator and only supports base64, whereas Nix’s SRI-style format uses a colon and supports all the same encodings like regular hashes (16/32/64).
+    # To keep this program reasonably simple, we will upgrade Nix’s format to SRI.
+    oldHashAlgo="${BASH_REMATCH[1]}"
+    sri=true
+elif [[ "$oldHashAlgo" = "null" ]]; then
+    # Some fetcher functions support SRI-style `hash` attribute in addition to legacy type-specific attributes. When `hash` is used `outputHashAlgo` is null so let’s complain when SRI-style hash value was not detected.
+    die "Unable to figure out hashing scheme from '$oldHash' in '$attr'!"
+fi
+
 case "$oldHashAlgo" in
+    # Lengths of hex-encoded hashes
     sha256) hashLength=64 ;;
     sha512) hashLength=128 ;;
     *) die "Unhandled hash algorithm '$oldHashAlgo' in '$attr'!" ;;
@@ -140,6 +152,12 @@ esac
 
 # Make a temporary all-zeroes hash of $hashLength characters
 tempHash=$(printf '%0*d' "$hashLength" 0)
+
+if [[ -n "$sri" ]]; then
+    # SRI hashes only support base64
+    # SRI hashes need to declare the hash type as part of the hash
+    tempHash="$(nix to-sri --type "$oldHashAlgo" "$tempHash")"
+fi
 
 sed -i "$nixFile" -re "s|\"$oldHash\"|\"$tempHash\"|"
 if cmp -s "$nixFile" "$nixFile.bak"; then
@@ -151,6 +169,11 @@ if [ -z "$newHash" ]; then
     nix-build $systemArg --no-out-link -A "$attr.src" 2>"$attr.fetchlog" >/dev/null || true
     # FIXME: use nix-build --hash here once https://github.com/NixOS/nix/issues/1172 is fixed
     newHash=$(egrep -v "killing process|dependencies couldn't be built|wanted: " "$attr.fetchlog" | tail -n2 | sed "s~output path .* has .* hash ‘\(.*\)’ when .* was expected\|fixed-output derivation produced path '.*' with .* hash '\(.*\)' instead of the expected hash '.*'\|  got:    .*:\(.*\)~\1\2\3~" | head -n1)
+fi
+
+if [[ -n "$sri" ]]; then
+    # nix-build preserves the hashing scheme so we can just convert the result to SRI using the old type
+    newHash="$(nix to-sri --type "$oldHashAlgo" "$newHash")"
 fi
 
 if [ -z "$newHash" ]; then
