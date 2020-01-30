@@ -1,11 +1,13 @@
 { stdenv
+, substituteAll
 , pkgconfig
 , fetchurl
 , python3Packages
-, intltool
+, gettext
 , itstool
 , libtool
 , texinfo
+, utillinux
 , autoreconfHook
 , glib
 , dotconf
@@ -37,17 +39,24 @@ let
       throw "You need to enable at least one output module.";
 in stdenv.mkDerivation rec {
   pname = "speech-dispatcher";
-  version = "0.8.8";
+  version = "0.9.1";
 
   src = fetchurl {
-    url = "http://www.freebsoft.org/pub/projects/speechd/${pname}-${version}.tar.gz";
-    sha256 = "1wvck00w9ixildaq6hlhnf6wa576y02ac96lp6932h3k1n08jaiw";
+    url = "https://github.com/brailcom/speechd/releases/download/${version}/${pname}-${version}.tar.gz";
+    hash = "sha256:16bg52hnkrsrs7kgbzanb34b9zb6fqxwj0a9bmsxmj1skkil1h1p";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./fix-paths.patch;
+      inherit utillinux;
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig
     autoreconfHook
-    intltool
+    gettext
     libtool
     itstool
     texinfo
@@ -79,6 +88,7 @@ in stdenv.mkDerivation rec {
   configureFlags = [
     # Audio method falls back from left to right.
     "--with-default-audio-method=\"libao,pulse,alsa,oss\""
+    "--with-systemdsystemunitdir=${placeholder ''out''}/lib/systemd/system"
   ] ++ optional withPulse "--with-pulse"
     ++ optional withAlsa "--with-alsa"
     ++ optional withLibao "--with-libao"
@@ -97,6 +107,8 @@ in stdenv.mkDerivation rec {
   postInstall = ''
     wrapPythonPrograms
   '';
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Common interface to speech synthesis";
