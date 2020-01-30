@@ -67,8 +67,6 @@ stdenv.mkDerivation rec {
     libsignal-protocol-c
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = https://github.com/dino/dino;
