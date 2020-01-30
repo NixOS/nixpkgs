@@ -12,7 +12,6 @@ buildGoModule rec {
   };
   modSha256 = "1kmm6yb03g9lsz380rvf32j4icp3rcq7ixxcgsxfgpwqvq08zkn6";
 
-  goPackagePath = "k8s.io/helm";
   subPackages = [ "cmd/helm" ];
   buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];
 
