@@ -546,6 +546,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
    <listitem>
     <para>The LLVM versions 3.5, 3.9 and 4 (including the corresponding CLang versions) have been dropped.</para>
    </listitem>
+   <listitem>
+    <para>
+     The <option>networking.interfaces.*.preferTempAddress</option> option has
+     been replaced by <option>networking.interfaces.*.tempAddress</option>.
+     The new option allows better control of the IPv6 temporary addresses,
+     including completely disabling them for interfaces where they are not
+     needed.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
