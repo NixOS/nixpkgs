@@ -315,7 +315,7 @@ rec {
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
       paths = referencesByPopularity overallClosure;
-      nativeBuildInputs = [ jshon rsync tarsum ];
+      nativeBuildInputs = [ jshon rsync tarsum moreutils ];
       enableParallelBuilding = true;
     }
     ''
@@ -335,7 +335,8 @@ rec {
         cat $paths ${lib.concatMapStringsSep " " (path: "| grep -v ${path}") (closures ++ [ overallClosure ])}
       }
 
-      paths | head -n $((maxLayers - 1)) | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      # We need to sponge to avoid grep broken pipe error when maxLayers == 1
+      paths | sponge | head -n $((maxLayers - 1)) | cat -n | xargs -r -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       if [ $(paths | wc -l) -ge $maxLayers ]; then
         paths | tail -n+$maxLayers | xargs ${storePathToLayer} $maxLayers
       fi
@@ -544,6 +545,9 @@ rec {
     # believe the actual maximum is 128.
     maxLayers ? 100
   }:
+    assert
+      (lib.assertMsg (maxLayers > 1)
+      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
     let
       baseName = baseNameOf name;
       contentsEnv = symlinkJoin {
