@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "x264";
-  version = "20190517-2245";
+  version = "20191217-2245";
 
   src = fetchurl {
     url = "https://download.videolan.org/x264/snapshots/x264-snapshot-${version}-stable.tar.bz2";
-    sha256 = "1xv41z04km3rf374xk3ny7v8ibr211ph0j5am0909ln63mphc48f";
+    sha256 = "0q214q4rhbhigyx3dfhp6d5v5gzln01cxccl153ps5ih567mqjdj";
   };
 
   # Upstream ./configure greps for (-mcpu|-march|-mfpu) in CFLAGS, which in nix
@@ -24,6 +24,8 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString (stdenv.buildPlatform.isx86_64 || stdenv.hostPlatform.isi686) ''
     # `AS' is set to the binutils assembler, but we need nasm
     unset AS
+  '' + lib.optionalString (stdenv.hostPlatform.isAarch64 || stdenv.hostPlatform.isAarch32) ''
+    export AS=$CC
   '';
 
   configureFlags = [ "--enable-shared" ]
