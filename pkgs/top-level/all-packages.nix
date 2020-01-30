@@ -9050,15 +9050,14 @@ in
   inherit (beam.interpreters)
     erlang erlangR18 erlangR19 erlangR20 erlangR21 erlangR22
     erlang_odbc erlang_javac erlang_odbc_javac erlang_nox erlang_basho_R16B02
-    elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6
-    lfe lfe_1_2;
+    elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6;
 
   inherit (beam.packages.erlang)
     rebar rebar3
     fetchHex beamPackages
     relxExe;
 
-  inherit (beam.packages.erlangR19) cuter;
+  inherit (beam.packages.erlangR19) cuter lfe lfe_1_2;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
