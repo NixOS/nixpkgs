@@ -4,12 +4,12 @@ let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.10.2";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "03c717qjlbym02nwy82l6jhrkbidsdm1jv5k8p3c10p6a46jy9nl"
+      then "18hsr119dq46rvhz5sb9snn2gfxwiig37g6bfzk24x6wlga3xihq"
       else "1ay0lmbv2rw9klz289yg0hhsac83kfzzlbwwhjpi28xndl2lq4bf";
   };
 
