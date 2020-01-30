@@ -11,7 +11,7 @@
   meta = with stdenv.lib; {
     homepage = https://openrazer.github.io/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ roelvandijk ];
+    maintainers = with maintainers; [ roelvandijk evanjs ];
     platforms = platforms.linux;
   };
 }
