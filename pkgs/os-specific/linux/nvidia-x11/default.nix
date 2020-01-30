@@ -26,6 +26,12 @@ rec {
       sha256_64bit = "057wq9p2vl87gy61f079b6d7clw2vhw3kq7rj411brhrnvr7shmd";
       settingsSha256 = "1hr1n78c92zksnnryrcz4b8kxvi6kz4yp801ks85hq4a3rryj4vg";
       persistencedSha256 = "050znx2scm7x3r7czsz77ddjh4bs18hdd3k3shwpi3zflkmnhnvj";
+      patches =
+        # https://gitlab.com/snippets/1923197
+        lib.optional (lib.versionAtLeast (kernel.version or "0") "5.5") (fetchurl {
+          url = "https://gitlab.com/snippets/1923197/raw";
+          sha256 = "012qdsk0sbip6417172jx2iqw7ck8pc204xlsw9bh33jhng61kbx";
+        });
     }
     else legacy_390;
 
