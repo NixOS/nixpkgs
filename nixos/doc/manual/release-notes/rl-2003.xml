@@ -490,6 +490,52 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      All other display managers in NixOS are configured like this.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       There have been lots of improvements to the Mailman module.  As
+       a result,
+     </para>
+     <itemizedlist>
+       <listitem>
+         <para>
+           The <option>services.mailman.hyperkittyBaseUrl</option>
+           option has been renamed to <xref
+           linkend="opt-services.mailman.hyperkitty.baseUrl"/>.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           The <option>services.mailman.hyperkittyApiKey</option>
+           option has been removed.  This is because having an option
+           for the Hyperkitty API key meant that the API key would be
+           stored in the world-readable Nix store, which was a
+           security vulnerability.  A new Hyperkitty API key will be
+           generated the first time the new Hyperkitty service is run,
+           and it will then be persisted outside of the Nix store.  To
+           continue using Hyperkitty, you must set <xref
+           linkend="opt-services.mailman.hyperkitty.enable"/> to
+           <literal>true</literal>.
+         </para>
+       </listitem>
+       <listitem>
+         <para>
+           Additionally, some Postfix configuration must now be set
+           manually instead of automatically by the Mailman module:
+<programlisting>
+<xref linkend="opt-services.postfix.relayDomains"/> = [ "hash:/var/lib/mailman/data/postfix_domains" ];
+<xref linkend="opt-services.postfix.config"/>.transport_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+<xref linkend="opt-services.postfix.config"/>.local_recipient_maps = [ "hash:/var/lib/mailman/data/postfix_lmtp" ];
+</programlisting>
+           This is because some users may want to include other values
+           in these lists as well, and this was not possible if they
+           were set automatically by the Mailman module.  It would not
+           have been possible to just concatenate values from multiple
+           modules each setting the values they needed, because the
+           order of elements in the list is significant.
+         </para>
+       </listitem>
+     </itemizedlist>
+   </listitem>
   </itemizedlist>
  </section>
 
