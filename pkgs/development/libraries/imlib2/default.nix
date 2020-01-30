@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig
-, freetype, libid3tag
-, x11Support ? true, xlibsWrapper ? null }:
+{ stdenv, fetchurl
+# Image file formats
+, libjpeg, libtiff, giflib, libpng, libwebp
+# imlib2 can load images from ID3 tags.
+, libid3tag
+, freetype , bzip2, pkgconfig
+, x11Support ? true, xlibsWrapper ? null
+}:
 
 let
   inherit (stdenv.lib) optional;
@@ -14,8 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "0v8n3dswx7rxqfd0q03xwc7j2w1mv8lv18rdxv487a1xw5vklfad";
   };
 
-  buildInputs = [ libjpeg libtiff giflib libpng bzip2 freetype libid3tag ]
-    ++ optional x11Support xlibsWrapper;
+  buildInputs = [
+    libjpeg libtiff giflib libpng libwebp
+    bzip2 freetype libid3tag
+  ] ++ optional x11Support xlibsWrapper;
 
   nativeBuildInputs = [ pkgconfig ];
 
