@@ -70,10 +70,10 @@
       SDL SDL_image SDL_mixer SDL_ttf SDL2 SDL2_image SDL2_mixer SDL2_ttf
 
       # Imaging
-      cups libsane
+      cups sane-backend
 
       # Trial Use
-      libpng15 gtk3
+      libpng gtk3
 
     ];
 
@@ -92,13 +92,13 @@
       pathsToLink = ["/lib"];
       ignoreCollisions = true;
     };
-  in lib.mkIf config.environment.lsb.enable ({
+  in lib.mkIf config.environment.lsb.enable (lib.mkMerge [{
     environment.sessionVariables.LD_LIBRARY_PATH =
       "${base-libs64}/lib${lib.optionalString config.environment.lsb.support32Bit ":${base-libs32}/lib"}";
 
     environment.systemPackages = with pkgs; [
       # Core
-      bc gnum4 man lsb-release file psmisc ed gettext util-linux
+      bc gnum4 man lsb-release file psmisc ed gettext utillinux
 
       # Languages
       python2 perl python3
@@ -117,12 +117,12 @@
     ];
 
     environment.ld-linux = true;
-  } // lib.mkIf config.environment.lsb.enableDesktop {
+  } (lib.mkIf config.environment.lsb.enableDesktop {
     hardware.opengl.enable = lib.mkDefault true;
     hardware.pulseaudio.enable = lib.mkDefault true;
-  } // lib.mkIf (config.environment.lsb.support32Bit && config.environment.lsb.enableDesktop) {
+  }) (lib.mkIf (config.environment.lsb.support32Bit && config.environment.lsb.enableDesktop) {
     hardware.opengl.driSupport32Bit = lib.mkDefault true;
     hardware.pulseaudio.support32Bit = lib.mkDefault true;
-  });
+  })]);
 
 }
