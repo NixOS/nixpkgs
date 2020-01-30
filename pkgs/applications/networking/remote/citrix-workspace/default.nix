@@ -30,17 +30,6 @@
 let
   versionInfo = let
     supportedVersions = {
-      "19.3.0" = {
-        major     = "19";
-        minor     = "3";
-        patch     = "0";
-        x64hash   = "0mhpp29ca3dw9hx72i0qawdq35wcc7qzgxwzlx4aicwnm1gbil5c";
-        x86hash   = "1hxgj5lk5ghbpssbqjd404qr84gls967vwrh8ww5hg3pn86kyf8w";
-        x64suffix = "5";
-        x86suffix = "5";
-        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1903.html;
-      };
-
       "19.6.0" = {
         major     = "19";
         minor     = "6";
@@ -60,7 +49,7 @@ let
         x86hash   = "0afcqirb4q349r3izy88vqkszg6y2wg14iwypk6nrmvwgvcl6jdn";
         x64suffix = "20";
         x86suffix = "20";
-        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-latest1.html;
+        homepage  = https://www.citrix.com/downloads/workspace-app/legacy-workspace-app-for-linux/workspace-app-for-linux-1908.html;
       };
 
       "19.10.0" = {
@@ -93,7 +82,7 @@ let
     # The lifespans of Citrix products can be found here:
     # https://www.citrix.com/support/product-lifecycle/milestones/receiver.html
     deprecatedVersions = let
-      versions = [ ];
+      versions = [ "19.3.0" ];
     in
       lib.listToAttrs
         (lib.forEach versions

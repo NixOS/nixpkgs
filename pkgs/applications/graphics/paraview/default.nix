@@ -55,11 +55,11 @@ mkDerivation rec {
   # so we need to put the correct sitePackages (with numpy) back on the path
   postInstall = ''
     wrapProgram $out/bin/paraview \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
     wrapProgram $out/bin/pvbatch \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
     wrapProgram $out/bin/pvpython \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
   '';
 
   meta = {

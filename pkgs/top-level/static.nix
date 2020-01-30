@@ -88,7 +88,6 @@ self: super: let
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
-  gcc5Stdenv = foldl (flip id) super.gcc5Stdenv staticAdapters;
   gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
   gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
   gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;

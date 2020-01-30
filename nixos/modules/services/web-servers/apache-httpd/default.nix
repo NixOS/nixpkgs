@@ -179,6 +179,28 @@ let
         then hostOpts.documentRoot
         else pkgs.runCommand "empty" { preferLocalBuild = true; } "mkdir -p $out"
       ;
+
+      mkLocations = locations: concatStringsSep "\n" (map (config: ''
+        <Location ${config.location}>
+          ${optionalString (config.proxyPass != null) ''
+            <IfModule mod_proxy.c>
+                ProxyPass ${config.proxyPass}
+                ProxyPassReverse ${config.proxyPass}
+            </IfModule>
+          ''}
+          ${optionalString (config.index != null) ''
+            <IfModule mod_dir.c>
+                DirectoryIndex ${config.index}
+            </IfModule>
+          ''}
+          ${optionalString (config.alias != null) ''
+            <IfModule mod_alias.c>
+                Alias "${config.alias}"
+            </IfModule>
+          ''}
+          ${config.extraConfig}
+        </Location>
+      '') (sortProperties (mapAttrsToList (k: v: v // { location = k; }) locations)));
     in
       ''
         ${optionalString mainCfg.logPerVirtualHost ''
@@ -218,12 +240,6 @@ let
         ''}
 
         ${
-          let makeFileConf = elem: ''
-                Alias ${elem.urlPath} ${elem.file}
-              '';
-          in concatMapStrings makeFileConf hostOpts.servedFiles
-        }
-        ${
           let makeDirConf = elem: ''
                 Alias ${elem.urlPath} ${elem.dir}/
                 <Directory ${elem.dir}>
@@ -235,6 +251,7 @@ let
           in concatMapStrings makeDirConf hostOpts.servedDirs
         }
 
+        ${mkLocations hostOpts.locations}
         ${hostOpts.extraConfig}
       ''
   ;
@@ -605,6 +622,11 @@ in
         '';
       }
     ];
+
+    warnings =
+      mapAttrsToList (name: hostOpts: ''
+        Using config.services.httpd.virtualHosts."${name}".servedFiles is deprecated and will become unsupported in a future release. Your configuration will continue to work as is but please migrate your configuration to config.services.httpd.virtualHosts."${name}".locations before the 20.09 release of NixOS.
+      '') (filterAttrs (name: hostOpts: hostOpts.servedFiles != []) mainCfg.virtualHosts);
 
     users.users = optionalAttrs (mainCfg.user == "wwwrun") {
       wwwrun = {

@@ -1,6 +1,6 @@
 { config, lib, name, ... }:
 let
-  inherit (lib) mkOption types;
+  inherit (lib) literalExample mkOption nameValuePair types;
 in
 {
   options = {
@@ -175,6 +175,12 @@ in
       ];
       description = ''
         This option provides a simple way to serve individual, static files.
+
+        <note><para>
+          This option has been deprecated and will be removed in a future
+          version of NixOS. You can achieve the same result by making use of
+          the <literal>locations.&lt;name&gt;.alias</literal> option.
+        </para></note>
       '';
     };
 
@@ -230,6 +236,31 @@ in
         xlink:href='http://www.robotstxt.org/'/> for details.
       '';
     };
+
+    locations = mkOption {
+      type = with types; attrsOf (submodule (import ./location-options.nix));
+      default = {};
+      example = literalExample ''
+        {
+          "/" = {
+            proxyPass = "http://localhost:3000";
+          };
+          "/foo/bar.png" = {
+            alias = "/home/eelco/some-file.png";
+          };
+        };
+      '';
+      description = ''
+        Declarative location config. See <link
+        xlink:href="https://httpd.apache.org/docs/2.4/mod/core.html#location"/> for details.
+      '';
+    };
+
+  };
+
+  config = {
+
+    locations = builtins.listToAttrs (map (elem: nameValuePair elem.urlPath { alias = elem.file; }) config.servedFiles);
 
   };
 }

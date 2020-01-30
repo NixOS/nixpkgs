@@ -1662,6 +1662,8 @@ in {
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
+  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };  
+
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
@@ -3324,6 +3326,8 @@ in {
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
   djangorestframework-jwt = callPackage ../development/python-modules/djangorestframework-jwt { };
+
+  djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
   django-raster = callPackage ../development/python-modules/django-raster { };
 

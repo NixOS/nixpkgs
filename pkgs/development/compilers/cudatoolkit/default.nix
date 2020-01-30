@@ -2,8 +2,6 @@
 , callPackage
 , fetchurl
 , gcc48
-, gcc49
-, gcc5
 , gcc6
 , gcc7
 }:
@@ -29,14 +27,14 @@ in rec {
     version = "7.0.28";
     url = "http://developer.download.nvidia.com/compute/cuda/7_0/Prod/local_installers/cuda_7.0.28_linux.run";
     sha256 = "1km5hpiimx11jcazg0h3mjzk220klwahs2vfqhjavpds5ff2wafi";
-    gcc = gcc49;
+    gcc = gcc6;
   };
 
   cudatoolkit_7_5 = common {
     version = "7.5.18";
     url = "http://developer.download.nvidia.com/compute/cuda/7.5/Prod/local_installers/cuda_7.5.18_linux.run";
     sha256 = "1v2ylzp34ijyhcxyh5p6i0cwawwbbdhni2l5l4qm21s1cx9ish88";
-    gcc = gcc49;
+    gcc = gcc6;
   };
 
   cudatoolkit_8 = common {
@@ -49,7 +47,7 @@ in rec {
         sha256 = "1iaz5rrsnsb1p99qiqvxn6j3ksc7ry8xlr397kqcjzxqbljbqn9d";
       })
     ];
-    gcc = gcc5;
+    gcc = gcc6;
   };
 
   cudatoolkit_9_0 = common {

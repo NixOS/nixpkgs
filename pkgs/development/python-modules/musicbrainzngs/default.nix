@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "musicbrainzngs";
-  version = "0.6";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dddarpjawryll2wss65xq3v9q8ln8dan7984l5dxzqx88d2dvr8";
+    sha256 = "09z6k07pxncfgfc8clfmmxl2xqbd7h8x8bjzwr95hc0bzl00275b";
   };
 
   buildInputs = [ pkgs.glibcLocales ];
