@@ -9057,7 +9057,9 @@ in
     fetchHex beamPackages
     relxExe;
 
-  inherit (beam.packages.erlangR19) cuter lfe lfe_1_2;
+  inherit (beam.packages.erlangR19) cuter lfe_1_2;
+
+  inherit (beam.packages.erlangR21) lfe lfe_1_3;
 
   groovy = callPackage ../development/interpreters/groovy { };
 
