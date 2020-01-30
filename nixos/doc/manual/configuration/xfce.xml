@@ -30,6 +30,14 @@
   (system wide), put them into your
   <xref linkend="opt-environment.systemPackages"/>.
  </para>
+ <simplesect xml:id="sec-xfce-thunar-plugins">
+  <title>Thunar Plugins</title>
+  <para>
+    If you'd like to add extra plugins to Thunar, add them to
+    <xref linkend="opt-services.xserver.desktopManager.xfce.thunarPlugins"/>.
+    You shouldn't just add them to <xref linkend="opt-environment.systemPackages"/>.
+  </para>
+ </simplesect>
  <simplesect xml:id="sec-xfce-troubleshooting">
   <title>Troubleshooting</title>
   <para>
