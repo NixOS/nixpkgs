@@ -1,6 +1,15 @@
-{ stdenv, pkgconfig, fetchurl, python3Packages
-, intltool, itstool, libtool, texinfo, autoreconfHook
-, glib, dotconf, libsndfile
+{ stdenv
+, pkgconfig
+, fetchurl
+, python3Packages
+, intltool
+, itstool
+, libtool
+, texinfo
+, autoreconfHook
+, glib
+, dotconf
+, libsndfile
 , withLibao ? true, libao
 , withPulse ? false, libpulseaudio
 , withAlsa ? false, alsaLib
@@ -35,11 +44,29 @@ in stdenv.mkDerivation rec {
     sha256 = "1wvck00w9ixildaq6hlhnf6wa576y02ac96lp6932h3k1n08jaiw";
   };
 
-  nativeBuildInputs = [ pkgconfig autoreconfHook intltool libtool itstool texinfo wrapPython ];
+  nativeBuildInputs = [
+    pkgconfig
+    autoreconfHook
+    intltool
+    libtool
+    itstool
+    texinfo
+    wrapPython
+  ];
 
-  buildInputs = [ glib dotconf libsndfile libao libpulseaudio alsaLib python ]
-    ++ optionals withEspeak [ espeak sonic pcaudiolib ]
-    ++ optional withFlite flite
+  buildInputs = [
+    glib
+    dotconf
+    libsndfile
+    libao
+    libpulseaudio
+    alsaLib
+    python
+  ] ++ optionals withEspeak [
+    espeak
+    sonic
+    pcaudiolib
+  ] ++ optional withFlite flite
     ++ optional withPico svox
     # TODO: add flint/festival support with festival-freebsoft-utils package
     # ++ optional withFestival festival-freebsoft-utils
@@ -73,7 +100,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Common interface to speech synthesis";
-    homepage = https://devel.freebsoft.org/speechd;
+    homepage = "https://devel.freebsoft.org/speechd";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ berce ];
     platforms = platforms.linux;
