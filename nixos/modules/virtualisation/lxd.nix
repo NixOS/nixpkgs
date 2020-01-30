@@ -31,6 +31,7 @@ in
       package = mkOption {
         type = types.package;
         default = pkgs.lxd;
+        defaultText = "pkgs.lxd";
         description = ''
           The LXD package to use.
         '';
@@ -39,6 +40,7 @@ in
       lxcPackage = mkOption {
         type = types.package;
         default = pkgs.lxc;
+        defaultText = "pkgs.lxc";
         description = ''
           The LXC package to use with LXD (required for AppArmor profiles).
         '';
