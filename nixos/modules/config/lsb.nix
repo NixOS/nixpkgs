@@ -41,7 +41,7 @@
       libxml2 libxslt
 
       # Bonus (not in LSB)
-      bzip2 curl expat libusb1 libcap dbus
+      bzip2 curl expat libusb1 libcap dbus libuuid
 
     ] ++ lib.optionals config.environment.lsb.enableDesktop [
       # Desktop
@@ -49,6 +49,8 @@
       ## Graphics Libraries (X11)
       xorg.libX11 xorg.libxcb xorg.libSM xorg.libICE xorg.libXt
       xorg.libXft xorg.libXrender xorg.libXext xorg.libXi xorg.libXtst
+      xorg.libXcursor xorg.libXcomposite xorg.libXfixes
+      xorg.libXdamage xorg.libXrandr xorg.libXScrnSaver xorg.libXfixes
       libxkbcommon
 
       ## OpenGL Libraries
@@ -58,7 +60,7 @@
       libpng12 libjpeg fontconfig freetype libtiff cairo pango atk
 
       ## GTK+ Stack Libraries
-      gtk2 gdk-pixbuf glib dbus-glib
+      gtk2 gdk-pixbuf glib dbus-glib at-spi2-core at-spi2-atk
 
       ## Qt Libraries
       qt4
