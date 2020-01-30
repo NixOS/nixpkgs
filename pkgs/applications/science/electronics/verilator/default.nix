@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "verilator";
-  version = "4.024";
+  version = "4.026";
 
   src = fetchurl {
     url    = "https://www.veripool.org/ftp/${pname}-${version}.tgz";
-    sha256 = "0nmjazdv36ksjp8ys48c1grlzkd6yx3zhcd9y165d4sjm3m1pffs";
+    sha256 = "1b4zxwgd780yxql11r2333qhl7ki5jxh9jxlyhv9xqml9aq8myva";
   };
 
   enableParallelBuilding = true;
