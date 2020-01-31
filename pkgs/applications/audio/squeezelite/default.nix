@@ -1,6 +1,9 @@
-{ stdenv, fetchFromGitHub, alsaLib, faad2, flac, libmad, libvorbis, mpg123 }:
+{ stdenv, fetchFromGitHub, alsaLib, faad2, flac, libmad, libvorbis, makeWrapper, mpg123 }:
 
-stdenv.mkDerivation {
+let
+  runtimeDeps  = [ faad2 flac libmad libvorbis mpg123 ];
+  rpath = stdenv.lib.makeLibraryPath runtimeDeps;
+in stdenv.mkDerivation {
   name = "squeezelite-git-2018-08-14";
 
   src = fetchFromGitHub {
@@ -10,7 +13,8 @@ stdenv.mkDerivation {
     sha256 = "0di3d5qy8fhawijq6bxy524fgffvzl08dprrws0fs2j1a70fs0fh";
   };
 
-  buildInputs = [ alsaLib faad2 flac libmad libvorbis mpg123 ];
+  buildInputs = [ alsaLib ] ++ runtimeDeps;
+  nativeBuildInputs = [ makeWrapper ];
 
   enableParallelBuilding = true;
 
@@ -20,6 +24,7 @@ stdenv.mkDerivation {
     install -Dm755 -t $out/bin                   squeezelite
     install -Dm644 -t $out/share/doc/squeezelite *.txt *.md
 
+    wrapProgram $out/bin/squeezelite --set LD_LIBRARY_PATH $RPATH
     runHook postInstall
   '';
 
@@ -29,4 +34,5 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     platforms = platforms.linux;
   };
+  RPATH = rpath;
 }
