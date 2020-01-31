@@ -17975,6 +17975,8 @@ in
 
   vegur = callPackage ../data/fonts/vegur { };
 
+  vegeta = callPackage ../tools/networking/vegeta { };
+
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
   vistafonts = callPackage ../data/fonts/vista-fonts { };
