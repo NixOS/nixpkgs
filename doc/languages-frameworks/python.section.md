@@ -1061,11 +1061,9 @@ in pkgs.mkShell rec {
     pythonPackages.numpy
     pythonPackages.requests
 
-    # the following packages are related to the dependencies of your python
-    # project.
-    # In this particular example the python modules listed in the
-    # requirements.txt require the following packages to be installed locally
-    # in order to compile any binary extensions they may require.
+    # In this particular example, in order to compile any binary extensions they may
+    # require, the python modules listed in the hypothetical requirements.txt need
+    # the following packages to be installed locally:
     taglib
     openssl
     git
@@ -1075,7 +1073,8 @@ in pkgs.mkShell rec {
     zlib
   ];
 
-  # Now we can execute any commands within the virtual environment
+  # Now we can execute any commands within the virtual environment.
+  # This is optional and can be left out to run pip manually.
   postShellHook = ''
     pip install -r requirements.txt
   '';
@@ -1091,12 +1090,14 @@ with import <nixpkgs> { };
 
 let
   venvDir = "./.venv";
+  pythonPackages = python3Packages;
 in pkgs.mkShell rec {
   name = "impurePythonEnv";
   buildInputs = [
-    python3Packages.python
-    python3Packages.virtualenv
-    ...
+    pythonPackages.python
+    # Needed when using python 2.7
+    # pythonPackages.virtualenv
+    # ...
   ];
 
   # This is very close to how venvShellHook is implemented, but
@@ -1108,14 +1109,18 @@ in pkgs.mkShell rec {
       echo "Skipping venv creation, '${venvDir}' already exists"
     else
       echo "Creating new venv environment in path: '${venvDir}'"
+      # Note that the module venv was only introduced in python 3, so for 2.7
+      # this needs to be replaced with a call to virtualenv
       ${pythonPackages.python.interpreter} -m venv "${venvDir}"
     fi
 
     # Under some circumstances it might be necessary to add your virtual
     # environment to PYTHONPATH, which you can do here too;
-    # PYTHONPATH=$PWD/${venvDir}/${python.sitePackages}/:$PYTHONPATH
+    # PYTHONPATH=$PWD/${venvDir}/${pythonPackages.python.sitePackages}/:$PYTHONPATH
 
     source "${venvDir}/bin/activate"
+
+    # As in the previous example, this is optional.
     pip install -r requirements.txt
   '';
 }
