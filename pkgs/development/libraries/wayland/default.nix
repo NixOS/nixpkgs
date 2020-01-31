@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib, stdenv, fetchurl, meson, pkgconfig, ninja
 , libffi, libxml2, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
 }:
@@ -8,23 +8,19 @@ assert expat != null;
 
 stdenv.mkDerivation rec {
   pname = "wayland";
-  version = "1.17.0";
+  version = "1.18.0";
 
   src = fetchurl {
     url = "https://wayland.freedesktop.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "194ibzwpdcn6fvk4xngr4bf5axpciwg2bj82fdvz88kfmjw13akj";
+    sha256 = "0k995rn96xkplrapz5k648j651wc43kq817xk1x8280h16gsfxa6";
   };
 
   separateDebugInfo = true;
 
-  configureFlags = [
-    "--disable-documentation"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "--with-host-scanner"
-  ];
+  mesonFlags = [ "-Ddocumentation=false" ];
 
   nativeBuildInputs = [
-    pkgconfig
+    meson pkgconfig ninja
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # for wayland-scanner during build
     wayland
@@ -33,11 +29,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat libxml2 ];
 
   meta = {
-    description = "Reference implementation of the wayland protocol";
+    description = "Core Wayland window system code and protocol";
+    longDescription = ''
+      Wayland is a project to define a protocol for a compositor to talk to its
+      clients as well as a library implementation of the protocol.
+      The wayland protocol is essentially only about input handling and buffer
+      management, but also handles drag and drop, selections, window management
+      and other interactions that must go through the compositor (but not
+      rendering).
+    '';
     homepage    = https://wayland.freedesktop.org/;
-    license     = lib.licenses.mit;
+    license     = lib.licenses.mit; # Expat version
     platforms   = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ codyopel ];
+    maintainers = with lib.maintainers; [ primeos codyopel ];
   };
 
   passthru.version = version;
