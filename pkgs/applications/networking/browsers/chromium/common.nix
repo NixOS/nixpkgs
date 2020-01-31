@@ -140,11 +140,7 @@ let
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
-    ] ++ optional stdenv.isAarch64 (fetchpatch {
-      url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
-      postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
-      sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
-    });
+    ];
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
