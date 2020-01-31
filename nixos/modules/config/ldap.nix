@@ -280,6 +280,7 @@ in
           Group = "nslcd";
           RuntimeDirectory = [ "nslcd" ];
           PIDFile = "/run/nslcd/nslcd.pid";
+          AmbientCapabilities = "CAP_SYS_RESOURCE";
         };
       };
 
