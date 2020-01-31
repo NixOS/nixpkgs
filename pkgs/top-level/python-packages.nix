@@ -1824,6 +1824,10 @@ in {
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
 
+  cirq = callPackage ../development/python-modules/cirq {
+    pythonProtobuf = self.protobuf;
+  };
+
   colorcet = callPackage ../development/python-modules/colorcet { };
 
   coloredlogs = callPackage ../development/python-modules/coloredlogs { };

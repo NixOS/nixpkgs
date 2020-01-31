@@ -1905,6 +1905,12 @@
     email = "burkett.andrew@gmail.com";
     name = "Andrew Burkett";
   };
+  drewrisinger = {
+    email = "drisinger+nixpkgs@gmail.com";
+    github = "drewrisinger";
+    gitHubId = 10198051;
+    name = "Drew Risinger";
+  };
   dsferruzza = {
     email = "david.sferruzza@gmail.com";
     github = "dsferruzza";
