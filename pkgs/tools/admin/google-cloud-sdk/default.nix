@@ -78,6 +78,9 @@ in stdenv.mkDerivation rec {
     # nixpkgs instead.
     rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod \
           $out/google-cloud-sdk/platform/gsutil/third_party/crcmod_osx
+
+    # remove tests and test data
+    find $out -name tests -type d -exec rm -rf '{}' +
   '';
 
   meta = with stdenv.lib; {
