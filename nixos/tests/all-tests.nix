@@ -275,6 +275,7 @@ in
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
