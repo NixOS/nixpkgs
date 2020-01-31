@@ -536,6 +536,9 @@ auth required pam_succeed_if.so uid >= 1000 quiet
        </listitem>
      </itemizedlist>
    </listitem>
+   <listitem>
+    <para>The LLVM versions 3.5, 3.9 and 4 (including the corresponding CLang versions) have been dropped.</para>
+   </listitem>
   </itemizedlist>
  </section>
 
