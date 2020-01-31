@@ -195,21 +195,21 @@ in
   };
 
   config = mkIf (cfg.ssh.enable || cfg.pam.enable) {
-     environment.systemPackages = [ pkgs.duo-unix ];
+    environment.systemPackages = [ pkgs.duo-unix ];
 
-     security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
-     environment.etc = loginCfgFile // pamCfgFile;
+    security.wrappers.login_duo.source = "${pkgs.duo-unix.out}/bin/login_duo";
+    environment.etc = loginCfgFile // pamCfgFile;
 
-     /* If PAM *and* SSH are enabled, then don't do anything special.
-     If PAM isn't used, set the default SSH-only options. */
-     services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
-     if cfg.pam.enable then "UseDNS no" else ''
-       # Duo Security configuration
-       ForceCommand ${config.security.wrapperDir}/login_duo
-       PermitTunnel no
-       ${optionalString (!cfg.allowTcpForwarding) ''
-         AllowTcpForwarding no
-       ''}
-     '');
+    /* If PAM *and* SSH are enabled, then don't do anything special.
+    If PAM isn't used, set the default SSH-only options. */
+    services.openssh.extraConfig = mkIf (cfg.ssh.enable || cfg.pam.enable) (
+    if cfg.pam.enable then "UseDNS no" else ''
+      # Duo Security configuration
+      ForceCommand ${config.security.wrapperDir}/login_duo
+      PermitTunnel no
+      ${optionalString (!cfg.allowTcpForwarding) ''
+        AllowTcpForwarding no
+      ''}
+    '');
   };
 }
