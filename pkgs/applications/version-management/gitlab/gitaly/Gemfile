@@ -34,7 +34,7 @@ group :development, :test do
 
   # gitlab-shell spec gems
   gem 'listen', '~> 0.5.0'
-  gem 'simplecov', '~> 0.9.0', require: false
+  gem 'simplecov', '~> 0.17.1', require: false
   gem 'vcr', '~> 4.0.0'
   gem 'webmock', '~> 3.4.0'
 end
