@@ -1304,6 +1304,12 @@
     githubId = 811527;
     name = "Christopher Jefferson";
   };
+  chrislf = {
+    email = "";
+    github = "chrislf";
+    githubId = 4284199;
+    name = "Chris Linton-Ford";
+  };
   chrisrosset = {
     email = "chris@rosset.org.uk";
     github = "chrisrosset";
