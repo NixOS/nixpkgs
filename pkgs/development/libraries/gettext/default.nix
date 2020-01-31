@@ -12,10 +12,7 @@ stdenv.mkDerivation rec {
     ./absolute-paths.diff
     ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
   ]
-  # HACK: Since this is merely a UX fix, to minimise rebuilds only patch
-  #       the final library.
-  #       Remove the entire thing when updating to the next release.
-  ++ lib.optional (stdenv.isDarwin && !(lib.hasPrefix "bootstrap" stdenv.name))
+  ++ lib.optional stdenv.isDarwin
       (fetchpatch {
         url = "https://git.savannah.gnu.org/cgit/gettext.git/patch?id=ec0e6b307456ceab352669ae6bccca9702108753";
         sha256 = "0xqs01c7xl7vmw6bqvsmrzxxjxk2a4spcdpmlwm3b4hi2wc2lxnf";
