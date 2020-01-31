@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -37,6 +37,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
+
+  nativeBuildInputs = [ jq ];
 
   patches = [
     ./gcloud-path.patch
@@ -81,6 +83,12 @@ in stdenv.mkDerivation rec {
 
     # remove tests and test data
     find $out -name tests -type d -exec rm -rf '{}' +
+
+    # compact all the JSON
+    find $out -name \*.json | while read path; do
+      jq -c . $path > $path.min
+      mv $path.min $path
+    done
   '';
 
   meta = with stdenv.lib; {
