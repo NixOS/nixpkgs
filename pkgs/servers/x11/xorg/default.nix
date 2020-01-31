@@ -1,7 +1,14 @@
 # THIS IS A GENERATED FILE.  DO NOT EDIT!
 { lib, newScope, pixman }:
 
-lib.makeScope newScope (self: with self; {
+let postInstallResources = xbitmaps: ''
+    for bin in $out/bin/*; do
+      wrapProgram $bin \
+        --suffix XFILESEARCHPATH : $out/share/X11/%T/%N%C:$out/include/X11/%T/%N:${xbitmaps}/include/X11/%T/%N
+    done
+  '';
+
+in lib.makeScope newScope (self: with self; {
 
   inherit pixman;
 
@@ -31,7 +38,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "bitmap-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -39,12 +46,13 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0kzbv5wh02798l77y9y8d8sjkmzm9cvsn3rjh8a86v5waj50apsb";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
     buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  editres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  editres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "editres-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -52,8 +60,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "04awfwmy3f9f0bchidc4ssbgrbicn5gzasg3jydpfnp5513d76h8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1261,7 +1270,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
+  oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, xbitmaps, libXext, libXmu, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "oclock-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1269,8 +1278,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1zmfzfmdp42nvapf0qz1bc3i3waq5sjrpkgfw64qs4nmq30wy86c";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libxkbfile libX11 libXext libXmu libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libxkbfile libX11 xbitmaps libXext libXmu libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1352,7 +1362,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  viewres = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  viewres = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, xbitmaps, libXmu, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "viewres-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1360,8 +1370,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1mz319kfmvcrdpi22dmdr91mif1j0j3ck1f8mmnz5g1r9kl1in2y";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXaw libXmu libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libXaw xbitmaps libXmu libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1417,7 +1428,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
+  xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, xorgproto, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xcalc-1.1.0";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1425,8 +1436,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1sxmlcb0sb3h4z05kl5l0kxnhrc0h8c74p9m3zdc7bv58jaldmym";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXaw xorgproto libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps xorgproto libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1534,7 +1546,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xclock-1.0.9";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1542,8 +1554,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1fr3q4rszgx7x2zxy2ip592a3fgx20hfwac49p2l5b7jqsr1ying";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXaw libXft libxkbfile libXmu xorgproto libXrender libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps libXft libxkbfile libXmu xorgproto libXrender libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1573,7 +1586,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xconsole = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
+  xconsole = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xconsole-1.0.7";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1581,8 +1594,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1q2ib1626i5da0nda09sp3vzppjrcn82fff83cw7hwr0vy14h56i";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -1612,7 +1626,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
+  xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, xbitmaps, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xdm-1.1.12";
     builder = ./builder.sh;
     src = fetchurl {
@@ -1620,8 +1634,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "1x17hdymf6rd8jmh4n1sd4g5a8ayr5w94nwjw84qs2fs5pvq7lhd";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXau libXaw xbitmaps libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2353,7 +2368,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xfd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
+  xfd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, fontconfig, libXaw, xbitmaps, libXft, libXmu, xorgproto, libXrender, libXt, gettext, makeWrapper }: stdenv.mkDerivation {
     name = "xfd-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2361,12 +2376,13 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0n6r1v8sm0z0ycqch035xpm46nv5v4mav3kxh36883l3ln5r6bqr";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig gettext ];
-    buildInputs = [ libxkbfile fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
+    nativeBuildInputs = [ pkgconfig gettext makeWrapper ];
+    buildInputs = [ libxkbfile fontconfig libXaw xbitmaps libXft libXmu xorgproto libXrender libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xfontsel = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xfontsel = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xfontsel-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2374,8 +2390,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0700lf6hx7dg88wq1yll7zjvf9gbwh06xff20yffkxb289y0pai5";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXaw libXmu libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2418,7 +2435,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xgc = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xgc = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, xbitmaps, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xgc-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2426,8 +2443,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0pigvjd3i9fchmj1inqy151aafz3dr0vq1h2zizdb2imvadqv0hl";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXaw libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libXaw xbitmaps libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2548,7 +2566,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xload = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
+  xload = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt, gettext, makeWrapper }: stdenv.mkDerivation {
     name = "xload-1.1.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2556,8 +2574,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "01sr6yd6yhyyfgn88l867w6h9dn5ikcynaz5rwji6xqxhw1lhkpk";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig gettext ];
-    buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
+    nativeBuildInputs = [ pkgconfig gettext makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2600,7 +2619,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xmag = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
+  xmag = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xmag-1.0.6";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2608,12 +2627,13 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0qg12ifbbk9n8fh4jmyb625cknn8ssj86chd6zwdiqjin8ivr8l7";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libX11 libXaw libXmu libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libX11 libXaw xbitmaps libXmu libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xmessage = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xmessage = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, xbitmaps, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xmessage-1.0.5";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2621,8 +2641,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "0a90kfm0qz8cn2pbpqfyqrc5s9bfvvy14nj848ynvw56wy0zng9p";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXaw libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libXaw xbitmaps libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2639,7 +2660,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xmore = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
+  xmore = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, xbitmaps, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xmore-1.0.3";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2647,8 +2668,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "06r514p30v87vx00ddlck9mwazaqk9bx08ip866p1mw2a46iwjk4";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libXaw libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libXaw xbitmaps libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
@@ -2808,7 +2830,7 @@ lib.makeScope newScope (self: with self; {
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
-  xsm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
+  xsm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXaw, xbitmaps, libXt, makeWrapper }: stdenv.mkDerivation {
     name = "xsm-1.0.4";
     builder = ./builder.sh;
     src = fetchurl {
@@ -2816,8 +2838,9 @@ lib.makeScope newScope (self: with self; {
       sha256 = "09a4ss1fnrh1sgm21r4n5pivawf34paci3rn6mscyljf7a4vcd4r";
     };
     hardeningDisable = [ "bindnow" "relro" ];
-    nativeBuildInputs = [ pkgconfig ];
-    buildInputs = [ libICE libSM libX11 libXaw libXt ];
+    nativeBuildInputs = [ pkgconfig makeWrapper ];
+    buildInputs = [ libICE libSM libX11 libXaw xbitmaps libXt ];
+    postInstall = postInstallResources xbitmaps;
     meta.platforms = stdenv.lib.platforms.unix;
   }) {};
 
