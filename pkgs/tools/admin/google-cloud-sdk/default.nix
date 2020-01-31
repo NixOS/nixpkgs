@@ -89,6 +89,9 @@ in stdenv.mkDerivation rec {
       jq -c . $path > $path.min
       mv $path.min $path
     done
+
+    # strip the Cython gRPC library
+    strip $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
   meta = with stdenv.lib; {
