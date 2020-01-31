@@ -1,6 +1,8 @@
 { lib, stdenv, fetchurl, meson, pkgconfig, ninja
 , libffi, libxml2, wayland
 , expat ? null # Build wayland-scanner (currently cannot be disabled as of 1.7.0)
+, withDocumentation ? false, graphviz-nox, doxygen, libxslt, xmlto, python3
+, docbook_xsl, docbook_xml_dtd_45, docbook_xml_dtd_42
 }:
 
 # Require the optional to be enabled until upstream fixes or removes the configure flag
@@ -17,16 +19,26 @@ stdenv.mkDerivation rec {
 
   separateDebugInfo = true;
 
-  mesonFlags = [ "-Ddocumentation=false" ];
+  mesonFlags = [ "-Ddocumentation=${lib.boolToString withDocumentation}" ];
+
+  postPatch = lib.optionalString withDocumentation ''
+    patchShebangs doc/doxygen/gen-doxygen.py
+  '';
 
   nativeBuildInputs = [
     meson pkgconfig ninja
   ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     # for wayland-scanner during build
     wayland
+  ] ++ lib.optionals withDocumentation [
+    (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
+    doxygen libxslt xmlto python3 docbook_xml_dtd_45
   ];
 
-  buildInputs = [ libffi /* docbook_xsl doxygen graphviz libxslt xmlto */ expat libxml2 ];
+  buildInputs = [ libffi expat libxml2
+  ] ++ lib.optionals withDocumentation [
+    docbook_xsl docbook_xml_dtd_45 docbook_xml_dtd_42
+  ];
 
   meta = {
     description = "Core Wayland window system code and protocol";
