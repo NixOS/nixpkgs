@@ -144,4 +144,7 @@ self: super: {
   easytest_0_3 = markBroken super.easytest_0_3;
   haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
 
+  # The LTS-14.x version of the dependencies are too old.
+  policeman = super.policeman.overrideScope (self: super: { ansi-terminal = self.ansi-terminal_0_10_2; relude = self.relude_0_6_0_0; });
+
 }
