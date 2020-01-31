@@ -6,7 +6,7 @@
 , makeWrapper
 , boost
 , llvmPackages
-, llvmPackages_4
+, llvmPackages_5
 , gmp
 , emacs
 , emacs25-nox
@@ -48,7 +48,7 @@ in stdenv.mkDerivation rec {
     "-DCMAKE_C_COMPILER=${llvmPackages.clang}/bin/clang"
     "-DBoost_USE_STATIC_LIBS=OFF"
     "-DMOZART_BOOST_USE_STATIC_LIBS=OFF"
-    "-DCMAKE_PROGRAM_PATH=${llvmPackages_4.clang}/bin"
+    "-DCMAKE_PROGRAM_PATH=${llvmPackages_5.clang}/bin"
     # Rationale: Nix's cc-wrapper needs to see a compile flag (like -c) to
     # infer that it is not a linking call, and stop trashing the command line
     # with linker flags.
@@ -69,9 +69,9 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     boost
-    llvmPackages_4.llvm
-    llvmPackages_4.clang
-    llvmPackages_4.clang-unwrapped
+    llvmPackages_5.llvm
+    llvmPackages_5.clang
+    llvmPackages_5.clang-unwrapped
     gmp
     emacs25-nox
     jre_headless
