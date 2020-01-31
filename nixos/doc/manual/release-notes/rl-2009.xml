@@ -103,6 +103,10 @@
       <link linkend="opt-security.duosec.secretKeyFile">security.duosec.secretKeyFile</link>
       option for better security.
     </para>
+    <para>
+      <literal>security.duosec.ikey</literal> has been renamed to
+      <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

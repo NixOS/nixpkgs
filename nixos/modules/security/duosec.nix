@@ -9,7 +9,7 @@ let
 
   configFilePam = ''
     [duo]
-    ikey=${cfg.ikey}
+    ikey=${cfg.integrationKey}
     host=${cfg.host}
     ${optionalString (cfg.groups != "") ("groups="+cfg.groups)}
     failmode=${cfg.failmode}
@@ -27,6 +27,7 @@ in
 {
   imports = [
     (mkRenamedOptionModule [ "security" "duosec" "group" ] [ "security" "duosec" "groups" ])
+    (mkRenamedOptionModule [ "security" "duosec" "ikey" ] [ "security" "duosec" "integrationKey" ])
     (mkRemovedOptionModule [ "security" "duosec" "skey" ] "The insecure security.duosec.skey option has been replaced by a new security.duosec.secretKeyFile option. Use this new option to store a secure copy of your key instead.")
   ];
 
@@ -44,7 +45,7 @@ in
         description = "If enabled, protect logins with Duo Security using PAM support.";
       };
 
-      ikey = mkOption {
+      integrationKey = mkOption {
         type = types.str;
         description = "Integration key.";
       };
