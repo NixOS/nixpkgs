@@ -3012,6 +3012,7 @@ broken-packages:
   - archlinux
   - archlinux-web
   - archnews
+  - arduino-copilot
   - arena
   - arff
   - arghwxhaskell
@@ -4929,6 +4930,7 @@ broken-packages:
   - fused-effects-lens
   - fused-effects-random
   - fused-effects-resumable
+  - fused-effects-squeal
   - fusion
   - futhark
   - futun
@@ -5099,6 +5101,7 @@ broken-packages:
   - git-remote-ipfs
   - git-repair
   - git-sanity
+  - git-vogue
   - gitdo
   - github-backup
   - github-data
@@ -7761,6 +7764,7 @@ broken-packages:
   - opensoundcontrol-ht
   - openssh-github-keys
   - openssh-protocol
+  - opentelemetry-lightstep
   - opentheory-char
   - opentok
   - opentype
@@ -9383,6 +9387,7 @@ broken-packages:
   - structures
   - stt
   - stunts
+  - stylish-haskell
   - stylist
   - stylized
   - suavemente
