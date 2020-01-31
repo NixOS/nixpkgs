@@ -1305,7 +1305,7 @@
     name = "Christopher Jefferson";
   };
   chrislf = {
-    email = "";
+    email = "chris.lintonford+nix@gmail.com";
     github = "chrislf";
     githubId = 4284199;
     name = "Chris Linton-Ford";
