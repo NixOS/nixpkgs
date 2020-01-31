@@ -763,6 +763,10 @@ let
 
     tls = callPackage ../development/ocaml-modules/tls { };
 
+    torch = callPackage ../development/ocaml-modules/torch {
+      inherit (pkgs.python3Packages) pytorch;
+    };
+
     type_conv_108_08_00 = callPackage ../development/ocaml-modules/type_conv/108.08.00.nix { };
     type_conv_109_60_01 = callPackage ../development/ocaml-modules/type_conv/109.60.01.nix { };
     type_conv_112_01_01 = callPackage ../development/ocaml-modules/type_conv/112.01.01.nix { };
