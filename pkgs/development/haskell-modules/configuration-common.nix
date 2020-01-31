@@ -1063,10 +1063,10 @@ self: super: {
   dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
   dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
     dhall = self.dhall_1_29_0;
-    prettyprinter = self.prettyprinter_1_5_1;
+    prettyprinter = self.prettyprinter_1_6_0;
     prettyprinter-ansi-terminal =
       self.prettyprinter-ansi-terminal.override {
-        prettyprinter = self.prettyprinter_1_5_1;
+        prettyprinter = self.prettyprinter_1_6_0;
       };
   };
 
