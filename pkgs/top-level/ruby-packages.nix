@@ -1073,10 +1073,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "08cqwk8valxv4bls891f3ciqa258vbsfgqd3mymf62qdld8m9y3z";
+      sha256 = "18clyn0fp0h5alnkf9i2bqd6wvl78h468pdbzs1csqnba8vw4q1c";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   globalid = {
     dependencies = ["activesupport"];
