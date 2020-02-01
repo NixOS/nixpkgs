@@ -91,9 +91,7 @@ while [ "$#" -gt 0 ]; do
         shift 1
         ;;
       --use-remote-sudo)
-        # note the trailing space
         maybeSudo=(sudo --)
-        shift 1
         ;;
       *)
         echo "$0: unknown option \`$i'"
