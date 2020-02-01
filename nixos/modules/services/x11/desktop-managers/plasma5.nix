@@ -60,7 +60,7 @@ in
                   -e '/^toolBarFont=/ s/,Regular$//'
           fi
 
-          exec "${getBin plasma5.plasma-workspace}/bin/startkde"
+          exec "${getBin plasma5.plasma-workspace}/bin/startplasma-x11"
         '';
       };
 
