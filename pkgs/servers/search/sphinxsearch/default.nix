@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig,
+{ stdenv, fetchurl, pkgconfig, expat, mariadb, zlib, openssl,
   version ? "2.2.11",
   mainSrc ? fetchurl {
     url = "http://sphinxsearch.com/files/sphinx-${version}-release.tar.gz";
@@ -13,12 +13,17 @@ stdenv.mkDerivation {
 
   configureFlags = [
     "--program-prefix=sphinxsearch-"
-    "--without-mysql"
+    "--with-mysql=${mariadb}/"
+    "--with-libexpat"
     "--enable-id64"
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkgconfig expat
+  ];
+
+  buildInputs = [
+    mariadb zlib openssl
   ];
 
   meta = {
