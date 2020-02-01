@@ -113,10 +113,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0saginz71qy4k1hz3sffrjd6zcw54jsm61f7jks02fxys31ir865";
+      sha256 = "0a8q9a1f6x4gy55p8cf52a22bnpjgn18ad9n959x0f4gybbhs948";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   atomos = {
     groups = ["default"];
