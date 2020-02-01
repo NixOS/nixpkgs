@@ -1,14 +1,14 @@
 { fetchFromGitHub, gperf, openssl, readline, zlib, cmake, stdenv }:
 
 stdenv.mkDerivation rec {
-  version = "1.5.0";
+  version = "1.6.0";
   pname = "tdlib";
 
   src = fetchFromGitHub {
     owner = "tdlib";
     repo = "td";
     rev = "v${version}";
-    sha256 = "1rqxdvzlryqln5jzj35cwz1fjwy4s8xq97p0wdnpzbfjpcalvrm5";
+    sha256 = "0zlzpl6fgszg18kwycyyyrnkm255dvc6fkq0b0y32m5wvwwl36cv";
   };
 
   buildInputs = [ gperf openssl readline zlib ];
