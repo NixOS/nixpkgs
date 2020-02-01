@@ -555,6 +555,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      needed.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Rspamd was updated to version 2.2. Read
+       <link xlink:href="https://rspamd.com/doc/migration.html#migration-to-rspamd-20">
+       the upstream migration notes</link> carefully. Please be especially
+       aware that some modules were removed and the default Bayes backend is
+       now Redis.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
