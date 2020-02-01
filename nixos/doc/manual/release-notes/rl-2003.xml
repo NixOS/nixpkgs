@@ -103,6 +103,13 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
     via <option>services.upower</option>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     To use Geary you should enable <xref linkend="opt-programs.geary.enable"/> instead of
+     just adding it to <xref linkend="opt-environment.systemPackages"/>.
+     It was created so Geary could function properly outside of GNOME.
+    </para>
+   </listitem>
   </itemizedlist>
 
  </section>
