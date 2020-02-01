@@ -1,15 +1,19 @@
 { fetchFromGitHub, stdenv, readline, cmake }:
 
-stdenv.mkDerivation {
+let
+  rev = "71f2b40320127561175ad60f6f2428f3438e5243";
+in stdenv.mkDerivation {
   pname = "abc-verifier";
   version = "2020-01-11";
 
   src = fetchFromGitHub {
+    inherit rev;
     owner = "berkeley-abc";
     repo = "abc";
-    rev    = "71f2b40320127561175ad60f6f2428f3438e5243";
     sha256 = "15sn146ajxql7l1h8rsag5lhn4spwvgjhwzqawfr78snzadw8by3";
   };
+
+  passthru.rev = rev;
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ readline ];
