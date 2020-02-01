@@ -132,9 +132,8 @@ gem 'seed-fu', '~> 2.3.7'
 gem 'elasticsearch-model', '~> 6.1'
 gem 'elasticsearch-rails', '~> 6.1', require: 'elasticsearch/rails/instrumentation'
 gem 'elasticsearch-api',   '~> 6.8'
-gem 'aws-sdk-core', '~> 3'
-gem 'aws-sdk-cloudformation', '~> 1'
-gem 'faraday_middleware-aws-sigv4'
+gem 'aws-sdk'
+gem 'faraday_middleware-aws-signers-v4'
 
 # Markdown and HTML processing
 gem 'html-pipeline', '~> 2.12'
