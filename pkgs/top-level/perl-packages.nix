@@ -19545,8 +19545,13 @@ let
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-2.30.tar.gz;
       sha256 = "11lf54akr9nbivqkjrhvkmfdgkbhw85sq0q4mak56n6bf542bgbm";
     };
-    # https://rt.cpan.org/Public/Bug/Display.html?id=124509
-    patches = [ ../development/perl-modules/timedate-2020.patch ];
+    patches = [
+      # https://rt.cpan.org/Public/Bug/Display.html?id=124509
+      (fetchpatch {
+        url = "https://github.com/atoomic/perl-TimeDate/commit/4b67ccbdc1846620470ca524a5f3e2afd7b33f66.patch";
+        sha256 = "1q37yw0b2pammvl0aana70nq7krqwhpcanqa11h2pg9sa9ls7q87";
+      })
+    ];
   };
 
   TimeDuration = buildPerlPackage {
