@@ -68,36 +68,6 @@ rec {
     gtk3Support = false;
   };
 
-  firefox-esr-60 = common rec {
-    pname = "firefox-esr";
-    ffversion = "60.9.0esr";
-
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "4baea5c9c4eff257834bbaee6d7786f69f7e6bacd24ca13c2705226f4a0d88315ab38c650b2c5e9c76b698f2debc7cea1e5a99cb4dc24e03c48a24df5143a3cf";
-    };
-
-    patches = [
-      ./no-buildconfig-ffx65.patch
-
-      # this one is actually an omnipresent bug
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
-      ./fix-pa-context-connect-retval.patch
-
-      missing-documentation-patch
-    ];
-
-    meta = firefox.meta // {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-      knownVulnerabilities = [ "Support ended around October 2019." ];
-    };
-    updateScript = callPackage ./update.nix {
-      attrPath = "firefox-esr-60-unwrapped";
-      versionSuffix = "esr";
-      versionKey = "ffversion";
-    };
-  };
-
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
     ffversion = "68.4.2esr";
@@ -199,6 +169,9 @@ in {
 } // lib.optionalAttrs (config.allowAliases or true) {
   # ALIASES
   # remove after 20.03 branchoff
+
+  firefox-esr-60 = throw "firefoxPackages.firefox-esr-60 was removed as it's an unsupported ESR with open security issues.";
+
   tor-browser-7-5 = throw "firefoxPackages.tor-browser-7-5 was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
   tor-browser-8-5 = throw "firefoxPackages.tor-browser-8-5 was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
   tor-browser = throw "firefoxPackages.tor-browser was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
