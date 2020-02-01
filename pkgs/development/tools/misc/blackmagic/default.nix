@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub
-, gcc-arm-embedded, libftdi1
+, gcc-arm-embedded, libftdi1, libusb, pkgconfig
 , python, pythonPackages
 }:
 
@@ -20,11 +20,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gcc-arm-embedded
+    gcc-arm-embedded pkgconfig
   ];
 
   buildInputs = [
     libftdi1
+    libusb
     python
     pythonPackages.intelhex
   ];
@@ -60,7 +61,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://github.com/blacksphere/blackmagic;
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ pjones emily ];
-    platforms = platforms.unix;
+    maintainers = with maintainers; [ pjones emily sorki ];
+    # fails on darwin with
+    # arm-none-eabi-gcc: error: unrecognized command line option '-iframework'
+    platforms = platforms.linux;
   };
 }
