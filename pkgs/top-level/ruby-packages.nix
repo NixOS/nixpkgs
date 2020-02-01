@@ -185,10 +185,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1380dvd5dbnhlvagb9z9cr62kh1knza7bcgr9msqshj55iqk4p0k";
+      sha256 = "0gkxdfslcvrwrs48giilji3bgxd5bwijwq33p9h00r10jzfg2028";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   camping = {
     dependencies = ["mab" "rack"];
