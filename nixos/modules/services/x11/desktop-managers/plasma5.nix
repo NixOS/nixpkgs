@@ -137,6 +137,7 @@ in
           libkscreen
           libksysguard
           milou
+          plasma-browser-integration
           plasma-integration
           polkit-kde-agent
           systemsettings
