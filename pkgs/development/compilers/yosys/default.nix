@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation rec {
   pname = "yosys";
-  version = "2019.10.18";
+  version = "2020.02.01";
 
   src = fetchFromGitHub {
     owner  = "yosyshq";
     repo   = "yosys";
-    rev    = "3c41599ee1f62e4d77ba630fa1a245ef3fe236fa";
-    sha256 = "0jg2g8v08ax1q6qlvn8c1h147m03adzrgf21043xwbh4c7s5k137";
+    rev    = "a1c840ca5d6e8b580e21ae48550570aa9665741a";
+    sha256 = "1vna04dh6l68nifssgs3hxqwn4k529krmm4crj94a8wwhwra52mh";
     name   = "yosys";
   };
 
