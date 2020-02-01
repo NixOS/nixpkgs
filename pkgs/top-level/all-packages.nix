@@ -10181,6 +10181,8 @@ in
 
   hadolint = haskell.lib.justStaticExecutables haskellPackages.hadolint;
 
+  halfempty = callPackage ../development/tools/halfempty {};
+
   hcloud = callPackage ../development/tools/hcloud { };
 
   help2man = callPackage ../development/tools/misc/help2man { };
