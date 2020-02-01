@@ -1031,10 +1031,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0bvw0xlq0nrvzv559d3kbihc8m3iv3q70cs6xan0n6dywxayizbf";
+      sha256 = "0194gzn0kialfh0j7crllvp808r64sg6dh297x69b0av21ar5pam";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   gh_inspector = {
     groups = ["default"];
