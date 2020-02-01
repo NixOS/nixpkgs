@@ -1052,10 +1052,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1cv617ad4bhd3qhi5m0638v0mf9kw32g7r89c754xsmmas921igc";
+      sha256 = "1l3jpgbdvb55xhcmpkcqgwx5068dfyi8kijfvzhbqh96ng0p1m7g";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   gitlab-markup = {
     groups = ["default"];
