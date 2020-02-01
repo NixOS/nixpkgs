@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "1.11.0";
 
   src = fetchurl {
-    url = "http://code.coreboot.org/p/seabios/downloads/get/${pname}-${version}.tar.gz";
+    url = "https://www.seabios.org/downloads/${pname}-${version}.tar.gz";
     sha256 = "1xwvp77djxbxbxg82hzj26pv6zka3556vkdcp09hnfwapcp46av2";
   };
 
