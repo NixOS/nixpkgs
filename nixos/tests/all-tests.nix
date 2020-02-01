@@ -65,7 +65,7 @@ in
   couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
-  dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
+  dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   docker-containers = handleTestOn ["x86_64-linux"] ./docker-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
