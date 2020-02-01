@@ -4742,6 +4742,8 @@ in
 
   motion = callPackage ../applications/video/motion { };
 
+  MozPhab = callPackage ../applications/misc/MozPhab { };
+
   mtail = callPackage ../servers/monitoring/mtail {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
