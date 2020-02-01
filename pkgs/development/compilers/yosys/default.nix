@@ -1,4 +1,5 @@
 { stdenv
+, abc-verifier
 , bison
 , fetchFromGitHub
 , flex
@@ -12,19 +13,7 @@
 , zlib
 }:
 
-with builtins;
-
-let
-  # NOTE: the version of abc used here is synchronized with
-  # the one in the yosys Makefile of the version above;
-  # keep them the same for quality purposes.
-  abc = fetchFromGitHub {
-    owner  = "berkeley-abc";
-    repo   = "abc";
-    rev    = "623b5e82513d076a19f864c01930ad1838498894";
-    sha256 = "1mrfqwsivflqdzc3531r6mzp33dfyl6dnqjdwfcq137arqh36m67";
-  };
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "yosys";
   version = "2019.10.18";
 
@@ -49,18 +38,14 @@ in stdenv.mkDerivation rec {
       --replace 'CXX = gcc' "" \
       --replace 'LD = gcc' 'LD = $(CXX)' \
       --replace 'ABCMKARGS = CC="$(CXX)" CXX="$(CXX)"' 'ABCMKARGS =' \
-      --replace 'echo UNKNOWN' 'echo ${substring 0 10 src.rev}'
+      --replace 'echo UNKNOWN' 'echo ${builtins.substring 0 10 src.rev}'
     patchShebangs tests
   '';
 
   preBuild = ''
-    cp -R ${abc} abc
     chmod -R u+w .
-    substituteInPlace abc/Makefile \
-      --replace 'CC   := gcc' "" \
-      --replace 'CXX  := g++' ""
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-    echo 'ABCREV := default' >> Makefile.conf
+    echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
 
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
@@ -68,10 +53,6 @@ in stdenv.mkDerivation rec {
 
   doCheck = true;
   checkInputs = [ verilog ];
-  # checkPhase defaults to VERBOSE=y, which gets passed down to abc,
-  # which then does $(VERBOSE)gcc, which then complains about not
-  # being able to find ygcc. Life is pain.
-  checkFlags = [ " " ];
 
   meta = {
     description = "Framework for RTL synthesis tools";
