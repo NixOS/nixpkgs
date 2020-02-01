@@ -5,11 +5,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "catfish";
-  version = "1.4.12";
+  version = "1.4.13";
 
   src = fetchurl {
     url = "https://archive.xfce.org/src/apps/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0jhk4x97vip6h7rsw8hbwzfjmz55w6dpcj9v96m54xr15gh31yy3";
+    sha256 = "0fg89946z6n8njxn4mv29jksw8yavg8vypsljn9031pjwl3fmh2q";
   };
 
   nativeBuildInputs = [
@@ -51,7 +51,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://docs.xfce.org/apps/catfish/start;
+    homepage = "https://docs.xfce.org/apps/catfish/start";
     description = "Handy file search tool";
     longDescription = ''
       Catfish is a handy file searching tool. The interface is
