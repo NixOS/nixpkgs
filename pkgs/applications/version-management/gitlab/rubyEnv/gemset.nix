@@ -319,37 +319,38 @@
     };
     version = "1.0.3";
   };
-  aws-partitions = {
+  aws-sdk = {
+    dependencies = ["aws-sdk-resources"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0mr3f9bdh9lxqy4c999sk99avy46fygx4hf3i86adpvrj6axmygs";
+      sha256 = "1yvl9bxzaxgcyzix2yw46cgll9nl0xfg5qx1j6y3xc1i78rk7vy0";
       type = "gem";
     };
-    version = "1.263.0";
-  };
-  aws-sdk-cloudformation = {
-    dependencies = ["aws-sdk-core" "aws-sigv4"];
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "11fhscz4y6lq9c8p0ikq5608qbv4bhi6sq7bxn6vnsgx9m45kvq1";
-      type = "gem";
-    };
-    version = "1.29.0";
+    version = "2.11.374";
   };
   aws-sdk-core = {
-    dependencies = ["aws-eventstream" "aws-partitions" "aws-sigv4" "jmespath"];
+    dependencies = ["aws-sigv4" "jmespath"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yl3aw8q7ddm5x2wrqdry038gnkw0ys5il2qhlifqyc0qk8yhlfz";
+      sha256 = "1d7nw1jihv7rglcmkd3hhidjflbzq5ik63n43q27pmx8ki108rd9";
       type = "gem";
     };
-    version = "3.88.0";
+    version = "2.11.374";
+  };
+  aws-sdk-resources = {
+    dependencies = ["aws-sdk-core"];
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "0qx2a67vsw8rz1y0m04f97p1q4zx7miy06a5ck78hm77nvsigjj4";
+      type = "gem";
+    };
+    version = "2.11.374";
   };
   aws-sigv4 = {
     dependencies = ["aws-eventstream"];
@@ -1316,16 +1317,16 @@
     };
     version = "0.12.2";
   };
-  faraday_middleware-aws-sigv4 = {
-    dependencies = ["aws-sigv4" "faraday"];
+  faraday_middleware-aws-signers-v4 = {
+    dependencies = ["aws-sdk-resources" "faraday"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gk2qakcvvbgfvvfd8cgf13sligv5mp816ykmra9llqmbfym8ikl";
+      sha256 = "0y88xcbq8k2ijhsqdava5493p26k49agvnzca6vkl3qwfv3ambhp";
       type = "gem";
     };
-    version = "0.3.0";
+    version = "0.1.7";
   };
   faraday_middleware-multi_json = {
     dependencies = ["faraday_middleware" "multi_json"];
