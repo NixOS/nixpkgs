@@ -2,11 +2,11 @@
   rcssmin, rjsmin, django_appconf }:
 buildPythonPackage rec {
     pname = "django_compressor";
-    version = "2.3";
+    version = "2.4";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "1pbygd00l0k5p1r959131khij1km1a1grfxg0r59ar2wyx3n7j27";
+      sha256 = "0kx7bclfa0sxlsz6ka70zr9ra00lks0hmv1kc99wbanx6xhirvfj";
     };
     postPatch = ''
       substituteInPlace setup.py --replace 'rcssmin == 1.0.6' 'rcssmin' \
