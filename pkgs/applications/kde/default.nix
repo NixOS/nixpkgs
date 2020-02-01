@@ -96,6 +96,7 @@ let
       kate = callPackage ./kate.nix {};
       kbreakout = callPackage ./kbreakout.nix {};
       kcachegrind = callPackage ./kcachegrind.nix {};
+      kbruch = callPackage ./kbruch.nix {};
       kcalc = callPackage ./kcalc.nix {};
       kcalutils = callPackage ./kcalutils.nix {};
       kcharselect = callPackage ./kcharselect.nix {};
