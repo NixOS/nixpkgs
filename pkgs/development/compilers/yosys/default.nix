@@ -42,13 +42,20 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  preBuild = ''
+  preBuild = let
+    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
+  in ''
     chmod -R u+w .
     make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
     echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
 
     # we have to do this ourselves for some reason...
     (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
+
+    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile;then
+      echo "yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
+      exit 1
+    fi
   '';
 
   doCheck = true;
