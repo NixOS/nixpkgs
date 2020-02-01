@@ -40,34 +40,6 @@ rec {
     };
   };
 
-  # Do not remove. This is the last version of Firefox that supports
-  # the old plugins. While this package is unsafe to use for browsing
-  # the web, there are many old useful plugins targeting offline
-  # activities (e.g. ebook readers, syncronous translation, etc) that
-  # will probably never be ported to WebExtensions API.
-  firefox-esr-52 = (common rec {
-    pname = "firefox-esr";
-    ffversion = "52.9.0esr";
-    src = fetchurl {
-      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "bfca42668ca78a12a9fb56368f4aae5334b1f7a71966fbba4c32b9c5e6597aac79a6e340ac3966779d2d5563eb47c054ab33cc40bfb7306172138ccbd3adb2b9";
-    };
-
-    patches = [
-      # this one is actually an omnipresent bug
-      # https://bugzilla.mozilla.org/show_bug.cgi?id=1444519
-      ./fix-pa-context-connect-retval.patch
-    ];
-
-    meta = firefox.meta // {
-      description = "A web browser built from Firefox Extended Support Release source tree";
-      knownVulnerabilities = [ "Support ended in August 2018." ];
-    };
-  }).override {
-    stdenv = overrideCC gccStdenv gcc6; # gcc7 fails with "undefined reference to `__divmoddi4'"
-    gtk3Support = false;
-  };
-
   firefox-esr-68 = common rec {
     pname = "firefox-esr";
     ffversion = "68.4.2esr";
@@ -92,6 +64,12 @@ rec {
 } // lib.optionalAttrs (config.allowAliases or true) {
   # ALIASES
   # remove after 20.03 branchoff
+  firefox-esr-52 = throw ''
+    firefoxPackages.firefox-esr-52 was removed as it's an unsupported ESR with
+    open security issues. If you need it because you need to run some plugins
+    not having been ported to WebExtensions API, import it from an older
+    nixpkgs checkout still containing it.
+  '';
   firefox-esr-60 = throw "firefoxPackages.firefox-esr-60 was removed as it's an unsupported ESR with open security issues.";
 
   icecat = throw "firefoxPackages.icecat was removed as even its latest upstream version is based on an unsupported ESR release with open security issues.";
