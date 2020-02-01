@@ -23,7 +23,7 @@ mkDerivation rec {
     homepage = "https://github.com/Cockatrice/Cockatrice";
     description = "A cross-platform virtual tabletop for multiplayer card games";
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ spencerjanssen ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }
