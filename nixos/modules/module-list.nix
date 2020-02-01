@@ -117,6 +117,7 @@
   ./programs/fish.nix
   ./programs/freetds.nix
   ./programs/fuse.nix
+  ./programs/geary.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-documents.nix
   ./programs/gnome-terminal.nix
@@ -280,6 +281,7 @@
   ./services/databases/riak.nix
   ./services/databases/riak-cs.nix
   ./services/databases/stanchion.nix
+  ./services/databases/victoriametrics.nix
   ./services/databases/virtuoso.nix
   ./services/desktops/accountsservice.nix
   ./services/desktops/bamf.nix
@@ -426,6 +428,7 @@
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
   ./services/misc/folding-at-home.nix
+  ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
   ./services/misc/geoip-updater.nix
@@ -864,7 +867,6 @@
   ./services/x11/unclutter.nix
   ./services/x11/unclutter-xfixes.nix
   ./services/x11/desktop-managers/default.nix
-  ./services/x11/display-managers/auto.nix
   ./services/x11/display-managers/default.nix
   ./services/x11/display-managers/gdm.nix
   ./services/x11/display-managers/lightdm.nix

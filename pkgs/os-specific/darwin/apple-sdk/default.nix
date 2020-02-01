@@ -1,10 +1,15 @@
 { stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib }:
 
+let version = "10.12"; in
+
+# Ensure appleSdkVersion is up to date.
+assert stdenv.isDarwin -> stdenv.appleSdkVersion == version;
+
 let
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
-    version = "10.12";
     pname = "MacOS_SDK";
+    inherit version;
 
     # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
     #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version

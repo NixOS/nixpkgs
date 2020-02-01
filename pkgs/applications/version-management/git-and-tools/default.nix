@@ -135,6 +135,10 @@ let
 
   git-test = callPackage ./git-test { };
 
+  git-workspace = callPackage ./git-workspace {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git2cl = callPackage ./git2cl { };
 
   gitFastExport = callPackage ./fast-export { };
