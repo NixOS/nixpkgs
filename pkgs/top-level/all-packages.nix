@@ -10618,6 +10618,8 @@ in
 
   sqlite-web = callPackage ../development/tools/database/sqlite-web { };
 
+  sqlmap = python3Packages.sqlmap;
+
   sselp = callPackage ../tools/X11/sselp{ };
 
   stm32cubemx = callPackage ../development/tools/misc/stm32cubemx { };
