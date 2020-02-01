@@ -1,5 +1,5 @@
 { stdenv, fetchurl, cmake, ninja, llvm_5, llvm_8, curl, tzdata
-, python, libconfig, lit, gdb, unzip, darwin, bash
+, python, libconfig, lit, gdb, unzip, darwin, bash, patch
 , callPackage, makeWrapper, runCommand, targetPackages
 , bootstrapVersion ? false
 , version ? "1.17.0"
@@ -55,6 +55,10 @@ stdenv.mkDerivation rec {
   + stdenv.lib.optionalString (!bootstrapVersion && stdenv.hostPlatform.isDarwin) ''
       # https://github.com/NixOS/nixpkgs/issues/34817
       rm -r ldc-${version}-src/tests/plugins/addFuncEntryCall
+  ''
+
+  + stdenv.lib.optionalString (bootstrapVersion && stdenv.hostPlatform.isDarwin) ''
+      patch -F3 -l -u ldc-${version}-src/runtime/druntime/src/rt/sections_ldc.d ${./0001-Fix-issue-20019-Symbol-not-found-_dyld_enumerate_tlv.patch}
   '';
 
   postPatch = ''
@@ -94,7 +98,9 @@ stdenv.mkDerivation rec {
       libconfig llvm_5
     ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isDarwin
-      darwin.apple_sdk.frameworks.Foundation;
+      darwin.apple_sdk.frameworks.Foundation
+    ++ stdenv.lib.optional (bootstrapVersion && stdenv.hostPlatform.isDarwin)
+      patch;
 
 
   buildInputs = [ curl tzdata ];
