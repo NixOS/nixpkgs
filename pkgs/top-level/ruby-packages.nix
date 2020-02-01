@@ -1117,10 +1117,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0hgb555j5pimy8pjpf20pzbmhpr1wx59phlwbwsq37zjv89wirva";
+      sha256 = "17az8g0n1yzz90kdbjg2hpabi04qccda7v6lin76bs637ivfg2md";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   hashie = {
     groups = ["default"];
