@@ -1706,10 +1706,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "03jdjphc5vk9a9rgvkfhz78dfyxi67a20c12h6pcd22r5xq8hzj0";
+      sha256 = "1d0cn50qgpifrcv8qx72wi6l9xalw3ryngbfmm9xpg9vx5rl1qbp";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   parallel = {
     groups = ["default"];
