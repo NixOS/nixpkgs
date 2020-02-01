@@ -1095,10 +1095,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "14kcf8079wmimzy78yysizsl44d6iaw2pp5xj70vdxg342r4a6k5";
+      sha256 = "1a3x8qiisbax3x0izj8l5w66r53ba5ma53ax2jhdbhbvaxx3d02n";
       type = "gem";
     };
-    version = "3.3.7";
+    version = "3.4.1";
   };
   gpgme = {
     dependencies = ["mini_portile2"];
