@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "blugon";
-  version = "1.11.4";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "jumper149";
     repo = pname;
     rev = version;
-    sha256 = "0x320w2h5nlcgha4345i8ns15akb4kmrdgkh710s4r1n1by4x11r";
+    sha256 = "0vdhq8v011awhpkccbcmigj9c46widyzh0m5knafapanai3kv7ii";
   };
 
   buildInputs = [ python3 libX11 libXrandr ];
