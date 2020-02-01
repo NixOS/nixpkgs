@@ -166,7 +166,7 @@ in
           backupPaths = if (backup.dynamicFilesFrom == null)
                         then concatStringsSep " " backup.paths
                         else "--files-from ${filesFromTmpFile}";
-          pruneCmd = optional (builtins.length backup.pruneOpts > 0) [
+          pruneCmd = optionals (builtins.length backup.pruneOpts > 0) [
             ( resticCmd + " forget --prune " + (concatStringsSep " " backup.pruneOpts) )
             ( resticCmd + " check" )
           ];
