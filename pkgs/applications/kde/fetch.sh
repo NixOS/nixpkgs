@@ -1,1 +1,1 @@
-WGET_ARGS=( https://download.kde.org/stable/applications/19.08.3/ )
+WGET_ARGS=( http://download.kde.org/stable/release-service/19.12.1/src )
