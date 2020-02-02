@@ -25826,6 +25826,8 @@ in
 
   tlwg = callPackage ../data/fonts/tlwg { };
 
+  tt2020 = callPackage ../data/fonts/tt2020 { };
+
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
   diceware = callPackage ../tools/security/diceware { };
