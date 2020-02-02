@@ -11504,10 +11504,10 @@ let
 
   ModuleBuild = buildPerlPackage {
     pname = "Module-Build";
-    version = "0.4229";
+    version = "0.4231";
     src = fetchurl {
-      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4229.tar.gz;
-      sha256 = "064c03wxia7jz0i578awj4srykj0nnigm4p5r0dv0559rnk93r0z";
+      url = mirror://cpan/authors/id/L/LE/LEONT/Module-Build-0.4231.tar.gz;
+      sha256 = "05xpn8qg814y49vrih16zfr9iiwb7pmdf57ahjnc2h0p5illq3vy";
     };
     meta = {
       description = "Build and install Perl modules";
