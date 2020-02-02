@@ -1,27 +1,27 @@
 { fetchurl, stdenv }:
 
 let
-  version = "0.19.0";
+  version = "0.20.0";
 
   suffix = {
-    x86_64-linux  = "";
-    aarch64-linux = "-aarch64";
+    x86_64-linux  = "x86_64";
+    aarch64-linux = "aarch64";
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
   fetchbin = name: sha256: fetchurl {
-    url    = "${baseurl}/v${version}/${name}-v${version}${suffix}";
+    url    = "${baseurl}/v${version}/${name}-v${version}-${suffix}";
     sha256 = sha256."${stdenv.hostPlatform.system}";
   };
 
   firecracker-bin = fetchbin "firecracker" {
-    x86_64-linux  = "0yjhw77xc2nc96p36jhf0va95gf6hwi9n270g4iiwakycdy048mx";
-    aarch64-linux = "165yca7pcwpqw3x6dihcjz1xcwjh37sdi9qrrjk9zasxx7xcniym";
+    x86_64-linux  = "073pp4q5dnyr126k8k7qdkqclqx18hj12app4gj2is0413gia8z9";
+    aarch64-linux = "1w5f522imq5dnjrdidnrq7jlwcdrsiz32shv9bh66dhy336sd8qw";
   };
 
   jailer-bin = fetchbin "jailer" {
-    x86_64-linux  = "1q792b4bl1q3ach8nc8l0fbcil44knv3wa542xrskndzdz28lhsp";
-    aarch64-linux = "1cnwlpy5bswjprk7fcjgf6lxidhp7z00qx691nkwhzjkby80j490";
+    x86_64-linux  = "0falk6y9y0pimgav1yg6ydn6wsslz0my01qd9by8ipk3f3776531";
+    aarch64-linux = "1j4x4p4zz1ydvpzbbmxszyqv28qbl4v3hiwdj2f67f1jn1cv9l7z";
   };
 
 in
