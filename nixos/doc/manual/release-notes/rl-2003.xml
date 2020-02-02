@@ -571,6 +571,12 @@ auth required pam_succeed_if.so uid >= 1000 quiet
        now Redis.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The <literal>*psu</literal> versions of <package>oraclejdk8</package> have been removed
+     as they aren't provided by upstream anymore.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

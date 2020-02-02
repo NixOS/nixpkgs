@@ -557,4 +557,11 @@ mapAliases ({
   clang_39 = llvm_4;
   clang_35 = llvm_4;
   clang_4 = llvm_4;
+
+  /* Cleanup before 20.09 */
+  oraclejdk8psu = throw ''
+    The *psu versions of oraclejdk aren't provided by upstream anymore and were therefore removed!
+  '';
+  oraclejre8psu = oraclejdk8psu;
+  oraclejdk8psu_distro = oraclejdk8psu;
 })
