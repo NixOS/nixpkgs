@@ -1,0 +1,27 @@
+Fix build on macOS.
+Patch source: https://github.com/frankosterfeld/qtkeychain/commit/95c6021e280ebe4692e7729cf626c7298db9b226
+
+commit 95c6021e280ebe4692e7729cf626c7298db9b226
+Author: Vadim Peretokin <vperetokin@gmail.com>
+Date:   Tue Sep 10 10:21:40 2019 +0200
+
+    Don't quote LIBS arguments
+
+diff --git a/lib/qtkeychain/qt5keychain.pri b/lib/qtkeychain/qt5keychain.pri
+index ee6d4e8..b3bb626 100644
+--- a/lib/qtkeychain/qt5keychain.pri
++++ b/lib/qtkeychain/qt5keychain.pri
+@@ -73,11 +73,11 @@ win32 {
+ }
+
+ macx:!ios {
+-    LIBS += "-framework Security" "-framework Foundation"
++    LIBS += -framework Security -framework Foundation
+     SOURCES += $$QT5KEYCHAIN_PWD/keychain_mac.cpp
+ }
+
+ ios {
+-    LIBS += "-framework Security" "-framework Foundation"
++    LIBS += -framework Security -framework Foundation
+     OBJECTIVE_SOURCES += $$QT5KEYCHAIN_PWD/keychain_ios.mm
+ }
