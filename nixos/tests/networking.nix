@@ -533,7 +533,7 @@ let
           useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
-            preferTempAddress = true;
+            tempAddress = "default";
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
             useDHCP = true;
@@ -546,7 +546,7 @@ let
           useNetworkd = networkd;
           useDHCP = false;
           interfaces.eth1 = {
-            preferTempAddress = false;
+            tempAddress = "enabled";
             ipv4.addresses = mkOverride 0 [ ];
             ipv6.addresses = mkOverride 0 [ ];
             useDHCP = true;

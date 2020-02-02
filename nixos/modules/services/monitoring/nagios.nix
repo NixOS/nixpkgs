@@ -154,7 +154,7 @@ in
       };
 
       virtualHost = mkOption {
-        type = types.submodule (import ../web-servers/apache-httpd/per-server-options.nix);
+        type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
         example = literalExample ''
           { hostName = "example.org";
             adminAddr = "webmaster@example.org";

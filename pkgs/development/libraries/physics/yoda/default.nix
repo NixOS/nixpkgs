@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python2Packages, root, makeWrapper, zlib, withRootSupport ? false }:
+{ stdenv, fetchurl, fetchpatch, python, root, makeWrapper, zlib, withRootSupport ? false }:
 
 stdenv.mkDerivation rec {
   pname = "yoda";
@@ -9,13 +9,25 @@ stdenv.mkDerivation rec {
     sha256 = "1ki88rscnym0vjxpfgql8m1lrc7vm1jb9w4jhw9lvv3rk84lpdng";
   };
 
-  pythonPath = []; # python wrapper support
+  patches = [
+    # fixes "TypeError: expected bytes, str found" in writeYODA()
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/yoda/commit/d2bbbe92912457f8a29b440cbfa0b39daf28ec34.diff";
+      sha256 = "1x60piswpxwak61r2sdclsc8pzi1fshpkjnxlyflsa1iap77vkq8";
+    })
+  ];
 
-  buildInputs = with python2Packages; [ python numpy matplotlib makeWrapper ]
+  nativeBuildInputs = with python.pkgs; [ cython makeWrapper ];
+  buildInputs = [ python ]
+    ++ (with python.pkgs; [ numpy matplotlib ])
     ++ stdenv.lib.optional withRootSupport root;
   propagatedBuildInputs = [ zlib ];
 
   enableParallelBuilding = true;
+
+  postPatch = ''
+    touch pyext/yoda/*.{pyx,pxd}
+  '';
 
   postInstall = ''
     for prog in "$out"/bin/*; do
