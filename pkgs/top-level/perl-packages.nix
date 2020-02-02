@@ -1990,16 +1990,17 @@ let
 
   CDB_File = buildPerlPackage {
     pname = "CDB_File";
-    version = "1.01";
+    version = "1.02";
     src = fetchurl {
-      url = mirror://cpan/authors/id/T/TO/TODDR/CDB_File-1.01.tar.gz;
-      sha256 = "9a1af86fa3a3011396e33c0a046e637c442effcb05b4991378d349287ff7f4f7";
+      url = mirror://cpan/authors/id/T/TO/TODDR/CDB_File-1.02.tar.gz;
+      sha256 = "a0ae46916a190dd746be9fb11cda51cfb27dfec0f21e15e1ec2773dadc50c05f";
     };
     meta = {
       homepage = "https://github.com/toddr/CDB_File";
       description = "Perl extension for access to cdb databases";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
+    propagatedBuildInputs = [ BCOW ];
   };
 
   Catmandu = buildPerlModule {
