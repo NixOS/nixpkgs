@@ -1963,8 +1963,6 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
-  mons = callPackage ../tools/misc/mons {};
-
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
@@ -3453,6 +3451,8 @@ in
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
+  
+  fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
 
@@ -7555,10 +7555,6 @@ in
 
   yeshup = callPackage ../tools/system/yeshup { };
 
-  ytop = callPackage ../tools/system/ytop {
-    inherit (darwin.apple_sdk.frameworks) IOKit;
-  };
-
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
   # To expose more packages for Yi, override the extraPackages arg.
@@ -8448,13 +8444,7 @@ in
   jre = jre8;
   jre_headless = jre8_headless;
 
-  inherit (callPackages ../development/compilers/graalvm {
-    gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
-    inherit (darwin.apple_sdk.frameworks)
-      CoreFoundation Foundation JavaNativeFoundation
-      JavaVM JavaRuntimeSupport Cocoa;
-    inherit (darwin) libiconv libobjc libresolv;
-  }) mx jvmci8 graalvm8;
+  inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
@@ -8468,9 +8458,13 @@ in
 
   oraclejdk8 = pkgs.oraclejdk8distro true false;
 
+  oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
+
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
+
+  oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
   jrePlugin = jre8Plugin;
 
@@ -8480,7 +8474,13 @@ in
 
   oraclejdk8distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix {
+      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix {
+        inherit installjdk pluginSupport;
+      });
+
+  oraclejdk8psu_distro = installjdk: pluginSupport:
+    (if pluginSupport then appendToName "with-plugin" else x: x)
+      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix {
         inherit installjdk pluginSupport;
       });
 
@@ -15461,8 +15461,6 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
-  qpaeq = qt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
-
   pulseaudioFull = pulseaudio.override {
     x11Support = true;
     jackaudioSupport = true;
@@ -15681,9 +15679,6 @@ in
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
-  };
-  prometheus-xmpp-alerts = callPackages ../servers/monitoring/prometheus/xmpp-alerts.nix {
-    pythonPackages = python3Packages;
   };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
@@ -25834,8 +25829,6 @@ in
   wal-g = callPackage ../tools/backup/wal-g {};
 
   tlwg = callPackage ../data/fonts/tlwg { };
-
-  tt2020 = callPackage ../data/fonts/tt2020 { };
 
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
