@@ -30,9 +30,8 @@ stdenv.mkDerivation {
     cp ${custom-ninja}/bin/ninja vendor/ninja/snapshot/ninja.linux
   '';
 
-  configurePhase = ''
-    node scripts/ninja.js config
-  '';
+  # avoid building the development version, will break aarch64 build
+  dontConfigure = true;
 
   buildPhase = ''
     # This is an unfortunate name, but it's actually how to build a release
