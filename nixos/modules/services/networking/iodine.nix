@@ -9,6 +9,8 @@ let
 
   iodinedUser = "iodined";
 
+  /* is this path made unreadable by ProtectHome = true ? */
+  isProtected = x: hasPrefix "/root" x || hasPrefix "/home" x;
 in
 {
   imports = [
@@ -134,6 +136,24 @@ in
             serviceConfig = {
               RestartSec = "30s";
               Restart = "always";
+
+              # hardening :
+              # Filesystem access
+              ProtectSystem = "strict";
+              ProtectHome = if isProtected cfg.passwordFile then "read-only" else "true" ;
+              PrivateTmp = true;
+              ReadWritePaths = "/dev/net/tun";
+              PrivateDevices = false;
+              ProtectKernelTunables = true;
+              ProtectKernelModules = true;
+              ProtectControlGroups = true;
+              # Caps
+              NoNewPrivileges = true;
+              # Misc.
+              LockPersonality = true;
+              RestrictRealtime = true;
+              PrivateMounts = true;
+              MemoryDenyWriteExecute = true;
             };
           };
       in
@@ -147,6 +167,24 @@ in
             after = [ "network.target" ];
             wantedBy = [ "multi-user.target" ];
             script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "< \"${cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
+            serviceConfig = {
+              # Filesystem access
+              ProtectSystem = "strict";
+              ProtectHome = if isProtected cfg.server.passwordFile then "read-only" else "true" ;
+              PrivateTmp = true;
+              ReadWritePaths = "/dev/net/tun";
+              PrivateDevices = false;
+              ProtectKernelTunables = true;
+              ProtectKernelModules = true;
+              ProtectControlGroups = true;
+              # Caps
+              NoNewPrivileges = true;
+              # Misc.
+              LockPersonality = true;
+              RestrictRealtime = true;
+              PrivateMounts = true;
+              MemoryDenyWriteExecute = true;
+            };
           };
         };
 
