@@ -1549,6 +1549,8 @@ in
 
   datasette = with python3Packages; toPythonApplication datasette;
 
+  date = callPackage ../development/libraries/date { };
+
   datefudge = callPackage ../tools/system/datefudge { };
 
   dateutils = callPackage ../tools/misc/dateutils { };
