@@ -24,13 +24,13 @@ let
   flags = if fullGame then [] else [ "-DMAKEANDPLAY" ];
 in stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "2.3-git-2020-01-22";
+  version = "unstable-2020-02-02";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
-    rev = "90cab340f123f1a355f638c47b677c6572a514b2";
-    sha256 = "1bq7kj33pw1dwsgh0s0pqayfyhpnbvpgw2c1w9scpl5l0hkhg44p";
+    rev = "4bc76416f551253452012d28e2bc049087e2be73";
+    sha256 = "1sc64f7sxf063bdgnkg23vc170chq2ix25gs836hyswx98iyg5ly";
   };
 
   CFLAGS = flags;
@@ -51,7 +51,7 @@ in stdenv.mkDerivation rec {
     description = "A retro-styled platform game";
     longDescription = ''
       VVVVVV is a platform game all about exploring one simple mechanical
-      idea - what if you reversed gravity instead of jumping? 
+      idea - what if you reversed gravity instead of jumping?
     '';
     homepage = "https://thelettervsixtim.es";
     license = if fullGame then licenses.unfree else licenses.unfreeRedistributable;
