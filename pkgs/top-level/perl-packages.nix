@@ -2050,13 +2050,13 @@ let
 
   CGICompile = buildPerlModule {
      pname = "CGI-Compile";
-     version = "0.23";
+     version = "0.24";
      src = fetchurl {
-       url = mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.23.tar.gz;
-       sha256 = "13cr6bgzr665v73j4dykwslqlh74smpsz34zpd4h23517748cfc0";
+       url = mirror://cpan/authors/id/R/RK/RKITOVER/CGI-Compile-0.24.tar.gz;
+       sha256 = "1zyz35hmflgm9jibi0mkni7n13lg5wwfvkavpzqgyza6kgzp515j";
      };
-     propagatedBuildInputs = [ Filepushd ];
-     buildInputs = [ CGI CaptureTiny ModuleBuildTiny Switch TestNoWarnings TestRequires TryTiny ];
+     propagatedBuildInputs = [ Filepushd SubName ];
+     buildInputs = [ CGI CaptureTiny ModuleBuildTiny SubIdentify Switch TestNoWarnings TestRequires TryTiny ];
      meta = {
        description = "Compile .cgi scripts to a code reference like ModPerl::Registry";
        license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
