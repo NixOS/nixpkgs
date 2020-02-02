@@ -7522,6 +7522,11 @@
     githubId = 5121426;
     name = "Albert Safin";
   };
+  xfoxawy = {
+    email = "xfoxawy@gmail.com";
+    github = "xfoxawy";
+    name = "Mohammed Kamal";
+  }
   y0no = {
     email = "y0no@y0no.fr";
     github = "y0no";

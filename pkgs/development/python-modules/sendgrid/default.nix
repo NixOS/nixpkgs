@@ -9,7 +9,7 @@
 , mock
 , codecov
 , coverage
-,fetchurl
+, fetchurl
 }:
  
 buildPythonPackage rec {
