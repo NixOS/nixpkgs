@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
         s:^# \(LOOKUP_MYSQL_PC=mysql.connector-c\)$:\1:
         s:^\(LOOKUP_LIBS\)=\(.*\):\1=\2 -lmysqlclient -L${mysql.connector-c}/lib/mysql -lssl -ldl -lm -lpthread -lz:
         s:^# \(LOOKUP_LIBS\)=.*:\1=-lmysqlclient -L${mysql.connector-c}/lib/mysql -lssl -ldl -lm -lpthread -lz:
-        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${mysql.connector-c}/include/mysql/:
+        s:^# \(LOOKUP_INCLUDE\)=.*:\1=-I${stdenv.lib.getDev mysql.connector-c}/include/mysql/:
       ''}
       ${stdenv.lib.optionalString enableAuthDovecot ''
         s:^# \(AUTH_DOVECOT\)=.*:\1=yes:
