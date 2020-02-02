@@ -129,6 +129,9 @@ let
       azure-mgmt-cosmosdb = overrideAzureMgmtPackage super.azure-mgmt-cosmosdb "0.11.0" "zip"
         "05j0s2ng6ck35lw85cbjf5cm6canc71c41aagr68cmiqj1li6v1z";
 
+      azure-mgmt-deploymentmanager = overrideAzureMgmtPackage super.azure-mgmt-deploymentmanager "0.1.0" "zip"
+        "0gvh17bhfcpvr6w0nd06v482m8lqxchlk256w68agi2qnqw6v2ir";
+
       azure-mgmt-imagebuilder = overrideAzureMgmtPackage super.azure-mgmt-imagebuilder "0.2.1" "zip"
         "0mwlvy4x5nr3hsz7wdpdhpzwarzzwz4225bfpd68hr0pcjgzspky";
 
