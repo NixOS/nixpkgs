@@ -16,7 +16,6 @@
 , libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
-, jre
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
@@ -124,7 +123,6 @@ let
       glib gtk3 dbus-glib
       libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
-      jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
@@ -242,7 +240,8 @@ let
       blink_symbol_level = 0;
       enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
-
+      closure_compile = false; # Disable type-checking for the Web UI to avoid a Java dependency.
+      
       # Google API keys, see:
       #   http://www.chromium.org/developers/how-tos/api-keys
       # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
