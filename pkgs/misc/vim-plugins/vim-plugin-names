@@ -366,6 +366,7 @@ raghur/vim-ghost
 raichoo/purescript-vim
 Raimondi/delimitMate
 rakr/vim-one
+rbgrouleff/bclose.vim
 reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim
