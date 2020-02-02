@@ -21,7 +21,7 @@ buildPythonPackage rec {
     libXi libXext libSM libICE libX11
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-I${pkgs.qt5.qtbase.dev}/include/QtCore"
     "-I${pkgs.qt5.qtbase.dev}/include/QtGui"
     "-I${pkgs.qt5.qtbase.dev}/include/QtOpenGL"
@@ -39,7 +39,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://pivy.coin3d.org/;
+    homepage = https://github.com/coin3d/pivy/;
     description = "A Python binding for Coin";
     license = licenses.bsd0;
     maintainers = with maintainers; [ gebner ];

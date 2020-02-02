@@ -19,11 +19,8 @@ stdenv.mkDerivation {
     patchShebangs ./configure
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
-
-  NIX_LDFLAGS = [
-    "-ldl"
-  ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+  NIX_LDFLAGS = "-ldl";
 
   meta = {
     homepage = http://www.bergo.eng.br/eboard/;

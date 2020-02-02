@@ -7,6 +7,7 @@
 , importlib-metadata
 , importlib-resources
 , nodeenv
+, python
 , six
 , toml
 , virtualenv
@@ -14,13 +15,17 @@
 
 buildPythonApplication rec {
   pname = "pre-commit";
-  version = "1.20.0";
+  version = "1.21.0";
 
   src = fetchPypi {
     inherit version;
     pname = "pre_commit";
-    sha256 = "0vmv3hrivm0sm81cn59n2pmw8h323sg4sgncl910djby2a3jc5cz";
+    sha256 = "0l5qg1cw4a0670m96s0ryy5mqz5aslfrrnwpriqgmrnsgdixhj4g";
   };
+
+  patches = [
+    ./hook-tmpl-use-the-hardcoded-path-to-pre-commit.patch
+  ];
 
   propagatedBuildInputs = [
     aspy-yaml
@@ -37,6 +42,11 @@ buildPythonApplication rec {
 
   # slow and impure
   doCheck = false;
+
+  preFixup = ''
+    substituteInPlace $out/${python.sitePackages}/pre_commit/resources/hook-tmpl \
+      --subst-var-by pre-commit $out
+  '';
 
   meta = with lib; {
     description = "A framework for managing and maintaining multi-language pre-commit hooks";

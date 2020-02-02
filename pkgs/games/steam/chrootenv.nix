@@ -53,7 +53,7 @@ let
       echo "$runtime_paths"
       exit 0
     fi
-    export LD_LIBRARY_PATH="$runtime_paths:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     exec "$@"
   '';
 
@@ -75,10 +75,11 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
-    pkgsi686Linux.libva
+    libva
 
     # Not formally in runtime but needed by some games
     at-spi2-atk
+    at-spi2-core   # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
@@ -259,7 +260,7 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH"}
+      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"}
       exec -- "$run" "$@"
     '';
   };

@@ -2,13 +2,13 @@
 
 mkDerivation rec {
   pname = "boomerang";
-  version = "0.5.1";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "BoomerangDecompiler";
     repo = pname;
     rev = "v${version}";
-    sha256 = "046ba4km8c31kbnllx05nbqhjmk7bpi56d3n8md8bsr98nj21a2j";
+    sha256 = "0xncdp0z8ry4lkzmvbj5d7hlzikivghpwicgywlv47spgh8ny0ix";
   };
 
   nativeBuildInputs = [ cmake bison flex ];

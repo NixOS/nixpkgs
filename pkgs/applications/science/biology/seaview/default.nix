@@ -1,12 +1,12 @@
 { stdenv, fetchurl, coreutils, fltk, libjpeg }:
 
 stdenv.mkDerivation rec {
-  version = "4.7";
+  version = "5.0";
   pname = "seaview";
 
   src = fetchurl {
     url = "ftp://pbil.univ-lyon1.fr/pub/mol_phylogeny/seaview/archive/seaview_${version}.tar.gz";
-    sha256 = "0fhyq7dcn0izhwcfin9ajsr7kmmsqm9f1np1rmhzg4digfwqb29n";
+    sha256 = "0gzjqf5mm91pa1drwxvz229bv6l995npdggngszh6z6j4pfh8j7c";
   };
 
   buildInputs = [ fltk libjpeg ];

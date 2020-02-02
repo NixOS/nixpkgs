@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "fzf";
-  version = "0.19.0";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
     owner = "junegunn";
     repo = pname;
     rev = version;
-    sha256 = "192ci09yi2hps02skcnbfwyjbf7pl0wb6q2zshb58cid5zgla8bx";
+    sha256 = "02zy3c4k84rzqdkaf04idbj10v286hi0ix1xl2qsz1wrblh168w8";
   };
 
   modSha256 = "12lnv8b96adpcg9qfizcyd9nxz590nxd82xch6ij719zlqyps143";
@@ -36,15 +36,13 @@ buildGoModule rec {
   '';
 
   postInstall = ''
-    name="${pname}-${version}"
-
     cp $src/bin/fzf-tmux $out/bin
 
     mkdir -p $man/share/man
     cp -r $src/man/man1 $man/share/man
 
-    mkdir -p $out/share/vim-plugins/$name
-    cp -r $src/plugin $out/share/vim-plugins/$name
+    mkdir -p $out/share/vim-plugins/${pname}
+    cp -r $src/plugin $out/share/vim-plugins/${pname}
 
     cp -R $src/shell $out/share/fzf
     cat <<SCRIPT > $out/bin/fzf-share
@@ -60,7 +58,7 @@ buildGoModule rec {
     homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
-    maintainers = with maintainers; [ filalex77 ];
+    maintainers = with maintainers; [ filalex77 ma27 ];
     platforms = platforms.unix;
   };
 }

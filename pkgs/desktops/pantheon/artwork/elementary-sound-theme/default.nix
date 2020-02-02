@@ -19,18 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "1dc583lq61c361arjl3s44d2k72c46bqvcqv1c3s69f2ndsnxjdz";
   };
 
-  passthru = {
-    updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
-    };
-  };
-
   nativeBuildInputs = [
     meson
     ninja
     pkgconfig
   ];
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = "pantheon.${pname}";
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A set of system sounds for elementary";

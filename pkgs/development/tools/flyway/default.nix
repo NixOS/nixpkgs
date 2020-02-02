@@ -1,13 +1,13 @@
 { stdenv, fetchurl, jre_headless, makeWrapper }:
   let
-    version = "6.1.0";
+    version = "6.1.3";
   in
     stdenv.mkDerivation {
       pname = "flyway";
       inherit version;
       src = fetchurl {
         url = "https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/${version}/flyway-commandline-${version}.tar.gz";
-        sha256 = "14f8vviki89dqhd429zlj0frma52xhyxpdln5c81z1dgs7819rpg";
+        sha256 = "0hd5gkfjhxb1ny8y0pqn7vs34bqk4w5k7vcygd6iz1d57q0giwp6";
       };
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
@@ -19,7 +19,8 @@
         makeWrapper "${jre_headless}/bin/java" $out/bin/flyway \
           --add-flags "-Djava.security.egd=file:/dev/../dev/urandom" \
           --add-flags "-classpath '$out/share/flyway/lib/*:$out/share/flyway/drivers/*'" \
-          --add-flags "org.flywaydb.commandline.Main"
+          --add-flags "org.flywaydb.commandline.Main" \
+          --add-flags "-jarDirs='$out/share/flyway/jars'"
       '';
       meta = with stdenv.lib; {
         description = "Evolve your Database Schema easily and reliably across all your instances";

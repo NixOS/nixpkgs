@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, gtest, python, boost }:
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  python,
+  boost
+}:
 
 stdenv.mkDerivation rec {
   pname = "cli11";
@@ -20,6 +27,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     rm -rfv extern/googletest
     ln -sfv ${gtest.src} extern/googletest
+    sed -i '/TrueFalseTest/d' tests/CMakeLists.txt
   '';
 
   enableParallelBuilding = true;

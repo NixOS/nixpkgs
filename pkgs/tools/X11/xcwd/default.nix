@@ -13,7 +13,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ libX11 ];
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   installPhase = ''
     install -D xcwd "$out/bin/xcwd"

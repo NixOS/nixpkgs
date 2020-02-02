@@ -21,7 +21,6 @@
 , libsecret
 , db
 , python3
-, python
 , readline
 , gtk3
 }:
@@ -51,7 +50,6 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    python
     python3
     vala
   ];

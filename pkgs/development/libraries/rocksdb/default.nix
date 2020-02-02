@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     substituteInPlace CMakeLists.txt --replace "find_package(zlib " "find_package(ZLIB "
   '';
 
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
+
   cmakeFlags = [
     "-DPORTABLE=1"
     "-DWITH_JEMALLOC=0"

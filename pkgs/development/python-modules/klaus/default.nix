@@ -1,14 +1,14 @@
-{ lib, python, fetchFromGitHub }:
+{ lib, buildPythonPackage, fetchFromGitHub, isPy3k, six, flask, pygments, dulwich, httpauth, humanize, pytest, requests, python-ctags3, mock }:
 
-python.pkgs.buildPythonPackage rec {
+buildPythonPackage rec {
   pname = "klaus";
-  version = "1.5.0";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "jonashaag";
     repo = pname;
     rev = version;
-    sha256 = "0pagyqfcj47ghd9m7b32hvi17hbl19f0wallkz6ncvmvvy919lfz";
+    sha256 = "1432m3ki2g4ma10pfv310q1w4da46b0y2jklb8ajbz8a09ms6mfx";
   };
 
   prePatch = ''
@@ -16,11 +16,11 @@ python.pkgs.buildPythonPackage rec {
       --replace "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
   '';
 
-  propagatedBuildInputs = with python.pkgs; [
+  propagatedBuildInputs = [
     six flask pygments dulwich httpauth humanize
   ];
 
-  checkInputs = with python.pkgs; [
+  checkInputs = [
     pytest requests python-ctags3
   ] ++ lib.optional (!isPy3k) mock;
 

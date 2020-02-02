@@ -7,20 +7,20 @@ assert imagePreviewSupport -> w3m != null;
 
 python3Packages.buildPythonApplication rec {
   name = "ranger-${version}";
-  version = "1.9.2";
+  version = "1.9.3";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
     rev = "v${version}";
-    sha256= "1ws6g8z1m1hfp8bv4msvbaa9f7948p687jmc8h69yib4jkv3qyax";
+    sha256= "1rygfryczanvqxn43lmlkgs04sbqznbvbb9hlbm3h5qgdcl0xlw8";
   };
 
   LC_ALL = "en_US.UTF-8";
 
   checkInputs = with python3Packages; [ pytest ];
   propagatedBuildInputs = [ file ]
-    ++ lib.optional (imagePreviewSupport) [ python3Packages.pillow ];
+    ++ lib.optionals (imagePreviewSupport) [ python3Packages.pillow ];
 
   checkPhase = ''
     py.test tests

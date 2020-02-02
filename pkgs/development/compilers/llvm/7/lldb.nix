@@ -10,7 +10,7 @@
 , llvm
 , clang-unwrapped
 , perl
-, python
+, python3
 , version
 , darwin
 }:
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   src = fetch "lldb" "0klsscg1sczc4nw2l53xggi969k361cng2sjjrfp3bv4g5x14s4v";
 
-  nativeBuildInputs = [ cmake perl python which swig ];
+  nativeBuildInputs = [ cmake perl python3 which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
 

@@ -1,6 +1,7 @@
 { stdenv
 , mkDerivation
 , lib
+, fetchpatch
 , fetchzip
 , pkgconfig
 , qtbase
@@ -17,6 +18,14 @@
     sha256 = "07z8grnnpkd0nf3y3r6qjlk1jlzrbhdrp9mnhrhhmws54p1bhl20";
   };
 
+  patches = [
+    # Fix installation without DESTDIR
+    (fetchpatch {
+      url = "https://github.com/falkTX/Cadence/commit/1fd3275e7daf4b75f59ef1f85a9e2e93bd5c0731.patch";
+      sha256 = "0q791jsh8vmjg678dzhbp1ykq8xrrlxl1mbgs3g8if1ccj210vd8";
+    })
+  ];
+
   nativeBuildInputs = [
     pkgconfig
   ];
@@ -26,8 +35,8 @@
   ];
 
   makeFlags = [
-    "PREFIX=''"
-    "DESTDIR=${placeholder "out"}"
+    "PREFIX=${placeholder "out"}"
+    "SYSCONFDIR=${placeholder "out"}/etc"
   ];
 
   propagatedBuildInputs = with python3Packages; [

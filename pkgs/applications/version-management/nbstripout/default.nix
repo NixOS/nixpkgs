@@ -1,6 +1,6 @@
-{lib, python2Packages, git, mercurial, coreutils}:
+{lib, python, git, mercurial, coreutils}:
 
-with python2Packages;
+with python.pkgs;
 buildPythonApplication rec {
   version = "0.3.6";
   pname = "nbstripout";
@@ -8,7 +8,7 @@ buildPythonApplication rec {
   # Mercurial should be added as a build input but because it's a Python
   # application, it would mess up the Python environment. Thus, don't add it
   # here, instead add it to PATH when running unit tests
-  checkInputs = [ pytest pytest-flake8 pytest-cram git ];
+  checkInputs = [ pytest pytest-flake8 git ];
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ ipython nbformat ];
 

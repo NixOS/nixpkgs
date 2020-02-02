@@ -1,7 +1,7 @@
 { theme ? null, stdenv, fetchurl, dpkg, makeWrapper , alsaLib, atk, cairo,
 cups, curl, dbus, expat, fontconfig, freetype, glib , gnome2, gtk3, gdk-pixbuf,
 libappindicator-gtk3, libnotify, libxcb, nspr, nss, pango , systemd, xorg,
-at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio
+at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio, xdg_utils
 }:
 
 let
@@ -93,7 +93,8 @@ in stdenv.mkDerivation {
     # Replace the broken bin/slack symlink with a startup wrapper
     rm $out/bin/slack
     makeWrapper $out/lib/slack/slack $out/bin/slack \
-      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH
+      --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
+      --prefix PATH : ${xdg_utils}/bin
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/slack.desktop \

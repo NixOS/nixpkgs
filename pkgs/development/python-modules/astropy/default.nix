@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "3.2.3";
+  version = "4.0";
 
   disabled = !isPy3k; # according to setup.py
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "47f00816c2978fdd10f448c8f0337d6dca7b8cbeaab4bf272b5fd37cb4b890d3";
+    sha256 = "404200e0baa84de09ac563ad9ccab3817e9b9669d0025cee74a8752f4bc2771b";
   };
 
   nativeBuildInputs = [ astropy-helpers ];

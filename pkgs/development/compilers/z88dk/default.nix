@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # we test in checkPhase
     substituteInPlace Makefile \
       --replace 'testsuite bin/z88dk-lib$(EXESUFFIX)' 'bin/z88dk-lib$(EXESUFFIX)'\
-      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='   
+      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='
   '';
 
   checkPhase = ''
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  installTargets = "libs install";
+  installTargets = [ "libs" "install" ];
 
   meta = with stdenv.lib; {
     homepage    = "https://www.z88dk.org";

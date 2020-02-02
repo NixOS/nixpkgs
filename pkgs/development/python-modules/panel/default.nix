@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.6.4";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9b86a827f24dcfd1b6d821836e691fca7aab21b79a293031297f83cf2f8d6cef";
+    sha256 = "71d446f469b424cb190bc896e78d0415b2bbebf17c6e5b024ed1a73b4448f8f4";
   };
 
   propagatedBuildInputs = [

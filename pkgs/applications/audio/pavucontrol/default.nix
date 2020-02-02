@@ -1,5 +1,5 @@
 { fetchurl, stdenv, pkgconfig, intltool, libpulseaudio, gtkmm3
-, libcanberra-gtk3, makeWrapper, gnome3 }:
+, libcanberra-gtk3, gnome3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pavucontrol";
@@ -10,16 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1qhlkl3g8d7h72xjskii3g1l7la2cavwp69909pzmbi2jyn5pi4g";
   };
 
-  preFixup = ''
-    wrapProgram "$out/bin/pavucontrol" \
-     --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE" \
-     --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS"
-  '';
-
-  buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3 makeWrapper
+  buildInputs = [ libpulseaudio gtkmm3 libcanberra-gtk3
                   gnome3.adwaita-icon-theme ];
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig intltool wrapGAppsHook ];
 
   configureFlags = [ "--disable-lynx" ];
 

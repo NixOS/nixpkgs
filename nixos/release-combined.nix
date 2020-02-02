@@ -54,7 +54,7 @@ in rec {
         (all nixos.dummy)
         (all nixos.manual)
 
-        nixos.iso_graphical.x86_64-linux or []
+        nixos.iso_plasma5.x86_64-linux or []
         nixos.iso_minimal.aarch64-linux or []
         nixos.iso_minimal.i686-linux or []
         nixos.iso_minimal.x86_64-linux or []
@@ -120,8 +120,8 @@ in rec {
         (all nixos.tests.networking.scripted.macvlan)
         (all nixos.tests.networking.scripted.sit)
         (all nixos.tests.networking.scripted.vlan)
-        (all nixos.tests.nfs3)
-        (all nixos.tests.nfs4)
+        (all nixos.tests.nfs3.simple)
+        (all nixos.tests.nfs4.simple)
         (all nixos.tests.openssh)
         (all nixos.tests.php-pcre)
         (all nixos.tests.predictable-interface-names.predictable)

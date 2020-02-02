@@ -24,7 +24,7 @@
 , lm_sensors
 , mongoc
 , mosquitto
-, net_snmp
+, net-snmp
 , postgresql
 , protobufc
 , python
@@ -243,10 +243,10 @@ let
       buildInputs = stdenv.lib.optionals stdenv.isLinux [ libatasmart udev ];
     };
     snmp = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ net_snmp ];
+      buildInputs = stdenv.lib.optionals stdenv.isLinux [ net-snmp ];
     };
     snmp_agent = {
-      buildInputs = stdenv.lib.optionals stdenv.isLinux [ net_snmp ];
+      buildInputs = stdenv.lib.optionals stdenv.isLinux [ net-snmp ];
     };
     statsd = {};
     swap = {};

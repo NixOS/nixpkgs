@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "3.3.6";
+  version = "4.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1z7qw1h3rhca12ycv8xrzw6z2gf81v0j6lfq9kpwh472w4vk75v1";
+    sha256 = "f2bfece9743188e3d1da68f02271a7c6eb7f0a3b692c3df4952458ab96b037a8";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];

@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     libX11 SDL SDL_ttf SDL_image libGLU libGL expat zlib
   ];
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
 
   meta = {
     description = ''A multiplayer space combat game (client part)'';

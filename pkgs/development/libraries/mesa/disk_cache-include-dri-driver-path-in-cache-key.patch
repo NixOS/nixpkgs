@@ -1,4 +1,4 @@
-From 2a1e32b4105fe95413a615a44d40938920ea1a19 Mon Sep 17 00:00:00 2001
+From 6d22383149e4cdc646c68e29238f41d895a4705b Mon Sep 17 00:00:00 2001
 From: David McFarland <corngood@gmail.com>
 Date: Mon, 6 Aug 2018 15:52:11 -0300
 Subject: [PATCH] disk_cache: include dri driver path in cache key
@@ -12,10 +12,10 @@ timestamps in /nix/store are zero.
  3 files changed, 15 insertions(+), 1 deletion(-)
 
 diff --git a/meson_options.txt b/meson_options.txt
-index a723b5406cf..65a8954291f 100644
+index 626baf3..579c15b 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -330,3 +330,9 @@ option(
+@@ -341,6 +341,12 @@ option(
    value : true,
    description : 'Enable direct rendering in GLX and EGL for DRI',
  )
@@ -25,11 +25,14 @@ index a723b5406cf..65a8954291f 100644
 +  value : '',
 +  description : 'Mesa cache key.'
 +)
+ option(
+   'I-love-half-baked-turnips',
+   type : 'boolean',
 diff --git a/src/util/disk_cache.c b/src/util/disk_cache.c
-index 0aa2646a9bb..bd784d38e21 100644
+index 0cd92ca..fc1c173 100644
 --- a/src/util/disk_cache.c
 +++ b/src/util/disk_cache.c
-@@ -389,8 +389,10 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
+@@ -395,8 +395,10 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
  
     /* Create driver id keys */
     size_t id_size = strlen(driver_id) + 1;
@@ -40,7 +43,7 @@ index 0aa2646a9bb..bd784d38e21 100644
     cache->driver_keys_blob_size += gpu_name_size;
  
     /* We sometimes store entire structs that contains a pointers in the cache,
-@@ -411,6 +413,7 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
+@@ -417,6 +419,7 @@ disk_cache_create(const char *gpu_name, const char *driver_id,
     uint8_t *drv_key_blob = cache->driver_keys_blob;
     DRV_KEY_CPY(drv_key_blob, &cache_version, cv_size)
     DRV_KEY_CPY(drv_key_blob, driver_id, id_size)
@@ -49,13 +52,13 @@ index 0aa2646a9bb..bd784d38e21 100644
     DRV_KEY_CPY(drv_key_blob, &ptr_size, ptr_size_size)
     DRV_KEY_CPY(drv_key_blob, &driver_flags, driver_flags_size)
 diff --git a/src/util/meson.build b/src/util/meson.build
-index 397c2228129..77013563e5d 100644
+index f69ebe9..e2bd8e2 100644
 --- a/src/util/meson.build
 +++ b/src/util/meson.build
-@@ -120,7 +120,12 @@ libmesa_util = static_library(
+@@ -158,7 +158,12 @@ _libmesa_util = static_library(
    [files_mesa_util, format_srgb],
    include_directories : inc_common,
-   dependencies : [dep_zlib, dep_clock, dep_thread, dep_atomic, dep_m],
+   dependencies : deps_for_libmesa_util,
 -  c_args : [c_msvc_compat_args, c_vis_args],
 +  c_args : [
 +    c_msvc_compat_args, c_vis_args,
@@ -67,5 +70,5 @@ index 397c2228129..77013563e5d 100644
  )
  
 -- 
-2.19.2
+2.24.1
 

@@ -1,11 +1,10 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 let
   configDir = "/var/lib/foobar";
   apiPassword = "some_secret";
   mqttPassword = "another_secret";
   hassCli = "hass-cli --server http://hass:8123 --password '${apiPassword}'";
-
 in {
   name = "home-assistant";
   meta = with pkgs.stdenv.lib; {
@@ -69,36 +68,44 @@ in {
   };
 
   testScript = ''
-    startAll;
-    $hass->waitForUnit("home-assistant.service");
+    start_all()
+    hass.wait_for_unit("home-assistant.service")
+    with subtest("Check that YAML configuration file is in place"):
+        hass.succeed("test -L ${configDir}/configuration.yaml")
+    with subtest("lovelace config is copied because lovelaceConfigWritable = true"):
+        hass.succeed("test -f ${configDir}/ui-lovelace.yaml")
+    with subtest("Check that Home Assistant's web interface and API can be reached"):
+        hass.wait_for_open_port(8123)
+        hass.succeed("curl --fail http://localhost:8123/states")
+        assert "API running" in hass.succeed(
+            "curl --fail -H 'x-ha-access: ${apiPassword}' http://localhost:8123/api/"
+        )
+    with subtest("Toggle a binary sensor using MQTT"):
+        assert '"state": "off"' in hass.succeed(
+            "curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}'"
+        )
+        hass.wait_until_succeeds(
+            "mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -m let_there_be_light"
+        )
+        assert '"state": "on"' in hass.succeed(
+            "curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}'"
+        )
+    with subtest("Toggle a binary sensor using hass-cli"):
+        assert '"state": "on"' in hass.succeed(
+            "${hassCli} --output json state get binary_sensor.mqtt_binary_sensor"
+        )
+        hass.succeed(
+            "${hassCli} state edit binary_sensor.mqtt_binary_sensor --json='{\"state\": \"off\"}'"
+        )
+        assert '"state": "off"' in hass.succeed(
+            "curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}'"
+        )
+    with subtest("Print log to ease debugging"):
+        output_log = hass.succeed("cat ${configDir}/home-assistant.log")
+        print("\n### home-assistant.log ###\n")
+        print(output_log + "\n")
 
-    # The config is specified using a Nix attribute set,
-    # converted from JSON to YAML, and linked to the config dir
-    $hass->succeed("test -L ${configDir}/configuration.yaml");
-    # The lovelace config is copied because lovelaceConfigWritable = true
-    $hass->succeed("test -f ${configDir}/ui-lovelace.yaml");
-
-    # Check that Home Assistant's web interface and API can be reached
-    $hass->waitForOpenPort(8123);
-    $hass->succeed("curl --fail http://localhost:8123/states");
-    $hass->succeed("curl --fail -H 'x-ha-access: ${apiPassword}' http://localhost:8123/api/ | grep -qF 'API running'");
-
-    # Toggle a binary sensor using MQTT
-    $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
-    $hass->waitUntilSucceeds("mosquitto_pub -V mqttv311 -t home-assistant/test -u homeassistant -P '${mqttPassword}' -m let_there_be_light");
-    $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"on\"'");
-
-    # Toggle a binary sensor using hass-cli
-    $hass->succeed("${hassCli} --output json state get binary_sensor.mqtt_binary_sensor | grep -qF '\"state\": \"on\"'");
-    $hass->succeed("${hassCli} state edit binary_sensor.mqtt_binary_sensor --json='{\"state\": \"off\"}'");
-    $hass->succeed("curl http://localhost:8123/api/states/binary_sensor.mqtt_binary_sensor -H 'x-ha-access: ${apiPassword}' | grep -qF '\"state\": \"off\"'");
-
-    # Print log to ease debugging
-    my $log = $hass->succeed("cat ${configDir}/home-assistant.log");
-    print "\n### home-assistant.log ###\n";
-    print "$log\n";
-
-    # Check that no errors were logged
-    $hass->fail("cat ${configDir}/home-assistant.log | grep -qF ERROR");
+    with subtest("Check that no errors were logged"):
+        assert "ERROR" not in output_log
   '';
 })

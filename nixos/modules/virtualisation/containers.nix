@@ -225,12 +225,6 @@ let
           fi
           ${concatStringsSep "\n" (mapAttrsToList renderExtraVeth cfg.extraVeths)}
         fi
-
-        # Get the leader PID so that we can signal it in
-        # preStop. We can't use machinectl there because D-Bus
-        # might be shutting down. FIXME: in systemd 219 we can
-        # just signal systemd-nspawn to do a clean shutdown.
-        machinectl show "$INSTANCE" | sed 's/Leader=\(.*\)/\1/;t;d' > "/run/containers/$INSTANCE.pid"
       ''
   );
 
@@ -715,14 +709,7 @@ in
 
       postStart = postStartScript dummyConfig;
 
-      preStop =
-        ''
-          pid="$(cat /run/containers/$INSTANCE.pid)"
-          if [ -n "$pid" ]; then
-            kill -RTMIN+4 "$pid"
-          fi
-          rm -f "/run/containers/$INSTANCE.pid"
-        '';
+      preStop = "machinectl poweroff $INSTANCE";
 
       restartIfChanged = false;
 

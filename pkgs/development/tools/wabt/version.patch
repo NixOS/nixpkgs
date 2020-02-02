@@ -1,0 +1,28 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 363a5660..ad3300ed 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -68,22 +68,7 @@ endif ()
+ include(CheckTypeSize)
+ check_type_size(ssize_t SSIZE_T)
+ check_type_size(size_t SIZEOF_SIZE_T)
+-
+-FIND_PACKAGE(Git QUIET REQUIRED)
+-EXECUTE_PROCESS(COMMAND
+-        "${GIT_EXECUTABLE}" --git-dir=${CMAKE_CURRENT_SOURCE_DIR}/.git describe --tags
+-        RESULT_VARIABLE
+-            GIT_HASH_RESULT
+-        OUTPUT_VARIABLE
+-            GIT_HASH
+-        OUTPUT_STRIP_TRAILING_WHITESPACE)
+-
+-IF(${GIT_HASH_RESULT} EQUAL 0)
+-    SET(WABT_VERSION_INFO "${GIT_HASH}")
+-ELSE()
+-    MESSAGE(WARNING "Error running git describe to determine version")
+-    SET(WABT_VERSION_INFO "(unable to determine version)")
+-ENDIF()
++SET(WABT_VERSION_INFO "@version@")
+ 
+ configure_file(
+   ${WABT_SOURCE_DIR}/src/config.h.in

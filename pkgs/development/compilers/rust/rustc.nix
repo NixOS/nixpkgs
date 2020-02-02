@@ -1,15 +1,16 @@
 { stdenv, removeReferencesTo, pkgsBuildBuild, pkgsBuildHost, pkgsBuildTarget
-, fetchurl, file, python2
+, fetchurl, file, python3
 , llvm_9, darwin, git, cmake, rust, rustPlatform
 , pkgconfig, openssl
 , which, libffi
 , withBundledLLVM ? false
+, enableRustcDev ? true
 , version
 , sha256
 }:
 
 let
-  inherit (stdenv.lib) optional optionalString;
+  inherit (stdenv.lib) optionals optional optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   llvmSharedForBuild = pkgsBuildBuild.llvm_9.override { enableSharedLibraries = true; };
@@ -41,11 +42,11 @@ in stdenv.mkDerivation rec {
   # See: https://github.com/NixOS/nixpkgs/pull/56540#issuecomment-471624656
   stripDebugList = [ "bin" ];
 
-  NIX_LDFLAGS =
+  NIX_LDFLAGS = toString (
        # when linking stage1 libstd: cc: undefined reference to `__cxa_begin_catch'
        optional (stdenv.isLinux && !withBundledLLVM) "--push-state --as-needed -lstdc++ --pop-state"
     ++ optional (stdenv.isDarwin && !withBundledLLVM) "-lc++"
-    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib";
+    ++ optional stdenv.isDarwin "-rpath ${llvmSharedForHost}/lib");
 
   # Increase codegen units to introduce parallelism within the compiler.
   RUSTFLAGS = "-Ccodegen-units=10";
@@ -83,12 +84,12 @@ in stdenv.mkDerivation rec {
     "${setBuild}.cxx=${cxxForBuild}"
     "${setHost}.cxx=${cxxForHost}"
     "${setTarget}.cxx=${cxxForTarget}"
-  ] ++ optional (!withBundledLLVM) [
+  ] ++ optionals (!withBundledLLVM) [
     "--enable-llvm-link-shared"
     "${setBuild}.llvm-config=${llvmSharedForBuild}/bin/llvm-config"
     "${setHost}.llvm-config=${llvmSharedForHost}/bin/llvm-config"
     "${setTarget}.llvm-config=${llvmSharedForTarget}/bin/llvm-config"
-  ] ++ optional stdenv.isLinux [
+  ] ++ optionals stdenv.isLinux [
     "--enable-profiler" # build libprofiler_builtins
   ];
 
@@ -121,7 +122,7 @@ in stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   nativeBuildInputs = [
-    file python2 rustPlatform.rust.rustc git cmake
+    file python3 rustPlatform.rust.rustc git cmake
     which libffi removeReferencesTo pkgconfig
   ];
 
@@ -132,9 +133,15 @@ in stdenv.mkDerivation rec {
   outputs = [ "out" "man" "doc" ];
   setOutputFlags = false;
 
-  # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
-  # and thus a transitive dependency on ncurses
-  postInstall = ''
+  postInstall = stdenv.lib.optionalString enableRustcDev ''
+    # install rustc-dev components. Necessary to build rls, clippy...
+    python x.py dist rustc-dev
+    tar xf build/dist/rustc-dev*tar.gz
+    cp -r rustc-dev*/rustc-dev*/lib/* $out/lib/
+
+  '' + ''
+    # remove references to llvm-config in lib/rustlib/x86_64-unknown-linux-gnu/codegen-backends/librustc_codegen_llvm-llvm.so
+    # and thus a transitive dependency on ncurses
     find $out/lib -name "*.so" -type f -exec remove-references-to -t ${llvmShared} '{}' '+'
   '';
 

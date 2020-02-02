@@ -1,8 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, docutils
-, virtualenv
 , webtest
 , zope_component
 , hupper
@@ -10,7 +8,6 @@
 , plaster
 , plaster-pastedeploy
 , repoze_lru
-, repoze_sphinx_autointerface
 , translationstring
 , venusian
 , webob
@@ -28,9 +25,9 @@ buildPythonPackage rec {
     sha256 = "d80ccb8cfa550139b50801591d4ca8a5575334adb493c402fce2312f55d07d66";
   };
 
-  checkInputs = [ docutils virtualenv webtest zope_component ];
+  checkInputs = [ webtest zope_component ];
 
-  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru repoze_sphinx_autointerface translationstring venusian webob zope_deprecation zope_interface ];
+  propagatedBuildInputs = [ hupper PasteDeploy plaster plaster-pastedeploy repoze_lru translationstring venusian webob zope_deprecation zope_interface ];
 
   # Failing tests
   # https://github.com/Pylons/pyramid/issues/1899

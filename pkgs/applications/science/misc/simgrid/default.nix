@@ -54,28 +54,28 @@ stdenv.mkDerivation rec {
   #
   # For more information see:
   # https://simgrid.org/doc/3.22/Installing_SimGrid.html#simgrid-compilation-options)
-  cmakeFlags= ''
-    -Denable_documentation=${optionOnOff buildDocumentation}
-    -Denable_java=${optionOnOff buildJavaBindings}
-    -Denable_fortran=${optionOnOff fortranSupport}
-    -Denable_model-checking=${optionOnOff modelCheckingSupport}
-    -Denable_ns3=off
-    -Denable_lua=off
-    -Denable_lib_in_jar=off
-    -Denable_maintainer_mode=off
-    -Denable_mallocators=on
-    -Denable_debug=on
-    -Denable_smpi=on
-    -Denable_smpi_ISP_testsuite=${optionOnOff moreTests}
-    -Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}
-    -Denable_compile_warnings=${optionOnOff debug}
-    -Denable_compile_optimizations=${optionOnOff (!debug)}
-    -Denable_lto=${optionOnOff (!debug)}
-  '';
-  # -Denable_lua=${optionOnOff luaSupport}
-  # -Denable_smpi_papi=${optionOnOff moreTests}
+  cmakeFlags = [
+    "-Denable_documentation=${optionOnOff buildDocumentation}"
+    "-Denable_java=${optionOnOff buildJavaBindings}"
+    "-Denable_fortran=${optionOnOff fortranSupport}"
+    "-Denable_model-checking=${optionOnOff modelCheckingSupport}"
+    "-Denable_ns3=off"
+    "-Denable_lua=off"
+    "-Denable_lib_in_jar=off"
+    "-Denable_maintainer_mode=off"
+    "-Denable_mallocators=on"
+    "-Denable_debug=on"
+    "-Denable_smpi=on"
+    "-Denable_smpi_ISP_testsuite=${optionOnOff moreTests}"
+    "-Denable_smpi_MPICH3_testsuite=${optionOnOff moreTests}"
+    "-Denable_compile_warnings=${optionOnOff debug}"
+    "-Denable_compile_optimizations=${optionOnOff (!debug)}"
+    "-Denable_lto=${optionOnOff (!debug)}"
+    # "-Denable_lua=${optionOnOff luaSupport}"
+    # "-Denable_smpi_papi=${optionOnOff moreTests}"
+  ];
 
-  makeFlags = optionalString debug "VERBOSE=1";
+  makeFlags = optional debug "VERBOSE=1";
 
   # Some Perl scripts are called to generate test during build which
   # is before the fixupPhase, so do this manualy here:

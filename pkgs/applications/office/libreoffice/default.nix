@@ -16,27 +16,25 @@
 , langs ? [ "ca" "cs" "de" "en-GB" "en-US" "eo" "es" "fr" "hu" "it" "ja" "nl" "pl" "pt" "pt-BR" "ru" "sl" "zh-CN" ]
 , withHelp ? true
 , kdeIntegration ? false
-}:
+, variant ? "fresh"
+} @ args:
+
+assert builtins.elem variant [ "fresh" "still" ];
 
 let
-  primary-src = import ./default-primary-src.nix { inherit fetchurl; };
-in
+  importVariant = f: import (./. + "/src-${variant}/${f}");
 
-let inherit (primary-src) major minor subdir version; in
+  primary-src = importVariant "primary.nix" { inherit fetchurl; };
 
-let
+  inherit (primary-src) major minor subdir version;
+
   lib = stdenv.lib;
   langsSpaces = lib.concatStringsSep " " langs;
-
-  fetchSrc = {name, sha256}: fetchurl {
-    url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${name}-${version}.tar.xz";
-    inherit sha256;
-  };
 
   srcs = {
     third_party =
       map (x : ((fetchurl {inherit (x) url sha256 name;}) // {inherit (x) md5name md5;}))
-      ((import ./libreoffice-srcs.nix) ++ [
+      (importVariant "download.nix" ++ [
         (rec {
           name = "unowinreg.dll";
           url = "https://dev-www.libreoffice.org/extern/${md5name}";
@@ -46,20 +44,10 @@ let
         })
       ]);
 
-    translations = fetchSrc {
-      name = "translations";
-      sha256 = "0730fw2kr00b2d56jkdzjdz49c4k4mxiz879c7ikw59c5zvrh009";
-    };
-
-    # TODO: dictionaries
-
-    help = fetchSrc {
-      name = "help";
-      sha256 = "1w9bqwzz75vvxxy9dgln0v6p6isf8mkqnkg1nzlaykvdgsn5sp4z";
-    };
-
+    translations = primary-src.translations;
+    help = primary-src.help;
   };
-in stdenv.mkDerivation rec {
+in (stdenv.mkDerivation rec {
   pname = "libreoffice";
   inherit version;
 
@@ -69,7 +57,7 @@ in stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = [ "-I${librdf_rasqal}/include/rasqal" ] ++ lib.optional stdenv.isx86_64 "-mno-fma";
+  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
 
   patches = [
     ./xdg-open-brief.patch
@@ -260,7 +248,7 @@ in stdenv.mkDerivation rec {
     find -name "*.cmd" -exec sed -i s,/lib:/usr/lib,, {} \;
     '';
 
-  makeFlags = "SHELL=${bash}/bin/bash";
+  makeFlags = [ "SHELL=${bash}/bin/bash" ];
 
   enableParallelBuilding = true;
 
@@ -402,4 +390,4 @@ in stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}
+}).overrideAttrs ((importVariant "override.nix") args)

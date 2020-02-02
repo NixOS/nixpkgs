@@ -1,27 +1,25 @@
-{ stdenv, fetchFromGitHub, jre, jdk, makeDesktopItem, perl, writeText, runtimeShell }:
+{ stdenv, fetchFromGitHub, jre, jdk, gradle, makeDesktopItem, perl, writeText, runtimeShell }:
 
 let
   pname = "jd-gui";
-  version = "1.6.5";
+  version = "1.6.6";
 
   src = fetchFromGitHub {
     owner = "java-decompiler";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0yn2xcwznig941pw2f3wi8ixz1wprxcn9wl0g2ggdzx51rfwgzzi";
+    sha256 = "010bd3q2m4jy4qz5ahdx86b5f558s068gbjlbpdhq3bhh4yrjy20";
   };
 
   deps = stdenv.mkDerivation {
     name = "${pname}-deps";
     inherit src;
 
-    nativeBuildInputs = [ jdk perl ];
-
-    patchPhase = "patchShebangs gradlew";
+    nativeBuildInputs = [ jdk perl gradle ];
 
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d);
-      ./gradlew --no-daemon jar
+      gradle --no-daemon jar
     '';
 
     # Mavenize dependency paths
@@ -30,12 +28,11 @@ let
       find $GRADLE_USER_HOME/caches/modules-2 -type f -regex '.*\.\(jar\|pom\)' \
         | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
         | sh
-      cp -r $GRADLE_USER_HOME/wrapper $out
     '';
 
     outputHashAlgo = "sha256";
     outputHashMode = "recursive";
-    outputHash = "1s4p91iiyikrsgvpzkhw3jm5lsm0jpzp7iw7afdhhl9jm18igs70";
+    outputHash = "1qil12s0daxpxj5xj5dj6s2k89is0kiir2vcafkm3lasc41acmk3";
   };
 
   # Point to our local deps repo
@@ -74,15 +71,11 @@ in stdenv.mkDerivation rec {
   inherit pname version src;
   name = "${pname}-${version}";
 
-  nativeBuildInputs = [ jdk ];
-
-  patchPhase = "patchShebangs gradlew";
+  nativeBuildInputs = [ jdk gradle ];
 
   buildPhase = ''
     export GRADLE_USER_HOME=$(mktemp -d)
-    cp -r ${deps}/wrapper $GRADLE_USER_HOME
-    chmod u+w $GRADLE_USER_HOME/wrapper/dists/gradle*/*/*.lck
-    ./gradlew --offline --no-daemon --info --init-script ${gradleInit} jar
+    gradle --offline --no-daemon --info --init-script ${gradleInit} jar
   '';
 
   installPhase = let

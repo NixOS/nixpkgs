@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       --prefix PKG_CONFIG_PATH ":" "${SDL.dev}/lib/pkgconfig"
   '';
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = "-lX11";
 
   meta = {
     homepage = http://icculus.org/smpeg/;

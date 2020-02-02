@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "ConfigArgParse";
-  version = "0.15.1";
+  version = "1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "baaf0fd2c1c108d007f402dab5481ac5f12d77d034825bf5a27f8224757bd0ac";
+    sha256 = "0cvinm7bb03qfjpq2zhfacm0qs4ip4378nvya8x41p4wpi2q4dxz";
   };
 
   # no tests in tarball

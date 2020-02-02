@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  buildFlags = "lib libopt glut glutopt";
+  buildFlags = [ "lib" "libopt" "glut" "glutopt" ];
 
   postInstall = ''
     cp ./META $out/lib/ocaml/${ocaml.version}/site-lib/lablgl

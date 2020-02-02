@@ -147,8 +147,7 @@ in
       '';
     };
 
-    users.users = singleton {
-      name = username;
+    users.users.${username} = {
       description = "DNSChain daemon user";
       home = dataDir;
       createHome = true;

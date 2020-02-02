@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ libnl iptables ];
 
-  makeFlags = "-C src/usr";
+  makeFlags = [ "-C" "src/usr" ];
 
   prePatch = ''
     sed -e 's%^XTABLES_SO_DIR = .*%XTABLES_SO_DIR = '"$out"'/lib/xtables%g' -i src/usr/iptables/Makefile

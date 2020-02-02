@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = http://chrisarndt.de/projects/threadpool/;
+    homepage = https://chrisarndt.de/projects/threadpool/;
     description = "Easy to use object-oriented thread pool framework";
     license = licenses.mit;
   };

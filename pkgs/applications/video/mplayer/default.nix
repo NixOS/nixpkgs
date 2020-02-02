@@ -195,11 +195,11 @@ stdenv.mkDerivation rec {
     echo CONFIG_MPEGAUDIODSP=yes >> config.mak
   '';
 
-  NIX_LDFLAGS = with stdenv.lib;
+  NIX_LDFLAGS = with stdenv.lib; toString (
        optional  fontconfigSupport "-lfontconfig"
     ++ optional  fribidiSupport "-lfribidi"
     ++ optionals x11Support [ "-lX11" "-lXext" ]
-    ;
+  );
 
   installTargets = [ "install" ] ++ stdenv.lib.optional x11Support "install-gui";
 

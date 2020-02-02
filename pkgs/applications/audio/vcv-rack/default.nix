@@ -79,7 +79,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
-  buildFlags = "Rack";
+  buildFlags = [ "Rack" ];
 
   installPhase = ''
     install -D -m755 -t $out/bin Rack
@@ -93,7 +93,7 @@ with stdenv.lib; stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open-source virtual modular synthesizer";
-    homepage = http://vcvrack.com/;
+    homepage = https://vcvrack.com/;
     # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
     # no-derivatives clause
     license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];

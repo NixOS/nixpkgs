@@ -20,13 +20,13 @@ with stdenv.lib;
 
 python3Packages.buildPythonApplication rec {
   pname = "tryton";
-  version = "5.4.0";
+  version = "5.4.2";
 
   disabled = !python3Packages.isPy3k;
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0wbq8y8z0n6c5b3h5ynlawn3z79a3hkb1fkmblz4pwnj0jfnbswd";
+    sha256 = "1rca19krvmycdhmi1vb4ixwq0cagmrkhbqry4f19b725nlp8cv0q";
   };
 
   nativeBuildInputs = [

@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "di";
-  version = "4.47.2";
+  version = "4.47.3";
 
   src = fetchurl {
     url = "https://gentoo.com/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "1g97pp2hznskqlkhl6ppyzgdmv878bcqiwh633kdnm70d1pvh192";
+    sha256 = "0m4npba50sf5s61g5z3xd2r7937zwja941f2h3f081xi24c2hfck";
   };
 
   makeFlags = [ "INSTALL_DIR=$(out)" ];
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     homepage = https://gentoo.com/di/;
     license = licenses.zlib;
     updateWalker = true;
-    maintainers = with maintainers; [ manveru ndowens ];
+    maintainers = with maintainers; [ manveru ];
     platforms = platforms.all;
   };
 }

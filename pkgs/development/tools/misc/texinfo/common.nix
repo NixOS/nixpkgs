@@ -6,6 +6,10 @@
 , interactive ? false, ncurses, procps
 }:
 
+let
+  crossBuildTools = interactive && stdenv.hostPlatform != stdenv.buildPlatform;
+in
+
 with stdenv.lib;
 
 stdenv.mkDerivation {
@@ -17,7 +21,13 @@ stdenv.mkDerivation {
     inherit sha256;
   };
 
-  patches = optional (version == "6.5") ./perl.patch;
+  patches = optional (version == "6.5") ./perl.patch
+    ++ optional crossBuildTools ./cross-tools-flags.patch;
+
+  # ncurses is required to build `makedoc'
+  # this feature is introduced by the ./cross-tools-flags.patch
+  NATIVE_TOOLS_CFLAGS = if crossBuildTools then "-I${getDev buildPackages.ncurses}/include" else null;
+  NATIVE_TOOLS_LDFLAGS = if crossBuildTools then "-L${getLib buildPackages.ncurses}/lib" else null;
 
   # We need a native compiler to build perl XS extensions
   # when cross-compiling.
@@ -30,10 +40,8 @@ stdenv.mkDerivation {
   configureFlags = [ "PERL=${buildPackages.perl}/bin/perl" ]
     ++ stdenv.lib.optional stdenv.isSunOS "AWK=${gawk}/bin/awk";
 
-  preInstall = ''
-    installFlags="TEXMF=$out/texmf-dist";
-    installTargets="install install-tex";
-  '';
+  installFlags = [ "TEXMF=$(out)/texmf-dist" ];
+  installTargets = [ "install" "install-tex" ];
 
   checkInputs = [ procps ];
 

@@ -19,6 +19,11 @@ buildPythonApplication rec {
     pygments sqlparse pgspecial setproctitle keyring
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "prompt_toolkit>=2.0.6,<3.0.0" "prompt_toolkit"
+  '';
+
   checkInputs = [ pytest mock ];
 
   # `test_application_name_db_uri` fails: https://github.com/dbcli/pgcli/issues/1104

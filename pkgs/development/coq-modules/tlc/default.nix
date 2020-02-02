@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ coq ];
 
-  installFlags = "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib";
+  installFlags = [ "CONTRIB=$(out)/lib/coq/${coq.coq-version}/user-contrib" ];
 
   meta = {
     homepage = "http://www.chargueraud.org/softs/tlc/";
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: stdenv.lib.versionAtLeast v "8.6";
+    compatibleCoqVersions = stdenv.lib.flip builtins.elem [ "8.6" "8.7" "8.8" "8.9" "8.10" ];
   };
 }

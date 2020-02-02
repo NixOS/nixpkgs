@@ -77,6 +77,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "rulesdir=${placeholder "out"}/lib/udev/rules.d" ];
 
+  doCheck = stdenv.hostPlatform.isx86_64;
+
   postInstall = ''
     mkdir -p $test/{bin,test}
     cp -a test $test

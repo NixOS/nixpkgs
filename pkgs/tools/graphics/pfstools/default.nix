@@ -14,9 +14,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "man"];
 
-  cmakeFlags = ''
-    -DWITH_MATLAB=false 
-  '';
+  cmakeFlags = [ "-DWITH_MATLAB=false" ];
 
   preConfigure = ''
     rm cmake/FindNETPBM.cmake

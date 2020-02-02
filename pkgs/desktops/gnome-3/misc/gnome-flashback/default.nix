@@ -141,6 +141,8 @@ let
           Type=Application
           DesktopNames=GNOME-Flashback;GNOME;
         '';
+      } // {
+        providedSessions = [ "gnome-flashback-${wmName}" ];
       };
 
       mkSystemdTargetForWm = { wmName }:

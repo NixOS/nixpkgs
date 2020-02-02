@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.60";
+  version = "2.62";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    sha256 = "1sr31r80jfswlx9a0p5bn85p6h7mq28fw8ihhnlbhphii6w8z2j9";
+    sha256 = "1lb3a8r2gv0437viwy25s34g05x5v81gk0nxlgx7hzwv7b9zkv5s";
   };
 
   nativeBuildInputs = [
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
     "--with-context=$out/share/texmf/tex/context/third"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-I${boehmgc.dev}/include/gc" ];
+  NIX_CFLAGS_COMPILE = "-I${boehmgc.dev}/include/gc";
 
   postInstall = ''
     mv $out/share/info/asymptote/*.info $out/share/info/

@@ -10,7 +10,7 @@ in
 
         extraOptions = mkOption {
           type = types.listOf types.str;
-          default = [ "--buttons 45" ];
+          default = [ "--buttons=45" ];
           example = [ "--debug" ];
           description = ''
             Additional command-line arguments to pass to

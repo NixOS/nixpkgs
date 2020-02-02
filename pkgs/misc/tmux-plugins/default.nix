@@ -95,8 +95,8 @@ in rec {
     pluginName = "ctrlw";
     src = fetchgit {
       url = "https://github.com/eraserhd/tmux-ctrlw";
-      rev = "2354b5d56828813d0f7a4b228ca74b6134c2695f";
-      sha256 = "00hy1axmki8h2285mivsj923z327xkq89wfl2x4dxc71xjhdl216";
+      rev = "b456977125c640cd587b786c6a79cb5c7b0f900d";
+      sha256 = "1kv5pqfjczd6z7i9jf6j5xmcai50l9bn5p2p1w1l5fi6cj8cz1k1";
     };
   };
 

@@ -3,13 +3,13 @@
 stdenv.mkDerivation {
   pname = "xsel-unstable";
 
-  version = "2018-01-10";
+  version = "2019-08-21";
 
   src = fetchFromGitHub {
     owner = "kfish";
     repo = "xsel";
-    rev = "9bfc13d64b5acb92c6648c696a9d9260fcbecc65";
-    sha256 = "05ms34by5hxznnpvmvhgp6llvlkz0zw4sq6c4bgwr82lj140lscm";
+    rev = "ef01f3c72a195dbce682184c842b81b17d7d7ad1";
+    sha256 = "191qa6022b7nww3bicfxpgp4d9x6c8s3sgixi780383ghkxds08c";
   };
 
   nativeBuildInputs = [ autoreconfHook ];

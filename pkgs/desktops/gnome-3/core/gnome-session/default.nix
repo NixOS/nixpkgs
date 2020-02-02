@@ -4,11 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-session";
-  version = "3.34.1";
+  version = "3.34.2";
+
+  outputs = ["out" "sessions"];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-session/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0q366pns99f6wka5ikahqpasnsm72q9pg0c0nnfb2ld7spi1z06p";
+    sha256 = "1qgqp97f8k2zi2ydvhds14zsjzfj7cv521r6wx5sw0qacn0p7dwb";
   };
 
   patches = [
@@ -50,11 +52,21 @@ stdenv.mkDerivation rec {
       --suffix XDG_CONFIG_DIRS : "${gnome3.gnome-settings-daemon}/etc/xdg"
   '';
 
+  # We move the GNOME sessions to another output since gnome-session is a dependency of
+  # GDM itself. If we do not hide them, it will show broken GNOME sessions when GDM is
+  # enabled without proper GNOME installation.
+  postInstall = ''
+    mkdir $sessions
+    moveToOutput share/wayland-sessions "$sessions"
+    moveToOutput share/xsessions "$sessions"
+  '';
+
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gnome-session";
       attrPath = "gnome3.gnome-session";
     };
+    providedSessions = [ "gnome" "gnome-xorg" ];
   };
 
   meta = with stdenv.lib; {

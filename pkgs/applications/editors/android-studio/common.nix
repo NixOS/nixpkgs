@@ -22,6 +22,7 @@
 , freetype
 , libpulseaudio
 , libGL
+, libuuid
 , libX11
 , libxcb
 , libXcomposite
@@ -115,6 +116,7 @@ let
           dbus
           expat
           libpulseaudio
+          libuuid
           libX11
           libxcb
           libXcomposite

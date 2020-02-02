@@ -19,7 +19,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
 
   meta = with stdenv.lib; {
     homepage = http://doomseeker.drdteam.org/;

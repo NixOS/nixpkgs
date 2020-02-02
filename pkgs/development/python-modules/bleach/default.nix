@@ -24,10 +24,9 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace ",<3dev" ""
   '';
 
-  # Disable a test
-  # https://github.com/mozilla/bleach/issues/467
+  # Disable network tests
   checkPhase = ''
-    pytest -k "not test_only_text_is_cleaned"
+    pytest -k "not protocols"
   '';
 
   meta = {

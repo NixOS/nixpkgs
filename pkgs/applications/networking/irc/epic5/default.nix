@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     homepage = http://epicsol.org;
     description = "A IRC client that offers a great ircII interface";
     license = licenses.bsd3;
-    maintainers = [ maintainers.ndowens ];
+    maintainers = [];
   };
 }
 

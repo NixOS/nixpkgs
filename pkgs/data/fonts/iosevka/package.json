@@ -1,6 +1,6 @@
 {
 	"name": "iosevka-build-deps",
-	"version": "2.3.2",
+	"version": "2.3.3",
 	"scripts": {
 		"build": "verda -f verdafile.js"
 	},
@@ -15,12 +15,12 @@
 		"patrisika-scopes": "^0.11.1",
 		"primitive-quadify-off-curves": "^0.4.0",
 		"stylus": "^0.54.5",
-		"toml": "^2.3.2",
+		"toml": "^3.0.0",
 		"topsort": "0.0.2",
 		"ttf2woff": "^2.0.1",
 		"ttf2woff2": "^2.0.3",
-		"unorm": "^1.4.1",
+		"unorm": "^1.6.0",
 		"verda": "^1.0.0-0",
-		"yargs": "^12.0.0"
+		"yargs": "^14.2.0"
 	}
 }

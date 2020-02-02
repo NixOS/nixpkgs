@@ -13,7 +13,7 @@
    </listitem>
    <listitem>
     <para>
-     Fork the repository on GitHub.
+     Fork <link xlink:href="https://github.com/nixos/nixpkgs/">the Nixpkgs repository</link> on GitHub.
     </para>
    </listitem>
    <listitem>
@@ -22,15 +22,10 @@
      <itemizedlist>
       <listitem>
        <para>
-        You can make branch from a commit of your local <command>nixos-version</command>. That will help you to avoid additional local compilations. Because you will receive packages from binary cache.
-        <itemizedlist>
-         <listitem>
-          <para>
-           For example: <command>nixos-version</command> returns <command>15.05.git.0998212 (Dingo)</command>. So you can do:
-          </para>
-         </listitem>
-        </itemizedlist>
+        You can make branch from a commit of your local <command>nixos-version</command>. That will help you to avoid additional local compilations. Because you will receive packages from binary cache. For example
 <screen>
+<prompt>$ </prompt>nixos-version --hash
+0998212
 <prompt>$ </prompt>git checkout 0998212
 <prompt>$ </prompt>git checkout -b 'fix/pkg-name-update'
 </screen>
@@ -47,13 +42,11 @@
    <listitem>
     <para>
      Make commits of logical units.
-     <itemizedlist>
-      <listitem>
-       <para>
-        If you removed pkgs, made some major NixOS changes etc., write about them in <command>nixos/doc/manual/release-notes/rl-unstable.xml</command>.
-       </para>
-      </listitem>
-     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     If you removed pkgs or made some major NixOS changes, write about it in the release notes for the next stable release. For example <command>nixos/doc/manual/release-notes/rl-2003.xml</command>.
     </para>
    </listitem>
    <listitem>
@@ -178,7 +171,7 @@ Additional information.
    </listitem>
    <listitem>
     <para>
-     Rebase you branch against current <command>master</command>.
+     <link xlink:href="https://git-scm.com/book/en/v2/Git-Branching-Rebasing">Rebase</link> your branch against current <command>master</command>.
     </para>
    </listitem>
   </itemizedlist>
@@ -194,36 +187,12 @@ Additional information.
    </listitem>
    <listitem>
     <para>
-     Create pull request:
-     <itemizedlist>
-      <listitem>
-       <para>
-        Write the title in format <command>(pkg-name | nixos/&lt;module>): improvement</command>.
-        <itemizedlist>
-         <listitem>
-          <para>
-           If you update the pkg, write versions <command>from -> to</command>.
-          </para>
-         </listitem>
-        </itemizedlist>
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Write in comment if you have tested your patch. Do not rely much on <command>TravisCI</command>.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        If you make an improvement, write about your motivation.
-       </para>
-      </listitem>
-      <listitem>
-       <para>
-        Notify maintainers of the package. For example add to the message: <command>cc @jagajaga @domenkozar</command>.
-       </para>
-      </listitem>
-     </itemizedlist>
+     Create the pull request
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Follow <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/.github/CONTRIBUTING.md#submitting-changes">the contribution guidelines</link>.
     </para>
    </listitem>
   </itemizedlist>
@@ -317,25 +286,25 @@ Additional information.
   </section>
 
   <section xml:id="submitting-changes-tested-compilation">
-   <title>Tested compilation of all pkgs that depend on this change using <command>nix-review</command></title>
+   <title>Tested compilation of all pkgs that depend on this change using <command>nixpkgs-review</command></title>
 
    <para>
-    If you are updating a package's version, you can use nix-review to make sure all packages that depend on the updated package still compile correctly. The <command>nix-review</command> utility can look for and build all dependencies either based on uncommited changes with the <literal>wip</literal> option or specifying a github pull request number.
+    If you are updating a package's version, you can use nixpkgs-review to make sure all packages that depend on the updated package still compile correctly. The <command>nixpkgs-review</command> utility can look for and build all dependencies either based on uncommited changes with the <literal>wip</literal> option or specifying a github pull request number.
    </para>
 
    <para>
     review changes from pull request number 12345:
-    <screen>nix run nixpkgs.nix-review -c nix-review pr 12345</screen>
+    <screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review pr 12345</screen>
    </para>
 
    <para>
     review uncommitted changes:
-    <screen>nix run nixpkgs.nix-review -c nix-review wip</screen>
+    <screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review wip</screen>
    </para>
 
    <para>
     review changes from last commit:
-    <screen>nix run nixpkgs.nix-review -c nix-review rev HEAD</screen>
+    <screen>nix run nixpkgs.nixpkgs-review -c nixpkgs-review rev HEAD</screen>
    </para>
   </section>
 
@@ -408,7 +377,7 @@ Additional information.
   <section xml:id="submitting-changes-master-branch">
    <title>Master branch</title>
    <para>
-    The <literal>master</literal> branch is the main development branch. 
+    The <literal>master</literal> branch is the main development branch.
     It should only see non-breaking commits that do not cause mass rebuilds.
    </para>
   </section>
@@ -416,8 +385,8 @@ Additional information.
   <section xml:id="submitting-changes-staging-branch">
    <title>Staging branch</title>
    <para>
-    The <literal>staging</literal> branch is a development branch where mass-rebuilds go. 
-    It should only see non-breaking mass-rebuild commits. 
+    The <literal>staging</literal> branch is a development branch where mass-rebuilds go.
+    It should only see non-breaking mass-rebuild commits.
     That means it is not to be used for testing, and changes must have been well tested already.
     If the branch is already in a broken state, please refrain from adding extra new breakages.
    </para>
@@ -426,10 +395,10 @@ Additional information.
   <section xml:id="submitting-changes-staging-next-branch">
    <title>Staging-next branch</title>
    <para>
-    The <literal>staging-next</literal> branch is for stabilizing mass-rebuilds submitted to the <literal>staging</literal> branch prior to merging them into <literal>master</literal>. 
-    Mass-rebuilds should go via the <literal>staging</literal> branch. 
+    The <literal>staging-next</literal> branch is for stabilizing mass-rebuilds submitted to the <literal>staging</literal> branch prior to merging them into <literal>master</literal>.
+    Mass-rebuilds should go via the <literal>staging</literal> branch.
     It should only see non-breaking commits that are fixing issues blocking it from being merged into the <literal>master </literal> branch.
-   </para>  
+   </para>
    <para>
     If the branch is already in a broken state, please refrain from adding extra new breakages. Stabilize it for a few days and then merge into master.
    </para>

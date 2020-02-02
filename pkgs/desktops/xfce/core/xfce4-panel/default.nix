@@ -11,7 +11,7 @@ mkXfceDerivation {
   buildInputs = [ exo garcon gtk2 gtk3 glib glib-networking libxfce4ui libxfce4util libwnck3 xfconf ];
 
   patches = [ ./xfce4-panel-datadir.patch ];
-  patchFlags = "-p1";
+  patchFlags = [ "-p1" ];
 
   postPatch = ''
     for f in $(find . -name \*.sh); do

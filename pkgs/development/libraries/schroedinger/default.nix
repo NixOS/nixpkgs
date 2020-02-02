@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   doCheck = (!stdenv.isDarwin);
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches = [
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/master/multimedia/schroedinger/files/patch-testsuite-Makefile.am.diff";

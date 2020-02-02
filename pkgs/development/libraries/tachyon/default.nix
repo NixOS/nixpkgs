@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
          if stdenv.hostPlatform.system == "x86_64-freebsd" then "bsd"           else
          if stdenv.hostPlatform.system == "x686-freebsd"   then "bsd"           else
          throw "Don't know what arch to select for tachyon build";
-  makeFlags = arch;
+  makeFlags = [ arch ];
   patches = [
     # Remove absolute paths in Make-config (and unset variables so they can be set in preBuild)
     ./no-absolute-paths.patch

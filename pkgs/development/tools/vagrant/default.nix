@@ -25,6 +25,19 @@ let
         inherit version;
       };
     } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+
+    # This replaces the gem symlinks with directories, resolving this
+    # error when running vagrant (I have no idea why):
+    # /nix/store/p4hrycs0zaa9x0gsqylbk577ppnryixr-vagrant-2.2.6/lib/ruby/gems/2.6.0/gems/i18n-1.1.1/lib/i18n/config.rb:6:in `<module:I18n>': uninitialized constant I18n::Config (NameError)
+    postBuild = ''
+      for gem in "$out"/lib/ruby/gems/*/gems/*; do
+        cp -a "$gem/" "$gem.new"
+        rm "$gem"
+        # needed on macOS, otherwise the mv yields permission denied 
+        chmod +w "$gem.new"
+        mv "$gem.new" "$gem"
+      done
+    '';
   };
 
 in buildRubyGem rec {
@@ -79,12 +92,7 @@ in buildRubyGem rec {
   '';
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/vagrant" --version)" == "Vagrant ${version}" ]]; then
-      echo 'Vagrant smoke check passed'
-    else
-      echo 'Vagrant smoke check failed'
-      return 1
-    fi
+    HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null
   '';
 
   # `patchShebangsAuto` patches this one script which is intended to run

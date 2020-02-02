@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ which libxcb xcbutilkeysyms xcbutilimage xcbutilxrm
     pam libX11 libev cairo libxkbcommon libxkbfile ];
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc";
+  makeFlags = [ "all" ];
+  installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" ];
   postInstall = ''
     mkdir -p $out/share/man/man1
     cp *.1 $out/share/man/man1

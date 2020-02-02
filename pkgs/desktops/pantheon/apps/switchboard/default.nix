@@ -17,18 +17,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard";
-  version = "2.3.7";
+  version = "2.3.8";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "160aar5dqd019vn28cm0d0ijj1i6mwpqkl7a1l4lpasw12drxwxz";
+    sha256 = "1y254irl07fp70228zm268w20zd7risz0sk9i9wz59yynxwjshbx";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

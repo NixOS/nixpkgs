@@ -288,9 +288,8 @@ in
 
   config = mkIf config.services.printing.enable {
 
-    users.users = singleton
-      { name = "cups";
-        uid = config.ids.uids.cups;
+    users.users.cups =
+      { uid = config.ids.uids.cups;
         group = "lp";
         description = "CUPS printing services";
       };

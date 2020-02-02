@@ -287,10 +287,16 @@ rec {
   # unless there are more paths than $maxLayers. In that case, create
   # $maxLayers-1 for the most popular layers, and smush the remainaing
   # store paths in to one final layer.
+  #
+  # NOTE: the `closures` parameter is a list of closures to include.
+  # The TOP LEVEL store paths themselves will never be present in the
+  # resulting image. At this time (2019-12-16) none of these layers
+  # are appropriate to include, as they are all created as
+  # implementation details of dockerTools.
   mkManyPureLayers = {
     name,
     # Files to add to the layer.
-    closure,
+    closures,
     configJson,
     # Docker has a 125-layer maximum, we pick 100 to ensure there is
     # plenty of room for extension.
@@ -303,11 +309,13 @@ rec {
         isExecutable = true;
         src = ./store-path-to-layer.sh;
       };
+
+      overallClosure = writeText "closure" (lib.concatStringsSep " " closures);
     in
     runCommand "${name}-granular-docker-layers" {
       inherit maxLayers;
-      paths = referencesByPopularity closure;
-      nativeBuildInputs = [ jshon rsync tarsum ];
+      paths = referencesByPopularity overallClosure;
+      nativeBuildInputs = [ jshon rsync tarsum moreutils ];
       enableParallelBuilding = true;
     }
     ''
@@ -323,9 +331,14 @@ rec {
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
       #      maxLayers-1, maxLayers, and maxLayers+1
-      head -n $((maxLayers - 1)) $paths | cat -n | xargs -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
-      if [ $(cat $paths | wc -l) -ge $maxLayers ]; then
-        tail -n+$maxLayers $paths | xargs ${storePathToLayer} $maxLayers
+      paths() {
+        cat $paths ${lib.concatMapStringsSep " " (path: "| grep -v ${path}") (closures ++ [ overallClosure ])}
+      }
+
+      # We need to sponge to avoid grep broken pipe error when maxLayers == 1
+      paths | sponge | head -n $((maxLayers - 1)) | cat -n | xargs -r -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      if [ $(paths | wc -l) -ge $maxLayers ]; then
+        paths | tail -n+$maxLayers | xargs ${storePathToLayer} $maxLayers
       fi
 
       echo "Finished building layer '$name'"
@@ -532,9 +545,17 @@ rec {
     # believe the actual maximum is 128.
     maxLayers ? 100
   }:
+    assert
+      (lib.assertMsg (maxLayers > 1)
+      "the maxLayers argument of dockerTools.buildLayeredImage function must be greather than 1 (current value: ${toString maxLayers})");
     let
       baseName = baseNameOf name;
-      contentsEnv = symlinkJoin { name = "bulk-layers"; paths = (if builtins.isList contents then contents else [ contents ]); };
+      contentsEnv = symlinkJoin {
+        name = "bulk-layers";
+        paths = if builtins.isList contents
+          then contents
+          else [ contents ];
+      };
 
       configJson = let
           pure = writeText "${baseName}-config.json" (builtins.toJSON {
@@ -551,7 +572,7 @@ rec {
 
       bulkLayers = mkManyPureLayers {
           name = baseName;
-          closure = writeText "closure" "${contentsEnv} ${configJson}";
+          closures = [ contentsEnv configJson ];
           # One layer will be taken up by the customisationLayer, so
           # take up one less.
           maxLayers = maxLayers - 1;
@@ -585,6 +606,8 @@ rec {
           if tag == null
           then lib.head (lib.splitString "-" (lib.last (lib.splitString "/" result)))
           else lib.toLower tag;
+        # Docker can't be made to run darwin binaries
+        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${if (tag == null) then ''
           outName="$(basename "$out")"
@@ -623,6 +646,26 @@ rec {
           -n object -s "$layerID" -i "$imageTag" \
           -i "$imageName" > image/repositories
 
+
+        echo "Cooking the image..."
+        # tar exits with an exit code of 1 if files changed while it was
+        # reading them. It considers a change in the number of hard links
+        # to be a "change", which can cause this to fail if images are being
+        # built concurrently and the auto-optimise-store nix option is turned on.
+        # Since the contents of these files will not change, we can reasonably
+        # ignore this exit code.
+        set +e
+        tar -C image --dereference --hard-dereference --sort=name \
+          --mtime="@$SOURCE_DATE_EPOCH" --owner=0 --group=0  \
+          --mode=a-w --xform s:'^./':: --use-compress-program='pigz -nT' \
+          --warning=no-file-changed -cf $out .
+        RET=$?
+        if [ $RET -ne 0 ] && [ $RET -ne 1 ]; then
+          exit $RET
+        fi
+        set -e
+
+        echo "Finished."
       '';
 
     in
@@ -724,6 +767,9 @@ rec {
           reg = if fromImage == null then [] else fromImage.contentsList;
         in
           contentsList ++ reg;
+
+        # Docker can't be made to run darwin binaries
+        meta.badPlatforms = lib.platforms.darwin;
       } ''
         ${lib.optionalString (tag == null) ''
           outName="$(basename "$out")"

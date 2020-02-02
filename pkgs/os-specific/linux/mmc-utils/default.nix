@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1mak9rqjp6yvqk2h5hfil5a9gfx138h62n3cryckfbhr6fmaylm7";
   };
 
-  makeFlags = "CC=${stdenv.cc.targetPrefix}cc";
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     make install prefix=$out

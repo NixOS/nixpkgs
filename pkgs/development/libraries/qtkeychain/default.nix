@@ -24,12 +24,12 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DQT_TRANSLATIONS_DIR=share/qt/translations" ];
 
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
+    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ pkgconfig ] # for finding libsecret
   ;
 
-  buildInputs = stdenv.lib.optional (!stdenv.isDarwin) [ libsecret ]
+  buildInputs = stdenv.lib.optionals (!stdenv.isDarwin) [ libsecret ]
     ++ (if withQt5 then [ qtbase qttools ] else [ qt4 ])
-    ++ stdenv.lib.optional stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
       CoreFoundation Security
     ])
   ;

@@ -66,6 +66,15 @@ pet = buildGoModule rec {
     </callout>
    </calloutlist>
   </para>
+
+  <para>
+    <varname>modSha256</varname> can also take <varname>null</varname> as an input.
+
+    When `null` is used as a value, the derivation won't be a
+    fixed-output derivation but disable the build sandbox instead. This can be useful outside
+    of nixpkgs where re-generating the modSha256 on each mod.sum changes is cumbersome,
+    but will fail to build by Hydra, as builds with a disabled sandbox are discouraged.
+  </para>
  </section>
 
  <section xml:id="ssec-go-legacy">
@@ -94,7 +103,7 @@ deis = buildGoPackage rec {
 
   goDeps = ./deps.nix; <co xml:id='ex-buildGoPackage-3' />
 
-  buildFlags = "--tags release"; <co xml:id='ex-buildGoPackage-4' />
+  buildFlags = [ "--tags" "release" ]; <co xml:id='ex-buildGoPackage-4' />
 }
 </programlisting>
   </example>

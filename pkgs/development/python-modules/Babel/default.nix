@@ -11,13 +11,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pytz ];
 
-  checkInputs = [ pytest freezegun glibcLocales ];
+  checkInputs = [ pytest freezegun ];
 
+  # Note that a test will fail with an encoding error on Python 2 with Nix < 2.3
+  # due to https://github.com/NixOS/nixpkgs/pull/75676#issuecomment-579008837.
+  # TODO: Remove the above comment when we use a version that includes the fix
+  #       from https://github.com/python-babel/babel/pull/691
   doCheck = !stdenv.isDarwin;
-
-  preCheck = ''
-    export LC_ALL="en_US.UTF-8"
-  '';
 
   meta = with lib; {
     homepage = http://babel.edgewall.org;

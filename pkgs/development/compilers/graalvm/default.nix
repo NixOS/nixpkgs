@@ -1,10 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial, python27, setJavaClassPath,
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchzip, fetchgit, mercurial_4, python27, setJavaClassPath,
   zlib, makeWrapper, openjdk, unzip, git, clang, llvm, which, icu, ruby, bzip2, glibc
   # gfortran, readline, bzip2, lzma, pcre, curl, ed, tree ## WIP: fastr deps
 }:
 
 let
   version = "19.1.1";
+  mercurial = mercurial_4;
   truffleMake = ./truffle.make;
   makeMxGitCache = list: out: ''
      mkdir ${out}
@@ -242,10 +243,7 @@ in rec {
                   'method->name_and_sig_as_C_string(), p2i(method->native_function()), p2i(entry)' || exit -1
     '';
     hardeningDisable = [ "fortify" ];
-    NIX_CFLAGS_COMPILE = [
-      "-Wno-error=format-overflow" # newly detected by gcc7
-      "-Wno-error=nonnull"
-    ];
+    NIX_CFLAGS_COMPILE = "-Wno-error=format-overflow -Wno-error=nonnull";
     buildPhase = ''
       export MX_ALT_OUTPUT_ROOT=$NIX_BUILD_TOP/mxbuild
       export MX_CACHE_DIR=${makeMxCache jvmci8-mxcache}

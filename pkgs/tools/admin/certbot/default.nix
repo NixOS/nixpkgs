@@ -1,19 +1,18 @@
-{ stdenv, python37Packages, fetchFromGitHub, fetchurl, dialog, autoPatchelfHook, nginx, pebble }:
+{ stdenv, python37Packages, fetchFromGitHub, fetchurl, dialog, autoPatchelfHook }:
 
 
 python37Packages.buildPythonApplication rec {
   pname = "certbot";
-  version = "0.39.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1s32xg2ljz7ci78wc8rqkjvgrz7vprb7fkznrlf9a4blm55pp54c";
+    sha256 = "180x7gcpfbrzw8k654s7b5nxdy2yg61lq513dykyn3wz4gssw465";
   };
 
   patches = [
-    ./0001-pebble_artifacts-hardcode-pebble-location.patch
     ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
   ];
 
@@ -43,9 +42,8 @@ python37Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace certbot/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
-    substituteInPlace certbot/util.py --replace "sw_vers" "/usr/bin/sw_vers"
-    substituteInPlace certbot-ci/certbot_integration_tests/utils/pebble_artifacts.py --replace "@pebble@" "${pebble}/bin/pebble"
+    cd certbot
+    substituteInPlace certbot/_internal/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
   '';
 
   postInstall = ''
@@ -55,15 +53,7 @@ python37Packages.buildPythonApplication rec {
     done
   '';
 
-  # tests currently time out, because they're trying to do network access
-  # Upstream issue: https://github.com/certbot/certbot/issues/7450
-  doCheck = false;
-
-  checkPhase = ''
-    PATH="$out/bin:${nginx}/bin:$PATH" pytest certbot-ci/certbot_integration_tests
-  '';
-
-  dontUseSetuptoolsCheck = true;
+  doCheck = true;
 
   meta = with stdenv.lib; {
     homepage = src.meta.homepage;

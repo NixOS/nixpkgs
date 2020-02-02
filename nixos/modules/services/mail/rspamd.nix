@@ -374,15 +374,13 @@ in
     # Allow users to run 'rspamc' and 'rspamadm'.
     environment.systemPackages = [ pkgs.rspamd ];
 
-    users.users = singleton {
-      name = cfg.user;
+    users.users.${cfg.user} = {
       description = "rspamd daemon";
       uid = config.ids.uids.rspamd;
       group = cfg.group;
     };
 
-    users.groups = singleton {
-      name = cfg.group;
+    users.groups.${cfg.group} = {
       gid = config.ids.gids.rspamd;
     };
 

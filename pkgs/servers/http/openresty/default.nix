@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl zlib pcre libxml2 libxslt gd geoip postgresql ];
   nativeBuildInputs = [ perl ];
 
-  NIX_CFLAGS_COMPILE = ["-I${libxml2.dev}/include/libxml2"];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   preConfigure = ''
     patchShebangs .

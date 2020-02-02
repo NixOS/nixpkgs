@@ -5,22 +5,16 @@
 
 stdenv.mkDerivation rec {
   pname = "nim";
-  version = "1.0.4";
+  version = "1.0.6";
 
   src = fetchurl {
     url = "https://nim-lang.org/download/${pname}-${version}.tar.xz";
-    sha256 = "1q5fx9g40bk4ajghi856w5l34fmrl7avq5j6p0dr2xa4l52ib149";
+    sha256 = "1cv6bxc7w21455c0pv0r2h64ljyzw266jsk1fsgiiyk2rx8mfkhk";
   };
 
   enableParallelBuilding = true;
 
-  NIX_LDFLAGS = [
-    "-lcrypto"
-    "-lpcre"
-    "-lreadline"
-    "-lgc"
-    "-lsqlite3"
-  ];
+  NIX_LDFLAGS = "-lcrypto -lpcre -lreadline -lgc -lsqlite3";
 
   # we could create a separate derivation for the "written in c" version of nim
   # used for bootstrapping, but koch insists on moving the nim compiler around

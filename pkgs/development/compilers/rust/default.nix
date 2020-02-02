@@ -1,5 +1,6 @@
 { rustcVersion
 , rustcSha256
+, enableRustcDev ? true
 , bootstrapVersion
 , bootstrapHashes
 , selectRustPackage
@@ -19,17 +20,17 @@
     }.${cpu.name} or cpu.name;
   in "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
-  makeRustPlatform = { rustc, cargo, ... }: {
+  makeRustPlatform = { rustc, cargo, ... }: rec {
     rust = {
       inherit rustc cargo;
     };
 
-    buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo;
+    fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
+      inherit cargo;
+    };
 
-      fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
-        inherit cargo;
-      };
+    buildRustPackage = callPackage ../../../build-support/rust {
+      inherit rustc cargo fetchcargo;
     };
 
     rustcSrc = callPackage ./rust-src.nix {
@@ -70,6 +71,7 @@
       rustc = self.callPackage ./rustc.nix ({
         version = rustcVersion;
         sha256 = rustcSha256;
+        inherit enableRustcDev;
 
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;

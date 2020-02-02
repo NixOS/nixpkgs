@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, python
 , six
 }:
 
@@ -13,11 +14,14 @@ buildPythonPackage rec {
     sha256 = "9e2173042edd5cc9c7bee0d7731873f17fcdce0e42e4b7ab68857d0de7b631fc";
   };
 
-  checkPhase = ''
-    python -m ppft.tests
-  '';
-
   propagatedBuildInputs = [ six ];
+
+  # darwin seems to hang
+  doCheck = !stdenv.isDarwin;
+  checkPhase = ''
+    cd examples
+    ${python.interpreter} -m ppft.tests
+  '';
 
   meta = with stdenv.lib; {
     description = "Distributed and parallel python";
