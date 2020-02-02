@@ -3451,6 +3451,8 @@ in
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
+  
+  fusee-interface-tk = callPackage ../applications/misc/fusee-interface-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
 
