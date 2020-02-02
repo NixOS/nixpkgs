@@ -1,4 +1,4 @@
-{ mkDerivation, lib, pkgconfig, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl }:
+{ mkDerivation, stdenv, lib, pkgconfig, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl }:
 
 mkDerivation rec {
   pname = "chatterino2";
@@ -12,6 +12,10 @@ mkDerivation rec {
   };
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase qtsvg qtmultimedia boost openssl ];
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p "$out/Applications"
+    mv bin/chatterino.app "$out/Applications/"
+  '';
   meta = with lib; {
     description = "A chat client for Twitch chat";
     longDescription = ''
