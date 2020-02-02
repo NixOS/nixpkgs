@@ -191,6 +191,17 @@ let
     };
   };
 
+  bclose-vim = buildVimPluginFrom2Nix {
+    pname = "bclose-vim";
+    version = "2018-10-10";
+    src = fetchFromGitHub {
+      owner = "rbgrouleff";
+      repo = "bclose.vim";
+      rev = "99018b4a2dd18aea1cbd3aa23565b01a0f8c5b73";
+      sha256 = "09a7g0nxn8cbnfz6za8q1p46kb5zbvxl80077hrjpnx4xc82xn2h";
+    };
+  };
+
   bufexplorer = buildVimPluginFrom2Nix {
     pname = "bufexplorer";
     version = "2020-01-10";
