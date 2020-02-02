@@ -7,10 +7,8 @@
     ../../../common/pc/ssd
   ];
 
-  # TODO: boot loader
-  #boot.loader.systemd-boot.enable = lib.mkDefault true;
-  boot.kernelPackages = pkgs.linuxPackages_5_1;
-  boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
+  # Set to true for just the first run, then disable it.
+  # boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
   # The 48.ucode causes the Killer wifi card to crash.
   # The iwlfwifi-cc-a0-46.ucode works perfectly
