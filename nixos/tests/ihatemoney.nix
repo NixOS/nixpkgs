@@ -1,13 +1,5 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, pkgs ? import ../.. { inherit system config; }
-}:
-
 let
-  inherit (import ../lib/testing.nix { inherit system pkgs; }) makeTest;
-in
-map (
-  backend: makeTest {
+  f = backend: import ./make-test-python.nix ({ pkgs, ... }: {
     name = "ihatemoney-${backend}";
     machine = { lib, ... }: {
       services.ihatemoney = {
@@ -30,23 +22,34 @@ map (
       };
     };
     testScript = ''
-      $machine->waitForOpenPort(8000);
-      $machine->waitForUnit("uwsgi.service");
-      my $return = $machine->succeed("curl -X POST http://localhost:8000/api/projects -d 'name=yay&id=yay&password=yay&contact_email=yay\@example.com'");
-      die "wrong project id $return" unless "\"yay\"\n" eq $return;
-      my $timestamp = $machine->succeed("stat --printf %Y /var/lib/ihatemoney/secret_key");
-      my $owner = $machine->succeed("stat --printf %U:%G /var/lib/ihatemoney/secret_key");
-      die "wrong ownership for the secret key: $owner, is uwsgi running as the right user ?" unless $owner eq "ihatemoney:ihatemoney";
-      $machine->shutdown();
-      $machine->start();
-      $machine->waitForOpenPort(8000);
-      $machine->waitForUnit("uwsgi.service");
-      # check that the database is really persistent
-      print $machine->succeed("curl --basic -u yay:yay http://localhost:8000/api/projects/yay");
-      # check that the secret key is really persistent
-      my $timestamp2 = $machine->succeed("stat --printf %Y /var/lib/ihatemoney/secret_key");
-      die unless $timestamp eq $timestamp2;
-      $machine->succeed("curl http://localhost:8000 | grep ihatemoney");
+      machine.wait_for_open_port(8000)
+      machine.wait_for_unit("uwsgi.service")
+
+      assert '"yay"' in machine.succeed(
+          "curl -X POST http://localhost:8000/api/projects -d 'name=yay&id=yay&password=yay&contact_email=yay\@example.com'"
+      )
+      owner, timestamp = machine.succeed(
+          "stat --printf %U:%G___%Y /var/lib/ihatemoney/secret_key"
+      ).split("___")
+      assert "ihatemoney:ihatemoney" == owner
+
+      with subtest("Restart machine and service"):
+          machine.shutdown()
+          machine.start()
+          machine.wait_for_open_port(8000)
+          machine.wait_for_unit("uwsgi.service")
+
+      with subtest("check that the database is really persistent"):
+          machine.succeed("curl --basic -u yay:yay http://localhost:8000/api/projects/yay")
+
+      with subtest("check that the secret key is really persistent"):
+          timestamp2 = machine.succeed("stat --printf %Y /var/lib/ihatemoney/secret_key")
+          assert timestamp == timestamp2
+
+      assert "ihatemoney" in machine.succeed("curl http://localhost:8000")
     '';
-  }
-) [ "sqlite" "postgresql" ]
+  });
+in {
+  ihatemoney-sqlite = f "sqlite";
+  ihatemoney-postgresql = f "postgresql";
+}
