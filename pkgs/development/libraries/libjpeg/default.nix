@@ -3,11 +3,11 @@
 with stdenv.lib;
 
 stdenv.mkDerivation {
-  name = "libjpeg-9c";
+  name = "libjpeg-9d";
 
   src = fetchurl {
-    url = http://www.ijg.org/files/jpegsrc.v9c.tar.gz;
-    sha256 = "08kixcf3a7s9x91174abjnk1xbvj4v8crdc73zi4k9h3jfbm00k5";
+    url = http://www.ijg.org/files/jpegsrc.v9d.tar.gz;
+    sha256 = "0clwys9lcqlxqgcw8s1gwfm5ix2zjlqpklmd3mbvqmj5ibj51jwr";
   };
 
   configureFlags = optional static "--enable-static --disable-shared";

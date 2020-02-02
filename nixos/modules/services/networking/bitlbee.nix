@@ -168,8 +168,7 @@ in
         createHome = true;
       };
 
-      users.groups = singleton {
-        name = "bitlbee";
+      users.groups.bitlbee = {
         gid = config.ids.gids.bitlbee;
       };
 

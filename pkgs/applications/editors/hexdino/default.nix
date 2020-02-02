@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, ncurses }:
-rustPlatform.buildRustPackage rec {
-  name = "hexdino-${version}";
+
+rustPlatform.buildRustPackage {
+  pname = "hexdino";
   version = "0.1.0";
 
   src = fetchFromGitHub {

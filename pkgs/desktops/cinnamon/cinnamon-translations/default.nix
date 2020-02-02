@@ -25,6 +25,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = "https://github.com/linuxmint/cinnamon-translations";
     description = "Translations files for the Cinnamon desktop";
+    license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = [ maintainers.mkg20001 ];
   };

@@ -85,15 +85,15 @@ self: super: {
   lens = self.lens_4_18_1;
   memory = self.memory_0_15_0;
   microlens = self.microlens_0_4_11_2;
-  microlens-ghc = self.microlens-ghc_0_4_11_1;
+  microlens-ghc = self.microlens-ghc_0_4_12;
   microlens-mtl = self.microlens-mtl_0_2_0_1;
-  microlens-platform = self.microlens-platform_0_4_0;
-  microlens-th = self.microlens-th_0_4_3_2;
+  microlens-platform = self.microlens-platform_0_4_1;
+  microlens-th = self.microlens-th_0_4_3_4;
   network = self.network_3_1_1_1;
   optparse-applicative = self.optparse-applicative_0_15_1_0;
-  pandoc = self.pandoc_2_9_1_1;
+  pandoc = dontCheck super.pandoc_2_9_1_1;        # https://github.com/jgm/pandoc/issues/6086
   pandoc-types = self.pandoc-types_1_20;
-  prettyprinter = self.prettyprinter_1_5_1;
+  prettyprinter = self.prettyprinter_1_6_0;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
   regex-base = self.regex-base_0_94_0_0;
   regex-compat = self.regex-compat_0_95_2_0;
@@ -102,10 +102,9 @@ self: super: {
   regex-tdfa = self.regex-tdfa_1_3_1_0;
   shelly = self.shelly_1_9_0;
   singletons = self.singletons_2_6;
-  skylighting = self.skylighting_0_8_3;
-  skylighting-core = self.skylighting-core_0_8_3;
+  skylighting = self.skylighting_0_8_3_2;
+  skylighting-core = self.skylighting-core_0_8_3_2;
   sop-core = self.sop-core_0_5_0_0;
-  tls-session-manager = self.tls-session-manager_0_0_4;
   texmath = self.texmath_0_12;
   th-desugar = self.th-desugar_1_10;
   tls = self.tls_1_5_3;
@@ -144,5 +143,11 @@ self: super: {
   easytest = markBroken super.easytest;
   easytest_0_3 = markBroken super.easytest_0_3;
   haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
+
+  # The LTS-14.x version of the dependencies are too old.
+  policeman = super.policeman.overrideScope (self: super: { ansi-terminal = self.ansi-terminal_0_10_2; relude = self.relude_0_6_0_0; });
+
+  # https://github.com/kowainik/relude/issues/241
+  relude_0_6_0_0 = dontCheck super.relude_0_6_0_0;
 
 }

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "ROPGadget";
-  version = "5.9";
+  version = "6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0lggiqws4dzq6k6c20l515pmjajl19gymsxfggkv771dv5kr1gbs";
+    sha256 = "02wgrdrg0s0cr9yjsb4945244m8x8rr8jzxr8h8c6k2na4d17xf4";
   };
 
   propagatedBuildInputs = [ capstone ];

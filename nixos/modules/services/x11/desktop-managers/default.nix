@@ -68,21 +68,15 @@ in
           scripts before forwarding the value to the
           <varname>displayManager</varname>.
         '';
-        apply = list: {
-          list = map (d: d // {
-            manage = "desktop";
-            start = d.start
-            + optionalString (needBGCond d) ''
-              if [ -e $HOME/.background-image ]; then
-                ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
-              else
-                # Use a solid black background as fallback
-                ${pkgs.xorg.xsetroot}/bin/xsetroot -solid black
-              fi
-            '';
-          }) list;
-          needBGPackages = [] != filter needBGCond list;
-        };
+        apply = map (d: d // {
+          manage = "desktop";
+          start = d.start
+          + optionalString (needBGCond d) ''
+            if [ -e $HOME/.background-image ]; then
+              ${pkgs.feh}/bin/feh --bg-${cfg.wallpaper.mode} ${optionalString cfg.wallpaper.combineScreens "--no-xinerama"} $HOME/.background-image
+            fi
+          '';
+        });
       };
 
       default = mkOption {
@@ -100,5 +94,5 @@ in
 
   };
 
-  config.services.xserver.displayManager.session = cfg.session.list;
+  config.services.xserver.displayManager.session = cfg.session;
 }

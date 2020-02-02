@@ -127,14 +127,9 @@ in
       "/share/gtksourceview-4.0"
     ];
 
-    services.xserver.desktopManager.session = [{
-      name = "xfce";
-      bgSupport = true;
-      start = ''
-        ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.displayManager.sessionPackages = [
+      pkgs.xfce.xfce4-session
+    ];
 
     services.xserver.updateDbusEnvironment = true;
     services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];

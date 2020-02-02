@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "World Coordinate System Library for Astronomy";
-    homepage = http://www.atnf.csiro.au/people/mcalabre/WCS/;
+    homepage = https://www.atnf.csiro.au/people/mcalabre/WCS/;
 
     longDescription = ''Library for world coordinate systems for
     spherical geometries and their conversion to image coordinate

@@ -55,6 +55,11 @@ let
     (assertMacAddress "MACAddress")
   ];
 
+  checkVRF = checkUnitConfig "VRF" [
+    (assertOnlyFields [ "Table" ])
+    (assertMinimum "Table" 0)
+  ];
+
   # NOTE The PrivateKey directive is missing on purpose here, please
   # do not add it to this list. The nix store is world-readable let's
   # refrain ourselves from providing a footgun.
@@ -346,6 +351,21 @@ let
         <literal>[Netdev]</literal> section of the unit.  See
         <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    vrfConfig = mkOption {
+      default = {};
+      example = { Table = 2342; };
+      type = types.addCheck (types.attrsOf unitOption) checkVRF;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[VRF]</literal> section of the unit. See
+        <citerefentry><refentrytitle>systemd.netdev</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+        A detailed explanation about how VRFs work can be found in the
+        <link xlink:href="https://www.kernel.org/doc/Documentation/networking/vrf.txt">kernel
+        docs</link>.
       '';
     };
 
@@ -843,6 +863,11 @@ let
           ${optionalString (def.xfrmConfig != { }) ''
             [Xfrm]
             ${attrsToSection def.xfrmConfig}
+
+          ''}
+          ${optionalString (def.vrfConfig != { }) ''
+            [VRF]
+            ${attrsToSection def.vrfConfig}
 
           ''}
           ${optionalString (def.wireguardConfig != { }) ''

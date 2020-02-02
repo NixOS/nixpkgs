@@ -70,6 +70,7 @@ stdenv.mkDerivation rec {
       gtk-doc.
     '';
 
+    license = [ licenses.gpl2 licenses.lgpl2 ];
     platforms = platforms.linux;
     maintainers = [ maintainers.mkg20001 ];
   };

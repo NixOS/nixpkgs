@@ -28,6 +28,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake flex bison makeWrapper ];
   buildInputs = [ openssl libedit qt4 nettools iproute ];
 
+  postPatch = ''
+    # fix build with bison3
+    sed -i 's/define "parser_class_name"/define parser_class_name/' source/iked/conf.parse.yy
+  '';
+
   configurePhase = ''
     mkdir -p $out/{bin,sbin,lib}
     cmake -DQTGUI=YES -DETCDIR=$out/etc -DLIBDIR=$out/lib -DSBINDIR=$out/sbin -DBINDIR=$out/bin \

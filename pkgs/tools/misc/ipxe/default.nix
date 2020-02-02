@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib;
     { description = "Network boot firmware";
-      homepage = http://ipxe.org/;
+      homepage = https://ipxe.org/;
       license = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];
       platforms = [ "x86_64-linux" "i686-linux" ];

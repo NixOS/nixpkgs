@@ -1,8 +1,8 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
   pname = "kompose";
-  version = "1.18.0";
+  version = "1.20.0";
 
   goPackagePath = "github.com/kubernetes/kompose";
 
@@ -10,8 +10,15 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "kubernetes";
     repo = "kompose";
-    sha256 = "1hb4bs710n9fghphhfakwg42wjscf136dcr05zwwfg7iyqx2cipc";
+    sha256 = "1zgxm3zcxapav4jxh1r597rmxmlxcgns1l8w632ch7d90x5ihvll";
   };
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    $bin/bin/kompose completion bash > kompose.bash
+    $bin/bin/kompose completion zsh > kompose.zsh
+    installShellCompletion kompose.{bash,zsh}
+  '';
 
   meta = with stdenv.lib; {
     description = "A tool to help users who are familiar with docker-compose move to Kubernetes";

@@ -87,7 +87,8 @@ in {
       type = with types; listOf package;
       default = with pkgs; [
         swaylock swayidle
-        xwayland rxvt_unicode dmenu
+        xwayland alacritty dmenu
+        rxvt_unicode # For backward compatibility (old default terminal)
       ];
       defaultText = literalExample ''
         with pkgs; [ swaylock swayidle xwayland rxvt_unicode dmenu ];

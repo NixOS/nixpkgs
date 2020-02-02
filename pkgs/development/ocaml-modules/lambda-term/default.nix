@@ -2,11 +2,11 @@
 
 buildDunePackage rec {
   pname = "lambda-term";
-  version = "2.0.2";
+  version = "2.0.3";
 
   src = fetchurl {
     url = "https://github.com/ocaml-community/lambda-term/releases/download/${version}/lambda-term-${version}.tbz";
-    sha256 = "1p9yczrx78pf5hvhcg1qiqb2vdlmw6bmhhjsm4wiqjq2cc6piaqw";
+    sha256 = "1n1b3ffj41a1lm2315hh870yj9h8gg8g9jcxha6dr3xx8r84np3v";
   };
 
   buildInputs = [ libev ];

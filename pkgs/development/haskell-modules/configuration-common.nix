@@ -603,9 +603,7 @@ self: super: {
   sets = dontCheck super.sets;
 
   # Install icons, metadata and cli program.
-  # Do not build hgettext as it is broken
-  # https://gitlab.freedesktop.org/bustle/bustle/issues/13
-  bustle = overrideCabal (disableCabalFlag (super.bustle.override { hgettext = null; }) "hgettext") (drv: {
+  bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
     patches = [
@@ -1054,19 +1052,19 @@ self: super: {
   # This will probably be able to be removed when we update to LTS-15.
   dhall_1_29_0 =
     dontCheck (super.dhall_1_29_0.override {
-      prettyprinter = self.prettyprinter_1_5_1;
+      prettyprinter = self.prettyprinter_1_6_0;
       prettyprinter-ansi-terminal =
         self.prettyprinter-ansi-terminal.override {
-          prettyprinter = self.prettyprinter_1_5_1;
+          prettyprinter = self.prettyprinter_1_6_0;
         };
     });
   dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
   dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
     dhall = self.dhall_1_29_0;
-    prettyprinter = self.prettyprinter_1_5_1;
+    prettyprinter = self.prettyprinter_1_6_0;
     prettyprinter-ansi-terminal =
       self.prettyprinter-ansi-terminal.override {
-        prettyprinter = self.prettyprinter_1_5_1;
+        prettyprinter = self.prettyprinter_1_6_0;
       };
   };
 
@@ -1237,8 +1235,8 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # need newer version of ghc-libparser
-  hlint = super.hlint.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
+  # Use a matching version of ghc-lib-parser.
+  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
@@ -1259,7 +1257,7 @@ self: super: {
   });
 
   # The LTS-14.x version of their dependencies are too old.
-  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
+  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_1; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
@@ -1337,7 +1335,27 @@ self: super: {
 
   # 2019-12-19 - glirc wants regex-tdfa >=1.3 which results in errors with regex-base which errors more
   # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
-  glirc = doJailbreak super.glirc;
+  # 2020-01-17 - as of recently the basic doJailbreak is not enough and have to override regex-tdfa which needs an override for regex-base
+
+  glirc = doJailbreak (super.glirc.override {
+    regex-tdfa = self.regex-tdfa_1_3_1_0;
+  });
+
+  regex-tdfa_1_3_1_0 = doJailbreak (super.regex-tdfa_1_3_1_0.override {
+    regex-base = self.regex-base_0_94_0_0;
+  });
+
+  # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
+  # multiple versions of them were being pulled in by the others which is not allowed.
+  # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
+  matterhorn = doJailbreak (super.matterhorn.override {
+    brick-skylighting = self.brick-skylighting.override {
+      brick = self.brick_0_50_1;
+    };
+  });
+
+  # 2020-01-19 - because of QuickCheck bounds | was broken anyway and is needed for matterhorn -- kiwi
+  Unique = doJailbreak super.Unique;
 
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
@@ -1367,5 +1385,8 @@ self: super: {
 
   # krank-0.1.0 does not accept PyF-0.9.0.0.
   krank = doJailbreak super.krank;
+
+  # prettyprinter-1.6.0 fails its doctest suite.
+  prettyprinter_1_6_0 = dontCheck super.prettyprinter_1_6_0;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

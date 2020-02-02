@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     owner = "unoconv";
     repo = "unoconv";
     rev = version;
-    sha256 = "0ix605lk0k3hv241jb2kf4jq5744q2wh9x0pzkmay5m126vv8kq4";
+    sha256 = "0mxrzzg9bl42lsiw8hcq624qbq8jrhcgmnal7ys68dj0l901snk3";
   };
 
   buildInputs = [ asciidoc makeWrapper ];
