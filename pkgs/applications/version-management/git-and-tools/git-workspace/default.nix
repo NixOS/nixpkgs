@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-workspace";
-  version = "0.4.1";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "orf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "01qxm00c5wqpy1clrvjr44v7cg4nqawaf5a6qnvvgswvis4kakzr";
+    sha256 = "0pl5z0gx2ypkrgq7vj1cxj5iwj06vcd06x3b3nh0g7w7q7nl8pr4";
   };
 
-  cargoSha256 = "16rkmk888alfvq8nsggi26vck1c7ya0fa5j7gv219g5py4gw2n34";
+  cargoSha256 = "0jbsz7r9n3jcgb9sd6pdjwzjf1b35qpfqw8ba8fjjmzfvs9qn6ld";
 
   verifyCargoDeps = true;
 
