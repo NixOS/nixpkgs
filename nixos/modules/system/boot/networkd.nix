@@ -972,9 +972,10 @@ in
     systemd.network.units = mkOption {
       description = "Definition of networkd units.";
       default = {};
+      internal = true;
       type = with types; attrsOf (submodule (
         { name, config, ... }:
-        { options = concreteUnitOptions;
+        { options = mapAttrs (_: x: x // { internal = true; }) concreteUnitOptions;
           config = {
             unit = mkDefault (makeUnit name config);
           };
