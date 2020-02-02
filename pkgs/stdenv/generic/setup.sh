@@ -806,20 +806,17 @@ _defaultUnpack() {
     local fn="$1"
 
     if [ -d "$fn" ]; then
-
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
         cp -pr --reflink=auto -- "$fn" "$(stripHash "$fn")"
-
     else
-
         case "$fn" in
             *.tar.xz | *.tar.lzma | *.txz)
                 # Don't rely on tar knowing about .xz.
                 xz -d < "$fn" | tar xf -
                 ;;
-            *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz)
+            *.tar | *.tar.* | *.tgz | *.tbz2 | *.tbz | *.bz2)
                 # GNU tar can automatically select the decompression method
                 # (info "(tar) gzip").
                 tar xf "$fn"
@@ -828,7 +825,6 @@ _defaultUnpack() {
                 return 1
                 ;;
         esac
-
     fi
 }
 
