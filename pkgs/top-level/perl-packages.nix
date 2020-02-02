@@ -952,10 +952,10 @@ let
 
   BCOW = buildPerlPackage {
     pname = "B-COW";
-    version = "0.001";
+    version = "0.002";
     src = fetchurl {
-      url = mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.001.tar.gz;
-      sha256 = "1n5hfhm72q96cpplc8hjfwkv7haq0xnq2db6ql611jdv17z3sp4d";
+      url = mirror://cpan/authors/id/A/AT/ATOOMIC/B-COW-0.002.tar.gz;
+      sha256 = "0z2px2x15vr1y5rxsv7d80kh186ld7a45nbm4lsbs07g8y0p7rzw";
     };
     meta = {
       description = "B::COW additional B helpers to check COW status";
