@@ -1178,12 +1178,12 @@ let
 
   falcon = buildVimPluginFrom2Nix {
     pname = "falcon";
-    version = "2020-01-01";
+    version = "2020-02-02";
     src = fetchFromGitHub {
       owner = "fenetikm";
       repo = "falcon";
-      rev = "419279ec95260efe3af42c8b03b823e59f09c3bc";
-      sha256 = "1cydvb4jbh8h1n09rc8446fspvfvbgbqz5a21nbadbkg3106wn3c";
+      rev = "4355adcfe26e34744f95a467a07642094ac75884";
+      sha256 = "0acya14rrmryfv6lmihx5mrjaa6aqqp1mfmyn3jawsynrgrfalc4";
     };
   };
 
@@ -1575,12 +1575,12 @@ let
 
   jedi-vim = buildVimPluginFrom2Nix {
     pname = "jedi-vim";
-    version = "2020-01-24";
+    version = "2020-02-02";
     src = fetchFromGitHub {
       owner = "davidhalter";
       repo = "jedi-vim";
-      rev = "c9bdefca547d8d9fc1add1231d1f7d381d056ebf";
-      sha256 = "1pddriamagd93v45j7ycvlxgs2inxs3gq6616x5d82v7g3ipypgk";
+      rev = "ea4de13344084623d243bed3ebfccde9f9076585";
+      sha256 = "0hw3564qqmjdykk1bpb5hgi2ysv0lfpw7z8kbs9mv6sxhln1p7js";
       fetchSubmodules = true;
     };
   };
