@@ -65,6 +65,8 @@ with frameworks; with libs; {
   InstallerPlugins        = [];
   InstantMessage          = [];
   JavaFrameEmbedding      = [];
+  JavaNativeFoundation    = [];
+  JavaRuntimeSupport      = [];
   JavaScriptCore          = [];
   Kerberos                = [];
   Kernel                  = [ IOKit ];
