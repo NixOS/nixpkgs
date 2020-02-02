@@ -20374,6 +20374,7 @@ in
   mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
 
   mpvScripts = {
+    bookmark = callPackage ../applications/video/mpv/scripts/bookmark.nix {};
     convert = callPackage ../applications/video/mpv/scripts/convert.nix {};
     mpris = callPackage ../applications/video/mpv/scripts/mpris.nix {};
   };
