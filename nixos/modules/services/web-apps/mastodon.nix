@@ -35,16 +35,11 @@ let
       ] else []
     ) env))));
 
-  mastodonEnv = pkgs.runCommand "mastodon-env" { preferLocalBuild = true; } ''
-    mkdir -p $out/bin
-    cat > $out/bin/mastodon-env << EOF
-    #!${pkgs.bash}/bin/bash
+  mastodonEnv = pkgs.writeShellScriptBin "mastodon-env" ''
     set -a
     source "${envFile}"
     source /var/lib/mastodon/.secrets_env
     eval -- "\$@"
-    EOF
-    chmod +x $out/bin/mastodon-env
   '';
 
 in {
