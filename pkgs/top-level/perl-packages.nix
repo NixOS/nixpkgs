@@ -9653,10 +9653,10 @@ let
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "3.17";
+    version = "3.18";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.17.tar.gz;
-      sha256 = "5150d0809f54fc99dc088b156f958bb258473c0e22f5c67157f71f919544fe5e";
+      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.18.tar.gz;
+      sha256 = "a62474311b57c0a01ad06a5e340ec10d3723d74fd019304c769ffc7a61b5a47a";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
