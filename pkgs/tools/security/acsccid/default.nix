@@ -1,20 +1,21 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, flex, perl, pkgconfig, pcsclite, libusb }:
+{ stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, flex, perl, pkgconfig, pcsclite, libusb, libiconv }:
 
 stdenv.mkDerivation rec {
-  version = "1.1.6";
+  version = "1.1.8";
   pname = "acsccid";
 
   src = fetchFromGitHub {
     owner = "acshk";
-    repo = "acsccid";
-    rev = "26bc84c738d12701e6a7289ed578671d71cbf3cb";
-    sha256 = "09k7hvcay092wkyf0hjsvimg1h4qzss1nk7m5yanlib4ldhw5g5c";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "12aahrvsk21qgpjwcrr01s742ixs44nmjkvcvqyzhqb307x1rrn3";
   };
 
   doCheck = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl ];
+  buildInputs = [ pcsclite libusb autoconf automake libtool gettext flex perl ]
+                ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
   postPatch = ''
     sed -e s_/bin/echo_echo_g -i src/Makefile.am

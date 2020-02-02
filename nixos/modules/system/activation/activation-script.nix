@@ -162,16 +162,6 @@ in
         <literal>/usr/bin/env</literal>.
       '';
     };
-
-    environment.ld-linux = mkOption {
-      default = false;
-      type = types.bool;
-      visible = false;
-      description = ''
-        Install symlink to ld-linux(8) system-wide to allow running unmodified ELF binaries.
-        It might be useful to run games or executables distributed inside jar files.
-      '';
-    };
   };
 
 
@@ -205,29 +195,8 @@ in
       ''
       else ''
         rm -f /usr/bin/env
-        rmdir -p /usr/bin || true
+        rmdir --ignore-fail-on-non-empty /usr/bin /usr
       '';
-
-    system.activationScripts.ld-linux =
-      concatStrings (
-        mapAttrsToList
-          (target: source:
-            if config.environment.ld-linux then ''
-              mkdir -m 0755 -p $(dirname ${target})
-              ln -sfn ${escapeShellArg source} ${target}.tmp
-              mv -f ${target}.tmp ${target} # atomically replace
-            '' else ''
-              rm -f ${target}
-              rmdir $(dirname ${target}) || true
-            '')
-          {
-            "i686-linux"   ."/lib/ld-linux.so.2"          = "${pkgs.glibc.out}/lib/ld-linux.so.2";
-            "x86_64-linux" ."/lib/ld-linux.so.2"          = "${pkgs.pkgsi686Linux.glibc.out}/lib/ld-linux.so.2";
-            "x86_64-linux" ."/lib64/ld-linux-x86-64.so.2" = "${pkgs.glibc.out}/lib64/ld-linux-x86-64.so.2";
-            "aarch64-linux"."/lib/ld-linux-aarch64.so.1"  = "${pkgs.glibc.out}/lib/ld-linux-aarch64.so.1";
-            "armv7l-linux" ."/lib/ld-linux-armhf.so.3"    = "${pkgs.glibc.out}/lib/ld-linux-armhf.so.3";
-          }.${pkgs.stdenv.system} or {}
-      );
 
     system.activationScripts.specialfs =
       ''

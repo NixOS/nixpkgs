@@ -25,6 +25,13 @@
    </listitem>
    <listitem>
     <para>
+     Linux kernel is updated to branch 5.4 by default (from 4.19).
+     Users of Intel GPUs may prefer to explicitly set branch to 4.19 to avoid some regressions.
+     <programlisting>boot.kernelPackages = pkgs.linuxPackages_4_19;</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      Postgresql for NixOS service now defaults to v11.
     </para>
    </listitem>
@@ -52,7 +59,7 @@
    <listitem>
     <para>
       <command>nixos-option</command> has been rewritten in C++, speeding it up, improving correctness,
-      and adding a <option>--all</option> option which prints all options and their values.
+      and adding a <option>-r</option> option which prints all options and their values recursively.
     </para>
    </listitem>
    <listitem>
@@ -94,6 +101,13 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
     <para>
     UPower's configuration is now managed by NixOS and can be customized
     via <option>services.upower</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     To use Geary you should enable <xref linkend="opt-programs.geary.enable"/> instead of
+     just adding it to <xref linkend="opt-environment.systemPackages"/>.
+     It was created so Geary could function properly outside of GNOME.
     </para>
    </listitem>
   </itemizedlist>
@@ -535,6 +549,33 @@ auth required pam_succeed_if.so uid >= 1000 quiet
          </para>
        </listitem>
      </itemizedlist>
+   </listitem>
+   <listitem>
+    <para>The LLVM versions 3.5, 3.9 and 4 (including the corresponding CLang versions) have been dropped.</para>
+   </listitem>
+   <listitem>
+    <para>
+     The <option>networking.interfaces.*.preferTempAddress</option> option has
+     been replaced by <option>networking.interfaces.*.tempAddress</option>.
+     The new option allows better control of the IPv6 temporary addresses,
+     including completely disabling them for interfaces where they are not
+     needed.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Rspamd was updated to version 2.2. Read
+       <link xlink:href="https://rspamd.com/doc/migration.html#migration-to-rspamd-20">
+       the upstream migration notes</link> carefully. Please be especially
+       aware that some modules were removed and the default Bayes backend is
+       now Redis.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>*psu</literal> versions of <package>oraclejdk8</package> have been removed
+     as they aren't provided by upstream anymore.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

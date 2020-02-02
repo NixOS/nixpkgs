@@ -32,7 +32,6 @@ in
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
-  #blivet = handleTest ./blivet.nix {};   # broken since 2017-07024
   buildkite-agent = handleTest ./buildkite-agent.nix {};
   boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
@@ -276,6 +275,7 @@ in
   systemd-analyze = handleTest ./systemd-analyze.nix {};
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
+  systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
   systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};

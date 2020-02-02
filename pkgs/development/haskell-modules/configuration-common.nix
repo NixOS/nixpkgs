@@ -603,9 +603,7 @@ self: super: {
   sets = dontCheck super.sets;
 
   # Install icons, metadata and cli program.
-  # Do not build hgettext as it is broken
-  # https://gitlab.freedesktop.org/bustle/bustle/issues/13
-  bustle = overrideCabal (disableCabalFlag (super.bustle.override { hgettext = null; }) "hgettext") (drv: {
+  bustle = overrideCabal super.bustle (drv: {
     buildDepends = [ pkgs.libpcap ];
     buildTools = with pkgs.buildPackages; [ gettext perl help2man ];
     patches = [
@@ -1063,10 +1061,10 @@ self: super: {
   dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
   dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
     dhall = self.dhall_1_29_0;
-    prettyprinter = self.prettyprinter_1_5_1;
+    prettyprinter = self.prettyprinter_1_6_0;
     prettyprinter-ansi-terminal =
       self.prettyprinter-ansi-terminal.override {
-        prettyprinter = self.prettyprinter_1_5_1;
+        prettyprinter = self.prettyprinter_1_6_0;
       };
   };
 
@@ -1259,7 +1257,7 @@ self: super: {
   });
 
   # The LTS-14.x version of their dependencies are too old.
-  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_0; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
+  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_1; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
