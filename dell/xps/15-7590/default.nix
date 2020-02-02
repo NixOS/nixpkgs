@@ -10,6 +10,12 @@
   # Set to true for just the first run, then disable it.
   # boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
+  # Earlier font-size setup
+  console.earlySetup = true;
+
+  # Prevent small EFI partiion from filling up
+  boot.loader.grub.configurationLimit = 10;
+
   # The 48.ucode causes the Killer wifi card to crash.
   # The iwlfwifi-cc-a0-46.ucode works perfectly
   nixpkgs.pkgs = import <nixpkgs> {
