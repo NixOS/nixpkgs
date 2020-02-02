@@ -1961,6 +1961,8 @@ in
 
   monetdb = callPackage ../servers/sql/monetdb { };
 
+  mons = callPackage ../tools/misc/mons {};
+
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
   };
