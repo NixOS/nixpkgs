@@ -1706,6 +1706,17 @@ let
     };
   };
 
+  lf-vim = buildVimPluginFrom2Nix {
+    pname = "lf-vim";
+    version = "2019-10-11";
+    src = fetchFromGitHub {
+      owner = "ptzz";
+      repo = "lf.vim";
+      rev = "8ffbae128b8887283b2d4b3a660e5be0de58ea0c";
+      sha256 = "0gzj9h31f4synjqfv8dhqihr6fgi3ar06xqjjl5fb4269p9964lb";
+    };
+  };
+
   lh-brackets = buildVimPluginFrom2Nix {
     pname = "lh-brackets";
     version = "2019-11-26";
