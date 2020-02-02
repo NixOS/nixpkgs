@@ -15680,6 +15680,9 @@ in
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+  prometheus-xmpp-alerts = callPackages ../servers/monitoring/prometheus/xmpp-alerts.nix {
+    pythonPackages = python3Packages;
+  };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
 
