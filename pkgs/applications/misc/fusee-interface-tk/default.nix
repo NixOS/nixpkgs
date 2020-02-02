@@ -21,9 +21,9 @@ in stdenv.mkDerivation {
     
     # The program isn't just called app, so I'm renaming it based on the repo name 
     # It also isn't a standard program, so we need to append the shebang to the top
-    echo "#!${pythonEnv.interpreter}" > $out/bin/fusee-launcher-tk.py 
-    cat app.py >> $out/bin/fusee-launcher-tk.py 
-    chmod +x $out/bin/fusee-launcher-tk.py 
+    echo "#!${pythonEnv.interpreter}" > $out/bin/fusee-launcher-tk 
+    cat app.py >> $out/bin/fusee-launcher-tk
+    chmod +x $out/bin/fusee-launcher-tk 
     
 
     # app.py depends on these to run 
