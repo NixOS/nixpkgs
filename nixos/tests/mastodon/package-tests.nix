@@ -69,7 +69,9 @@ import ../make-test-python.nix ({ pkgs, ...} :
     machine.succeed(su("cd mastodon; rails assets:precompile"))
     machine.succeed(su("cd mastodon; rails db:environment:set"))
     machine.succeed(su("cd mastodon; rails db:schema:load"))
-    machine.log(machine.succeed(su("cd mastodon; rspec --no-color")))  # Ruby tests.
+    machine.log(
+        machine.succeed(su("cd mastodon; rspec --seed 12345 --no-color"))
+    )  # Ruby tests.
     machine.log(machine.succeed(su("cd mastodon; yarn run jest")))  # Javascript tests.
   '';
 })
