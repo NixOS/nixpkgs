@@ -1,4 +1,4 @@
-{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip }:
+{ stdenv, lib, buildEnv, writeShellScriptBin, fetchurl, vscode, unzip, jq }:
 
 let
 
@@ -84,7 +84,7 @@ let
   };
 
   vscodeEnv = import ./vscodeEnv.nix {
-    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace;
+    inherit lib buildEnv writeShellScriptBin extensionsFromVscodeMarketplace jq;
     vscodeDefault = vscode;
   };
 in 
