@@ -87,6 +87,8 @@ in buildPythonPackage rec {
     # ordering logic has changed
     "numpy_ufuncs_other"
     "order_without_freq"
+    # tries to import from pandas.tests post install
+    "util_in_top_level"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
