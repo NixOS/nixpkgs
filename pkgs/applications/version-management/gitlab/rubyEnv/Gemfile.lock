@@ -81,15 +81,13 @@ GEM
     attr_required (1.0.1)
     awesome_print (1.8.0)
     aws-eventstream (1.0.3)
-    aws-partitions (1.263.0)
-    aws-sdk-cloudformation (1.29.0)
-      aws-sdk-core (~> 3, >= 3.71.0)
-      aws-sigv4 (~> 1.1)
-    aws-sdk-core (3.88.0)
-      aws-eventstream (~> 1.0, >= 1.0.2)
-      aws-partitions (~> 1, >= 1.239.0)
-      aws-sigv4 (~> 1.1)
+    aws-sdk (2.11.374)
+      aws-sdk-resources (= 2.11.374)
+    aws-sdk-core (2.11.374)
+      aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
+    aws-sdk-resources (2.11.374)
+      aws-sdk-core (= 2.11.374)
     aws-sigv4 (1.1.0)
       aws-eventstream (~> 1.0, >= 1.0.2)
     axiom-types (0.1.1)
@@ -278,9 +276,9 @@ GEM
       faraday (~> 0.8)
     faraday_middleware (0.12.2)
       faraday (>= 0.7.4, < 1.0)
-    faraday_middleware-aws-sigv4 (0.3.0)
-      aws-sigv4 (~> 1.0)
-      faraday (>= 0.15)
+    faraday_middleware-aws-signers-v4 (0.1.7)
+      aws-sdk-resources (~> 2)
+      faraday (~> 0.9)
     faraday_middleware-multi_json (0.0.6)
       faraday_middleware
       multi_json
@@ -1144,8 +1142,7 @@ DEPENDENCIES
   atlassian-jwt (~> 0.2.0)
   attr_encrypted (~> 3.1.0)
   awesome_print
-  aws-sdk-cloudformation (~> 1)
-  aws-sdk-core (~> 3)
+  aws-sdk
   babosa (~> 1.0.2)
   base32 (~> 0.3.0)
   batch-loader (~> 1.4.0)
@@ -1191,7 +1188,7 @@ DEPENDENCIES
   escape_utils (~> 1.1)
   factory_bot_rails (~> 5.1.0)
   faraday (~> 0.12)
-  faraday_middleware-aws-sigv4
+  faraday_middleware-aws-signers-v4
   fast_blank
   ffaker (~> 2.10)
   flipper (~> 0.17.1)
