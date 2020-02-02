@@ -8,26 +8,25 @@
 { settings      ? {}
 # if marked as true will create an empty json file if does not exists
 , createIfDoesNotExists ? true
-, vscodeSettingsFile ? .vscode/settings.json
+, vscodeSettingsFile ? ".vscode/settings.json"
 }:
 let
-  #VSCode Settings file
-  vscodeSettingsFileStr = toString vscodeSettingsFile;
 
   updateVSCodeSettingsCmd = ''
   (
-    echo 'updateSettings.nix: Updating ${vscodeSettingsFileStr}...' 
-    oldSettings=$(cat ${vscodeSettingsFileStr})
-    echo $oldSettings' ${builtins.toJSON settings}' | ${jq}/bin/jq -s add > ${vscodeSettingsFileStr}
+    echo 'updateSettings.nix: Updating ${vscodeSettingsFile}...' 
+    oldSettings=$(cat ${vscodeSettingsFile})
+    echo $oldSettings' ${builtins.toJSON settings}' | ${jq}/bin/jq -s add > ${vscodeSettingsFile}
   )'';
 
-  createEmptySettingsCmd = ''mkdir -p .vscode && echo "{}" > ${vscodeSettingsFileStr}'';
+  createEmptySettingsCmd = ''mkdir -p .vscode && echo "{}" > ${vscodeSettingsFile}'';
 in 
-  writeShellScriptBin ''vscodeNixUpdate-${lib.removeSuffix ".json" (builtins.baseNameOf vscodeSettingsFileStr)}''
+
+  writeShellScriptBin ''vscodeNixUpdate-${lib.removeSuffix ".json" (builtins.baseNameOf vscodeSettingsFile)}''
   (lib.optionalString (settings != {}) 
   (if createIfDoesNotExists then ''
-    [ ! -f "${vscodeSettingsFileStr}" ] && ${createEmptySettingsCmd}
+    [ ! -f "${vscodeSettingsFile}" ] && ${createEmptySettingsCmd}
     ${updateVSCodeSettingsCmd}
   ''
-  else ''[ -f "${vscodeSettingsFileStr}" ] && ${updateVSCodeSettingsCmd}''
+  else ''[ -f "${vscodeSettingsFile}" ] && ${updateVSCodeSettingsCmd}''
   ))
