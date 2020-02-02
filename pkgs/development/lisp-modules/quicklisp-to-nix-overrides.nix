@@ -105,6 +105,18 @@ $out/lib/common-lisp/query-fs"
       '';
     };
   };
+  serapeum = x: {
+    overrides = y: (x.overrides y) //{
+      # Override src until quicklisp catches up to 65837f8 (see serapeum
+      # issue #42)
+      src = pkgs.fetchFromGitHub {
+        owner = "ruricolist";
+        repo = "serapeum";
+        rev = "65837f8a0d65b36369ec8d000fff5c29a395b5fe";
+        sha256 = "0clwf81r2lvk1rbfvk91s9zmbkas9imf57ilqclw12mxaxlfsnbw";
+      };
+    };
+  };
   sqlite = x: {
     propagatedBuildInputs = [pkgs.sqlite];
     overrides = y: (x.overrides y) // {

@@ -15,7 +15,7 @@ fi
 # Inspect each file and see if it has the latest version
 NIXPKGS="$(git rev-parse --show-toplevel)"
 ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
-  KERNEL="$(sed -n $LINUXSED <<< "$FILE")"
+  KERNEL="$(sed -n -e $LINUXSED <<< "$FILE")"
   [ -z "$KERNEL" ] && continue
 
   # Find the matching new kernel version
@@ -45,11 +45,11 @@ ls $NIXPKGS/pkgs/os-specific/linux/kernel | while read FILE; do
     echo "Failed to get hash of $URL"
     continue
   fi
-  sed -i "s/sha256 = \".*\"/sha256 = \"$HASH\"/g" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
+  sed -i -e "s/sha256 = \".*\"/sha256 = \"$HASH\"/g" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
 
   # Rewrite the expression
   sed -i -e '/version = /d' $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
-  sed -i "\#buildLinux (args // rec {#a \  version = \"$V\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
+  sed -i -e "\#buildLinux (args // rec {#a \  version = \"$V\";" $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE
 
   # Commit the changes
   git add -u $NIXPKGS/pkgs/os-specific/linux/kernel/$FILE

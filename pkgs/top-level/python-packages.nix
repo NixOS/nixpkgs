@@ -187,6 +187,8 @@ in {
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
+  aria2p = callPackage ../development/python-modules/aria2p { inherit (pkgs) aria2 poetry; };
+
   arviz = callPackage ../development/python-modules/arviz { };
 
   asana = callPackage ../development/python-modules/asana { };
@@ -311,6 +313,8 @@ in {
   azure-storage-blob = callPackage ../development/python-modules/azure-storage-blob { };
 
   azure-storage-file = callPackage ../development/python-modules/azure-storage-file { };
+
+  azure-storage-file-share = callPackage ../development/python-modules/azure-storage-file-share { };
 
   azure-storage-queue = callPackage ../development/python-modules/azure-storage-queue { };
 
@@ -1658,6 +1662,8 @@ in {
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
+  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };  
+
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
@@ -1817,6 +1823,10 @@ in {
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
+
+  cirq = callPackage ../development/python-modules/cirq {
+    pythonProtobuf = self.protobuf;
+  };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
 
@@ -2253,6 +2263,8 @@ in {
   python-json-logger = callPackage ../development/python-modules/python-json-logger { };
 
   python-ly = callPackage ../development/python-modules/python-ly {};
+
+  pyhcl = callPackage ../development/python-modules/pyhcl { };
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
@@ -2817,6 +2829,7 @@ in {
     (p: p.overrideAttrs (super: {
       meta = super.meta // {
         outputsToInstall = [ "py" ];
+        broken = (super.meta.broken or false) || pythonAtLeast "3.8";
       };
     }))
 
@@ -3317,6 +3330,8 @@ in {
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
   djangorestframework-jwt = callPackage ../development/python-modules/djangorestframework-jwt { };
+
+  djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
 
   django-raster = callPackage ../development/python-modules/django-raster { };
 
@@ -4834,7 +4849,7 @@ in {
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
-  pyenchant = callPackage ../development/python-modules/pyenchant { };
+  pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
@@ -5681,6 +5696,10 @@ in {
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  yoda = toPythonModule (pkgs.yoda.override {
+    inherit python;
+  });
 
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 

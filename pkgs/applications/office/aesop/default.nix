@@ -3,23 +3,14 @@
 
 stdenv.mkDerivation rec {
   pname = "aesop";
-  version = "1.1.3";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "1hnwhxaz0zx4fswrxjzyv5s77v5fimn87yid9sd1qgfv2g1ck0jc";
+    sha256 = "1aa1kp1rndi2dj1d9sf8zhssn5dw183yx1fm2xccdy9zjf9wi4jk";
   };
-
-  patches = [
-    # Fix build
-    # https://github.com/lainsce/aesop/pull/33
-    (fetchpatch {
-      url = "https://github.com/lainsce/aesop/commit/850ec86bbfef5168e537a5af7e0d73d96db56330.patch";
-      sha256 = "14b251wp11rypqw4fafwjbsqy92mxzr8mmaxlv7n4whvwxrzqirh";
-    })
-  ];
 
   nativeBuildInputs = [
     desktop-file-utils

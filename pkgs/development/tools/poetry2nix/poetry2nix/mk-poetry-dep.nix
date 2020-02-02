@@ -20,7 +20,8 @@
 
 pythonPackages.callPackage (
   { preferWheel ? false
-  }:
+  , ...
+  }@args:
 
     let
 
@@ -82,7 +83,9 @@ pythonPackages.callPackage (
             else (builtins.elemAt (lib.strings.splitString "-" name) 2);
         };
 
-      baseBuildInputs = lib.optional (name != "setuptools_scm" && name != "setuptools-scm") pythonPackages.setuptools_scm;
+      baseBuildInputs = lib.optional (name != "setuptools_scm" && name != "setuptools-scm") pythonPackages.setuptools-scm;
+
+      format = if isLocal then "pyproject" else if isGit then "setuptools" else fileInfo.format;
 
     in
 
@@ -90,24 +93,32 @@ pythonPackages.callPackage (
         pname = name;
         version = version;
 
+        inherit format;
+
         doCheck = false; # We never get development deps
-        dontStrip = true;
-        format = if isLocal then "pyproject" else if isGit then "setuptools" else fileInfo.format;
+
+        # Stripping pre-built wheels lead to `ELF load command address/offset not properly aligned`
+        dontStrip = format == "wheel";
 
         nativeBuildInputs = if (!isSource && (getManyLinuxDeps fileInfo.name).str != null) then [ autoPatchelfHook ] else [];
-        buildInputs = baseBuildInputs ++ (if !isSource then (getManyLinuxDeps fileInfo.name).pkg else []);
+        buildInputs = (
+          baseBuildInputs
+          ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
+          ++ lib.optional isLocal buildSystemPkgs
+        );
 
         propagatedBuildInputs =
-          let
-            # Some dependencies like django gets the attribute name django
-            # but dependencies try to access Django
-            deps = builtins.map (d: lib.toLower d) (builtins.attrNames dependencies);
-          in
-            (builtins.map (n: pythonPackages.${n}) deps) ++ (if isLocal then buildSystemPkgs else []);
+          # Some dependencies like django get the attribute name django
+          # but dependencies try to access Django
+          builtins.map (n: pythonPackages.${lib.toLower n}) (builtins.attrNames dependencies);
 
         meta = {
-          broken = ! isCompatible python.version python-versions;
+          broken = ! isCompatible python.pythonVersion python-versions;
           license = [];
+        };
+
+        passthru = {
+          inherit args;
         };
 
         # We need to retrieve kind from the interpreter and the filename of the package

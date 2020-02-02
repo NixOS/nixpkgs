@@ -17,7 +17,7 @@ let
         ../modules/testing/test-instrumentation.nix
         ../modules/profiles/qemu-guest.nix
       ];
-    }).config.system.build.openstackImage;
+    }).config.system.build.openstackImage + "/nixos.qcow2";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;

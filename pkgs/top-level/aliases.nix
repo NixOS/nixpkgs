@@ -126,7 +126,6 @@ mapAliases ({
   '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
-  fprintd-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
@@ -213,7 +212,6 @@ mapAliases ({
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
-  libfprint-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
@@ -414,6 +412,7 @@ mapAliases ({
   system_config_printer = system-config-printer;  # added 2016-01-03
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
+  tangogps = foxtrotgps; # added 2020-01-26
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
   telepathy_glib = telepathy-glib; # added 2018-02-25
@@ -541,4 +540,21 @@ mapAliases ({
   tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
   # added 2020-01-10
   tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+
+    /* Cleanup before 20.09 */
+  llvm_4 = throw ''
+    The LLVM versions 3.5, 3.9 and 4.0 have been removed in NixOS 20.03
+    due to a lack of compatibility with glibc 2.30!
+  '';
+  llvm_39 = llvm_4;
+  llvm_35 = llvm_4;
+  lld_4 = llvm_4;
+
+  llvmPackages_4 = llvm_4;
+  llvmPackages_39 = llvm_4;
+  llvmPackages_35 = llvm_4;
+
+  clang_39 = llvm_4;
+  clang_35 = llvm_4;
+  clang_4 = llvm_4;
 })

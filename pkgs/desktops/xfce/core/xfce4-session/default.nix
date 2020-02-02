@@ -1,4 +1,4 @@
-{ mkXfceDerivation, polkit, exo, libxfce4util, libxfce4ui, xfconf, iceauth, gtk3, glib, libwnck3, xorg, xfce4-session }:
+{ mkXfceDerivation, polkit, exo, libxfce4util, libxfce4ui, xfconf, iceauth, gtk3, glib, libwnck3, xorg, xfce4-session, runtimeShell }:
 
 mkXfceDerivation {
   category = "xfce";
@@ -14,9 +14,25 @@ mkXfceDerivation {
   # See https://github.com/NixOS/nixpkgs/issues/36468
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
-  passthru.xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
+  # Don't use startxfce4 in xfce.desktop
+  # It's has FHS isms
+  postFixup = ''
+    chmod +x $out/etc/xdg/xfce4/xinitrc
+    patchShebangs $out/etc/xdg/xfce4/xinitrc
 
-  meta =  {
+    substituteInPlace "$out/share/xsessions/xfce.desktop" \
+      --replace "Exec=startxfce4" "Exec=$out/etc/xdg/xfce4/xinitrc"
+  '';
+
+  passthru = {
+    xinitrc = "${xfce4-session}/etc/xdg/xfce4/xinitrc";
+
+    providedSessions = [
+      "xfce"
+    ];
+  };
+
+  meta = {
     description = "Session manager for Xfce";
   };
 }

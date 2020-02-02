@@ -10,42 +10,29 @@
 with lib;
 
 # Main reference:
-# - This package is based on the Arch package:
+# - This package was originally based on the Arch package but all patches are now upstreamed:
 #   https://git.archlinux.org/svntogit/community.git/tree/trunk/PKGBUILD?h=packages/telegram-desktop
-# Other references that could be useful (but we should try to stick to Arch):
+# Other references that could be useful:
 # - https://git.alpinelinux.org/aports/tree/testing/telegram-desktop/APKBUILD
 # - https://github.com/void-linux/void-packages/blob/master/srcpkgs/telegram-desktop/template
 
 mkDerivation rec {
   pname = "telegram-desktop";
-  version = "1.9.4";
-  # Note: Due to our strong dependency on the Arch patches it's probably best
-  # to also wait for the Arch update (especially if the patches don't apply).
+  version = "1.9.9";
 
   # Telegram-Desktop with submodules
   src = fetchurl {
     url = "https://github.com/telegramdesktop/tdesktop/releases/download/v${version}/tdesktop-${version}-full.tar.gz";
-    sha256 = "1ldsgbix0ca4pl2z55wiz90ll3542zsm9slayrzyr7b2jw7arxwy";
+    sha256 = "08bxlqiapj9yqj9ywni33n5k7n3ckgfhv200snjqyqy9waqph1i6";
   };
-
-  # Arch patches (svn export telegram-desktop/trunk)
-  archPatches = fetchsvn {
-    url = "svn://svn.archlinux.org/community/telegram-desktop/trunk";
-    # svn log svn://svn.archlinux.org/community/telegram-desktop/trunk
-    rev = "553350";
-    sha256 = "05fyij490flrbn4jfwhm8gx9imh0wfby4j9fj69f45qgkpsd7ajb";
-  };
-
-  # Note: It would be best if someone could get as many patches upstream as
-  # possible (we currently depend a lot on custom patches...).
-  patches = [
-    "${archPatches}/0005-Use-system-wide-fonts.patch"
-    "${archPatches}/0006-Revert-Disable-DemiBold-fallback-for-Semibold.patch"
-  ];
 
   postPatch = ''
     substituteInPlace Telegram/SourceFiles/platform/linux/linux_libs.cpp \
       --replace '"appindicator3"' '"${libappindicator-gtk3}/lib/libappindicator3.so"'
+    substituteInPlace Telegram/lib_spellcheck/spellcheck/platform/linux/linux_enchant.cpp \
+      --replace '"libenchant-2.so.2"' '"${enchant2}/lib/libenchant-2.so.2"'
+    substituteInPlace Telegram/CMakeLists.txt \
+      --replace '"''${TDESKTOP_LAUNCHER_BASENAME}.appdata.xml"' '"''${TDESKTOP_LAUNCHER_BASENAME}.metainfo.xml"'
   '';
 
   # We want to run wrapProgram manually (with additional parameters)
@@ -63,25 +50,11 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${minizip}/include/minizip"
-    # See Telegram/gyp/qt.gypi
-    "-I${getDev qtbase}/mkspecs/linux-g++"
-  ] ++ concatMap (x: [
-    "-I${getDev qtbase}/include/${x}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}"
-    "-I${getDev qtbase}/include/${x}/${qtbase.version}/${x}"
-    "-I${getDev libopus}/include/opus"
-    "-I${getDev alsaLib}/include/alsa"
-    "-I${getDev libpulseaudio}/include/pulse"
-    ]) [ "QtCore" "QtGui" "QtDBus" ];
-  CPPFLAGS = NIX_CFLAGS_COMPILE;
-
   cmakeFlags = [
     "-Ddisable_autoupdate=ON"
-    #"-DTDESKTOP_API_TEST=ON" # TODO: Officiall API credentials for Nixpkgs
-    "-DTDESKTOP_API_ID=17349" # See: https://github.com/NixOS/nixpkgs/issues/55271
-    "-DTDESKTOP_API_HASH=344583e45741c457fe1862106095a5eb"
+    # TODO: Officiall API credentials for Nixpkgs
+    # (see: https://github.com/NixOS/nixpkgs/issues/55271):
+    "-DTDESKTOP_API_TEST=ON"
     "-DDESKTOP_APP_USE_GLIBC_WRAPS=OFF"
     "-DDESKTOP_APP_USE_PACKAGED=ON"
     "-DDESKTOP_APP_USE_PACKAGED_RLOTTIE=OFF"
@@ -90,6 +63,7 @@ mkDerivation rec {
     "-DTDESKTOP_DISABLE_DESKTOP_FILE_GENERATION=ON"
     "-DTDESKTOP_USE_PACKAGED_TGVOIP=OFF"
     #"-DDESKTOP_APP_SPECIAL_TARGET=\"\"" # TODO: Error when set to "": Bad special target '""'
+    "-DTDESKTOP_LAUNCHER_BASENAME=telegramdesktop" # Note: This is the default
   ];
 
   # Note: The following packages could be packaged system-wide, but it's
@@ -106,19 +80,6 @@ mkDerivation rec {
   #   - upstream: https://github.com/grishka/libtgvoip
   # Both of these packages are included in this PR (kotatogram-desktop):
   # https://github.com/NixOS/nixpkgs/pull/75210
-
-  installPhase = ''
-    install -Dm755 bin/Telegram $out/bin/telegram-desktop
-
-    mkdir -p $out/share/{kservices5,applications,metainfo}
-    sed "s,/usr/bin,$out/bin,g" "../lib/xdg/tg.protocol" > "$out/share/kservices5/tg.protocol"
-    install -m444 "../lib/xdg/telegramdesktop.desktop" "$out/share/applications/telegram-desktop.desktop"
-    install -m644 "../lib/xdg/telegramdesktop.appdata.xml" "$out/share/metainfo/telegramdesktop.metainfo.xml"
-
-    for icon_size in 16 32 48 64 128 256 512; do
-      install -Dm644 "../Telegram/Resources/art/icon''${icon_size}.png" "$out/share/icons/hicolor/''${icon_size}x''${icon_size}/apps/telegram.png"
-    done
-  '';
 
   postFixup = ''
     # This is necessary to run Telegram in a pure environment.

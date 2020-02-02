@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python, pbzx, lib }:
+{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib }:
 
 let
   # sadly needs to be exported because security_tool needs it
@@ -16,7 +16,7 @@ let
       sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    buildInputs = [ xar cpio python pbzx ];
+    nativeBuildInputs = [ xar cpio python3 pbzx ];
 
     outputs = [ "out" "dev" "man" ];
 

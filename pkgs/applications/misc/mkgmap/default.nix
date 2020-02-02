@@ -17,12 +17,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mkgmap";
-  version = "4289";
+  version = "4432";
 
   src = fetchsvn {
     url = "https://svn.mkgmap.org.uk/mkgmap/mkgmap/trunk";
     rev = version;
-    sha256 = "1sm1pw71q7z0jrxm8bcgm6xjl2mcidyibcf0a3m8fv2andidxrb4";
+    sha256 = "1z1ppf9v1b9clnx20v15xkmdrfw6q4h7i15drzxsdh2wl6bafzvx";
   };
 
   # This patch removes from the build process
