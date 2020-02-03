@@ -577,6 +577,13 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      as they aren't provided by upstream anymore.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <option>services.dnscrypt-proxy</option> module has been removed
+     as it used the deprecated version of dnscrypt-proxy. We've added
+     <xref linkend="opt-services.dnscrypt-proxy2.enable"/> to use the supported version.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

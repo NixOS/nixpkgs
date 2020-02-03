@@ -565,4 +565,6 @@ mapAliases ({
   '';
   oraclejre8psu = oraclejdk8psu;
   oraclejdk8psu_distro = oraclejdk8psu;
+
+  dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
 })
