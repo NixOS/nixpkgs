@@ -1,6 +1,19 @@
---- a/elf/Makefile
-+++ b/elf/Makefile
-@@ -589,13 +589,13 @@ $(objpfx)sln: $(sln-modules:%=$(objpfx)%.o)
+diff -Naur glibc-2.27-orig/elf/ldconfig.c glibc-2.27/elf/ldconfig.c
+--- glibc-2.27-orig/elf/ldconfig.c	2018-02-01 11:17:18.000000000 -0500
++++ glibc-2.27/elf/ldconfig.c	2018-02-17 22:43:17.232175182 -0500
+@@ -51,7 +51,7 @@
+ #endif
+ 
+ #ifndef LD_SO_CONF
+-# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
++# define LD_SO_CONF PREFIX "/etc/ld.so.conf"
+ #endif
+ 
+ /* Get libc version number.  */
+diff -Naur glibc-2.27-orig/elf/Makefile glibc-2.27/elf/Makefile
+--- glibc-2.27-orig/elf/Makefile	2018-02-01 11:17:18.000000000 -0500
++++ glibc-2.27/elf/Makefile	2018-02-17 22:44:50.334006750 -0500
+@@ -559,13 +559,13 @@
  
  $(objpfx)ldconfig: $(ldconfig-modules:%=$(objpfx)%.o)
  
@@ -19,19 +32,9 @@
  
  cpp-srcs-left := $(all-rtld-routines:=.os)
  lib := rtld
---- a/elf/ldconfig.c
-+++ b/elf/ldconfig.c
-@@ -51,7 +51,7 @@
- #endif
- 
- #ifndef LD_SO_CONF
--# define LD_SO_CONF SYSCONFDIR "/ld.so.conf"
-+# define LD_SO_CONF PREFIX "/etc/ld.so.conf"
- #endif
- 
- /* Get libc version number.  */
---- a/sysdeps/generic/dl-cache.h
-+++ b/sysdeps/generic/dl-cache.h
+diff -Naur glibc-2.27-orig/sysdeps/generic/dl-cache.h glibc-2.27/sysdeps/generic/dl-cache.h
+--- glibc-2.27-orig/sysdeps/generic/dl-cache.h	2018-02-01 11:17:18.000000000 -0500
++++ glibc-2.27/sysdeps/generic/dl-cache.h	2018-02-17 22:45:20.471598816 -0500
 @@ -28,7 +28,7 @@
  #endif
  

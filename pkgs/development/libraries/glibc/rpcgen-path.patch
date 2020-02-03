@@ -1,6 +1,7 @@
---- a/sunrpc/rpc_main.c
-+++ b/sunrpc/rpc_main.c
-@@ -78,7 +78,7 @@ static const char *cmdname;
+diff -ru glibc-2.18-orig/sunrpc/rpc_main.c glibc-2.18/sunrpc/rpc_main.c
+--- glibc-2.18-orig/sunrpc/rpc_main.c	2013-08-11 00:52:55.000000000 +0200
++++ glibc-2.18/sunrpc/rpc_main.c	2013-11-15 12:04:48.041006977 +0100
+@@ -78,7 +78,7 @@
  
  static const char *svcclosetime = "120";
  static int cppDefined;	/* explicit path for C preprocessor */
@@ -9,7 +10,7 @@
  static const char CPPFLAGS[] = "-C";
  static char *pathbuf;
  static int cpp_pid;
-@@ -107,7 +107,6 @@ static char *extendfile (const char *file, const char *ext);
+@@ -107,7 +107,6 @@
  static void open_output (const char *infile, const char *outfile);
  static void add_warning (void);
  static void clear_args (void);
@@ -17,7 +18,7 @@
  static void open_input (const char *infile, const char *define);
  static int check_nettype (const char *name, const char *list_to_check[]);
  static void c_output (const char *infile, const char *define,
-@@ -322,25 +321,6 @@ clear_args (void)
+@@ -322,25 +321,6 @@
    argcount = FIXEDARGS;
  }
  
@@ -43,7 +44,7 @@
  /*
   * Open input file with given define for C-preprocessor
   */
-@@ -359,7 +339,6 @@ open_input (const char *infile, const char *define)
+@@ -359,7 +339,6 @@
    switch (cpp_pid)
      {
      case 0:

@@ -1,4 +1,4 @@
-From d9e6dd5631c8d97fd2d3128317c6352e34bf3ca7 Mon Sep 17 00:00:00 2001
+From 3288c6da64add3b4561b8c10fff522027caea01c Mon Sep 17 00:00:00 2001
 From: Nicholas Miell <nmiell@gmail.com>
 Date: Sat, 17 Jun 2017 18:21:07 -0700
 Subject: [PATCH] Align the stack on entry to __tls_get_addr()
@@ -17,13 +17,13 @@ engine and available for purchase on Steam.
  1 file changed, 4 insertions(+)
 
 diff --git a/elf/dl-tls.c b/elf/dl-tls.c
-index b425d661..b02c2afa 100644
+index 5aba33b3fa..3f3cb917de 100644
 --- a/elf/dl-tls.c
 +++ b/elf/dl-tls.c
-@@ -818,6 +818,10 @@ rtld_hidden_proto (__tls_get_addr)
+@@ -827,6 +827,10 @@ rtld_hidden_proto (__tls_get_addr)
  rtld_hidden_def (__tls_get_addr)
  #endif
- 
+
 +#ifdef __x86_64__
 +/* Old versions of gcc didn't align the stack. */
 +__attribute__((force_align_arg_pointer))
@@ -31,6 +31,5 @@ index b425d661..b02c2afa 100644
  /* The generic dynamic and local dynamic model cannot be used in
     statically linked applications.  */
  void *
--- 
-2.17.1
-
+--
+2.13.0
