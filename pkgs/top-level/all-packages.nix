@@ -14489,6 +14489,8 @@ in
 
   sonic = callPackage ../development/libraries/sonic { };
 
+  sope = callPackage ../development/libraries/sope { };
+
   soprano = callPackage ../development/libraries/soprano { };
 
   soqt = callPackage ../development/libraries/soqt { };
