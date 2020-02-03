@@ -4009,6 +4009,8 @@ in
     javac = jdk;
   };
 
+  hdl_dump = callPackage ../games/hdl_dump { };
+
   hecate = callPackage ../applications/editors/hecate { };
 
   heaptrack = libsForQt5.callPackage ../development/tools/profiling/heaptrack {};
