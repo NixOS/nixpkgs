@@ -42,7 +42,7 @@ let
   updateKeybindingsCmd = updateSettings {
     settings = keybindings;
     createIfDoesNotExists = createKeybindingsIfDoesNotExists;
-    vscodeSettingsFile = .vscode/keybindings.json;
+    vscodeSettingsFile = ".vscode/keybindings.json";
   };
 
   vscodeExts2nix = import ./vscodeExts2nix.nix { 
