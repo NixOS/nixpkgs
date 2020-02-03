@@ -20378,9 +20378,6 @@ in
 
   mm-common = callPackage ../development/libraries/mm-common { };
 
-  # Renamed
-  matrique = spectral;
-
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
   mplayer = callPackage ../applications/video/mplayer ({
