@@ -16,7 +16,6 @@
 , pluginSupport ? true
 , installjce ? false
 , config
-, licenseAccepted ? config.oraclejdk.accept_license or false
 , glib
 , libxml2
 , libav_0_8
@@ -35,13 +34,6 @@
 }:
 
 assert swingSupport -> xorg != null;
-
-if !licenseAccepted then throw ''
-    You must accept the Oracle Binary Code License Agreement for Java SE at
-    https://www.oracle.com/technetwork/java/javase/terms/license/index.html
-    by setting nixpkgs config option 'oraclejdk.accept_license = true;'
-  ''
-else assert licenseAccepted;
 
 let
 
