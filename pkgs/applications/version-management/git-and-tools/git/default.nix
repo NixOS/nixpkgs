@@ -1,5 +1,5 @@
 { fetchurl, stdenv, buildPackages
-, curl, openssl, zlib, expat, perlPackages, python3, gettext, cpio
+, curl, openssl, zlib, expat, perlPackages, python3, gettext-runtime, gettext-tools, cpio
 , gnugrep, gnused, gawk, coreutils # needed at runtime by git-filter-branch etc
 , openssh, pcre2
 , asciidoc, texinfo, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_45
@@ -60,10 +60,10 @@ stdenv.mkDerivation {
 
     # Fix references to gettext introduced by ./git-sh-i18n.patch
     substituteInPlace git-sh-i18n.sh \
-        --subst-var-by gettext ${gettext}
+        --subst-var-by gettext ${gettext-runtime}
   '';
 
-  nativeBuildInputs = [ gettext perlPackages.perl ]
+  nativeBuildInputs = [ gettext-tools perlPackages.perl ]
     ++ stdenv.lib.optionals withManual [ asciidoc texinfo xmlto docbook2x
          docbook_xsl docbook_xml_dtd_45 libxslt ];
   buildInputs = [curl openssl zlib expat cpio makeWrapper libiconv]

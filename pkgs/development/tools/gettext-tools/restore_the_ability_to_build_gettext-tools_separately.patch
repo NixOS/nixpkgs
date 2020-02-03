@@ -1,0 +1,64 @@
+based on https://git.savannah.gnu.org/gitweb/?p=gettext.git;a=commitdiff_plain;h=e4b3a3f56fa6fc2a51769e286545f0631bb4837c
+---
+
+diff --git a/configure.ac b/configure.ac
+index 0ddc236..09564bf 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -124,6 +124,22 @@ AM_CONDITIONAL([PACKAGE_IS_GETTEXT_TOOLS], [true])
+ AM_CONDITIONAL([PRELOADABLE_LIBINTL],
+   [test $USE_INCLUDED_LIBINTL = no && test $GLIBC2 = yes && test "$enable_shared" = yes])
+ 
++dnl This option allows to build gettext-tools without (re)building libtextstyle.
++AC_ARG_WITH([installed-libtextstyle],
++  [AS_HELP_STRING([--with-installed-libtextstyle],
++     [Use an already installed libtextstyle.])],
++  [gt_use_installed_libtextstyle=$withval],
++  [gt_use_installed_libtextstyle=no])
++if test "$gt_use_installed_libtextstyle" != no; then
++  gl_LIBTEXTSTYLE
++else
++  test -f ../libtextstyle/Makefile || {
++    AC_MSG_ERROR([When building the gettext-tools package without building the entire gettext package, you need to pass the --with-installed-libtextstyle option to configure.])
++  }
++fi
++AM_CONDITIONAL([USE_INSTALLED_LIBTEXTSTYLE],
++  [test "$gt_use_installed_libtextstyle" != no])
++
+ dnl This line internationalizes the bison generated parsers.
+ BISON_I18N
+ 
+diff --git a/src/Makefile.am b/src/Makefile.am
+index b98b7ab..af3dcee 100644
+--- a/src/Makefile.am
++++ b/src/Makefile.am
+@@ -250,6 +250,9 @@ cldr_plurals_SOURCES = cldr-plural.y cldr-plural-exp.c cldr-plurals.c
+ cldr_plurals_CFLAGS = $(AM_CFLAGS) $(INCXML)
+ cldr_plurals_LDADD = libgettextsrc.la $(LDADD)
+ 
++if USE_INSTALLED_LIBTEXTSTYLE
++LT_LIBTEXTSTYLE = @LTLIBTEXTSTYLE@
++else
+ # How to get the include files of libtextstyle.
+ textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h:
+ 	here=`pwd`; \
+@@ -257,6 +260,9 @@ textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h:
+ 	  $(MAKE) install-nobase_includeHEADERS install-nobase_nodist_includeHEADERS includedir="$$here"
+ BUILT_SOURCES    += textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h
+ MOSTLYCLEANFILES += textstyle.h textstyle/stdbool.h textstyle/version.h textstyle/woe32dll.h
++# Where to find the built libtextstyle library.
++LT_LIBTEXTSTYLE = ../../libtextstyle/lib/libtextstyle.la
++endif
+ 
+ # How to build libgettextsrc.la.
+ # Need ../gnulib-lib/libgettextlib.la.
+@@ -268,7 +274,7 @@ MOSTLYCLEANFILES += textstyle.h textstyle/stdbool.h textstyle/version.h textstyl
+ # use iconv().
+ libgettextsrc_la_LDFLAGS = \
+   -release @VERSION@ \
+-  ../gnulib-lib/libgettextlib.la $(LTLIBUNISTRING) ../../libtextstyle/lib/libtextstyle.la @LTLIBINTL@ @LTLIBICONV@ -lc -no-undefined
++  ../gnulib-lib/libgettextlib.la $(LTLIBUNISTRING) $(LT_LIBTEXTSTYLE) @LTLIBINTL@ @LTLIBICONV@ -lc -no-undefined
+ 
+ # OS/2 does not support a DLL name longer than 8 characters.
+ if OS2
+

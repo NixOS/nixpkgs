@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, gettext, meson, ninja, pkgconfig, perl, python3
+{ config, stdenv, fetchurl, gettext-runtime, gettext-tools, meson, ninja, pkgconfig, perl, python3
 , libiconv, zlib, libffi, pcre, libelf, gnome3, libselinux, bash, gnum4, gtk-doc, docbook_xsl, docbook_xml_dtd_45
 # use utillinuxMinimal to avoid circular dependency (utillinux, systemd, glib)
 , utillinuxMinimal ? null
@@ -105,10 +105,10 @@ stdenv.mkDerivation rec {
   ]);
 
   nativeBuildInputs = [
-    meson ninja pkgconfig perl python3 gettext gtk-doc docbook_xsl docbook_xml_dtd_45
+    meson ninja pkgconfig perl python3 gettext-tools gtk-doc docbook_xsl docbook_xml_dtd_45
   ];
 
-  propagatedBuildInputs = [ zlib libffi gettext libiconv ];
+  propagatedBuildInputs = [ zlib libffi gettext-runtime libiconv ];
 
   mesonFlags = [
     # Avoid the need for gobject introspection binaries in PATH in cross-compiling case.

@@ -7,7 +7,7 @@ index e1d917fd27..e90f8e1414 100644
  then
  	: no probing necessary
 -elif type gettext.sh >/dev/null 2>&1
-+elif type @gettext@/bin/gettext.sh >/dev/null 2>&1
++elif type @gettext-runtime@/bin/gettext.sh >/dev/null 2>&1
  then
  	# GNU libintl's gettext.sh
  	GIT_INTERNAL_GETTEXT_SH_SCHEME=gnu
@@ -16,8 +16,8 @@ index e1d917fd27..e90f8e1414 100644
  gnu)
  	# Use libintl's gettext.sh, or fall back to English if we can't.
 -	. gettext.sh
-+	. @gettext@/bin/gettext.sh
-+	export PATH=@gettext@/bin:$PATH
++	. @gettext-runtime@/bin/gettext.sh
++	export PATH=@gettext-runtime@/bin:$PATH
  	;;
  gettext_without_eval_gettext)
  	# Solaris has a gettext(1) but no eval_gettext(1)

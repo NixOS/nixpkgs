@@ -35,14 +35,14 @@ index 0a0a28f1..16fd51fe 100755
  EOF
  mkdir -p ${DIR}/files/de/share/de/LC_MESSAGES
 -msgfmt --output-file ${DIR}/files/de/share/de/LC_MESSAGES/helloworld.mo de.po
-+@gettext@/bin/msgfmt --output-file ${DIR}/files/de/share/de/LC_MESSAGES/helloworld.mo de.po
++@gettext-tools@/bin/msgfmt --output-file ${DIR}/files/de/share/de/LC_MESSAGES/helloworld.mo de.po
  cat > fr.po <<EOF
  msgid "Hello world"
  msgstr "Bonjour le monde"
  EOF
  mkdir -p ${DIR}/files/fr/share/fr/LC_MESSAGES
 -msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
-+@gettext@/bin/msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
++@gettext-tools@/bin/msgfmt --output-file ${DIR}/files/fr/share/fr/LC_MESSAGES/helloworld.mo fr.po
  
  flatpak build-finish ${DIR}
  mkdir -p repos

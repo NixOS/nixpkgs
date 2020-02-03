@@ -623,6 +623,14 @@ auth required pam_succeed_if.so uid >= 1000 quiet
     via <option>boot.initrd.luks.fido2Support</option>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>gettext</package> has been split into 3 components:
+     <package>gettext-runtime</package>, <package>gettext-tools</package>
+     and <package>libtextstyle</package>. As a convenience, <package>gettext</package>
+     now points to <package>gettext-runtime</package>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>

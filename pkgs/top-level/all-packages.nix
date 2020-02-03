@@ -105,11 +105,11 @@ in
   ### BUILD SUPPORT
 
   autoreconfHook = makeSetupHook
-    { deps = [ autoconf automake gettext libtool ]; }
+    { deps = [ autoconf automake gettext-tools libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   autoreconfHook264 = makeSetupHook
-    { deps = [ autoconf264 automake111x gettext libtool ]; }
+    { deps = [ autoconf264 automake111x gettext-tools libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
 
   autoPatchelfHook = makeSetupHook { name = "auto-patchelf-hook"; }
@@ -11463,7 +11463,14 @@ in
 
   getdns = callPackage ../development/libraries/getdns { };
 
-  gettext = callPackage ../development/libraries/gettext { };
+  gettext-tools = callPackages ../development/tools/gettext-tools { };
+
+  gettext-runtime = callPackages ../development/libraries/gettext-runtime { };
+
+  libtextstyle = callPackage ../development/libraries/libtextstyle { };
+
+  # Ease transition between one-package gettext to split packages (tools - runtime)
+  gettext = gettext-runtime;
 
   gf2x = callPackage ../development/libraries/gf2x {};
 

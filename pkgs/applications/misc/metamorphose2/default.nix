@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, makeWrapper, gettext
+{ stdenv, fetchgit, makeWrapper, gettext-tools
 , python27, python2Packages
 }:
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
 
   postPatch = ''
     substituteInPlace messages/Makefile \
-      --replace "\$(shell which msgfmt)" "${gettext}/bin/msgfmt"
+      --replace "\$(shell which msgfmt)" "${gettext-tools}/bin/msgfmt"
   '';
 
   postInstall = ''
@@ -27,8 +27,8 @@ stdenv.mkDerivation {
       --add-flags "-O $out/share/metamorphose2/metamorphose2.py -w=3"
   '';
 
-  buildInput = [ gettext python27 ];
-  nativeBuildInputs = [ makeWrapper ];
+  buildInput = [ python27 ];
+  nativeBuildInputs = [ makeWrapper gettext-tools ];
   propagatedBuildInputs = [ python2Packages.wxPython python2Packages.pillow ];
 
   makeFlags = [ "PREFIX=$(out)" ];
