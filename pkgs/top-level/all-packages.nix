@@ -16108,6 +16108,8 @@ in
 
   smcroute = callPackage ../servers/smcroute { };
 
+  sogo = callPackage ../servers/web-apps/sogo { };
+
   spawn_fcgi = callPackage ../servers/http/spawn-fcgi { };
 
   spring-boot-cli = callPackage ../development/tools/spring-boot-cli { };
