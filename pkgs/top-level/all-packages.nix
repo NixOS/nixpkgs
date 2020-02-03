@@ -8730,6 +8730,8 @@ in
 
   pforth = callPackage ../development/compilers/pforth {};
 
+  pfsshell = callPackage ../tools/filesystems/pfsshell {};
+
   picat = callPackage ../development/compilers/picat { };
 
   ponyc = callPackage ../development/compilers/ponyc {
