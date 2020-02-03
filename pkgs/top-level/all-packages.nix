@@ -9178,6 +9178,7 @@ in
     let
       defaultOctaveOptions = {
         qt = null;
+        qscintilla = null;
         ghostscript = null;
         graphicsmagick = null;
         llvm = null;
@@ -9199,6 +9200,7 @@ in
 
   octaveFull = (lowPrio (octave.override {
     qt = qt4;
+    inherit qscintilla;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   }));
