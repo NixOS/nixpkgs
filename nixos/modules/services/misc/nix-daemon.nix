@@ -443,7 +443,19 @@ in
         fi
       '';
 
-    nix.nrBuildUsers = mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else cfg.maxJobs));
+    nix.nrBuildUsers =
+      let
+        remoteJobs =
+          if cfg.distributedBuilds
+          then
+            builtins.foldl' builtins.add 0
+              (map (machine: machine.maxJobs) cfg.buildMachines)
+          else 0;
+
+        totalJobs = cfg.maxJobs + remoteJobs;
+
+      in
+        mkDefault (lib.max 32 (if cfg.maxJobs == "auto" then 0 else totalJobs));
 
     users.users = nixbldUsers;
 
