@@ -1,9 +1,5 @@
-{
-stdenv, fetchFromGitHub, cmake, makeWrapper
-,qtbase, qttools, python, libGLU, libGL
-,libXt, qtx11extras, qtxmlpatterns
-, mkDerivation
-}:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, qtbase , qttools, python
+, libGLU, libGL , libXt, qtx11extras, qtxmlpatterns , mkDerivation }:
 
 mkDerivation rec {
   pname = "paraview";
@@ -53,20 +49,20 @@ mkDerivation rec {
 
   # Paraview links into the Python library, resolving symbolic links on the way,
   # so we need to put the correct sitePackages (with numpy) back on the path
-  postInstall = ''
-    wrapProgram $out/bin/paraview \
+  preFixup = ''
+    wrapQtApp $out/bin/paraview \
       --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvbatch \
+    wrapQtApp $out/bin/pvbatch \
       --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvpython \
+    wrapQtApp $out/bin/pvpython \
       --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.paraview.org/;
     description = "3D Data analysis and visualization application";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [guibert];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.free;
+    maintainers = with maintainers; [ guibert ];
+    platforms = platforms.linux;
   };
 }
