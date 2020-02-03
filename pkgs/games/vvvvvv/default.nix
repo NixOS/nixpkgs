@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, requireFile
+{ stdenv, fetchurl, fetchFromGitHub, requireFile, makeWrapper
 , SDL2, SDL2_mixer, cmake, ninja
 , Foundation
 , fullGame ? false }:
@@ -18,6 +18,7 @@ let
   } else fetchurl {
     # the data file for the free Make and Play edition
     url = https://thelettervsixtim.es/makeandplay/data.zip;
+    name = "mapdata.zip";
     sha256 = "1q2pzscrglmwfgdl8yj300wymwskh51iq66l4xcd0qk0q3g3rbkg";
   };
 
@@ -42,12 +43,12 @@ in stdenv.mkDerivation rec {
     SDL2 SDL2_mixer
   ] + stdenv.lib.optionalPlatform stdenv.lib.platforms.darwin [ Foundation ];
 
-  sourceRoot = "source/desktop_version";
+    sourceRoot = "source/desktop_version";
 
   installPhase = ''
     install -d $out/bin
     install -t $out/bin VVVVVV
-    install -T ${dataZip} $out/bin/data.zip
+    wrapProgram $out/bin/VVVVVV --add-flags "-assets ${dataZip}"
   '';
 
   meta = with stdenv.lib; {
