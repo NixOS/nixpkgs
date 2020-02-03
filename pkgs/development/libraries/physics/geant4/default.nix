@@ -8,7 +8,7 @@
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, stdenv, fetchurl, cmake
+, stdenv, fetchurl, fetchpatch, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
@@ -36,13 +36,22 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "10.5.1";
+  version = "10.6.0";
   pname = "geant4";
 
   src = fetchurl{
-    url = "http://cern.ch/geant4-data/releases/geant4.10.05.p01.tar.gz";
-    sha256 = "f4a292220500fad17e0167ce3153e96e3410ecbe96284e572dc707f63523bdff";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.tar.gz";
+    sha256 = "169ikv2sssfbqml7bs146dj035xifxm9b12r4rzmgpvswfhca90l";
   };
+
+  # This patch fixes crash when set -u is enabled
+  patches = [
+    (fetchpatch {
+      name = "bash-variable-fix.patch";
+      url = "https://bugzilla-geant4.kek.jp/attachment.cgi?id=606&action=diff&collapsed=&headers=1&format=raw";
+      sha256 = "1bg9wg174fbqbjsjm1gz9584a7rq9p1szxr2fq9yfvqaf78289k6";
+    })
+  ];
 
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
@@ -64,11 +73,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs =  [ cmake ];
-  buildInputs = [ clhep expat zlib libGLU libGL xlibsWrapper libXmu ]
+
+  buildInputs = [ libGLU xlibsWrapper libXmu ]
+    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
+
+  propagatedBuildInputs = [ clhep expat zlib libGL ]
     ++ stdenv.lib.optionals enableGDML [ xercesc ]
     ++ stdenv.lib.optionals enableXM [ motif ]
-    ++ stdenv.lib.optionals enableQT [ qtbase ]
-    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
+    ++ stdenv.lib.optionals enableQT [ qtbase ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.

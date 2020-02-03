@@ -18,12 +18,14 @@ stdenv.mkDerivation {
   inherit (geant4_nomt) version src;
   pname = "g4py";
 
-  sourceRoot = "geant4.10.05.p01/environments/g4py";
-
   nativeBuildInputs = [ cmake ];
   buildInputs = [ geant4_nomt xercesc boost_python python ];
 
   GEANT4_INSTALL = geant4_nomt;
+
+  postPatch = ''
+    cd environments/g4py
+  '';
 
   preConfigure = ''
     # Fix for boost 1.67+
