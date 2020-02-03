@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "crun";
-  version = "0.11";
+  version = "0.12";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = pname;
     rev = version;
-    sha256 = "0mn64hrgx4a7mhqjxn127i8yivhn1grp93wws1da1ffj4ap6ay76";
+    sha256 = "0sxpdv3afh8hn39jdg06vwkyp7i6dsyf1gg8719vwiwmcbhzj8mx";
     fetchSubmodules = true;
   };
 
