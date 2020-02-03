@@ -1,8 +1,8 @@
-diff --git a/qutebrowser/app.py b/qutebrowser/app.py
-index a47b5d2f4..f23ee23ef 100644
---- a/qutebrowser/app.py
-+++ b/qutebrowser/app.py
-@@ -573,13 +573,8 @@ class Quitter(QObject):
+diff --git a/quitter.py b/quitterb.py
+index a42b9d0..f544ccb 100644
+--- a/qutebrowser/misc/quitter.py
++++ b/qutebrowser/misc/quitter.py
+@@ -112,13 +112,7 @@ class Quitter(QObject):
          Return:
              The commandline as a list of strings.
          """
@@ -14,7 +14,6 @@ index a47b5d2f4..f23ee23ef 100644
 -        else:
 -            args = [sys.executable, '-m', 'qutebrowser']
 +        args = ['@qutebrowser@']
-+        cwd = None
  
          # Add all open pages so they get reopened.
          page_args = []  # type: typing.MutableSequence[str]
