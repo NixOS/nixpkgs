@@ -7183,6 +7183,8 @@ in
 
   wifite2 = callPackage ../tools/networking/wifite2 { };
 
+  wimboot = callPackage ../tools/misc/wimboot { };
+
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
   woff2 = callPackage ../development/web/woff2 { };
