@@ -103,7 +103,9 @@ let
 
   git-imerge = callPackage ./git-imerge { };
 
-  git-interactive-rebase-tool = callPackage ./git-interactive-rebase-tool {};
+  git-interactive-rebase-tool = callPackage ./git-interactive-rebase-tool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   git-machete = python3Packages.callPackage ./git-machete { };
 
