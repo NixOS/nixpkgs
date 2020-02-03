@@ -11,11 +11,11 @@ rustPlatform.buildRustPackage rec {
     sha256 = "10z3di2qypgsmg2z7xfs9nlrf9vng5i7l8dvqadv1l4lb9zz7i8q";
   };
 
-  patches = [ ./01-terminaltests.patch ];
-
   cargoSha256 = "002kr52vlpv1rhnxki29xflpmgk6bszrw0dsxcc34kyal0593ajk";
 
   buildInputs = [ ncurses5 ];
+
+  checkFlagsArray = [ "--test-threads=1" ];
 
   meta = with lib; {
     homepage = "https://github.com/MitMaro/git-interactive-rebase-tool";
