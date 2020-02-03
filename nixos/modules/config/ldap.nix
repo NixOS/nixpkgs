@@ -28,8 +28,6 @@ let
   };
 
   nslcdConfig = writeText "nslcd.conf" ''
-    uid nslcd
-    gid nslcd
     uri ${cfg.server}
     base ${cfg.base}
     timelimit ${toString cfg.timeLimit}
@@ -282,6 +280,7 @@ in
           Group = "nslcd";
           RuntimeDirectory = [ "nslcd" ];
           PIDFile = "/run/nslcd/nslcd.pid";
+          AmbientCapabilities = "CAP_SYS_RESOURCE";
         };
       };
 
