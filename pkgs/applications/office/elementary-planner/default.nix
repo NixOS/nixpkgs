@@ -1,21 +1,22 @@
-{ stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, appstream-glib, desktop-file-utils
+{ stdenv, fetchFromGitHub, fetchpatch
+, meson, ninja, pkgconfig, desktop-file-utils
 , python3, vala, wrapGAppsHook
 , evolution-data-server
 , libical
 , libgee
 , json-glib
+, glib
 , sqlite
 , libsoup
 , gtk3
-, pantheon /* granite, schemas */
+, pantheon /* granite, icons, maintainers */
 , webkitgtk
-, appstream
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-planner";
   version = "2.1.1";
+
   src = fetchFromGitHub {
     owner = "alainm23";
     repo = "planner";
@@ -24,7 +25,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    appstream-glib
     desktop-file-utils
     meson
     ninja
@@ -39,31 +39,33 @@ stdenv.mkDerivation rec {
     libical
     libgee
     json-glib
+    glib
     sqlite
     libsoup
     gtk3
     pantheon.granite
     webkitgtk
-    appstream
-    pantheon.elementary-gsettings-schemas
     pantheon.elementary-icon-theme
+  ];
+
+  # Fix version string, remove in next update!
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/alainm23/planner/pull/194/commits/3d0a2197087b13fe90fa6f85f817ba56798d632c.patch";
+      sha256 = "077q5jddi8jaw2ypc6szbd1c50i4x3b21jvmvi3w7g5zhjwpkmf5";
+    })
   ];
 
   postPatch = ''
     chmod +x build-aux/meson/post_install.py
     patchShebangs build-aux/meson/post_install.py
-
-    # Fix version string not updated in this release.
-    # (please check if still needed when updating!)
-    substituteInPlace src/Dialogs/Preferences.vala \
-      --replace v2.0.8 v${version}
   '';
 
   meta = with stdenv.lib; {
     description = "Task and project manager designed to elementary OS";
     homepage = "https://planner-todo.web.app";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill ] ++ pantheon.maintainers;
   };
 }
 
