@@ -305,6 +305,7 @@ in rec {
 
     # tor-browser versions > 9.0 integrate tor-launcher and tor-button, which this derivation does not need
     # but disabling it with the following configure flag does not actually work, hence the rather hacky patch
+    # https://trac.torproject.org/projects/tor/ticket/33135
     patches = [
       (fetchpatch {
         url = "https://github.com/SLNOS/tor-browser/commit/87c24c7709e2c7657f8a304635e7fb18429229de.patch";
