@@ -37,7 +37,7 @@ let
 
       email = mkOption {
         type = types.nullOr types.str;
-        default = null;
+        default = cfg.email;
         description = "Contact email address for the CA to be able to reach you.";
       };
 
@@ -282,8 +282,7 @@ in
                 apath = "/var/lib/${lpath}";
                 spath = "/var/lib/acme/.lego";
                 rights = if data.allowKeysForGroup then "750" else "700";
-                email = if data.email == null then cfg.email else data.email;
-                globalOpts = [ "-d" data.domain "--email" email "--path" "." "--key-type" data.keyType ]
+                globalOpts = [ "-d" data.domain "--email" data.email "--path" "." "--key-type" data.keyType ]
                           ++ optionals (cfg.acceptTerms) [ "--accept-tos" ]
                           ++ optionals (data.dnsProvider != null && !data.dnsPropagationCheck) [ "--dns.disable-cp" ]
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
