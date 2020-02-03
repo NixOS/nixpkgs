@@ -1,13 +1,11 @@
-# FIXME(ma27): before merging this to master we *have* to replace those files
-# as they're built for testing purposes with the aarch64 community builder.
 {
   busybox = import <nix/fetchurl.nix> {
-    url = "https://aarch64.mbosch.me/busybox";
-    sha256 = "10z8aigcj0lyfwbc4wzl7s0ng9g37sx1vsqh9sijw3hi0gfhhn4v";
+    url = http://nixos-arm.dezgeg.me/bootstrap-aarch64-2017-03-11-bb3ef8/busybox;
+    sha256 = "12qcml1l67skpjhfjwy7gr10nc86gqcwjmz9ggp7knss8gq8pv7f";
     executable = true;
   };
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = "https://aarch64.mbosch.me/bootstrap-tools.tar.xz";
-    sha256 = "0n4k0l7j2yqjzicj1gyk8gdpbszqn6yj6mlx6m2pzfcm2hmbzwfk";
+    url = http://tarballs.nixos.org/stdenv-linux/aarch64/c5aabb0d603e2c1ea05f5a93b3be82437f5ebf31/bootstrap-tools.tar.xz;
+    sha256 = "d3f1bf2a1495b97f45359d5623bdb1f8eb75db43d3bf2059fc127b210f059358";
   };
 }
