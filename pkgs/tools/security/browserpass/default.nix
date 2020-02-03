@@ -44,6 +44,10 @@ buildGoModule rec {
     ln -s $out/lib/browserpass/hosts/firefox/*.json $out/lib/mozilla/native-messaging-hosts
   '';
 
+  # Don't rewrite symlinks to be relative to the derivation
+  # This is required to make browserpass work in firefox
+  dontRewriteSymlinks = 1;
+
   meta = with lib; {
     description = "Browserpass native client app";
     homepage = https://github.com/browserpass/browserpass-native;
