@@ -3003,6 +3003,12 @@
     githubId = 12491746;
     name = "Masato Yonekawa";
   };
+  i077 = {
+    email = "nixpkgs@imranhossa.in";
+    github = "i077";
+    githubId = 2789926;
+    name = "Imran Hossain";
+  };
   iand675 = {
     email = "ian@iankduncan.com";
     github = "iand675";
