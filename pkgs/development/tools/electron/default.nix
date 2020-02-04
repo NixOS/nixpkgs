@@ -35,4 +35,12 @@ in
     armv7l-linux = "2c09e9a77f1da152d766dc2e43719e2852b70f917229466a2ac457416d1374f7";
     aarch64-linux = "1dad780b872bbc069eb1cac9ff4ec8f0b8d200153ab7f51397e27219094db1f0";
   };
+
+  electron_8 = mkElectron "8.0.0" {
+    x86_64-linux = "b457a2ece83bb8a2efea42e75403740cbba051a64e325288760046b8999dd1c9";
+    x86_64-darwin = "3f96dfa1d4e0313d11b9e5c66e2df161cfdb30685ee9dadcc779bcad2fb3876e";
+    i686-linux = "0633ac2b6b6d00302e0e5df224d0e808e4ea9ecc14643e8534027e49b20436fb";
+    armv7l-linux = "8d1f3daa86c77e7aceb8c8e4491c094e789951c7d475fc536b85fe7d279794bf";
+    aarch64-linux = "484c04204478e8594d66f8bd332529c0c5eecfd71ee1705cc0478fa59c6818ee";
+  };
 }
