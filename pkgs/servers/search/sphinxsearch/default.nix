@@ -19,11 +19,11 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [
-    pkgconfig expat
+    pkgconfig
   ];
 
   buildInputs = [
-    mariadb zlib openssl
+    expat mariadb zlib openssl
   ];
 
   meta = {
