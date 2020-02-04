@@ -2043,6 +2043,8 @@ in
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
 
+  pueue = callPackage ../applications/misc/pueue { };
+
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
