@@ -4898,6 +4898,8 @@ in {
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
 
+  pyosmium = callPackage ../development/python-modules/pyosmium { };
+
   pyotp = callPackage ../development/python-modules/pyotp { };
 
   pyproj = callPackage ../development/python-modules/pyproj { };
