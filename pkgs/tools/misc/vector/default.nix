@@ -1,6 +1,7 @@
 { stdenv, lib, fetchFromGitHub, rustPlatform
 , openssl, pkgconfig, protobuf
 , Security, libiconv, rdkafka
+, tzdata
 
 , features ?
     (if stdenv.isAarch64
@@ -10,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "vector";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner  = "timberio";
     repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "1bqp1ms8y91mpcmxlc8kyncigxq7spxq1ygy6gviz35zq1cqkwnr";
+    sha256 = "1r6pqljrl0cqz5x09p6bmf4h52h8m02pg05a09idj86v0c0q6bw3";
   };
 
   cargoSha256 = "01hynn8ccpwqrirr1bczqc7q7pqkzfjks2v6q4f32xbm50b31fky";
@@ -28,7 +29,7 @@ rustPlatform.buildRustPackage rec {
   PROTOC_INCLUDE="${protobuf}/include";
 
   cargoBuildFlags = [ "--no-default-features" "--features" "${lib.concatStringsSep "," features}" ];
-  checkPhase = ":"; # skip tests, too -- they don't respect the rdkafka flag...
+  checkPhase = "TZDIR=${tzdata}/share/zoneinfo cargo test --no-default-features --features ${lib.concatStringsSep "," features}";
 
   meta = with stdenv.lib; {
     description = "A high-performance logs, metrics, and events router";
