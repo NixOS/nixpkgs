@@ -46,6 +46,11 @@ let
           boot.loader.systemd-boot.enable = true;
         ''}
 
+        ${optionalString (bootLoader == "refind") ''
+          boot.loader.refind.enable = true;
+          boot.loader.refind.installAsRemovable = true; # required as initial nixos-install is run in bios-mode
+        ''}
+
         users.users.alice = {
           isNormalUser = true;
           home = "/home/alice";
@@ -69,7 +74,9 @@ let
                   }:
     let
       iface = if grubVersion == 1 then "ide" else "virtio";
-      isEfi = bootLoader == "systemd-boot" || (bootLoader == "grub" && grubUseEfi);
+      isEfi = bootLoader == "systemd-boot"
+        || bootLoader == "refind"
+        || (bootLoader == "grub" && grubUseEfi);
 
       # FIXME don't duplicate the -enable-kvm etc. flags here yet again!
       qemuFlags =
@@ -131,6 +138,8 @@ let
 
       ${if bootLoader == "grub" then
           ''$machine->succeed("test -e /boot/grub");''
+        else if bootLoader == "refind" then
+          ''$machine->succeed("test -e /boot/EFI/BOOT/refind.conf");''
         else
           ''$machine->succeed("test -e /boot/loader/loader.conf");''
       }
@@ -228,7 +237,7 @@ let
   makeInstallerTest = name:
     { createPartitions, preBootCommands ? "", extraConfig ? ""
     , extraInstallerConfig ? {}
-    , bootLoader ? "grub" # either "grub" or "systemd-boot"
+    , bootLoader ? "grub" # either "grub" or "systemd-boot" or "refind"
     , grubVersion ? 2, grubDevice ? "/dev/vda", grubIdentifier ? "uuid", grubUseEfi ? false
     , enableOCR ? false, meta ? {}
     , testCloneConfig ? false
@@ -265,6 +274,7 @@ let
               if grubVersion == 1 then "scsi" else "virtio";
 
             boot.loader.systemd-boot.enable = mkIf (bootLoader == "systemd-boot") true;
+            boot.loader.refind.enable = mkIf (bootLoader == "refind") true;
 
             hardware.enableAllFirmware = mkForce false;
 
@@ -291,7 +301,8 @@ let
                 curl
               ]
               ++ optional (bootLoader == "grub" && grubVersion == 1) pkgs.grub
-              ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ];
+              ++ optionals (bootLoader == "grub" && grubVersion == 2) [ pkgs.grub2 pkgs.grub2_efi ]
+              ++ optional (bootLoader == "refind") pkgs.refind;
 
             nix.binaryCaches = mkForce [ ];
             nix.extraOptions =
@@ -381,6 +392,28 @@ let
         grubUseEfi = true;
     };
 
+  simple-uefi-refind-config =
+    { createPartitions =
+        ''
+          $machine->succeed(
+              "flock /dev/vda parted --script /dev/vda -- mklabel gpt"
+              . " mkpart ESP fat32 1M 50MiB" # /boot
+              . " set 1 boot on"
+              . " mkpart primary linux-swap 50MiB 1024MiB"
+              . " mkpart primary ext2 1024MiB -1MiB", # /
+              "udevadm settle",
+              "mkswap /dev/vda2 -L swap",
+              "swapon -L swap",
+              "mkfs.ext3 -L nixos /dev/vda3",
+              "mount LABEL=nixos /mnt",
+              "mkfs.vfat -n BOOT /dev/vda1",
+              "mkdir -p /mnt/boot",
+              "mount LABEL=BOOT /mnt/boot",
+          );
+        '';
+        bootLoader = "refind";
+    };
+
   clone-test-extraconfig = { extraConfig =
          ''
          environment.systemPackages = [ pkgs.grub2 ];
@@ -441,6 +474,8 @@ in {
 
   # Test cloned configurations with the uefi grub configuration
   simpleUefiGrubClone = makeInstallerTest "simpleUefiGrubClone" (simple-uefi-grub-config // clone-test-extraconfig);
+
+  simpleUefiRefind = makeInstallerTest "simpleUefiRefind" simple-uefi-refind-config;
 
   # Same as the previous, but now with a separate /boot partition.
   separateBoot = makeInstallerTest "separateBoot"
