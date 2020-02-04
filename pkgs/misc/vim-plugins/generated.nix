@@ -4480,6 +4480,17 @@ let
     };
   };
 
+  vim-kitty-navigator = buildVimPluginFrom2Nix {
+    pname = "vim-kitty-navigator";
+    version = "2019-11-04";
+    src = fetchFromGitHub {
+      owner = "knubie";
+      repo = "vim-kitty-navigator";
+      rev = "c32357892f10117291461631d51a6bfd20e72b9a";
+      sha256 = "0zqvcnbns0vbxkqr0mpiapql8cvp54nn5a6mwc7l24jr6plhiwmn";
+    };
+  };
+
   vim-lastplace = buildVimPluginFrom2Nix {
     pname = "vim-lastplace";
     version = "2020-01-20";
