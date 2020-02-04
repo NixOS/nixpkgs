@@ -16525,6 +16525,8 @@ in
 
     it87 = callPackage ../os-specific/linux/it87 {};
 
+    asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
+
     ena = callPackage ../os-specific/linux/ena {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
