@@ -19278,9 +19278,7 @@ in
     withpcre2 = false;
   };
 
-  gitRepo = callPackage ../applications/version-management/git-repo {
-    python = python27;
-  };
+  gitRepo = callPackage ../applications/version-management/git-repo { };
 
   git-quick-stats = callPackage ../development/tools/git-quick-stats {};
 

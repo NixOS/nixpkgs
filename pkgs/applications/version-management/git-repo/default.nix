@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, python, git, gnupg, less, cacert
+, python3, git, gnupg, less, cacert
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   patchPhase = ''
     substituteInPlace repo --replace \
