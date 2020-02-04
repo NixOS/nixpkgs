@@ -1,20 +1,18 @@
-{ lib, buildPythonPackage, fetchFromGitHub, nose }:
+{ lib, buildPythonPackage, fetchurl, nose }:
 
 buildPythonPackage {
-  version = "0.5.3-2016-09-28";
+  version = "0.5.3";
   pname = "tempita";
 
-  src = fetchFromGitHub {
-    owner = "gjhiggins";
-    repo = "tempita";
-    rev = "47414a7c6e46a9a9afe78f0bce2ea299fa84d10";
-    sha256 = "0f33jjjs5rvp7ar2j6ggyfykcrsrn04jaqcq71qfvycf6b7nw3rn";
+  src = fetchurl {
+    url = https://bitbucket.org/ianb/tempita/get/97392d008cc8.tar.gz;
+    sha256 = "0nxnkxjvfyxygmws2zxql590mwqsqd1rnhy80m9nbpdh81p7vh9y";
   };
 
   buildInputs = [ nose ];
 
   meta = {
-    homepage = https://github.com/gjhiggins/tempita;
+    homepage = http://pythonpaste.org/tempita/;
     description = "A very small text templating language";
     license = lib.licenses.mit;
   };
