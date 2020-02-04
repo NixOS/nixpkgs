@@ -28,6 +28,8 @@ let
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
+  gh = callPackage ./gh { };
+
   ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
