@@ -186,6 +186,21 @@ let
     };
   };
 
+  AlienLibxml2 = buildPerlPackage {
+    pname = "Alien-Libxml2";
+    version = "0.12";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/P/PL/PLICEASE/Alien-Libxml2-0.12.tar.gz;
+      sha256 = "0b3dj1510fxldhicijvw390gnh5j1k6rjzcc2jzs9f8nwfkqh6r2";
+    };
+    propagatedBuildInputs = [ AlienBuild ];
+    buildInputs = [ MojoDOM58 SortVersions Test2Suite URI ];
+    meta = {
+      description = "Install the C libxml2 library on your system";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   aliased = buildPerlModule {
     pname = "aliased";
     version = "0.34";
@@ -11897,6 +11912,20 @@ let
     };
   };
 
+  MojoDOM58 = buildPerlPackage {
+    pname = "Mojo-DOM58";
+    version = "2.000";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DB/DBOOK/Mojo-DOM58-2.000.tar.gz;
+      sha256 = "1wsy0j6jpd06gc1ay6isyzqh5cdc834g5w0amslqcjgvf4snlk46";
+    };
+    meta = {
+      description = "Minimalistic HTML/XML DOM parser with CSS selectors";
+      license = with stdenv.lib.licenses; [ artistic2 ];
+      homepage = "https://github.com/Grinnz/Mojo-DOM58";
+    };
+  };
+
   mod_perl2 = buildPerlPackage {
     pname = "mod_perl";
     version = "2.0.11";
@@ -20621,13 +20650,13 @@ let
 
   XMLLibXML = buildPerlPackage {
     pname = "XML-LibXML";
-    version = "2.0134";
+    version = "2.0202";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0134.tar.gz;
-      sha256 = "1ks69xymv6zkj7hvaymjvb78ch81abri7kg4zrwxhdfsqb8a9g7h";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/XML-LibXML-2.0202.tar.gz;
+      sha256 = "1bp2d5jpfmp35f2giwqx60q2rmzq469szkxzfcqkd742x72h4ayc";
     };
     SKIP_SAX_INSTALL = 1;
-    buildInputs = [ pkgs.libxml2 ];
+    buildInputs = [ pkgs.libxml2 AlienLibxml2 ];
     propagatedBuildInputs = [ XMLSAX ];
 
     # https://rt.cpan.org/Public/Bug/Display.html?id=122958
