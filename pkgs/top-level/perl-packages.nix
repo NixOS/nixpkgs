@@ -194,7 +194,7 @@ let
       sha256 = "0b3dj1510fxldhicijvw390gnh5j1k6rjzcc2jzs9f8nwfkqh6r2";
     };
     propagatedBuildInputs = [ AlienBuild ];
-    buildInputs = [ MojoDOM58 SortVersions Test2Suite URI ];
+    buildInputs = [ pkgs.libxml2 MojoDOM58 SortVersions Test2Suite URI ];
     meta = {
       description = "Install the C libxml2 library on your system";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -12502,7 +12502,6 @@ let
       url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-AttributeHelpers-0.25.tar.gz;
       sha256 = "b0c819ec83999b258b248f82059fa5975a0cee365423abbee0efaca5401c5ec6";
     };
-    patches = [ ../development/perl-modules/MooseXAttributeHelpers-perl-5.20.patch ];
     buildInputs = [ ModuleBuildTiny TestException ];
     propagatedBuildInputs = [ Moose ];
     meta = {
@@ -20656,13 +20655,8 @@ let
       sha256 = "1bp2d5jpfmp35f2giwqx60q2rmzq469szkxzfcqkd742x72h4ayc";
     };
     SKIP_SAX_INSTALL = 1;
-    buildInputs = [ pkgs.libxml2 AlienLibxml2 ];
+    buildInputs = [ AlienLibxml2 ];
     propagatedBuildInputs = [ XMLSAX ];
-
-    # https://rt.cpan.org/Public/Bug/Display.html?id=122958
-    preCheck = ''
-      rm t/32xpc_variables.t
-    '';
   };
 
   XMLLibXMLSimple = buildPerlPackage {
