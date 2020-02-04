@@ -62,8 +62,9 @@ rec {
     };
   };
 } // lib.optionalAttrs (config.allowAliases or true) {
-  # ALIASES
-  # remove after 20.03 branchoff
+  #### ALIASES
+  #### remove after 20.03 branchoff
+
   firefox-esr-52 = throw ''
     firefoxPackages.firefox-esr-52 was removed as it's an unsupported ESR with
     open security issues. If you need it because you need to run some plugins
