@@ -2553,6 +2553,8 @@ in {
     pythonPackages = self;
   });
 
+  ecos-python = callPackage ../development/python-modules/ecos-python { };
+
   edward = callPackage ../development/python-modules/edward { };
 
   elasticsearch = callPackage ../development/python-modules/elasticsearch { };
