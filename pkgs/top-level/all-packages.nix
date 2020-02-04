@@ -25948,5 +25948,4 @@ in
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
 
-  dat = nodePackages.dat;
 }
