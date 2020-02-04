@@ -79,7 +79,7 @@ See code for all available configurations.
 [Dell XPS 13 9360]: dell/xps/13-9360
 [Dell XPS 13 9370]: dell/xps/13-9370
 [Dell XPS 13 9380]: dell/xps/13-9380
-[Dell XPS 15 7590]: dell/xps/15-9550
+[Dell XPS 15 7590]: dell/xps/15-7590
 [Dell XPS 15 9550]: dell/xps/15-9550
 [Inverse Path USB armory]: inversepath/usbarmory
 [Lenovo ThinkPad X1 (6th Gen)]: lenovo/thinkpad/x1/6th-gen
