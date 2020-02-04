@@ -21,9 +21,11 @@
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
+, libdrm ? null, wayland ? null, mesa_drivers ? null, libxkbcommon ? null # useOzone
 
 # package customization
 , useVaapi ? false
+, useOzone ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
@@ -129,7 +131,8 @@ let
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
       ++ optional useVaapi libva
-      ++ optional pulseSupport libpulseaudio;
+      ++ optional pulseSupport libpulseaudio
+      ++ optionals useOzone [ libdrm wayland mesa_drivers libxkbcommon ];
 
     patches = [
       ./patches/nix_plugin_paths_68.patch
@@ -261,6 +264,16 @@ let
     } // optionalAttrs pulseSupport {
       use_pulseaudio = true;
       link_pulseaudio = true;
+    } // optionalAttrs useOzone {
+      use_ozone = true;
+      ozone_platform_gbm = false;
+      use_xkbcommon = true;
+      use_glib = true;
+      use_gtk = true;
+      use_system_libwayland = true;
+      use_system_minigbm = true;
+      use_system_libdrm = true;
+      system_wayland_scanner_path = "${wayland}/bin/wayland-scanner";
     } // (extraAttrs.gnFlags or {}));
 
     configurePhase = ''
