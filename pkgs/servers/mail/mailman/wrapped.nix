@@ -15,6 +15,6 @@ runCommand "${mailman.name}-wrapped" {
   cd "${mailman}/bin"
   for exe in *; do
     makeWrapper "${mailman}/bin/$exe" "$out/bin/$exe" \
-        --set PYTHONPATH ${makePythonPath ([ mailman python3.pkgs.urllib3 ] ++ archivers)}
+        --set PYTHONPATH ${makePythonPath ([ mailman ] ++ archivers)}
   done
 ''
