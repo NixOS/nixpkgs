@@ -1878,6 +1878,8 @@ in {
 
   cvxopt = callPackage ../development/python-modules/cvxopt { };
 
+  cvxpy = callPackage ../development/python-modules/cvxpy { };
+  
   cycler = callPackage ../development/python-modules/cycler { };
 
   cysignals = callPackage ../development/python-modules/cysignals { };
