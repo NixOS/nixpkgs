@@ -9722,8 +9722,6 @@ in
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
 
-  bazel-deps = callPackage ../development/tools/build-managers/bazel/bazel-deps { };
-
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
   bazel-watcher = callPackage ../development/tools/bazel-watcher {
