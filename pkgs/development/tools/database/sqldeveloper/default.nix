@@ -1,7 +1,7 @@
 { stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
 
 let
-  version = "17.4.1.054.0712";
+  version = "19.4.0.354.1759";
 
   desktopItem = makeDesktopItem {
     name = "sqldeveloper";
@@ -20,7 +20,7 @@ in
 
   src = requireFile rec {
     name = "sqldeveloper-${version}-no-jre.zip";
-    url = "http://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/";
+    url = "https://www.oracle.com/tools/downloads/sqldev-downloads.html";
     message = ''
       This Nix expression requires that ${name} already be part of the store. To
       obtain it you need to
@@ -46,7 +46,7 @@ in
 
         nix-prefetch-url --type sha256 file:///path/to/${name}
     '';
-    sha256 = "7e92ca94d02489002db291c96f1d67f9b2501a8967ff3457103fcf60c1eb154a";
+    sha256 = "1hk3hfxyl6ryp4v1l9mgzflban565ayfmm2k412azmw5rnmjf6fv";
   };
 
   buildInputs = [ makeWrapper unzip ];
@@ -78,7 +78,7 @@ in
     '';
     homepage = http://www.oracle.com/technetwork/developer-tools/sql-developer/overview/;
     license = licenses.unfree;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ ardumont flokli ];
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ ardumont ma27 ];
   };
 }

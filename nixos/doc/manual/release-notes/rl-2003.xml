@@ -589,6 +589,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      <literal>qesteidutil</literal> has been deprecated in favor of <literal>qdigidoc</literal>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>sqldeveloper_18</package> has been removed as it's not maintained anymore,
+     <package>sqldeveloper</package> has been updated to version <literal>19.4</literal>.
+     Please note that this means that this means that the <package>oraclejdk</package> is now
+     required. For further information please read the
+     <link xlink:href="https://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/sqldev-relnotes-194-5908846.html">release notes</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
