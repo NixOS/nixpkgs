@@ -13,6 +13,7 @@
 , enablePepperFlash ? false
 , enableWideVine ? false
 , useVaapi ? false # test video on radeon, before enabling this
+, useOzone ? false
 , cupsSupport ? true
 , pulseSupport ? config.pulseaudio or stdenv.isLinux
 , commandLineArgs ? ""
@@ -30,7 +31,7 @@ let
     upstream-info = (callPackage ./update.nix {}).getChannel channel;
 
     mkChromiumDerivation = callPackage ./common.nix {
-      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi;
+      inherit gnome gnomeSupport gnomeKeyringSupport proprietaryCodecs cupsSupport pulseSupport useVaapi useOzone;
     };
 
     browser = callPackage ./browser.nix { inherit channel enableWideVine; };
