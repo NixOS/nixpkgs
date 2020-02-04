@@ -12495,15 +12495,15 @@ let
     propagatedBuildInputs = [ Moose ];
   };
 
-  MooseXAttributeHelpers = buildPerlPackage {
+  MooseXAttributeHelpers = buildPerlModule {
     pname = "MooseX-AttributeHelpers";
-    version = "0.23";
+    version = "0.25";
     src = fetchurl {
-      url = mirror://cpan/authors/id/D/DR/DROLSKY/MooseX-AttributeHelpers-0.23.tar.gz;
-      sha256 = "3f63f60d94d840a309d9137f78605e15f07c977fd15a4f4b55bd47b65ed52be1";
+      url = mirror://cpan/authors/id/E/ET/ETHER/MooseX-AttributeHelpers-0.25.tar.gz;
+      sha256 = "b0c819ec83999b258b248f82059fa5975a0cee365423abbee0efaca5401c5ec6";
     };
     patches = [ ../development/perl-modules/MooseXAttributeHelpers-perl-5.20.patch ];
-    buildInputs = [ TestException ];
+    buildInputs = [ ModuleBuildTiny TestException ];
     propagatedBuildInputs = [ Moose ];
     meta = {
       description = "Extend your attribute interfaces (deprecated)";
