@@ -211,4 +211,11 @@ $out/lib/common-lisp/query-fs"
       '';
     };
   };
+  cl-store = x: {
+    overrides = y: (x.overrides y) // {
+      postPatch = ''
+        sed -i -e 's/:initform "Unknown" /:initform #:|Unknown| /' backends.lisp
+      '';
+    };
+  };
 }
