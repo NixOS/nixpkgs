@@ -8,7 +8,9 @@
 # Require the optional to be enabled until upstream fixes or removes the configure flag
 assert expat != null;
 
-stdenv.mkDerivation rec {
+let
+  isCross = stdenv.buildPlatform != stdenv.hostPlatform;
+in stdenv.mkDerivation rec {
   pname = "wayland";
   version = "1.18.0";
 
@@ -21,15 +23,20 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [ "-Ddocumentation=${lib.boolToString withDocumentation}" ];
 
+  patches = lib.optional isCross ./fix-wayland-cross-compilation.patch;
+
   postPatch = lib.optionalString withDocumentation ''
     patchShebangs doc/doxygen/gen-doxygen.py
+  '' + lib.optionalString isCross ''
+    substituteInPlace egl/meson.build --replace \
+      "find_program('nm').path()" \
+      "find_program('${stdenv.cc.targetPrefix}nm').path()"
   '';
 
   nativeBuildInputs = [
     meson pkgconfig ninja
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    # for wayland-scanner during build
-    wayland
+  ] ++ lib.optionals isCross [
+    wayland # For wayland-scanner during the build
   ] ++ lib.optionals withDocumentation [
     (graphviz-nox.override { pango = null; }) # To avoid an infinite recursion
     doxygen libxslt xmlto python3 docbook_xml_dtd_45
