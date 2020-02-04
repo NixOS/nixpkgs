@@ -36,9 +36,9 @@
 } @ args:
 
 let
-  version = "2.30";
+  version = "2.31";
   patchSuffix = "";
-  sha256 = "1bxqpg91d02qnaz837a5kamm0f43pr1il4r9pknygywsar713i72";
+  sha256 = "05zxkyz9bv3j9h0xyid1rhvh3klhsmrpkf3bcs6frvlgyr2gwilj";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -108,8 +108,6 @@ stdenv.mkDerivation ({
       })
 
       ./fix-x64-abi.patch
-      ./2.27-CVE-2019-19126.patch
-      ./2.30-cve-2020-1752.patch
     ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
     ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
