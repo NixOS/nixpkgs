@@ -716,6 +716,8 @@ in
 
   awscli = callPackage ../tools/admin/awscli { };
 
+  awscli-session-manager = callPackage ../tools/admin/awscli-session-manager { };
+
   awsebcli = callPackage ../tools/virtualization/awsebcli {};
 
   awslogs = callPackage ../tools/admin/awslogs { };
