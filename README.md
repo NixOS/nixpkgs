@@ -39,6 +39,7 @@ See code for all available configurations.
 | [Dell XPS 13 9360][]              | `<nixos-hardware/dell/xps/13-9360>`                |
 | [Dell XPS 13 9370][]              | `<nixos-hardware/dell/xps/13-9370>`                |
 | [Dell XPS 13 9380][]              | `<nixos-hardware/dell/xps/13-9380>`                |
+| [Dell XPS 15 7590][]              | `<nixos-hardware/dell/xps/15-7590>`                |
 | [Dell XPS 15 9550][]              | `<nixos-hardware/dell/xps/15-9550>`                |
 | [Inverse Path USB armory][]       | `<nixos-hardware/inversepath/usbarmory>`           |
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`             |
