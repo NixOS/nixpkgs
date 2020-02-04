@@ -5973,6 +5973,8 @@ in {
 
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
+  vispy = callPackage ../development/python-modules/vispy { };
+
   vsts = callPackage ../development/python-modules/vsts { };
 
   vsts-cd-manager = callPackage ../development/python-modules/vsts-cd-manager { };
