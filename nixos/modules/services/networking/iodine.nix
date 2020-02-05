@@ -52,7 +52,7 @@ in
                 server = mkOption {
                   type = types.str;
                   default = "";
-                  description = "Domain or Subdomain of server running iodined";
+                  description = "Hostname of server running iodined";
                   example = "tunnel.mydomain.com";
                 };
 
