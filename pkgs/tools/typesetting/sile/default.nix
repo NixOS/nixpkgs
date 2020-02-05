@@ -7,17 +7,17 @@
 with stdenv.lib;
 
 let
-  luaEnv = lua.withPackages(ps: with ps;[cassowary linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
+  luaEnv = lua.withPackages(ps: with ps;[cassowary cosmo linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
 
 in
 
 stdenv.mkDerivation rec {
   pname = "sile";
-  version = "0.10.1";
+  version = "0.10.3";
 
   src = fetchurl {
     url = "https://github.com/sile-typesetter/sile/releases/download/v${version}/${pname}-${version}.tar.bz2";
-    sha256 = "a5ec924bfe8a629ec4b4d09754d822cab1cf48d28bc6ce649faa5c597a108666";
+    sha256 = "d89d5ce7d2bf46fb062e5299ffd8b5d821dc3cb3462a0e7c1109edeee111d856";
   };
 
   nativeBuildInputs = [pkgconfig makeWrapper];
