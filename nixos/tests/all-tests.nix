@@ -65,7 +65,7 @@ in
   couchdb = handleTest ./couchdb.nix {};
   deluge = handleTest ./deluge.nix {};
   dhparams = handleTest ./dhparams.nix {};
-  dnscrypt-proxy = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy.nix {};
+  dnscrypt-proxy2 = handleTestOn ["x86_64-linux"] ./dnscrypt-proxy2.nix {};
   docker = handleTestOn ["x86_64-linux"] ./docker.nix {};
   docker-containers = handleTestOn ["x86_64-linux"] ./docker-containers.nix {};
   docker-edge = handleTestOn ["x86_64-linux"] ./docker-edge.nix {};
@@ -213,8 +213,7 @@ in
   openldap = handleTest ./openldap.nix {};
   opensmtpd = handleTest ./opensmtpd.nix {};
   openssh = handleTest ./openssh.nix {};
-  # openstack-image-userdata doesn't work in a sandbox as the simulated openstack instance needs network access
-  #openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
+  openstack-image-userdata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).userdata or {};
   openstack-image-metadata = (handleTestOn ["x86_64-linux"] ./openstack-image.nix {}).metadata or {};
   orangefs = handleTest ./orangefs.nix {};
   os-prober = handleTestOn ["x86_64-linux"] ./os-prober.nix {};

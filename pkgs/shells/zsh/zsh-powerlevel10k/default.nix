@@ -5,12 +5,12 @@
 
 stdenv.mkDerivation {
   pname = "powerlevel10k";
-  version = "1.0";
+  version = "1.1";
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "powerlevel10k";
-    rev = "c21961b53c137253020aeffca2b132fdd6bcb116";
-    sha256 = "1jp6jhw5kb10d76zkxdv8c04s51ilmjka336bgnllya9nyqaqpxp";
+    rev = "9d9c50611da19044370ee759e593ccadbad32a6a";
+    sha256 = "0jl4jamh7i8w7lp3qbbakh1wsyrrmslsrjwh9jgyvw50a83hp6fj";
   };
 
   patches = [

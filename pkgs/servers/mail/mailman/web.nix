@@ -34,6 +34,6 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Django project for Mailman 3 web interface";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [ peti qyliss ];
   };
 }

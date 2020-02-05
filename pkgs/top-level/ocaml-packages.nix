@@ -562,6 +562,8 @@ let
       then callPackage ../development/ocaml-modules/num {}
       else null;
 
+    parmap = callPackage ../development/ocaml-modules/parmap { };
+
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
     core_extended_p4 = callPackage ../development/ocaml-modules/core_extended { };

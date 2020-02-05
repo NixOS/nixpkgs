@@ -529,6 +529,7 @@
   ./services/monitoring/prometheus/alertmanager.nix
   ./services/monitoring/prometheus/exporters.nix
   ./services/monitoring/prometheus/pushgateway.nix
+  ./services/monitoring/prometheus/xmpp-alerts.nix
   ./services/monitoring/riemann.nix
   ./services/monitoring/riemann-dash.nix
   ./services/monitoring/riemann-tools.nix
@@ -590,7 +591,7 @@
   ./services/networking/dhcpd.nix
   ./services/networking/dnscache.nix
   ./services/networking/dnschain.nix
-  ./services/networking/dnscrypt-proxy.nix
+  ./services/networking/dnscrypt-proxy2.nix
   ./services/networking/dnscrypt-wrapper.nix
   ./services/networking/dnsdist.nix
   ./services/networking/dnsmasq.nix

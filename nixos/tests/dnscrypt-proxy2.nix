@@ -1,5 +1,5 @@
 import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "dnscrypt-proxy";
+  name = "dnscrypt-proxy2";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ joachifm ];
   };
@@ -13,9 +13,16 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     {
       security.apparmor.enable = true;
 
-      services.dnscrypt-proxy.enable = true;
-      services.dnscrypt-proxy.localPort = localProxyPort;
-      services.dnscrypt-proxy.extraArgs = [ "-X libdcplugin_example.so" ];
+      services.dnscrypt-proxy2.enable = true;
+      services.dnscrypt-proxy2.settings = {
+        listen_addresses = [ "127.0.0.1:${toString localProxyPort}" ];
+        sources.public-resolvers = {
+          urls = [ "https://download.dnscrypt.info/resolvers-list/v2/public-resolvers.md" ];
+          cache_file = "public-resolvers.md";
+          minisign_key = "RWQf6LRCGA9i53mlYecO4IzT51TGPpvWucNSCh1CBM0QTaLn73Y7GFO3";
+          refresh_delay = 72;
+        };
+      };
 
       services.dnsmasq.enable = true;
       services.dnsmasq.servers = [ "127.0.0.1#${toString localProxyPort}" ];
@@ -24,12 +31,6 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
   testScript = ''
     client.wait_for_unit("dnsmasq")
-
-    # The daemon is socket activated; sending a single ping should activate it.
-    client.fail("systemctl is-active dnscrypt-proxy")
-    client.execute(
-        "${pkgs.iputils}/bin/ping -c1 example.com"
-    )
-    client.wait_until_succeeds("systemctl is-active dnscrypt-proxy")
+    client.wait_for_unit("dnscrypt-proxy2")
   '';
 })
