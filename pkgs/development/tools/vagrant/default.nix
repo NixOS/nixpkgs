@@ -1,12 +1,13 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux }:
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, fetchpatch
+}:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.6";
+  version = "2.2.7";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "0nssq2i4riif0q72h5qp7dlxd4shqcyvm1bx9adppcacb77gpnhv";
+  sha256 = "1z31y1nqiyj6rml9lz8gcbr29myhs5wcap8jsvgm3pb7p9p9y8m9";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -53,6 +54,13 @@ in buildRubyGem rec {
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
+
+    # fix deprecation warning on ruby 2.6.5.
+    # See also https://github.com/hashicorp/vagrant/pull/11307
+    (fetchpatch {
+      url = "https://github.com/hashicorp/vagrant/commit/d18ed567aaa5da23c9e91ab87f360e7bf6760f13.patch";
+      sha256 = "0f61qj41rc3fdggmnha4jrqg4pzmfiriwpsz4fcgf7c0bx6qha7q";
+    })
   ];
 
   postPatch = ''
@@ -110,7 +118,7 @@ in buildRubyGem rec {
     description = "A tool for building complete development environments";
     homepage = https://www.vagrantup.com/;
     license = licenses.mit;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ aneeshusa ma27 ];
     platforms = with platforms; linux ++ darwin;
   };
 }
