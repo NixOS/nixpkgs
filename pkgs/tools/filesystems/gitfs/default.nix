@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, python2Packages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
-python2Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gitfs";
   version = "0.5.2";
 
@@ -16,8 +16,8 @@ python2Packages.buildPythonApplication rec {
     echo > requirements.txt
   '';
 
-  buildInputs = with python2Packages; [ pytest pytestcov mock ];
-  propagatedBuildInputs = with python2Packages; [ atomiclong fusepy pygit2 ];
+  checkInputs = with python3Packages; [ pytest pytestcov mock ];
+  propagatedBuildInputs = with python3Packages; [ atomiclong fusepy pygit2 six ];
 
   checkPhase = "py.test";
   doCheck = false;
