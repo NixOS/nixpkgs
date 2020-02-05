@@ -932,8 +932,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/safchain/ethtool";
-      rev =  "42ed695e3de80b9d695f280295fd7994639f209d";
-      sha256 = "0n5hkrzc1bh46nidcssx4539kvcmgj501v3kzh2pljpg27509daj";
+      rev =  "ef7e7c9c27639f149a3c4bfae07a9c0fc3a1691a";
+      sha256 = "140bd01ngh2jgqhr2av3d4xmwk71c2mq5crg8gy89al76dwrjb7b";
     };
   }
   {
