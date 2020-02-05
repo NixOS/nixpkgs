@@ -4918,7 +4918,7 @@ in {
     doCheck = false;
   });
 
-  python-http-client = callPackage ../development/python-modules/python-http-client {};
+  python-http-client = callPackage ../development/python-modules/python-http-client { };
 
   rabbitpy = callPackage ../development/python-modules/rabbitpy { };
 
@@ -6227,7 +6227,7 @@ in {
 
   send2trash = callPackage ../development/python-modules/send2trash { };
 
-  sendgrid = callPackage ../development/python-modules/sendgrid {};
+  sendgrid = callPackage ../development/python-modules/sendgrid { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
 

@@ -21,13 +21,15 @@ buildPythonPackage rec {
     sha256 = "5ad98598c13b8cf5545d20f6fb6ecf967a08b48e3e175affabd82cfc71522d01";
   };
 
-  doCheck = false; # fails due to missing file sendgrid/helpers/inbound/config.yml, https://github.com/sendgrid/sendgrid-python/issues/868
+ checkPhase = ''
+  test --ignore=tests/test_app.py
+ '';
  
  propagatedBuildInputs = [ flask pyyaml six pytest mock codecov coverage python-http-client];
  
   meta = with lib; {
     description = "Twilio SendGrid library for Python";
-    homepage = https://pypi.org/project/sendgrid/;
+    homepage = "https://github.com/sendgrid/sendgrid-python";
     license = licenses.mit;
     maintainers = with maintainers; [ xfoxawy ];
   };
