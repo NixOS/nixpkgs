@@ -14515,6 +14515,8 @@ in
 
   quesoglc = callPackage ../development/libraries/quesoglc { };
 
+  quiche = callPackage ../development/libraries/quiche {};
+
   quickder = callPackage ../development/libraries/quickder {};
 
   quicksynergy = callPackage ../applications/misc/quicksynergy { };
