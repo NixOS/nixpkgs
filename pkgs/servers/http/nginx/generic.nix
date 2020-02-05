@@ -96,7 +96,10 @@ stdenv.mkDerivation {
     ++ optional (gd != null) "--with-http_image_filter_module"
     ++ optional (with stdenv.hostPlatform; isLinux || isFreeBSD) "--with-file-aio"
     ++ configureFlags
-    ++ map (mod: "--add-module=${mod.src}") modules;
+    ++ map (mod: if !(mod ? configureFlags) then "--add-module=${mod.src}" else mod.configureFlags) modules;
+
+  # for modules that depend on cmake
+  dontUseCmakeConfigure = true;
 
   NIX_CFLAGS_COMPILE = toString ([
     "-I${libxml2.dev}/include/libxml2"
