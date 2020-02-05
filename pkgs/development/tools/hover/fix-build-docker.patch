@@ -1,0 +1,13 @@
+diff --git a/cmd/build.go b/cmd/build.go
+index 265c8d8..2d71daf 100644
+--- a/cmd/build.go
++++ b/cmd/build.go
+@@ -359,7 +359,7 @@ func buildNormal(targetOS string, vmArguments []string) {
+ 	}
+ 	checkForMainDesktop()
+ 	crossCompile = targetOS != runtime.GOOS
+-	buildDocker = crossCompile || buildDocker
++	buildDocker = true
+
+ 	if buildCachePath != "" {
+ 		engineCachePath = enginecache.ValidateOrUpdateEngineAtPath(targetOS, buildCachePath)
