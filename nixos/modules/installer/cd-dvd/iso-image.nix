@@ -569,18 +569,14 @@ in
       };
 
     fileSystems."/nix/store" =
-      { fsType = "overlay";
-        device = "overlay";
-        options = [
-          "lowerdir=/nix/.ro-store"
-          "upperdir=/nix/.rw-store/store"
-          "workdir=/nix/.rw-store/work"
-        ];
+      { fsType = "unionfs-fuse";
+        device = "unionfs";
+        options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" ];
 
-    boot.initrd.kernelModules = [ "loop" "overlay" ];
+    boot.initrd.kernelModules = [ "loop" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.

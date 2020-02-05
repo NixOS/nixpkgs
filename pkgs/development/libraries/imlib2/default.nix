@@ -1,28 +1,19 @@
-{ stdenv, fetchurl
-# Image file formats
-, libjpeg, libtiff, giflib, libpng, libwebp
-# imlib2 can load images from ID3 tags.
-, libid3tag
-, freetype , bzip2, pkgconfig
-, x11Support ? true, xlibsWrapper ? null
-}:
+{ stdenv, fetchurl, libjpeg, libtiff, giflib, libpng, bzip2, pkgconfig
+, freetype, libid3tag
+, x11Support ? true, xlibsWrapper ? null }:
 
-let
-  inherit (stdenv.lib) optional;
-in
+with stdenv.lib;
+
 stdenv.mkDerivation rec {
-  pname = "imlib2";
-  version = "1.6.1";
+  name = "imlib2-1.5.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/enlightenment/${pname}-${version}.tar.bz2";
-    sha256 = "0v8n3dswx7rxqfd0q03xwc7j2w1mv8lv18rdxv487a1xw5vklfad";
+    url = "mirror://sourceforge/enlightenment/${name}.tar.bz2";
+    sha256 = "1bms2iwmvnvpz5jqq3r52glarqkafif47zbh1ykz8hw85d2mfkps";
   };
 
-  buildInputs = [
-    libjpeg libtiff giflib libpng libwebp
-    bzip2 freetype libid3tag
-  ] ++ optional x11Support xlibsWrapper;
+  buildInputs = [ libjpeg libtiff giflib libpng bzip2 freetype libid3tag ]
+    ++ optional x11Support xlibsWrapper;
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -44,7 +35,7 @@ stdenv.mkDerivation rec {
     moveToOutput bin/imlib2-config "$dev"
   '';
 
-  meta = with stdenv.lib; {
+  meta = {
     description = "Image manipulation library";
 
     longDescription = ''
@@ -55,8 +46,8 @@ stdenv.mkDerivation rec {
       easily, without sacrificing speed.
     '';
 
-    homepage = "https://docs.enlightenment.org/api/imlib2/html";
-    license = licenses.mit;
+    homepage = http://docs.enlightenment.org/api/imlib2/html;
+    license = licenses.free;
     platforms = platforms.unix;
     maintainers = with maintainers; [ spwhitt ];
   };

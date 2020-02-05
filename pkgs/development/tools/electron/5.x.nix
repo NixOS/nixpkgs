@@ -1,7 +1,7 @@
-{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, gtk3, unzip, atomEnv, libuuid, at-spi2-atk }:
+{ stdenv, libXScrnSaver, makeWrapper, fetchurl, wrapGAppsHook, gtk3, unzip, atomEnv, libuuid, at-spi2-atk, at-spi2-core }:
 
 let
-  version = "4.2.8";
+  version = "5.0.8";
   name = "electron-${version}";
 
   throwSystem = throw "Unsupported system: ${stdenv.hostPlatform.system}";
@@ -19,19 +19,19 @@ let
     src = {
       i686-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-ia32.zip";
-        sha256 = "1sikxr0pfpi3wrf1d7fia1vhb1gacsy9pr7qc0fycgnzsy2nvf8n";
+        sha256 = "1blw38x4fp4w2vs6r1d0jz3pg0m78417i0q9bvwpnwbn6wil857y";
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-x64.zip";
-        sha256 = "0wc954cjc13flvdh8rkmnifdx6nirf273v1n76lsklbsq6c73i4h";
+        sha256 = "1gz5n8gkgka7343qcwckagd4ply1lxwiaccdjv16srk2wwc9bc9m";
       };
       armv7l-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-armv7l.zip";
-        sha256 = "0370ygpsm42drm70gj12i6mg960wchhqis7zz8i9is2ax1b2xjp5";
+        sha256 = "1y8yna6z7xc378k6hsgngv9v98yjwq36knnr4qan0pw26paw1m82";
       };
       aarch64-linux = fetchurl {
         url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-linux-arm64.zip";
-        sha256 = "0vl90lsjcsgcxivbaq526ffbx3lsh6axfmpkfxl8cj2jlbsg593k";
+        sha256 = "1ha4ajvi0z051b6npigw6w4xi3bj3hhpxfr3xw4fgx6g6bvf1vpx";
       };
     }.${stdenv.hostPlatform.system} or throwSystem;
 
@@ -54,7 +54,7 @@ let
 
       patchelf \
         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libuuid at-spi2-atk ]}:$out/lib/electron" \
+        --set-rpath "${atomEnv.libPath}:${stdenv.lib.makeLibraryPath [ libuuid at-spi2-atk at-spi2-core ]}:$out/lib/electron" \
         $out/lib/electron/electron
 
       wrapProgram $out/lib/electron/electron \
@@ -68,7 +68,7 @@ let
 
     src = fetchurl {
       url = "https://github.com/electron/electron/releases/download/v${version}/electron-v${version}-darwin-x64.zip";
-      sha256 = "083v8k17b596fa63a7qrwyn2k8pd5vmg9yijbqbnpfcg4ja3bjx9";
+      sha256 = "1h7i2ik6wms5v6ji0mp33kzfh9sd89m7w3m2nm6wrjny7m0b43ww";
     };
 
     buildInputs = [ unzip ];

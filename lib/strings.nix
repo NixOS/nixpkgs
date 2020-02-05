@@ -244,7 +244,7 @@ rec {
      Also note that Nix treats strings as a list of bytes and thus doesn't
      handle unicode.
 
-     Type: stringToCharacters :: string -> [string]
+     Type: stringtoCharacters :: string -> [string]
 
      Example:
        stringToCharacters ""

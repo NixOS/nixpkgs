@@ -6,11 +6,11 @@
 stdenv.mkDerivation rec {
   version = "2020-02-04";
   pname = "oh-my-zsh";
-  rev = "77aa1795d2f05583d4fc63a63abb0144beb5ecff";
+  rev = "6bebc254e88ac9b7fdaa7491d031f82ec107e418";
 
   src = fetchgit { inherit rev;
     url = "https://github.com/ohmyzsh/ohmyzsh";
-    sha256 = "0n36wpdlr1w4gr0cja48mcywi8av71p3diigkiv3n45a9hh94fxx";
+    sha256 = "1lmg1givymr4hgmvmngklm7q3g7dpqwm7aj5xild72cdhx0g5qqw";
   };
 
   pathsToLink = [ "/share/oh-my-zsh" ];
