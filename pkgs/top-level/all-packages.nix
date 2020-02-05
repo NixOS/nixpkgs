@@ -23399,9 +23399,12 @@ in
   };
 
   protontricks = callPackage ../tools/package-management/protontricks {
-    inherit (python3Packages) buildPythonApplication vdf;
+    inherit (python3Packages) buildPythonApplication pytest setuptools_scm vdf;
     inherit (gnome3) zenity;
     wine = wineWowPackages.minimal;
+    winetricks = winetricks.override {
+      wine = wineWowPackages.minimal;
+    };
   };
 
   stepmania = callPackage ../games/stepmania {
