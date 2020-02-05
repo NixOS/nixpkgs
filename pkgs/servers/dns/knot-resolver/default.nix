@@ -16,22 +16,14 @@ lua = luajitPackages;
 
 unwrapped = stdenv.mkDerivation rec {
   pname = "knot-resolver";
-  version = "5.0.0";
+  version = "5.0.1";
 
   src = fetchurl {
     url = "https://secure.nic.cz/files/knot-resolver/${pname}-${version}.tar.xz";
-    sha256 = "ca6023cd0c18b11f4a0cff0c8e882c7f3a5ad6653e9aa95acdbedafc5a53a5ed";
+    sha256 = "4a93264ad0cda7ea2252d1ba057e474722f77848165f2893e0c76e21ae406415";
   };
 
   outputs = [ "out" "dev" ];
-
-  patches = [
-    (fetchpatch { # TODO: included in the next release.
-      name = "fix-GC-path.patch";
-      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/b723dbbe0.diff";
-      sha256 = "1hrwbv9vjybnwm083jxcinzw3fmwlsf1dgxrly7mhjs8d3jhqc4z";
-    })
-  ];
 
   # Path fixups for the NixOS service.
   postPatch = ''
