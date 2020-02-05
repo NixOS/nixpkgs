@@ -1,0 +1,24 @@
+diff --git a/user/drbdadm_adjust.c b/user/drbdadm_adjust.c
+index cb23270..3a751ca 100644
+--- a/user/drbdadm_adjust.c
++++ b/user/drbdadm_adjust.c
+@@ -29,6 +29,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/wait.h>
++#include <sys/sysmacros.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+ 
+diff --git a/user/legacy/drbdadm_adjust.c b/user/legacy/drbdadm_adjust.c
+index c79163c..6990ffb 100644
+--- a/user/legacy/drbdadm_adjust.c
++++ b/user/legacy/drbdadm_adjust.c
+@@ -27,6 +27,7 @@
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include <sys/wait.h>
++#include <sys/sysmacros.h>
+ #include <unistd.h>
+ #include <fcntl.h>
+ 
