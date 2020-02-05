@@ -73,7 +73,7 @@ in
                 passwordFile = mkOption {
                   type = types.str;
                   default = "";
-                  description = "File that contains password";
+                  description = "Path to a file containing the password.";
                 };
               };
             }
