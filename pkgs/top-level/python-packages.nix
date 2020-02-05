@@ -232,6 +232,8 @@ in {
 
   autograd = callPackage ../development/python-modules/autograd { };
 
+  autograd-gamma = callPackage ../development/python-modules/autograd-gamma { };
+
   autologging = callPackage ../development/python-modules/autologging { };
 
   automat = callPackage ../development/python-modules/automat { };
