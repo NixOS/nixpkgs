@@ -7,7 +7,7 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
 
 let
   pythonEnv = python.withPackages (p: with p; [
@@ -37,6 +37,8 @@ in stdenv.mkDerivation rec {
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
+
+  nativeBuildInputs = [ jq ];
 
   patches = [
     ./gcloud-path.patch
@@ -76,7 +78,20 @@ in stdenv.mkDerivation rec {
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
-    rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod
+    rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod \
+          $out/google-cloud-sdk/platform/gsutil/third_party/crcmod_osx
+
+    # remove tests and test data
+    find $out -name tests -type d -exec rm -rf '{}' +
+
+    # compact all the JSON
+    find $out -name \*.json | while read path; do
+      jq -c . $path > $path.min
+      mv $path.min $path
+    done
+
+    # strip the Cython gRPC library
+    strip $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
   meta = with stdenv.lib; {
