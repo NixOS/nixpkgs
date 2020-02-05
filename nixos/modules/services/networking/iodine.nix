@@ -59,7 +59,7 @@ in
                 relay = mkOption {
                   type = types.str;
                   default = "";
-                  description = "DNS server to use as a intermediate relay to the iodined server";
+                  description = "DNS server to use as an intermediate relay to the iodined server";
                   example = "8.8.8.8";
                 };
 
