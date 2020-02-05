@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, makeWrapper
-, python, git, gnupg, less, cacert
+, python3, git, gnupg, less, cacert
 }:
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "1.13.8";
+  version = "1.13.9.1";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "1wmzgijmssgwkkw8g4zgmc4x64xkvz6nq1b3szcvawgv1ndwnb2j";
+    sha256 = "0yns7n8gpac33cbkm85slslcnfdb55ax9c0vpvmmfbgcgkvqlknb";
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ python ];
+  buildInputs = [ python3 ];
 
   patchPhase = ''
     substituteInPlace repo --replace \
