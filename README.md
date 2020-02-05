@@ -41,6 +41,9 @@ See code for all available configurations.
 | [Dell XPS 13 9380][]              | `<nixos-hardware/dell/xps/13-9380>`                |
 | [Dell XPS 15 7590][]              | `<nixos-hardware/dell/xps/15-7590>`                |
 | [Dell XPS 15 9550][]              | `<nixos-hardware/dell/xps/15-9550>`                |
+| [Dell XPS 15 9560][]              | `<nixos-hardware/dell/xps/15-9560>`                |
+| [Dell XPS 15 9560, intel only][]  | `<nixos-hardware/dell/xps/15-9560/intel>`          |
+| [Dell XPS 15 9560, nvidia only][] | `<nixos-hardware/dell/xps/15-9560/nvidia>`         |
 | [Inverse Path USB armory][]       | `<nixos-hardware/inversepath/usbarmory>`           |
 | Lenovo IdeaPad Z510               | `<nixos-hardware/lenovo/ideapad/z510>`             |
 | Lenovo ThinkPad E495              | `<nixos-hardware/lenovo/thinkpad/e495>`            |
@@ -83,6 +86,9 @@ See code for all available configurations.
 [Dell XPS 13 9380]: dell/xps/13-9380
 [Dell XPS 15 7590]: dell/xps/15-7590
 [Dell XPS 15 9550]: dell/xps/15-9550
+[Dell XPS 15 9560]: dell/xps/15-9560
+[Dell XPS 15 9560, intel only]: dell/xps/15-9560/intel
+[Dell XPS 15 9560, nvidia only]: dell/xps/15-9560/nvidia
 [Inverse Path USB armory]: inversepath/usbarmory
 [Lenovo ThinkPad X1 (6th Gen)]: lenovo/thinkpad/x1/6th-gen
 [Lenovo ThinkPad X260]: lenovo/thinkpad/x260
