@@ -16,6 +16,7 @@ showSyntax() {
 # Parse the command line.
 origArgs=("$@")
 extraBuildFlags=()
+lockFlags=()
 action=
 buildNix=1
 fast=
@@ -61,7 +62,7 @@ while [ "$#" -gt 0 ]; do
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L)
+      --show-trace|--keep-failed|-K|--keep-going|-k|--verbose|-v|-vv|-vvv|-vvvv|-vvvvv|--fallback|--repair|--no-build-output|-Q|-j*|-L|--refresh|--no-net)
         extraBuildFlags+=("$i")
         ;;
       --option)
@@ -99,6 +100,18 @@ while [ "$#" -gt 0 ]; do
       --flake)
         flake="$1"
         shift 1
+        ;;
+      --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+        lockFlags+=("$i")
+        ;;
+      --update-input)
+        j="$1"; shift 1
+        lockFlags+=("$i" "$j")
+        ;;
+      --override-input)
+        j="$1"; shift 1
+        k="$1"; shift 1
+        lockFlags+=("$i" "$j" "$k")
         ;;
       *)
         echo "$0: unknown option \`$i'"
@@ -268,7 +281,7 @@ fi
 
 # Resolve the flake.
 if [[ -n $flake ]]; then
-    flake=$(nix flake info --json "${extraBuildFlags[@]}" -- "$flake" | jq -r .url)
+    flake=$(nix flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
 # Find configuration.nix and open editor instead of building.
@@ -402,7 +415,7 @@ if [ -z "$rollback" ]; then
         else
             outLink=$tmpDir/result
             nix build "$flake#$flakeAttr.config.system.build.toplevel" \
-		--keep-going "${extraBuildFlags[@]}" --out-link $outLink
+              --keep-going "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
             pathToConfig="$(readlink -f $outLink)"
         fi
         copyToTarget "$pathToConfig"
@@ -411,7 +424,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}"
+            nix build "$flake#$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}" "${lockFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm ]; then
