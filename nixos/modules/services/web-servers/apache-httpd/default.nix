@@ -29,8 +29,8 @@ let
 
   listenInfo = unique (concatMap mkListenInfo vhosts);
 
+  enableHttp2 = any (vhost: vhost.http2) vhosts;
   enableSSL = any (listen: listen.ssl) listenInfo;
-
   enableUserDir = any (vhost: vhost.enableUserDir) vhosts;
 
   # NOTE: generally speaking order of modules is very important
@@ -44,6 +44,7 @@ let
       "mpm_${cfg.multiProcessingModule}"
     ]
     ++ (if cfg.multiProcessingModule == "prefork" then [ "cgi" ] else [ "cgid" ])
+    ++ optional enableHttp2 "http2"
     ++ optional enableSSL "ssl"
     ++ optional enableUserDir "userdir"
     ++ optional cfg.enableMellon { name = "auth_mellon"; path = "${pkgs.apacheHttpdPackages.mod_auth_mellon}/modules/mod_auth_mellon.so"; }
@@ -164,6 +165,7 @@ let
             SSLCertificateFile ${sslServerCert}
             SSLCertificateKeyFile ${sslServerKey}
             ${optionalString (sslServerChain != null) "SSLCertificateChainFile ${sslServerChain}"}
+            ${optionalString hostOpts.http2 "Protocols h2 h2c http/1.1"}
             ${acmeChallenge}
             ${mkVHostCommonConf hostOpts}
         </VirtualHost>
