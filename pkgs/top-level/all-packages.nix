@@ -1927,6 +1927,8 @@ in
 
   lynis = callPackage ../tools/security/lynis { };
 
+  mapproxy = callPackage ../applications/misc/mapproxy { };
+
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
   mathics = with python2Packages; toPythonApplication mathics;
