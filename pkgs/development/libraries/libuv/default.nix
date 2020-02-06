@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoconf, automake, libtool, pkgconfig, ApplicationServices, CoreServices }:
 
 stdenv.mkDerivation rec {
-  version = "1.34.1";
+  version = "1.34.2";
   pname = "libuv";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vkn76wr2nivhmgjnkni2yih642mrlzkxbivdmlvcf3hg4h7gipp";
+    sha256 = "14ax49daz7j86lybi242jiry49jrnnvlyc39k6va700n03py4h9n";
   };
 
   postPatch = let
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       "getnameinfo_basic" "udp_send_hang_loop" # probably network-dependent
       "spawn_setuid_fails" "spawn_setgid_fails" "fs_chown" # user namespaces
       "getaddrinfo_fail" "getaddrinfo_fail_sync"
-      "threadpool_multiple_event_loops" # times out on slow machines
+      "threadpool_multiple_event_loops" "hrtime" # times out on slow machines
       "get_passwd" # passed on NixOS but failed on other Linuxes
       "tcp_writealot" # times out sometimes
     ] ++ stdenv.lib.optionals stdenv.isDarwin [
