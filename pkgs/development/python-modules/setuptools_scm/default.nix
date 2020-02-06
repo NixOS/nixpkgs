@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, pip }:
+{ stdenv, buildPythonPackage, fetchPypi, pip, pytest }:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
@@ -8,6 +8,9 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "26b8a108783cd88f4b15ff1f0f347d6b476db25d0c226159b835d713f9487320";
   };
+
+  # Requires pytest, circular dependency
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/pypa/setuptools_scm/;
