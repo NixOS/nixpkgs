@@ -38,11 +38,12 @@
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-, screenSaverSupport ? true,           libXScrnSaver ? null
 , sambaSupport       ? stdenv.isLinux, samba         ? null
+, screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
 , speexSupport       ? true,           speex         ? null
+, swiftSupport       ? false,          swift         ? null
 , theoraSupport      ? true,           libtheora     ? null
 , vaapiSupport       ? stdenv.isLinux, libva         ? null
 , vdpauSupport       ? true,           libvdpau      ? null
@@ -119,7 +120,6 @@ in stdenv.mkDerivation rec {
     "--disable-libmpv-static"
     "--disable-static-build"
     "--disable-build-date" # Purity
-    "--disable-macos-cocoa-cb" # Disable whilst Swift isn't supported
     (enableFeature archiveSupport  "libarchive")
     (enableFeature cddaSupport     "cdda")
     (enableFeature dvdnavSupport   "dvdnav")
@@ -130,11 +130,13 @@ in stdenv.mkDerivation rec {
     (enableFeature vaapiSupport    "vaapi")
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
-  ];
+  ] # Disable whilst Swift isn't supported
+    ++ stdenv.lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
     addOpenGLRunpath docutils makeWrapper perl pkgconfig python3 wafHook which
-  ];
+  ]
+    ++ optional swiftSupport swift;
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
@@ -172,7 +174,7 @@ in stdenv.mkDerivation rec {
     ++ optionals x11Support        [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
     ++ optionals vulkanSupport     [ libplacebo shaderc vulkan-headers vulkan-loader ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation Cocoa CoreAudio
+      CoreFoundation Cocoa CoreAudio MediaPlayer
     ]);
 
   enableParallelBuilding = true;
