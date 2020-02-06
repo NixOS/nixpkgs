@@ -60,7 +60,7 @@ in
                   -e '/^toolBarFont=/ s/,Regular$//'
           fi
 
-          exec "${getBin plasma5.plasma-workspace}/bin/startkde"
+          exec "${getBin plasma5.plasma-workspace}/bin/startplasma-x11"
         '';
       };
 
@@ -137,6 +137,7 @@ in
           libkscreen
           libksysguard
           milou
+          plasma-browser-integration
           plasma-integration
           polkit-kde-agent
           systemsettings
