@@ -6,12 +6,12 @@
   coreutils, dbus, gnugrep, gnused, isocodes, libdbusmenu, libSM, libXcursor,
   libXtst, pam, wayland, xmessage, xprop, xrdb, xsetroot,
 
-  baloo, kactivities, kactivities-stats, kcmutils, kconfig, kcrash, kdbusaddons,
-  kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime, kinit,
-  kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner, kscreenlocker,
-  ktexteditor, ktextwidgets, kwallet, kwayland, kwin, kxmlrpcclient, libkscreen,
-  libksysguard, libqalculate, networkmanager-qt, phonon, plasma-framework,
-  prison, solid, kholidays, breeze-qt5,
+  baloo, breeze-qt5, kactivities, kactivities-stats, kcmutils, kconfig, kcrash,
+  kdbusaddons, kdeclarative, kdelibs4support, kdesu, kglobalaccel, kidletime,
+  kinit, kjsembed, knewstuff, knotifyconfig, kpackage, kpeople, krunner,
+  kscreenlocker, ktexteditor, ktextwidgets, kwallet, kwayland, kwin,
+  kxmlrpcclient, libkscreen, libksysguard, libqalculate, networkmanager-qt,
+  phonon, plasma-framework, prison, solid, kholidays,
 
   qtgraphicaleffects, qtquickcontrols, qtquickcontrols2, qtscript, qttools,
   qtwayland, qtx11extras,
@@ -38,9 +38,15 @@ mkDerivation {
   propagatedUserEnvPkgs = [ qtgraphicaleffects ];
   outputs = [ "out" "dev" ];
 
+  cmakeFlags = [
+    ''-DNIXPKGS_BREEZE_WALLPAPERS=${getBin breeze-qt5}/share/wallpapers''
+  ];
+
   patches = [
     ./0001-startkde.patch
+    ./0002-absolute-wallpaper-install-dir.patch
   ];
+
 
   NIX_CFLAGS_COMPILE = [
     ''-DNIXPKGS_XMESSAGE="${getBin xmessage}/bin/xmessage"''
