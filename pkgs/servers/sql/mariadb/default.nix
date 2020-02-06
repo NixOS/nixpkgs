@@ -3,6 +3,7 @@
 , libaio, libevent, jemalloc, cracklib, systemd, perl
 , fixDarwinDylibNames, cctools, CoreServices, less
 , numactl # NUMA Support
+, withStorageMroonga ? true, kytea, msgpack, zeromq
 , withoutClient ? false
 }:
 
@@ -144,6 +145,7 @@ server = stdenv.mkDerivation (common // {
     xz lzo lz4 bzip2 snappy
     libxml2 boost judy libevent cracklib
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) numactl
+    ++ optionals withStorageMroonga [ kytea msgpack zeromq ]
     ++ optional stdenv.hostPlatform.isLinux linux-pam
     ++ optional (!stdenv.hostPlatform.isDarwin) mytopEnv;
 
@@ -166,6 +168,8 @@ server = stdenv.mkDerivation (common // {
     "-DWITHOUT_FEDERATED=1"
   ] ++ optional (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32) [
     "-DWITH_NUMA=ON"
+  ] ++ optional (!withStorageMroonga) [
+    "-DWITHOUT_MROONGA=ON"
   ] ++ optionals withoutClient [
     "-DWITHOUT_CLIENT=ON"
   ] ++ optionals stdenv.hostPlatform.isDarwin [
@@ -181,7 +185,6 @@ server = stdenv.mkDerivation (common // {
     chmod +x "$out"/bin/wsrep_sst_common
     rm "$out"/bin/{mysql_client_test,mysqltest}
     rm -r "$out"/data # Don't need testing data
-    mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
   '' + optionalString withoutClient ''
     ${ # We don't build with GSSAPI on Darwin
       optionalString (!stdenv.hostPlatform.isDarwin) ''
@@ -190,6 +193,8 @@ server = stdenv.mkDerivation (common // {
     }
     rm "$out"/lib/mysql/plugin/client_ed25519.so
     rm "$out"/lib/{libmysqlclient${libExt},libmysqlclient_r${libExt}}
+  '' + optionalString withStorageMroonga ''
+    mv "$out"/share/{groonga,groonga-normalizer-mysql} "$out"/share/doc/mysql
   '' + optionalString (!stdenv.hostPlatform.isDarwin) ''
     sed -i 's/-mariadb/-mysql/' "$out"/bin/galera_new_cluster
   '';
