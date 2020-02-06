@@ -11,7 +11,7 @@ pyaml, sphinx, lxml, pygobject3, pycairo, gtk3, gobjectIntrospection
 # => gr-wavelet: collection of wavelet blocks
 , gsl
 # => gr-qtgui: the Qt-based GUI
-, qt5, qwt, qwt6, pyqt5
+, qt5, qwt, pyqt5
 # => gr-audio: audio subsystems (system/OS dependent)
 , alsaLib   # linux   'audio-alsa'
 , CoreAudio # darwin  'audio-osx'
@@ -64,7 +64,6 @@ stdenv.mkDerivation rec {
         pycairo
         gtk3
         gobjectIntrospection
-        qwt
         (python3.withPackages (ps : with ps; [pygobject3]))
   ];
 
