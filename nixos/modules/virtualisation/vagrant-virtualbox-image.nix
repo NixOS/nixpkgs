@@ -12,7 +12,7 @@
 
   # generate the box v1 format which is much easier to generate
   # https://www.vagrantup.com/docs/boxes/format.html
-  system.build.virtualboxVagrant = pkgs.runCommand
+  system.build.vagrantVirtualbox = pkgs.runCommand
     "virtualbox-vagrant.box"
     {}
     ''
