@@ -6251,6 +6251,8 @@ in
 
   safecopy = callPackage ../tools/system/safecopy { };
 
+  safe = callPackage ../tools/security/safe { };
+
   safe-rm = callPackage ../tools/system/safe-rm { };
 
   safeeyes = callPackage ../applications/misc/safeeyes { };
