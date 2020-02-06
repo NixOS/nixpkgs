@@ -1473,6 +1473,8 @@ in {
 
   webapp2 = callPackage ../development/python-modules/webapp2 { };
 
+  wordcloud = callPackage ../development/python-modules/wordcloud { };
+  
   wrf-python = callPackage ../development/python-modules/wrf-python { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
