@@ -103,6 +103,17 @@ let
     };
   };
 
+  arcanist-vim = buildVimPluginFrom2Nix {
+    pname = "arcanist-vim";
+    version = "2016-05-27";
+    src = fetchFromGitHub {
+      owner = "solarnz";
+      repo = "arcanist.vim";
+      rev = "bd59e799e838c8d946d33142104b2db625dc15d6";
+      sha256 = "11v7gqa5rnv28q0i3d02g9sw22gkjn10afvjx7bg352d91knxn9m";
+    };
+  };
+
   argtextobj-vim = buildVimPluginFrom2Nix {
     pname = "argtextobj-vim";
     version = "2010-10-18";
