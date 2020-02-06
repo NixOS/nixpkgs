@@ -137,6 +137,7 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
+  jirafeau = handleTest ./jirafeau.nix {};
   kafka = handleTest ./kafka.nix {};
   keepalived = handleTest ./keepalived.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
