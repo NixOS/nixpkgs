@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "librepcb";
   version = "0.1.2";
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     wrapQtApp $out/bin/librepcb
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
     homepage = https://librepcb.org/;
     maintainers = with maintainers; [ luz ];
