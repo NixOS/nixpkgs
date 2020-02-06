@@ -7942,7 +7942,6 @@ broken-packages:
   - perfect-vector-shuffle
   - PerfectHash
   - perfecthash
-  - perhaps
   - periodic
   - perm
   - permutations
