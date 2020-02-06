@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -22,7 +22,7 @@ let
     nativeBuildInputs = [ cmake python3 ]
       ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ]
+    buildInputs = [ libxml2 llvm lld ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
@@ -50,6 +50,8 @@ let
       ./unwindlib.patch
       # https://reviews.llvm.org/D51899
       ./compiler-rt-baremetal.patch
+      # make clang -xhip use $PATH to find executables
+      ./HIP-use-PATH-8.patch
     ];
 
     postPatch = ''

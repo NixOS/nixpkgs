@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "riot-web";
-  version = "1.5.6";
+  version = "1.5.8";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "063ynbil038y201skyldj2ysr0hwgwq981w1iw104xd17x31zmn0";
+    sha256 = "112zjlmxy2s8qcd227laf1lfvbbwwcipn51xb779hy2dci48kpkx";
   };
 
   installPhase = let

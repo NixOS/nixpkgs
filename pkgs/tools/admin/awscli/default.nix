@@ -57,9 +57,6 @@ in py.pkgs.buildPythonApplication rec {
     pyyaml
     groff
     less
-    urllib3
-    dateutil
-    jmespath
   ];
 
   postInstall = ''

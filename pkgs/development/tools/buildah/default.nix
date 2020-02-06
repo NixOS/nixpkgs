@@ -4,13 +4,13 @@
 
 buildGoPackage rec {
   pname = "buildah";
-  version = "1.13.1";
+  version = "1.13.2";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "buildah";
     rev    = "v${version}";
-    sha256 = "0swhpdr970ik6fhvmj45r84lsp1n6rxm0bgv9i1lvrxy1mdv7r9x";
+    sha256 = "0860ynv93gbicpczfapvrd558dzbqicy9rv4ivyjhb6yyfgy4qai";
   };
 
   outputs = [ "bin" "man" "out" ];

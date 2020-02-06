@@ -1905,6 +1905,12 @@
     email = "burkett.andrew@gmail.com";
     name = "Andrew Burkett";
   };
+  drewrisinger = {
+    email = "drisinger+nixpkgs@gmail.com";
+    github = "drewrisinger";
+    gitHubId = 10198051;
+    name = "Drew Risinger";
+  };
   dsferruzza = {
     email = "david.sferruzza@gmail.com";
     github = "dsferruzza";
@@ -2550,6 +2556,12 @@
     githubId = 1943632;
     name = "fro_ozen";
   };
+  Frostman = {
+    email = "me@slukjanov.name";
+    github = "Frostman";
+    githubId = 134872;
+    name = "Sergei Lukianov";
+  };
   frontsideair = {
     email = "photonia@gmail.com";
     github = "frontsideair";
@@ -3021,6 +3033,12 @@
     github = "illegalprime";
     githubId = 4401220;
     name = "Michael Eden";
+  };
+  ilya-fedin = {
+    email = "fedin-ilja2010@ya.ru";
+    github = "ilya-fedin";
+    githubId = 17829319;
+    name = "Ilya Fedin";
   };
   ilya-kolpakov = {
     email = "ilya.kolpakov@gmail.com";
@@ -3859,6 +3877,12 @@
     github = "rokk4";
     githubId = 17659803;
     name = "Matthias Axel Kröll";
+  };
+  kristian-brucaj = {
+    email = "kbrucaj@gmail.com";
+    github = "kristian-brucaj";
+    githubID = "8893110";
+    name = "Kristian Brucaj";
   };
   kristoff3r = {
     email = "k.soeholm@gmail.com";
@@ -7979,5 +8003,17 @@
     github = "snglth";
     githubId = 8686360;
     name = "Illia Shestakov";
+  };
+  foxit64 = {
+    email = "o4nsxy05@gmail.com";
+    github = "foxit64";
+    githubId = 56247270;
+    name = "Foxit";
+  };
+  masaeedu = {
+    email = "masaeedu@gmail.com";
+    github = "masaeedu";
+    githubId = 3674056;
+    name = "Asad Saeeduddin";
   };
 }

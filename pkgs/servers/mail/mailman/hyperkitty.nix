@@ -36,7 +36,7 @@ buildPythonPackage rec {
   '';
 
   meta = {
-    homepage = "http://www.gnu.org/software/mailman/";
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "Archiver for GNU Mailman v3";
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.linux;

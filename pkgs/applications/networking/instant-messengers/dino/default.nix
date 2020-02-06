@@ -2,7 +2,8 @@
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
 , gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
-, libnotify, libsoup, libgee
+, libnotify, libsoup, libgee, utillinux, libselinux, libsepol, libpsl, brotli
+, librsvg, libsignal-protocol-c
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -14,15 +15,15 @@
 , icu
  }:
 
-stdenv.mkDerivation {
-  name = "dino-unstable-2019-10-28";
+stdenv.mkDerivation rec {
+  pname = "dino";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "388cc56674487e7b9e339637369fc55f0e271daf";
-    sha256 = "1v8rnjbzi8qhwb1fv787byxk8ygfs16z2j64h0s6sd3asr4n0kz1";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
   };
 
   nativeBuildInputs = [
@@ -51,21 +52,27 @@ stdenv.mkDerivation {
     pcre
     xorg.libxcb
     xorg.libpthreadstubs
+    xorg.libXtst
     libXdmcp
     libxkbcommon
     epoxy
     at-spi2-core
     dbus
     icu
+    utillinux
+    libselinux
+    libsepol
+    libpsl
+    brotli
+    libsignal-protocol-c
+    librsvg
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = https://github.com/dino/dino;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 qyliss ];
   };
 }

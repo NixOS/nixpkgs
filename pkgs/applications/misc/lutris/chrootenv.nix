@@ -69,7 +69,7 @@ in buildFHSUserEnv {
     flac
 
     # rpcs3 // TODO: "error while loading shared libraries: libz.so.1..."
-    llvm_4
+    llvm
 
     # ScummVM
     nasm sndio

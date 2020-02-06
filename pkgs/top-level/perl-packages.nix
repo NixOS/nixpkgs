@@ -14432,12 +14432,12 @@ let
     doCheck = false;
   };
 
-  PerlTidy = buildPerlPackage {
+  PerlTidy = buildPerlPackage rec {
     pname = "Perl-Tidy";
-    version = "20190915";
+    version = "20200110";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-20190915.tar.gz;
-      sha256 = "c236dfacbba115cfc3f2868006c8601e021fe97c13cd2170a49bf8d404cc701b";
+      url = "mirror://cpan/authors/id/S/SH/SHANCOCK/Perl-Tidy-${version}.tar.gz";
+      sha256 = "11l0isqr7ysrm1y07lrla0ns1x3wvjw8im4kk50rsh22iyw3mhf8";
     };
     meta = {
       description = "Indent and reformat perl scripts";
@@ -19545,8 +19545,13 @@ let
       url = mirror://cpan/authors/id/G/GB/GBARR/TimeDate-2.30.tar.gz;
       sha256 = "11lf54akr9nbivqkjrhvkmfdgkbhw85sq0q4mak56n6bf542bgbm";
     };
-    # https://rt.cpan.org/Public/Bug/Display.html?id=124509
-    patches = [ ../development/perl-modules/timedate-2020.patch ];
+    patches = [
+      # https://rt.cpan.org/Public/Bug/Display.html?id=124509
+      (fetchpatch {
+        url = "https://github.com/atoomic/perl-TimeDate/commit/4b67ccbdc1846620470ca524a5f3e2afd7b33f66.patch";
+        sha256 = "1q37yw0b2pammvl0aana70nq7krqwhpcanqa11h2pg9sa9ls7q87";
+      })
+    ];
   };
 
   TimeDuration = buildPerlPackage {

@@ -38,6 +38,7 @@ in
     (mkRenamedOptionModule [ "networking" "dnsExtensionMechanism" ] [ "networking" "resolvconf" "dnsExtensionMechanism" ])
     (mkRenamedOptionModule [ "networking" "extraResolvconfConf" ] [ "networking" "resolvconf" "extraConfig" ])
     (mkRenamedOptionModule [ "networking" "resolvconfOptions" ] [ "networking" "resolvconf" "extraOptions" ])
+    (mkRemovedOptionModule [ "networking" "resolvconf" "useHostResolvConf" ] "This option was never used for anything anyways")
   ];
 
   options = {
@@ -50,15 +51,6 @@ in
         internal = true;
         description = ''
           DNS configuration is managed by resolvconf.
-        '';
-      };
-
-      useHostResolvConf = mkOption {
-        type = types.bool;
-        default = false;
-        description = ''
-          In containers, whether to use the
-          <filename>resolv.conf</filename> supplied by the host.
         '';
       };
 

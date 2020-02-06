@@ -28,6 +28,8 @@ let
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
+  gh = callPackage ./gh { };
+
   ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
@@ -103,6 +105,10 @@ let
 
   git-imerge = callPackage ./git-imerge { };
 
+  git-interactive-rebase-tool = callPackage ./git-interactive-rebase-tool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-machete = python3Packages.callPackage ./git-machete { };
 
   git-octopus = callPackage ./git-octopus { };
@@ -134,6 +140,10 @@ let
   git-sync = callPackage ./git-sync { };
 
   git-test = callPackage ./git-test { };
+
+  git-workspace = callPackage ./git-workspace {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   git2cl = callPackage ./git2cl { };
 

@@ -500,6 +500,8 @@ in {
 
   braintree = callPackage ../development/python-modules/braintree { };
 
+  deepdiff = callPackage ../development/python-modules/deepdiff { };
+
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
   breathe = callPackage ../development/python-modules/breathe { };
@@ -1662,6 +1664,8 @@ in {
 
   asn1ate = callPackage ../development/python-modules/asn1ate { };
 
+  atlassian-python-api = callPackage ../development/python-modules/atlassian-python-api { };  
+
   atomiclong = callPackage ../development/python-modules/atomiclong { };
 
   atomicwrites = callPackage ../development/python-modules/atomicwrites { };
@@ -1821,6 +1825,10 @@ in {
   cli-helpers = callPackage ../development/python-modules/cli-helpers {};
 
   cmarkgfm = callPackage ../development/python-modules/cmarkgfm { };
+
+  cirq = callPackage ../development/python-modules/cirq {
+    pythonProtobuf = self.protobuf;
+  };
 
   colorcet = callPackage ../development/python-modules/colorcet { };
 
@@ -3325,6 +3333,8 @@ in {
 
   djangorestframework-jwt = callPackage ../development/python-modules/djangorestframework-jwt { };
 
+  djangorestframework-simplejwt = callPackage ../development/python-modules/djangorestframework-simplejwt { };
+
   django-raster = callPackage ../development/python-modules/django-raster { };
 
   django_redis = callPackage ../development/python-modules/django_redis { };
@@ -4306,7 +4316,9 @@ in {
 
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
-  nbformat = callPackage ../development/python-modules/nbformat { };
+  nbformat = if isPy3k then 
+    callPackage ../development/python-modules/nbformat { }
+  else callPackage ../development/python-modules/nbformat/2.nix { };
 
   nbmerge = callPackage ../development/python-modules/nbmerge { };
 
@@ -4841,7 +4853,7 @@ in {
 
   pyelftools = callPackage ../development/python-modules/pyelftools { };
 
-  pyenchant = callPackage ../development/python-modules/pyenchant { };
+  pyenchant = callPackage ../development/python-modules/pyenchant { enchant2 = pkgs.enchant2; };
 
   pyexcelerator = callPackage ../development/python-modules/pyexcelerator { };
 
@@ -4885,6 +4897,8 @@ in {
   pyomo = callPackage ../development/python-modules/pyomo { };
 
   pyopencl = callPackage ../development/python-modules/pyopencl { };
+
+  pyosmium = callPackage ../development/python-modules/pyosmium { };
 
   pyotp = callPackage ../development/python-modules/pyotp { };
 
@@ -5688,6 +5702,10 @@ in {
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  yoda = toPythonModule (pkgs.yoda.override {
+    inherit python;
+  });
 
   youtube-dl = callPackage ../tools/misc/youtube-dl {};
 

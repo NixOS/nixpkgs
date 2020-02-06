@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qttools, qttranslations }:
+{ stdenv, mkDerivation, lib, fetchFromGitHub, qmake, qttools, qttranslations }:
 
 mkDerivation rec {
   pname = "gpxlab";
@@ -18,6 +18,12 @@ mkDerivation rec {
     lrelease GPXLab/locale/*.ts
   '';
 
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv GPXLab/GPXLab.app $out/Applications
+    wrapQtApp $out/Applications/GPXLab.app/Contents/MacOS/GPXLab
+  '';
+
   enableParallelBuilding = true;
 
   meta = with lib; {
@@ -29,6 +35,6 @@ mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

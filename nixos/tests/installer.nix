@@ -74,7 +74,7 @@ let
       # FIXME don't duplicate the -enable-kvm etc. flags here yet again!
       qemuFlags =
         (if system == "x86_64-linux" then "-m 768 " else "-m 512 ") +
-        (optionalString (system == "x86_64-linux") "-cpu kvm64 ") +
+        (optionalString (system == "x86_64-linux") "-cpu host ") +
         (optionalString (system == "aarch64-linux") "-enable-kvm -machine virt,gic-version=host -cpu host ");
 
       hdFlags = ''hda => "vm-state-machine/machine.qcow2", hdaInterface => "${iface}", ''

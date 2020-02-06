@@ -1,4 +1,4 @@
-{ stdenv, stdenv49, gccStdenv, llvmPackages
+{ gcc6Stdenv, stdenv, gccStdenv, llvmPackages
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
@@ -37,6 +37,7 @@ in with builtins; {
     patches = [
       ./patches/ldflags-5.1.patch
       ./patches/fix-scm-version.patch
+      ./patches/gcc-fixes.patch
       python3-six-patch
       python3-print-patch
     ];
@@ -50,6 +51,7 @@ in with builtins; {
     patches = [
       ./patches/ldflags-5.2.patch
       ./patches/fix-scm-version.patch
+      ./patches/gcc-fixes.patch
       python3-six-patch
       python3-print-patch
     ];

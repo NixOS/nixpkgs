@@ -68,6 +68,7 @@ deoplete-plugins/deoplete-jedi
 deoplete-plugins/deoplete-zsh
 derekelkins/agda-vim
 derekwyatt/vim-scala
+dhruvasagar/vim-prosession
 dhruvasagar/vim-table-mode
 digitaltoad/vim-jade
 direnv/direnv.vim
@@ -354,6 +355,7 @@ ponko2/deoplete-fish
 posva/vim-vue
 powerman/vim-plugin-AnsiEsc
 PProvost/vim-ps1
+ptzz/lf.vim
 python-mode/python-mode
 qnighy/lalrpop.vim
 qpkorr/vim-bufkill
@@ -365,6 +367,7 @@ raghur/vim-ghost
 raichoo/purescript-vim
 Raimondi/delimitMate
 rakr/vim-one
+rbgrouleff/bclose.vim
 reedes/vim-pencil
 reedes/vim-wordy
 rhysd/committia.vim

@@ -1,17 +1,17 @@
 { lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
-      p = {
-        crateName = "nixtestcrate";
-        version = "0.1.0";
-        authors = [ "Test <test@example.com>" ];
-      } // args;
-    in buildRustCrate p;
+    p = {
+      crateName = "nixtestcrate";
+      version = "0.1.0";
+      authors = [ "Test <test@example.com>" ];
+    } // args;
+  in buildRustCrate p;
 
-    mkFile = destination: text: writeTextFile {
-      name = "src";
-      destination = "/${destination}";
-      inherit text;
+  mkFile = destination: text: writeTextFile {
+    name = "src";
+    destination = "/${destination}";
+    inherit text;
   };
 
   mkBin = name: mkFile name ''
@@ -185,7 +185,41 @@ let
           "test tests_bar ... ok"
         ];
       };
-
+      linkAgainstRlibCrate = {
+        crateName = "foo";
+        src = mkFile  "src/main.rs" ''
+          extern crate somerlib;
+          fn main() {}
+        '';
+        dependencies = [
+          (mkCrate {
+            crateName = "somerlib";
+            type = [ "rlib" ];
+            src = mkLib "src/lib.rs";
+          })
+        ];
+      };
+      # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
+      # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
+      buildRsOutDirOverlay = {
+        src = symlinkJoin {
+          name = "buildrs-out-dir-overlay";
+          paths = [
+            (mkLib "src/lib.rs")
+            (mkFile "build.rs" ''
+              use std::env;
+              use std::ffi::OsString;
+              use std::fs;
+              use std::path::Path;
+              fn main() {
+                let out_dir = env::var_os("OUT_DIR").expect("OUT_DIR not set");
+                let out_file = Path::new(&out_dir).join("lib.rs");
+                fs::write(out_file, "invalid rust code!").expect("failed to write lib.rs");
+              }
+            '')
+          ];
+        };
+      };
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
   in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {

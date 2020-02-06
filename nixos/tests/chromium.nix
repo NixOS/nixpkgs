@@ -23,7 +23,7 @@ mapAttrs (channel: chromiumPkg: makeTest rec {
 
   machine.imports = [ ./common/user-account.nix ./common/x11.nix ];
   machine.virtualisation.memorySize = 2047;
-  machine.services.xserver.displayManager.auto.user = "alice";
+  machine.test-support.displayManager.auto.user = "alice";
   machine.environment.systemPackages = [ chromiumPkg ];
 
   startupHTML = pkgs.writeText "chromium-startup.html" ''

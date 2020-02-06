@@ -52,6 +52,10 @@ stdenv.mkDerivation (rec {
 
     sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
 
+    # Fails on systems with a rootfs. Looks like a bug in the test, see
+    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
+
     # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
     for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
       sed '2i echo Skipping chgrp && exit 77' -i "$f"

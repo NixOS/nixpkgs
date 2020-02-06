@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-mlgmpidl-${version}";
-  version = "1.2.11";
+  version = "1.2.12";
   src = fetchFromGitHub {
     owner = "nberth";
     repo = "mlgmpidl";
     rev = version;
-    sha256 = "1rycl84sdvgb5avdsya9iz8brx92y2zcb6cn4w1j0164j6q2ril9";
+    sha256 = "17xqiclaqs4hmnb92p9z6z9a1xfr31vcn8nlnj8ykk57by31vfza";
   };
 
   buildInputs = [ perl gmp mpfr ocaml findlib camlidl ];
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
   postConfigure = ''
     sed -i Makefile \
       -e 's|^	/bin/rm |	rm |'
+    mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
   '';
 
-  createFindlibDestdir = true;
 
   meta = {
     description = "OCaml interface to the GMP library";

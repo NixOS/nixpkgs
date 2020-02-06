@@ -137,16 +137,7 @@ in ''
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/")
      grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
        | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
-
      set -e
-     if [[ -n "$(ls target/build/${crateName}.out)" ]]; then
-
-        if [[ -e "${libPath}" ]]; then
-           cp -r target/build/${crateName}.out/* $(dirname ${libPath}) #*/
-        else
-           cp -r target/build/${crateName}.out/* src #*/
-        fi
-     fi
   fi
   runHook postConfigure
 ''
