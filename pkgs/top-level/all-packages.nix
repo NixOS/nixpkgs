@@ -11777,7 +11777,7 @@ in
     inherit (darwin.apple_sdk.frameworks) ApplicationServices;
   };
 
-  pangox_compat = callPackage ../development/libraries/pangox-compat { };
+  pangox_compat = callPackage ../development/libraries/pangox-compat { pango = pango_1_43; };
 
   gdata-sharp = callPackage ../development/libraries/gdata-sharp { };
 
