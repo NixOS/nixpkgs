@@ -27,6 +27,18 @@
    </arg>
 
    <arg>
+    <group choice='req'>
+     <arg choice='plain'><option>--nesting-limit</option></arg>
+     <arg choice='plain'><option>-n</option></arg>
+    </group>
+    <replaceable>limit</replaceable>
+   </arg>
+
+   <arg>
+    <option>--no-nesting-limit</option>
+   </arg>
+
+   <arg>
     <replaceable>option.name</replaceable>
    </arg>
   </cmdsynopsis>
@@ -66,6 +78,27 @@
      <para>
       This option is passed to the underlying
       <command>nix-instantiate</command> invocation.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><option>-n</option></term>
+    <term><option>--no-nesting-limit</option></term>
+    <listitem>
+     <para>
+      Specify how many levels of lists and attributes should
+      be shown.
+     </para>
+     <para>
+      Please note that this doesn't have any effect if <literal>--recursive</literal> is set.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
+    <term><option>--no-nesting-limit</option></term>
+    <listitem>
+     <para>
+      Render all levels of attributes.
      </para>
     </listitem>
    </varlistentry>

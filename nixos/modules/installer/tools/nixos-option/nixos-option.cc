@@ -376,25 +376,25 @@ Value parseAndEval(EvalState & state, const std::string & expression, const std:
     return v;
 }
 
-void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path);
+void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path, int maxNestingLevel, int nestingLevel = 0);
 
-void printList(Context & ctx, Out & out, Value & v)
+void printList(Context & ctx, Out & out, Value & v, int maxNestingLevel, int nestingLevel)
 {
     Out listOut(out, "[", "]", v.listSize());
     for (unsigned int n = 0; n < v.listSize(); ++n) {
-        printValue(ctx, listOut, *v.listElems()[n], "");
+        printValue(ctx, listOut, *v.listElems()[n], "", maxNestingLevel, nestingLevel);
         listOut << Out::sep;
     }
 }
 
-void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
+void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path, int maxNestingLevel, int nestingLevel)
 {
     Out attrsOut(out, "{", "}", v.attrs->size());
     for (const auto & a : v.attrs->lexicographicOrder()) {
         std::string name = a->name;
         if (!forbiddenRecursionName(name)) {
             attrsOut << name << " = ";
-            printValue(ctx, attrsOut, *a->value, appendPath(path, name));
+            printValue(ctx, attrsOut, *a->value, appendPath(path, name), maxNestingLevel, nestingLevel);
             attrsOut << ";" << Out::sep;
         }
     }
@@ -436,7 +436,7 @@ void printMultiLineString(Out & out, const Value & v)
     }
 }
 
-void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path)
+void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path, int maxNestingLevel, int nestingLevel)
 {
     try {
         if (auto ex = std::get_if<std::exception_ptr>(&maybeValue)) {
@@ -446,9 +446,19 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
         if (ctx.state.isDerivation(v)) {
             describeDerivation(ctx, out, v);
         } else if (v.isList()) {
-            printList(ctx, out, v);
+            if (maxNestingLevel != -1)
+                nestingLevel++;
+            if (nestingLevel < maxNestingLevel || maxNestingLevel == -1)
+                printList(ctx, out, v, maxNestingLevel, nestingLevel);
+            else
+                out << "[ … ]";
         } else if (v.type == tAttrs) {
-            printAttrs(ctx, out, v, path);
+            if (maxNestingLevel != -1)
+                nestingLevel++;
+            if (nestingLevel < maxNestingLevel || maxNestingLevel == -1)
+                printAttrs(ctx, out, v, path, maxNestingLevel, nestingLevel);
+            else
+                out << "{ … }";
         } else if (v.type == tString && std::string(v.string.s).find('\n') != std::string::npos) {
             printMultiLineString(out, v);
         } else {
@@ -473,10 +483,10 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
     }
 }
 
-void printConfigValue(Context & ctx, Out & out, const std::string & path, std::variant<Value, std::exception_ptr> v)
+void printConfigValue(Context & ctx, Out & out, const std::string & path, std::variant<Value, std::exception_ptr> v, int maxNestingLevel)
 {
     out << path << " = ";
-    printValue(ctx, out, std::move(v), path);
+    printValue(ctx, out, std::move(v), path, maxNestingLevel);
     out << ";\n";
 }
 
@@ -487,14 +497,14 @@ bool starts_with(const std::string & s, const std::string & prefix)
            std::equal(s.begin(), std::next(s.begin(), prefix.size()), prefix.begin(), prefix.end());
 }
 
-void printRecursive(Context & ctx, Out & out, const std::string & path)
+void printRecursive(Context & ctx, Out & out, const std::string & path, int maxNestingLevel)
 {
     mapOptions(
-        [&ctx, &out, &path](const std::string & optionPath) {
+        [&ctx, &out, &path, &maxNestingLevel](const std::string & optionPath) {
             mapConfigValuesInOption(
-                [&ctx, &out, &path](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
+                [&ctx, &out, &path, &maxNestingLevel](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
                     if (starts_with(configPath, path)) {
-                        printConfigValue(ctx, out, configPath, v);
+                        printConfigValue(ctx, out, configPath, v, maxNestingLevel);
                     }
                 },
                 optionPath, ctx);
@@ -502,10 +512,10 @@ void printRecursive(Context & ctx, Out & out, const std::string & path)
         ctx, path);
 }
 
-void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
+void printAttr(Context & ctx, Out & out, const std::string & path, Value & root, int maxNestingLevel)
 {
     try {
-        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, root), path);
+        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, root), path, maxNestingLevel);
     } catch (Error & e) {
         out << describeError(e);
     }
@@ -521,30 +531,30 @@ bool hasExample(Context & ctx, Value & option)
     }
 }
 
-void printOption(Context & ctx, Out & out, const std::string & path, Value & option)
+void printOption(Context & ctx, Out & out, const std::string & path, Value & option, int maxNestingLevel)
 {
     out << "Value:\n";
-    printAttr(ctx, out, path, ctx.configRoot);
+    printAttr(ctx, out, path, ctx.configRoot, maxNestingLevel);
 
     out << "\n\nDefault:\n";
-    printAttr(ctx, out, "default", option);
+    printAttr(ctx, out, "default", option, maxNestingLevel);
 
     out << "\n\nType:\n";
-    printAttr(ctx, out, "type.description", option);
+    printAttr(ctx, out, "type.description", option, maxNestingLevel);
 
     if (hasExample(ctx, option)) {
         out << "\n\nExample:\n";
-        printAttr(ctx, out, "example", option);
+        printAttr(ctx, out, "example", option, maxNestingLevel);
     }
 
     out << "\n\nDescription:\n";
-    printAttr(ctx, out, "description", option);
+    printAttr(ctx, out, "description", option, maxNestingLevel);
 
     out << "\n\nDeclared by:\n";
-    printAttr(ctx, out, "declarations", option);
+    printAttr(ctx, out, "declarations", option, maxNestingLevel);
 
     out << "\n\nDefined by:\n";
-    printAttr(ctx, out, "files", option);
+    printAttr(ctx, out, "files", option, maxNestingLevel);
     out << "\n";
 }
 
@@ -559,7 +569,7 @@ void printListing(Out & out, Value & v)
     }
 }
 
-void printOne(Context & ctx, Out & out, const std::string & path)
+void printOne(Context & ctx, Out & out, const std::string & path, int maxNestingLevel)
 {
     try {
         auto result = findAlongOptionPath(ctx, path);
@@ -569,7 +579,7 @@ void printOne(Context & ctx, Out & out, const std::string & path)
             out << "Note: showing " << result.path << " instead of " << path << "\n";
         }
         if (isOption(ctx, option)) {
-            printOption(ctx, out, result.path, option);
+            printOption(ctx, out, result.path, option, maxNestingLevel);
         } else {
             printListing(out, option);
         }
@@ -587,6 +597,7 @@ int main(int argc, char ** argv)
     std::string path = ".";
     std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
     std::string configExpr = "(import <nixpkgs/nixos> {}).config";
+    int nestingLevel = 3;
     std::vector<std::string> args;
 
     struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
@@ -607,6 +618,10 @@ int main(int argc, char ** argv)
             optionsExpr = nix::getArg(*arg, arg, end);
         } else if (*arg == "--config_expr") {
             configExpr = nix::getArg(*arg, arg, end);
+        } else if (*arg == "--nesting-limit" || *arg == "-n") {
+            nestingLevel = std::stoi(nix::getArg(*arg, arg, end));
+        } else if (*arg == "--no-nesting-limit") {
+            nestingLevel = -1;
         } else if (!arg->empty() && arg->at(0) == '-') {
             return false;
         } else {
@@ -631,10 +646,10 @@ int main(int argc, char ** argv)
 
     auto print = recursive ? printRecursive : printOne;
     if (args.empty()) {
-        print(ctx, out, "");
+        print(ctx, out, "", nestingLevel);
     }
     for (const auto & arg : args) {
-        print(ctx, out, arg);
+        print(ctx, out, arg, nestingLevel);
     }
 
     ctx.state.printStats();
