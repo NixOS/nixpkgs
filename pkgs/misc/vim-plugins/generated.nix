@@ -1189,12 +1189,12 @@ let
 
   far-vim = buildVimPluginFrom2Nix {
     pname = "far-vim";
-    version = "2020-02-10";
+    version = "2020-02-12";
     src = fetchFromGitHub {
       owner = "brooth";
       repo = "far.vim";
-      rev = "4d1e65c41fbe2b78827dd943f93930f601661bc3";
-      sha256 = "1686vv570w1pljbzcc8yd9shzbbhxny9za80sq41xpd2wvyn1iw1";
+      rev = "e4068a68f740a328c40ed4c7a59a88bfe8033dd8";
+      sha256 = "1h1sr9kkdj712ra777bff8msc42v9k3xwmwjc7favwk71jbx0n5l";
     };
   };
 
