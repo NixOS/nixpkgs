@@ -905,10 +905,8 @@ def subtest(name: str) -> Iterator[None]:
             yield
             return True
         except Exception as e:
-            failed_tests.append(
-                'Test "{}" failed with error: "{}"'.format(name, str(e))
-            )
-            log.log("error: {}".format(str(e)))
+            log.log(f'Test "{name}" failed with error: "{e}"')
+            raise e
 
     return False
 
