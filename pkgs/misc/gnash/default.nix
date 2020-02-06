@@ -1,6 +1,6 @@
 { stdenv, fetchgit, fetchpatch, autoreconfHook
 , pkgconfig, libtool, boost, SDL
-, glib, pango, gettext, curl, xorg
+, glib, pangox_compat, gettext, curl, xorg
 , libpng, libjpeg, giflib, speex, atk
 
 # renderers
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
   buildInputs = [
     glib gettext boost curl SDL speex
     xorg.libXmu xorg.libSM xorg.libXt
-    libpng libjpeg giflib pango atk
+    libpng libjpeg giflib pangox_compat atk
   ] ++ optional  enableAGG       agg
     ++ optional  enableCairo     cairo
     ++ optional  enableQt        qt4
