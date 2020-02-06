@@ -782,6 +782,8 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
@@ -1926,6 +1928,8 @@ in
   ir-standard-fonts = callPackage ../data/fonts/ir-standard-fonts { };
 
   lynis = callPackage ../tools/security/lynis { };
+
+  mapproxy = callPackage ../applications/misc/mapproxy { };
 
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 

@@ -135,6 +135,15 @@ in
       description = "Path to server SSL chain file.";
     };
 
+    http2 = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to enable HTTP 2. HTTP/2 is supported in all multi-processing modules that come with httpd. <emphasis>However, if you use the prefork mpm, there will
+        be severe restrictions.</emphasis> Refer to <link xlink:href="https://httpd.apache.org/docs/2.4/howto/http2.html#mpm-config"/> for details.
+      '';
+    };
+
     adminAddr = mkOption {
       type = types.nullOr types.str;
       default = null;
