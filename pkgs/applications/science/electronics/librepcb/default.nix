@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake }:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qttools, qmake }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "librepcb";
   version = "0.1.0";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       cp share/librepcb/fontobene/newstroke.bene $out/share/librepcb/fontobene/
     '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
     homepage = https://librepcb.org/;
     maintainers = with maintainers; [ luz ];
