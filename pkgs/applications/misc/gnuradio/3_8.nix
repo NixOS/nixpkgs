@@ -21,7 +21,6 @@ pyaml, sphinx, lxml, pygobject3, pycairo, gtk3, gobjectIntrospection
 , SDL
 # Other
 , libusb1, orc, cppzmq, zeromq, doxygen, wrapGAppsHook, pango, cairo, log4cpp
-, wrapQtAppsHook
 , ccache
 }:
 
@@ -39,19 +38,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake pkgconfig git makeWrapper cppunit orc
-    wrapQtAppsHook
   ];
 
-  makeWrapperArgs = [
-    # Firstly, add all necessary QT variables
-    "\${qtWrapperArgs[@]}"
-
-    # Then, add the installed scripts/ directory to the python path
-    "--prefix" "PYTHONPATH" ":" "$out/lib/${python3Packages.python.libPrefix}/site-packages"
-
-    # Finally, move to directory that contains data
-    "--run" "\"cd $out/share/${name}\""
-  ];
 
   buildInputs = [
       cppzmq zeromq

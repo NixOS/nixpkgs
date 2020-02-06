@@ -18982,9 +18982,8 @@ in
 
   gnss-sdr = callPackage ../applications/radio/gnss-sdr { boost=boost166; };
 
-  gnuradio_3_8  = lowPrio (qt5.callPackage ../applications/misc/gnuradio/3_8.nix {
-    inherit python3Packages;
-    inherit (python3Packages) numpy scipy matplotlib
+  gnuradio_3_8  = lowPrio (callPackage ../applications/misc/gnuradio/3_8.nix {
+    inherit (python3Packages) python3Packages numpy scipy matplotlib
 Mako pyqt5 pyopengl
 pyaml sphinx lxml pygobject3 pycairo pygtk;
     inherit (darwin.apple_sdk.frameworks) CoreAudio;
