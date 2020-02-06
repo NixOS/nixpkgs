@@ -1,7 +1,7 @@
 {stdenv, fetchzip}:
 
 let
-  version = "3.3";
+  version = "3.5";
 in fetchzip {
   name = "jost-${version}";
   url = "https://github.com/indestructible-type/Jost/releases/download/${version}/Jost.zip";
@@ -11,7 +11,7 @@ in fetchzip {
     unzip -j $downloadedFile \*.otf -d $out/share/fonts/opentype
   '';
 
-  sha256="00nrhs3aif2hc4yhjhbn9ywmydl2w0g0hv5m5is8gv7wx8yi2j9z";
+  sha256="0l78vhmbsyfmrva5wc76pskhxqryyg8q5xddpj9g5wqsddy525dq";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/indestructible-type/Jost;
