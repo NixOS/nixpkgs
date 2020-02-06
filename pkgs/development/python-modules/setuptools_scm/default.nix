@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  version = "3.3.3";
+  version = "3.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "19cyndx23xmpbhz4qrwmfwsmnnaczd0dw7qg977ksq2dbvxy29dx";
+    sha256 = "26b8a108783cd88f4b15ff1f0f347d6b476db25d0c226159b835d713f9487320";
   };
 
   meta = with stdenv.lib; {
