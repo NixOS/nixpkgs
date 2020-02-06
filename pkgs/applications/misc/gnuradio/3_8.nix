@@ -21,23 +21,36 @@ pyaml, sphinx, lxml, pygobject3, pycairo, gtk3, gobjectIntrospection
 , SDL
 # Other
 , libusb1, orc, cppzmq, zeromq, doxygen, wrapGAppsHook, pango, cairo, log4cpp
+, wrapQtAppsHook
 , ccache
 }:
 
 stdenv.mkDerivation rec {
   name = "gnuradio-${version}";
-  version = "3.8-techpreview";
+  version = "3.8.0.0";
 
   src = fetchFromGitHub {
     owner = "gnuradio";
     repo = "gnuradio";
-    rev = "d9c981e5137f04a0a226d7b29d5814ecf53b2df2";
-    sha256 = "1hl05xjxq9hkwv64ynlj72bnfrgzvxi7f9s6330qbik1vny9bi0n";
+    rev = "4cc4c74c10411235fb36de58be09022c5573dbd8";
+    sha256 = "30ec08d49a6aaa412e6edc005a5645d1cc8ae9e10f45d88946f1424817f53128";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     cmake pkgconfig git makeWrapper cppunit orc
+    wrapQtAppsHook
+  ];
+
+  makeWrapperArgs = [
+    # Firstly, add all necessary QT variables
+    "\${qtWrapperArgs[@]}"
+
+    # Then, add the installed scripts/ directory to the python path
+    "--prefix" "PYTHONPATH" ":" "$out/lib/${python3Packages.python.libPrefix}/site-packages"
+
+    # Finally, move to directory that contains data
+    "--run" "\"cd $out/share/${name}\""
   ];
 
   buildInputs = [
@@ -47,7 +60,7 @@ stdenv.mkDerivation rec {
       gtk3
       gobjectIntrospection
       ccache
-      boost fftw swig3 qt5.qtbase qwt6
+      boost fftw swig3 qt5.qtbase
       pango.out
       cairo
       qwt SDL libusb1 uhd gsl log4cpp
@@ -63,6 +76,7 @@ stdenv.mkDerivation rec {
         pycairo
         gtk3
         gobjectIntrospection
+        qwt
         (python3.withPackages (ps : with ps; [pygobject3]))
   ];
 
@@ -95,7 +109,8 @@ stdenv.mkDerivation rec {
 
   # Framework path needed for qwt6_qt4 but not qwt5
   cmakeFlags =
-    stdenv.lib.optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ];
+    ["-DQWT_LIBRARIES=${qwt}/lib/libqwt.so"] ++
+    (stdenv.lib.optionals stdenv.isDarwin [ "-DCMAKE_FRAMEWORK_PATH=${qwt}/lib" ]);
 
   # - Ensure we get an interactive backend for matplotlib. If not the gr_plot_*
   #   programs will not display anything. Yes, $MATPLOTLIBRC must point to the
