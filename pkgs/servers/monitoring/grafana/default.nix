@@ -38,7 +38,7 @@ buildGoPackage rec {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.asl20;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ];
+    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 ];
     platforms = platforms.linux;
   };
 }
