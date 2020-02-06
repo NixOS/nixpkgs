@@ -32,6 +32,7 @@ let
     modules = callLibs ./modules.nix;
     options = callLibs ./options.nix;
     types = callLibs ./types.nix;
+    secrets = callLibs ./secrets.nix;
 
     # constants
     licenses = callLibs ./licenses.nix;
@@ -120,7 +121,8 @@ let
       scrubOptionValue literalExample showOption showFiles
       unknownModule mkOption;
     inherit (types) isType setType defaultTypeMerge defaultFunctor
-      isOptionType mkOptionType secretInNixStore;
+      isOptionType mkOptionType;
+    inherit (secrets) unprotectPath secretInNixStore;
     inherit (asserts)
       assertMsg assertOneOf;
     inherit (debug) addErrorContextToAttrs traceIf traceVal traceValFn
