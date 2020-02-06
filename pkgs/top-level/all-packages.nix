@@ -11767,6 +11767,8 @@ in
     harfbuzz = harfbuzz.override { withCoreText = stdenv.isDarwin; };
   };
 
+  pango_1_43 = callPackage ../development/libraries/pango/1.43.nix { };
+
   pangolin = callPackage ../development/libraries/pangolin {
     inherit (darwin.apple_sdk.frameworks) Carbon Cocoa;
   };
