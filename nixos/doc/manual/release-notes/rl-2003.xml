@@ -248,6 +248,23 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
+     The <literal>roundcube</literal> module has been hardened.
+     <itemizedlist>
+      <listitem>
+       <para>
+        The password of the database is not written world readable in the store any more. If <literal>database.host</literal> is set to <literal>localhost</literal>, then a unix user of the same name as the database will be created and PostreSQL peer authentication will be used, removing the need for a password. Otherwise, a password is still needed and can be provided with the new option <literal>database.passwordFile</literal>, which should be set to the path of a file containing the password and readable by the user <literal>nginx</literal> only. The <literal>database.password</literal> option is insecure and deprecated. Usage of this option will print a warning.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        A random <literal>des_key</literal> is set by default in the configuration of roundcube, instead of using the hardcoded and insecure default. To ensure a clean migration, all users will be logged out when you upgrade to this release.
+       </para>
+      </listitem>
+     </itemizedlist>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
      The packages <literal>openobex</literal> and <literal>obexftp</literal>
      are no longer installed when enabling Bluetooth via
      <option>hardware.bluetooth.enable</option>.

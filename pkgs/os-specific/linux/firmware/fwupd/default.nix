@@ -87,14 +87,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.3.3";
+  version = "1.3.7";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0nqzqvx8nzflhb4kzvkdcv7kixb50vh6h21kpkd7pjxp942ndzql";
+    sha256 = "02mzn3whk5mba4nxyrkypawr1gzjx79n4nrkhrp8vja6mxxgsf10";
   };
 
-  outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
+  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
     meson
@@ -148,10 +148,6 @@ stdenv.mkDerivation rec {
     ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
 
-    # do not require which
-    # https://github.com/fwupd/fwupd/pull/1568
-    ./no-which.patch
-
     # installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle
     (substituteAll {
@@ -163,7 +159,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      libfwupd/generate-version-script.py \
+      contrib/get-version.py \
+      contrib/generate-version-script.py \
       meson_post_install.sh \
       po/make-images \
       po/make-images.sh \
@@ -172,11 +169,6 @@ stdenv.mkDerivation rec {
     # we cannot use placeholder in substituteAll
     # https://github.com/NixOS/nix/issues/1846
     substituteInPlace data/installed-tests/meson.build --subst-var installedTests
-
-    # install plug-ins to out, they are not really part of the library
-    substituteInPlace meson.build \
-      --replace "plugin_dir = join_paths(libdir, 'fwupd-plugins-3')" \
-                "plugin_dir = join_paths('${placeholder "out"}', 'fwupd_plugins-3')"
 
     substituteInPlace data/meson.build --replace \
       "install_dir: systemd.get_pkgconfig_variable('systemdshutdowndir')" \
@@ -211,7 +203,6 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
-    "--libexecdir=${placeholder "out"}/libexec"
   ] ++ stdenv.lib.optionals (!haveDell) [
     "-Dplugin_dell=false"
     "-Dplugin_synaptics=false"
