@@ -1,4 +1,4 @@
-# Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
+# Updating? Keep $out/etc synchronized with passthru keys
 
 { stdenv
 , fetchurl
@@ -272,6 +272,12 @@ stdenv.mkDerivation rec {
       "pki/fwupd-metadata/GPG-KEY-Linux-Foundation-Metadata"
       "pki/fwupd-metadata/GPG-KEY-Linux-Vendor-Firmware-Service"
       "pki/fwupd-metadata/LVFS-CA.pem"
+    ];
+
+    # BlacklistPlugins key in fwupd/daemon.conf
+    defaultBlacklistedPlugins = [
+      "test"
+      "invalid"
     ];
 
     tests = {
