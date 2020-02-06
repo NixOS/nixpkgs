@@ -7,8 +7,8 @@
 # }
 
 stdenv.mkDerivation rec {
-  name = "timescaledb-${version}";
-  version = "1.3.2";
+  pname = "timescaledb";
+  version = "1.6.0";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ postgresql openssl ];
@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
     owner  = "timescale";
     repo   = "timescaledb";
     rev    = "refs/tags/${version}";
-    sha256 = "117az52h8isi15p47r5d6k5y80ng9vj3x8ljq39iavgr364q716c";
+    sha256 = "0b42rhkycr4pwwa4fxnmppd3bl0xz7azvlm145rd7warlsr5h0lb";
   };
 
-  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" ];
+  cmakeFlags = [ "-DSEND_TELEMETRY_DEFAULT=OFF" "-DREGRESS_CHECKS=OFF" ];
 
   # Fix the install phase which tries to install into the pgsql extension dir,
   # and cannot be manually overridden. This is rather fragile but works OK.
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
     homepage    = https://www.timescale.com/;
-    maintainers = with maintainers; [ volth ];
+    maintainers = with maintainers; [ volth marsam ];
     platforms   = postgresql.meta.platforms;
     license     = licenses.asl20;
   };

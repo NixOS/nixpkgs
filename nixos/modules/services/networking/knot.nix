@@ -56,6 +56,7 @@ in {
       package = mkOption {
         type = types.package;
         default = pkgs.knot-dns;
+        defaultText = "pkgs.knot-dns";
         description = ''
           Which Knot DNS package to use
         '';
@@ -92,4 +93,3 @@ in {
     environment.systemPackages = [ knot-cli-wrappers ];
   };
 }
-

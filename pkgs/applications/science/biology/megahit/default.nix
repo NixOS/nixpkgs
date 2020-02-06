@@ -1,23 +1,20 @@
-{ stdenv, fetchFromGitHub, zlib }:
+{ stdenv, fetchFromGitHub, cmake, zlib }:
 
 stdenv.mkDerivation rec {
   pname    = "megahit";
-  version = "1.1.4";
+  version = "1.2.9";
 
   src = fetchFromGitHub {
     owner = "voutcn";
     repo = "megahit";
     rev = "v${version}";
-    sha256 = "011k0776w76l03zmy70kfd3y9zjmdnspfbs9fcxmnl3bdwd36kcw";
+    sha256 = "1r5d9nkdmgjsbrpj43q9hy3s8jwsabaz3ji561v18hy47v58923c";
   };
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
 
-  installPhase = ''
-    for bin in megahit_sdbg_build megahit megahit_asm_core megahit_toolkit; do
-        install -vD $bin $out/bin/$bin
-    done
-  '';
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "An ultra-fast single-node solution for large and complex metagenomics assembly via succinct de Bruijn graph";

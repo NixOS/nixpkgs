@@ -3,8 +3,8 @@
 , libiberty, zlib
 }:
 
-stdenv.mkDerivation rec {
-  name = "libbfd-${version}";
+stdenv.mkDerivation {
+  pname = "libbfd";
   inherit (binutils-unwrapped) version src;
 
   outputs = [ "out" "dev" ];
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   dontUpdateAutotoolsGnuConfigScripts = true;
 
   nativeBuildInputs = [ autoreconfHook bison ];
-  buildInputs = [ libiberty zlib ];
+  buildInputs = [ libiberty zlib.dev ];
 
   configurePlatforms = [ "build" "host" ];
   configureFlags = [

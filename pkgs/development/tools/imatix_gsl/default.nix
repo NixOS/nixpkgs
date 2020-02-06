@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pcre } :
 
-stdenv.mkDerivation rec {
-  name = "imatix_gsl-${version}";
+stdenv.mkDerivation {
+  pname = "imatix_gsl";
   version = "4.1";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   postPatch = "sed -e 's,/usr/bin/install,install,g' -i src/Makefile";
   preBuild = "cd src";
-  installFlags = "DESTDIR=$(out)";
+  installFlags = [ "DESTDIR=$(out)" ];
 
   meta = with stdenv.lib; {
     license = licenses.gpl3Plus;

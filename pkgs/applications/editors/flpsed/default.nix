@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fltk13, ghostscript }:
 
 stdenv.mkDerivation rec {
-  name = "flpsed-${version}";
+  pname = "flpsed";
   version = "0.7.3";
 
   src = fetchurl {
-    url = "http://www.flpsed.org/${name}.tar.gz";
+    url = "http://www.flpsed.org/${pname}-${version}.tar.gz";
     sha256 = "0vngqxanykicabhfdznisv82k5ypkxwg0s93ms9ribvhpm8vf2xp";
   };
 
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     homepage = http://flpsed.org/flpsed.html;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
   };
 }

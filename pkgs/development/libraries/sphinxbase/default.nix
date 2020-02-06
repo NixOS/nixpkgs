@@ -23,7 +23,7 @@ stdenv.mkDerivation (rec {
     homepage = http://cmusphinx.sourceforge.net;
     license = stdenv.lib.licenses.bsd2;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 
 } // (stdenv.lib.optionalAttrs multipleOutputs {

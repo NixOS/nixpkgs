@@ -1,12 +1,12 @@
 { stdenv, fetchurl, jre, ctags, makeWrapper, coreutils, git, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "opengrok-${version}";
+  pname = "opengrok";
   version = "1.0";
 
   # binary distribution
   src = fetchurl {
-    url = "https://github.com/oracle/opengrok/releases/download/${version}/${name}.tar.gz";
+    url = "https://github.com/oracle/opengrok/releases/download/${version}/${pname}-${version}.tar.gz";
     sha256 = "0h4rwfh8m41b7ij931gcbmkihri25m48373qf6ig0714s66xwc4i";
   };
 

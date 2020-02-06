@@ -1,10 +1,10 @@
 {fetchurl, stdenv, dpkg, makeWrapper,
  alsaLib, cups, curl, dbus, expat, fontconfig, freetype, glib, gst_all_1, harfbuzz, libcap,
- libpulseaudio, libxml2, libxslt, libGLU_combined, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
+ libpulseaudio, libxml2, libxslt, libGLU, libGL, nspr, nss, openssl, systemd, wayland, xorg, zlib, ...
 }:
 
-stdenv.mkDerivation rec {
-  name = "viber-${version}";
+stdenv.mkDerivation {
+  pname = "viber";
   version = "7.0.0.1035";
 
   src = fetchurl {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libxml2
       libxslt
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       openssl

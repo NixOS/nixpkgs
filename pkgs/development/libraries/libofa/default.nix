@@ -5,10 +5,11 @@ let
   deb_patch = "5";
 in
 stdenv.mkDerivation rec {
-  name = "libofa-${version}";
+  pname = "libofa";
+  inherit version;
 
   src = fetchurl {
-    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/${name}.tar.gz";
+    url = "https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/musicip-libofa/${pname}-${version}.tar.gz";
     sha256 = "184ham039l7lwhfgg0xr2vch2xnw1lwh7sid432mh879adhlc5h2";
   };
 

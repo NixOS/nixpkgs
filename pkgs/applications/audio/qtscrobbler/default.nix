@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, withMtp ? true, libmtp, pkgconfig, which, qt4, qmake4Hook }:
 
 stdenv.mkDerivation rec {
-  name = "qtscrobbler-${version}";
+  pname = "qtscrobbler";
   version = "0.11";
 
   src = fetchurl {

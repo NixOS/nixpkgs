@@ -1,25 +1,51 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, gettext, vala
-, python3, desktop-file-utils, libcanberra, gtk3, libgee, granite, libnotify
-, libunity, pango, plank, bamf, sqlite, libdbusmenu-gtk3, zeitgeist, glib-networking
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, gettext
+, vala
+, python3
+, desktop-file-utils
+, libcanberra
+, gtk3
+, glib
+, libgee
+, granite
+, libnotify
+, libunity
+, pango
+, plank
+, bamf
+, sqlite
+, libdbusmenu-gtk3
+, zeitgeist
+, glib-networking
+, elementary-icon-theme
+, libcloudproviders
+, libgit2-glib
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "files";
-  version = "4.1.8";
+  pname = "elementary-files";
+  version = "4.3.0";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "files";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1frslwbqnv3mwv5dpb1sbhxnwl87cps2ambkkhnn9wwckjpm7p8f";
+    sha256 = "0brckm0vi9lh8l4g3cy37pbyrdh6g0mdsv3cpii069y2drrh8mz5";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -41,8 +67,10 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libcanberra
+    libcloudproviders
     libdbusmenu-gtk3
     libgee
+    libgit2-glib
     libnotify
     libunity
     pango
@@ -51,13 +79,16 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [ ./hardcode-gsettings.patch ];
+  patches = [
+    ./hardcode-gsettings.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
 
-    substituteInPlace filechooser-module/FileChooserDialog.vala --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH $out/share/gsettings-schemas/${name}/glib-2.0/schemas
+    substituteInPlace filechooser-module/FileChooserDialog.vala \
+      --subst-var-by ELEMENTARY_FILES_GSETTINGS_PATH ${glib.makeSchemaPath "$out" "${pname}-${version}"}
   '';
 
   meta = with stdenv.lib; {

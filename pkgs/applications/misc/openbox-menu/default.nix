@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk2, menu-cache }:
 
 stdenv.mkDerivation rec {
-  name = "openbox-menu-${version}";
+  pname = "openbox-menu";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://bitbucket.org/fabriceT/openbox-menu/downloads/${name}.tar.bz2";
+    url = "https://bitbucket.org/fabriceT/openbox-menu/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1hi4b6mq97y6ajq4hhsikbkk23aha7ikaahm92djw48mgj2f1w8l";
   };
 

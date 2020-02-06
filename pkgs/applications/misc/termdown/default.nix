@@ -5,12 +5,12 @@ with stdenv.lib;
 
 buildPythonApplication rec {
 
-  name    = "termdown-${version}";
-  version = "1.15.0";
+  pname = "termdown";
+  version = "1.16.0";
 
   src = fetchFromGitHub {
     rev    = version;
-    sha256 = "08l03yk5jc1g0gps789q1s2knnaqzlidy4s5q5nhwg9g25la19nr";
+    sha256 = "0k429ss1xifm9vbgyzpp71r79byn9jclvr0rm77bai2r8nz3s2vf";
     repo   = "termdown";
     owner  = "trehn";
   };

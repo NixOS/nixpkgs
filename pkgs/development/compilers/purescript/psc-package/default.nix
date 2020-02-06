@@ -4,13 +4,13 @@ with lib;
 
 mkDerivation rec {
   pname = "psc-package";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "purescript";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1zadbph1vha3b5hvmjvs138dcwbab49f3v63air1l6r4cvpb6831";
+    sha256 = "165yax131rj1mdlqd28g6wcy1ps3k4w50z8gj9yc3nfs09dy0lab";
   };
 
   isLibrary = false;

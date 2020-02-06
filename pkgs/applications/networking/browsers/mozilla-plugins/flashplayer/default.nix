@@ -9,7 +9,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , graphite2
@@ -73,8 +73,8 @@ let
       "";
 in
 stdenv.mkDerivation rec {
-  name = "flashplayer-${version}";
-  version = "32.0.0.223";
+  pname = "flashplayer";
+  version = "32.0.0.314";
 
   src = fetchurl {
     url =
@@ -85,14 +85,14 @@ stdenv.mkDerivation rec {
     sha256 =
       if debug then
         if arch == "x86_64" then
-          "165zsh4dzzsy38kc8yxp0jdygk4qid5xd642gchlky7z6fwza223"
+          "076l93wjcy15sic88cyq6msp87gdhcvbk4ym2vbvvjz2bav2z456"
         else
-          "1by2zqw9xgvpf1jnbf5qjl3kcjn5wxznl44f47f8h2gkgcnrf749"
+          "0kxr8d6fh00akqgk3lwv0z6rk7xswislicsbh9b9p33f19mj7c8a"
       else
         if arch == "x86_64" then
-          "07hbg98pgpp81v2sr4vw8siava7wkg1r6hg8i6rg00w9mhvn9vcz"
+          "0a3hvp0qmqlann8k875ajf0i70cv0an1a3mr8kbgji46dxqvwjxz"
         else
-          "1z2nmznmwvg3crdj3gbz2bxvi8dq2jk5yiwk79y90h199nsan1n2";
+          "0jyywas2z7ssgzng82qgnp01gy6nccqavkbx9529m07xrclvqbxn";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -130,7 +130,7 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
+      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
       libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
@@ -141,7 +141,7 @@ stdenv.mkDerivation rec {
     description = "Adobe Flash Player browser plugin";
     homepage = http://www.adobe.com/products/flashplayer/;
     license = stdenv.lib.licenses.unfree;
-    maintainers = [];
+    maintainers = with stdenv.lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

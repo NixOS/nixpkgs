@@ -33,11 +33,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gthumb";
-  version = "3.8.0";
+  version = "3.8.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1l2s1facq1r6yvqjqc34aqfzlvb3nhkhn79xisxbbdlgrrxdq52f";
+    sha256 = "1a0gss9cjcwayrcpkam5kc1giwbfy38jgqxvh33in9gfq9dgrygg";
   };
 
   nativeBuildInputs = [
@@ -103,6 +103,6 @@ stdenv.mkDerivation rec {
     description = "Image browser and viewer for GNOME";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = [ maintainers.mimadrid ];
+    maintainers = [ maintainers.mimame ];
   };
 }

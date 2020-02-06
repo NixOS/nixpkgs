@@ -22,10 +22,10 @@ let params = {
         sha256 = "1slw227idwjw9a21vj3s6kal22mrmvvlpg8r7xk590ml99bn6404";
       };
     };
-    param = params."${coq.coq-version}";
+    param = params.${coq.coq-version};
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "coq${coq.coq-version}-bignums";
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
   meta = with stdenv.lib; {
     license = licenses.lgpl2;

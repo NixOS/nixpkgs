@@ -1,20 +1,19 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
-  qtsvg, libsForQt5, polkit, gsettings-qt, dtkcore, dtkwidget,
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qttools, qtx11extras,
+  qtsvg, polkit, gsettings-qt, dtkcore, dtkwidget,
   dde-qt-dbus-factory, dde-network-utils, dde-daemon,
   deepin-desktop-schemas, xorg, glib, wrapGAppsHook, deepin,
-  plugins ? [], symlinkJoin, makeWrapper }:
+  plugins ? [], symlinkJoin, makeWrapper, libdbusmenu }:
 
 let
-unwrapped = stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+unwrapped = mkDerivation rec {
   pname = "dde-dock";
-  version = "4.10.3";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "17iy78r0frpv42g521igfdcgdklbifzig1wzxq2nl14fq0bgxg4v";
+    sha256 = "12dshsqhzajnxm7r53qg0c84b6xlj313qnssnx2m25z4jdp5i7pr";
   };
 
   nativeBuildInputs = [
@@ -32,9 +31,9 @@ unwrapped = stdenv.mkDerivation rec {
     deepin-desktop-schemas
     dtkcore
     dtkwidget
-    glib.bin
+    glib
     gsettings-qt
-    libsForQt5.libdbusmenu
+    libdbusmenu
     polkit
     qtsvg
     qtx11extras
@@ -65,11 +64,19 @@ unwrapped = stdenv.mkDerivation rec {
 
   cmakeFlags = [ "-DDOCK_TRAY_USE_NATIVE_POPUP=YES" ];
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Dock for Deepin Desktop Environment";

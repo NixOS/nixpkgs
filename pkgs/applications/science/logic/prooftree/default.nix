@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, ncurses, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "prooftree-${version}";
+  pname = "prooftree";
   version = "0.13";
 
   src = fetchurl {

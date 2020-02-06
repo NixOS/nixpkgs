@@ -1,12 +1,12 @@
 { lib, buildPythonApplication, fetchurl, pyspf }:
 
 buildPythonApplication rec {
-  name = "pypolicyd-spf-${version}";
+  pname = "pypolicyd-spf";
   majorVersion = "2.0";
   version = "${majorVersion}.2";
 
   src = fetchurl {
-    url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/pypolicyd-spf/${majorVersion}/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1nm8y1jjgx6mxrbcxrbdnmkf8vglwp0wiw6jipzh641wb24gi76z";
   };
 

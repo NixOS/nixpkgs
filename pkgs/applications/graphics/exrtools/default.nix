@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, openexr, libpng12, libjpeg }:
 
 stdenv.mkDerivation rec {
-  name = "exrtools-${version}";
+  pname = "exrtools";
   version = "0.4";
 
   src = fetchurl {
-    url =  "http://scanline.ca/exrtools/${name}.tar.gz";
+    url =  "http://scanline.ca/exrtools/${pname}-${version}.tar.gz";
     sha256 = "0jpkskqs1yjiighab4s91jy0c0qxcscwadfn94xy2mm2bx2qwp4z";
   };
 

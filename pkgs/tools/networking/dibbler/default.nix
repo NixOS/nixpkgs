@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "dibbler-${version}";
+  pname = "dibbler";
   version = "1.0.1";
 
   src = fetchurl {
-    url = "http://www.klub.com.pl/dhcpv6/dibbler/${name}.tar.gz";
+    url = "http://www.klub.com.pl/dhcpv6/dibbler/${pname}-${version}.tar.gz";
     sha256 = "18bnwkvax02scjdg5z8gvrkvy1lhssfnlpsaqb5kkh30w1vri1i7";
   };
 

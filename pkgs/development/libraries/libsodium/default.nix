@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "dev" ];
-  separateDebugInfo = stdenv.isLinux;
+  separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   enableParallelBuilding = true;
 

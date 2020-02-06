@@ -1,6 +1,6 @@
 { stdenv, appleDerivation, developer_cmds }:
 
-appleDerivation rec {
+appleDerivation {
   buildInputs = [ developer_cmds ];
 
   installPhase = ''

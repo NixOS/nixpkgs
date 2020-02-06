@@ -2,14 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "psmisc";
-  version = "23.2";
-  name = "${pname}-${version}";
+  version = "23.3";
 
   src = fetchFromGitLab {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d90wmibxpkl0d7sdibvvkwpyxyg6m6ksh5gwrjh15vf1swvd5i1";
+    sha256 = "1132xvrldv0dar2mf221mv5kvajq0v6yrq8k3nl0wslnh5baa0r0";
   };
 
   nativeBuildInputs = [ autoconf automake gettext ];

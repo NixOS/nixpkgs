@@ -1,33 +1,40 @@
 { stdenv, fetchurl
-, attr, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
+, attr, judy, keyutils, libaio, libapparmor, libbsd, libcap, libgcrypt, lksctp-tools, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "stress-ng";
-  version = "0.09.59.1";
+  version = "0.10.16";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0f3a6ki9v8lw4m9cwzlxsy7ykzmckgydnj2vypvwlr7rxcs19hxl";
+    sha256 = "0173lys5i7bnw8zdpkrr8chh1b84q9b08a41a5v6fgpmzk7zzgza";
   };
 
+  postPatch = ''
+    sed -i '/\#include <bsd\/string.h>/i #undef HAVE_STRLCAT\n#undef HAVE_STRLCPY' stress-ng.h
+  ''; # needed because of Darwin patch on libbsd
+
   # All platforms inputs then Linux-only ones
-  buildInputs = [ libbsd libgcrypt zlib ]
+  buildInputs = [ judy libbsd libgcrypt zlib ]
     ++ stdenv.lib.optionals stdenv.hostPlatform.isLinux [
       attr keyutils libaio libapparmor libcap lksctp-tools
     ];
 
-  postPatch = ''
-    substituteInPlace Makefile --replace "/usr" ""
-  '';
+  makeFlags = [
+    "BINDIR=${placeholder "out"}/bin"
+    "MANDIR=${placeholder "out"}/share/man/man1"
+    "JOBDIR=${placeholder "out"}/share/stress-ng/example-jobs"
+    "BASHDIR=${placeholder "out"}/share/bash-completion/completions"
+  ];
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.hostPlatform.isMusl "-D_LINUX_SYSINFO_H=1";
 
   # Won't build on i686 because the binary will be linked again in the
   # install phase without checking the dependencies. This will prevent
   # triggering the rebuild. Why this only happens on i686 remains a
   # mystery, though. :-(
   enableParallelBuilding = (!stdenv.isi686);
-
-  installFlags = [ "DESTDIR=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     description = "Stress test a computer system";

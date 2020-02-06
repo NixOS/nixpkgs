@@ -8,6 +8,10 @@ let
   xf86inputvmmouse = pkgs.xorg.xf86inputvmmouse;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "vmwareGuest" ] [ "virtualisation" "vmware" "guest" ])
+  ];
+
   options.virtualisation.vmware.guest = {
     enable = mkEnableOption "VMWare Guest Support";
     headless = mkOption {
@@ -33,7 +37,7 @@ in
         serviceConfig.ExecStart = "${open-vm-tools}/bin/vmtoolsd";
       };
 
-    environment.etc."vmware-tools".source = "${open-vm-tools}/etc/vmware-tools/*";
+    environment.etc.vmware-tools.source = "${open-vm-tools}/etc/vmware-tools/*";
 
     services.xserver = mkIf (!cfg.headless) {
       videoDrivers = mkOverride 50 [ "vmware" ];

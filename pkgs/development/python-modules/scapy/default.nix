@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.4.2";
+  version = "2.4.3";
 
   disabled = isPyPy;
 
@@ -21,27 +21,26 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "v${version}";
-    sha256 = "03xzjklvc6y4d87k0rqpx5h112ld5nvgfldrbd8c4mx6f9mmd11n";
+    sha256 = "08ypdzp0p3gvmz3pwi0i9q5f7hz9cq8yn6gawia49ynallwnv4zy";
   };
 
   # TODO: Temporary workaround
   patches = [ ./fix-version.patch ];
 
   postPatch = ''
-    sed -i "s/NIXPKGS_SCAPY_VERSION/${version}/" \
-      setup.py scapy/__init__.py
+    sed -i "s/NIXPKGS_SCAPY_VERSION/${version}/" scapy/__init__.py
   '' + lib.optionalString withManufDb ''
     substituteInPlace scapy/data.py --replace "/opt/wireshark" "${wireshark}"
   '';
 
   propagatedBuildInputs = [ pycrypto ecdsa ]
-    ++ lib.optional withOptionalDeps [ tcpdump ipython ]
-    ++ lib.optional withCryptography [ cryptography ]
-    ++ lib.optional withVoipSupport [ sox ]
-    ++ lib.optional withPlottingSupport [ matplotlib ]
-    ++ lib.optional withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ]
-    ++ lib.optional (isPy3k && pythonOlder "3.4") [ enum34 ]
-    ++ lib.optional doCheck [ mock ];
+    ++ lib.optionals withOptionalDeps [ tcpdump ipython ]
+    ++ lib.optional withCryptography cryptography
+    ++ lib.optional withVoipSupport sox
+    ++ lib.optional withPlottingSupport matplotlib
+    ++ lib.optionals withGraphicsSupport [ pyx texlive.combined.scheme-minimal graphviz imagemagick ]
+    ++ lib.optional (isPy3k && pythonOlder "3.4") enum34
+    ++ lib.optional doCheck mock;
 
   # Tests fail with Python 3.6 (seems to be an upstream bug, I'll investigate)
   doCheck = if isPy3k then false else true;

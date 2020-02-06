@@ -1,6 +1,6 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
-, gdk_pixbuf, glib, gnome2, pango, nspr, nss, gtk3
+, gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
 , xorg, autoPatchelfHook, systemd, libnotify
 }:
 
@@ -13,7 +13,7 @@ let deps = [
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     pango
@@ -40,11 +40,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2019.5";
+  version = "2019.10";
 
   src = fetchurl {
     url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "542a93521906cd5e97075c9f3e9088c19562b127556a3de151e25bc66b11fe0b";
+    sha256 = "0nckbhfpf4r5l5h22jcv93b5i9y2sc8lhcaffsg2ld804h5ygbbq";
   };
 
   nativeBuildInputs = [
@@ -71,13 +71,9 @@ stdenv.mkDerivation rec {
     mv opt/Mullvad\ VPN/* $out/share/mullvad
 
     sed -i 's|\/opt\/Mullvad.*VPN|'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
-    sed -i 's|\/opt\/Mullvad.*VPN/resources|'$out'/bin|g' $out/share/mullvad/resources/mullvad-daemon.service
 
-    ln -s $out/share/mullvad/mullvad-vpn $out/bin/mullvad-vpn
+    ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
-
-    mkdir -p $out/etc/systemd/system
-    ln -s $out/share/mullvad/resources/mullvad-daemon.service $out/etc/systemd/system/mullvad-daemon.service
 
     runHook postInstall
   '';
@@ -88,6 +84,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers ;[ filalex77 xfix ];
   };
 
 }

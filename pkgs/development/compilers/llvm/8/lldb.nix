@@ -9,15 +9,16 @@
 , libxml2
 , llvm
 , clang-unwrapped
-, python
+, python3
 , version
 , darwin
 }:
 
 stdenv.mkDerivation {
-  name = "lldb-${version}";
+  pname = "lldb";
+  inherit version;
 
-  src = fetch "lldb" "0wq3mi76fk86g2g2bcsr0yhagh1dlf2myk641ai58rc116gqp4a9";
+  src = fetch "lldb" "1mriw4adrwm6kzabrjr7yqmdiylxd6glf6samd80dp8idnm9p9z8";
 
   postPatch = ''
     # Fix up various paths that assume llvm and clang are installed in the same place
@@ -29,9 +30,9 @@ stdenv.mkDerivation {
       cmake/modules/LLDBStandalone.cmake
   '';
 
-  nativeBuildInputs = [ cmake python which swig ];
+  nativeBuildInputs = [ cmake python3 which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa darwin.cf-private ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];

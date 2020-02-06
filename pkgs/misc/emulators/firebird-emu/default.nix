@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qtdeclarative }:
 
 stdenv.mkDerivation rec {
-  name = "firebird-emu-${version}";
+  pname = "firebird-emu";
   version = "1.4";
 
   src = fetchFromGitHub {

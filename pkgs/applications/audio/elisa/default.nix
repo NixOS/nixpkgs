@@ -7,13 +7,13 @@
 
 mkDerivation rec {
   pname = "elisa";
-  version = "0.4.2";
+  version = "19.12.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "elisa";
     rev    = "v${version}";
-    sha256 = "0q098zaajwbpkrarrsdzpjhpsq2nxkqaxwzhr2gjlg08j9vqkpfm";
+    sha256 = "1939xwhy1s502pai63vz56hnnsl3qsb6arhrlg5bw6bwsv88blac";
   };
 
   buildInputs = [ vlc ];

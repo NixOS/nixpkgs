@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin    # For buildEnv to setup proper symlinks. See #22653
-    mkdir -p $out/{lib,share/extension}
+    mkdir -p $out/{lib,share/postgresql/extension}
 
     cp *.so      $out/lib
     cp *.sql     $out/share/postgresql/extension

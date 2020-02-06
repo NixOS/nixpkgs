@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perl, autoconf, automake, libtool }:
 
 stdenv.mkDerivation rec {
-  name = "qqwing-${version}";
+  pname = "qqwing";
   version = "1.3.4";
 
   src = fetchFromGitHub {

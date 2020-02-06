@@ -5,13 +5,13 @@
 
 let
   pname = "gnome-klotski";
-  version = "3.32.0";
+  version = "3.34.3";
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1p4s15gxj6gasix22z9vlx2yrx196fvcxr6v6qrl569idfgjbi72";
+    sha256 = "0swbyjlgrkd1hgcmp23h7p8fpjm2rpmnn87n6is0jx1x4cl8ab18";
   };
 
   nativeBuildInputs = [
@@ -28,7 +28,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome3.updateScript {
-      packageName = "${pname}";
+      packageName = pname;
       attrPath = "gnome3.${pname}";
     };
   };

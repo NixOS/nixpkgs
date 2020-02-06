@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl, tie }:
 
 stdenv.mkDerivation rec {
-  name = "cwebbin-${version}";
+  pname = "cwebbin";
   version = "22p";
 
   src = fetchFromGitHub {

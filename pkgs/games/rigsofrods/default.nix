@@ -1,11 +1,11 @@
-{ fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU_combined, boost,
+{ fetchFromGitHub, stdenv, wxGTK30, freeimage, cmake, zziplib, libGLU, libGL, boost,
   pkgconfig, libuuid, openal, ogre, ois, curl, gtk2, mygui, unzip,
   angelscript, ogrepaged, mysocketw, libxcb
   }:
 
 stdenv.mkDerivation rec {
   version = "0.4.7.0";
-  name = "rigsofrods-${version}";
+  pname = "rigsofrods";
 
   src = fetchFromGitHub {
     owner = "RigsOfRods";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ wxGTK30 freeimage cmake zziplib libGLU_combined boost
+  buildInputs = [ wxGTK30 freeimage cmake zziplib libGLU libGL boost
     libuuid openal ogre ois curl gtk2 mygui unzip angelscript
     ogrepaged mysocketw libxcb ];
 

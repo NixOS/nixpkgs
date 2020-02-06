@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libnet-${version}";
+  pname = "libnet";
   version = "1.2-rc3";
 
   src = fetchurl {
-    url = "mirror://sourceforge/libnet-dev/${name}.tar.gz";
+    url = "mirror://sourceforge/libnet-dev/${pname}-${version}.tar.gz";
     sha256 = "0qsapqa7dzq9f6lb19kzilif0pj82b64fjv5bq086hflb9w81hvj";
   };
 

@@ -1,4 +1,4 @@
-{ bundlerEnv, ruby, lib }:
+{ bundlerEnv, ruby, lib, bundlerUpdateScript }:
 
 bundlerEnv rec {
   name = "${pname}-${version}";
@@ -7,6 +7,8 @@ bundlerEnv rec {
 
   inherit ruby;
   gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "bundler-audit";
 
   meta = with lib; {
     description = "Patch-level verification for Bundler";
@@ -20,7 +22,7 @@ bundlerEnv rec {
     '';
     homepage    = https://github.com/rubysec/bundler-audit;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ primeos ];
+    maintainers = with maintainers; [ primeos nicknovitski ];
     platforms   = platforms.unix;
   };
 }

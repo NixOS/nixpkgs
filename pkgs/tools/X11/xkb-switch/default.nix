@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, libX11, libxkbfile }:
 
 stdenv.mkDerivation rec {
-  name = "xkb-switch-${version}";
-  version = "1.5.0";
+  pname = "xkb-switch";
+  version = "1.6.0";
 
   src = fetchFromGitHub {
     owner = "ierton";
     repo = "xkb-switch";
     rev = version;
-    sha256 = "03wk2gg3py97kx0kjzbjrikld1sa55i6mgi398jbcbiyx2gjna78";
+    sha256 = "11yn0y1kx04rqxh0d81b5q7kbyz58pi48bl7hyhlv7p8yndkfg4b";
   };
 
   nativeBuildInputs = [ cmake ];

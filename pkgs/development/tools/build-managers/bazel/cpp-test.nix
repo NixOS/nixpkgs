@@ -8,6 +8,7 @@
 , runtimeShell
 , writeScript
 , writeText
+, distDir
 }:
 
 let
@@ -42,6 +43,7 @@ let
     bazelScript = ''
       ${bazel}/bin/bazel \
         build --verbose_failures \
+        --distdir=${distDir} \
           //...
     '';
   };

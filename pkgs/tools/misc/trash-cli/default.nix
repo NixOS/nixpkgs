@@ -9,7 +9,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "andreafrancia";
     repo = "trash-cli";
-    rev = "${version}";
+    rev = version;
     sha256 = "1bqazna223ibqjwbc1wfvfnspfyrvjy8347qlrgv4cpng72n7gfi";
   };
 
@@ -25,6 +25,12 @@ python3Packages.buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/andreafrancia/trash-cli/commit/a21b80d1e69783bb09376c3f60dd2f2a10578805.patch";
       sha256 = "0w49rjh433sjfc2cl5a9wlbr6kcn9f1qg905qsyv7ay3ar75wvyp";
+    })
+
+    # Fix listing trashed files over mount points, see https://github.com/andreafrancia/trash-cli/issues/95
+    (fetchpatch {
+      url = "https://github.com/andreafrancia/trash-cli/commit/436dfddb4c2932ba3ff696e4732750b7bdc58461.patch";
+      sha256 = "02pkcz7nj67jbnqpw1943nrv95m8xyjvab4j62fa64r73fagm8m4";
     })
   ];
 

@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig
-, vala, libgee, granite, gtk3, switchboard }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-sharing";
@@ -14,7 +25,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -32,7 +43,15 @@ stdenv.mkDerivation rec {
     switchboard
   ];
 
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder ''out''}/lib/switchboard";
+  patches = [
+    # Fix build with latest vala
+    (fetchpatch {
+      url = "https://github.com/elementary/switchboard-plug-sharing/commit/22c9d52577a2e8c36c840a99009420266a39e1fe.patch";
+      sha256 = "0rbf1yxhc7k44cwikd45mv2g6slzw0rkwn5s38q3yxai9jnpvqch";
+    })
+  ];
+
+  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Sharing Plug";

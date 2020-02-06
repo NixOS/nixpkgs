@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "coq2html-${version}";
+  pname = "coq2html";
+  inherit version;
 
   src = fetchgit {
     url = "https://github.com/xavierleroy/coq2html";

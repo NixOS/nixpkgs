@@ -1,7 +1,6 @@
 {stdenv, fetchurl, gmp}:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "lrs";
   version = "7.0";
 

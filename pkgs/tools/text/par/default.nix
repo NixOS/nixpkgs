@@ -1,7 +1,8 @@
 {stdenv, fetchurl, fetchpatch}:
 
 stdenv.mkDerivation {
-  name = "par-1.52";
+  pname = "par";
+  version = "1.52";
 
   src = fetchurl {
     url = http://www.nicemice.net/par/Par152.tar.gz;

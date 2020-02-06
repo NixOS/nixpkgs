@@ -7,11 +7,13 @@ stdenv.mkDerivation rec {
     src = fetchFromGitHub {
       owner = "Oblomov";
       repo = "clinfo";
-      rev = "${version}";
+      rev = version;
       sha256 = "0y2q0lz5yzxy970b7w7340vp4fl25vndahsyvvrywcrn51ipgplx";
     };
 
   buildInputs = [ ocl-icd opencl-headers ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=stringop-truncation" ];
 
   makeFlags = [ "PREFIX=${placeholder "out"}" ];
 

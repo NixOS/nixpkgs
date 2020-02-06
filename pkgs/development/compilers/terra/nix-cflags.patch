@@ -1,0 +1,22 @@
+diff --git a/src/terralib.lua b/src/terralib.lua
+index 351238d..e638c90 100644
+--- a/src/terralib.lua
++++ b/src/terralib.lua
+@@ -3395,6 +3395,17 @@ function terra.includecstring(code,cargs,target)
+     	args:insert("-internal-isystem")
+     	args:insert(path)
+     end
++
++    -- NOTE(aseipp): include relevant Nix header files
++    args:insert("-isystem")
++    args:insert("@NIX_LIBC_INCLUDE@")
++
++    local nix_cflags = os.getenv('NIX_CFLAGS_COMPILE')
++    if nix_cflags ~= nil then
++        for w in nix_cflags:gmatch("%S+") do
++          args:insert(w)
++        end
++    end
+     
+     if cargs then
+         args:insertall(cargs)

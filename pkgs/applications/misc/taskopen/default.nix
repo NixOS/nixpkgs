@@ -1,6 +1,6 @@
 { fetchurl, stdenv, makeWrapper, which, perl, perlPackages }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "taskopen-1.1.4";
   src = fetchurl {
     url = "https://github.com/ValiValpas/taskopen/archive/v1.1.4.tar.gz";

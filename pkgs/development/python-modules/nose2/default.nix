@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "nose2";
-  version = "0.8.0";
+  version = "0.9.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9052f2b46807b63d9bdf68e0768da1f8386368889b50043fd5d0889c470258f3";
+    sha256 = "16drs4bc2wvgwwi1pf6pmk6c00pl16vs1v7djc4a8kwpsxpibphf";
   };
 
   propagatedBuildInputs = [ six coverage ]

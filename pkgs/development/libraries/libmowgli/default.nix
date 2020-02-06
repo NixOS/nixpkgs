@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libmowgli-${version}";
+  pname = "libmowgli";
   version = "2.1.3";
 
   src = fetchurl {

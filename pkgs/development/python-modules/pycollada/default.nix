@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pycollada";
-  version = "0.6";
+  version = "0.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fcd6f38fd981e350f9ec754d9671834017accd600e967d6d299a6cfdae5ba4f4";
+    sha256 = "0b2vz9fp9asw57m3p9zjlz9gddanrhpxbdfimg98ik654kp2vj7r";
   };
 
   propagatedBuildInputs = [ numpy dateutil ];

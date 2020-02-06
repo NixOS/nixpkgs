@@ -1,4 +1,4 @@
-# User's Guide to Emscripten in Nixpkgs
+# Emscripten
 
 [Emscripten](https://github.com/kripken/emscripten): An LLVM-to-JavaScript Compiler
 

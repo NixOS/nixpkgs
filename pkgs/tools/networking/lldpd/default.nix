@@ -1,13 +1,13 @@
 { stdenv, lib, fetchurl, pkgconfig, removeReferencesTo
-, libevent, readline, net_snmp, openssl
+, libevent, readline, net-snmp, openssl
 }:
 
 stdenv.mkDerivation rec {
-  name = "lldpd-${version}";
+  pname = "lldpd";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "https://media.luffy.cx/files/lldpd/${name}.tar.gz";
+    url = "https://media.luffy.cx/files/lldpd/${pname}-${version}.tar.gz";
     sha256 = "0kvj49y6slnldi9dha81nzxvpwd7d8kq1qlibn6h1wdb5w1vq6ak";
   };
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig removeReferencesTo ];
-  buildInputs = [ libevent readline net_snmp openssl ];
+  buildInputs = [ libevent readline net-snmp openssl ];
 
   enableParallelBuilding = true;
 

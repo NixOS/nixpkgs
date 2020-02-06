@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub,  libjack2, gtk2, lv2, faust, pkgconfig }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "git-2015-05-21";
-  name = "foo-yc20-${version}";
+  pname = "foo-yc20";
   src = fetchFromGitHub {
     owner = "sampov2";
     repo = "foo-yc20";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libjack2 gtk2 lv2 faust ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   # remove lv2 until https://github.com/sampov2/foo-yc20/issues/6 is resolved
   postInstallFixup = "rm -rf $out/lib/lv2";

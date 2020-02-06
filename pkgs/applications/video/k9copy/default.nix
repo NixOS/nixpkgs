@@ -7,10 +7,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.0.3";
-  name = "k9copy-${version}";
+  pname = "k9copy";
 
   src = fetchurl {
-    url = "mirror://sourceforge/k9copy-reloaded/${name}.tar.gz";
+    url = "mirror://sourceforge/k9copy-reloaded/${pname}-${version}.tar.gz";
     sha256 = "0dp06rwihks50c57bbv04d6bj2qc88isl91971r4lii2xp0qn7sg";
   };
 
@@ -56,5 +56,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2;
     maintainers = with stdenv.lib.maintainers; [ flosse ];
     platforms = stdenv.lib.platforms.unix;
+    # TODO: The software is deprecated and the build is broken, see:
+    # https://github.com/NixOS/nixpkgs/pull/63260#issuecomment-503506487
+    broken = true;
   };
 }

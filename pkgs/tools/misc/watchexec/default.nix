@@ -1,23 +1,26 @@
-{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, darwin }:
+{ stdenv, rustPlatform, fetchFromGitHub, CoreServices, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "watchexec";
-  version = "1.10.2";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "10h9g6r5zkm71zpr33imh49187xx1wcv9sw7bf5dllgnxabd0lql";
+    sha256 = "03s9nsss4895x4lp90y65jajavk8c2nj1jjnmx0vbbwl210ghlv1";
   };
 
-  cargoSha256 = "1sqwplvpg0n9j0h9j94m7a6ylgqi4y4wyx489y09z9gm7aqgrsjc";
+  cargoSha256 = "07whi9w51ddh8s7v06c3k6n5q9gfx74rdkhgfysi180y2rgnbanj";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [
-    CoreServices
-    # This is needed to avoid an undefined symbol error "_CFURLResourceIsReachable"
-    darwin.cf-private
-  ];
+  nativeBuildInputs = [ installShellFiles ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
+
+  postInstall = ''
+    installManPage doc/watchexec.1
+    installShellCompletion --zsh --name _watchexec completions/zsh
+  '';
 
   meta = with stdenv.lib; {
     description = "Executes commands in response to file modifications";

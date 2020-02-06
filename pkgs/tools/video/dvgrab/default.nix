@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, libunwind, libraw1394, libjpeg, libiec61883, libdv
 , libavc1394, pkgconfig, autoreconfHook }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dvgrab-2016-05-16";
 
   src = fetchFromGitHub {

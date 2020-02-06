@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "polyml-${version}";
+  pname = "polyml";
+  inherit version;
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
@@ -27,7 +28,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl21;
     platforms = with stdenv.lib.platforms; linux;
     maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

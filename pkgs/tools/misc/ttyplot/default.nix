@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ttyplot-${version}";
+  pname = "ttyplot";
   version = "1.4";
 
   src = fetchFromGitHub {

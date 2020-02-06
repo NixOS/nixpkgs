@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, geoipWithDatabase, ncurses, glib }:
+{ stdenv, fetchurl, pkgconfig, ncurses, glib, libmaxminddb }:
 
 stdenv.mkDerivation rec {
   version = "1.3";
-  name = "goaccess-${version}";
+  pname = "goaccess";
 
   src = fetchurl {
     url = "https://tar.goaccess.io/goaccess-${version}.tar.gz";
@@ -10,13 +10,13 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-    "--enable-geoip"
+    "--enable-geoip=mmdb"
     "--enable-utf8"
   ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    geoipWithDatabase
+    libmaxminddb
     ncurses
     glib
   ];

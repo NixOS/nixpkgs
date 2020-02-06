@@ -21,7 +21,7 @@ in stdenv.mkDerivation {
   name = "tbs-2018.04.18-${kernel.version}";
 
   srcs = [ media build ];
-  sourceRoot = "${build.name}";
+  sourceRoot = build.name;
 
   preConfigure = ''
     make dir DIR=../${media.name}

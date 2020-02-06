@@ -26,4 +26,4 @@ index e280e86..b2dd42b 100755
 -# Execute the strangled program under a clean environment
  # pass through the FPS and overriden LD_PRELOAD environment variables
 -exec env FPS="${FPS}" LD_PRELOAD="${LD_PRELOAD}:libstrangle.so" "$@"
-+FPS="${FPS}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}:@out@/lib/libstrangle/lib64:@out@/lib/libstrangle/lib32" LD_PRELOAD="${LD_PRELOAD}:libstrangle.so" exec "$@"
++FPS="${FPS}" LD_LIBRARY_PATH="${LD_LIBRARY_PATH}${LD_LIBRARY_PATH:+:}@out@/lib/libstrangle/lib64:@out@/lib/libstrangle/lib32" LD_PRELOAD="${LD_PRELOAD}:libstrangle.so" exec "$@"

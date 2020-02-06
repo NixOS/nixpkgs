@@ -1,9 +1,9 @@
-{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU_combined, libSM, libXext, dialog, makeWrapper }:
+{ stdenv, lib, fetchzip, freeglut, libXmu, libXi, libX11, libICE, libGLU, libGL, libSM, libXext, dialog, makeWrapper }:
 let
-  lpath = stdenv.lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU_combined libSM libXext ];
+  lpath = stdenv.lib.makeLibraryPath [ libXmu libXi libX11 freeglut libICE libGLU libGL libSM libXext ];
 in
 stdenv.mkDerivation rec {
-  name = "iceSL-${version}";
+  pname = "iceSL";
   version = "2.1.10";
 
   src =  if stdenv.hostPlatform.system == "x86_64-linux" then fetchzip {

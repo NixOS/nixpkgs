@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vimb-${version}";
+  pname = "vimb";
   version = "3.3.0";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://fanglingsu.github.io/vimb/;
     license = stdenv.lib.licenses.gpl3;
-    maintainers = [ stdenv.lib.maintainers.rickynils ];
+    maintainers = [];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

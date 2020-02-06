@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -20,7 +20,6 @@ in
     description = "Prometheus exporter for surfboard cable modem";
     unitConfig.Documentation = "https://github.com/ipstatic/surfboard_exporter";
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-surfboard-exporter}/bin/surfboard_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

@@ -1,32 +1,32 @@
 { fetchurl, fetchpatch, stdenv, pkgconfig, libgcrypt, libassuan, libksba
-, libgpgerror, libiconv, npth, gettext, texinfo, pcsclite, sqlite
-, buildPackages
+, libgpgerror, libiconv, npth, gettext, texinfo, buildPackages
 
 # Each of the dependencies below are optional.
 # Gnupg can be built without them at the cost of reduced functionality.
-, pinentry ? null, guiSupport ? true
-, adns ? null, gnutls ? null, libusb ? null, openldap ? null
-, readline ? null, zlib ? null, bzip2 ? null
+, guiSupport ? true, enableMinimal ? false
+, adns ? null , bzip2 ? null , gnutls ? null , libusb ? null , openldap ? null
+, pcsclite ? null , pinentry ? null , readline ? null , sqlite ? null , zlib ?
+null
 }:
 
 with stdenv.lib;
 
-assert guiSupport -> pinentry != null;
+assert guiSupport -> pinentry != null && enableMinimal == false;
 
 stdenv.mkDerivation rec {
-  name = "gnupg-${version}";
+  pname = "gnupg";
 
-  version = "2.2.17";
+  version = "2.2.19";
 
   src = fetchurl {
-    url = "mirror://gnupg/gnupg/${name}.tar.bz2";
-    sha256 = "056mgy09lvsi03531a437qj58la1j2x1y1scvfi53diris3658mg";
+    url = "mirror://gnupg/gnupg/${pname}-${version}.tar.bz2";
+    sha256 = "1h6yx6sdpz3lf9gdppgxqcf73baynr8gflmh43286fkgw3058994";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig texinfo ];
   buildInputs = [
-    libgcrypt libassuan libksba libiconv npth gettext texinfo
+    libgcrypt libassuan libksba libiconv npth gettext
     readline libusb gnutls adns openldap zlib bzip2 sqlite
   ];
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
         configure doc/dirmngr.texi doc/gnupg.info-1
-  '' + stdenv.lib.optionalString stdenv.isLinux ''
+  '' + stdenv.lib.optionalString ( stdenv.isLinux && pcsclite != null) ''
     sed -i 's,"libpcsclite\.so[^"]*","${stdenv.lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
   ''; #" fix Emacs syntax highlighting :-(
 
@@ -50,7 +50,14 @@ stdenv.mkDerivation rec {
     "--with-npth-prefix=${npth}"
   ] ++ optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentryBinaryPath}";
 
-  postInstall = ''
+  postInstall = if enableMinimal
+  then ''
+    rm -r $out/{libexec,sbin,share}
+    for f in `find $out/bin -type f -not -name gpg`
+    do
+      rm $f
+    done
+  '' else ''
     mkdir -p $out/lib/systemd/user
     for f in doc/examples/systemd-user/*.{service,socket} ; do
       substitute $f $out/lib/systemd/user/$(basename $f) \

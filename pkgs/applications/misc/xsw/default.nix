@@ -4,7 +4,7 @@ let
   makeSDLFlags = map (p: "-I${lib.getDev p}/include/SDL");
 
 in stdenv.mkDerivation rec {
-  name = "xsw-${version}";
+  pname = "xsw";
   version = "0.1.2";
 
   src = fetchFromGitHub {
@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ SDL SDL_image SDL_ttf SDL_gfx ];
 
-  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ];
+  NIX_CFLAGS_COMPILE = toString (makeSDLFlags [ SDL SDL_image SDL_ttf SDL_gfx ]);
 
   patches = [
     ./parse.patch # Fixes compilation error by avoiding redundant definitions.

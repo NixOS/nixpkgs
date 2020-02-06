@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "osinfo-db";
-  version = "20190611";
+  version = "20191125";
 
   src = fetchurl {
     url = "https://releases.pagure.org/libosinfo/${pname}-${version}.tar.xz";
-    sha256 = "00gkdkycicl4rlr8by61sfsgpjsiswr8b148fl2arinr4vz3n46h";
+    sha256 = "102mdykp5pjv7lw7saig640vb5a8ivy4ji8sa68q2wzfwg1yix78";
   };
 
   nativeBuildInputs = [ osinfo-db-tools intltool libxml2 ];

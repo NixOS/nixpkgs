@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0-beta.1";
-  name = "JamomaCore-${version}";
+  pname = "JamomaCore";
 
   src = fetchFromGitHub {
     owner = "jamoma";

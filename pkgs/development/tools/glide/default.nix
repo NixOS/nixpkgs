@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "glide-${version}";
+  pname = "glide";
   version = "0.12.3";
 
   goPackagePath = "github.com/Masterminds/glide";

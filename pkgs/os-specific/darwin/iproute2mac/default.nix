@@ -1,8 +1,8 @@
-{ stdenv, fetchFromGitHub, darwin, python }:
+{ stdenv, fetchFromGitHub, darwin, python2 }:
 
 stdenv.mkDerivation rec {
   version = "1.2.1";
-  name = "iproute2mac-${version}";
+  pname = "iproute2mac";
 
   src = fetchFromGitHub {
     owner = "brona";
@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1n6la7blbxza2m79cpnywsavhzsdv4gzdxrkly4dppyidjg6jy1h";
   };
 
-  buildInputs = [ python ];
+  buildInputs = [ python2 ];
 
   postPatch = ''
     substituteInPlace src/ip.py \
-      --replace /usr/bin/python ${python}/bin/python \
+      --replace /usr/bin/python ${python2}/bin/python \
       --replace /sbin/ifconfig ${darwin.network_cmds}/bin/ifconfig \
       --replace /sbin/route ${darwin.network_cmds}/bin/route \
       --replace /usr/sbin/netstat ${darwin.network_cmds}/bin/netstat \

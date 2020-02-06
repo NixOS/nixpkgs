@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "xlslib-${version}";
+  pname = "xlslib";
   version = "2.5.0";
 
   src = fetchurl {

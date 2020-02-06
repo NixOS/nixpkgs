@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mmake-${version}";
+  pname = "mmake";
   version = "1.2.0";
 
   goPackagePath = "github.com/tj/mmake";

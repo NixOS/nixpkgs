@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, isPy27
 , pytest
 , locket
 , numpy
@@ -11,11 +12,12 @@
 
 buildPythonPackage rec {
   pname = "partd";
-  version = "0.3.10";
+  version = "1.1.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "33722a228ebcd1fa6f44b1631bdd4cff056376f89eb826d7d880b35b637bcfba";
+    sha256 = "6e258bf0810701407ad1410d63d1a15cfd7b773fd9efe555dac6bb82cc8832b0";
   };
 
   checkInputs = [ pytest ];

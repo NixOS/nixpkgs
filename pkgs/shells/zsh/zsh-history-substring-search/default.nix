@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "zsh-history-substring-search-${version}";
-  version = "1.0.1";
+  pname = "zsh-history-substring-search";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-history-substring-search";
     rev = "v${version}";
-    sha256 = "0lgmq1xcccnz5cf7vl0r0qj351hwclx9p80cl0qczxry4r2g5qaz";
+    sha256 = "0y8va5kc2ram38hbk2cibkk64ffrabfv1sh4xm7pjspsba9n5p1y";
   };
 
   installPhase = ''

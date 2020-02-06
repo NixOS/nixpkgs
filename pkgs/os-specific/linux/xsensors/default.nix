@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, gtk2, pkgconfig, lm_sensors }:
 
 stdenv.mkDerivation rec {
-  name = "xsensors-${version}";
+  pname = "xsensors";
   version = "0.70";
   src = fetchurl {
     url = "http://www.linuxhardware.org/xsensors/xsensors-${version}.tar.gz";

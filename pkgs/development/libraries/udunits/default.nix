@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "udunits-${version}";
+  pname = "udunits";
   version = "2.2.27.6";
   
   src = fetchFromGitHub {

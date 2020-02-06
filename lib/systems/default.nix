@@ -37,6 +37,7 @@ rec {
         else if final.isAndroid             then "bionic"
         else if final.isLinux /* default */ then "glibc"
         else if final.isMsp430              then "newlib"
+        else if final.isVc4                 then "newlib"
         else if final.isAvr                 then "avrlibc"
         else if final.isNetBSD              then "nblibc"
         # TODO(@Ericson2314) think more about other operating systems
@@ -58,13 +59,13 @@ rec {
       uname = {
         # uname -s
         system = {
-          "linux" = "Linux";
-          "windows" = "Windows";
-          "darwin" = "Darwin";
-          "netbsd" = "NetBSD";
-          "freebsd" = "FreeBSD";
-          "openbsd" = "OpenBSD";
-          "wasi" = "Wasi";
+          linux = "Linux";
+          windows = "Windows";
+          darwin = "Darwin";
+          netbsd = "NetBSD";
+          freebsd = "FreeBSD";
+          openbsd = "OpenBSD";
+          wasi = "Wasi";
         }.${final.parsed.kernel.name} or null;
 
          # uname -p
@@ -79,6 +80,7 @@ rec {
         else if final.isAarch64 then "arm64"
         else if final.isx86_32 then "x86"
         else if final.isx86_64 then "ia64"
+        else if final.isMips then "mips"
         else final.parsed.cpu.name;
 
       qemuArch =
@@ -86,10 +88,10 @@ rec {
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
         else {
-          "powerpc" = "ppc";
-          "powerpcle" = "ppc";
-          "powerpc64" = "ppc64";
-          "powerpc64le" = "ppc64le";
+          powerpc = "ppc";
+          powerpcle = "ppc";
+          powerpc64 = "ppc64";
+          powerpc64le = "ppc64le";
         }.${final.parsed.cpu.name} or final.parsed.cpu.name;
 
       emulator = pkgs: let

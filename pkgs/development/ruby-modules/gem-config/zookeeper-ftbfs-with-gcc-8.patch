@@ -1,0 +1,11 @@
+--- zkc-3.4.5/c/src/zookeeper.c 2019-09-13 12:05:20.647034862 +0200
++++ zkc-3.4.5/c/src/zookeeper.c 2019-09-13 12:05:49.125360269 +0200
+@@ -3418,7 +3418,7 @@
+ 
+ static const char* format_endpoint_info(const struct sockaddr_storage* ep)
+ {
+-    static char buf[128];
++    static char buf[128 + 6]; // include space for the port :xxxxxx
+     char addrstr[128];
+     void *inaddr;
+ #ifdef WIN32

@@ -2,14 +2,14 @@
 , leptonica, libpng, libtiff, icu, pango, opencl-headers }:
 
 stdenv.mkDerivation rec {
-  name = "tesseract-${version}";
-  version = "4.0.0";
+  pname = "tesseract";
+  version = "4.1.1";
 
   src = fetchFromGitHub {
     owner = "tesseract-ocr";
     repo = "tesseract";
     rev = version;
-    sha256 = "1b5fi2vibc4kk9b30kkk4ais4bw8fbbv24bzr5709194hb81cav8";
+    sha256 = "1ca27zbjpx35nxh9fha410z3jskwyj06i5hqiqdc08s2d7kdivwn";
   };
 
   enableParallelBuilding = true;

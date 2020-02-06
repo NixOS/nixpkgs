@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ... }:
 
-stdenv.mkDerivation rec {
-  name = "serpent-${version}";
+stdenv.mkDerivation {
+  pname = "serpent";
 
   # I can't find any version numbers, so we're just using the date
   # of the last commit.

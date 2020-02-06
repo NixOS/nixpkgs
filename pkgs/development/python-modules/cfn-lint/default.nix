@@ -1,22 +1,26 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, pythonOlder
 , pyyaml
 , six
 , requests
 , aws-sam-translator
+, importlib-metadata
+, importlib-resources
 , jsonpatch
 , jsonschema
 , pathlib2
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "cfn-lint";
-  version = "0.19.1";
+  version = "0.26.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5a723ff791fc23aced78e9cde28f18f9eeae9a24f91db2b7a20f7aa837a613b3";
+    sha256 = "5449313b5f176024bd5fd6ebe69ce986a2d9b8a9d6a147b2d442c8d9fa99a6c5";
   };
 
   propagatedBuildInputs = [
@@ -27,7 +31,8 @@ buildPythonPackage rec {
     jsonpatch
     jsonschema
     pathlib2
-  ];
+    setuptools
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata importlib-resources ];
 
   # No tests included in archive
   doCheck = false;

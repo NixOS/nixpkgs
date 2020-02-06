@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "moosefs";
-  version = "3.0.104";
+  version = "3.0.109";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "057xg7zy872w4hczk9b9ckmqyah3qhgysvxddqizr204cyadicxh";
+    sha256 = "1pwackc511fzx28w3an5qk738ykhpspvc1063w2hv901f213xjzw";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

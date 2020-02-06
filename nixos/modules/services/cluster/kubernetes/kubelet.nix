@@ -52,6 +52,12 @@ let
   taints = concatMapStringsSep "," (v: "${v.key}=${v.value}:${v.effect}") (mapAttrsToList (n: v: v) cfg.taints);
 in
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "applyManifests" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "cadvisorPort" ] "")
+    (mkRemovedOptionModule [ "services" "kubernetes" "kubelet" "allowPrivileged" ] "")
+  ];
+
   ###### interface
   options.services.kubernetes.kubelet = with lib.types; {
 
@@ -59,12 +65,6 @@ in
       description = "Kubernetes kubelet info server listening address.";
       default = "0.0.0.0";
       type = str;
-    };
-
-    allowPrivileged = mkOption {
-      description = "Whether to allow Kubernetes containers to request privileged mode.";
-      default = false;
-      type = bool;
     };
 
     clusterDns = mkOption {
@@ -98,7 +98,7 @@ in
         default = [];
         example = literalExample ''
           [{
-            "cniVersion": "0.2.0",
+            "cniVersion": "0.3.1",
             "name": "mynet",
             "type": "bridge",
             "bridge": "cni0",
@@ -112,7 +112,7 @@ in
                 ]
             }
           } {
-            "cniVersion": "0.2.0",
+            "cniVersion": "0.3.1",
             "type": "loopback"
           }]
         '';
@@ -234,28 +234,21 @@ in
 
   ###### implementation
   config = mkMerge [
-    (let
-
-      kubeletPaths = filter (a: a != null) [
-        cfg.kubeconfig.caFile
-        cfg.kubeconfig.certFile
-        cfg.kubeconfig.keyFile
-        cfg.clientCaFile
-        cfg.tlsCertFile
-        cfg.tlsKeyFile
-      ];
-
-    in mkIf cfg.enable {
+    (mkIf cfg.enable {
       services.kubernetes.kubelet.seedDockerImages = [infraContainer];
 
       systemd.services.kubelet = {
         description = "Kubernetes Kubelet Service";
-        wantedBy = [ "kubelet.target" ];
-        after = [ "kube-control-plane-online.target" ];
-        before = [ "kubelet.target" ];
+        wantedBy = [ "kubernetes.target" ];
+        after = [ "network.target" "docker.service" "kube-apiserver.service" ];
         path = with pkgs; [ gitMinimal openssh docker utillinux iproute ethtool thin-provisioning-tools iptables socat ] ++ top.path;
         preStart = ''
-          rm -f /opt/cni/bin/* || true
+          ${concatMapStrings (img: ''
+            echo "Seeding docker image: ${img}"
+            docker load <${img}
+          '') cfg.seedDockerImages}
+
+          rm /opt/cni/bin/* || true
           ${concatMapStrings (package: ''
             echo "Linking cni package: ${package}"
             ln -fs ${package}/bin/* /opt/cni/bin
@@ -269,7 +262,6 @@ in
           RestartSec = "1000ms";
           ExecStart = ''${top.package}/bin/kubelet \
             --address=${cfg.address} \
-            --allow-privileged=${boolToString cfg.allowPrivileged} \
             --authentication-token-webhook \
             --authentication-token-webhook-cache-ttl="10s" \
             --authorization-mode=Webhook \
@@ -308,56 +300,6 @@ in
           '';
           WorkingDirectory = top.dataDir;
         };
-        unitConfig.ConditionPathExists = kubeletPaths;
-      };
-
-      systemd.paths.kubelet = {
-        wantedBy =  [ "kubelet.service" ];
-        pathConfig = {
-          PathExists = kubeletPaths;
-          PathChanged = kubeletPaths;
-        };
-      };
-
-      systemd.services.docker.before = [ "kubelet.service" ];
-
-      systemd.services.docker-seed-images = {
-        wantedBy = [ "docker.service" ];
-        after = [ "docker.service" ];
-        before = [ "kubelet.service" ];
-        path = with pkgs; [ docker ];
-        preStart = ''
-          ${concatMapStrings (img: ''
-            echo "Seeding docker image: ${img}"
-            docker load <${img}
-          '') cfg.seedDockerImages}
-        '';
-        script = "echo Ok";
-        serviceConfig.Type = "oneshot";
-        serviceConfig.RemainAfterExit = true;
-        serviceConfig.Slice = "kubernetes.slice";
-      };
-
-      systemd.services.kubelet-online = {
-        wantedBy = [ "kube-node-online.target" ];
-        after = [ "flannel.target" "kubelet.target" ];
-        before = [ "kube-node-online.target" ];
-        # it is complicated. flannel needs kubelet to run the pause container before
-        # it discusses the node CIDR with apiserver and afterwards configures and restarts
-        # dockerd. Until then prevent creating any pods because they have to be recreated anyway
-        # because the network of docker0 has been changed by flannel.
-        script = let
-          docker-env = "/run/flannel/docker";
-          flannel-date = "stat --print=%Y ${docker-env}";
-          docker-date = "systemctl show --property=ActiveEnterTimestamp --value docker";
-        in ''
-          until test -f ${docker-env} ; do sleep 1 ; done
-          while test `${flannel-date}` -gt `date +%s --date="$(${docker-date})"` ; do
-            sleep 1
-          done
-        '';
-        serviceConfig.Type = "oneshot";
-        serviceConfig.Slice = "kubernetes.slice";
       };
 
       # Allways include cni plugins
@@ -404,16 +346,5 @@ in
       };
     })
 
-    {
-      systemd.targets.kubelet = {
-        wantedBy = [ "kube-node-online.target" ];
-        before = [ "kube-node-online.target" ];
-      };
-
-      systemd.targets.kube-node-online = {
-        wantedBy = [ "kubernetes.target" ];
-        before = [ "kubernetes.target" ];
-      };
-    }
   ];
 }

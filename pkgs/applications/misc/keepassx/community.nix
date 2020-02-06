@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, qttools, darwin
 
 , curl
 , glibcLocales
@@ -7,7 +7,6 @@
 , libargon2
 , libgcrypt
 , libgpgerror
-, libmicrohttpd
 , libsodium
 , libyubikey
 , pkg-config
@@ -17,6 +16,7 @@
 , qtsvg
 , qtx11extras
 , quazip
+, wrapQtAppsHook
 , yubikey-personalization
 , zlib
 
@@ -25,19 +25,21 @@
 , withKeePassKeeShareSecure ? true
 , withKeePassSSHAgent ? true
 , withKeePassNetworking ? false
+, withKeePassTouchID ? true
+, withKeePassFDOSecrets ? true
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "keepassxc-${version}";
-  version = "2.4.1";
+  pname = "keepassxc";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "keepassxreboot";
     repo = "keepassxc";
-    rev = "${version}";
-    sha256 = "1cbfsfdvb4qw6yb0zl6mymdbphnb7lxbfrc5a8cjmn9w8b09kv6m";
+    rev = version;
+    sha256 = "0z5bd17qaq7zpv96gw6qwv6rb4xx7xjq86ss6wm5zskcrraf7r7n";
   };
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang [
@@ -68,17 +70,19 @@ stdenv.mkDerivation rec {
   ++ (optional withKeePassKeeShare "-DWITH_XC_KEESHARE=ON")
   ++ (optional withKeePassKeeShareSecure "-DWITH_XC_KEESHARE_SECURE=ON")
   ++ (optional withKeePassNetworking "-DWITH_XC_NETWORKING=ON")
+  ++ (optional (withKeePassTouchID && stdenv.isDarwin) "-DWITH_XC_TOUCHID=ON")
+  ++ (optional (withKeePassFDOSecrets && stdenv.isLinux) "-DWITH_XC_FDOSECRETS=ON")
   ++ (optional withKeePassSSHAgent "-DWITH_XC_SSHAGENT=ON");
 
   doCheck = true;
   checkPhase = ''
     export LC_ALL="en_US.UTF-8"
-    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     export QT_QPA_PLATFORM=offscreen
+    export QT_PLUGIN_PATH="${qtbase.bin}/${qtbase.qtPluginPrefix}"
     make test ARGS+="-E testgui --output-on-failure"
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper qttools ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
 
   buildInputs = [
     curl
@@ -88,7 +92,6 @@ stdenv.mkDerivation rec {
     libargon2
     libgcrypt
     libgpgerror
-    libmicrohttpd
     libsodium
     libyubikey
     pkg-config
@@ -100,12 +103,12 @@ stdenv.mkDerivation rec {
     zlib
   ]
   ++ stdenv.lib.optional withKeePassKeeShareSecure quazip
-  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras;
+  ++ stdenv.lib.optional stdenv.isDarwin qtmacextras
+  ++ stdenv.lib.optional (stdenv.isDarwin && withKeePassTouchID) darwin.apple_sdk.frameworks.LocalAuthentication;
 
-  postInstall = optionalString stdenv.isDarwin ''
+  preFixup = optionalString stdenv.isDarwin ''
     # Make it work without Qt in PATH.
-    wrapProgram $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC \
-      --set QT_PLUGIN_PATH ${qtbase.bin}/${qtbase.qtPluginPrefix}
+    wrapQtApp $out/Applications/KeePassXC.app/Contents/MacOS/KeePassXC
   '';
 
   meta = {
@@ -113,7 +116,7 @@ stdenv.mkDerivation rec {
     longDescription = "A community fork of KeePassX, which is itself a port of KeePass Password Safe. The goal is to extend and improve KeePassX with new features and bugfixes to provide a feature-rich, fully cross-platform and modern open-source password manager. Accessible via native cross-platform GUI, CLI, and browser integration with the KeePassXC Browser Extension (https://github.com/keepassxreboot/keepassxc-browser).";
     homepage = https://keepassxc.org/;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ s1lvester jonafato ];
-    platforms = with platforms; linux ++ darwin;
+    maintainers = with maintainers; [ jonafato ];
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

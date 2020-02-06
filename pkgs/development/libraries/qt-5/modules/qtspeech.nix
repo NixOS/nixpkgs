@@ -3,5 +3,5 @@
 qtModule {
   name = "qtspeech";
   qtInputs = [ ];
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [ "out" "dev" ];
 }

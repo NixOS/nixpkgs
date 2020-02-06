@@ -1,8 +1,8 @@
-{stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, libGLU_combined, imagemagick, libtiff, bzip2}:
+{stdenv, fetchurl, pkgconfig, xlibsWrapper, libXext, libGLU, libGL, imagemagick, libtiff, bzip2}:
 
 stdenv.mkDerivation rec {
   version = "0.9.1";
-  name = "rss-glx-${version}";
+  pname = "rss-glx";
 
   src = fetchurl {
     url = "mirror://sourceforge/rss-glx/rss-glx_${version}.tar.bz2";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libGLU_combined xlibsWrapper imagemagick libtiff bzip2 ];
+  buildInputs = [ libGLU libGL xlibsWrapper imagemagick libtiff bzip2 ];
 
   NIX_CFLAGS_COMPILE = "-I${imagemagick.dev}/include/ImageMagick";
   NIX_LDFLAGS= "-rpath ${libXext}/lib";

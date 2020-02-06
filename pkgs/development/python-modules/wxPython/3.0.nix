@@ -21,7 +21,6 @@ assert wxGTK.unicode;
 buildPythonPackage rec {
   pname = "wxPython";
   version = "3.0.2.0";
-  name = pname + "-" + version;
 
   disabled = isPy3k || isPyPy;
   doCheck = false;
@@ -30,6 +29,9 @@ buildPythonPackage rec {
     url = "mirror://sourceforge/wxpython/wxPython-src-${version}.tar.bz2";
     sha256 = "0qfzx3sqx4mwxv99sfybhsij4b5pc03ricl73h4vhkzazgjjjhfm";
   };
+
+  dontUseSetuptoolsBuild = true;
+  dontUsePipInstall = true;
 
   hardeningDisable = [ "format" ];
 

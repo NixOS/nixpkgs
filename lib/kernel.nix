@@ -1,7 +1,7 @@
 { lib, version }:
 
 with lib;
-rec {
+{
   # Common patterns/legacy
   whenAtLeast = ver: mkIf (versionAtLeast version ver);
   whenOlder   = ver: mkIf (versionOlder version ver);

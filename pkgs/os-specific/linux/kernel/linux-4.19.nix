@@ -3,16 +3,16 @@
 with stdenv.lib;
 
 buildLinux (args // rec {
-  version = "4.19.59";
+  version = "4.19.101";
 
   # modDirVersion needs to be x.y.z, will automatically add .0 if needed
-  modDirVersion = if (modDirVersionArg == null) then concatStrings (intersperse "." (take 3 (splitString "." "${version}.0"))) else modDirVersionArg;
+  modDirVersion = if (modDirVersionArg == null) then concatStringsSep "." (take 3 (splitVersion "${version}.0")) else modDirVersionArg;
 
   # branchVersion needs to be x.y
-  extraMeta.branch = concatStrings (intersperse "." (take 2 (splitString "." version)));
+  extraMeta.branch = versions.majorMinor version;
 
   src = fetchurl {
     url = "mirror://kernel/linux/kernel/v4.x/linux-${version}.tar.xz";
-    sha256 = "0nxkr196q0b1hs3a3zavpsjp0jgbqmcwdf0y0f3hbpirshjiid5q";
+    sha256 = "1i4bkwankl5q95kgqmmyzdkwmf3b8ppkb8ild9bw12mkpmm1a9my";
   };
 } // (args.argsOverride or {}))

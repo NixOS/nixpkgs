@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name    = "cloudflared-${version}";
+  pname = "cloudflared";
   version = "2019.7.0";
 
   goPackagePath = "github.com/cloudflare/cloudflared";

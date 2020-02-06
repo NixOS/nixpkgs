@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ums-${version}";
+  pname = "ums";
   version = "6.2.2";
   
   src = fetchurl {
-    url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${name}" + "-Java8.tgz";
+    url = "mirror://sourceforge/project/unimediaserver/Official%20Releases/Linux/" + stdenv.lib.toUpper "${pname}-${version}" + "-Java8.tgz";
     sha256 = "1qa999la9hixy0pdj9phjvr6lwqycgdvm94nc1606vz0ivf95b15";
-    name = "${name}.tgz";
+    name = "${pname}-${version}.tgz";
   };
 
   buildInputs = [ makeWrapper ];

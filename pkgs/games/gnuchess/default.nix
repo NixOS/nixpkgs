@@ -12,7 +12,7 @@ let
     flex
   ];
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (s) name version;
   src = fetchurl {
     inherit (s) url sha256;

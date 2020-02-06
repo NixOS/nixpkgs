@@ -1,7 +1,7 @@
 { stdenv, cmake, fetchurl, ncurses, readline }:
 
 stdenv.mkDerivation rec {
-  name = "ctodo-${version}";
+  pname = "ctodo";
   version = "1.3";
 
   src = fetchurl {

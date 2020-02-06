@@ -1,7 +1,6 @@
 { stdenv, fetchurl, libxml2, readline, zlib, perl, cairo, gtk3, gsl
-, pkgconfig, gtksourceview, pango, gettext
+, pkgconfig, gtksourceview, pango, gettext, dconf
 , makeWrapper, gsettings-desktop-schemas, hicolor-icon-theme
-, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +25,7 @@ stdenv.mkDerivation rec {
      --prefix XDG_DATA_DIRS : "$out/share" \
      --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS" \
      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
-     --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules"
+     --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
   '';
 
   meta = {

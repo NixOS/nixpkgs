@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "packet-${version}";
+  pname = "packet";
   version = "v2.2.2";
 
   goPackagePath = "github.com/ebsarr/packet";

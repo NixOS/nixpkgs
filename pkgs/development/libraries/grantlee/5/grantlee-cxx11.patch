@@ -1,0 +1,24 @@
+From 3a5fc7662da3261be6496611900c095844e56ab1 Mon Sep 17 00:00:00 2001
+From: Albert Astals Cid <aacid@kde.org>
+Date: Sat, 20 Jul 2019 17:35:30 +0200
+Subject: [PATCH] Fix compile with newer Qt/cmake combination
+
+Without this i get huge errors about Qt needing C++11 support
+---
+ CMakeLists.txt | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 6d51110..0859788 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -11,6 +11,9 @@ endif()
+ 
+ project(Grantlee)
+ 
++set (CMAKE_CXX_STANDARD 11)
++set (CMAKE_CXX_EXTENSIONS OFF)
++
+ # Workaround for http://public.kitware.com/Bug/view.php?id=12301
+ if (MINGW)
+   if(NOT CMAKE_BUILD_TYPE)

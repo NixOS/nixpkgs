@@ -1,26 +1,44 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson
-, ninja, vala, desktop-file-utils, gtk3, granite, libgee
-, geoclue2, libchamplain, clutter, folks, geocode-glib, python3
-, libnotify, libical, evolution-data-server, appstream-glib
-, elementary-icon-theme, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, vala
+, desktop-file-utils
+, gtk3
+, granite
+, libgee
+, geoclue2
+, libchamplain
+, clutter
+, folks
+, geocode-glib
+, python3
+, libnotify
+, libical
+, evolution-data-server
+, appstream-glib
+, elementary-icon-theme
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "calendar";
-  version = "5.0";
+  pname = "elementary-calendar";
+  version = "5.0.3";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "calendar";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "0yiis5ig98gjw4s2qh8lppkdmv1cgi6qchxqncsjdki7yxyyni35";
+    sha256 = "1dqcmh585fjib4m8bs7qy23fv429s7q9nbcqnn0vvmy1n36fic4m";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 

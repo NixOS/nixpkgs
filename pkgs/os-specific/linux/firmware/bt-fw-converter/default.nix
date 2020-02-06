@@ -1,7 +1,7 @@
 { stdenv, fetchurl, makeWrapper, perl, perlPackages, bluez }:
 
 stdenv.mkDerivation  rec {
-  name = "bt-fw-converter-${version}";
+  pname = "bt-fw-converter";
   version = "2017-02-19";
   rev = "2d8b34402df01c6f7f4b8622de9e8b82fadf4153";
 
@@ -15,8 +15,8 @@ stdenv.mkDerivation  rec {
   buildInputs = [ perl perlPackages.RegexpGrammars bluez ];
 
   unpackCmd = ''
-    mkdir -p ${name}
-    cp $src ${name}/bt-fw-converter.pl
+    mkdir -p ${pname}-${version}
+    cp $src ${pname}-${version}/bt-fw-converter.pl
   '';
 
   installPhase = ''

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "bgs-${version}";
+  pname = "bgs";
   version = "0.8";
 
   src = fetchurl {

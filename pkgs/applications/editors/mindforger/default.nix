@@ -1,7 +1,7 @@
 { stdenv, fetchurl, qmake, qtbase, qtwebkit }:
 
 stdenv.mkDerivation rec {
-  name = "mindforger-${version}";
+  pname = "mindforger";
   version = "1.48.2";
 
   src = fetchurl {

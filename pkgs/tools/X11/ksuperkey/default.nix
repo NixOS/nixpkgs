@@ -1,6 +1,6 @@
 { stdenv, fetchgit, libX11, libXtst, pkgconfig, xorgproto, libXi }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ksuperkey-git-2015-07-21";
 
   nativeBuildInputs = [ pkgconfig ];

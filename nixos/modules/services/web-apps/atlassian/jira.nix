@@ -148,12 +148,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users."${cfg.user}" = {
+    users.users.${cfg.user} = {
       isSystemUser = true;
       group = cfg.group;
     };
 
-    users.groups."${cfg.group}" = {};
+    users.groups.${cfg.group} = {};
 
     systemd.tmpfiles.rules = [
       "d '${cfg.home}' - ${cfg.user} - - -"

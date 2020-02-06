@@ -2,11 +2,11 @@
 , libXrender, libXinerama, libXcursor, libXv, libXext
 , libXfixes, libXrandr, libSM, freetype, fontconfig, zlib, libjpeg, libpng
 , libmng, which, libGLU, openssl, dbus, cups, pkgconfig
-, libtiff, glib, icu, mysql, postgresql, sqlite, perl, coreutils, libXi
+, libtiff, glib, icu, libmysqlclient, postgresql, sqlite, perl, coreutils, libXi
 , buildMultimedia ? stdenv.isLinux, alsaLib, gstreamer, gst-plugins-base
 , buildWebkit ? (stdenv.isLinux || stdenv.isDarwin)
 , libGLSupported ? stdenv.lib.elem stdenv.hostPlatform.system stdenv.lib.platforms.mesaPlatforms
-, flashplayerFix ? false, gdk_pixbuf
+, flashplayerFix ? false, gdk-pixbuf
 , gtkStyle ? stdenv.hostPlatform == stdenv.buildPlatform, gtk2
 , gnomeStyle ? false, libgnomeui, GConf, gnome_vfs
 , developerBuild ? false
@@ -14,7 +14,7 @@
 , examples ? false
 , demos ? false
 # darwin support
-, cf-private, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
+, libobjc, ApplicationServices, OpenGL, Cocoa, AGL, libcxx
 }:
 
 let
@@ -48,6 +48,8 @@ stdenv.mkDerivation rec {
   prePatch = ''
     substituteInPlace configure --replace /bin/pwd pwd
     substituteInPlace src/corelib/global/global.pri --replace /bin/ls ${coreutils}/bin/ls
+    substituteInPlace src/3rdparty/javascriptcore/JavaScriptCore/jit/JITStubs.cpp \
+      --replace 'asm volatile' 'asm'
     sed -e 's@/\(usr\|opt\)/@/var/empty/@g' -i config.tests/*/*.test -i mkspecs/*/*.conf
   '' + lib.optionalString stdenv.isDarwin ''
     # remove impure reference to /usr/lib/libstdc++.6.dylib
@@ -83,10 +85,19 @@ stdenv.mkDerivation rec {
           + "21b342d71c19e6d68b649947f913410fe6129ea4/debian/patches/kubuntu_39_fix_medium_font.diff";
         sha256 = "0bli44chn03c2y70w1n8l7ss4ya0b40jqqav8yxrykayi01yf95j";
       })
+      # Patches are no longer available from here, so vendoring it for now.
+      #(fetchpatch {
+      #  name = "qt4-gcc6.patch";
+      #  url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
+      #  sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+      #})
+      ./qt4-gcc6.patch
+      ./qt4-openssl-1.1.patch
       (fetchpatch {
-        name = "qt4-gcc6.patch";
-        url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/qt4-gcc6.patch?h=packages/qt4&id=ca773a144f5abb244ac4f2749eeee9333cac001f";
-        sha256 = "07lrva7bjh6i40p7b3ml26a2jlznri8bh7y7iyx5zmvb1gfxmj34";
+        name = "gcc9-foreach.patch";
+        url = "https://salsa.debian.org/qt-kde-team/qt/qt4-x11/raw/"
+          + "0d4a3dd61ccb156dee556c214dbe91c04d44a717/debian/patches/gcc9-qforeach.patch";
+        sha256 = "0dzn6qxrgxb75rvck9kmy5gspawdn970wsjw56026dhkih8cp3pg";
       })
     ]
     ++ lib.optional gtkStyle (substituteAll ({
@@ -114,7 +125,7 @@ stdenv.mkDerivation rec {
       ];
 
   preConfigure = ''
-    export LD_LIBRARY_PATH="`pwd`/lib:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="`pwd`/lib''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     configureFlags+="
       -docdir $out/share/doc/${name}
       -plugindir $out/lib/qt4/plugins
@@ -161,7 +172,7 @@ stdenv.mkDerivation rec {
     (mk (!stdenv.isFreeBSD) "opengl") "-xrender" "-xrandr" "-xinerama" "-xcursor" "-xinput" "-xfixes" "-fontconfig"
     "-qdbus" (mk (cups != null) "cups") "-glib" "-dbus-linked" "-openssl-linked"
 
-    "-${if mysql != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
+    "-${if libmysqlclient != null then "plugin" else "no"}-sql-mysql" "-system-sqlite"
 
     "-exceptions" "-xmlpatterns"
 
@@ -187,21 +198,21 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ cups # Qt dlopen's libcups instead of linking to it
       postgresql sqlite libjpeg libmng libtiff icu ]
-    ++ lib.optionals (mysql != null) [ mysql.connector-c ]
-    ++ lib.optionals gtkStyle [ gtk2 gdk_pixbuf ]
-    ++ lib.optionals stdenv.isDarwin [ cf-private ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
+    ++ lib.optionals (libmysqlclient != null) [ libmysqlclient ]
+    ++ lib.optionals gtkStyle [ gtk2 gdk-pixbuf ]
+    ++ lib.optionals stdenv.isDarwin [ ApplicationServices OpenGL Cocoa AGL libcxx libobjc ];
 
   nativeBuildInputs = [ perl pkgconfig which ];
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # with gcc7 the warnings blow the log over Hydra's limit
     [ "-Wno-expansion-to-defined" "-Wno-unused-local-typedefs" ]
     ++ lib.optional stdenv.isLinux "-std=gnu++98" # gnu++ in (Obj)C flags is no good on Darwin
     ++ lib.optionals (stdenv.isFreeBSD || stdenv.isDarwin)
       [ "-I${glib.dev}/include/glib-2.0" "-I${glib.out}/lib/glib-2.0/include" ]
-    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1";
+    ++ lib.optional stdenv.isDarwin "-I${libcxx}/include/c++/v1");
 
   NIX_LDFLAGS = lib.optionalString (stdenv.isFreeBSD || stdenv.isDarwin) "-lglib-2.0";
 

@@ -2,7 +2,7 @@
 
 
 buildGoPackage rec {
-  name = "reflex-${version}";
+  pname = "reflex";
   version = "0.2.0";
 
   goPackagePath = "github.com/cespare/reflex";

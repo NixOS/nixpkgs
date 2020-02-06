@@ -147,8 +147,10 @@ in
       }) mountPoints;
 
     systemd.tmpfiles.rules = [
-      "e '${stateDir}' 0700 unifi - - -"
-      "e '${stateDir}/data' 0700 unifi - - -"
+      "d '${stateDir}' 0700 unifi - - -"
+      "d '${stateDir}/data' 0700 unifi - - -"
+      "d '${stateDir}/webapps' 0700 unifi - - -"
+      "L+ '${stateDir}/webapps/ROOT' - - - - ${cfg.unifiPackage}/webapps/ROOT"
     ];
 
     systemd.services.unifi = {
@@ -161,21 +163,11 @@ in
       # This a HACK to fix missing dependencies of dynamic libs extracted from jars
       environment.LD_LIBRARY_PATH = with pkgs.stdenv; "${cc.cc.lib}/lib";
 
-      preStart = ''
-        # Create the volatile webapps
-        rm -rf "${stateDir}/webapps"
-        mkdir -p "${stateDir}/webapps"
-        ln -s "${cfg.unifiPackage}/webapps/ROOT" "${stateDir}/webapps/ROOT"
-      '';
-
-      postStop = ''
-        rm -rf "${stateDir}/webapps"
-      '';
-
       serviceConfig = {
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} start";
         ExecStop = "${(removeSuffix "\n" cmd)} stop";
+        Restart = "on-failure";
         User = "unifi";
         UMask = "0077";
         WorkingDirectory = "${stateDir}";

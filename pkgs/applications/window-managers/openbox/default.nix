@@ -3,7 +3,7 @@
 , imlib2, pango, libstartup_notification, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "openbox-${version}";
+  pname = "openbox";
   version = "3.6.1";
 
   nativeBuildInputs = [
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   src = fetchurl {
-    url = "http://openbox.org/dist/openbox/${name}.tar.gz";
+    url = "http://openbox.org/dist/openbox/${pname}-${version}.tar.gz";
     sha256 = "1xvyvqxlhy08n61rjkckmrzah2si1i7nmc7s8h07riqq01vc0jlb";
   };
 

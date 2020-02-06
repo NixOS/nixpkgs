@@ -3,7 +3,7 @@
 , procps, utilmacros, gtk-doc, openssl, peg }:
 
 stdenv.mkDerivation rec {
-  name = "intel-gpu-tools-${version}";
+  pname = "intel-gpu-tools";
   version = "1.23";
 
   src = fetchurl {
@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libdrm libpciaccess cairo xorgproto udev libX11 kmod
     libXext libXv libXrandr glib bison libunwind python3 procps
     gtk-doc openssl peg ];
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
 
   preConfigure = ''
     ./autogen.sh

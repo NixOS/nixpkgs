@@ -1,18 +1,44 @@
-{ stdenv, bazel, cacert, enableNixHacks ? true }:
+{ stdenv
+, bazel
+, cacert
+, lib
+}:
 
-args@{ name, bazelFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+args@{
+  name
+, bazelFlags ? []
+, bazelBuildFlags ? []
+, bazelFetchFlags ? []
+, bazelTarget
+, buildAttrs
+, fetchAttrs
+
+# Newer versions of Bazel are moving away from built-in rules_cc and instead
+# allow fetching it as an external dependency in a WORKSPACE file[1]. If
+# removed in the fixed-output fetch phase, building will fail to download it.
+# This can be seen e.g. in #73097
+#
+# This option allows configuring the removal of rules_cc in cases where a
+# project depends on it via an external dependency.
+#
+# [1]: https://github.com/bazelbuild/rules_cc
+, removeRulesCC ? true
+, removeLocalConfigCc ? true
+, removeLocal ? true
+, ...
+}:
 
 let
-  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
+  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
 in stdenv.mkDerivation (fBuildAttrs // {
-  inherit name bazelFlags bazelTarget;
+  inherit name bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
   deps = stdenv.mkDerivation (fFetchAttrs // {
     name = "${name}-deps";
-    inherit bazelFlags bazelTarget;
+    inherit bazelFlags bazelBuildFlags bazelFetchFlags bazelTarget;
 
     nativeBuildInputs = fFetchAttrs.nativeBuildInputs or [] ++ [ bazel ];
 
@@ -20,8 +46,12 @@ in stdenv.mkDerivation (fBuildAttrs // {
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
       export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
       export HOME="$NIX_BUILD_TOP"
+      export USER="nix"
       # This is needed for git_repository with https remotes
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+      # This is needed for Bazel fetchers that are themselves programs (e.g.
+      # rules_go using the go toolchain)
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     buildPhase = fFetchAttrs.buildPhase or ''
@@ -37,7 +67,16 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # We disable multithreading for the fetching phase since it can lead to timeouts with many dependencies/threads:
       # https://github.com/bazelbuild/bazel/issues/6502
-      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 USER=homeless-shelter bazel --output_base="$bazelOut" --output_user_root="$bazelUserRoot" fetch --loading_phase_threads=1 $bazelFlags $bazelTarget
+      BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
+      USER=homeless-shelter \
+      bazel \
+        --output_base="$bazelOut" \
+        --output_user_root="$bazelUserRoot" \
+        fetch \
+        --loading_phase_threads=1 \
+        $bazelFlags \
+        $bazelFetchFlags \
+        $bazelTarget
 
       runHook postBuild
     '';
@@ -47,19 +86,27 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
+      ${if removeRulesCC then "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}" else ""}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      rm -rf $bazelOut/external/{local_*,\@local_*}
+      ${if removeLocalConfigCc then "rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}" else ""}
+      ${if removeLocal then "rm -rf $bazelOut/external/{local_*,\@local_*.marker}" else ""}
 
-      # Patching markers to make them deterministic
-      find $bazelOut/external -name '@*\.marker' -exec sed -i \
-        -e 's, -\?[0-9][0-9]*$, 1,' \
-        -e '/^ENV:TMP.*/d' \
-        '{}' \;
+      # Clear markers
+      find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
 
       # Remove all vcs files
       rm -rf $(find $bazelOut/external -type d -name .git)
       rm -rf $(find $bazelOut/external -type d -name .svn)
       rm -rf $(find $bazelOut/external -type d -name .hg)
+
+      # Removing top-level symlinks along with their markers.
+      # This is needed because they sometimes point to temporary paths (?).
+      # For example, in Tensorflow-gpu build:
+      # platforms -> NIX_BUILD_TOP/tmp/install/35282f5123611afa742331368e9ae529/_embedded_binaries/platforms
+      find $bazelOut/external -maxdepth 1 -type l | while read symlink; do
+        name="$(basename "$symlink")"
+        rm "$symlink" "$bazelOut/external/@$name.marker"
+      done
 
       # Patching symlinks to remove build directory reference
       find $bazelOut/external -type l | while read symlink; do
@@ -74,12 +121,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
     '';
 
     dontFixup = true;
+    allowedRequisites = [];
+
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
     outputHash = fetchAttrs.sha256;
   });
 
-  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (if enableNixHacks then (bazel.override { enableNixHacks = true; }) else bazel) ];
+  nativeBuildInputs = fBuildAttrs.nativeBuildInputs or [] ++ [ (bazel.override { enableNixHacks = true; }) ];
 
   preHook = fBuildAttrs.preHook or "" + ''
     export bazelOut="$NIX_BUILD_TOP/output"
@@ -134,6 +183,7 @@ in stdenv.mkDerivation (fBuildAttrs // {
       "''${linkopts[@]}" \
       "''${host_linkopts[@]}" \
       $bazelFlags \
+      $bazelBuildFlags \
       $bazelTarget
 
     runHook postBuild

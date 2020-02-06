@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   version = "1.6";
-  name = "ario-${version}";
+  pname = "ario";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ario-player/${name}.tar.gz";
+    url = "mirror://sourceforge/ario-player/${pname}-${version}.tar.gz";
     sha256 = "16nhfb3h5pc7flagfdz7xy0iq6kvgy6h4bfpi523i57rxvlfshhl";
   };
 

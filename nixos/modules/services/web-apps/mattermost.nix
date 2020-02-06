@@ -146,17 +146,17 @@ in
 
   config = mkMerge [
     (mkIf cfg.enable {
-      users.users = optionalAttrs (cfg.user == "mattermost") (singleton {
-        name = "mattermost";
-        group = cfg.group;
-        uid = config.ids.uids.mattermost;
-        home = cfg.statePath;
-      });
+      users.users = optionalAttrs (cfg.user == "mattermost") {
+        mattermost = {
+          group = cfg.group;
+          uid = config.ids.uids.mattermost;
+          home = cfg.statePath;
+        };
+      };
 
-      users.groups = optionalAttrs (cfg.group == "mattermost") (singleton {
-        name = "mattermost";
-        gid = config.ids.gids.mattermost;
-      });
+      users.groups = optionalAttrs (cfg.group == "mattermost") {
+        mattermost.gid = config.ids.gids.mattermost;
+      };
 
       services.postgresql.enable = cfg.localDatabaseCreate;
 

@@ -13,17 +13,16 @@
 <screen>
 <prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs
 <prompt>$ </prompt>cd nixpkgs
-<prompt>$ </prompt>git remote add channels https://github.com/NixOS/nixpkgs-channels
-<prompt>$ </prompt>git remote update channels
+<prompt>$ </prompt>git remote update origin
 </screen>
   This will check out the latest Nixpkgs sources to
   <filename>./nixpkgs</filename> the NixOS sources to
   <filename>./nixpkgs/nixos</filename>. (The NixOS source tree lives in a
-  subdirectory of the Nixpkgs repository.) The remote
-  <literal>channels</literal> refers to a read-only repository that tracks the
-  Nixpkgs/NixOS channels (see <xref linkend="sec-upgrading"/> for more
+  subdirectory of the Nixpkgs repository.) The
+  <literal>nixpkgs</literal> repository has branches that correspond
+  to each Nixpkgs/NixOS channel (see <xref linkend="sec-upgrading"/> for more
   information about channels). Thus, the Git branch
-  <literal>channels/nixos-17.03</literal> will contain the latest built and
+  <literal>origin/nixos-17.03</literal> will contain the latest built and
   tested version available in the <literal>nixos-17.03</literal> channel.
  </para>
  <para>
@@ -40,15 +39,15 @@
   Or, to base your local branch on the latest version available in a NixOS
   channel:
 <screen>
-<prompt>$ </prompt>git remote update channels
-<prompt>$ </prompt>git checkout -b local channels/nixos-17.03
+<prompt>$ </prompt>git remote update origin
+<prompt>$ </prompt>git checkout -b local origin/nixos-17.03
 </screen>
   (Replace <literal>nixos-17.03</literal> with the name of the channel you want
   to use.) You can use <command>git merge</command> or <command>git
   rebase</command> to keep your local branch in sync with the channel, e.g.
 <screen>
-<prompt>$ </prompt>git remote update channels
-<prompt>$ </prompt>git merge channels/nixos-17.03
+<prompt>$ </prompt>git remote update origin
+<prompt>$ </prompt>git merge origin/nixos-17.03
 </screen>
   You can use <command>git cherry-pick</command> to copy commits from your
   local branch to the upstream branch.

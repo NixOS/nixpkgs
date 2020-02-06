@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, enableShared ? true }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "5.3.0";
-  name = "fmt-${version}";
+  version = "6.0.0";
+  pname = "fmt";
 
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
-    rev = "${version}";
-    sha256 = "1hl9s69a5ql5nckc0ifh2fzlgsgv1wsn6yhqkpnrhasqkhj0hgv4";
+    rev = version;
+    sha256 = "0yfrw6by4h27k3psv9x1q7z2kdbz7pkwxidr494bpa6ppglij6ba";
   };
 
   outputs = [ "out" "dev" ];
@@ -17,16 +17,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DFMT_TEST=TRUE"
-    "-DBUILD_SHARED_LIBS=${if enableShared then "TRUE" else "FALSE"}"
+    "-DBUILD_SHARED_LIBS=TRUE"
   ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
-  # preCheckHook ensures the test binaries can find libfmt.so.5
-  preCheck = if enableShared
-             then "export LD_LIBRARY_PATH=\"$PWD\""
-             else "";
+  # preCheckHook ensures the test binaries can find libfmt.so
+  preCheck = ''
+    export LD_LIBRARY_PATH="$PWD"
+  '';
 
   meta = with stdenv.lib; {
     description = "Small, safe and fast formatting library";

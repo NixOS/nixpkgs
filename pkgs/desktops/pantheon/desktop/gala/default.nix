@@ -1,23 +1,43 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, python3, ninja, vala
-, desktop-file-utils, gettext, libxml2, gtk3, granite, libgee, bamf, libcanberra
-, libcanberra-gtk3, gnome-desktop, mutter, clutter, plank, elementary-icon-theme
-, elementary-settings-daemon, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, python3
+, ninja
+, vala
+, desktop-file-utils
+, gettext
+, libxml2
+, gtk3
+, granite
+, libgee
+, bamf
+, libcanberra
+, libcanberra-gtk3
+, gnome-desktop
+, mutter
+, clutter
+, plank
+, elementary-icon-theme
+, elementary-settings-daemon
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "gala";
-  version = "unstable-2019-07-01"; # Is tracking https://github.com/elementary/gala/commits/stable/juno
+  version = "3.2.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
-    rev = "5f1dbf15a7571bd16779d964b0cb3bd54232a928";
-    sha256 = "1mbxqqfl54pydgs9pvvgfdbbck91vwyg770gd3vgzc6kmf6c34d5";
+    rev = version;
+    sha256 = "1vf55ls3h20zpf0yxb206cijq8nkf89z2lmhccb4i1g2zajd31ix";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      versionPolicy = "master";
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -48,7 +68,9 @@ stdenv.mkDerivation rec {
     plank
   ];
 
-  patches = [ ./plugins-dir.patch ];
+  patches = [
+    ./plugins-dir.patch
+  ];
 
   postPatch = ''
     chmod +x build-aux/meson/post_install.py

@@ -11,14 +11,14 @@ revs = {
   "8.2" = "8.2";
 };
 in stdenv.mkDerivation rec {
-  name = "acl2-${version}";
+  pname = "acl2";
   version = "8.2";
 
   src = fetchFromGitHub {
     owner = "acl2-devel";
     repo = "acl2-devel";
-    rev = revs."${version}";
-    sha256 = hashes."${version}";
+    rev = revs.${version};
+    sha256 = hashes.${version};
   };
 
   buildInputs = [ sbcl

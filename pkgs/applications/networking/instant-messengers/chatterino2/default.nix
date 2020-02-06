@@ -1,6 +1,6 @@
-{ stdenv, pkgconfig, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl }:
+{ mkDerivation, lib, pkgconfig, fetchFromGitHub, qtbase, qtsvg, qtmultimedia, qmake, boost, openssl }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "chatterino2";
   version = "unstable-2019-05-11";
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase qtsvg qtmultimedia boost openssl ];
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A chat client for Twitch chat";
     longDescription = ''
       Chatterino is a chat client for Twitch chat. It aims to be an

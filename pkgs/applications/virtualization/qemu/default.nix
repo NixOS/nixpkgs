@@ -35,16 +35,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.0.0";
-  name = "qemu-"
-    + stdenv.lib.optionalString xenSupport "xen-"
-    + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
-    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
-    + version;
+  version = "4.2.0";
+  pname = "qemu"
+    + stdenv.lib.optionalString xenSupport "-xen"
+    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
+    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "085g6f75si8hbn94mnnjn1r7ysixn5bqj4bhqwvadj00fhzp2zvd";
+    sha256 = "1gczv8hn3wqci86css3mhzrppp3z8vppxw25l08j589k6bvz7x1w";
   };
 
   nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
@@ -79,9 +78,11 @@ stdenv.mkDerivation rec {
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
     (fetchpatch {
-      url = "https://git.qemu.org/?p=qemu.git;a=patch;h=d52680fc932efb8a2f334cc6993e705ed1e31e99";
-      name = "CVE-2019-12155.patch";
-      sha256 = "0h2q71mcz3gvlrbfkqcgla74jdg73hvzcrwr4max2ckpxx8x9207";
+      name = "CVE-2019-15890.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=c59279437eda91841b9d26079c70b8a540d41204";
+      sha256 = "1q2rc67mfdz034mk81z9bw105x9zad7n954sy3kq068b1svrf7iy";
+      stripLen = 1;
+      extraPrefix = "slirp/";
     })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [

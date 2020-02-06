@@ -4,7 +4,7 @@
 }:
 
 buildGoPackage rec {
-  name = "gocyclo-unstable-${version}";
+  pname = "gocyclo-unstable";
   version = "2015-02-08";
   rev = "aa8f8b160214d8dfccfe3e17e578dd0fcc6fede7";
 

@@ -5,10 +5,11 @@
 let
   generic = { version, sha256, license }:
     stdenv.mkDerivation rec {
-      name = "ragel-${version}";
+      pname = "ragel";
+      inherit version;
 
       src = fetchurl {
-        url = "https://www.colm.net/files/ragel/${name}.tar.gz";
+        url = "https://www.colm.net/files/ragel/${pname}-${version}.tar.gz";
         inherit sha256;
       };
 
@@ -20,7 +21,7 @@ let
 
       configureFlags = [ "--with-colm=${colm}" ];
 
-      NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isGNU "-std=gnu++98";
+      NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-std=gnu++98";
 
       doCheck = true;
 

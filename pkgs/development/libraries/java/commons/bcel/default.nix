@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.2";
-  name    = "commons-bcel-${version}";
+  pname = "commons-bcel";
 
   src = fetchurl {
     url    = "mirror://apache/commons/bcel/binaries/bcel-${version}.tar.gz";

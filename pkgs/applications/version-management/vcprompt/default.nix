@@ -1,7 +1,7 @@
 { stdenv, fetchhg, autoconf, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "vcprompt-${version}";
+  pname = "vcprompt";
   version = "1.2.1";
 
   src = fetchhg {

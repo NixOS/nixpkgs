@@ -12,12 +12,12 @@
 # Debian builds with std.h (systemtap).
 
 stdenv.mkDerivation rec {
-  name = "lttng-ust-${version}";
-  version = "2.10.4";
+  pname = "lttng-ust";
+  version = "2.10.5";
 
   src = fetchurl {
-    url = "https://lttng.org/files/lttng-ust/${name}.tar.bz2";
-    sha256 = "0rx9q5r9qcdx3i9i0rx28p33yl52sd6f35qj7qs4li2w42xv9mbm";
+    url = "https://lttng.org/files/lttng-ust/${pname}-${version}.tar.bz2";
+    sha256 = "0ddwk0nl28bkv2xb78gz16a2bvlpfbjmzwfbgwf5p1cq46dyvy86";
   };
 
   buildInputs = [ python ];

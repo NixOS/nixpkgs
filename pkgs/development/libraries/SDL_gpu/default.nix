@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, libGLU }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "SDL_gpu-unstable";
   version = "2019-01-24";
 

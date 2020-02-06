@@ -5,10 +5,9 @@
 buildPythonPackage rec {
   pname = "nwdiag";
   version = "1.0.4";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/n/nwdiag/${name}.tar.gz";
+    url = "mirror://pypi/n/nwdiag/${pname}-${version}.tar.gz";
     sha256 = "002565875559789a2dfc5f578c07abdf44269c3f7cdf78d4809bdc4bdc2213fa";
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libunarr-${version}";
+  pname = "libunarr";
   version = "1.0.1";
 
   src = fetchurl {

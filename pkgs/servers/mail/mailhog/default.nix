@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "MailHog-${version}";
+  pname = "MailHog";
   version = "1.0.0";
   rev = "v${version}";
 

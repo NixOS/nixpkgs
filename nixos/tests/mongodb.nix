@@ -1,6 +1,6 @@
 # This test start mongodb, runs a query using mongo shell
 
-import ./make-test.nix ({ pkgs, ...} : let
+import ./make-test-python.nix ({ pkgs, ...} : let
   testQuery = pkgs.writeScript "nixtest.js" ''
     db.greetings.insert({ "greeting": "hello" });
     print(db.greetings.findOne().greeting);
@@ -33,8 +33,10 @@ in {
     };
 
   testScript = ''
-    startAll;
-    $one->waitForUnit("mongodb.service");
-    $one->succeed("mongo -u nixtest -p nixtest nixtest ${testQuery}") =~ /hello/ or die;
+    start_all()
+    one.wait_for_unit("mongodb.service")
+    one.succeed(
+        "mongo -u nixtest -p nixtest nixtest ${testQuery} | grep -q hello"
+    )
   '';
 })

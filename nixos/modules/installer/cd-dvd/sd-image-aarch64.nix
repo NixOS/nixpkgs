@@ -59,4 +59,8 @@ in
       ${extlinux-conf-builder} -t 3 -c ${config.system.build.toplevel} -d ./files/boot
     '';
   };
+
+  # the installation media is also the installation target,
+  # so we don't want to provide the installation configuration.nix.
+  installer.cloneConfig = false;
 }

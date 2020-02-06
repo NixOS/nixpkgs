@@ -3,7 +3,7 @@
 , dataDir ? "/var/lib/softether" }:
 
 stdenv.mkDerivation rec {
-  name = "softether-${version}";
+  pname = "softether";
   version = "4.29";
   build = "9680";
 

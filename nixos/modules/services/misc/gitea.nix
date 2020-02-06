@@ -55,6 +55,11 @@ let
     [service]
     DISABLE_REGISTRATION = ${boolToString cfg.disableRegistration}
 
+    ${optionalString (cfg.mailerPasswordFile != null) ''
+      [mailer]
+      PASSWD = #mailerpass#
+    ''}
+
     ${cfg.extraConfig}
   '';
 in
@@ -255,6 +260,13 @@ in
         description = "Upper level of template and static files path.";
       };
 
+      mailerPasswordFile = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        example = "/var/lib/secrets/gitea/mailpw";
+        description = "Path to a file containing the SMTP password.";
+      };
+
       disableRegistration = mkEnableOption "the registration lock" // {
         description = ''
           By default any user can create an account on this <literal>gitea</literal> instance.
@@ -310,6 +322,7 @@ in
       "d '${cfg.stateDir}/conf' - ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom' - ${cfg.user} gitea - -"
       "d '${cfg.stateDir}/custom/conf' - ${cfg.user} gitea - -"
+      "d '${cfg.stateDir}/log' - ${cfg.user} gitea - -"
       "d '${cfg.repositoryRoot}' - ${cfg.user} gitea - -"
       "Z '${cfg.stateDir}' - ${cfg.user} gitea - -"
 
@@ -344,9 +357,15 @@ in
           KEY="$(head -n1 ${secretKey})"
           DBPASS="$(head -n1 ${cfg.database.passwordFile})"
           JWTSECRET="$(head -n1 ${jwtSecret})"
+          ${if (cfg.mailerPasswordFile == null) then ''
+            MAILERPASSWORD="#mailerpass#"
+          '' else ''
+            MAILERPASSWORD="$(head -n1 ${cfg.mailerPasswordFile} || :)"
+          ''}
           sed -e "s,#secretkey#,$KEY,g" \
               -e "s,#dbpass#,$DBPASS,g" \
-              -e "s,#jwtsecet#,$JWTSECET,g" \
+              -e "s,#jwtsecret#,$JWTSECRET,g" \
+              -e "s,#mailerpass#,$MAILERPASSWORD,g" \
               -i ${runConfig}
           chmod 640 ${runConfig} ${secretKey} ${jwtSecret}
         ''}
@@ -375,6 +394,26 @@ in
         WorkingDirectory = cfg.stateDir;
         ExecStart = "${gitea.bin}/bin/gitea web";
         Restart = "always";
+
+        # Filesystem
+        ProtectHome = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        ReadWritePaths = cfg.stateDir;
+        # Caps
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        # Misc.
+        LockPersonality = true;
+        RestrictRealtime = true;
+        PrivateMounts = true;
+        PrivateUsers = true;
+        MemoryDenyWriteExecute = true;
+        SystemCallFilter = "~@clock @cpu-emulation @debug @keyring @memlock @module @mount @obsolete @raw-io @reboot @resources @setuid @swap";
+        SystemCallArchitectures = "native";
+        RestrictAddressFamilies = "AF_UNIX AF_INET AF_INET6";
       };
 
       environment = {
@@ -390,6 +429,7 @@ in
         home = cfg.stateDir;
         useDefaultShell = true;
         group = "gitea";
+        isSystemUser = true;
       };
     };
 
@@ -433,4 +473,5 @@ in
       timerConfig.OnCalendar = cfg.dump.interval;
     };
   };
+  meta.maintainers = with lib.maintainers; [ srhb ];
 }

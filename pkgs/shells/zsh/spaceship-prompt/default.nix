@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec{
-  name = "spaceship-prompt-${version}";
-  version = "3.7.1";
+stdenv.mkDerivation rec {
+  pname = "spaceship-prompt";
+  version = "3.11.2";
 
   src = fetchFromGitHub {
     owner = "denysdovhan";
     repo = "spaceship-prompt";
-    sha256 = "0laihax18bs254rm2sww5wkjbmkp4m5c8aicgqpi4diz7difxk6z";
-    rev = "aaa34aeab9ba0a99416788f627ec9aeffba392f0";
+    sha256 = "1q7m9mmg82n4fddfz01y95d5n34xnzhrnn1lli0vih39sgmzim9b";
+    rev = "v${version}";
   };
 
   installPhase = ''

@@ -91,7 +91,7 @@ in
           BATTERYLEVEL 50
           MINUTES 5
         '';
-        type = types.string;
+        type = types.lines;
         description = ''
           Contents of the runtime configuration file, apcupsd.conf. The default
           settings makes apcupsd autodetect USB UPSes, limit network access to
@@ -106,7 +106,7 @@ in
         example = {
           doshutdown = ''# shell commands to notify that the computer is shutting down'';
         };
-        type = types.attrsOf types.string;
+        type = types.attrsOf types.lines;
         description = ''
           Each attribute in this option names an apcupsd event and the string
           value it contains will be executed in a shell, in response to that

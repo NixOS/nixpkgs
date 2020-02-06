@@ -2,7 +2,7 @@
 
 assert stdenv ? cc && stdenv.cc.libc != null;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "scmccid-5.0.11";
 
   src = if stdenv.hostPlatform.system == "i686-linux" then (fetchurl {

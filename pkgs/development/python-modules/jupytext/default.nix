@@ -1,41 +1,33 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, testfixtures
-, pyyaml
+{ lib, buildPythonPackage, fetchPypi, isPy27
 , mock
 , nbformat
 , pytest
+, pyyaml
 }:
 
 buildPythonPackage rec {
   pname = "jupytext";
-  version = "1.1.3";
+  version = "1.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1klcx333kpgb5gbaasmz07brqjxvls3l5dpj0kv9cfsd76cq17yh";
+    sha256 = "081c8dbql93bpl72pzg0z8vg482r3f350490mhqn965s10bz8say";
   };
 
   propagatedBuildInputs = [
     pyyaml
     nbformat
-    testfixtures
-  ];
+  ] ++ lib.optionals isPy27 [ mock ]; # why they put it in install_requires, who knows
+
   checkInputs = [
-    pytest
-  ];
-  # setup.py checks for those even though they're not needed at runtime (only
-  # for tests), thus not propagated
-  buildInputs = [
-    mock
     pytest
   ];
 
   # requires test notebooks which are not shipped with the pypi release
+  # also, pypi no longer includes tests
   doCheck = false;
   checkPhase = ''
-    py.test
+    pytest
   '';
 
   meta = with lib; {

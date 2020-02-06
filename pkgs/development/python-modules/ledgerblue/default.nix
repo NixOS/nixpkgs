@@ -1,18 +1,19 @@
 { stdenv, fetchPypi, buildPythonPackage, hidapi
 , pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
+, websocket_client
 }:
 
 buildPythonPackage rec {
   pname = "ledgerblue";
-  version = "0.1.24";
+  version = "0.1.31";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fc111ed5db8da93f280928d966f9d87416b464f5f09cec80b60e88c4c1265026";
+    sha256 = "f1fc7ab685780309a7220c6ee517d88072cc594a9615bcc18e68ed5f149fa432";
   };
 
   propagatedBuildInputs = [
-    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex
+    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket_client
   ];
 
   # No tests

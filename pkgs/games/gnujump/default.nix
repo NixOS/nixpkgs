@@ -1,17 +1,15 @@
 { stdenv, fetchurl, SDL, SDL_image, SDL_mixer }:
 
 stdenv.mkDerivation rec {
-  name = "gnujump-${version}";
+  pname = "gnujump";
   version = "1.0.8";
   src = fetchurl {
-    url = "mirror://gnu/gnujump/${name}.tar.gz";
+    url = "mirror://gnu/gnujump/${pname}-${version}.tar.gz";
     sha256 = "05syy9mzbyqcfnm0hrswlmhwlwx54f0l6zhcaq8c1c0f8dgzxhqk";
   };
   buildInputs = [ SDL SDL_image SDL_mixer ];
 
-  NIX_LDFLAGS = [
-    "-lm"
-  ];
+  NIX_LDFLAGS = "-lm";
 
   meta = with stdenv.lib; {
     homepage = https://jump.gnu.sinusoid.es/index.php?title=Main_Page;

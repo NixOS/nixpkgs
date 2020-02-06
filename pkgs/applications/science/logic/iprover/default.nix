@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, eprover, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "iprover-${version}";
+  pname = "iprover";
   version = "2018_Jul_24_11h";
 
   src = fetchurl {
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp iproveropt "$out/bin"
 
-    mkdir -p "$out/share/${name}"
-    cp *.p "$out/share/${name}"
+    mkdir -p "$out/share/${pname}-${version}"
+    cp *.p "$out/share/${pname}-${version}"
     echo -e "#! ${stdenv.shell}\\n$out/bin/iproveropt --clausifier \"${eprover}/bin/eprover\" --clausifier_options \" --tstp-format --silent --cnf \" \"\$@\"" > "$out"/bin/iprover
     chmod a+x  "$out"/bin/iprover
   '';

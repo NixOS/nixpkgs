@@ -3,10 +3,11 @@
 let version = "1.6.1";
 in
 stdenv.mkDerivation rec {
-  name = "nitrogen-${version}";
+  pname = "nitrogen";
+  inherit version;
 
   src = fetchurl {
-    url = "http://projects.l3ib.org/nitrogen/files/${name}.tar.gz";
+    url = "http://projects.l3ib.org/nitrogen/files/${pname}-${version}.tar.gz";
     sha256 = "0zc3fl1mbhq0iyndy4ysmy8vv5c7xwf54rbgamzfhfvsgdq160pl";
   };
 

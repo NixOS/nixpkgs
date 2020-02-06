@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgee";
-  version = "0.20.1";
+  version = "0.20.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0c26x8gi3ivmhlbqcmiag4jwrkvcy28ld24j55nqr3jikb904a5v";
+    sha256 = "0g1mhl7nidg82v4cikkk8dakzc18hg7wv0dsf2pbyijzfm5mq0wy";
   };
 
   doCheck = true;

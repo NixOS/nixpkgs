@@ -1,13 +1,13 @@
 { stdenv, fetchurl, cmake, llvmPackages, python2 }:
 
 stdenv.mkDerivation rec {
-  name = "include-what-you-use-${version}";
+  pname = "include-what-you-use";
   # Also bump llvmPackages in all-packages.nix to the supported version!
-  version = "0.10";
+  version = "0.13";
 
   src = fetchurl {
-    sha256 = "16alan9rwbhpyfxmlpc7gbfnbqd877wdqrkvgqrjb1jlqkzpg55s";
-    url = "${meta.homepage}/downloads/${name}.src.tar.gz";
+    sha256 = "1jav4qf7d303by9iy6v08w73wfwzj76i54inh90w1s34m9q44aa9";
+    url = "${meta.homepage}/downloads/${pname}-${version}.src.tar.gz";
   };
 
   buildInputs = with llvmPackages; [ clang-unwrapped llvm python2 ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     substituteInPlace $out/bin/iwyu_tool.py \
-      --replace "['include-what-you-use']" "['$out/bin/include-what-you-use']"
+      --replace "'include-what-you-use'" "'$out/bin/include-what-you-use'"
   '';
 
   meta = with stdenv.lib; {

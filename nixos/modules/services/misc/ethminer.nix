@@ -71,7 +71,7 @@ in
 
       maxPower = mkOption {
         type = types.int;
-        default = 115;
+        default = 113;
         description = "Miner max watt usage.";
       };
 
@@ -92,7 +92,9 @@ in
 
       serviceConfig = {
         DynamicUser = true;
+        ExecStartPre = "${pkgs.ethminer}/bin/.ethminer-wrapped --list-devices";
         ExecStartPost = optional (cfg.toolkit == "cuda") "+${getBin config.boot.kernelPackages.nvidia_x11}/bin/nvidia-smi -pl ${toString cfg.maxPower}";
+        Restart = "always";
       };
 
       environment = {

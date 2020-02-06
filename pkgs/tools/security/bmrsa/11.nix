@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "bmrsa-${version}";
+  pname = "bmrsa";
   version = "11";
 
   src = fetchurl {

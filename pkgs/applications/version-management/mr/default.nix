@@ -1,7 +1,7 @@
 { stdenv, fetchgit, perl }:
 
-stdenv.mkDerivation rec {
-  name = "mr-${version}";
+stdenv.mkDerivation {
+  pname = "mr";
   version = "1.20180726";
 
   src = fetchgit {
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Multiple Repository management tool";

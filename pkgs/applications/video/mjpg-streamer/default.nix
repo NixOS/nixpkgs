@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, libjpeg }:
 
-stdenv.mkDerivation rec {
-  name = "mjpg-streamer-${version}";
+stdenv.mkDerivation {
+  pname = "mjpg-streamer";
   version = "unstable-2019-05-24";
 
   src = fetchFromGitHub {

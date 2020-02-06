@@ -1,10 +1,10 @@
 { stdenv
 , fetchFromGitHub
 , desktop-file-utils
+, vala
 , gettext
 , glib
 , gtk3
-, hicolor-icon-theme
 , libgee
 , libdazzle
 , meson
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "5.1.1";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "1mfg3iksk4z65qkc652vbc6pl34vxw5s560flhcj9g87n6444hqw";
+    sha256 = "1y0n1p14kg24qnybi201181q7j6vm20ka4xwmgggjll9v6qflvaz";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     gettext
     meson
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     python3
     wrapGAppsHook
@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk3
-    hicolor-icon-theme
     libdazzle
     libgee
     pantheon.granite
@@ -54,6 +53,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "The always-incognito web browser";

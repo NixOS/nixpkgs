@@ -4,7 +4,6 @@
 rustPlatform.buildRustPackage rec {
   pname = "panopticon";
   version = "unstable-20171202";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "das-labor";

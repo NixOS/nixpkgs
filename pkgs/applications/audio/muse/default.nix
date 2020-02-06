@@ -1,7 +1,9 @@
 { stdenv
 , fetchFromGitHub
 , libjack2
-, qt5
+, wrapQtAppsHook
+, qtsvg
+, qttools
 , cmake
 , libsndfile
 , libsamplerate
@@ -13,15 +15,14 @@
 , dssi
 , liblo
 , pkgconfig
-, gitAndTools
 }:
 
-stdenv.mkDerivation rec {
-  name = "muse-sequencer-${version}";
+stdenv.mkDerivation {
+  pname = "muse-sequencer";
   version = "3.1pre1";
 
   meta = with stdenv.lib; {
-    homepage = http://www.muse-sequencer.org;
+    homepage = "https://www.muse-sequencer.org/";
     description = "MIDI/Audio sequencer with recording and editing capabilities";
     longDescription = ''
       MusE is a MIDI/Audio sequencer with recording and editing capabilities
@@ -45,14 +46,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    gitAndTools.gitFull
+    wrapQtAppsHook
+    qttools
+    cmake
   ];
 
   buildInputs = [
     libjack2
-    qt5.qtsvg
-    qt5.qttools
-    cmake
+    qtsvg
     libsndfile
     libsamplerate
     ladspaH
@@ -65,15 +66,4 @@ stdenv.mkDerivation rec {
   ];
 
   sourceRoot = "source/muse3";
-
-  buildPhase = ''
-    cd ..
-    bash compile_muse.sh
-  '';
-
-  installPhase = ''
-    mkdir $out
-    cd build
-    make install
-  '';
 }

@@ -1,16 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen, makeWrapper
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, doxygen, makeWrapper
 , msgpack, neovim, pythonPackages, qtbase }:
 
 let
-  unwrapped = stdenv.mkDerivation rec {
+  unwrapped = mkDerivation rec {
     pname = "neovim-qt-unwrapped";
-    version = "0.2.11";
+    version = "0.2.15";
 
     src = fetchFromGitHub {
       owner  = "equalsraf";
       repo   = "neovim-qt";
       rev    = "v${version}";
-      sha256 = "0pc1adxc89p2rdvb6nxyqr9sjzqz9zw2dg7a4ardxsl3a8jga1wh";
+      sha256 = "097nykglqp4jyvla4yp32sc1f1hph4cqqhp6rm9ww7br8c0j54xl";
     };
 
     cmakeFlags = [
@@ -24,7 +24,7 @@ let
       jinja2 python msgpack
     ]);
 
-    nativeBuildInputs = [ cmake doxygen makeWrapper ];
+    nativeBuildInputs = [ cmake doxygen ];
 
     enableParallelBuilding = true;
 
@@ -60,8 +60,9 @@ in
         --prefix PATH : "${neovim}/bin"
 
       # link .desktop file
-      mkdir -p "$out/share"
+      mkdir -p "$out/share/pixmaps"
       ln -s '${unwrapped}/share/applications' "$out/share/applications"
+      ln -s '${unwrapped}/share/pixmaps/nvim-qt.png' "$out/share/pixmaps/nvim-qt.png"
     '';
 
     preferLocalBuild = true;

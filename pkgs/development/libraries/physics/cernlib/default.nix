@@ -2,10 +2,13 @@
 
 stdenv.mkDerivation rec {
   version = "2006";
-  name = "cernlib-${version}";
+  pname = "cernlib";
 
   src = fetchurl {
-    url = "https://cernlib.web.cern.ch/cernlib/download/${version}_source/tar/${version}_src.tar.gz";
+    urls = [
+      "https://ftp.riken.jp/cernlib/download/${version}_source/tar/${version}_src.tar.gz"
+      "https://cernlib.web.cern.ch/cernlib/download/${version}_source/tar/${version}_src.tar.gz"
+    ];
     sha256 = "0awla1rl96z82br7slcmg8ks1d2a7slk6dj79ywb871j2ksi3fky";
   };
 

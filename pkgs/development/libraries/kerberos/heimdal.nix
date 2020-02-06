@@ -6,7 +6,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "heimdal-${version}";
+  pname = "heimdal";
   version = "7.7.0";
 
   src = fetchFromGitHub {

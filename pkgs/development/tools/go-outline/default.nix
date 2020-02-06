@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "go-outline-${version}";
+  pname = "go-outline";
   version = "unstable-2018-11-22";
   rev = "7182a932836a71948db4a81991a494751eccfe77";
 

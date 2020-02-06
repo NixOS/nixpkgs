@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "hexd-${version}";
+  pname = "hexd";
   version = "1.0.0";
 
   src = fetchFromGitHub {

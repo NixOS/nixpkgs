@@ -2,7 +2,6 @@
 , Carbon
 , Cocoa
 , Kernel
-, cf-private
 , fetchFromGitHub
 , lib
 , mesa_glu
@@ -11,7 +10,7 @@
 }:
 
 buildGoPackage rec {
-  name = "aminal-${version}";
+  pname = "aminal";
   version = "0.8.6";
 
   goPackagePath = "github.com/liamg/aminal";
@@ -25,12 +24,7 @@ buildGoPackage rec {
       xorg.libXinerama
       xorg.libXrandr
       xorg.libXxf86vm
-    ] ++ lib.optionals stdenv.isDarwin [
-      Carbon
-      Cocoa
-      Kernel
-      cf-private  /* Needed for NSDefaultRunLoopMode */
-    ];
+    ] ++ lib.optionals stdenv.isDarwin [ Carbon Cocoa Kernel ];
 
   src = fetchFromGitHub {
     owner = "liamg";

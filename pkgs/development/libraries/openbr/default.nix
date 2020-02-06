@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, cmake, opencv, qtbase, qtsvg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   version = "0.5";
-  name = "openbr-${version}";
+  pname = "openbr";
 
   src = fetchFromGitHub {
     owner = "biometrics";

@@ -40,7 +40,7 @@ in
 
   config = mkIf cfg.enable {
 
-    boot.extraTTYs = [ cfg.tty ];
+    console.extraTTYs = [ cfg.tty ];
 
     systemd.services.rogue =
       { description = "Rogue dungeon crawling game";

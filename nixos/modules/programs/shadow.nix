@@ -6,17 +6,27 @@ with lib;
 
 let
 
+  /*
+  There are three different sources for user/group id ranges, each of which gets
+  used by different programs:
+  - The login.defs file, used by the useradd, groupadd and newusers commands
+  - The update-users-groups.pl file, used by NixOS in the activation phase to
+    decide on which ids to use for declaratively defined users without a static
+    id
+  - Systemd compile time options -Dsystem-uid-max= and -Dsystem-gid-max=, used
+    by systemd for features like ConditionUser=@system and systemd-sysusers
+  */
   loginDefs =
     ''
       DEFAULT_HOME yes
 
       SYS_UID_MIN  400
-      SYS_UID_MAX  499
+      SYS_UID_MAX  999
       UID_MIN      1000
       UID_MAX      29999
 
       SYS_GID_MIN  400
-      SYS_GID_MAX  499
+      SYS_GID_MAX  999
       GID_MIN      1000
       GID_MAX      29999
 
@@ -66,22 +76,18 @@ in
         config.users.defaultUserShell;
 
     environment.etc =
-      [ { # /etc/login.defs: global configuration for pwdutils.  You
-          # cannot login without it!
-          source = pkgs.writeText "login.defs" loginDefs;
-          target = "login.defs";
-        }
+      { # /etc/login.defs: global configuration for pwdutils.  You
+        # cannot login without it!
+        "login.defs".source = pkgs.writeText "login.defs" loginDefs;
 
-        { # /etc/default/useradd: configuration for useradd.
-          source = pkgs.writeText "useradd"
-            ''
-              GROUP=100
-              HOME=/home
-              SHELL=${utils.toShellPath config.users.defaultUserShell}
-            '';
-          target = "default/useradd";
-        }
-      ];
+        # /etc/default/useradd: configuration for useradd.
+        "default/useradd".source = pkgs.writeText "useradd"
+          ''
+            GROUP=100
+            HOME=/home
+            SHELL=${utils.toShellPath config.users.defaultUserShell}
+          '';
+      };
 
     security.pam.services =
       { chsh = { rootOK = true; };

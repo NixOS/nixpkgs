@@ -1,22 +1,22 @@
 { buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
-  name = "lf-${version}";
-  version = "12";
+  pname = "lf";
+  version = "13";
 
   src = fetchFromGitHub {
     owner = "gokcehan";
     repo = "lf";
     rev = "r${version}";
-    sha256 = "1pjydnwlc6mrnwz13s13c91nvjvb1ibwl944ppg8xq8dcy9b2cs4";
+    sha256 = "1ld3q75v8rvp169w5p85z1vznqs9bhck6bm2f6fykxx16hmpb6ga";
   };
 
   modSha256 = "14fvn8yjm9cnpsmzgxw2dypr3h8h36mxrbk7zma42w8rsp46jpz7";
 
   # TODO: Setting buildFlags probably isn't working properly. I've tried a few
   # variants, e.g.:
-  # - buildFlags = "-ldflags \"-s -w -X 'main.gVersion=${version}'\"";
-  # - buildFlags = "-ldflags \\\"-X ${goPackagePath}/main.gVersion=${version}\\\"";
+  # - buildFlags = [ "-ldflags" "\"-s" "-w"" ""-X 'main.gVersion=${version}'\"" ];
+  # - buildFlags = [ "-ldflags" "\\\"-X" "${goPackagePath}/main.gVersion=${version}\\\"" ];
   # Override the build phase (to set buildFlags):
   buildPhase = ''
     runHook preBuild

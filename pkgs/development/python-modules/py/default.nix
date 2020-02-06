@@ -1,17 +1,22 @@
 { stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
+
 buildPythonPackage rec {
   pname = "py";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "bf92637198836372b520efcba9e020c330123be8ce527e535d185ed4b6f45694";
+    sha256 = "5e27081401262157467ad6e7f851b7aa402c5852dbcb3dae06768434de5752aa";
   };
 
   # Circular dependency on pytest
   doCheck = false;
 
-  buildInputs = [ setuptools_scm ];
+  nativeBuildInputs = [ setuptools_scm ];
+
+  pythonImportsCheck = [
+    "py"
+  ];
 
   meta = with stdenv.lib; {
     description = "Library with cross-python path, ini-parsing, io, code, log facilities";

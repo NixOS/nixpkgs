@@ -1,14 +1,14 @@
 diff -Naur xapian-core.old/tests/api_db.cc xapian-core.new/tests/api_db.cc
 --- xapian-core.old/tests/api_db.cc
 +++ xapian-core.new/tests/api_db.cc
-@@ -998,6 +998,7 @@
+@@ -1020,6 +1020,7 @@
  
  // test for keepalives
  DEFINE_TESTCASE(keepalive1, remote) {
 +    SKIP_TEST("Fails in darwin nix build environment");
-     Xapian::Database db(get_remote_database("apitest_simpledata", 5000));
+     XFAIL_FOR_BACKEND("multi_glass_remoteprog_glass",
+ 		      "Multi remote databases are currently buggy");
  
-     /* Test that keep-alives work */
 diff -Naur xapian-core.old/tests/api_scalability.cc xapian-core.new/tests/api_scalability.cc
 --- xapian-core.old/tests/api_scalability.cc
 +++ xapian-core.new/tests/api_scalability.cc

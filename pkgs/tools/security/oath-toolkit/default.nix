@@ -5,7 +5,7 @@ let
     if stdenv.isDarwin then xmlsec
     else pam;
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "oath-toolkit-2.6.2";
 
   src = fetchFromGitLab {

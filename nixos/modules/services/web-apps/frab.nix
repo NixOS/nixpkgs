@@ -19,7 +19,7 @@ let
     RAILS_SERVE_STATIC_FILES = "1";
   } // cfg.extraEnvironment;
 
-  frab-rake = pkgs.stdenv.mkDerivation rec {
+  frab-rake = pkgs.stdenv.mkDerivation {
     name = "frab-rake";
     buildInputs = [ package.env pkgs.makeWrapper ];
     phases = "installPhase fixupPhase";
@@ -173,14 +173,13 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ frab-rake ];
 
-    users.users = [
-      { name = cfg.user;
-        group = cfg.group;
+    users.users.${cfg.user} =
+      { group = cfg.group;
         home = "${cfg.statePath}";
-      }
-    ];
+        isSystemUser = true;
+      };
 
-    users.groups = [ { name = cfg.group; } ];
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.statePath}/system/attachments' - ${cfg.user} ${cfg.group} - -"

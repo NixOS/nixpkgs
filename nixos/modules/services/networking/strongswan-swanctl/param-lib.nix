@@ -21,7 +21,7 @@ rec {
   mkConf = indent : ps :
     concatMapStringsSep "\n"
       (name:
-        let value = ps."${name}";
+        let value = ps.${name};
             indentation = replicate indent " ";
         in
         indentation + (
@@ -58,7 +58,7 @@ rec {
   ) set);
 
   # Recursively map over every parameter in the given attribute set.
-  mapParamsRecursive = mapAttrsRecursiveCond' (as: (!(as ? "_type" && as._type == "param")));
+  mapParamsRecursive = mapAttrsRecursiveCond' (as: (!(as ? _type && as._type == "param")));
 
   mapAttrsRecursiveCond' = cond: f: set:
     let
@@ -67,7 +67,7 @@ rec {
           g =
             name: value:
             if isAttrs value && cond value
-              then { "${name}" = recurse (path ++ [name]) value; }
+              then { ${name} = recurse (path ++ [name]) value; }
               else f (path ++ [name]) name value;
         in mapAttrs'' g set;
     in recurse [] set;
@@ -77,6 +77,6 @@ rec {
 
   # Extract the options from the given set of parameters.
   paramsToOptions = ps :
-    mapParamsRecursive (_path: name: param: { "${name}" = param.option; }) ps;
+    mapParamsRecursive (_path: name: param: { ${name} = param.option; }) ps;
 
 }

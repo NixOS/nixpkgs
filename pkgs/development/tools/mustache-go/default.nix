@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "mustache-go-${version}";
+  pname = "mustache-go";
   version = "1.0.1";
 
   goPackagePath = "github.com/cbroglie/mustache";

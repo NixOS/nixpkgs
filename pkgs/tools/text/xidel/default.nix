@@ -1,7 +1,7 @@
 { stdenv, fetchurl, dpkg }:
 
 stdenv.mkDerivation rec {
-  name = "xidel-${version}";
+  pname = "xidel";
   version = "0.9.6";
 
   ## Source archive lacks file (manageUtils.sh), using pre-built package for now.

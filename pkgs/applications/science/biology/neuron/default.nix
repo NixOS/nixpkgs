@@ -13,7 +13,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "neuron-${version}";
+  pname = "neuron";
   version = "7.5";
 
   nativeBuildInputs = [ which pkgconfig automake autoconf libtool ];

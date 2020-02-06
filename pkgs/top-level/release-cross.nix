@@ -135,6 +135,11 @@ in
   /* Linux on the fuloong */
   fuloongminipc = mapTestOnCross lib.systems.examples.fuloongminipc linuxCommon;
 
+  /* Javacript */
+  ghcjs = mapTestOnCross lib.systems.examples.ghcjs {
+    haskell.packages.ghcjs.hello = nativePlatforms;
+  };
+
   /* Linux on Raspberrypi */
   rpi = mapTestOnCross lib.systems.examples.raspberryPi rpiCommon;
   rpi-musl = mapTestOnCross lib.systems.examples.muslpi rpiCommon;
@@ -143,9 +148,8 @@ in
 
   x86_64-musl = mapTestOnCross lib.systems.examples.musl64 linuxCommon;
 
-  /* Linux on Aarch64 */
-  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt (linuxCommon // {
-  });
+  android64 = mapTestOnCross lib.systems.examples.aarch64-android-prebuilt linuxCommon;
+  android32 = mapTestOnCross lib.systems.examples.armv7a-android-prebuilt linuxCommon;
 
   wasi32 = mapTestOnCross lib.systems.examples.wasi32 wasiCommon;
 

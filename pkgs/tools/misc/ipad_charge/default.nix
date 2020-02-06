@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libusb1 }:
 
 stdenv.mkDerivation rec {
-  name = "ipad_charge-${version}";
+  pname = "ipad_charge";
   version = "2015-02-03";
 
   src = fetchFromGitHub {

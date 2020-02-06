@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.99.8";
-  name = "fastjson-${version}";
+  pname = "fastjson";
   src = fetchFromGitHub {
     repo = "libfastjson";
     owner = "rsyslog";

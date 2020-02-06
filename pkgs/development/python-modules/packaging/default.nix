@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "packaging";
-  version = "19.0";
+  version = "19.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0c98a5d0be38ed775798ece1b9727178c4469d9c3b4ada66e8e6b7849f8732af";
+    sha256 = "28b924174df7a2fa32c1953825ff29c61e2f5e082343165438812f00d3a7fc47";
   };
 
   propagatedBuildInputs = [ pyparsing six ];

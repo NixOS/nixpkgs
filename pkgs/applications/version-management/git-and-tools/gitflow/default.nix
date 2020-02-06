@@ -5,7 +5,6 @@ with pkgs.lib;
 stdenv.mkDerivation rec {
   pname = "gitflow";
   version = "1.12.2";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "petervanderdoes";

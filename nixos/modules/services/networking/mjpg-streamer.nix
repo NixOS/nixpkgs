@@ -49,10 +49,11 @@ in {
 
   config = mkIf cfg.enable {
 
-    users.users = optional (cfg.user == "mjpg-streamer") {
-      name = "mjpg-streamer";
-      uid = config.ids.uids.mjpg-streamer;
-      group = cfg.group;
+    users.users = optionalAttrs (cfg.user == "mjpg-streamer") {
+      mjpg-streamer = {
+        uid = config.ids.uids.mjpg-streamer;
+        group = cfg.group;
+      };
     };
 
     systemd.services.mjpg-streamer = {

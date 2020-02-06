@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   version_major = "2.1.7369";
   version_minor = "1";
   version = version_major + "." + version_minor;
-  name = "sky-${version}";
+  pname = "sky";
   unpackCmd = "ar x $curSrc; tar -xf data.tar.xz";
   src = fetchurl {
     url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";

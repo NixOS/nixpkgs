@@ -13,7 +13,7 @@ stdenv.mkDerivation (common // rec {
   name = "cataclysm-dda-${version}";
 
   src = fetchFromCleverRaven {
-    rev = "${version}";
+    rev = version;
     sha256 = "00zzhx1mh1qjq668cga5nbrxp2qk6b82j5ak65skhgnlr6ii4ysc";
   };
 
@@ -24,6 +24,8 @@ stdenv.mkDerivation (common // rec {
   postPatch = common.postPatch + ''
     substituteInPlace lua/autoexec.lua --replace "/usr/share" "$out/share"
   '';
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy";
 
   makeFlags = common.makeFlags ++ [
     "LUA=1"

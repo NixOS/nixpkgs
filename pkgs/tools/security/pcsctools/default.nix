@@ -5,11 +5,11 @@
 let deps = lib.makeBinPath [ wget coreutils ];
 
 in stdenv.mkDerivation rec {
-  name = "pcsc-tools-1.5.4";
+  name = "pcsc-tools-1.5.5";
 
   src = fetchurl {
     url = "http://ludovic.rousseau.free.fr/softwares/pcsc-tools/${name}.tar.bz2";
-    sha256 = "14vw6ya8gzyw3lzyrsvfcxx7qm7ry39fbxcdqqh552c1lyxnm7n3";
+    sha256 = "01251m8hf7by8rw8fayhjxmcqvi6dp150680fpf89bqycha2vgqv";
   };
 
   buildInputs = [ udev dbus perlPackages.perl pcsclite ];

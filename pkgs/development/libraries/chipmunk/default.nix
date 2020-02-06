@@ -1,9 +1,9 @@
-{ stdenv, fetchurl, cmake, freeglut, libGLU_combined, glfw2, glew, libX11, xorgproto
+{ stdenv, fetchurl, cmake, freeglut, libGLU, libGL, glfw2, glew, libX11, xorgproto
 , libXi, libXmu
 }:
 
 stdenv.mkDerivation rec {
-  name = "chipmunk-${version}";
+  pname = "chipmunk";
   majorVersion = "7";
   version = "${majorVersion}.0.1";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs =
-    [ freeglut libGLU_combined glfw2 glew libX11 xorgproto libXi libXmu ];
+    [ freeglut libGLU libGL glfw2 glew libX11 xorgproto libXi libXmu ];
 
   postInstall = ''
     mkdir -p $out/bin

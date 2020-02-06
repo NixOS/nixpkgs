@@ -1,29 +1,35 @@
-{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub, runCommand, runCommandCC, makeWrapper
+{ stdenv, callPackage, lib, fetchurl, fetchFromGitHub
+, runCommand, runCommandCC, makeWrapper, recurseIntoAttrs
 # this package (through the fixpoint glass)
 , bazel
 , lr, xe, zip, unzip, bash, writeCBin, coreutils
 , which, gawk, gnused, gnutar, gnugrep, gzip, findutils
 # updater
-, python3, writeScript
+, python27, python3, writeScript
 # Apple dependencies
 , cctools, libcxx, CoreFoundation, CoreServices, Foundation
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , buildJdkName
 , runtimeShell
-# Always assume all markers valid (don't redownload dependencies).
-# Also, don't clean up environment variables.
+# Downstream packages for tests
+, bazel-watcher
+# Always assume all markers valid (this is needed because we remove markers; they are non-deterministic).
+# Also, don't clean up environment variables (so that NIX_ environment variables are passed to compilers).
 , enableNixHacks ? false
 , gcc-unwrapped
 , autoPatchelfHook
+, file
+, substituteAll
+, writeTextFile
 }:
 
 let
-  version = "0.27.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "0yn662dzgfr8ls4avfl12k5sr4f210bab12wml18bh4sjlxhs263";
+    sha256 = "1fvc7lakdczim1i99hrwhwx2w75afd3q9fgbhrx7i3pnav3a6kbj";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -33,7 +39,6 @@ let
     let
       srcs = (builtins.fromJSON (builtins.readFile ./src-deps.json));
       toFetchurl = d: lib.attrsets.nameValuePair d.name (fetchurl {
-        name = d.name;
         urls = d.urls;
         sha256 = d.sha256;
         });
@@ -42,12 +47,18 @@ let
       srcs.io_bazel_skydoc
       srcs.bazel_skylib
       srcs.io_bazel_rules_sass
+      srcs.platforms
       (if stdenv.hostPlatform.isDarwin
-       then srcs.${"java_tools_javac11_darwin-v2.0.zip"}
-       else srcs.${"java_tools_javac11_linux-v2.0.zip"})
-      srcs.${"coverage_output_generator-v1.0.zip"}
+       then srcs."java_tools_javac11_darwin-v7.0.zip"
+       else srcs."java_tools_javac11_linux-v7.0.zip")
+      srcs."coverage_output_generator-v2.0.zip"
       srcs.build_bazel_rules_nodejs
-      srcs.${"android_tools_pkg-0.4.tar.gz"}
+      srcs."android_tools_pkg-0.12.tar.gz"
+      srcs."0.28.3.tar.gz"
+      srcs.rules_pkg
+      srcs.rules_cc
+      srcs.rules_java
+      srcs.rules_proto
       ]);
 
   distDir = runCommand "bazel-deps" {} ''
@@ -83,7 +94,7 @@ let
     #        ],
     #     )
     #
-    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip ];
+    [ bash coreutils findutils gawk gnugrep gnutar gnused gzip which unzip file zip ];
 
   # Java toolchain used for the build and tests
   javaToolchain = "@bazel_tools//tools/jdk:toolchain_host${buildJdkName}";
@@ -99,7 +110,7 @@ let
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
 
-    src = srcDepsSet."java_tools_javac11_${system}-v2.0.zip";
+    src = srcDepsSet."java_tools_javac11_${system}-v7.0.zip";
 
     nativeBuildInputs = [ autoPatchelfHook unzip ];
     buildInputs = [ gcc-unwrapped ];
@@ -116,9 +127,22 @@ let
     '';
   };
 
+  bazelRC = writeTextFile {
+    name = "bazel-rc";
+    text = ''
+      build --override_repository=${remote_java_tools.name}=${remote_java_tools}
+      build --distdir=${distDir}
+      startup --server_javabase=${runJdk}
+
+      # load default location for the system wide configuration
+      try-import /etc/bazel.bazelrc
+    '';
+  };
+
 in
 stdenv.mkDerivation rec {
-  name = "bazel-${version}";
+  pname = "bazel";
+  inherit version;
 
   meta = with lib; {
     homepage = "https://github.com/bazelbuild/bazel/";
@@ -137,7 +161,23 @@ stdenv.mkDerivation rec {
     # argument if it's found to be an empty string.
     ./trim-last-argument-to-gcc-if-empty.patch
 
-    ./python-stub-path-fix.patch
+    # --experimental_strict_action_env (which may one day become the default
+    # see bazelbuild/bazel#2574) hardcodes the default
+    # action environment to a non hermetic value (e.g. "/usr/local/bin").
+    # This is non hermetic on non-nixos systems. On NixOS, bazel cannot find the required binaries.
+    # So we are replacing this bazel paths by defaultShellPath,
+    # improving hermeticity and making it work in nixos.
+    (substituteAll {
+      src = ./strict_action_env.patch;
+      strictActionEnvPatch = defaultShellPath;
+    })
+
+    # bazel reads its system bazelrc in /etc
+    # override this path to a builtin one
+    (substituteAll {
+      src = ./bazel_rc.patch;
+      bazelSystemBazelRCPath = bazelRC;
+    })
   ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
 
 
@@ -215,18 +255,33 @@ stdenv.mkDerivation rec {
         sha256 = "03c1bwlq5bs3hg96v4g4pg2vqwhqq6w538h66rcpw02f83yy7fs8";
       };
 
-    in {
-      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; };
-      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; };
-      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; };
-      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; };
-      pythonBinPath = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; };
+    in (if !stdenv.hostPlatform.isDarwin then {
+      # `extracted` doesn’t work on darwin
+      shebang = callPackage ./shebang-test.nix { inherit runLocal extracted bazelTest distDir; };
+    } else {}) // {
+      bashTools = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; };
+      cpp = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
+      java = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; };
+      protobuf = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; };
+      pythonBinPath = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; };
 
-      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
-      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
-      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples; bazel = bazelWithNixHacks; };
-      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
-      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix{ inherit runLocal bazelTest; bazel = bazelWithNixHacks; };
+      bashToolsWithNixHacks = callPackage ./bash-tools-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+
+      cppWithNixHacks = callPackage ./cpp-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      javaWithNixHacks = callPackage ./java-test.nix { inherit runLocal bazelTest bazel-examples distDir; bazel = bazelWithNixHacks; };
+      protobufWithNixHacks = callPackage ./protobuf-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+      pythonBinPathWithNixHacks = callPackage ./python-bin-path-test.nix { inherit runLocal bazelTest distDir; bazel = bazelWithNixHacks; };
+
+      # downstream packages using buildBazelPackage
+      # fixed-output hashes of the fetch phase need to be spot-checked manually
+      downstream = recurseIntoAttrs ({
+        inherit bazel-watcher;
+      }
+          # dm-sonnet is only packaged for linux
+      // (lib.optionalAttrs stdenv.isLinux {
+          # TODO(timokau) dm-sonnet is broken currently
+          # dm-sonnet-linux = python3.pkgs.dm-sonnet;
+      }));
     };
 
   # update the list of workspace dependencies
@@ -287,7 +342,7 @@ stdenv.mkDerivation rec {
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
-      sed -i -e "s;/usr/bin/xcrun clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
+      sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
@@ -308,11 +363,12 @@ stdenv.mkDerivation rec {
     '';
 
     genericPatches = ''
-      # Substitute python's stub shebang to plain python path. (see TODO add pr URL)
-      # See also `postFixup` where python is added to $out/nix-support
-      substituteInPlace src/main/java/com/google/devtools/build/lib/bazel/rules/python/python_stub_template.txt\
-          --replace "/usr/bin/env python" "${python3}/bin/python" \
-          --replace "NIX_STORE_PYTHON_PATH" "${python3}/bin/python" \
+      # Substitute j2objc and objc wrapper's python shebang to plain python path.
+      # These scripts explicitly depend on Python 2.7, hence we use python27.
+      # See also `postFixup` where python27 is added to $out/nix-support
+      substituteInPlace tools/j2objc/j2objc_header_map.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
+      substituteInPlace tools/j2objc/j2objc_wrapper.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
+      substituteInPlace tools/objc/j2objc_dead_code_pruner.py --replace "$!/usr/bin/python2.7" "#!${python27}/bin/python"
 
       # md5sum is part of coreutils
       sed -i 's|/sbin/md5|md5sum|' \
@@ -322,8 +378,12 @@ stdenv.mkDerivation rec {
       grep -rlZ /bin src/main/java/com/google/devtools | while IFS="" read -r -d "" path; do
         # If you add more replacements here, you must change the grep above!
         # Only files containing /bin are taken into account.
+        # We default to python3 where possible. See also `postFixup` where
+        # python3 is added to $out/nix-support
         substituteInPlace "$path" \
           --replace /bin/bash ${customBash}/bin/bash \
+          --replace "/usr/bin/env bash" ${customBash}/bin/bash \
+          --replace "/usr/bin/env python" ${python3}/bin/python \
           --replace /usr/bin/env ${coreutils}/bin/env \
           --replace /bin/true ${coreutils}/bin/true
       done
@@ -332,6 +392,11 @@ stdenv.mkDerivation rec {
       substituteInPlace tools/build_rules/test_rules.bzl \
         --replace /bin/bash ${customBash}/bin/bash
 
+      for i in $(find tools/cpp/ -type f)
+      do
+        substituteInPlace $i \
+          --replace /bin/bash ${customBash}/bin/bash
+      done
 
       # Fixup scripts that generate scripts. Not fixed up by patchShebangs below.
       substituteInPlace scripts/bootstrap/compile.sh \
@@ -339,8 +404,8 @@ stdenv.mkDerivation rec {
 
       # add nix environment vars to .bazelrc
       cat >> .bazelrc <<EOF
-      build --experimental_distdir=${distDir}
-      fetch --experimental_distdir=${distDir}
+      build --distdir=${distDir}
+      fetch --distdir=${distDir}
       build --copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --copt="/g')"
       build --host_copt="$(echo $NIX_CFLAGS_COMPILE | sed -e 's/ /" --host_copt="/g')"
       build --linkopt="-Wl,$(echo $NIX_LDFLAGS | sed -e 's/ /" --linkopt="-Wl,/g')"
@@ -358,14 +423,6 @@ stdenv.mkDerivation rec {
           -e "/\$command \\\\$/a --host_java_toolchain='${javaToolchain}' \\\\" \
           -i scripts/bootstrap/compile.sh
 
-      # --experimental_strict_action_env (which will soon become the
-      # default, see bazelbuild/bazel#2574) hardcodes the default
-      # action environment to a value that on NixOS at least is bogus.
-      # So we hardcode it to something useful.
-      substituteInPlace \
-        src/main/java/com/google/devtools/build/lib/bazel/rules/BazelRuleClassProvider.java \
-        --replace /bin:/usr/bin ${defaultShellPath}
-
       # This is necessary to avoid:
       # "error: no visible @interface for 'NSDictionary' declares the selector
       # 'initWithContentsOfURL:error:'"
@@ -381,12 +438,6 @@ stdenv.mkDerivation rec {
       mv runfiles.bash.tmp tools/bash/runfiles/runfiles.bash
 
       patchShebangs .
-
-      # bazel reads its system bazelrc in /etc
-      # override this path to a builtin one
-      substituteInPlace \
-        src/main/cpp/option_processor.cc \
-        --replace BAZEL_SYSTEM_BAZELRC_PATH "\"$out/etc/bazelrc\""
     '';
     in lib.optionalString stdenv.hostPlatform.isDarwin darwinPatches
      + genericPatches;
@@ -438,14 +489,6 @@ stdenv.mkDerivation rec {
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
     mv ./bazel_src/output/bazel $out/bin/bazel-real
 
-    wrapProgram "$out/bin/bazel" --add-flags --server_javabase="${runJdk}"
-
-    # generates the system bazelrc
-    # warning: the name of the repository depends on the system, hence
-    # the reference to .name
-    mkdir $out/etc
-    echo "build --override_repository=${remote_java_tools.name}=${remote_java_tools}" > $out/etc/bazelrc
-
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
     mv ./bazel_src/output/bazel-complete.bash $out/share/bash-completion/completions/bazel
@@ -456,24 +499,8 @@ stdenv.mkDerivation rec {
   installCheckPhase = ''
     export TEST_TMPDIR=$(pwd)
 
-    tar xf ${srcDepsSet.io_bazel_skydoc} -C $TEST_TMPDIR
-    mv $(ls | grep skydoc-) io_bazel_skydoc
-
-    tar xf ${srcDepsSet.bazel_skylib} -C $TEST_TMPDIR
-    mv $(ls | grep bazel-skylib-) bazel_skylib
-
-    tar xf ${srcDepsSet.io_bazel_rules_sass} -C $TEST_TMPDIR
-    mv $(ls | grep rules_sass-) rules_sass
-
-    unzip ${srcDepsSet.build_bazel_rules_nodejs} -d $TEST_TMPDIR
-    mv rules_nodejs-0.16.2 build_bazel_rules_nodejs
-
     hello_test () {
-      $out/bin/bazel test \
-        --override_repository=io_bazel_skydoc=$TEST_TMPDIR/io_bazel_skydoc \
-        --override_repository=bazel_skylib=$TEST_TMPDIR/bazel_skylib \
-        --override_repository=io_bazel_rules_sass=$TEST_TMPDIR/rules_sass \
-        --override_repository=build_bazel_rules_nodejs=$TEST_TMPDIR/build_bazel_rules_nodejs \
+      $out/bin/bazel test --distdir=${distDir} \
         --test_output=errors \
         --java_toolchain='${javaToolchain}' \
         examples/cpp:hello-success_test \
@@ -509,7 +536,13 @@ stdenv.mkDerivation rec {
     echo "${customBash} ${defaultShellPath}" >> $out/nix-support/depends
     # The templates get tar’d up into a .jar,
     # so nix can’t detect python is needed in the runtime closure
+    # Some of the scripts explicitly depend on Python 2.7. Otherwise, we
+    # default to using python3. Therefore, both python27 and python3 are
+    # runtime dependencies.
+    echo "${python27}" >> $out/nix-support/depends
     echo "${python3}" >> $out/nix-support/depends
+  '' + lib.optionalString stdenv.isDarwin ''
+    echo "${cctools}" >> $out/nix-support/depends
   '';
 
   dontStrip = true;

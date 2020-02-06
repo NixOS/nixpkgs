@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, fuse, zlib, glib }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "fuseiso-20070708";
 
   src = fetchurl {

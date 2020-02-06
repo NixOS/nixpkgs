@@ -1,4 +1,4 @@
-{ lib, callPackage, fetchurl, fetchFromGitHub, python3, overrideCC, gccStdenv, gcc6 }:
+{ lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
 
 let
 
@@ -14,26 +14,24 @@ let
 in
 
 rec {
-
   firefox = common rec {
     pname = "firefox";
-    ffversion = "67.0.4";
+    ffversion = "72.0.2";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "3krwkc90m320a74vjyzlrxs4jc63cykbmpgisac9kv8m9n0bis5i1yf0dl9n14d9p4p541wvzhqygx7byj6mnvkhbk5b2l0nlvwias2";
+      sha512 = "13l23p2dqsf2cpdzaydqqq4kbxlc5jxggz9r2i49avn4q9bqx036zvsq512q1hk37bz2bwq8zdr0530s44zickinls150xq14kq732d";
     };
 
     patches = [
       ./no-buildconfig-ffx65.patch
     ];
 
-    extraNativeBuildInputs = [ python3 ];
-
     meta = {
       description = "A web browser built from Firefox source tree";
       homepage = http://www.mozilla.com/en-US/firefox/;
       maintainers = with lib.maintainers; [ eelco andir ];
       platforms = lib.platforms.unix;
+      badPlatforms = lib.platforms.darwin;
       license = lib.licenses.mpl20;
     };
     updateScript = callPackage ./update.nix {
@@ -72,10 +70,11 @@ rec {
 
   firefox-esr-60 = common rec {
     pname = "firefox-esr";
-    ffversion = "60.7.2esr";
+    ffversion = "60.9.0esr";
+
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "0mw5dgrxd5vj6cngd9v3dy6hzdsg82s0cs9fabhrzrl1dy3pqdkccqqnj9r0hxwmcrdgca3s35i5lwwmlljagq6nyb5q6qv4fzv0n0j";
+      sha512 = "4baea5c9c4eff257834bbaee6d7786f69f7e6bacd24ca13c2705226f4a0d88315ab38c650b2c5e9c76b698f2debc7cea1e5a99cb4dc24e03c48a24df5143a3cf";
     };
 
     patches = [
@@ -90,9 +89,32 @@ rec {
 
     meta = firefox.meta // {
       description = "A web browser built from Firefox Extended Support Release source tree";
+      knownVulnerabilities = [ "Support ended around October 2019." ];
     };
     updateScript = callPackage ./update.nix {
       attrPath = "firefox-esr-60-unwrapped";
+      versionSuffix = "esr";
+      versionKey = "ffversion";
+    };
+  };
+
+  firefox-esr-68 = common rec {
+    pname = "firefox-esr";
+    ffversion = "68.4.2esr";
+    src = fetchurl {
+      url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
+      sha512 = "1n7ssx4w5b822bq8zcv6vsy5ph1xjyj9qh6zbnknym5bc0spzk19nrkrpl8a2m26z6xj2lgw1n19gjf4ab6jpfxv3cqq4qwmm0v2fz1";
+    };
+
+    patches = [
+      ./no-buildconfig-ffx65.patch
+    ];
+
+    meta = firefox.meta // {
+      description = "A web browser built from Firefox Extended Support Release source tree";
+    };
+    updateScript = callPackage ./update.nix {
+      attrPath = "firefox-esr-68-unwrapped";
       versionSuffix = "esr";
       versionKey = "ffversion";
     };
@@ -138,7 +160,7 @@ rec {
     };
   });
 
-in rec {
+in {
 
   icecat = iccommon rec {
     ffversion = "60.3.0";
@@ -153,6 +175,7 @@ in rec {
       ./no-buildconfig.patch
       missing-documentation-patch
     ];
+    meta.knownVulnerabilities = [ "Support ended around October 2019." ];
   };
 
   # Similarly to firefox-esr-52 above.
@@ -174,94 +197,8 @@ in rec {
     meta.knownVulnerabilities = [ "Support ended in August 2018." ];
   };
 
-}) // (let
-
-  tbcommon = args: common (args // {
-    pname = "tor-browser";
-    isTorBrowserLike = true;
-
-    unpackPhase = ''
-      # fetchFromGitHub produces ro sources, root dir gets a name that
-      # is too long for shebangs. fixing
-      cp -a $src tor-browser
-      chmod -R +w tor-browser
-      cd tor-browser
-
-      # set times for xpi archives
-      find . -exec touch -d'2010-01-01 00:00' {} \;
-    '';
-
-    meta = (args.meta or {}) // {
-      description = "A web browser built from TorBrowser source tree";
-      longDescription = ''
-        This is a version of TorBrowser with bundle-related patches
-        reverted.
-
-        I.e. it's a variant of Firefox with less fingerprinting and
-        some isolation features you can't get with any extensions.
-
-        Or, alternatively, a variant of TorBrowser that works like any
-        other UNIX program and doesn't expect you to run it from a
-        bundle.
-
-        It will use your default Firefox profile if you're not careful
-        even! Be careful!
-
-        It will clash with firefox binary if you install both. But it
-        should not be a problem because you should run browsers in
-        separate users/VMs anyway.
-
-        Create new profile by starting it as
-
-        $ firefox -ProfileManager
-
-        and then configure it to use your tor instance.
-
-        Or just use `tor-browser-bundle` package that packs this
-        `tor-browser` back into a sanely-built bundle.
-      '';
-      homepage = "https://www.torproject.org/projects/torbrowser.html";
-      platforms = lib.platforms.unix;
-      license = with lib.licenses; [ mpl20 bsd3 ];
-    };
-  });
-
-in rec {
-
-  tor-browser-7-5 = (tbcommon rec {
-    ffversion = "52.9.0esr";
-    tbversion = "7.5.6";
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo  = "tor-browser";
-      # branch "tor-browser-52.9.0esr-7.5-2-slnos"
-      rev   = "95bb92d552876a1f4260edf68fda5faa3eb36ad8";
-      sha256 = "1ykn3yg4s36g2cpzxbz7s995c33ij8kgyvghx38z4i8siaqxdddy";
-    };
-  }).override {
-    gtk3Support = false;
-  };
-
-  tor-browser-8-5 = tbcommon rec {
-    ffversion = "60.8.0esr";
-    tbversion = "8.5.4";
-
-    # FIXME: fetchFromGitHub is not ideal, unpacked source is >900Mb
-    src = fetchFromGitHub {
-      owner = "SLNOS";
-      repo  = "tor-browser";
-      # branch "tor-browser-60.8.0esr-8.5-1-slnos"
-      rev   = "9ec7e4832a68ba3a77f5e8e21dc930a25757f55d";
-      sha256 = "10x9h2nm1p8cs0qnd8yjp7ly5raxagqyfjn4sj2y3i86ya5zygb9";
-    };
-
-    patches = [
-      missing-documentation-patch
-    ];
-  };
-
-  tor-browser = tor-browser-8-5;
+  tor-browser-7-5 = throw "firefoxPackages.tor-browser-7-5 was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+  tor-browser-8-5 = throw "firefoxPackages.tor-browser-8-5 was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+  tor-browser = throw "firefoxPackages.tor-browser was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
 
 })

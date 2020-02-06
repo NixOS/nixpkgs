@@ -14,7 +14,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "singularity-${version}";
+  pname = "singularity";
   version = "3.2.1";
 
   src = fetchFromGitHub {
@@ -30,6 +30,11 @@ buildGoPackage rec {
   buildInputs = [ openssl ];
   nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
+
+  prePatch = ''
+    substituteInPlace internal/pkg/build/copy/copy.go \
+      --replace /bin/cp ${coreutils}/bin/cp
+  '';
 
   postConfigure = ''
     cd go/src/github.com/sylabs/singularity

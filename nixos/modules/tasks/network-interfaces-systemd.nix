@@ -12,7 +12,7 @@ let
     i.ipv4.addresses
     ++ optionals cfg.enableIPv6 i.ipv6.addresses;
 
-  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "both" else "no";
+  dhcpStr = useDHCP: if useDHCP == true || useDHCP == null then "yes" else "no";
 
   slaves =
     concatLists (map (bond: bond.interfaces) (attrValues cfg.bonds))
@@ -31,13 +31,19 @@ in
       message = "networking.defaultGatewayWindowSize is not supported by networkd.";
     } {
       assertion = cfg.vswitches == {};
-      message = "networking.vswichtes are not supported by networkd.";
+      message = "networking.vswitches are not supported by networkd.";
     } {
       assertion = cfg.defaultGateway == null || cfg.defaultGateway.interface == null;
       message = "networking.defaultGateway.interface is not supported by networkd.";
     } {
       assertion = cfg.defaultGateway6 == null || cfg.defaultGateway6.interface == null;
       message = "networking.defaultGateway6.interface is not supported by networkd.";
+    } {
+      assertion = cfg.useDHCP == false;
+      message = ''
+        networking.useDHCP is not supported by networkd.
+        Please use per interface configuration and set the global option to false.
+      '';
     } ] ++ flip mapAttrsToList cfg.bridges (n: { rstp, ... }: {
       assertion = !rstp;
       message = "networking.bridges.${n}.rstp is not supported by networkd.";
@@ -54,11 +60,9 @@ in
       let
         domains = cfg.search ++ (optional (cfg.domain != null) cfg.domain);
         genericNetwork = override:
-          let gateway = optional (cfg.defaultGateway != null) cfg.defaultGateway.address
-            ++ optional (cfg.defaultGateway6 != null) cfg.defaultGateway6.address;
-          in {
-            DHCP = override (dhcpStr cfg.useDHCP);
-          } // optionalAttrs (gateway != [ ]) {
+          let gateway = optional (cfg.defaultGateway != null && (cfg.defaultGateway.address or "") != "") cfg.defaultGateway.address
+            ++ optional (cfg.defaultGateway6 != null && (cfg.defaultGateway6.address or "") != "") cfg.defaultGateway6.address;
+          in optionalAttrs (gateway != [ ]) {
             routes = override [
               {
                 routeConfig = {
@@ -72,9 +76,8 @@ in
           };
       in mkMerge [ {
         enable = true;
-        networks."99-main" = genericNetwork mkDefault;
       }
-      (mkMerge (flip map interfaces (i: {
+      (mkMerge (forEach interfaces (i: {
         netdevs = mkIf i.virtual ({
           "40-${i.name}" = {
             netdevConfig = {
@@ -89,8 +92,8 @@ in
         networks."40-${i.name}" = mkMerge [ (genericNetwork mkDefault) {
           name = mkDefault i.name;
           DHCP = mkForce (dhcpStr
-            (if i.useDHCP != null then i.useDHCP else cfg.useDHCP && interfaceIps i == [ ]));
-          address = flip map (interfaceIps i)
+            (if i.useDHCP != null then i.useDHCP else false));
+          address = forEach (interfaceIps i)
             (ip: "${ip.address}/${toString ip.prefixLength}");
           networkConfig.IPv6PrivacyExtensions = "kernel";
         } ];
@@ -102,7 +105,7 @@ in
             Kind = "bridge";
           };
         };
-        networks = listToAttrs (flip map bridge.interfaces (bi:
+        networks = listToAttrs (forEach bridge.interfaces (bi:
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bridge = name;
@@ -160,20 +163,20 @@ in
                             (mapAttrsToList (k: _: k) do); "";
             # get those driverOptions that have been set
             filterSystemdOptions = filterAttrs (sysDOpt: kOpts:
-                                     any (kOpt: do ? "${kOpt}") kOpts.optNames);
+                                     any (kOpt: do ? ${kOpt}) kOpts.optNames);
             # build final set of systemd options to bond values
             buildOptionSet = mapAttrs (_: kOpts: with kOpts;
                                # we simply take the first set kernel bond option
                                # (one option has multiple names, which is silly)
-                               head (map (optN: valTransform (do."${optN}"))
+                               head (map (optN: valTransform (do.${optN}))
                                  # only map those that exist
-                                 (filter (o: do ? "${o}") optNames)));
+                                 (filter (o: do ? ${o}) optNames)));
             in seq assertNoUnknownOption
                    (buildOptionSet (filterSystemdOptions driverOptionMapping));
 
         };
 
-        networks = listToAttrs (flip map bond.interfaces (bi:
+        networks = listToAttrs (forEach bond.interfaces (bi:
           nameValuePair "40-${bi}" (mkMerge [ (genericNetwork (mkOverride 999)) {
             DHCP = mkOverride 0 (dhcpStr false);
             networkConfig.Bond = name;

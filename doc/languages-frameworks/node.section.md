@@ -1,5 +1,5 @@
-Node.js packages
-================
+Node.js
+=======
 The `pkgs/development/node-packages` folder contains a generated collection of
 [NPM packages](https://npmjs.com/) that can be installed with the Nix package
 manager.

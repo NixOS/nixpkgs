@@ -1,10 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake
-, zlib, libusb1
-, enableGUI ? false, qtbase ? null }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, zlib, libusb1
+, enableGUI ? false, qtbase ? null
+}:
 
-stdenv.mkDerivation rec {
+let version = "1.4.2"; in
+
+mkDerivation {
   name = "heimdall-${if enableGUI then "gui-" else ""}${version}";
-  version = "1.4.2";
 
   src = fetchFromGitHub {
     owner  = "Benjamin-Dobell";
@@ -20,11 +21,14 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DDISABLE_FRONTEND=${if enableGUI then "OFF" else "ON"}"
+    "-DLIBUSB_LIBRARY=${libusb1}"
   ];
 
   preConfigure = ''
     # Give ownership of the Galaxy S USB device to the logged in user.
     substituteInPlace heimdall/60-heimdall.rules --replace 'MODE="0666"' 'TAG+="uaccess"'
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    substituteInPlace libpit/CMakeLists.txt --replace "-std=gnu++11" ""
   '';
 
   installPhase = ''

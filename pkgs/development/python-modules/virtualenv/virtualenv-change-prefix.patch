@@ -26,13 +26,13 @@ index bcf3225..3530997 100755
 -    if IS_DARWIN:
 -        prefixes.extend(
 -            (
--                os.path.join("/Library/Python", sys.version[:3], "site-packages"),
+-                os.path.join("/Library/Python", VERSION, "site-packages"),
 -                os.path.join(sys.prefix, "Extras", "lib", "python"),
--                os.path.join("~", "Library", "Python", sys.version[:3], "site-packages"),
+-                os.path.join("~", "Library", "Python", VERSION, "site-packages"),
 -                # Python 2.6 no-frameworks
--                os.path.join("~", ".local", "lib", "python", sys.version[:3], "site-packages"),
+-                os.path.join("~", ".local", "lib", "python", VERSION, "site-packages"),
 -                # System Python 2.7 on OSX Mountain Lion
--                os.path.join("~", "Library", "Python", sys.version[:3], "lib", "python", "site-packages"),
+-                os.path.join("~", "Library", "Python", VERSION, "lib", "python", "site-packages"),
 -            )
 -        )
 +    prefixes = ["/nix/store", sys.prefix]

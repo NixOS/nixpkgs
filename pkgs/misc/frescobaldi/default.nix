@@ -1,23 +1,31 @@
-{ lib, fetchFromGitHub, python3Packages, lilypond }:
+{ lib, buildPythonApplication, fetchFromGitHub, python3Packages, pyqtwebengine, lilypond }:
 
-python3Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   name = "frescobaldi-${version}";
-  version = "3.0.0";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
     rev = "v${version}";
-    sha256 = "1yn18pwsjxpxz5j3yfysmaif8k0vqahj5c7ays9cxsylpg9hl7jd";
+    sha256 = "0sv6dc1l34rrhfbn1wqkl9zs9hiacmmbviw87d0d03987s1iirb1";
   };
 
   propagatedBuildInputs = with python3Packages; [
     lilypond pygame python-ly sip
-    pyqt5_with_qtwebkit (poppler-qt5.override { pyqt5 = pyqt5_with_qtwebkit; })
+    pyqt5 poppler-qt5
+    pyqtwebengine
   ];
+
+  nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   # no tests in shipped with upstream
   doCheck = false;
+
+  dontWrapQtApps = true;
+  makeWrapperArgs = [
+      "\${qtWrapperArgs[@]}"
+  ];
 
   meta = with lib; {
     homepage = http://frescobaldi.org/;
@@ -35,7 +43,7 @@ python3Packages.buildPythonApplication rec {
       fonts and keyboard shortcuts
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sepi ma27 ];
+    maintainers = with maintainers; [ sepi ];
     platforms = platforms.all;
   };
 }

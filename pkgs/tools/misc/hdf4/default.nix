@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hdf-${version}";
+  pname = "hdf";
   version = "4.2.14";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${version}/src/hdf-${version}.tar.bz2";

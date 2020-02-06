@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl_1_1 }:
+{ stdenv, fetchFromGitLab, autoreconfHook, libpcap, db, glib, libnet, libnids, symlinkJoin, openssl }:
 let
   /*
   dsniff's build system unconditionnaly wants static libraries and does not
@@ -33,8 +33,8 @@ let
     dontDisableStatic = true;
   });
   ssl = symlinkJoin {
-    inherit (openssl_1_1) name;
-    paths = with openssl_1_1.override { static = true; }; [ out dev ];
+    inherit (openssl) name;
+    paths = with openssl.override { static = true; }; [ out dev ];
   };
 in stdenv.mkDerivation {
   pname = "dsniff";
@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ glib pcap ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread";
+  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl";
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch

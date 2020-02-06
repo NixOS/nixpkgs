@@ -1,6 +1,6 @@
 { stdenv, fetchurl, netcdf, hdf5, curl }:
 stdenv.mkDerivation rec {
-  name = "netcdf-cxx4-${version}";
+  pname = "netcdf-cxx4";
   version = "4.3.0";
 
   src = fetchurl {

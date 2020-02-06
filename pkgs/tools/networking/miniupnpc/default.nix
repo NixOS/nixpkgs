@@ -3,21 +3,21 @@
 let
   generic = { version, sha256 }:
     stdenv.mkDerivation rec {
-      name = "miniupnpc-${version}";
+      pname = "miniupnpc";
+      inherit version;
       src = fetchurl {
-        name = "${name}.tar.gz";
-        url = "http://miniupnp.free.fr/files/download.php?file=${name}.tar.gz";
+        name = "${pname}-${version}.tar.gz";
+        url = "http://miniupnp.free.fr/files/download.php?file=${pname}-${version}.tar.gz";
         inherit sha256;
       };
 
-      nativeBuildInputs = [] ++
-        stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
+      nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
 
       patches = stdenv.lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
       doCheck = !stdenv.isFreeBSD;
 
-      makeFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+      makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
       meta = with stdenv.lib; {
         homepage = http://miniupnp.free.fr/;

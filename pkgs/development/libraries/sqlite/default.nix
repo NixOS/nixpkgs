@@ -9,13 +9,13 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "sqlite-${version}";
-  version = "3.28.0";
+  pname = "sqlite";
+  version = "3.30.1";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2019/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "1hxpi45crbqp6lacl7z611lna02k956m9bsy2bjzrbb2y23546yn";
+    sha256 = "0q4f57a5995wz9c7dfiqy9zwl0kn0b900nxwinqa3llv13dm0nlc";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-threadsafe" ] ++ optional interactive "--enable-readline";
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-DSQLITE_ENABLE_COLUMN_METADATA"
     "-DSQLITE_ENABLE_DBSTAT_VTAB"
     "-DSQLITE_ENABLE_JSON1"

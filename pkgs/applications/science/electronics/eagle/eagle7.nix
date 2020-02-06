@@ -13,7 +13,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "eagle-${version}";
+  pname = "eagle";
   version = "7.7.0";
 
   src =

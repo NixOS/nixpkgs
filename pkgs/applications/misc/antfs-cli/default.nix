@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "antfs-cli";
   version = "unstable-2017-02-11";
 

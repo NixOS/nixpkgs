@@ -6,16 +6,17 @@
 , django
 , mock
 , isort
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "django-taggit";
-  version = "0.23.0";
-  disabled = pythonOlder "2.7";
+  version = "1.2.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "a21cbe7e0879f1364eef1c88a2eda89d593bf000ebf51c3f00423c6927075dce";
+    sha256 = "4186a6ce1e1e9af5e2db8dd3479c5d31fa11a87d216a2ce5089ba3afde24a2c5";
   };
 
   propagatedBuildInputs = [ isort django ];

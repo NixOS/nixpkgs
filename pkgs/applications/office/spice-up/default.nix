@@ -1,8 +1,10 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
-, gdk_pixbuf
+, gdk-pixbuf
 , gtk3
+, vala
 , gettext
 , ninja
 , pantheon
@@ -12,7 +14,8 @@
 , libevdev
 , libgee
 , libsoup
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "spice-up";
@@ -32,13 +35,14 @@ stdenv.mkDerivation rec {
     gettext
     ninja
     pkgconfig
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
+
   buildInputs = [
     pantheon.elementary-icon-theme
     pantheon.granite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     json-glib
     libevdev
@@ -46,6 +50,21 @@ stdenv.mkDerivation rec {
     libgudev
     libsoup
   ];
+
+  patches = [
+    # Fix build with Vala 0.46
+    # https://github.com/Philip-Scott/Spice-up/pull/288
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Philip-Scott/Spice-up/pull/288.patch";
+      sha256 = "0kyfd8v2sk4cvcq1j8ysp64snfjhnpr3iz7l04lx7if7h372xj39";
+    })
+  ];
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Create simple and beautiful presentations";

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "void-${version}";
+  pname = "void";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "spacejam";
     repo = "void";
-    rev = "${version}";
+    rev = version;
     sha256 = "08vazw4rszqscjz988k89z28skyj3grm81bm5iwknxxagmrb20fz";
   };
 

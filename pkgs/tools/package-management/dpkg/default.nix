@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl, zlib, bzip2, xz, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "dpkg-${version}";
+  pname = "dpkg";
   version = "1.19.7";
 
   src = fetchurl {

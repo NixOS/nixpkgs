@@ -1,8 +1,7 @@
 { stdenv, fetchurl, emacs, texlive, ghostscript }:
  
 let auctex = stdenv.mkDerivation ( rec {
-  version = "12.1";
-  name = "${pname}-${version}";
+  version = "12.2";
 
   # Make this a valid tex(live-new) package;
   # the pkgs attribute is provided with a hack below.
@@ -13,8 +12,8 @@ let auctex = stdenv.mkDerivation ( rec {
   outputs = [ "out" "tex" ];
 
   src = fetchurl {
-    url = "mirror://gnu/${pname}/${name}.tar.gz";
-    sha256 = "1d2x59jw42hr81fma195bniqyhvp5ig5q0xmywbkcy59f16wlp69";
+    url = "mirror://gnu/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "14vqs08mkfzc91jg7kabs9sdn74vywj8a29gyrfa3ivnm9c7jrsr";
   };
 
   buildInputs = [ emacs texlive.combined.scheme-basic ghostscript ];

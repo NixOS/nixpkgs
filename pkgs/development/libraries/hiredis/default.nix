@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "hiredis-${version}";
+  pname = "hiredis";
   version = "0.14.0";
 
   src = fetchFromGitHub {

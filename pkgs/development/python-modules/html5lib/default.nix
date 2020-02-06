@@ -2,7 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , flake8
-, pytest
+, pytest_4
 , pytest-expect
 , mock
 , six
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "66cb0dcfdbbc4f9c3ba1a63fdb511ffdbd4f513b2b6d81b80cd26ce6b3fb3736";
   };
 
-  checkInputs = [ flake8 pytest pytest-expect mock ];
+  checkInputs = [ flake8 pytest_4 pytest-expect mock ];
   propagatedBuildInputs = [
     six webencodings
   ];

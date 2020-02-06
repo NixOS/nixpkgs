@@ -1,48 +1,51 @@
-{ stdenv, fetchurl, pythonPackages, makeWrapper, imagemagick
-, enablePlayer ? true, vlc ? null, qt5 }:
+{ stdenv, fetchurl, pkgs, python3Packages, makeWrapper
+, enablePlayer ? true, vlc ? null, qt5, lib }:
 
 stdenv.mkDerivation rec {
-  name = "tribler-${version}";
-  version = "7.1.2";
+  pname = "tribler";
+  version = "7.4.0-exp1";
 
   src = fetchurl {
-    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.gz";
-    sha256 = "1ayzqx4358qlx56hsnsn5s8xl6mzdb6nw4kwsalmp86dw6vmmis8";
+    url = "https://github.com/Tribler/tribler/releases/download/v${version}/Tribler-v${version}.tar.xz";
+    sha256 = "18ziisg0v2gdxnprbhqsryz92yk270waj0la7m2h326k5qql3qkf";
   };
 
-  buildInputs = [
-    pythonPackages.python
-    pythonPackages.wrapPython
+  nativeBuildInputs = [
+    python3Packages.wrapPython
     makeWrapper
-    imagemagick
+  ];
+
+  buildInputs = [
+    python3Packages.python
   ];
 
   pythonPath = [
-    pythonPackages.libtorrentRasterbar
-    pythonPackages.apsw
-    pythonPackages.twisted
-    pythonPackages.netifaces
-    pythonPackages.pycrypto
-    pythonPackages.pyasn1
-    pythonPackages.requests
-    pythonPackages.setuptools
-    pythonPackages.m2crypto
-    pythonPackages.pyqt5
-    pythonPackages.chardet
-    pythonPackages.cherrypy
-    pythonPackages.cryptography
-    pythonPackages.libnacl
-    pythonPackages.configobj
-    pythonPackages.matplotlib
-    pythonPackages.plyvel
-    pythonPackages.decorator
-    pythonPackages.feedparser
-    pythonPackages.service-identity
-    pythonPackages.psutil
-    pythonPackages.meliae
-    pythonPackages.sip
-    pythonPackages.pillow
-    pythonPackages.networkx
+    python3Packages.libtorrentRasterbar
+    python3Packages.twisted
+    python3Packages.netifaces
+    python3Packages.pycrypto
+    python3Packages.pyasn1
+    python3Packages.requests
+    python3Packages.m2crypto
+    python3Packages.pyqt5
+    python3Packages.chardet
+    python3Packages.cherrypy
+    python3Packages.cryptography
+    python3Packages.libnacl
+    python3Packages.configobj
+    python3Packages.decorator
+    python3Packages.feedparser
+    python3Packages.service-identity
+    python3Packages.psutil
+    python3Packages.pillow
+    python3Packages.networkx
+    python3Packages.pony
+    python3Packages.lz4
+    python3Packages.pyqtgraph
+
+    # there is a BTC feature, but it requires some unclear version of
+    # bitcoinlib, so this doesn't work right now.
+    # python3Packages.bitcoinlib
   ];
 
   postPatch = ''
@@ -54,12 +57,11 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
-    find . -name '*.png' -exec convert -strip {} {} \;
     mkdir -pv $out
     # Nasty hack; call wrapPythonPrograms to set program_PYTHONPATH.
     wrapPythonPrograms
     cp -prvd ./* $out/
-    makeWrapper ${pythonPackages.python}/bin/python $out/bin/tribler \
+    makeWrapper ${python3Packages.python}/bin/python $out/bin/tribler \
         --set QT_QPA_PLATFORM_PLUGIN_PATH ${qt5.qtbase.bin}/lib/qt-*/plugins/platforms \
         --set _TRIBLERPATH $out \
         --set PYTHONPATH $out:$program_PYTHONPATH \

@@ -3,11 +3,11 @@
 , fuse, curl, expat }:
 
 stdenv.mkDerivation rec {
-  name = "s3backer-${version}";
-  version = "1.5.1";
+  pname = "s3backer";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
-    sha256 = "0rfbylahnhv8sy9a8zkkfpyavf07dq3sdq060wrxnxbpad6qf91q";
+    sha256 = "1228qlfgz48k9vv72hrz488zg73zls99cppb9vmikc0pzv1xndsx";
     rev = version;
     repo = "s3backer";
     owner = "archiecobbs";

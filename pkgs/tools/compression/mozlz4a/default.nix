@@ -1,7 +1,6 @@
 { stdenv, fetchurl, python3, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "mozlz4a";
   version = "2018-08-23";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)

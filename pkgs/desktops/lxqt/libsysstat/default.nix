@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qtbase, lxqt-build-tools }:
+{ lib, mkDerivation, fetchFromGitHub, cmake, qtbase, lxqt-build-tools }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "libsysstat";
   version = "0.4.2";
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ qtbase ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Library used to query system info and statistics";
     homepage = https://github.com/lxqt/libsysstat;
     license = licenses.lgpl21Plus;

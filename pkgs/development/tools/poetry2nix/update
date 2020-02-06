@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+pwd=$(pwd)
+workdir=$(mktemp -d)
+
+function cleanup {
+    cd "$pwd"
+    rm -rf $workdir
+}
+trap cleanup EXIT
+
+cd "$workdir"
+
+curl -L -s https://github.com/nix-community/poetry2nix/archive/master.tar.gz | tar -xz
+mv poetry2nix-master/* .
+
+mkdir build
+cp *.nix *.json *.py build/
+cp -r bin build/
+rm build/shell.nix build/generate.py build/overlay.nix build/flake.nix
+
+cat > build/README.md << EOF
+Dont change these files here, they are maintained at https://github.com/nix-community/poetry2nix
+
+The update procedure is as-follows:
+1. Send your change to the upstream poetry2nix repository
+2. Get it approved with tests passing
+3. Run the update script in pkgs/development/tools/poetry2nix
+EOF
+
+rm -rf "$pwd/poetry2nix"
+mv build "$pwd/poetry2nix"

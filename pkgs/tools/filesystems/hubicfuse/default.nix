@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkgconfig, curl, openssl, fuse, libxml2, json_c, file }:
 
 stdenv.mkDerivation rec {
-  name = "hubicfuse-${version}";
+  pname = "hubicfuse";
   version = "3.0.1";
 
   src = fetchFromGitHub {

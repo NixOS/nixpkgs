@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, lvm2 }:
 
 buildGoPackage rec {
-  name = "convoy-${version}";
+  pname = "convoy";
   version = "0.5.0";
 
   goPackagePath = "github.com/rancher/convoy";

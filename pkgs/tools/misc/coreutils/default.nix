@@ -15,7 +15,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "coreutils";
   version = "8.31";
 
@@ -25,8 +25,13 @@ stdenv.mkDerivation rec {
   };
 
   patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+         # Fix failing test with musl. See https://lists.gnu.org/r/coreutils/2019-05/msg00031.html
+         # To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
          # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
-         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch;
+         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch
+         # Fix compilation in android-cross environments. To be removed in coreutils-8.32.
+         ++ [ ./coreutils-8.31-android-cross.patch ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -47,6 +52,10 @@ stdenv.mkDerivation rec {
 
     sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
 
+    # Fails on systems with a rootfs. Looks like a bug in the test, see
+    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
+
     # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
     for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
       sed '2i echo Skipping chgrp && exit 77' -i "$f"
@@ -54,10 +63,12 @@ stdenv.mkDerivation rec {
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") ''
-    echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-    echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-  '';
+  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+    ''
+      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+    ''
+  ]);
 
   outputs = [ "out" "info" ];
 
@@ -138,8 +149,9 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.eelco ];
   };
-
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-}
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+  NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
+})

@@ -26,6 +26,6 @@ stdenv.mkDerivation rec {
     # under the 3-clause BSD license. The rest is 2-clause BSD license.
     license = with licenses; [ bsd3 bsd2 ];
     platforms = platforms.unix;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
   };
 }

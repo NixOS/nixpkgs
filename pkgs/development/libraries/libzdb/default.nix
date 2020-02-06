@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec
 {
   version = "3.1";
-  name = "libzdb-${version}";
+  pname = "libzdb";
 
   src = fetchurl
   {

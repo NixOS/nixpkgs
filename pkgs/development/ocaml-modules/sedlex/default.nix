@@ -6,11 +6,11 @@ else
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-sedlex-${version}";
-  version = "1.99.4";
+  version = "1.99.5";
 
   src = fetchzip {
-    url = "https://github.com/alainfrisch/sedlex/archive/v${version}.tar.gz";
-    sha256 = "1b7nqxyfcz8i7m4b8zil2rn6ygh2czy26f9v64xnxn8r0hy9sh1m";
+    url = "https://github.com/ocaml-community/sedlex/archive/fb84e1766fc4b29e79ec40029ffee5cdb37b392f.tar.gz";
+    sha256 = "0phnqyn6mpv5byr1kkphl24y9q9fb2k3xg9yb457h5816q6ya72n";
   };
 
   buildInputs = [ ocaml findlib ppx_tools_versioned ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   meta = {
-    homepage = https://github.com/alainfrisch/sedlex;
+    homepage = https://github.com/ocaml-community/sedlex;
     description = "An OCaml lexer generator for Unicode";
     license = stdenv.lib.licenses.mit;
     inherit (ocaml.meta) platforms;

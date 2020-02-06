@@ -1,6 +1,6 @@
-{ lib, ruby, bundlerApp }:
+{ lib, ruby, bundlerApp, bundlerUpdateScript }:
 
-bundlerApp rec {
+bundlerApp {
   pname = "oxidized";
   gemdir = ./.;
 
@@ -8,11 +8,13 @@ bundlerApp rec {
 
   exes = [ "oxidized" "oxidized-web" "oxidized-script" ];
 
+  passthru.updateScript = bundlerUpdateScript "oxidized";
+
   meta = with lib; {
     description = "Oxidized is a network device configuration backup tool. It's a RANCID replacement!";
     homepage    = https://github.com/ytti/oxidized;
     license     = licenses.asl20;
-    maintainers = [ maintainers.willibutz ];
+    maintainers = with maintainers; [ willibutz nicknovitski ];
     platforms   = platforms.linux;
   };
 }

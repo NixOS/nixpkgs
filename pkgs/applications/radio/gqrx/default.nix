@@ -1,4 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, qtbase, qtsvg, gnuradio, boost, gr-osmosdr
+, mkDerivation
 # drivers (optional):
 , rtl-sdr, hackrf
 , pulseaudioSupport ? true, libpulseaudio
@@ -6,15 +7,15 @@
 
 assert pulseaudioSupport -> libpulseaudio != null;
 
-stdenv.mkDerivation rec {
-  name = "gqrx-${version}";
-  version = "2.11.5";
+mkDerivation rec {
+  pname = "gqrx";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "csete";
     repo = "gqrx";
     rev = "v${version}";
-    sha256 = "0q9i0dhd6blagxzk84pzqjq8n4ym3jc1mkkhygg8yncr4vq2saaf";
+    sha256 = "00alf3q6y313xpx6p7v43vqsphd2x4am4q362lw21bcy9wc4jidw";
   };
 
   nativeBuildInputs = [ cmake ];

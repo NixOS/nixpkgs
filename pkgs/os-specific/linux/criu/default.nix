@@ -3,12 +3,12 @@
 , which, python, makeWrapper, docbook_xml_dtd_45 }:
 
 stdenv.mkDerivation rec {
-  name    = "criu-${version}";
-  version = "3.12";
+  pname = "criu";
+  version = "3.13";
 
   src = fetchurl {
-    url    = "https://download.openvz.org/criu/${name}.tar.bz2";
-    sha256 = "1z0fpym8fi2jqx99himqs8pm5l4mzrswjqxcyfwjmbabzb77dwhf";
+    url    = "https://download.openvz.org/criu/${pname}-${version}.tar.bz2";
+    sha256 = "1yn9ix9lqvqvjrs3a3g6g1wqfniyf9n7giy0mr3jvijmrcm7y0pa";
   };
 
   enableParallelBuilding = true;

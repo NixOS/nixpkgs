@@ -1,0 +1,10 @@
+--- a/repo	2020-02-05 21:11:52.773854798 +0100
++++ b/repo	2020-02-05 21:12:34.018329462 +0100
+@@ -137,6 +137,7 @@
+ import stat
+ import subprocess
+ import sys
++import ssl
+ 
+ if sys.version_info[0] == 3:
+   import urllib.request

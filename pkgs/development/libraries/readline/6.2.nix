@@ -11,7 +11,7 @@ stdenv.mkDerivation (rec {
 
   propagatedBuildInputs = [ncurses];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   patches =
     [ ./link-against-ncurses.patch
       ./no-arch_only.patch

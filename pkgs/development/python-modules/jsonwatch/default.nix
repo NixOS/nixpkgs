@@ -5,7 +5,7 @@
 , isPyPy
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "jsonwatch";
   version = "0.2.0";
   disabled = isPyPy; # doesn't find setuptools

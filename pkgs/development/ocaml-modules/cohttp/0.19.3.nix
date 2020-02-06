@@ -19,7 +19,7 @@ buildOcaml rec {
   ++ stdenv.lib.optionals asyncSupport [ async_p4 async_ssl_p4 ];
   propagatedBuildInputs = [ re stringext uri_p4 fieldslib_p4 sexplib_p4 base64 ];
 
-  buildFlags = "PREFIX=$(out)";
+  buildFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/mirage/ocaml-cohttp;

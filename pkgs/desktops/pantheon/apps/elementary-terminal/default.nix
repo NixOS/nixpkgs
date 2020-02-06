@@ -1,24 +1,39 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3
-, vala, desktop-file-utils, gtk3, libxml2, granite, libnotify, vte, libgee
-, elementary-icon-theme, appstream, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, meson
+, ninja
+, python3
+, vala
+, desktop-file-utils
+, gtk3
+, libxml2
+, granite
+, libnotify
+, vte
+, libgee
+, elementary-icon-theme
+, appstream
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
-  pname = "terminal";
-  version = "5.3.5";
+  pname = "elementary-terminal";
+  version = "5.5.1";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "terminal";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "1gd5m24digmx3sgs21ggfiqiwhgym6s1dlg1sv9mdqh5wgsa6b8f";
+    sha256 = "1b8fzs9s7djhwp02l3fwjpwxylklpbnw7x46mv7c8ksbp0m75iyj";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 

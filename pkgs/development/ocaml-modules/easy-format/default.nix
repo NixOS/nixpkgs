@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A high-level and functional interface to the Format module of the OCaml standard library";
-    homepage = "http://mjambon.com/${pname}.html";
+    homepage = "https://github.com/ocaml-community/${pname}";
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];
   };

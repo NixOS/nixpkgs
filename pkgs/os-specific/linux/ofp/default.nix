@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ofp-${version}";
+  pname = "ofp";
   version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "OpenFastPath";
     repo = "ofp";
-    rev = "${version}";
+    rev = version;
     sha256 = "05902593fycgkwzk5g7wzgk0k40nrrgybplkdka3rqnlj6aydhqf";
   };
 

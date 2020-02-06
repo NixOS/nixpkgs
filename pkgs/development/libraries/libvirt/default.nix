@@ -16,13 +16,13 @@ with stdenv.lib;
 let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
-  name = "libvirt-${version}";
+  pname = "libvirt";
   version = "5.4.0";
 
   src =
     if buildFromTarball then
       fetchurl {
-        url = "http://libvirt.org/sources/${name}.tar.xz";
+        url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
         sha256 = "0ywf8m9yz2hxnic7fylzlmgy4m353r4vv5zsvp89zq5yh4h81yhw";
       }
     else
@@ -102,6 +102,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
     "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
+    "EBTABLES_PATH=${ebtables}/bin/ebtables-legacy"
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"
@@ -129,6 +130,7 @@ in stdenv.mkDerivation rec {
     binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
   in ''
     substituteInPlace $out/libexec/libvirt-guests.sh \
+      --replace 'ON_BOOT=start'       'ON_BOOT=''${ON_BOOT:-start}' \
       --replace 'ON_SHUTDOWN=suspend' 'ON_SHUTDOWN=''${ON_SHUTDOWN:-suspend}' \
       --replace "$out/bin"            '${gettext}/bin' \
       --replace 'lock/subsys'         'lock' \
@@ -156,6 +158,6 @@ in stdenv.mkDerivation rec {
     '';
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz globin ];
   };
 }

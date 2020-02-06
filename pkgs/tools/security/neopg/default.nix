@@ -11,7 +11,7 @@
 , gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "neopg-${version}";
+  pname = "neopg";
   version = "0.0.6";
 
   src = fetchFromGitHub {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   dontUseCmakeBuildDir = true;
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/3rdparty/googletest/googletest:$(pwd)/neopg
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/3rdparty/googletest/googletest:$(pwd)/neopg
   '';
 
   meta = with stdenv.lib; {

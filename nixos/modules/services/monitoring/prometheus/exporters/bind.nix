@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -39,7 +39,6 @@ in
   };
   serviceOpts = {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-bind-exporter}/bin/bind_exporter \
           -web.listen-address ${cfg.listenAddress}:${toString cfg.port} \

@@ -13,8 +13,8 @@ let
     else throw "ImageMagick is not supported on this platform.";
 
   cfg = {
-    version = "6.9.9-34";
-    sha256 = "0sqrgyfi7i7x1akna95c1qhk9sxxswzm3pkssfi4w6v7bn24g25g";
+    version = "6.9.10-71";
+    sha256 = "0c69xmr8k8c4dplgzxydm30s2dr8biq71x07hc15bw196nsx3srr";
     patches = [];
   }
     # Freeze version on mingw so we don't need to port the patch too often.
@@ -31,8 +31,8 @@ let
       };
 in
 
-stdenv.mkDerivation rec {
-  name = "imagemagick-${version}";
+stdenv.mkDerivation {
+  pname = "imagemagick";
   inherit (cfg) version;
 
   src = fetchFromGitHub {

@@ -3,13 +3,13 @@
 
 buildPythonPackage rec {
   pname = "tzlocal";
-  version = "1.5.1";
+  version = "2.0.0";
 
   propagatedBuildInputs = [ pytz ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ebeb848845ac898da6519b9b31879cf13b6626f7184c496037b818e238f2c4e";
+    sha256 = "949b9dd5ba4be17190a80c0268167d7e6c92c62b30026cf9764caf3e308e5590";
   };
 
   # test fail (timezone test fail)

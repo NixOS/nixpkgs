@@ -1,74 +1,64 @@
-{ lib
-, buildPythonPackage
+{ buildPythonPackage
 , fetchPypi
-, isPyPy
-, mock
-, pytest
-, flask
-, jinja2
-, markupsafe
-, werkzeug
-, itsdangerous
-, dateutil
-, requests
-, six
-, pygments
-, pystache
-, markdown
-, pyyaml
-, pyzmq
-, tornado
-, colorama
-, isPy3k
 , futures
-, websocket_client
+, isPy27
+, isPyPy
+, jinja2
+, lib
+, mock
 , numpy
-, pandas
-, greenlet
-, python
-, bkcharts
+, nodejs
+, packaging
 , pillow
+, pytest
+, python
+, python-dateutil
+, pyyaml
 , selenium
+, six
+, substituteAll
+, tornado
 }:
 
 buildPythonPackage rec {
   pname = "bokeh";
-  version = "1.0.4";
+  version = "1.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "ceeb6a75afc1b2de00c2b8b6da121dec3fb77031326897b80d4375a70e96aebf";
+    sha256 = "1rywd6c6hi0c6yg18j5zxssjd07a5hafcd21xr3q2yvp3aj3h3f6";
   };
+
+  patches = [
+    (substituteAll {
+      src = ./hardcode-nodejs-npmjs-paths.patch;
+      node_bin = "${nodejs}/bin/node";
+      npm_bin = "${nodejs}/bin/npm";
+    })
+  ];
 
   disabled = isPyPy;
 
-  # Some test that uses tornado fails
-#   doCheck = false;
-
-  checkInputs = [ mock pytest pillow selenium ];
+  checkInputs = [
+    mock
+    pytest
+    pillow
+    selenium
+  ];
 
   propagatedBuildInputs = [
     pillow
-    flask
     jinja2
-    markupsafe
-    werkzeug
-    itsdangerous
-    dateutil
-    requests
+    python-dateutil
     six
-    pygments
-    pystache
-    markdown
     pyyaml
-    pyzmq
     tornado
-    colorama
-    bkcharts
+    numpy
+    packaging
   ]
-  ++ lib.optionals ( !isPy3k ) [ futures ]
-  ++ lib.optionals ( !isPy3k && !isPyPy ) [ websocket_client ]
-  ++ lib.optionals ( !isPyPy ) [ numpy pandas greenlet ];
+  ++ lib.optionals ( isPy27 ) [
+    futures
+  ];
 
   checkPhase = ''
     ${python.interpreter} -m unittest discover -s bokeh/tests

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoconf, automake, imlib2, libtool, libX11, pkgconfig, xorgproto }:
 
 stdenv.mkDerivation rec {
-  name = "hsetroot-${version}";
+  pname = "hsetroot";
   version = "1.0.2";
 
   # The primary download site seems to no longer exist; use Gentoo's mirror for now.
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [ underlinkingPatch ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   preConfigure = "./autogen.sh";
 

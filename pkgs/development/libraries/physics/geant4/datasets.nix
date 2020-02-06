@@ -1,12 +1,13 @@
-{ stdenv, fetchurl, }:
+{ stdenv, fetchurl, geant_version }:
 
 let
-  mkDataset = { name, version, sha256, envvar}:
+  mkDataset = { name, version, sha256, envvar }:
     stdenv.mkDerivation {
       inherit name version;
+      inherit geant_version;
 
       src = fetchurl {
-        url = "https://geant4-data.web.cern.ch/geant4-data/datasets/${name}.${version}.tar.gz";
+        url = "https://cern.ch/geant4-data/datasets/${name}.${version}.tar.gz";
         inherit sha256;
       };
 
@@ -14,9 +15,10 @@ let
       dontBuild = true;
       dontConfigure = true;
 
+      datadir = "${placeholder "out"}/share/Geant4-${geant_version}/data/${name}${version}";
       installPhase = ''
-        mkdir -p $out/data
-        mv ./* $out/data
+        mkdir -p $datadir
+        mv ./* $datadir
       '';
 
       inherit envvar;
@@ -33,71 +35,78 @@ in
   builtins.listToAttrs (map (a: { inherit (a) name; value = mkDataset a; }) [
     {
       name = "G4NDL";
-      version = "4.5";
-      sha256 = "cba928a520a788f2bc8229c7ef57f83d0934bb0c6a18c31ef05ef4865edcdf8e";
+      version = "4.6";
+      sha256 = "022l2jjhi57frfdv9nk6s6q23gmr9zkix06fmni8gf0gmvr7qa4x";
       envvar = "NEUTRONHP";
     }
 
     {
       name = "G4EMLOW";
-      version = "7.3";
-      sha256 = "583aa7f34f67b09db7d566f904c54b21e95a9ac05b60e2bfb794efb569dba14e";
+      version = "7.9";
+      sha256 = "1zrsvk2ahlwss6mgjrma6d2ii49vlzcd5r3ccw94c7m9rnk9mgsa";
       envvar = "LE";
     }
 
     {
       name = "G4PhotonEvaporation";
-      version = "5.2";
-      sha256 = "83607f8d36827b2a7fca19c9c336caffbebf61a359d0ef7cee44a8bcf3fc2d1f";
+      version = "5.5";
+      sha256 = "1mvnbs7yvkii41blks6bkqr8qhxgnj3xxvv1i3vdg2y14shxv5ar";
       envvar = "LEVELGAMMA";
     }
 
     {
       name = "G4RadioactiveDecay";
-      version = "5.2";
-      sha256 = "99c038d89d70281316be15c3c98a66c5d0ca01ef575127b6a094063003e2af5d";
+      version = "5.4";
+      sha256 = "0qaark6mqzxr3lqawv6ai8z5211qihlp5x2hn86vzx8kgpd7j1r4";
       envvar = "RADIOACTIVE";
     }
 
     {
       name = "G4SAIDDATA";
-      version = "1.1";
-      sha256 = "a38cd9a83db62311922850fe609ecd250d36adf264a88e88c82ba82b7da0ed7f";
+      version = "2.0";
+      sha256 = "149fqy801n1pj2g6lcai2ziyvdz8cxdgbfarax6y8wdakgksh9hx";
       envvar = "SAIDXS";
     }
 
     {
-      name = "G4NEUTRONXS";
-      version = "1.4";
-      sha256 = "57b38868d7eb060ddd65b26283402d4f161db76ed2169437c266105cca73a8fd";
-      envvar = "NEUTRONXS";
+      name = "G4PARTICLEXS";
+      version = "2.1";
+      sha256 = "0h8ba8jk197npbd9lzq2qlfiklbjgqwk45m1cc6piy5vf8ri0k89";
+      envvar = "PARTICLEXS";
     }
 
     {
       name = "G4ABLA";
       version = "3.1";
-      sha256 = "7698b052b58bf1b9886beacdbd6af607adc1e099fc730ab6b21cf7f090c027ed";
+      sha256 = "1v97q28g1xqwnav0lwzwk7hc3b87yrmbvkgadf4bkwcbnm9b163n";
       envvar = "ABLA";
+    }
+
+    {
+      name = "G4INCL";
+      version = "1.0";
+      sha256 = "0z9nqk125vvf4f19lhgb37jy60jf9zrjqg5zbxbd1wz93a162qbi";
+      envvar = "INCL";
     }
 
     {
       name = "G4PII";
       version = "1.3";
-      sha256 = "6225ad902675f4381c98c6ba25fc5a06ce87549aa979634d3d03491d6616e926";
+      sha256 = "09p92rk1sj837m6n6yd9k9a8gkh6bby2bfn6k0f3ix3m4s8as9b2";
       envvar = "PII";
     }
 
     {
       name = "G4ENSDFSTATE";
       version = "2.2";
-      sha256 = "dd7e27ef62070734a4a709601f5b3bada6641b111eb7069344e4f99a01d6e0a6";
+      sha256 = "19p0sq0rmyg48j9hddqy24dn99md7ddiyq09lyj381q7cbpjfznx";
       envvar = "ENSDFSTATE";
     }
 
     {
       name = "G4RealSurface";
-      version = "2.1";
-      sha256 = "2a287adbda1c0292571edeae2082a65b7f7bd6cf2bf088432d1d6f889426dcf3";
+      version = "2.1.1";
+      sha256 = "0l3gs0nlp10cjlwiln3f72zfch0av2g1r8m2ny9afgvwgbwiyj4h";
       envvar = "REALSURFACE";
     }
   ])

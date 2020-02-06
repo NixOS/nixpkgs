@@ -1,6 +1,6 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "zsh-prezto-2019-03-18";
   src = fetchgit {
     url = "https://github.com/sorin-ionescu/prezto";

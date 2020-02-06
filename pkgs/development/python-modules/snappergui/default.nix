@@ -5,7 +5,7 @@
 , dbus-python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "Snapper-GUI";
   version = "0.1";
 

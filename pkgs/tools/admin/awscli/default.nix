@@ -1,11 +1,11 @@
 { lib
-, python
+, python3
 , groff
 , less
 }:
 
 let
-  py = python.override {
+  py = python3.override {
     packageOverrides = self: super: {
       rsa = super.rsa.overridePythonAttrs (oldAttrs: rec {
         version = "3.4.2";
@@ -14,30 +14,33 @@ let
           sha256 = "25df4e10c263fb88b5ace923dd84bf9aa7f5019687b5e55382ffcdb8bede9db5";
         };
       });
-      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
-        version = "0.3.9";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1";
-        };
-      });
+
       pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "3.13";
+        version = "5.1.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "3ef3092145e9b70e3ddd2c7ad59bdd0252a94dfe3949721633e41344de00a6bf";
+          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
         };
       });
+
+      colorama = super.colorama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.4.1";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0ba247bx5pc60hcpbf3rjsqk0whilg241i9qdfnlcwij5qgdgvh5";
+        };
+      });
+
     };
   };
 
 in py.pkgs.buildPythonApplication rec {
   pname = "awscli";
-  version = "1.16.170"; # N.B: if you change this, change botocore to a matching version too
+  version = "1.16.266"; # N.B: if you change this, change botocore to a matching version too
 
   src = py.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "12kh62imdfy8whvqzdrmdq4zw70gj1g3smqldf4lqpjfzss7cy92";
+    sha256 = "9c59a5ca805f467669d471b29550ecafafb9b380a4a6926a9f8866f71cd4f7be";
   };
 
   # No tests included
@@ -63,6 +66,8 @@ in py.pkgs.buildPythonApplication rec {
     mv $out/bin/aws_zsh_completer.sh $out/share/zsh/site-functions
     rm $out/bin/aws.cmd
   '';
+
+  passthru.python = py; # for aws_shell
 
   meta = with lib; {
     homepage = https://aws.amazon.com/cli/;

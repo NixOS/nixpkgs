@@ -142,7 +142,7 @@ in {
         messages, and respond to them according to a set of rules.
       '';
       default = {};
-      example = { "eth0".rules."1111::/64" = {}; };
+      example = { eth0.rules."1111::/64" = {}; };
     };
   };
 
@@ -153,7 +153,7 @@ in {
     '' ];
 
     services.ndppd.proxies = mkIf (cfg.interface != null && cfg.network != null) {
-      "${cfg.interface}".rules."${cfg.network}" = {};
+      ${cfg.interface}.rules.${cfg.network} = {};
     };
 
     systemd.services.ndppd = {
@@ -161,7 +161,25 @@ in {
       documentation = [ "man:ndppd(1)" "man:ndppd.conf(5)" ];
       after = [ "network-pre.target" ];
       wantedBy = [ "multi-user.target" ];
-      serviceConfig.ExecStart = "${pkgs.ndppd}/bin/ndppd -c ${ndppdConf}";
+      serviceConfig = {
+        ExecStart = "${pkgs.ndppd}/bin/ndppd -c ${ndppdConf}";
+
+        # Sandboxing
+        CapabilityBoundingSet = "CAP_NET_RAW CAP_NET_ADMIN";
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = "AF_INET6 AF_PACKET AF_NETLINK";
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+      };
     };
   };
 }

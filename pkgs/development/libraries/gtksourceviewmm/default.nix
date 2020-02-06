@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, gtkmm3, glibmm, gtksourceview3, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gtksourceviewmm-${version}";
+  pname = "gtksourceviewmm";
   version = "3.21.3";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gtksourceviewmm/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/gtksourceviewmm/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "1danc9mp5mnb65j01qxkwj92z8jf1gns41wbgp17qh7050f0pc6v";
   };
 

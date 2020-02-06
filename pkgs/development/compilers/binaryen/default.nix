@@ -1,11 +1,11 @@
 { stdenv, cmake, python, fetchFromGitHub, emscriptenRev ? null }:
 
 let
-  defaultVersion = "86";
+  defaultVersion = "89";
 
   # Map from git revs to SHA256 hashes
   sha256s = {
-    "version_86" = "12h5018rdwg7vjni0mz91vkpdwyqw0nfacig3vg9dvyn4fnfm76z";
+    version_89 = "0rh1dq33ilq54szfgi1ajaiaj7rbylai02rhp9zm9vpwp0rw8mij";
     "1.38.28" = "172s7y5f38736ic8ri3mnbdqcrkadd40a26cxcfwbscc53phl11v";
   };
 in
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   rev = if emscriptenRev == null
         then "version_${version}"
         else emscriptenRev;
-  name = "binaryen-${version}";
+  pname = "binaryen";
 
   src = fetchFromGitHub {
     owner = "WebAssembly";

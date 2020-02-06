@@ -59,10 +59,8 @@ http {
   <para>
    The private key <filename>key.pem</filename> and certificate
    <filename>fullchain.pem</filename> will be put into
-   <filename>/var/lib/acme/foo.example.com</filename>. The target directory can
-   be configured with the option <xref linkend="opt-security.acme.directory"/>.
+   <filename>/var/lib/acme/foo.example.com</filename>.
   </para>
-
   <para>
    Refer to <xref linkend="ch-options" /> for all available configuration
    options for the <link linkend="opt-security.acme.certs">security.acme</link>

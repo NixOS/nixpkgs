@@ -1,36 +1,74 @@
-{ stdenv, fetchFromGitLab, meson, ninja, gettext, cargo, rustc, python3, rustPlatform, pkgconfig, gtksourceview
-, hicolor-icon-theme, glib, libhandy, gtk3, libsecret, dbus, openssl, sqlite, gst_all_1, wrapGAppsHook, fetchpatch }:
+{ stdenv
+, fetchFromGitLab
+, fetchpatch
+, meson
+, ninja
+, gettext
+, cargo
+, rustc
+, python3
+, rustPlatform
+, pkgconfig
+, gtksourceview4
+, glib
+, libhandy
+, gtk3
+, dbus
+, openssl
+, sqlite
+, gst_all_1
+, cairo
+, gdk-pixbuf
+, gspell
+, wrapGAppsHook
+}:
 
 rustPlatform.buildRustPackage rec {
-  version = "4.0.0";
-  name = "fractal-${version}";
+  pname = "fractal";
+  version = "4.2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "05q47jdgbi5jz01280msb8gxnbsrgf2jvglfm6k40f1xw4wxkrzy";
+    sha256 = "0r98km3c8naj3mdr1wppzj823ir7jnsia7r3cbg3vsq8q52i480r";
   };
 
+  cargoSha256 = "1n9n4d057cz44sh1iy2hb2adplhnrhvr8drnp0v2h8yw73a5shvv";
+
   nativeBuildInputs = [
-    meson ninja pkgconfig gettext cargo rustc python3 wrapGAppsHook
-  ];
-  buildInputs = [
-    glib gtk3 libhandy dbus openssl sqlite gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-bad
-    gtksourceview hicolor-icon-theme libsecret
+    cargo
+    gettext
+    meson
+    ninja
+    pkgconfig
+    python3
+    rustc
+    wrapGAppsHook
   ];
 
-  patches = [
-    # Fixes build with >= gstreamer 1.15.1
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/commit/e78f36c25c095ea09c9c421187593706ad7c4065.patch";
-      sha256 = "1qv7ayhkhgrrldag2lzs9ql17nbc1d72j375ljhhf6cms89r19ir";
-    })
+  buildInputs = [
+    cairo
+    dbus
+    gdk-pixbuf
+    glib
+    gspell
+    gst_all_1.gst-editing-services
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    gst_all_1.gst-validate
+    gtk3
+    gtksourceview4
+    libhandy
+    openssl
+    sqlite
   ];
 
   postPatch = ''
-    patchShebangs scripts/meson_post_install.py
+    chmod +x scripts/test.sh
+    patchShebangs scripts/meson_post_install.py scripts/test.sh
   '';
 
   # Don't use buildRustPackage phases, only use it for rust deps setup
@@ -39,13 +77,11 @@ rustPlatform.buildRustPackage rec {
   checkPhase = null;
   installPhase = null;
 
-  cargoSha256 = "1ax5dv200v8mfx0418bx8sbwpbp6zj469xg75hp78kqfiv83pn1g";
-
   meta = with stdenv.lib; {
     description = "Matrix group messaging app";
     homepage = https://gitlab.gnome.org/GNOME/fractal;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill worldofpeace ];
   };
 }
 

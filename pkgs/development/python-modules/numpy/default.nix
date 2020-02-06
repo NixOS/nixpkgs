@@ -1,11 +1,22 @@
-{ lib, fetchPypi, python, buildPythonPackage, gfortran, pytest, blas, writeTextFile }:
+{ lib
+, fetchPypi
+, python
+, buildPythonPackage
+, gfortran
+, pytest
+, blas
+, writeTextFile
+, isPyPy
+, cython
+, setuptoolsBuildHook
+ }:
 
 let
   blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      "${blasImplementation}" = {
+      ${blasImplementation} = {
         include_dirs = "${blas}/include";
         library_dirs = "${blas}/lib";
       } // lib.optionalAttrs (blasImplementation == "mkl") {
@@ -16,15 +27,16 @@ let
   };
 in buildPythonPackage rec {
   pname = "numpy";
-  version = "1.16.4";
+  version = "1.18.1";
+  format = "pyproject.toml";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "7242be12a58fec245ee9734e625964b97cf7e3f2f7d016603f9e56660ce479c7";
+    sha256 = "b6ff59cee96b454516e47e7721098e6ceebef435e3e21ac2d6c3b8b02628eb77";
   };
 
-  nativeBuildInputs = [ gfortran pytest ];
+  nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
   buildInputs = [ blas ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
@@ -45,6 +57,8 @@ in buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
+  doCheck = !isPyPy; # numpy 1.16+ hits a bug in pypy's ctypes, using either numpy or pypy HEAD fixes this (https://github.com/numpy/numpy/issues/13807)
+
   checkPhase = ''
     runHook preCheck
     pushd dist
@@ -58,14 +72,13 @@ in buildPythonPackage rec {
     inherit blasImplementation cfg;
   };
 
-  # Disable two tests
-  # - test_f2py: f2py isn't yet on path.
+  # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_f2py,test_large_file_support";
+  NOSE_EXCLUDE="test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";
-    homepage = http://numpy.scipy.org/;
+    homepage = https://numpy.org/;
     maintainers = with lib.maintainers; [ fridh ];
   };
 }

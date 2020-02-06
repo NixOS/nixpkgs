@@ -2,7 +2,7 @@
   asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt }:
 
 stdenv.mkDerivation rec {
-  name = "lsyncd-${version}";
+  pname = "lsyncd";
   version = "2.2.3";
 
   src = fetchFromGitHub {

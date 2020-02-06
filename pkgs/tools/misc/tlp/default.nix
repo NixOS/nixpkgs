@@ -14,7 +14,7 @@ let
           );
 
 in stdenv.mkDerivation rec {
-  name = "tlp-${version}";
+  pname = "tlp";
   version = "1.2.2";
 
   src = fetchFromGitHub {

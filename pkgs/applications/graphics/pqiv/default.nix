@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation (rec {
-  name = "pqiv-${version}";
+  pname = "pqiv";
   version = "2.11";
 
   src = fetchFromGitHub {
@@ -22,7 +22,7 @@ stdenv.mkDerivation (rec {
     description = "Powerful image viewer with minimal UI";
     homepage = http://www.pberndt.com/Programme/Linux/pqiv;
     license = licenses.gpl3;
-    maintainers = [ maintainers.ndowens ];
+    maintainers = [];
     platforms = platforms.linux;
   };
 })

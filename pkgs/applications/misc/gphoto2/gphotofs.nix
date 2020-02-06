@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libtool, pkgconfig, libgphoto2, fuse, glib }:
 
 stdenv.mkDerivation rec {
-  name = "gphoto2fs-${version}";
+  pname = "gphoto2fs";
   version = "0.5.0";
   src = fetchurl {
     url="mirror://sourceforge/gphoto/gphotofs/${version}/gphotofs-0.5.tar.bz2";

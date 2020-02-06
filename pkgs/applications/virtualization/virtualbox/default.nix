@@ -1,8 +1,8 @@
-{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2
-, libX11, xorgproto, libXext, libXcursor, libXmu, qt5, libIDL, SDL, libcap, libGL
-, libpng, glib, lvm2, libXrandr, libXinerama, libopus
-, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
-, alsaLib, curl, libvpx, nettools, dbus
+{ config, stdenv, fetchurl, lib, iasl, dev86, pam, libxslt, libxml2, wrapQtAppsHook
+, libX11, xorgproto, libXext, libXcursor, libXmu, libIDL, SDL, libcap, libGL
+, libpng, glib, lvm2, libXrandr, libXinerama, libopus, qtbase, qtx11extras
+, qttools, qtsvg, qtwayland, pkgconfig, which, docbook_xsl, docbook_xml_dtd_43
+, alsaLib, curl, libvpx, nettools, dbus, substituteAll, fetchpatch
 , makeself, perl
 , javaBindings ? true, jdk ? null # Almost doesn't affect closure size
 , pythonBindings ? false, python3 ? null
@@ -21,10 +21,21 @@ let
   buildType = "release";
   # Remember to change the extpackRev and version in extpack.nix and
   # guest-additions/default.nix as well.
-  main = "11sxx2zaablkvjiw0i5g5i5ibak6bsq6fldrcxwbcby6318shnhv";
-  version = "6.0.8";
+  main = "036x2mvkk22lbg72cz6pik9z538j1ag6mmwjjmfikgrq1i7v24jy";
+  version = "6.0.14";
+
+  iasl' = iasl.overrideAttrs (old: rec {
+    inherit (old) pname;
+    version = "20190108";
+    src = fetchurl {
+      url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
+      sha256 = "0bqhr3ndchvfhxb31147z8gd81dysyz5dwkvmp56832d0js2564q";
+    };
+    NIX_CFLAGS_COMPILE = old.NIX_CFLAGS_COMPILE + " -Wno-error=stringop-truncation";
+  });
 in stdenv.mkDerivation {
-  name = "virtualbox-${version}";
+  pname = "virtualbox";
+  inherit version;
 
   src = fetchurl {
     url = "https://download.virtualbox.org/virtualbox/${version}/VirtualBox-${version}.tar.bz2";
@@ -33,17 +44,21 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" "modsrc" ];
 
-  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ];
+  nativeBuildInputs = [ pkgconfig which docbook_xsl docbook_xml_dtd_43 patchelfUnstable ]
+    ++ optional (!headless) wrapQtAppsHook;
+
+  # Wrap manually because we wrap just a small number of executables.
+  dontWrapQtApps = true;
 
   buildInputs =
-    [ iasl dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
+    [ iasl' dev86 libxslt libxml2 xorgproto libX11 libXext libXcursor libIDL
       libcap glib lvm2 alsaLib curl libvpx pam makeself perl
       libXmu libpng libopus python ]
     ++ optional javaBindings jdk
     ++ optional pythonBindings python # Python is needed even when not building bindings
     ++ optional pulseSupport libpulseaudio
     ++ optionals (headless) [ libXrandr libGL ]
-    ++ optionals (!headless) [ qt5.qtbase qt5.qtx11extras libXinerama SDL ];
+    ++ optionals (!headless) [ qtbase qtx11extras libXinerama SDL ];
 
   hardeningDisable = [ "format" "fortify" "pic" "stackprotector" ];
 
@@ -53,7 +68,7 @@ in stdenv.mkDerivation {
         -e 's@PYTHONDIR=.*@PYTHONDIR=${if pythonBindings then python else ""}@' \
         -e 's@CXX_FLAGS="\(.*\)"@CXX_FLAGS="-std=c++11 \1"@' \
         ${optionalString (!headless) ''
-        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qt5.qtbase}/bin"@' \
+        -e 's@TOOLQT5BIN=.*@TOOLQT5BIN="${getDev qtbase}/bin"@' \
         ''} -i configure
     ls kBuild/bin/linux.x86/k* tools/linux.x86/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux.so.2
     ls kBuild/bin/linux.amd64/k* tools/linux.amd64/bin/* | xargs -n 1 patchelf --set-interpreter ${stdenv.glibc.out}/lib/ld-linux-x86-64.so.2
@@ -74,8 +89,39 @@ in stdenv.mkDerivation {
 
   patches =
      optional enableHardening ./hardened.patch
+     # When hardening is enabled, we cannot use wrapQtApp to ensure that VirtualBoxVM sees
+     # the correct environment variables needed for Qt to work, specifically QT_PLUGIN_PATH.
+     # This is because VirtualBoxVM would detect that it is wrapped that and refuse to run,
+     # and also because it would unset QT_PLUGIN_PATH for security reasons. We work around
+     # these issues by patching the code to set QT_PLUGIN_PATH to the necessary paths,
+     # after the code that unsets it. Note that qtsvg is included so that SVG icons from
+     # the user's icon theme can be loaded.
+  ++ optional (!headless && enableHardening) (substituteAll {
+      src = ./qt-env-vars.patch;
+      qtPluginPath = "${qtbase.bin}/${qtbase.qtPluginPrefix}:${qtsvg.bin}/${qtbase.qtPluginPrefix}:${qtwayland.bin}/${qtbase.qtPluginPrefix}";
+    })
   ++ [
     ./qtx11extras.patch
+    # Kernel 5.4 fix, should be fixed with next upstream release
+    # https://www.virtualbox.org/ticket/18945
+    (fetchpatch {
+      name = "kernel-5.4-fix-1.patch";
+      url = "https://www.virtualbox.org/changeset/81586/vbox?format=diff";
+      sha256 = "0zbkc9v65pkdmjik53x29g39qyf7narkhpwpx5n1n1bfqnhf0k1r";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "kernel-5.4-fix-2.patch";
+      url = "https://www.virtualbox.org/changeset/81587/vbox?format=diff";
+      sha256 = "1j98cqxj8qlqwaqr4mvwwbkmchw8jmygjwgzz82gix7fj76j2y9c";
+      stripLen = 1;
+    })
+    (fetchpatch {
+      name = "kernel-5.4-fix-3.patch";
+      url = "https://www.virtualbox.org/changeset/81649/vbox?format=diff";
+      sha256 = "1d6p5k5dgzmjglqfkbcbvpn1x3wxila30q4gcbb7pxwfgclaw2hk";
+      stripLen = 1;
+    })
   ];
 
   postPatch = ''
@@ -105,9 +151,9 @@ in stdenv.mkDerivation {
     VBOX_JAVA_HOME                 := ${jdk}
     ''}
     ${optionalString (!headless) ''
-    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qt5.qtx11extras}/lib
-    PATH_QT5_X11_EXTRAS_INC        := ${getDev qt5.qtx11extras}/include
-    TOOL_QT5_LRC                   := ${getDev qt5.qttools}/bin/lrelease
+    PATH_QT5_X11_EXTRAS_LIB        := ${getLib qtx11extras}/lib
+    PATH_QT5_X11_EXTRAS_INC        := ${getDev qtx11extras}/include
+    TOOL_QT5_LRC                   := ${getDev qttools}/bin/lrelease
     ''}
     LOCAL_CONFIG
 
@@ -177,6 +223,15 @@ in stdenv.mkDerivation {
     cp -rv out/linux.*/${buildType}/bin/src "$modsrc"
   '';
 
+  preFixup = optionalString (!headless) ''
+    wrapQtApp $out/bin/VirtualBox
+  ''
+  # If hardening is disabled, wrap the VirtualBoxVM binary instead of patching
+  # the source code (see postPatch).
+  + optionalString (!headless && !enableHardening) ''
+    wrapQtApp $out/libexec/virtualbox/VirtualBoxVM
+  '';
+
   passthru = {
     inherit version;       # for guest additions
     inherit extensionPack; # for inclusion in profile to prevent gc
@@ -186,7 +241,7 @@ in stdenv.mkDerivation {
     description = "PC emulator";
     license = licenses.gpl2;
     homepage = https://www.virtualbox.org/;
-    maintainers = with maintainers; [ flokli sander ];
+    maintainers = with maintainers; [ sander ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libnfs-${version}";
+  pname = "libnfs";
   version = "4.0.0";
 
   src = fetchFromGitHub {

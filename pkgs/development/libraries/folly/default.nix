@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
-, google-gflags, libiberty, openssl }:
+, gflags, libiberty, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "folly-${version}";
-  version = "2019.06.17.00";
+  pname = "folly";
+  version = "2019.11.11.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
     rev = "v${version}";
-    sha256 = "0v639yqk029c585x3140rdfbz3xrdjwc858bqfy4yv31pyrn608l";
+    sha256 = "1sgv7sdalbs7zhz3zcc95gn2h8j2xjf7hkw2c618zc3pdn6aa58w";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     boost
     double-conversion
     glog
-    google-gflags
+    gflags
     libevent
     libiberty
     openssl

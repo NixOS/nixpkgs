@@ -6,7 +6,6 @@
 , libXext, libICE, libXrandr
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux && !stdenv.hostPlatform.isAndroid, libpulseaudio
 , OpenGL, CoreAudio, CoreServices, AudioUnit, Kernel, Cocoa
-, cf-private
 }:
 
 # NOTE: When editing this expression see if the same change applies to
@@ -14,12 +13,22 @@
 
 with stdenv.lib;
 
+let
+  extraPropagatedBuildInputs = [ ]
+    ++ optionals x11Support [ libXext libICE libXrandr ]
+    ++ optionals openglSupport [ libGL libGLU ]
+    ++ optional alsaSupport alsaLib
+    ++ optional pulseaudioSupport libpulseaudio
+    ++ optional stdenv.isDarwin Cocoa;
+  rpath = makeLibraryPath extraPropagatedBuildInputs;
+in
+
 stdenv.mkDerivation rec {
-  name    = "SDL-${version}";
+  pname = "SDL";
   version = "1.2.15";
 
   src = fetchurl {
-    url    = "https://www.libsdl.org/release/${name}.tar.gz";
+    url    = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
     sha256 = "005d993xcac8236fpvd1iawkz4wqjybkpn8dbwaliqz5jfkidlyn";
   };
 
@@ -32,20 +41,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ]
     ++ optional stdenv.isLinux libcap;
 
-  propagatedBuildInputs = [ libiconv ]
-    ++ optionals x11Support [ libXext libICE libXrandr ]
-    ++ optionals openglSupport [ libGL libGLU ]
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseaudioSupport libpulseaudio
-    ++ optional stdenv.isDarwin Cocoa;
+  propagatedBuildInputs = [ libiconv ] ++ extraPropagatedBuildInputs;
 
   buildInputs = [ ]
     ++ optional (!stdenv.hostPlatform.isMinGW && alsaSupport) audiofile
-    ++ optionals stdenv.isDarwin [
-      AudioUnit CoreAudio CoreServices Kernel OpenGL
-      # Needed for NSDefaultRunLoopMode symbols.
-      cf-private
-    ];
+    ++ optionals stdenv.isDarwin [ AudioUnit CoreAudio CoreServices Kernel OpenGL ];
 
   configureFlags = [
     "--disable-oss"
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     for lib in $out/lib/*.so* ; do
       if [[ -L "$lib" ]]; then
-        patchelf --set-rpath "$(patchelf --print-rpath $lib):${makeLibraryPath propagatedBuildInputs}" "$lib"
+        patchelf --set-rpath "$(patchelf --print-rpath $lib):${rpath}" "$lib"
       fi
     done
   '';

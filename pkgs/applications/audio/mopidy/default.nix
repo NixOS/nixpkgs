@@ -4,13 +4,13 @@
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy";
-  version = "2.2.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "mopidy";
     repo = "mopidy";
     rev = "v${version}";
-    sha256 = "01vl162c7ssf69b0m65ys9fxnsqnfa1whwbprnc063lkcnrnlkr1";
+    sha256 = "1qdflxr0an6l2m3j90h55bzyj7rjlkkwmxx945hwv8xi472rcgdj";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -21,7 +21,7 @@ pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    gst-python pygobject3 pykka tornado_4 requests
+    gst-python pygobject3 pykka tornado_4 requests setuptools
   ] ++ stdenv.lib.optional (!stdenv.isDarwin) dbus-python;
 
   # There are no tests
@@ -38,7 +38,7 @@ pythonPackages.buildPythonApplication rec {
       SoundCloud, Google Play Music, and more
     '';
     license = licenses.asl20;
-    maintainers = with maintainers; [ rickynils fpletz ];
+    maintainers = [ maintainers.fpletz ];
     hydraPlatforms = [];
   };
 }

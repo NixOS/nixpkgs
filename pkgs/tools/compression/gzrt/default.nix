@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "gzrt-0.8";
 
   src = fetchurl {
-    url = "http://www.urbanophile.com/arenn/coding/gzrt/${name}.tar.gz";
+    url = "https://www.urbanophile.com/arenn/coding/gzrt/${name}.tar.gz";
     sha256 = "1vhzazj47xfpbfhzkwalz27cc0n5gazddmj3kynhk0yxv99xrdxh";
   };
 
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://www.urbanophile.com/arenn/hacking/gzrt/;
+    homepage = https://www.urbanophile.com/arenn/hacking/gzrt/;
     description = "The gzip Recovery Toolkit";
-    license = stdenv.lib.licenses.gpl3;
+    license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;
   };
 }

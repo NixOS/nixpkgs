@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pdftotext";
-  version = "2.1.1";
+  version = "2.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jwc2zpss0983wqqi0kpichasljsxar9c4ma8vycn8maw3pi3bg3";
+    sha256 = "00xf3jmpb4m3q758wvk4khpcmiys4gmd88vvrz6i7yw1jl268y6k";
   };
 
   buildInputs = [ poppler ];

@@ -3,10 +3,10 @@
 
 stdenv.mkDerivation rec {
   version = "3.19";
-  name = "xnee-${version}";
+  pname = "xnee";
 
   src = fetchurl {
-    url = "mirror://gnu/xnee/${name}.tar.gz";
+    url = "mirror://gnu/xnee/${pname}-${version}.tar.gz";
     sha256 = "04n2lac0vgpv8zsn7nmb50hf3qb56pmj90dmwnivg09gyrf1x92j";
   };
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   # `cnee' is linked without `-lXi' and as a consequence has a RUNPATH that
   # lacks libXi.
-  makeFlags = "LDFLAGS=-lXi";
+  makeFlags = [ "LDFLAGS=-lXi" ];
 
   # XXX: Actually tests require an X server.
   doCheck = true;
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
     homepage = https://www.gnu.org/software/xnee/;
 
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
   };
 }

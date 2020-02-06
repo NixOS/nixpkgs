@@ -1,13 +1,13 @@
 {stdenv, fetchurl} :
 
 stdenv.mkDerivation rec {
-  name = "lucene-${version}";
+  pname = "lucene";
   version = "1.4.3";
 
   builder = ./builder.sh;
 
   src = fetchurl {
-    url = "https://archive.apache.org/dist/jakarta/lucene/${name}.tar.gz";
+    url = "https://archive.apache.org/dist/jakarta/lucene/${pname}-${version}.tar.gz";
     sha256 = "1mxaxg65f7v8n60irjwm24v7hcisbl0srmpvcy1l4scs6rjj1awh";
   };
 

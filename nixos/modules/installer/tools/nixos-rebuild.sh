@@ -22,6 +22,7 @@ repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
 targetHost=
+maybeSudo=()
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -89,6 +90,9 @@ while [ "$#" -gt 0 ]; do
         targetHost="$1"
         shift 1
         ;;
+      --use-remote-sudo)
+        maybeSudo=(sudo --)
+        ;;
       *)
         echo "$0: unknown option \`$i'"
         exit 1
@@ -96,6 +100,9 @@ while [ "$#" -gt 0 ]; do
     esac
 done
 
+if [ -n "$SUDO_USER" ]; then
+    maybeSudo=(sudo --)
+fi
 
 if [ -z "$buildHost" -a -n "$targetHost" ]; then
     buildHost="$targetHost"
@@ -111,17 +118,17 @@ buildHostCmd() {
     if [ -z "$buildHost" ]; then
         "$@"
     elif [ -n "$remoteNix" ]; then
-        ssh $SSHOPTS "$buildHost" PATH="$remoteNix:$PATH" "$@"
+        ssh $SSHOPTS "$buildHost" env PATH="$remoteNix:$PATH" "${maybeSudo[@]}" "$@"
     else
-        ssh $SSHOPTS "$buildHost" "$@"
+        ssh $SSHOPTS "$buildHost" "${maybeSudo[@]}" "$@"
     fi
 }
 
 targetHostCmd() {
     if [ -z "$targetHost" ]; then
-        "$@"
+        "${maybeSudo[@]}" "$@"
     else
-        ssh $SSHOPTS "$targetHost" "$@"
+        ssh $SSHOPTS "$targetHost" "${maybeSudo[@]}" "$@"
     fi
 }
 

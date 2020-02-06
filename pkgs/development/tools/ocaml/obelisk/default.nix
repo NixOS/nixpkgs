@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-	name = "obelisk-${version}";
+	pname = "obelisk";
 	version = "0.4.0";
 	src = fetchFromGitHub {
 		owner = "lelio-brun";

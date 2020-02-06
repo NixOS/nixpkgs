@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libjpeg, libGLU_combined, freeglut, zlib, cmake, libX11, libxml2, libpng,
+{ stdenv, fetchurl, libjpeg, libGLU, libGL, freeglut, zlib, cmake, libX11, libxml2, libpng,
   libXxf86vm }:
 
 stdenv.mkDerivation {
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1w19abqjn64w47m35alg7bcdl1p97nf11zn64cp4p0dydihmhv56";
   };
 
-  buildInputs = [ libjpeg libGLU_combined freeglut zlib cmake libX11 libxml2 libpng
+  buildInputs = [ libjpeg libGLU libGL freeglut zlib cmake libX11 libxml2 libpng
     libXxf86vm ];
 
   postPatch = ''

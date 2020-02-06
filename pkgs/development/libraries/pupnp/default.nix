@@ -1,7 +1,7 @@
 { fetchFromGitHub, stdenv, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "libupnp-${version}";
+  pname = "libupnp";
   version = "1.8.4";
 
   src = fetchFromGitHub {

@@ -7,15 +7,6 @@ let
   };
 in
 nodePackages // {
-  aws-azure-login = nodePackages.aws-azure-login.override {
-    PUPPETEER_SKIP_CHROMIUM_DOWNLOAD = "true";
-
-    buildInputs = [ pkgs.makeWrapper ];
-    postInstall = ''
-      wrapProgram "$out/bin/aws-azure-login" --set PUPPETEER_EXECUTABLE_PATH "${pkgs.chromium}/bin/chromium"
-    '';
-  };
-
   bower2nix = nodePackages.bower2nix.override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
@@ -30,7 +21,7 @@ nodePackages // {
   };
 
   dat = nodePackages.dat.override {
-    buildInputs = [ nodePackages.node-gyp-build ];
+    buildInputs = [ nodePackages.node-gyp-build pkgs.libtool pkgs.autoconf pkgs.automake ];
   };
 
   dnschain = nodePackages.dnschain.override {
@@ -39,6 +30,10 @@ nodePackages // {
       wrapProgram $out/bin/dnschain --suffix PATH : ${pkgs.openssl.bin}/bin
     '';
   };
+
+  bitwarden-cli = pkgs.lib.overrideDerivation nodePackages."@bitwarden/cli" (drv: {
+    name = "bitwarden-cli-${drv.version}";
+  });
 
   ios-deploy = nodePackages.ios-deploy.override (drv: {
     nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.buildPackages.rsync ];
@@ -71,10 +66,6 @@ nodePackages // {
     postInstall = ''
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}
     '';
-  };
-
-  npm2nix = nodePackages."npm2nix-git://github.com/NixOS/npm2nix.git#5.12.0".override {
-    postInstall = "npm run-script prepublish";
   };
 
   pnpm = nodePackages.pnpm.override {
@@ -124,5 +115,9 @@ nodePackages // {
 
       nodePackages.node-pre-gyp
     ];
+  };
+
+  thelounge = nodePackages.thelounge.override {
+    buildInputs = [ nodePackages.node-pre-gyp ];
   };
 }

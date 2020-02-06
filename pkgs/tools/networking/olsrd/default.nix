@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bison, flex }:
 
 stdenv.mkDerivation rec {
-  name = "olsrd-${version}";
+  pname = "olsrd";
   version = "0.9.6.1";
 
   src = fetchurl {
-    url = "http://www.olsr.org/releases/0.9/${name}.tar.bz2";
+    url = "http://www.olsr.org/releases/0.9/${pname}-${version}.tar.bz2";
     sha256 = "9cac290e9bff5fc7422110b9ccd972853f10962c962d2f31a63de9c6d1520612";
   };
 

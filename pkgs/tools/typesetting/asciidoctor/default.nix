@@ -1,8 +1,7 @@
 { lib, bundlerApp, makeWrapper,
   # Optional dependencies, can be null
   epubcheck, kindlegen,
-  # For the update shell
-  mkShell, bundix
+  bundlerUpdateScript
 }:
 
 let
@@ -26,21 +25,16 @@ let
       '';
 
     passthru = {
-      inherit updateShell;
+      updateScript = bundlerUpdateScript "asciidoctor";
     };
 
     meta = with lib; {
       description = "A faster Asciidoc processor written in Ruby";
       homepage = https://asciidoctor.org/;
       license = licenses.mit;
-      maintainers = with maintainers; [ gpyh ];
+      maintainers = with maintainers; [ gpyh nicknovitski ];
       platforms = platforms.unix;
     };
-  };
-
-  updateShell = mkShell {
-    inputsFrom = lib.attrValues app.gems;
-    buildInputs = [ bundix ];
   };
 in
   app

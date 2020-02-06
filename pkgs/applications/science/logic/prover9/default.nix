@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     done
   '';
 
-  buildFlags = "all";
+  buildFlags = [ "all" ];
 
   checkPhase = "make test1";
 

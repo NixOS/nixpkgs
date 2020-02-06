@@ -21,7 +21,7 @@ let
 in
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sage-${version}";
+  pname = "sage";
   src = sage-with-env.env.lib.src;
 
   buildInputs = [

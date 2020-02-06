@@ -10,7 +10,7 @@ in pythonPackages.buildPythonApplication {
 
   src = fetchFromGitHub {
     owner = "kpcyrd";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
     inherit sha256;
   };

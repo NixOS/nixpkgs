@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "Rtree";
-  version = "0.8.3";
+  version = "0.9.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0jc62jbcqqpjcwcly7l9zk25bg72mrxmjykpvfiscgln00qczfbc";
+    sha256 = "55c046a98e8d84235792de1f18635f680d7b4085264fbced6b073f28fcbe353a";
   };
 
   propagatedBuildInputs = [ libspatialindex ];

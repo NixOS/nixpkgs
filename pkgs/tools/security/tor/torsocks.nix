@@ -1,7 +1,7 @@
 { stdenv, fetchgit, autoreconfHook, libcap }:
 
 stdenv.mkDerivation rec {
-  name = "torsocks-${version}";
+  pname = "torsocks";
   version = "2.3.0";
 
   src = fetchgit {

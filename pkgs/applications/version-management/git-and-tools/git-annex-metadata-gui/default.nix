@@ -1,7 +1,7 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, pyqt5, git-annex-adapter }:
 
 buildPythonApplication rec {
-  name = "git-annex-metadata-gui-${version}";
+  pname = "git-annex-metadata-gui";
   version = "0.2.0";
 
   src = fetchFromGitHub {

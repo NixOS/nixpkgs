@@ -1,11 +1,10 @@
 {stdenv, fetchurl, perl, bdftopcf, perlPackages, fontforge, SDL, SDL_image}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "unscii";
   version = "1.1";
   # or fetchFromGitHub(owner,repo,rev) or fetchgit(rev)
   src = fetchurl {
-    url = "http://pelulamu.net/${pname}/${name}-src.tar.gz";
+    url = "http://pelulamu.net/${pname}/${pname}-${version}-src.tar.gz";
     sha256 = "0qcxcnqz2nlwfzlrn115kkp3n8dd7593h762vxs6vfqm13i39lq1";
   };
   nativeBuildInputs = [perl bdftopcf perlPackages.TextCharWidth fontforge

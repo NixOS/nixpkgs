@@ -2,7 +2,8 @@
 
 let version = "1.1";
 in stdenv.mkDerivation {
-  name = "asciiquarium-${version}";
+  pname = "asciiquarium";
+  inherit version;
   src = fetchurl {
     url = "https://robobunny.com/projects/asciiquarium/asciiquarium_${version}.tar.gz";
     sha256 = "0qfkr5b7sxzi973nh0h84blz2crvmf28jkkgaj3mxrr56mhwc20v";

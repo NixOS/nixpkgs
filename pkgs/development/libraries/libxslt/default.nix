@@ -1,35 +1,26 @@
-{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python2, libgcrypt
+{ stdenv, fetchurl, fetchpatch, libxml2, findXMLCatalogs, python, libgcrypt
 , cryptoSupport ? false
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 }:
 
-assert pythonSupport -> python2 != null;
+assert pythonSupport -> python != null;
 assert pythonSupport -> libxml2.pythonSupport;
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "libxslt";
-  version = "1.1.33";
-  name = pname + "-" + version;
+  version = "1.1.34";
 
   src = fetchurl {
-    url = "http://xmlsoft.org/sources/${name}.tar.gz";
-    sha256 = "1j1q1swnsy8jgi9x7mclvkrqhfgn09886gdlr9wzk7a08i8n0dlf";
+    url = "http://xmlsoft.org/sources/${pname}-${version}.tar.gz";
+    sha256 = "0zrzz6kjdyavspzik6fbkpvfpbd25r2qg6py5nnjaabrsr3bvccq";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "CVE-2019-11068.patch";
-      url = "https://gitlab.gnome.org/GNOME/libxslt/commit/e03553605b45c88f0b4b2980adfbbb8f6fca2fd6.patch";
-      sha256 = "0pkpb4837km15zgg6h57bncp66d5lwrlvkr73h0lanywq7zrwhj8";
-    })
-  ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ] ++ stdenv.lib.optional pythonSupport "py";
 
   buildInputs = [ libxml2.dev ]
-    ++ stdenv.lib.optionals pythonSupport [ libxml2.py python2 ]
+    ++ stdenv.lib.optionals pythonSupport [ libxml2.py python ]
     ++ stdenv.lib.optionals cryptoSupport [ libgcrypt ];
 
   propagatedBuildInputs = [ findXMLCatalogs ];
@@ -39,7 +30,7 @@ stdenv.mkDerivation rec {
     "--without-debug"
     "--without-mem-debug"
     "--without-debugger"
-  ] ++ optional pythonSupport "--with-python=${python2}"
+  ] ++ optional pythonSupport "--with-python=${python}"
     ++ optional (!cryptoSupport) "--without-crypto";
 
   postFixup = ''
@@ -49,7 +40,7 @@ stdenv.mkDerivation rec {
   '' + optionalString pythonSupport ''
     mkdir -p $py/nix-support
     echo ${libxml2.py} >> $py/nix-support/propagated-build-inputs
-    moveToOutput lib/python2.7 "$py"
+    moveToOutput ${python.libPrefix} "$py"
   '';
 
   passthru = {

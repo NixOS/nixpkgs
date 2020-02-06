@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "duti";
-  name = "${pname}-${version}";
   version = "1.5.4pre";
   src = fetchFromGitHub {
     owner = "moretension";

@@ -22,7 +22,7 @@ in {
   config = mkIf cfg.enable {
     services.geoclue2 = {
       enable = true;
-      appConfig."localtime" = {
+      appConfig.localtime = {
         isAllowed = true;
         isSystem = true;
       };
@@ -34,6 +34,10 @@ in {
     environment.systemPackages = [ pkgs.localtime.out ];
     # Install the systemd unit.
     systemd.packages = [ pkgs.localtime.out ];
+
+    users.users.localtimed = {
+      description = "Taskserver user";
+    };
 
     systemd.services.localtime = {
       wantedBy = [ "multi-user.target" ];

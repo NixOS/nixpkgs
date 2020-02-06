@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec{
   version = "3.03+dfsg2";
-  name = "cowsay-${version}";
+  pname = "cowsay";
 
   src = fetchurl {
     url = "http://http.debian.net/debian/pool/main/c/cowsay/cowsay_${version}.orig.tar.gz";

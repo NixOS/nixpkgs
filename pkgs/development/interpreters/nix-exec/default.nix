@@ -1,7 +1,8 @@
 { stdenv, fetchurl, pkgconfig, nix, git }: let
   version = "4.1.6";
 in stdenv.mkDerivation {
-  name = "nix-exec-${version}";
+  pname = "nix-exec";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/shlevy/nix-exec/releases/download/v${version}/nix-exec-${version}.tar.xz";

@@ -8,7 +8,7 @@ let
     desktopName = pname;
     name = pname;
     exec = "@out@/bin/${pname}";
-    icon = "${pname}";
+    icon = pname;
     terminal = "False";
     comment = "An open-source, single-player, role-playing roguelike game set in the world of Eyal.";
     type = "Application";
@@ -18,12 +18,17 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.5.10";
+  version = "1.6.6";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0mc5dgh2x9nbili7gy6srjhb23ckalf08wqq2amyjr5rq392jvd7";
+    sha256 = "1amx0y49scy9hq71wjvkdzvgclwa2g54vkv4bf40mxyp4pl0bq7m";
   };
+
+  prePatch = ''
+    # http://forums.te4.org/viewtopic.php?f=42&t=49478&view=next#p234354
+    sed -i 's|#include <GL/glext.h>||' src/tgl.h
+  '';
 
   nativeBuildInputs = [ makeWrapper unzip premake4 ];
 
@@ -36,11 +41,7 @@ in stdenv.mkDerivation rec {
   # disable parallel building as it caused sporadic build failures
   enableParallelBuilding = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${SDL2.dev}/include/SDL2"
-    "-I${SDL2_image}/include/SDL2"
-    "-I${SDL2_ttf}/include/SDL2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2 -I${SDL2_image}/include/SDL2 -I${SDL2_ttf}/include/SDL2";
 
   makeFlags = [ "config=release" ];
 

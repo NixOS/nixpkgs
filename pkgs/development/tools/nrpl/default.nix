@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, makeWrapper, nim, pcre, tinycc }:
 
-stdenv.mkDerivation rec {
-  name = "nrpl-${version}";
+stdenv.mkDerivation {
+  pname = "nrpl";
   version = "20150522";
 
   src = fetchFromGitHub {
@@ -21,9 +21,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  NIX_LDFLAGS = [
-    "-lpcre"
-  ];
+  NIX_LDFLAGS = "-lpcre";
 
   buildPhase = ''
     HOME=$TMPDIR

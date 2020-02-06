@@ -1,8 +1,8 @@
 { stdenv, pkgs }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.4.0";
-  name = "ecdsautils-${version}";
+  pname = "ecdsautils";
 
   src = pkgs.fetchFromGitHub {
     owner = "freifunk-gluon";

@@ -35,7 +35,7 @@ let
     "http://repo.fdzh.org/chrome/deb/pool/main/g"
   ];
 
-in rec {
+in {
   getChannel = channel: let
     chanAttrs = builtins.getAttr channel sources;
   in {

@@ -6,8 +6,9 @@
 
 # The celt codec has been deprecated and is now a part of the opus codec
 
-stdenv.mkDerivation rec {
-  name = "celt-${version}";
+stdenv.mkDerivation {
+  pname = "celt";
+  inherit version;
 
   inherit src;
 

@@ -3,7 +3,7 @@
 let
   pname = "mypaint-brushes";
   version = "1.3.0";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

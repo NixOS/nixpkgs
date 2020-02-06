@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "slstatus-${version}";
+  pname = "slstatus";
   version = "unstable-2018-04-16";
 
   src = fetchgit {

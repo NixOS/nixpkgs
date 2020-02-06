@@ -55,7 +55,7 @@ assert vp9HighbitdepthSupport -> (vp9DecoderSupport || vp9EncoderSupport);
 assert isCygwin -> unitTestsSupport && webmIOSupport && libyuvSupport;
 
 stdenv.mkDerivation rec {
-  name = "libvpx-${version}";
+  pname = "libvpx";
   version = "1.7.0";
 
   src = fetchFromGitHub {
@@ -65,7 +65,11 @@ stdenv.mkDerivation rec {
     sha256 = "0vvh89hvp8qg9an9vcmwb7d9k3nixhxaz6zi65qdjnd0i56kkcz6";
   };
 
-  patchPhase = ''patchShebangs .'';
+  patches = [
+    ./CVE-2019-9232.CVE-2019-9325.CVE-2019-9371.CVE-2019-9433.patch
+  ];
+
+  postPatch = ''patchShebangs .'';
 
   outputs = [ "bin" "dev" "out" ];
   setOutputFlags = false;
@@ -114,7 +118,7 @@ stdenv.mkDerivation rec {
     (if isDarwin || isCygwin then
        "--enable-static --disable-shared"
      else
-       "--disable-static --enable-shared")
+       "--enable-shared")
     (enableFeature smallSupport "small")
     (enableFeature postprocVisualizerSupport "postproc-visualizer")
     (enableFeature unitTestsSupport "unit-tests")

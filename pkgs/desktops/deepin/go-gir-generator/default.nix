@@ -2,7 +2,6 @@
   libgudev, deepin }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "go-gir-generator";
   version = "2.0.2";
 
@@ -28,11 +27,11 @@ stdenv.mkDerivation rec {
   '';
 
   makeFlags = [
-    "PREFIX=${placeholder ''out''}"
+    "PREFIX=${placeholder "out"}"
     "GOCACHE=$(TMPDIR)/go-cache"
   ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Generate static golang bindings for GObject";

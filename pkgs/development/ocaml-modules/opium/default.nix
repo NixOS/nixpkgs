@@ -13,7 +13,7 @@
 , alcotest
 }:
 
-buildDunePackage rec {
+buildDunePackage {
 	pname = "opium";
 	inherit (opium_kernel) version src meta minimumOCamlVersion;
 

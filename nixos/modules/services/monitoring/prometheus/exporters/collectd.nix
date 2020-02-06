@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -64,7 +64,6 @@ in
     '' else "";
   in {
     serviceConfig = {
-      DynamicUser = true;
       ExecStart = ''
         ${pkgs.prometheus-collectd-exporter}/bin/collectd_exporter \
           -log.format ${cfg.logFormat} \

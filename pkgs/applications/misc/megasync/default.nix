@@ -7,7 +7,6 @@
 , doxygen
 , fetchFromGitHub
 , ffmpeg
-, hicolor-icon-theme
 , libmediainfo
 , libraw
 , libsodium
@@ -15,23 +14,25 @@
 , libuv
 , libzen
 , lsb-release
+, mkDerivation
 , pkgconfig
-, qt5
+, qtbase
+, qttools
 , sqlite
 , swig
 , unzip
 , wget
 }:
 
-stdenv.mkDerivation rec {
-  name = "megasync-${version}";
-  version = "4.1.1.0";
+mkDerivation rec {
+  pname = "megasync";
+  version = "4.2.3.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0lc228q3s9xp78dxjn22g6anqlsy1hi7a6yfs4q3l6gyfc3qcxl2";
+    sha256 = "0l4yfrxjb62vc9dnlzy8rjqi68ga1bys5x5rfzs40daw13yf1adv";
     fetchSubmodules = true;
   };
 
@@ -41,8 +42,7 @@ stdenv.mkDerivation rec {
     doxygen
     lsb-release
     pkgconfig
-    qt5.qmake
-    qt5.qttools
+    qttools
     swig
   ];
   buildInputs = [
@@ -50,15 +50,13 @@ stdenv.mkDerivation rec {
     cryptopp
     curl
     ffmpeg
-    hicolor-icon-theme
     libmediainfo
     libraw
     libsodium
     libtool
     libuv
     libzen
-    qt5.qtbase
-    qt5.qtsvg
+    qtbase
     sqlite
     unzip
     wget

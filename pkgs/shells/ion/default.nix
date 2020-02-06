@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "ion-${version}";
+  pname = "ion";
   version = "1.0.5";
 
   src = fetchFromGitHub {
@@ -22,5 +22,9 @@ buildRustPackage rec {
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
+  };
+
+  passthru = {
+	  shellPath = "/bin/ion";
   };
 }

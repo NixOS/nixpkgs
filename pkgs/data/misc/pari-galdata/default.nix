@@ -2,9 +2,9 @@
 , fetchurl
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "20080411";
-  name = "pari-galdata-${version}";
+  pname = "pari-galdata";
 
   src = fetchurl {
     url = "http://pari.math.u-bordeaux.fr/pub/pari/packages/galdata.tgz";

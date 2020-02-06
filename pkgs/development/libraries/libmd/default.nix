@@ -1,7 +1,6 @@
 { stdenv, fetchurl, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "libmd";
   version = "1.0.1";
 

@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, pkgconfig, docbook_xsl, libxslt, docbook_xml_dtd_45
 , acl, attr, boost, btrfs-progs, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, python, utillinux }:
+, lvm2, pam, python, utillinux, fetchpatch, json_c }:
 
 stdenv.mkDerivation rec {
-  name = "snapper-${version}";
-  version = "0.8.3";
+  pname = "snapper";
+  version = "0.8.9";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "snapper";
     rev = "v${version}";
-    sha256 = "0f3nsqk8820jh08qdh23n01vxbigsfcn9s5qvgqz6jf4pwin6j0x";
+    sha256 = "1flqhfpx9dipim22wq7wh1590ra4gydwii1jjp99pi03mdhavlbn";
   };
 
   nativeBuildInputs = [
@@ -20,12 +20,20 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam python utillinux
+    lvm2 pam python utillinux json_c
+  ];
+
+  patches = [
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://github.com/openSUSE/snapper/commit/c51708aea22d9436da287cba84424557ad03644b.patch";
+      sha256 = "106pf7pv8z3q37c8ckmgwxs1phf2fy7l53a9g5xq5kk2rjj1cx34";
+    })
   ];
 
   postPatch = ''
     # Hard-coded root paths, hard-coded root paths everywhere...
-    for file in {client,data,pam,scripts}/Makefile.am; do
+    for file in {client,data,pam,scripts,zypp-plugin}/Makefile.am; do
       substituteInPlace $file \
         --replace '$(DESTDIR)/usr' "$out" \
         --replace "DESTDIR" "out" \
@@ -41,9 +49,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = [
-    "-I${libxml2.dev}/include/libxml2"
-  ];
+  NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
   postInstall = ''
     rm -r $out/etc/cron.*

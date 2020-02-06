@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     # we test in checkPhase
     substituteInPlace Makefile \
       --replace 'testsuite bin/z88dk-lib$(EXESUFFIX)' 'bin/z88dk-lib$(EXESUFFIX)'\
-      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='   
+      --replace 'ALL_EXT = bin/zsdcc$(EXESUFFIX)' 'ALL_EXT ='
   '';
 
   checkPhase = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   #_FORTIFY_SOURCE requires compiling with optimization (-O)
   NIX_CFLAGS_COMPILE = "-O";
 
-  short_rev = "${builtins.substring 0 7 src.rev}";
+  short_rev = builtins.substring 0 7 src.rev;
   makeFlags = [
     "git_rev=${short_rev}"
     "version=${version}"
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     mkdir -p $out/{bin,share}
   '';
 
-  installTargets = "libs install";
+  installTargets = [ "libs" "install" ];
 
   meta = with stdenv.lib; {
     homepage    = "https://www.z88dk.org";

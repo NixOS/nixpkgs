@@ -5,14 +5,14 @@
   withX ? true }:
 
 stdenv.mkDerivation rec {
-  name = "open-vm-tools-${version}";
-  version = "10.3.10";
+  pname = "open-vm-tools";
+  version = "11.0.5";
 
   src = fetchFromGitHub {
     owner  = "vmware";
     repo   = "open-vm-tools";
     rev    = "stable-${version}";
-    sha256 = "0x2cyccnb4sycrw7r5mzby2d196f9jiph8vyqi0x8v8r2b4vi4yj";
+    sha256 = "0idh8dqwb1df2di689090k9x1iap35jk3wg8yb1g70byichmscqb";
   };
 
   sourceRoot = "${src.name}/open-vm-tools";
@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
      mkdir -p common-agent/etc/config
      sed -i 's|.*common-agent/etc/config/Makefile.*|\\|' configure.ac
 
+     sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' Makefile.am
      sed -i 's,^confdir = ,confdir = ''${prefix},' scripts/Makefile.am
      sed -i 's,etc/vmware-tools,''${prefix}/etc/vmware-tools,' services/vmtoolsd/Makefile.am
      sed -i 's,$(PAM_PREFIX),''${prefix}/$(PAM_PREFIX),' services/vmtoolsd/Makefile.am
@@ -45,6 +46,16 @@ stdenv.mkDerivation rec {
     ++ lib.optional (!withX) "--without-x";
 
   enableParallelBuilding = true;
+
+  NIX_CFLAGS_COMPILE = builtins.toString [
+    # igrone glib-2.62 deprecations
+    # Drop in next stable release.
+    "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+
+    # fix build with gcc9
+    "-Wno-error=address-of-packed-member"
+    "-Wno-error=format-overflow"
+  ];
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \

@@ -25,7 +25,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnuradio-${version}";
+  pname = "gnuradio";
   version = "3.7.13.4";
 
   src = fetchFromGitHub {
@@ -50,9 +50,7 @@ stdenv.mkDerivation rec {
     Mako cheetah numpy scipy matplotlib pyqt4 pygtk wxPython pyopengl
   ];
 
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   enableParallelBuilding = true;
 

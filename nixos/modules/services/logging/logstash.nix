@@ -37,6 +37,11 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "logstash" "address" ] [ "services" "logstash" "listenAddress" ])
+    (mkRemovedOptionModule [ "services" "logstash" "enableWeb" ] "The web interface was removed from logstash")
+  ];
+
   ###### interface
 
   options = {
@@ -53,7 +58,7 @@ in
         type = types.package;
         default = pkgs.logstash;
         defaultText = "pkgs.logstash";
-        example = literalExample "pkgs.logstash5";
+        example = literalExample "pkgs.logstash";
         description = "Logstash package to use.";
       };
 

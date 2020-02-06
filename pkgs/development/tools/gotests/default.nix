@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gotests-${version}";
+  pname = "gotests";
   version = "1.5.3";
   rev = "v${version}";
 

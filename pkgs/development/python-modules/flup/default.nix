@@ -15,7 +15,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = "http://trac.saddi.com/flup";
+    homepage = "https://www.saddi.com/software/flup/";
     description = "FastCGI Python module set";
     license = licenses.bsd0;
   };

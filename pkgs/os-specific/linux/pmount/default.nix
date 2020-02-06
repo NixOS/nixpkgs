@@ -8,7 +8,7 @@
 assert stdenv.lib.hasSuffix "/" mediaDir;
 
 stdenv.mkDerivation rec {
-  name = "pmount-${version}";
+  pname = "pmount";
   version = "0.9.23";
 
   src = fetchurl {

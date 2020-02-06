@@ -25,7 +25,8 @@ let
   luaCPath = getPath "so";
 in
 stdenv.mkDerivation {
-  name = "lumail-${version}";
+  pname = "lumail";
+  inherit version;
 
   src = fetchurl {
     url = "https://lumail.org/download/lumail-${version}.tar.gz";
@@ -51,7 +52,7 @@ stdenv.mkDerivation {
     sed -e "s|^#\!\(.*/perl.*\)$|#\!\1$perlFlags|" -i perl.d/imap-proxy
   '';
 
-  buildFlags = if debugBuild then "lumail2-debug" else "";
+  buildFlags = stdenv.lib.optional debugBuild "lumail2-debug";
 
   installPhase = ''
     mkdir -p $out/bin || true

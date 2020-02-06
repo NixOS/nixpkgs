@@ -1,7 +1,7 @@
 { fetchgit, libcommuni, qtbase, qmake, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "communi-${version}";
+  pname = "communi";
   version = "3.5.0";
 
   src = fetchgit {

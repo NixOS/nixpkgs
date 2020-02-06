@@ -10,19 +10,21 @@
 , pkgconfig
 , file
 , protobufc
+, libiconv
 }:
 stdenv.mkDerivation rec {
-  name = "postgis-${version}";
-  version = "2.5.2";
+  pname = "postgis";
+  version = "3.0.0";
 
   outputs = [ "out" "doc" ];
 
   src = fetchurl {
     url = "https://download.osgeo.org/postgis/source/postgis-${version}.tar.gz";
-    sha256 = "0pnva72f2w4jcgnl1y7nw5rdly4ipx3hji4c9yc9s0hna1n2ijxn";
+    sha256 = "15557fbk0xkngihwhqsbdyz2ng49blisf5zydw81j0gabk6x4vy0";
   };
 
-  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ];
+  buildInputs = [ libxml2 postgresql geos proj gdal json_c protobufc ]
+                ++ stdenv.lib.optional stdenv.isDarwin libiconv;
   nativeBuildInputs = [ perl pkgconfig ];
   dontDisableStatic = true;
 
@@ -43,14 +45,18 @@ stdenv.mkDerivation rec {
     sed -i "s|\$(DESTDIR)\$(PGSQL_BINDIR)|$prefix/bin|g
             " \
         "raster/scripts/python/Makefile";
-  '';
-
-  preInstall = ''
     mkdir -p $out/bin
+
+    # postgis' build system assumes it is being installed to the same place as postgresql, and looks
+    # for the postgres binary relative to $PREFIX. We gently support this system using an illusion.
+    ln -s ${postgresql}/bin/postgres $out/bin/postgres
   '';
 
   # create aliases for all commands adding version information
   postInstall = ''
+    # Teardown the illusory postgres used for building; see postConfigure.
+    rm $out/bin/postgres
+
     for prog in $out/bin/*; do # */
       ln -s $prog $prog-${version}
     done
@@ -62,8 +68,9 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "Geographic Objects for PostgreSQL";
     homepage = https://postgis.net/;
+    changelog = "https://git.osgeo.org/gitea/postgis/postgis/raw/tag/${version}/NEWS";
     license = licenses.gpl2;
     maintainers = [ maintainers.marcweber ];
-    platforms = platforms.linux;
+    inherit (postgresql.meta) platforms;
   };
 }

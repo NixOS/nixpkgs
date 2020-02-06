@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "iio-sensor-proxy";
-  version = "2.7";
+  version = "2.8";
 
   src = fetchFromGitHub {
     owner  = "hadess";
     repo   = pname;
     rev    = version;
-    sha256 = "05ipljw78d8z90cnkygcrpd0qq4vh14bb9hy06vqxnpdbyq46fxh";
+    sha256 = "07rzm1z2p6lh4iv5pyp0p2x5805m9gsh19kcsjls3fi25p3a2c00";
   };
 
   configurePhase = ''

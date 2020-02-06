@@ -1,7 +1,7 @@
 mesonConfigurePhase() {
     runHook preConfigure
 
-    if [ -z "$dontAddPrefix" ]; then
+    if [ -z "${dontAddPrefix-}" ]; then
         mesonFlags="--prefix=$prefix $mesonFlags"
     fi
 
@@ -36,7 +36,7 @@ mesonConfigurePhase() {
     runHook postConfigure
 }
 
-if [ -z "$dontUseMesonConfigure" -a -z "$configurePhase" ]; then
+if [ -z "${dontUseMesonConfigure-}" -a -z "${configurePhase-}" ]; then
     setOutputFlags=
     configurePhase=mesonConfigurePhase
 fi

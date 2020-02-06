@@ -16,17 +16,19 @@ assert !cpp || mpi == null;
 let inherit (stdenv.lib) optional optionals; in
 
 stdenv.mkDerivation rec {
-  version = "1.10.5";
-  name = "hdf5-${version}";
+  version = "1.10.6";
+  pname = "hdf5";
   src = fetchurl {
-    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${name}/src/${name}.tar.bz2";
-    sha256 = "0i3g6v521vigzbx8wpd32ibsiiw92r65ca3qdbn0d8fj8f4fmmk8";
+    url = "https://support.hdfgroup.org/ftp/HDF5/releases/hdf5-1.10/${pname}-${version}/src/${pname}-${version}.tar.bz2";
+    sha256 = "1gf38x51128hn00744358w27xgzjk0ff4wra4yxh2lk804ck1mh9";
   };
 
   passthru = {
     mpiSupport = (mpi != null);
     inherit mpi;
   };
+
+  outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ removeReferencesTo ];
 
@@ -51,6 +53,10 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+    moveToOutput 'bin/h5cc' "''${!outputDev}"
+    moveToOutput 'bin/h5c++' "''${!outputDev}"
+    moveToOutput 'bin/h5fc' "''${!outputDev}"
+    moveToOutput 'bin/h5pcc' "''${!outputDev}"
   '';
 
   meta = {

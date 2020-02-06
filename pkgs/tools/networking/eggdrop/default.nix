@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, tcl }:
 
-stdenv.mkDerivation rec {
-  name = "eggdrop-${version}";
+stdenv.mkDerivation {
+  pname = "eggdrop";
   version = "1.6.21-nix1";
 
   src = fetchFromGitHub {
@@ -32,5 +32,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     license = licenses.gpl2;
     platforms = platforms.unix;
+    homepage = http://www.eggheads.org;
+    description = "An Internet Relay Chat (IRC) bot";
   };
 }

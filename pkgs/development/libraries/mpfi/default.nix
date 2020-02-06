@@ -1,6 +1,6 @@
 {stdenv, fetchurl, mpfr}:
 stdenv.mkDerivation rec {
-  name = "mpfi-${version}";
+  pname = "mpfi";
   version = "1.5.3";
   file_nr = "37331";
   src = fetchurl {
@@ -17,6 +17,6 @@ stdenv.mkDerivation rec {
     homepage = https://gforge.inria.fr/projects/mpfi/;
     license = stdenv.lib.licenses.lgpl21Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

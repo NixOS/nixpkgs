@@ -1,0 +1,17 @@
+1. dpdk built with meson generates rte_build_config.h rather than rte_config.h.
+2. dpdk configured with libbsd requires that dependents link with libbsd.
+
+--- a/lib/env_dpdk/env.mk
++++ b/lib/env_dpdk/env.mk
+@@ -140,6 +140,9 @@ endif
+ 
+-ifneq (,$(wildcard $(DPDK_INC_DIR)/rte_config.h))
+-ifneq (,$(shell grep -e "define RTE_LIBRTE_VHOST_NUMA 1" -e "define RTE_EAL_NUMA_AWARE_HUGEPAGES 1" $(DPDK_INC_DIR)/rte_config.h))
++ifneq (,$(wildcard $(DPDK_INC_DIR)/rte_build_config.h))
++ifneq (,$(shell grep -e "define RTE_LIBRTE_VHOST_NUMA 1" -e "define RTE_EAL_NUMA_AWARE_HUGEPAGES 1" $(DPDK_INC_DIR)/rte_build_config.h))
+ ENV_LINKER_ARGS += -lnuma
+ endif
++ifneq (,$(shell grep -e "define RTE_USE_LIBBSD 1" $(DPDK_INC_DIR)/rte_build_config.h))
++ENV_LINKER_ARGS += -lbsd
++endif
+ endif

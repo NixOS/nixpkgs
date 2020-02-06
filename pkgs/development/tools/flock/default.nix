@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation rec {
   pname = "flock";
-  name = "${pname}-${version}";
   version = "0.2.3";
 
   src = fetchFromGitHub {

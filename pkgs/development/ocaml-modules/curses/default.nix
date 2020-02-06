@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocaml, findlib, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "ocaml-curses-${version}";
+  pname = "ocaml-curses";
   version = "1.0.4";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ocaml findlib ];
 
   # Fix build for recent ncurses versions
-  NIX_CFLAGS_COMPILE = [ "-DNCURSES_INTERNALS=1" ];
+  NIX_CFLAGS_COMPILE = "-DNCURSES_INTERNALS=1";
 
   createFindlibDestdir = true;
 

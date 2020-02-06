@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, libx86emu, flex, perl, libuuid }:
 
 stdenv.mkDerivation rec {
-  name = "hwinfo-${version}";
-  version = "21.66";
+  pname = "hwinfo";
+  version = "21.68";
 
   src = fetchFromGitHub {
     owner = "opensuse";
     repo = "hwinfo";
-    rev = "${version}";
-    sha256 = "1f841hzh9ik02690h9b1k3ysqv91avsb0zir2ykqz8qj39c5qsxz";
+    rev = version;
+    sha256 = "0x63rkyl16918l8yf0azy2lyxaqy8nc6iafid89acvxn32j146rg";
   };
 
   patchPhase = ''
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     description = "Hardware detection tool from openSUSE";
     license = licenses.gpl2;
     homepage = https://github.com/openSUSE/hwinfo;
-    maintainers = with maintainers; [ bobvanderlinden ndowens ];
+    maintainers = with maintainers; [ bobvanderlinden ];
     platforms = platforms.linux;
   };
 }

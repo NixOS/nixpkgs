@@ -22,24 +22,17 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.5.0";
-  disabled = pythonOlder "3.5";
+  version = "7.10.2";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e840810029224b56cd0d9e7719dc3b39cf84d577f8ac686547c8ba7a06eeab26";
+    sha256 = "762d79a62b6aa96b04971e920543f558dfbeedc0468b899303c080c8068d4ac2";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
-
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/ipython/ipython/commit/e1b53e9ef91a43b9e275bb9e48b4253218375d87.patch";
-      sha256 = "sha256:0q7zsgalwxss6aikhakbdkvvz0g4ac4sa3ncrklm74ksqh56rsgb";
-    })
-  ];
 
   buildInputs = [ glibcLocales ];
 
@@ -64,10 +57,14 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "IPython"
+  ];
+
+  meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

@@ -2,36 +2,35 @@
 , pkgconfig, libtool, intltool
 , libXmu
 , lua
+, tinyxml
 , agg, alsaLib, soundtouch, openal
 , desktop-file-utils
-, gtk2, gtkglext, libglade, pangox_compat
+, gtk2, gtkglext, libglade
 , libGLU, libpcap, SDL, zziplib }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "desmume-${version}";
+  pname = "desmume";
   version = "0.9.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/project/desmume/desmume/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/project/desmume/desmume/${version}/${pname}-${version}.tar.gz";
     sha256 = "15l8wdw3q61fniy3h93d84dnm6s4pyadvh95a0j6d580rjk4pcrs";
   };
 
   patches = [
-    (fetchpatch {
-      name = "gcc6_fixes.patch";
-      url = "https://anonscm.debian.org/viewvc/pkg-games/packages/trunk/desmume/debian/patches/gcc6_fixes.patch?revision=15925";
-      sha256 = "0j3fmxz0mfb3f4biks03pyz8f9hy958ks6qplisl60rzq9v9qpks";
-     })
+    ./gcc6_fixes.patch
+    ./gcc7_fixes.patch
+    ./01_use_system_tinyxml.patch
   ];
 
   CXXFLAGS = "-fpermissive";
 
   buildInputs =
   [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop-file-utils gtk2 gtkglext libglade pangox_compat
-    libGLU libpcap SDL zziplib ];
+    openal desktop-file-utils gtk2 gtkglext libglade
+    libGLU libpcap SDL zziplib tinyxml ];
 
   configureFlags = [
     "--disable-glade"  # Failing on compile step

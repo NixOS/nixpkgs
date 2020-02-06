@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "usync";
   version = "0.0.3";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "ebzzry";

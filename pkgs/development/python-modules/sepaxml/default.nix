@@ -1,17 +1,32 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
+, lxml
+, pytest
+, text-unidecode
+, xmlschema
+}:
 
 buildPythonPackage rec {
-  version = "2.0.0";
+  version = "2.2.0";
   pname = "sepaxml";
-  disabled = !isPy3k;
+  disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0jhj8fa0lbyaw15q485kyyli9qgrmqr47a6z6pgqm40kwmjghiyc";
+  src = fetchFromGitHub {
+    owner = "raphaelm";
+    repo = "python-sepaxml";
+    rev = version;
+    sha256 = "1qmgdcz61hs65m2fddwn9jpyk2sxifdb0f3jz1n0lgy774z0pmas";
   };
 
-  # no tests included in PyPI package
-  doCheck = false;
+  propagatedBuildInputs = [
+    text-unidecode
+    xmlschema
+  ];
+
+  checkInputs = [ pytest lxml ];
+
+  checkPhase = ''
+    pytest
+  '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/raphaelm/python-sepaxml/;

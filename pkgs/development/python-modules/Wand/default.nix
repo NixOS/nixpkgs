@@ -6,11 +6,11 @@
 
 buildPythonPackage rec {
   pname = "Wand";
-  version = "0.5.4";
+  version = "0.5.8";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "e2e08e19a37c61e85eaa307fe319889af46fe4cac6c23e3ae668b96be3e497ff";
+    sha256 = "0sjdlfhw1wdjqpmr72mckf2njy9xigx51shl510jhvl418cja2bd";
   };
 
   postPatch = ''
