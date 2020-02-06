@@ -147,12 +147,15 @@ let
           patchShebangs --build .
 
           mkdir -p third_party/node/linux/node-linux-x64/bin
-          ln -s --force ${nodejs}/bin/node                    third_party/node/linux/node-linux-x64/bin/node      || true
+          ln -s --force ${nodejs}/bin/node                                third_party/node/linux/node-linux-x64/bin/node      || true
+
+          mkdir -p buildtools/linux64
+          ln -s --force ${llvmPackages_latest.clang.cc}/bin/clang-format  buildtools/linux64/clang-format                     || true
 
           mkdir -p third_party/llvm-build/Release+Asserts/bin
-          ln -s --force ${llvmPackages_latest.clang}/bin/clang     third_party/llvm-build/Release+Asserts/bin/clang    || true
-          ln -s --force ${llvmPackages_latest.clang}/bin/clang++   third_party/llvm-build/Release+Asserts/bin/clang++  || true
-          ln -s --force ${llvmPackages_latest.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
+          ln -s --force ${llvmPackages_latest.clang}/bin/clang            third_party/llvm-build/Release+Asserts/bin/clang    || true
+          ln -s --force ${llvmPackages_latest.clang}/bin/clang++          third_party/llvm-build/Release+Asserts/bin/clang++  || true
+          ln -s --force ${llvmPackages_latest.llvm}/bin/llvm-ar           third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
 
           echo 'build_with_chromium = true'                > build/config/gclient_args.gni
           echo 'checkout_android = false'                 >> build/config/gclient_args.gni
@@ -198,7 +201,8 @@ let
 
 in {
   chromium-git_78 = common { version = "78.0.3905.1";   };
-  chromium-git_79 = common { version = "79.0.3945.145"; };
-  chromium-git_80 = common { version = "80.0.3987.78";  };
-  chromium-git_81 = common { version = "81.0.4042.1";   };
+  chromium-git_79 = common { version = "79.0.3945.147"; };
+  chromium-git_80 = common { version = "80.0.3987.90";  };
+  chromium-git_81 = common { version = "81.0.4044.11";  };
+  chromium-git_82 = common { version = "82.0.4050.1";   };
 }
