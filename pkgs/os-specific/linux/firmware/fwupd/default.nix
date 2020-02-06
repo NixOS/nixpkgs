@@ -94,7 +94,10 @@ stdenv.mkDerivation rec {
     sha256 = "02mzn3whk5mba4nxyrkypawr1gzjx79n4nrkhrp8vja6mxxgsf10";
   };
 
-  outputs = [ "out" "dev" "devdoc" "man" "installedTests" ];
+  # libfwupd goes to lib
+  # daemon, plug-ins and libfwupdplugin go to out
+  # CLI programs go to out
+  outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
     meson
@@ -147,6 +150,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
+
+    # install plug-ins and libfwupdplugin to out,
+    # they are not really part of the library
+    ./install-fwupdplugin-to-out.patch
 
     # installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle
@@ -203,6 +210,12 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+
+    # We do not want to place the daemon into lib (cyclic reference)
+    "--libexecdir=${placeholder "out"}/libexec"
+    # Our builder only adds $lib/lib to rpath but some things link
+    # against libfwupdplugin which is in $out/lib.
+    "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
   ] ++ stdenv.lib.optionals (!haveDell) [
     "-Dplugin_dell=false"
     "-Dplugin_synaptics=false"
