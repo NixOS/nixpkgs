@@ -3,7 +3,7 @@
 }:
 
 let
-  version = "11.35.3";
+  version = "11.35.9";
 in stdenv.mkDerivation {
 
   pname = "monetdb";
@@ -11,7 +11,7 @@ in stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://dev.monetdb.org/downloads/sources/archive/MonetDB-${version}.tar.bz2";
-    sha256 = "185v8ph8jq8im77dmm20d64nwgjzzc01kz71rh09nb6x6rgcna2x";
+    sha256 = "0bs7z41vwm9aidxl1f40yx8r0qz3qranmxd0xzd4a1hahjq3j5rx";
   };
 
   postPatch = ''

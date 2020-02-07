@@ -1,19 +1,21 @@
-{stdenv, fetchpatch, autoconf, automake, fetchFromGitHub, pkgconfig}:
+{ stdenv
+, fetchpatch
+, autoconf
+, automake
+, fetchFromGitHub
+, pkgconfig
+}:
 
-let
+stdenv.mkDerivation rec {
   pname = "mypaint-brushes";
   version = "1.3.0";
-in stdenv.mkDerivation {
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
-    owner = "Jehan";
+    owner = "mypaint";
     repo = pname;
     rev = "v${version}";
     sha256 = "1iz89z6v2mp8j1lrf942k561s8311i3s34ap36wh4rybb2lq15m0";
   };
-
-  nativeBuildInputs = [ autoconf automake pkgconfig ];
 
   patches = [
     # build with automake 1.16
@@ -23,10 +25,16 @@ in stdenv.mkDerivation {
     })
   ];
 
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkgconfig
+  ];
+
   preConfigure = "./autogen.sh";
 
   meta = with stdenv.lib; {
-    homepage = http://mypaint.org/;
+    homepage = "http://mypaint.org/";
     description = "Brushes used by MyPaint and other software using libmypaint.";
     license = licenses.cc0;
     maintainers = with maintainers; [ jtojnar ];

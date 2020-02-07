@@ -20,14 +20,6 @@ stdenv.mkDerivation rec {
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
   ];
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    # Fix build on darwin
-    (fetchpatch {
-      url = "https://github.com/xkbcommon/libxkbcommon/commit/32d178b50fe0da05e51e4fe8903c84371d133331.patch";
-      sha256 = "1wqdjla8hmgdqr8xc2manw363sxrqqsn3s8bd397h3cd7fj3hh1v";
-    })
-  ];
-
   doCheck = false; # fails, needs unicode locale
 
   meta = with stdenv.lib; {

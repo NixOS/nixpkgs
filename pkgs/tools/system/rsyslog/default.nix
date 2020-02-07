@@ -5,6 +5,7 @@
 , liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
 , libmaxminddb ? null
+, nixosTests ? null
 }:
 
 with stdenv.lib;
@@ -102,6 +103,10 @@ stdenv.mkDerivation rec {
     (mkFlag (curl != null)            "omhttpfs")
     (mkFlag true                      "generate-man-pages")
   ];
+
+  passthru.tests = {
+    nixos-rsyslogd = nixosTests.rsyslogd;
+  };
 
   meta = {
     homepage = https://www.rsyslog.com/;

@@ -386,6 +386,11 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    gam = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    quantreg = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    rmutil = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    robustbase = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
+    SparseM = lib.optionals stdenv.isDarwin [ pkgs.libiconv ];
     svKomodo = [ pkgs.which ];
     nat = [ pkgs.which ];
     nat_templatebrains = [ pkgs.which ];
