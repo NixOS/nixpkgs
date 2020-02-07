@@ -5,21 +5,21 @@
 # See https://github.com/mikefarah/yq/issues/227
 buildGoPackage rec {
   pname = "yq-go";
-  version = "2.4.0";
+  version = "3.1.0";
 
-  goPackagePath = "gopkg.in/mikefarah/yq.v2";
+  goPackagePath = "github.com/mikefarah/yq/v3";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     rev = version;
     repo = "yq";
-    sha256 = "0nizg08mdpb8g6hj887kk5chljba6x9v0f5ysqf28py511yp0dym";
+    sha256 = "0hsb9m0pq2agsg7392r6h9sv5vqa2r7fl0ff1q24vpx8jlpq1vc6";
   };
 
   goDeps = ./deps.nix;
 
   postInstall = ''
-    mv $bin/bin/yq.v2 $bin/bin/yq
+    mv $bin/bin/v3 $bin/bin/yq
   '';
 
   meta = with stdenv.lib; {
