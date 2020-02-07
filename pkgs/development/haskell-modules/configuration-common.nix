@@ -1236,7 +1236,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # Use a matching version of ghc-lib-parser.
-  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
+  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
@@ -1380,7 +1380,7 @@ self: super: {
 
   # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
   ormolu = doJailbreak (super.ormolu.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_8_2;
+    ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205;
   });
 
   # krank-0.1.0 does not accept PyF-0.9.0.0.
