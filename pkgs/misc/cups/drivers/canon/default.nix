@@ -124,14 +124,11 @@ stdenv.mkDerivation {
     patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32" $out/bin/c3pldrv
 
     # c3pldrv is programmed with fixed paths that point to "/usr/{bin,lib.share}/..."
-    # preload32 wrappes all necessary function calls to redirect the fixed paths
-    # into $out.
     mkdir -p $out/libexec
-    preload32=$out/libexec/libpreload32.so
-    ${i686_NIX_GCC}/bin/gcc -shared ${./preload.c} -o $preload32 -ldl -DOUT=\"$out\" -fPIC
+    mv $out/bin/c3pldrv $out/bin/.c3pldrv-real
+    ${i686_NIX_GCC}/bin/gcc -m32 ${./vfhs.c} -o $out/bin/c3pldrv -DOUT=\"$out\" -DEXEC=\"$out/bin/.c3pldrv-real\"
     wrapProgram "$out/bin/c3pldrv" \
-      --set PRELOAD_DEBUG 1 \
-      --set LD_PRELOAD $preload32 \
+      --prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [ pkgsi686Linux.stdenv.cc.cc.lib ]} \
       --prefix LD_LIBRARY_PATH : "$out/lib32"
 
 
