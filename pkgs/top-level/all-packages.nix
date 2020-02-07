@@ -4309,6 +4309,8 @@ in
 
   jazzy = callPackage ../development/tools/jazzy { };
 
+  jc = with python3Packages; toPythonApplication jc;
+
   jd = callPackage ../development/tools/jd { };
 
   jd-gui = callPackage ../tools/security/jd-gui { };

@@ -803,6 +803,8 @@ in {
 
   janus = callPackage ../development/python-modules/janus { };
 
+  jc = callPackage ../development/python-modules/jc { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   junit-xml = callPackage ../development/python-modules/junit-xml { };
