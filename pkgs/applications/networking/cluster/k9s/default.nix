@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "k9s";
-  version = "0.13.6";
+  version = "0.13.8";
   # rev is the release commit, mainly for version command output
   rev = "8fedc42304ce33df314664eb0c4ac73be59065af";
 
@@ -10,7 +10,7 @@ buildGoModule rec {
     owner  = "derailed";
     repo   = "k9s";
     rev    = "v${version}";
-    sha256 = "1gffbj6pgys6k3i8ikcy3yr2r9cwg0xki55yz5yg6z4a8h0jc8a6";
+    sha256 = "0xkxvgqzzhz5bhbqwgyw9w238kadqccr1fbvrxjcjr32xlbs56z2";
   };
 
   buildFlagsArray = ''
