@@ -6012,6 +6012,8 @@ in
 
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
+  quickbms = pkgsi686Linux.callPackage ../development/tools/parsing/quickbms { };
+
   quickjs = callPackage ../development/interpreters/quickjs { };
 
   quickserve = callPackage ../tools/networking/quickserve { };
