@@ -883,6 +883,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
