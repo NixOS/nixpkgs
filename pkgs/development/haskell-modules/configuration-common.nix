@@ -1350,7 +1350,7 @@ self: super: {
   # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
   matterhorn = doJailbreak (super.matterhorn.override {
     brick-skylighting = self.brick-skylighting.override {
-      brick = self.brick_0_50_1;
+      brick = self.brick_0_51;
     };
   });
 
