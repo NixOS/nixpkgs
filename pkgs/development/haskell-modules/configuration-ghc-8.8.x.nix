@@ -70,7 +70,7 @@ self: super: {
   xmobar = doJailbreak super.xmobar;
 
   # use latest version to fix the build
-  brick = self.brick_0_50_1;
+  brick = self.brick_0_51;
   dbus = self.dbus_1_2_11;
   doctemplates = self.doctemplates_0_8;
   exact-pi = doJailbreak super.exact-pi;
