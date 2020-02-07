@@ -1,11 +1,48 @@
-{ stdenv, fetchurl, ostree, rpm, which, autoconf, automake, libtool, pkgconfig, cargo, rustc,
-  gobject-introspection, gtk-doc, libxml2, libxslt, docbook_xsl, docbook_xml_dtd_42, docbook_xml_dtd_43, gperf, cmake,
-  libcap, glib, systemd, json-glib, libarchive, libsolv, librepo, polkit,
-  bubblewrap, pcre, check, python, json_c, libmodulemd_1, utillinux, sqlite, cppunit, fetchpatch }:
+{ stdenv
+, fetchurl
+, ostree
+, rpm
+, which
+, autoconf
+, automake
+, libtool
+, pkgconfig
+, cargo
+, rustc
+, gobject-introspection
+, gtk-doc
+, libxml2
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, docbook_xml_dtd_43
+, gperf
+, cmake
+, libcap
+, glib
+, systemd
+, json-glib
+, libarchive
+, libsolv
+, librepo
+, polkit
+, bubblewrap
+, pcre
+, check
+, python
+, json_c
+, libmodulemd_1
+, utillinux
+, sqlite
+, cppunit
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
   version = "2019.5";
+
+  outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
     url = "https://github.com/projectatomic/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
@@ -25,17 +62,46 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" "man" "devdoc" ];
   nativeBuildInputs = [
-    pkgconfig which autoconf automake libtool cmake gperf cargo rustc
-    gobject-introspection gtk-doc libxml2 libxslt docbook_xsl docbook_xml_dtd_42 docbook_xml_dtd_43
+    pkgconfig
+    which
+    autoconf
+    automake
+    libtool
+    cmake
+    gperf
+    cargo
+    rustc
+    gobject-introspection
+    gtk-doc
+    libxml2
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
+    docbook_xml_dtd_43
   ];
+
   buildInputs = [
-    libcap ostree rpm glib systemd polkit bubblewrap
-    json-glib libarchive libsolv librepo
-    pcre check python
-     # libdnf
-    json_c libmodulemd_1 utillinux sqlite cppunit
+    libcap
+    ostree
+    rpm
+    glib
+    systemd
+    polkit
+    bubblewrap
+    json-glib
+    libarchive
+    libsolv
+    librepo
+    pcre
+    check
+    python
+    # libdnf
+    json_c
+    libmodulemd_1
+    utillinux
+    sqlite
+    cppunit
   ];
 
   configureFlags = [
@@ -60,7 +126,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A hybrid image/package system. It uses OSTree as an image format, and uses RPM as a component model";
-    homepage = https://rpm-ostree.readthedocs.io/en/latest/;
+    homepage = "https://rpm-ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ copumpkin ];
     platforms = platforms.linux;
