@@ -9726,6 +9726,7 @@ in
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
   }));
   spidermonkey_60 = callPackage ../development/interpreters/spidermonkey/60.nix { };
+  spidermonkey_68 = callPackage ../development/interpreters/spidermonkey/68.nix { };
   spidermonkey = spidermonkey_38;
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
