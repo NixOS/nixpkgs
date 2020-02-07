@@ -13494,6 +13494,21 @@ let
     doCheck = false; # The test suite fails, see https://rt.cpan.org/Public/Bug/Display.html?id=85799
   };
 
+  NetSNPP = buildPerlPackage rec {
+    pname = "Net-SNPP";
+    version = "1.17";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/T/TO/TOBEYA/${pname}-${version}.tar.gz";
+      sha256 = "06b851d64596625e866359fb017dd0d08973e0ebc50c323f4a1d50ecdd868e76";
+    };
+    propagatedBuildInputs = [ libnet ];
+    doCheck = false;
+    meta = {
+      description = "Simple Network Pager Protocol Client";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   NetSSH = buildPerlPackage {
     pname = "Net-SSH";
     version = "0.09";
