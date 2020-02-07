@@ -3075,6 +3075,7 @@ broken-packages:
   - atomic-primops-vector
   - atomo
   - ats-format
+  - ats-pkg
   - ats-setup
   - ats-storable
   - attic-schedule
@@ -6065,6 +6066,7 @@ broken-packages:
   - hs-twitterarchiver
   - hs-vcard
   - hs-watchman
+  - hs2ats
   - hs2bf
   - Hs2lib
   - hsaml2
@@ -6781,6 +6783,7 @@ broken-packages:
   - lame
   - lame-tester
   - lang
+  - language-ats
   - language-bash
   - language-boogie
   - language-c-comments
@@ -7081,6 +7084,7 @@ broken-packages:
   - lxd-client
   - lye
   - Lykah
+  - lz4-bytes
   - lz4-conduit
   - lzma-enumerator
   - lzma-streams
@@ -8946,6 +8950,7 @@ broken-packages:
   - sha-streams
   - shade
   - shadower
+  - shake-ats
   - shake-cabal-build
   - shake-extras
   - shake-minify
@@ -9031,6 +9036,7 @@ broken-packages:
   - simseq
   - singleton-dict
   - singleton-typelits
+  - singletons-presburger
   - singnal
   - singular-factory
   - sink
@@ -10005,6 +10011,7 @@ broken-packages:
   - uuagc-bootstrap
   - uuagc-diagrams
   - uuid-aeson
+  - uuid-bytes
   - uuid-orphans
   - uvector
   - uvector-algorithms
