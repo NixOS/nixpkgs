@@ -847,6 +847,8 @@ in {
 
   mininet-python = (toPythonModule (pkgs.mininet.override{ inherit python; })).py;
 
+  mirakuru = callPackage ../development/python-modules/mirakuru { };
+
   mkl-service = callPackage ../development/python-modules/mkl-service { };
 
   mnist = callPackage ../development/python-modules/mnist { };
