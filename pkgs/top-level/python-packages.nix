@@ -1226,6 +1226,8 @@ in {
 
   pytest-mypy = callPackage ../development/python-modules/pytest-mypy { };
 
+  pytest-mysql = callPackage ../development/python-modules/pytest-mysql { };
+
   pytest-ordering = callPackage ../development/python-modules/pytest-ordering { };
 
   pytest-pylint = callPackage ../development/python-modules/pytest-pylint { };
