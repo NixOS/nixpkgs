@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub
 , mkfontdir, mkfontscale, bdf2psf, bdftopcf
-, fonttosfnt
+, fonttosfnt, libfaketime
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ mkfontdir mkfontscale bdf2psf bdftopcf fonttosfnt ];
+    [ mkfontdir mkfontscale bdf2psf bdftopcf
+      fonttosfnt libfaketime
+    ];
 
   buildPhase = ''
     # convert bdf fonts to psf
@@ -35,7 +37,7 @@ stdenv.mkDerivation rec {
     for i in *.bdf $src/hidpi/*.bdf; do
         name=$(basename $i .bdf)
         bdftopcf -o "$name.pcf" "$i"
-        fonttosfnt -v -o "$name.otb" "$i" || true
+        faketime -f "1970-01-01 00:00:01" fonttosfnt -v -o "$name.otb" "$i" || true
     done
   '';
 
@@ -57,7 +59,7 @@ stdenv.mkDerivation rec {
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
-  outputHash     = "0j9fhvzkascpb5y8lc1pmmmgd74apgw9mimbj0bk2chcbfsi852p";
+  outputHash     = "028mq0j6w76isv4ycj1jzx7ih9d9cz5012np7f1pf3bvnvw3ajw2";
 
   meta = with stdenv.lib; {
     description = ''
