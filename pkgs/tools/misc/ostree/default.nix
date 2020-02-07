@@ -1,6 +1,32 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gjs, nixosTests
-, glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
-, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gtk-doc
+, gobject-introspection
+, gjs
+, nixosTests
+, glib
+, systemd
+, xz
+, e2fsprogs
+, libsoup
+, gpgme
+, which
+, autoconf
+, automake
+, libtool
+, fuse
+, utillinuxMinimal
+, libselinux
+, libarchive
+, libcap
+, bzip2
+, yacc
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -17,24 +43,47 @@ stdenv.mkDerivation rec {
   patches = [
     # Workarounds for https://github.com/ostreedev/ostree/issues/1592
     ./fix-1592.patch
+
     # Disable test-gpg-verify-result.test,
     # https://github.com/ostreedev/ostree/issues/1634
     ./disable-test-gpg-verify-result.patch
+
     # Tests access the helper using relative path
     # https://github.com/ostreedev/ostree/issues/1593
     ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
   ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobject-introspection which yacc
-    libxslt docbook_xsl docbook_xml_dtd_42
+    autoconf
+    automake
+    libtool
+    pkgconfig
+    gtk-doc
+    gobject-introspection
+    which
+    yacc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
   ];
 
   buildInputs = [
-    glib systemd e2fsprogs libsoup gpgme fuse libselinux libcap
-    libarchive bzip2 xz
+    glib
+    systemd
+    e2fsprogs
+    libsoup
+    gpgme
+    fuse
+    libselinux
+    libcap
+    libarchive
+    bzip2
+    xz
     utillinuxMinimal # for libmount
-    (python3.withPackages (p: with p; [ pyyaml ])) gjs # for tests
+
+    # for installed tests
+    (python3.withPackages (p: with p; [ pyyaml ]))
+    gjs
   ];
 
   preConfigure = ''
@@ -62,7 +111,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage = https://ostree.readthedocs.io/en/latest/;
+    homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];
