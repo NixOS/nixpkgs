@@ -1,15 +1,15 @@
 { stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gtk3, gdk-pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, xorg, xprintidle-ng }:
+, gnome2, gtk3, gdk-pixbuf, libnotify, libxcb, libuuid, nspr, nss, pango
+, systemd, xorg, xprintidle-ng, at_spi2_atk, at-spi2-core
+}:
 
 let
-
-  version = "1.10.45";
-
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
+    at_spi2_atk
+    at-spi2-core
     cairo
     cups
     curl
@@ -24,6 +24,7 @@ let
     pango
     libnotify
     libxcb
+    libuuid
     nspr
     nss
     stdenv.cc.cc
@@ -43,20 +44,14 @@ let
     xorg.libXScrnSaver
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
-  src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity_${version}_amd64.deb";
-        sha256 = "0jfi0lfijnhij9jvkhxgyvq8m1jzaym8n1c7707fv3hjh1h0vxn1";
-      }
-    else
-      throw "super-productivity is not supported on ${stdenv.hostPlatform.system}";
-
-in stdenv.mkDerivation {
+in stdenv.mkDerivation rec {
   pname = "super-productivity";
-  inherit version;
+  version = "5.3.5";
 
-  inherit src;
+  src = fetchurl {
+    url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity_${version}_amd64.deb";
+    sha256 = "1wq5kp5m6qmf2kzljhz4c2q0m22sa3ibjzfip9ww1lflws7pk8w9";
+  };
 
   buildInputs = [
     dpkg
@@ -98,7 +93,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "To Do List / Time Tracker with Jira Integration.";
-    homepage = https://super-productivity.com;
+    homepage = "https://super-productivity.com";
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ offline ];
