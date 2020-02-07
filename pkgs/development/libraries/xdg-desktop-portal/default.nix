@@ -1,4 +1,22 @@
-{ stdenv, fetchFromGitHub, nixosTests, substituteAll, autoreconfHook, pkgconfig, libxml2, glib, pipewire, fontconfig, flatpak, gsettings-desktop-schemas, acl, dbus, fuse, geoclue2, json-glib, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, nixosTests
+, substituteAll
+, autoreconfHook
+, pkgconfig
+, libxml2
+, glib
+, pipewire
+, fontconfig
+, flatpak
+, gsettings-desktop-schemas
+, acl
+, dbus
+, fuse
+, geoclue2
+, json-glib
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "xdg-desktop-portal";
@@ -14,15 +32,36 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
+    # Allow loading portals from different path than prefix (since that is immutable).
+    # We pass XDG_DESKTOP_PORTAL_PATH environment variable to the systemd service to achieve that.
     ./respect-path-env-var.patch
+
+    # Hardcode paths used by x-d-p itself.
     (substituteAll {
       src = ./fix-paths.patch;
       inherit flatpak;
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig libxml2 wrapGAppsHook ];
-  buildInputs = [ glib pipewire fontconfig flatpak acl dbus geoclue2 fuse gsettings-desktop-schemas json-glib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    libxml2
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
+    glib
+    pipewire
+    fontconfig
+    flatpak
+    acl
+    dbus
+    geoclue2
+    fuse
+    gsettings-desktop-schemas
+    json-glib
+  ];
 
   doCheck = true; # XXX: investigate!
 
@@ -31,8 +70,8 @@ stdenv.mkDerivation rec {
   ];
 
   makeFlags = [
-    "installed_testdir=$(installedTests)/libexec/installed-tests/xdg-desktop-portal"
-    "installed_test_metadir=$(installedTests)/share/installed-tests/xdg-desktop-portal"
+    "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal"
+    "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/xdg-desktop-portal"
   ];
 
   passthru = {
