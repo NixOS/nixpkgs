@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchFromGitHub
-, mkfontdir, mkfontscale, bdf2psf, bdftopcf
+, mkfontscale, bdf2psf, bdftopcf
 , fonttosfnt, libfaketime
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs =
-    [ mkfontdir mkfontscale bdf2psf bdftopcf
+    [ mkfontscale bdf2psf bdftopcf
       fonttosfnt libfaketime
     ];
 
@@ -33,33 +33,37 @@ stdenv.mkDerivation rec {
     done
     cd $build
 
-    # convert bdf fonts to pcf and otb
+    # convert bdf fonts to pcf
     for i in *.bdf $src/hidpi/*.bdf; do
         name=$(basename $i .bdf)
         bdftopcf -o "$name.pcf" "$i"
-        faketime -f "1970-01-01 00:00:01" fonttosfnt -v -o "$name.otb" "$i" || true
+    done
+
+    # convert unicode bdf fonts to otb
+    for i in *-uni*.bdf $src/hidpi/*-uni*.bdf; do
+        name=$(basename $i .bdf)
+        faketime -f "1970-01-01 00:00:01" \
+        fonttosfnt -v -o "$name.otb" "$i"
     done
   '';
 
   installPhase = ''
     # install the psf fonts (for the virtual console)
     fontDir="$out/share/consolefonts"
-    mkdir -p "$fontDir"
-    mv -t "$fontDir" psf/*.psf
+    install -D -m 644 -t "$fontDir" psf/*.psf
 
-    # install the pcf and otb fonts (for xorg applications)
+    # install the pcf fonts (for xorg applications)
     fontDir="$out/share/fonts/misc"
-    mkdir -p "$fontDir"
-    mv -t "$fontDir" *.pcf *.otb
+    install -D -m 644 -t "$fontDir" *.pcf
+    mkfontdir "$fontDir"
 
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+    # install the otb fonts (for gtk applications)
+    fontDir="$otb/share/fonts/misc"
+    install -D -m 644 -t "$fontDir" *.otb
+    mkfontdir "$fontDir"
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash     = "028mq0j6w76isv4ycj1jzx7ih9d9cz5012np7f1pf3bvnvw3ajw2";
+  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = ''
