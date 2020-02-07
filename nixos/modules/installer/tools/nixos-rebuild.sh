@@ -418,7 +418,7 @@ if [ -z "$rollback" ]; then
         else
             outLink=$tmpDir/result
             nix build "$flake#$flakeAttr.config.system.build.toplevel" \
-              --keep-going "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
+              "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
             pathToConfig="$(readlink -f $outLink)"
         fi
         copyToTarget "$pathToConfig"
@@ -427,7 +427,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" --keep-going "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            nix build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm ]; then
