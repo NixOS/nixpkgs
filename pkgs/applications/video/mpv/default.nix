@@ -1,7 +1,8 @@
 { config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
-, nv-codec-headers, lua, libuchardet, libiconv ? null, darwin
+, nv-codec-headers, lua, libuchardet, libiconv ? null
+, CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 
 , waylandSupport ? stdenv.isLinux
   , wayland           ? null
@@ -173,9 +174,7 @@ in stdenv.mkDerivation rec {
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support        [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
     ++ optionals vulkanSupport     [ libplacebo shaderc vulkan-headers vulkan-loader ]
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation Cocoa CoreAudio MediaPlayer
-    ]);
+    ++ optionals stdenv.isDarwin   [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
 
   enableParallelBuilding = true;
 
