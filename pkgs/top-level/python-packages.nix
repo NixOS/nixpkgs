@@ -4730,6 +4730,8 @@ in {
 
   portend = callPackage ../development/python-modules/portend { };
 
+  port-for = callPackage ../development/python-modules/port-for { };
+
   powerline = callPackage ../development/python-modules/powerline { };
 
   pox = callPackage ../development/python-modules/pox { };
