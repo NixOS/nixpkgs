@@ -14447,6 +14447,8 @@ in
 
   spice-up = callPackage ../applications/office/spice-up { };
 
+  spirv-cross = callPackage ../tools/graphics/spirv-cross { };
+
   sratom = callPackage ../development/libraries/audio/sratom { };
 
   srm = callPackage ../tools/security/srm { };
