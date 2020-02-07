@@ -1066,6 +1066,8 @@ in {
 
   pydrive = callPackage ../development/python-modules/pydrive { };
 
+  pydruid = callPackage ../development/python-modules/pydruid { };
+
   pydy = callPackage ../development/python-modules/pydy { };
 
   pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
