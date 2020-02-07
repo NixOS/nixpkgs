@@ -70,7 +70,7 @@ self: super: {
   xmobar = doJailbreak super.xmobar;
 
   # use latest version to fix the build
-  brick = self.brick_0_50_1;
+  brick = self.brick_0_51;
   dbus = self.dbus_1_2_11;
   doctemplates = self.doctemplates_0_8;
   exact-pi = doJailbreak super.exact-pi;
@@ -82,7 +82,7 @@ self: super: {
   HaTeX = self.HaTeX_3_22_0_0;
   HsYAML = self.HsYAML_0_2_1_0;
   json-autotype = doJailbreak super.json-autotype;
-  lens = self.lens_4_18_1;
+  lens = self.lens_4_19;
   memory = self.memory_0_15_0;
   microlens = self.microlens_0_4_11_2;
   microlens-ghc = self.microlens-ghc_0_4_12;

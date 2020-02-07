@@ -81,4 +81,10 @@ self: super: {
     hackage-db = self.hackage-db_2_1_0;
   });
 
+  # cabal2spec needs a recent version of Cabal
+  cabal2spec = super.cabal2spec.overrideScope (self: super: { Cabal = self.Cabal_3_0_0_0; });
+
+  # Builds only with ghc-8.8.x and beyond.
+  policeman = markBroken super.policeman;
+
 }
