@@ -285,10 +285,13 @@ if [[ -n $flake ]]; then
 fi
 
 # Find configuration.nix and open editor instead of building.
-# FIXME: handle flakes
 if [ "$action" = edit ]; then
-    NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
-    exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+    if [[ -z $flake ]]; then
+        NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
+        exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
+    else
+        exec nix edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
+    fi
     exit 1
 fi
 
