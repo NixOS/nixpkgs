@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, flex, bison, perlPackages, libminc, libjpeg, zlib }:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, flex, bison, perl, TextFormat,
+  libminc, libjpeg, nifticlib, zlib }:
 
 stdenv.mkDerivation rec {
   pname   = "minc-tools";
@@ -15,9 +16,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake flex bison makeWrapper ];
   buildInputs = [ libminc libjpeg zlib ];
-  propagatedBuildInputs = with perlPackages; [ perl TextFormat ];
+  propagatedBuildInputs = [ perl TextFormat ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/" ];
+  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/"
+                 "-DZNZ_INCLUDE_DIR=${nifticlib}/include/"
+                 "-DZNZ_LIBRARY=${nifticlib}/lib/libznz.a"
+                 "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti/"
+                 "-DNIFTI_LIBRARY=${nifticlib}/lib/libniftiio.a" ];
 
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do
