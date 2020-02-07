@@ -1390,6 +1390,7 @@ self: super: {
   prettyprinter_1_6_0 = dontCheck super.prettyprinter_1_6_0;
 
   # the test suite has an overly tight restriction on doctest
+  # See https://github.com/ekmett/perhaps/pull/5
   perhaps = doJailbreak super.perhaps;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
