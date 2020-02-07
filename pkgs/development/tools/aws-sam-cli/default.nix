@@ -83,6 +83,11 @@ buildPythonApplication rec {
     tomlkit
   ];
 
+  postFixup = ''
+    # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
+    wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
+  '';
+
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
