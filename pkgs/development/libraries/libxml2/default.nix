@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, fetchpatch
 , zlib, xz, python, ncurses, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
 , icuSupport ? false, icu ? null
@@ -27,6 +27,11 @@ stdenv.mkDerivation rec {
     #   https://github.com/NixOS/nixpkgs/pull/63174
     #   https://github.com/NixOS/nixpkgs/pull/72342
     ./utf8-xmlErrorFuncHandler.patch
+    (fetchpatch {
+      name = "CVE-2020-7595.patch";
+      url = "https://gitlab.gnome.org/GNOME/libxml2/commit/0e1a49c8907645d2e155f0d89d4d9895ac5112b5.patch";
+      sha256 = "0klvaxkzakkpyq0m44l9xrpn5kwaii194sqsivfm6zhnb9hhl15l";
+    })
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]

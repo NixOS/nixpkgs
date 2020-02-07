@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "spdk";
-  version = "19.10.1";
+  version = "20.01";
 
   src = fetchFromGitHub {
     owner = "spdk";
     repo = "spdk";
     rev = "v${version}";
-    sha256 = "1fajcc4c09p6wcfw08k0x4x7v8yh0ghq94zhs5d4g9563p2va6ab";
+    sha256 = "13pbl46bfzc3z10ydr1crimklyj7f0s73873bjknglw474gm52h8";
   };
 
   patches = [ ./spdk-dpdk-meson.patch ];

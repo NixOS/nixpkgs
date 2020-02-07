@@ -59,7 +59,7 @@
    <listitem>
     <para>
       <command>nixos-option</command> has been rewritten in C++, speeding it up, improving correctness,
-      and adding a <option>--all</option> option which prints all options and their values.
+      and adding a <option>-r</option> option which prints all options and their values recursively.
     </para>
    </listitem>
    <listitem>
@@ -101,6 +101,13 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
     <para>
     UPower's configuration is now managed by NixOS and can be customized
     via <option>services.upower</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     To use Geary you should enable <xref linkend="opt-programs.geary.enable"/> instead of
+     just adding it to <xref linkend="opt-environment.systemPackages"/>.
+     It was created so Geary could function properly outside of GNOME.
     </para>
    </listitem>
   </itemizedlist>
@@ -237,6 +244,23 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
      and bitmap fonts are no longer supported in applications relying on Pango for font rendering
      (notably, GTK application). See <link xlink:href="https://gitlab.gnome.org/GNOME/pango/issues/386">
      upstream issue</link> for more information.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>roundcube</literal> module has been hardened.
+     <itemizedlist>
+      <listitem>
+       <para>
+        The password of the database is not written world readable in the store any more. If <literal>database.host</literal> is set to <literal>localhost</literal>, then a unix user of the same name as the database will be created and PostreSQL peer authentication will be used, removing the need for a password. Otherwise, a password is still needed and can be provided with the new option <literal>database.passwordFile</literal>, which should be set to the path of a file containing the password and readable by the user <literal>nginx</literal> only. The <literal>database.password</literal> option is insecure and deprecated. Usage of this option will print a warning.
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        A random <literal>des_key</literal> is set by default in the configuration of roundcube, instead of using the hardcoded and insecure default. To ensure a clean migration, all users will be logged out when you upgrade to this release.
+       </para>
+      </listitem>
+     </itemizedlist>
     </para>
    </listitem>
    <listitem>
@@ -545,6 +569,51 @@ auth required pam_succeed_if.so uid >= 1000 quiet
    </listitem>
    <listitem>
     <para>The LLVM versions 3.5, 3.9 and 4 (including the corresponding CLang versions) have been dropped.</para>
+   </listitem>
+   <listitem>
+    <para>
+     The <option>networking.interfaces.*.preferTempAddress</option> option has
+     been replaced by <option>networking.interfaces.*.tempAddress</option>.
+     The new option allows better control of the IPv6 temporary addresses,
+     including completely disabling them for interfaces where they are not
+     needed.
+    </para>
+   </listitem>
+   <listitem>
+     <para>
+       Rspamd was updated to version 2.2. Read
+       <link xlink:href="https://rspamd.com/doc/migration.html#migration-to-rspamd-20">
+       the upstream migration notes</link> carefully. Please be especially
+       aware that some modules were removed and the default Bayes backend is
+       now Redis.
+     </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <literal>*psu</literal> versions of <package>oraclejdk8</package> have been removed
+     as they aren't provided by upstream anymore.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     The <option>services.dnscrypt-proxy</option> module has been removed
+     as it used the deprecated version of dnscrypt-proxy. We've added
+     <xref linkend="opt-services.dnscrypt-proxy2.enable"/> to use the supported version.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <literal>qesteidutil</literal> has been deprecated in favor of <literal>qdigidoc</literal>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     <package>sqldeveloper_18</package> has been removed as it's not maintained anymore,
+     <package>sqldeveloper</package> has been updated to version <literal>19.4</literal>.
+     Please note that this means that this means that the <package>oraclejdk</package> is now
+     required. For further information please read the
+     <link xlink:href="https://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/sqldev-relnotes-194-5908846.html">release notes</link>.
+    </para>
    </listitem>
   </itemizedlist>
  </section>

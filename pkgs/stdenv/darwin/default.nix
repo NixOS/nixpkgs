@@ -1,6 +1,9 @@
 { lib
 , localSystem, crossSystem, config, overlays, crossOverlays ? []
-
+# The version of darwin.apple_sdk used for sources provided by apple.
+, appleSdkVersion ? "10.12"
+# Minimum required macOS version, used both for compatibility as well as reproducability.
+, macosVersionMin ? "10.12"
 # Allow passing in bootstrap files directly so we can test the stdenv bootstrap process when changing the bootstrap tools
 , bootstrapFiles ? let
   fetch = { file, sha256, executable ? true }: import <nix/fetchurl.nix> {
@@ -28,15 +31,19 @@ let
   ];
 in rec {
   commonPreHook = ''
-    export NIX_ENFORCE_PURITY="''${NIX_ENFORCE_PURITY-1}"
-    export NIX_ENFORCE_NO_NATIVE="''${NIX_ENFORCE_NO_NATIVE-1}"
+    export NIX_ENFORCE_NO_NATIVE=''${NIX_ENFORCE_NO_NATIVE-1}
+    export NIX_ENFORCE_PURITY=''${NIX_ENFORCE_PURITY-1}
     export NIX_IGNORE_LD_THROUGH_GCC=1
-    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
-    export MACOSX_DEPLOYMENT_TARGET=10.12
     export SDKROOT=
-    export CMAKE_OSX_ARCHITECTURES=x86_64
+
+    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
+    export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
+    export NIX_LDFLAGS+=" -macosx_version_min ${macosVersionMin} -sdk_version ${appleSdkVersion} -no_uuid"
+
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no
+
+    stripAllFlags=" " # the Darwin "strip" command doesn't know "-s"
   '';
 
   bootstrapTools = derivation {
@@ -130,8 +137,7 @@ in rec {
         __extraImpureHostDeps = commonImpureHostDeps;
 
         extraAttrs = {
-          inherit platform;
-          parent = last;
+          inherit macosVersionMin appleSdkVersion platform;
         };
         overrides  = self: super: (overrides self super) // { fetchurl = thisStdenv.fetchurlBoot; };
       };
@@ -400,9 +406,9 @@ in rec {
     extraBuildInputs = [ pkgs.darwin.CF ];
 
     extraAttrs = {
-      inherit platform bootstrapTools;
-      libc         = pkgs.darwin.Libsystem;
+      libc = pkgs.darwin.Libsystem;
       shellPackage = pkgs.bash;
+      inherit macosVersionMin appleSdkVersion platform bootstrapTools;
     };
 
     allowedRequisites = (with pkgs; [

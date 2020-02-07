@@ -299,7 +299,7 @@ in
       couchpotato = 267;
       gogs = 268;
       pdns-recursor = 269;
-      kresd = 270;
+      #kresd = 270; # switched to "knot-resolver" with dynamic ID
       rpc = 271;
       geoip = 272;
       fcron = 273;
@@ -600,7 +600,7 @@ in
       headphones = 266;
       couchpotato = 267;
       gogs = 268;
-      kresd = 270;
+      #kresd = 270; # switched to "knot-resolver" with dynamic ID
       #rpc = 271; # unused
       #geoip = 272; # unused
       fcron = 273;

@@ -2,13 +2,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "topgrade";
-  version = "3.7.1";
+  version = "3.9.0";
 
   src = fetchFromGitHub {
     owner = "r-darwish";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0vs0gnfs9swlmzsj7m3b88xfzcfy7n68bgm4i94csc3qsbip6m0j";
+    sha256 = "0g9pb4f5skigyahv8kpx7wkvv625lvgnbqz6iq7j7wgixxf4nl1i";
   };
 
   cargoSha256 = "1y85hl7xl60vsj3ivm6pyd6bvk39wqg25bqxfx00r9myha94iqmd";

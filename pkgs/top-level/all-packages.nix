@@ -782,6 +782,8 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
+
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
 
   bitwarden = callPackage ../tools/security/bitwarden { };
@@ -1100,6 +1102,8 @@ in
   };
 
   azureus = callPackage ../tools/networking/p2p/azureus { };
+
+  b3sum = callPackage ../tools/security/b3sum {};
 
   backblaze-b2 = python.pkgs.callPackage ../development/tools/backblaze-b2 { };
 
@@ -1925,6 +1929,8 @@ in
 
   lynis = callPackage ../tools/security/lynis { };
 
+  mapproxy = callPackage ../applications/misc/mapproxy { };
+
   marlin-calc = callPackage ../tools/misc/marlin-calc {};
 
   mathics = with python2Packages; toPythonApplication mathics;
@@ -1960,6 +1966,8 @@ in
   mlarchive2maildir = callPackage ../applications/networking/mailreaders/mlarchive2maildir { };
 
   monetdb = callPackage ../servers/sql/monetdb { };
+
+  mons = callPackage ../tools/misc/mons {};
 
   mousetweaks = callPackage ../applications/accessibility/mousetweaks {
     inherit (pkgs.xorg) libX11 libXtst libXfixes;
@@ -2038,6 +2046,8 @@ in
   precice = callPackage ../development/libraries/precice { };
 
   parallel-rust = callPackage ../tools/misc/parallel-rust { };
+
+  pueue = callPackage ../applications/misc/pueue { };
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
@@ -2768,9 +2778,7 @@ in
 
   djbdns = callPackage ../tools/networking/djbdns { };
 
-  dnscrypt-proxy = callPackage ../tools/networking/dnscrypt-proxy/1.x { };
-
-  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy/2.x { };
+  dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy2 { };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
@@ -5254,11 +5262,11 @@ in
 
   networkmanager-fortisslvpn = callPackage ../tools/networking/network-manager/fortisslvpn { };
 
-  networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan.nix { };
+  networkmanager_strongswan = callPackage ../tools/networking/network-manager/strongswan { };
 
-  networkmanagerapplet = callPackage ../tools/networking/network-manager/applet.nix { };
+  networkmanagerapplet = callPackage ../tools/networking/network-manager/applet { };
 
-  networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu.nix  { };
+  networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu  { };
 
   newsboat = callPackage ../applications/networking/feedreaders/newsboat {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5982,7 +5990,6 @@ in
 
   qastools = libsForQt5.callPackage ../tools/audio/qastools { };
 
-  qesteidutil = libsForQt5.callPackage ../tools/security/qesteidutil { } ;
   qdigidoc = libsForQt5.callPackage ../tools/security/qdigidoc { } ;
 
   qgrep = callPackage ../tools/text/qgrep {
@@ -6676,8 +6683,6 @@ in
 
   Sylk = callPackage ../applications/networking/Sylk {};
 
-  otter-browser = qt5.callPackage ../applications/networking/browsers/otter {};
-
   privoxy = callPackage ../tools/networking/privoxy {
     w3m = w3m-batch;
   };
@@ -6868,6 +6873,8 @@ in
   tpm-luks = callPackage ../tools/security/tpm-luks { };
 
   tpm2-abrmd = callPackage ../tools/security/tpm2-abrmd { };
+
+  tpm2-pkcs11 = callPackage ../misc/tpm2-pkcs11 { };
 
   tpm2-tools = callPackage ../tools/security/tpm2-tools { };
 
@@ -7180,6 +7187,8 @@ in
   whois = callPackage ../tools/networking/whois { };
 
   wifite2 = callPackage ../tools/networking/wifite2 { };
+
+  wimboot = callPackage ../tools/misc/wimboot { };
 
   wireguard-tools = callPackage ../tools/networking/wireguard-tools { };
 
@@ -7548,6 +7557,10 @@ in
   yaml-merge = callPackage ../tools/text/yaml-merge { };
 
   yeshup = callPackage ../tools/system/yeshup { };
+
+  ytop = callPackage ../tools/system/ytop {
+    inherit (darwin.apple_sdk.frameworks) IOKit;
+  };
 
   yggdrasil = callPackage ../tools/networking/yggdrasil { };
 
@@ -8438,7 +8451,13 @@ in
   jre = jre8;
   jre_headless = jre8_headless;
 
-  inherit (callPackages ../development/compilers/graalvm { }) mx jvmci8 graalvm8;
+  inherit (callPackages ../development/compilers/graalvm {
+    gcc = if stdenv.targetPlatform.isDarwin then gcc8 else gcc;
+    inherit (darwin.apple_sdk.frameworks)
+      CoreFoundation Foundation JavaNativeFoundation
+      JavaVM JavaRuntimeSupport Cocoa;
+    inherit (darwin) libiconv libobjc libresolv;
+  }) mx jvmci8 graalvm8;
 
   inherit (callPackages ../development/compilers/graalvm/enterprise-edition.nix { })
     graalvm8-ee
@@ -8452,13 +8471,9 @@ in
 
   oraclejdk8 = pkgs.oraclejdk8distro true false;
 
-  oraclejdk8psu = pkgs.oraclejdk8psu_distro true false;
-
   oraclejre = lowPrio (pkgs.jdkdistro false false);
 
   oraclejre8 = lowPrio (pkgs.oraclejdk8distro false false);
-
-  oraclejre8psu = lowPrio (pkgs.oraclejdk8psu_distro false false);
 
   jrePlugin = jre8Plugin;
 
@@ -8468,13 +8483,7 @@ in
 
   oraclejdk8distro = installjdk: pluginSupport:
     (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8cpu-linux.nix {
-        inherit installjdk pluginSupport;
-      });
-
-  oraclejdk8psu_distro = installjdk: pluginSupport:
-    (if pluginSupport then appendToName "with-plugin" else x: x)
-      (callPackage ../development/compilers/oraclejdk/jdk8psu-linux.nix {
+      (callPackage ../development/compilers/oraclejdk/jdk8-linux.nix {
         inherit installjdk pluginSupport;
       });
 
@@ -8826,7 +8835,8 @@ in
   sagittarius-scheme = callPackage ../development/compilers/sagittarius-scheme {};
 
   sbclBootstrap = callPackage ../development/compilers/sbcl/bootstrap.nix {};
-  sbcl = callPackage ../development/compilers/sbcl {};
+  sbcl_2_0_1 = callPackage ../development/compilers/sbcl {};
+  sbcl = callPackage ../development/compilers/sbcl/2.0.0.nix {};
 
   scala_2_10 = callPackage ../development/compilers/scala/2.10.nix { };
   scala_2_11 = callPackage ../development/compilers/scala/2.11.nix { };
@@ -8857,12 +8867,7 @@ in
 
   spirv-llvm-translator = callPackage ../development/compilers/spirv-llvm-translator { };
 
-  sqldeveloper = callPackage ../development/tools/database/sqldeveloper { };
-
-  # sqldeveloper_18 needs JavaFX, which currently only is available inside the
-  # (non-free and net yet packaged for Darwin) OracleJDK
-  # we might be able to get rid of it, as soon as we have an OpenJDK with OpenJFX included
-  sqldeveloper_18 = callPackage ../development/tools/database/sqldeveloper/18.2.nix {
+  sqldeveloper = callPackage ../development/tools/database/sqldeveloper {
     jdk = oraclejdk;
   };
 
@@ -9175,6 +9180,7 @@ in
     let
       defaultOctaveOptions = {
         qt = null;
+        qscintilla = null;
         ghostscript = null;
         graphicsmagick = null;
         llvm = null;
@@ -9196,6 +9202,7 @@ in
 
   octaveFull = (lowPrio (octave.override {
     qt = qt4;
+    inherit qscintilla;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   }));
@@ -9664,11 +9671,8 @@ in
 
   aws-adfs = with python3Packages; toPythonApplication aws-adfs;
 
-  electron_6 = callPackage ../development/tools/electron/6.x.nix { };
-
-  electron_5 = callPackage ../development/tools/electron/5.x.nix { };
-
-  electron_4 = callPackage ../development/tools/electron { };
+  inherit (callPackages ../development/tools/electron { })
+    electron_4 electron_5 electron_6 electron_7 electron_8;
 
   electron_3 = callPackage ../development/tools/electron/3.x.nix { };
   electron = electron_4;
@@ -9713,8 +9717,6 @@ in
   buildifier = bazel-buildtools;
   buildozer = bazel-buildtools;
   unused_deps = bazel-buildtools;
-
-  bazel-deps = callPackage ../development/tools/build-managers/bazel/bazel-deps { };
 
   bazel-remote = callPackage ../development/tools/build-managers/bazel/bazel-remote { };
 
@@ -10179,6 +10181,8 @@ in
 
   hadolint = haskell.lib.justStaticExecutables haskellPackages.hadolint;
 
+  halfempty = callPackage ../development/tools/halfempty {};
+
   hcloud = callPackage ../development/tools/hcloud { };
 
   help2man = callPackage ../development/tools/misc/help2man { };
@@ -10332,8 +10336,6 @@ in
   mkcert = callPackage ../development/tools/misc/mkcert { };
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
-
-  moby = callPackage ../development/tools/misc/moby { };
 
   modd = callPackage ../development/tools/modd { };
 
@@ -10613,6 +10615,8 @@ in
   sqlitebrowser = libsForQt5.callPackage ../development/tools/database/sqlitebrowser { };
 
   sqlite-web = callPackage ../development/tools/database/sqlite-web { };
+
+  sqlmap = python3Packages.sqlmap;
 
   sselp = callPackage ../tools/X11/sselp{ };
 
@@ -12281,6 +12285,8 @@ in
   libuchardet = callPackage ../development/libraries/libuchardet { };
 
   libchop = callPackage ../development/libraries/libchop { };
+
+  libcint = callPackage ../development/libraries/libcint { };
 
   libclc = callPackage ../development/libraries/libclc { };
 
@@ -15451,6 +15457,8 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices AudioUnit Cocoa;
   };
 
+  qpaeq = qt5.callPackage ../servers/pulseaudio/qpaeq.nix { };
+
   pulseaudioFull = pulseaudio.override {
     x11Support = true;
     jackaudioSupport = true;
@@ -15669,6 +15677,9 @@ in
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
+  };
+  prometheus-xmpp-alerts = callPackage ../servers/monitoring/prometheus/xmpp-alerts.nix {
+    pythonPackages = python3Packages;
   };
 
   prometheus-cpp = callPackage ../development/libraries/prometheus-cpp { };
@@ -16507,6 +16518,8 @@ in
 
     it87 = callPackage ../os-specific/linux/it87 {};
 
+    asus-wmi-sensors = callPackage ../os-specific/linux/asus-wmi-sensors {};
+
     ena = callPackage ../os-specific/linux/ena {};
 
     v4l2loopback = callPackage ../os-specific/linux/v4l2loopback { };
@@ -17318,6 +17331,8 @@ in
 
   caladea = callPackage ../data/fonts/caladea {};
 
+  canta-theme = callPackage ../data/themes/canta { };
+
   cantarell-fonts = callPackage ../data/fonts/cantarell-fonts { };
 
   capitaine-cursors = callPackage ../data/icons/capitaine-cursors { };
@@ -18057,6 +18072,8 @@ in
 
   agedu = callPackage ../tools/misc/agedu { };
 
+  agenda = callPackage ../applications/office/agenda { };
+
   ahoviewer = callPackage ../applications/graphics/ahoviewer { };
 
   airwave = callPackage ../applications/audio/airwave { };
@@ -18593,12 +18610,6 @@ in
 
   dmenu = callPackage ../applications/misc/dmenu { };
 
-  # TODO (@primeos): Remove after the 19.09 branch-off:
-  dmenu2 = throw ''
-    The fork "dmenu2" is not maintained by upstream anymore. Please use the
-    original "dmenu" instead.
-  '';
-
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
   };
@@ -18719,6 +18730,8 @@ in
   electrum-dash = callPackage ../applications/misc/electrum/dash.nix { };
 
   electrum-ltc = callPackage ../applications/misc/electrum/ltc.nix { };
+
+  elementary-planner = callPackage ../applications/office/elementary-planner { };
 
   elinks = callPackage ../applications/networking/browsers/elinks {
     openssl = openssl_1_0_2;
@@ -19260,9 +19273,7 @@ in
     withpcre2 = false;
   };
 
-  gitRepo = callPackage ../applications/version-management/git-repo {
-    python = python27;
-  };
+  gitRepo = callPackage ../applications/version-management/git-repo { };
 
   git-quick-stats = callPackage ../development/tools/git-quick-stats {};
 
@@ -19900,6 +19911,8 @@ in
 
   ksuperkey = callPackage ../tools/X11/ksuperkey { };
 
+  ktimetracker = libsForQt5.callPackage ../applications/office/ktimetracker { };
+
   ktorrent = libsForQt5.callPackage ../applications/networking/p2p/ktorrent { };
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
@@ -20353,9 +20366,6 @@ in
   mm = callPackage ../applications/networking/instant-messengers/mm { };
 
   mm-common = callPackage ../development/libraries/mm-common { };
-
-  # Renamed
-  matrique = spectral;
 
   mpc-qt = libsForQt5.callPackage ../applications/video/mpc-qt { };
 
@@ -21640,13 +21650,6 @@ in
 
   taskopen = callPackage ../applications/misc/taskopen { };
 
-  # TODO (@primeos): Remove after the 19.09 branch-off:
-  tdesktopPackages = throw ''
-    The attributes "tdesktopPackages.*" where removed as the preview version
-    will not be maintained anymore (there are regular stable releases and we
-    depend on the patches from Arch Linux which only track the stable version
-    as well). Please switch to "tdesktop" (stable version).
-  '';
   tdesktop = qt5.callPackage ../applications/networking/instant-messengers/telegram/tdesktop { };
 
   telepathy-gabble = callPackage ../applications/networking/instant-messengers/telepathy/gabble { };
@@ -22570,7 +22573,7 @@ in
 
   zanshin = libsForQt5.callPackage ../applications/office/zanshin {
     inherit (kdeApplications) akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap;
-    inherit (kdeFrameworks) krunner kwallet;
+    inherit (kdeFrameworks) krunner kwallet kcalendarcore;
     boost = boost160;
   };
 
@@ -23397,9 +23400,12 @@ in
   };
 
   protontricks = callPackage ../tools/package-management/protontricks {
-    inherit (python3Packages) buildPythonApplication vdf;
+    inherit (python3Packages) buildPythonApplication pytest setuptools_scm vdf;
     inherit (gnome3) zenity;
     wine = wineWowPackages.minimal;
+    winetricks = winetricks.override {
+      wine = wineWowPackages.minimal;
+    };
   };
 
   stepmania = callPackage ../games/stepmania {
@@ -25816,6 +25822,8 @@ in
 
   tlwg = callPackage ../data/fonts/tlwg { };
 
+  tt2020 = callPackage ../data/fonts/tt2020 { };
+
   simplehttp2server = callPackage ../servers/simplehttp2server { };
 
   diceware = callPackage ../tools/security/diceware { };
@@ -25923,5 +25931,4 @@ in
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
 
-  dat = nodePackages.dat;
 }

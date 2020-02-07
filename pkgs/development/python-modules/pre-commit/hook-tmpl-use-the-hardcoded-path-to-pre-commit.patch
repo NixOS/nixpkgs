@@ -1,0 +1,25 @@
+From d9e6999e32112602ec276634cb004eda3ca64ec3 Mon Sep 17 00:00:00 2001
+From: "Wael M. Nasreddine" <wael.nasreddine@gmail.com>
+Date: Mon, 13 Jan 2020 11:04:58 -0800
+Subject: [PATCH] hook-tmpl: use the hardcoded path to pre-commit, if found
+
+---
+ pre_commit/resources/hook-tmpl | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/pre_commit/resources/hook-tmpl b/pre_commit/resources/hook-tmpl
+index 213d16e..3a99211 100755
+--- a/pre_commit/resources/hook-tmpl
++++ b/pre_commit/resources/hook-tmpl
+@@ -107,6 +107,8 @@ def _exe() -> Tuple[str, ...]:
+             except OSError:
+                 pass
+ 
++    if os.path.isfile('@pre-commit@/bin/pre-commit') and os.access('@pre-commit@/bin/pre-commit', os.X_OK):
++        return ('@pre-commit@/bin/pre-commit', 'run')
+     if distutils.spawn.find_executable('pre-commit'):
+         return ('pre-commit', 'run')
+ 
+-- 
+2.23.1
+

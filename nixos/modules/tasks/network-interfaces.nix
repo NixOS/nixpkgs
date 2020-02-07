@@ -143,13 +143,34 @@ let
         description = "Name of the interface.";
       };
 
-      preferTempAddress = mkOption {
-        type = types.bool;
-        default = cfg.enableIPv6;
-        defaultText = literalExample "config.networking.enableIPv6";
+      tempAddress = mkOption {
+        type = types.enum [ "default" "enabled" "disabled" ];
+        default = if cfg.enableIPv6 then "default" else "disabled";
+        defaultText = literalExample ''if cfg.enableIPv6 then "default" else "disabled"'';
         description = ''
-          When using SLAAC prefer a temporary (IPv6) address over the EUI-64
-          address for originating connections. This is used to reduce tracking.
+          When IPv6 is enabled with SLAAC, this option controls the use of
+          temporary address (aka privacy extensions). This is used to reduce tracking.
+          The three possible values are:
+
+          <itemizedlist>
+           <listitem>
+            <para>
+             <literal>"default"</literal> to generate temporary addresses and use
+             them by default;
+            </para>
+           </listitem>
+           <listitem>
+            <para>
+             <literal>"enabled"</literal> to generate temporary addresses but keep
+             using the standard EUI-64 ones by default;
+            </para>
+           </listitem>
+           <listitem>
+            <para>
+             <literal>"disabled"</literal> to completely disable temporary addresses.
+            </para>
+           </listitem>
+          </itemizedlist>
         '';
       };
 
@@ -287,6 +308,11 @@ let
       let
         defined = x: x != "_mkMergedOptionModule";
       in [
+        (mkChangedOptionModule [ "preferTempAddress" ] [ "tempAddress" ]
+         (config:
+          let bool = getAttrFromPath [ "preferTempAddress" ] config;
+          in if bool then "default" else "enabled"
+        ))
         (mkRenamedOptionModule [ "ip4" ] [ "ipv4" "addresses"])
         (mkRenamedOptionModule [ "ip6" ] [ "ipv6" "addresses"])
         (mkRemovedOptionModule [ "subnetMask" ] ''
@@ -945,7 +971,7 @@ in
           The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
         '';
       })) ++ (forEach interfaces (i: {
-        assertion = i.preferTempAddress -> cfg.enableIPv6;
+        assertion = i.tempAddress != "disabled" -> cfg.enableIPv6;
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
         '';
@@ -973,8 +999,11 @@ in
       "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
         (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)))
-      // listToAttrs (forEach (filter (i: i.preferTempAddress) interfaces)
-        (i: nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" 2));
+      // listToAttrs (forEach interfaces
+        (i: let
+          opt = i.tempAddress;
+          val = { disabled = 0; enabled = 1; default = 2; }.${opt};
+         in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
@@ -1103,10 +1132,18 @@ in
       (pkgs.writeTextFile rec {
         name = "ipv6-privacy-extensions.rules";
         destination = "/etc/udev/rules.d/99-${name}";
-        text = concatMapStrings (i: ''
-          # enable IPv6 privacy addresses but prefer EUI-64 addresses for ${i.name}
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=1"
-        '') (filter (i: !i.preferTempAddress) interfaces);
+        text = concatMapStrings (i:
+          let
+            opt = i.tempAddress;
+            val = if opt == "disabled" then 0 else 1;
+            msg = if opt == "disabled"
+                  then "completely disable IPv6 privacy addresses"
+                  else "enable IPv6 privacy addresses but prefer EUI-64 addresses";
+          in
+          ''
+            # override to ${msg} for ${i.name}
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${toString val}"
+          '') (filter (i: i.tempAddress != "default") interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})
       (pkgs.writeTextFile {
