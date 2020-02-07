@@ -4811,6 +4811,8 @@ in
 
   libpointmatcher = callPackage ../development/libraries/libpointmatcher { };
 
+  libportal = callPackage ../development/libraries/libportal { };
+
   libmicrodns = callPackage ../development/libraries/libmicrodns { };
 
   libnids = callPackage ../tools/networking/libnids { };
