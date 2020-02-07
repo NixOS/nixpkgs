@@ -3,7 +3,6 @@
 
   iptables ? null,
   iproute ? null,
-  libmnl ? null,
   makeWrapper ? null,
   openresolv ? null,
   procps ? null,
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
   sourceRoot = "source/src";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"
