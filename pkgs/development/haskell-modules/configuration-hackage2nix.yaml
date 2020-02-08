@@ -6204,7 +6204,6 @@ broken-packages:
   - hsx-xhtml
   - hsx2hs
   - hsXenCtrl
-  - HsYAML-aeson
   - hsyscall
   - hsyslog-tcp
   - hsyslog-udp
