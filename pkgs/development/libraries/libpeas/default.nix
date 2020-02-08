@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.24.1";
+  version = "1.26.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1162dr7smmfb02czmhshr0f93hqj7w0nw29bys5lzfvwarxcyflw";
+    sha256 = "0xkk9zhkw8f2fm7g9nb4ry4xxig5n27s7rjmx6l7jr2941zdfxm9";
   };
 
   nativeBuildInputs = [ pkgconfig meson ninja gettext gobject-introspection ];
