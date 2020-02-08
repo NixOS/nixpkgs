@@ -29,9 +29,14 @@
 , libcap
 , libseccomp
 , coreutils
+, socat
 , gettext
 , hicolor-icon-theme
+, shared-mime-info
+, desktop-file-utils
+, gtk3
 , fuse
+, malcontent
 , nixosTests
 , libsoup
 , lzma
@@ -50,14 +55,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.4.2";
+  version = "1.6.1";
 
   # TODO: split out lib once we figure out what to do with triggerdir
   outputs = [ "out" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "08nmpp26mgv0vp3mlwk97rnp0j7i108h4hr9nllja19sjxnrlygj";
+    sha256 = "1x3zh2xashsq1nh4s85qq45hcnwfbnwzln2wlk10g7149nia6f7w";
   };
 
   patches = [
@@ -65,7 +70,9 @@ stdenv.mkDerivation rec {
     # https://github.com/flatpak/flatpak/issues/1460
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit coreutils gettext glibcLocales;
+      inherit coreutils gettext glibcLocales socat gtk3;
+      smi = shared-mime-info;
+      dfu = desktop-file-utils;
       hicolorIconTheme = hicolor-icon-theme;
     })
 
@@ -135,6 +142,7 @@ stdenv.mkDerivation rec {
     systemd
     xorg.libXau
     fuse
+    malcontent
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
