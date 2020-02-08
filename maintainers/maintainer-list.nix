@@ -682,6 +682,12 @@
     githubId = 192147;
     name = "aszlig";
   };
+  atemu = {
+    name = "Atemu";
+    email = "atemu.main+nixpkgs@gmail.com";
+    github = "Atemu";
+    githubId = 18599032;
+  };
   athas = {
     email = "athas@sigkill.dk";
     github = "athas";
