@@ -78,19 +78,17 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "zoneminder";
-  version = "1.32.3";
+  version = "1.34.3";
 
   src = fetchFromGitHub {
     owner  = "ZoneMinder";
     repo   = "zoneminder";
     rev    = version;
-    sha256 = "1sx2fn99861zh0gp8g53ynr1q6yfmymxamn82y54jqj6nv475njz";
+    sha256 = "0jp7950v36gxxzkwdp5i0312s26czhfsl5ixdxfzn21cx31hhlg0";
   };
 
   patches = [
     ./default-to-http-1dot1.patch
-    # Explicitly link with dynamic linking library to fix build
-    ./link-with-libdl.patch
   ];
 
   postPatch = ''
@@ -125,6 +123,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace scripts/zmdbbackup.in \
       --replace /usr/bin/mysqldump ${mysql.client}/bin/mysqldump
 
+    substituteInPlace scripts/zmupdate.pl.in \
+      --replace "'mysql'" "'${mysql.client}/bin/mysql'" \
+      --replace "'mysqldump'" "'${mysql.client}/bin/mysqldump'"
+
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
              src/zm_config.h.in \
@@ -133,7 +135,7 @@ in stdenv.mkDerivation rec {
       substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
     done
 
-   for f in includes/Event.php views/image.php skins/classic/views/image-ffmpeg.php ; do
+   for f in includes/Event.php views/image.php ; do
      substituteInPlace web/$f \
        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
    done
@@ -147,6 +149,7 @@ in stdenv.mkDerivation rec {
     DateManip DBI DBDmysql LWP SysMmap
     # run-time dependencies not checked at build-time
     ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
+    CryptEksblowfish DataEntropy # zmupdate.pl
   ]);
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
