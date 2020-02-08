@@ -12774,6 +12774,8 @@ in
 
   libmad = callPackage ../development/libraries/libmad { };
 
+  malcontent = callPackage ../development/libraries/malcontent { };
+
   libmanette = callPackage ../development/libraries/libmanette { };
 
   libmatchbox = callPackage ../development/libraries/libmatchbox { };
