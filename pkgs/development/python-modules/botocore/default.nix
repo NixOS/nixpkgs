@@ -28,6 +28,10 @@ buildPythonPackage rec {
     urllib3
   ];
 
+  postPatch = ''
+    substituteInPlace setup.py --replace ",<0.16" ""
+  '';
+
   checkInputs = [ mock nose ];
 
   checkPhase = ''
