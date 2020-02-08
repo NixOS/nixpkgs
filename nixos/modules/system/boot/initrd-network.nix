@@ -113,8 +113,7 @@ in
         for o in $(cat /proc/cmdline); do
           case $o in
             ip=*)
-              ipconfig $o && hasNetwork=1 \
-                && ifaces="$ifaces $(echo $o | cut -d: -f6)"
+              ipconfig $o && ifaces="$ifaces $(echo $o | cut -d: -f6)"
               ;;
           esac
         done
@@ -122,28 +121,20 @@ in
 
       # Otherwise, use DHCP.
       + optionalString doDhcp ''
-        if [ -z "$hasNetwork" ]; then
+        # Bring up all interfaces.
+        for iface in ${dhcpIfShellExpr}; do
+          echo "bringing up network interface $iface..."
+          ip link set "$iface" up && ifaces="$ifaces $iface"
+        done
 
-          # Bring up all interfaces.
-          for iface in ${dhcpIfShellExpr}; do
-            echo "bringing up network interface $iface..."
-            ip link set "$iface" up && ifaces="$ifaces $iface"
-          done
-
-          # Acquire DHCP leases.
-          for iface in ${dhcpIfShellExpr}; do
-            echo "acquiring IP address via DHCP on $iface..."
-            udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs} && hasNetwork=1
-          done
-        fi
+        # Acquire DHCP leases.
+        for iface in ${dhcpIfShellExpr}; do
+          echo "acquiring IP address via DHCP on $iface..."
+          udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
+        done
       ''
 
-      + ''
-        if [ -n "$hasNetwork" ]; then
-          echo "networking is up!"
-          ${cfg.postCommands}
-        fi
-      '');
+      + cfg.postCommands);
 
     boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
       for iface in $ifaces; do
