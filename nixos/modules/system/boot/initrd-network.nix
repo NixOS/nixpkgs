@@ -103,7 +103,7 @@ in
     boot.initrd.kernelModules = [ "af_packet" ];
 
     boot.initrd.extraUtilsCommands = ''
-      copy_bin_and_libs ${pkgs.mkinitcpio-nfs-utils}/bin/ipconfig
+      copy_bin_and_libs ${pkgs.klibc}/lib/klibc/bin.static/ipconfig
     '';
 
     boot.initrd.preLVMCommands = mkBefore (
