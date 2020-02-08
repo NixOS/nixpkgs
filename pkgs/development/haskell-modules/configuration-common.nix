@@ -1393,4 +1393,14 @@ self: super: {
   # See https://github.com/ekmett/perhaps/pull/5
   perhaps = doJailbreak super.perhaps;
 
+  # it depends on HsYAML >=0.2.0 && < 0.3, so use 0.2.1.0
+  HsYAML-aeson = super.HsYAML-aeson.override {
+    HsYAML = self.HsYAML_0_2_1_0;
+  };
+
+  # it depends on HsYAML >=0.2.0 && < 0.3, so use 0.2.1.0
+  stylish-haskell = super.stylish-haskell.override {
+    HsYAML = self.HsYAML_0_2_1_0;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

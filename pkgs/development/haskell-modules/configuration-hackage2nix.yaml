@@ -6204,7 +6204,6 @@ broken-packages:
   - hsx-xhtml
   - hsx2hs
   - hsXenCtrl
-  - HsYAML-aeson
   - hsyscall
   - hsyslog-tcp
   - hsyslog-udp
@@ -9389,7 +9388,6 @@ broken-packages:
   - structures
   - stt
   - stunts
-  - stylish-haskell
   - stylist
   - stylized
   - suavemente
