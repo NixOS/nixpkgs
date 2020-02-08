@@ -4,6 +4,20 @@ with lib;
 
 let
   cfg = config.services.traefik;
+  jsonValue = with types;
+    let
+      valueType = nullOr (oneOf [
+        bool
+        int
+        float
+        str
+        (lazyAttrsOf valueType)
+        (listOf valueType)
+      ]) // {
+        description = "JSON value";
+        emptyValue.value = { };
+      };
+    in valueType;
   dynamicConfigFile = if cfg.dynamicConfigFile == null then
     pkgs.runCommand "config.toml" {
       buildInputs = [ pkgs.remarshal ];
@@ -52,7 +66,7 @@ in {
       description = ''
         Static configuration for Traefik.
       '';
-      type = types.attrs;
+      type = jsonValue;
       default = { entryPoints.http.address = ":80"; };
       example = {
         entryPoints.web.address = ":8080";
@@ -76,7 +90,7 @@ in {
       description = ''
         Dynamic configuration for Traefik.
       '';
-      type = types.attrs;
+      type = jsonValue;
       default = { };
       example = {
         http.routers.router1 = {
