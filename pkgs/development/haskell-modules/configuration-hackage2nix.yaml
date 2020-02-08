@@ -4912,7 +4912,6 @@ broken-packages:
   - ghcprofview
   - ght
   - gi-cairo-again
-  - gi-gdkx11
   - gi-graphene
   - gi-gsk
   - gi-gstpbutils
