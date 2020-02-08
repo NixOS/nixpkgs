@@ -11738,6 +11738,8 @@ in
 
   glib-networking = callPackage ../development/libraries/glib-networking {};
 
+  glib-testing = callPackage ../development/libraries/glib-testing { };
+
   glirc = haskell.lib.justStaticExecutables haskellPackages.glirc;
 
   gom = callPackage ../development/libraries/gom { };
