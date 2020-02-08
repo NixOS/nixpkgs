@@ -1,6 +1,7 @@
 { stdenv
 , fetchurl
 , fetchpatch
+, substituteAll
 , pkgconfig
 , gtk-doc
 , gobject-introspection
@@ -13,6 +14,7 @@
 , libsoup
 , gpgme
 , which
+, makeWrapper
 , autoconf
 , automake
 , libtool
@@ -29,28 +31,41 @@
 , python3
 }:
 
-stdenv.mkDerivation rec {
+let
+  testPython = (python3.withPackages (p: with p; [
+    pyyaml
+  ]));
+in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2019.2";
+  version = "2019.6";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "0nbbrz3p4ms6vpl272q6fimqvizryw2a8mnfqcn69xf03sz5204y";
+    sha256 = "1bhrfbjna3rnymijxagzkdq2zl74g71s2xmimihjhvcw2zybi0jl";
   };
 
   patches = [
+    # Tests access the helper using relative path
+    # https://github.com/ostreedev/ostree/issues/1593
+    # Patch from https://github.com/ostreedev/ostree/pull/1633
+    ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
+
+    # Fix tests running in Catalan instead of C locale.
+    (fetchpatch {
+      url = "https://github.com/ostreedev/ostree/commit/5135a1e58ade2bfafc8c1fda359540eafd72531e.patch";
+      sha256 = "1crzaagw1zzx8v6rsnxb9jnc3ij9hlpvdl91w3skqdm28adx7yx8";
+    })
+
     # Workarounds for https://github.com/ostreedev/ostree/issues/1592
     ./fix-1592.patch
 
-    # Disable test-gpg-verify-result.test,
-    # https://github.com/ostreedev/ostree/issues/1634
-    ./disable-test-gpg-verify-result.patch
-
-    # Tests access the helper using relative path
-    # https://github.com/ostreedev/ostree/issues/1593
-    ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
+    # Hard-code paths in tests
+    (substituteAll {
+      src = ./fix-test-paths.patch;
+      python3 = testPython.interpreter;
+    })
   ];
 
   nativeBuildInputs = [
@@ -61,6 +76,7 @@ stdenv.mkDerivation rec {
     gtk-doc
     gobject-introspection
     which
+    makeWrapper
     yacc
     libxslt
     docbook_xsl
@@ -82,7 +98,7 @@ stdenv.mkDerivation rec {
     utillinuxMinimal # for libmount
 
     # for installed tests
-    (python3.withPackages (p: with p; [ pyyaml ]))
+    testPython
     gjs
   ];
 
@@ -102,6 +118,12 @@ stdenv.mkDerivation rec {
     "installed_testdir=${placeholder "installedTests"}/libexec/installed-tests/libostree"
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
+
+  postFixup = ''
+    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+    done
+  '';
 
   passthru = {
     tests = {
