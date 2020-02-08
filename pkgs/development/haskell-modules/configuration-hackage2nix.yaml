@@ -5717,7 +5717,6 @@ broken-packages:
   - HLearn-distributions
   - hledger-api
   - hledger-chart
-  - hledger-flow
   - hledger-irr
   - hledger-vty
   - hlibBladeRF
