@@ -31,36 +31,23 @@
 , check
 , python
 , json_c
+, zchunk
 , libmodulemd_1
 , utillinux
 , sqlite
 , cppunit
-, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
   pname = "rpm-ostree";
-  version = "2019.5";
+  version = "2020.1";
 
   outputs = [ "out" "dev" "man" "devdoc" ];
 
   src = fetchurl {
-    url = "https://github.com/projectatomic/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
-    sha256 = "0innbrjj086mslbf55bcvs9a3rv9hg1y2nhzxdjy3nhpqxqlzdnn";
+    url = "https://github.com/coreos/${pname}/releases/download/v${version}/${pname}-${version}.tar.xz";
+    sha256 = "1xgfppq4fqqvg3cs327bckjpiz6rrn3bbbhg3q5p4j2bzsq89xiz";
   };
-
-  patches = [
-    # gobject-introspection requires curl in cflags
-    # https://github.com/NixOS/nixpkgs/pull/50953#issuecomment-449777169
-    # https://github.com/NixOS/nixpkgs/pull/50953#issuecomment-452177080
-    ./fix-introspection-build.patch
-
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://github.com/coreos/rpm-ostree/commit/60053d0d3d2279d120ae7007c6048e499d2c4d14.patch";
-      sha256 = "0ig21zip09iy2da7ksg87jykaj3q8jyzh8r7yrpzyql85qxiwm0m";
-    })
-  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -98,6 +85,7 @@ stdenv.mkDerivation rec {
     python
     # libdnf
     json_c
+    zchunk
     libmodulemd_1
     utillinux
     sqlite
