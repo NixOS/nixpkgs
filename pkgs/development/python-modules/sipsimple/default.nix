@@ -25,7 +25,10 @@ buildPythonPackage rec {
   };
 
   preConfigure = ''
+    # TODO: Executable bits are set by upstream with the next release
+    # see AGProjects/python-sipsimple/commit/a36d66cf758afb43c59f7ac48b193c4148eb1848
     chmod +x ./deps/pjsip/configure ./deps/pjsip/aconfigure
+
     export LD=$CC
   '';
 
