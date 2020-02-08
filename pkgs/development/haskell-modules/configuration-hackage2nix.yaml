@@ -6092,7 +6092,6 @@ broken-packages:
   - http-querystring
   - http-response-decoder
   - http-shed
-  - http-streams
   - http-wget
   - http2-client
   - http2-client-exe
