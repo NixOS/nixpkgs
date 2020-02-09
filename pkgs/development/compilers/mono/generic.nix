@@ -1,6 +1,7 @@
 { stdenv, fetchurl, bison, pkgconfig, glib, gettext, perl, libgdiplus, libX11, callPackage, ncurses, zlib, withLLVM ? false, cacert, Foundation, libobjc, python, version, sha256, autoconf, libtool, automake, cmake, which
 , enableParallelBuilding ? true
 , srcArchiveSuffix ? "tar.bz2"
+, extraPatches ? []
 }:
 
 let
@@ -41,7 +42,7 @@ stdenv.mkDerivation rec {
 
   # We want pkg-config to take priority over the dlls in the Mono framework and the GAC
   # because we control pkg-config
-  patches = [ ./pkgconfig-before-gac.patch ];
+  patches = [ ./pkgconfig-before-gac.patch ] ++ extraPatches;
 
   # Patch all the necessary scripts. Also, if we're using LLVM, we fix the default
   # LLVM path to point into the Mono LLVM build, since it's private anyway.

@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
       Config
     sed -i -e s,/usr/bin/perl,${perl}/bin/perl, \
       templates/src/*.pl
+    sed -i -e '/<stropts.h>/d' lib/os_linux.h
   '' + /* html-tidy updates */ ''
     substituteInPlace ./session/html_secure_tidy.c \
       --replace buffio.h tidybuffio.h
