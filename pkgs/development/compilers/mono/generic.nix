@@ -23,8 +23,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = [glib];
 
-  # To overcome the bug https://bugzilla.novell.com/show_bug.cgi?id=644723
-  dontDisableStatic = true;
+  NIX_LDFLAGS = if stdenv.isDarwin then "" else "-lgcc_s" ;
 
   configureFlags = [
     "--x-includes=${libX11.dev}/include"
