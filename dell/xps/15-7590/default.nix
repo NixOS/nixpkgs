@@ -10,6 +10,13 @@
   # Set to true for just the first run, then disable it.
   # boot.loader.efi.canTouchEfiVariables = lib.mkDefault true;
 
+  # Load GPU drivers.
+  # hardware.bumblebee.enable = lib.mkDefault true;
+
+  # High DPI for X users. 175 "looks reasonable" but I didn't do the actual DPI
+  # calculation.
+  # services.xserver.dpi = lib.mkDefault 175;
+
   # Earlier font-size setup
   console.earlySetup = true;
 
