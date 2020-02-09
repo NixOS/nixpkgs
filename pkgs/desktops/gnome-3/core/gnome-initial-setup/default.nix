@@ -32,15 +32,16 @@
 , tzdata
 , yelp
 , libgnomekbd
+, malcontent
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-initial-setup";
-  version = "3.34.3";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1dc87mcvr7vdhfx4q0c44q37lf7ls2qvnc34dm66802qssrcxy9k";
+    sha256 = "08di7n26qhjfr0p1dvya2xfqwx37k8xbya97a8ccz3j0fzw0my4a";
   };
 
   nativeBuildInputs = [
@@ -74,6 +75,7 @@ stdenv.mkDerivation rec {
     polkit
     webkitgtk
     libnma
+    malcontent
   ];
 
   patches = [
@@ -85,9 +87,7 @@ stdenv.mkDerivation rec {
   ];
 
   mesonFlags = [
-    "-Dregion-page=true"
     "-Dcheese=disabled"
-    "-Dsoftware-sources=disabled"
     "-Dibus=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
   ];
