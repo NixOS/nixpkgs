@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
-, blockdiag
+, blockdiag, setuptools
 }:
 
 buildPythonPackage rec {
@@ -13,7 +13,7 @@ buildPythonPackage rec {
 
   buildInputs = [ pep8 nose unittest2 docutils ];
 
-  propagatedBuildInputs = [ blockdiag ];
+  propagatedBuildInputs = [ blockdiag setuptools ];
 
   # tests fail
   doCheck = false;
