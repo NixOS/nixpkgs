@@ -155,9 +155,9 @@ let
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
-        mkdir -p $out/lib/mozilla
+        mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString nativeMessagingHosts}; do
-            lndir -silent $ext/lib/mozilla $out/lib/mozilla
+            ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
 
         # For manpages, in case the program supplies them
