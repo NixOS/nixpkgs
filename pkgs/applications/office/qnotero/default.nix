@@ -1,5 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages
-}:
+{ stdenv, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
 
 python3Packages.buildPythonPackage rec {
   pname = "qnotero";
@@ -13,7 +12,7 @@ python3Packages.buildPythonPackage rec {
     sha256 = "16ckcjxa3dgmz1y8gd57q2h84akra3j4bgl4fwv4m05bam3ml1xs";
   };
 
-  propagatedBuildInputs = [ python3Packages.pyqt5 ];
+  propagatedBuildInputs = [ python3Packages.pyqt5 wrapQtAppsHook ];
 
   patchPhase = ''
       substituteInPlace ./setup.py \
@@ -21,6 +20,10 @@ python3Packages.buildPythonPackage rec {
 
       substituteInPlace ./libqnotero/_themes/light.py \
          --replace "/usr/share" "$out/usr/share"
+  '';
+
+  preFixup = ''
+    wrapQtApp "$out"/bin/qnotero
   '';
 
   meta = {
