@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
       sha256 = "01aqvz63glwq6wg0wr7ykqqghb4abgq77ghvhizbzadg1k4h7drx";
       excludes = [ "NEWS" ];
     })
+    (fetchpatch {
+      name = "CVE-2019-9278.patch";
+      url = "https://github.com/libexif/libexif/commit/75aa73267fdb1e0ebfbc00369e7312bac43d0566.patch";
+      sha256 = "10ikg33mips5zq9as7l9xqnyzbg1wwr4sw17517nzf4hafjpasrj";
+    })
   ];
 
   buildInputs = [ gettext ];
