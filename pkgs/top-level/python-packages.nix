@@ -3815,6 +3815,8 @@ in {
     inherit (pkgs) pkgconfig;
   };
 
+  graphql-core = callPackage ../development/python-modules/graphql-core { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = callPackage ../development/python-modules/greenlet { };
