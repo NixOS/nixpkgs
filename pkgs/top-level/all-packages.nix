@@ -13283,6 +13283,10 @@ in
 
   luabind_luajit = luabind.override { lua = luajit; };
 
+  luksmeta = callPackage ../development/libraries/luksmeta {
+    asciidoc = asciidoc-full;
+  };
+
   lzo = callPackage ../development/libraries/lzo { };
 
   opencl-clang = callPackage ../development/libraries/opencl-clang { };
