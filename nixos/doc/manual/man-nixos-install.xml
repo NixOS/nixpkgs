@@ -210,7 +210,7 @@
       The closure must be an appropriately configured NixOS system, with boot
       loader and partition configuration that fits the target host. Such a
       closure is typically obtained with a command such as <command>nix-build
-      -I nixos-config=./configuration.nix '&lt;nixos&gt;' -A system
+      -I nixos-config=./configuration.nix '&lt;nixpkgs/nixos&gt;' -A system
       --no-out-link</command>
      </para>
     </listitem>

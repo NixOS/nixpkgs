@@ -11,13 +11,14 @@ compat53,,,,,vcunat
 coxpcall,,,1.17.0-1,,
 cqueues,,,,,vcunat
 cyrussasl,,,,,vcunat
-digestif,,http://luarocks.org/dev,,lua5_3,
+digestif,,,,lua5_3,
 dkjson,,,,,
 fifo,,,,,
 http,,,,,vcunat
 inspect,,,,,
 ldoc,,,,,
 lgi,,,,,
+linenoise,,,,,
 ljsyscall,,,,lua5_1,lblasc
 lpeg,,,,,vyp
 lpeg_patterns,,,,,
@@ -43,6 +44,7 @@ luadbi-mysql,,,,,
 luadbi-postgresql,,,,,
 luadbi-sqlite3,,,,,
 luadoc,,,,,
+luaepnf,,,,,
 luaevent,,,,,
 luaexpat,,,1.3.0-1,,arobyn flosse
 luaffi,,http://luarocks.org/dev,,,
@@ -50,6 +52,7 @@ luafilesystem,,,1.7.0-2,,flosse vcunat
 lualogging,,,,,
 luaossl,,,,lua5_1,vcunat
 luaposix,,,,,vyp lblasc
+luarepl,,,,,
 luasec,,,,,flosse
 luasocket,,,,,
 luasql-sqlite3,,,,,vyp
@@ -72,3 +75,4 @@ std__debug,std._debug,,,,
 std_normalize,std.normalize,,,,
 stdlib,,,,,vyp
 pulseaudio,,,,,doronbehar
+vstruct,,,,,

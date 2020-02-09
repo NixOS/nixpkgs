@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja
+{ stdenv, fetchFromGitHub, meson, pkgconfig, ninja, wrapGAppsHook
 , wayland, wlroots, gtkmm3, libinput, libsigcxx, jsoncpp, fmt, scdoc, spdlog, gtk-layer-shell
 , traySupport  ? true,  libdbusmenu-gtk3
 , pulseSupport ? false, libpulseaudio
@@ -19,7 +19,7 @@
     };
 
     nativeBuildInputs = [
-      meson ninja pkgconfig scdoc
+      meson ninja pkgconfig scdoc wrapGAppsHook
     ];
 
     buildInputs = with stdenv.lib;

@@ -147,7 +147,13 @@ in rec {
       done
 
       # Symlink all units provided listed in systemd.packages.
-      for i in ${toString cfg.packages}; do
+      packages="${toString cfg.packages}"
+
+      # Filter duplicate directories
+      declare -A unique_packages
+      for k in $packages ; do unique_packages[$k]=1 ; done
+
+      for i in ''${!unique_packages[@]}; do
         for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
           if ! [[ "$fn" =~ .wants$ ]]; then
             if [[ -d "$fn" ]]; then

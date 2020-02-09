@@ -1,29 +1,19 @@
-{ stdenv, fetchFromGitHub, rustPlatform, fetchpatch
-, Security
-}:
+{ stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
   pname = "procs";
-  version = "0.8.16";
+  version = "0.9.6";
 
   src = fetchFromGitHub {
     owner = "dalance";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0l4n3gr1sc7wfa21p8yh7idaii0mnfpyqp4cg7f9l4345isy94vq";
+    sha256 = "06q18ynb4r9dcxc690291z9vvll9rfpc8j1gkkgfav2f1xdndzq3";
   };
 
-  cargoSha256 = "03c63dlzvag341n6la1s61ccri1avlprd91m11z9zzjhi9b46kcr";
+  cargoSha256 = "11wv02nn6gp32zzcd6kmsh6ky0dzyk1qqhb5vxvmq2nxhxjlddwv";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
-
-  patches = [
-    # Fix tests on darwin. Remove with the next release
-    (fetchpatch {
-      url = "https://github.com/dalance/procs/commit/bb554e247b5b339bc00fa5dd2e771b0d7cb09cd5.patch";
-      sha256 = "1szvvifa4pdbgdsmdj5f0zq6qzf1lh6wwc6ipawblfzwmg7d9wvk";
-    })
-  ];
 
   meta = with stdenv.lib; {
     description = "A modern replacement for ps written in Rust";

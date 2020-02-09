@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, intltool, perlPackages
-, goffice, gnome3, wrapGAppsHook, gtk3, bison, pythonPackages
+, goffice, gnome3, wrapGAppsHook, gtk3, bison, python3Packages
 , itstool
 }:
 
 let
-  inherit (pythonPackages) python pygobject3;
+  inherit (python3Packages) python pygobject3;
 in stdenv.mkDerivation rec {
   pname = "gnumeric";
   version = "1.12.46";

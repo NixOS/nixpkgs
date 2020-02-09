@@ -1,17 +1,17 @@
-{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
+{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
-      p = {
-        crateName = "nixtestcrate";
-        version = "0.1.0";
-        authors = [ "Test <test@example.com>" ];
-      } // args;
-    in buildRustCrate p;
+    p = {
+      crateName = "nixtestcrate";
+      version = "0.1.0";
+      authors = [ "Test <test@example.com>" ];
+    } // args;
+  in buildRustCrate p;
 
-    mkFile = destination: text: writeTextFile {
-      name = "src";
-      destination = "/${destination}";
-      inherit text;
+  mkFile = destination: text: writeTextFile {
+    name = "src";
+    destination = "/${destination}";
+    inherit text;
   };
 
   mkBin = name: mkFile name ''
@@ -92,7 +92,17 @@ let
     cases = {
       libPath =  { libPath = "src/my_lib.rs"; src = mkLib "src/my_lib.rs"; };
       srcLib =  { src = mkLib "src/lib.rs"; };
-      customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
+
+      # This used to be supported by cargo but as of 1.40.0 I can't make it work like that with just cargo anymore.
+      # This might be a regression or deprecated thing they finally removed…
+      # customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
+      # rustLibTestsCustomLibName = {
+      #   libName = "test_lib";
+      #   src = mkTestFile "src/test_lib.rs" "foo";
+      #   buildTests = true;
+      #   expectedTestOutputs = [ "test foo ... ok" ];
+      # };
+
       customLibNameAndLibPath =  { libName = "test_lib"; libPath = "src/best-lib.rs"; src = mkLib "src/best-lib.rs"; };
       crateBinWithPath =  { crateBin = [{ name = "test_binary1"; path = "src/foobar.rs"; }]; src = mkBin "src/foobar.rs"; };
       crateBinNoPath1 =  { crateBin = [{ name = "my-binary2"; }]; src = mkBin "src/my_binary2.rs"; };
@@ -121,12 +131,6 @@ let
         src = mkTestFile "src/lib.rs" "baz";
         buildTests = true;
         expectedTestOutputs = [ "test baz ... ok" ];
-      };
-      rustLibTestsCustomLibName = {
-        libName = "test_lib";
-        src = mkTestFile "src/test_lib.rs" "foo";
-        buildTests = true;
-        expectedTestOutputs = [ "test foo ... ok" ];
       };
       rustLibTestsCustomLibPath = {
         libPath = "src/test_path.rs";
@@ -181,7 +185,41 @@ let
           "test tests_bar ... ok"
         ];
       };
-
+      linkAgainstRlibCrate = {
+        crateName = "foo";
+        src = mkFile  "src/main.rs" ''
+          extern crate somerlib;
+          fn main() {}
+        '';
+        dependencies = [
+          (mkCrate {
+            crateName = "somerlib";
+            type = [ "rlib" ];
+            src = mkLib "src/lib.rs";
+          })
+        ];
+      };
+      # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
+      # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
+      buildRsOutDirOverlay = {
+        src = symlinkJoin {
+          name = "buildrs-out-dir-overlay";
+          paths = [
+            (mkLib "src/lib.rs")
+            (mkFile "build.rs" ''
+              use std::env;
+              use std::ffi::OsString;
+              use std::fs;
+              use std::path::Path;
+              fn main() {
+                let out_dir = env::var_os("OUT_DIR").expect("OUT_DIR not set");
+                let out_file = Path::new(&out_dir).join("lib.rs");
+                fs::write(out_file, "invalid rust code!").expect("failed to write lib.rs");
+              }
+            '')
+          ];
+        };
+      };
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
   in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {
@@ -207,9 +245,12 @@ let
       test -e ${pkg}/bin/brotli-decompressor && touch $out
     '';
   };
-  test = runCommand "run-buildRustCrate-tests" {
-    nativeBuildInputs = builtins.attrValues tests;
-  } "
-    touch $out
-  ";
+  test = releaseTools.aggregate {
+    name = "buildRustCrate-tests";
+    meta = {
+      description = "Test cases for buildRustCrate";
+      maintainers = [ lib.maintainers.andir ];
+    };
+    constituents = builtins.attrValues tests;
+  };
 }

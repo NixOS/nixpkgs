@@ -1,8 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, six, httplib2, requests }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy3k, six, httplib2, requests }:
 
 buildPythonPackage rec {
   pname = "mailmanclient";
   version = "3.3.0";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
@@ -16,7 +17,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "mailmanclient" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://www.gnu.org/software/mailman/";
+    homepage = "https://www.gnu.org/software/mailman/";
     description = "REST client for driving Mailman 3";
     license = licenses.lgpl3;
     platforms = platforms.linux;

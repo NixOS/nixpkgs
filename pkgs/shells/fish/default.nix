@@ -3,6 +3,7 @@
   groff, man-db, getent, libiconv, pcre2,
   gettext, ncurses, python3,
   cmake
+  , fetchpatch
 
   , writeText
 
@@ -106,6 +107,15 @@ let
     preConfigure = ''
       patchShebangs ./build_tools/git_version_gen.sh
     '';
+
+    patches = [
+      # Fixes "Integer 243 in '243 (243)' followed by non-digit" error with systemctl completion.
+      # https://github.com/fish-shell/fish-shell/issues/5689 (will be included in fish 3.1.0)
+      (fetchpatch {
+        url = "https://github.com/fish-shell/fish-shell/commit/c6ec4235136e82c709e8d7b455f7c463f9714b48.patch";
+        sha256 = "02m6pkhhx6y21csydznsxkbpnwhcpzyz99xgd9ryh7s03v7wbigw";
+      })
+    ];
 
     # Required binaries during execution
     # Python: Autocompletion generated from manpages and config editing

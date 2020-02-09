@@ -18,7 +18,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "Big-B";
-    repo = pname;
+    repo = "swaylock-fancy";
     rev = "35618ceec70338047355b6b057825e68f16971b5";
     sha256 = "06fjqwblmj0d9pq6y11rr73mizirna4ixy6xkvblf1c7sn5n8lpc";
   };

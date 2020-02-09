@@ -15,7 +15,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "coreutils";
   version = "8.31";
 
@@ -29,7 +29,9 @@ stdenv.mkDerivation rec {
          # To be removed in coreutils-8.32.
          ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
          # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
-         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch;
+         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch
+         # Fix compilation in android-cross environments. To be removed in coreutils-8.32.
+         ++ [ ./coreutils-8.31-android-cross.patch ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -49,6 +51,10 @@ stdenv.mkDerivation rec {
       --replace 'mode3=2755' 'mode3=1755'
 
     sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
+
+    # Fails on systems with a rootfs. Looks like a bug in the test, see
+    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
 
     # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
     for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
@@ -143,8 +149,9 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.eelco ];
   };
-
 } // optionalAttrs stdenv.hostPlatform.isMusl {
   # Work around a bogus warning in conjunction with musl.
   NIX_CFLAGS_COMPILE = "-Wno-error";
-}
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+  NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
+})

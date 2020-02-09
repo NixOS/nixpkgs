@@ -3,7 +3,7 @@
 , cups
 , fetchurl
 , gmp, gnutls
-, libffi, libbfd
+, libffi, binutils-unwrapped
 , libjpeg, libtiff, libpng, giflib, libungif
 , libxml2, libxslt, libiconv
 , libobjc, libgcrypt
@@ -25,7 +25,7 @@ gsmakeDerivation {
     aspell audiofile
     cups
     gmp gnutls
-    libffi libbfd
+    libffi binutils-unwrapped
     libjpeg libtiff libpng giflib libungif
     libxml2 libxslt libiconv
     libobjc libgcrypt
@@ -34,10 +34,6 @@ gsmakeDerivation {
     libiberty
   ];
   patches = [ ./fixup-paths.patch ];
-
-  # Bump to gcc9 has give missing xmemdup symbols. Need libiberty here
-  # to resolve it, unclear why. See #76927 for more info
-  NIX_LDFLAGS = "-liberty";
 
   meta = {
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";

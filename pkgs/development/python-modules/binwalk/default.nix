@@ -10,24 +10,39 @@
 , p7zip
 , cabextract
 , lzma
+, nose
 , pycrypto
 , pyqtgraph ? null }:
 
-let visualizationSupport = (pyqtgraph != null);
+let
+  visualizationSupport = (pyqtgraph != null);
+  version = "2.2.0";
 in
 buildPythonPackage {
   pname = "binwalk";
-  version = "2.1.1";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "devttys0";
     repo = "binwalk";
-    rev = "291a03595d17f848c73b74cb6ca508da782cd8f7";
-    sha256 = "0grid93yz6i6jb2zggrqncp5awdf7qi88j5y2k7dq0k9r6b8zydw";
+    rev = "be738a52e09b0da2a6e21470e0dbcd5beb42ed1b";
+    sha256 = "1bxgj569fzwv6jhcbl864nmlsi9x1k1r20aywjxc8b9b1zgqrlvc";
   };
 
   propagatedBuildInputs = [ zlib xz ncompress gzip bzip2 gnutar p7zip cabextract lzma pycrypto ]
-    ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+  ++ stdenv.lib.optional visualizationSupport pyqtgraph;
+
+  # setup.py only installs version.py during install, not test
+  postPatch = ''
+    echo '__version__ = "${version}"' > src/binwalk/core/version.py
+  '';
+
+  # binwalk wants to access ~/.config/binwalk/magic
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  checkInputs = [ nose ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/ReFirmLabs/binwalk";

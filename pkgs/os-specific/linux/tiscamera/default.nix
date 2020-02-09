@@ -11,17 +11,23 @@
 , gobject-introspection
 , gst_all_1
 , libwebcam
+, libunwind
+, gstreamer
+, elfutils
+, orc
+, python3
+, libuuid
 }:
 
 stdenv.mkDerivation rec {
   pname = "tiscamera";
-  version = "0.9.1";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "TheImagingSource";
     repo = pname;
     rev = "v-${pname}-${version}";
-    sha256 = "143yp6bpzj3rqfnrcnlrcwggay37fg6rkphh4w9y9v7v4wllzf87";
+    sha256 = "07vp6khgl6qd3a4519dmx1s5bfw7pld793p50pjn29fqh91fm93g";
   };
 
   nativeBuildInputs = [
@@ -39,6 +45,12 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     libwebcam
+    libunwind
+    gstreamer
+    elfutils
+    orc
+    python3
+    libuuid
   ];
 
 
@@ -50,13 +62,8 @@ stdenv.mkDerivation rec {
     "-DBUILD_LIBUSB=ON"
   ];
 
-
-  patches = [
-    ./allow-pipeline-stop-in-trigger-mode.patch # To be removed next release.
-  ];
-
   postPatch = ''
-    substituteInPlace ./data/udev/80-theimagingsource-cameras.rules \
+    substituteInPlace ./data/udev/80-theimagingsource-cameras.rules.in \
       --replace "/usr/bin/uvcdynctrl" "${libwebcam}/bin/uvcdynctrl" \
       --replace "/path/to/tiscamera/uvc-extensions" "$out/share/uvcdynctrl/data/199e"
 
@@ -84,7 +91,7 @@ stdenv.mkDerivation rec {
   # dependency on `libtcam` (which itself is built as part of this build). In order to allow
   # that, we set the dynamic linker's path to point on the build time location of the library.
   preBuild = ''
-    export LD_LIBRARY_PATH=$PWD/src:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/src''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
   '';
 
   meta = with lib; {

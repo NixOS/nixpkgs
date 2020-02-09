@@ -154,6 +154,7 @@ buildPythonPackage rec {
      --replace "text-unidecode==1.2" "text-unidecode" \
      --replace "tzlocal>=1.4,<2.0.0" "tzlocal" \
      --replace "sqlalchemy~=1.3" "sqlalchemy" \
+     --replace "gunicorn>=19.5.0, <20.0" "gunicorn" \
      --replace "werkzeug>=0.14.1, <0.15.0" "werkzeug"
  
   # dumb-init is only needed for CI and Docker, not relevant for NixOS.

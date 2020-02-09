@@ -1,18 +1,18 @@
 diff --git a/meson.build b/meson.build
-index b064cb8..1a470cf 100644
+index 38486c9..c567613 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -103,8 +103,8 @@
- 
- libexecdir = join_paths(prefix, get_option('libexecdir'))
- datadir = join_paths(prefix, get_option('datadir'))
--installed_test_bindir = join_paths(libexecdir, 'installed-tests', meson.project_name())
--installed_test_datadir = join_paths(datadir, 'installed-tests', meson.project_name())
-+installed_test_bindir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
-+installed_test_datadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', meson.project_name())
+@@ -110,8 +110,8 @@
+   prefix = get_option('prefix')
+   datadir = join_paths(prefix, get_option('datadir'))
+   libexecdir = join_paths(prefix, get_option('libexecdir'))
+-  installed_test_bindir = join_paths(libexecdir, 'installed-tests', meson.project_name())
+-  installed_test_datadir = join_paths(datadir, 'installed-tests', meson.project_name())
++  installed_test_bindir = join_paths(get_option('installed_test_prefix'), 'libexec', 'installed-tests', meson.project_name())
++  installed_test_datadir = join_paths(get_option('installed_test_prefix'), 'share', 'installed-tests', meson.project_name())
+ endif
  
  gio = dependency('gio-2.0', version : '>= 2.45.8')
- uuid = dependency('uuid')
 diff --git a/meson_options.txt b/meson_options.txt
 index 27e8cb6..74548ae 100644
 --- a/meson_options.txt

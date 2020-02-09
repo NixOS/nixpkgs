@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, python3Packages, libsForQt5, ghostscript }:
+{ stdenv, fetchFromGitHub, python3Packages, libsForQt5, ghostscript, qt5}:
 
 python3Packages.buildPythonApplication rec {
   pname = "krop";
@@ -17,6 +17,11 @@ python3Packages.buildPythonApplication rec {
     poppler-qt5
     libsForQt5.poppler
     ghostscript
+  ];
+
+  nativeBuildInputs = [ qt5.wrapQtAppsHook ];
+  makeWrapperArgs = [
+   "\${qtWrapperArgs[@]}"
   ];
 
   # Disable checks because of interference with older Qt versions // xcb

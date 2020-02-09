@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "fluxctl";
-  version = "1.16.0";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flux";
     rev = version;
-    sha256 = "1yk78w9cwssk5y69iapfzqf7mnrkam3w64x4zsx3zjpdmvp9dq7l";
+    sha256 = "0kp4xk1b8vxajl3cl6any9gmf3412gsahm5fvkyaclnj20yvq807";
   };
 
-  modSha256 = "17rh8yilxqv0dwljwm5ay43diwcy5pa1g2jff9wyhsh8q7sy9wln";
+  modSha256 = "0fnlnavw4l3425c9nwjkd98xihrgxi9n5yc9yv15j5xzg47qnqav";
 
   subPackages = [ "cmd/fluxctl" ];
 

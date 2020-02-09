@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, nodejs, which, python27, utillinux }:
 
-let version = "20.4"; in
+let version = "20.5"; in
 stdenv.mkDerivation {
   name = "cjdns-"+version;
 
@@ -8,7 +8,7 @@ stdenv.mkDerivation {
     owner = "cjdelisle";
     repo = "cjdns";
     rev = "cjdns-v${version}";
-    sha256 = "1d8li7vws1dmdgs96dmy4vh55gqy2ir4dnkrvgkv3fjq9pffr7vx";
+    sha256 = "13f174bmbyqna899naja4fzpma3yaw815ylksk8klcc3glg07v7b";
   };
 
   buildInputs = [ which python27 nodejs ] ++

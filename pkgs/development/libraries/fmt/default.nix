@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, enableShared ? true }:
+{ stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
   version = "6.0.0";
@@ -17,16 +17,16 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DFMT_TEST=TRUE"
-    "-DBUILD_SHARED_LIBS=${if enableShared then "TRUE" else "FALSE"}"
+    "-DBUILD_SHARED_LIBS=TRUE"
   ];
 
   enableParallelBuilding = true;
 
   doCheck = true;
   # preCheckHook ensures the test binaries can find libfmt.so
-  preCheck = if enableShared
-             then "export LD_LIBRARY_PATH=\"$PWD\""
-             else "";
+  preCheck = ''
+    export LD_LIBRARY_PATH="$PWD"
+  '';
 
   meta = with stdenv.lib; {
     description = "Small, safe and fast formatting library";

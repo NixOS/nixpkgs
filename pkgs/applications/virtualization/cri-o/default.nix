@@ -16,8 +16,7 @@
 }:
 
 let
-  makeFlags = "BUILDTAGS=\"apparmor seccomp selinux
-    containers_image_ostree_stub\"";
+  buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
 in buildGoPackage rec {
   project = "cri-o";
   version = "1.16.1";
@@ -47,7 +46,7 @@ in buildGoPackage rec {
     # Build the crio binaries
     function build() {
       go build \
-        -tags ${makeFlags} \
+        -tags "${buildTags}" \
         -o bin/"$1" \
         -buildmode=pie \
         -ldflags '-s -w ${ldflags}' \

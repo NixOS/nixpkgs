@@ -111,7 +111,7 @@ in {
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" "CAP_SETGID" "CAP_SETUID" ];
         # Security
         NoNewPrivileges = true;
-        # Sanboxing
+        # Sandboxing
         ProtectSystem = "full";
         ProtectHome = true;
         RuntimeDirectory = "unit";
@@ -130,8 +130,10 @@ in {
     };
 
     users.users = optionalAttrs (cfg.user == "unit") {
-      unit.group = cfg.group;
-      isSystemUser = true;
+      unit = {
+        group = cfg.group;
+        isSystemUser = true;
+      };
     };
 
     users.groups = optionalAttrs (cfg.group == "unit") {

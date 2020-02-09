@@ -55,9 +55,6 @@
     elif [[ -e src/lib.rs ]]; then
        build_lib src/lib.rs
        ${lib.optionalString buildTests "build_lib_test src/lib.rs"}
-    elif [[ -e "src/$LIB_NAME.rs" ]]; then
-       build_lib src/$LIB_NAME.rs
-       ${lib.optionalString buildTests ''build_lib_test "src/$LIB_NAME.rs"''}
     fi
 
 

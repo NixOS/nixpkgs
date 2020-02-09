@@ -1,13 +1,13 @@
 { lib, go, buildGoPackage, fetchFromGitHub, mkYarnPackage }:
 
 let
-  version = "2.14.0";
+  version = "2.15.2";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "prometheus";
     repo = "prometheus";
-    sha256 = "0zmxj78h3cnqbhsqab940hyzpim5i9r81b15a57f3dnrrd10p287";
+    sha256 = "0gl11qqbq57vkx226n8z4x07fwvly5f21y6dn20kjh2fxigmrb2n";
   };
 
   webui = mkYarnPackage {
@@ -57,12 +57,6 @@ in buildGoPackage rec {
     mkdir -p "$bin/share/doc/prometheus" "$bin/etc/prometheus"
     cp -a $src/documentation/* $bin/share/doc/prometheus
     cp -a $src/console_libraries $src/consoles $bin/etc/prometheus
-  '';
-
-  # Disable module-mode, because Go 1.13 automatically enables it if there is
-  # go.mod file. Remove after https://github.com/NixOS/nixpkgs/pull/73380
-  preCheck = ''
-    export GO111MODULE=off
   '';
 
   doCheck = true;

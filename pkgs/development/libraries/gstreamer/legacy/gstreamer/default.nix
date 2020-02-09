@@ -1,5 +1,5 @@
 { fetchurl, fetchpatch, stdenv, autoreconfHook
-, perl, bison2, flex, pkgconfig, glib, libxml2, libintl, libunwind
+, perl, bison, flex, pkgconfig, glib, libxml2, libintl, libunwind
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +15,15 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
-  nativeBuildInputs = [ autoreconfHook flex perl pkgconfig libintl bison2 glib ];
+  nativeBuildInputs = [ autoreconfHook flex perl pkgconfig libintl bison glib ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin libunwind;
   propagatedBuildInputs = [ glib libxml2 ];
 
   patches = [
+    (fetchpatch {
+      url = "https://github.com/flathub/com.xnview.XnRetro/raw/fec03bbe240f45aa10d7d4eea9d6f066d9b6ac9c/gstreamer-0.10.36-bison3.patch";
+      sha256 = "05aarg3yzl5jx3z5838ixv392g0r3kbsi2vfqniaxmidhnfzij2y";
+    })
     (fetchpatch {
       url = "https://github.com/GStreamer/common/commit/03a0e5736761a72d4ed880e8c485bbf9e4a8ea47.patch";
       sha256 = "0rin3x01yy78ky3smmhbwlph18hhym18q4x9w6ddiqajg5lk4xhm";

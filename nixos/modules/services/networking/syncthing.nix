@@ -484,6 +484,24 @@ in {
               -gui-address=${cfg.guiAddress} \
               -home=${cfg.configDir}
           '';
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProtectControlGroups = true;
+          ProtectHostname = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          CapabilityBoundingSet = [
+            "~CAP_SYS_PTRACE" "~CAP_SYS_ADMIN"
+            "~CAP_SETGID" "~CAP_SETUID" "~CAP_SETPCAP"
+            "~CAP_SYS_TIME" "~CAP_KILL"
+          ];
         };
       };
       syncthing-init = mkIf (

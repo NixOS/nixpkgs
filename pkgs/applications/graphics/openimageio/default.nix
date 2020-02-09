@@ -39,6 +39,5 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.unix;
-    badPlatforms = [ "x86_64-darwin" ];
   };
 }

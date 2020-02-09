@@ -39,6 +39,7 @@ stdenv.mkDerivation rec {
   prePatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
+    sed -i support/apachectl.in -e 's|$HTTPD -t|$HTTPD -t -f /etc/httpd/httpd.conf|'
   '';
 
   # Required for ‘pthread_cancel’.

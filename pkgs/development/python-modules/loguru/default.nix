@@ -2,18 +2,18 @@
 
 buildPythonPackage rec {
   pname = "loguru";
-  version = "0.4.0";
+  version = "0.4.1";
   
   disabled = isPy27;
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d5ddf363b7e0e562652f283f74a89bf35601baf16b70f2cd2736a2f8c6638748";
+    sha256 = "a6101fd435ac89ba5205a105a26a6ede9e4ddbb4408a6e167852efca47806d11";
   };
 
   checkInputs = [ pytestCheckHook colorama ];
 
   disabledTests = [ "test_time_rotation_reopening" "test_file_buffering" ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "test_rotation_and_retention" "test_rotation_and_retention_timed_file" "test_renaming" "test_await_complete_inheritance" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/Delgan/loguru;

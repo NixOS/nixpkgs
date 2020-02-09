@@ -84,7 +84,7 @@ rec {
         else final.parsed.cpu.name;
 
       qemuArch =
-        if final.isArm then "arm"
+        if final.isAarch32 then "arm"
         else if final.isx86_64 then "x86_64"
         else if final.isx86 then "i386"
         else {

@@ -76,8 +76,6 @@ let
               jobs.tests.cc-wrapper.x86_64-darwin
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-39.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
               jobs.tests.stdenv-inputs.x86_64-darwin
               jobs.tests.macOSSierraShared.x86_64-darwin
               jobs.tests.patch-shebangs.x86_64-darwin
@@ -105,7 +103,6 @@ let
               jobs.nix-info-tested.x86_64-linux
               # Ensure that X11/GTK are in order.
               jobs.thunderbird.x86_64-linux
-              jobs.unar.x86_64-linux
               jobs.cachix.x86_64-linux
 
               /*
@@ -117,10 +114,6 @@ let
 
               jobs.tests.cc-wrapper-clang.x86_64-linux
               jobs.tests.cc-wrapper-libcxx.x86_64-linux
-              jobs.tests.cc-wrapper-clang-39.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-39.x86_64-linux
-              jobs.tests.cc-wrapper-clang-4.x86_64-linux
-              jobs.tests.cc-wrapper-libcxx-4.x86_64-linux
               jobs.tests.cc-wrapper-clang-5.x86_64-linux
               jobs.tests.cc-wrapper-libcxx-5.x86_64-linux
               jobs.tests.cc-wrapper-clang-6.x86_64-linux
@@ -150,10 +143,6 @@ let
               # jobs.tests.cc-wrapper-gcc8.x86_64-darwin
               jobs.tests.cc-wrapper-clang.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-39.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-39.x86_64-darwin
-              jobs.tests.cc-wrapper-clang-4.x86_64-darwin
-              jobs.tests.cc-wrapper-libcxx-4.x86_64-darwin
               jobs.tests.cc-wrapper-clang-5.x86_64-darwin
               jobs.tests.cc-wrapper-libcxx-6.x86_64-darwin
               jobs.tests.cc-wrapper-clang-6.x86_64-darwin
@@ -191,6 +180,8 @@ let
       haskell.compiler = packagePlatforms pkgs.haskell.compiler;
       haskellPackages = packagePlatforms pkgs.haskellPackages;
       idrisPackages = packagePlatforms pkgs.idrisPackages;
+
+      tests = packagePlatforms pkgs.tests;
 
       # Language packages disabled in https://github.com/NixOS/nixpkgs/commit/ccd1029f58a3bb9eca32d81bf3f33cb4be25cc66
 

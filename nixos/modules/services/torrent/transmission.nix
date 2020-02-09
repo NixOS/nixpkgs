@@ -129,19 +129,23 @@ in
     # It's useful to have transmission in path, e.g. for remote control
     environment.systemPackages = [ pkgs.transmission ];
 
-    users.users = optionalAttrs (cfg.user == "transmission") (singleton
-      { name = "transmission";
+    users.users = optionalAttrs (cfg.user == "transmission") ({
+      transmission = {
+        name = "transmission";
         group = cfg.group;
         uid = config.ids.uids.transmission;
         description = "Transmission BitTorrent user";
         home = homeDir;
         createHome = true;
-      });
+      };
+    });
 
-    users.groups = optionalAttrs (cfg.group == "transmission") (singleton
-      { name = "transmission";
+    users.groups = optionalAttrs (cfg.group == "transmission") ({
+      transmission = {
+        name = "transmission";
         gid = config.ids.gids.transmission;
-      });
+      };
+    });
 
     # AppArmor profile
     security.apparmor.profiles = mkIf apparmor [

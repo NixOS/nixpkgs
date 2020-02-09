@@ -13,6 +13,7 @@
 , pyramid
 , rq
 , sanic
+, sqlalchemy
 , stdenv
 , tornado
 , urllib3
@@ -27,7 +28,7 @@ buildPythonPackage rec {
     sha256 = "c6b919623e488134a728f16326c6f0bcdab7e3f59e7f4c472a90eea4d6d8fe82";
   };
 
-  checkInputs = [ django flask tornado bottle rq falcon ]
+  checkInputs = [ django flask tornado bottle rq falcon sqlalchemy ]
   ++ stdenv.lib.optionals isPy3k [ celery pyramid sanic aiohttp ];
 
   propagatedBuildInputs = [ urllib3 certifi ];

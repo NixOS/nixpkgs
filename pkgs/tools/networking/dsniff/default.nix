@@ -54,7 +54,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ glib pcap ];
-  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread";
+  NIX_CFLAGS_LINK = "-lglib-2.0 -lpthread -ldl";
   postPatch = ''
     for patch in debian/patches/*.patch; do
       patch < $patch

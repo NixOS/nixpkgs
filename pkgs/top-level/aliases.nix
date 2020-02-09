@@ -84,6 +84,7 @@ mapAliases ({
   cv = progress; # added 2015-09-06
   d1x_rebirth = dxx-rebirth; # added 2018-04-25
   d2x_rebirth = dxx-rebirth; # added 2018-04-25
+  dat = nodePackages.dat;
   dbus_daemon = dbus.daemon; # added 2018-04-25
   dbus_glib = dbus-glib; # added 2018-02-25
   dbus_libs = dbus; # added 2018-04-25
@@ -126,7 +127,6 @@ mapAliases ({
   '';
   font-droid = throw "font-droid has been deprecated by noto-fonts"; # 2019-04-12
   foomatic_filters = foomatic-filters;  # 2016-08
-  fprintd-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   fuse_exfat = exfat;                   # 2015-09-11
   fuseki = apache-jena-fuseki; # added 2018-04-25
   fusesmb = throw "fusesmb is abandoned by upstream"; # added 2019-10-15
@@ -213,7 +213,6 @@ mapAliases ({
   liberation_ttf_v1_from_source = liberation_ttf_v1; # added 2018-12-12
   liberation_ttf_v2_from_source = liberation_ttf_v2; # added 2018-12-12
   liberationsansnarrow = liberation-sans-narrow; # added 2018-12-12
-  libfprint-thinkpad = throw "removed from repository 2019-12-01: Install it manually with an override.";
   libgnome_keyring = libgnome-keyring; # added 2018-02-25
   libgnome_keyring3 = libgnome-keyring3; # added 2018-02-25
   libgumbo = gumbo; # added 2018-01-21
@@ -239,6 +238,7 @@ mapAliases ({
   man_db = man-db; # added 2016-05
   manpages = man-pages; # added 2015-12-06
   mariadb-client = hiPrio mariadb.client; #added 2019.07.28
+  matrique = spectral; # added 2020-01-27
   mbedtls_1_3 = throw "mbedtls_1_3 is end of life, see https://tls.mbed.org/kb/how-to/upgrade-2.0"; # added 2019-12-08
   mess = mame; # added 2019-10-30
   mcomix = throw "mcomix has been removed from nixpkgs, as it's unmaintained"; # added 2019-12-10
@@ -254,6 +254,7 @@ mapAliases ({
   midoriWrapper = midori; # added 2015-01
   mlt-qt5 = libsForQt5.mlt;  # added 2015-12-19
   mobile_broadband_provider_info = mobile-broadband-provider-info; # added 2018-02-25
+  moby = throw "moby has been removed, merged into linuxkit in 2018.  Use linuxkit instead.";
   module_init_tools = kmod; # added 2016-04-22
   mono-zeroconf = throw "deprecated 2019-09-20: abandoned by upstream.";
   mozart = mozart2-binary; # added 2019-09-23
@@ -290,6 +291,7 @@ mapAliases ({
   opensans-ttf = open-sans; # added 2018-12-04
   openssh_with_kerberos = openssh; # added 2018-01-28
   osquery = throw "osquery has been removed."; # added 2019-11-24
+  otter-browser = throw "otter-browser has been removed from nixpkgs, as it was unmaintained"; # added 2020-02-02
   owncloudclient = owncloud-client;  # added 2016-08
   p11_kit = p11-kit; # added 2018-02-25
   parquet-cpp = arrow-cpp; # added 2018-09-08
@@ -414,6 +416,7 @@ mapAliases ({
   system_config_printer = system-config-printer;  # added 2016-01-03
   systool = sysfsutils; # added 2018-04-25
   tahoelafs = tahoe-lafs; # added 2018-03-26
+  tangogps = foxtrotgps; # added 2020-01-26
   telepathy_farstream = telepathy-farstream; # added 2018-02-25
   telepathy_gabble = telepathy-gabble; # added 2018-02-25
   telepathy_glib = telepathy-glib; # added 2018-02-25
@@ -442,6 +445,7 @@ mapAliases ({
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
+  ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
   ucsFonts = ucs-fonts; # added 2016-07-15
   ultrastardx-beta = ultrastardx; # added 2017-08-12
   usb_modeswitch = usb-modeswitch; # added 2016-05-10
@@ -475,6 +479,9 @@ mapAliases ({
   xbmcPlugins = kodiPlugins; # added 2018-04-25
   xmonad_log_applet_gnome3 = xmonad_log_applet; # added 2018-05-01
   xf86_video_nouveau = xorg.xf86videonouveau; # added 2015-09
+  xf86_input_mtrack = throw ("xf86_input_mtrack has been removed from nixpkgs as it hasn't been maintained"
+    + "and is broken. Working alternatives are libinput and synaptics.");
+  xf86_input_multitouch = throw "xf86_input_multitouch has been removed from nixpkgs."; # added 2020-01-20
   xlibs = xorg; # added 2015-09
   xpraGtk3 = xpra; # added 2018-09-13
   youtubeDL = youtube-dl;  # added 2014-10-26
@@ -537,4 +544,31 @@ mapAliases ({
   tor-browser-bundle = throw "tor-browser-bundle was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
   # added 2020-01-10
   tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
+
+    /* Cleanup before 20.09 */
+  llvm_4 = throw ''
+    The LLVM versions 3.5, 3.9 and 4.0 have been removed in NixOS 20.03
+    due to a lack of compatibility with glibc 2.30!
+  '';
+  llvm_39 = llvm_4;
+  llvm_35 = llvm_4;
+  lld_4 = llvm_4;
+
+  llvmPackages_4 = llvm_4;
+  llvmPackages_39 = llvm_4;
+  llvmPackages_35 = llvm_4;
+
+  clang_39 = llvm_4;
+  clang_35 = llvm_4;
+  clang_4 = llvm_4;
+
+  /* Cleanup before 20.09 */
+  oraclejdk8psu = throw ''
+    The *psu versions of oraclejdk aren't provided by upstream anymore and were therefore removed!
+  '';
+  oraclejre8psu = oraclejdk8psu;
+  oraclejdk8psu_distro = oraclejdk8psu;
+
+  dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
+  sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
 })

@@ -2,6 +2,7 @@
 , stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 # Build dependencies
 , glibcLocales
 # Test dependencies
@@ -35,6 +36,15 @@ buildPythonPackage rec {
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace setup.py --replace "'gnureadline'" " "
   '';
+
+  patches = [
+    # Use the proper pygments lexer for python2 (https://github.com/ipython/ipython/pull/12095)
+    (fetchpatch {
+      name = "python2-lexer.patch";
+      url = "https://github.com/ipython/ipython/pull/12095/commits/8805293b5e4bce9150cc2ad9c5d6d984849ae447.patch";
+      sha256 = "16p4gl7a49v76w33j39ih7yspy6x2d14p9bh4wdpg9cafhw9nbc0";
+    })
+  ];
 
   buildInputs = [ glibcLocales ];
 

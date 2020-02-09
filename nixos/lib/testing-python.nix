@@ -155,7 +155,7 @@ in rec {
             --add-flags "''${vms[*]}" \
             ${lib.optionalString enableOCR
               "--prefix PATH : '${ocrProg}/bin:${imagemagick_tiff}/bin'"} \
-            --run "export testScript=\"\$(cat $out/test-script)\"" \
+            --run "export testScript=\"\$(${coreutils}/bin/cat $out/test-script)\"" \
             --set VLANS '${toString vlans}'
           ln -s ${testDriver}/bin/nixos-test-driver $out/bin/nixos-run-vms
           wrapProgram $out/bin/nixos-run-vms \

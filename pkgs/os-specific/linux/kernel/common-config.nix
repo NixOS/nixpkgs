@@ -24,6 +24,13 @@ let
   # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
 
+  whenPlatformHasEBPFJit =
+    mkIf (stdenv.hostPlatform.isAarch32 ||
+          stdenv.hostPlatform.isAarch64 ||
+          stdenv.hostPlatform.isx86_64 ||
+          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
+
   options = {
 
     debug = {
@@ -106,7 +113,12 @@ let
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
-      BPF_JIT            = mkIf (stdenv.hostPlatform.system == "x86_64-linux") yes;
+      BPF_JIT            = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON  = no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
+      HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
+      BPF_STREAM_PARSER  = whenAtLeast "4.19" yes;
+      XDP_SOCKETS        = whenAtLeast "4.19" yes;
+      XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
@@ -698,6 +710,7 @@ let
 
       HWMON         = yes;
       THERMAL_HWMON = yes; # Hardware monitoring support
+      NVME_HWMON    = whenAtLeast "5.5" yes; # NVMe drives temperature reporting
       UEVENT_HELPER = no;
 
       USERFAULTFD   = yes;

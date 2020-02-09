@@ -1,8 +1,5 @@
-{ stdenv,  autoreconfHook, fetchFromGitHub, pkgconfig, python2Packages, glib }:
+{ stdenv, autoreconfHook, fetchFromGitHub, pkgconfig, enablePython ? false, python, glib }:
 
-let
-  inherit (python2Packages) python cython;
-in
 stdenv.mkDerivation rec {
   pname = "libplist";
   version = "2019-04-04";
@@ -14,18 +11,23 @@ stdenv.mkDerivation rec {
     sha256 = "19yw80yblq29i2jx9yb7bx0lfychy9dncri3fk4as35kq5bf26i8";
   };
 
-  outputs = ["bin" "dev" "out" "py"];
+  outputs = ["bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
 
   nativeBuildInputs = [
     pkgconfig
-    python
-    cython
     autoreconfHook
+  ] ++ stdenv.lib.optionals enablePython [
+    python
+    python.pkgs.cython
+  ];
+
+  configureFlags = stdenv.lib.optionals (!enablePython) [
+    "--without-cython"
   ];
 
   propagatedBuildInputs = [ glib ];
 
-  postFixup = ''
+  postFixup = stdenv.lib.optionalString enablePython ''
     moveToOutput "lib/${python.libPrefix}" "$py"
   '';
 

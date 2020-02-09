@@ -3,13 +3,13 @@
 
 buildGoModule rec {
   pname = "tinygo";
-  version = "0.10.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner = "tinygo-org";
     repo = "tinygo";
     rev = "v${version}";
-    sha256 = "03di8500dqk25giiajglcdf2gbc0jidsn8qsw2sxmkmnd1np7gyd";
+    sha256 = "0cmg8x9hpvzlxp6hiy9hkh9nn7ig7b0x6k8a2c3bw19pfx9lxksf";
   };
 
   modSha256 = "0r3lfi1bj550sf3b7ysz62c2c33f8zfli8208xixj3jadycb6r3z";

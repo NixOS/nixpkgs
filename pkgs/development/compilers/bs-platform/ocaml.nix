@@ -1,7 +1,7 @@
-{ stdenv, src, version, bs-version }:
+{ stdenv, src, version }:
 stdenv.mkDerivation rec {
   inherit src version;
-  name = "ocaml-${version}+bs-${bs-version}";
+  name = "ocaml-${version}+bs";
   configurePhase = ''
     ./configure -prefix $out
   '';

@@ -32,7 +32,7 @@ in {
       default = 1;
     };
 
-    threeshold = mkOption {
+    threshold = mkOption {
       description = "Minimum number of pixels considered cursor movement";
       type = types.int;
       default = 1;
@@ -71,6 +71,11 @@ in {
       serviceConfig.Restart = "always";
     };
   };
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "unclutter" "threeshold" ]
+                           [ "services"  "unclutter" "threshold" ])
+  ];
 
   meta.maintainers = with lib.maintainers; [ rnhmjoj ];
 

@@ -71,8 +71,8 @@ rec {
 
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
-    # `beam.packages.erlangR19.elixir`.
-    inherit (packages.erlang) elixir elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6 elixir_1_5;
+    # `beam.packages.erlangR22.elixir`.
+    inherit (packages.erlang) elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6;
 
     inherit (packages.erlang) lfe lfe_1_2;
   };
@@ -83,7 +83,6 @@ rec {
   # Each field in this tuple represents all Beam packages in nixpkgs built with
   # appropriate Erlang/OTP version.
   packages = {
-
     # Packages built with default Erlang version.
     erlang = packagesWith interpreters.erlang;
     erlangR18 = packagesWith interpreters.erlangR18;
@@ -91,6 +90,5 @@ rec {
     erlangR20 = packagesWith interpreters.erlangR20;
     erlangR21 = packagesWith interpreters.erlangR21;
     erlangR22 = packagesWith interpreters.erlangR22;
-
   };
 }

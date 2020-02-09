@@ -1,6 +1,8 @@
 { lib
 , python3Packages
-, taskwarrior }:
+, taskwarrior
+, glibcLocales
+}:
 
 with python3Packages;
 
@@ -20,6 +22,8 @@ buildPythonApplication rec {
     tzlocal
     urwid
   ];
+
+  checkInputs = [ glibcLocales ];
 
   makeWrapperArgs = [ "--suffix" "PATH" ":" "${taskwarrior}/bin" ];
 

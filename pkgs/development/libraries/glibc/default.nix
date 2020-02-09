@@ -49,20 +49,18 @@ callPackage ./common.nix { inherit stdenv; } {
       ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "pie";
 
     NIX_CFLAGS_COMPILE = stdenv.lib.concatStringsSep " "
-      (if !stdenv.hostPlatform.isMusl
-        # TODO: This (returning a string or `null`, instead of a list) is to
-        #       not trigger a mass rebuild due to the introduction of the
-        #       musl-specific flags below.
-        #       At next change to non-musl glibc builds, remove this `then`
-        #       and the above condition, instead keeping only the `else` below.
-        then (stdenv.lib.optionals withGd gdCflags)
-        else
-          (builtins.concatLists [
-            (stdenv.lib.optionals withGd gdCflags)
-            # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
-            # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
-            (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
-          ]));
+      (builtins.concatLists [
+        (stdenv.lib.optionals withGd gdCflags)
+        # Fix -Werror build failure when building glibc with musl with GCC >= 8, see:
+        # https://github.com/NixOS/nixpkgs/pull/68244#issuecomment-544307798
+        (stdenv.lib.optional stdenv.hostPlatform.isMusl "-Wno-error=attribute-alias")
+        (stdenv.lib.optionals ((stdenv.hostPlatform != stdenv.buildPlatform) || stdenv.hostPlatform.isMusl) [
+          # Ignore "error: '__EI___errno_location' specifies less restrictive attributes than its target '__errno_location'"
+          # New warning as of GCC 9
+          # Same for musl: https://github.com/NixOS/nixpkgs/issues/78805
+          "-Wno-error=missing-attributes"
+        ])
+      ]);
 
     # When building glibc from bootstrap-tools, we need libgcc_s at RPATH for
     # any program we run, because the gcc will have been placed at a new

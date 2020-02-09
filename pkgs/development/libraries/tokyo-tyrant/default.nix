@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "tokyotyrant-1.1.41";
 
   src = fetchurl {
-    url = "http://fallabs.com/tokyotyrant/${name}.tar.gz";
+    url = "https://fallabs.com/tokyotyrant/${name}.tar.gz";
     sha256 = "13xqcinhydqmh7231qlir6pymacjwcf98drybkhd9597kzxp1bs2";
   };
 
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
          licensed under the GNU Lesser General Public License.
        '';
 
-    homepage = http://fallabs.com/tokyotyrant/;
+    homepage = https://fallabs.com/tokyotyrant/;
 
     license = stdenv.lib.licenses.lgpl21Plus;
 

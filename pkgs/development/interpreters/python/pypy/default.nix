@@ -1,5 +1,5 @@
 { stdenv, substituteAll, fetchurl
-, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi
+, zlib ? null, zlibSupport ? true, bzip2, pkgconfig, libffi, libunwind, Security
 , sqlite, openssl_1_0_2, ncurses, python, expat, tcl, tk, tix, xlibsWrapper, libX11
 , self, gdbm, db, lzma
 , python-setup-hook
@@ -47,6 +47,8 @@ in with passthru; stdenv.mkDerivation rec {
     stdenv.cc.libc
   ] ++ optionals zlibSupport [
     zlib
+  ] ++ optionals stdenv.isDarwin [
+    libunwind Security
   ];
 
   hardeningDisable = optional stdenv.isi686 "pic";
@@ -127,12 +129,16 @@ in with passthru; stdenv.mkDerivation rec {
     mkdir -p $out/{bin,include,lib,${executable}-c}
 
     cp -R {include,lib_pypy,lib-python,${executable}-c} $out/${executable}-c
-    cp lib${executable}-c.so $out/lib/
+    cp lib${executable}-c${stdenv.hostPlatform.extensions.sharedLibrary} $out/lib/
     ln -s $out/${executable}-c/${executable}-c $out/bin/${executable}
 
     # other packages expect to find stuff according to libPrefix
     ln -s $out/${executable}/include $out/include/${libPrefix}
     ln -s $out/${executable}-c/lib-python/${if isPy3k then "3" else pythonVersion} $out/lib/${libPrefix}
+
+    ${stdenv.lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change @rpath/libpypy${optionalString isPy3k "3"}-c.dylib $out/lib/libpypy${optionalString isPy3k "3"}-c.dylib $out/bin/${executable}
+    ''}
 
     # verify cffi modules
     $out/bin/${executable} -c ${if isPy3k then "'import tkinter;import sqlite3;import curses;import lzma'" else "'import Tkinter;import sqlite3;import curses'"}

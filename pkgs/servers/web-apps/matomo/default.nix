@@ -3,8 +3,8 @@
 let
   versions = {
     matomo = {
-      version = "3.13.0";
-      sha256 = "0h4jqibb86zw5l26r927qrbjhba8c79pc4xp3hgpi25p3fjncax8";
+      version = "3.13.1";
+      sha256 = "071m3sw3rrhlccbwdyklcn8rwp4mcnii5m2a7zmgx3rv87i9n2ni";
     };
 
     matomo-beta = {

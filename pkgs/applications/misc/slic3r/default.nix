@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       instructions for your 3D printer. It cuts the model into horizontal
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
-    homepage = http://slic3r.org/;
+    homepage = https://slic3r.org/;
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor the-kenny ];

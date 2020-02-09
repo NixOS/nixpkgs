@@ -28,6 +28,9 @@ buildPythonApplication rec {
     # Removing the date format tests as they are outdated
     substituteInPlace trac/util/tests/__init__.py \
       --replace "suite.addTest(datefmt.test_suite())" ""
+    # Removing Pygments tests as per https://trac.edgewall.org/ticket/13229
+    substituteInPlace trac/mimeview/tests/__init__.py \
+      --replace "suite.addTest(pygments.test_suite())" ""
   '';
 
   propagatedBuildInputs = [

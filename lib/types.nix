@@ -367,18 +367,6 @@ rec {
                 { path = [ "services" "geoclue2" "appConfig" ];
                   name = "desktopID";
                 }
-                { path = [ "home-manager" "users" anyString "programs" "ssh" "matchBlocks" ];
-                  name = "host"; # https://github.com/rycee/home-manager/blob/e8dbc3561373b68d12decb3c0d7c1ba245f138f7/modules/programs/ssh.nix#L265
-                }
-                { path = [ "home-manager" "users" anyString "home" "file" ];
-                  name = "target"; # https://github.com/rycee/home-manager/blob/0e9b7aab3c6c27bf020402e0e2ef20b65c040552/modules/files.nix#L33
-                }
-                { path = [ "home-manager" "users" anyString "xdg" "configFile" ];
-                  name = "target"; # https://github.com/rycee/home-manager/blob/54de0e1d79a1370e57a8f23bef89f99f9b92ab67/modules/misc/xdg.nix#L41
-                }
-                { path = [ "home-manager" "users" anyString "xdg" "dataFile" ];
-                  name = "target"; # https://github.com/rycee/home-manager/blob/54de0e1d79a1370e57a8f23bef89f99f9b92ab67/modules/misc/xdg.nix#L58
-                }
               ];
               matched = let
                 equals = a: b: b == anyString || a == b;
@@ -418,7 +406,7 @@ rec {
                 In file ${def.file}
                 a list is being assigned to the option config.${option}.
                 This will soon be an error as type loaOf is deprecated.
-                See https://git.io/fj2zm for more information.
+                See https://github.com/NixOS/nixpkgs/pull/63103 for more information.
                 Do
                   ${option} =
                     { ${set}${more}}
@@ -602,7 +590,7 @@ rec {
         tail' = tail ts;
       in foldl' either head' tail';
 
-    # Either value of type `finalType` or `coercedType`, the latter is
+    # Either value of type `coercedType` or `finalType`, the former is
     # converted to `finalType` using `coerceFunc`.
     coercedTo = coercedType: coerceFunc: finalType:
       assert lib.assertMsg (coercedType.getSubModules == null)
@@ -611,12 +599,12 @@ rec {
       mkOptionType rec {
         name = "coercedTo";
         description = "${finalType.description} or ${coercedType.description} convertible to it";
-        check = x: finalType.check x || (coercedType.check x && finalType.check (coerceFunc x));
+        check = x: (coercedType.check x && finalType.check (coerceFunc x)) || finalType.check x;
         merge = loc: defs:
           let
             coerceVal = val:
-              if finalType.check val then val
-              else coerceFunc val;
+              if coercedType.check val then coerceFunc val
+              else val;
           in finalType.merge loc (map (def: def // { value = coerceVal def.value; }) defs);
         emptyValue = finalType.emptyValue;
         getSubOptions = finalType.getSubOptions;

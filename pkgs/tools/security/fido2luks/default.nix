@@ -7,19 +7,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fido2luks";
-  version = "0.2.2";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "shimunn";
     repo = pname;
     rev = version;
-    sha256 = "018qzbgmgm0f0d0c7i54nqqjbr4k5mzy1xfavi6hpifjll971wci";
+    sha256 = "0340xp7q6f0clb7wmqpgllllwsixmsy37k1f5kj3hwvb730rz93x";
   };
 
   buildInputs = [ cryptsetup ];
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "1kf757wxxk5h8dfbz588qw1pnyjbg5qzr7rz14i7x8rhmn5xwb74";
+  cargoSha256 = "1i37k4ih6118z3wip2qh4jqk7ja2z0v1w8dri1lwqwlciqw17zi9";
   verifyCargoDeps = true;
 
   meta = with stdenv.lib; {

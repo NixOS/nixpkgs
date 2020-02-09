@@ -19,6 +19,12 @@
   <command>nixos-rebuild switch</command>.
  </para>
 
+ <note>
+  <para>
+   Some packages require additional global configuration such as D-Bus or systemd service registration so adding them to <xref linkend="opt-environment.systemPackages"/> might not be sufficient. You are advised to check the <link xlink:href="#ch-options">list of options</link> whether a NixOS module for the package does not exist.
+  </para>
+ </note>
+
  <para>
   You can get a list of the available packages as follows:
 <screen>

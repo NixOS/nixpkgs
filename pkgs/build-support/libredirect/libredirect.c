@@ -61,7 +61,11 @@ static const char * rewrite(const char * path, char * buf)
 
 static int open_needs_mode(int flags)
 {
+#ifdef O_TMPFILE
     return (flags & O_CREAT) || (flags & O_TMPFILE) == O_TMPFILE;
+#else
+    return flags & O_CREAT;
+#endif
 }
 
 /* The following set of Glibc library functions is very incomplete -

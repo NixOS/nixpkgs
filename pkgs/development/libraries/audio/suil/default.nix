@@ -9,12 +9,12 @@ assert !(withQt4 && withQt5);
 
 stdenv.mkDerivation rec {
   pname = "suil";
-  version = "0.10.0";
+  version = "0.10.6";
   name = "${pname}-qt${if withQt4 then "4" else "5"}-${version}";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "0j489gm3fhnmwmbgw30bvd4byw1vsy4yazdlnji8jzhcz0qwb5cq";
+    sha256 = "0z4v01pjw4wh65x38w6icn28wdwxz13ayl8hvn4p1g9kmamp1z06";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];

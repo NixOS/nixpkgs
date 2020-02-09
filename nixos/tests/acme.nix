@@ -29,7 +29,6 @@ in import ./make-test-python.nix {
       systemd.services.pebble-challtestsrv = {
         enable = true;
         description = "Pebble ACME challenge test server";
-        requires = [ ];
         wantedBy = [ "network.target" ];
         serviceConfig = {
           ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";

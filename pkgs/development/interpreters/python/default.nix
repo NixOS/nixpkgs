@@ -57,7 +57,7 @@ in {
       suffix = "";
     };
     sha256 = "0hds28cg226m8j8sr394nm9yc4gxhvlv109w0avsf2mxrlrz0hsd";
-    inherit (darwin) CF configd;
+    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -70,7 +70,7 @@ in {
       suffix = "";
     };
     sha256 = "0jdh9pvx6m6lfz2liwvvhn7vks7qrysqgwn517fkpxb77b33fjn2";
-    inherit (darwin) CF configd;
+    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -83,7 +83,7 @@ in {
       suffix = "";
     };
     sha256 = "1pj0mz1xl27khi250p29c0y99vxg662js8zp71aprkf8i8wkr0qa";
-    inherit (darwin) CF configd;
+    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -96,7 +96,7 @@ in {
       suffix = "";
     };
     sha256 = "0gskry19ylw91p38pdq36qcgk6h3x5i4ia0ik977kw2943kwr8jm";
-    inherit (darwin) CF configd;
+    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -109,7 +109,7 @@ in {
       suffix = "";
     };
     sha256 = "1s4lwn5vzsajlc88m6hkghsvnjw4d00l2dsgng0m2w6vyqbl32bm";
-    inherit (darwin) CF configd;
+    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -119,10 +119,10 @@ in {
       major = "3";
       minor = "9";
       patch = "0";
-      suffix = "a2";
+      suffix = "a3";
     };
-    sha256 = "02a301bdcldin05ksdg8xw8xr6gdkpf73p0cabvn9rdl6yhkr3q8";
-    inherit (darwin) CF configd;
+    sha256 = "09l68jyfhhass3cqyqyp2cv3a3i86qs0x736isidmpbrbxsincva";
+    inherit (darwin) configd;
     inherit passthruFun;
   };
 
@@ -136,6 +136,7 @@ in {
     ncurses = null;
     gdbm = null;
     sqlite = null;
+    configd = null;
     stripConfig = true;
     stripIdlelib = true;
     stripTests = true;
@@ -158,9 +159,11 @@ in {
     };
     sha256 = "0yq6ln1ic476sasp8zs4mg5i9524l1p96qwanp486rr1yza1grlg";
     pythonVersion = "2.7";
-    db = db.override { dbmSupport = true; };
+    db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
     inherit passthruFun;
+    inherit (darwin) libunwind;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   pypy36 = callPackage ./pypy {
@@ -172,9 +175,11 @@ in {
     };
     sha256 = "1hqvnran7d2dzj5555n7q680dyzhmbklz04pvkxgb5j604v7kkx1";
     pythonVersion = "3.6";
-    db = db.override { dbmSupport = true; };
+    db = db.override { dbmSupport = !stdenv.isDarwin; };
     python = python27;
     inherit passthruFun;
+    inherit (darwin) libunwind;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   pypy27_prebuilt = callPackage ./pypy/prebuilt.nix {

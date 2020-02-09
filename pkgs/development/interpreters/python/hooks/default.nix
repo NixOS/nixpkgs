@@ -2,6 +2,9 @@
 { python
 , callPackage
 , makeSetupHook
+, disabledIf
+, isPy3k
+, ensureNewerSourcesForZipFilesHook
 }:
 
 let
@@ -108,6 +111,15 @@ in rec {
         inherit pythonCheckInterpreter setuppy;
       };
     } ./setuptools-check-hook.sh) {};
+
+  venvShellHook = disabledIf (!isPy3k) (callPackage ({ }:
+    makeSetupHook {
+      name = "venv-shell-hook";
+      deps = [ ensureNewerSourcesForZipFilesHook ];
+      substitutions = {
+        inherit pythonInterpreter;
+    };
+  } ./venv-shell-hook.sh) {});
 
   wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {

@@ -50,8 +50,8 @@ in
       };
 
       runtimePackages = mkOption {
-        default = [ pkgs.bash pkgs.nix ];
-        defaultText = "[ pkgs.bash pkgs.nix ]";
+        default = [ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ];
+        defaultText = "[ pkgs.bash pkgs.gnutar pkgs.gzip pkgs.git pkgs.nix ]";
         description = "Add programs to the buildkite-agent environment";
         type = types.listOf types.package;
       };
@@ -74,13 +74,12 @@ in
         '';
       };
 
-      meta-data = mkOption {
-        type = types.str;
-        default = "";
-        example = "queue=default,docker=true,ruby2=true";
+      tags = mkOption {
+        type = types.attrsOf types.str;
+        default = {};
+        example = { queue = "default"; docker = "true"; ruby2 ="true"; };
         description = ''
-          Meta data for the agent. This is a comma-separated list of
-          <code>key=value</code> pairs.
+          Tags for the agent.
         '';
       };
 
@@ -93,26 +92,20 @@ in
         '';
       };
 
-      openssh =
-        { privateKeyPath = mkOption {
-            type = types.path;
-            description = ''
-              Private agent key.
+      privateSshKeyPath = mkOption {
+        type = types.nullOr types.path;
+        default = null;
+        ## maximum care is taken so that secrets (ssh keys and the CI token)
+        ## don't end up in the Nix store.
+        apply = final: if final == null then null else toString final;
 
-              A run-time path to the key file, which is supposed to be provisioned
-              outside of Nix store.
-            '';
-          };
-          publicKeyPath = mkOption {
-            type = types.path;
-            description = ''
-              Public agent key.
+        description = ''
+          OpenSSH private key
 
-              A run-time path to the key file, which is supposed to be provisioned
-              outside of Nix store.
-            '';
-          };
-        };
+          A run-time path to the key file, which is supposed to be provisioned
+          outside of Nix store.
+        '';
+      };
 
       hooks = mkHookOptions [
         { name = "checkout";
@@ -181,18 +174,26 @@ in
           instead.
         '';
       };
+
+      shell = mkOption {
+        type = types.str;
+        default = "${pkgs.bash}/bin/bash -e -c";
+        description = ''
+          Command that buildkite-agent 3 will execute when it spawns a shell.
+        '';
+      };
     };
   };
 
   config = mkIf config.services.buildkite-agent.enable {
-    users.users.buildkite-agent =
-      { name = "buildkite-agent";
-        home = cfg.dataDir;
-        createHome = true;
-        description = "Buildkite agent user";
-        extraGroups = [ "keys" ];
-        isSystemUser = true;
-      };
+    users.users.buildkite-agent = {
+      name = "buildkite-agent";
+      home = cfg.dataDir;
+      createHome = true;
+      description = "Buildkite agent user";
+      extraGroups = [ "keys" ];
+      isSystemUser = true;
+    };
 
     environment.systemPackages = [ cfg.package ];
 
@@ -210,17 +211,18 @@ in
         ##     don't end up in the Nix store.
         preStart = let
           sshDir = "${cfg.dataDir}/.ssh";
+          tagStr = lib.concatStringsSep "," (lib.mapAttrsToList (name: value: "${name}=${value}") cfg.tags);
         in
-          ''
+          optionalString (cfg.privateSshKeyPath != null) ''
             mkdir -m 0700 -p "${sshDir}"
-            cp -f "${toString cfg.openssh.privateKeyPath}" "${sshDir}/id_rsa"
-            cp -f "${toString cfg.openssh.publicKeyPath}"  "${sshDir}/id_rsa.pub"
-            chmod 600 "${sshDir}"/id_rsa*
-
+            cp -f "${toString cfg.privateSshKeyPath}" "${sshDir}/id_rsa"
+            chmod 600 "${sshDir}"/id_rsa
+          '' + ''
             cat > "${cfg.dataDir}/buildkite-agent.cfg" <<EOF
             token="$(cat ${toString cfg.tokenPath})"
             name="${cfg.name}"
-            meta-data="${cfg.meta-data}"
+            shell="${cfg.shell}"
+            tags="${tagStr}"
             build-path="${cfg.dataDir}/builds"
             hooks-path="${cfg.hooksPath}"
             ${cfg.extraConfig}
@@ -228,11 +230,14 @@ in
           '';
 
         serviceConfig =
-          { ExecStart = "${pkgs.buildkite-agent}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
+          { ExecStart = "${cfg.package}/bin/buildkite-agent start --config /var/lib/buildkite-agent/buildkite-agent.cfg";
             User = "buildkite-agent";
             RestartSec = 5;
             Restart = "on-failure";
             TimeoutSec = 10;
+            # set a long timeout to give buildkite-agent a chance to finish current builds
+            TimeoutStopSec = "2 min";
+            KillMode = "mixed";
           };
       };
 
@@ -246,8 +251,11 @@ in
     ];
   };
   imports = [
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                [ "services" "buildkite-agent" "tokenPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ] [ "services" "buildkite-agent" "openssh" "privateKeyPath" ])
-    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]  [ "services" "buildkite-agent" "openssh" "publicKeyPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "token" ]                    [ "services" "buildkite-agent" "tokenPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKey" ]     [ "services" "buildkite-agent" "privateSshKeyPath" ])
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "openssh" "privateKeyPath" ] [ "services" "buildkite-agent" "privateSshKeyPath" ])
+    (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKey" ]      "SSH public keys aren't necessary to clone private repos.")
+    (mkRemovedOptionModule [ "services" "buildkite-agent" "openssh" "publicKeyPath" ]  "SSH public keys aren't necessary to clone private repos.")
+    (mkRenamedOptionModule [ "services" "buildkite-agent" "meta-data"]                 [ "services" "buildkite-agent" "tags" ])
   ];
 }

@@ -20,16 +20,10 @@ let
 
   getFunctorFn = fn: if builtins.typeOf fn == "set" then fn.__functor else fn;
 
-  getAttrDefault = attribute: set: default: (
-    if builtins.hasAttr attribute set
-    then builtins.getAttr attribute set
-    else default
-  );
-
   # Map SPDX identifiers to license names
   spdxLicenses = lib.listToAttrs (lib.filter (pair: pair.name != null) (builtins.map (v: { name = if lib.hasAttr "spdxId" v then v.spdxId else null; value = v; }) (lib.attrValues lib.licenses)));
   # Get license by id falling back to input string
-  getLicenseBySpdxId = spdxId: getAttrDefault spdxId spdxLicenses spdxId;
+  getLicenseBySpdxId = spdxId: spdxLicenses.${spdxId} or spdxId;
 
   #
   # Returns an attrset { python, poetryPackages } for the given lockfile
@@ -45,7 +39,11 @@ let
       lockData = readTOML poetrylock;
       lockFiles = lib.getAttrFromPath [ "metadata" "files" ] lockData;
 
-      specialAttrs = [ "poetrylock" "overrides" ];
+      specialAttrs = [
+        "overrides"
+        "poetrylock"
+        "pwd"
+      ];
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
       evalPep508 = mkEvalPep508 python;
@@ -65,7 +63,7 @@ let
       # closure as python can only ever have one version of a dependency
       baseOverlay = self: super:
         let
-          getDep = depName: if builtins.hasAttr depName self then self."${depName}" else throw "foo";
+          getDep = depName: self.${depName};
 
           lockPkgs = builtins.listToAttrs (
             builtins.map (
@@ -74,7 +72,7 @@ let
                 value = self.mkPoetryDep (
                   pkgMeta // {
                     inherit pwd;
-                    source = getAttrDefault "source" pkgMeta null;
+                    source = pkgMeta.source or null;
                     files = lockFiles.${name};
                     pythonPackages = self;
                   }
@@ -93,6 +91,8 @@ let
                 inherit pkgs lib python poetryLib;
               };
               poetry = poetryPkg;
+              # The canonical name is setuptools-scm
+              setuptools-scm = super.setuptools_scm;
             }
           )
           # Null out any filtered packages, we don't want python.pkgs from nixpkgs
@@ -155,16 +155,21 @@ let
 
       pyProject = readTOML pyproject;
 
-      specialAttrs = [ "pyproject" "poetrylock" "overrides" ];
+      specialAttrs = [
+        "overrides"
+        "poetrylock"
+        "pwd"
+        "pyproject"
+      ];
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
       getDeps = depAttr: let
-        deps = getAttrDefault depAttr pyProject.tool.poetry {};
+        deps = pyProject.tool.poetry.${depAttr} or {};
         depAttrs = builtins.map (d: lib.toLower d) (builtins.attrNames deps);
       in
         builtins.map (dep: py.pkgs."${dep}") depAttrs;
 
-      getInputs = attr: getAttrDefault attr attrs [];
+      getInputs = attr: attrs.${attr} or [];
       mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
 
       buildSystemPkgs = poetryLib.getBuildSystemPkgs {
@@ -180,26 +185,26 @@ let
 
           format = "pyproject";
 
-          nativeBuildInputs = [ pkgs.yj ];
           buildInputs = mkInput "buildInputs" buildSystemPkgs;
           propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
+          nativeBuildInputs = mkInput "nativeBuildInputs" [ pkgs.yj ];
           checkInputs = mkInput "checkInputs" (getDeps "dev-dependencies");
 
           passthru = {
             python = py;
           };
 
-          postPatch = (getAttrDefault "postPatch" passedAttrs "") + ''
+          postPatch = (passedAttrs.postPatch or "") + ''
             # Tell poetry not to resolve the path dependencies. Any version is
             # fine !
-            yj -tj < pyproject.toml | python ${./pyproject-without-path.py} > pyproject.json
+            yj -tj < pyproject.toml | ${python.interpreter} ${./pyproject-without-path.py} > pyproject.json
             yj -jt < pyproject.json > pyproject.toml
             rm pyproject.json
           '';
 
           meta = meta // {
             inherit (pyProject.tool.poetry) description homepage;
-            license = getLicenseBySpdxId (getAttrDefault "license" pyProject.tool.poetry "unknown");
+            license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
           };
 
         }

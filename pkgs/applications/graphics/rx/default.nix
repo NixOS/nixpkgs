@@ -7,13 +7,13 @@ with stdenv.lib;
 
 rustPlatform.buildRustPackage rec {
   pname = "rx";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "cloudhead";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1byaxbhd3q49473kcdd52rvn3xq7bmy8bdx3pz0jiw96bclzhcgq";
+    sha256 = "1n5s7v2z13550gkqz7w6dw62jdy60wdi8w1lfa23609b4yhg4w94";
   };
 
   cargoSha256 = "173jfjvdag97f6jvfg366hjk9v3cz301cbzpcahy51rbf1cip1w1";

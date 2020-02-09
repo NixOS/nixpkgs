@@ -1,7 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libpfm
@@ -46,8 +46,8 @@ in stdenv.mkDerivation ({
   outputs = [ "out" "python" ]
     ++ optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ optionals enableManpages [ python.pkgs.sphinx python.pkgs.recommonmark ];
+  nativeBuildInputs = [ cmake python3 ]
+    ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -117,7 +117,7 @@ in stdenv.mkDerivation ({
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''

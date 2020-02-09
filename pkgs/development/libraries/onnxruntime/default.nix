@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, glibcLocales
-, cmake, python3
+, cmake, python3, libpng, zlib
 }:
 
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "1d28lzrjnq69yl8j9ncxlsxl0bniacn3hnsr9van10zgp527436v";
+    sha256 = "1ryf5v2h07c7b42q2p9id88i270ajyz5rlsradp00dy8in6dn2yr";
     # TODO: use nix-versions of grpc, onnx, eigen, googletest, etc.
     # submodules increase src size and compile times significantly
     # not currently feasible due to how integrated cmake build is with git
@@ -25,12 +25,19 @@ stdenv.mkDerivation rec {
     python3 # for shared-lib or server
   ];
 
+  buildInputs = [
+    # technically optional, but highly recommended
+    libpng
+    zlib
+  ];
+
   cmakeDir = "../cmake";
 
   cmakeFlags = [
     "-Donnxruntime_USE_OPENMP=ON"
     "-Donnxruntime_BUILD_SHARED_LIB=ON"
-    "-Donnxruntime_ENABLE_LTO=ON"
+    # flip back to ON next release
+    "-Donnxruntime_ENABLE_LTO=OFF" # https://github.com/microsoft/onnxruntime/issues/2828
   ];
 
   # ContribOpTest.StringNormalizerTest sets locale to en_US.UTF-8"
