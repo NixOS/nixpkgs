@@ -99,6 +99,7 @@ mkDerivation rec {
       msgpack
       beautifulsoup4
       html2text
+      pyqtwebengine
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ]
