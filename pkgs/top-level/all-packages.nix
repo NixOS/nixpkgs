@@ -9564,6 +9564,8 @@ in
 
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
 
+  guile-json = callPackage ../development/guile-modules/guile-json { };
+
   guile-ncurses = callPackage ../development/guile-modules/guile-ncurses { };
 
   guile-opengl = callPackage ../development/guile-modules/guile-opengl { };
