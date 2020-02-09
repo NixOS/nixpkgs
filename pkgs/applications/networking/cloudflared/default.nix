@@ -1,19 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "cloudflared";
-  version = "2019.7.0";
-
-  goPackagePath = "github.com/cloudflare/cloudflared";
+  version = "2019.12.0";
 
   src = fetchFromGitHub {
     owner  = "cloudflare";
     repo   = "cloudflared";
     rev    = version;
-    sha256 = "19229p7c9m7v0xpmzi5rfwjzm845ikq8pndkry2si9azks18x77q";
+    sha256 = "0cc78bysp7z76h4ddiwbsrygz4m4r71f8xylg99pc5qyg8p3my4p";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "1y5vh8g967rrm9b9hjlr70bs2rm09cpik673brgk3nzqxka10w7p";
 
   buildFlagsArray = "-ldflags=-X main.Version=${version}";
 

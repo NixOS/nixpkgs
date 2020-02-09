@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "sbt";
-  version = "1.3.7";
+  version = "1.3.8";
 
   src = fetchurl {
     urls = [
       "https://piccolo.link/sbt-${version}.tgz"
       "https://github.com/sbt/sbt/releases/download/v${version}/sbt-${version}.tgz"
     ];
-    sha256 = "054qfbvhkh1w66f2nvsv1mvrkjc9qddzsnfrhmaqx79gglxllgc1";
+    sha256 = "0pcrbpsvccyxdwc7f8h87rkn0kalar0iypnh3gygw4c0fm4yvci7";
   };
 
   patchPhase = ''

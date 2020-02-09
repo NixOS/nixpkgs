@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dnnl";
-  version = "1.1.2";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "mkl-dnn";
     rev = "v${version}";
-    sha256 = "150cdyfiw4izvzmbmdqidwadppb1qjmzhpaqjczm397ygi1m92l1";
+    sha256 = "17xpdwqjfb2bq586gnk3hq94r06jd8pk6qfs703qqd7155fkbil9";
   };
 
   # Generic fix upstreamed in https://github.com/intel/mkl-dnn/pull/631
