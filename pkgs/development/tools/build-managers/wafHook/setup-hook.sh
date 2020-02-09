@@ -22,6 +22,10 @@ wafConfigurePhase() {
     runHook postConfigure
 }
 
+if [ -z "${dontUseWafConfigure-}" -a -z "${configurePhase-}" ]; then
+    configurePhase=wafConfigurePhase
+fi
+
 wafBuildPhase () {
     runHook preBuild
 
@@ -40,6 +44,10 @@ wafBuildPhase () {
 
     runHook postBuild
 }
+
+if [ -z "${dontUseWafBuild-}" -a -z "${buildPhase-}" ]; then
+    buildPhase=wafBuildPhase
+fi
 
 wafInstallPhase() {
     runHook preInstall
@@ -60,6 +68,6 @@ wafInstallPhase() {
     runHook postInstall
 }
 
-configurePhase=wafConfigurePhase
-buildPhase=wafBuildPhase
-installPhase=wafInstallPhase
+if [ -z "${dontUseWafInstall-}" -a -z "${installPhase-}" ]; then
+    installPhase=wafInstallPhase
+fi
