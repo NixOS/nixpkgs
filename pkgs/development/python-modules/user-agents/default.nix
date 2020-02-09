@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "user-agents";
-  version = "2.0";
+  version = "2.1.0";
 
   # PyPI is missing devices.json
   src = fetchFromGitHub {
     owner = "selwin";
     repo = "python-user-agents";
     rev = "v${version}";
-    sha256 = "0ix2yajqdnfj433j50dls90mkmqz8m4fiywxg097zwkkc95wm8s4";
+    sha256 = "04bndajsfnpymxfiggnj7g38cmlvca3ry5k2611x8ibp38x53yhc";
   };
 
   propagatedBuildInputs = [ ua-parser ];
