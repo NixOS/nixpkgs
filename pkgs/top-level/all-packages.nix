@@ -1431,6 +1431,10 @@ in
 
   clasp = callPackage ../tools/misc/clasp { };
 
+  clevis = callPackage ../tools/security/clevis {
+    asciidoc = asciidoc-full;
+  };
+
   cli53 = callPackage ../tools/admin/cli53 { };
 
   cli-visualizer = callPackage ../applications/misc/cli-visualizer { };
