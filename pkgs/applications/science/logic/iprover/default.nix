@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iprover";
-  version = "2018_Jul_24_11h";
+  version = "3.1";
 
   src = fetchurl {
-    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover_${version}.tar.gz";
-    sha256 = "1iqim11flzm56aaysasl5whajcv1gq31hkidaqfr8ww7kwl1h06p";
+    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover-v${version}.tar.gz";
+    sha256 = "0lik8p7ayhjwpkln1iwf0ri84ramhch74j5nj6z7ph6wfi92pgg8";
   };
 
   buildInputs = [ ocaml eprover zlib ];
