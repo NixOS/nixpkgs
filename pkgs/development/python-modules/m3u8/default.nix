@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "m3u8";
-  version = "0.5.2";
+  version = "0.5.4";
 
   src = fetchFromGitHub {
     owner = "globocom";
     repo = pname;
     rev = version;
-    sha256 = "0p6wmwv1nfa5pyakq5d55w9v142z5ja3db3s3qr44kx895d9lhng";
+    sha256 = "1a2c7vqcysxkaffk40zg8d60l9hpjk0dw221fy9cg72i8jxq1gmm";
   };
 
   checkInputs = [ bottle pytest pytestcov ];
