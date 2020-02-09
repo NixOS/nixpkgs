@@ -180,7 +180,7 @@ in
               wmCommand = "${pkgs.gnome3.metacity}/bin/metacity";
             } ++ cfg.flashback.customSessions);
 
-      security.pam.services.gnome-screensaver = {
+      security.pam.services.gnome-flashback = {
         enableGnomeKeyring = true;
       };
 
@@ -191,9 +191,10 @@ in
           inherit (wm) wmName;
         }) cfg.flashback.customSessions);
 
-      services.dbus.packages = [
-        pkgs.gnome3.gnome-screensaver
-      ];
+        # gnome-panel needs these for menu applet
+        environment.sessionVariables.XDG_DATA_DIRS = [ "${pkgs.gnome3.gnome-flashback}/share" ];
+        # TODO: switch to sessionVariables (resolve conflict)
+        environment.variables.XDG_CONFIG_DIRS = [ "${pkgs.gnome3.gnome-flashback}/etc/xdg" ];
     })
 
     (mkIf serviceCfg.core-os-services.enable {

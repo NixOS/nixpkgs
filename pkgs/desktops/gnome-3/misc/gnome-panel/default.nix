@@ -7,7 +7,6 @@
 , gettext
 , glib
 , gnome-desktop
-, gnome-flashback
 , gnome-menus
 , gnome3
 , gtk3
@@ -46,8 +45,8 @@ in stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gnome-menus}/share:${gnome-flashback}/share"
-      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg:${gnome-flashback}/etc/xdg"
+      --prefix XDG_DATA_DIRS : "${gnome-menus}/share"
+      --prefix XDG_CONFIG_DIRS : "${gnome-menus}/etc/xdg"
     )
   '';
 
