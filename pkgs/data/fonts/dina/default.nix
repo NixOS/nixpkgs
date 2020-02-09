@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip
-, bdftopcf, mkfontscale
+, bdftopcf, mkfontscale, fontforge
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs =
-    [ unzip bdftopcf mkfontscale ];
+    [ unzip bdftopcf mkfontscale fontforge ];
 
   patchPhase = "sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf";
 
@@ -33,15 +33,23 @@ stdenv.mkDerivation {
       bdftopcf -t -o $(newName "$i").pcf "$i"
     done
     gzip -n -9 *.pcf
+
+    # convert bdf fonts to otb
+    for i in *.bdf; do
+      fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$(newName $i).otb\")"
+    done
   '';
 
   installPhase = ''
     install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
     install -D -m 644 -t "$bdf/share/fonts/misc" *.bdf
+    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
     mkfontdir "$out/share/fonts/misc"
+    mkfontdir "$bdf/share/fonts/misc"
+    mkfontdir "$otb/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" ];
+  outputs = [ "out" "bdf" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A monospace bitmap font aimed at programmers";
