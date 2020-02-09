@@ -1082,6 +1082,8 @@ in {
 
   pyfaidx = callPackage ../development/python-modules/pyfaidx { };
 
+  pyfcm = callPackage ../development/python-modules/pyfcm { };
+
   pyfttt = callPackage ../development/python-modules/pyfttt { };
 
   pyftdi = callPackage ../development/python-modules/pyftdi { };
