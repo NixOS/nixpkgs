@@ -93,7 +93,7 @@ mkDerivation rec {
       netifaces
       pillow
       python
-      pyqt5_with_qtwebkit
+      pyqt5
       sip
       regex
       msgpack
