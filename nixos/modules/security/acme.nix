@@ -316,23 +316,26 @@ in
                     '';
                     ExecStartPost =
                       let
+                        keyName = builtins.replaceStrings ["*"] ["_"] data.domain;
                         script = pkgs.writeScript "acme-post-start" ''
                           #!${pkgs.runtimeShell} -e
                           cd ${apath}
 
                           # Test that existing cert is older than new cert
-                          KEY=${spath}/certificates/*${data.domain}.key
+                          KEY=${spath}/certificates/${keyName}.key
                           if [ -e $KEY -a $KEY -nt key.pem ]; then
-                            cp -p ${spath}/certificates/*${data.domain}.key key.pem
-                            cp -p ${spath}/certificates/*${data.domain}.crt cert.pem
-                            cp -p ${spath}/certificates/*${data.domain}.issuer.crt chain.pem
+                            cp -p ${spath}/certificates/${keyName}.key key.pem
+                            cp -p ${spath}/certificates/${keyName}.crt cert.pem
+                            cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
                             cat cert.pem chain.pem > fullchain.pem
                             cat key.pem cert.pem chain.pem > full.pem
                             chmod ${rights} *.pem
                             chown '${data.user}:${data.group}' *.pem
                           fi
 
+                          echo post stuff
                           ${data.postRun}
+                          echo done
                         '';
                       in
                         "+${script}";
