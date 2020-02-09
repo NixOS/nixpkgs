@@ -35,6 +35,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DBUILD_DEPS=OFF"
     "-DCMAKE_SKIP_BUILD_RPATH=OFF"
+    "-DBUILD_SHARED_LIBS:BOOL=ON"
   ] ++ lib.optional (!customMemoryManagement) "-DCUSTOM_MEMORY_MANAGEMENT=0"
   ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "-DENABLE_TESTING=OFF"
