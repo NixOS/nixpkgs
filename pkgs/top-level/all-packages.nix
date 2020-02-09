@@ -12060,6 +12060,8 @@ in
 
   jemalloc450 = callPackage ../development/libraries/jemalloc/jemalloc450.nix { };
 
+  jose = callPackage ../development/libraries/jose { };
+
   jshon = callPackage ../development/tools/parsing/jshon { };
 
   json2hcl = callPackage ../development/tools/json2hcl { };
