@@ -3228,7 +3228,9 @@ in {
 
   crayons = callPackage ../development/python-modules/crayons{ };
 
-  django = self.django_1_11;
+  django = self.django_lts;
+
+  django_lts = self.django_2_2;
 
   django_1_11 = callPackage ../development/python-modules/django/1_11.nix {
     gdal = self.gdal;

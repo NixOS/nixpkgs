@@ -8733,17 +8733,17 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_40_0 = callPackage ../development/compilers/rust/1_40_0.nix {
+  rust_1_41_0 = callPackage ../development/compilers/rust/1_41_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   rust_1_38_0 = callPackage ../development/compilers/rust/1_38_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_40_0;
+  rust = rust_1_41_0;
 
-  rustPackages_1_40_0 = rust_1_40_0.packages.stable;
+  rustPackages_1_41_0 = rust_1_41_0.packages.stable;
   rustPackages_1_38_0 = rust_1_38_0.packages.stable;
-  rustPackages = rustPackages_1_40_0;
+  rustPackages = rustPackages_1_41_0;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
   inherit (rust) makeRustPlatform;
@@ -9458,6 +9458,7 @@ in
   };
 
   ruby = ruby_2_6;
+  rubyPackages = rubyPackages_2_6;
 
   rubyPackages_2_4 = recurseIntoAttrs ruby_2_4.gems;
   rubyPackages_2_5 = recurseIntoAttrs ruby_2_5.gems;
@@ -13830,7 +13831,7 @@ in
       kservice ktexteditor ktextwidgets kunitconversion kwallet kwayland
       kwidgetsaddons kwindowsystem kxmlgui kxmlrpcclient modemmanager-qt
       networkmanager-qt plasma-framework prison solid sonnet syntax-highlighting
-      syndication threadweaver kirigami2 kholidays kpurpose;
+      syndication threadweaver kirigami2 kholidays kpurpose kcontacts;
 
     ### KDE PLASMA 5
 
@@ -15313,7 +15314,11 @@ in
 
   mailman-rss = callPackage ../development/python-modules/mailman-rss { };
 
-  mailman-web = with python3.pkgs; toPythonApplication mailman-web;
+  mailman-web = with (python3.override {
+    packageOverrides = self: super: {
+      django = self.django_1_11;
+    };
+  }).pkgs; toPythonApplication mailman-web;
 
   mattermost = callPackage ../servers/mattermost { };
   matterircd = callPackage ../servers/mattermost/matterircd.nix { };
@@ -19837,7 +19842,7 @@ in
 
   inherit (kdeApplications)
     akonadi akregator ark dolphin dragon ffmpegthumbs filelight gwenview k3b
-    kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kcontacts kdenlive kdf kdialog
+    kaddressbook kate kcachegrind kcalc kcharselect kcolorchooser kdenlive kdf kdialog
     keditbookmarks kfind kget kgpg khelpcenter kig kleopatra kmail kmix kmplot kolourpaint kompare konsole yakuake
     kpkpass kitinerary kontact korganizer krdc krfb ksystemlog ktouch kwalletmanager marble minuet okular spectacle;
 
