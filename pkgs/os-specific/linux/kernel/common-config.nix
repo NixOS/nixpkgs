@@ -114,7 +114,7 @@ let
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
       BPF_JIT            = whenPlatformHasEBPFJit yes;
-      BPF_JIT_ALWAYS_ON  = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON  = no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
       HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
       BPF_STREAM_PARSER  = whenAtLeast "4.19" yes;
       XDP_SOCKETS        = whenAtLeast "4.19" yes;

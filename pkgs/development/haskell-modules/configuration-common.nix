@@ -74,7 +74,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0s8sv6h90l2a9xdabj0nirhpr6d2k8s5cddjdkm50x395i014w31";
+      sha256 = "1shb1jgm78bx88rbsr1nmimjzzfqw96qdr38mcrr1c2qz5ky820v";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -1236,7 +1236,7 @@ self: super: {
   constraints-deriving = dontCheck super.constraints-deriving;
 
   # Use a matching version of ghc-lib-parser.
-  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2; };
+  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205; };
 
   # https://github.com/sol/hpack/issues/366
   hpack = self.hpack_0_33_0;
@@ -1350,7 +1350,7 @@ self: super: {
   # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
   matterhorn = doJailbreak (super.matterhorn.override {
     brick-skylighting = self.brick-skylighting.override {
-      brick = self.brick_0_50_1;
+      brick = self.brick_0_51;
     };
   });
 
@@ -1380,7 +1380,7 @@ self: super: {
 
   # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
   ormolu = doJailbreak (super.ormolu.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_8_2;
+    ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205;
   });
 
   # krank-0.1.0 does not accept PyF-0.9.0.0.
@@ -1388,5 +1388,9 @@ self: super: {
 
   # prettyprinter-1.6.0 fails its doctest suite.
   prettyprinter_1_6_0 = dontCheck super.prettyprinter_1_6_0;
+
+  # the test suite has an overly tight restriction on doctest
+  # See https://github.com/ekmett/perhaps/pull/5
+  perhaps = doJailbreak super.perhaps;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

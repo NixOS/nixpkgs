@@ -530,6 +530,9 @@ self: super: builtins.intersectAttrs super {
     '';
   });
 
+  # Break infinite recursion cycle with criterion and network-uri.
+  js-flot = dontCheck super.js-flot;
+
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
 
