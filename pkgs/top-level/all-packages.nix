@@ -17362,7 +17362,8 @@ in
 
   culmus = callPackage ../data/fonts/culmus { };
 
-  clearlyU = callPackage ../data/fonts/clearlyU { };
+  clearlyU = callPackage ../data/fonts/clearlyU
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
 
