@@ -571,4 +571,6 @@ mapAliases ({
 
   dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
+
+  gcc-snapshot = throw "Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 })

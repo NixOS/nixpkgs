@@ -615,6 +615,12 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      <link xlink:href="https://www.oracle.com/technetwork/developer-tools/sql-developer/downloads/sqldev-relnotes-194-5908846.html">release notes</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>gcc-snapshot</package>-package has been removed. It's marked as broken for &gt;2 years and used to point
+     to a fairly old snapshot  from the <package>gcc7</package>-branch.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
