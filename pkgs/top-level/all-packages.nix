@@ -18493,9 +18493,6 @@ in
 
   comical = callPackage ../applications/graphics/comical { };
 
-  conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
-  conkeror = wrapFirefox conkeror-unwrapped { };
-
   containerd = callPackage ../applications/virtualization/containerd { };
 
   convchain = callPackage ../tools/graphics/convchain {};
@@ -19113,18 +19110,11 @@ in
   });
 
   firefox-unwrapped = firefoxPackages.firefox;
-  firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52;
-  firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
-  icecat-unwrapped = firefoxPackages.icecat;
-
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { gdkWayland = true; };
-  firefox-esr-52 = wrapFirefox firefox-esr-52-unwrapped { };
-  firefox-esr-60 = wrapFirefox firefox-esr-60-unwrapped { };
   firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
   firefox-esr = firefox-esr-68;
-  icecat = wrapFirefox icecat-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
