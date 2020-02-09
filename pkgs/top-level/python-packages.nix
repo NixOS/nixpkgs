@@ -3817,6 +3817,8 @@ in {
 
   graphql-core = callPackage ../development/python-modules/graphql-core { };
 
+  graphql-server-core = callPackage ../development/python-modules/graphql-server-core { };
+
   grammalecte = callPackage ../development/python-modules/grammalecte { };
 
   greenlet = callPackage ../development/python-modules/greenlet { };
