@@ -24,7 +24,9 @@ These settings are needed both for booting the final install, and installer itse
 === Wifi ===
 ~~Wifi does not work with kernels older than 5.1 (firmware not present) or newer~~ (https://bbs.archlinux.org/viewtopic.php?id=247705)
 
-Update: The 48.ucode causes the Killer wifi card to crash. The iwlfwifi-cc-a0-46.ucode works perfectly. default.nix contains an overlay that removes the offending ucode from the linux-firmware bundle.
+Update: The 48.ucode causes the Killer wifi card to crash. The iwlfwifi-cc-a0-46.ucode works perfectly. 
+default.nix contains an overlay that removes the offending ucode from the linux-firmware bundle.
+To use it one also needs to enable unfree firmware in their own configuration (<code>hardware.enableRedistributableFirmware = true;</code>)
 
 ```
   # Use the systemd-boot EFI boot loader.
