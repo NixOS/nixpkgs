@@ -5278,6 +5278,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  grocy = callPackage ../servers/grocy { };
+
   nextcloud = callPackage ../servers/nextcloud { };
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
