@@ -4791,6 +4791,8 @@ in {
 
   precis-i18n = callPackage ../development/python-modules/precis-i18n { };
 
+  promise = callPackage ../development/python-modules/promise { };
+
   prox-tv = callPackage ../development/python-modules/prox-tv {
     # We need to use blas instead of openblas on darwin,
     # see https://github.com/NixOS/nixpkgs/pull/45013.
