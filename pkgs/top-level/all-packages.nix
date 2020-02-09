@@ -15664,6 +15664,10 @@ in
     libmemcached = null; # Detection is broken upstream
   };
 
+  tang = callPackage ../servers/tang {
+    asciidoc = asciidoc-full;
+  };
+
   timescaledb-parallel-copy = callPackage ../development/tools/database/timescaledb-parallel-copy { };
 
   timescaledb-tune = callPackage ../development/tools/database/timescaledb-tune { };
