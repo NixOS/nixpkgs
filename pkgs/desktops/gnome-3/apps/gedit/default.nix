@@ -1,20 +1,21 @@
 { stdenv, meson, fetchurl, python3
 , pkgconfig, gtk3, glib, adwaita-icon-theme
 , libpeas, gtksourceview4, gsettings-desktop-schemas
-, wrapGAppsHook, ninja, libsoup, libxml2
-, gnome3, gspell, perl, itstool, desktop-file-utils }:
+, wrapGAppsHook, ninja, libsoup, tepl
+, gnome3, gspell, perl, itstool, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "3.34.1";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1inm50sdfw63by1lf4f1swb59mpyxlly0g5rdg99j5l3357fzygb";
+    sha256 = "0dclapyghbkg15cjcf6nljcyy4980ipjw1m3mbqpmnz9lh9dv0y9";
   };
 
   nativeBuildInputs = [
-    pkgconfig wrapGAppsHook meson ninja libxml2
+    pkgconfig wrapGAppsHook meson ninja
     python3 perl itstool desktop-file-utils
   ];
 
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
     adwaita-icon-theme libsoup
     libpeas gtksourceview4
     gsettings-desktop-schemas gspell
+    tepl
   ];
 
   postPatch = ''
