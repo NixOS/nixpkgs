@@ -11,11 +11,13 @@ wafConfigurePhase() {
     fi
 
     local flagsArray=(
-        @crossFlags@
         "${flagsArray[@]}"
         $wafConfigureFlags "${wafConfigureFlagsArray[@]}"
         ${configureTargets:-configure}
     )
+    if [ -z "${dontAddWafCrossFlags:-}" ]; then
+        flagsArray+=(@crossFlags@)
+    fi
     echoCmd 'configure flags' "${flagsArray[@]}"
     python "$wafPath" "${flagsArray[@]}"
 
