@@ -18503,9 +18503,6 @@ in
 
   comical = callPackage ../applications/graphics/comical { };
 
-  conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
-  conkeror = wrapFirefox conkeror-unwrapped { };
-
   containerd = callPackage ../applications/virtualization/containerd { };
 
   convchain = callPackage ../tools/graphics/convchain {};

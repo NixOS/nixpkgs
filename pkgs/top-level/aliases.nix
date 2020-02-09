@@ -123,6 +123,11 @@ mapAliases ({
   firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60; # 2020-02, remove after 20.03 branchoff
   icecat                   = firefoxPackages.icecat;         # 2020-02, remove after 20.03 branchoff
   icecat-unwrapped         = firefoxPackages.icecat;         # 2020-02, remove after 20.03 branchoff
+  conkeror-unwrapped       = conkeror; # 2020-02, remove after 20.03 branchoff
+  conkeror                 = throw ''
+    Conkeror doesn't work with any secure firefox release.
+    Please move to some of the alternatives at http://conkeror.org/Alternatives
+  ''; # 2020-02, remove after 20.03 branchoff
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
   flameGraph = flamegraph; # added 2018-04-25
