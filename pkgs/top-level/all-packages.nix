@@ -1270,7 +1270,9 @@ in
 
   brook = callPackage ../tools/networking/brook { };
 
-  broot = callPackage ../tools/misc/broot { };
+  broot = callPackage ../tools/misc/broot {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
