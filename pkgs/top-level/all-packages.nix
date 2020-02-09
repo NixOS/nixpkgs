@@ -9562,6 +9562,8 @@ in
 
   guile-gcrypt = callPackage ../development/guile-modules/guile-gcrypt { };
 
+  guile-git = callPackage ../development/guile-modules/guile-git { };
+
   guile-lib = callPackage ../development/guile-modules/guile-lib { };
 
   guile-json = callPackage ../development/guile-modules/guile-json { };
