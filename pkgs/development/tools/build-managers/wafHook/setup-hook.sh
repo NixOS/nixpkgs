@@ -61,7 +61,7 @@ wafInstallPhase() {
     local flagsArray=(
         $wafFlags ${wafFlagsArray[@]}
         $installFlags ${installFlagsArray[@]}
-	${installTargets:-install}
+        ${installTargets:-install}
     )
 
     echoCmd 'install flags' "${flagsArray[@]}"
