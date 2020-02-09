@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "feedgen";
-  version = "0.7.0";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "82c9e29884e137c3e3e7959a02f142d1f7a46cd387d572e9e40150112a27604f";
+    sha256 = "0jl0b87l7v6c0f1nx6k81skjhdj5i11kmchdjls00mynpvdip0cf";
   };
 
   propagatedBuildInputs = [ dateutil lxml ];
