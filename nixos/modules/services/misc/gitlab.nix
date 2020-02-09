@@ -88,7 +88,7 @@ let
           wiki = true;
           snippets = true;
           builds = true;
-          container_registry = cfg.registry.enable;
+          container_registry = cfg.registry.defaultForProjects;
         };
       };
       repositories.storages.default.path = "${cfg.statePath}/repositories";
@@ -122,10 +122,10 @@ let
       };
       registry = {
         enabled = cfg.registry.enable;
-        host = cfg.registry.host;
-        port = cfg.registry.port;
+        host = services.dockerRegistry.listenAddress;
+        port = services.dockerRegistry.port;
         key = cfg.registry.keyFile;
-        api_url = "http://localhost:5000/";
+        api_url = "http://${services.dockerRegistry.listenAddress}:${services.dockerRegistry.port}/";
         issuer = "gitlab-issuer";
       };
       extra = {};
@@ -415,6 +415,21 @@ in {
           default = null;
           description = "Path to gitLab container registry certificate-key.";
         };
+        defaultForProjects = mkOption {
+          type = types.bool;
+          default = cfg.registry.enable;
+          description = "If gitlab container registry is project default.";
+        };
+        issuer = mkOption {
+          type = types.str;
+          default = "gitlab-issuer";
+          description = "Gitlab container registry issuer.";
+        };
+        serviceName = mkOption {
+          type = types.str;
+          default = "container_registry";
+          description = "Gitlab container registry service name.";
+        };
       };
 
       smtp = {
@@ -672,14 +687,11 @@ in {
     # Enable Docker Registry, if GitLab-Container Registry is enabled
     services.dockerRegistry = optionalAttrs cfg.registry.enable {
       enable = cfg.registry.enable;
-      listenAddress = "127.0.0.1";
-      port = 5000;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
       extraConfig = {
-        REGISTRY_LOG_LEVEL = "info";
-        REGISTRY_AUTH_TOKEN_REALM = "https://${cfg.host}/jwt/auth";
-        REGISTRY_AUTH_TOKEN_SERVICE = "container_registry";
-        REGISTRY_AUTH_TOKEN_ISSUER = "gitlab-issuer";
+        REGISTRY_AUTH_TOKEN_REALM = "http${if cfg.https == true then "s" else ""}://${cfg.host}/jwt/auth";
+        REGISTRY_AUTH_TOKEN_SERVICE = cfg.registry.serviceName;
+        REGISTRY_AUTH_TOKEN_ISSUER = cfg.registry.issuer;
         REGISTRY_AUTH_TOKEN_ROOTCERTBUNDLE = cfg.registry.certFile;
         REGISTRY_STORAGE_DELETE_ENABLED = "true";
       };
