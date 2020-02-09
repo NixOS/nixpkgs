@@ -542,6 +542,9 @@ mapAliases ({
   # added 2020-01-10
   tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
 
+  # added 2020-02-09
+  dina-font-pcf = dina-font;
+
     /* Cleanup before 20.09 */
   llvm_4 = throw ''
     The LLVM versions 3.5, 3.9 and 4.0 have been removed in NixOS 20.03
