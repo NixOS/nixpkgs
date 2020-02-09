@@ -1403,4 +1403,11 @@ self: super: {
     HsYAML = self.HsYAML_0_2_1_0;
   };
 
+  # it wants to build a statically linked binary by default
+  hledger-flow = overrideCabal super.hledger-flow ( drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace hledger-flow.cabal --replace "-static" ""
+    '';
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
