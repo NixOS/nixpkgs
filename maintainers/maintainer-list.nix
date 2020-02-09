@@ -4241,6 +4241,12 @@
     github = "ltavard";
     name = "Laure Tavard";
   };
+  luc65r = {
+    email = "lucas@ransan.tk";
+    github = "luc65r";
+    githubId = 59375051;
+    name = "Lucas Ransan";
+  };
   lucus16 = {
     email = "lars.jellema@gmail.com";
     github = "Lucus16";
