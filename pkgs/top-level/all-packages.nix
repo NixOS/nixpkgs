@@ -7797,6 +7797,8 @@ in
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
+  bluespec = callPackage ../development/compilers/bluespec { };
+
   colm = callPackage ../development/compilers/colm { };
 
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { };
