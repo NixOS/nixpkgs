@@ -16,7 +16,7 @@ buildGoModule rec {
     description = "Easily manage and invoke small scripts and wrappers";
     homepage    = https://github.com/TekWizely/run;
     license     = licenses.mit;
-    maintainers = with maintainers; [ rawkode ];
+    maintainers = with maintainers; [ rawkode filalex77 ];
     platforms   = platforms.unix;
   };
 }
