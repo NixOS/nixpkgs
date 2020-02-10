@@ -1,0 +1,72 @@
+From bd0a222cca9973d7662a92c794ae04b40c29d914 Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Thu, 30 Jul 2020 00:43:20 +0200
+Subject: [PATCH] agent/network_connect_psk: check if the config-file for the
+ SSID points to a store path
+
+If the network is declaratively configured by NixOS, it must not be
+modified imperatively.
+---
+ src/dbus.c    |  6 ++++++
+ src/dbus.h    |  1 +
+ src/network.c | 14 +++++++++++++-
+ 3 files changed, 20 insertions(+), 1 deletion(-)
+
+diff --git a/src/dbus.c b/src/dbus.c
+index ceede5c..f8b8109 100644
+--- a/src/dbus.c
++++ b/src/dbus.c
+@@ -114,6 +114,12 @@ struct l_dbus_message *dbus_error_not_supported(struct l_dbus_message *msg)
+ 					"Operation not supported");
+ }
+ 
++struct l_dbus_message *dbus_error_file_is_a_nix_store_path(struct l_dbus_message *msg, char *ssid)
++{
++	return l_dbus_message_new_error(msg, IWD_SERVICE ".NotSupportNixOS",
++					"Cannot update SSID %s as it's configured in a file that points to a store path! Please update your NixOS config accordingly!", ssid);
++}
++
+ struct l_dbus_message *dbus_error_no_agent(struct l_dbus_message *msg)
+ {
+ 	return l_dbus_message_new_error(msg, IWD_SERVICE ".NoAgent",
+diff --git a/src/dbus.h b/src/dbus.h
+index ebae85d..adb0241 100644
+--- a/src/dbus.h
++++ b/src/dbus.h
+@@ -59,6 +59,7 @@ struct l_dbus_message *dbus_error_invalid_format(struct l_dbus_message *msg);
+ struct l_dbus_message *dbus_error_already_exists(struct l_dbus_message *msg);
+ struct l_dbus_message *dbus_error_not_found(struct l_dbus_message *msg);
+ struct l_dbus_message *dbus_error_not_supported(struct l_dbus_message *msg);
++struct l_dbus_message *dbus_error_file_is_a_nix_store_path(struct l_dbus_message *msg, char *ssid);
+ struct l_dbus_message *dbus_error_no_agent(struct l_dbus_message *msg);
+ struct l_dbus_message *dbus_error_not_connected(struct l_dbus_message *msg);
+ struct l_dbus_message *dbus_error_not_configured(struct l_dbus_message *msg);
+diff --git a/src/network.c b/src/network.c
+index 70541b5..d510f5e 100644
+--- a/src/network.c
++++ b/src/network.c
+@@ -851,8 +851,20 @@ static struct l_dbus_message *network_connect_psk(struct network *network,
+ 
+ 	l_debug("ask_passphrase: %s",
+ 		network->ask_passphrase ? "true" : "false");
+-
+ 	if (network->ask_passphrase) {
++		char store_dir[] = "@storeDir@";
++		char full_path[PATH_MAX];
++		char *cfgpath;
++		if (network->info != NULL) {
++			cfgpath = network->info->ops->get_file_path(network->info);
++			int ret = readlink(cfgpath, full_path, sizeof(full_path));
++			l_free(cfgpath);
++
++			if (ret != -1 && strncmp(full_path, store_dir, strlen(store_dir)) == 0) {
++				return dbus_error_file_is_a_nix_store_path(message, network->ssid);
++			}
++		}
++
+ 		network->ask_passphrase = false;
+ 
+ 		network->agent_request =
+-- 
+2.25.4
+

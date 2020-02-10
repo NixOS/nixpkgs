@@ -9,6 +9,7 @@
 , readline
 , openssl
 , python3Packages
+, substituteAll
 }:
 
 stdenv.mkDerivation rec {
@@ -22,6 +23,13 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "man" ];
+
+  patches = [
+    (substituteAll {
+      src = ./0001-agent-network_connect_psk-check-if-the-config-file-f.patch;
+      inherit (builtins) storeDir;
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -54,7 +62,7 @@ stdenv.mkDerivation rec {
     "--with-systemd-networkdir=${placeholder "out"}/lib/systemd/network/"
   ];
 
-  postUnpack = ''
+  postPatch = ''
     patchShebangs .
   '';
 
@@ -85,6 +93,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill fpletz ];
+    maintainers = with maintainers; [ dtzWill fpletz ma27 ];
   };
 }
