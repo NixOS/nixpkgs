@@ -149,6 +149,16 @@ sub buildFlake {
     unlink("$systemPath.tmp");
 }
 
+sub clearContainerState {
+    my ($profileDir, $gcRootsDir, $root, $configFile) = @_;
+
+    safeRemoveTree($profileDir) if -e $profileDir;
+    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
+    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
+    safeRemoveTree($root) if -e $root;
+    unlink($configFile) or die;
+}
+
 if ($action eq "create") {
     # Acquire an exclusive lock to prevent races with other
     # invocations of ‘nixos-container create’.
@@ -226,7 +236,10 @@ if ($action eq "create") {
 
     if (defined $systemPath) {
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
-            or die "$0: failed to set initial container configuration\n";
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to set initial container configuration\n";
+            };
     } else {
         mkpath("$root/etc/nixos", 0, 0755);
 
@@ -237,7 +250,10 @@ if ($action eq "create") {
         system("nix-env", "-p", "$profileDir/system",
                "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
                "--set", "-A", "system") == 0
-            or die "$0: failed to build initial container configuration\n";
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to build initial container configuration\n"
+            };
     }
 
     print "$containerName\n" if $ensureUniqueName;
@@ -331,11 +347,7 @@ if ($action eq "destroy") {
 
     terminateContainer if (isContainerRunning);
 
-    safeRemoveTree($profileDir) if -e $profileDir;
-    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
-    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
-    safeRemoveTree($root) if -e $root;
-    unlink($confFile) or die;
+    clearContainerState($profileDir, $gcRootsDir, $root, $confFile);
 }
 
 elsif ($action eq "restart") {
