@@ -1,5 +1,6 @@
 { stdenv, fetchurl, fetchFromGitHub, requireFile
 , SDL2, SDL2_mixer, cmake, ninja
+, Foundation
 , fullGame ? false }:
 
 let
@@ -24,20 +25,22 @@ let
   flags = if fullGame then [] else [ "-DMAKEANDPLAY" ];
 in stdenv.mkDerivation rec {
   pname = "vvvvvv";
-  version = "unstable-2020-02-02";
+  version = "unstable-2020-02-09";
 
   src = fetchFromGitHub {
     owner = "TerryCavanagh";
     repo = "VVVVVV";
-    rev = "4bc76416f551253452012d28e2bc049087e2be73";
-    sha256 = "1sc64f7sxf063bdgnkg23vc170chq2ix25gs836hyswx98iyg5ly";
+    rev = "1b00d1260064b384f8b294d15ad5eb43f2dde22b";
+    sha256 = "0z98d95ywr30cl6jsxc6ijp2h5p6abgh44ydm5dz9x9zp5rw6zc5";
   };
 
   CFLAGS = flags;
   CXXFLAGS = flags;
 
   nativeBuildInputs = [ cmake ninja ];
-  buildInputs = [ SDL2 SDL2_mixer ];
+  buildInputs = [
+    SDL2 SDL2_mixer
+  ] + stdenv.lib.optionalPlatform stdenv.lib.platforms.darwin [ Foundation ];
 
   sourceRoot = "source/desktop_version";
 
@@ -56,6 +59,6 @@ in stdenv.mkDerivation rec {
     homepage = "https://thelettervsixtim.es";
     license = if fullGame then licenses.unfree else licenses.unfreeRedistributable;
     maintainers = [ maintainers.dkudriavtsev ];
-    platforms = platforms.all;
+    platforms = [ platforms.linux platforms.darwin ];
   };
 }
