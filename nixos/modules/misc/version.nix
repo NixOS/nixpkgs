@@ -42,8 +42,8 @@ in
 
     nixos.revision = mkOption {
       internal = true;
-      type = types.str;
-      default = trivial.revisionWithDefault "master";
+      type = types.nullOr types.str;
+      default = trivial.revisionWithDefault null;
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
