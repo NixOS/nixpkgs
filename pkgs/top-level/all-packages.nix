@@ -24065,9 +24065,7 @@ in
 
   osi = callPackage ../development/libraries/science/math/osi { };
 
-  or-tools = callPackage ../development/libraries/science/math/or-tools {
-    pythonProtobuf = pythonPackages.protobuf;
-  };
+  or-tools = callPackage ../development/libraries/science/math/or-tools { };
 
   rubiks = callPackage ../development/libraries/science/math/rubiks { };
 
