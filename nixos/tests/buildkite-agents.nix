@@ -6,18 +6,13 @@ import ./make-test-python.nix ({ pkgs, ... }:
     maintainers = [ flokli ];
   };
 
-  nodes = {
-    node1 = { pkgs, ... }: {
-      services.buildkite-agent = {
-        enable = true;
+  machine = { pkgs, ... }: {
+    services.buildkite-agents = {
+      one = {
         privateSshKeyPath = (import ./ssh-keys.nix pkgs).snakeOilPrivateKey;
         tokenPath = (pkgs.writeText "my-token" "5678");
       };
-    };
-    # don't configure ssh key, run as a separate user
-    node2 = { pkgs, ...}: {
-      services.buildkite-agent = {
-        enable = true;
+      two = {
         tokenPath = (pkgs.writeText "my-token" "1234");
       };
     };
@@ -28,9 +23,9 @@ import ./make-test-python.nix ({ pkgs, ... }:
     # we can't wait on the unit to start up, as we obviously can't connect to buildkite,
     # but we can look whether files are set up correctly
 
-    node1.wait_for_file("/var/lib/buildkite-agent/buildkite-agent.cfg")
-    node1.wait_for_file("/var/lib/buildkite-agent/.ssh/id_rsa")
+    machine.wait_for_file("/var/lib/buildkite-agent-one/buildkite-agent.cfg")
+    machine.wait_for_file("/var/lib/buildkite-agent-one/.ssh/id_rsa")
 
-    node2.wait_for_file("/var/lib/buildkite-agent/buildkite-agent.cfg")
+    machine.wait_for_file("/var/lib/buildkite-agent-two/buildkite-agent.cfg")
   '';
 })
