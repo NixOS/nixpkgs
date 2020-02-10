@@ -37,6 +37,11 @@ let
         substituteInPlace setup.cfg \
           --replace "azure-namespace-package = azure-mgmt-nspkg" ""
       '';
+
+      # force PEP420
+      postInstall = ''
+        rm -f $out/${py.sitePackages}/azure/{,mgmt/}__init__.py
+      '';
     });
 
   py = python.override {
