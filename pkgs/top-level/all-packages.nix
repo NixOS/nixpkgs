@@ -1953,6 +1953,8 @@ in
 
   merriweather = callPackage ../data/fonts/merriweather { };
 
+  merriweather-sans = callPackage ../data/fonts/merriweather-sans { };
+
   meson = callPackage ../development/tools/build-managers/meson { };
 
   meson-tools = callPackage ../misc/meson-tools { };
