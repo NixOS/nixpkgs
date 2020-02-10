@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql, lua}:
+{ stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql
+, withLuaJIT ? false, lua, luajit }:
 
 stdenv.mkDerivation rec {
   pname = "osm2pgsql";
@@ -13,7 +14,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ expat proj bzip2 zlib boost postgresql lua ];
+  buildInputs = [ expat proj bzip2 zlib boost postgresql ]
+    ++ stdenv.lib.optional withLuaJIT luajit
+    ++ stdenv.lib.optional (!withLuaJIT) lua;
+
+  cmakeFlags = stdenv.lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 
   NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
@@ -21,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "OpenStreetMap data to PostgreSQL converter";
     homepage = "https://github.com/openstreetmap/osm2pgsql";
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ jglukasik ];
   };
 }
