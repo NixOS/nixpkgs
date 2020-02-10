@@ -10,7 +10,7 @@ case "$1" in
     ;;
   --json)
     cat <<EOF
-{"nixosVersion": "@version@", "nixpkgsRevision": "@revision@", "configurationRevision": "@configurationRevision@"}
+@json@
 EOF
     ;;
   *)
