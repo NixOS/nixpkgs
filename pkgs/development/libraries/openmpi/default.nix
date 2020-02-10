@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl
+{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl, libfabric, pmix, ucx
 , rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget, symlinkJoin
 
 # Enable CUDA support
@@ -6,6 +6,9 @@
 
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
+
+# Enable the SLURM bindings
+, enableSLURM ? false
 
 # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
 , enablePrefix ? false
@@ -20,6 +23,7 @@ let
     name = "${cudatoolkit.name}-unsplit";
     paths = [ cudatoolkit.out cudatoolkit.lib ];
   };
+
 in stdenv.mkDerivation rec {
   pname = "openmpi";
   inherit version;
@@ -28,6 +32,14 @@ in stdenv.mkDerivation rec {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
     sha256 = "0ms0zvyxyy3pnx9qwib6zaljyp2b3ixny64xvq3czv3jpr8zf2wh";
   };
+
+  # TODO: Remove these, when a new release gets out
+  # https://github.com/open-mpi/ompi/commit/526775dfd7ad75c308532784de4fb3ffed25458f.patch
+  # https://github.com/open-mpi/ompi/commit/a3026c016a6a8be379f62585b6ddc070175c8106.patch
+  patches = [
+    ./ucx-1.8.patch
+    ./ucx-1.7.patch
+  ];
 
   postPatch = ''
     patchShebangs ./
@@ -40,7 +52,7 @@ in stdenv.mkDerivation rec {
     find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
-  buildInputs = with stdenv; [ gfortran zlib ]
+  buildInputs = with stdenv; [ gfortran zlib libfabric pmix ucx ]
     ++ lib.optionals isLinux [ libnl numactl ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
@@ -48,13 +60,20 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  configureFlags = with stdenv; lib.optional (!cudaSupport) "--disable-mca-dso"
+  configureFlags = with stdenv; [
+    "--with-cma"
+    "--with-hwloc=${hwloc.dev}"
+    "--with-ofi=${libfabric}"
+    "--with-pmi=${pmix}"
+    "--with-pmix=${pmix} --enable-install-libpmix"
+    "--with-verbs=${rdma-core}"
+    "--with-ucx=${ucx}"
+    ]
+    ++ lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
     ++ lib.optional enableSGE "--with-sge"
+    ++ lib.optional enableSLURM "--with-slurm"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
-    # TODO: add UCX support, which is recommended to use with cuda for the most robust OpenMPI build
-    # https://github.com/openucx/ucx
-    # https://www.open-mpi.org/faq/?category=buildcuda
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
     ;
 
