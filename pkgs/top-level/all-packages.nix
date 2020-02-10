@@ -10791,6 +10791,7 @@ in
 
   gdb = callPackage ../development/tools/misc/gdb {
     guile = null;
+    readline = readline80;
   };
 
   jhiccup = callPackage ../development/tools/java/jhiccup { };
