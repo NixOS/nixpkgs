@@ -2,9 +2,19 @@
 , python, munge, perl, pam, openssl, zlib
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
 , readline, freeipmi, libssh2, xorg, lz4
+, buildEnv, libibmad, libibumad, pmix, ucx
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
+
+let
+
+  ofed = buildEnv {
+    name = "ofed";
+    paths = [ libibmad libibumad ];
+  };
+
+in
 
 stdenv.mkDerivation rec {
   pname = "slurm";
@@ -37,6 +47,7 @@ stdenv.mkDerivation rec {
     curl python munge perl pam openssl zlib
       libmysqlclient ncurses gtk2 lz4
       lua hwloc numactl readline freeipmi
+      ofed pmix ucx
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
   configureFlags = with stdenv.lib;
@@ -46,6 +57,9 @@ stdenv.mkDerivation rec {
       "--with-munge=${munge}"
       "--with-ssl=${openssl.dev}"
       "--with-zlib=${zlib}"
+      "--with-ofed=${ofed}"
+      "--with-pmix=${pmix}"
+      "--with-ucx=${ucx}"
       "--sysconfdir=/etc/slurm"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
       ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")
@@ -56,6 +70,8 @@ stdenv.mkDerivation rec {
     patchShebangs ./doc/html/shtml2html.py
     patchShebangs ./doc/man/man2html.py
   '';
+
+  makeFlags = [ "OFED_CPPFLAGS=-I${ofed}/include" ];
 
   postInstall = ''
     rm -f $out/lib/*.la $out/lib/slurm/*.la
