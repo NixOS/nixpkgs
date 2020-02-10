@@ -31,15 +31,10 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "INCLUDEDIR=$(dev)/include"
-    # TODO do this instead
-    #"BUILD_STATIC=${if enableStatic then "yes" else "no"}"
-    #"BUILD_SHARED=${if enableShared then "yes" else "no"}"
-    #"WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
+    "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
+    "BUILD_SHARED=${if enableShared then "yes" else "no"}"
+    "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
   ]
-    # TODO delete and do above
-    ++ stdenv.lib.optional (enableStatic) "BUILD_STATIC=yes"
-    ++ stdenv.lib.optional (!enableShared) "BUILD_SHARED=no"
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
     # TODO make full dictionary
     ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
     ;
@@ -52,9 +47,7 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
       mv $out/bin/*.dll $out/lib
       ln -s $out/lib/*.dll
-    ''
-    # TODO remove
-    + stdenv.lib.optionalString (!enableStatic) "rm $out/lib/*.a";
+    '';
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
