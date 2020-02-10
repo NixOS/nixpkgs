@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     function symlink () {
       local target=$1 linkname=$2
       if [ -e "$linkname" ]; then
-        echo "warning: conflict for $linkname. Overriding."
+        echo "warning: conflict for $linkname. Overriding $(readlink $linkname) with $target."
       fi
       ln -sfn "$target" "$linkname"
     }
