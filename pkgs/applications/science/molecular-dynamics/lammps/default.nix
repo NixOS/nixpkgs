@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
     for pack in ${stdenv.lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
   '';
 
+  enableParallelBuilding = true;
+
   # Must do manual build due to LAMMPS requiring a seperate build for
   # the libraries and executable. Also non-typical make script
   buildPhase = ''
-    make mode=exe ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
-    make mode=shlib ${if withMPI then "mpi" else "serial"} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+    make mode=exe ${if withMPI then "mpi" else "serial"} ${if enableParallelBuilding then "-j" else ""} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
+    make mode=shlib ${if withMPI then "mpi" else "serial"} ${if enableParallelBuilding then "-j" else ""} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
   '';
 
   installPhase = ''
