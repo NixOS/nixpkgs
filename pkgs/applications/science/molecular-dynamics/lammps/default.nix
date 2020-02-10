@@ -12,14 +12,14 @@ let packages = [
 in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
-  version = "stable_22Aug2018";
+  version = "stable_7Aug2019";
   pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
     rev = version;
-    sha256 = "1dlifm9wm1jcw2zwal3fnzzl41ng08c7v48w6hx2mz84zljg1nsj";
+    sha256 = "0yddiyizmqip87jvg76pqa8g3nk4sm0xwzryp9bq276q20l6mamj";
   };
 
   passthru = {
