@@ -5984,6 +5984,8 @@ in
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
+  pmix = callPackage ../development/libraries/pmix { };
+
   ucx = callPackage ../development/libraries/ucx { };
 
   openmodelica = callPackage ../applications/science/misc/openmodelica { };
