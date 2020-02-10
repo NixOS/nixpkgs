@@ -182,7 +182,7 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : with lib; {
     gitlab.succeed("test -s /tmp/archive.tar.gz")
     gitlab.succeed("test -s /tmp/archive.tar.bz2")
     gitlab.succeed(
-        "curl -H @/tmp/headers http://gitlab:4567"
+        "curl http://gitlab:4567"
     )
   '';
 })
