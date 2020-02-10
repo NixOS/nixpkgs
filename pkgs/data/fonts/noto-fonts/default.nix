@@ -73,19 +73,21 @@ in
     weights = "{Black,Condensed,Extra,Medium,Semi,Thin}*";
   };
 
-  noto-fonts-cjk = let version = "1.004"; in fetchzip {
-    name = "noto-fonts-cjk-${version}";
+  noto-fonts-cjk = let zip = fetchzip {
+    url = let rev = "be6c059ac1587e556e2412b27f5155c8eb3ddbe6"; in
+      "https://raw.githubusercontent.com/googlefonts/noto-cjk/${rev}/NotoSansCJK.ttc.zip";
+    # __MACOSX...
+    stripRoot = false;
+    sha256 = "0ik4z2b15i0pghskgfm3adzb0h35fr4gyzvz3bq49hhkhn9h85vi";
+  }; in stdenvNoCC.mkDerivation {
+    pname = "noto-fonts-cjk";
+    version = "2.001";
 
-    # Same as https://noto-website.storage.googleapis.com/pkgs/NotoSansCJK.ttc.zip but versioned & with no extra SIL license file
-    url = "https://raw.githubusercontent.com/googlei18n/noto-cjk/40d9f5b179a59a06b98373c76bdc3e2119e4e6b2/NotoSansCJK.ttc.zip";
-    postFetch = ''
-      mkdir -p $out/share/fonts
-      unzip -j $downloadedFile \*.ttc -d $out/share/fonts/noto
+    buildCommand = ''
+      install -m444 -Dt $out/share/fonts/opentype/noto-cjk ${zip}/*.ttc
     '';
-    sha256 = "0ghw2azqq3nkcxsbvf53qjmrhcfsnry79rq7jsr0wwi2pn7d3dsq";
 
     meta = with lib; {
-      inherit version;
       description = "Beautiful and free fonts for CJK languages";
       homepage = https://www.google.com/get/noto/help/cjk/;
       longDescription =
@@ -102,7 +104,7 @@ in
       '';
       license = licenses.ofl;
       platforms = platforms.all;
-      maintainers = with maintainers; [ mathnerd314 ];
+      maintainers = with maintainers; [ mathnerd314 emily ];
     };
   };
 
