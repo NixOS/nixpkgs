@@ -5703,6 +5703,8 @@ in {
 
   xxhash = callPackage ../development/python-modules/xxhash { };
 
+  ydiff = callPackage ../development/python-modules/ydiff { };
+
   yoda = toPythonModule (pkgs.yoda.override {
     inherit python;
   });
