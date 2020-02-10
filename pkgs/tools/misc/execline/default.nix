@@ -35,15 +35,21 @@ buildPackage {
     mv examples $doc/share/doc/execline/examples
 
     mv $bin/bin/execlineb $bin/bin/.execlineb-wrapped
-    cc \
+
+    # A wrapper around execlineb, which provides all execline
+    # tools on `execlineb`’s PATH.
+    # It is implemented as a C script, because on non-Linux,
+    # nested shebang lines are not supported.
+    # The -lskarnet has to come at the end to support static builds.
+    $CC \
       -O \
       -Wall -Wpedantic \
       -D "EXECLINEB_PATH()=\"$bin/bin/.execlineb-wrapped\"" \
       -D "EXECLINE_BIN_PATH()=\"$bin/bin\"" \
       -I "${skalibs.dev}/include" \
       -L "${skalibs.lib}/lib" \
-      -lskarnet \
       -o "$bin/bin/execlineb" \
-      ${./execlineb-wrapper.c}
+      ${./execlineb-wrapper.c} \
+      -lskarnet
   '';
 }
