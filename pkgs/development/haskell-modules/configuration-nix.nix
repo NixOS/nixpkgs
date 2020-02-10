@@ -640,18 +640,22 @@ self: super: builtins.intersectAttrs super {
       # we can safely jailbreak spago and use the older directory package from
       # LTS-14.
       spagoWithOverrides = doJailbreak (super.spago.override {
-        # spago requires dhall_1_27_0.
-        dhall = self.dhall_1_27_0;
+        # spago requires dhall-1.29.0.
+        dhall = self.dhall_1_29_0;
       });
 
+      # This defines the version of the purescript-docs-search release we are using.
+      # This is defined in the src/Spago/Prelude.hs file in the spago source.
+      docsSearchVersion = "v0.0.8";
+
       docsSearchAppJsFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/docs-search-app.js";
-        sha256 = "11721x455qzh40vzfmralaynn9v8b5wix86r107hhs08vhryjib2";
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
+        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
       };
 
       purescriptDocsSearchFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/purescript-docs-search";
-        sha256 = "16p1fmdvpwz1yswav8qjsd26c9airb22xncqw1rjnbd8lcpqx0p5";
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
+        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {

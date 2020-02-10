@@ -2356,7 +2356,7 @@ extra-packages:
   - control-monad-free < 0.6            # newer versions don't compile with anything but GHC 7.8.x
   - dbus <1                             # for xmonad-0.26
   - deepseq == 1.3.0.1                  # required to build Cabal with GHC 6.12.3
-  - dhall == 1.27.0                     # required for spago 0.13.0.  Probably can be removed when next version of spago is available.
+  - dhall == 1.29.0                     # required for spago 0.14.0.
   - doctemplates == 0.8                 # required by pandoc-2.9.x
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x

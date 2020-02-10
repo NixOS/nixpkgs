@@ -1068,9 +1068,6 @@ self: super: {
       };
   };
 
-  # Tests for dhall access the network.
-  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
-
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
   dhall-json =
