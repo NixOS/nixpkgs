@@ -1,5 +1,4 @@
 { flavor ? ""
-, ldflags ? ""
 , stdenv
 , btrfs-progs
 , buildGoPackage
