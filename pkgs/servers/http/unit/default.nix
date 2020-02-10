@@ -18,14 +18,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.14.0";
+  version = "1.15.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "01anczfcdwd22hb0y4zw647f86ivk5zq8lcd13xfxjvkmnsnbj9w";
+    sha256 = "1dj21fcssrvbspppbhg8684vfcbn0m1abiy1r60h5fzb470k21jb";
   };
 
   patches = [
