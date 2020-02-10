@@ -30,7 +30,16 @@ buildPythonPackage rec {
       url = "https://github.com/IdentityPython/pysaml2/commit/1d97d2d26f63e42611558fdd0e439bb8a7496a27.patch";
       sha256 = "0r6d6hkk6z9yw7aqnsnylii516ysmdsc8dghwmgnwvw6cm7l388p";
     })
+    (fetchpatch {
+      name = "CVE-2020-5390.patch";
+      url = "https://github.com/IdentityPython/pysaml2/commit/5e9d5acbcd8ae45c4e736ac521fd2df5b1c62e25.patch";
+      sha256 = "1axpvb8vhpxn85hgzkd87g88j4izwan6vng1wbpcw736qkr7248m";
+    })
   ];
+
+  postPatch = ''
+    substituteInPlace tests/test_xsw.py --replace "unittest.mock" "mock"
+  '';
 
   propagatedBuildInputs = [ cryptography defusedxml future pyopenssl dateutil pytz requests six ];
 
