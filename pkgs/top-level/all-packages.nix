@@ -5980,6 +5980,8 @@ in
 
   rtmidi = callPackage ../development/libraries/audio/rtmidi { };
 
+  libfabric = callPackage ../development/libraries/libfabric { };
+
   openmpi = callPackage ../development/libraries/openmpi { };
 
   openmodelica = callPackage ../applications/science/misc/openmodelica { };
