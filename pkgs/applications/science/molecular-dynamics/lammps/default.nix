@@ -1,14 +1,26 @@
 { stdenv, fetchFromGitHub
 , libpng, gzip, fftw, openblas
+, cmake, pkgconfig, python2
 , mpi ? null
 }:
-let packages = [
-     "asphere" "body" "class2" "colloid" "compress" "coreshell"
-     "dipole" "granular" "kspace" "manybody" "mc" "misc" "molecule"
-     "opt" "peri" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-reaxc"
-    ];
-    lammps_includes = "-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64";
-    withMPI = (mpi != null);
+let
+  packages = [
+    "asphere" "body" "class2" "colloid" "compress" "coreshell" "dipole"
+    "granular" "kspace" "manybody" "mc" "meam" "misc" "molecule" "mpiio" "opt"
+    "peri" "poems" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-atc"
+    "user-fep" "user-manifold" "user-misc" "user-molfile" "user-reaxc"
+    "kokkos" "python"
+  ];
+
+  lammps_includes = [
+    "-DLAMMPS_EXCEPTIONS=yes"
+    "-DLAMMPS_GZIP=yes"
+    "-DLAMMPS_MEMALIGN=64"
+    "-DBUILD_LIB=yes"
+  ];
+
+  withMPI = (mpi != null);
+
 in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
@@ -27,30 +39,24 @@ stdenv.mkDerivation rec {
     inherit packages;
   };
 
-  buildInputs = [ fftw libpng openblas gzip ]
+  patchPhase = ''
+    substituteInPlace "cmake/CMakeLists.txt" --replace \
+      "$ENV{HOME}/.local" \
+      "$out"
+  '';
+
+  nativeBuildInputs = [ cmake pkgconfig ];
+  buildInputs = [ fftw libpng openblas gzip python2 ]
     ++ (stdenv.lib.optionals withMPI [ mpi ]);
 
-  configurePhase = ''
-    cd src
-    for pack in ${stdenv.lib.concatStringsSep " " packages}; do make "yes-$pack" SHELL=$SHELL; done
-  '';
+  cmakeFlags = with stdenv;
+  map (pkg: "-DPKG_${lib.toUpper pkg}=yes") packages
+  ++ lib.optionals withMPI [ "-DBUILD_MPI=yes" ]
+  ++ lammps_includes;
+
+  cmakeDir = "../cmake";
 
   enableParallelBuilding = true;
-
-  # Must do manual build due to LAMMPS requiring a seperate build for
-  # the libraries and executable. Also non-typical make script
-  buildPhase = ''
-    make mode=exe ${if withMPI then "mpi" else "serial"} ${if enableParallelBuilding then "-j" else ""} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
-    make mode=shlib ${if withMPI then "mpi" else "serial"} ${if enableParallelBuilding then "-j" else ""} SHELL=$SHELL LMP_INC="${lammps_includes}" FFT_PATH=-DFFT_FFTW3 FFT_LIB=-lfftw3 JPG_LIB=-lpng
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin $out/include $out/lib
-
-    cp -v lmp_* $out/bin/
-    cp -v *.h $out/include/
-    cp -v liblammps* $out/lib/
-  '';
 
   meta = with stdenv.lib; {
     description = "Classical Molecular Dynamics simulation code";
