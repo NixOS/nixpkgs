@@ -36,6 +36,10 @@ let
       unfuckRelease = "0.47.01";
       sha256 = "11xvb3qh4crdf59pwfwpi73rzm3ysd1r1xp2k1jp7527jmqapk4k";
     };
+    "0.47.02" = {
+      unfuckRelease = "0.47.01";
+      sha256 = "11xvb3qh4crdf59pwfwpi73rzm3ysd1r1xp2k1jp7527jmqapk4k";
+    };
   };
 
   release = if hasAttr dfVersion unfuck-releases

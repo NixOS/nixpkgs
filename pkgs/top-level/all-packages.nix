@@ -1270,7 +1270,9 @@ in
 
   brook = callPackage ../tools/networking/brook { };
 
-  broot = callPackage ../tools/misc/broot { };
+  broot = callPackage ../tools/misc/broot {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
@@ -1904,6 +1906,8 @@ in
   languagetool = callPackage ../tools/text/languagetool {  };
 
   lepton = callPackage ../tools/graphics/lepton { };
+
+  lexicon = callPackage ../tools/admin/lexicon { };
 
   lief = callPackage ../development/libraries/lief {};
 
@@ -5274,6 +5278,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
+  grocy = callPackage ../servers/grocy { };
+
   nextcloud = callPackage ../servers/nextcloud { };
 
   nextcloud-client = libsForQt5.callPackage ../applications/networking/nextcloud-client { };
@@ -6087,6 +6093,8 @@ in
 
   rtmpdump = callPackage ../tools/video/rtmpdump { };
   rtmpdump_gnutls = rtmpdump.override { gnutlsSupport = true; opensslSupport = false; };
+
+  rtptools = callPackages ../tools/networking/rtptools {};
 
   reaverwps = callPackage ../tools/networking/reaver-wps {};
 
@@ -7789,6 +7797,8 @@ in
 
   binaryen = callPackage ../development/compilers/binaryen { };
 
+  bluespec = callPackage ../development/compilers/bluespec { };
+
   colm = callPackage ../development/compilers/colm { };
 
   colmap = libsForQt5.callPackage ../applications/science/misc/colmap { };
@@ -8125,18 +8135,6 @@ in
     threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
 
     isl = if !stdenv.isDarwin then isl_0_17 else null;
-  }));
-
-  gcc-snapshot = lowPrio (wrapCC (callPackage ../development/compilers/gcc/snapshot {
-    inherit noSysDirs;
-
-    # PGO seems to speed up compilation by gcc by ~10%, see #445 discussion
-    profiledCompiler = with stdenv; (!isDarwin && (isi686 || isx86_64));
-
-    libcCross = if stdenv.targetPlatform != stdenv.buildPlatform then libcCross else null;
-    threadsCross = if stdenv.targetPlatform != stdenv.buildPlatform then threadsCross else null;
-
-    isl = isl_0_17;
   }));
 
   gfortran = gfortran9;
@@ -9180,29 +9178,18 @@ in
     git = gitMinimal;
   };
 
-  inherit (
-    let
-      defaultOctaveOptions = {
-        qt = null;
-        qscintilla = null;
-        ghostscript = null;
-        graphicsmagick = null;
-        llvm = null;
-        hdf5 = null;
-        glpk = null;
-        suitesparse = null;
-        jdk = null;
-        openblas = if stdenv.isDarwin then openblasCompat else openblas;
-      };
-
-      hgOctaveOptions =
-        (removeAttrs defaultOctaveOptions ["ghostscript"]) // {
-          overridePlatforms = stdenv.lib.platforms.none;
-        };
-    in {
-      octave = callPackage ../development/interpreters/octave defaultOctaveOptions;
-      octaveHg = lowPrio (callPackage ../development/interpreters/octave/hg.nix hgOctaveOptions);
-  }) octave octaveHg;
+  octave = callPackage ../development/interpreters/octave {
+    qt = null;
+    qscintilla = null;
+    ghostscript = null;
+    graphicsmagick = null;
+    llvm = null;
+    hdf5 = null;
+    glpk = null;
+    suitesparse = null;
+    jdk = null;
+    openblas = if stdenv.isDarwin then openblasCompat else openblas;
+  };
 
   octaveFull = (lowPrio (octave.override {
     qt = qt4;
@@ -10529,6 +10516,8 @@ in
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
+
+  scaff = callPackage ../development/tools/scaff { };
 
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
@@ -15458,6 +15447,8 @@ in
 
   pshs = callPackage ../servers/http/pshs { };
 
+  sympa = callPackage ../servers/mail/sympa { };
+
   system-sendmail = lowPrio (callPackage ../servers/mail/system-sendmail { });
 
   # PulseAudio daemons
@@ -18513,9 +18504,6 @@ in
 
   comical = callPackage ../applications/graphics/comical { };
 
-  conkeror-unwrapped = callPackage ../applications/networking/browsers/conkeror { };
-  conkeror = wrapFirefox conkeror-unwrapped { };
-
   containerd = callPackage ../applications/virtualization/containerd { };
 
   convchain = callPackage ../tools/graphics/convchain {};
@@ -19133,18 +19121,11 @@ in
   });
 
   firefox-unwrapped = firefoxPackages.firefox;
-  firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52;
-  firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60;
   firefox-esr-68-unwrapped = firefoxPackages.firefox-esr-68;
-  icecat-unwrapped = firefoxPackages.icecat;
-
   firefox = wrapFirefox firefox-unwrapped { };
   firefox-wayland = wrapFirefox firefox-unwrapped { gdkWayland = true; };
-  firefox-esr-52 = wrapFirefox firefox-esr-52-unwrapped { };
-  firefox-esr-60 = wrapFirefox firefox-esr-60-unwrapped { };
   firefox-esr-68 = wrapFirefox firefox-esr-68-unwrapped { };
   firefox-esr = firefox-esr-68;
-  icecat = wrapFirefox icecat-unwrapped { };
 
   firefox-bin-unwrapped = callPackage ../applications/networking/browsers/firefox-bin {
     channel = "release";
@@ -19311,6 +19292,10 @@ in
   lollypop = callPackage ../applications/audio/lollypop { };
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
+
+  manim = python37Packages.callPackage ../applications/video/manim {
+    opencv = python37Packages.opencv3;
+  };
 
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
@@ -23204,7 +23189,13 @@ in
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
-  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
+  openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix {
+    openmw = openmw.override {
+      stdenv = gcc8Stdenv;
+      openscenegraph = openscenegraph.override { stdenv = gcc8Stdenv; };
+      mygui = mygui.override { stdenv = gcc8Stdenv; };
+    };
+  };
 
   openraPackages = import ../games/openra pkgs;
 
@@ -24526,6 +24517,8 @@ in
 
   fityk = callPackage ../applications/science/misc/fityk { };
 
+  galario = callPackage ../development/libraries/galario { };
+
   gildas = callPackage ../applications/science/astronomy/gildas { };
 
   gplates = callPackage ../applications/science/misc/gplates {
@@ -24716,6 +24709,8 @@ in
   cups-brother-hl1110 = pkgsi686Linux.callPackage ../misc/cups/drivers/hl1110 { };
 
   cups-brother-hl3140cw = pkgsi686Linux.callPackage ../misc/cups/drivers/hl3140cw { };
+
+  cups-brother-hll2340dw = pkgsi686Linux.callPackage  ../misc/cups/drivers/hll2340dw { };
 
   cups-googlecloudprint = callPackage ../misc/cups/drivers/googlecloudprint { };
 
@@ -25044,7 +25039,7 @@ in
   /*
    * Run a NixOS VM network test using this evaluation of Nixpkgs.
    *
-   * It is mostly equivalent to `import ./make-test.nix` from the
+   * It is mostly equivalent to `import ./make-test-python.nix` from the
    * NixOS manual[1], except that your `pkgs` will be used instead of
    * letting NixOS invoke Nixpkgs again. If a test machine needs to
    * set NixOS options under `nixpkgs`, it must set only the
@@ -25070,11 +25065,11 @@ in
    */
   nixosTest =
     let
-      /* The nixos/lib/testing.nix module, preapplied with arguments that
+      /* The nixos/lib/testing-python.nix module, preapplied with arguments that
        * make sense for this evaluation of Nixpkgs.
        */
       nixosTesting =
-        (import ../../nixos/lib/testing.nix {
+        (import ../../nixos/lib/testing-python.nix {
           inherit (pkgs.stdenv.hostPlatform) system;
           inherit pkgs;
           extraConfigurations = [(
@@ -25361,6 +25356,8 @@ in
   mkSaneConfig = callPackage ../applications/graphics/sane/config.nix { };
 
   sane-frontends = callPackage ../applications/graphics/sane/frontends.nix { };
+
+  sanoid = callPackage ../tools/backup/sanoid { };
 
   satysfi = callPackage ../tools/typesetting/satysfi { };
 

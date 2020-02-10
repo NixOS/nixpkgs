@@ -19,7 +19,11 @@ in rec {
   inherit pkgs;
 
 
-  testDriver = stdenv.mkDerivation {
+  testDriver = lib.warn ''
+    Perl VM tests are deprecated and will be removed for 20.09.
+    Please update your tests to use the python test driver.
+    See https://github.com/NixOS/nixpkgs/pull/71684 for details.
+  '' stdenv.mkDerivation {
     name = "nixos-test-driver";
 
     buildInputs = [ makeWrapper perl ];

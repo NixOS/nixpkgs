@@ -5,5 +5,8 @@ in {
     nodes.letsencrypt.config.networking.primaryIPAddress
   ];
 
+  security.acme.acceptTerms = true;
+  security.acme.email = "webmaster@example.com";
+
   security.pki.certificateFiles = [ letsencrypt-ca ];
 }
