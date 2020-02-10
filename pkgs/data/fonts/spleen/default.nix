@@ -1,4 +1,4 @@
-{ lib, fetchurl, mkfontdir }:
+{ lib, fetchurl, mkfontscale }:
 
 let
   pname = "spleen";
@@ -11,14 +11,15 @@ in fetchurl {
   recursiveHash = true;
   postFetch = ''
     tar xvf $downloadedFile --strip=1
-    d="$out/share/fonts/X11/misc/spleen"
-    install -Dm644 *.{pcf.gz,psfu,bdf} -t $d
+    d="$out/share/fonts/misc"
+    install -D -m 644 *.{pcf,bdf,otf} -t "$d"
+    install -D -m 644 *.psfu -t "$out/share/consolefonts"
     install -m644 fonts.alias-spleen $d/fonts.alias
 
     # create fonts.dir so NixOS xorg module adds to fp
-    ${mkfontdir}/bin/mkfontdir $d
+    ${mkfontscale}/bin/mkfontdir "$d"
   '';
-  sha256 = "0h9gj7syn87hl5rhwckih92r228zac6b1dvh3034caml8ad3fyla";
+  sha256 = "0x1xiw4gyfkyvwqg0f47rl92zq76d0c6jfncdnq8m2wwpxz9697b";
 
   meta = with lib; {
     description = "Monospaced bitmap fonts";
