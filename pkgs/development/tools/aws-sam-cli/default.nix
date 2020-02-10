@@ -13,38 +13,11 @@ let
         };
       });
 
-      jsonschema = super.jsonschema.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0grwi50v3vahvcijlw6g6q55yc5jyj0p1cmiq3rkycxnfr16i81g";
-        };
-        nativeBuildInputs = [ super.setuptools_scm ];
-        propagatedBuildInputs = with super; oldAttrs.propagatedBuildInputs ++ [ pyrsistent attrs importlib-metadata ];
-        doCheck = false;
-      });
-
       cookiecutter = super.cookiecutter.overridePythonAttrs (oldAttrs: rec {
         version = "1.6.0";
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "0glsvaz8igi2wy1hsnhm9fkn6560vdvdixzvkq6dn20z3hpaa5hk";
-        };
-      });
-
-      boto3 = super.boto3.overridePythonAttrs (oldAttrs: rec {
-        version = "1.10.50";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "199nr61ivm4bychn3rxyzzyca5f8wlwags3s43rdv9yn048xa02w";
-        };
-      });
-
-      botocore = super.botocore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.13.50";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1m3lbi13d9gcp6wfhv0pkwg8akasxlhv49y34ybj74ppgximqnkn";
         };
       });
     };
