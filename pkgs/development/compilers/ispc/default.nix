@@ -1,9 +1,9 @@
-{stdenv, fetchFromGitHub, cmake, which, m4, python, bison, flex, llvmPackages,
+{stdenv, fetchFromGitHub, cmake, which, m4, python3, bison, flex, llvmPackages,
 testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.10.0";
+  version = "1.12.0";
   rev = "v${version}";
 
   inherit testedTargets;
@@ -14,16 +14,20 @@ stdenv.mkDerivation rec {
     owner = "ispc";
     repo = "ispc";
     inherit rev;
-    sha256 = "1x07n2gaff3v32yvddrb659mx5gg12bnbsqbyfimp396wn04w60b";
+    sha256 = "1g0a17c1b5s0272awcg210k4lfcx857agmcm2a2a6rsh0afhmy7w";
   };
 
   doCheck = stdenv.isLinux;
+
+  # LLVM uses -Werror but also runs clang on assembly files, which
+  # makes -fno-strict-overflow break the build.
+  hardeningDisable = ["strictoverflow"];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = with llvmPackages; [
     which
     m4
-    python
+    python3
     bison
     flex
     llvm
