@@ -10516,6 +10516,8 @@ in
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
 
+  scaff = callPackage ../development/tools/scaff { };
+
   selenium-server-standalone = callPackage ../development/tools/selenium/server { };
 
   selendroid = callPackage ../development/tools/selenium/selendroid { };
