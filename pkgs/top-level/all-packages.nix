@@ -5428,6 +5428,8 @@ in
 
   ocserv = callPackage ../tools/networking/ocserv { };
 
+  opencorsairlink = callPackage ../tools/misc/opencorsairlink { };
+
   openfortivpn = callPackage ../tools/networking/openfortivpn { };
 
   obexfs = callPackage ../tools/bluetooth/obexfs { };
