@@ -1,8 +1,7 @@
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "slim";
-
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [ aszlig ];
+    maintainers = [ oxij aszlig ];
   };
 
   machine = { pkgs, ... }: {
@@ -50,17 +49,17 @@ import ./make-test.nix ({ pkgs, ...} : {
   testScript = { nodes, ... }: let
     user = nodes.machine.config.users.users.alice;
   in ''
-    startAll;
-    $machine->waitForText(qr/Username:/);
-    $machine->sendChars("${user.name}\n");
-    $machine->waitForText(qr/Password:/);
-    $machine->sendChars("${user.password}\n");
+    start_all()
+    machine.wait_for_text("Username:")
+    machine.send_chars("${user.name}\n")
+    machine.wait_for_text("Password:")
+    machine.send_chars("${user.password}\n")
 
-    $machine->waitForFile('${user.home}/.Xauthority');
-    $machine->succeed('xauth merge ${user.home}/.Xauthority');
-    $machine->waitForWindow('^IceWM ');
+    machine.wait_for_file("${user.home}/.Xauthority")
+    machine.succeed("xauth merge ${user.home}/.Xauthority")
+    machine.wait_for_window("^IceWM ")
 
     # Make sure SLiM doesn't create a log file
-    $machine->fail('test -e /var/log/slim.log');
+    machine.fail("test -e /var/log/slim.log")
   '';
 })
