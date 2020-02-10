@@ -8524,6 +8524,33 @@ let
     buildInputs = [ TestDifferences TestMemoryCycle ];
   };
 
+  HTMLStripScripts = buildPerlPackage {
+    pname = "HTML-StripScripts";
+    version = "1.06";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DRTECH/HTML-StripScripts-1.06.tar.gz;
+      sha256 = "222bfb7ec1fdfa465e32da3dc4abed2edc7364bbe19e8e3c513c7d585b0109ad";
+    };
+    meta = {
+      description = "Strip scripting constructs out of HTML";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  HTMLStripScriptsParser = buildPerlPackage {
+    pname = "HTML-StripScripts-Parser";
+    version = "1.03";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/D/DR/DRTECH/HTML-StripScripts-Parser-1.03.tar.gz;
+      sha256 = "478c1a4e46eb77fa7bce96ba288168f0b98c27f250e00dc6312365081aed3407";
+    };
+    propagatedBuildInputs = [ HTMLParser HTMLStripScripts ];
+    meta = {
+      description = "XSS filter using HTML::Parser";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   HTMLTableExtract = buildPerlPackage {
     pname = "HTML-TableExtract";
     version = "2.13";
@@ -11414,6 +11441,21 @@ let
     propagatedBuildInputs = [ EmailDateFormat ];
     meta = {
       description = "Low-calorie MIME generator (DEPRECATED)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  MIMELiteHTML = buildPerlPackage {
+    pname = "MIME-Lite-HTML";
+    version = "1.24";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/A/AL/ALIAN/MIME-Lite-HTML-1.24.tar.gz;
+      sha256 = "db603ccbf6653bcd28cfa824d72e511ead019fc8afb9f1854ec872db2d3cd8da";
+    };
+    doCheck = false;
+    propagatedBuildInputs = [ HTMLParser LWP MIMELite URI ];
+    meta = {
+      description = "Provide routine to transform a HTML page in a MIME-Lite mail";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
