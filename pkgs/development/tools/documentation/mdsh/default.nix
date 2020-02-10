@@ -11,8 +11,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1a9i6h8fzrrfzjyfxaps73lxgkz92k0bnmwbjbwdmiwci4qgi9ms";
   };
 
-  cargoSha256 = "0rarpzfigyxr6s0ba13z00kvnms29qkjfbfjkay72mb6xn7f1059";
-  verifyCargoDeps = true;
+  cargoSha256 = "1fxajh1n0qvcdas6w7dy3g92wilhfldy90pyk3779mrnh57fa6n5";
+  legacyCargoFetcher = false;
 
   meta = with stdenv.lib; {
     description = "Markdown shell pre-processor";
