@@ -19286,6 +19286,10 @@ in
 
   m32edit = callPackage ../applications/audio/midas/m32edit.nix {};
 
+  manim = python37Packages.callPackage ../applications/video/manim {
+    opencv = python37Packages.opencv3;
+  };
+
   manuskript = libsForQt5.callPackage ../applications/editors/manuskript { };
 
   manul = callPackage ../development/tools/manul { };
