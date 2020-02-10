@@ -21216,35 +21216,11 @@ in
 
   rxvt = callPackage ../applications/misc/rxvt { };
 
-  # urxvt
-  rxvt_unicode = callPackage ../applications/misc/rxvt_unicode { };
+  rxvt-unicode = callPackage ../applications/misc/rxvt-unicode/wrapper.nix { };
 
-  rxvt_unicode-with-plugins = callPackage ../applications/misc/rxvt_unicode/wrapper.nix {
-    plugins = [
-      urxvt_autocomplete_all_the_things
-      urxvt_perl
-      urxvt_perls
-      urxvt_tabbedex
-      urxvt_font_size
-      urxvt_theme_switch
-      urxvt_vtwheel
-      urxvt_bidi
-    ];
-    perlDeps = [
-      # This needs the perl module it self provides
-      urxvt_bidi
-    ];
-  };
+  rxvt-unicode-unwrapped = callPackage ../applications/misc/rxvt-unicode { };
 
-  # urxvt plugins
-  urxvt_autocomplete_all_the_things = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-autocomplete-all-the-things { };
-  urxvt_perl = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perl { };
-  urxvt_perls = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-perls { };
-  urxvt_tabbedex = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-tabbedex { };
-  urxvt_font_size = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-font-size { };
-  urxvt_theme_switch = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-theme-switch { };
-  urxvt_vtwheel = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-vtwheel.nix { };
-  urxvt_bidi = callPackage ../applications/misc/rxvt_unicode-plugins/urxvt-bidi { };
+  rxvt-unicode-plugins = import ../applications/misc/rxvt-unicode-plugins { inherit callPackage; };
 
   uade123 = callPackage ../applications/audio/uade123 {};
 
