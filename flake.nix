@@ -1,3 +1,5 @@
+# Experimental flake interface to Nixpkgs.
+# See https://github.com/NixOS/rfcs/pull/49 for details.
 {
   edition = 201909;
 
