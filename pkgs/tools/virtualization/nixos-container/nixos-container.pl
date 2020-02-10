@@ -22,13 +22,13 @@ $ENV{"NIXOS_CONFIG"} = "";
 sub showHelp {
     print <<EOF;
 Usage: nixos-container list
-       nixos-container create <container-name> [--nixos-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>] [--port <port>] [--host-address <string>] [--local-address <string>]
+       nixos-container create <container-name> [--nixos-path <path>] [--nixpkgs-path <path>] [--system-path <path>] [--config-file <path>] [--config <string>] [--ensure-unique-name] [--auto-start] [--bridge <iface>] [--port <port>] [--host-address <string>] [--local-address <string>]
        nixos-container destroy <container-name>
        nixos-container start <container-name>
        nixos-container stop <container-name>
        nixos-container terminate <container-name>
        nixos-container status <container-name>
-       nixos-container update <container-name> [--config <string>] [--config-file <path>]
+       nixos-container update <container-name> [--nixpkgs-path <path>] [--config <string>] [--config-file <path>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -47,6 +47,7 @@ my $port;
 my $extraConfig;
 my $signal;
 my $configFile;
+my $nixpkgsPath;
 my $hostAddress;
 my $localAddress;
 
@@ -61,6 +62,7 @@ GetOptions(
     "nixos-path=s" => \$nixosPath,
     "config=s" => \$extraConfig,
     "config-file=s" => \$configFile,
+    "nixpkgs-path=s" => \$nixpkgsPath,
     "host-address=s" => \$hostAddress,
     "local-address=s" => \$localAddress,
     ) or exit 1;
@@ -201,10 +203,12 @@ if ($action eq "create") {
         my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
         writeNixOSConfig $nixosConfigFile;
 
-        system("nix-env", "-p", "$profileDir/system",
-               "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
-               "--set", "-A", "system") == 0
-            or die "$0: failed to build initial container configuration\n";
+        my @args = (("nix-env", "-p", "$profileDir/system",
+                     "-I", "nixos-config=$nixosConfigFile"),
+                    defined $nixpkgsPath ? ("-I", "nixpkgs=$nixpkgsPath") : (),
+                    ("-f", "$nixenvF", "--set", "-A", "system")
+                   );
+        system(@args) == 0 or die "$0: failed to build initial container configuration\n";
     }
 
     print "$containerName\n" if $ensureUniqueName;
@@ -335,10 +339,13 @@ elsif ($action eq "update") {
         writeNixOSConfig $nixosConfigFile;
     }
 
-    system("nix-env", "-p", "$profileDir/system",
-           "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
-           "--set", "-A", "system") == 0
-        or die "$0: failed to build container configuration\n";
+    my @args = (("nix-env", "-p", "$profileDir/system",
+                 "-I", "nixos-config=$nixosConfigFile"),
+                defined $nixpkgsPath ? ("-I", "nixpkgs=$nixpkgsPath") : (),
+                ("-f", "<nixpkgs/nixos>", "--set", "-A", "system")
+               );
+
+    system(@args) == 0 or die "$0: failed to build container configuration\n";
 
     if (isContainerRunning) {
         print STDERR "reloading container...\n";
