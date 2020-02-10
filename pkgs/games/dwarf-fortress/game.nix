@@ -96,6 +96,6 @@ stdenv.mkDerivation {
     inherit homepage;
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;
-    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit ];
+    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit shazow ];
   };
 }

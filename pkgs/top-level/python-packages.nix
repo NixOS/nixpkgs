@@ -678,6 +678,8 @@ in {
 
   firetv = callPackage ../development/python-modules/firetv { };
 
+  flower = callPackage ../development/python-modules/flower { };
+
   flufl_bounce = callPackage ../development/python-modules/flufl/bounce.nix { };
 
   flufl_i18n = callPackage ../development/python-modules/flufl/i18n.nix { };
@@ -999,6 +1001,8 @@ in {
   pymysql = callPackage ../development/python-modules/pymysql { };
 
   pymupdf = callPackage ../development/python-modules/pymupdf { };
+
+  pynamecheap = callPackage ../development/python-modules/pynamecheap { };
 
   Pmw = callPackage ../development/python-modules/Pmw { };
 
@@ -1399,6 +1403,8 @@ in {
     python = self.python;
     usePython = true;
   });
+
+  softlayer = callPackage ../development/python-modules/softlayer { };
 
   sparse = callPackage ../development/python-modules/sparse { };
 
@@ -4341,6 +4347,8 @@ in {
 
   names = callPackage ../development/python-modules/names { };
 
+  nbconflux = callPackage ../development/python-modules/nbconflux { };
+
   nbconvert = callPackage ../development/python-modules/nbconvert { };
 
   nbformat = if isPy3k then 
@@ -6800,6 +6808,8 @@ in {
 
   tldextract = callPackage ../development/python-modules/tldextract { };
 
+  transip = callPackage ../development/python-modules/transip { };
+
   pyemd  = callPackage ../development/python-modules/pyemd { };
 
   pulp  = callPackage ../development/python-modules/pulp { };
@@ -6899,6 +6909,8 @@ in {
   libiio = (toPythonModule (pkgs.libiio.override {
     inherit python;
   })).python;
+
+  localzone = callPackage ../development/python-modules/localzone { };
 
   scour = callPackage ../development/python-modules/scour { };
 

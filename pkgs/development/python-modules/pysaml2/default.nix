@@ -1,5 +1,6 @@
 { stdenv
 , buildPythonPackage
+, isPy3k
 , fetchFromGitHub
 , substituteAll
 , xmlsec
@@ -9,14 +10,16 @@
 
 buildPythonPackage rec {
   pname = "pysaml2";
-  version = "4.9.0";
+  version = "5.0.0";
+
+  disabled = !isPy3k;
 
   # No tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "IdentityPython";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1ww1l34zn25vxifs8nr0bg7gkhbpy5g45mj0jj4d8hzimahb1brx";
+    sha256 = "0hwhxz45h8l1b0615hf855z7valfcmm0nb7k31bcj84v68zp5rjs";
   };
 
   patches = [

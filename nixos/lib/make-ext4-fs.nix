@@ -64,7 +64,7 @@ pkgs.stdenv.mkDerivation {
       echo "copying files to image..."
       cptofs -t ext4 -i $img ./files/* /
 
-
+      export EXT2FS_NO_MTAB_OK=yes
       # I have ended up with corrupted images sometimes, I suspect that happens when the build machine's disk gets full during the build.
       if ! fsck.ext4 -n -f $img; then
         echo "--- Fsck failed for EXT4 image of $bytes bytes (numInodes=$numInodes, numDataBlocks=$numDataBlocks) ---"
@@ -72,21 +72,8 @@ pkgs.stdenv.mkDerivation {
         return 1
       fi
 
-      (
-        # Resizes **snugly** to its actual limits (or closer to)
-        free=$(dumpe2fs $img | grep '^Free blocks:')
-        blocksize=$(dumpe2fs $img | grep '^Block size:')
-        blocks=$(dumpe2fs $img | grep '^Block count:')
-        blocks=$((''${blocks##*:})) # format the number.
-        blocksize=$((''${blocksize##*:})) # format the number.
-        # System can't boot with 0 blocks free.
-        # Add 16MiB of free space
-        fudge=$(( 16 * 1024 * 1024 / blocksize ))
-        size=$(( blocks - ''${free##*:} + fudge ))
-
-        echo "Resizing from $blocks blocks to $size blocks. (~ $((size*blocksize/1024/1024))MiB)"
-        EXT2FS_NO_MTAB_OK=yes resize2fs $img -f $size
-      )
+      echo "Resizing to minimum allowed size"
+      resize2fs -M $img
 
       # And a final fsck, because of the previous truncating.
       fsck.ext4 -n -f $img

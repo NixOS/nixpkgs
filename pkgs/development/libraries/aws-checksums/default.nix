@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS:BOOL=ON" ];
+
   meta = with lib; {
     description = "HW accelerated CRC32c and CRC32";
     homepage = https://github.com/awslabs/aws-checksums;
