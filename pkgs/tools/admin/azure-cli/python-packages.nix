@@ -111,6 +111,9 @@ let
         '';
       };
 
+      azure-mgmt-policyinsights = overrideAzureMgmtPackage super.azure-mgmt-policyinsights "0.3.1" "zip"
+        "021r0vhbv36dk13azc23zx4fkgyb43md38ign1d257mncz1mlzxj";
+
       azure-mgmt-recoveryservicesbackup = overrideAzureMgmtPackage super.azure-mgmt-recoveryservicesbackup "0.5.0" "zip"
         "0jhq8fi3dn2cncyv2rrgr4kldd254f30zgwf6p85rdgvg2p9k4hl";
 
