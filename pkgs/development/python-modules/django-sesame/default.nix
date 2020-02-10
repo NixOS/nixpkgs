@@ -1,21 +1,21 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib, buildPythonPackage, fetchFromGitHub
 , django }:
 
 buildPythonPackage rec {
   pname = "django-sesame";
   version = "1.7";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e68bad4a6ef44322380f1f01d009f9d3cb55d1ffef0b669574b511db5ab0c6c0";
+  src = fetchFromGitHub {
+    owner = "aaugustin";
+    repo = pname;
+    rev = version;
+    sha256 = "0k8s44zn2jmasp0w064vrx685fn4pbmdfx8qmhkab1hd5ys6pi44";
   };
 
   checkInputs = [ django ];
 
   checkPhase = ''
-    PYTHONPATH="$(pwd):$PYTHONPATH" \
-    DJANGO_SETTINGS_MODULE=sesame.test_settings \
-      django-admin test sesame
+    make test
   '';
 
   meta = with lib; {
