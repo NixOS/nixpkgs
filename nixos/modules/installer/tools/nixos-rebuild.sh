@@ -222,7 +222,7 @@ fi
 
 
 # If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
-if [ -n "$upgrade" -a -z "$_NIXOS_REBUILD_REEXEC" ]; then
+if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
     nix-channel --update nixos
 
     # If there are other channels that contain a file called
@@ -350,7 +350,6 @@ prebuiltNix() {
 
 remotePATH=
 
-# FIXME: get nix from the flake.
 if [[ -n $buildNix && -z $flake ]]; then
     echo "building Nix..." >&2
     nixDrv=
@@ -434,14 +433,14 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vm -k "${extraBuildFlags[@]}")"
         else
-            echo "TODO: not implemented" >&2
+            echo "$0: 'build-vm' is not supported with '--flake'" >&2
             exit 1
         fi
     elif [ "$action" = build-vm-with-bootloader ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A vmWithBootLoader -k "${extraBuildFlags[@]}")"
         else
-            echo "TODO: not implemented" >&2
+            echo "$0: 'build-vm-with-bootloader' is not supported with '--flake'" >&2
             exit 1
         fi
     else
