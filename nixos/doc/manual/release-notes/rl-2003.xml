@@ -661,6 +661,21 @@ auth required pam_succeed_if.so uid >= 1000 quiet
        now uses the short rather than full version string.
      </para>
    </listitem>
+   <listitem>
+    <para>
+     The ACME module has switched from simp-le to <link xlink:href="https://github.com/go-acme/lego">lego</link>
+     which allows us to support DNS-01 challenges and wildcard certificates. The following options have been added:
+     <link linkend="opt-security.acme.acceptTerms">security.acme.acceptTerms</link>,
+     <link linkend="opt-security.acme.certs">security.acme.certs.&lt;name&gt;.dnsProvider</link>,
+     <link linkend="opt-security.acme.certs">security.acme.certs.&lt;name&gt;.credentialsFile</link>,
+     <link linkend="opt-security.acme.certs">security.acme.certs.&lt;name&gt;.dnsPropagationCheck</link>.
+     As well as this, the options <literal>security.acme.acceptTerms</literal> and either
+     <literal>security.acme.email</literal> or <literal>security.acme.certs.&lt;name&gt;.email</literal>
+     must be set in order to use the ACME module.
+     Certificates will be regenerated anew on the next renewal date. The credentials for simp-le are
+     preserved and thus it is possible to roll back to previous versions without breaking certificate
+     generation.
+   </listitem>
     <listitem>
     <para>
     It is now possible to unlock LUKS-Encrypted file systems using a FIDO2 token
