@@ -88,6 +88,7 @@ in
   fancontrol = handleTest ./fancontrol.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
+  firefox-esr = handleTest ./firefox.nix { esr = true; };
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
