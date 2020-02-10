@@ -675,8 +675,9 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      Certificates will be regenerated anew on the next renewal date. The credentials for simp-le are
      preserved and thus it is possible to roll back to previous versions without breaking certificate
      generation.
+    </para>
    </listitem>
-    <listitem>
+   <listitem>
     <para>
     It is now possible to unlock LUKS-Encrypted file systems using a FIDO2 token
     via <option>boot.initrd.luks.fido2Support</option>.
