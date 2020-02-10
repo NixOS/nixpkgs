@@ -111,6 +111,10 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+    ''
+    # FIXME: find a solution for infinite recursion in cross builds.
+    # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
 
       # Ensure that libidn2 is found.
       patch -p 1 <<EOF
