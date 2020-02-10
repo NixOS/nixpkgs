@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   ];
 
   # TODO(@Ericson2314): Separate binaries and libraries
-  outputs = [ "out" "dev" ];
+  outputs = [ "bin" "out" "dev" ];
 
   buildInputs = stdenv.lib.optional doCheck valgrind;
 
@@ -47,6 +47,9 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
       mv $out/bin/*.dll $out/lib
       ln -s $out/lib/*.dll
+    ''
+    + ''
+      moveToOutput bin "$bin"
     '';
 
   meta = with stdenv.lib; {
