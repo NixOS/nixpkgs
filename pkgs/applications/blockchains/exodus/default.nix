@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
 atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio }:
+cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
       alsaLib
       dbus.lib
       at-spi2-atk
+      at-spi2-core
       cups.lib
       libpulseaudio
       systemd
