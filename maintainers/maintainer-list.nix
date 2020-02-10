@@ -1340,6 +1340,12 @@
     githubId = 25088352;
     name = "Christian Kögler";
   };
+  clkamp = {
+    email = "c@lkamp.de";
+    github = "clkamp";
+    githubId = 46303707;
+    name = "Christian Lütke-Stetzkamp";
+  };
   kampka = {
     email = "christian@kampka.net";
     github = "kampka";

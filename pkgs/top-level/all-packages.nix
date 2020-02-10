@@ -18531,6 +18531,8 @@ in
 
   cvsps = callPackage ../applications/version-management/cvsps { };
 
+  cvsq = callPackage ../applications/version-management/cvsq { };
+
   cvs2svn = callPackage ../applications/version-management/cvs2svn { };
 
   cwm = callPackage ../applications/window-managers/cwm { };
