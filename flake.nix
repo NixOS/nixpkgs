@@ -30,7 +30,7 @@
           });
       };
 
-      checks.tarball = jobs.tarball;
+      checks.x86_64-linux.tarball = jobs.tarball;
 
       htmlDocs = {
         nixpkgsManual = jobs.manual;
@@ -42,7 +42,7 @@
       legacyPackages = forAllSystems (system: import ./. { inherit system; });
 
       nixosModules = {
-        notDetected = ./nixos/modules/installer/scan/not-detected.nix;
+        notDetected = import ./nixos/modules/installer/scan/not-detected.nix;
       };
     };
 }

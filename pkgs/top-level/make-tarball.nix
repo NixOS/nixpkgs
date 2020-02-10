@@ -20,7 +20,7 @@ releaseTools.sourceTarball {
   versionSuffix = "pre${
     if nixpkgs ? lastModified
     then builtins.substring 0 8 nixpkgs.lastModified
-    else toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
   buildInputs = [ nix.out jq lib-tests ];
 
@@ -28,7 +28,7 @@ releaseTools.sourceTarball {
     eval "$preConfigure"
     releaseName=nixpkgs-$VERSION$VERSION_SUFFIX
     echo -n $VERSION_SUFFIX > .version-suffix
-    echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
+    echo -n ${nixpkgs.rev or nixpkgs.shortRev or "dirty"} > .git-revision
     echo "release name is $releaseName"
     echo "git-revision is $(cat .git-revision)"
   '';
