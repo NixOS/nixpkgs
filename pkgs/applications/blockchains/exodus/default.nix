@@ -21,6 +21,7 @@ stdenv.mkDerivation rec {
     cd Exodus-linux-x64
     cp -r . $out
     ln -s $out/Exodus $out/bin/Exodus
+    ln -s $out/bin/Exodus $out/bin/exodus
     ln -s $out/exodus.desktop $out/share/applications
     substituteInPlace $out/share/applications/exodus.desktop \
           --replace 'Exec=bash -c "cd `dirname %k` && ./Exodus"' "Exec=Exodus"
