@@ -522,6 +522,8 @@ in {
 
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
 
+  bugsnag = callPackage ../development/python-modules/bugsnag { };
+
   cachecontrol = callPackage ../development/python-modules/cachecontrol { };
 
   cachelib = callPackage ../development/python-modules/cachelib { };
