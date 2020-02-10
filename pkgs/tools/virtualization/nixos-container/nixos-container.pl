@@ -43,6 +43,7 @@ Usage: nixos-container list
          [--config <string>]
          [--config-file <path>]
          [--flake <flakeref>]
+         [--nixos-path <path>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -386,6 +387,7 @@ elsif ($action eq "update") {
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
             or die "$0: failed to set container configuration\n";
     } else {
+
         my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
 
         # FIXME: may want to be more careful about clobbering the existing
@@ -395,8 +397,9 @@ elsif ($action eq "update") {
             writeNixOSConfig $nixosConfigFile;
         }
 
+        my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
         system("nix-env", "-p", "$profileDir/system",
-               "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+               "-I", "nixos-config=$nixosConfigFile", "-f", $nixenvF,
                "--set", "-A", "system") == 0
             or die "$0: failed to build container configuration\n";
     }
