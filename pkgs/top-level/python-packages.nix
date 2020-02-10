@@ -4969,6 +4969,8 @@ in {
 
   pyshp = callPackage ../development/python-modules/pyshp { };
 
+  pysnow = callPackage ../development/python-modules/pysnow { };
+
   pysmbc = callPackage ../development/python-modules/pysmbc {
     inherit (pkgs) pkgconfig;
   };
