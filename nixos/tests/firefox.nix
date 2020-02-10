@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
   name = "firefox";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -8,7 +8,9 @@ import ./make-test-python.nix ({ pkgs, ... }: {
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      environment.systemPackages = [ pkgs.firefox pkgs.xdotool ];
+      environment.systemPackages =
+        (if esr then [ pkgs.firefox-esr ] else [ pkgs.firefox ])
+        ++ [ pkgs.xdotool ];
     };
 
   testScript = ''
