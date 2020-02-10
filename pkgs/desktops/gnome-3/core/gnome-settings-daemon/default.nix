@@ -53,7 +53,6 @@ stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit tzdata mousetweaks;
     })
-    ./global-backlight-helper.patch
   ];
 
   nativeBuildInputs = [
@@ -103,11 +102,6 @@ stdenv.mkDerivation rec {
   # we're using plain
   NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
-  # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper
-  postFixup = ''
-    mkdir -p $out/bin/gnome-settings-daemon
-    ln -s $out/libexec/gsd-backlight-helper $out/bin/gnome-settings-daemon/gsd-backlight-helper
-  '';
 
   postPatch = ''
     for f in gnome-settings-daemon/codegen.py plugins/power/gsd-power-constants-update.pl meson_post_install.py; do
