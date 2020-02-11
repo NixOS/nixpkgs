@@ -22903,6 +22903,16 @@ in
 
   airstrike = callPackage ../games/airstrike { };
 
+  alephone = callPackage ../games/alephone { ffmpeg = ffmpeg_2; };
+  alephone-durandal = callPackage ../games/alephone/durandal { };
+  alephone-eternal = callPackage ../games/alephone/eternal { };
+  alephone-evil = callPackage ../games/alephone/evil { };
+  alephone-infinity = callPackage ../games/alephone/infinity { };
+  alephone-marathon = callPackage ../games/alephone/marathon { };
+  alephone-pheonix = callPackage ../games/alephone/pheonix { };
+  alephone-red = callPackage ../games/alephone/red { };
+  alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
+
   alienarena = callPackage ../games/alienarena { };
 
   amoeba = callPackage ../games/amoeba { };
