@@ -31,11 +31,9 @@ in stdenv.mkDerivation rec {
   };
 
   # TODO: Remove these, when a new release gets out
-  # https://github.com/open-mpi/ompi/commit/526775dfd7ad75c308532784de4fb3ffed25458f.patch
-  # https://github.com/open-mpi/ompi/commit/a3026c016a6a8be379f62585b6ddc070175c8106.patch
   patches = [
-    ./ucx-1.8.patch
-    ./ucx-1.7.patch
+    (fetchpatch { name = "ucx-1.8-compat-1"; url = "https://github.com/open-mpi/ompi/commit/526775dfd7ad75c308532784de4fb3ffed25458f.patch"; sha256 = "1zfr7ym4303dsnnjqfc1qbnfs0izd8bazxfl57p3dhqsiznd734r"; })
+    (fetchpatch { name = "ucx-1.8-compat-2"; url = "https://github.com/open-mpi/ompi/commit/a3026c016a6a8be379f62585b6ddc070175c8106.patch"; sha256 = "04qa1fzx7fsbagc38irs6ilqqnhnwx5ncdslmypzmamrm67v4g00"; })
   ];
 
   postPatch = ''
