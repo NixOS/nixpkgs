@@ -14400,6 +14400,10 @@ in
 
   sundials = callPackage ../development/libraries/sundials { };
 
+  sundials_2 = callPackage ../development/libraries/sundials/2.x.nix {
+    python = python3;
+  };
+
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
