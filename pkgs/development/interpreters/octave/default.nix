@@ -68,22 +68,57 @@ stdenv.mkDerivation rec {
     sha256 = "1qcmcpsq1lfka19fxzvxjwjhg113c39a9a0x8plkhvwdqyrn5sig";
   };
 
-  buildInputs = [ gfortran readline ncurses perl flex texinfo qhull
-    graphicsmagick pcre pkgconfig fltk zlib curl openblas libsndfile fftw
-    fftwSinglePrec portaudio qrupdate arpack libwebp gl2ps ]
-    ++ (stdenv.lib.optional (qt != null) qt)
-    ++ (stdenv.lib.optional (qscintilla != null) qscintilla)
-    ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
-    ++ (stdenv.lib.optional (llvm != null) llvm)
-    ++ (stdenv.lib.optional (hdf5 != null) hdf5)
-    ++ (stdenv.lib.optional (glpk != null) glpk)
-    ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
-    ++ (stdenv.lib.optional (jdk != null) jdk)
-    ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
-    ++ (stdenv.lib.optional (python != null) python)
-    ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
-    ;
-
+  buildInputs = [
+    readline
+    ncurses
+    perl
+    flex
+    qhull
+    graphicsmagick
+    pcre
+    fltk
+    zlib
+    curl
+    openblas
+    libsndfile
+    fftw
+    fftwSinglePrec
+    portaudio
+    qrupdate
+    arpack
+    libwebp
+    gl2ps
+  ]
+  ++ (stdenv.lib.optionals enableQt [
+    qtbase
+    qtsvg
+    qscintilla
+  ])
+  ++ (stdenv.lib.optional (ghostscript != null) ghostscript)
+  ++ (stdenv.lib.optional (hdf5 != null) hdf5)
+  ++ (stdenv.lib.optional (glpk != null) glpk)
+  ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
+  ++ (stdenv.lib.optional (jdk != null) jdk)
+  ++ (stdenv.lib.optional (sundials != null) sundials)
+  ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
+  ++ (stdenv.lib.optional (python != null) python)
+  ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
+  ;
+  nativeBuildInputs = [
+    pkgconfig
+    gfortran 
+    # Listed here as well because it's outputs are split
+    fftw
+    fftwSinglePrec
+    texinfo
+  ]
+  ++ (stdenv.lib.optional (sundials != null) sundials)
+  ++ (stdenv.lib.optional enableJIT llvm)
+  ++ (stdenv.lib.optionals enableQt [
+    qtscript
+    qttools
+  ])
+  ;
 
   doCheck = !stdenv.isDarwin;
 
