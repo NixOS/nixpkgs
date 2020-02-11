@@ -62,6 +62,7 @@ in
 stdenv.mkDerivation rec {
   version = "5.2.0";
   pname = "octave";
+
   src = fetchurl {
     url = "mirror://gnu/octave/${pname}-${version}.tar.gz";
     sha256 = "1qcmcpsq1lfka19fxzvxjwjhg113c39a9a0x8plkhvwdqyrn5sig";
@@ -83,12 +84,6 @@ stdenv.mkDerivation rec {
     ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
     ;
 
-  # makeinfo is required by Octave at runtime to display help
-  prePatch = ''
-    substituteInPlace libinterp/corefcn/help.cc \
-      --replace 'Vmakeinfo_program = "makeinfo"' \
-                'Vmakeinfo_program = "${texinfo}/bin/makeinfo"'
-  '';
 
   doCheck = !stdenv.isDarwin;
 
