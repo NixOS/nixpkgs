@@ -1,7 +1,4 @@
-{ stdenvNoCC, lib, buildPackages
-, fetchurl, perl, rsync
-, elf-header
-}:
+{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header }:
 
 let
   makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
@@ -16,7 +13,7 @@ let
     # We do this so we have a build->build, not build->host, C compiler.
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     # `elf-header` is null when libc provides `elf.h`.
-    nativeBuildInputs = [ perl rsync elf-header ];
+    nativeBuildInputs = [ perl elf-header ];
 
     extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
 
@@ -47,8 +44,15 @@ let
       make headers_check $makeFlags
     '';
 
+    # The following command requires rsync:
+    #   make headers_install INSTALL_HDR_PATH=$out $makeFlags
+    # but rsync depends on popt which does not compile on aarch64 without
+    # updateAutotoolsGnuConfigScriptsHook which is not enabled in stage2,
+    # so we replicate it with cp. This also reduces bootstrap closure size.
     installPhase = ''
-      make headers_install INSTALL_HDR_PATH=$out $makeFlags
+      mkdir -p $out
+      cp -r usr/include $out
+      find $out -type f ! -name '*.h' -delete
     ''
     # Some builds (e.g. KVM) want a kernel.release.
     + ''
