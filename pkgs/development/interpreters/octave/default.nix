@@ -92,15 +92,16 @@ stdenv.mkDerivation rec {
   # See https://savannah.gnu.org/bugs/?50339
   F77_INTEGER_8_FLAG = if openblas.blas64 then "-fdefault-integer-8" else "";
 
-  configureFlags =
-    [ "--enable-readline"
-      "--enable-dl"
-      "--with-blas=openblas"
-      "--with-lapack=openblas"
-    ]
-    ++ stdenv.lib.optional openblas.blas64 "--enable-64"
-    ++ stdenv.lib.optionals stdenv.isDarwin ["--with-x=no"]
-    ;
+  configureFlags = [
+    "--enable-readline"
+    "--with-blas=openblas"
+    "--with-lapack=openblas"
+  ]
+    ++ stdenv.lib.optionals openblas.blas64 [ "--enable-64" ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
+    ++ stdenv.lib.optionals enableQt [ "--with-qt=5" ]
+    ++ stdenv.lib.optionals enableJIT [ "--enable-jit" ]
+  ;
 
   # Keep a copy of the octave tests detailed results in the output
   # derivation, because someone may care
