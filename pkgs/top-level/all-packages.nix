@@ -18148,6 +18148,8 @@ in
 
   argo = callPackage ../applications/networking/cluster/argo { };
 
+  argocd = callPackage ../applications/networking/cluster/argocd { };
+
   ario = callPackage ../applications/audio/ario { };
 
   arion = callPackage ../applications/virtualization/arion { };
