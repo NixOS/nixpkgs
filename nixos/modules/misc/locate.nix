@@ -128,7 +128,7 @@ in {
 
     # directory creation needs to be separated from main service
     # because ReadWritePaths fails when the directory doesn't already exist
-    systemd.tmpfiles.rules = [ "d ${dirOf cfg.output} 0755 root root -" ];
+    systemd.tmpfiles.rules = mkIf ((dirOf cfg.output) != "/var/cache") [ "d ${dirOf cfg.output} 0755 root root -" ];
 
     systemd.services.update-locatedb =
       { description = "Update Locate Database";
