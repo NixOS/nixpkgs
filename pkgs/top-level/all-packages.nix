@@ -20652,6 +20652,8 @@ in
 
   nedit = callPackage ../applications/editors/nedit { };
 
+  ngt = callPackage ../development/libraries/ngt { };
+
   nheko = libsForQt5.callPackage ../applications/networking/instant-messengers/nheko { };
 
   nomacs = libsForQt5.callPackage ../applications/graphics/nomacs { };
