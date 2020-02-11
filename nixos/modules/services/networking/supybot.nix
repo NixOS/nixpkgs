@@ -6,6 +6,7 @@ let
   cfg  = config.services.supybot;
   isStateDirHome = hasPrefix "/home/" cfg.stateDir;
   isStateDirVar = cfg.stateDir == "/var/lib/supybot";
+  pyEnv = pkgs.python3.withPackages (p: [ p.limnoria ] ++ (cfg.extraPackages p));
 in
 {
   options = {
@@ -13,8 +14,9 @@ in
     services.supybot = {
 
       enable = mkOption {
+        type = types.bool;
         default = false;
-        description = "Enable Supybot, an IRC bot";
+        description = "Enable Supybot, an IRC bot (also known as Limnoria).";
       };
 
       stateDir = mkOption {
@@ -37,13 +39,47 @@ in
         '';
       };
 
+      plugins = mkOption {
+        type = types.attrsOf types.path;
+        default = {};
+        description = ''
+          Attribute set of additional plugins that will be symlinked to the
+          <filename>plugin</filename> subdirectory.
+
+          Please note that you still need to add the plugins to the config
+          file (or with <literal>!load</literal>) using their attribute name.
+        '';
+        example = literalExample ''
+          let
+            plugins = pkgs.fetchzip {
+              url = "https://github.com/ProgVal/Supybot-plugins/archive/57c2450c.zip";
+              sha256 = "077snf84ibnva3sbpzdfpfma6hcdw7dflwnhg6pw7mgnf0nd84qd";
+            };
+          in
+          {
+            Wikipedia = "''${plugins}/Wikipedia";
+            Decide = ./supy-decide;
+          }
+        '';
+      };
+
+      extraPackages = mkOption {
+        default = p: [];
+        description = ''
+          Extra Python packages available to supybot plugins. The
+          value must be a function which receives the attrset defined
+          in <varname>python3Packages</varname> as the sole argument.
+        '';
+        example = literalExample ''p: [ p.lxml p.requests ]'';
+      };
+
     };
 
   };
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ pkgs.pythonPackages.limnoria ];
+    environment.systemPackages = [ pkgs.python3Packages.limnoria ];
 
     users.users.supybot = {
       uid = config.ids.uids.supybot;
@@ -59,16 +95,16 @@ in
 
     systemd.services.supybot = {
       description = "Supybot, an IRC bot";
+      documentation = [ "https://limnoria.readthedocs.io/" ];
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.pythonPackages.limnoria ];
       preStart = ''
         # This needs to be created afresh every time
         rm -f '${cfg.stateDir}/supybot.cfg.bak'
       '';
 
       serviceConfig = {
-        ExecStart = "${pkgs.pythonPackages.limnoria}/bin/supybot ${cfg.stateDir}/supybot.cfg";
+        ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
         PIDFile = "/run/supybot.pid";
         User = "supybot";
         Group = "supybot";
@@ -116,7 +152,10 @@ in
       "d '${cfg.stateDir}/tmp'          0750 supybot supybot - -"
       "d '${cfg.stateDir}/web'          0750 supybot supybot - -"
       "L '${cfg.stateDir}/supybot.cfg'  -    -       -       - ${cfg.configFile}"
-    ];
+    ]
+    ++ (flip mapAttrsToList cfg.plugins (name: dest:
+      "L+ '${cfg.stateDir}/plugins/${name}' - - - - ${dest}"
+    ));
 
   };
 }
