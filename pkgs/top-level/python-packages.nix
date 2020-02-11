@@ -2441,6 +2441,8 @@ in {
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
+  digi-xbee = callPackage ../development/python-modules/digi-xbee { };
+
   leather = callPackage ../development/python-modules/leather { };
 
   libais = callPackage ../development/python-modules/libais { };
@@ -6948,7 +6950,11 @@ in {
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
+  srp = callPackage ../development/python-modules/srp { };
+
   srptools = callPackage ../development/python-modules/srptools { };
+
+  srp = callPackage ../development/python-modules/srp { };
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 
