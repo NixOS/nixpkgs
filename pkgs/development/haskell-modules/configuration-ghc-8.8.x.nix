@@ -93,7 +93,7 @@ self: super: {
   optparse-applicative = self.optparse-applicative_0_15_1_0;
   pandoc = dontCheck super.pandoc_2_9_1_1;        # https://github.com/jgm/pandoc/issues/6086
   pandoc-types = self.pandoc-types_1_20;
-  prettyprinter = self.prettyprinter_1_6_0;
+  prettyprinter = self.prettyprinter_1_6_1;
   primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
   regex-base = self.regex-base_0_94_0_0;
   regex-compat = self.regex-compat_0_95_2_0;
@@ -145,7 +145,10 @@ self: super: {
   haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
 
   # The LTS-14.x version of the dependencies are too old.
-  policeman = super.policeman.overrideScope (self: super: { ansi-terminal = self.ansi-terminal_0_10_2; relude = self.relude_0_6_0_0; });
+  policeman = super.policeman.overrideScope (self: super: {
+    ansi-terminal = self.ansi-terminal_0_10_3;
+    relude = self.relude_0_6_0_0;
+  });
 
   # https://github.com/kowainik/relude/issues/241
   relude_0_6_0_0 = dontCheck super.relude_0_6_0_0;

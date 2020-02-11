@@ -1052,19 +1052,19 @@ self: super: {
   # This will probably be able to be removed when we update to LTS-15.
   dhall_1_29_0 =
     dontCheck (super.dhall_1_29_0.override {
-      prettyprinter = self.prettyprinter_1_6_0;
+      prettyprinter = self.prettyprinter_1_6_1;
       prettyprinter-ansi-terminal =
         self.prettyprinter-ansi-terminal.override {
-          prettyprinter = self.prettyprinter_1_6_0;
+          prettyprinter = self.prettyprinter_1_6_1;
         };
     });
   dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
   dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
     dhall = self.dhall_1_29_0;
-    prettyprinter = self.prettyprinter_1_6_0;
+    prettyprinter = self.prettyprinter_1_6_1;
     prettyprinter-ansi-terminal =
       self.prettyprinter-ansi-terminal.override {
-        prettyprinter = self.prettyprinter_1_6_0;
+        prettyprinter = self.prettyprinter_1_6_1;
       };
   };
 
@@ -1254,7 +1254,13 @@ self: super: {
   });
 
   # The LTS-14.x version of their dependencies are too old.
-  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_1; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
+  cabal-plan = super.cabal-plan.overrideScope (self: super: {
+    optparse-applicative = self.optparse-applicative_0_15_1_0;
+    ansi-terminal = self.ansi-terminal_0_10_3;
+    base-compat = self.base-compat_0_11_1;
+    semialign = self.semialign_1_1;
+    time-compat = doJailbreak super.time-compat;
+  });
   hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
@@ -1384,7 +1390,7 @@ self: super: {
   krank = doJailbreak super.krank;
 
   # prettyprinter-1.6.0 fails its doctest suite.
-  prettyprinter_1_6_0 = dontCheck super.prettyprinter_1_6_0;
+  prettyprinter_1_6_1 = dontCheck super.prettyprinter_1_6_1;
 
   # the test suite has an overly tight restriction on doctest
   # See https://github.com/ekmett/perhaps/pull/5
