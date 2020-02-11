@@ -22912,6 +22912,8 @@ in
   alephone-pheonix = callPackage ../games/alephone/pheonix { };
   alephone-red = callPackage ../games/alephone/red { };
   alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
+  alephone-pathways-into-darkness =
+    callPackage ../games/alephone/pathways-into-darkness { };
 
   alienarena = callPackage ../games/alienarena { };
 
