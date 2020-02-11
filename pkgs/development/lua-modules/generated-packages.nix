@@ -158,6 +158,23 @@ busted = buildLuarocksPackage {
     };
   };
 };
+cassowary = buildLuarocksPackage {
+  pname = "cassowary";
+  version = "2.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cassowary-2.2-1.src.rock;
+    sha256 = "0laghzk5jbap5rfd8sasnrdrbda649sfciarba8rhygm0qni1azy";
+  };
+  propagatedBuildInputs = [ lua penlight ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/simoncozens/cassowary.lua";
+    description = "The cassowary constraint solver.";
+    maintainers = with maintainers; [ marsam ];
+    license.fullName = "Apache 2";
+  };
+};
 cjson = buildLuarocksPackage {
   pname = "lua-cjson";
   version = "2.1.0.6-1";
