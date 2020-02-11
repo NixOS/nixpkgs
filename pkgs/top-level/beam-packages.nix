@@ -74,7 +74,7 @@ rec {
     # `beam.packages.erlangR22.elixir`.
     inherit (packages.erlang) elixir elixir_1_10 elixir_1_9 elixir_1_8 elixir_1_7 elixir_1_6;
 
-    inherit (packages.erlang) lfe lfe_1_2;
+    inherit (packages.erlang) lfe lfe_1_2 lfe_1_3;
   };
 
   # Helper function to generate package set with a specific Erlang version.

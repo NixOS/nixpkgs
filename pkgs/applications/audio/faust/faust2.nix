@@ -3,25 +3,30 @@
 , fetchFromGitHub
 , makeWrapper
 , pkgconfig
+, cmake
 , llvm
 , emscripten
 , openssl
 , libsndfile
 , libmicrohttpd
+, gnutls
+, libtasn1
+, p11-kit
 , vim
+, which
 }:
 
 with stdenv.lib.strings;
 
 let
 
-  version = "2.5.23";
+  version = "2.20.2";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    sha256 = "1pci8ac6sqrm3mb3yikmmr3iy35g3nj4iihazif1amqkbdz719rc";
+    sha256 = "08hv8gyj6c83128z3si92r1ka5ckf9sdpn5jdnlhrqyzja4mrxsy";
     fetchSubmodules = true;
   };
 
@@ -40,8 +45,8 @@ let
 
     inherit src;
 
-    nativeBuildInputs = [ makeWrapper pkgconfig vim ];
-    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd ];
+    nativeBuildInputs = [ makeWrapper pkgconfig cmake vim which ];
+    buildInputs = [ llvm emscripten openssl libsndfile libmicrohttpd gnutls libtasn1 p11-kit ];
 
 
     passthru = {
@@ -50,39 +55,13 @@ let
 
 
     preConfigure = ''
-      makeFlags="$makeFlags prefix=$out LLVM_CONFIG='${llvm}/bin/llvm-config' world"
-
-      # The faust makefiles use 'system ?= $(shell uname -s)' but nix
-      # defines 'system' env var, so undefine that so faust detects the
-      # correct system.
-      unset system
-      # sed -e "232s/LLVM_STATIC_LIBS/LLVMLIBS/" -i compiler/Makefile.unix
-
-      # The makefile sets LLVM_<version> depending on the current llvm
-      # version, but the detection code is quite brittle.
-      #
-      # Failing to properly detect the llvm version means that the macro
-      # LLVM_VERSION ends up being the raw output of `llvm-config --version`, while
-      # the code assumes that it's set to a symbol like `LLVM_35`.  Two problems result:
-      # * <command-line>:0:1: error: macro names must be identifiers.; and
-      # * a bunch of undefined reference errors due to conditional definitions relying on
-      #   LLVM_XY being defined.
-      #
-      # For now, fix this by 1) pinning the llvm version; 2) manually setting LLVM_VERSION
-      # to something the makefile will recognize.
-      sed '52iLLVM_VERSION=${stdenv.lib.getVersion llvm}' -i compiler/Makefile.unix
+      cd build
     '';
 
-    postPatch = ''
-      # fix build with llvm 5.0.2 by adding it to the list of known versions
-      # TODO: check if still needed on next update
-      substituteInPlace compiler/Makefile.unix \
-        --replace "5.0.0 5.0.1" "5.0.0 5.0.1 5.0.2"
+    cmakeFlags = ''
+      -C ../backends/all.cmake -C  ../targets/all.cmake ..
     '';
 
-    # Remove most faust2appl scripts since they won't run properly
-    # without additional paths setup. See faust.wrap,
-    # faust.wrapWithBuildEnv.
     postInstall = ''
       # syntax error when eval'd directly
       pattern="faust2!(*@(atomsnippets|graph|graphviewer|md|plot|sig|sigviewer|svg))"
@@ -90,10 +69,6 @@ let
     '';
 
     postFixup = ''
-      # Set faustpath explicitly.
-      substituteInPlace "$out"/bin/faustpath \
-        --replace "/usr/local /usr /opt /opt/local" "$out"
-
       # The 'faustoptflags' is 'source'd into other faust scripts and
       # not used as an executable, so patch 'uname' usage directly
       # rather than use makeWrapper.
@@ -160,8 +135,6 @@ let
         # 'faustoptflags' to absolute paths.
         for script in "$out"/bin/*; do
           substituteInPlace "$script" \
-            --replace ". faustpath" ". '${faust}/bin/faustpath'" \
-            --replace ". faustoptflags" ". '${faust}/bin/faustoptflags'" \
             --replace " error " "echo"
         done
       '';
@@ -200,19 +173,22 @@ let
 
       propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
+      libPath = stdenv.lib.makeLibraryPath propagatedBuildInputs;
 
       postFixup = ''
 
         # export parts of the build environment
         for script in "$out"/bin/*; do
           wrapProgram "$script" \
+            --set FAUSTLDDIR "${faust}/lib" \
             --set FAUSTLIB "${faust}/share/faust" \
-            --set FAUST_LIB_PATH "${faust}/share/faust" \
             --set FAUSTINC "${faust}/include/faust" \
+            --set FAUSTARCH "${faust}/share/faust" \
             --prefix PATH : "$PATH" \
             --prefix PKG_CONFIG_PATH : "$PKG_CONFIG_PATH" \
             --set NIX_CFLAGS_COMPILE "$NIX_CFLAGS_COMPILE" \
-            --set NIX_LDFLAGS "$NIX_LDFLAGS"
+            --set NIX_LDFLAGS "$NIX_LDFLAGS -lpthread" \
+            --prefix LIBRARY_PATH $libPath
         done
       '';
     });
