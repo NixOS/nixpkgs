@@ -29,6 +29,7 @@
 , luajit
 , openexr
 , OpenCL
+, suitesparse
 }:
 
 stdenv.mkDerivation rec {
@@ -76,6 +77,7 @@ stdenv.mkDerivation rec {
     gexiv2
     luajit
     openexr
+    suitesparse
   ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
@@ -93,7 +95,6 @@ stdenv.mkDerivation rec {
     "-Dlibav=disabled"
     "-Dlibv4l=disabled"
     "-Dlibv4l2=disabled"
-    "-Dumfpack=disabled"
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"
