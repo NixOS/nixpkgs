@@ -1,8 +1,50 @@
-{ stdenv, fetchurl, gfortran, readline, ncurses, perl, flex, texinfo, qhull
-, libsndfile, portaudio, libX11, graphicsmagick, pcre, pkgconfig, libGL, libGLU, fltk
-, fftw, fftwSinglePrec, zlib, curl, qrupdate, openblas, arpack, libwebp, gl2ps
-, qt ? null, qscintilla ? null, ghostscript ? null, llvm ? null, hdf5 ? null,glpk ? null
-, suitesparse ? null, gnuplot ? null, jdk ? null, python ? null, overridePlatforms ? null
+{ stdenv
+, fetchurl
+, gfortran
+, readline
+, ncurses
+, perl
+, flex
+, texinfo
+, qhull
+, libsndfile
+, portaudio
+, libX11
+, graphicsmagick
+, pcre
+, pkgconfig
+, libGL
+, libGLU
+, fltk
+# Both are needed for discrete Fourier transform
+, fftw
+, fftwSinglePrec
+, zlib
+, curl
+, qrupdate
+, openblas
+, arpack
+, libwebp
+, gl2ps
+, ghostscript ? null
+, hdf5 ? null
+, glpk ? null
+, suitesparse ? null
+, gnuplot ? null
+, jdk ? null
+, python ? null
+, overridePlatforms ? null
+, sundials ? null
+# Qt / GUI is disabled by default
+, enableQt ? false
+, qtbase ? null
+, qtsvg ? null
+, qtscript ? null
+, qscintilla ? null
+, qttools ? null
+# JIT is disabled by default
+, enableJIT ? false
+, llvm ? null
 }:
 
 let
