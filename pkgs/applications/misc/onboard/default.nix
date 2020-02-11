@@ -16,6 +16,7 @@
 , hunspellWithDicts
 , intltool
 , isocodes
+, libappindicator-gtk3
 , libcanberra-gtk3
 , mousetweaks
 , udev
@@ -71,6 +72,7 @@ python3.pkgs.buildPythonApplication rec {
     gtk3
     hunspell
     isocodes
+    libappindicator-gtk3
     libcanberra-gtk3
     libxkbcommon
     mousetweaks
