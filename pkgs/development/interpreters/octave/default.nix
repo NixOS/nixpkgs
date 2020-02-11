@@ -116,6 +116,8 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
     maintainers = with stdenv.lib.maintainers; [raskin];
     description = "Scientific Pragramming Language";
+    # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
+    broken = enableJIT;
     platforms = if overridePlatforms == null then
       (with stdenv.lib.platforms; linux ++ darwin)
     else overridePlatforms;
