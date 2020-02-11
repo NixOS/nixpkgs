@@ -19,6 +19,7 @@ stdenv.mkDerivation rec {
     # put docs in correct subdirectory
     mkdir -p $out/share/doc
     mv $out/doc $out/share/doc/scala
+    mv $out/{LICENSE,NOTICE} $out/share/doc/scala
 
     for p in $(ls $out/bin/) ; do
       wrapProgram $out/bin/$p \

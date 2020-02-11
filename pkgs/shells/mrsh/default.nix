@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, meson, ninja, pkgconfig, readline }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, readline }:
 
 stdenv.mkDerivation rec {
   pname   = "mrsh";
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mrsh.sh";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

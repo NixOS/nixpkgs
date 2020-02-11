@@ -1,11 +1,13 @@
---- ./platformio/proc.py-old	2017-09-29 01:20:08.174548250 +0200
-+++ ./platformio/proc.py	2017-09-29 01:19:48.410485308 +0200
-@@ -164,7 +164,7 @@
-                 isdir(join(p, "click")) or isdir(join(p, "platformio")))
+diff --git a/platformio/proc.py b/platformio/proc.py
+index 80e50201..15cee5a5 100644
+--- a/platformio/proc.py
++++ b/platformio/proc.py
+@@ -167,7 +167,7 @@ def copy_pythonpath_to_osenv():
+             conditions.append(isdir(join(p, "click")) or isdir(join(p, "platformio")))
          if all(conditions):
              _PYTHONPATH.append(p)
--    os.environ['PYTHONPATH'] = os.pathsep.join(_PYTHONPATH)
-+    os.environ['PYTHONPATH'] = os.pathsep.join(sys.path)
+-    os.environ["PYTHONPATH"] = os.pathsep.join(_PYTHONPATH)
++    os.environ["PYTHONPATH"] = os.pathsep.join(sys.path)
  
  
- def get_serialports(filter_hwid=False):
+ def where_is_program(program, envpath=None):

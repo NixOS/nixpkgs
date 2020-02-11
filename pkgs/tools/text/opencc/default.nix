@@ -9,10 +9,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake python ];
 
-  makeFlags = [
+  preBuild = ''
     # let intermediate tools find intermediate library
-    "LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(CURDIR)/src"
-  ];
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/src
+  '';
 
   # Parallel building occasionaly fails with: Error copying file "/tmp/nix-build-opencc-1.0.5.drv-0/OpenCC-ver.1.0.5/build/src/libopencc.so.1.0.0" to "/tmp/nix-build-opencc-1.0.5.drv-0/OpenCC-ver.1.0.5/build/src/tools".
   enableParallelBuilding = false;

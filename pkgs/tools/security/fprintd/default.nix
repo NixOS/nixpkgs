@@ -1,9 +1,11 @@
-{ stdenv
+{ thinkpad ? false
+, stdenv
 , fetchurl
 , fetchpatch
 , pkgconfig
 , intltool
-, libfprint
+, libfprint-thinkpad ? null
+, libfprint ? null
 , glib
 , dbus-glib
 , polkit
@@ -15,7 +17,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "fprintd";
+  pname = "fprintd" + stdenv.lib.optionalString thinkpad "-thinkpad";
   version = "0.9.0";
 
   src = fetchurl {
@@ -44,8 +46,10 @@ stdenv.mkDerivation rec {
     nss
     pam
     systemd
-    libfprint
-  ];
+  ]
+  ++ stdenv.lib.optional thinkpad libfprint-thinkpad
+  ++ stdenv.lib.optional (!thinkpad) libfprint
+  ;
 
   configureFlags = [
     # is hardcoded to /var/lib/fprint, this is for the StateDirectory install target

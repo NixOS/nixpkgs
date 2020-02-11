@@ -1,14 +1,14 @@
-{ mkDerivation, lib, fetchFromGitHub, qmake, qttools }:
+{ stdenv, mkDerivation, lib, fetchFromGitHub, qmake, qttools }:
 
 mkDerivation rec {
   pname = "gpxsee";
-  version = "7.19";
+  version = "7.20";
 
   src = fetchFromGitHub {
     owner = "tumic0";
     repo = "GPXSee";
     rev = version;
-    sha256 = "0mfmj0g6q6p2i6bd64ik1hq2l1ddqxnc6i9m30dnfl4v1zyvlc38";
+    sha256 = "08scvhhdadzz9iydhpkn2k618bgw26z09y6nydi3hi8fc3xfnb8d";
   };
 
   nativeBuildInputs = [ qmake ];
@@ -16,6 +16,12 @@ mkDerivation rec {
 
   preConfigure = ''
     lrelease lang/*.ts
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications
+    mv GPXSee.app $out/Applications
+    wrapQtApp $out/Applications/GPXSee.app/Contents/MacOS/GPXSee
   '';
 
   enableParallelBuilding = true;
@@ -29,6 +35,6 @@ mkDerivation rec {
     '';
     license = licenses.gpl3;
     maintainers = with maintainers; [ womfoo sikmir ];
-    platforms = platforms.linux;
+    platforms = with platforms; linux ++ darwin;
   };
 }

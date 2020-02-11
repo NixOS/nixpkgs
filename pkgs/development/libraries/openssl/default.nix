@@ -36,7 +36,9 @@ let
 
     outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
     setOutputFlags = false;
-    separateDebugInfo = !(stdenv.hostPlatform.useLLVM or false) && stdenv.cc.isGNU;
+    separateDebugInfo = !(stdenv.hostPlatform.useLLVM or false)
+      && stdenv.hostPlatform == stdenv.buildPlatform # unable to fix infinite recursion on stdenv.cc
+      && stdenv.cc.isGNU;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodev;

@@ -18,15 +18,20 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.13.0";
+  version = "1.15.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "1b5il05isq5yvnx2qpnihsrmj0jliacvhrm58i87d48anwpv1k8q";
+    sha256 = "1dj21fcssrvbspppbhg8684vfcbn0m1abiy1r60h5fzb470k21jb";
   };
+
+  patches = [
+    # https://github.com/nginx/unit/issues/357
+    ./drop_cap.patch
+  ];
 
   nativeBuildInputs = [ which ];
 

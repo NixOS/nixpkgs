@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, unzip, sqlite, makeWrapper, dotnet-sdk, ffmpeg,
+{ stdenv, lib, fetchurl, unzip, sqlite, makeWrapper, dotnet-netcore, ffmpeg,
   fontconfig, freetype }:
 
 let
@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    dotnet-sdk
+    dotnet-netcore
     sqlite
   ];
 
@@ -42,7 +42,7 @@ in stdenv.mkDerivation rec {
     install -dm 755 "$out/opt/jellyfin"
     cp -r * "$out/opt/jellyfin"
 
-    makeWrapper "${dotnet-sdk}/bin/dotnet" $out/bin/jellyfin \
+    makeWrapper "${dotnet-netcore}/bin/dotnet" $out/bin/jellyfin \
       --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
         sqlite fontconfig freetype stdenv.cc.cc.lib
       ]}:$out/opt/jellyfin/runtimes/${runtimeDir}/native/" \

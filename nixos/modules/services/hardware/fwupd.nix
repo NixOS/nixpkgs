@@ -53,7 +53,7 @@ in {
 
       blacklistPlugins = mkOption {
         type = types.listOf types.str;
-        default = [ "test" ];
+        default = [];
         example = [ "udev" ];
         description = ''
           Allow blacklisting specific plugins
@@ -91,6 +91,9 @@ in {
 
   ###### implementation
   config = mkIf cfg.enable {
+    # Disable test related plug-ins implicitly so that users do not have to care about them.
+    services.fwupd.blacklistPlugins = cfg.package.defaultBlacklistedPlugins;
+
     environment.systemPackages = [ cfg.package ];
 
     environment.etc = {

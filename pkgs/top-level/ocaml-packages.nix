@@ -241,6 +241,8 @@ let
 
     duff = callPackage ../development/ocaml-modules/duff { };
 
+    dum = callPackage ../development/ocaml-modules/dum { };
+
     dune = callPackage ../development/tools/ocaml/dune { };
 
     dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
@@ -556,9 +558,15 @@ let
       lwt = ocaml_lwt;
     };
 
+    npy = callPackage ../development/ocaml-modules/npy {
+      inherit (pkgs.python3Packages) numpy;
+    };
+
     num = if lib.versionOlder "4.06" ocaml.version
       then callPackage ../development/ocaml-modules/num {}
       else null;
+
+    parmap = callPackage ../development/ocaml-modules/parmap { };
 
     comparelib = callPackage ../development/ocaml-modules/comparelib { };
 
@@ -838,6 +846,8 @@ let
     safepass = callPackage ../development/ocaml-modules/safepass { };
 
     sedlex = callPackage ../development/ocaml-modules/sedlex { };
+
+    sedlex_2 = callPackage ../development/ocaml-modules/sedlex/2.nix { };
 
     sodium = callPackage ../development/ocaml-modules/sodium { };
 
@@ -1231,6 +1241,8 @@ in let inherit (pkgs) callPackage; in rec
   ocamlPackages_4_08 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.08.nix { });
 
   ocamlPackages_4_09 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.09.nix { });
+
+  ocamlPackages_4_10 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.10.nix { });
 
   ocamlPackages_latest = ocamlPackages_4_09;
 

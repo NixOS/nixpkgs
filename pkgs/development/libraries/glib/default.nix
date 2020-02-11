@@ -160,7 +160,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"

@@ -4,7 +4,7 @@ let arch = if stdenv.isx86_64 then "x86-64" else
            if stdenv.isi686 then "x86-32" else
            "unknown";
 
-    version = "10";
+    version = "11";
 in
 
 stdenv.mkDerivation {
@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://github.com/official-stockfish/Stockfish/archive/sf_${version}.tar.gz";
-    sha256 = "1lrxqq8fw1wrw5b45r4s3ddd51yr85a2k8a9i1wjvyd6v9vm7761";
+    sha256 = "16di83s79gf9kzdhcal5y0q9d59544gd5xqf1k8bwrqvc36628l0";
   };
 
   postUnpack = "sourceRoot+=/src";

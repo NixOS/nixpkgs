@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "unoconv";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "unoconv";
     repo = "unoconv";
     rev = version;
-    sha256 = "0ix605lk0k3hv241jb2kf4jq5744q2wh9x0pzkmay5m126vv8kq4";
+    sha256 = "1akx64686in8j8arl6vsgp2n3bv770q48pfv283c6fz6wf9p8fvr";
   };
 
   buildInputs = [ asciidoc makeWrapper ];

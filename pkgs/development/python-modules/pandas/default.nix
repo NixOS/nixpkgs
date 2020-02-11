@@ -30,11 +30,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.25.3";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52da74df8a9c9a103af0a72c9d5fdc8e0183a90884278db7f386b5692a2220a4";
+    sha256 = "3c07765308f091d81b6735d4f2242bb43c332cc3461cae60543df6b10967fe27";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -87,6 +87,8 @@ in buildPythonPackage rec {
     # ordering logic has changed
     "numpy_ufuncs_other"
     "order_without_freq"
+    # tries to import from pandas.tests post install
+    "util_in_top_level"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"

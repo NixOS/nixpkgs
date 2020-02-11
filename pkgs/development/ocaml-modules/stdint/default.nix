@@ -1,8 +1,10 @@
-{ stdenv, fetchFromGitHub, buildDunePackage }:
+{ lib, fetchFromGitHub, buildDunePackage }:
 
 buildDunePackage rec {
   pname = "stdint";
   version = "0.6.0";
+
+  minimumOCamlVersion = "4.07";
 
   src = fetchFromGitHub {
     owner = "andrenth";
@@ -14,7 +16,7 @@ buildDunePackage rec {
   meta = {
     description = "Various signed and unsigned integers for OCaml";
     homepage = "https://github.com/andrenth/ocaml-stdint";
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.gebner ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.gebner ];
   };
 }

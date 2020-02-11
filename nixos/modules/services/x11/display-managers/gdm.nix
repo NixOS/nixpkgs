@@ -174,6 +174,10 @@ in
       "f /run/gdm/.config/gnome-initial-setup-done 0711 gdm gdm - yes"
     ];
 
+    # Otherwise GDM will not be able to start correctly and display Wayland sessions
+    systemd.packages = with pkgs.gnome3; [ gnome-session gnome-shell ];
+    environment.systemPackages = [ pkgs.gnome3.adwaita-icon-theme ];
+
     systemd.services.display-manager.wants = [
       # Because sd_login_monitor_new requires /run/systemd/machines
       "systemd-machined.service"

@@ -6,13 +6,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "i3-layout-manager";
-  version = "unstable-2019-06-19";
+  version = "unstable-2019-12-06";
 
   src = fetchFromGitHub {
     owner = "klaxalk";
     repo = pname;
-    rev = "80ade872bfd70d9c6039024097ceb8c852a2816a";
-    sha256 = "02xhyd737qwni628mjzr9i5v2kga5cq4k8m77bxm1p6kkj84nlmg";
+    rev = "064e13959413ba2d706185478a394e5852c0dc53";
+    sha256 = "1qm35sp1cfi3xj5j7xwa05dkb3353gwq4xh69ryc6382xx3wszg6";
   };
 
   nativeBuildInputs = [ makeWrapper ];

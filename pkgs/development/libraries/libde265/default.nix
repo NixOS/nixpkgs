@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.4";
+  version = "1.0.5";
   pname = "libde265";
 
   src = fetchFromGitHub {
     owner = "strukturag";
     repo = "libde265";
     rev = "v${version}";
-    sha256 = "0svxrhh1pv7xpj75svz0iw1sq5i6z2grj7sc3q11hl63666hzh7d";
+    sha256 = "1qisj8ryzbknam3hk81rq70fsd9mcpxm898bqygvbsmbwyvmz3pg";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

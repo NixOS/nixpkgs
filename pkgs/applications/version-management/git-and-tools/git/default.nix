@@ -21,7 +21,7 @@ assert sendEmailSupport -> perlSupport;
 assert svnSupport -> perlSupport;
 
 let
-  version = "2.24.1";
+  version = "2.25.0";
   svn = subversionClient.override { perlBindings = perlSupport; };
 
   gitwebPerlLibs = with perlPackages; [ CGI HTMLParser CGIFast FCGI FCGIProcManager HTMLTagCloud ];
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://www.kernel.org/pub/software/scm/git/git-${version}.tar.xz";
-    sha256 = "0ql5z31vgl7b785gwrf00m129mg7zi9pa65n12ij3mpxx3f28gvj";
+    sha256 = "1l58v42aazj0x9276gk8r9mwyl9pgp9w99aakz4xfhzv7wd2jq60";
   };
 
   outputs = [ "out" ];
@@ -145,6 +145,12 @@ stdenv.mkDerivation {
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       mkdir -p $out/etc/bash_completion.d
       ln -s $out/share/git/contrib/completion/git-prompt.sh $out/etc/bash_completion.d/
+      mkdir -p $out/share/zsh/site-functions
+      ln -s $out/share/git/contrib/completion/git-completion.zsh $out/share/zsh/site-functions/_git
+
+      # Patch the zsh completion script so it can find the Bash completion script.
+      sed -i -e "/locations=(/a \${"\t\t"}'$out/share/git/contrib/completion/git-completion.bash'" \
+        $out/share/git/contrib/completion/git-completion.zsh
 
       # grep is a runtime dependency, need to patch so that it's found
       substituteInPlace $out/libexec/git-core/git-sh-setup \

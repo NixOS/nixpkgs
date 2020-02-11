@@ -17,9 +17,8 @@ import ./make-test-python.nix (
             configFile = pkgs.writeText "corerad.toml" ''
               [[interfaces]]
               name = "eth1"
-              send_advertisements = true
-                [[interfaces.plugins]]
-                name = "prefix"
+              advertise = true
+                [[interfaces.prefix]]
                 prefix = "::/64"
             '';
           };

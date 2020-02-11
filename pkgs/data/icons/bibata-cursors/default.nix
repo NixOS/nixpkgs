@@ -16,6 +16,11 @@ in stdenvNoCC.mkDerivation rec {
   postPatch = ''
     patchShebangs .
     substituteInPlace build.sh --replace "sudo" ""
+
+    # Don't generate windows cursors,
+    # they aren't used and aren't installed
+    # by the project's install script anyway.
+    echo "exit 0" > w32-make.sh
   '';
 
   nativeBuildInputs  = [
@@ -31,7 +36,9 @@ in stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     install -dm 0755 $out/share/icons
-    cp -pr Bibata_* $out/share/icons/
+    for x in Bibata_*; do
+      cp -pr $x/out/X11/$x $out/share/icons/
+    done
   '';
 
   meta = with stdenvNoCC.lib; {

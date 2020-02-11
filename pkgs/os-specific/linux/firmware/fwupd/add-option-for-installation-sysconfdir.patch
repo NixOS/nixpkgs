@@ -1,10 +1,10 @@
 diff --git a/data/meson.build b/data/meson.build
-index 25db9509..f394eb25 100644
+index d59bdc88..4a4cfc35 100644
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -13,7 +13,7 @@
- if build_daemon
-   subdir('installed-tests')
+@@ -16,7 +16,7 @@
+ 
+ if build_standalone
    install_data(['daemon.conf'],
 -    install_dir : join_paths(sysconfdir, 'fwupd')
 +    install_dir : join_paths(sysconfdir_install, 'fwupd')
@@ -76,10 +76,10 @@ index 826a3c1d..b78db663 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/meson.build b/meson.build
-index 8e1de887..a5bb1fe6 100644
+index b1a523d2..aacb8e0a 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -158,6 +158,12 @@
+@@ -169,6 +169,12 @@
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -89,14 +89,14 @@ index 8e1de887..a5bb1fe6 100644
 +  sysconfdir_install = sysconfdir
 +endif
 +
+ diffcmd = find_program('diff')
  gio = dependency('gio-2.0', version : '>= 2.45.8')
- giounix = dependency('gio-unix-2.0', version : '>= 2.45.8')
- if gio.version().version_compare ('>= 2.55.0')
+ giounix = dependency('gio-unix-2.0', version : '>= 2.45.8', required: false)
 diff --git a/meson_options.txt b/meson_options.txt
-index 71b50c6a..561c2031 100644
+index be0adfef..73983333 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -24,6 +24,7 @@
+@@ -26,6 +26,7 @@
  option('systemd', type : 'boolean', value : true, description : 'enable systemd support')
  option('systemdunitdir', type: 'string', value: '', description: 'Directory for systemd units')
  option('elogind', type : 'boolean', value : false, description : 'enable elogind support')
@@ -105,10 +105,10 @@ index 71b50c6a..561c2031 100644
  option('udevdir', type: 'string', value: '', description: 'Directory for udev rules')
  option('efi-cc', type : 'string', value : 'gcc', description : 'the compiler to use for EFI modules')
 diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
-index cb9f4555..b972d7fb 100644
+index ed4eee70..76dbdb1d 100644
 --- a/plugins/dell-esrt/meson.build
 +++ b/plugins/dell-esrt/meson.build
-@@ -36,5 +36,5 @@
+@@ -37,5 +37,5 @@
    output : 'dell-esrt.conf',
    configuration : con2,
    install: true,
@@ -116,10 +116,10 @@ index cb9f4555..b972d7fb 100644
 +  install_dir: join_paths(sysconfdir_install, 'fwupd', 'remotes.d'),
  )
 diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
-index 5c88504e..7706da71 100644
+index 25fc5c7d..77eb9a83 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -26,7 +26,7 @@
+@@ -27,7 +27,7 @@
  )
  
  install_data(['redfish.conf'],
@@ -129,7 +129,7 @@ index 5c88504e..7706da71 100644
  
  if get_option('tests')
 diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
-index 42718abf..bc815491 100644
+index 06ab34ee..297a9182 100644
 --- a/plugins/thunderbolt/meson.build
 +++ b/plugins/thunderbolt/meson.build
 @@ -46,7 +46,7 @@
@@ -142,10 +142,10 @@ index 42718abf..bc815491 100644
  # we use functions from 2.52 in the tests
  if get_option('tests') and umockdev.found() and gio.version().version_compare('>= 2.52')
 diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
-index 45b18d7d..ef8e0b04 100644
+index 39b5f566..0f904a22 100644
 --- a/plugins/uefi/meson.build
 +++ b/plugins/uefi/meson.build
-@@ -85,7 +85,7 @@
+@@ -87,7 +87,7 @@
  )
  
  install_data(['uefi.conf'],

@@ -3,11 +3,11 @@
 
 buildPythonPackage rec {
   pname = "Jinja2";
-  version = "2.10.3";
+  version = "2.11.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9fe95f19286cfefaa917656583d020be14e7859c6b0252588391e47db34527de";
+    sha256 = "93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250";
   };
 
   checkInputs = [ pytest ];

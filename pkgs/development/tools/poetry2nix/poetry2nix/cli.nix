@@ -25,7 +25,6 @@ pkgs.stdenv.mkDerivation {
 
   buildPhase = ''
     runHook preBuild
-    ${python3.pkgs.black}/bin/black --quiet --check poetry2nix
     patchShebangs poetry2nix
     runHook postBuild
   '';

@@ -2,7 +2,7 @@
 , libXrender, libXext, libtiff, libjpeg, libpng, libXScrnSaver, writeText
 , libXdmcp, libXau, lib, openssl }:
 let
-  version = "2.1.1";
+  version = "2.1.2";
  in
 stdenv.mkDerivation rec {
   pname = "argyllcms";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     # Kind of flacky URL, it was reaturning 406 and inconsistent binaries for a
     # while on me. It might be good to find a mirror
     url = "https://www.argyllcms.com/Argyll_V${version}_src.zip";
-    sha256 = "0zq3fipky44xg536kdhg9bchi6s9ka7n1q73fwf9ja766s8rj99m";
+    sha256 = "1bsi795kphr1a8l2kvvm9qfkvgfpimds4ijalnmg23wnr8691md1";
 
     # The argyllcms web server doesn't like curl ...
     curlOpts = "--user-agent 'Mozilla/5.0'";

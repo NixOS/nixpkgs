@@ -12,9 +12,12 @@
 , azure-mgmt-compute
 , azure-mgmt-keyvault
 , azure-mgmt-network
+, azure-mgmt-resource
+, azure-mgmt-security
 , azure-mgmt-storage
 , azure-mgmt-web
 , azure-storage-file
+, azure-storage-file-share
 , bandit
 , bcrypt
 , beautifulsoup4
@@ -39,6 +42,7 @@
 , psycopg2
 , pycrypto
 , pygments
+, pyhcl
 , pyjks
 , pynacl
 , pyopenssl
@@ -57,31 +61,31 @@
 
 buildPythonPackage rec {
   pname = "fluidasserts";
-  version = "20.1.22554";
+  version = "20.1.33141";
   disabled = !isPy37;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "0j7zppwingi9m58z51phy40d69jlskx1vgyz1gj9miqhbjfdymhi";
+    sha256 = "01l6yb3r19q8b4kwqkrzn7mpfsr65zsgzax2fbs43hb6pq6vavnx";
   };
 
   patchPhase = ''
     # Version mismatches between current FluidAsserts and Nixpkgs
     substituteInPlace ./setup.py \
-      --replace 'tlslite-ng==0.8.0-alpha29' 'tlslite-ng==0.7.5' \
-      --replace 'boto3==1.10.17' 'boto3==1.10.1' \
-      --replace 'cfn-flip==1.2.2' 'cfn-flip==1.1.0.post1' \
-      --replace 'azure-mgmt-storage==7.1.0' 'azure-mgmt-storage==7.0.0' \
+      --replace 'tlslite-ng==0.8.0-alpha36' 'tlslite-ng==0.7.5' \
+      --replace 'boto3==1.11.7' 'boto3==1.10.1' \
+      --replace 'typed-ast==1.4.1' 'typed-ast==1.4.0' \
+      --replace 'pillow==7.0.0' 'pillow==6.2.1' \
 
     # Functionality that will be not present for the momment
     #   but that we'll work to add in the future
     # Just a minimal portion of fluidasserts use this
     substituteInPlace ./setup.py \
-      --replace "'azure-storage-file-share==12.0.0'," "" \
       --replace "'pymssql==2.1.4'," "" \
-      --replace "'pytesseract==0.3.0'," "" \
+      --replace "'pytesseract==0.3.1'," "" \
       --replace "'pywinrm==0.4.1'," "" \
+      --replace "'mitmproxy==5.0.1'," "" \
 
   '';
 
@@ -95,9 +99,12 @@ buildPythonPackage rec {
     azure-mgmt-compute
     azure-mgmt-keyvault
     azure-mgmt-network
+    azure-mgmt-resource
+    azure-mgmt-security
     azure-mgmt-storage
     azure-mgmt-web
     azure-storage-file
+    azure-storage-file-share
     bandit
     bcrypt
     beautifulsoup4
@@ -122,6 +129,7 @@ buildPythonPackage rec {
     psycopg2
     pycrypto
     pygments
+    pyhcl
     pyjks
     pynacl
     pyopenssl
@@ -145,34 +153,14 @@ buildPythonPackage rec {
     rm test/conftest.py
 
     pytest \
-      test/test_cloud_aws_cloudformation_cloudfront.py \
-      test/test_cloud_aws_cloudformation_dynamodb.py \
-      test/test_cloud_aws_cloudformation_ec2.py \
-      test/test_cloud_aws_cloudformation_elb.py \
-      test/test_cloud_aws_cloudformation_elb2.py \
-      test/test_cloud_aws_cloudformation_fsx.py \
-      test/test_cloud_aws_cloudformation_iam.py \
-      test/test_cloud_aws_cloudformation_kms.py \
-      test/test_cloud_aws_cloudformation_rds.py \
-      test/test_cloud_aws_cloudformation_s3.py \
-      test/test_cloud_aws_cloudformation_secretsmanager.py \
-      test/test_format_apk.py \
-      test/test_format_file.py \
-      test/test_format_jks.py \
-      test/test_format_jwt.py \
-      test/test_format_pdf.py \
-      test/test_format_pkcs12.py \
-      test/test_format_string.py \
-      test/test_helper_asynchronous.py \
-      test/test_helper_crypto.py \
-      test/test_lang_core.py \
-      test/test_lang_csharp.py \
-      test/test_lang_docker.py \
-      test/test_lang_dotnetconfig.py \
-      test/test_lang_html.py \
-      test/test_lang_php.py \
-      test/test_lang_python.py \
-      test/test_lang_rpgle.py \
+      test/test_cloud_aws_terraform_{ebs,ec2}.py \
+      test/test_cloud_aws_cloudformation_{cloudfront,dynamodb,ec2,elb,elb2}.py \
+      test/test_cloud_aws_cloudformation_{fsx,iam,kms,rds,s3,secretsmanager}.py \
+      test/test_format_{apk,jks,jwt,pdf,pkcs12,string}.py \
+      test/test_helper_{asynchronous,crypto}.py \
+      test/test_lang_{javascript,java}.py \
+      test/test_lang_{core,csharp,docker,dotnetconfig,html,php,python,rpgle}.py \
+      test/test_utils_generic.py
 
   '';
 

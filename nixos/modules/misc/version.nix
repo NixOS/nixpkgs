@@ -6,6 +6,7 @@ let
   cfg = config.system.nixos;
 
   gitRepo      = "${toString pkgs.path}/.git";
+  gitRepoValid = lib.pathIsGitRepo gitRepo;
   gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
 in
 
@@ -41,8 +42,8 @@ in
 
     nixos.revision = mkOption {
       internal = true;
-      type = types.str;
-      default = trivial.revisionWithDefault "master";
+      type = types.nullOr types.str;
+      default = trivial.revisionWithDefault null;
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
@@ -83,6 +84,12 @@ in
       description = "Default NixOS channel to which the root user is subscribed.";
     };
 
+    configurationRevision = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "The Git revision of the top-level flake from which this configuration was built.";
+    };
+
   };
 
   config = {
@@ -91,8 +98,8 @@ in
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
       version = mkDefault (cfg.release + cfg.versionSuffix);
-      revision      = mkIf (pathExists gitRepo) (mkDefault            gitCommitId);
-      versionSuffix = mkIf (pathExists gitRepo) (mkDefault (".git." + gitCommitId));
+      revision      = mkIf gitRepoValid (mkDefault            gitCommitId);
+      versionSuffix = mkIf gitRepoValid (mkDefault (".git." + gitCommitId));
     };
 
     # Generate /etc/os-release.  See

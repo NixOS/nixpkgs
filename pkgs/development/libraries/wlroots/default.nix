@@ -1,28 +1,19 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, fetchpatch
 , wayland, libGL, wayland-protocols, libinput, libxkbcommon, pixman
 , xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg_4, freerdp
+, libpng, ffmpeg_4
 }:
 
 stdenv.mkDerivation rec {
   pname = "wlroots";
-  version = "0.8.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "wlroots";
     rev = version;
-    sha256 = "1ak86kx617c81dy85wg9rldy1z3n8ch93cjc05a4j6sifv0nkyfm";
+    sha256 = "0c0q1p9yss5kx4430ik3n89drqpmm2bvgl8fjlf6prac1a7xzqn8";
   };
-
-  patches = [
-    # add missing header that changed in mesa-19.2.2
-    # https://github.com/swaywm/wlroots/issues/1862
-    (fetchpatch {
-      url = "https://github.com/swaywm/wlroots/commit/d113e48a2a32542fe6e12f1759f07888364609bf.diff";
-      sha256 = "1h09j1gmnzlz4py92a92chgy8xzsd8h8xn5irq9s2hq4cla66h87";
-    })
-  ];
 
   # $out for the library and $examples for the example programs (in examples):
   outputs = [ "out" "examples" ];
@@ -32,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
     xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg_4 freerdp
+    libpng ffmpeg_4
   ];
 
   mesonFlags = [

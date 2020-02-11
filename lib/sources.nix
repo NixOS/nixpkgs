@@ -105,6 +105,7 @@ rec {
       in type == "directory" || lib.any (ext: lib.hasSuffix ext base) exts;
     in cleanSourceWith { inherit filter; src = path; };
 
+  pathIsGitRepo = path: (builtins.tryEval (commitIdFromGitRepo path)).success;
 
   # Get the commit id of a git repo
   # Example: commitIdFromGitRepo <nixpkgs/.git>

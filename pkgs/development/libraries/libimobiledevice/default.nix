@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libimobiledevice";
-  version = "2019-11-29";
+  version = "2020-01-20";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "9f79242a441ce37c28db2b84d49621d26418dc53";
-    sha256 = "1hs0hppsfyhjx47jk2j8n5riqjyrdqvdkc0z0kry0sw09c80zjnr";
+    rev = "61babf5f54e7734ebf3044af4c6294524d4b29b5";
+    sha256 = "02dnq6xza72li52kk4p2ak0gq2js3ssfp2fpjlgsv0bbn5mkg2hi";
   };
 
   outputs = [ "out" "dev" ];

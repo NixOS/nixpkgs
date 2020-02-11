@@ -23,12 +23,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "frama-c";
-  version = "19.1";
-  slang   = "Potassium";
+  version = "20.0";
+  slang   = "Calcium";
 
   src = fetchurl {
     url    = "http://frama-c.com/download/frama-c-${version}-${slang}.tar.gz";
-    sha256 = "16xsc4jv3ycs5dqprpkh9isr6l2w6i4bq83msqmkdc7l7hf53vrd";
+    sha256 = "03dvn162djylj2skmk6vv75gh87mm4s5cspkzcrlm5x0rlla2yqn";
   };
 
   preConfigure = lib.optionalString stdenv.cc.isClang "configureFlagsArray=(\"--with-cpp=clang -E -C\")";

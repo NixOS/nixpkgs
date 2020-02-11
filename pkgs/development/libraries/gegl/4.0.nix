@@ -33,37 +33,17 @@
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.18";
+  version = "0.4.20";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0r6akqnrkvxizyhyi8sv40mxm7j4bcwjb6mqjpxy0zzbbfsdyin9";
+    sha256 = "1zrxnxlhn0jmshg4n2m2xlgi886w059ynkiiihm7rpi05fs8pg93";
   };
 
   patches = [
-    # Fix arch detection.
-    # https://gitlab.gnome.org/GNOME/gegl/merge_requests/53
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/commit/6bcf95fd0f32cf5e8b1ddbe17b14d9ad049bded8.patch";
-      sha256 = "0aqdr3y5mr47wq44jnhp97188bvpjlf56zrlmn8aazdf07r2apma";
-    })
-
-    # Fix Darwin build.
-    # https://gitlab.gnome.org/GNOME/gegl/merge_requests/54
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gegl/commit/2bc06bfedee4fb25f6a966c8235b75292e24e55f.patch";
-      sha256 = "1psls61wsrdq5pzpvj22mrm46lpzrw3wkx6li7dv6fyb65wz2n4d";
-    })
-
-    # Fix test timeout. Downstream debian patch.
-    (fetchpatch {
-      url = "https://salsa.debian.org/gnome-team/gegl/raw/9b7520b38d87cd8ad4b39bf0b8c62d011da25169/debian/patches/increase_test_timeout.patch";
-      sha256 = "1prc1h1aipjd9db0i1j7nzga4zvk3vl8qsjpz1jzv1wwvz02isly";
-    })
-
     # Remove gegl:simple / backend-file test that times out frequently
     ./patches/no-simple-backend-file-test.patch
   ];

@@ -6,13 +6,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "snabb";
-  version = "2018.01.2";
+  version = "2019.11";
 
   src = fetchFromGitHub {
     owner = "snabbco";
     repo = "snabb";
     rev = "v${version}";
-    sha256 = "0n6bjf5g4imy0aql8fa55c0db3w8h944ia1dk10167x5pqvkgdgm";
+    sha256 = "1sas9d9kk92mc2wrwgmm0xxz7ycmh388dwvyxf1hy183yvin1nac";
   };
 
   buildInputs = [ makeWrapper ];

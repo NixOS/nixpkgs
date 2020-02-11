@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "pack";
-  version = "0.6.0";
+  version = "0.7.0";
 
   src = fetchFromGitHub {
     owner = "buildpacks";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00v4kb9cv6nn7vrybjkv0kgcvfm5dsg0168dv253mrp9xmv8kd9l";
+    sha256 = "0glfxrw3x35m4nmhr9xwlc14y5g9zni85rcrcn3dvkvgh4m6ipaj";
   };
 
   goPackagePath = "github.com/buildpacks/pack";
@@ -19,6 +19,7 @@ buildGoPackage rec {
 
   meta = with lib; {
     homepage = "https://buildpacks.io/";
+    changelog = "https://github.com/buildpacks/pack/releases/tag/v${version}";
     description = "Local CLI for building apps using Cloud Native Buildpacks";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];

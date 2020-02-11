@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
 
 buildGoPackage rec {
-  version = "1.2.0";
+  version = "1.3.0";
   pname = "grafana-loki";
   goPackagePath = "github.com/grafana/loki";
 
@@ -11,8 +11,14 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "04ix58gb9yy5jf8fhn3k1pbwqs69k7m96cck38ymhwml1793b4k9";
+    sha256 = "0b1dpb3vh5i18467qk8kpb5ic14p4p1dfyr8hjkznf6bs7g8ka1q";
   };
+
+  postPatch = ''
+    substituteInPlace pkg/distributor/distributor_test.go --replace \
+      '"eth0", "en0", "lo0"' \
+      '"lo"'
+  '';
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];

@@ -9,7 +9,7 @@ with pkgs.lib;
 with import common/ec2.nix { inherit makeTest pkgs; };
 
 let
-  image =
+  imageCfg =
     (import ../lib/eval-config.nix {
       inherit system;
       modules = [
@@ -26,20 +26,32 @@ let
             '';
 
           # Needed by nixos-rebuild due to the lack of network
-          # access. Mostly copied from
-          # modules/profiles/installation-device.nix.
+          # access. Determined by trial and error.
           system.extraDependencies =
-            with pkgs; [
-              stdenv busybox perlPackages.ArchiveCpio unionfs-fuse mkinitcpio-nfs-utils
+            with pkgs; (
+              [
+                # Needed for a nixos-rebuild.
+                busybox
+                stdenv
+                stdenvNoCC
+                mkinitcpio-nfs-utils
+                unionfs-fuse
+                cloud-utils
+                desktop-file-utils
+                texinfo
+                libxslt.bin
+                xorg.lndir
 
-              # These are used in the configure-from-userdata tests for EC2. Httpd and valgrind are requested
-              # directly by the configuration we set, and libxslt.bin is used indirectly as a build dependency
-              # of the derivation for dbus configuration files.
-              apacheHttpd valgrind.doc libxslt.bin
-            ];
+                # These are used in the configure-from-userdata tests
+                # for EC2. Httpd and valgrind are requested by the
+                # configuration.
+                apacheHttpd apacheHttpd.doc apacheHttpd.man valgrind.doc
+              ]
+            );
         }
       ];
-    }).config.system.build.amazonImage;
+    }).config;
+  image = "${imageCfg.system.build.amazonImage}/${imageCfg.amazonImage.name}.vhd";
 
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
@@ -110,16 +122,23 @@ in {
           text = "whoa";
         };
 
+        networking.hostName = "ec2-test-vm"; # required by services.httpd
+
         services.httpd = {
           enable = true;
           adminAddr = "test@example.org";
-          virtualHosts.localhost.documentRoot = "${pkgs.valgrind.doc}/share/doc/valgrind/html";
+          virtualHosts.localhost.documentRoot = "''${pkgs.valgrind.doc}/share/doc/valgrind/html";
         };
         networking.firewall.allowedTCPPorts = [ 80 ];
       }
     '';
     script = ''
       $machine->start;
+
+      # amazon-init must succeed. if it fails, make the test fail
+      # immediately instead of timing out in waitForFile.
+      $machine->waitForUnit('amazon-init.service');
+
       $machine->waitForFile("/etc/testFile");
       $machine->succeed("cat /etc/testFile | grep -q 'whoa'");
 

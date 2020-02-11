@@ -26,7 +26,6 @@ stdenv.mkDerivation {
   cmakeFlags = [
     "-DSYSTEM_CLANG=ON"
     "-DCLANG_CXX=ON"
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
   shell = runtimeShell;

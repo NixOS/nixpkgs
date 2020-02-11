@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "lilv";
-  version = "0.24.4";
+  version = "0.24.6";
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
-    sha256 = "0f24cd7wkk5l969857g2ydz2kjjrkvvddg1g87xzzs78lsvq8fy3";
+    sha256 = "1p3hafsxgs5d4za7n66lf5nz74qssfqpmk520cm7iq2njvvlqm2z";
   };
 
   nativeBuildInputs = [ pkgconfig python3 wafHook ];

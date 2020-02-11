@@ -1,14 +1,23 @@
-{ stdenv, fetchurl, glib, pkgconfig, gettext, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
-, libgcrypt, gobject-introspection, vala, gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
+{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, gettext, libxslt, python3
+, docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
+, gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.19.1";
+  version = "0.20.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fhflcsr70b1pps2pcvqcbdhip2ny5am9nbm634f4sj5g40y30w5";
+    sha256 = "0hxfpm8f4rlx685igd4bv89wb80v2952h373g3w6l42kniq7667i";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "rename-internal-functions-to-avoid-conflicts-and-fix-build.patch";
+      url = "https://gitlab.gnome.org/GNOME/libsecret/commit/cf21ad50b62f7c8e4b22ef374f0a73290a99bdb8.patch";
+      sha256 = "1n9nyzq5qrvw7s6sj5gzj33ia3rrx719jpys1cfhfbayg2sxyd4n";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -17,7 +26,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl gobject-introspection vala gtk-doc ];
+  nativeBuildInputs = [
+    pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
+    gobject-introspection vala gtk-doc
+  ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 
@@ -27,7 +39,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installCheckInputs = [ python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb_run dbus gjs ];
+  installCheckInputs = [
+    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb_run dbus gjs
+  ];
 
   # needs to run after install because typelibs point to absolute paths
   doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib
