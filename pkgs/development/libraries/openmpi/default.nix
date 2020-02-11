@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl, libfabric, pmix, ucx
+{ stdenv, fetchurl, fetchpatch, gfortran, perl, libnl, pmix, ucx
 , rdma-core, zlib, numactl, libevent, hwloc, pkgsTargetTarget, symlinkJoin
 
 # Enable CUDA support
@@ -47,7 +47,7 @@ in stdenv.mkDerivation rec {
     find -name "Makefile.in" -exec sed -i "s/\`date\`/$ts/" \{} \;
   '';
 
-  buildInputs = with stdenv; [ gfortran zlib libfabric pmix ucx ]
+  buildInputs = with stdenv; [ gfortran zlib pmix ucx ]
     ++ lib.optionals isLinux [ libnl numactl ]
     ++ lib.optionals cudaSupport [ cudatoolkit ]
     ++ [ libevent hwloc ]
@@ -58,7 +58,6 @@ in stdenv.mkDerivation rec {
   configureFlags = with stdenv; [
     "--with-cma"
     "--with-hwloc=${hwloc.dev}"
-    "--with-ofi=${libfabric}"
     "--with-pmi=${pmix}"
     "--with-pmix=${pmix} --enable-install-libpmix"
     "--with-ucx=${ucx}"
