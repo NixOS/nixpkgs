@@ -276,12 +276,12 @@ in
 
   goland = buildGoland rec {
     name = "goland-${version}";
-    version = "2019.3.1"; /* updated by script */
+    version = "2019.3.2"; /* updated by script */
     description = "Up and Coming Go IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/go/${name}.tar.gz";
-      sha256 = "1lj5i71nw2m9xwv6q48b86kipiwj927bxiwxppb4isqax2w6250d"; /* updated by script */
+      sha256 = "0namvc8dfm562dgvs4mrv1c6lyi4j8yxw402fkw55l0xqv3ff0a9"; /* updated by script */
     };
     wmClass = "jetbrains-goland";
     update-channel = "GoLand RELEASE";
@@ -289,12 +289,12 @@ in
 
   idea-community = buildIdea rec {
     name = "idea-community-${version}";
-    version = "2019.3.2"; /* updated by script */
+    version = "2019.3.3"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, community edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIC-${version}.tar.gz";
-      sha256 = "09vicd2czag07f2f7dy0mmcvz5kryv659m32zm9rlsr4nai1i3y3"; /* updated by script */
+      sha256 = "15rs866fp4lrsqdk13fnbg7ncdfrhky1m5sl90p32v45j90hagrg"; /* updated by script */
     };
     wmClass = "jetbrains-idea-ce";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -302,12 +302,12 @@ in
 
   idea-ultimate = buildIdea rec {
     name = "idea-ultimate-${version}";
-    version = "2019.3.2"; /* updated by script */
+    version = "2019.3.3"; /* updated by script */
     description = "Integrated Development Environment (IDE) by Jetbrains, requires paid license";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/idea/ideaIU-${version}-no-jbr.tar.gz";
-      sha256 = "09lgdd7gkx94warjc7wah9w7s9lj81law8clavjjyjas8bhhf1hz"; /* updated by script */
+      sha256 = "034aq5lf64apc152xr0889hg2xak2if9n5xl6zvd3f9q9srhivxn"; /* updated by script */
     };
     wmClass = "jetbrains-idea";
     update-channel = "IntelliJ IDEA RELEASE";
@@ -328,12 +328,12 @@ in
 
   pycharm-community = buildPycharm rec {
     name = "pycharm-community-${version}";
-    version = "2019.3.2"; /* updated by script */
+    version = "2019.3.3"; /* updated by script */
     description = "PyCharm Community Edition";
     license = stdenv.lib.licenses.asl20;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "06dzqjsq6jqgv8askzskm0bllzm9i8rzmhkjsv4na2phvdxf6qi2"; /* updated by script */
+      sha256 = "0ly3cdzm4hp4qchdadjmbd39jnqpmpnlk6vgp8s4amsv35b6hydd"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm-ce";
     update-channel = "PyCharm RELEASE";
@@ -341,12 +341,12 @@ in
 
   pycharm-professional = buildPycharm rec {
     name = "pycharm-professional-${version}";
-    version = "2019.3.2"; /* updated by script */
+    version = "2019.3.3"; /* updated by script */
     description = "PyCharm Professional Edition";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/python/${name}.tar.gz";
-      sha256 = "1zp64pnzz2jy232g8fgkqmn34afbhbkkhgyb9z1v1qfb533p39ig"; /* updated by script */
+      sha256 = "1305zvb5n2zqnny4l50qfv7jd1sj4ffhrig4rpfiqg65ncfpypwb"; /* updated by script */
     };
     wmClass = "jetbrains-pycharm";
     update-channel = "PyCharm RELEASE";
@@ -367,12 +367,12 @@ in
 
   ruby-mine = buildRubyMine rec {
     name = "ruby-mine-${version}";
-    version = "2019.3.1"; /* updated by script */
+    version = "2019.3.2"; /* updated by script */
     description = "The Most Intelligent Ruby and Rails IDE";
     license = stdenv.lib.licenses.unfree;
     src = fetchurl {
       url = "https://download.jetbrains.com/ruby/RubyMine-${version}.tar.gz";
-      sha256 = "0xadjx4szd9rk3bl3fqzhnfq744gmkbz9li80j5rqm27qhf4axfx"; /* updated by script */
+      sha256 = "0mwzhvrhvsyb8r7sjcigv9jazim1zyipb3ym4xsd2gyl3ans2vm9"; /* updated by script */
     };
     wmClass = "jetbrains-rubymine";
     update-channel = "RubyMine RELEASE";
