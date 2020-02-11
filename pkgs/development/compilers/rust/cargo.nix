@@ -1,5 +1,5 @@
 { stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc
+, installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
 
@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
+  nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
@@ -37,6 +37,8 @@ rustPlatform.buildRustPackage {
       --suffix PATH : "${rustc}/bin" \
       --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+
+    installManPage src/tools/cargo/src/etc/man/*
   '';
 
   checkPhase = ''
