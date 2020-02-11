@@ -1,7 +1,7 @@
-diff --git a/gettext-runtime/src/gettext.sh.in b/gettext-runtime/src/gettext.sh.in
+diff --git a/src/gettext.sh.in b/src/gettext.sh.in
 index 1dfa3bb..d6ef8a8 100644
---- a/gettext-runtime/src/gettext.sh.in
-+++ b/gettext-runtime/src/gettext.sh.in
+--- a/src/gettext.sh.in
++++ b/src/gettext.sh.in
 @@ -86,14 +86,14 @@ fi
  # looks up the translation of MSGID and substitutes shell variables in the
  # result.

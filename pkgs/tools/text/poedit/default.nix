@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, gettext, pkgconfig, wxGTK30,
+{ stdenv, fetchurl, autoconf, automake, libtool, gettext-tools, pkgconfig, wxGTK30,
   boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk2, gtkspell2, pugixml,
   nlohmann_json, hicolor-icon-theme, wrapGAppsHook }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lucenepp nlohmann_json wxGTK30 icu pugixml gtk2 gtkspell2 hicolor-icon-theme ];
 
-  propagatedBuildInputs = [ gettext ];
+  propagatedBuildInputs = [ gettext-tools ];
   
   preConfigure = "
     patchShebangs bootstrap
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
  
   preFixup = ''
-    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ gettext ]}")
+    gappsWrapperArgs+=(--prefix PATH : "${stdenv.lib.makeBinPath [ gettext-tools ]}")
   '';
  
   enableParallelBuilding = true;

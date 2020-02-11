@@ -1,31 +1,29 @@
-{ stdenv, lib, fetchurl, libiconv, xz, fetchpatch }:
+{ stdenv, lib, fetchurl, libiconv }:
 
-stdenv.mkDerivation rec {
-  pname = "gettext";
-  version = "0.20.1";
+let common = import ../gettext/common.nix { inherit fetchurl; };
+in stdenv.mkDerivation rec {
+  pname = "gettext-runtime";
+  inherit (common) version src;
 
-  src = fetchurl {
-    url = "mirror://gnu/gettext/${pname}-${version}.tar.gz";
-    sha256 = "0p3zwkk27wm2m2ccfqm57nj7vqkmfpn7ja1nf65zmhz8qqs5chb6";
-  };
+  sourceRoot = "${common.pname}-${common.version}/${pname}/";
+
+  # Sources are within a subdir of the upstream directory. Given
+  # that patches are applied from sourceRoot, we cannot just
+  # fetch patches upstream in order to backport them. We have
+  # to update them to accomodate the effective root.
   patches = [
     ./absolute-paths.diff
-    ./gettext.git-2336451ed68d91ff4b5ae1acbc1eca30e47a86a9.patch
-  ]
-  ++ lib.optional stdenv.isDarwin
-      (fetchpatch {
-        url = "https://git.savannah.gnu.org/cgit/gettext.git/patch?id=ec0e6b307456ceab352669ae6bccca9702108753";
-        sha256 = "0xqs01c7xl7vmw6bqvsmrzxxjxk2a4spcdpmlwm3b4hi2wc2lxnf";
-      });
+  ] ++ lib.optional stdenv.isDarwin [
+    ./gettext.git-ec0e6b307456ceab352669ae6bccca9702108753.patch
+  ];
 
   outputs = [ "out" "man" "doc" "info" ];
 
   hardeningDisable = [ "format" ];
 
-  LDFLAGS = if stdenv.isSunOS then "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec" else "";
-
   configureFlags = [
-     "--disable-csharp" "--with-xz"
+    "--disable-csharp"
+    "--with-xz"
   ] ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     # On cross building, gettext supposes that the wchar.h from libc
     # does not fulfill gettext needs, so it tries to work with its
@@ -35,19 +33,9 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-   substituteAllInPlace gettext-runtime/src/gettext.sh.in
-   substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-   substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+    substituteAllInPlace src/gettext.sh.in
   '';
 
-  nativeBuildInputs = [
-    xz
-    xz.bin
-  ];
   # HACK, see #10874 (and 14664)
   buildInputs = stdenv.lib.optional (!stdenv.isLinux && !stdenv.hostPlatform.isCygwin) libiconv;
 
@@ -82,14 +70,13 @@ stdenv.mkDerivation rec {
       GNU packages produce multi-lingual messages.
     '';
 
-    homepage = https://www.gnu.org/software/gettext/;
+    homepage = "https://www.gnu.org/software/gettext/";
 
-    maintainers = with maintainers; [ zimbatm vrthra ];
-    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ zimbatm vrthra lsix ];
+
+    # Licensing changes from component to component.
+    # see https://git.savannah.gnu.org/gitweb/?p=gettext.git;a=blob;f=gettext-runtime/COPYING;h=9045d4cd3fdc2f192776f6663ff5411ded29f8a1;hb=7ab696c983ab080a21dc06e422366c086d7dd91a
+    license = [ licenses.lgpl21Plus licenses.gpl3 ];
     platforms = platforms.all;
   };
-}
-
-// stdenv.lib.optionalAttrs stdenv.isDarwin {
-  makeFlags = [ "CFLAGS=-D_FORTIFY_SOURCE=0" ];
 }

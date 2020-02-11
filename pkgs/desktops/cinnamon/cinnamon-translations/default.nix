@@ -1,6 +1,6 @@
 { stdenv
 , fetchFromGitHub
-, gettext
+, gettext-tools
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gettext
+    gettext-tools
   ];
 
   installPhase = ''

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib
-, autoconf, automake, gnum4, libtool, perl, gnulib, uthash, pkgconfig, gettext
+, autoconf, automake, gnum4, libtool, perl, gnulib, uthash, pkgconfig, gettext-tools
 , python, freetype, zlib, glib, libungif, libpng, libjpeg, libtiff, libxml2, cairo, pango
 , readline, woff2, zeromq
 , withSpiro ? false, libspiro
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isi686 "-msse2 -mfpmath=sse";
 
-  nativeBuildInputs = [ pkgconfig autoconf automake gnum4 libtool perl gettext ];
+  nativeBuildInputs = [ pkgconfig autoconf automake gnum4 libtool perl gettext-tools ];
   buildInputs = [
     readline uthash woff2 zeromq
     python freetype zlib glib libungif libpng libjpeg libtiff libxml2
