@@ -25152,6 +25152,8 @@ in
 
   mongoc = callPackage ../development/libraries/mongoc { };
 
+  mongoose = callPackage ../development/libraries/science/math/mongoose {};
+
   morph = callPackage ../tools/package-management/morph { };
 
   mupen64plus = callPackage ../misc/emulators/mupen64plus { };
