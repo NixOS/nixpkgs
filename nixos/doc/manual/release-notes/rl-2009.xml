@@ -72,6 +72,16 @@
 }</programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
+      as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
+      is 20.09 or higher. It also enables number of
+      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
+      which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
+      <option>systemd.services.supybot.serviceConfig</option>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

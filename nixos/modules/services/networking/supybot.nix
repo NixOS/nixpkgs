@@ -3,13 +3,11 @@
 with lib;
 
 let
-
   cfg  = config.services.supybot;
-
+  isStateDirHome = hasPrefix "/home/" cfg.stateDir;
+  isStateDirVar = cfg.stateDir == "/var/lib/supybot";
 in
-
 {
-
   options = {
 
     services.supybot = {
@@ -42,7 +40,6 @@ in
     };
 
   };
-
 
   config = mkIf cfg.enable {
 
@@ -79,6 +76,32 @@ in
         Restart = "on-abort";
         StartLimitInterval = "5m";
         StartLimitBurst = "1";
+
+        NoNewPrivileges = true;
+        PrivateDevices = true;
+        PrivateMounts = true;
+        PrivateTmp = true;
+        ProtectControlGroups = true;
+        ProtectKernelModules = true;
+        ProtectKernelTunables = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictSUIDSGID = true;
+        SystemCallArchitectures = "native";
+        RestrictNamespaces = true;
+        RestrictRealtime = true;
+        LockPersonality = true;
+        MemoryDenyWriteExecute = true;
+        RemoveIPC = true;
+        ProtectHostname = true;
+        CapabilityBoundingSet = "";
+        ProtectSystem = "full";
+      }
+      // optionalAttrs isStateDirVar {
+        StateDirectory = "supybot";
+        ProtectSystem = "strict";
+      }
+      // optionalAttrs (!isStateDirHome) {
+        ProtectHome = true;
       };
     };
 
