@@ -1,6 +1,6 @@
-{ stdenv, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
+{ lib, isClang, mkDerivation, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "doomseeker";
   version = "2018-03-05";
 
@@ -19,9 +19,9 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+  NIX_CFLAGS_COMPILE = lib.optionalString isClang "-Wno-error=format-security";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = http://doomseeker.drdteam.org/;
     description = "Multiplayer server browser for many Doom source ports";
     license = licenses.gpl2;
