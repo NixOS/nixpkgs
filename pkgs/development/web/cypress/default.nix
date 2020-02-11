@@ -30,7 +30,7 @@ stdenv.mkDerivation rec{
     mkdir -p $out/bin/resources/app
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
-    echo '{"verified": true}' > $out/bin/binary_state.json
+    echo '{"verified": true}' > $out/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
   '';
 
