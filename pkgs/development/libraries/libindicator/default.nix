@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     substituteInPlace configure \
       --replace 'LIBINDICATOR_LIBS+="$LIBM"' 'LIBINDICATOR_LIBS+=" $LIBM"'
+    substituteInPlace libindicator/indicator3-0.4.pc.in.in \
+      --replace 'indicatordir=''${libdir}' 'indicatordir=/run/current-system/sw/lib'
     for f in {build-aux/ltmain.sh,configure,m4/libtool.m4}; do
       substituteInPlace $f\
         --replace /usr/bin/file ${file}/bin/file
