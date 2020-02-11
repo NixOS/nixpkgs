@@ -4,7 +4,7 @@ header "fetching Apache Mesos maven repo"
 function fetchArtifact {
   repoPath="$1"
   echo "Fetching $repoPath"
-  url="http://repo.maven.apache.org/maven2/$repoPath"
+  url="https://repo.maven.apache.org/maven2/$repoPath"
   mkdir -p $(dirname $out/$repoPath)
   curl --fail --location --insecure --retry 3 --max-redirs 20 "$url" --output "$out/$repoPath"
 }

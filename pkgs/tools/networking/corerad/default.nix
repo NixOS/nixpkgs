@@ -2,18 +2,16 @@
 
 buildGoModule rec {
   pname = "corerad";
-  version = "0.1.9";
-
-  goPackagePath = "github.com/mdlayher/corerad";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "mdlayher";
     repo = "corerad";
     rev = "v${version}";
-    sha256 = "1m23f318qr6b8c7hxrhihrm09pmdwab988k3bn4ygfm49z5phy4s";
+    sha256 = "04w77cahnphgd8b09a67dkrgx9jh8mvgjfjydj6drcw67v0d18c0";
   };
 
-  modSha256 = "0idlpkn6krs77akn3p6gxsbc8zpj1rnjkhhwmb8ns98x82g6bln0";
+  modSha256 = "0vbbpndqwwz1mc59j7liaayxaj53cs8s3javgj3pvhkn4vp65p7c";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mdlayher/corerad";

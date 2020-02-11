@@ -18,6 +18,7 @@
  <xi:include href="opengl.xml" />
  <xi:include href="shell-helpers.xml" />
  <xi:include href="steam.xml" />
+ <xi:include href="urxvt.xml" />
  <xi:include href="weechat.xml" />
  <xi:include href="xorg.xml" />
 </chapter>

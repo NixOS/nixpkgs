@@ -100,6 +100,7 @@ let
       kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
+      kcontacts = callPackage ./kcontacts.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};

@@ -7,8 +7,8 @@ with ocamlPackages; buildDunePackage rec {
   minimumOCamlVersion = "4.06";
 
   src = fetchurl {
-    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}.tbz";
-    sha256 = "09y6sfkqfrgxbmphz5q8w7mdlj8fjsrkiapcx86f94dnwz6j3ajf";
+    url = "https://github.com/ocaml-ppx/ocamlformat/releases/download/${version}/ocamlformat-${version}-2.tbz";
+    sha256 = "0ki2flqi3xkhw9mfridivb6laxm7gml8rj9qz42vqmy9yx76jjxq";
   };
 
   buildInputs = [

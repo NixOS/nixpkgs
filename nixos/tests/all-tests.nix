@@ -32,7 +32,7 @@ in
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
-  buildkite-agent = handleTest ./buildkite-agent.nix {};
+  buildkite-agents = handleTest ./buildkite-agents.nix {};
   boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
@@ -96,6 +96,7 @@ in
   freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
+  grocy = handleTest ./grocy.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
@@ -256,6 +257,7 @@ in
   runInMachine = handleTest ./run-in-machine.nix {};
   rxe = handleTest ./rxe.nix {};
   samba = handleTest ./samba.nix {};
+  sanoid = handleTest ./sanoid.nix {};
   sddm = handleTest ./sddm.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
@@ -269,6 +271,7 @@ in
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
+  sympa = handleTest ./sympa.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};
@@ -308,6 +311,7 @@ in
   xss-lock = handleTest ./xss-lock.nix {};
   yabar = handleTest ./yabar.nix {};
   yggdrasil = handleTest ./yggdrasil.nix {};
+  zfs = handleTest ./zfs.nix {};
   zsh-history = handleTest ./zsh-history.nix {};
   zookeeper = handleTest ./zookeeper.nix {};
 }

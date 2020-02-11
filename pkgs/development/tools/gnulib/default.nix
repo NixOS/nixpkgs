@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation {
   pname = "gnulib";
-  version = "20190326";
+  version = "20190811";
 
   src = fetchgit {
     url = https://git.savannah.gnu.org/r/gnulib.git;
-    rev = "a18f7ce3c0aa760c33d46bbeb8e5b3a14cf24984";
-    sha256 = "04py5n3j17wyqv9wfsslcrxzapni9vmw6p5g0adzy2md3ygjw4x4";
+    rev = "6430babe47ece6953cf18ef07c1d8642c8588e89";
+    sha256 = "14kgykbjly03dlb25sllcfcrpk7zkypa449gr3zbqv4rhpmnzizg";
   };
 
   dontFixup = true;

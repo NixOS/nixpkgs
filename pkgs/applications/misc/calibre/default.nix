@@ -93,12 +93,13 @@ mkDerivation rec {
       netifaces
       pillow
       python
-      pyqt5_with_qtwebkit
+      pyqt5
       sip
       regex
       msgpack
       beautifulsoup4
       html2text
+      pyqtwebengine
       # the following are distributed with calibre, but we use upstream instead
       odfpy
     ]

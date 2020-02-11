@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "jieba";
-  version = "0.40";
+  version = "0.42.1";
 
   # no tests in PyPI tarball
   src = fetchFromGitHub {
     owner = "fxsjy";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nasyxva9m3k9fb9g627ppphp3697jdplbb2bavqx71sa7mqim2m";
+    sha256 = "028vmd6sj6wn9l1ilw7qfmlpyiysnlzdgdlhwxs6j4fvq0gyrwxk";
   };
 
   checkInputs = [ glibcLocales ];

@@ -1,23 +1,21 @@
 { stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
-, lsb-release, glog, protobuf, cbc, zlib
-, ensureNewerSourcesForZipFilesHook, python, swig
-, pythonProtobuf }:
+, lsb-release, glog, protobuf3_11, cbc, zlib
+, ensureNewerSourcesForZipFilesHook, python, swig }:
 
-stdenv.mkDerivation rec {
+let
+  protobuf = protobuf3_11;
+  pythonProtobuf = python.pkgs.protobuf.override { inherit protobuf; };
+
+in stdenv.mkDerivation rec {
   pname = "or-tools";
-  version = "7.3";
+  version = "7.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
     rev = "v${version}";
-    sha256 = "0q06vxmds6nm3dpjw4y5jzr8j98qgfb9i8pbm9pfhmqigv791hwc";
+    sha256 = "1p9jwdwzcsaa58ap912hdf2w27vna3xl9g4lh6kjskddwi8l3wac";
   };
-
-  patches = [
-    ./build.patch # https://github.com/google/or-tools/pull/1619
-    ./protobuf.patch # Otherwise it tries to install protobuf from pypi.
-  ];
 
   # The original build system uses cmake which does things like pull
   # in dependencies through git and Makefile creation time. We
@@ -69,7 +67,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux;
   };
 }

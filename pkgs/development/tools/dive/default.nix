@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "dive";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dqaqzmb74kf6q70wxfbsrbbfmxl82rj7r5kpsg5znm99filk3ny";
+    sha256 = "1v69xbkjmyzm5g4wi9amjk65fs4qgxkqc0dvq55vqjigzrranp22";
   };
 
   modSha256 = "1y8mqxlzbizra2m9aayp6w07s39gddvm5igdaw9kwxwjwvd1dbfc";
@@ -16,6 +16,8 @@ buildGoModule rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with stdenv.lib; {
     description = "A tool for exploring each layer in a docker image";

@@ -117,6 +117,18 @@ mapAliases ({
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
+  firefox-esr-52           = firefoxPackages.firefox-esr-52; # 2020-02, remove after 20.03 branchoff
+  firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52; # 2020-02, remove after 20.03 branchoff
+  firefox-esr-60           = firefoxPackages.firefox-esr-60; # 2020-02, remove after 20.03 branchoff
+  firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60; # 2020-02, remove after 20.03 branchoff
+  icecat                   = firefoxPackages.icecat;         # 2020-02, remove after 20.03 branchoff
+  icecat-unwrapped         = firefoxPackages.icecat;         # 2020-02, remove after 20.03 branchoff
+  conkeror-unwrapped       = conkeror; # 2020-02, remove after 20.03 branchoff
+  conkeror                 = throw ''
+    Conkeror doesn't work with any secure firefox release.
+    Please move to some of the alternatives at http://conkeror.org/Alternatives
+  ''; # 2020-02, remove after 20.03 branchoff
+
   firestr = throw "firestr has been removed."; # added 2019-12-08
   flameGraph = flamegraph; # added 2018-04-25
   font-awesome-ttf = font-awesome; # 2018-02-25
@@ -369,7 +381,16 @@ mapAliases ({
   ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
-  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  rxvt_unicode_with-plugins = rxvt-unicode; # added 2020-02-02
+  rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
+  urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
+  urxvt_perl = rxvt-unicode-plugins.perl; # added 2020-02-02
+  urxvt_perls = rxvt-unicode-plugins.perls; # added 2020-02-02
+  urxvt_tabbedex = rxvt-unicode-plugins.tabbedex; # added 2020-02-02
+  urxvt_font_size = rxvt-unicode-plugins.font-size; # added 2020-02-02
+  urxvt_theme_switch = rxvt-unicode-plugins.theme-switch; # added 2020-02-02
+  urxvt_vtwheel = rxvt-unicode-plugins.vtwheel; # added 2020-02-02
+  urxvt_bidi = rxvt-unicode-plugins.bidi; # added 2020-02-02
   s6Dns = s6-dns; # added 2018-07-23
   s6Networking = s6-networking; # added 2018-07-23
   s6LinuxUtils = s6-linux-utils; # added 2018-07-23
@@ -571,4 +592,6 @@ mapAliases ({
 
   dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
+
+  gcc-snapshot = throw "Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 })

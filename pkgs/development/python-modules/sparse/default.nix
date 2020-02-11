@@ -35,6 +35,5 @@ buildPythonPackage rec {
     homepage = https://github.com/pydata/sparse/;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
-    broken = true;
   };
 }

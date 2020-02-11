@@ -303,7 +303,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti veprbl ];
 
     platforms =
       stdenv.lib.platforms.linux ++

@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, which, openssl, readline }:
+{ stdenv, lib, fetchFromGitHub, which, openssl, readline, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "eresi";
@@ -10,6 +10,13 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "0a5a7mh2zw9lcdrl8n1mqccrc0xcgj7743l7l4kslkh722fxv625";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/thorkill/eresi/commit/a79406344cc21d594d27fa5ec5922abe9f7475e7.patch";
+      sha256 = "1mjjc6hj7r06iarvai7prcdvjk9g0k5vwrmkwcm7b8ivd5xzxp2z";
+    })
+  ];
 
   postPatch = ''
     # Two occurences of fprintf() with only two arguments, which should really
