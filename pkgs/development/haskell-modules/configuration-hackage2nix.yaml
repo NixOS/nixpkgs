@@ -1407,6 +1407,7 @@ default-package-overrides:
   - mono-traversable-keys ==0.1.0
   - more-containers ==0.2.2.0
   - mountpoints ==1.0.2
+  - mpi-hs ==0.5.3.0
   - msgpack ==1.0.1.0
   - msgpack-aeson ==0.1.0.0
   - mtl ==2.2.2
