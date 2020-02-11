@@ -2920,7 +2920,7 @@ in
   duplicati = callPackage ../tools/backup/duplicati { };
 
   duplicity = callPackage ../tools/backup/duplicity {
-    gnupg = gnupg1;
+    pythonPackages = python3Packages;
   };
 
   duply = callPackage ../tools/backup/duply { };
