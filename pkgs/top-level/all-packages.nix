@@ -18435,6 +18435,10 @@ in
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
 
+  brotab = callPackage ../tools/misc/brotab {
+    python = python3;
+  };
+
   bookworm = callPackage ../applications/office/bookworm { };
 
   chromium = callPackage ../applications/networking/browsers/chromium (config.chromium or {});
