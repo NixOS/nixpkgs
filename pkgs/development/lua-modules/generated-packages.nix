@@ -214,6 +214,23 @@ compat53 = buildLuarocksPackage {
     };
   };
 };
+cosmo = buildLuarocksPackage {
+  pname = "cosmo";
+  version = "16.06.04-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cosmo-16.06.04-1.src.rock;
+    sha256 = "1adrk74j0x1yzhy0xz9k80hphxdjvm09kpwpbx00sk3kic6db0ww";
+  };
+  propagatedBuildInputs = [ lpeg ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://cosmo.luaforge.net";
+    description = "Safe templates for Lua";
+    maintainers = with maintainers; [ marsam ];
+    license.fullName = "MIT/X11";
+  };
+};
 coxpcall = buildLuarocksPackage {
   pname = "coxpcall";
   version = "1.17.0-1";
