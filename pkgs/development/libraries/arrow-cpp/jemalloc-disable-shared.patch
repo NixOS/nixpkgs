@@ -1,11 +1,11 @@
 diff --git a/cmake_modules/ThirdpartyToolchain.cmake b/cmake_modules/ThirdpartyToolchain.cmake
 --- a/cmake_modules/ThirdpartyToolchain.cmake
 +++ b/cmake_modules/ThirdpartyToolchain.cmake
-@@ -1428,6 +1428,7 @@ if(ARROW_JEMALLOC)
-                       "--with-jemalloc-prefix=je_arrow_"
-                       "--with-private-namespace=je_arrow_private_"
-                       "--without-export"
-+                      "--disable-shared"
-                       # Don't override operator new()
-                       "--disable-cxx" "--disable-libdl"
-                       # See https://github.com/jemalloc/jemalloc/issues/1237
+@@ -1317,6 +1317,7 @@ if(ARROW_JEMALLOC)
+               "--with-jemalloc-prefix=je_arrow_"
+               "--with-private-namespace=je_arrow_private_"
+               "--without-export"
++              "--disable-shared"
+               # Don't override operator new()
+               "--disable-cxx" "--disable-libdl"
+               # See https://github.com/jemalloc/jemalloc/issues/1237
