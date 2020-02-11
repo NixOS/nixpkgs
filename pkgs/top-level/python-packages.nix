@@ -2636,6 +2636,8 @@ in {
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
+  ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
+
   filetype = callPackage ../development/python-modules/filetype { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
