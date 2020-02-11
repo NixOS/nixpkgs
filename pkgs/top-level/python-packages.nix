@@ -6924,8 +6924,6 @@ in {
 
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
-  srp = callPackage ../development/python-modules/srp { };
-
   srptools = callPackage ../development/python-modules/srptools { };
 
   srp = callPackage ../development/python-modules/srp { };
