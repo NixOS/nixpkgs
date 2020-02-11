@@ -7,9 +7,6 @@
 # Enable the Sun Grid Engine bindings
 , enableSGE ? false
 
-# Enable the SLURM bindings
-, enableSLURM ? false
-
 # Pass PATH/LD_LIBRARY_PATH to point to current mpirun by default
 , enablePrefix ? false
 }:
@@ -66,13 +63,11 @@ in stdenv.mkDerivation rec {
     "--with-ofi=${libfabric}"
     "--with-pmi=${pmix}"
     "--with-pmix=${pmix} --enable-install-libpmix"
-    "--with-verbs=${rdma-core}"
     "--with-ucx=${ucx}"
     ]
     ++ lib.optional (!cudaSupport) "--disable-mca-dso"
     ++ lib.optional isLinux  "--with-libnl=${libnl.dev}"
     ++ lib.optional enableSGE "--with-sge"
-    ++ lib.optional enableSLURM "--with-slurm"
     ++ lib.optional enablePrefix "--enable-mpirun-prefix-by-default"
     ++ lib.optionals cudaSupport [ "--with-cuda=${cudatoolkit_joined}" "--enable-dlopen" ]
     ;
