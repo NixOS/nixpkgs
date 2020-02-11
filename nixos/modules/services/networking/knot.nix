@@ -13,7 +13,12 @@ let
     ln -s ${configFile} $out
     knotc --config=${configFile} conf-check
   '';
-
+  keymgr = pkgs.writeShellScriptBin "keymgr" ''
+    ${pkgs.systemd}/bin/systemd-run --pipe \
+     --uid knot --working-directory="$PWD" \
+     -p DynamicUser=yes -p StateDirectory=knot \
+    ${cfg.package}/bin/keymgr --config=${configFile} "$@"
+  '';
   knot-cli-wrappers = pkgs.stdenv.mkDerivation {
     name = "knot-cli-wrappers";
     buildInputs = [ pkgs.makeWrapper ];
@@ -22,8 +27,6 @@ let
       makeWrapper ${cfg.package}/bin/knotc "$out/bin/knotc" \
         --add-flags "--config=${configFile}" \
         --add-flags "--socket=${socketFile}"
-      makeWrapper ${cfg.package}/bin/keymgr "$out/bin/keymgr" \
-        --add-flags "--config=${configFile}"
       for executable in kdig khost kjournalprint knsec3hash knsupdate kzonecheck
       do
         ln -s "${cfg.package}/bin/$executable" "$out/bin/$executable"
@@ -90,6 +93,6 @@ in {
       };
     };
 
-    environment.systemPackages = [ knot-cli-wrappers ];
+    environment.systemPackages = [ knot-cli-wrappers keymgr ];
   };
 }
