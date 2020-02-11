@@ -1,4 +1,4 @@
-{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig
+{ stdenv, darwin, fetchurl, makeWrapper, pkgconfig, autoconf, automake
 , harfbuzz, icu
 , fontconfig, lua, libiconv
 , makeFontsConf, gentium
@@ -7,7 +7,7 @@
 with stdenv.lib;
 
 let
-  luaEnv = lua.withPackages(ps: with ps;[cassowary cosmo linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
+  luaEnv = lua.withPackages(ps: with ps;[cassowary cosmo compat53 linenoise lpeg lua-zlib lua_cliargs luaepnf luaexpat luafilesystem luarepl luasec luasocket stdlib vstruct]);
 
 in
 
@@ -20,7 +20,9 @@ stdenv.mkDerivation rec {
     sha256 = "d89d5ce7d2bf46fb062e5299ffd8b5d821dc3cb3462a0e7c1109edeee111d856";
   };
 
-  nativeBuildInputs = [pkgconfig makeWrapper];
+  configureFlags = [ "--with-system-luarocks" ];
+
+  nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
   buildInputs = [ harfbuzz icu fontconfig libiconv luaEnv ]
   ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.AppKit
   ;
@@ -37,19 +39,23 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  doCheck = stdenv.targetPlatform == stdenv.hostPlatform
+  # TODO: needs to tweak Makefile-fonts to avoid download fonts
+  doCheck = false; /*stdenv.targetPlatform == stdenv.hostPlatform
   && ! stdenv.isAarch64 # random seg. faults
   && ! stdenv.isDarwin; # dy lib not found
+ */
 
   enableParallelBuilding = true;
 
-  checkPhase = ''
-    make examples
+  preBuild = stdenv.lib.optionalString stdenv.cc.isClang ''
+    substituteInPlace libtexpdf/dpxutil.c \
+      --replace "ASSERT(ht && ht->table && iter);" "ASSERT(ht && iter);"
   '';
+
+  checkTarget = "examples";
 
   postInstall = ''
     install -D -t $out/share/doc/sile documentation/sile.pdf
-    install -D -t $out/share/doc/sile examples
   '';
 
   # Hack to avoid TMPDIR in RPATHs.
@@ -69,7 +75,7 @@ stdenv.mkDerivation rec {
       technologies and borrowing some ideas from graphical systems
       such as InDesign.
     '';
-    homepage = http://www.sile-typesetter.org;
+    homepage = "https://sile-typesetter.org/";
     platforms = platforms.unix;
     license = licenses.mit;
   };
