@@ -7,7 +7,7 @@ cd "$(dirname "${BASH_SOURCE[0]}")"
 root=../../..
 export NIXPKGS_ALLOW_UNFREE=1
 
-mate_version=1.22
+mate_version=1.24
 theme_version=3.22
 materepo=https://pub.mate-desktop.org/releases/${mate_version}
 themerepo=https://pub.mate-desktop.org/releases/themes/${theme_version}
