@@ -2383,6 +2383,7 @@ extra-packages:
   - patience ^>= 0.1                    # required by chell-0.4.x
   - persistent >=2.5 && <2.8            # pre-lts-11.x versions neeed by git-annex 6.20180227
   - persistent-sqlite < 2.7             # pre-lts-11.x versions neeed by git-annex 6.20180227
+  - prettyprinter == 1.6.1              # required by ghc 8.8.x, and dhall-1.29.0
   - primitive == 0.5.1.*                # required to build alex with GHC 6.12.3
   - proto-lens == 0.2.*                 # required for tensorflow-proto-0.1.x on GHC 8.2.x
   - proto-lens-protobuf-types == 0.2.*  # required for tensorflow-proto-0.1.x on GHC 8.2.x
