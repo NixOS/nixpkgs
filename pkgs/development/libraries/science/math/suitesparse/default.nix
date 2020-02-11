@@ -1,33 +1,46 @@
-{ stdenv, fetchurl, gfortran, openblas, cmake, fixDarwinDylibNames
+{ stdenv
+, fetchFromGitHub
+, gfortran
+, openblas
+, cmake
+, fixDarwinDylibNames
 , gnum4
-, enableCuda  ? false, cudatoolkit
+, enableCuda ? false
+, cudatoolkit
 }:
 
-let
-  version = "5.4.0";
-  name = "suitesparse-${version}";
-
-  SHLIB_EXT = stdenv.hostPlatform.extensions.sharedLibrary;
-in
 stdenv.mkDerivation rec {
-  inherit name;
+  pname = "suitesparse";
+  version = "5.4.0";
 
-  src = fetchurl {
-    url = "http://faculty.cse.tamu.edu/davis/SuiteSparse/SuiteSparse-${version}.tar.gz";
-    sha256 = "1lfvjj787yqyhk25w7brlrkrl7dnnn5dq4ijxws3wrbcd4vd2k9p";
+  outputs = [ "out" "dev" "doc" ];
+
+  src = fetchFromGitHub {
+    owner = "DrTimothyAldenDavis";
+    repo = "SuiteSparse";
+    rev = "v${version}";
+    sha256 = "sha256:1jwqn86z9xxcj6gsiymmws40zfvdcclprffsmdasdjnjax00z9sk";
   };
+
+  nativeBuildInputs = [
+    cmake
+    gnum4
+  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+
+  buildInputs = [
+    openblas
+    gfortran.cc.lib
+  ] ++ stdenv.lib.optional enableCuda cudatoolkit;
 
   dontUseCmakeConfigure = true;
 
   preConfigure = ''
     mkdir -p $out/lib
-    mkdir -p $out/include
-    mkdir -p $out/share/doc/${name}
+    mkdir -p $dev/include
+    mkdir -p $doc/share/doc/${pname}-${version}
 
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
-        -e 's/METIS .*$/METIS =/' \
-        -e 's/METIS_PATH .*$/METIS_PATH =/' \
-        -e '/CHOLMOD_CONFIG/ s/$/-DNPARTITION/'
+        -e '/CHOLMOD_CONFIG ?=/ s/$/ -DNPARTITION/'
   ''
   + stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
@@ -49,7 +62,7 @@ stdenv.mkDerivation rec {
         -e 's|^[[:space:]]*\(NVCCFLAGS     =\)|NVCCFLAGS = $(NV20) -O3 -gencode=arch=compute_20,code=sm_20 -gencode=arch=compute_30,code=sm_30 -gencode=arch=compute_35,code=sm_35 -gencode=arch=compute_60,code=sm_60|'
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin " -DNTIMER";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-DNTIMER";
 
   buildPhase = ''
     runHook preBuild
@@ -75,7 +88,7 @@ stdenv.mkDerivation rec {
     ${if enableCuda then "${cudatoolkit}/bin/nvcc" else "${stdenv.cc.outPath}/bin/cc"} \
         static/*.o                                                                     \
         ${if stdenv.isDarwin then "-dynamiclib" else "--shared"}                       \
-        -o "lib/libsuitesparse${SHLIB_EXT}"                                            \
+        -o "lib/libsuitesparse${stdenv.hostPlatform.extensions.sharedLibrary}"         \
         -lopenblas                                                                     \
         ${stdenv.lib.optionalString enableCuda "-lcublas"}
 
@@ -85,12 +98,11 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out
     cp -r lib $out/
-    cp -r include $out/
-    cp -r share $out/
-    ''
-    + stdenv.lib.optionalString stdenv.isDarwin ''
+    cp -r include $dev/
+    cp -r share $doc/
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
     # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.
     # We manually fix them up here.
     fixDarwinDylibNames() {
@@ -109,28 +121,19 @@ stdenv.mkDerivation rec {
     }
 
     fixDarwinDylibNames $(find "$out" -name "*.dylib")
-    ''
-    + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  ''
+  + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # Fix rpaths
     cd $out
     find -name \*.so\* -type f -exec \
       patchelf --set-rpath "$out/lib:${stdenv.lib.makeLibraryPath buildInputs}" {} \;
-    ''
-    +
-    ''
+  ''
+  + ''
     runHook postInstall
-    '';
-
-  nativeBuildInputs = [
-    cmake
-    gnum4
-  ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
-
-  buildInputs = [ openblas gfortran.cc.lib ]
-    ++ stdenv.lib.optional enableCuda cudatoolkit;
+  '';
 
   meta = with stdenv.lib; {
-    homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;
+    homepage = "http://faculty.cse.tamu.edu/davis/suitesparse.html";
     description = "A suite of sparse matrix algorithms";
     license = with licenses; [ bsd2 gpl2Plus lgpl21Plus ];
     maintainers = with maintainers; [ ttuegel ];
