@@ -347,6 +347,7 @@ mapAliases ({
   pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
   pinentry_qt = pinentry-qt; # added 2019-10-14
   pinentry_gnome = pinentry-gnome; # added 2019-10-14
+  pinentry_qt5 = pinentry-qt; # added 2020-02-11
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";

@@ -6269,6 +6269,8 @@ in
 
   safecopy = callPackage ../tools/system/safecopy { };
 
+  safe = callPackage ../tools/security/safe { };
+
   safe-rm = callPackage ../tools/system/safe-rm { };
 
   safeeyes = callPackage ../applications/misc/safeeyes { };
@@ -8300,16 +8302,16 @@ in
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Tools";
-        rev = "26c1b8878315a7a5c188df45e0bc236bb222b698";
-        sha256 = "1q76vaqwxf4q2l4rd7j2p2jqgcqpys0m235drzx0drkn2qd50n1b";
+        rev = "5c019b5923c1f6bf00a3ac28114ec4a7b1faa0e2";
+        sha256 = "17a0kiyb7zjsg7ws12diip84vds1ajl98ni9c2wria6ymcvbvsvz";
       };
     });
     spirv-headers = spirv-headers.overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "SPIRV-Headers";
-        rev = "2434b89345a50c018c84f42a310b0fad4f3fd94f";
-        sha256 = "1m902q1alm0rbh69zlskkx4n453xijijp9mf3wzwphi2j36gygwm";
+        rev = "204cd131c42b90d129073719f2766293ce35c081";
+        sha256 = "1gp0mlbfccqnalaix97jxsa5i337xyzyr55wgssapy56p0q04wv2";
       };
     });
   };
@@ -14593,24 +14595,24 @@ in
         src = fetchFromGitHub {
           owner = "KhronosGroup";
           repo = "SPIRV-Tools";
-          rev = "aa9e8f538041db3055ea443080e0ccc315fa114f";
-          sha256 = "1nbii0xa5zgs36dmpvzpli1jbzb9ijr7bkgvzmlpcjrjsl02cnbk";
+          rev = "323a81fc5e30e43a04e5e22af4cba98ca2a161e6";
+          sha256 = "1kwyh95l02w3v1ra55c836wayzw8d0m14ab7wf0ynhhyp3k2p9hv";
         };
       });
       spirv-headers = spirv-tools.overrideAttrs (_: {
         src = fetchFromGitHub {
           owner = "KhronosGroup";
           repo = "SPIRV-Headers";
-          rev = "45c2cc37276d69e5b257507d97fd90d2a5684ccc";
-          sha256 = "1jrzazv5j8nsn8hz5vc43vz4msps05d65wdy9spfg2hg36r1s2pm";
+          rev = "204cd131c42b90d129073719f2766293ce35c081";
+          sha256 = "1gp0mlbfccqnalaix97jxsa5i337xyzyr55wgssapy56p0q04wv2";
         };
       });
     }).overrideAttrs (_: {
       src = fetchFromGitHub {
         owner = "KhronosGroup";
         repo = "glslang";
-        rev = "333d1c95792692205472c457d7bec915a94c8000";
-        sha256 = "04srq1zcilhs7p1xz7wcnrncjxqskhfnqggisvxw5f774gk01ks6";
+        rev = "4fc7a33910fb8e40b970d160e1b38ab3f67fe0f3";
+        sha256 = "1dghz8zl774dx2xpa4dv8xhxirbylgyn6kx18ib4qirna1njp0zg";
       };
     });
   };
@@ -17920,7 +17922,7 @@ in
   source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
   source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
 
-  spleen = callPackage ../data/fonts/spleen { inherit (xorg) mkfontdir; };
+  spleen = callPackage ../data/fonts/spleen { inherit (buildPackages.xorg) mkfontscale; };
 
   stilo-themes = callPackage ../data/themes/stilo { };
 
@@ -18430,6 +18432,10 @@ in
   chirp = callPackage ../applications/radio/chirp { };
 
   browsh = callPackage ../applications/networking/browsers/browsh { };
+
+  brotab = callPackage ../tools/misc/brotab {
+    python = python3;
+  };
 
   bookworm = callPackage ../applications/office/bookworm { };
 
@@ -21720,6 +21726,8 @@ in
   tint2 = callPackage ../applications/misc/tint2 { };
 
   tiny = callPackage ../applications/networking/irc/tiny { };
+
+  tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
 
   tixati = callPackage ../applications/networking/p2p/tixati { };
 

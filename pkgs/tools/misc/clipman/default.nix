@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "clipman";
-  version = "1.2.0";
+  version = "unstable-2019-12-10";
 
   src = fetchFromGitHub {
     owner = "yory8";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "0266qb8p5l8j25nn51ajsbiij8bh5r7ywphf2x1l7wfhbzgxz12d";
+    rev = "c57453be90bb4496f67275db8c0beb2116a6ce14";
+    sha256 = "0zvqk3gcpx67dsn7qr0p9bgjp0sljl3yrlsfbqzrbrmj2lwr98ys";
   };
 
   modSha256 = "0aw0ng8pk8qzn1iv79iw0v9zr8xdc8p9xnigr3ij86038f7aqdhv";
