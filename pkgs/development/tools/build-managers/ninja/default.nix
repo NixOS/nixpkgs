@@ -4,30 +4,14 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "ninja";
-  version = "1.9.0";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "ninja-build";
     repo = "ninja";
     rev = "v${version}";
-    sha256 = "1q0nld3g0d210zmdjyjzjz2xb2bw1s58gj6zsx7p8q30yh0wg610";
+    sha256 = "1fbzl7mrcrwp527sgkc1npfl3k6bbpydpiq98xcf1a1hkrx0z5x4";
   };
-
-  patches = [
-    # Make builds reproducible by generating the same IDs from the same inputs.
-    (fetchpatch {
-      name = "consistent-doc-ids";
-      url = "https://github.com/ninja-build/ninja/commit/9aa947471fcfc607bec6d92a1a6eed5c692edbaf.patch";
-      sha256 = "0zsg46jflsh644jccrcgyfalr7fkzrv041kyi8644nyk923gcrl9";
-    })
-    # https://github.com/ninja-build/ninja/issues/1510 - fix w/musl, possibly BSDs?
-    #
-    (fetchpatch {
-      name = "fix-issue-1510.patch";
-      url = https://github.com/makepost/ninja/commit/567815df38a2ff54ad7478a90bd75c91e434236a.patch;
-      sha256 = "0zd0xyi7h2066nw1dsk76c7yf71b0f7v4p5nljda7jxi01vpdh69";
-    })
-  ];
 
   nativeBuildInputs = [ python3 re2c ] ++ optionals buildDocs [ asciidoc docbook_xml_dtd_45 docbook_xsl libxslt.bin ];
 

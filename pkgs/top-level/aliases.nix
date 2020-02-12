@@ -379,8 +379,10 @@ mapAliases ({
   ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_3_6 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_3 = throw "deprecated 2019-09-06: use a newer version of ruby";
-  ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
-  ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
+  ruby_2_4_3 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_4 = throw "deprecated 2019-12: use a newer version of ruby";
+  ruby_2_5_0 = throw "deprecated 2018-0213: use a newer version of ruby";
+  rubyPackages_2_4 = throw "deprecated 2019-12: use a newer version of rubyPackages instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
   rxvt_unicode_with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
