@@ -32,5 +32,6 @@ stdenv.mkDerivation rec {
     homepage = "https://mate-desktop.org";
     license = licenses.gpl3;
     platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }
