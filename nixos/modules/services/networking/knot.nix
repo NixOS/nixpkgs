@@ -5,14 +5,16 @@ with lib;
 let
   cfg = config.services.knot;
 
-  configFile = pkgs.writeText "knot.conf" cfg.extraConfig;
-  socketFile = "/run/knot/knot.sock";
+  configFile = pkgs.writeTextFile {
+    name = "knot.conf";
+    text = (concatMapStringsSep "\n" (file: "include: ${file}") cfg.keyFiles) + "\n" +
+           cfg.extraConfig;
+    checkPhase = lib.optionalString (cfg.keyFiles == []) ''
+      ${cfg.package}/bin/knotc --config=$out conf-check
+    '';
+  };
 
-  knotConfCheck = file: pkgs.runCommand "knot-config-checked"
-    { buildInputs = [ cfg.package ]; } ''
-    ln -s ${configFile} $out
-    knotc --config=${configFile} conf-check
-  '';
+  socketFile = "/run/knot/knot.sock";
 
   knot-cli-wrappers = pkgs.stdenv.mkDerivation {
     name = "knot-cli-wrappers";
@@ -42,6 +44,19 @@ in {
         default = [];
         description = ''
           List of additional command line paramters for knotd
+        '';
+      };
+
+      keyFiles = mkOption {
+        type = types.listOf types.path;
+        default = [];
+        description = ''
+          A list of files containing additional configuration
+          to be included using the include directive. This option
+          allows to include configuration like TSIG keys without
+          exposing them to the nix store readable to any process.
+          Note that using this option will also disable configuration
+          checks at build time.
         '';
       };
 
@@ -81,7 +96,7 @@ in {
 
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${cfg.package}/bin/knotd --config=${knotConfCheck configFile} --socket=${socketFile} ${concatStringsSep " " cfg.extraArgs}";
+        ExecStart = "${cfg.package}/bin/knotd --config=${configFile} --socket=${socketFile} ${concatStringsSep " " cfg.extraArgs}";
         ExecReload = "${knot-cli-wrappers}/bin/knotc reload";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_SETPCAP";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_SETPCAP";
