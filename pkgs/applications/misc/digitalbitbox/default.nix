@@ -48,13 +48,13 @@ let
     "cp ${writeText name rule} $out/etc/udev/rules.d/${name}";
 in stdenv.mkDerivation rec {
   pname = "digitalbitbox";
-  version = "2.2.2";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "digitalbitbox";
     repo = "dbb-app";
     rev = "v${version}";
-    sha256 = "1r77fvqrlaryzij5dfbnigzhvg1d12g96qb2gp8dy3xph1j0k3s1";
+    sha256 = "100np8i407c4zjq47fdbm87klxzajwa92rv5yk1vxnrgsr6zw3ca";
   };
 
   nativeBuildInputs = with stdenv.lib; [
