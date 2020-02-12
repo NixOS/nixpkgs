@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "eom";
-  version = "1.22.2";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0za1lw4awg1i0ls0r9iw0ail2hqa34y1dx65b50bw9kx9kbfyl9l";
+    sha256 = "0zzximp2534bky0vac219alafblw6m0lis0gncq92017s6c1mb77";
   };
 
   nativeBuildInputs = [
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "An image viewing and cataloging program for the MATE desktop";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];
