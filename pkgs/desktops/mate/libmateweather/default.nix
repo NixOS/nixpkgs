@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libmateweather";
-  version = "1.22.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1y3z82ymc7q6z8ly9f6nys0hbs373fjnvr6j7zwlgf6zc88f71h3";
+    sha256 = "094mnlczxq9crjj8z7dzs1zmwscdkbp54l3qjaf4a4bhd8lihv8d";
   };
 
   nativeBuildInputs = [ pkgconfig intltool ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library to access weather information from online services for MATE";
-    homepage = https://github.com/mate-desktop/libmateweather;
+    homepage = "https://github.com/mate-desktop/libmateweather";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
