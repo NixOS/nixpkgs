@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-user-guide";
-  version = "1.22.3";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0zv8arsxnbab0qk3ck9i1wp3d4gfclcv6vq6nh5i8zjz6rpp9cjs";
+    sha256 = "0ddxya84iydvy85dbqls0wmz2rph87wri3rsdhv4rkbhh5g4sd7f";
   };
 
   nativeBuildInputs = [ itstool intltool libxml2 ];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "MATE User Guide";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus fdl12 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
