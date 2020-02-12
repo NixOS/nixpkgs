@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "mate-user-share";
-  version = "1.22.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1krsar1pwa8720qz2dckcg0f6z9mvfk49djdxaz1afvi7blmqd6k";
+    sha256 = "1h4aabcby96nsg557brzzb0an1qvnawhim2rinzlzg4fhkvdfnr5";
   };
 
   nativeBuildInputs = [
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "User level public file sharing for the MATE desktop";
-    homepage = https://github.com/mate-desktop/mate-user-share;
+    homepage = "https://github.com/mate-desktop/mate-user-share";
     license = with licenses; [ gpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
