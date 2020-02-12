@@ -7177,6 +7177,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Foundation;
   };
 
+  onionbalance = python3Packages.callPackage ../tools/security/onionbalance {};
+
   tor = callPackage ../tools/security/tor {
     # remove this, when libevent's openssl is upgraded to 1_1_0 or newer.
     libevent = libevent.override {
