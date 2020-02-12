@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation rec {
   pname = "suitesparse";
-  version = "5.4.0";
+  version = "5.7.1";
 
   outputs = [ "out" "dev" "doc" ];
 
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
     owner = "DrTimothyAldenDavis";
     repo = "SuiteSparse";
     rev = "v${version}";
-    sha256 = "sha256:1jwqn86z9xxcj6gsiymmws40zfvdcclprffsmdasdjnjax00z9sk";
+    sha256 = "SA9SQKRDKUI1GilNMuCXljcvovLUwRKBUi/tiQ4dl5w=";
   };
 
   nativeBuildInputs = [
