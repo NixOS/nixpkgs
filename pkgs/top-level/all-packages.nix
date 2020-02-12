@@ -9029,7 +9029,7 @@ in
 
   clooj = callPackage ../development/interpreters/clojure/clooj.nix { };
 
-  dhall = callPackage ../development/interpreters/dhall { };
+  dhall = haskell.lib.justStaticExecutables haskellPackages.dhall;
 
   dhall-nix = haskell.lib.justStaticExecutables haskellPackages.dhall-nix;
 
@@ -9039,7 +9039,7 @@ in
 
   dhall-text = haskell.lib.justStaticExecutables haskellPackages.dhall-text;
 
-  dhallPackages = import ../development/dhall-modules { inherit pkgs; };
+  dhallPackages = callPackages ./dhall-packages.nix { };
 
   duktape = callPackage ../development/interpreters/duktape { };
 
