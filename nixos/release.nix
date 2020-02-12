@@ -20,7 +20,7 @@ let
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import ./.. { inherit system; };
       callTest = t: {
         ${system} = hydraJob t.test;
       };
@@ -28,7 +28,7 @@ let
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
-  pkgs = import nixpkgs { system = "x86_64-linux"; };
+  pkgs = import ./.. { system = "x86_64-linux"; };
 
 
   versionModule =
@@ -41,7 +41,7 @@ let
   makeIso =
     { module, type, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -54,7 +54,7 @@ let
   makeSdImage =
     { module, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -65,7 +65,7 @@ let
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     let
 
@@ -183,7 +183,7 @@ in rec {
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -199,7 +199,7 @@ in rec {
   # A disk image that can be imported to Amazon EC2 and registered as an AMI
   amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
