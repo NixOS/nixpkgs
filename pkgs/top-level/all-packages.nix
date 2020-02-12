@@ -24308,6 +24308,8 @@ in
   suitesparse_5_3 = callPackage ../development/libraries/science/math/suitesparse {};
   suitesparse = suitesparse_5_3;
 
+  suitesparse-graphblas = callPackage ../development/libraries/science/math/suitesparse-graphblas {};
+
   superlu = callPackage ../development/libraries/science/math/superlu {};
 
   symmetrica = callPackage ../applications/science/math/symmetrica {};
