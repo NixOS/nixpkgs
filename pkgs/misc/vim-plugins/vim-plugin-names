@@ -225,8 +225,8 @@ lumiliet/vim-twig
 luochen1990/rainbow
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
-machakann/vim-swap
 machakann/vim-sandwich
+machakann/vim-swap
 majutsushi/tagbar
 maksimr/vim-jsbeautify
 MarcWeber/vim-addon-actions
@@ -491,8 +491,8 @@ uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
-Valodim/deoplete-notmuch
 valloric/youcompleteme
+Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes
