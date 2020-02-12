@@ -32,10 +32,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "cajaextensiondir=$$out/lib/caja/extensions-2.0" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A simple multi-page document viewer for the MATE desktop";
     homepage = "https://mate-desktop.org";
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.unix;
+    license = licenses.gpl2;
+    platforms = platforms.unix;
+    maintainers = [ maintainers.romildo ];
   };
 }
