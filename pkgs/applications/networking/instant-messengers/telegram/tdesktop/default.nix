@@ -4,7 +4,7 @@
 , dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
 # TODO: Shouldn't be required:
 , pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
-, xdg_utils
+, xdg_utils, makeDesktopItem
 }:
 
 with lib;
@@ -93,6 +93,20 @@ mkDerivation rec {
     sed -i $out/bin/telegram-desktop \
       -e "s,'XDG-RUNTIME-DIR',\"\''${XDG_RUNTIME_DIR:-/run/user/\$(id --user)}\","
   '';
+
+  postInstall = ''
+    ${desktopItem.buildCommand}
+  '';
+
+  desktopItem = makeDesktopItem {
+    name = pname;
+    exec = pname;
+    icon = pname;
+    desktopName = "Telegram";
+    genericName = meta.description;
+    categories = "Network;InstantMessaging;";
+    mimeType = "x-scheme-handler/tg";
+  };
 
   meta = {
     description = "Telegram Desktop messaging app";
