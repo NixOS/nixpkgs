@@ -59,7 +59,7 @@ in
 
     buildInputs = (if stdenv.isDarwin
       then [ unzip ]
-      else [ gtk2 at-spi2-atk libdbusmenu-gtk3 wrapGAppsHook ] ++ atomEnv.packages)
+      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
         ++ [ libsecret libXScrnSaver ];
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
