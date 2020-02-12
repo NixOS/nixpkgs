@@ -2,14 +2,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
-  version = "1.22.2";
+  version = "1.24.0";
 
   format = "other";
   doCheck = false;
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1lzcwsz940v218frwzhpywp1an9x3cgfvqr7r8dplpdapvd0khrs";
+    sha256 = "01lyi47a04xk0by5bvnfmqgv5sysk2wdlri6a4ssmy1qhgwh9zr3";
   };
 
   nativeBuildInputs = [ pkgconfig intltool gobject-introspection wrapGAppsHook ];
@@ -20,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "MATE Desktop menu editor";
-    homepage = https://github.com/mate-desktop/mozo;
+    homepage = "https://github.com/mate-desktop/mozo";
     license = with licenses; [ lgpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
