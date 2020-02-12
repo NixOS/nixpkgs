@@ -11104,6 +11104,8 @@ in
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib {};
 
+  ubus = callPackage ../development/libraries/ubus { };
+
   uri = callPackage ../development/libraries/uri { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
