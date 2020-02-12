@@ -6,14 +6,6 @@ let
     lib.makeOverridable
       ( { rev
         , sha256
-
-          # The version of the Kubernetes OpenAPI spec to use.
-          #
-          # This defaults to the latest supported Kubernetes if left unspecified.
-          #
-          # This is only supported by dhall-kubernetes version 3.0.0 or newer.
-        , kubernetesVersion ? null
-
         , file ? "package.dhall"
         }:
           buildDhallPackage {
@@ -29,11 +21,8 @@ let
                   inherit rev sha256;
                 };
 
-                prefix =
-                  if kubernetesVersion == null then "" else "${kubernetesVersion}/";
-
               in
-                "${src}/${prefix}${file}";
+                "${src}/${file}";
           }
       );
 

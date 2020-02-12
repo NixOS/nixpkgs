@@ -56,9 +56,9 @@ in
           sha256 = "1v4y1x13lxy6cxf8xqc6sb0mc4mrd4frkxih95v9q2wxw4vkw2h7";
 
           dependencies = [
-            (k8s_6a47bd.override { kubernetesVersion = "1.14"; })
-            (k8s_6a47bd.override { kubernetesVersion = "1.15"; })
-            (k8s_6a47bd.override { kubernetesVersion = "1.16"; })
+            (k8s_6a47bd.override { file = "1.14/package.dhall"; })
+            (k8s_6a47bd.override { file = "1.15/package.dhall"; })
+            (k8s_6a47bd.override { file = "1.16/package.dhall"; })
             (k8s_4ad581.override { file = "types.dhall"; })
             (k8s_fee24c.override { file = "types/io.k8s.api.core.v1.ServiceSpec.dhall"; })
             (k8s_fee24c.override { file = "types/io.k8s.api.core.v1.PodTemplateSpec.dhall"; })
