@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "python-caja";
-  version = "1.22.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "07hkvs4a6anrvh28zjsrj8anbcz32p19hslhq66yhcvh0hh4kvqk";
+    sha256 = "1wp61q64cgzr3syd3niclj6rjk87wlib5m86i0myf5ph704r3qgg";
   };
 
   nativeBuildInputs = [
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Python binding for Caja components";
-    homepage = https://github.com/mate-desktop/python-caja;
+    homepage = "https://github.com/mate-desktop/python-caja";
     license = [ licenses.gpl2Plus ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
