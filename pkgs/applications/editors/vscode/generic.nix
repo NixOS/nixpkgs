@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig
+, systemd, fontconfig, libdbusmenu-gtk3
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -59,7 +59,7 @@ in
 
     buildInputs = (if stdenv.isDarwin
       then [ unzip ]
-      else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
+      else [ gtk2 at-spi2-atk libdbusmenu-gtk3 wrapGAppsHook ] ++ atomEnv.packages)
         ++ [ libsecret libXScrnSaver ];
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
@@ -95,7 +95,7 @@ in
       '';
 
     preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]})
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig libdbusmenu-gtk3 ]})
     '';
 
     inherit meta;
