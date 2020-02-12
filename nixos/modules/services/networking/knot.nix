@@ -65,6 +65,13 @@ in {
   };
 
   config = mkIf config.services.knot.enable {
+    users.users.knot = {
+      isSystemUser = true;
+      group = "knot";
+      description = "Knot daemon user";
+    };
+
+    users.groups.knot.gid = null;
     systemd.services.knot = {
       unitConfig.Documentation = "man:knotd(8) man:knot.conf(5) man:knotc(8) https://www.knot-dns.cz/docs/${cfg.package.version}/html/";
       description = cfg.package.meta.description;
@@ -79,7 +86,7 @@ in {
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE CAP_SETPCAP";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE CAP_SETPCAP";
         NoNewPrivileges = true;
-        DynamicUser = "yes";
+        User = "knot";
         RuntimeDirectory = "knot";
         StateDirectory = "knot";
         StateDirectoryMode = "0700";
