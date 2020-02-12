@@ -3,13 +3,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "libopenshot-audio";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "libopenshot-audio";
     rev = "v${version}";
-    sha256 = "1fvp6nmf30xzkmcznakh8dv5vn9d7nq051pqcqv638hsfppkmcrl";
+    sha256 = "0mclxyb9vbyf76jrs5545cishgbkg0g44lass2ni557pyk3jagh3";
   };
 
   nativeBuildInputs =
