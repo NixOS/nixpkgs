@@ -6,5 +6,6 @@
     ../../../common/cpu/amd
   ];
 
-  boot.kernelPackages = pkgs.linuxPackages_5_2;
+  # see https://github.com/NixOS/nixpkgs/issues/69289
+  boot.kernelPackages = lib.mkIf (lib.versionOlder linux.version "5.2") pkgs.linuxPackages_latest;
 }
