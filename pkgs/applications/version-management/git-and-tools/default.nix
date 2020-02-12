@@ -95,6 +95,10 @@ let
 
   git-extras = callPackage ./git-extras { };
 
+  git-filter-repo = callPackage ./git-filter-repo {
+    inherit git python3;
+  };
+
   git-gone = callPackage ./git-gone {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
