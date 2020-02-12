@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "1k0jwa3481g3mkalwlb9gkcz9aq9zjpwmzckv823fr2d8djp41cc";
   };
 
+  patches = [ ./TDEPS-150.patch ];
+
   buildInputs = [ makeWrapper ];
 
   installPhase =
@@ -22,11 +24,6 @@ stdenv.mkDerivation rec {
         cp deps.edn $out
 
         substituteInPlace clojure --replace PREFIX $out
-
-        # hotfixes https://clojure.atlassian.net/browse/TDEPS-150
-        substituteInPlace clojure --replace \
-          'if [[ "$stale" = true && "$describe" = false ]];' \
-          'if [[ "$stale" = true && "$describe" = false && -z "$force_cp" ]];'
 
         install -Dt $out/bin clj clojure
         wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
