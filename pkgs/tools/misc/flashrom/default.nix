@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ funfunctor fpletz ];
     platforms = with platforms; linux;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
