@@ -80,6 +80,7 @@ in stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     systemd.lib
+    libnotify
   ];
 
   unpackPhase = "dpkg-deb -x $src .";
