@@ -1,5 +1,6 @@
 { lib
 , python
+, enableTelemetry ? false
 }:
 
 let
@@ -55,6 +56,11 @@ buildPythonApplication rec {
     six
     tomlkit
   ];
+
+  postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
+    # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
+    wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
+  '';
 
   # fix over-restrictive version bounds
   postPatch = ''
