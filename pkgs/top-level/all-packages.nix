@@ -11106,6 +11106,8 @@ in
 
   ubus = callPackage ../development/libraries/ubus { };
 
+  uci = callPackage ../development/libraries/uci { };
+
   uri = callPackage ../development/libraries/uri { };
 
   cppcms = callPackage ../development/libraries/cppcms { };
