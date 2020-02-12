@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl
+{ stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, curl, darwin
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +16,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optionals stdenv.isDarwin [
+                  curl
+                  darwin.apple_sdk.frameworks.Security
+                  darwin.apple_sdk.frameworks.CoreServices
+                  darwin.apple_sdk.frameworks.CoreFoundation
+                ];
 
   # tries to use "/homeless-shelter" and fails
   doCheck = false;
