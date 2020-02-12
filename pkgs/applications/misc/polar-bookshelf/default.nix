@@ -10,12 +10,12 @@
 
 stdenv.mkDerivation rec {
   pname = "polar-bookshelf";
-  version = "1.13.10";
+  version = "1.90.18";
 
   # fetching a .deb because there's no easy way to package this Electron app
   src = fetchurl {
     url = "https://github.com/burtonator/polar-bookshelf/releases/download/v${version}/polar-bookshelf-${version}-amd64.deb";
-    sha256 = "1bxcyf6n2m5x1z8ic6kzskinyyc6lh6nj0bycbwc524n6ms5j99p";
+    sha256 = "1yl679szhb38a4dkb0aviyyp5qi7sc5vxhpjrrzzkrbzqrgnx1x2";
   };
 
   buildInputs = [
@@ -51,7 +51,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     wrapGAppsHook
     autoPatchelfHook
-    makeWrapper
     dpkg
   ];
 
@@ -69,7 +68,7 @@ stdenv.mkDerivation rec {
 
     mv usr/share/* $out/share/
 
-    ln -s $out/share/polar-bookshelf/polar-bookshelf $out/bin/polar-bookshelf
+    ln -s $out/share/polar-bookshelf/polar-bookshelf.bin $out/bin/polar-bookshelf
 
     # Correct desktop file `Exec`
     substituteInPlace $out/share/applications/polar-bookshelf.desktop \
