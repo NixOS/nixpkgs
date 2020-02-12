@@ -66,6 +66,7 @@ in rec {
         (all nixos.tests.containers-ip)
         nixos.tests.chromium.x86_64-linux or []
         (all nixos.tests.firefox)
+        (all nixos.tests.firefox-esr)
         (all nixos.tests.firewall)
         (all nixos.tests.fontconfig-default-fonts)
         (all nixos.tests.gnome3-xorg)
