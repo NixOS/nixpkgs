@@ -16,14 +16,14 @@
   });
 in
 stdenv.mkDerivation rec {
-  version_major = "2.1.7369";
+  version_major = "2.1.7520";
   version_minor = "1";
   version = version_major + "." + version_minor;
   pname = "sky";
   unpackCmd = "ar x $curSrc; tar -xf data.tar.xz";
   src = fetchurl {
     url = "https://tel.red/repos/ubuntu/pool/non-free/sky_${version_major + "-" + version_minor}ubuntu+xenial_amd64.deb";
-    sha256 = "0b3j90km3rp5bgaklxw881g0gcy09mqzbhjdfrq4s2np026ql3d9";
+    sha256 = "078gdk4dbw7aqfrrc5xlhhzpiy3br8wpn0mbfbqfxrnbpgn5ya2w";
   };
   buildInputs = [ 
     file
