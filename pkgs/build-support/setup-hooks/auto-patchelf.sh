@@ -106,7 +106,15 @@ autoPatchelfFile() {
         patchelf --set-interpreter "$interpreter" "$toPatch"
         if [ -n "$runtimeDependencies" ]; then
             for dep in $runtimeDependencies; do
-                rpath="$rpath${rpath:+:}$dep/lib"
+                if [[ -f "$dep" && "$dep" =~ \.so(\.[0-9]+)*$ ]]; then
+                    rpath="$rpath${rpath:+:}$(dirname "$dep")"
+                elif [[ -d "$dep" && -d "$dep/lib" ]]; then
+                    rpath="$rpath${rpath:+:}$dep/lib"
+                else
+                    echo "autoPatchelfFile: ERROR: $dep passed to \$runtimeDependencies must be" \
+                         "either a directory containing lib subdirectory or a .so file."
+                    return 1
+                fi
             done
         fi
     fi

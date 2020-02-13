@@ -2000,11 +2000,14 @@ addEnvHooks "$hostOffset" myBashFunction
        This is a special setup hook which helps in packaging proprietary software in that it automatically tries to find missing shared library dependencies of ELF files based on the given <varname>buildInputs</varname> and <varname>nativeBuildInputs</varname>.
       </para>
       <para>
-       You can also specify a <varname>runtimeDependencies</varname> variable which lists dependencies to be unconditionally added to <glossterm>rpath</glossterm> of all executables.
+       You can also specify a <varname>runtimeDependencies</varname> variable which lists dependencies or paths to shared libraries to be unconditionally added to <glossterm>rpath</glossterm> of all executables.
        This is useful for programs that use <citerefentry>
        <refentrytitle>dlopen</refentrytitle>
        <manvolnum>3</manvolnum> </citerefentry> to load libraries at runtime.
       </para>
+      <note>
+       <para>When you pass a library path such as <literal>${libv4l}/lib/libv4l/v4l2convert.so</literal> to  <envar>runtimeDependencies</envar>, the whole <literal>${libv4l}/lib/libv4l</literal> directory is added to <glossterm>rpath</glossterm>. This enables the patched program to find all other libraries in the directory, not just the single library you chose.</para>
+      </note>
       <para>
        In certain situations you may want to run the main command (<command>autoPatchelf</command>) of the setup hook on a file or a set of directories instead of unconditionally patching all outputs. This can be done by setting the <varname>dontAutoPatchelf</varname> environment variable to a non-empty value.
       </para>
