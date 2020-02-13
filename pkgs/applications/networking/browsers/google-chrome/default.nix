@@ -5,7 +5,7 @@
 , libXcursor, libXext, libXfixes, libXrender, libXScrnSaver, libXcomposite, libxcb
 , alsaLib, libXdamage, libXtst, libXrandr, expat, cups
 , dbus, gtk2, gtk3, gdk-pixbuf, gcc-unwrapped, at-spi2-atk, at-spi2-core
-, kerberos
+, kerberos, libdrm, mesa
 
 # command line arguments which are always set e.g "--disable-gpu"
 , commandLineArgs ? ""
@@ -60,6 +60,7 @@ let
     bzip2 libcap at-spi2-atk at-spi2-core
     kerberos
   ] ++ optional pulseSupport libpulseaudio
+    ++ optionals (channel == "dev") [ libdrm mesa ]
     ++ [ gtk ];
 
   suffix = if channel != "stable" then "-" + channel else "";
