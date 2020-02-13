@@ -370,6 +370,11 @@ in
 
   fetchzip = callPackage ../build-support/fetchzip { };
 
+  fetchComposer = callPackage ../build-support/composer/fetchcomposer.nix {
+    inherit (phpPackages) composer;
+  };
+  buildComposerPackage = callPackage ../build-support/composer { };
+
   fetchCrate = callPackage ../build-support/rust/fetchcrate.nix { };
 
   fetchFromGitHub = callPackage ../build-support/fetchgithub {};
