@@ -33,6 +33,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  postFixup = ''
+    substituteInPlace $out/share/xsessions/mate.desktop \
+      --replace "Exec=mate-session" "Exec=$out/bin/mate-session" \
+      --replace "TryExec=mate-session" "TryExec=$out/bin/mate-session"
+  '';
+
+  passthru.providedSessions = [ "mate" ];
+
   meta = with stdenv.lib; {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";
