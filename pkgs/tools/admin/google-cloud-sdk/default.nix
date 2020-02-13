@@ -42,6 +42,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./gcloud-path.patch
+    ./gsutil-disable-updates.patch
   ];
 
   installPhase = ''
