@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  postPatch = ''
+  preConfigure = ''
     sed -i "s,/bin/stty,$(type -p stty),g" configure
   '';
 
