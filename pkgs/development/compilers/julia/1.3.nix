@@ -8,8 +8,8 @@
 , curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
 # linear algebra
 , openblas, arpack
-# llvm
-, llvm
+# Darwin frameworks
+, CoreServices, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -83,6 +83,8 @@ stdenv.mkDerivation rec {
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; }.${arch}
                   or (throw "unsupported architecture: ${arch}");
+      # Julia applies a lot of patches to its dependencies, so for now do not use the system LLVM
+      # https://github.com/JuliaLang/julia/tree/master/deps/patches
     in [
       "ARCH=${arch}"
       "MARCH=${march}"
