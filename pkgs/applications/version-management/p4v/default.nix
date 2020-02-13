@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "p4v";
-  version = "2017.3.1601999";
+  version = "2019.2.1904275";
 
   src = fetchurl {
-    url = "https://cdist2.perforce.com/perforce/r17.3/bin.linux26x86_64/p4v.tgz";
-    sha256 = "9ded42683141e1808535ec3e87d3149f890315c192d6e97212794fd54862b9a4";
+    url = "https://cdist2.perforce.com/perforce/r19.2/bin.linux26x86_64/p4v.tgz";
+    sha256 = "c5c3de2d3809cd32892da2162bf44f3faecf2c657ad92ba4144a3a72fb3afb13";
   };
 
   dontBuild = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     mkdir $out
     cp -r bin $out
     mkdir -p $out/lib/p4v
-    cp -r lib/p4v/P4VResources $out/lib/p4v
+    cp -r lib/P4VResources $out/lib/p4v
 
     for f in $out/bin/*.bin ; do
       patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $f
