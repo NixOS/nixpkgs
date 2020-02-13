@@ -14,17 +14,17 @@
 
 stdenv.mkDerivation rec {
   # Note the revision needs to be adjusted.
-  version = "6.1-20190112";
+  version = "6.2";
   name = "ncurses-${version}" + lib.optionalString (abiVersion == "5") "-abi5-compat";
 
   # We cannot use fetchFromGitHub (which calls fetchzip)
   # because we need to be able to use fetchurlBoot.
   src = let
     # Note the version needs to be adjusted.
-    rev = "acb4184f8f69fddd052a3daa8c8675f4bf8ce369";
+    rev = "v${version}";
   in fetchurl {
     url = "https://github.com/mirror/ncurses/archive/${rev}.tar.gz";
-    sha256 = "1z8v63cj2y7dxf4m1api8cvk0ns9frif9c60m2sxhibs06pjy4q0";
+    sha256 = "15r2456g0mlq2q7gh2z52vl6zv6y0z8sdchrs80kg4idqd8sm8fd";
   };
 
   patches = lib.optional (!stdenv.cc.isClang) ./clang.patch;
