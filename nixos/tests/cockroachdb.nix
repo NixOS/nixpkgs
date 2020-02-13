@@ -65,12 +65,14 @@ let
 
       # Enable and configure Chrony, using the given virtualized clock passed
       # through by KVM.
-      services.chrony.enable = true;
-      services.chrony.servers = lib.mkForce [ ];
-      services.chrony.extraConfig = ''
-        refclock PHC /dev/ptp0 poll 2 prefer require refid KVM
-        makestep 0.1 3
-      '';
+      services.chrony = {
+        enable = true;
+        servers = lib.mkForce [ ];
+        extraConfig = ''
+          refclock PHC /dev/ptp0 poll 2 prefer require refid KVM
+          makestep 0.1 3
+        '';
+      };
 
       # Enable CockroachDB. In order to ensure that Chrony has performed its
       # first synchronization at boot-time (which may take ~10 seconds) before
@@ -81,12 +83,14 @@ let
       # Note that the default threshold for NTP-based skew in CockroachDB is
       # ~500ms by default, so making sure it's started *after* accurate time
       # synchronization is extremely important.
-      services.cockroachdb.enable = true;
-      services.cockroachdb.insecure = true;
-      services.cockroachdb.openPorts = true;
-      services.cockroachdb.locality = locality;
-      services.cockroachdb.listen.address = myAddr;
-      services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
+      services.cockroachdb = {
+        enable = true;
+        insecure = true;
+        openPorts = true;
+        locality = locality;
+        listen.address = myAddr;
+        join = lib.mkIf (joinNode != null) joinNode;
+      };
 
       # Hold startup until Chrony has performed its first measurement (which
       # will probably result in a full timeskip, thanks to makestep)
@@ -95,10 +99,9 @@ let
       '';
     };
 
-in import ./make-test.nix ({ pkgs, ...} : {
+in import ./make-test-python.nix ({ pkgs, ...} : {
   name = "cockroachdb";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers;
-    [ thoughtpolice ];
+  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ thoughtpolice ];
 
   nodes = {
     node1 = makeNode "country=us,region=east,dc=1"  "192.168.1.1" null;
@@ -106,21 +109,21 @@ in import ./make-test.nix ({ pkgs, ...} : {
     node3 = makeNode "country=eu,region=west,dc=2"  "192.168.1.3" "192.168.1.1";
   };
 
-  # NOTE: All the nodes must start in order and you must NOT use startAll, because
-  # there's otherwise no way to guarantee that node1 will start before the others try
-  # to join it.
+  # NOTE: All the nodes must start in order and you must NOT use startAll,
+  # because there's otherwise no way to guarantee that node1 will start before
+  # the others try to join it.
   testScript = ''
-    $node1->start;
-    $node1->waitForUnit("cockroachdb");
+    for node in node1, node2, node3:
+        node.start()
+        node.wait_for_unit("cockroachdb")
 
-    $node2->start;
-    $node2->waitForUnit("cockroachdb");
-
-    $node3->start;
-    $node3->waitForUnit("cockroachdb");
-
-    $node1->mustSucceed("cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1");
-    $node1->mustSucceed("cockroach workload init bank 'postgresql://root\@192.168.1.1:26257?sslmode=disable'");
-    $node1->mustSucceed("cockroach workload run bank --duration=1m 'postgresql://root\@192.168.1.1:26257?sslmode=disable'");
+    node1.succeed(
+        "cockroach sql --host=192.168.1.1 --insecure -e "
+        + "'SHOW ALL CLUSTER SETTINGS' 2>&1",
+        "cockroach workload init bank "
+        + "'postgresql://root\@192.168.1.1:26257?sslmode=disable'",
+        "cockroach workload run bank --duration=1m "
+        + "'postgresql://root\@192.168.1.1:26257?sslmode=disable'",
+    )
   '';
 })
