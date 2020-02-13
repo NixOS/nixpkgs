@@ -12,11 +12,11 @@ let
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
-  version = "0.84.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
+  version = "0.85.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0ccp2gx05cz5y04k5pgbyi4ikyq60nafa7x2yx4aaf1vfkd318f7";
+    sha256 = "0jyr036scdly13hx5dxmsqp2p3jifc29h2by51msw0ih6bmpbj1b";
   };
 
   outputs = [ "out" "dev" ];
