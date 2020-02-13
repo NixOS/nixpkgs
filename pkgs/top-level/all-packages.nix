@@ -22693,6 +22693,10 @@ in
 
   nano-wallet = libsForQt5.callPackage ../applications/blockchains/nano-wallet { };
 
+  nanod = callPackage ../applications/blockchains/nanod {
+    inherit (darwin.apple_sdk.frameworks) Foundation OpenCL;
+  };
+
   namecoin  = callPackage ../applications/blockchains/namecoin.nix  { withGui = true; };
   namecoind = callPackage ../applications/blockchains/namecoin.nix { withGui = false; };
 

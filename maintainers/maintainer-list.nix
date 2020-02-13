@@ -5797,6 +5797,16 @@
     githubId = 4579165;
     name = "Danny Bautista";
   };
+  qasaur = {
+    email = "marcus.engvall@engvall.company";
+    github = "qasaur";
+    githubId = 1158421;
+    name = "Marcus Engvall";
+    keys = [{
+      longkeyid = "rsa4096/0x745ECB0AF17BF30C";
+      fingerprint = "9116F648B20388E300CC110C745ECB0AF17BF30C";
+    }];
+  };
   q3k = {
     email = "q3k@q3k.org";
     github = "q3k";
