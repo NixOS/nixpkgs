@@ -20,5 +20,7 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
     license = licenses.gpl2;
+    broken = stdenv.isAarch64;
+    # /build/git-3453f61/itkextras/OneDimensionalInPlaceAccumulateFilter.txx:311:10: fatal error: xmmintrin.h: No such file or directory
   };
 }
