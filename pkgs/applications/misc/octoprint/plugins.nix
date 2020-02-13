@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
+{ stdenv, fetchgit, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
 
 let
   buildPlugin = args: python2Packages.buildPythonPackage (args // {
@@ -192,6 +192,24 @@ let
         homepage = "https://github.com/eyal0/OctoPrint-PrintTimeGenius";
         license = licenses.agpl3;
         maintainers = with maintainers; [ gebner ];
+      };
+    };
+
+    abl-expert = buildPlugin rec {
+      pname = "ABL_Expert";
+      version = "2019-12-21";
+
+      src = fetchgit {
+        url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+        rev = "f11fbe05088ad618bfd9d064ac3881faec223f33";
+        sha256 = "026r4prkyvwzxag5pv36455q7s3gaig37nmr2nbvhwq3d2lbi5s4";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
+        homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
       };
     };
 
