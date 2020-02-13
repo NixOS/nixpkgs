@@ -21430,6 +21430,8 @@ in
     gtksharp = gtk-sharp-2_0;
   };
 
+  pistol = callPackage ../tools/misc/pistol { };
+
   plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
 
   plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
