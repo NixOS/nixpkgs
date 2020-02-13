@@ -132,7 +132,7 @@ in
             description = "iodine client - ${name}";
             after = [ "network.target" ];
             wantedBy = [ "multi-user.target" ];
-            script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "< \"${cfg.passwordFile}\""} ${cfg.relay} ${cfg.server}";
+            script = "exec ${pkgs.iodine}/bin/iodine -f -u ${iodinedUser} ${cfg.extraConfig} ${optionalString (cfg.passwordFile != "") "< \"${builtins.toString cfg.passwordFile}\""} ${cfg.relay} ${cfg.server}";
             serviceConfig = {
               RestartSec = "30s";
               Restart = "always";
@@ -166,7 +166,7 @@ in
             description = "iodine, ip over dns server daemon";
             after = [ "network.target" ];
             wantedBy = [ "multi-user.target" ];
-            script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "< \"${cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
+            script = "exec ${pkgs.iodine}/bin/iodined -f -u ${iodinedUser} ${cfg.server.extraConfig} ${optionalString (cfg.server.passwordFile != "") "< \"${builtins.toString cfg.server.passwordFile}\""} ${cfg.server.ip} ${cfg.server.domain}";
             serviceConfig = {
               # Filesystem access
               ProtectSystem = "strict";
