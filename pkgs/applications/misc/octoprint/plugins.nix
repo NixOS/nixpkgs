@@ -231,6 +231,25 @@ let
         maintainers = with maintainers; [ WhittlesJr ];
       };
     };
+
+    simpleemergencystop = buildPlugin rec {
+      pname = "SimpleEmergencyStop";
+      version = "0.2.5";
+
+      src = fetchFromGitHub {
+        owner = "Sebclem";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "10wadv09wv2h96igvq3byw9hz1si82n3c7v5y0ii3j7hm2d06y8p";
+      };
+
+      meta = with stdenv.lib; {
+        description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
+        homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
   };
 
 in self
