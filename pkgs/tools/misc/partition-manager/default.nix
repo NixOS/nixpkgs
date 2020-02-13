@@ -1,7 +1,7 @@
 { mkDerivation, fetchurl, lib
-, extra-cmake-modules, kdoctools, wrapGAppsHook, wrapQtAppsHook
-, kconfig, kcrash, kinit, kpmcore
-, eject, libatasmart , utillinux, qtbase
+, extra-cmake-modules, kdoctools, wrapGAppsHook
+, kconfig, kcrash, kinit, kpmcore, kauth
+, eject, smartmontools, utillinux, qtbase
 }:
 
 let
@@ -17,11 +17,11 @@ in mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook wrapQtAppsHook ];
+  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook ];
 
   # refer to kpmcore for the use of eject
-  buildInputs = [ eject libatasmart utillinux ];
-  propagatedBuildInputs = [ kconfig kcrash kinit kpmcore ];
+  buildInputs = [ eject smartmontools utillinux ];
+  propagatedBuildInputs = [ kauth kconfig kcrash kinit kpmcore ];
 
   meta = with lib; {
     description = "KDE Partition Manager";

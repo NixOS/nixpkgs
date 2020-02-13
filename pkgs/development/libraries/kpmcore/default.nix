@@ -20,6 +20,7 @@ in stdenv.mkDerivation rec {
     smartmontools
     parted # we only need the library
 
+    kdeFrameworks.kauth
     kdeFrameworks.kio
 
     utillinux # needs blkid (note that this is not provided by utillinux-compat)
