@@ -14,12 +14,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "refind";
-  version = "0.11.4";
+  version = "0.11.5";
   srcName = "refind-src-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/refind/${version}/${srcName}.tar.gz";
-    sha256 = "1bjd0dl77bc5k6g3kc7s8m57vpbg2zscph9qh84xll9rc10g3fir";
+    sha256 = "0pphl37y1zfrcai821aab9k097yp669hn1j07cas1nppinafg78v";
   };
 
   patches = [
