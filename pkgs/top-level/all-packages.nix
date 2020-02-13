@@ -1139,6 +1139,8 @@ in
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
+  bdf2sfd = callPackage ../tools/misc/bdf2sfd { };
+
   bcat = callPackage ../tools/text/bcat {};
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
