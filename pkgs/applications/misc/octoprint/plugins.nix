@@ -213,6 +213,24 @@ let
       };
     };
 
+    gcodeeditor = buildPlugin rec {
+      pname = "GcodeEditor";
+      version = "0.2.6";
+
+      src = fetchFromGitHub {
+        owner = "ieatacid";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "0c6p78r3vd6ys3kld308pyln09zjbr9yif1ljvcx6wlml2i5l1vh";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Edit gcode on OctoPrint";
+        homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
   };
 
 in self
