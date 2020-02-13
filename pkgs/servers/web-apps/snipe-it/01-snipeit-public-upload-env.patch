@@ -1,0 +1,468 @@
+diff --git a/app/Http/Controllers/AccessoriesController.php b/app/Http/Controllers/AccessoriesController.php
+index 36e8a9921..7c20e2431 100755
+--- a/app/Http/Controllers/AccessoriesController.php
++++ b/app/Http/Controllers/AccessoriesController.php
+@@ -85,7 +85,7 @@ class AccessoriesController extends Controller
+         $accessory->qty                     = request('qty');
+         $accessory->user_id                 = Auth::user()->id;
+         $accessory->supplier_id             = request('supplier_id');
+-        $accessory = $request->handleImages($accessory,600, public_path().'/uploads/accessories');
++        $accessory = $request->handleImages($accessory,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/accessories');
+ 
+ 
+         // Was the accessory created?
+@@ -146,7 +146,7 @@ class AccessoriesController extends Controller
+         $accessory->qty                     = request('qty');
+         $accessory->supplier_id             = request('supplier_id');
+ 
+-        $accessory = $request->handleImages($accessory,600, public_path().'/uploads/accessories');
++        $accessory = $request->handleImages($accessory,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/accessories');
+ 
+ 
+         // Was the accessory updated?
+diff --git a/app/Http/Controllers/Api/AssetModelsController.php b/app/Http/Controllers/Api/AssetModelsController.php
+index 08a2cd68d..e601896b4 100644
+--- a/app/Http/Controllers/Api/AssetModelsController.php
++++ b/app/Http/Controllers/Api/AssetModelsController.php
+@@ -180,7 +180,7 @@ class AssetModelsController extends Controller
+ 
+         if ($assetmodel->image) {
+             try  {
+-                unlink(public_path().'/uploads/models/'.$assetmodel->image);
++                unlink(getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/models/' . $assetmodel->image);
+             } catch (\Exception $e) {
+                 \Log::info($e);
+             }
+diff --git a/app/Http/Controllers/AssetModelsController.php b/app/Http/Controllers/AssetModelsController.php
+index 7c3531e47..0156b7f30 100755
+--- a/app/Http/Controllers/AssetModelsController.php
++++ b/app/Http/Controllers/AssetModelsController.php
+@@ -90,7 +90,7 @@ class AssetModelsController extends Controller
+             $model->fieldset_id = e($request->input('custom_fieldset'));
+         }
+ 
+-        $model = $request->handleImages($model,600, public_path().'/uploads/models');
++        $model = $request->handleImages($model,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/models');
+ 
+             // Was it created?
+         if ($model->save()) {
+@@ -166,7 +166,7 @@ class AssetModelsController extends Controller
+             }
+         }
+ 
+-        $model = $request->handleImages($model,600, public_path().'/uploads/models');
++        $model = $request->handleImages($model,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/models');
+ 
+         if ($model->save()) {
+             return redirect()->route("models.index")->with('success', trans('admin/models/message.update.success'));
+@@ -198,7 +198,7 @@ class AssetModelsController extends Controller
+ 
+         if ($model->image) {
+             try  {
+-                unlink(public_path().'/uploads/models/'.$model->image);
++                unlink(getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/models/'.$model->image);
+             } catch (\Exception $e) {
+                 \Log::info($e);
+             }
+@@ -388,7 +388,7 @@ class AssetModelsController extends Controller
+         }
+ 
+ 
+-        
++
+         if (count($update_array) > 0) {
+             AssetModel::whereIn('id', $models_raw_array)->update($update_array);
+             return redirect()->route('models.index')
+diff --git a/app/Http/Controllers/AssetsController.php b/app/Http/Controllers/AssetsController.php
+index fe8c2b4d0..261ae7d93 100755
+--- a/app/Http/Controllers/AssetsController.php
++++ b/app/Http/Controllers/AssetsController.php
+@@ -156,12 +156,12 @@ class AssetsController extends Controller
+ 
+             $file_name = str_random(25).".".$extension;
+ 
+-            $directory= public_path('uploads/assets/');
++            $directory= getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/assets/';
+             // Check if the uploads directory exists.  If not, try to create it.
+             if (!file_exists($directory)) {
+                 mkdir($directory, 0755, true);
+             }
+-            $path = public_path('uploads/assets/'.$file_name);
++            $path = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/assets/' . $file_name;
+             try {
+                 Image::make($image)->resize(800, 800, function ($constraint) {
+                     $constraint->aspectRatio();
+@@ -323,7 +323,7 @@ class AssetsController extends Controller
+ 
+         if ($request->filled('image_delete')) {
+             try {
+-                unlink(public_path().'/uploads/assets/'.$asset->image);
++                unlink(getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/assets/' . $asset->image);
+                 $asset->image = '';
+             } catch (\Exception $e) {
+                 \Log::info($e);
+@@ -350,14 +350,14 @@ class AssetsController extends Controller
+             $extension = substr($header, strpos($header, '/')+1);
+             $image = substr($image, strpos($image, ',')+1);
+ 
+-            $directory= public_path('uploads/assets/');
++            $directory= getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/assets/';
+             // Check if the uploads directory exists.  If not, try to create it.
+             if (!file_exists($directory)) {
+                 mkdir($directory, 0755, true);
+             }
+ 
+             $file_name = str_random(25).".".$extension;
+-            $path = public_path('uploads/assets/'.$file_name);
++            $path = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/assets/' . $file_name;
+             try {
+                 Image::make($image)->resize(800, 800, function ($constraint) {
+                     $constraint->aspectRatio();
+@@ -471,7 +471,7 @@ class AssetsController extends Controller
+             $asset = Asset::withTrashed()->find($assetId);
+             if ($asset) {
+                 $size = Helper::barcodeDimensions($settings->barcode_type);
+-                $qr_file = public_path().'/uploads/barcodes/qr-'.str_slug($asset->asset_tag).'-'.str_slug($asset->id).'.png';
++                $qr_file = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/barcodes/qr-' . str_slug($asset->asset_tag) . '-' . str_slug($asset->id) . '.png';
+ 
+                 if (isset($asset->id, $asset->asset_tag)) {
+                     if (file_exists($qr_file)) {
+@@ -502,7 +502,7 @@ class AssetsController extends Controller
+     {
+         $settings = Setting::getSettings();
+         $asset = Asset::find($assetId);
+-        $barcode_file = public_path().'/uploads/barcodes/'.str_slug($settings->alt_barcode).'-'.str_slug($asset->asset_tag).'.png';
++        $barcode_file = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/barcodes/' . str_slug($settings->alt_barcode) . '-' . str_slug($asset->asset_tag) . '.png';
+ 
+         if (isset($asset->id, $asset->asset_tag)) {
+             if (file_exists($barcode_file)) {
+diff --git a/app/Http/Controllers/CategoriesController.php b/app/Http/Controllers/CategoriesController.php
+index f57ec2b4c..9f5213df5 100755
+--- a/app/Http/Controllers/CategoriesController.php
++++ b/app/Http/Controllers/CategoriesController.php
+@@ -83,7 +83,7 @@ class CategoriesController extends Controller
+         $category->checkin_email        = $request->input('checkin_email', '0');
+         $category->user_id              = Auth::id();
+ 
+-        $category = $request->handleImages($category,600, public_path().'/uploads/categories');
++        $category = $request->handleImages($category,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/categories');
+ 
+         if ($category->save()) {
+             return redirect()->route('categories.index')->with('success', trans('admin/categories/message.create.success'));
+@@ -147,7 +147,7 @@ class CategoriesController extends Controller
+             $category->image = null;
+         }
+ 
+-        $category = $request->handleImages($category,600, public_path().'/uploads/categories');
++        $category = $request->handleImages($category,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/categories');
+ 
+         if ($category->save()) {
+             // Redirect to the new category page
+diff --git a/app/Http/Controllers/CompaniesController.php b/app/Http/Controllers/CompaniesController.php
+index 637f11b1d..d94e0e0b7 100644
+--- a/app/Http/Controllers/CompaniesController.php
++++ b/app/Http/Controllers/CompaniesController.php
+@@ -63,7 +63,7 @@ final class CompaniesController extends Controller
+         $company = new Company;
+         $company->name = $request->input('name');
+ 
+-        $company = $request->handleImages($company,600, public_path().'/uploads/companies');
++        $company = $request->handleImages($company,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/companies');
+ 
+         if ($company->save()) {
+             return redirect()->route('companies.index')
+@@ -117,7 +117,7 @@ final class CompaniesController extends Controller
+             $company->image = null;
+         }
+ 
+-        $company = $request->handleImages($company,600, public_path().'/uploads/companies');
++        $company = $request->handleImages($company,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/companies');
+ 
+ 
+         if ($company->save()) {
+diff --git a/app/Http/Controllers/ComponentsController.php b/app/Http/Controllers/ComponentsController.php
+index f4106b420..c2b0a068d 100644
+--- a/app/Http/Controllers/ComponentsController.php
++++ b/app/Http/Controllers/ComponentsController.php
+@@ -91,7 +91,7 @@ class ComponentsController extends Controller
+         $component->user_id                = Auth::id();
+ 
+ 
+-        $component = $request->handleImages($component,600, public_path().'/uploads/components');
++        $component = $request->handleImages($component,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/components');
+ 
+         if ($component->save()) {
+             return redirect()->route('components.index')->with('success', trans('admin/components/message.create.success'));
+@@ -155,7 +155,7 @@ class ComponentsController extends Controller
+         $component->purchase_cost          = request('purchase_cost');
+         $component->qty                    = Input::get('qty');
+ 
+-        $component = $request->handleImages($component,600, public_path().'/uploads/components');
++        $component = $request->handleImages($component,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/components');
+ 
+         if ($component->save()) {
+             return redirect()->route('components.index')->with('success', trans('admin/components/message.update.success'));
+diff --git a/app/Http/Controllers/ConsumablesController.php b/app/Http/Controllers/ConsumablesController.php
+index afe36a6e4..41ac86a57 100644
+--- a/app/Http/Controllers/ConsumablesController.php
++++ b/app/Http/Controllers/ConsumablesController.php
+@@ -87,7 +87,7 @@ class ConsumablesController extends Controller
+         $consumable->user_id                = Auth::id();
+ 
+ 
+-        $consumable = $request->handleImages($consumable,600, public_path().'/uploads/components');
++        $consumable = $request->handleImages($consumable,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/components');
+ 
+ 
+         if ($consumable->save()) {
+@@ -153,7 +153,7 @@ class ConsumablesController extends Controller
+         if ($request->file('image')) {
+             $image = $request->file('image');
+             $file_name = str_random(25).".".$image->getClientOriginalExtension();
+-            $path = public_path('uploads/consumables/'.$file_name);
++            $path = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/consumables/'.$file_name;
+             Image::make($image->getRealPath())->resize(800, null, function ($constraint) {
+                 $constraint->aspectRatio();
+                 $constraint->upsize();
+diff --git a/app/Http/Controllers/DepartmentsController.php b/app/Http/Controllers/DepartmentsController.php
+index 965c98b4f..8a1c54473 100644
+--- a/app/Http/Controllers/DepartmentsController.php
++++ b/app/Http/Controllers/DepartmentsController.php
+@@ -53,7 +53,7 @@ class DepartmentsController extends Controller
+         $department->user_id = Auth::user()->id;
+         $department->manager_id = ($request->filled('manager_id' ) ? $request->input('manager_id') : null);
+ 
+-        $department = $request->handleImages($department,600, public_path().'/uploads/departments');
++        $department = $request->handleImages($department,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/departments');
+ 
+         if ($department->save()) {
+             return redirect()->route("departments.index")->with('success', trans('admin/departments/message.create.success'));
+@@ -155,7 +155,7 @@ class DepartmentsController extends Controller
+         $department->fill($request->all());
+         $department->manager_id = ($request->filled('manager_id' ) ? $request->input('manager_id') : null);
+ 
+-        $department = $request->handleImages($department,600, public_path().'/uploads/departments');
++        $department = $request->handleImages($department,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/departments');
+ 
+         if ($department->save()) {
+             return redirect()->route("departments.index")->with('success', trans('admin/departments/message.update.success'));
+diff --git a/app/Http/Controllers/LocationsController.php b/app/Http/Controllers/LocationsController.php
+index d31b8a13b..81e46b16e 100755
+--- a/app/Http/Controllers/LocationsController.php
++++ b/app/Http/Controllers/LocationsController.php
+@@ -88,7 +88,7 @@ class LocationsController extends Controller
+         $location->manager_id       = $request->input('manager_id');
+         $location->user_id          = Auth::id();
+ 
+-        $location = $request->handleImages($location,600, public_path().'/uploads/locations');
++        $location = $request->handleImages($location,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/locations');
+ 
+         if ($location->save()) {
+             return redirect()->route("locations.index")->with('success', trans('admin/locations/message.create.success'));
+@@ -153,7 +153,7 @@ class LocationsController extends Controller
+         $location->zip          = $request->input('zip');
+         $location->ldap_ou      = $request->input('ldap_ou');
+         $location->manager_id   = $request->input('manager_id');
+-        $location = $request->handleImages($location,600, public_path().'/uploads/locations');
++        $location = $request->handleImages($location,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/locations');
+ 
+ 
+         if ($location->save()) {
+diff --git a/app/Http/Controllers/ManufacturersController.php b/app/Http/Controllers/ManufacturersController.php
+index fdcfe6903..07d6667b2 100755
+--- a/app/Http/Controllers/ManufacturersController.php
++++ b/app/Http/Controllers/ManufacturersController.php
+@@ -75,7 +75,7 @@ class ManufacturersController extends Controller
+         $manufacturer->support_url     = $request->input('support_url');
+         $manufacturer->support_phone    = $request->input('support_phone');
+         $manufacturer->support_email    = $request->input('support_email');
+-        $manufacturer = $request->handleImages($manufacturer,600, public_path().'/uploads/manufacturers');
++        $manufacturer = $request->handleImages($manufacturer,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/manufacturers');
+ 
+ 
+ 
+@@ -131,13 +131,13 @@ class ManufacturersController extends Controller
+         $manufacturer->support_url     = $request->input('support_url');
+         $manufacturer->support_phone    = $request->input('support_phone');
+         $manufacturer->support_email    = $request->input('support_email');
+-        
++
+         // Set the model's image property to null if the image is being deleted
+         if ($request->input('image_delete') == 1) {
+             $manufacturer->image = null;
+         }
+ 
+-        $manufacturer = $request->handleImages($manufacturer,600, public_path().'/uploads/manufacturers');
++        $manufacturer = $request->handleImages($manufacturer,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/manufacturers');
+ 
+ 
+ 
+@@ -171,7 +171,7 @@ class ManufacturersController extends Controller
+ 
+         if ($manufacturer->image) {
+             try  {
+-                unlink(public_path().'/uploads/manufacturers/'.$manufacturer->image);
++                unlink(getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/manufacturers/'.$manufacturer->image);
+             } catch (\Exception $e) {
+                 \Log::info($e);
+             }
+@@ -234,7 +234,7 @@ class ManufacturersController extends Controller
+ 
+     }
+ 
+-   
++
+ 
+ 
+ }
+diff --git a/app/Http/Controllers/ProfileController.php b/app/Http/Controllers/ProfileController.php
+index a255aa34b..488da26d8 100755
+--- a/app/Http/Controllers/ProfileController.php
++++ b/app/Http/Controllers/ProfileController.php
+@@ -68,7 +68,7 @@ class ProfileController extends Controller
+         if (Input::file('avatar')) {
+             $image = Input::file('avatar');
+             $file_name = str_slug($user->first_name."-".$user->last_name).".".$image->getClientOriginalExtension();
+-            $path = public_path('uploads/avatars/'.$file_name);
++            $path = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/avatars/' .$file_name;
+             Image::make($image->getRealPath())->resize(84, 84)->save($path);
+             $user->avatar = $file_name;
+         }
+diff --git a/app/Http/Controllers/SettingsController.php b/app/Http/Controllers/SettingsController.php
+index 7eecd5476..24b2e36ac 100755
+--- a/app/Http/Controllers/SettingsController.php
++++ b/app/Http/Controllers/SettingsController.php
+@@ -425,7 +425,7 @@ class SettingsController extends Controller
+             if (!config('app.lock_passwords')) {
+                 $image = $request->file('image');
+                 $file_name = "logo.".$image->getClientOriginalExtension();
+-                $path = public_path('uploads');
++                $path = getenv('SNIPEIT_PUBLIC_UPLOADS_DIR');
+                 if ($image->getClientOriginalExtension()!='svg') {
+ 
+                     Image::make($image->getRealPath())->resize(null, 150, function ($constraint) {
+diff --git a/app/Http/Controllers/SuppliersController.php b/app/Http/Controllers/SuppliersController.php
+index bc7934abc..da5d86e31 100755
+--- a/app/Http/Controllers/SuppliersController.php
++++ b/app/Http/Controllers/SuppliersController.php
+@@ -78,7 +78,7 @@ class SuppliersController extends Controller
+         $supplier->notes                = request('notes');
+         $supplier->url                  = $supplier->addhttp(request('url'));
+         $supplier->user_id              = Auth::id();
+-        $supplier = $request->handleImages($supplier,600, public_path().'/uploads/suppliers');
++        $supplier = $request->handleImages($supplier,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/suppliers');
+ 
+ 
+         if ($supplier->save()) {
+@@ -136,7 +136,7 @@ class SuppliersController extends Controller
+         $supplier->email                = request('email');
+         $supplier->url                  = $supplier->addhttp(request('url'));
+         $supplier->notes                = request('notes');
+-        $supplier = $request->handleImages($supplier,600, public_path().'/uploads/suppliers');
++        $supplier = $request->handleImages($supplier,600, getenv('SNIPEIT_PUBLIC_UPLOADS_DIR').'/suppliers');
+ 
+         if ($supplier->save()) {
+             return redirect()->route('suppliers.index')->with('success', trans('admin/suppliers/message.update.success'));
+diff --git a/app/Providers/SettingsServiceProvider.php b/app/Providers/SettingsServiceProvider.php
+index 7577b94f5..e64db8bb0 100644
+--- a/app/Providers/SettingsServiceProvider.php
++++ b/app/Providers/SettingsServiceProvider.php
+@@ -41,7 +41,7 @@ class SettingsServiceProvider extends ServiceProvider
+          */
+         // Model paths and URLs
+         \App::singleton('models_upload_path', function(){
+-            return public_path('/uploads/models/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/models/';
+         });
+ 
+         \App::singleton('models_upload_url', function(){
+@@ -50,7 +50,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Categories
+         \App::singleton('categories_upload_path', function(){
+-            return public_path('/uploads/categories/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/categories/';
+         });
+ 
+         \App::singleton('categories_upload_url', function(){
+@@ -59,7 +59,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Locations
+         \App::singleton('locations_upload_path', function(){
+-            return public_path('/uploads/locations/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/locations/';
+         });
+ 
+         \App::singleton('locations_upload_url', function(){
+@@ -68,7 +68,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Users
+         \App::singleton('users_upload_path', function(){
+-            return public_path('/uploads/users/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/users/';
+         });
+ 
+         \App::singleton('users_upload_url', function(){
+@@ -77,7 +77,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Manufacturers
+         \App::singleton('manufacturers_upload_path', function(){
+-            return public_path('/uploads/manufacturers/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/manufacturers/';
+         });
+ 
+         \App::singleton('manufacturers_upload_url', function(){
+@@ -86,7 +86,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Suppliers
+         \App::singleton('suppliers_upload_path', function(){
+-            return public_path('/uploads/suppliers/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/suppliers/';
+         });
+ 
+         \App::singleton('suppliers_upload_url', function(){
+@@ -95,7 +95,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Departments
+         \App::singleton('departments_upload_path', function(){
+-            return public_path('/uploads/departments/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/departments/';
+         });
+ 
+         \App::singleton('departments_upload_url', function(){
+@@ -104,7 +104,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Company paths and URLs
+         \App::singleton('companies_upload_path', function(){
+-            return public_path('/uploads/companies/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/companies/';
+         });
+ 
+         \App::singleton('companies_upload_url', function(){
+@@ -113,7 +113,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Accessories paths and URLs
+         \App::singleton('accessories_upload_path', function(){
+-            return public_path('/uploads/accessories/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/accessories/';
+         });
+ 
+         \App::singleton('accessories_upload_url', function(){
+@@ -122,7 +122,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Consumables paths and URLs
+         \App::singleton('consumables_upload_path', function(){
+-            return public_path('/uploads/consumables/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/consumables/';
+         });
+ 
+         \App::singleton('consumables_upload_url', function(){
+@@ -132,7 +132,7 @@ class SettingsServiceProvider extends ServiceProvider
+ 
+         // Components paths and URLs
+         \App::singleton('components_upload_path', function(){
+-            return public_path('/uploads/components/');
++            return getenv('SNIPEIT_PUBLIC_UPLOADS_DIR') . '/components/';
+         });
+ 
+         \App::singleton('components_upload_url', function(){

@@ -1,0 +1,58 @@
+diff --git a/vendor/laravel/framework/src/Illuminate/Foundation/Application.php b/vendor/laravel/framework/src/Illuminate/Foundation/Application.php
+index 2f05a4844..ab0a4a250 100755
+--- a/vendor/laravel/framework/src/Illuminate/Foundation/Application.php
++++ b/vendor/laravel/framework/src/Illuminate/Foundation/Application.php
+@@ -393,7 +393,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
+      */
+     public function storagePath()
+     {
+-        return $this->storagePath ?: $this->basePath.DIRECTORY_SEPARATOR.'storage';
++        return getenv('LARAVEL_NIX_STORAGE_PATH');
+     }
+
+     /**
+@@ -429,7 +429,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
+      */
+     public function environmentPath()
+     {
+-        return $this->environmentPath ?: $this->basePath;
++        return getenv('LARAVEL_NIX_ENVIRONMENT_PATH');
+     }
+
+     /**
+@@ -858,7 +858,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
+      */
+     public function getCachedServicesPath()
+     {
+-        return $this->bootstrapPath().'/cache/services.php';
++        return getenv('LARAVEL_NIX_BOOTSTRAP_CACHE_PATH') . '/services.php';
+     }
+
+     /**
+@@ -868,7 +868,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
+      */
+     public function getCachedPackagesPath()
+     {
+-        return $this->bootstrapPath().'/cache/packages.php';
++        return getenv('LARAVEL_NIX_BOOTSTRAP_CACHE_PATH') . '/packages.php';
+     }
+
+     /**
+@@ -888,7 +888,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
+      */
+     public function getCachedConfigPath()
+     {
+-        return $this->bootstrapPath().'/cache/config.php';
++        return getenv('LARAVEL_NIX_BOOTSTRAP_CACHE_PATH') . '/config.php';
+     }
+
+     /**
+@@ -908,7 +908,7 @@ class Application extends Container implements ApplicationContract, HttpKernelIn
+      */
+     public function getCachedRoutesPath()
+     {
+-        return $this->bootstrapPath().'/cache/routes.php';
++        return getenv('LARAVEL_NIX_BOOTSTRAP_CACHE_PATH') . '/routes.php';
+     }
+
+     /**

@@ -1,0 +1,19 @@
+diff --git a/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php b/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php
+index 04f0e4a..2a99071 100644
+--- a/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php
++++ b/vendor/laravel/framework/src/Illuminate/Foundation/Http/Kernel.php
+@@ -115,10 +115,14 @@ class Kernel implements KernelContract
+
+             $response = $this->sendRequestThroughRouter($request);
+         } catch (Exception $e) {
++            die("{$e->getMessage()} {$e->getTraceAsString()}");
++
+             $this->reportException($e);
+
+             $response = $this->renderException($request, $e);
+         } catch (Throwable $e) {
++            die("{$e->getMessage()} {$e->getTraceAsString()}");
++
+             $this->reportException($e = new FatalThrowableError($e));
+
+             $response = $this->renderException($request, $e);

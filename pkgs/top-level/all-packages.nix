@@ -2124,6 +2124,8 @@ in
 
   snipes = callPackage ../games/snipes { };
 
+  snipe-it = callPackage ../servers/web-apps/snipe-it { };
+
   snippetpixie = callPackage ../tools/text/snippetpixie { };
 
   socklog = callPackage ../tools/system/socklog { };
