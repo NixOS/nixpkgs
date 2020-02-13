@@ -484,6 +484,8 @@ in {
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
+  bayesian-optimization = callPackage ../development/python-modules/bayesian-optimization { };
+
   bayespy = callPackage ../development/python-modules/bayespy { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
