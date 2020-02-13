@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchPypi, pbr, sphinx, sphinx-testing, nose, glibcLocales }:
+{ lib, buildPythonPackage, fetchPypi, isPy27, pbr, sphinx, sphinx-testing, nose, glibcLocales }:
 
 buildPythonPackage rec {
   pname = "sphinx-jinja";
@@ -14,7 +14,10 @@ buildPythonPackage rec {
 
   checkInputs = [ sphinx-testing nose glibcLocales ];
 
-  checkPhase = ''
+  checkPhase = lib.optionalString (!isPy27) ''
+    # prevent python from loading locally and breaking namespace
+    mv sphinxcontrib .sphinxcontrib
+  '' + ''
     # Zip (epub) does not support files with epoch timestamp
     LC_ALL="en_US.UTF-8" nosetests -e test_build_epub
   '';
