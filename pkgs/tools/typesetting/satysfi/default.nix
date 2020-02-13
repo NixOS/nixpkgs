@@ -74,7 +74,7 @@ in
       homepage = https://github.com/gfngfn/SATySFi;
       description = "A statically-typed, functional typesetting system";
       license = licenses.lgpl3;
-      maintainers = [ maintainers.mt-caret ];
+      maintainers = [ maintainers.mt-caret maintainers.marsam ];
       platforms = platforms.all;
     };
   }
