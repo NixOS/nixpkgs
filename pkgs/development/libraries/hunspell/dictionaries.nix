@@ -732,4 +732,26 @@ in rec {
     shortDescription = "Russian (Russian)";
     license = with stdenv.lib.licenses; [ mpl20 lgpl3 ];
   };
+
+  /* CZECH */
+
+  cs_CZ = cs-cz;
+  cs-cz = mkDictFromLibreOffice {
+    shortName = "cs-cz";
+    dictFileName = "cs_CZ";
+    shortDescription = "Czech (Czechia)";
+    readmeFile = "README_cs.txt";
+    license = with stdenv.lib.licenses; [ gpl2 ];
+  };
+
+  /* SLOVAK */
+
+  sk_SK = sk-sk;
+  sk-sk = mkDictFromLibreOffice {
+    shortName = "sk-sk";
+    dictFileName = "sk_SK";
+    shortDescription = "Slovak (Slovakia)";
+    readmeFile = "README_sk.txt";
+    license = with stdenv.lib.licenses; [ gpl2 lgpl21 mpl11 ];
+  };
 }
