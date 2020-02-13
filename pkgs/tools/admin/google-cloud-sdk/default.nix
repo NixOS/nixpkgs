@@ -83,6 +83,7 @@ in stdenv.mkDerivation rec {
 
     # remove tests and test data
     find $out -name tests -type d -exec rm -rf '{}' +
+    rm $out/google-cloud-sdk/platform/gsutil/gslib/commands/test.py
 
     # compact all the JSON
     find $out -name \*.json | while read path; do
