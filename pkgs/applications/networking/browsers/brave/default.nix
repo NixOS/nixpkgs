@@ -151,7 +151,7 @@ stdenv.mkDerivation rec {
       contribute to your favorite creators automatically.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte ];
     platforms = [ "x86_64-linux" ];
   };
 }
