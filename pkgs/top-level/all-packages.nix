@@ -25281,6 +25281,8 @@ in
 
   rmount = callPackage ../tools/filesystems/rmount {};
 
+  romdirfs = callPackage ../tools/filesystems/romdirfs {};
+
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
   run-scaled = callPackage ../tools/X11/run-scaled { };
