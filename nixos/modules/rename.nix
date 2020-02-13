@@ -42,6 +42,12 @@ with lib;
       instead, or any other display manager in NixOS as they all support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
+    (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
+      The brightnessctl module was removed because newer versions of
+      brightnessctl don't require the udev rules anymore (they can use the
+      systemd-logind API). Instead of using the module you can now
+      simply add the brightnessctl package to environment.systemPackages.
+    '')
 
     # Do NOT add any option renames here, see top of the file
   ];
