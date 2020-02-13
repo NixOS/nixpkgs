@@ -20546,6 +20546,8 @@ in
 
   mopidy-iris = callPackage ../applications/audio/mopidy/iris.nix { };
 
+  mopidy-mpd = callPackage ../applications/audio/mopidy/mpd.nix { };
+
   motif = callPackage ../development/libraries/motif { };
 
   mozplugger = callPackage ../applications/networking/browsers/mozilla-plugins/mozplugger {};
