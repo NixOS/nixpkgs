@@ -2263,6 +2263,8 @@ in
 
   biber = callPackage ../tools/typesetting/biber { };
 
+  biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
+
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { };
 
