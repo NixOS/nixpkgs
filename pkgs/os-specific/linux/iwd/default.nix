@@ -8,7 +8,6 @@
 , docutils
 , readline
 , python3Packages
-, systemd
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
     ell
     python3Packages.python
     readline
-    systemd
   ];
 
   pythonPath = [
