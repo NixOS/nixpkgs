@@ -5,7 +5,8 @@
 , qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
 , qttools, qtwayland, qtwebchannel, qtwebengine
 # Runtime
-, coreutils, libjpeg_turbo, pciutils, procps, utillinux, libv4l
+, coreutils, libjpeg_turbo, pciutils, procps, utillinux
+, enableV4l ? false, libv4l
 , pulseaudioSupport ? true, libpulseaudio ? null
 }:
 
@@ -101,11 +102,10 @@ in mkDerivation {
 
   qtWrapperArgs = [
     ''--prefix PATH : ${makeBinPath [ coreutils glib.dev pciutils procps qttools.dev utillinux ]}''
-    ''--prefix LD_PRELOAD : ${libv4l}/lib/libv4l/v4l2convert.so''
     # --run "cd ${placeholder "out"}/share/zoom-us"
     # ^^ unfortunately, breaks run arg into multiple array elements, due to
     # some bad array propagation. We'll do that in bash below
-  ];
+  ] ++ stdenv.lib.optional enableV4l ''--prefix LD_PRELOAD : ${libv4l}/lib/libv4l/v4l2convert.so'';
 
   postFixup = ''
     # Zoom expects "zopen" executable (needed for web login) to be present in CWD. Or does it expect
