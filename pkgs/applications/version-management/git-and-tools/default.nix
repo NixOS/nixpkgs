@@ -22,6 +22,8 @@ let
 
   bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
 
+  bump2version = pkgs.python37Packages.callPackage ./bump2version { };
+
   darcsToGit = callPackage ./darcs-to-git { };
 
   delta = callPackage ./delta { };
