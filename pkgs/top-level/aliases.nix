@@ -382,7 +382,7 @@ mapAliases ({
   ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
   ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
-  rxvt_unicode_with-plugins = rxvt-unicode; # added 2020-02-02
+  rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
   urxvt_perl = rxvt-unicode-plugins.perl; # added 2020-02-02
