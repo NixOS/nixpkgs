@@ -224,7 +224,7 @@ in
   #packagekit = handleTest ./packagekit.nix {};
   #pam-oath-login = handleTest ./pam-oath-login.nix {};
   #pam-u2f = handleTest ./pam-u2f.nix {};
-  #pantheon = handleTest ./pantheon.nix {};
+  pantheon = handleTest ./pantheon.nix {};
   #paperless = handleTest ./paperless.nix {};
   #peerflix = handleTest ./peerflix.nix {};
   #pgjwt = handleTest ./pgjwt.nix {};
