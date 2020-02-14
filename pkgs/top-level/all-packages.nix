@@ -203,7 +203,7 @@ in
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
-  docker-slim = callPackage ../build-support/docker-slim { };
+  docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
