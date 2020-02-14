@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
+{ stdenv, fetchurl, pkgconfig, gettext, glib, dbus-glib, libxklavier,
   libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
   wrapGAppsHook }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    intltool
+    gettext
     pkgconfig
     wrapGAppsHook
   ];

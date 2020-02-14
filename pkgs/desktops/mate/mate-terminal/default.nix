@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, itstool, libxml2, mate, dconf, gtk3, vte, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, glib, itstool, libxml2, mate, dconf, gtk3, vte, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-terminal";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 

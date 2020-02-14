@@ -1,4 +1,4 @@
-{ config, stdenv, fetchurl, pkgconfig, intltool, glib
+{ config, stdenv, fetchurl, pkgconfig, gettext, glib
 , alsaSupport ? stdenv.isLinux, alsaLib
 , pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
 , ossSupport ? false
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "08vkdp2kzy27xwscwp2jj5nz0yblrka2482l6cx3wl4dnk0rpznm";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig gettext ];
 
   buildInputs = [ glib ]
     ++ stdenv.lib.optional alsaSupport alsaLib

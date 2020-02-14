@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gtk3, libxml2, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, itstool, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-calc";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     itstool
     wrapGAppsHook
   ];

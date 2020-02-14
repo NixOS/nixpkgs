@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, isocodes, enchant, libxml2, python3, gnome3, gtksourceview3, libpeas, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, perl, itstool, isocodes, enchant, libxml2, python3, gnome3, gtksourceview3, libpeas, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "pluma";
@@ -11,7 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
+    perl
     itstool
     isocodes
     wrapGAppsHook

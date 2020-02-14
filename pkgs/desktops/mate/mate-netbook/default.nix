@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libwnck3, libfakekey, libXtst, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-netbook";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 

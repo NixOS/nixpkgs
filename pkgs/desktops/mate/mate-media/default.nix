@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, libtool, libxml2, libcanberra-gtk3, gtk3, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-media";
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     libtool
     wrapGAppsHook
   ];

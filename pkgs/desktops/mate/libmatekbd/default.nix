@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, libxklavier }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, libxklavier }:
 
 stdenv.mkDerivation rec {
   pname = "libmatekbd";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1sq7gwr9q3hq4q0vx32qqa68qcqf5by9mqyxnq6lwgaq8ydq16ab";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool ];
+  nativeBuildInputs = [ pkgconfig gettext ];
 
   buildInputs = [ gtk3 libxklavier ];
 

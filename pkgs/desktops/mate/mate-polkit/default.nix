@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, gobject-introspection, libappindicator-gtk3, libindicator-gtk3, polkit }:
 
 stdenv.mkDerivation rec {
   pname = "mate-polkit";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    intltool
+    gettext
     pkgconfig
   ];
 

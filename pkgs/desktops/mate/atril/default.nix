@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, texlive, mate, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, glib, libxml2, libsecret, poppler, itstool, hicolor-icon-theme, texlive, mate, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "atril";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     wrapGAppsHook
   ];
 

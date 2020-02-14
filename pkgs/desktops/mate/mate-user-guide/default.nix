@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, intltool, itstool, libxml2, yelp }:
+{ stdenv, fetchurl, gettext, itstool, libxml2, yelp }:
 
 stdenv.mkDerivation rec {
   pname = "mate-user-guide";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ddxya84iydvy85dbqls0wmz2rph87wri3rsdhv4rkbhh5g4sd7f";
   };
 
-  nativeBuildInputs = [ itstool intltool libxml2 ];
+  nativeBuildInputs = [ itstool gettext libxml2 ];
 
   buildInputs = [ yelp ];
 

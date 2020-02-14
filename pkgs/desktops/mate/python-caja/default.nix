@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk3, mate, python3Packages }:
+{ stdenv, fetchurl, pkgconfig, gettext, gtk3, mate, python3Packages }:
 
 stdenv.mkDerivation rec {
   pname = "python-caja";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     python3Packages.wrapPython
   ];
 

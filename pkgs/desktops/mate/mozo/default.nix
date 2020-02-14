@@ -1,4 +1,4 @@
-{ stdenv, python3, fetchurl, pkgconfig, intltool, mate, gtk3, glib, wrapGAppsHook, gobject-introspection }:
+{ stdenv, python3, fetchurl, pkgconfig, gettext, mate, gtk3, glib, wrapGAppsHook, gobject-introspection }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mozo";
@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
     sha256 = "01lyi47a04xk0by5bvnfmqgv5sysk2wdlri6a4ssmy1qhgwh9zr3";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gobject-introspection wrapGAppsHook ];
+  nativeBuildInputs = [ pkgconfig gettext gobject-introspection wrapGAppsHook ];
 
   propagatedBuildInputs =  [ mate.mate-menus python3.pkgs.pygobject3 ];
 

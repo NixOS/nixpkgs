@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, iconnamingutils, librsvg, gtk3, hicolor-icon-theme }:
+{ stdenv, fetchurl, pkgconfig, gettext, iconnamingutils, librsvg, gtk3, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "mate-icon-theme";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "0a2lz61ivwwcdznmwlmgjr6ipr9sdl5g2czbagnpxkwz8f3m77na";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool iconnamingutils ];
+  nativeBuildInputs = [ pkgconfig gettext iconnamingutils ];
 
   buildInputs = [ librsvg ];
 

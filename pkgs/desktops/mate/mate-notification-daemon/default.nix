@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libcanberra-gtk3,
+{ stdenv, fetchurl, pkgconfig, gettext, glib, libcanberra-gtk3,
   libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     libxml2 # for xmllint
     wrapGAppsHook
   ];
