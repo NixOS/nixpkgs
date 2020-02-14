@@ -13,6 +13,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ yelp ];
 
+  postPatch = ''
+    substituteInPlace mate-user-guide.desktop.in.in \
+      --replace "Exec=yelp" "Exec=${yelp}/bin/yelp"
+  '';
+
   meta = with stdenv.lib; {
     description = "MATE User Guide";
     homepage = "https://mate-desktop.org";
