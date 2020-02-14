@@ -7,9 +7,11 @@
 , qt5
 , gnuradio
 , liquid-dsp
+, mkDerivation
+, wrapQtAppsHook
 }:
 
-stdenv.mkDerivation {
+mkDerivation {
   name = "inspectrum-unstable-2017-05-31";
 
   src = fetchFromGitHub {
@@ -19,7 +21,7 @@ stdenv.mkDerivation {
     sha256 = "1fvnr8gca25i6s9mg9b2hyqs0zzr4jicw13mimc9dhrgxklrr1yv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig wrapQtAppsHook ];
   buildInputs = [
     cmake
     qt5.qtbase
