@@ -109,7 +109,7 @@ let
 
   hash_ =
     if hash != "" then { outputHashAlgo = null; outputHash = hash; }
-    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use sha256 or sha512"
+    else if md5 != "" then throw "fetchurl does not support md5 anymore, please use hash (in SRI format), sha256 or sha512 attribute"
     else if (outputHash != "" && outputHashAlgo != "") then { inherit outputHashAlgo outputHash; }
     else if sha512 != "" then { outputHashAlgo = "sha512"; outputHash = sha512; }
     else if sha256 != "" then { outputHashAlgo = "sha256"; outputHash = sha256; }
