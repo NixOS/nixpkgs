@@ -20,9 +20,9 @@ let
       listen_addresses = '${if cfg.enableTCPIP then "*" else "localhost"}'
       port = ${toString cfg.port}
       ${cfg.extraConfig}
-    '';
+    ''; 
 
-    dirMode = if cfg.groupAccess == true then "0750" else "0700";
+  groupAccessAvailable = versionAtLeast postgresql.version "11.0";
 
 in
 
@@ -66,18 +66,6 @@ in
         '';
       };
 
-      groupAccess = mkOption {
-        type = with types; nullOr bool;
-        default = null;
-        description = ''
-          When true, allow read access for group (<literal>0750</literal> mask for data directory).
-          Supported only for PostgreSQL 11+.
-          </para><para>
-          When false, force a restrictive <literal>0700</literal> mask on data directory, so
-          PostgreSQL won't fail due to too permissive mask.
-        '';
-      };
-
       authentication = mkOption {
         type = types.lines;
         default = "";
@@ -105,7 +93,7 @@ in
       initdbArgs = mkOption {
         type = with types; listOf str;
         default = [];
-        example = [ "--data-checksums" ];
+        example = [ "--data-checksums" "--allow-group-access" ];
         description = ''
           Additional arguments passed to <literal>initdb<literal> during data dir
           initialisation.
@@ -246,14 +234,6 @@ in
 
   config = mkIf cfg.enable {
 
-    assertions = [
-      { assertion = cfg.groupAccess == true -> versionAtLeast cfg.package.version "11.0";
-        message = ''
-          'groupAccess' is not available for PostgreSQL < 11.
-        '';
-      }
-    ];
-
     services.postgresql.package =
       # Note: when changing the default, make it conditional on
       # ‘system.stateVersion’ to maintain compatibility with existing
@@ -267,9 +247,6 @@ in
       mkDefault (if versionAtLeast config.system.stateVersion "17.09"
                   then "/var/lib/postgresql/${cfg.package.psqlSchema}"
                   else "/var/db/postgresql");
-
-    services.postgresql.initdbArgs =
-      mkBefore (optional (cfg.groupAccess == true) "--allow-group-access");
 
     services.postgresql.authentication = mkAfter
       ''
@@ -310,7 +287,7 @@ in
           ''
             # Create data directory.
             if ! test -e ${cfg.dataDir}/PG_VERSION; then
-              mkdir -m ${dirMode} -p ${cfg.dataDir}
+              mkdir -m 0700 -p ${cfg.dataDir}
               rm -f ${cfg.dataDir}/*.conf
               chown -R postgres:postgres ${cfg.dataDir}
             fi
@@ -329,8 +306,9 @@ in
               ln -sfn "${pkgs.writeText "recovery.conf" cfg.recoveryConfig}" \
                 "${cfg.dataDir}/recovery.conf"
             ''}
-            ${optionalString (cfg.groupAccess != null) ''
-              chmod ${dirMode} "${cfg.dataDir}"
+            ${optionalString (!groupAccessAvailable) ''
+              # postgresql pre 11.0 doesn't start if state directory mode is group accessible
+              chmod 0700 "${cfg.dataDir}"
             ''}
 
             exec postgres
