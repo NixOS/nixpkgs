@@ -192,13 +192,22 @@ let
             ["--network=host"]
           '';
         };
+
+        autoStart = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            When enabled, the container is automatically started on boot.
+            If this option is set to false, the container has to be started on-demand via its service.
+          '';
+        };
       };
     };
 
   mkService = name: container: let
     mkAfter = map (x: "docker-${x}.service") container.dependsOn;
   in rec {
-    wantedBy = [ "multi-user.target" ];
+    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
     after = [ "docker.service" "docker.socket" ] ++ mkAfter;
     requires = after;
 
