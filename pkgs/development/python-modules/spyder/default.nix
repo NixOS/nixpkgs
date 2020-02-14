@@ -1,7 +1,8 @@
 { stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet, pyxdg, intervaltree
+  spyder-kernels, qtpy, pyzmq, chardet, pyxdg, intervaltree, qdarkstyle,
+  watchdog
 , pyqtwebengine
 }:
 
@@ -19,7 +20,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine pyxdg intervaltree
+    pygments qtpy pyzmq chardet pyqtwebengine pyxdg intervaltree qdarkstyle watchdog
   ];
 
   # There is no test for spyder
