@@ -86,6 +86,7 @@ in
         pkgs.shared-mime-info
         pkgs.xdg-user-dirs # Update user dirs as described in https://freedesktop.org/wiki/Software/xdg-user-dirs/
         pkgs.mate.mate-settings-daemon
+        pkgs.yelp # for 'Contents' in 'Help' menus
       ];
 
     programs.dconf.enable = true;
