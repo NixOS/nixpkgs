@@ -13,7 +13,7 @@ in
 
 let
   # Make base-64 encoded SRI hash filename-safe using RFC 4648 §5
-  tmpname = lib.replaceStrings [ "+" "/" "=" ] [ "-" "_" "" ] args.sha256;
+  tmpname = lib.replaceStrings [ "+" "/" "=" ] [ "-" "_" "" ] (args.hash or args.sha256);
 in
 fetchurl ({
   postFetch = ''
