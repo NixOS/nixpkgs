@@ -6565,6 +6565,8 @@ in
 
   stdman = callPackage ../data/documentation/stdman { };
 
+  stderred = callPackage ../tools/misc/stderred { };
+
   stenc = callPackage ../tools/backup/stenc { };
 
   stm32loader = with python3Packages; toPythonApplication stm32loader;
