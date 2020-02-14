@@ -14,6 +14,9 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/lib/urxvt/perl
     cp keyboard-select $out/lib/urxvt/perl
+    cp deprecated/clipboard \
+       deprecated/url-select \
+    $out/lib/urxvt/perl
   '';
 
   meta = with stdenv.lib; {
