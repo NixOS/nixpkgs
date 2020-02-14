@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, libstartup_notification, gnome3, gtk3, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, libcanberra-gtk3, libgtop, libstartup_notification, gnome3, gtk3, mate-settings-daemon, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "marco";
@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     gtk3
     gnome3.zenity
+    mate-settings-daemon
   ];
 
   meta = with stdenv.lib; {
