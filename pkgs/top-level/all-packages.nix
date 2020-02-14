@@ -6469,6 +6469,8 @@ in
     tex = texlive.combined.scheme-small;
   };
 
+  StevenBlack-hosts = callPackage ../applications/networking/StevenBlack-hosts {};
+
   sleuthkit = callPackage ../tools/system/sleuthkit {};
 
   sleepyhead = callPackage ../applications/misc/sleepyhead {};

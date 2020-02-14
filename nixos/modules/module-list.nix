@@ -714,6 +714,7 @@
   ./services/networking/sslh.nix
   ./services/networking/ssh/lshd.nix
   ./services/networking/ssh/sshd.nix
+  ./services/networking/StevenBlack-hosts.nix
   ./services/networking/strongswan.nix
   ./services/networking/strongswan-swanctl/module.nix
   ./services/networking/stunnel.nix
