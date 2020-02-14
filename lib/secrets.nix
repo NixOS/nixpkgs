@@ -33,9 +33,12 @@ rec {
         # hosts Nix store
         if builtins.typeOf path == "path" then
           # Don't import again if the path refers to something in the store
+          # We do this so that secrets aren't stored multiple times in the store
           if hasPrefix builtins.storeDir (toString path) then
             builtins.storePath path
           # Otherwise import the path into the store
+          # We could just use string interpolation to do this, but that wouldn't
+          # work with invalid-as-derivation-name filenames
           else builtins.path {
             name = validDerivationName (baseNameOf path);
             path = path;
