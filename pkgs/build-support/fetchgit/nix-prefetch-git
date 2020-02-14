@@ -25,7 +25,7 @@ commitDateStrict8601=
 if test -n "$deepClone"; then
     deepClone=true
 else
-    deepClone=false
+    deepClone=
 fi
 
 if test "$leaveDotGit" != 1; then
@@ -65,7 +65,7 @@ for arg; do
             --branch-name) argfun=set_branchName;;
             --deepClone) deepClone=true;;
             --quiet) QUIET=true;;
-            --no-deepClone) deepClone=false;;
+            --no-deepClone) deepClone=;;
             --leave-dotGit) leaveDotGit=true;;
             --fetch-submodules) fetchSubmodules=true;;
             --builder) builder=true;;
@@ -150,7 +150,7 @@ checkout_ref(){
     local hash="$1"
     local ref="$2"
 
-    if "$deepClone"; then
+    if [[ -n "$deepClone" ]]; then
         # The caller explicitly asked for a deep clone.  Deep clones
         # allow "git describe" and similar tools to work.  See
         # https://marc.info/?l=nix-dev&m=139641582514772
@@ -369,7 +369,9 @@ print_results() {
   "rev": "$(json_escape "$fullRev")",
   "date": "$(json_escape "$commitDateStrict8601")",
   "$(json_escape "$hashType")": "$(json_escape "$hash")",
-  "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false)
+  "fetchSubmodules": $([[ -n "$fetchSubmodules" ]] && echo true || echo false),
+  "deepClone": $([[ -n "$deepClone" ]] && echo true || echo false),
+  "leaveDotGit": $([[ -n "$leaveDotGit" ]] && echo true || echo false)
 }
 EOF
     fi
