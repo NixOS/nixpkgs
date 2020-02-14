@@ -30,6 +30,10 @@ buildPythonPackage rec {
     sha256 = "1h0w7x7d9g3z7vmxn5w7qxdkjya3sl0xfnklfaaaj8dkb5mjldpi";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py --replace "jedi>=0.14.1,<0.16" "jedi>=0.14.1"
+  '';
+
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
 
