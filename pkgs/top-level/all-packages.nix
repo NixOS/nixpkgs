@@ -21470,9 +21470,15 @@ in
 
   skrooge = libsForQt5.callPackage ../applications/office/skrooge {};
 
+  slim-ng = callPackage ../applications/display-managers/slim {
+    libpng = libpng12;
+  };
+
   smartgithg = callPackage ../applications/version-management/smartgithg {
     jre = openjdk11;
   };
+
+  slimThemes = recurseIntoAttrs (callPackage ../applications/display-managers/slim/themes.nix {});
 
   smartdeblur = callPackage ../applications/graphics/smartdeblur { };
 

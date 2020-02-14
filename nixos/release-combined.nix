@@ -131,6 +131,7 @@ in rec {
         (all nixos.tests.proxy)
         (all nixos.tests.sddm.default)
         (all nixos.tests.simple)
+        (all nixos.tests.slim)
         (all nixos.tests.switchTest)
         (all nixos.tests.udisks2)
         (all nixos.tests.xfce)

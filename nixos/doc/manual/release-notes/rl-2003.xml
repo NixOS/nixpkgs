@@ -177,13 +177,6 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
-     The SLIM Display Manager has been removed, as it has been unmaintained since 2013.
-     Consider migrating to a different display manager such as LightDM (current default in NixOS),
-     SDDM, GDM, or using the startx module which uses Xinitrc.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
      The Way Cooler wayland compositor has been removed, as the project has been officially canceled.
      There are no more <literal>way-cooler</literal> attribute and <literal>programs.way-cooler</literal> options.
     </para>
