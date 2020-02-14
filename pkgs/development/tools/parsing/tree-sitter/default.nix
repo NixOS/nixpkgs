@@ -80,6 +80,9 @@ in rustPlatform.buildRustPackage {
   };
 
   inherit cargoSha256;
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
 
   meta = {
     homepage = "https://github.com/tree-sitter/tree-sitter";

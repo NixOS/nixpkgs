@@ -17,7 +17,7 @@
   # Please set to true on any Rust package updates. Once all packages set this
   # to true, we will delete and make it the default. For details, see the Rust
   # section on the manual and ./README.md.
-, legacyCargoFetcher ? true
+, legacyCargoFetcher ? false
 , buildType ? "release"
 , meta ? {}
 , target ? null

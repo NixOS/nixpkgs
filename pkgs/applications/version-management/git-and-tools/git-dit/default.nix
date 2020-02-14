@@ -26,6 +26,9 @@ buildRustPackage rec {
     sha256 = "1sx6sc2dj3l61gbiqz8vfyhw5w4xjdyfzn1ixz0y8ipm579yc7a2";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "10852131aizfw9j1yl4gz180h4gd8y5ymx3wmf5v9cmqiqxy8bgy";
 
   nativeBuildInputs = [

@@ -64,6 +64,9 @@ self: super: {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
       cargoSha256 = "1w8g7pxwnjqp9zi47h4lz2mcg5daldsk5z72h8cjj750wng8a82c";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 

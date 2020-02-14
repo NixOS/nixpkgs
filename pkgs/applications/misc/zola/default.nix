@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "03rwf5l1l3ap03qi0xqcxsbyvpg3cqmr50j8ql6c5v55xl0ki9w8";
 
   nativeBuildInputs = [ cmake pkgconfig ];

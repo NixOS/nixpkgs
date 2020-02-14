@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0vkcis06gwsqfwvrl8xcf74mfcs6j77b9fhcz5rrh77mwl7ixsdc";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "04wffj2y9pqyk0x3y6ghp06pggmxnk2h245iabqq0mpwx36fd8b6";
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake ];

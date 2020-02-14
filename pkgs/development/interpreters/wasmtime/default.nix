@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "08b3rbnl7qwyfbwaqcb7z84sh0h94v18v6557hrf0dlil414v54i";
 
   cargoPatches = [ ./cargo-lock.patch ];

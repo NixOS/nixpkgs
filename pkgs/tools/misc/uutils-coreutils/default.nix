@@ -14,6 +14,9 @@ rustPlatform.buildRustPackage {
   # too many impure/platform-dependent tests
   doCheck = false;
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0qnpx2xhckb45q8cgn0xh31dg5k73hqp5mz5zg3micmg7as4b621";
 
   makeFlags =

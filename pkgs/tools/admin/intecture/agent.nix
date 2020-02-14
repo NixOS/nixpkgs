@@ -14,6 +14,9 @@ buildRustPackage rec {
     sha256 = "0j27qdgyxybaixggh7k57mpm6rifimn4z2vydk463msc8b3kgywj";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "093ipd8lg2ngnln55x5j40g2n8f3y8aysgz9rjn95a4npxrg4yxw";
 
   buildInputs = [ openssl zeromq czmq zlib ];

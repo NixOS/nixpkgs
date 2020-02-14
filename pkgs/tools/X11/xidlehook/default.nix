@@ -16,6 +16,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0jdkcxvlw7s8pz1ka3d2w97356a2axvlwfgyh2dz7nmfzpjx64x0";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;

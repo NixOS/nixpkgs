@@ -24,6 +24,9 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "02bx8nz8kkr0l8m1b8nfc9576qx9is6s72x4ji3bzwimy76jvx3j";
 
   # Some tests fail because they need network access.

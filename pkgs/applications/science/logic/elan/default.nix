@@ -4,6 +4,9 @@ rustPlatform.buildRustPackage rec {
   pname = "elan";
   version = "0.7.5";
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0q0xlvyyf88dbz43r7kk9v8rrp6hj0nl5i2i9mg6ibk2gphgdv6v";
 
   src = fetchFromGitHub {

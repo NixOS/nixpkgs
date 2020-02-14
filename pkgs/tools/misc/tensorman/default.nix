@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ pkgconfig openssl ];
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1gh5w6zzrvjk60bqaf355fagijy723rvmqjh4laksd96pmzdfwn9";
 
   meta = with stdenv.lib; {

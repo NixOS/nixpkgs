@@ -14,6 +14,9 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0d7h0kn41w6wm4w63vjy2i7r19jkansfvfjn7vgh2gqh5m60kal2";
 
   nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
