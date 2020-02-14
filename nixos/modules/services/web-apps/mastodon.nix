@@ -10,7 +10,6 @@ let
     NODE_ENV = "production";
 
     DB_USER = cfg.database.user;
-    SMTP_LOGIN  = cfg.smtp.user;
 
     REDIS_HOST = cfg.redis.host;
     REDIS_PORT = toString(cfg.redis.port);
@@ -26,7 +25,9 @@ let
     ES_ENABLED = if (cfg.elasticsearch.host != null) then "true" else "false";
     ES_HOST = cfg.elasticsearch.host;
     ES_PORT = toString(cfg.elasticsearch.port);
-  } // cfg.extraConfig;
+  }
+  // (if cfg.smtp.authenticate then { SMTP_LOGIN  = cfg.smtp.user; } else {})
+  // cfg.extraConfig;
 
   envFile = pkgs.writeText "mastodon.env" (lib.concatMapStrings (s: s + "\n") (
     (lib.concatLists (lib.mapAttrsToList (name: value:
@@ -248,6 +249,12 @@ in {
           default = true;
         };
 
+        authenticate = lib.mkOption {
+          description = "Authenticate with the SMTP server using username and password.";
+          type = lib.types.bool;
+          default = true;
+        };
+
         host = lib.mkOption {
           description = "SMTP host used when sending emails to users.";
           type = lib.types.str;
@@ -355,7 +362,9 @@ in {
         VAPID_PRIVATE_KEY=$(cat ${cfg.vapidPrivateKeyFile})
         VAPID_PUBLIC_KEY=$(cat ${cfg.vapidPublicKeyFile})
         DB_PASS="$(cat ${cfg.database.passwordFile})"
+      '' + (if cfg.smtp.authenticate then ''
         SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
+      '' else "") + ''
         EOF
       '';
       serviceConfig = {
