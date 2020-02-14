@@ -246,4 +246,16 @@ rec {
     contents = [ pkgs.bash pkgs.hello ];
     maxLayers = 2;
   };
+
+  # 16. Create a layered image with more packages than max layers.
+  # coreutils and hello are part of the same layer
+  bulk-layer = pkgs.dockerTools.buildLayeredImage {
+    name = "bulk-layer";
+    tag = "latest";
+    contents = with pkgs; [
+      coreutils hello
+    ];
+    maxLayers = 2;
+  };
+
 }
