@@ -3788,6 +3788,7 @@ broken-packages:
   - collections
   - collections-api
   - collections-base-instances
+  - Color
   - color-counter
   - colorless
   - colorless-http-client
@@ -6549,6 +6550,7 @@ broken-packages:
   - ivory-serialize
   - ivory-stdlib
   - ivy-web
+  - ix
   - ixdopp
   - ixmonad
   - ixshader
@@ -8492,6 +8494,7 @@ broken-packages:
   - reform-happstack
   - reform-hsp
   - reformat
+  - refractor
   - refresht
   - refurb
   - reg-alloc
@@ -8628,6 +8631,7 @@ broken-packages:
   - riot
   - risc386
   - riscv-isa
+  - Ritt-Wu
   - rivers
   - rivet
   - rivet-migration
@@ -8692,6 +8696,7 @@ broken-packages:
   - rungekutta
   - runmany
   - runtime-arbitrary
+  - rv
   - rws
   - RxHaskell
   - s-expression
@@ -9945,6 +9950,7 @@ broken-packages:
   - unittyped
   - unity-testresult-parser
   - unitym-yesod
+  - universal
   - universe-th
   - unix-fcntl
   - unix-handle
