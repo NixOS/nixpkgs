@@ -755,6 +755,8 @@ in {
 
   handout = callPackage ../development/python-modules/handout { };
 
+  helpdev = callPackage ../development/python-modules/helpdev { };
+
   helper = callPackage ../development/python-modules/helper { };
 
   hdmedians = callPackage ../development/python-modules/hdmedians { };

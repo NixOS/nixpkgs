@@ -1,4 +1,10 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{ 
+  lib
+  , fetchPypi
+  , buildPythonPackage
+  , helpdev
+  , qtpy
+}:
 
 buildPythonPackage rec {
   pname = "qdarkstyle";
@@ -10,8 +16,10 @@ buildPythonPackage rec {
     sha256 = "0xfllpwnnxdwvfzrrz3b317vb37n5h1x24nzv6zghij4cr5pr5ka";
   };
 
+  propagatedBuildInputs = [ helpdev qtpy ];
+
   # No tests available
-  doCheck = false;
+  # doCheck = false;
 
   meta = with lib; {
     description = "A dark stylesheet for Python and Qt applications";
