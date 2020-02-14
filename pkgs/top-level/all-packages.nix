@@ -912,6 +912,8 @@ in
 
   git-town = callPackage ../tools/misc/git-town { };
 
+  github-cli = callPackage ../applications/version-management/github-cli { };
+
   github-changelog-generator = callPackage ../development/tools/github-changelog-generator { };
 
   github-commenter = callPackage ../development/tools/github-commenter { };
