@@ -192,6 +192,8 @@ let
 
   transcrypt = callPackage ./transcrypt { };
 
+  ydiff = pkgs.python3.pkgs.toPythonApplication pkgs.python3.pkgs.ydiff;
+
 } // lib.optionalAttrs (config.allowAliases or true) (with self; {
   # aliases
   gitAnnex = git-annex;
