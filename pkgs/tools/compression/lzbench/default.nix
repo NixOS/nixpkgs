@@ -1,18 +1,17 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "lzbench-20170208";
+  pname = "lzbench";
+  version = "1.8";
 
   src = fetchFromGitHub {
     owner = "inikep";
-    repo = "lzbench";
-    rev = "d5e9b58";
-    sha256 = "16xj5fldwl639f0ys5rx54csbfvf35ja34bdl5m068hdn6dr47r5";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "0gxw9b3yjj3z2b1y9mx3yfhklyxpfmb8fjf9mfpg9hlbr9mcpff3";
   };
 
   enableParallelBuilding = true;
-
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ stdenv.glibc.static ];
 
   installPhase = ''
     mkdir -p $out/bin
