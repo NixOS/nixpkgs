@@ -25,6 +25,9 @@ rustPlatform.buildRustPackage rec {
     '';
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "185jnmyirfhrv8bxvmwizf3lvq49sjj1696g3gflph31d8bfpb0c";
 
   nativeBuildInputs = [ nasm ];

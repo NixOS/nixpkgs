@@ -90,7 +90,7 @@ my $action = $ARGV[0] or die "$0: no action specified\n";
 
 if (defined $configFile and defined $extraConfig) {
     die "--config and --config-file are mutually incompatible. " .
-        "Please define on or the other, but not both";
+        "Please define one or the other, but not both";
 }
 
 if (defined $flake && $flake =~ /^(.*)#([^#"]+)$/) {

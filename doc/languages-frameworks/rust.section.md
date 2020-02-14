@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
-  verifyCargoDeps = true;
+  legacyCargoFetcher = false;
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
@@ -59,12 +59,19 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
-When `verifyCargoDeps` is set to `true`, the build will also verify that the
-`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the
-`cargoDeps` and `src`. Note that this option changes the value of `cargoSha256`
-since it also copies the `Cargo.lock` in it. To avoid breaking
-backward-compatibility this option is not enabled by default but hopefully will
-be in the future.
+Setting `legacyCargoFetcher` to `false` enables the following behavior:
+
+1. The `Cargo.lock` file is copied into the cargo vendor directory.
+2. At buildtime, `buildRustPackage` will ensure that the `src` and `cargoSha256`
+   are consistent. This avoids errors where one but not the other is updated.
+3. The builder will compress the vendored cargo src directory into a tar.gz file
+   for storage after vendoring, and decompress it before the build. This saves
+   disk space and enables hashed mirrors for Rust dependencies.
+
+Note that this option changes the value of `cargoSha256`, so it is currently
+defaulted to `false`. When updating a Rust package, please set it to `true`;
+eventually we will default this to true and update the remaining Rust packages,
+then delete the option from all individual Rust package expressions.
 
 ### Building a crate for a different target
 

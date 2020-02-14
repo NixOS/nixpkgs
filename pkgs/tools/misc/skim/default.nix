@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   outputs = [ "out" "vim" ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1dl530ac8i4wdw7lziskl7rhh3ak9ykcws3kpy64808kxg3b1jnz";
 
   patchPhase = ''

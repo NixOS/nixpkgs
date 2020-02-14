@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "git-repo";
-  version = "2.0";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "android";
     repo = "tools_repo";
     rev = "v${version}";
-    sha256 = "077fsg2mh47c7qvqwpivkw474rpnw5xs36j23rxj2k5m700bz3hq";
+    sha256 = "0jrll0mjfwakyjvlhbxwsdi32jhgss9mwz8c8h24n1qbqqxysrk4";
   };
 
   patches = [ ./import-ssl-module.patch ];

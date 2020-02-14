@@ -23,6 +23,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ SDL2 ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "03724z33dqxbbrzpvz172qh45qrgnyb801algjdcm32v8xsx81qg";
 
   postInstall = ''

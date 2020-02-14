@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0fh5rz6slyjzz03bpjcl9gplk36vm7qcc0i0gvhsikwvw0cf3hym";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0377jbjkrrjss3w8xmjsjjynycpdk19grp20hffxschg4ryvniin";
 
   preFixup = ''

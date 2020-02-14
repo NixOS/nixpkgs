@@ -2,32 +2,38 @@
 , fetchFromGitHub
 , rustPlatform
 , pkgconfig
-, openssl
+, libressl
 , curl
 , Security
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "wasm-pack";
-  version = "0.8.1";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
     rev = "v${version}";
-    sha256 = "1z66m16n4r16zqmnv84a5jndr5x6mdqdq4b1wq929sablwqd2rl4";
+    sha256 = "1rqyfg6ajxxyfx87ar25nf5ck9hd0p12qgv98dicniqag8l4rvsr";
   };
 
-  cargoSha256 = "0hp68w5mvk725gzbmlgl8j6wa1dv2fydil7jvq0f09mzxxaqrwcs";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "095gk6lcck5864wjhrkhgnkxn9pzcg82xk5p94br7lmf15y9gc7j";
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
+  buildInputs = [
+    # LibreSSL works around segfault issues caused by OpenSSL being unable to
+    # gracefully exit while doing work.
+    # See: https://github.com/rustwasm/wasm-pack/issues/650
+    libressl
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ curl Security ];
 
-
-  # Tests fetch external resources and build artifacts.
-  # Disabled to work with sandboxing
+  # Most tests rely on external resources and build artifacts.
+  # Disabling check here to work with build sandboxing.
   doCheck = false;
 
   meta = with stdenv.lib; {

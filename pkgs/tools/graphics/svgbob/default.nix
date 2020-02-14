@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/svgbob_cli";
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0mnq1s809f394x83gjv9zljr07c94k48zkrwxs6ibi19shgmrnnd";
 
   # Test tries to build outdated examples

@@ -2,15 +2,15 @@
 
 stdenv.mkDerivation {
   pname = "metamath";
-  version = "0.178";
+  version = "0.180";
 
   buildInputs = [ autoreconfHook ];
 
   src = fetchFromGitHub {
     owner = "metamath";
     repo = "metamath-exe";
-    rev = "4f59d60aeb03f92aea3cc7ecf5a2c0fcf08900a5";
-    sha256 = "0nrl4nzp6rm2sn365xyjf3g5l5fl58kca7rq08lqyz5gla0wgfcf";
+    rev = "469e1b253f29be838411e2cc9c93d7704297059c";
+    sha256 = "0nazi7z8qrpn7nnmxk99ilwf8smkzh26jcvn17wyfnywxpdsb7wa";
   };
 
   # the files necessary to build the DATA target are not in this distribution
