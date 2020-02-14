@@ -1,7 +1,7 @@
 { stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet
+  spyder-kernels, qtpy, pyzmq, chardet, pyxdg, intervaltree
 , pyqtwebengine
 }:
 
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine
+    pygments qtpy pyzmq chardet pyqtwebengine pyxdg intervaltree
   ];
 
   # There is no test for spyder
@@ -40,6 +40,7 @@ buildPythonPackage rec {
     # this is still part of the pyqt 5.11 version we have in nixpkgs
     sed -i /pyqtwebengine/d setup.py
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
+    substituteInPlace setup.py --replace "jedi==0.14.1" "jedi>=0.15.2"
   '';
 
   # Create desktop item
