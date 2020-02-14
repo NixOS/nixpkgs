@@ -2,7 +2,7 @@
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels, qtpy, pyzmq, chardet, pyxdg, intervaltree, qdarkstyle,
-  watchdog
+  watchdog, python-language-server, pympler, diff-match-patch, atomicwrites
 , pyqtwebengine
 }:
 
@@ -21,6 +21,7 @@ buildPythonPackage rec {
     jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine pyxdg intervaltree qdarkstyle watchdog
+    python-language-server pympler diff-match-patch atomicwrites
   ];
 
   # There is no test for spyder

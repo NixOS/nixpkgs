@@ -1,6 +1,7 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
 , backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server, flake8, ujson
-, pytest, mock, pytestcov, coverage, setuptools
+, versioneer, pytest, mock, pytestcov, coverage, numpy, pandas, matplotlib, pyqt5
+, setuptools
 , # Allow building a limited set of providers, e.g. ["pycodestyle"].
   providers ? ["*"]
   # The following packages are optional and
@@ -30,15 +31,15 @@ buildPythonPackage rec {
     sha256 = "1h0w7x7d9g3z7vmxn5w7qxdkjya3sl0xfnklfaaaj8dkb5mjldpi";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "jedi>=0.14.1,<0.16" "jedi>=0.14.1"
-  '';
+  # postPatch = ''
+  #   substituteInPlace setup.py --replace "jedi>=0.14.1,<0.16" "jedi>=0.14.1"
+  # '';
 
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
 
   checkInputs = [
-    pytest mock pytestcov coverage
+    versioneer pytest mock pytestcov coverage numpy pandas matplotlib pyqt5
     # rope is technically a dependency, but we don't add it by default since we
     # already have jedi, which is the preferred option
     rope
