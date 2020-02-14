@@ -82,7 +82,7 @@ self: super: {
   HaTeX = self.HaTeX_3_22_0_0;
   HsYAML = self.HsYAML_0_2_1_0;
   json-autotype = doJailbreak super.json-autotype;
-  lens = self.lens_4_19;
+  lens = self.lens_4_19_1;
   memory = self.memory_0_15_0;
   microlens = self.microlens_0_4_11_2;
   microlens-ghc = self.microlens-ghc_0_4_12;
