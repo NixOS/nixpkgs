@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1k2kr1zlxx3w3kwb634kngzx8vl5iif1yr6zk2xh46gjwqb3223l";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0i5wy15w985nxwl4b6rzb06hchzjwph6ygzjkkmigm9diw9jcycn";
 
   buildInputs = [ llvmPackages.libclang llvmPackages.clang ];

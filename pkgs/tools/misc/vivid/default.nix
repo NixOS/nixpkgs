@@ -15,6 +15,9 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/main.rs --replace /usr/share $out/share
   '';
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "04xx26ngz7hx7bv5g01q9h6dqa96xkx0xm3jb0qk6c3hp6500zpn";
 
   postInstall = ''

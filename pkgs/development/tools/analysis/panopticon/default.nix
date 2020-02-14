@@ -24,6 +24,9 @@ rustPlatform.buildRustPackage rec {
      git
   ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1fsxd7yzb38h1d52yyz7kj1v0riycjydb1b1bn1zkhgwm5sm2kbs";
   doCheck = false;
 

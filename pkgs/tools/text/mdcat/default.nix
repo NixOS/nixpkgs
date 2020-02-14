@@ -14,6 +14,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1kc434pa72n9xll2r4ddmd9xdwv3ls36cwsmdry392j41zmics51";
 
   checkInputs = [ ansi2html ];

@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0w7ysha46ml3j1i1knvll4pmqg291z8a2ypcy650m61dhrvkh2ng";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "18nlvqa9ha4vs9xb60hivhgcsqr69zsigfmqyig48slvwgqkbwda";
 
   buildInputs = [ openssl libsodium ]

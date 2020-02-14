@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
   };
   sourceRoot = "source/impl";
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "06rl7v0f1lgj9ii07fcnaxmhn28ckr03cpf5b93q8ripm5qh7my9";
 
   nativeBuildInputs = [ pkgconfig ];

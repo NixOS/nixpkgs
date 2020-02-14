@@ -18,6 +18,9 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1yp7kandh5hh8hkzlmqpj05vwgr5v4nil8blf3scbppg865qk3rq";
 
   nativeBuildInputs = [ cmake pkg-config ];
