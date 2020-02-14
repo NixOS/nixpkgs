@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
+{ stdenv, fetchgit, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
 
 let
   buildPlugin = args: python2Packages.buildPythonPackage (args // {
@@ -168,13 +168,13 @@ let
 
     printtimegenius = buildPlugin rec {
       pname = "PrintTimeGenius";
-      version = "2.0.2";
+      version = "2.2.1";
 
       src = fetchFromGitHub {
         owner = "eyal0";
         repo = "OctoPrint-${pname}";
         rev = version;
-        sha256 = "1w4jm42434x87sbih45brkb9krik851vxkz153w3w5c8p74kgg6f";
+        sha256 = "1dr93vbpxgxw3b1q4rwam8f4dmiwr5vnfr9796g6jx8xkpfzzy1h";
       };
 
       preConfigure = ''
@@ -182,6 +182,10 @@ let
         rm */analyzers/marlin-calc*
         sed 's@"{}.{}".format(binary_base_name, machine)@"${marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
       '';
+
+      patches = [
+        ./printtimegenius-logging.patch
+      ];
 
       meta = with stdenv.lib; {
         description = "Better print time estimation for OctoPrint";
@@ -191,6 +195,61 @@ let
       };
     };
 
+    abl-expert = buildPlugin rec {
+      pname = "ABL_Expert";
+      version = "2019-12-21";
+
+      src = fetchgit {
+        url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+        rev = "f11fbe05088ad618bfd9d064ac3881faec223f33";
+        sha256 = "026r4prkyvwzxag5pv36455q7s3gaig37nmr2nbvhwq3d2lbi5s4";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
+        homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
+
+    gcodeeditor = buildPlugin rec {
+      pname = "GcodeEditor";
+      version = "0.2.6";
+
+      src = fetchFromGitHub {
+        owner = "ieatacid";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "0c6p78r3vd6ys3kld308pyln09zjbr9yif1ljvcx6wlml2i5l1vh";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Edit gcode on OctoPrint";
+        homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
+
+    simpleemergencystop = buildPlugin rec {
+      pname = "SimpleEmergencyStop";
+      version = "0.2.5";
+
+      src = fetchFromGitHub {
+        owner = "Sebclem";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "10wadv09wv2h96igvq3byw9hz1si82n3c7v5y0ii3j7hm2d06y8p";
+      };
+
+      meta = with stdenv.lib; {
+        description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
+        homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
   };
 
 in self
