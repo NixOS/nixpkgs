@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     isocodes
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Library with common API for various MATE modules";
     homepage = "https://mate-desktop.org";

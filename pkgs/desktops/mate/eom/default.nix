@@ -30,6 +30,8 @@ stdenv.mkDerivation rec {
     hicolor-icon-theme
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "An image viewing and cataloging program for the MATE desktop";
     homepage = "https://mate-desktop.org";

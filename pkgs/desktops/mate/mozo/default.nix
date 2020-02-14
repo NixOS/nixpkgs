@@ -18,6 +18,8 @@ python3.pkgs.buildPythonApplication rec {
 
   buildInputs = [ gtk3 glib ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE Desktop menu editor";
     homepage = "https://github.com/mate-desktop/mozo";

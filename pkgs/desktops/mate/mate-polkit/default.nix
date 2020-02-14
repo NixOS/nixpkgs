@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     polkit
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Integrates polkit authentication for MATE desktop";
     homepage = "https://mate-desktop.org";

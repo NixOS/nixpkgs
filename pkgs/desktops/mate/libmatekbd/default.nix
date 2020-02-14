@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gtk3 libxklavier ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Keyboard management library for MATE";
     homepage = "https://github.com/mate-desktop/libmatekbd";

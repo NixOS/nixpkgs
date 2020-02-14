@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Icon themes from MATE";
     homepage = "https://mate-desktop.org";

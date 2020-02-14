@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     done
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Faenza icon theme from MATE";
     homepage = "https://mate-desktop.org";

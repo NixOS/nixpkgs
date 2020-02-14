@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-applets" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "The MATE Power Manager";
     homepage = "https://mate-desktop.org";

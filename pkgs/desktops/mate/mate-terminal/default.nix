@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "The MATE Terminal Emulator";
     homepage = "https://mate-desktop.org";

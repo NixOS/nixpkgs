@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = stdenv.lib.optional ossSupport "--enable-oss";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Mixer library for MATE";
     homepage = "https://github.com/mate-desktop/libmatemixer";

@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-update-mimedb" ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "File manager for the MATE desktop";
     homepage = "https://mate-desktop.org";

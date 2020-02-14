@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "06w25mk2w7rfnkwpnav8pcrvip1zdd0zd1qc6d975ksmg66r1vz7";
   };
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Common files for development of MATE packages";
     homepage = "https://mate-desktop.org";

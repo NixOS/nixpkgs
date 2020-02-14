@@ -36,6 +36,8 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Applets for use with the MATE panel";
     homepage = "https://mate-desktop.org";

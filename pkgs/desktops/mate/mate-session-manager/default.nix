@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     polkit
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE Desktop session manager";
     homepage = "https://github.com/mate-desktop/mate-session-manager";

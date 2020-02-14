@@ -25,6 +25,8 @@ stdenv.mkDerivation rec {
     wrapGAppsHook
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Media tools for MATE";
     homepage = "https://mate-desktop.org";

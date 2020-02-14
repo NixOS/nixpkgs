@@ -41,6 +41,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-caja-extension-dir=$$out/lib/caja/extensions-2.0" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Dropbox extension for Caja file manager";
     homepage = "https://github.com/mate-desktop/caja-dropbox";

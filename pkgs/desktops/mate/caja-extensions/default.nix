@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-cajadir=$$out/lib/caja/extensions-2.0" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Set of extensions for Caja file manager";
     homepage = "https://mate-desktop.org";

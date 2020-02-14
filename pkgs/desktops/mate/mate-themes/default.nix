@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/ContrastHigh
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A set of themes from MATE";
     homepage = "https://mate-desktop.org";

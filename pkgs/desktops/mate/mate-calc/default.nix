@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     libxml2
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Calculator for the MATE desktop";
     homepage = "https://mate-desktop.org";

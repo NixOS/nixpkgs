@@ -23,6 +23,8 @@ stdenv.mkDerivation rec {
     mate.mate-panel
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE utilities for netbooks";
     longDescription = ''

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     mate.mate-desktop
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "Powerful text editor for the MATE desktop";
     homepage = "https://mate-desktop.org";

@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-systemd" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "System monitor for the MATE desktop";
     homepage = "https://mate-desktop.org";

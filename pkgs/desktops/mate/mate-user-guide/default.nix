@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
       --replace "Exec=yelp" "Exec=${yelp}/bin/yelp"
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE User Guide";
     homepage = "https://mate-desktop.org";

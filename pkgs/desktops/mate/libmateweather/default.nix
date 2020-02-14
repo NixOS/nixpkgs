@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
 
   preFixup = "rm -f $out/share/icons/mate/icon-theme.cache";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Library to access weather information from online services for MATE";
     homepage = "https://github.com/mate-desktop/libmateweather";

@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gettext ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Background images and data for MATE";
     homepage = "https://mate-desktop.org";

@@ -26,6 +26,8 @@ stdenv.mkDerivation rec {
     mate-settings-daemon
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE default window manager";
     homepage = "https://github.com/mate-desktop/marco";

@@ -42,6 +42,8 @@ stdenv.mkDerivation rec {
     "--with-cajadir=$(out)/lib/caja/extensions-2.0"
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "User level public file sharing for the MATE desktop";
     homepage = "https://github.com/mate-desktop/mate-user-share";

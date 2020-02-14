@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Screen saver and locker for the MATE desktop";
     homepage = "https://mate-desktop.org";

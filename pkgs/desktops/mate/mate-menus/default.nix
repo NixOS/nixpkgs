@@ -18,6 +18,8 @@ stdenv.mkDerivation rec {
     "INTROSPECTION_TYPELIBDIR=$(out)/lib/girepository-1.0"
   ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Menu system for MATE";
     homepage = "https://github.com/mate-desktop/mate-menus";
