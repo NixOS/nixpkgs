@@ -6,13 +6,13 @@
 assert stdenv.lib.versionOlder "4.02" ocaml.version;
 
 stdenv.mkDerivation rec {
-  name = "trv-${version}";
+  pname = "trv";
   version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "afiniate";
     repo = "trv";
-    rev = "${version}";
+    rev = version;
     sha256 = "0fv0zh76djqhkzfzwv6k60rnky50pw9gn01lwhijrggrcxrrphz1";
   };
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   createFindlibDestdir = true;
   dontStrip = true;
 
-  installFlags = "SEMVER=${version} PREFIX=$(out)";
+  installFlags = [ "SEMVER=${version}" "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/afiniate/trv;

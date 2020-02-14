@@ -3,7 +3,7 @@
 { stdenv, fetchurl, python, pkgconfig, imagemagick, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "pythonmagick-${version}";
+  pname = "pythonmagick";
   version = "0.9.16";
 
   src = fetchurl {

@@ -4,20 +4,25 @@ with pkgs;
 with lib;
 
 let
-  cfg = config.networking.connman;
+  cfg = config.services.connman;
   configFile = pkgs.writeText "connman.conf" ''
     [General]
     NetworkInterfaceBlacklist=${concatStringsSep "," cfg.networkInterfaceBlacklist}
 
     ${cfg.extraConfig}
   '';
+  enableIwd = cfg.wifi.backend == "iwd";
 in {
+
+  imports = [
+    (mkRenamedOptionModule [ "networking" "connman" ] [ "services" "connman" ])
+  ];
 
   ###### interface
 
   options = {
 
-    networking.connman = {
+    services.connman = {
 
       enable = mkOption {
         type = types.bool;
@@ -45,15 +50,26 @@ in {
       };
 
       networkInterfaceBlacklist = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [ "vmnet" "vboxnet" "virbr" "ifb" "ve" ];
         description = ''
           Default blacklisted interfaces, this includes NixOS containers interfaces (ve).
         '';
       };
 
+      wifi = {
+        backend = mkOption {
+          type = types.enum [ "wpa_supplicant" "iwd" ];
+          default = "wpa_supplicant";
+          description = ''
+            Specify the Wi-Fi backend used.
+            Currently supported are <option>wpa_supplicant</option> or <option>iwd</option>.
+          '';
+        };
+      };
+
       extraFlags = mkOption {
-        type = with types; listOf string;
+        type = with types; listOf str;
         default = [ ];
         example = [ "--nodnsproxy" ];
         description = ''
@@ -71,31 +87,34 @@ in {
 
     assertions = [{
       assertion = !config.networking.useDHCP;
-      message = "You can not use services.networking.connman with services.networking.useDHCP";
-    }{
-      assertion = config.networking.wireless.enable;
-      message = "You must use services.networking.connman with services.networking.wireless";
+      message = "You can not use services.connman with networking.useDHCP";
     }{
       assertion = !config.networking.networkmanager.enable;
-      message = "You can not use services.networking.connman with services.networking.networkmanager";
+      message = "You can not use services.connman with networking.networkmanager";
     }];
 
     environment.systemPackages = [ connman ];
 
-    systemd.services."connman" = {
+    systemd.services.connman = {
       description = "Connection service";
       wantedBy = [ "multi-user.target" ];
-      after = [ "syslog.target" ];
+      after = [ "syslog.target" ] ++ optional enableIwd "iwd.service";
+      requires = optional enableIwd "iwd.service";
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman";
         Restart = "on-failure";
-        ExecStart = "${pkgs.connman}/sbin/connmand --config=${configFile} --nodaemon ${toString cfg.extraFlags}";
+        ExecStart = toString ([
+          "${pkgs.connman}/sbin/connmand"
+          "--config=${configFile}"
+          "--nodaemon"
+        ] ++ optional enableIwd "--wifi=iwd_agent"
+          ++ cfg.extraFlags);
         StandardOutput = "null";
       };
     };
 
-    systemd.services."connman-vpn" = mkIf cfg.enableVPN {
+    systemd.services.connman-vpn = mkIf cfg.enableVPN {
       description = "ConnMan VPN service";
       wantedBy = [ "multi-user.target" ];
       after = [ "syslog.target" ];
@@ -108,7 +127,7 @@ in {
       };
     };
 
-    systemd.services."net-connman-vpn" = mkIf cfg.enableVPN {
+    systemd.services.net-connman-vpn = mkIf cfg.enableVPN {
       description = "D-BUS Service";
       serviceConfig = {
         Name = "net.connman.vpn";
@@ -121,7 +140,12 @@ in {
 
     networking = {
       useDHCP = false;
-      wireless.enable = true;
+      wireless = {
+        enable = mkIf (!enableIwd) true;
+        iwd = mkIf enableIwd {
+          enable = true;
+        };
+      };
       networkmanager.enable = false;
     };
   };

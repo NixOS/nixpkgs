@@ -1,17 +1,23 @@
-{ stdenv, fetchFromGitHub, gtk3, numix-icon-theme }:
+{ stdenv, fetchFromGitHub, gtk3, numix-icon-theme, hicolor-icon-theme }:
 
 stdenv.mkDerivation rec {
   pname = "numix-icon-theme-circle";
-  version = "19.02.22";
+  version = "19.12.27";
 
   src = fetchFromGitHub {
     owner = "numixproject";
     repo = pname;
     rev = version;
-    sha256 = "10jh633rllp9yjfkjjyf8455n84q7ppxw1kk9dp1rsg4dq327ks7";
+    sha256 = "0za44h7f4vk37yl30xlaa6w76maiipb6p63gl9hl1rshdn9nxq0y";
   };
 
   nativeBuildInputs = [ gtk3 numix-icon-theme ];
+
+  propagatedBuildInputs = [
+    hicolor-icon-theme
+  ];
+
+  dontDropIconThemeCache = true;
 
   installPhase = ''
     install -dm 755 $out/share/icons
@@ -19,6 +25,10 @@ stdenv.mkDerivation rec {
   '';
 
   postFixup = ''
+    for panel in $out/share/icons/*/*/panel; do
+      ln -sf $(realpath ${numix-icon-theme}/share/icons/Numix/16/$(readlink $panel)) $panel
+    done
+
     for theme in $out/share/icons/*; do
       gtk-update-icon-cache $theme
     done
@@ -30,6 +40,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     # darwin cannot deal with file names differing only in case
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ romildo ];
   };
 }

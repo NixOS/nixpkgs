@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -6,20 +6,23 @@
 
 let
   self = stdenv.mkDerivation ({
-    name = "clang-${version}";
+    pname = "clang";
+    inherit version;
+
+    src = fetch "cfe" "0ihnbdl058gvl2wdy45p5am55bq8ifx8m9mhcsgj9ax8yxlzvvvh";
 
     unpackPhase = ''
-      unpackFile ${fetch "cfe" "0svk1f70hvpwrjp6x5i9kqwrqwxnmcrw5s7f4cxyd100mdd12k08"}
+      unpackFile $src
       mv cfe-${version}* clang
       sourceRoot=$PWD/clang
       unpackFile ${clang-tools-extra_src}
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python ]
-      ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    nativeBuildInputs = [ cmake python3 ]
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ]
+    buildInputs = [ libxml2 llvm lld ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
@@ -45,6 +48,10 @@ let
       # Backport for the `--unwindlib=[libgcc|compiler-rt]` flag, which is
       # needed for our bootstrapping to not interfere with C.
       ./unwindlib.patch
+      # https://reviews.llvm.org/D51899
+      ./compiler-rt-baremetal.patch
+      # make clang -xhip use $PATH to find executables
+      ./HIP-use-PATH-8.patch
     ];
 
     postPatch = ''
@@ -101,7 +108,7 @@ let
       platforms   = stdenv.lib.platforms.all;
     };
   } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
+    pname = "clang-manpages";
 
     buildPhase = ''
       make docs-clang-man

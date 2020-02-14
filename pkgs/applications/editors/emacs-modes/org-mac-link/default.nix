@@ -1,6 +1,6 @@
 {stdenv, fetchurl, emacs}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "org-mac-link-1.2";
 
   src = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Insert org-mode links to items selected in various Mac apps";
-    homepage = http://orgmode.org/worg/org-contrib/org-mac-link.html;
+    homepage = https://orgmode.org/worg/org-contrib/org-mac-link.html;
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

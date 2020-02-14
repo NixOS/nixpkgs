@@ -1,7 +1,7 @@
 { stdenv, fetchgit, ant, jdk, makeWrapper, jre, coreutils, which }:
 
 stdenv.mkDerivation rec {
-  name = "projectlibre-${version}";
+  pname = "projectlibre";
   version = "1.7.0";
 
   src = fetchgit {

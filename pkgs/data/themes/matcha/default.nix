@@ -1,17 +1,17 @@
-{ stdenv, fetchFromGitHub, gdk_pixbuf, librsvg, gtk-engine-murrine }:
+{ stdenv, fetchFromGitHub, gdk-pixbuf, librsvg, gtk-engine-murrine }:
 
 stdenv.mkDerivation rec {
-  name = "matcha-${version}";
-  version = "2019-06-22";
+  pname = "matcha";
+  version = "2020-02-06";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
-    repo = "matcha";
-    rev = "f42df7a3219d7fbacb7be1b2e0e416d74339865e";
-    sha256 = "1x954rmxv14xndn4ybhbr4pmzccnwqp462bpvzd2hak5wsqs4wxc";
+    repo = pname;
+    rev = version;
+    sha256 = "14kii4dn028yqbsd0pr195di067harh9z2h753856dlxvs8d6vkx";
   };
 
-  buildInputs = [ gdk_pixbuf librsvg ];
+  buildInputs = [ gdk-pixbuf librsvg ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A stylish Design theme for GTK based desktop environments";
-    homepage = https://vinceliuice.github.io/theme-matcha;
+    homepage = "https://vinceliuice.github.io/theme-matcha";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

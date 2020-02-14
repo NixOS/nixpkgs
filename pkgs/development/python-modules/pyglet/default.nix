@@ -1,22 +1,25 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, libGLU_combined
+, libGL
+, libGLU
 , xorg
 , future
 , pytest
 , glibc
 , gtk2-x11
-, gdk_pixbuf
+, gdk-pixbuf
+, fontconfig
+, freetype
 }:
 
 buildPythonPackage rec {
-  version = "1.3.2";
+  version = "1.4.2";
   pname = "pyglet";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b00570e7cdf6971af8953b6ece50d83d13272afa5d1f1197c58c0f478dd17743";
+    sha256 = "1dxxrl4nc7xh3aai1clgzvk48bvd35r7ksirsddz0mwhx7jmm8px";
   };
 
   # find_library doesn't reliably work with nix (https://github.com/NixOS/nixpkgs/issues/7307).
@@ -32,9 +35,9 @@ buildPythonPackage rec {
         for name in names:
             path = None
             if name == 'GL':
-                path = '${libGLU_combined}/lib/libGL${ext}'
+                path = '${libGL}/lib/libGL${ext}'
             elif name == 'GLU':
-                path = '${libGLU_combined}/lib/libGLU${ext}'
+                path = '${libGLU}/lib/libGLU${ext}'
             elif name == 'c':
                 path = '${glibc}/lib/libc${ext}.6'
             elif name == 'X11':
@@ -42,7 +45,13 @@ buildPythonPackage rec {
             elif name == 'gdk-x11-2.0':
                 path = '${gtk2-x11}/lib/libgdk-x11-2.0${ext}'
             elif name == 'gdk_pixbuf-2.0':
-                path = '${gdk_pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+                path = '${gdk-pixbuf}/lib/libgdk_pixbuf-2.0${ext}'
+            elif name == 'Xext':
+                path = '${xorg.libXext}/lib/libXext${ext}'
+            elif name == 'fontconfig':
+                path = '${fontconfig.lib}/lib/libfontconfig${ext}'
+            elif name == 'freetype':
+                path = '${freetype}/lib/libfreetype${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))

@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "mimetic";
   version = "0.9.8";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url    = "http://www.codesink.org/download/${pname}-${version}.tar.gz";

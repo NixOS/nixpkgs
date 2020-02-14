@@ -1,0 +1,60 @@
+From 0de195de31dc311976af52a7c2b547bc23af2691 Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Sat, 14 Dec 2019 19:27:14 +0100
+Subject: [PATCH] Don't use distutils.StrictVersion that cannot handle certain
+ versions
+
+```
+  File "setup.py", line 63, in <module>
+    if StrictVersion(setuptools_version) >= StrictVersion('36.2'):
+File
+"/nix/store/zdh16dcvjw99ybam59zd2ijb6bx138j0-python3-3.7.5/lib/python3.7/distutils/version.py",
+line 40, in __init__
+    self.parse(vstring)
+File
+"/nix/store/zdh16dcvjw99ybam59zd2ijb6bx138j0-python3-3.7.5/lib/python3.7/distutils/version.py",
+line 137, in parse
+    raise ValueError("invalid version number '%s'" % vstring)
+ValueError: invalid version number '41.4.0.post20191022'
+```
+---
+ certbot/setup.py | 15 +--------------
+ 1 file changed, 1 insertion(+), 14 deletions(-)
+
+diff --git a/certbot/setup.py b/certbot/setup.py
+index c1bf914..7456bf2 100644
+--- a/certbot/setup.py
++++ b/certbot/setup.py
+@@ -3,7 +3,6 @@ import os
+ import re
+ import sys
+ 
+-from distutils.version import StrictVersion
+ from setuptools import find_packages, setup, __version__ as setuptools_version
+ from setuptools.command.test import test as TestCommand
+ 
+@@ -56,20 +55,8 @@ install_requires = [
+ 
+ # Add pywin32 on Windows platforms to handle low-level system calls.
+ # This dependency needs to be added using environment markers to avoid its installation on Linux.
+-# However environment markers are supported only with setuptools >= 36.2.
+-# So this dependency is not added for old Linux distributions with old setuptools,
+-# in order to allow these systems to build certbot from sources.
+ pywin32_req = 'pywin32>=227'  # do not forget to edit pywin32 dependency accordingly in windows-installer/construct.py
+-if StrictVersion(setuptools_version) >= StrictVersion('36.2'):
+-    install_requires.append(pywin32_req + " ; sys_platform == 'win32'")
+-elif 'bdist_wheel' in sys.argv[1:]:
+-    raise RuntimeError('Error, you are trying to build certbot wheels using an old version '
+-                       'of setuptools. Version 36.2+ of setuptools is required.')
+-elif os.name == 'nt':
+-    # This branch exists to improve this package's behavior on Windows. Without
+-    # it, if the sdist is installed on Windows with an old version of
+-    # setuptools, pywin32 will not be specified as a dependency.
+-    install_requires.append(pywin32_req)
++install_requires.append(pywin32_req + " ; sys_platform == 'win32'")
+ 
+ dev_extras = [
+     'astroid==1.6.5',
+-- 
+2.24.1
+

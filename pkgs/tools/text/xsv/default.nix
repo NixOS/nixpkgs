@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "xsv-${version}";
+  pname = "xsv";
   version = "0.13.0";
 
   src = fetchFromGitHub {
@@ -10,6 +10,9 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "17v1nw36mrarrd5yv4xd3mpc1d7lvhd5786mqkzyyraf78pjg045";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "1xlbszr9ccv924ww45lnc0qqb7nxj2cnc41480xbpvsdqsdrgbhs";
 

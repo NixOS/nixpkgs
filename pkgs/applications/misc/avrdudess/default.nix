@@ -1,6 +1,6 @@
 { stdenv, runtimeShell, fetchurl, unzip, mono, avrdude, gtk2, xdg_utils }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "avrdudess-2.2.20140102";
 
   src = fetchurl {

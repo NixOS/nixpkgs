@@ -4,7 +4,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "intecture-auth-${version}";
+  pname = "intecture-auth";
   version = "0.1.2";
 
   src = fetchFromGitHub {
@@ -13,6 +13,9 @@ buildRustPackage rec {
     rev = version;
     sha256 = "0c7ar3pc7n59lzfy74lwz51p09s2bglc870rfr4c0vmc91jl0pj2";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "1rnhhb4mpf1j7c7a2pz4741hzbf2s2wb0bm25j049n64j49j3jq8";
 

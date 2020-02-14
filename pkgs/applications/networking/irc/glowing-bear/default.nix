@@ -1,14 +1,14 @@
 { fetchFromGitHub, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "glowing-bear-${version}";
-  version = "0.7.1";
+  pname = "glowing-bear";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     rev = version;
     owner = "glowing-bear";
     repo = "glowing-bear";
-    sha256 = "0gwrf67l3i3nl7zy1miljz6f3vv6zzc3g9as06by548f21cizzjb";
+    sha256 = "14a3fqsmi28g7j3lzk4l4m47p2iml1aaf3514wazn2clw48lnqhw";
   };
 
   installPhase = ''

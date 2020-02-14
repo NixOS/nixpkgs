@@ -1,6 +1,6 @@
 { buildPythonPackage, lib, foundationdb }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "foundationdb";
   version = foundationdb.version;
 

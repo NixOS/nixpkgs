@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
-, libjpeg, libXxf86vm, libGLU_combined, openal, libvorbis, sqlite, luajit
-, freetype, gettext, doxygen, ncurses, graphviz, xorg
+, libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
+, freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
 , leveldb, postgresql, hiredis
 }:
 
@@ -24,7 +24,8 @@ let
       };
     };
   in stdenv.mkDerivation {
-    name = "minetest-${version}";
+    pname = "minetest";
+    inherit version;
 
     src = sources.src;
 
@@ -39,15 +40,16 @@ let
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
 
-    NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
+    NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
 
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
+      gmp libspatialindex
     ] ++ optionals buildClient [
-      libpng libjpeg libGLU_combined openal libogg libvorbis xorg.libX11 libXxf86vm
-    ] ++ optional buildServer [
+      libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
+    ] ++ optionals buildServer [
       leveldb postgresql hiredis
     ];
 
@@ -72,9 +74,9 @@ let
   };
 
   v5 = {
-    version = "5.0.1";
-    sha256 = "11i8fqjpdggqfdlx440k5758zy0nbf9phxan9r63mavc7mph88ay";
-    dataSha256 = "1hw3n7qqpasq6bivxhq01kr0d58w0gp46s0baxixp1fakd79p8a7";
+    version = "5.1.1";
+    sha256 = "0cjj63333b7j4ydfq0h9yc6d2jvmyjd7n7zbd08yrf0rcibrj2k0";
+    dataSha256 = "1r9fxz2j24q74a9injvbxbf2xk67fzabv616i676zw2cvgv9hn39";
   };
 
 in {

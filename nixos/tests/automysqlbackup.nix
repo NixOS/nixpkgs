@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 {
   name = "automysqlbackup";
@@ -15,20 +15,24 @@ import ./make-test.nix ({ pkgs, lib, ... }:
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
     # Need to have mysql started so that it can be populated with data.
-    $machine->waitForUnit("mysql.service");
+    machine.wait_for_unit("mysql.service")
 
-    # Wait for testdb to be fully populated (5 rows).
-    $machine->waitUntilSucceeds("mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5");
+    with subtest("Wait for testdb to be fully populated (5 rows)."):
+        machine.wait_until_succeeds(
+            "mysql -u root -D testdb -N -B -e 'select count(id) from tests' | grep -q 5"
+        )
 
-    # Do a backup and wait for it to start
-    $machine->startJob("automysqlbackup.service");
-    $machine->waitForJob("automysqlbackup.service");
+    with subtest("Do a backup and wait for it to start"):
+        machine.start_job("automysqlbackup.service")
+        machine.wait_for_job("automysqlbackup.service")
 
-    # wait for backup file and check that data appears in backup
-    $machine->waitForFile("/var/backup/mysql/daily/testdb");
-    $machine->succeed("${pkgs.gzip}/bin/zcat /var/backup/mysql/daily/testdb/daily_testdb_*.sql.gz | grep hello");
+    with subtest("wait for backup file and check that data appears in backup"):
+        machine.wait_for_file("/var/backup/mysql/daily/testdb")
+        machine.succeed(
+            "${pkgs.gzip}/bin/zcat /var/backup/mysql/daily/testdb/daily_testdb_*.sql.gz | grep hello"
+        )
     '';
 })

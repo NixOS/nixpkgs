@@ -1,14 +1,14 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "go-protobuf-${version}";
-  version = "1.3.1";
+  pname = "go-protobuf";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "golang";
     repo = "protobuf";
     rev = "v${version}";
-    sha256 = "15am4s4646qy6iv0g3kkqq52rzykqjhm4bf08dk0fy2r58knpsyl";
+    sha256 = "1k1wb4zr0qbwgpvz9q5ws9zhlal8hq7dmq62pwxxriksayl6hzym";
   };
 
   modSha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";

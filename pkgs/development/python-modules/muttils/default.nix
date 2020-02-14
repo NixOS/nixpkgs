@@ -4,7 +4,7 @@
 , isPy3k
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "muttils";
   version = "1.3";
   disabled = isPy3k;

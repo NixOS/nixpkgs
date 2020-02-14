@@ -1,27 +1,21 @@
-{ stdenv, fetchurl, makeWrapper, autoPatchelfHook }:
+{ stdenv, fetchurl, autoPatchelfHook }:
 
 let
-  version = "3.8.0";
   arch = if stdenv.is64bit then "amd64" else "x86";
-  libDir = if stdenv.is64bit then "lib64" else "lib";
-in
-
-stdenv.mkDerivation {
-  name = "teamspeak-server-${version}";
+in stdenv.mkDerivation rec {
+  pname = "teamspeak-server";
+  version = "3.10.2";
 
   src = fetchurl {
-    urls = [
-      "http://dl.4players.de/ts/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
-      "http://teamspeak.gameserver.gamed.de/ts3/releases/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2"
-    ];
+    url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "1bzmqqqpwn6q2pvkrkkxq0ggs8crxbkwaxlggcdxjlyg95cyq8k1"
-      else "0p5rqwdsvbria5dzjjm5mj8vfy0zpfs669wpbwxd4g3n4vh03kyw";
+      then "03c717qjlbym02nwy82l6jhrkbidsdm1jv5k8p3c10p6a46jy9nl"
+      else "1ay0lmbv2rw9klz289yg0hhsac83kfzzlbwwhjpi28xndl2lq4bf";
   };
 
-  nativeBuildInputs = [ makeWrapper autoPatchelfHook ];
-
   buildInputs = [ stdenv.cc.cc ];
+
+  nativeBuildInputs = [ autoPatchelfHook ];
 
   installPhase = ''
     # Install files.
@@ -31,15 +25,15 @@ stdenv.mkDerivation {
     # Make symlinks to the binaries from bin.
     mkdir -p $out/bin/
     ln -s $out/lib/teamspeak/ts3server $out/bin/ts3server
-    ln -s $out/lib/teamspeak/tsdnsserver $out/bin/tsdnsserver
+    ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "TeamSpeak voice communication server";
     homepage = https://teamspeak.com/;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.arobyn ];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ arobyn gerschtli ];
   };
 }
 

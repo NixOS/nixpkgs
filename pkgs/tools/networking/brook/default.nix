@@ -2,15 +2,15 @@
 
 buildGoPackage rec {
   pname = "brook";
-  version = "20190601";
+  version = "20200201";
 
   goPackagePath = "github.com/txthinking/brook";
 
   src = fetchFromGitHub {
     owner = "txthinking";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "04gx1p447wabw3d18s9sm8ynlvj2bp8ac9dsgs08kd1dyrsjlljk";
+    sha256 = "0fyw2q99gapnrg836x299sgagx94a5jpw4x3gnsf69fih7cqp9lm";
   };
 
   goDeps = ./deps.nix;

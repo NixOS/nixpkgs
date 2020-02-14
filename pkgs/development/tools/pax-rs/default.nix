@@ -2,7 +2,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "pax-rs-${version}";
+  pname = "pax-rs";
   version = "0.4.0";
 
   meta = with stdenv.lib; {
@@ -35,6 +35,9 @@ buildRustPackage rec {
       chmod +w $out
       cp ${cargo-lock} $out/Cargo.lock
     '';
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "132a9vnlyp78zxiw5xrazadvx0scs7h2vbm5wz612dmh436mwnxg";
 }

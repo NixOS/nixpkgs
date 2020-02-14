@@ -4,13 +4,13 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "brakeman";
-  version = "4.5.1";
-  source.sha256 = "0vqnhlswvrg5fpxszfkjmla85gdlvgspz0whlli730ydx648mi68";
+  version = "4.7.2";
+  source.sha256 = "1j1svldxvbl27kpyp9yngfwa0fdqal926sjk0cha7h520wvnz79k";
 
   meta = with lib; {
     description = "Static analysis security scanner for Ruby on Rails";
-    homepage = https://brakemanscanner.org/;
-    license = [ licenses.cc-by-nc-sa-40 licenses.mit ];
+    homepage = "https://brakemanscanner.org/";
+    license = [ licenses.unfreeRedistributable ];
     platforms = ruby.meta.platforms;
     maintainers = [ maintainers.marsam ];
   };

@@ -13,7 +13,8 @@ let
   version = "1.0";
 
 in stdenv.mkDerivation {
-  name = "nrsc5-${version}";
+  pname = "nrsc5";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "theori-io";

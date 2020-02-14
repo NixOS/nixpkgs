@@ -1,8 +1,8 @@
-{ stdenv, lib, fetchurl, dpkg, wrapGAppsHook
-, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk_pixbuf, glib, freetype, fontconfig
+{ stdenv, lib, fetchurl, autoPatchelfHook, dpkg, wrapGAppsHook
+, gnome2, gtk3, atk, at-spi2-atk, cairo, pango, gdk-pixbuf, glib, freetype, fontconfig
 , dbus, libX11, xorg, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
 , libXext, libXfixes, libXrender, libXtst, libXScrnSaver, nss, nspr, alsaLib
-, cups, expat, udev, libnotify, libuuid
+, cups, expat, systemd, libnotify, libuuid, at-spi2-core, libappindicator-gtk3
 # Unfortunately this also overwrites the UI language (not just the spell
 # checking language!):
 , hunspellDicts, spellcheckerLanguage ? null # E.g. "de_DE"
@@ -21,23 +21,42 @@ let
         --set HUNSPELL_DICTIONARIES "${hunspellDicts.${hunspellDict}}/share/hunspell" \
         --set LC_MESSAGES "${spellcheckerLanguage}"''
       else "");
-  rpath = lib.makeLibraryPath [
+in stdenv.mkDerivation rec {
+  pname = "signal-desktop";
+  version = "1.31.0"; # Please backport all updates to the stable channel.
+  # All releases have a limited lifetime and "expire" 90 days after the release.
+  # When releases "expire" the application becomes unusable until an update is
+  # applied. The expiration date for the current release can be extracted with:
+  # $ grep -a "^{\"buildExpiration" "${signal-desktop}/lib/Signal/resources/app.asar"
+  # (Alternatively we could try to patch the asar archive, but that requires a
+  # few additional steps and might not be the best idea.)
+
+  src = fetchurl {
+    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
+    sha256 = "19vsv7jv30xvfgq1nr3091b6x4agymy9afpy9r9mxzgn0xfb0ap9";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    wrapGAppsHook
+  ];
+
+  buildInputs = [
     alsaLib
-    atk
     at-spi2-atk
+    at-spi2-core
+    atk
     cairo
     cups
     dbus
     expat
     fontconfig
     freetype
-    gdk_pixbuf
+    gdk-pixbuf
     glib
     gnome2.GConf
     gtk3
-    pango
-    libnotify
-    libuuid
     libX11
     libXScrnSaver
     libXcomposite
@@ -49,53 +68,57 @@ let
     libXrandr
     libXrender
     libXtst
+    libappindicator-gtk3
+    libnotify
+    libuuid
     nspr
     nss
-    udev
+    pango
+    systemd
     xorg.libxcb
   ];
 
-in stdenv.mkDerivation rec {
-  name = "signal-desktop-${version}";
-  version = "1.25.3";
-
-  src = fetchurl {
-    url = "https://updates.signal.org/desktop/apt/pool/main/s/signal-desktop/signal-desktop_${version}_amd64.deb";
-    sha256 = "0f7pip4d97xixwf667xpi50r0r65givvmry862zhp2cq24bs0693";
-  };
-
-  phases = [ "unpackPhase" "installPhase" ];
-
-  nativeBuildInputs = [ dpkg wrapGAppsHook ];
+  runtimeDependencies = [
+    systemd.lib
+    libnotify
+  ];
 
   unpackPhase = "dpkg-deb -x $src .";
 
+  dontBuild = true;
+  dontConfigure = true;
+  dontPatchELF = true;
+  # We need to run autoPatchelf manually with the "no-recurse" option, see
+  # https://github.com/NixOS/nixpkgs/pull/78413 for the reasons.
+  dontAutoPatchelf = true;
+
   installPhase = ''
-    mkdir -p $out
-    cp -R opt $out
+    mkdir -p $out/lib
 
-    mv ./usr/share $out/share
-    mv $out/opt/Signal $out/libexec
-    rmdir $out/opt
+    mv usr/share $out/share
+    mv opt/Signal $out/lib/Signal
 
-    chmod -R g-w $out
-
-    # Patch signal
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-             --set-rpath ${rpath}:$out/libexec $out/libexec/signal-desktop
-    wrapProgram $out/libexec/signal-desktop \
-      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}/" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.cc.cc.lib}/lib" \
-      ${customLanguageWrapperArgs} \
-      "''${gappsWrapperArgs[@]}"
+    # Note: The following path contains bundled libraries:
+    # $out/lib/Signal/resources/app.asar.unpacked/node_modules/sharp/vendor/lib/
+    # We run autoPatchelf with the "no-recurse" option to avoid picking those
+    # up, but resources/app.asar still requires them.
 
     # Symlink to bin
     mkdir -p $out/bin
-    ln -s $out/libexec/signal-desktop $out/bin/signal-desktop
+    ln -s $out/lib/Signal/signal-desktop $out/bin/signal-desktop
+  '';
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }"
+      ${customLanguageWrapperArgs}
+    )
 
     # Fix the desktop link
     substituteInPlace $out/share/applications/signal-desktop.desktop \
       --replace /opt/Signal/signal-desktop $out/bin/signal-desktop
+
+    autoPatchelf --no-recurse -- $out/lib/Signal/
   '';
 
   meta = {
@@ -106,7 +129,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = https://signal.org/;
     license     = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ ixmatus primeos ];
+    maintainers = with lib.maintainers; [ ixmatus primeos equirosa ];
     platforms   = [ "x86_64-linux" ];
   };
 }

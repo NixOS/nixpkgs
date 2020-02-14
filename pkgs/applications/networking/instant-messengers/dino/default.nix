@@ -1,8 +1,9 @@
 { stdenv, fetchFromGitHub
 , vala, cmake, ninja, wrapGAppsHook, pkgconfig, gettext
-, gobject-introspection, gnome3, glib, gdk_pixbuf, gtk3, glib-networking
+, gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
+, librsvg, libsignal-protocol-c
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -15,14 +16,14 @@
  }:
 
 stdenv.mkDerivation rec {
-  name = "dino-unstable-2019-03-07";
+  pname = "dino";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "cc7b0aa7bd5b6599159f654fdd8a2fd111e16a3e";
-    sha256 = "1cq62vif92fz38si2bl49qwy4ys9gxdrvzkv25av6c6nwmyih4gv";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     libgee
     gnome3.adwaita-icon-theme
     sqlite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     libnotify
     gpgme
@@ -57,15 +58,15 @@ stdenv.mkDerivation rec {
     at-spi2-core
     dbus
     icu
+    libsignal-protocol-c
+    librsvg
   ];
 
-  enableParallelBuilding = true;
-
   meta = with stdenv.lib; {
-    description = "Modern Jabber/XMPP Client using GTK+/Vala";
+    description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = https://github.com/dino/dino;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 qyliss ];
   };
 }

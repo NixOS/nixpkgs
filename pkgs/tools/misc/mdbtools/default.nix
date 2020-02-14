@@ -4,7 +4,8 @@
 
 let version = "0.7.1";
 in stdenv.mkDerivation {
-  name = "mdbtools-${version}";
+  pname = "mdbtools";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "brianb";

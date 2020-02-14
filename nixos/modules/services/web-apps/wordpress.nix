@@ -3,7 +3,7 @@
 let
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) any attrValues concatMapStringsSep flatten literalExample;
-  inherit (lib) mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
+  inherit (lib) mapAttrs mapAttrs' mapAttrsToList nameValuePair optional optionalAttrs optionalString;
 
   eachSite = config.services.wordpress;
   user = "wordpress";
@@ -61,6 +61,19 @@ let
     ?>
   '';
 
+  secretsVars = [ "AUTH_KEY" "SECURE_AUTH_KEY" "LOOGGED_IN_KEY" "NONCE_KEY" "AUTH_SALT" "SECURE_AUTH_SALT" "LOGGED_IN_SALT" "NONCE_SALT" ];
+  secretsScript = hostStateDir: ''
+    if ! test -e "${hostStateDir}/secret-keys.php"; then
+      umask 0177
+      echo "<?php" >> "${hostStateDir}/secret-keys.php"
+      ${concatMapStringsSep "\n" (var: ''
+        echo "define('${var}', '`tr -dc a-zA-Z0-9 </dev/urandom | head -c 64`');" >> "${hostStateDir}/secret-keys.php"
+      '') secretsVars}
+      echo "?>" >> "${hostStateDir}/secret-keys.php"
+      chmod 440 "${hostStateDir}/secret-keys.php"
+    fi
+  '';
+
   siteOpts = { lib, name, ... }:
     {
       options = {
@@ -114,7 +127,7 @@ let
             <note><para>These themes need to be packaged before use, see example.</para></note>
           '';
           example = ''
-            # For shits and giggles, let's package the responsive theme
+            # Let's package the responsive theme
             responsiveTheme = pkgs.stdenv.mkDerivation {
               name = "responsive-theme";
               # Download the theme from the wordpress site
@@ -133,7 +146,7 @@ let
           '';
         };
 
-        database = rec {
+        database = {
           host = mkOption {
             type = types.str;
             default = "localhost";
@@ -196,18 +209,12 @@ let
         };
 
         virtualHost = mkOption {
-          type = types.submodule ({
-            options = import ../web-servers/apache-httpd/per-server-options.nix {
-              inherit lib;
-              forMainServer = false;
-            };
-          });
+          type = types.submodule (import ../web-servers/apache-httpd/vhost-options.nix);
           example = literalExample ''
             {
-              enableSSL = true;
               adminAddr = "webmaster@example.org";
-              sslServerCert = "/var/lib/acme/wordpress.example.org/full.pem";
-              sslServerKey = "/var/lib/acme/wordpress.example.org/key.pem";
+              forceSSL = true;
+              enableACME = true;
             }
           '';
           description = ''
@@ -216,15 +223,15 @@ let
         };
 
         poolConfig = mkOption {
-          type = types.lines;
-          default = ''
-            pm = dynamic
-            pm.max_children = 32
-            pm.start_servers = 2
-            pm.min_spare_servers = 2
-            pm.max_spare_servers = 4
-            pm.max_requests = 500
-          '';
+          type = with types; attrsOf (oneOf [ str int bool ]);
+          default = {
+            "pm" = "dynamic";
+            "pm.max_children" = 32;
+            "pm.start_servers" = 2;
+            "pm.min_spare_servers" = 2;
+            "pm.max_spare_servers" = 4;
+            "pm.max_requests" = 500;
+          };
           description = ''
             Options for the WordPress PHP pool. See the documentation on <literal>php-fpm.conf</literal>
             for details on configuration directives.
@@ -280,56 +287,48 @@ in
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "wordpress-${hostName}" {
-        listen = "/run/phpfpm/wordpress-${hostName}.sock";
-        extraConfig = ''
-          listen.owner = ${config.services.httpd.user}
-          listen.group = ${config.services.httpd.group}
-          user = ${user}
-          group = ${group}
-
-          ${cfg.poolConfig}
-        '';
+        inherit user group;
+        settings = {
+          "listen.owner" = config.services.httpd.user;
+          "listen.group" = config.services.httpd.group;
+        } // cfg.poolConfig;
       }
     )) eachSite;
 
     services.httpd = {
       enable = true;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts = mapAttrsToList (hostName: cfg:
-        (mkMerge [
-          cfg.virtualHost {
-            documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
-            extraConfig = ''
-              <Directory "${pkg hostName cfg}/share/wordpress">
-                <FilesMatch "\.php$">
-                  <If "-f %{REQUEST_FILENAME}">
-                    SetHandler "proxy:unix:/run/phpfpm/wordpress-${hostName}.sock|fcgi://localhost/"
-                  </If>
-                </FilesMatch>
+      virtualHosts = mapAttrs (hostName: cfg: mkMerge [ cfg.virtualHost {
+        documentRoot = mkForce "${pkg hostName cfg}/share/wordpress";
+        extraConfig = ''
+          <Directory "${pkg hostName cfg}/share/wordpress">
+            <FilesMatch "\.php$">
+              <If "-f %{REQUEST_FILENAME}">
+                SetHandler "proxy:unix:${config.services.phpfpm.pools."wordpress-${hostName}".socket}|fcgi://localhost/"
+              </If>
+            </FilesMatch>
 
-                # standard wordpress .htaccess contents
-                <IfModule mod_rewrite.c>
-                  RewriteEngine On
-                  RewriteBase /
-                  RewriteRule ^index\.php$ - [L]
-                  RewriteCond %{REQUEST_FILENAME} !-f
-                  RewriteCond %{REQUEST_FILENAME} !-d
-                  RewriteRule . /index.php [L]
-                </IfModule>
+            # standard wordpress .htaccess contents
+            <IfModule mod_rewrite.c>
+              RewriteEngine On
+              RewriteBase /
+              RewriteRule ^index\.php$ - [L]
+              RewriteCond %{REQUEST_FILENAME} !-f
+              RewriteCond %{REQUEST_FILENAME} !-d
+              RewriteRule . /index.php [L]
+            </IfModule>
 
-                DirectoryIndex index.php
-                Require all granted
-                Options +FollowSymLinks
-              </Directory>
+            DirectoryIndex index.php
+            Require all granted
+            Options +FollowSymLinks
+          </Directory>
 
-              # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
-              <Files wp-config.php>
-                Require all denied
-              </Files>
-            '';
-          }
-        ])
-      ) eachSite;
+          # https://wordpress.org/support/article/hardening-wordpress/#securing-wp-config-php
+          <Files wp-config.php>
+            Require all denied
+          </Files>
+        '';
+      } ]) eachSite;
     };
 
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
@@ -344,14 +343,7 @@ in
           wantedBy = [ "multi-user.target" ];
           before = [ "phpfpm-wordpress-${hostName}.service" ];
           after = optional cfg.database.createLocally "mysql.service";
-          script = ''
-            if ! test -e "${stateDir hostName}/secret-keys.php"; then
-              echo "<?php" >> "${stateDir hostName}/secret-keys.php"
-              ${pkgs.curl}/bin/curl -s https://api.wordpress.org/secret-key/1.1/salt/ >> "${stateDir hostName}/secret-keys.php"
-              echo "?>" >> "${stateDir hostName}/secret-keys.php"
-              chmod 440 "${stateDir hostName}/secret-keys.php"
-            fi
-          '';
+          script = secretsScript (stateDir hostName);
 
           serviceConfig = {
             Type = "oneshot";
@@ -365,7 +357,10 @@ in
       })
     ];
 
-    users.users.${user}.group = group;
+    users.users.${user} = {
+      group = group;
+      isSystemUser = true;
+    };
 
   };
 }

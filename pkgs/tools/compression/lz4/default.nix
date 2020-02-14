@@ -21,7 +21,8 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  # TODO(@Ericson2314): Separate binaries and libraries
+  outputs = [ "bin" "out" "dev" ];
 
   buildInputs = stdenv.lib.optional doCheck valgrind;
 
@@ -30,20 +31,26 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=$(out)"
     "INCLUDEDIR=$(dev)/include"
-    # TODO do this instead
-    #"BUILD_STATIC=${if enableStatic then "yes" else "no"}"
-    #"BUILD_SHARED=${if enableShared then "yes" else "no"}"
+    "BUILD_STATIC=${if enableStatic then "yes" else "no"}"
+    "BUILD_SHARED=${if enableShared then "yes" else "no"}"
+    "WINDRES:=${stdenv.cc.bintools.targetPrefix}windres"
   ]
-    # TODO delete and do above
-    ++ stdenv.lib.optional (enableStatic) "BUILD_STATIC=yes"
-    ++ stdenv.lib.optional (!enableShared) "BUILD_SHARED=no"
+    # TODO make full dictionary
+    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW "TARGET_OS=MINGW"
     ;
 
   doCheck = false; # tests take a very long time
   checkTarget = "test";
 
-  # TODO remove
-  postInstall = stdenv.lib.optionalString (!enableStatic) "rm $out/lib/*.a";
+  # TODO(@Ericson2314): Make resusable setup hook for this issue on Windows.
+  postInstall =
+    stdenv.lib.optionalString stdenv.hostPlatform.isWindows ''
+      mv $out/bin/*.dll $out/lib
+      ln -s $out/lib/*.dll
+    ''
+    + ''
+      moveToOutput bin "$bin"
+    '';
 
   meta = with stdenv.lib; {
     description = "Extremely fast compression algorithm";
@@ -56,6 +63,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://lz4.github.io/lz4/;
     license = with licenses; [ bsd2 gpl2Plus ];
-    platforms = platforms.unix;
+    platforms = platforms.all;
   };
 }

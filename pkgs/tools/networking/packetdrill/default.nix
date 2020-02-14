@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, bison, flex }:
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "1.0";
-  name = "packetdrill-${version}";
+  pname = "packetdrill";
   src = fetchFromGitHub {
     owner = "google";
     repo = "packetdrill";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
   setSourceRoot = ''
     export sourceRoot=$(realpath */gtests/net/packetdrill)
   '';
-  NIX_CFLAGS_COMPILE = "-Wno-error=unused-result";
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=unused-result"
+    "-Wno-error=stringop-truncation"
+    "-Wno-error=address-of-packed-member"
+  ];
   nativeBuildInputs = [ bison flex ];
   patches = [ ./nix.patch ];
   enableParallelBuilding = true;

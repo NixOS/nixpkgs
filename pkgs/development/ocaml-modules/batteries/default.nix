@@ -1,19 +1,19 @@
-{ stdenv, fetchzip, ocaml, findlib, ocamlbuild, qtest, num }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, qtest, num }:
 
-let version = "2.9.0"; in
+let version = "2.11.0"; in
 
 stdenv.mkDerivation {
   name = "ocaml${ocaml.version}-batteries-${version}";
 
-  src = fetchzip {
-    url = "https://github.com/ocaml-batteries-team/batteries-included/archive/v${version}.tar.gz";
-    sha256 = "1wianim29kkkf4c31k7injjp3ji69ki5krrp6csq8ycswg791dby";
+  src = fetchurl {
+    url = "https://github.com/ocaml-batteries-team/batteries-included/releases/download/v${version}/batteries-${version}.tar.gz";
+    sha256 = "0swdnm9c3sd3yzzyg7yh1lkqhfikmga4fzx2416ja1q62nv26j53";
   };
 
   buildInputs = [ ocaml findlib ocamlbuild qtest ];
   propagatedBuildInputs = [ num ];
 
-  doCheck = !stdenv.lib.versionAtLeast ocaml.version "4.07" && !stdenv.isAarch64;
+  doCheck = stdenv.lib.versions.majorMinor ocaml.version != "4.07" && !stdenv.isAarch64;
   checkTarget = "test test";
 
   createFindlibDestdir = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     license = stdenv.lib.licenses.lgpl21Plus;
     platforms = ocaml.meta.platforms or [];
     maintainers = [
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
     ];
   };
 }

@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, autoreconfHook, pkgconfig, parallel
-, sassc, inkscape, libxml2, glib, gdk_pixbuf, librsvg, gtk-engine-murrine
+, sassc, inkscape, libxml2, glib, gdk-pixbuf, librsvg, gtk-engine-murrine
 , cinnamonSupport ? true
 , gnomeFlashbackSupport ? true
 , gnomeShellSupport ? true
@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.8.7";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "1rn51yj7f7bclvrwwqwid4z9cpap4yd0zw0xs08c36zcjmr28426";
+    sha256 = "1z8kiac3gb4hsyq92p5dd8fyjv7bad55q65kbnjiskpm4ircg4ja";
   };
 
   preferLocalBuild = true;
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional telegramSupport zip;
 
   buildInputs = [
-    gdk_pixbuf
+    gdk-pixbuf
     librsvg
   ];
 
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "A Gtk+ theme based on Material Design Refresh";
+    description = "A GTK theme based on Material Design Refresh";
     homepage = https://gitlab.com/tista500/plata-theme;
     license = with licenses; [ gpl2 cc-by-sa-40 ];
     platforms = platforms.linux;

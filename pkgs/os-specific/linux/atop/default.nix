@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.4.0";
-  name = "atop-${version}";
+  pname = "atop";
 
   src = fetchurl {
     url = "https://www.atoptool.nl/download/atop-${version}.tar.gz";

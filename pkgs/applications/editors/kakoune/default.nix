@@ -4,12 +4,12 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "kakoune-unwrapped";
-  version = "2019.01.20";
+  version = "2020.01.16";
   src = fetchFromGitHub {
     repo = "kakoune";
     owner = "mawww";
     rev = "v${version}";
-    sha256 = "04ak1jm7b1i03sx10z3fxw08rn692y2fj482jn5kpzfzj91b2ila";
+    sha256 = "16v6z1nzj54j19fraxhb18jdby4zfs1br91gxpg9s2s4nsk0km0b";
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses asciidoc docbook_xsl libxslt ];
@@ -23,6 +23,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     export version="v${version}"
+  '';
+
+  doInstallCheckPhase = true;
+  installCheckPhase = ''
+    $out/bin/kak -ui json -E "kill 0"
   '';
 
   meta = {

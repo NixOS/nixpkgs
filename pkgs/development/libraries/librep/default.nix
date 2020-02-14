@@ -6,7 +6,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "librep-${version}";
+  pname = "librep";
   version = "0.92.7";
   sourceName = "librep_${version}";
 
@@ -18,10 +18,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ readline texinfo ];
   propagatedBuildInputs = [ gdbm gmp libffi ];
-
-  configureFlags = [
-    "--disable-static"
-  ];
 
   setupHook = ./setup-hook.sh;
 

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.3.2";
-  name = "ext4magic-${version}";
+  pname = "ext4magic";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ext4magic/${name}.tar.gz";
+    url = "mirror://sourceforge/ext4magic/${pname}-${version}.tar.gz";
     sha256 = "8d9c6a594f212aecf4eb5410d277caeaea3adc03d35378257dfd017ef20ea115";
   };
 
@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
         url = https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch;
         sha256 = "1accydd8kigid68yir2fbihm3r3x8ws3iyznp25snkx41w6y6x8c";
     })
+    ./glibc-fix.patch
   ];
 
   buildInputs = [ file libuuid e2fsprogs zlib bzip2 ];

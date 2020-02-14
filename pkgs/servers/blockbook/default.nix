@@ -1,4 +1,5 @@
-{ buildGoPackage
+{ stdenv
+, buildGoPackage
 , lib
 , fetchFromGitHub
 , rocksdb
@@ -30,7 +31,9 @@ buildGoPackage rec {
 
   nativeBuildInputs = [ pkg-config packr ];
 
-  preBuild = ''
+  preBuild = lib.optionalString stdenv.isDarwin ''
+    ulimit -n 8192
+  '' + ''
     export CGO_CFLAGS="-I${rocksdb}/include"
     export CGO_LDFLAGS="-L${rocksdb}/lib -lrocksdb -lstdc++ -lm -lz -lbz2 -lsnappy -llz4"
     packr clean && packr

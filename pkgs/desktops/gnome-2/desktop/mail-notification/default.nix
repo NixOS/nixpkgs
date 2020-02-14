@@ -3,7 +3,7 @@
 stdenv.mkDerivation rec {
   rev = "9ae8768";
   version = "5.4";
-  name = "mail-notification-${version}";
+  pname = "mail-notification";
 
   src = fetchFromGitHub {
     inherit rev;
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ./patches/mail-notification-dont-link-against-bsd-compat.patch
   ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure = "./jb configure prefix=$out";

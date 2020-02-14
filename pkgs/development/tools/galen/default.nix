@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "galen";
   version = "2.4.4";
-  name = "${pname}-${version}";
 
   inherit jre8;
 

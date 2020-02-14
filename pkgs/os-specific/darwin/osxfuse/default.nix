@@ -16,8 +16,7 @@ let
   '';
 in
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+stdenv.mkDerivation {
 
   pname = "osxfuse";
   inherit version;

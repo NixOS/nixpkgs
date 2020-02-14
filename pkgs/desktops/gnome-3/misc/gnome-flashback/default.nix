@@ -22,28 +22,25 @@
 , writeTextFile
 , writeShellScriptBin
 , xkeyboard_config
+, runCommand
 }:
 
 let
   pname = "gnome-flashback";
-  version = "3.32.0";
-  requiredComponents = wmName: "RequiredComponents=${wmName};gnome-flashback-init;gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Clipboard;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Mouse;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill;org.gnome.SettingsDaemon.ScreensaverProxy;org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
+  version = "3.34.2";
+  requiredComponents = wmName: "RequiredComponents=${wmName};gnome-flashback;gnome-panel;org.gnome.SettingsDaemon.A11ySettings;org.gnome.SettingsDaemon.Color;org.gnome.SettingsDaemon.Datetime;org.gnome.SettingsDaemon.Housekeeping;org.gnome.SettingsDaemon.Keyboard;org.gnome.SettingsDaemon.MediaKeys;org.gnome.SettingsDaemon.Power;org.gnome.SettingsDaemon.PrintNotifications;org.gnome.SettingsDaemon.Rfkill;org.gnome.SettingsDaemon.ScreensaverProxy;org.gnome.SettingsDaemon.Sharing;org.gnome.SettingsDaemon.Smartcard;org.gnome.SettingsDaemon.Sound;org.gnome.SettingsDaemon.Wacom;org.gnome.SettingsDaemon.XSettings;";
   gnome-flashback = stdenv.mkDerivation rec {
     name = "${pname}-${version}";
 
     src = fetchurl {
       url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-      sha256 = "0jfzr7vdmnxpxqqa38ni1p3c508xhlnxqpmmqshk3rvrf0afqn62";
+      sha256 = "1726xcm2q94nfvb055d3m61m20s0xy3xl1fc3ds3k3rcrn457riv";
     };
 
     # make .desktop Execs absolute
     postPatch = ''
       patch -p0 <<END_PATCH
-      +++ data/applications/gnome-flashback-init.desktop.in
-      @@ -4 +4 @@
-      -Exec=gnome-flashback --initialize
-      +Exec=$out/bin/gnome-flashback --initialize
-      +++ data/applications/gnome-flashback.desktop.in
+      +++ data/applications/gnome-flashback.desktop.in.in
       @@ -4 +4 @@
       -Exec=gnome-flashback
       +Exec=$out/bin/gnome-flashback
@@ -144,7 +141,16 @@ let
           Type=Application
           DesktopNames=GNOME-Flashback;GNOME;
         '';
+      } // {
+        providedSessions = [ "gnome-flashback-${wmName}" ];
       };
+
+      mkSystemdTargetForWm = { wmName }:
+        runCommand "gnome-flashback-${wmName}.target" {} ''
+          mkdir -p $out/lib/systemd/user
+          cp "${gnome-flashback}/lib/systemd/user/gnome-session-x11@gnome-flashback-metacity.target" \
+            "$out/lib/systemd/user/gnome-session-x11@gnome-flashback-${wmName}.target"
+        '';
     };
 
     meta = with stdenv.lib; {

@@ -7,10 +7,11 @@
 , meta ? {}, ... } @ args:
 
 pkgs.stdenv.mkDerivation (
-  args // 
+  args //
   {
 
-  name = "emscripten-${args.name}";
+  pname = "emscripten-${lib.getName args}";
+  version = lib.getVersion args;
   buildInputs = [ emscripten python ] ++ buildInputs;
   nativeBuildInputs = [ emscripten python ] ++ nativeBuildInputs;
 

@@ -1,0 +1,11 @@
+diff --git a/configure b/configure
+--- a/configure
++++ b/configure
+@@ -4029,7 +4029,6 @@ fi
+ 
+ if test "$USEOCAMLFIND" = yes; then
+    OCAMLFINDLIB=$(ocamlfind printconf stdlib)
+-   OCAMLFIND=$(which ocamlfind)
+    if test "$OCAMLFINDLIB" != "$OCAMLLIB"; then
+    USEOCAMLFIND=no;
+    echo "but your ocamlfind is not compatible with your ocamlc:"

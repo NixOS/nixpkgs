@@ -35,7 +35,7 @@ with lib;
     })
 
     (mkIf cfg.yarn.resourcemanager.enabled {
-      systemd.services."yarn-resourcemanager" = {
+      systemd.services.yarn-resourcemanager = {
         description = "Hadoop YARN ResourceManager";
         wantedBy = [ "multi-user.target" ];
 
@@ -53,7 +53,7 @@ with lib;
     })
 
     (mkIf cfg.yarn.nodemanager.enabled {
-      systemd.services."yarn-nodemanager" = {
+      systemd.services.yarn-nodemanager = {
         description = "Hadoop YARN NodeManager";
         wantedBy = [ "multi-user.target" ];
 

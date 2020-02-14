@@ -7,7 +7,6 @@
 stdenv.mkDerivation rec {
   pname = "planarity";
   version = "3.0.0.5";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "graph-algorithms";

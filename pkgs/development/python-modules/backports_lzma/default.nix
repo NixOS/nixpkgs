@@ -9,13 +9,13 @@
 
 if !(pythonOlder "3.3") then null else buildPythonPackage rec {
   pname = "backports.lzma";
-  version = "0.0.13";
+  version = "0.0.14";
 
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "50829db66f0445442f6c796bba0ca62d1f87f54760c4682b6d1489e729a43744";
+    sha256 = "16d8b68e4d3cd4e6c9ddb059850452946da3914c8a8e197a7f2b0954559f2df4";
   };
 
   buildInputs = [ lzma ];

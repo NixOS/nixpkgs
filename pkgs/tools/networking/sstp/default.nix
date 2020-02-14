@@ -1,7 +1,7 @@
 { stdenv, fetchurl, pkgconfig, ppp, libevent, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sstp-client-${version}";
+  pname = "sstp-client";
   version = "1.0.12";
 
   src = fetchurl {

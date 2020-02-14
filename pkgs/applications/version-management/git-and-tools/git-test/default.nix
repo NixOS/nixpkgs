@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper, git }:
 
 stdenv.mkDerivation rec {
-  name = "git-test-${version}";
+  pname = "git-test";
   version = "1.0.4";
 
   src = fetchFromGitHub {

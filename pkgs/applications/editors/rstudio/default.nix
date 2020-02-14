@@ -1,9 +1,10 @@
-{ stdenv, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
+{ lib, mkDerivation, fetchurl, fetchFromGitHub, makeDesktopItem, cmake, boost, zlib
 , openssl, R, qtbase, qtxmlpatterns, qtsensors, qtwebengine, qtwebchannel
 , libuuid, hunspellDicts, unzip, ant, jdk, gnumake, makeWrapper, pandoc
 , llvmPackages
 }:
 
+with lib;
 let
   verMajor = "1";
   verMinor = "2";
@@ -12,8 +13,9 @@ let
   ginVer = "2.1.2";
   gwtVer = "2.8.1";
 in
-stdenv.mkDerivation rec {
-  name = "RStudio-${version}";
+mkDerivation rec {
+  pname = "RStudio";
+  inherit version;
 
   nativeBuildInputs = [ cmake unzip ant jdk makeWrapper pandoc ];
 
@@ -46,7 +48,13 @@ stdenv.mkDerivation rec {
     sha256 = "19x000m3jwnkqgi6ic81lkzyjvvxcfacw2j0vcfcaknvvagzhyhb";
   };
 
-  hunspellDictionaries = with stdenv.lib; filter isDerivation (attrValues hunspellDicts);
+  hunspellDictionaries = filter isDerivation (unique (attrValues hunspellDicts));
+  # These dicts contain identically-named dict files, so we only keep the
+  # -large versions in case of clashes
+  largeDicts = filter (d: hasInfix "-large-wordlist" d) hunspellDictionaries;
+  otherDicts = filter (d: !(hasAttr "dictFileName" d &&
+                            elem d.dictFileName (map (d: d.dictFileName) largeDicts))) hunspellDictionaries;
+  dictionaries = largeDicts ++ otherDicts;
 
   mathJaxSrc = fetchurl {
     url = https://s3.amazonaws.com/rstudio-buildtools/mathjax-26.zip;
@@ -76,7 +84,7 @@ stdenv.mkDerivation rec {
       mv gwt-${gwtVer} $GWT_LIB_DIR/gwt/${gwtVer}
 
       mkdir dependencies/common/dictionaries
-      for dict in ${builtins.concatStringsSep " " hunspellDictionaries}; do
+      for dict in ${builtins.concatStringsSep " " dictionaries}; do
         for i in "$dict/share/hunspell/"*; do
           ln -sv $i dependencies/common/dictionaries/
         done
@@ -98,7 +106,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DRSTUDIO_TARGET=Desktop" "-DQT_QMAKE_EXECUTABLE=$NIX_QT5_TMP/bin/qmake" ];
 
   desktopItem = makeDesktopItem {
-    name = name;
+    name = "${pname}-${version}";
     exec = "rstudio %F";
     icon = "rstudio";
     desktopName = "RStudio";
@@ -108,15 +116,16 @@ stdenv.mkDerivation rec {
     mimeType = "text/x-r-source;text/x-r;text/x-R;text/x-r-doc;text/x-r-sweave;text/x-r-markdown;text/x-r-html;text/x-r-presentation;application/x-r-data;application/x-r-project;text/x-r-history;text/x-r-profile;text/x-tex;text/x-markdown;text/html;text/css;text/javascript;text/x-chdr;text/x-csrc;text/x-c++hdr;text/x-c++src;";
   };
 
+  qtWrapperArgs = [ ''--suffix PATH : ${gnumake}/bin'' ];
+
   postInstall = ''
-      wrapProgram $out/bin/rstudio --suffix PATH : ${gnumake}/bin
       mkdir $out/share
       cp -r ${desktopItem}/share/applications $out/share
       mkdir $out/share/icons
       ln $out/rstudio.png $out/share/icons
   '';
 
-  meta = with stdenv.lib;
+  meta = with lib;
     { description = "Set of integrated tools for the R language";
       homepage = https://www.rstudio.com/;
       license = licenses.agpl3;

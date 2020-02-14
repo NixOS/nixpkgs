@@ -8,10 +8,11 @@ with stdenv.lib;
 
 let
   common = { version, sha256, patches ? [], withDocs ? false }: stdenv.mkDerivation rec {
-    name = "openssl-${version}";
+    pname = "openssl";
+    inherit version;
 
     src = fetchurl {
-      url = "https://www.openssl.org/source/${name}.tar.gz";
+      url = "https://www.openssl.org/source/${pname}-${version}.tar.gz";
       inherit sha256;
     };
 
@@ -35,7 +36,9 @@ let
 
     outputs = [ "bin" "dev" "out" "man" ] ++ optional withDocs "doc";
     setOutputFlags = false;
-    separateDebugInfo = stdenv.hostPlatform.isLinux;
+    separateDebugInfo = !(stdenv.hostPlatform.useLLVM or false)
+      && stdenv.hostPlatform == stdenv.buildPlatform # unable to fix infinite recursion on stdenv.cc
+      && stdenv.cc.isGNU;
 
     nativeBuildInputs = [ perl ];
     buildInputs = stdenv.lib.optional withCryptodev cryptodev;
@@ -43,10 +46,11 @@ let
     # TODO(@Ericson2314): Improve with mass rebuild
     configurePlatforms = [];
     configureScript = {
-        "x86_64-darwin"  = "./Configure darwin64-x86_64-cc";
-        "x86_64-solaris" = "./Configure solaris64-x86_64-gcc";
-        "armv6l-linux" = "./Configure linux-armv4 -march=armv6";
-        "armv7l-linux" = "./Configure linux-armv4 -march=armv7-a";
+        armv6l-linux = "./Configure linux-armv4 -march=armv6";
+        armv7l-linux = "./Configure linux-armv4 -march=armv7-a";
+        x86_64-darwin  = "./Configure darwin64-x86_64-cc";
+        x86_64-linux = "./Configure linux-x86_64";
+        x86_64-solaris = "./Configure solaris64-x86_64-gcc";
       }.${stdenv.hostPlatform.system} or (
         if stdenv.hostPlatform == stdenv.buildPlatform
           then "./config"
@@ -70,9 +74,20 @@ let
       "-DHAVE_CRYPTODEV"
       "-DUSE_CRYPTODEV_DIGESTS"
     ] ++ stdenv.lib.optional enableSSL2 "enable-ssl2"
-      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng";
+      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && stdenv.hostPlatform.isAarch64) "no-afalgeng"
+      # OpenSSL needs a specific `no-shared` configure flag.
+      # See https://wiki.openssl.org/index.php/Compilation_and_Installation#Configure_Options
+      # for a comprehensive list of configuration options.
+      ++ stdenv.lib.optional (versionAtLeast version "1.1.0" && static) "no-shared";
 
-    makeFlags = [ "MANDIR=$(man)/share/man" ];
+    makeFlags = [
+      "MANDIR=$(man)/share/man"
+      # This avoids conflicts between man pages of openssl subcommands (for
+      # example 'ts' and 'err') man pages and their equivalent top-level
+      # command in other packages (respectively man-pages and moreutils).
+      # This is done in ubuntu and archlinux, and possiibly many other distros.
+      "MANSUFFIX=ssl"
+    ];
 
     enableParallelBuilding = true;
 
@@ -87,7 +102,11 @@ let
     '' +
     ''
       mkdir -p $bin
+    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
+    ''
       substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
+    '' +
+    ''
       mv $out/bin $bin/
 
       mkdir $dev
@@ -99,7 +118,7 @@ let
       rmdir $out/etc/ssl/{certs,private}
     '';
 
-    postFixup = ''
+    postFixup = stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows) ''
       # Check to make sure the main output doesn't depend on perl
       if grep -r '${buildPackages.perl}' $out; then
         echo "Found an erroneous dependency on perl ^^^" >&2
@@ -113,15 +132,14 @@ let
       license = licenses.openssl;
       platforms = platforms.all;
       maintainers = [ maintainers.peti ];
-      priority = 10; # resolves collision with ‘man-pages’
     };
   };
 
 in {
 
   openssl_1_0_2 = common {
-    version = "1.0.2s";
-    sha256 = "15mbmg8hf7s12vr3v2bdc0pi9y4pdbnsxhzk4fyyap42jaa5rgfa";
+    version = "1.0.2u";
+    sha256 = "ecd0c6ffb493dd06707d38b14bb4d8c2288bb7033735606569d8f90f89669d16";
     patches = [
       ./1.0.2/nix-ssl-cert-file.patch
 
@@ -132,8 +150,8 @@ in {
   };
 
   openssl_1_1 = common {
-    version = "1.1.1c";
-    sha256 = "142c7zdlz06hjrrvinb9f276czc78bnkyhd9xma621qmmmwk1yzn";
+    version = "1.1.1d";
+    sha256 = "1whinyw402z3b9xlb3qaxv4b9sk4w1bgh9k0y8df1z4x3yy92fhy";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 

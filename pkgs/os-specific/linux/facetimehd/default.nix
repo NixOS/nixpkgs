@@ -16,9 +16,9 @@ let
   #       still works.
   srcParams = if (stdenv.lib.versionAtLeast kernel.version "4.8") then
     { # Use mainline branch
-      version = "unstable-2016-10-09";
-      rev = "887d0f531ef7b91457be519474136c3355c5132b";
-      sha256 = "0bayahnxar1q6wvf9cb6p8gsfw98w0wqp715hs4r7apmddwk9v7n";
+      version = "unstable-2019-12-10";
+      rev = "ea832ac486afb6dac9ef59aa37e90f332ab7f05a";
+      sha256 = "1dg2i558hjnjnyk53xyg0ayykqaial9bm420v22s9a3khzzjnwq3";
     }
   else
     { # Use master branch (broken on 4.8)

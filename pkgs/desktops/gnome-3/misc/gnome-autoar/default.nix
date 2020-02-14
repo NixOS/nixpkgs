@@ -1,23 +1,43 @@
-{ stdenv, fetchurl, pkgconfig, gnome3
-, gtk3, glib, gobject-introspection, libarchive
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnome3
+, gtk3
+, glib
+, gobject-introspection
+, libarchive
+, vala
 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-autoar-${version}";
-  version = "0.2.3";
+  pname = "gnome-autoar";
+  version = "0.2.4";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/gnome-autoar/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "02i4zgqqqj56h7bcys6dz7n78m4nj2x4dv1ggjmnrk98n06xpsax";
+    url = "mirror://gnome/sources/gnome-autoar/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0yk56ch46n3wfy633mq31kif9n7v06rlij4vqbsbn6l4z1vw6d0a";
   };
 
   passthru = {
     updateScript = gnome3.updateScript { packageName = "gnome-autoar"; attrPath = "gnome3.gnome-autoar"; };
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk3 glib ];
-  propagatedBuildInputs = [ libarchive gobject-introspection ];
+  nativeBuildInputs = [
+    gobject-introspection
+    pkgconfig
+    vala
+  ];
+
+  buildInputs = [
+    gtk3
+  ];
+
+  propagatedBuildInputs = [
+    libarchive
+    glib
+  ];
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;

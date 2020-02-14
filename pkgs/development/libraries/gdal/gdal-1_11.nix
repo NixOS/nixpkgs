@@ -3,11 +3,11 @@
 , libpng }:
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
+  pname = "gdal";
   version = "1.11.5";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
+    url = "https://download.osgeo.org/gdal/${version}/${pname}-${version}.tar.xz";
     sha256 = "0hphxzvy23v3vqxx1y22hhhg4cypihrb8555y12nb4mrhzlw7zfl";
   };
 
@@ -40,9 +40,7 @@ stdenv.mkDerivation rec {
   ];
 
   # Allow use of old proj_api.h
-  NIX_CFLAGS_COMPILE = [
-    "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1"
-  ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H=1";
 
   # Prevent this:
   #

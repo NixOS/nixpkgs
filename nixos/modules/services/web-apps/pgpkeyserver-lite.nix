@@ -60,7 +60,7 @@ in
     services.nginx.virtualHosts = let
       hkpPort = builtins.toString cfg.hkpPort;
     in {
-      "${cfg.hostname}" = {
+      ${cfg.hostname} = {
         root = webPkg;
         locations = {
           "/pks".extraConfig = ''

@@ -1,22 +1,22 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, python
+, isPy3k
 , msrest
 , msrestazure
 , azure-common
 , azure-mgmt-nspkg
-, python
-, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "azure-mgmt-dns";
-  version = "2.1.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "3730b1b3f545a5aa43c0fff07418b362a789eb7d81286e2bed90ffef88bfa5d0";
+    sha256 = "0zxkcczf01b64qfwj98jqdvnwqahygcyccf37rcxpdcfgpkg9kbf";
   };
 
   propagatedBuildInputs = [
@@ -26,13 +26,19 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  # this is still needed for when the version is overrided
+  # to previous versions. E.g azure-cli
+  postInstall = lib.optionalString isPy3k ''
+    rm -f $out/${python.sitePackages}/azure/{,mgmt/}__init__.py
+  '';
+
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure DNS Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/dns?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
-    maintainers = with maintainers; [ mwilsoninsight ];
+    maintainers = with maintainers; [ jonringer mwilsoninsight ];
   };
 }

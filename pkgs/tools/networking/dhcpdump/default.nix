@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libpcap, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dhcpdump-1.8";
 
   src = fetchurl {

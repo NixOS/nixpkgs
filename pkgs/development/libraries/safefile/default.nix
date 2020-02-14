@@ -1,15 +1,12 @@
 { stdenv, fetchurl, path, runtimeShell }:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "safefile";
   version = "1.0.5";
 
   src = fetchurl {
-    url = "http://research.cs.wisc.edu/mist/${pname}/releases/${name}.tar.gz";
+    url = "http://research.cs.wisc.edu/mist/${pname}/releases/${pname}-${version}.tar.gz";
     sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
   };
-
-  buildInputs = [];
 
   passthru = {
     updateScript = ''
@@ -25,7 +22,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.asl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = http://research.cs.wisc.edu/mist/safefile/;
+    homepage = https://research.cs.wisc.edu/mist/safefile/;
     updateWalker = true;
   };
 }

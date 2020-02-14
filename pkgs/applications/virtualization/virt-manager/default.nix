@@ -9,18 +9,13 @@
 
 with stdenv.lib;
 
-# TODO: remove after there's support for setupPyDistFlags
-let
-  setuppy = ../../../development/interpreters/python/run_setup.py;
-in
 python3Packages.buildPythonApplication rec {
-  name = "virt-manager-${version}";
-  version = "2.2.0";
-  namePrefix = "";
+  pname = "virt-manager";
+  version = "2.2.1";
 
   src = fetchurl {
-    url = "http://virt-manager.org/download/sources/virt-manager/${name}.tar.gz";
-    sha256 = "0186c2fjqm3wdr3wik4fcyl5l3gv5j6sxn18d0vclw83w4yrhjz9";
+    url = "http://virt-manager.org/download/sources/virt-manager/${pname}-${version}.tar.gz";
+    sha256 = "06ws0agxlip6p6n3n43knsnjyd91gqhh2dadgc33wl9lx1k8vn6g";
   };
 
   nativeBuildInputs = [
@@ -49,13 +44,7 @@ python3Packages.buildPythonApplication rec {
     ${python3Packages.python.interpreter} setup.py configure --prefix=$out
   '';
 
-  # TODO: remove after there's support for setupPyDistFlags
-  buildPhase = ''
-    runHook preBuild
-    cp ${setuppy} nix_run_setup
-    ${python3Packages.python.pythonForBuild.interpreter} nix_run_setup --no-update-icon-cache build_ext bdist_wheel
-    runHook postBuild
-  '';
+  setupPyGlobalFlags = [ "--no-update-icon-cache" ];
 
   preFixup = ''
     gappsWrapperArgs+=(--set PYTHONPATH "$PYTHONPATH")
@@ -77,6 +66,6 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl2;
     # exclude Darwin since libvirt-glib currently doesn't build there
     platforms = platforms.linux;
-    maintainers = with maintainers; [ qknight offline fpletz ];
+    maintainers = with maintainers; [ qknight offline fpletz globin ];
   };
 }

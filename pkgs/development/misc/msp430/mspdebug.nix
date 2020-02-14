@@ -3,7 +3,8 @@
 let
   version = "0.25";
 in stdenv.mkDerivation {
-  name = "mspdebug-${version}";
+  pname = "mspdebug";
+  inherit version;
   src = fetchFromGitHub {
     owner = "dlbeer";
     repo = "mspdebug";

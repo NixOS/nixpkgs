@@ -9,7 +9,7 @@ let
   lt6_6 = builtins.compareVersions cfg.package.version "6.6" < 0;
 
   cfgFile = pkgs.writeText "kibana.json" (builtins.toJSON (
-    (filterAttrsRecursive (n: v: v != null) ({
+    (filterAttrsRecursive (n: v: v != null && v != []) ({
       server.host = cfg.listenAddress;
       server.port = cfg.port;
       server.ssl.certificate = cfg.cert;
@@ -150,7 +150,7 @@ in {
       description = "Kibana package to use";
       default = pkgs.kibana;
       defaultText = "pkgs.kibana";
-      example = "pkgs.kibana5";
+      example = "pkgs.kibana";
       type = types.package;
     };
 
@@ -198,8 +198,7 @@ in {
 
     environment.systemPackages = [ cfg.package ];
 
-    users.users = singleton {
-      name = "kibana";
+    users.users.kibana = {
       uid = config.ids.uids.kibana;
       description = "Kibana service user";
       home = cfg.dataDir;

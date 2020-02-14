@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ncurses, pcre }:
+{ stdenv, fetchurl, ncurses, pcre, buildPackages }:
 
 let
   version = "5.7.1";
@@ -7,16 +7,23 @@ let
     url = "mirror://sourceforge/zsh/zsh-${version}-doc.tar.xz";
     sha256 = "1d1r88n1gfdavx4zy3svl1gljrvzim17jb2r834hafg2a016flrh";
   };
-
 in
 
 stdenv.mkDerivation {
-  name = "zsh-${version}";
+  pname = "zsh";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/zsh/zsh-${version}.tar.xz";
     sha256 = "1s3yww0mzgvpc48kp0x868mm3gbna42sbgzya0nknj0x5hn2jq3j";
   };
+
+  patches = [
+    # Bracketed-paste-magic error in Putty due to empty $PASTED variable
+    # http://www.zsh.org/mla/workers/2019/msg00808.html
+    # This patch included in the next version
+    ./bracketed-paste-magic.patch
+  ];
 
   buildInputs = [ ncurses pcre ];
 
@@ -61,7 +68,11 @@ else
   fi
 fi
 EOF
-    $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    ${if stdenv.hostPlatform == stdenv.buildPlatform then ''
+      $out/bin/zsh -c "zcompile $out/etc/zprofile"
+    '' else ''
+      ${stdenv.lib.getBin buildPackages.zsh}/bin/zsh -c "zcompile $out/etc/zprofile"
+    ''}
     mv $out/etc/zprofile $out/etc/zprofile_zwc_is_used
   '';
   # XXX: patch zsh to take zwc if newer _or equal_

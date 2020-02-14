@@ -18,7 +18,7 @@ rec {
     buildPhase ? "",
     preInstall ? "",
     postInstall ? "",
-    path ? (builtins.parseDrvName name).name,
+    path ? stdenv.lib.getName name,
     addonInfo ? null,
     ...
   }:

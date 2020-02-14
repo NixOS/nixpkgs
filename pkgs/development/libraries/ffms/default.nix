@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, zlib, ffmpeg, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "ffms-${version}";
+  pname = "ffms";
   version = "2.23";
 
   src = fetchFromGitHub {
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/FFMS/ffms2/;
     description = "Libav/ffmpeg based source library for easy frame accurate access";
     license = licenses.mit;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

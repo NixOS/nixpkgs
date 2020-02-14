@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "sqlcheck-${version}";
+  pname = "sqlcheck";
   version = "1.2";
 
   src = fetchFromGitHub {

@@ -1,13 +1,9 @@
 diff --git a/lib/PlugsManager.vala b/lib/PlugsManager.vala
-index 75d0eaf..c227908 100644
+index 8b21e7b..bc36321 100644
 --- a/lib/PlugsManager.vala
 +++ b/lib/PlugsManager.vala
-@@ -34,10 +34,18 @@ public class Switchboard.PlugsManager : GLib.Object {
-     private Gee.LinkedList<Switchboard.Plug> plugs;
-     
-     public signal void plug_added (Switchboard.Plug plug);
--    
-+
+@@ -36,7 +36,15 @@ public class Switchboard.PlugsManager : GLib.Object {
+ 
      private PlugsManager () {
          plugs = new Gee.LinkedList<Switchboard.Plug> ();
 -        var base_folder = File.new_for_path (Build.PLUGS_DIR);

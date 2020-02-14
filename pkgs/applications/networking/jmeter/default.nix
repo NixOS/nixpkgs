@@ -1,10 +1,10 @@
 { fetchurl, stdenv, jre, makeWrapper, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "jmeter-${version}";
+  pname = "jmeter";
   version = "5.1.1";
   src = fetchurl {
-    url = "https://archive.apache.org/dist/jmeter/binaries/apache-${name}.tgz";
+    url = "https://archive.apache.org/dist/jmeter/binaries/apache-${pname}-${version}.tgz";
     sha256 = "1bmlxnlcias781mwf3wzpd4935awswbq3w8ijck65bsaw07m2kc4";
   };
 

@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ttyrec-${version}";
+  pname = "ttyrec";
   version = "1.0.8";
 
   src = fetchurl {
-    url = "http://0xcc.net/ttyrec/${name}.tar.gz";
+    url = "http://0xcc.net/ttyrec/${pname}-${version}.tar.gz";
     sha256 = "ef5e9bf276b65bb831f9c2554cd8784bd5b4ee65353808f82b7e2aef851587ec";
   };
 
@@ -26,5 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ zimbatm ];
+    broken = true; # 2020-01-28
   };
 }

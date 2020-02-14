@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "unittest-cpp-${version}";
+  pname = "unittest-cpp";
   version = "2.0.0";
 
   src = fetchFromGitHub {

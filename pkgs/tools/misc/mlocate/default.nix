@@ -3,11 +3,11 @@
 let
   dbfile = stdenv.lib.attrByPath [ "locate" "dbfile" ] "/var/cache/locatedb" config;
 in stdenv.mkDerivation rec {
-  name = "mlocate-${version}";
+  pname = "mlocate";
   version = "0.26";
 
   src = fetchurl {
-    url = "https://releases.pagure.org/mlocate/${name}.tar.xz";
+    url = "https://releases.pagure.org/mlocate/${pname}-${version}.tar.xz";
     sha256 = "0gi6y52gkakhhlnzy0p6izc36nqhyfx5830qirhvk3qrzrwxyqrh";
   };
 

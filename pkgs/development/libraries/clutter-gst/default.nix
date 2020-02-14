@@ -1,17 +1,17 @@
-{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl, gnome3, gdk_pixbuf }:
+{ fetchurl, stdenv, pkgconfig, clutter, gtk3, glib, cogl, gnome3, gdk-pixbuf }:
 
-let
+stdenv.mkDerivation rec {
   pname = "clutter-gst";
   version = "3.0.27";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "17czmpl92dzi4h3rn5rishk015yi3jwiw29zv8qan94xcmnbssgy";
   };
 
-  propagatedBuildInputs = [ clutter gtk3 glib cogl gdk_pixbuf ];
+  propagatedBuildInputs = [ clutter gtk3 glib cogl gdk-pixbuf ];
   nativeBuildInputs = [ pkgconfig ];
 
   postBuild = "rm -rf $out/share/gtk-doc";

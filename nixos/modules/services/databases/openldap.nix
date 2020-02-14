@@ -47,26 +47,26 @@ in
       };
 
       user = mkOption {
-        type = types.string;
+        type = types.str;
         default = "openldap";
         description = "User account under which slapd runs.";
       };
 
       group = mkOption {
-        type = types.string;
+        type = types.str;
         default = "openldap";
         description = "Group account under which slapd runs.";
       };
 
       urlList = mkOption {
-        type = types.listOf types.string;
+        type = types.listOf types.str;
         default = [ "ldap:///" ];
         description = "URL list slapd should listen on.";
         example = [ "ldaps:///" ];
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/db/openldap";
         description = "The database directory.";
       };
@@ -259,6 +259,8 @@ in
           ${openldap.out}/bin/slapadd ${configOpts} -l ${dataFile}
         ''}
         chown -R "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
+
+        ${openldap}/bin/slaptest ${configOpts}
       '';
       serviceConfig.ExecStart =
         "${openldap.out}/libexec/slapd -d '${cfg.logLevel}' " +

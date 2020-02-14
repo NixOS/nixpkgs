@@ -6,7 +6,7 @@ let
   pname = "f5_6";
 in
 
-fetchzip rec {
+fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";

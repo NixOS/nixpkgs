@@ -1,24 +1,30 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, icu, catch2 }:
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, icu, catch2, ronn }:
 
 stdenv.mkDerivation rec {
-  name = "nuspell-${version}";
-  version = "2.2.0";
+  pname = "nuspell";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "nuspell";
     repo = "nuspell";
     rev = "v${version}";
-    sha256 = "17khkb1sxn1p6rfql72l7a4lxafbxj0dwi95hsmyi6wajvfrg9sy";
+    sha256 = "1cyvvf5f92a777qgh00ja43z43j5nhc9dw5l3wvw9j6j9bqc4i8p";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ronn ];
   buildInputs = [ boost icu ];
+
+  outputs = [ "out" "lib" "dev" "man" ];
 
   enableParallelBuilding = true;
 
   postPatch = ''
     rm -rf external/Catch2
     ln -sf ${catch2.src} external/Catch2
+  '';
+
+  postInstall = ''
+    rm -rf $out/share/doc
   '';
 
   meta = with stdenv.lib; {

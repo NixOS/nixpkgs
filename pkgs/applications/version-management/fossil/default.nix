@@ -4,16 +4,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "fossil-${version}";
-  version = "2.9";
+  pname = "fossil";
+  version = "2.10";
 
   src = fetchurl {
     urls =
       [
         "https://www.fossil-scm.org/index.html/uv/fossil-src-${version}.tar.gz"
       ];
-    name = "${name}.tar.gz";
-    sha256 = "0kwb7pkp7y2my916rhyl6kmcf0fk8gkzaxzy13hfgqs35nlsvchw";
+    name = "${pname}-${version}.tar.gz";
+    sha256 = "041bs4fgk52fw58p7s084pxk9d9vs5v2f2pjbznqawz75inpg8yq";
   };
 
   buildInputs = [ zlib openssl readline sqlite which ed ]
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     platforms = with stdenv.lib.platforms; all;
     maintainers = [ #Add your name here!
-      stdenv.lib.maintainers.z77z
+      stdenv.lib.maintainers.maggesi
       stdenv.lib.maintainers.viric
     ];
   };

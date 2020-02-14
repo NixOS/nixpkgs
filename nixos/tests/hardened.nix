@@ -10,6 +10,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
+      environment.memoryAllocator.provider = "graphene-hardened";
       nix.useSandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
@@ -28,7 +29,7 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     let
-      hardened-malloc-tests = pkgs.stdenv.mkDerivation rec {
+      hardened-malloc-tests = pkgs.stdenv.mkDerivation {
         name = "hardened-malloc-tests-${pkgs.graphene-hardened-malloc.version}";
         src = pkgs.graphene-hardened-malloc.src;
         buildPhase = ''

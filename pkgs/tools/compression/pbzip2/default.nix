@@ -4,10 +4,11 @@ let major = "1.1";
     version = "${major}.13";
 in
 stdenv.mkDerivation rec {
-  name = "pbzip2-${version}";
+  pname = "pbzip2";
+  inherit version;
 
   src = fetchurl {
-    url = "https://launchpad.net/pbzip2/${major}/${version}/+download/${name}.tar.gz";
+    url = "https://launchpad.net/pbzip2/${major}/${version}/+download/${pname}-${version}.tar.gz";
     sha256 = "1rnvgcdixjzbrmcr1nv9b6ccrjfrhryaj7jwz28yxxv6lam3xlcg";
   };
 
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "substituteInPlace Makefile --replace g++ c++";
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=reserved-user-defined-literal";
 

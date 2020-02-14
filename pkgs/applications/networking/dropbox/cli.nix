@@ -6,7 +6,7 @@
 , dropbox
 , gtk3
 , gnome3
-, gdk_pixbuf
+, gdk-pixbuf
 , gobject-introspection
 }:
 
@@ -15,7 +15,8 @@ let
   dropboxd = "${dropbox}/bin/dropbox";
 in
 stdenv.mkDerivation {
-  name = "dropbox-cli-${version}";
+  pname = "dropbox-cli";
+  inherit version;
 
   outputs = [ "out" "nautilusExtension" ];
 
@@ -36,7 +37,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     pkgconfig
     gobject-introspection
-    gdk_pixbuf
+    gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection
     # but we are using Nix for installation so we will not need that.
     (python3.withPackages (ps: with ps; [
@@ -52,11 +53,11 @@ stdenv.mkDerivation {
   ];
 
   configureFlags = [
-    "--with-nautilus-extension-dir=${placeholder ''nautilusExtension''}/lib/nautilus/extensions-3.0"
+    "--with-nautilus-extension-dir=${placeholder "nautilusExtension"}/lib/nautilus/extensions-3.0"
   ];
 
   makeFlags = [
-    "EMBLEM_DIR=${placeholder ''nautilusExtension''}/share/nautilus-dropbox/emblems"
+    "EMBLEM_DIR=${placeholder "nautilusExtension"}/share/nautilus-dropbox/emblems"
   ];
 
   meta = {

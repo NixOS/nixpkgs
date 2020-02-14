@@ -3,7 +3,7 @@
 with lib;
 
 buildGoPackage rec {
-  name = "ct-${version}";
+  pname = "ct";
   version = "0.7.0";
 
   goPackagePath = "github.com/coreos/container-linux-config-transpiler";

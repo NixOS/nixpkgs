@@ -2,29 +2,33 @@
 , libjack2, gettext, intltool, guile_2_0, lilypond
 , glib, libxml2, librsvg, libsndfile, aubio
 , gtk3, gtksourceview, evince, fluidsynth, rubberband
-, portaudio, portmidi, fftw, makeWrapper }:
+, portaudio, portmidi, fftw, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "denemo-${version}";
-  version = "2.2.0";
+  pname = "denemo";
+  version = "2.3.0";
 
   src = fetchurl {
     url = "https://ftp.gnu.org/gnu/denemo/denemo-${version}.tar.gz";
-    sha256 = "18zcs4xmfj4vpzi15dj7k5bjzzzlr3sjf9xhrrgy4samrrdpqzfh";
+    sha256 = "1blkcl3slbsq9jlhwcf2m9v9g38a0sjfhh9advgi2qr1gxri08by";
   };
 
   buildInputs = [
-    libjack2 gettext guile_2_0 lilypond pkgconfig glib libxml2 librsvg libsndfile
+    libjack2 guile_2_0 lilypond glib libxml2 librsvg libsndfile
     aubio gtk3 gtksourceview evince fluidsynth rubberband portaudio fftw portmidi
-    makeWrapper
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/denemo --prefix PATH : ${lilypond}/bin
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : "${lilypond}/bin"
+    )
   '';
 
   nativeBuildInputs = [
+    wrapGAppsHook
     intltool
+    gettext
+    pkgconfig
   ];
 
   meta = with stdenv.lib; {

@@ -5,11 +5,11 @@
 { stdenv, fetchurl, openssh, rsync, cvs }:
 
 stdenv.mkDerivation rec {
-  name = "rssh-${version}";
+  pname = "rssh";
   version = "2.3.4";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rssh/rssh/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/rssh/rssh/${version}/${pname}-${version}.tar.gz";
     sha256 = "f30c6a760918a0ed39cf9e49a49a76cb309d7ef1c25a66e77a41e2b1d0b40cd9";
   };
 

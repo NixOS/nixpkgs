@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "trompeloeil-${version}";
-  version = "34";
+  pname = "trompeloeil";
+  version = "36";
 
   src = fetchFromGitHub {
     owner = "rollbear";
     repo = "trompeloeil";
     rev = "v${version}";
-    sha256 = "0mj3zni18kfm04jrqjaa1p6ii5q0dz6qdm3hi57z9lzygaxbdc97";
+    sha256 = "1ik4cxh2srcdjrj9409lvxgklnadmjd3f5lvjqb5z3jgv51w38nh";
   };
 
   nativeBuildInputs = [ cmake ];

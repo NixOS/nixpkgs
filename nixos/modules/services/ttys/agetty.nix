@@ -92,7 +92,7 @@ in
         restartIfChanged = false;
       };
 
-    systemd.services."console-getty" =
+    systemd.services.console-getty =
       { serviceConfig.ExecStart = [
           "" # override upstream default with an empty ExecStart
           (gettyCmd "--noclear --keep-baud console 115200,38400,9600 $TERM")
@@ -102,7 +102,7 @@ in
         enable = mkDefault config.boot.isContainer;
       };
 
-    environment.etc = singleton
+    environment.etc.issue =
       { # Friendly greeting on the virtual consoles.
         source = pkgs.writeText "issue" ''
 
@@ -110,7 +110,6 @@ in
           ${config.services.mingetty.helpLine}
 
         '';
-        target = "issue";
       };
 
   };

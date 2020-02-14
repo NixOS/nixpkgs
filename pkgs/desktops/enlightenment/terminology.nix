@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "terminology";
-  version = "1.4.1";
+  version = "1.6.0";
 
   src = fetchurl {
     url = "http://download.enlightenment.org/rel/apps/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "0mm9v5a94369is3kaarnr3a28wy42wslzi1mcisaidlcldgv7f6p";
+    sha256 = "0xxx4xyhis6fy3frgb34ip0aj0kc4zashf60gzbxmq5gadbb0p5r";
   };
 
   nativeBuildInputs = [
     meson
     ninja
-    (pkgconfig.override { vanilla = true; })
+    pkgconfig
     makeWrapper
   ];
 
@@ -25,8 +25,8 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Powerful terminal emulator based on EFL";
     homepage = https://www.enlightenment.org/about-terminology;
-    platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.bsd2;
-    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx ];
+    platforms = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ matejc tstrobel ftrvxmtrx romildo ];
   };
 }

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "libmysofa-${version}";
-  version = "0.7";
+  pname = "libmysofa";
+  version = "0.9.1";
 
   src = fetchFromGitHub {
     owner = "hoene";
     repo = "libmysofa";
     rev = "v${version}";
-    sha256 = "0si0z7cfw6xcs3dkrb4zini55xpxwfp27yl8lbx39gx2pf8v2jls";
+    sha256 = "10pz9n99cl2j72m7bdj8xka5akyk0sjbysr7rlfdq0qfkiq5922v";
   };
 
   nativeBuildInputs = [ cmake ];

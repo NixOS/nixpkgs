@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.7.0";
-  name = "hunspell-${version}";
+  pname = "hunspell";
 
   src = fetchurl {
     url = "https://github.com/hunspell/hunspell/archive/v${version}.tar.gz";
@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses readline ];
   nativeBuildInputs = [ autoreconfHook ];
+
+  patches = [ ./0001-Make-hunspell-look-in-XDG_DATA_DIRS-for-dictionaries.patch ];
 
   postPatch = ''
     patchShebangs tests
@@ -49,6 +51,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.all;
     license = with licenses; [ gpl2 lgpl21 mpl11 ];
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

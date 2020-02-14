@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 let
   # Download Big Buck Bunny example, licensed under CC Attribution 3.0.
   testMkv = pkgs.fetchurl {
@@ -19,7 +19,13 @@ in {
   testScript = ''
     # Test MP4 and MKV transcoding. Since this is a short clip, transcoding typically
     # only takes a few seconds.
-    $machine->succeed("HandBrakeCLI -i ${testMkv} -o test.mp4 -e x264 -q 20 -B 160");
-    $machine->succeed("HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160");
+    start_all()
+
+    machine.succeed(
+        "HandBrakeCLI -i ${testMkv} -o test.mp4 -e x264 -q 20 -B 160"
+    )
+    machine.succeed(
+        "HandBrakeCLI -i ${testMkv} -o test.mkv -e x264 -q 20 -B 160"
+    )
   '';
 })

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "fsmon-${version}";
-  version = "1.5";
+  pname = "fsmon";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = "nowsecure";
     repo = "fsmon";
-    rev = "${version}";
-    sha256 = "1b99cd5k2zh30sagp3f55jvj1r48scxibv7aqqc2sp82sci59npg";
+    rev = version;
+    sha256 = "1zpac37biy8jz8234q0krn7pjggz33k0grz590ravbjgfawm1ccy";
   };
 
   installPhase = ''

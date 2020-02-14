@@ -1,11 +1,11 @@
 { stdenv, fetchFromGitHub, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "uptimed-${version}";
-  version = "0.4.1";
+  pname = "uptimed";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
-    sha256 = "0hqs7n3agayckwdgwadzw5shpdh4h1inqgvp4zr5fi324pj5x80j";
+    sha256 = "0wnnpjfxnycigqj6hag0n6p5piss8cv40y9jda72d9s4df5n91z8";
     rev = "v${version}";
     repo = "uptimed";
     owner = "rpodgorny";

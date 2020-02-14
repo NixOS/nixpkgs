@@ -1,11 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libmnl }:
 
 stdenv.mkDerivation rec {
-  name = "ipset-7.2";
+  pname = "ipset";
+  version = "7.5";
 
   src = fetchurl {
-    url = "http://ipset.netfilter.org/${name}.tar.bz2";
-    sha256 = "06268dchlk4x8x27rhn569hjkm99jk2iid3ara2xr7k66i2kh4rf";
+    url = "http://ipset.netfilter.org/${pname}-${version}.tar.bz2";
+    sha256 = "02vangpxdyyk9z84vc0ba1vbjvfnd6zlniisc029xzkgmdafwym5";
   };
 
   nativeBuildInputs = [ pkgconfig ];

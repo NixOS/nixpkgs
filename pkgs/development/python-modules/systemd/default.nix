@@ -3,7 +3,6 @@
 buildPythonPackage rec {
   pname = "systemd";
   version = "234";
-  name = pname + "-" + version;
 
   src = fetchFromGitHub {
     owner = "systemd";

@@ -2,10 +2,10 @@
 
 let param =
   if stdenv.lib.versionAtLeast ocaml.version "4.03"
-  then {
-    version = "0.6.1";
-    url = " https://github.com/Chris00/ocaml-rope/releases/download/0.6.1/rope-0.6.1.tbz";
-    sha256 = "1zqh28jz1zjb0l354wi1046qpkwmk582ssz0gsqh6d44wpspdxk2";
+  then rec {
+    version = "0.6.2";
+    url = "https://github.com/Chris00/ocaml-rope/releases/download/${version}/rope-${version}.tbz";
+    sha256 = "15cvfa0s1vjx7gjd07d3fkznilishqf4z4h2q5f20wm9ysjh2h2i";
     buildInputs = [ dune ];
     extra = {
       buildPhase = "dune build -p rope";

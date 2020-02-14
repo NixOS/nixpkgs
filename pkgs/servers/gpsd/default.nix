@@ -42,6 +42,10 @@ stdenv.mkDerivation rec {
     ./0002-scons-envs-patch.patch
   ];
 
+  postPatch = ''
+    sed -i -e '17i#include <sys/sysmacros.h>' serial.c
+  '';
+
   # - leapfetch=no disables going online at build time to fetch leap-seconds
   #   info. See <gpsd-src>/build.txt for more info.
   preBuild = ''
@@ -67,7 +71,7 @@ stdenv.mkDerivation rec {
   preInstall = ''
     mkdir -p "$out/lib/udev/rules.d"
   '';
-  installTargets = "install udev-install";
+  installTargets = [ "install" "udev-install" ];
 
   postFixup = ''
     wrapPythonProgramsIn $out/bin "$out $pythonPath"

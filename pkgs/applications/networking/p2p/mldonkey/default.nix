@@ -1,6 +1,6 @@
 { stdenv, fetchurl, ocamlPackages, zlib, bzip2, ncurses, file, gd, libpng, libjpeg }:
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation ({
   name = "mldonkey-3.1.6";
 
   src = fetchurl {

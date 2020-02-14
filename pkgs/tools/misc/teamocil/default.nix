@@ -1,9 +1,11 @@
-{ lib, bundlerEnv, ruby }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
-bundlerEnv rec {
+bundlerEnv {
   inherit ruby;
   pname = "teamocil";
   gemdir = ./.;
+
+  passthru.updateScript = bundlerUpdateScript "teamocil";
 
   meta = with lib; {
     description     = "A simple tool used to automatically create windows and panes in tmux with YAML files";
@@ -12,6 +14,7 @@ bundlerEnv rec {
     platforms       = platforms.all;
     maintainers     = with maintainers; [
       zachcoyle 
+      nicknovitski
     ];
   };
 }

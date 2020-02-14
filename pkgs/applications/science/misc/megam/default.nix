@@ -1,8 +1,9 @@
 { fetchurl, stdenv, ocaml, makeWrapper, ncurses }:
 
 let version = "0.92"; in
-stdenv.mkDerivation rec {
-  name = "megam-${version}";
+stdenv.mkDerivation {
+  pname = "megam";
+  inherit version;
 
   src = fetchurl {
     url = "http://hal3.name/megam/megam_src.tgz";
@@ -15,7 +16,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  makeFlags = "CAML_INCLUDES=${ocaml}/lib/ocaml/caml";
+  makeFlags = [ "CAML_INCLUDES=${ocaml}/lib/ocaml/caml" ];
 
   # see https://bugzilla.redhat.com/show_bug.cgi?id=435559
   dontStrip = true;

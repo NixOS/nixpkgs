@@ -3,12 +3,14 @@
 , pkgconfig
 , meson
 , ninja
+, nixosTests
 , vala
 , gettext
 , libxml2
 , glib
 , json-glib
 , gcr
+, gnome-online-accounts
 , gobject-introspection
 , liboauth
 , gnome3
@@ -20,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdata";
-  version = "0.17.10";
+  version = "0.17.11";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "04mh2p5x2iidfx0d1cablxbi3hvna8cmlddc1mm4387n0grx3ly1";
+    sha256 = "11m99sh2k679rnsvqsi95s1l0r8lkvj61dmwg1pnxvsd5q91g6bb";
   };
 
   patches = [
@@ -45,7 +47,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gcr
     glib
-    gnome3.gnome-online-accounts
     liboauth
     libsoup
     libxml2
@@ -55,13 +56,14 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
+    gnome-online-accounts
     json-glib
   ];
 
   mesonFlags = [
     "-Dgtk_doc=false"
-    "-Dinstalled_test_bindir=${placeholder ''installedTests''}/libexec"
-    "-Dinstalled_test_datadir=${placeholder ''installedTests''}/share"
+    "-Dinstalled_test_bindir=${placeholder "installedTests"}/libexec"
+    "-Dinstalled_test_datadir=${placeholder "installedTests"}/share"
     "-Dinstalled_tests=true"
   ];
 
@@ -69,6 +71,10 @@ stdenv.mkDerivation rec {
     updateScript = gnome3.updateScript {
       packageName = pname;
       versionPolicy = "none"; # Stable version has not been updated for a long time.
+    };
+
+    tests = {
+      installedTests = nixosTests.installed-tests.libgdata;
     };
   };
 

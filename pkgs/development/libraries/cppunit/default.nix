@@ -1,12 +1,12 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "cppunit-${version}";
-  version = "1.14.0";
+  pname = "cppunit";
+  version = "1.15.0";
 
   src = fetchurl {
-    url = "https://dev-www.libreoffice.org/src/${name}.tar.gz";
-    sha256 = "1027cyfx5gsjkdkaf6c2wnjh68882grw8n672018cj3vs9lrhmix";
+    url = "https://dev-www.libreoffice.org/src/${pname}-${version}.tar.gz";
+    sha256 = "08j9hc11yl07ginsf282pshn6zpy96yhzf7426sfn10f8gdxyq8w";
   };
 
   meta = with stdenv.lib; {

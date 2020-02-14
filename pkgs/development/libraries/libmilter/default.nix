@@ -1,7 +1,7 @@
 { stdenv, fetchurl, m4 }:
 
 stdenv.mkDerivation rec {
-  name = "libmilter-${version}";
+  pname = "libmilter";
   version = "8.15.2";
 
   src = fetchurl {
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     sh Build -f ./a.m4
   '';
 
-  patches = [ ./install.patch ./sharedlib.patch ];
+  patches = [ ./install.patch ./sharedlib.patch ./glibc-2.30.patch ];
 
   nativeBuildInputs = [ m4 ];
 

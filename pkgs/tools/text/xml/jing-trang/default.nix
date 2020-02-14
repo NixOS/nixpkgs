@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, jre_headless, jdk, ant, saxon }:
 
-stdenv.mkDerivation rec {
-  name = "jing-trang-${version}";
+stdenv.mkDerivation {
+  pname = "jing-trang";
   version = "20151127";
 
   src = fetchFromGitHub {
@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ jdk ant saxon ];
+
+  CLASSPATH = "lib/saxon.jar";
 
   preBuild = "ant";
 

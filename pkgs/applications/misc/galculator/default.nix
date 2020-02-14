@@ -3,7 +3,7 @@
 , gtk, pkgconfig, flex }:
 
 stdenv.mkDerivation rec {
-  name = "galculator-${version}";
+  pname = "galculator";
   version = "2.1.4";
 
   src = fetchFromGitHub {

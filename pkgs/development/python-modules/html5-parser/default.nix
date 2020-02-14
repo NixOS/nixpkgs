@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "html5-parser";
-  version = "0.4.7";
+  version = "0.4.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gzs9fa38m80y509fg58ylwhxgy7w28ww968pi6wmfrih9ib6l93";
+    sha256 = "25fe8f6848cbc15187f6748c0695df32bcf1b37df6420b6a01b4ebe1ec1ed48f";
   };
 
   nativeBuildInputs = [ pkgconfig ];

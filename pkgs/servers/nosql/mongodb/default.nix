@@ -20,8 +20,9 @@ let version = "3.4.10";
       "yaml"
     ] ++ optionals stdenv.isLinux [ "tcmalloc" ];
 
-in stdenv.mkDerivation rec {
-  name = "mongodb-${version}";
+in stdenv.mkDerivation {
+  pname = "mongodb";
+  inherit version;
 
   src = fetchurl {
     url = "https://fastdl.mongodb.org/src/mongodb-src-r${version}.tar.gz";
@@ -65,7 +66,7 @@ in stdenv.mkDerivation rec {
       --replace 'engine("wiredTiger")' 'engine("mmapv1")'
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.cc.isClang "-Wno-unused-command-line-argument";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
   sconsFlags = [
     "--release"
@@ -81,6 +82,8 @@ in stdenv.mkDerivation rec {
   preBuild = ''
     sconsFlags+=" CC=$CC"
     sconsFlags+=" CXX=$CXX"
+  '' + optionalString stdenv.isAarch64 ''
+    sconsFlags+=" CCFLAGS='-march=armv8-a+crc'"
   '';
 
   preInstall = ''

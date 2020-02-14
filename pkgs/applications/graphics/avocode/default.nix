@@ -1,20 +1,21 @@
 { stdenv, makeDesktopItem, fetchurl, unzip
-, gdk_pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook, hicolor-icon-theme, libuuid
+, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsaLib, cups, expat, udev, gnome3
+, xorg, mozjpeg, makeWrapper, wrapGAppsHook, libuuid, at-spi2-core
 }:
 
 stdenv.mkDerivation rec {
-  name = "avocode-${version}";
-  version = "3.8.1";
+  pname = "avocode";
+  version = "4.2.2";
 
   src = fetchurl {
     url = "https://media.avocode.com/download/avocode-app/${version}/avocode-${version}-linux.zip";
-    sha256 = "1akrrnv0ajzvbhflbpmh4ckcqfqrgdjqfp6d4jqvspqi56zmsr83";
+    sha256 = "0f4cmai2d1x7wbqllxp9na6gxgqfxqav8n4g9azyvm6ymd8zjnx8";
   };
 
   libPath = stdenv.lib.makeLibraryPath (with xorg; [
     stdenv.cc.cc.lib
-    gdk_pixbuf
+    at-spi2-core.out
+    gdk-pixbuf
     glib
     gtk3
     atk
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [makeWrapper wrapGAppsHook];
-  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
+  buildInputs = [ unzip gtk3 gnome3.adwaita-icon-theme ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder

@@ -29,11 +29,11 @@ let
     };
     armv6l-linux = armv7l-linux;
   };
-  cfg = options."${stdenv.hostPlatform.system}" or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
+  cfg = options.${stdenv.hostPlatform.system} or (throw "missing source url for platform ${stdenv.hostPlatform.system}");
 in
 
 stdenv.mkDerivation rec {
-  name     = "ccl-${version}";
+  pname = "ccl";
   version  = "1.11.5";
 
   src = fetchurl {

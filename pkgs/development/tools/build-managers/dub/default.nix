@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, curl, dmd, libevent, rsync }:
 
 stdenv.mkDerivation rec {
-  name = "dub-${version}";
+  pname = "dub";
   version = "1.14.0";
 
   enableParallelBuilding = true;

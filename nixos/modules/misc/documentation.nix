@@ -1,4 +1,4 @@
-{ config, lib, pkgs, baseModules, extraModules, modules, ... }:
+{ config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
 
@@ -22,7 +22,10 @@ let
         scrubbedEval = evalModules {
           modules = [ { nixpkgs.localSystem = config.nixpkgs.localSystem; } ] ++ manualModules;
           args = (config._module.args) // { modules = [ ]; };
-          specialArgs = { pkgs = scrubDerivations "pkgs" pkgs; };
+          specialArgs = {
+            pkgs = scrubDerivations "pkgs" pkgs;
+            inherit modulesPath;
+          };
         };
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
@@ -67,6 +70,11 @@ let
 in
 
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
+    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
+  ];
 
   options = {
 

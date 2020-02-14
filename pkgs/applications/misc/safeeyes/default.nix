@@ -1,10 +1,9 @@
-{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng, wrapGAppsHook, gdk_pixbuf, shared-mime-info, librsvg
+{ lib, python3Packages, gobject-introspection, libappindicator-gtk3, libnotify, gtk3, gnome3, xprintidle-ng, wrapGAppsHook, gdk-pixbuf, shared-mime-info, librsvg
 }:
 
 let inherit (python3Packages) python buildPythonApplication fetchPypi;
 
 in buildPythonApplication rec {
-  name = "${pname}-${version}";
   pname = "safeeyes";
   version = "2.0.9";
   namePrefix = "";
@@ -50,7 +49,7 @@ in buildPythonApplication rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
 

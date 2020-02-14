@@ -1,20 +1,20 @@
 { stdenv, fetchFromGitHub, python3Packages }:
 
 python3Packages.buildPythonApplication rec {
-  version = "0.21.0";
+  version = "0.25.2";
   name    = "toot-${version}";
 
   src = fetchFromGitHub {
     owner  = "ihabunek";
     repo   = "toot";
-    rev    = "${version}";
-    sha256 = "03s81i9rz7dn33r13p7j2c7yw874hkm64x7myddiqw9lc21fyzql";
+    rev    = version;
+    sha256 = "0g18x8pbwhk2d3aphah6dqqbhz62k48pwx63flsnqd4brccd0jkh";
   };
 
   checkInputs = with python3Packages; [ pytest ];
 
   propagatedBuildInputs = with python3Packages;
-    [ requests beautifulsoup4 future wcwidth ];
+    [ requests beautifulsoup4 future wcwidth urwid ];
 
   checkPhase = ''
     py.test

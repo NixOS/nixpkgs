@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libxkbcommon";
-  version = "0.8.4";
+  version = "0.10.0";
 
   src = fetchurl {
     url = "https://xkbcommon.org/download/${pname}-${version}.tar.xz";
-    sha256 = "12vc91ydhphd5sddz15560r41l7k0i7mq6nma8kkbzdp6bwwzpb0";
+    sha256 = "1wmnl0hngn6vrqrya4r8hvimlkr4jag39yjprls4gyrqvh667hsp";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -19,12 +19,6 @@ stdenv.mkDerivation rec {
     "-Dxkb-config-root=${xkeyboard_config}/etc/X11/xkb"
     "-Dx-locale-root=${libX11.out}/share/X11/locale"
   ];
-
-  # Remove example program which fail on Darwin
-  postPatch = if stdenv.isDarwin then ''
-    substituteInPlace meson.build \
-      --replace "executable('rmlvo-to-keymap', 'test/rmlvo-to-keymap.c', dependencies: test_dep)" ""
-  '' else null;
 
   doCheck = false; # fails, needs unicode locale
 

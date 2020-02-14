@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ocaml, camlidl, fuse, findlib }:
 
 stdenv.mkDerivation rec {
-  name = "ocamlfuse-${version}";
+  pname = "ocamlfuse";
   version = "2.7.1_cvs5";
 
   src = fetchFromGitHub {

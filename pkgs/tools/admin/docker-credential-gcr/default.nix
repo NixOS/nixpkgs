@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "docker-credential-gcr-${version}";
+  pname = "docker-credential-gcr";
   version = "1.4.3";
 
   goPackagePath = "github.com/GoogleCloudPlatform/docker-credential-gcr";

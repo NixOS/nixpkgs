@@ -22,6 +22,7 @@ in
 mkDerivation {
   name = "ark";
   meta = {
+    description = "Graphical file compression/decompression utility";
     license = with lib.licenses;
       [ gpl2 lgpl3 ] ++ lib.optional unfreeEnableUnrar unfree;
     maintainers = [ lib.maintainers.ttuegel ];

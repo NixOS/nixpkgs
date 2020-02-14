@@ -12,8 +12,8 @@
 , stdenv
 }:
 
-stdenv.mkDerivation rec {
-  name = "spectrwm-${version}";
+stdenv.mkDerivation {
+  pname = "spectrwm";
   version = "2.7.2";
 
   src = fetchurl {
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     subdir = if stdenv.isDarwin then "osx" else "linux";
   in "spectrwm-SPECTRWM_2_7_2/${subdir}";
 
-  makeFlags="PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
   installPhase = "PREFIX=$out make install";
 
   meta = with stdenv.lib; {

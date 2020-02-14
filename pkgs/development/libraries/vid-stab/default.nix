@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "vid-stab-${version}";
+  pname = "vid-stab";
   version = "0.98b";
   
   src = fetchurl {

@@ -1,5 +1,5 @@
 {
-  "mail" = {
+  mail = {
     version = "2.6.3";
     source = {
       type = "gem";
@@ -9,14 +9,14 @@
       "mime-types"
     ];
   };
-  "mime-types" = {
+  mime-types = {
     version = "2.6.1";
     source = {
       type = "gem";
       sha256 = "1vnrvf245ijfyxzjbj9dr6i1hkjbyrh4yj88865wv9bs75axc5jv";
     };
   };
-  "taskjuggler" = {
+  taskjuggler = {
     version = "3.5.0";
     source = {
       type = "gem";
@@ -27,7 +27,7 @@
       "term-ansicolor"
     ];
   };
-  "term-ansicolor" = {
+  term-ansicolor = {
     version = "1.3.2";
     source = {
       type = "gem";
@@ -37,7 +37,7 @@
       "tins"
     ];
   };
-  "tins" = {
+  tins = {
     version = "1.6.0";
     source = {
       type = "gem";

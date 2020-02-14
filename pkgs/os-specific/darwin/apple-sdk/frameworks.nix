@@ -65,11 +65,14 @@ with frameworks; with libs; {
   InstallerPlugins        = [];
   InstantMessage          = [];
   JavaFrameEmbedding      = [];
+  JavaNativeFoundation    = [];
+  JavaRuntimeSupport      = [];
   JavaScriptCore          = [];
   Kerberos                = [];
   Kernel                  = [ IOKit ];
   LDAP                    = [];
   LatentSemanticMapping   = [ Carbon ];
+  LocalAuthentication     = [];
   MapKit                  = [];
   MediaAccessibility      = [ CoreGraphics CoreText QuartzCore ];
   MediaToolbox            = [ AudioToolbox AudioUnit CoreMedia ];

@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2012-05-31";
-  name = "woof-${version}";
+  pname = "woof";
 
   src = fetchurl {
     url = "http://www.home.unix-ag.org/simon/woof-${version}.py";

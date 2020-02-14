@@ -1,19 +1,19 @@
-{stdenv, fetchFromGitHub, autoreconfHook}:
+{stdenv, fetchFromGitHub, autoreconfHook, pandoc, pkgconfig}:
 
 stdenv.mkDerivation rec {
   pname = "jo";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner  = "jpmens";
     repo = "jo";
     rev = version;
-    sha256 ="03b22zb5034ccqyp4ynfzknxagb3jz2dppl0kqz2nv4a08aglpmy";
+    sha256 ="11miqg0i83drwkn66b4333vhfdw62al11dyfgp30alg6pcab3icl";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pandoc pkgconfig ];
 
   meta = with stdenv.lib; {
     description = "A small utility to create JSON objects";

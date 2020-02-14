@@ -2,7 +2,7 @@
 , gnutls, libgcrypt, zlib, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "nzbget-${version}";
+  pname = "nzbget";
   version = "21.0";
 
   src = fetchurl {

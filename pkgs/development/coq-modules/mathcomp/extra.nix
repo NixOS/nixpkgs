@@ -74,7 +74,7 @@ versions = {
       core-deps = with coqPackages; [ mathcomp-field_1_9 ];
       extra-deps = with coqPackages; [ mathcomp_1_9-bigenough ];
     };
-  }; 
+  };
   "1.8.0" = {
     finmap.version = "1.2.1";
     bigenough.version = "1.0.0";
@@ -139,7 +139,7 @@ packageGen = {
                                else compatibleCoqVersions;
     mc-core-deps = if builtins.isNull core-deps then [ssreflect] else core-deps;
   in
-  { "${package}" = let from = src; in
+  { ${package} = let from = src; in
 
   stdenv.mkDerivation rec {
     inherit version;
@@ -149,12 +149,12 @@ packageGen = {
       owner = owner;
       repo = package;
       rev = version;
-      sha256 = version-sha256."${version}";
+      sha256 = version-sha256.${version};
     } else from;
 
     propagatedBuildInputs = [ coq ] ++ mc-core-deps ++ extra-deps;
 
-    installFlags = "-f Makefile.coq COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+    installFlags = [ "-f" "Makefile.coq" "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
     meta = {
       inherit description;
@@ -173,7 +173,7 @@ packageGen = {
   };
   };
 
-current-versions = versions."${current-ssreflect.version}" or {};
+current-versions = versions.${current-ssreflect.version} or {};
 
 select = x: mapAttrs (n: pkg: {package = n;} // pkg) (recursiveUpdate param x);
 
@@ -181,14 +181,14 @@ for-version = v: suffix: (mapAttrs' (n: pkg:
         {name = "mathcomp_${suffix}-${n}";
          value = (packageGen ({
              ssreflect = coqPackages."mathcomp-ssreflect_${suffix}";
-           } // pkg))."${n}";})
-        (select versions."${v}"));
+           } // pkg)).${n};})
+        (select versions.${v}));
 
 all = (for-version "1.7.0" "1_7") //
       (for-version "1.8.0" "1_8") //
       (for-version "1.9.0" "1_9") //
      (recurseIntoAttrs (mapDerivationAttrset dontDistribute (
-        mapAttrs' (n: pkg: {name = "mathcomp-${n}"; value = (packageGen pkg)."${n}";})
+        mapAttrs' (n: pkg: {name = "mathcomp-${n}"; value = (packageGen pkg).${n};})
               (select current-versions))));
 in
 {

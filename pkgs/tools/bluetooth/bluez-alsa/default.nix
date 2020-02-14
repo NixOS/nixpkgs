@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
-, alsaLib, bluez, glib, sbc
+, alsaLib, bluez, glib, sbc, dbus
 
 # optional, but useful utils
 , readline, libbsd, ncurses
@@ -12,32 +12,31 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "bluez-alsa-${version}";
-  version = "1.4.0";
+  pname = "bluez-alsa";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "Arkq";
     repo = "bluez-alsa";
     rev = "v${version}";
-    sha256 = "12kc2896rbir8viywd6bjwcklkwf46j4svh9viryn6kmk084nb49";
+    sha256 = "08mppgnjf1j2733bk9yf0cny6rfxxwiys0s62lz2zd2lpdl6d9lz";
   };
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   buildInputs = [
-    alsaLib bluez glib sbc
+    alsaLib bluez glib sbc dbus
     readline libbsd ncurses
   ]
   ++ optional aacSupport fdk_aac;
 
   configureFlags = [
     "--with-alsaplugindir=\$out/lib/alsa-lib"
+    "--with-dbusconfdir=\$out/etc/dbus-1"
     "--enable-rfcomm"
     "--enable-hcitop"
   ]
   ++ optional aacSupport "--enable-aac";
-
-  doCheck = false; # fails 1 of 3 tests, needs access to ALSA
 
   meta = {
     description = "Bluez 5 Bluetooth Audio ALSA Backend";
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
     homepage = src.meta.homepage;
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = [ maintainers.oxij ];
+    maintainers = [ maintainers.oxij maintainers.lheckemann ];
   };
 
 }

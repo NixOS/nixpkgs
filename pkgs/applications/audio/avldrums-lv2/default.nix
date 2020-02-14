@@ -1,19 +1,18 @@
 { stdenv, fetchFromGitHub, pkgconfig, pango, cairo, libGLU, lv2 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "avldrums.lv2";
-  version = "0.3.5";
+  version = "0.4.0";
 
   src = fetchFromGitHub {
     owner = "x42";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00n2varc7iwp0xbfi45hpq4vlpxxb2kbrdzvrc20qp2265994bqf";
+    sha256 = "1z70rcq6z3gkb4fm8dm9hs31bslwr97zdh2n012fzki9b9rdj5qv";
     fetchSubmodules = true;
   };
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

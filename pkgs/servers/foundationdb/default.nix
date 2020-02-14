@@ -1,4 +1,4 @@
-{ stdenv, stdenv49, gcc9Stdenv, llvmPackages_8
+{ gcc6Stdenv, stdenv, gccStdenv, llvmPackages
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
@@ -8,8 +8,8 @@
 let
   vsmakeBuild = import ./vsmake.nix args;
   cmakeBuild = import ./cmake.nix (args // {
-    gccStdenv    = gcc9Stdenv;
-    llvmPackages = llvmPackages_8;
+    gccStdenv    = gccStdenv;
+    llvmPackages = llvmPackages;
   });
 
   python3-six-patch = fetchpatch {
@@ -24,12 +24,17 @@ let
     sha256 = "11y434w68cpk7shs2r22hyrpcrqi8vx02cw7v5x79qxvnmdxv2an";
   };
 
+  glibc230-fix = fetchpatch {
+    url = "https://github.com/Ma27/foundationdb/commit/e133cb974b9a9e4e1dc2d4ac15881d31225c0197.patch";
+    sha256 = "1v9q2fyc73msigcykjnbmfig45zcrkrzcg87b0r6mxpnby8iryl1";
+  };
+
 in with builtins; {
 
   # Older versions use the bespoke 'vsmake' build system
   # ------------------------------------------------------
 
-  foundationdb51 = vsmakeBuild rec {
+  foundationdb51 = vsmakeBuild {
     version = "5.1.7";
     branch  = "release-5.1";
     sha256  = "1rc472ih24f9s5g3xmnlp3v62w206ny0pvvw02bzpix2sdrpbp06";
@@ -37,12 +42,13 @@ in with builtins; {
     patches = [
       ./patches/ldflags-5.1.patch
       ./patches/fix-scm-version.patch
+      ./patches/gcc-fixes.patch
       python3-six-patch
       python3-print-patch
     ];
   };
 
-  foundationdb52 = vsmakeBuild rec {
+  foundationdb52 = vsmakeBuild {
     version = "5.2.8";
     branch  = "release-5.2";
     sha256  = "1kbmmhk2m9486r4kyjlc7bb3wd50204i0p6dxcmvl6pbp1bs0wlb";
@@ -50,12 +56,13 @@ in with builtins; {
     patches = [
       ./patches/ldflags-5.2.patch
       ./patches/fix-scm-version.patch
+      ./patches/gcc-fixes.patch
       python3-six-patch
       python3-print-patch
     ];
   };
 
-  foundationdb60 = vsmakeBuild rec {
+  foundationdb60 = vsmakeBuild {
     version = "6.0.18";
     branch  = "release-6.0";
     sha256  = "0q1mscailad0z7zf1nypv4g7gx3damfp45nf8nzyq47nsw5gz69p";
@@ -68,14 +75,15 @@ in with builtins; {
   # 6.1 and later versions should always use CMake
   # ------------------------------------------------------
 
-  foundationdb61 = cmakeBuild rec {
-    version = "6.1.10";
+  foundationdb61 = cmakeBuild {
+    version = "6.1.12";
     branch  = "release-6.1";
-    sha256  = "1v278zlrki3da2i2258j2b4rk4fq6d9bj623z01bjrvmaqxc2gry";
+    sha256  = "1yh5hx6rim41m0dwhnb2pcwz67wlnk0zwvyw845d36b29gwy58ab";
 
     patches = [
       ./patches/clang-libcxx.patch
       ./patches/suppress-clang-warnings.patch
+      glibc230-fix
     ];
   };
 

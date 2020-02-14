@@ -4,7 +4,7 @@
 assert tlsSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "uhub-${version}";
+  pname = "uhub";
   version = "0.5.0";
 
   src = fetchFromGitHub {
@@ -44,10 +44,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  cmakeFlags = ''
-    -DSYSTEMD_SUPPORT=ON
-    ${if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF"}
-  '';
+  cmakeFlags = [
+    "-DSYSTEMD_SUPPORT=ON"
+    (if tlsSupport then "-DSSL_SUPPORT=ON" else "-DSSL_SUPPORT=OFF")
+  ];
 
   meta = with stdenv.lib; {
     description = "High performance peer-to-peer hub for the ADC network";

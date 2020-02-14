@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.0.49";
-  name = "munin-${version}";
+  pname = "munin";
 
   src = fetchFromGitHub {
     owner = "munin-monitoring";
@@ -92,16 +92,16 @@ stdenv.mkDerivation rec {
   # DESTDIR shouldn't be needed (and shouldn't have worked), but munin
   # developers have forgotten to use PREFIX everywhere, so we use DESTDIR to
   # ensure that everything is installed in $out.
-  makeFlags = ''
-    PREFIX=$(out)
-    DESTDIR=$(out)
-    PERLLIB=$(out)/${perlPackages.perl.libPrefix}
-    PERL=${perlPackages.perl}/bin/perl
-    PYTHON=${python}/bin/python
-    RUBY=${ruby}/bin/ruby
-    JAVARUN=${jre}/bin/java
-    PLUGINUSER=munin
-  '';
+  makeFlags = [
+    "PREFIX=$(out)"
+    "DESTDIR=$(out)"
+    "PERLLIB=$(out)/${perlPackages.perl.libPrefix}"
+    "PERL=${perlPackages.perl.outPath}/bin/perl"
+    "PYTHON=${python.outPath}/bin/python"
+    "RUBY=${ruby.outPath}/bin/ruby"
+    "JAVARUN=${jre.outPath}/bin/java"
+    "PLUGINUSER=munin"
+  ];
 
   postFixup = ''
     echo "Removing references to /usr/{bin,sbin}/ from munin plugins..."

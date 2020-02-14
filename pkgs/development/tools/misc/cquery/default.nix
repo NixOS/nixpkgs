@@ -14,8 +14,8 @@ let
   stdenv = llvmPackages.stdenv;
 
 in
-stdenv.mkDerivation rec {
-  name    = "cquery-${version}";
+stdenv.mkDerivation {
+  pname = "cquery";
   version = "2018-10-14";
 
   inherit src;
@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DSYSTEM_CLANG=ON"
     "-DCLANG_CXX=ON"
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12"
   ];
 
   shell = runtimeShell;

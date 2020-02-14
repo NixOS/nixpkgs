@@ -1,7 +1,7 @@
 { stdenv, i3lock, imagemagick, scrot, playerctl, fetchFromGitLab }:
 
 stdenv.mkDerivation rec {
-  name = "i3lock-pixeled-${version}";
+  pname = "i3lock-pixeled";
   version = "1.2.1";
 
   src = fetchFromGitLab {

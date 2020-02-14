@@ -3,7 +3,7 @@
 }:
 
 buildGoPackage rec {
-  name = "livepeer-${version}";
+  pname = "livepeer";
   version = "0.2.4";
 
   goPackagePath = "github.com/livepeer/go-livepeer";
@@ -17,11 +17,6 @@ buildGoPackage rec {
   };
 
   buildInputs = [ pkgconfig ffmpeg ];
-
-  # XXX This removes the -O2 flag, to avoid errors like:
-  #   cgo-dwarf-inference:2:8: error: enumerator value for '__cgo_enum__0' is not an integer constant
-  # This is a workaround for nixpkgs+golang BUG https://github.com/NixOS/nixpkgs/issues/25959
-  hardeningDisable = [ "fortify" ];
 
   enableParallelBuilding = true;
 

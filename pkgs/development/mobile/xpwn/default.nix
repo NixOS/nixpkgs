@@ -1,12 +1,14 @@
-{ stdenv, fetchgit, cmake, zlib, libpng, bzip2, libusb, openssl }:
+{ stdenv, fetchFromGitHub, cmake, zlib, libpng, bzip2, libusb, openssl }:
 
-stdenv.mkDerivation {
-  name = "xpwn-0.5.8git";
+stdenv.mkDerivation rec {
+  pname = "xpwn";
+  version = "0.5.8git";
 
-  src = fetchgit {
-    url    = "git://github.com/dborca/xpwn.git";
-    rev    = "4534da88d4e8a32cdc9da9b5326e2cc482c95ef0";
-    sha256 = "1h1ak40fg5bym0hifpii9q2hqdp2m387cwfzb4bl6qq36xpkd6wv";
+  src = fetchFromGitHub {
+    owner = "planetbeing";
+    repo = pname;
+    rev = "ac362d4ffe4d0489a26144a1483ebf3b431da899";
+    sha256 = "1qw9vbk463fpnvvvfgzxmn9add2p30k832s09mlycr7z1hrh3wyf";
   };
 
   preConfigure = ''
@@ -18,7 +20,9 @@ stdenv.mkDerivation {
     sed -i -e '/install/d' CMakeLists.txt
   '';
 
-  buildInputs = [ cmake zlib libpng bzip2 libusb openssl ];
+  strictDeps = true;
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ zlib libpng bzip2 libusb openssl ];
 
   meta = with stdenv.lib; {
     homepage    = "http://planetbeing.lighthouseapp.com/projects/15246-xpwn";

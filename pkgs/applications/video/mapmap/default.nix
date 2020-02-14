@@ -13,7 +13,7 @@ with stdenv;
 mkDerivation rec {
 
   version = "0.6.1";
-  name = "mapmap-${version}";
+  pname = "mapmap";
 
   src = fetchFromGitHub {
     owner = "mapmapteam";

@@ -1,6 +1,6 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "memtest86+";
   version = "5.01-coreboot-002";
 
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
 
-  buildFlags = "memtest.bin";
+  buildFlags = [ "memtest.bin" ];
 
   doCheck = false; # fails
 

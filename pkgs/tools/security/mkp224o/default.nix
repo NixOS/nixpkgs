@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "mkp224o-${version}";
+  pname = "mkp224o";
   version = "1.3.0";
 
   src = fetchFromGitHub {

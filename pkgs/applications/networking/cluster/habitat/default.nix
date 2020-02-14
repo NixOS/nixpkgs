@@ -4,7 +4,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "habitat-${version}";
+  pname = "habitat";
   version = "0.30.2";
 
   src = fetchFromGitHub {
@@ -13,6 +13,9 @@ buildRustPackage rec {
     rev = version;
     sha256 = "0pqrm85pd9hqn5fwqjbyyrrfh4k7q9mi9qy9hm8yigk5l8mw44y1";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "1ahfm5agvabqqqgjsyjb95xxbc7mng1mdyclcakwp1m1qdkxx9p0";
 

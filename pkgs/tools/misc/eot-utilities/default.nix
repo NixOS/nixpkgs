@@ -3,7 +3,6 @@
 stdenv.mkDerivation rec {
   pname = "eot_utilities";
   version = "1.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://www.w3.org/Tools/eot-utils/eot-utilities-${version}.tar.gz";

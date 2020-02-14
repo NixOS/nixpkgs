@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   mavenCommonArtifactFilters_1_2 = map (obj: fetchMaven {
     version = "1.2";
     artifactId = "maven-common-artifact-filters";

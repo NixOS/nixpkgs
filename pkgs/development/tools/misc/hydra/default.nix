@@ -1,9 +1,9 @@
-{ stdenv, nix, perlPackages, buildEnv, releaseTools, fetchFromGitHub
+{ stdenv, nix, perlPackages, buildEnv, fetchFromGitHub
 , makeWrapper, autoconf, automake, libtool, unzip, pkgconfig, sqlite, libpqxx
 , gitAndTools, mercurial, darcs, subversion, bazaar, openssl, bzip2, libxslt
 , guile, perl, postgresql, nukeReferences, git, boehmgc, nlohmann_json
 , docbook_xsl, openssh, gnused, coreutils, findutils, gzip, lzma, gnutar
-, rpm, dpkg, cdrkit, pixz, lib, fetchpatch, boost, autoreconfHook
+, rpm, dpkg, cdrkit, pixz, lib, boost, autoreconfHook
 }:
 
 with stdenv;
@@ -15,7 +15,7 @@ else
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages;
+    paths = with perlPackages; lib.closePropagation
       [ ModulePluggable
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -27,7 +27,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystRuntime
+        CatalystPluginUnicodeEncoding
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -51,6 +51,7 @@ let
         LWP
         LWPProtocolHttps
         NetAmazonS3
+        NetPrometheus
         NetStatsd
         PadWalker
         Readonly
@@ -58,6 +59,8 @@ let
         SetScalar
         Starman
         SysHostnameLong
+        TermSizeAny
+        TestMore
         TextDiff
         TextTable
         XMLSimple
@@ -67,17 +70,17 @@ let
         boehmgc
       ];
   };
-in releaseTools.nixBuild rec {
+in stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2019-05-06";
+  version = "2020-02-06";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = pname;
-    rev = "ff64583d07f046e378a6be596ec0ce7a9e2b7472";
-    sha256 = "0w88q0saz7si22z3ryim6vdrv9qkwn6l25xfmiapvh5qrnrrdcb9";
+    rev = "2b4f14963b16b21ebfcd6b6bfa7832842e9b2afc";
+    sha256 = "16q0cffcsfx5pqd91n9k19850c1nbh4vvbd9h8yi64ihn7v8bick";
   };
 
   buildInputs =
@@ -97,16 +100,9 @@ in releaseTools.nixBuild rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/NixOS/hydra/pull/648/commits/4171ab4c4fd576c516dc03ba64d1c7945f769af0.patch";
-      sha256 = "1fxa2459kdws6qc419dv4084c1ssmys7kqg4ic7n643kybamsgrx";
-    })
-  ];
-
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  NIX_CFLAGS_COMPILE = [ "-pthread" ];
+  NIX_CFLAGS_COMPILE = "-pthread";
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH

@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , pythonOlder
+, isPy27
 , fetchFromGitHub
 , nose
 , noise
@@ -48,6 +49,7 @@ buildPythonPackage rec {
 
   # with python<3.5, unittest fails to discover tests because of their filenames
   # so nose is used instead.
+  doCheck = !isPy27; # google namespace clash
   checkInputs = stdenv.lib.optional (pythonOlder "3.5") [ nose ];
   postCheck = stdenv.lib.optionalString (pythonOlder "3.5") ''
     nosetests tests

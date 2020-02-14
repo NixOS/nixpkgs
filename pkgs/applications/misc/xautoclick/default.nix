@@ -3,9 +3,9 @@
 , qtSupport ? true, qt4
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.31";
-  name = "xautoclick-${version}";
+  pname = "xautoclick";
   src = fetchurl {
     url = "mirror://sourceforge/project/xautoclick/xautoclick/xautoclick-0.31/xautoclick-0.31.tar.gz";
     sha256 = "0h522f12a7v2b89411xm51iwixmjp2mp90rnizjgiakx9ajnmqnm";

@@ -1,5 +1,5 @@
 { stdenv, fetchurl, libGL, xorg, cairo
-, libpng, gtk2, glib, gdk_pixbuf, fontconfig, freetype, curl
+, libpng, gtk2, glib, gdk-pixbuf, fontconfig, freetype, curl
 , dbus-glib, alsaLib, libpulseaudio, systemd, pango
 }:
 
@@ -24,7 +24,7 @@ let
     ];
 
   rpathProgram = makeLibraryPath
-    [ gdk_pixbuf
+    [ gdk-pixbuf
       glib
       gtk2
       xorg.libX11
@@ -46,23 +46,23 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "google-talk-plugin-${version}";
+  pname = "google-talk-plugin";
 
-  # You can get the upstream version and SHA-1 hash from the following URLs:
-  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA1'
-  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages | grep -E 'Version|SHA1'
+  # You can get the upstream version and SHA-256 hash from the following URLs:
+  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-amd64/Packages | grep -E 'Version|SHA256'
+  # curl -s http://dl.google.com/linux/talkplugin/deb/dists/stable/main/binary-i386/Packages | grep -E 'Version|SHA256'
   version = "5.41.3.0";
 
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
-        sha1 = "0bbc3d6997ba22ce712d93e5bc336c894b54fc81";
+        sha256 = "af7e23d2b6215afc547f96615b99f04e0561557cc58c0c9302364b5a3840d97d";
       }
     else if stdenv.hostPlatform.system == "i686-linux" then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
-        sha1 = "6eae0544858f85c68b0cc46d7786e990bd94f139";
+        sha256 = "4c46d2b7f2018640288cd7ac49adc47e309d0beadfd979eb03030e672016b4a7";
       }
     else throw "Google Talk does not support your platform.";
 

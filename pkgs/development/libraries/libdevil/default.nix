@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "libdevil-${version}";
+  pname = "libdevil";
   version = "1.7.8";
 
   src = fetchurl {

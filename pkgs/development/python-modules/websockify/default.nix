@@ -5,12 +5,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.0";
+  version = "0.9.0";
   pname = "websockify";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "547d3d98c5081f2dc2872a2e4a3aef33e0ee5141d5f6209204aab2f4a41548d2";
+    sha256 = "1nnalv0jkkj34hw6yb12lp6r6fj1ps9vkkyshjvx65y5xdwmnny3";
   };
 
   propagatedBuildInputs = [ numpy ];

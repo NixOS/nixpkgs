@@ -13,14 +13,12 @@
 
 buildPythonPackage rec {
   pname = "graph_nets";
-  version = "1.0.4";
+  version = "1.0.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f27f0358a477d4ec3ab300bf09944b4dfdd5c10b0a5f7ac06bcb32d1327ebe1";
+    sha256 = "73e98a5930c6c7b609257ada2cf4523db70810343e0593bf0fa710b77e991933";
   };
-
-  buildInputs = [];
 
   postPatch = ''
     # https://github.com/deepmind/graph_nets/issues/63

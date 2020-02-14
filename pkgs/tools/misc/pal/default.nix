@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sed -i -e 's,/etc/pal\.conf,'$out/etc/pal.conf, src/input.c
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ glib gettext readline ];

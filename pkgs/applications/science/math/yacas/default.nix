@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "yacas-${version}";
-  version = "1.6.1";
+  pname = "yacas";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "grzegorzmazur";
     repo = "yacas";
     rev = "v${version}";
-    sha256 = "0awvlvf607r4hwl1vkhs6jq2s6ig46c66pmr4vspj2cdnypx99cc";
+    sha256 = "0fwd98dwq6g0md3yhgyl30i377593b8rw6gsvffzvs11g3aqf1ga";
   };
 
   hardeningDisable = [ "format" ];

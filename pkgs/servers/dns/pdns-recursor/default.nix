@@ -7,12 +7,12 @@ assert enableProtoBuf -> protobuf != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pdns-recursor-${version}";
-  version = "4.1.14";
+  pname = "pdns-recursor";
+  version = "4.2.1";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/pdns-recursor-${version}.tar.bz2";
-    sha256 = "055zhxp58883722dr9y5bi91bk1ypc0whdyi96nklsga7gxbikkz";
+    sha256 = "07w9av3v9zjnb1fhknmza168yxsq4zr2jqcla7yg10ajrhsk534d";
   };
 
   nativeBuildInputs = [ pkgconfig ];

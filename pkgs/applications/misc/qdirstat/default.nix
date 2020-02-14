@@ -1,24 +1,25 @@
 { stdenv, fetchFromGitHub, qmake
 , coreutils, xdg_utils, bash
-, makeWrapper, perlPackages }:
+, makeWrapper, perlPackages, mkDerivation }:
 
 let
-  version = "1.5.90";
-in stdenv.mkDerivation rec {
-  name = "qdirstat-${version}";
+  version = "1.6";
+in mkDerivation rec {
+  pname = "qdirstat";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "shundhammer";
     repo = "qdirstat";
-    rev = "${version}";
-    sha256 = "161jzii5p0dflbpixibn3yhp13smjf6aw802rz1q4879s12gqdq6";
+    rev = version;
+    sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
   buildInputs = [ perlPackages.perl ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace scripts/scripts.pro \
       --replace /bin/true ${coreutils}/bin/true
 
@@ -36,9 +37,8 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/StdCleanup.cpp \
       --replace /bin/bash ${bash}/bin/bash
   '';
-  postPatch = ''
-    export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
-  '';
+
+  qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/qdirstat-cache-writer \

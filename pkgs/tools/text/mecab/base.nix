@@ -1,6 +1,6 @@
 { fetchurl }:
 
-rec {
+{
     version = "0.996";
 
     src = fetchurl {

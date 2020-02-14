@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "kail-${version}";
+  pname = "kail";
   version = "0.8.0";
 
   goPackagePath = "github.com/boz/kail";

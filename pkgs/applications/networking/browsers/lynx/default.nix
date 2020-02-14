@@ -7,7 +7,7 @@
 assert sslSupport -> openssl != null;
 
 stdenv.mkDerivation rec {
-  name = "lynx-${version}";
+  pname = "lynx";
   version = "2.8.9rel.1";
 
   src = fetchurl {

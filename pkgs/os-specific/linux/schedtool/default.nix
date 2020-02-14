@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "schedtool-${version}";
+  pname = "schedtool";
   version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "freequaos";
     repo = "schedtool";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1wdw6fnf9a01xfjhdah3mn8bp1bvahf2lfq74i6hk5b2cagkppyp";
   };
 

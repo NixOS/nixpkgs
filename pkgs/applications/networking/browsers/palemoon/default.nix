@@ -3,7 +3,7 @@
 , dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
 , gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
 , libnotify, libstartup_notification, makeWrapper
-, libGLU_combined, perl, python, libpulseaudio
+, libGLU, libGL, perl, python, libpulseaudio
 , unzip, xorg, wget, which, yasm, zip, zlib
 }:
 
@@ -13,14 +13,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "palemoon";
-  version = "28.6.0.1";
+  version = "28.8.2.1";
 
   src = fetchFromGitHub {
-    name   = "${pname}-${version}";
     owner  = "MoonchildProductions";
     repo   = "UXP";
     rev    = "PM${version}_Release";
-    sha256 = "1adgajy5vsghvjlv2nqyrbp6mnv3k6slqxxi8r949xlb5h6d210b";
+    sha256 = "1m7dfgy5vjw1ndjsh0aksvsp0ii2kj7gxn0sp3h0xgwi0yq7lwyb";
   };
 
   desktopItem = makeDesktopItem {
@@ -44,7 +43,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib bzip2 cairo dbus dbus-glib ffmpeg file fontconfig freetype
     gnome2.GConf gnum4 gtk2 hunspell libevent libjpeg libnotify
-    libstartup_notification makeWrapper libGLU_combined perl
+    libstartup_notification makeWrapper libGLU libGL perl
     pkgconfig python libpulseaudio unzip wget which yasm zip zlib
   ] ++ (with xorg; [
     libX11 libXext libXft libXi libXrender libXScrnSaver
@@ -56,6 +55,7 @@ in stdenv.mkDerivation rec {
   configurePhase = ''
     export MOZBUILD_STATE_PATH=$(pwd)/mozbuild
     export MOZCONFIG=$(pwd)/mozconfig
+    export MOZ_NOSPAM=1
     export builddir=$(pwd)/pmbuild
 
     echo > $MOZCONFIG "
@@ -90,8 +90,6 @@ in stdenv.mkDerivation rec {
     mk_add_options AUTOCONF=${autoconf213}/bin/autoconf
     "
   '';
-
-  hardeningDisable = [ "format" ];
 
   buildPhase = ''
     $src/mach build
@@ -129,7 +127,7 @@ in stdenv.mkDerivation rec {
     '';
     homepage    = "https://www.palemoon.org/";
     license     = licenses.mpl20;
-    maintainers = with maintainers; [ rnhmjoj AndersonTorres OPNA2608 ];
+    maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
     platforms   = [ "i686-linux" "x86_64-linux" ];
   };
 }

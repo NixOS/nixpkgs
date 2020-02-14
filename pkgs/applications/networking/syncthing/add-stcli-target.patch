@@ -1,17 +1,17 @@
-diff --git i/build.go w/build.go
-index 7d400d6f..1b5e1d25 100644
---- i/build.go
-+++ w/build.go
-@@ -175,6 +175,12 @@ var targets = map[string]target{
+diff --git a/build.go b/build.go
+index c8a5c1cf..d75a8491 100644
+--- a/build.go
++++ b/build.go
+@@ -202,6 +202,12 @@ var targets = map[string]target{
  			{src: "AUTHORS", dst: "deb/usr/share/doc/syncthing-relaypoolsrv/AUTHORS.txt", perm: 0644},
  		},
  	},
 +	"stcli": {
 +		name:        "stcli",
 +		description: "Syncthing CLI",
-+		buildPkg:    "github.com/syncthing/syncthing/cmd/stcli",
-+		binaryName:  "stcli", // .exe will be added automatically for Windows builds
++		buildPkgs:   []string{"github.com/syncthing/syncthing/cmd/stcli"},
++		binaryName:  "stcli",
 +	},
  }
  
- func init() {
+ // These are repos we need to clone to run "go generate"

@@ -1,6 +1,6 @@
-{ lib, buildDunePackage, fetchurl, ocaml-migrate-parsetree }:
+{ stdenv, lib, buildDunePackage, fetchurl, ocaml, ocaml-migrate-parsetree }:
 
-buildDunePackage rec {
+buildDunePackage (rec {
 	pname = "ppxfind";
 	version = "1.3";
 	src = fetchurl {
@@ -12,10 +12,17 @@ buildDunePackage rec {
 
 	buildInputs = [ ocaml-migrate-parsetree ];
 
+  # Don't run the native `strip' when cross-compiling.
+  dontStrip = stdenv.hostPlatform != stdenv.buildPlatform;
+
 	meta = {
 		homepage = "https://github.com/diml/ppxfind";
 		description = "ocamlfind ppx tool";
 		license = lib.licenses.bsd3;
 		maintainers = [ lib.maintainers.vbgl ];
 	};
-}
+} // (
+if lib.versions.majorMinor ocaml.version == "4.04" then {
+  dontStrip = true;
+} else {}
+))

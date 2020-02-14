@@ -42,6 +42,7 @@ Options:
       --url url       Any url understood by 'git clone'.
       --rev ref       Any sha1 or references (such as refs/heads/master)
       --hash h        Expected hash.
+      --branch-name   Branch name to check out into
       --deepClone     Clone the entire repository.
       --no-deepClone  Make a shallow clone of just the required ref.
       --leave-dotGit  Keep the .git directories.
@@ -265,7 +266,9 @@ make_deterministic_repo(){
     rm -f .git/config
 
     # Garbage collect unreferenced objects.
-    git gc --prune=all
+    # Note: --keep-largest-pack prevents non-deterministic ordering of packs
+    #   listed in .git/objects/info/packs by only using a single pack
+    git gc --prune=all --keep-largest-pack
     )
 }
 

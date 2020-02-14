@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, rustPlatform, libXinerama, libX11, pkgconfig }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   name = "wtftw-0.0pre20170921";
   src = fetchFromGitHub {
     owner = "kintaro";
@@ -8,6 +8,9 @@ rustPlatform.buildRustPackage rec {
     rev = "13712d4c051938520b90b6639d4ff813f6fe5f48";
     sha256 = "1r74nhcwiy2rmifzjhdal3jcqz4jz48nfvhdyw4gasa6nxp3msdl";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "18lb24k71sndklbwwhbv8jglj2d4y9mdk07l60wsvn5m2jbnpckk";
 

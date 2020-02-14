@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, six, pytest, mock }:
+{ lib, buildPythonPackage, fetchFromGitHub, pyyaml, jsonschema, six, pytest, mock, isPy3k }:
 
 buildPythonPackage rec {
   pname = "swagger-spec-validator";

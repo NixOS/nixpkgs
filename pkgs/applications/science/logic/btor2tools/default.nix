@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "btor2tools-${version}";
+stdenv.mkDerivation {
+  pname = "btor2tools";
   version = "pre55_8c150b39";
 
   src = fetchFromGitHub {
@@ -24,8 +24,8 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" ];
 
   meta = with stdenv.lib; {
-    description = "Fast SAT solver";
-    homepage    = http://fmv.jku.at/lingeling/;
+    description = "A generic parser and tool package for the BTOR2 format";
+    homepage    = "https://github.com/Boolector/btor2tools";
     license     = licenses.mit;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];

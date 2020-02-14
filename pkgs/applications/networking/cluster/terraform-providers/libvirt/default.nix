@@ -18,7 +18,7 @@
 # https://github.com/dmacvicar/terraform-provider-libvirt/tree/master/examples
 
 buildGoPackage rec {
-  name = "terraform-provider-libvirt-${version}";
+  pname = "terraform-provider-libvirt";
   version = "0.5.1";
 
   goPackagePath = "github.com/dmacvicar/terraform-provider-libvirt";

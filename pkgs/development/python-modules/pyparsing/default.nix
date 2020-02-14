@@ -1,19 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ buildPythonPackage
+, fetchFromGitHub
+, lib
+
+# pythonPackages
+, coverage
+}:
+
 buildPythonPackage rec {
-    pname = "pyparsing";
-    version = "2.3.1";
+  pname = "pyparsing";
+  version = "2.4.6";
 
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "66c9268862641abcac4a96ba74506e594c884e3f57690a696d21ad8210ed667a";
-    };
+  src = fetchFromGitHub {
+    owner = "pyparsing";
+    repo = pname;
+    rev = "pyparsing_${version}";
+    sha256 = "1fh7s3cfr274pd6hh6zygl99842rqws98an2nkrrqj2spb9ldxcm";
+  };
 
-    # Not everything necessary to run the tests is included in the distribution
-    doCheck = false;
+  # https://github.com/pyparsing/pyparsing/blob/847af590154743bae61a32c3dc1a6c2a19009f42/tox.ini#L6
+  checkInputs = [ coverage ];
+  checkPhase = ''
+    coverage run --branch simple_unit_tests.py
+    coverage run --branch unitTests.py
+  '';
 
-    meta = with stdenv.lib; {
-      homepage = http://pyparsing.wikispaces.com/;
-      description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
-      license = licenses.mit;
-    };
+  meta = with lib; {
+    homepage = "https://github.com/pyparsing/pyparsing";
+    description = "An alternative approach to creating and executing simple grammars, vs. the traditional lex/yacc approach, or the use of regular expressions";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      kamadorueda
+    ];
+  };
 }

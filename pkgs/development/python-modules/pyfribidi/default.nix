@@ -6,14 +6,14 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.11.0";
+  version = "0.12.0";
   pname = "pyfribidi";
   disabled = isPy3k || isPyPy;
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "6f7d83c09eae0cb98a40b85ba3dedc31af4dbff8fc4425f244c1e9f44392fded";
+    sha256 = "64726a4a56783acdc79c6b9b3a15f16e6071077c897a0b999f3b43f744bc621c";
   };
 
   meta = with stdenv.lib; {

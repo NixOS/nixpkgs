@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.15";
-  name = "mdp-${version}";
+  pname = "mdp";
 
   src = fetchFromGitHub {
     owner = "visit1985";

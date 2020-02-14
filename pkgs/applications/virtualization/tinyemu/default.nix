@@ -1,10 +1,10 @@
 { stdenv, fetchurl, openssl, curl, SDL }:
 
 stdenv.mkDerivation rec {
-  name = "tinyemu-${version}";
+  pname = "tinyemu";
   version = "2018-09-23";
   src = fetchurl {
-    url = "https://bellard.org/tinyemu/${name}.tar.gz";
+    url = "https://bellard.org/tinyemu/${pname}-${version}.tar.gz";
     sha256 = "0d6payyqf4lpvmmzvlpq1i8wpbg4sf3h6llsw0xnqdgq3m9dan4v";
   };
   buildInputs = [ openssl curl SDL ];

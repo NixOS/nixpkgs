@@ -14,8 +14,6 @@ with lib;
 
   nix.allowedUsers = mkDefault [ "@users" ];
 
-  environment.memoryAllocator.provider = mkDefault "graphene-hardened";
-
   security.hideProcessInformation = mkDefault true;
 
   security.lockKernelModules = mkDefault true;
@@ -25,6 +23,8 @@ with lib;
   security.protectKernelImage = mkDefault true;
 
   security.allowSimultaneousMultithreading = mkDefault false;
+
+  security.forcePageTableIsolation = mkDefault true;
 
   security.virtualisation.flushL1DataCache = mkDefault "always";
 
@@ -43,8 +43,8 @@ with lib;
     # Disable legacy virtual syscalls
     "vsyscall=none"
 
-    # Enable PTI even if CPU claims to be safe from meltdown
-    "pti=on"
+    # Enable page allocator randomization
+    "page_alloc.shuffle=1"
   ];
 
   boot.blacklistedKernelModules = [
@@ -52,6 +52,27 @@ with lib;
     "ax25"
     "netrom"
     "rose"
+
+    # Old or rare or insufficiently audited filesystems
+    "adfs"
+    "affs"
+    "bfs"
+    "befs"
+    "cramfs"
+    "efs"
+    "erofs"
+    "exofs"
+    "freevxfs"
+    "f2fs"
+    "hfs"
+    "hpfs"
+    "jfs"
+    "minix"
+    "nilfs2"
+    "qnx4"
+    "qnx6"
+    "sysv"
+    "ufs"
   ];
 
   # Restrict ptrace() usage to processes with a pre-defined relationship
@@ -93,22 +114,16 @@ with lib;
   # Disable ftrace debugging
   boot.kernel.sysctl."kernel.ftrace_enabled" = mkDefault false;
 
-  # Enable reverse path filtering (that is, do not attempt to route packets
-  # that "obviously" do not belong to the iface's network; dropped packets are
-  # logged as martians).
+  # Enable strict reverse path filtering (that is, do not attempt to route
+  # packets that "obviously" do not belong to the iface's network; dropped
+  # packets are logged as martians).
   boot.kernel.sysctl."net.ipv4.conf.all.log_martians" = mkDefault true;
-  boot.kernel.sysctl."net.ipv4.conf.all.rp_filter" = mkDefault true;
+  boot.kernel.sysctl."net.ipv4.conf.all.rp_filter" = mkDefault "1";
   boot.kernel.sysctl."net.ipv4.conf.default.log_martians" = mkDefault true;
-  boot.kernel.sysctl."net.ipv4.conf.default.rp_filter" = mkDefault true;
+  boot.kernel.sysctl."net.ipv4.conf.default.rp_filter" = mkDefault "1";
 
   # Ignore broadcast ICMP (mitigate SMURF)
   boot.kernel.sysctl."net.ipv4.icmp_echo_ignore_broadcasts" = mkDefault true;
-
-  # Ignore route information from sender
-  boot.kernel.sysctl."net.ipv4.conf.all.accept_source_route" = mkDefault false;
-  boot.kernel.sysctl."net.ipv4.conf.default.accept_source_route" = mkDefault false;
-  boot.kernel.sysctl."net.ipv6.conf.all.accept_source_route" = mkDefault false;
-  boot.kernel.sysctl."net.ipv6.conf.default.accept_source_route" = mkDefault false;
 
   # Ignore incoming ICMP redirects (note: default is needed to ensure that the
   # setting is applied to interfaces added after the sysctls are set)
@@ -122,4 +137,7 @@ with lib;
   # Ignore outgoing ICMP redirects (this is ipv4 only)
   boot.kernel.sysctl."net.ipv4.conf.all.send_redirects" = mkDefault false;
   boot.kernel.sysctl."net.ipv4.conf.default.send_redirects" = mkDefault false;
+
+  # Restrict userfaultfd syscalls to processes with the SYS_PTRACE capability
+  boot.kernel.sysctl."vm.unprivileged_userfaultfd" = mkDefault false;
 }

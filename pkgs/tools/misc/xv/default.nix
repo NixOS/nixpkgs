@@ -13,9 +13,12 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner  = "chrisvest";
     repo   = pname;
-    rev    = "${version}";
+    rev    = version;
     sha256 = "0x2yd21sr4wik3z22rknkx1fgb64j119ynjls919za8gd83zk81g";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "0m69pcmnx3c3q7lgvbhxc8dl6lavv5ch4r6wg2bhdmapcmb4p7jq";
 

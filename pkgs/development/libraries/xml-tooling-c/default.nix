@@ -1,17 +1,19 @@
-{ stdenv, fetchgit, autoreconfHook, boost, curl, openssl, log4shib, xercesc, xml-security-c }:
+{ stdenv, fetchgit, autoreconfHook, pkgconfig
+, boost, curl, openssl, log4shib, xercesc, xml-security-c
+}:
 
 stdenv.mkDerivation rec {
-  name = "xml-tooling-c-${version}";
-  version = "1.6.3";
+  pname = "xml-tooling-c";
+  version = "3.0.4";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xmltooling.git";
     rev = version;
-    sha256 = "09z2pp3yy3kqx22vwgxyi3s0vlpdv9camw8dpi3q8piff6zxak3q";
+    sha256 = "0frj4w70l06nva6dvdcivgm1ax69rqbjdzzbgp0sxhiqhddslbas";
   };
 
   buildInputs = [ boost curl openssl log4shib xercesc xml-security-c ];
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   enableParallelBuilding = true;
 

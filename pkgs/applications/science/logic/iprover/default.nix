@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ocaml, eprover, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "iprover-${version}";
-  version = "2018_Jul_24_11h";
+  pname = "iprover";
+  version = "3.1";
 
   src = fetchurl {
-    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover_${version}.tar.gz";
-    sha256 = "1iqim11flzm56aaysasl5whajcv1gq31hkidaqfr8ww7kwl1h06p";
+    url = "http://www.cs.man.ac.uk/~korovink/iprover/iprover-v${version}.tar.gz";
+    sha256 = "0lik8p7ayhjwpkln1iwf0ri84ramhch74j5nj6z7ph6wfi92pgg8";
   };
 
   buildInputs = [ ocaml eprover zlib ];
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/bin"
     cp iproveropt "$out/bin"
 
-    mkdir -p "$out/share/${name}"
-    cp *.p "$out/share/${name}"
+    mkdir -p "$out/share/${pname}-${version}"
+    cp *.p "$out/share/${pname}-${version}"
     echo -e "#! ${stdenv.shell}\\n$out/bin/iproveropt --clausifier \"${eprover}/bin/eprover\" --clausifier_options \" --tstp-format --silent --cnf \" \"\$@\"" > "$out"/bin/iprover
     chmod a+x  "$out"/bin/iprover
   '';

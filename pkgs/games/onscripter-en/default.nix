@@ -3,7 +3,7 @@
 , SDL, SDL_image, SDL_mixer, SDL_ttf }:
 
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "onscripter-en-20110930";
 
   src = fetchurl {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--no-werror" ];
 
   # Without this libvorbisfile.so is not getting linked properly for some reason.
-  NIX_CFLAGS_LINK = [ "-lvorbisfile" ];
+  NIX_CFLAGS_LINK = "-lvorbisfile";
 
   preBuild = ''
     sed -i 's/.dll//g' Makefile

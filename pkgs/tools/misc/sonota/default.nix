@@ -12,7 +12,7 @@ let
   };
 
 in buildPythonApplication rec {
-  name = "sonota-unstable-${version}";
+  pname = "sonota-unstable";
   version = "2018-10-07";
 
   src = fetchFromGitHub {

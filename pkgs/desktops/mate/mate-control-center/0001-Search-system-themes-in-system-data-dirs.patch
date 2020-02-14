@@ -1,0 +1,81 @@
+From 74fb65a2574c93a2b20a51875a5e336f727ff4bc Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Jos=C3=A9=20Romildo=20Malaquias?= <malaquias@gmail.com>
+Date: Wed, 25 Dec 2019 18:48:38 -0300
+Subject: [PATCH] Search system themes in system data dirs
+
+---
+ capplets/common/gtkrc-utils.c     | 20 ++++++++++++--------
+ capplets/common/mate-theme-info.c | 18 +++++++++++-------
+ 2 files changed, 23 insertions(+), 15 deletions(-)
+
+diff --git a/capplets/common/gtkrc-utils.c b/capplets/common/gtkrc-utils.c
+index 011c8a1..27e01da 100644
+--- a/capplets/common/gtkrc-utils.c
++++ b/capplets/common/gtkrc-utils.c
+@@ -60,15 +60,19 @@ gchar* gtkrc_find_named(const gchar* name)
+ 
+ 	if (!path)
+ 	{
+-		gchar* theme_dir = gtk_rc_get_theme_dir();
+-		path = g_build_filename(theme_dir, name, subpath, NULL);
+-		g_free(theme_dir);
++		const gchar * const * dirs = g_get_system_data_dirs();
+ 
+-		if (!g_file_test(path, G_FILE_TEST_EXISTS))
+-		{
+-			g_free (path);
+-			path = NULL;
+-		}
++		if (dirs != NULL)
++			for (; !path && *dirs != NULL; ++dirs)
++			{
++				path = g_build_filename(*dirs, "themes", name, subpath, NULL);
++
++				if (!g_file_test(path, G_FILE_TEST_EXISTS))
++				{
++					g_free (path);
++					path = NULL;
++				}
++			}
+ 	}
+ 
+ 	return path;
+diff --git a/capplets/common/mate-theme-info.c b/capplets/common/mate-theme-info.c
+index 54ae3ae..a738f0b 100644
+--- a/capplets/common/mate-theme-info.c
++++ b/capplets/common/mate-theme-info.c
+@@ -1763,6 +1763,7 @@ mate_theme_color_scheme_equal (const gchar *s1, const gchar *s2)
+ void
+ mate_theme_init ()
+ {
++  const gchar * const * dirs;
+   GFile *top_theme_dir;
+   gchar *top_theme_dir_string;
+   static gboolean initted = FALSE;
+@@ -1783,13 +1784,16 @@ mate_theme_init ()
+   theme_hash_by_uri = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+   theme_hash_by_name = g_hash_table_new_full (g_str_hash, g_str_equal, g_free, NULL);
+ 
+-  /* Add all the toplevel theme dirs. */
+-  /* $datadir/themes */
+-  top_theme_dir_string = gtk_rc_get_theme_dir ();
+-  top_theme_dir = g_file_new_for_path (top_theme_dir_string);
+-  g_free (top_theme_dir_string);
+-  add_top_theme_dir_monitor (top_theme_dir, 1, NULL);
+-  g_object_unref (top_theme_dir);
++  /* Add all the toplevel theme dirs following the XDG Base Directory Specification */
++  dirs = g_get_system_data_dirs ();
++  if (dirs != NULL)
++    for (; *dirs != NULL; ++dirs) {
++      top_theme_dir_string = g_build_filename (*dirs, "themes", NULL);
++      top_theme_dir = g_file_new_for_path (top_theme_dir_string);
++      g_free (top_theme_dir_string);
++      add_top_theme_dir_monitor (top_theme_dir, 1, NULL);
++      g_object_unref (top_theme_dir);
++    }
+ 
+   /* ~/.themes */
+   top_theme_dir_string  = g_build_filename (g_get_home_dir (), ".themes", NULL);
+-- 
+2.24.1
+

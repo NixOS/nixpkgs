@@ -4,20 +4,22 @@ let
   inherit (stdenv.hostPlatform) system;
 
   plat = {
-    "x86_64-linux" = "linux-x64";
-    "x86_64-darwin" = "darwin";
+    x86_64-linux = "linux-x64";
+    x86_64-darwin = "darwin";
   }.${system};
 
   archive_fmt = if system == "x86_64-darwin" then "zip" else "tar.gz";
 
   sha256 = {
-    "x86_64-linux" = "1ck13xpnfklfc81jd8d5md09fcp0gjypacdqj276mzhr5mig29cd";
-    "x86_64-darwin" = "0xpzm372swv0by22saxib16fvvvfjr7d68aj3l5dsl5c9a8v23qj";
+    x86_64-linux = "1bb7icdjzprrsxllx2q478m1p3qf5sbs3rs3bavvb3hzyyf4bifn";
+    x86_64-darwin = "1hqpfmp5s135kb9777s96sr0zbls002h1980qbgf7r2hmc0mpnx0";
   }.${system};
 in
   callPackage ./generic.nix rec {
+    # The update script doesn't correctly change the hash for darwin, so please:
+    # nixpkgs-update: no auto update
 
-    version = "1.36.1";
+    version = "1.42.0";
     pname = "vscode";
 
     executableName = "code" + lib.optionalString isInsiders "-insiders";

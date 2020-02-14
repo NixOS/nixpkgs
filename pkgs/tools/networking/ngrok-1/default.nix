@@ -1,9 +1,9 @@
 { buildGoPackage, go-bindata, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "ngrok-${version}";
+  pname = "ngrok";
   version = "1.7.1";
-  rev = "${version}";
+  rev = version;
 
   goPackagePath = "ngrok";
 

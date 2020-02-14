@@ -1,12 +1,12 @@
-{ stdenv, fetchFromGitHub, qtbase, qmake, qttools, qtsvg }:
+{ mkDerivation, lib, fetchFromGitHub, qtbase, qmake, qttools, qtsvg }:
 
 # To use `flameshot gui`, you will also need to put flameshot in `services.dbus.packages`
 # in configuration.nix so that the daemon gets launched properly:
 #
 #   services.dbus.packages = [ pkgs.flameshot ];
 #   environment.systemPackages = [ pkgs.flameshot ];
-stdenv.mkDerivation rec {
-  name = "flameshot-${version}";
+mkDerivation rec {
+  pname = "flameshot";
   version = "0.6.0";
 
   src = fetchFromGitHub {
@@ -34,11 +34,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Powerful yet simple to use screenshot software";
     homepage = https://github.com/lupoDharkael/flameshot;
     maintainers = [ maintainers.scode ];
-    license = stdenv.lib.licenses.gpl3;
-    platforms = stdenv.lib.platforms.linux;
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
   };
 }

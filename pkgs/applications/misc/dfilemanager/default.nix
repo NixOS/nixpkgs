@@ -1,10 +1,11 @@
-{ stdenv, fetchgit, cmake, file, qtbase, qttools, solid }:
+{ stdenv, mkDerivation, fetchgit, cmake, file, qtbase, qttools, solid }:
 
 let
   version = "git-2016-01-10";
 in
-stdenv.mkDerivation {
-  name = "dfilemanager-${version}";
+mkDerivation {
+  pname = "dfilemanager";
+  inherit version;
   src = fetchgit {
     url = "git://git.code.sf.net/p/dfilemanager/code";
     rev = "2c5078b05e0ad74c037366be1ab3e6a03492bde4";
@@ -13,7 +14,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ cmake qtbase qttools file solid ];
 
-  cmakeFlags = "-DQT5BUILD=true";
+  cmakeFlags = [ "-DQT5BUILD=true" ];
 
   meta = {
     homepage = http://dfilemanager.sourceforge.net/;

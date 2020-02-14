@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, poppler, libgcrypt, pcre, asciidoc }:
 
 stdenv.mkDerivation rec {
-  name = "pdfgrep-${version}";
+  pname = "pdfgrep";
   version = "2.1.2";
 
   src = fetchurl {
-    url = "https://pdfgrep.org/download/${name}.tar.gz";
+    url = "https://pdfgrep.org/download/${pname}-${version}.tar.gz";
     sha256 = "1fia10djcxxl7n9jw2prargw4yzbykk6izig2443ycj9syhxrwqf";
   };
 

@@ -7,7 +7,6 @@
 buildPythonPackage rec {
   pname = "nitpick";
   version = "1.1";
-  name = "${pname}-${version}";
 
   format = "other";
   disabled = !isPy27;

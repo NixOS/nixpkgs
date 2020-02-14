@@ -19,8 +19,8 @@ if toolsVersion == "26.0.1" then import ./tools/26.nix {
   };
 } else if toolsVersion == "26.1.1" then import ./tools/26.nix {
   inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
-  package = packages.tools."${toolsVersion}";
+  package = packages.tools.${toolsVersion};
 } else import ./tools/25.nix {
   inherit deployAndroidPackage lib autoPatchelfHook makeWrapper os pkgs pkgs_i686 postInstall;
-  package = packages.tools."${toolsVersion}";
+  package = packages.tools.${toolsVersion};
 }

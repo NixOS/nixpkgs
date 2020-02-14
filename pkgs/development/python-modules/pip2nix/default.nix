@@ -6,6 +6,7 @@
 , contexter
 , jinja2
 , pytest
+, pip
 }:
 
 buildPythonPackage rec {
@@ -17,7 +18,7 @@ buildPythonPackage rec {
     sha256 = "ec9a71e09ac7f43cc7b6c9d386384eb7b5c331bf6ea0e72ca559d87979397a95";
   };
 
-  propagatedBuildInputs = [ click configobj contexter jinja2 pytest ];
+  propagatedBuildInputs = [ click configobj contexter pip jinja2 pytest ];
 
   postPatch = ''
     sed -i "s/'pip>=8,<10'/'pip'/" setup.py
@@ -26,6 +27,9 @@ buildPythonPackage rec {
 
   # tests not included with pypi release
   doCheck = false;
+
+  # Requires an old pip version
+  broken = true;
 
   meta = with stdenv.lib; {
     description = "Generate Nix expressions for Python packages";

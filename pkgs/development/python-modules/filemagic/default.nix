@@ -1,7 +1,7 @@
 { stdenv, lib, buildPythonPackage, fetchFromGitHub, file
 , isPy3k, mock, unittest2 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "filemagic";
   version = "1.6";
 

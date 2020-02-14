@@ -1,3 +1,10 @@
+{ rustcVersion
+, rustcSha256
+, enableRustcDev ? true
+, bootstrapVersion
+, bootstrapHashes
+, selectRustPackage
+}:
 { stdenv, lib
 , buildPackages
 , newScope, callPackage
@@ -5,17 +12,31 @@
 , llvmPackages_5
 , pkgsBuildTarget, pkgsBuildBuild
 }: rec {
-  makeRustPlatform = { rustc, cargo, ... }: {
+  toRustTarget = platform: with platform.parsed; let
+    cpu_ = {
+      "armv7a" = "armv7";
+      "armv7l" = "armv7";
+      "armv6l" = "arm";
+    }.${cpu.name} or cpu.name;
+  in "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+
+  makeRustPlatform = { rustc, cargo, ... }: rec {
     rust = {
       inherit rustc cargo;
     };
 
-    buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo;
+    fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetchCargoTarball.nix {
+      inherit cargo;
+    };
 
-      fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
-        inherit cargo;
-      };
+    # N.B. This is a legacy fetcher implementation that is being phased out and deleted.
+    # See ../../../build-support/rust/README.md for details.
+    fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
+      inherit cargo;
+    };
+
+    buildRustPackage = callPackage ../../../build-support/rust {
+      inherit rustc cargo fetchcargo fetchCargoTarball;
     };
 
     rustcSrc = callPackage ./rust-src.nix {
@@ -36,21 +57,28 @@
   # cycles / purify builds). In this way, nixpkgs would be in control of all
   # bootstrapping.
   packages = {
-    prebuilt = callPackage ./bootstrap.nix {};
+    prebuilt = callPackage ./bootstrap.nix {
+      version = bootstrapVersion;
+      hashes = bootstrapHashes;
+    };
     stable = lib.makeScope newScope (self: let
       # Like `buildRustPackages`, but may also contain prebuilt binaries to
       # break cycle. Just like `bootstrapTools` for nixpkgs as a whole,
       # nothing in the final package set should refer to this.
       bootstrapRustPackages = self.buildRustPackages.overrideScope' (_: _:
         lib.optionalAttrs (stdenv.buildPlatform == stdenv.hostPlatform)
-          buildPackages.rust.packages.prebuilt);
+          (selectRustPackage buildPackages).packages.prebuilt);
       bootRustPlatform = makeRustPlatform bootstrapRustPackages;
     in {
       # Packages suitable for build-time, e.g. `build.rs`-type stuff.
-      buildRustPackages = buildPackages.rust.packages.stable;
+      buildRustPackages = (selectRustPackage buildPackages).packages.stable;
       # Analogous to stdenv
       rustPlatform = makeRustPlatform self.buildRustPackages;
       rustc = self.callPackage ./rustc.nix ({
+        version = rustcVersion;
+        sha256 = rustcSha256;
+        inherit enableRustcDev;
+
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
       } // lib.optionalAttrs (stdenv.cc.isClang && stdenv.hostPlatform == stdenv.buildPlatform) {
@@ -59,11 +87,14 @@
         pkgsBuildHost = pkgsBuildBuild // { targetPackages.stdenv = llvmPackages_5.stdenv; };
         pkgsBuildTarget = pkgsBuildTarget // { targetPackages.stdenv = llvmPackages_5.stdenv; };
       });
+      rustfmt = self.callPackage ./rustfmt.nix { inherit Security; };
       cargo = self.callPackage ./cargo.nix {
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;
         inherit CoreFoundation Security;
       };
+      clippy = self.callPackage ./clippy.nix { inherit Security; };
+      rls = self.callPackage ./rls { inherit CoreFoundation Security; };
     });
   };
 }

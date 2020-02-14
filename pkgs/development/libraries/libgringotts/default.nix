@@ -1,11 +1,11 @@
 { stdenv, fetchurl, pkgconfig, zlib, bzip2, libmcrypt, libmhash }:
 
 stdenv.mkDerivation rec {
-  name = "libgringotts-${version}";
+  pname = "libgringotts";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/gringotts.berlios/files/${name}.tar.bz2";
+    url = "https://sourceforge.net/projects/gringotts.berlios/files/${pname}-${version}.tar.bz2";
     sha256 = "1ldz1lyl1aml5ci1mpnys8dg6n7khpcs4zpycak3spcpgdsnypm7";
   };
 

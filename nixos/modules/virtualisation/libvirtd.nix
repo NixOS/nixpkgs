@@ -28,6 +28,11 @@ let
 
 in {
 
+  imports = [
+    (mkRemovedOptionModule [ "virtualisation" "libvirtd" "enableKVM" ]
+      "Set the option `virtualisation.libvirtd.qemuPackage' instead.")
+  ];
+
   ###### interface
 
   options.virtualisation.libvirtd = {
@@ -104,6 +109,18 @@ in {
       '';
     };
 
+    onBoot = mkOption {
+      type = types.enum ["start" "ignore" ];
+      default = "start";
+      description = ''
+        Specifies the action to be done to / on the guests when the host boots.
+        The "start" option starts all guests that were running prior to shutdown
+        regardless of their autostart settings. The "ignore" option will not
+        start the formally running guest on boot. However, any guest marked as
+        autostart will still be automatically started by libvirtd.
+      '';
+    };
+
     onShutdown = mkOption {
       type = types.enum ["shutdown" "suspend" ];
       default = "suspend";
@@ -134,7 +151,8 @@ in {
       # this file is expected in /etc/qemu and not sysconfdir (/var/lib)
       etc."qemu/bridge.conf".text = lib.concatMapStringsSep "\n" (e:
         "allow ${e}") cfg.allowedBridges;
-      systemPackages = with pkgs; [ libvirt libressl.nc cfg.qemuPackage ];
+      systemPackages = with pkgs; [ libvirt libressl.nc iptables cfg.qemuPackage ];
+      etc.ethertypes.source = "${pkgs.iptables}/etc/ethertypes";
     };
 
     boot.kernelModules = [ "tun" ];
@@ -221,6 +239,7 @@ in {
       path = with pkgs; [ coreutils libvirt gawk ];
       restartIfChanged = false;
 
+      environment.ON_BOOT = "${cfg.onBoot}";
       environment.ON_SHUTDOWN = "${cfg.onShutdown}";
     };
 

@@ -36,6 +36,7 @@ in
 
     boot.kernelPackages = mkOption {
       default = pkgs.linuxPackages;
+      type = types.unspecified // { merge = mergeEqualOption; };
       apply = kernelPackages: kernelPackages.extend (self: super: {
         kernel = super.kernel.override {
           inherit randstructSeed;
@@ -100,14 +101,19 @@ in
       type = types.bool;
       default = false;
       description = ''
-        Whether to activate VESA video mode on boot.
+        (Deprecated) This option, if set, activates the VESA 800x600 video
+        mode on boot and disables kernel modesetting. It is equivalent to
+        specifying <literal>[ "vga=0x317" "nomodeset" ]</literal> in the
+        <option>boot.kernelParams</option> option. This option is
+        deprecated as of 2020: Xorg now works better with modesetting, and
+        you might want a different VESA vga setting, anyway.
       '';
     };
 
     boot.extraModulePackages = mkOption {
       type = types.listOf types.package;
       default = [];
-      example = literalExample "[ pkgs.linuxPackages.nvidia_x11 ]";
+      example = literalExample "[ config.boot.kernelPackages.nvidia_x11 ]";
       description = "A list of additional packages supplying kernel modules.";
     };
 
@@ -255,12 +261,11 @@ in
 
     # Create /etc/modules-load.d/nixos.conf, which is read by
     # systemd-modules-load.service to load required kernel modules.
-    environment.etc = singleton
-      { target = "modules-load.d/nixos.conf";
-        source = kernelModulesConf;
+    environment.etc =
+      { "modules-load.d/nixos.conf".source = kernelModulesConf;
       };
 
-    systemd.services."systemd-modules-load" =
+    systemd.services.systemd-modules-load =
       { wantedBy = [ "multi-user.target" ];
         restartTriggers = [ kernelModulesConf ];
         serviceConfig =

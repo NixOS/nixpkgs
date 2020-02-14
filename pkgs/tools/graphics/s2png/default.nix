@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, diffutils, gd, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "s2png-${version}";
+  pname = "s2png";
   version = "0.7.2";
 
   src = fetchFromGitHub {

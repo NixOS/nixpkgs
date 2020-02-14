@@ -1,6 +1,6 @@
 { lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "profont";
 
   url = "http://web.archive.org/web/20160707013914/http://tobiasjung.name/downloadfile.php?file=profont-x11.zip";

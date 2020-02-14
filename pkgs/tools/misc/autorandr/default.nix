@@ -6,10 +6,11 @@
 
 let
   python = python3Packages.python;
-  version = "1.8.1";
+  version = "1.9";
 in
   stdenv.mkDerivation {
-    name = "autorandr-${version}";
+    pname = "autorandr";
+    inherit version;
 
     buildInputs = [ python ];
 
@@ -47,15 +48,15 @@ in
     src = fetchFromGitHub {
       owner = "phillipberndt";
       repo = "autorandr";
-      rev = "${version}";
-      sha256 = "1bp1cqkrpg77rjyh4lq1agc719fmxn92jkiicf6nbhfl8kf3l3vy";
+      rev = version;
+      sha256 = "1bb0l7fcm5lcx9y02zdxv7pfdqf4v4gsc5br3v1x9gzjvqj64l7n";
     };
 
-    meta = {
+    meta = with stdenv.lib; {
       homepage = https://github.com/phillipberndt/autorandr/;
       description = "Automatically select a display configuration based on connected devices";
-      license = stdenv.lib.licenses.gpl3Plus;
-      maintainers = [ stdenv.lib.maintainers.coroa ];
-      platforms = stdenv.lib.platforms.unix;
+      license = licenses.gpl3Plus;
+      maintainers = with maintainers; [ coroa globin ];
+      platforms = platforms.unix;
     };
   }

@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "btops-${version}";
+  pname = "btops";
   version = "0.1.0";
 
   goPackagePath = "github.com/cmschuetz/btops";

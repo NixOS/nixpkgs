@@ -1,11 +1,11 @@
 { stdenv, fetchurl, fetchpatch, flite, alsaLib, debug ? false }:
 
 stdenv.mkDerivation rec {
-  name = "eflite-${version}";
+  pname = "eflite";
   version = "0.4.1";
 
   src = fetchurl {
-    url = "https://sourceforge.net/projects/eflite/files/eflite/${version}/${name}.tar.gz";
+    url = "https://sourceforge.net/projects/eflite/files/eflite/${version}/${pname}-${version}.tar.gz";
     sha256 = "088p9w816s02s64grfs28gai3lnibzdjb9d1jwxzr8smbs2qbbci";
   };
 

@@ -5,14 +5,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "sudo-1.8.27";
+  pname = "sudo";
+  version = "1.8.31";
 
   src = fetchurl {
-    urls =
-      [ "ftp://ftp.sudo.ws/pub/sudo/${name}.tar.gz"
-        "ftp://ftp.sudo.ws/pub/sudo/OLD/${name}.tar.gz"
-      ];
-    sha256 = "1h1f7v9pv0rzp14cxzv8kaa8mdd717fbqv83l7c5dvvi8jwnisvv";
+    url = "ftp://ftp.sudo.ws/pub/sudo/${pname}-${version}.tar.gz";
+    sha256 = "0ks5mm9hda5idivncyfpiz4lrd8fv0dpmsl711788k7f7ixdka3y";
   };
 
   prePatch = ''
@@ -48,7 +46,7 @@ stdenv.mkDerivation rec {
       #define _PATH_MV "${coreutils}/bin/mv"
     EOF
     makeFlags="install_uid=$(id -u) install_gid=$(id -g)"
-    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy"
+    installFlags="sudoers_uid=$(id -u) sudoers_gid=$(id -g) sysconfdir=$out/etc rundir=$TMPDIR/dummy vardir=$TMPDIR/dummy DESTDIR=/"
     '';
 
   nativeBuildInputs = [ groff ];

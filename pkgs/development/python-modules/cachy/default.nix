@@ -1,22 +1,22 @@
 { lib, buildPythonPackage, fetchPypi
 , redis
 , memcached
-, msgpack-python
+, msgpack
 }:
 
 buildPythonPackage rec {
   pname = "cachy";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0v6mjyhgx6j7ya20bk69cr3gdzdkdf6psay0h090rscclgji65dp";
+    sha256 = "186581f4ceb42a0bbe040c407da73c14092379b1e4c0e327fdb72ae4a9b269b1";
   };
 
   propagatedBuildInputs = [
     redis
     memcached
-    msgpack-python
+    msgpack
   ];
 
   # The Pypi tarball doesn't include tests, and the GitHub source isn't

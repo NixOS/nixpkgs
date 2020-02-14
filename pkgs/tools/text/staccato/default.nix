@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "staccato-${version}";
+  pname = "staccato";
   version = "0.1.6";
 
   src = fetchFromGitHub {
@@ -10,6 +10,9 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "1zbd1gx0ik2r7bavcid776j37g6rzd3f6cs94kq1qar4gyf1gqjm";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "0h1822hba6lpv14y6hgn8qgh7p812b3kkf592ggr6yjlhqfh37n7";
 

@@ -1,43 +1,39 @@
-{ stdenv, fetchurl, file, findutils, binutils-unwrapped, glibc, coreutils, sysctl }:
+{ stdenv, fetchFromGitHub, makeWrapper, file, findutils
+, binutils-unwrapped, glibc, coreutils, sysctl, openssl
+}:
 
 stdenv.mkDerivation rec {
-  name = "checksec-${version}";
-  version = "1.5";
+  pname = "checksec";
+  version = "2.1.0";
 
-  src = fetchurl {
-    url    = "https://www.trapkit.de/tools/checksec.sh";
-    sha256 = "0iq9v568mk7g7ksa1939g5f5sx7ffq8s8n2ncvphvlckjgysgf3p";
+  src = fetchFromGitHub {
+    owner = "slimm609";
+    repo = "checksec.sh";
+    rev = version;
+    sha256 = "00s4qg4h9s9vi46jyw7lz36lb5i8h3s9cmicnngp17764xgkr916";
   };
 
   patches = [ ./0001-attempt-to-modprobe-config-before-checking-kernel.patch ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = ''
-    mkdir ${name}
-    cp $src ${name}/checksec.sh
-    cd ${name}
-  '';
-
-  installPhase = ''
+  installPhase = let
+    path = stdenv.lib.makeBinPath [
+      findutils file binutils-unwrapped sysctl openssl
+    ];
+  in ''
     mkdir -p $out/bin
-    cp checksec.sh $out/bin/checksec
-    chmod +x $out/bin/checksec
-    substituteInPlace $out/bin/checksec --replace /bin/bash ${stdenv.shell}
+    install checksec $out/bin
     substituteInPlace $out/bin/checksec --replace /lib/libc.so.6 ${glibc.out}/lib/libc.so.6
-    substituteInPlace $out/bin/checksec --replace find ${findutils}/bin/find
-    substituteInPlace $out/bin/checksec --replace "file $" "${file}/bin/file $"
-    substituteInPlace $out/bin/checksec --replace "xargs file" "xargs ${file}/bin/file"
-    substituteInPlace $out/bin/checksec --replace " readelf -" " ${binutils-unwrapped}/bin/readelf -"
-    substituteInPlace $out/bin/checksec --replace "(readelf -" "(${binutils-unwrapped}/bin/readelf -"
-    substituteInPlace $out/bin/checksec --replace "command_exists readelf" "command_exists ${binutils-unwrapped}/bin/readelf"
-    substituteInPlace $out/bin/checksec --replace "/sbin/sysctl -" "${sysctl}/bin/sysctl -"
     substituteInPlace $out/bin/checksec --replace "/usr/bin/id -" "${coreutils}/bin/id -"
+    wrapProgram $out/bin/checksec \
+      --prefix PATH : ${path}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A tool for checking security bits on executables";
     homepage    = "http://www.trapkit.de/tools/checksec.html";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
+    license     = licenses.bsd3;
+    platforms   = platforms.linux;
+    maintainers = with maintainers; [ thoughtpolice globin ];
   };
 }

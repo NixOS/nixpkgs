@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses, gpgme }:
 
 stdenv.mkDerivation rec {
-  name = "gpgstats-${version}";
+  pname = "gpgstats";
   version = "0.5";
 
   src = fetchurl {
-    url = "https://www.vanheusden.com/gpgstats/${name}.tgz";
+    url = "https://www.vanheusden.com/gpgstats/${pname}-${version}.tgz";
     sha256 = "1n3njqhjwgfllcxs0xmk89dzgirrpfpfzkj71kqyvq97gc1wbcxy";
   };
 
@@ -16,8 +16,8 @@ stdenv.mkDerivation rec {
     cp gpgstats $out/bin
   '';
 
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionals (!stdenv.is64bit)
-    [ "-D_FILE_OFFSET_BITS=64" "-DLARGEFILE_SOURCE=1" ];
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!stdenv.is64bit)
+    "-D_FILE_OFFSET_BITS=64 -DLARGEFILE_SOURCE=1";
 
   meta = with stdenv.lib; {
     description = "Calculates statistics on the keys in your gpg key-ring";

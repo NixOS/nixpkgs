@@ -36,6 +36,37 @@ in
         '';
     };
 
+    services.minidlna.friendlyName = mkOption {
+      type = types.str;
+      default = "${config.networking.hostName} MiniDLNA";
+      defaultText = "$HOSTNAME MiniDLNA";
+      example = "rpi3";
+      description =
+        ''
+          Name that the DLNA server presents to clients.
+        '';
+    };
+
+    services.minidlna.rootContainer = mkOption {
+      type = types.str;
+      default = ".";
+      example = "B";
+      description =
+        ''
+          Use a different container as the root of the directory tree presented
+          to clients. The possible values are:
+          - "." - standard container
+          - "B" - "Browse Directory"
+          - "M" - "Music"
+          - "P" - "Pictures"
+          - "V" - "Video"
+          - Or, you can specify the ObjectID of your desired root container
+            (eg. 1$F for Music/Playlists)
+          If you specify "B" and the client device is audio-only then
+          "Music/Folders" will be used as root.
+         '';
+    };
+
     services.minidlna.loglevel = mkOption {
       type = types.str;
       default = "warn";
@@ -64,9 +95,55 @@ in
         '';
     };
 
+    services.minidlna.announceInterval = mkOption {
+      type = types.int;
+      default = 895;
+      description =
+        ''
+          The interval between announces (in seconds).
+
+          By default miniDLNA will announce its presence on the network
+          approximately every 15 minutes.
+
+          Many people prefer shorter announce intervals (e.g. 60 seconds)
+          on their home networks, especially when DLNA clients are
+          started on demand.
+        '';
+    };
+
     services.minidlna.config = mkOption {
       type = types.lines;
-      description = "The contents of MiniDLNA's configuration file.";
+      description =
+      ''
+        The contents of MiniDLNA's configuration file.
+        When the service is activated, a basic template is generated
+        from the current options opened here.
+      '';
+    };
+
+    services.minidlna.extraConfig = mkOption {
+      type = types.lines;
+      default = "";
+      example = ''
+        # Not exhaustive example
+        # Support for streaming .jpg and .mp3 files to a TiVo supporting HMO.
+        enable_tivo=no
+        # SSDP notify interval, in seconds.
+        notify_interval=10
+        # maximum number of simultaneous connections
+        # note: many clients open several simultaneous connections while
+        # streaming
+        max_connections=50
+        # set this to yes to allow symlinks that point outside user-defined
+        # media_dirs.
+        wide_links=yes
+      '';
+      description =
+      ''
+        Extra minidlna options not yet opened for configuration here
+        (strict_dlna, model_number, model_name, etc...).  This is appended
+        to the current service already provided.
+      '';
     };
   };
 
@@ -75,13 +152,16 @@ in
     services.minidlna.config =
       ''
         port=${toString port}
-        friendly_name=${config.networking.hostName} MiniDLNA
+        friendly_name=${cfg.friendlyName}
         db_dir=/var/cache/minidlna
         log_level=${cfg.loglevel}
         inotify=yes
+        root_container=${cfg.rootContainer}
         ${concatMapStrings (dir: ''
           media_dir=${dir}
         '') cfg.mediaDirs}
+        notify_interval=${toString cfg.announceInterval}
+        ${cfg.extraConfig}
       '';
 
     users.users.minidlna = {
@@ -96,7 +176,7 @@ in
       { description = "MiniDLNA Server";
 
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "local-fs.target" ];
+        after = [ "network.target" ];
 
         serviceConfig =
           { User = "minidlna";

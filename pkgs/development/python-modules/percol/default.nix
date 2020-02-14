@@ -1,7 +1,5 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, isPy3k
+{ lib, buildPythonPackage, fetchPypi, isPy3k
+, six
 }:
 
 buildPythonPackage rec {
@@ -14,11 +12,14 @@ buildPythonPackage rec {
     sha256 = "7a649c6fae61635519d12a6bcacc742241aad1bff3230baef2cedd693ed9cfe8";
   };
 
-  meta = with stdenv.lib; {
+  propagatedBuildInputs = [ six ];
+
+  meta = with lib; {
     homepage = https://github.com/mooz/percol;
     description = "Adds flavor of interactive filtering to the traditional pipe concept of shell";
     license = licenses.mit;
     maintainers = with maintainers; [ koral ];
+    broken = true; # missing cmigemo package which is missing libmigemo.so
+    # also doesn't support python3
   };
-
 }

@@ -1,6 +1,6 @@
 { lib, rustPlatform, fetchFromGitHub }:
 rustPlatform.buildRustPackage rec {
-  name = "git-codeowners-${version}";
+  pname = "git-codeowners";
   version = "0.1.2";
 
   src = fetchFromGitHub {
@@ -9,6 +9,9 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "0bzq4ridzb4l1zqrj1r0vlzkjpgfaqwky5jf49cwjhz4ybwrfpkq";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "1k5gxbjv4a8l5y9rm0n4vwzlwp4hk1rb59v0wvcirmj0p7hpw9x9";
 

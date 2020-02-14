@@ -3,9 +3,9 @@
 with stdenv.lib;
 let
   efiSystemsBuild = {
-    "i686-linux".target = "i386";
-    "x86_64-linux".target = "x86_64";
-    "aarch64-linux".target = "aarch64";
+    i686-linux.target = "i386";
+    x86_64-linux.target = "x86_64";
+    aarch64-linux.target = "aarch64";
   };
 
 in (

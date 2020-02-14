@@ -1,43 +1,105 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gtk-doc, gobject-introspection, gnome3
-, glib, systemd, xz, e2fsprogs, libsoup, gpgme, which, autoconf, automake, libtool, fuse, utillinuxMinimal, libselinux
-, libarchive, libcap, bzip2, yacc, libxslt, docbook_xsl, docbook_xml_dtd_42, python3
+{ stdenv
+, fetchurl
+, fetchpatch
+, substituteAll
+, pkgconfig
+, gtk-doc
+, gobject-introspection
+, gjs
+, nixosTests
+, glib
+, systemd
+, xz
+, e2fsprogs
+, libsoup
+, gpgme
+, which
+, makeWrapper
+, autoconf
+, automake
+, libtool
+, fuse
+, utillinuxMinimal
+, libselinux
+, libarchive
+, libcap
+, bzip2
+, yacc
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
+, python3
 }:
 
-stdenv.mkDerivation rec {
+let
+  testPython = (python3.withPackages (p: with p; [
+    pyyaml
+  ]));
+in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2019.1";
+  version = "2019.6";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "08y7nsxl305dnlfak4kyj88lld848y4kg6bvjqngcxaqqvkk9xqm";
+    sha256 = "1bhrfbjna3rnymijxagzkdq2zl74g71s2xmimihjhvcw2zybi0jl";
   };
 
   patches = [
-    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
-    ./fix-1592.patch
-    # Disable test-gpg-verify-result.test,
-    # https://github.com/ostreedev/ostree/issues/1634
-    ./disable-test-gpg-verify-result.patch
     # Tests access the helper using relative path
     # https://github.com/ostreedev/ostree/issues/1593
+    # Patch from https://github.com/ostreedev/ostree/pull/1633
+    ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
+
+    # Fix tests running in Catalan instead of C locale.
     (fetchpatch {
-      url = https://github.com/ostreedev/ostree/pull/1633.patch;
-      sha256 = "07xiw1dr7j4yw3w92qhw37f9crlglibflcqj2kf0v5gfrl9i6g4j";
+      url = "https://github.com/ostreedev/ostree/commit/5135a1e58ade2bfafc8c1fda359540eafd72531e.patch";
+      sha256 = "1crzaagw1zzx8v6rsnxb9jnc3ij9hlpvdl91w3skqdm28adx7yx8";
+    })
+
+    # Workarounds for https://github.com/ostreedev/ostree/issues/1592
+    ./fix-1592.patch
+
+    # Hard-code paths in tests
+    (substituteAll {
+      src = ./fix-test-paths.patch;
+      python3 = testPython.interpreter;
     })
   ];
 
   nativeBuildInputs = [
-    autoconf automake libtool pkgconfig gtk-doc gobject-introspection which yacc
-    libxslt docbook_xsl docbook_xml_dtd_42
+    autoconf
+    automake
+    libtool
+    pkgconfig
+    gtk-doc
+    gobject-introspection
+    which
+    makeWrapper
+    yacc
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
   ];
 
   buildInputs = [
-    glib systemd e2fsprogs libsoup gpgme fuse libselinux libcap
-    libarchive bzip2 xz
+    glib
+    systemd
+    e2fsprogs
+    libsoup
+    gpgme
+    fuse
+    libselinux
+    libcap
+    libarchive
+    bzip2
+    xz
     utillinuxMinimal # for libmount
-    (python3.withPackages (p: with p; [ pyyaml ])) gnome3.gjs # for tests
+
+    # for installed tests
+    testPython
+    gjs
   ];
 
   preConfigure = ''
@@ -57,9 +119,21 @@ stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
+  postFixup = ''
+    for test in $installedTests/libexec/installed-tests/libostree/*.js; do
+      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+    done
+  '';
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.ostree;
+    };
+  };
+
   meta = with stdenv.lib; {
     description = "Git for operating system binaries";
-    homepage = https://ostree.readthedocs.io/en/latest/;
+    homepage = "https://ostree.readthedocs.io/en/latest/";
     license = licenses.lgpl2Plus;
     platforms = platforms.linux;
     maintainers = with maintainers; [ copumpkin ];

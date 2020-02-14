@@ -1,22 +1,19 @@
 {
   mkDerivation, lib,
-  fetchFromGitHub,
+  fetchurl,
   extra-cmake-modules,
   qtbase, boost,
   akonadi-calendar, akonadi-notes, akonadi-search, kidentitymanagement, kontactinterface, kldap,
-  krunner, kwallet
+  krunner, kwallet, kcalendarcore
 }:
 
 mkDerivation rec {
   pname = "zanshin";
-  version = "2017-11-25";
-  name = "${pname}-${version}";
+  version = "0.5.71";
 
-  src = fetchFromGitHub {
-    owner = "KDE";
-    repo = "zanshin";
-    rev = "3df91dd81682d2ccfe542c4582dc1d5f98537c89";
-    sha256 = "18wx7bdqzp81xmwi266gphh2lfbcp5s0fzyp654gki40yhkqph6m";
+  src = fetchurl {
+    url = "mirror://kde/stable/${pname}/${pname}-${version}.tar.xz";
+    sha256 = "0b316ddcd46sawva84x5d8nsp19v66gbm83djrra7fv3k8nkv4xh";
   };
 
   nativeBuildInputs = [
@@ -26,7 +23,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase boost
     akonadi-calendar akonadi-notes akonadi-search kidentitymanagement kontactinterface kldap
-    krunner kwallet
+    krunner kwallet kcalendarcore
   ];
 
   meta = with lib; {

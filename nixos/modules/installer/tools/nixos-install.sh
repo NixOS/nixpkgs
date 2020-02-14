@@ -14,6 +14,8 @@ extraBuildFlags=()
 mountPoint=/mnt
 channelPath=
 system=
+verbosity=()
+buildLogs=
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -55,6 +57,12 @@ while [ "$#" -gt 0 ]; do
         --debug)
             set -x
             ;;
+        -v*|--verbose)
+            verbosity+=("$i")
+            ;;
+        -L|--print-build-logs)
+            buildLogs="$i"
+            ;;
         *)
             echo "$0: unknown option \`$i'"
             exit 1
@@ -94,7 +102,7 @@ if [[ -z $system ]]; then
     outLink="$tmpdir/system"
     nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG"
+        -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]} ${buildLogs}
     system=$(readlink -f $outLink)
 fi
 
@@ -103,7 +111,7 @@ fi
 # a progress bar.
 nix-env --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
-        -p $mountPoint/nix/var/nix/profiles/system --set "$system"
+        -p $mountPoint/nix/var/nix/profiles/system --set "$system" ${verbosity[@]}
 
 # Copy the NixOS/Nixpkgs sources to the target as the initial contents
 # of the NixOS channel.
@@ -115,7 +123,8 @@ if [[ -z $noChannelCopy ]]; then
         echo "copying channel..."
         mkdir -p $mountPoint/nix/var/nix/profiles/per-user/root
         nix-env --store "$mountPoint" "${extraBuildFlags[@]}" --extra-substituters "$sub" \
-                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet
+                -p $mountPoint/nix/var/nix/profiles/per-user/root/channels --set "$channelPath" --quiet \
+                ${verbosity[@]}
         install -m 0700 -d $mountPoint/root/.nix-defexpr
         ln -sfn /nix/var/nix/profiles/per-user/root/channels $mountPoint/root/.nix-defexpr/channels
     fi

@@ -12,11 +12,6 @@ let
 
   samba = cfg.package;
 
-  setupScript =
-    ''
-      mkdir -p /var/lock/samba /var/log/samba /var/cache/samba /var/lib/samba/private
-    '';
-
   shareConfig = name:
     let share = getAttr name cfg.shares; in
     "[${name}]\n " + (smbToString (
@@ -45,6 +40,7 @@ let
   daemonService = appName: args:
     { description = "Samba Service Daemon ${appName}";
 
+      after = [ (mkIf (cfg.enableNmbd && "${appName}" == "smbd") "samba-nmbd.service") ];
       requiredBy = [ "samba.target" ];
       partOf = [ "samba.target" ];
 
@@ -61,6 +57,7 @@ let
         Type = "notify";
         NotifyAccess = "all"; #may not do anything...
       };
+      unitConfig.RequiresMountsFor = "/var/lib/samba";
 
       restartTriggers = [ configFile ];
     };
@@ -68,6 +65,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "samba" "defaultShare" ] "")
+  ];
 
   ###### interface
 
@@ -118,7 +118,7 @@ in
         type = types.package;
         default = pkgs.samba;
         defaultText = "pkgs.samba";
-        example = literalExample "pkgs.samba3";
+        example = literalExample "pkgs.samba4Full";
         description = ''
           Defines which package should be used for the samba server.
         '';
@@ -227,22 +227,22 @@ in
         systemd = {
           targets.samba = {
             description = "Samba Server";
-            requires = [ "samba-setup.service" ];
-            after = [ "samba-setup.service" "network.target" ];
+            after = [ "network.target" ];
             wantedBy = [ "multi-user.target" ];
           };
           # Refer to https://github.com/samba-team/samba/tree/master/packaging/systemd
           # for correct use with systemd
           services = {
-            "samba-smbd" = daemonService "smbd" "";
-            "samba-nmbd" = mkIf cfg.enableNmbd (daemonService "nmbd" "");
-            "samba-winbindd" = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
-            "samba-setup" = {
-              description = "Samba Setup Task";
-              script = setupScript;
-              unitConfig.RequiresMountsFor = "/var/lib/samba";
-            };
+            samba-smbd = daemonService "smbd" "";
+            samba-nmbd = mkIf cfg.enableNmbd (daemonService "nmbd" "");
+            samba-winbindd = mkIf cfg.enableWinbindd (daemonService "winbindd" "");
           };
+          tmpfiles.rules = [
+            "d /var/lock/samba - - - - -"
+            "d /var/log/samba - - - - -"
+            "d /var/cache/samba - - - - -"
+            "d /var/lib/samba/private - - - - -"
+          ];
         };
 
         security.pam.services.samba = {};

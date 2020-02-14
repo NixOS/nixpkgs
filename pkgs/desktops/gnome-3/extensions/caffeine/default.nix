@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, glib, gettext, bash }:
+{ stdenv, fetchFromGitHub, glib, gettext, bash, gnome3 }:
 
 stdenv.mkDerivation rec {
-  name = "gnome-shell-extension-caffeine-${version}";
-  version = "unstable-2019-04-02";
+  pname = "gnome-shell-extension-caffeine";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "gnome-shell-extension-caffeine";
-    rev = "a6b37dee108cddf50a0f0a19f0101854a75bf173";
-    sha256 = "1j3q12j36v97551sjb0c8qc8zr7a7gmxibygczryfdfmwjzp6icl";
+    rev = "v${version}";
+    sha256 = "1v74xfk7csgc4kw1fg75brmhk2aby3d453ksnmj4k8ivyxkzxmfg";
   };
 
   uuid = "caffeine@patapon.info";

@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 stdenv.mkDerivation rec {
   version = "2.0.0.2";
-  name = "checkbashisms-${version}";
+  pname = "checkbashisms";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/checkbaskisms/${version}/checkbashisms";

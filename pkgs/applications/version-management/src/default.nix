@@ -1,12 +1,12 @@
 { stdenv, fetchurl, python, rcs, git, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "src-${version}";
-  version = "1.26";
+  pname = "src";
+  version = "1.27";
 
   src = fetchurl {
-    url = "http://www.catb.org/~esr/src/${name}.tar.gz";
-    sha256 = "06npsnf2bfjgcs7wilhcqn24zn286nyy4qyp3yp88zapkxzlap23";
+    url = "http://www.catb.org/~esr/src/${pname}-${version}.tar.gz";
+    sha256 = "0764kcyh54plzmvfyhh086wpszh67nv1nsxgk95n9bxxinr7sn3x";
   };
 
   nativeBuildInputs = [ makeWrapper ];

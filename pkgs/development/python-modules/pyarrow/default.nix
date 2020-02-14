@@ -25,6 +25,8 @@ buildPythonPackage rec {
     "-DCMAKE_POLICY_DEFAULT_CMP0025=NEW"
   ];
 
+  dontUseCmakeConfigure = true;
+
   preBuild = ''
     export PYARROW_PARALLEL=$NIX_BUILD_CORES
   '';

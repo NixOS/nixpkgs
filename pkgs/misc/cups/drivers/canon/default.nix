@@ -1,49 +1,55 @@
-{stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux }:
+{stdenv, fetchurl, unzip, autoreconfHook, libtool, makeWrapper, cups, ghostscript, pkgsi686Linux, zlib }:
 
 let
 
   i686_NIX_GCC = pkgsi686Linux.callPackage ({gcc}: gcc) {};
   i686_libxml2 = pkgsi686Linux.callPackage ({libxml2}: libxml2) {};
 
+  commonVer = "4.10";
+  version = "3.70";
+  dl = "8/0100007658/08";
+
+  versionNoDots = builtins.replaceStrings ["."] [""] version;
   src_canon = fetchurl {
-    url = "https://files.canon-europe.com/files/soft45378/software/o147jen_linuxufrII_0290.zip";
-    sha256 = "1qpdmaaw42gm5fi21rp4lf05skffkq42ka5c8xkw8rckzb13sy9j";
+    url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-uken-05.tar.gz";
+    sha256 = "0424lvyrsvsb94qga4p4ldis7f714c5yw5ydv3f84mdl2a7papg0";
   };
 
 in
 
 
-stdenv.mkDerivation rec {
-  name = "canon-cups-ufr2-2.90";
+stdenv.mkDerivation {
+  pname = "canon-cups-ufr2";
+  version = version;
   src = src_canon;
 
   phases = [ "unpackPhase" "installPhase" ];
 
   postUnpack = ''
-    (cd $sourceRoot; tar -xzf Sources/cndrvcups-common-2.90-1.tar.gz)
-    (cd $sourceRoot; tar -xzf Sources/cndrvcups-lb-2.90-1.tar.gz)
+    (cd $sourceRoot; tar -xzf Sources/cndrvcups-common-${commonVer}-1.tar.gz)
+    (cd $sourceRoot; tar -xzf Sources/cndrvcups-lb-${version}-1.tar.gz)
   '';
 
   nativeBuildInputs = [ makeWrapper unzip autoreconfHook libtool ];
 
-  buildInputs = [ cups ];
+  buildInputs = [ cups zlib ];
 
   installPhase = ''
     ##
     ## cndrvcups-common buildPhase
     ##
-    ( cd cndrvcups-common-2.90/buftool
+    ( cd cndrvcups-common-${commonVer}/buftool
       autoreconf -fi
       ./autogen.sh --prefix=$out --enable-progpath=$out/bin --libdir=$out/lib --disable-shared --enable-static
       make
     )
 
-    ( cd cndrvcups-common-2.90/backend
+    ( cd cndrvcups-common-${commonVer}/backend
       ./autogen.sh --prefix=$out --libdir=$out/lib
       make
     )
 
-    ( cd cndrvcups-common-2.90/c3plmod_ipc
+    ( cd cndrvcups-common-${commonVer}/c3plmod_ipc
       make
     )
 
@@ -51,19 +57,19 @@ stdenv.mkDerivation rec {
     ## cndrvcups-common installPhase
     ##
 
-    ( cd cndrvcups-common-2.90/buftool
+    ( cd cndrvcups-common-${commonVer}/buftool
       make install
     )
 
-    ( cd cndrvcups-common-2.90/backend
+    ( cd cndrvcups-common-${commonVer}/backend
       make install
     )
 
-    ( cd cndrvcups-common-2.90/c3plmod_ipc
+    ( cd cndrvcups-common-${commonVer}/c3plmod_ipc
       make install DESTDIR=$out/lib
     )
 
-    ( cd cndrvcups-common-2.90/libs
+    ( cd cndrvcups-common-${commonVer}/libs
       chmod 755 *
       mkdir -p $out/lib32
       mkdir -p $out/bin
@@ -72,15 +78,22 @@ stdenv.mkDerivation rec {
       cp libc3pl.so.0.0.1 $out/lib32
       cp libcaepcm.so.1.0 $out/lib32
       cp libColorGear.so.0.0.0 $out/lib32
-      cp libColorGearC.so.0.0.0 $out/lib32
+      cp libColorGearC.so.1.0.0 $out/lib32
       cp libcanon_slim.so.1.0.0 $out/lib32
       cp c3pldrv $out/bin
     )
 
-    (cd cndrvcups-common-2.90/data
+    (cd cndrvcups-common-${commonVer}/Rule
+      mkdir -p $out/share/usb
+      chmod 644 *.usb-quirks $out/share/usb
+    )
+
+    (cd cndrvcups-common-${commonVer}/data
       chmod 644 *.ICC
       mkdir -p $out/share/caepcm
       cp *.ICC $out/share/caepcm
+      cp *.icc $out/share/caepcm
+      cp *.PRF $out/share/caepcm
     )
 
     (cd $out/lib32
@@ -96,8 +109,8 @@ stdenv.mkDerivation rec {
       ln -sf libcanon_slim.so.1.0.0 libcanon_slim.so
       ln -sf libColorGear.so.0.0.0 libColorGear.so.0
       ln -sf libColorGear.so.0.0.0 libColorGear.so
-      ln -sf libColorGearC.so.0.0.0 libColorGearC.so.0
-      ln -sf libColorGearC.so.0.0.0 libColorGearC.so
+      ln -sf libColorGearC.so.1.0.0 libColorGearC.so.1
+      ln -sf libColorGearC.so.1.0.0 libColorGearC.so
     )
 
     (cd $out/lib
@@ -106,7 +119,7 @@ stdenv.mkDerivation rec {
     )
 
     patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib" $out/lib32/libColorGear.so.0.0.0
-    patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib" $out/lib32/libColorGearC.so.0.0.0
+    patchelf --set-rpath "$(cat ${i686_NIX_GCC}/nix-support/orig-cc)/lib" $out/lib32/libColorGearC.so.1.0.0
 
     patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32" $out/bin/c3pldrv
 
@@ -127,18 +140,13 @@ stdenv.mkDerivation rec {
     ## cndrvcups-lb buildPhase
     ##
 
-    ( cd cndrvcups-lb-2.90/ppd
-      ./autogen.sh --prefix=$out
+    ( cd cndrvcups-lb-${version}/buftool
+      ./autogen.sh --prefix=$out --libdir=$out/lib --enable-progpath=$out/bin --enable-static
       make
     )
 
-    ( cd cndrvcups-lb-2.90/pstoufr2cpca
-      CPPFLAGS="-I$out/include" LDFLAGS=" -L$out/lib" ./autogen.sh --prefix=$out --enable-progpath=$out/bin
-      make
-    )
-
-    ( cd cndrvcups-lb-2.90/cpca
-      CPPFLAGS="-I$out/include" LDFLAGS=" -L$out/lib" ./autogen.sh --prefix=$out --enable-progpath=$out/bin  --enable-static
+    ( cd cndrvcups-lb-${version}/pstoufr2cpca
+      ./autogen.sh --prefix=$out --libdir=$out/lib
       make
     )
 
@@ -146,19 +154,11 @@ stdenv.mkDerivation rec {
     ## cndrvcups-lb installPhase
     ##
 
-    ( cd cndrvcups-lb-2.90/ppd
+    ( cd cndrvcups-lb-${version}/pstoufr2cpca
       make install
     )
 
-    ( cd cndrvcups-lb-2.90/pstoufr2cpca
-      make install
-    )
-
-    ( cd cndrvcups-lb-2.90/cpca
-      make install
-    )
-
-    ( cd cndrvcups-lb-2.90/libs
+    ( cd cndrvcups-lb-${version}/libs
       chmod 755 *
       mkdir -p $out/lib32
       mkdir -p $out/bin
@@ -189,7 +189,7 @@ stdenv.mkDerivation rec {
       ln -sf libcnlbcm.so.1.0 libcnlbcm.so
     )
 
-    ( cd cndrvcups-lb-2.90
+    ( cd cndrvcups-lb-${version}
       chmod 644 data/CnLB*
       chmod 644 libs/cnpkbidi_info*
       chmod 644 libs/ThLB*
@@ -201,6 +201,9 @@ stdenv.mkDerivation rec {
       cp libs/ThLB* $out/share/ufr2filter
     )
 
+    mkdir -p $out/share/cups/model
+    install -c -m 644 cndrvcups-lb-${version}/ppd/CN*.ppd $out/share/cups/model/
+
     patchelf --set-rpath "$out/lib32:${i686_libxml2.out}/lib" $out/lib32/libcanonufr2.so.1.0.0
 
     patchelf --interpreter "$(cat ${i686_NIX_GCC}/nix-support/dynamic-linker)" --set-rpath "$out/lib32" $out/bin/cnpkmoduleufr2
@@ -211,9 +214,12 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" "$out/bin"
     '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "CUPS Linux drivers for Canon printers";
     homepage = http://www.canon.com/;
-    license = stdenv.lib.licenses.unfree;
+    license = licenses.unfree;
+    maintainers = with maintainers; [
+      kylesferrazza
+    ];
   };
 }

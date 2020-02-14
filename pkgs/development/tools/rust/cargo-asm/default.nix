@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "cargo-asm-${version}";
+  pname = "cargo-asm";
   version = "0.1.17";
 
   src = fetchFromGitHub {
@@ -10,6 +10,9 @@ rustPlatform.buildRustPackage rec {
     rev = "7f69a17e9c36dfe1f0d7080d7974c72ecc87a145";
     sha256 = "0zn5p95hsmhvk2slc9hakrpvim6l4zbpgkks2x64ndwyfmzyykws";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "1k9mc29y4487ssf5whvr8xig7j4jh0rpcrhclp6siw8xamygijdm";
 

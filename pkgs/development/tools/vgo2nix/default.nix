@@ -7,8 +7,8 @@
 , fetchFromGitHub
 }:
 
-buildGoPackage rec {
-  name = "vgo2nix-${version}";
+buildGoPackage {
+  pname = "vgo2nix";
   version = "unstable-2019-02-06";
   goPackagePath = "github.com/adisbladis/vgo2nix";
 

@@ -12,7 +12,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   version = "2.8.12.1";
-  name = "wxGTK-${version}";
+  pname = "wxGTK";
 
   src = fetchurl {
     url = "mirror://sourceforge/wxpython/wxPython-src-${version}.tar.bz2";
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
     + optionalString withMesa "${libGLU.out}/lib ${libGL.out}/lib ";
 
   # Work around a bug in configure.
-  NIX_CFLAGS_COMPILE = [ "-DHAVE_X11_XLIB_H=1" "-lX11" "-lcairo" "-Wno-narrowing" ];
+  NIX_CFLAGS_COMPILE = "-DHAVE_X11_XLIB_H=1 -lX11 -lcairo -Wno-narrowing";
 
   preConfigure = "
     substituteInPlace configure --replace 'SEARCH_INCLUDE=' 'DUMMY_SEARCH_INCLUDE='

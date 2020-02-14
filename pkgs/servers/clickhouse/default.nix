@@ -1,25 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, libtool
-, boost, capnproto, cctz, clang-unwrapped, double-conversion, gperftools, icu
-, libcpuid, libxml2, lld, llvm, lz4 , mysql, openssl, poco, re2, rdkafka
-, readline, sparsehash, unixODBC, zstd, ninja, jemalloc, brotli, protobuf, xxHash
+{ stdenv, fetchFromGitHub, cmake, libtool, ninja
+, boost, brotli, capnproto, cctz, clang-unwrapped, double-conversion, gperftools
+, icu, jemalloc, libcpuid, libxml2, lld, llvm, lz4, libmysqlclient, openssl
+, poco, protobuf, rapidjson, re2, rdkafka, readline, sparsehash, unixODBC
+, xxHash, zstd
 }:
 
 stdenv.mkDerivation rec {
-  name = "clickhouse-${version}";
-  version = "19.6.2.11";
+  pname = "clickhouse";
+  version = "19.13.6.51";
 
   src = fetchFromGitHub {
     owner  = "yandex";
     repo   = "ClickHouse";
     rev    = "v${version}-stable";
-    sha256 = "0bs38a8dm5x43klx4nc5dwkkxpab12lp2chyvc2y47c75j7rn5d7";
+    sha256 = "0mcwfam1nrs2g54syw7vvpfkjn3l4gfzvla7xbg92lr03fn6kbn2";
   };
 
   nativeBuildInputs = [ cmake libtool ninja ];
   buildInputs = [
-    boost capnproto cctz clang-unwrapped double-conversion gperftools icu
-    libcpuid libxml2 lld llvm lz4 mysql.connector-c openssl poco re2 rdkafka
-    readline sparsehash unixODBC zstd jemalloc brotli protobuf xxHash
+    boost brotli capnproto cctz clang-unwrapped double-conversion gperftools
+    icu jemalloc libcpuid libxml2 lld llvm lz4 libmysqlclient openssl
+    poco protobuf rapidjson re2 rdkafka readline sparsehash unixODBC
+    xxHash zstd
   ];
 
   cmakeFlags = [

@@ -1,4 +1,4 @@
-{ config, lib, pkgs }:
+{ config, lib, pkgs, options }:
 
 with lib;
 
@@ -62,6 +62,7 @@ in
   };
   serviceOpts = {
     serviceConfig = {
+      DynamicUser = false;
       ExecStart = ''
         ${pkgs.prometheus-postfix-exporter}/bin/postfix_exporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
@@ -73,7 +74,7 @@ in
                                           then "--systemd.slice ${cfg.systemd.slice}"
                                           else "--systemd.unit ${cfg.systemd.unit}")
           ++ optional (cfg.systemd.enable && (cfg.systemd.journalPath != null))
-                       "--systemd.jounal_path ${cfg.systemd.journalPath}"
+                       "--systemd.journal_path ${cfg.systemd.journalPath}"
           ++ optional (!cfg.systemd.enable) "--postfix.logfile_path ${cfg.logfilePath}")}
       '';
     };

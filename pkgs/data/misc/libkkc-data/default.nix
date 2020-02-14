@@ -3,10 +3,9 @@
 stdenv.mkDerivation rec {
   pname = "libkkc-data";
   version = "0.2.7";
-  name = "${pname}-${version}";
 
   src = fetchurl {
-    url = "${meta.homepage}/releases/download/v${libkkc.version}/${name}.tar.xz";
+    url = "${meta.homepage}/releases/download/v${libkkc.version}/${pname}-${version}.tar.xz";
     sha256 = "16avb50jasq2f1n9xyziky39dhlnlad0991pisk3s11hl1aqfrwy";
   };
 

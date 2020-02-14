@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, cmake, ninja, pkgconfig, libiconv, libintl
+{ stdenv, lib, fetchurl, fetchpatch, cmake, ninja, pkgconfig, libiconv, libintl
 , zlib, curl, cairo, freetype, fontconfig, lcms, libjpeg, openjpeg
 , withData ? true, poppler_data
 , qt5Support ? false, qtbase ? null
@@ -7,16 +7,16 @@
 , minimal ? false, suffix ? "glib"
 }:
 
-let # beware: updates often break cups-filters build
-  version = "0.74.0";
+let
   mkFlag = optset: flag: "-DENABLE_${flag}=${if optset then "on" else "off"}";
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
+  version = "0.84.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";
-    sha256 = "0bvb0yq9zsl2b811j4l4x0vf8g5lgmqbndkb2hvgsrr5639rzq4j";
+    sha256 = "0ccp2gx05cz5y04k5pgbyi4ikyq60nafa7x2yx4aaf1vfkd318f7";
   };
 
   outputs = [ "out" "dev" ];

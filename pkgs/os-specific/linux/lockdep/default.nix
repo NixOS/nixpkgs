@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name    = "lockdep-${version}";
+  pname = "lockdep";
   version = "4.1.2";
   fullver = "4.1.2";
 

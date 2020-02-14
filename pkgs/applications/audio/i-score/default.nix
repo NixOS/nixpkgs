@@ -27,7 +27,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0.0-b31";
-  name = "i-score-${version}";
+  pname = "i-score";
 
   src = fetchFromGitHub {
     owner = "OSSIA";
@@ -70,7 +70,7 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export CMAKE_PREFIX_PATH="$CMAKE_PREFIX_PATH:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
+    export CMAKE_PREFIX_PATH="''${CMAKE_PREFIX_PATH-}:$(echo "${jamomacore}/jamoma/share/cmake/Jamoma")"
   '';
 
   postInstall = ''rm $out/bin/i-score.sh'';

@@ -45,10 +45,31 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "lib/net40/*" ];
   };
 
-  FSharpCore = fetchNuGet {
+  FSharpCore302 = fetchNuGet {
+    baseName = "FSharp.Core";
+    version = "3.0.2";
+    sha256 = "1s4pqwbmhrsg5sw8i6dixdri3x0yjyilmkhsf4apfkp80si7d73q";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpCore3125 = fetchNuGet {
+    baseName = "FSharp.Core";
+    version = "3.1.2.5";
+    sha256 = "0pfvjimrgrffb5rj612gsid044lfpk8g2cxyh9792dc1n8ck5hih";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpCore4001 = fetchNuGet {
     baseName = "FSharp.Core";
     version = "4.0.0.1";
-    sha256 = "01nhjcxdz8l1r5vvdzhmgy5x7z5fqppab3ki34qg14axgf8jjygn";
+    sha256 = "0v53iq12ji2d1bkdyg9dn8sz5l93sprrh835amh39dghh8v8vm8k";
+    outputFiles = [ "*" ];
+  };
+
+  FSharpCore4117 = fetchNuGet {
+    baseName = "FSharp.Core";
+    version = "4.1.17";
+    sha256 = "1yk23ir66fgqm5r6qyf66zf64l0s223l3yd7p9yvbyimyg0hgzb1";
     outputFiles = [ "*" ];
   };
 
@@ -89,8 +110,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   FSharpCompilerTools = fetchNuGet {
     baseName = "FSharp.Compiler.Tools";
-    version = "4.1.4";
-    sha256 = "0vsp0khlnwh15ibg8s161rw6a6i8rlriclpq53paga447jllf0m8";
+    version = "4.1.27";
+    sha256 = "1m3hl8ja9gp5ajxmjf7bnq24bbkd6kx7yhxf4zb8si27h1n9l6dl";
     outputFiles = [ "*" ];
   };
 
@@ -101,10 +122,10 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     outputFiles = [ "build/*" ];
   };
 
-  FsLexYacc704 = fetchNuGet {
+  FsLexYacc706 = fetchNuGet {
     baseName = "FsLexYacc";
-    version = "7.0.4";
-    sha256 = "01zpdb0pybdf0by02rwd7pb1g0cmnn8jxm2pibzxjxw6f4l43ywi";
+    version = "7.0.6";
+    sha256 = "0xwiq8q5q6ga6zj24w83ch5csbv405xcg6jg2hmnjic0npz0drk2";
     outputFiles = [ "*" ];
   };
 
@@ -203,8 +224,8 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   SystemValueTuple = fetchNuGet {
     baseName = "System.ValueTuple";
-    version = "4.3.0";
-    sha256 = "00p5s753xh5417arw3k6npf1pc1k3m1s9mrlkw5vmc7pg8lm6n88";
+    version = "4.3.1";
+    sha256 = "0qzq878s66yfkf4n2b9af8lw2bx45s3cg6mi0w8w0bi358fa7q70";
     outputFiles = [ "*" ];
   };
 
@@ -409,14 +430,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Deedle = fetchNuGet rec {
+  Deedle = fetchNuGet {
     baseName = "Deedle";
     version = "1.2.5";
     sha256 = "0g19ll6bp97ixprcnpwwvshr1n9jxxf9xjhkxp0r63mg46z48jnw";
     outputFiles = [ "*" ];
   };
 
-  ExcelDna = buildDotnetPackage rec {
+  ExcelDna = buildDotnetPackage {
     baseName = "Excel-DNA";
     version = "0.32.0";
 
@@ -475,7 +496,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  ExtCore = buildDotnetPackage rec {
+  ExtCore = buildDotnetPackage {
     baseName = "ExtCore";
     version = "0.8.46";
 
@@ -506,6 +527,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
       license = stdenv.lib.licenses.asl20;
       maintainers = with stdenv.lib.maintainers; [ obadz ];
       platforms = with stdenv.lib.platforms; linux;
+      broken = true;
     };
   };
 
@@ -543,7 +565,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  FSharpCompilerService = buildDotnetPackage rec {
+  FSharpCompilerService = buildDotnetPackage {
     baseName = "FSharp.Compiler.Service";
     version = "0.0.90";
 
@@ -646,7 +668,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
   #   };
   # };
 
-  GitVersionTree = buildDotnetPackage rec {
+  GitVersionTree = buildDotnetPackage {
     baseName = "GitVersionTree";
     version = "2013-10-01";
 
@@ -848,13 +870,13 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Nuget = buildDotnetPackage {
     baseName = "Nuget";
-    version = "3.4.3";
+    version = "4.9.1";
 
     src = fetchFromGitHub {
       owner = "mono";
       repo = "nuget-binary";
-      rev = "1f3025c2eb13bfcb56b47ddd77329ac3d9911d1c";
-      sha256 = "01snk05hcrp5i2ys3p1y34r05q1b460q6wb8p3vwpba2q2czdax5";
+      rev = "7871fa26914593fdb2f2500df1196df7b8aecb1c";
+      sha256 = "07r63xam6icm17pf6amh1qkmna13nxa3ncdan7a3ql307i5isriz";
     };
 
     buildInputs = [ unzip ];
@@ -906,7 +928,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  UnionArgParser = buildDotnetPackage rec {
+  UnionArgParser = buildDotnetPackage {
     baseName = "UnionArgParser";
     version = "0.8.7";
 

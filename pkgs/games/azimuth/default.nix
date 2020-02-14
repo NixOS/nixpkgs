@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, SDL }:
+{ stdenv, fetchFromGitHub, SDL, which, installTool ? false }:
 
 stdenv.mkDerivation rec {
   pname = "azimuth";
@@ -11,7 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1znfvpmqiixd977jv748glk5zc4cmhw5813zp81waj07r9b0828r";
   };
 
+  nativeBuildInputs = [ which ];
+  buildInputs = [ SDL ];
+
   preConfigure = ''
+    cat Makefile
     substituteInPlace data/azimuth.desktop \
       --replace Exec=azimuth "Exec=$out/bin/azimuth" \
       --replace "Version=%AZ_VERSION_NUMBER" "Version=${version}"
@@ -19,29 +23,11 @@ stdenv.mkDerivation rec {
 
   makeFlags = [
     "BUILDTYPE=release"
-  ];
+    "INSTALLDIR=$(out)"
+  ] ++ (if installTool then ["INSTALLTOOL=true"] else ["INSTALLTOOL=false"]);
 
-  buildInputs = [ SDL ];
 
   enableParallelBuilding = true;
-
-  # the game doesn't have an installation procedure
-  installPhase = ''
-    mkdir -p $out/bin
-    cp out/release/host/bin/azimuth $out/bin/azimuth
-    cp out/release/host/bin/editor $out/bin/azimuth-editor
-    cp out/release/host/bin/muse $out/bin/azimuth-muse
-    cp out/release/host/bin/zfxr $out/bin/azimuth-zfxr
-    mkdir -p $out/share/doc/azimuth
-    cp doc/* README.md LICENSE $out/share/doc/azimuth
-    mkdir -p $out/share/icons/hicolor/128x128/apps $out/share/icons/hicolor/64x64/apps $out/share/icons/hicolor/48x48/apps $out/share/icons/hicolor/32x32/apps
-    cp data/icons/icon_128x128.png $out/share/icons/hicolor/128x128/apps/azimuth.png
-    cp data/icons/icon_64x64.png $out/share/icons/hicolor/64x64/apps/azimuth.png
-    cp data/icons/icon_48x48.png $out/share/icons/hicolor/48x48/apps/azimuth.png
-    cp data/icons/icon_32x32.png $out/share/icons/hicolor/32x32/apps/azimuth.png
-    mkdir -p $out/share/applications
-    cp data/azimuth.desktop $out/share/applications
-  '';
 
   meta = {
     description = "A metroidvania game using only vectorial graphic";

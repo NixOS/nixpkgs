@@ -1,7 +1,7 @@
 { lib, bundlerApp, ruby
 , beta ? false }:
 
-bundlerApp rec {
+bundlerApp {
   inherit ruby;
   pname = "cocoapods";
   gemfile = if beta then ./Gemfile-beta else ./Gemfile;

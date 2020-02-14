@@ -1,16 +1,14 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qtx11extras, dtkcore,
-  deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qmake, qtx11extras, dtkcore, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dtkwm";
-  version = "2.0.11";
+  version = "2.0.12";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "10l89i84vsh5knq9wg2php7vfg5rj5c9hrrl9rjlcidn1rz8yx6f";
+    sha256 = "0rdzzqsggqarldwb4yp5s4sf5czicgxbdmibjn0pw32129r2d1g3";
   };
 
   nativeBuildInputs = [
@@ -23,14 +21,23 @@ stdenv.mkDerivation rec {
     qtx11extras
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      QT_HOST_DATA=$out \
-      INCLUDE_INSTALL_DIR=$out/include \
-      LIB_INSTALL_DIR=$out/lib"
-  '';
+  patches = [
+    # Set DTK_MODULE_NAME
+    (fetchpatch {
+      url = "https://github.com/linuxdeepin/dtkwm/commit/2490891a.patch";
+      sha256 = "0krydxjpnaihkgs1n49b6mcf3rd3lkispcnkb1j5vpfs9hp9f48j";
+    })
+  ];
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  outRef = placeholder "out";
+
+  qmakeFlags = [
+    "QT_HOST_DATA=${outRef}"
+    "INCLUDE_INSTALL_DIR=${outRef}/include"
+    "LIB_INSTALL_DIR=${outRef}/lib"
+  ];
+
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

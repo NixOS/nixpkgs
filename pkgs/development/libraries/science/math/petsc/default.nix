@@ -6,7 +6,7 @@
 , python }:
 
 stdenv.mkDerivation rec {
-  name = "petsc-${version}";
+  pname = "petsc";
   version = "3.8.4";
 
   src = fetchurl {

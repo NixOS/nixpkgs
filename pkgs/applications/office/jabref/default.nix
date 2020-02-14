@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.8.1";
-  name = "jabref-${version}";
+  pname = "jabref";
 
   src = fetchurl {
     url = "https://github.com/JabRef/jabref/releases/download/v${version}/JabRef-${version}.jar";
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open source bibliography reference manager";
-    homepage = http://jabref.sourceforge.net;
+    homepage = https://www.jabref.org;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.gebner ];

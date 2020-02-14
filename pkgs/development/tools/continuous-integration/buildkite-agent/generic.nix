@@ -5,7 +5,8 @@ let
   goPackagePath = "github.com/buildkite/agent";
 in
 buildGoPackage {
-  name = "buildkite-agent-${version}";
+  pname = "buildkite-agent";
+  inherit version;
 
   inherit goPackagePath src postPatch;
 

@@ -1,7 +1,7 @@
 { stdenv, go, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "pushgateway-${version}";
+  pname = "pushgateway";
   version = "0.8.0";
   rev = "v${version}";
 
@@ -43,7 +43,7 @@ buildGoPackage rec {
     description = "Allows ephemeral and batch jobs to expose metrics to Prometheus";
     homepage = https://github.com/prometheus/pushgateway;
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz ivan ];
+    maintainers = with maintainers; [ benley fpletz ];
     platforms = platforms.unix;
   };
 }

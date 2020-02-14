@@ -80,5 +80,14 @@ import ./make-test.nix ({ pkgs, ... }: {
       # This is to be sure the order of layers of the parent image is preserved
       $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer2 | grep -q layer2");
       $docker->succeed("docker run --rm  ${pkgs.dockerTools.examples.layersOrder.imageName} cat /tmp/layer3 | grep -q layer3");
+
+      # Ensure image with only 2 layers can be loaded
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.two-layered-image}'");
+
+      # Ensure the bulk layer didn't miss store paths
+      # Regression test for https://github.com/NixOS/nixpkgs/issues/78744
+      $docker->succeed("docker load --input='${pkgs.dockerTools.examples.bulk-layer}'");
+      # This ensure the two output paths (ls and hello) are in the layer
+      $docker->succeed("docker run bulk-layer ls /bin/hello");
     '';
 })

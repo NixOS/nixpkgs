@@ -8,11 +8,15 @@ stdenv.mkDerivation {
     sha256 = "1z8b26n23k0sjbxgrix646b06cnpndpq7cbcj0ilsvvdx5ms81jk";
   };
 
+  postPatch = ''
+    sed -i -e '/<stropts.h>/d' lib/pty.c
+  '';
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk2 readline ncurses gettext openssl ];
 
-  meta = { 
-    description = "GTK+-based FTP client";
+  meta = {
+    description = "GTK-based FTP client";
     homepage = http://www.gftp.org;
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

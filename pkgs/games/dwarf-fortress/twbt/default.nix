@@ -44,7 +44,7 @@ let
 in
 
 stdenvNoCC.mkDerivation rec {
-  name = "twbt-${version}";
+  pname = "twbt";
   version = release.twbtRelease;
 
   src = fetchurl {

@@ -1,5 +1,5 @@
 { stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
-, xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk
+, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
 , ffmpeg_4, x264, libvpx, libwebp, x265
 , libfakeXinerama
@@ -14,11 +14,11 @@ let
   xf86videodummy = callPackage ./xf86videodummy { };
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "2.5";
+  version = "3.0.5";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "0q6c7ijgpp2wk6jlh0pzqki1w60i36wyl2zfwkg0gpdh40ypab3x";
+    sha256 = "1zy4q8sq0j00ybxw3v8ylaj2aj10x2gb0a05aqbcnrwp3hf983vz";
   };
 
   patches = [
@@ -40,7 +40,7 @@ in buildPythonApplication rec {
     ] ++ [
     cython
 
-    pango cairo gdk_pixbuf atk.out gtk3 glib
+    pango cairo gdk-pixbuf atk.out gtk3 glib
 
     ffmpeg_4 libvpx x264 libwebp x265
 
@@ -56,14 +56,12 @@ in buildPythonApplication rec {
   propagatedBuildInputs = with python3.pkgs; [
     pillow rencode pycrypto cryptography pycups lz4 dbus-python
     netifaces numpy pygobject3 pycairo gst-python pam
-    pyopengl paramiko opencv python-uinput pyxdg
+    pyopengl paramiko opencv4 python-uinput pyxdg
     ipaddress idna
   ];
 
-  NIX_CFLAGS_COMPILE = [
     # error: 'import_cairo' defined but not used
-    "-Wno-error=unused-function"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
     "--with-Xdummy"

@@ -1,15 +1,32 @@
-{ stdenv, fetchurl, substituteAll, openconnect, intltool, pkgconfig, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome3, kmod }:
+{ stdenv
+, fetchurl
+, substituteAll
+, glib
+, libxml2
+, openconnect
+, intltool
+, pkgconfig
+, autoreconfHook
+, networkmanager
+, gcr
+, libsecret
+, file
+, gtk3
+, withGnome ? true
+, gnome3
+, kmod
+, fetchpatch
+}:
 
 let
-  pname   = "NetworkManager-openconnect";
-  version = "1.2.4";
-in stdenv.mkDerivation rec {
-  name    = "${pname}${if withGnome then "-gnome" else ""}-${version}";
+  pname = "NetworkManager-openconnect";
+  version = "1.2.6";
+in stdenv.mkDerivation {
+  name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
-    url    = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15j98wwspv6mcmy91w30as5qc1bzsnhlk060xhjy4qrvd37y0xx1";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0nlp290nkawc4wqm978n4vhzg3xdqi8kpjjx19l855vab41rh44m";
   };
 
   patches = [
@@ -17,16 +34,35 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit kmod openconnect;
     })
+
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/NetworkManager-openconnect/merge_requests/9.patch";
+      sha256 = "0yd2dmq6gq6y4czr7dqdgaiqvw2vyv2gikznpfdxyfn2v1pcrk9m";
+    })
   ];
 
-  buildInputs = [ openconnect networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret ];
+  buildInputs = [
+    glib
+    libxml2
+    openconnect
+    networkmanager
+  ] ++ stdenv.lib.optionals withGnome [
+    gtk3
+    gcr
+    libsecret
+  ];
 
-  nativeBuildInputs = [ intltool pkgconfig ];
+  nativeBuildInputs = [
+    intltool
+    pkgconfig
+    file
+  ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
     "--enable-absolute-paths"
+    "--without-libnm-glib"
   ];
 
   passthru = {
@@ -37,7 +73,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    description = "NetworkManager's OpenConnect plugin";
+    description = "NetworkManager’s OpenConnect plugin";
     inherit (networkmanager.meta) maintainers platforms;
     license = licenses.gpl2Plus;
   };

@@ -1,18 +1,21 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "void-${version}";
+  pname = "void";
   version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "spacejam";
     repo = "void";
-    rev = "${version}";
+    rev = version;
     sha256 = "08vazw4rszqscjz988k89z28skyj3grm81bm5iwknxxagmrb20fz";
   };
 
   # The tests are long-running and not that useful
   doCheck = false;
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "03g7155jpg8k1ymk95m8rlhlszkxyq0rv32966n4gk5yziijvk4k";
 

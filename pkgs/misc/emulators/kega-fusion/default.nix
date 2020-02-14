@@ -1,10 +1,10 @@
-{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsaLib, libSM, libX11, gdk_pixbuf, pango, libXinerama, mpg123, runtimeShell }:
+{ stdenv, lib, writeText, fetchurl, upx, libGLU, glib, gtk2, alsaLib, libSM, libX11, gdk-pixbuf, pango, libXinerama, mpg123, runtimeShell }:
 
 let
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsaLib libSM libX11 gdk_pixbuf pango libXinerama ];
+  libPath = lib.makeLibraryPath [ stdenv.cc.cc libGLU glib gtk2 alsaLib libSM libX11 gdk-pixbuf pango libXinerama ];
 
-in stdenv.mkDerivation rec {
-  name = "kega-fusion-${version}";
+in stdenv.mkDerivation {
+  pname = "kega-fusion";
   version = "3.63x";
 
   src = fetchurl {

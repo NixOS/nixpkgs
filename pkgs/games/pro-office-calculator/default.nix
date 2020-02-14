@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, tinyxml-2, cmake, qtbase, qtmultimedia }:
 stdenv.mkDerivation rec {
   version = "1.0.13";
-  name = "pro-office-calculator-${version}";
+  pname = "pro-office-calculator";
 
   src = fetchFromGitHub {
     owner  = "RobJinman";

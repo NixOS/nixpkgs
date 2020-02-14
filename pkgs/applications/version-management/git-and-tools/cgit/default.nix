@@ -6,11 +6,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "cgit-${version}";
+  pname = "cgit";
   version = "1.2.1";
 
   src = fetchurl {
-    url = "https://git.zx2c4.com/cgit/snapshot/${name}.tar.xz";
+    url = "https://git.zx2c4.com/cgit/snapshot/${pname}-${version}.tar.xz";
     sha256 = "1gw2j5xc5qdx2hwiwkr8h6kgya7v9d9ff9j32ga1dys0cca7qm1w";
   };
 

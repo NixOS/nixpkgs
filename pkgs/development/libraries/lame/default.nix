@@ -22,11 +22,11 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "lame-${version}";
+  pname = "lame";
   version = "3.100";
 
   src = fetchurl {
-    url = "mirror://sourceforge/lame/${name}.tar.gz";
+    url = "mirror://sourceforge/lame/${pname}-${version}.tar.gz";
     sha256 = "07nsn5sy3a8xbmw1bidxnsj5fj6kg9ai04icmqw40ybkp353dznx";
   };
 

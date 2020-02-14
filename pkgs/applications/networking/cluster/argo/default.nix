@@ -1,18 +1,19 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "argo-${version}";
-  version = "2.2.1";
+  pname = "argo";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "v${version}";
-    sha256 = "0x3aizwbqkg2712021wcq4chmwjhw2df702wbr6zd2a2cdypwb67";
+    sha256 = "15726n5rrbzszq5dpmrxbw9cn7ahihn28jqk274270140gz5aak1";
   };
 
   goDeps = ./deps.nix;
   goPackagePath = "github.com/argoproj/argo";
+  subPackages = [ "cmd/argo" ];
 
   meta = with lib; {
     description = "Container native workflow engine for Kubernetes";

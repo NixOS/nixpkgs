@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pymssql";
-  version = "2.1.4";
+  version = "3.0.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1yvs3azd8dkf40lybr9wvswvf4hbxn5ys9ypansmbbb328dyn09j";
+    sha256 = "4d0ed31c76983d723c0c979b18e2273623621e630ca4901f17a86128aca13f84";
   };
 
   buildInputs = [cython setuptools-git];

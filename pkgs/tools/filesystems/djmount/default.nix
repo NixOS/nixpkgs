@@ -1,10 +1,10 @@
 { stdenv, fetchurl, pkgconfig, fuse }:
 
 stdenv.mkDerivation rec {
-  name = "djmount-${version}";
+  pname = "djmount";
   version = "0.71";
   src = fetchurl {
-    url = "mirror://sourceforge/djmount/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/djmount/${version}/${pname}-${version}.tar.gz";
     sha256 = "0kqf0cy3h4cfiy5a2sigmisx0lvvsi1n0fbyb9ll5gacmy1b8nxa";
   };
 

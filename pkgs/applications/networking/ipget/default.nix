@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, fetchgx }:
 
 buildGoPackage rec {
-  name = "ipget-${version}";
+  pname = "ipget";
   version = "0.3.2";
   rev = "v${version}";
 
@@ -9,7 +9,7 @@ buildGoPackage rec {
 
   extraSrcPaths = [
     (fetchgx {
-      inherit name src;
+      inherit  src;name = "${pname}-${version}";
       sha256 = "07l9hpkhk5phr95zp1l5wd3ii38bw91hy4dlw2rsfbzcsc8bq4s8";
     })
   ];

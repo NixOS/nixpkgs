@@ -11,13 +11,10 @@ stdenv.mkDerivation rec {
     sha256 = "0q9c02b6nmw41yfsiqsnphgc3f0yg3fj31wkccp47cmwvy634lc3";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
-    # TODO: move the following to CMake setup hook
-    "-DCMAKE_INSTALL_BINDIR=${placeholder "bin"}/bin"
-    "-DCMAKE_INSTALL_MANDIR=${placeholder "man"}/share/man"
   ];
 
   doCheck = true;

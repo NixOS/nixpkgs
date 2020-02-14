@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gfortran }:
 
 stdenv.mkDerivation rec {
-  name = "mela-${version}";
+  pname = "mela";
   version = "2.0.1";
 
   src = fetchFromGitHub {

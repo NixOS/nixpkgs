@@ -1,18 +1,19 @@
-{ stdenv, fetchzip, autoreconfHook, zlib, bzip2 }:
+{ stdenv, fetchurl, autoreconfHook, zlib, bzip2 }:
 
 stdenv.mkDerivation rec {
-  name = "bgpdump-2017-09-29";
+  pname = "bgpdump";
+  version = "1.6.0";
 
-  src = fetchzip {
-    url = "https://bitbucket.org/ripencc/bgpdump/get/94a0e724b335.zip";
-    sha256 = "09g9vz2zc4nyzl669w1j7fxw21ifja6dxbp0xbqh6n7w3gpx2g88";
+  src = fetchurl {
+    url = "https://ris.ripe.net/source/bgpdump/libbgpdump-1.6.0.tgz";
+    sha256 = "144369gj35mf63nz4idqwsvgsirw7fybm8kkk07yymrjp8jr3aqk";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ zlib bzip2 ];
 
   meta = {
-    homepage = https://bitbucket.org/ripencc/bgpdump/wiki/Home;
+    homepage = https://bitbucket.org/ripencc/bgpdump/;
     description = ''Analyze dump files produced by Zebra/Quagga or MRT'';
     license = stdenv.lib.licenses.hpnd;
     maintainers = with stdenv.lib.maintainers; [ lewo ];

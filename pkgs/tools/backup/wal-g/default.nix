@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, brotli }:
 
 buildGoPackage rec {
-  name = "wal-g-${version}";
+  pname = "wal-g";
   version = "0.2.0";
 
   src = fetchFromGitHub {
@@ -21,5 +21,6 @@ buildGoPackage rec {
     license = stdenv.lib.licenses.asl20;
     description = "An archival restoration tool for Postgres";
     maintainers = [ stdenv.lib.maintainers.ocharles ];
+    broken = true;
   };
 }

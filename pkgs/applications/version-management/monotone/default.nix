@@ -5,13 +5,14 @@
 
 let
   version = "1.1";
-  perlVersion = (builtins.parseDrvName perl.name).version;
+  perlVersion = stdenv.lib.getVersion perl;
 in
 
 assert perlVersion != "";
 
 stdenv.mkDerivation rec {
-  name = "monotone-${version}";
+  pname = "monotone";
+  inherit version;
 
   src = fetchurl {
     url = "http://monotone.ca/downloads/${version}/monotone-${version}.tar.bz2";
@@ -25,8 +26,8 @@ stdenv.mkDerivation rec {
     openssl gmp bzip2 ];
 
   postInstall = ''
-    mkdir -p $out/share/${name}
-    cp -rv contrib/ $out/share/${name}/contrib
+    mkdir -p $out/share/${pname}-${version}
+    cp -rv contrib/ $out/share/${pname}-${version}/contrib
     mkdir -p $out/${perl.libPrefix}/${perlVersion}
     cp -v contrib/Monotone.pm $out/${perl.libPrefix}/${perlVersion}
   '';

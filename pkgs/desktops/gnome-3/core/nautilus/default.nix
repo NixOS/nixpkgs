@@ -1,38 +1,82 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, libxml2
-, desktop-file-utils, python3, wrapGAppsHook , gtk3, gnome3, gnome-autoar
-, glib-networking, shared-mime-info, libnotify, libexif, libseccomp , exempi
-, librsvg, tracker, tracker-miners, gexiv2, libselinux, gdk_pixbuf
-, substituteAll, bubblewrap, gst_all_1, gsettings-desktop-schemas
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, gettext
+, libxml2
+, desktop-file-utils
+, python3
+, wrapGAppsHook
+, gtk3
+, gnome3
+, gnome-autoar
+, glib-networking
+, shared-mime-info
+, libnotify
+, libexif
+, libseccomp
+, exempi
+, librsvg
+, tracker
+, tracker-miners
+, gexiv2
+, libselinux
+, gdk-pixbuf
+, substituteAll
+, gnome-desktop
+, gst_all_1
+, gsettings-desktop-schemas
+, gobject-introspection
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "nautilus";
-  version = "3.32.1";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "3.34.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0vmrvimv4183l3ij4kv0ir2c9rfzk7gh3xc2pa4wkqq9kn7h6m7s";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "19zqwq4qyyncc5wq3xls0f7rsavnw741k336p2h7kx35p4kf41mv";
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig libxml2 gettext python3 wrapGAppsHook
     desktop-file-utils
+    gettext
+    gobject-introspection
+    libxml2
+    meson
+    ninja
+    pkgconfig
+    python3
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    glib-networking shared-mime-info libexif gtk3 exempi libnotify libselinux
-    tracker tracker-miners gexiv2 libseccomp bubblewrap gst_all_1.gst-plugins-base
-    gnome3.adwaita-icon-theme gsettings-desktop-schemas
+    exempi
+    gexiv2
+    glib-networking
+    gnome-desktop
+    gnome3.adwaita-icon-theme
+    gsettings-desktop-schemas
+    gst_all_1.gst-plugins-base
+    gtk3
+    libexif
+    libnotify
+    libseccomp
+    libselinux
+    shared-mime-info
+    tracker
+    tracker-miners
   ];
 
-  propagatedBuildInputs = [ gnome-autoar ];
+  propagatedBuildInputs = [
+    gnome-autoar
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(
       # Thumbnailers
-      --prefix XDG_DATA_DIRS : "${gdk_pixbuf}/share"
+      --prefix XDG_DATA_DIRS : "${gdk-pixbuf}/share"
       --prefix XDG_DATA_DIRS : "${librsvg}/share"
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
@@ -44,13 +88,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./extension_dir.patch
-    # 3.30 now generates it's own thummbnails,
-    # and no longer depends on `gnome-desktop`
-    (substituteAll {
-      src = ./bubblewrap-paths.patch;
-      bubblewrap_bin = "${bubblewrap}/bin/bwrap";
-      inherit (builtins) storeDir;
-    })
   ];
 
   passthru = {

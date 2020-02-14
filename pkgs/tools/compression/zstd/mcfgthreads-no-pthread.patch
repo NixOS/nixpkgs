@@ -1,0 +1,13 @@
+diff --git a/programs/Makefile b/programs/Makefile
+index 7882fe8c..1e8237bb 100644
+--- a/programs/Makefile
++++ b/programs/Makefile
+@@ -107,7 +107,7 @@ HAVE_THREAD := $(shell [ "$(HAVE_PTHREAD)" -eq "1" -o -n "$(filter Windows%,$(OS
+ ifeq ($(HAVE_THREAD), 1)
+ THREAD_MSG := ==> building with threading support
+ THREAD_CPP := -DZSTD_MULTITHREAD
+-THREAD_LD := -pthread
++THREAD_LD :=
+ else
+ THREAD_MSG := $(NO_THREAD_MSG)
+ endif

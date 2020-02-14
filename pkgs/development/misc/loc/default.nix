@@ -4,7 +4,7 @@ with rustPlatform;
 
 buildRustPackage rec {
   version = "0.4.1";
-  name = "loc-${version}";
+  pname = "loc";
 
   src = fetchFromGitHub {
     owner = "cgag";
@@ -12,6 +12,9 @@ buildRustPackage rec {
     rev = "v${version}";
     sha256 = "0086asrx48qlmc484pjz5r5znli85q6qgpfbd81gjlzylj7f57gg";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "06iqzpg5jz1xd2amajvlf7yaz9kr3q2ipbhx71whvv9mwplmxmbi";
 

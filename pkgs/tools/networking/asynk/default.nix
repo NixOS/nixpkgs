@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
-  name = "ASynK-${version}";
+  pname = "ASynK";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
     url = "https://github.com/skarra/ASynK/archive/v${version}.tar.gz";
     sha256 = "1bp30437mnls0kzm0525p3bg5nw9alpqrqhw186f6zp9i4y5znp1";
   };

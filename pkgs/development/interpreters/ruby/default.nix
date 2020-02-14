@@ -1,8 +1,9 @@
 { stdenv, buildPackages, lib
-, fetchurl, fetchFromSavannah, fetchFromGitHub
+, fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
 , zlib, openssl, gdbm, ncurses, readline, groff, libyaml, libffi, autoreconfHook, bison
 , autoconf, libiconv, libobjc, libunwind, Foundation
 , buildEnv, bundler, bundix
+, makeWrapper, buildRubyGem, defaultGemConfig, removeReferencesTo
 } @ args:
 
 let
@@ -11,7 +12,7 @@ let
   opString = lib.optionalString;
   patchSet = import ./rvm-patchsets.nix { inherit fetchFromGitHub; };
   config = import ./config.nix { inherit fetchFromSavannah; };
-  rubygems = import ./rubygems { inherit stdenv lib fetchurl; };
+  rubygems = import ./rubygems { inherit stdenv lib fetchurl fetchpatch; };
 
   # Contains the ruby version heuristics
   rubyVersion = import ./ruby-version.nix { inherit lib; };
@@ -25,15 +26,17 @@ let
   generic = { version, sha256 }: let
     ver = version;
     tag = ver.gitTag;
-    atLeast25 = lib.versionAtLeast ver.majMin "2.5";
+    atLeast27 = lib.versionAtLeast ver.majMin "2.7";
     baseruby = self.override {
       useRailsExpress = false;
       docSupport = false;
+      rubygemsSupport = false;
     };
     self = lib.makeOverridable (
       { stdenv, buildPackages, lib
-      , fetchurl, fetchFromSavannah, fetchFromGitHub
+      , fetchurl, fetchpatch, fetchFromSavannah, fetchFromGitHub
       , useRailsExpress ? true
+      , rubygemsSupport ? true
       , zlib, zlibSupport ? true
       , openssl, opensslSupport ? true
       , gdbm, gdbmSupport ? true
@@ -41,12 +44,19 @@ let
       , groff, docSupport ? true
       , libyaml, yamlSupport ? true
       , libffi, fiddleSupport ? true
+      # ruby -e "puts RbConfig::CONFIG['configure_args']"
+      # puts a reference to the C compiler in the binary.
+      # This might be required by some gems at runtime,
+      # but we allow to strip it out for smaller closure size.
+      , removeReferencesTo, removeReferenceToCC ? true
       , autoreconfHook, bison, autoconf
       , buildEnv, bundler, bundix
       , libiconv, libobjc, libunwind, Foundation
+      , makeWrapper, buildRubyGem, defaultGemConfig
       }:
       stdenv.mkDerivation rec {
-        name = "ruby-${version}";
+        pname = "ruby";
+        inherit version;
 
         src = if useRailsExpress then fetchFromGitHub {
           owner  = "ruby";
@@ -66,14 +76,13 @@ let
         nativeBuildInputs = [ autoreconfHook bison ]
           ++ (op docSupport groff)
           ++ op (stdenv.buildPlatform != stdenv.hostPlatform) buildPackages.ruby;
-        buildInputs =
-             (op fiddleSupport libffi)
+        buildInputs = [ autoconf ]
+          ++ (op fiddleSupport libffi)
           ++ (ops cursesSupport [ ncurses readline ])
           ++ (op zlibSupport zlib)
           ++ (op opensslSupport openssl)
           ++ (op gdbmSupport gdbm)
           ++ (op yamlSupport libyaml)
-          ++ (op atLeast25 autoconf)
           # Looks like ruby fails to build on darwin without readline even if curses
           # support is not enabled, so add readline to the build inputs if curses
           # support is disabled (if it's enabled, we already have it) and we're
@@ -85,26 +94,29 @@ let
 
         patches =
           (import ./patchsets.nix {
-            inherit patchSet useRailsExpress ops;
+            inherit patchSet useRailsExpress ops fetchpatch;
             patchLevel = ver.patchLevel;
-          })."${ver.majMinTiny}";
+          }).${ver.majMinTiny};
 
-        postUnpack = ''
-          cp -r ${rubygems} $sourceRoot/rubygems
+        postUnpack = opString rubygemsSupport ''
+          rm -rf $sourceRoot/{lib,test}/rubygems*
+          cp -r ${rubygems}/lib/rubygems* $sourceRoot/lib
+          cp -r ${rubygems}/test/rubygems $sourceRoot/test
         '';
 
-        postPatch = if atLeast25 then ''
+        postPatch = ''
           sed -i configure.ac -e '/config.guess/d'
           cp --remove-destination ${config}/config.guess tool/
           cp --remove-destination ${config}/config.sub tool/
-        ''
-        else opString useRailsExpress ''
-          sed -i configure.in -e '/config.guess/d'
-          cp ${config}/config.guess tool/
-          cp ${config}/config.sub tool/
         '';
 
-        configureFlags = ["--enable-shared" "--enable-pthread"]
+        # Force the revision.h generation. Somehow `revision.tmp` is an empty
+        # file and because we don't add `git` to buildInputs, hence the check is
+        # always true.
+        # https://github.com/ruby/ruby/commit/97a5af62a318fcd93a4e5e4428d576c0280ddbae
+        buildFlags = lib.optionals atLeast27 [ "REVISION_LATEST=0" ];
+
+        configureFlags = ["--enable-shared" "--enable-pthread" "--with-soname=ruby_${tag}"]
           ++ op useRailsExpress "--with-baseruby=${baseruby}/bin/ruby"
           ++ op (!docSupport) "--disable-install-doc"
           ++ ops stdenv.isDarwin [
@@ -132,18 +144,19 @@ let
           export GEM_HOME="$out/${passthru.gemPath}"
         '';
 
-        installFlags = stdenv.lib.optionalString docSupport "install-doc";
+        installFlags = stdenv.lib.optional docSupport "install-doc";
         # Bundler tries to create this directory
         postInstall = ''
-          # Update rubygems
-          pushd rubygems
-          chmod +w bundler/bundler.gemspec
-          ${buildRuby} setup.rb --destdir $GEM_HOME
-          popd
-
           # Remove unnecessary groff reference from runtime closure, since it's big
           sed -i '/NROFF/d' $out/lib/ruby/*/*/rbconfig.rb
-
+          ${
+            lib.optionalString removeReferenceToCC ''
+              # Get rid of the CC runtime dependency
+              ${removeReferencesTo}/bin/remove-references-to \
+                -t ${stdenv.cc} \
+                $out/lib/libruby*
+            ''
+          }
           # Bundler tries to create this directory
           mkdir -p $out/nix-support
           cat > $out/nix-support/setup-hook <<EOF
@@ -194,6 +207,12 @@ let
             ruby = self;
           };
 
+          inherit (import ../../ruby-modules/with-packages {
+            inherit lib stdenv makeWrapper buildRubyGem buildEnv;
+            gemConfig = defaultGemConfig;
+            ruby = self;
+          }) withPackages gems;
+
           # deprecated 2016-09-21
           majorVersion = ver.major;
           minorVersion = ver.minor;
@@ -204,35 +223,27 @@ let
     ) args; in self;
 
 in {
-  ruby_2_3 = generic {
-    version = rubyVersion "2" "3" "8" "";
-    sha256 = {
-      src = "1gwsqmrhpx1wanrfvrsj3j76rv888zh7jag2si2r14qf8ihns0dm";
-      git = "0158fg1sx6l6applbq0831kl8kzx5jacfl9lfg0shfzicmjlys3f";
-    };
-  };
-
-  ruby_2_4 = generic {
-    version = rubyVersion "2" "4" "5" "";
-    sha256 = {
-      src = "162izk7c72y73vmdgcbsh8kqihrbm65xvp53r1s139pzwqd78dv7";
-      git = "181za4h6bd2bkyzyknxc18i5gq0pnqag60ybc17p0ixw3q7pdj43";
-    };
-  };
-
   ruby_2_5 = generic {
-    version = rubyVersion "2" "5" "5" "";
+    version = rubyVersion "2" "5" "7" "";
     sha256 = {
-      src = "0k2in88jymqh727s88yjsv7wrqs2hdj9h2w9zh2bmrj0ygylba98";
-      git = "0l7b7xv48gvvlqs27gghfi645qvc1nwiz8ym4j8w100rzzzfy6zz";
+      src = "1m6nmnj9shifp8g3yh7aimac01vl035bzcc19x2spdji6ig0sb8b";
+      git = "0wppf82c9ccdbnvj30mppr5a3mc7sxm05diahjdw7hhk29n43knp";
     };
   };
 
   ruby_2_6 = generic {
-    version = rubyVersion "2" "6" "3" "";
+    version = rubyVersion "2" "6" "5" "";
     sha256 = {
-      src = "1yw23hmllxsc4b7zqndn5l4d9503gdik6rsf3lfdkf12bxwx6zsp";
-      git = "1h4k2kw0vr4jh2ra9l89i8lnddfh2qfw67y9cknjylf7kw2m1pmh";
+      src = "0zgdrgylq6avbblf78kpaf0k2xnkpc3jng3wkd7x67ycdrqnp5v6";
+      git = "0pay6ic22ag3bnvxffhgwp7z6clkd0p93944a1l4lvc5hxc8v77j";
+    };
+  };
+
+  ruby_2_7 = generic {
+    version = rubyVersion "2" "7" "0" "";
+    sha256 = {
+      src = "1glc3zpnih6h8mrgfcak0aa7cgmi4zyvxfyi6y2brwg2nn9sm6cc";
+      git = "11iz64k95czs273mb10195d1j75mmbcgddfdx1vay5876ffw81dq";
     };
   };
 }

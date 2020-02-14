@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg }:
+{ stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result }:
 
 stdenv.mkDerivation rec {
 	name = "ocaml${ocaml.version}-rresult-${version}";
@@ -10,6 +10,8 @@ stdenv.mkDerivation rec {
 
 	buildInputs = [ ocaml findlib ocamlbuild topkg ];
 
+  propagatedBuildInputs = [ result ];
+  
 	inherit (topkg) buildPhase installPhase;
 
 	meta = {

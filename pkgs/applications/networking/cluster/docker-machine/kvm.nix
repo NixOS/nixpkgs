@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, libvirt, pkgconfig }:
 
 buildGoPackage rec {
-  name = "docker-machine-kvm-${version}";
+  pname = "docker-machine-kvm";
   version = "0.10.0";
 
   goPackagePath = "github.com/dhiltgen/docker-machine-kvm";

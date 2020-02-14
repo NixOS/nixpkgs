@@ -1,6 +1,6 @@
 { lib, fetchzip }:
 
-fetchzip rec {
+fetchzip {
   name = "ubuntu-font-family-0.83";
 
   url = "https://assets.ubuntu.com/v1/fad7939b-ubuntu-font-family-0.83.zip";

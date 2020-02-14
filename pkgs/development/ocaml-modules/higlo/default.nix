@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, xtmpl, ulex }:
 
 stdenv.mkDerivation rec {
-  name = "higlo-${version}";
+  pname = "higlo";
   version = "0.6";
   src = fetchFromGitHub {
     owner = "zoggy";

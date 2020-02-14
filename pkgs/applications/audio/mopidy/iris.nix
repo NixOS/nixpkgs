@@ -1,18 +1,17 @@
-{ stdenv, pythonPackages, mopidy, mopidy-local-images }:
+{ stdenv, python3Packages, mopidy, mopidy-local-images }:
 
-pythonPackages.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Iris";
-  version = "3.38.0";
+  version = "3.44.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0w86g037jdihh6a16x7y82qk8yk30frkj23k9axcj9fjyp30r0x5";
+    sha256 = "0gap0cyw6sfb4487i1x220rr9fbsz6xyw68l15ar0vfll0zv0760";
   };
 
   propagatedBuildInputs = [
     mopidy
-    mopidy-local-images
-  ] ++ (with pythonPackages; [
+  ] ++ (with python3Packages; [
     configobj
     requests
     tornado_4

@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
           + lib.optionalString useNcurses "-cursesUI"
           + lib.optionalString withQt5 "-qt5UI"
           + lib.optionalString useQt4 "-qt4UI";
-  version = "3.14.5";
+  version = "3.16.3";
 
   src = fetchurl {
     url = "${meta.homepage}files/v${lib.versions.majorMinor version}/cmake-${version}.tar.gz";
     # compare with https://cmake.org/files/v${lib.versions.majorMinor version}/cmake-${version}-SHA-256.txt
-    sha256 = "505ae49ebe3c63c595fa5f814975d8b72848447ee13b6613b0f8b96ebda18c06";
+    sha256 = "0s06wrp0jnw2l4yq94skj53hwnz7lqrmhh96sq7w7njkkggickz5";
   };
 
   patches = [
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
 
     # Derived from https://github.com/libuv/libuv/commit/1a5d4f08238dd532c3718e210078de1186a5920d
     ./libuv-application-services.patch
+
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
   outputs = [ "out" ];

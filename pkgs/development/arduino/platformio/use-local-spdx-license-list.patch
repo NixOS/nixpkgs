@@ -1,0 +1,16 @@
+diff --git a/platformio/package/manifest/schema.py b/platformio/package/manifest/schema.py
+index f1d68e08..9b7b1da8 100644
+--- a/platformio/package/manifest/schema.py
++++ b/platformio/package/manifest/schema.py
+@@ -174,9 +174,5 @@ class ManifestSchema(Schema):
+     @staticmethod
+     @memoized(expire="1h")
+     def load_spdx_licenses():
+-        r = requests.get(
+-            "https://raw.githubusercontent.com/spdx/license-list-data"
+-            "/v3.7/json/licenses.json"
+-        )
+-        r.raise_for_status()
+-        return r.json()
++        import json
++        return json.load(open("@SPDX_LICENSE_LIST_DATA@/json/licenses.json"))

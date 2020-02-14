@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, puredata }:
 
 stdenv.mkDerivation rec {
-  name = "cyclone-${version}";
+  pname = "cyclone";
   version = "0.3beta-2";
 
   src = fetchFromGitHub {

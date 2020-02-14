@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, python, opencl-headers }:
 
 stdenv.mkDerivation rec {
-  name = "opencl-clhpp-${version}";
+  pname = "opencl-clhpp";
   version = "2.0.10";
 
   src = fetchFromGitHub {

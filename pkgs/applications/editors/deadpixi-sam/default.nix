@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2017-10-27";
-  name = "deadpixi-sam-unstable-${version}";
+  pname = "deadpixi-sam-unstable";
 
   src = fetchFromGitHub {
     owner = "deadpixi";

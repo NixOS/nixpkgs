@@ -56,4 +56,12 @@ for module in $closure; do
     done
 done
 
+# copy module ordering hints for depmod
+cp $kernel/lib/modules/"$version"/modules.order $out/lib/modules/"$version"/.
+cp $kernel/lib/modules/"$version"/modules.builtin $out/lib/modules/"$version"/.
+
 depmod -b $out -a $version
+
+# remove original hints from final derivation
+rm $out/lib/modules/"$version"/modules.order
+rm $out/lib/modules/"$version"/modules.builtin

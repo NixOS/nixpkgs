@@ -3,7 +3,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pixd-${version}";
+  pname = "pixd";
   version = "1.0.0";
 
   src = fetchFromGitHub {

@@ -6,11 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.14";
+  version = "0.9.25";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0rllwc4h89xdivy85nmgqdi2s0sk1zw31mlvrnlr9gz2902cnq93";
+    sha256 = "0w5jh2lanqxsva9fr9p07mmbd5w4v6zmhf6lr0awksvhjx77lhdc";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   postPatch = stdenv.lib.optional stdenv.isDarwin ''
     # Fake the impure dependencies pbpaste and pbcopy
     mkdir bin
-    echo '#${stdenv.shell}' > bin/pbpaste
-    echo '#${stdenv.shell}' > bin/pbcopy
+    echo '#!${stdenv.shell}' > bin/pbpaste
+    echo '#!${stdenv.shell}' > bin/pbcopy
     chmod +x bin/{pbcopy,pbpaste}
     export PATH=$(realpath bin):$PATH
   '';

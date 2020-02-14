@@ -14,11 +14,17 @@
 # coc-go dependency
 , go
 
-# vim-go denpencies
+# deoplete-khard dependency
+, khard
+
+# vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# direnv-vim dependencies
+, direnv
 
 # vCoolor dependency
 , gnome3
@@ -33,6 +39,9 @@ self: super: {
     dependencies = with super; [ vim-addon-manager ];
   };
 
+  # Mainly used as a dependency for fzf-vim. Wraps the fzf program as a vim
+  # plugin, since part of the fzf vim plugin is included in the main fzf
+  # program.
   fzfWrapper = buildVimPluginFrom2Nix {
     pname = "fzf";
     version = fzf.version;
@@ -46,16 +55,19 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.146";
+    version = "0.1.156";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "1xm98pyzf2dlh04ijjf3nkh37lyqspbbjddkjny1g06xxb4kfxnk";
+      sha256 = "0bf2va6lpgw7wqpwpfidijbzphhvw48hyc2b529qv12vwgnd1shq";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0dixvmwq611wg2g3rp1n1gqali46904fnhb90gcpl9a1diqb34sh";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+      cargoSha256 = "1w8g7pxwnjqp9zi47h4lz2mcg5daldsk5z72h8cjj750wng8a82c";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -77,17 +89,6 @@ self: super: {
     '';
   };
 
-  # do not auto-update this one, as the name clashes with vim-snippets
-  vim-docbk-snippets = buildVimPluginFrom2Nix {
-    pname = "vim-docbk-snippets";
-    version = "2017-11-02";
-    src = fetchgit {
-      url = "https://github.com/jhradilek/vim-snippets";
-      rev = "69cce66defdf131958f152ea7a7b26c21ca9d009";
-      sha256 = "1363b2fmv69axrl2hm74dmx51cqd8k7rk116890qllnapzw1zjgc";
-    };
-  };
-
   clang_complete = super.clang_complete.overrideAttrs(old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
@@ -102,6 +103,14 @@ self: super: {
 
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
+    '';
+  });
+
+  direnv-vim = super.direnv-vim.overrideAttrs(oa: {
+    preFixup = oa.preFixup or "" + ''
+      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+        --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
   });
 
@@ -120,14 +129,15 @@ self: super: {
   });
 
   # Only official releases contains the required index.js file
+  # NB: Make sure you pick a rev from the release branch!
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "0.0.73";
+    version = "2020-01-05";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "v${version}";
-      sha256 = "1z7573rbh806nmkh75hr1kbhxr4jysv6k9x01fcyjfwricpa3cf7";
+      rev = "984779f2f825626aa9d441746d8b4ee079137c65";
+      sha256 = "0w7qnhi7wikr789h3w5p59l8wd81czpvbzbdanf8klf9ap4ma3yg";
     };
   };
 
@@ -163,6 +173,10 @@ self: super: {
     '';
   });
 
+  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+    dependencies = with super; [ nvim-yarp ];
+  });
+
   deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
     dependencies = with super; [ deoplete-nvim vim-fish ];
   });
@@ -177,6 +191,17 @@ self: super: {
    '';
   });
 
+  deoplete-khard = super.deoplete-khard.overrideAttrs(old: {
+    dependencies = [ self.deoplete-nvim ];
+    passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
+    meta = {
+      description = "Address-completion for khard via deoplete";
+      homepage = "https://github.com/nicoe/deoplete-khard";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ jorsn ];
+    };
+  });
+
   ensime-vim = super.ensime-vim.overrideAttrs(old: {
     passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
     dependencies = with super; [ vimproc-vim vimshell-vim super.self forms ];
@@ -184,6 +209,10 @@ self: super: {
 
   forms = super.forms.overrideAttrs(old: {
     dependencies = with super; [ super.self ];
+  });
+
+  ghcid = super.ghcid.overrideAttrs(old: {
+    configurePhase = "cd plugins/nvim";
   });
 
   gist-vim = super.gist-vim.overrideAttrs(old: {
@@ -219,6 +248,10 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  fzf-vim = super.fzf-vim.overrideAttrs(old: {
+    dependencies = [ self.fzfWrapper ];
   });
 
   sved = let
@@ -375,6 +408,10 @@ self: super: {
     '';
   });
 
+  vim-metamath = super.vim-metamath.overrideAttrs(old: {
+    preInstall = "cd vim";
+  });
+
   vim-snipmate = super.vim-snipmate.overrideAttrs(old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
@@ -422,8 +459,8 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_python_interpreter_path', '''" \
-        "'ycm_python_interpreter_path', '${python3}/bin/python'"
+        --replace "'ycm_path_to_python_interpreter', '''" \
+        "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
@@ -445,6 +482,10 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = stdenv.lib.licenses.mit;
     };
+  });
+
+  lf-vim = super.lf-vim.overrideAttrs(old: {
+    dependencies = with super; [ bclose-vim ];
   });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, flex }:
 
 stdenv.mkDerivation rec {
-  name = "libconfuse-${version}";
+  pname = "libconfuse";
   version = "3.2.2";
 
   src = fetchFromGitHub {

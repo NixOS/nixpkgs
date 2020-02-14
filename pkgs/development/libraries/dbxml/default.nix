@@ -1,11 +1,11 @@
 { stdenv, fetchurl, db62, xercesc, xqilla }:
 
 stdenv.mkDerivation rec {
-  name = "dbxml-${version}";
+  pname = "dbxml";
   version = "6.1.4";
 
   src = fetchurl {
-    url = "http://download.oracle.com/berkeley-db/${name}.tar.gz";
+    url = "http://download.oracle.com/berkeley-db/${pname}-${version}.tar.gz";
     sha256 = "a8fc8f5e0c3b6e42741fa4dfc3b878c982ff8f5e5f14843f6a7e20d22e64251a";
   };
 

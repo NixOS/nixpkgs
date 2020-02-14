@@ -1,6 +1,6 @@
 { stdenv, fetchurl, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "mysocketw-031026";
   src = fetchurl {
     url = http://www.digitalfanatics.org/cal/socketw/files/SocketW031026.tar.gz;

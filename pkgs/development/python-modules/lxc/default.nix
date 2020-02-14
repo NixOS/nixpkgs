@@ -5,7 +5,7 @@
 , pkgs
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "python-lxc-unstable";
   version = "2016-08-25";
   disabled = isPy3k;

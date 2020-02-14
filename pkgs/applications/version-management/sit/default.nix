@@ -3,7 +3,7 @@
   libiconv, CoreFoundation, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "sit-${version}";
+  pname = "sit";
   version = "0.4.1";
 
   src = fetchFromGitHub {
@@ -19,6 +19,9 @@ rustPlatform.buildRustPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "0kijx7s7zh6yisrsjz213h9x5jx43ixr44vy5rb3wwbn9dgsr528";
 

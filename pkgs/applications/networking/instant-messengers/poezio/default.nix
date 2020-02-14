@@ -1,22 +1,24 @@
-{ lib, buildPythonApplication, fetchurl, pythonOlder
+{ lib, buildPythonApplication, fetchFromGitHub, pythonOlder
 , pytest, aiodns, slixmpp, pyinotify, potr, mpd2, cffi, pkgconfig }:
 buildPythonApplication rec {
-    name = "poezio-${version}";
-    version = "0.12";
+    pname = "poezio";
+    version = "0.12.1";
 
     disabled = pythonOlder "3.4";
 
-    buildInputs = [ pytest ];
+    checkInputs = [ pytest ];
     propagatedBuildInputs = [ aiodns slixmpp pyinotify potr mpd2 cffi ];
     nativeBuildInputs = [ pkgconfig ];
 
-    src = fetchurl {
-      url = "http://dev.louiz.org/attachments/download/129/${name}.tar.gz";
-      sha256 = "11n9x82xyjwbqk28lsfnvqwn8qc9flv6w2c64camh6j3148ykpvz";
+    src = fetchFromGitHub {
+      owner = pname;
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "04qnsr0l12i55k6xl4q4akx317gai9wv5f1wpkfkq01wp181i5ll";
     };
 
     checkPhase = ''
-      py.test
+      pytest
     '';
 
     meta = with lib; {

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libsodium }:
 
-stdenv.mkDerivation rec {
-  name = "quicktun-${version}";
+stdenv.mkDerivation {
+  pname = "quicktun";
   version = "2.2.5";
 
   src = fetchFromGitHub {

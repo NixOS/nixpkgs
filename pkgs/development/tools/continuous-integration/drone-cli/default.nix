@@ -1,19 +1,23 @@
-# with import <nixpkgs>{};
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-buildGoPackage rec {
-  name = "drone-cli-${version}";
-  version = "0.8.6";
+let version = "1.2.1";
+in buildGoModule rec {
+  inherit version;
+  pname = "drone-cli";
   revision = "v${version}";
   goPackagePath = "github.com/drone/drone-cli";
 
-  goDeps= ./deps.nix;
+  modSha256 = "0g0vq4vm2hy00r2gjsrhg57xv9sldlqix3wzimiqdli085bcz46b";
+
+  preBuild = ''
+    buildFlagsArray+=("-ldflags" "-X main.version=${version}")
+  '';
 
   src = fetchFromGitHub {
     owner = "drone";
     repo = "drone-cli";
     rev = revision;
-    sha256 = "1vvilpqyx9jl0lc9hr73qxngwhwbyk81fycal7ys1w59gv9hxrh9";
+    sha256 = "19icihi5nxcafxlh4w61nl4cd0dhvik9zl8g4gqmazikjqsjms2j";
   };
 
   meta = with stdenv.lib; {

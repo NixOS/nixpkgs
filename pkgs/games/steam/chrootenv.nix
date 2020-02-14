@@ -16,6 +16,9 @@ let
   commonTargetPkgs = pkgs: with pkgs;
     [
       steamPackages.steam-fonts
+      # Needed for operating system detection until
+      # https://github.com/ValveSoftware/steam-for-linux/issues/5909 is resolved
+      lsb-release
       # Errors in output without those
       pciutils
       python2
@@ -45,12 +48,12 @@ let
 
   runSh = writeScript "run.sh" ''
     #!${runtimeShell}
-    runtime_paths="${lib.concatStringsSep ":" ldPath}"
+    runtime_paths="/lib32:/lib64:${lib.concatStringsSep ":" ldPath}"
     if [ "$1" == "--print-steam-runtime-library-paths" ]; then
       echo "$runtime_paths"
       exit 0
     fi
-    export LD_LIBRARY_PATH="$runtime_paths:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$runtime_paths''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     exec "$@"
   '';
 
@@ -72,14 +75,28 @@ in buildFHSUserEnv rec {
     xorg.libX11
     xorg.libXfixes
     libGL
+    libva
 
     # Not formally in runtime but needed by some games
+    at-spi2-atk
+    at-spi2-core   # CrossCode
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-ugly
     libdrm
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    ## screeps dependencies
+    gtk3
+    dbus
+    zlib
+    glib
+    atk
+    cairo
+    freetype
+    gdk-pixbuf
+    pango
+    fontconfig
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
@@ -90,7 +107,7 @@ in buildFHSUserEnv rec {
     gtk2
     bzip2
     zlib
-    gdk_pixbuf
+    gdk-pixbuf
 
     # Without these it silently fails
     xorg.libXinerama
@@ -243,7 +260,7 @@ in buildFHSUserEnv rec {
         exit 1
       fi
       shift
-      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=${lib.concatStringsSep ":" ldPath}:$LD_LIBRARY_PATH"}
+      ${lib.optionalString (!nativeOnly) "export LD_LIBRARY_PATH=/lib32:/lib64:${lib.concatStringsSep ":" ldPath}\${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"}
       exec -- "$run" "$@"
     '';
   };

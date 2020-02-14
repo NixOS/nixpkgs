@@ -46,8 +46,8 @@ let
 
         ln -s ${kernelPath} $out/kernel
         ln -s ${config.system.modulesTree} $out/kernel-modules
-        ${optionalString (pkgs.stdenv.hostPlatform.platform.kernelDTB or false) ''
-          ln -s ${config.boot.kernelPackages.kernel}/dtbs $out/dtbs
+        ${optionalString (config.hardware.deviceTree.package != null) ''
+          ln -s ${config.hardware.deviceTree.package} $out/dtbs
         ''}
 
         echo -n "$kernelParams" > $out/kernel-params

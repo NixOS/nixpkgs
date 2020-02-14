@@ -3,11 +3,11 @@
 with stdenv.lib;
 stdenv.mkDerivation rec{
 
-  name = "libtap-${version}";
+  pname = "libtap";
   version = "1.12.0";
 
   src = fetchurl {
-    url = "https://web-cpan.shlomifish.org/downloads/${name}.tar.bz2";
+    url = "https://web-cpan.shlomifish.org/downloads/${pname}-${version}.tar.bz2";
     sha256 = "1ms1770cx8c6q3lhn1chkzy12vzmjgvlms7cqhd2d3260j2wwv5s";
   };
 

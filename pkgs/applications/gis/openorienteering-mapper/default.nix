@@ -3,8 +3,8 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "OpenOrienteering-Mapper-${version}";
-  version = "0.8.4";
+  pname = "OpenOrienteering-Mapper";
+  version = "0.9.1";
 
   buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
                   qtsensors clipper zlib proj doxygen cups];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "0rw34kp2vd1la97vnk9plwvis6lvyib2bvs7lgkhpnm4p5l7dp1g";
+    sha256 = "1fyhvf2y89hj7wj89kxccx3dqcja6ndy3w4rx1vmzrp246jpz7wb";
   };
 
   cmakeFlags =
@@ -40,9 +40,6 @@ stdenv.mkDerivation rec {
     "-DMapper_PACKAGE_GDAL=0"
     ]);
 
-  # Needs to be available when proj_api.h gets evaluted by CPP
-  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
-
   postInstall =
     stdenv.lib.optionalString stdenv.isDarwin ''
     # Fixes "This application failed to start because it could not find or load the Qt
@@ -60,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.openorienteering.org/apps/mapper/;
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [mpickering];
+    maintainers = with maintainers; [ mpickering sikmir ];
   };
 }

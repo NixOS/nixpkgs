@@ -1,6 +1,6 @@
 { buildPythonPackage, django_1_8, waitress }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "waitress-django";
   version = "0.0.0";
 

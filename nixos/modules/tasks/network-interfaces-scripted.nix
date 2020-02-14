@@ -498,8 +498,8 @@ let
          // mapAttrs' createSitDevice cfg.sits
          // mapAttrs' createVlanDevice cfg.vlans
          // {
-           "network-setup" = networkSetup;
-           "network-local-commands" = networkLocalCommands;
+           network-setup = networkSetup;
+           network-local-commands = networkLocalCommands;
          };
 
     services.udev.extraRules =

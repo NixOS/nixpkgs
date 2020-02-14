@@ -2,29 +2,36 @@
 
 stdenv.mkDerivation rec {
   version = "2.4.7";
-  name = "ppp-${version}";
+  pname = "ppp";
 
   src = fetchurl {
-    url = "mirror://samba/ppp/${name}.tar.gz";
+    url = "mirror://samba/ppp/${pname}-${version}.tar.gz";
     sha256 = "0c7vrjxl52pdwi4ckrvfjr08b31lfpgwf3pp0cqy76a77vfs7q02";
   };
 
   patches =
-    [ ( substituteAll {
+    [
+      # fix for glibc>=2.28
+      (fetchurl {
+        url = "https://github.com/paulusmack/ppp/commit/3c7b86229f7bd2600d74db14b1fe5b3896be3875.patch";
+        sha256 = "0qlbi247lx3injpy8a1gcij9yilik0vfaibkpvdp88k3sa1rs69z";
+      })
+      ( substituteAll {
         src = ./nix-purity.patch;
         inherit libpcap;
         glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
+        openssl = openssl.dev;
       })
       # Without nonpriv.patch, pppd --version doesn't work when not run as
       # root.
       ./nonpriv.patch
       (fetchurl {
         name = "CVE-2015-3310.patch";
-        url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/rc_mksid-no-buffer-overflow?h=debian/2.4.7-1%2b4";
+        url = "https://salsa.debian.org/roam/ppp/raw/ef5d585aca6b1200a52c7109caa66ef97964d76e/debian/patches/rc_mksid-no-buffer-overflow";
         sha256 = "1dk00j7bg9nfgskw39fagnwv1xgsmyv0xnkd6n1v5gy0psw0lvqh";
       })
       (fetchurl {
-        url = "https://anonscm.debian.org/git/collab-maint/pkg-ppp.git/plain/debian/patches/0016-pppoe-include-netinet-in.h-before-linux-in.h.patch";
+        url = "https://salsa.debian.org/roam/ppp/raw/ef5d585aca6b1200a52c7109caa66ef97964d76e/debian/patches/0016-pppoe-include-netinet-in.h-before-linux-in.h.patch";
         sha256 = "1xnmqn02kc6g5y84xynjwnpv9cvrfn3nyv7h7r8j8xi7qf2aj4q8";
       })
       (fetchurl {
@@ -64,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Point-to-point implementation for Linux and Solaris";
     license = with licenses; [ bsdOriginal publicDomain gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.falsifian ];
+    maintainers = [ ];
   };
 }

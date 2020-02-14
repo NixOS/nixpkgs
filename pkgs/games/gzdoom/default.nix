@@ -3,14 +3,14 @@
 , bzip2, zlib, libjpeg, libsndfile, mpg123, game-music-emu }:
 
 stdenv.mkDerivation rec {
-  name = "gzdoom-${version}";
-  version = "4.1.3";
+  pname = "gzdoom";
+  version = "4.3.3";
 
   src = fetchFromGitHub {
     owner = "coelckers";
     repo = "gzdoom";
     rev = "g${version}";
-    sha256 = "07mkh50gnprrq11kifibvf5yq1hgcqkj7nzprl5kjgjwwlwd76x6";
+    sha256 = "1c4vhnvvwy1rs8xm01kqd486h5xsiccwkf95fjx7912zr49yalks";
   };
 
   nativeBuildInputs = [ cmake makeWrapper ];
@@ -21,18 +21,24 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  NIX_CFLAGS_LINK = [ "-lopenal" "-lfluidsynth" ];
+  NIX_CFLAGS_LINK = "-lopenal -lfluidsynth";
 
   preConfigure = ''
     sed -i \
       -e "s@/usr/share/sounds/sf2/@${soundfont-fluid}/share/soundfonts/@g" \
       -e "s@FluidR3_GM.sf2@FluidR3_GM2-2.sf2@g" \
-      src/sound/mididevices/music_fluidsynth_mididevice.cpp
+      libraries/zmusic/mididevices/music_fluidsynth_mididevice.cpp
   '';
 
   installPhase = ''
     install -Dm755 gzdoom "$out/lib/gzdoom/gzdoom"
     for i in *.pk3; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in fm_banks/*; do
+      install -Dm644 "$i" "$out/lib/gzdoom/$i"
+    done
+    for i in soundfonts/*; do
       install -Dm644 "$i" "$out/lib/gzdoom/$i"
     done
     mkdir $out/bin

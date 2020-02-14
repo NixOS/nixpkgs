@@ -6,8 +6,8 @@
 , patches
 }:
 
-stdenv.mkDerivation rec {
-  name = "restbed-${version}";
+stdenv.mkDerivation {
+  pname = "restbed";
   version = "2016-09-15";
 
   src = fetchFromGitHub {

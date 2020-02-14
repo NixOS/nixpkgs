@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchFromGitHub, python3, python3Packages, zbar, secp256k1
+{ stdenv, fetchurl, fetchFromGitHub, wrapQtAppsHook, python3, python3Packages, zbar, secp256k1
 , enableQt ? !stdenv.isDarwin
 
 
@@ -40,7 +40,7 @@ let
   };
 in
 
-python3Packages.buildPythonApplication rec {
+python3Packages.buildPythonApplication {
   pname = "electrum";
   inherit version;
 
@@ -53,6 +53,8 @@ python3Packages.buildPythonApplication rec {
     # can't symlink, tests get confused
     cp -ar ${tests} $sourceRoot/electrum/tests
   '';
+
+  nativeBuildInputs = stdenv.lib.optionals enableQt [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with python3Packages; [
     aiorpcx
@@ -72,6 +74,7 @@ python3Packages.buildPythonApplication rec {
     tlslite-ng
 
     # plugins
+    ckcc-protocol
     keepkey
     trezor
     btchip
@@ -86,7 +89,7 @@ python3Packages.buildPythonApplication rec {
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
-      --replace ${libzbar_name} ${zbar}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');
@@ -102,6 +105,11 @@ python3Packages.buildPythonApplication rec {
                 "Exec=$out/bin/electrum %u" \
       --replace 'Exec=sh -c "PATH=\"\\$HOME/.local/bin:\\$PATH\"; electrum --testnet %u"' \
                 "Exec=$out/bin/electrum --testnet %u"
+
+  '';
+
+  postFixup = stdenv.lib.optionalString enableQt ''
+    wrapQtApp $out/bin/electrum
   '';
 
   checkInputs = with python3Packages; [ pytest ];

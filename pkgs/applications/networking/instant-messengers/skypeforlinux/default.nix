@@ -1,18 +1,19 @@
 { stdenv, fetchurl, dpkg
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk_pixbuf, glib, glibc, gnome2, gnome3
+, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, glibc, gnome2, gnome3
 , gtk3, libnotify, libpulseaudio, libsecret, libv4l, nspr, nss, pango, systemd, wrapGAppsHook, xorg
-, at-spi2-atk }:
+, at-spi2-atk, libuuid, at-spi2-core }:
 
 let
 
   # Please keep the version x.y.0.z and do not update to x.y.76.z because the
   # source of the latter disappears much faster.
-  version = "8.49.0.49";
+  version = "8.55.0.141";
 
   rpath = stdenv.lib.makeLibraryPath [
     alsaLib
     atk
     at-spi2-atk
+    at-spi2-core
     cairo
     cups
     curl
@@ -23,9 +24,10 @@ let
     glib
     glibc
     libsecret
+    libuuid
 
     gnome2.GConf
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
 
     gnome3.gnome-keyring
@@ -57,14 +59,18 @@ let
   src =
     if stdenv.hostPlatform.system == "x86_64-linux" then
       fetchurl {
-        url = "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb";
-        sha256 = "0l5q336kkw9i13076qn7fkknypg7cwjp58qi8xd6h0rwha3kkqa2";
+        urls = [
+          "https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+          "https://web.archive.org/web/https://repo.skype.com/deb/pool/main/s/skypeforlinux/skypeforlinux_${version}_amd64.deb"
+        ];
+        sha256 = "0yfbxrnf2mjihrsvp0r81kbxh3rfh53y7sbfp3bwqky951a93qis";
       }
     else
       throw "Skype for linux is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "skypeforlinux-${version}";
+  pname = "skypeforlinux";
+  inherit version;
 
   system = "x86_64-linux";
 

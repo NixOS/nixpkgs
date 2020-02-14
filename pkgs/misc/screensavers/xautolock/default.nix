@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "xautolock-${version}";
+  pname = "xautolock";
   version = "2.2-7-ga23dd5c";
 
   # This repository contains xautolock-2.2 plus various useful patches that
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "MANPATH=$(out)/share/man"
   ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = with stdenv.lib; {
     description = "Launch a given program when your X session has been idle for a given time.";

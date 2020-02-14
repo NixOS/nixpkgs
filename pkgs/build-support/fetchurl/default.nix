@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
+{ lib, buildPackages ? { inherit stdenvNoCC; }, stdenvNoCC, curl }: # Note that `curl' may be `null', in case of the native stdenvNoCC.
 
 let
 
@@ -10,7 +10,7 @@ let
   # resulting store derivations (.drv files) much smaller, which in
   # turn makes nix-env/nix-instantiate faster.
   mirrorsFile =
-    stdenvNoCC.mkDerivation ({
+    buildPackages.stdenvNoCC.mkDerivation ({
       name = "mirrors-list";
       builder = ./write-mirror-list.sh;
       preferLocalBuild = true;

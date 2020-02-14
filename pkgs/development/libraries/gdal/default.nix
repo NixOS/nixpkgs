@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
+, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2, autoreconfHook
 , netcdfSupport ? true, netcdf, hdf5, curl
@@ -8,19 +8,17 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
-  version = "3.0.1";
+  pname = "gdal";
+  version = "3.0.3";
 
   src = fetchFromGitHub {
     owner = "OSGeo";
     repo = "gdal";
     rev = "v${version}";
-    sha256 = "04rraqhygv8b8fy87qvdhkgx87whby9n98p3gxqr7kdrfymwnh8l";
+    sha256 = "1rbyxmgmp27a5wvm4g70jr79bazhdl8q9rcch2b78m73njdv73xa";
   };
 
   sourceRoot = "source/gdal";
-
-  patches = [ ./001.3_0_1.darwin.patch ];
 
   nativeBuildInputs = [ autoreconfHook ];
 
@@ -38,7 +36,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
+    "--with-mysql=${libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

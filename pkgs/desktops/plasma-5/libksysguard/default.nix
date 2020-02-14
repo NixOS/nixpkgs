@@ -2,7 +2,7 @@
   mkDerivation,
   extra-cmake-modules,
   kauth, kcompletion, kconfig, kconfigwidgets, kcoreaddons, ki18n, kiconthemes,
-  kservice, kwidgetsaddons, kwindowsystem, plasma-framework, qtscript, qtwebkit,
+  kservice, kwidgetsaddons, kwindowsystem, plasma-framework, qtscript, qtwebengine,
   qtx11extras
 }:
 
@@ -15,7 +15,7 @@ mkDerivation {
   buildInputs = [
     kauth kconfig ki18n kiconthemes kwindowsystem kcompletion kconfigwidgets
     kcoreaddons kservice kwidgetsaddons plasma-framework qtscript qtx11extras
-    qtwebkit
+    qtwebengine
   ];
   outputs = [ "bin" "dev" "out" ];
 }

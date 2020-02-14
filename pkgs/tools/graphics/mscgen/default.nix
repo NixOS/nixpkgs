@@ -4,7 +4,8 @@ let
   version = "0.20";
 in
 stdenv.mkDerivation {
-  name = "mscgen-${version}";
+  pname = "mscgen";
+  inherit version;
 
   src = fetchurl {
     url = "http://www.mcternan.me.uk/mscgen/software/mscgen-src-${version}.tar.gz";

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libfann-${version}";
+  pname = "libfann";
   version = "2.2.0";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "git-annex-remote-b2-${version}";
+  pname = "git-annex-remote-b2";
   version = "20151212-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "4db46b9fc9ef7b3f4851c2a6b061cb8f90f553ba";
 

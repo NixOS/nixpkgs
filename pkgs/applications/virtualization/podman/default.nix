@@ -1,37 +1,39 @@
-{ stdenv, fetchFromGitHub, pkgconfig
+{ stdenv, fetchFromGitHub, pkgconfig, installShellFiles
 , buildGoPackage, gpgme, lvm2, btrfs-progs, libseccomp, systemd
 , go-md2man
 }:
 
 buildGoPackage rec {
-  name = "podman-${version}";
-  version = "1.3.2";
+  pname = "podman";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "libpod";
     rev    = "v${version}";
-    sha256 = "1j5n08273igj6wm9rrwks9nnklv91060bn1yv3ak78csxc05whs3";
+    sha256 = "1rbapks11xg0vgl9m322mijirx0wm6c4yav8aw2y41wsr7qd7db4";
   };
 
   goPackagePath = "github.com/containers/libpod";
 
   outputs = [ "bin" "out" "man" ];
 
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
-  nativeBuildInputs = [ pkgconfig go-md2man ];
+  nativeBuildInputs = [ pkgconfig go-md2man installShellFiles ];
 
-  buildInputs = [ btrfs-progs libseccomp gpgme lvm2 systemd ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs libseccomp gpgme lvm2 systemd ];
 
   buildPhase = ''
-    pushd $NIX_BUILD_TOP/go/src/${goPackagePath}
+    pushd go/src/${goPackagePath}
     patchShebangs .
-    make binaries docs
+    ${if stdenv.isDarwin
+      then "make CGO_ENABLED=0 BUILDTAGS='remoteclient containers_image_openpgp exclude_graphdriver_devicemapper' varlink_generate all"
+      else "make binaries docs"}
   '';
 
   installPhase = ''
     install -Dm555 bin/podman $bin/bin/podman
+    installShellCompletion --bash completions/bash/podman
+    installShellCompletion --zsh completions/zsh/_podman
     MANDIR=$man/share/man make install.man
   '';
 
@@ -39,7 +41,7 @@ buildGoPackage rec {
     homepage = https://podman.io/;
     description = "A program for managing pods, containers and container images";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vdemeester ];
-    platforms = platforms.linux;
+    maintainers = with maintainers; [ vdemeester saschagrunert marsam ];
+    platforms = platforms.unix;
   };
 }

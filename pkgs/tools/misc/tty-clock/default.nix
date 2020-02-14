@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ncurses, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tty-clock-${version}";
+  pname = "tty-clock";
   version = "2.3";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/xorg62/tty-clock;

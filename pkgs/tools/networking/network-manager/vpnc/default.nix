@@ -1,9 +1,9 @@
 { stdenv, fetchurl, substituteAll, vpnc, intltool, pkgconfig, networkmanager, libsecret
-, gtk3, withGnome ? true, gnome3, kmod, file }:
+, gtk3, withGnome ? true, gnome3, kmod, file, fetchpatch, networkmanagerapplet }:
 let
   pname = "NetworkManager-vpnc";
   version = "1.2.6";
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
 
   src = fetchurl {
@@ -16,10 +16,15 @@ in stdenv.mkDerivation rec {
       src = ./fix-paths.patch;
       inherit vpnc kmod;
     })
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/NetworkManager-vpnc/merge_requests/5.patch";
+      sha256 = "0z0x5vqmrsap3ynamhya7gh6c6k5grhj2vqpy76alnv9xns8dzi6";
+    })
   ];
 
   buildInputs = [ vpnc networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret gnome3.networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
 
   nativeBuildInputs = [ intltool pkgconfig file ];
 

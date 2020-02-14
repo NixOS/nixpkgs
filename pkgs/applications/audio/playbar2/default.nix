@@ -7,7 +7,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "playbar2-${version}";
+  pname = "playbar2";
   version = "2.5";
 
   src = fetchFromGitHub {

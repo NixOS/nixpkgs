@@ -1,7 +1,7 @@
 {stdenv, fetchurl, pkgconfig, gtk2, synergy}:
 
 stdenv.mkDerivation rec {
-  name = "quicksynergy-${version}";
+  pname = "quicksynergy";
   version = "0.9.0";
   src = fetchurl {
     url = "mirror://sourceforge/project/quicksynergy/Linux/${version}/quicksynergy-${version}.tar.gz";

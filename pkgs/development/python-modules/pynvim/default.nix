@@ -7,22 +7,21 @@
 , trollius
 , pythonOlder
 , isPyPy
+, pytestrunner
 }:
 
 buildPythonPackage rec {
   pname = "pynvim";
-  version = "0.3.2";
+  version = "0.4.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "01dybk4vs452pljn1q3il5z2sd313ki0lgiglc0xmjc6wp290r6g";
+    sha256 = "0n2cx22lrmbq7xk7356lyn6k77ryqvkxplw9k0fglk35ckb1isam";
   };
 
-  checkInputs = [ nose ];
-
-  checkPhase = ''
-    nosetests
-  '';
+  nativeBuildInputs = [
+    pytestrunner
+  ];
 
   # Tests require pkgs.neovim,
   # which we cannot add because of circular dependency.

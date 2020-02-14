@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "libcli-${version}";
+  pname = "libcli";
   version = "1.9.7";
 
   src = fetchFromGitHub {

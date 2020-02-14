@@ -1,12 +1,12 @@
 { stdenv, fetchurl, pkgconfig, libnl, openssl, sqlite ? null }:
 
 stdenv.mkDerivation rec {
-  name = "hostapd-${version}";
-  version = "2.8";
+  pname = "hostapd";
+  version = "2.9";
 
   src = fetchurl {
-    url = "https://w1.fi/releases/${name}.tar.gz";
-    sha256 = "1c74rrazkhy4lr7pwgwa2igzca7h9l4brrs7672kiv7fwqmm57wj";
+    url = "https://w1.fi/releases/${pname}-${version}.tar.gz";
+    sha256 = "1mrbvg4v7vm7mknf0n29mf88k3s4a4qj6r4d51wq8hmjj1m7s7c8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -49,6 +49,7 @@ stdenv.mkDerivation rec {
     CONFIG_INTERNETWORKING=y
     CONFIG_HS20=y
     CONFIG_ACS=y
+    CONFIG_GETRANDOM=y
   '' + stdenv.lib.optionalString (sqlite != null) ''
     CONFIG_SQLITE=y
   '';
@@ -69,7 +70,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://hostap.epitest.fi;
+    homepage = https://hostap.epitest.fi;
     repositories.git = git://w1.fi/hostap.git;
     description = "A user space daemon for access point and authentication servers";
     license = licenses.gpl2;

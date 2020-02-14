@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.0.5";
+  version = "0.4.2.6";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0vk9j3ybz5dwwbmqrdj1bjcsxy76pc8frmfvflkdzwfkvkqcp8mm";
+    sha256 = "1i766s211nrbjvwvkd2375mjsbbc28yrg46564rbx6w46cj10005";
   };
 
   outputs = [ "out" "geoip" ];
@@ -34,6 +34,8 @@ stdenv.mkDerivation rec {
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+
+    patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
 
   enableParallelBuilding = true;

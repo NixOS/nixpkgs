@@ -1,25 +1,26 @@
-{ stdenv, bundlerEnv, ruby, makeWrapper }:
+{ stdenv, bundlerEnv, ruby, bundlerUpdateScript, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "fastlane";
   version = (import ./gemset.nix).fastlane.version;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  env = bundlerEnv {
-    name = "${name}-gems";
-    inherit pname ruby;
-    gemdir = ./.;
-  };
-
   phases = [ "installPhase" ];
 
-  installPhase = ''
+  installPhase = let
+    env = bundlerEnv {
+      name = "${pname}-${version}-gems";
+      inherit pname ruby;
+      gemdir = ./.;
+    };
+  in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/fastlane $out/bin/fastlane \
      --set FASTLANE_SKIP_UPDATE_CHECK 1
   '';
+
+  passthru.updateScript = bundlerUpdateScript "fastlane";
 
   meta = with stdenv.lib; {
     description     = "A tool to automate building and releasing iOS and Android apps";
@@ -28,6 +29,7 @@ stdenv.mkDerivation rec {
     license         = licenses.mit;
     maintainers     = with maintainers; [
       peterromfeldhk
+      nicknovitski
     ];
   };
 }

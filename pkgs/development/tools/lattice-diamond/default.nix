@@ -1,7 +1,7 @@
 { stdenv, rpmextract, patchelf, makeWrapper, file, requireFile, glib, zlib, 
     freetype, fontconfig, xorg }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "diamond-3.10";
 
   nativeBuildInputs = [ rpmextract patchelf makeWrapper file ];

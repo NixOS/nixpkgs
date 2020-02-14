@@ -7,36 +7,38 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, cffi, cryptography, pyopenssl,
-  crcmod, google-compute-engine, with-gce ? false }:
+{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
 
 let
-  pythonInputs = [ cffi cryptography pyopenssl crcmod ]
-                 ++ lib.optional (with-gce) google-compute-engine;
-  pythonPath = lib.makeSearchPath python.sitePackages pythonInputs;
+  pythonEnv = python.withPackages (p: with p; [
+    cffi
+    cryptography
+    pyopenssl
+    crcmod
+  ] ++ lib.optional (with-gce) google-compute-engine);
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "1w94c1p8vnp3kf802zpr3i0932f5b5irnfqmxj2p44gfyfmkym1j";
+      sha256 = "10h0khh8npj2j5f7h3z86h46zbb1skbfs74firssich6jk7rx6km";
     };
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "0pps7csf8d3rxqgd0bv06ga6cgkqhlbsys0k0sy1ipl3i6h5hmpf";
+      sha256 = "182r9lgpks50ihcrkarc5w6l4rfmpdnx825lazamj5j2jsha73xw";
     };
   }.${system};
 
 in stdenv.mkDerivation rec {
-  name = "google-cloud-sdk-${version}";
-  version = "241.0.0";
+  pname = "google-cloud-sdk";
+  version = "268.0.0";
 
-  src = fetchurl (sources name stdenv.hostPlatform.system);
+  src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
   buildInputs = [ python makeWrapper ];
 
-  doBuild = false;
+  nativeBuildInputs = [ jq ];
 
   patches = [
     ./gcloud-path.patch
@@ -55,8 +57,9 @@ in stdenv.mkDerivation rec {
         programPath="$out/google-cloud-sdk/bin/$program"
         binaryPath="$out/bin/$program"
         wrapProgram "$programPath" \
-            --set CLOUDSDK_PYTHON "${python}/bin/python" \
-            --prefix PYTHONPATH : "${pythonPath}"
+            --set CLOUDSDK_PYTHON "${pythonEnv}/bin/python" \
+            --prefix PYTHONPATH : "${pythonEnv}/${python.sitePackages}" \
+            --prefix PATH : "${openssl.bin}/bin"
 
         mkdir -p $out/bin
         ln -s $programPath $binaryPath
@@ -75,7 +78,20 @@ in stdenv.mkDerivation rec {
 
     # This directory contains compiled mac binaries. We used crcmod from
     # nixpkgs instead.
-    rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod
+    rm -r $out/google-cloud-sdk/platform/gsutil/third_party/crcmod \
+          $out/google-cloud-sdk/platform/gsutil/third_party/crcmod_osx
+
+    # remove tests and test data
+    find $out -name tests -type d -exec rm -rf '{}' +
+
+    # compact all the JSON
+    find $out -name \*.json | while read path; do
+      jq -c . $path > $path.min
+      mv $path.min $path
+    done
+
+    # strip the Cython gRPC library
+    strip $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
   meta = with stdenv.lib; {
@@ -84,7 +100,7 @@ in stdenv.mkDerivation rec {
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
-    maintainers = with maintainers; [ stephenmw zimbatm ];
+    maintainers = with maintainers; [ pradyuman stephenmw zimbatm ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
   };
 }

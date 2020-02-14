@@ -1,8 +1,8 @@
 { fetchgit, stdenv, love, curl, zip }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "0.12.1";
-  name = "hawkthorne-${version}";
+  pname = "hawkthorne";
 
   src = fetchgit {
     url = "https://github.com/hawkthorne/hawkthorne-journey.git";

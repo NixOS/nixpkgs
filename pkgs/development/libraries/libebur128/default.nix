@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.2.4";
-  name = "libebur128-${version}";
+  pname = "libebur128";
 
   src = fetchFromGitHub {
     owner = "jiixyj";

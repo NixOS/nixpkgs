@@ -20,11 +20,11 @@ let inherit (stdenv) lib; in
 
 stdenv.mkDerivation rec {
   pname = "yubikey-manager-qt";
-  version = "1.1.2";
+  version = "1.1.4";
 
   src = fetchurl {
     url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
-    sha256 = "01ax8zjrahs2sjbgsys2ahh57sdcap0ij3y1r1bbvsgzr7xxm2q8";
+    sha256 = "0rbr72741q7fqkr9qmvgj2mi6192ayz7bl935q2bsnqils4wsa3f";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook python3.pkgs.wrapPython qmake ];

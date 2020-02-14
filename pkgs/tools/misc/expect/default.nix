@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, tcl, makeWrapper }:
+{ stdenv, fetchurl, tcl, makeWrapper, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   version = "5.45.4";
-  name = "expect-${version}";
+  pname = "expect";
 
   src = fetchurl {
     url = "mirror://sourceforge/expect/Expect/${version}/expect${version}.tar.gz";
@@ -10,11 +10,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ tcl ];
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper autoreconfHook ];
 
   hardeningDisable = [ "format" ];
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s,/bin/stty,$(type -p stty),g" configure
   '';
 

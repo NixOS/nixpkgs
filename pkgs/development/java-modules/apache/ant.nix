@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   ant_1_8_2 = map (obj: fetchMaven {
     version = "1.8.2";
     artifactId = "ant";

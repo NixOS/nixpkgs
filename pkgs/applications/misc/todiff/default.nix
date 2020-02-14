@@ -1,7 +1,7 @@
 { stdenv, rustPlatform, fetchFromGitHub }:
 
 rustPlatform.buildRustPackage rec {
-  name = "todiff-${version}";
+  pname = "todiff";
   version = "0.6.1";
 
   src = fetchFromGitHub {
@@ -10,6 +10,9 @@ rustPlatform.buildRustPackage rec {
     rev = version;
     sha256 = "1y0v8nkaqb8kn61xwarpbyrq019gxx1f5f5p1hzw73nqxadc1rcm";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "0xn5p71qk0ahd2drklja16xwv7zw0797kkzpiv563kffzvd1p8id";
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, glib, ncurses, libcap_ng }:
 
 stdenv.mkDerivation rec {
-  name = "irqbalance-${version}";
+  pname = "irqbalance";
   version = "1.6.0";
 
   src = fetchFromGitHub {
@@ -15,6 +15,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ glib ncurses libcap_ng ];
 
   LDFLAGS = "-lncurses";
+
+  postInstall =
+    ''
+      # Systemd service
+      mkdir -p $out/lib/systemd/system
+      grep -vi "EnvironmentFile" misc/irqbalance.service >$out/lib/systemd/system/irqbalance.service
+      substituteInPlace $out/lib/systemd/system/irqbalance.service \
+        --replace /usr/sbin/irqbalance $out/bin/irqbalance \
+        --replace ' $IRQBALANCE_ARGS' ""
+    '';
 
   meta = {
     homepage = https://github.com/Irqbalance/irqbalance;

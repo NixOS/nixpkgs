@@ -7,8 +7,8 @@
 , fetchpatch
 }:
 
-mkDerivation rec {
-  name = "vogl-${version}";
+mkDerivation {
+  pname = "vogl";
   version = "2016-05-13";
 
   src = fetchFromGitHub {
@@ -52,5 +52,6 @@ mkDerivation rec {
     license = licenses.mit;
     maintainers = [ maintainers.deepfire ];
     platforms = [ "x86_64-linux" "i686-linux" ];
+    broken = true;
   };
 }

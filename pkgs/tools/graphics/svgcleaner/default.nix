@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name = "svgcleaner-${version}";
+  pname = "svgcleaner";
   version = "0.9.2";
 
   src = fetchFromGitHub {
@@ -10,6 +10,9 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "1jpnqsln37kkxz98vj7gly3c2170v6zamd876nc9nfl9vns41s0f";
   };
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "0kzrklw5nrzgvrfzq1mlnri06s19p4f3w38v39247baz2xd6j1n2";
 

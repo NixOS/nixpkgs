@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, postgresql, openssl } :
 
 stdenv.mkDerivation rec {
-  name = "pgmanage-${version}";
+  pname = "pgmanage";
   version = "11.0.1";
 
   src = fetchFromGitHub {

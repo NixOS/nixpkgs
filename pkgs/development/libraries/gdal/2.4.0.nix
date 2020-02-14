@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchpatch, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql, libgeotiff, pythonPackages, proj, geos, openssl
+, postgresql, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl
 , libpng, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat
 , libiconv, libxml2
 , netcdfSupport ? true, netcdf, hdf5, curl
@@ -8,13 +8,22 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "gdal-${version}";
+  pname = "gdal";
   version = "2.4.0";
 
   src = fetchurl {
-    url = "https://download.osgeo.org/gdal/${version}/${name}.tar.xz";
+    url = "https://download.osgeo.org/gdal/${version}/${pname}-${version}.tar.xz";
     sha256 = "09qgy36z0jc9w05373m4n0vm4j54almdzql6z9p9zr9pdp61syf3";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2019-17545.patch";
+      url = "https://github.com/OSGeo/gdal/commit/8cd2d2eb6327cf782a74dae263ffa6f89f46c93d.patch";
+      stripLen = 1;
+      sha256 = "06h88a659jcqf6ps1m91qy78s6s9krbkwnz28f5qh7032vlp6qpw";
+    })
+  ];
 
   buildInputs = [ unzip libjpeg libtiff libgeotiff libpng proj openssl sqlite
     libspatialite poppler hdf4 qhull giflib expat libxml2 proj ]
@@ -30,7 +39,7 @@ stdenv.mkDerivation rec {
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}"       # optional
     "--with-pg=${postgresql}/bin/pg_config"
-    "--with-mysql=${mysql.connector-c or mysql}/bin/mysql_config"
+    "--with-mysql=${libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff.dev}"
     "--with-sqlite3=${sqlite.dev}"
     "--with-spatialite=${libspatialite}"

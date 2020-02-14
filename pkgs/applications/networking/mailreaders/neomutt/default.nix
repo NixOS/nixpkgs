@@ -1,23 +1,23 @@
 { stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which, writeScript
 , ncurses, perl , cyrus_sasl, gss, gpgme, kerberos, libidn, libxml2, notmuch, openssl
-, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell
+, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, mailcap, runtimeShell, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  version = "20180716";
-  name = "neomutt-${version}";
+  version = "20191207";
+  pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
-    rev    = "neomutt-${version}";
-    sha256 = "0im2kkahkr04q04irvcimfawxi531ld6wrsa92r2m7l10gmijkl8";
+    rev    = version;
+    sha256 = "147yjpqnsbfy01fhsflxlixk0985r91a6bjmqq3cwmf7gka3sihm";
   };
 
   buildInputs = [
     cyrus_sasl gss gpgme kerberos libidn ncurses
     notmuch openssl perl lmdb
-    mailcap
+    mailcap sqlite
   ];
 
   nativeBuildInputs = [
@@ -50,6 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
+    "--enable-autocrypt"
     "--gpgme"
     "--gss"
     "--lmdb"

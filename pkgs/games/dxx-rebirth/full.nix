@@ -2,7 +2,7 @@
 , dxx-rebirth, descent1-assets, descent2-assets }:
 
 let
-  generic = ver: assets: stdenv.mkDerivation rec {
+  generic = ver: assets: stdenv.mkDerivation {
     name = "d${toString ver}x-rebirth-full-${assets.version}";
 
     nativeBuildInputs = [ makeWrapper ];

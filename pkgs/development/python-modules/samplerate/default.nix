@@ -4,7 +4,7 @@
 , pkgs
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "scikits.samplerate";
   version = "0.3.3";
 

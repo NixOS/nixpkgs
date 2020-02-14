@@ -2,11 +2,16 @@
 
 let
 
-  runCommand' = stdenv: name: env: buildCommand:
+  runCommand' = runLocal: stdenv: name: env: buildCommand:
     stdenv.mkDerivation ({
       inherit name buildCommand;
       passAsFile = [ "buildCommand" ];
-    } // env);
+    }
+    // (lib.optionalAttrs runLocal {
+          preferLocalBuild = true;
+          allowSubstitutes = false;
+       })
+    // env);
 
 in
 
@@ -21,11 +26,27 @@ rec {
   * runCommand "name" {envVariable = true;} ''echo hello > $out''
   * runCommandNoCC "name" {envVariable = true;} ''echo hello > $out'' # equivalent to prior
   * runCommandCC "name" {} ''gcc -o myfile myfile.c; cp myfile $out'';
+  *
+  * The `*Local` variants force a derivation to be built locally,
+  * it is not substituted.
+  *
+  * This is intended for very cheap commands (<1s execution time).
+  * It saves on the network roundrip and can speed up a build.
+  *
+  * It is the same as adding the special fields
+  * `preferLocalBuild = true;`
+  * `allowSubstitutes = false;`
+  * to a derivation’s attributes.
   */
   runCommand = runCommandNoCC;
-  runCommandNoCC = runCommand' stdenvNoCC;
-  runCommandCC = runCommand' stdenv;
+  runCommandLocal = runCommandNoCCLocal;
 
+  runCommandNoCC = runCommand' false stdenvNoCC;
+  runCommandNoCCLocal = runCommand' true stdenvNoCC;
+
+  runCommandCC = runCommand' false stdenv;
+  # `runCommandCCLocal` left out on purpose.
+  # We shouldn’t force the user to have a cc in scope.
 
   /* Writes a text file to the nix store.
    * The contents of text is added to the file in the store.
@@ -381,4 +402,37 @@ rec {
   # Copy a list of paths to the Nix store.
   copyPathsToStore = builtins.map copyPathToStore;
 
+  /* Applies a list of patches to a source directory.
+   *
+   * Examples:
+   *
+   * # Patching nixpkgs:
+   * applyPatches {
+   *   src = pkgs.path;
+   *   patches = [
+   *     (pkgs.fetchpatch {
+   *       url = "https://github.com/NixOS/nixpkgs/commit/1f770d20550a413e508e081ddc08464e9d08ba3d.patch";
+   *       sha256 = "1nlzx171y3r3jbk0qhvnl711kmdk57jlq4na8f8bs8wz2pbffymr";
+   *     })
+   *   ];
+   * }
+   */
+  applyPatches =
+    { src
+    , name ? (if builtins.typeOf src == "path"
+              then builtins.baseNameOf src
+              else
+                if builtins.isAttrs src && builtins.hasAttr "name" src
+                then src.name
+                else throw "applyPatches: please supply a `name` argument because a default name can only be computed when the `src` is a path or is an attribute set with a `name` attribute."
+             ) + "-patched"
+    , patches   ? []
+    , postPatch ? ""
+    }: stdenvNoCC.mkDerivation {
+      inherit name src patches postPatch;
+      preferLocalBuild = true;
+      allowSubstitutes = false;
+      phases = "unpackPhase patchPhase installPhase";
+      installPhase = "cp -R ./ $out";
+    };
 }

@@ -7,8 +7,9 @@ let
   version = "4.5.4";
 in
 
-stdenv.mkDerivation rec {
-  name = "gringo-${version}";
+stdenv.mkDerivation {
+  pname = "gringo";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://sourceforge/project/potassco/gringo/${version}/gringo-${version}-source.tar.gz";

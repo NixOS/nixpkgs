@@ -7,13 +7,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "3.3.0";
+  version = "7.0.0";
   pname = "azure-mgmt-storage";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "1kffay8hr8h3hf78wb1kisvffpwxsxy6lixbgh9dbv0p781sgyh6";
+    sha256 = "7f5e6b18dee267c99f08f6a716a93173bbae433c8665f5c59153fb1a963bc105";
   };
 
   postInstall = if isPy3k then "" else ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "This is the Microsoft Azure Storage Management Client Library";
-    homepage = https://docs.microsoft.com/en-us/python/api/overview/azure/storage?view=azure-python;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ olcai mwilsoninsight ];
   };

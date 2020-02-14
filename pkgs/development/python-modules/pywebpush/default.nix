@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "pywebpush";
-  version = "1.9.4";
+  version = "1.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03qkijz56fx7p8405sknw2wji4pfj5knajk2lmj9y58mjxydbpp3";
+    sha256 = "e80ae0ea978b2e3b7860d2a9ae836528f5fa2e13936673e0b6613589965937ee";
   };
 
   propagatedBuildInputs = [

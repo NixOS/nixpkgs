@@ -23,7 +23,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gtk-sharp-${version}";
+  pname = "gtk-sharp";
   version = "2.12.45";
 
   builder = ./builder.sh;

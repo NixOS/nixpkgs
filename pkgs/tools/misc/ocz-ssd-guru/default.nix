@@ -1,10 +1,10 @@
-{ fetchurl, stdenv, xorg, freetype, fontconfig, libGLU_combined, glibc, makeWrapper }:
+{ fetchurl, stdenv, xorg, freetype, fontconfig, libGLU, libGL, glibc, makeWrapper }:
 
 let
   system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
 in
 stdenv.mkDerivation rec {
-  name = "ocz-ssd-guru-${version}";
+  pname = "ocz-ssd-guru";
   version = "1.0.1170";
 
   src = fetchurl {
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       xorg.libXrender
       stdenv.cc.cc
       glibc
-      libGLU_combined
+      libGLU libGL
   ];
 
   installPhase = ''

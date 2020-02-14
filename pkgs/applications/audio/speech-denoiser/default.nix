@@ -8,7 +8,7 @@ let
     sha256 = "189l6lz8sz5vr6bjyzgcsrvksl1w6crqsg0q65r94b5yjsmjnpr4";
   };
 
-  rnnoise-nu = stdenv.mkDerivation rec {
+  rnnoise-nu = stdenv.mkDerivation {
     pname = "rnnoise-nu";
     version = "unstable-07-10-2019";
     src = speech-denoiser-src;
@@ -18,7 +18,7 @@ let
     installTargets = [ "install-rnnoise-nu" ];
   };
 in
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation  {
   pname = "speech-denoiser";
   version = "unstable-07-10-2019";
 

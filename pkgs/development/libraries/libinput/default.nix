@@ -26,12 +26,12 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libinput-${version}";
-  version = "1.13.4";
+  pname = "libinput";
+  version = "1.15.0";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/libinput/${name}.tar.xz";
-    sha256 = "07a0w7rak7rvnh6g4j0akwjxwinxfszc1xi9mrx12fv82k3mgsyk";
+    url = "https://www.freedesktop.org/software/libinput/${pname}-${version}.tar.xz";
+    sha256 = "1qa3b2fd4pv8ysf0mgwnyhqv9v48zgy3sy0q3a3vxcmwcvpizgxz";
   };
 
   outputs = [ "bin" "out" "dev" ];
@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     (mkFlag documentationSupport "documentation")
     (mkFlag eventGUISupport "debug-gui")
     (mkFlag testsSupport "tests")
+    "--sysconfdir=/etc"
     "--libexecdir=${placeholder "bin"}/libexec"
   ];
 

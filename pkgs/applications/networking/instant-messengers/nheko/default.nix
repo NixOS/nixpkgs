@@ -1,6 +1,7 @@
 { lib, stdenv, fetchFromGitHub
-, cmake, cmark, lmdb, qt5, qtmacextras, mtxclient
-, boost, spdlog, olm, pkgconfig, nlohmann_json
+, cmake, cmark, lmdb, mkDerivation, qtbase, qtmacextras
+, qtmultimedia, qttools, mtxclient, boost, spdlog, olm, pkgconfig
+, nlohmann_json
 }:
 
 # These hashes and revisions are based on those from here:
@@ -20,8 +21,8 @@ let
     sha256 = "1whsc5cybf9rmgyaj6qjji03fv5jbgcgygp956s3835b9f9cjg1n";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nheko-${version}";
+mkDerivation rec {
+  pname = "nheko";
   version = "0.6.4";
 
   src = fetchFromGitHub {
@@ -63,7 +64,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     mtxclient olm boost lmdb spdlog cmark
-    qt5.qtbase qt5.qtmultimedia qt5.qttools
+    qtbase qtmultimedia qttools
   ] ++ lib.optional stdenv.isDarwin qtmacextras;
 
   enableParallelBuilding = true;

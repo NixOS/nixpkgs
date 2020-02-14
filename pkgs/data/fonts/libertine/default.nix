@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fontforge }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "linux-libertine-5.3.0";
 
   src = fetchurl {

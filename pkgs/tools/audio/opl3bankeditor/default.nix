@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, cmake, qttools, alsaLib }:
+{ stdenv, mkDerivation, fetchFromGitHub, cmake, qttools, alsaLib }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "1.5";
   pname = "OPL3BankEditor";
 

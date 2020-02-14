@@ -1,8 +1,7 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU_combined, zlib, swig, python, doxygen, xorg }:
+{ stdenv, fetchFromGitHub, unzip, cmake, freeglut, libGLU, libGL, zlib, swig, python, doxygen, xorg }:
 
-stdenv.mkDerivation rec
-{
-  name = "partio-${version}";
+stdenv.mkDerivation {
+  pname = "partio";
   version = "2018-03-01";
 
   src = fetchFromGitHub {
@@ -15,7 +14,7 @@ stdenv.mkDerivation rec
   outputs = [ "dev" "out" "lib" ];
 
   nativeBuildInputs = [ unzip cmake doxygen ];
-  buildInputs = [ freeglut libGLU_combined zlib swig python xorg.libXi xorg.libXmu ];
+  buildInputs = [ freeglut libGLU libGL zlib swig python xorg.libXi xorg.libXmu ];
 
   enableParallelBuilding = true;
 

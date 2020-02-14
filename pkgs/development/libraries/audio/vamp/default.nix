@@ -3,7 +3,7 @@
 
 { stdenv, fetchFromGitHub, pkgconfig, libsndfile }:
 
-rec {
+{
 
   vampSDK = stdenv.mkDerivation {
     name = "vamp-sdk-2.7.1";
