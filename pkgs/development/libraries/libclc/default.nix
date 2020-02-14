@@ -28,6 +28,8 @@ stdenv.mkDerivation {
     ${python.interpreter} ./configure.py --prefix=$out
   '';
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     homepage = http://libclc.llvm.org/;
     description = "Implementation of the library requirements of the OpenCL C programming language";
