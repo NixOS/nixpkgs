@@ -1,5 +1,6 @@
 { stdenv, fetchurl, bison, flex, autoreconfHook
 , openssl, db, attr, perl, tcsh
+, enableLmdb ? false
 } :
 
 stdenv.mkDerivation rec {
@@ -32,8 +33,9 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc/orangefs"
     "--enable-shared"
     "--enable-fast"
+    "--enable-racache"
     "--with-ssl=${stdenv.lib.getDev openssl}"
-  ];
+  ] ++ stdenv.lib.optional enableLmdb "--with-db-backend=lmdb";
 
 
   enableParallelBuilding = true;
