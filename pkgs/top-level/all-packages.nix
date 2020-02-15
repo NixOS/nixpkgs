@@ -21614,10 +21614,12 @@ in
     systemdSupport = true;
   };
 
-  synergy = callPackage ../applications/misc/synergy {
+  synergy = libsForQt5.callPackage ../applications/misc/synergy {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
   };
+
+  synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
