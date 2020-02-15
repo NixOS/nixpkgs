@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
-  psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
+  psutil, pyflakes, rope, numpy, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels, qtpy, pyzmq, chardet, pyxdg, intervaltree, qdarkstyle,
   watchdog, python-language-server, pympler, diff-match-patch, atomicwrites
@@ -18,7 +18,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
+    jedi pycodestyle psutil pyflakes rope numpy pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine pyxdg intervaltree qdarkstyle watchdog
     python-language-server pympler diff-match-patch atomicwrites

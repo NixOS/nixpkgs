@@ -1458,9 +1458,9 @@ in {
   sniffio = callPackage ../development/python-modules/sniffio { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
-  spyder-kernels_0_5_2 = callPackage ../development/python-modules/spyder-kernels/spyder-kernels_0_5_2.nix {};
+  spyder-kernels_0_5 = callPackage ../development/python-modules/spyder-kernels/0.5.nix {};
   spyder = callPackage ../development/python-modules/spyder {};
-  spyder_3_3_4 = callPackage ../development/python-modules/spyder/spyder_3_3_4.nix {};
+  spyder_3 = callPackage ../development/python-modules/spyder/3.nix {};
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 

@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
+{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, pythonAtLeast
 , pytest, mock, pytestcov, coverage
 , future, futures, ujson
 }:
@@ -6,6 +6,9 @@
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
   version = "0.3.4";
+
+  # tests fail >=3.8
+  disabled = pythonAtLeast "3.8";
 
   src = fetchFromGitHub {
     owner = "palantir";

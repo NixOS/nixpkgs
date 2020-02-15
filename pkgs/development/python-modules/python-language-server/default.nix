@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27
+{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder, isPy27, pythonAtLeast
 , backports_functools_lru_cache, configparser, futures, future, jedi, pluggy, python-jsonrpc-server, flake8, ujson
 , versioneer, pytest, mock, pytestcov, coverage, numpy, pandas, matplotlib, pyqt5
 , setuptools
@@ -24,16 +24,15 @@ buildPythonPackage rec {
   pname = "python-language-server";
   version = "0.31.8";
 
+  # no python-jsonrpc-server for >=3.8
+  disabled = pythonAtLeast "3.8";
+
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-language-server";
     rev = version;
     sha256 = "1h0w7x7d9g3z7vmxn5w7qxdkjya3sl0xfnklfaaaj8dkb5mjldpi";
   };
-
-  # postPatch = ''
-  #   substituteInPlace setup.py --replace "jedi>=0.14.1,<0.16" "jedi>=0.14.1"
-  # '';
 
   # The tests require all the providers, disable otherwise.
   doCheck = providers == ["*"];
