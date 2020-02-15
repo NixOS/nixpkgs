@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = "http://reveng.sourceforge.net/";
     maintainers = with maintainers; [ btlvr ];
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = platforms.x86_64;
   };
 }
