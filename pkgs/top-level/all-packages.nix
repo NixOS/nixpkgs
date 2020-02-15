@@ -855,6 +855,8 @@ in
 
   crc32c = callPackage ../development/libraries/crc32c { };
 
+  crc-reveng = callPackage ../tools/security/crc-reveng { };
+
   cue = callPackage ../development/tools/cue { };
 
   deskew = callPackage ../applications/graphics/deskew { };
