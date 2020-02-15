@@ -1,16 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
+{ stdenv, fetchurl, pkgconfig, mod_ca, pkgs }:
 
 stdenv.mkDerivation rec {
   pname = "mod_spkac";
-  version = "0.2.1";
+  version = "0.2.2";
 
   src = fetchurl {
     url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
-    sha256 = "0x6ia9qcr7lx2awpv9cr4ndic5f4g8yqzmp2hz66zpzkmk2b2pyz";
+    sha256 = "0hpr58yazbi21m0sjn22a8ns4h81s4jlab9szcdw7j9w9jdc7j0h";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ mod_ca apr aprutil ];
+  buildInputs = [ mod_ca pkgs.apr pkgs.aprutil ];
   inherit (mod_ca) configureFlags installFlags;
 
   meta = with stdenv.lib; {
