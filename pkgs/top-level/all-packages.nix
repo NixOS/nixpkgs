@@ -17499,7 +17499,8 @@ in
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
-  envypn-font = callPackage ../data/fonts/envypn-font { };
+  envypn-font = callPackage ../data/fonts/envypn-font
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   envdir = callPackage ../tools/misc/envdir-go { };
 
