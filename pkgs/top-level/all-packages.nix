@@ -165,6 +165,8 @@ in
 
   corgi = callPackage ../development/tools/corgi { };
 
+  colorz = callPackage ../tools/misc/colorz { };
+
   dhallToNix = callPackage ../build-support/dhall-to-nix.nix {
     inherit dhall-nix;
   };
