@@ -75,7 +75,9 @@ stdenv.mkDerivation rec {
     '';
 
   cmakeFlags =
-    [ "-DWITH_MOD_OCEANSIM=ON"
+    [
+      "-DWITH_ALEMBIC=OFF"
+      "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"
