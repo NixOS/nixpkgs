@@ -8,12 +8,10 @@ stdenv.mkDerivation rec {
     sha256 = "0d13w6xp47zdsz8x2sxm1708i6h0bis1q5b49bbw032mwk8jpklx";
   };
 
-  patchPhase = ''
+  postPatch = ''
     substituteInPlace config.h --replace "BMP_BIT   32" "BMP_BIT 64"
     substituteInPlace config.h --replace "BMP_SUB   16" "BMP_SUB 32"
   '';
-
-  buildPhase = "make";
 
   installPhase = ''
     mkdir -p $out/bin
