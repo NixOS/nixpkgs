@@ -1,24 +1,16 @@
-{ lib, python3, mautrix-telegram, fetchpatch }:
+{ lib, python3, mautrix-telegram }:
 
 with python3.pkgs;
 
 buildPythonPackage rec {
   pname = "mautrix-telegram";
-  version = "0.7.0";
+  version = "0.7.1";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0xzivcn1s5j2nn9p7li9bzr0h225bnli4fr3yrh8v7npx2ymg1r3";
+    sha256 = "1yi4h37lhlpa095hzd0gwn1ifbycq8878kj5n2sjhw8kk6nblda9";
   };
-
-  patches = [
-    # fix tests
-    (fetchpatch {
-      url = "https://github.com/tulir/mautrix-telegram/commit/fe52f0ad106122f08af72e356c4c62bb8875b453.patch";
-      sha256 = "0r7j7q78brqqx0rkchld328k00yq0ykdk7syvwpihqzj3gchacb7";
-    })
-  ];
 
   postPatch = ''
     sed -i -e '/alembic>/d' setup.py

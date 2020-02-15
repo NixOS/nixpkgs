@@ -12,7 +12,7 @@ let
     ikey=${cfg.ikey}
     skey=${cfg.skey}
     host=${cfg.host}
-    ${optionalString (cfg.group != "") ("group="+cfg.group)}
+    ${optionalString (cfg.groups != "") ("groups="+cfg.groups)}
     failmode=${cfg.failmode}
     pushinfo=${boolToStr cfg.pushinfo}
     autopush=${boolToStr cfg.autopush}
@@ -42,6 +42,10 @@ let
   };
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "security" "duosec" "group" ] [ "security" "duosec" "groups" ])
+  ];
+
   options = {
     security.duosec = {
       ssh.enable = mkOption {
@@ -71,10 +75,16 @@ in
         description = "Duo API hostname.";
       };
 
-      group = mkOption {
+      groups = mkOption {
         type = types.str;
         default = "";
-        description = "Use Duo authentication for users only in this group.";
+        example = "users,!wheel,!*admin guests";
+        description = ''
+          If specified, Duo authentication is required only for users
+          whose primary group or supplementary group list matches one
+          of the space-separated pattern lists. Refer to
+          <link xlink:href="https://duo.com/docs/duounix"/> for details.
+        '';
       };
 
       failmode = mkOption {

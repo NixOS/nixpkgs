@@ -141,9 +141,11 @@ let
     '';
 
   dmDefault = cfg.desktopManager.default;
+  # fallback default for cases when only default wm is set
+  dmFallbackDefault = if dmDefault != null then dmDefault else "none";
   wmDefault = cfg.windowManager.default;
 
-  defaultSessionFromLegacyOptions = concatStringsSep "+" (filter (s: s != null) ([ dmDefault ] ++ optional (wmDefault != "none") wmDefault));
+  defaultSessionFromLegacyOptions = dmFallbackDefault + optionalString (wmDefault != null && wmDefault != "none") "+${wmDefault}";
 
 in
 
@@ -358,7 +360,7 @@ in
             { c = wmDefault; t = "- services.xserver.windowManager.default"; }
             ]))}
           Please use
-            services.xserver.displayManager.defaultSession = "${concatStringsSep "+" (filter (s: s != null) [ dmDefault wmDefault ])}";
+            services.xserver.displayManager.defaultSession = "${defaultSessionFromLegacyOptions}";
           instead.
         ''
       ];
@@ -425,6 +427,7 @@ in
                     TryExec=${script}
                     Exec=${script}
                     Name=${sessionName}
+                    DesktopNames=${sessionName}
                   '';
                 } // {
                   providedSessions = [ sessionName ];

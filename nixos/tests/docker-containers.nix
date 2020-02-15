@@ -7,19 +7,19 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
   };
 
   nodes = {
-    docker = { pkgs, ... }:
-      {
-        docker-containers.nginx = {
-          image = "nginx-container";
-          imageFile = pkgs.dockerTools.examples.nginx;
-          ports = ["8181:80"];
-        };
+    docker = { pkgs, ... }: {
+      docker-containers.nginx = {
+        image = "nginx-container";
+        imageFile = pkgs.dockerTools.examples.nginx;
+        ports = ["8181:80"];
       };
+    };
   };
 
   testScript = ''
+    start_all()
     docker.wait_for_unit("docker-nginx.service")
     docker.wait_for_open_port(8181)
-    docker.wait_until_succeeds("curl http://localhost:8181|grep Hello")
+    docker.wait_until_succeeds("curl http://localhost:8181 | grep Hello")
   '';
 })

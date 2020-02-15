@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "0val36yw987b1558iiyk3nqg0yy5k9y5wh49v91zj3cs58mmfyhc";
   };
 
+  postPatch = ''
+    sed -i -e '/pid_t gettid/,+2d' libcoz/ccutil/thread.h
+  '';
+
   postConfigure = ''
     # This is currently hard-coded. Will be fixed in the next release.
     sed -e "s|/usr/lib/|$out/lib/|" -i ./coz

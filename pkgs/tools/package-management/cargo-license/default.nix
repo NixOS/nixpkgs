@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./add-Cargo.lock.patch ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0ksxvbrx8d8d09i167mdrhz5m46nbr6l0vyn7xpdanmha31xiaz9";
 
   meta = with lib; {

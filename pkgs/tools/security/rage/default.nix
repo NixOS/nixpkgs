@@ -2,22 +2,26 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rage";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "str4d";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ri4rfhy1wl0cppi2cp97kkiz08x2f072yfahn2kv9r4v1i9f4a7";
+    sha256 = "1lfp9vyrk8880j7p5i73zja9dglvl1lvvh7286rwd1a9gbcj6grb";
   };
 
-  cargoSha256 = "02adwvcvha83zcvc5n7p88l7wmkg52j2xhznmhabc0zn328as2yd";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "09dg43vba8hwivng2h70qmpxnijad171mf02vwjw0gqxk83ql28v";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "A simple, secure and modern encryption tool with small explicit keys, no config options, and UNIX-style composability";
     homepage = "https://github.com/str4d/rage";
+    changelog = "https://github.com/str4d/rage/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = [ maintainers.marsam ];
   };

@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0a4bml9nxvyh110a60l4lc11yr2ds5r8d3iplslccrkq1ka96av9";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0dbgjc21q0zaadsjvq3s6y6f4dmsybxb6g2sg8w2d3phkm9j921z";
 
   checkInputs = [ coreutils bash dash ];

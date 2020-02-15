@@ -1,24 +1,24 @@
 { stdenv, fetchgit, fetchNodeModules, buildPythonPackage
 , pgpy, flask, bleach, misaka, humanize, markdown, psycopg2, pygments, requests
-, sqlalchemy, flask_login, beautifulsoup4, sqlalchemy-utils, celery, alembic
+, sqlalchemy, cryptography, beautifulsoup4, sqlalchemy-utils, celery, alembic
 , importlib-metadata
 , sassc, nodejs
 , writeText }:
 
 buildPythonPackage rec {
   pname = "srht";
-  version = "0.54.4";
+  version = "0.57.2";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/core.sr.ht";
     rev = version;
-    sha256 = "0flxvn178hqd8ljz89ddis80zfnmzgimv4506w4dg2flbwzywy7z";
+    sha256 = "11rfpb0wf1xzrhcnpahaghmi5626snzph0vsbxlmmqx75wf0p6mf";
   };
 
   node_modules = fetchNodeModules {
     src = "${src}/srht";
     nodejs = nodejs;
-    sha256 = "0axl50swhcw8llq8z2icwr4nkr5qsw2riih0a040f9wx4xiw4p6p";
+    sha256 = "0gwa2xb75g7fclrsr7r131kj8ri5gmhd96yw1iws5pmgsn2rlqi1";
   };
 
   patches = [
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pygments
     requests
     sqlalchemy
-    flask_login
+    cryptography
     beautifulsoup4
     sqlalchemy-utils
 
@@ -57,17 +57,7 @@ buildPythonPackage rec {
     cp -r ${node_modules} srht/node_modules
   '';
 
-  preCheck = let
-    config = writeText "config.ini" ''
-      [webhooks]
-      private-key=K6JupPpnr0HnBjelKTQUSm3Ro9SgzEA2T2Zv472OvzI=
-
-      [meta.sr.ht]
-      origin=http://meta.sr.ht.local
-    '';
-  in ''
-    cp -f ${config} config.ini
-  '';
+  dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://git.sr.ht/~sircmpwn/srht;

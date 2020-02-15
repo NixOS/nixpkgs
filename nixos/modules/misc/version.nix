@@ -42,8 +42,8 @@ in
 
     nixos.revision = mkOption {
       internal = true;
-      type = types.str;
-      default = trivial.revisionWithDefault "master";
+      type = types.nullOr types.str;
+      default = trivial.revisionWithDefault null;
       description = "The Git revision from which this NixOS configuration was built.";
     };
 
@@ -82,6 +82,12 @@ in
       type = types.str;
       default = https://nixos.org/channels/nixos-unstable;
       description = "Default NixOS channel to which the root user is subscribed.";
+    };
+
+    configurationRevision = mkOption {
+      type = types.nullOr types.str;
+      default = null;
+      description = "The Git revision of the top-level flake from which this configuration was built.";
     };
 
   };

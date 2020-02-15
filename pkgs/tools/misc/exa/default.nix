@@ -8,6 +8,9 @@ buildRustPackage rec {
   pname = "exa";
   version = "0.9.0";
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1hgjp23rjd90wyf0nq6d5akjxdfjlaps54dv23zgwjvkhw24fidf";
 
   src = fetchFromGitHub {

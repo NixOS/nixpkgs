@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, rustPlatform, ncurses }:
-rustPlatform.buildRustPackage rec {
-  name = "hexdino-${version}";
+
+rustPlatform.buildRustPackage {
+  pname = "hexdino";
   version = "0.1.0";
 
   src = fetchFromGitHub {
@@ -10,8 +11,8 @@ rustPlatform.buildRustPackage rec {
     sha256 = "11mz07735gxqfamjcjjmxya6swlvr1p77sgd377zjcmd6z54gwyf";
   };
 
-  cargoSha256 = "0qa8ypp5a7sf1gic482zh3i6s94w6k6bgmk5ynfvwi7g49ql7c4z";
-  verifyCargoDeps = true;
+  cargoSha256 = "06ghcd4j751mdkzwb88nqwk8la4zdb137y0iqrkpykkfx0as43x3";
+  legacyCargoFetcher = false;
 
   buildInputs = [ ncurses ];
 

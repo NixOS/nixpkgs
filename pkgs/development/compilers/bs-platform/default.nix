@@ -21,8 +21,5 @@ in
     license = licenses.lgpl3;
     maintainers = with maintainers; [ turbomack gamb anmonteiro ];
     platforms = platforms.all;
-    # Currently there is an issue with aarch build in hydra
-    # https://github.com/BuckleScript/bucklescript/issues/4091
-    badPlatforms = platforms.aarch64;
   };
 })

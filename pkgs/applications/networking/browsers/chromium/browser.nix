@@ -60,8 +60,22 @@ mkChromiumDerivation (base: rec {
 
   meta = {
     description = "An open source web browser from Google";
-    homepage = http://www.chromium.org/;
-    maintainers = with maintainers; [ bendlas thefloweringash ];
+    longDescription = ''
+      Chromium is an open source web browser from Google that aims to build a
+      safer, faster, and more stable way for all Internet users to experience
+      the web. It has a minimalist user interface and provides the vast majority
+      of source code for Google Chrome (which has some additional features).
+    '';
+    homepage = https://www.chromium.org/;
+    maintainers = with maintainers; [ bendlas thefloweringash primeos ];
+    # Overview of the maintainer roles:
+    # nixos-unstable:
+    # - TODO: Need a new maintainer for x86_64 [0]
+    # - @thefloweringash: aarch64
+    # - @primeos: Provisional maintainer (x86_64)
+    # Stable channel:
+    # - TODO (need someone to test backports [0])
+    # [0]: https://github.com/NixOS/nixpkgs/issues/78450
     license = if enableWideVine then licenses.unfree else licenses.bsd3;
     platforms = platforms.linux;
     hydraPlatforms = if channel == "stable" then ["aarch64-linux" "x86_64-linux"] else [];

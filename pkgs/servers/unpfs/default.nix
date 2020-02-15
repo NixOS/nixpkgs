@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/example/unpfs";
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1d33nwj3i333a6ji3r3037mgg553lc3wsawm0pz13kbvhjf336i8";
 
   RUSTC_BOOTSTRAP = 1;

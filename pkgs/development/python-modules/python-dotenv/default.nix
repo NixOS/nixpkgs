@@ -8,11 +8,11 @@
 
 buildPythonPackage rec {
   pname = "python-dotenv";
-  version = "0.10.4";
+  version = "0.10.5";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16s2x5ghrhz9ljm6h3y0pbwh97558vbs7l0yiicag4s0xyn0nzq0";
+    sha256 = "1p6xk0f1yj1s4n8wjs9m8xqilc5bcwvfzsy9nv5lrmkhr78bym7j";
   };
 
   propagatedBuildInputs = [ click ] ++ lib.optionals isPy27 [ typing ];

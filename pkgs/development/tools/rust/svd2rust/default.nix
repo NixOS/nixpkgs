@@ -14,6 +14,9 @@ buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "03rfb8swxbcc9qm4mhxz5nm4b1gw7g7389wrdc91abxl4mw733ac";
 
   # doc tests fail due to missing dependency

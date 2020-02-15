@@ -14,12 +14,16 @@
  <refsynopsisdiv>
   <cmdsynopsis>
    <command>nixos-option</command>
+
    <arg>
-    <option>-I</option> <replaceable>path</replaceable>
+    <group choice='req'>
+     <arg choice='plain'><option>-r</option></arg>
+     <arg choice='plain'><option>--recursive</option></arg>
+    </group>
    </arg>
 
    <arg>
-    <option>--all</option>
+    <option>-I</option> <replaceable>path</replaceable>
    </arg>
 
    <arg>
@@ -46,6 +50,15 @@
   </para>
   <variablelist>
    <varlistentry>
+    <term><option>-r</option></term>
+    <term><option>--recursive</option></term>
+    <listitem>
+     <para>
+      Print all the values at or below the specified path recursively.
+     </para>
+    </listitem>
+   </varlistentry>
+   <varlistentry>
     <term>
      <option>-I</option> <replaceable>path</replaceable>
     </term>
@@ -53,16 +66,6 @@
      <para>
       This option is passed to the underlying
       <command>nix-instantiate</command> invocation.
-     </para>
-    </listitem>
-   </varlistentry>
-   <varlistentry>
-    <term>
-     <option>--all</option>
-    </term>
-    <listitem>
-     <para>
-      Print the values of all options.
      </para>
     </listitem>
    </varlistentry>

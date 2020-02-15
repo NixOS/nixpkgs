@@ -697,6 +697,16 @@ in
       '';
     };
 
+    systemd.sleep.extraConfig = mkOption {
+      default = "";
+      type = types.lines;
+      example = "HibernateDelaySec=1h";
+      description = ''
+        Extra config options for systemd sleep state logic.
+        See sleep.conf.d(5) man page for available options.
+      '';
+    };
+
     systemd.user.extraConfig = mkOption {
       default = "";
       type = types.lines;
@@ -776,6 +786,18 @@ in
       '';
     };
 
+    systemd.suppressedSystemUnits = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      example = [ "systemd-backlight@.service" ];
+      description = ''
+        A list of units to suppress when generating system systemd configuration directory. This has
+        priority over upstream units, <option>systemd.units</option>, and
+        <option>systemd.additionalUpstreamSystemUnits</option>. The main purpose of this is to
+        suppress a upstream systemd unit with any modifications made to it by other NixOS modules.
+      '';
+    };
+
   };
 
 
@@ -808,8 +830,11 @@ in
         done
         ${concatStrings (mapAttrsToList (exec: target: "ln -s ${target} $out/${exec};\n") links)}
       '';
+
+      enabledUpstreamSystemUnits = filter (n: ! elem n cfg.suppressedSystemUnits) upstreamSystemUnits;
+      enabledUnits = filterAttrs (n: v: ! elem n cfg.suppressedSystemUnits) cfg.units;
     in ({
-      "systemd/system".source = generateUnits "system" cfg.units upstreamSystemUnits upstreamSystemWants;
+      "systemd/system".source = generateUnits "system" enabledUnits enabledUpstreamSystemUnits upstreamSystemWants;
 
       "systemd/user".source = generateUnits "user" cfg.user.units upstreamUserUnits [];
 
@@ -863,6 +888,7 @@ in
 
       "systemd/sleep.conf".text = ''
         [Sleep]
+        ${config.systemd.sleep.extraConfig}
       '';
 
       # install provided sysctl snippets

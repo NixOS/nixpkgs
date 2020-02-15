@@ -218,12 +218,12 @@ in rec {
       '';
 
       testScript = ''
-        startAll;
-        $client->waitForUnit("multi-user.target");
+        start_all()
+        client.wait_for_unit("multi-user.target")
         ${preBuild}
-        $client->succeed("env -i ${bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2");
+        client.succeed("env -i ${bash}/bin/bash ${buildrunner} /tmp/xchg/saved-env >&2")
         ${postBuild}
-        $client->succeed("sync"); # flush all data before pulling the plug
+        client.succeed("sync") # flush all data before pulling the plug
       '';
 
       vmRunCommand = writeText "vm-run" ''
@@ -263,9 +263,12 @@ in rec {
         { ... }:
         {
           inherit require;
+          imports = [
+            ../tests/common/auto.nix
+          ];
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
-          services.xserver.displayManager.auto.enable = true;
+          test-support.displayManager.auto.enable = true;
           services.xserver.displayManager.defaultSession = "none+icewm";
           services.xserver.windowManager.icewm.enable = true;
         };
@@ -274,7 +277,7 @@ in rec {
         machine = client;
         preBuild =
           ''
-            $client->waitForX;
+            client.wait_for_x()
           '';
       } // args);
 

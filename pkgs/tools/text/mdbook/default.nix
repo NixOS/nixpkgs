@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0gcrv54iswphzxxkmak1c7pmmpakiri6jk50j4bxrsplwjr76f7n";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "00grlxjz61vxinr18f28ga6610yjxcq48lr75wmyc5wq317j12fn";
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];

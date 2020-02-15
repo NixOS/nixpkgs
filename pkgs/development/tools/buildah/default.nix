@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
+, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, libselinux, libseccomp
 }:
 
 buildGoPackage rec {
   pname = "buildah";
-  version = "1.13.1";
+  version = "1.14.0";
 
   src = fetchFromGitHub {
     owner  = "containers";
     repo   = "buildah";
     rev    = "v${version}";
-    sha256 = "0swhpdr970ik6fhvmj45r84lsp1n6rxm0bgv9i1lvrxy1mdv7r9x";
+    sha256 = "0nbcrhfd0c14d0m9a4mkd01jxk5i503z38kv2qfz5cvfghx517qq";
   };
 
   outputs = [ "bin" "man" "out" ];
@@ -19,7 +19,7 @@ buildGoPackage rec {
   excludedPackages = [ "tests" ];
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
+  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
 
   patches = [ ./disable-go-module-mode.patch ];
 

@@ -37,6 +37,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--no-default-features --features \"${features}\"" ];
   cargoPatches = [ ./cargo-lock.patch ];
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0xlcskddhy7xsiwj54gmn1xlgkfxb4dwrys7rbamfz1h8aa6ixjx";
 
   nativeBuildInputs = [ pkgconfig ];

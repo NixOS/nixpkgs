@@ -19,6 +19,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1bqp1ms8y91mpcmxlc8kyncigxq7spxq1ygy6gviz35zq1cqkwnr";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "01hynn8ccpwqrirr1bczqc7q7pqkzfjks2v6q4f32xbm50b31fky";
   buildInputs = [ openssl pkgconfig protobuf rdkafka ]
                 ++ stdenv.lib.optional stdenv.isDarwin [ Security libiconv ];

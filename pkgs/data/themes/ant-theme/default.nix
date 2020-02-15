@@ -32,8 +32,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/EliverLara/Ant;
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = [
-      maintainers.pbogdan
-    ];
+    maintainers = [ ];
   };
 }

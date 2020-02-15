@@ -3,13 +3,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "starship";
-  version = "0.33.1";
+  version = "0.36.0";
 
   src = fetchFromGitHub {
     owner = "starship";
     repo = pname;
     rev = "v${version}";
-    sha256 = "15z8iwig10brjxirr9nm1aibjz6qpd82v7n9c4i2q1q9qvb3j5cs";
+    sha256 = "0vkp6yfafzyhilkk5rfvgka91gmhm9nrrvy3m6gdza4ayslmcpam";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
@@ -19,7 +19,10 @@ rustPlatform.buildRustPackage rec {
       --replace "/bin/echo" "echo"
   '';
 
-  cargoSha256 = "16jr96ljd34x3fa2jahcqmjm1ds8519hx391wv1snk7y70fz1314";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "05q527bd5q6a7kd03hwic4bynyc4sipyvi0bf2g2jqxzcsmswyyk";
   checkPhase = "cargo test -- --skip directory::home_directory --skip directory::directory_in_root";
 
   meta = with stdenv.lib; {
