@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "1m3ccp5ncafkifg8sxyxczsg3ja1gvq8wmgni68bgzm2lwxh2qgw";
-  legacyCargoFetcher = false;
 
   meta = with stdenv.lib; {
     description = "Tree command, improved";
