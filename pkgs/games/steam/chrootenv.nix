@@ -97,6 +97,9 @@ in buildFHSUserEnv rec {
     gdk-pixbuf
     pango
     fontconfig
+
+    # friends options won't display "Launch Game" without it
+    lsof
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;
