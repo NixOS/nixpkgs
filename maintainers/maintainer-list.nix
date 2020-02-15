@@ -1067,8 +1067,8 @@
     githubId = 37037;
     name = "Filip Brcic";
     keys = [{
-      longkeyid = "rsa2048/0x0123456789ABCDEF";
-      fingerprint = "AAAA BBBB CCCC DDDD EEEE  FFFF 0000 1111 2222 3333";
+      longkeyid = "rsa4096/0x96577BD3C105EDA4";
+      fingerprint = "9AFC 0A4B D2CE F3D2 2CF6  1081 9657 7BD3 C105 EDA4";
     }];
   };
   brian-dawn = {
