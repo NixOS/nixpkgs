@@ -251,7 +251,7 @@ in
     services.postgresql.authentication = mkAfter
       ''
         # Generated file; do not edit!
-        local all all              ident
+        local all all              peer
         host  all all 127.0.0.1/32 md5
         host  all all ::1/128      md5
       '';
