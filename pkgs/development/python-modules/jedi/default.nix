@@ -9,10 +9,6 @@ buildPythonPackage rec {
     sha256 = "01zqasl690x1i6dq4mvh13pz0cw8i276xsivsrnn00x90iqm42g9";
   };
 
-  # postPatch = ''
-  #   substituteInPlace requirements.txt --replace "parso==0.1.0" "parso"
-  # '';
-
   checkInputs = [ pytest glibcLocales tox pytestcov ];
 
   propagatedBuildInputs = [ parso ];
