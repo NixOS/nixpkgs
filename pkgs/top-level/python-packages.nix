@@ -1459,6 +1459,7 @@ in {
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
   spyder = callPackage ../development/python-modules/spyder {};
+  spyder_3_3_4 = callPackage ../development/python-modules/spyder/spyder_3_3_4.nix {};
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
