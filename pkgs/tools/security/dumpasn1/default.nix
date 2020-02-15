@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description =
-      "object dump program that will dump data encoded using any of the ASN.1 encoding rules in a variety of user-specified formats";
+      "Object dump program that will dump data encoded using any of the ASN.1 encoding rules in a variety of user-specified formats";
     homepage = "https://www.cs.auckland.ac.nz/~pgut001/";
     maintainers = with maintainers; [ btlvr ];
     license = licenses.bsdOriginal;
