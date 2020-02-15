@@ -1063,6 +1063,12 @@
     githubId = 7716744;
     name = "Berno Strik";
   };
+  btlvr = {
+    email = "btlvr@protonmail.com";
+    github = "btlvr";
+    githubId = 32319131;
+    name = "Brett L";
+  };
   buffet = {
     email = "niclas@countingsort.com";
     github = "buffet";
