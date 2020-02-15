@@ -1,6 +1,6 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, mock, pytestcov, coverage
-, future, futures
+, future, futures, ujson
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,8 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [ future ]
+  propagatedBuildInputs = [ ujson ]
+    ++ stdenv.lib.optional (pythonOlder "3.0") future
     ++ stdenv.lib.optional (pythonOlder "3.2") futures;
 
   meta = with stdenv.lib; {
