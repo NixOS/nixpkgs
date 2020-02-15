@@ -4,7 +4,8 @@ stdenv.mkDerivation rec {
   pname = "dumpasn1";
   version = "unstable-2014-06-26";
 
-  hardeningDisable = [ "all" ];
+  # uses constant for indenting
+  NIX_CFLAGS_COMPILE = "-Wno-error=format-security";
 
   src = fetchFromGitHub {
     owner = "clibs";
