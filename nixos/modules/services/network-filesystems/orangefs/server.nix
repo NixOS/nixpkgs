@@ -10,8 +10,11 @@ let
   # Maximum handle number is 2^63
   maxHandle = 9223372036854775806;
 
+  # handles start at 3
+  offset = 3;
+
   # One range of handles for each meta/data instance
-  handleStep = maxHandle / (length aliases) / 2;
+  handleStep = (maxHandle - offset) / (length aliases) / 2;
 
   fileSystems = mapAttrsToList (name: fs: ''
     <FileSystem>
@@ -25,7 +28,7 @@ let
       ${concatStringsSep "\n" (
           imap0 (i: alias:
             let
-              begin = i * handleStep + 3;
+              begin = i * handleStep + offset;
               end = begin + handleStep - 1;
             in "Range ${alias} ${toString begin}-${toString end}") aliases
        )}
@@ -35,7 +38,7 @@ let
       ${concatStringsSep "\n" (
           imap0 (i: alias:
             let
-              begin = i * handleStep + 3 + (length aliases) * handleStep;
+              begin = i * handleStep + (length aliases) * handleStep + offset;
               end = begin + handleStep - 1;
             in "Range ${alias} ${toString begin}-${toString end}") aliases
        )}
