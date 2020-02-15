@@ -11487,7 +11487,9 @@ in
     libXpm = null;
   };
 
-  gdal = callPackage ../development/libraries/gdal { };
+  gdal = callPackage ../development/libraries/gdal {
+    pythonPackages = python3Packages; 
+  };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
 
