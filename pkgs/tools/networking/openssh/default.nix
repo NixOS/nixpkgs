@@ -4,6 +4,8 @@
 , withKerberos ? true
 , withGssapiPatches ? false
 , kerberos
+, libfido2
+, withFIDO ? stdenv.hostPlatform.isUnix
 , linkOpenssl? true
 }:
 
@@ -12,15 +14,15 @@ let
   # **please** update this patch when you update to a new openssh release.
   gssapiPatch = fetchpatch {
     name = "openssh-gssapi.patch";
-    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%258.1p1-2/debian/patches/gssapi.patch";
-    sha256 = "0zfxx46a5lpjp317z354yyswa2wvmb1pp5p0nxsbhsrzw94jvxsj";
+    url = "https://salsa.debian.org/ssh-team/openssh/raw/debian/1%258.2p1-1/debian/patches/gssapi.patch";
+    sha256 = "081gryqkfr5zr4f5m4v0piq1sxz06sb38z5lqxccgpivql7pa8d8";
   };
 
 in
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "openssh";
-  version = if hpnSupport then "7.8p1" else "8.1p1";
+  version = if hpnSupport then "7.8p1" else "8.2p1";
 
   src = if hpnSupport then
       fetchurl {
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     else
       fetchurl {
         url = "mirror://openbsd/OpenSSH/portable/${pname}-${version}.tar.gz";
-        sha256 = "1zwk3g57gb13br206k6jdhgnp6y1nibwswzraqspbl1m73pxpx82";
+        sha256 = "0wg6ckzvvklbzznijxkk28fb8dnwyjd0w30ra0afwv6gwr8m34j3";
       };
 
   patches =
@@ -61,6 +63,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ] ++ optional (hpnSupport || withGssapiPatches) autoreconfHook;
   buildInputs = [ zlib openssl libedit pam ]
+    ++ optional withFIDO libfido2
     ++ optional withKerberos kerberos;
 
   preConfigure = ''
@@ -80,6 +83,7 @@ stdenv.mkDerivation rec {
     "--disable-strip"
     (if pam != null then "--with-pam" else "--without-pam")
   ] ++ optional (etcDir != null) "--sysconfdir=${etcDir}"
+    ++ optional withFIDO "--with-security-key-builtin=yes"
     ++ optional withKerberos (assert kerberos != null; "--with-kerberos5=${kerberos}")
     ++ optional stdenv.isDarwin "--disable-libutil"
     ++ optional (!linkOpenssl) "--without-openssl";
