@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     name = "javafx_scenebuilder-${version}-linux-x64.tar.gz";
       sha256 = "0b66wxrg9n6i0ysvl4n07kj1d5zqk32vywxrvdn3spykn8pxixj4";
     message = ''
-      SceneBuilder cannot be downloaded without license acception.
+      SceneBuilder cannot be downloaded without accepting a license.
       1. Download a copy from https://www.oracle.com/technetwork/java/javase/downloads/javafxscenebuilder-1x-archive-2199384.html
       2. In a shell, execute:
          nix-prefetch-url file:///path/to/javafx_scenebuilder-2_0-linux-x64.tar.gz
