@@ -39,6 +39,10 @@ in
       displayManager.lightdm.enable = lib.mkForce false;
     };
     systemd.services.display-manager.enable = false;
+
+    # Let Xorg use its default log location ($XDG_DATA_HOME/xorg/)
+    services.xserver.logFile = mkDefault null;
+
     # Implement xserverArgs via xinit's system-wide xserverrc
     environment.etc."X11/xinit/xserverrc".source = pkgs.writeShellScript "xserverrc" ''
       exec ${pkgs.xorg.xorgserver}/bin/X ${toString config.services.xserver.displayManager.xserverArgs} "$@"
