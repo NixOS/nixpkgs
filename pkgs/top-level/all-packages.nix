@@ -2901,6 +2901,8 @@ in
 
   duff = callPackage ../tools/filesystems/duff { };
 
+  dumpasn1 = callPackage ../tools/security/dumpasn1 { };
+
   dumptorrent = callPackage ../tools/misc/dumptorrent { };
 
   duo-unix = callPackage ../tools/security/duo-unix { };
