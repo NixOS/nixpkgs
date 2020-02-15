@@ -58,9 +58,8 @@ let
     liberation_ttf curl utillinux xdg_utils wget
     flac harfbuzz icu libpng opusWithCustomModes snappy speechd
     bzip2 libcap at-spi2-atk at-spi2-core
-    kerberos
+    kerberos libdrm mesa
   ] ++ optional pulseSupport libpulseaudio
-    ++ optionals (channel == "dev") [ libdrm mesa ]
     ++ [ gtk ];
 
   suffix = if channel != "stable" then "-" + channel else "";
