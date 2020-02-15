@@ -3160,6 +3160,8 @@ in
   executor = with python3Packages; toPythonApplication executor;
 
   exif = callPackage ../tools/graphics/exif { };
+  
+  exifprobe = callPackage ../tools/graphics/exifprobe { };
 
   exiftags = callPackage ../tools/graphics/exiftags { };
 
