@@ -39,6 +39,6 @@ stdenv.mkDerivation {
     '';
     homepage = "http://ywstd.fr/p/pj/#envypn";
     license = licenses.miros;
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }
