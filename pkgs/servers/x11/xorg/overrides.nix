@@ -761,6 +761,9 @@ self: super:
     prePatch = ''
       sed -i 's|^defaultserverargs="|&-logfile \"$HOME/.xorg.log\"|p' startx.cpp
     '';
+    postFixup = ''
+      substituteInPlace $out/bin/startx --replace $out/etc/X11/xinit/xserverrc /etc/X11/xinit/xserverrc
+    '';
   });
 
   xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
