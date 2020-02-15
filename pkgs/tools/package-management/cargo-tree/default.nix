@@ -1,4 +1,5 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, pkgconfig, cmake, curl, libiconv, darwin }:
+
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tree";
   version = "0.29.0";
@@ -9,8 +10,6 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "16k41pj66m2221n1v2szir7x7qwx4i0g3svck2c8cj76h0bqyy15";
   };
-
-  legacyCargoFetcher = false;
 
   cargoSha256 = "0762gdj4n5mlflhzynnny1h8z792zyxmb4kcn54jj7qzdask4qdy";
 
