@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
     sha256 = "06bc3qhf137aj5dd1vjxgnfpd41mg00c9qvgfd5dijzrgfl66fa1";
   };
 
-  buildPhase = "gcc ./dumpasn1.c";
+  buildPhase = "$CC ./dumpasn1.c";
 
   installPhase = ''
     mkdir -p $out/bin
