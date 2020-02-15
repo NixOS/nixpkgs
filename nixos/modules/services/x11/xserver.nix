@@ -509,6 +509,16 @@ in
         '';
       };
 
+      logFile = mkOption {
+        type = types.nullOr types.str;
+        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
+        default = "/dev/null";
+        example = "/var/log/Xorg.0.log";
+        description = ''
+          Controls the file Xorg logs to.
+        '';
+      };
+
       verbose = mkOption {
         type = types.nullOr types.int;
         default = 3;
@@ -683,11 +693,10 @@ in
     services.xserver.displayManager.xserverArgs =
       [ "-config ${configFile}"
         "-xkbdir" "${cfg.xkbDir}"
-        # Log at the default verbosity level to stderr rather than /var/log/X.*.log.
-         "-logfile" "/dev/null"
       ] ++ optional (cfg.display != null) ":${toString cfg.display}"
         ++ optional (cfg.tty     != null) "vt${toString cfg.tty}"
         ++ optional (cfg.dpi     != null) "-dpi ${toString cfg.dpi}"
+        ++ optional (cfg.logFile != null) "-logfile ${toString cfg.logFile}"
         ++ optional (cfg.verbose != null) "-verbose ${toString cfg.verbose}"
         ++ optional (!cfg.enableTCP) "-nolisten tcp"
         ++ optional (cfg.autoRepeatDelay != null) "-ardelay ${toString cfg.autoRepeatDelay}"
