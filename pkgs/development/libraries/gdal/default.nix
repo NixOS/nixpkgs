@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
 , libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl, libpng
 , sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv, libxml2
-, autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl }:
+, autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config }:
 
 with stdenv.lib;
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/gdal";
 
-  nativeBuildInputs = [ autoreconfHook ];
+  nativeBuildInputs = [ autoreconfHook pkg-config ];
 
   buildInputs = [
     unzip
@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     giflib
     expat
     libxml2
+    postgresql
   ] ++ (with pythonPackages; [ python numpy wrapPython ])
     ++ stdenv.lib.optional stdenv.isDarwin libiconv
     ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
     "--with-png=${libpng.dev}" # optional
     "--with-poppler=${poppler.dev}" # optional
     "--with-libz=${zlib.dev}" # optional
-    "--with-pg=${postgresql}/bin/pg_config"
+    "--with-pg=yes" # since gdal 3.0 doesn't use ${postgresql}/bin/pg_config
     "--with-mysql=${libmysqlclient}/bin/mysql_config"
     "--with-geotiff=${libgeotiff}"
     "--with-sqlite3=${sqlite.dev}"
