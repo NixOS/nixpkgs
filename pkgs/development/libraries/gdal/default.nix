@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
   # - teach gdal that libdf is the legacy name for libhdf
   preConfigure = ''
     substituteInPlace configure \
-    --replace "-lmfhdf -ldf" "-lmfhdf -lhdf"
+      --replace "-lmfhdf -ldf" "-lmfhdf -lhdf"
   '';
 
   preBuild = ''
