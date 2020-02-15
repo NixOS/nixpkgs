@@ -1,17 +1,12 @@
-{ stdenv
-, fetchurl
-, blas
-, gfortran
-, liblapack
-, python }:
+{ stdenv , fetchurl , blas , gfortran , liblapack , python }:
 
 stdenv.mkDerivation rec {
   pname = "petsc";
-  version = "3.8.4";
+  version = "3.12.4";
 
   src = fetchurl {
     url = "http://ftp.mcs.anl.gov/pub/petsc/release-snapshots/petsc-${version}.tar.gz";
-    sha256 = "1iy49gagxncx09d88kxnwkj876p35683mpfk33x37165si6xqy4z";
+    sha256 = "1hw4f12v2xwrs37gjh83dbixhg0yxandqx7s7k5vlfx91l9l3aan";
   };
 
   nativeBuildInputs = [ blas gfortran.cc.lib liblapack python ];
@@ -26,7 +21,7 @@ stdenv.mkDerivation rec {
     configureFlagsArray=(
       $configureFlagsArray
       "--CC=$CC"
-      "--with-cxx=0"
+      "--with-cxx=g++"
       "--with-fc=0"
       "--with-mpi=0"
       "--with-blas-lib=[${blas}/lib/libblas.a,${gfortran.cc.lib}/lib/libgfortran.a]"
@@ -34,17 +29,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  postInstall = ''
-    rm $out/bin/petscmpiexec
-    rm $out/bin/popup
-    rm $out/bin/uncrustify.cfg
-    rm -rf $out/bin/win32fe
-  '';
-
-  meta = {
-    description = "Library of linear algebra algorithms for solving partial differential equations";
-    homepage = https://www.mcs.anl.gov/petsc/index.html;
-    platforms = stdenv.lib.platforms.all;
-    license = stdenv.lib.licenses.bsd2;
+  meta = with stdenv.lib; {
+    description = ''
+      Library of linear algebra algorithms for solving partial differential
+      equations
+    '';
+    homepage = "https://www.mcs.anl.gov/petsc/index.html";
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ wucke13 ];
+    platforms = platforms.all;
   };
 }
