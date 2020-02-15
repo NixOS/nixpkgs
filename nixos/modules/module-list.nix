@@ -650,6 +650,7 @@
   ./services/networking/mtprotoproxy.nix
   ./services/networking/murmur.nix
   ./services/networking/mxisd.nix
+  ./services/networking/nanod.nix
   ./services/networking/namecoind.nix
   ./services/networking/nat.nix
   ./services/networking/ndppd.nix
