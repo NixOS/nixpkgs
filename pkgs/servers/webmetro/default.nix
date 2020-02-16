@@ -11,10 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1n2c7ygs8qsd5zgii6fqqcwg427bsij082bg4ijnzkq5630dx651";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "03ncwj9bn21590phcnqyclclcird7rikbhxbwhg8i9i0nad81aaa";
+  cargoSha256 = "0xifc3jwj0c6ynx0gzm5zlnfcq023fjpjmdg9x0vs1fh3b42pdsy";
 
   meta = with stdenv.lib; {
     description = "Simple relay server for broadcasting a WebM stream";
