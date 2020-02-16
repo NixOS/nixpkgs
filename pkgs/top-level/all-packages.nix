@@ -9506,8 +9506,6 @@ in
 
   proglodyte-wasm = callPackage ../development/interpreters/proglodyte-wasm { };
 
-  wasm-gc = callPackage ../development/interpreters/wasm-gc { };
-
 
   ### DEVELOPMENT / MISC
 
@@ -11488,7 +11486,7 @@ in
   };
 
   gdal = callPackage ../development/libraries/gdal {
-    pythonPackages = python3Packages; 
+    pythonPackages = python3Packages;
   };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
