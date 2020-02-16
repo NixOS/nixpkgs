@@ -241,7 +241,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://github.com/pytoolz/toolz;
+    homepage = "https://github.com/pytoolz/toolz";
     description = "List processing tools and functional utilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ fridh ];
@@ -335,7 +335,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy multipledispatch dateutil ];
 
   meta = with lib; {
-    homepage = https://github.com/ContinuumIO/datashape;
+    homepage = "https://github.com/ContinuumIO/datashape";
     description = "A data description language";
     license = licenses.bsd2;
     maintainers = with maintainers; [ fridh ];
@@ -369,7 +369,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Pythonic binding for the libxml2 and libxslt libraries";
-    homepage = https://lxml.de;
+    homepage = "https://lxml.de";
     license = licenses.bsd3;
     maintainers = with maintainers; [ sjourdois ];
   };
