@@ -17,7 +17,7 @@
   # Please set to true on any Rust package updates. Once all packages set this
   # to true, we will delete and make it the default. For details, see the Rust
   # section on the manual and ./README.md.
-, legacyCargoFetcher ? true
+, legacyCargoFetcher ? false
 , buildType ? "release"
 , meta ? {}
 , target ? null
@@ -45,11 +45,17 @@ let
   # and have vendored deps, check them against the src attr for consistency.
   validateCargoDeps = cargoSha256 != "unset" && !legacyCargoFetcher;
 
+  # Some cargo builds include build hooks that modify their own vendor
+  # dependencies. This copies the vendor directory into the build tree and makes
+  # it writable. If we're using a tarball, the unpackFile hook already handles
+  # this for us automatically.
   setupVendorDir = if cargoVendorDir == null
-    then ''
+    then (''
       unpackFile "$cargoDeps"
       cargoDepsCopy=$(stripHash $cargoDeps)
-    ''
+    '' + stdenv.lib.optionalString legacyCargoFetcher ''
+      chmod -R +w "$cargoDepsCopy"
+    '')
     else ''
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';

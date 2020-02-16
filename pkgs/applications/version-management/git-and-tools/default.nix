@@ -22,6 +22,8 @@ let
 
   bitbucket-server-cli = callPackage ./bitbucket-server-cli { };
 
+  bump2version = pkgs.python37Packages.callPackage ./bump2version { };
+
   darcsToGit = callPackage ./darcs-to-git { };
 
   delta = callPackage ./delta { };
@@ -191,6 +193,8 @@ let
   topGit = callPackage ./topgit { };
 
   transcrypt = callPackage ./transcrypt { };
+
+  ydiff = pkgs.python3.pkgs.toPythonApplication pkgs.python3.pkgs.ydiff;
 
 } // lib.optionalAttrs (config.allowAliases or true) (with self; {
   # aliases

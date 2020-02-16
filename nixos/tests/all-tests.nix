@@ -88,6 +88,7 @@ in
   fancontrol = handleTest ./fancontrol.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
+  firefox-esr = handleTest ./firefox.nix { esr = true; };
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
@@ -144,6 +145,7 @@ in
   kernel-testing = handleTest ./kernel-testing.nix {};
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
+  krb5 = discoverTests (import ./krb5 {});
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};

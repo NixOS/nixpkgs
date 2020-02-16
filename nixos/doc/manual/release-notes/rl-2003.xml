@@ -625,6 +625,12 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      to a fairly old snapshot  from the <package>gcc7</package>-branch.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <citerefentry><refentrytitle>nixos-build-vms</refentrytitle><manvolnum>8</manvolnum>
+     </citerefentry>-script now uses the python test-driver.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

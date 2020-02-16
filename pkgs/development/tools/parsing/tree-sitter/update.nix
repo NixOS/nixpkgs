@@ -22,7 +22,7 @@ let
     res=$(${curl}/bin/curl \
       --silent \
       "https://api.github.com/repos/${urlEscape owner}/$(${urlEscapeSh} "$repo")/releases/latest")
-    if [[ "$(printf "%s" "$res" | ${jq}bin/jq '.message')" =~ "rate limit" ]]; then
+    if [[ "$(printf "%s" "$res" | ${jq}/bin/jq '.message')" =~ "rate limit" ]]; then
       echo "rate limited" >&2
     fi
     release=$(printf "%s" "$res" | ${jq}/bin/jq '.tag_name')

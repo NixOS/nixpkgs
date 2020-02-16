@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage {
   };
 
   cargoSha256 = "06ghcd4j751mdkzwb88nqwk8la4zdb137y0iqrkpykkfx0as43x3";
-  legacyCargoFetcher = false;
 
   buildInputs = [ ncurses ];
 

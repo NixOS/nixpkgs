@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./fix-build.patch ]; # Cargo.lock is not up-to-date
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "073dnn80sl4adh7vi6q9sx2vkmy27gxy7ysxz17iz12p7pfcagm2";
 
   meta = with stdenv.lib; {

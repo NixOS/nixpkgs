@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1y0v8nkaqb8kn61xwarpbyrq019gxx1f5f5p1hzw73nqxadc1rcm";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0xn5p71qk0ahd2drklja16xwv7zw0797kkzpiv563kffzvd1p8id";
 
   checkPhase = "cargo test --features=integration_tests";

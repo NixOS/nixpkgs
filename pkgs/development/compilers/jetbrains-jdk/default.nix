@@ -7,17 +7,17 @@
 
 let drv = stdenv.mkDerivation rec {
   pname = "jetbrainsjdk";
-  version = "520.30";
+  version = "520.38";
 
   src = if stdenv.hostPlatform.system == "x86_64-linux" then
     fetchurl {
       url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_5-linux-x64-b${version}.tar.gz";
-      sha256 = "0xmr5jjnr4af7byz5w01phyrrdyizfhqmwhs4k8ih566fkhyzj02";
+      sha256 = "13hqp9ww9afkl70yrslyyx0z7fqcc8nrcqax69d6jaj587qfjqvz";
     }
   else if stdenv.hostPlatform.system == "x86_64-darwin" then
     fetchurl {
       url = "https://bintray.com/jetbrains/intellij-jbr/download_file?file_path=jbrsdk-11_0_5-osx-x64-b${version}.tar.gz";
-      sha256 = "0wfcw66wv5rkkjzyzi9j7zk7c2fgi33ny09drgihxi2kdzyfrpcb";
+      sha256 = "1qrw4rpyznx7pkcjlfhi889l3a7gydz9yrqp6phz1rszmklpyk07";
     }
   else
     throw "unsupported system: ${stdenv.hostPlatform.system}";

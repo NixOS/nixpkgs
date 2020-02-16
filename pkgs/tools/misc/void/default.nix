@@ -14,6 +14,9 @@ rustPlatform.buildRustPackage rec {
   # The tests are long-running and not that useful
   doCheck = false;
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "03g7155jpg8k1ymk95m8rlhlszkxyq0rv32966n4gk5yziijvk4k";
 
   meta = with stdenv.lib; {

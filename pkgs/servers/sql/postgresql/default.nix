@@ -175,6 +175,9 @@ let
       cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
       wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
     '';
+
+    passthru.version = postgresql.version;
+    passthru.psqlSchema = postgresql.psqlSchema;
   };
 
 in self: {

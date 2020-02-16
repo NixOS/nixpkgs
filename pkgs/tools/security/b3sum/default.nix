@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "source/b3sum";
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0qw7sr817lmj9xicc03cj1k49lwjwc1whllc7sj2g4c0nl2vndir";
   verifyCargoDeps = false;
 

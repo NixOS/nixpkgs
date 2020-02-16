@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1v9wq4k7k4lmdz6xy6kabchjpbx9lds20yh6va87shypdh9iva29";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0y1y74fgxcv8a3cmyf30p6gg12r79ln7inir8scj88wbmwgkbxsp";
 
   buildInputs = [ openssl cacert curl ]

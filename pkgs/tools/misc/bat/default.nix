@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "0d7h0kn41w6wm4w63vjy2i7r19jkansfvfjn7vgh2gqh5m60kal2";
+  cargoSha256 = "17xyb84axkn341nd5rm7jza1lrn8wcnl6jirhyv63r5k6mswy39i";
 
   nativeBuildInputs = [ pkgconfig llvmPackages.libclang installShellFiles makeWrapper ];
 
