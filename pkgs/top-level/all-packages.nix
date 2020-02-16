@@ -4161,6 +4161,8 @@ in
 
   icecast = callPackage ../servers/icecast { };
 
+  icepeak = haskellPackages.icepeak;
+
   iceshelf = callPackage ../tools/backup/iceshelf { };
 
   darkice = callPackage ../tools/audio/darkice { };
