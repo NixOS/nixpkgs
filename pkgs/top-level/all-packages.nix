@@ -12438,6 +12438,8 @@ in
 
   libfilezilla = callPackage ../development/libraries/libfilezilla { };
 
+  libfishsound = callPackage ../development/libraries/libfishsound { };
+
   libfm = callPackage ../development/libraries/libfm { };
   libfm-extra = libfm.override {
     extraOnly = true;
