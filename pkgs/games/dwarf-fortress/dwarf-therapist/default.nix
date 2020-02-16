@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dwarf-therapist";
-  version = "41.1.2";
+  version = "41.1.3";
 
   src = fetchFromGitHub {
     owner = "Dwarf-Therapist";
     repo = "Dwarf-Therapist";
     rev = "v${version}";
-    sha256 = "1qyyny2v4wxqs4ar02s8aawaxnkibz5aa5xgjm421k6v04iqxgcl";
+    sha256 = "15f6npbfgsxsr6pm2vxpali8f6nyyk80bcyhy9s77n064q0qg2nj";
   };
 
   nativeBuildInputs = [ texlive cmake ninja ];

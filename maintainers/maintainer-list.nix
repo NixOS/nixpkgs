@@ -367,6 +367,12 @@
       fingerprint = "7FDB 17B3 C29B 5BA6 E5A9  8BB2 9FAA 63E0 9750 6D9D";
     }];
   };
+  almac = {
+    email = "alma.cemerlic@gmail.com";
+    github = "a1mac";
+    githubId = 60479013;
+    name = "Alma Cemerlic";
+  };
   alunduil = {
     email = "alunduil@gmail.com";
     github = "alunduil";
@@ -1078,6 +1084,12 @@
     github = "bstrik";
     githubId = 7716744;
     name = "Berno Strik";
+  };
+  btlvr = {
+    email = "btlvr@protonmail.com";
+    github = "btlvr";
+    githubId = 32319131;
+    name = "Brett L";
   };
   buffet = {
     email = "niclas@countingsort.com";
@@ -3284,6 +3296,12 @@
     github = "jefdaj";
     githubId = 1198065;
     name = "Jeffrey David Johnson";
+  };
+  jefflabonte = {
+    email = "grimsleepless@protonmail.com";
+    github = "jefflabonte";
+    githubId = 9425955;
+    name = "Jean-François Labonté";
   };
   jensbin = {
     email = "jensbin+git@pm.me";
@@ -6251,6 +6269,12 @@
     githubId = 766350;
     name = "Richard Zetterberg";
   };
+  samdoshi = {
+    email = "sam@metal-fish.co.uk";
+    github = "samdoshi";
+    githubId = 112490;
+    name = "Sam Doshi";
+  };
   samdroid-apps = {
     email = "sam@sam.today";
     github = "samdroid-apps";
@@ -7437,6 +7461,12 @@
     email = "val@codejam.info";
     github = "valeriangalliat";
     name = "Valérian Galliat";
+  };
+  valodim = {
+    email = "look@my.amazin.horse";
+    github = "valodim";
+    githubId = 27813;
+    name = "Vincent Breitmoser";
   };
   vandenoever = {
     email = "jos@vandenoever.info";

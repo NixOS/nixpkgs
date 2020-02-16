@@ -9759,6 +9759,28 @@ let
     };
   };
 
+  LaTeXML = buildPerlPackage {
+    pname = "LaTeXML";
+    version = "0.8.4";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/B/BR/BRMILLER/LaTeXML-0.8.4.tar.gz";
+      sha256 = "92599b45fb587ac14b2ba9cc84b85d9ddc2deaf1cbdc2e89e7a6559e1fbb34cc";
+    };
+    propagatedBuildInputs = [ ArchiveZip DBFile FileWhich IOString ImageSize JSONXS LWP ParseRecDescent TextUnidecode URI XMLLibXML XMLLibXSLT shortenPerlShebang ];
+    doCheck = false;  # epub test fails
+    postInstall = ''
+      shortenPerlShebang $out/bin/latexml
+      shortenPerlShebang $out/bin/latexmlc
+      shortenPerlShebang $out/bin/latexmlfind
+      shortenPerlShebang $out/bin/latexmlmath
+      shortenPerlShebang $out/bin/latexmlpost
+    '';
+    meta = {
+      description = "Transforms TeX and LaTeX into XML/HTML/MathML";
+      license = stdenv.lib.licenses.free;
+    };
+  };
+
   libapreq2 = buildPerlPackage {
     pname = "libapreq2";
     version = "2.13";

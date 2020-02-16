@@ -427,6 +427,7 @@ in
                     TryExec=${script}
                     Exec=${script}
                     Name=${sessionName}
+                    DesktopNames=${sessionName}
                   '';
                 } // {
                   providedSessions = [ sessionName ];

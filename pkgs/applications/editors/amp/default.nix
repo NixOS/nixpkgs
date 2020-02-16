@@ -3,17 +3,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amp";
-  # The latest release (0.5.2) does not compile, so we use a git snapshot instead.
-  version = "unstable-2019-06-09";
+  version = "0.6.1";
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = pname;
-    rev = "2c88e82a88ada8a5fd2620ef225192395a4533a2";
-    sha256 = "0ha1xiabq31s687gkrnszf3zc7b3sfdl79iyg5ygbc49mzvarp8c";
+    rev = version;
+    sha256 = "0jhxyl27nwp7rp0lc3kic69g8x55d0azrwlwwhz3z74icqa8f03j";
   };
 
-  cargoSha256 = "1bvj2zg19ak4vi47vjkqlybz011kn5zq1j7zznr76zrryacw4lz1";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "0rk5c8knx8swqzmj7wd18hq2h5ndkzvcbq4lzggpavkk01a8hlb1";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ openssl python3 xorg.libxcb libgit2 ] ++ stdenv.lib.optionals stdenv.isDarwin

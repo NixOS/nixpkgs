@@ -1,9 +1,9 @@
 {
-  "version": "12.7.5",
-  "repo_hash": "0jlhaakpg6bycajbhm3100gs2ka9f6iv529dvj3y1k6gysd2dpvs",
+  "version": "12.7.6",
+  "repo_hash": "092c6n2jg8himmcc23gh3gvmx0y272kwk00cj1s2k4b92dlzvm18",
   "owner": "gitlab-org",
   "repo": "gitlab",
-  "rev": "v12.7.5-ee",
+  "rev": "v12.7.6-ee",
   "passthru": {
     "GITALY_SERVER_VERSION": "1.83.0",
     "GITLAB_PAGES_VERSION": "1.12.0",

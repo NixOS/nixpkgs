@@ -15,6 +15,9 @@ buildRustPackage rec {
     sha256 = "0iixczy3cad44j2d7zzj8f3lnmp4jwnb0snmwfgiq3vj9wrn28pz";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0k6z69a09ps55w2rdgnf92yscw6rlbcpb4q9yf3rsav15pgpqvw8";
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkgconfig ];

@@ -1,82 +1,15 @@
-From 3cf93fd595bd3fca98c98a0bdc8fc86b36ee1403 Mon Sep 17 00:00:00 2001
-From: Michael Hoang <enzime@users.noreply.github.com>
-Date: Wed, 9 Oct 2019 12:42:53 +1100
-Subject: [PATCH] Remove writeback buffering workaround
-
----
- src/woeusb | 45 ---------------------------------------------
- 1 file changed, 45 deletions(-)
+https://github.com/slacka/WoeUSB/issues/267
 
 diff --git a/src/woeusb b/src/woeusb
-index 3284259..0d3ea20 100755
+index 8cb292c..c017dbf 100755
 --- a/src/woeusb
 +++ b/src/woeusb
-@@ -308,9 +308,6 @@ init(){
+@@ -1661,6 +1661,8 @@ workaround_support_windows_7_uefi_boot(){
+ ## - System lagging while copying data · Issue #113 · slacka/WoeUSB <https://github.com/slacka/WoeUSB/issues/113>
+ ## - The pernicious USB-stick stall problem [LWN.net] <https://lwn.net/Articles/572911/>
+ workaround_linux_make_writeback_buffering_not_suck(){
++	return 0
++
+ 	util_check_function_parameters_quantity 1 "${#}"
+ 	local -r mode="${1}"
  
- 	current_state=copying-filesystem
- 
--	workaround_linux_make_writeback_buffering_not_suck \
--		apply
--
- 	copy_filesystem_files \
- 		"${source_fs_mountpoint}" \
- 		"${target_fs_mountpoint}" \
-@@ -1650,41 +1647,6 @@ workaround_support_windows_7_uefi_boot(){
- 		> "${efi_boot_directory}/bootx64.efi"
- }; declare -fr workaround_support_windows_7_uefi_boot
- 
--## Currently WoeUSB indirectly causes severely unresponsive system on 64-bit architecture with large primary memory during file copy process due to a flaw of the writeback buffer size handling in Linux kernel, workaround it before it is fixed
--## Refer: 
--## - System lagging while copying data · Issue #113 · slacka/WoeUSB <https://github.com/slacka/WoeUSB/issues/113>
--## - The pernicious USB-stick stall problem [LWN.net] <https://lwn.net/Articles/572911/>
--workaround_linux_make_writeback_buffering_not_suck(){
--	util_check_function_parameters_quantity 1 "${#}"
--	local -r mode="${1}"
--
--	local -ir VM_DIRTY_BACKGROUND_BYTES=$((16*1024*1024)) # 16MiB
--	local -ir VM_DIRTY_BYTES=$((48*1024*1024)) # 48MiB
--
--	case "${mode}" in
--		apply)
--			echo_with_color \
--				yellow \
--				'Applying workaround to prevent 64-bit systems with big primary memory from being unresponsive during copying files.'
--			echo "${VM_DIRTY_BACKGROUND_BYTES}" > /proc/sys/vm/dirty_background_bytes
--			echo "${VM_DIRTY_BYTES}" > /proc/sys/vm/dirty_bytes
--		;;
--		reset)
--			echo_with_color \
--				yellow \
--				'Resetting workaround to prevent 64-bit systems with big primary memory from being unresponsive during copying files.'
--			echo 0 > /proc/sys/vm/dirty_background_bytes
--			echo 0 > /proc/sys/vm/dirty_bytes
--		;;
--		*)
--			printf_with_color \
--				red \
--				'Fatal: %s: Unexpected *mode* encountered, please report bug.\n' \
--				"${FUNCNAME[0]}"
--		;;
--	esac
--}; declare -fr workaround_linux_make_writeback_buffering_not_suck
--
- install_legacy_pc_bootloader_grub(){
- 	util_check_function_parameters_quantity 3 "${#}"
- 	local -r target_fs_mountpoint="${1}"; shift 1
-@@ -1836,13 +1798,6 @@ trap_exit(){
- 		off \
- 		"${global_only_for_gui}"
- 
--	case "${current_state}" in
--		copying-filesystem|finished)
--			workaround_linux_make_writeback_buffering_not_suck \
--				reset
--		;;
--	esac
--
- 	if util_is_parameter_set_and_not_empty \
- 		source_fs_mountpoint; then
- 		if ! cleanup_mountpoint  \
--- 
-2.23.0
-

@@ -12,6 +12,9 @@ rustPlatform.buildRustPackage {
   pname = "wishbone-tool";
   inherit version;
   src = "${src}/wishbone-tool";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0pj8kf6s1c666p4kc6q1hlvaqm0lm9aqnsx5r034g1y8sxnnyri2";
   buildInputs = [ libusb ];
 

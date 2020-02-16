@@ -17,6 +17,9 @@ rustPlatform.buildRustPackage {
   pname = "parity";
   inherit version;
   inherit cargoSha256;
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
 
   src = fetchFromGitHub {
     owner = "paritytech";

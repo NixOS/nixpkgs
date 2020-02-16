@@ -206,13 +206,13 @@ rec {
   };
 
   docker_19_03 = makeOverridable dockerGen {
-    version = "19.03.5";
-    rev = "633a0ea838f10e000b7c6d6eed1623e6e988b5bc";
-    sha256 = "1cs38ffh5xn8c40rln4pvd53iahvi4kys9an6kpclvvciqfc2cxs";
-    runcRev = "3e425f80a8c931f88e6d94a8c831b9d5aa481657";
-    runcSha256 = "18psc830b2rkwml1x6vxngam5b5wi3pj14mw817rshpzy87prspj";
-    containerdRev = "b34a5c8af56e510852c35414db4c1f4fa6172339";
-    containerdSha256 = "1kddhkd93wkrimk0yjcqiavdrqc818nd39rf3wrgxyilx1mfnrwb";
+    version = "19.03.6";
+    rev = "369ce74a3ce86a392e39e45d3960ce970fdfac97";
+    sha256 = "0myvh7p9h0j4xc35zhcvp8cqxd3r6p6jx5zxl5rzh14m6lgzmkh0";
+    runcRev = "dc9208a3303feef5b3839f4323d9beb36df0a9dd";
+    runcSha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
+    containerdRev = "35bd7a5f69c13e1563af8a93431411cd9ecf5021";
+    containerdSha256 = "076355bkbdsgsxryhhr9gbpyypdx8gg149lylyd6q5ig98p179ap";
     tiniRev = "fec3683b971d9c3ef73f284f176672c44b448662";
     tiniSha256 = "1h20i3wwlbd8x4jr2gz68hgklh0lb0jj7y5xk1wvr8y58fip1rdn";
   };

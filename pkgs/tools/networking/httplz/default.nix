@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [ "--bin httplz" ];
   cargoPatches = [ ./cargo-lock.patch ];
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1ajxfvj1pv6yq84zgrh7vjzghpb2y8qd5r09gzwdvww5rbj920fq";
 
   postInstall = ''

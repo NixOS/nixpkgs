@@ -21,6 +21,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [ dbus gdk-pixbuf libnotify xorg.libX11 ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0l6x59bzzilc78gsi5rlgq9zjvp8qjphfsds776ljzmkbdq8q4iz";
 
   postInstall = lib.optionalString (bins != [])  ''

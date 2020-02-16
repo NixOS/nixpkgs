@@ -203,7 +203,7 @@ in
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
-  docker-slim = callPackage ../build-support/docker-slim { };
+  docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
@@ -1139,6 +1139,8 @@ in
 
   bdf2psf = callPackage ../tools/misc/bdf2psf { };
 
+  bdf2sfd = callPackage ../tools/misc/bdf2sfd { };
+
   bcat = callPackage ../tools/text/bcat {};
 
   bcache-tools = callPackage ../tools/filesystems/bcache-tools { };
@@ -1322,6 +1324,7 @@ in
   bs-platform = callPackage ../development/compilers/bs-platform {};
 
   c3d = callPackage ../applications/graphics/c3d {
+    stdenv = gcc8Stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -2261,7 +2264,11 @@ in
 
   bgs = callPackage ../tools/X11/bgs { };
 
+  bibclean = callPackage ../tools/typesetting/bibclean { };
+
   biber = callPackage ../tools/typesetting/biber { };
+
+  biblatex-check = callPackage ../tools/typesetting/biblatex-check { };
 
   birdfont = callPackage ../tools/misc/birdfont { };
   xmlbird = callPackage ../tools/misc/birdfont/xmlbird.nix { };
@@ -2860,6 +2867,8 @@ in
 
   docbook2mdoc = callPackage ../tools/misc/docbook2mdoc { };
 
+  docbookrx = callPackage ../tools/typesetting/docbookrx { };
+
   docear = callPackage ../applications/office/docear { };
 
   dockbarx = callPackage ../applications/misc/dockbarx { };
@@ -2978,6 +2987,8 @@ in
   luckybackup = libsForQt5.callPackage ../tools/backup/luckybackup {
     ssh = openssh;
   };
+
+  kramdown-asciidoc = callPackage ../tools/typesetting/kramdown-asciidoc { };
 
   mcrcon = callPackage ../tools/networking/mcrcon {};
 
@@ -10521,6 +10532,8 @@ in
 
   rr = callPackage ../development/tools/analysis/rr { };
 
+  samurai = callPackage ../development/tools/build-managers/samurai { };
+
   saleae-logic = callPackage ../development/tools/misc/saleae-logic { };
 
   sauce-connect = callPackage ../development/tools/sauce-connect { };
@@ -11474,7 +11487,9 @@ in
     libXpm = null;
   };
 
-  gdal = callPackage ../development/libraries/gdal { };
+  gdal = callPackage ../development/libraries/gdal {
+    pythonPackages = python3Packages; 
+  };
 
   gdal_1_11 = callPackage ../development/libraries/gdal/gdal-1_11.nix { };
 
@@ -13072,6 +13087,8 @@ in
 
   libunibreak = callPackage ../development/libraries/libunibreak { };
 
+  libuninameslist = callPackage ../development/libraries/libuninameslist { };
+
   libunique = callPackage ../development/libraries/libunique { };
   libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
@@ -14456,6 +14473,8 @@ in
   tk-8_6 = callPackage ../development/libraries/tk/8.6.nix { };
   tk-8_5 = callPackage ../development/libraries/tk/8.5.nix { tcl = tcl-8_5; };
 
+  tl-expected = callPackage ../development/libraries/tl-expected { };
+
   tnt = callPackage ../development/libraries/tnt { };
 
   tntnet = callPackage ../development/libraries/tntnet { };
@@ -15368,6 +15387,8 @@ in
 
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
+  mlflow-server = callPackage ../servers/mlflow-server { };
+  
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
@@ -17379,11 +17400,13 @@ in
 
   culmus = callPackage ../data/fonts/culmus { };
 
-  clearlyU = callPackage ../data/fonts/clearlyU { };
+  clearlyU = callPackage ../data/fonts/clearlyU
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   cm_unicode = callPackage ../data/fonts/cm-unicode {};
 
-  creep = callPackage ../data/fonts/creep { };
+  creep = callPackage ../data/fonts/creep
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   crimson = callPackage ../data/fonts/crimson {};
 
@@ -17395,9 +17418,8 @@ in
     paths = [ dejavu_fonts.out ];
   };
 
-  dina-font = callPackage ../data/fonts/dina { };
-
-  dina-font-pcf = callPackage ../data/fonts/dina-pcf { };
+  dina-font = callPackage ../data/fonts/dina
+    { inherit (buildPackages.xorg) mkfontscale; };
 
   dns-root-data = callPackage ../data/misc/dns-root-data { };
 
@@ -17481,7 +17503,8 @@ in
 
   encode-sans = callPackage ../data/fonts/encode-sans { };
 
-  envypn-font = callPackage ../data/fonts/envypn-font { };
+  envypn-font = callPackage ../data/fonts/envypn-font
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   envdir = callPackage ../tools/misc/envdir-go { };
 
@@ -17510,7 +17533,8 @@ in
 
   geolite-legacy = callPackage ../data/misc/geolite-legacy { };
 
-  gohufont = callPackage ../data/fonts/gohufont { };
+  gohufont = callPackage ../data/fonts/gohufont
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   gnome-user-docs = callPackage ../data/documentation/gnome-user-docs { };
 
@@ -17793,7 +17817,8 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  profont = callPackage ../data/fonts/profont { };
+  profont = callPackage ../data/fonts/profont
+    { inherit (buildPackages.xorg) mkfontscale; };
 
   proggyfonts = callPackage ../data/fonts/proggyfonts { };
 
@@ -18150,6 +18175,8 @@ in
   arelle = with python3Packages; toPythonApplication arelle;
 
   argo = callPackage ../applications/networking/cluster/argo { };
+
+  argocd = callPackage ../applications/networking/cluster/argocd { };
 
   ario = callPackage ../applications/audio/ario { };
 
@@ -19025,7 +19052,9 @@ in
 
   gr-osmosdr = callPackage ../applications/radio/gnuradio/osmosdr.nix { };
 
-  goldendict = libsForQt5.callPackage ../applications/misc/goldendict { };
+  goldendict = libsForQt5.callPackage ../applications/misc/goldendict {
+    inherit (darwin) libiconv;
+  };
 
   gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
 
@@ -20796,6 +20825,8 @@ in
 
   paprefs = callPackage ../applications/audio/paprefs { };
 
+  pantalaimon = python3Packages.callPackage ../applications/networking/instant-messengers/pantalaimon { };
+
   pavucontrol = callPackage ../applications/audio/pavucontrol { };
 
   paraview = libsForQt5.callPackage ../applications/graphics/paraview { };
@@ -21592,10 +21623,12 @@ in
     systemdSupport = true;
   };
 
-  synergy = callPackage ../applications/misc/synergy {
+  synergy = libsForQt5.callPackage ../applications/misc/synergy {
     stdenv = if stdenv.cc.isClang then llvmPackages_5.stdenv else stdenv;
     inherit (darwin.apple_sdk.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver;
   };
+
+  synergyWithoutGUI = synergy.override { withGUI = false; };
 
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
@@ -23183,7 +23216,10 @@ in
 
   openclonk = callPackage ../games/openclonk { };
 
-  openjk = callPackage ../games/openjk { };
+  openjk = callPackage ../games/openjk {
+    # segfaults when built with gcc9
+    stdenv = gcc8Stdenv;
+  };
 
   openmw = libsForQt5.callPackage ../games/openmw { };
 
@@ -25941,4 +25977,5 @@ in
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
 
+  go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
 }

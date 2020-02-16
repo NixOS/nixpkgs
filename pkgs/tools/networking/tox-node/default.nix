@@ -31,6 +31,9 @@ buildRustPackage rec {
 
   doCheck = false;
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1nv0630yb8k857n7km4bbgf41j747xdxv7xnc6a9746qpggmdbkh";
 
   meta = with stdenv.lib; {

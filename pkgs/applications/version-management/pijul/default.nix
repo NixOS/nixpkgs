@@ -45,6 +45,9 @@ in rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1w77s5q18yr1gqqif15wmrfdvv2chq8rq3w4dnmxg2gn0r7bmz2k";
 
   meta = with stdenv.lib; {

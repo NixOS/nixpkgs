@@ -13,6 +13,9 @@ buildRustPackage rec {
     sha256 = "0086asrx48qlmc484pjz5r5znli85q6qgpfbd81gjlzylj7f57gg";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "06iqzpg5jz1xd2amajvlf7yaz9kr3q2ipbhx71whvv9mwplmxmbi";
 
   meta = with stdenv.lib; {

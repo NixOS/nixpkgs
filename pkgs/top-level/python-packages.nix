@@ -574,6 +574,8 @@ in {
 
   btchip = callPackage ../development/python-modules/btchip { };
 
+  databricks-cli = callPackage ../development/python-modules/databricks-cli { };
+
   datatable = callPackage ../development/python-modules/datatable {
     inherit (pkgs.llvmPackages) openmp libcxx libcxxabi;
   };
@@ -1317,6 +1319,8 @@ in {
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
+  pywick = callPackage ../development/python-modules/pywick { };
+
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
 
   pyvcd = callPackage ../development/python-modules/pyvcd { };
@@ -1346,6 +1350,8 @@ in {
   sabyenc = callPackage ../development/python-modules/sabyenc { };
 
   salmon-mail = callPackage ../development/python-modules/salmon-mail { };
+
+  sanic-auth = callPackage ../development/python-modules/sanic-auth { };
 
   seekpath = callPackage ../development/python-modules/seekpath { };
 
@@ -2439,6 +2445,8 @@ in {
 
   digital-ocean = callPackage ../development/python-modules/digitalocean { };
 
+  digi-xbee = callPackage ../development/python-modules/digi-xbee { };
+
   leather = callPackage ../development/python-modules/leather { };
 
   libais = callPackage ../development/python-modules/libais { };
@@ -2513,6 +2521,8 @@ in {
   dill = callPackage ../development/python-modules/dill { };
 
   discogs_client = callPackage ../development/python-modules/discogs_client { };
+
+  dlx = callPackage ../development/python-modules/dlx { };
 
   dmenu-python = callPackage ../development/python-modules/dmenu { };
 
@@ -2627,6 +2637,8 @@ in {
     else throw "faulthandler is built into ${python.executable}";
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
+
+  ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   filetype = callPackage ../development/python-modules/filetype { };
 
@@ -2743,6 +2755,8 @@ in {
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
+
+  hickle = callPackage ../development/python-modules/hickle { };
 
   hiro = callPackage ../development/python-modules/hiro {};
 
@@ -2916,6 +2930,8 @@ in {
   misaka = callPackage ../development/python-modules/misaka {};
 
   mlrose = callPackage ../development/python-modules/mlrose { };
+
+  mlflow = callPackage ../development/python-modules/mlflow { };
 
   mt-940 = callPackage ../development/python-modules/mt-940 { };
 
@@ -3763,6 +3779,8 @@ in {
 
   google_resumable_media = callPackage ../development/python-modules/google_resumable_media { };
 
+  gorilla = callPackage ../development/python-modules/gorilla { };
+
   gpgme = toPythonModule (pkgs.gpgme.override {
     pythonSupport = true;
     inherit python;
@@ -3860,6 +3878,8 @@ in {
   ics = callPackage ../development/python-modules/ics { };
 
   ifaddr = callPackage ../development/python-modules/ifaddr { };
+
+  imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
   imageio = callPackage ../development/python-modules/imageio { };
 
@@ -4151,6 +4171,8 @@ in {
   marshmallow = callPackage ../development/python-modules/marshmallow { };
 
   marshmallow-enum = callPackage ../development/python-modules/marshmallow-enum { };
+
+  marshmallow-polyfield = callPackage ../development/python-modules/marshmallow-polyfield { };
 
   marshmallow-sqlalchemy = callPackage ../development/python-modules/marshmallow-sqlalchemy { };
 
@@ -4969,6 +4991,8 @@ in {
 
   pyshp = callPackage ../development/python-modules/pyshp { };
 
+  pysnow = callPackage ../development/python-modules/pysnow { };
+
   pysmbc = callPackage ../development/python-modules/pysmbc {
     inherit (pkgs) pkgconfig;
   };
@@ -5243,6 +5267,8 @@ in {
   quandl = callPackage ../development/python-modules/quandl { };
   # alias for an older package which did not support Python 3
   Quandl = callPackage ../development/python-modules/quandl { };
+
+  querystring_parser = callPackage ../development/python-modules/querystring-parser { };
 
   qscintilla-qt4 = callPackage ../development/python-modules/qscintilla { };
 
@@ -5759,6 +5785,8 @@ in {
   xlwt = callPackage ../development/python-modules/xlwt { };
 
   xxhash = callPackage ../development/python-modules/xxhash { };
+
+  ydiff = callPackage ../development/python-modules/ydiff { };
 
   yoda = toPythonModule (pkgs.yoda.override {
     inherit python;
@@ -6754,6 +6782,8 @@ in {
     inherit (pkgs) zstd pkgconfig;
   };
 
+  zstandard = callPackage ../development/python-modules/zstandard { };
+
   zxcvbn = callPackage ../development/python-modules/zxcvbn { };
 
   incremental = callPackage ../development/python-modules/incremental { };
@@ -6943,6 +6973,8 @@ in {
   importlib-resources = callPackage ../development/python-modules/importlib-resources {};
 
   srptools = callPackage ../development/python-modules/srptools { };
+
+  srp = callPackage ../development/python-modules/srp { };
 
   curve25519-donna = callPackage ../development/python-modules/curve25519-donna { };
 

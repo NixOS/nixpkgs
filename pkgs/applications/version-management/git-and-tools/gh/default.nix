@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "gh";
-  version = "0.5.3";
+  version = "0.5.5";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "033y9bwdaj8735nmj22k8lrgkgimji7hyly9i4jyp11iaa7cgd7a";
+    sha256 = "0jmkcx95kngzylqhllg33s094rggpsrgky704z8v6j4969xgrfnc";
   };
 
   modSha256 = "0ina3m2ixkkz2fws6ifwy34pmp6kn5s3j7w40alz6vmybn2smy1h";
@@ -29,7 +29,7 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "GitHub CLI tool";
-    homepage = "https://github.com/cli/cli";
+    homepage = "https://cli.github.com/";
     license = licenses.mit;
     maintainers = with maintainers; [ zowoq ];
   };
