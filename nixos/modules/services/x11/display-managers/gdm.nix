@@ -166,7 +166,7 @@ in
       };
 
     systemd.tmpfiles.rules = [
-      "d /run/gdm/.config 0711 gdm gdm -"
+      "d /run/gdm/.config 0711 gdm gdm"
     ] ++ optionals config.hardware.pulseaudio.enable [
       "d /run/gdm/.config/pulse 0711 gdm gdm"
       "L+ /run/gdm/.config/pulse/${pulseConfig.name} - - - - ${pulseConfig}"
