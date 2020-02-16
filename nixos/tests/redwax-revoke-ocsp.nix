@@ -10,15 +10,21 @@
 #
 # 2.    Sets up a apache httpd server with SSL to host an OCSP endpoint
 #
-# 3.  	Check that this works.
+# 3.    Check that this works.
 #
-
-# RedWax   Redwax aims to decentralise trust management so that the 
-#          values security, confidentiality and privacy can be upheld 
-#          in public infrastructure and private interactions. 
+# Note that we'll use a OCSP specific certificate to sign the OCSP
+#      response. As opposed to signing it with the CA that issued
+#      the certificates that are revoked. This way we can limit
+#      the damage in case that OCSP private key leaks out (as all
+#      it can done due to its critical extension/CA:FALSE is
+#      sign OCSP responses.
+#
+# RedWax   Redwax aims to decentralise trust management so that the
+#          values security, confidentiality and privacy can be upheld
+#          in public infrastructure and private interactions.
 #          http://redwax.eu
 #
-# 
+#
 # make-test-python = yourtestfunction: (import "${pkgs.path}/nixos/tests/make-test-python.nix" yourtestfunction { inherit pkgs; }):
 # import <nixos/tests/make-test-python.nix> ({ pkgs, ... }:
 import ./make-test-python.nix ({ pkgs, ... }:
@@ -52,7 +58,7 @@ in
         virtualHosts = {
           "site.local" = {
             documentRoot = "${revokeRoot}/docroot";
-            # We need port 80; as openssl does not know how to 
+            # We need port 80; as openssl does not know how to
             # fetch CRLs over https.
             #
             forceSSL = true;
@@ -77,12 +83,8 @@ in
               <Location /ocsp>
                   SetHandler ocsp
 
-                  # In this (simple) case; we'll use the same cert to sign the OCSP response
-                  # as we do for the user certs (As opposed to having a separate, lesser, ocsp
-                  # publishing cert that can only do OCSP signing).
-                  #
-                  OcspSigningCertificate "${revokeRoot}/keys/ca-users.pem"
-                  OcspSigningKey "${revokeRoot}/keys/ca-users.key"
+                  OcspSigningCertificate "${revokeRoot}/keys/ocsp.pem"
+                  OcspSigningKey "${revokeRoot}/keys/ocsp.key"
               </Location>
             '';
           };
@@ -110,7 +112,7 @@ in
         ${pkgs.openssl}/bin/openssl req -new -x509 -nodes -newkey rsa:1024 \
             -extensions v3_ca \
             -subj "$basedn/CN=CA" \
-            -out $dir/ca.pem -keyout $dir/ca.key 
+            -out $dir/ca.pem -keyout $dir/ca.key
 
         # Now create our two sub CAs. One for the services and one for the users.
         # And sign each with the above root CA key.
@@ -120,7 +122,7 @@ in
         # startup.
         #
         cat >  $dir/extfile.cnf <<EOM
-basicConstraints=CA:TRUE
+basicConstraints = CA:TRUE
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 EOM
@@ -136,12 +138,16 @@ EOM
                -out $dir/ca-$subca.pem
         done
 
-	# Create an OCSP signer - we hang it under the CA; typically these
-	# would be in a more operational part of the sub-tree; as to avoid
-	# having to take the CA key out of cold store too often.
-	#
+        # Create an OCSP signer; as we want to avoid having to have
+        # the key of the ca-users near the web-server; we create a
+        # more neutered one (CA:False, critical on just OCSP signing).
+        #
+  	# Standards (and openssl) expect this ocsp signing cert to be
+        # under the same CA as the one that it signs OCSP related
+        # requests of.
+        #
         cat >  $dir/extfile.cnf <<EOM
-basicConstraints=CA:FALSE
+basicConstraints = CA:FALSE
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
 keyUsage = critical, digitalSignature
@@ -152,11 +158,11 @@ EOM
                -keyout $dir/ocsp.key \
                -subj "$basedn/CN=OCSP Department" |\
         ${pkgs.openssl}/bin/openssl x509 -req -days 14 -set_serial $RANDOM \
-               -CA $dir/ca.pem -CAkey $dir/ca.key \
+               -CA $dir/ca-users.pem -CAkey $dir/ca-users.key \
                -extfile $dir/extfile.cnf \
                -out $dir/ocsp.pem
 
-        # We know longer need the root CA key - as we've
+        # We no longer need the root CA key - as we've
         # signed our two worker sub CA's. And they'll
         # do the rest.
         #
@@ -170,18 +176,8 @@ EOM
         cat $dir/ocsp.pem $dir/ca.pem > $dir/chain-ocsp.pem
         cat $dir/ca.pem $dir/ca-*.pem $dir/ocsp.pem  > $dir/chain.pem
 
-        # Somewhat anoyingly - the CRL fetch of openssl ignores the CA settings;
-        # and only looks at the hashed-path-dir. So we make one of the few we need.
-        #
-        mkdir $dir/hashed
-        for cf in $dir/ca.pem $dir/ca-users.pem $dir/ca-web.pem $dir/ocsp.pem
-        do 
-            ln $cf $dir/hashed/`${pkgs.openssl}/bin/openssl x509 -noout -hash -in $cf`.0
-        done
-        ls $dir/hashed
-
         # Use the CA Web sub ca to sign a localhost cert. We keep this very simple; a
-        # more realistic example would set all sort of x509v3 extensions; such as an 
+        # more realistic example would set all sort of x509v3 extensions; such as an
         # key IDs and SubjectAltNames.
         #
         ${pkgs.openssl}/bin/openssl req -new -nodes -newkey rsa:1024  -keyout $dir/server.key \
@@ -191,8 +187,8 @@ EOM
         ${pkgs.openssl}/bin/openssl x509 -req -days 14 -set_serial $RANDOM \
               -CA $dir/ca-web.pem -CAkey $dir/ca-web.key \
               -in $dir/server.csr \
-              -out $dir/server.pem 
-        rm $dir/server.csr 
+              -out $dir/server.pem
+        rm $dir/server.csr
 
         # SSLCertificateChainFile was obsoleted in apache 2.4.8 - its role taken over by
         # having them concatenated into SSLCertificateFile. So we create that here; sorted
@@ -213,8 +209,8 @@ EOM
         #
         mkdir $dir/certs $dir/crl $dir/newcerts
         touch $dir/index.txt
-	echo 01 > $dir/serial.txt
-	echo 01 > $dir/crlnumber.txt
+        echo 01 > $dir/serial.txt
+        echo 01 > $dir/crlnumber.txt
         cat >  $dir/openssl.cnf <<EOM
 [ca]
 default_ca = CA_default
@@ -261,7 +257,7 @@ keyUsage = critical, digitalSignature, cRLSign, keyCertSign
 
 [ usr_cert ]
 basicConstraints=CA:FALSE
-authorityInfoAccess = caIssuers;URI:https://site.local/ocsp.crt
+# authorityInfoAccess = OCSP;URI:https://site.local/ocsp, caIssuers; URI:https://site.local/web-users.crt
 authorityInfoAccess = OCSP;URI:https://site.local/ocsp
 subjectKeyIdentifier = hash
 authorityKeyIdentifier = keyid,issuer
@@ -280,7 +276,7 @@ extendedKeyUsage = critical, OCSPSigning
 EOM
         # Now issue certicates to our usually menagerie of users
         #
-        for person in alice bob charlie malory
+        for person in alice charlie malory
         do
            ${pkgs.openssl}/bin/openssl req \
                -config $dir/openssl.cnf \
@@ -292,48 +288,47 @@ EOM
 
            s=`cat $dir/serial.txt`
            ${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
-		-extensions usr_cert  -batch \
-		-in  $dir/person-$person.crt \
-		-out $dir/person-$person.pem  
+                -extensions usr_cert  -batch \
+                -in  $dir/person-$person.crt \
+                -out $dir/person-$person.pem
 
-           rm $dir/person-$person.crt 
+           rm $dir/person-$person.crt
            # cp $dir/newcerts/$s.pem $dir/person-$person.pem
         done
 
         cat $dir/index.txt
 
-        # Revoke Malory - she is up to no good. Again. 
+        # Revoke Malory - she is up to no good. Again.
         #
-  	${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
-		-batch \
-		-revoke $dir/person-malory.pem
+        ${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
+                -batch \
+                -revoke $dir/person-malory.pem
 
         # Revoke Charlie - he is now working somewhere else.
         #
-  	${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
-		-batch \
+        ${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
+                -batch \
                 -crl_reason affiliationChanged \
-		-revoke $dir/person-charlie.pem
+                -revoke $dir/person-charlie.pem
 
         # Then regenerate and resign the CRL.
         #
-  	${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
-		-batch \
-		-gencrl \
-		-out $dir/ca-users-crl.pem 
+        ${pkgs.openssl}/bin/openssl ca -config $dir/openssl.cnf \
+                -batch \
+                -gencrl \
+                -out $dir/ca-users-crl.pem
 
         # Just to quell a webserver error & warning.
-	# 
+        #
         mkdir ${revokeRoot}/docroot
         echo Nothing to see, now move along > ${revokeRoot}/docroot/index.html
-        cp $dir/ocsp.pem ${revokeRoot}/docroot/ocsp.crt
 
       '';
     };
 
   testScript = ''
     # First we validate that w've set up the certs/revocs correctly.
-    
+
     # Validate alice and malory their certs against the CA; both should be ok (as this
     # does not check the OCSP responder / crl file.
     #
@@ -367,7 +362,28 @@ EOM
     machine.wait_for_unit("httpd.service")
 
     machine.succeed(
-        "openssl ocsp -issuer ${revokeRoot}/keys/ca-users.pem -cert ${revokeRoot}/keys/person-alice.pem -cert ${revokeRoot}/keys/person-charlie.pem -cert ${revokeRoot}/keys/person-malory.pem -resp_text -url https://site.local/ocsp > /dev/stderr"
+        "openssl ocsp -issuer ${revokeRoot}/keys/ca-users.pem -CAfile ${revokeRoot}/keys/ca.pem -cert ${revokeRoot}/keys/person-alice.pem -cert ${revokeRoot}/keys/person-charlie.pem -cert ${revokeRoot}/keys/person-malory.pem -resp_text -url https://site.local/ocsp > /dev/stderr"
     )
+
+    # This should show something such as:
+    #
+    #   OCSP Response Data:
+    #   ....
+    #         detailed information & signature certificate
+    #   ....
+    #   Response verify OK
+    #   /data/http/demo/keys/person-alice.pem: good
+    #         This Update: Feb 15 22:10:32 2020 GMT
+    #         Next Update: Feb 18 22:10:32 2020 GMT
+    #   /data/http/demo/keys/person-charlie.pem: revoked
+    #         This Update: Feb 15 22:10:32 2020 GMT
+    #         Next Update: Feb 18 22:10:32 2020 GMT
+    #         Reason: affiliationChanged
+    #         Revocation Time: Feb 15 22:10:32 2020 GMT
+    #   /data/http/demo/keys/person-malory.pem: revoked
+    #         This Update: Feb 15 22:10:32 2020 GMT
+    #         Next Update: Feb 18 22:10:32 2020 GMT
+    #         Reason: unspecified
+    #         Revocation Time: Feb 15 22:10:31 2020 GMT
   '';
 })
