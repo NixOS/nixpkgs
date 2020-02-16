@@ -1,17 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, pafy
-}:
+{ lib, python3Packages, fetchFromGitHub }:
 
-buildPythonPackage rec {
+with python3Packages;
+
+buildPythonApplication rec {
   pname = "mps-youtube";
-  version = "0.2.8";
-  disabled = (!isPy3k);
+  version = "unstable-2020-01-28";
 
   src = fetchFromGitHub {
     owner = "mps-youtube";
     repo = "mps-youtube";
-    rev = "v${version}";
-    sha256 = "1w1jhw9rg3dx7vp97cwrk5fymipkcy2wrbl1jaa38ivcjhqg596y";
+    rev = "b808697133ec2ad7654953232d1e841b20aa7cc3";
+    sha256 = "0lqprlpc0v092xqkjc0cc395ag45lijwgd34dpg2jy6i0f2szywv";
   };
 
   propagatedBuildInputs = [ pafy ];
@@ -30,6 +29,6 @@ buildPythonPackage rec {
     description = "Terminal based YouTube player and downloader";
     homepage = "https://github.com/mps-youtube/mps-youtube";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ odi ];
+    maintainers = with maintainers; [ koral odi ];
   };
 }
