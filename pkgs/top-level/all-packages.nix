@@ -9427,7 +9427,6 @@ in
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
   })
-    ruby_2_4
     ruby_2_5
     ruby_2_6
     ruby_2_7;
@@ -9448,7 +9447,6 @@ in
   ruby = ruby_2_6;
   rubyPackages = rubyPackages_2_6;
 
-  rubyPackages_2_4 = recurseIntoAttrs ruby_2_4.gems;
   rubyPackages_2_5 = recurseIntoAttrs ruby_2_5.gems;
   rubyPackages_2_6 = recurseIntoAttrs ruby_2_6.gems;
   rubyPackages_2_7 = recurseIntoAttrs ruby_2_7.gems;
@@ -21350,9 +21348,7 @@ in
 
   wavebox = callPackage ../applications/networking/instant-messengers/wavebox { };
 
-  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi {
-    ruby = ruby_2_4;  # sonic-pi build breaks with ruby 2.5 and 2.6
-  };
+  sonic-pi = libsForQt5.callPackage ../applications/audio/sonic-pi { };
 
   st = callPackage ../applications/misc/st {
     conf = config.st.conf or null;
