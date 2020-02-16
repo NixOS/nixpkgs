@@ -203,7 +203,7 @@ in
 
   docker-ls = callPackage ../tools/misc/docker-ls { };
 
-  docker-slim = callPackage ../build-support/docker-slim { };
+  docker-slim = callPackage ../applications/virtualization/docker-slim { };
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
@@ -1322,6 +1322,7 @@ in
   bs-platform = callPackage ../development/compilers/bs-platform {};
 
   c3d = callPackage ../applications/graphics/c3d {
+    stdenv = gcc8Stdenv;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
@@ -21712,6 +21713,8 @@ in
   tint2 = callPackage ../applications/misc/tint2 { };
 
   tiny = callPackage ../applications/networking/irc/tiny { };
+
+  tipp10 = qt5.callPackage ../applications/misc/tipp10 { };
 
   tixati = callPackage ../applications/networking/p2p/tixati { };
 

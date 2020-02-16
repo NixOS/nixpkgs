@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
 
-  name = "rxvt_unicode-vtwheel-0.3.2";
+  name = "rxvt-unicode-vtwheel-0.3.2";
 
   src = fetchgit {
    url = "https://aur.archlinux.org/urxvt-vtwheel.git";

@@ -91,11 +91,7 @@ in
     environment.systemPackages = [ alsaUtils ];
 
     environment.etc = mkIf (!pulseaudioEnabled && config.sound.extraConfig != "")
-      [
-        { source = pkgs.writeText "asound.conf" config.sound.extraConfig;
-          target = "asound.conf";
-        }
-      ];
+      { "asound.conf".text = config.sound.extraConfig; };
 
     # ALSA provides a udev rule for restoring volume settings.
     services.udev.packages = [ alsaUtils ];

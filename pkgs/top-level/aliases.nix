@@ -347,6 +347,7 @@ mapAliases ({
   pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
   pinentry_qt = pinentry-qt; # added 2019-10-14
   pinentry_gnome = pinentry-gnome; # added 2019-10-14
+  pinentry_qt5 = pinentry-qt; # added 2020-02-11
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
@@ -383,7 +384,7 @@ mapAliases ({
   ruby_2_5_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   rubyPackages_2_4 = throw "deprecated 2019-12: use a newer version of rubyPackages instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
-  rxvt_unicode_with-plugins = rxvt-unicode; # added 2020-02-02
+  rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
   urxvt_perl = rxvt-unicode-plugins.perl; # added 2020-02-02
