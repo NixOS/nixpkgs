@@ -33,7 +33,6 @@ in {
           The attribute name defines the name of the config,
           and the attribute value defines the content of the config.
         '';
-        apply = lib.mapAttrs (name: text: pkgs.writeText "${name}" text);
       };
     };
   };
@@ -63,12 +62,7 @@ in {
       '';
     };
     environment = {
-      etc = lib.mapAttrsToList
-              (name: file:
-                { source = file;
-                  target = "shorewall/${name}";
-                })
-              cfg.configs;
+      etc = lib.mapAttrs' (name: conf: lib.nameValuePair "shorewall/${name}" {text=conf;}) cfg.configs;
       systemPackages = [ cfg.package ];
     };
   };
