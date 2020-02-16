@@ -1462,6 +1462,9 @@ in {
   spyder-kernels = if isPy3k then callPackage ../development/python-modules/spyder-kernels {}
     else callPackage ../development/python-modules/spyder-kernels/2.nix {};
 
+  spyder = if isPy3k then callPackage ../development/python-modules/spyder {}
+    else callPackage ../development/python-modules/spyder/2.nix {};
+
   tenacity = callPackage ../development/python-modules/tenacity { };
 
   tokenserver = callPackage ../development/python-modules/tokenserver {};
