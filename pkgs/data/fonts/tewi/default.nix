@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, python3, bdftopcf, mkfontscale }:
+{ stdenv, fetchFromGitHub, python3
+, bdftopcf, mkfontscale
+, libfaketime, fonttosfnt
+}:
 
 stdenv.mkDerivation rec {
   pname = "tewi-font";
@@ -11,12 +14,12 @@ stdenv.mkDerivation rec {
     sha256 = "1axv9bv10xlcmgfyjh3z5kn5fkg3m6n1kskcs5hvlmyb6m1zk91j";
   };
 
-  nativeBuildInputs = [ python3 bdftopcf mkfontscale ];
+  nativeBuildInputs =
+    [ python3 bdftopcf mkfontscale
+      libfaketime fonttosfnt
+    ];
 
   postPatch = ''
-    # do not update fontconfig cache
-    sed '32,33d' -i Makefile
-
     # make gzip deterministic
     sed 's/gzip -9/gzip -9 -n/g' -i Makefile
 
@@ -24,11 +27,26 @@ stdenv.mkDerivation rec {
     patchShebangs scripts/merge
   '';
 
+  postBuild = ''
+    # convert bdf fonts to otb
+    for i in *.bdf; do
+      name=$(basename "$i" .bdf)
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$name.otb" "$i"
+    done
+  '';
+
   installPhase = ''
     fontDir="$out/share/fonts/misc"
     install -m 644 -D out/* -t "$fontDir"
     mkfontdir "$fontDir"
+
+    fontDir="$otb/share/fonts/misc"
+    install -m 644 -D *.otb -t "$fontDir"
+    mkfontdir "$fontDir"
   '';
+
+  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A nice bitmap font, readable even at small sizes";
