@@ -1459,8 +1459,8 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
-  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
-  spyder = callPackage ../development/python-modules/spyder {};
+  spyder-kernels = if isPy3k then callPackage ../development/python-modules/spyder-kernels {}
+    else callPackage ../development/python-modules/spyder-kernels/2.nix {};
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
