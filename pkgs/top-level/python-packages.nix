@@ -2759,6 +2759,8 @@ in {
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
 
+  helpdev = callPackage ../development/python-modules/helpdev { };
+
   hickle = callPackage ../development/python-modules/hickle { };
 
   hiro = callPackage ../development/python-modules/hiro {};
