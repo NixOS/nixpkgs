@@ -20063,6 +20063,8 @@ in
     inherit (darwin) libobjc;
   };
 
+  jftui = callPackage ../applications/video/jftui { };
+
   lilyterm = callPackage ../applications/misc/lilyterm {
     inherit (gnome2) vte;
     gtk = gtk2;
