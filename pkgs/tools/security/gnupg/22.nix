@@ -33,6 +33,9 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-libusb-include-path.patch
     ./0001-dirmngr-Only-use-SKS-pool-CA-for-SKS-pool.patch
+    ./tests-add-test-cases-for-import-without-uid.patch
+    ./allow-import-of-previously-known-keys-even-without-UI.patch
+    ./accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
   ];
   postPatch = ''
     sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' \
