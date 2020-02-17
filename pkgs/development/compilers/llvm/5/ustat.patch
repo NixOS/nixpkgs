@@ -1,0 +1,40 @@
+# <sys/ustat.h> wa removed from glibc 2.28 in commit cf2478d53ad7071e84c724a986b56fe17f4f4ca7
+# LLVM backported the fix for this to their 6.x branch, but not to their 5.x branch.
+# https://bugs.llvm.org/show_bug.cgi?id=37418
+# https://reviews.llvm.org/D47165
+# https://reviews.llvm.org/D47281
+# https://reviews.llvm.org/file/data/lwk7tvnagvylkwkgymvq/PHID-FILE-jvepapocdgor5vr2mphf/D47281.diff
+
+Index: lib/sanitizer_common/sanitizer_platform_limits_posix.cc
+===================================================================
+--- a/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
++++ b/lib/sanitizer_common/sanitizer_platform_limits_posix.cc
+@@ -159,7 +159,6 @@
+ # include <sys/procfs.h>
+ #endif
+ #include <sys/user.h>
+-#include <sys/ustat.h>
+ #include <linux/cyclades.h>
+ #include <linux/if_eql.h>
+ #include <linux/if_plip.h>
+@@ -253,7 +252,19 @@
+ #endif // SANITIZER_LINUX || SANITIZER_FREEBSD
+ 
+ #if SANITIZER_LINUX && !SANITIZER_ANDROID
+-  unsigned struct_ustat_sz = sizeof(struct ustat);
++  // Use pre-computed size of struct ustat to avoid <sys/ustat.h> which
++  // has been removed from glibc 2.28.
++#if defined(__aarch64__) || defined(__s390x__) || defined (__mips64) \
++  || defined(__powerpc64__) || defined(__arch64__) || defined(__sparcv9) \
++  || defined(__x86_64__)
++#define SIZEOF_STRUCT_USTAT 32
++#elif defined(__arm__) || defined(__i386__) || defined(__mips__) \
++  || defined(__powerpc__) || defined(__s390__)
++#define SIZEOF_STRUCT_USTAT 20
++#else
++#error Unknown size of struct ustat
++#endif
++  unsigned struct_ustat_sz = SIZEOF_STRUCT_USTAT;
+   unsigned struct_rlimit64_sz = sizeof(struct rlimit64);
+   unsigned struct_statvfs64_sz = sizeof(struct statvfs64);
+ #endif // SANITIZER_LINUX && !SANITIZER_ANDROID
