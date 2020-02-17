@@ -1403,4 +1403,7 @@ self: super: {
     '';
   });
 
+  # cabal-fmt requires Cabal3
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_0_0_0; };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
