@@ -2877,9 +2877,7 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
   };
 
-  doomseeker = qt5.callPackage ../applications/misc/doomseeker {
-    inherit (stdenv.cc) isClang;
-  };
+  doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
   doom-bcc = callPackage ../games/zdoom/bcc-git.nix { };
 
