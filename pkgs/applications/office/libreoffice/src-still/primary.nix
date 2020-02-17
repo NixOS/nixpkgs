@@ -25,7 +25,8 @@ rec {
     sha256 = "1l5v9bb7n9s6i24q4mdyqyp5v4f8iy0a9dmpgw649vngj1zxdxfh";
   };
 
-  # TODO: dictionaries
+  # the "dictionaries" archive is not used for LO build because we already build hunspellDicts packages from
+  # it and LibreOffice can use these by pointing DICPATH environment variable at the hunspell directory
 
   help = fetchSrc {
     name = "help";
