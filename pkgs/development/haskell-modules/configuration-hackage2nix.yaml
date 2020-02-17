@@ -3328,7 +3328,6 @@ broken-packages:
   - cabal-dev
   - cabal-dir
   - cabal-flatpak
-  - cabal-fmt
   - cabal-ghc-dynflags
   - cabal-ghci
   - cabal-graphdeps
