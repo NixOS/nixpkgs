@@ -1,10 +1,11 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
+{ stdenv, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
 , blockdiag
 }:
 
 buildPythonPackage rec {
   pname = "seqdiag";
   version = "2.0.0";
+  disabled = isPy27;
 
   src = fetchurl {
     url = "mirror://pypi/s/seqdiag/${pname}-${version}.tar.gz";
