@@ -6632,6 +6632,7 @@ in
 
   svgcleaner = callPackage ../tools/graphics/svgcleaner { };
 
+  ssb-patchbay = callPackage ../applications/networking/ssb/patchbay { };
   ssb-patchwork = callPackage ../applications/networking/ssb/patchwork { };
 
   ssdeep = callPackage ../tools/security/ssdeep { };
