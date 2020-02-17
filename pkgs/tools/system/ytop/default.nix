@@ -15,10 +15,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "11pcchwahcwdvmfwfs6j2zg23grlw538wfs90mvqy2mpccj7d3ys";
+  cargoSha256 = "0c4xp63fm1n7x8brmx7avqjvcbqi32k6x5ps7h0fh0ign452y7fz";
   verifyCargoDeps = true;
 
   meta = with stdenv.lib; {
