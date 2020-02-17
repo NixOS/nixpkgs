@@ -105,8 +105,10 @@ let
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};
       kguiaddons = callPackage ./kguiaddons.nix {};
+      kholidays = callPackage ./kholidays.nix {};
       ki18n = callPackage ./ki18n.nix {};
       kidletime = callPackage ./kidletime.nix {};
+      kirigami2 = callPackage ./kirigami2.nix {};
       kitemmodels = callPackage ./kitemmodels.nix {};
       kitemviews = callPackage ./kitemviews.nix {};
       kplotting = callPackage ./kplotting.nix {};
@@ -117,12 +119,11 @@ let
       networkmanager-qt = callPackage ./networkmanager-qt.nix {};
       oxygen-icons5 = callPackage ./oxygen-icons5.nix {};
       prison = callPackage ./prison.nix {};
+      qqc2-desktop-style = callPackage ./qqc2-desktop-style.nix {};
       solid = callPackage ./solid.nix {};
       sonnet = callPackage ./sonnet.nix {};
       syntax-highlighting = callPackage ./syntax-highlighting.nix {};
       threadweaver = callPackage ./threadweaver.nix {};
-      kirigami2 = callPackage ./kirigami2.nix {};
-      kholidays = callPackage ./kholidays.nix {};
 
     # TIER 2
       kactivities = callPackage ./kactivities.nix {};
