@@ -17934,7 +17934,8 @@ in
   inter-ui = callPackage ../data/fonts/inter-ui { };
   inter = callPackage ../data/fonts/inter { };
 
-  siji = callPackage ../data/fonts/siji { };
+  siji = callPackage ../data/fonts/siji
+    { inherit (buildPackages.xorg) mkfontscale fonttosfnt; };
 
   sound-theme-freedesktop = callPackage ../data/misc/sound-theme-freedesktop { };
 
