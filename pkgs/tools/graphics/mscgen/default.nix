@@ -37,7 +37,7 @@ stdenv.mkDerivation {
       printing.
     '';
 
-    platforms = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }
