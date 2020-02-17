@@ -2119,7 +2119,7 @@ in
   riot-desktop = callPackage ../applications/networking/instant-messengers/riot/riot-desktop.nix { };
 
   riot-web = callPackage ../applications/networking/instant-messengers/riot/riot-web.nix {
-    conf = config.riot-web.conf or null;
+    conf = config.riot-web.conf or {};
   };
 
   ripasso-cursive = callPackage ../tools/security/ripasso/cursive.nix {
