@@ -1,8 +1,17 @@
-Index: kinit-5.32.0/src/kdeinit/kinit.cpp
-===================================================================
---- kinit-5.32.0.orig/src/kdeinit/kinit.cpp
-+++ kinit-5.32.0/src/kdeinit/kinit.cpp
-@@ -623,19 +623,15 @@ static pid_t launch(int argc, const char
+From 715c5f461b4992dac066601202a673bc551a5e33 Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Sun, 16 Feb 2020 14:23:31 -0600
+Subject: [PATCH 1/4] kinit-libpath
+
+---
+ src/kdeinit/kinit.cpp | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
+
+diff --git a/src/kdeinit/kinit.cpp b/src/kdeinit/kinit.cpp
+index 8fff17a..0801b75 100644
+--- a/src/kdeinit/kinit.cpp
++++ b/src/kdeinit/kinit.cpp
+@@ -622,19 +622,15 @@ static pid_t launch(int argc, const char *_name, const char *args,
  
          if (!libpath.isEmpty()) {
              if (libpath_relative) {
@@ -31,3 +40,6 @@ Index: kinit-5.32.0/src/kdeinit/kinit.cpp
                  }
              } else {
                  l.load();
+-- 
+2.23.1
+
