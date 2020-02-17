@@ -1,7 +1,7 @@
 +++ build/SConstruct
-@@ -63,10 +63,10 @@ elif platform_arg == 'javascript':
+@@ -63,10 +63,10 @@
      custom_tools = ['cc', 'c++', 'ar', 'link', 'textfile', 'zip']
-
+ 
  env_base = Environment(tools=custom_tools)
 -if 'TERM' in os.environ:
 -    env_base['ENV']['TERM'] = os.environ['TERM']
@@ -11,7 +11,6 @@
 +    if (k in os.environ):
 +        env_base["ENV"][k] = os.environ[k]
 +
- env_base.android_maven_repos = []
- env_base.android_flat_dirs = []
- env_base.android_dependencies = []
-
+ env_base.disabled_modules = []
+ env_base.use_ptrcall = False
+ env_base.module_version_string = ""
