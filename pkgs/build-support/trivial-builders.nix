@@ -255,11 +255,14 @@ rec {
          }:
     let
       args = removeAttrs args_ [ "name" "postBuild" ]
-        // { inherit preferLocalBuild allowSubstitutes; }; # pass the defaults
+        // {
+          inherit preferLocalBuild allowSubstitutes;
+          passAsFile = [ "paths" ];
+        }; # pass the defaults
     in runCommand name args
       ''
         mkdir -p $out
-        for i in $paths; do
+        for i in $(cat $pathsPath); do
           ${lndir}/bin/lndir -silent $i $out
         done
         ${postBuild}
