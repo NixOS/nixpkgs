@@ -36,22 +36,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "10.6.0";
+  version = "10.6.1";
   pname = "geant4";
 
   src = fetchurl{
-    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.tar.gz";
-    sha256 = "169ikv2sssfbqml7bs146dj035xifxm9b12r4rzmgpvswfhca90l";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p01.tar.gz";
+    sha256 = "0ssxg7dd7vxljb3fdyb0llg7gsxack21qjfsb3n23k107a19yibk";
   };
-
-  # This patch fixes crash when set -u is enabled
-  patches = [
-    (fetchpatch {
-      name = "bash-variable-fix.patch";
-      url = "https://bugzilla-geant4.kek.jp/attachment.cgi?id=606&action=diff&collapsed=&headers=1&format=raw";
-      sha256 = "1bg9wg174fbqbjsjm1gz9584a7rq9p1szxr2fq9yfvqaf78289k6";
-    })
-  ];
 
   cmakeFlags = [
     "-DGEANT4_INSTALL_DATA=OFF"
