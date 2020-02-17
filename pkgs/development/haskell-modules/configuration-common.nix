@@ -1416,4 +1416,58 @@ self: super: {
   # cabal-fmt requires Cabal3
   cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_0_0_0; };
 
+  # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
+  # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
+  # patch here. That single patch is for the gtk2hs super-repo, out of which
+  # we extract the patch for each indvidiual project (glib/gio/pango/gtk/gtk3).
+  glib = appendPatch super.glib (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+    includes = [ "glib.cabal" ];
+    stripLen = 1;
+    sha256 = "1zdss1xgsbijs3kx8dp5a81qryrfc1zm1xrd20whna3dqakf8b7g";
+  });
+  gio = appendPatch super.gio (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+    includes = [ "gio.cabal" ];
+    stripLen = 1;
+    sha256 = "0d72k6gqvgax9jcqi3gz1gqnar7jg8p5065z3mw2fcwvdw46s2zv";
+  });
+  pango = appendPatch super.pango (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+    includes = [ "pango.cabal" ];
+    stripLen = 1;
+    sha256 = "0dc221wlmyhc24h6ybfhbkxmcx4i6bvkbr1zgqidbnj3yp6w0l5w";
+  });
+  # gtk/gtk3 have an additional complication: independent of the above
+  # 0.13.8.0-specific fix, they need to be told on Darwin to use the Quartz
+  # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
+  gtk3 =
+    let
+      patchedGtk3 = appendPatch super.gtk3 (pkgs.fetchpatch {
+        url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+        includes = [ "gtk3.cabal" ];
+        stripLen = 1;
+        sha256 = "0zvj0dzfwf9bksfhi0m4v0h5aij236gd0qhyr1adpdcjrkd8zbkd";
+      });
+    in
+      # The appendConfigureFlags should remain even after we can drop patchedGtk3.
+      appendConfigureFlags patchedGtk3 (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
+  gtk =
+    let
+      patchedGtk = appendPatch super.gtk (pkgs.fetchpatch {
+        url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+        includes = [ "gtk.cabal-renamed" ];
+        stripLen = 1;
+        sha256 = "0wb0scvmhg8b42hxpns9m6zak3r8b25a2z7wg6vl56n17nb635l7";
+        # One final complication: the gtk cabal file in the source repo (as seen
+        # by the patch) is `gtk.cabal-renamed`, but this gets changed to the usual
+        # `gtk.cabal` before uploading to Hackage by a script.
+        postFetch = ''
+          substituteInPlace $out --replace "-renamed" ""
+        '';
+      });
+    in
+      # The appendConfigureFlags should remain even after we can drop patchedGtk.
+      appendConfigureFlags patchedGtk (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
