@@ -128,7 +128,6 @@ stdenv.mkDerivation rec {
     bzip2
     dbus
     dconf
-    glib
     gpgme
     json-glib
     libarchive
@@ -136,7 +135,6 @@ stdenv.mkDerivation rec {
     libseccomp
     libsoup
     lzma
-    ostree
     polkit
     python3
     systemd
@@ -146,6 +144,12 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
+  ];
+
+  # Required by flatpak.pc
+  propagatedBuildInputs = [
+    glib
+    ostree
   ];
 
   checkInputs = [
