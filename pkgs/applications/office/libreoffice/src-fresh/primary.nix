@@ -8,8 +8,8 @@ rec {
 
   major = "6";
   minor = "3";
-  patch = "0";
-  tweak = "4";
+  patch = "5";
+  tweak = "2";
 
   subdir = "${major}.${minor}.${patch}";
 
@@ -17,19 +17,19 @@ rec {
 
   src = fetchurl {
     url = "https://download.documentfoundation.org/libreoffice/src/${subdir}/libreoffice-${version}.tar.xz";
-    sha256 = "1mxflzrcm04djkj8ifyy4rwgl8bxirrvzrn864w6rgvzn43h30w7";
+    sha256 = "0jnayv1i0iq1gpf3q3z9nfq6jid77d0c76675lkqb3gi07f63nzz";
   };
 
   # FIXME rename
   translations = fetchSrc {
     name = "translations";
-    sha256 = "0730fw2kr00b2d56jkdzjdz49c4k4mxiz879c7ikw59c5zvrh009";
+    sha256 = "01g09bbn1ixrsfj4l0x6x8p06dz9hnlrhnr3f3xb42drmi9ipvjv";
   };
 
   # TODO: dictionaries
 
   help = fetchSrc {
     name = "help";
-    sha256 = "1w9bqwzz75vvxxy9dgln0v6p6isf8mkqnkg1nzlaykvdgsn5sp4z";
+    sha256 = "1p38wlclv6cbjpkkq7n2mjpxy84pxi4vxc9s5kjp4dm63zzxafd6";
   };
 }
