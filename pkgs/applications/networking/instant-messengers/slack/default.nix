@@ -6,7 +6,7 @@ at-spi2-atk, at-spi2-core, libuuid, nodePackages, libpulseaudio, xdg_utils
 
 let
 
-  version = "4.2.0";
+  version = "4.3.3";
 
   inherit (stdenv.hostPlatform) system;
 
