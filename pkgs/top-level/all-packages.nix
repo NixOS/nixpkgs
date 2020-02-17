@@ -19809,6 +19809,8 @@ in
 
   font-manager = callPackage ../applications/misc/font-manager { };
 
+  fontpreview = callPackage ../applications/misc/fontpreview { };
+
   foo-yc20 = callPackage ../applications/audio/foo-yc20 { };
 
   fossil = callPackage ../applications/version-management/fossil { };
