@@ -1,5 +1,5 @@
 { stdenv, fetchurl, bison, flex, autoreconfHook
-, openssl, db, attr, perl, tcsh
+, openssl, db, attr, perl, tcsh, fetchpatch
 , enableLmdb ? false
 } :
 
@@ -11,6 +11,26 @@ stdenv.mkDerivation rec {
     url = "http://download.orangefs.org/current/source/orangefs-${version}.tar.gz";
     sha256 = "15669f5rcvn44wkas0mld0qmyclrmhbrw4bbbp66sw3a12vgn4sm";
   };
+
+  patches = let
+    urlBase = "https://github.com/waltligon/orangefs/commit/";
+  in [
+    (fetchpatch {
+      name = "glib-2.28-1";
+      url = "${urlBase}560f1e624687781d92561507295d1e7833187fc4.patch";
+      sha256 = "0bp4znzrzhfwfwpkpffacxdg0511wxv5zff7754k94r467rq9nx5";
+    })
+    (fetchpatch {
+      name = "glib-2.28-2";
+      url = "${urlBase}63ba2f50483339c195d1def845befe6adab16f35.patch";
+      sha256 = "0239blp0yzsc02cjrnsyllz48wkqcc22g4h48rff08wadi56cfnc";
+    })
+    (fetchpatch {
+      name = "glib-2.30";
+      url = "${urlBase}ce93eeeeb26ba555f1cc6f8d48f7dd4ccecc5851.patch";
+      sha256 = "15hff3nb9sp85k243k4ij5jhk6hpb63nq8ipil6fn76k41hv4ciz";
+    })
+  ];
 
   nativeBuildInputs = [ bison flex perl autoreconfHook ];
   buildInputs = [ openssl db attr tcsh ];
