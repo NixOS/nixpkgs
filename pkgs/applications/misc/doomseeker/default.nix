@@ -1,6 +1,6 @@
-{ stdenv, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
+{ stdenv, mkDerivation, cmake, fetchFromBitbucket, pkgconfig, qtbase, qttools, qtmultimedia, zlib, bzip2, xxd }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "doomseeker";
   version = "2018-03-05";
 
@@ -13,13 +13,10 @@ stdenv.mkDerivation {
 
   patches = [ ./fix_paths.patch ./qt_build_fix.patch ];
 
+  nativeBuildInputs = [ cmake qttools pkgconfig xxd ];
   buildInputs = [ qtbase qtmultimedia zlib bzip2 ];
 
-  nativeBuildInputs = [ cmake qttools pkgconfig xxd ];
-
-  enableParallelBuilding = true;
-
-  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=format-security";
+  hardeningDisable = stdenv.lib.optional stdenv.isDarwin "format";
 
   meta = with stdenv.lib; {
     homepage = http://doomseeker.drdteam.org/;
