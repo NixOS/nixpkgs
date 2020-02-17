@@ -1,29 +1,37 @@
-{ stdenv, callPackage, defaultCrateOverrides, fetchFromGitHub, cmake, curl, libssh2, libgit2, openssl, zlib }:
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, curl
+, libgit2
+, libssh2
+, openssl
+, pkg-config
+, zlib }:
 
-((callPackage ./cargo-update.nix {}).cargo_update {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    cargo-update = attrs: rec {
-      name = "cargo-update-${version}";
-      version = "1.5.2";
+rustPlatform.buildRustPackage rec {
+  pname = "cargo-update";
+  version = "2.5.0";
 
-      src = fetchFromGitHub {
-        owner = "nabijaczleweli";
-        repo = "cargo-update";
-        rev = "v${version}";
-        sha256 = "1bvrdgcw2akzd78wgvsisvghi8pvdk3szyg9s46qxv4km9sf88s7";
-      };
+  src = fetchFromGitHub {
+    owner = "nabijaczleweli";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "143aczay7i3zbhbvv4cjf6hns5w8j52rfdaq8ff0r8v3qghd2972";
+  };
 
-      nativeBuildInputs = [ cmake ];
-      buildInputs = [ libssh2 libgit2 openssl zlib ]
-        ++ stdenv.lib.optional stdenv.isDarwin curl;
+  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "0mxc752hmd7r29camq4f4qzwx0w008rqlq07j2r26z4ygvlrkc3a";
 
-      meta = with stdenv.lib; {
-        description = "A cargo subcommand for checking and applying updates to installed executables";
-        homepage = https://github.com/nabijaczleweli/cargo-update;
-        license = with licenses; [ mit ];
-        maintainers = with maintainers; [ gerschtli ];
-        platforms = platforms.all;
-      };
-    };
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libgit2 libssh2 openssl pkg-config zlib ]
+    ++ stdenv.lib.optional stdenv.isDarwin curl;
+
+  meta = with stdenv.lib; {
+    description = "A cargo subcommand for checking and applying updates to installed executables";
+    homepage = "https://github.com/nabijaczleweli/cargo-update";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gerschtli filalex77 ];
+    platforms = platforms.all;
   };
 }
