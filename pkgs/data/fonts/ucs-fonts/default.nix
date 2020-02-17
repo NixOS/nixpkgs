@@ -38,6 +38,7 @@ stdenv.mkDerivation {
   outputHash = "12fh3kbsib0baqwk6148fnzqrj9gs4vnl7yd5n9km72sic1z1xwk";
 
   meta = with stdenv.lib; {
+    homepage = https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html;
     description = "Unicode bitmap fonts";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.all;
