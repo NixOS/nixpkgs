@@ -25492,7 +25492,8 @@ in
 
   tetex = callPackage ../tools/typesetting/tex/tetex { libpng = libpng12; };
 
-  tewi-font = callPackage ../data/fonts/tewi  {};
+  tewi-font = callPackage ../data/fonts/tewi
+    { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   texFunctions = callPackage ../tools/typesetting/tex/nix pkgs;
 
