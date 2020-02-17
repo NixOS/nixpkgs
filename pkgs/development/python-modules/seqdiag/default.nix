@@ -1,14 +1,15 @@
-{ stdenv, fetchurl, buildPythonPackage, pep8, nose, unittest2, docutils
+{ stdenv, fetchurl, buildPythonPackage, isPy27, pep8, nose, unittest2, docutils
 , blockdiag
 }:
 
 buildPythonPackage rec {
   pname = "seqdiag";
-  version = "0.9.6";
+  version = "2.0.0";
+  disabled = isPy27;
 
   src = fetchurl {
     url = "mirror://pypi/s/seqdiag/${pname}-${version}.tar.gz";
-    sha256 = "78104e7644c1a4d3a5cacb68de6a7f720793f08dd78561ef0e9e80bed63702bf";
+    sha256 = "0k7j4f9j3d0325piwvbv90nfh0wzfk2n6s73s6h6nsxmqshcgswk";
   };
 
   buildInputs = [ pep8 nose unittest2 docutils ];

@@ -1,17 +1,17 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
 , pytest, mock, pytestcov, coverage
-, future, futures
+, future, futures, ujson
 }:
 
 buildPythonPackage rec {
   pname = "python-jsonrpc-server";
-  version = "0.2.0";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "palantir";
     repo = "python-jsonrpc-server";
     rev = version;
-    sha256 = "054b0xm5z3f82jwp7zj21pkh7gwj9jd933jhymdx49n1n1iynfn0";
+    sha256 = "sha256:027sx5pv4i9a192kr00bjjcxxprh2xyr8q5372q8ghff3xryk9dd";
   };
 
   postPatch = ''
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     pytest
   '';
 
-  propagatedBuildInputs = [ future ]
+  propagatedBuildInputs = [ future ujson ]
     ++ stdenv.lib.optional (pythonOlder "3.2") futures;
 
   meta = with stdenv.lib; {

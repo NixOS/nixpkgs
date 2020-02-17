@@ -10,13 +10,13 @@ assert withHyperscan -> stdenv.isx86_64;
 
 stdenv.mkDerivation rec {
   pname = "rspamd";
-  version = "2.2";
+  version = "2.3";
 
   src = fetchFromGitHub {
     owner = "rspamd";
     repo = "rspamd";
     rev = version;
-    sha256 = "0rqiz4xm20w80q8p4grcgqcrg14yiddsay0aw00f0v82h4apw7k8";
+    sha256 = "1v4kbvj9r0hs8jaisq3fr0rg0qndpbhc5h8cbpfpprmkbw4nj6pf";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl ];

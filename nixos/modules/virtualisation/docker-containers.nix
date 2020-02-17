@@ -210,7 +210,16 @@ let
     wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
     after = [ "docker.service" "docker.socket" ] ++ mkAfter;
     requires = after;
+    path = [ pkgs.docker ];
 
+    preStart = ''
+      docker rm -f ${name} || true
+      ${optionalString (container.imageFile != null) ''
+        docker load -i ${container.imageFile}
+        ''}
+      '';
+    postStop = "docker rm -f ${name} || true";
+        
     serviceConfig = {
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
@@ -229,12 +238,7 @@ let
         ++ map escapeShellArg container.cmd
       );
 
-      ExecStartPre =
-        ["-${pkgs.docker}/bin/docker rm -f ${name}"] ++
-        (optional (container.imageFile != null) "${pkgs.docker}/bin/docker load -i ${container.imageFile}");
-
-      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || ${pkgs.docker}/bin/docker stop ${name}"'';
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f ${name}";
+      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || docker stop ${name}"'';
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their
