@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   version = "1.6.1";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "man" "doc" "installedTests" ];
+  outputs = [ "out" "dev" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
