@@ -937,6 +937,8 @@ in {
 
   osmnx = callPackage ../development/python-modules/osmnx { };
 
+  osmpythontools = callPackage ../development/python-modules/osmpythontools { };
+
   outcome = callPackage ../development/python-modules/outcome {};
 
   ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito {
