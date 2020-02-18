@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
     (substituteAll {
       src = ./fix-paths.patch;
-      p11 = p11-kit;
+      p11kit = "${p11-kit.dev}/bin/p11-kit";
     })
     (substituteAll {
       src = ./bubblewrap-paths.patch;
