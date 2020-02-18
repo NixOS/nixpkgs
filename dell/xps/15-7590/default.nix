@@ -1,6 +1,13 @@
 { lib, ... }:
-
-{
+# Earlier font-size setup.
+# Virtual console options were renamed in 20.03; use the right option depending
+# on the OS version; keep this here at least until 20.03 is stable.
+lib.recursiveUpdate
+(if lib.versionAtLeast (lib.versions.majorMinor lib.version) "20.03" then {
+  console.earlySetup = true;
+} else {
+  boot.earlyVconsoleSetup = true;
+}) {
   imports = [
     ../../../common/cpu/intel
     ../../../common/pc/laptop
@@ -28,8 +35,9 @@
   nixpkgs.overlays = [
     (self: super: {
       firmwareLinuxNonfree = super.firmwareLinuxNonfree.overrideAttrs (old: {
-        src = super.fetchgit{
-          url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
+        src = super.fetchgit {
+          url =
+            "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
           rev = "bf13a71b18af229b4c900b321ef1f8443028ded8";
           sha256 = "1dcaqdqyffxiadx420pg20157wqidz0c0ca5mrgyfxgrbh6a4mdj";
         };
