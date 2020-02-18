@@ -3810,6 +3810,8 @@ in {
     cudaSupport = false;
   };
 
+  pytorch-metric-learning = callPackage ../development/python-modules/pytorch-metric-learning { };
+
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
   python2-pythondialog = callPackage ../development/python-modules/python2-pythondialog { };
