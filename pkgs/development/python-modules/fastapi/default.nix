@@ -39,14 +39,6 @@ buildPythonPackage rec {
     aiosqlite
   ];
 
-  # starlette pinning kept in place due to 0.12.9 being a hard
-  # dependency luckily fastapi is currently the only dependent on
-  # starlette. Please remove pinning when possible
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "pydantic >=0.32.2,<=0.32.2" "pydantic"
-  '';
-
   checkPhase = ''
     pytest --ignore=tests/test_default_response_class.py
   '';
