@@ -905,6 +905,8 @@ in {
     inherit python;
   };
 
+  nevergrad = callPackage ../development/python-modules/nevergrad { };
+
   nix-prefetch-github = callPackage ../development/python-modules/nix-prefetch-github { };
 
   nixpart = callPackage ../tools/filesystems/nixpart { };
