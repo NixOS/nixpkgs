@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch, cmake, nasm, numactl
 , numaSupport ? stdenv.hostPlatform.isLinux && (stdenv.hostPlatform.isx86 || stdenv.hostPlatform.isAarch64)  # Enabled by default on NUMA platforms
 , debugSupport ? false # Run-time sanity checks (debugging)
-, highbitdepthSupport ? false # false=8bits per channel, true=10/12bits per channel
+, highbitdepthSupport ? true # false=8bits per channel, true=10/12bits per channel
 , werrorSupport ? false # Warnings as errors
 , ppaSupport ? false # PPA profiling instrumentation
 , vtuneSupport ? false # Vtune profiling instrumentation
@@ -17,14 +17,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "x265";
-  version = "3.2";
+  version = "3.3";
 
   src = fetchurl {
     urls = [
+      "https://bitbucket.org/multicoreware/x265/downloads/x265_${version}.tar.gz"
       "https://get.videolan.org/x265/x265_${version}.tar.gz"
       "ftp://ftp.videolan.org/pub/videolan/x265/x265_${version}.tar.gz"
     ];
-    sha256 = "0fqkhfhr22gzavxn60cpnj3agwdf5afivszxf3haj5k1sny7jk9n";
+    sha256 = "170b61cgpcs5n35qps0p40dqs1q81vkgagzbs4zv7pzls6718vpj";
   };
 
   enableParallelBuilding = true;
