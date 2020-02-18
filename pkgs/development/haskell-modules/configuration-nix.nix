@@ -680,6 +680,11 @@ self: super: builtins.intersectAttrs super {
           # https://github.com/spacchetti/spago/issues/510
           cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
           cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w "$sourceRoot/templates/docs-search-app.js" "$sourceRoot/templates/purescript-docs-search"
         '';
       });
 
