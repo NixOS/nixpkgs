@@ -2735,6 +2735,8 @@ in {
 
   google-pasta = callPackage ../development/python-modules/google-pasta { };
 
+  googletrans = callPackage ../development/python-modules/googletrans { };
+
   gpapi = callPackage ../development/python-modules/gpapi { };
   gplaycli = callPackage ../development/python-modules/gplaycli { };
 
