@@ -3,6 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "ogdf";
   version = "2020.02";
+
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
@@ -10,15 +11,15 @@ stdenv.mkDerivation rec {
     sha256 = "0drrs8zh1097i5c60z9g658vs9k1iinkav8crlwk722ihfm1vxqd";
   };
 
+  nativeBuildInputs = [ cmake doxygen ];
+
+  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-fPIC" ];
+
   # Without disabling hardening for format, the build fails with
   # the following error.
   #> /build/source/src/coin/CoinUtils/CoinMessageHandler.cpp:766:35: error: format not a string literal and no format arguments [-Werror=format-security]
   #> 766 |      sprintf(messageOut_,format_+2);
-
   hardeningDisable = [ "format" ];
-
-  nativeBuildInputs = [ cmake doxygen ];
-  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-fPIC" ];
 
   meta = with stdenv.lib; {
     description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
@@ -39,5 +40,4 @@ stdenv.mkDerivation rec {
       University of Cologne, University of Konstanz, and TU Ilmenau.
     '';
    };
-
 }
