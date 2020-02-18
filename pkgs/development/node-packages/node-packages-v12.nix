@@ -256,13 +256,13 @@ let
         sha1 = "1b681c21ff84033c826543090689420d187151dc";
       };
     };
-    "chownr-1.1.3" = {
+    "chownr-1.1.4" = {
       name = "chownr";
       packageName = "chownr";
-      version = "1.1.3";
+      version = "1.1.4";
       src = fetchurl {
-        url = "https://registry.npmjs.org/chownr/-/chownr-1.1.3.tgz";
-        sha512 = "i70fVHhmV3DtTl6nqvZOnIjbY0Pe4kAUjwHj8z0zAdgBtYrJyYwLKCCuRBQ5ppkyL0AkN7HKRnETdmdp1zqNXw==";
+        url = "https://registry.npmjs.org/chownr/-/chownr-1.1.4.tgz";
+        sha512 = "jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==";
       };
     };
     "class-utils-0.3.6" = {
@@ -1741,15 +1741,6 @@ let
         sha512 = "5NsSEDv8zY70ScRnOTn7bK7eanl2MvFrOrS/R6x+dBt5g1ghnj9Zv90kO8GwT8gxcu2ANyFprnFYB85IogIJOQ==";
       };
     };
-    "punycode-1.4.1" = {
-      name = "punycode";
-      packageName = "punycode";
-      version = "1.4.1";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/punycode/-/punycode-1.4.1.tgz";
-        sha1 = "c0d5a63b2718800ad8e1eb0fa5269c84dd41845e";
-      };
-    };
     "punycode-2.1.1" = {
       name = "punycode";
       packageName = "punycode";
@@ -1822,13 +1813,13 @@ let
         sha1 = "8dcae470e1c88abc2d600fff4a776286da75e637";
       };
     };
-    "request-2.88.0" = {
+    "request-2.88.2" = {
       name = "request";
       packageName = "request";
-      version = "2.88.0";
+      version = "2.88.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/request/-/request-2.88.0.tgz";
-        sha512 = "NAqBSrijGLZdM0WZNsInLJpkJokL72XYjUpnB0iwsRgxh7dB6COrHnTBNwN0E+lHDAJzu7kLAkDeY08z2/A0hg==";
+        url = "https://registry.npmjs.org/request/-/request-2.88.2.tgz";
+        sha512 = "MsvtOrfG9ZcrOwAW+Qi+F6HbD0CWXEh9ou77uOb7FM2WPhwT7smM833PzanhJLsgXjN89Ir6V2PczXNnMpwKhw==";
       };
     };
     "resolve-1.15.1" = {
@@ -2227,13 +2218,13 @@ let
         sha1 = "7c80c17b9dfebe599e27367e0d4dd5590141db38";
       };
     };
-    "tough-cookie-2.4.3" = {
+    "tough-cookie-2.5.0" = {
       name = "tough-cookie";
       packageName = "tough-cookie";
-      version = "2.4.3";
+      version = "2.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.4.3.tgz";
-        sha512 = "Q5srk/4vDM54WJsJio3XNn6K2sCG+CQ8G5Wz6bZhRZoAe/+TxjWB/GlFAnYEbkYVlON9FMk/fE3h2RLpPXo4lQ==";
+        url = "https://registry.npmjs.org/tough-cookie/-/tough-cookie-2.5.0.tgz";
+        sha512 = "nlLsUzgm1kfLXSXfRZMc1KLAugd4hqJHDTvc2hDIwS3mZAfMEuMbc03SujMF+GEcpaX/qboeycw6iO8JwVv2+g==";
       };
     };
     "tunnel-agent-0.6.0" = {
@@ -2760,7 +2751,7 @@ in
       sources."buffer-from-1.1.1"
       sources."builtins-1.0.3"
       sources."caseless-0.12.0"
-      sources."chownr-1.1.3"
+      sources."chownr-1.1.4"
       sources."code-point-at-1.1.0"
       sources."combined-stream-1.0.8"
       sources."concat-map-0.0.1"
@@ -2868,7 +2859,7 @@ in
           sources."safe-buffer-5.1.2"
         ];
       })
-      sources."request-2.88.0"
+      sources."request-2.88.2"
       sources."resolve-1.15.1"
       sources."retry-0.10.1"
       sources."rimraf-2.6.3"
@@ -2894,11 +2885,7 @@ in
       sources."strip-ansi-3.0.1"
       sources."tar-4.4.13"
       sources."temp-0.9.1"
-      (sources."tough-cookie-2.4.3" // {
-        dependencies = [
-          sources."punycode-1.4.1"
-        ];
-      })
+      sources."tough-cookie-2.5.0"
       sources."tunnel-agent-0.6.0"
       sources."tweetnacl-0.14.5"
       sources."typedarray-0.0.6"
@@ -2947,7 +2934,7 @@ in
       sources."bcrypt-pbkdf-1.0.2"
       sources."brace-expansion-1.1.11"
       sources."caseless-0.12.0"
-      sources."chownr-1.1.3"
+      sources."chownr-1.1.4"
       sources."code-point-at-1.1.0"
       sources."combined-stream-1.0.8"
       sources."concat-map-0.0.1"
@@ -3009,7 +2996,7 @@ in
       sources."punycode-2.1.1"
       sources."qs-6.5.2"
       sources."readable-stream-2.3.7"
-      sources."request-2.88.0"
+      sources."request-2.88.2"
       sources."rimraf-2.7.1"
       sources."safe-buffer-5.1.2"
       sources."safer-buffer-2.1.2"
@@ -3021,11 +3008,7 @@ in
       sources."string_decoder-1.1.1"
       sources."strip-ansi-3.0.1"
       sources."tar-4.4.13"
-      (sources."tough-cookie-2.4.3" // {
-        dependencies = [
-          sources."punycode-1.4.1"
-        ];
-      })
+      sources."tough-cookie-2.5.0"
       sources."tunnel-agent-0.6.0"
       sources."tweetnacl-0.14.5"
       sources."uri-js-4.2.2"
@@ -3080,7 +3063,7 @@ in
       sources."are-we-there-yet-1.1.5"
       sources."balanced-match-1.0.0"
       sources."brace-expansion-1.1.11"
-      sources."chownr-1.1.3"
+      sources."chownr-1.1.4"
       sources."code-point-at-1.1.0"
       sources."concat-map-0.0.1"
       sources."console-control-strings-1.1.0"
