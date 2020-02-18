@@ -6,12 +6,16 @@
 , cmark
 }:
 
+# Unfree version is not redistributable:
+# https://dev.aseprite.org/2016/09/01/new-source-code-license/
+# Consider supporting the developer: https://aseprite.org/#buy
+
 let
   skia = callPackage ./skia.nix {};
 in
 stdenv.mkDerivation rec {
   pname = "aseprite";
-  version = if unfree then "1.2.11" else "1.1.7";
+  version = if unfree then "1.2.16.3" else "1.1.7";
 
   src = fetchFromGitHub {
     owner = "aseprite";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     fetchSubmodules = true;
     sha256 = if unfree
-      then "1illr51jpg5g6nx29rav9dllyy5lzyyn7lj2fhrnpz1ysqgaq5p8"
+      then "16yn7y9xdc5jd50cq7bmsm320gv23pp71lr8hg2nmynzc8ibyda8"
       else "0gd49lns2bpzbkwax5jf9x1xmg1j8ij997kcxr2596cwiswnw4di";
   };
 
