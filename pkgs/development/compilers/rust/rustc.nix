@@ -155,8 +155,10 @@ in stdenv.mkDerivation rec {
 
   requiredSystemFeatures = [ "big-parallel" ];
 
+  passthru.llvm = llvmShared;
+
   meta = with stdenv.lib; {
-    homepage = https://www.rust-lang.org/;
+    homepage = "https://www.rust-lang.org/";
     description = "A safe, concurrent, practical language";
     maintainers = with maintainers; [ madjar cstrahan globin havvy ];
     license = [ licenses.mit licenses.asl20 ];
