@@ -1556,6 +1556,8 @@ in
 
   datasette = with python3Packages; toPythonApplication datasette;
 
+  howard-hinnant-date = callPackage ../development/libraries/howard-hinnant-date { };
+
   datefudge = callPackage ../tools/system/datefudge { };
 
   dateutils = callPackage ../tools/misc/dateutils { };
