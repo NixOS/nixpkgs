@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   version = "1.6.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "man" "doc" "installedTests" ];
+  outputs = [ "out" "dev" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
@@ -128,7 +128,6 @@ stdenv.mkDerivation rec {
     bzip2
     dbus
     dconf
-    glib
     gpgme
     json-glib
     libarchive
@@ -136,7 +135,6 @@ stdenv.mkDerivation rec {
     libseccomp
     libsoup
     lzma
-    ostree
     polkit
     python3
     systemd
@@ -146,6 +144,12 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
+  ];
+
+  # Required by flatpak.pc
+  propagatedBuildInputs = [
+    glib
+    ostree
   ];
 
   checkInputs = [
