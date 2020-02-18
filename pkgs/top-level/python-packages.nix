@@ -484,6 +484,8 @@ in {
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
+  bayesian-optimization = callPackage ../development/python-modules/bayesian-optimization { };
+
   bayespy = callPackage ../development/python-modules/bayespy { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
@@ -5878,6 +5880,8 @@ in {
 
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
 
+  sqlitedict = callPackage ../development/python-modules/sqlitedict { };
+
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 
   sqlmap = callPackage ../development/python-modules/sqlmap { };
@@ -6110,6 +6114,8 @@ in {
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+
+  untangle = callPackage ../development/python-modules/untangle { };
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 

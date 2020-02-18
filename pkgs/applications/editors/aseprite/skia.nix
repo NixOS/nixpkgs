@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchgit, python2, gn, ninja
-, fontconfig, expat, icu58, libjpeg, libpng, libwebp, zlib
+, fontconfig, expat, icu58, libglvnd, libjpeg, libpng, libwebp, zlib
 , mesa, libX11
 }:
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ python2 gn ninja ];
 
   buildInputs = [
-    fontconfig expat icu58 libjpeg libpng libwebp zlib
+    fontconfig expat icu58 libglvnd libjpeg libpng libwebp zlib
     mesa libX11
   ];
 
