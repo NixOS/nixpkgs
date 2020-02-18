@@ -4412,6 +4412,12 @@
     githubId = 115218;
     name = "Felix Richter";
   };
+  malo = {
+    email = "mbourgon@gmail.com";
+    github = "malob";
+    githubId = 2914269;
+    name = "Malo Bourgon";
+  };
   malyn = {
     email = "malyn@strangeGizmo.com";
     github = "malyn";
