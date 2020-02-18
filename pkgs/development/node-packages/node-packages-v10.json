@@ -158,6 +158,8 @@
 , "web-ext"
 , "webpack"
 , "webpack-cli"
+, "webpack-dev-server"
+, "copy-webpack-plugin"
 , "webtorrent-cli"
 , "wring"
 , "write-good"
