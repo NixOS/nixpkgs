@@ -15384,7 +15384,7 @@ in
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
   mlflow-server = callPackage ../servers/mlflow-server { };
-  
+
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
@@ -19902,6 +19902,8 @@ in
   kermit = callPackage ../tools/misc/kermit { };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
+
+  khronos = callPackage ../applications/office/khronos { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
