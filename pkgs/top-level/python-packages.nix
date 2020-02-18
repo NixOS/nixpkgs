@@ -3926,6 +3926,8 @@ in {
 
   ifaddr = callPackage ../development/python-modules/ifaddr { };
 
+  ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
+
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
   imageio = callPackage ../development/python-modules/imageio { };
