@@ -16,7 +16,10 @@ in
 
 {
 
-  meta.maintainers = pkgs.pantheon.maintainers;
+  meta = {
+    doc = ./pantheon.xml;
+    maintainers = pkgs.pantheon.maintainers;
+  };
 
   options = {
 
