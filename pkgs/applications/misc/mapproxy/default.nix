@@ -38,6 +38,7 @@ buildPythonApplication rec {
     substituteInPlace mapproxy/util/ext/serving.py --replace "args = [sys.executable] + sys.argv" "args = sys.argv"
   '';
   propagatedBuildInputs = [
+    boto3 # needed for caches service
     pillow
     pyyaml
     pyproj
