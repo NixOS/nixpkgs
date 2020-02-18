@@ -7909,8 +7909,6 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
     inherit (llvmPackages_6) clang llvm;
   })
-    crystal_0_25
-    crystal_0_26
     crystal_0_27
     crystal_0_29
     crystal_0_30
