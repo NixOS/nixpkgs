@@ -49,7 +49,7 @@ let
     [ (toString gcc.cc.lib)
     ];
 
-  etcProfile = writeText "profile" ''
+  shellProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
     export LOCALE_ARCHIVE='/usr/lib/locale/locale-archive'
     export LD_LIBRARY_PATH="/run/opengl-driver/lib:/run/opengl-driver-32/lib:/usr/lib:/usr/lib32''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
@@ -68,60 +68,10 @@ let
     ${profile}
   '';
 
-  # Compose /etc for the chroot environment
-  etcPkg = stdenv.mkDerivation {
-    name         = "${name}-chrootenv-etc";
-    buildCommand = ''
-      mkdir -p $out/etc
-      cd $out/etc
-
-      # environment variables
-      ln -s ${etcProfile} profile
-
-      # compatibility with NixOS
-      ln -s /host/etc/static static
-
-      # symlink some NSS stuff
-      ln -s /host/etc/passwd passwd
-      ln -s /host/etc/group group
-      ln -s /host/etc/shadow shadow
-      ln -s /host/etc/hosts hosts
-      ln -s /host/etc/resolv.conf resolv.conf
-      ln -s /host/etc/nsswitch.conf nsswitch.conf
-
-      # symlink sudo and su stuff
-      ln -s /host/etc/login.defs login.defs
-      ln -s /host/etc/sudoers sudoers
-      ln -s /host/etc/sudoers.d sudoers.d
-
-      # symlink other core stuff
-      ln -s /host/etc/localtime localtime
-      ln -s /host/etc/zoneinfo zoneinfo
-      ln -s /host/etc/machine-id machine-id
-      ln -s /host/etc/os-release os-release
-
-      # symlink PAM stuff
-      ln -s /host/etc/pam.d pam.d
-
-      # symlink fonts stuff
-      ln -s /host/etc/fonts fonts
-
-      # symlink ALSA stuff
-      ln -s /host/etc/asound.conf asound.conf
-
-      # symlink SSL certs
-      mkdir -p ssl
-      ln -s /host/etc/ssl/certs ssl/certs
-
-      # symlink /etc/mtab -> /proc/mounts (compat for old userspace progs)
-      ln -s /proc/mounts mtab
-    '';
-  };
-
   # Composes a /usr-like directory structure
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
-    paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
+    paths = basePkgs ++ targetPaths;
     extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
@@ -199,4 +149,5 @@ in stdenv.mkDerivation {
   '';
   preferLocalBuild = true;
   allowSubstitutes = false;
+  profile = shellProfile;
 }

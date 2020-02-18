@@ -19,7 +19,7 @@ let
     [ -d "$1" ] && [ -r "$1" ] && cd "$1"
     shift
 
-    source /etc/profile
+    source ${env.profile}
     exec ${run} "$@"
   '';
 
