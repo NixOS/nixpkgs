@@ -2881,10 +2881,11 @@ in
 
   dotnetfx40 = callPackage ../development/libraries/dotnetfx40 { };
 
-  dolphinEmu = callPackage ../misc/emulators/dolphin-emu { };
-  dolphinEmuMaster = qt5.callPackage ../misc/emulators/dolphin-emu/master.nix {
-    inherit (darwin.apple_sdk.frameworks) CoreBluetooth ForceFeedback IOKit OpenGL;
-  };
+  dolphinEmuPackages = callPackages ../misc/emulators/dolphin-emu { };
+  dolphinEmu = dolphinEmuPackages.stable;
+  dolphinEmuBeta = dolphinEmuPackages.beta;
+  dolphinEmuDev = dolphinEmuPackages.dev;
+  dolphinEmuMaster = dolphinEmuDev;
 
   doomseeker = qt5.callPackage ../applications/misc/doomseeker { };
 
@@ -15406,7 +15407,7 @@ in
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
   mlflow-server = callPackage ../servers/mlflow-server { };
-  
+
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
   moodle = callPackage ../servers/web-apps/moodle { };

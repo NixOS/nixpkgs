@@ -6,28 +6,30 @@
 , vulkan-loader ? null, libpulseaudio ? null
 
 # - Inputs used for Darwin
-, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi }:
+, CoreBluetooth, ForceFeedback, IOKit, OpenGL, libpng, hidapi
+
+# - From updater script
+, version, rev, sha256, branch }:
 
 let
   desktopItem = makeDesktopItem {
-    name = "dolphin-emu-master";
-    exec = "dolphin-emu-master";
+    name = "dolphin-emu-${branch}";
+    exec = "dolphin-emu-${branch}";
     icon = "dolphin-emu";
     comment = "A Wii/GameCube Emulator";
-    desktopName = "Dolphin Emulator (master)";
+    desktopName = "Dolphin Emulator (${branch})";
     genericName = "Wii/GameCube Emulator";
     categories = "Game;Emulator;";
     startupNotify = "false";
   };
 in stdenv.mkDerivation rec {
   pname = "dolphin-emu";
-  version = "5.0-11608";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "69ee15e5ef369d51681540e6714f02554e3bd8a6";
-    sha256 = "1svi9mnddhjcv64xh3y9l68k3rix7wimq8b0mqf5hp7qrda07lx8";
+    inherit rev sha256;
   };
 
   enableParallelBuilding = true;
@@ -50,7 +52,7 @@ in stdenv.mkDerivation rec {
     "-DENABLE_LTO=ON"
     "-DDOLPHIN_WC_REVISION=${src.rev}"
     "-DDOLPHIN_WC_DESCRIBE=${version}"
-    "-DDOLPHIN_WC_BRANCH=master"
+    "-DDOLPHIN_WC_BRANCH=${branch}"
   ] ++ lib.optionals stdenv.isDarwin [
     "-DOSX_USE_DEFAULT_SEARCH_PATH=True"
   ];
@@ -70,15 +72,15 @@ in stdenv.mkDerivation rec {
 
   postInstall = ''
     cp -r ${desktopItem}/share/applications $out/share
-    ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-master
+    ln -sf $out/bin/dolphin-emu $out/bin/dolphin-emu-${branch}
   '';
 
   meta = with lib; {
     homepage = "https://dolphin-emu.org";
-    description = "Gamecube/Wii/Triforce emulator for x86_64 and ARMv8";
+    description = "Gamecube/Wii emulator for x86_64 and ARMv8";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ MP2E ashkitten ];
-    branch = "master";
+    inherit branch;
     # x86_32 is an unsupported platform.
     # Enable generic build if you really want a JIT-less binary.
     broken = stdenv.isDarwin;
