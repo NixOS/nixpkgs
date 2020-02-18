@@ -3180,6 +3180,8 @@ in {
 
   pyrtlsdr = callPackage ../development/python-modules/pyrtlsdr { };
 
+  scan-build = callPackage ../development/python-modules/scan-build { };
+
   scandir = callPackage ../development/python-modules/scandir { };
 
   schema = callPackage ../development/python-modules/schema {};
