@@ -71,6 +71,9 @@ in
     environment.sessionVariables."MATE_PANEL_APPLETS_DIR" = "${config.system.path}/share/mate-panel/applets";
     environment.sessionVariables."MATE_PANEL_EXTRA_MODULES" = "${config.system.path}/lib/mate-panel/applets";
 
+    # Debugging
+    environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
+
     environment.systemPackages =
       pkgs.mate.basePackages ++
       (pkgs.gnome3.removePackagesByName
