@@ -64,7 +64,7 @@ let
 
       ln -s spec/compiler spec/std
 
-      mkdir /tmp/crystal
+      mkdir -p /tmp/crystal/cache
       substituteInPlace spec/std/file_spec.cr \
         --replace '/bin/ls' '${coreutils}/bin/ls' \
         --replace '/usr/share' '/tmp/crystal' \
@@ -77,23 +77,19 @@ let
         --replace '"env"' '"${coreutils}/bin/env"' \
         --replace '"/usr"' '"/tmp"'
 
-      substituteInPlace spec/std/socket/tcp_server_spec.cr \
-        --replace '{% if flag?(:gnu) %}"listen: "{% else %}"bind: "{% end %}' '"bind: "'
-
       substituteInPlace spec/std/system_spec.cr \
         --replace '`hostname`' '`${nettools}/bin/hostname`'
-
-      # See https://github.com/crystal-lang/crystal/pull/8640
-      substituteInPlace spec/std/http/cookie_spec.cr \
-        --replace '01 Jan 2020' '01 Jan #{Time.utc.year + 2}'
 
       # See https://github.com/crystal-lang/crystal/issues/8629
       substituteInPlace spec/std/socket/udp_socket_spec.cr \
         --replace 'it "joins and transmits to multicast groups"' 'pending "joins and transmits to multicast groups"'
 
-      # See https://github.com/crystal-lang/crystal/pull/8699
-      substituteInPlace spec/std/xml/xml_spec.cr \
-        --replace 'it "handles errors"' 'pending "handles errors"'
+      # See https://github.com/crystal-lang/crystal/pull/7925
+      substituteInPlace spec/std/http/cookie_spec.cr \
+        --replace 'it "by max-age=0"' 'pending "by max-age=0"'
+
+      substituteInPlace spec/std/file_spec.cr \
+        --replace 'pending_win32 "raises if file cannot be accessed"' 'pending "raises if file cannot be accessed"'
     '';
 
     buildInputs = commonBuildInputs extraBuildInputs;
@@ -102,6 +98,8 @@ let
 
     makeFlags = [
       "CRYSTAL_CONFIG_VERSION=${version}"
+      # FIXME: not sure if this is the best idea
+      "CRYSTAL_CACHE_DIR=/tmp/crystal/cache"
     ];
 
     buildFlags = [
@@ -223,6 +221,15 @@ in rec {
     };
   };
 
+  binaryCrystal_0_32 = genericBinary {
+    version = "0.32.1";
+    sha256s = {
+      x86_64-linux  = "1mwpr87ix14vsdlswy3qjgc4pn9k5585wp3wyypbclz42f4gsc8c";
+      i686-linux    = "17zfvvrzcd0hrxj3pcir3gwl95gazg7a49hk1kf88dhk0cj0hmis";
+      x86_64-darwin = "155wf1rnc5kh3y6gn5pjh185p3nvq50lfill1b714sm3kmqfh099";
+    };
+  };
+
   crystal_0_25 = generic {
     version = "0.25.1";
     sha256  = "15xmbkalsdk9qpc6wfpkly3sifgw6a4ai5jzlv78dh3jp7glmgyl";
@@ -271,7 +278,13 @@ in rec {
     binary = binaryCrystal_0_31;
   };
 
-  crystal = crystal_0_32;
+  crystal_0_33 = generic {
+    version = "0.33.0";
+    sha256  = "1zg0qixcws81s083wrh54hp83ng2pa8iyyafaha55mzrh8293jbi";
+    binary = binaryCrystal_0_32;
+  };
+
+  crystal = crystal_0_33;
 
   crystal2nix = callPackage ./crystal2nix.nix {};
 }
