@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
     skia libGL
   ];
 
-  patches = lib.optionals unfree [
+  patches = if !unfree then [
+    ./allegro-glibc-2.30.patch
+  ] else [
     (fetchpatch {
       url = "https://github.com/lfont/aseprite/commit/f1ebc47012d3fed52306ed5922787b4b98cc0a7b.patch";
       sha256 = "03xg7x6b9iv7z18vzlqxhcfphmx4v3qhs9f5rgf38ppyklca5jyw";
