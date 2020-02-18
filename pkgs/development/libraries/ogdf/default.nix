@@ -1,27 +1,25 @@
 { stdenv, fetchFromGitHub, cmake, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "ogdf-${version}";
+  pname = "ogdf";
   version = "2020.02";
   src = fetchFromGitHub {
-    owner = "ogdf";
-    repo = "ogdf";
-    rev = "be4452b6c36575d11a04d5bb1b362edeb8173eaa";
+    owner = pname;
+    repo = pname;
+    rev = "catalpa-202002";
     sha256 = "0drrs8zh1097i5c60z9g658vs9k1iinkav8crlwk722ihfm1vxqd";
   };
 
   hardeningDisable = [ "all" ];
   nativeBuildInputs = [ cmake doxygen ];
-  cmakeFlags = [ "-DOGDF_WARNING_ERRORS=OFF"
-                 "-DCMAKE_CXX_FLAGS=-fPIC"
-               ];
+  cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-fPIC" ];
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Open Graph Drawing Framework/Open Graph algorithms and Data structure Framework";
-    homepage = http://www.ogdf.net;
-    license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [ ianwookim ];
-    platforms = stdenv.lib.platforms.all;
+    homepage = "http://www.ogdf.net";
+    license = licenses.gpl2;
+    maintainers = [ maintainers.ianwookim ];
+    platforms = platforms.all;
     longDescription = ''
       OGDF stands both for Open Graph Drawing Framework (the original name) and
       Open Graph algorithms and Data structures Framework.
