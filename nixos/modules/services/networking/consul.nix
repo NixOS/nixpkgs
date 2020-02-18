@@ -179,7 +179,7 @@ in
             (filterAttrs (n: _: hasPrefix "consul.d/" n) config.environment.etc);
 
         serviceConfig = {
-          ExecStart = "@${cfg.package.bin}/bin/consul consul agent -config-dir /etc/consul.d"
+          ExecStart = "@${cfg.package.bin}/bin/consul agent -config-dir /etc/consul.d"
             + concatMapStrings (n: " -config-file ${n}") configFiles;
           ExecReload = "${cfg.package.bin}/bin/consul reload";
           PermissionsStartOnly = true;
