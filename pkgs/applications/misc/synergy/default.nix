@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchFromGitHub, cmake, avahi-compat
+{ stdenv, lib, fetchFromGitHub, cmake, openssl
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
-, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, openssl
+, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
 , withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
@@ -35,20 +35,19 @@ stdenv.mkDerivation rec {
     chmod -R +w ext/
   '';
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
-    "-DOSX_TARGET_MAJOR=10"
-    "-DOSX_TARGET_MINOR=7"
-  ] ++ lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
+  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
 
   nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
 
   dontWrapQtApps = true;
 
   buildInputs = [
-    openssl avahi-compat
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices Carbon Cocoa CoreServices ScreenSaver
-  ] ++ lib.optionals stdenv.isLinux [ xlibsWrapper libX11 libXi libXtst libXrandr xinput ];
+  ] ++ lib.optionals stdenv.isLinux [
+    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -56,10 +55,15 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString withGUI ''
     cp bin/synergy $out/bin/
     wrapQtApp $out/bin/synergy --prefix PATH : ${lib.makeBinPath [ openssl ]}
+  '' + lib.optionalString stdenv.isLinux ''
     mkdir -p $out/share/icons/hicolor/scalable/apps
     cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
     mkdir -p $out/share/applications
     substitute ../res/synergy.desktop $out/share/applications/synergy.desktop --replace /usr/bin $out/bin
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/
+    mv bundle/Synergy.app $out/Applications/
+    ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
   '';
 
   doCheck = true;

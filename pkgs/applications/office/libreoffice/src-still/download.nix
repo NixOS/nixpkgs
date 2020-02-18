@@ -1,10 +1,10 @@
 [
   {
-    name = "libabw-0.1.2.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libabw-0.1.2.tar.xz";
-    sha256 = "0b72944d5af81dda0a5c5803ee84cbac4b81441a4d767aa57029adc6744c2485";
+    name = "libabw-0.1.3.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libabw-0.1.3.tar.xz";
+    sha256 = "e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed";
     md5 = "";
-    md5name = "0b72944d5af81dda0a5c5803ee84cbac4b81441a4d767aa57029adc6744c2485-libabw-0.1.2.tar.xz";
+    md5name = "e763a9dc21c3d2667402d66e202e3f8ef4db51b34b79ef41f56cacb86dcd6eed-libabw-0.1.3.tar.xz";
   }
   {
     name = "commons-logging-1.2-src.tar.gz";
@@ -28,11 +28,11 @@
     md5name = "976a12a59bc286d634a21d7be0841cc74289ea9077aa1af46be19d1a6e844c19-apr-util-1.5.4.tar.gz";
   }
   {
-    name = "boost_1_66_0.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/boost_1_66_0.tar.bz2";
-    sha256 = "5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9";
+    name = "boost_1_69_0.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/boost_1_69_0.tar.bz2";
+    sha256 = "8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406";
     md5 = "";
-    md5name = "5721818253e6a0989583192f96782c4a98eb6204965316df9f5ad75819225ca9-boost_1_66_0.tar.bz2";
+    md5name = "8f32d4617390d1c2d16f26a27ab60d97807b35440d45891fa340fc2648b04406-boost_1_69_0.tar.bz2";
   }
   {
     name = "breakpad.zip";
@@ -147,11 +147,11 @@
     md5name = "e61677e8799ce6e55b25afc11aa5339113f6a49cff031f336e32fa58635b1a4a-libetonyek-0.1.9.tar.xz";
   }
   {
-    name = "expat-2.2.5.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/expat-2.2.5.tar.bz2";
-    sha256 = "d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6";
+    name = "expat-2.2.8.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/expat-2.2.8.tar.bz2";
+    sha256 = "9a130948b05a82da34e4171d5f5ae5d321d9630277af02c8fa51e431f6475102";
     md5 = "";
-    md5name = "d9dc32efba7e74f788fcc4f212a43216fc37cf5f23f4c2339664d473353aedf6-expat-2.2.5.tar.bz2";
+    md5name = "9a130948b05a82da34e4171d5f5ae5d321d9630277af02c8fa51e431f6475102-expat-2.2.8.tar.bz2";
   }
   {
     name = "Firebird-3.0.0.32483-0.tar.bz2";
@@ -231,11 +231,11 @@
     md5name = "edc4d741888bc0d38e32dbaa17149596-source-sans-pro-2.010R-ro-1.065R-it.tar.gz";
   }
   {
-    name = "source-serif-font-2.007R.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/source-serif-font-2.007R.tar.gz";
-    sha256 = "10b2bbb357d52bf0f516d3e0ac0a09b5f7901470fbf649b69dad9ccc2d29f7cb";
+    name = "source-serif-pro-3.000R.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/source-serif-pro-3.000R.tar.gz";
+    sha256 = "826a2b784d5cdb4c2bbc7830eb62871528360a61a52689c102a101623f1928e3";
     md5 = "";
-    md5name = "10b2bbb357d52bf0f516d3e0ac0a09b5f7901470fbf649b69dad9ccc2d29f7cb-source-serif-font-2.007R.tar.gz";
+    md5name = "826a2b784d5cdb4c2bbc7830eb62871528360a61a52689c102a101623f1928e3-source-serif-pro-3.000R.tar.gz";
   }
   {
     name = "EmojiOneColor-SVGinOT-1.3.tar.gz";
@@ -308,11 +308,11 @@
     md5name = "0e422d1564a6dbf22a9af598535425271e583514c0f7ba7d9091676420de34ac-libfreehand-0.1.2.tar.xz";
   }
   {
-    name = "freetype-2.8.1.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/freetype-2.8.1.tar.bz2";
-    sha256 = "e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78";
+    name = "freetype-2.9.1.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/freetype-2.9.1.tar.bz2";
+    sha256 = "db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d";
     md5 = "";
-    md5name = "e5435f02e02d2b87bb8e4efdcaa14b1f78c9cf3ab1ed80f94b6382fb6acc7d78-freetype-2.8.1.tar.bz2";
+    md5name = "db8d87ea720ea9d5edc5388fc7a0497bb11ba9fe972245e0f7f4c7e8b1e1e84d-freetype-2.9.1.tar.bz2";
   }
   {
     name = "glm-0.9.4.6-libreoffice.zip";
@@ -329,18 +329,18 @@
     md5name = "1b29fedb8bfad775e70eafac5b0590621683b2d9869db994568e6401f4034ceb-gpgme-1.9.0.tar.bz2";
   }
   {
-    name = "graphite2-minimal-1.3.10.tgz";
-    url = "http://dev-www.libreoffice.org/src/graphite2-minimal-1.3.10.tgz";
-    sha256 = "aa5e58356cd084000609ebbd93fef456a1bc0ab9e46fea20e81552fb286232a9";
+    name = "graphite2-minimal-1.3.13.tgz";
+    url = "http://dev-www.libreoffice.org/src/graphite2-minimal-1.3.13.tgz";
+    sha256 = "d47d387161db7f7ebade1920aa7cbdc797e79772597d8b55e80b58d1071bcc36";
     md5 = "";
-    md5name = "aa5e58356cd084000609ebbd93fef456a1bc0ab9e46fea20e81552fb286232a9-graphite2-minimal-1.3.10.tgz";
+    md5name = "d47d387161db7f7ebade1920aa7cbdc797e79772597d8b55e80b58d1071bcc36-graphite2-minimal-1.3.13.tgz";
   }
   {
-    name = "harfbuzz-1.8.4.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/harfbuzz-1.8.4.tar.bz2";
-    sha256 = "3c592f86fa0da69e2e0e98cae9f5d5b61def3bb7948aa00ca45748f27fa545fd";
+    name = "harfbuzz-2.3.1.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/harfbuzz-2.3.1.tar.bz2";
+    sha256 = "f205699d5b91374008d6f8e36c59e419ae2d9a7bb8c5d9f34041b9a5abcae468";
     md5 = "";
-    md5name = "3c592f86fa0da69e2e0e98cae9f5d5b61def3bb7948aa00ca45748f27fa545fd-harfbuzz-1.8.4.tar.bz2";
+    md5name = "f205699d5b91374008d6f8e36c59e419ae2d9a7bb8c5d9f34041b9a5abcae468-harfbuzz-2.3.1.tar.bz2";
   }
   {
     name = "hsqldb_1_8_0.zip";
@@ -462,11 +462,11 @@
     md5name = "b24890e2bb46e12e72a79f7e965f409f4e16466d00e1dd15d93d73ee6b592523-libjpeg-turbo-1.5.3.tar.gz";
   }
   {
-    name = "language-subtag-registry-2019-04-03.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/language-subtag-registry-2019-04-03.tar.bz2";
-    sha256 = "a1d7fb901764bb8f251d4f686cdf565764f9987d0fb5d9315d54a7366a84822d";
+    name = "language-subtag-registry-2019-09-16.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/language-subtag-registry-2019-09-16.tar.bz2";
+    sha256 = "07b66bc0f2786fde55f6bbcbcb4a455a846eb8e2351c8ce3d0a219a73693736a";
     md5 = "";
-    md5name = "a1d7fb901764bb8f251d4f686cdf565764f9987d0fb5d9315d54a7366a84822d-language-subtag-registry-2019-04-03.tar.bz2";
+    md5name = "07b66bc0f2786fde55f6bbcbcb4a455a846eb8e2351c8ce3d0a219a73693736a-language-subtag-registry-2019-09-16.tar.bz2";
   }
   {
     name = "JLanguageTool-1.7.0.tar.bz2";
@@ -539,25 +539,25 @@
     md5name = "083daa92d8ee6f4af96a6143b12d7fc8fe1a547e14f862304f7281f8f7347483-ltm-1.0.zip";
   }
   {
-    name = "xmlsec1-1.2.27.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/xmlsec1-1.2.27.tar.gz";
-    sha256 = "97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6";
+    name = "xmlsec1-1.2.28.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/xmlsec1-1.2.28.tar.gz";
+    sha256 = "13eec4811ea30e3f0e16a734d1dbf7f9d246a71d540b48d143a07b489f6222d4";
     md5 = "";
-    md5name = "97d756bad8e92588e6997d2227797eaa900d05e34a426829b149f65d87118eb6-xmlsec1-1.2.27.tar.gz";
+    md5name = "13eec4811ea30e3f0e16a734d1dbf7f9d246a71d540b48d143a07b489f6222d4-xmlsec1-1.2.28.tar.gz";
   }
   {
-    name = "libxml2-2.9.9.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/libxml2-2.9.9.tar.gz";
-    sha256 = "94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871";
+    name = "libxml2-2.9.10.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/libxml2-2.9.10.tar.gz";
+    sha256 = "aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f";
     md5 = "";
-    md5name = "94fb70890143e3c6549f265cee93ec064c80a84c42ad0f23e85ee1fd6540a871-libxml2-2.9.9.tar.gz";
+    md5name = "aafee193ffb8fe0c82d4afef6ef91972cbaf5feea100edc2f262750611b4be1f-libxml2-2.9.10.tar.gz";
   }
   {
-    name = "libxslt-1.1.33.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/libxslt-1.1.33.tar.gz";
-    sha256 = "8e36605144409df979cab43d835002f63988f3dc94d5d3537c12796db90e38c8";
+    name = "libxslt-1.1.34.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/libxslt-1.1.34.tar.gz";
+    sha256 = "98b1bd46d6792925ad2dfe9a87452ea2adebf69dcb9919ffd55bf926a7f93f7f";
     md5 = "";
-    md5name = "8e36605144409df979cab43d835002f63988f3dc94d5d3537c12796db90e38c8-libxslt-1.1.33.tar.gz";
+    md5name = "98b1bd46d6792925ad2dfe9a87452ea2adebf69dcb9919ffd55bf926a7f93f7f-libxslt-1.1.34.tar.gz";
   }
   {
     name = "lp_solve_5.5.tar.gz";
@@ -602,11 +602,11 @@
     md5name = "ef36c1a1aabb2ba3b0bedaaafe717bf4480be2ba8de6f3894be5fd3702b013ba-libmspub-0.1.4.tar.xz";
   }
   {
-    name = "libmwaw-0.3.14.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libmwaw-0.3.14.tar.xz";
-    sha256 = "aca8bf1ce55ed83adbea82c70d4c8bebe8139f334b3481bf5a6e407f91f33ce9";
+    name = "libmwaw-0.3.15.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libmwaw-0.3.15.tar.xz";
+    sha256 = "0440bb09f05e3419423d8dfa36ee847056ebfd837f9cbc091fdb5b057daab0b1";
     md5 = "";
-    md5name = "aca8bf1ce55ed83adbea82c70d4c8bebe8139f334b3481bf5a6e407f91f33ce9-libmwaw-0.3.14.tar.xz";
+    md5name = "0440bb09f05e3419423d8dfa36ee847056ebfd837f9cbc091fdb5b057daab0b1-libmwaw-0.3.15.tar.xz";
   }
   {
     name = "mythes-1.2.4.tar.gz";
@@ -623,11 +623,11 @@
     md5name = "db0bd8cdec329b48f53a6f00199c92d5ba40b0f015b153718d1b15d3d967fbca-neon-0.30.2.tar.gz";
   }
   {
-    name = "nss-3.45-with-nspr-4.21.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/nss-3.45-with-nspr-4.21.tar.gz";
-    sha256 = "fae11751100510d26f16a245f0db9a5b3d638ab28ce0bccd50d4314f7e526ba1";
+    name = "nss-3.47.1-with-nspr-4.23.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/nss-3.47.1-with-nspr-4.23.tar.gz";
+    sha256 = "07d4276168f59bb3038c7826dabb5fbfbab8336ddf65e4e6e43bce89ada78c64";
     md5 = "";
-    md5name = "fae11751100510d26f16a245f0db9a5b3d638ab28ce0bccd50d4314f7e526ba1-nss-3.45-with-nspr-4.21.tar.gz";
+    md5name = "07d4276168f59bb3038c7826dabb5fbfbab8336ddf65e4e6e43bce89ada78c64-nss-3.47.1-with-nspr-4.23.tar.gz";
   }
   {
     name = "libodfgen-0.1.6.tar.bz2";
@@ -658,11 +658,11 @@
     md5name = "cdd6cffdebcd95161a73305ec13fc7a78e9707b46ca9f84fb897cd5626df3824-openldap-2.4.45.tgz";
   }
   {
-    name = "openssl-1.0.2r.tar.gz";
-    url = "http://dev-www.libreoffice.org/src/openssl-1.0.2r.tar.gz";
-    sha256 = "ae51d08bba8a83958e894946f15303ff894d75c2b8bbd44a852b64e3fe11d0d6";
+    name = "openssl-1.0.2t.tar.gz";
+    url = "http://dev-www.libreoffice.org/src/openssl-1.0.2t.tar.gz";
+    sha256 = "14cb464efe7ac6b54799b34456bd69558a749a4931ecfd9cf9f71d7881cac7bc";
     md5 = "";
-    md5name = "ae51d08bba8a83958e894946f15303ff894d75c2b8bbd44a852b64e3fe11d0d6-openssl-1.0.2r.tar.gz";
+    md5name = "14cb464efe7ac6b54799b34456bd69558a749a4931ecfd9cf9f71d7881cac7bc-openssl-1.0.2t.tar.gz";
   }
   {
     name = "liborcus-0.14.1.tar.gz";
@@ -686,11 +686,11 @@
     md5name = "66adacd705a7d19895e08eac46d1e851332adf2e736c566bef1164e7a442519d-libpagemaker-0.0.4.tar.xz";
   }
   {
-    name = "pdfium-3550.tar.bz2";
-    url = "http://dev-www.libreoffice.org/src/pdfium-3550.tar.bz2";
-    sha256 = "572460f7f9e2f86d022a9c6a82f1e2ded6c3c29ba352d4b9fac60b87e2159679";
+    name = "pdfium-3794.tar.bz2";
+    url = "http://dev-www.libreoffice.org/src/pdfium-3794.tar.bz2";
+    sha256 = "e3faddcf741336c64ca2e6f72b23e9e60979969b2cf67c878c9a5bc38328cfc4";
     md5 = "";
-    md5name = "572460f7f9e2f86d022a9c6a82f1e2ded6c3c29ba352d4b9fac60b87e2159679-pdfium-3550.tar.bz2";
+    md5name = "e3faddcf741336c64ca2e6f72b23e9e60979969b2cf67c878c9a5bc38328cfc4-pdfium-3794.tar.bz2";
   }
   {
     name = "pixman-0.34.0.tar.gz";
@@ -707,11 +707,11 @@
     md5name = "505e70834d35383537b6491e7ae8641f1a4bed1876dbfe361201fc80868d88ca-libpng-1.6.37.tar.xz";
   }
   {
-    name = "poppler-0.74.0.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/poppler-0.74.0.tar.xz";
-    sha256 = "92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f";
+    name = "poppler-0.82.0.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/poppler-0.82.0.tar.xz";
+    sha256 = "234f8e573ea57fb6a008e7c1e56bfae1af5d1adf0e65f47555e1ae103874e4df";
     md5 = "";
-    md5name = "92e09fd3302567fd36146b36bb707db43ce436e8841219025a82ea9fb0076b2f-poppler-0.74.0.tar.xz";
+    md5name = "234f8e573ea57fb6a008e7c1e56bfae1af5d1adf0e65f47555e1ae103874e4df-poppler-0.82.0.tar.xz";
   }
   {
     name = "postgresql-9.2.24.tar.bz2";
@@ -721,11 +721,11 @@
     md5name = "a754c02f7051c2f21e52f8669a421b50485afcde9a581674d6106326b189d126-postgresql-9.2.24.tar.bz2";
   }
   {
-    name = "Python-3.5.7.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/Python-3.5.7.tar.xz";
-    sha256 = "285892899bf4d5737fd08482aa6171c6b2564a45b9102dfacfb72826aebdc7dc";
+    name = "Python-3.5.9.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/Python-3.5.9.tar.xz";
+    sha256 = "c24a37c63a67f53bdd09c5f287b5cff8e8b98f857bf348c577d454d3f74db049";
     md5 = "";
-    md5name = "285892899bf4d5737fd08482aa6171c6b2564a45b9102dfacfb72826aebdc7dc-Python-3.5.7.tar.xz";
+    md5name = "c24a37c63a67f53bdd09c5f287b5cff8e8b98f857bf348c577d454d3f74db049-Python-3.5.9.tar.xz";
   }
   {
     name = "libqxp-0.0.2.tar.xz";
@@ -805,11 +805,11 @@
     md5name = "0168229624cfac409e766913506961a8-ucpp-1.3.2.tar.gz";
   }
   {
-    name = "libvisio-0.1.6.tar.xz";
-    url = "http://dev-www.libreoffice.org/src/libvisio-0.1.6.tar.xz";
-    sha256 = "fe1002d3671d53c09bc65e47ec948ec7b67e6fb112ed1cd10966e211a8bb50f9";
+    name = "libvisio-0.1.7.tar.xz";
+    url = "http://dev-www.libreoffice.org/src/libvisio-0.1.7.tar.xz";
+    sha256 = "8faf8df870cb27b09a787a1959d6c646faa44d0d8ab151883df408b7166bea4c";
     md5 = "";
-    md5name = "fe1002d3671d53c09bc65e47ec948ec7b67e6fb112ed1cd10966e211a8bb50f9-libvisio-0.1.6.tar.xz";
+    md5name = "8faf8df870cb27b09a787a1959d6c646faa44d0d8ab151883df408b7166bea4c-libvisio-0.1.7.tar.xz";
   }
   {
     name = "libwpd-0.10.3.tar.xz";

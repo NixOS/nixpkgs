@@ -62,9 +62,6 @@ let crate = crate_ // (lib.attrByPath [ crate_.crateName ] (attr: {}) crateOverr
     extraRustcOpts_ = extraRustcOpts;
     buildTests_ = buildTests;
 
-    # take a list of crates that we depend on and override them to fit our overrides, rustc, release, …
-    makeDependencies = map (dep: lib.getLib (dep.override { inherit release verbose crateOverrides; }));
-
     # crate2nix has a hack for the old bash based build script that did split
     # entries at `,`. No we have to work around that hack.
     # https://github.com/kolloch/crate2nix/blame/5b19c1b14e1b0e5522c3e44e300d0b332dc939e7/crate2nix/templates/build.nix.tera#L89
@@ -93,8 +90,8 @@ stdenv.mkDerivation (rec {
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
     depsBuildBuild = [ rust stdenv.cc ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
-    dependencies = makeDependencies dependencies_;
-    buildDependencies = makeDependencies buildDependencies_;
+    dependencies = map lib.getLib dependencies_;
+    buildDependencies = map lib.getLib buildDependencies_;
 
     completeDeps = lib.unique (dependencies ++ lib.concatMap (dep: dep.completeDeps) dependencies);
     completeBuildDeps = lib.unique (

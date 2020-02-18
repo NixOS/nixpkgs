@@ -1,18 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, libcanberra-gtk3,
-  libnotify, libwnck3, gtk3, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, glib, libcanberra-gtk3,
+  libnotify, libwnck3, gtk3, libxml2, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-notification-daemon";
-  version = "1.22.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0f8m3m94iqj2x61dzwwvwq2qlsl2ma8pqr6rfns5pzd0nj0waz0m";
+    sha256 = "0y362b51lb8nq2cw254qc39x8hpficn5rxddzp0fxqxakrh7vcif";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
+    libxml2 # for xmllint
     wrapGAppsHook
   ];
 
@@ -25,9 +26,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
-    description = "Notification daemon for MATE";
-    homepage = https://github.com/mate-desktop/mate-notification-daemon;
+    description = "Notification daemon for MATE Desktop";
+    homepage = "https://github.com/mate-desktop/mate-notification-daemon";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

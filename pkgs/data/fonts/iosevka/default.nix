@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    npm run build -- ttf::$pname
+    npm run build -- ttf::$pname >/dev/null
     runHook postBuild
   '';
 

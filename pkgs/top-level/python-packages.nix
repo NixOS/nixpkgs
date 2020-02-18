@@ -484,6 +484,8 @@ in {
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
+  bayesian-optimization = callPackage ../development/python-modules/bayesian-optimization { };
+
   bayespy = callPackage ../development/python-modules/bayespy { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
@@ -1459,8 +1461,11 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
-  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
-  spyder = callPackage ../development/python-modules/spyder {};
+  spyder-kernels = if isPy3k then callPackage ../development/python-modules/spyder-kernels {}
+    else callPackage ../development/python-modules/spyder-kernels/2.nix {};
+
+  spyder = if isPy3k then callPackage ../development/python-modules/spyder {}
+    else callPackage ../development/python-modules/spyder/2.nix {};
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
@@ -2541,6 +2546,8 @@ in {
 
   docker_pycreds = callPackage ../development/python-modules/docker-pycreds {};
 
+  docloud = callPackage ../development/python-modules/docloud { };
+
   docopt = callPackage ../development/python-modules/docopt { };
 
   doctest-ignore-unicode = callPackage ../development/python-modules/doctest-ignore-unicode { };
@@ -2755,6 +2762,8 @@ in {
   hass-nabucasa = callPackage ../development/python-modules/hass-nabucasa { };
 
   hbmqtt = callPackage ../development/python-modules/hbmqtt { };
+
+  helpdev = callPackage ../development/python-modules/helpdev { };
 
   hickle = callPackage ../development/python-modules/hickle { };
 
@@ -5713,6 +5722,8 @@ in {
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
 
+  vertica-python = callPackage ../development/python-modules/vertica-python { };
+
   virtkey = callPackage ../development/python-modules/virtkey {
     inherit (pkgs) pkgconfig;
   };
@@ -5868,6 +5879,8 @@ in {
   slowaes = callPackage ../development/python-modules/slowaes { };
 
   sqlite3dbm = callPackage ../development/python-modules/sqlite3dbm { };
+
+  sqlitedict = callPackage ../development/python-modules/sqlitedict { };
 
   sqlobject = callPackage ../development/python-modules/sqlobject { };
 
@@ -6101,6 +6114,8 @@ in {
   unittest2 = callPackage ../development/python-modules/unittest2 { };
 
   unittest-xml-reporting = callPackage ../development/python-modules/unittest-xml-reporting { };
+
+  untangle = callPackage ../development/python-modules/untangle { };
 
   traceback2 = callPackage ../development/python-modules/traceback2 { };
 
