@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
     description = "A modern replacement for ps written in Rust";
     homepage = "https://github.com/dalance/procs";
     license = licenses.mit;
-    maintainers = [ maintainers.dalance ];
+    maintainers = with maintainers;  [ dalance filalex77 ];
     platforms = with platforms; linux ++ darwin;
   };
 }
