@@ -124,6 +124,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  # See https://savannah.gnu.org/bugs/?50339
+  F77_INTEGER_8_FLAG = if openblas.blas64 then "-fdefault-integer-8" else "";
+
   configureFlags = [
     "--enable-readline"
     "--with-blas=openblas"
