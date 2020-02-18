@@ -7933,8 +7933,6 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
     inherit (llvmPackages_6) clang llvm;
   })
-    crystal_0_25
-    crystal_0_26
     crystal_0_27
     crystal_0_29
     crystal_0_30
@@ -15410,7 +15408,7 @@ in
   miniHttpd = callPackage ../servers/http/mini-httpd {};
 
   mlflow-server = callPackage ../servers/mlflow-server { };
-  
+
   mlmmj = callPackage ../servers/mail/mlmmj { };
 
   moodle = callPackage ../servers/web-apps/moodle { };
