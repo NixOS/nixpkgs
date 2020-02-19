@@ -34,7 +34,9 @@ buildPythonPackage rec {
   # test_process_isolation_settings is currently broken on Darwin Catalina
   # https://github.com/ansible/ansible-runner/issues/413
   checkPhase = ''
-    HOME=$(mktemp -d) pytest --ignore test/unit/test_runner.py -k "not test_prepare${lib.optionalString stdenv.isDarwin " and not test_process_isolation_settings"}"
+    HOME=$TMPDIR pytest \
+      --ignore test/unit/test_runner.py \
+      -k "not prepare ${lib.optionalString stdenv.isDarwin "and not process_isolation_settings"}"
   '';
 
   meta = with lib; {
