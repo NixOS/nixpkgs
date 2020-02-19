@@ -3444,6 +3444,12 @@ let
       url = mirror://cpan/authors/id/A/AJ/AJGB/Crypt-Curve25519-0.06.tar.gz;
       sha256 = "1ir0gfxm8i7r9zyfs2zvil5jgwirl7j6cb9cm1p2kjpfnhyp0j4z";
     };
+    patches = [
+      (fetchpatch {
+        url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-perl/Crypt-Curve25519/files/Crypt-Curve25519-0.60.0-fmul-fixedvar.patch?id=cec727ad614986ca1e6b9468eea7f1a5a9183382";
+        sha256 = "0l005jzxp6q6vyl3p43ji47if0v9inscnjl0vxaqzf6c17akgbhf";
+      })
+    ];
     meta = {
       description = "Generate shared secret using elliptic-curve Diffie-Hellman function";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
@@ -11120,10 +11126,10 @@ let
 
   MathGMP = buildPerlPackage {
     pname = "Math-GMP";
-    version = "2.19";
+    version = "2.20";
     src = fetchurl {
-      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Math-GMP-2.19.tar.gz;
-      sha256 = "1c07521m4d38hy2yx21hkwz22n2672bvrc4i21ldc68h85qy1q8i";
+      url = mirror://cpan/authors/id/S/SH/SHLOMIF/Math-GMP-2.20.tar.gz;
+      sha256 = "0psmpj3j8cw02b5bzb7qnkd4rcpxm82891rwpdi2hx2jxy0mznhn";
     };
     buildInputs = [ pkgs.gmp AlienGMP ];
     NIX_CFLAGS_COMPILE = "-I${pkgs.gmp.dev}/include";
