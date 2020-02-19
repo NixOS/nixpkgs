@@ -18039,7 +18039,8 @@ in
 
   undefined-medium = callPackage ../data/fonts/undefined-medium { };
 
-  uni-vga = callPackage ../data/fonts/uni-vga { };
+  uni-vga = callPackage ../data/fonts/uni-vga
+     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   unicode-character-database = callPackage ../data/misc/unicode-character-database { };
 
