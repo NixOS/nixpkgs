@@ -90,11 +90,33 @@ in rec {
       maintainers = [ lib.maintainers.eelco ];
     };
     constituents =
-      let all = x: map (system: x.${system}) supportedSystems; in
-      [ nixpkgs.tarball
-        (all nixpkgs.jdk)
-      ]
-      ++ lib.collect lib.isDerivation nixos;
+      let all = x: map (system: x + ".${system}") supportedSystems; in
+      lib.flatten [
+        "nixpkgs.tarball"
+        (all "nixpkgs.jdk")
+        "nixos.channel"
+        "nixos.manual"
+        (all "nixos.iso_minimal")
+        (all "nixos.dummy")
+        (all "nixos.tests.containers-imperative")
+        (all "nixos.tests.containers-ipv4")
+        (all "nixos.tests.containers-ipv6")
+        (all "nixos.tests.firewall")
+        (all "nixos.tests.ipv6")
+        (all "nixos.tests.login")
+        (all "nixos.tests.misc")
+        (all "nixos.tests.nat")
+        (all "nixos.tests.nfs3")
+        (all "nixos.tests.openssh")
+        (all "nixos.tests.php-pcre")
+        (all "nixos.tests.predictable-interface-names")
+        (all "nixos.tests.proxy")
+        (all "nixos.tests.simple")
+        (all "nixos.tests.installer.lvm")
+        (all "nixos.tests.installer.separateBoot")
+        (all "nixos.tests.installer.simple")
+        (all "nixos.tests.boot.biosCdrom")
+      ];
   });
 
 }
