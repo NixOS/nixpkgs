@@ -8,13 +8,13 @@ assert stdenv.lib.versionAtLeast mlt.version "6.18.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "19.12.31";
+  version = "20.02.17";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "1vwgah8pp2kbd0iaz952d3bwxphk06yxqc0pi4hk1mklkh87qzm9";
+    sha256 = "0nsqlbapqgxccb7mnvxqw4hdddj944d4z5jxafpv0cwj7s3z8wj0";
   };
 
   patches = [ ./0001-encodedock.cpp-connect-to-VAAPI-via-DRM-not-X11.patch ];
