@@ -240,10 +240,7 @@ stdenv.mkDerivation {
 
 
     # Step 4: Bunde javascript
-echo 1111
-cat scripts/bundle.js
     NODE_ENV=production node scripts/bundle.js
-echo 2222
     node scripts/bundleForeign.js
 
     # Step 5: Backup resources
