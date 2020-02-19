@@ -2,14 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "clojure";
-  version = "1.10.1.507";
+  version = "1.10.1.510";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "1k0jwa3481g3mkalwlb9gkcz9aq9zjpwmzckv823fr2d8djp41cc";
+    sha256 = "061vq54wcfyikqychxq0648v8l9dzgm6vn56palzkmxx2bv07q66";
   };
-
-  patches = [ ./TDEPS-150.patch ];
 
   buildInputs = [ makeWrapper ];
 
@@ -37,6 +35,7 @@ stdenv.mkDerivation rec {
       -Sverbose \
       -Scp $out/libexec/clojure-tools-${version}.jar
   '';
+
   meta = with stdenv.lib; {
     description = "A Lisp dialect for the JVM";
     homepage = https://clojure.org/;
