@@ -11,8 +11,8 @@
     version = "81.0.4044.17";
   };
   stable = {
-    sha256 = "10myihiyrgnm0ly41k4h8ayl3vv3cpshs3pshpqaba0l8i5r5b9f";
-    sha256bin64 = "0pd4ygmyinaq22lmaqjqi1gs3svnb863mkhcf85dzm1354iz1g9k";
-    version = "80.0.3987.106";
+    sha256 = "00c9czjyk1h3i40lvmh2rshp1mq7pcxwsfh1qrq22w8ba6ydkib5";
+    sha256bin64 = "0sydv69hnssbvkrl1zc3qpb1czmfxv9kq6qs9gdiy2i3zskfvhkx";
+    version = "80.0.3987.116";
   };
 }
