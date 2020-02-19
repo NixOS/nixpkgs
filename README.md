@@ -97,3 +97,9 @@ See code for all available configurations.
 [Samsung Series 9 NP900X3C]: samsung/np900x3c
 [Purism Librem 13v3]: purism/librem/13v3
 [Toshiba Chromebook 2 `swanky`]: toshiba/swanky
+
+## How to contribute a new device profile
+
+1. Add your device profile expression in the appropriate directory
+2. Link it in the table in README.md
+3. Run ./tests/run.py to test it. The test script script will parse all the profiles from the README.md
