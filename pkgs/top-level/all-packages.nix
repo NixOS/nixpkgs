@@ -20678,6 +20678,8 @@ in
 
   mypaint = callPackage ../applications/graphics/mypaint { };
 
+  mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
+
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
 
   mythtv = libsForQt5.callPackage ../applications/video/mythtv {
