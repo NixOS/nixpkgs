@@ -20458,6 +20458,7 @@ in
 
   mpv = callPackage ../applications/video/mpv {
     inherit lua;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation Cocoa CoreAudio MediaPlayer;
   };
 
   mpv-with-scripts = callPackage ../applications/video/mpv/wrapper.nix { };
