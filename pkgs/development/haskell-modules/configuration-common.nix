@@ -1393,4 +1393,9 @@ self: super: {
   # See https://github.com/ekmett/perhaps/pull/5
   perhaps = doJailbreak super.perhaps;
 
+  # amqp-utils depends on amqp >= 0.19
+  amqp-utils = super.amqp-utils.override {
+    amqp = dontCheck super.amqp_0_19_1;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
