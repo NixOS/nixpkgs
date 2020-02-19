@@ -14427,7 +14427,7 @@ in
   taglib-sharp = callPackage ../development/libraries/taglib-sharp { };
 
   talloc = callPackage ../development/libraries/talloc {
-    python = buildPackages.python2;
+    python = buildPackages.python3;
   };
 
   tclap = callPackage ../development/libraries/tclap {};
