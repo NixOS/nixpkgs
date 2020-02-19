@@ -72,6 +72,9 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
+  # latest version does not support pandoc 2.8, remove once 2.9
+  # is available in LTS
+  - pandoc-crossref ==0.3.4.2
   # LTS Haskell 14.25
   - abstract-deque ==0.3
   - abstract-deque-tests ==0.3
@@ -7841,7 +7844,6 @@ broken-packages:
   - pan-os-syslog
   - panda
   - pandoc-citeproc-preamble
-  - pandoc-crossref
   - pandoc-include
   - pandoc-include-code
   - pandoc-japanese-filters
