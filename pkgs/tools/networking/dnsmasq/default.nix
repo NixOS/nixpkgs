@@ -26,6 +26,13 @@ stdenv.mkDerivation rec {
       url = "thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=ab73a746a0d6fcac2e682c5548eeb87fb9c9c82e";
       sha256 = "1hnixij3jp1p6zc3bx2dr92yyf9jp1ahhl9hiiq7bkbhbrw6mbic";
     })
+
+    # Fix build with recent kernels
+    (fetchpatch {
+      name = "fix-build-after-y2038-changes-in-glibc.patch";
+      url = "http://thekelleys.org.uk/gitweb/?p=dnsmasq.git;a=patch;h=3052ce208acf602f0163166dcefb7330d537cedb";
+      sha256 = "0ri9bn5ins4jvswvakpk8l8cmyzjfsn84rk0rrpbn1ayxm17hqh2";
+    })
   ];
 
   preBuild = ''
