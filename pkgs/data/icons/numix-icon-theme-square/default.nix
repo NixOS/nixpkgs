@@ -11,11 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "0pjbi2g7wk8gyr4lvp8fvcb8z29kc3l6v19a45axgadnc609hqw7";
   };
 
-  nativeBuildInputs = [ gtk3 numix-icon-theme ];
+  nativeBuildInputs = [ gtk3 ];
 
-  propagatedBuildInputs = [
-    hicolor-icon-theme
-  ];
+  buildInputs = [ numix-icon-theme ];
+
+  propagatedBuildInputs = [ hicolor-icon-theme ];
 
   dontDropIconThemeCache = true;
 
