@@ -24,7 +24,7 @@
 , gd ? null, libpng ? null
 , libidn2
 , bison
-, python3
+, python3Minimal
 }:
 
 { name
@@ -155,7 +155,7 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison python3 ];
+  nativeBuildInputs = [ bison python3Minimal ];
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to

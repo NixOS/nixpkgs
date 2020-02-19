@@ -13109,6 +13109,8 @@ in
 
   libunibreak = callPackage ../development/libraries/libunibreak { };
 
+  libuninameslist = callPackage ../development/libraries/libuninameslist { };
+
   libunique = callPackage ../development/libraries/libunique { };
   libunique3 = callPackage ../development/libraries/libunique/3.x.nix { };
 
