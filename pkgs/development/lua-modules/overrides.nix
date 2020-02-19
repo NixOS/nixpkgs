@@ -264,36 +264,51 @@ with super;
     disabled = luaOlder "5.1" || (luaAtLeast "5.4");
   });
 
-  luv = super.luv.override({
-    # Use system libuv instead of building local and statically linking
-    # This is a hacky way to specify -DWITH_SHARED_LIBUV=ON which
-    # is not possible with luarocks and the current luv rockspec
-    # While at it, remove bundled libuv source entirely to be sure.
-    # We may wish to drop bundled lua submodules too...
-    preBuild = ''
-     sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
-     rm -rf deps/libuv
+  luv = pkgs.stdenv.mkDerivation rec {
+
+    pname = super.luv.pname;
+    version = super.luv.version;
+
+    src = pkgs.fetchFromGitHub {
+      owner = "luvit";
+      repo = pname;
+      rev = version;
+      sha256 = "0lg3kncaka1mx18k0w4wsylsa6xnp7m11n68wgn38sph7f2nn1x9";
+    };
+
+    # So we can be sure no internal dependency is used from the repo and that
+    # everything is provided by us
+    postUnpack = ''
+     rm -rf deps
     '';
+
+    cmakeFlags = [
+      "-DWITH_SHARED_LIBUV=ON"
+      "-DLUA_BUILD_TYPE=System"
+      "-DBUILD_MODULE=OFF"
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DLUA_COMPAT53_DIR=${super.lua.pkgs.compat53}"
+    ];
 
     buildInputs = [ pkgs.libuv ];
 
-    passthru = {
-      libluv = self.luv.override ({
-        preBuild = self.luv.preBuild + ''
-          sed -i 's,\(option(BUILD_MODULE.*\)ON,\1OFF,' CMakeLists.txt
-          sed -i 's,\(option(BUILD_SHARED_LIBS.*\)OFF,\1ON,' CMakeLists.txt
-          sed -i 's,${"\${INSTALL_INC_DIR}"},${placeholder "out"}/include/luv,' CMakeLists.txt
-        '';
+    nativeBuildInputs = [
+      pkgs.cmake
+      super.lua.pkgs.compat53
+    ]
+    # TODO: Check if that's needed on darwin
+    ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
+      pkgs.fixDarwinDylibNames
+    ]
+    ;
+    # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+    # TODO: Check if that's needed on darwin
+    NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+      (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+    propagatedBuildInputs = [ lua ];
 
-        nativeBuildInputs = [ pkgs.fixDarwinDylibNames ];
-
-        # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-        NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
-          (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
-      });
-    };
-  });
-
+    meta = super.luv.meta;
+  };
 
   rapidjson = super.rapidjson.override({
     preBuild = ''
