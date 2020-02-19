@@ -46,6 +46,17 @@ let
             "zpool destroy rpool",
             "udevadm settle",
         )
+
+        machine.succeed(
+            'echo password | zpool create -o altroot="/tmp/mnt" '
+            + "-O encryption=aes-256-gcm -O keyformat=passphrase rpool /dev/vdb1",
+            "zfs create -o mountpoint=legacy rpool/root",
+            "mount -t zfs rpool/root /tmp/mnt",
+            "udevadm settle",
+            "umount /tmp/mnt",
+            "zpool destroy rpool",
+            "udevadm settle",
+        )
       '' + extraTest;
 
     };
@@ -57,18 +68,6 @@ in {
 
   unstable = makeZfsTest "unstable" {
     enableUnstable = true;
-    extraTest = ''
-      machine.succeed(
-          'echo password | zpool create -o altroot="/tmp/mnt" '
-          + "-O encryption=aes-256-gcm -O keyformat=passphrase rpool /dev/vdb1",
-          "zfs create -o mountpoint=legacy rpool/root",
-          "mount -t zfs rpool/root /tmp/mnt",
-          "udevadm settle",
-          "umount /tmp/mnt",
-          "zpool destroy rpool",
-          "udevadm settle",
-      )
-    '';
   };
 
   installer = (import ./installer.nix { }).zfsroot;
