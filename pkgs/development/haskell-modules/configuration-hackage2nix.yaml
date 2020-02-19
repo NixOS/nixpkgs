@@ -2916,7 +2916,6 @@ broken-packages:
   - AMI
   - ampersand
   - amqp-conduit
-  - amqp-utils
   - analyze
   - analyze-client
   - anansi-pandoc
