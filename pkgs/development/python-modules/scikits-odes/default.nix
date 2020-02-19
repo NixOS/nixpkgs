@@ -11,7 +11,7 @@
 , pytest
 , python
 , scipy
-, sundials_3
+, sundials
 }:
 
 buildPythonPackage rec {
@@ -30,7 +30,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     numpy
-    sundials_3
+    sundials
     scipy
   ] ++ lib.optionals (!isPy3k) [ enum34 ];
 
