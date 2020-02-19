@@ -15,7 +15,7 @@ rec {
       name = last (builtins.split "/" nameOrPath);
     in
 
-    pkgs.runCommand name (if (types.str.check content) then {
+    pkgs.runCommandLocal name (if (types.str.check content) then {
       inherit content interpreter;
       passAsFile = [ "content" ];
     } else {
@@ -192,7 +192,7 @@ rec {
     {id="";for(i=idx;i<ctx;i++)id=sprintf("%s%s", id, "\t");printf "%s%s\n", id, $0}
    '';
 
-  writeNginxConfig = name: text: pkgs.runCommand name {
+  writeNginxConfig = name: text: pkgs.runCommandLocal name {
     inherit text;
     passAsFile = [ "text" ];
   } /* sh */ ''

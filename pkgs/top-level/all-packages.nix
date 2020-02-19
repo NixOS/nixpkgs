@@ -4312,6 +4312,8 @@ in
 
   jira-cli = callPackage ../development/tools/jira_cli { };
 
+  jirafeau = callPackage ../servers/web-apps/jirafeau { };
+
   jitterentropy = callPackage ../development/libraries/jitterentropy { };
 
   jl = haskellPackages.callPackage ../development/tools/jl { };
@@ -5467,6 +5469,8 @@ in
 
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim/default.nix { };
 
+  ogdf = callPackage ../development/libraries/ogdf { };
+
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola { };
@@ -6267,6 +6271,8 @@ in
   s-tui = callPackage ../tools/system/s-tui { };
 
   s3backer = callPackage ../tools/filesystems/s3backer { };
+
+  s3bro = callPackage ../tools/admin/s3bro { };
 
   s3fs = callPackage ../tools/filesystems/s3fs { };
 
@@ -20673,6 +20679,8 @@ in
   mlocate = callPackage ../tools/misc/mlocate { };
 
   mypaint = callPackage ../applications/graphics/mypaint { };
+
+  mypaint-brushes1 = callPackage ../development/libraries/mypaint-brushes/1.0.nix { };
 
   mypaint-brushes = callPackage ../development/libraries/mypaint-brushes { };
 

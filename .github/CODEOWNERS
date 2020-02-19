@@ -31,6 +31,9 @@
 /pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
 /pkgs/build-support/setup-hooks       @Ericson2314
 
+# Nixpkgs build-support
+/pkgs/build-support/writers @lassulus @Profpatsch
+
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
 /nixos/lib/from-env.nix     @nbp @infinisil

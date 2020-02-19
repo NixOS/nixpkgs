@@ -7,59 +7,81 @@
 , libpng
 , librsvg
 , gobject-introspection
+, libmypaint
+, mypaint-brushes
 , gdk-pixbuf
 , pkgconfig
-, python2
-, scons
+, python3
 , swig
 , wrapGAppsHook
 }:
 
 let
-  inherit (python2.pkgs) pycairo pygobject3 numpy;
-in stdenv.mkDerivation {
+  inherit (python3.pkgs) pycairo pygobject3 numpy buildPythonApplication;
+in buildPythonApplication rec {
   pname = "mypaint";
-  version = "1.2.1";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
-    rev = "bcf5a28d38bbd586cc9d4cee223f849fa303864f";
-    sha256 = "1zwx7n629vz1jcrqjqmw6vl6sxdf81fq6a5jzqiga8167gg8s9pf";
+    rev = "v${version}";
+    sha256 = "180kyilhf81ndhwl1hlvy82gh6hxpcvka2d1nkghbpgy431rls6r";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
     intltool
     pkgconfig
-    scons
     swig
     wrapGAppsHook
     gobject-introspection # for setup hook
   ];
-
   buildInputs = [
     gtk3
     gdk-pixbuf
+    libmypaint
+    mypaint-brushes
     json_c
     lcms2
     libpng
     librsvg
     pycairo
     pygobject3
-    python2
   ];
 
   propagatedBuildInputs = [
     numpy
+    pycairo
+    pygobject3
   ];
 
-  postInstall = ''
-    sed -i -e 's|/usr/bin/env python2.7|${python2}/bin/python|' $out/bin/mypaint
+  checkInputs = [
+    gtk3
+  ];
+
+  buildPhase = ''
+    runHook preBuild
+
+    ${python3.interpreter} setup.py build
+
+    runHook postBuild
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(--prefix PYTHONPATH : $PYTHONPATH)
+  installPhase = ''
+    runHook preInstall
+
+    ${python3.interpreter} setup.py managed_install --prefix=$out
+
+    runHook postInstall
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+
+    HOME=$TEMPDIR ${python3.interpreter} setup.py test
+
+    runHook postCheck
   '';
 
   meta = with stdenv.lib; {
