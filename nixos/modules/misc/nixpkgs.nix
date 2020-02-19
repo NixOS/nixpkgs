@@ -14,32 +14,57 @@ let
     then f x
     else f;
 
-  mergeConfig = lhs_: rhs_:
-    let
-      lhs = optCall lhs_ { inherit pkgs; };
-      rhs = optCall rhs_ { inherit pkgs; };
-    in
-    recursiveUpdate lhs rhs //
-    optionalAttrs (lhs ? packageOverrides) {
-      packageOverrides = pkgs:
-        optCall lhs.packageOverrides pkgs //
-        optCall (attrByPath ["packageOverrides"] ({}) rhs) pkgs;
-    } //
-    optionalAttrs (lhs ? perlPackageOverrides) {
-      perlPackageOverrides = pkgs:
-        optCall lhs.perlPackageOverrides pkgs //
-        optCall (attrByPath ["perlPackageOverrides"] ({}) rhs) pkgs;
-    };
-
-  configType = mkOptionType {
+  mergableConfigType = mkOptionType {
     name = "nixpkgs-config";
     description = "nixpkgs config";
-    check = x:
-      let traceXIfNot = c:
-            if c x then true
-            else lib.traceSeqN 1 x false;
-      in traceXIfNot isConfig;
-    merge = args: fold (def: mergeConfig def.value) {};
+    check = isConfig;
+    merge = loc: defs:
+      let
+        # Ensure that each attribute from nixpkgs.config appears at the
+        # first iteration to make sure that nothing is lost.
+        allValues = fold recursiveUpdate {} defs;
+
+        # Recurses through the `config` attr-set for nixpkgs and ensures that
+        # no conflicting definitions exist and that overrides are resolved properly.
+        mapFun = path: value:
+          if isAttrs value && !(value ? _type) then value
+          else let
+            # Evaluate mkIf/mkMerge with `lib.dischargeProperties` and append the
+            # value to the list of declarations. If a value is `null`, it means that
+            # it was not declared in one of the configs and can be ignored.
+            appendVal = all: value_: next:
+              let
+                # FIXME support `mkMerge [{ snens = mkIf cond val; }]`
+                discharged = dischargeProperties value_;
+                # FIXME check if there's a case where `discharged` is `[]` and
+                # therefore breaks `head`.
+                value = let h = head discharged; in if isAttrs h
+                  then foldl recursiveUpdate {} discharged
+                  else h;
+              in all ++ (if value == null then [] else [{
+                inherit (next) file;
+                inherit value;
+              }]);
+
+            # Gather all declarations of a value in the `nixpkgs.config` attr-set.
+            allDeclarations = foldl
+              (all: next: appendVal all (optCall (attrByPath path null next) finalPkgs) next)
+              []
+              defs;
+
+            # Evaluate all overrides (defined using mkOverride/mkForce/etc) and pick the
+            # value with the highes priority.
+            result = sortProperties (filterOverrides allDeclarations);
+
+            # Merge all declarations (if a list or an attr-set is given, those can be merged together),
+            # if a "unique" value is given, it's ensured that no conflicting definitions exist.
+            #
+            # FIXME This is missing support for separatedString!
+            merge = let h = (head result).value or null; in
+              if isList h || isAttrs h then mergeDefaultOption else mergeOneOption;
+          in
+            merge (["nixpkgs" "config"] ++ (tail path)) result;
+      in mapAttrsRecursiveCond (x: !(x ? _type)) mapFun allValues;
   };
 
   overlayType = mkOptionType {
@@ -113,7 +138,7 @@ in
         ''
           { allowBroken = true; allowUnfree = true; }
         '';
-      type = configType;
+      type = mergableConfigType;
       description = ''
         The configuration of the Nix Packages collection.  (For
         details, see the Nixpkgs documentation.)  It allows you to set
