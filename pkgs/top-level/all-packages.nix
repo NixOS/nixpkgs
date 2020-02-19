@@ -9236,7 +9236,6 @@ in
   # - Build docs:                           yes
   octave = callPackage ../development/interpreters/octave {
     python = python3;
-    sundials = sundials_2;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
   # Build summary for this flavor
@@ -9255,7 +9254,6 @@ in
   # - Build docs:                           yes
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
-    sundials = sundials_2;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableJIT = true;
   };
@@ -9276,7 +9274,6 @@ in
   # Build summary for this flavor
   octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
     python = python3;
-    sundials = sundials_2;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableQt = true;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];

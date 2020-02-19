@@ -34,7 +34,7 @@
 , jdk ? null
 , python ? null
 , overridePlatforms ? null
-, sundials ? null
+, sundials_2 ? null
 # Qt / GUI is disabled by default
 , enableQt ? false
 , qtbase ? null
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional (glpk != null) glpk)
   ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
   ++ (stdenv.lib.optional (jdk != null) jdk)
-  ++ (stdenv.lib.optional (sundials != null) sundials)
+  ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
   ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
   ++ (stdenv.lib.optional (python != null) python)
   ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     fftwSinglePrec
     texinfo
   ]
-  ++ (stdenv.lib.optional (sundials != null) sundials)
+  ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
   ++ (stdenv.lib.optional enableJIT llvm)
   ++ (stdenv.lib.optionals enableQt [
     qtscript
