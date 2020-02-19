@@ -8,6 +8,7 @@
 , gmpxx
 , ncurses5
 , gnustep
+, libffi
 }:
 stdenv.mkDerivation rec {
   pname = "hopper";
@@ -30,7 +31,6 @@ stdenv.mkDerivation rec {
     libbsd
     python27
     gmpxx
-
     ncurses5
     gnustep.libobjc
   ];
@@ -53,6 +53,9 @@ stdenv.mkDerivation rec {
       $sourceRoot/opt/hopper-${rev}/lib/libobjcxx.so* \
       $sourceRoot/opt/hopper-${rev}/lib/libpthread_workqueue.so* \
       $out/lib
+
+    # we already ship libffi.so.7
+    ln -s ${lib.getLib libffi}/lib/libffi.so $out/lib/libffi.so.6
 
     cp -r $sourceRoot/usr/share $out
 
