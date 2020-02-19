@@ -4299,6 +4299,16 @@
     githubId = 1784379;
     name = "Kyohei Kadota";
   };
+  Luflosi = {
+    name = "Luflosi";
+    email = "luflosi@luflosi.de";
+    github = "Luflosi";
+    githubId = 15217907;
+    keys = [{
+      longkeyid = "rsa4096/0x6F987CCF224D20B9";
+      fingerprint = "66D1 3048 2B5F 2069 81A6  6B83 6F98 7CCF 224D 20B9";
+    }];
+  };
   luispedro = {
     email = "luis@luispedro.org";
     github = "luispedro";
