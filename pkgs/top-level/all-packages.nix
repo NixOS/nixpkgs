@@ -5469,6 +5469,8 @@ in
 
   ofono-phonesim = libsForQt5.callPackage ../development/tools/ofono-phonesim/default.nix { };
 
+  ogdf = callPackage ../development/libraries/ogdf { };
+
   oh-my-zsh = callPackage ../shells/zsh/oh-my-zsh { };
 
   ola = callPackage ../applications/misc/ola { };
