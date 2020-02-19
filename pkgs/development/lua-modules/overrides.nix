@@ -264,6 +264,13 @@ with super;
     disabled = luaOlder "5.1" || (luaAtLeast "5.4");
   });
 
+  compat53 = super.compat53.override (old: {
+    # needed for luv build
+    postInstall = ''
+      cp -r c-api $out/c-api
+    '';
+  });
+
   luv = pkgs.stdenv.mkDerivation rec {
 
     pname = super.luv.pname;
