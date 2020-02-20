@@ -9134,7 +9134,7 @@ in
   kanif = callPackage ../applications/networking/cluster/kanif { };
 
   lumo = callPackage ../development/interpreters/clojurescript/lumo {
-    nodejs = nodejs-10_x;
+    nodejs = nodejs-13_x;
   };
 
   lxappearance = callPackage ../desktops/lxde/core/lxappearance {
