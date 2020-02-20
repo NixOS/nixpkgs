@@ -1201,8 +1201,6 @@ let
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
 
-    trv = callPackage ../development/tools/misc/trv { };
-
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
