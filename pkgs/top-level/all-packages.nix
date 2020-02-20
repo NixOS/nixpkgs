@@ -6007,6 +6007,8 @@ in
 
   openmpi = callPackage ../development/libraries/openmpi { };
 
+  ucx = callPackage ../development/libraries/ucx {};
+
   openmodelica = callPackage ../applications/science/misc/openmodelica { };
 
   qarte = libsForQt5.callPackage ../applications/video/qarte { };
