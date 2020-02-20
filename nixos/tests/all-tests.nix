@@ -206,6 +206,7 @@ in
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-etag = handleTest ./nginx-etag.nix {};
+  nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
