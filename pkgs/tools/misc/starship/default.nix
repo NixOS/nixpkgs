@@ -19,10 +19,7 @@ rustPlatform.buildRustPackage rec {
       --replace "/bin/echo" "echo"
   '';
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1i5g7j6x3pcrgc0mz2sqzl8kv9crm0h5zrszzbjrdyy2svfzqmp2";
+  cargoSha256 = "16wsd8z4cfb5pplwfvwgi5qawwv8c0aa220wnvphplmgz8cpq35r";
   checkPhase = "cargo test -- --skip directory::home_directory --skip directory::directory_in_root";
 
   meta = with stdenv.lib; {
