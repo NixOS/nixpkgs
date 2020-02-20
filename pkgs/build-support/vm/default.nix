@@ -126,6 +126,10 @@ rec {
     mkdir -p /fs/etc
     ln -sf /proc/mounts /fs/etc/mtab
     echo "127.0.0.1 localhost" > /fs/etc/hosts
+    # Ensures tools requiring /etc/passwd will work (e.g. nix)
+    if [ ! -e /fs/etc/passwd ]; then
+      echo "root:x:0:0:System administrator:/root:/bin/sh" > /fs/etc/passwd
+    fi
 
     echo "starting stage 2 ($command)"
     exec switch_root /fs $command $out
