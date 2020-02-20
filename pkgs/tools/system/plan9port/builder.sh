@@ -8,13 +8,20 @@ plan9portLinkFlags()
     local -a linkFlags=()
     eval set -- "$NIX_LDFLAGS"
     while (( $# > 0 )); do
-        if [[ $1 = -rpath ]]; then
-            linkFlags+=( "-Wl,-rpath,$2" )
+        case "$1" in
+        -rpath|-macosx_version_min|-sdk_version)
+            linkFlags+=( "-Wl,$1,$2" )
             shift 2
-        else
+            ;;
+        -no_uuid)
+            linkFlags+=( "-Wl,$1" )
+            shift
+            ;;
+        *)
             linkFlags+=( "$1" )
             shift
-        fi
+            ;;
+        esac
     done
     echo "${linkFlags[*]}"
 }
