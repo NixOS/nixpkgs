@@ -19031,6 +19031,8 @@ in
 
   fsv = callPackage ../applications/misc/fsv { };
 
+  ft2-clone = callPackage ../applications/audio/ft2-clone { };
+
   fvwm = callPackage ../applications/window-managers/fvwm { };
 
   ganttproject-bin = callPackage ../applications/misc/ganttproject-bin { };
