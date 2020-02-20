@@ -1,27 +1,30 @@
-{ lib, stdenv, fetchurl, writeText, conf ? null }:
+{ lib, stdenv, fetchurl, writeText, jq, conf ? {} }:
 
 # Note for maintainers:
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
 
-stdenv.mkDerivation rec {
+let
+  noPhoningHome = {
+    disable_guests = true; # disable automatic guest account registration at matrix.org
+    piwik = false; # disable analytics
+  };
+  configOverrides = writeText "riot-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
+
+in stdenv.mkDerivation rec {
   pname = "riot-web";
-  version = "1.5.8";
+  version = "1.5.9";
 
   src = fetchurl {
     url = "https://github.com/vector-im/riot-web/releases/download/v${version}/riot-v${version}.tar.gz";
-    sha256 = "112zjlmxy2s8qcd227laf1lfvbbwwcipn51xb779hy2dci48kpkx";
+    sha256 = "1qibbgjzhiwn1lnfm3pbfn6jahphgyf6625mp4v0ah2is75x16ys";
   };
 
-  installPhase = let
-    configFile = if (conf != null)
-      then writeText "riot-config.json" conf
-      else "$out/config.sample.json";
-  in ''
+  installPhase = ''
     runHook preInstall
 
     mkdir -p $out/
     cp -R . $out/
-    ln -s ${configFile} $out/config.json
+    ${jq}/bin/jq -s '.[0] * .[1]' "config.sample.json" "${configOverrides}" > "$out/config.json"
 
     runHook postInstall
   '';
