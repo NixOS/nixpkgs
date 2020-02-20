@@ -107,7 +107,7 @@ self: super: {
   sop-core = self.sop-core_0_5_0_0;
   texmath = self.texmath_0_12;
   th-desugar = self.th-desugar_1_10;
-  tls = self.tls_1_5_3;
+  tls = self.tls_1_5_4;
   trifecta = self.trifecta_2_1;
   vty = self.vty_5_26;
   xml-conduit = overrideCabal super.xml-conduit (drv: { version = "1.9.0.0"; sha256 = "1p57v127882rxvvmwjmvnqdmk3x2wg1z4d8y03849h0xaz1vid0w"; });
