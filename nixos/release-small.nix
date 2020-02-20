@@ -95,7 +95,7 @@ in rec {
         "nixpkgs.tarball"
         (all "nixpkgs.jdk")
         "nixos.channel"
-        "nixos.manual"
+        "nixos.manual.x86_64-linux"
         (all "nixos.iso_minimal")
         (all "nixos.dummy")
         (all "nixos.tests.containers-imperative")
@@ -105,11 +105,16 @@ in rec {
         (all "nixos.tests.ipv6")
         (all "nixos.tests.login")
         (all "nixos.tests.misc")
-        (all "nixos.tests.nat")
+        (all "nixos.tests.nat.firewall-conntrack")
+        (all "nixos.tests.nat.firewall")
+        (all "nixos.tests.nat.standalone")
         (all "nixos.tests.nfs3")
         (all "nixos.tests.openssh")
         (all "nixos.tests.php-pcre")
-        (all "nixos.tests.predictable-interface-names")
+        (all "nixos.tests.predictable-interface-names.predictable")
+        (all "nixos.tests.predictable-interface-names.predictableNetworkd")
+        (all "nixos.tests.predictable-interface-names.unpredictable")
+        (all "nixos.tests.predictable-interface-names.unpredictableNetworkd")
         (all "nixos.tests.proxy")
         (all "nixos.tests.simple")
         (all "nixos.tests.installer.lvm")

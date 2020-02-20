@@ -140,9 +140,9 @@ in rec {
         (all "nixos.tests.xfce4-14")
 
         "nixpkgs.tarball"
-        (all "allSupportedNixpkgs.emacs")
+        (all "nixpkgs.emacs")
         # The currently available aarch64 JDK is unfree
-        (except ["aarch64-linux"] "allSupportedNixpkgs.jdk")
+        (except ["aarch64-linux"] "nixpkgs.jdk")
       ];
   };
 
