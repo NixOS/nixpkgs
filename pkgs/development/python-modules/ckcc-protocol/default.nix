@@ -12,12 +12,12 @@
 
 buildPythonPackage rec {
   pname = "ckcc-protocol";
-  version = "0.8.0";
+  version = "1.0.0";
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1mbs9l8qycy50j5lq6az7l5d8i40nb0vmlyhcyax298qp6c1r1gh";
+    sha256 = "1glws7z7kk9qyl1j4446hb6vv3l4s5xca40zb4fzhsh6chm76h11";
   };
 
   checkInputs = [
