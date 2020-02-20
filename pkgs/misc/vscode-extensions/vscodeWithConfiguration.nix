@@ -15,6 +15,12 @@
 let 
   nixExtsDrvs = extensionsFromVscodeMarketplace nixExtensions;
   mutExtsDrvs = extensionsFromVscodeMarketplace mutableExtensions;
+  mutableExtsPaths = lib.forEach mutExtsDrvs ( e: 
+  {
+    origin = ''${e}/share/vscode/extensions/${e.vscodeExtUniqueId}'';
+    target = ''${vscodeExtsFolderName}/${e.vscodeExtUniqueId}-${(lib.findSingle (ext: ''${ext.publisher}.${ext.name}'' == e.vscodeExtUniqueId) "" "m" mutableExtensions ).version}'';
+  }
+  );
 
   #removed not defined extensions
   rmExtensions =  lib.optionalString (nixExtensions++mutableExtensions != []) ''
@@ -23,9 +29,12 @@ let
   #copy mutable extension out of the nix store
   cpExtensions = ''
     ${lib.concatMapStringsSep "\n" (e : ''ln -sfn ${e}/share/vscode/extensions/* ${vscodeExtsFolderName}/'') nixExtsDrvs}
-    ${lib.concatMapStringsSep "\n" (e : ''
-      cp -a ${e}/share/vscode/extensions/${e.vscodeExtUniqueId} ${vscodeExtsFolderName}/${e.vscodeExtUniqueId}-${(lib.findSingle (ext: ''${ext.publisher}.${ext.name}'' == e.vscodeExtUniqueId) "" "m" mutableExtensions ).version}
-      '') mutExtsDrvs} 
+    ${lib.concatMapStringsSep "\n" (ePath : ''
+      if [ ! -d ${ePath.target} ]; then
+        cp -a ${ePath.origin} ${ePath.target}
+        chmod -R u+rwx ${ePath.target}
+      fi
+      '') mutableExtsPaths} 
   '';
 in
   writeShellScriptBin "code" ''
