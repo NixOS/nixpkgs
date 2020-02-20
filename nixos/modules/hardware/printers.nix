@@ -6,12 +6,16 @@ let
     (concatStringsSep " "
       (mapAttrsToList (name: value: "-o '${name}'='${value}'") options)
     );
-  ensurePrinter = p: ''
+  ensurePrinter = p:
+    assert (p.model or null) == null || (p.ppd or null) == null;
+    assert (p.model or null) != null || (p.ppd or null) != null;
+    ''
     ${pkgs.cups}/bin/lpadmin -p '${p.name}' -E \
       ${optionalString (p.location != null) "-L '${p.location}'"} \
       ${optionalString (p.description != null) "-D '${p.description}'"} \
       -v '${p.deviceUri}' \
-      -m '${p.model}' \
+      ${if (p.model or null) != null then "-m '${p.model}'" else ""} \
+      ${if (p.ppd or null) != null then "-P '${p.ppd}'" else ""} \
       ${ppdOptionsString p.ppdOptions}
   '';
   ensureDefaultPrinter = name: ''
@@ -82,13 +86,27 @@ in {
               '';
             };
             model = mkOption {
-              type = types.str;
+              type = types.nullOr types.str;
               example = literalExample ''
                 gutenprint.''${lib.version.majorMinor (lib.getVersion pkgs.cups)}://brother-hl-5140/expert
               '';
+              default = null;
               description = ''
-                Location of the ppd driver file for the printer.
+                Model of the printer, in the form of a path to an installed PPD file.
                 <command>lpinfo -m</command> shows a list of supported models.
+                This option is incompatible with the `ppd` option.
+              '';
+            };
+            ppd = mkOption {
+              type = types.nullOr types.path;
+              example = literalExample ''
+                ./path/to/some_printer.ppd
+              '';
+              default = null;
+              description = ''
+                Path to a PPD file for the printer, usually supplied by the printer manufacturer.
+                The PPD does not need to be installed.
+                This option is incompatible with the `model` option.
               '';
             };
             ppdOptions = mkOption {
