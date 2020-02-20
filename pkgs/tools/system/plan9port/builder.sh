@@ -5,25 +5,11 @@ export PLAN9_TARGET=$PLAN9
 
 plan9portLinkFlags()
 {
-    local -a linkFlags=()
     eval set -- "$NIX_LDFLAGS"
-    while (( $# > 0 )); do
-        case "$1" in
-        -rpath|-macosx_version_min|-sdk_version)
-            linkFlags+=( "-Wl,$1,$2" )
-            shift 2
-            ;;
-        -no_uuid)
-            linkFlags+=( "-Wl,$1" )
-            shift
-            ;;
-        *)
-            linkFlags+=( "$1" )
-            shift
-            ;;
-        esac
+    local flag
+    for flag in "$@"; do
+        printf ' -Wl,%s' "$flag"
     done
-    echo "${linkFlags[*]}"
 }
 
 configurePhase()
