@@ -65,7 +65,7 @@ let
       else { pkg = []; str = null; };
 
   # Fetch the artifacts from the PyPI index. Since we get all
-  # info we need from the lock file we don't use nixpkgs' fetchPyPi
+  # info we need from the lock file we don't use nixpkgs' fetchPypi
   # as it modifies casing while not providing anything we don't already
   # have.
   #
