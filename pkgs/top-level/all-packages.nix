@@ -15947,6 +15947,8 @@ in
 
   mssql_jdbc = callPackage ../servers/sql/mssql/jdbc { };
 
+  azuredatastudio = callPackage ../applications/misc/azuredatastudio { };
+
   miniflux = callPackage ../servers/miniflux { };
 
   nagios = callPackage ../servers/monitoring/nagios { };
