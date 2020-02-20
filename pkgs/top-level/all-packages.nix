@@ -1776,6 +1776,8 @@ in
 
   fwup = callPackage ../tools/misc/fwup { };
 
+  fx_cast_bridge = callPackage ../tools/misc/fx_cast { };
+
   fzf = callPackage ../tools/misc/fzf { };
 
   fzf-zsh = callPackage ../shells/zsh/fzf-zsh { };
