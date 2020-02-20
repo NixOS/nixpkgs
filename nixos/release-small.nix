@@ -83,7 +83,7 @@ in rec {
       vim;
   };
 
-  tested = lib.hydraJob (pkgs.releaseTools.aggregate {
+  tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
@@ -117,6 +117,6 @@ in rec {
         (all "nixos.tests.installer.simple")
         (all "nixos.tests.boot.biosCdrom")
       ];
-  });
+  };
 
 }
