@@ -8922,8 +8922,6 @@ in
     stdenv = gccStdenv;
   };
 
-  inherit (ocaml-ng.ocamlPackages_4_02) trv;
-
   bupc = callPackage ../development/compilers/bupc { };
 
   urn = callPackage ../development/compilers/urn { };
