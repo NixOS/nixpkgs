@@ -144,6 +144,10 @@ if [[ -n "$sri" ]]; then
     tempHash="$(nix to-sri --type "$oldHashAlgo" "$tempHash")"
 fi
 
+# Escape regex metacharacter that are allowed in hashes (+)
+oldHashEscaped=$(echo "$oldHash" | sed -re 's|[+]|\\&|g')
+tempHashEscaped=$(echo "$tempHash" | sed -re 's|[+]|\\&|g')
+
 # Replace new version
 sed -i.bak "$nixFile" -re "$pattern"
 if cmp -s "$nixFile" "$nixFile.bak"; then
@@ -159,7 +163,7 @@ if [[ -n "$newUrl" ]]; then
     fi
 fi
 
-sed -i "$nixFile" -re "s|\"$oldHash\"|\"$tempHash\"|"
+sed -i "$nixFile" -re "s|\"$oldHashEscaped\"|\"$tempHash\"|"
 if cmp -s "$nixFile" "$nixFile.bak"; then
     die "Failed to replace source hash of '$attr' to a temporary hash!"
 fi
@@ -186,7 +190,7 @@ if [[ -z "${ignoreSameHash}" && "$oldVersion" != "$newVersion" && "$oldHash" = "
     die "Both the old and new source hashes of '$attr.src' were equivalent. Please fix the package's source URL to be dependent on '\${version}'!"
 fi
 
-sed -i "$nixFile" -re "s|\"$tempHash\"|\"$newHash\"|"
+sed -i "$nixFile" -re "s|\"$tempHashEscaped\"|\"$newHash\"|"
 if cmp -s "$nixFile" "$nixFile.bak"; then
     die "Failed to replace temporary source hash of '$attr' to the final source hash!"
 fi
