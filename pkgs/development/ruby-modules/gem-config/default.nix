@@ -294,6 +294,12 @@ in
   libv8 = attrs: {
     buildInputs = [ which v8 python ];
     buildFlags = [ "--with-system-v8=true" ];
+    dontBuild = false;
+    postPatch = ''
+      substituteInPlace ext/libv8/extconf.rb \
+        --replace "location = Libv8::Location::Vendor.new" \
+                  "location = Libv8::Location::System.new"
+    '';
   };
 
   execjs = attrs: {

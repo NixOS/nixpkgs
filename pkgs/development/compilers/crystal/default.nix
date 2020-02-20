@@ -178,15 +178,6 @@ let
   }));
 
 in rec {
-  binaryCrystal_0_26 = genericBinary {
-    version = "0.26.1";
-    sha256s = {
-      x86_64-linux  = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
-      i686-linux    = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
-      x86_64-darwin = "1mri8bfrcldl69gczxpihxpv1shn4bijx28m3qby8vnk0ii63n9s";
-    };
-  };
-
   binaryCrystal_0_27 = genericBinary {
     version = "0.27.2";
     sha256s = {
@@ -221,20 +212,6 @@ in rec {
       i686-linux    = "0hridnis5vvrswflx0q67xfg5hryhz6ivlwrb9n4pryj5d1gwjrr";
       x86_64-darwin = "1dgxgv0s3swkc5cwawzgpbc6bcd2nx4hjxc7iw2h907y1vgmbipz";
     };
-  };
-
-  crystal_0_25 = generic {
-    version = "0.25.1";
-    sha256  = "15xmbkalsdk9qpc6wfpkly3sifgw6a4ai5jzlv78dh3jp7glmgyl";
-    doCheck = false;
-    binary = binaryCrystal_0_26;
-  };
-
-  crystal_0_26 = generic {
-    version = "0.26.1";
-    sha256  = "0jwxrqm99zcjj82gyl6bzvnfj79nwzqf8sa1q3f66q9p50v44f84";
-    doCheck = false; # about 20 tests out of more than 14000 are failing
-    binary = binaryCrystal_0_26;
   };
 
   crystal_0_27 = generic {

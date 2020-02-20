@@ -1,5 +1,6 @@
 { lib
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 }:
 
@@ -12,9 +13,12 @@ buildPythonPackage rec {
     sha256 = "54c38050039232e1db4ad7375cfce6748d7b41c29e95a081c8a6d2c30364a2ce";
   };
 
-  postPatch = ''
-    substituteInPlace src/tests/test.py --replace "DocumentationTestCase" "NoDocumentation"
-  '';
+  patches = [
+    (fetchpatch {
+      url = https://github.com/micheles/decorator/commit/3265f2755d16c0a3dfc9f1feee39722ddc11ee80.patch;
+      sha256 = "1q5nmff30vccqq5swf2ivm8cn7x3lhz8c9qpj0zddgs2y7fw8syz";
+    })
+  ];
 
   meta = with lib; {
     homepage = https://pypi.python.org/pypi/decorator;
