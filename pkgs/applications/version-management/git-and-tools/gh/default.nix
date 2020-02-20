@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles, fetchpatch }:
 
 buildGoModule rec {
   pname = "gh";
@@ -26,6 +26,16 @@ buildGoModule rec {
       installShellCompletion gh.$shell
     done
   '';
+
+  # should be in the next release
+  # https://github.com/cli/cli/issues/401#issuecomment-586918622
+  # https://github.com/cli/cli/issues/401#issuecomment-588261787
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/cli/cli/commit/213f4a5333c21020da030012979bd326a34fb28c.patch";
+      sha256 = "0sp52khbbq8cfxgqs77qzxrmi7zwb12dnqps5z8sk063y30i97zp";
+    })
+  ];
 
   meta = with lib; {
     description = "GitHub CLI tool";
