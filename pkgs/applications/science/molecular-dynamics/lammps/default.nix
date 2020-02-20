@@ -4,13 +4,16 @@
 , mpi ? null
 }:
 let
+  withMPI = (mpi != null);
+
   packages = [
     "asphere" "body" "class2" "colloid" "compress" "coreshell" "dipole"
-    "granular" "kspace" "manybody" "mc" "meam" "misc" "molecule" "mpiio" "opt"
+    "granular" "kspace" "manybody" "mc" "meam" "misc" "molecule" "opt"
     "peri" "poems" "qeq" "replica" "rigid" "shock" "snap" "srd" "user-atc"
     "user-fep" "user-manifold" "user-misc" "user-molfile" "user-reaxc"
     "kokkos" "python"
-  ];
+  ]
+  ++ stdenv.lib.optionals withMPI [ "mpiio" ];
 
   lammps_includes = [
     "-DLAMMPS_EXCEPTIONS=yes"
@@ -18,8 +21,6 @@ let
     "-DLAMMPS_MEMALIGN=64"
     "-DBUILD_LIB=yes"
   ];
-
-  withMPI = (mpi != null);
 
 in
 stdenv.mkDerivation rec {
