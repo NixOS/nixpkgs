@@ -21046,6 +21046,8 @@ in
 
   pstree = callPackage ../applications/misc/pstree { };
 
+  pt2-clone = callPackage ../applications/audio/pt2-clone { };
+
   ptask = callPackage ../applications/misc/ptask { };
 
   pulseaudio-ctl = callPackage ../applications/audio/pulseaudio-ctl { };
