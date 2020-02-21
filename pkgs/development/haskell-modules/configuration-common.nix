@@ -1476,4 +1476,9 @@ self: super: {
     monoid-subclasses = self.monoid-subclasses_1_0_1;
   });
 
+  # Needs more recent streamly version
+  streamly-bytestring = super.streamly-bytestring.override {
+    streamly = self.streamly_0_7_1;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
