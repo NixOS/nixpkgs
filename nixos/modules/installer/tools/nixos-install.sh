@@ -102,6 +102,7 @@ if [[ -z $system ]]; then
     outLink="$tmpdir/system"
     nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
+        --option experimental-features nix-command \
         -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]} ${buildLogs}
     system=$(readlink -f $outLink)
 fi
