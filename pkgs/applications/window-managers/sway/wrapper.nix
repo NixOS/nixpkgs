@@ -28,7 +28,7 @@ in symlinkJoin {
   name = "sway-${sway-unwrapped.version}";
 
   paths = (optional withBaseWrapper baseWrapper)
-    ++ [ sway-unwrapped ];
+    ++ [ sway-unwrapped (sway-unwrapped.debug or null) ];
 
   nativeBuildInputs = [ makeWrapper ]
     ++ (optional withGtkWrapper wrapGAppsHook);
