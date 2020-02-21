@@ -1470,4 +1470,10 @@ self: super: {
   # Unnecessary upper bound on vector <0.12.1
   bitwise-enum = doJailbreak super.bitwise-enum;
 
+  # Needs more recent versions of those libraries
+  construct = super.construct.overrideScope (self: super: {
+    incremental-parser = self.incremental-parser_0_4;
+    monoid-subclasses = self.monoid-subclasses_1_0_1;
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
