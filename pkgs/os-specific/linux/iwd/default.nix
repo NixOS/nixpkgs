@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
     sha256 = "09viyfv5j2rl6ly52b2xlc2zbmb6i22dv89jc6823bzdjjimkrg6";
   };
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [
     autoreconfHook
     docutils
