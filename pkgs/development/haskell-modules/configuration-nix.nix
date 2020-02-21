@@ -706,4 +706,8 @@ self: super: builtins.intersectAttrs super {
         wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
       '';
     });
+
+  # break infinite recursion with base-orphans
+  primitive = dontCheck super.primitive;
+
 }
