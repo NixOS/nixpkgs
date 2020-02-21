@@ -27,6 +27,7 @@ profile=/nix/var/nix/profiles/system
 buildHost=
 targetHost=
 maybeSudo=()
+NIX="nix --option experimental-features nix-command"
 
 while [ "$#" -gt 0 ]; do
     i="$1"; shift 1
@@ -281,7 +282,7 @@ fi
 
 # Resolve the flake.
 if [[ -n $flake ]]; then
-    flake=$(nix flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
+    flake=$($NIX flake info --json "${extraBuildFlags[@]}" "${lockFlags[@]}" -- "$flake" | jq -r .url)
 fi
 
 # Find configuration.nix and open editor instead of building.
@@ -290,7 +291,7 @@ if [ "$action" = edit ]; then
         NIXOS_CONFIG=${NIXOS_CONFIG:-$(nix-instantiate --find-file nixos-config)}
         exec "${EDITOR:-nano}" "$NIXOS_CONFIG"
     else
-        exec nix edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
+        exec $NIX edit "${lockFlags[@]}" -- "$flake#$flakeAttr"
     fi
     exit 1
 fi
@@ -416,7 +417,7 @@ if [ -z "$rollback" ]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' --no-out-link -A system "${extraBuildFlags[@]}")"
         else
             outLink=$tmpDir/result
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" \
+            $NIX build "$flake#$flakeAttr.config.system.build.toplevel" \
               "${extraBuildFlags[@]}" "${lockFlags[@]}" --out-link $outLink
             pathToConfig="$(readlink -f $outLink)"
         fi
@@ -426,7 +427,7 @@ if [ -z "$rollback" ]; then
         if [[ -z $flake ]]; then
             pathToConfig="$(nixBuild '<nixpkgs/nixos>' -A system -k "${extraBuildFlags[@]}")"
         else
-            nix build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
+            $NIX build "$flake#$flakeAttr.config.system.build.toplevel" "${extraBuildFlags[@]}" "${lockFlags[@]}"
             pathToConfig="$(readlink -f ./result)"
         fi
     elif [ "$action" = build-vm ]; then
