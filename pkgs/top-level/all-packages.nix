@@ -1285,7 +1285,7 @@ in
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
-  btrfs-dedupe = callPackage ../tools/filesystems/btrfs-dedupe {};
+  btrfs-dedupe = throw "btrfs-dedupe is removed, please consider using beesd directly or through services.beesd";
 
   btrbk = callPackage ../tools/backup/btrbk {
     asciidoc = asciidoc-full;

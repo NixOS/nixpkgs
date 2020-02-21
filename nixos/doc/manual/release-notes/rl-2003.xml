@@ -631,6 +631,11 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      </citerefentry>-script now uses the python test-driver.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>btrfs-dedupe</package>-package has been removed. It isn't actively developed and there is a better alternative in nixpkgs, which also can be used through a NixOS module. Please see <package>bees</package> and <option>services.bees</option>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
