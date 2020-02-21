@@ -7,6 +7,8 @@ stdenv.mkDerivation {
 
   buildInputs = [ gtk3 epoxy wayland ];
 
+  separateDebugInfo = true;
+
   src = fetchFromGitHub {
     owner = "cyclopsian";
     repo = "wdisplays";
