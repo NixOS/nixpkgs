@@ -27,6 +27,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-usr-local-search-paths.patch
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Remove a test which fails on aarch64.
+    # See https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17718
+    ./0001-Disable-test-pending-upstream-fix.patch
   ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
