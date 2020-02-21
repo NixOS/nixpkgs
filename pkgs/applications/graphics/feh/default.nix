@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   outputs = [ "out" "man" "doc" ];
+  separateDebugInfo = true;
 
   nativeBuildInputs = [ makeWrapper xorg.libXt ];
 
