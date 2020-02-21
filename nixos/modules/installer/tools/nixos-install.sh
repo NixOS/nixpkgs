@@ -100,7 +100,7 @@ sub="auto?trusted=1"
 if [[ -z $system ]]; then
     echo "building the configuration in $NIXOS_CONFIG..."
     outLink="$tmpdir/system"
-    nix build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
+    nix-build --out-link "$outLink" --store "$mountPoint" "${extraBuildFlags[@]}" \
         --extra-substituters "$sub" \
         -f '<nixpkgs/nixos>' system -I "nixos-config=$NIXOS_CONFIG" ${verbosity[@]} ${buildLogs}
     system=$(readlink -f $outLink)
