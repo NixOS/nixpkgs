@@ -23,7 +23,7 @@ let
     name = "ssb-patchwork";
     exec = "${binary}/bin/ssb-patchwork";
     icon = "ssb-patchwork.png";
-    comment = "Decentralized messaging and sharing app";
+    comment = "Client for the decentralized social network Secure Scuttlebutt";
     desktopName = "Patchwork";
     genericName = "Patchwork";
     categories = "Network;";
