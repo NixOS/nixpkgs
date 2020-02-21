@@ -32,7 +32,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "268.0.0";
+  version = "281.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
