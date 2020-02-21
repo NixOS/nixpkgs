@@ -12,6 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "1aa1mh32y019j8s3sjzn4vwi0xn83dwgl685jnbgh51k16gh6qk6";
   };
 
+  enableParallelBuilding = true;
+
   configureFlags = [
     "--program-prefix=sphinxsearch-"
     "--enable-id64"
