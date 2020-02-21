@@ -69,6 +69,9 @@ self: super: {
   snap-server = doJailbreak super.snap-server;
   xmobar = doJailbreak super.xmobar;
   exact-pi = doJailbreak super.exact-pi;
+  time-compat = doJailbreak super.time-compat;
+  http-media = doJailbreak super.http-media;
+  servant-server = doJailbreak super.servant-server;
 
   # These packages don't work and need patching and/or an update.
   hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
