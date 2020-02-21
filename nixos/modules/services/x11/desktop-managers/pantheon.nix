@@ -242,9 +242,9 @@ in
       programs.zsh.vteIntegration = mkDefault true;
 
       # Harmonize Qt5 applications under Pantheon
-      qt5.enable = true;
-      qt5.platformTheme = "gnome";
-      qt5.style = "adwaita";
+      qt.enable = true;
+      qt.platformTheme = "qgnomeplatform";
+      qt.style.name = "adwaita";
 
       # Default Fonts
       fonts.fonts = with pkgs; [

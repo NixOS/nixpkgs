@@ -13,6 +13,7 @@
   ./config/appstream.nix
   ./config/console.nix
   ./config/xdg/sounds.nix
+  ./config/gtk/gtk.nix
   ./config/gtk/gtk-icon-cache.nix
   ./config/gnu.nix
   ./config/i18n.nix
@@ -26,7 +27,7 @@
   ./config/nsswitch.nix
   ./config/power-management.nix
   ./config/pulseaudio.nix
-  ./config/qt5.nix
+  ./config/qt.nix
   ./config/resolvconf.nix
   ./config/shells-environment.nix
   ./config/swap.nix
