@@ -4524,6 +4524,17 @@ let
     meta.homepage = "https://github.com/justinmk/vim-dirvish/";
   };
 
+  vim-dirvish-git = buildVimPluginFrom2Nix {
+    pname = "vim-dirvish-git";
+    version = "2018-09-14";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "vim-dirvish-git";
+      rev = "423bbb5e532fe0f14677d18e6dff05c91c4ad2e0";
+      sha256 = "0fzyk5ylg4p2dl2hyx3y2kz395mgckfd2j0s7z0l1lrn87mh4ral";
+    };
+  };
+
   vim-dispatch = buildVimPluginFrom2Nix {
     pname = "vim-dispatch";
     version = "2020-04-19";
