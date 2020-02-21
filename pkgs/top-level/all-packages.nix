@@ -14400,8 +14400,6 @@ in
 
   sundials = callPackage ../development/libraries/sundials { };
 
-  sundials_3 = callPackage ../development/libraries/sundials/3.x.nix { };
-
   sutils = callPackage ../tools/misc/sutils { };
 
   svrcore = callPackage ../development/libraries/svrcore { };
