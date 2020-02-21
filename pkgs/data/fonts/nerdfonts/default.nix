@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
   patchPhase = ''
     patchShebangs install.sh
     sed -i -e 's|font_dir="\$HOME/.local/share/fonts|font_dir="$out/share/fonts/truetype|g' install.sh
+    sed -i -e 's|font_dir="\$HOME/Library/Fonts|font_dir="$out/share/fonts/truetype|g' install.sh
   '';
   installPhase = ''
     mkdir -p $out/share/fonts/truetype
