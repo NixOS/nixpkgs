@@ -588,13 +588,14 @@ int main(int argc, char ** argv)
     std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
     std::string configExpr = "(import <nixpkgs/nixos> {}).config";
     std::vector<std::string> args;
+    std::string_view pname = nix::baseNameOf(argv[0]);
 
     struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
     {
         using nix::LegacyArgs::LegacyArgs;
     };
 
-    MyArgs myArgs(nix::baseNameOf(argv[0]), [&](Strings::iterator & arg, const Strings::iterator & end) {
+    MyArgs myArgs(pname.data(), [&](Strings::iterator & arg, const Strings::iterator & end) {
         if (*arg == "--help") {
             nix::showManPage("nixos-option");
         } else if (*arg == "--version") {
