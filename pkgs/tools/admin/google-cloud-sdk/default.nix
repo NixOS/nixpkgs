@@ -30,6 +30,8 @@ let
     };
   }.${system};
 
+  strip = if stdenv.isDarwin then "strip -x" else "strip";
+
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   version = "268.0.0";
@@ -93,7 +95,7 @@ in stdenv.mkDerivation rec {
     done
 
     # strip the Cython gRPC library
-    strip $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
+    ${strip} $out/google-cloud-sdk/lib/third_party/grpc/_cython/cygrpc.so
   '';
 
   meta = with stdenv.lib; {
