@@ -160,6 +160,38 @@
    package into your system environment. It should work for all Qt 5 library
    versions.
   </para>
+  <para>
+   With help of
+   <option>
+    <link linkend="opt-gtk.enable">
+     gtk
+    </link>
+   </option>
+   and
+   <option>
+    <link linkend="opt-qt.enable">
+     qt
+    </link>
+   </option>
+   modules you can declaratively set system-wide themes settings.
+<programlisting>
+  gtk.enable = true;
+  gtk.theme = {
+    name = "Adwaita-dark";
+    package = pkgs.gnome-themes-extra;
+  };
+  gtk.iconTheme = {
+    name = "Adwaita";
+    package = pkgs.gnome3.adwaita-icon-theme;
+  };
+  qt.enable = true;
+  qt.platformTheme = "gtk3";
+  qt.style = {
+    name = "adwaita-dark";
+    package = pkgs.adwaita-qt;
+  };
+</programlisting>
+  </para>
  </simplesect>
  <simplesect xml:id="custom-xkb-layouts">
   <title>Custom XKB layouts</title>
