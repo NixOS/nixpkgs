@@ -20608,6 +20608,15 @@ in
 
   shogun = callPackage ../applications/science/machine-learning/shogun {
     stdenv = gcc8Stdenv;
+
+    # Workaround for the glibc abi version mismatch.
+    # Please note that opencv builds are by default disabled.
+    opencv = opencv3.override {
+      stdenv = gcc8Stdenv;
+      openexr = openexr.override {
+        stdenv = gcc8Stdenv;
+      };
+    };
   };
 
   sky = callPackage ../applications/networking/instant-messengers/sky {};
