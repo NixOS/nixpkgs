@@ -62,6 +62,7 @@ buildPythonApplication rec {
   propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
 
   outputs = [ "out" "terminfo" ];
+  separateDebugInfo = true;
 
   patches = [
     ./fix-paths.patch
