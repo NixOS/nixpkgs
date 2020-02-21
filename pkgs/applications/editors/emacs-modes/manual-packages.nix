@@ -112,12 +112,12 @@
 
   org-roam = melpaBuild rec {
     pname = "org-roam";
-    version = "0.1.1";
+    version = "0.1.2";
     src = pkgs.fetchFromGitHub {
       owner = "jethrokuan";
       repo = "org-roam";
       rev = "v${version}";
-      sha256 = "0srbqx6i21qdb9cn2cx5fk8a4477xflfx0ybfbx95rwcciz20zn6";
+      sha256 = "1p8bhj09s0iyb3fcjibsl1p61wiac17sn1w7hwm1wqrcydj8h8hx";
     };
     recipe = pkgs.writeText "recipe" ''
       (org-roam
