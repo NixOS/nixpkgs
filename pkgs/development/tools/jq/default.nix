@@ -11,6 +11,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "bin" "doc" "man" "dev" "lib" "out" ];
 
+  separateDebugInfo = true;
+
   buildInputs = [ oniguruma ];
 
   configureFlags =
