@@ -1460,4 +1460,11 @@ self: super: {
       # The appendConfigureFlags should remain even after we can drop patchedGtk.
       appendConfigureFlags patchedGtk (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
 
+  # Chart-tests needs and compiles some modules from Chart itself
+  Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
+    preCheck = old.postPatch or "" + ''
+      tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
+    '';
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
