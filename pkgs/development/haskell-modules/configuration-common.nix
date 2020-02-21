@@ -394,11 +394,6 @@ self: super: {
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
 
-  # use the correct version of network
-  systemd_2_2_0 = dontCheck (super.systemd_2_2_0.override {
-    network = self.network_3_1_1_1;
-  });
-
   # https://github.com/eli-frey/cmdtheline/issues/28
   cmdtheline = dontCheck super.cmdtheline;
 
@@ -1042,31 +1037,7 @@ self: super: {
   vector-algorithms = dontCheck super.vector-algorithms;
 
   # The test suite attempts to use the network.
-  dhall =
-    generateOptparseApplicativeCompletion "dhall" (
-      dontCheck super.dhall
-  );
-  # https://github.com/dhall-lang/dhall-haskell/commit/dedd5e0ea6fd12f87d887af3d2220eebc61ee8af
-  # This raises the lower bound on prettyprinter to 1.5.1 since
-  # `removeTrailingWhitespace` is buggy in earlier versions.
-  # This will probably be able to be removed when we update to LTS-15.
-  dhall_1_29_0 =
-    dontCheck (super.dhall_1_29_0.override {
-      prettyprinter = self.prettyprinter_1_6_1;
-      prettyprinter-ansi-terminal =
-        self.prettyprinter-ansi-terminal.override {
-          prettyprinter = self.prettyprinter_1_6_1;
-        };
-    });
-  dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
-  dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
-    dhall = self.dhall_1_29_0;
-    prettyprinter = self.prettyprinter_1_6_1;
-    prettyprinter-ansi-terminal =
-      self.prettyprinter-ansi-terminal.override {
-        prettyprinter = self.prettyprinter_1_6_1;
-      };
-  };
+  dhall = generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall);
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1093,7 +1064,6 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_8_0 = doJailbreak super.haddock-library_1_8_0;
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1202,12 +1172,6 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
-  # These packages needs network 3.x, which is not in LTS-13.x.
-  network-bsd_2_8_1_0 = super.network-bsd_2_8_1_0.override { network = self.network_3_0_1_1; };
-  lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
-  lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
-  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; });
-
   # Some tests depend on a postgresql instance
   # Haddock failure: https://github.com/haskell/haddock/issues/979
   esqueleto = dontHaddock (dontCheck super.esqueleto);
@@ -1232,12 +1196,6 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # Use a matching version of ghc-lib-parser.
-  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205; };
-
-  # https://github.com/sol/hpack/issues/366
-  hpack = self.hpack_0_33_0;
-
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
 
@@ -1252,16 +1210,6 @@ self: super: {
       done
     '';
   });
-
-  # The LTS-14.x version of their dependencies are too old.
-  cabal-plan = super.cabal-plan.overrideScope (self: super: {
-    optparse-applicative = self.optparse-applicative_0_15_1_0;
-    ansi-terminal = self.ansi-terminal_0_10_3;
-    base-compat = self.base-compat_0_11_1;
-    semialign = self.semialign_1_1;
-    time-compat = doJailbreak super.time-compat;
-  });
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
@@ -1299,10 +1247,6 @@ self: super: {
   # upstream issue: https://github.com/vmchale/atspkg/issues/12
   language-ats = dontCheck super.language-ats;
 
-  # polysemy-plugin requires polysemy >= 1.2.0.0
-  polysemy = self.polysemy_1_2_3_0;
-  polysemy-zoo = self.polysemy-zoo_0_6_0_1;
-
   # https://github.com/Happstack/web-routes-th/pull/3
   web-routes-th = doJailbreak super.web-routes-th;
 
@@ -1335,18 +1279,6 @@ self: super: {
 
   # needs newer version of the systemd package
   spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
-
-  # 2019-12-19 - glirc wants regex-tdfa >=1.3 which results in errors with regex-base which errors more
-  # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
-  # 2020-01-17 - as of recently the basic doJailbreak is not enough and have to override regex-tdfa which needs an override for regex-base
-
-  glirc = doJailbreak (super.glirc.override {
-    regex-tdfa = self.regex-tdfa_1_3_1_0;
-  });
-
-  regex-tdfa_1_3_1_0 = doJailbreak (super.regex-tdfa_1_3_1_0.override {
-    regex-base = self.regex-base_0_94_0_0;
-  });
 
   # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
   # multiple versions of them were being pulled in by the others which is not allowed.
@@ -1388,9 +1320,6 @@ self: super: {
 
   # krank-0.1.0 does not accept PyF-0.9.0.0.
   krank = doJailbreak super.krank;
-
-  # prettyprinter-1.6.0 fails its doctest suite.
-  prettyprinter_1_6_1 = dontCheck super.prettyprinter_1_6_1;
 
   # the test suite has an overly tight restriction on doctest
   # See https://github.com/ekmett/perhaps/pull/5
