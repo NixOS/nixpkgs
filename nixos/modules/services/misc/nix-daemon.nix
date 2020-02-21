@@ -452,7 +452,7 @@ in
     system.activationScripts.nix = stringAfter [ "etc" "users" ]
       ''
         # Create directories in /nix.
-        ${nix}/bin/nix ping-store --no-net
+        ${nix}/bin/nix --option experimental-features nix-command ping-store --no-net
 
         # Subscribe the root user to the NixOS channel by default.
         if [ ! -e "/root/.nix-channels" ]; then
