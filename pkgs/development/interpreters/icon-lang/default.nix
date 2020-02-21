@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libX11, libXt , withGraphics ? true }:
+{ stdenv, fetchFromGitHub, fetchpatch, libX11, libXt, withGraphics ? true }:
 
 stdenv.mkDerivation rec {
   pname = "icon-lang";
@@ -11,6 +11,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = stdenv.lib.optionals withGraphics [ libX11 libXt ];
+
+  patches = [
+    # Patch on git master, likely won't be necessary in future release
+    (fetchpatch {
+      url = "https://github.com/gtownsend/icon/commit/bfc4a6004d0d3984c8066289b8d8e563640c4ddd.patch";
+      sha256 = "1pqapjghk10rb73a1mfflki2wipjy4kvnravhmrilkqzb9hd6v8m";
+      excludes = [
+        "doc/relnotes.htm"
+        "src/h/version.h"
+      ];
+    })
+  ];
 
   configurePhase =
     let
