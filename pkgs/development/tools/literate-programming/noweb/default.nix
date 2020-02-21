@@ -57,7 +57,7 @@ let noweb = stdenv.mkDerivation rec {
 
     # HACK: This is ugly, but functional.
     PATH=$out/bin:$PATH make -BC xdoc
-    make "''${installFlags[@]}" install-man
+    make "''${installFlags[@]} install-man"
 
     ln -s "$tex" "$out/share/texmf"
   '';
