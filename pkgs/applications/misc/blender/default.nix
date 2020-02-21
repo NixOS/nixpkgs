@@ -17,11 +17,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.81a";
+  version = "2.82";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "1zl0ar95qkxsrbqw9miz2hrjijlqjl06vg3clfk9rm7krr2l3b2j";
+    sha256 = "0rgw8nilvn6k6r7p28y2l1rwpami1cc8xz473jaahn7wa4ndyah0";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
