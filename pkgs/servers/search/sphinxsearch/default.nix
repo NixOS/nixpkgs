@@ -1,24 +1,29 @@
-{ stdenv, fetchurl, pkgconfig,
-  version ? "2.2.11",
-  mainSrc ? fetchurl {
-    url = "http://sphinxsearch.com/files/sphinx-${version}-release.tar.gz";
-    sha256 = "1aa1mh32y019j8s3sjzn4vwi0xn83dwgl685jnbgh51k16gh6qk6";
-  }
+{ stdenv, fetchurl, pkg-config, libmysqlclient,
+  enableMysql ? true
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "sphinxsearch";
-  inherit version;
-  src = mainSrc;
+  version = "2.2.11";
+
+  src = fetchurl {
+    url = "http://sphinxsearch.com/files/sphinx-${version}-release.tar.gz";
+    sha256 = "1aa1mh32y019j8s3sjzn4vwi0xn83dwgl685jnbgh51k16gh6qk6";
+  };
 
   configureFlags = [
     "--program-prefix=sphinxsearch-"
-    "--without-mysql"
     "--enable-id64"
+  ] ++ stdenv.lib.optionals (!enableMysql) [
+    "--without-mysql"
   ];
 
   nativeBuildInputs = [
-    pkgconfig
+    pkg-config
+  ];
+
+  buildInputs = stdenv.lib.optionals enableMysql [
+    libmysqlclient
   ];
 
   meta = {
