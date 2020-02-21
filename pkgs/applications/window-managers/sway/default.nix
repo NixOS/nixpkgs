@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
     ./load-configuration-from-etc.patch
   ];
 
+  separateDebugInfo = true;
+
   nativeBuildInputs = [
     pkgconfig meson ninja scdoc
   ];
