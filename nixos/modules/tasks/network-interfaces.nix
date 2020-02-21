@@ -13,7 +13,7 @@ let
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches);
+    ++ concatMap (i: attrNames (filterAttrs (name: config: ! (config.type == "internal" || hasAttr name cfg.interfaces)) i.interfaces)) (attrValues cfg.vswitches);
 
   slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
@@ -336,6 +336,32 @@ let
 
   };
 
+  vswitchInterfaceOpts = {name, ...}: {
+
+    options = {
+
+      name = mkOption {
+        description = "Name of the interface";
+        example = "eth0";
+        type = types.str;
+      };
+
+      vlan = mkOption {
+        description = "Vlan tag to apply to interface";
+        example = 10;
+        type = types.nullOr types.int;
+        default = null;
+      };
+
+      type = mkOption {
+        description = "Openvswitch type to assign to interface";
+        example = "internal";
+        type = types.nullOr types.str;
+        default = null;
+      };
+    };
+  };
+
   hexChars = stringToCharacters "0123456789abcdef";
 
   isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
@@ -486,8 +512,8 @@ in
     networking.vswitches = mkOption {
       default = { };
       example =
-        { vs0.interfaces = [ "eth0" "eth1" ];
-          vs1.interfaces = [ "eth2" "wlan0" ];
+        { vs0.interfaces = { eth0 = { }; lo1 = { type="internal"; }; };
+          vs1.interfaces = [ { name = "eth2"; } { name = "lo2"; type="internal"; } ];
         };
       description =
         ''
@@ -504,9 +530,8 @@ in
 
           interfaces = mkOption {
             example = [ "eth0" "eth1" ];
-            type = types.listOf types.str;
-            description =
-              "The physical network interfaces connected by the vSwitch.";
+            description = "The physical network interfaces connected by the vSwitch.";
+            type = with types; loaOf (submodule vswitchInterfaceOpts);
           };
 
           controllers = mkOption {
@@ -527,6 +552,25 @@ in
             description = ''
               OpenFlow rules to insert into the Open vSwitch. All <literal>openFlowRules</literal> are
               loaded with <literal>ovs-ofctl</literal> within one atomic operation.
+            '';
+          };
+
+          # TODO: custom "openflow version" type, with list from existing openflow protocols
+          supportedOpenFlowVersions = mkOption {
+            type = types.listOf types.str;
+            example = [ "OpenFlow10" "OpenFlow13" "OpenFlow14" ];
+            default = [ "OpenFlow13" ];
+            description = ''
+              Supported versions to enable on this switch.
+            '';
+          };
+
+          # TODO: use same type as elements from supportedOpenFlowVersions
+          openFlowVersion = mkOption {
+            type = types.str;
+            default = "OpenFlow13";
+            description = ''
+              Version of OpenFlow protocol to use when communicating with the switch internally (e.g. with <literal>openFlowRules</literal>).
             '';
           };
 
