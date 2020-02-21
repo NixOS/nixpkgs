@@ -1,4 +1,5 @@
-{ stdenv, fetchurl, pkg-config, libmysqlclient,
+{ stdenv, fetchurl, pkg-config, expat, libmysqlclient,
+  enableXmlpipe2 ? false,
   enableMysql ? true
 }:
 
@@ -24,6 +25,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optionals enableMysql [
     libmysqlclient
+  ] ++ stdenv.lib.optionals enableXmlpipe2 [
+    expat
   ];
 
   meta = {
