@@ -2,7 +2,7 @@
 
 let
   name = "ma1sd-${version}";
-  version = "2.1.1";
+  version = "2.3.0";
   rev = "a112a5e57cb38ad282939d2dcb9c1476e038af39";
 
   src = fetchFromGitHub {
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "a federated matrix identity server; fork of mxisd";
-    homepage = https://github.com/ma1uta/ma1sd;
+    homepage = "https://github.com/ma1uta/ma1sd";
     license = licenses.agpl3;
     maintainers = with maintainers; [ mguentner ];
     platforms = platforms.all;
