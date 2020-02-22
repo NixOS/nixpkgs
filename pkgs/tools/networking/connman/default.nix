@@ -3,7 +3,6 @@
 , pkgconfig
 , openconnect
 , file
-, gawk,
   openvpn
 , vpnc
 , glib
@@ -11,7 +10,6 @@
 , iptables
 , gnutls
 , polkit,
-  wpa_supplicant
 , readline6
 , pptp
 , ppp
@@ -34,7 +32,6 @@ stdenv.mkDerivation rec {
     dbus
     iptables
     gnutls
-    wpa_supplicant
     readline6
     pptp
     ppp
@@ -43,13 +40,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkgconfig
     file
-    gawk
   ];
 
   preConfigure = ''
-    export WPASUPPLICANT=${wpa_supplicant}/sbin/wpa_supplicant
     export PPPD=${ppp}/sbin/pppd
-    export AWK=${gawk}/bin/gawk
     sed -i "s/\/usr\/bin\/file/file/g" ./configure
   '';
 
