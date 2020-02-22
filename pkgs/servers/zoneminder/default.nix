@@ -135,10 +135,13 @@ in stdenv.mkDerivation rec {
       substituteInPlace $f --replace @ZM_CONFIG_SUBDIR@ /etc/zoneminder
     done
 
-   for f in includes/Event.php views/image.php ; do
-     substituteInPlace web/$f \
-       --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
-   done
+    for f in includes/Event.php views/image.php ; do
+      substituteInPlace web/$f \
+        --replace "'ffmpeg " "'${ffmpeg}/bin/ffmpeg "
+    done
+
+    substituteInPlace web/includes/functions.php \
+      --replace "'date " "'${coreutils}/bin/date "
   '';
 
   buildInputs = [
