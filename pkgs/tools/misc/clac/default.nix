@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 stdenv.mkDerivation rec {
   pname = "clac";
-  version = "0.0.0.20170503";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "soveran";
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.bsd2;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.unix;
-    homepage = https://github.com/soveran/clac;
+    homepage = "https://github.com/soveran/clac";
   };
 }
