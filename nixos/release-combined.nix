@@ -64,6 +64,7 @@ in rec {
       "nixos.tests.docker.x86_64-linux"
       "nixos.tests.ecryptfs.x86_64-linux"
       "nixos.tests.env.x86_64-linux"
+      "nixos.tests.firefox-esr.x86_64-linux"
       "nixos.tests.firefox.x86_64-linux"
       "nixos.tests.firewall.x86_64-linux"
       "nixos.tests.fontconfig-default-fonts.x86_64-linux"
