@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
+{ stdenv, lib, fetchFromGitHub, fetchurl, substituteAll, cmake, makeWrapper, pkgconfig
 , curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
 , coreutils, procps, psmisc }:
@@ -89,6 +89,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./default-to-http-1dot1.patch
+    ./0001-Don-t-use-file-timestamp-in-cache-filename.patch
   ];
 
   postPatch = ''
@@ -141,7 +142,8 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace web/includes/functions.php \
-      --replace "'date " "'${coreutils}/bin/date "
+      --replace "'date " "'${coreutils}/bin/date " \
+      --subst-var-by srcHash "`basename $out`"
   '';
 
   buildInputs = [
