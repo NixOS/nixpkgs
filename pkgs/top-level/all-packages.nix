@@ -18445,6 +18445,8 @@ in
 
   brave = callPackage ../applications/networking/browsers/brave { };
 
+  breezy = with python3Packages; toPythonApplication breezy;
+
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
   brig = callPackage ../applications/networking/brig { };
