@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "jing-trang";
-  version = "20151127";
+  version = "20181222";
 
   src = fetchFromGitHub {
     owner = "relaxng";
@@ -36,7 +36,7 @@ stdenv.mkDerivation {
     description = "A RELAX NG validator in Java";
     # The homepage is www.thaiopensource.com, but it links to googlecode.com
     # for downloads and call it the "project site".
-    homepage = https://www.thaiopensource.com/relaxng/trang.html;
+    homepage = "https://www.thaiopensource.com/relaxng/trang.html";
     platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor ];
   };
