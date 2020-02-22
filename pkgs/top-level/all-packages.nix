@@ -21839,6 +21839,10 @@ in
 
   toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
 
+  tony = libsForQt5.callPackage ../applications/audio/tony {
+    inherit (pkgs.vamp) vampSDK;
+  };
+
   topydo = callPackage ../applications/misc/topydo {};
 
   torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
