@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "nanorc";
-  version = "2018-09-05";
+  version = "2020.1.25";
 
   src = fetchFromGitHub {
     owner = "scopatz";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Improved Nano Syntax Highlighting Files";
-    homepage = https://github.com/scopatz/nanorc;
+    homepage = "https://github.com/scopatz/nanorc";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ nequissimus ];
     platforms = stdenv.lib.platforms.all;
