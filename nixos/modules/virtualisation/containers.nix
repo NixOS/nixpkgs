@@ -158,9 +158,6 @@ let
 
   preStartScript = cfg:
     ''
-      # Clean up existing machined registration and interfaces.
-      machinectl terminate "$INSTANCE" 2> /dev/null || true
-
       if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
          [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
         ip link del dev "ve-$INSTANCE" 2> /dev/null || true
@@ -710,6 +707,7 @@ in
 
       preStop = "machinectl poweroff $INSTANCE";
 
+      stopIfChanged = false;
       restartIfChanged = false;
 
       serviceConfig = serviceDirectives dummyConfig;
