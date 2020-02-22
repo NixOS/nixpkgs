@@ -114,6 +114,11 @@ in
       path = [ pkgs.undervolt ];
 
       description = "Intel Undervolting Service";
+
+      # Apply undervolt on boot, nixos generation switch and resume
+      wantedBy = [ "multi-user.target" "post-resume.target" ];
+      after = [ "post-resume.target" ]; # Not sure why but it won't work without this
+
       serviceConfig = {
         Type = "oneshot";
         Restart = "no";
