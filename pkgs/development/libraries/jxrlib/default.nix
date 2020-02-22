@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "jxrlib";
-  version = "1.1";
+  version = "2019.10.9";
 
   # Use the source from a fork on github because CodePlex does not
   # deliver an easily downloadable tarball.
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Implementation of the JPEG XR image codec standard";
-    homepage = https://jxrlib.codeplex.com;
+    homepage = "https://jxrlib.codeplex.com";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
