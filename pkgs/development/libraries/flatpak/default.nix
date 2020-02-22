@@ -55,14 +55,14 @@
 
 stdenv.mkDerivation rec {
   pname = "flatpak";
-  version = "1.6.1";
+  version = "1.6.2";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "man" "doc" "installedTests" ];
+  outputs = [ "out" "dev" "man" "doc" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1x3zh2xashsq1nh4s85qq45hcnwfbnwzln2wlk10g7149nia6f7w";
+    sha256 = "02k9p5n60gz2k85n805n9niic4miw0mfh0i7yk1vrc8vaa5h69wd";
   };
 
   patches = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     # Hardcode paths used by Flatpak itself.
     (substituteAll {
       src = ./fix-paths.patch;
-      p11 = p11-kit;
+      p11kit = "${p11-kit.dev}/bin/p11-kit";
     })
 
     # Adapt paths exposed to sandbox for NixOS.
@@ -128,7 +128,6 @@ stdenv.mkDerivation rec {
     bzip2
     dbus
     dconf
-    glib
     gpgme
     json-glib
     libarchive
@@ -136,7 +135,6 @@ stdenv.mkDerivation rec {
     libseccomp
     libsoup
     lzma
-    ostree
     polkit
     python3
     systemd
@@ -146,6 +144,12 @@ stdenv.mkDerivation rec {
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
+  ];
+
+  # Required by flatpak.pc
+  propagatedBuildInputs = [
+    glib
+    ostree
   ];
 
   checkInputs = [

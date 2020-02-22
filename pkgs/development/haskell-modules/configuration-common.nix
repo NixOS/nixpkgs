@@ -1393,4 +1393,25 @@ self: super: {
   # See https://github.com/ekmett/perhaps/pull/5
   perhaps = doJailbreak super.perhaps;
 
+  # Chart-tests needs and compiles some modules from Chart itself
+  Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
+    preCheck = old.postPatch or "" + ''
+      tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
+    '';
+  });
+
+  # Unnecessary upper bound on vector <0.12.1
+  bitwise-enum = doJailbreak super.bitwise-enum;
+
+  # Needs more recent versions of those libraries
+  construct = super.construct.overrideScope (self: super: {
+    incremental-parser = self.incremental-parser_0_4;
+    monoid-subclasses = self.monoid-subclasses_1_0_1;
+  });
+
+  # Needs more recent streamly version
+  streamly-bytestring = super.streamly-bytestring.override {
+    streamly = self.streamly_0_7_0;
+  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
