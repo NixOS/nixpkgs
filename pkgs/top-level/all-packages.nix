@@ -23939,6 +23939,8 @@ in
 
   tinyfugue = callPackage ../games/tinyfugue { };
 
+  tockloader = callPackage ../development/tools/misc/tockloader { };
+
   tome2 = callPackage ../games/tome2 { };
 
   tome4 = callPackage ../games/tome4 { };
