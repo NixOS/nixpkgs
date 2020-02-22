@@ -1,6 +1,47 @@
 { lib }:
 
 rec {
+  /* Format a boolean value to a command line list. If boolean is false,
+     returns empty list. Otherwise, returns a list with option name.
+
+     Example:
+       cli.mkDefaultBool "help" true => ["--help"]
+       cli.mkDefaultBool "verbose" false => []
+  */
+  mkDefaultBool = k: v: lib.optional v (mkDefaultOptionName k);
+
+  /* Format a list value to a command line list. Interleaves the same option
+     name for each value in the list.
+
+     Example:
+       cli.mkDefaultList "name" ["ethel" "joe"] => ["--name" "ethel" "--name" "joe"]
+  */
+  mkDefaultList =  k: v: lib.concatMap (mkDefaultOption k) v;
+
+  /* Format a value to a command line list. Returns option name, followed by
+     stringified representation of the value.
+
+     Example:
+       cli.mkDefaultOption "disk" "/dev/sda" => ["--disk" "/dev/sda"]
+       cli.mkDefaultOption "ram" 2048 => ["--ram" "2048"]
+  */
+  mkDefaultOption =
+    k: v: if v == null
+      then []
+      else [ (mkDefaultOptionName k) (lib.generators.mkValueStringDefault {} v) ];
+
+  /* Format option name. One character names are assumed to be short options (`-`),
+     other names are long options (`--`).
+
+     Example:
+       cli.mkDefaultOptionName "h" => ["-h"]
+       cli.mkDefaultOptionName "help" => ["--help"]
+  */
+  mkDefaultOptionName =
+    k: if builtins.stringLength k == 1
+        then "-${k}"
+        else "--${k}";
+
   /* Automatically convert an attribute set to command-line options.
 
      This helps protect against malformed command lines and also to reduce
@@ -42,42 +83,17 @@ rec {
   toGNUCommandLineShell =
     options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
 
-  toGNUCommandLine = {
-    # how to string-format the option name;
-    # by default one character is a short option (`-`),
-    # more than one characters a long option (`--`).
-    mkOptionName ?
-      k: if builtins.stringLength k == 1
-          then "-${k}"
-          else "--${k}",
-
-    # how to format a boolean value to a command list;
-    # by default it’s a flag option
-    # (only the option name if true, left out completely if false).
-    mkBool ? k: v: lib.optional v (mkOptionName k),
-
-    # how to format a list value to a command list;
-    # by default the option name is repeated for each value
-    # and `mkOption` is applied to the values themselves.
-    mkList ? k: v: lib.concatMap (mkOption k) v,
-
-    # how to format any remaining value to a command list;
-    # on the toplevel, booleans and lists are handled by `mkBool` and `mkList`,
-    # though they can still appear as values of a list.
-    # By default, everything is printed verbatim and complex types
-    # are forbidden (lists, attrsets, functions). `null` values are omitted.
-    mkOption ?
-      k: v: if v == null
-            then []
-            else [ (mkOptionName k) (lib.generators.mkValueStringDefault {} v) ]
-    }:
+  toGNUCommandLine =
+    { mkBool ? mkDefaultBool,
+      mkList ? mkDefaultList,
+      mkOption ? mkDefaultOption,
+      mkOptionName ? mkDefaultOptionName }:
     options:
       let
         render = k: v:
           if      builtins.isBool v then mkBool k v
           else if builtins.isList v then mkList k v
           else mkOption k v;
-
       in
         builtins.concatLists (lib.mapAttrsToList render options);
 }
