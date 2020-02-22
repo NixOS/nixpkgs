@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "metis-prover";
-  version = "2.3.20160713";
+  version = "2.4.20180810";
 
   src = fetchFromGitHub {
     owner = "gilith";
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Automatic theorem prover for first-order logic with equality";
-    homepage = http://www.gilith.com/research/metis/;
+    homepage = "http://www.gilith.com/research/metis/";
     license = licenses.mit;
     maintainers = with maintainers; [ gebner ];
     platforms = platforms.unix;
