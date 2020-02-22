@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation {
   pname = "csound-manual";
-  version = "unstable-2019-02-22";
+  version = "6.14.0";
 
   src = fetchFromGitHub {
     owner = "csound";
