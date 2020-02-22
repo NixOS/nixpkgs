@@ -30,6 +30,7 @@ stdenv.mkDerivation rec {
     vpnc
     glib
     dbus
+    libmnl
     iptables
     gnutls
     readline
@@ -69,6 +70,9 @@ stdenv.mkDerivation rec {
     "--with-pptp=${pptp}/sbin/pptp"
     "--enable-iwd"
   ];
+  doCheck = true;
+
+  outputs = [ "out" "dev" ];
 
   meta = with stdenv.lib; {
     description = "A daemon for managing internet connections";
