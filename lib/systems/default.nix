@@ -123,7 +123,7 @@ rec {
         else throw "Don't know how to run ${final.config} executables.";
 
     } // mapAttrs (n: v: v final.parsed) inspect.predicates
-      // args;
+      // builtins.removeAttrs args ["system"];
   in assert final.useAndroidPrebuilt -> final.isAndroid;
      assert lib.foldl
        (pass: { assertion, message }:
