@@ -158,6 +158,7 @@ jhradilek/vim-docbk
 jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
 jistr/vim-nerdtree-tabs
+jjo/vim-cue
 jlanzarotta/bufexplorer
 jnurmine/zenburn
 jonbri/vim-colorstepper
