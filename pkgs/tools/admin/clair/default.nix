@@ -1,28 +1,28 @@
-{ lib, buildGoPackage, fetchFromGitHub, makeWrapper, rpm, xz }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, rpm, xz }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "clair";
-  version = "2.0.9";
-
-  goPackagePath = "github.com/coreos/clair";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
-    owner = "coreos";
+    owner = "quay";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1lcrqka4daqqjagx2mbfzg3z8wxg669mw1lb450nrlc33ji2iwdm";
+    sha256 = "14dh9iv2g138rivvfk135m3l90kk6c1ln1iqxhbi7s99h1jixbqw";
   };
+
+  modSha256 = "0rgkrid58kji39nlmiii95r8shbzr6dwalj5m7qwxy5w1rcaljr5";
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram $bin/bin/clair \
+    wrapProgram $out/bin/clair \
       --prefix PATH : "${lib.makeBinPath [ rpm xz ]}"
   '';
 
   meta = with lib; {
     description = "Vulnerability Static Analysis for Containers";
-    homepage = "https://github.com/coreos/clair";
+    homepage = "https://github.com/quay/clair";
     license = licenses.asl20;
     maintainers = with maintainers; [ marsam ];
   };

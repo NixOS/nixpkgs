@@ -8,18 +8,21 @@
 with lib;
 
 let
-
-  cfg = config.networking.defaultMailServer;
+  cfg = config.services.ssmtp;
 
 in
-
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "networking" "defaultMailServer" ] [ "services" "ssmtp" ])
+    (mkRenamedOptionModule [ "services" "ssmtp" "directDelivery" ] [ "services" "ssmtp" "enable" ])
+  ];
 
   options = {
 
-    networking.defaultMailServer = {
+    services.ssmtp = {
 
-      directDelivery = mkOption {
+      enable = mkOption {
         type = types.bool;
         default = false;
         description = ''
@@ -29,7 +32,7 @@ in
           <command>sendmail</command> or <command>postfix</command> on
           your machine, set this option to <literal>true</literal>, and
           set the option
-          <option>networking.defaultMailServer.hostName</option> to the
+          <option>services.ssmtp.hostName</option> to the
           host name of your preferred mail server.
         '';
       };
@@ -129,9 +132,9 @@ in
   };
 
 
-  config = mkIf cfg.directDelivery {
+  config = mkIf cfg.enable {
 
-    networking.defaultMailServer.authPassFile = mkIf (cfg.authPass != "")
+    services.ssmtp.authPassFile = mkIf (cfg.authPass != "")
       (mkDefault (toString (pkgs.writeTextFile {
         name = "ssmtp-authpass";
         text = cfg.authPass;

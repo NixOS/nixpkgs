@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-videos";
-  version = "2.6.3";
+  version = "2.7.0";
 
   repoName = "videos";
 
@@ -27,13 +27,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1ncm8kh6dcy83p8pmpilnk03b4dx3b1jm8w13izq2dkglfgdwvqx";
+    sha256 = "1b6dqqmxa83fwlh9r0v918ikxd3mnwk0j5xssw1wk5l7q72s43w7";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

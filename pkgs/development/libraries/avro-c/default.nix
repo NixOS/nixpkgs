@@ -1,14 +1,14 @@
 { stdenv, cmake, fetchurl, pkgconfig, jansson, zlib }:
 
 let
-  version = "1.9.0";
+  version = "1.9.1";
 in stdenv.mkDerivation {
   pname = "avro-c";
   inherit version;
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/c/avro-c-${version}.tar.gz";
-    sha256 = "1ch8z9jpkjxjx2zh28z0946gz3vwj1jnkrzg4vwvfa287128cml0";
+    sha256 = "0hj6w1w5mqkhnhkvjc0zz5njnnrbcjv5ml4f8gq80wff2cgbrxvx";
   };
 
   postPatch = ''

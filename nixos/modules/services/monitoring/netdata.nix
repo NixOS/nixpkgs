@@ -138,7 +138,7 @@ in {
       description = "Real time performance monitoring";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = (with pkgs; [ gawk curl ]) ++ lib.optional cfg.python.enable
+      path = (with pkgs; [ curl gawk which ]) ++ lib.optional cfg.python.enable
         (pkgs.python3.withPackages cfg.python.extraPackages);
       serviceConfig = {
         Environment="PYTHONPATH=${pkgs.netdata}/libexec/netdata/python.d/python_modules";
@@ -179,12 +179,14 @@ in {
       { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
     ];
 
-    users.users = optional (cfg.user == defaultUser) {
-      name = defaultUser;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} = {
+        isSystemUser = true;
+      };
     };
 
-    users.groups = optional (cfg.group == defaultUser) {
-      name = defaultUser;
+    users.groups = optionalAttrs (cfg.group == defaultUser) {
+      ${defaultUser} = { };
     };
 
   };

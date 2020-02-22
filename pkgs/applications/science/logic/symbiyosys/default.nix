@@ -1,17 +1,19 @@
-{ stdenv, fetchFromGitHub, yosys, bash, python3 }:
+{ stdenv, fetchFromGitHub, yosys, bash, python3, yices }:
 
 stdenv.mkDerivation {
   pname = "symbiyosys";
-  version = "2019.08.13";
+  version = "2020.02.08";
 
   src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "symbiyosys";
-    rev    = "9cb542ac7a310b3dfa626349db53bed6236b670c";
-    sha256 = "0c7nz740738ybk33zzlfl00cq86n31wvra8pqqkpl4ygxnwca1d6";
+    owner  = "YosysHQ";
+    repo   = "SymbiYosys";
+    rev    = "500b526131f434b9679732fc89515dbed67c8d7d";
+    sha256 = "1pwbirszc80r288x81nx032snniqgmc80i09bbha2i3zd0c3pj5h";
   };
 
   buildInputs = [ python3 yosys ];
+
+  propagatedBuildInputs = [ yices ];
 
   buildPhase = "true";
   installPhase = ''

@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "glib-networking";
-  version = "2.60.3";
+  version = "2.62.3";
 
   outputs = [ "out" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1mfw44qpmwvz6yzj8c6spx6z357wrmkk15byrkc5byagd82860fm";
+    sha256 = "1xvzixzwwh8wk8f79qbm2gl7hp3hj1a7skv281v5qsx74dpzi8cc";
   };
 
   patches = [
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     };
 
     tests = {
-      installedTests = nixosTests.glib-networking;
+      installedTests = nixosTests.installed-tests.glib-networking;
     };
   };
 

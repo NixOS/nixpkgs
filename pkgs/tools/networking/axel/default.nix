@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "axel";
-  version = "2.17.5";
+  version = "2.17.7";
 
   src = fetchFromGitHub {
     owner = "axel-download-accelerator";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0kwfbwh9g2227icgykgwa057vll5rkgac3df0pby530bivqzzzlw";
+    sha256 = "0z20d2fkf69v35d4pkba95vnk7yq7393kwikmb64y7cjyz4m2ngk";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig autoconf-archive txt2man ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Console downloading program with some features for parallel connections for faster downloading";
     homepage = "https://github.com/axel-download-accelerator/axel";
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = with platforms; unix;
     license = licenses.gpl2;
   };
 }

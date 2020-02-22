@@ -1,15 +1,20 @@
-{ stdenv, fetchgit, ocaml, findlib, ncurses }:
+{ stdenv, fetchFromGitHub, ocaml, findlib }:
+
+if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+then throw "camlpdf is not available for OCaml ${ocaml.version}"
+else
 
 stdenv.mkDerivation rec {
-  version = "2.2.1";
+  version = "2.3";
   name = "ocaml${ocaml.version}-camlpdf-${version}";
-  src = fetchgit {
-    url = https://github.com/johnwhitington/camlpdf.git;
-    rev = "refs/tags/v${version}";
-    sha256 = "0wa4rw8ccpb8xprslg88hbk352bi8bia4iffc22y55gkjr60f8gj";
+  src = fetchFromGitHub {
+    owner = "johnwhitington";
+    repo = "camlpdf";
+    rev = "v${version}";
+    sha256 = "1z8h6bjzmlscr6h6kdvzj8kspifb4n9dg7zi54z1cv2qi03kr8dk";
   };
 
-  buildInputs = [ ocaml findlib ncurses ];
+  buildInputs = [ ocaml findlib ];
 
   # Version number in META file is wrong
   patchPhase = ''
@@ -20,12 +25,6 @@ stdenv.mkDerivation rec {
     > version="${version}"
     EOF
   '';
-
-  makeFlags = with stdenv.lib;
-  optionals (versionAtLeast ocaml.version "4.06") [
-    "OCAMLBCFLAGS+=-unsafe-string"
-    "OCAMLNCFLAGS+=-unsafe-string"
-  ];
 
   createFindlibDestdir = true;
 

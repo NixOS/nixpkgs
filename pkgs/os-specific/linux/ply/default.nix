@@ -1,4 +1,4 @@
-{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip }:
+{ stdenv, kernel, fetchFromGitHub, autoreconfHook, yacc, flex, p7zip, rsync }:
 
 assert kernel != null -> stdenv.lib.versionAtLeast kernel.version "4.0";
 
@@ -7,7 +7,7 @@ let
 in stdenv.mkDerivation {
   pname = "ply";
   inherit version;
-  nativeBuildInputs = [ autoreconfHook flex yacc p7zip ];
+  nativeBuildInputs = [ autoreconfHook flex yacc p7zip rsync ];
 
   src = fetchFromGitHub {
     owner = "iovisor";

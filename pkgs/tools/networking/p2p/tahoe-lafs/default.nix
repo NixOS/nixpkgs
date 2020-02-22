@@ -90,5 +90,6 @@ pythonPackages.buildPythonApplication rec {
     license = [ lib.licenses.gpl2Plus /* or */ "TGPPLv1+" ];
     maintainers = with lib.maintainers; [ MostAwesomeDude ];
     platforms = lib.platforms.gnu ++ lib.platforms.linux;
+    broken = true;
   };
 }

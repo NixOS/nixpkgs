@@ -7,8 +7,9 @@
 , gmp, mpfr, libmpc, libelf, isl
 , cloog ? null
 
-, enablePlugin
+, enableLTO
 , enableMultilib
+, enablePlugin
 , enableShared
 
 , langC
@@ -103,7 +104,7 @@ let
 
     # Basic configuration
     ++ [
-      "--enable-lto"
+      (lib.enableFeature enableLTO "lto")
       "--disable-libstdcxx-pch"
       "--without-included-gettext"
       "--with-system-zlib"
@@ -152,7 +153,7 @@ let
     ++ lib.optional (langJava && javaAntlr != null) "--with-antlr-jar=${javaAntlr}"
 
     ++ (import ../common/platform-flags.nix { inherit (stdenv) lib targetPlatform; })
-    ++ lib.optional (targetPlatform != hostPlatform) crossConfigureFlags
+    ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional (targetPlatform != hostPlatform) "--disable-bootstrap"
 
     # Platform-specific flags

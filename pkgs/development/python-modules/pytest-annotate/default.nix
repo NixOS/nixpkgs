@@ -6,12 +6,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "1.0.2";
+  version = "1.0.3";
   pname = "pytest-annotate";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "03e4dece2d1aa91666034f1b2e8bb7a7b8c6be11baf3cf2929b26eea5c6e86f3";
+    sha256 = "1ef5924aca93a7b47edaf46a38284fb5a173eed5e3b1a93ec00c8e35f0dd76ab";
   };
 
   buildInputs = [

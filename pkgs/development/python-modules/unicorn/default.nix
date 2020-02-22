@@ -1,23 +1,23 @@
-{ stdenv, buildPackages, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, setuptools, unicorn-emu }:
 
 buildPythonPackage rec {
   pname = "unicorn";
-  version = "1.0.1";
+  version = stdenv.lib.getVersion unicorn-emu;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0a5b4vh734b3wfkgapzzf8x18rimpmzvwwkly56da84n27wfw9bg";
-  };
+  src = unicorn-emu.src;
+  sourceRoot = "unicorn-${version}/bindings/python";
 
-  # needs python2 at build time
-  PYTHON=buildPackages.python2.interpreter;
+  prePatch = ''
+    ln -s ${unicorn-emu}/lib/libunicorn${stdenv.targetPlatform.extensions.sharedLibrary} prebuilt/
+    ln -s ${unicorn-emu}/lib/libunicorn.a prebuilt/
+  '';
 
-  setupPyBuildFlags = [ "--plat-name" "linux" ];
+  propagatedBuildInputs = [ setuptools ];
 
   meta = with stdenv.lib; {
-    description = "Unicorn CPU emulator engine";
+    description = "Python bindings for Unicorn CPU emulator engine";
     homepage = "http://www.unicorn-engine.org/";
     license = [ licenses.gpl2 ];
-    maintainers = [ maintainers.bennofs ];
+    maintainers = with maintainers; [ bennofs ris ];
   };
 }

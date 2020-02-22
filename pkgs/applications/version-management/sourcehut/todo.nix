@@ -1,15 +1,16 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
-, srht, redis, alembic, pystache }:
+, srht, redis, alembic, pystache
+, pytest, factory_boy, writeText }:
 
 buildPythonPackage rec {
   pname = "todosrht";
-  version = "0.46.8";
+  version = "0.55.3";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/todo.sr.ht";
     rev = version;
-    sha256 = "17nqqy81535jnkidjiqv8v2301w5wzbbvx4czib69aagw1l85gnn";
+    sha256 = "1j82yxdnag0q6rp0rpiq3ccn5maa1k58j2f1ilcsxf1gr13pycf5";
   };
 
   patches = [
@@ -30,8 +31,13 @@ buildPythonPackage rec {
     export SRHT_PATH=${srht}/${python.sitePackages}/srht
   '';
 
-  # Tests require a network connection
-  doCheck = false;
+  # pytest tests fail
+  checkInputs = [
+    pytest
+    factory_boy
+  ];
+
+  dontUseSetuptoolsCheck = true;
 
   meta = with stdenv.lib; {
     homepage = https://todo.sr.ht/~sircmpwn/todo.sr.ht;

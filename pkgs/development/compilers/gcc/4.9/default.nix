@@ -7,6 +7,7 @@
 , profiledCompiler ? false
 , staticCompiler ? false
 , enableShared ? true
+, enableLTO ? true
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man); required for Java
 , gmp, mpfr, libmpc, gettext, which
@@ -60,7 +61,13 @@ let majorVersion = "4";
     inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
     patches =
-      [ ../use-source-date-epoch.patch ../parallel-bconfig.patch ./parallel-strsignal.patch ]
+      [ ../use-source-date-epoch.patch ../parallel-bconfig.patch ./parallel-strsignal.patch
+        (fetchpatch {
+          name = "avoid-ustat-glibc-2.28.patch";
+          url = "https://gitweb.gentoo.org/proj/gcc-patches.git/plain/4.9.4/gentoo/100_all_avoid-ustat-glibc-2.28.patch?id=55fcb515620a8f7d3bb77eba938aa0fcf0d67c96";
+          sha256 = "0b32sb4psv5lq0ij9fwhi1b4pjbwdjnv24nqprsk14dsc6xmi1g0";
+        })
+      ]
       ++ optional (targetPlatform != hostPlatform) ../libstdc++-target.patch
       ++ optional noSysDirs ../no-sys-dirs.patch
       ++ optional langFortran ../gfortran-driving.patch
@@ -115,7 +122,8 @@ in
 assert x11Support -> (filter (x: x == null) ([ gtk2 libart_lgpl ] ++ xlibs)) == [];
 
 stdenv.mkDerivation ({
-  name = "${crossNameAddon}${name}${if stripped then "" else "-debug"}-${version}";
+  pname = "${crossNameAddon}${name}${if stripped then "" else "-debug"}";
+  inherit version;
 
   builder = ../builder.sh;
 
@@ -204,8 +212,9 @@ stdenv.mkDerivation ({
       gmp mpfr libmpc libelf isl
       cloog
 
-      enablePlugin
+      enableLTO
       enableMultilib
+      enablePlugin
       enableShared
 
       langC
@@ -228,10 +237,7 @@ stdenv.mkDerivation ({
 
   doCheck = false; # requires a lot of tools, causes a dependency cycle for stdenv
 
-  installTargets =
-    if stripped
-    then "install-strip"
-    else "install";
+  installTargets = optional stripped "install-strip";
 
   # https://gcc.gnu.org/install/specific.html#x86-64-x-solaris210
   ${if hostPlatform.system == "x86_64-solaris" then "CC" else null} = "gcc -m64";
@@ -297,7 +303,7 @@ stdenv.mkDerivation ({
       compiler used in the GNU system including the GNU/Linux variant.
     '';
 
-    maintainers = with stdenv.lib.maintainers; [ peti ];
+    maintainers = with stdenv.lib.maintainers; [ peti veprbl ];
 
     platforms =
       stdenv.lib.platforms.linux ++

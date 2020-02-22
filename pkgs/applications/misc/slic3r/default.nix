@@ -1,5 +1,5 @@
-{ stdenv, fetchgit, perl, makeWrapper, makeDesktopItem
-, which, perlPackages, boost
+{ lib, stdenv, fetchgit, perl, makeWrapper
+, makeDesktopItem, which, perlPackages, boost
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +40,11 @@ stdenv.mkDerivation rec {
     sed -i 's|"/usr/include/asm-generic/ioctls.h"|<asm-generic/ioctls.h>|g' xs/src/libslic3r/GCodeSender.cpp
   '';
 
+  # note the boost-compile-error is fixed in
+  # https://github.com/slic3r/Slic3r/commit/90f108ae8e7a4315f82e317f2141733418d86a68
+  # this patch can be probably be removed in the next version after 1.3.0
+  patches = lib.optional (lib.versionAtLeast boost.version "1.56.0") ./boost-compile-error.patch;
+
   buildPhase = ''
     export SLIC3R_NO_AUTO=true
     export LD=$CXX
@@ -77,7 +82,7 @@ stdenv.mkDerivation rec {
       instructions for your 3D printer. It cuts the model into horizontal
       slices (layers), generates toolpaths to fill them and calculates the
       amount of material to be extruded.'';
-    homepage = http://slic3r.org/;
+    homepage = https://slic3r.org/;
     license = licenses.agpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ bjornfor the-kenny ];

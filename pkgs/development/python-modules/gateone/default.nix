@@ -25,7 +25,7 @@ buildPythonPackage {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://liftoffsoftware.com/;
+    homepage = "http://liftoffsoftware.com/";
     description = "GateOne is a web-based terminal emulator and SSH client";
     maintainers = with maintainers; [ tomberek ];
     license = licenses.gpl3;

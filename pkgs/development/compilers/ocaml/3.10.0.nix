@@ -12,7 +12,7 @@ stdenv.mkDerivation (rec {
 
   prefixKey = "-prefix ";
   configureFlags = ["-no-tk" "-x11lib" xlibsWrapper];
-  buildFlags = "world bootstrap world.opt";
+  buildFlags = [ "world" "bootstrap" "world.opt" ];
   buildInputs = [xlibsWrapper ncurses];
   installTargets = "install installopt";
   patchPhase = ''

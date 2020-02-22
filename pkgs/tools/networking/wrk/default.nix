@@ -22,13 +22,13 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-DluaL_reg=luaL_Reg" ]; # needed since luajit-2.1.0-beta3
-  
+  NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
+
   installPhase = ''
     mkdir -p $out/bin
     cp wrk $out/bin
   '';
-  
+
   meta = with stdenv.lib; {
     description = "HTTP benchmarking tool";
     homepage = https://github.com/wg/wrk;

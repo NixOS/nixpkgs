@@ -1,4 +1,4 @@
-{ lib, fetchurl, fetchFromGitHub, callPackage
+{ lib, fetchurl, callPackage
 , storeDir ? "/nix/store"
 , stateDir ? "/nix/var"
 , confDir ? "/etc"
@@ -10,8 +10,8 @@ let
 
 common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
-  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline
-  , autoreconfHook, autoconf-archive, bison, flex, libxml2, libxslt, docbook5, docbook_xsl_ns, jq
+  , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
+  , jq, libarchive, rustc, cargo
   , busybox-sandbox-shell
   , storeDir
   , stateDir
@@ -19,7 +19,7 @@ common =
   , withLibseccomp ? lib.any (lib.meta.platformMatch stdenv.hostPlatform) libseccomp.meta.platforms, libseccomp
   , withAWS ? stdenv.isLinux || stdenv.isDarwin, aws-sdk-cpp
 
-  , name, suffix ? "", src, includesPerl ? false, fromGit ? false
+  , name, suffix ? "", src, includesPerl ? false
 
   }:
   let
@@ -29,19 +29,21 @@ common =
       version = lib.getVersion name;
 
       is20 = lib.versionAtLeast version "2.0pre";
+      is24 = lib.versionAtLeast version "2.4pre";
 
-      VERSION_SUFFIX = lib.optionalString fromGit suffix;
+      VERSION_SUFFIX = suffix;
 
       outputs = [ "out" "dev" "man" "doc" ];
 
       nativeBuildInputs =
         [ pkgconfig ]
         ++ lib.optionals (!is20) [ curl perl ]
-        ++ lib.optionals fromGit [ autoreconfHook autoconf-archive bison flex libxml2 libxslt docbook5 docbook_xsl_ns jq ];
+        ++ lib.optionals is24 [ jq ];
 
-      buildInputs = [ curl openssl sqlite xz bzip2 ]
+      buildInputs = [ curl openssl sqlite xz bzip2 nlohmann_json ]
         ++ lib.optional (stdenv.isLinux || stdenv.isDarwin) libsodium
         ++ lib.optionals is20 [ brotli boost editline ]
+        ++ lib.optionals is24 [ libarchive rustc cargo ]
         ++ lib.optional withLibseccomp libseccomp
         ++ lib.optional (withAWS && is20)
             ((aws-sdk-cpp.override {
@@ -57,7 +59,7 @@ common =
       propagatedBuildInputs = [ boehmgc ];
 
       # Seems to be required when using std::atomic with 64-bit types
-      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
+      NIX_LDFLAGS = lib.optionalString (stdenv.hostPlatform.system == "armv5tel-linux" || stdenv.hostPlatform.system == "armv6l-linux") "-latomic";
 
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
@@ -94,9 +96,9 @@ common =
            # RISC-V support in progress https://github.com/seccomp/libseccomp/pull/50
         ++ lib.optional (!withLibseccomp) "--disable-seccomp-sandboxing";
 
-      makeFlags = "profiledir=$(out)/etc/profile.d";
+      makeFlags = [ "profiledir=$(out)/etc/profile.d" ];
 
-      installFlags = "sysconfdir=$(out)/etc";
+      installFlags = [ "sysconfdir=$(out)/etc" ];
 
       doInstallCheck = true; # not cross
 
@@ -121,13 +123,11 @@ common =
         homepage = https://nixos.org/;
         license = stdenv.lib.licenses.lgpl2Plus;
         maintainers = [ stdenv.lib.maintainers.eelco ];
-        platforms = stdenv.lib.platforms.all;
+        platforms = stdenv.lib.platforms.unix;
         outputsToInstall = [ "out" "man" ];
       };
 
       passthru = {
-        inherit fromGit;
-
         perl-bindings = if includesPerl then nix else stdenv.mkDerivation {
           pname = "nix-perl";
           inherit version;
@@ -140,7 +140,6 @@ common =
           # but noting for future travellers.
           nativeBuildInputs =
             [ perl pkgconfig curl nix libsodium ]
-            ++ lib.optionals fromGit [ autoreconfHook autoconf-archive ]
             ++ lib.optional is20 boost;
 
           configureFlags =
@@ -174,10 +173,10 @@ in rec {
   };
 
   nixStable = callPackage common (rec {
-    name = "nix-2.3";
+    name = "nix-2.3.3";
     src = fetchurl {
       url = "http://nixos.org/releases/nix/${name}/${name}.tar.xz";
-      sha256 = "b1d1b4d87390941fc64b19776f1ed9e3871231d38f5a1f295dd13925acd3a98d";
+      sha256 = "332fffb8dfc33eab854c136ef162a88cec15b701def71fa63714d160831ba224";
     };
 
     inherit storeDir stateDir confDir boehmgc;
@@ -186,29 +185,23 @@ in rec {
   });
 
   nixUnstable = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre6895_84de821";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "84de8210040580ce7189332b43038d52c56a9689";
-      sha256 = "062pdly0m2hk8ly8li5psvpbj1mi7m1a15k8wyzf79q7294l5li3";
+    name = "nix-2.4${suffix}";
+    suffix = "pre7250_94c93437";
+    src = fetchurl {
+      url = "https://hydra.nixos.org/build/112193977/download/3/nix-2.4${suffix}.tar.xz";
+      sha256 = "f9baf241c9449c1e3e5c9610adbcd2ce9e5fbcab16aff3ba3030d2fad7b34d7b";
     };
-    fromGit = true;
 
     inherit storeDir stateDir confDir boehmgc;
   });
 
   nixFlakes = lib.lowPrio (callPackage common rec {
-    name = "nix-2.3${suffix}";
-    suffix = "pre20190830_04np4n6";
-    src = fetchFromGitHub {
-      owner = "NixOS";
-      repo = "nix";
-      rev = "aa82f8b2d2a2c42f0d713e8404b668cef1a4b108";
-      hash = "sha256-09ZHwpxf9pRDacCSGTHYx+fnKYgxKx8G37Jqb4wl1xI=";
+    name = "nix-2.4${suffix}";
+    suffix = "pre20200207_d2032ed";
+    src = fetchurl {
+      url = "https://hydra.nixos.org/build/111815420/download/3/nix-2.4${suffix}.tar.xz";
+      sha256 = "e72a20efeee4ccc704cca3a06de9185fb8742bc7ef1a62af5896ec0f379b9ceb";
     };
-    fromGit = true;
 
     inherit storeDir stateDir confDir boehmgc;
   });

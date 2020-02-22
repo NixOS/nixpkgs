@@ -2,14 +2,15 @@
 
 let
   inherit (python3.pkgs) buildPythonApplication pytest mock pexpect;
+  repo = "lesspass";
 in
 buildPythonApplication rec {
   pname = "lesspass-cli";
   version = "9.0.0";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = repo;
+    repo = repo;
     rev = version;
     sha256 = "1mdv0c0fn4d72iigy8hz4s7kf7q3pg4gjjadxwxyjwsalapnsapk";
   };

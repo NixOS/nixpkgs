@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "1aflg07cc9ak9mg1cr0qr368c9s141glwlarl5nhalf6hhq7ibcb";
   };
 
-  buildInputs =
-    [ ocaml findlib dune base stdio liblapack blas ] ++
+  buildInputs = [ ocaml findlib dune base stdio ];
+  propagatedBuildInputs = [ liblapack blas ] ++
     stdenv.lib.optionals stdenv.isDarwin
       [ darwin.apple_sdk.frameworks.Accelerate ];
 

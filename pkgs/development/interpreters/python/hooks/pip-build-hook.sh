@@ -7,7 +7,7 @@ pipBuildPhase() {
 
     mkdir -p dist
     echo "Creating a wheel..."
-    @pythonInterpreter@ -m pip wheel --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist "$options" .
+    @pythonInterpreter@ -m pip wheel --no-index --no-deps --no-clean --no-build-isolation --wheel-dir dist .
     echo "Finished creating a wheel..."
 
     runHook postBuild
@@ -31,12 +31,12 @@ pipShellHook() {
     echo "Finished executing pipShellHook"
 }
 
-if [ -z "$dontUsePipBuild" ] && [ -z "$buildPhase" ]; then
+if [ -z "${dontUsePipBuild-}" ] && [ -z "${buildPhase-}" ]; then
     echo "Using pipBuildPhase"
     buildPhase=pipBuildPhase
 fi
 
-if [ -z "$shellHook" ]; then
+if [ -z "${shellHook-}" ]; then
     echo "Using pipShellHook"
     shellHook=pipShellHook
 fi

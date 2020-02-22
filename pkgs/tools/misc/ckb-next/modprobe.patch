@@ -1,26 +1,26 @@
 diff --git a/src/daemon/input_linux.c b/src/daemon/input_linux.c
-index 1cedb07..8e0b24b 100644
+index 8489f5b..b851419 100644
 --- a/src/daemon/input_linux.c
 +++ b/src/daemon/input_linux.c
-@@ -58,7 +58,7 @@ int os_inputopen(usbdevice* kb){
-     /// First check whether the uinput module is loaded by the kernel.
-     ///
-     // Load the uinput module (if it's not loaded already)
--    if(system("modprobe uinput") != 0) {
-+    if(system("@kmod@/bin/modprobe uinput") != 0) {
-         ckb_fatal("Failed to load uinput module\n");
-         return 1;
-     }
+@@ -63,7 +63,7 @@ int os_inputopen(usbdevice* kb){
+ 
+     // If not available, load the module
+     if(fd < 0){
+-        if(system("modprobe uinput") != 0) {
++        if(system("@kmod@/bin/modprobe uinput") != 0) {
+             ckb_fatal("Failed to load uinput module\n");
+             return 1;
+         }
 diff --git a/src/gui/mainwindow.cpp b/src/gui/mainwindow.cpp
-index 3601146..3f2f78f 100644
+index 1eb95bd..f7d38ba 100644
 --- a/src/gui/mainwindow.cpp
 +++ b/src/gui/mainwindow.cpp
-@@ -251,7 +251,7 @@ void MainWindow::updateVersion(){
-             daemonWarning.append(tr("<br /><b>Warning:</b> System Extension by \"Fumihiko Takayama\" is not allowed in Security & Privacy. Please allow it and then unplug and replug your devices."));
+@@ -284,7 +284,7 @@ void MainWindow::updateVersion(){
  #elif defined(Q_OS_LINUX)
-             QProcess modprobe;
--            modprobe.start("modprobe", QStringList("uinput"));
-+            modprobe.start("@kmod@/bin/modprobe", QStringList("uinput"));
+             if(!(QFileInfo("/dev/uinput").exists() || QFileInfo("/dev/input/uinput").exists())){
+                 QProcess modprobe;
+-                modprobe.start("modprobe", QStringList("uinput"));
++                modprobe.start("@kmod@/bin/modprobe", QStringList("uinput"));
  
-             if(!modprobe.waitForFinished())
-                 qDebug() << "Modprobe error";
+                 if(!modprobe.waitForFinished())
+                     qDebug() << "Modprobe error";

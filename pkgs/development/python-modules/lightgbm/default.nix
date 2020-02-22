@@ -10,16 +10,18 @@
 
 buildPythonPackage rec {
   pname = "lightgbm";
-  version = "2.2.3";
+  version = "2.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40354d21da6bfa73c7ada4d01b2e0b22eaae00f93e90bdaf3fc423020c273890";
+    sha256 = "bd1817be401e74c0d8b049e97ea2f35d2ce155cfa130119ce4195ea207bd6388";
   };
 
   nativeBuildInputs = [
     cmake
   ];
+
+  dontUseCmakeConfigure = true;
 
   # we never actually explicitly call the install command so this is the only way
   # to inject these options to it - however, openmp-library doesn't appear to have

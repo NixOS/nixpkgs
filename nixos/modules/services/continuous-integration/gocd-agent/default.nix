@@ -135,20 +135,20 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.groups = optional (cfg.group == "gocd-agent") {
-      name = "gocd-agent";
-      gid = config.ids.gids.gocd-agent;
+    users.groups = optionalAttrs (cfg.group == "gocd-agent") {
+      gocd-agent.gid = config.ids.gids.gocd-agent;
     };
 
-    users.users = optional (cfg.user == "gocd-agent") {
-      name = "gocd-agent";
-      description = "gocd-agent user";
-      createHome = true;
-      home = cfg.workDir;
-      group = cfg.group;
-      extraGroups = cfg.extraGroups;
-      useDefaultShell = true;
-      uid = config.ids.uids.gocd-agent;
+    users.users = optionalAttrs (cfg.user == "gocd-agent") {
+      gocd-agent = {
+        description = "gocd-agent user";
+        createHome = true;
+        home = cfg.workDir;
+        group = cfg.group;
+        extraGroups = cfg.extraGroups;
+        useDefaultShell = true;
+        uid = config.ids.uids.gocd-agent;
+      };
     };
 
     systemd.services.gocd-agent = {

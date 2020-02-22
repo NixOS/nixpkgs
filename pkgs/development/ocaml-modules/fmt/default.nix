@@ -8,7 +8,8 @@ stdenv.mkDerivation {
     sha256 = "1zj9azcxcn6skmb69ykgmi9z8c50yskwg03wqgh87lypgjdcz060";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg cmdliner ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ findlib topkg cmdliner ];
   propagatedBuildInputs = [ result uchar ];
 
   inherit (topkg) buildPhase installPhase;

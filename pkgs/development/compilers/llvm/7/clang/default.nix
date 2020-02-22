@@ -1,4 +1,4 @@
-{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python
+{ stdenv, fetch, cmake, libxml2, llvm, version, clang-tools-extra_src, python3, lld
 , fixDarwinDylibNames
 , enableManpages ? false
 , enablePolly ? false # TODO: get this info from llvm (passthru?)
@@ -6,7 +6,8 @@
 
 let
   self = stdenv.mkDerivation ({
-    name = "clang-${version}";
+    pname = "clang";
+    inherit version;
 
     src = fetch "cfe" "0vc4i87qwxnw9lci4ayws9spakg0z6w5w670snj9f8g5m9rc8zg9";
 
@@ -18,10 +19,10 @@ let
       mv clang-tools-extra-* $sourceRoot/tools/extra
     '';
 
-    nativeBuildInputs = [ cmake python ]
-      ++ stdenv.lib.optional enableManpages python.pkgs.sphinx;
+    nativeBuildInputs = [ cmake python3 ]
+      ++ stdenv.lib.optional enableManpages python3.pkgs.sphinx;
 
-    buildInputs = [ libxml2 llvm ]
+    buildInputs = [ libxml2 llvm lld ]
       ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
     cmakeFlags = [
@@ -37,7 +38,11 @@ let
       "-DLINK_POLLY_INTO_TOOLS=ON"
     ];
 
-    patches = [ ./purity.patch ];
+    patches = [
+      ./purity.patch
+      # make clang -xhip use $PATH to find executables
+      ./HIP-use-PATH-7.patch
+    ];
 
     postPatch = ''
       sed -i -e 's/DriverArgs.hasArg(options::OPT_nostdlibinc)/true/' \
@@ -93,7 +98,7 @@ let
       platforms   = stdenv.lib.platforms.all;
     };
   } // stdenv.lib.optionalAttrs enableManpages {
-    name = "clang-manpages-${version}";
+    pname = "clang-manpages";
 
     buildPhase = ''
       make docs-clang-man

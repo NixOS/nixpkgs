@@ -97,6 +97,6 @@ buildFHSUserEnv {
 
     # Actually run Plex, prepending LD_LIBRARY_PATH with the libraries from
     # the Plex package.
-    LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$root exec "$root/Plex Media Server"
+    LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$root exec "$root/Plex Media Server"
   '';
 }

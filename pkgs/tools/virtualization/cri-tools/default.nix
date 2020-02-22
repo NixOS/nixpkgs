@@ -2,19 +2,19 @@
 
 buildGoPackage rec {
   pname = "cri-tools";
-  version = "1.15.0";
+  version = "1.17.0";
   src = fetchFromGitHub {
     owner = "kubernetes-sigs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03fhddncwqrdyxz43m3bak9dlrsqzibqqja3p94nic4ydk2hry62";
+    sha256 = "0h9gry56graif761lmcy91q9fzwvmwb15wcx8245927yfg5j0zgh";
   };
 
   goPackagePath = "github.com/kubernetes-sigs/cri-tools";
 
   buildPhase = ''
     pushd go/src/${goPackagePath}
-    make
+    make all install BINDIR=$bin/bin
   '';
 
   meta = with lib; {

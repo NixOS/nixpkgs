@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3, gtk3
-, desktop-file-utils, json-glib, libsoup, libgee, poppler, wrapGAppsHook }:
+{ stdenv, vala, fetchFromGitHub, pantheon, pkgconfig, meson, ninja, python3, gtk3
+, desktop-file-utils, json-glib, libsoup, libgee, poppler, wrapGAppsHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
   pname = "aesop";
-  version = "1.1.2";
+  version = "1.2.3";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "1vadm8295jb7jaah2qykf3h9zvl5c013sanmxqi4snmmq4pa32ax";
+    sha256 = "1aa1kp1rndi2dj1d9sf8zhssn5dw183yx1fm2xccdy9zjf9wi4jk";
   };
 
   nativeBuildInputs = [
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
 
@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "The simplest PDF viewer around";

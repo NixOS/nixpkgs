@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../../ -i bash -p wget yarn2nix-moretea.yarn2nix
+#!nix-shell -I nixpkgs=../../../../../ -i bash -p wget yarn2nix
 
 set -euo pipefail
 

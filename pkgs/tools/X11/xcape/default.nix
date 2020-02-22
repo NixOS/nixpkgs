@@ -3,7 +3,7 @@ libXi }:
 
 stdenv.mkDerivation rec {
   pname = "xcape";
-  version = "unstable-20180301";
+  version = "unstable-2018-03-01";
 
   src = fetchFromGitHub {
     owner = "alols";

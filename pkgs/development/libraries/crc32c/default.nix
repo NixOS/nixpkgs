@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ gflags ];
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.isAarch64 "-march=armv8-a+crc";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isAarch64 "-march=armv8-a+crc";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/google/crc32c;

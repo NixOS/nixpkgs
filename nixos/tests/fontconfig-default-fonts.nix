@@ -1,6 +1,11 @@
-import ./make-test.nix ({ lib, ... }:
+import ./make-test-python.nix ({ lib, ... }:
 {
   name = "fontconfig-default-fonts";
+
+  meta.maintainers = with lib.maintainers; [
+    jtojnar
+    worldofpeace
+  ];
 
   machine = { config, pkgs, ... }: {
     fonts.enableDefaultFonts = true; # Background fonts
@@ -20,9 +25,9 @@ import ./make-test.nix ({ lib, ... }:
   };
 
   testScript = ''
-    $machine->succeed("fc-match serif | grep '\"Gentium Plus\"'");
-    $machine->succeed("fc-match sans-serif | grep '\"Cantarell\"'");
-    $machine->succeed("fc-match monospace | grep '\"Source Code Pro\"'");
-    $machine->succeed("fc-match emoji | grep '\"Twitter Color Emoji\"'");
+    machine.succeed("fc-match serif | grep '\"Gentium Plus\"'")
+    machine.succeed("fc-match sans-serif | grep '\"Cantarell\"'")
+    machine.succeed("fc-match monospace | grep '\"Source Code Pro\"'")
+    machine.succeed("fc-match emoji | grep '\"Twitter Color Emoji\"'")
   '';
 })

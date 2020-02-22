@@ -26,7 +26,7 @@ let
     i686-cygwin = "win32";
   };
 
-  dfVersionTriple = splitString "." dfVersion;
+  dfVersionTriple = splitVersion dfVersion;
   baseVersion = elemAt dfVersionTriple 1;
   patchVersion = elemAt dfVersionTriple 2;
 
@@ -96,6 +96,6 @@ stdenv.mkDerivation {
     inherit homepage;
     license = licenses.unfreeRedistributable;
     platforms = attrNames platforms;
-    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit ];
+    maintainers = with maintainers; [ a1russell robbinch roconnor the-kenny abbradar numinit shazow ];
   };
 }

@@ -9,11 +9,11 @@
 stdenv.mkDerivation rec {
 
   pname = "kid3";
-  version = "3.7.1";
+  version = "3.8.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/kid3/kid3/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0xkrsjrbr3z8cn8hjf623l28r3b755gr11i0clv8d8i3s10vhbd8";
+    sha256 = "051y77swpi9isx275gwzl4fn3igd2dmixbszv9m3h0h9lqhcjrvr";
   };
 
   nativeBuildInputs = [ wrapQtAppsHook ];

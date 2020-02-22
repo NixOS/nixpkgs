@@ -2,7 +2,7 @@
 , libxml2, libxslt, ncurses, openssl, perl, autoconf
 , openjdk ? null # javacSupport
 , unixODBC ? null # odbcSupport
-, libGLU_combined ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
+, libGL ? null, libGLU ? null, wxGTK ? null, wxmac ? null, xorg ? null # wxSupport
 , withSystemd ? stdenv.isLinux, systemd # systemd support in epmd
 }:
 
@@ -18,13 +18,13 @@
 , enableKernelPoll ? true
 , javacSupport ? false, javacPackages ? [ openjdk ]
 , odbcSupport ? false, odbcPackages ? [ unixODBC ]
-, wxSupport ? true, wxPackages ? [ libGLU_combined wxGTK xorg.libX11 ]
+, wxSupport ? true, wxPackages ? [ libGL libGLU wxGTK xorg.libX11 ]
 , preUnpack ? "", postUnpack ? ""
 , patches ? [], patchPhase ? "", prePatch ? "", postPatch ? ""
 , configureFlags ? [], configurePhase ? "", preConfigure ? "", postConfigure ? ""
 , buildPhase ? "", preBuild ? "", postBuild ? ""
 , installPhase ? "", preInstall ? "", postInstall ? ""
-, installTargets ? "install install-docs"
+, installTargets ? [ "install" "install-docs" ]
 , checkPhase ? "", preCheck ? "", postCheck ? ""
 , fixupPhase ? "", preFixup ? "", postFixup ? ""
 , meta ? {}
@@ -32,7 +32,7 @@
 
 assert wxSupport -> (if stdenv.isDarwin
   then wxmac != null
-  else libGLU_combined != null && wxGTK != null && xorg != null);
+  else libGL != null && libGLU != null && wxGTK != null && xorg != null);
 
 assert odbcSupport -> unixODBC != null;
 assert javacSupport -> openjdk != null;
@@ -121,8 +121,7 @@ in stdenv.mkDerivation ({
       tolerance.
     '';
 
-    # aarch64 is supposed to work but started failing in https://hydra.nixos.org/build/83735973
-    platforms = subtractLists [ "aarch64-linux" ] platforms.unix;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ the-kenny sjmackenzie couchemar gleber ];
     license = licenses.asl20;
   } // meta);
@@ -142,7 +141,7 @@ in stdenv.mkDerivation ({
 // optionalAttrs (preCheck != "")       { inherit preCheck; }
 // optionalAttrs (postCheck != "")      { inherit postCheck; }
 // optionalAttrs (installPhase != "")   { inherit installPhase; }
-// optionalAttrs (installTargets != "") { inherit installTargets; }
+// optionalAttrs (installTargets != []) { inherit installTargets; }
 // optionalAttrs (preInstall != "")     { inherit preInstall; }
 // optionalAttrs (fixupPhase != "")     { inherit fixupPhase; }
 // optionalAttrs (preFixup != "")       { inherit preFixup; }

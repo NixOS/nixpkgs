@@ -16,18 +16,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-datetime";
-  version = "2.1.5";
+  version = "2.1.6";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1iz8skf5dw76a07ljc8v8lw2x2nrmq8j6sggm227cmxy60gadsdv";
+    sha256 = "09734c3qc0296zf14rdhl4p6ppga015rz9hhsvlcc3nvyw7kdqkc";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -51,8 +51,6 @@ stdenv.mkDerivation rec {
       src = ./timezone.patch;
       tzdata = "${tzdata}/share/zoneinfo/zone.tab";
     })
-    # Use "clock-format" GSettings key that's been moved to granite
-    ./clock-format.patch
   ];
 
   PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "urlgrabber";
-  version = "4.0.0";
+  version = "4.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fazs574fgixd525cn2dh027f4qf0c0gbwcfyfkhc6fkblfa1ibr";
+    sha256 = "075af8afabae6362482d254e5ac3ffa595d1766117b684e53d9c25c2e937e139";
   };
 
   propagatedBuildInputs = [ pycurl six ];

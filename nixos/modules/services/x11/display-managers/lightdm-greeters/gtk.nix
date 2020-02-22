@@ -15,34 +15,6 @@ let
   icons = cfg.iconTheme.package;
   cursors = cfg.cursorTheme.package;
 
-  # The default greeter provided with this expression is the GTK greeter.
-  # Again, we need a few things in the environment for the greeter to run with
-  # fonts/icons.
-  wrappedGtkGreeter = pkgs.runCommand "lightdm-gtk-greeter" {
-      buildInputs = [ pkgs.makeWrapper ];
-      preferLocalBuild = true;
-    } ''
-      # This wrapper ensures that we actually get themes
-      makeWrapper ${pkgs.lightdm_gtk_greeter}/sbin/lightdm-gtk-greeter \
-        $out/greeter \
-        --prefix PATH : "${lib.getBin pkgs.stdenv.cc.libc}/bin" \
-        --set GDK_PIXBUF_MODULE_FILE "${pkgs.librsvg.out}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" \
-        --set GTK_PATH "${theme}:${pkgs.gtk3.out}" \
-        --set GTK_EXE_PREFIX "${theme}" \
-        --set GTK_DATA_PREFIX "${theme}" \
-        --set XDG_DATA_DIRS "${theme}/share:${icons}/share" \
-        --set XDG_CONFIG_HOME "${theme}/share" \
-        --set XCURSOR_PATH "${cursors}/share/icons"
-
-      cat - > $out/lightdm-gtk-greeter.desktop << EOF
-      [Desktop Entry]
-      Name=LightDM Greeter
-      Comment=This runs the LightDM Greeter
-      Exec=$out/greeter
-      Type=Application
-      EOF
-    '';
-
   gtkGreeterConf = writeText "lightdm-gtk-greeter.conf"
     ''
     [greeter]
@@ -185,9 +157,15 @@ in
   config = mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeter = mkDefault {
-      package = wrappedGtkGreeter;
+      package = pkgs.lightdm_gtk_greeter.xgreeters;
       name = "lightdm-gtk-greeter";
     };
+
+    environment.systemPackages = [
+      cursors
+      icons
+      theme
+    ];
 
     environment.etc."lightdm/lightdm-gtk-greeter.conf".source = gtkGreeterConf;
 

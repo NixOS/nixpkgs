@@ -47,12 +47,12 @@ stdenv.mkDerivation rec {
   # fit in the limit. https://github.com/NixOS/nix/pull/1085
     ++ lib.optionals stdenv.isDarwin [ "--disable-gpg-test" ];
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # qgpgme uses Q_ASSERT which retains build inputs at runtime unless
     # debugging is disabled
     lib.optional (qtbase != null) "-DQT_NO_DEBUG"
     # https://www.gnupg.org/documentation/manuals/gpgme/Largefile-Support-_0028LFS_0029.html
-    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+    ++ lib.optional (system == "i686-linux") "-D_FILE_OFFSET_BITS=64");
 
   checkInputs = [ which ];
 
@@ -69,6 +69,6 @@ stdenv.mkDerivation rec {
     '';
     license = with licenses; [ lgpl21Plus gpl3Plus ];
     platforms = platforms.unix;
-    maintainers = with maintainers; [ fuuzetsu primeos ];
+    maintainers = with maintainers; [ primeos ];
   };
 }

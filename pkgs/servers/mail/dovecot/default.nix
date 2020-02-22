@@ -3,25 +3,25 @@
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
-, withMySQL ? false, mysql
+, withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.7.2";
+  name = "dovecot-2.3.9.3";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
-    ++ lib.optional withMySQL mysql.connector-c
+    ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "0q0jgcv3ni2znkgyhc966ffphj1wk73y76wssh0yciqafs2f0v36";
+    sha256 = "0lcnqib63nv32xr3nr4s3x8k77mbgrhc13swjl2xqnzw4fabd7zq";
   };
 
   enableParallelBuilding = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # Make dovecot look for plugins in /etc/dovecot/modules
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
-    ./2.2.x-module_dir.patch
+    ./2.3.x-module_dir.patch
   ];
 
   configureFlags = [

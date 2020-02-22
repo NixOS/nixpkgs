@@ -8,35 +8,39 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2019.09.01";
+  version = "2020.02.04";
+  # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-53-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-130-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
-       owner  = "symbiflow";
+       owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "98871e0e2959bc8cb4de3c7ebe2b9eddc4efe00c";
-       sha256 = "1yq7ih2xvhfvdpijmbqjq6jcngl6710kiv66hkww5ih8j5dzsq5l";
+       rev    = "4e4b95c8e03583d48d76d1229f9c7825e2ee5be1";
+       sha256 = "02kg48393bjiys56r62b4ks2xvfarw9phi5bips2xsnj9c99pmg0";
        name   = "trellis";
      })
     (fetchFromGitHub {
-      owner  = "symbiflow";
+      owner  = "SymbiFlow";
       repo   = "prjtrellis-db";
-      rev    = "b4d626b6402c131e9a035470ffe4cf33ccbe7986";
-      sha256 = "0k26lq6c049ja8hhqcljwjb1y5k4gcici23l2n86gyp83jr03ilx";
-      name   = "database";
+      rev    = "717478b757a702bbc7e3e11a5fbecee2a64f7922";
+      sha256 = "0q4j8qz3m2hissn2a82ck542cx62bp4f0wwzl3g22yv59i13yg83";
+      name   = "trellis-database";
     })
   ];
   sourceRoot = "trellis";
 
   buildInputs = [ boostWithPython3 ];
   nativeBuildInputs = [ cmake python3 ];
+  cmakeFlags = [
+    "-DCURRENT_GIT_VERSION=${realVersion}"
+    # TODO: should this be in stdenv instead?
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
+  ];
+  enableParallelBuilding = true;
 
   preConfigure = with builtins; ''
-    substituteInPlace libtrellis/CMakeLists.txt \
-      --replace "git describe --tags" "echo ${realVersion}"
-
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
 
     source environment.sh
@@ -51,7 +55,7 @@ stdenv.mkDerivation rec {
       to provide sufficient information to develop a free and
       open Verilog to bitstream toolchain for these devices.
     '';
-    homepage    = https://github.com/symbiflow/prjtrellis;
+    homepage    = https://github.com/SymbiFlow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
     platforms   = stdenv.lib.platforms.all;

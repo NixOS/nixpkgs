@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
   hardeningDisable = [ "fortify" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     "MAN3DIR=$(man)/share/man/man3"
     "MAN5DIR=$(man)/share/man/man5"
     "MAN8DIR=$(man)/share/man/man8"
-    "PYTHON=python"
+    "PYTHON=${python.pythonForBuild}/bin/python"
     "PYTHONLIBDIR=$(py)/${python.sitePackages}"
     "SBINDIR=$(bin)/sbin"
     "SHLIBDIR=$(out)/lib"

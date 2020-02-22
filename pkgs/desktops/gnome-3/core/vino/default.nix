@@ -82,10 +82,10 @@ stdenv.mkDerivation {
   '';
 
   passthru = {
-    updateScript = gnome3.updateScript {
-      packageName = "vino";
-      attrPath = "gnome3.vino";
-    };
+    # updateScript = gnome3.updateScript {
+    #   packageName = "vino";
+    #   attrPath = "gnome3.vino";
+    # };
   };
 
   meta = with stdenv.lib; {

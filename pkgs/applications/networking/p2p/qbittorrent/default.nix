@@ -10,13 +10,13 @@ with lib;
 
 mkDerivation rec {
   pname = "qbittorrent";
-  version = "4.1.7";
+  version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "qbittorrent";
     repo = "qbittorrent";
     rev = "release-${version}";
-    sha256 = "1z4k64h3ik1a7ir4v9g3ar1wq8zfh4r2pq43hr2wvlamm2111gdv";
+    sha256 = "0bz4l7awkx4qf3gh9c8gj8fab989439zj8qy4x9r36wxdjg5cxil";
   };
 
   # NOTE: 2018-05-31: CMake is working but it is not officially supported

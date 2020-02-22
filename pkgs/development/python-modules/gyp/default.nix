@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchgit
+, fetchFromGitiles
 , isPy3k
 }:
 
@@ -9,8 +9,8 @@ buildPythonPackage {
   version = "2015-06-11";
   disabled = isPy3k;
 
-  src = fetchgit {
-    url = "https://chromium.googlesource.com/external/gyp.git";
+  src = fetchFromGitiles {
+    url = "https://chromium.googlesource.com/external/gyp";
     rev = "fdc7b812f99e48c00e9a487bd56751bbeae07043";
     sha256 = "1imgxsl4mr1662vsj2mlnpvvrbz71yk00w8p85vi5bkgmc6awgiz";
   };

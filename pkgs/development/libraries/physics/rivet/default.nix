@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
+{ stdenv, fetchurl, fetchpatch, fastjet, ghostscript, gsl, hepmc2, imagemagick, less, python2, texlive, yoda, which, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "rivet";
@@ -11,6 +11,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./darwin.patch # configure relies on impure sw_vers to -Dunix
+    (fetchpatch {
+      url = "https://gitlab.com/hepcedar/rivet/commit/37bd34f52cce66946ebb311a8fe61bfc5f69cc00.diff";
+      sha256 = "0wj3ilpfq2gpc33bj3800l9vyvc9lrrlj1x9ss5qki0yiqd8i2aa";
+    })
   ];
 
   latex = texlive.combine { inherit (texlive)

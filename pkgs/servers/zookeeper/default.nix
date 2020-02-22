@@ -19,14 +19,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp -R bin/{zkCli,zkCleanup,zkEnv,zkServer}.sh $out/bin
     patchShebangs $out/bin
+    substituteInPlace $out/bin/zkServer.sh \
+        --replace /bin/echo ${coreutils}/bin/echo
     for i in $out/bin/{zkCli,zkCleanup,zkServer}.sh; do
       wrapProgram $i \
         --set JAVA_HOME "${jre}" \
         --prefix PATH : "${bash}/bin"
     done
-    substituteInPlace $out/bin/zkServer.sh \
-        --replace /bin/echo ${coreutils}/bin/echo \
-        --replace "/usr/bin/env bash" ${bash}/bin/bash
     chmod -x $out/bin/zkEnv.sh
 
     mkdir -p $out/share/zooinspector

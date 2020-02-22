@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
      void sigint(int sig) FUNCATTR_NORETURN;
     -inline void init(void);
     +static inline void init(void);
-     
+
      /* clear stuff and exit */
     --- a/src/options.c
     +++ b/src/options.c
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
 
   # This code uses inline in the gnu89 sense: see http://clang.llvm.org/compatibility.html#inline
-  NIX_CFLAGS_COMPILE = if stdenv.cc.isClang then "-std=gnu89" else null;
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-std=gnu89";
 
   meta = with stdenv.lib; {
     description = "A small and simple console-based live network and disk io bandwidth monitor";

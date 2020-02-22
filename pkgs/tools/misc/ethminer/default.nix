@@ -1,16 +1,31 @@
-{ stdenv, fetchFromGitHub, opencl-headers, cmake, jsoncpp, boost, makeWrapper,
-  cudatoolkit, mesa, ethash, opencl-info, ocl-icd, openssl, pkg-config, cli11 }:
+{
+  stdenv,
+  fetchFromGitHub,
+  opencl-headers,
+  cmake,
+  jsoncpp,
+  boost,
+  makeWrapper,
+  cudatoolkit,
+  mesa,
+  ethash,
+  opencl-info,
+  ocl-icd,
+  openssl,
+  pkg-config,
+  cli11
+}:
 
 stdenv.mkDerivation rec {
   pname = "ethminer";
-  version = "0.18.0-rc.0";
+  version = "0.18.0";
 
   src =
     fetchFromGitHub {
       owner = "ethereum-mining";
       repo = "ethminer";
       rev = "v${version}";
-      sha256 = "0gwnwxahjfwr4d2aci7y3w206nc5ifssl28ildva98ys0d24wy7z";
+      sha256 = "10b6s35axmx8kyzn2vid6l5nnzcaf4nkk7f5f7lg3cizv6lsj707";
       fetchSubmodules = true;
     };
 

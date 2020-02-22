@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
 
   stdenv.mkDerivation rec {
-  version = "16.06";
+  version = "19.08";
   pname = "mma";
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "1g4gvc0nr0qjc0fyqrnx037zpaasgymgmrm5s7cdxqnld9wqw8ww";
+    sha256 = "02g2q9f1hbrj1v4mbf7zx2571vqpfla5803hcjpkdkvn8g0dwci0";
   };
 
   buildInputs = [ makeWrapper python3 alsaUtils timidity ];

@@ -22,7 +22,7 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Command-line client for Papertrail log management service";
-    homepage    = http://github.com/papertrail/papertrail-cli/;
+    homepage    = https://github.com/papertrail/papertrail-cli/;
     license     = licenses.mit;
     maintainers = with maintainers; [ nicknovitski ];
     platforms   = ruby.meta.platforms;

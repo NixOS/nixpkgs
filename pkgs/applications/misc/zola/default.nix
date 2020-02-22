@@ -1,19 +1,19 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cmake, pkgconfig, openssl, CoreServices }:
+{ stdenv, fetchFromGitHub, rustPlatform, cmake, pkg-config, openssl, CoreServices }:
 
 rustPlatform.buildRustPackage rec {
   pname = "zola";
-  version = "0.8.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "getzola";
     repo = pname;
     rev = "v${version}";
-    sha256 = "166kmlkzd1qyw9yq2jqs58z8b3d956jjhw9r15jzw98md949psr5";
+    sha256 = "112aqv21gy1fbly5v2x3ph32pr82d1mwh0q57yfaaqygz2madypb";
   };
 
-  cargoSha256 = "1brmlg6nqyls1v62z0fg0km150q9m7h71wy67lidcnw76icmqr24";
+  cargoSha256 = "0hqa60bx8pxhgad7x6r4zbwddrkcspnnp53bl94zbf3j47p10ggz";
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [ openssl ]
     ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A fast static site generator with everything built-in";
-    homepage = https://www.getzola.org/;
+    homepage = "https://www.getzola.org/";
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;

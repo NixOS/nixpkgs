@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ...} :
+import ./make-test-python.nix ({ pkgs, ...} :
 let
     accessKey = "BKIKJAA5BMMU2RHO6IBB";
     secretKey = "V7f1CwQqAcwo80UEIJEjc5gVQUSSx5ohQ9GSrr12";
@@ -18,7 +18,7 @@ let
       sio.seek(0)
       minioClient.put_object('test-bucket', 'test.txt', sio, sio_len, content_type='text/plain')
     '';
-  in {
+in {
   name = "minio";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ bachp ];
@@ -37,19 +37,19 @@ let
     };
   };
 
-  testScript =
-    ''
-      startAll;
-      $machine->waitForUnit("minio.service");
-      $machine->waitForOpenPort(9000);
+  testScript = ''
+    start_all()
+    machine.wait_for_unit("minio.service")
+    machine.wait_for_open_port(9000)
 
-      # Create a test bucket on the server
-      $machine->succeed("mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} S3v4");
-      $machine->succeed("mc mb minio/test-bucket");
-      $machine->succeed("${minioPythonScript}");
-      $machine->succeed("mc ls minio") =~ /test-bucket/ or die;
-      $machine->succeed("mc cat minio/test-bucket/test.txt") =~ /Test from Python/ or die;
-      $machine->shutdown;
-
-    '';
+    # Create a test bucket on the server
+    machine.succeed(
+        "mc config host add minio http://localhost:9000 ${accessKey} ${secretKey} S3v4"
+    )
+    machine.succeed("mc mb minio/test-bucket")
+    machine.succeed("${minioPythonScript}")
+    assert "test-bucket" in machine.succeed("mc ls minio")
+    assert "Test from Python" in machine.succeed("mc cat minio/test-bucket/test.txt")
+    machine.shutdown()
+  '';
 })

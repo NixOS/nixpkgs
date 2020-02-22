@@ -2,7 +2,7 @@
 , python
 , buildPythonPackage
 , bootstrapped-pip
-, fetchPypi
+, fetchFromGitHub
 , mock
 , scripttest
 , virtualenv
@@ -14,12 +14,15 @@
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "19.2.3";
+  version = "20.0.2";
   format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "e7a31f147974362e6c82d84b91c7f2bdf57e4d3163d3d454e6c3e71944d67135";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "1jj0qa47d7pqn2r379p434hxk14ij2qgmr83x65w9ib9l8092fhg";
+    name = "${pname}-${version}-source";
   };
 
   nativeBuildInputs = [ bootstrapped-pip ];
@@ -34,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [ mit ];
     homepage = https://pip.pypa.io/;
     priority = 10;
   };

@@ -18,6 +18,31 @@ runTests {
     expected = 2;
   };
 
+  testPipe = {
+    expr = pipe 2 [
+      (x: x + 2) # 2 + 2 = 4
+      (x: x * 2) # 4 * 2 = 8
+    ];
+    expected = 8;
+  };
+
+  testPipeEmpty = {
+    expr = pipe 2 [];
+    expected = 2;
+  };
+
+  testPipeStrings = {
+    expr = pipe [ 3 4 ] [
+      (map toString)
+      (map (s: s + "\n"))
+      concatStrings
+    ];
+    expected = ''
+      3
+      4
+    '';
+  };
+
   /*
   testOr = {
     expr = or true false;
@@ -102,13 +127,28 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
+  testSplitVersionSingle = {
+    expr = versions.splitVersion "1";
+    expected = [ "1" ];
+  };
+
+  testSplitVersionDouble = {
+    expr = versions.splitVersion "1.2";
+    expected = [ "1" "2" ];
+  };
+
+  testSplitVersionTriple = {
+    expr = versions.splitVersion "1.2.3";
+    expected = [ "1" "2" "3" ];
+  };
+
   testIsStorePath =  {
     expr =
       let goodPath =
             "${builtins.storeDir}/d945ibfx9x185xf04b890y4f9g3cbb63-python-2.7.11";
       in {
         storePath = isStorePath goodPath;
-        storePathDerivation = isStorePath (import ../.. {}).hello;
+        storePathDerivation = isStorePath (import ../.. { system = "x86_64-linux"; }).hello;
         storePathAppendix = isStorePath
           "${goodPath}/bin/python";
         nonAbsolute = isStorePath (concatStrings (tail (stringToCharacters goodPath)));
@@ -401,4 +441,41 @@ runTests {
     expected  = "«foo»";
   };
 
+
+# CLI
+
+  testToGNUCommandLine = {
+    expr = cli.toGNUCommandLine {} {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    };
+
+    expected = [
+      "-X" "PUT"
+      "--data" "{\"id\":0}"
+      "--retry" "3"
+      "--url" "https://example.com/foo"
+      "--url" "https://example.com/bar"
+      "--verbose"
+    ];
+  };
+
+  testToGNUCommandLineShell = {
+    expr = cli.toGNUCommandLineShell {} {
+      data = builtins.toJSON { id = 0; };
+      X = "PUT";
+      retry = 3;
+      retry-delay = null;
+      url = [ "https://example.com/foo" "https://example.com/bar" ];
+      silent = false;
+      verbose = true;
+    };
+
+    expected = "'-X' 'PUT' '--data' '{\"id\":0}' '--retry' '3' '--url' 'https://example.com/foo' '--url' 'https://example.com/bar' '--verbose'";
+  };
 }

@@ -64,6 +64,8 @@ let
           rm -f $out/bin/$(basename "$i")
           makeWrapper "$i" $out/bin/$(basename "$i") --set GEM_PATH ${gemEnv}/${ruby.gemPath}
         done
+
+        ln -s ${ruby}/nix-support $out/nix-support
       '';
 
       passthru = {

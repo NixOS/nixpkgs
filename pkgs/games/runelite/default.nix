@@ -1,17 +1,17 @@
 { stdenv, fetchurl, makeWrapper, jre, makeDesktopItem, lib }:
 
-  stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "runelite";
-  version = "1.6.0";
+  version = "2.0.0";
 
   src = fetchurl {
     url = "https://github.com/runelite/launcher/releases/download/${version}/RuneLite.jar";
-    sha256 = "0q2xx0wrnlg5mrv8nnmnh300r8mqfm8k2p028m7mr09kn18xvkzx";
+    sha256 = "0q0x8g43ggkvp5fgnymgygx59xfhnyyrhpi6ha333gqg97rr0rvw";
   };
 
   icon = fetchurl {
-    url = "https://github.com/runelite/runelite/raw/master/runelite-client/src/main/resources/runelite.png";
-    sha256 = "0fxzkpsin09giqp7h8z0plxznk5d5j60sv34v1lw61p7d5y2izvr";
+    url = "https://github.com/runelite/launcher/raw/${version}/appimage/runelite.png";
+    sha256 = "04fcjm7p546gr82g0jbh497j7rnh70lrvas0k171bff4v3knrjw1";
   };
 
   desktop = makeDesktopItem {
@@ -43,11 +43,11 @@
     --add-flags "-jar $out/share/runelite/RuneLite.jar"
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Open source Old School RuneScape client";
     homepage = "https://runelite.net/";
-    license = lib.licenses.bsd2;
-    maintainers = [ lib.maintainers.kmeakin ];
-    platforms = lib.platforms.all;
+    license = licenses.bsd2;
+    maintainers = with maintainers; [ kmeakin ];
+    platforms = platforms.all;
   };
-  }
+}

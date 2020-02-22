@@ -266,19 +266,19 @@ in {
       serviceConfig.User = "${cfg.user}";
     };
 
-    users.groups = optionalAttrs (cfg.group == "mediatomb") (singleton {
-      name = "mediatomb";
-      gid = gid;
-    });
+    users.groups = optionalAttrs (cfg.group == "mediatomb") {
+      mediatomb.gid = gid;
+    };
 
-    users.users = optionalAttrs (cfg.user == "mediatomb") (singleton {
-      name = "mediatomb";
-      isSystemUser = true;
-      group = cfg.group;
-      home = "${cfg.dataDir}";
-      createHome = true;
-      description = "Mediatomb DLNA Server User";
-    });
+    users.users = optionalAttrs (cfg.user == "mediatomb") {
+      mediatomb = {
+        isSystemUser = true;
+        group = cfg.group;
+        home = "${cfg.dataDir}";
+        createHome = true;
+        description = "Mediatomb DLNA Server User";
+      };
+    };
 
     networking.firewall = {
       allowedUDPPorts = [ 1900 cfg.port ];

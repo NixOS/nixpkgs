@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, sqlite, wxGTK30, gettext }:
+{ stdenv, fetchgit, sqlite, wxGTK30, gettext, wrapGAppsHook }:
 
 
 let
@@ -14,7 +14,16 @@ in
       sha256 = "0r4n93z3scv0i0zqflsxwv7j4yl8jy3gr0m4l30y1q8qv0zj9n74";
     };
 
-    buildInputs = [ sqlite wxGTK30 gettext ];
+    nativeBuildInputs = [
+      wrapGAppsHook
+    ];
+
+    buildInputs = [
+      gettext
+      sqlite
+      wxGTK30
+      wxGTK30.gtk
+    ];
 
     meta = {
       description = "Easy-to-use personal finance software";

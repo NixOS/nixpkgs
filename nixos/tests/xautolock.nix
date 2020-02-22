@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 with lib;
 
@@ -9,16 +9,16 @@ with lib;
   nodes.machine = {
     imports = [ ./common/x11.nix ./common/user-account.nix ];
 
-    services.xserver.displayManager.auto.user = "bob";
+    test-support.displayManager.auto.user = "bob";
     services.xserver.xautolock.enable = true;
     services.xserver.xautolock.time = 1;
   };
 
   testScript = ''
-    $machine->start;
-    $machine->waitForX;
-    $machine->mustFail("pgrep xlock");
-    $machine->sleep(120);
-    $machine->mustSucceed("pgrep xlock");
+    machine.start()
+    machine.wait_for_x()
+    machine.fail("pgrep xlock")
+    machine.sleep(120)
+    machine.succeed("pgrep xlock")
   '';
 })

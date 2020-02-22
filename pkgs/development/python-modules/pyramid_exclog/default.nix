@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A package which logs to a Python logger when an exception is raised by a Pyramid application";
-    homepage = http://docs.pylonsproject.org/;
+    homepage = https://docs.pylonsproject.org/;
     license = licenses.bsd0;
     maintainers = with maintainers; [ domenkozar ];
   };

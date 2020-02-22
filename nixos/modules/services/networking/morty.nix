@@ -74,6 +74,7 @@ in
       { description = "Morty user";
         createHome = true;
         home = "/var/lib/morty";
+        isSystemUser = true;
       };
 
     systemd.services.morty =

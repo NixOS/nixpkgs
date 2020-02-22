@@ -4,7 +4,7 @@
 
 mkDerivation rec {
   pname = "qt5integration";
-  version = "0.3.12";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
@@ -40,7 +40,7 @@ mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugins for DDE";

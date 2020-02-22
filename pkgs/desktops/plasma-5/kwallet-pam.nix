@@ -7,4 +7,8 @@ mkDerivation {
   postPatch = ''
     sed -i pam_kwallet_init -e "s|socat|${lib.getBin socat}/bin/socat|"
   '';
+  postFixup = ''
+    wrapQtApp $out/libexec/pam_kwallet_init
+  '';
+  dontWrapQtApps = true;
 }

@@ -1,0 +1,15 @@
+diff --git a/package.cmake b/package.cmake
+index 24960d5..e9a21e7 100644
+--- a/package.cmake
++++ b/package.cmake
+@@ -24,7 +24,9 @@ if(UNIX)
+ 
+   get_os_release_info(os_name os_version)
+ 
+-  if("${os_name}" STREQUAL "clear-linux-os")
++  if(DEFINED ETC_DIR)
++    set(_dir_etc ${ETC_DIR})
++  elseif("${os_name}" STREQUAL "clear-linux-os")
+     # clear-linux-os distribution avoids /etc for distribution defaults.
+     set(_dir_etc "/usr/share/defaults/etc")
+   else()

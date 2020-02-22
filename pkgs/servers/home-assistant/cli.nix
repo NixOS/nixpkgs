@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.7.0";
+  version = "0.8.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "a38d4669201ac2afa71b6578a220bf4d6d59131263b278d51ebd1479677f6baf";
+    sha256 = "0qq42b2a0rlrzaxwf3zqks5gzgv0hf4pz4yjjl6ldnizw8fcj40n";
   };
 
   postPatch = ''
@@ -33,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Command-line tool for Home Asssistant";
+    description = "Command-line tool for Home Assistant";
     homepage = https://github.com/home-assistant/home-assistant-cli;
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

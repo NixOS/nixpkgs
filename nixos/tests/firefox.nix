@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, esr ? false, ... }: {
   name = "firefox";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco shlevy ];
@@ -8,22 +8,32 @@ import ./make-test.nix ({ pkgs, ... }: {
     { pkgs, ... }:
 
     { imports = [ ./common/x11.nix ];
-      environment.systemPackages = [ pkgs.firefox pkgs.xdotool ];
+      environment.systemPackages =
+        (if esr then [ pkgs.firefox-esr ] else [ pkgs.firefox ])
+        ++ [ pkgs.xdotool ];
     };
 
-  testScript =
-    ''
-      $machine->waitForX;
-      $machine->execute("xterm -e 'firefox file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' &");
-      $machine->waitForWindow(qr/Valgrind/);
-      $machine->sleep(40); # wait until Firefox has finished loading the page
-      $machine->execute("xdotool key space"); # do I want to make Firefox the
-                             # default browser? I just want to close the dialog
-      $machine->sleep(2); # wait until Firefox hides the default browser window
-      $machine->execute("xdotool key F12");
-      $machine->sleep(10); # wait until Firefox draws the developer tool panel
-      $machine->succeed("xwininfo -root -tree | grep Valgrind");
-      $machine->screenshot("screen");
+  testScript = ''
+      machine.wait_for_x()
+
+      with subtest("wait until Firefox has finished loading the Valgrind docs page"):
+          machine.execute(
+              "xterm -e 'firefox file://${pkgs.valgrind.doc}/share/doc/valgrind/html/index.html' &"
+          )
+          machine.wait_for_window("Valgrind")
+          machine.sleep(40)
+
+      with subtest("Close default browser prompt"):
+          machine.execute("xdotool key space")
+
+      with subtest("Hide default browser window"):
+          machine.sleep(2)
+          machine.execute("xdotool key F12")
+
+      with subtest("wait until Firefox draws the developer tool panel"):
+          machine.sleep(10)
+          machine.succeed("xwininfo -root -tree | grep Valgrind")
+          machine.screenshot("screen")
     '';
 
 })

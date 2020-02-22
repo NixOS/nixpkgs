@@ -1,10 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , openssl
 , cryptography_vectors
 , darwin
-, asn1crypto
 , packaging
 , six
 , pythonOlder
@@ -21,11 +21,11 @@
 
 buildPythonPackage rec {
   pname = "cryptography";
-  version = "2.7"; # Also update the hash in vectors.nix
+  version = "2.8"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1inlnr36kl36551c9rcad99jmhk81v33by3glkadwdcgmi17fd76";
+    sha256 = "0l8nhw14npknncxdnp7n4hpmjyscly6g7fbivyxkjwvlv071zniw";
   };
 
   outputs = [ "out" "dev" ];
@@ -33,7 +33,6 @@ buildPythonPackage rec {
   buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
-    asn1crypto
     packaging
     six
   ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
@@ -49,8 +48,9 @@ buildPythonPackage rec {
     pytz
   ];
 
+  # remove when https://github.com/pyca/cryptography/issues/4998 is fixed
   checkPhase = ''
-    py.test --disable-pytest-warnings tests
+    py.test --disable-pytest-warnings tests -k 'not load_ecdsa_no_named_curve'
   '';
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we

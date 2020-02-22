@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ]
     ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
-    ++ concatMap (a: a.deps) opts;
+    ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];
 

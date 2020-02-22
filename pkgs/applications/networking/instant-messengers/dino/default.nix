@@ -3,6 +3,7 @@
 , gobject-introspection, gnome3, glib, gdk-pixbuf, gtk3, glib-networking
 , xorg, libXdmcp, libxkbcommon
 , libnotify, libsoup, libgee
+, librsvg, libsignal-protocol-c
 , libgcrypt
 , epoxy
 , at-spi2-core
@@ -14,15 +15,15 @@
 , icu
  }:
 
-stdenv.mkDerivation {
-  name = "dino-unstable-2019-03-07";
+stdenv.mkDerivation rec {
+  pname = "dino";
+  version = "0.1.0";
 
   src = fetchFromGitHub {
     owner = "dino";
     repo = "dino";
-    rev = "ff6caf241c4d57d3ef124a8b7c3144a09f320ea0";
-    sha256 = "1gjxfnywlypi3slvxb91b2mycrsqjinmafnkkngahyikr7gmqgnf";
-    fetchSubmodules = true;
+    rev = "v${version}";
+    sha256 = "1k5cgj5n8s40i71wqdh6m1q0njl45ichfdbbywx9rga5hljz1c54";
   };
 
   nativeBuildInputs = [
@@ -57,15 +58,15 @@ stdenv.mkDerivation {
     at-spi2-core
     dbus
     icu
+    libsignal-protocol-c
+    librsvg
   ];
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Modern Jabber/XMPP Client using GTK/Vala";
     homepage = https://github.com/dino/dino;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = [ maintainers.mic92 ];
+    maintainers = with maintainers; [ mic92 qyliss ];
   };
 }

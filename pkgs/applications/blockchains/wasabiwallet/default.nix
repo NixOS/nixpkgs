@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, makeDesktopItem, openssl, xorg, curl, fontconfig, krb5, zlib, dotnet-sdk }:
+{ stdenv, fetchurl, makeDesktopItem, openssl, xorg, curl, fontconfig, krb5, zlib, dotnet-netcore }:
 
 stdenv.mkDerivation rec {
   pname = "wasabiwallet";
-  version = "1.1.6";
+  version = "1.1.9.2";
 
   src = fetchurl {
     url = "https://github.com/zkSNACKs/WalletWasabi/releases/download/v${version}/WasabiLinux-${version}.tar.gz";
-    sha256 = "1i7fhaj9chjlm7qg0h3azy4djnm9rxskbr3dzjj0n9rw8cjdqyq6";
+    sha256 = "0qcgrw106rqcls6p5iq02sq3w6xrzhc5z7w8v5almbw7ikv6f0s2";
   };
 
   dontBuild = true;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     cd $out/opt/${pname}
     for i in $(find . -type f -name '*.so') wassabee
       do
-        patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ openssl stdenv.cc.cc.lib xorg.libX11 curl fontconfig.lib krb5 zlib dotnet-sdk ]} $i
+        patchelf --set-rpath ${stdenv.lib.makeLibraryPath [ openssl stdenv.cc.cc.lib xorg.libX11 curl fontconfig.lib krb5 zlib dotnet-netcore ]} $i
       done
     patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" wassabee
     ln -s $out/opt/${pname}/wassabee $out/bin/${pname}

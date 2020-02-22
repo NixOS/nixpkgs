@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pyasn1 pygobject3 dbus-python pillow cssutils precis-i18n keyring
+    nbxmpp pyasn1 pygobject3 dbus-python pillow cssutils precis-i18n keyring setuptools
   ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
     ++ lib.optional enableRST docutils
     ++ lib.optionals enableOmemoPluginDependencies [ python-axolotl qrcode ]

@@ -2,15 +2,15 @@
 
 let
   baseName = "bloop";
-  version = "1.3.2";
-  nailgunCommit = "9327a60a"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
+  version = "1.3.4";
+  nailgunCommit = "d7ed5db"; # Fetched from https://github.com/scalacenter/bloop/releases/download/v${version}/install.py
 
   client = stdenv.mkDerivation {
     name = "${baseName}-client-${version}";
 
     src = fetchurl {
       url = "https://raw.githubusercontent.com/scalacenter/nailgun/${nailgunCommit}/pynailgun/ng.py";
-      sha256 = "0z4as5ibmzkd145wsch9caiy4037bgg780gcf7pyns0cv9n955b4";
+      sha256 = "0lrj25m0nvphz2i5mqjwccpyrd7gn8a5k22k5khrpdh6ldxqis8a";
     };
 
     phases = [ "installPhase" ];
@@ -33,7 +33,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "0k9zc9q793fkfwcssbkmzb0nxmgb99rwi0pjkqhvf719vmgvhc2a";
+    outputHash     = "1z33ip6hgfwiixm2gimz819p5cnxn1fmxb3ryyf77jzwsx7py718";
   };
 
   zsh = stdenv.mkDerivation {

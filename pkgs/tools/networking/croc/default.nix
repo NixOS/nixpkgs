@@ -2,7 +2,7 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "6.1.1";
+  version = "6.4.10";
 
   goPackagePath = "github.com/schollz/croc";
 
@@ -10,17 +10,17 @@ buildGoModule rec {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "08gkwllk3m5hpkr1iwabvs739rvl6rzdnra2v040dzdj6zgyd12r";
+    sha256 = "1w16k0h9zk4q6icyf79jw4zc1jy2h9yzw0bcmywq0pz0pqk6z4nw";
   };
 
-  modSha256 = "026m3hc2imna7bf4jpqm7yq6mr4l5is2crsx1vxdpr4h0n6z0v3i";
+  modSha256 = "069n9593jfrlbrfnzr4mxvs1v1y4fvgnc9kawahh2a1rzh3cxrvq";
   subPackages = [ "." ];
 
   meta = with stdenv.lib; {
     description = "Easily and securely send things from one computer to another";
     homepage = https://github.com/schollz/croc;
     license = licenses.mit;
-    maintainers = with maintainers; [ hugoreeves ];
+    maintainers = with maintainers; [ hugoreeves equirosa ];
 
     longDescription = ''
       Croc is a command line tool written in Go that allows any two computers to

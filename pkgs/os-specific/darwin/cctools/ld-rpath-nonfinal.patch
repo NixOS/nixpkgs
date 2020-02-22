@@ -1,13 +1,14 @@
 diff --git a/cctools/ld64/src/ld/Options.cpp b/cctools/ld64/src/ld/Options.cpp
-index 9250016..91d54ec 100644
+index e4b37ec..4189ebc 100644
 --- a/cctools/ld64/src/ld/Options.cpp
 +++ b/cctools/ld64/src/ld/Options.cpp
-@@ -4175,23 +4175,9 @@ void Options::checkIllegalOptionCombinations()
+@@ -5800,24 +5800,6 @@ void Options::checkIllegalOptionCombinations()
+ 	if ( fDeadStrip && (fOutputKind == Options::kObjectFile) )
  		throw "-r and -dead_strip cannot be used together";
  
- 	// can't use -rpath unless targeting 10.5 or later
+-	// can't use -rpath unless targeting 10.5 or later
 -	if ( fRPaths.size() > 0 ) {
--		if ( !minOS(ld::mac10_5, ld::iOS_2_0) )
+-		if ( !platforms().minOS(ld::version2008) )
 -			throw "-rpath can only be used when targeting Mac OS X 10.5 or later";
 -		switch ( fOutputKind ) {
 -			case Options::kDynamicExecutable:
@@ -23,9 +24,6 @@ index 9250016..91d54ec 100644
 -		}
 -	}
 -	
-+	if ( fRPaths.size() > 0 && !minOS(ld::mac10_5, ld::iOS_2_0) )
-+		throw "-rpath can only be used when targeting Mac OS X 10.5 or later";
-+
  	if ( fPositionIndependentExecutable ) {
  		switch ( fOutputKind ) {
  			case Options::kDynamicExecutable:

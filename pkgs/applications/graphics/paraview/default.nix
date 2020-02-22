@@ -1,12 +1,9 @@
-{
-stdenv, fetchFromGitHub, cmake, makeWrapper
-,qtbase, qttools, python, libGLU_combined
-,libXt, qtx11extras, qtxmlpatterns
-}:
+{ stdenv, fetchFromGitHub, cmake, makeWrapper, qtbase , qttools, python
+, libGLU, libGL , libXt, qtx11extras, qtxmlpatterns , mkDerivation }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "paraview";
-  version = "5.6.0";
+  version = "5.6.3";
 
   # fetching from GitHub instead of taking an "official" source
   # tarball because of missing submodules there
@@ -14,7 +11,7 @@ stdenv.mkDerivation rec {
     owner = "Kitware";
     repo = "ParaView";
     rev = "v${version}";
-    sha256 = "1j13yfdgcv4yzfr449i4c8r4rs1c9zr6qd3igr4vv3ani8zixkzi";
+    sha256 = "0zcij59pg47c45gfddnpbin13w16smzhcbivzm1k4pg4366wxq1q";
     fetchSubmodules = true;
   };
 
@@ -29,7 +26,7 @@ stdenv.mkDerivation rec {
   # libraries.  These reside in build/lib, and are not found by
   # default.
   preBuild = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib:$PWD/VTK/ThirdParty/vtkm/vtk-m/lib
   '';
 
   enableParallelBuilding = true;
@@ -42,7 +39,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     python
     python.pkgs.numpy
-    libGLU_combined
+    libGLU libGL
     libXt
     qtbase
     qtx11extras
@@ -52,20 +49,20 @@ stdenv.mkDerivation rec {
 
   # Paraview links into the Python library, resolving symbolic links on the way,
   # so we need to put the correct sitePackages (with numpy) back on the path
-  postInstall = ''
-    wrapProgram $out/bin/paraview \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvbatch \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
-    wrapProgram $out/bin/pvpython \
-      --set PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+  preFixup = ''
+    wrapQtApp $out/bin/paraview \
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapQtApp $out/bin/pvbatch \
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
+    wrapQtApp $out/bin/pvpython \
+      --prefix PYTHONPATH "${python.pkgs.numpy}/${python.sitePackages}"
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     homepage = http://www.paraview.org/;
     description = "3D Data analysis and visualization application";
-    license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [guibert];
-    platforms = with stdenv.lib.platforms; linux;
+    license = licenses.free;
+    maintainers = with maintainers; [ guibert ];
+    platforms = platforms.linux;
   };
 }

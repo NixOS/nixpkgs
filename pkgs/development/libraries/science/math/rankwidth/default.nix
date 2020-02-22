@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
     description = "Calculates rank-width and rank-decompositions";
     license = with licenses; [ gpl2Plus ];
     maintainers = with maintainers; [ timokau ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
   };
 }

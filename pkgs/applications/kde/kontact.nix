@@ -2,7 +2,7 @@
   mkDerivation, lib, kdepimTeam,
   extra-cmake-modules, kdoctools,
   qtwebengine,
-  kcmutils, kcrash, kdbusaddons, kwindowsystem,
+  kcmutils, kcrash, kdbusaddons, kparts, kwindowsystem,
   akonadi, grantleetheme, kdepim-apps-libs, kontactinterface, kpimtextedit,
   mailcommon, libkdepim
 }:
@@ -16,7 +16,7 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
     qtwebengine
-    kcmutils kcrash kdbusaddons kwindowsystem
+    kcmutils kcrash kdbusaddons kparts kwindowsystem
     akonadi grantleetheme kdepim-apps-libs kontactinterface kpimtextedit
     mailcommon libkdepim
   ];

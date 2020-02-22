@@ -1,9 +1,20 @@
-{ stdenv, fetchurl, meson, ninja, pkgconfig, fetchpatch
-, glib, gdk-pixbuf, gobject-introspection, gnome3 }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, pkgconfig
+, fetchpatch
+, glib
+, gdk-pixbuf
+, gobject-introspection
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "libnotify";
   version = "0.7.8";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -26,8 +37,17 @@ stdenv.mkDerivation rec {
     "-Dgtk_doc=false"
   ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection ];
-  buildInputs = [ glib gdk-pixbuf ];
+  nativeBuildInputs = [
+    gobject-introspection
+    meson
+    ninja
+    pkgconfig
+  ];
+
+  propagatedBuildInputs = [
+    gdk-pixbuf
+    glib
+  ];
 
   passthru = {
     updateScript = gnome3.updateScript {
@@ -40,6 +60,7 @@ stdenv.mkDerivation rec {
     homepage = https://developer.gnome.org/notification-spec/;
     description = "A library that sends desktop notifications to a notification daemon";
     platforms = platforms.unix;
+    maintainers = gnome3.maintainers;
     license = licenses.lgpl21;
   };
 }

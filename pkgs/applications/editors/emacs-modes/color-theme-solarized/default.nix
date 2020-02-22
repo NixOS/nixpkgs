@@ -1,6 +1,6 @@
-{stdenv, fetchzip, emacs, colorTheme}:
+{stdenv, fetchzip, emacs, color-theme}:
 let
-  commit = "412713a0fcedd520d208a7b783fea03d710bcc61";
+  commit = "f3ca8902ea056fb8e46cb09f09c96294e31cd4ee";
 in
 stdenv.mkDerivation {
   name = "color-theme-solarized-1.0.0";
@@ -8,15 +8,14 @@ stdenv.mkDerivation {
   src = fetchzip {
 
     url = "https://github.com/sellout/emacs-color-theme-solarized/archive/${commit}.zip";
-    sha256 = "1xd2yk7p39zxgcf91s80pqknzdxw9d09cppjb87g7ihj6f0wxqjv";
+    sha256 = "16d7adqi07lzzr0qipl1fbag9l8kiyr3xrqxi528pimcisbg85d3";
   };
 
   buildInputs = [ emacs ];
-  propagatedUserEnvPkgs = [ colorTheme ];
-
+  propagatedUserEnvPkgs = [ color-theme ];
 
   buildPhase = ''
-    emacs -L . -L ${colorTheme}/share/emacs/site-lisp --batch -f batch-byte-compile *.el
+    emacs -L . -L ${color-theme}/share/emacs/site-lisp/elpa/color-theme-* --batch -f batch-byte-compile *.el
   '';
 
   installPhase = ''
@@ -30,8 +29,5 @@ stdenv.mkDerivation {
     maintainers = [ maintainers.samuelrivas ];
     license = licenses.mit;
     platforms = platforms.all;
-
-    # Fails with `solarized-definitions.el:786:1:Warning: the function `rotatef' is not known to`
-    broken = true;
   };
 }

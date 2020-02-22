@@ -12,7 +12,7 @@ evalConfig() {
     local attr=$1
     shift;
     local script="import ./default.nix { modules = [ $@ ];}"
-    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace
+    nix-instantiate --timeout 1 -E "$script" -A "$attr" --eval-only --show-trace --read-write-mode
 }
 
 reportFailure() {
@@ -87,36 +87,36 @@ checkConfigOutput "false" "$@" ./define-force-enable.nix
 checkConfigOutput "false" "$@" ./define-enable-force.nix
 
 # Check mkForce with option and submodules.
-checkConfigError 'attribute .*foo.* .* not found' config.loaOfSub.foo.enable ./declare-loaOfSub-any-enable.nix
-checkConfigOutput 'false' config.loaOfSub.foo.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix
-set -- config.loaOfSub.foo.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' config.attrsOfSub.foo.enable ./declare-attrsOfSub-any-enable.nix
+checkConfigOutput 'false' config.attrsOfSub.foo.enable ./declare-attrsOfSub-any-enable.nix ./define-attrsOfSub-foo.nix
+set -- config.attrsOfSub.foo.enable ./declare-attrsOfSub-any-enable.nix ./define-attrsOfSub-foo-enable.nix
 checkConfigOutput 'true' "$@"
-checkConfigOutput 'false' "$@" ./define-force-loaOfSub-foo-enable.nix
-checkConfigOutput 'false' "$@" ./define-loaOfSub-force-foo-enable.nix
-checkConfigOutput 'false' "$@" ./define-loaOfSub-foo-force-enable.nix
-checkConfigOutput 'false' "$@" ./define-loaOfSub-foo-enable-force.nix
+checkConfigOutput 'false' "$@" ./define-force-attrsOfSub-foo-enable.nix
+checkConfigOutput 'false' "$@" ./define-attrsOfSub-force-foo-enable.nix
+checkConfigOutput 'false' "$@" ./define-attrsOfSub-foo-force-enable.nix
+checkConfigOutput 'false' "$@" ./define-attrsOfSub-foo-enable-force.nix
 
 # Check overriding effect of mkForce on submodule definitions.
-checkConfigError 'attribute .*bar.* .* not found' config.loaOfSub.bar.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix
-checkConfigOutput 'false' config.loaOfSub.bar.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix ./define-loaOfSub-bar.nix
-set -- config.loaOfSub.bar.enable ./declare-loaOfSub-any-enable.nix ./define-loaOfSub-foo.nix ./define-loaOfSub-bar-enable.nix
+checkConfigError 'attribute .*bar.* .* not found' config.attrsOfSub.bar.enable ./declare-attrsOfSub-any-enable.nix ./define-attrsOfSub-foo.nix
+checkConfigOutput 'false' config.attrsOfSub.bar.enable ./declare-attrsOfSub-any-enable.nix ./define-attrsOfSub-foo.nix ./define-attrsOfSub-bar.nix
+set -- config.attrsOfSub.bar.enable ./declare-attrsOfSub-any-enable.nix ./define-attrsOfSub-foo.nix ./define-attrsOfSub-bar-enable.nix
 checkConfigOutput 'true' "$@"
-checkConfigError 'attribute .*bar.* .* not found' "$@" ./define-force-loaOfSub-foo-enable.nix
-checkConfigError 'attribute .*bar.* .* not found' "$@" ./define-loaOfSub-force-foo-enable.nix
-checkConfigOutput 'true' "$@" ./define-loaOfSub-foo-force-enable.nix
-checkConfigOutput 'true' "$@" ./define-loaOfSub-foo-enable-force.nix
+checkConfigError 'attribute .*bar.* .* not found' "$@" ./define-force-attrsOfSub-foo-enable.nix
+checkConfigError 'attribute .*bar.* .* not found' "$@" ./define-attrsOfSub-force-foo-enable.nix
+checkConfigOutput 'true' "$@" ./define-attrsOfSub-foo-force-enable.nix
+checkConfigOutput 'true' "$@" ./define-attrsOfSub-foo-enable-force.nix
 
 # Check mkIf with submodules.
-checkConfigError 'attribute .*foo.* .* not found' config.loaOfSub.foo.enable ./declare-enable.nix ./declare-loaOfSub-any-enable.nix
-set -- config.loaOfSub.foo.enable ./declare-enable.nix ./declare-loaOfSub-any-enable.nix
-checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-if-loaOfSub-foo-enable.nix
-checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-loaOfSub-if-foo-enable.nix
-checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-loaOfSub-foo-if-enable.nix
-checkConfigOutput 'false' "$@" ./define-loaOfSub-foo-enable-if.nix
-checkConfigOutput 'true' "$@" ./define-enable.nix ./define-if-loaOfSub-foo-enable.nix
-checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-if-foo-enable.nix
-checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-if-enable.nix
-checkConfigOutput 'true' "$@" ./define-enable.nix ./define-loaOfSub-foo-enable-if.nix
+checkConfigError 'attribute .*foo.* .* not found' config.attrsOfSub.foo.enable ./declare-enable.nix ./declare-attrsOfSub-any-enable.nix
+set -- config.attrsOfSub.foo.enable ./declare-enable.nix ./declare-attrsOfSub-any-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-if-attrsOfSub-foo-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-attrsOfSub-if-foo-enable.nix
+checkConfigError 'attribute .*foo.* .* not found' "$@" ./define-attrsOfSub-foo-if-enable.nix
+checkConfigOutput 'false' "$@" ./define-attrsOfSub-foo-enable-if.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-if-attrsOfSub-foo-enable.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-attrsOfSub-if-foo-enable.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-attrsOfSub-foo-if-enable.nix
+checkConfigOutput 'true' "$@" ./define-enable.nix ./define-attrsOfSub-foo-enable-if.nix
 
 # Check disabledModules with config definitions and option declarations.
 set -- config.enable ./define-enable.nix ./declare-enable.nix
@@ -138,7 +138,7 @@ checkConfigError 'while evaluating the module argument .*custom.* in .*import-cu
 checkConfigError 'infinite recursion encountered' "$@"
 
 # Check _module.check.
-set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-loaOfSub-foo.nix
+set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
 checkConfigError 'The option .* defined in .* does not exist.' "$@"
 checkConfigOutput "true" "$@" ./define-module-check.nix
 
@@ -152,17 +152,47 @@ checkConfigOutput "12" config.value ./declare-coerced-value-unsound.nix
 checkConfigError 'The option value .* in .* is not.*8 bit signed integer.* or string convertible to it' config.value ./declare-coerced-value-unsound.nix ./define-value-string-bigint.nix
 checkConfigError 'unrecognised JSON value' config.value ./declare-coerced-value-unsound.nix ./define-value-string-arbitrary.nix
 
-# Check loaOf with long list.
-checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-long-list.nix
-
-# Check loaOf with many merges of lists.
-checkConfigOutput "1 2 3 4 5 6 7 8 9 10" config.result ./loaOf-with-many-list-merges.nix
-
 # Check mkAliasOptionModule.
 checkConfigOutput "true" config.enable ./alias-with-priority.nix
 checkConfigOutput "true" config.enableAlias ./alias-with-priority.nix
 checkConfigOutput "false" config.enable ./alias-with-priority-can-override.nix
 checkConfigOutput "false" config.enableAlias ./alias-with-priority-can-override.nix
+
+# submoduleWith
+
+## specialArgs should work
+checkConfigOutput "foo" config.submodule.foo ./declare-submoduleWith-special.nix
+
+## shorthandOnlyDefines config behaves as expected
+checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigError 'is not of type `boolean' config.submodule.config ./declare-submoduleWith-shorthand.nix ./define-submoduleWith-noshorthand.nix
+checkConfigError 'value is a boolean while a set was expected' config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-shorthand.nix
+checkConfigOutput "true" config.submodule.config ./declare-submoduleWith-noshorthand.nix ./define-submoduleWith-noshorthand.nix
+
+## submoduleWith should merge all modules in one swoop
+checkConfigOutput "true" config.submodule.inner ./declare-submoduleWith-modules.nix
+checkConfigOutput "true" config.submodule.outer ./declare-submoduleWith-modules.nix
+
+## Paths should be allowed as values and work as expected
+checkConfigOutput "true" config.submodule.enable ./declare-submoduleWith-path.nix
+
+# Check that disabledModules works recursively and correctly
+checkConfigOutput "true" config.enable ./disable-recursive/main.nix
+checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-foo.nix}
+checkConfigOutput "true" config.enable ./disable-recursive/{main.nix,disable-bar.nix}
+checkConfigError 'The option .* defined in .* does not exist' config.enable ./disable-recursive/{main.nix,disable-foo.nix,disable-bar.nix}
+
+# Check that imports can depend on derivations
+checkConfigOutput "true" config.enable ./import-from-store.nix
+
+# Check attrsOf and lazyAttrsOf. Only lazyAttrsOf should be lazy, and only
+# attrsOf should work with conditional definitions
+# In addition, lazyAttrsOf should honor an options emptyValue
+checkConfigError "is not lazy" config.isLazy ./declare-attrsOf.nix ./attrsOf-lazy-check.nix
+checkConfigOutput "true" config.isLazy ./declare-lazyAttrsOf.nix ./attrsOf-lazy-check.nix
+checkConfigOutput "true" config.conditionalWorks ./declare-attrsOf.nix ./attrsOf-conditional-check.nix
+checkConfigOutput "false" config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
+checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 
 cat <<EOF
 ====== module tests ======

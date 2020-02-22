@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
     description = "ID3 tag manipulation library";
     homepage = http://mad.sourceforge.net/;
     license = licenses.gpl2;
-    maintainers = [ maintainers.fuuzetsu ];
+    maintainers = [ ];
     platforms = platforms.unix;
   };
 }

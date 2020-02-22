@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       A C++ library for Quadratic Programming which implements the
       Goldfarb-Idnani active-set dual method.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; linux;
   };
 }

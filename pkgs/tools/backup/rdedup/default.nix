@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
-, llvmPackages, clang_39, lzma
+, llvmPackages, clang, lzma
 , Security }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,13 +13,16 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "19j1xscchnckqq1nddx9nr9wxxv124ab40l4mdalqbkli4zd748j";
 
   patches = [
     ./v3.1.1-fix-Cargo.lock.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang_39 ];
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang ];
   buildInputs = [ openssl libsodium lzma ]
     ++ (stdenv.lib.optional stdenv.isDarwin Security);
 

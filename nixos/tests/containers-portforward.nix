@@ -7,7 +7,7 @@ let
   containerPort = 80;
 in 
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "containers-portforward";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ianwookim ];
@@ -36,27 +36,27 @@ import ./make-test.nix ({ pkgs, ...} : {
 
   testScript =
     ''
-      $machine->succeed("nixos-container list") =~ /webserver/ or die;
+      container_list = machine.succeed("nixos-container list")
+      assert "webserver" in container_list
 
       # Start the webserver container.
-      $machine->succeed("nixos-container start webserver");
+      machine.succeed("nixos-container start webserver")
 
       # wait two seconds for the container to start and the network to be up
-      sleep 2;
+      machine.sleep(2)
 
       # Since "start" returns after the container has reached
       # multi-user.target, we should now be able to access it.
-      #my $ip = $machine->succeed("nixos-container show-ip webserver");
-      #chomp $ip;
-      $machine->succeed("ping -n -c1 ${hostIp}");
-      $machine->succeed("curl --fail http://${hostIp}:${toString hostPort}/ > /dev/null");
+      # ip = machine.succeed("nixos-container show-ip webserver").strip()
+      machine.succeed("ping -n -c1 ${hostIp}")
+      machine.succeed("curl --fail http://${hostIp}:${toString hostPort}/ > /dev/null")
 
       # Stop the container.
-      $machine->succeed("nixos-container stop webserver");
-      $machine->fail("curl --fail --connect-timeout 2 http://${hostIp}:${toString hostPort}/ > /dev/null");
+      machine.succeed("nixos-container stop webserver")
+      machine.fail("curl --fail --connect-timeout 2 http://${hostIp}:${toString hostPort}/ > /dev/null")
 
       # Destroying a declarative container should fail.
-      $machine->fail("nixos-container destroy webserver");
+      machine.fail("nixos-container destroy webserver")
     '';
 
 })

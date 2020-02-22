@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.asl20;
 
-    maintainers = with maintainers; [ ericsagnes ndowens ];
+    maintainers = with maintainers; [ ericsagnes ];
     platforms = platforms.unix;
   };
 

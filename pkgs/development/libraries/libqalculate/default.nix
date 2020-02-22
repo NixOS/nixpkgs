@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libqalculate";
-  version = "3.3.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "qalculate";
     repo = "libqalculate";
     rev = "v${version}";
-    sha256 = "1qgsngi9z1sr6pzgcq6kgng62arpc5xn2ai1ks69myzzmgwk8adp";
+    sha256 = "0g3047lwd0rh0dds196iija3kq06mhkh6y8x5whcbv3s0db66h18";
   };
 
   outputs = [ "out" "dev" "doc" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   patchPhase = ''
-    substituteInPlace libqalculate/Calculator.cc \
+    substituteInPlace libqalculate/Calculator-plot.cc \
       --replace 'commandline = "gnuplot"' 'commandline = "${gnuplot}/bin/gnuplot"' \
       --replace '"gnuplot - ' '"${gnuplot}/bin/gnuplot - '
   '' + stdenv.lib.optionalString stdenv.cc.isClang ''

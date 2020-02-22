@@ -1,14 +1,5 @@
-From cccadedfbcb6764a38382154838113a6b2fd4dee Mon Sep 17 00:00:00 2001
-From: Michael Hoang <enzime@users.noreply.github.com>
-Date: Mon, 10 Dec 2018 15:08:01 +1100
-Subject: [PATCH] Patch build.bash for nixpkgs
-
----
- build.bash | 37 ++-----------------------------------
- 1 file changed, 2 insertions(+), 35 deletions(-)
-
 diff --git a/build.bash b/build.bash
-index 1588011..72117d9 100755
+index 7c278b6..41494c5 100755
 --- a/build.bash
 +++ b/build.bash
 @@ -29,7 +29,6 @@ srcd="$(dirname $0)"
@@ -20,10 +11,10 @@ index 1588011..72117d9 100755
  mkdir -p $outd/{$wsid,lablGL}
  :>$outd/ordered
 @@ -39,12 +38,6 @@ isfresh() { test -r "$1.past" && . "$1.past" && test "$k" = "$2"; }
- mbt=native
+ mbt=${mbt:-native}
  mulibs="$mudir/build/$mbt/libmupdf.a" # $mudir/build/$mbt/libmupdf-third.a
  
--keycmd="(cd $mudir && git describe --tags --dirty); digest $mulibs"
+-keycmd="(cd $mudir && make -q build=$mbt libs && echo); digest $mulibs"
 -isfresh "$mulibs" "$(eval $keycmd)" || (
 -    make -C "$mudir" build=$mbt -j $mjobs libs
 -    echo "k='$(eval $keycmd)'" >$mudir/build/$mbt/libmupdf.a.past
@@ -32,12 +23,12 @@ index 1588011..72117d9 100755
  oincs() {
      local i=
      local incs1=
-@@ -90,32 +83,6 @@ mflags() {
+@@ -90,34 +83,6 @@ mflags() {
  }
  
  overs="$(ocamlc -vnum 2>/dev/null)" || overs=""
--test "$overs" = "4.07.0" || {
--    url=https://caml.inria.fr/pub/distrib/ocaml-4.07/ocaml-4.07.0.tar.xz
+-test "$overs" = "4.08" || {
+-    url=https://caml.inria.fr/pub/distrib/ocaml-4.08/ocaml-4.08.0.tar.xz
 -    txz=$outd/$(basename $url)
 -    isfresh $txz $url || {
 -        executable_p() { command -v "$1" >/dev/null 2>&1; }
@@ -54,8 +45,10 @@ index 1588011..72117d9 100755
 -        tar xf $txz -C $outd
 -        bn=$(basename $url)
 -        cd $outd/${bn%.tar.xz}
--        ./configure -prefix $absprefix                                      \
--                    -no-graph -no-debugger -no-ocamldoc -no-native-compiler
+-        ./configure --disable-vmthreads --disable-graph-lib \
+-                    --disable-ocamldoc --enable-debugger=no \
+-                    --disable-flat-float-array              \
+-                    --prefix=$absprefix
 -        make -j $mjobs world
 -        make install
 -        echo "k='$url'" >$absprefix/bin/ocamlc.past
@@ -65,7 +58,7 @@ index 1588011..72117d9 100755
  
  bocaml1() {
      grep -q "$3" $outd/ordered || {
-@@ -224,7 +191,7 @@ bobjc() {
+@@ -227,7 +192,7 @@ bobjc() {
      } && vecho "fresh $o"
  }
  
@@ -74,7 +67,7 @@ index 1588011..72117d9 100755
  
  cmd="(. $srcd/genconfstr.sh >$outd/confstruct.ml)"
  keycmd="digest $srcd/genconfstr.sh $outd/confstruct.ml"
-@@ -278,7 +245,7 @@ for m in ml_gl ml_glarray ml_raw; do
+@@ -281,7 +246,7 @@ for m in ml_gl ml_glarray ml_raw; do
  done
  
  libs="str.cma unix.cma"
@@ -83,6 +76,3 @@ index 1588011..72117d9 100755
  if $darwin; then
      mcomp=$(ocamlc -config | grep bytecomp_c_co | { read _ c; echo $c; })
      clibs="$clibs -framework Cocoa -framework OpenGL"
--- 
-2.19.2
-

@@ -1,5 +1,6 @@
 { stdenv, lib, fetchurl, autoreconfHook, pkgconfig
-, libxslt, xz, elf-header }:
+, libxslt, xz, elf-header
+, withStatic ? false }:
 
 let
   systems = [ "/run/current-system/kernel-modules" "/run/booted-system/kernel-modules" "" ];
@@ -21,10 +22,11 @@ in stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--with-xz"
     "--with-modulesdirs=${modulesDirs}"
-  ];
+  ] ++ lib.optional withStatic "--enable-static";
 
   patches = [ ./module-dir.patch ]
-    ++ lib.optional stdenv.isDarwin ./darwin.patch;
+    ++ lib.optional stdenv.isDarwin ./darwin.patch
+    ++ lib.optional withStatic ./enable-static.patch;
 
   postInstall = ''
     for prog in rmmod insmod lsmod modinfo modprobe depmod; do

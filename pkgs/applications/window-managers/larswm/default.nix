@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ libX11 libXext libXmu ];
 
   makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     homepage = http://www.fnurt.net/larswm;

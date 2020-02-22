@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "19b6vqblddaw8ccw4sn0qsqzbswlhrz8ia6n4m3hymvcxn8skpz9";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Identifies duplicate files residing within specified directories";
@@ -23,6 +23,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/adrianlopezroche/fdupes;
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.z77z ];
+    maintainers = [ maintainers.maggesi ];
   };
 }

@@ -65,3 +65,16 @@ diff -rp dymo-cups-drivers-1.4.0.5/src/lw/CupsFilterLabelWriter.h dymo-cups-driv
   #include <cups/raster.h>
   #include "LabelWriterDriver.h"
   #include "LabelWriterLanguageMonitor.h"
+diff -rp dymo-cups-drivers-1.4.0.5/src/common/CupsPrintEnvironment.cpp dymo-cups-drivers-1.4.0.5-fix/src/common/CupsPrintEnvironment.cpp
+*** dymo-cups-drivers-1.4.0.5/src/common/CupsPrintEnvironment.cpp	2019-12-16 19:37:23.429662838 +0000
+--- dymo-cups-drivers-1.4.0.5-fix/src/common/CupsPrintEnvironment.cpp	2019-12-16 19:41:48.506991614 +0000
+***************
+*** 23,28 ****
+--- 23,29 ----
+  #include "CupsPrintEnvironment.h"
+  #include <errno.h>
+  #include <cups/cups.h>
++ #include <cups/sidechannel.h>
+  #include <cassert>
+
+  namespace DymoPrinterDriver

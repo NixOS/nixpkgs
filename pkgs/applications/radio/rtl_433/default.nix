@@ -4,14 +4,14 @@
 
 stdenv.mkDerivation {
 
-  version = "18.12";
+  version = "19.08";
   pname = "rtl_433";
 
   src = fetchFromGitHub {
     owner = "merbanan";
     repo = "rtl_433";
-    rev = "18.12";
-    sha256 = "0y73g9ffpsgnmfk8lbihyl9d1fd9v91wsn8k8xhsdmgmn4ra1jk5";
+    rev = "19.08";
+    sha256 = "0cm82gm5c86qfl4dw37h8wyk77947k6fv2n1pn3xvk3wz2ygsdi6";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

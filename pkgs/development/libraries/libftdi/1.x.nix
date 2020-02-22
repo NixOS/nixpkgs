@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, libusb1, libconfuse
 , cppSupport ? true, boost ? null
-, pythonSupport ? true, python ? null, swig ? null
+, pythonSupport ? true, python3 ? null, swig ? null
 , docSupport ? true, doxygen ? null
 }:
 
 assert cppSupport -> boost != null;
-assert pythonSupport -> python != null && swig != null;
+assert pythonSupport -> python3 != null && swig != null;
 assert docSupport -> doxygen != null;
 
 stdenv.mkDerivation rec {
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = with stdenv.lib; [ libconfuse ]
     ++ optionals cppSupport [ boost ]
-    ++ optionals pythonSupport [ python swig ]
+    ++ optionals pythonSupport [ python3 swig ]
     ++ optionals docSupport [ doxygen ];
 
   preBuild = stdenv.lib.optionalString docSupport ''

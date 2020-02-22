@@ -3,11 +3,11 @@
 
 buildPythonPackage (rec {
   pname = "buildbot-worker";
-  version = "2.4.0";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04dk1jg0yq0rcm7j7pn7l1pqqjhiyvwppnhc1b7106sx2cdj2yb2";
+    sha256 = "0hr42fp3sw6c59qahihm9440618z7prwsy4z0ax553zvw47pc22l";
   };
 
   propagatedBuildInputs = [ twisted future ];
@@ -20,7 +20,7 @@ buildPythonPackage (rec {
   '';
 
   meta = with lib; {
-    homepage = http://buildbot.net/;
+    homepage = "https://buildbot.net/";
     description = "Buildbot Worker Daemon";
     maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
     license = licenses.gpl2;

@@ -17,11 +17,11 @@ let
   vivaldiName = if isSnapshot then "vivaldi-snapshot" else "vivaldi";
 in stdenv.mkDerivation rec {
   pname = "vivaldi";
-  version = "2.7.1628.33-1";
+  version = "2.11.1811.38-1";
 
   src = fetchurl {
     url = "https://downloads.vivaldi.com/${branch}/vivaldi-${branch}_${version}_amd64.deb";
-    sha256 = "1km5ccxqyd5xgmzm42zca670jf7wd4j7c726fhyj4wjni71zar34";
+    sha256 = "0nz7yhxp7fxv6pj1i2684di1wgk4k78hw4icfjqzjwmvc3i710jw";
   };
 
   unpackPhase = ''
@@ -51,8 +51,7 @@ in stdenv.mkDerivation rec {
       --set-rpath "${libPath}" \
       opt/${vivaldiName}/vivaldi-bin
   '' + stdenv.lib.optionalString proprietaryCodecs ''
-    sed -i '/^if \[ "$VIVALDI_FFMPEG_FOUND/i \
-      VIVALDI_FFMPEG_FOUND=YES\nCACHED_FFMPEG=${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so' opt/${vivaldiName}/${vivaldiName}
+    ln -s ${vivaldi-ffmpeg-codecs}/lib/libffmpeg.so opt/${vivaldiName}/libffmpeg.so.''${version%\.*\.*}
   '' + ''
     echo "Finished patching Vivaldi binaries"
   '';
@@ -82,8 +81,7 @@ in stdenv.mkDerivation rec {
       --suffix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}/ \
       ${stdenv.lib.optionalString enableWidevine "--suffix LD_LIBRARY_PATH : ${libPath}"}
   '' + stdenv.lib.optionalString enableWidevine ''
-    rm $out/opt/${vivaldiName}/libwidevinecdm.so
-    ln -s ${vivaldi-widevine}/lib/libwidevinecdm.so $out/opt/${vivaldiName}/libwidevinecdm.so
+    ln -sf ${vivaldi-widevine}/share/google/chrome/WidevineCdm $out/opt/${vivaldiName}/WidevineCdm
   '';
 
   meta = with stdenv.lib; {

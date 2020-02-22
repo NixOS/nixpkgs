@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "marlin-calc";
-  version = "2019-06-04";
+  version = "2019-10-17";
 
   src = fetchFromGitHub {
     owner = "eyal0";
     repo = "Marlin";
-    rev = "4120d1c72d6c32e9c5cc745c05d20963ba4bbca3";
-    sha256 = "06aly7s4k1r31njm43sbxq9a0127sw43pnaddh92a3cc39rbj2va";
+    rev = "3d5a5c86bea35a2a169eb56c70128bf2d070feef";
+    sha256 = "14sqajm361gnrcqv84g7kbmyqm8pppbhqsabszc4j2cn7vbwkdg5";
   };
 
   buildPhase = ''

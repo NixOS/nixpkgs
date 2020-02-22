@@ -97,7 +97,7 @@ let
       cat > "$out/bin/simutrans" <<EOF
       #!${runtimeShell}
       cd "$out"/share/simutrans
-      exec "${binaries}/bin/simutrans" -use_workdir "\''${extraFlagsArray[@]}" "\$@"
+      exec "${binaries}/bin/simutrans" -use_workdir "\$@"
       EOF
       chmod +x "$out/bin/simutrans"
     '';
@@ -164,6 +164,7 @@ let
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;
+      broken = true;
     };
   };
 

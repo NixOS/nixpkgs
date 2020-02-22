@@ -1,37 +1,49 @@
-{ stdenv, fetchurl, pythonPackages, glibcLocales }:
+{ lib, fetchFromGitHub, python, glibcLocales }:
 
-pythonPackages.buildPythonApplication rec {
-  pname = "errbot";
-  version = "5.2.0";
-
-  src = fetchurl {
-    url = "mirror://pypi/e/errbot/${pname}-${version}.tar.gz";
-    sha256 = "0q5fg113s3gnym38d4y5mlnxw6vrm388zw5mlapf7b2zgx34r053";
+let
+  # errbot requires markdown<3, and is not compatible with it either.
+  py = python.override {
+    packageOverrides = self: super: {
+      markdown = super.markdown.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.11";
+        src = super.fetchPypi {
+          pname = "Markdown";
+          inherit version;
+          sha256 = "108g80ryzykh8bj0i7jfp71510wrcixdi771lf2asyghgyf8cmm8";
+        };
+      });
+    };
   };
 
-  disabled = !pythonPackages.isPy3k;
+in
+py.pkgs.buildPythonApplication rec {
+  pname = "errbot";
+  version = "6.1.1";
+
+  src = fetchFromGitHub {
+    owner = "errbotio";
+    repo = "errbot";
+    rev = version;
+    sha256 = "1s4dl1za5imwsv6j3y7m47dy91hmqd5n221kkqm9ni4mpzgpffz0";
+  };
 
   LC_ALL = "en_US.utf8";
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace dnspython3 dnspython \
-      --replace 'cryptography<2.1.0' cryptography \
-      --replace 'pyOpenSSL<17.3.0' pyOpenSSL
-  '';
-
-  # tests folder is not included in release
-  doCheck = false;
-
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with pythonPackages; [
-    webtest bottle threadpool rocket-errbot requests jinja2
-    pyopenssl colorlog Yapsy markdown ansi pygments dnspython pep8
+  propagatedBuildInputs = with py.pkgs; [
+    webtest requests jinja2 flask dulwich
+    pyopenssl colorlog markdown ansi pygments
     daemonize pygments-markdown-lexer telegram irc slackclient
-    sleekxmpp hypchat pytest
+    sleekxmpp pyasn1 pyasn1-modules hypchat
   ];
 
-  meta = with stdenv.lib; {
+  checkInputs = with py.pkgs; [ mock pytest ];
+  # avoid tests that do network calls
+  checkPhase = ''
+    pytest tests -k 'not backup and not broken_plugin and not plugin_cycle'
+  '';
+
+  meta = with lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = http://errbot.io/;
     maintainers = with maintainers; [ fpletz globin ];

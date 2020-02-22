@@ -4,12 +4,12 @@ with pythonPackages;
 
 buildPythonApplication rec {
   pname = "watson";
-  version = "1.7.0";
+  version = "1.8.0";
 
   src = fetchPypi {
     inherit version;
     pname = "td-watson";
-    sha256 = "249313996751f32f38817d424cbf8d74956461df1439f0ee3a962fcc3c77225d";
+    sha256 = "1ip66jhbcqifdw1avbhngwym0vv7fsqxgbph11da5wlqwfwp060n";
   };
 
   checkPhase = ''

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   buildInputs = [ libevent ];
   propagatedBuildInputs = [ cyrus_sasl ];
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive"/*gcc7*/ ];
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   meta = with stdenv.lib; {
     homepage = https://libmemcached.org;

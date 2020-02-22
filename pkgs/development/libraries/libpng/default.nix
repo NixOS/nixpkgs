@@ -34,6 +34,6 @@ in stdenv.mkDerivation rec {
     homepage = http://www.libpng.org/pub/png/libpng.html;
     license = licenses.libpng2;
     platforms = platforms.all;
-    maintainers = [ maintainers.vcunat maintainers.fuuzetsu ];
+    maintainers = [ maintainers.vcunat ];
   };
 }

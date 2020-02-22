@@ -1,32 +1,47 @@
 { stdenv, fetchurl }:
 let
-  version = "110.91";
+  version = "110.95";
   baseurl = "http://smlnj.cs.uchicago.edu/dist/working/${version}";
 
+  isArch64 = stdenv.system == "x86_64-linux";
+
+  arch = if isArch64
+    then "64"
+    else "32";
+
+  boot32 = { url = "${baseurl}/boot.x86-unix.tgz";
+             sha256 = "07bcrvjphyin1ygjbymcqhd1mbfk4hff82wmxcllh77lr28l5dxf"; };
+  boot64 = { url = "${baseurl}/boot.amd64-unix.tgz";
+             sha256 = "1zn96a83kb6bn6228yfjsvb58m2qxw9k4j3qz0p9c8za479w4ch6"; };
+
+  bootBinary = if isArch64
+               then boot64
+               else boot32;
+
   sources = map fetchurl [
-    { url = "${baseurl}/config.tgz";              sha256 = "00vbg2kpwgkf272m697p5hd35pawficbrifchn7dnd519wpdx436"; }
-    { url = "${baseurl}/cm.tgz";                  sha256 = "0wxb0s2fwh7lbb3z2pfvmvhk5v0gm75kchkv7gg9f895ahyvm6yd"; }
-    { url = "${baseurl}/compiler.tgz";            sha256 = "0iq06ycivy562i59vvbma9zi575zw1djhdfkcy0bn7m9kfzzbgkh"; }
-    { url = "${baseurl}/runtime.tgz";             sha256 = "0km8p4vmy3m38xv0rl8d3mh2nlk2mvx010npm34gs374bmmzc7z9"; }
-    { url = "${baseurl}/system.tgz";              sha256 = "16d5vs1rn7ly6jxjm08222cj0sry73pr57xpc9d6k286b1v0910b"; }
-    { url = "${baseurl}/MLRISC.tgz";              sha256 = "1c9sw8zm90ykas5nwbhk2wic7sxkjrylb610x37v46m5ips1wlma"; }
-    { url = "${baseurl}/smlnj-lib.tgz";           sha256 = "09ka20ym7ahrpj4r6vc5phflc8y57dj09qvwk8ambfwb2p2274sw"; }
-    { url = "${baseurl}/old-basis.tgz";           sha256 = "1bhq9fv6p8diz489h9571g0xrsi8yx7h6gh9410255klxjrw964h"; }
-    { url = "${baseurl}/ckit.tgz";                sha256 = "1lq9ljai0shc6hszx5v6bqmkz16a3f295mfg7q622apzgzark3vd"; }
-    { url = "${baseurl}/nlffi.tgz";               sha256 = "1xjmlwiclgckj73z5hz3hnqlavp3ax9sfvgc0rvj3xpy3i3n6axj"; }
-    { url = "${baseurl}/cml.tgz";                 sha256 = "1sjzipxnvr9dgcg16bllfk3b46ac9f8h353nh1ccykwwq4whi9bf"; }
-    { url = "${baseurl}/eXene.tgz";               sha256 = "04clbchrlqx5v35gkbydbfnpl720i4nqijkshiwn0v592n4xfdf4"; }
-    { url = "${baseurl}/ml-lpt.tgz";              sha256 = "0max073nzwv7vx13caj7zmlhslvxlgg8rj52278g7f6fqcrwp5cf"; }
-    { url = "${baseurl}/ml-lex.tgz";              sha256 = "0x2mbg45l71049sgvvkl6bnqc5svz70vh1m1rbf3xk41z5bapcgr"; }
-    { url = "${baseurl}/ml-yacc.tgz";             sha256 = "0a1pbwpw1y6d1xn9yjarqpmybrxqwp5snp28by36745h1jvb1p1b"; }
-    { url = "${baseurl}/ml-burg.tgz";             sha256 = "119mq5jrbkn9vf9fgb0wyz483hf26al9hwb91xpmlmfx5qqnfzik"; }
-    { url = "${baseurl}/pgraph.tgz";              sha256 = "1s7jmh3q88rz29bk02y3gzdqrgvk484j5ji8bn7s6fc78m50nqp8"; }
-    { url = "${baseurl}/trace-debug-profile.tgz"; sha256 = "1gzf1pbmw2cn5w6f5qfdm3d6n6069n1nnzz6z4v7mr07x54c6mdv"; }
-    { url = "${baseurl}/heap2asm.tgz";            sha256 = "09cgj568a9x017awysjdx35mlp5zkdmc2fs67fvnm5ifl7ivfs8j"; }
-    { url = "${baseurl}/smlnj-c.tgz";             sha256 = "1g4xhcxychs9q25x7a5lvqfamq52c5ljlx84bc5cazvpkhixyg04"; }
-    { url = "${baseurl}/doc.tgz";                 sha256 = "1l0x91dscizk2pyj1lw595r84h1h0shxh0x5hva891717a1hfa51"; }
-    { url = "${baseurl}/boot.x86-unix.tgz";       sha256 = "0f6x4nfhrgm1z4dx862df2yaffdh1sd6zx2lyb2vph5mhp7x9n58"; }
-    { url = "${baseurl}/asdl.tgz";                sha256 = "1pi3m21jllyd2h0zpz4bajskfv58g6pjhpprqiwgmikn6w1pryp8"; }
+    bootBinary
+    { url = "${baseurl}/config.tgz";              sha256 = "09srqxkxl86iaz6l6dz83c1apsac0pxpfq6b74i6l0nfl261jibw"; }
+    { url = "${baseurl}/cm.tgz";                  sha256 = "0gh8inrb07z597axw8qipwyx52m8nac5d5r0rvgzvdnnjg9nr9zy"; }
+    { url = "${baseurl}/compiler.tgz";            sha256 = "1kk6jwzyc261l5nii3n8rwccmgvcj1mg5fgycfsfsiyyy1v8xfx7"; }
+    { url = "${baseurl}/runtime.tgz";             sha256 = "17i069h5cv411sgzx3ynlf4v3wlrxiba9bwy1b0x0cyhs879kppc"; }
+    { url = "${baseurl}/system.tgz";              sha256 = "0s8ij3wfxpjrmrwxrgrirfxjj8vkda6l32j88al5q1ic3ncwc58s"; }
+    { url = "${baseurl}/MLRISC.tgz";              sha256 = "1v2d3gjxrcgc95x5glqcw0nfp13aapkcw03fyi70m3k1yc61izmz"; }
+    { url = "${baseurl}/smlnj-lib.tgz";           sha256 = "04i11ki8v9s7yz3lg6b0djhi03zzkzav0b5cr81ypxlkmf4hh6bp"; }
+    { url = "${baseurl}/old-basis.tgz";           sha256 = "1ryqpy0n7c9gd995ndmjvaci74f95nr8n1jjgm28yd1sn7hnavhi"; }
+    { url = "${baseurl}/ckit.tgz";                sha256 = "18mcs3j8c5gq9cmck7r175am60blaznqmhzyir622yfc8fpw1map"; }
+    { url = "${baseurl}/nlffi.tgz";               sha256 = "16mrl5aqbgsgljxa3z8kj5max9drddml34bq7rn1i78594jfvkwk"; }
+    { url = "${baseurl}/cml.tgz";                 sha256 = "00x784nv1pi6534k3vva26i9qx84cvw242vgwbs5020zkm6gvrmn"; }
+    { url = "${baseurl}/eXene.tgz";               sha256 = "143825h36v6z77kwvrvpszgwnhmjs3yldb18i9z4lwkqfb4kn7f7"; }
+    { url = "${baseurl}/ml-lpt.tgz";              sha256 = "17ly9h9ry8r94dx6lkas6w2cxknwkpma4z9pj8rgzmd3w6qm7j1z"; }
+    { url = "${baseurl}/ml-lex.tgz";              sha256 = "1ja3l2kiq17754c58mwdiqi25f7ax0cji2wk0vq4872iwwxc22px"; }
+    { url = "${baseurl}/ml-yacc.tgz";             sha256 = "1m48nkwvw87yg39sjihlw8na5m34bzz3d4zpfbjaj2f75fkjy3jf"; }
+    { url = "${baseurl}/ml-burg.tgz";             sha256 = "13nbvbah7bn8gjm4gi41m412vpl69wd6d3x3wzbb6xpia9vm4z4j"; }
+    { url = "${baseurl}/pgraph.tgz";              sha256 = "1aizkl8avz01kx221xy5z7a1a1b5xqn2hrk66wr8d0iav2nh5c98"; }
+    { url = "${baseurl}/trace-debug-profile.tgz"; sha256 = "1c80xgck9sb2rm554nfg4f5mpjkdbrwkcx88pj120056225l10vx"; }
+    { url = "${baseurl}/heap2asm.tgz";            sha256 = "1n68drd7as5dy20ccfvgd9cmnhfpfvz7g3f0gc8kpaqaz3vpy36g"; }
+    { url = "${baseurl}/smlnj-c.tgz";             sha256 = "1b6svh2kk5211rq73fdwx3sf80d2rshf0dmkkrq5mw4852nzqz3p"; }
+    { url = "${baseurl}/doc.tgz";                 sha256 = "021yzhy9maypq4ahz0d0qpr601spndg583fn9mapv6rl42kwhjq6"; }
+    { url = "${baseurl}/asdl.tgz";                sha256 = "0nqavqcbidwnphbbwjrxhpy8glbyad51wy0cpqimbsw3sgns0zkd"; }
   ];
 in stdenv.mkDerivation {
   pname = "smlnj";
@@ -37,6 +52,7 @@ in stdenv.mkDerivation {
   patchPhase = ''
     sed -i '/PATH=/d' config/_arch-n-opsys base/runtime/config/gen-posix-names.sh
     echo SRCARCHIVEURL="file:/$TMP" > config/srcarchiveurl
+    patch --verbose config/_heap2exec ${./heap2exec.diff}
   '';
 
   unpackPhase = ''
@@ -50,7 +66,7 @@ in stdenv.mkDerivation {
   '';
 
   buildPhase = ''
-    ./config/install.sh
+    ./config/install.sh -default ${arch}
   '';
 
   installPhase = ''
@@ -67,7 +83,7 @@ in stdenv.mkDerivation {
     description = "Standard ML of New Jersey, a compiler";
     homepage    = http://smlnj.org;
     license     = licenses.bsd3;
-    platforms   = [ "i686-linux" ];
+    platforms   = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

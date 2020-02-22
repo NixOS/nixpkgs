@@ -31,8 +31,8 @@ diff -ur cmake-3.12.1/Utilities/cmlibuv/src/unix/fsevents.c cmake-3.12.1-patched
  #include "uv.h"
  #include "internal.h"
  
--#if TARGET_OS_IPHONE
-+#if !HAVE_CORESERVICES_CORESERVICES_H
+-#if TARGET_OS_IPHONE || MAC_OS_X_VERSION_MAX_ALLOWED < 1070
++#if !HAVE_CORESERVICES_CORESERVICES_H || MAC_OS_X_VERSION_MAX_ALLOWED < 1070
  
  /* iOS (currently) doesn't provide the FSEvents-API (nor CoreServices) */
  

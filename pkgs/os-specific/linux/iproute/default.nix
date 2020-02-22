@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
-  version = "5.2.0";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/net/${pname}/${pname}-${version}.tar.xz";
-    sha256 = "1a2dywa2kam24951byv9pl32mb9z6klh7d4vp8fwfgrm4vn5vfd5";
+    sha256 = "0ywg70f98wgfai35jl47xzpjp45a6n7crja4vc8ql85cbi1l7ids";
   };
 
   preConfigure = ''
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile --replace " netem " " "
   '';
 
-  outputs = [ "out" "dev"];
+  outputs = [ "out" "dev" ];
 
   makeFlags = [
     "DESTDIR="

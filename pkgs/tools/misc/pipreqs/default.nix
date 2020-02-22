@@ -3,11 +3,11 @@
 # Using python 2 because when packaging with python 3 pipreqs fails to parse python 2 code.
 python2Packages.buildPythonApplication rec {
   pname = "pipreqs";
-  version = "0.4.9";
+  version = "0.4.10";
 
   src = python2Packages.fetchPypi {
     inherit pname version;
-    sha256 = "cec6eecc4685967b27eb386037565a737d036045f525b9eb314631a68d60e4bc";
+    sha256 = "0fdr3mbxjpmrxr7yfc1sn9kbpcyb0qwafimhhrrqvf989dj1sdcy";
   };
 
   propagatedBuildInputs = with python2Packages; [ yarg docopt ];

@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "passlib";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "3d948f64138c25633613f303bcc471126eae67c04d5e3f6b7b8ce6242f8653e0";
+    sha256 = "8d666cef936198bc2ab47ee9b0410c94adf2ba798e5a84bf220be079ae7ab6a8";
   };
 
   checkInputs = [ nose ];

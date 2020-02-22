@@ -22,6 +22,6 @@ agda.mkDerivation (self: rec {
     description = "Agda standard library developed at Iowa";
     license = stdenv.lib.licenses.free;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 })

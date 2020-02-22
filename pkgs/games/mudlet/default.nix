@@ -1,4 +1,4 @@
-{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, pcre, pugixml, qtbase, qtmultimedia, qttools, yajl, libzip, hunspell
+{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, qtmultimedia, qttools, yajl, libzip, hunspell
 , boost, libGLU, lua, cmake,  which, }:
 
 let
@@ -6,27 +6,19 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
-  version = "4.0.3";
+  version = "4.3";
 
   src = fetchFromGitHub {
     owner = "Mudlet";
     repo = "Mudlet";
     rev = "Mudlet-${version}";
     fetchSubmodules = true;
-    sha256 = "18bl4k0qgh47d9k5ipfvypfj1il678c0ws64a8adn8k21jajzkik";
+    sha256 = "0qqdmivfwf9jmv5yx90z1fj99nlhnq762lfw6bcxgv74y4l4b4c0";
   };
 
-  patches = [
-    ( fetchpatch {
-      url = "https://github.com/Mudlet/Mudlet/commit/3c8f12b6d757894d92ec2e2c9b12b91f69e8a3b6.patch";
-      name = "hunspell-1.7";
-      sha256 = "09qggls4pzpd8h9h10fbpfd7x3kr7fjp9axdwz98igpwy714n98j";
-    })
-  ];
-
-  nativeBuildInputs = [ cmake wrapQtAppsHook qttools which ];
+  nativeBuildInputs = [ cmake wrapQtAppsHook git qttools which ];
   buildInputs = [
-    pcre pugixml qtbase qtmultimedia luaEnv libzip libGLU yajl boost hunspell
+    pcre pugixml qtbase libsForQt5.qtkeychain qtmultimedia luaEnv libzip libGLU yajl boost hunspell
   ];
 
   WITH_FONTS = "NO";
@@ -35,6 +27,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   installPhase =  ''
+    mkdir -pv $out/lib
+    cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib
     mkdir -pv $out/bin
     cp src/mudlet $out
     mkdir -pv $out/share/mudlet
@@ -49,6 +43,7 @@ stdenv.mkDerivation rec {
     makeQtWrapper $out/mudlet $out/bin/mudlet \
       --set LUA_CPATH "${luaEnv}/lib/lua/${lua.luaversion}/?.so" \
       --prefix LUA_PATH : "$NIX_LUA_PATH" \
+      --prefix LD_LIBRARY_PATH : "${libsForQt5.qtkeychain}/lib/" \
       --run "cd $out";
   '';
 

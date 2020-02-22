@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
   ];
 
   # issues with ntl -- https://github.com/wbhart/flint2/issues/487
-  NIX_CXXSTDLIB_COMPILE = [ "-std=c++11" ];
+  NIX_CXXSTDLIB_COMPILE = "-std=c++11";
 
   patches = [
     (fetchpatch {

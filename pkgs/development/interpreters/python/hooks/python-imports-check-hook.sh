@@ -10,7 +10,7 @@ pythonImportsCheckPhase () {
     fi
 }
 
-if [ -z "$dontUsePythonImportsCheck" ]; then
+if [ -z "${dontUsePythonImportsCheck-}" ]; then
     echo "Using pythonImportsCheckPhase"
     preDistPhases+=" pythonImportsCheckPhase"
 fi

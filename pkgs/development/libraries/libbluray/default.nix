@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = optional withAACS libaacs;
 
-  NIX_LDFLAGS = [
+  NIX_LDFLAGS = toString [
     (optionalString withAACS   "-L${libaacs}/lib -laacs")
     (optionalString withBDplus "-L${libbdplus}/lib -lbdplus")
   ];

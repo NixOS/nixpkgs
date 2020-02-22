@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 

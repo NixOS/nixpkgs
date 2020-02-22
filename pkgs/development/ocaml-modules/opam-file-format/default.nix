@@ -15,6 +15,8 @@ stdenv.mkDerivation rec {
 
   installFlags = [ "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
+  patches = [ ./optional-static.patch ];
+
   meta = {
     description = "Parser and printer for the opam file syntax";
     license = stdenv.lib.licenses.lgpl21;

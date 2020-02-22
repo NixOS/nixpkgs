@@ -18,11 +18,11 @@ stdenv.mkDerivation rec {
   buildInputs = [ libxcb xcbutilkeysyms xcbutilimage pam libX11
     libev cairo libxkbcommon libxkbfile libjpeg_turbo xcbutilxrm ];
 
-  makeFlags = "all";
+  makeFlags = [ "all" ];
   preInstall = ''
     mkdir -p $out/share/man/man1
   '';
-  installFlags = "PREFIX=\${out} SYSCONFDIR=\${out}/etc MANDIR=\${out}/share/man";
+  installFlags = [ "PREFIX=\${out}" "SYSCONFDIR=\${out}/etc" "MANDIR=\${out}/share/man" ];
   postInstall = ''
     mv $out/bin/i3lock $out/bin/i3lock-color
     mv $out/share/man/man1/i3lock.1 $out/share/man/man1/i3lock-color.1

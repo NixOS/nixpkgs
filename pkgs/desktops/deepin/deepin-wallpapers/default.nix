@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
       $out/var/cache/image-blur/$(echo -n $out/share/backgrounds/deepin/desktop.jpg | md5sum | cut -d " " -f 1).jpg
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Wallpapers for Deepin Desktop Environment";

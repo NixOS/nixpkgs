@@ -2,11 +2,11 @@
   pkgconfig, bzip2, xmlto, gettext, imagemagick, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "libpst-0.6.72";
+  name = "libpst-0.6.74";
 
   src = fetchurl {
     url = "http://www.five-ten-sg.com/libpst/packages/${name}.tar.gz";
-    sha256 = "01ymym0218805g7bqhr7x2rlhzsbsbidi3nr0z2r2w07xf8xh6ca";
+    sha256 = "0dzx8jniz7mczbbp08zfrl46h27hyfrsnjxmka9pi5aawzfdm1zp";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

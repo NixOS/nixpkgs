@@ -11,6 +11,13 @@ let
 
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "iodined" "enable" ] [ "services" "iodine" "server" "enable" ])
+    (mkRenamedOptionModule [ "services" "iodined" "domain" ] [ "services" "iodine" "server" "domain" ])
+    (mkRenamedOptionModule [ "services" "iodined" "ip" ] [ "services" "iodine" "server" "ip" ])
+    (mkRenamedOptionModule [ "services" "iodined" "extraConfig" ] [ "services" "iodine" "server" "extraConfig" ])
+    (mkRemovedOptionModule [ "services" "iodined" "client" ] "")
+  ];
 
   ### configuration
 
@@ -140,8 +147,7 @@ in
       };
     };
 
-    users.users = singleton {
-      name = iodinedUser;
+    users.users.${iodinedUser} = {
       uid = config.ids.uids.iodined;
       description = "Iodine daemon user";
     };

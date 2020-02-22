@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , pkgconfig
+, vala
 , gtk3
 , glib
 , pantheon
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    pantheon.vala
+    vala
     pkgconfig
     wrapGAppsHook
   ];

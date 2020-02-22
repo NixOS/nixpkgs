@@ -10,11 +10,11 @@ with stdenv.lib;
 
 perlPackages.buildPerlPackage rec {
   pname = "gscan2pdf";
-  version = "2.5.5";
+  version = "2.6.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/gscan2pdf/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0gfhjmv768hx2l3jk2mjhh1snkgkaddgw70s14jq8kxhhzvhlmv8";
+    sha256 = "1chmk51xwylnjrgc6hw23x7g7cpwzgwmjc49fcah7pkd3dk1cvvr";
   };
 
   nativeBuildInputs = [ wrapGAppsHook ];
@@ -38,7 +38,7 @@ perlPackages.buildPerlPackage rec {
       ListMoreUtils
       HTMLParser
       ProcProcessTable
-      Log4Perl
+      LogLog4perl
       TryTiny
       DataUUID
       DateCalc

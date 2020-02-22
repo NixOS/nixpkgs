@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = "http://iverilog.icarus.com/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ winden ];
-    platforms = platforms.linux;
+    platforms = platforms.all;
   };
 }

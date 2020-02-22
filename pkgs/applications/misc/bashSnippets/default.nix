@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper
 , curl, python, bind, iproute, bc, gitMinimal }:
 let
-  version = "1.17.3";
+  version = "1.23.0";
   deps = lib.makeBinPath [
     curl
     python
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     owner = "alexanderepstein";
     repo = "Bash-Snippets";
     rev = "v${version}";
-    sha256 = "1xdjk8bjh7l6h7gdqrra1dh4wdq89wmd0jsirsvqa3bmcsb2wz1r";
+    sha256 = "044nxgd3ic2qr6hgq5nymn3dyf5i4s8mv5z4az6jvwlrjnvbg8cp";
   };
 
   buildInputs = [ makeWrapper ];

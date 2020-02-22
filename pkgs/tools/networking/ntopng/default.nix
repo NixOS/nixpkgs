@@ -20,6 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./0001-Undo-weird-modification-of-data_dir.patch
     ./0002-Remove-requirement-to-have-writeable-callback-dir.patch
+    ./0003-New-libpcap-defines-SOCKET.patch
   ];
 
   buildInputs = [ libpcap/* gnutls libgcrypt*/ libxml2 glib geoip geolite-legacy
@@ -53,8 +54,8 @@ stdenv.mkDerivation rec {
     sed 's|LIBS += -lstdc++.6||' -i Makefile
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-fpermissive" ]
-    ++ stdenv.lib.optional stdenv.cc.isClang "-Wno-error=reserved-user-defined-literal";
+  NIX_CFLAGS_COMPILE = "-fpermissive"
+    + stdenv.lib.optionalString stdenv.cc.isClang " -Wno-error=reserved-user-defined-literal";
 
   meta = with stdenv.lib; {
     description = "High-speed web-based traffic analysis and flow collection tool";

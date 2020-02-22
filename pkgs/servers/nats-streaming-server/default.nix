@@ -3,17 +3,15 @@
 with lib;
 
 buildGoPackage rec {
-  pname = "nats-streaming-server";
-  version = "0.11.2";
-  rev = "v${version}";
-
-  goPackagePath = "github.com/nats-io/nats-streaming-server";
+  pname   = "nats-streaming-server";
+  version = "0.16.2";
+  goPackagePath = "github.com/nats-io/${pname}";
 
   src = fetchFromGitHub {
-    inherit rev;
-    owner = "nats-io";
-    repo = "nats-streaming-server";
-    sha256 = "1jd9c5yw3xxp5hln1g8w48l4cslhxbv0k2af47g6pya09kwknqkq";
+    rev    = "v${version}";
+    owner  = "nats-io";
+    repo   = pname;
+    sha256 = "0xrgwsw4xrn6fjy1ra4ycam50kdhyqqsms4yxblj5c5z7w4hnlmk";
   };
 
   meta = {

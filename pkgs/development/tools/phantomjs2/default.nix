@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, fetchpatch
-, bison2, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
+, bison, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
 , libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
 , darwin, writeScriptBin, cups, makeWrapper
 }:
@@ -27,7 +27,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [
-    bison2 flex fontconfig freetype gperf icu openssl
+    bison flex fontconfig freetype gperf icu openssl
     libjpeg libpng perl python ruby sqlite qtwebkit qtbase
     makeWrapper
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -68,6 +68,10 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/phantomjs.pro \
       --replace "QT_MINOR_VERSION, 5" "QT_MINOR_VERSION, 9"
   '';
+
+  # Avoids error in webpage.cpp:80:89:
+  # invalid suffix on literal; C++11 requires a space between litend identifier
+  NIX_CFLAGS_COMPILE = "-Wno-reserved-user-defined-literal";
 
   __impureHostDeps = stdenv.lib.optional stdenv.isDarwin "/usr/lib/libicucore.dylib";
 

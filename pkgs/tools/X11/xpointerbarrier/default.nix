@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ xorg.libX11 xorg.libXfixes xorg.libXrandr ];
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [ "prefix=$(out)" ];
 
   meta = {
     homepage = https://uninformativ.de/git/xpointerbarrier;

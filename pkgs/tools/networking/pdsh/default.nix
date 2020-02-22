@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, readline, rsh, ssh }:
 
 stdenv.mkDerivation rec {
-  name = "pdsh-2.33";
+  name = "pdsh-2.34";
 
   src = fetchurl {
     url = "https://github.com/chaos/pdsh/releases/download/${name}/${name}.tar.gz";
-    sha256 = "0bwlkl9inj66iwvafg00pi3sk9n673phdi0kcc59y9nn55s0hs3k";
+    sha256 = "1s91hmhrz7rfb6h3l5k97s393rcm1ww3svp8dx5z8vkkc933wyxl";
   };
 
   buildInputs = [ perl readline ssh ];

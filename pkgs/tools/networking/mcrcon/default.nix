@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mcrcon";
-  version = "0.6.1";
+  version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "Tiiffi";
     repo = "mcrcon";
     rev = "v${version}";
-    sha256 = "0as60cgl8sflykmwihc6axy1hzx6gjgjav6c7mvlbsc43dv8fs51";
+    sha256 = "004h1glagyw1mic1k461bky0w2fxdfhrhcqjzr9wp6gvyy9s8bix";
   };
 
   buildPhase = ''

@@ -1,20 +1,23 @@
-{ stdenv, fetchFromGitHub, SDL2, frei0r, gettext, mlt, jack1, mkDerivation
-, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
-, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools }:
+{ stdenv, fetchFromGitHub, fetchpatch, mkDerivation, SDL2, frei0r, gettext, mlt
+, jack1, pkgconfig, qtbase, qtmultimedia, qtwebkit, qtx11extras, qtwebsockets
+, qtquickcontrols, qtgraphicaleffects, libmlt, qmake, qttools
+}:
 
-assert stdenv.lib.versionAtLeast libmlt.version "6.8.0";
-assert stdenv.lib.versionAtLeast mlt.version "6.8.0";
+assert stdenv.lib.versionAtLeast libmlt.version "6.18.0";
+assert stdenv.lib.versionAtLeast mlt.version "6.18.0";
 
 mkDerivation rec {
   pname = "shotcut";
-  version = "19.08.16";
+  version = "20.02.17";
 
   src = fetchFromGitHub {
     owner = "mltframework";
     repo = "shotcut";
     rev = "v${version}";
-    sha256 = "0alnnfgimfs8fjddkcfx4pzyijwz5dgnqic5qazaza6f4kf60801";
+    sha256 = "0nsqlbapqgxccb7mnvxqw4hdddj944d4z5jxafpv0cwj7s3z8wj0";
   };
+
+  patches = [ ./0001-encodedock.cpp-connect-to-VAAPI-via-DRM-not-X11.patch ];
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ pkgconfig qmake ];
@@ -30,13 +33,14 @@ mkDerivation rec {
   prePatch = ''
     sed 's_shotcutPath, "qmelt"_"${mlt}/bin/melt"_' -i src/jobs/meltjob.cpp
     sed 's_shotcutPath, "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/jobs/ffmpegjob.cpp
+    sed 's_qApp->applicationDirPath(), "ffmpeg"_"${mlt.ffmpeg}/bin/ffmpeg"_' -i src/docks/encodedock.cpp
     NICE=$(type -P nice)
     sed "s_/usr/bin/nice_''${NICE}_" -i src/jobs/meltjob.cpp src/jobs/ffmpegjob.cpp
   '';
 
   qtWrapperArgs = [
     "--prefix FREI0R_PATH : ${frei0r}/lib/frei0r-1"
-    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2 ]}"
+    "--prefix LD_LIBRARY_PATH : ${stdenv.lib.makeLibraryPath [jack1 SDL2]}"
     "--prefix PATH : ${mlt}/bin"
     ];
 
@@ -58,7 +62,7 @@ mkDerivation rec {
     '';
     homepage = https://shotcut.org;
     license = licenses.gpl3;
-    maintainers = with maintainers; [ goibhniu woffs ];
+    maintainers = with maintainers; [ goibhniu woffs peti ];
     platforms = platforms.linux;
   };
 }

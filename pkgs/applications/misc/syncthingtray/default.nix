@@ -20,14 +20,14 @@
 }:
 
 mkDerivation rec {
-  version = "0.9.1";
+  version = "0.10.6";
   pname = "syncthingtray";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "syncthingtray";
     rev = "v${version}";
-    sha256 = "0ijwpwlwwbfh9fdfbwz6dgi6hpmaav2jm56mzxm6as50iwnb59fx";
+    sha256 = "1lh1qsdy5081jrs27ba0mfh90ya1fj9h6j5k0cdsfap9mcxyjd9g";
   };
 
   buildInputs = [ qtbase cpp-utilities qtutilities ]
@@ -45,6 +45,7 @@ mkDerivation rec {
   ] ++ lib.optionals (!plasmoidSupport) ["-DNO_PLASMOID=ON"]
     ++ lib.optionals (!kioPluginSupport) ["-DNO_FILE_ITEM_ACTION_PLUGIN=ON"]
     ++ lib.optionals systemdSupport ["-DSYSTEMD_SUPPORT=ON"]
+    ++ lib.optionals (!webviewSupport) ["-DWEBVIEW_PROVIDER:STRING=none"]
   ;
 
   meta = with lib; {

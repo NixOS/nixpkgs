@@ -7,7 +7,6 @@
 , doxygen
 , fetchFromGitHub
 , ffmpeg
-, hicolor-icon-theme
 , libmediainfo
 , libraw
 , libsodium
@@ -51,7 +50,6 @@ mkDerivation rec {
     cryptopp
     curl
     ffmpeg
-    hicolor-icon-theme
     libmediainfo
     libraw
     libsodium

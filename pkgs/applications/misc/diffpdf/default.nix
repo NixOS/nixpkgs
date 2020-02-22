@@ -1,6 +1,6 @@
-{ stdenv, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
+{ stdenv, mkDerivation, fetchurl, fetchpatch, qmake, qttools, qtbase, poppler }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   version = "2.1.3";
   pname = "diffpdf";
 

@@ -42,13 +42,13 @@ let
       propagate = out:
         let setupHook = { writeScript }:
               writeScript "setup-hook" ''
-                if [ "$hookName" != postHook ]; then
+                if [ "''${hookName:-}" != postHook ]; then
                     postHooks+=("source @dev@/nix-support/setup-hook")
                 else
                     # Propagate $dev so that this setup hook is propagated
                     # But only if there is a separate $dev output
                     if [ "''${outputDev:?}" != out ]; then
-                        propagatedBuildInputs="$propagatedBuildInputs @dev@"
+                        propagatedBuildInputs="''${propagatedBuildInputs-} @dev@"
                     fi
                 fi
               '';
@@ -97,8 +97,10 @@ let
       breeze-icons = callPackage ./breeze-icons.nix {};
       kapidox = callPackage ./kapidox.nix {};
       karchive = callPackage ./karchive.nix {};
+      kcalendarcore = callPackage ./kcalendarcore.nix {};
       kcodecs = callPackage ./kcodecs.nix {};
       kconfig = callPackage ./kconfig.nix {};
+      kcontacts = callPackage ./kcontacts.nix {};
       kcoreaddons = callPackage ./kcoreaddons.nix {};
       kdbusaddons = callPackage ./kdbusaddons.nix {};
       kdnssd = callPackage ./kdnssd.nix {};

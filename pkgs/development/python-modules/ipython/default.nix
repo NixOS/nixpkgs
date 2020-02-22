@@ -22,12 +22,12 @@
 
 buildPythonPackage rec {
   pname = "ipython";
-  version = "7.6.1";
-  disabled = pythonOlder "3.5";
+  version = "7.12.0";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "11067ab11d98b1e6c7f0993506f7a5f8a91af420f7e82be6575fcb7a6ca372a0";
+    sha256 = "d9459e7237e2e5858738ff9c3e26504b79899b58a6d49e574d352493d80684c6";
   };
 
   prePatch = lib.optionalString stdenv.isDarwin ''
@@ -57,10 +57,14 @@ buildPythonPackage rec {
     nosetests
   '';
 
-  meta = {
+  pythonImportsCheck = [
+    "IPython"
+  ];
+
+  meta = with lib; {
     description = "IPython: Productive Interactive Computing";
     homepage = http://ipython.org/;
-    license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ bjornfor fridh ];
+    license = licenses.bsd3;
+    maintainers = with maintainers; [ bjornfor fridh ];
   };
 }

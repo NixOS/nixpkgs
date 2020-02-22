@@ -3,16 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
-  version = "0.1.11";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "tectonic-typesetting";
     repo = "tectonic";
     rev = "v${version}";
-    sha256 = "1j98qxlq74vs8nf2jsn2xw9iyrf8kih4v0hrvznkhcab6bpibp2x";
+    sha256 = "0dycv135bkpf71iwlwh8rwwvn287d605nl7v8mjxlrsayiivdmn9";
   };
 
-  cargoSha256 = "0hsm5a40lc3gy1zrfrchp7zby17xjv5a4llqr4xmka07y7sk08fn";
+  cargoSha256 = "1axrf7d01gmhvrap13rydfvwcsg0lk1zw7z1i7zzm898bc7c02qn";
 
   nativeBuildInputs = [ pkgconfig ];
 

@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage    = http://fmv.jku.at/aiger/;
     license     = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    platforms   = stdenv.lib.platforms.unix;
   };
 }

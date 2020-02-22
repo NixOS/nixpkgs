@@ -36,7 +36,7 @@ mkDerivation rec {
     description = "Tool used to launch programs quickly by typing their names";
     homepage = https://github.com/lxqt/lxqt-runner;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

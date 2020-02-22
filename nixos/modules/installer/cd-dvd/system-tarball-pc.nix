@@ -122,11 +122,10 @@ in
 
   /* fake entry, just to have a happy stage-1. Users
      may boot without having stage-1 though */
-  fileSystems = [
+  fileSystems.fake =
     { mountPoint = "/";
       device = "/dev/something";
-      }
-  ];
+    };
 
   nixpkgs.config = {
     packageOverrides = p: {

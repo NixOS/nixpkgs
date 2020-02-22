@@ -17,7 +17,7 @@ agda.mkDerivation (self: rec {
     description = "Base library for HoTT in Agda";
     license = stdenv.lib.licenses.bsd3;
     platforms = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
     broken = true;  # largely replaced by HoTT-Agda
   };
 })

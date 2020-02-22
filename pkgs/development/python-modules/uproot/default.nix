@@ -3,6 +3,7 @@
 , backports_lzma
 , cachetools
 , lz4
+, pandas
 , pytestrunner
 , pytest
 , pkgconfig
@@ -15,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "uproot";
-  version = "3.8.0";
+  version = "3.11.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06s0lym5md59pj8w89acnwk0i0hh92az187h4gz22mb849h308pw";
+    sha256 = "1bn8z640408s4h04ymy0y79fm5ss2mx99mkgdbw68a80x0p6982h";
   };
 
   nativeBuildInputs = [ pytestrunner ];
@@ -27,6 +28,7 @@ buildPythonPackage rec {
   checkInputs = [
     lz4
     mock
+    pandas
     pkgconfig
     pytest
     requests
@@ -41,8 +43,11 @@ buildPythonPackage rec {
   ];
 
   # skip tests which do network calls
+  # test_compression.py is missing zstandard package
   checkPhase = ''
-    pytest tests -k 'not hist_in_tree and not branch_auto_interpretation'
+    pytest tests -k 'not hist_in_tree \
+      and not branch_auto_interpretation' \
+      --ignore=tests/test_compression.py
   '';
 
   meta = with lib; {

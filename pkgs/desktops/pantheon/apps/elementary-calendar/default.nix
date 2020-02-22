@@ -25,7 +25,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-calendar";
-  version = "5.0";
+  version = "5.0.3";
 
   repoName = "calendar";
 
@@ -33,13 +33,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0yiis5ig98gjw4s2qh8lppkdmv1cgi6qchxqncsjdki7yxyyni35";
+    sha256 = "1dqcmh585fjib4m8bs7qy23fv429s7q9nbcqnn0vvmy1n36fic4m";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

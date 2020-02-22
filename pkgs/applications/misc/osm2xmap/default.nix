@@ -12,17 +12,14 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [
-    "GIT_VERSION=$(version)"
+    "GIT_VERSION=${version}"
     "GIT_TIMESTAMP="
-    "SHAREDIR=$(out)/share/"
-    "INSTALL_BINDIR=$(out)/bin"
-    "INSTALL_MANDIR=$(out)/share/man/man1"
-    "INSTALL_SHAREDIR=$(out)/share/"
+    "SHAREDIR=${placeholder ''out''}/share/osm2xmap"
+    "INSTALL_BINDIR=${placeholder ''out''}/bin"
+    "INSTALL_MANDIR=${placeholder ''out''}/share/man/man1"
   ];
 
-  NIX_CFLAGS_COMPILE = [ "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H" ];
-
-  installFlags = [ "DESTDIR=$(out)" ];
+  NIX_CFLAGS_COMPILE = "-DACCEPT_USE_OF_DEPRECATED_PROJ_API_H";
 
   buildInputs = [ libroxml proj libyamlcpp boost ];
 

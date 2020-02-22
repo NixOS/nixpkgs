@@ -1,4 +1,4 @@
-{ stdenv, stdenv49, gcc9Stdenv, llvmPackages_8
+{ gcc6Stdenv, stdenv, gccStdenv, llvmPackages
 , lib, fetchurl, fetchpatch, fetchFromGitHub
 
 , cmake, ninja, which, findutils, m4, gawk
@@ -8,8 +8,8 @@
 let
   vsmakeBuild = import ./vsmake.nix args;
   cmakeBuild = import ./cmake.nix (args // {
-    gccStdenv    = gcc9Stdenv;
-    llvmPackages = llvmPackages_8;
+    gccStdenv    = gccStdenv;
+    llvmPackages = llvmPackages;
   });
 
   python3-six-patch = fetchpatch {
@@ -22,6 +22,11 @@ let
     name   = "import-for-python-print.patch";
     url    = "https://github.com/apple/foundationdb/commit/ded17c6cd667f39699cf663c0e87fe01e996c153.patch";
     sha256 = "11y434w68cpk7shs2r22hyrpcrqi8vx02cw7v5x79qxvnmdxv2an";
+  };
+
+  glibc230-fix = fetchpatch {
+    url = "https://github.com/Ma27/foundationdb/commit/e133cb974b9a9e4e1dc2d4ac15881d31225c0197.patch";
+    sha256 = "1v9q2fyc73msigcykjnbmfig45zcrkrzcg87b0r6mxpnby8iryl1";
   };
 
 in with builtins; {
@@ -37,6 +42,7 @@ in with builtins; {
     patches = [
       ./patches/ldflags-5.1.patch
       ./patches/fix-scm-version.patch
+      ./patches/gcc-fixes.patch
       python3-six-patch
       python3-print-patch
     ];
@@ -50,6 +56,7 @@ in with builtins; {
     patches = [
       ./patches/ldflags-5.2.patch
       ./patches/fix-scm-version.patch
+      ./patches/gcc-fixes.patch
       python3-six-patch
       python3-print-patch
     ];
@@ -69,13 +76,14 @@ in with builtins; {
   # ------------------------------------------------------
 
   foundationdb61 = cmakeBuild {
-    version = "6.1.10";
+    version = "6.1.12";
     branch  = "release-6.1";
-    sha256  = "1v278zlrki3da2i2258j2b4rk4fq6d9bj623z01bjrvmaqxc2gry";
+    sha256  = "1yh5hx6rim41m0dwhnb2pcwz67wlnk0zwvyw845d36b29gwy58ab";
 
     patches = [
       ./patches/clang-libcxx.patch
       ./patches/suppress-clang-warnings.patch
+      glibc230-fix
     ];
   };
 

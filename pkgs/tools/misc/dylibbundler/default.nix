@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "1mpd43hvpfp7pskfrjnd6vcmfii9v3p97q0ws50krkdvshp0bv2h";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Small command-line program that aims to make bundling .dylibs as easy as possible";

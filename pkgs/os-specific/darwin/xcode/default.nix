@@ -53,5 +53,5 @@ in lib.makeExtensible (self: {
   xcode_10_2_1 = requireXcode "10.2.1" "11sdb54nr0x7kp987qq839x6k5gdx7vqdxjiy5xm5279n1n47bmg";
   xcode_10_3 = requireXcode "10.3" "1i628vfn6zad81fsz3zpc6z15chhskvyp8qnajp2wnpzvrwl6ngb";
   xcode_11 = requireXcode "11" "1r03j3kkp4blfp2kqpn538w3dx57ms930fj8apjkq6dk7fv3jcqh";
-  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if stdenv.targetPlatform.useiOSPrebuilt then stdenv.targetPlatform.xcodeVer else "8.2")}";
+  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if stdenv.targetPlatform.useiOSPrebuilt then stdenv.targetPlatform.xcodeVer else "10.3")}";
 })

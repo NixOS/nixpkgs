@@ -20,6 +20,11 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
+  NIX_CFLAGS_COMPILE = [
+    "-Wno-error=format-truncation"
+    "-Wno-error=address-of-packed-member"
+  ];
+
   nativeBuildInputs = [ cmake doxygen perl python2Packages.sphinx ];
   buildInputs = [ libuuid json_c python2 ];
 

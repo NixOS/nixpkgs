@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "hgsrht";
-  version = "0.13.0";
+  version = "0.21.1";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~sircmpwn/hg.sr.ht";
     rev = version;
-    sha256 = "0qkknvja0pyk69fvzqafj3x8hi5miw22nmksvifbrjcqph8jknqg";
+    sha256 = "19r8zcy4xf9imqifqw3b7ylxd46i025ncns69kn5xp11damilz66";
   };
 
   patches = [

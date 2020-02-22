@@ -7,27 +7,26 @@
 
 buildGoModule rec {
   pname = "wtf";
-  version = "0.21.0";
-
-  overrideModAttrs = _oldAttrs : _oldAttrs // {
-    preBuild = ''export GOPROXY="https://gocenter.io"'';
-  };
+  version = "0.25.0";
 
   src = fetchFromGitHub {
     owner = "wtfutil";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sd8vrx7nak0by4whdmd9jzr66zm48knv1w1aqi90709fv98brm9";
-  };
+    sha256 = "1g76hzlyi8s8dayd36cs4bhnwgrrr731ybflw3xk5pgkgcbs14sd";
+   };
 
-  modSha256 = "0jgq9ql27x0kdp59l5drisl5v7v7sx2wy3zqjbr3bqyh3vdx19ic";
+  modSha256 = "186m7s20r59dyh5lpby4sd4vw3rvnkfzslylwin0c3r6150yrx8h";
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
+
+  subPackages = [ "." ];
 
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$out/bin/wtf" --prefix PATH : "${ncurses.dev}/bin"
+    mv "$out/bin/wtf" "$out/bin/wtfutil"
+    wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
   '';
 
   meta = with lib; {

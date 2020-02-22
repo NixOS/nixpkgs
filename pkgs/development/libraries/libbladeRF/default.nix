@@ -10,7 +10,7 @@ let
     sha256 = "0is79dhsyp9xmlnfdr1i5s1c22ipjafk9d35jpn5dynpvj86m99c";
   };
 
-  version = "2.2.0";
+  version = "2.2.1";
 
 in stdenv.mkDerivation {
   pname = "libbladeRF";
@@ -20,7 +20,7 @@ in stdenv.mkDerivation {
     owner = "Nuand";
     repo = "bladeRF";
     rev = "libbladeRF_v${version}";
-    sha256 = "0mdj5dkqg69gp0xw6gkhp86nxnm9g7az5rplnncxkp4p1kr35rnl";
+    sha256 = "0g89al4kwfbx1l3zjddgb9ay4mhr7zk0ndchca3sm1vq2j47nf4l";
   };
 
   nativeBuildInputs = [ pkgconfig ];

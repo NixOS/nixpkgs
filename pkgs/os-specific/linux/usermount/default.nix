@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus libnotify udisks2 gdk-pixbuf ];
 
-  NIX_CFLAGS_COMPILE = [ "-DENABLE_NOTIFICATIONS" ];
+  NIX_CFLAGS_COMPILE = "-DENABLE_NOTIFICATIONS";
 
   installPhase = ''
     mkdir -p $out/bin

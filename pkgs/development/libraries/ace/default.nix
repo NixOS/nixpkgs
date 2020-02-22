@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ace";
-  version = "6.5.6";
+  version = "6.5.7";
 
   src = fetchurl {
     url = "http://download.dre.vanderbilt.edu/previous_versions/ACE-${version}.tar.bz2";
-    sha256 = "15lfjc8r854hvjfvimhnqc3987b3cdngilhkii9rwpzginbyipi4";
+    sha256 = "0hvd7y3hs8r3r7qbllfaqrva3jrx5razcnwlws822k66v4r10cbx";
   };
 
   enableParallelBuilding = true;

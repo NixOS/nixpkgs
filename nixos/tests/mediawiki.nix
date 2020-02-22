@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "mediawiki";
   meta.maintainers = [ lib.maintainers.aanderse ];
 
@@ -11,9 +11,11 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit('phpfpm-mediawiki.service');
-    $machine->succeed('curl -L http://localhost/') =~ /MediaWiki has been installed/ or die;
+    machine.wait_for_unit("phpfpm-mediawiki.service")
+
+    page = machine.succeed("curl -L http://localhost/")
+    assert "MediaWiki has been installed" in page
   '';
 })

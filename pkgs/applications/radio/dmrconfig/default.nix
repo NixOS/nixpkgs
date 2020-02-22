@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
       --replace /usr/local/bin/dmrconfig $out/bin/dmrconfig
   '';
 
-  makeFlags = "VERSION=${version} GITCOUNT=0";
+  makeFlags = [ "VERSION=${version}" "GITCOUNT=0" ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib/udev/rules.d

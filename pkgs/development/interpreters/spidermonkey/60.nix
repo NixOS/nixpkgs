@@ -4,23 +4,28 @@
 with stdenv.lib;
 
 let
-  version = "60.4.0";
+  version = "60.9.0";
 in stdenv.mkDerivation {
   pname = "spidermonkey";
   inherit version;
 
   src = fetchurl {
     url = "mirror://mozilla/firefox/releases/${version}esr/source/firefox-${version}esr.source.tar.xz";
-    sha256 = "11gzxd82grc3kg1ha4yni6ag6b97n46qycvv6x15s91ziia5hli0";
+    sha256 = "0gy5x2rnnbkqmjd9sq93s3q5na9nkba68xwpizild7k6qn63qicz";
   };
+
+  outputs = [ "out" "dev" ];
+  setOutputFlags = false; # Configure script only understands --includedir
 
   buildInputs = [ readline zlib icu ];
   nativeBuildInputs = [ autoconf213 pkgconfig perl which python2 zip ];
 
   patches = [
+    # Fixed in 62.0
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1415202
     (fetchpatch {
-      url = https://bug1415202.bmoattachments.org/attachment.cgi?id=8926363;
-      sha256 = "082ryrvqa3lvs67v3sq9kf2jshf4qp1fpi195wffc40jdrl8fnin";
+      url = "https://src.fedoraproject.org/rpms/mozjs60/raw/a1b605c73f382db25977cb2d4d70a3ba2ff85b92/f/Always-use-the-equivalent-year-to-determine-the-time-zone.patch";
+      sha256 = "12i225qbzlyfj2disms50zrr5jy8zgn2cc4rgsg58sfgf1bn7150";
     })
   ];
 
@@ -61,7 +66,9 @@ in stdenv.mkDerivation {
 
   # Remove unnecessary static lib
   preFixup = ''
+    moveToOutput bin/js60-config "$dev"
     rm $out/lib/libjs_static.ajs
+    ln -s $out/bin/js60 $out/bin/js
   '';
 
   enableParallelBuilding = true;

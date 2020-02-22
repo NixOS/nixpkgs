@@ -1,0 +1,98 @@
+#!/usr/bin/env python
+from concurrent.futures import ThreadPoolExecutor
+import subprocess
+import textwrap
+import argparse
+import toml
+import json
+import sys
+
+
+argparser = argparse.ArgumentParser(description="Generate overrides for git hashes",)
+argparser.add_argument(
+    "--lock", default="poetry.lock", help="Path to input poetry.lock",
+)
+argparser.add_argument(
+    "--out", default="poetry-git-overlay.nix", help="Output file",
+)
+
+
+def fetch_git(pkg):
+    return (
+        pkg["name"],
+        subprocess.run(
+            [
+                "nix-prefetch-git",
+                "--fetch-submodules",
+                "--url",
+                pkg["source"]["url"],
+                "--rev",
+                pkg["source"]["reference"],
+            ],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        ),
+    )
+
+
+def indent(expr, spaces=2):
+    i = " " * spaces
+    return "\n".join([(i if l != "" else "") + l for l in expr.split("\n")])
+
+
+if __name__ == "__main__":
+    args = argparser.parse_args()
+
+    with open(args.lock) as lockf:
+        lock = toml.load(lockf)
+
+    pkgs = []
+    for pkg in lock["package"]:
+        if "source" in pkg:
+            pkgs.append(pkg)
+
+    with ThreadPoolExecutor() as e:
+        futures = []
+
+        for pkg in pkgs:
+            futures.append(e.submit(fetch_git, pkg))
+
+        lines = [
+            "{ pkgs }:",
+            "self: super: {",
+        ]
+
+        for f in futures:
+            drv_name, p = f.result()
+            if p.returncode != 0:
+                sys.stderr.buffer.write(p.stderr)
+                sys.stderr.buffer.flush()
+                exit(p.returncode)
+
+            meta = json.loads(p.stdout.decode())
+            lines.append(
+                indent(
+                    textwrap.dedent(
+                        """
+              %s = super.%s.overrideAttrs (
+                _: {
+                  src = pkgs.fetchgit {
+                    url = "%s";
+                    rev = "%s";
+                    sha256 = "%s";
+                  };
+                }
+              );"""
+                        % (drv_name, drv_name, meta["url"], meta["rev"], meta["sha256"])
+                    )
+                )
+            )
+
+        lines.extend(["", "}", ""])
+
+        expr = "\n".join(lines)
+
+    with open(args.out, "w") as f:
+        f.write(expr)
+
+    print(f"Wrote {args.out}")

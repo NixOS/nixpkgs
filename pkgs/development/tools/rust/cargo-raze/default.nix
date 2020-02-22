@@ -3,15 +3,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-raze";
-  version = "0.2.8";
+  version = "0.2.10";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0d87azip59bmkk38par23f5yvb9w8ikvdg6grn689zpgc3di2phx";
+    sha256 = "1fznh8jygzyzphw7762qc2jv0370z7qjqk1vkql0g246iqby8pq9";
   };
   sourceRoot = "source/impl";
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
 
   cargoSha256 = "06rl7v0f1lgj9ii07fcnaxmhn28ckr03cpf5b93q8ripm5qh7my9";
 

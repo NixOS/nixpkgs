@@ -2,14 +2,14 @@
 
 buildPythonPackage rec {
   pname = "simplekml";
-  version = "1.3.1";
+  version = "1.3.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "30c121368ce1d73405721730bf766721e580cae6fbb7424884c734c89ec62ad7";
+    sha256 = "08l24gfql83yjcdqb51nnnvckbnfb7bl89am4q9zr0fslrbcn3vf";
   };
 
-  doCheck = false; # no tests are defined in 1.3.1
+  doCheck = false; # no tests are defined in 1.3.3
 
   meta = with lib; {
     description = "Generate KML with as little effort as possible";

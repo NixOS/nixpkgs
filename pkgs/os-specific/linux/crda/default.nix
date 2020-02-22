@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, libgcrypt, libnl, pkgconfig, python2Packages, wireless-regdb }:
+{ stdenv, fetchurl, fetchpatch, libgcrypt, libnl, pkgconfig, python3, wireless-regdb }:
 
 stdenv.mkDerivation rec {
   pname = "crda";
@@ -9,9 +9,24 @@ stdenv.mkDerivation rec {
     url = "http://kernel.org/pub/software/network/crda/crda-${version}.tar.xz";
   };
 
+  patches = [
+    # Switch to Python 3
+    # https://lore.kernel.org/linux-wireless/1437542484-23409-1-git-send-email-ahmed.taahir@gmail.com/
+    (fetchpatch {
+      url = "https://lore.kernel.org/linux-wireless/1437542484-23409-2-git-send-email-ahmed.taahir@gmail.com/raw";
+      sha256 = "0s2n340cgaasvg1k8g9v8xjrbh4y2mcgrhdmv97ja2fs8xjcjbf1";
+    })
+    (fetchpatch {
+      url = "https://lore.kernel.org/linux-wireless/1437542484-23409-3-git-send-email-ahmed.taahir@gmail.com/raw";
+      sha256 = "01dlfw7kqhyx025jxq2l75950b181p9r7i9zkflcwvbzzdmx59md";
+    })
+  ];
+
   buildInputs = [ libgcrypt libnl ];
   nativeBuildInputs = [
-    pkgconfig python2Packages.m2crypto python2Packages.python
+    pkgconfig
+    python3
+    python3.pkgs.pycrypto
   ];
 
   postPatch = ''
@@ -36,6 +51,11 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
   checkTarget = "verify";
+
+  postInstall = ''
+    # The patch installs build header
+    rm $out/include/reglib/keys-gcrypt.h
+  '';
 
   meta = with stdenv.lib; {
     description = "Linux wireless Central Regulatory Domain Agent";

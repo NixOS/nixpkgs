@@ -57,18 +57,19 @@ in
     environment.systemPackages = [ pkgs.davfs2 ];
     environment.etc."davfs2/davfs2.conf".source = cfgFile;
 
-    users.groups = optionalAttrs (cfg.davGroup == "davfs2") (singleton {
-      name = "davfs2";
-      gid = config.ids.gids.davfs2;
-    });
+    users.groups = optionalAttrs (cfg.davGroup == "davfs2") {
+      davfs2.gid = config.ids.gids.davfs2;
+    };
 
-    users.users = optionalAttrs (cfg.davUser == "davfs2") (singleton {
-      name = "davfs2";
-      createHome = false;
-      group = cfg.davGroup;
-      uid = config.ids.uids.davfs2;
-      description = "davfs2 user";
-    });
+    users.users = optionalAttrs (cfg.davUser == "davfs2") {
+      davfs2 = {
+        createHome = false;
+        group = cfg.davGroup;
+        uid = config.ids.uids.davfs2;
+        description = "davfs2 user";
+      };
+    };
+
   };
 
 }

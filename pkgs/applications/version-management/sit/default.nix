@@ -20,6 +20,9 @@ rustPlatform.buildRustPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0kijx7s7zh6yisrsjz213h9x5jx43ixr44vy5rb3wwbn9dgsr528";
 
   meta = with stdenv.lib; {

@@ -14,14 +14,26 @@ let
 in
 with stdenv; mkDerivation rec {
   pname = "nextpnr";
-  version = "2019.08.31";
+  version = "2020.02.04";
 
-  src = fetchFromGitHub {
-    owner  = "yosyshq";
-    repo   = "nextpnr";
-    rev    = "c0b7379e8672b6263152d5e340e62f22179fdc8b";
-    sha256 = "174n962xiwyzy53cn192h9rq95h951k3xy6bs43p5ya592ai5mjh";
-  };
+  srcs = [
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr";
+      rev    = "ca733561873cd54be047ae30a94efcd71b3f8be5";
+      sha256 = "176drrq6w53qbwmnksa1b22w9qz3gd1db9hy2lyv8svbcdxd9qwp";
+      name   = "nextpnr";
+    })
+    (fetchFromGitHub {
+      owner  = "YosysHQ";
+      repo   = "nextpnr-tests";
+      rev    = "8f93e7e0f897b1b5da469919c9a43ba28b623b2a";
+      sha256 = "0zpd0w49k9l7rs3wmi2v8z5s4l4lad5rprs5l83w13667himpzyc";
+      name   = "nextpnr-tests";
+    })
+  ];
+
+  sourceRoot = "nextpnr";
 
   nativeBuildInputs
      = [ cmake ]
@@ -33,27 +45,31 @@ with stdenv; mkDerivation rec {
 
   enableParallelBuilding = true;
   cmakeFlags =
-    [ "-DARCH=generic;ice40;ecp5"
+    [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
+      "-DARCH=generic;ice40;ecp5"
+      "-DBUILD_TESTS=ON"
       "-DICEBOX_ROOT=${icestorm}/share/icebox"
-      "-DTRELLIS_ROOT=${trellis}/share/trellis"
+      "-DTRELLIS_INSTALL_PREFIX=${trellis}"
       "-DPYTRELLIS_LIBDIR=${trellis}/lib/trellis"
       "-DUSE_OPENMP=ON"
       # warning: high RAM usage
       "-DSERIALIZE_CHIPDB=OFF"
-      # use PyPy for icestorm if enabled
-      "-DPYTHON_EXECUTABLE=${icestorm.pythonInterp}"
     ]
     ++ (lib.optional (!enableGui) "-DBUILD_GUI=OFF")
     ++ (lib.optional (enableGui && stdenv.isDarwin)
         "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
-  # Fix the version number. This is a bit stupid (and fragile) in practice
-  # but works ok. We should probably make this overrideable upstream.
   patchPhase = with builtins; ''
-    substituteInPlace ./CMakeLists.txt \
-      --replace 'git log -1 --format=%h' 'echo ${substring 0 11 src.rev}'
+    # use PyPy for icestorm if enabled
+    substituteInPlace ./ice40/family.cmake \
+      --replace ''\'''${PYTHON_EXECUTABLE}' '${icestorm.pythonInterp}'
   '';
 
+  preBuild = ''
+    ln -s ../nextpnr-tests tests
+  '';
+
+  doCheck = true;
 
   postFixup = lib.optionalString enableGui ''
     wrapQtApp $out/bin/nextpnr-generic

@@ -84,13 +84,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) (singleton
-      { name = defaultUser;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} = {
         isSystemUser = true;
         createHome = false;
         home = cfg.location;
         group = "nogroup";
-      });
+      };
+    };
 
     services.mysql.ensureUsers = [{
       name = cfg.user;

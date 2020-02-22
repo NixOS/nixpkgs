@@ -1,22 +1,28 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , uvicorn
 , starlette
 , pydantic
-, python
 , isPy3k
-, which
+, pytest
+, pytestcov
+, pyjwt
+, passlib
+, aiosqlite
 }:
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.33.0";
+  version = "0.45.0";
+  format = "flit";
   disabled = !isPy3k;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1mc8ljfk6xyn2cq725s8hgapp62z5mylzw9akvkhwwz3bh8m5a7f";
+  src = fetchFromGitHub {
+    owner = "tiangolo";
+    repo = "fastapi";
+    rev = version;
+    sha256 = "1qwh382ny6qa3zi64micdq4j7dc64zv4rfd8g91j0digd4rhs6i1";
   };
 
   propagatedBuildInputs = [
@@ -25,10 +31,24 @@ buildPythonPackage rec {
     pydantic
   ];
 
-  patches = [ ./setup.py.patch ];
+  checkInputs = [
+    pytest
+    pytestcov
+    pyjwt
+    passlib
+    aiosqlite
+  ];
+
+  # starlette pinning kept in place due to 0.12.9 being a hard
+  # dependency luckily fastapi is currently the only dependent on
+  # starlette. Please remove pinning when possible
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace "pydantic >=0.32.2,<=0.32.2" "pydantic"
+  '';
 
   checkPhase = ''
-    ${python.interpreter} -c "from fastapi import FastAPI; app = FastAPI()"
+    pytest --ignore=tests/test_default_response_class.py
   '';
 
   meta = with lib; {

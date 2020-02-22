@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optional stdenv.isLinux
     "--with-module-dir=${mesa.drivers.driverLink}/lib/vdpau";
 
-  NIX_LDFLAGS = if stdenv.isDarwin then "-lX11" else null;
+  NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isDarwin "-lX11";
 
   installFlags = [ "moduledir=$(out)/lib/vdpau" ];
 

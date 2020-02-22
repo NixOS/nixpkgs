@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... } :
+import ./make-test-python.nix ({ pkgs, ... } :
 let
   role     = "test";
   password = "secret";
@@ -29,11 +29,13 @@ in
   };
 
   testScript = ''
-    startAll;
-    $one->waitForUnit("default.target");
-    $one->requireActiveUnit("pgmanage.service");
+    start_all()
+    one.wait_for_unit("default.target")
+    one.require_unit_state("pgmanage.service", "active")
 
     # Test if we can log in.
-    $one->waitUntilSucceeds("curl 'http://localhost:8080/pgmanage/auth' --data 'action=login&connname=${conn}&username=${role}&password=${password}' --fail");
+    one.wait_until_succeeds(
+        "curl 'http://localhost:8080/pgmanage/auth' --data 'action=login&connname=${conn}&username=${role}&password=${password}' --fail"
+    )
   '';
 })

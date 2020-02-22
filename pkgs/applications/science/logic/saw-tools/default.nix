@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gmp4, ncurses, zlib, clang_35 }:
+{ stdenv, fetchurl, gmp4, ncurses, zlib, clang }:
 
 let
   libPath = stdenv.lib.makeLibraryPath
@@ -34,12 +34,11 @@ stdenv.mkDerivation {
     mv bin $out/bin
     mv doc $out/share
 
-    # Hack around lack of libtinfo in NixOS
-    ln -s ${ncurses.out}/lib/libncursesw.so.5       $out/lib/libtinfo.so.5
+    ln -s ${ncurses.out}/lib/libtinfo.so.5       $out/lib/libtinfo.so.5
     ln -s ${stdenv.cc.libc}/lib/libpthread.so.0 $out/lib/libpthread.so.0
 
     # Add a clang symlink for easy building with a suitable compiler.
-    ln -s ${clang_35}/bin/clang $out/bin/saw-clang
+    ln -s ${clang}/bin/clang $out/bin/saw-clang
   '';
 
   fixupPhase = ''

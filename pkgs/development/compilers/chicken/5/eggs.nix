@@ -47,12 +47,12 @@ rec {
   };
 
   srfi-13 = eggDerivation {
-    name = "srfi-13-0.2.1";
+    name = "srfi-13-0.3";
 
     src = fetchegg {
       name = "srfi-13";
-      version = "0.2.1";
-      sha256 = "0204i7fhc4dy0l89lbi2lv9cjndrvwyrk68z3wy7x445jb4ky1gq";
+      version = "0.3";
+      sha256 = "0yaw9i6zhpxl1794pirh168clprjgmsb0xlr96drirjzsslgm3zp";
     };
 
     buildInputs = [

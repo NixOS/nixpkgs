@@ -7,7 +7,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.2.0";
+  version = "3.0.0";
   pname = "fints";
   disabled = isPy27;
 
@@ -15,13 +15,8 @@ buildPythonPackage rec {
     owner = "raphaelm";
     repo = "python-fints";
     rev = "v${version}";
-    sha256 = "1gx173dzdprf3jsc7dss0xax8s6l2hr02qg9m5c4rksb3dl5fl8w";
+    sha256 = "00fqgnmv7z6d792ga4cyzn9lrfjf79jplkssm2jbyb0akfggfj7h";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'sepaxml==2.0.*' 'sepaxml~=2.0'
-  '';
 
   propagatedBuildInputs = [ requests mt-940 sepaxml bleach ];
 

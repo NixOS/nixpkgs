@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
-  version = "3.0rc5";
+  version = "3.0rc6";
 
   src = fetchFromGitHub {
     owner = "drwetter";
     repo = pname;
     rev = version;
-    sha256 = "14b9n0h4f2dsa292wi9gnan5ncgqblis6wyh5978lhjzi1d7gyds";
+    sha256 = "1ks7pqgrg382ry0a0jf1dwgcwv81snhkrhkjdbcpym6w5flmpjsv";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       CLI tool which checks a server's service on any port for the support of
       TLS/SSL ciphers, protocols as well as recent cryptographic flaws and more.
     '';
-    homepage = https://testssl.sh/;
+    homepage = "https://testssl.sh/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ etu ];
   };

@@ -6,15 +6,15 @@
 
 stdenv.mkDerivation rec {
   pname = "rgbds";
-  version = "0.3.8";
+  version = "0.3.9";
   src = fetchFromGitHub {
     owner = "rednex";
     repo = "rgbds";
     rev = "v${version}";
-    sha256 = "0db37z886026svhj6qnc3wk56sndbnz1vi41gn2k3bl6ppbnjlpk";
+    sha256 = "0pzd9ig3ahpgq7jbj82grllxx1v01d620insr2m8h0c6jj25n5hv";
   };
   nativeBuildInputs = [ bison flex pkg-config libpng ];
-  installFlags = "PREFIX=\${out}";
+  installFlags = [ "PREFIX=\${out}" ];
 
   meta = with stdenv.lib; {
     homepage = https://rednex.github.io/rgbds/;

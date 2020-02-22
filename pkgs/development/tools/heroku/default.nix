@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "heroku";
-  version = "7.27.1";
+  version = "7.38.1";
 
   src = fetchurl {
     url = "https://cli-assets.heroku.com/heroku-v${version}/heroku-v${version}.tar.xz";
-    sha256 = "0aq89kvv80mz67j4dgl84ff5j58q5p3k82bbnvxs5nhf2jcandym";
+    sha256 = "1sa4ph4d5y48yz2n06aivqgl07ljlgwgf5ik431vnrz5smxl6ngr";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage = https://cli.heroku.com;
+    homepage = "https://cli.heroku.com";
     description = "Everything you need to get started using Heroku";
     maintainers = with lib.maintainers; [ aflatter mirdhyn peterhoeg ];
     license = lib.licenses.mit;

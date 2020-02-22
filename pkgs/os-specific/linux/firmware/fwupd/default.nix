@@ -1,4 +1,4 @@
-# Updating? Keep $out/etc synchronized with passthru.filesInstalledToEtc
+# Updating? Keep $out/etc synchronized with passthru keys
 
 { stdenv
 , fetchurl
@@ -45,6 +45,7 @@
 , freetype
 , fontconfig
 , pango
+, tpm2-tss
 , bubblewrap
 , efibootmgr
 , flashrom
@@ -57,6 +58,7 @@ let
     pygobject3
     pycairo
     pillow
+    setuptools
   ]);
 
   installedTestsPython = python3.withPackages (p: with p; [
@@ -78,20 +80,23 @@ let
 
   # # Currently broken on Aarch64
   # haveFlashrom = isx86;
-  # Experimental in 1.2.10
+  # Experimental
   haveFlashrom = false;
 
 in
 
 stdenv.mkDerivation rec {
   pname = "fwupd";
-  version = "1.2.10";
+  version = "1.3.7";
 
   src = fetchurl {
     url = "https://people.freedesktop.org/~hughsient/releases/fwupd-${version}.tar.xz";
-    sha256 = "0inngs7i48akm9c7fmdsf9zjif595rkaba69rl76jfwfv8r21vjb";
+    sha256 = "02mzn3whk5mba4nxyrkypawr1gzjx79n4nrkhrp8vja6mxxgsf10";
   };
 
+  # libfwupd goes to lib
+  # daemon, plug-ins and libfwupdplugin go to out
+  # CLI programs go to out
   outputs = [ "out" "lib" "dev" "devdoc" "man" "installedTests" ];
 
   nativeBuildInputs = [
@@ -136,6 +141,7 @@ stdenv.mkDerivation rec {
     freetype
     fontconfig
     pango
+    tpm2-tss
     efivar
   ] ++ stdenv.lib.optionals haveDell [
     libsmbios
@@ -144,6 +150,10 @@ stdenv.mkDerivation rec {
   patches = [
     ./fix-paths.patch
     ./add-option-for-installation-sysconfdir.patch
+
+    # install plug-ins and libfwupdplugin to out,
+    # they are not really part of the library
+    ./install-fwupdplugin-to-out.patch
 
     # installed tests are installed to different output
     # we also cannot have fwupd-tests.conf in $out/etc since it would form a cycle
@@ -156,7 +166,8 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs \
-      libfwupd/generate-version-script.py \
+      contrib/get-version.py \
+      contrib/generate-version-script.py \
       meson_post_install.sh \
       po/make-images \
       po/make-images.sh \
@@ -165,11 +176,6 @@ stdenv.mkDerivation rec {
     # we cannot use placeholder in substituteAll
     # https://github.com/NixOS/nix/issues/1846
     substituteInPlace data/installed-tests/meson.build --subst-var installedTests
-
-    # install plug-ins to out, they are not really part of the library
-    substituteInPlace meson.build \
-      --replace "plugin_dir = join_paths(libdir, 'fwupd-plugins-3')" \
-                "plugin_dir = join_paths('${placeholder "out"}', 'fwupd_plugins-3')"
 
     substituteInPlace data/meson.build --replace \
       "install_dir: systemd.get_pkgconfig_variable('systemdshutdowndir')" \
@@ -194,6 +200,7 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
+    "-Dgtkdoc=true"
     "-Dplugin_dummy=true"
     "-Dudevdir=lib/udev"
     "-Dsystemdunitdir=lib/systemd/system"
@@ -203,20 +210,20 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+
+    # We do not want to place the daemon into lib (cyclic reference)
+    "--libexecdir=${placeholder "out"}/libexec"
+    # Our builder only adds $lib/lib to rpath but some things link
+    # against libfwupdplugin which is in $out/lib.
+    "-Dc_link_args=-Wl,-rpath,${placeholder "out"}/lib"
   ] ++ stdenv.lib.optionals (!haveDell) [
     "-Dplugin_dell=false"
     "-Dplugin_synaptics=false"
   ] ++ stdenv.lib.optionals (!haveRedfish) [
     "-Dplugin_redfish=false"
-  ] ++ stdenv.lib.optionals (!haveFlashrom) [
-    "-Dplugin_flashrom=false"
+  ] ++ stdenv.lib.optionals haveFlashrom [
+    "-Dplugin_flashrom=true"
   ];
-
-  # TODO: We need to be able to override the directory flags from meson setup hook
-  # better – declaring them multiple times might become an error.
-  preConfigure = ''
-    mesonFlagsArray+=("--libexecdir=$out/libexec")
-  '';
 
   postInstall = ''
     moveToOutput share/installed-tests "$installedTests"
@@ -230,15 +237,18 @@ stdenv.mkDerivation rec {
   # https://github.com/NixOS/nixpkgs/pull/67625#issuecomment-525788428
   PKG_CONFIG_POLKIT_GOBJECT_1_ACTIONDIR = "/run/current-system/sw/share/polkit-1/actions";
 
+  # cannot install to systemd prefix
+  PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMPRESETDIR = "${placeholder "out"}/lib/systemd/system-preset";
+
   # TODO: wrapGAppsHook wraps efi capsule even though it is not elf
   dontWrapGApps = true;
   # so we need to wrap the executables manually
   postFixup = ''
     find -L "$out/bin" "$out/libexec" -type f -executable -print0 \
       | while IFS= read -r -d ''' file; do
-      if [[ "''${file}" != *.efi ]]; then
-        echo "Wrapping program ''${file}"
-        wrapProgram "''${file}" "''${gappsWrapperArgs[@]}"
+      if [[ "$file" != *.efi ]]; then
+        echo "Wrapping program $file"
+        wrapGApp "$file"
       fi
     done
   '';
@@ -246,11 +256,15 @@ stdenv.mkDerivation rec {
   # /etc/fwupd/uefi.conf is created by the services.hardware.fwupd NixOS module
   passthru = {
     filesInstalledToEtc = [
+      # "fwupd/daemon.conf" # already created by the module
+      "fwupd/redfish.conf"
       "fwupd/remotes.d/dell-esrt.conf"
       "fwupd/remotes.d/lvfs-testing.conf"
       "fwupd/remotes.d/lvfs.conf"
       "fwupd/remotes.d/vendor.conf"
       "fwupd/remotes.d/vendor-directory.conf"
+      "fwupd/thunderbolt.conf"
+      # "fwupd/uefi.conf" # already created by the module
       "pki/fwupd/GPG-KEY-Hughski-Limited"
       "pki/fwupd/GPG-KEY-Linux-Foundation-Firmware"
       "pki/fwupd/GPG-KEY-Linux-Vendor-Firmware-Service"
@@ -260,13 +274,19 @@ stdenv.mkDerivation rec {
       "pki/fwupd-metadata/LVFS-CA.pem"
     ];
 
+    # BlacklistPlugins key in fwupd/daemon.conf
+    defaultBlacklistedPlugins = [
+      "test"
+      "invalid"
+    ];
+
     tests = {
-      installedTests = nixosTests.fwupd;
+      installedTests = nixosTests.installed-tests.fwupd;
     };
   };
 
   meta = with stdenv.lib; {
-    homepage = https://fwupd.org/;
+    homepage = "https://fwupd.org/";
     maintainers = with maintainers; [ jtojnar ];
     license = [ licenses.gpl2 ];
     platforms = platforms.linux;

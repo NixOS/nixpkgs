@@ -74,6 +74,7 @@ python3Packages.buildPythonApplication {
     tlslite-ng
 
     # plugins
+    ckcc-protocol
     keepkey
     trezor
     btchip
@@ -88,7 +89,8 @@ python3Packages.buildPythonApplication {
       --replace ${libsecp256k1_name} ${secp256k1}/lib/libsecp256k1${stdenv.hostPlatform.extensions.sharedLibrary}
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
-      --replace ${libzbar_name} ${zbar}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+      --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');

@@ -1,24 +1,29 @@
-{ buildPythonPackage, fetchPypi, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "JPype1";
-  version = "0.6.3";
+  version = "0.7.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6841523631874a731e1f94e1b1f130686ad3772030eaa3b6946256eeb1d10dd1";
+    sha256 = "c16d01cde9c2c955d76d45675e64b06c3255784d49cea4147024e99a01fbbb18";
   };
 
-  patches = [ ./set-compiler-language.patch ];
+  checkInputs = [
+    pytest
+  ];
 
-  checkInputs = [ pytest ];
-
-  # ImportError: Failed to import test module: test.testlucene
+  # required openjdk (easy) but then there were some class path issues
+  # when running the tests
   doCheck = false;
 
-  meta = {
-    homepage = "https://github.com/originell/jpype/";
-    license = "License :: OSI Approved :: Apache Software License";
-    description = "A Python to Java bridge.";
+  meta = with lib; {
+    homepage = https://github.com/originell/jpype/;
+    license = licenses.asl20;
+    description = "A Python to Java bridge";
   };
 }

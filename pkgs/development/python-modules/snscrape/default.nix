@@ -3,6 +3,7 @@
 , isPy3k
 , fetchPypi
 , setuptools_scm
+, setuptools
 , requests
 , lxml
 , beautifulsoup4
@@ -26,7 +27,7 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [ setuptools_scm ];
-  propagatedBuildInputs = [ requests lxml beautifulsoup4 ];
+  propagatedBuildInputs = [ setuptools requests lxml beautifulsoup4 ];
 
   meta = with lib; {
     homepage = https://github.com/JustAnotherArchivist/snscrape;

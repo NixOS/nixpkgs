@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, unzip, cmake, libGLU_combined, freeglut, libX11, xorgproto
+{ stdenv, fetchurl, unzip, cmake, libGLU, libGL, freeglut, libX11, xorgproto
 , libXi, pkgconfig }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    unzip cmake libGLU_combined freeglut libX11 xorgproto libXi
+    unzip cmake libGLU libGL freeglut libX11 xorgproto libXi
   ];
 
   cmakeFlags = [
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "2D physics engine";
-    homepage = http://box2d.org/;
+    homepage = https://box2d.org/;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
     license = licenses.zlib;

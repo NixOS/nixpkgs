@@ -79,15 +79,15 @@ in {
 
   fish = zncDerivation rec {
     name = "znc-fish-${version}";
-    version = "git-2014-10-10";
+    version = "git-2017-06-26";
     module_name = "fish";
 
     src = fetchFromGitHub {
-      # this fork works with ZNC 1.6
-      owner = "jarrydpage";
+      # this fork works with ZNC 1.7
+      owner = "oilslump";
       repo = "znc-fish";
-      rev = "9c580e018a1a08374e814fc06f551281cff827de";
-      sha256 = "0yvs0jkwwp18qxqvw1dvir91ggczz56ka00k0zlsb81csdi8xfvl";
+      rev = "7d91467dbb195f7b591567911210523c6087662e";
+      sha256 = "1ky5xg17k5f393whrv5iv8zsmdvdyk2f7z5qdsmxcwy3pdxy6vsm";
     };
 
     meta = {

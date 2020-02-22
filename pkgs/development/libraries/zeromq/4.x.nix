@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
 
   doCheck = false; # fails all the tests (ctest)
 
-  cmakeFlags = if enableDrafts then [ "-DENABLE_DRAFTS=ON" ] else null;
+  cmakeFlags = stdenv.lib.optional enableDrafts "-DENABLE_DRAFTS=ON";
 
   meta = with stdenv.lib; {
     branch = "4";

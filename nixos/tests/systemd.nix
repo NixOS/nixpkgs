@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "systemd";
 
   machine = { lib, ... }: {
@@ -19,7 +19,7 @@ import ./make-test.nix ({ pkgs, ... }: {
     systemd.extraConfig = "DefaultEnvironment=\"XXX_SYSTEM=foo\"";
     systemd.user.extraConfig = "DefaultEnvironment=\"XXX_USER=bar\"";
     services.journald.extraConfig = "Storage=volatile";
-    services.xserver.displayManager.auto.user = "alice";
+    test-support.displayManager.auto.user = "alice";
 
     systemd.shutdown.test = pkgs.writeScript "test.shutdown" ''
       #!${pkgs.stdenv.shell}
@@ -53,50 +53,69 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    $machine->waitForX;
+    import re
+    import subprocess
+
+    machine.wait_for_x()
     # wait for user services
-    $machine->waitForUnit("default.target","alice");
+    machine.wait_for_unit("default.target", "alice")
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35415
-    subtest "configuration files are recognized by systemd", sub {
-      $machine->succeed('test -e /system_conf_read');
-      $machine->succeed('test -e /home/alice/user_conf_read');
-      $machine->succeed('test -z $(ls -1 /var/log/journal)');
-    };
+    with subtest("configuration files are recognized by systemd"):
+        machine.succeed("test -e /system_conf_read")
+        machine.succeed("test -e /home/alice/user_conf_read")
+        machine.succeed("test -z $(ls -1 /var/log/journal)")
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/50273
-    subtest "DynamicUser actually allocates a user", sub {
-        $machine->succeed('systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami | grep iamatest');
-    };
+    with subtest("DynamicUser actually allocates a user"):
+        assert "iamatest" in machine.succeed(
+            "systemd-run --pty --property=Type=oneshot --property=DynamicUser=yes --property=User=iamatest whoami"
+        )
 
     # Regression test for https://github.com/NixOS/nixpkgs/issues/35268
-    subtest "file system with x-initrd.mount is not unmounted", sub {
-      $machine->succeed('mountpoint -q /test-x-initrd-mount');
-      $machine->shutdown;
-      system('qemu-img', 'convert', '-O', 'raw',
-             'vm-state-machine/empty2.qcow2', 'x-initrd-mount.raw');
-      my $extinfo = `${pkgs.e2fsprogs}/bin/dumpe2fs x-initrd-mount.raw`;
-      die "File system was not cleanly unmounted: $extinfo"
-        unless $extinfo =~ /^Filesystem state: *clean$/m;
-    };
+    with subtest("file system with x-initrd.mount is not unmounted"):
+        machine.succeed("mountpoint -q /test-x-initrd-mount")
+        machine.shutdown()
 
-    subtest "systemd-shutdown works", sub {
-      $machine->shutdown;
-      $machine->waitForUnit('multi-user.target');
-      $machine->succeed('test -e /tmp/shared/shutdown-test');
-    };
+        subprocess.check_call(
+            [
+                "qemu-img",
+                "convert",
+                "-O",
+                "raw",
+                "vm-state-machine/empty0.qcow2",
+                "x-initrd-mount.raw",
+            ]
+        )
+        extinfo = subprocess.check_output(
+            [
+                "${pkgs.e2fsprogs}/bin/dumpe2fs",
+                "x-initrd-mount.raw",
+            ]
+        ).decode("utf-8")
+        assert (
+            re.search(r"^Filesystem state: *clean$", extinfo, re.MULTILINE) is not None
+        ), ("File system was not cleanly unmounted: " + extinfo)
 
-   # Test settings from /etc/sysctl.d/50-default.conf are applied
-   subtest "systemd sysctl settings are applied", sub {
-     $machine->waitForUnit('multi-user.target');
-     $machine->succeed('sysctl net.core.default_qdisc | grep -q "fq_codel"');
-   };
+    with subtest("systemd-shutdown works"):
+        machine.shutdown()
+        machine.wait_for_unit("multi-user.target")
+        machine.succeed("test -e /tmp/shared/shutdown-test")
 
-   # Test cgroup accounting is enabled
-   subtest "systemd cgroup accounting is enabled", sub {
-     $machine->waitForUnit('multi-user.target');
-     $machine->succeed('systemctl show testservice1.service -p IOAccounting | grep -q "yes"');
-     $machine->succeed('systemctl status testservice1.service | grep -q "CPU:"');
-   };
+    # Test settings from /etc/sysctl.d/50-default.conf are applied
+    with subtest("systemd sysctl settings are applied"):
+        machine.wait_for_unit("multi-user.target")
+        assert "fq_codel" in machine.succeed("sysctl net.core.default_qdisc")
+
+    # Test cgroup accounting is enabled
+    with subtest("systemd cgroup accounting is enabled"):
+        machine.wait_for_unit("multi-user.target")
+        assert "yes" in machine.succeed(
+            "systemctl show testservice1.service -p IOAccounting"
+        )
+
+        retcode, output = machine.execute("systemctl status testservice1.service")
+        assert retcode in [0, 3]  # https://bugs.freedesktop.org/show_bug.cgi?id=77507
+        assert "CPU:" in output
   '';
 })

@@ -1,15 +1,15 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
-, srht, pyyaml, PyGithub, cryptography }:
+, srht, pyyaml, PyGithub }:
 
 buildPythonPackage rec {
   pname = "dispatchsrht";
-  version = "0.11.0";
+  version = "0.13.3";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/dispatch.sr.ht";
     rev = version;
-    sha256 = "1kahl2gy5a5li79djwkzkglkw2s7pl4d29bzqp8c53r0xvx4sqkz";
+    sha256 = "08asayfwpzafscpli5grx1p0y1ryz7pqkznf5bd9j8ir2iyhbc10";
   };
 
   patches = [
@@ -22,7 +22,6 @@ buildPythonPackage rec {
     srht
     pyyaml
     PyGithub
-    cryptography
   ];
 
   preBuild = ''

@@ -1,4 +1,4 @@
-{ stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib }:
+{ stdenv, gtest, fetchFromGitHub, cmake, boost, eigen, python, vtk, zlib, tbb }:
 
 stdenv.mkDerivation rec {
   version = "2.0.0";
@@ -12,7 +12,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  cmakeFlags = "-DWITH_VTK=ON -DBUILD_ALL_MODULES=ON";
+  cmakeFlags = [
+    "-DWITH_VTK=ON"
+    "-DBUILD_ALL_MODULES=ON"
+    "-DWITH_TBB=ON"
+  ];
 
   doCheck = true;
 
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ cmake gtest ];
-  buildInputs = [ boost eigen python vtk zlib ];
+  buildInputs = [ boost eigen python vtk zlib tbb ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/BioMedIA/MIRTK";

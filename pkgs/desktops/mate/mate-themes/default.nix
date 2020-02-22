@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   version = "3.22.20";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/themes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url = "https://pub.mate-desktop.org/releases/themes/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0c3dhf8p9nc2maky4g9xr04iil9wwbdkmhpzynlc6lfg4ksqq2bx";
   };
 
@@ -20,9 +20,11 @@ stdenv.mkDerivation rec {
     gtk-update-icon-cache "$out"/share/icons/ContrastHigh
   '';
 
+  enableParallelBuilding = true;
+
   meta = {
     description = "A set of themes from MATE";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = stdenv.lib.licenses.lgpl21;
     platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.romildo ];

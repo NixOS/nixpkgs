@@ -45,13 +45,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2019-05-03";
+  version = "unstable-2019-11-15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "ea2b7a3dea34a6803134f4adc16c276f4c2479eb";
-    sha256 = "00x772nbrbx7ma0scr24m65g50pmi4v6d6q3cwbbi55r8qiy2yz7";
+    rev = "0a49ae08f76de7f886a3dbed4422711c2fa39d10";
+    sha256 = "09l56nv9cnyhykclfmvam6bkcxlamwbql6nrz9n022553w92hkjf";
   };
 
   nativeBuildInputs = [

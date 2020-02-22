@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   buildInputs = [
     autoconf automake libtool libX11 xorgproto libXi libXaw

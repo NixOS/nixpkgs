@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, python3, bdftopcf, mkfontdir, mkfontscale }:
+{ stdenv, fetchurl, python3
+, libfaketime, fonttosfnt
+, bdftopcf, mkfontscale
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminus-font";
@@ -9,15 +12,35 @@ stdenv.mkDerivation rec {
     sha256 = "1bwlkj39rqbyq57v5yssayav6hzv1n11b9ml2s0dpiyfsn6rqy9l";
   };
 
-  nativeBuildInputs = [ python3 bdftopcf mkfontdir mkfontscale ];
-
-  patchPhase = ''
-    substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
-  '';
+  nativeBuildInputs =
+    [ python3 bdftopcf libfaketime
+      fonttosfnt mkfontscale
+    ];
 
   enableParallelBuilding = true;
 
+  postPatch = ''
+    substituteInPlace Makefile --replace 'fc-cache' '#fc-cache'
+  '';
+
+  postBuild = ''
+    # convert unicode bdf fonts to otb
+    for i in *.bdf; do
+      name=$(basename $i .bdf)
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$name.otb" "$i"
+    done
+  '';
+
+  postInstall = ''
+    # install otb fonts (for GTK applications)
+    install -m 644 -D *.otb -t "$otb/share/fonts/misc";
+    mkfontdir "$otb/share/fonts/misc"
+  '';
+
   installTargets = [ "install" "fontdir" ];
+
+  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A clean fixed width font";

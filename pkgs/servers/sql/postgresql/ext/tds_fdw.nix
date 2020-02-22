@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "tds_fdw";
-  version = "1.0.8";
+  version = "2.0.1";
 
   buildInputs = [ postgresql freetds ];
 
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     owner  = "tds-fdw";
     repo   =  pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "0dlv1imiy773yplqqpl26xka65bc566k2x81wkrbvwqagnwvcai2";
+    sha256 = "1zpcrx30bvaf72782hgz2s19i5ndwvi7z87fanl1lnymznrk9lzg";
   };
 
   installPhase = ''

@@ -1,5 +1,5 @@
 {  stdenv, fetchFromGitHub, libX11, unzip, cmake, ois, freetype, libuuid,
-   boost, pkgconfig, withOgre ? false, ogre ? null, libGLU_combined ? null } :
+   boost, pkgconfig, withOgre ? false, ogre ? null, libGL, libGLU ? null } :
 
 let
   renderSystem = if withOgre then "3" else "4";
@@ -17,7 +17,8 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libX11 unzip cmake ois freetype libuuid boost (if withOgre then ogre else libGLU_combined) ];
+  buildInputs = [ libX11 unzip cmake ois freetype libuuid boost ]
+    ++ (if withOgre then [ ogre ] else [libGL libGLU]);
 
   # Tools are disabled due to compilation failures.
   cmakeFlags = [ "-DMYGUI_BUILD_TOOLS=OFF" "-DMYGUI_BUILD_DEMOS=OFF" "-DMYGUI_RENDERSYSTEM=${renderSystem}" ];

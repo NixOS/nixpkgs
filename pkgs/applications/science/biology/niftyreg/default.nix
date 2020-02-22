@@ -9,6 +9,8 @@ stdenv.mkDerivation rec {
     sha256 = "07v9v9s41lvw72wpb1jgh2nzanyc994779bd35p76vg8mzifmprl";
   };
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=narrowing" ];
+
   nativeBuildInputs = [ cmake ];
   buildInputs = [ zlib ];
   enableParallelBuilding = true;

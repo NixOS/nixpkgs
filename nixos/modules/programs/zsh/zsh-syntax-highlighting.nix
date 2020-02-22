@@ -6,6 +6,13 @@ let
   cfg = config.programs.zsh.syntaxHighlighting;
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "programs" "zsh" "enableSyntaxHighlighting" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
+    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "enable" ] [ "programs" "zsh" "syntaxHighlighting" "enable" ])
+    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "highlighters" ] [ "programs" "zsh" "syntaxHighlighting" "highlighters" ])
+    (mkRenamedOptionModule [ "programs" "zsh" "syntax-highlighting" "patterns" ] [ "programs" "zsh" "syntaxHighlighting" "patterns" ])
+  ];
+
   options = {
     programs.zsh.syntaxHighlighting = {
       enable = mkEnableOption "zsh-syntax-highlighting";
@@ -81,7 +88,7 @@ in
     ];
 
     programs.zsh.interactiveShellInit = with pkgs;
-      lib.concatStringsSep "\n" ([
+      lib.mkAfter (lib.concatStringsSep "\n" ([
         "source ${zsh-syntax-highlighting}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
       ] ++ optional (length(cfg.highlighters) > 0)
         "ZSH_HIGHLIGHT_HIGHLIGHTERS=(${concatStringsSep " " cfg.highlighters})"
@@ -95,6 +102,6 @@ in
             styles: design:
             "ZSH_HIGHLIGHT_STYLES[${styles}]='${design}'"
           ) cfg.styles)
-      );
+      ));
   };
 }

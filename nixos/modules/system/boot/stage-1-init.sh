@@ -183,6 +183,12 @@ for o in $(cat /proc/cmdline); do
         copytoram)
             copytoram=1
             ;;
+        findiso=*)
+            # if an iso name is supplied, try to find the device where
+            # the iso resides on
+            set -- $(IFS==; echo $o)
+            isoPath=$2
+            ;;
     esac
 done
 
@@ -328,8 +334,10 @@ mountFS() {
 
     # Filter out x- options, which busybox doesn't do yet.
     local optionsFiltered="$(IFS=,; for i in $options; do if [ "${i:0:2}" != "x-" ]; then echo -n $i,; fi; done)"
+    # Prefix (lower|upper|work)dir with /mnt-root (overlayfs)
+    local optionsPrefixed="$( echo "$optionsFiltered" | sed -E 's#\<(lowerdir|upperdir|workdir)=#\1=/mnt-root#g' )"
 
-    echo "$device /mnt-root$mountPoint $fsType $optionsFiltered" >> /etc/fstab
+    echo "$device /mnt-root$mountPoint $fsType $optionsPrefixed" >> /etc/fstab
 
     checkFS "$device" "$fsType"
 
@@ -348,10 +356,11 @@ mountFS() {
             ;;
     esac
 
-    # Create backing directories for unionfs-fuse.
-    if [ "$fsType" = unionfs-fuse ]; then
-        for i in $(IFS=:; echo ${options##*,dirs=}); do
-            mkdir -m 0700 -p /mnt-root"${i%=*}"
+    # Create backing directories for overlayfs
+    if [ "$fsType" = overlay ]; then
+        for i in upper work; do
+             dir="$( echo "$optionsPrefixed" | grep -o "${i}dir=[^,]*" )"
+             mkdir -m 0700 -p "${dir##*=}"
         done
     fi
 
@@ -442,6 +451,27 @@ if test -e /sys/power/resume -a -e /sys/power/disk; then
     fi
 fi
 
+# If we have a path to an iso file, find the iso and link it to /dev/root
+if [ -n "$isoPath" ]; then
+  mkdir -p /findiso
+
+  for delay in 5 10; do
+    blkid | while read -r line; do
+      device=$(echo "$line" | sed 's/:.*//')
+      type=$(echo "$line" | sed 's/.*TYPE="\([^"]*\)".*/\1/')
+
+      mount -t "$type" "$device" /findiso
+      if [ -e "/findiso$isoPath" ]; then
+        ln -sf "/findiso$isoPath" /dev/root
+        break 2
+      else
+        umount /findiso
+      fi
+    done
+
+    sleep "$delay"
+  done
+fi
 
 # Try to find and mount the root device.
 mkdir -p $targetRoot

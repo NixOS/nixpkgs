@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "pytest-remotedata";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15b75a38431da96a4da5e48b20a18e4dcc40d191abc199b17cb969f818530481";
+    sha256 = "e20c58d4b7c359c4975dc3c3d3d67be0905180d2368be0be3ae09b15a136cfc0";
   };
 
   propagatedBuildInputs = [

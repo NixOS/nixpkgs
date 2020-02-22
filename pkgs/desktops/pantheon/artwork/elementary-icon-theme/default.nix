@@ -6,11 +6,13 @@
 , ninja
 , hicolor-icon-theme
 , gtk3
+, inkscape
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-icon-theme";
-  version = "5.0.4";
+  version = "5.2.0";
 
   repoName = "icons";
 
@@ -18,26 +20,29 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0ha7biqvmkv68x1gi9bfcn5z0ld067pa5czx0pyf053pa86lg3hx";
+    sha256 = "1irkjj8xfpgkl5p56xhqa3w2s98b8lav7d1lxxrabdi87cjv3n33";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     gtk3
+    inkscape
     meson
     ninja
     python3
+    xorg.xcursorgen
   ];
 
   propagatedBuildInputs = [
     hicolor-icon-theme
   ];
+
+  dontDropIconThemeCache = true;
 
   mesonFlags = [
     "-Dvolume_icons=false" # Tries to install some icons to /

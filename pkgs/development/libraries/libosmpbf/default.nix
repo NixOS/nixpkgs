@@ -12,7 +12,7 @@ stdenv.mkDerivation {
 
   sourceRoot = "OSM-binary-1.3.3/src";
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     homepage = https://github.com/scrosby/OSM-binary;

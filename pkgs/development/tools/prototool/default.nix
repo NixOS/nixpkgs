@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "prototool";
-  version = "1.8.0";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner = "uber";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0m6g5p3jyf0ja5j9rqmw8mhipdqxk7rcxm0plmh65bxk1n22fzjc";
+    sha256 = "1ssgvhcnqffhhdx8hnk4lmklip2f6g9i7ifblywfjylb08y7iqgd";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  modSha256 = "0l4nqb1c1lqqk70l9qwib1azavxlwghi2fv5siwrr5zw4jysz5ml";
+  modSha256 = "1gc8kc9mbi3mlh48zx4lcgpsrf8z879f1qj9wfyr66s7wd1ljazg";
 
   postInstall = ''
     wrapProgram "$out/bin/prototool" \

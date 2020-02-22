@@ -1,5 +1,6 @@
 { stdenv, buildPythonPackage, fetchPypi, twine, pbr, click, click-completion, validate-email,
-pendulum, ptable, requests, inquirer, pythonOlder, pytest, pytestcov, pytest-mock, faker, factory_boy }:
+pendulum, ptable, requests, inquirer, pythonOlder, pytest, pytestcov, pytest-mock, faker, factory_boy,
+setuptools }:
 
 
 buildPythonPackage rec {
@@ -16,6 +17,7 @@ buildPythonPackage rec {
 
   postPatch = ''
    substituteInPlace requirements.txt \
+     --replace "pendulum==2.0.4" "pendulum>=2.0.4" \
      --replace "click-completion==0.5.0" "click-completion>=0.5.0" \
      --replace "pbr==5.1.2" "pbr>=5.1.2" \
      --replace "inquirer==2.5.1" "inquirer>=2.5.1"
@@ -37,6 +39,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
+    setuptools
     click
     click-completion
     validate-email

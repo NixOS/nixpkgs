@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  makeFlags = "INSTALL=install";
+  makeFlags = [ "INSTALL=install" ];
 
   meta = {
     description = "Terminal-based Tetris clone by Victor Nilsson";

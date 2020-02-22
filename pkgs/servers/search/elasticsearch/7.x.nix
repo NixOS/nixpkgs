@@ -17,12 +17,12 @@ let
   shas =
     if enableUnfree
     then {
-      x86_64-linux  = "0x1ws6iqflvzphg2srvdrn4xrr5wd5fnykkc9h006mj9rb5lp1k9";
-      x86_64-darwin = "0yjzgsbsgwa6gbp270fqfm1klm6f8n4s2xmay62gdgvnsj543cxz";
+      x86_64-linux  = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
+      x86_64-darwin = "1ia3byir3i5qaarmcaysrg3dhnxjmxnf0m0kzyf61g9aiy87gb7q";
     }
     else {
-      x86_64-linux  = "1nl6yic1j422l2c7mf8wv0ylfx6marrwm7d181z9nzdswq509kpg";
-      x86_64-darwin = "1sy4an9d1faifr3n2y45kalrd22yb68dnpjhi9h8q73c21gp8pzf";
+      x86_64-linux  = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
+      x86_64-darwin = "01f81720rbzdqc0g1xymhz2lflldfbnb0rh7mpki99pss28vj9sh";
     };
 in
 stdenv.mkDerivation (rec {

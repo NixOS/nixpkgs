@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "2.2.3";
+  version = "2.2.4";
 
   repoName = "capnet-assist";
 
@@ -25,13 +25,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "15cnwimkmmsb4rwvgm8bizcsn1krsj6k3qc88izn79is75y6wwji";
+    sha256 = "0yz827gs1qv6csgv4v993rjmqzc6dbymbvznsy45ghlh19l4l7j1";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 

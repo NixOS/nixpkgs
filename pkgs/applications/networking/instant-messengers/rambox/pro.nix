@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rambox-pro";
-  version = "1.1.6";
+  version = "1.2.2";
 
   dontBuild = true;
   dontStrip = true;
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
-    sha256 = "1jdamjdl649315ms5g1c7m7gpy04rv7xpy6bsvink242adaq2pjz";
+    sha256 = "1zzlfk86gzg20qapqz9s8p9vmak8vj1smkwn9yrzs2yisfqh0gpc";
   };
 
   installPhase = ''

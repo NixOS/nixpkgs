@@ -4,7 +4,7 @@
 , pam, withPAM ? stdenv.isLinux
 , systemd, withSystemd ? stdenv.isLinux
 , python2, python3, ncurses
-, ruby, php-embed, mysql
+, ruby, php-embed, libmysqlclient
 }:
 
 let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
@@ -34,7 +34,7 @@ let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "
                     # usage: https://uwsgi-docs.readthedocs.io/en/latest/PHP.html#running-php-apps-with-nginx
                     path = "plugins/php";
                     inputs = [ php-embed ] ++ php-embed.buildInputs;
-                    NIX_CFLAGS_LINK = [ "-L${mysql.connector-c}/lib/mysql" ];
+                    NIX_CFLAGS_LINK = [ "-L${libmysqlclient}/lib/mysql" ];
                   })
                 ];
 
@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  NIX_CFLAGS_LINK = lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
+  NIX_CFLAGS_LINK = toString (lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed);
 
   meta = with stdenv.lib; {
     homepage = https://uwsgi-docs.readthedocs.org/en/latest/;

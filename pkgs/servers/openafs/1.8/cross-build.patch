@@ -2,9 +2,9 @@ diff -Nur --unidirectional-new-file openafs-1.8.2/configure.ac openafs-1.8.2.new
 --- openafs-1.8.2/configure.ac	2018-09-11 17:52:48.000000000 +0200
 +++ openafs-1.8.2.new/configure.ac	2018-10-16 15:56:36.512277860 +0200
 @@ -23,6 +23,7 @@
+ AFS_LT_INIT
  
  AC_PROG_CC
- AC_PROG_LIBTOOL
 +AX_PROG_CC_FOR_BUILD
  
  AC_PATH_PROGS([PATH_CPP], [cpp], [${CC-cc} -E], [$PATH:/lib:/usr/ccs/lib])

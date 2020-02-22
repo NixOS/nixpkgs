@@ -25,8 +25,9 @@ in
 , doCheck ? !isCross && stdenv.lib.versionOlder "7.4" ghc.version
 , doBenchmark ? false
 , doHoogle ? true
+, doHaddockQuickjump ? doHoogle && stdenv.lib.versionAtLeast ghc.version "8.6"
 , editedCabalFile ? null
-, enableLibraryProfiling ? true
+, enableLibraryProfiling ? !(ghc.isGhcjs or false)
 , enableExecutableProfiling ? false
 , profilingDetail ? "exported-functions"
 # TODO enable shared libs for cross-compiling
@@ -130,6 +131,37 @@ let
                      import Distribution.Simple
                      main = defaultMain
                    '';
+
+  # This awk expression transforms a package conf file like
+  #
+  #   author:               John Doe <john-doe@example.com>
+  #   description:
+  #       The purpose of this library is to do
+  #       foo and bar among other things
+  #
+  # into a more easily processeable form:
+  #
+  #   author: John Doe <john-doe@example.com>
+  #   description: The purpose of this library is to do foo and bar among other things
+  unprettyConf = builtins.toFile "unpretty-cabal-conf.awk" ''
+    /^[^ ]+:/ {
+      # When the line starts with a new field, terminate the previous one with a newline
+      if (started == 1) print ""
+      # to strip leading spaces
+      $1=$1
+      printf "%s", $0
+      started=1
+    }
+
+    /^ +/ {
+      # to strip leading spaces
+      $1=$1
+      printf " %s", $0
+    }
+
+    # Terminate the final field with a newline
+    END { print "" }
+  '';
 
   crossCabalFlags = [
     "--with-ghc=${ghcCommand}"
@@ -343,12 +375,22 @@ stdenv.mkDerivation ({
     # libraries) from all the dependencies.
     local dynamicLinksDir="$out/lib/links"
     mkdir -p $dynamicLinksDir
-    for d in $(grep dynamic-library-dirs "$packageConfDir/"*|awk '{print $2}'|sort -u); do
-      ln -s "$d/"*.dylib $dynamicLinksDir
+
+    # Unprettify all package conf files before reading/writing them
+    for d in "$packageConfDir/"*; do
+      # gawk -i inplace seems to strip the last newline
+      gawk -f ${unprettyConf} "$d" > tmp
+      mv tmp "$d"
+    done
+
+    for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
+      for lib in "$d/"*.dylib; do
+        ln -s "$lib" "$dynamicLinksDir"
+      done
     done
     # Edit the local package DB to reference the links directory.
     for f in "$packageConfDir/"*.conf; do
-      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," $f
+      sed -i "s,dynamic-library-dirs: .*,dynamic-library-dirs: $dynamicLinksDir," "$f"
     done
   '') + ''
     ${ghcCommand}-pkg --${packageDbFlag}="$packageConfDir" recache
@@ -410,16 +452,13 @@ stdenv.mkDerivation ({
     ${optionalString (doHaddock && isLibrary) ''
       ${setupCommand} haddock --html \
         ${optionalString doHoogle "--hoogle"} \
+        ${optionalString doHaddockQuickjump "--quickjump"} \
         ${optionalString (isLibrary && hyperlinkSource) "--hyperlink-source"} \
         ${stdenv.lib.concatStringsSep " " haddockFlags}
     ''}
     runHook postHaddock
   '';
 
-  # The scary sed expression handles two cases in v2.5 Cabal's package configs:
-  # 1. 'id:    short-name-0.0.1-9yvw8HF06tiAXuxm5U8KjO'
-  # 2. 'id:\n
-  #         very-long-descriptive-useful-name-0.0.1-9yvw8HF06tiAXuxm5U8KjO'
   installPhase = ''
     runHook preInstall
 
@@ -434,8 +473,9 @@ stdenv.mkDerivation ({
         rmdir "$packageConfFile"
       fi
       for packageConfFile in "$packageConfDir/"*; do
-        local pkgId=$( ${gnused}/bin/sed -n -e ':a' -e '/^id:$/N; s/id:\n[ ]*\([^\n]*\).*$/\1/p; s/id:[ ]*\([^\n]*\)$/\1/p; ta' $packageConfFile )
-        mv $packageConfFile $packageConfDir/$pkgId.conf
+        local pkgId=$(gawk -f ${unprettyConf} "$packageConfFile" \
+          | grep '^id:' | cut -d' ' -f2)
+        mv "$packageConfFile" "$packageConfDir/$pkgId.conf"
       done
 
       # delete confdir if there are no libraries

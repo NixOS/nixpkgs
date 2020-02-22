@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, fltk, openexr, libGLU_combined, ctl }:
+{ stdenv, fetchurl, pkgconfig, fltk, openexr, libGLU, libGL, ctl }:
 
 stdenv.mkDerivation {
   name ="openexr_viewers-2.2.1";
@@ -17,7 +17,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ openexr fltk libGLU_combined ctl ];
+  buildInputs = [ openexr fltk libGLU libGL ctl ];
 
   meta = {
     description = "Application for viewing OpenEXR images on a display at various exposure settings";

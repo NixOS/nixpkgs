@@ -7,6 +7,10 @@
 with lib;
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "ec2" "metadata" ] "")
+  ];
+
   config = {
 
     systemd.services.apply-ec2-data =

@@ -78,37 +78,35 @@ let
   etcfiles =
     let
       defaultConfd = import ./dd-agent-defaults.nix;
-    in (map (f: { source = "${pkgs.dd-agent}/agent/conf.d-system/${f}";
-                  target = "dd-agent/conf.d/${f}";
-                }) defaultConfd) ++ [
-      { source = ddConf;
-        target = "dd-agent/datadog.conf";
-      }
-      { source = diskConfig;
-        target = "dd-agent/conf.d/disk.yaml";
-      }
-      { source = networkConfig;
-        target = "dd-agent/conf.d/network.yaml";
-      } ] ++
-    (optional (cfg.postgresqlConfig != null)
-      { source = postgresqlConfig;
-        target = "dd-agent/conf.d/postgres.yaml";
-      }) ++
-    (optional (cfg.nginxConfig != null)
-      { source = nginxConfig;
-        target = "dd-agent/conf.d/nginx.yaml";
-      }) ++
-    (optional (cfg.mongoConfig != null)
-      { source = mongoConfig;
-        target = "dd-agent/conf.d/mongo.yaml";
-      }) ++
-    (optional (cfg.processConfig != null)
-      { source = processConfig;
-        target = "dd-agent/conf.d/process.yaml";
-      }) ++
-    (optional (cfg.jmxConfig != null)
-      { source = jmxConfig;
-        target = "dd-agent/conf.d/jmx.yaml";
+    in
+      listToAttrs (map (f: {
+        name = "dd-agent/conf.d/${f}";
+        value.source = "${pkgs.dd-agent}/agent/conf.d-system/${f}";
+      }) defaultConfd) //
+      {
+        "dd-agent/datadog.conf".source = ddConf;
+        "dd-agent/conf.d/disk.yaml".source = diskConfig;
+        "dd-agent/conf.d/network.yaml".source = networkConfig;
+      } //
+      (optionalAttrs (cfg.postgresqlConfig != null)
+      {
+        "dd-agent/conf.d/postgres.yaml".source = postgresqlConfig;
+      }) //
+      (optionalAttrs (cfg.nginxConfig != null)
+      {
+        "dd-agent/conf.d/nginx.yaml".source = nginxConfig;
+      }) //
+      (optionalAttrs (cfg.mongoConfig != null)
+      { 
+        "dd-agent/conf.d/mongo.yaml".source = mongoConfig;
+      }) //
+      (optionalAttrs (cfg.processConfig != null)
+      { 
+        "dd-agent/conf.d/process.yaml".source = processConfig;
+      }) //
+      (optionalAttrs (cfg.jmxConfig != null)
+      {
+        "dd-agent/conf.d/jmx.yaml".source = jmxConfig;
       });
 
 in {

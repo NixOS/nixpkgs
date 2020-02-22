@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU_combined
+{ stdenv, fetchurl, cmake, pkgconfig, qtbase, qt5, libGLU, libGL
 , freeglut ? null, openal ? null, SDL2 ? null }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ qtbase qt5.qtmultimedia libGLU_combined freeglut openal SDL2 ];
+  buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL freeglut openal SDL2 ];
 
   patches = [
     ./linkage-rwx-linux-elf.patch

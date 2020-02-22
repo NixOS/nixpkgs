@@ -1,4 +1,5 @@
-{ lib
+{ stdenv
+, lib
 , buildPythonPackage
 , fetchPypi
 , nose
@@ -14,6 +15,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ nose ];
+
+  # "OSError: AF_UNIX path too long" for darwin
+  doCheck = !stdenv.isDarwin;
 
   meta = {
     license = lib.licenses.lgpl21;

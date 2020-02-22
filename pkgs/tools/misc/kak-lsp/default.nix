@@ -2,16 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kak-lsp";
-  version = "6.2.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "ul";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0bazbz1g5iqxlwybn5whidvavglvgdl9yp9qswgsk1jrjmcr5klx";
+    sha256 = "1b9v417g0z9q1sqgnms5vy740xggg4fcz0fdwbc4hfvfj6jkyaad";
   };
 
-  cargoSha256 = "0w0mnh8fnl8zi9n0fxzqaqbvmfagf3ay5v2na3laxb72jm76hrwa";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "0kzrrphlilnyl79yfmlvd6an8iyi8zcs0inwiq74z383lnbdpk7q";
 
   buildInputs = lib.optional stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "all" ];
 
-  buildFlags = "memtest.bin";
+  buildFlags = [ "memtest.bin" ];
 
   doCheck = false; # fails
 

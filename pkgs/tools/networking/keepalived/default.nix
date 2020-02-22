@@ -1,24 +1,28 @@
-{ stdenv, fetchFromGitHub, libnfnetlink, libnl, net_snmp, openssl, pkgconfig }:
+{ stdenv, fetchFromGitHub, nixosTests
+, libnfnetlink, libnl, net-snmp, openssl
+, pkgconfig, autoreconfHook }:
 
 stdenv.mkDerivation rec {
   pname = "keepalived";
-  version = "1.4.2";
+  version = "2.0.20";
 
   src = fetchFromGitHub {
     owner = "acassen";
     repo = "keepalived";
     rev = "v${version}";
-    sha256 = "154yxs6kwpi9yc4pa45ba3z3bfwzgmmmja5nk3d9mxq6w6s1swcy";
+    sha256 = "0ijzw56hbac24dhrgjd0hjgf45072imyzq3mcgsirdl3xqjc6x12";
   };
 
   buildInputs = [
     libnfnetlink
     libnl
-    net_snmp
+    net-snmp
     openssl
   ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  passthru.tests.keepalived = nixosTests.keepalived;
+
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   configureFlags = [
     "--enable-sha1"

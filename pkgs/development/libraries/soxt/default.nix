@@ -1,4 +1,4 @@
-{ fetchhg, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU_combined }:
+{ fetchhg, stdenv, cmake, coin3d, motif, xlibsWrapper, libXmu, libGLU, libGL }:
 
 stdenv.mkDerivation {
   pname = "soxt";
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ coin3d motif xlibsWrapper libGLU_combined libXmu ];
+  buildInputs = [ coin3d motif xlibsWrapper libGLU libGL libXmu ];
 
   meta = with stdenv.lib; {
     homepage = https://bitbucket.org/Coin3D/coin/wiki/Home;

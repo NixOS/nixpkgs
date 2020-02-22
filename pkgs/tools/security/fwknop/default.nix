@@ -19,8 +19,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpcap texinfo ]
-    ++ stdenv.lib.optional gnupgSupport [ gnupg gpgme.dev ]
-    ++ stdenv.lib.optional wgetSupport [ wget ];
+    ++ stdenv.lib.optionals gnupgSupport [ gnupg gpgme.dev ]
+    ++ stdenv.lib.optionals wgetSupport [ wget ];
 
   configureFlags = [
     "--sysconfdir=/etc"

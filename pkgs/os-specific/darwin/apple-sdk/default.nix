@@ -1,10 +1,15 @@
-{ stdenv, fetchurl, xar, cpio, pkgs, python, pbzx, lib }:
+{ stdenv, fetchurl, xar, cpio, pkgs, python3, pbzx, lib }:
+
+let version = "10.12"; in
+
+# Ensure appleSdkVersion is up to date.
+assert stdenv.isDarwin -> stdenv.appleSdkVersion == version;
 
 let
   # sadly needs to be exported because security_tool needs it
   sdk = stdenv.mkDerivation rec {
-    version = "10.12";
     pname = "MacOS_SDK";
+    inherit version;
 
     # This URL comes from https://swscan.apple.com/content/catalogs/others/index-10.12.merged-1.sucatalog, which we found by:
     #  1. Google: site:swscan.apple.com and look for a name that seems appropriate for your version
@@ -12,13 +17,12 @@ let
     #  3. ???
     #  4. Profit
     src = fetchurl {
-      url    = "http://swcdn.apple.com/content/downloads/28/09/091-29862/pafhn2u002b9slnrxzy9p86rpedycnjhb5/DevSDK_OSX1012.pkg";
-      sha256 = "1sggc70rypqwcjwr7ciavw8sczwll16cwqxdxrbw7r2qvy3b0nhx";
+      url    = "http://swcdn.apple.com/content/downloads/33/36/041-90419-A_7JJ4H9ZHO2/xs88ob5wjz6riz7g6764twblnvksusg4ps/DevSDK_OSX1012.pkg";
+      sha256 = "13xq34sb7383b37hwy076gnhf96prpk1b4087p87xnwswxbrisih";
     };
 
-    buildInputs = [ xar cpio python pbzx ];
+    nativeBuildInputs = [ xar cpio python3 pbzx ];
 
-    phases = [ "unpackPhase" "installPhase" "fixupPhase" ];
     outputs = [ "out" "dev" "man" ];
 
     unpackPhase = ''
@@ -52,7 +56,7 @@ let
   framework = name: deps: stdenv.mkDerivation {
     name = "apple-framework-${name}";
 
-    phases = [ "installPhase" "fixupPhase" ];
+    dontUnpack = true;
 
     # because we copy files from the system
     preferLocalBuild = true;
@@ -62,9 +66,16 @@ let
     installPhase = ''
       linkFramework() {
         local path="$1"
+        local nested_path="$1"
         local dest="$out/Library/Frameworks/$path"
+        if [ "$path" == "JavaNativeFoundation.framework" ]; then
+          local nested_path="JavaVM.framework/Versions/A/Frameworks/JavaNativeFoundation.framework"
+        fi
+        if [ "$path" == "JavaRuntimeSupport.framework" ]; then
+          local nested_path="JavaVM.framework/Versions/A/Frameworks/JavaRuntimeSupport.framework"
+        fi
         local name="$(basename "$path" .framework)"
-        local current="$(readlink "/System/Library/Frameworks/$path/Versions/Current")"
+        local current="$(readlink "/System/Library/Frameworks/$nested_path/Versions/Current")"
         if [ -z "$current" ]; then
           current=A
         fi
@@ -76,25 +87,21 @@ let
         # ApplicationServices in the 10.9 SDK
         local isChild=0
 
-        if [ -d "${sdk.out}/Library/Frameworks/$path/Versions/$current/Headers" ]; then
+        if [ -d "${sdk.out}/Library/Frameworks/$nested_path/Versions/$current/Headers" ]; then
           isChild=1
-          cp -R "${sdk.out}/Library/Frameworks/$path/Versions/$current/Headers" .
+          cp -R "${sdk.out}/Library/Frameworks/$nested_path/Versions/$current/Headers" .
         elif [ -d "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" ]; then
           current="$(readlink "/System/Library/Frameworks/$name.framework/Versions/Current")"
           cp -R "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current/Headers" .
         fi
-        ln -s -L "/System/Library/Frameworks/$path/Versions/$current/$name"
-        ln -s -L "/System/Library/Frameworks/$path/Versions/$current/Resources"
+        ln -s -L "/System/Library/Frameworks/$nested_path/Versions/$current/$name"
+        ln -s -L "/System/Library/Frameworks/$nested_path/Versions/$current/Resources"
 
-        if [ -f "/System/Library/Frameworks/$path/module.map" ]; then
-          ln -s "/System/Library/Frameworks/$path/module.map"
+        if [ -f "/System/Library/Frameworks/$nested_path/module.map" ]; then
+          ln -s "/System/Library/Frameworks/$nested_path/module.map"
         fi
 
-        if [ $isChild -eq 1 ]; then
-          pushd "${sdk.out}/Library/Frameworks/$path/Versions/$current" >/dev/null
-        else
-          pushd "${sdk.out}/Library/Frameworks/$name.framework/Versions/$current" >/dev/null
-        fi
+        pushd "${sdk.out}/Library/Frameworks/$nested_path/Versions/$current" >/dev/null
         local children=$(echo Frameworks/*.framework)
         popd >/dev/null
 
@@ -109,7 +116,6 @@ let
 
         popd >/dev/null
       }
-
 
       linkFramework "${name}.framework"
     '';
@@ -137,7 +143,7 @@ in rec {
   libs = {
     xpc = stdenv.mkDerivation {
       name   = "apple-lib-xpc";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include
@@ -150,7 +156,7 @@ in rec {
 
     Xplugin = stdenv.mkDerivation {
       name   = "apple-lib-Xplugin";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       # Not enough
       __propagatedImpureHostDeps = [ "/usr/lib/libXplugin.1.dylib" ];
@@ -168,7 +174,7 @@ in rec {
 
     utmp = stdenv.mkDerivation {
       name   = "apple-lib-utmp";
-      phases = [ "installPhase" "fixupPhase" ];
+      dontUnpack = true;
 
       installPhase = ''
         mkdir -p $out/include

@@ -1,35 +1,47 @@
-{ stdenv
-, buildPythonPackage
-, fetchPypi
-, pkgs-docker
+{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast
 , docker
-, traitlets
-, python-json-logger
 , escapism
 , jinja2
-, ruamel_yaml
+, pkgs-docker
+, python-json-logger
 , pyyaml
-, pytest
-, wheel
-, pytestcov
-, pythonAtLeast
+, ruamel_yaml
+, semver
+, toml
+, traitlets
 }:
 
 buildPythonPackage rec {
-  version = "0.7.0";
+  version = "0.10.0";
   pname = "jupyter-repo2docker";
   disabled = !(pythonAtLeast "3.4");
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cf93ddf283de8c6b8f4ad983f8bf9b7b2a2c37812e387c245f8ba229d4f180c4";
+    sha256 = "7965262913be6be60e64c8016f5f3d4bf93701f2787209215859d73b2adbc05a";
   };
 
-  checkInputs = [ pytest pyyaml wheel pytestcov ];
-  propagatedBuildInputs = [ pkgs-docker docker traitlets python-json-logger escapism jinja2 ruamel_yaml ];
+  propagatedBuildInputs = [
+    docker
+    escapism
+    jinja2
+    pkgs-docker
+    python-json-logger
+    ruamel_yaml
+    semver
+    toml
+    traitlets
+  ];
 
   # tests not packaged with pypi release
   doCheck = false;
+
+  pythonImportsCheck = [
+    "repo2docker"
+    "repo2docker.app"
+    "repo2docker.utils"
+    "repo2docker.contentproviders.base"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://repo2docker.readthedocs.io/en/latest/;

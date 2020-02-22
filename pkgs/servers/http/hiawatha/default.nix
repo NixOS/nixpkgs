@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     description = "An advanced and secure webserver";
     license = licenses.gpl2;
     platforms = platforms.unix;    # "Hiawatha runs perfectly on Linux, BSD and MacOS X"
-    maintainers = [ maintainers.ndowens ];
+    maintainers = [];
   };
 
 }

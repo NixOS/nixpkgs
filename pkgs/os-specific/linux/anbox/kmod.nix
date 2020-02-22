@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "anbox-modules";
-  version = "2019-07-13-" + kernel.version;
+  version = "2019-11-15-" + kernel.version;
 
   src = fetchFromGitHub {
     owner = "anbox";
     repo = "anbox-modules";
-    rev = "816dd4d6e702cf77a44cfe208659af6c39e02b57";
-    sha256 = "115xrv3fz5bk51hz8cwb61h0xnrsnv217fxmbpw35a6hjrk7gslc";
+    rev = "e0a237e571989987806b32881044c539db25e3e1";
+    sha256 = "1km1nslp4f5znwskh4bb1b61r1inw1dlbwiyyq3rrh0f0agf8d0v";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;

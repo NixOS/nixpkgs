@@ -5,7 +5,7 @@ stdenv.mkDerivation {
   pname = "libdislocator";
 
   src = afl.src;
-  sourceRoot = "${afl.name}/libdislocator";
+  sourceRoot = "${afl.src.name}/libdislocator";
 
   makeFlags = [ "PREFIX=$(out)" ];
 

@@ -1,23 +1,41 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pam }:
+{ stdenv, buildGoModule, fetchFromGitHub, gnum4, pam, fscrypt-experimental }:
 
 # Don't use this for anything important yet!
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "fscrypt";
-  version = "unstable-2019-08-29";
-
-  goPackagePath = "github.com/google/fscrypt";
-
-  goDeps = ./deps.nix;
+  version = "0.2.6";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "fscrypt";
-    rev = "8a3acda2011e9a080ee792c1e11646e6118a4930";
-    sha256 = "17h6r5lqiz0cw9vsixv48a1p78nd7bs1kncg6p4lfagl7kr5hpls";
+    rev = "v${version}";
+    sha256 = "15pwhz4267kwhkv532k6wgjqfzawawdrrk6vnl017ys5s9ln51a8";
   };
 
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace 'TAG_VERSION := $(shell git describe --tags)' "" \
+      --replace '$(shell date)' '$(shell date --date="@0")' \
+      --replace "/usr/local" "$out"
+  '';
+
+  modSha256 = "110b647q6ljsg5gwlciqv4cddxmk332nahcrpidrpsiqs2yjv1md";
+
+  nativeBuildInputs = [ gnum4 ];
   buildInputs = [ pam ];
+
+  buildPhase = ''
+    make
+  '';
+
+  installPhase = ''
+    make install
+  '';
+
+  preFixup = ''
+    remove-references-to -t ${fscrypt-experimental.go} $out/lib/security/pam_fscrypt.so
+  '';
 
   meta = with stdenv.lib; {
     description =

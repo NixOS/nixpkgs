@@ -18,11 +18,11 @@
 
 stdenv.mkDerivation rec {
   pname = "filezilla";
-  version = "3.44.2";
+  version = "3.46.3";
 
   src = fetchurl {
     url = "https://download.filezilla-project.org/client/FileZilla_${version}_src.tar.bz2";
-    sha256 = "1dny16ybzml6py1y8vprylqq1xc08221w5xcwcmygkjrb0820kax";
+    sha256 = "15bkg9qs07h4pzkxba1gymp8f264dk0zrzd9brx48fcwm7qbzigi";
   };
 
   configureFlags = [

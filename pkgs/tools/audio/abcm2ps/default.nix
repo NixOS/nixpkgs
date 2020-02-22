@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "abcm2ps";
-  version = "8.14.5";
+  version = "8.14.7";
 
   src = fetchFromGitHub {
     owner = "leesavide";
     repo = "abcm2ps";
     rev = "v${version}";
-    sha256 = "1i6db49khqy8bqg21cn90b1fvyw8mh1asdswzssr6dr2g8bhdwmq";
+    sha256 = "0k12wf37vl31w2qpj3dsmv8c4ifrsg3qa30gqsx553jw7n0f3ma2";
   };
 
   configureFlags = [

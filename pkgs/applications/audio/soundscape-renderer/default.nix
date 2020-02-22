@@ -11,7 +11,7 @@
 , boost
 , ecasound
 , glibcLocales
-, libGLU_combined # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
+, libGLU, libGL # Needed because help2man basically does a ./ssr-binaural  --help and ssr-binaural needs libGL
 }:
 
 stdenv.mkDerivation {
@@ -33,7 +33,7 @@ stdenv.mkDerivation {
   LC_ALL = "en_US.UTF-8";
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ boost boost.dev ecasound libGLU_combined help2man libsndfile fftwFloat libjack2 libxml2 qt4 glibcLocales ];
+  buildInputs = [ boost boost.dev ecasound libGLU libGL help2man libsndfile fftwFloat libjack2 libxml2 qt4 glibcLocales ];
 
   # 1) Fix detecting version. https://github.com/SoundScapeRenderer/ssr/pull/53
   # 2) Make it find ecasound headers

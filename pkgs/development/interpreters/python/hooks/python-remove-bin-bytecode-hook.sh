@@ -12,6 +12,6 @@ pythonRemoveBinBytecodePhase () {
     fi
 }
 
-if [ -z "$dontUsePythonRemoveBinBytecode" ]; then
+if [ -z "${dontUsePythonRemoveBinBytecode-}" ]; then
     preDistPhases+=" pythonRemoveBinBytecodePhase"
 fi

@@ -9,12 +9,12 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.1.5";
+  version = "0.1.9";
   pname = "dask-xgboost";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1860d06965fe68def1c83b9195130a92050fd4bc28bf2be689898a3a74ee1316";
+    sha256 = "6faeeed044112151e28770b69fb1ad06b026597726ce8dc185fd3ae45363d0c0";
   };
 
   checkInputs = [ pytest scikitlearn ];

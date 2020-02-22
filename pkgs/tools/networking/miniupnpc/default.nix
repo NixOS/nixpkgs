@@ -11,14 +11,13 @@ let
         inherit sha256;
       };
 
-      nativeBuildInputs = [] ++
-        stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
+      nativeBuildInputs = stdenv.lib.optionals stdenv.isDarwin [ which cctools ];
 
       patches = stdenv.lib.optional stdenv.isFreeBSD ./freebsd.patch;
 
       doCheck = !stdenv.isFreeBSD;
 
-      makeFlags = "PREFIX=$(out) INSTALLPREFIX=$(out)";
+      makeFlags = [ "PREFIX=$(out)" "INSTALLPREFIX=$(out)" ];
 
       meta = with stdenv.lib; {
         homepage = http://miniupnp.free.fr/;

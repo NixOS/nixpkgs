@@ -20,6 +20,9 @@
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
+, eggUnpackHook
+, eggBuildHook
+, eggInstallHook
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -119,6 +122,8 @@ let
     pipBuildHook
   ] ++ lib.optionals (format == "wheel") [
     wheelUnpackHook
+  ] ++ lib.optionals (format == "egg") [
+    eggUnpackHook eggBuildHook eggInstallHook
   ] ++ lib.optionals (!(format == "other") || dontUsePipInstall) [
     pipInstallHook
   ] ++ lib.optionals (stdenv.buildPlatform == stdenv.hostPlatform) [

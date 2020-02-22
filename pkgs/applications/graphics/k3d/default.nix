@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, ftgl, glew, asciidoc
-, cmake, ninja, libGLU_combined, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
-, libpng, boost, doxygen, cairomm, pkgconfig, imagemagick, libjpeg, libtiff
-, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, pangox_compat, libXmu }:
+, cmake, ninja, libGLU, libGL, zlib, python, expat, libxml2, libsigcxx, libuuid, freetype
+, libpng, boost, doxygen, cairomm, pkgconfig, libjpeg, libtiff
+, gettext, intltool, perl, gtkmm2, glibmm, gtkglext, libXmu }:
 
 stdenv.mkDerivation rec {
   version = "0.8.0.6";
@@ -32,16 +32,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ninja gettext intltool doxygen pkgconfig perl asciidoc ];
 
   buildInputs = [
-     libGLU_combined zlib python expat libxml2 libsigcxx libuuid freetype libpng
-     boost cairomm imagemagick libjpeg libtiff
-     ftgl glew gtkmm2 glibmm gtkglext pangox_compat libXmu
+     libGLU libGL zlib python expat libxml2 libsigcxx libuuid freetype libpng
+     boost cairomm libjpeg libtiff
+     ftgl glew gtkmm2 glibmm gtkglext libXmu
     ];
 
   #doCheck = false;
 
-  NIX_CFLAGS_COMPILE = [
-    "-Wno-deprecated-declarations"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-deprecated-declarations";
 
   meta = with stdenv.lib; {
     description = "A 3D editor with support for procedural editing";

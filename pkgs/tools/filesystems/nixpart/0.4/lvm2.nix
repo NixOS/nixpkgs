@@ -40,7 +40,7 @@ stdenv.mkDerivation {
   #patches = [ ./purity.patch ];
 
   # To prevent make install from failing.
-  preInstall = "installFlags=\"OWNER= GROUP= confdir=$out/etc\"";
+  installFlags = [ "OWNER=" "GROUP=" "confdir=${placeholder "out"}/etc" ];
 
   # Install systemd stuff.
   #installTargets = "install install_systemd_generators install_systemd_units install_tmpfiles_configuration";

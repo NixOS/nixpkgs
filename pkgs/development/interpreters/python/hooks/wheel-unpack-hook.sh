@@ -12,7 +12,7 @@ wheelUnpackPhase(){
     echo "Finished executing wheelUnpackPhase"
 }
 
-if [ -z "$dontUseWheelUnpack" ] && [ -z "$unpackPhase" ]; then
+if [ -z "${dontUseWheelUnpack-}" ] && [ -z "${unpackPhase-}" ]; then
     echo "Using wheelUnpackPhase"
     unpackPhase=wheelUnpackPhase
 fi

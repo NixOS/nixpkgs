@@ -8,8 +8,6 @@ stdenv.mkDerivation rec {
     sha256 = "1y0gikds2nr8jk8smhrl617njk23ymmpxyjb2j1xbj0k82xspv78";
   };
 
-  buildInputs = [];
-
   passthru = {
     updateScript = ''
       #!${runtimeShell}
@@ -24,7 +22,7 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.asl20 ;
     maintainers = [stdenv.lib.maintainers.raskin];
     platforms = stdenv.lib.platforms.linux;
-    homepage = http://research.cs.wisc.edu/mist/safefile/;
+    homepage = https://research.cs.wisc.edu/mist/safefile/;
     updateWalker = true;
   };
 }

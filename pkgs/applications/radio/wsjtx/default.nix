@@ -4,12 +4,12 @@
 
 stdenv.mkDerivation rec {
   pname = "wsjtx";
-  version = "2.1.0";
+  version = "2.1.2";
 
   # This is a "superbuild" tarball containing both wsjtx and a hamlib fork
   src = fetchurl {
     url = "http://physics.princeton.edu/pulsar/k1jt/wsjtx-${version}.tgz";
-    sha256 = "04flhyfw0djnnbrzh3f5lx06bnn92khchz3bmswk8if8n8j58v4y";
+    sha256 = "0aj3wg5xjjqwjvw6lra171ag5wq86w0hf1ra4k8mnaf0mc1qgbyl";
   };
 
   # Hamlib builds with autotools, wsjtx builds with cmake

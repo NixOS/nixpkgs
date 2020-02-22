@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-c";
-  version = "0.9.0";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "alanxz";
     repo = "rabbitmq-c";
     rev = "v${version}";
-    sha256 = "1mhzxyh9pmpxjjbyy8hd34gm39sxf73r1ldk8zjfsfbs26ggrppz";
+    sha256 = "1iv7aww4pam8497s524xjxbbxypyqd01qgrb0b429y3q9x06m4sw";
   };
 
   buildInputs = [ cmake openssl popt xmlto ];

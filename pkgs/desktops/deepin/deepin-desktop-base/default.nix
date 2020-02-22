@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "deepin-desktop-base";
-  version = "2019.06.19";
+  version = "2019.07.10";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "1r158x4z4qalv4q1ni3aln05krdzblvr7y6wyciwl7cr5ag1i1jy";
+    sha256 = "0rs7bjy35k5gc5nbba1cijhdz16zny30lgmcf2ckx1pkdszk2vra";
   };
 
   nativeBuildInputs = [ deepin.setupHook ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ln -s ../lib/deepin/desktop-version $out/etc/deepin-version
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Base assets and definitions for Deepin Desktop Environment";

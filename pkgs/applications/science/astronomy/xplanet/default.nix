@@ -1,29 +1,38 @@
-{stdenv, fetchurl, pkgconfig, freetype, pango, libpng, libtiff, giflib
-, libjpeg, netpbm}:
+{stdenv, fetchurl, fetchpatch, pkgconfig, freetype, pango, libpng, libtiff
+, giflib, libjpeg, netpbm}:
 
 stdenv.mkDerivation rec {
-  name = "xplanet-1.3.0";
+  pname = "xplanet";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/xplanet/${name}.tar.gz";
-    sha256 = "0hml2v228wi2r61m1pgka7h96rl92b6apk0iigm62miyp4mp9ys4";
+    url = "mirror://sourceforge/xplanet/${pname}-${version}.tar.gz";
+    sha256 = "1rzc1alph03j67lrr66499zl0wqndiipmj99nqgvh9xzm1qdb023";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ freetype pango libpng libtiff giflib libjpeg netpbm ];
 
   patches = [
-    ./giflib.patch
-    ./gcc6.patch
+    (fetchpatch {
+      name = "giflib6.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/giflib6.patch?h=packages/xplanet&id=ce6f25eb369dc011161613894f01fd0a6ae85a09";
+      sha256 = "173l0xkqq0v2bpaff7hhwc7y2aw5cclqw8988k1nalhyfbrjb8bl";
+    })
+    (fetchpatch {
+      name = "xplanet-c++11.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/trunk/xplanet-c++11.patch?h=packages/xplanet&id=ce6f25eb369dc011161613894f01fd0a6ae85a09";
+      sha256 = "0vldai78ixw49bxch774pps6pq4sp0p33qvkvxywcz7p8kzpg8q2";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=c++11-narrowing";
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Renders an image of the earth or other planets into the X root window";
     homepage = http://xplanet.sourceforge.net;
-    license = "GPL";
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = stdenv.lib.platforms.all;
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ lassulus sander ];
+    platforms = platforms.all;
   };
 }

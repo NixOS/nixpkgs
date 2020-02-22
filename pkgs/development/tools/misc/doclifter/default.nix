@@ -8,7 +8,7 @@ stdenv.mkDerivation {
   };
   buildInputs = [ python ];
   
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
   
   preInstall = ''
     mkdir -p $out/bin

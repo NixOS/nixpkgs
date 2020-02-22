@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "radio_beam";
-  version = "0.3.1";
+  version = "0.3.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1wgd9dyz3pcc9ighkclb6qfyshwbg35s57lz6k62jhcxpvp8r5zb";
+    sha256 = "0g1nqiikv023ab60gfqrvc13kfjv8m70bpfk264vlliaq6mvxdf2";
   };
 
   propagatedBuildInputs = [ astropy ];

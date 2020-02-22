@@ -19,9 +19,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  installFlags = ''
-    DESTDIR=$(out)
-  '';
+  installFlags = [ "DESTDIR=$(out)" ];
 
   fixupPhase = ''
     cp -r $out/var/empty/local/lib $out

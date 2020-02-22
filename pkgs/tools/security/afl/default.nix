@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, callPackage, makeWrapper
+{ stdenv, fetchFromGitHub, callPackage, makeWrapper
 , clang, llvm, which, libcgroup
 }:
 
@@ -9,11 +9,13 @@ let
     else throw "afl: no support for ${stdenv.hostPlatform.system}!";
   afl = stdenv.mkDerivation rec {
     pname = "afl";
-    version = "2.52b";
+    version = "2.56b";
 
-    src = fetchurl {
-      url    = "http://lcamtuf.coredump.cx/afl/releases/${pname}-${version}.tgz";
-      sha256 = "0ig0ij4n1pwry5dw1hk4q88801jzzy2cric6y2gd6560j55lnqa3";
+    src = fetchFromGitHub {
+      owner = "google";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "1q1g59gkm48aa4cg9h70jx4i2gapmypgp5rzs156b2avd95vwkn1";
     };
     enableParallelBuilding = true;
 

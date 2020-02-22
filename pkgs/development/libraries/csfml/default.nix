@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, sfml }:
 
 let
-  version = "2.4";
+  version = "2.5";
 in
 
 stdenv.mkDerivation {
@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "SFML";
     repo  = "CSFML";
-    rev   = "b5facb85d13bff451a5fd2d088a97472a685576c";
-    sha256 = "1q716gd7c7jlxzwpq5z4rjj5lsrn71ql2djphccdf9jannllqizn";
+    rev   = version;
+    sha256 = "071magxif5nrdddzk2z34czqmz1dfws4d7dqynb2zpn7cwhwxcpm";
   };
   buildInputs = [ cmake sfml ];
   cmakeFlags = [ "-DCMAKE_MODULE_PATH=${sfml}/share/SFML/cmake/Modules/" ];

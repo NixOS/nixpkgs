@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://www.freetype.org/ttfautohint;
     license = licenses.gpl2Plus; # or the FreeType License (BSD + advertising clause)
-    maintainers = with maintainers; [ goibhniu ndowens ];
+    maintainers = with maintainers; [ goibhniu ];
     platforms = platforms.unix;
   };
 

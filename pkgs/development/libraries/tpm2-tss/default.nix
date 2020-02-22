@@ -1,15 +1,24 @@
-{ stdenv, lib, fetchurl
+{ stdenv, lib, fetchurl, fetchpatch
 , cmocka, doxygen, ibm-sw-tpm2, iproute, openssl, perl, pkgconfig, procps
-, uthash, which }:
+, uthash, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-tss";
-  version = "2.2.3";
+  version = "2.3.2";
 
   src = fetchurl {
     url = "https://github.com/tpm2-software/${pname}/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "1hwrka0g817a4d1177vv0z13gp66bxzxhflfxswjhcdk93kaws8k";
+    sha256 = "19jg09sxy3aj4dc1yv32jjv0m62cnmhjlw02jbh4d4pk2439m4l2";
   };
+
+  patches = [
+    # Fix test failure. see https://github.com/tpm2-software/tpm2-tss/pull/1585
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/tpm2-software/tpm2-tss/pull/1585.patch";
+      sha256 = "0ak3l588ahzv3yx1gfa4sa6p74lsffxzkr23ppznm34wvlcci86n";
+    })
+  ];
 
   nativeBuildInputs = [
     doxygen perl pkgconfig

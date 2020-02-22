@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
-  version = "1.1.0";
+  version = "1.3.0";
   src = fetchurl {
-    url = "https://developers.yubico.com/libfido2/Releases/libfido2-${version}.tar.gz";
-    sha256 = "1h51q9pgv54czf7k6v90b02gnvqw4dlxmz6vi0n06shpkdzv5jh1";
+    url = "https://developers.yubico.com/${pname}/Releases/${pname}-${version}.tar.gz";
+    sha256 = "1izyl3as9rn7zcxpsvgngjwr55gli5gy822ac3ajzm65qiqkcbhb";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libcbor libressl udev ];
+  buildInputs = [ libcbor libressl ] ++ stdenv.lib.optionals stdenv.isLinux [ udev ];
 
   cmakeFlags = [ "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d" ];
 
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Yubico/libfido2;
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
-
+    platforms = platforms.linux;
   };
 }

@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   meta = with stdenv.lib; {
-    homepage = "http://taglib.org/";
+    homepage = "https://taglib.org/";
     repositories.git = "git://github.com/taglib/taglib.git";
     description = "A library for reading and editing audio file metadata.";
     longDescription = ''

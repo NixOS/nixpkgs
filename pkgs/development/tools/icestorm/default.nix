@@ -11,20 +11,22 @@
 
 stdenv.mkDerivation rec {
   pname = "icestorm";
-  version = "2019.08.31";
+  version = "2019.09.13";
 
-  pythonPkg = if usePyPy then pypy3 else python3;
-  pythonInterp = pythonPkg.interpreter;
+  passthru = rec {
+    pythonPkg = if usePyPy then pypy3 else python3;
+    pythonInterp = pythonPkg.interpreter;
+  };
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "04f1eb78ed8fd50516aee50102675041a8fd40cd";
-    sha256 = "10jdiw4mw0afcjq7xl3xs8z733mlrx927x620vs2yz91p757jxbd";
+    rev    = "0ec00d892a91cc68e45479b46161f649caea2933";
+    sha256 = "1qlh99fafb7xga702k64fmc9m700nsddrfgcq4x8qn8fplsb64f1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pythonPkg libftdi1 ];
+  buildInputs = [ passthru.pythonPkg libftdi1 ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
@@ -39,12 +41,12 @@ stdenv.mkDerivation rec {
       --replace /usr/local/share "$out/share"
 
     for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
-      substituteInPlace "$x" --replace python3 "${pythonInterp}"
+      substituteInPlace "$x" --replace python3 "${passthru.pythonInterp}"
     done
 
     for x in $(find . -type f -iname '*.py'); do
       substituteInPlace "$x" \
-        --replace '/usr/bin/env python3' '${pythonInterp}'
+        --replace '/usr/bin/env python3' '${passthru.pythonInterp}'
     done
   '';
 

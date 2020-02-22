@@ -2,16 +2,21 @@
 
 stdenv.mkDerivation rec {
   pname = "leatherman";
-  version = "1.7.1";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
-    sha256 = "0m2dm1gzwj0kwyl031bif89h3n4znml3m5n97hywlbra58ni8km1";
+    sha256 = "1kvvqvr0djz4gb770rs5h97zqcymvbzrmsw8kz2icvlmcicm7qd8";
     rev = version;
     repo = "leatherman";
     owner = "puppetlabs";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=ignored-qualifiers" "-Wno-error=class-memaccess" "-Wno-error=catch-value" ];
+  NIX_CFLAGS_COMPILE = builtins.toString [
+    "-Wno-error=ignored-qualifiers"
+    "-Wno-error=class-memaccess"
+    "-Wno-error=catch-value"
+    "-Wno-error=deprecated-copy"
+  ];
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost curl ruby ];
@@ -19,7 +24,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/puppetlabs/leatherman/;  
+    homepage = https://github.com/puppetlabs/leatherman/;
     description = "A collection of C++ and CMake utility libraries";
     license = licenses.asl20;
     maintainers = [ maintainers.womfoo ];

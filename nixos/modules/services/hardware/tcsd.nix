@@ -137,15 +137,15 @@ in
       serviceConfig.ExecStart = "${pkgs.trousers}/sbin/tcsd -f -c ${tcsdConf}";
     };
 
-    users.users = optionalAttrs (cfg.user == "tss") (singleton
-      { name = "tss";
+    users.users = optionalAttrs (cfg.user == "tss") {
+      tss = {
         group = "tss";
         uid = config.ids.uids.tss;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "tss") (singleton
-      { name = "tss";
-        gid = config.ids.gids.tss;
-      });
+    users.groups = optionalAttrs (cfg.group == "tss") {
+      tss.gid = config.ids.gids.tss;
+    };
   };
 }

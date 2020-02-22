@@ -54,12 +54,12 @@ rec {
   gradle_latest = gradle_5_6;
 
   gradle_5_6 = gradleGen rec {
-    name = "gradle-5.6.1";
+    name = "gradle-5.6.4";
     nativeVersion = "0.18";
 
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "04pccfcry5c59xwm6rr4r3baanwbfr5yrwhxv4r5v8z4414291h9";
+      sha256 = "1f3067073041bc44554d0efe5d402a33bc3d3c93cc39ab684f308586d732a80d";
     };
   };
 
@@ -70,40 +70,6 @@ rec {
     src = fetchurl {
       url = "http://services.gradle.org/distributions/${name}-bin.zip";
       sha256 = "0vhqxnk0yj3q9jam5w4kpia70i4h0q4pjxxqwynh3qml0vrcn9l6";
-    };
-  };
-
-  gradle_3_5 = gradleGen rec {
-    name = "gradle-3.5.1";
-    nativeVersion = "0.14";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "1y7fbhrdriclbs5ksxahi0aafsz760lalwyz8r4llysc5pskbkld";
-    };
-  };
-
-  gradle_2_14 = gradleGen rec {
-    name = "gradle-2.14.1";
-    nativeVersion = "0.10";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0fggjxpsnakdaviw7bn2jmsl06997phlqr1251bjmlgjf7d1xing";
-    };
-  };
-
-  # Nix pkgs that depend on this old version:
-  # pkgs/tools/security/jd-gui/default.nix
-  # pkgs/servers/mxisd/default.nix
-  # If these packages are updated, this old version can probably be removed
-  gradle_2_5 = gradleGen rec {
-    name = "gradle-2.5";
-    nativeVersion = "0.10";
-
-    src = fetchurl {
-      url = "http://services.gradle.org/distributions/${name}-bin.zip";
-      sha256 = "0mc5lf6phkncx77r0papzmfvyiqm0y26x50ipvmzkcsbn463x59z";
     };
   };
 }

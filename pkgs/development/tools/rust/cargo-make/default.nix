@@ -1,8 +1,8 @@
-{ stdenv, fetchurl, runCommand, fetchFromGitHub, rustPlatform, Security }:
+{ stdenv, fetchurl, runCommand, fetchFromGitHub, rustPlatform, Security, openssl, pkg-config }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-make";
-  version = "0.22.1";
+  version = "0.27.0";
 
   src =
     let
@@ -10,22 +10,24 @@ rustPlatform.buildRustPackage rec {
         owner = "sagiegurari";
         repo = pname;
         rev = version;
-        sha256 = "1wsams41zl56mkb8671n5fqkkchs68jd9nvfzry8axxiv7n175gc";
-      };
-      cargo-lock = fetchurl {
-        url = "https://gist.githubusercontent.com/xrelkd/e4c9c7738b21f284d97cb7b1d181317d/raw/850e9830f4ab4bc65da6eb5cd8b0911970a7739f/cargo-make-Cargo.lock";
-        sha256 = "0knmzplxmh8vksmpg56l2p1a10hpqbr9hmbk3hv0aj63125rhhqy";
+        sha256 = "197r7rlgk8csvq612gz4431vvrvyxhcmfswarsdczp4b94pzaa6h";
       };
     in
     runCommand "cargo-make-src" {} ''
       cp -R ${source} $out
       chmod +w $out
-      cp ${cargo-lock} $out/Cargo.lock
+      cp ${./Cargo.lock} $out/Cargo.lock
     '';
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "18j0nflf997z4nwdxifxp1ji1rbwqbg6zm2256j21am4ak45krsy";
+  buildInputs = [ openssl ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "02bx8nz8kkr0l8m1b8nfc9576qx9is6s72x4ji3bzwimy76jvx3j";
 
   # Some tests fail because they need network access.
   # However, Travis ensures a proper build.

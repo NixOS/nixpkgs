@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild, dune }:
 let
   pname = "cppo";
-  webpage = "http://mjambon.com/${pname}.html";
+  webpage = "https://github.com/ocaml-community/${pname}";
 in
 assert stdenv.lib.versionAtLeast ocaml.version "3.12";
 
@@ -18,7 +18,7 @@ let param =
     sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
     extra = {
       createFindlibDestdir = true;
-      makeFlags = "PREFIX=$(out)";
+      makeFlags = [ "PREFIX=$(out)" ];
       preBuild = ''
         mkdir $out/bin
       '';

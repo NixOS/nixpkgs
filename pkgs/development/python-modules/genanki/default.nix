@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "genanki";
-  version = "0.6.4";
+  version = "0.8.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6d17761e06aca2d9acb588acfdce33fd3d05571338825760622c99fc7210f15a";
+    sha256 = "c7c6c276f182a63a807b52a95f197df12794ff014f48dd287cb51ca2dcbe1b34";
   };
 
   propagatedBuildInputs = [

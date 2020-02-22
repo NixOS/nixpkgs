@@ -17,7 +17,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-shortcut-overlay";
-  version = "1.0.1";
+  version = "1.1.0";
 
   repoName = "shortcut-overlay";
 
@@ -25,13 +25,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "1ph4rx2l5fn0zh4fjfjlgbgskmzc0lvzqgcv7v4kr5m4rij1p4y4";
+    sha256 = "10s44x5qln3asrdr6v5b3v92prh8rfhv96dbm73zhifm2jjm22g8";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
