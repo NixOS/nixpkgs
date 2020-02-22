@@ -823,6 +823,8 @@ in {
 
   lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
 
+  lazr-restfulclient = callPackage ../development/python-modules/lazr-restfulclient { };
+
   lazr-uri = callPackage ../development/python-modules/lazr-uri { };
 
   libmr = callPackage ../development/python-modules/libmr { };
