@@ -171,5 +171,6 @@ buildPythonPackage rec {
     maintainers = with maintainers; [
       kamadorueda
     ];
+    broken = true; # dependency breadth is making this unmanagable
   };
 }
