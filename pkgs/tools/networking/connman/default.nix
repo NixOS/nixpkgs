@@ -10,7 +10,7 @@
 , iptables
 , gnutls
 , polkit,
-, readline6
+, readline
 , pptp
 , ppp
 }:
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     dbus
     iptables
     gnutls
-    readline6
+    readline
     pptp
     ppp
   ];
