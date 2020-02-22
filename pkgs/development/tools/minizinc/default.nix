@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, flex, bison }:
 let
-  version = "2.2.3";
+  version = "2.3.2";
 in
 stdenv.mkDerivation {
   pname = "minizinc";
@@ -16,7 +16,7 @@ stdenv.mkDerivation {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.minizinc.org/;
+    homepage = "https://www.minizinc.org/";
     description = "MiniZinc is a medium-level constraint modelling language.";
 
     longDescription = ''
