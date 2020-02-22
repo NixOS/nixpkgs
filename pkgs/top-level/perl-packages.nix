@@ -9478,11 +9478,11 @@ let
   # TODO: use CPAN version
   ImageExifTool = buildPerlPackage {
     pname = "Image-ExifTool";
-    version = "11.70";
+    version = "11.85";
 
     src = fetchurl {
-      url = "https://www.sno.phy.queensu.ca/~phil/exiftool/Image-ExifTool-11.70.tar.gz";
-      sha256 = "1z0s0zvga24m9dzp1lnrsvwv9qmvn21ifd9in520sd54ld774ifp";
+      url = "https://exiftool.org/Image-ExifTool-11.85.tar.gz";
+      sha256 = "15zqm0ly2b3paqg0ym44ib2mvh6k18a9q5rvdirwipqa127al2lb";
     };
 
     nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
@@ -9492,7 +9492,7 @@ let
 
     meta = with stdenv.lib; {
       description = "A tool to read, write and edit EXIF meta information";
-      homepage = https://www.sno.phy.queensu.ca/~phil/exiftool/;
+      homepage = "https://exiftool.org/";
 
       longDescription = ''
         ExifTool is a platform-independent Perl library plus a command-line
