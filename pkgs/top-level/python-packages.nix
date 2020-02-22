@@ -6182,6 +6182,8 @@ in {
 
   vultr = callPackage ../development/python-modules/vultr { };
 
+  wadllib = callPackage ../development/python-modules/wadllib { };
+
   waitress = callPackage ../development/python-modules/waitress { };
 
   waitress-django = callPackage ../development/python-modules/waitress-django { };
