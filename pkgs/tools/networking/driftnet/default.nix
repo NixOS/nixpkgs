@@ -6,7 +6,7 @@ with lib;
 
 stdenv.mkDerivation {
   pname = "driftnet";
-  version = "1.1.5";
+  version = "1.3.0";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Driftnet watches network traffic, and picks out and displays JPEG and GIF images for display";
-    homepage = https://github.com/deiv/driftnet;
+    homepage = "https://github.com/deiv/driftnet";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
     license = licenses.gpl2;
