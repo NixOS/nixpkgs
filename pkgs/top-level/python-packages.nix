@@ -5434,7 +5434,10 @@ in {
 
   scp = callPackage ../development/python-modules/scp {};
 
-  seaborn = callPackage ../development/python-modules/seaborn { };
+  seaborn = if isPy3k then
+    callPackage ../development/python-modules/seaborn { }
+  else
+    callPackage ../development/python-modules/seaborn/0.9.1.nix { };
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
