@@ -6,7 +6,7 @@ let arch =
   else throw "Unknown architecture";
 in stdenv.mkDerivation {
   pname = "grub4dos";
-  version = "0.4.6a-2019-05-12";
+  version = "2020-01-28-8bb5845";
 
   src = fetchFromGitHub {
     owner = "chenall";
@@ -34,7 +34,7 @@ in stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   meta = with stdenv.lib; {
-    homepage = http://grub4dos.chenall.net/;
+    homepage = "http://grub4dos.chenall.net/";
     description = "GRUB for DOS is the dos extension of GRUB";
     maintainers = with maintainers; [ abbradar ];
     platforms = platforms.linux;
