@@ -502,6 +502,8 @@ in {
 
   braintree = callPackage ../development/python-modules/braintree { };
 
+  breezy = callPackage ../development/python-modules/breezy { };
+
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
