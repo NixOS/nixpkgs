@@ -43,7 +43,6 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    export PPPD=${ppp}/sbin/pppd
     sed -i "s/\/usr\/bin\/file/file/g" ./configure
   '';
 
@@ -70,10 +69,6 @@ stdenv.mkDerivation rec {
     "--with-pptp=${pptp}/sbin/pptp"
     "--enable-iwd"
   ];
-
-  postInstall = ''
-    cp ./client/connmanctl $out/sbin/connmanctl
-  '';
 
   meta = with stdenv.lib; {
     description = "A daemon for managing internet connections";
