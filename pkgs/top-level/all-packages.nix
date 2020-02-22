@@ -14437,7 +14437,9 @@ in
     withQt5 = false;
   };
 
-  sundials = callPackage ../development/libraries/sundials { };
+  sundials = callPackage ../development/libraries/sundials {
+    python = python3;
+  };
 
   sundials_2 = callPackage ../development/libraries/sundials/2.x.nix {
     python = python3;
