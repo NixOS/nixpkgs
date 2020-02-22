@@ -19,10 +19,10 @@
 
 stdenv.mkDerivation rec {
   pname = "connman";
-  version = "1.37";
+  version = "1.38";
   src = fetchurl {
     url = "mirror://kernel/linux/network/connman/${pname}-${version}.tar.xz";
-    sha256 = "05kfjiqhqfmbbwc4snnyvi5hc4zxanac62f6gcwaf5mvn0z9pqkc";
+    sha256 = "0awkqigvhwwxiapw0x6yd4whl465ka8a4al0v2pcqy9ggjlsqc6b";
   };
 
   buildInputs = [
