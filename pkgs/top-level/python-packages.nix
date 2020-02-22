@@ -823,6 +823,8 @@ in {
 
   lazr_delegates = callPackage ../development/python-modules/lazr/delegates.nix { };
 
+  lazr-uri = callPackage ../development/python-modules/lazr-uri { };
+
   libmr = callPackage ../development/python-modules/libmr { };
 
   limitlessled = callPackage ../development/python-modules/limitlessled { };
