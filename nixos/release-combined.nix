@@ -55,6 +55,7 @@ in rec {
       "nixos.ova.x86_64-linux"
       "nixos.sd_image.aarch64-linux"
       "nixos.tests.boot.biosCdrom.x86_64-linux"
+      "nixos.tests.boot.biosUsb.x86_64-linux"
       "nixos.tests.boot-stage1.x86_64-linux"
       "nixos.tests.boot.uefiCdrom.x86_64-linux"
       "nixos.tests.boot.uefiUsb.x86_64-linux"
