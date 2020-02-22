@@ -2551,6 +2551,36 @@ in
   conspy = callPackage ../os-specific/linux/conspy {};
 
   connman = callPackage ../tools/networking/connman { };
+  connmanThin = callPackage ../tools/networking/connman {
+    enableOpenconnect = false;
+    enableOpenvpn = false;
+    enableVpnc = false;
+    vpnc = false;
+    enablePolkit = false;
+    enablePptp = false;
+    enableLoopback = false;
+    # enableEthernet = false;
+    enableWireguard = false;
+    enableGadget = false;
+    # enableWifi = false;
+    enableBluetooth = false;
+    enableOfono = false;
+    enableDundee = false;
+    enablePacrunner = false;
+    enableNeard = false;
+    enableWispr = false;
+    enableTools = false;
+    enableStats = false;
+    enableClient = false;
+    # enableDatafiles = false;
+  };
+  connmanFull = callPackage ../tools/networking/connman {
+    enableNetworkManager = true;
+    enableHh2serialGps = true;
+    enableL2tp = true;
+    enableIospm = true;
+    enableTist = true;
+  };
 
   connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
 
