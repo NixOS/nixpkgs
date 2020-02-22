@@ -12,14 +12,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.19.0";
+  version = "1.20.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "1s6kzx4xh8b6v7ki8h2mfzprj5rxvlgx2md20cr8c0v81qpz3q3q";
+    sha256 = "0g7iv5w14wndl5iv2q81dppgwq09sm93vpnyq7p49nl7q1dsz1d6";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
