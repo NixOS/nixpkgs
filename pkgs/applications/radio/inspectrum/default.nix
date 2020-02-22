@@ -12,7 +12,7 @@
 
 mkDerivation {
   pname = "inspectrum";
-  version = "unstable-2017-05-31";
+  version = "0.2.2";
 
   src = fetchFromGitHub {
     owner = "miek";
