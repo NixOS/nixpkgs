@@ -219,6 +219,14 @@ let
         '';
       };
 
+      nodelay = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Wheather the delay after typing a wrong password should be disabled.
+        '';
+      };
+
       requireWheel = mkOption {
         default = false;
         type = types.bool;
@@ -366,7 +374,7 @@ let
             || cfg.enableGnomeKeyring
             || cfg.googleAuthenticator.enable
             || cfg.duoSecurity.enable)) ''
-              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth
+              auth required pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth
               ${optionalString config.security.pam.enableEcryptfs
                 "auth optional ${pkgs.ecryptfs}/lib/security/pam_ecryptfs.so unwrap"}
               ${optionalString cfg.pamMount
@@ -382,7 +390,7 @@ let
                 "auth required ${pkgs.duo-unix}/lib/security/pam_duo.so"}
             '') + ''
           ${optionalString cfg.unixAuth
-              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} likeauth try_first_pass"}
+              "auth sufficient pam_unix.so ${optionalString cfg.allowNullPassword "nullok"} ${optionalString cfg.nodelay "nodelay"} likeauth try_first_pass"}
           ${optionalString cfg.otpwAuth
               "auth sufficient ${pkgs.otpw}/lib/security/pam_otpw.so"}
           ${optionalString use_ldap
