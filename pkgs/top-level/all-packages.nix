@@ -4267,6 +4267,8 @@ in
 
   netmask = callPackage ../tools/networking/netmask {};
 
+  netifd = callPackage ../tools/networking/netifd {};
+
   ipscan = callPackage ../tools/security/ipscan { };
 
   ipv6calc = callPackage ../tools/networking/ipv6calc {};
@@ -11136,6 +11138,10 @@ in
   cpp-ipfs-api = callPackage ../development/libraries/cpp-ipfs-api { };
 
   cpp-netlib = callPackage ../development/libraries/cpp-netlib {};
+
+  ubus = callPackage ../development/libraries/ubus { };
+
+  uci = callPackage ../development/libraries/uci { };
 
   uri = callPackage ../development/libraries/uri { };
 

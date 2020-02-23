@@ -1,12 +1,13 @@
 { stdenv, lib, fetchgit, cmake, pkgconfig, json_c }:
 
 stdenv.mkDerivation {
-  name = "libubox-2017-09-29";
+  pname = "libubox";
+  version = "unstable-2020-01-20";
 
   src = fetchgit {
     url = "https://git.openwrt.org/project/libubox.git";
-    rev = "632688e8d6cde32781e4ec685d59afb0938300ad";
-    sha256 = "1rkwn287k7p802hbd9ap13xxrxsghq6827r86ymqbbcmbcrna13c";
+    rev = "43a103ff17ee5872669f8712606578c90c14591d";
+    sha256 = "0cihgckghamcfxrvqjjn69giib80xhsqaj98ldn0gd96zqh96sd4";
   };
 
   cmakeFlags = [ "-DBUILD_LUA=OFF" "-DBUILD_EXAMPLES=OFF" ];
