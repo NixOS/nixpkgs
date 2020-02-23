@@ -109,7 +109,7 @@ mkDerivation rec {
     qmake CONFIG+="release" MEGA.pro
     pushd MEGASync
       lrelease MEGASync.pro
-      DESKTOP_DESTDIR="$out" qmake PREFIX="$out" -o Makefile MEGASync.pro CONFIG+=release
+      DESKTOP_DESTDIR="$out" qmake PREFIX="$out" "QMAKE_CXXFLAGS += -fpermissive" -o Makefile MEGASync.pro CONFIG+=release
     popd
   '';
 
