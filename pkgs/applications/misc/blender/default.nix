@@ -2,7 +2,7 @@
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimageio2, openjpeg, python3Packages
-, openvdb, libXxf86vm, tbb
+, openvdb, libXxf86vm, tbb, alembic
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimageio2 openjpeg python zlib fftw jemalloc
+      alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
       makeWrapper
@@ -76,7 +77,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags =
     [
-      "-DWITH_ALEMBIC=OFF"
+      "-DWITH_ALEMBIC=ON"
       "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
