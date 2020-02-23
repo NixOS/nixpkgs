@@ -1,6 +1,8 @@
 { stdenv
 , buildBazelPackage
+, ensureNewerSourcesForZipFilesHook
 , fetchFromGitHub
+, writeScriptBin
 , cacert
 , git
 , glibcLocales
@@ -10,9 +12,12 @@
 , makeWrapper
 , procps
 , python3
+, unzip
+, zip
 }:
 
 let
+
   preBuild = ''
     patchShebangs .
 
@@ -31,18 +36,56 @@ let
     export GOPATH=
   '';
 
+  # Python wheels are .zip files, but when they're created they differ
+  # depending on filesystem iteration order and are thus non-reproducible.
+  # However, we can make them reproducible by unzipping them, listing all
+  # files, and then re-creating the wheel file with a sorted list.
+  makeReproducibleWheel = writeScriptBin "make-reproducible-wheel" ''
+    #!${stdenv.shell}
+
+    set -euo pipefail
+
+    main() {
+      local input="$1"; shift
+      echo "making wheel reproducible: $input" >&2
+
+      local tmpdir="/tmp/wheel"
+      mkdir -p "$tmpdir"
+      trap "rm -rf $tmpdir" EXIT
+
+      cd "$tmpdir"
+      ${unzip}/bin/unzip -qq "$input"
+
+      local files="$(find . -type f | LC_ALL=C sort)"
+      ${zip}/bin/zip -q -r -o -X /tmp/replacement.whl $files 2>/dev/null
+      cd /tmp
+
+      mv /tmp/replacement.whl "$input"
+    }
+
+    main "$@"
+  '';
+
 in buildBazelPackage rec {
   name = "gvisor-${version}";
-  version = "2019-11-14";
+  version = "2020-03-27";
 
   src = fetchFromGitHub {
     owner = "google";
     repo  = "gvisor";
-    rev   = "release-20191114.0";
-    sha256 = "0kyixjjlws9iz2r2srgpdd4rrq94vpxkmh2rmmzxd9mcqy2i9bg1";
+    rev   = "f6e4daa67ad5f07ac1bcff33476b4d13f49a69bc";
+    sha256 = "14r5325cf4cl04dqk9c03gpj21jjr8y0byar628wn8l4h6q9kgrp";
   };
 
-  nativeBuildInputs = [ git glibcLocales go makeWrapper python3 ];
+  nativeBuildInputs = [
+    ensureNewerSourcesForZipFilesHook
+    makeReproducibleWheel
+    git
+    glibcLocales
+    go
+    makeWrapper
+    python3
+  ];
 
   bazelTarget = "//runsc:runsc";
 
@@ -74,9 +117,12 @@ in buildBazelPackage rec {
 
       # Remove log file(s)
       rm -f "$bazelOut"/java.log "$bazelOut"/java.log.*
+
+      # Make all Python wheels reproducible
+      find "$bazelOut/external/pydeps" -name '*.whl' -exec make-reproducible-wheel {} \;
     '';
 
-    sha256 = "1bn7nhv5pag8fdm8l8nvgg3fzvhpy2yv9yl2slrb16lckxzha3v6";
+    sha256 = "1rhnc3sicfd8kyrz6sys7m2fq6mcqpci32d262xxyvh36g6hdnls";
   };
 
   buildAttrs = {
