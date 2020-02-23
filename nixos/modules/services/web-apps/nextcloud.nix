@@ -443,7 +443,7 @@ in {
         pools.nextcloud = {
           user = "nextcloud";
           group = "nginx";
-          phpOptions = phpOptionsExtensions + phpOptionsStr;
+          phpOptions = phpOptionsStr;
           phpPackage = phpPackage;
           phpEnv = {
             NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
