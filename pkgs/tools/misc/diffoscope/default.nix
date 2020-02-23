@@ -9,11 +9,11 @@
 # Note: when upgrading this package, please run the list-missing-tools.sh script as described below!
 python3Packages.buildPythonApplication rec {
   pname = "diffoscope";
-  version = "136";
+  version = "137";
 
   src = fetchurl {
     url    = "https://diffoscope.org/archive/diffoscope-${version}.tar.bz2";
-    sha256 = "0an9c63xgy1bvqnpnn9mfphsq1qx8ba69yk15nqa9p78iqq2hf4h";
+    sha256 = "1qa508nlqvz0s0cd6jk5c8m43kqfx1h2mgx50iphy4y0spnyv946";
   };
 
   patches = [
@@ -69,9 +69,9 @@ python3Packages.buildPythonApplication rec {
       diffoscope is developed as part of the "reproducible builds" Debian
       project and was formerly known as "debbindiff".
     '';
-    homepage    = https://wiki.debian.org/ReproducibleBuilds;
+    homepage    = "https://diffoscope.org/";
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dezgeg ];
+    maintainers = with maintainers; [ dezgeg ma27 ];
     platforms   = platforms.unix;
   };
 }
