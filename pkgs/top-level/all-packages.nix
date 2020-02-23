@@ -13465,6 +13465,8 @@ in
 
   neardal = callPackage ../development/libraries/neardal { };
 
+  neatvnc = callPackage ../development/libraries/neatvnc { };
+
   neon = callPackage ../development/libraries/neon { };
 
   neon_0_29 = callPackage ../development/libraries/neon/0.29.nix {
