@@ -89,6 +89,10 @@ in
   };
 
   config = {
+    assertions = [ {
+      assertion = lib.nixos.sanityCheckStateVersion cfg.release config.system.stateVersion;
+      message = "system.stateVersion was set to an invalid version.";
+    } ];
 
     system.nixos = {
       # These defaults are set here rather than up there so that

@@ -90,7 +90,7 @@ in
       # your system.  Help is available in the configuration.nix(5) man page
       # and in the NixOS manual (accessible by running ‘nixos-help’).
 
-      { config, pkgs, ... }:
+      { config, pkgs, lib, ... }:
 
       {
         imports =
@@ -174,7 +174,7 @@ in
         # this value at the release version of the first install of this system.
         # Before changing this value read the documentation for this option
         # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
-        system.stateVersion = "${config.system.nixos.release}"; # Did you read the comment?
+        system.stateVersion = lib.nixos.decodeStateVersion ${toString (lib.nixos.encodeStateVersion config.system.nixos.release)}; # Did you read the comment?
 
       }
     '';

@@ -55,6 +55,8 @@ let
     # back-compat aliases
     platforms = systems.doubles;
 
+    nixos = callLibs ./nixos.nix;
+
     inherit (builtins) add addErrorContext attrNames concatLists
       deepSeq elem elemAt filter genericClosure genList getAttr
       hasAttr head isAttrs isBool isInt isList isString length
