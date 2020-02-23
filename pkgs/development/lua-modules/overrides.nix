@@ -309,7 +309,6 @@ with super;
     ]
     ;
     # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-    # TODO: Check if that's needed on darwin
     NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
       (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
     propagatedBuildInputs = [ lua ];
