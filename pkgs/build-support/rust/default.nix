@@ -19,6 +19,7 @@
   # section on the manual and ./README.md.
 , legacyCargoFetcher ? false
 , buildType ? "release"
+, buildBins ? []
 , meta ? {}
 , target ? null
 , cargoVendorDir ? null
@@ -151,6 +152,7 @@ stdenv.mkDerivation (filteredArgs // {
       cargo build \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
         --target ${rustTarget} \
+        ${concatStringsSep " " (map (b: "--bin=${b}") buildBins)} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 

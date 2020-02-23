@@ -73,6 +73,17 @@ pkgs.rustPlatform.buildRustPackage {
 }
 ```
 
+### Building another executable from the crate
+
+To build different executables from the crate's default, use the `buildBins` attribute:
+
+```nix
+pkgs.rustPlatform.buildRustPackage {
+  (...)
+  buildBins = [ "sccache-dist" ];
+}
+```
+
 ## Compiling Rust crates using Nix instead of Cargo
 
 ### Simple operation
