@@ -302,12 +302,7 @@ with super;
     nativeBuildInputs = [
       pkgs.cmake
       super.lua.pkgs.compat53
-    ]
-    # TODO: Check if that's needed on darwin
-    ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [
-      pkgs.fixDarwinDylibNames
-    ]
-    ;
+    ];
     # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
     NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
       (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
