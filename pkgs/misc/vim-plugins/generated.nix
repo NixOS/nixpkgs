@@ -160,12 +160,12 @@ let
 
   awesome-vim-colorschemes = buildVimPluginFrom2Nix {
     pname = "awesome-vim-colorschemes";
-    version = "2019-11-23";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "rafi";
       repo = "awesome-vim-colorschemes";
-      rev = "b5037cbf87ee4b0beed91adb33c339122e58326f";
-      sha256 = "1yxjdb2cmha6vqhmsv8vy80whs201wwwx0xmyp76mz9zkcsyljak";
+      rev = "fc222a81de4734eeccd89e81d66319d4a2e8fee7";
+      sha256 = "08wk7i2p62zghvk7q22z6ac6qidpd58r1pkx5lbxg6l9zv7sb8j3";
     };
   };
 
@@ -898,12 +898,12 @@ let
 
   denite-nvim = buildVimPluginFrom2Nix {
     pname = "denite-nvim";
-    version = "2020-02-19";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "denite.nvim";
-      rev = "a22e597a2950510b5bef4f9cc972ae7f1d66b269";
-      sha256 = "1acwb4r20xmsj0cvjc7ql0vfbyj74zmi8ncns678afj7qc595mxq";
+      rev = "e435b78c3fa878dba7bbb03ee7cd95df6ce7a836";
+      sha256 = "10lz16l34ran96i5902hw9zw3qbfdz712bdjkdwvaijmgnj464s5";
     };
   };
 
@@ -1077,12 +1077,12 @@ let
 
   deoplete-nvim = buildVimPluginFrom2Nix {
     pname = "deoplete-nvim";
-    version = "2020-02-19";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deoplete.nvim";
-      rev = "1ec8428fc4a150756dc793295b44f7e62544b5ed";
-      sha256 = "00ywghgprbq9x1m5l5d00c10n9yk83ai6gxlw6gmjl67bya65ikg";
+      rev = "ebc9c155b0247314609e8d326e030adb3391f243";
+      sha256 = "1y51fn2lxal6kf7cls913kl51f67in08xhv2waqngv71bd377bjj";
     };
   };
 
@@ -1399,12 +1399,12 @@ let
 
   gruvbox = buildVimPluginFrom2Nix {
     pname = "gruvbox";
-    version = "2018-02-25";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "morhetz";
       repo = "gruvbox";
-      rev = "cb4e7a5643f7d2dd40e694bcbd28c4b89b185e86";
-      sha256 = "12qkq1x96bm1cmqfg6sb8jxpl2b6gwvhc5qn3gva6vl4nx3ianqi";
+      rev = "040138616bec342d5ea94d4db296f8ddca17007a";
+      sha256 = "0qk2mqs04qlxkc1ldgjbiv1yisi2xl2b8svmjz0hdp9y2l5vfccw";
     };
   };
 
@@ -2214,12 +2214,12 @@ let
 
   nvim-lsp = buildVimPluginFrom2Nix {
     pname = "nvim-lsp";
-    version = "2020-02-22";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "nvim-lsp";
-      rev = "be0f71585eb3185b214c84c643e43e9647ef67d1";
-      sha256 = "1rrlq70yx9ks19xbnic4k2vnq0i7xnfm7s0z5lsxp6xl2w3di78z";
+      rev = "2dc39ef00bedde68aa7fab7023646a5ff8ca9986";
+      sha256 = "0l6blvqj2fh942farbwk02gfl2skqr59m6zz1kn4drybvr0sdw8k";
     };
   };
 
@@ -2687,12 +2687,12 @@ let
 
   SpaceCamp = buildVimPluginFrom2Nix {
     pname = "SpaceCamp";
-    version = "2020-02-22";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "jaredgorski";
       repo = "SpaceCamp";
-      rev = "35187bc15654196c3f7cbf3eabb194dc0ee499de";
-      sha256 = "119chhmz561rfjag778a6yp9w6vdi9kxgv5756rnnav7rrp8ap9a";
+      rev = "44d2e55286bc04588b35b356e36c56ae15e78ad2";
+      sha256 = "1qzlcp46x4pm6dyf2k4n2rrdh27zj7j719gh853gvhdbvjk650yr";
     };
   };
 
@@ -3986,12 +3986,12 @@ let
 
   vim-fugitive = buildVimPluginFrom2Nix {
     pname = "vim-fugitive";
-    version = "2020-02-20";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "tpope";
       repo = "vim-fugitive";
-      rev = "9e4a5239ee2a91f71605a288810419ce3a603df2";
-      sha256 = "1ssw5q3wn9jdq9zyr176b2g24263rpm22gn4sswjylz5d5m2f6yq";
+      rev = "31629d8bd18ddb5db6d9c55585d1eeb325a6bb43";
+      sha256 = "1qvhdxha29wj7fw88i72n16m05hd9apfqwf16g6wi6v2nfqfwpnp";
     };
   };
 
@@ -4063,12 +4063,12 @@ let
 
   vim-go = buildVimPluginFrom2Nix {
     pname = "vim-go";
-    version = "2020-02-20";
+    version = "2020-02-23";
     src = fetchFromGitHub {
       owner = "fatih";
       repo = "vim-go";
-      rev = "26c00294a0726ebfe80174f310b868af5e0f2042";
-      sha256 = "1ymdqdl0bfingkh7gdprvdmp5q3wka3kwnw0cw1nyzq8m3sn1803";
+      rev = "dc02b2192ff2f652379f94791b7c7e311c946068";
+      sha256 = "1h6hb870zqx7wdk49wpcp7rrd70nvvb4wk311j8439z4f6ibfsdq";
     };
   };
 
