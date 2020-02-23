@@ -5625,7 +5625,6 @@ broken-packages:
   - haskore-supercollider
   - haskore-synthesizer
   - HaskRel
-  - hasktags
   - hasktorch
   - hasktorch-codegen
   - hasktorch-ffi-th
@@ -6673,7 +6672,6 @@ broken-packages:
   - jsaddle-wkwebview
   - JsContracts
   - jsmw
-  - json
   - json-assertions
   - json-ast-json-encoder
   - json-ast-quickcheck
