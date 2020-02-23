@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "argo";
-  version = "2.4.3";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "argoproj";
     repo = "argo";
     rev = "v${version}";
-    sha256 = "15726n5rrbzszq5dpmrxbw9cn7ahihn28jqk274270140gz5aak1";
+    sha256 = "0q8pvzinpp5ffnl671h38m2i26cyqkpxnhs2kcccvidh3200zia3";
   };
 
   goDeps = ./deps.nix;
