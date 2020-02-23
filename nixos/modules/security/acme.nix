@@ -149,6 +149,14 @@ let
           </itemizedlist>
         '';
       };
+
+      extraLegoRenewFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional flags to pass to lego renew.
+        '';
+      };
     };
   };
 
@@ -305,7 +313,7 @@ in
                 runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts);
                 renewOpts = escapeShellArgs (globalOpts ++
                   [ "renew" "--days" (toString cfg.validMinDays) ] ++
-                  certOpts);
+                  certOpts ++ data.extraLegoRenewFlags);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
