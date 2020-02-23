@@ -2,12 +2,12 @@
 
 let
   pname = "ssb-patchwork";
-  version = "3.17.4";
+  version = "3.17.5";
   name = "Patchwork-${version}";
 
   src = fetchurl {
     url = "https://github.com/ssbc/patchwork/releases/download/v${version}/${name}.AppImage";
-    sha256 = "0mjyrd0d9wfsfd9ajg1xf7ijg4k8jp76swjsiydxpgfk1sdljswv";
+    sha256 = "0zmi6d9v92icbkln69n50648xbaz6jih5sal1fm5a8kw5is8qg4s";
   };
 
   binary = appimageTools.wrapType2 {
