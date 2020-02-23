@@ -37,6 +37,13 @@ in
 
       after = [ "dev-random.device" ];
 
+      # Clean shutdown without DefaultDependencies
+      conflicts = [ "shutdown.target" ];
+      before = [
+        "sysinit.target"
+        "shutdown.target"
+      ];
+
       description = "Hardware RNG Entropy Gatherer Daemon";
 
       # rngd may have to start early to avoid entropy starvation during boot with encrypted swap
