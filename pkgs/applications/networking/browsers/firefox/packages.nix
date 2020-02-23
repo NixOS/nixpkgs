@@ -1,4 +1,4 @@
-{ config, lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
+{ config, lib, callPackage, fetchurl }:
 
 let
 
