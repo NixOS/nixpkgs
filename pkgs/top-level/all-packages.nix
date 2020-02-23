@@ -22166,6 +22166,8 @@ in
 
   wayv = callPackage ../tools/X11/wayv {};
 
+  wayvnc = callPackage ../applications/networking/remote/wayvnc { };
+
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
