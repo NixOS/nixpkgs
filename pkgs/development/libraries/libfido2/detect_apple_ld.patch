@@ -1,0 +1,11 @@
+--- a/CMakeLists.txt	2020-02-19 17:21:59.000000000 +0000
++++ b/CMakeLists.txt	2020-02-23 15:57:34.241115306 +0000
+@@ -296,7 +296,7 @@
+ endif()
+ 
+ # export list
+-if(CMAKE_C_COMPILER_ID STREQUAL "AppleClang")
++if(APPLE AND CMAKE_C_COMPILER_ID STREQUAL "Clang" OR CMAKE_C_COMPILER_ID STREQUAL "AppleClang")	
+ 	# clang + lld
+ 	string(CONCAT CMAKE_SHARED_LINKER_FLAGS ${CMAKE_SHARED_LINKER_FLAGS}
+ 	    " -exported_symbols_list ${CMAKE_CURRENT_SOURCE_DIR}/src/export.llvm")
