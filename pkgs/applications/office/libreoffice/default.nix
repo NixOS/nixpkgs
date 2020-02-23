@@ -57,23 +57,11 @@ in (stdenv.mkDerivation rec {
 
   # For some reason librdf_redland sometimes refers to rasqal.h instead
   # of rasqal/rasqal.h
-  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal";
+  NIX_CFLAGS_COMPILE = "-I${librdf_rasqal}/include/rasqal"
+    + stdenv.lib.optionalString stdenv.isx86_64 " -mno-fma";
 
   patches = [
     ./xdg-open-brief.patch
-
-    # Poppler-0.82 compatibility
-    # https://gerrit.libreoffice.org/81545
-    (fetchpatch {
-      url = "https://github.com/LibreOffice/core/commit/2eadd46ab81058087af95bdfc1fea28fcdb65998.patch";
-      sha256 = "1mpipdfxvixjziizbhfbpybpzlg1ijw7s0yqjpmq5d7pf3pvkm4n";
-    })
-    # Poppler-0.83 compatibility
-    # https://gerrit.libreoffice.org/84384
-    (fetchpatch {
-      url = "https://github.com/LibreOffice/core/commit/9065cd8d9a19864f6b618f2dc10daf577badd9ee.patch";
-      sha256 = "0nd0gck8ra3ffw936a7ri0s6a0ii5cyglnhip2prcjh5yf7vw2i2";
-    })
   ];
 
   tarballPath = "external/tarballs";
@@ -235,7 +223,6 @@ in (stdenv.mkDerivation rec {
       sed -e '/CPPUNIT_TEST(testEmbeddedDataSource);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
       sed -e '/CPPUNIT_TEST(testTdf96479);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
       sed -e '/CPPUNIT_TEST(testInconsistentBookmark);/d' -i './sw/qa/extras/uiwriter/uiwriter.cxx'
-      sed -e '/CPPUNIT_TEST(Import_Export_Import);/d' -i './sw/qa/extras/inc/swmodeltestbase.hxx'
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlexport9.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/ooxmlexport/ooxmlencryption.cxx"
       sed -e "s/DECLARE_SW_ROUNDTRIP_TEST(\([_a-zA-Z0-9.]\+\)[, ].*, *\([_a-zA-Z0-9.]\+\))/class \\1: public \\2 { public: void verify() override; }; void \\1::verify() /" -i "sw/qa/extras/odfexport/odfexport.cxx"
@@ -296,7 +283,6 @@ in (stdenv.mkDerivation rec {
     "--enable-python=system"
     "--enable-dbus"
     "--enable-release-build"
-    (lib.enableFeature kdeIntegration "kde4")
     "--enable-epm"
     "--with-jdk-home=${jdk.home}"
     "--with-ant-home=${ant}/lib/ant"
@@ -309,8 +295,6 @@ in (stdenv.mkDerivation rec {
     "--with-system-libwps"
     "--with-system-openldap"
     "--with-system-coinmp"
-
-    "--with-alloc=system"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -349,6 +333,7 @@ in (stdenv.mkDerivation rec {
     "--without-system-mdds"
     # https://github.com/NixOS/nixpkgs/commit/5c5362427a3fa9aefccfca9e531492a8735d4e6f
     "--without-system-orcus"
+    "--without-system-qrcodegen"
     "--without-system-xmlsec"
   ];
 
@@ -390,4 +375,4 @@ in (stdenv.mkDerivation rec {
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };
-}).overrideAttrs ((importVariant "override.nix") args)
+}).overrideAttrs ((importVariant "override.nix") (args // { inherit kdeIntegration; }))

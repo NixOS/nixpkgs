@@ -201,13 +201,13 @@ let
 
   maxminddb = buildPecl rec {
     pname = "maxminddb";
-    version = "1.5.0";
+    version = "1.6.0";
 
     src = pkgs.fetchFromGitHub {
       owner = "maxmind";
       repo = "MaxMind-DB-Reader-php";
       rev = "v${version}";
-      sha256 = "1ilgpx36rgihjr8s4bvkbms5hl6xy7mymna3ym2bl4lb15vkr0sm";
+      sha256 = "0sa943ij9pgz55aik93lllb8lh063bvr66ibn77p3y3p41vdiabz";
     };
 
     buildInputs = [ pkgs.libmaxminddb ];
@@ -285,6 +285,20 @@ let
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
 
     meta.broken = isPhp74; # Build error
+  };
+
+  pdo_oci = buildPecl rec {
+    inherit (php) src version;
+
+    pname = "pdo_oci";
+    sourceRoot = "php-${version}/ext/pdo_oci";
+
+    buildInputs = [ pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+
+    postPatch = ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    '';
   };
 
   pdo_sqlsrv = buildPecl {

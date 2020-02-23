@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libcbor libressl udev ];
+  buildInputs = [ libcbor libressl ] ++ stdenv.lib.optionals stdenv.isLinux [ udev ];
 
   cmakeFlags = [ "-DUDEV_RULES_DIR=${placeholder "out"}/etc/udev/rules.d" ];
 
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Yubico/libfido2;
     license = licenses.bsd2;
     maintainers = with maintainers; [ dtzWill ];
-
+    platforms = platforms.linux;
   };
 }

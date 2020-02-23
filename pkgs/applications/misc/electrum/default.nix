@@ -90,6 +90,7 @@ python3Packages.buildPythonApplication {
   '' + (if enableQt then ''
     substituteInPlace ./electrum/qrscanner.py \
       --replace ${libzbar_name} ${zbar.lib}/lib/libzbar${stdenv.hostPlatform.extensions.sharedLibrary}
+    sed -i 's/qdarkstyle<2.7/qdarkstyle<3.0/' contrib/requirements/requirements.txt
   '' else ''
     sed -i '/qdarkstyle/d' contrib/requirements/requirements.txt
   '');

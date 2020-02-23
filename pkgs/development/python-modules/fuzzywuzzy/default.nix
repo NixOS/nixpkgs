@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "fuzzywuzzy";
-  version = "0.17.0";
+  version = "0.18.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6f49de47db00e1c71d40ad16da42284ac357936fa9b66bea1df63fed07122d62";
+    sha256 = "1s00zn75y2dkxgnbw8kl8dw4p1mc77cv78fwfa4yb0274s96w0a5";
   };
 
   propagatedBuildInputs = [ python-Levenshtein ];
