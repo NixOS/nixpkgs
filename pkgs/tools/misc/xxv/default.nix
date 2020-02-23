@@ -7,20 +7,17 @@ let useNcurses = !stdenv.hostPlatform.isWindows; in
 assert useNcurses -> ncurses != null;
 
 rustPlatform.buildRustPackage rec {
-  pname   = "xv";
-  version = "0.1.1";
+  pname   = "xxv";
+  version = "0.1.2";
 
   src = fetchFromGitHub {
     owner  = "chrisvest";
     repo   = pname;
     rev    = version;
-    sha256 = "0x2yd21sr4wik3z22rknkx1fgb64j119ynjls919za8gd83zk81g";
+    sha256 = "0ppfsgdigza2jppbkg4qanjhlkpnq7p115c4471vc6vpikpfrlk3";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0m69pcmnx3c3q7lgvbhxc8dl6lavv5ch4r6wg2bhdmapcmb4p7jq";
+  cargoSha256 = "1gnyig87a0yqgkng52fpn6hv629vym6k7ydljnxrhb5phmj2qbqx";
 
   buildInputs = lib.optionals useNcurses [ ncurses ]
   ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ])
@@ -33,10 +30,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A visual hex viewer for the terminal";
     longDescription = ''
-      XV is a terminal hex viewer with a text user interface, written in 100% safe Rust.
+      XXV is a terminal hex viewer with a text user interface, written in 100% safe Rust.
     '';
-    homepage    = https://chrisvest.github.io/xv/;
-    license     = with licenses; [ asl20 ];
+    homepage    = "https://chrisvest.github.io/xxv/";
+    license     = with licenses; [ gpl3 ];
     maintainers = with maintainers; [ lilyball ];
     platforms   = platforms.all;
   };
