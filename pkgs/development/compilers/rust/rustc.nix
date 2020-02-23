@@ -7,6 +7,7 @@
 , enableRustcDev ? true
 , version
 , sha256
+, patches ? []
 }:
 
 let
@@ -103,6 +104,8 @@ in stdenv.mkDerivation rec {
 
   # the rust build system complains that nix alters the checksums
   dontFixLibtool = true;
+
+  inherit patches;
 
   postPatch = ''
     patchShebangs src/etc
