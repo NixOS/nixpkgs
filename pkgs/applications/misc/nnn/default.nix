@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   };
 
   configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
-  preBuild = optionalString (conf != null) "cp ${configFile} nnn.h";
+  preBuild = optionalString (conf != null) "cp ${configFile} src/nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline ncurses ];
