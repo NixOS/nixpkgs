@@ -6906,7 +6906,7 @@
     email = "worldofpeace@protonmail.ch";
     github = "worldofpeace";
     githubId = 28888242;
-    name = "Worldofpeace";
+    name = "worldofpeace";
   };
   wscott = {
     email = "wsc9tt@gmail.com";
