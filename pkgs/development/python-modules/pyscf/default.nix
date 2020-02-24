@@ -52,12 +52,20 @@ buildPythonPackage rec {
 
   checkInputs = [ nose nose-exclude ];
   # from source/.travis.yml, mostly
-  # Tests take about 50 mins to run
-  checkPhase = ''
+  # Tests take about 30 mins to run
+  preCheck = ''
     # HACK: Move compiled libraries to test dir so pyscf import mechanism can find them
     cp ./dist/tmpbuild/pyscf/pyscf/lib/*.so ./pyscf/lib/
 
-    nosetests -vv -x \
+    # Set config used by tests to ensure reproducibility
+    echo 'pbc_tools_pbc_fft_engine = "NUMPY"' > pyscf/pyscf_config.py
+    export OMP_NUM_THREADS=1
+    export PYSCF_CONFIG_FILE=$(pwd)/pyscf/pyscf_config.py
+  '';
+  checkPhase = ''
+    runHook preCheck
+
+    nosetests \
       --where=pyscf \
       --no-path \
       --exclude-dir=geomopt \
@@ -97,6 +105,8 @@ buildPythonPackage rec {
       --ignore-files=.*_slow.*py \
       --ignore-files=.*_kproxy_.*py \
       --ignore-files=test_proxy.py
+
+      runHook postCheck
   '';
 
   meta = with lib; {
