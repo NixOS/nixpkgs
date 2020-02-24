@@ -113,9 +113,14 @@ in stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
-  postFixup = ''
+  postFixup = let
+    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+      (placeholder "out")
+      gobject-introspection
+    ];
+  in ''
     for test in $installedTests/libexec/installed-tests/libostree/*.js; do
-      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
     done
   '';
 
