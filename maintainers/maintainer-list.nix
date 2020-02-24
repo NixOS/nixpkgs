@@ -1085,6 +1085,12 @@
     githubId = 7716744;
     name = "Berno Strik";
   };
+  brettlyons = {
+    email = "blyons@fastmail.com";
+    github = "brettlyons";
+    githubId = 3043718;
+    name = "Brett Lyons";
+  };
   btlvr = {
     email = "btlvr@protonmail.com";
     github = "btlvr";
