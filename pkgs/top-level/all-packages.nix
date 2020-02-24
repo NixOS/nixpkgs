@@ -7060,9 +7060,7 @@ in
 
   vbetool = callPackage ../tools/system/vbetool { };
 
-  vde2 = callPackage ../tools/networking/vde2 {
-    openssl = openssl_1_0_2;
-  };
+  vde2 = callPackage ../tools/networking/vde2 { };
 
   vboot_reference = callPackage ../tools/system/vboot_reference {};
 
