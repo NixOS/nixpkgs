@@ -17446,6 +17446,8 @@ in
 
   corefonts = callPackage ../data/fonts/corefonts { };
 
+  cozette = callPackage ../data/fonts/cozette { };
+
   culmus = callPackage ../data/fonts/culmus { };
 
   clearlyU = callPackage ../data/fonts/clearlyU
