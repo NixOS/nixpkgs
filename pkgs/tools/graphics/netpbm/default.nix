@@ -17,17 +17,22 @@
 stdenv.mkDerivation {
   # Determine version and revision from:
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
-  name = "netpbm-10.82.01";
+  name = "netpbm-10.89.1";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
-    rev = "3264";
-    sha256 = "17fmyjbxp1l18rma7gb0m8wd9kx2iwhqs8dd6fpalsn2cr8mf8hf";
+    rev = "3735";
+    sha256 = "hRepEUBlf83p77Amjze+Qz7XTHhCuPdV01K/UabR89Q=";
   };
 
-  postPatch = /* CVE-2005-2471, from Arch */ ''
+  postPatch = ''
+    # CVE-2005-2471, from Arch
     substituteInPlace converter/other/pstopnm.c \
       --replace '"-dSAFER"' '"-dPARANOIDSAFER"'
+
+    # Install libnetpbm.so symlink to correct destination
+    substituteInPlace lib/Makefile \
+      --replace '/sharedlink' '/lib'
   '';
 
   nativeBuildInputs = [
@@ -79,7 +84,7 @@ stdenv.mkDerivation {
 
     make package pkgdir=$out
 
-    rm -rf $out/link $out/*_template $out/{pkginfo,README,VERSION} $out/man/web
+    rm -rf $out/*_template $out/{pkginfo,README,VERSION} $out/man/web
 
     mkdir -p $out/share/netpbm
     mv $out/misc $out/share/netpbm/
