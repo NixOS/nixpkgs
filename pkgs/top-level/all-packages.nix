@@ -2702,6 +2702,8 @@ in
 
   citra = libsForQt5.callPackage ../misc/emulators/citra { };
 
+  cmigemo = callPackage ../tools/text/cmigemo { };
+
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
   cmt = callPackage ../applications/audio/cmt {};
