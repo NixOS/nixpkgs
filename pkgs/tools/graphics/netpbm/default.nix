@@ -46,6 +46,8 @@ stdenv.mkDerivation {
   ] ++ lib.optional enableX11 libX11;
 
   configurePhase = ''
+    runHook preConfigure
+
     cp config.mk.in config.mk
     echo "STATICLIB_TOO = n" >> config.mk
     substituteInPlace "config.mk" \
@@ -57,6 +59,8 @@ stdenv.mkDerivation {
     echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
     echo "NETPBMLIBTYPE = dylib" >> config.mk
     echo "NETPBMLIBSUFFIX = dylib" >> config.mk
+
+    runHook postConfigure
   '';
 
   preBuild = ''
@@ -71,6 +75,8 @@ stdenv.mkDerivation {
   enableParallelBuilding = false;
 
   installPhase = ''
+    runHook preInstall
+
     make package pkgdir=$out
 
     rm -rf $out/link $out/*_template $out/{pkginfo,README,VERSION} $out/man/web
@@ -82,6 +88,8 @@ stdenv.mkDerivation {
     for prog in ppmquant; do
         wrapProgram "$out/bin/$prog" --prefix PATH : "$out/bin"
     done
+
+    runHook postInstall
   '';
 
   passthru.updateScript = ./update.sh;
