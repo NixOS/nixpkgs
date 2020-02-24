@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, intltool, mate-icon-theme, gtk2, gtk3,
+{ stdenv, fetchurl, pkgconfig, gettext, mate-icon-theme, gtk2, gtk3,
   gtk_engines, gtk-engine-murrine, gdk-pixbuf, librsvg }:
 
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "051g2vq817g84yrqzf7hjcqr4xrghnw1rprjd6jf5mhhzmwcas6n";
   };
 
-  nativeBuildInputs = [ pkgconfig intltool gtk3 ];
+  nativeBuildInputs = [ pkgconfig gettext gtk3 ];
 
   buildInputs = [ mate-icon-theme gtk2 gtk_engines gdk-pixbuf librsvg ];
 
