@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, openssl, static ? false }:
+{ stdenv, lib, fetchurl, openssl, fetchpatch, static ? false }:
 
 let
   pkgname = "ipmitool";
@@ -12,7 +12,14 @@ stdenv.mkDerivation {
     sha256 = "0kfh8ny35rvwxwah4yv91a05qwpx74b5slq2lhrh71wz572va93m";
   };
 
-  patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
+  patches = [
+    (fetchpatch {
+      url = "https://sources.debian.org/data/main/i/ipmitool/1.8.18-6/debian/patches/0120-openssl1.1.patch";
+      sha256 = "1xvsjxb782lzy72bnqqnsk3r5h4zl3na95s4pqn2qg7cic2mnbfk";
+    })
+  ];
+
+  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/plugins/ipmi_intf.c --replace "s6_addr16" "s6_addr"
   '';
 
