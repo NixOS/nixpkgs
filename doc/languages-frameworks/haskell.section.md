@@ -112,8 +112,10 @@ haskell.compiler.ghc865                  ghc-8.6.5
 haskell.compiler.integer-simple.ghc865   ghc-8.6.5
 haskell.compiler.ghc881                  ghc-8.8.1
 haskell.compiler.integer-simple.ghc881   ghc-8.8.1
-haskell.compiler.ghc882                  ghc-8.8.1.20191211
-haskell.compiler.integer-simple.ghc882   ghc-8.8.1.20191211
+haskell.compiler.ghc882                  ghc-8.8.2
+haskell.compiler.integer-simple.ghc882   ghc-8.8.2
+haskell.compiler.ghc883                  ghc-8.8.3
+haskell.compiler.integer-simple.ghc883   ghc-8.8.3
 haskell.compiler.ghcjs                   ghcjs-8.6.0.1
 ```
 
