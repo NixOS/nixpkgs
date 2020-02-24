@@ -35,7 +35,14 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Comprehensive suite for man in the middle attacks";
-    homepage = http://ettercap.github.io/ettercap/;
+    longDescription = ''
+      Ettercap is a comprehensive suite for man in the middle attacks. It
+      features sniffing of live connections, content filtering on the fly and
+      many other interesting tricks. It supports active and passive dissection
+      of many protocols and includes many features for network and host
+      analysis.
+    '';
+    homepage = https://www.ettercap-project.org/;
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = with maintainers; [ pSub ];
