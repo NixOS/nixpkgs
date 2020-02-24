@@ -8,12 +8,6 @@ poetry2nix.mkPoetryApplication {
   pyproject = ./pyproject.toml;
   poetrylock = ./poetry.lock;
 
-  overrides = [ (poetry2nix.defaultPoetryOverrides.overrideOverlay (self: super: {
-    # Needed because poetry2nix currently doesn't handle pyproject.toml python bounds
-    # See https://github.com/nix-community/poetry2nix/issues/50
-    importlib-metadata = if python.pythonOlder "3.8" then super.importlib-metadata else null;
-  }))];
-
   src = fetchFromGitHub (lib.importJSON ./src.json);
 
   # "Vendor" dependencies (for build-system support)
