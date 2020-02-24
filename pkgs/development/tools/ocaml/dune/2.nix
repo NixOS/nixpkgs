@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    sha256 = "166a6lncx0nlmn0kxgx9qkn1dnbphm30vy1wncxcpsqspxhkqfra";
+    sha256 = "1jzm29z58l34kpqll9jcz5dkkhh36lncba1yb32ghknkvyfdvcxj";
   };
 
   buildInputs = [ ocaml findlib ];
