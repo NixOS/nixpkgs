@@ -26,7 +26,7 @@ let
 
     x86_64-linux = {
       url = "${baseUrl}/${name}-linux-x86_64.tar.gz";
-      sha256 = "182r9lgpks50ihcrkarc5w6l4rfmpdnx825lazamj5j2jsha73xw";
+      sha256 = "00ziqr60q1la716c9cy3hjpyq3hiw3m75d4wry6prn5655jw4ph6";
     };
   }.${system};
 
@@ -34,7 +34,7 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
-  version = "268.0.0";
+  version = "281.0.0";
 
   src = fetchurl (sources "${pname}-${version}" stdenv.hostPlatform.system);
 
