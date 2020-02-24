@@ -26,9 +26,14 @@ buildPythonPackage {
   checkPhase = ''
     # Not very necessary. This test isn't actually currently run
     substituteInPlace python/iso8601/test_iso8601.py --replace "import iso8601" "import subunit.iso8601 as iso8601"
+    export SHELL_SHARE=./shell/share/
+    patchShebangs ./shell/tests/*.sh
+    # this SHOULD run all tests in python/subunit/tests, but only runs ./shell/tests/*
+    ${python.interpreter} -m unittest all_tests.py
 
-    ${python.interpreter} -m unittest all_tests.py # theoretically this should run all tests, but doesn't work. /bin/sh can't source paths
-    pytest --pyargs subunit.tests # This has ~30 fails, most down to some classes missing "option" attribute.
+    # Use pyargs b/c tests are in site-packages/subunit/tests/...
+    # This has ~30 fails, most down to some classes missing "option" attribute. Don't know cause of others
+    pytest --pyargs subunit.tests
   '';
 
   meta = pkgs.subunit.meta;
