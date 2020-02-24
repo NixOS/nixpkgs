@@ -6796,6 +6796,12 @@
     githubId = 4061736;
     name = "Severen Redwood";
   };
+  sstef = {
+    email = "stephane@nix.frozenid.net";
+    github = "fkstef";
+    githubId = 8668915;
+    name = "Stephane Schitter";
+  };
   steell = {
     email = "steve@steellworks.com";
     github = "Steell";
