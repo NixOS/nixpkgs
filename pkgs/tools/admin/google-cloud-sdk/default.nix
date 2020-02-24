@@ -21,7 +21,7 @@ let
   sources = name: system: {
     x86_64-darwin = {
       url = "${baseUrl}/${name}-darwin-x86_64.tar.gz";
-      sha256 = "10h0khh8npj2j5f7h3z86h46zbb1skbfs74firssich6jk7rx6km";
+      sha256 = "0hg4823dlnf9ahqh9dr05wsi6cdxn9mbwhg65jng3d2aws3ski6r";
     };
 
     x86_64-linux = {
