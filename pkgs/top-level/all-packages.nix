@@ -26714,4 +26714,6 @@ in
   vpsfree-client = callPackage ../tools/virtualization/vpsfree-client {};
 
   gpio-utils = callPackage ../os-specific/linux/kernel/gpio-utils.nix { };
+
+  jlink = callPackage ../development/tools/jlink {};
 }
