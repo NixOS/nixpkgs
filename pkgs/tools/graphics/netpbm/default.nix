@@ -61,6 +61,8 @@ stdenv.mkDerivation {
     done
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     homepage = http://netpbm.sourceforge.net/;
     description = "Toolkit for manipulation of graphic images";
