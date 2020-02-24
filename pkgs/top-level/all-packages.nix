@@ -18085,6 +18085,8 @@ in
 
   victor-mono = callPackage ../data/fonts/victor-mono { };
 
+  vimix-gtk-themes = callPackage ../data/themes/vimix {};
+
   vistafonts = callPackage ../data/fonts/vista-fonts { };
 
   vistafonts-chs = callPackage ../data/fonts/vista-fonts-chs { };
