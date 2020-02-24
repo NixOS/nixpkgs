@@ -16,6 +16,8 @@ stdenv.mkDerivation rec {
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 
+  dontDropIconThemeCache = true;
+
   postInstall = ''
     gtk-update-icon-cache "$out"/share/icons/ContrastHigh
   '';
