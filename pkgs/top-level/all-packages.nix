@@ -23999,6 +23999,8 @@ in
 
   mrbayes = callPackage ../applications/science/biology/mrbayes { };
 
+  mrtrix = callPackage ../applications/science/biology/mrtrix { python = python3; };
+
   megahit = callPackage ../applications/science/biology/megahit { };
 
   messer-slim = callPackage ../applications/science/biology/messer-slim { };
