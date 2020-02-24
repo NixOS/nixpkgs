@@ -619,6 +619,8 @@ in {
 
   diofant = callPackage ../development/python-modules/diofant { };
 
+  dipy = callPackage ../development/python-modules/dipy { };
+
   docrep = callPackage ../development/python-modules/docrep { };
 
   dominate = callPackage ../development/python-modules/dominate { };
