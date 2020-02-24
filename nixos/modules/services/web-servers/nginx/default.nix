@@ -487,7 +487,7 @@ in
 
       sslCiphers = mkOption {
         type = types.str;
-        default = "EECDH+aRSA+AESGCM:EDH+aRSA:EECDH+aRSA:+AES256:+AES128:+SHA1:!CAMELLIA:!SEED:!3DES:!DES:!RC4:!eNULL";
+        default = "EECDH+AESGCM:EDH+AESGCM:EECDH+aRSA+AESGCM:EDH+aRSA:EECDH+aRSA:+AES256:+AES128:+SHA1:!CAMELLIA:!SEED:!3DES:!DES:!RC4:!eNULL";
         description = "Ciphers to choose from when negotiating tls handshakes.";
       };
 
