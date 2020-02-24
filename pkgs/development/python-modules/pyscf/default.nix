@@ -46,21 +46,17 @@ buildPythonPackage rec {
     scipy
   ];
 
-  # prePatch = ''
-  #   # echo "recursive-include pyscf test" >> MANIFEST.in
-  #   # substituteInPlace setup.py --replace "*test*" ""  # include tests in output
-  #   # substituteInPlace pyscf/lib/misc.py --replace "_loaderpath = os.path.dirname(__file__)" "_loaderpath = os.path.dirname(__file__); print(_loaderpath)"
-  # '';
-
   PYSCF_INC_DIR = lib.strings.makeLibraryPath [ libcint libxc ];
 
   pythonImportsCheck = [ "pyscf" ];
+
   checkInputs = [ nose nose-exclude ];
   # from source/.travis.yml, mostly
   # Tests take about 50 mins to run
   checkPhase = ''
-    # substituteInPlace pyscf/lib/misc.py --replace "__file__" "param.__file__"
-    cp ./dist/tmpbuild/pyscf/pyscf/lib/*.so ./pyscf/lib/  # HACK: Move compiled libraries to test dir so pyscf import mechanism can find them
+    # HACK: Move compiled libraries to test dir so pyscf import mechanism can find them
+    cp ./dist/tmpbuild/pyscf/pyscf/lib/*.so ./pyscf/lib/
+
     nosetests -vv -x \
       --where=pyscf \
       --no-path \
@@ -101,24 +97,7 @@ buildPythonPackage rec {
       --ignore-files=.*_slow.*py \
       --ignore-files=.*_kproxy_.*py \
       --ignore-files=test_proxy.py
-      # --collect-only
-      # tdscf/*_slow.py gw/*_slow.py are not compatible with python3.[456] and old numpy
-
-      # Unused flags, from testing
-      # --nocapture \
-      # --first-pkg-wins \
-      # --traverse-namespace \
-      # --exclude-dir=examples \
   '';
-  # checkInputs = [ pytest ];
-  # checkPhase = ''
-  #   cd pyscf
-  #   for directory in `find . -type d -mindepth 1 -maxdepth 1 | sort -z`
-  #   do
-  #     echo "Testing $directory"
-  #     ( pytest $directory )
-  #   done
-  # '';
 
   meta = with lib; {
     description = "Python-based Simulations of Chemistry Framework";
