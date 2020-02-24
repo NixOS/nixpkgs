@@ -103,7 +103,7 @@ self: super:
   );
 
   # importlib-metadata has an incomplete dependency specification
-  importlib-metadata = super.importlib-metadata.overrideAttrs (
+  importlib-metadata = if super.importlib-metadata == null then null else super.importlib-metadata.overrideAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional self.python.isPy2 self.pathlib2;
     }
