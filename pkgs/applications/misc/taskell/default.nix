@@ -1,8 +1,8 @@
 { lib, haskellPackages, fetchFromGitHub }:
 
 let
-  version = "1.9.2";
-  sha256  = "1al385dn3pqw9dnby65abdj18qg46dzk3bhxnhnc0gj1ks1rygmx";
+  version = "1.9.3";
+  sha256  = "1xh18884xkhcln4blglzi0faag4ydhxxsk9hj6llb81kcsxlsi89";
 
 in (haskellPackages.mkDerivation {
   pname = "taskell";
@@ -62,5 +62,5 @@ in (haskellPackages.mkDerivation {
   homepage    = "https://taskell.app";
   license     = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ matthiasbeyer ];
-  platforms   = with lib.platforms; unix ++ darwin;
+  platforms = [ "x86_64-linux" ];
 })
