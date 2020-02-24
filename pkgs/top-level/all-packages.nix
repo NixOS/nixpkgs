@@ -951,6 +951,8 @@ in
 
   ili2c = callPackage ../tools/misc/ili2c { };
 
+  imageworsener = callPackage ../tools/graphics/imageworsener { };
+
   imgpatchtools = callPackage ../development/mobile/imgpatchtools { };
 
   ipgrep = callPackage ../tools/networking/ipgrep { };
