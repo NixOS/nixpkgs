@@ -1,6 +1,7 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem
 , atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
 , lsb-release, freetype, fontconfig, polkit, polkit_gnome
+, bash, curl, common-updater-scripts, writeShellScriptBin, nix-prefetch-scripts
 , pulseaudio }:
 
 let
@@ -78,6 +79,12 @@ in stdenv.mkDerivation rec {
     substituteInPlace $out/share/applications/*.desktop \
       --subst-var out
   '';
+
+  passthru = {
+    updateScript = [
+      "env" "PATH=$PATH:${stdenv.lib.makeBinPath [ nix-prefetch-scripts bash curl common-updater-scripts (writeShellScriptBin "update-anydesk" (builtins.readFile ./update.sh)) ]}" "update-anydesk"
+    ];
+  };
 
   meta = with stdenv.lib; {
     inherit description;
