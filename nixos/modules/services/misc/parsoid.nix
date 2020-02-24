@@ -6,7 +6,7 @@ let
 
   cfg = config.services.parsoid;
 
-  parsoid = pkgs.nodePackages."parsoid-git://github.com/abbradar/parsoid#stable";
+  parsoid = pkgs.nodePackages.parsoid;
 
   confTree = {
     worker_heartbeat_timeout = 300000;
