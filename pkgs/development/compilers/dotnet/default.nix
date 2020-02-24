@@ -52,17 +52,17 @@ in rec {
   # v3.1.1 (LTS)
 
   aspnetcore_3_1 = buildAspNetCore {
-    version = "3.1.1";
-    sha512 = "cc27828cacbc783ef83cc1378078e14ac558aec30726b36c4f154fad0d08ff011e7e1dfc17bc851926ea3b0da9c7d71496af14ee13184bdf503856eca30a89ae";
+    version = "3.1.2";
+    sha512 = "27708bk5liz8r39p4dzs41clgq298d49g8ipzdj56pz613vkfyv7bp91666ydz36aazm265j2g9ji3sk1f9kbgv6024zwrly5w9vqrm";
   };
 
   netcore_3_1 = buildNetCore {
-    version = "3.1.1";
-    sha512 = "991a89ac7b52d3bf6c00359ce94c5a3f7488cd3d9e4663ba0575e1a5d8214c5fcc459e2cb923c369c2cdb789a96f0b1dfb5c5aae1a04df6e7f1f365122072611";
+    version = "3.1.2";
+    sha512 = "3zwg1anrcni9kagmjxn485bpjvb146hkm7irmikq3v879gjhd2fgpscg226ds83l4pxll3r7lwris6ij952xmy8lsqraapd9111ba14";
   };
 
   sdk_3_1 = buildNetCoreSdk {
-    version = "3.1.101";
-    sha512 = "eeee75323be762c329176d5856ec2ecfd16f06607965614df006730ed648a5b5d12ac7fd1942fe37cfc97e3013e796ef278e7c7bc4f32b8680585c4884a8a6a1";
+    version = "3.1.102";
+    sha512 = "0lmz8ac5j0i4zcq4904kr6qibvyjcm2ckfg27kqyqfii00qmm80xb5sk3i7f06xqkbgkrqkbg9rsldk75akw6m5dxg932j602bxrb4w";
   };
 }
