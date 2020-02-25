@@ -463,7 +463,9 @@ let
         };
       };
 
-      testScript = ''
+      # The test is disabled for systemd-networkd.
+      # See the commit message of a3a441c.
+      testScript = optionalString (!networkd) ''
         targetList = """
         tap0: tap persist user 0
         tun0: tun persist user 0
