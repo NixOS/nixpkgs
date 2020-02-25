@@ -15375,6 +15375,8 @@ in
 
   jetty = callPackage ../servers/http/jetty { };
 
+  keycloak = callPackage ../servers/keycloak { };
+
   knot-dns = callPackage ../servers/dns/knot-dns { };
   knot-resolver = callPackage ../servers/dns/knot-resolver { };
 
