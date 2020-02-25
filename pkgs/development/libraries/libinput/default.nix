@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig meson ninja ]
-    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ]
-    ++ optionals testsSupport [ valgrind ];
+    ++ optionals documentationSupport [ doxygen graphviz sphinx-build ];
 
-  buildInputs = [ libevdev mtdev libwacom (python3.withPackages (pkgs: with pkgs; [ evdev ])) ]
-    ++ optionals eventGUISupport [ cairo glib gtk3 ]
-    ++ optionals testsSupport [ check ];
+  buildInputs = [ libevdev mtdev libwacom ]
+    ++ optionals eventGUISupport [ cairo glib gtk3 ];
+
+  checkInputs = [ (python3.withPackages (pkgs: with pkgs; [ evdev ])) check valgrind ];
 
   propagatedBuildInputs = [ udev ];
 
