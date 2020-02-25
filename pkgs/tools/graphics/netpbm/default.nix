@@ -58,6 +58,8 @@ stdenv.mkDerivation {
     substituteInPlace "config.mk" \
         --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
         --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include" \
+        --replace "TIFFLIB_NEEDS_JPEG = Y" "TIFFLIB_NEEDS_JPEG = N" \
+        --replace "TIFFLIB_NEEDS_Z = Y" "TIFFLIB_NEEDS_Z = N" \
         --replace "JPEGLIB = NONE" "JPEGLIB = ${libjpeg.out}/lib/libjpeg.so" \
         --replace "JPEGHDR_DIR =" "JPEGHDR_DIR = ${libjpeg.dev}/include"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
