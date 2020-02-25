@@ -7,8 +7,8 @@ let
 in
 
 stdenv.mkDerivation rec {
-  srcVersion = "jan20a";
-  version = "20200101_a";
+  srcVersion = "feb20a";
+  version = "20200201_a";
   pname = "gildas";
 
   src = fetchurl {
@@ -16,19 +16,15 @@ stdenv.mkDerivation rec {
     # source code of the previous release to a different directory
     urls = [ "http://www.iram.fr/~gildas/dist/gildas-src-${srcVersion}.tar.xz"
       "http://www.iram.fr/~gildas/dist/archive/gildas/gildas-src-${srcVersion}.tar.xz" ];
-    sha256 = "12n08pax7gwg2z121ix3ah5prq3yswqnf2yc8jgs4i9rgkpbsfzz";
+    sha256 = "05f34kpi3pfgf4dsyka7mkcln26yzb2mixnnc306krq0isjm7m26";
   };
-
-  # Python scripts are not converted to Python 3 syntax when parallel
-  # building is turned on. Disable it until this is fixed upstream.
-  enableParallelBuilding = false;
 
   nativeBuildInputs = [ pkgconfig groff perl getopt gfortran which ];
 
   buildInputs = [ gtk2-x11 lesstif cfitsio python3Env ncurses ]
     ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ CoreFoundation ]);
 
-  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ./imager-py3.patch ];
+  patches = [ ./wrapper.patch ./clang.patch ./aarch64.patch ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
 
