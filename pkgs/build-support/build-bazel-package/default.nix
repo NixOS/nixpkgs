@@ -4,8 +4,13 @@
 , lib
 }:
 
+let
+  bazelPkg = bazel;
+in
+
 args@{
   name
+, bazel ? bazelPkg
 , bazelFlags ? []
 , bazelBuildFlags ? []
 , bazelFetchFlags ? []
