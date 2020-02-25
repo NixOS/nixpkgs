@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   # $out for the library and $examples for the example programs (in examples):
   outputs = [ "out" "examples" ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
+  nativeBuildInputs = [ meson ninja pkgconfig wayland ];
 
   buildInputs = [
     wayland libGL wayland-protocols libinput libxkbcommon pixman
