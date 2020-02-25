@@ -4,7 +4,7 @@
 } :
 
 let
-  version = "27.0";
+  version = "28.0";
 
 in stdenv.mkDerivation {
   pname = "rdma-core";
@@ -14,7 +14,7 @@ in stdenv.mkDerivation {
     owner = "linux-rdma";
     repo = "rdma-core";
     rev = "v${version}";
-    sha256 = "04mhcrcmbwxcjhswlkhnr6m5nl2389jgjv6aqhd4v0x555cwnfvw";
+    sha256 = "0az2is6p5gkyphi2b978kwn7knry60y33kn6p7cxz49ca79a42cy";
   };
 
   nativeBuildInputs = [ cmake pkgconfig pandoc docutils makeWrapper ];
@@ -26,11 +26,6 @@ in stdenv.mkDerivation {
   ];
 
   postPatch = ''
-    substituteInPlace providers/rxe/rxe_cfg.in \
-      --replace ethtool "${ethtool}/bin/ethtool" \
-      --replace 'ip addr' "${iproute}/bin/ip addr" \
-      --replace 'ip link' "${iproute}/bin/ip link"
-
     substituteInPlace srp_daemon/srp_daemon.sh.in \
       --replace /bin/rm rm
   '';
