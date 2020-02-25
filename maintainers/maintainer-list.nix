@@ -8102,4 +8102,9 @@
     githubId = 3674056;
     name = "Asad Saeeduddin";
   };
+  ngerstle = {
+    name  = "Nicholas Gerstle";
+    email = "ngerstle@gmail.com";
+    github = "ngerstle";
+  };
 }
