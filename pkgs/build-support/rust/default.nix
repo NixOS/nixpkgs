@@ -162,22 +162,17 @@ stdenv.mkDerivation (args // {
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
-    # rename the output dir to a architecture independent one
-    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
-    for target in "''${targets[@]}"; do
-      rm -rf "$target/../../${buildType}"
-      ln -srf "$target" "$target/../../"
-    done
-
     runHook postBuild
   '';
 
-  checkPhase = args.checkPhase or ''
+  checkPhase = args.checkPhase or (let
+    argstr = "${stdenv.lib.optionalString (buildType == "release") "--release"} --target ${rustTarget} --frozen";
+  in ''
     runHook preCheck
-    echo "Running cargo cargo test -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
-    cargo test -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
+    echo "Running cargo cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test ${argstr} -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
-  '';
+  '');
 
   doCheck = args.doCheck or true;
 
@@ -187,6 +182,13 @@ stdenv.mkDerivation (args // {
 
   installPhase = args.installPhase or ''
     runHook preInstall
+
+    # rename the output dir to a architecture independent one
+    mapfile -t targets < <(find "$NIX_BUILD_TOP" -type d | grep '${releaseDir}$')
+    for target in "''${targets[@]}"; do
+      rm -rf "$target/../../${buildType}"
+      ln -srf "$target" "$target/../../"
+    done
     mkdir -p $out/bin $out/lib
 
     find $releaseDir \
