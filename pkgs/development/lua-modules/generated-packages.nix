@@ -1324,25 +1324,6 @@ luuid = buildLuarocksPackage {
     };
   };
 };
-luv = buildLuarocksPackage {
-  pname = "luv";
-  version = "1.34.1-1";
-
-  src = fetchurl {
-    url    = https://luarocks.org/luv-1.34.1-1.src.rock;
-    sha256 = "044cyp25xn35nj5qp1hx04lfkzrpa6adhqjshq2g7wvbga77p1q0";
-  };
-  disabled = (luaOlder "5.1");
-  propagatedBuildInputs = [ lua ];
-
-  meta = with stdenv.lib; {
-    homepage = "https://github.com/luvit/luv";
-    description = "Bare libuv bindings for lua";
-    license = {
-      fullName = "Apache 2.0";
-    };
-  };
-};
 markdown = buildLuarocksPackage {
   pname = "markdown";
   version = "0.33-1";

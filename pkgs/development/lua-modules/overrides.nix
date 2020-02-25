@@ -271,46 +271,6 @@ with super;
     '';
   });
 
-  luv = pkgs.stdenv.mkDerivation rec {
-
-    pname = super.luv.pname;
-    version = super.luv.version;
-
-    src = pkgs.fetchFromGitHub {
-      owner = "luvit";
-      repo = pname;
-      rev = version;
-      sha256 = "0lg3kncaka1mx18k0w4wsylsa6xnp7m11n68wgn38sph7f2nn1x9";
-    };
-
-    # So we can be sure no internal dependency is used from the repo and that
-    # everything is provided by us
-    postUnpack = ''
-     rm -rf deps
-    '';
-
-    cmakeFlags = [
-      "-DWITH_SHARED_LIBUV=ON"
-      "-DLUA_BUILD_TYPE=System"
-      "-DBUILD_MODULE=OFF"
-      "-DBUILD_SHARED_LIBS=ON"
-      "-DLUA_COMPAT53_DIR=${super.lua.pkgs.compat53}"
-    ];
-
-    buildInputs = [ pkgs.libuv ];
-
-    nativeBuildInputs = [
-      pkgs.cmake
-      super.lua.pkgs.compat53
-    ];
-    # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
-    NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
-      (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
-    propagatedBuildInputs = [ lua ];
-
-    meta = super.luv.meta;
-  };
-
   rapidjson = super.rapidjson.override({
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt

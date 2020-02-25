@@ -99,6 +99,51 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
+  luv = pkgs.stdenv.mkDerivation rec {
+    pname = "luv";
+    version = "1.34.1-1";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "luvit";
+      repo = pname;
+      rev = version;
+      sha256 = "0lg3kncaka1mx18k0w4wsylsa6xnp7m11n68wgn38sph7f2nn1x9";
+    };
+    disabled = (luaOlder "5.1");
+
+    # So we can be sure no internal dependency is used from the repo and that
+    # everything is provided by us
+    postUnpack = ''
+     rm -rf deps
+    '';
+
+    cmakeFlags = [
+      "-DWITH_SHARED_LIBUV=ON"
+      "-DLUA_BUILD_TYPE=System"
+      "-DBUILD_MODULE=OFF"
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DLUA_COMPAT53_DIR=${lua.pkgs.compat53}"
+    ];
+
+    buildInputs = [ pkgs.libuv ];
+
+    nativeBuildInputs = [
+      pkgs.cmake
+      lua.pkgs.compat53
+    ];
+    # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+    NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+      (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+    propagatedBuildInputs = [ lua ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/luvit/luv";
+      description = "Bare libuv bindings for lua";
+      license = {
+        fullName = "Apache 2.0";
+      };
+    };
+  };
   luxio = buildLuaPackage rec {
     name = "luxio-${version}";
     version = "13";
