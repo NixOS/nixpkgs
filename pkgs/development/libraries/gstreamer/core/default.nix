@@ -48,6 +48,7 @@ stdenv.mkDerivation rec {
     flex
     python3
     makeWrapper
+    glib
     gobject-introspection
     bash-completion
 
@@ -57,7 +58,9 @@ stdenv.mkDerivation rec {
     docbook_xml_dtd_43
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
+  buildInputs = [
+    bash-completion
+  ] ++ lib.optionals stdenv.isLinux [
     libcap
     libunwind
     elfutils
