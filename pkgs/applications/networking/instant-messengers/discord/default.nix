@@ -17,10 +17,10 @@ in {
     pname = "discord-ptb";
     binaryName = "DiscordPTB";
     desktopName = "Discord PTB";
-    version = "0.0.16";
+    version = "0.0.18";
     src = fetchurl {
       url = "https://dl-ptb.discordapp.net/apps/linux/${version}/discord-ptb-${version}.tar.gz";
-      sha256 = "1ia94xvzygim9rx1sjnnss518ggw0i20mhp9pby33q70ha35n0aq";
+      sha256 = "1v9xph7shpmabwysbc08qqlkydzgsir8rwarrjf01xmpcpyia17g";
     };
   };
   canary = callPackage ./base.nix rec {
