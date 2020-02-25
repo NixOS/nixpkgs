@@ -21590,6 +21590,10 @@ in
 
   skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
+  sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup {
+    inherit (pkgs.vamp) vampSDK;
+  };
+
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser {
     inherit (pkgs.vamp) vampSDK;
   };
