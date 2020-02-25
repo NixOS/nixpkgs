@@ -9,7 +9,7 @@ let
     inherit cctools;
   };
 in buildMongoDB {
-  version = "3.4.22";
-  sha256 = "1rizrr69b26y7fb973n52hk387sf3mxzqg8wka4f3zdjdidfyiny";
+  version = "3.4.24";
+  sha256 = "0j6mvgv0jnsnvgkl8505bl88kbxkba66qijlpi1la0dd5pd1imfr";
   patches = [ ./forget-build-dependencies-3-4.patch ];
 }

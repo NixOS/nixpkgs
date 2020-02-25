@@ -39,8 +39,7 @@ in stdenv.mkDerivation rec {
     gperftools
     libpcap
     libyamlcpp
-    openssl.dev
-    openssl.out
+    openssl
     pcre-cpp
     python
     sasl
