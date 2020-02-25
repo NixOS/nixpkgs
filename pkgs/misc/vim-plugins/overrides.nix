@@ -28,6 +28,9 @@
 
 # vCoolor dependency
 , gnome3
+
+# notational-fzf-vim dependencies
+, ripgrep
 }:
 
 self: super: {
@@ -248,6 +251,17 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+  
+  notational-fzf-vim = super.notational-fzf-vim.overrideAttrs(old: {
+    dependencies = with self; [ fzf-vim ];
+    patchPhase = ''
+      substituteInPlace plugin/notational_fzf.vim \
+        --replace "'rg'" "'${ripgrep}/bin/rg'" \
+        --replace \
+        "let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'" \
+        "let s:python_executable = '${python3}/bin/python3'"
+    '';
   });
 
   fzf-vim = super.fzf-vim.overrideAttrs(old: {
