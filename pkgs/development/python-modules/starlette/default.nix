@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchurl
 , aiofiles
 , graphene
 , itsdangerous
@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.0";
+  version = "0.12.9";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6bd414152d40d000ccbf6aa40ed89718b40868366a0f69fb83034f416303acef";
+  src = fetchurl {
+    url = "https://github.com/encode/starlette/archive/${version}.tar.gz";
+    sha256 = "0d3g44hajqmjlr46mf527algqf6a5zh7k7dssl6hwzqm71qr09jp";
   };
 
   propagatedBuildInputs = [
@@ -44,6 +44,7 @@ buildPythonPackage rec {
   checkInputs = [
     pytest
     aiosqlite
+    graphene
   ];
 
   checkPhase = ''
