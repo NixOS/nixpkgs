@@ -52,12 +52,12 @@ let
   setupVendorDir = if cargoVendorDir == null
     then (''
       unpackFile "$cargoDeps"
-      cargoDepsCopy=$(stripHash $cargoDeps)
+      cargoDepsCopy=$(pwd)/$(stripHash $cargoDeps)
     '' + stdenv.lib.optionalString legacyCargoFetcher ''
       chmod -R +w "$cargoDepsCopy"
     '')
     else ''
-      cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
+      cargoDepsCopy="$(pwd)/$sourceRoot/${cargoVendorDir}"
     '';
 
   rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
@@ -93,12 +93,12 @@ stdenv.mkDerivation (filteredArgs // {
     ${setupVendorDir}
 
     mkdir .cargo
-    config="$(pwd)/$cargoDepsCopy/.cargo/config";
+    config="$cargoDepsCopy/.cargo/config";
     if [[ ! -e $config ]]; then
       config=${./fetchcargo-default-config.toml};
     fi;
     substitute $config .cargo/config \
-      --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
+      --subst-var-by vendor "$cargoDepsCopy"
 
     cat >> .cargo/config <<'EOF'
     [target."${rust.toRustTarget stdenv.buildPlatform}"]
@@ -114,8 +114,10 @@ stdenv.mkDerivation (filteredArgs // {
     EOF
 
     export RUST_LOG=${logLevel}
-  '' + stdenv.lib.optionalString validateCargoDeps ''
-    if ! diff source/Cargo.lock $cargoDepsCopy/Cargo.lock ; then
+  ''+ (args.postUnpack or "");
+
+  postPatch = (args.postPatch or "") + stdenv.lib.optionalString validateCargoDeps ''
+    if ! diff Cargo.lock $cargoDepsCopy/Cargo.lock ; then
       echo
       echo "ERROR: cargoSha256 is out of date"
       echo
@@ -131,7 +133,7 @@ stdenv.mkDerivation (filteredArgs // {
     fi
   '' + ''
     unset cargoDepsCopy
-  '' + (args.postUnpack or "");
+  '';
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
