@@ -106,6 +106,7 @@ let
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
+  arch = stdenv.hostPlatform.parsed.cpu.name;
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
@@ -493,9 +494,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
-    # if it can’t find something in tools, it calls $out/bin/bazel-real
+    # if it can’t find something in tools, it calls $out/bin/bazel-{version}-{os_arch}
+    # The binary _must_ exist with this naming if your project contains a .bazelversion
+    # file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
-    mv ./bazel_src/output/bazel $out/bin/bazel-real
+    mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
@@ -534,7 +537,7 @@ stdenv.mkDerivation rec {
     exec "$BAZEL_REAL" "$@"
     EOF
 
-    # second call succeeds because it defers to $out/bin/bazel-real
+    # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
   '';
 
