@@ -4,7 +4,7 @@
 # Add services.udev.pkgs = [ pkgs.stlink ] to your configuration.nix
 
 let
-  version = "1.5.1";
+  version = "1.6.0";
 in
 stdenv.mkDerivation {
   pname = "stlink";
@@ -13,8 +13,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "texane";
     repo = "stlink";
-    rev = "v1.5.1";
-    sha256 = "1d5gxiqpsm8fc105cxlp27af9fk339fap5h6nay21x5a7n61jgyc";
+    rev = "v1.6.0";
+    sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
   };
 
   buildInputs = [ cmake libusb1 ];
