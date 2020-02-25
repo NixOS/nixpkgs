@@ -19,6 +19,8 @@ stdenv.mkDerivation {
   # https://sourceforge.net/p/netpbm/code/HEAD/log/?path=/advanced
   name = "netpbm-10.89.1";
 
+  outputs = [ "bin" "out" "dev" ];
+
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/netpbm/code/advanced";
     rev = "3735";
@@ -95,6 +97,8 @@ stdenv.mkDerivation {
     for prog in ppmquant; do
         wrapProgram "$out/bin/$prog" --prefix PATH : "$out/bin"
     done
+
+    moveToOutput bin "''${!outputBin}"
 
     runHook postInstall
   '';
