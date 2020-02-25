@@ -8,6 +8,8 @@ stdenv.mkDerivation rec {
     substituteInPlace configure.ac --replace stdc++ c++
   '';
 
+  patches = [ ./5.7-new-libffi-FFI_SYSV.patch ];
+
   buildInputs = [ libffi gmp ];
 
   nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin autoreconfHook;
