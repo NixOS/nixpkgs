@@ -6116,6 +6116,8 @@ in {
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
 
+  xcfun = callPackage ../development/python-modules/xcfun { };
+
   xlib = callPackage ../development/python-modules/xlib { };
 
   yappi = callPackage ../development/python-modules/yappi { };
