@@ -199,8 +199,6 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps"] // {
         LUAROCKS="$LUAROCKS --verbose"
     fi
 
-    patchShebangs .
-
     runHook postBuild
   '';
 
