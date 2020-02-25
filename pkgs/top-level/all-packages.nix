@@ -14717,6 +14717,8 @@ in
 
   xcbutilxrm = callPackage ../servers/x11/xorg/xcb-util-xrm.nix { };
 
+  xcfun = callPackage ../development/libraries/xcfun { };
+
   xdo = callPackage ../tools/misc/xdo { };
 
   xineLib = callPackage ../development/libraries/xine-lib { };
