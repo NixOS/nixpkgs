@@ -30,7 +30,12 @@ stdenv.mkDerivation rec {
     in
     "make ${target} name=${platform}";
 
-  installPhase = "make Install dest=$out";
+  installPhase = ''
+    make Install dest=$out
+    rm $out/README
+    mkdir -p $out/share/doc
+    mv $out/doc $out/share/doc/icon
+  '';
 
   meta = with stdenv.lib; {
     description = ''A very high level general-purpose programming language'';
