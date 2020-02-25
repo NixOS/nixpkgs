@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomjs2 }:
+{ lib, buildGoPackage, fetchurl, fetchFromGitHub, phantomJsSupport ? false, phantomjs2 ? null }:
 
 buildGoPackage rec {
   pname = "grafana";
@@ -31,6 +31,7 @@ buildGoPackage rec {
     tar -xvf $srcStatic
     mkdir -p $bin/share/grafana
     mv grafana-*/{public,conf,tools} $bin/share/grafana/
+  '' + lib.optionalString phantomJsSupport ''
     ln -sf ${phantomjs2}/bin/phantomjs $bin/share/grafana/tools/phantomjs/phantomjs
   '';
 
