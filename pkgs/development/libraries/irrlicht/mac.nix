@@ -1,19 +1,12 @@
 { stdenv, fetchzip, libGLU, libGL, unzip, fetchFromGitHub, cmake, Cocoa, OpenGL, IOKit }:
 
 let
-  version = "1.8.4";
-
-  irrlichtZip = fetchzip {
-    name = "irrlichtZip";
-    url = "mirror://sourceforge/irrlicht/irrlicht-${version}.zip";
-    sha256 = "02sq067fn4xpf0lcyb4vqxmm43qg2nxx770bgrl799yymqbvih5f";
-  };
-
+  common = import ./common.nix { inherit fetchzip; };
 in
 
 stdenv.mkDerivation rec {
   pname = "irrlicht-mac";
-  inherit version;
+  version = common.version;
 
   src = fetchFromGitHub {
 		owner = "quiark";
@@ -23,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   postUnpack = ''
-    cp -r ${irrlichtZip}/* $sourceRoot/
+    cp -r ${common.src}/* $sourceRoot/
     chmod -R 777 $sourceRoot
 	'';
 

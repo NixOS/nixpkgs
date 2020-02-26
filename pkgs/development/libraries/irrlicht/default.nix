@@ -1,14 +1,14 @@
 { stdenv, fetchzip, libGLU, libGL, unzip, libXrandr, libX11, libXxf86vm }:
 
+let
+  common = import ./common.nix { inherit fetchzip; };
+in
 
 stdenv.mkDerivation rec {
-  pname = "irrlicht";
-  version = "1.8.4";
+  pname = common.pname;
+  version = common.version;
 
-  src = fetchzip {
-    url = "mirror://sourceforge/irrlicht/${pname}-${version}.zip";
-    sha256 = "02sq067fn4xpf0lcyb4vqxmm43qg2nxx770bgrl799yymqbvih5f";
-  };
+  src = common.src;
 
   preConfigure = ''
     cd source/Irrlicht
