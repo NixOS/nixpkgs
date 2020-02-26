@@ -21333,6 +21333,8 @@ in
     guiSupport = false;
   };
 
+  qcad = libsForQt5.callPackage ../applications/misc/qcad { };
+
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
 
   eiskaltdcpp = callPackage ../applications/networking/p2p/eiskaltdcpp {

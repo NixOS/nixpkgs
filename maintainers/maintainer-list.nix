@@ -8144,6 +8144,11 @@
       fingerprint = "85F8 E850 F8F2 F823 F934  535B EC50 6589 9AEA AF4C";
     }];
   };
+  yvesf = {
+    email = "yvesf+nix@xapek.org";
+    github = "yvesf";
+    name = "Yves Fischer";
+  };
   yvt = {
     email = "i@yvt.jp";
     github = "yvt";
