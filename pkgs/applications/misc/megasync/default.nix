@@ -1,16 +1,17 @@
 { stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen, lsb-release
-, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip, wget }:
+, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
+, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
+, wget }:
 
 mkDerivation rec {
   pname = "megasync";
-  version = "4.2.3.0";
+  version = "4.2.5.0";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0l4yfrxjb62vc9dnlzy8rjqi68ga1bys5x5rfzs40daw13yf1adv";
+    sha256 = "1zw7x8gpvzhnzyirs5ishjl5idzyyin4wdxa67d6gzfgvqi33n7w";
     fetchSubmodules = true;
   };
 
@@ -39,6 +40,13 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
+
+    # Fix build errror also described upstream:
+    # https://github.com/meganz/MEGAsync/pull/313
+    (fetchpatch {
+      url = "https://github.com/meganz/MEGAsync/pull/313.patch";
+      sha256 = "1ld00cnh9afxibvkzkqi8gz59xlzidw2dy4yqngwwdqy76sfsn3w";
+    })
   ];
 
   postPatch = ''
