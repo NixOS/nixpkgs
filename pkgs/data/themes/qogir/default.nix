@@ -19,6 +19,9 @@ stdenv.mkDerivation rec {
     patchShebangs .
     mkdir -p $out/share/themes
     name= ./install.sh -d $out/share/themes
+    mkdir -p $out/share/doc/${pname}
+    cp -a src/firefox $out/share/doc/${pname}
+    rm $out/share/themes/*/{AUTHORS,COPYING}
   '';
 
   meta = with stdenv.lib; {
