@@ -26,11 +26,14 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-    "-DBUILD_TESTING=ON"
+    "-DBUILD_TESTING=1"
+    "-DBUILD_SHARED_LIBS=1"
   ];
 
   doCheck = true;
   checkPhase = ''
+    # set path for finding libxc.so for tests
+    export LD_LIBRARY_PATH=/build/source/build
     ctest --progress
   '';
 
