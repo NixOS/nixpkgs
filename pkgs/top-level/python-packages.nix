@@ -3441,6 +3441,8 @@ in {
 
   hg-git = callPackage ../development/python-modules/hg-git { };
 
+  hg-evolve = callPackage ../development/python-modules/hg-evolve { };
+
   dtopt = callPackage ../development/python-modules/dtopt { };
 
   easywatch = callPackage ../development/python-modules/easywatch { };
