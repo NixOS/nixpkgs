@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Flat Design theme for GTK based desktop environments";
-    homepage = https://vinceliuice.github.io/Qogir-theme;
+    homepage = "https://vinceliuice.github.io/Qogir-theme";
     license = licenses.gpl3;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];
