@@ -7,7 +7,7 @@
 , fetchzip
 , jack_capture
 , pkgconfig
-, pulseaudio
+, pulseaudioFull
 , qtbase
 , makeWrapper
 , mkDerivation
@@ -38,7 +38,7 @@ mkDerivation rec {
       libjackso=$(realpath ${lib.makeLibraryPath [libjack2]}/libjack.so.0);
       substituteInPlace ./src/jacklib.py --replace libjack.so.0 $libjackso
       substituteInPlace ./src/cadence.py --replace "/usr/bin/pulseaudio" \
-        "${lib.makeBinPath[pulseaudio]}/pulseaudio"
+        "${lib.makeBinPath[pulseaudioFull]}/pulseaudio"
       substituteInPlace ./c++/jackbridge/JackBridge.cpp --replace libjack.so.0 $libjackso
   '';
 
@@ -49,6 +49,7 @@ mkDerivation rec {
   buildInputs = [
     qtbase
     jack_capture
+    pulseaudioFull
     ((python3.withPackages (ps: with ps; [
           pyqt5
           dbus-python
@@ -83,7 +84,10 @@ mkDerivation rec {
   in lib.mapAttrsToList (script: source: ''
     rm -f ${script}
     makeQtWrapper ${source} ${script} \
-      --prefix PATH : "${lib.makeBinPath [jack_capture]}"
+      --prefix PATH : "${lib.makeBinPath [
+        jack_capture # cadence-render
+        pulseaudioFull # cadence, cadence-session-start
+        ]}"
   '') scriptAndSource;
 
   meta = {
