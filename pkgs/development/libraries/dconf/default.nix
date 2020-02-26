@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "lib" "dev" "devdoc" ];
 
-  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 gtk-doc docbook_xsl docbook_xml_dtd_42 ];
+  nativeBuildInputs = [ meson ninja vala pkgconfig python3 libxslt libxml2 glib gtk-doc docbook_xsl docbook_xml_dtd_42 ];
   buildInputs = [ glib bash-completion dbus ];
 
   mesonFlags = [
