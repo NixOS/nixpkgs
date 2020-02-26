@@ -120,7 +120,7 @@
     homepage =
       "https://linrunner.de/en/tlp/docs/tlp-linux-advanced-power-management.html";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar lovesegfault ];
     license = licenses.gpl2Plus;
   };
 }
