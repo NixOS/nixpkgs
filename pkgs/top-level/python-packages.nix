@@ -4346,6 +4346,8 @@ in {
 
   msgpack = callPackage ../development/python-modules/msgpack {};
 
+  msgpack_1_0_0 = callPackage ../development/python-modules/msgpack/1.0.0.nix {};
+
   msgpack-numpy = callPackage ../development/python-modules/msgpack-numpy {};
 
   msrplib = callPackage ../development/python-modules/msrplib { };
@@ -6468,7 +6470,9 @@ in {
 
   trollius = callPackage ../development/python-modules/trollius {};
 
-  pynvim = callPackage ../development/python-modules/pynvim {};
+  pynvim = callPackage ../development/python-modules/pynvim {
+    msgpack = self.msgpack_1_0_0;
+  };
 
   typogrify = callPackage ../development/python-modules/typogrify { };
 
