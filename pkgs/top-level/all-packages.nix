@@ -20814,6 +20814,8 @@ in
     withSidebar = true;
   };
 
+  mutt-trim = callPackage ../applications/networking/mailreaders/mutt-trim { };
+
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
