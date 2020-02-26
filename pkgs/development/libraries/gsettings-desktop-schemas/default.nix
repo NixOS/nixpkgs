@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ glib gobject-introspection ];
 
-  nativeBuildInputs = [ pkgconfig python3 meson ninja ];
+  nativeBuildInputs = [ pkgconfig python3 meson ninja glib ];
 
   meta = with stdenv.lib; {
     maintainers = gnome3.maintainers;
