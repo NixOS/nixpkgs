@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "This library is not meant to stand-alone. Instead it defines common helpers used by all Google API clients.";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }
