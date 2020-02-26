@@ -1,6 +1,7 @@
-{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsa-lib, dbus, xkeyboardconfig, bc, addOpenGLRunpath }:
+{ lib, stdenv, requireFile, zlib, libpng, libSM, libICE, fontconfig, xorg, libGLU, libGL, alsa-lib, dbus, xkeyboardconfig, nss, nspr, expat, pciutils, libxkbcommon, bc, addOpenGLRunpath }:
 
 let
+  # NOTE: Some dependencies only show in errors when run with QT_DEBUG_PLUGINS=1
   ld_library_path = builtins.concatStringsSep ":" [
     "${stdenv.cc.cc.lib}/lib64"
     (lib.makeLibraryPath [
@@ -17,6 +18,8 @@ let
       xorg.libXcomposite
       xorg.libXdamage
       xorg.libXtst
+      xorg.libxcb
+      xorg.libXScrnSaver
       alsa-lib
       fontconfig
       libSM
@@ -25,16 +28,21 @@ let
       libpng
       dbus
       addOpenGLRunpath.driverLink
+      nss
+      nspr
+      expat
+      pciutils
+      libxkbcommon
     ])
   ];
   license_dir = "~/.config/houdini";
 in
 stdenv.mkDerivation rec {
-  version = "17.5.460";
+  version = "18.0.391";
   pname = "houdini-runtime";
   src = requireFile rec {
     name = "houdini-${version}-linux_x86_64_gcc6.3.tar.gz";
-    sha256 = "1w3i7pscxnqfp5ya6cwh5r357z2dqdg5pjadcy9pb6rs0mjc4vky";
+    sha256 = "0bcbw8hjrg180wlw34bl085d3vx666j2pzsfdbsxwgrf3lzkx7wk";
     url = meta.homepage;
   };
 
