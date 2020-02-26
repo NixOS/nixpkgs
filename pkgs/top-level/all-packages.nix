@@ -20557,6 +20557,8 @@ in
     withSidebar = true;
   };
 
+  mutt-ics = callPackage ../applications/networking/mailreaders/mutt-ics { };
+
   mwic = callPackage ../applications/misc/mwic {
     pythonPackages = python3Packages;
   };
