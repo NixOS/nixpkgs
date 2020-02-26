@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "percona-server";
-  version = "5.6.43-84.3";
+  version = "5.6.47-87.0";
 
   src = fetchurl {
     url = "https://www.percona.com/downloads/Percona-Server-5.6/Percona-Server-${version}/source/tarball/percona-server-${version}.tar.gz";
-    sha256 = "1cc0lfmpq4pw90bcsszsygw06vd4j4bh3ph5x0yn3z7wddvmjlpw";
+    sha256 = "0wqxs224594zz7rnsvi4gda3yfbqxmip2vw76a0xvj0q9i63h09p";
   };
 
   buildInputs = [ cmake bison ncurses openssl zlib libaio perl ];
