@@ -801,6 +801,8 @@ in {
 
   jira = callPackage ../development/python-modules/jira { };
 
+  jsonpath = callPackage ../development/python-modules/jsonpath { };
+
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
   junitparser = callPackage ../development/python-modules/junitparser { };
