@@ -230,6 +230,13 @@ builtins.removeAttrs attrs ["disabled" "checkInputs" "externalDeps" "extraVariab
     runHook postInstall
   '';
 
+
+  checkPhase = attrs.checkPhase or ''
+    runHook preCheck
+    $LUAROCKS test
+    runHook postCheck
+  '';
+
   passthru = {
     inherit lua; # The lua interpreter
     inherit externalDeps;
