@@ -965,6 +965,8 @@ in {
 
   pdfx = callPackage ../development/python-modules/pdfx { };
 
+  pushover-complete = callPackage ../development/python-modules/pushover-complete { };
+
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
   pyperf = callPackage ../development/python-modules/pyperf { };
