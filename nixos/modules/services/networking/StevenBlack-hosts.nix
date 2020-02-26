@@ -8,7 +8,7 @@ with lib;
         Flags to passs while building the hosts file.
         Note that compress and skipstatichosts are passed by default.
         See also <link xlink:href="https://github.com/StevenBlack/hosts#command-line-options>here</link> for details.
-        Note that options thet modify directly the hosts file or he global DNS cache will error out as the hosts file is first built in the standard nix sandbox.
+        Note that options thet modify directly the hosts file or the global DNS cache will error out as the hosts file is first built in the standard nix sandbox.
       '';
       default = {};
       #TODO: cli setting type
@@ -18,7 +18,7 @@ with lib;
       
     };
     whitelist = mkOption {
-      description = " List of hosts to allow";
+      description = "List of hosts to allow";
       default = "";
       type = types.lines;
 
