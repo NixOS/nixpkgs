@@ -1,11 +1,12 @@
 { stdenv, fetchurl, meson, ninja, pkgconfig, gtk, zathura_core, girara, djvulibre, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-djvu-0.2.8";
+  pname = "zathura-djvu";
+  version = "0.2.9";
 
   src = fetchurl {
     url = "https://pwmt.org/projects/zathura/plugins/download/${name}.tar.xz";
-    sha256 = "0axkv1crdxn0z44whaqp2ibkdqcykhjnxk7qzms0dp1b67an9rnh";
+    sha256 = "0kl7k4lq97m80gninwm84l7cl2jpkpki59mhy2326xgshc9w0wqd";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig ];
