@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "This library simplifies using Google’s various server-to-server authentication mechanisms to access Google APIs.";
     homepage = "https://google-auth.readthedocs.io/en/latest/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }
