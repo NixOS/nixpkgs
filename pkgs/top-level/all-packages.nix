@@ -23784,6 +23784,7 @@ in
     clipboard-indicator = callPackage ../desktops/gnome-3/extensions/clipboard-indicator { };
     dash-to-dock = callPackage ../desktops/gnome-3/extensions/dash-to-dock { };
     dash-to-panel = callPackage ../desktops/gnome-3/extensions/dash-to-panel { };
+    draw-on-your-screen = callPackage ../desktops/gnome-3/extensions/draw-on-your-screen { };
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
