@@ -167,8 +167,6 @@ let
     inherit (darwin) Security;
   };
 
-  hubUnstable = throw "use gitAndTools.hub instead";
-
   lab = callPackage ./lab { };
 
   lefthook = callPackage ./lefthook { };
