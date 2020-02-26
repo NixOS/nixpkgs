@@ -62,6 +62,10 @@ nodePackages // {
     buildInputs = [ nodePackages.node-gyp-build ];
   };
 
+  insect = nodePackages.insect.override (drv: {
+    nativeBuildInputs = drv.nativeBuildInputs or [] ++ [ pkgs.psc-package pkgs.purescript nodePackages.pulp ];
+  });
+
   node-inspector = nodePackages.node-inspector.override {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };
