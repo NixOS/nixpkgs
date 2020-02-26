@@ -5,7 +5,7 @@ buildGoModule rec {
   version = "2.2.2";
 
   subPackages = [ "." ];
-  outputs = ["out" "doc"];
+  outputs = ["out" "doc" "data"];
 
   src = fetchFromGitHub {
     owner  = "errata-ai";
@@ -21,7 +21,9 @@ buildGoModule rec {
   goPackagePath = "github.com/errata-ai/vale";
   postInstall = ''
     mkdir -p $doc/share/doc/vale
+    mkdir -p $data/share/vale
     cp -r docs/* $doc/share/doc/vale
+    cp -r styles $data/share/vale
   '';
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
