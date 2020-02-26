@@ -22,7 +22,7 @@ in stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
 
   nativeBuildInputs = [
-    meson ninja
+    meson ninja glib
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [
