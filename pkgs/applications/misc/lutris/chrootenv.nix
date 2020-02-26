@@ -12,7 +12,7 @@ let
   ];
 
 in buildFHSUserEnv {
-  name = "lutris";
+  name = "lutris-${lutris-unwrapped.version}";
 
   runScript = "lutris";
 
@@ -113,5 +113,13 @@ in buildFHSUserEnv {
     mkdir -p $out/share
     ln -sf ${lutris-unwrapped}/share/applications $out/share
     ln -sf ${lutris-unwrapped}/share/icons $out/share
+    ln -s $out/bin/lutris-${lutris-unwrapped.version} $out/bin/lutris
   '';
+
+  meta = with lutris-unwrapped.meta; {
+    homepage = homepage;
+    description = description;
+    license = license;
+    maintainers = maintainers;
+  };
 }
