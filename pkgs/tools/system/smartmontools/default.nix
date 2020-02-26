@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
     description = "Tools for monitoring the health of hard drives";
     homepage    = https://www.smartmontools.org/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
+    maintainers = with maintainers; [ peti Frostman ];
     platforms   = with platforms; linux ++ darwin;
   };
 }
