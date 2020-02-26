@@ -1,5 +1,5 @@
 #! /usr/bin/env nix-shell
-#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ attrs ])
+#! nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ mypy attrs ])
 #
 # This script downloads Home Assistant's source tarball.
 # Inside the homeassistant/components directory, each integration has an associated manifest.json,
@@ -38,6 +38,12 @@ PKG_PREFERENCES = {
     "tensorflow-bin": "tensorflow",
     "tensorflowWithoutCuda": "tensorflow",
 }
+
+
+def run_mypy() -> None:
+    cmd = ["mypy", "--ignore-missing-imports", __file__]
+    print(f"$ {' '.join(cmd)}")
+    subprocess.run(cmd, check=True)
 
 
 def get_version():
@@ -162,7 +168,7 @@ def main() -> None:
         f.write("  components = {\n")
         for component, deps in build_inputs.items():
             available, missing = deps
-            f.write(f"    \"{component}\" = ps: with ps; [ ")
+            f.write(f'    "{component}" = ps: with ps; [ ')
             f.write(" ".join(available))
             f.write("];")
             if len(missing) > 0:
@@ -171,5 +177,7 @@ def main() -> None:
         f.write("  };\n")
         f.write("}\n")
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
+    run_mypy()
     main()
