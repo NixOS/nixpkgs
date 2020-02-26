@@ -19,13 +19,15 @@ let
     "8.7" = versions.post_8_6;
     "8.8" = versions.post_8_6;
     "8.9" = versions.post_8_6;
+    "8.10" = versions.post_8_6;
+    "8.11" = versions.post_8_6;
   };
   param = params.${coq.coq-version};
 in
 
 stdenv.mkDerivation rec {
   inherit (param) version;
-  name = "coq-paco-${coq.coq-version}-${version}";
+  name = "coq${coq.coq-version}-paco-${version}";
 
   src = fetchFromGitHub {
     inherit (param) rev sha256;
@@ -52,7 +54,7 @@ stdenv.mkDerivation rec {
   };
 
   passthru = {
-    compatibleCoqVersions = v: builtins.elem v [ "8.5" "8.6" "8.7" "8.8" "8.9" ];
+    compatibleCoqVersions = stdenv.lib.flip builtins.hasAttr params;
   };
 
 }
