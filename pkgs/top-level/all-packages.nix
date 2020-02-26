@@ -9220,58 +9220,15 @@ in
     git = gitMinimal;
   };
 
-  # Build summary for this flavor
-  # - Build Octave Qt GUI:                  no (missing:QtCore QtGui QtNetwork QtHelp QtXml)
-  # - JIT compiler for loops:               no
-  # - Build Java interface:                 yes
-  # - Build static libraries:               no
-  # - Build shared libraries:               yes
-  # - Dynamic Linking API:                  dlopen
-  # - Include support for GNU readline:     yes
-  # - 64-bit array dims and indexing:       yes
-  # - 64-bit BLAS array dims and indexing:  yes
-  # - OpenMP SMP multithreading:            yes
-  # - Truncate intermediate FP results:     yes
-  # - Build cross tools:                    no
-  # - Build docs:                           yes
   octave = callPackage ../development/interpreters/octave {
     python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
-  # Build summary for this flavor
-  # - Build Octave Qt GUI:                  no (missing:QtCore QtGui QtNetwork QtHelp QtXml)
-  # - JIT compiler for loops:               yes
-  # - Build Java interface:                 yes
-  # - Build static libraries:               no
-  # - Build shared libraries:               yes
-  # - Dynamic Linking API:                  dlopen
-  # - Include support for GNU readline:     yes
-  # - 64-bit array dims and indexing:       yes
-  # - 64-bit BLAS array dims and indexing:  yes
-  # - OpenMP SMP multithreading:            yes
-  # - Truncate intermediate FP results:     yes
-  # - Build cross tools:                    no
-  # - Build docs:                           yes
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableJIT = true;
   };
-  # Build summary for this flavor
-  # - Build Octave Qt GUI:                  yes
-  # - JIT compiler for loops:               no
-  # - Build Java interface:                 yes
-  # - Build static libraries:               no
-  # - Build shared libraries:               yes
-  # - Dynamic Linking API:                  dlopen
-  # - Include support for GNU readline:     yes
-  # - 64-bit array dims and indexing:       yes
-  # - 64-bit BLAS array dims and indexing:  yes
-  # - OpenMP SMP multithreading:            yes
-  # - Truncate intermediate FP results:     yes
-  # - Build cross tools:                    no
-  # - Build docs:                           yes
-  # Build summary for this flavor
   octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
     python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;

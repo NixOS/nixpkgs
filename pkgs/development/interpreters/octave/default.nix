@@ -1,7 +1,6 @@
 { stdenv
 , fetchurl
 , gfortran
-, readline
 , ncurses
 , perl
 , flex
@@ -31,18 +30,23 @@
 , glpk ? null
 , suitesparse ? null
 , gnuplot ? null
+# - Include support for GNU readline:
+, enableReadline ? true
+, readline ? null
+# - Build Java interface:
+, enableJava ? true
 , jdk ? null
 , python ? null
 , overridePlatforms ? null
 , sundials_2 ? null
-# Qt / GUI is disabled by default
+# - Build Octave Qt GUI:
 , enableQt ? false
 , qtbase ? null
 , qtsvg ? null
 , qtscript ? null
 , qscintilla ? null
 , qttools ? null
-# JIT is disabled by default
+# - JIT compiler for loops:
 , enableJIT ? false
 , llvm ? null
 }:
@@ -98,7 +102,7 @@ stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional (hdf5 != null) hdf5)
   ++ (stdenv.lib.optional (glpk != null) glpk)
   ++ (stdenv.lib.optional (suitesparse != null) suitesparse)
-  ++ (stdenv.lib.optional (jdk != null) jdk)
+  ++ (stdenv.lib.optional (enableJava) jdk)
   ++ (stdenv.lib.optional (sundials_2 != null) sundials_2)
   ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
   ++ (stdenv.lib.optional (python != null) python)
@@ -128,10 +132,10 @@ stdenv.mkDerivation rec {
   F77_INTEGER_8_FLAG = if openblas.blas64 then "-fdefault-integer-8" else "";
 
   configureFlags = [
-    "--enable-readline"
     "--with-blas=openblas"
     "--with-lapack=openblas"
   ]
+    ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
     ++ stdenv.lib.optionals openblas.blas64 [ "--enable-64" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
     ++ stdenv.lib.optionals enableQt [ "--with-qt=5" ]
