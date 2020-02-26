@@ -89,6 +89,17 @@ in
   };
 
   config = {
+    assertions = [
+      { assertion = let
+          inherit (lib) versions length stringLength all elem elemAt versionAtLeast;
+          inherit (config.system) stateVersion;
+          parts = versions.splitVersion stateVersion;
+          isVersion = length parts == 2 && all (p: stringLength p == 2) parts;
+          correctMinorVersion = elem (elemAt parts 1) [ "03" "09" ];
+          notNewerThanNixpkgs = versionAtLeast cfg.release stateVersion;
+        in isVersion && correctMinorVersion && notNewerThanNixpkgs;
+        message = "system.stateVersion was not set to a valid NixOS version (e.g. 20.03)."; }
+    ];
 
     system.nixos = {
       # These defaults are set here rather than up there so that
