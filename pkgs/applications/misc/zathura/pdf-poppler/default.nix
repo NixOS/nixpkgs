@@ -1,12 +1,12 @@
 { stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core, girara, poppler }:
 
 stdenv.mkDerivation rec {
-  version = "0.2.9";
   pname = "zathura-pdf-poppler";
+  version = "0.3.0";
 
   src = fetchurl {
     url = "https://git.pwmt.org/pwmt/zathura-pdf-poppler/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0c15rnwh42m3ybrhax01bl36w0iynaq8xg6l08riml3cyljypi9l";
+    sha256 = "133xxh82x37v0ihwk5g2hih1xlzm76kkayifdjn15xqf14gp6axs";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig zathura_core ];
