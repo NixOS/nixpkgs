@@ -9,12 +9,12 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  pname = "zathura-core";
-  version = "0.4.4";
+  pname = "zathura";
+  version = "0.4.5";
 
   src = fetchurl {
     url = "https://git.pwmt.org/pwmt/zathura/-/archive/${version}/zathura-${version}.tar.gz";
-    sha256 = "0v5klgr009rsxi41h73k0398jbgmgh37asvwz2w15i4fzmw89jgb";
+    sha256 = "1khs1snwjclgl12ykagvbdpv7sw1lf7mmws8902hf899za7wfrwl";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];
