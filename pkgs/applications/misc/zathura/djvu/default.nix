@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with stdenv.lib; {
-    homepage = https://pwmt.org/projects/zathura-djvu/;
+    homepage = "https://pwmt.org/projects/zathura-djvu/";
     description = "A zathura DJVU plugin";
     longDescription = ''
       The zathura-djvu plugin adds DjVu support to zathura by using the

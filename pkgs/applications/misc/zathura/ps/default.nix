@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
-    homepage = https://pwmt.org/projects/zathura-ps/;
+    homepage = "https://pwmt.org/projects/zathura-ps/";
     description = "A zathura PS plugin";
     longDescription = ''
       The zathura-ps plugin adds PS support to zathura by using the

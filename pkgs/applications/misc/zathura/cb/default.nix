@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
-    homepage = https://pwmt.org/projects/zathura-cb/;
+    homepage = "https://pwmt.org/projects/zathura-cb/";
     description = "A zathura CB plugin";
     longDescription = ''
       The zathura-cb plugin adds comic book support to zathura.
