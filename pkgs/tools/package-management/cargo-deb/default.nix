@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.isDarwin [ Security ];
 
-  cargoSha256 = "0j64dcczxdr9zdch4a241d5adgipzz8sgbw00min9k3p8hbljd9n";
+  cargoSha256 = "0ji6d5a23rzhkkk27iigqcf2zw3mx1p1ap0cryqcj43z5ixdygiw";
 
   meta = with lib; {
     description = "Generate Debian packages from information in Cargo.toml";

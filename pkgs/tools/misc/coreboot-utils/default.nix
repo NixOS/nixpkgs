@@ -1,7 +1,7 @@
 { stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
 
 let
-  version = "4.10";
+  version = "4.11";
 
   meta = with stdenv.lib; {
     description = "Various coreboot-related tools";
@@ -16,7 +16,7 @@ let
 
     src = fetchurl {
       url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "1jsiz17afi2lqg1jv6lsl8s05w7vr7iwgg86y2qp369hcz6kcwfa";
+      sha256 = "11xdm2c1blaqb32j98085sak78jldsw0xhrkzqs5b8ir9jdqbzcp";
     };
 
     enableParallelBuilding = true;

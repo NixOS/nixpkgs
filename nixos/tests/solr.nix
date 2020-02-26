@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
 
 {
   name = "solr";
@@ -21,28 +21,36 @@ import ./make-test.nix ({ pkgs, ... }:
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit('solr.service');
-    $machine->waitForOpenPort('8983');
-    $machine->succeed('curl --fail http://localhost:8983/solr/');
+    machine.wait_for_unit("solr.service")
+    machine.wait_for_open_port(8983)
+    machine.succeed("curl --fail http://localhost:8983/solr/")
 
     # adapted from pkgs.solr/examples/films/README.txt
-    $machine->succeed('sudo -u solr solr create -c films');
-    $machine->succeed(q(curl http://localhost:8983/solr/films/schema -X POST -H 'Content-type:application/json' --data-binary '{
-      "add-field" : {
-        "name":"name",
-        "type":"text_general",
-        "multiValued":false,
-        "stored":true
-      },
-      "add-field" : {
-        "name":"initial_release_date",
-        "type":"pdate",
-        "stored":true
-      }
-    }')) =~ /"status":0/ or die;
-    $machine->succeed('sudo -u solr post -c films ${pkgs.solr}/example/films/films.json');
-    $machine->succeed('curl http://localhost:8983/solr/films/query?q=name:batman') =~ /"name":"Batman Begins"/ or die;
+    machine.succeed("sudo -u solr solr create -c films")
+    assert '"status":0' in machine.succeed(
+        """
+      curl http://localhost:8983/solr/films/schema -X POST -H 'Content-type:application/json' --data-binary '{
+        "add-field" : {
+          "name":"name",
+          "type":"text_general",
+          "multiValued":false,
+          "stored":true
+        },
+        "add-field" : {
+          "name":"initial_release_date",
+          "type":"pdate",
+          "stored":true
+        }
+      }'
+    """
+    )
+    machine.succeed(
+        "sudo -u solr post -c films ${pkgs.solr}/example/films/films.json"
+    )
+    assert '"name":"Batman Begins"' in machine.succeed(
+        "curl http://localhost:8983/solr/films/query?q=name:batman"
+    )
   '';
 })

@@ -104,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gilbertchen/go.dbus";
-      rev =  "9e442e6378618c083fd3b85b703ffd202721fb17";
-      sha256 = "0q8ld38gnr4adzw5287lw5f5l14yp8slxsz1za5ryrkprh04bhkv";
+      rev =  "8591994fa32f1dbe3fa9486bc6f4d4361ac16649";
+      sha256 = "0wg82hwgk4s65ns76x7cby6dfdxsdkc4jyqn9zd7g037fhzh8rk5";
     };
   }
   {
@@ -230,8 +230,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/pkg/sftp";
-      rev =  "98203f5a8333288eb3163b7c667d4260fe1333e9";
-      sha256 = "09wxyrhwwh20rzpzb06vsj8k2bmw52cjlx7j4115zhky27528sx9";
+      rev =  "3edd153f213d8d4191a0ee4577c61cca19436632";
+      sha256 = "0iw6lijdljwh5xw5hsy0b578cr52h6vvm7hbnzlrvciwhh4sfhhp";
     };
   }
   {

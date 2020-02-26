@@ -2,7 +2,7 @@
 , ilmbase, libXi, libX11, libXext, libXrender
 , libjpeg, libpng, libsamplerate, libsndfile
 , libtiff, libGLU, libGL, openal, opencolorio, openexr, openimageio2, openjpeg, python3Packages
-, openvdb, libXxf86vm, tbb
+, openvdb, libXxf86vm, tbb, alembic
 , zlib, fftw, opensubdiv, freetype, jemalloc, ocl-icd, addOpenGLRunpath
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
@@ -17,11 +17,11 @@ let python = python3Packages.python; in
 
 stdenv.mkDerivation rec {
   pname = "blender";
-  version = "2.81a";
+  version = "2.82";
 
   src = fetchurl {
     url = "https://download.blender.org/source/${pname}-${version}.tar.xz";
-    sha256 = "1zl0ar95qkxsrbqw9miz2hrjijlqjl06vg3clfk9rm7krr2l3b2j";
+    sha256 = "0rgw8nilvn6k6r7p28y2l1rwpami1cc8xz473jaahn7wa4ndyah0";
   };
 
   patches = lib.optional stdenv.isDarwin ./darwin.patch;
@@ -31,6 +31,7 @@ stdenv.mkDerivation rec {
     [ boost ffmpeg gettext glew ilmbase
       freetype libjpeg libpng libsamplerate libsndfile libtiff
       opencolorio openexr openimageio2 openjpeg python zlib fftw jemalloc
+      alembic
       (opensubdiv.override { inherit cudaSupport; })
       tbb
       makeWrapper
@@ -75,7 +76,9 @@ stdenv.mkDerivation rec {
     '';
 
   cmakeFlags =
-    [ "-DWITH_MOD_OCEANSIM=ON"
+    [
+      "-DWITH_ALEMBIC=ON"
+      "-DWITH_MOD_OCEANSIM=ON"
       "-DWITH_CODEC_FFMPEG=ON"
       "-DWITH_CODEC_SNDFILE=ON"
       "-DWITH_INSTALL_PORTABLE=OFF"

@@ -117,6 +117,18 @@ mapAliases ({
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
   firefoxWrapper = firefox;           # 2015-09
+  firefox-esr-52           = firefoxPackages.firefox-esr-52; # 2020-02, remove after 20.03 branchoff
+  firefox-esr-52-unwrapped = firefoxPackages.firefox-esr-52; # 2020-02, remove after 20.03 branchoff
+  firefox-esr-60           = firefoxPackages.firefox-esr-60; # 2020-02, remove after 20.03 branchoff
+  firefox-esr-60-unwrapped = firefoxPackages.firefox-esr-60; # 2020-02, remove after 20.03 branchoff
+  icecat                   = firefoxPackages.icecat;         # 2020-02, remove after 20.03 branchoff
+  icecat-unwrapped         = firefoxPackages.icecat;         # 2020-02, remove after 20.03 branchoff
+  conkeror-unwrapped       = conkeror; # 2020-02, remove after 20.03 branchoff
+  conkeror                 = throw ''
+    Conkeror doesn't work with any secure firefox release.
+    Please move to some of the alternatives at http://conkeror.org/Alternatives
+  ''; # 2020-02, remove after 20.03 branchoff
+
   firestr = throw "firestr has been removed."; # added 2019-12-08
   flameGraph = flamegraph; # added 2018-04-25
   font-awesome-ttf = font-awesome; # 2018-02-25
@@ -335,6 +347,7 @@ mapAliases ({
   pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
   pinentry_qt = pinentry-qt; # added 2019-10-14
   pinentry_gnome = pinentry-gnome; # added 2019-10-14
+  pinentry_qt5 = pinentry-qt; # added 2020-02-11
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
@@ -366,10 +379,21 @@ mapAliases ({
   ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_3_6 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_3 = throw "deprecated 2019-09-06: use a newer version of ruby";
-  ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
-  ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
+  ruby_2_4_3 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_4 = throw "deprecated 2019-12: use a newer version of ruby";
+  ruby_2_5_0 = throw "deprecated 2018-0213: use a newer version of ruby";
+  rubyPackages_2_4 = throw "deprecated 2019-12: use a newer version of rubyPackages instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
-  rxvt_unicode_with-plugins = rxvt_unicode-with-plugins; # added 2015-04-02
+  rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
+  rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
+  urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
+  urxvt_perl = rxvt-unicode-plugins.perl; # added 2020-02-02
+  urxvt_perls = rxvt-unicode-plugins.perls; # added 2020-02-02
+  urxvt_tabbedex = rxvt-unicode-plugins.tabbedex; # added 2020-02-02
+  urxvt_font_size = rxvt-unicode-plugins.font-size; # added 2020-02-02
+  urxvt_theme_switch = rxvt-unicode-plugins.theme-switch; # added 2020-02-02
+  urxvt_vtwheel = rxvt-unicode-plugins.vtwheel; # added 2020-02-02
+  urxvt_bidi = rxvt-unicode-plugins.bidi; # added 2020-02-02
   s6Dns = s6-dns; # added 2018-07-23
   s6Networking = s6-networking; # added 2018-07-23
   s6LinuxUtils = s6-linux-utils; # added 2018-07-23
@@ -399,6 +423,7 @@ mapAliases ({
   smbclient = samba; # added 2018-04-25
   slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
   slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
+  sundials_3 = throw "removed 2020-02. outdated and no longer needed";
   net_snmp = net-snmp; # added 2019-12-21
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25
@@ -545,6 +570,9 @@ mapAliases ({
   # added 2020-01-10
   tor-browser-unwrapped = throw "tor-browser-unwrapped was removed because it was out of date and inadequately maintained. Please use tor-browser-bundle-bin instead. See #77452.";
 
+  # added 2020-02-09
+  dina-font-pcf = dina-font;
+
     /* Cleanup before 20.09 */
   llvm_4 = throw ''
     The LLVM versions 3.5, 3.9 and 4.0 have been removed in NixOS 20.03
@@ -571,4 +599,6 @@ mapAliases ({
 
   dnscrypt-proxy = throw "dnscrypt-proxy has been removed. Please use dnscrypt-proxy2."; # added 2020-02-02
   sqldeveloper_18 = throw "sqldeveloper_18 is not maintained anymore!"; # added 2020-02-04
+
+  gcc-snapshot = throw "Marked as broken for >2 years, additionally this 'snapshot' pointed to a fairly old one from gcc7.";
 })

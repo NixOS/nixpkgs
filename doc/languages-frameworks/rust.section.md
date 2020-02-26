@@ -37,11 +37,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
-  verifyCargoDeps = true;
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
@@ -59,12 +58,9 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
-When `verifyCargoDeps` is set to `true`, the build will also verify that the
-`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the
-`cargoDeps` and `src`. Note that this option changes the value of `cargoSha256`
-since it also copies the `Cargo.lock` in it. To avoid breaking
-backward-compatibility this option is not enabled by default but hopefully will
-be in the future.
+Unless `legacyCargoFetcher` is set to `true`, the fetcher will also verify that
+the `Cargo.lock` file is in sync with the `src` attribute, and will compress the
+vendor directory into a tar.gz archive.
 
 ### Building a crate for a different target
 

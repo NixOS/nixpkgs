@@ -32,7 +32,7 @@ in
   bees = handleTest ./bees.nix {};
   bind = handleTest ./bind.nix {};
   bittorrent = handleTest ./bittorrent.nix {};
-  buildkite-agent = handleTest ./buildkite-agent.nix {};
+  buildkite-agents = handleTest ./buildkite-agents.nix {};
   boot = handleTestOn ["x86_64-linux"] ./boot.nix {}; # syslinux is unsupported on aarch64
   boot-stage1 = handleTest ./boot-stage1.nix {};
   borgbackup = handleTest ./borgbackup.nix {};
@@ -88,6 +88,7 @@ in
   fancontrol = handleTest ./fancontrol.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
+  firefox-esr = handleTest ./firefox.nix { esr = true; };
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
@@ -96,6 +97,7 @@ in
   freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
+  grocy = handleTest ./grocy.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
@@ -135,6 +137,7 @@ in
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
+  jirafeau = handleTest ./jirafeau.nix {};
   kafka = handleTest ./kafka.nix {};
   keepalived = handleTest ./keepalived.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
@@ -143,6 +146,7 @@ in
   kernel-testing = handleTest ./kernel-testing.nix {};
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
+  krb5 = discoverTests (import ./krb5 {});
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};
@@ -256,6 +260,7 @@ in
   runInMachine = handleTest ./run-in-machine.nix {};
   rxe = handleTest ./rxe.nix {};
   samba = handleTest ./samba.nix {};
+  sanoid = handleTest ./sanoid.nix {};
   sddm = handleTest ./sddm.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
@@ -269,6 +274,7 @@ in
   strongswan-swanctl = handleTest ./strongswan-swanctl.nix {};
   sudo = handleTest ./sudo.nix {};
   switchTest = handleTest ./switch-test.nix {};
+  sympa = handleTest ./sympa.nix {};
   syncthing-init = handleTest ./syncthing-init.nix {};
   syncthing-relay = handleTest ./syncthing-relay.nix {};
   systemd = handleTest ./systemd.nix {};

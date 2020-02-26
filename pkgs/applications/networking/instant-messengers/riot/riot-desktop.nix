@@ -6,12 +6,12 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.5.6";
+  version = "1.5.9";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "148rg6wc84xy53bj16v5riw78s999ridid59x6v9jas827l0bdpk";
+    sha256 = "13bskp8nj1h44y7x4dibnfa8sdnzl744x4xckcw5lxnlkccfr69m";
   };
 
 in mkYarnPackage rec {
@@ -29,7 +29,6 @@ in mkYarnPackage rec {
     # resources
     mkdir -p "$out/share/riot"
     ln -s '${riot-web}' "$out/share/riot/webapp"
-    cp -r '${riot-web-src}/origin_migrator' "$out/share/riot/origin_migrator"
     cp -r './deps/riot-web' "$out/share/riot/electron"
     cp -r './deps/riot-web/img' "$out/share/riot"
     rm "$out/share/riot/electron/node_modules"

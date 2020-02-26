@@ -2,24 +2,32 @@
 
 stdenv.mkDerivation rec {
   pname = "nordic";
-  version = "1.6.5";
+  version = "1.8.1";
 
   srcs = [
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic.tar.xz";
-      sha256 = "163g1kh92fhgbwi91053xs39bpdd032w2v67c3jf8lf4cgvkwggp";
+      url = "https://github.com/EliverLara/Nordic/releases/download/V${version}/Nordic.tar.xz";
+      sha256 = "0jvc6l093gj9azkrjswdc1kqlyc6drnhsxgpzylzcgjxvxyi9vmd";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-blue.tar.xz";
-      sha256 = "05qq1v8sil8s51aa78q2najcqdnkpgdzc8dckrx47wy36cfxbxwz";
+      url = "https://github.com/EliverLara/Nordic/releases/download/V${version}/Nordic-standard-buttons.tar.xz";
+      sha256 = "049hcvccjds465v78sk3cjg7zck36l1zpyrf4p8xinj2h3b74zr8";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-standard-buttons.tar.xz";
-      sha256 = "17r450xxd8v8125a4bwd0yj3f3vnwcad2f19a0vgmk63s9grvkg0";
+      url = "https://github.com/EliverLara/Nordic/releases/download/V${version}/Nordic-darker.tar.xz";
+      sha256 = "1qaj4x451ic8mx4aak1axw29jm6ymwgh5w3n3mw5kjm1fwg4b5dz";
     })
     (fetchurl {
-      url = "https://github.com/EliverLara/Nordic/releases/download/v${version}/Nordic-blue-standard-buttons.tar.xz";
-      sha256 = "0894naw0wkl2h9l27qz9h1k02dfgfqyb02icmgadg0cb44j3zlpb";
+      url = "https://github.com/EliverLara/Nordic/releases/download/V${version}/Nordic-darker-standard-buttons.tar.xz";
+      sha256 = "19wczzppimp7sql9v0sq1sc5j0ix51270c58j22mg01kd2h2iivy";
+    })
+    (fetchurl {
+      url = "https://github.com/EliverLara/Nordic/releases/download/V${version}/Nordic-bluish-accent.tar.xz";
+      sha256 = "1jvjjxiz8q9583f3gidky65s2g5pd5bkvbx0jvwn0p0kz8vlzmzk";
+    })
+    (fetchurl {
+      url = "https://github.com/EliverLara/Nordic/releases/download/V${version}/Nordic-bluish-accent-standard-buttons.tar.xz";
+      sha256 = "0wqn0aszddq8nbh6c667rwhy7c1zky23a9q3d8gci421n20l6lyd";
     })
   ];
 
@@ -35,7 +43,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Dark Gtk theme created using the awesome Nord color pallete";
-    homepage = https://github.com/EliverLara/Nordic;
+    homepage = "https://github.com/EliverLara/Nordic";
     license = licenses.gpl3;
     platforms = platforms.all;
     maintainers = [ maintainers.romildo ];

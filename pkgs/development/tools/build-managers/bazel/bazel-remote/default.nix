@@ -8,13 +8,13 @@
 
 buildBazelPackage rec {
   name = "bazel-remote-${version}";
-  version = "2020-01-29";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "buchgr";
     repo = "bazel-remote";
-    rev = "ae9378321552dd14066332f8fa55076040228cb7";
-    sha256 = "1jbd319n255cmmncnjfdkdcpx0x62asp3dqwgl6vimx4dqqj8v1p";
+    rev = "v${version}";
+    sha256 = "1fpdw139d5q1377qnqbgkahmdr4mdaa17d2m10wkyvyvijwm4r2m";
   };
 
   nativeBuildInputs = [ go git ];

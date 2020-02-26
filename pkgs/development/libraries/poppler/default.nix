@@ -12,7 +12,7 @@ let
 in
 stdenv.mkDerivation rec {
   name = "poppler-${suffix}-${version}";
-  version = "0.84.0"; # beware: updates often break cups-filters build, check texlive too!
+  version = "0.84.0"; # beware: updates often break cups-filters build, check texlive and scribusUnstable too!
 
   src = fetchurl {
     url = "${meta.homepage}/poppler-${version}.tar.xz";

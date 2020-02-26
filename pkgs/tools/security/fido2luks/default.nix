@@ -19,8 +19,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ cryptsetup ];
   nativeBuildInputs = [ pkg-config ];
 
-  cargoSha256 = "1i37k4ih6118z3wip2qh4jqk7ja2z0v1w8dri1lwqwlciqw17zi9";
-  verifyCargoDeps = true;
+  cargoSha256 = "0rp4f6xnwmvf3pv6h0qwsg01jrndf77yn67675ac39kxzmrzfy2f";
 
   meta = with stdenv.lib; {
     description = "Decrypt your LUKS partition using a FIDO2 compatible authenticator";

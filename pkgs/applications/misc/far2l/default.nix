@@ -1,10 +1,17 @@
 { stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
   xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
 
-with stdenv.lib;
+let
+  newer-colorer-schemes = fetchFromGitHub {
+    owner = "colorer";
+    repo = "Colorer-schemes";
+    rev = "7c831f5e94a90530ace8b2bb9916210e3a2fcda6"; # 2019-11-28 (far2l has older Colorer-schemes)
+    sha256 = "18vaahdz5i7xdf00c9h9kjjswm4jszywm8zkhva4c4ivr4qqnv2c";
+  };
+in
 stdenv.mkDerivation rec {
-  build = "unstable-2018-07-19.git${builtins.substring 0 7 src.rev}";
-  name = "far2l-2.1.${build}";
+  pname = "far2l";
+  version = "2019-12-14.git${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
     owner = "elfmz";
@@ -16,16 +23,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ]
-    ++ optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
-  postPatch = optionalString stdenv.isLinux ''
+  postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace far2l/bootstrap/trash.sh \
       --replace 'gvfs-trash'  '${gvfs}/bin/gvfs-trash'
-  '' + optionalString stdenv.isDarwin ''
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace far2l/CMakeLists.txt \
       --replace "-framework System" -lSystem
   '' + ''
-    echo 'echo ${build}' > far2l/bootstrap/scripts/vbuild.sh
+    echo 'echo ${version}' > far2l/bootstrap/scripts/vbuild.sh
     substituteInPlace far2l/bootstrap/open.sh              \
       --replace 'xdg-open'    '${xdg_utils}/bin/xdg-open'
     substituteInPlace far2l/vtcompletor.cpp                \
@@ -42,14 +49,9 @@ stdenv.mkDerivation rec {
       --replace '"bzip2 '     '"${bzip2}/bin/bzip2 '       \
       --replace '"tar '       '"${gnutar}/bin/tar '
 
-    ( cd colorer/configs/base
-      patch -p2 <  ${ fetchpatch {
-                        name   = "nix-language-highlighting.patch";
-                        url    = https://github.com/colorer/Colorer-schemes/commit/64bd06de0a63224b431cd8fc42cd9fa84b8ba7c0.patch;
-                        sha256 = "1mrj1wyxmk7sll9j1jzw6miwi0sfavf654klms24wngnh6hadsch";
-                      }
-                    }
-    )
+    cp ${newer-colorer-schemes}/hrc/hrc/base/nix.hrc     colorer/configs/base/hrc/base/
+    cp ${newer-colorer-schemes}/hrc/hrc/base/cpp.hrc     colorer/configs/base/hrc/base/
+    cp ${newer-colorer-schemes}/hrc/hrc/inet/jscript.hrc colorer/configs/base/hrc/base/
   '';
 
   installPhase = ''
@@ -59,7 +61,8 @@ stdenv.mkDerivation rec {
     ln -s -r --force $out/bin/far2l $out/share/far2l/far2l_askpass
     ln -s -r --force $out/bin/far2l $out/share/far2l/far2l_sudoapp
 
-    sed "s,/usr/bin/,$out/bin/," ../far2l/DE/far2l.desktop > $out/share/applications/far2l.desktop
+    cp ../far2l/DE/far2l.desktop $out/share/applications/far2l.desktop
+    substituteInPlace $out/share/applications/far2l.desktop --replace \''${CMAKE_INSTALL_PREFIX} "$out"
 
     cp ../far2l/DE/icons/hicolor/1024x1024/apps/far2l.svg $out/share/icons/hicolor/scalable/apps/
     convert -size 128x128 ../far2l/DE/icons/far2l.svg $out/share/icons/far2l.png
@@ -75,7 +78,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "An orthodox file manager";
     homepage = https://github.com/elfmz/far2l;
     license = licenses.gpl2;

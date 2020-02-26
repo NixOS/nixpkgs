@@ -158,6 +158,23 @@ busted = buildLuarocksPackage {
     };
   };
 };
+cassowary = buildLuarocksPackage {
+  pname = "cassowary";
+  version = "2.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cassowary-2.2-1.src.rock;
+    sha256 = "0laghzk5jbap5rfd8sasnrdrbda649sfciarba8rhygm0qni1azy";
+  };
+  propagatedBuildInputs = [ lua penlight ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/simoncozens/cassowary.lua";
+    description = "The cassowary constraint solver.";
+    maintainers = with maintainers; [ marsam ];
+    license.fullName = "Apache 2";
+  };
+};
 cjson = buildLuarocksPackage {
   pname = "lua-cjson";
   version = "2.1.0.6-1";
@@ -195,6 +212,23 @@ compat53 = buildLuarocksPackage {
     license = {
       fullName = "MIT";
     };
+  };
+};
+cosmo = buildLuarocksPackage {
+  pname = "cosmo";
+  version = "16.06.04-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cosmo-16.06.04-1.src.rock;
+    sha256 = "1adrk74j0x1yzhy0xz9k80hphxdjvm09kpwpbx00sk3kic6db0ww";
+  };
+  propagatedBuildInputs = [ lpeg ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://cosmo.luaforge.net";
+    description = "Safe templates for Lua";
+    maintainers = with maintainers; [ marsam ];
+    license.fullName = "MIT/X11";
   };
 };
 coxpcall = buildLuarocksPackage {
@@ -1292,11 +1326,11 @@ luuid = buildLuarocksPackage {
 };
 luv = buildLuarocksPackage {
   pname = "luv";
-  version = "1.30.0-0";
+  version = "1.34.1-1";
 
   src = fetchurl {
-    url    = https://luarocks.org/luv-1.30.0-0.src.rock;
-    sha256 = "1z5sdq9ld4sm5pws9qxpk9cadv9i7ycwad1zwsa57pj67gly11vi";
+    url    = https://luarocks.org/luv-1.34.1-1.src.rock;
+    sha256 = "044cyp25xn35nj5qp1hx04lfkzrpa6adhqjshq2g7wvbga77p1q0";
   };
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua ];

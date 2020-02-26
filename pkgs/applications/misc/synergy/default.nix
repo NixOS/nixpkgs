@@ -1,81 +1,73 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchurl, cmake, xlibsWrapper
+{ stdenv, lib, fetchFromGitHub, cmake, openssl
 , ApplicationServices, Carbon, Cocoa, CoreServices, ScreenSaver
-, libX11, libXi, libXtst, libXrandr, xinput, curl, openssl, unzip }:
+, xlibsWrapper, libX11, libXi, libXtst, libXrandr, xinput, avahi-compat
+, withGUI ? true, wrapQtAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "synergy";
-  version = "1.8.8";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "symless";
     repo = "synergy-core";
-    rev = "v${version}-stable";
-    sha256 = "0ksgr9hkf09h54572p7k7b9zkfhcdb2g2d5x7ixxn028y8i3jyp3";
+    rev = "${version}-stable";
+    sha256 = "1jk60xw4h6s5crha89wk4y8rrf1f3bixgh5mzh3cq3xyrkba41gh";
   };
 
-  patches = [./openssl-1.1.patch ./update_gtest_gmock.patch
-  ] ++ lib.optional stdenv.isDarwin ./respect_macos_arch.patch;
+  patches = [ ./build-tests.patch
+  ] ++ lib.optional stdenv.isDarwin ./macos_build_fix.patch;
 
-  patch_gcc6 = fetchpatch {
-    url = https://raw.githubusercontent.com/gentoo/gentoo/20e2bff3697ebf5f291e9907b34aae3074a36b53/dev-cpp/gmock/files/gmock-1.7.0-gcc6.patch;
-    sha256 = "0j3f381x1lf8qci9pfv6mliggl8qs2w05v5lw3rs3gn7aibg174d";
-  };
-
-  # Due to the included gtest and gmock not supporting clang
-  # we replace it with 1.7.0 for synergy-1.8.8. This should
-  # become unnecessary when we update to a newer version of Synergy.
-  gmock_zip = fetchurl {
-    url = https://github.com/google/googlemock/archive/release-1.7.0.zip;
-    sha256 = "11bd04098rzamv7f9y01zaf9c8zrmzdk6g1qrlwq780pxzlr4ya0";
-  };
-
-  gtest_zip = fetchurl {
-    url = https://github.com/google/googletest/archive/release-1.7.0.zip;
-    sha256 = "1l5n6kzdypjzjrz2jh14ylzrx735lccfx2p3s4ccgci8g9abg35m";
+  # Since the included gtest and gmock don't support clang and the
+  # segfault when built with gcc9, we replace it with 1.10.0 for
+  # synergy-1.11.0. This should become unnecessary when upstream
+  # updates these dependencies.
+  googletest = fetchFromGitHub {
+    owner = "google";
+    repo = "googletest";
+    rev = "release-1.10.0";
+    sha256 = "1zbmab9295scgg4z2vclgfgjchfjailjnvzc6f5x9jvlsdi3dpwz";
   };
 
   postPatch = ''
-    ${unzip}/bin/unzip -d ext/ ${gmock_zip}
-    ${unzip}/bin/unzip -d ext/ ${gtest_zip}
-    mv ext/googlemock-release-1.7.0 ext/gmock-1.7.0
-    mv ext/googletest-release-1.7.0 ext/gtest-1.7.0
-    patch -d ext/gmock-1.7.0 -p1 -i ${patch_gcc6}
-  ''
-    # We have XRRNotifyEvent (libXrandr), but with the upstream CMakeLists.txt
-    # it's not able to find it (it's trying to search the store path of libX11
-    # instead) and we don't get XRandR support, even though the CMake output
-    # _seems_ to say so:
-    #
-    #   Looking for XRRQueryExtension in Xrandr - found
-    #
-    # The relevant part however is:
-    #
-    #   Looking for XRRNotifyEvent - not found
-    #
-    # So let's force it:
-  + lib.optionalString stdenv.isLinux ''
-    sed -i -e '/HAVE_X11_EXTENSIONS_XRANDR_H/c \
-      set(HAVE_X11_EXTENSIONS_XRANDR_H true)
-    ' CMakeLists.txt
+    rm -r ext/*
+    cp -r ${googletest}/googlemock ext/gmock/
+    cp -r ${googletest}/googletest ext/gtest/
+    chmod -R +w ext/
   '';
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [ "-DOSX_TARGET_MAJOR=10" "-DOSX_TARGET_MINOR=7" ];
+  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF";
+
+  nativeBuildInputs = [ cmake ] ++ lib.optional withGUI wrapQtAppsHook;
+
+  dontWrapQtApps = true;
 
   buildInputs = [
-    cmake curl openssl
+    openssl
   ] ++ lib.optionals stdenv.isDarwin [
     ApplicationServices Carbon Cocoa CoreServices ScreenSaver
-  ] ++ lib.optionals stdenv.isLinux [ xlibsWrapper libX11 libXi libXtst libXrandr xinput ];
+  ] ++ lib.optionals stdenv.isLinux [
+    xlibsWrapper libX11 libXi libXtst libXrandr xinput avahi-compat
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
-    cp ../bin/synergyc $out/bin
-    cp ../bin/synergys $out/bin
-    cp ../bin/synergyd $out/bin
+    cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
+  '' + lib.optionalString withGUI ''
+    cp bin/synergy $out/bin/
+    wrapQtApp $out/bin/synergy --prefix PATH : ${lib.makeBinPath [ openssl ]}
+  '' + lib.optionalString stdenv.isLinux ''
+    mkdir -p $out/share/icons/hicolor/scalable/apps
+    cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
+    mkdir -p $out/share/applications
+    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop --replace /usr/bin $out/bin
+  '' + lib.optionalString stdenv.isDarwin ''
+    mkdir -p $out/Applications/
+    mv bundle/Synergy.app $out/Applications/
+    ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
   '';
 
   doCheck = true;
-  checkPhase = "../bin/unittests";
+  checkPhase = "bin/unittests";
 
   meta = with lib; {
     description = "Share one mouse and keyboard between multiple computers";

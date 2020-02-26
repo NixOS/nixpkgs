@@ -41,7 +41,6 @@
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
-  ./hardware/brightnessctl.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
@@ -229,6 +228,8 @@
   ./services/backup/restic.nix
   ./services/backup/restic-rest-server.nix
   ./services/backup/rsnapshot.nix
+  ./services/backup/sanoid.nix
+  ./services/backup/syncoid.nix
   ./services/backup/tarsnap.nix
   ./services/backup/tsm.nix
   ./services/backup/zfs-replication.nix
@@ -251,7 +252,7 @@
   ./services/computing/slurm/slurm.nix
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
-  ./services/continuous-integration/buildkite-agent.nix
+  ./services/continuous-integration/buildkite-agents.nix
   ./services/continuous-integration/hail.nix
   ./services/continuous-integration/hydra/default.nix
   ./services/continuous-integration/gitlab-runner.nix
@@ -401,6 +402,7 @@
   ./services/mail/rspamd.nix
   ./services/mail/rss2email.nix
   ./services/mail/roundcube.nix
+  ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
   ./services/misc/airsonic.nix
   ./services/misc/apache-kafka.nix
@@ -814,9 +816,11 @@
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/gotify-server.nix
+  ./services/web-apps/grocy.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ihatemoney
+  ./services/web-apps/jirafeau.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix

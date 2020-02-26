@@ -13,6 +13,9 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0nqcp54nwv4ic5jc3cgg15rh8dgkixfgkwb5q47rv8ding4cd0j5";
 
   meta = with stdenv.lib; {

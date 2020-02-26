@@ -4,6 +4,7 @@ airblade/vim-rooter
 ajh17/Spacegray.vim
 aklt/plantuml-syntax
 albfan/nerdtree-git-plugin
+alok/notational-fzf-vim
 altercation/vim-colors-solarized
 alvan/vim-closetag
 alx741/vim-hindent
@@ -41,6 +42,7 @@ chikatoike/concealedyank.vim
 chikatoike/sourcemap.vim
 chrisbra/CheckAttach
 chrisbra/csv.vim
+chrisbra/NrrwRgn
 chrisbra/Recover.vim
 chrisbra/unicode.vim
 chrisgeo/sparkup
@@ -157,6 +159,7 @@ jhradilek/vim-docbk
 jhradilek/vim-snippets as vim-docbk-snippets
 jiangmiao/auto-pairs
 jistr/vim-nerdtree-tabs
+jjo/vim-cue
 jlanzarotta/bufexplorer
 jnurmine/zenburn
 jonbri/vim-colorstepper
@@ -164,6 +167,7 @@ jonsmithers/vim-html-template-literals
 joonty/vim-xdebug
 josa42/coc-go
 jpalardy/vim-slime
+jparise/vim-phabricator
 jreybert/vimagit
 jsfaint/gen_tags.vim
 JuliaEditorSupport/deoplete-julia
@@ -225,8 +229,8 @@ lumiliet/vim-twig
 luochen1990/rainbow
 lyokha/vim-xkbswitch
 machakann/vim-highlightedyank
-machakann/vim-swap
 machakann/vim-sandwich
+machakann/vim-swap
 majutsushi/tagbar
 maksimr/vim-jsbeautify
 MarcWeber/vim-addon-actions
@@ -277,6 +281,7 @@ mopp/sky-color-clock.vim
 morhetz/gruvbox
 motus/pig.vim
 mpickering/hlint-refactor-vim
+nanotech/jellybeans.vim
 natebosch/vim-lsc
 nathanaelkane/vim-indent-guides
 nathangrigg/vim-beancount
@@ -421,6 +426,7 @@ sjl/gundo.vim
 sjl/splice.vim
 sk1418/last256
 slashmili/alchemist.vim
+solarnz/arcanist.vim
 sonph/onehalf
 stefandtw/quickfix-reflector.vim
 stephpy/vim-yaml
@@ -491,8 +497,8 @@ uarun/vim-protobuf
 udalov/kotlin-vim
 ujihisa/neco-look
 unblevable/quick-scope
-Valodim/deoplete-notmuch
 valloric/youcompleteme
+Valodim/deoplete-notmuch
 vhda/verilog_systemverilog.vim
 vim-airline/vim-airline
 vim-airline/vim-airline-themes

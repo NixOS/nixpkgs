@@ -15,6 +15,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0kvmjahyx5dcjhry2hkvcshi0lbgipfj0as74a3h3bllfvdfkkg0";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0aykhhxk416p237safmqh5dhwjgrhvgc6zikkmxi9rq567ypp914";
   cargoPatches = [ ./cargo-lock.patch ];
 
@@ -23,6 +26,12 @@ rustPlatform.buildRustPackage rec {
   # we might be able to run these with something like
   # `cargo insta review` in the `preCheck` phase.
   checkPhase = ''
+    cd cargo-geiger/tests/snapshots
+    for file in *
+    do
+      mv $file r#$file
+    done
+    cd -
     cargo test -- \
     --skip test_package::case_2 \
     --skip test_package::case_3 \

@@ -25,19 +25,19 @@ let
     owner = "TES3MP";
     repo = "CoreScripts";
     # usually latest in stable branch (e.g. 0.7.0)
-    rev = "506146f5b2297242b713a030a589966156df1e8e";
-    sha256 = "0p4a4bgigyxfmaczf3jnz6ik4hgvdaafzc4614hbmbm1qbn8wpf9";
+    rev = "24aae91d9ddad38cdb3b0e0a13af59f142803e94";
+    sha256 = "1rfmxxr9ircfagdpbdrzl26msdhx1i3g974cblbv69078cradfh3";
   };
 in openmw.overrideAttrs (oldAttrs: rec {
-  version = "2019-07-01";
+  version = "2019-11-19";
   name = "openmw-tes3mp-${version}";
 
   src = fetchFromGitHub {
     owner = "TES3MP";
     repo = "openmw-tes3mp";
     # usually latest in stable branch (e.g. 0.7.0)
-    rev = "94a9292cc676a037496f98877b62da80cde2ac47";
-    sha256 = "0kc45xs33rsxac1aba248slzvljx90ybdk4ag9jwjjmsjmy7w2w5";
+    rev = "ad9ee80641a3e22d0780daca051df7f4e90f3615";
+    sha256 = "03a1vldiv5lk7yq6lhicx3qz8hjfxhind2dj0w9lg5839ljyk6jv";
   };
 
   nativeBuildInputs = oldAttrs.nativeBuildInputs ++ [ makeWrapper ];
@@ -71,7 +71,7 @@ in openmw.overrideAttrs (oldAttrs: rec {
     description = "Multiplayer for TES3:Morrowind based on OpenMW";
     homepage = https://tes3mp.com/;
     license = licenses.gpl3;
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
 })

@@ -8,6 +8,7 @@
 , google_talk_plugin, fribid, gnome3/*.gnome-shell*/
 , browserpass, chrome-gnome-shell, uget-integrator, plasma-browser-integration, bukubrow
 , tridactyl-native
+, fx_cast_bridge
 , udev
 , kerberos
 }:
@@ -71,6 +72,7 @@ let
           ++ lib.optional (cfg.enableGnomeExtensions or false) chrome-gnome-shell
           ++ lib.optional (cfg.enableUgetIntegrator or false) uget-integrator
           ++ lib.optional (cfg.enablePlasmaBrowserIntegration or false) plasma-browser-integration
+          ++ lib.optional (cfg.enableFXCastBridge or false) fx_cast_bridge
           ++ extraNativeMessagingHosts
         );
       libs =   lib.optional stdenv.isLinux udev
@@ -155,9 +157,9 @@ let
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
-        mkdir -p $out/lib/mozilla
+        mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString nativeMessagingHosts}; do
-            lndir -silent $ext/lib/mozilla $out/lib/mozilla
+            ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
 
         # For manpages, in case the program supplies them

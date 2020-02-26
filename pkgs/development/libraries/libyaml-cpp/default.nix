@@ -11,8 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "0ykkxzxcwwiv8l8r697gyqh1nl582krpvi7m7l6b40ijnk4pw30s";
   };
 
-  outputs = [ "out" "dev" ];
-
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" "-DYAML_CPP_BUILD_TESTS=OFF" ];

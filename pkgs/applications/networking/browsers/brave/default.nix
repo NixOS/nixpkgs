@@ -87,6 +87,7 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
     sha256 = "1a7rk4r7phlf1y3ap3942z5sfvb6i4qglvq06qqhz49wq1wbgvq1";
+
   };
 
   dontConfigure = true;
@@ -151,7 +152,7 @@ stdenv.mkDerivation rec {
       contribute to your favorite creators automatically.
     '';
     license = licenses.mpl20;
-    maintainers = with maintainers; [ uskudnik rht ];
+    maintainers = with maintainers; [ uskudnik rht jefflabonte ];
     platforms = [ "x86_64-linux" ];
   };
 }

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-crev";
-  version = "0.15.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "crev-dev";
     repo = "cargo-crev";
     rev = "v${version}";
-    sha256 = "1v7m2yy54jm5mkg9n3wnba1j5ldw6mvk2sgbngx1q240wnc9vbnk";
+    sha256 = "1vf78hrc84xgr73r72vmilh24s4qy80a1z6gyk97nd8ipn93m2k5";
   };
 
-  cargoSha256 = "09kcvrhklbzjjyqikj9c53w24qy3f6v5hb16ib4fq1s2ia77rgl2";
+  cargoSha256 = "0h7izq4sq6nf0gip7ylyglq1mvpfipm4qmjsifb3x559lqwfbxli";
 
   nativeBuildInputs = [ pkgconfig ];
 

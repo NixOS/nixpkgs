@@ -53,6 +53,9 @@ in
       ./default-seccomp-policy-dir.diff
     ];
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
     cargoSha256 = "1d7y07wkliy5qnlyx5zj6ni39avhs3s48sqgvwxm5g5zrahg2a85";
 
     nativeBuildInputs = [ pkgconfig ];

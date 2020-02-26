@@ -1,4 +1,5 @@
 { lib
+, stdenv
 , buildPythonPackage
 , fetchPypi
 , pythonOlder
@@ -35,7 +36,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytestrunner pytest gunicorn pytest-timeout async_generator pytest_xdist
+    pytestrunner pytest gunicorn async_generator pytest_xdist
     pytest-mock pytestcov trustme brotlipy freezegun
   ];
 
@@ -54,6 +55,7 @@ buildPythonPackage rec {
                and not handle_keepalive_on_closed_connection \
                and not proxy_https_bad_response \
                and not partially_applied_handler \
+               ${lib.optionalString stdenv.is32bit "and not test_cookiejar"} \
                and not middleware" \
       --ignore=test_connector.py
   '';

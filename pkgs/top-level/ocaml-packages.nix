@@ -558,6 +558,10 @@ let
       lwt = ocaml_lwt;
     };
 
+    npy = callPackage ../development/ocaml-modules/npy {
+      inherit (pkgs.python3Packages) numpy;
+    };
+
     num = if lib.versionOlder "4.06" ocaml.version
       then callPackage ../development/ocaml-modules/num {}
       else null;
@@ -618,6 +622,8 @@ let
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {};
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
+
+    pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
 
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
