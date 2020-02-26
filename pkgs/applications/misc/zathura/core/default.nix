@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
     "-Dmanpages=enabled"
     "-Dconvert-icon=enabled"
     "-Dsynctex=enabled"
+    # Make sure tests are enabled for doCheck
+    "-Dtests=enabled"
   ];
 
   nativeBuildInputs = [
