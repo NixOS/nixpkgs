@@ -2763,6 +2763,8 @@ in {
 
   gtimelog = callPackage ../development/python-modules/gtimelog { };
 
+  gtts = callPackage ../development/python-modules/gtts { };
+
   gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin"
   then callPackage ../development/python-modules/gurobipy/darwin.nix {
     inherit (pkgs.darwin) cctools insert_dylib;
