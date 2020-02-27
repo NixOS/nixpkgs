@@ -1268,20 +1268,8 @@ self: super: {
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
-  # needs newer version of the systemd package
-  spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
-
-  # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
-  # multiple versions of them were being pulled in by the others which is not allowed.
-  # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
-  matterhorn = doJailbreak (super.matterhorn.override {
-    brick-skylighting = self.brick-skylighting.override {
-      brick = self.brick_0_52;
-    };
-  });
-
-  # 2020-01-19 - because of QuickCheck bounds | was broken anyway and is needed for matterhorn -- kiwi
-  Unique = doJailbreak super.Unique;
+  # Support recent versions of fast-logger.
+  spacecookie = doJailbreak super.spacecookie;
 
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
