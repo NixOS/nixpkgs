@@ -8131,6 +8131,12 @@
     email = "ngerstle@gmail.com";
     github = "ngerstle";
   };
+  xavierzwirtz = {
+    email = "me@xavierzwirtz.com";
+    github = "xavierzwirtz";
+    githubId = 474343;
+    name = "Xavier Zwirtz";
+  };
 }
 
   
