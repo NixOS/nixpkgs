@@ -1,0 +1,26 @@
+From 85ede2cf452800710de136f4f864921d3bb9773c Mon Sep 17 00:00:00 2001
+From: Tom Hall <tahall256@protonmail.ch>
+Date: Fri, 21 Feb 2020 22:56:06 +0000
+Subject: [PATCH] Disable test pending upstream fix
+
+See https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17718
+---
+ tests/reg-tests-1d.R | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/reg-tests-1d.R b/tests/reg-tests-1d.R
+index 9b551a1fc8..18ce6027ed 100644
+--- a/tests/reg-tests-1d.R
++++ b/tests/reg-tests-1d.R
+@@ -3079,7 +3079,7 @@ stopifnot(exprs = {
+     x[1:52] %% 3 == 2:1
+    -x[1:52] %% 3 == 1:2
+ }) # larger x suffer from cancellation (well, warning too early now):
+-tools::assertWarning(x[60:68] %% 3)
++#tools::assertWarning(x[60:68] %% 3)
+ 
+ 
+ ## Hilmar Berger's on R-devel list: 'data.frame() == NULL' etc
+-- 
+2.24.1
+

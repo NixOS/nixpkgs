@@ -36,7 +36,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytestrunner pytest gunicorn pytest-timeout async_generator pytest_xdist
+    pytestrunner pytest gunicorn async_generator pytest_xdist
     pytest-mock pytestcov trustme brotlipy freezegun
   ];
 

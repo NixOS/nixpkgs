@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub, cmake, doxygen, graphviz, makeWrapper
-, boost, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
+, boost168, SDL2, python2, freetype, openal, libogg, libvorbis, zlib, libpng, libtiff
 , libjpeg, libGLU, libGL, glew, libxslt
 }:
 
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-	(boost.override { enablePython = true; })
+	(boost168.override { enablePython = true; })
     SDL2 python2 freetype openal libogg libvorbis zlib libpng libtiff libjpeg libGLU libGL glew ];
 
   nativeBuildInputs = [ cmake doxygen graphviz makeWrapper ];

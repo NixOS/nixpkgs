@@ -71,6 +71,10 @@ in stdenv.mkDerivation rec {
       src/comp/update-build-version.sh \
       src/comp/update-build-system.sh \
       src/comp/wrapper.sh
+
+    substituteInPlace src/comp/Makefile \
+      --replace 'BINDDIR' 'BINDIR' \
+      --replace 'install-bsc install-bluetcl' 'install-bsc install-bluetcl $(UTILEXES) install-utils'
   '';
 
   makeFlags = [

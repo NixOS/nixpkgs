@@ -4,6 +4,7 @@
 , bootstrapVersion
 , bootstrapHashes
 , selectRustPackage
+, rustcPatches ? []
 }:
 { stdenv, lib
 , buildPackages
@@ -78,6 +79,8 @@
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
+
+        patches = rustcPatches;
 
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;

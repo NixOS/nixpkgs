@@ -2,7 +2,7 @@
 , gtk3, gettext, wrapGAppsHook, gdk-pixbuf, gobject-introspection }:
 
 let
-  inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3;
+  inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3 setuptools;
 
 in buildPythonApplication {
   name = "devede-4.8.8";
@@ -34,7 +34,7 @@ in buildPythonApplication {
   ];
 
   propagatedBuildInputs = [
-    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3
+    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
   ];
 
   postPatch = ''

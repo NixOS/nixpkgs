@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
 
     license = licenses.gpl3Plus;
 
-    maintainers = [ maintainers.vanschelven ];
+    maintainers = [ ];
 
     platforms = platforms.unix;
     branch = "7.0";

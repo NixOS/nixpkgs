@@ -2,6 +2,7 @@
 , maintainer ? null
 , path ? null
 , max-workers ? null
+, include-overlays ? false
 , keep-going ? null
 }:
 
@@ -20,9 +21,7 @@ let
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix {
-    overlays = [];
-  };
+  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
 
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)

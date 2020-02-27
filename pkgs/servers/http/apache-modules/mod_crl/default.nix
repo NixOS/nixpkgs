@@ -1,12 +1,13 @@
 { stdenv, fetchurl, pkgconfig, mod_ca, apr, aprutil }:
 
+
 stdenv.mkDerivation rec {
   pname = "mod_crl";
-  version = "0.2.1";
+  version = "0.2.3";
 
   src = fetchurl {
     url = "https://redwax.eu/dist/rs/${pname}-${version}.tar.gz";
-    sha256 = "0k6iqn5a4bqdz3yx6d53f1r75c21jnwhxmmcq071zq0361xjzzj6";
+    sha256 = "1x186kp6fr8nwg0jlv5phagxndvw4rjqfga9mkibmn6dx252p61d";
   };
 
   nativeBuildInputs = [ pkgconfig ];
