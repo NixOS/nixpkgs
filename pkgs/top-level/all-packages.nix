@@ -22854,7 +22854,7 @@ in
   zcash = callPackage ../applications/blockchains/zcash { };
 
   parity = callPackage ../applications/blockchains/parity { };
-  parity-beta = callPackage ../applications/blockchains/parity/beta.nix { };
+
   parity-ui = callPackage ../applications/blockchains/parity-ui { };
 
   polkadot = callPackage ../applications/blockchains/polkadot { };
