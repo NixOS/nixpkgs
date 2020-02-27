@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, pytest
+, pytestCheckHook
 }:
 
 buildPythonPackage rec {
@@ -14,12 +14,8 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytest
+    pytestCheckHook
   ];
-
-  checkPhase = ''
-    pytest
-  '';
 
   meta = with lib; {
     description = "Helps to use fixtures in pytest.mark.parametrize";
