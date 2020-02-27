@@ -565,14 +565,6 @@ rec {
     meta.description = "Helpers for incremental operations on map like data structures";
   };
 
-  ocaml_plugin = janePackage {
-    pname = "ocaml_plugin";
-    hash = "0fal5j59qkbksg6ak1ngn92pcgg3f9gwfaglpxb7l6bck20kaigp";
-    buildInputs = [ ocamlbuild ];
-    propagatedBuildInputs = [ async ];
-    meta.description = "Automatically build and dynlink ocaml source files";
-  };
-
   parsexp_io = janePackage {
     pname = "parsexp_io";
     hash = "0rhdl40jiirvv6fhgjk50n8wzs3jly5d8dyyyfgpjgl39mwkjjnb";
