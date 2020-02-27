@@ -67,6 +67,13 @@ let
         ./qtbase.patch.d/0010-qtbase-qtpluginpath.patch
         ./qtbase.patch.d/0011-qtbase-assert.patch
         ./qtbase.patch.d/0012-fix-header_module.patch
+        # https://bugreports.qt.io/browse/QTBUG-81715
+        # remove after updating to qt > 5.12.7
+        (fetchpatch {
+          name = "fix-qt5_make_output_file-cmake-macro.patch";
+          url = "https://code.qt.io/cgit/qt/qtbase.git/patch/?id=8a3fde00bf53d99e9e4853e8ab97b0e1bcf74915";
+          sha256 = "1gpcbdpyazdxnmldvhsf3pfwr2gjvi08x3j6rxf543rq01bp6cpx";
+        })
       ];
     qtdeclarative = [ ./qtdeclarative.patch ];
     qtscript = [ ./qtscript.patch ];

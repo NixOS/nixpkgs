@@ -29,13 +29,13 @@
 
 stdenv.mkDerivation rec {
   pname = "folks";
-  version = "0.13.1";
+  version = "0.13.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0pda8sx4ap3lyri5fdrnakl29la1zkhwlc9bmnp13qigp1iwdw9x";
+    sha256 = "0wq14yjs7m3axziy679a854vc7r7fj1l38p9jnyapb21vswdcqq2";
   };
 
   mesonFlags = [
