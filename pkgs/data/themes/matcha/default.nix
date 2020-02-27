@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
     mkdir -p $out/share/themes
     name= ./install.sh -d $out/share/themes
     install -D -t $out/share/gtksourceview-3.0/styles src/extra/gedit/matcha.xml
+    mkdir -p $out/share/doc/${pname}
+    cp -a src/extra/firefox $out/share/doc/${pname}
   '';
 
   meta = with stdenv.lib; {
