@@ -271,6 +271,31 @@ with super;
     '';
   });
 
+  luv = super.luv.override({
+    # So we can be sure no internal dependency is used from the repo and that
+    # everything is provided by us
+    preConfigure = ''
+      rm -rf deps
+    ''
+    # See the following issues:
+    # - https://github.com/luarocks/luarocks/issues/1160
+    # - https://github.com/luarocks/luarocks/issues/509
+    # - https://github.com/luarocks/luarocks/issues/339
+    + ''
+      sed -i 's,\(option(WITH_SHARED_LIBUV.*\)OFF,\1ON,' CMakeLists.txt
+    '';
+    LUA_COMPAT53_DIR="${lua.pkgs.compat53}";
+
+    buildInputs = [ pkgs.libuv ];
+
+    nativeBuildInputs = [
+      lua.pkgs.compat53
+    ];
+    # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+    NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+      (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+  });
+
   rapidjson = super.rapidjson.override({
     preBuild = ''
       sed -i '/set(CMAKE_CXX_FLAGS/d' CMakeLists.txt
