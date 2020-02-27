@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, autoreconfHook, talloc, finger_bsd, perl
+{ stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
 , openssl
 , linkOpenssl? true
 , openldap
@@ -70,6 +70,12 @@ stdenv.mkDerivation rec {
     "--sysconfdir=/etc"
     "--localstatedir=/var"
   ] ++ optional (!linkOpenssl) "--with-openssl=no";
+
+  patches = stdenv.lib.optional withRest (fetchpatch {
+    # Fix HTTP/2 in rest
+    url = "https://github.com/FreeRADIUS/freeradius-server/commit/6286520698a3cc4053b4d49eb0a61d9ba77632aa.patch";
+    sha256 = "1ycvr3ql1mfkvzydnn4aiygnidicv2hgllppv37nb1p2pk02159g";
+  });
 
   postPatch = ''
     substituteInPlace src/main/checkrad.in --replace "/usr/bin/finger" "${finger_bsd}/bin/finger"
