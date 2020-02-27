@@ -16317,6 +16317,8 @@ in
     openssl = openssl_1_0_2;
   };
 
+  indicator-cpufreq = callPackage ../os-specific/linux/indicator-cpufreq { };
+
   intel2200BGFirmware = callPackage ../os-specific/linux/firmware/intel2200BGFirmware { };
 
   intel-compute-runtime = callPackage ../os-specific/linux/intel-compute-runtime { };
