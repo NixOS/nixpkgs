@@ -9247,23 +9247,19 @@ in
   };
 
   octave = callPackage ../development/interpreters/octave {
-    qt = null;
-    qscintilla = null;
-    ghostscript = null;
-    graphicsmagick = null;
-    llvm = null;
-    hdf5 = null;
-    glpk = null;
-    suitesparse = null;
-    jdk = null;
+    python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
-
-  octaveFull = (lowPrio (octave.override {
-    qt = qt4;
-    inherit qscintilla;
-    overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
+  octave-jit = callPackage ../development/interpreters/octave {
+    python = python3;
     openblas = if stdenv.isDarwin then openblasCompat else openblas;
+    enableJIT = true;
+  };
+  octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
+    python = python3;
+    openblas = if stdenv.isDarwin then openblasCompat else openblas;
+    enableQt = true;
+    overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   }));
 
   ocropus = callPackage ../applications/misc/ocropus { };
@@ -14432,7 +14428,13 @@ in
     withQt5 = false;
   };
 
-  sundials = callPackage ../development/libraries/sundials { };
+  sundials = callPackage ../development/libraries/sundials {
+    python = python3;
+  };
+
+  sundials_2 = callPackage ../development/libraries/sundials/2.x.nix {
+    python = python3;
+  };
 
   sutils = callPackage ../tools/misc/sutils { };
 
