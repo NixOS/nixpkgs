@@ -101,13 +101,13 @@ with self; {
 
   luv = pkgs.stdenv.mkDerivation rec {
     pname = "luv";
-    version = "1.34.1-1";
+    version = "1.34.2-0";
 
     src = pkgs.fetchFromGitHub {
       owner = "luvit";
       repo = pname;
       rev = version;
-      sha256 = "0lg3kncaka1mx18k0w4wsylsa6xnp7m11n68wgn38sph7f2nn1x9";
+      sha256 = "0iq272n7p0wkll4a7d880qyhdp65582cwc3b2zzrirpli93x3v87";
     };
     disabled = (luaOlder "5.1");
 
@@ -120,7 +120,7 @@ with self; {
     cmakeFlags = [
       "-DWITH_SHARED_LIBUV=ON"
       "-DLUA_BUILD_TYPE=System"
-      "-DBUILD_MODULE=OFF"
+      "-DBUILD_MODULE=ON"
       "-DBUILD_SHARED_LIBS=ON"
       "-DLUA_COMPAT53_DIR=${lua.pkgs.compat53}"
     ];
