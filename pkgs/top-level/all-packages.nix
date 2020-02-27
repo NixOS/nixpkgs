@@ -2984,6 +2984,8 @@ in
 
   edid-decode = callPackage ../tools/misc/edid-decode { };
 
+  edid-generator = callPackage ../tools/misc/edid-generator { };
+
   editres = callPackage ../tools/graphics/editres { };
 
   edit = callPackage ../applications/editors/edit { };
