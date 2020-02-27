@@ -17,7 +17,8 @@ let
     };
   });
 
-in python3Packages.buildPythonApplication {
+in 
+let self = python3Packages.buildPythonApplication {
     inherit (tortoisehgSrc.meta) name version;
     src = tortoisehgSrc;
 
@@ -49,4 +50,7 @@ in python3Packages.buildPythonApplication {
       platforms = lib.platforms.linux;
       maintainers = with lib.maintainers; [ danbst ];
     };
+};
+in self // {
+  withPackages = self.withPackages ["$out/bin/thg"];
 }
