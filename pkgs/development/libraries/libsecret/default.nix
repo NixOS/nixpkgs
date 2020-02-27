@@ -11,14 +11,6 @@ stdenv.mkDerivation rec {
     sha256 = "1r4habxdzmn02id324m0m4mg5isf22q1z436bg3vjjmcz1b3rjsg";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "rename-internal-functions-to-avoid-conflicts-and-fix-build.patch";
-      url = "https://gitlab.gnome.org/GNOME/libsecret/commit/cf21ad50b62f7c8e4b22ef374f0a73290a99bdb8.patch";
-      sha256 = "1n9nyzq5qrvw7s6sj5gzj33ia3rrx719jpys1cfhfbayg2sxyd4n";
-    })
-  ];
-
   postPatch = ''
     patchShebangs .
   '';
