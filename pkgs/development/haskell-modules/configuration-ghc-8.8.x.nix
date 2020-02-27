@@ -78,10 +78,6 @@ self: super: {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
     sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
   });
-  polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
-    sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
-  });
   foundation = dontCheck super.foundation;
   vault = dontHaddock super.vault;
 
