@@ -153,11 +153,11 @@ with super;
   });
 
   luadbi-mysql = super.luadbi-mysql.override({
-    extraVariables = ''
-      -- Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR='${pkgs.libmysqlclient}/include/mysql';
-      MYSQL_LIBDIR='${pkgs.libmysqlclient}/lib/mysql';
-    '';
+    extraVariables = {
+      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+      MYSQL_INCDIR="${pkgs.libmysqlclient}/include/mysql";
+      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+    };
     buildInputs = [
       pkgs.mysql.client
       pkgs.libmysqlclient
