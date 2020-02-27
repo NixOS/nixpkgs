@@ -25,6 +25,13 @@ unwrapped = stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  patches = [
+    (fetchpatch {
+      url = "https://gitlab.labs.nic.cz/knot/knot-resolver/commit/e3946fd3.diff";
+      sha256 = "0pnhk6wzzpd5li1ljffa6c0l239q1wanprh6km49v6n0crxx1b5f";
+    })
+  ];
+
   # Path fixups for the NixOS service.
   postPatch = ''
     patch meson.build <<EOF
