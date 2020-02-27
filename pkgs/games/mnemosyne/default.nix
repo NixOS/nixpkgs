@@ -17,6 +17,8 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [ anki ];
 
   propagatedBuildInputs = with python.pkgs; [
+    googletrans
+    gtts
     pyqtwebengine
     pyqt5
     matplotlib
