@@ -67,6 +67,8 @@ core-packages:
 # comment saying "# LTS Haskell x.y". Any changes after that commend will be
 # lost the next time `update-stackage.sh` runs.
 default-package-overrides:
+  # for cabal-install-3.0.0.0
+  - hackage-security >=0.5.2.2 && <0.6
   # pandoc-2.9 does not accept the 0.3 version yet
   - doclayout < 0.3
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
