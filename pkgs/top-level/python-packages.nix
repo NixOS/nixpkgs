@@ -783,6 +783,8 @@ in {
 
   i3ipc = callPackage ../development/python-modules/i3ipc { };
 
+  ignite = callPackage ../development/python-modules/ignite { };
+
   ihatemoney = callPackage ../development/python-modules/ihatemoney { };
 
   imutils = callPackage ../development/python-modules/imutils { };
@@ -5123,6 +5125,8 @@ in {
   pynmea2 = callPackage ../development/python-modules/pynmea2 {};
 
   pynrrd = callPackage ../development/python-modules/pynrrd { };
+
+  pynvml = callPackage ../development/python-modules/pynvml { };
 
   pynzb = callPackage ../development/python-modules/pynzb { };
 
