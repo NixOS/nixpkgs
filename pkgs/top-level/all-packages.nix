@@ -2772,11 +2772,7 @@ in
 
   curl_unix_socket = callPackage ../tools/networking/curl-unix-socket { };
 
-  curlie = callPackage ../tools/networking/curlie {
-    # Version 1.2.0 fails to build with go 1.13 due to:
-    #    verifying golang.org/x/crypto@v0.0.0-20180524125353-159ae71589f3: golang.org/x/crypto@v0.0.0-20180524125353-159ae71589f3: Get https://sum.golang.org/lookup/golang.org/x/crypto@v0.0.0-20180524125353-159ae71589f3: dial tcp: lookup sum.golang.org on [::1]:53: read udp [::1]:49088->[::1]:53: read: connection refused
-    buildGoModule = buildGo112Module;
-  };
+  curlie = callPackage ../tools/networking/curlie { };
 
   cunit = callPackage ../tools/misc/cunit { };
   bcunit = callPackage ../tools/misc/bcunit { };
@@ -3900,9 +3896,7 @@ in
 
   grpcurl = callPackage ../tools/networking/grpcurl { };
 
-  grpcui = callPackage ../tools/networking/grpcui {
-    buildGoModule = buildGo112Module;
-  };
+  grpcui = callPackage ../tools/networking/grpcui { };
 
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
     stdenv = overrideCC stdenv buildPackages.pkgsi686Linux.gcc6;
@@ -4325,12 +4319,7 @@ in
   iperf3 = callPackage ../tools/networking/iperf/3.nix { };
   iperf = iperf3;
 
-  ipfs = callPackage ../applications/networking/ipfs {
-    # Version 0.4.22 fails to build with go 1.13 due to version validation:
-    #    go: github.com/go-critic/go-critic@v0.0.0-20181204210945-ee9bf5809ead: invalid pseudo-version: does not match version-control timestamp (2019-02-10T22:04:43Z)
-    # This is fixed in master, but release containing the fix does not exist yet.
-    buildGoModule = buildGo112Module;
-  };
+  ipfs = callPackage ../applications/networking/ipfs { };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
   ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
 
@@ -5431,7 +5420,7 @@ in
 
   noip = callPackage ../tools/networking/noip { };
 
- nomad = callPackage ../applications/networking/cluster/nomad { };
+  nomad = callPackage ../applications/networking/cluster/nomad { };
 
   notable = callPackage ../applications/misc/notable { };
 
@@ -15534,9 +15523,7 @@ in
 
   grafana_reporter = callPackage ../servers/monitoring/grafana-reporter { };
 
-  gobetween = callPackage ../servers/gobetween {
-    buildGoModule = buildGo112Module;
-  };
+  gobetween = callPackage ../servers/gobetween { };
 
   h2o = callPackage ../servers/http/h2o { };
 
@@ -16394,9 +16381,7 @@ in
 
   cpustat = callPackage ../os-specific/linux/cpustat { };
 
-  cockroachdb = callPackage ../servers/sql/cockroachdb {
-    buildGoPackage = buildGo112Package;
-  };
+  cockroachdb = callPackage ../servers/sql/cockroachdb { };
 
   conky = callPackage ../os-specific/linux/conky ({
     lua = lua5_3_compat;
@@ -17250,11 +17235,7 @@ in
 
   gotests = callPackage ../development/tools/gotests { };
 
-  gotestsum = callPackage ../development/tools/gotestsum {
-    # Version 0.3.5 fails to build with go 1.13:
-    #    build ./testjson/internal/badmain: cannot find module for path ./testjson/internal/badmain
-    buildGoModule = buildGo112Module;
-  };
+  gotestsum = callPackage ../development/tools/gotestsum { };
 
   impl = callPackage ../development/tools/impl { };
 
@@ -20558,10 +20539,7 @@ in
 
   marp = callPackage ../applications/office/marp { };
 
-  magnetico = callPackage ../applications/networking/p2p/magnetico {
-    # Version 2019-08-14 fails to build with go 1.13 due to missing go.sum
-    buildGoModule = buildGo112Module;
-  };
+  magnetico = callPackage ../applications/networking/p2p/magnetico { };
 
   matchbox = callPackage ../applications/window-managers/matchbox { };
 
@@ -22086,9 +22064,7 @@ in
 
   teleprompter = callPackage ../applications/misc/teleprompter {};
 
-  tendermint = callPackage ../tools/networking/tendermint {
-    buildGoModule = buildGo112Module;
-  };
+  tendermint = callPackage ../tools/networking/tendermint { };
 
   termdown = (newScope pythonPackages) ../applications/misc/termdown { };
 
