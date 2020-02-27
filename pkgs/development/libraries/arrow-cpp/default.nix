@@ -101,18 +101,17 @@ in stdenv.mkDerivation rec {
     "-DARROW_PROTOBUF_USE_SHARED=OFF"
     "-DARROW_TEST_LINKAGE=static"
     "-DOPENSSL_USE_STATIC_LIBS=ON"
+  ] ++ lib.optionals stdenv.isDarwin [
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # needed for tests
+    "-DCMAKE_INSTALL_RPATH=@loader_path/../lib" # needed for tools executables
   ] ++ lib.optional (!stdenv.isx86_64) "-DARROW_USE_SIMD=OFF";
 
   doInstallCheck = true;
   PARQUET_TEST_DATA =
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];
-  installCheckPhase = (lib.optionalString stdenv.isDarwin ''
-    for f in release/*test{,s}; do
-      install_name_tool -add_rpath "$out"/lib  "$f"
-    done
-  '')
-  + (let
+  installCheckPhase =
+  let
     excludedTests = lib.optionals stdenv.isDarwin [
       # Some plasma tests need to be patched to use a shorter AF_UNIX socket
       # path on Darwin. See https://github.com/NixOS/nix/pull/1085
@@ -122,7 +121,7 @@ in stdenv.mkDerivation rec {
   in ''
     ctest -L unittest -V \
       --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
-  '');
+  '';
 
   meta = {
     description = "A  cross-language development platform for in-memory data";
