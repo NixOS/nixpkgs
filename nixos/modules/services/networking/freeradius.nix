@@ -10,8 +10,8 @@ let
   {
     description = "FreeRadius server";
     wantedBy = ["multi-user.target"];
-    after = ["network-online.target"];
-    wants = ["network-online.target"];
+    after = ["network.target"];
+    wants = ["network.target"];
     preStart = ''
       ${pkgs.freeradius}/bin/radiusd -C -d ${cfg.configDir} -l stdout
     '';
