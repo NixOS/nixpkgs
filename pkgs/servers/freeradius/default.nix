@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     homepage = https://freeradius.org/;
     description = "A modular, high performance free RADIUS suite";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ sheenobu willibutz ];
+    maintainers = with maintainers; [ sheenobu willibutz fpletz lheckemann elseym ];
     platforms = with platforms; linux;
   };
 
