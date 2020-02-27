@@ -4464,6 +4464,8 @@ in {
     inherit (pkgs) which;
   };
 
+  nitime = callPackage ../development/python-modules/nitime { };
+
   nixpkgs = callPackage ../development/python-modules/nixpkgs { };
 
   nixpkgs-pytools = callPackage ../development/python-modules/nixpkgs-pytools { };
