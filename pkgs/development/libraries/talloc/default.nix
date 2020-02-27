@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o
+    ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc.c.[0-9]*.o
   '';
 
   meta = with stdenv.lib; {
