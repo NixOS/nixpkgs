@@ -25996,7 +25996,6 @@ in
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {
-      inherit buildGo112Module;
       inherit (darwin.apple_sdk.frameworks) Security;
     }
   );
