@@ -398,6 +398,7 @@ scrooloose/nerdcommenter
 scrooloose/nerdtree
 scrooloose/syntastic
 sebastianmarkow/deoplete-rust
+SevereOverfl0w/deoplete-github
 sheerun/vim-polyglot
 Shougo/context_filetype.vim
 Shougo/defx.nvim
