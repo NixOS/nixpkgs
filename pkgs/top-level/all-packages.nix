@@ -13128,6 +13128,7 @@ in
   libversion = callPackage ../development/libraries/libversion { };
 
   libvirt = callPackage ../development/libraries/libvirt { };
+  libvirt_5_4_0 = callPackage ../development/libraries/libvirt/5.4.0.nix { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
 
