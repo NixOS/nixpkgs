@@ -6,7 +6,7 @@
 let
   inherit (python3Packages) docutils dulwich python;
 
-in python3Packages.buildPythonApplication rec {
+in let self = python3Packages.buildPythonApplication rec {
   pname = "mercurial";
   version = "5.3";
 
@@ -63,4 +63,7 @@ in python3Packages.buildPythonApplication rec {
     updateWalker = true;
     platforms = stdenv.lib.platforms.unix;
   };
+};
+in self // {
+  withPackages = self.withPackages ["$out/bin/hg"];
 }
