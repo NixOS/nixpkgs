@@ -1,22 +1,27 @@
-{ stdenv, python37Packages, fetchFromGitHub, fetchurl, dialog, autoPatchelfHook }:
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, ConfigArgParse, acme, configobj, cryptography, distro, josepy, parsedatetime, pyRFC3339, pyopenssl, pytz, requests, six, zope_component, zope_interface
+, dialog, mock, gnureadline
+, pytest_xdist, pytest, dateutil
+}:
 
-
-python37Packages.buildPythonApplication rec {
+buildPythonApplication rec {
   pname = "certbot";
-  version = "1.0.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "180x7gcpfbrzw8k654s7b5nxdy2yg61lq513dykyn3wz4gssw465";
+    sha256 = "1nzp1l63f64qqp89y1vyd4lgfhykfp5dkr6iwfiyf273y7sjwpsa";
   };
 
   patches = [
     ./0001-Don-t-use-distutils.StrictVersion-that-cannot-handle.patch
   ];
 
-  propagatedBuildInputs = with python37Packages; [
+  propagatedBuildInputs = [
     ConfigArgParse
     acme
     configobj
@@ -24,26 +29,21 @@ python37Packages.buildPythonApplication rec {
     distro
     josepy
     parsedatetime
-    psutil
     pyRFC3339
     pyopenssl
     pytz
+    requests
     six
     zope_component
     zope_interface
   ];
 
-  buildInputs = [ dialog ] ++ (with python37Packages; [ mock gnureadline ]);
+  buildInputs = [ dialog mock gnureadline ];
 
-  checkInputs = with python37Packages; [
-    pytest_xdist
-    pytest
-    dateutil
-  ];
+  checkInputs = [ pytest_xdist pytest dateutil ];
 
-  postPatch = ''
+  preBuild = ''
     cd certbot
-    substituteInPlace certbot/_internal/notify.py --replace "/usr/sbin/sendmail" "/run/wrappers/bin/sendmail"
   '';
 
   postInstall = ''
@@ -55,11 +55,11 @@ python37Packages.buildPythonApplication rec {
 
   doCheck = true;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = src.meta.homepage;
     description = "ACME client that can obtain certs and extensibly update server configurations";
     platforms = platforms.unix;
-    maintainers = [ maintainers.domenkozar ];
-    license = licenses.asl20;
+    maintainers = with maintainers; [ domenkozar ];
+    license = with licenses; [ asl20 ];
   };
 }
