@@ -99,7 +99,19 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
-  luv = pkgs.stdenv.mkDerivation rec {
+  # This package is very much like `lua.pkgs.luv`, but it's not defined as a
+  # module because it fails to install some files if we use
+  # `buildLuarocksPackage` instead of `mkDerivation`. However, if another
+  # package (e.g lua.pkgs.nvim-client) would require `luv =
+  # stdenv.mkDerivation`, it would not detect it and hence it would fail to
+  # build.
+
+  # The workaround implemented here is to create 2 versions of `libluv` while
+  # `luv` is still defined by lua's generated packages and still overriden as
+  # necessary in lua's overrides. This version is used in neovim and every
+  # other package that needs luv as a shared library (not as a mere lua
+  # module).
+  libluv = pkgs.stdenv.mkDerivation rec {
     pname = "luv";
     version = "1.34.2-0";
 
