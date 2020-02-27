@@ -26,6 +26,6 @@ stdenv.mkDerivation {
     homepage    = http://sphinxsearch.com;
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [ ederoyd46 ];
+    maintainers = with stdenv.lib.maintainers; [ ederoyd46 valodim ];
   };
 }
