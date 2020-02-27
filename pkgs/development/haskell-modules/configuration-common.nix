@@ -1378,11 +1378,6 @@ self: super: {
   # Unnecessary upper bound on vector <0.12.1
   bitwise-enum = doJailbreak super.bitwise-enum;
 
-  # Needs more recent streamly version
-  streamly-bytestring = super.streamly-bytestring.override {
-    streamly = self.streamly_0_7_1;
-  };
-
   # This breaks because of version bounds, but compiles and runs fine.
   # Last commit is 5 years ago, so we likely won't get upstream fixed soon.
   # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
