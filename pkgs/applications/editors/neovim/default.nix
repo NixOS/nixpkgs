@@ -14,7 +14,7 @@ let
   neovimLuaEnv = lua.withPackages(ps:
     (with ps; [ lpeg luabitop mpack ]
     ++ optionals doCheck [
-        nvim-client luv coxpcall busted luafilesystem penlight inspect
+        nvim-client libluv coxpcall busted luafilesystem penlight inspect
       ]
     ));
 in
@@ -44,7 +44,7 @@ in
       libtermkey
       libuv
       libvterm-neovim
-      lua.pkgs.luv
+      lua.pkgs.libluv
       msgpack
       ncurses
       neovimLuaEnv
