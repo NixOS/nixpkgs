@@ -63,6 +63,15 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      randomizedDelaySec = mkOption {
+        default = 0;
+        type = types.int;
+        description = ''
+          Add a randomized delay (in seconds) to wait before automatically
+          upgrading. The delay will be chosen between zero and this value.
+        '';
+      };
+
     };
 
   };
@@ -108,6 +117,9 @@ let cfg = config.system.autoUpgrade; in
 
       startAt = cfg.dates;
     };
+
+    systemd.timers.nixos-upgrade.timerConfig.RandomizedDelaySec =
+        toString cfg.randomizedDelaySec;
 
   };
 
