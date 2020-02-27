@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "API Client library for Google Cloud: Core Helpers";
     homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

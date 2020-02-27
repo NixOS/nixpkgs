@@ -86,6 +86,8 @@ in buildFHSUserEnv rec {
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    udev # shadow of the tomb raider
+
     ## screeps dependencies
     gtk3
     dbus
@@ -100,6 +102,9 @@ in buildFHSUserEnv rec {
 
     # friends options won't display "Launch Game" without it
     lsof
+
+    # called by steam's setup.sh
+    file
   ] ++ (if (!nativeOnly) then [
     (steamPackages.steam-runtime-wrapped.override {
       inherit runtimeOnly;

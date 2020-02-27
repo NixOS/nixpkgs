@@ -1,4 +1,4 @@
-{ newScope, config, stdenv, llvmPackages_9
+{ newScope, config, stdenv, llvmPackages_9, llvmPackages_10
 , makeWrapper, ed
 , glib, gtk3, gnome3, gsettings-desktop-schemas
 , libva ? null
@@ -19,8 +19,10 @@
 }:
 
 let
-  stdenv = llvmPackages_9.stdenv;
-  llvmPackages = llvmPackages_9;
+  llvmPackages = if channel == "dev"
+    then llvmPackages_10
+    else llvmPackages_9;
+  stdenv = llvmPackages.stdenv;
 
   callPackage = newScope chromium;
 

@@ -1,4 +1,4 @@
-{fetchFromGitHub, libgit2, ...}:
+{ fetchFromGitHub, libgit2, ...}:
 
 libgit2.overrideAttrs (oldAttrs: {
   cmakeFlags = oldAttrs.cmakeFlags ++ [
@@ -13,7 +13,7 @@ libgit2.overrideAttrs (oldAttrs: {
   src = fetchFromGitHub {
     owner = "romkatv";
     repo = "libgit2";
-    rev = "75be63625a0de418ec3551306362ee1e21034039";
-    sha256 = "1bwr1ahfxn1nn2f78ri91icxpv8xhpmgypcvg042cmcpm2qrahz9";
+    rev = "bb77509f4436901f3958e30272026f63d2247d7d";
+    sha256 = "06iypr0sc6g11xipwfbgm6f039d4qy9krmwb3zww8k4y004s5jcv";
   };
 })

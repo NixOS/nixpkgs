@@ -21,6 +21,6 @@ buildPythonPackage rec {
     description = "Cloud Speech API enables integration of Google speech recognition into applications.";
     homepage = "https://github.com/googleapis/google-cloud-python/tree/master/speech";
     license = licenses.asl20;
-    maintainers = with maintainers; [ vanschelven ];
+    maintainers = with maintainers; [ ];
   };
 }

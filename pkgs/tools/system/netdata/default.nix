@@ -1,6 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
+{ stdenv, callPackage, fetchFromGitHub, autoreconfHook, pkgconfig
 , CoreFoundation, IOKit, libossp_uuid
-, curl, libcap,  libuuid, lm_sensors, zlib
+, curl, libcap,  libuuid, lm_sensors, zlib, fetchpatch
 , withCups ? false, cups
 , withDBengine ? true, libuv, lz4, judy
 , withIpmi ? (!stdenv.isDarwin), freeipmi
@@ -11,15 +11,17 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  version = "1.19.0";
+let
+  go-d-plugin = callPackage ./go.d.plugin.nix {};
+in stdenv.mkDerivation rec {
+  version = "1.20.0";
   pname = "netdata";
 
   src = fetchFromGitHub {
     owner = "netdata";
     repo = "netdata";
     rev = "v${version}";
-    sha256 = "1s6kzx4xh8b6v7ki8h2mfzprj5rxvlgx2md20cr8c0v81qpz3q3q";
+    sha256 = "0g7iv5w14wndl5iv2q81dppgwq09sm93vpnyq7p49nl7q1dsz1d6";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -34,11 +36,19 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./no-files-in-etc-and-var.patch
+    # part of the next release
+    (fetchpatch {
+      url = "https://github.com/netdata/netdata/commit/5c992b7d92cf008ce91627efccf8644732db1f87.patch";
+      sha256 = "1nvbmhy5rir4kw77dhx1qr0l0wcspakr7z7ivva1ilz1aml8nbnm";
+    })
   ];
 
   NIX_CFLAGS_COMPILE = optionalString withDebug "-O1 -ggdb -DNETDATA_INTERNAL_CHECKS=1";
 
-  postInstall = optionalString (!stdenv.isDarwin) ''
+  postInstall = ''
+    ln -s ${go-d-plugin.bin}/lib/netdata/conf.d/* $out/lib/netdata/conf.d
+    ln -s ${go-d-plugin.bin}/bin/godplugind $out/libexec/netdata/plugins.d/go.d.plugin
+  '' + optionalString (!stdenv.isDarwin) ''
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org

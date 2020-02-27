@@ -83,12 +83,9 @@ stdenv.mkDerivation rec {
 
       unset CPP # setting CPP intereferes with dependency calculation
 
-      cp -r ${gnulib} $PWD/gnulib
-      chmod u+w -R $PWD/gnulib
-
       patchShebangs .
 
-      ./bootstrap --no-git --gnulib-srcdir=$PWD/gnulib
+      ./bootstrap --no-git --gnulib-srcdir=${gnulib}
 
       substituteInPlace ./configure --replace '/usr/share/fonts/unifont' '${unifont}/share/fonts'
     '';

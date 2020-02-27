@@ -51,13 +51,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ibus";
-  version = "1.5.21";
+  version = "1.5.22";
 
   src = fetchFromGitHub {
     owner = "ibus";
     repo = "ibus";
     rev = version;
-    sha256 = "0fjbqj7d2g5c8i1wdggzhz269xisxv4xb1pa9swalm5p2b2vrjlx";
+    sha256 = "09ynn7gq84q18hhbg6wq2yrliwil42qbzxbwbpggry1s955jg5xb";
   };
 
   patches = [
