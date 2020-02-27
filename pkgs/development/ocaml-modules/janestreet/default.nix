@@ -515,13 +515,6 @@ rec {
     meta.description = "Micro-benchmarking library for OCaml";
   };
 
-  core_profiler = janePackage {
-    pname = "core_profiler";
-    hash = "1kaaw3jp3qarbd9rgpjfb9md0dqblf2bxiqb245sqmx4c1346v1c";
-    propagatedBuildInputs = [ core_extended ];
-    meta.description = "Profiling library";
-  };
-
   csvfields = janePackage {
     pname = "csvfields";
     hash = "10zw4fjlniivfdzzz79lnbvcjnhk5y16m1p8mn4xbs23n6mbix0f";
