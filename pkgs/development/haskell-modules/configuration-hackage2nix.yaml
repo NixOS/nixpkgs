@@ -2598,3 +2598,18 @@ dont-distribute-packages:
 
 broken-packages:
   # These packages don't compile or depend on packages that don't compile.
+  - accelerate-kullback-liebler
+  - bulmex
+  - git-remote-ipfs
+  - gps2htmlReport
+  - hsmagick
+  - ipld-cid
+  - multibase
+  - multihash-serialise
+  - reflex-dom-retractable
+  - reflex-dom-svg
+  - servant-reflex
+  - tensorflow
+  - tensorflow-core-ops
+  - tensorflow-logging
+  - tensorflow-ops
