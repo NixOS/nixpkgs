@@ -23,6 +23,10 @@
 , eggUnpackHook
 , eggBuildHook
 , eggInstallHook
+, includeWithPackages ? false
+, runCommand
+, xorg
+, makeWrapper
 }:
 
 { name ? "${attrs.pname}-${attrs.version}"
@@ -171,4 +175,31 @@ let
 passthru.updateScript = let
     filename = builtins.head (lib.splitString ":" self.meta.position);
   in attrs.passthru.updateScript or [ update-python-libraries filename ];
-in lib.extendDerivation true passthru self
+in
+let selfExtended = 
+  if includeWithPackages == false then self 
+  else self // {
+    withPackages = toWrap : packages : 
+      runCommand "${self.name}+${
+        lib.strings.concatStringsSep "+"
+            (builtins.map (package: package.name) packages)
+      }" { 
+        buildInputs = [ xorg.lndir makeWrapper ]; 
+      } ''
+      mkdir $out
+      lndir ${self} $out
+      for command in ${lib.strings.concatStringsSep " " toWrap}; do
+          wrapProgram "$command" --prefix PYTHONPATH : \
+            ${
+              lib.strings.concatStringsSep ":"
+                (
+                  builtins.map (package: "${package}/${python.sitePackages}")
+                    packages
+                )
+            }
+      done
+      '';
+  };
+in
+
+lib.extendDerivation true passthru selfExtended

@@ -50,6 +50,7 @@ let
   buildPythonApplication = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
     namePrefix = "";        # Python applications should not have any prefix
     toPythonModule = x: x;  # Application does not provide modules.
+    includeWithPackages = true;
   }));
 
   # See build-setupcfg/default.nix for documentation.
