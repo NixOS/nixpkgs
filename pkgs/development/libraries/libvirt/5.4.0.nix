@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchgit
 , pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
-, coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
+, coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
@@ -17,26 +17,50 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.0.0";
+  version = "5.4.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "0xkz6n6pyv7k4jj7762v65jdsj8pkcpbnas65hjy7b5vi4in9fz6";
+        sha256 = "0ywf8m9yz2hxnic7fylzlmgy4m353r4vv5zsvp89zq5yh4h81yhw";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "0j0rvymxaqavak03w7gblm8ingvbcwczpwfk8s0iqvsgfgk9974p";
+        sha256 = "1dja1mf295w0sl83zag62c4j55cfbzzfbhdxpkyv2zm3zv0mwdyc";
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig docutils ];
+  patches = optionals (!stdenv.isDarwin) [
+    (fetchpatch {
+      name = "5.4.0-CVE-2019-10161.patch";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=aed6a032cead4386472afb24b16196579e239580";
+      sha256 = "19k9z9xx68nf03igbgy1imxnlp5ppj7cgdbq9kri3s834hkjcygs";
+    })
+  ] ++ [
+    (fetchpatch {
+      name = "5.4.0-CVE-2019-10166.patch";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=db0b78457f183e4c7ac45bc94de86044a1e2056a";
+      sha256 = "17pd1rab2mxj4q0vg30vi2gh78mf52ik1p5l12wrghb0wjf7swml";
+    })
+    (fetchpatch {
+      name = "5.4.0-CVE-2019-10167.patch";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=8afa68bac0cf99d1f8aaa6566685c43c22622f26";
+      sha256 = "0hgbwk0y2n6ihzjk8vqabhw914axjqgzcb7c5xx893r86c54c0ml";
+    })
+    (fetchpatch {
+      name = "5.4.0-CVE-2019-10168.patch";
+      url = "https://libvirt.org/git/?p=libvirt.git;a=patch;h=bf6c2830b6c338b1f5699b095df36f374777b291";
+      sha256 = "0s4hc3hsjncx1852ndjas1nng9v23pxf4mi1jxcajsqvhw89la0g";
+    })
+  ];
+
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
-    libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
+    libxslt xhtml1 perlPackages.XMLXPath curl libpcap
   ] ++ optionals (!buildFromTarball) [
     libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
@@ -60,12 +84,7 @@ in stdenv.mkDerivation rec {
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
     patchShebangs . # fixes /usr/bin/python references
-    mkdir -p build && cd build
   '';
-
-  configureScript = "../configure";
-
-  dontAddDisableDepTrack = true;
 
   configureFlags = [
     "--localstatedir=/var"
@@ -102,6 +121,7 @@ in stdenv.mkDerivation rec {
     "localstatedir=$(TMPDIR)/var"
     "sysconfdir=$(out)/var/lib"
   ];
+
 
   postInstall = let
     binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
