@@ -2604,6 +2604,7 @@ broken-packages:
   # These packages don't compile or depend on packages that don't compile.
   - accelerate-kullback-liebler
   - bulmex
+  - deepzoom
   - git-remote-ipfs
   - gps2htmlReport
   - hsmagick
