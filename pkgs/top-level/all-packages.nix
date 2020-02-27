@@ -764,6 +764,8 @@ in
 
   alttab = callPackage ../tools/X11/alttab { };
 
+  amdgpu-fan = with python3Packages; toPythonApplication amdgpu-fan;
+
   amule = callPackage ../tools/networking/p2p/amule { };
 
   amuleDaemon = appendToName "daemon" (amule.override {

@@ -147,6 +147,8 @@ in {
 
   alerta-server = callPackage ../development/python-modules/alerta-server { };
 
+  amdgpu-fan = callPackage ../development/python-modules/amdgpu-fan { };
+
   androguard = callPackage ../development/python-modules/androguard { };
 
   phonenumbers = callPackage ../development/python-modules/phonenumbers { };
