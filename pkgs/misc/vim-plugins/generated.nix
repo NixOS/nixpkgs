@@ -986,6 +986,17 @@ let
     };
   };
 
+  deoplete-greek = buildVimPluginFrom2Nix {
+    pname = "deoplete-greek";
+    version = "2019-12-23";
+    src = fetchFromGitHub {
+      owner = "Inazuma110";
+      repo = "deoplete-greek";
+      rev = "aecf3b2f8acfab20c93a6dc88d55260a0df04cbf";
+      sha256 = "086qjbqps05zb2vnyb5q7a67i7al8mxxi86n0h5nsqdd0ws6qqhx";
+    };
+  };
+
   deoplete-jedi = buildVimPluginFrom2Nix {
     pname = "deoplete-jedi";
     version = "2020-02-03";
