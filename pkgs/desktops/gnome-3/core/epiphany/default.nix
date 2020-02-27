@@ -68,6 +68,7 @@ stdenv.mkDerivation rec {
     python3
     wrapGAppsHook
     buildPackages.glib
+    buildPackages.gtk3
   ];
 
   buildInputs = [
