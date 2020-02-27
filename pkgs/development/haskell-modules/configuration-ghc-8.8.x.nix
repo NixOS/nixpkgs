@@ -94,4 +94,7 @@ self: super: {
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
+  # https://github.com/kowainik/relude/issues/241
+  relude = dontCheck super.relude;
+
 }
