@@ -44,6 +44,7 @@ self: super: {
 
   # Jailbreak to fix the build.
   async = doJailbreak super.async;
+  ChasingBottoms = doJailbreak super.ChasingBottoms;
   hashable = doJailbreak super.hashable;
   parallel = doJailbreak super.parallel;
   regex-base = doJailbreak super.regex-base;
