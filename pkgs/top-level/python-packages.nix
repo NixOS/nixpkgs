@@ -1953,6 +1953,8 @@ in {
 
   pyechonest = callPackage ../development/python-modules/pyechonest { };
 
+  pyee = callPackage ../development/python-modules/pyee { };
+
   pyepsg = callPackage ../development/python-modules/pyepsg { };
 
   billiard = callPackage ../development/python-modules/billiard { };
