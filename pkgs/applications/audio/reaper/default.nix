@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoPatchelfHook, makeWrapper
-, alsaLib, xorg
+, alsaLib, xorg, libjack2
 , gtk3, pango, gdk-pixbuf, cairo, glib, freetype
 , libpulseaudio, xdg_utils
 }:
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     rm $out/opt/REAPER/uninstall-reaper.sh
 
     wrapProgram $out/opt/REAPER/reaper \
-      --prefix LD_LIBRARY_PATH : ${libpulseaudio}/lib
+      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ libpulseaudio libjack2 ]}"
 
     mkdir $out/bin
     ln -s $out/opt/REAPER/reaper $out/bin/
