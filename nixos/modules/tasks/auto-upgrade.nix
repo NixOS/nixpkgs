@@ -70,7 +70,7 @@ let cfg = config.system.autoUpgrade; in
         description = ''
           Add a randomized delay to wait before automatically upgrading.
           The delay will be between zero and this value.
-          This value must be a valid systemd timestamp.
+          This value must be a valid systemd timespan.
         '';
       };
 
