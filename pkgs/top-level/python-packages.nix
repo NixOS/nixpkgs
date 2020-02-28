@@ -2370,6 +2370,8 @@ in {
 
   pytest-isort = callPackage ../development/python-modules/pytest-isort { };
 
+  pytest-lazy-fixture = callPackage ../development/python-modules/pytest-lazy-fixture { };
+
   pytest-mpl = callPackage ../development/python-modules/pytest-mpl { };
 
   pytest-mock = callPackage ../development/python-modules/pytest-mock { };
