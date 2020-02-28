@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ];
+    maintainers = with maintainers; [ dywedir globin ma27 ];
     platforms = platforms.all;
   };
 }
