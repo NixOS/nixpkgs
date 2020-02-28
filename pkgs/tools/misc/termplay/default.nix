@@ -1,14 +1,13 @@
-{ rustPlatform, fetchFromGitHub, lib, makeWrapper, gst_all_1, libsixel }:
+{ rustPlatform, fetchFromGitLab, lib, makeWrapper, gst_all_1, libsixel }:
 
 rustPlatform.buildRustPackage rec {
   pname = "termplay";
   version = "2.0.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "termplay";
     rev = "v${version}";
-
     sha256 = "1w7hdqgqr1jgxid3k7f2j52wz31gv8bzr9rsm6xzp7nnihp6i45p";
   };
 
