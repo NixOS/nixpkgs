@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch
 , pkgconfig, which, autoconf, automake, libtool, nasm, perl
-, openssl, systemd, pam, fuse, libjpeg, libopus, pixman, xorg, xorgxrdp }:
+, openssl, systemd, pam, fuse, libjpeg, libopus, pixman, xorg }:
 
 stdenv.mkDerivation rec {
   version = "0.9.12";
@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
     "--enable-opus"
   ];
 
+  # redefine pid path, so xrdp can write it without being root
+  NIX_CFLAGS_COMPILE = [ ''-DXRDP_PID_PATH="/run/xrdp"'' ];
+
   installFlags = [ "DESTDIR=$(out)" "prefix=" ];
 
   postInstall = ''
@@ -58,29 +61,6 @@ stdenv.mkDerivation rec {
     rm $out/etc/xrdp/{rsakeys.ini,key.pem,cert.pem}
 
     cp $src/keygen/openssl.conf $out/share/xrdp/openssl.conf
-
-    substituteInPlace $out/etc/xrdp/sesman.ini --replace /etc/xrdp/pulse $out/etc/xrdp/pulse
-
-    # remove all session types except Xorg (they are not supported by this setup)
-    ${perl}/bin/perl -i -ne 'print unless /\[(X11rdp|Xvnc|console|vnc-any|sesman-any|rdp-any|neutrinordp-any)\]/ .. /^$/' $out/etc/xrdp/xrdp.ini
-
-    # remove all session types and then add Xorg
-    ${perl}/bin/perl -i -ne 'print unless /\[(X11rdp|Xvnc|Xorg)\]/ .. /^$/' $out/etc/xrdp/sesman.ini
-
-    cat >> $out/etc/xrdp/sesman.ini <<EOF
-
-    [Xorg]
-    param=${xorg.xorgserver}/bin/Xorg
-    param=-modulepath
-    param=${xorgxrdp}/lib/xorg/modules,${xorg.xorgserver}/lib/xorg/modules
-    param=-config
-    param=${xorgxrdp}/etc/X11/xrdp/xorg.conf
-    param=-noreset
-    param=-nolisten
-    param=tcp
-    param=-logfile
-    param=.xorgxrdp.%s.log
-    EOF
   '';
 
   enableParallelBuilding = true;
