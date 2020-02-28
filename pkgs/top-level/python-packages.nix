@@ -2488,6 +2488,8 @@ in {
 
   requests-file = callPackage ../development/python-modules/requests-file { };
 
+  requests-html = callPackage ../development/python-modules/requests-html { };
+
   requests-kerberos = callPackage ../development/python-modules/requests-kerberos { };
 
   requests-unixsocket = callPackage ../development/python-modules/requests-unixsocket {};
