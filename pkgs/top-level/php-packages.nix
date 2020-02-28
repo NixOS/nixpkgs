@@ -2,7 +2,7 @@
 , bzip2, curl, libxml2, openssl, gmp5, icu, oniguruma, libsodium, html-tidy
 , libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
 , pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
-, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC }:
+, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC, callPackage }:
 
 let
   self = with self; {
@@ -389,6 +389,31 @@ let
     configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
     meta.broken = true;
   };
+
+  # Regenerate updates via `composer2nix -p phpactor/phpactor` in
+  # `<nixpkgs/pkgs/development/interpreteres/php/packages/phpactor>`.
+  phpactor = let
+    composerEnv = callPackage ../development/interpreters/php/packages/phpactor/composer-env.nix {
+      phpPackages = self;
+      inherit php;
+    };
+    pkg = callPackage ../development/interpreters/php/packages/phpactor/php-packages.nix {
+      inherit composerEnv;
+      noDev = true;
+    };
+  in pkg.overrideAttrs (_: {
+    preferLocalBuild  = true;
+    preFixup = ''
+      substituteInPlace vendor/phpactor/phpactor/lib/Phpactor.php \
+        --replace "\$extensionDir = __DIR__ . '/.." "\$extensionDir = '/tmp"
+    '';
+    meta = with pkgs.lib; {
+      description = "Dependency Manager for PHP";
+      license = licenses.mit;
+      homepage = "https://phpactor.github.io/phpactor/";
+      maintainers = with maintainers; [ ma27 ];
+    };
+  });
 
   phpcbf = mkDerivation rec {
     version = "3.5.3";

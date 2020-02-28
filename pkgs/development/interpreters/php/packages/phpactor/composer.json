@@ -1,0 +1,5 @@
+{
+  "require": {
+    "phpactor/phpactor": "*"
+  }
+}
