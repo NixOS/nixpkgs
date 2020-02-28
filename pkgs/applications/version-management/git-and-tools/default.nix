@@ -70,6 +70,8 @@ let
 
   git-codeowners = callPackage ./git-codeowners { };
 
+  git-codereview = callPackage ./git-codereview { };
+
   git-cola = callPackage ./git-cola { };
 
   git-crypt = callPackage ./git-crypt { };
