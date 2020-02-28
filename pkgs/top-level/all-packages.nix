@@ -23362,6 +23362,8 @@ in
 
   pacvim = callPackage ../games/pacvim { };
 
+  papermc = callPackage ../games/papermc { };
+
   pentobi = libsForQt5.callPackage ../games/pentobi { };
 
   performous = callPackage ../games/performous {
