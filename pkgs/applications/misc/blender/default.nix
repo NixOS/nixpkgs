@@ -7,7 +7,7 @@
 , jackaudioSupport ? false, libjack2
 , cudaSupport ? config.cudaSupport or false, cudatoolkit
 , colladaSupport ? true, opencollada
-, enableNumpy ? false, makeWrapper
+, makeWrapper
 , pugixml, SDL, Cocoa, CoreGraphics, ForceFeedback, OpenAL, OpenGL
 }:
 
@@ -117,11 +117,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  postInstall = optionalString enableNumpy
-    ''
-      wrapProgram $out/bin/blender \
-        --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages}
-    '';
+  blenderExecutable =
+    placeholder "out" + (if stdenv.isDarwin then "/Blender.app/Contents/MacOS/Blender" else "/bin/blender");
+  # --python-expr is used to workaround https://developer.blender.org/T74304
+  postInstall = ''
+    wrapProgram $blenderExecutable \
+      --add-flags '--python-expr "import sys; sys.path.append(\"${python3Packages.numpy}/${python.sitePackages}\")"'
+  '';
 
   # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be
   # found. See the explanation in libglvnd.
