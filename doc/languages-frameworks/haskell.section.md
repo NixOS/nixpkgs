@@ -84,18 +84,18 @@ nix-env -qaP -A nixos.haskellPackages
 nix-env -iA nixos.haskellPackages.cabal-install
 ```
 
-Our current default compiler is GHC 8.6.x and the `haskellPackages` set
+Our current default compiler is GHC 8.8.x and the `haskellPackages` set
 contains packages built with that particular version. Nixpkgs contains the last
 three major releases of GHC and there is a whole family of package sets
 available that defines Hackage packages built with each of those compilers,
 too:
 ```shell
-nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc844
-nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc882
+nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc865
+nix-env -f "<nixpkgs>" -qaP -A haskell.packages.ghc8101
 ```
 
 The name `haskellPackages` is really just a synonym for
-`haskell.packages.ghc865`, because we prefer that package set internally and
+`haskell.packages.ghc882`, because we prefer that package set internally and
 recommend it to our users as their default choice, but ultimately you are free
 to compile your Haskell packages with any GHC version you please. The following
 command displays the complete list of available compilers:
@@ -112,8 +112,10 @@ haskell.compiler.ghc865                  ghc-8.6.5
 haskell.compiler.integer-simple.ghc865   ghc-8.6.5
 haskell.compiler.ghc881                  ghc-8.8.1
 haskell.compiler.integer-simple.ghc881   ghc-8.8.1
-haskell.compiler.ghc882                  ghc-8.8.1.20191211
-haskell.compiler.integer-simple.ghc882   ghc-8.8.1.20191211
+haskell.compiler.ghc882                  ghc-8.8.2
+haskell.compiler.integer-simple.ghc882   ghc-8.8.2
+haskell.compiler.ghc883                  ghc-8.8.3
+haskell.compiler.integer-simple.ghc883   ghc-8.8.3
 haskell.compiler.ghcjs                   ghcjs-8.6.0.1
 ```
 

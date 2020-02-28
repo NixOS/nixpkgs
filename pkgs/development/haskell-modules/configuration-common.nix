@@ -69,12 +69,12 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc super.git-annex {
+  git-annex = (overrideSrc (appendPatch super.git-annex ./patches/git-annex-fix-build-with-ghc-8.8.x.patch) {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "1shb1jgm78bx88rbsr1nmimjzzfqw96qdr38mcrr1c2qz5ky820v";
+      sha256 = "0pl0yip7zp4i78cj9jqkmm33wqaaaxjq3ggnfmv95y79yijd6yh4";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -394,11 +394,6 @@ self: super: {
   Random123 = dontCheck super.Random123;
   systemd = dontCheck super.systemd;
 
-  # use the correct version of network
-  systemd_2_2_0 = dontCheck (super.systemd_2_2_0.override {
-    network = self.network_3_1_1_1;
-  });
-
   # https://github.com/eli-frey/cmdtheline/issues/28
   cmdtheline = dontCheck super.cmdtheline;
 
@@ -526,7 +521,9 @@ self: super: {
 
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
-  MissingH = dontCheck super.MissingH;
+
+  # Doesn't accept recent versions of 'base' or QuickCheck.
+  MissingH = dontCheck (doJailbreak super.MissingH);
 
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
@@ -687,15 +684,6 @@ self: super: {
 
   # https://github.com/goldfirere/singletons/issues/122
   singletons = dontCheck super.singletons;
-
-  # Fix an aarch64 issue with cryptonite-0.25:
-  # https://github.com/haskell-crypto/cryptonite/issues/234
-  # This has been committed upstream, but there is, as of yet, no new release.
-  # Also, disable the test suite to avoid https://github.com/haskell-crypto/cryptonite/issues/260.
-  cryptonite = appendPatch (dontCheck super.cryptonite) (pkgs.fetchpatch {
-    url = https://github.com/haskell-crypto/cryptonite/commit/4622e5fc8ece82f4cf31358e31cd02cf020e558e.patch;
-    sha256 = "1m2d47ni4jbrpvxry50imj91qahr3r7zkqm157clrzlmw6gzpgnq";
-  });
 
   # Djinn's last release was 2014, incompatible with Semigroup-Monoid Proposal
   # https://github.com/augustss/djinn/pull/8
@@ -1042,34 +1030,7 @@ self: super: {
   vector-algorithms = dontCheck super.vector-algorithms;
 
   # The test suite attempts to use the network.
-  dhall =
-    generateOptparseApplicativeCompletion "dhall" (
-      dontCheck super.dhall
-  );
-  # https://github.com/dhall-lang/dhall-haskell/commit/dedd5e0ea6fd12f87d887af3d2220eebc61ee8af
-  # This raises the lower bound on prettyprinter to 1.5.1 since
-  # `removeTrailingWhitespace` is buggy in earlier versions.
-  # This will probably be able to be removed when we update to LTS-15.
-  dhall_1_29_0 =
-    dontCheck (super.dhall_1_29_0.override {
-      prettyprinter = self.prettyprinter_1_6_0;
-      prettyprinter-ansi-terminal =
-        self.prettyprinter-ansi-terminal.override {
-          prettyprinter = self.prettyprinter_1_6_0;
-        };
-    });
-  dhall-bash_1_0_27 = super.dhall-bash_1_0_27.override { dhall = self.dhall_1_29_0; };
-  dhall-json_1_6_1 = super.dhall-json_1_6_1.override {
-    dhall = self.dhall_1_29_0;
-    prettyprinter = self.prettyprinter_1_6_0;
-    prettyprinter-ansi-terminal =
-      self.prettyprinter-ansi-terminal.override {
-        prettyprinter = self.prettyprinter_1_6_0;
-      };
-  };
-
-  # Tests for dhall access the network.
-  dhall_1_27_0 = dontCheck super.dhall_1_27_0;
+  dhall = generateOptparseApplicativeCompletion "dhall" (dontCheck super.dhall);
 
   # Missing test files in source distribution, fixed once 1.4.0 is bumped
   # https://github.com/dhall-lang/dhall-haskell/pull/997
@@ -1096,7 +1057,6 @@ self: super: {
 
   # The test suite is broken. Break out of "base-compat >=0.9.3 && <0.10, hspec >=2.4.4 && <2.5".
   haddock-library = doJailbreak (dontCheck super.haddock-library);
-  haddock-library_1_8_0 = doJailbreak super.haddock-library_1_8_0;
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
@@ -1205,12 +1165,6 @@ self: super: {
   # Fix build with attr-2.4.48 (see #53716)
   xattr = appendPatch super.xattr ./patches/xattr-fix-build.patch;
 
-  # These packages needs network 3.x, which is not in LTS-13.x.
-  network-bsd_2_8_1_0 = super.network-bsd_2_8_1_0.override { network = self.network_3_0_1_1; };
-  lambdabot-core = super.lambdabot-core.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
-  lambdabot-reference-plugins = super.lambdabot-reference-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; hslogger = self.hslogger_1_3_0_0; });
-  lambdabot-haskell-plugins = super.lambdabot-haskell-plugins.overrideScope (self: super: { network = self.network_3_0_1_1; });
-
   # Some tests depend on a postgresql instance
   # Haddock failure: https://github.com/haskell/haddock/issues/979
   esqueleto = dontHaddock (dontCheck super.esqueleto);
@@ -1235,12 +1189,6 @@ self: super: {
   # Test suite won't link for no apparent reason.
   constraints-deriving = dontCheck super.constraints-deriving;
 
-  # Use a matching version of ghc-lib-parser.
-  ghc-lib-parser-ex = super.ghc-lib-parser-ex.override { ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205; };
-
-  # https://github.com/sol/hpack/issues/366
-  hpack = self.hpack_0_33_0;
-
   # QuickCheck >=2.3 && <2.13, hspec >=2.1 && <2.7
   graphviz = dontCheck super.graphviz;
 
@@ -1255,10 +1203,6 @@ self: super: {
       done
     '';
   });
-
-  # The LTS-14.x version of their dependencies are too old.
-  cabal-plan = super.cabal-plan.overrideScope (self: super: { optparse-applicative = self.optparse-applicative_0_15_1_0; ansi-terminal = self.ansi-terminal_0_10_2; base-compat = self.base-compat_0_11_1; semialign = self.semialign_1_1; time-compat = doJailbreak super.time-compat; });
-  hoogle = super.hoogle.override { haskell-src-exts = self.haskell-src-exts_1_23_0; };
 
   # Version bounds for http-client are too strict:
   # https://github.com/bitnomial/prometheus/issues/34
@@ -1296,10 +1240,6 @@ self: super: {
   # upstream issue: https://github.com/vmchale/atspkg/issues/12
   language-ats = dontCheck super.language-ats;
 
-  # polysemy-plugin requires polysemy >= 1.2.0.0
-  polysemy = self.polysemy_1_2_3_0;
-  polysemy-zoo = self.polysemy-zoo_0_6_0_1;
-
   # https://github.com/Happstack/web-routes-th/pull/3
   web-routes-th = doJailbreak super.web-routes-th;
 
@@ -1330,32 +1270,8 @@ self: super: {
   # https://github.com/kazu-yamamoto/dns/issues/150
   dns = dontCheck super.dns;
 
-  # needs newer version of the systemd package
-  spacecookie = super.spacecookie.override { systemd = self.systemd_2_2_0; };
-
-  # 2019-12-19 - glirc wants regex-tdfa >=1.3 which results in errors with regex-base which errors more
-  # hoping to make a proper derivation with plugins enabled and more reliable building -- kiwi
-  # 2020-01-17 - as of recently the basic doJailbreak is not enough and have to override regex-tdfa which needs an override for regex-base
-
-  glirc = doJailbreak (super.glirc.override {
-    regex-tdfa = self.regex-tdfa_1_3_1_0;
-  });
-
-  regex-tdfa_1_3_1_0 = doJailbreak (super.regex-tdfa_1_3_1_0.override {
-    regex-base = self.regex-base_0_94_0_0;
-  });
-
-  # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
-  # multiple versions of them were being pulled in by the others which is not allowed.
-  # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
-  matterhorn = doJailbreak (super.matterhorn.override {
-    brick-skylighting = self.brick-skylighting.override {
-      brick = self.brick_0_51;
-    };
-  });
-
-  # 2020-01-19 - because of QuickCheck bounds | was broken anyway and is needed for matterhorn -- kiwi
-  Unique = doJailbreak super.Unique;
+  # Support recent versions of fast-logger.
+  spacecookie = doJailbreak super.spacecookie;
 
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
@@ -1380,17 +1296,97 @@ self: super: {
 
   # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
   ormolu = doJailbreak (super.ormolu.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_8_2_20200205;
+    ghc-lib-parser = self.ghc-lib-parser_8_8_3_20200224;
   });
 
   # krank-0.1.0 does not accept PyF-0.9.0.0.
   krank = doJailbreak super.krank;
 
-  # prettyprinter-1.6.0 fails its doctest suite.
-  prettyprinter_1_6_0 = dontCheck super.prettyprinter_1_6_0;
-
   # the test suite has an overly tight restriction on doctest
   # See https://github.com/ekmett/perhaps/pull/5
   perhaps = doJailbreak super.perhaps;
+
+  # it wants to build a statically linked binary by default
+  hledger-flow = overrideCabal super.hledger-flow ( drv: {
+    postPatch = (drv.postPatch or "") + ''
+      substituteInPlace hledger-flow.cabal --replace "-static" ""
+    '';
+  });
+
+  # cabal-fmt requires Cabal3
+  cabal-fmt = super.cabal-fmt.override { Cabal = self.Cabal_3_0_0_0; };
+
+  # Several gtk2hs-provided packages at v0.13.8.0 fail to build on Darwin
+  # until we pick up https://github.com/gtk2hs/gtk2hs/pull/293 so apply that
+  # patch here. That single patch is for the gtk2hs super-repo, out of which
+  # we extract the patch for each indvidiual project (glib/gio/pango/gtk/gtk3).
+  glib = appendPatch super.glib (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+    includes = [ "glib.cabal" ];
+    stripLen = 1;
+    sha256 = "1zdss1xgsbijs3kx8dp5a81qryrfc1zm1xrd20whna3dqakf8b7g";
+  });
+  gio = appendPatch super.gio (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+    includes = [ "gio.cabal" ];
+    stripLen = 1;
+    sha256 = "0d72k6gqvgax9jcqi3gz1gqnar7jg8p5065z3mw2fcwvdw46s2zv";
+  });
+  pango = appendPatch super.pango (pkgs.fetchpatch {
+    url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+    includes = [ "pango.cabal" ];
+    stripLen = 1;
+    sha256 = "0dc221wlmyhc24h6ybfhbkxmcx4i6bvkbr1zgqidbnj3yp6w0l5w";
+  });
+  # gtk/gtk3 have an additional complication: independent of the above
+  # 0.13.8.0-specific fix, they need to be told on Darwin to use the Quartz
+  # rather than X11 backend (see eg https://github.com/gtk2hs/gtk2hs/issues/249).
+  gtk3 =
+    let
+      patchedGtk3 = appendPatch super.gtk3 (pkgs.fetchpatch {
+        url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+        includes = [ "gtk3.cabal" ];
+        stripLen = 1;
+        sha256 = "0zvj0dzfwf9bksfhi0m4v0h5aij236gd0qhyr1adpdcjrkd8zbkd";
+      });
+    in
+      # The appendConfigureFlags should remain even after we can drop patchedGtk3.
+      appendConfigureFlags patchedGtk3 (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
+  gtk =
+    let
+      patchedGtk = appendPatch super.gtk (pkgs.fetchpatch {
+        url = "https://github.com/gtk2hs/gtk2hs/commit/1cf2f9bff2427d39986e32880d1383cfff49ab0e.patch";
+        includes = [ "gtk.cabal-renamed" ];
+        stripLen = 1;
+        sha256 = "0wb0scvmhg8b42hxpns9m6zak3r8b25a2z7wg6vl56n17nb635l7";
+        # One final complication: the gtk cabal file in the source repo (as seen
+        # by the patch) is `gtk.cabal-renamed`, but this gets changed to the usual
+        # `gtk.cabal` before uploading to Hackage by a script.
+        postFetch = ''
+          substituteInPlace $out --replace "-renamed" ""
+        '';
+      });
+    in
+      # The appendConfigureFlags should remain even after we can drop patchedGtk.
+      appendConfigureFlags patchedGtk (pkgs.lib.optional pkgs.stdenv.isDarwin "-f have-quartz-gtk");
+
+  # Chart-tests needs and compiles some modules from Chart itself
+  Chart-tests = (addExtraLibrary super.Chart-tests self.QuickCheck).overrideAttrs (old: {
+    preCheck = old.postPatch or "" + ''
+      tar --one-top-level=../chart --strip-components=1 -xf ${self.Chart.src}
+    '';
+  });
+
+  # Unnecessary upper bound on vector <0.12.1
+  bitwise-enum = doJailbreak super.bitwise-enum;
+
+  # This breaks because of version bounds, but compiles and runs fine.
+  # Last commit is 5 years ago, so we likely won't get upstream fixed soon.
+  # https://bitbucket.org/rvlm/hakyll-contrib-hyphenation/src/master/
+  # Therefore we jailbreak it.
+  hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
+
+  # https://github.com/bergmark/feed/issues/43
+  feed = dontCheck super.feed;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
