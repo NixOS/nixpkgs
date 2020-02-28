@@ -81,9 +81,19 @@ stdenv.mkDerivation rec {
     substituteInPlace src/main/checkrad.in --replace "/usr/bin/finger" "${finger_bsd}/bin/finger"
   '';
 
+  # By default, freeradius will generate Diffie-Hellman parameters and
+  # self-signed TLS certificates during installation. We don't want
+  # this, for several reasons:
+  # - reproducibility (random generation)
+  # - we don't want _anybody_ to use a cert where the private key is on our public binary cache!
+  # - we don't want the certs to change each time the package is rebuilt
+  # So let's avoid anything getting into our output.
+  makeFlags = [ "LOCAL_CERT_FILES=" ];
+
   installFlags = [
     "sysconfdir=\${out}/etc"
     "localstatedir=\${TMPDIR}"
+    "INSTALL_CERT_FILES=" # see comment at makeFlags
   ];
 
   outputs = [ "out" "dev" "man" "doc" ];
