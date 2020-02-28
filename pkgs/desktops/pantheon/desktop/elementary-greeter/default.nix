@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0.1";
+  version = "5.0.2";
 
   repoName = "greeter";
 
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0qy6iw71p8hv6fpcr7p3hqbzlcpxrz18qdm1inannq68d0pxfx76";
+    sha256 = "0557lr8czqwjrm39ykfacqw5x7nng7fmf1gxkif70xg7dk3lc7gd";
   };
 
   passthru = {
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./sysconfdir-install.patch
-    # Needed until https://github.com/elementary/greeter/issues/360 is fixed
+    # Needed until "https://github.com/elementary/greeter"/issues/360 is fixed
     (substituteAll {
       src = ./hardcode-fallback-background.patch;
       default_wallpaper = "${nixos-artwork.wallpapers.simple-dark-gray}/share/artwork/gnome/nix-wallpaper-simple-dark-gray.png";
@@ -118,7 +118,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "LightDM Greeter for Pantheon";
-    homepage = https://github.com/elementary/greeter;
+    homepage = "https://github.com/elementary/greeter";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
