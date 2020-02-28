@@ -473,10 +473,4 @@ rec {
   /* Pick the outputs of packages to place in buildInputs */
   chooseDevOutputs = drvs: builtins.map getDev drvs;
 
-  /*** deprecated stuff ***/
-
-  zipWithNames = zipAttrsWithNames;
-  zip = builtins.trace
-    "lib.zip is deprecated, use lib.zipAttrsWith instead" zipAttrsWith;
-
 }

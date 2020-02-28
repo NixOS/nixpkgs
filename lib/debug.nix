@@ -178,7 +178,7 @@ rec {
           + "for your uses (`lib.concat(Map)StringsSep`)." )
     (lib.concatStringsSep "; " (map (x: "${x}=") (attrNames a)));
 
-  showVal = with lib;
+  showVal = xx: with lib;
     trace ( "Warning: `showVal` is deprecated "
           + "and will be removed in the next release, "
           + "please use `traceSeqN`" )
@@ -196,7 +196,7 @@ rec {
       go = x: generators.toPretty
         { allowPrettyValues = true; }
         (modify x);
-    in go);
+    in go) xx;
 
   traceXMLVal = x:
     trace ( "Warning: `traceXMLVal` is deprecated "
