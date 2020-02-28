@@ -2378,6 +2378,8 @@ in {
 
   pytest-timeout = callPackage ../development/python-modules/pytest-timeout { };
 
+  pytest-trio = callPackage ../development/python-modules/pytest-trio { };
+
   pytest-warnings = callPackage ../development/python-modules/pytest-warnings { };
 
   pytest-watch = callPackage ../development/python-modules/pytest-watch { };
