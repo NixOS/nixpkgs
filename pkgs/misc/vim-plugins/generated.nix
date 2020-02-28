@@ -4945,6 +4945,18 @@ let
     meta.homepage = "https://github.com/henrik/vim-indexed-search/";
   };
 
+  vim-instant-markdown = buildVimPluginFrom2Nix {
+    pname = "vim-instant-markdown";
+    version = "2020-02-27";
+    src = fetchFromGitHub {
+      owner = "suan";
+      repo = "vim-instant-markdown";
+      rev = "2d5324edf171dd0cd2e1eb995fd77816ee3bb959";
+      sha256 = "0yw9rdx2f8s8g8d5p2yh485kyg9cy77d7ymf2h32npg8qmm9vrmj";
+    };
+    meta.homepage = "https://github.com/suan/vim-instant-markdown/";
+  };
+
   vim-ipython = buildVimPluginFrom2Nix {
     pname = "vim-ipython";
     version = "2015-06-23";

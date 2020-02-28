@@ -34,6 +34,9 @@
 
 # fruzzy dependency
 , nim
+
+# vim-instant-markdown dependency
+, curl
 }:
 
 self: super: {
@@ -630,6 +633,15 @@ self: super: {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
         --replace 'import vim' 'import vim; import sys; sys.path.append("${python.pkgs.isort}/${python.sitePackages}")'
+    '';
+  });
+
+  vim-instant-markdown = super.vim-instant-markdown.overrideAttrs(old: {
+    dependencies = with super; [ nodePackages.instant-markdown-d curl ];
+    buildPhase = ''
+      substituteInPlace after/ftplugin/markdown/instant-markdown.vim \
+        --replace 'instant-markdown-d' '${nodePackages.instant-markdown-d}/bin/instant-markdown-d' \
+        --replace 'curl' '${curl}/bin/curl'
     '';
   });
 
