@@ -12,10 +12,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [ pkgconfig openssl ];
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1gh5w6zzrvjk60bqaf355fagijy723rvmqjh4laksd96pmzdfwn9";
+  cargoSha256 = "0vckay4jhg02xg68mvh7ys0yjj0p30m6wsjriqc8k24wjsrhiw9k";
 
   meta = with stdenv.lib; {
     description = "Utility for easy management of Tensorflow containers";
