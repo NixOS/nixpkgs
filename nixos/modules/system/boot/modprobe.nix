@@ -28,7 +28,7 @@ with lib;
         Any additional configuration to be appended to the generated
         <filename>modprobe.conf</filename>.  This is typically used to
         specify module options.  See
-        <citerefentry><refentrytitle>modprobe.conf</refentrytitle>
+        <citerefentry><refentrytitle>modprobe.d</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
       type = types.lines;
