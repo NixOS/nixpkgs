@@ -69,7 +69,7 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc super.git-annex {
+  git-annex = (overrideSrc (appendPatch super.git-annex ./patches/git-annex-fix-build-with-ghc-8.8.x.patch) {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
