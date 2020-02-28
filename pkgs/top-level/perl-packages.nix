@@ -14630,6 +14630,21 @@ let
     };
   };
 
+  PerlIOgzip = buildPerlPackage {
+    pname = "PerlIO-gzip";
+    version = "0.20";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/N/NW/NWCLARK/PerlIO-gzip-0.20.tar.gz";
+      sha256 = "4848679a3f201e3f3b0c5f6f9526e602af52923ffa471a2a3657db786bd3bdc5";
+    };
+    buildInputs = [ pkgs.zlib ];
+    NIX_CFLAGS_LINK = "-L${pkgs.zlib.out}/lib -lz";
+    meta = {
+      description = "Perl extension to provide a PerlIO layer to gzip/gunzip";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PerlIOutf8_strict = buildPerlPackage {
     pname = "PerlIO-utf8_strict";
     version = "0.007";
