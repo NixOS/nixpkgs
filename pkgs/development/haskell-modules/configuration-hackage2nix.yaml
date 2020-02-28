@@ -9248,7 +9248,6 @@ broken-packages:
   - Shellac-editline
   - Shellac-haskeline
   - Shellac-readline
-  - ShellCheck
   - shellish
   - shellmate
   - shellmate-extras
