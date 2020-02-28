@@ -3112,6 +3112,8 @@ in {
 
   pyphen = callPackage ../development/python-modules/pyphen {};
 
+  pyppeteer = callPackage ../development/python-modules/pyppeteer {};
+
   pypoppler = callPackage ../development/python-modules/pypoppler { };
 
   pypillowfight = callPackage ../development/python-modules/pypillowfight { };
