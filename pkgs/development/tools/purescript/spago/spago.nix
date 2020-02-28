@@ -44,4 +44,5 @@ mkDerivation {
   prePatch = "hpack";
   homepage = "https://github.com/purescript/spago#readme";
   license = stdenv.lib.licenses.bsd3;
+  broken = true;   # Build is broken in lts-15.x.
 }
