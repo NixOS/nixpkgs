@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdata";
-  version = "0.17.11";
+  version = "0.17.12";
 
   outputs = [ "out" "dev" "installedTests" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "11m99sh2k679rnsvqsi95s1l0r8lkvj61dmwg1pnxvsd5q91g6bb";
+    sha256 = "0613nihsvwvdnmlbjnwi8zqxgmpwyxdapzznq4cy1fp84246zzd0";
   };
 
   patches = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GData API library";
-    homepage = https://wiki.gnome.org/Projects/libgdata;
+    homepage = "https://wiki.gnome.org/Projects/libgdata";
     maintainers = with maintainers; [ raskin lethalman ] ++ gnome3.maintainers;
     platforms = platforms.linux;
     license = licenses.lgpl21Plus;
