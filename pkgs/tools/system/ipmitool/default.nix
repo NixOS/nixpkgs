@@ -19,19 +19,19 @@ stdenv.mkDerivation {
     })
   ];
 
-  postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/plugins/ipmi_intf.c --replace "s6_addr16" "s6_addr"
-  '';
-
   buildInputs = [ openssl ];
 
-  preConfigure = ''
-    configureFlagsArray=(
-      --infodir=$out/share/info
-      --mandir=$out/share/man
-      ${if static then "LDFLAGS=-static --enable-static --disable-shared" else "--enable-shared"}
-    )
-  '';
+  configureFlags = [
+    "--infodir=${placeholder "out"}/share/info"
+    "--mandir=${placeholder "out"}/share/man"
+  ] ++ stdenv.lib.optionals static [
+    "LDFLAGS=-static"
+    "--enable-static"
+    "--disable-shared"
+  ] ++ stdenv.lib.optionals (!static) [
+    "--enable-shared"
+  ];
+
   makeFlags = stdenv.lib.optional static "AM_LDFLAGS=-all-static";
   dontDisableStatic = static;
 
