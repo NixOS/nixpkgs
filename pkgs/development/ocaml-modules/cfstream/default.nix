@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "cfstream";
-  version = "1.3.0";
+  version = "1.3.1";
 
   minimumOCamlVersion = "4.04.1";
 
@@ -10,7 +10,7 @@ buildDunePackage rec {
     owner = "biocaml";
     repo   = pname;
     rev    = version;
-    sha256 = "1bpzpci0cx6r3sdk183mm603wgzvvj46nlx0lpx44108anxcxbak";
+    sha256 = "0qnxfp6y294gjsccx7ksvwn9x5q20hi8sg24rjypzsdkmlphgdnd";
   };
 
   patches = [ ./git_commit.patch ];

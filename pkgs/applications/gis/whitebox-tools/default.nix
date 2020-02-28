@@ -12,10 +12,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0zn4b4md3pn1rvb15rnz3zcx9a359x26nfy7zcfp7nx27ais13n5";
+  cargoSha256 = "13k21akyfqgamywj39bw73sldby1s02vyvxfglxbaqq1x96xcy4i";
 
   # failures: structures::polyline::test::test_polyline_split
   doCheck = false;

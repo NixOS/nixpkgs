@@ -7586,7 +7586,7 @@ in
 
   xurls = callPackage ../tools/text/xurls {};
 
-  xv = callPackage ../tools/misc/xv {};
+  xxv = callPackage ../tools/misc/xxv {};
 
   xvfb_run = callPackage ../tools/misc/xvfb-run { inherit (texFunctions) fontsConf; };
 
@@ -16921,6 +16921,8 @@ in
   mdadm = mdadm4;
   mdadm4 = callPackage ../os-specific/linux/mdadm { };
 
+  metastore = callPackage ../os-specific/linux/metastore { };
+
   mingetty = callPackage ../os-specific/linux/mingetty { };
 
   miraclecast = callPackage ../os-specific/linux/miraclecast { };
@@ -18456,6 +18458,8 @@ in
   brackets = callPackage ../applications/editors/brackets { gconf = gnome2.GConf; };
 
   brave = callPackage ../applications/networking/browsers/brave { };
+
+  breezy = with python3Packages; toPythonApplication breezy;
 
   notmuch-bower = callPackage ../applications/networking/mailreaders/notmuch-bower { };
 
@@ -22864,7 +22868,7 @@ in
   zcash = callPackage ../applications/blockchains/zcash { };
 
   parity = callPackage ../applications/blockchains/parity { };
-  parity-beta = callPackage ../applications/blockchains/parity/beta.nix { };
+
   parity-ui = callPackage ../applications/blockchains/parity-ui { };
 
   polkadot = callPackage ../applications/blockchains/polkadot { };
@@ -24513,6 +24517,8 @@ in
 
   symbiyosys = callPackage ../applications/science/logic/symbiyosys {};
 
+  mcy = callPackage ../applications/science/logic/mcy {};
+
   lingeling = callPackage ../applications/science/logic/lingeling {};
 
   ### SCIENCE / ELECTRONICS
@@ -25866,9 +25872,9 @@ in
   spdlog = spdlog_1;
 
   dart = callPackage ../development/interpreters/dart { };
-  dart_stable = dart.override { version = "2.0.0"; };
-  dart_old = dart.override { version = "1.24.3"; };
-  dart_dev = dart.override { version = "2.0.0-dev.26.0"; };
+  dart_old = dart.override    { version = "1.24.3"; };
+  dart_stable = dart.override { version = "2.7.1"; };
+  dart_dev = dart.override    { version = "2.8.0-dev.10.0"; };
 
   httrack = callPackage ../tools/backup/httrack { };
 

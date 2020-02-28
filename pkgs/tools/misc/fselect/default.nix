@@ -11,10 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zccl60l557lhaaqb33myys4vp3jsnjqh3dxb22i46bff28s1w6c";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1496zjrkwj5bv08k575m064x0hfk0gpci0dmxvvspj6jf8f8bfm6";
+  cargoSha256 = "0023adx4xkm24p3nwj0j669xns4qf8insalcnlv3r2iv4138w10l";
 
   meta = with stdenv.lib; {
     description = "Find files with SQL-like queries";
