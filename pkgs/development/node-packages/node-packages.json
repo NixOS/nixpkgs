@@ -88,6 +88,7 @@
 , "imapnotify"
 , "indium"
 , "insect"
+, "instant-markdown-d"
 , "ionic"
 , "ios-deploy"
 , { "iosevka-build-deps": "../../data/fonts/iosevka" }
