@@ -1053,6 +1053,17 @@ let
     };
   };
 
+  deoplete-phpactor = buildVimPluginFrom2Nix {
+    pname = "deoplete-phpactor";
+    version = "2019-02-22";
+    src = fetchFromGitHub {
+      owner = "kristijanhusak";
+      repo = "deoplete-phpactor";
+      rev = "53e239effb8ff20fc0a192206e96d98d4f9001ad";
+      sha256 = "14097r9fmyp9zxfgv0fj2s52qd1v5cxdckfg4zph7lg3yri1hx9p";
+    };
+  };
+
   deoplete-rust = buildVimPluginFrom2Nix {
     pname = "deoplete-rust";
     version = "2017-07-18";
@@ -1099,12 +1110,12 @@ let
 
   deoplete-nvim = buildVimPluginFrom2Nix {
     pname = "deoplete-nvim";
-    version = "2020-02-25";
+    version = "2020-02-27";
     src = fetchFromGitHub {
       owner = "Shougo";
       repo = "deoplete.nvim";
-      rev = "3a8e68d09c6d1a62991c883279f6f647c9e23b7f";
-      sha256 = "0h87i51w0xll2nyib4fqhspdwzh4ynrv1zs74dz7a8nl1v3lzlnx";
+      rev = "08582f7c52aa53d63f9a7a714fab9137d6ea48f0";
+      sha256 = "1bnz9q6rz95w8xw9vhzhfrfr6r8zdgf0ihylvjaa2kzxir7sngm2";
     };
   };
 
