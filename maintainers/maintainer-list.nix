@@ -2613,7 +2613,7 @@
     email = "ftrvxmtrx@gmail.com";
     github = "ftrvxmtrx";
     githubId = 248148;
-    name = "Siarhei Zirukin";
+    name = "Sigrid Solveig Haflínudóttir";
   };
   fuerbringer = {
     email = "severin@fuerbringer.info";
