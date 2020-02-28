@@ -1,7 +1,7 @@
 { stdenv, lib, makeDesktopItem
 , unzip, libsecret, libXScrnSaver, wrapGAppsHook
 , gtk2, atomEnv, at-spi2-atk, autoPatchelfHook
-, systemd, fontconfig
+, systemd, fontconfig, libdbusmenu-gtk3
 
 # Attributes inherit from specific versions
 , version, src, meta, sourceRoot
@@ -95,7 +95,7 @@ in
       '';
 
     preFixup = lib.optionalString (system == "i686-linux" || system == "x86_64-linux") ''
-      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig ]})
+      gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ systemd fontconfig libdbusmenu-gtk3 ]})
     '';
 
     inherit meta;
