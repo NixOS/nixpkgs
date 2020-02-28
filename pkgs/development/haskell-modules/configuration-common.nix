@@ -1384,4 +1384,7 @@ self: super: {
   # Therefore we jailbreak it.
   hakyll-contrib-hyphenation = doJailbreak super.hakyll-contrib-hyphenation;
 
+  # https://github.com/bergmark/feed/issues/43
+  feed = dontCheck super.feed;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
