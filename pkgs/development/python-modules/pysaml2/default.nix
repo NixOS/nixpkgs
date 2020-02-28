@@ -36,6 +36,11 @@ buildPythonPackage rec {
     })
   ];
 
+  postPatch = ''
+    # fix failing tests on systems with 32bit time_t
+    sed -i 's/2999\(-.*T\)/2029\1/g' tests/*.xml
+  '';
+
   propagatedBuildInputs = [ cryptography defusedxml future pyopenssl dateutil pytz requests six ];
 
   checkInputs = [ mock pyasn1 pymongo pytest responses ];

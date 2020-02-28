@@ -4,11 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "talloc-2.1.14";
+  pname = "talloc";
+  version = "2.1.16";
 
   src = fetchurl {
-    url = "mirror://samba/talloc/${name}.tar.gz";
-    sha256 = "1kk76dyav41ip7ddbbf04yfydb4jvywzi2ps0z2vla56aqkn11di";
+    url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
+    sha256 = "1aajda08yf7njgvg6r21ccxlvkarb9bwvf4jqh8yn3871a1zcnqr";
   };
 
   nativeBuildInputs = [ pkgconfig fixDarwinDylibNames python wafHook
@@ -29,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
-    ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc_[0-9]*.o
+    ${stdenv.cc.targetPrefix}ar q $out/lib/libtalloc.a bin/default/talloc.c.[0-9]*.o
   '';
 
   meta = with stdenv.lib; {

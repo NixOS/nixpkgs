@@ -15,6 +15,7 @@ let
           src = oldAttrs.src.override {
             inherit version sha256;
           };
+          doCheck = oldAttrs.doCheck && (attrname != "psutil");
         });
       };
   };

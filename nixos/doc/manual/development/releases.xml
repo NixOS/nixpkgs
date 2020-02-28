@@ -71,8 +71,9 @@
      <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/commit/d6b08acd1ccac0d9d502c4b635e00b04d3387f06">
       Update <literal>versionSuffix</literal> in
-      <literal>nixos/release.nix</literal></link>, use <literal>git log
-      --format=%an|wc -l</literal> to get the commit count
+      <literal>nixos/release.nix</literal></link>, use
+      <literal>git rev-list --count 17.09-beta</literal>
+      to get the commit count.
      </para>
     </listitem>
     <listitem>

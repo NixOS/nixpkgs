@@ -17,10 +17,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm644 -t $out/share/mcfly mcfly.bash
   '';
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1bf65kagvhsi6lg8187ihi5j45hkq9d8v6j7rzmmfhngdzvcfr69";
+  cargoSha256 = "0r2zb59rpja9z7q0gsylqaq4vqm5rp57fy56ajjrm6k6z06nq7bv";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/cantino/mcfly;

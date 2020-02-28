@@ -97,7 +97,7 @@ in buildFHSUserEnv {
     libcap libtiff libva libgphoto2 libxslt libtxc_dxtn libsndfile giflib zlib glib
     alsaLib zziplib bash dbus keyutils zip cabextract freetype unzip coreutils
     readline gcc SDL SDL2 curl graphite2 gtk2 gtk3 udev ncurses wayland libglvnd
-    vulkan-loader xdg_utils sqlite gnutls
+    vulkan-loader xdg_utils sqlite gnutls libbsd
 
     # PCSX2 // TODO: "libgobject-2.0.so.0: wrong ELF class: ELFCLASS64"
 

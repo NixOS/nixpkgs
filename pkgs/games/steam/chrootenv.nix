@@ -86,6 +86,8 @@ in buildFHSUserEnv rec {
     mono
     xorg.xkeyboardconfig
     xorg.libpciaccess
+    udev # shadow of the tomb raider
+
     ## screeps dependencies
     gtk3
     dbus

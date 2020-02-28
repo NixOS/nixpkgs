@@ -17,6 +17,13 @@ if uname | grep Linux > /dev/null &&
     export DBUS_SESSION_BUS_ADDRESS="unix:path=$dbus_socket_dir/session"
 fi
 
+for PROFILE in $NIX_PROFILES; do
+    HDIR="$PROFILE/share/hunspell"
+    if [ -d "$HDIR" ]; then
+        export DICPATH=$DICPATH''${DICPATH:+:}$HDIR
+    fi
+done
+
 "@libreoffice@/bin/$(basename "$0")" "$@"
 code="$?"
 

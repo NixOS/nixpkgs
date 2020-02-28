@@ -242,7 +242,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs Frostman ];
+    maintainers = with maintainers; [ cstrahan orivej mic92 rvolosatovs Frostman ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

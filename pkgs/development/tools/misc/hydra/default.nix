@@ -85,7 +85,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
-      gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
+      gitAndTools.top-git mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
       perlDeps perl nix
       postgresql # for running the tests
@@ -95,7 +95,7 @@ in stdenv.mkDerivation rec {
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
+      gzip bzip2 lzma gnutar unzip git gitAndTools.top-git mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];

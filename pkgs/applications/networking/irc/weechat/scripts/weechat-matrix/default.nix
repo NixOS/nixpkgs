@@ -64,7 +64,7 @@ in buildPythonPackage {
       --replace '/usr/bin/env -S python3' '${scriptPython}/bin/python'
     substituteInPlace $out/bin/matrix_decrypt \
       --replace '/usr/bin/env python3' '${scriptPython}/bin/python'
-   
+
     mkdir -p $out/${python.sitePackages}
     cp -r $src/matrix $out/${python.sitePackages}/matrix
   '';
@@ -75,7 +75,7 @@ in buildPythonPackage {
     description = "A Python plugin for Weechat that lets Weechat communicate over the Matrix protocol";
     homepage = "https://github.com/poljar/weechat-matrix";
     license = licenses.isc;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ tilpner emily ];
   };
 }

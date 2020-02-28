@@ -55,11 +55,11 @@
             "https://github.com/bazelbuild/rules_proto/archive/97d8af4dc474595af3900dd85cb3a29ad28cc313.tar.gz"
         ]
     },
-    "android_tools_pkg-0.12.tar.gz": {
-        "name": "android_tools_pkg-0.12.tar.gz",
-        "sha256": "96c4eef4d195dd95e43a4259cf5b82a1e34f67333439e91955bbdc0e1c8e7a31",
+    "android_tools_pkg-0.13.tar.gz": {
+        "name": "android_tools_pkg-0.13.tar.gz",
+        "sha256": "3ca6a5e6576a9cda7c59f5fd33b1fe096725730712057c5893589ac15b019407",
         "urls": [
-            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.12.tar.gz"
+            "https://mirror.bazel.build/bazel_android_tools/android_tools_pkg-0.13.tar.gz"
         ]
     },
     "bazel_j2objc": {
@@ -115,11 +115,11 @@
             "https://github.com/google/googletest/archive/release-1.10.0.tar.gz"
         ]
     },
-    "coverage_output_generator-v2.0.zip": {
-        "name": "coverage_output_generator-v2.0.zip",
-        "sha256": "3a6951051272d51613ac4c77af6ce238a3db321bf06506fde1b8866eb18a89dd",
+    "coverage_output_generator-v2.1.zip": {
+        "name": "coverage_output_generator-v2.1.zip",
+        "sha256": "96ac6bc9b9fbc67b532bcae562da1642409791e6a4b8e522f04946ee5cc3ff8e",
         "urls": [
-            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.0.zip"
+            "https://mirror.bazel.build/bazel_coverage_output_generator/releases/coverage_output_generator-v2.1.zip"
         ]
     },
     "desugar_jdk_libs": {

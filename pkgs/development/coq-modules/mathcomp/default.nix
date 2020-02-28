@@ -8,6 +8,7 @@ let
   ####################################
   # sha256 of released mathcomp versions
   mathcomp-sha256 = {
+    "1.10.0" = "1b9m6pwxxyivw7rgx82gn5kmgv2mfv3h3y0mmjcjfypi8ydkrlbv";
     "1.9.0" = "0lid9zaazdi3d38l8042lczb02pw5m9wq0yysiilx891hgq2p81r";
     "1.8.0" = "07l40is389ih8bi525gpqs3qp4yb2kl11r9c8ynk1ifpjzpnabwp";
     "1.7.0" = "0wnhj9nqpx2bw6n1l4i8jgrw3pjajvckvj3lr4vzjb3my2lbxdd1";
@@ -15,6 +16,7 @@ let
   };
   # versions of coq compatible with released mathcomp versions
   mathcomp-coq-versions = {
+    "1.10.0" = flip elem [ "8.7" "8.8" "8.9" "8.10" "8.11" ];
     "1.9.0" = flip elem ["8.7" "8.8" "8.9" "8.10"];
     "1.8.0" = flip elem ["8.7" "8.8" "8.9"];
     "1.7.0" = flip elem ["8.6" "8.7" "8.8" "8.9"];
@@ -24,7 +26,7 @@ let
   max-mathcomp-version = last (naturalSort (attrNames mathcomp-coq-versions));
   # mathcomp prefered version by decreasing order
   # (the first version in the list will be tried first)
-  mathcomp-version-preference = [ "1.8.0" "1.9.0" "1.7.0" "1.6.1" ];
+  mathcomp-version-preference = [ "1.8.0" "1.9.0" "1.10.0" "1.7.0" "1.6.1" ];
 
   ##############################################################
   # COMPUTED using the configuration above (edit with caution) #
@@ -133,6 +135,7 @@ getAttrOr = a: n: a.${n} or (throw a.error);
 mathcompCorePkgs_1_7 = mathcompGen "1.7.0";
 mathcompCorePkgs_1_8 = mathcompGen "1.8.0";
 mathcompCorePkgs_1_9 = mathcompGen "1.9.0";
+mathcompCorePkgs_1_10 = mathcompGen "1.10.0";
 mathcompCorePkgs     = recurseIntoAttrs
   (mapDerivationAttrset dontDistribute (mathcompGen default-mathcomp-version));
 
@@ -143,6 +146,7 @@ inherit mathcompGenSingle;
 mathcomp_1_7_single = getAttrOr (mathcompGenSingle "1.7.0") "single";
 mathcomp_1_8_single = getAttrOr (mathcompGenSingle "1.8.0") "single";
 mathcomp_1_9_single = getAttrOr (mathcompGenSingle "1.9.0") "single";
+mathcomp_1_10_single = getAttrOr (mathcompGenSingle "1.10.0") "single";
 mathcomp_single     = dontDistribute
  (getAttrOr (mathcompGenSingle default-mathcomp-version) "single");
 
@@ -151,13 +155,16 @@ mathcomp_single     = dontDistribute
 # each of these have a special attribute overrideMathcomp which
 # must be used instead of overrideAttrs in order to also fix the dependencies
 inherit mathcompGen mathcompCorePkgs
-        mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs_1_9;
+        mathcompCorePkgs_1_7 mathcompCorePkgs_1_8 mathcompCorePkgs_1_9
+	mathcompCorePkgs_1_10
+	;
 
 
 mathcomp     = getAttrOr mathcompCorePkgs     "all";
 mathcomp_1_7 = getAttrOr mathcompCorePkgs_1_7 "all";
 mathcomp_1_8 = getAttrOr mathcompCorePkgs_1_8 "all";
 mathcomp_1_9 = getAttrOr mathcompCorePkgs_1_9 "all";
+mathcomp_1_10 = getAttrOr mathcompCorePkgs_1_10 "all";
 
 ssreflect     = getAttrOr mathcompCorePkgs    "ssreflect";
 
@@ -165,4 +172,5 @@ ssreflect     = getAttrOr mathcompCorePkgs    "ssreflect";
 (mapAttrs' (n: pkg: {name = "mathcomp-${n}"; value = pkg;}) mathcompCorePkgs) //
 (mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_7"; value = pkg;}) mathcompCorePkgs_1_7) //
 (mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_8"; value = pkg;}) mathcompCorePkgs_1_8) //
-(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_9"; value = pkg;}) mathcompCorePkgs_1_9)
+(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_9"; value = pkg;}) mathcompCorePkgs_1_9) //
+(mapAttrs' (n: pkg: {name = "mathcomp-${n}_1_10"; value = pkg;}) mathcompCorePkgs_1_10)

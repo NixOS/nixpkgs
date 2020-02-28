@@ -11,10 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "01jiqizg1ywvrrwhqzfqzbaqrzyfaqm66sixas0mpyzmd6cdwmh6";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1zmk70hccrxn1gdr1bksnvh6sa2h4518s0ni8k2ihxi4ld1ch5p2";
+  cargoSha256 = "0hah0qfgnl4w2h0djyh4xx1jks5dkzwin01qw001dqiasl60prn2";
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";

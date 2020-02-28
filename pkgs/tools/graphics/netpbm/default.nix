@@ -15,7 +15,7 @@ stdenv.mkDerivation {
 
   postPatch = /* CVE-2005-2471, from Arch */ ''
     substituteInPlace converter/other/pstopnm.c \
-      --replace '"-DSAFER"' '"-DPARANOIDSAFER"'
+      --replace '"-dSAFER"' '"-dPARANOIDSAFER"'
   '';
 
   buildInputs =

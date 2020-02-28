@@ -50,13 +50,13 @@ let
   inherit (python2Packages) pygtk wrapPython python;
 in stdenv.mkDerivation rec {
   pname = "gimp";
-  version = "2.10.14";
+  version = "2.10.18";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "0m6wdnfvsxyhimdd4v3351g4r1fklllnbipbwcfym3h7q88hz6yz";
+    sha256 = "Zb/hEejuv/093jAWzLUH+ZSNJmPZSXy0ONm7YJ4R1xY=";
   };
 
   nativeBuildInputs = [
@@ -155,6 +155,7 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [
     "--without-webkit" # old version is required
+    "--disable-check-update"
     "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
     "--with-icc-directory=/run/current-system/sw/share/color/icc"
     # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)

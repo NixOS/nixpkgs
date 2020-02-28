@@ -6,7 +6,7 @@ let
 
   cfg = config.services.parsoid;
 
-  parsoid = pkgs.nodePackages."parsoid-git://github.com/abbradar/parsoid#stable";
+  parsoid = pkgs.nodePackages.parsoid;
 
   confTree = {
     worker_heartbeat_timeout = 300000;
@@ -98,8 +98,29 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       serviceConfig = {
-        User = "nobody";
         ExecStart = "${parsoid}/lib/node_modules/parsoid/bin/server.js -c ${confFile} -n ${toString cfg.workers}";
+
+        DynamicUser = true;
+        User = "parsoid";
+        Group = "parsoid";
+
+        CapabilityBoundingSet = "";
+        NoNewPrivileges = true;
+        ProtectSystem = "strict";
+        ProtectHome = true;
+        PrivateTmp = true;
+        PrivateDevices = true;
+        ProtectHostname = true;
+        ProtectKernelTunables = true;
+        ProtectKernelModules = true;
+        ProtectControlGroups = true;
+        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictNamespaces = true;
+        LockPersonality = true;
+        #MemoryDenyWriteExecute = true;
+        RestrictRealtime = true;
+        RestrictSUIDSGID = true;
+        RemoveIPC = true;
       };
     };
 

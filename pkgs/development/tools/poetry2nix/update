@@ -15,7 +15,7 @@ mv poetry2nix-master/* .
 
 mkdir build
 cp *.nix *.json *.py build/
-cp -r bin build/
+cp -r hooks bin build/
 rm build/shell.nix build/generate.py build/overlay.nix build/flake.nix
 
 cat > build/README.md << EOF

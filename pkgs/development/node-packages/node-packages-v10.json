@@ -54,6 +54,7 @@
 , "hueadm"
 , "imapnotify"
 , "indium"
+, "insect"
 , "ionic"
 , "ios-deploy"
 , { "iosevka-build-deps": "../../data/fonts/iosevka" }
@@ -99,6 +100,7 @@
 , {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
 , "ocaml-language-server"
 , "parcel-bundler"
+, "parsoid"
 , "peerflix"
 , "peerflix-server"
 , "pnpm"
@@ -163,6 +165,7 @@
 , "webtorrent-cli"
 , "wring"
 , "write-good"
+, "yaml-language-server"
 , "yarn"
 , "yo"
 ]
