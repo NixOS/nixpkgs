@@ -7,6 +7,7 @@
 , markdown
 , futures
 , absl-py
+, google-auth-oauthlib
 }:
 
 # tensorflow/tensorboard is built from a downloaded wheel, because
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "tensorflow-tensorboard";
-  version = "1.15.0";
+  version = "2.1.0";
   format = "wheel";
 
   src = fetchPypi ({
@@ -24,10 +25,10 @@ buildPythonPackage rec {
     format = "wheel";
   } // (if isPy3k then {
     python = "py3";
-    sha256 = "1g62i3nrgp8q9wfsyqqjkkfnsz7x2k018c26kdh527h1yrjjrbac";
+    sha256 = "1wpjdzhjpcdkyaahzd4bl71k4l30z5c55280ndiwj32hw70lxrp6";
   } else {
     python = "py2";
-    sha256 = "0l3zc8j2sh7h1z4qpy8kfvclv3kzndri55p10i42q6xahs9phav1";
+    sha256 = "1f805839xa36wxb7xac9fyxzaww92vw4d50vs6g61wnlr4byp00w";
   }));
 
   propagatedBuildInputs = [
@@ -37,6 +38,7 @@ buildPythonPackage rec {
     markdown
     grpcio
     absl-py
+    google-auth-oauthlib
     # not declared in install_requires, but used at runtime
     # https://github.com/NixOS/nixpkgs/issues/73840
     wheel
