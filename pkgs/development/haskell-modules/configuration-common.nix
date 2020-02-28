@@ -521,7 +521,9 @@ self: super: {
 
   # Won't compile with recent versions of QuickCheck.
   inilist = dontCheck super.inilist;
-  MissingH = dontCheck super.MissingH;
+
+  # Doesn't accept recent versions of 'base' or QuickCheck.
+  MissingH = dontCheck (doJailbreak super.MissingH);
 
   # https://github.com/yaccz/saturnin/issues/3
   Saturnin = dontCheck super.Saturnin;
