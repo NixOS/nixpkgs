@@ -25,10 +25,7 @@ in rustPlatform.buildRustPackage rec {
 
   RUSTC_BOOTSTRAP = 1;
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1v6n4aqhd5pyvvhlzhpmq7ykclfxw82wn2bg7n49b53d9p72jwq6";
+  cargoSha256 = "1zzf71d2pr4mkc3xpm58z1apgskw2z8rklly7q23qxkzg5h4qasx";
   cargoBuildFlags = [ featuresFlag ];
 
   checkPhase = ''
