@@ -1273,6 +1273,9 @@ self: super: {
   # Support recent versions of fast-logger.
   spacecookie = doJailbreak super.spacecookie;
 
+  # 2020-02-28 this was broken and is needed by glirc -- Kiwi
+  hookup = doJailbreak super.hookup;
+
   # apply patches from https://github.com/snapframework/snap-server/pull/126
   # manually until they are accepted upstream
   snap-server = overrideCabal super.snap-server (drv: {

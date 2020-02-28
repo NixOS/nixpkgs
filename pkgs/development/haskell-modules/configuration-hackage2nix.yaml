@@ -2446,7 +2446,8 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
-    # - glirc
+    - glirc
+    - hookup
     - matterhorn
     - Unique
   psibi:
@@ -5123,7 +5124,6 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
-  - glirc
   - GLMatrix
   - glob-posix
   - global
@@ -6023,7 +6023,6 @@ broken-packages:
   - hoodle-types
   - hoogle-index
   - hooks-dir
-  - hookup
   - hoopl
   - hoovie
   - hopencc
