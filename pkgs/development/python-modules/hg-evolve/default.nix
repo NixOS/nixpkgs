@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, mercurial
 }:
 
 buildPythonPackage rec {
@@ -13,7 +14,9 @@ buildPythonPackage rec {
     sha256 = "08bjrgxv8zrrz5xxydzkjl4a8cw3g62nmzfnvdzxxcrf1c96qw76";
   };
 
-  doCheck = false;
+  buildInputs = [
+    mercurial
+  ];
 
   meta = with stdenv.lib; {
     description = "Enables the “changeset evolution” feature of Mercurial core";
