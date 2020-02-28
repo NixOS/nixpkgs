@@ -2,7 +2,7 @@
 #! nix-shell shell-generate.nix -i bash
 set -eu -o pipefail
 
-cd "$NODE_NIXPKGS_PATH/pkgs/development/node-packages"
+cd "$NODE_NIXPKGS_PATH"
 rm -f ./node-env.nix
 for version in 10 12 13; do
     tmpdir=$(mktemp -d)
