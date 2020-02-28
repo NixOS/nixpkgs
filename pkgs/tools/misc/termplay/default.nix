@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoBuildFlags = ["--features" "bin"];
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "15i7qid91awlk74n823im1n6isqanf4vlcal90n1w9izyddzs9j0";
+  cargoSha256 = "0nxm2k8dx6nxyghvpw44wqfd1n65947v2wqxxvy641hin4d7xzma";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
