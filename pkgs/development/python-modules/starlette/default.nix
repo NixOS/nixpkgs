@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , buildPythonPackage
-, fetchPypi
+, fetchurl
 , aiofiles
 , graphene
 , itsdangerous
@@ -20,12 +20,12 @@
 
 buildPythonPackage rec {
   pname = "starlette";
-  version = "0.13.0";
+  version = "0.13.2";
   disabled = isPy27;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6bd414152d40d000ccbf6aa40ed89718b40868366a0f69fb83034f416303acef";
+  src = fetchurl {
+    url = "https://github.com/encode/starlette/archive/${version}.tar.gz";
+    sha256 = "1snnmbyia7k18di6i3wij4vwmczcr6mj6x9fwrw7ndbil2r36g42";
   };
 
   propagatedBuildInputs = [
