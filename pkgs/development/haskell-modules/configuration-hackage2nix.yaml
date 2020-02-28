@@ -67,6 +67,8 @@ core-packages:
 # comment saying "# LTS Haskell x.y". Any changes after that commend will be
 # lost the next time `update-stackage.sh` runs.
 default-package-overrides:
+  # This was only intended for ghc-7.0.4, and has very old deps, one hidden behind a flag
+  - MissingH ==1.4.2.0
   # for cabal-install-3.0.0.0
   - hackage-security >=0.5.2.2 && <0.6
   # pandoc-2.9 does not accept the 0.3 version yet
@@ -3752,7 +3754,6 @@ broken-packages:
   - confide
   - config-parser
   - config-select
-  - ConfigFile
   - ConfigFileTH
   - Configger
   - configifier
@@ -7419,7 +7420,6 @@ broken-packages:
   - miss
   - miss-porcelain
   - missing-py2
-  - MissingH
   - MissingPy
   - mix-arrows
   - mixed-strategies
