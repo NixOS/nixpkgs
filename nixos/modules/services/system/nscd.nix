@@ -7,6 +7,10 @@ let
   nssModulesPath = config.system.nssModules.path;
   cfg = config.services.nscd;
 
+  nscd = if pkgs.stdenv.hostPlatform.libc == "glibc"
+         then pkgs.stdenv.cc.libc.bin
+         else pkgs.glibc.bin;
+
 in
 
 {
@@ -59,16 +63,16 @@ in
         # files. So prefix the ExecStart command with "!" to prevent systemd
         # from dropping privileges early. See ExecStart in systemd.service(5).
         serviceConfig =
-          { ExecStart = "!@${pkgs.glibc.bin}/sbin/nscd nscd";
+          { ExecStart = "!@${nscd}/sbin/nscd nscd";
             Type = "forking";
             DynamicUser = true;
             RuntimeDirectory = "nscd";
             PIDFile = "/run/nscd/nscd.pid";
             Restart = "always";
             ExecReload =
-              [ "${pkgs.glibc.bin}/sbin/nscd --invalidate passwd"
-                "${pkgs.glibc.bin}/sbin/nscd --invalidate group"
-                "${pkgs.glibc.bin}/sbin/nscd --invalidate hosts"
+              [ "${nscd}/sbin/nscd --invalidate passwd"
+                "${nscd}/sbin/nscd --invalidate group"
+                "${nscd}/sbin/nscd --invalidate hosts"
               ];
           };
       };
