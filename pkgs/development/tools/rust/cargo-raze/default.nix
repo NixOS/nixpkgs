@@ -3,20 +3,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-raze";
-  version = "0.2.10";
+  version = "0.2.15";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1fznh8jygzyzphw7762qc2jv0370z7qjqk1vkql0g246iqby8pq9";
+    sha256 = "0cbbf0r753h4m42h0z44yn99cbwkchacf703j2i9gdi7d60ns92p";
   };
+
   sourceRoot = "source/impl";
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "06rl7v0f1lgj9ii07fcnaxmhn28ckr03cpf5b93q8ripm5qh7my9";
+  cargoSha256 = "1d9ra80bilgmn44a4dzjvc4cyl9wv6bzkp8mavr6qjpjq57x4sin";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ curl libgit2 openssl ]
@@ -26,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generate Bazel BUILD files from Cargo dependencies";
-    homepage = https://github.com/google/cargo-raze;
+    homepage = "https://github.com/google/cargo-raze";
     license = licenses.asl20;
     maintainers = with maintainers; [ elasticdog ];
     platforms = platforms.all;
