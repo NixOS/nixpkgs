@@ -1400,4 +1400,27 @@ self: super: {
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
 
+  pantry = appendPatches super.pantry [
+    # Pantry has been updated for ghc-8.8 upstream, but there hasn't been a
+    # release yet with this patch. This can probably be removed when a
+    # version of pantry is released after 0.2.0.0.
+    # https://github.com/commercialhaskell/pantry/pull/6
+    (pkgs.fetchpatch {
+      url = "https://github.com/commercialhaskell/pantry/pull/6.diff";
+      sha256 = "0aml06jshpjh3aiscs5av7y33m3d6s6x5pzdvh7pky476izfg87k";
+      excludes = [
+        ".azure/azure-linux-template.yml"
+        ".azure/azure-osx-template.yml"
+        ".azure/azure-windows-template.yml"
+        "package.yaml"
+        "pantry.cabal"
+        "stack-lts-11.yaml"
+        "stack-lts-12.yaml"
+        "stack-nightly.yaml"
+        "stack-windows.yaml"
+        "stack.yaml"
+      ];
+    })
+  ];
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
