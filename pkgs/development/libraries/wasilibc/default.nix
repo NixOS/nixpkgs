@@ -1,19 +1,26 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
-  name = "wasilibc-20190712";
+  name = "wasilibc-20200227";
   src = fetchFromGitHub {
     owner = "CraneStation";
     repo = "wasi-libc";
-    rev = "8df0d4cd6a559b58d4a34b738a5a766b567448cf";
-    sha256 = "1n4gvgzacpagar2mx8g9950q0brnhwz7jg2q44sa5mnjmlnkiqhh";
+    rev = "d9066a87c04748e7381695eaf01cc5c9a9c3003b";
+    sha256 = "0103bm6arj18sf8bm9lgj3b64aa2znflpjwca33jm83jpbf8h0ry";
   };
+
+  preBuild = ''
+    makeFlagsArray=( WASM_CFLAGS="-isystem sysroot/include -isystem ../sysroot/include" )
+  '';
+
   makeFlags = [
     "WASM_CC=${stdenv.cc.targetPrefix}cc"
     "WASM_NM=${stdenv.cc.targetPrefix}nm"
     "WASM_AR=${stdenv.cc.targetPrefix}ar"
     "INSTALL_DIR=${placeholder "out"}"
   ];
+
+  enableParallelBuilding = true;
 
   postInstall = ''
     mv $out/lib/*/* $out/lib
