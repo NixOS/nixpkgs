@@ -532,6 +532,21 @@ let
     };
   };
 
+  Applify = buildPerlPackage {
+    pname = "Applify";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.21.tar.gz";
+      sha256 = "e34bc64c12c42369af6db7d17e3e20059b9d97ed50f8e487bf610008525eb84d";
+    };
+    meta = {
+      homepage = "https://github.com/jhthorsen/applify";
+      description = "Write object oriented scripts with ease";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
     version = "0.88";
