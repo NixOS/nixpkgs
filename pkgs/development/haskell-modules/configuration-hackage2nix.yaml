@@ -2367,6 +2367,7 @@ extra-packages:
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock == 2.22.*                   # required on GHC 8.0.x
   - haddock-api == 2.22.*               # required on GHC 7.8.x
+  - haddock-library ==1.7.*             # required by stylish-cabal-0.5.0.0
   - happy <1.19.6                       # newer versions break Agda
   - happy == 1.19.9                     # for purescript
   - haskell-gi-overloading == 0.0       # gi-* packages use this dependency to disable overloading support
