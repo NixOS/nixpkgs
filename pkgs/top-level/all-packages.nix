@@ -21191,6 +21191,8 @@ in
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
 
+  qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
+
   qlandkartegt = libsForQt5.callPackage ../applications/misc/qlandkartegt {};
 
   garmindev = callPackage ../applications/misc/qlandkartegt/garmindev.nix {};
