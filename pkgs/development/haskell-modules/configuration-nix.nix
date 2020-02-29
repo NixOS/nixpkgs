@@ -635,11 +635,19 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
+      # Spago needs a patch for MonadFail changes.
+      # https://github.com/purescript/spago/pull/584
+      # This can probably be removed when a version after spago-0.14.0 is released.
+      spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
+        url = "https://github.com/purescript/spago/pull/584/commits/898a8e48665e5a73ea03525ce2c973455ab9ac52.patch";
+        sha256 = "05gs1hjlcf60cr6728rhgwwgxp3ildly14v4l2lrh6ma2fljhyjy";
+      });
+
       # Spago basically compiles with LTS-14, but it requires a newer version
       # of directory.  This is to work around a bug only present on windows, so
       # we can safely jailbreak spago and use the older directory package from
       # LTS-14.
-      spagoWithOverrides = doJailbreak (super.spago.override {
+      spagoWithOverrides = doJailbreak (spagoWithPatches.override {
         # spago requires dhall-1.29.0.
         dhall = self.dhall_1_29_0;
       });
