@@ -70,6 +70,7 @@ py.pkgs.buildPythonApplication rec {
     homepage = http://errbot.io/;
     maintainers = with maintainers; [ fpletz globin ];
     license = licenses.gpl3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
+    # flaky on darwin, "RuntimeError: can't start new thread"
   };
 }
