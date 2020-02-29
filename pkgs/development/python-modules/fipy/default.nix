@@ -14,6 +14,8 @@
 , gmsh
 , python
 , stdenv
+, openssh
+, fetchurl
 }:
 
 let
@@ -21,12 +23,11 @@ let
 in
   buildPythonPackage rec {
     pname = "fipy";
-    version = "3.3";
+    version = "3.4.1";
 
-    src = fetchPypi {
-      pname = "FiPy";
-      inherit version;
-      sha256 = "11agpg3d6yrns8igkpml1mxy3mkqkjq2yrw1mw12y07dkk12ii19";
+    src = fetchurl {
+      url = "https://github.com/usnistgov/fipy/releases/download/${version}/FiPy-${version}.tar.gz";
+      sha256 = "0078yg96fknqhywn1v26ryc5z47c0j0c1qwz6p8wsjn0wmzggaqk";
     };
 
     propagatedBuildInputs = [
@@ -38,11 +39,13 @@ in
       mpi4py
       future
       scikit-fmm
+      openssh
     ] ++ lib.optionals isPy27 [ pysparse ] ++ not_darwin_inputs;
 
     checkInputs = not_darwin_inputs;
 
     checkPhase = ''
+      export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
       ${python.interpreter} setup.py test --modules
     '';
 

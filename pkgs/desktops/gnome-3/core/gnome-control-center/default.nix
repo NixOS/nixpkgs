@@ -62,16 +62,17 @@
 , vino
 , gnome-user-share
 , gnome-remote-desktop
+, shadow
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.34.2";
+  version = "3.34.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "054igagvmyzpaa5nwzz98gv7bk7l5dwp6g813707132si3szlpx8";
+    sha256 = "0bi7lsmr5hcf0v17brsa8j33p6i0wnh620bzwycmxryfp6s6vshp";
   };
 
   nativeBuildInputs = [
@@ -138,6 +139,7 @@ stdenv.mkDerivation rec {
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
+      usermod = "${shadow}/bin/usermod";
       gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;

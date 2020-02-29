@@ -1,9 +1,7 @@
-{ lib, buildPythonPackage, fetchFromGitHub
-, python3, protobuf3_6
-}:
+{ lib, buildPythonPackage, fetchFromGitHub, python, protobuf3_6 }:
 
 let
-  python = python3.override {
+  py = python.override {
     packageOverrides = self: super: {
       protobuf = super.protobuf.override {
         protobuf = protobuf3_6;
@@ -21,7 +19,7 @@ in buildPythonPackage rec {
     sha256 = "1jscmc5s7mwx43gvxjlqc30ylp5jjpmkqx7s3b9nllbh926p3ixg";
   };
 
-  propagatedBuildInputs = with python.pkgs; [ protobuf dnspython ];
+  propagatedBuildInputs = with py.pkgs; [ protobuf dnspython ];
 
   # Tests are failing (TODO: unknown reason)
   # TypeError: __init__() missing 1 required positional argument: 'string'

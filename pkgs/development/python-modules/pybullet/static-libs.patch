@@ -1,13 +1,13 @@
 diff --git a/setup.py b/setup.py
-index 98efabdbf..e69e79084 100644
+index 6f7bd7589..321fc6ab0 100644
 --- a/setup.py
 +++ b/setup.py
-@@ -563,6 +563,8 @@ print("-----")
+@@ -465,6 +465,8 @@ print("-----")
  
  extensions = []
  
 +libraries += [ "X11", "GL" ] # statically link x11 and opengl
 +
- pybullet_ext = Extension("pybullet",
-         sources =  sources,
-         libraries = libraries,
+ pybullet_ext = Extension(
+     "pybullet",
+     sources=sources,

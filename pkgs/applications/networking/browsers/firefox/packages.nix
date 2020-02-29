@@ -1,16 +1,7 @@
-{ config, lib, callPackage, fetchurl, fetchFromGitHub, overrideCC, gccStdenv, gcc6 }:
+{ config, lib, callPackage, fetchurl }:
 
 let
-
   common = opts: callPackage (import ./common.nix opts) {};
-
-  # Needed on older branches since rustc: 1.32.0 -> 1.33.0
-  missing-documentation-patch = fetchurl {
-    name = "missing-documentation.patch";
-    url = "https://aur.archlinux.org/cgit/aur.git/plain/deny_missing_docs.patch"
-        + "?h=firefox-esr&id=03bdd01f9cf";
-    sha256 = "1i33n3fgwc8d0v7j4qn7lbdax0an6swar12gay3q2nwrhg3ic4fb";
-  };
 in
 
 rec {

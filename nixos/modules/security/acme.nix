@@ -325,10 +325,10 @@ in
                           KEY=${spath}/certificates/${keyName}.key
                           if [ -e $KEY -a $KEY -nt key.pem ]; then
                             cp -p ${spath}/certificates/${keyName}.key key.pem
-                            cp -p ${spath}/certificates/${keyName}.crt cert.pem
+                            cp -p ${spath}/certificates/${keyName}.crt fullchain.pem
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
-                            cat cert.pem chain.pem > fullchain.pem
-                            cat key.pem cert.pem chain.pem > full.pem
+                            ln -s fullchain.pem cert.pem
+                            cat key.pem fullchain.pem > full.pem
                             chmod ${rights} *.pem
                             chown '${data.user}:${data.group}' *.pem
                           fi

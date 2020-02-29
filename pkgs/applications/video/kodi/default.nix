@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
+{ stdenv, lib, fetchpatch, fetchurl, fetchFromGitHub, autoconf, automake, libtool, makeWrapper, linuxHeaders
 , pkgconfig, cmake, gnumake, yasm, python2Packages
 , libgcrypt, libgpgerror, libunistring
 , boost, avahi, lame, autoreconfHook
@@ -193,6 +193,15 @@ in stdenv.mkDerivation {
       pkgconfig gnumake
       autoconf automake libtool # still needed for some components. Check if that is the case with 19.0
     ] ++ lib.optionals useWayland [ wayland-protocols ];
+
+    patches = [
+      # Adds missing cassert includes, fixing builds. This will be unnecessary
+      # after 18.6 is released (which will contain this patch)
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/d5947e6733fd564edb68df91fd6d389d9fb82319.patch";
+        sha256 = "1shlbsbfba3074wdyhl42vgin6jfzl7sy3zsvxaxkpx8g7my9jn2";
+      })
+    ];
 
     cmakeFlags = [
       "-Dlibdvdcss_URL=${libdvdcss.src}"
