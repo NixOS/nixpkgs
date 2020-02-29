@@ -9111,7 +9111,6 @@ broken-packages:
   - semigroups-actions
   - semiring
   - semiring-num
-  - semver-range
   - sendgrid-haskell
   - sendgrid-v3
   - sensei
