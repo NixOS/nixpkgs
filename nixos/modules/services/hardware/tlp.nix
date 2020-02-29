@@ -37,6 +37,21 @@ in
 
   ###### implementation
   config = mkIf cfg.enable {
+    warnings = with builtins.isNull;
+    if !isNull config.powerManagement.scsiLinkPolicy then
+      [ "You've set a non-null value for powerManagement.scsiLinkPolicy. The TLP module will override that decision." ]
+    else if !isNull config.powerManagement.cpuFreqGovernor then
+      [ "You've set a non-null value for powerManagement.cpuFreqGovernor. The TLP module will override that decision." ]
+    else if !isNull config.powerManagement.cpufreq.max then
+      [ "You've set a non-null value for powerManagement.cpufreq.max. The TLP module will override that decision." ]
+    else if !isNull config.powerManagement.cpufreq.min then
+      [ "You've set a non-null value for powerManagement.cpufreq.min. The TLP module will override that decision." ]
+    else if config.systemd.services.systemd-rfkill.enable == true then
+      [ "You've enabled systemd.services.systemd-rfkill. The TLP module will forcefully disable it." ]
+    else if config.systemd.sockets.systemd-rfkill.enable == true then
+      [ "You've enabled systemd.sockets.systemd-rfkill. The TLP module will forcefully disable it." ]
+    else [];
+
     boot.kernelModules = [ "msr" ];
 
     environment.etc = {
@@ -51,10 +66,10 @@ in
     # FIXME: When the config is parametrized we need to move these into a
     # conditional on the relevant options being enabled.
     powerManagement = {
-      scsiLinkPolicy = null;
-      cpuFreqGovernor = null;
-      cpufreq.max = null;
-      cpufreq.min = null;
+      scsiLinkPolicy = lib.mkForce null;
+      cpuFreqGovernor = lib.mkForce null;
+      cpufreq.max = lib.mkForce null;
+      cpufreq.min = lib.mkForce null;
     };
 
     services.udev.packages = [ tlp ];
@@ -64,8 +79,8 @@ in
       # XXX: These must always be disabled/masked according to [1].
       #
       # [1]: https://github.com/linrunner/TLP/blob/a9ada09e0821f275ce5f93dc80a4d81a7ff62ae4/tlp-stat.in#L319
-      sockets.systemd-rfkill.enable = false;
-      services.systemd-rfkill.enable = false;
+      sockets.systemd-rfkill.enable = lib.mkForce false;
+      services.systemd-rfkill.enable = lib.mkForce false;
 
       services.tlp = {
         # XXX: The service should reload whenever the configuration changes,
