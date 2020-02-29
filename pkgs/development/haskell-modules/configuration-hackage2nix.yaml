@@ -3095,7 +3095,6 @@ broken-packages:
   - binary-ext
   - binary-file
   - binary-indexed-tree
-  - binary-instances
   - binary-protocol
   - binary-protocol-zmq
   - binary-search
