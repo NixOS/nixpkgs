@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib }:
+{ stdenv, llvm, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
   name = "wasilibc-20200227";
@@ -9,14 +9,14 @@ stdenv.mkDerivation {
     sha256 = "0103bm6arj18sf8bm9lgj3b64aa2znflpjwca33jm83jpbf8h0ry";
   };
 
-  preBuild = ''
-    makeFlagsArray=( WASM_CFLAGS="-isystem sysroot/include -isystem ../sysroot/include" )
-  '';
+  makeFlagsArray = [
+    "WASM_CFLAGS=-O2 -DNDEBUG -U_FORTIFY_SOURCE -fno-pic -fno-stack-protector -isystem sysroot/include -isystem ../sysroot/include"
+  ];
 
   makeFlags = [
     "WASM_CC=${stdenv.cc.targetPrefix}cc"
-    "WASM_NM=${stdenv.cc.targetPrefix}nm"
-    "WASM_AR=${stdenv.cc.targetPrefix}ar"
+    "WASM_NM=${llvm}/bin/llvm-nm"
+    "WASM_AR=${llvm}/bin/llvm-ar"
     "INSTALL_DIR=${placeholder "out"}"
   ];
 
