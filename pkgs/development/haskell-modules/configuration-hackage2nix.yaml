@@ -2433,7 +2433,6 @@ package-maintainers:
     - nix-paths
     - pandoc
     - structured-haskell-mode
-    - stylish-cabal
     - titlecase
     - xmonad
     - xmonad-contrib
@@ -9701,6 +9700,7 @@ broken-packages:
   - stunclient
   - stunts
   - stutter
+  - stylish-cabal
   - stylist
   - stylized
   - sub-state
