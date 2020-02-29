@@ -1,4 +1,4 @@
-{ stdenv, llvm, fetchFromGitHub, lib }:
+{ stdenv, llvm-tools, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation {
   name = "wasilibc-20200227";
@@ -9,14 +9,19 @@ stdenv.mkDerivation {
     sha256 = "0103bm6arj18sf8bm9lgj3b64aa2znflpjwca33jm83jpbf8h0ry";
   };
 
-  makeFlagsArray = [
+  makeFlagsArray = stdenv.lib.optional stdenv.cc.isClang [
     "WASM_CFLAGS=-O2 -DNDEBUG -U_FORTIFY_SOURCE -fno-pic -fno-stack-protector -isystem sysroot/include -isystem ../sysroot/include"
   ];
 
-  makeFlags = [
+  makeFlags = if stdenv.cc.isClang then [
     "WASM_CC=${stdenv.cc.targetPrefix}cc"
-    "WASM_NM=${llvm}/bin/llvm-nm"
-    "WASM_AR=${llvm}/bin/llvm-ar"
+    "WASM_NM=${llvm-tools}/bin/llvm-nm"
+    "WASM_AR=${llvm-tools}/bin/llvm-ar"
+    "INSTALL_DIR=${placeholder "out"}"
+  ] else [
+    "WASM_CC=${stdenv.cc.targetPrefix}cc"
+    "WASM_NM=${stdenv.cc.targetPrefix}nm"
+    "WASM_AR=${stdenv.cc.targetPrefix}ar"
     "INSTALL_DIR=${placeholder "out"}"
   ];
 
