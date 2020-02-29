@@ -3580,6 +3580,12 @@
     githubId = 1058504;
     name = "José Luis Lafuente";
   };
+  jloyet = {
+    email = "ml@fatbsd.com";
+    github = "fatpat";
+    githubId = 822436;
+    name = "Jérôme Loyet";
+  };
   jluttine = {
     email = "jaakko.luttinen@iki.fi";
     github = "jluttine";

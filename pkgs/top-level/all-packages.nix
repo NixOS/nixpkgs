@@ -23781,6 +23781,8 @@ in
 
   sauerbraten = callPackage ../games/sauerbraten {};
 
+  scaleft = callPackage ../applications/networking/scaleft { };
+
   scaleway-cli = callPackage ../tools/admin/scaleway-cli { };
 
   scid = callPackage ../games/scid {
