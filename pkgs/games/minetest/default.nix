@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake, irrlicht, libpng, bzip2, curl, libogg, jsoncpp
 , libjpeg, libXxf86vm, libGLU, libGL, openal, libvorbis, sqlite, luajit
 , freetype, gettext, doxygen, ncurses, graphviz, xorg, gmp, libspatialindex
-, leveldb, postgresql, hiredis
+, leveldb, postgresql, hiredis, libiconv, OpenGL, OpenAL ? openal, Carbon, Cocoa
 }:
 
 with stdenv.lib;
@@ -39,7 +39,7 @@ let
     ] ++ optionals buildClient [
       "-DOpenGL_GL_PREFERENCE=GLVND"
     ];
-
+    
     NIX_CFLAGS_COMPILE = "-DluaL_reg=luaL_Reg"; # needed since luajit-2.1.0-beta3
 
     nativeBuildInputs = [ cmake doxygen graphviz ];
@@ -47,6 +47,8 @@ let
     buildInputs = [
       irrlicht luajit jsoncpp gettext freetype sqlite curl bzip2 ncurses
       gmp libspatialindex
+    ] ++ optionals stdenv.isDarwin [ 
+      libiconv OpenGL OpenAL Carbon Cocoa
     ] ++ optionals buildClient [
       libpng libjpeg libGLU libGL openal libogg libvorbis xorg.libX11 libXxf86vm
     ] ++ optionals buildServer [
@@ -62,7 +64,7 @@ let
       homepage = http://minetest.net/;
       description = "Infinite-world block sandbox game";
       license = licenses.lgpl21Plus;
-      platforms = platforms.linux;
+      platforms = platforms.linux ++ platforms.darwin;
       maintainers = with maintainers; [ pyrolagus fpletz ];
     };
   };

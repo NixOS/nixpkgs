@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
-, coreutils, git, gmp, nettools, openssl_1_0_2, readline, tzdata, libxml2, libyaml
+, coreutils, git, gmp, nettools, openssl, readline, tzdata, libxml2, libyaml
 , boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib, pkgconfig
 , callPackage }:
 
@@ -20,7 +20,7 @@ let
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
 
-  checkInputs = [ git gmp openssl_1_0_2 readline libxml2 libyaml ];
+  checkInputs = [ git gmp openssl readline libxml2 libyaml ];
 
   genericBinary = { version, sha256s, rel ? 1 }:
   stdenv.mkDerivation rec {
@@ -39,7 +39,7 @@ let
   };
 
   commonBuildInputs = extraBuildInputs: [
-    boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl_1_0_2
+    boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl
   ] ++ extraBuildInputs
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 

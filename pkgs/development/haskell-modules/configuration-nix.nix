@@ -640,18 +640,22 @@ self: super: builtins.intersectAttrs super {
       # we can safely jailbreak spago and use the older directory package from
       # LTS-14.
       spagoWithOverrides = doJailbreak (super.spago.override {
-        # spago requires dhall_1_27_0.
-        dhall = self.dhall_1_27_0;
+        # spago requires dhall-1.29.0.
+        dhall = self.dhall_1_29_0;
       });
 
+      # This defines the version of the purescript-docs-search release we are using.
+      # This is defined in the src/Spago/Prelude.hs file in the spago source.
+      docsSearchVersion = "v0.0.8";
+
       docsSearchAppJsFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/docs-search-app.js";
-        sha256 = "11721x455qzh40vzfmralaynn9v8b5wix86r107hhs08vhryjib2";
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
+        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
       };
 
       purescriptDocsSearchFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/purescript-docs-search";
-        sha256 = "16p1fmdvpwz1yswav8qjsd26c9airb22xncqw1rjnbd8lcpqx0p5";
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
+        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
@@ -676,6 +680,11 @@ self: super: builtins.intersectAttrs super {
           # https://github.com/spacchetti/spago/issues/510
           cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
           cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w "$sourceRoot/templates/docs-search-app.js" "$sourceRoot/templates/purescript-docs-search"
         '';
       });
 
@@ -688,4 +697,17 @@ self: super: builtins.intersectAttrs super {
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
   postgresql-typed = dontCheck super.postgresql-typed;
+
+  # mplayer-spot uses mplayer at runtime.
+  mplayer-spot =
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.mplayer ];
+    in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
+      postInstall = ''
+        wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
+      '';
+    });
+
+  # break infinite recursion with base-orphans
+  primitive = dontCheck super.primitive;
+
 }
