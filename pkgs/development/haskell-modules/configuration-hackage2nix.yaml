@@ -5095,7 +5095,6 @@ broken-packages:
   - git-repair
   - git-sanity
   - gitdo
-  - github
   - github-backup
   - github-data
   - github-release
