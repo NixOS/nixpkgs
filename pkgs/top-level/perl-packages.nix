@@ -7820,6 +7820,10 @@ let
     checkInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ pkgs.gobject-introspection Glib ];
     meta = {
+      broken = true; # TODO: tests failing because "failed to load libregress.so"
+      # see https://github.com/NixOS/nixpkgs/pull/68115
+      # and https://github.com/NixOS/nixpkgs/issues/68116
+      # adding pkgs.gnome3.gjs does not fix it
       description = "Dynamically create Perl language bindings";
       license = stdenv.lib.licenses.lgpl2Plus;
     };
