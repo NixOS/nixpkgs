@@ -67,7 +67,12 @@ let
     (assertOnlyFields [
       "PrivateKeyFile" "ListenPort" "FwMark"
     ])
-    (assertRange "FwMark" 1 4294967295)
+    # The following check won't work on nix <= 2.2
+    # see https://github.com/NixOS/nix/pull/2378
+    #
+    # Add this again when we'll have drop the
+    # nix < 2.2 support.
+    # (assertRange "FwMark" 1 4294967295)
   ];
 
   # NOTE The PresharedKey directive is missing on purpose here, please
@@ -181,7 +186,12 @@ let
     (assertOnlyFields [
       "InterfaceId" "Independent"
     ])
-    (assertRange "InterfaceId" 1 4294967295)
+    # The following check won't work on nix <= 2.2
+    # see https://github.com/NixOS/nix/pull/2378
+    #
+    # Add this again when we'll have drop the
+    # nix < 2.2 support.
+    # (assertRange "InterfaceId" 1 4294967295)
     (assertValueOneOf "Independent" boolValues)
   ];
 
@@ -242,7 +252,12 @@ let
       "IPProtocol" "InvertRule" "Family"
     ])
     (assertRange "TypeOfService" 0 255)
-    (assertRange "FirewallMark" 1 4294967295)
+    # The following check won't work on nix <= 2.2
+    # see https://github.com/NixOS/nix/pull/2378
+    #
+    # Add this again when we'll have drop the
+    # nix < 2.2 support.
+    #  (assertRange "FirewallMark" 1 4294967295)
     (assertInt "Priority")
     (assertPort "SourcePort")
     (assertPort "DestinationPort")
@@ -554,7 +569,7 @@ let
     options = {
       routingPolicyRuleConfig = mkOption {
         default = { };
-        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; } ;};
+        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; } ;};
         type = types.addCheck (types.attrsOf unitOption) checkRoutingPolicyRule;
         description = ''
           Each attribute in this set specifies an option in the
