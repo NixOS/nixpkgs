@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, meson, pkg-config, ninja
 , pixman, libuv, gnutls, libdrm
 # libjpeg_turbo: Optional, for tight encoding (disabled because experimental)
+, enableCpuAcceleration ? false # Whether to use CPU extensions (e.g. AVX)
 }:
 
 stdenv.mkDerivation rec {
@@ -16,6 +17,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ meson pkg-config ninja ];
   buildInputs = [ pixman libuv gnutls libdrm ];
+
+  patches = stdenv.lib.optional (!enableCpuAcceleration) ./disable-cpu-acceleration.patch;
 
   meta = with stdenv.lib; {
     description = "A VNC server library";
