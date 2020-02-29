@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     description = "Perceptual video quality assessment based on multi-method fusion (VMAF)";
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = [ maintainers.cfsmp3 ];
+    maintainers = [ maintainers.cfsmp3 maintainers.marsam ];
   };
 
 }
