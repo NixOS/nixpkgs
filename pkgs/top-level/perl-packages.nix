@@ -19276,6 +19276,20 @@ let
     buildInputs = [ FileFindRule TestPod TestPodCoverage ];
   };
 
+  TextLorem = buildPerlModule {
+    pname = "Text-Lorem";
+    version = "0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AD/ADEOLA/Text-Lorem-0.3.tar.gz";
+      sha256 = "64bb636fb21213101a646b414ecbdc1b55edf905cbcdc7f5d24774ec5061fe2d";
+    };
+    meta = {
+      description = "Generate random Latin looking text";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   TestManifest = buildPerlPackage {
     pname = "Test-Manifest";
     version = "2.021";
