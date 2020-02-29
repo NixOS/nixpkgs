@@ -48,6 +48,7 @@ self: super: {
   # Needs older QuickCheck version
   attoparsec-varword = dontCheck super.attoparsec-varword;
 
+  # https://github.com/koalaman/shellcheck/issues/1778
   ShellCheck = overrideCabal super.ShellCheck (drv: {
     patches = [
       # cabal 3.0 support
