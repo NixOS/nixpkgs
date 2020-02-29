@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1y33n0dmrssv35l0apfq1mchyh92cfbzjarh0m8zb2nxwhvk7paw";
+  cargoSha256 = "08zqhj3b0v4fxj8vi323zrxg4xvbp9gndm2khzs6daacglbwbvhk";
 
   postInstall = ''
     installShellCompletion utils/completions/pueue.{bash,fish} --zsh utils/completions/_pueue
