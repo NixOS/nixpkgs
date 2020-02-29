@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, tcl }:
+{ stdenv, fetchurl, writeText, tcl }:
 
 stdenv.mkDerivation rec {
   pname = "incrtcl";
@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
     rmdir $out/bin
     mv $out/lib/itcl${version}/* $out/lib
     rmdir $out/lib/itcl${version}
+  '';
+
+  setupHook = writeText "setup-hook.sh" ''
+    export ITCL_LIBRARY=@out@/lib
   '';
 
   outputs = [ "out" "dev" "man" ];
