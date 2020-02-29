@@ -9572,7 +9572,6 @@ broken-packages:
   - stable-marriage
   - stable-memo
   - stable-tree
-  - stack
   - stack-bump
   - stack-fix
   - stack-hpc-coveralls
