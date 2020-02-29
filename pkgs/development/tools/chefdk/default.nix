@@ -1,7 +1,7 @@
 { lib, bundlerEnv, bundlerUpdateScript, ruby, perl, autoconf }:
 
 bundlerEnv {
-  name = "chef-dk-2.4.17";
+  name = "chef-dk-4.7.73";
 
   inherit ruby;
   gemdir = ./.;
@@ -16,7 +16,6 @@ bundlerEnv {
     license     = licenses.asl20;
     maintainers = with maintainers; [ offline nicknovitski ];
     platforms   = platforms.unix;
-    # chefdk depends on ruby 2.4 which we don't support anymore
-    broken      = true;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
