@@ -235,6 +235,21 @@ let
     (assertValueOneOf "AutoJoin" boolValues)
   ];
 
+  checkRoutingPolicyRule = checkUnitConfig "RoutingPolicyRule" [
+    (assertOnlyFields [
+      "TypeOfService" "From" "To" "FirewallMark" "Table" "Priority"
+      "IncomingInterface" "OutgoingInterface" "SourcePort" "DestinationPort"
+      "IPProtocol" "InvertRule" "Family"
+    ])
+    (assertRange "TypeOfService" 0 255)
+    (assertRange "FirewallMark" 1 4294967295)
+    (assertInt "Priority")
+    (assertPort "SourcePort")
+    (assertPort "DestinationPort")
+    (assertValueOneOf "InvertRule" boolValues)
+    (assertValueOneOf "Family" ["ipv4" "ipv6" "both"])
+  ];
+
   checkRoute = checkUnitConfig "Route" [
     (assertOnlyFields [
       "Gateway" "GatewayOnLink" "Destination" "Source" "Metric"
@@ -535,6 +550,22 @@ let
     };
   };
 
+  routingPolicyRulesOptions = {
+    options = {
+      routingPolicyRuleConfig = mkOption {
+        default = { };
+        example = { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; } ;};
+        type = types.addCheck (types.attrsOf unitOption) checkRoutingPolicyRule;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[RoutingPolicyRule]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
   routeOptions = {
     options = {
       routeConfig = mkOption {
@@ -772,6 +803,16 @@ let
       '';
     };
 
+    routingPolicyRules = mkOption {
+      default = [ ];
+      type = with types; listOf (submodule routingPolicyRulesOptions);
+      description = ''
+        A list of routing policy rules sections to be added to the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     routes = mkOption {
       default = [ ];
       type = with types; listOf (submodule routeOptions);
@@ -927,6 +968,11 @@ let
           ${flip concatMapStrings def.routes (x: ''
             [Route]
             ${attrsToSection x.routeConfig}
+
+          '')}
+          ${flip concatMapStrings def.routingPolicyRules (x: ''
+            [RoutingPolicyRule]
+            ${attrsToSection x.routingPolicyRuleConfig}
 
           '')}
           ${def.extraConfig}
