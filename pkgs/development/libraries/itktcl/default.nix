@@ -15,8 +15,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-tcl=${tcl}/lib"
     "--with-tk=${tk}/lib"
-    "--with-tkinclude=${tk.dev}/include"
     "--with-itcl=${incrtcl}/lib"
+    "--with-tkinclude=${tk.dev}/include"
   ];
 
   postInstall = ''
