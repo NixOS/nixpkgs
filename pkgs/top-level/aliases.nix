@@ -113,6 +113,7 @@ mapAliases ({
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
+  fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H.";
   ffadoFull = ffado; # added 2018-05-01
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
@@ -424,6 +425,29 @@ mapAliases ({
   slim = throw "slim has been removed. Please use a different display-manager"; # added 2019-11-11
   slimThemes = throw "slimThemes has been removed because slim has been also"; # added 2019-11-11
   sundials_3 = throw "removed 2020-02. outdated and no longer needed";
+
+  # added 2020-02-10
+  sourceHanSansPackages = {
+    japanese = source-han-sans;
+    korean = source-han-sans;
+    simplified-chinese = source-han-sans;
+    traditional-chinese = source-han-sans;
+  };
+  source-han-sans-japanese = source-han-sans;
+  source-han-sans-korean = source-han-sans;
+  source-han-sans-simplified-chinese = source-han-sans;
+  source-han-sans-traditional-chinese = source-han-sans;
+  sourceHanSerifPackages = {
+    japanese = source-han-serif;
+    korean = source-han-serif;
+    simplified-chinese = source-han-serif;
+    traditional-chinese = source-han-serif;
+  };
+  source-han-serif-japanese = source-han-serif;
+  source-han-serif-korean = source-han-serif;
+  source-han-serif-simplified-chinese = source-han-serif;
+  source-han-serif-traditional-chinese = source-han-serif;
+
   net_snmp = net-snmp; # added 2019-12-21
   spaceOrbit = space-orbit; # addewd 2016-05-23
   speech_tools = speech-tools; # added 2018-04-25

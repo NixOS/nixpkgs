@@ -8284,7 +8284,7 @@ in
 
   # Please update doc/languages-frameworks/haskell.section.md, “Our
   # current default compiler is”, if you bump this:
-  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc865;
+  haskellPackages = dontRecurseIntoAttrs haskell.packages.ghc882;
 
   inherit (haskellPackages) ghc;
 
@@ -8292,7 +8292,9 @@ in
 
   stack = haskell.lib.justStaticExecutables haskellPackages.stack;
   hlint = haskell.lib.justStaticExecutables haskellPackages.hlint;
-  stylish-cabal = haskell.lib.justStaticExecutables haskellPackages.stylish-cabal;
+
+  # We use a version built with an older compiler because of https://github.com/pikajude/stylish-cabal/issues/12.
+  stylish-cabal = haskell.lib.justStaticExecutables haskell.packages.ghc865.stylish-cabal;
 
   all-cabal-hashes = callPackage ../data/misc/hackage { };
 
@@ -8992,8 +8994,6 @@ in
   tinyscheme = callPackage ../development/interpreters/tinyscheme {
     stdenv = gccStdenv;
   };
-
-  inherit (ocaml-ng.ocamlPackages_4_02) trv;
 
   bupc = callPackage ../development/compilers/bupc { };
 
@@ -12063,6 +12063,7 @@ in
 
   ijs = callPackage ../development/libraries/ijs { };
 
+  itktcl  = callPackage ../development/libraries/itktcl { };
   incrtcl = callPackage ../development/libraries/incrtcl { };
 
   indicator-application-gtk2 = callPackage ../development/libraries/indicator-application/gtk2.nix { };
@@ -12082,7 +12083,11 @@ in
 
   ip2location-c = callPackage ../development/libraries/ip2location-c { };
 
-  irrlicht = callPackage ../development/libraries/irrlicht { };
+  irrlicht = if !stdenv.isDarwin then
+    callPackage ../development/libraries/irrlicht { }
+  else callPackage ../development/libraries/irrlicht/mac.nix {
+    inherit (darwin.apple_sdk.frameworks) Cocoa OpenGL IOKit;
+  };
 
   isocodes = callPackage ../development/libraries/iso-codes { };
 
@@ -17073,9 +17078,7 @@ in
 
   pam_pgsql = callPackage ../os-specific/linux/pam_pgsql { };
 
-  pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth {
-    openssl = openssl_1_0_2;
-  };
+  pam_ssh_agent_auth = callPackage ../os-specific/linux/pam_ssh_agent_auth { };
 
   pam_u2f = callPackage ../os-specific/linux/pam_u2f { };
 
@@ -18017,16 +18020,10 @@ in
 
   source-han-code-jp = callPackage ../data/fonts/source-han-code-jp { };
 
-  sourceHanSansPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han-sans { });
-  source-han-sans-japanese = sourceHanSansPackages.japanese;
-  source-han-sans-korean = sourceHanSansPackages.korean;
-  source-han-sans-simplified-chinese = sourceHanSansPackages.simplified-chinese;
-  source-han-sans-traditional-chinese = sourceHanSansPackages.traditional-chinese;
-  sourceHanSerifPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han-serif { });
-  source-han-serif-japanese = sourceHanSerifPackages.japanese;
-  source-han-serif-korean = sourceHanSerifPackages.korean;
-  source-han-serif-simplified-chinese = sourceHanSerifPackages.simplified-chinese;
-  source-han-serif-traditional-chinese = sourceHanSerifPackages.traditional-chinese;
+  sourceHanPackages = dontRecurseIntoAttrs (callPackage ../data/fonts/source-han { });
+  source-han-sans = sourceHanPackages.sans;
+  source-han-serif = sourceHanPackages.serif;
+  source-han-mono = sourceHanPackages.mono;
 
   spleen = callPackage ../data/fonts/spleen { inherit (buildPackages.xorg) mkfontscale; };
 
@@ -18869,9 +18866,7 @@ in
 
   elementary-planner = callPackage ../applications/office/elementary-planner { };
 
-  elinks = callPackage ../applications/networking/browsers/elinks {
-    openssl = openssl_1_0_2;
-  };
+  elinks = callPackage ../applications/networking/browsers/elinks { };
 
   elvis = callPackage ../applications/editors/elvis { };
 
@@ -20002,6 +19997,8 @@ in
   kermit = callPackage ../tools/misc/kermit { };
 
   kexi = libsForQt5.callPackage ../applications/office/kexi { };
+
+  khronos = callPackage ../applications/office/khronos { };
 
   keyfinder = libsForQt5.callPackage ../applications/audio/keyfinder { };
 
@@ -21907,12 +21904,6 @@ in
 
   topydo = callPackage ../applications/misc/topydo {};
 
-  torchPackages = recurseIntoAttrs ( callPackage ../applications/science/machine-learning/torch {
-    lua = luajit ;
-  } );
-
-  torch-repl = lib.setName "torch-repl" torchPackages.trepl;
-
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
     inherit (pythonPackages) wrapPython wxPython;
   };
@@ -23276,7 +23267,10 @@ in
 
   multimc = libsForQt5.callPackage ../games/multimc { };
 
-  inherit (callPackages ../games/minetest { })
+  inherit (callPackages ../games/minetest {
+	inherit (darwin) libiconv;
+    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
+  })
     minetestclient_4 minetestserver_4
     minetestclient_5 minetestserver_5;
 

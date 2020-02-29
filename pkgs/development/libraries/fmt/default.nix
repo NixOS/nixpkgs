@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  version = "6.1.1";
   pname = "fmt";
+  version = "6.1.2";
 
   src = fetchFromGitHub {
     owner = "fmtlib";
     repo = "fmt";
     rev = version;
-    sha256 = "0arii4hs33lqlbfwilnxiq8mqcvdwz66b24qa7fdjiga02j8kl2n";
+    sha256 = "1ngb2fd7c2jnxi3x5kjgxmpixmyc737f77vibij43dl77ybiaihi";
   };
 
   outputs = [ "out" "dev" ];
@@ -16,17 +16,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
-    "-DFMT_TEST=TRUE"
-    "-DBUILD_SHARED_LIBS=TRUE"
+    "-DBUILD_SHARED_LIBS=ON"
+    "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests
   ];
 
-  enableParallelBuilding = true;
-
   doCheck = true;
-  # preCheckHook ensures the test binaries can find libfmt.so
-  preCheck = ''
-    export LD_LIBRARY_PATH="$PWD"
-  '';
 
   meta = with stdenv.lib; {
     description = "Small, safe and fast formatting library";
