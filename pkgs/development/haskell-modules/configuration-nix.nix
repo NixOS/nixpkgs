@@ -710,4 +710,8 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
 
+  # dhall-1.29.0 tests access the network.  This override can be removed when
+  # dhall_1_29_0 is no longer used, since more recent versions of dhall don't
+  # access the network in checks.
+  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
 }
