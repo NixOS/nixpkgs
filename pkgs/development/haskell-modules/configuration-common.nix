@@ -1071,8 +1071,28 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
-  }));
+
+  stack =
+    generateOptparseApplicativeCompletion
+      "stack"
+      (appendPatches super.stack [
+        # This PR fixes stack up to be able to build with Cabal-3.  This patch
+        # can probably be dropped when the next stack release is made after
+        # 2.1.3.1.
+        (pkgs.fetchpatch {
+          url = "https://github.com/commercialhaskell/stack/pull/5156.diff";
+          sha256 = "0knk6f9fh1b4fxkhvx5gfrwclal4vi2va4zy34gpmwnjr7knf42y";
+          excludes = [
+            "snapshot-lts-12.yaml"
+            "snapshot-nightly.yaml"
+            "snapshot.yaml"
+          ];
+        })
+        # This patch fixes stack up to be able to build various GHC-8.8 changes.
+        # This can hopefully be dropped when the next stack release is made
+        # after 2.1.3.1 (assuming the next stack release uses GHC-8.8).
+        ./patches/stack-ghc882-support.patch
+      ]);
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
