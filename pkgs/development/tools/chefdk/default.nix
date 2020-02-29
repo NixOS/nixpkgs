@@ -16,5 +16,6 @@ bundlerEnv {
     license     = licenses.asl20;
     maintainers = with maintainers; [ offline nicknovitski ];
     platforms   = platforms.unix;
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
