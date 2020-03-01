@@ -2559,10 +2559,10 @@ in
     enablePolkit = false;
     enablePptp = false;
     enableLoopback = false;
-    # enableEthernet = false;
+    # enableEthernet = false; # If disabled no ethernet connection can be performed
     enableWireguard = false;
     enableGadget = false;
-    # enableWifi = false;
+    # enableWifi = false; # If disabled no WiFi connection can be performed
     enableBluetooth = false;
     enableOfono = false;
     enableDundee = false;
@@ -2572,7 +2572,7 @@ in
     enableTools = false;
     enableStats = false;
     enableClient = false;
-    # enableDatafiles = false;
+    # enableDatafiles = false; # If disabled, configuration and data files are not installed
   };
   connmanFull = callPackage ../tools/networking/connman {
     enableNetworkManager = true;
