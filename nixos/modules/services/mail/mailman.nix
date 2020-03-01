@@ -265,6 +265,11 @@ in {
       '';
       serviceConfig = {
         Type = "oneshot";
+        # RemainAfterExit makes restartIfChanged work for this service, so
+        # downstream services will get updated automatically when things like
+        # services.mailman.hyperkitty.baseUrl change.  Otherwise users have to
+        # restart things manually, which is confusing.
+        RemainAfterExit = "yes";
       };
     };
 
@@ -282,6 +287,9 @@ in {
       serviceConfig = {
         User = cfg.webUser;
         Type = "oneshot";
+        # Similar to mailman-settings.service, this makes restartTriggers work
+        # properly for this service.
+        RemainAfterExit = "yes";
         WorkingDirectory = "/var/lib/mailman-web";
       };
     };
