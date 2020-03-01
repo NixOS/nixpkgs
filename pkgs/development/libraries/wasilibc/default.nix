@@ -29,6 +29,8 @@ stdenv.mkDerivation {
 
   postInstall = ''
     mv $out/lib/*/* $out/lib
+    rm -r $out/lib/wasm32-wasi
+    ln -s $out/lib $out/lib/wasm32-wasi
     ln -s $out/share/wasm32-wasi/undefined-symbols.txt $out/lib/wasi.imports
   '';
 
