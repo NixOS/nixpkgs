@@ -1,4 +1,4 @@
-{ lib, stdenv, echo_build_heading, noisily, mkRustcDepArgs }:
+{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs }:
 { build
 , buildDependencies
 , colors
@@ -32,9 +32,11 @@ let version_ = lib.splitString "-" crateVersion;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
 in ''
   cd ${workspace_member}
-  runHook preConfigure
-  ${echo_build_heading colors}
+  ${echo_colored colors}
   ${noisily colors verbose}
+  source ${./lib.sh}
+
+  runHook preConfigure
   symlink_dependency() {
     # $1 is the nix-store path of a dependency
     # $2 is the target path
