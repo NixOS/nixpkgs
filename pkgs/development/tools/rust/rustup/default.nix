@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0d7l3j8js16zgdx37kykavr343v65vchldz88j38jjyc43pcm2pg";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0kn3sq99sgsh8msignyb4vjllv0wf1crqaw7sqp3ggmlkrdq35sd";
+  cargoSha256 = "1y13kfski36rfvqkp3mxxn12aidp339j7rigv49msyr004ac5y8s";
 
   nativeBuildInputs = [ pkgconfig ];
 
