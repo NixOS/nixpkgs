@@ -4,11 +4,13 @@
 # Versions of `riot-web` and `riot-desktop` should be kept in sync.
 
 let
-  noPhoningHome = {
+  privacyOverrides = writeText "riot-config-privacy.json" (builtins.toJSON {
     disable_guests = true; # disable automatic guest account registration at matrix.org
     piwik = false; # disable analytics
-  };
-  configOverrides = writeText "riot-config-overrides.json" (builtins.toJSON (noPhoningHome // conf));
+  });
+  userOverrides = writeText "riot-config-user.json" (
+    with builtins; if isAttrs conf then toJSON conf else conf
+  );
 
 in stdenv.mkDerivation rec {
   pname = "riot-web";
@@ -24,7 +26,12 @@ in stdenv.mkDerivation rec {
 
     mkdir -p $out/
     cp -R . $out/
-    ${jq}/bin/jq -s '.[0] * .[1]' "config.sample.json" "${configOverrides}" > "$out/config.json"
+
+    ${jq}/bin/jq -s '.[0] * .[1] * .[2]' \
+      "config.sample.json" \
+      "${privacyOverrides}" \
+      "${userOverrides}" \
+      > "$out/config.json"
 
     runHook postInstall
   '';
