@@ -28,10 +28,6 @@ stdenv.mkDerivation {
   };
 
   postPatch = ''
-    # CVE-2005-2471, from Arch
-    substituteInPlace converter/other/pstopnm.c \
-      --replace '"-dSAFER"' '"-dPARANOIDSAFER"'
-
     # Install libnetpbm.so symlink to correct destination
     substituteInPlace lib/Makefile \
       --replace '/sharedlink' '/lib'
