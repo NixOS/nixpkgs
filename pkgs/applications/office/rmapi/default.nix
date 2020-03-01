@@ -16,7 +16,10 @@ in
 # import-from-derivation. For this reason, we have to manually copy the
 # two files into nixpkgs.
 # Reference:
-# * https://discourse.nixos.org/t/is-importing-a-derivation-from-another-repository-bad-practice/5016/4?u=enteee
+# * https://nixos.wiki/wiki/Import_From_Derivation
+# * https://discourse.nixos.org/t/is-importing-a-derivation-from-another-repository-bad-practice/5016/4
+#
+#
 #  callPackage "${repo}/derivation.nix" {
 
   callPackage ./derivation.nix {
