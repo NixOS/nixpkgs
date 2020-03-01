@@ -84,8 +84,10 @@ stdenv.mkDerivation rec {
   ;
 
   # fix invalid path to 'file'
-  preConfigure = ''
+  patchPhase = ''
+    runHook prePatch
     sed -i "s/\/usr\/bin\/file/file/g" ./configure
+    runHook postPatch
   '';
 
   configureFlags = [
