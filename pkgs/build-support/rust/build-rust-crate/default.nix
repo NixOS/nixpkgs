@@ -88,7 +88,7 @@ stdenv.mkDerivation (rec {
 
     src = crate.src or (fetchCrate { inherit (crate) crateName version sha256; });
     name = "rust_${crate.crateName}-${crate.version}${lib.optionalString buildTests_ "-test"}";
-    depsBuildBuild = [ rust stdenv.cc ];
+    depsBuildBuild = [ rust stdenv.cc cargo jq ];
     buildInputs = (crate.buildInputs or []) ++ buildInputs_;
     dependencies = map lib.getLib dependencies_;
     buildDependencies = map lib.getLib buildDependencies_;
@@ -114,6 +114,8 @@ stdenv.mkDerivation (rec {
       in lib.substring 0 10 hashedMetadata;
 
     build = crate.build or "";
+    # Either set to a concrete sub path to the crate root
+    # or use `null` for auto-detect.
     workspace_member = crate.workspace_member or ".";
     crateVersion = crate.version;
     crateDescription = crate.description or "";
