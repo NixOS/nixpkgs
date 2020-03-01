@@ -56,49 +56,57 @@ in {
       services.knot.enable = true;
       services.knot.extraArgs = [ "-v" ];
       services.knot.keyFiles = [ tsigFile ];
-      services.knot.extraConfig = ''
-        server:
-            listen: 0.0.0.0@53
-            listen: ::@53
+      services.knot.nixConfig = {
+        server.listen = [ "0.0.0.0@53" "::@53" ];
 
-        acl:
-          - id: slave_acl
-            address: 192.168.0.2
-            key: slave_key
-            action: transfer
+        acl = [
+          { id = "slave_acl";
+            address = "192.168.0.2";
+            key = "slave_key";
+            action = "transfer";
+          }
+        ];
 
-        remote:
-          - id: slave
-            address: 192.168.0.2@53
+        remote = [
+          { id = "slave";
+            address = "192.168.0.2@53";
+          }
+        ];
 
-        template:
-          - id: default
-            storage: ${knotZonesEnv}
-            notify: [slave]
-            acl: [slave_acl]
-            dnssec-signing: on
+        template = [
+          { id = "default";
+            storage = knotZonesEnv;
+            notify = [ "slave" ];
+            acl = [ "slave_acl" ];
+            dnssec-signing = "on";
             # Input-only zone files
             # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
             # prevents modification of the zonefiles, since the zonefiles are immutable
-            zonefile-sync: -1
-            zonefile-load: difference
-            journal-content: changes
+            zonefile-sync = -1;
+            zonefile-load = "difference";
+            journal-content = "changes";
             # move databases below the state directory, because they need to be writable
-            journal-db: /var/lib/knot/journal
-            kasp-db: /var/lib/knot/kasp
-            timer-db: /var/lib/knot/timer
+            journal-db = "/var/lib/knot/journal";
+            kasp-db = "/var/lib/knot/kasp";
+            timer-db = "/var/lib/knot/timer";
+          }
+        ];
 
-        zone:
-          - domain: example.com
-            file: example.com.zone
+        zone = [
+          { domain = "example.com";
+            file = "example.com.zone";
+          }
+          { domain = "sub.example.com";
+            file = "sub.example.com.zone";
+          }
+        ];
 
-          - domain: sub.example.com
-            file: sub.example.com.zone
-
-        log:
-          - target: syslog
-            any: info
-      '';
+        log = [
+          { target = "syslog";
+            any = "info";
+          }
+        ];
+      };
     };
 
     slave = { lib, ... }: {
