@@ -68,6 +68,9 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
+    # https://github.com/meganz/MEGAsync/issues/366
+    # https://chromium.googlesource.com/breakpad/breakpad/+/7e3c165000d44fa153a3270870ed500bc8bbb461%5E%21/#F0
+    ./fix-breakpad.patch
   ];
 
   postPatch = ''

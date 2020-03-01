@@ -1,0 +1,25 @@
+diff -ur source-a/src/MEGASync/google_breakpad/client/linux/handler/exception_handler.cc source-b/src/MEGASync/google_breakpad/client/linux/handler/exception_handler.cc
+--- source-a/src/MEGASync/google_breakpad/client/linux/handler/exception_handler.cc	1970-01-01 09:00:01.000000000 +0900
++++ source-b/src/MEGASync/google_breakpad/client/linux/handler/exception_handler.cc	2020-03-01 18:18:09.142104648 +0900
+@@ -103,12 +103,6 @@
+ #define PR_SET_PTRACER 0x59616d61
+ #endif
+ 
+-// A wrapper for the tgkill syscall: send a signal to a specific thread.
+-static int tgkill(pid_t tgid, pid_t tid, int sig) {
+-  return syscall(__NR_tgkill, tgid, tid, sig);
+-  return 0;
+-}
+-
+ namespace google_breakpad {
+ 
+ namespace {
+@@ -347,7 +341,7 @@
+     // In order to retrigger it, we have to queue a new signal by calling
+     // kill() ourselves.  The special case (si_pid == 0 && sig == SIGABRT) is
+     // due to the kernel sending a SIGABRT from a user request via SysRQ.
+-    if (tgkill(getpid(), syscall(__NR_gettid), sig) < 0) {
++    if (sys_tgkill(getpid(), syscall(__NR_gettid), sig) < 0) {
+       // If we failed to kill ourselves (e.g. because a sandbox disallows us
+       // to do so), we instead resort to terminating our process. This will
+       // result in an incorrect exit code.
