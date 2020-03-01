@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0zfdsnrnxplvi4f92l7sqdp5yk5p738ra64m41izlcilkwj1j3vp";
+  cargoSha256 = "1vhra9v4jsy9hyhjrmxjy6rnraxz13h1b7l51xvbai5wxsxm7z8m";
 
   meta = with stdenv.lib; {
     description = "A statically typed language for the Erlang VM";
