@@ -1,6 +1,6 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip
+, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -365,6 +365,12 @@ self: super: {
 
   vim-easytags = super.vim-easytags.overrideAttrs(old: {
     dependencies = with super; [ vim-misc ];
+    patches = [
+      (fetchpatch { # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
+        url = https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch;
+        sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
+      })
+    ];
   });
 
   # change the go_bin_path to point to a path in the nix store. See the code in
