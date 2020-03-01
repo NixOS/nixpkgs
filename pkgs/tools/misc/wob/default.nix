@@ -5,19 +5,14 @@
 
 stdenv.mkDerivation rec {
   pname = "wob";
-  version = "0.7";
+  version = "0.8";
 
   src = fetchFromGitHub {
     owner = "francma";
     repo = pname;
     rev = version;
-    sha256 = "1j3l4v9iqhidn1b6vx86px9hz5wbsbgj3zy2jzwf9204k5sfv715";
+    sha256 = "0gzqc75wjm3yj81rm03zkp5lvsmlhhp79qlz85yyan1gcz5spdb6";
   };
-
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace "version: '0.6'" "version: '${version}'"
-  '';
 
   nativeBuildInputs = [ meson ninja pkg-config scdoc wayland ];
   buildInputs = [ wayland-protocols ]
