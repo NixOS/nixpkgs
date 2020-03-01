@@ -183,7 +183,12 @@ in {
       (requirePostfixHash [ "config" "local_recipient_maps" ] "postfix_lmtp")
     ];
 
-    users.users.mailman = { description = "GNU Mailman"; isSystemUser = true; };
+    users.users.mailman = {
+      description = "GNU Mailman";
+      isSystemUser = true;
+      group = "mailman";
+    };
+    users.groups.mailman.members = [ "mailman" ];
 
     environment.etc."mailman.cfg".text = mailmanCfg;
 
@@ -241,8 +246,8 @@ in {
         mailmanCfg=$mailmanDir/mailman-hyperkitty.cfg
         mailmanWebCfg=$mailmanWebDir/settings_local.json
 
-        install -m 0700 -o mailman -g nogroup -d $mailmanDir
-        install -m 0700 -o ${cfg.webUser} -g nogroup -d $mailmanWebDir
+        install -m 0750 -o mailman -g mailman -d $mailmanDir
+        install -m 0750 -o ${cfg.webUser} -g mailman -d $mailmanWebDir
 
         if [ ! -e $mailmanWebCfg ]; then
             hyperkittyApiKey=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 64)
@@ -254,6 +259,7 @@ in {
                 --arg secret_key "$secretKey" \
                 >"$mailmanWebCfgTmp"
             chown ${cfg.webUser} "$mailmanWebCfgTmp"
+            chmod 0600 "$mailmanWebCfgTmp"
             mv -n "$mailmanWebCfgTmp" $mailmanWebCfg
         fi
 
@@ -261,6 +267,7 @@ in {
         mailmanCfgTmp=$(mktemp)
         sed "s/@API_KEY@/$hyperkittyApiKey/g" ${mailmanHyperkittyCfg} >"$mailmanCfgTmp"
         chown mailman "$mailmanCfgTmp"
+        chmod 0600 "$mailmanCfgTmp"
         mv "$mailmanCfgTmp" $mailmanCfg
       '';
       serviceConfig = {
