@@ -56,29 +56,21 @@ stdenv.mkDerivation {
     runHook preConfigure
 
     cp config.mk.in config.mk
-    echo "STATICLIB_TOO = n" >> config.mk
-    substituteInPlace "config.mk" \
-        --replace "TIFFLIB = NONE" "TIFFLIB = ${libtiff.out}/lib/libtiff.so" \
-        --replace "TIFFHDR_DIR =" "TIFFHDR_DIR = ${libtiff.dev}/include" \
-        --replace "TIFFLIB_NEEDS_JPEG = Y" "TIFFLIB_NEEDS_JPEG = N" \
-        --replace "TIFFLIB_NEEDS_Z = Y" "TIFFLIB_NEEDS_Z = N" \
-        --replace "JPEGLIB = NONE" "JPEGLIB = ${libjpeg.out}/lib/libjpeg.so" \
-        --replace "JPEGHDR_DIR =" "JPEGHDR_DIR = ${libjpeg.dev}/include"
+
+    # Disable building static library
+    echo "STATICLIB_TOO = N" >> config.mk
+
+    # Use libraries from Nixpkgs
+    echo "TIFFLIB = libtiff.so" >> config.mk
+    echo "TIFFLIB_NEEDS_JPEG = N" >> config.mk
+    echo "TIFFLIB_NEEDS_Z = N" >> config.mk
+    echo "JPEGLIB = libjpeg.so" >> config.mk
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
     echo "LDSHLIB=-dynamiclib -install_name $out/lib/libnetpbm.\$(MAJ).dylib" >> config.mk
     echo "NETPBMLIBTYPE = dylib" >> config.mk
     echo "NETPBMLIBSUFFIX = dylib" >> config.mk
 
     runHook postConfigure
-  '';
-
-  preBuild = ''
-    export LDFLAGS="-lz"
-    substituteInPlace "pm_config.in.h" \
-        --subst-var-by "rgbPath1" "$out/lib/rgb.txt" \
-        --subst-var-by "rgbPath2" "/var/empty/rgb.txt" \
-        --subst-var-by "rgbPath3" "/var/empty/rgb.txt"
-    touch lib/standardppmdfont.c
   '';
 
   enableParallelBuilding = false;
