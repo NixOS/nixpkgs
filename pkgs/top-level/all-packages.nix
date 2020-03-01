@@ -17938,6 +17938,8 @@ in
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
+  snowblind = callPackage ../data/themes/snowblind { };
+
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
