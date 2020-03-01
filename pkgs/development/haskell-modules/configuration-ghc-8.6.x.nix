@@ -87,4 +87,8 @@ self: super: {
   # Builds only with ghc-8.8.x and beyond.
   policeman = markBroken super.policeman;
 
+  # https://github.com/pikajude/stylish-cabal/issues/12
+  stylish-cabal = doDistribute (markUnbroken (super.stylish-cabal.override { haddock-library = self.haddock-library_1_7_0; }));
+  haddock-library_1_7_0 = dontCheck super.haddock-library_1_7_0;
+
 }

@@ -13,10 +13,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "19j1xscchnckqq1nddx9nr9wxxv124ab40l4mdalqbkli4zd748j";
+  cargoSha256 = "1zvg68ilgpnd95b36jvna9h1jr5d72x1a0g6flw2x6sd0msc0mdw";
 
   patches = [
     ./v3.1.1-fix-Cargo.lock.patch

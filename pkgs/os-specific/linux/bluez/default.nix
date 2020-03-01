@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bluez";
-  version = "5.52";
+  version = "5.53";
 
   src = fetchurl {
     url = "mirror://kernel/linux/bluetooth/${pname}-${version}.tar.xz";
-    sha256 = "02jng21lp6fb3c2bh6vf9y7cj4gaxwk29dfc32ncy0lj0gi4q57p";
+    sha256 = "1g1qg6dz6hl3csrmz75ixr12lwv836hq3ckb259svvrg62l2vaiq";
   };
 
   pythonPath = with python3.pkgs; [
@@ -116,7 +116,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Bluetooth support for Linux";
-    homepage = http://www.bluez.org/;
+    homepage = "http://www.bluez.org/";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.linux;
     repositories.git = https://git.kernel.org/pub/scm/bluetooth/bluez.git;

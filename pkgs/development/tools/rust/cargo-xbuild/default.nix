@@ -11,10 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1haq8gv4k6qgihyjplf76589d2hbb1720g6yvwk88aksjxmqj4jm";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "011r5n68ay94dvfm37xpd9s8x086l6qsll74iw98hcvw3inxp1ws";
+  cargoSha256 = "08y64yqvar1ph1pcbh6lhqf4kj85zw74dfg0ii9lycvzxvkwvhqp";
 
   meta = with stdenv.lib; {
     description = "Automatically cross-compiles the sysroot crates core, compiler_builtins, and alloc";

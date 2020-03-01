@@ -154,28 +154,13 @@ let
 
     cmdliner = callPackage ../development/ocaml-modules/cmdliner { };
 
-    cohttp_p4 = callPackage ../development/ocaml-modules/cohttp/0.19.3.nix {
-      base64 = base64_2;
-      lwt = lwt2;
-    };
-
-    cohttp =
-      if lib.versionOlder "4.03" ocaml.version
-      then callPackage ../development/ocaml-modules/cohttp { }
-      else cohttp_p4;
+    cohttp = callPackage ../development/ocaml-modules/cohttp { };
 
     cohttp-lwt = callPackage ../development/ocaml-modules/cohttp/lwt.nix { };
 
     cohttp-lwt-unix = callPackage ../development/ocaml-modules/cohttp/lwt-unix.nix { };
 
-    conduit_p4 = callPackage ../development/ocaml-modules/conduit/0.10.0.nix {
-       lwt = lwt2;
-    };
-
-    conduit =
-      if lib.versionOlder "4.03" ocaml.version
-      then callPackage ../development/ocaml-modules/conduit { }
-      else conduit_p4;
+    conduit = callPackage ../development/ocaml-modules/conduit { };
 
     conduit-lwt = callPackage ../development/ocaml-modules/conduit/lwt.nix { };
 
@@ -1206,8 +1191,6 @@ let
     # Apps / from all-packages
 
     ocamlnat = callPackage  ../development/ocaml-modules/ocamlnat { };
-
-    trv = callPackage ../development/tools/misc/trv { };
 
     omake_rc1 = callPackage ../development/tools/ocaml/omake/0.9.8.6-rc1.nix { };
 

@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     homepage = https://developers.yubico.com/libu2f-host;
     description = "A C library and command-line tool that implements the host-side of the U2F protocol";
-    license = licenses.bsd2;
+    license = with licenses; [ gpl3Plus lgpl21Plus ];
     platforms = platforms.unix;
   };
 }

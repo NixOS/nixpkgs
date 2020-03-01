@@ -18,7 +18,10 @@ stdenv.mkDerivation {
     sha256 = "1nnakbi01g7yd3zqwprchh5yp45br8086b0kbbpmnclabcvlcdiq";
   };
 
-  patches = [ ./gc-init.patch ];
+  patches = [
+    ./gc-init.patch
+    ./openssl-1.1.patch
+  ];
 
   buildInputs = [ ncurses xlibsWrapper bzip2 zlib openssl spidermonkey gpm ]
     ++ stdenv.lib.optional enableGuile guile
