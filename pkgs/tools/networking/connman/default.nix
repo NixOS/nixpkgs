@@ -8,7 +8,7 @@
 , libmnl
 , gnutls
 , readline
-# Choices one has to decide
+# configureable options
 , firewallType ? "iptables" # or "nftables"
 , iptables ? null
 , libnftnl ? null # for nftables
@@ -81,7 +81,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (firewallType == "nftables") [ libnftnl ]
   ;
 
-  # Fix file program not found
+  # fix invalid path to 'file'
   preConfigure = ''
     sed -i "s/\/usr\/bin\/file/file/g" ./configure
   '';
@@ -99,8 +99,8 @@ stdenv.mkDerivation rec {
     # production build flags
     "--disable-maintainer-mode"
     "--enable-session-policy-local=builtin"
-    # This is for building and running tests (probably enabled by default),
-    # --enable-tests installs the tests as well
+    # for building and running tests
+    # --enable-tests # installs the tests, we don't want that
     "--enable-tools"
   ]
     ++ stdenv.lib.optionals (!enableLoopback) [ "--disable-loopback" ]
@@ -108,8 +108,8 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optionals (!enableWireguard) [ "--disable-wireguard" ]
     ++ stdenv.lib.optionals (!enableGadget) [ "--disable-gadget" ]
     ++ stdenv.lib.optionals (!enableWifi) [ "--disable-wifi" ]
-    # We (almost) always turn on IWD support as it doesn't require any new dependencies
-    # and it's easier for the NixOS module to use only 1 connmand package when
+    # enable IWD support for wifi as it doesn't require any new dependencies
+    # and it's easier for the NixOS module to use only one connman package when
     # IWD is requested
     ++ stdenv.lib.optionals (enableWifi) [ "--enable-iwd" ]
     ++ stdenv.lib.optionals (!enableBluetooth) [ "--disable-bluetooth" ]
