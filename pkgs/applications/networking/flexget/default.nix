@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "FlexGet";
-  version = "3.1.26";
+  version = "3.1.30";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "0bd8ccc9ae8e9fd9d5aa4f61a1a5d8b62ff30257fc0f5b2ec61b2f4b26275eee";
+    sha256 = "453992c6bf8a7b0f83abeddd0e8f989dc10fd59e407e3803b886072cff2576a7";
   };
 
   postPatch = ''
