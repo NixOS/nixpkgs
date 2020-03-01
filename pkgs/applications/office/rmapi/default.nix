@@ -6,8 +6,7 @@ let
 
   repo = fetchFromGitHub {
     owner = "juruen";
-    rev = "tags/v${version}";
-
+    rev = "v${version}";
     repo = pname;
     sha256 = "0m51gmrsdwasrlamg70186f22lb21pw79vkrqr13iqg2cszdlrva";
   };
