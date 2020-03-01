@@ -25798,7 +25798,7 @@ in
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
-  xp-pen-g430 = callPackage ../misc/drivers/xp-pen-g430 {};
+  xp-pen-g430 = libsForQt5.callPackage ../misc/drivers/xp-pen-g430 {};
 
   kcli = callPackage ../development/tools/kcli {};
 
