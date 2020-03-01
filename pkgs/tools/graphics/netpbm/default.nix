@@ -73,7 +73,7 @@ stdenv.mkDerivation {
     runHook postConfigure
   '';
 
-  enableParallelBuilding = false;
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
