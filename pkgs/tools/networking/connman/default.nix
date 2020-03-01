@@ -52,6 +52,8 @@
 assert stdenv.lib.asserts.assertOneOf "firewallType" firewallType [ "iptables" "nftables" ];
 assert stdenv.lib.asserts.assertOneOf "dnsType" dnsType [ "internal" "systemd-resolved" ];
 
+let inherit (stdenv.lib) optionals; 
+
 stdenv.mkDerivation rec {
   pname = "connman";
   version = "1.38";
@@ -72,13 +74,13 @@ stdenv.mkDerivation rec {
     pkgconfig
     file
   ]
-    ++ stdenv.lib.optionals (enableOpenvpn) [ openvpn ]
-    ++ stdenv.lib.optionals (enableOpenconnect) [ openconnect ]
-    ++ stdenv.lib.optionals (enableVpnc) [ vpnc ]
-    ++ stdenv.lib.optionals (enablePolkit) [ polkit ]
-    ++ stdenv.lib.optionals (enablePptp) [ pptp ppp ]
-    ++ stdenv.lib.optionals (firewallType == "iptables") [ iptables ]
-    ++ stdenv.lib.optionals (firewallType == "nftables") [ libnftnl ]
+    ++ optionals (enableOpenvpn) [ openvpn ]
+    ++ optionals (enableOpenconnect) [ openconnect ]
+    ++ optionals (enableVpnc) [ vpnc ]
+    ++ optionals (enablePolkit) [ polkit ]
+    ++ optionals (enablePptp) [ pptp ppp ]
+    ++ optionals (firewallType == "iptables") [ iptables ]
+    ++ optionals (firewallType == "nftables") [ libnftnl ]
   ;
 
   # fix invalid path to 'file'
@@ -103,60 +105,60 @@ stdenv.mkDerivation rec {
     # --enable-tests # installs the tests, we don't want that
     "--enable-tools"
   ]
-    ++ stdenv.lib.optionals (!enableLoopback) [ "--disable-loopback" ]
-    ++ stdenv.lib.optionals (!enableEthernet) [ "--disable-ethernet" ]
-    ++ stdenv.lib.optionals (!enableWireguard) [ "--disable-wireguard" ]
-    ++ stdenv.lib.optionals (!enableGadget) [ "--disable-gadget" ]
-    ++ stdenv.lib.optionals (!enableWifi) [ "--disable-wifi" ]
+    ++ optionals (!enableLoopback) [ "--disable-loopback" ]
+    ++ optionals (!enableEthernet) [ "--disable-ethernet" ]
+    ++ optionals (!enableWireguard) [ "--disable-wireguard" ]
+    ++ optionals (!enableGadget) [ "--disable-gadget" ]
+    ++ optionals (!enableWifi) [ "--disable-wifi" ]
     # enable IWD support for wifi as it doesn't require any new dependencies
     # and it's easier for the NixOS module to use only one connman package when
     # IWD is requested
-    ++ stdenv.lib.optionals (enableWifi) [ "--enable-iwd" ]
-    ++ stdenv.lib.optionals (!enableBluetooth) [ "--disable-bluetooth" ]
-    ++ stdenv.lib.optionals (!enableOfono) [ "--disable-ofono" ]
-    ++ stdenv.lib.optionals (!enableDundee) [ "--disable-dundee" ]
-    ++ stdenv.lib.optionals (!enablePacrunner) [ "--disable-pacrunner" ]
-    ++ stdenv.lib.optionals (!enableNeard) [ "--disable-neard" ]
-    ++ stdenv.lib.optionals (!enableWispr) [ "--disable-wispr" ]
-    ++ stdenv.lib.optionals (!enableTools) [ "--disable-tools" ]
-    ++ stdenv.lib.optionals (!enableStats) [ "--disable-stats" ]
-    ++ stdenv.lib.optionals (!enableClient) [ "--disable-client" ]
-    ++ stdenv.lib.optionals (!enableDatafiles) [ "--disable-datafiles" ]
-    ++ stdenv.lib.optionals (enableOpenconnect) [
+    ++ optionals (enableWifi) [ "--enable-iwd" ]
+    ++ optionals (!enableBluetooth) [ "--disable-bluetooth" ]
+    ++ optionals (!enableOfono) [ "--disable-ofono" ]
+    ++ optionals (!enableDundee) [ "--disable-dundee" ]
+    ++ optionals (!enablePacrunner) [ "--disable-pacrunner" ]
+    ++ optionals (!enableNeard) [ "--disable-neard" ]
+    ++ optionals (!enableWispr) [ "--disable-wispr" ]
+    ++ optionals (!enableTools) [ "--disable-tools" ]
+    ++ optionals (!enableStats) [ "--disable-stats" ]
+    ++ optionals (!enableClient) [ "--disable-client" ]
+    ++ optionals (!enableDatafiles) [ "--disable-datafiles" ]
+    ++ optionals (enableOpenconnect) [
       "--enable-openconnect=builtin"
       "--with-openconnect=${openconnect}/sbin/openconnect"
     ]
-    ++ stdenv.lib.optionals (enableOpenvpn) [
+    ++ optionals (enableOpenvpn) [
       "--enable-openvpn=builtin"
       "--with-openvpn=${openvpn}/sbin/openvpn"
     ]
-    ++ stdenv.lib.optionals (enableVpnc) [
+    ++ optionals (enableVpnc) [
       "--enable-vpnc=builtin"
       "--with-vpnc=${vpnc}/sbin/vpnc"
     ]
-    ++ stdenv.lib.optionals (enablePolkit) [
+    ++ optionals (enablePolkit) [
       "--enable-polkit"
     ]
-    ++ stdenv.lib.optionals (enablePptp) [
+    ++ optionals (enablePptp) [
       "--enable-pptp"
       "--with-pptp=${pptp}/sbin/pptp"
     ]
-    ++ stdenv.lib.optionals (!enableWireguard) [
+    ++ optionals (!enableWireguard) [
       "--disable-wireguard"
     ]
-    ++ stdenv.lib.optionals (enableNetworkManager) [
+    ++ optionals (enableNetworkManager) [
       "--enable-nmcompat"
     ]
-    ++ stdenv.lib.optionals (enableHh2serialGps) [
+    ++ optionals (enableHh2serialGps) [
       "--enable-hh2serial-gps"
     ]
-    ++ stdenv.lib.optionals (enableL2tp) [
+    ++ optionals (enableL2tp) [
       "--enable-l2tp"
     ]
-    ++ stdenv.lib.optionals (enableIospm) [
+    ++ optionals (enableIospm) [
       "--enable-iospm"
     ]
-    ++ stdenv.lib.optionals (enableTist) [
+    ++ optionals (enableTist) [
       "--enable-tist"
     ]
   ;
