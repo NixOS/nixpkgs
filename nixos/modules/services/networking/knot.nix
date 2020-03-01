@@ -147,14 +147,23 @@ in {
 
         # This section contains a list of attribute sets.  In each of the sets
         # there's an attribute (`fa_name`, typically "id") that must exist and come first.
+        # Alternatively we support using attribute sets instead of lists; example diff:
+        # -template = [ { id = "default"; /* other attributes */ }   { id = "foo"; } ]
+        # +template = { default = {       /* those attributes */ };  foo = { };      }
         sec_list_fa = fa_name: nix_def: sec_name: if !hasAttr sec_name nix_def then "" else
-          sec_name + ":\n"
-          + (flip concatMapStrings) nix_def.${sec_name}
-              (elem: "  - " + n2y "" { ${fa_name} = elem.${fa_name}; }
-                + "    " + n2y "    " (removeAttrs elem [ fa_name ])
-                + "\n"
-              )
-          ;
+          let
+            elem2yaml = fa_val: other_attrs:
+              "  - " + n2y "" { ${fa_name} = fa_val; }
+              + "    " + n2y "    " other_attrs
+              + "\n";
+            sec = nix_def.${sec_name};
+          in
+            sec_name + ":\n" +
+              (if isList sec
+                then flip concatMapStrings sec
+                  (elem: elem2yaml elem.${fa_name} (removeAttrs elem [ fa_name ]))
+                else concatStrings (mapAttrsToList elem2yaml sec)
+              );
 
         # This convertor doesn't care about ordering of attributes.
         # TODO: it could probably be simplified even more, now that it's not

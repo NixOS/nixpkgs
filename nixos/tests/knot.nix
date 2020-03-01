@@ -59,22 +59,15 @@ in {
       services.knot.nixConfig = {
         server.listen = [ "0.0.0.0@53" "::@53" ];
 
-        acl = [
-          { id = "slave_acl";
+        acl.slave_acl = {
             address = "192.168.0.2";
             key = "slave_key";
             action = "transfer";
-          }
-        ];
+        };
 
-        remote = [
-          { id = "slave";
-            address = "192.168.0.2@53";
-          }
-        ];
+        remote.slave.address = "192.168.0.2@53";
 
-        template = [
-          { id = "default";
+        template.default = {
             storage = knotZonesEnv;
             notify = [ "slave" ];
             acl = [ "slave_acl" ];
@@ -89,23 +82,14 @@ in {
             journal-db = "/var/lib/knot/journal";
             kasp-db = "/var/lib/knot/kasp";
             timer-db = "/var/lib/knot/timer";
-          }
-        ];
+        };
 
-        zone = [
-          { domain = "example.com";
-            file = "example.com.zone";
-          }
-          { domain = "sub.example.com";
-            file = "sub.example.com.zone";
-          }
-        ];
+        zone = {
+          "example.com".file = "example.com.zone";
+          "sub.example.com".file = "sub.example.com.zone";
+        };
 
-        log = [
-          { target = "syslog";
-            any = "info";
-          }
-        ];
+        log.syslog.any = "info";
       };
     };
 
