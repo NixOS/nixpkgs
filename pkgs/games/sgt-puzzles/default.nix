@@ -42,8 +42,8 @@ stdenv.mkDerivation rec {
           --set-key Exec --set-value $i \
           --set-key Name --set-value $i \
           --set-key Comment --set-value "${meta.description}" \
-          --set-key Categories --set-value LogicGame \
-          --set-key Icon --set-value $i-48d24 $i.desktop
+          --set-key Categories --set-value Game \
+          --set-key Icon --set-value $out/share/icons/hicolor/48x48/apps/$i-48d24 $i.desktop
         rm $i.desktop
       done
     )
