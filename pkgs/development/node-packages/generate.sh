@@ -5,11 +5,6 @@ set -eu -o pipefail
 cd "$NODE_NIXPKGS_PATH"
 rm -f ./node-env.nix
 for version in 10 12 13; do
-    tmpdir=$(mktemp -d)
-    node2nix --nodejs-$version -i node-packages-v$version.json -o $tmpdir/node-packages-v$version.nix -c $tmpdir/composition-v$version.nix
-    if [ $? -eq 0 ]; then
-        mv $tmpdir/node-packages-v$version.nix .
-        mv $tmpdir/composition-v$version.nix .
-    fi
+    node2nix --nodejs-$version -i node-packages-v$version.json -o node-packages-v$version.nix -c composition-v$version.nix
 done
 cd -
