@@ -71,7 +71,7 @@ in {
             storage = knotZonesEnv;
             notify = [ "slave" ];
             acl = [ "slave_acl" ];
-            dnssec-signing = "on";
+            dnssec-signing = true;
             # Input-only zone files
             # https://www.knot-dns.cz/docs/2.8/html/operation.html#example-3
             # prevents modification of the zonefiles, since the zonefiles are immutable
