@@ -1,3 +1,11 @@
+echo_build_heading() {
+  if (( $# == 1 )); then
+    echo_colored "Building $1"
+  else
+    echo_colored "Building $1 ($2)"
+  fi
+}
+
 build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
@@ -132,7 +140,7 @@ search_for_bin_path() {
   done
 
   if [[ -z "$BIN_PATH" ]]; then
-    echo "failed to find file for binary target: $BIN_NAME" >&2
+    echo_error "ERROR: failed to find file for binary target: $BIN_NAME" >&2
     exit 1
   fi
 }
