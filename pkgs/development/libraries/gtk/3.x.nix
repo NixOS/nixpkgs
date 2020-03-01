@@ -77,9 +77,6 @@ stdenv.mkDerivation rec {
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
     ./patches/3.0-darwin-x11.patch
-    # 3.24.13 failed to ship a header file
-    # https://gitlab.gnome.org/GNOME/gtk/issues/2279
-    ./patches/missing-header.patch
   ];
 
   separateDebugInfo = stdenv.isLinux;
