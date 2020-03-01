@@ -4,8 +4,8 @@
  This derivation is impure: it relies on an Xcode toolchain being installed
  and available in the expected place. The values of sandboxProfile
  are copied pretty directly from the MacVim derivation, which
- is also impure. In order to build you at least need the `build-use-chroot`
- option set to `relaxed` or set the `sandbox` option to `false`.
+ is also impure. In order to build you at least need the `sandbox`
+ option set to `relaxed` or `false`.
  */
 
 stdenv.mkDerivation rec {
