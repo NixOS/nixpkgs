@@ -62,9 +62,7 @@ in
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
-  # Applying this to an attribute set will cause nix-env to look
-  # inside the set for derivations.
-  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+  inherit (lib) recurseIntoAttrs;
 
   # This is intended to be the reverse of recurseIntoAttrs, as it is
   # defined now it exists mainly for documentation purposes, but you
@@ -72,7 +70,7 @@ in
   # the Attrs which is useful for testing massive changes. Ideally,
   # every package subset not marked with recurseIntoAttrs should be
   # marked with this.
-  dontRecurseIntoAttrs = x: x;
+  inherit (lib) dontRecurseIntoAttrs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
