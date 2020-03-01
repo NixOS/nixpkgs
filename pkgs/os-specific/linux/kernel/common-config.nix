@@ -104,6 +104,7 @@ let
 
     networking = {
       NET                = yes;
+      IP_ADVANCED_ROUTER = yes;
       IP_PNP             = no;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
@@ -126,6 +127,7 @@ let
       IP_ROUTE_VERBOSE            = yes;
       IP_MROUTE_MULTIPLE_TABLES   = yes;
       IP_MULTICAST                = yes;
+      IP_MULTIPLE_TABLES          = yes;
       IPV6_ROUTER_PREF            = yes;
       IPV6_ROUTE_INFO             = yes;
       IPV6_OPTIMISTIC_DAD         = yes;
