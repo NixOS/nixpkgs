@@ -4062,7 +4062,7 @@ in
   pixd = callPackage ../tools/misc/pixd { };
 
   hey = callPackage ../tools/networking/hey { };
-  
+
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
@@ -12647,9 +12647,7 @@ in
 
   libgpiod = callPackage ../development/libraries/libgpiod { };
 
-  libgpod = callPackage ../development/libraries/libgpod {
-    inherit (pkgs.pythonPackages) mutagen;
-  };
+  libgpod = callPackage ../development/libraries/libgpod { };
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
 
