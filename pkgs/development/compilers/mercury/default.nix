@@ -1,17 +1,22 @@
-{ stdenv, fetchurl, gcc, flex, bison, texinfo, jdk, erlang, makeWrapper
-, readline }:
+{ stdenv, lib, fetchurl, flex, bison, texinfo, makeWrapper, readline
+, enableErlang ? false, erlang
+, enableJava ? false, jdk
+, CoreFoundation
+}:
 
 stdenv.mkDerivation rec {
   pname = "mercury";
-  version = "14.01.1";
+  version = "20.01";
 
   src = fetchurl {
     url    = "https://dl.mercurylang.org/release/mercury-srcdist-${version}.tar.gz";
-    sha256 = "12z8qi3da8q50mcsjsy5bnr4ia6ny5lkxvzy01a3c9blgbgcpxwq";
+    sha256 = "0m1mkr5zh0wc1fnlz8r3sqrb1vpqqy71ggxi4vmd546fiyzn5m64";
   };
 
-  buildInputs = [ gcc flex bison texinfo jdk erlang makeWrapper
-                  readline ];
+  buildInputs = [ flex bison texinfo makeWrapper readline stdenv.cc ]
+    ++ lib.optional stdenv.isDarwin CoreFoundation
+    ++ lib.optional enableErlang erlang
+    ++ lib.optional enableJava jdk;
 
   patchPhase = ''
     # Fix calls to programs in /bin
@@ -23,22 +28,26 @@ stdenv.mkDerivation rec {
   '';
 
   preConfigure = ''
-    mkdir -p $out/lib/mercury/cgi-bin ;
-    configureFlags="--enable-deep-profiler=$out/lib/mercury/cgi-bin";
+    mkdir -p $out/lib/mercury/cgi-bin
+    configureFlags+=--enable-deep-profiler=$out/lib/mercury/cgi-bin
   '';
+  configureFlags = []
+    ++ lib.optional enableJava "--enable-java-grade"
+    ++ lib.optional enableErlang "--enable-erlang-grade";
 
   preBuild = ''
     # Mercury buildsystem does not take -jN directly.
     makeFlags="PARALLEL=-j$NIX_BUILD_CORES" ;
   '';
 
-  postInstall = ''
+  postFixup = ''
     # Wrap with compilers for the different targets.
-    for e in $(ls $out/bin) ; do
-      wrapProgram $out/bin/$e \
-        --prefix PATH ":" "${gcc}/bin" \
-        --prefix PATH ":" "${jdk}/bin" \
-        --prefix PATH ":" "${erlang}/bin"
+    for e in $out/bin/* ; do
+      wrapProgram $e --prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}
+  ''
+  + lib.optionalString enableJava ''--prefix PATH : ${lib.makeBinPath [ jdk ]} ''
+  + lib.optionalString enableErlang ''--prefix PATH : ${lib.makeBinPath [erlang]} ''
+  + ''
     done
   '';
 
@@ -55,8 +64,8 @@ stdenv.mkDerivation rec {
       trade-offs.
     '';
     homepage    = "http://mercurylang.org";
-    license     = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
+    license     = lib.licenses.gpl2;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
     maintainers = [ ];
   };
 }
