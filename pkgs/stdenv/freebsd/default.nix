@@ -243,6 +243,9 @@ in
         nativePrefix = "/usr";
         nativeLibc   = true;
         stdenvNoCC = prevStage.stdenv;
+        buildPackages = {
+          inherit (prevStage) stdenv;
+        };
         cc           = {
           name    = "clang-9.9.9";
           cc      = "/usr";
