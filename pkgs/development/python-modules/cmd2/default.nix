@@ -6,11 +6,11 @@
 }:
 buildPythonPackage rec {
   pname = "cmd2";
-  version = "0.9.25";
+  version = "0.10.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0w5jh2lanqxsva9fr9p07mmbd5w4v6zmhf6lr0awksvhjx77lhdc";
+    sha256 = "0df6c9a1xx1xnz6hk8nbbzy721bf74zk14q8bwmn7qgz5a1ii3m6";
   };
 
   LC_ALL="en_US.UTF-8";
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Enhancements for standard library's cmd module";
-    homepage = https://github.com/python-cmd2/cmd2;
+    homepage = "https://github.com/python-cmd2/cmd2";
     maintainers = with maintainers; [ teto ];
   };
 }
