@@ -95,7 +95,15 @@ stdenv.mkDerivation {
   ++ stdenv.lib.optionals stdenv.isSunOS ["INSTALL=install" "NO_INET_NTOP=" "NO_INET_PTON="]
   ++ (if stdenv.isDarwin then ["NO_APPLE_COMMON_CRYPTO=1"] else ["sysconfdir=/etc"])
   ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl ["NO_SYS_POLL_H=1" "NO_GETTEXT=YesPlease"]
-  ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1";
+  ++ stdenv.lib.optional withpcre2 "USE_LIBPCRE2=1"
+  # git-gui refuses to start with the version of tk distributed with
+  # macOS Catalina. We can prevent git from building the .app bundle
+  # by specifying an invalid tk framework. The postInstall step will
+  # then ensure that git-gui uses tcl/tk from nixpkgs, which is an
+  # acceptable version.
+  #
+  # See https://github.com/Homebrew/homebrew-core/commit/dfa3ccf1e7d3901e371b5140b935839ba9d8b706
+  ++ stdenv.lib.optional stdenv.isDarwin "TKFRAMEWORK=/nonexistent";
 
 
   postBuild = ''
