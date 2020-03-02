@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, zlib, gmp, jdk8,
+{ stdenv, fetchpatch, fetchFromGitHub, cmake, zlib, gmp, jdk8,
   # The JDK we use on Darwin currenly makes extensive use of rpaths which are
   # annoying and break the python library, so let's not bother for now
   includeJava ? !stdenv.hostPlatform.isDarwin, includeGplCode ? true }:
@@ -20,9 +20,17 @@ let
     inherit rev sha256;
   };
 
+  patches = [
+    # Python 3.8 compatibility
+    (fetchpatch {
+      url = https://github.com/sambayless/monosat/commit/a5079711d0df0451f9840f3a41248e56dbb03967.patch;
+      sha256 = "0fwsk67798dns7izdry19r7r3nmym4cbgxfpbjbnx4b4mlak65j8";
+    })
+  ];
+
   core = stdenv.mkDerivation {
     name = "${pname}-${version}";
-    inherit src;
+    inherit src patches;
     buildInputs = [ cmake zlib gmp jdk8 ];
 
     cmakeFlags = [
@@ -48,20 +56,22 @@ let
   };
 
   python = { buildPythonPackage, cython }: buildPythonPackage {
-    inherit pname version src;
-
-    # The top-level "source" is what fetchFromGitHub gives us. The rest is inside the repo
-    sourceRoot = "source/src/monosat/api/python/";
+    inherit pname version src patches;
 
     propagatedBuildInputs = [ core cython ];
 
     # This tells setup.py to use cython, which should produce faster bindings
     MONOSAT_CYTHON = true;
 
+    # After patching src, move to where the actually relevant source is. This could just be made
+    # the sourceRoot if it weren't for the patch.
+    postPatch = ''
+      cd src/monosat/api/python
+    '' +
     # The relative paths here don't make sense for our Nix build
     # TODO: do we want to just reference the core monosat library rather than copying the
     # shared lib? The current setup.py copies the .dylib/.so...
-    postPatch = ''
+    ''
       substituteInPlace setup.py \
         --replace 'library_dir = "../../../../"' 'library_dir = "${core}/lib/"'
     '';
