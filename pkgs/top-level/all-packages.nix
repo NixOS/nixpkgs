@@ -15762,7 +15762,7 @@ in
         # when adding a new linux version
         kernelPatches.cpu-cgroup-v2."4.11"
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions
+        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
@@ -15770,13 +15770,16 @@ in
     kernelPatches =
       [ kernelPatches.bridge_stp_helper
         kernelPatches.modinst_arg_list_too_long
-        kernelPatches.export_kernel_fpu_functions
+        kernelPatches.export_kernel_fpu_functions."4.14"
       ];
   };
 
   # Update this when adding the newest kernel major version!
   linux_latest = callPackage ../os-specific/linux/kernel/linux-5.4.nix {
-    kernelPatches = [ kernelPatches.bridge_stp_helper ];
+    kernelPatches = [
+      kernelPatches.bridge_stp_helper
+      kernelPatches.export_kernel_fpu_functions."5.3"
+    ];
   };
 
   linux_testing = callPackage ../os-specific/linux/kernel/linux-testing.nix {
