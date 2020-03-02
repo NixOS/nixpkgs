@@ -5284,7 +5284,6 @@ broken-packages:
   - gtfs-realtime
   - gtk-jsinput
   - gtk-serialized-event
-  - gtk-sni-tray
   - gtk-toy
   - gtk2hs-hello
   - gtk2hs-rpn
@@ -9622,7 +9621,6 @@ broken-packages:
   - statsd
   - statsd-client
   - statsdi
-  - status-notifier-item
   - statvfs
   - stb-image-redux
   - stc-lang
@@ -9810,7 +9808,6 @@ broken-packages:
   - Tablify
   - tabloid
   - tabs
-  - taffybar
   - tag-bits
   - tag-stream
   - tagged-exception-core
@@ -10697,7 +10694,6 @@ broken-packages:
   - xchat-plugin
   - xcp
   - xdcc
-  - xdg-desktop-entry
   - xdot
   - Xec
   - xenstore
