@@ -232,7 +232,6 @@ stdenv.mkDerivation {
        for prog in bin/gitk libexec/git-core/{git-gui,git-citool,git-gui--askpass}; do
          sed -i -e "s|exec 'wish'|exec '${tk}/bin/wish'|g" \
                 -e "s|exec wish|exec '${tk}/bin/wish'|g" \
-                -e "s|exec \"[^\"]*/MacOS/Wish\"|exec '${tk}/bin/wish'|g" \
                 "$out/$prog"
        done
        ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
