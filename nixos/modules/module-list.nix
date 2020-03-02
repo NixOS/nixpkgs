@@ -660,6 +660,7 @@
   ./services/networking/ngircd.nix
   ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
+  ./services/networking/nix-store-gcs-proxy.nix
   ./services/networking/nixops-dns.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
