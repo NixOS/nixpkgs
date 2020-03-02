@@ -25,6 +25,14 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postInstall = ''
+    # install completions
+    install -Dm555 \
+      extras/httpie-completion.bash \
+      $out/share/bash-completion/completions/http.bash
+    install -Dm555 \
+      extras/httpie-completion.fish \
+      $out/share/fish/vendor_completions.d/http.fish
+
     mkdir -p $man/share/man/man1
 
     docdir=$doc/share/doc/httpie
