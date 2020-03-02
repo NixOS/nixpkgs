@@ -12,7 +12,6 @@
 , gcr
 , gnome-online-accounts
 , gobject-introspection
-, liboauth
 , gnome3
 , p11-kit
 , openssl
@@ -47,7 +46,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gcr
     glib
-    liboauth
     libsoup
     libxml2
     openssl
