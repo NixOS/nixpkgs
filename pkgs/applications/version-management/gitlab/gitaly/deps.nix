@@ -842,8 +842,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/libgit2/git2go";
-      rev = "ecaeb7a21d47";
-      sha256 = "14r7ryff93r49g94f6kg66xc0y6rwb31lj22s3qmzmlgywk0pgvr";
+      rev = "v0.28.5";
+      sha256 = "1cbs3y53xklr5j580s76lpgv7rvjc2j6jwm7f7nw56wjq5vx5zyk";
     };
   }
   {
