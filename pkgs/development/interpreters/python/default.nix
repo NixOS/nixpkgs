@@ -119,9 +119,9 @@ in {
       major = "3";
       minor = "9";
       patch = "0";
-      suffix = "a3";
+      suffix = "a4";
     };
-    sha256 = "09l68jyfhhass3cqyqyp2cv3a3i86qs0x736isidmpbrbxsincva";
+    sha256 = "0qzy0wlq0izxk8ii28gy70v138g6xnz9sgsxpyayls2j04l6b5vz";
     inherit (darwin) configd;
     inherit passthruFun;
   };
