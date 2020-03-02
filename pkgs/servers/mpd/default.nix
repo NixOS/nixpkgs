@@ -130,7 +130,7 @@ let
 
       meta = with stdenv.lib; {
         description = "A flexible, powerful daemon for playing music";
-        homepage    = "http://mpd.wikia.com/wiki/Music_Player_Daemon_Wiki";
+        homepage    = "https://www.musicpd.org/";
         license     = licenses.gpl2;
         maintainers = with maintainers; [ astsmtl ehmry fpletz tobim ];
         platforms   = platforms.unix;
