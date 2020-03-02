@@ -1,17 +1,19 @@
-{ stdenv, fetchurl, gettext }:
+{ stdenv, fetchurl, meson, ninja, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "mate-backgrounds";
-  version = "1.24.0";
+  version = "1.24.1";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16rmsy02fyq6mj6xgc5mdyh146z3zmkn7iwsi44s962aqwbpn4i8";
+    sha256 = "0b9yx68p9l867bqsl9z2g4wrs8p396ls673jgaliys5snmk8n8dn";
   };
 
-  nativeBuildInputs = [ gettext ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+  ];
 
   meta = with stdenv.lib; {
     description = "Background images and data for MATE";
