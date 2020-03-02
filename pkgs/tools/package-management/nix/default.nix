@@ -66,17 +66,15 @@ common =
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        (if is20 then ''
-           mkdir -p $out/lib
-           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
-           rm -f $out/lib/*.a
-           ${lib.optionalString stdenv.isLinux ''
-             chmod u+w $out/lib/*.so.*
-             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
-           ''}
-         '' else ''
-           configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
-         '') +
+        lib.optionalString is20 ''
+          mkdir -p $out/lib
+          cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
+          rm -f $out/lib/*.a
+          ${lib.optionalString stdenv.isLinux ''
+            chmod u+w $out/lib/*.so.*
+            patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+          ''}
+        '' +
         # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
         # build system's bash and other utilities when cross-compiling
         lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
@@ -103,6 +101,7 @@ common =
           "--with-dbi=${perlPackages.DBI}/${perl.libPrefix}"
           "--with-dbd-sqlite=${perlPackages.DBDSQLite}/${perl.libPrefix}"
           "--with-www-curl=${perlPackages.WWWCurl}/${perl.libPrefix}"
+          "BDW_GC_LIBS=\"-lgc -lgccpp\""
         ] ++ lib.optionals (is20 && stdenv.isLinux) [
           "--with-sandbox-shell=${sh}/bin/busybox"
         ]
