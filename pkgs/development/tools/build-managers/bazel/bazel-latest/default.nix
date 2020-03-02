@@ -289,7 +289,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     cat ${runCommand "bazel-deps.json" {} ''
         ${unzip}/bin/unzip ${src} WORKSPACE
-        ${python3}/bin/python3 ${./update-srcDeps.py} ./WORKSPACE > $out
+        ${python3}/bin/python3 ${../update-srcDeps.py} ./WORKSPACE > $out
     ''} > ${builtins.toString ./src-deps.json}
   '';
 
