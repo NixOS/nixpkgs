@@ -1444,4 +1444,7 @@ self: super: {
     })
   ];
 
+  # https://github.com/serokell/nixfmt/pull/62
+  nixfmt = doJailbreak super.nixfmt;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
