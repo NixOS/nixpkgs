@@ -3721,6 +3721,12 @@
     github = "kampfschlaefer";
     name = "Arnold Krille";
   };
+  karantan = {
+    name = "Gasper Vozel";
+    email = "karantan@gmail.com";
+    github = "karantan";
+    githubId = 7062631;
+  };
   karolchmist = {
     email = "info+nix@chmist.com";
     name = "karolchmist";
