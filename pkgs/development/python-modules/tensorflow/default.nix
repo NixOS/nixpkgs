@@ -7,7 +7,7 @@
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
 , functools32
 , opt-einsum
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_1_15_1
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
@@ -373,7 +373,7 @@ in buildPythonPackage {
     numpy
     six
     protobuf
-    tensorflow-estimator
+    tensorflow-estimator_1_15_1
     termcolor
     wrapt
     grpcio
