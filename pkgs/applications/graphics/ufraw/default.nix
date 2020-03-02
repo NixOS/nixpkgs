@@ -60,7 +60,7 @@ stdenv.mkDerivation {
   ] ++ stdenv.lib.optional withGimpPlugin "--with-gimp";
 
   postInstall = stdenv.lib.optionalString withGimpPlugin ''
-    moveToOutput "lib/gimp" "$gimpPlugin"
+    moveToOutput ${gimp.targetPluginDir} "$gimpPlugin"
   '';
 
   meta = with stdenv.lib; {
