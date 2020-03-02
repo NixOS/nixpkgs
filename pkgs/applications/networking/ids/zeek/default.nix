@@ -5,11 +5,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "https://www.zeek.org/downloads/zeek-${version}.tar.gz";
-    sha256 = "1lhik212wrbi092qizc08f3i0b9pj318sxwm0abc5jc3v3pz7x3r";
+    sha256 = "0d5agk6yc4xyx2lwfx6r1psks1373h53m0icyka1jf15b4zjg3m7";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
