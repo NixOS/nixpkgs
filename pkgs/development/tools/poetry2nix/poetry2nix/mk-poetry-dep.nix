@@ -106,8 +106,10 @@ pythonPackages.callPackage (
         # Stripping pre-built wheels lead to `ELF load command address/offset not properly aligned`
         dontStrip = format == "wheel";
 
-        nativeBuildInputs = (if (!isSource && (getManyLinuxDeps fileInfo.name).str != null) then [ autoPatchelfHook ] else [])
-        ++ lib.optional (isLocal) pkgs.yj
+        nativeBuildInputs = [
+          pythonPackages.poetry2nixFixupHook
+        ]
+        ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
         ++ lib.optional (format == "pyproject") pythonPackages.removePathDependenciesHook
         ;
 
@@ -117,14 +119,24 @@ pythonPackages.callPackage (
           ++ lib.optional isLocal buildSystemPkgs
         );
 
-        propagatedBuildInputs =
-          # Some dependencies like django get the attribute name django
-          # but dependencies try to access Django
-          builtins.map (n: pythonPackages.${lib.toLower n}) (builtins.attrNames dependencies);
+        propagatedBuildInputs = let
+          compat = isCompatible python.pythonVersion;
+          deps = lib.filterAttrs (n: v: v) (
+            lib.mapAttrs (
+              n: v: let
+                constraints = v.python or "";
+              in
+                compat constraints
+            ) dependencies
+          );
+          depAttrs = lib.attrNames deps;
+        in
+          builtins.map (n: pythonPackages.${lib.toLower n}) depAttrs;
 
         meta = {
           broken = ! isCompatible python.pythonVersion python-versions;
           license = [];
+          inherit (python.meta) platforms;
         };
 
         passthru = {
@@ -139,7 +151,7 @@ pythonPackages.callPackage (
             inherit (source) url;
             rev = source.reference;
           }
-        ) else if isLocal then (localDepPath) else fetchFromPypi {
+        ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else fetchFromPypi {
           pname = name;
           inherit (fileInfo) file hash kind;
         };
