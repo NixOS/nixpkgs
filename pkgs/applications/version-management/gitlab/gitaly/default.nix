@@ -70,7 +70,7 @@ in buildGoPackage rec {
     homepage = https://gitlab.com/gitlab-org/gitaly;
     description = "A Git RPC service for handling all the git calls made by GitLab";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ roblabla globin fpletz ];
+    maintainers = with maintainers; [ roblabla globin fpletz talyz ];
     license = licenses.mit;
   };
 }
