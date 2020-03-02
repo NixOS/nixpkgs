@@ -3,6 +3,7 @@
 , opencv
 , qt4
 , libsndfile
+, which
 }:
 
 faust.wrapWithBuildEnv {
@@ -19,6 +20,7 @@ faust.wrapWithBuildEnv {
     opencv
     qt4
     libsndfile
+    which
   ];
 
 }
