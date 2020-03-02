@@ -23821,7 +23821,7 @@ in
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
-    impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
+    impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
