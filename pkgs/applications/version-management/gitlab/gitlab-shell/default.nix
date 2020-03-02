@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitLab, buildGoPackage, ruby }:
 
 buildGoPackage rec {
-  pname = "gitlab-shell-go";
+  pname = "gitlab-shell";
   version = "11.0.0";
   src = fetchFromGitLab {
     owner = "gitlab-org";
