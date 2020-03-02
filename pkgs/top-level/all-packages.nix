@@ -9445,6 +9445,8 @@ in
 
   pipewire = callPackage ../development/libraries/pipewire {};
 
+  pyradio = callPackage ../applications/radio/pyradio {};
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
