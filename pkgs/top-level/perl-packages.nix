@@ -3295,11 +3295,7 @@ let
       sha256 = "b4b1471a2881e2d616f59e723879b4110ae485b79d5962f115119c28cf69e07f";
     };
     patches = [
-      (fetchpatch {
-        url = "https://patch-diff.githubusercontent.com/raw/andk/cpanpm/pull/133.diff";
-        name = "patch-YAML-modules-default-for-LoadBlessed-was-changed-to-false";
-        sha256 = "0i8648cwshzzd0b34gyfn68s1vs85d8336ggk2kl99awah1ydsfr";
-      })
+      ../development/perl-modules/perl-CPAN-YAML-modules-default-for-LoadBlessed.patch
     ];
     propagatedBuildInputs = [ ArchiveZip CPANChecksums CPANPerlReleases Expect FileHomeDir LWP LogLog4perl ModuleBuild TermReadKey YAML YAMLLibYAML YAMLSyck ];
     meta = {

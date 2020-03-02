@@ -1,0 +1,22 @@
+diff --git a/lib/CPAN.pm b/lib/CPAN.pm
+index 2d87f47f..2e28c9fc 100644
+--- a/lib/CPAN.pm
++++ b/lib/CPAN.pm
+@@ -558,7 +558,9 @@ sub _yaml_loadfile {
+         # 5.6.2 could not do the local() with the reference
+         # so we do it manually instead
+         my $old_loadcode = ${"$yaml_module\::LoadCode"};
++        my $old_loadblessed = ${"$yaml_module\::LoadBlessed"};
+         ${ "$yaml_module\::LoadCode" } = $CPAN::Config->{yaml_load_code} || 0;
++        ${ "$yaml_module\::LoadBlessed" } = 1;
+ 
+         my ($code, @yaml);
+         if ($code = UNIVERSAL::can($yaml_module, "LoadFile")) {
+@@ -582,6 +584,7 @@ sub _yaml_loadfile {
+             }
+         }
+         ${"$yaml_module\::LoadCode"} = $old_loadcode;
++        ${"$yaml_module\::LoadBlessed"} = $old_loadblessed;
+         return \@yaml;
+     } else {
+         # this shall not be done by the frontend
