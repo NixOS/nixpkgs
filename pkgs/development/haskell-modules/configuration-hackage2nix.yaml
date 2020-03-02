@@ -5530,9 +5530,7 @@ broken-packages:
   - haskell-go-checkers
   - haskell-in-space
   - haskell-kubernetes
-  - haskell-lsp
   - haskell-lsp-client
-  - haskell-lsp-types
   - haskell-ml
   - haskell-mpfr
   - haskell-names
@@ -7192,7 +7190,6 @@ broken-packages:
   - ls-usb
   - lscabal
   - LslPlus
-  - lsp-test
   - lsystem
   - ltext
   - ltk
