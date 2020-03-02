@@ -10,6 +10,7 @@ let
 
 common =
   { lib, stdenv, fetchpatch, perl, curl, bzip2, sqlite, openssl ? null, xz
+  , bash, coreutils, gzip, gnutar
   , pkgconfig, boehmgc, perlPackages, libsodium, brotli, boost, editline, nlohmann_json
   , jq, libarchive, rustc, cargo
   , busybox-sandbox-shell
@@ -30,6 +31,7 @@ common =
 
       is20 = lib.versionAtLeast version "2.0pre";
       is24 = lib.versionAtLeast version "2.4pre";
+      isExactly23 = lib.versionAtLeast version "2.3" && lib.versionOlder version "2.4";
 
       VERSION_SUFFIX = suffix;
 
@@ -64,17 +66,31 @@ common =
       preConfigure =
         # Copy libboost_context so we don't get all of Boost in our closure.
         # https://github.com/NixOS/nixpkgs/issues/45462
-        if is20 then ''
-          mkdir -p $out/lib
-          cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
-          rm -f $out/lib/*.a
-          ${lib.optionalString stdenv.isLinux ''
-            chmod u+w $out/lib/*.so.*
-            patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
-          ''}
-        '' else ''
-          configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
-        '';
+        (if is20 then ''
+           mkdir -p $out/lib
+           cp -pd ${boost}/lib/{libboost_context*,libboost_thread*,libboost_system*} $out/lib
+           rm -f $out/lib/*.a
+           ${lib.optionalString stdenv.isLinux ''
+             chmod u+w $out/lib/*.so.*
+             patchelf --set-rpath $out/lib:${stdenv.cc.cc.lib}/lib $out/lib/libboost_thread.so.*
+           ''}
+         '' else ''
+           configureFlagsArray+=(BDW_GC_LIBS="-lgc -lgccpp")
+         '') +
+        # For Nix-2.3, patch around an issue where the Nix configure step pulls in the
+        # build system's bash and other utilities when cross-compiling
+        lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform && isExactly23) ''
+          mkdir tmp/
+          substitute corepkgs/config.nix.in tmp/config.nix.in \
+            --subst-var-by bash ${bash}/bin/bash \
+            --subst-var-by coreutils ${coreutils}/bin \
+            --subst-var-by bzip2 ${bzip2}/bin/bzip2 \
+            --subst-var-by gzip ${gzip}/bin/gzip \
+            --subst-var-by xz ${xz}/bin/xz \
+            --subst-var-by tar ${gnutar}/bin/tar \
+            --subst-var-by tr ${coreutils}/bin/tr
+          mv tmp/config.nix.in corepkgs/config.nix.in
+          '';
 
       configureFlags =
         [ "--with-store-dir=${storeDir}"
