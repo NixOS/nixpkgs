@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
-  version = "1.4.2";
+  version = "1.5";
 
   src = fetchurl {
     url = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/snapshot/libgpiod-${version}.tar.gz";
-    sha256 = "0r0hdindy6pi1va3mhk2lg5dis0qbi535k790w76dxfx1hyavk70";
+    sha256 = "1r337ici2nvi9v2h33nf3b7nisirc4s8p31cpv1cg8jbzn3wi15g";
   };
 
   buildInputs = [ kmod ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
       the character device instead. This library encapsulates the ioctl calls and
       data structures behind a straightforward API.
     '';
-    homepage = https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/;
+    homepage = "https://git.kernel.org/pub/scm/libs/libgpiod/libgpiod.git/about/";
     license = licenses.lgpl2;
     maintainers = [ maintainers.expipiplus1 ];
     platforms = platforms.linux;
