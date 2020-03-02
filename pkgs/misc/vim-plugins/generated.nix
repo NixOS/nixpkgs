@@ -4953,6 +4953,17 @@ let
     };
   };
 
+  vim-pico8-syntax = buildVimPluginFrom2Nix {
+    pname = "vim-pico8-syntax";
+    version = "2016-10-30";
+    src = fetchFromGitHub {
+      owner = "justinj";
+      repo = "vim-pico8-syntax";
+      rev = "dbdd92fad0533eeaeaea844815d4de11e9507ce7";
+      sha256 = "0say0bb74rdbabgsf7rrbm8x841pmgh80fwr6kn94fgphr3vhm0s";
+    };
+  };
+
   vim-plug = buildVimPluginFrom2Nix {
     pname = "vim-plug";
     version = "2020-01-27";
