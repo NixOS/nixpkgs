@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, gettext }:
+{ stdenv, fetchurl, meson, ninja, gettext }:
 
 stdenv.mkDerivation rec {
   pname = "mate-backgrounds";
@@ -9,9 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0b9yx68p9l867bqsl9z2g4wrs8p396ls673jgaliys5snmk8n8dn";
   };
 
-  nativeBuildInputs = [ gettext ];
-
-  enableParallelBuilding = true;
+  nativeBuildInputs = [
+    gettext
+    meson
+    ninja
+  ];
 
   meta = with stdenv.lib; {
     description = "Background images and data for MATE";
