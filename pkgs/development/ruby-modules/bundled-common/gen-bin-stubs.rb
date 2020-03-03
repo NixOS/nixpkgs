@@ -32,8 +32,9 @@ paths.each do |path|
 #
 
 ENV["BUNDLE_GEMFILE"] = #{gemfile.dump}
-ENV["BUNDLE_PATH"] = #{bundle_path.dump}
 ENV['BUNDLE_FROZEN'] = '1'
+ENV["GEM_HOME"] = #{bundle_path.dump}
+ENV["GEM_PATH"] = #{bundle_path.dump}
 
 $LOAD_PATH.unshift #{bundler_path.dump} + "/lib"
 
