@@ -1,4 +1,4 @@
-{ callPackage, lowPrio }:
+{ callPackage }:
 
 {
   connmanFull = callPackage ./connman.nix {
@@ -9,7 +9,7 @@
     enableTist = true;
   };
 
-  connmanMinimal = lowPrio (callPackage ./connman.nix {
+  connmanMinimal = callPackage ./connman.nix {
     enableOpenconnect = false;
     enableOpenvpn = false;
     enableVpnc = false;
@@ -31,7 +31,7 @@
     enableStats = false;
     enableClient = false;
     # enableDatafiles = false; # If disabled, configuration and data files are not installed
-  });
+  };
 
   # All the defaults
   connman = callPackage ./connman.nix { };
