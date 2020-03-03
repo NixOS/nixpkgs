@@ -1,7 +1,7 @@
 { mkDerivation, stdenv, lib, fetchFromGitHub, cmake
 , qtbase, qtquickcontrols, qtkeychain, qtmultimedia, qttools
 , libqmatrixclient_0_5
-, gnome3
+, libsecret
 }:
 
 let
@@ -16,7 +16,7 @@ let
       inherit sha256;
     };
 
-    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain library gnome3.libsecret ];
+    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain library libsecret ];
 
     nativeBuildInputs = [ cmake qttools ];
 
