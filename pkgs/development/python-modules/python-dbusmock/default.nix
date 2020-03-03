@@ -47,6 +47,8 @@ buildPythonPackage rec {
     pygobject3 bluez bluez.test networkmanager
   ];
 
+  propagatedBuildInputs = [ dbus-python ];
+
   checkPhase = ''
     runHook preCheck
     export PATH="$PATH:${bluez.test}/test";
