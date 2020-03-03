@@ -75,10 +75,16 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
+    (python3.withPackages (pp: with pp; [
+      python-dbusmock
+      # The following possibly need to be propagated by dbusmock
+      # if they are not optional
+      dbus-python
+      pygobject3
+    ]))
   ];
 
-  # TODO: enable tests
-  # doCheck = true;
+  doCheck = true;
 
   postPatch = ''
     chmod +x meson_post_install.py
