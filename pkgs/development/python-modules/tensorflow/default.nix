@@ -7,7 +7,7 @@
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
 , functools32
 , opt-einsum
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_1_15_1
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
@@ -296,10 +296,12 @@ let
       TF_SYSTEM_LIBS = null;
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
+      # FIXME: can't (re)produce this output with current bazel.
+      # FIXME: build log: https://gist.github.com/andir/eff3e9c8eda5b56c8ea84903aed9cc35
       sha256 = if cudaSupport then
-        "1p544yk7jcspgc4qr4amw11ds16c2an5yxvagx5pmwawz0s083pf"
+        "0gyhjvzshgj59mbns8njlfl9qpz4sdg4j0xs2dva0w2nql7cr7im"
       else
-        "1dqbw3k3avqiy9xpgs44l6z65ab5rjjlxwig8z7gcl7fw9h6sbq9";
+        "04jvg3mc2si4xdbszc1vnw1rmf22p7snbjphmnklp7bc39jxkcrz";
     };
 
     buildAttrs = {
@@ -374,7 +376,7 @@ in buildPythonPackage {
     numpy
     six
     protobuf
-    tensorflow-estimator
+    tensorflow-estimator_1_15_1
     termcolor
     wrapt
     grpcio

@@ -6659,6 +6659,7 @@ in {
   zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+  tensorflow-estimator_1_15_1 = callPackage ../development/python-modules/tensorflow-estimator/1_15_1.nix { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
