@@ -1,13 +1,60 @@
-{ stdenv, buildPythonPackage, fetchPypi, glibcLocales, mock, pytest, botocore,
-  testfixtures, pillow, six, twisted, w3lib, lxml, queuelib, pyopenssl,
-  service-identity, parsel, pydispatcher, cssselect, lib }:
+{ stdenv
+, buildPythonPackage
+, isPy27
+, fetchPypi
+, glibcLocales
+, pytest
+, testfixtures
+, pillow
+, twisted
+, cryptography
+, w3lib
+, lxml
+, queuelib
+, pyopenssl
+, service-identity
+, parsel
+, pydispatcher
+, cssselect
+, zope_interface
+, protego
+, lib
+, jmespath
+, sybil
+, pytest-twisted
+, botocore
+}:
+
 buildPythonPackage rec {
-  version = "1.8.0";
+  version = "2.0.1";
   pname = "Scrapy";
 
-  checkInputs = [ glibcLocales mock pytest botocore testfixtures pillow ];
+  disabled = isPy27;
+
+  checkInputs = [
+    glibcLocales
+    jmespath
+    pytest
+    sybil
+    testfixtures
+    pillow
+    pytest-twisted
+    botocore
+  ];
+
   propagatedBuildInputs = [
-    six twisted w3lib lxml cssselect queuelib pyopenssl service-identity parsel pydispatcher
+    twisted
+    cryptography
+    cssselect
+    lxml
+    parsel
+    pydispatcher
+    pyopenssl
+    queuelib
+    service-identity
+    w3lib
+    zope_interface
+    protego
   ];
 
   patches = [
@@ -18,20 +65,20 @@ buildPythonPackage rec {
     ./permissions-fix.patch
   ];
 
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   # Disable doctest plugin—enabled in the shipped pytest.ini—because it causes pytest to hang
   # Ignore proxy tests because requires mitmproxy
   # Ignore test_retry_dns_error because tries to resolve an invalid dns and weirdly fails with "Reactor was unclean"
   # Ignore xml encoding test on darwin because lxml can't find encodings https://bugs.launchpad.net/lxml/+bug/707396
   checkPhase = ''
-    substituteInPlace pytest.ini --replace "addopts = --doctest-modules" "addopts ="
+    substituteInPlace pytest.ini --replace "--doctest-modules" ""
     pytest --ignore=tests/test_linkextractors_deprecated.py --ignore=tests/test_proxy_connect.py --deselect tests/test_crawl.py::CrawlTestCase::test_retry_dns_error ${lib.optionalString stdenv.isDarwin "--deselect tests/test_utils_iterators.py::LxmlXmliterTestCase::test_xmliter_encoding"}
   '';
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "fe06576f9a4971de9dc0175c60fd92561e8275f2bad585c1cb5d65c5181b2db0";
+    sha256 = "85581a01f4160a103ca9906ffa4e44474f4ecd1685f0934728892c58ebf111f6";
   };
 
   postInstall = ''
@@ -42,7 +89,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A fast high-level web crawling and web scraping framework, used to crawl websites and extract structured data from their pages";
-    homepage = https://scrapy.org/;
+    homepage = "https://scrapy.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [ drewkett marsam ];
     platforms = platforms.unix;
