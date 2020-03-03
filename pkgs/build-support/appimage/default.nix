@@ -1,4 +1,4 @@
-{ stdenv, libarchive, patchelf, zlib, buildFHSUserEnv, writeScript }:
+{ stdenv, libarchive, radare2, jq, buildFHSUserEnv, squashfsTools, writeScript }:
 
 rec {
   # Both extraction functions could be unified, but then
@@ -19,15 +19,16 @@ rec {
     name = "${name}-extracted";
     inherit src;
 
-    nativeBuildInputs = [ patchelf ];
+    nativeBuildInputs = [ radare2 jq squashfsTools ];
     buildCommand = ''
       install $src ./appimage
-      patchelf \
-        --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-        --replace-needed libz.so.1 ${zlib}/lib/libz.so.1 \
-        ./appimage
 
-      ./appimage --appimage-extract
+      # multiarch offset one-liner using same method as AppImage
+      # see https://gist.github.com/probonopd/a490ba3401b5ef7b881d5e603fa20c93
+      offset=$(r2 ./appimage -nn -Nqc "pfj.elf_header @ 0" |\
+        jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
+
+      unsquashfs -o $offset ./appimage
 
       cp -rv squashfs-root $out
     '';
