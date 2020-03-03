@@ -302,7 +302,7 @@ in
     security.pam.services.lightdm-autologin.text = ''
         auth      requisite     pam_nologin.so
 
-        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      required      pam_succeed_if.so ${optionalString (cfg.autoLogin.user != "root") "uid >= 1000"} quiet
         auth      required      pam_permit.so
 
         account   sufficient    pam_unix.so
