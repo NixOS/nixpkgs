@@ -1,4 +1,4 @@
-{ stdenv, pkgs, bazel_1, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_0, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
@@ -94,7 +94,7 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_1;
+    bazel = bazel_0;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -121,7 +121,6 @@ let
         sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
       })
 
-      ./tf-1.15-bazel-1.0.patch
 
       (fetchpatch {
         # be compatible with gast >0.2 instead of only gast 0.2.2
@@ -283,7 +282,6 @@ let
     bazelFlags = [
       # temporary fixes to make the build work with bazel 0.27
       "--incompatible_no_support_tools_in_action_inputs=false"
-      "--incompatible_use_native_patch=false"
     ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
@@ -299,9 +297,9 @@ let
       # FIXME: can't (re)produce this output with current bazel.
       # FIXME: build log: https://gist.github.com/andir/eff3e9c8eda5b56c8ea84903aed9cc35
       sha256 = if cudaSupport then
-        "0gyhjvzshgj59mbns8njlfl9qpz4sdg4j0xs2dva0w2nql7cr7im"
+        "0bzkqjnw1crf0v91yb1frvy0l7kmjawbfwdhm89h73i8fqjab8jw"
       else
-        "04jvg3mc2si4xdbszc1vnw1rmf22p7snbjphmnklp7bc39jxkcrz";
+        "1d7czp43a3a4aksvdcskbdy7dgifily1amqbz9fa6d8mkhdj5if5";
     };
 
     buildAttrs = {
@@ -422,6 +420,9 @@ in buildPythonPackage {
     x = np.random.uniform(size=(1,1))
     y = np.random.uniform(size=(1,))
     model.fit(x, y, epochs=1)
+
+    # regression test for #77626
+    from tensorflow.contrib import tensor_forest
     EOF
   '';
 
