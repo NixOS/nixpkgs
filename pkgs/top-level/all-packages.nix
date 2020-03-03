@@ -8679,7 +8679,10 @@ in
 
   manticore = callPackage ../development/compilers/manticore { };
 
-  mercury = callPackage ../development/compilers/mercury { };
+  mercury = callPackage ../development/compilers/mercury {
+    stdenv = gccStdenv;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation;
+  };
 
   microscheme = callPackage ../development/compilers/microscheme { };
 
