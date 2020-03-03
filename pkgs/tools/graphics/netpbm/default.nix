@@ -84,12 +84,12 @@ stdenv.mkDerivation {
     mkdir -p $out/share/netpbm
     mv $out/misc $out/share/netpbm/
 
+    moveToOutput bin "''${!outputBin}"
+
     # wrap any scripts that expect other programs in the package to be in their PATH
     for prog in ppmquant; do
-        wrapProgram "$out/bin/$prog" --prefix PATH : "$out/bin"
+        wrapProgram "''${!outputBin}/bin/$prog" --prefix PATH : "''${!outputBin}/bin"
     done
-
-    moveToOutput bin "''${!outputBin}"
 
     runHook postInstall
   '';
