@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, pkgconfig, libcbor, libressl, udev, IOKit }:
+{ stdenv, fetchurl, cmake, pkgconfig, libcbor, openssl, udev, IOKit }:
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
-  buildInputs = [ libcbor libressl ]
+  buildInputs = [ libcbor openssl ]
     ++ stdenv.lib.optionals stdenv.isLinux [ udev ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
