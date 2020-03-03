@@ -107,6 +107,13 @@
      </para>
    </listitem>
    <listitem>
+     <para>
+       Setting <option>services.openssh.authorizedKeysFiles</option> now also affects which keys <option>security.pam.enableSSHAgentAuth</option> will use.
+
+       WARNING: If you are using these options in combination do make sure that any key paths you use are present in <option>services.openssh.authorizedKeysFiles</option>!
+     </para>
+   </listitem>
+   <listitem>
     <para>
      The option <option>fonts.enableFontDir</option> has been renamed to
      <xref linkend="opt-fonts.fontDir.enable"/>. The path of font directory
