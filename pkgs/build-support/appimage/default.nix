@@ -1,38 +1,39 @@
 { stdenv, libarchive, radare2, jq, buildFHSUserEnv, squashfsTools, writeScript }:
 
 rec {
-  # Both extraction functions could be unified, but then
-  # it would depend on libmagic to correctly identify ISO 9660s
 
-  extractType1 = { name, src }: stdenv.mkDerivation {
+  extract = { name, src }: stdenv.mkDerivation {
     name = "${name}-extracted";
     inherit src;
-
-    nativeBuildInputs = [ libarchive ];
+    nativeBuildInputs = [ radare2 libarchive jq squashfsTools ];
     buildCommand = ''
-      mkdir $out
-      bsdtar -x -C $out -f $src
+      # https://github.com/AppImage/libappimage/blob/ca8d4b53bed5cbc0f3d0398e30806e0d3adeaaab/src/libappimage/utils/MagicBytesChecker.cpp#L45-L63
+      appimageType=$(r2 $src -nn -Nqc "p8 3 @ 8")
+      case "$appimageType" in
+        414901)
+          mkdir $out
+          bsdtar -x -C $out -f $src;;
+
+        414902)
+          install $src ./appimage
+
+          # multiarch offset one-liner using same method as AppImage
+          # see https://gist.github.com/probonopd/a490ba3401b5ef7b881d5e603fa20c93
+          offset=$(r2 ./appimage -nn -Nqc "pfj.elf_header @ 0" |\
+            jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
+
+          unsquashfs -o $offset ./appimage
+
+          cp -rv squashfs-root $out;;
+
+        # 414903) get prepared, https://github.com/TheAssassin/type3-runtime
+        *) echo "Unsupported AppImage Signature: $appimageType";;
+      esac
     '';
   };
 
-  extractType2 = { name, src }: stdenv.mkDerivation {
-    name = "${name}-extracted";
-    inherit src;
-
-    nativeBuildInputs = [ radare2 jq squashfsTools ];
-    buildCommand = ''
-      install $src ./appimage
-
-      # multiarch offset one-liner using same method as AppImage
-      # see https://gist.github.com/probonopd/a490ba3401b5ef7b881d5e603fa20c93
-      offset=$(r2 ./appimage -nn -Nqc "pfj.elf_header @ 0" |\
-        jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
-
-      unsquashfs -o $offset ./appimage
-
-      cp -rv squashfs-root $out
-    '';
-  };
+  extractType1 = extract;
+  extractType2 = extract;
 
   wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
