@@ -26,6 +26,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DENABLE_TESTS=OFF"
+    "-DLINKER_NAME=gold" # lld is not wrapped with ld-wrapper.sh, does not set rpath.
     "-DUNBUNDLED=ON"
     "-DUSE_STATIC_LIBRARIES=OFF"
   ];
