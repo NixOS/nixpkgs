@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
-    python3
+    (python3.withPackages (p: [p.python-dbusmock]))
     vala
   ];
 
