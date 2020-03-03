@@ -327,14 +327,14 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
 
   Boogie = buildDotnetPackage rec {
     baseName = "Boogie";
-    version = "2019-06-20";
-    name = "${baseName}-unstable-${version}";
+    version = "2.4.1";
+    name = "${baseName}-${version}";
 
     src = fetchFromGitHub {
       owner = "boogie-org";
       repo = "boogie";
-      rev = "2e8fae4dc1724d8f9e7b1f877116e56b0773337e";
-      sha256 = "01wjps3yfx8q0qy0zrmmfd1ixjxi2dhkn1wfazb5qm2slav39dp2";
+      rev = "v${version}";
+      sha256 = "13f6ifkh6gpy4bvx5zhgwmk3wd5rfxzl9wxwfhcj1c90fdrhwh1b";
     };
 
     # emulate `nuget restore Source/Boogie.sln`
@@ -379,7 +379,20 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     };
   };
 
-  Dafny = buildDotnetPackage rec {
+  Dafny = let
+    z3 = pkgs.z3.overrideAttrs (oldAttrs: with oldAttrs; rec {
+      version = "4.8.4";
+      name = "${pname}-${version}";
+
+      src = fetchFromGitHub {
+        owner = "Z3Prover";
+        repo = pname;
+        rev = "z3-${version}";
+        sha256 = "014igqm5vwswz0yhz0cdxsj3a6dh7i79hvhgc3jmmmz3z0xm1gyn";
+      };
+    });
+    boogie = assert dotnetPackages.Boogie.version == "2.4.1"; dotnetPackages.Boogie;
+  in buildDotnetPackage rec {
     baseName = "Dafny";
     version = "2.3.0";
 
@@ -396,7 +409,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     '';
 
     preBuild = ''
-      ln -s ${pkgs.z3} Binaries/z3
+      ln -s ${z3} Binaries/z3
     '';
 
     buildInputs = [ Boogie ];
@@ -415,7 +428,7 @@ let self = dotnetPackages // overrides; dotnetPackages = with self; {
     # Boogie as an input is not enough. Boogie libraries need to be at the same
     # place as Dafny ones. Same for "*.dll.mdb". No idea why or how to fix.
     postFixup = ''
-      for lib in ${Boogie}/lib/dotnet/${Boogie.baseName}/*.dll{,.mdb}; do
+      for lib in ${boogie}/lib/dotnet/${boogie.baseName}/*.dll{,.mdb}; do
         ln -s $lib $out/lib/dotnet/${baseName}/
       done
       # We generate our own executable scripts
