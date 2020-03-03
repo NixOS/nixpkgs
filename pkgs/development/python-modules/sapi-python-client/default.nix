@@ -11,6 +11,10 @@ buildPythonPackage rec {
         sha256 = "1xja4v5d30hy26lfys21vcz1lcs88v8mvjxwl2dc3wxx2pzdvcf6";
     };
 
+    postPatch = ''
+        sed -i 's|use_scm_version=True|version="${version}"|' setup.py
+    '';
+
     doCheck = false; # requires API token and an active keboola bucket
 
     nativeBuildInputs = [ git setuptools_scm ]; 
