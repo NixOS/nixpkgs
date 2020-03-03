@@ -1,5 +1,9 @@
 = Dell XPS 13 7390 =
 
+== Installation == 
+You need to disable AHCI as described here.
+https://wiki.ubuntu.com/Dell/XPS/XPS-13-7390-2-in-1
+
 == Firmware upgrades ==
 
 Note that this device is supported by [https://fwupd.org/ fwupd].
