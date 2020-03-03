@@ -3106,7 +3106,6 @@ broken-packages:
   - binary-ext
   - binary-file
   - binary-indexed-tree
-  - binary-instances
   - binary-protocol
   - binary-protocol-zmq
   - binary-search
@@ -5096,7 +5095,6 @@ broken-packages:
   - git-repair
   - git-sanity
   - gitdo
-  - github
   - github-backup
   - github-data
   - github-release
@@ -9113,7 +9111,6 @@ broken-packages:
   - semigroups-actions
   - semiring
   - semiring-num
-  - semver-range
   - sendgrid-haskell
   - sendgrid-v3
   - sensei
