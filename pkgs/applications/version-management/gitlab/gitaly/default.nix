@@ -5,6 +5,7 @@ let
   rubyEnv = bundlerEnv rec {
     name = "gitaly-env";
     inherit ruby;
+    copyGemFiles = true;
     gemdir = ./.;
     gemset =
       let x = import (gemdir + "/gemset.nix");
