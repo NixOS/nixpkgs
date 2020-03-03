@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # Fix build with GCC 9
+  NIX_CFLAGS_COMPILE = "-fpermissive";
+
   postBuild = "echo testing; ! (bash ./test | grep ERROR)";
 
   installPhase = ''
