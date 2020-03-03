@@ -2,7 +2,8 @@
 
 stdenv.mkDerivation {
 
-  name = "acgtk-1.5.1";
+  pname = "acgtk";
+  version = "1.5.1";
 
   src = fetchurl {
     url = https://acg.loria.fr/software/acg-1.5.1-20191113.tar.gz;
