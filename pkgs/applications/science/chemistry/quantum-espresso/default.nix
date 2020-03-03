@@ -4,12 +4,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "6.4.1";
+  version = "6.5";
   pname = "quantum-espresso";
 
   src = fetchurl {
     url = "https://gitlab.com/QEF/q-e/-/archive/qe-${version}/q-e-qe-${version}.tar.gz";
-    sha256 = "027skhp2zzx0f4mh6azqjljdimchak5cdn13v4x7aj5q2zvfkmxh";
+    sha256 = "00nnsq1vq579xsmkvwrgs6bdqdcbdlsmcp4yfynnvs40ca52m2r5";
   };
 
   passthru = {
@@ -35,7 +35,7 @@ configureFlags = if (mpi != null) then [ "LD=${mpi}/bin/mpif90" ] else [ "LD=${g
         nanoscale. It is based on density-functional theory, plane waves, and
         pseudopotentials.
       '';
-    homepage = https://www.quantum-espresso.org/;
+    homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.costrouc ];
