@@ -6729,6 +6729,8 @@ in {
 
   threadpool = callPackage ../development/python-modules/threadpool { };
 
+  threadpoolctl = callPackage ../development/python-modules/threadpoolctl { };
+
   rocket-errbot = callPackage ../development/python-modules/rocket-errbot {  };
 
   Yapsy = callPackage ../development/python-modules/yapsy { };
