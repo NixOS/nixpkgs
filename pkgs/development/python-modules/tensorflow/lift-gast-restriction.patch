@@ -3,9 +3,9 @@ index 992f2eae22..d9386f9b13 100644
 --- a/tensorflow/tools/pip_package/setup.py
 +++ b/tensorflow/tools/pip_package/setup.py
 @@ -54,7 +54,7 @@ REQUIRED_PACKAGES = [
-     'astor >= 0.6.0',
-     'backports.weakref >= 1.0rc1;python_version<"3.4"',
      'enum34 >= 1.1.6;python_version<"3.4"',
+     # functools comes with python3, need to install the backport for python2
+     'functools32 >= 3.2.3;python_version<"3"',
 -    'gast == 0.2.2',
 +    'gast >= 0.2.2',
      'google_pasta >= 0.1.6',
