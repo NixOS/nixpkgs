@@ -39,15 +39,6 @@ let
 in
 
 {
-  asciidoctor-diagram = { version, ruby, ... }: {
-    postInstall = ''
-      # Delete vendored JAR files unless using JRuby.
-      if ruby -e 'exit(RUBY_PLATFORM != "java")'; then
-          rm -v $out/${ruby.gemPath}/gems/$gemName-${version}/lib/*.jar
-      fi
-    '';
-  };
-
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkgconfig ];
