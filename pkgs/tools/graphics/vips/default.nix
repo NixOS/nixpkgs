@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
   pname = "vips";
   version = "8.9.1";
 
+  outputs = [ "bin" "out" "man" "dev" ];
+
   src = fetchFromGitHub {
     owner = "libvips";
     repo = "libvips";
