@@ -15,7 +15,7 @@ let
     map (childConfig:
       (import ../../../lib/eval-config.nix {
         inherit baseModules;
-        system = config.nixpkgs.system;
+        system = config.nixpkgs.initialSystem;
         modules =
            (optionals inheritParent modules)
         ++ [ ./no-clone.nix ]
