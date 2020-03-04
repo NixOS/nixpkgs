@@ -42,7 +42,6 @@
 , enableDatafiles ? true
 # optional features which are turned *off* by default
 , enableNetworkManager ? false
-, networkmanager ? null
 , enableHh2serialGps ? false
 , enableL2tp ? false
 , enableIospm ? false
