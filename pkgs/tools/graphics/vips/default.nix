@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
     expat
   ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
+  # Required by .pc file
+  propagatedBuildInputs = [
+    glib
+  ];
+
   autoreconfPhase = ''
     NOCONFIGURE=1 ./autogen.sh
   '';
