@@ -4949,6 +4949,12 @@
     githubId = 118035;
     name = "Corbin Simpson";
   };
+  mothsart = {
+    email = "jerem.ferry@gmail.com";
+    github = "mothsart";
+    githubId = 10601196;
+    name = "Jérémie Ferry";
+  };
   mounium = {
     email = "muoniurn@gmail.com";
     github = "mounium";

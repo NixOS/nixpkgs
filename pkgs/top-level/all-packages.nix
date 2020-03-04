@@ -18800,6 +18800,8 @@ in
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
 
+  drawing = callPackage ../applications/graphics/drawing { };
+
   drawio = callPackage ../applications/graphics/drawio {};
 
   drawpile = libsForQt5.callPackage ../applications/graphics/drawpile { };
