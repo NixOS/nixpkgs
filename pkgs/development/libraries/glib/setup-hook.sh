@@ -24,4 +24,12 @@ glibPreFixupPhase() {
 
     addToSearchPath GSETTINGS_SCHEMAS_PATH "${!outputLib}/share/gsettings-schemas/$name"
 }
-preFixupPhases+=" glibPreFixupPhase"
+
+# gappsWrapperArgsHook expects GSETTINGS_SCHEMAS_PATH variable to be set by this.
+# Until we have dependency mechanism in generic builder, we need to use this ugly hack.
+if [[ " ${preFixupPhases:-} " =~ " gappsWrapperArgsHook " ]]; then
+    preFixupPhases+=" "
+    preFixupPhases="${preFixupPhases/ gappsWrapperArgsHook / glibPreFixupPhase gappsWrapperArgsHook }"
+else
+    preFixupPhases+=" glibPreFixupPhase"
+fi
