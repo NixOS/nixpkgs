@@ -8156,7 +8156,6 @@ broken-packages:
   - persistent-map
   - persistent-migration
   - persistent-mongoDB
-  - persistent-mysql
   - persistent-mysql-haskell
   - persistent-protobuf
   - persistent-ratelimit
