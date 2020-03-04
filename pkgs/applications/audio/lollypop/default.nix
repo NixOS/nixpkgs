@@ -12,6 +12,10 @@
 , desktop-file-utils
 , totem-pl-parser
 , gobject-introspection
+, glib-networking
+, gdk-pixbuf
+, glib
+, pango
 , wrapGAppsHook
 , lastFMSupport ? true
 , youtubeSupport ? true
@@ -42,6 +46,9 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
+    gdk-pixbuf
+    glib
+    glib-networking
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -50,6 +57,7 @@ python3.pkgs.buildPythonApplication rec  {
     gstreamer
     gtk3
     libsoup
+    pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
 
