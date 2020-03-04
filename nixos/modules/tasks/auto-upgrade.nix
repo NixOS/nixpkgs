@@ -68,9 +68,11 @@ let cfg = config.system.autoUpgrade; in
         type = types.str;
         example = "45min";
         description = ''
-          Add a randomized delay to wait before automatically upgrading.
-          The delay will be between zero and this value.
-          This value must be a valid systemd timespan.
+          Add a randomized delay before each automatic upgrade.
+          The delay will be chozen between zero and this value.
+          This value must be a time span in the format specified by
+          <citerefentry><refentrytitle>systemd.time</refentrytitle>
+          <manvolnum>7</manvolnum></citerefentry>
         '';
       };
 
