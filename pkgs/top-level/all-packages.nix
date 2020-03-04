@@ -4062,7 +4062,7 @@ in
   pixd = callPackage ../tools/misc/pixd { };
 
   hey = callPackage ../tools/networking/hey { };
-  
+
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
@@ -9804,6 +9804,8 @@ in
 
   bison = callPackage ../development/tools/parsing/bison { };
   yacc = bison; # TODO: move to aliases.nix
+
+  bisonpp = callPackage ../development/tools/parsing/bisonpp { };
 
   blackmagic = callPackage ../development/tools/misc/blackmagic { };
 
