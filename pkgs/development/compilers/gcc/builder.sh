@@ -213,18 +213,18 @@ preInstall() {
 
 postInstall() {
     # Move runtime libraries to $lib.
-    if [[ -d "$out/$target_triple/lib" && -n "$(ls -A $out/$target_triple/lib)" ]]; then
-        moveToOutput "$target_triple/lib/lib*.so*" "$lib"
-        moveToOutput "$target_triple/lib/lib*.la" "$lib"
-        moveToOutput "$target_triple/lib/lib*.dylib" "$lib"
-        mv "$lib/$target_triple"/lib/* "$lib/lib/"
-        rmdir -p --ignore-fail-on-non-empty "$lib/$target_triple/lib" || :
-    elif [[ -d "$out/$target_triple/lib64" && -n "$(ls -A $out/$target_triple/lib64)" ]]; then
-        moveToOutput "$target_triple/lib64/lib*.so*" "$lib"
-        moveToOutput "$target_triple/lib64/lib*.la" "$lib"
-        moveToOutput "$target_triple/lib64/lib*.dylib" "$lib"
-        mv "$lib/$target_triple"/lib64/* "$lib/lib/"
-        rmdir -p --ignore-fail-on-non-empty "$lib/$target_triple/lib64" || :
+    if [[ -n ${targetConfig} && -d "$out/$targetConfig/lib" && -n "$(ls -A $out/$targetConfig/lib)" ]]; then
+        moveToOutput "$targetConfig/lib/lib*.so*" "$lib"
+        moveToOutput "$targetConfig/lib/lib*.la" "$lib"
+        moveToOutput "$targetConfig/lib/lib*.dylib" "$lib"
+        mv "$lib/$targetConfig"/lib/* "$lib/lib/"
+        rmdir -p --ignore-fail-on-non-empty "$lib/$targetConfig/lib" || :
+    elif [[ -n ${targetConfig} && -d "$out/$targetConfig/lib64" && -n "$(ls -A $out/$targetConfig/lib64)" ]]; then
+        moveToOutput "$targetConfig/lib64/lib*.so*" "$lib"
+        moveToOutput "$targetConfig/lib64/lib*.la" "$lib"
+        moveToOutput "$targetConfig/lib64/lib*.dylib" "$lib"
+        mv "$lib/$targetConfig"/lib64/* "$lib/lib/"
+        rmdir -p --ignore-fail-on-non-empty "$lib/$targetConfig/lib64" || :
     else
         moveToOutput "lib/lib*.so*" "$lib"
         moveToOutput "lib/lib*.la"  "$lib"
