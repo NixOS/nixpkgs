@@ -115,7 +115,7 @@ stdenv.mkDerivation (filteredArgs // {
 
     export RUST_LOG=${logLevel}
   '' + stdenv.lib.optionalString validateCargoDeps ''
-    if ! diff source/Cargo.lock $cargoDepsCopy/Cargo.lock ; then
+    if ! diff ''${sourceRoot:-source}/Cargo.lock $cargoDepsCopy/Cargo.lock ; then
       echo
       echo "ERROR: cargoSha256 is out of date"
       echo
