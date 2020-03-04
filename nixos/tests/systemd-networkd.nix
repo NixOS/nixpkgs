@@ -41,15 +41,25 @@ let generateNodeConf = { lib, pkgs, config, privk, pubk, peerId, nodeId, ...}: {
               { routeConfig = { Gateway = "10.0.0.${nodeId}"; Destination = "10.0.0.0/24"; }; }
             ];
           };
-          "90-eth1" = {
+          "30-eth1" = {
             matchConfig = { Name = "eth1"; };
-            address = [ "192.168.1.${nodeId}/24" ];
+            address = [
+              "192.168.1.${nodeId}/24"
+              "fe80::${nodeId}/64"
+            ];
+            routingPolicyRules = [
+              { routingPolicyRuleConfig = { Table = 10; IncomingInterface = "eth1"; Family = "both"; };}
+              { routingPolicyRuleConfig = { Table = 20; OutgoingInterface = "eth1"; };}
+              { routingPolicyRuleConfig = { Table = 30; From = "192.168.1.1"; To = "192.168.1.2"; SourcePort = 666 ; DestinationPort = 667; };}
+              { routingPolicyRuleConfig = { Table = 40; IPProtocol = "tcp"; InvertRule = true; };}
+              { routingPolicyRuleConfig = { Table = 50; IncomingInterface = "eth1"; Family = "ipv4"; };}
+            ];
           };
         };
       };
     };
 in import ./make-test-python.nix ({pkgs, ... }: {
-  name = "networkd-wireguard";
+  name = "networkd";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ninjatrappeur ];
   };
@@ -76,9 +86,28 @@ testScript = ''
     start_all()
     node1.wait_for_unit("systemd-networkd-wait-online.service")
     node2.wait_for_unit("systemd-networkd-wait-online.service")
+
+    # ================================
+    # Wireguard
+    # ================================
     node1.succeed("ping -c 5 10.0.0.2")
     node2.succeed("ping -c 5 10.0.0.1")
     # Is the fwmark set?
     node2.succeed("wg | grep -q 42")
+
+    # ================================
+    # Routing Policies
+    # ================================
+    # Testing all the routingPolicyRuleConfig members:
+    # Table + IncomingInterface
+    node1.succeed("sudo ip rule | grep 'from all iif eth1 lookup 10'")
+    # OutgoingInterface
+    node1.succeed("sudo ip rule | grep 'from all oif eth1 lookup 20'")
+    # From + To + SourcePort + DestinationPort
+    node1.succeed(
+        "sudo ip rule | grep 'from 192.168.1.1 to 192.168.1.2 sport 666 dport 667 lookup 30'"
+    )
+    # IPProtocol + InvertRule
+    node1.succeed("sudo ip rule | grep 'not from all ipproto tcp lookup 40'")
 '';
 })
