@@ -1782,6 +1782,8 @@ in {
 
   base58 = callPackage ../development/python-modules/base58 {};
 
+  batchgenerators = callPackage ../development/python-modules/batchgenerators { };
+
   batinfo = callPackage ../development/python-modules/batinfo {};
 
   bcdoc = callPackage ../development/python-modules/bcdoc {};
