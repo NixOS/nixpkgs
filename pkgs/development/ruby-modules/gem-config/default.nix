@@ -506,7 +506,7 @@ in
         --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
       substituteInPlace lib/vips.rb \
-        --replace "vips_libname = 'vips'" "vips_libname = '${vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace "vips_libname = 'vips'" "vips_libname = '${stdenv.lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
   };
 
