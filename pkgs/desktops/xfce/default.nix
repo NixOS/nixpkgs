@@ -78,7 +78,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     inherit (pkgs.gnome3) libsoup;
   };
 
-  xfdashbooard = callPackage ./applications/xfdashboard {};
+  xfdashboard = callPackage ./applications/xfdashboard {};
 
   # TODO: this repo is inactive for many years. Remove?
   xfce4-volumed = callPackage ./applications/xfce4-volumed { };

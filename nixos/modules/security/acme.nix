@@ -174,7 +174,7 @@ in
 
       renewInterval = mkOption {
         type = types.str;
-        default = "weekly";
+        default = "daily";
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -399,7 +399,17 @@ in
       systemd.tmpfiles.rules =
         map (data: "d ${data.webroot}/.well-known/acme-challenge - ${data.user} ${data.group}") (filter (data: data.webroot != null) (attrValues cfg.certs));
 
-      systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
+      systemd.timers = let
+        # Allow systemd to pick a convenient time within the day
+        # to run the check.
+        # This allows the coalescing of multiple timer jobs.
+        # We divide by the number of certificates so that if you
+        # have many certificates, the renewals are distributed over
+        # the course of the day to avoid rate limits.
+        numCerts = length (attrNames cfg.certs);
+        _24hSecs = 60 * 60 * 24;
+        AccuracySec = "${toString (_24hSecs / numCerts)}s";
+      in flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
         ({
           description = "Renew ACME Certificate for ${cert}";
@@ -408,8 +418,9 @@ in
             OnCalendar = cfg.renewInterval;
             Unit = "acme-${cert}.service";
             Persistent = "yes";
-            AccuracySec = "5m";
-            RandomizedDelaySec = "1h";
+            inherit AccuracySec;
+            # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
+            RandomizedDelaySec = "24h";
           };
         })
       );

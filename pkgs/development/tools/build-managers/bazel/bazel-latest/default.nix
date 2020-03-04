@@ -159,7 +159,7 @@ stdenv.mkDerivation rec {
     # On Darwin, the last argument to gcc is coming up as an empty string. i.e: ''
     # This is breaking the build of any C target. This patch removes the last
     # argument if it's found to be an empty string.
-    ./trim-last-argument-to-gcc-if-empty.patch
+    ../trim-last-argument-to-gcc-if-empty.patch
 
     # --experimental_strict_action_env (which may one day become the default
     # see bazelbuild/bazel#2574) hardcodes the default
@@ -168,17 +168,17 @@ stdenv.mkDerivation rec {
     # So we are replacing this bazel paths by defaultShellPath,
     # improving hermeticity and making it work in nixos.
     (substituteAll {
-      src = ./strict_action_env.patch;
+      src = ../strict_action_env.patch;
       strictActionEnvPatch = defaultShellPath;
     })
 
     # bazel reads its system bazelrc in /etc
     # override this path to a builtin one
     (substituteAll {
-      src = ./bazel_rc.patch;
+      src = ../bazel_rc.patch;
       bazelSystemBazelRCPath = bazelRC;
     })
-  ] ++ lib.optional enableNixHacks ./nix-hacks.patch;
+  ] ++ lib.optional enableNixHacks ../nix-hacks.patch;
 
 
   # Additional tests that check bazel’s functionality. Execute
@@ -289,7 +289,7 @@ stdenv.mkDerivation rec {
     #!${runtimeShell}
     cat ${runCommand "bazel-deps.json" {} ''
         ${unzip}/bin/unzip ${src} WORKSPACE
-        ${python3}/bin/python3 ${./update-srcDeps.py} ./WORKSPACE > $out
+        ${python3}/bin/python3 ${../update-srcDeps.py} ./WORKSPACE > $out
     ''} > ${builtins.toString ./src-deps.json}
   '';
 

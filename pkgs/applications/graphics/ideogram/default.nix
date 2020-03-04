@@ -17,13 +17,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ideogram";
-  version = "1.3.2";
+  version = "1.3.3";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = pname;
     rev = version;
-    sha256 = "08nl11gj3234nrqyigqkq3yiyrqf2hha24x5jkl78ypj2xhcnhw8";
+    sha256 = "1zkr7x022khn5g3sq2dkxzy1hiiz66vl81s3i5sb9qr88znh79p1";
   };
 
   nativeBuildInputs = [

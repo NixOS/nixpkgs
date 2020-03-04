@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, gmp, libffi }:
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, gmp, libffi }:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
@@ -7,6 +7,14 @@ stdenv.mkDerivation rec {
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure.ac --replace stdc++ c++
   '';
+
+  patches = [
+    (fetchpatch {
+      name = "new-libffi-FFI_SYSV.patch";
+      url = "https://github.com/polyml/polyml/commit/ad32de7f181acaffaba78d5c3d9e5aa6b84a741c.patch";
+      sha256 = "007q3r2h9kfh3c1nv0dyhipmak44q468ab9bwnz4kk4a2dq76n8v";
+    })
+  ];
 
   buildInputs = [ libffi gmp ];
 
@@ -33,6 +41,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.polyml.org/;
     license = licenses.lgpl21;
     platforms = with platforms; (linux ++ darwin);
-    maintainers = with maintainers; [ maggesi yurrriq ];
+    maintainers = with maintainers; [ maggesi kovirobi ];
   };
 }

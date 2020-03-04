@@ -881,6 +881,16 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      </citerefentry>-script now uses the python test-driver.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <package>riot-web</package> package now accepts configuration overrides as an attribute set instead of a string.
+     A formerly used JSON configuration can be converted to an attribute set with <literal>builtins.fromJSON</literal>.
+    </para>
+    <para>
+     The new default configuration also disables automatic guest account registration and analytics to improve privacy.
+     The previous behavior can be restored by setting <literal>config.riot-web.conf = { disable_guests = false; piwik = true; }</literal>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -941,6 +951,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
     <para>
     It is now possible to unlock LUKS-Encrypted file systems using a FIDO2 token
     via <option>boot.initrd.luks.fido2Support</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Predicatbly named network-interfaces get renamed in stage-1. This means that it's possible
+     to use the proper interface name for e.g. dropbear-setups.
+    </para>
+    <para>
+     For further reference, please read <link xlink:href="https://github.com/NixOS/nixpkgs/pull/68953">#68953</link> or the corresponding <link xlink:href="https://discourse.nixos.org/t/predictable-network-interface-names-in-initrd/4055">discourse thread</link>.
     </para>
    </listitem>
   </itemizedlist>
