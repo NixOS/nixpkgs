@@ -8,13 +8,23 @@ rec {
     nativeBuildInputs = [ radare2 libarchive jq squashfsTools ];
     buildCommand = ''
       # https://github.com/AppImage/libappimage/blob/ca8d4b53bed5cbc0f3d0398e30806e0d3adeaaab/src/libappimage/utils/MagicBytesChecker.cpp#L45-L63
-      appimageType=$(r2 $src -nn -Nqc "p8 3 @ 8")
-      case "$appimageType" in
-        414901)
-          mkdir $out
-          bsdtar -x -C $out -f $src;;
+      eval $(r2 $src -nn -Nqc "p8j 3 @ 8" |
+        jq -r '{appimageSignature: (.[:-1]|implode), appimageType: .[-1]}|
+          @sh "appimageSignature=\(.appimageSignature) appimageType=\(.appimageType)"')
 
-        414902)
+      # check AppImage signature
+      if [[ $appimageSignature != "AI" ]]; then
+        echo "Not an appimage."
+        exit
+      fi
+
+      case "$appimageType" in
+        1)
+          mkdir $out
+          bsdtar -x -C $out -f $src
+          ;;
+
+        2)
           install $src ./appimage
 
           # multiarch offset one-liner using same method as AppImage
@@ -22,12 +32,11 @@ rec {
           offset=$(r2 ./appimage -nn -Nqc "pfj.elf_header @ 0" |\
             jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
 
-          unsquashfs -o $offset ./appimage
+          unsquashfs -q -d $out -o $offset ./appimage
+          ;;
 
-          cp -rv squashfs-root $out;;
-
-        # 414903) get prepared, https://github.com/TheAssassin/type3-runtime
-        *) echo "Unsupported AppImage Signature: $appimageType";;
+        # 3) get ready, https://github.com/TheAssassin/type3-runtime
+        *) echo "Unsupported AppImage Type: $appimageType";;
       esac
     '';
   };
