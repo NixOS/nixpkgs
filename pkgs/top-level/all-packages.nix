@@ -539,6 +539,8 @@ in
     pname = "OPNplug";
   };
 
+  adminer = callPackage ../servers/adminer { };
+
   advancecomp = callPackage ../tools/compression/advancecomp {};
 
   aefs = callPackage ../tools/filesystems/aefs { };
