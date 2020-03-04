@@ -18436,6 +18436,8 @@ in
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
 
+  bgpq3 = callPackage ../tools/networking/bgpq3 { };
+
   blackbox = callPackage ../applications/version-management/blackbox { };
 
   bleachbit = callPackage ../applications/misc/bleachbit { };
