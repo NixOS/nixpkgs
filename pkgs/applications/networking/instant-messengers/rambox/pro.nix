@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "rambox-pro";
-  version = "1.2.2";
+  version = "1.3.0";
 
   dontBuild = true;
   dontStrip = true;
@@ -12,12 +12,12 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/ramboxapp/download/releases/download/v${version}/RamboxPro-${version}-linux-x64.tar.gz";
-    sha256 = "1zzlfk86gzg20qapqz9s8p9vmak8vj1smkwn9yrzs2yisfqh0gpc";
+    sha256 = "1ipyhksni9pvlmkh1s6y8yqcnlv30b6807fwh6awxzf894gg45l5";
   };
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/RamboxPro $out/share/applications
-    asar e resources/app.asar $out/opt/RamboxPro/resources/app.asar.unpacked   
+    asar e resources/app.asar $out/opt/RamboxPro/resources/app.asar.unpacked
     ln -s ${desktopItem}/share/applications/* $out/share/applications
   '';
 
