@@ -2,8 +2,9 @@
 , fetchFromGitHub
 # Dynamic libraries
 , dbus, glib, libGL, libX11, libXfixes, libuuid, libxcb, qtbase, qtdeclarative
-, qtimageformats, qtlocation, qtquickcontrols, qtquickcontrols2, qtscript, qtsvg
-, qttools, qtwayland, qtwebchannel, qtwebengine
+, qtgraphicaleffects, qtimageformats, qtlocation, qtquickcontrols
+, qtquickcontrols2, qtscript, qtsvg , qttools, qtwayland, qtwebchannel
+, qtwebengine
 # Runtime
 , coreutils, libjpeg_turbo, pciutils, procps, utillinux
 , pulseaudioSupport ? true, libpulseaudio ? null
@@ -39,9 +40,9 @@ in mkDerivation {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo
-    qtbase qtdeclarative qtlocation qtquickcontrols qtquickcontrols2 qtscript
-    qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
+    dbus glib libGL libX11 libXfixes libuuid libxcb libjpeg_turbo qtbase
+    qtdeclarative qtgraphicaleffects qtlocation qtquickcontrols qtquickcontrols2
+    qtscript qtwebchannel qtwebengine qtimageformats qtsvg qttools qtwayland
   ];
 
   runtimeDependencies = optional pulseaudioSupport libpulseaudio;
