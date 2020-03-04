@@ -327,7 +327,7 @@ in
                             cp -p ${spath}/certificates/${keyName}.key key.pem
                             cp -p ${spath}/certificates/${keyName}.crt fullchain.pem
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
-                            ln -s fullchain.pem cert.pem
+                            ln -sf fullchain.pem cert.pem
                             cat key.pem fullchain.pem > full.pem
                             chmod ${rights} *.pem
                             chown '${data.user}:${data.group}' *.pem
