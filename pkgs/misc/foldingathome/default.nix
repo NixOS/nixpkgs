@@ -1,36 +1,39 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, zlib, buildFHSUserEnv, ocl-icd }:
 
-stdenv.mkDerivation {
-  name = "folding-at-home-6.02";
+let
+  pkg = stdenv.mkDerivation rec {
+    pname = "folding-at-home";
+    version = "7.5.1";
 
-  src = fetchurl {
-    url = http://www.stanford.edu/group/pandegroup/folding/release/FAH6.02-Linux.tgz;
-    sha256 = "01nwi0lb4vv0xg4k04i2fbf5v5qgabl70jm5cgvw1ibgqjz03910";
+    src = fetchurl {
+      url = https://download.foldingathome.org/releases/public/release/fahclient/debian-stable-64bit/v7.5/fahclient_7.5.1_amd64.deb;
+      sha256 = "09kxsgs9csizcy3973pvcf9k7nipdjy9hnw1q5cp4ri8sdhp1r7g";
+    };
+
+    unpackPhase = "
+      ar x $src
+      tar xvf data.tar.xz
+    ";
+
+    installPhase = ''
+      cd usr/bin
+      BINFILES="FAHClient FAHCoreWrapper";
+      mkdir -p $out/bin
+      cp $BINFILES $out/bin
+    '';
   };
 
-  unpackPhase = "tar xvzf $src";
+in
 
-  # Otherwise it doesn't work at all, even ldd thinks it's not a dynamic executable
-  dontStrip = true;
-
-  # This program, to run with '-smp', wants to execute the program mpiexec
-  # as "./mpiexec", although it also expects to write the data files into "."
-  # I suggest, if someone wants to run it, in the data directory set a link
-  # to the store for 'mpiexec', so './mpiexec' will work. That link better
-  # be considered a gcroot.
-  installPhase = ''
-    BINFILES="fah6 mpiexec";
-    for a in $BINFILES; do
-      patchelf --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) $a
-    done
-    mkdir -p $out/bin
-    cp $BINFILES $out/bin
-  '';
-
+buildFHSUserEnv {
+  name = "FAHClient";
+  targetPkgs = ps: [pkg zlib ocl-icd];
+  runScript = "/bin/FAHClient";
   meta = {
     homepage = http://folding.stanford.edu/;
     description = "Folding@home distributed computing client";
     license = stdenv.lib.licenses.unfree;
-    platforms = [ "i686-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }
+

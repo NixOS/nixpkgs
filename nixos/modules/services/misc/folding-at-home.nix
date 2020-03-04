@@ -51,17 +51,21 @@ in {
     systemd.services.foldingathome = {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
+      preStart =
+      let
+        configXml = pkgs.writeText "config.xml" ''
+          <config>
+            <user value='${cfg.nickname}'/>
+            ${cfg.config}
+          </config>
+        '';
+      in
+      ''
         mkdir -m 0755 -p ${stateDir}
         chown ${fahUser} ${stateDir}
-        cp -f ${pkgs.writeText "client.cfg" cfg.config} ${stateDir}/client.cfg
+        cp -f ${configXml} ${stateDir}/config.xml
       '';
-      script = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${fahUser} -c 'cd ${stateDir}; ${pkgs.foldingathome}/bin/fah6'";
+      script = "${pkgs.su}/bin/su -s ${pkgs.runtimeShell} ${fahUser} -c 'cd ${stateDir}; ${pkgs.foldingathome}/bin/FAHClient'";
     };
-
-    services.foldingAtHome.config = ''
-        [settings]
-        username=${cfg.nickname}
-    '';
   };
 }
