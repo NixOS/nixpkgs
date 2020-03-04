@@ -13,7 +13,7 @@ rec {
           @sh "appimageSignature=\(.appimageSignature) appimageType=\(.appimageType)"')
 
       # check AppImage signature
-      if [[ $appimageSignature != "AI" ]]; then
+      if [[ "$appimageSignature" != "AI" ]]; then
         echo "Not an appimage."
         exit
       fi
@@ -25,14 +25,13 @@ rec {
           ;;
 
         2)
-          install $src ./appimage
-
           # multiarch offset one-liner using same method as AppImage
           # see https://gist.github.com/probonopd/a490ba3401b5ef7b881d5e603fa20c93
-          offset=$(r2 ./appimage -nn -Nqc "pfj.elf_header @ 0" |\
+          offset=$(r2 $src -nn -Nqc "pfj.elf_header @ 0" |\
             jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
 
-          unsquashfs -q -d $out -o $offset ./appimage
+          unsquashfs -q -d $out -o $offset $src
+          chmod go-w $out
           ;;
 
         # 3) get ready, https://github.com/TheAssassin/type3-runtime
