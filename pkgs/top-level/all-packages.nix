@@ -2551,9 +2551,9 @@ in
   conspy = callPackage ../os-specific/linux/conspy {};
 
   inherit (callPackage ../tools/networking/connman {})
+    connman
     connmanFull
     connmanMinimal
-    connman
   ;
 
   connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };

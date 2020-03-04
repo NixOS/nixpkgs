@@ -1,6 +1,9 @@
 { callPackage }:
 
 {
+  # All the defaults
+  connman = callPackage ./connman.nix { };
+
   connmanFull = callPackage ./connman.nix {
     enableNetworkManager = true;
     enableHh2serialGps = true;
@@ -32,7 +35,4 @@
     enableClient = false;
     # enableDatafiles = false; # If disabled, configuration and data files are not installed
   };
-
-  # All the defaults
-  connman = callPackage ./connman.nix { };
 }
