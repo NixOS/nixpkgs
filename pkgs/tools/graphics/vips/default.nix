@@ -16,6 +16,7 @@
 , python27
 , libpng ? null
 , fetchFromGitHub
+, fetchpatch
 , autoreconfHook
 , gtk-doc
 , gobject-introspection
@@ -37,6 +38,15 @@ stdenv.mkDerivation rec {
       rm -r $out/test/test-suite/images/
     '';
   };
+
+  patches = [
+    # autogen.sh should not run configure
+    # https://github.com/libvips/libvips/pull/1566
+    (fetchpatch {
+      url = "https://github.com/libvips/libvips/commit/97a92e0e6abab652fdf99313b138bfd77d70deb4.patch";
+      sha256 = "0w1sm5wmvfp8svdpk8mz57c1n6zzy3snq0g2f8yxjamv0d2gw2dp";
+    })
+  ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -63,7 +73,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   autoreconfPhase = ''
-    ./autogen.sh
+    NOCONFIGURE=1 ./autogen.sh
   '';
 
   meta = with stdenv.lib; {
