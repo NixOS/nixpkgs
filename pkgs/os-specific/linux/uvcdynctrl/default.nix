@@ -15,9 +15,16 @@ stdenv.mkDerivation {
   buildInputs = [ libxml2 ];
 
   prePatch = ''
-    substituteInPlace uvcdynctrl/CMakeLists.txt \
-      --replace "/etc/udev" "$out/etc/udev" \
-      --replace "/lib/udev" "$out/lib/udev"
+    local fixup_list=(
+      uvcdynctrl/CMakeLists.txt
+      uvcdynctrl/udev/rules/80-uvcdynctrl.rules
+      uvcdynctrl/udev/scripts/uvcdynctrl
+    )
+    for f in "''${fixup_list[@]}"; do
+      substituteInPlace "$f" \
+        --replace "/etc/udev" "$out/etc/udev" \
+        --replace "/lib/udev" "$out/lib/udev"
+    done
   '';
 
   meta = with stdenv.lib; {
