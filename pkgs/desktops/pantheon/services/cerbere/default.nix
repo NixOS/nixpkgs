@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "cerbere";
-  version = "2.5.0";
+  version = "2.5.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "12y6gg4vyc1rhdm2c7pr7bgmdrah7ddphyh25fgh3way8l9gh7vw";
+    sha256 = "0vgx3hdpwvxx31rbkqhjznw4fk38nki72apd66d6jiyi7av1063r";
   };
 
   passthru = {
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A simple service to ensure uptime of essential processes";
-    homepage = https://github.com/elementary/cerbere;
+    homepage = "https://github.com/elementary/cerbere";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = pantheon.maintainers;
