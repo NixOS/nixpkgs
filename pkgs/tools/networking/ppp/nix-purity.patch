@@ -1,8 +1,8 @@
 diff --git a/pppd/Makefile.linux b/pppd/Makefile.linux
-index 060db6a..c151c62 100644
+index 1ebebec..bf90c62 100644
 --- a/pppd/Makefile.linux
 +++ b/pppd/Makefile.linux
-@@ -117,7 +117,7 @@ CFLAGS   += -DHAS_SHADOW
+@@ -120,7 +120,7 @@ CFLAGS   += -DHAS_SHADOW
  #LIBS     += -lshadow $(LIBS)
  endif
  
@@ -11,7 +11,16 @@ index 060db6a..c151c62 100644
  CFLAGS  += -DHAVE_CRYPT_H=1
  LIBS	+= -lcrypt
  endif
-@@ -169,7 +169,7 @@ LIBS	+= -ldl
+@@ -132,7 +132,7 @@ endif
+ 
+ ifdef NEEDDES
+ ifndef USE_CRYPT
+-CFLAGS   += -I/usr/include/openssl
++CFLAGS   += -I@openssl@/include/openssl
+ LIBS     += -lcrypto
+ else
+ CFLAGS   += -DUSE_CRYPT=1
+@@ -178,7 +178,7 @@ LIBS	+= -ldl
  endif
  
  ifdef FILTER

@@ -1,72 +1,141 @@
-{ wxGTK, lib, stdenv, fetchurl, cmake, libGLU_combined, zlib
-, libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
-, doxygen, pcre, libpthreadstubs, libXdmcp
-, wrapGAppsHook
-, oceSupport ? true, opencascade
+{ lib, stdenv, gnome3, pkgs, wxGTK30, wxGTK31
+, gsettings-desktop-schemas, hicolor-icon-theme
+, callPackage, callPackages
+, librsvg, cups
+
+, pname ? "kicad"
+, oceSupport ? false, opencascade
+, withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
-, swig, python, pythonPackages
+, scriptingSupport ? true, swig, python3, python3Packages
+, debug ? false, valgrind
+, with3d ? true
+, withI18n ? true
 }:
 
 assert ngspiceSupport -> libngspice != null;
 
 with lib;
-stdenv.mkDerivation rec {
-  name = "kicad-${version}";
-  series = "5.0";
-  version = "5.0.2";
+let
 
-  src = fetchurl {
-    url = "https://launchpad.net/kicad/${series}/${version}/+download/kicad-${version}.tar.xz";
-    sha256 = "10605rr10x0353n6yk2z095ydnkd1i6j1ncbq64pfxdn5vkhcd1g";
+  stable = pname != "kicad-unstable";
+  baseName = if (stable) then "kicad" else "kicad-unstable";
+
+  versions =  import ./versions.nix;
+  versionConfig = versions.${baseName};
+
+  wxGTK = if (stable)
+    # wxGTK3x may default to withGtk2 = false, see #73145
+    then wxGTK30.override { withGtk2 = false; }
+    # wxGTK31 currently introduces an issue with opening the python interpreter in pcbnew
+    # but brings high DPI support?
+    else wxGTK31.override { withGtk2 = false; };
+
+  pythonPackages = python3Packages;
+  python = python3;
+  wxPython = python3Packages.wxPython_4_0;
+
+  libraries = callPackages ./libraries.nix versionConfig.libVersion;
+  base = callPackage ./base.nix {
+    pname = baseName;
+    inherit versions stable baseName;
+    inherit wxGTK python wxPython;
+    inherit debug withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
   };
 
-  postPatch = ''
-    substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace no-vcs-found ${version}
-  '';
+in
+stdenv.mkDerivation rec {
 
-  cmakeFlags = [
-    "-DKICAD_SCRIPTING=ON"
-    "-DKICAD_SCRIPTING_MODULES=ON"
-    "-DKICAD_SCRIPTING_WXPYTHON=ON"
-    # nix installs wxPython headers in wxPython package, not in wxwidget
-    # as assumed. We explicitely set the header location.
-    "-DCMAKE_CXX_FLAGS=-I${pythonPackages.wxPython}/include/wx-3.0"
-  ] ++ optionals (oceSupport) [ "-DKICAD_USE_OCE=ON" "-DOCE_DIR=${opencascade}" ]
-    ++ optional (ngspiceSupport) "-DKICAD_SPICE=ON";
+  inherit pname;
+  version = versions.${baseName}.kicadVersion.version;
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    pkgconfig
-    wrapGAppsHook
-    pythonPackages.wrapPython
-  ];
-  pythonPath = [ pythonPackages.wxPython ];
-  propagatedBuildInputs = [ pythonPackages.wxPython ];
+  src = base;
+  dontUnpack = true;
+  dontConfigure = true;
+  dontBuild = true;
+  dontFixup = true;
 
-  buildInputs = [
-    libGLU_combined zlib libX11 wxGTK pcre libXdmcp gettext glew glm libpthreadstubs
-    cairo curl openssl boost
-    swig python
-  ] ++ optional (oceSupport) opencascade
-    ++ optional (ngspiceSupport) libngspice;
+  pythonPath = optionals (scriptingSupport)
+    [ wxPython pythonPackages.six ];
 
-  # this breaks other applications in kicad
-  dontWrapGApps = true;
+  nativeBuildInputs = optionals (scriptingSupport)
+    [ pythonPackages.wrapPython ];
 
-  preFixup = ''
-    buildPythonPath "$out $pythonPath"
-    gappsWrapperArgs+=(--set PYTHONPATH "$program_PYTHONPATH")
+  # wrapGAppsHook added the equivalent to ${base}/share
+  # though i noticed no difference without it
+  makeWrapperArgs = [
+    "--prefix XDG_DATA_DIRS : ${base}/share"
+    "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
+    "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
+    "--prefix XDG_DATA_DIRS : ${wxGTK.gtk}/share/gsettings-schemas/${wxGTK.gtk.name}"
+    "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+    # wrapGAppsHook did these two as well, no idea if it matters...
+    "--prefix XDG_DATA_DIRS : ${cups}/share"
+    "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
 
-    wrapProgram "$out/bin/kicad" "''${gappsWrapperArgs[@]}"
-  '';
+    "--set KISYSMOD ${libraries.footprints}/share/kicad/modules"
+    "--set KICAD_SYMBOL_DIR ${libraries.symbols}/share/kicad/library"
+    "--set KICAD_TEMPLATE_DIR ${libraries.templates}/share/kicad/template"
+    "--prefix KICAD_TEMPLATE_DIR : ${libraries.symbols}/share/kicad/template"
+    "--prefix KICAD_TEMPLATE_DIR : ${libraries.footprints}/share/kicad/template"
+  ]
+  ++ optionals (with3d) [ "--set KISYS3DMOD ${libraries.packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
+
+  # infinisil's workaround for #39493
+  ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
+  ;
+
+  # dunno why i have to add $makeWrapperArgs manually...
+  # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
+  # not sure if anything has to be done with the other stuff in base/bin
+  # dxf2idf, idf2vrml, idfcyl, idfrect, kicad2step, kicad-ogltest
+  installPhase =
+    optionalString (scriptingSupport) '' buildPythonPath "${base} $pythonPath"
+    '' +
+    '' makeWrapper ${base}/bin/kicad $out/bin/kicad $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' +
+    '' makeWrapper ${base}/bin/pcbnew $out/bin/pcbnew $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' +
+    '' makeWrapper ${base}/bin/eeschema $out/bin/eeschema $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' +
+    '' makeWrapper ${base}/bin/gerbview $out/bin/gerbview $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' +
+    '' makeWrapper ${base}/bin/pcb_calculator $out/bin/pcb_calculator $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' +
+    '' makeWrapper ${base}/bin/pl_editor $out/bin/pl_editor $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    '' +
+    '' makeWrapper ${base}/bin/bitmap2component $out/bin/bitmap2component $makeWrapperArgs ''
+    + optionalString (scriptingSupport) '' --set PYTHONPATH "$program_PYTHONPATH"
+    ''
+  ;
+
+  # can't run this for each pname
+  # stable and unstable are in the same versions.nix
+  # and kicad-small reuses stable
+  # with "all" it updates both, run it manually if you don't want that
+  # and can't git commit if this could be running in parallel with other scripts
+  passthru.updateScript = [ ./update.sh "all" ];
 
   meta = {
-    description = "Free Software EDA Suite";
-    homepage = http://www.kicad-pcb.org/;
-    license = licenses.gpl2;
-    maintainers = with maintainers; [ berce ];
+    description = if (stable)
+      then "Open Source Electronics Design Automation Suite"
+      else "Open Source EDA Suite, Development Build";
+    homepage = "https://www.kicad-pcb.org/";
+    longDescription = ''
+      KiCad is an open source software suite for Electronic Design Automation.
+      The Programs handle Schematic Capture, and PCB Layout with Gerber output.
+    '';
+    license = licenses.agpl3;
+    # berce seems inactive...
+    maintainers = with maintainers; [ evils kiwi berce ];
+    # kicad's cross-platform, not sure what to fill in here
     platforms = with platforms; linux;
   };
 }

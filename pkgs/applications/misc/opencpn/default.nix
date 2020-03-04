@@ -2,14 +2,14 @@
   gettext, glib, portaudio }:
 
 stdenv.mkDerivation rec {
-  name = "opencpn-${version}";
-  version = "5.0.0";
+  pname = "opencpn-unstable";
+  version = "2019-11-21";
 
   src = fetchFromGitHub {
     owner = "OpenCPN";
     repo = "OpenCPN";
-    rev = "v${version}";
-    sha256 = "1xv3h6svw9aay5ixpql231md3pf00qxvhg62z88daraf18hlkfja";
+    rev = "e73dc935545b2bbcf193cc61d987a0178c52d7a7";
+    sha256 = "0yiqahkzwcbzgabc5xgxmwlngapkfiaqyva3mwz29xj0c5lg2bdk";
   };
 
   nativeBuildInputs = [ pkgconfig ];

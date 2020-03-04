@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.citi.umich.edu/projects/nfsv4/linux/;
     description = "Exports a gssapi interface which calls other random gssapi libraries";
     license = licenses.bsd3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ corngood ];
   };
 }

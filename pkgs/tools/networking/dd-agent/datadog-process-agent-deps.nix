@@ -23,8 +23,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/datadog-agent";
-      rev =  "4aa90bd394b62b0d3e3f15703c6e459c1c477fbc";
-      sha256 = "13zvg8ykakq97bw0kd2gj4s9gfjpx23d3c51w1jpa1raqwhgqi8z";
+      rev =  "d7712d570b91f4f97af9f155ad1c676921d8325d";
+      sha256 = "1gi921z79la4hjhm8xhl4jz167200qljvhhsy4blj4vinkgfpm8w";
     };
   }
   {
@@ -41,8 +41,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/gopsutil";
-      rev =  "c8f74f1344dd41bc49ec4d3c2377c526aaedfd20";
-      sha256 = "0r8al83apxrq1v6s2mq0p8h3c4z4n5g7ax8vcvs70pq0czy2fvgp";
+      rev =  "233cd0cf42c26d835ed6f0e46f2103432a88b526";
+      sha256 = "0rvxs1jjzv3j834dns28zr25bznarjmpgdy0z6gpimnq5nyicys5";
     };
   }
   {
@@ -50,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/DataDog/viper";
-      rev =  "23ced3bc6b3751855704445e48da2c53075ade86";
-      sha256 = "1zzf4mqpmk47p3395k2v8q6wi7lnqxr0l55vv4zk9gpqqyifbm9m";
+      rev =  "v1.5.0";
+      sha256 = "1sv0xvmfaif7zpfwk0j6qf11hxnfdsb2zfj63b9zx7l0zzhjzh06";
     };
   }
   {

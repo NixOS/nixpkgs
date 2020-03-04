@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation rec {
   version = src.version;
-  name = "sagedoc-${version}";
+  pname = "sagedoc";
   src = sage-with-env.env.lib.src;
 
 
@@ -51,6 +51,9 @@ stdenv.mkDerivation rec {
     export SAGE_NUM_THREADS="$NIX_BUILD_CORES"
     export HOME="$TMPDIR/sage_home"
     mkdir -p "$HOME"
+
+    # needed to link them in the sage docs using intersphinx
+    export PPLPY_DOCS=${python.pkgs.pplpy.doc}/share/doc/pplpy
 
     ${sage-with-env}/bin/sage -python -m sage_setup.docbuild \
       --mathjax \

@@ -1,0 +1,13 @@
+diff -u a/Makefile b/Makefile
+--- a/Makefile
++++ b/Makefile
+@@ -1,1 +1,5 @@
+-TARGETS = opam-file-format.cma opam-file-format.cmxa opam-file-format.cmxs
++TARGETS = opam-file-format.cma opam-file-format.cmxa
++
++ifeq "$(NATDYNLINK)" "true"
++TARGETS = $(TARGETS) opam-file-format.cmxs
++endif
+
+all: $(TARGETS)
+

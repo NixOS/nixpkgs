@@ -1,16 +1,16 @@
 { stdenv, pythonPackages, fetchFromGitHub }:
 
 let
-  version = "3.12";
+  version = "3.13";
   pname = "ps_mem";
-in pythonPackages.buildPythonApplication rec {
+in pythonPackages.buildPythonApplication {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "pixelb";
-    repo = "${pname}";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0kcxlmfisbwf24p2k72njfyfp22fjr9p9zalg9b4w0yhnlzk24ph";
+    sha256 = "0pgi9hvwfbkzvwicqlkwx4rwal1ikza018yxbwpnf7c80zw0zaw9";
   };
 
   meta = with stdenv.lib; {

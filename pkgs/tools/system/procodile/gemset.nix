@@ -1,19 +1,23 @@
 {
   json = {
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "01v6jjpvh3gnq6sgllpfqahlgxzj50ailwhj9b3cd20hi2dx0vxp";
+      sha256 = "0sx97bm9by389rbzv8r1f43h06xcz8vwi3h5jv074gvparql7lcx";
       type = "gem";
     };
-    version = "2.1.0";
+    version = "2.2.0";
   };
   procodile = {
     dependencies = ["json"];
+    groups = ["default"];
+    platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1gfms2h4k9zqq7jn04nphibcsjykgxiqwdyyz2r4kq428a25kqsf";
+      sha256 = "025pbr1kah7cgs527n5q56m5agaa2smzac4rpmpk619xg4r1rdhs";
       type = "gem";
     };
-    version = "1.0.17";
+    version = "1.0.23";
   };
 }

@@ -1,7 +1,7 @@
 { stdenv, libgit2, fetchgit }:
 
 stdenv.mkDerivation rec {
-  name = "stagit-${version}";
+  pname = "stagit";
   version = "0.9.1";
 
   src = fetchgit {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gh28spkry9wbmdj0hmvz3680fvbyzab9cifhj1p76f4fz27rnv9";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [ libgit2 ];
 

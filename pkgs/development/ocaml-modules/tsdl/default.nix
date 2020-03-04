@@ -7,7 +7,7 @@ else
 let
   pname = "tsdl";
   version = "0.9.4";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation {
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
   inherit (topkg) buildPhase installPhase;
 
   meta = with stdenv.lib; {
-    homepage = "${webpage}";
+    homepage = webpage;
     description = "Thin bindings to the cross-platform SDL library";
     license = licenses.bsd3;
     platforms = ocaml.meta.platforms or [];

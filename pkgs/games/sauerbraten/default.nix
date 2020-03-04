@@ -1,20 +1,20 @@
-{ stdenv, fetchsvn, libGLU_combined, SDL, SDL_image, SDL_mixer
-, libpng, zlib, libjpeg, imagemagick, libX11, runtimeShell
+{ stdenv, fetchsvn, SDL2, SDL2_image, SDL2_mixer
+, zlib, runtimeShell
 }:
 
 stdenv.mkDerivation rec {
   name = "sauerbraten-r${version}";
-  version = "5000";
+  version = "5492";
 
   src = fetchsvn {
     url = "https://svn.code.sf.net/p/sauerbraten/code";
-    sha256 = "17libj7dslprlwppdk3vyxdcigbsa4czln8gdyz9j264m11z1cbh";
+    sha256 = "0pin7ggy84fadjvran18db5v0l81qfv42faknpfaxx47xqz00l5s";
     rev = version;
   };
 
   buildInputs = [
-    libGLU_combined SDL SDL_image SDL_mixer libpng zlib libjpeg imagemagick
-    libX11
+    SDL2 SDL2_mixer SDL2_image
+    zlib
   ];
 
   preBuild = ''

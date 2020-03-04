@@ -1,0 +1,60 @@
+From 245e0f743d814c9ff2d1c748175e321301eb16cf Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Thu, 2 May 2019 05:28:08 +0100
+Subject: [PATCH] x86/fpu: Export __kernel_fpu_{begin,end}()
+
+This partially undo commit:
+
+12209993  x86/fpu: Don't export __kernel_fpu_{begin,end}()
+
+We need this symbol in zfs for AES-NI/AVX support.
+---
+ arch/x86/include/asm/fpu/api.h | 2 ++
+ arch/x86/kernel/fpu/core.c     | 6 ++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/include/asm/fpu/api.h b/arch/x86/include/asm/fpu/api.h
+index b56d504af6545..7d53388d266ea 100644
+--- a/arch/x86/include/asm/fpu/api.h
++++ b/arch/x86/include/asm/fpu/api.h
+@@ -18,6 +18,8 @@
+  * If you intend to use the FPU in softirq you need to check first with
+  * irq_fpu_usable() if it is possible.
+  */
++extern void __kernel_fpu_begin(void);
++extern void __kernel_fpu_end(void);
+ extern void kernel_fpu_begin(void);
+ extern void kernel_fpu_end(void);
+ extern bool irq_fpu_usable(void);
+diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+index 2e5003fef51a9..2ea85b32421a0 100644
+--- a/arch/x86/kernel/fpu/core.c
++++ b/arch/x86/kernel/fpu/core.c
+@@ -93,7 +93,7 @@ bool irq_fpu_usable(void)
+ }
+ EXPORT_SYMBOL(irq_fpu_usable);
+ 
+-static void __kernel_fpu_begin(void)
++void __kernel_fpu_begin(void)
+ {
+ 	struct fpu *fpu = &current->thread.fpu;
+ 
+@@ -111,8 +111,9 @@ static void __kernel_fpu_begin(void)
+ 		__cpu_invalidate_fpregs_state();
+ 	}
+ }
++EXPORT_SYMBOL(__kernel_fpu_begin);
+ 
+-static void __kernel_fpu_end(void)
++void __kernel_fpu_end(void)
+ {
+ 	struct fpu *fpu = &current->thread.fpu;
+ 
+@@ -121,6 +122,7 @@ static void __kernel_fpu_end(void)
+ 
+ 	kernel_fpu_enable();
+ }
++EXPORT_SYMBOL(__kernel_fpu_end);
+ 
+ void kernel_fpu_begin(void)
+ {

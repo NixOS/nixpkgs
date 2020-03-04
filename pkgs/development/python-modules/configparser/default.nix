@@ -1,16 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi }:
+{ stdenv, buildPythonPackage, fetchPypi, setuptools_scm }:
 
 buildPythonPackage rec {
   pname = "configparser";
-  version = "3.7.3";
+  version = "4.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "27594cf4fc279f321974061ac69164aaebd2749af962ac8686b20503ac0bcf2d";
+    sha256 = "c7d282687a5308319bf3d2e7706e575c635b0a470342641c93bea0ea3b5331df";
   };
 
   # No tests available
   doCheck = false;
+
+  nativeBuildInputs = [ setuptools_scm ];
 
   preConfigure = ''
     export LC_ALL=${if stdenv.isDarwin then "en_US" else "C"}.UTF-8

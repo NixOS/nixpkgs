@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, python3Packages }:
+{ stdenv, fetchFromGitHub, python3Packages }:
 
 with python3Packages;
 
 buildPythonApplication rec {
-  name = "cppclean-unstable-${version}";
-  version = "2018-05-12";
+  pname = "cppclean";
+  version = "0.13";
 
   src = fetchFromGitHub {
     owner  = "myint";
     repo   = "cppclean";
-    rev    = "e7da41eca5e1fd2bd1dddd6655e50128bb96dc28";
-    sha256 = "0pymh6r7y19bwcypfkmgwyixrx36pmz338jd83yrjflsbjlriqm4";
+    rev    = "v${version}";
+    sha256 = "081bw7kkl7mh3vwyrmdfrk3fgq8k5laacx7hz8fjpchrvdrkqph0";
   };
 
   postUnpack = ''

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchhg, fetchurl, gtk2, glib, pkgconfig, unzip, ncurses, zip }:
 stdenv.mkDerivation rec {
   version = "10.2";
-  name = "textadept-${version}";
+  pname = "textadept";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [

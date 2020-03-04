@@ -5,7 +5,7 @@ let
 in stdenv.mkDerivation rec {
   version = "1.1.24";
 
-  name = "backintime-common-${version}";
+  pname = "backintime-common";
 
   src = fetchFromGitHub {
     owner = "bit-team";

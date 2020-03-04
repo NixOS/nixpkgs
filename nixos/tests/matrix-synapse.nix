@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... } : let
+import ./make-test-python.nix ({ pkgs, ... } : let
 
 
   runWithOpenSSL = file: cmd: pkgs.runCommand file {
@@ -55,13 +55,17 @@ in {
   };
 
   testScript = ''
-    startAll;
-    $serverpostgres->waitForUnit("matrix-synapse.service");
-    $serverpostgres->waitUntilSucceeds("curl -L --cacert ${ca_pem} https://localhost:8448/");
-    $serverpostgres->requireActiveUnit("postgresql.service");
-    $serversqlite->waitForUnit("matrix-synapse.service");
-    $serversqlite->waitUntilSucceeds("curl -L --cacert ${ca_pem} https://localhost:8448/");
-    $serversqlite->mustSucceed("[ -e /var/lib/matrix-synapse/homeserver.db ]");
+    start_all()
+    serverpostgres.wait_for_unit("matrix-synapse.service")
+    serverpostgres.wait_until_succeeds(
+        "curl -L --cacert ${ca_pem} https://localhost:8448/"
+    )
+    serverpostgres.require_unit_state("postgresql.service")
+    serversqlite.wait_for_unit("matrix-synapse.service")
+    serversqlite.wait_until_succeeds(
+        "curl -L --cacert ${ca_pem} https://localhost:8448/"
+    )
+    serversqlite.succeed("[ -e /var/lib/matrix-synapse/homeserver.db ]")
   '';
 
 })

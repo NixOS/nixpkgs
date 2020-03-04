@@ -1,6 +1,6 @@
 { stdenv, fetchurl, fetchpatch, gmp }:
 stdenv.mkDerivation rec {
-  name = "ratpoints-${version}";
+  pname = "ratpoints";
   version = "2.1.3.p4";
 
   src = fetchurl {

@@ -5,10 +5,10 @@
 
 stdenv.mkDerivation rec {
   version = "0.5.0";
-  name = "liblrdf-${version}";
+  pname = "liblrdf";
 
   src = fetchurl {
-    url = "http://github.com/swh/LRDF/archive/${version}.tar.gz";
+    url = "https://github.com/swh/LRDF/archive/${version}.tar.gz";
     sha256 = "18p2flb2sv2hq6w2qkd29z9c7knnwqr3f12i2srshlzx6vwkm05s";
   };
 

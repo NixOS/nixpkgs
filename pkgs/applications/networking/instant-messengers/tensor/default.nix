@@ -4,7 +4,7 @@
 # should use that
 
 stdenv.mkDerivation rec {
-  name = "tensor-git-${version}";
+  pname = "tensor-git";
   version = "2017-02-21";
 
   src = fetchgit {

@@ -1,13 +1,11 @@
-{ stdenv, fetchurl, substituteAll
+{ stdenv, fetchurl, fetchpatch
 , pkgconfig, autoreconfHook
-, gmp, python, iptables, ldns, unbound, openssl, pcsclite
+, gmp, python3, iptables, ldns, unbound, openssl, pcsclite, glib
 , openresolv
 , systemd, pam
 , curl
-, kmod
 , enableTNC            ? false, trousers, sqlite, libxml2
 , enableNetworkManager ? false, networkmanager
-, libpcap
 , darwin
 }:
 
@@ -18,35 +16,34 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "strongswan-${version}";
-  version = "5.7.2";
+  pname = "strongswan";
+  version = "5.8.1"; # Make sure to also update <nixpkgs/nixos/modules/services/networking/strongswan-swanctl/swanctl-params.nix> when upgrading!
 
   src = fetchurl {
-    url = "https://download.strongswan.org/${name}.tar.bz2";
-    sha256 = "0w6cks42lvvyj5ivyhqyqxya48x93yzfpz281q3xmqicdskkp3ih";
+    url = "https://download.strongswan.org/${pname}-${version}.tar.bz2";
+    sha256 = "034rd6kr1bmnvj8rg2kcxdjb0cgj3dn9310mmm94j1awxan71byr";
   };
 
   dontPatchELF = true;
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs =
-    [ curl gmp python ldns unbound openssl pcsclite ]
+    [ curl gmp python3 ldns unbound openssl pcsclite ]
     ++ optionals enableTNC [ trousers sqlite libxml2 ]
     ++ optionals stdenv.isLinux [ systemd.dev pam iptables ]
     ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ SystemConfiguration ])
-    ++ optionals enableNetworkManager [ networkmanager ]
-    # ad-hoc fix for https://github.com/NixOS/nixpkgs/pull/51787
-    # Remove when the above PR lands in master
-    ++ [ libpcap ];
+    ++ optionals enableNetworkManager [ networkmanager glib ];
 
   patches = [
     ./ext_auth-path.patch
     ./firewall_defaults.patch
     ./updown-path.patch
-    (optional stdenv.isLinux (substituteAll {
-      src = ./modprobe-path.patch;
-      inherit kmod;
-    }))
+
+    # Don't use etc/dbus-1/system.d
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/strongswan/strongswan/pull/150.patch";
+      sha256 = "1irfxb99blb8v3hs0kmlhzkkwbmds1p0gq319z8lmacz36cgyj2c";
+    })
   ];
 
   postPatch = optionalString stdenv.isLinux ''
@@ -55,10 +52,6 @@ stdenv.mkDerivation rec {
 
     substituteInPlace src/libcharon/plugins/resolve/resolve_handler.c --replace "/sbin/resolvconf" "${openresolv}/sbin/resolvconf"
     '';
-
-  preConfigure = ''
-    configureFlagsArray+=("--with-systemdsystemunitdir=$out/etc/systemd/system")
-  '';
 
   configureFlags =
     [ "--enable-swanctl"
@@ -74,7 +67,7 @@ stdenv.mkDerivation rec {
       "--enable-curl" ]
     ++ optionals stdenv.isLinux [
       "--enable-farp" "--enable-dhcp"
-      "--enable-systemd"
+      "--enable-systemd" "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
       "--enable-xauth-pam"
       "--enable-forecast"
       "--enable-connmark"

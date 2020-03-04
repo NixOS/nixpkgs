@@ -4,7 +4,7 @@
 , writeScript, coreutils, gnugrep, jq, curl, common-updater-scripts, nix, runtimeShell
 , gnupg
 , darwin, xcbuild
-, procps
+, procps, icu
 }:
 
 with stdenv.lib;
@@ -30,7 +30,9 @@ let
      *  as that would put the paths into bin/nodejs.
      *  Including pkgconfig in build inputs would also have the same effect!
      */
-  ]) (builtins.attrNames sharedLibDeps);
+  ]) (builtins.attrNames sharedLibDeps) ++ [
+    "--with-intl=system-icu"
+  ];
 
   copyLibHeaders =
     map
@@ -51,12 +53,30 @@ in
     };
 
     buildInputs = optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
-      ++ [ python2 zlib libuv openssl http-parser ];
+      ++ [ zlib libuv openssl http-parser icu ];
 
-    nativeBuildInputs = [ which utillinux ]
-      ++ optionals stdenv.isDarwin [ pkgconfig xcbuild ];
+    nativeBuildInputs = [ which utillinux pkgconfig python2 ]
+      ++ optionals stdenv.isDarwin [ xcbuild ];
 
-    configureFlags = sharedConfigureFlags ++ [ "--without-dtrace" ] ++ extraConfigFlags;
+    configureFlags = let
+      isCross = stdenv.hostPlatform != stdenv.buildPlatform;
+      host = stdenv.hostPlatform.platform;
+      isAarch32 = stdenv.hostPlatform.isAarch32;
+    in sharedConfigureFlags ++ [
+      "--without-dtrace"
+    ] ++ (optionals isCross [
+      "--cross-compiling"
+      "--without-intl"
+      "--without-snapshot"
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "fpu" host.gcc) [
+      "--with-arm-fpu=${host.gcc.fpu}"
+    ]) ++ (optionals (isCross && isAarch32 && hasAttr "float-abi" host.gcc) [
+      "--with-arm-float-abi=${host.gcc.float-abi}"
+    ]) ++ (optionals (isCross && isAarch32) [
+      "--dest-cpu=arm"
+    ]) ++ extraConfigFlags;
+
+    configurePlatforms = [];
 
     dontDisableStatic = true;
 
@@ -94,7 +114,7 @@ in
     postInstall = ''
       PATH=$out/bin:$PATH patchShebangs $out
 
-      ${optionalString enableNpm ''
+      ${optionalString (enableNpm && stdenv.hostPlatform == stdenv.buildPlatform) ''
         mkdir -p $out/share/bash-completion/completions/
         $out/bin/npm completion > $out/share/bash-completion/completions/npm
         for dir in "$out/lib/node_modules/npm/man/"*; do
@@ -112,7 +132,7 @@ in
     '';
 
     passthru.updateScript = import ./update.nix {
-      inherit stdenv writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
+      inherit writeScript coreutils gnugrep jq curl common-updater-scripts gnupg nix runtimeShell;
       inherit (stdenv) lib;
       inherit majorVersion;
     };

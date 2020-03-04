@@ -14,7 +14,8 @@ in
 
 # TODO: loop over targetPrefixed binaries too
 stdenv.mkDerivation {
-  name = "${targetPrefix}cctools-binutils-darwin";
+  pname = "${targetPrefix}cctools-binutils-darwin";
+  inherit (cctools) version;
   outputs = [ "out" "info" "man" ];
   buildCommand = ''
     mkdir -p $out/bin $out/include
@@ -35,7 +36,7 @@ stdenv.mkDerivation {
       ln -sf "${cctools}/bin/$i" "$out/bin/$i"
     done
 
-    ln -s ${llvm}/bin/llvm-dsymutil $out/bin/dsymutil
+    ln -s ${llvm}/bin/dsymutil $out/bin/dsymutil
 
     ln -s ${binutils-unwrapped.out}/share $out/share
 

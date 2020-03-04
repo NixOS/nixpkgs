@@ -1,6 +1,10 @@
 { libopus
+, libctb
+, gsmlib
 , lua
 , curl
+, libmysqlclient
+, postgresql
 }:
 
 let
@@ -101,6 +105,11 @@ in
     theora = mk "codecs/mod_theora" [];
   };
 
+  databases = {
+    mariadb = mk "databases/mod_mariadb" [ libmysqlclient ];
+    pgsql = mk "databases/mod_pgsql" [ postgresql ];
+  };
+
   dialplans = {
     asterisk = mk "dialplans/mod_dialplan_asterisk" [];
     directory = mk "dialplans/mod_dialplan_directory" [];
@@ -114,7 +123,7 @@ in
   endpoints = {
     alsa = mk "endpoints/mod_alsa" [];
     dingaling = mk "endpoints/mod_dingaling" [];
-    gsmopen = mk "endpoints/mod_gsmopen" [];
+    gsmopen = mk "endpoints/mod_gsmopen" [ gsmlib libctb ];
     h323 = mk "endpoints/mod_h323" [];
     khomp = mk "endpoints/mod_khomp" [];
     loopback = mk "endpoints/mod_loopback" [];

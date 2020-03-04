@@ -4,7 +4,7 @@
 #   $path/logstash/{inputs,codecs,filters,outputs}/*.rb 
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "logstash-contrib-${version}";
+  pname = "logstash-contrib";
 
   src = fetchzip {
    url = "https://download.elasticsearch.org/logstash/logstash/logstash-contrib-${version}.tar.gz";

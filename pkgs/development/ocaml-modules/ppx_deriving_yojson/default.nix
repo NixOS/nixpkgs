@@ -4,7 +4,7 @@
 
 buildDunePackage rec {
   pname = "ppx_deriving_yojson";
-  version = "3.3";
+  version = "3.5.1";
 
   minimumOCamlVersion = "4.04";
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
     rev = "v${version}";
-    sha256 = "1gbfziw03r9azqlsmyn6izrgrf1xc30s88jgdany1kblpgq41rsz";
+    sha256 = "13nscby635vab9jf5pl1wgmdmqw192nf2r26m3gr01hp3bpn38zh";
   };
 
   buildInputs = [ ppxfind ounit ];

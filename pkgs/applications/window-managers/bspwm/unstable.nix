@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, libxcb, libXinerama, xcbutil, xcbutilkeysyms, xcbutilwm }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bspwm-unstable-2016-09-30";
 
 

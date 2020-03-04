@@ -1,24 +1,29 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, wayland, wayland-protocols, ffmpeg, x264 }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland, scdoc
+, wayland-protocols, ffmpeg_4, x264, libpulseaudio, ocl-icd, opencl-headers
+}:
 
 stdenv.mkDerivation rec {
   pname = "wf-recorder";
-  version = "unstable-2019-03-12";
+  version = "0.2";
 
   src = fetchFromGitHub {
     owner = "ammen99";
     repo = pname;
-    rev = "e6ea77a2569c04975cab8655f5ad4dbcf86df1f5";
-    sha256 = "1jhj5syzy8i8f9b3j4g12jmc5fcsiv4df9hgribdvw61v5pfz9g1";
+    rev = "v${version}";
+    sha256 = "1772hrd7j8b32y65x5c392kdijlcn13iqg9hrlagfar92102vsbf";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig ];
-  buildInputs = [ wayland wayland-protocols ffmpeg x264 ];
+  nativeBuildInputs = [ meson ninja pkg-config wayland scdoc ];
+  buildInputs = [
+    wayland-protocols ffmpeg_4 x264 libpulseaudio ocl-icd opencl-headers
+  ];
 
   meta = with stdenv.lib; {
     description = "Utility program for screen recording of wlroots-based compositors";
-    homepage = https://github.com/ammen99/wf-recorder;
+    inherit (src.meta) homepage;
+    changelog = "https://github.com/ammen99/wf-recorder/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ CrazedProgrammer ];
+    maintainers = with maintainers; [ primeos CrazedProgrammer ];
     platforms = platforms.linux;
   };
 }

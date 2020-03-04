@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, gnome3, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
+{ stdenv, fetchurl, pkgconfig, gettext, itstool, gnome3, glib, gtk3, gtksourceview3, libwnck3, libgtop, libxml2, libnotify, polkit, upower, wirelesstools, mate, hicolor-icon-theme, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "mate-applets-${version}";
-  version = "1.20.3";
+  pname = "mate-applets";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${mate.getRelease version}/${name}.tar.xz";
-    sha256 = "0y5501wliipxf43p2q9917r3ird7azlrbcwnj2q2q2zy00hvvk5f";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0nm3amb3v458mxv1mbz9y8f4230gldmydmkkm7vqxsrxbccynkxq";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     itstool
     wrapGAppsHook
   ];
@@ -34,11 +34,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-suid=no" ];
 
-  NIX_CFLAGS_COMPILE = "-I${gnome3.glib.dev}/include/gio-unix-2.0";
+  NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Applets for use with the MATE panel";
-    homepage = https://mate-desktop.org;
+    homepage = "https://mate-desktop.org";
     license = with licenses; [ gpl2Plus lgpl2Plus ];
     platforms = platforms.linux;
     maintainers = [ maintainers.romildo ];

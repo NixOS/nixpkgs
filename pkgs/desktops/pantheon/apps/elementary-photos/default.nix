@@ -1,32 +1,58 @@
-{ stdenv, fetchFromGitHub, pantheon, meson, ninja, pkgconfig, vala, desktop-file-utils
-, gtk3, glib, libaccounts-glib, libexif, libgee, geocode-glib, gexiv2,libgphoto2, fetchpatch
-, granite, gst_all_1, libgudev, json-glib, libraw, librest, libsoup, sqlite, python3
-, scour, webkitgtk, libwebp, appstream, libunity, wrapGAppsHook, gobject-introspection, elementary-icon-theme }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, desktop-file-utils
+, gtk3
+, libaccounts-glib
+, libexif
+, libgee
+, geocode-glib
+, gexiv2
+, libgphoto2
+, granite
+, gst_all_1
+, libgudev
+, json-glib
+, libraw
+, librest
+, libsoup
+, sqlite
+, python3
+, scour
+, webkitgtk
+, libwebp
+, appstream
+, libunity
+, wrapGAppsHook
+, elementary-icon-theme
+}:
 
 stdenv.mkDerivation rec {
-  pname = "photos";
-  version = "2.6.2";
+  pname = "elementary-photos";
+  version = "2.6.5";
 
-  name = "elementary-${pname}-${version}";
+  repoName = "photos";
 
   src = fetchFromGitHub {
     owner = "elementary";
-    repo = pname;
+    repo = repoName;
     rev = version;
-    sha256 = "166a1jb85n67z6ffm5i0xzap407rv0r511lzh0gidkap1qy6pnmi";
+    sha256 = "0r6d9y936nw4bn0jvixi1p62dy8qsgl2bx8g3889fndnhfnhbjv0";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
-      attrPath = "elementary-${pname}";
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
     appstream
     desktop-file-utils
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -53,10 +79,10 @@ stdenv.mkDerivation rec {
     libgphoto2
     libgudev
     libraw
+    librest
     libsoup
     libunity
     libwebp
-    librest
     scour
     sqlite
     webkitgtk
@@ -64,14 +90,6 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dplugins=false"
-  ];
-
-  patches = [
-    # Fix build against gexiv2 0.12
-    (fetchpatch {
-      url = "https://github.com/elementary/photos/commit/86df00ced674abb2ee430ea24422079cfabb314c.patch";
-      sha256 = "0836fzja93w36jf7ldqypsmnqn46mwsl93q41m104zn8qm0wrkmy";
-    })
   ];
 
   postPatch = ''

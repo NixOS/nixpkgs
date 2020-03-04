@@ -1,9 +1,12 @@
 { stdenv, buildPythonPackage, fetchFromGitHub, python,
   django, six
 }:
+
 buildPythonPackage rec {
   pname = "django-compat";
   version = "1.0.15";
+  # django-compat requires django < 2.0
+  disabled = stdenv.lib.versionAtLeast django.version "2.0";
 
   # the pypi packages don't include everything required for the tests
   src = fetchFromGitHub {

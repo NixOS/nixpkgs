@@ -9,7 +9,6 @@
 stdenv.mkDerivation rec {
   pname = "libwebcam";
   version = "0.2.5";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/${pname}/source/${pname}-src-${version}.tar.gz";

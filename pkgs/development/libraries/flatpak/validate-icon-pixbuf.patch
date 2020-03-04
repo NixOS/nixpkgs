@@ -1,0 +1,13 @@
+diff --git a/icon-validator/validate-icon.c b/icon-validator/validate-icon.c
+index 9e885070..44fea035 100644
+--- a/icon-validator/validate-icon.c
++++ b/icon-validator/validate-icon.c
+@@ -200,6 +200,8 @@ rerun_in_sandbox (const char *arg_width,
+     add_args (args, "--setenv", "G_MESSAGES_DEBUG", g_getenv ("G_MESSAGES_DEBUG"), NULL);
+   if (g_getenv ("G_MESSAGES_PREFIXED"))
+     add_args (args, "--setenv", "G_MESSAGES_PREFIXED", g_getenv ("G_MESSAGES_PREFIXED"), NULL);
++  if (g_getenv ("GDK_PIXBUF_MODULE_FILE"))
++    add_args (args, "--setenv", "GDK_PIXBUF_MODULE_FILE", g_getenv ("GDK_PIXBUF_MODULE_FILE"), NULL);
+ 
+   add_args (args, validate_icon, arg_width, arg_height, filename, NULL);
+   g_ptr_array_add (args, NULL);

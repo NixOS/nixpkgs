@@ -5,7 +5,7 @@ let
   binPath = stdenv.lib.makeBinPath ([ hyper-haskell-server ] ++ extra-packages);
 
 in stdenv.mkDerivation rec {
-  name = "hyper-haskell-${version}";
+  pname = "hyper-haskell";
   version = "0.1.0.2";
 
   src = fetchFromGitHub {

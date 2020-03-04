@@ -2,7 +2,6 @@
 
 stdenv.mkDerivation (rec {
   pname = "xe-guest-utilities";
-  name = "${pname}-${version}";
   version = "6.2.0";
   meta = {
     description = "Citrix XenServer Tools";

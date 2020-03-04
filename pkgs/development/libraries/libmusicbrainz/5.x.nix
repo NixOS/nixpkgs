@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "5.1.0";
-  name = "libmusicbrainz-${version}";
+  pname = "libmusicbrainz";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake neon libdiscid libxml2 ];

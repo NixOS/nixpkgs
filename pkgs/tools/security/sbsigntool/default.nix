@@ -1,10 +1,10 @@
 { stdenv
 , fetchgit, autoconf, automake, pkgconfig, help2man
-, utillinux, openssl, libuuid, gnu-efi, libbfd
+, openssl, libuuid, gnu-efi, libbfd
 }:
 
-stdenv.mkDerivation rec {
-  name = "sbsigntool-${version}";
+stdenv.mkDerivation {
+  pname = "sbsigntool";
   version = "0.9.1";
 
   src = fetchgit {

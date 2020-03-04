@@ -1,12 +1,12 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "closure-compiler-${version}";
-  version = "20190215";
+  pname = "closure-compiler";
+  version = "20200204";
 
   src = fetchurl {
     url = "https://dl.google.com/closure-compiler/compiler-${version}.tar.gz";
-    sha256 = "16rpl7x90ganpxlz6v9292cwx7dnkhklqx1nn161yj7ypf9bzd4k";
+    sha256 = "0diqnvyfh8w7yf7l5zqvb4msw07n50k9grz0k2znykaqwmjsidx9";
   };
 
   sourceRoot = ".";

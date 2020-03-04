@@ -1,11 +1,11 @@
 { stdenv, fetchurl, dpkg, makeWrapper, coreutils, gnugrep, gnused, perl, mfcl2720dwlpr }:
 
 stdenv.mkDerivation rec {
-  name = "mfcl2720dwcupswrapper-${version}";
+  pname = "mfcl2720dwcupswrapper";
   version = "3.2.0-1";
 
   src = fetchurl {
-    url = "https://download.brother.com/welcome/dlf101802/${name}.i386.deb";
+    url = "https://download.brother.com/welcome/dlf101802/${pname}-${version}.i386.deb";
     sha256 = "6d131926ce22c51b1854d2b91e426cc7ecbf5d6dabd698ef51a417090e35c598";
   };
 

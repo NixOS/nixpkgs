@@ -3,25 +3,25 @@
 , clucene_core_2, icu, openldap, libsodium, libstemmer, cyrus_sasl
 , nixosTests
 # Auth modules
-, withMySQL ? false, mysql
+, withMySQL ? false, libmysqlclient
 , withPgSQL ? false, postgresql
 , withSQLite ? true, sqlite
 }:
 
 stdenv.mkDerivation rec {
-  name = "dovecot-2.3.5.1";
+  name = "dovecot-2.3.9.3";
 
   nativeBuildInputs = [ perl pkgconfig ];
   buildInputs =
     [ openssl bzip2 zlib lz4 clucene_core_2 icu openldap libsodium libstemmer cyrus_sasl.dev ]
     ++ lib.optionals (stdenv.isLinux) [ systemd pam libcap inotify-tools ]
-    ++ lib.optional withMySQL mysql.connector-c
+    ++ lib.optional withMySQL libmysqlclient
     ++ lib.optional withPgSQL postgresql
     ++ lib.optional withSQLite sqlite;
 
   src = fetchurl {
     url = "https://dovecot.org/releases/2.3/${name}.tar.gz";
-    sha256 = "0gy3qzwbp6zsyn44pcfq8iiv9iy9q7z6py30h60alb1vkr3rv3yp";
+    sha256 = "0lcnqib63nv32xr3nr4s3x8k77mbgrhc13swjl2xqnzw4fabd7zq";
   };
 
   enableParallelBuilding = true;
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     # Make dovecot look for plugins in /etc/dovecot/modules
     # so we can symlink plugins from several packages there.
     # The symlinking needs to be done in NixOS.
-    ./2.2.x-module_dir.patch
+    ./2.3.x-module_dir.patch
   ];
 
   configureFlags = [
@@ -83,7 +83,7 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = https://dovecot.org/;
     description = "Open source IMAP and POP3 email server written with security primarily in mind";
-    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ peti rickynils fpletz globin ];
     platforms = stdenv.lib.platforms.unix;
   };
   passthru.tests = {

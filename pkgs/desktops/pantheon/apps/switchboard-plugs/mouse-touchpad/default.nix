@@ -1,25 +1,36 @@
-{ stdenv, fetchFromGitHub, pantheon, fetchpatch, meson, ninja
-, pkgconfig, vala, libgee, granite, gtk3, switchboard, gobject-introspection }:
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, meson
+, ninja
+, pkgconfig
+, vala
+, libgee
+, granite
+, gtk3
+, switchboard
+, elementary-settings-daemon
+, glib
+}:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.1.4";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "1zh5472ab01bckrc1py5bqqsal9i9pbgx6i8ap2d4yzhc8sirjrf";
+    sha256 = "1ls5jxzmd7cmbv8h67q6mcmfrfksgwjndqd6r9gxivsz2lcji3x7";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -27,13 +38,13 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    glib
     granite
     gtk3
     libgee
+    elementary-settings-daemon
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";

@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "git-sync-${version}";
+  pname = "git-sync";
   version = "20151024";
 
   src = fetchFromGitHub {

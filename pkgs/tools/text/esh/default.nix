@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, asciidoctor, gawk, gnused, runtimeShell }:
 
 stdenv.mkDerivation rec {
-  name = "esh-${version}";
+  pname = "esh";
   version = "0.1.1";
 
   src = fetchFromGitHub {

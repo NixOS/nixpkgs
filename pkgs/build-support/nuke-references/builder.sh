@@ -7,7 +7,7 @@ cat > $out/bin/nuke-refs <<EOF
 excludes=""
 while getopts e: o; do
     case "\$o" in
-        e) storeId=\$(echo "\$OPTARG" | sed -n "s|^$NIX_STORE/\\([a-z0-9]\{32\}\\)-.*|\1|p")
+        e) storeId=\$(echo "\$OPTARG" | $perl/bin/perl -ne "print \"\\\$1\" if m|^\Q$NIX_STORE\E/([a-z0-9]{32})-.*|")
            if [ -z "\$storeId" ]; then
                echo "-e argument must be a Nix store path"
                exit 1
@@ -20,7 +20,7 @@ shift \$((\$OPTIND-1))
 
 for i in "\$@"; do
     if test ! -L "\$i" -a -f "\$i"; then
-        cat "\$i" | $perl/bin/perl -pe "s|$NIX_STORE/\$excludes[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" > "\$i.tmp"
+        cat "\$i" | $perl/bin/perl -pe "s|\Q$NIX_STORE\E/\$excludes[a-z0-9]{32}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" > "\$i.tmp"
         if test -x "\$i"; then chmod +x "\$i.tmp"; fi
         mv "\$i.tmp" "\$i"
     fi

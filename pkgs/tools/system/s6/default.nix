@@ -1,11 +1,11 @@
-{ stdenv, skawarePackages }:
+{ skawarePackages }:
 
 with skawarePackages;
 
 buildPackage {
   pname = "s6";
-  version = "2.8.0.0";
-  sha256 = "01milx5shixvniaxxmanfzz54vcymjfi86433w62rk5ypvc94ir8";
+  version = "2.9.0.1";
+  sha256 = "0mvcjrz8nlj9p2zclmcv22b4y6bqzd2iz38arhgc989vdvrbmkg0";
 
   description = "skarnet.org's small & secure supervision software suite";
 

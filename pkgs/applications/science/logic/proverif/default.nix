@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "proverif-${version}";
+  pname = "proverif";
   version = "2.00";
 
   src = fetchurl {
@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Cryptographic protocol verifier in the Dolev-Yao model";
-    homepage    = "http://prosecco.gforge.inria.fr/personal/bblanche/proverif/";
+    homepage    = "https://prosecco.gforge.inria.fr/personal/bblanche/proverif/";
     license     = stdenv.lib.licenses.gpl2;
     platforms   = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];

@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = https://github.com/thumbor/remotecv/wiki;
     license = licenses.mit;
     maintainers = with maintainers; [ jluttine ];
+    broken = true; # no longer compatible with latest pillow
   };
 }

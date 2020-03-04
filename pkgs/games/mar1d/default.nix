@@ -18,7 +18,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "MAR1D-${version}";
+  pname = "MAR1D";
   version = "0.2.0";
   options = "-w${toString width}"
           + " -s${toString sensitivity}"

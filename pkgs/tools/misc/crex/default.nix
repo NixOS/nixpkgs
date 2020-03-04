@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "crex";
   version = "0.2.5";
 

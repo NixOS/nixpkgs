@@ -156,7 +156,7 @@ in
       };
       useCDN = mkOption {
         type = types.bool;
-        default = true;
+        default = false;
         description = ''
           Whether to use CDN resources or not.
         '';
@@ -893,16 +893,13 @@ in
       extraGroups = cfg.groups;
       home = cfg.workDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     systemd.services.codimd = {
       description = "CodiMD Service";
       wantedBy = [ "multi-user.target" ];
       after = [ "networking.target" ];
-      preStart = ''
-        mkdir -p ${cfg.workDir}
-        chown -R codimd: ${cfg.workDir}
-      '';
       serviceConfig = {
         WorkingDirectory = cfg.workDir;
         ExecStart = "${pkgs.codimd}/bin/codimd";
@@ -912,7 +909,6 @@ in
         ];
         Restart = "always";
         User = "codimd";
-        PermissionsStartOnly = true;
         PrivateTmp = true;
       };
     };

@@ -4,13 +4,13 @@ let
 # The version number here is whatever is reported by the RUBY_VERSION string
 rubyVersion = callPackage ../ruby/ruby-version.nix {} "2" "3" "3" "";
 jruby = stdenv.mkDerivation rec {
-  name = "jruby-${version}";
+  pname = "jruby";
 
-  version = "9.2.6.0";
+  version = "9.2.10.0";
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/jruby.org/downloads/${version}/jruby-bin-${version}.tar.gz";
-    sha256 = "0g8fkv946icw82h7pmg5aqh5mrgiiz9izjcjx9ism2x92w7gz8bh";
+    sha256 = "0lwmqyg06rv3iyhmfnqcg4xzaxcfrgjivjrc4ljwb0y629vp16ci";
   };
 
   buildInputs = [ makeWrapper ];

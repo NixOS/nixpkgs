@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Lightweight Python wrapper for Apache Solr";
-    homepage = "http://github.com/toastdriven/pysolr/";
+    homepage = "https://github.com/toastdriven/pysolr/";
     license = licenses.bsd3;
   };
 }

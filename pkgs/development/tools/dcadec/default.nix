@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = pname + "-" + version;
   pname = "dcadec";
   version = "0.2.0";
 

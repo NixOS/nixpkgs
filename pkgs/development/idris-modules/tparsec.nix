@@ -1,18 +1,21 @@
 { build-idris-package
 , fetchFromGitHub
+, contrib
 , lib
 }:
 build-idris-package  {
   name = "tparsec";
-  version = "2018-12-21";
+  version = "2020-02-11";
 
   ipkgName = "TParsec";
+  
+  idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {
     owner = "gallais";
     repo = "idris-tparsec";
-    rev = "6fafcaa894def6f2af86bc799e507013b56e7741";
-    sha256 = "0alnw0hqjs200gvb5f58lb16rna48j1v6wnvq4q7zbw99dcxsxwn";
+    rev = "943c64dfcb4e1582696f68312fad88145dc3a8e4";
+    sha256 = "0pyhkafhx2pwim91ada6qrgacvahl9bpv5m486y8fph4qzf4z6mx";
   };
 
   meta = {

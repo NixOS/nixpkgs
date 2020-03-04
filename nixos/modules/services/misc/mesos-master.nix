@@ -95,6 +95,9 @@ in {
 
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.workDir}' 0700 - - - -"
+    ];
     systemd.services.mesos-master = {
       description = "Mesos Master";
       wantedBy = [ "multi-user.target" ];
@@ -114,11 +117,7 @@ in {
             ${toString cfg.extraCmdLineOptions}
         '';
         Restart = "on-failure";
-        PermissionsStartOnly = true;
       };
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.workDir}
-      '';
     };
   };
 

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, cmake }:
 
-stdenv.mkDerivation rec {
-  name = "brigand-${version}";
+stdenv.mkDerivation {
+  pname = "brigand";
   version = "1.3.0";
 
   src = fetchFromGitHub {

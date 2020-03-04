@@ -1,5 +1,5 @@
 { stdenv, fetchurl, buildEnv, makeWrapper, glib, alsaLib , dbus, gtk2, atk
-, pango, freetype, fontconfig, gdk_pixbuf , cairo, cups, expat, nspr, gconf, nss
+, pango, freetype, fontconfig, gdk-pixbuf , cairo, cups, expat, nspr, gconf, nss
 , xorg, libcap, unzip
 }:
 
@@ -7,14 +7,14 @@ let
   thrustEnv = buildEnv {
     name = "env-thrust";
     paths = [
-      stdenv.cc.cc glib dbus gtk2 atk pango freetype fontconfig gdk_pixbuf
+      stdenv.cc.cc glib dbus gtk2 atk pango freetype fontconfig gdk-pixbuf
       cairo cups expat alsaLib nspr gconf nss xorg.libXrender xorg.libX11
       xorg.libXext xorg.libXdamage xorg.libXtst xorg.libXcomposite
       xorg.libXi xorg.libXfixes xorg.libXrandr xorg.libXcursor libcap
     ];
   };
 in stdenv.mkDerivation rec {
-  name = "thrust-${version}";
+  pname = "thrust";
   version = "0.7.6";
 
   src = fetchurl {

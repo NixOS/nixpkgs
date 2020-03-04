@@ -1,9 +1,8 @@
 {stdenv, fetchFromGitHub, cups}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "cups-zj-58";
   version = "2018-02-22";
-  name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "klirichek";

@@ -10,6 +10,7 @@ import ./make-test.nix ({ pkgs, ...} : {
     { users.users.alice = { isNormalUser = true; extraGroups = [ "proc" ]; };
       users.users.sybil = { isNormalUser = true; group = "wheel"; };
       imports = [ ../modules/profiles/hardened.nix ];
+      environment.memoryAllocator.provider = "graphene-hardened";
       nix.useSandbox = false;
       virtualisation.emptyDiskImages = [ 4096 ];
       boot.initrd.postDeviceCommands = ''
@@ -27,8 +28,32 @@ import ./make-test.nix ({ pkgs, ...} : {
     };
 
   testScript =
+    let
+      hardened-malloc-tests = pkgs.stdenv.mkDerivation {
+        name = "hardened-malloc-tests-${pkgs.graphene-hardened-malloc.version}";
+        src = pkgs.graphene-hardened-malloc.src;
+        buildPhase = ''
+          cd test/simple-memory-corruption
+          make -j4
+        '';
+
+        installPhase = ''
+          find . -type f -executable -exec install -Dt $out/bin '{}' +
+        '';
+      };
+    in
     ''
       $machine->waitForUnit("multi-user.target");
+
+      subtest "apparmor-loaded", sub {
+          $machine->succeed("systemctl status apparmor.service");
+      };
+
+      # AppArmor securityfs
+      subtest "apparmor-securityfs", sub {
+          $machine->succeed("mountpoint -q /sys/kernel/security");
+          $machine->succeed("cat /sys/kernel/security/apparmor/profiles");
+      };
 
       # Test loading out-of-tree modules
       subtest "extra-module-packages", sub {
@@ -82,6 +107,19 @@ import ./make-test.nix ({ pkgs, ...} : {
       subtest "kernelimage", sub {
         $machine->fail("systemctl hibernate");
         $machine->fail("systemctl kexec");
+      };
+
+      # Test hardened memory allocator
+      sub runMallocTestProg {
+          my ($progName, $errorText) = @_;
+          my $text = "fatal allocator error: " . $errorText;
+          $machine->fail("${hardened-malloc-tests}/bin/" . $progName) =~ $text;
+      };
+
+      subtest "hardenedmalloc", sub {
+        runMallocTestProg("double_free_large", "invalid free");
+        runMallocTestProg("unaligned_free_small", "invalid unaligned free");
+        runMallocTestProg("write_after_free_small", "detected write after free");
       };
     '';
 })

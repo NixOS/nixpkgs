@@ -1,5 +1,5 @@
 { stdenv, fetchurl, xlibsWrapper, libpng, libjpeg, libtiff, zlib, bzip2, libXcursor
-, libXrandr, libGLU_combined, libXft, libXfixes, xinput
+, libXrandr, libGLU, libGL, libXft, libXfixes, xinput
 , CoreServices }:
 
 let
@@ -7,16 +7,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "fox-${version}";
+  pname = "fox";
+  inherit version;
 
   src = fetchurl {
-    url = "ftp://ftp.fox-toolkit.org/pub/${name}.tar.gz";
+    url = "ftp://ftp.fox-toolkit.org/pub/${pname}-${version}.tar.gz";
     sha256 = "08w98m6wjadraw1pi13igzagly4b2nfa57kdqdnkjfhgkvg1bvv5";
   };
 
   buildInputs = [
     xlibsWrapper libpng libjpeg libtiff zlib bzip2 libXcursor libXrandr
-    libXft libGLU_combined libXfixes xinput
+    libXft libGLU libGL libXfixes xinput
   ] ++ stdenv.lib.optional stdenv.isDarwin CoreServices;
 
   doCheck = true;

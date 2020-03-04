@@ -1,22 +1,28 @@
-{ stdenv, fetchFromGitHub, buildGoPackage }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
-let
-  owner = "CircleCI-Public";
+buildGoModule rec {
   pname = "circleci-cli";
-  version = "0.1.2569";
-in
-buildGoPackage rec {
-  name = "${pname}-${version}";
-  inherit version;
+  version = "0.1.6072";
 
-  src =  fetchFromGitHub {
-    inherit owner;
+  src = fetchFromGitHub {
+    owner = "CircleCI-Public";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0ixiqx8rmia02r44zbhw149p5x9r9cv1fsnlhl8p2x5zd2bdr18x";
+    sha256 = "1sbzl6y7974sib14qr2qa6d20cs54h6a3mc1whbxifg87cw02qjn";
   };
 
-  goPackagePath = "github.com/${owner}/${pname}";
+  modSha256 = "1pxqc2a1hb6bk67sd2c37zwg6n7h0jay3yqsjcs4jc0bqv48gzip";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X github.com/CircleCI-Public/circleci-cli/version.Version=${version}" ];
+
+  preBuild = ''
+    substituteInPlace data/data.go \
+      --replace 'packr.New("circleci-cli-box", "../_data")' 'packr.New("circleci-cli-box", "${placeholder "out"}/share/circleci-cli")'
+  '';
+
+  postInstall = ''
+    install -Dm644 -t $out/share/circleci-cli _data/data.yml
+  '';
 
   meta = with stdenv.lib; {
     # Box blurb edited from the AUR package circleci-cli
@@ -25,7 +31,6 @@ buildGoPackage rec {
       run jobs as if they were running on the hosted CirleCI application.
     '';
     maintainers = with maintainers; [ synthetica ];
-    platforms = platforms.unix;
     license = licenses.mit;
     homepage = https://circleci.com/;
   };

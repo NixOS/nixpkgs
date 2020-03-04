@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libpcap, openssl, zlib, wirelesstools
 , iw, ethtool, pciutils, libnl, pkgconfig, makeWrapper
-, autoreconfHook }:
+, autoreconfHook, usbutils }:
 
 stdenv.mkDerivation rec {
   name = "aircrack-ng-1.5.2";
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     wrapProgram $out/bin/airmon-ng --prefix PATH : ${stdenv.lib.makeBinPath [
-      ethtool iw pciutils
+      ethtool iw pciutils usbutils
     ]}
   '';
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Wireless encryption cracking tools";
     homepage = http://www.aircrack-ng.org/;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar garbas ];
+    maintainers = with maintainers; [ domenkozar ];
     platforms = platforms.linux;
   };
 }

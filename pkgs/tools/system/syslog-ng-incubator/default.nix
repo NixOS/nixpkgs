@@ -3,13 +3,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "syslog-ng-incubator-${version}";
+  pname = "syslog-ng-incubator";
   version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "balabit";
     repo = "syslog-ng-incubator";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "17y85cqcyfbp882gaii731cvz5bg1s8rgda271jh6kgnrz5rbd4s";
   };
 
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/balabit/syslog-ng-incubator;
     description = "A collection of tools and modules for syslog-ng";
     license = licenses.gpl2;
-    maintainers = [ maintainers.rickynils ];
+    maintainers = [];
     platforms = platforms.linux;
     broken = true; # 2018-05-12
   };

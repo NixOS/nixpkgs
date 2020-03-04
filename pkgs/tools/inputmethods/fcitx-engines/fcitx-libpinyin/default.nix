@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pkgconfig, fcitx, gettext, libpinyin, glib, pcre, dbus, qtwebengine, qtbase, fcitx-qt5 }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-libpinyin-${version}";
+  pname = "fcitx-libpinyin";
   version = "0.5.3";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-libpinyin/${name}.tar.xz";
+    url = "http://download.fcitx-im.org/fcitx-libpinyin/${pname}-${version}.tar.xz";
     sha256 = "196c229ckib3xvafkk4n3n3jk9rpksfcjsbbwka6a9k2f34qrjj6";
   };
 
@@ -24,8 +24,6 @@ stdenv.mkDerivation rec {
 
   preInstall = ''
     substituteInPlace src/cmake_install.cmake \
-      --replace ${fcitx} $out
-    substituteInPlace po/cmake_install.cmake \
       --replace ${fcitx} $out
     substituteInPlace data/cmake_install.cmake \
       --replace ${fcitx} $out

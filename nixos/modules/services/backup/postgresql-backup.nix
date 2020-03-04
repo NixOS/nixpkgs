@@ -14,11 +14,6 @@ let
 
       requires = [ "postgresql.service" ];
 
-      preStart = ''
-        mkdir -m 0700 -p ${cfg.location}
-        chown postgres ${cfg.location}
-      '';
-
       script = ''
         umask 0077 # ensure backup is only readable by postgres user
 
@@ -32,7 +27,6 @@ let
 
       serviceConfig = {
         Type = "oneshot";
-        PermissionsStartOnly = "true";
         User = "postgres";
       };
 
@@ -40,6 +34,13 @@ let
     };
 
 in {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
+       A systemd timer is now used instead of cron.
+       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+    '')
+  ];
 
   options = {
     services.postgresqlBackup = {
@@ -87,8 +88,8 @@ in {
       };
 
       pgdumpOptions = mkOption {
-        type = types.string;
-        default = "-Cbo";
+        type = types.separatedString " ";
+        default = "-C";
         description = ''
           Command line options for pg_dump. This options is not used
           if <literal>config.services.postgresqlBackup.backupAll</literal> is enabled.
@@ -107,6 +108,11 @@ in {
         message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
       }];
     }
+    (mkIf cfg.enable {
+      systemd.tmpfiles.rules = [
+        "d '${cfg.location}' 0700 postgres - - -"
+      ];
+    })
     (mkIf (cfg.enable && cfg.backupAll) {
       systemd.services.postgresqlBackup =
         postgresqlBackupService "all" "${config.services.postgresql.package}/bin/pg_dumpall";

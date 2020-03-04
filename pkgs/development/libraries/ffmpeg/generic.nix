@@ -1,8 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, perl, texinfo, yasm
+{ stdenv, buildPackages, fetchurl, pkgconfig, addOpenGLRunpath, perl, texinfo, yasm
 , alsaLib, bzip2, fontconfig, freetype, gnutls, libiconv, lame, libass, libogg
 , libssh, libtheora, libva, libdrm, libvorbis, libvpx, lzma, libpulseaudio, soxr
-, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers
-, openglSupport ? false, libGLU_combined ? null
+, x264, x265, xvidcore, zlib, libopus, speex, nv-codec-headers, dav1d
+, openglSupport ? false, libGLU ? null, libGL ? null
+, libmfxSupport ? false, intel-media-sdk ? null
+, libaomSupport ? false, libaom ? null
 # Build options
 , runtimeCpuDetectBuild ? true # Detect CPU capabilities at runtime
 , multithreadBuild ? true # Multithreading via pthreads/win32 threads
@@ -42,7 +44,7 @@
 
 let
   inherit (stdenv) isDarwin isFreeBSD isLinux isAarch32;
-  inherit (stdenv.lib) optional optionals enableFeature;
+  inherit (stdenv.lib) optional optionals optionalString enableFeature filter;
 
   cmpVer = builtins.compareVersions;
   reqMin = requiredVersion: (cmpVer requiredVersion branch != 1);
@@ -61,15 +63,17 @@ let
   vpxSupport = reqMin "0.6" && !isAarch32;
 in
 
-assert openglSupport -> libGLU_combined != null;
+assert openglSupport -> libGL != null && libGLU != null;
+assert libmfxSupport -> intel-media-sdk != null;
+assert libaomSupport -> libaom != null;
 
 stdenv.mkDerivation rec {
 
-  name = "ffmpeg-${version}";
+  pname = "ffmpeg";
   inherit version;
 
   src = fetchurl {
-    url = "https://www.ffmpeg.org/releases/${name}.tar.bz2";
+    url = "https://www.ffmpeg.org/releases/${pname}-${version}.tar.bz2";
     inherit sha256;
   };
 
@@ -81,7 +85,7 @@ stdenv.mkDerivation rec {
   setOutputFlags = false; # doesn't accept all and stores configureFlags in libs!
 
   configurePlatforms = [];
-  configureFlags = [
+  configureFlags = filter (v: v != null) ([
       "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
       "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
     # License
@@ -89,17 +93,18 @@ stdenv.mkDerivation rec {
       "--enable-version3"
     # Build flags
       "--enable-shared"
-      "--disable-static"
       (ifMinVer "0.6" "--enable-pic")
       (enableFeature runtimeCpuDetectBuild "runtime-cpudetect")
       "--enable-hardcoded-tables"
+    ] ++
       (if multithreadBuild then (
          if stdenv.isCygwin then
-           "--disable-pthreads --enable-w32threads"
+           ["--disable-pthreads" "--enable-w32threads"]
          else # Use POSIX threads by default
-           "--enable-pthreads --disable-w32threads")
+           ["--enable-pthreads" "--disable-w32threads"])
        else
-         "--disable-pthreads --disable-w32threads")
+         ["--disable-pthreads" "--disable-w32threads"])
+    ++ [
       (ifMinVer "0.9" "--disable-os2threads") # We don't support OS/2
       "--enable-network"
       (ifMinVer "2.4" "--enable-pixelutils")
@@ -131,11 +136,13 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.1" "--enable-libssh")
       (ifMinVer "0.6" (enableFeature vaapiSupport "vaapi"))
       (ifMinVer "3.4" (enableFeature vaapiSupport "libdrm"))
-      "--enable-vdpau"
+      (enableFeature vdpauSupport "vdpau")
       "--enable-libvorbis"
       (ifMinVer "0.6" (enableFeature vpxSupport "libvpx"))
       (ifMinVer "2.4" "--enable-lzma")
       (ifMinVer "2.2" (enableFeature openglSupport "opengl"))
+      (ifMinVer "4.2" (enableFeature libmfxSupport "libmfx"))
+      (ifMinVer "4.2" (enableFeature libaomSupport "libaom"))
       (disDarwinOrArmFix (ifMinVer "0.9" "--enable-libpulse") "0.9" "--disable-libpulse")
       (ifMinVer "2.5" (if sdlSupport && reqMin "3.2" then "--enable-sdl2" else if sdlSupport then "--enable-sdl" else null)) # autodetected before 2.5, SDL1 support removed in 3.2 for SDL2
       (ifMinVer "1.2" "--enable-libsoxr")
@@ -145,6 +152,7 @@ stdenv.mkDerivation rec {
       (ifMinVer "2.8" "--enable-libopus")
       "--enable-libspeex"
       (ifMinVer "2.8" "--enable-libx265")
+      (ifMinVer "4.2" (enableFeature (dav1d != null) "libdav1d"))
     # Developer flags
       (enableFeature debugDeveloper "debug")
       (enableFeature optimizationsDeveloper "optimizations")
@@ -155,14 +163,18 @@ stdenv.mkDerivation rec {
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
       "--cross-prefix=${stdenv.cc.targetPrefix}"
       "--enable-cross-compile"
-  ] ++ optional stdenv.cc.isClang "--cc=clang";
+      "--pkg-config=pkg-config" # Override ffmpeg's ./configure assumption that pkg-config is prefixed by the architecture. (e.g. aarch64-unknown-linux-gnu-pkg-config)
+  ] ++ optional stdenv.cc.isClang "--cc=clang");
 
-  nativeBuildInputs = [ perl pkgconfig texinfo yasm ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  nativeBuildInputs = [ addOpenGLRunpath perl pkgconfig texinfo yasm ];
 
   buildInputs = [
     bzip2 fontconfig freetype gnutls libiconv lame libass libogg libssh libtheora
-    libvdpau libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
-  ] ++ optional openglSupport libGLU_combined
+    libvorbis lzma soxr x264 x265 xvidcore zlib libopus speex nv-codec-headers
+  ] ++ optionals openglSupport [ libGL libGLU ]
+    ++ optional libmfxSupport intel-media-sdk
+    ++ optional vpxSupport libaom
     ++ optional vpxSupport libvpx
     ++ optionals (!isDarwin && !isAarch32) [ libpulseaudio ] # Need to be fixed on Darwin and ARM
     ++ optional ((isLinux || isFreeBSD) && !isAarch32) libva
@@ -170,7 +182,8 @@ stdenv.mkDerivation rec {
     ++ optional isLinux alsaLib
     ++ optionals isDarwin darwinFrameworks
     ++ optional vdpauSupport libvdpau
-    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL);
+    ++ optional sdlSupport (if reqMin "3.2" then SDL2 else SDL)
+    ++ optional (reqMin "4.2") dav1d;
 
   enableParallelBuilding = true;
 
@@ -185,6 +198,10 @@ stdenv.mkDerivation rec {
       substituteInPlace $pc \
         --replace "includedir=$out" "includedir=''${!outputInclude}"
     done
+  '' + optionalString stdenv.isLinux ''
+    # Set RUNPATH so that libnvcuvid in /run/opengl-driver(-32)/lib can be found.
+    # See the explanation in addOpenGLRunpath.
+    addOpenGLRunpath $out/lib/libavcodec.so*
   '';
 
   installFlags = [ "install-man" ];
@@ -205,7 +222,7 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ codyopel fuuzetsu ];
+    maintainers = with maintainers; [ codyopel ];
     inherit branch;
   };
 }

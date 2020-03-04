@@ -1,9 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gocode-gomod-unstable-${version}";
-  version = "2019-02-12";
-  rev = "8cc90faaf4765d16de060350da41eadccc1a15d1";
+  pname = "gocode-gomod-unstable";
+  version = "2019-03-27";
+  rev = "81059208699789f992bb4a4a3fedd734e335468d";
 
   goPackagePath = "github.com/stamblerre/gocode";
 

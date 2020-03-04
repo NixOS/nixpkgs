@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig
-, SDL2, libGLU_combined, openal, luajit
+, SDL2, libGLU, libGL, openal, luajit
 , libdevil, freetype, physfs
 , libmodplug, mpg123, libvorbis, libogg
 }:
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    SDL2 libGLU_combined openal luajit
+    SDL2 libGLU libGL openal luajit
     libdevil freetype physfs libmodplug mpg123 libvorbis libogg
   ];
 
@@ -30,5 +30,6 @@ stdenv.mkDerivation rec {
 
     platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.raskin ];
+    broken = true;
   };
 }

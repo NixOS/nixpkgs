@@ -1,16 +1,16 @@
 { stdenv, fetchFromGitHub, pkgconfig, autoreconfHook, wrapGAppsHook
 , gnome3, avahi, gtk3, libappindicator-gtk3, libnotify, libpulseaudio
-, xlibsWrapper
+, xlibsWrapper, gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
-  name = "pasystray-${version}";
+  pname = "pasystray";
   version = "0.7.1";
 
   src = fetchFromGitHub {
     owner = "christophgysin";
     repo = "pasystray";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "0xx1bm9kimgq11a359ikabdndqg5q54pn1d1dyyjnrj0s41168fk";
   };
 
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gnome3.adwaita-icon-theme
     avahi gtk3 libappindicator-gtk3 libnotify libpulseaudio xlibsWrapper
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
   ];
 
   meta = with stdenv.lib; {

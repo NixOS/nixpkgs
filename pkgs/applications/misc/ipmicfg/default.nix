@@ -1,7 +1,7 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  name = "ipmicfg-${version}";
+  pname = "ipmicfg";
   version = "1.29.0";
   buildVersion = "181029";
 

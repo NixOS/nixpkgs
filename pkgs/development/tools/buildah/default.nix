@@ -1,52 +1,44 @@
 { stdenv, buildGoPackage, fetchFromGitHub
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, ostree, libselinux, libseccomp
-, go-md2man }:
+, gpgme, libgpgerror, lvm2, btrfs-progs, pkg-config, libselinux, libseccomp
+}:
 
-let
-  version = "1.7.2";
+buildGoPackage rec {
+  pname = "buildah";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
-    rev = "v${version}";
-    owner = "containers";
-    repo = "buildah";
-    sha256 = "19rp5kgdgyjfvg23m8dqlv6g1cs2c57nnw64ifjv24hqhy1xc0qk";
+    owner  = "containers";
+    repo   = "buildah";
+    rev    = "v${version}";
+    sha256 = "12x80g83xjcjiafcxyqrhg952nq5w91df35d7lnvc2vz8vvpkyx1";
   };
-  goPackagePath = "github.com/containers/buildah";
-
-in buildGoPackage rec {
-  name = "buildah-${version}";
-  inherit src;
 
   outputs = [ "bin" "man" "out" ];
 
-  inherit goPackagePath;
+  goPackagePath = "github.com/containers/buildah";
   excludedPackages = [ "tests" ];
 
-  # Optimizations break compilation of libseccomp c bindings
-  hardeningDisable = [ "fortify" ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs libselinux libseccomp ];
 
-  nativeBuildInputs = [ pkgconfig go-md2man.bin ];
-  buildInputs = [ gpgme libgpgerror lvm2 btrfs-progs ostree libselinux libseccomp ];
+  patches = [ ./disable-go-module-mode.patch ];
 
-  # Copied from the skopeo package, doesn’t seem to make a difference?
-  # If something related to these libs failed, uncomment these lines.
-  /*preBuild = with lib; ''
-    export CGO_CFLAGS="-I${getDev gpgme}/include -I${getDev libgpgerror}/include -I${getDev devicemapper}/include -I${getDev btrfs-progs}/include"
-    export CGO_LDFLAGS="-L${getLib gpgme}/lib -L${getLib libgpgerror}/lib -L${getLib devicemapper}/lib"
-  '';*/
-
-  postBuild = ''
-    # depends on buildGoPackage not changing …
-    pushd ./go/src/${goPackagePath}/docs
-    make docs
-    make install PREFIX="$man"
-    popd
+  buildPhase = ''
+    pushd go/src/${goPackagePath}
+    make GIT_COMMIT="unknown"
+    install -Dm755 buildah $bin/bin/buildah
+    install -Dm444 contrib/completions/bash/buildah $bin/share/bash-completion/completions/buildah
   '';
 
-  meta = {
+  postBuild = ''
+    make -C docs install PREFIX="$man"
+  '';
+
+  meta = with stdenv.lib; {
     description = "A tool which facilitates building OCI images";
-    homepage = https://github.com/containers/buildah;
-    maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
-    license = stdenv.lib.licenses.asl20;
+    homepage = "https://buildah.io/";
+    changelog = "https://github.com/containers/buildah/releases/tag/v${version}";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ Profpatsch vdemeester saschagrunert ];
   };
 }

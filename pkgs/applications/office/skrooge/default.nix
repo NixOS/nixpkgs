@@ -1,4 +1,4 @@
-{ mkDerivation, lib, fetchurl,
+{ mkDerivation, lib, fetchpatch, fetchurl,
   cmake, extra-cmake-modules, qtwebengine, qtscript, grantlee,
   kxmlgui, kwallet, kparts, kdoctools, kjobwidgets, kdesignerplugin,
   kiconthemes, knewstuff, sqlcipher, qca-qt5, kactivities, karchive,
@@ -6,12 +6,12 @@
 }:
 
 mkDerivation rec {
-  name = "skrooge-${version}";
-  version = "2.18.0";
+  pname = "skrooge";
+  version = "2.21.1";
 
   src = fetchurl {
-    url = "http://download.kde.org/stable/skrooge/${name}.tar.xz";
-    sha256 = "00zk152clnmq8rjjnrxmd7lfflf2pnzljaw73bjjsb6r6vkxywa6";
+    url = "http://download.kde.org/stable/skrooge/${pname}-${version}.tar.xz";
+    sha256 = "0lv953i7cybzbxr5gx6g4libdcjj086jf152mwrwvx1avrpjavb8";
   };
 
   nativeBuildInputs = [

@@ -1,15 +1,15 @@
 { lib, stdenv, fetchurl, jre, makeWrapper, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "6.0.0-rc2";
-  name = "schemaspy-${version}";
+  version = "6.1.0";
+  pname = "schemaspy";
 
   src = fetchurl {
-    url = "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${name}.jar";
-    sha256 = "0ph1l62hy163m2hgybhkccqbcj6brna1vdbr7536zc37lzjxq9rn";
+    url = "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${pname}-${version}.jar";
+    sha256 = "0lgz6b17hx9857fb2l03ggz8y3n8a37vrcsylif0gmkwj1v4qgl7";
   };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [
     jre
@@ -24,10 +24,10 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -D ${src} "$out/share/java/${name}.jar"
+    install -D ${src} "$out/share/java/${pname}-${version}.jar"
 
     makeWrapper ${jre}/bin/java $out/bin/schemaspy \
-      --add-flags "-jar $out/share/java/${name}.jar" \
+      --add-flags "-jar $out/share/java/${pname}-${version}.jar" \
       --prefix PATH : "$wrappedPath"
   '';
 

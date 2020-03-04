@@ -1,15 +1,15 @@
-{ stdenv, python3Packages, fetchFromGitHub, feh, libxslt,
+{ stdenv, python3Packages, fetchFromGitHub, libxslt,
   gobject-introspection, gtk3, wrapGAppsHook, gnome3 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "wpgtk";
-  version = "6.0.3";
+  version = "6.0.12";
 
   src = fetchFromGitHub {
     owner = "deviantfero";
     repo = "wpgtk";
     rev = version;
-    sha256 = "1ma1d4h751qnxadfn42h29knq0rl1lgzraifx6ypidjph5i5a10l";
+    sha256 = "1wqdjq3pjgwb1da549izw3bzi1bk6q7d1hjw3i2zg5nhig1vvxw6";
   };
 
   buildInputs = [
@@ -39,7 +39,7 @@ python3Packages.buildPythonApplication rec {
     longDescription = ''
      In short, wpgtk is a colorscheme/wallpaper manager with a template system attached which lets you create templates from any textfile and will replace keywords on it on the fly, allowing for great styling and theming possibilities.
 
-     wpgtk uses pywal as its colorscheme generator, but builds upon it with a UI and other features, such as the abilty to mix and edit the colorschemes generated and save them with their respective wallpapers, having light and dark themes, hackable and fast GTK+ theme made specifically for wpgtk and custom keywords and values to replace in templates.
+     wpgtk uses pywal as its colorscheme generator, but builds upon it with a UI and other features, such as the abilty to mix and edit the colorschemes generated and save them with their respective wallpapers, having light and dark themes, hackable and fast GTK theme made specifically for wpgtk and custom keywords and values to replace in templates.
 
      INFO: To work properly, this tool needs "programs.dconf.enable = true" on nixos or dconf installed. A reboot may be required after installing dconf.
      '';

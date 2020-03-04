@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, pkgconfig, efivar, popt }:
 
 stdenv.mkDerivation rec {
-  name = "efibootmgr-${version}";
+  pname = "efibootmgr";
   version = "17";
 
   nativeBuildInputs = [ pkgconfig ];
@@ -22,6 +22,8 @@ stdenv.mkDerivation rec {
       sha256 = "1sbijvlpv4khkix3vix9mbhzffj8lp8zpnbxm9gnzjz8yssz9p5h";
     })
   ];
+  # We have no LTO here since commit 22284b07.
+  postPatch = if stdenv.isi686 then "sed '/^CFLAGS/s/-flto//' -i Make.defaults" else null;
 
   makeFlags = [ "EFIDIR=nixos" ];
 

@@ -118,7 +118,6 @@ if test -n "$showURLs"; then
     exit 0
 fi
 
-
 if test -n "$preferHashedMirrors"; then
     tryHashedMirrors
 fi
@@ -128,6 +127,16 @@ set -o noglob
 
 success=
 for url in $urls; do
+    if [ -z "$postFetch" ]; then
+       case "$url" in
+           https://github.com/*/archive/*)
+               echo "warning: archives from GitHub revisions should use fetchFromGitHub"
+               ;;
+           https://gitlab.com/*/-/archive/*)
+               echo "warning: archives from GitLab revisions should use fetchFromGitLab"
+               ;;
+       esac
+    fi
     tryDownload "$url"
     if test -n "$success"; then finish; fi
 done

@@ -297,7 +297,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         description = "Directory where Prosody stores its data";
         default = "/var/lib/prosody";
       };
@@ -422,6 +422,13 @@ in
         description = "List of administrators of the current host";
       };
 
+      authentication = mkOption {
+        type = types.enum [ "internal_plain" "internal_hashed" "cyrus" "anonymous" ];
+        default = "internal_hashed";
+        example = "internal_plain";
+        description = "Authentication mechanism used for logins.";
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -458,7 +465,7 @@ in
 
       modules_enabled = {
 
-        ${ lib.concatStringsSep "\n\ \ " (lib.mapAttrsToList
+        ${ lib.concatStringsSep "\n  " (lib.mapAttrsToList
           (name: val: optionalString val "${toLua name};")
         cfg.modules) }
         ${ lib.concatStringsSep "\n" (map (x: "${toLua x};") cfg.package.communityModules)}
@@ -477,6 +484,7 @@ in
 
       s2s_secure_domains = ${toLua cfg.s2sSecureDomains}
 
+      authentication = ${toLua cfg.authentication}
 
       ${ cfg.extraConfig }
 

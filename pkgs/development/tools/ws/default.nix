@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "ws-${version}";
+  pname = "ws";
   version = "0.2.1";
   rev = "e9404cb37e339333088b36f6a7909ff3be76931d";
 

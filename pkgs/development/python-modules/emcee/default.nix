@@ -3,18 +3,18 @@
 
 buildPythonPackage rec {
   pname = "emcee";
-  version = "2.2.1";
+  version = "3.0.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b83551e342b37311897906b3b8acf32979f4c5542e0a25786ada862d26241172";
+    sha256 = "035a44d7594fdd03efd10a522558cdfaa080e046ad75594d0bf2aec80ec35388";
   };
 
   propagatedBuildInputs = [ numpy ];
 
   meta = with stdenv.lib; {
     description = "Kick ass affine-invariant ensemble MCMC sampling";
-    homepage = http://dan.iel.fm/emcee;
+    homepage = "https://emcee.readthedocs.io/";
     license = licenses.mit;
   };
 }

@@ -3,14 +3,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "pmdk-${version}";
-  version = "1.6";
+  pname = "pmdk";
+  version = "1.7";
 
   src = fetchFromGitHub {
     owner  = "pmem";
     repo   = "pmdk";
     rev    = "refs/tags/${version}";
-    sha256 = "11h9h5ifgaa5f6v9y77s5lmsj7k61qg52992s1361cmvl0ndgl9k";
+    sha256 = "1833sq0f1msaqwn31dn1fp37a6d5zp995i9gkazanydmppi2qy0i";
   };
 
   nativeBuildInputs = [ autoconf pkgconfig ];

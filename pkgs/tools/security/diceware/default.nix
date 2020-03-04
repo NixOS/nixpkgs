@@ -1,8 +1,8 @@
 { lib
-, pythonPackages
+, python3Packages
 }:
 
-with pythonPackages;
+with python3Packages;
 
 buildPythonApplication rec {
   pname = "diceware";
@@ -14,6 +14,8 @@ buildPythonApplication rec {
   };
 
   nativeBuildInputs = [ pytestrunner ];
+
+  propagatedBuildInputs = [ setuptools ];
 
   checkInputs = [ coverage pytest ];
 

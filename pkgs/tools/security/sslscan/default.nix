@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "sslscan-${version}";
+  pname = "sslscan";
   version = "1.11.13";
 
   src = fetchFromGitHub {

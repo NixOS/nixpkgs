@@ -1,6 +1,6 @@
 { stdenv, fetchurl, p7zip }:
 stdenv.mkDerivation rec {
-  name = "win-virtio-${version}";
+  pname = "win-virtio";
   version = "0.1.141-1";
 
   phases = [ "buildPhase" "installPhase" ];

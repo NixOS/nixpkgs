@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "gnugo-${version}";
+  pname = "gnugo";
   version = "3.8";
 
   src = fetchurl {

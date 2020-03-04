@@ -4,7 +4,7 @@
 , python
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "chevron";
   version = "0.13.1";
 

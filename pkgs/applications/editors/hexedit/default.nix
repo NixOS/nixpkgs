@@ -1,11 +1,11 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "hexedit-${version}";
+  pname = "hexedit";
   version = "1.2.13";
 
   src = fetchurl {
-    url = "http://rigaux.org/${name}.src.tgz";
+    url = "http://rigaux.org/${pname}-${version}.src.tgz";
     sha256 = "1mwdp1ikk64cqmagnrrps5jkn3li3n47maiqh2qc1xbp1ains4ka";
   };
 

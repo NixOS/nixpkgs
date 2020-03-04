@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeFontsConf, makeWrapper
+{ stdenv, fetchurl, makeFontsConf
 , cacert
 , cairo, coreutils, fontconfig, freefont_ttf
 , glib, gmp
@@ -45,17 +45,17 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "racket-${version}";
-  version = "7.2"; # always change at once with ./minimal.nix
+  pname = "racket";
+  version = "7.6"; # always change at once with ./minimal.nix
 
   src = (stdenv.lib.makeOverridable ({ name, sha256 }:
-    fetchurl rec {
+    fetchurl {
       url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
       inherit sha256;
     }
   )) {
-    inherit name;
-    sha256 = "12cq0kiigmf9bxb4rcgxdhwc2fcdwvlyb1q3f8x4hswcpgq1ybg4";
+    name = "${pname}-${version}";
+    sha256 = "0yagy7qrnz96gwafnj3whh2vs54788k1ci3vkm100h68gsw638b8";
   };
 
   FONTCONFIG_FILE = fontsConf;
@@ -102,8 +102,8 @@ stdenv.mkDerivation rec {
       libraries support applications from web servers and databases to
       GUIs and charts.
     '';
-    homepage = http://racket-lang.org/;
-    license = licenses.lgpl3;
+    homepage = https://racket-lang.org/;
+    license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ kkallio henrytill vrthra ];
     platforms = [ "x86_64-darwin" "x86_64-linux" ];
     broken = stdenv.isDarwin; # No support yet for setting FFI lookup path

@@ -1,16 +1,13 @@
 { lib, buildPythonPackage, fetchPypi }:
 
 buildPythonPackage rec {
-  version = "0.8.3";
+  version = "1.2.1";
   pname = "bitarray";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0pl9p4j3dhlyffsqra6h28q7jph6v3hgppg786lkmnqdh45x6305";
+    sha256 = "1kxrlxfj9nrx512sfwifwl9z4v6ky3qschl0zmk3s3dvc3s7bmif";
   };
-
-  # Delete once https://github.com/ilanschnell/bitarray/pull/55 is merged
-  patches = [ ./0001-Buffer-Protocol-Py3.patch ];
 
   meta = with lib; {
     description = "Efficient arrays of booleans";

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, dpkg, busybox, systemd }:
 
 stdenv.mkDerivation rec {
-  name = "molly-guard-${version}";
-  version = "0.6.3";
+  pname = "molly-guard";
+  version = "0.7.2";
 
   src = fetchurl {
-    url = "https://launchpad.net/ubuntu/+source/molly-guard/${version}/+build/8892607/+files/molly-guard_${version}_all.deb";
-    sha256 = "1d1x60m6kh9wfh9lc22g5s0j40aivwgsczykk27ymwl1pvk58dxn";
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/molly-guard_${version}_all.deb";
+    sha256 = "1k6b1hn8lc4rj9n036imsl7s9lqj6ny3acdhnbnamsdkkndmxrw7";
   };
 
   buildInputs = [ dpkg ];
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Attempts to prevent you from accidentally shutting down or rebooting machines";
-    homepage    = https://anonscm.debian.org/git/collab-maint/molly-guard.git/;
+    homepage    = https://salsa.debian.org/debian/molly-guard;
     license     = licenses.artistic2;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ DerTim1 ];

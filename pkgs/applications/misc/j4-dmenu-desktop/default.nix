@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake, dmenu }:
 
 stdenv.mkDerivation rec {
-  name    = "j4-dmenu-desktop-${version}";
-  version = "2.16";
+  pname = "j4-dmenu-desktop";
+  version = "2.17";
 
   src = fetchFromGitHub {
-    owner  = "enkore";
-    repo   = "j4-dmenu-desktop";
-    rev    = "r${version}";
-    sha256 = "0714cri8bwpimmiirhzrkbri4xi24k0za6i1aw94d3fnblk2dg9f";
+    owner = "enkore";
+    repo = pname;
+    rev = "r${version}";
+    sha256 = "0v23fimkn83dcm5p53y2ymhklff3kwppxhf75sm8xmswrzkixpgc";
   };
 
   postPatch = ''
@@ -18,13 +18,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   # tests are fetching an external git repository
-  cmakeFlags = [ "-DNO_TESTS:BOOL=ON" ];
+  cmakeFlags = [
+    "-DWITH_TESTS=OFF"
+    "-DWITH_GIT_CATCH=OFF"
+  ];
 
   meta = with stdenv.lib; {
     description = "A wrapper for dmenu that recognize .desktop files";
-    homepage    = "https://github.com/enkore/j4-dmenu-desktop";
-    license     = licenses.gpl3;
+    homepage = "https://github.com/enkore/j4-dmenu-desktop";
+    license = licenses.gpl3;
     maintainers = with maintainers; [ ericsagnes ];
-    platforms   = with platforms; unix;
+    platforms = platforms.unix;
   };
 }

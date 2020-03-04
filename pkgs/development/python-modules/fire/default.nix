@@ -1,25 +1,24 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, hypothesis, mock
-, python-Levenshtein, pytest }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch, six, hypothesis, mock
+, python-Levenshtein, pytest, termcolor, isPy27, enum34 }:
 
 buildPythonPackage rec {
   pname = "fire";
-  version = "0.1.3";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "python-fire";
     rev = "v${version}";
-    sha256 = "0kdcmzr3sgzjsw5fmvdylgrn8akqjbs433jbgqzp498njl9cc6qx";
+    sha256 = "1r6cmihafd7mb6j3mvgk251my6ckb0sqqj1l2ny2azklv175b38a";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six termcolor ] ++ stdenv.lib.optional isPy27 enum34;
 
   checkInputs = [ hypothesis mock python-Levenshtein pytest ];
 
   checkPhase = ''
     py.test
   '';
-
 
   meta = with stdenv.lib; {
     description = "A library for automatically generating command line interfaces";

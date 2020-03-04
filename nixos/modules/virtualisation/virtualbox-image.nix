@@ -45,10 +45,41 @@ in {
           The file name of the VirtualBox appliance.
         '';
       };
+      params = mkOption {
+        type = with types; attrsOf (oneOf [ str int bool (listOf str) ]);
+        example = {
+          audio = "alsa";
+          rtcuseutc = "on";
+          usb = "off";
+        };
+        description = ''
+          Parameters passed to the Virtualbox appliance.
+
+          Run <literal>VBoxManage modifyvm --help</literal> to see more options.
+        '';
+     };
     };
   };
 
   config = {
+
+    virtualbox.params = mkMerge [
+      (mapAttrs (name: mkDefault) {
+        acpi = "on";
+        vram = 32;
+        nictype1 = "virtio";
+        nic1 = "nat";
+        audiocontroller = "ac97";
+        audio = "alsa";
+        audioout = "on";
+        rtcuseutc = "on";
+        usb = "on";
+        usbehci = "on";
+        mouse = "usbtablet";
+      })
+      (mkIf (pkgs.stdenv.hostPlatform.system == "i686-linux") { pae = "on"; })
+    ];
+
     system.build.virtualBoxOVA = import ../../lib/make-disk-image.nix {
       name = cfg.vmDerivationName;
 
@@ -69,12 +100,8 @@ in {
           VBoxManage createvm --name "$vmName" --register \
             --ostype ${if pkgs.stdenv.hostPlatform.system == "x86_64-linux" then "Linux26_64" else "Linux26"}
           VBoxManage modifyvm "$vmName" \
-            --memory ${toString cfg.memorySize} --acpi on --vram 32 \
-            ${optionalString (pkgs.stdenv.hostPlatform.system == "i686-linux") "--pae on"} \
-            --nictype1 virtio --nic1 nat \
-            --audiocontroller ac97 --audio alsa --audioout on \
-            --rtcuseutc on \
-            --usb on --usbehci on --mouse usbtablet
+            --memory ${toString cfg.memorySize} \
+            ${lib.cli.toGNUCommandLineShell { } cfg.params}
           VBoxManage storagectl "$vmName" --name SATA --add sata --portcount 4 --bootable on --hostiocache on
           VBoxManage storageattach "$vmName" --storagectl SATA --port 0 --device 0 --type hdd \
             --medium disk.vmdk
@@ -99,6 +126,11 @@ in {
 
     boot.growPartition = true;
     boot.loader.grub.device = "/dev/sda";
+
+    swapDevices = [{
+      device = "/var/swap";
+      size = 2048;
+    }];
 
     virtualisation.virtualbox.guest.enable = true;
 

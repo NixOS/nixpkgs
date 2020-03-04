@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, bison, pam }:
 
 stdenv.mkDerivation rec {
-  name = "doas-${version}";
+  pname = "doas";
 
   version = "6.0";
 

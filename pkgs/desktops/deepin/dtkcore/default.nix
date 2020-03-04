@@ -1,21 +1,21 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, gsettings-qt, pythonPackages, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dtkcore";
-  version = "2.0.10";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "0dwpq6c38gaa95mgjnwj3vjz57n0cz6jfk950xi6s9ww2f4g6kq7";
+    sha256 = "0xdh6mmrv8yr6mjmlwj0fv037parkkwfwlaibcbrskwxqp9iri1y";
   };
 
   nativeBuildInputs = [
     pkgconfig
     qmake
     pythonPackages.wrapPython
+    deepin.setupHook
   ];
 
   buildInputs = [
@@ -23,29 +23,30 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # Only define QT_HOST_DATA if it is empty
-    sed '/QT_HOST_DATA=/a }' -i src/dtk_module.prf
-    sed '/QT_HOST_DATA=/i isEmpty(QT_HOST_DATA) {' -i src/dtk_module.prf
+    searchHardCodedPaths  # debugging
 
     # Fix shebang
     sed -i tools/script/dtk-translate.py -e "s,#!env,#!/usr/bin/env,"
   '';
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags QT_HOST_DATA=$out"
-  '';
+  qmakeFlags = [
+    "DTK_VERSION=${version}"
+    "LIB_INSTALL_DIR=${placeholder "out"}/lib"
+    "MKSPECS_INSTALL_DIR=${placeholder "out"}/mkspecs"
+  ];
 
   postFixup = ''
-    chmod +x $out/lib/dtk2/*.py
-    wrapPythonProgramsIn "$out/lib/dtk2" "$out $pythonPath"
+    chmod +x $out/lib/libdtk-${version}/DCore/bin/*.py
+    wrapPythonProgramsIn "$out/lib/libdtk-${version}/DCore/bin" "$out $pythonPath"
+    searchHardCodedPaths $out  # debugging
   '';
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
-    description = "Deepin tool kit core modules";
+    description = "Deepin tool kit core library";
     homepage = https://github.com/linuxdeepin/dtkcore;
     license = licenses.gpl3;
     platforms = platforms.linux;

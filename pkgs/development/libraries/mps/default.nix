@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, sqlite }:
 
 stdenv.mkDerivation rec {
-  name = "mps-${version}";
+  pname = "mps";
   version = "1.117.0";
 
   src = fetchurl {
@@ -13,9 +13,10 @@ stdenv.mkDerivation rec {
   buildInputs = [ sqlite ];
 
   # needed for 1.116.0 to build with gcc7
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-Wno-implicit-fallthrough"
     "-Wno-error=clobbered"
+    "-Wno-error=cast-function-type"
   ];
 
 

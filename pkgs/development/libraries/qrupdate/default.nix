@@ -28,9 +28,7 @@ stdenv.mkDerivation {
 
   buildFlags = [ "lib" "solib" ];
 
-  installTargets = if stdenv.isDarwin
-                   then ["install-staticlib" "install-shlib"]
-                   else "install";
+  installTargets = stdenv.lib.optionals stdenv.isDarwin [ "install-staticlib" "install-shlib" ];
 
   buildInputs = [ gfortran openblas ];
 

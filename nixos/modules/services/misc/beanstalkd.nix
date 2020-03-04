@@ -12,7 +12,7 @@ in
 
   options = {
     services.beanstalkd = {
-      enable = mkEnableOption "Enable the Beanstalk work queue.";
+      enable = mkEnableOption "the Beanstalk work queue";
 
       listen = {
         port = mkOption {
@@ -44,7 +44,8 @@ in
       serviceConfig = {
         DynamicUser = true;
         Restart = "always";
-        ExecStart = "${pkg}/bin/beanstalkd -l ${cfg.listen.address} -p ${toString cfg.listen.port}";
+        ExecStart = "${pkg}/bin/beanstalkd -l ${cfg.listen.address} -p ${toString cfg.listen.port} -b $STATE_DIRECTORY";
+        StateDirectory = "beanstalkd";
       };
     };
 

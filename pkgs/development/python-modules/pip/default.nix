@@ -1,25 +1,35 @@
 { lib
+, python
 , buildPythonPackage
-, fetchPypi
+, bootstrapped-pip
+, fetchFromGitHub
 , mock
 , scripttest
 , virtualenv
 , pretend
 , pytest
+, setuptools
+, wheel
 }:
 
 buildPythonPackage rec {
   pname = "pip";
-  version = "19.0.3";
+  version = "20.0.2";
+  format = "other";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "6e6f197a1abfb45118dbb878b5c859a0edbdd33fd250100bc015b67fded4b9f2";
+  src = fetchFromGitHub {
+    owner = "pypa";
+    repo = pname;
+    rev = version;
+    sha256 = "1jj0qa47d7pqn2r379p434hxk14ij2qgmr83x65w9ib9l8092fhg";
+    name = "${pname}-${version}-source";
   };
+
+  nativeBuildInputs = [ bootstrapped-pip ];
 
   # pip detects that we already have bootstrapped_pip "installed", so we need
   # to force it a little.
-  installFlags = [ "--ignore-installed" ];
+  pipInstallFlags = [ "--ignore-installed" ];
 
   checkInputs = [ mock scripttest virtualenv pretend pytest ];
   # Pip wants pytest, but tests are not distributed
@@ -27,7 +37,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "The PyPA recommended tool for installing Python packages";
-    license = lib.licenses.mit;
+    license = with lib.licenses; [ mit ];
     homepage = https://pip.pypa.io/;
     priority = 10;
   };

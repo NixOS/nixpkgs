@@ -1,23 +1,28 @@
 { stdenv, fetchFromGitHub
 , meson, ninja, pkgconfig, scdoc
-, wayland, wayland-protocols, libxkbcommon, cairo, gdk_pixbuf, pam
+, wayland, wayland-protocols, libxkbcommon, cairo, gdk-pixbuf, pam
 }:
 
 stdenv.mkDerivation rec {
-  name = "swaylock-${version}";
-  version = "1.3";
+  pname = "swaylock";
+  version = "1.5";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "swaylock";
     rev = version;
-    sha256 = "093nv1y9wyg48rfxhd36qdljjry57v1vkzrlc38mkf6zvsq8j7wb";
+    sha256 = "0r95p4w11dwm5ra614vddz83r8j7z6gd120z2vcchy7m9b0f15kf";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
-  buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk_pixbuf pam ];
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "version: '1.4'" "version: '${version}'"
+  '';
 
-  mesonFlags = [ "-Dswaylock-version=${version}"
+  nativeBuildInputs = [ meson ninja pkgconfig scdoc ];
+  buildInputs = [ wayland wayland-protocols libxkbcommon cairo gdk-pixbuf pam ];
+
+  mesonFlags = [
     "-Dpam=enabled" "-Dgdk-pixbuf=enabled" "-Dman-pages=enabled"
   ];
 

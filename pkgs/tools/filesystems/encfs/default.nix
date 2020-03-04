@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "encfs-${version}";
+  pname = "encfs";
   version = "1.9.5";
 
   src = fetchFromGitHub {

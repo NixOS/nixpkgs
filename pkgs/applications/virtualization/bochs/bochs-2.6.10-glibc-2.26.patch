@@ -1,0 +1,13 @@
+diff -Naur bochs-2.6.10.orig/iodev/network/slirp/slirp.h bochs-2.6.10.mod/iodev/network/slirp/slirp.h
+--- bochs-2.6.10.orig/iodev/network/slirp/slirp.h	2019-11-02 16:30:39.843938000 -0300
++++ bochs-2.6.10.mod/iodev/network/slirp/slirp.h	2019-12-29 12:55:49.541630697 -0300
+@@ -44,8 +44,8 @@
+ #endif
+ 
+ #include <sys/types.h>
+-#if defined(__OpenBSD__) || defined(__linux__)
+ #include <stdint.h>
++#if defined(__OpenBSD__) || defined(__linux__)
+ #include <sys/wait.h>
+ #endif
+ #ifdef HAVE_SYS_BITYPES_H

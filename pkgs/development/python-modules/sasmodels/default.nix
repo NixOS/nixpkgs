@@ -4,13 +4,13 @@
 
 buildPythonPackage rec {
   pname = "sasmodels";
-  version = "0.99";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "SasView";
     repo = "sasmodels";
     rev = "v${version}";
-    sha256 = "1lcvn42h29i0mg4i75xn0dbk711q9ycyhm3h95skqy8i61qmjrx6";
+    sha256 = "0k4334nxf1n6gwb9m57sqcchmlssglfd116mpl72glmmdc451d5j";
   };
 
   buildInputs = [ opencl-headers ];

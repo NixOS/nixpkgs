@@ -34,11 +34,12 @@ stdenv.mkDerivation {
     # source: https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
     ./linux-4.12.patch
     ./linux-4.15.patch
+    ./linux-5.1.patch
     ./null-pointer-fix.patch
     ./gcc.patch
   ];
 
-  makeFlags = "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}";
+  makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
   unpackPhase = ''
     sourceRoot=broadcom-sta

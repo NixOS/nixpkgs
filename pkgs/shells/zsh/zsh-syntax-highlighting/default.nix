@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.6.0";
-  name = "zsh-syntax-highlighting-${version}";
+  pname = "zsh-syntax-highlighting";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zsh ];
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   meta = with stdenv.lib; {
     description = "Fish shell like syntax highlighting for Zsh";

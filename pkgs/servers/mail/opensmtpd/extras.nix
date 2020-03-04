@@ -1,5 +1,5 @@
 { stdenv, fetchurl, openssl, libevent, libasr,
-  python2, pkgconfig, lua5, perl, mysql, postgresql, sqlite, hiredis,
+  python2, pkgconfig, lua5, perl, libmysqlclient, postgresql, sqlite, hiredis,
   enablePython ? true,
   enableLua ? true,
   enablePerl ? true,
@@ -10,17 +10,17 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensmtpd-extras-${version}";
+  pname = "opensmtpd-extras";
   version = "6.4.0";
 
   src = fetchurl {
-    url = "https://www.opensmtpd.org/archives/${name}.tar.gz";
+    url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
     sha256 = "09k25l7zy5ch3fk6qphni2h0rxdp8wacmfag1whi608dgimrhrnb";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl libevent
-    libasr python2 lua5 perl mysql.connector-c postgresql sqlite hiredis ];
+    libasr python2 lua5 perl libmysqlclient postgresql sqlite hiredis ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -48,39 +48,38 @@ stdenv.mkDerivation rec {
     "--with-scheduler-ram"
     "--with-scheduler-stub"
 
-  ] ++ stdenv.lib.optional enablePython [
+  ] ++ stdenv.lib.optionals enablePython [
     "--with-python=${python2}"
     "--with-filter-python"
     "--with-queue-python"
     "--with-table-python"
     "--with-scheduler-python"
 
-  ] ++ stdenv.lib.optional enableLua [
+  ] ++ stdenv.lib.optionals enableLua [
     "--with-lua=${pkgconfig}"
     "--with-filter-lua"
 
-  ] ++ stdenv.lib.optional enablePerl [
+  ] ++ stdenv.lib.optionals enablePerl [
     "--with-perl=${perl}"
     "--with-filter-perl"
 
-  ] ++ stdenv.lib.optional enableMysql [
+  ] ++ stdenv.lib.optionals enableMysql [
     "--with-table-mysql"
 
-  ] ++ stdenv.lib.optional enablePostgres [
+  ] ++ stdenv.lib.optionals enablePostgres [
     "--with-table-postgres"
 
-  ] ++ stdenv.lib.optional enableSqlite [
+  ] ++ stdenv.lib.optionals enableSqlite [
     "--with-table-sqlite"
 
-  ] ++ stdenv.lib.optional enableRedis [
+  ] ++ stdenv.lib.optionals enableRedis [
     "--with-table-redis"
   ];
 
-  NIX_CFLAGS_COMPILE =
-    stdenv.lib.optional enableRedis
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString enableRedis
       "-I${hiredis}/include/hiredis -lhiredis"
-    ++ stdenv.lib.optional enableMysql
-      "-L${mysql.connector-c}/lib/mysql";
+    + stdenv.lib.optionalString enableMysql
+      " -L${libmysqlclient}/lib/mysql";
 
   meta = with stdenv.lib; {
     homepage = https://www.opensmtpd.org/;

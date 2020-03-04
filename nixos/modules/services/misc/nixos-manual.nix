@@ -52,9 +52,9 @@ in
       };
     })
     (mkIf (cfg.showManual && cfgd.enable && cfgd.nixos.enable) {
-      boot.extraTTYs = [ "tty${toString cfg.ttyNumber}" ];
+      console.extraTTYs = [ "tty${toString cfg.ttyNumber}" ];
 
-      systemd.services."nixos-manual" = {
+      systemd.services.nixos-manual = {
         description = "NixOS Manual";
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {

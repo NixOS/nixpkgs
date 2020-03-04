@@ -5,7 +5,8 @@ let
 in
 
 stdenv.mkDerivation {
-  name = "teyjus-${version}";
+  pname = "teyjus";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/teyjus/teyjus/archive/v${version}.tar.gz";

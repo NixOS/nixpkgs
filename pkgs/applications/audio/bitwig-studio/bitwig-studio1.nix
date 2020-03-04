@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk_pixbuf
+{ stdenv, fetchurl, alsaLib, bzip2, cairo, dpkg, freetype, gdk-pixbuf
 , wrapGAppsHook, gtk2, gtk3, harfbuzz, jdk, lib, xorg
 , libbsd, libjack2, libpng, ffmpeg
 , libxkbcommon
@@ -6,7 +6,7 @@
 , xdg_utils, zenity, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "bitwig-studio-${version}";
+  pname = "bitwig-studio";
   version = "1.3.16";
 
   src = fetchurl {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
 
   buildInputs = with xorg; [
-    alsaLib bzip2.out cairo freetype gdk_pixbuf gtk2 gtk3 harfbuzz libX11 libXau
+    alsaLib bzip2.out cairo freetype gdk-pixbuf gtk2 gtk3 harfbuzz libX11 libXau
     libXcursor libXdmcp libXext libXfixes libXrender libbsd libjack2 libpng libxcb
     libxkbfile pixman xcbutil xcbutilwm zlib
   ];

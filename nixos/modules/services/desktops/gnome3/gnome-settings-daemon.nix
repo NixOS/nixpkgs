@@ -12,20 +12,19 @@ in
 
 {
 
+  imports = [
+    (mkRemovedOptionModule
+      ["services" "gnome3" "gnome-settings-daemon" "package"]
+      "")
+  ];
+
   ###### interface
 
   options = {
 
     services.gnome3.gnome-settings-daemon = {
 
-      enable = mkEnableOption "GNOME Settings Daemon.";
-
-      # There are many forks of gnome-settings-daemon
-      package = mkOption {
-        type = types.package;
-        default = pkgs.gnome3.gnome-settings-daemon;
-        description = "Which gnome-settings-daemon package to use.";
-      };
+      enable = mkEnableOption "GNOME Settings Daemon";
 
     };
 
@@ -36,9 +35,39 @@ in
 
   config = mkIf cfg.enable {
 
-    environment.systemPackages = [ cfg.package ];
+    environment.systemPackages = [
+      pkgs.gnome3.gnome-settings-daemon
+    ];
 
-    services.udev.packages = [ cfg.package ];
+    services.udev.packages = [
+      pkgs.gnome3.gnome-settings-daemon
+    ];
+
+    systemd.packages = [
+      pkgs.gnome3.gnome-settings-daemon
+    ];
+
+    systemd.user.targets."gnome-session-initialized".wants = [
+      "gsd-color.target"
+      "gsd-datetime.target"
+      "gsd-keyboard.target"
+      "gsd-media-keys.target"
+      "gsd-print-notifications.target"
+      "gsd-rfkill.target"
+      "gsd-screensaver-proxy.target"
+      "gsd-sharing.target"
+      "gsd-smartcard.target"
+      "gsd-sound.target"
+      "gsd-wacom.target"
+      "gsd-wwan.target"
+      "gsd-a11y-settings.target"
+      "gsd-housekeeping.target"
+      "gsd-power.target"
+    ];
+
+    systemd.user.targets."gnome-session-x11-services".wants = [
+      "gsd-xsettings.target"
+    ];
 
   };
 

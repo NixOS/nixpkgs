@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "0.0.19";
-  name = "qucs-${version}";
+  pname = "qucs";
 
   src = fetchFromGitHub {
     owner = "Qucs";

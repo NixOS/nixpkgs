@@ -72,19 +72,16 @@ in
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.configDir}' - minio minio - -"
+      "d '${cfg.dataDir}' - minio minio - -"
+    ];
+
     systemd.services.minio = {
       description = "Minio Object Storage";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      preStart = ''
-        # Make sure directories exist with correct owner
-        mkdir -p ${cfg.configDir}
-        chown -R minio:minio ${cfg.configDir}
-        mkdir -p ${cfg.dataDir}
-        chown minio:minio ${cfg.dataDir}
-      '';
       serviceConfig = {
-        PermissionsStartOnly = true;
         ExecStart = "${cfg.package}/bin/minio server --json --address ${cfg.listenAddress} --config-dir=${cfg.configDir} ${cfg.dataDir}";
         Type = "simple";
         User = "minio";

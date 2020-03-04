@@ -3,23 +3,23 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  name = "hyperfine-${version}";
-  version = "1.4.0";
+  pname = "hyperfine";
+  version = "1.9.0";
 
   src = fetchFromGitHub {
     owner  = "sharkdp";
-    repo   = "hyperfine";
+    repo   = pname;
     rev    = "refs/tags/v${version}";
-    sha256 = "1mn5nv3zljj2wz40imf62gknv84f7igslsf59gg1qvhgvgsd98sp";
+    sha256 = "0jx2lqhayp14c51dfvgmqrmmadyvxf0p4dsn770ndqpzv66rh6zb";
   };
 
-  cargoSha256 = "1kyx1fhz8l5m8dhwd7j3hic86xx71216775m9bslmm2z4csl7r1s";
+  cargoSha256 = "0n0hizldhr026mrzzz1wlw4g0b1z6ybxarybq3fzchs722iqpsis";
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
   meta = with stdenv.lib; {
     description = "Command-line benchmarking tool";
-    homepage    = https://github.com/sharkdp/hyperfine;
+    homepage    = "https://github.com/sharkdp/hyperfine";
     license     = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.thoughtpolice ];
     platforms   = platforms.all;

@@ -8,7 +8,7 @@
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, stdenv, fetchurl, cmake
+, stdenv, fetchurl, fetchpatch, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
@@ -30,18 +30,18 @@
 , libXpm
 
 # For enableQT, enableXM, enableOpenGLX11, enableRaytracerX11.
-, libGLU_combined
+, libGLU, libGL
 , xlibsWrapper
 , libXmu
 }:
 
 stdenv.mkDerivation rec {
-  version = "10.4.1";
-  name = "geant4-${version}";
+  version = "10.6.1";
+  pname = "geant4";
 
   src = fetchurl{
-    url = "http://cern.ch/geant4-data/releases/geant4.10.04.p01.tar.gz";
-    sha256 = "a3eb13e4f1217737b842d3869dc5b1fb978f761113e74bd4eaf6017307d234dd";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p01.tar.gz";
+    sha256 = "0ssxg7dd7vxljb3fdyb0llg7gsxack21qjfsb3n23k107a19yibk";
   };
 
   cmakeFlags = [
@@ -64,11 +64,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs =  [ cmake ];
-  buildInputs = [ clhep expat zlib libGLU_combined xlibsWrapper libXmu ]
+
+  buildInputs = [ libGLU xlibsWrapper libXmu ]
+    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
+
+  propagatedBuildInputs = [ clhep expat zlib libGL ]
     ++ stdenv.lib.optionals enableGDML [ xercesc ]
     ++ stdenv.lib.optionals enableXM [ motif ]
-    ++ stdenv.lib.optionals enableQT [ qtbase ]
-    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt ];
+    ++ stdenv.lib.optionals enableQT [ qtbase ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.
@@ -78,7 +81,10 @@ stdenv.mkDerivation rec {
   setupHook = ./geant4-hook.sh;
 
   passthru = {
-    data = import ./datasets.nix { inherit stdenv fetchurl; };
+    data = import ./datasets.nix {
+          inherit stdenv fetchurl;
+          geant_version = version;
+      };
   };
 
   # Set the myriad of envars required by Geant4 if we use a nix-shell.
@@ -95,7 +101,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.geant4.org;
     license = licenses.g4sl;
-    maintainers = with maintainers; [ tmplt ];
+    maintainers = with maintainers; [ tmplt omnipotententity ];
     platforms = platforms.linux;
   };
 }

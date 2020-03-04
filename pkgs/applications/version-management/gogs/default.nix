@@ -7,14 +7,14 @@
 with stdenv.lib;
 
 buildGoPackage rec {
-  name = "gogs-${version}";
-  version = "0.11.86";
+  pname = "gogs";
+  version = "0.11.91";
 
   src = fetchFromGitHub {
     owner = "gogs";
     repo = "gogs";
     rev = "v${version}";
-    sha256 = "0l8mwy0cyy3cdxqinf8ydb35kf7c8pj09xrhpr7rr7lldnvczabw";
+    sha256 = "1yfimgjg9n773kdml17119539w9736mi66bivpv5yp3cj2hj9mlj";
   };
 
   patches = [ ./static-root-path.patch ];
@@ -27,8 +27,11 @@ buildGoPackage rec {
   nativeBuildInputs = [ makeWrapper ]
     ++ optional pamSupport pam;
 
-  buildFlags = optional sqliteSupport "-tags sqlite"
-    ++ optional pamSupport "-tags pam";
+  buildFlags = [ "-tags" ];
+
+  buildFlagsArray =
+    (  optional sqliteSupport "sqlite"
+    ++ optional pamSupport "pam");
 
   outputs = [ "bin" "out" "data" ];
 

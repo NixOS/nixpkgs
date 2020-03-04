@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl
+{ stdenv, fetchFromGitHub, fetchurl
 , cmake, pkgconfig, dbus, makeWrapper
 , gtest
 , boost
@@ -45,13 +45,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "anbox";
-  version = "unstable-2019-03-07";
+  version = "unstable-2019-11-15";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "d521e282965462e82465045ab95d4ae1c4619685";
-    sha256 = "1wfx4bsyxvrjl16dq5pqgial8rnnsnxzbak2ap0waddz847czxwz";
+    rev = "0a49ae08f76de7f886a3dbed4422711c2fa39d10";
+    sha256 = "09l56nv9cnyhykclfmvam6bkcxlamwbql6nrz9n022553w92hkjf";
   };
 
   nativeBuildInputs = [
@@ -63,6 +63,8 @@ stdenv.mkDerivation rec {
     SDL2 SDL2_image protobuf protobufc properties-cpp lxc python
     libGL
   ];
+
+  NIX_CFLAGS_COMPILE = "-Wno-error=missing-field-initializers";
 
   patchPhase = ''
     patchShebangs scripts

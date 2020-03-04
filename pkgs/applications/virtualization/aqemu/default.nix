@@ -2,7 +2,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "aqemu-${version}";
+  pname = "aqemu";
   version = "0.9.2";
 
   src = fetchFromGitHub {

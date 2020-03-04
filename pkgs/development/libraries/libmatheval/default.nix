@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   version = "1.1.11";
-  name = "libmatheval-${version}";
+  pname = "libmatheval";
 
   nativeBuildInputs = [ pkgconfig autoconf flex ];
   buildInputs = [ guile ];
 
   src = fetchurl {
-    url = "https://ftp.gnu.org/gnu/libmatheval/${name}.tar.gz";
+    url = "https://ftp.gnu.org/gnu/libmatheval/${pname}-${version}.tar.gz";
     sha256 = "474852d6715ddc3b6969e28de5e1a5fbaff9e8ece6aebb9dc1cc63e9e88e89ab";
   };
 

@@ -1,19 +1,16 @@
-{ lib, bundlerEnv, ruby }:
-
-# Maintainer notes for updating
-# 1. increment version number in Gemfile
-# 2. run $ nix-shell --command "bundler install && bundix"
-#    in the travis directory in nixpkgs
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv {
   inherit ruby;
   pname = "travis";
   gemdir = ./.;
 
+  passthru.updateScript = bundlerUpdateScript "travis";
+
   meta = with lib; {
     description = "CLI and Ruby client library for Travis CI";
     homepage    = https://github.com/travis-ci/travis.rb;
     license     = licenses.mit;
-    maintainers = with maintainers; [ zimbatm ];
+    maintainers = with maintainers; [ zimbatm nicknovitski ];
   };
 }

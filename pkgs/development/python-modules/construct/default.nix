@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Powerful declarative parser (and builder) for binary data";
-    homepage = http://construct.readthedocs.org/;
+    homepage = https://construct.readthedocs.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ bjornfor ];
   };

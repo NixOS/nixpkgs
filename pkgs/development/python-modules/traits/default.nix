@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "traits";
-  version = "5.0.0";
+  version = "5.2.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8369117036fbbe00dbd40e1a01c8775b52bdbfa11db5788168e7c8c56663bac0";
+    sha256 = "1b71vp0l4523428aw098xw6rmkl8vlcy2aag40akijbyz1nnk541";
   };
 
   # Use pytest because its easier to discover tests

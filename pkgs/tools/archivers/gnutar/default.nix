@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, acl }:
 
 stdenv.mkDerivation rec {
-  name = "gnutar-${version}";
+  pname = "gnutar";
   version = "1.32";
 
   src = fetchurl {
@@ -13,6 +13,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optionals stdenv.isDarwin [
     "gt_cv_func_CFPreferencesCopyAppValue=no"
     "gt_cv_func_CFLocaleCopyCurrent=no"
+    "gt_cv_func_CFLocaleCopyPreferredLanguages=no"
   ];
 
   # gnutar tries to call into gettext between `fork` and `exec`,

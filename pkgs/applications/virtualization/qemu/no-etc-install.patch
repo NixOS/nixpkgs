@@ -1,10 +1,12 @@
+diff --git a/Makefile b/Makefile
 --- a/Makefile
 +++ b/Makefile
-@@ -597,7 +597,7 @@
+@@ -867,7 +867,7 @@ install-includedir:
+ 	$(INSTALL_DIR) "$(DESTDIR)$(includedir)"
  
- 
--install: all $(if $(BUILD_DOCS),install-doc) install-datadir install-localstatedir
-+install: all $(if $(BUILD_DOCS),install-doc) install-datadir
+ install: all $(if $(BUILD_DOCS),install-doc) \
+-	install-datadir install-localstatedir install-includedir \
++	install-datadir install-includedir \
+ 	$(if $(INSTALL_BLOBS),$(edk2-decompressed)) \
+ 	recurse-install
  ifneq ($(TOOLS),)
-	$(call install-prog,$(subst qemu-ga,qemu-ga$(EXESUF),$(TOOLS)),$(DESTDIR)$(bindir))
- endif

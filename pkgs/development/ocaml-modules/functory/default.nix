@@ -23,7 +23,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ ocaml findlib ];
 
-  installTargets = "ocamlfind-install";
+  installTargets = [ "ocamlfind-install" ];
 
   createFindlibDestdir = true;
 

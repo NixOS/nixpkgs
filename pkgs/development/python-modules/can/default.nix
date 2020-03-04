@@ -1,7 +1,9 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , pythonOlder
+, isPy27
+, aenum
 , wrapt
 , typing
 , pyserial
@@ -14,20 +16,15 @@
 
 buildPythonPackage rec {
   pname = "python-can";
-  version = "3.1.0";
+  version = "3.3.2";
 
-  # PyPI tarball is missing some tests and is missing __init__.py in test
-  # directory causing the tests to fail. See:
-  # https://github.com/hardbyte/python-can/issues/518
-  src = fetchFromGitHub {
-    repo = pname;
-    owner = "hardbyte";
-    rev = "v${version}";
-    sha256 = "01lfsh7drm4qvv909x9i0vnhskdh27mcb5xa86sv9m3zfpq8cjis";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "5fefb5c1e7e7f07faefc02c6eac79f9b58376f007048a04d8e7f325d48ec6b2e";
   };
 
-  propagatedBuildInputs = [ wrapt pyserial ] ++ lib.optional (pythonOlder "3.5") typing;
-  checkInputs = [ nose mock pytest pytest-timeout hypothesis future ];
+  propagatedBuildInputs = [ wrapt pyserial aenum ] ++ lib.optional (pythonOlder "3.5") typing;
+  checkInputs = [ nose mock pytest hypothesis future ];
 
   # Add the scripts to PATH
   checkPhase = ''

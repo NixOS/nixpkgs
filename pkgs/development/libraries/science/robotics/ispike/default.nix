@@ -2,11 +2,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ispike-${version}";
+  pname = "ispike";
   version = "2.1.1";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ispike/${name}.tar.gz";
+    url = "mirror://sourceforge/ispike/${pname}-${version}.tar.gz";
     sha256 = "0khrxp43bi5kisr8j4lp9fl4r5marzf7b4inys62ac108sfb28lp";
   };
 

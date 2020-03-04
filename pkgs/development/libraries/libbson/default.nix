@@ -1,7 +1,7 @@
 { fetchFromGitHub, perl, stdenv, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "libbson-${version}";
+  pname = "libbson";
   version = "1.9.5";
 
   src = fetchFromGitHub {

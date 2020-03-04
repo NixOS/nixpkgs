@@ -1,12 +1,12 @@
 { stdenv, fetchurl, getopt, makeWrapper, utillinux }:
 
 stdenv.mkDerivation rec {
-  name = "libseccomp-${version}";
-  version = "2.4.0";
+  pname = "libseccomp";
+  version = "2.4.2";
 
   src = fetchurl {
     url = "https://github.com/seccomp/libseccomp/releases/download/v${version}/libseccomp-${version}.tar.gz";
-    sha256 = "0paj1szszpf8plykrd66jqg1x3kmqs395rbjskahld2bnplcfx1f";
+    sha256 = "0nsq81acrbkdr8zairxbwa33bj2a6126npp76b4srjl472sjfkxm";
   };
 
   outputs = [ "out" "lib" "dev" "man" ];
@@ -28,7 +28,11 @@ stdenv.mkDerivation rec {
     homepage    = "https://github.com/seccomp/libseccomp";
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
-    badPlatforms = platforms.riscv;
+    badPlatforms = [
+      "alpha-linux"
+      "riscv64-linux" "riscv32-linux"
+      "sparc-linux" "sparc64-linux"
+    ];
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

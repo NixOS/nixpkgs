@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "Kajiki";
-  version = "0.7.2";
+  version = "0.8.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4e7aaf838f298958cf171f220e1d0dc4220338c76c97746a46d0cc389f90b10a";
+    sha256 = "bbec46b19285d42769d7c4f5a8a0195b72a62b54cd360a26a8875319d58efef6";
   };
 
   propagatedBuildInputs = [ Babel pytz nine ];

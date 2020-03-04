@@ -21,7 +21,7 @@
   <command>systemd</command>. Without any arguments, it shows the status of
   active units:
 <screen>
-$ systemctl
+<prompt>$ </prompt>systemctl
 -.mount          loaded active mounted   /
 swapfile.swap    loaded active active    /swapfile
 sshd.service     loaded active running   SSH Daemon
@@ -33,7 +33,7 @@ graphical.target loaded active active    Graphical Interface
   You can ask for detailed status information about a unit, for instance, the
   PostgreSQL database service:
 <screen>
-$ systemctl status postgresql.service
+<prompt>$ </prompt>systemctl status postgresql.service
 postgresql.service - PostgreSQL Server
           Loaded: loaded (/nix/store/pn3q73mvh75gsrl8w7fdlfk3fq5qm5mw-unit/postgresql.service)
           Active: active (running) since Mon, 2013-01-07 15:55:57 CET; 9h ago

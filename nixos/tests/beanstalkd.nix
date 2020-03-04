@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 
 let
   pythonEnv = pkgs.python3.withPackages (p: [p.beanstalkc]);
@@ -34,12 +34,16 @@ in
     };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $machine->waitForUnit('beanstalkd.service');
+    machine.wait_for_unit("beanstalkd.service")
 
-    $machine->succeed("${produce}");
-    $machine->succeed("${consume}") eq "this is a job\n" or die;
-    $machine->succeed("${consume}") eq "this is another job\n" or die;
+    machine.succeed("${produce}")
+    assert "this is a job\n" == machine.succeed(
+        "${consume}"
+    )
+    assert "this is another job\n" == machine.succeed(
+        "${consume}"
+    )
   '';
 })

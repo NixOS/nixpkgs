@@ -1,27 +1,26 @@
-{ stdenv, fetchurl, buildOcaml, ocaml, calendar, csv, re }:
+{ lib, fetchFromGitHub, buildDunePackage
+, calendar, csv, hex, re
+}:
 
-if !stdenv.lib.versionAtLeast ocaml.version "4"
-then throw "pgocaml is not available for OCaml ${ocaml.version}"
-else
-
-buildOcaml {
-  name = "pgocaml";
-  version = "2.3";
-  src = fetchurl {
-    url = https://github.com/darioteixeira/pgocaml/archive/v2.3.tar.gz;
-    sha256 = "18lymxlvcf4nwxawkidq3pilsp5rhl0l8ifq6pjk3ssjlx9w53pg";
+buildDunePackage rec {
+  pname = "pgocaml";
+  version = "4.0";
+  src = fetchFromGitHub {
+    owner = "darioteixeira";
+    repo = "pgocaml";
+    rev = "v${version}";
+    sha256 = "1s8c5prr7jb9k76bz990m836czm6k8rv5bvp6s2zg9ra0w19w90j";
   };
 
-  buildInputs = [ ];
-  propagatedBuildInputs = [ calendar csv re ];
+  minimumOCamlVersion = "4.05";
 
-  configureFlags = [ "--enable-p4" ];
+  preConfigure = "patchShebangs src/genconfig.sh";
 
-  createFindlibDestdir = true;
+  propagatedBuildInputs = [ calendar csv hex re ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "An interface to PostgreSQL databases for OCaml applications";
-    homepage = http://pgocaml.forge.ocamlcore.org/;
+    inherit (src.meta) homepage;
     license = licenses.lgpl2;
     maintainers = with maintainers; [ vbgl ];
   };

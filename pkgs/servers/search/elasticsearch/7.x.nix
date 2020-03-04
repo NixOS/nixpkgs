@@ -4,7 +4,7 @@
 , fetchurl
 , makeWrapper
 , jre_headless
-, utillinux
+, utillinux, gnugrep, coreutils
 , autoPatchelfHook
 , zlib
 }:
@@ -17,12 +17,12 @@ let
   shas =
     if enableUnfree
     then {
-      "x86_64-linux"  = "1fi57xqwgxx0ivjyfvaybzz2k457qw59fn9qr26d86lnkigfxpk8";
-      "x86_64-darwin" = "06hj96d4vl9q24dfx8ffydfs7qd440ys29654jgqp8sp7js7hjxp";
+      x86_64-linux  = "1s27bzx5y8vcd95qrw6av3fhyxb45219x9ahwaxa2cygmbpighrp";
+      x86_64-darwin = "1ia3byir3i5qaarmcaysrg3dhnxjmxnf0m0kzyf61g9aiy87gb7q";
     }
     else {
-      "x86_64-linux"  = "1jrcdxm1swf8ahkv3h7kyzzhdq9nwwfhimpflzdq2d831fx525y8";
-      "x86_64-darwin" = "119ym2d5fqwba3aq2izh5qj8vxawb7hf183cgg00s1sm1mm8lviv";
+      x86_64-linux  = "005i7d7ag10qkn7bkx7md50iihvcvc84hay2j94wvsm7yghhbmi3";
+      x86_64-darwin = "01f81720rbzdqc0g1xymhz2lflldfbnb0rh7mpki99pss28vj9sh";
     };
 in
 stdenv.mkDerivation (rec {
@@ -31,7 +31,7 @@ stdenv.mkDerivation (rec {
 
   src = fetchurl {
     url = "https://artifacts.elastic.co/downloads/elasticsearch/${name}-${plat}-${arch}.tar.gz";
-    sha256 = shas."${stdenv.hostPlatform.system}" or (throw "Unknown architecture");
+    sha256 = shas.${stdenv.hostPlatform.system} or (throw "Unknown architecture");
   };
 
   patches = [ ./es-home-6.x.patch ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation (rec {
     chmod +x $out/bin/*
 
     wrapProgram $out/bin/elasticsearch \
-      --prefix PATH : "${utillinux}/bin/" \
+      --prefix PATH : "${makeBinPath [ utillinux coreutils gnugrep ]}" \
       --set JAVA_HOME "${jre_headless}"
 
     wrapProgram $out/bin/elasticsearch-plugin --set JAVA_HOME "${jre_headless}"

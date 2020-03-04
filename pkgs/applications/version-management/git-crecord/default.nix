@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pythonPackages }:
 
 pythonPackages.buildPythonApplication rec {
-  name = "git-crecord-${version}";
+  pname = "git-crecord";
   version = "20161216.0";
 
   src = fetchFromGitHub {

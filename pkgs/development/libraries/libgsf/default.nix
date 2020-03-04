@@ -1,21 +1,21 @@
 { fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, python, perl, gdk_pixbuf, libiconv, libintl, gnome3 }:
+, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
-  version = "1.14.45";
+  version = "1.14.46";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1yk91ccf7z9b8d8ac6vip3gc5c0pkwgabqy6l0pj0kf43l7jrg2w";
+    sha256 = "0bddmlzg719sjhlbzqlhb7chwk93qc7g68m2r9r8xz112jdradpa";
   };
 
   nativeBuildInputs = [ pkgconfig intltool libintl ];
 
-  buildInputs = [ gettext bzip2 zlib python ];
+  buildInputs = [ gettext bzip2 zlib ];
   checkInputs = [ perl ];
 
-  propagatedBuildInputs = [ libxml2 glib gdk_pixbuf libiconv ];
+  propagatedBuildInputs = [ libxml2 glib gdk-pixbuf libiconv ];
 
   outputs = [ "out" "dev" ];
 

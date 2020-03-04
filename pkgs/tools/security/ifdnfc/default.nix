@@ -4,8 +4,8 @@
 , libnfc
 }:
 
-stdenv.mkDerivation rec {
-  name = "ifdnfc-${version}";
+stdenv.mkDerivation {
+  pname = "ifdnfc";
   version = "2016-03-01";
 
   src = fetchFromGitHub {

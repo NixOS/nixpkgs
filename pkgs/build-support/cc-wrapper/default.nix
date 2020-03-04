@@ -35,8 +35,8 @@ let
   targetPrefix = stdenv.lib.optionalString (targetPlatform != hostPlatform)
                                            (targetPlatform.config + "-");
 
-  ccVersion = (builtins.parseDrvName cc.name).version;
-  ccName = (builtins.parseDrvName cc.name).name;
+  ccVersion = stdenv.lib.getVersion cc;
+  ccName = stdenv.lib.removePrefix targetPrefix (stdenv.lib.getName cc);
 
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
@@ -59,9 +59,28 @@ let
   infixSalt = replaceStrings ["-" "."] ["_" "_"] targetPlatform.config;
 
   expand-response-params =
-    if buildPackages.stdenv.cc or null != null && buildPackages.stdenv.cc != "/dev/null"
+    if buildPackages.stdenv.hasCC && buildPackages.stdenv.cc != "/dev/null"
     then import ../expand-response-params { inherit (buildPackages) stdenv; }
     else "";
+
+  # older compilers (for example bootstrap's GCC 5) fail with -march=too-modern-cpu
+  isGccArchSupported = arch:
+    if cc.isGNU or false then
+      { skylake        = versionAtLeast ccVersion "6.0";
+        skylake-avx512 = versionAtLeast ccVersion "6.0";
+        cannonlake     = versionAtLeast ccVersion "8.0";
+        icelake-client = versionAtLeast ccVersion "8.0";
+        icelake-server = versionAtLeast ccVersion "8.0";
+        knm            = versionAtLeast ccVersion "8.0";
+      }.${arch} or true
+    else if cc.isClang or false then
+      { cannonlake     = versionAtLeast ccVersion "5.0";
+        icelake-client = versionAtLeast ccVersion "7.0";
+        icelake-server = versionAtLeast ccVersion "7.0";
+        knm            = versionAtLeast ccVersion "7.0";
+      }.${arch} or true
+    else
+      false;
 
 in
 
@@ -74,9 +93,9 @@ assert nativeLibc == bintools.nativeLibc;
 assert nativePrefix == bintools.nativePrefix;
 
 stdenv.mkDerivation {
-  name = targetPrefix
-    + (if name != "" then name else stdenv.lib.removePrefix targetPrefix "${ccName}-wrapper")
-    + (stdenv.lib.optionalString (cc != null && ccVersion != "") "-${ccVersion}");
+  pname = targetPrefix
+    + (if name != "" then name else "${ccName}-wrapper");
+  version = if cc == null then null else ccVersion;
 
   preferLocalBuild = true;
 
@@ -113,10 +132,10 @@ stdenv.mkDerivation {
     src=$PWD
   '';
 
+  wrapper = ./cc-wrapper.sh;
+
   installPhase =
     ''
-      set -u
-
       mkdir -p $out/bin $out/nix-support
 
       wrap() {
@@ -154,42 +173,42 @@ stdenv.mkDerivation {
       export default_cxx_stdlib_compile="${default_cxx_stdlib_compile}"
 
       if [ -e $ccPath/${targetPrefix}gcc ]; then
-        wrap ${targetPrefix}gcc ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcc
+        wrap ${targetPrefix}gcc $wrapper $ccPath/${targetPrefix}gcc
         ln -s ${targetPrefix}gcc $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}gcc
         export named_cxx=${targetPrefix}g++
       elif [ -e $ccPath/clang ]; then
-        wrap ${targetPrefix}clang ${./cc-wrapper.sh} $ccPath/clang
+        wrap ${targetPrefix}clang $wrapper $ccPath/clang
         ln -s ${targetPrefix}clang $out/bin/${targetPrefix}cc
         export named_cc=${targetPrefix}clang
         export named_cxx=${targetPrefix}clang++
       fi
 
       if [ -e $ccPath/${targetPrefix}g++ ]; then
-        wrap ${targetPrefix}g++ ${./cc-wrapper.sh} $ccPath/${targetPrefix}g++
+        wrap ${targetPrefix}g++ $wrapper $ccPath/${targetPrefix}g++
         ln -s ${targetPrefix}g++ $out/bin/${targetPrefix}c++
       elif [ -e $ccPath/clang++ ]; then
-        wrap ${targetPrefix}clang++ ${./cc-wrapper.sh} $ccPath/clang++
+        wrap ${targetPrefix}clang++ $wrapper $ccPath/clang++
         ln -s ${targetPrefix}clang++ $out/bin/${targetPrefix}c++
       fi
 
       if [ -e $ccPath/cpp ]; then
-        wrap ${targetPrefix}cpp ${./cc-wrapper.sh} $ccPath/cpp
+        wrap ${targetPrefix}cpp $wrapper $ccPath/cpp
       fi
     ''
 
     + optionalString cc.langFortran or false ''
-      wrap ${targetPrefix}gfortran ${./cc-wrapper.sh} $ccPath/${targetPrefix}gfortran
+      wrap ${targetPrefix}gfortran $wrapper $ccPath/${targetPrefix}gfortran
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}g77
       ln -sv ${targetPrefix}gfortran $out/bin/${targetPrefix}f77
     ''
 
     + optionalString cc.langJava or false ''
-      wrap ${targetPrefix}gcj ${./cc-wrapper.sh} $ccPath/${targetPrefix}gcj
+      wrap ${targetPrefix}gcj $wrapper $ccPath/${targetPrefix}gcj
     ''
 
     + optionalString cc.langGo or false ''
-      wrap ${targetPrefix}gccgo ${./cc-wrapper.sh} $ccPath/${targetPrefix}gccgo
+      wrap ${targetPrefix}gccgo $wrapper $ccPath/${targetPrefix}gccgo
     '';
 
   strictDeps = true;
@@ -205,8 +224,6 @@ stdenv.mkDerivation {
 
   postFixup =
     ''
-      set -u
-
       # Backwards compatability for packages expecting this file, e.g. with
       # `$NIX_CC/nix-support/dynamic-linker`.
       #
@@ -220,7 +237,7 @@ stdenv.mkDerivation {
       fi
     ''
 
-    + optionalString (libc != null) ''
+    + optionalString (libc != null) (''
       ##
       ## General libc support
       ##
@@ -236,11 +253,17 @@ stdenv.mkDerivation {
       # compile, because it uses "#include_next <limits.h>" to find the
       # limits.h file in ../includes-fixed. To remedy the problem,
       # another -idirafter is necessary to add that directory again.
-      echo "-B${libc_lib}${libc.libdir or "/lib/"} -idirafter ${libc_dev}${libc.incdir or "/include"} ${optionalString isGNU "-idirafter ${cc}/lib/gcc/*/*/include-fixed"}" > $out/nix-support/libc-cflags
+      echo "-B${libc_lib}${libc.libdir or "/lib/"}" >> $out/nix-support/libc-cflags
+      echo "-idirafter ${libc_dev}${libc.incdir or "/include"}" >> $out/nix-support/libc-cflags
+    '' + optionalString isGNU ''
+      for dir in "${cc}"/lib/gcc/*/*/include-fixed; do
+        echo '-idirafter' ''${dir} >> $out/nix-support/libc-cflags
+      done
+    '' + ''
 
       echo "${libc_lib}" > $out/nix-support/orig-libc
       echo "${libc_dev}" > $out/nix-support/orig-libc-dev
-    ''
+    '')
 
     + optionalString (!nativeTools) ''
       ##
@@ -279,23 +302,56 @@ stdenv.mkDerivation {
       export hardening_unsupported_flags="${builtins.concatStringsSep " " (cc.hardeningUnsupportedFlags or [])}"
     ''
 
+    # Machine flags. These are necessary to support
+
+    # TODO: We should make a way to support miscellaneous machine
+    # flags and other gcc flags as well.
+
+    # Always add -march based on cpu in triple. Sometimes there is a
+    # discrepency (x86_64 vs. x86-64), so we provide an "arch" arg in
+    # that case.
+    + optionalString ((targetPlatform ? platform.gcc.arch) &&
+                      isGccArchSupported targetPlatform.platform.gcc.arch) ''
+      echo "-march=${targetPlatform.platform.gcc.arch}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mcpu is not very useful. You should use mtune and march
+    # instead. It’s provided here for backwards compatibility.
+    + optionalString (targetPlatform ? platform.gcc.cpu) ''
+      echo "-mcpu=${targetPlatform.platform.gcc.cpu}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # -mfloat-abi only matters on arm32 but we set it here
+    # unconditionally just in case. If the abi specifically sets hard
+    # vs. soft floats we use it here.
+    + optionalString (targetPlatform ? platform.gcc.float-abi) ''
+      echo "-mfloat-abi=${targetPlatform.platform.gcc.float-abi}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.fpu) ''
+      echo "-mfpu=${targetPlatform.platform.gcc.fpu}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.mode) ''
+      echo "-mmode=${targetPlatform.platform.gcc.mode}" >> $out/nix-support/cc-cflags-before
+    ''
+    + optionalString (targetPlatform ? platform.gcc.tune &&
+                      isGccArchSupported targetPlatform.platform.gcc.tune) ''
+      echo "-mtune=${targetPlatform.platform.gcc.tune}" >> $out/nix-support/cc-cflags-before
+    ''
+
+    # TODO: categorize these and figure out a better place for them
     + optionalString hostPlatform.isCygwin ''
       hardening_unsupported_flags+=" pic"
-    ''
-
-    + optionalString targetPlatform.isMinGW ''
+    '' + optionalString targetPlatform.isMinGW ''
       hardening_unsupported_flags+=" stackprotector"
-    ''
-
-    + optionalString targetPlatform.isAvr ''
+    '' + optionalString targetPlatform.isAvr ''
       hardening_unsupported_flags+=" stackprotector pic"
-    ''
-
-    + optionalString targetPlatform.isNetBSD ''
+    '' + optionalString (targetPlatform.libc == "newlib") ''
+      hardening_unsupported_flags+=" stackprotector fortify pie pic"
+    '' + optionalString targetPlatform.isNetBSD ''
       hardening_unsupported_flags+=" stackprotector fortify"
     ''
 
-    + optionalString (targetPlatform.libc == "newlib") ''
+    + optionalString targetPlatform.isWasm ''
       hardening_unsupported_flags+=" stackprotector fortify pie pic"
     ''
 

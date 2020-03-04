@@ -1,8 +1,10 @@
 { stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
-, gdk_pixbuf
+, gdk-pixbuf
 , gtk3
+, vala
 , gettext
 , ninja
 , pantheon
@@ -12,17 +14,18 @@
 , libevdev
 , libgee
 , libsoup
-, wrapGAppsHook }:
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   pname = "spice-up";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Spice-up";
     rev = version;
-    sha256 = "0jbqgf936pqss8ha27fcyjbhvkn4ij96b3d87c6gcx90glmq33zb";
+    sha256 = "1pix911l4ddn50026a5sbpqfzba6fmw40m1yzbknmkgd2ny28f0m";
   };
 
   USER = "pbuilder";
@@ -32,13 +35,14 @@ stdenv.mkDerivation rec {
     gettext
     ninja
     pkgconfig
-    pantheon.vala
+    vala
     wrapGAppsHook
   ];
+
   buildInputs = [
     pantheon.elementary-icon-theme
     pantheon.granite
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     json-glib
     libevdev
@@ -46,6 +50,21 @@ stdenv.mkDerivation rec {
     libgudev
     libsoup
   ];
+
+  patches = [
+    # Fix build with Vala 0.46
+    # https://github.com/Philip-Scott/Spice-up/pull/288
+    (fetchpatch {
+      url = "https://patch-diff.githubusercontent.com/raw/Philip-Scott/Spice-up/pull/288.patch";
+      sha256 = "0kyfd8v2sk4cvcq1j8ysp64snfjhnpr3iz7l04lx7if7h372xj39";
+    })
+  ];
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Create simple and beautiful presentations";

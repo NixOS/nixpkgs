@@ -12,7 +12,8 @@ neovim:
 
 let
   wrapper = {
-      withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
+      extraMakeWrapperArgs ? ""
+    , withPython ? true,  extraPythonPackages ? (_: []) /* the function you would have passed to python.withPackages */
     , withPython3 ? true,  extraPython3Packages ? (_: []) /* the function you would have passed to python.withPackages */
     , withNodeJs? false
     , withRuby ? true
@@ -74,8 +75,9 @@ let
         ${optionalString withRuby '' --set GEM_HOME ${rubyEnv}/${rubyEnv.ruby.gemPath}'' }
       ''
       + optionalString (!stdenv.isDarwin) ''
-        # copy and patch the original neovim.desktop file
-        mkdir -p $out/share/applications
+        # copy icon and patch the original neovim.desktop file
+        mkdir -p $out/share/{applications,pixmaps}
+        ln -s ${neovim}/share/pixmaps/nvim.png $out/share/pixmaps/nvim.png
         substitute ${neovim}/share/applications/nvim.desktop $out/share/applications/nvim.desktop \
           --replace 'TryExec=nvim' "TryExec=$out/bin/nvim" \
           --replace 'Name=Neovim' 'Name=WrappedNeovim'
@@ -113,7 +115,7 @@ let
         # https://github.com/neovim/neovim/issues/9413
         wrapProgram $out/bin/nvim \
           --set NVIM_SYSTEM_RPLUGIN_MANIFEST $out/rplugin.vim \
-          --add-flags "-u ${vimUtils.vimrcFile configure}"
+          --add-flags "-u ${vimUtils.vimrcFile configure}" ${extraMakeWrapperArgs}
       '';
 
     preferLocalBuild = true;

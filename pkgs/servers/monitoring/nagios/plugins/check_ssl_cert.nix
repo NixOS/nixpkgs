@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, file, openssl, makeWrapper, which, curl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "check_ssl_cert-${version}";
+  pname = "check_ssl_cert";
   version = "1.80.0";
 
   src = fetchFromGitHub {

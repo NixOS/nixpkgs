@@ -41,7 +41,7 @@ in
     };
 
     services.radicale.config = mkOption {
-      type = types.string;
+      type = types.str;
       default = "";
       description = ''
         Radicale configuration, this will set the service
@@ -50,7 +50,7 @@ in
     };
 
     services.radicale.extraArgs = mkOption {
-      type = types.listOf types.string;
+      type = types.listOf types.str;
       default = [];
       description = "Extra arguments passed to the Radicale daemon.";
     };
@@ -59,18 +59,15 @@ in
   config = mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
 
-    users.users = singleton
-      { name = "radicale";
-        uid = config.ids.uids.radicale;
+    users.users.radicale =
+      { uid = config.ids.uids.radicale;
         description = "radicale user";
         home = "/var/lib/radicale";
         createHome = true;
       };
 
-    users.groups = singleton
-      { name = "radicale";
-        gid = config.ids.gids.radicale;
-      };
+    users.groups.radicale =
+      { gid = config.ids.gids.radicale; };
 
     systemd.services.radicale = {
       description = "A Simple Calendar and Contact Server";

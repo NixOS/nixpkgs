@@ -1,29 +1,35 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, setuptools_scm, entrypoints, secretstorage
-, pytest, pytest-flake8 }:
+{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, pythonOlder
+, dbus-python
+, entrypoints
+, importlib-metadata
+, pytest
+, pytest-flake8
+, secretstorage
+, setuptools_scm
+}:
 
 buildPythonPackage rec {
   pname = "keyring";
-  version = "18.0.0";
+  version = "20.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "12833d2b05d2055e0e25931184af9cd6a738f320a2264853cabbd8a3a0f0b65d";
+    sha256 = "963bfa7f090269d30bdc5e25589e5fd9dad2cf2a7c6f176a7f2386910e5d0d8d";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
 
   checkInputs = [ pytest pytest-flake8 ];
 
-  propagatedBuildInputs = [ entrypoints ] ++ stdenv.lib.optional stdenv.isLinux secretstorage;
+  propagatedBuildInputs = [ dbus-python entrypoints ]
+  ++ lib.optional stdenv.isLinux secretstorage
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  doCheck = !stdenv.isDarwin;
+  # checks try to access a darwin path on linux
+  doCheck = false;
 
-  checkPhase = ''
-    py.test
-  '';
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Store and access your passwords safely";
     homepage    = "https://pypi.python.org/pypi/keyring";
     license     = licenses.psfl;

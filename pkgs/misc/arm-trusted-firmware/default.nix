@@ -1,23 +1,23 @@
-{ stdenv, fetchFromGitHub, pkgsCross, buildPackages }:
+{ lib, stdenv, fetchFromGitHub, fetchpatch, openssl, pkgsCross, buildPackages }:
 
 let
   buildArmTrustedFirmware = { filesToInstall
             , installDir ? "$out"
-            , platform
+            , platform ? null
             , extraMakeFlags ? []
             , extraMeta ? {}
-            , version ? "2.0"
+            , version ? "2.2"
             , ... } @ args:
-           stdenv.mkDerivation (rec {
+           stdenv.mkDerivation ({
 
-    name = "arm-trusted-firmware-${platform}-${version}";
+    name = "arm-trusted-firmware${lib.optionalString (platform != null) "-${platform}"}-${version}";
     inherit version;
 
     src = fetchFromGitHub {
       owner = "ARM-software";
       repo = "arm-trusted-firmware";
       rev = "refs/tags/v${version}";
-      sha256 = "087pkwa6slxff0aiz3v42gww007nww97bl1p96fvvs7rr1y14gjx";
+      sha256 = "03fjl5hy1bqlya6fg553bqz7jrvilzrzpbs87cv6jd04v8qrvry8";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -25,16 +25,18 @@ let
     # For Cortex-M0 firmware in RK3399
     nativeBuildInputs = [ pkgsCross.arm-embedded.stdenv.cc ];
 
+    buildInputs = [ openssl ];
+
     makeFlags = [
       "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-      "PLAT=${platform}"
-    ] ++ extraMakeFlags;
+    ] ++ (lib.optional (platform != null) "PLAT=${platform}")
+      ++ extraMakeFlags;
 
     installPhase = ''
       runHook preInstall
 
       mkdir -p ${installDir}
-      cp ${stdenv.lib.concatStringsSep " " filesToInstall} ${installDir}
+      cp ${lib.concatStringsSep " " filesToInstall} ${installDir}
 
       runHook postInstall
     '';
@@ -45,7 +47,7 @@ let
     # Fatal error: can't create build/sun50iw1p1/release/bl31/sunxi_clocks.o: No such file or directory
     enableParallelBuilding = false;
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = https://github.com/ARM-software/arm-trusted-firmware;
       description = "A reference implementation of secure world software for ARMv8-A";
       license = licenses.bsd3;
@@ -53,19 +55,27 @@ let
     } // extraMeta;
   } // builtins.removeAttrs args [ "extraMeta" ]);
 
-in rec {
+in {
   inherit buildArmTrustedFirmware;
 
+  armTrustedFirmwareTools = buildArmTrustedFirmware rec {
+    extraMakeFlags = [
+      "HOSTCC=${stdenv.cc.targetPrefix}gcc"
+      "fiptool" "certtool" "sptool"
+    ];
+    filesToInstall = [
+      "tools/fiptool/fiptool"
+      "tools/cert_create/cert_create"
+      "tools/sptool/sptool"
+    ];
+    postInstall = ''
+      mkdir -p "$out/bin"
+      find "$out" -type f -executable -exec mv -t "$out/bin" {} +
+    '';
+  };
+
   armTrustedFirmwareAllwinner = buildArmTrustedFirmware rec {
-    version = "1.0";
-    src = fetchFromGitHub {
-      owner = "apritzel";
-      repo = "arm-trusted-firmware";
-      # Branch: `allwinner`
-      rev = "91f2402d941036a0db092d5375d0535c270b9121";
-      sha256 = "0lbipkxb01w97r6ah8wdbwxir3013rp249fcqhlzh2gjwhp5l1ys";
-    };
-    platform = "sun50iw1p1";
+    platform = "sun50i_a64";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = ["build/${platform}/release/bl31.bin"];
   };
@@ -92,5 +102,12 @@ in rec {
     platform = "rk3399";
     extraMeta.platforms = ["aarch64-linux"];
     filesToInstall = [ "build/${platform}/release/bl31/bl31.elf"];
+  };
+
+  armTrustedFirmwareS905 = buildArmTrustedFirmware rec {
+    extraMakeFlags = [ "bl31" ];
+    platform = "gxbb";
+    extraMeta.platforms = ["aarch64-linux"];
+    filesToInstall = [ "build/${platform}/release/bl31.bin"];
   };
 }

@@ -1,24 +1,24 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "nuttcp-${version}";
+  pname = "nuttcp";
   version = "8.1.4";
 
   src = fetchurl {
     urls = [
-      "http://nuttcp.net/nuttcp/latest/${name}.c"
-      "http://nuttcp.net/nuttcp/${name}/${name}.c"
-      "http://nuttcp.net/nuttcp/beta/${name}.c"
+      "http://nuttcp.net/nuttcp/latest/${pname}-${version}.c"
+      "http://nuttcp.net/nuttcp/${pname}-${version}/${pname}-${version}.c"
+      "http://nuttcp.net/nuttcp/beta/${pname}-${version}.c"
     ];
     sha256 = "1mygfhwxfi6xg0iycivx98ckak2abc3vwndq74278kpd8g0yyqyh";
   };
 
   man = fetchurl {
-    url = "http://nuttcp.net/nuttcp/${name}/nuttcp.8";
+    url = "http://nuttcp.net/nuttcp/${pname}-${version}/nuttcp.8";
     sha256 = "1yang94mcdqg362qbi85b63746hk6gczxrk619hyj91v5763n4vx";
   };
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   buildPhase = ''
     cc -O2 -o nuttcp $src

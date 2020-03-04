@@ -2,8 +2,8 @@
 , ocamlbuild
 }:
 
-stdenv.mkDerivation rec {
-	name = "js_of_ocaml-ocamlbuild-${version}"; 
+stdenv.mkDerivation {
+	pname = "js_of_ocaml-ocamlbuild"; 
 
 	inherit (js_of_ocaml-compiler) version src installPhase meta;
 

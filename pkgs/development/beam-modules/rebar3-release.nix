@@ -1,5 +1,5 @@
-{ stdenv, writeText, erlang, rebar3, openssl, libyaml,
-  pc, lib }:
+{ stdenv, writeText, erlang, rebar3, openssl,
+  lib }:
 
 { name, version
 , src
@@ -18,8 +18,6 @@
 with stdenv.lib;
 
 let
-  debugInfoFlag = lib.optionalString (enableDebugInfo || erlang.debugInfo) "debug-info";
-
   shell = drv: stdenv.mkDerivation {
           name = "interactive-shell-${drv.name}";
           buildInputs = [ drv ];

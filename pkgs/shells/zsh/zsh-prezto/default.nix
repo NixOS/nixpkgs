@@ -1,6 +1,6 @@
 { stdenv, fetchgit }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "zsh-prezto-2019-03-18";
   src = fetchgit {
     url = "https://github.com/sorin-ionescu/prezto";
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     description = "Prezto is the configuration framework for Zsh; it enriches the command line interface environment with sane defaults, aliases, functions, auto completion, and prompt themes.";
     homepage = https://github.com/sorin-ionescu/prezto;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
     platforms = with platforms; unix;
   };
 }

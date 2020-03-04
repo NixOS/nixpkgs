@@ -7,11 +7,11 @@
 
 buildPythonPackage rec {
   pname = "u-msgpack-python";
-  version = "2.5.0";
+  version = "2.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "7ff18ae3721fa75571f9329c08f7c0120416a6ae36194bd8674f65b3b78d0702";
+    sha256 = "09c85a8af77376034396681e76bf30c249a4fd8e5ebb239f8a468d3655f210d0";
   };
 
   LC_ALL="en_US.UTF-8";

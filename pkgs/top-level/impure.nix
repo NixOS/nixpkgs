@@ -72,6 +72,8 @@ in
         else overlays homeOverlaysDir
       else []
 
+, crossOverlays ? []
+
 , ...
 } @ args:
 
@@ -80,9 +82,10 @@ in
 assert args ? localSystem -> !(args ? system || args ? platform);
 
 import ./. (builtins.removeAttrs args [ "system" "platform" ] // {
-  inherit config overlays crossSystem;
+  inherit config overlays crossSystem crossOverlays;
   # Fallback: Assume we are building packages on the current (build, in GNU
   # Autotools parlance) system.
-  localSystem = (if args ? localSystem then {}
-                 else { system = builtins.currentSystem; }) // localSystem;
+  localSystem = if builtins.isString localSystem then localSystem
+                else (if args ? localSystem then {}
+                      else { system = builtins.currentSystem; }) // localSystem;
 })

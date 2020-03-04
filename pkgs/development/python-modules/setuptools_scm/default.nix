@@ -1,17 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pip }:
+{ stdenv, buildPythonPackage, fetchPypi, pip, pytest }:
+
 buildPythonPackage rec {
   pname = "setuptools_scm";
-  version = "3.2.0";
+  version = "3.4.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "52ab47715fa0fc7d8e6cd15168d1a69ba995feb1505131c3e814eb7087b57358";
+    sha256 = "26b8a108783cd88f4b15ff1f0f347d6b476db25d0c226159b835d713f9487320";
   };
 
-  buildInputs = [ pip ];
-
-  # Seems to fail due to chroot and would cause circular dependency
-  # with pytest
+  # Requires pytest, circular dependency
   doCheck = false;
 
   meta = with stdenv.lib; {

@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "foolscap";
-  version = "0.13.1";
+  version = "0.13.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0sqxp4fshnpcv69c2j04v8c22pjak28iwscxv998h2s3054knxz2";
+    sha256 = "8498c7e9eaecb5b19be74b18d55c2086440be08de29f2bb507f9b505757467ff";
   };
 
   propagatedBuildInputs = [ mock twisted pyopenssl service-identity ];

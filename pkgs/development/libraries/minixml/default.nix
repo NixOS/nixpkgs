@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mxml-${version}";
-  version = "3.0";
+  pname = "mxml";
+  version = "3.1";
 
   src = fetchFromGitHub {
     owner = "michaelrsweet";
     repo = "mxml";
     rev = "v${version}";
-    sha256 = "0madp2v2md3xq96aham91byns6qy4byd5pbg28q827fdahfhpmq7";
+    sha256 = "1kv36fxxh7bwfydhb90zjgsrvpyzvx1p5d0ayfvd3j8gip2rjhnp";
   };
 
   enableParallelBuilding = true;

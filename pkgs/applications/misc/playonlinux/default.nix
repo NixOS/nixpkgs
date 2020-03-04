@@ -4,7 +4,7 @@
 , cabextract
 , gettext
 , glxinfo
-, gnupg1compat
+, gnupg
 , icoutils
 , imagemagick
 , netcat-gnu
@@ -32,7 +32,7 @@ let
       python2Packages.python
       gettext
       glxinfo
-      gnupg1compat
+      gnupg
       icoutils
       imagemagick
       netcat-gnu
@@ -55,7 +55,8 @@ let
   libs = pkgs: stdenv.lib.makeLibraryPath [ xorg.libX11 libGL ];
 
 in stdenv.mkDerivation {
-  name = "playonlinux-${version}";
+  pname = "playonlinux";
+  inherit version;
 
   src = fetchurl {
     url = "https://www.playonlinux.com/script_files/PlayOnLinux/${version}/PlayOnLinux_${version}.tar.gz";

@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "mustache-spec-${version}";
+  pname = "mustache-spec";
   version = "1.0.2";
 
   src = fetchFromGitHub {

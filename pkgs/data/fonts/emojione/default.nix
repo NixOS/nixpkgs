@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, inkscape, imagemagick, potrace, svgo, scfbuild }:
 
 stdenv.mkDerivation rec {
-  name = "emojione-${version}";
+  pname = "emojione";
   version = "1.4";
 
   src = fetchFromGitHub {
@@ -29,7 +29,6 @@ stdenv.mkDerivation rec {
     description = "Open source emoji set";
     homepage = http://emojione.com/;
     license = licenses.cc-by-40;
-    platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
 }

@@ -1,12 +1,13 @@
 { stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux }:
+, libguestfs, qemu, writeText, withLibvirt ? stdenv.isLinux, fetchpatch
+}:
 
 let
   # NOTE: bumping the version and updating the hash is insufficient;
   # you must use bundix to generate a new gemset.nix in the Vagrant source.
-  version = "2.2.3";
+  version = "2.2.7";
   url = "https://github.com/hashicorp/vagrant/archive/v${version}.tar.gz";
-  sha256 = "1j00glqn8b1zsgqg2nyk5as405a6s6vclswg2ri0a229hnsiabvs";
+  sha256 = "1z31y1nqiyj6rml9lz8gcbr29myhs5wcap8jsvgm3pb7p9p9y8m9";
 
   deps = bundlerEnv rec {
     name = "${pname}-${version}";
@@ -25,6 +26,19 @@ let
         inherit version;
       };
     } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+
+    # This replaces the gem symlinks with directories, resolving this
+    # error when running vagrant (I have no idea why):
+    # /nix/store/p4hrycs0zaa9x0gsqylbk577ppnryixr-vagrant-2.2.6/lib/ruby/gems/2.6.0/gems/i18n-1.1.1/lib/i18n/config.rb:6:in `<module:I18n>': uninitialized constant I18n::Config (NameError)
+    postBuild = ''
+      for gem in "$out"/lib/ruby/gems/*/gems/*; do
+        cp -a "$gem/" "$gem.new"
+        rm "$gem"
+        # needed on macOS, otherwise the mv yields permission denied 
+        chmod +w "$gem.new"
+        mv "$gem.new" "$gem"
+      done
+    '';
   };
 
 in buildRubyGem rec {
@@ -40,6 +54,13 @@ in buildRubyGem rec {
     ./unofficial-installation-nowarn.patch
     ./use-system-bundler-version.patch
     ./0004-Support-system-installed-plugins.patch
+
+    # fix deprecation warning on ruby 2.6.5.
+    # See also https://github.com/hashicorp/vagrant/pull/11307
+    (fetchpatch {
+      url = "https://github.com/hashicorp/vagrant/commit/d18ed567aaa5da23c9e91ab87f360e7bf6760f13.patch";
+      sha256 = "0f61qj41rc3fdggmnha4jrqg4pzmfiriwpsz4fcgf7c0bx6qha7q";
+    })
   ];
 
   postPatch = ''
@@ -55,7 +76,7 @@ in buildRubyGem rec {
   postInstall =
     let
       pathAdditions = lib.makeSearchPath "bin"
-        (map (x: "${lib.getBin x}") ([
+        (map (x: lib.getBin x) ([
           libarchive
         ] ++ lib.optionals withLibvirt [
           libguestfs
@@ -68,6 +89,9 @@ in buildRubyGem rec {
 
     mkdir -p "$out/vagrant-plugins/plugins.d"
     echo '{}' > "$out/vagrant-plugins/plugins.json"
+
+    mkdir -p $out/share/bash-completion/completions/
+    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
   '' +
   lib.optionalString withLibvirt ''
     substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
@@ -76,12 +100,14 @@ in buildRubyGem rec {
   '';
 
   installCheckPhase = ''
-    if [[ "$("$out/bin/vagrant" --version)" == "Vagrant ${version}" ]]; then
-      echo 'Vagrant smoke check passed'
-    else
-      echo 'Vagrant smoke check failed'
-      return 1
-    fi
+    HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null
+  '';
+
+  # `patchShebangsAuto` patches this one script which is intended to run
+  # on foreign systems.
+  postFixup = ''
+    sed -i -e '1c#!/bin/sh -' \
+      $out/lib/ruby/gems/*/gems/vagrant-*/plugins/provisioners/salt/bootstrap-salt.sh
   '';
 
   passthru = {
@@ -92,7 +118,7 @@ in buildRubyGem rec {
     description = "A tool for building complete development environments";
     homepage = https://www.vagrantup.com/;
     license = licenses.mit;
-    maintainers = with maintainers; [ aneeshusa ];
+    maintainers = with maintainers; [ aneeshusa ma27 ];
     platforms = with platforms; linux ++ darwin;
   };
 }

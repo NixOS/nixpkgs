@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "gauge-${version}";
+  pname = "gauge";
   version = "1.0.4";
 
   goPackagePath = "github.com/getgauge/gauge";

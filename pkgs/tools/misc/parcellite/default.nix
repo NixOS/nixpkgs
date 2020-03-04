@@ -3,7 +3,7 @@
 , which, wrapGAppsHook, xdotool }:
 
 stdenv.mkDerivation rec {
-  name = "parcellite-${version}";
+  pname = "parcellite";
   version = "1.2.1";
 
   src = fetchFromGitHub {
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook intltool pkgconfig wrapGAppsHook ];
   buildInputs = [ gtk2 hicolor-icon-theme ];
-  NIX_LDFLAGS = [ "-lgio-2.0" ];
+  NIX_LDFLAGS = "-lgio-2.0";
 
   preFixup = ''
     # Need which and xdotool on path to fix auto-pasting.
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Lightweight GTK+ clipboard manager";
+    description = "Lightweight GTK clipboard manager";
     homepage = https://github.com/rickyrockrat/parcellite;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;

@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "parsel";
-  version = "1.5.1";
+  version = "1.5.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "9ccd82b8a122345601f6f9209e972c0e8c3518a188fcff2d37cb4d7bc570b4b8";
+    sha256 = "08v76s6s4li7asnyz8a7gbp9vz522rv5apranyv76mb0lhmjd92d";
   };
 
   checkInputs = [ pytest pytestrunner ];

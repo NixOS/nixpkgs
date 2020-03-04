@@ -1,14 +1,14 @@
 { stdenv, fetchurl, pkgconfig, libnl }:
 
-let
-  ver = "2019.1";
-in
+let cfg = import ./version.nix; in
+
 stdenv.mkDerivation rec {
-  name = "batctl-${ver}";
+  pname = "batctl";
+  inherit (cfg) version;
 
   src = fetchurl {
-    url = "https://downloads.open-mesh.org/batman/releases/batman-adv-${ver}/${name}.tar.gz";
-    sha256 = "14wp8rvm2m1r5qz7p1m08bzg2gmqyldkw1p6gk8rkdyqb3q0abg8";
+    url = "https://downloads.open-mesh.org/batman/releases/batman-adv-${version}/${pname}-${version}.tar.gz";
+    sha256 = cfg.sha256.${pname};
   };
 
   nativeBuildInputs = [ pkgconfig ];

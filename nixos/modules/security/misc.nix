@@ -12,14 +12,18 @@ with lib;
       type = types.bool;
       default = true;
       description = ''
-        Whether to allow creation of user namespaces.  A recurring problem
-        with user namespaces is the presence of code paths where the kernel's
-        permission checking logic fails to account for namespacing, instead
-        permitting a namespaced process to act outside the namespace with the
-        same privileges as it would have inside it.  This is particularly
+        Whether to allow creation of user namespaces.
+
+        The motivation for disabling user namespaces is the potential
+        presence of code paths where the kernel's permission checking
+        logic fails to account for namespacing, instead permitting a
+        namespaced process to act outside the namespace with the same
+        privileges as it would have inside it.  This is particularly
         damaging in the common case of running as root within the namespace.
-        When user namespace creation is disallowed, attempting to create
-        a user namespace fails with "no space left on device" (ENOSPC).
+
+        When user namespace creation is disallowed, attempting to create a
+        user namespace fails with "no space left on device" (ENOSPC).
+        root may re-enable user namespace creation at runtime.
       '';
     };
 
@@ -38,35 +42,39 @@ with lib;
         Whether to allow SMT/hyperthreading.  Disabling SMT means that only
         physical CPU cores will be usable at runtime, potentially at
         significant performance cost.
-        </para>
 
-        <para>
         The primary motivation for disabling SMT is to mitigate the risk of
         leaking data between threads running on the same CPU core (due to
         e.g., shared caches).  This attack vector is unproven.
-        </para>
 
-        <para>
         Disabling SMT is a supplement to the L1 data cache flushing mitigation
-        (see <xref linkend="opt-security.virtualization.flushL1DataCache"/>)
+        (see <xref linkend="opt-security.virtualisation.flushL1DataCache"/>)
         versus malicious VM guests (SMT could "bring back" previously flushed
         data).
-        </para>
-        <para>
       '';
     };
 
-    security.virtualization.flushL1DataCache = mkOption {
+    security.forcePageTableIsolation = mkOption {
+      type = types.bool;
+      default = false;
+      description = ''
+        Whether to force-enable the Page Table Isolation (PTI) Linux kernel
+        feature even on CPU models that claim to be safe from Meltdown.
+
+        This hardening feature is most beneficial to systems that run untrusted
+        workloads that rely on address space isolation for security.
+      '';
+    };
+
+    security.virtualisation.flushL1DataCache = mkOption {
       type = types.nullOr (types.enum [ "never" "cond" "always" ]);
       default = null;
       description = ''
         Whether the hypervisor should flush the L1 data cache before
         entering guests.
         See also <xref linkend="opt-security.allowSimultaneousMultithreading"/>.
-        </para>
 
-        <para>
-          <variablelist>
+        <variablelist>
           <varlistentry>
             <term><literal>null</literal></term>
             <listitem><para>uses the kernel default</para></listitem>
@@ -88,7 +96,7 @@ with lib;
             enters the guest.  May incur significant performance cost.
             </para></listitem>
           </varlistentry>
-          </variablelist>
+        </variablelist>
       '';
     };
   };
@@ -118,8 +126,12 @@ with lib;
       boot.kernelParams = [ "nosmt" ];
     })
 
-    (mkIf (config.security.virtualization.flushL1DataCache != null) {
-      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualization.flushL1DataCache}" ];
+    (mkIf config.security.forcePageTableIsolation {
+      boot.kernelParams = [ "pti=on" ];
+    })
+
+    (mkIf (config.security.virtualisation.flushL1DataCache != null) {
+      boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
     })
   ];
 }

@@ -1,6 +1,6 @@
 { lib
 , buildPythonPackage
-, fetchPypi
+, fetchFromGitHub
 , pytest
 , gym
 , scipy
@@ -15,19 +15,17 @@
 , mpi4py
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "baselines";
-  version = "0.1.5";
+  version = "0.1.6"; # remember to manually adjust the rev
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "0n1mxkcg82gzhkb4j5zzwm335r3rc1sblknqs4x6nkrrh42d65cm";
+  src = fetchFromGitHub {
+    owner = "openai";
+    repo = "baselines";
+    # Unfortunately releases are not tagged. This commit bumps the version in setup.py
+    rev = "2bca7901f51c88cdef3ca0666c6a87c454a4dbe8";
+    sha256 = "0j2ck7rsrcyny9qbmrw9aqvzfhv70nbign8iva2dsisa2x24gbcl";
   };
-
-  patches = [
-    # already fixed upstream
-    ./fix-dep-names.patch
-  ];
 
   propagatedBuildInputs = [
     gym
@@ -42,6 +40,13 @@ buildPythonPackage rec {
     tensorflow
     click
   ];
+
+  postPatch = ''
+    # Needed for the atari wrapper, but the gym-atari package is not supported
+    # in nixos anyways. Since opencv-python is not currently packaged, we
+    # disable it.
+    sed -ie '/opencv-python/d' setup.py
+  '';
 
   # fails to create a daemon, probably because of sandboxing
   doCheck = false;

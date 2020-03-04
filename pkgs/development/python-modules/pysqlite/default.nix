@@ -30,7 +30,7 @@ buildPythonPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://pysqlite.org/;
+    homepage = https://pysqlite.org/;
     description = "Python bindings for the SQLite embedded relational database engine";
     longDescription = ''
       pysqlite is a DB-API 2.0-compliant database interface for SQLite.

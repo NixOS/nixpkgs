@@ -1,5 +1,5 @@
 args @ { fetchurl, ... }:
-rec {
+{
   baseName = ''dynamic-classes'';
   version = ''20130128-git'';
 

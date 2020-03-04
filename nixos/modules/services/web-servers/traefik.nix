@@ -67,7 +67,7 @@ in {
 
     group = mkOption {
       default = "traefik";
-      type = types.string;
+      type = types.str;
       example = "docker";
       description = ''
         Set the group that traefik runs under.
@@ -84,18 +84,16 @@ in {
   };
 
   config = mkIf cfg.enable {
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 traefik traefik - -"
+    ];
+
     systemd.services.traefik = {
       description = "Traefik web server";
       after = [ "network-online.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
-        PermissionsStartOnly = true;
         ExecStart = ''${cfg.package.bin}/bin/traefik --configfile=${configFile}'';
-        ExecStartPre = [
-          ''${pkgs.coreutils}/bin/mkdir -p "${cfg.dataDir}"''
-          ''${pkgs.coreutils}/bin/chmod 700 "${cfg.dataDir}"''
-          ''${pkgs.coreutils}/bin/chown -R traefik:traefik "${cfg.dataDir}"''
-        ];
         Type = "simple";
         User = "traefik";
         Group = cfg.group;
@@ -119,6 +117,7 @@ in {
       group = "traefik";
       home = cfg.dataDir;
       createHome = true;
+      isSystemUser = true;
     };
 
     users.groups.traefik = {};

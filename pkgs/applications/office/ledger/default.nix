@@ -2,7 +2,7 @@
 , texinfo, gnused, usePython ? true }:
 
 stdenv.mkDerivation rec {
-  name = "ledger-${version}";
+  pname = "ledger";
   version = "3.1.3";
 
   src = fetchFromGitHub {

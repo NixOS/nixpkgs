@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, mtdev, gsettings-qt ,
-  lxqt, qtx11extras, qtmultimedia, qtsvg, fontconfig, freetype ,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, mtdev,
+  lxqt, qtx11extras, qtmultimedia, qtsvg,
   qt5dxcb-plugin, qtstyleplugins, dtkcore, dtkwidget, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "qt5integration";
-  version = "0.3.8";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "12d6iv2x0q2n73rscma30q31nh7h26gmhlf665gkgl2j825hlx5n";
+    sha256 = "140wb3vcm2ji8jhqdxv8f4shiknia1zk8fssqlp09kzc1cmb4ncy";
   };
 
   nativeBuildInputs = [
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Qt platform theme integration plugins for DDE";

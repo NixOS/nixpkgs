@@ -101,7 +101,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "cmus-${version}";
+  pname = "cmus";
   version = "2.8.0";
 
   src = fetchFromGitHub {
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ]
     ++ stdenv.lib.optional stdenv.cc.isClang clangGCC
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreAudio ]
-    ++ concatMap (a: a.deps) opts;
+    ++ flatten (concatMap (a: a.deps) opts);
 
   makeFlags = [ "LD=$(CC)" ];
 

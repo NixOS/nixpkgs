@@ -1,17 +1,28 @@
 # Helper functions for deepin packaging
 
 searchHardCodedPaths() {
-    # looks for ocurrences of hard coded paths in given (current)
-    # directory and command invocations for the purpose of debugging a
-    # derivation
+    # Usage:
+    #
+    #   searchHardCodedPaths [-a] [<path>]
+    #
+    # Looks for ocurrences of FHS hard coded paths and command
+    # invocations in the given path (default: current directory) for
+    # the purpose of debugging a derivation. The option -a enables
+    # processing binary files as if they were text.
 
-    local dir=$1
+    local binary
+    if [ "$1" = "-a" ]; then
+        binary="-a"
+        shift
+    fi
 
-    echo ----------- looking for command invocations
-    grep --color=always -r -E '\<(ExecStart|Exec|startDetached|execute|exec\.(Command|LookPath))\>' $dir || true
+    local path=$1
 
-    echo ----------- looking for hard coded paths
-    grep --color=always -a -r -E '/(usr|bin|sbin|etc|var|opt)\>' $dir || true
+    echo ----------- looking for command invocations in $path
+    grep --color=always -r -E '\<(ExecStart|Exec|startDetached|execute|exec\.(Command|LookPath))\>' $path || true
+
+    echo ----------- looking for hard coded paths in $path
+    grep --color=always $binary -r -E '/(usr|bin|sbin|etc|var|opt)\>' $path || true
 
     echo ----------- done
 }

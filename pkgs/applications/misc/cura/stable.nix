@@ -4,7 +4,8 @@ let
   version = "15.04";
 in
 stdenv.mkDerivation rec {
-  name = "cura-${version}";
+  pname = "cura";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/daid/Cura/archive/${version}.tar.gz";

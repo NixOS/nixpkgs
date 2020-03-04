@@ -1,102 +1,96 @@
-{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, dbus, dbus-glib
-, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables
-, libgcrypt, dnsmasq, bluez5, readline
+{ stdenv, fetchurl, substituteAll, intltool, pkgconfig, fetchpatch, dbus
+, gnome3, systemd, libuuid, polkit, gnutls, ppp, dhcp, iptables, python3, vala
+, libgcrypt, dnsmasq, bluez5, readline, libselinux, audit
 , gobject-introspection, modemmanager, openresolv, libndp, newt, libsoup
-, ethtool, gnused, coreutils, file, inetutils, kmod, jansson, libxslt
-, python3Packages, docbook_xsl, openconnect, curl, autoreconfHook }:
+, ethtool, gnused, iputils, kmod, jansson, gtk-doc, libxslt
+, docbook_xsl, docbook_xml_dtd_412, docbook_xml_dtd_42, docbook_xml_dtd_43
+, openconnect, curl, meson, ninja, libpsl, mobile-broadband-provider-info, runtimeShell }:
 
 let
-  pname = "NetworkManager";
+  pythonForDocs = python3.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in stdenv.mkDerivation rec {
-  name = "network-manager-${version}";
-  version = "1.16.0";
+  pname = "network-manager";
+  version = "1.22.8";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0b2x9hrg41cd17psqi0vacwj733v99hxczn53gdfs0yanqrji5lf";
+    url = "mirror://gnome/sources/NetworkManager/${stdenv.lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
+    sha256 = "0kxbgln78lb1cxhd79vbpdbncsb0cppr15fycgqb9df6f8nbj4cm";
   };
 
-  outputs = [ "out" "dev" ];
-
-  postPatch = ''
-    patchShebangs ./tools
-  '';
-
-  preConfigure = ''
-    substituteInPlace configure --replace /usr/bin/uname ${coreutils}/bin/uname
-    substituteInPlace configure --replace /usr/bin/file ${file}/bin/file
-
-    # Fixes: error: po/Makefile.in.in was not created by intltoolize.
-    intltoolize --automake --copy --force
-  '';
+  outputs = [ "out" "dev" "devdoc" "man" "doc" ];
 
   # Right now we hardcode quite a few paths at build time. Probably we should
   # patch networkmanager to allow passing these path in config file. This will
   # remove unneeded build-time dependencies.
-  configureFlags = [
-    "--with-dhclient=${dhcp}/bin/dhclient"
-    "--with-dnsmasq=${dnsmasq}/bin/dnsmasq"
+  mesonFlags = [
+    "-Ddhclient=${dhcp}/bin/dhclient"
+    "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     # Upstream prefers dhclient, so don't add dhcpcd to the closure
-    "--with-dhcpcd=no"
-    "--with-pppd=${ppp}/bin/pppd"
-    "--with-iptables=${iptables}/bin/iptables"
+    "-Ddhcpcd=no"
+    "-Ddhcpcanon=no"
+    "-Dpppd=${ppp}/bin/pppd"
+    "-Diptables=${iptables}/bin/iptables"
     # to enable link-local connections
-    "--with-udev-dir=${placeholder "out"}/lib/udev"
-    "--with-resolvconf=${openresolv}/sbin/resolvconf"
-    "--sysconfdir=/etc" "--localstatedir=/var"
-    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
-    "--with-crypto=gnutls" "--disable-more-warnings"
-    "--with-systemdsystemunitdir=$(out)/etc/systemd/system"
-    "--with-kernel-firmware-dir=/run/current-system/firmware"
-    "--with-session-tracking=systemd"
-    "--with-modem-manager-1"
-    "--with-nmtui"
-    "--disable-gtk-doc"
-    "--with-libnm-glib" # legacy library, TODO: remove
-    "--disable-tests"
+    "-Dudev_dir=${placeholder "out"}/lib/udev"
+    "-Dresolvconf=${openresolv}/bin/resolvconf"
+    "-Ddbus_conf_dir=${placeholder "out"}/share/dbus-1/system.d"
+    "-Dsystemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
+    "-Dkernel_firmware_dir=/run/current-system/firmware"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "-Dcrypto=gnutls"
+    "-Dsession_tracking=systemd"
+    "-Dmodem_manager=true"
+    "-Dpolkit_agent=true"
+    "-Dnmtui=true"
+    "-Ddocs=true"
+    "-Dtests=no"
+    "-Dqt=false"
+    # Allow using iwd when configured to do so
+    "-Diwd=true"
+    "-Dlibaudit=yes-disabled-by-default"
   ];
 
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit inetutils kmod openconnect ethtool coreutils dbus;
-      inherit (stdenv) shell;
+      inherit iputils kmod openconnect ethtool gnused systemd;
+      inherit runtimeShell;
     })
 
+    # Meson does not support using different directories during build and
+    # for installation like Autotools did with flags passed to make install.
+    ./fix-install-paths.patch
   ];
 
   buildInputs = [
-    systemd libuuid polkit ppp libndp curl
+    systemd libselinux audit libpsl libuuid polkit ppp libndp curl mobile-broadband-provider-info
     bluez5 dnsmasq gobject-introspection modemmanager readline newt libsoup jansson
   ];
 
-  propagatedBuildInputs = [ dbus-glib gnutls libgcrypt python3Packages.pygobject3 ];
+  propagatedBuildInputs = [ gnutls libgcrypt ];
 
-  nativeBuildInputs = [ autoreconfHook intltool pkgconfig libxslt docbook_xsl ];
+  nativeBuildInputs = [
+    meson ninja intltool pkgconfig
+    vala gobject-introspection dbus
+    # Docs
+    gtk-doc libxslt docbook_xsl docbook_xml_dtd_412 docbook_xml_dtd_42 docbook_xml_dtd_43 pythonForDocs
+  ];
 
   doCheck = false; # requires /sys, the net
 
-  installFlags = [
-    "sysconfdir=${placeholder "out"}/etc"
-    "localstatedir=${placeholder "out"}/var"
-    "runstatedir=${placeholder "out"}/run"
-  ];
+  postPatch = ''
+    patchShebangs ./tools
+    patchShebangs libnm/generate-setting-docs.py
+  '';
 
-  postInstall = ''
-    mkdir -p $out/lib/NetworkManager
-
-    # FIXME: Workaround until NixOS' dbus+systemd supports at_console policy
-    substituteInPlace $out/etc/dbus-1/system.d/org.freedesktop.NetworkManager.conf --replace 'at_console="true"' 'group="networkmanager"'
-
-    # systemd in NixOS doesn't use `systemctl enable`, so we need to establish
-    # aliases ourselves.
-    ln -s $out/etc/systemd/system/NetworkManager-dispatcher.service $out/etc/systemd/system/dbus-org.freedesktop.nm-dispatcher.service
-    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/dbus-org.freedesktop.NetworkManager.service
-
-    # Add the legacy service name from before #51382 to prevent NetworkManager
-    # from not starting back up:
-    # TODO: remove this once 19.10 is released
-    ln -s $out/etc/systemd/system/NetworkManager.service $out/etc/systemd/system/network-manager.service
+  preBuild = ''
+    # Our gobject-introspection patches make the shared library paths absolute
+    # in the GIR files. When building docs, the library is not yet installed,
+    # though, so we need to replace the absolute path with a local one during build.
+    # We are using a symlink that will be overridden during installation.
+    mkdir -p ${placeholder "out"}/lib
+    ln -s $PWD/libnm/libnm.so.0 ${placeholder "out"}/lib/libnm.so.0
   '';
 
   passthru = {
@@ -110,7 +104,7 @@ in stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/NetworkManager;
     description = "Network configuration and management tool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ phreedom rickynils domenkozar obadz ];
+    maintainers = with maintainers; [ phreedom domenkozar obadz worldofpeace ];
     platforms = platforms.linux;
   };
 }

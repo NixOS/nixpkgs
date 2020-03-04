@@ -36,10 +36,16 @@
 let
   basicEnv = (callPackage ../bundled-common {}) args;
 
-  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" ] // {
+  cmdArgs = removeAttrs args [ "pname" "postBuild" "gemConfig" "passthru" "gemset" "gemdir" ] // {
     inherit preferLocalBuild allowSubstitutes; # pass the defaults
 
     buildInputs = buildInputs ++ lib.optional (scripts != []) makeWrapper;
+
+    meta = { platforms = ruby.meta.platforms; } // meta;
+    passthru = basicEnv.passthru // {
+      inherit basicEnv;
+      inherit (basicEnv) env;
+    } // passthru;
   };
 in
   runCommand basicEnv.name cmdArgs ''
@@ -59,6 +65,4 @@ in
       find -L ${basicEnv}/${ruby.gemPath}/gems/${basicEnv.name} \( -wholename "*/man/*.$section" -o -wholename "*/man/man$section/*.$section" \) -print -execdir mkdir -p $mandir \; -execdir cp '{}' $mandir \;
     done
     ''}
-
-    ${postBuild}
   ''

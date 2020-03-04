@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libpcap, tcl }:
 
 stdenv.mkDerivation rec {
-  name = "hping-${version}";
+  pname = "hping";
   version = "20051105";
 
   src = fetchurl {

@@ -44,7 +44,7 @@ deployAndroidPackage {
     mkdir -p $out/bin
     for i in ndk-build
     do
-        ln -sf ../../libexec/android-sdk/ndk-bundle/$i $out/bin/$i
+        ln -sf ../libexec/android-sdk/ndk-bundle/$i $out/bin/$i
     done
   '';
   noAuditTmpdir = true; # Audit script gets invoked by the build/ component in the path for the make standalone script

@@ -1,4 +1,4 @@
-{ callPackage, newScope, pkgs, fetchurl }:
+{ callPackage, fetchurl }:
 
 callPackage ./generic.nix (rec {
   version = "1.7";

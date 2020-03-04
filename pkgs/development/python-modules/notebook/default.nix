@@ -25,11 +25,12 @@
 
 buildPythonPackage rec {
   pname = "notebook";
-  version = "5.7.4";
+  version = "6.0.3";
+  disabled = !isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d908673a4010787625c8952e91a22adf737db031f2aa0793ad92f6558918a74a";
+    sha256 = "47a9092975c9e7965ada00b9a20f0cf637d001db60d241d479f53c0be117ad48";
   };
 
   LC_ALL = "en_US.utf8";
@@ -64,10 +65,13 @@ buildPythonPackage rec {
     else ""}
   '';
 
+  # Some of the tests use localhost networking.
+  __darwinAllowLocalNetworking = true;
+
   meta = {
     description = "The Jupyter HTML notebook is a web-based notebook environment for interactive computing";
-    homepage = http://jupyter.org/;
+    homepage = https://jupyter.org/;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ fridh globin ];
+    maintainers = with lib.maintainers; [ fridh ];
   };
 }

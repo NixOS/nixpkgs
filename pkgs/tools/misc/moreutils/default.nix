@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "moreutils-${version}";
+  pname = "moreutils";
   version = "0.63";
 
   src = fetchgit {
@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 
-  buildFlags = "CC=cc";
-  installFlags = "PREFIX=$(out)";
+  buildFlags = [ "CC=cc" ];
+  installFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
     wrapProgram $out/bin/chronic --prefix PERL5LIB : $PERL5LIB

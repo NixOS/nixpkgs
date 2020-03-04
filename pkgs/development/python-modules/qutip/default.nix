@@ -39,6 +39,7 @@ buildPythonPackage rec {
     '';
     homepage = http://qutip.org/;
     license = licenses.bsd0;
+    broken = true;
   };
 
 }

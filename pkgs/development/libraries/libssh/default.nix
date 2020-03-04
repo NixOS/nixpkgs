@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cmake, zlib, openssl, libsodium }:
+{ stdenv, fetchurl, pkgconfig, cmake, zlib, openssl, libsodium }:
 
 stdenv.mkDerivation rec {
   name = "libssh-0.8.7";
@@ -13,7 +13,8 @@ stdenv.mkDerivation rec {
     sed -i 's,nacl/,sodium/,g' ./include/libssh/curve25519.h src/curve25519.c
   '';
 
-  outputs = [ "out" "dev" ];
+  # single output, otherwise cmake and .pc files point to the wrong directory
+  # outputs = [ "out" "dev" ];
 
   buildInputs = [ zlib openssl libsodium ];
 

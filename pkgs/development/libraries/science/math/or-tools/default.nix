@@ -1,15 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, google-gflags, which
-, lsb-release, glog, protobuf, cbc, zlib, python3 }:
+{ stdenv, fetchFromGitHub, cmake, abseil-cpp, gflags, which
+, lsb-release, glog, protobuf3_11, cbc, zlib
+, ensureNewerSourcesForZipFilesHook, python, swig }:
 
-stdenv.mkDerivation rec {
-  name = "or-tools-${version}";
-  version = "v6.10";
+let
+  protobuf = protobuf3_11;
+  pythonProtobuf = python.pkgs.protobuf.override { inherit protobuf; };
+
+in stdenv.mkDerivation rec {
+  pname = "or-tools";
+  version = "7.5";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "or-tools";
-    rev = version;
-    sha256 = "11k3671rpv968dsglc6bgarr9yi8ijaaqm2wq3m0rn4wy8fj7za2";
+    rev = "v${version}";
+    sha256 = "1p9jwdwzcsaa58ap912hdf2w27vna3xl9g4lh6kjskddwi8l3wac";
   };
 
   # The original build system uses cmake which does things like pull
@@ -18,29 +23,43 @@ stdenv.mkDerivation rec {
   # dependencies straight from nixpkgs and use the make build method.
   configurePhase = ''
     cat <<EOF > Makefile.local
-    UNIX_GFLAGS_DIR=${google-gflags}
+    UNIX_ABSL_DIR=${abseil-cpp}
+    UNIX_GFLAGS_DIR=${gflags}
     UNIX_GLOG_DIR=${glog}
     UNIX_PROTOBUF_DIR=${protobuf}
     UNIX_CBC_DIR=${cbc}
     EOF
   '';
 
-  makeFlags = [ "prefix=${placeholder "out"}" ];
-  buildFlags = [ "cc" ];
+  makeFlags = [
+    "prefix=${placeholder "out"}"
+    "PROTOBUF_PYTHON_DESC=${pythonProtobuf}/${python.sitePackages}/google/protobuf/descriptor_pb2.py"
+  ];
+  buildFlags = [ "cc" "pypi_archive" ];
 
   checkTarget = "test_cc";
   doCheck = true;
 
   installTargets = [ "install_cc" ];
+  # The upstream install_python target installs to $HOME.
+  postInstall = ''
+    mkdir -p "$python/${python.sitePackages}"
+    (cd temp_python/ortools; PYTHONPATH="$python/${python.sitePackages}:$PYTHONPATH" python setup.py install '--prefix=$python')
+  '';
 
   nativeBuildInputs = [
-    cmake lsb-release which zlib python3
+    cmake lsb-release swig which zlib python
+    ensureNewerSourcesForZipFilesHook
+    python.pkgs.setuptools python.pkgs.wheel
   ];
   propagatedBuildInputs = [
-    google-gflags glog protobuf cbc
+    abseil-cpp gflags glog protobuf cbc
+    pythonProtobuf python.pkgs.six
   ];
 
   enableParallelBuilding = true;
+
+  outputs = [ "out" "python" ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/google/or-tools;
@@ -48,7 +67,7 @@ stdenv.mkDerivation rec {
     description = ''
       Google's software suite for combinatorial optimization.
     '';
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ andersk ];
     platforms = with platforms; linux;
   };
 }

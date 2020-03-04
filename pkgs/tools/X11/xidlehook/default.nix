@@ -1,9 +1,9 @@
-{ lib, stdenv, rustPlatform, fetchFromGitLab
+{ lib, stdenv, rustPlatform, fetchFromGitLab, python3
 , xlibsWrapper, xorg, libpulseaudio, pkgconfig, patchelf, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "xidlehook-${version}";
-  version = "0.7.0";
+  pname = "xidlehook";
+  version = "0.8.0";
 
   doCheck = false;
 
@@ -12,14 +12,14 @@ rustPlatform.buildRustPackage rec {
     repo = "xidlehook";
     rev = version;
 
-    sha256 = "0dl4rnh4l3rhga5pfxmkc9syn6vx05zxdf8xcv0gw9h60y1smp6v";
+    sha256 = "127b20y86xs2wq5ka236057nyrh87fgzhjqbl6azf002afnbsn5m";
   };
 
   cargoBuildFlags = lib.optionals (!stdenv.isLinux) ["--no-default-features" "--features" "pulse"];
-  cargoSha256 = "148p7r9xmc0nc0d4qyxhh29xqcb5axwqwcxcrkgd41f32c3g44dc";
+  cargoSha256 = "0wakw3pqgwfwarjfb3h0a2javrhnf509v3j547a7p9k5kbjb5np0";
 
   buildInputs = [ xlibsWrapper xorg.libXScrnSaver libpulseaudio ] ++ lib.optional stdenv.isDarwin Security;
-  nativeBuildInputs = [ pkgconfig patchelf ];
+  nativeBuildInputs = [ pkgconfig patchelf python3 ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     RPATH="$(patchelf --print-rpath $out/bin/xidlehook)"

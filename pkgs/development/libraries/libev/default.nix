@@ -1,13 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, static ? false }:
 
 stdenv.mkDerivation rec {
-  name = "libev-${version}";
-  version="4.25";
+  pname = "libev";
+  version="4.31";
 
   src = fetchurl {
-    url = "http://dist.schmorp.de/libev/Attic/${name}.tar.gz";
-    sha256 = "1295q0lkkbrlpd5dl5i48bh1rm8mjzh9y795jlvjz3bp4wf7wxbq";
+    url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";
+    sha256 = "0nkfqv69wfyy2bpga4d53iqydycpik8jp8x6q70353hia8mmv1gd";
   };
+
+  configureFlags = stdenv.lib.optional (static) "LDFLAGS=-static";
 
   meta = {
     description = "A high-performance event loop/event model with lots of features";

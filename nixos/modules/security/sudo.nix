@@ -71,27 +71,29 @@ in
         this is the case when configuration options are merged.
       '';
       default = [];
-      example = [
-        # Allow execution of any command by all users in group sudo,
-        # requiring a password.
-        { groups = [ "sudo" ]; commands = [ "ALL" ]; }
+      example = literalExample ''
+        [
+          # Allow execution of any command by all users in group sudo,
+          # requiring a password.
+          { groups = [ "sudo" ]; commands = [ "ALL" ]; }
 
-        # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
-        # and the group with GID `1006` without a password.
-        { users = [ "backup" "database" ]; groups = [ 1006 ];
-          commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
+          # Allow execution of "/home/root/secret.sh" by user `backup`, `database`
+          # and the group with GID `1006` without a password.
+          { users = [ "backup" "database" ]; groups = [ 1006 ];
+            commands = [ { command = "/home/root/secret.sh"; options = [ "SETENV" "NOPASSWD" ]; } ]; }
 
-        # Allow all users of group `bar` to run two executables as user `foo`
-        # with arguments being pre-set.
-        { groups = [ "bar" ]; runAs = "foo";
-          commands =
-            [ "/home/baz/cmd1.sh hello-sudo"
-              { command = ''/home/baz/cmd2.sh ""''; options = [ "SETENV" ]; } ]; }
-      ];
+          # Allow all users of group `bar` to run two executables as user `foo`
+          # with arguments being pre-set.
+          { groups = [ "bar" ]; runAs = "foo";
+            commands =
+              [ "/home/baz/cmd1.sh hello-sudo"
+                  { command = '''/home/baz/cmd2.sh ""'''; options = [ "SETENV" ]; } ]; }
+        ]
+      '';
       type = with types; listOf (submodule {
         options = {
           users = mkOption {
-            type = with types; listOf (either string int);
+            type = with types; listOf (either str int);
             description = ''
               The usernames / UIDs this rule should apply for.
             '';
@@ -99,7 +101,7 @@ in
           };
 
           groups = mkOption {
-            type = with types; listOf (either string int);
+            type = with types; listOf (either str int);
             description = ''
               The groups / GIDs this rule should apply for.
             '';
@@ -107,7 +109,7 @@ in
           };
 
           host = mkOption {
-            type = types.string;
+            type = types.str;
             default = "ALL";
             description = ''
               For what host this rule should apply.
@@ -115,7 +117,7 @@ in
           };
 
           runAs = mkOption {
-            type = with types; string;
+            type = with types; str;
             default = "ALL:ALL";
             description = ''
               Under which user/group the specified command is allowed to run.
@@ -130,11 +132,11 @@ in
             description = ''
               The commands for which the rule should apply.
             '';
-            type = with types; listOf (either string (submodule {
+            type = with types; listOf (either str (submodule {
 
               options = {
                 command = mkOption {
-                  type = with types; string;
+                  type = with types; str;
                   description = ''
                     A command being either just a path to a binary to allow any arguments,
                     the full command with arguments pre-set or with <code>""</code> used as the argument,
@@ -212,7 +214,7 @@ in
 
     security.pam.services.sudo = { sshAgentAuth = true; };
 
-    environment.etc = singleton
+    environment.etc.sudoers =
       { source =
           pkgs.runCommand "sudoers"
           {
@@ -222,7 +224,6 @@ in
           # Make sure that the sudoers file is syntactically valid.
           # (currently disabled - NIXOS-66)
           "${pkgs.buildPackages.sudo}/sbin/visudo -f $src -c && cp $src $out";
-        target = "sudoers";
         mode = "0440";
       };
 

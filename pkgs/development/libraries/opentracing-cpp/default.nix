@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake }:
 stdenv.mkDerivation rec {
-  name = "opentracing-cpp-${version}";
+  pname = "opentracing-cpp";
   version = "1.5.1";
   src = fetchFromGitHub {
     owner = "opentracing";

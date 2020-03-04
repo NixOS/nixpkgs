@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ply ];
 
-  disabled = isPy3k;
+  doCheck = !isPy3k;
 
   meta = {
     homepage = https://github.com/erezsh/plyplus;

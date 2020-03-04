@@ -1,6 +1,4 @@
-{ config, lib, pkgs, ... }:
-
-# TODO: support non-postgresql
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
@@ -9,22 +7,28 @@ let
 
   ruby = cfg.packages.gitlab.ruby;
 
+  postgresqlPackage = if config.services.postgresql.enable then
+                        config.services.postgresql.package
+                      else
+                        pkgs.postgresql;
+
   gitlabSocket = "${cfg.statePath}/tmp/sockets/gitlab.socket";
   gitalySocket = "${cfg.statePath}/tmp/sockets/gitaly.socket";
   pathUrlQuote = url: replaceStrings ["/"] ["%2F"] url;
-  pgSuperUser = config.services.postgresql.superUser;
 
   databaseConfig = {
     production = {
       adapter = "postgresql";
       database = cfg.databaseName;
       host = cfg.databaseHost;
-      password = cfg.databasePassword;
       username = cfg.databaseUsername;
       encoding = "utf8";
       pool = cfg.databasePool;
     } // cfg.extraDatabaseConfig;
   };
+
+  # We only want to create a database if we're actually going to connect to it.
+  databaseActuallyCreateLocally = cfg.databaseCreateLocally && cfg.databaseHost == "";
 
   gitalyToml = pkgs.writeText "gitaly.toml" ''
     socket_path = "${lib.escape ["\""] gitalySocket}"
@@ -52,7 +56,7 @@ let
     gitlab_url = "http+unix://${pathUrlQuote gitlabSocket}";
     http_settings.self_signed_cert = false;
     repos_path = "${cfg.statePath}/repositories";
-    secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
+    secret_file = "${cfg.statePath}/gitlab_shell_secret";
     log_file = "${cfg.statePath}/log/gitlab-shell.log";
     custom_hooks_dir = "${cfg.statePath}/custom_hooks";
     redis = {
@@ -65,13 +69,6 @@ let
   };
 
   redisConfig.production.url = "redis://localhost:6379/";
-
-  secretsConfig.production = {
-    secret_key_base = cfg.secrets.secret;
-    otp_key_base = cfg.secrets.otp;
-    db_key_base = cfg.secrets.db;
-    openid_connect_signing_key = cfg.secrets.jws;
-  };
 
   gitlabConfig = {
     # These are the default settings from config/gitlab.example.yml
@@ -109,7 +106,7 @@ let
       gitlab_shell = {
         path = "${cfg.packages.gitlab-shell}";
         hooks_path = "${cfg.statePath}/shell/hooks";
-        secret_file = "${cfg.statePath}/config/gitlab_shell_secret";
+        secret_file = "${cfg.statePath}/gitlab_shell_secret";
         upload_pack = true;
         receive_pack = true;
       };
@@ -132,44 +129,39 @@ let
     HOME = "${cfg.statePath}/home";
     UNICORN_PATH = "${cfg.statePath}/";
     GITLAB_PATH = "${cfg.packages.gitlab}/share/gitlab/";
-    GITLAB_STATE_PATH = cfg.statePath;
-    GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     SCHEMA = "${cfg.statePath}/db/schema.rb";
+    GITLAB_UPLOADS_PATH = "${cfg.statePath}/uploads";
     GITLAB_LOG_PATH = "${cfg.statePath}/log";
-    GITLAB_SHELL_PATH = "${cfg.packages.gitlab-shell}";
-    GITLAB_SHELL_CONFIG_PATH = "${cfg.statePath}/shell/config.yml";
-    GITLAB_SHELL_SECRET_PATH = "${cfg.statePath}/config/gitlab_shell_secret";
-    GITLAB_SHELL_HOOKS_PATH = "${cfg.statePath}/shell/hooks";
     GITLAB_REDIS_CONFIG_FILE = pkgs.writeText "redis.yml" (builtins.toJSON redisConfig);
     prometheus_multiproc_dir = "/run/gitlab";
     RAILS_ENV = "production";
   };
 
-  gitlab-rake = pkgs.stdenv.mkDerivation rec {
+  gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rake $out/bin/gitlab-rake \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --set RAKEOPT '-f ${cfg.packages.gitlab}/share/gitlab/Rakefile' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
   };
 
-  gitlab-rails = pkgs.stdenv.mkDerivation rec {
+  gitlab-rails = pkgs.stdenv.mkDerivation {
     name = "gitlab-rails";
     buildInputs = [ pkgs.makeWrapper ];
     dontBuild = true;
-    unpackPhase = ":";
+    dontUnpack = true;
     installPhase = ''
       mkdir -p $out/bin
       makeWrapper ${cfg.packages.gitlab.rubyEnv}/bin/rails $out/bin/gitlab-rails \
           ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") gitlabEnv)} \
-          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar config.services.postgresql.package pkgs.coreutils pkgs.procps ]}:$PATH' \
+          --set PATH '${lib.makeBinPath [ pkgs.nodejs pkgs.gzip pkgs.git pkgs.gnutar postgresqlPackage pkgs.coreutils pkgs.procps ]}:$PATH' \
           --run 'cd ${cfg.packages.gitlab}/share/gitlab'
      '';
   };
@@ -185,16 +177,22 @@ let
         address: "${cfg.smtp.address}",
         port: ${toString cfg.smtp.port},
         ${optionalString (cfg.smtp.username != null) ''user_name: "${cfg.smtp.username}",''}
-        ${optionalString (cfg.smtp.password != null) ''password: "${cfg.smtp.password}",''}
+        ${optionalString (cfg.smtp.passwordFile != null) ''password: "@smtpPassword@",''}
         domain: "${cfg.smtp.domain}",
         ${optionalString (cfg.smtp.authentication != null) "authentication: :${cfg.smtp.authentication},"}
         enable_starttls_auto: ${toString cfg.smtp.enableStartTLSAuto},
+        ca_file: "/etc/ssl/certs/ca-certificates.crt",
         openssl_verify_mode: '${cfg.smtp.opensslVerifyMode}'
       }
     end
   '';
 
 in {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "gitlab" "stateDir" ] [ "services" "gitlab" "statePath" ])
+    (mkRemovedOptionModule [ "services" "gitlab" "satelliteDir" ] "")
+  ];
 
   options = {
     services.gitlab = {
@@ -238,7 +236,15 @@ in {
       statePath = mkOption {
         type = types.str;
         default = "/var/gitlab/state";
-        description = "Gitlab state directory, logs are stored here.";
+        description = ''
+          Gitlab state directory. Configuration, repositories and
+          logs, among other things, are stored here.
+
+          The directory will be created automatically if it doesn't
+          exist already. Its parent directories must be owned by
+          either <literal>root</literal> or the user set in
+          <option>services.gitlab.user</option>.
+        '';
       };
 
       backupPath = mkOption {
@@ -249,13 +255,33 @@ in {
 
       databaseHost = mkOption {
         type = types.str;
-        default = "127.0.0.1";
-        description = "Gitlab database hostname.";
+        default = "";
+        description = ''
+          Gitlab database hostname. An empty string means <quote>use
+          local unix socket connection</quote>.
+        '';
       };
 
-      databasePassword = mkOption {
-        type = types.str;
-        description = "Gitlab database user password.";
+      databasePasswordFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
+        description = ''
+          File containing the Gitlab database user password.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
+        '';
+      };
+
+      databaseCreateLocally = mkOption {
+        type = types.bool;
+        default = true;
+        description = ''
+          Whether a database should be automatically created on the
+          local host. Set this to <literal>false</literal> if you plan
+          on provisioning a local database yourself. This has no effect
+          if <option>services.gitlab.databaseHost</option> is customized.
+        '';
       };
 
       databaseName = mkOption {
@@ -343,10 +369,15 @@ in {
         '';
       };
 
-      initialRootPassword = mkOption {
-        type = types.str;
+      initialRootPasswordFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
         description = ''
-          Initial password of the root account if this is a new install.
+          File containing the initial password of the root account if
+          this is a new install.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
         '';
       };
 
@@ -370,15 +401,20 @@ in {
         };
 
         username = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr str;
           default = null;
           description = "Username of the SMTP server for Gitlab.";
         };
 
-        password = mkOption {
-          type = types.nullOr types.str;
+        passwordFile = mkOption {
+          type = types.nullOr types.path;
           default = null;
-          description = "Password of the SMTP server for Gitlab.";
+          description = ''
+            File containing the password of the SMTP server for Gitlab.
+
+            This should be a string, not a nix path, since nix paths
+            are copied into the world-readable nix store.
+          '';
         };
 
         domain = mkOption {
@@ -388,7 +424,7 @@ in {
         };
 
         authentication = mkOption {
-          type = types.nullOr types.str;
+          type = with types; nullOr str;
           default = null;
           description = "Authentitcation type to use, see http://api.rubyonrails.org/classes/ActionMailer/Base.html";
         };
@@ -406,68 +442,125 @@ in {
         };
       };
 
-      secrets.secret = mkOption {
-        type = types.str;
+      secrets.secretFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
         description = ''
-          The secret is used to encrypt variables in the DB. If
-          you change or lose this key you will be unable to access variables
-          stored in database.
+          A file containing the secret used to encrypt variables in
+          the DB. If you change or lose this key you will be unable to
+          access variables stored in database.
 
           Make sure the secret is at least 30 characters and all random,
           no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
         '';
       };
 
-      secrets.db = mkOption {
-        type = types.str;
+      secrets.dbFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
         description = ''
-          The secret is used to encrypt variables in the DB. If
-          you change or lose this key you will be unable to access variables
-          stored in database.
+          A file containing the secret used to encrypt variables in
+          the DB. If you change or lose this key you will be unable to
+          access variables stored in database.
 
           Make sure the secret is at least 30 characters and all random,
           no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
         '';
       };
 
-      secrets.otp = mkOption {
-        type = types.str;
+      secrets.otpFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
         description = ''
-          The secret is used to encrypt secrets for OTP tokens. If
-          you change or lose this key, users which have 2FA enabled for login
-          won't be able to login anymore.
+          A file containing the secret used to encrypt secrets for OTP
+          tokens. If you change or lose this key, users which have 2FA
+          enabled for login won't be able to login anymore.
 
           Make sure the secret is at least 30 characters and all random,
           no regular words or you'll be exposed to dictionary attacks.
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
         '';
       };
 
-      secrets.jws = mkOption {
-        type = types.str;
+      secrets.jwsFile = mkOption {
+        type = with types; nullOr path;
+        default = null;
         description = ''
-          The secret is used to encrypt session keys. If you change or lose
-          this key, users will be disconnected.
+          A file containing the secret used to encrypt session
+          keys. If you change or lose this key, users will be
+          disconnected.
 
           Make sure the secret is an RSA private key in PEM format. You can
           generate one with
 
           openssl genrsa 2048
+
+          This should be a string, not a nix path, since nix paths are
+          copied into the world-readable nix store.
         '';
       };
 
       extraConfig = mkOption {
         type = types.attrs;
         default = {};
-        example = {
-          gitlab = {
-            default_projects_features = {
-              builds = false;
+        example = literalExample ''
+          {
+            gitlab = {
+              default_projects_features = {
+                builds = false;
+              };
+            };
+            omniauth = {
+              enabled = true;
+              auto_sign_in_with_provider = "openid_connect";
+              allow_single_sign_on = ["openid_connect"];
+              block_auto_created_users = false;
+              providers = [
+                {
+                  name = "openid_connect";
+                  label = "OpenID Connect";
+                  args = {
+                    name = "openid_connect";
+                    scope = ["openid" "profile"];
+                    response_type = "code";
+                    issuer = "https://keycloak.example.com/auth/realms/My%20Realm";
+                    discovery = true;
+                    client_auth_method = "query";
+                    uid_field = "preferred_username";
+                    client_options = {
+                      identifier = "gitlab";
+                      secret = { _secret = "/var/keys/gitlab_oidc_secret"; };
+                      redirect_uri = "https://git.example.com/users/auth/openid_connect/callback";
+                    };
+                  };
+                }
+              ];
             };
           };
-        };
+        '';
         description = ''
-          Extra options to be merged into config/gitlab.yml as nix
-          attribute set.
+          Extra options to be added under
+          <literal>production</literal> in
+          <filename>config/gitlab.yml</filename>, as a nix attribute
+          set.
+
+          Options containing secret data should be set to an attribute
+          set containing the attribute <literal>_secret</literal> - a
+          string pointing to a file containing the value the option
+          should be set to. See the example to get a better picture of
+          this: in the resulting
+          <filename>config/gitlab.yml</filename> file, the
+          <literal>production.omniauth.providers[0].args.client_options.secret</literal>
+          key will be set to the contents of the
+          <filename>/var/keys/gitlab_oidc_secret</filename> file.
         '';
       };
     };
@@ -475,49 +568,114 @@ in {
 
   config = mkIf cfg.enable {
 
+    assertions = [
+      {
+        assertion = databaseActuallyCreateLocally -> (cfg.user == cfg.databaseUsername);
+        message = ''For local automatic database provisioning (services.gitlab.databaseCreateLocally == true) with peer authentication (services.gitlab.databaseHost == "") to work services.gitlab.user and services.gitlab.databaseUsername must be identical.'';
+      }
+      {
+        assertion = (cfg.databaseHost != "") -> (cfg.databasePasswordFile != null);
+        message = "When services.gitlab.databaseHost is customized, services.gitlab.databasePasswordFile must be set!";
+      }
+      {
+        assertion = cfg.initialRootPasswordFile != null;
+        message = "services.gitlab.initialRootPasswordFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.secretFile != null;
+        message = "services.gitlab.secrets.secretFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.dbFile != null;
+        message = "services.gitlab.secrets.dbFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.otpFile != null;
+        message = "services.gitlab.secrets.otpFile must be set!";
+      }
+      {
+        assertion = cfg.secrets.jwsFile != null;
+        message = "services.gitlab.secrets.jwsFile must be set!";
+      }
+    ];
+
     environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
 
     # Redis is required for the sidekiq queue runner.
     services.redis.enable = mkDefault true;
+
     # We use postgres as the main data store.
-    services.postgresql.enable = mkDefault true;
+    services.postgresql = optionalAttrs databaseActuallyCreateLocally {
+      enable = true;
+      ensureUsers = singleton { name = cfg.databaseUsername; };
+    };
+    # The postgresql module doesn't currently support concepts like
+    # objects owners and extensions; for now we tack on what's needed
+    # here.
+    systemd.services.postgresql.postStart = mkAfter (optionalString databaseActuallyCreateLocally ''
+      set -eu
+
+      $PSQL -tAc "SELECT 1 FROM pg_database WHERE datname = '${cfg.databaseName}'" | grep -q 1 || $PSQL -tAc 'CREATE DATABASE "${cfg.databaseName}" OWNER "${cfg.databaseUsername}"'
+      current_owner=$($PSQL -tAc "SELECT pg_catalog.pg_get_userbyid(datdba) FROM pg_catalog.pg_database WHERE datname = '${cfg.databaseName}'")
+      if [[ "$current_owner" != "${cfg.databaseUsername}" ]]; then
+          $PSQL -tAc 'ALTER DATABASE "${cfg.databaseName}" OWNER TO "${cfg.databaseUsername}"'
+          if [[ -e "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}" ]]; then
+              echo "Reassigning ownership of database ${cfg.databaseName} to user ${cfg.databaseUsername} failed on last boot. Failing..."
+              exit 1
+          fi
+          touch "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
+          $PSQL "${cfg.databaseName}" -tAc "REASSIGN OWNED BY \"$current_owner\" TO \"${cfg.databaseUsername}\""
+          rm "${config.services.postgresql.dataDir}/.reassigning_${cfg.databaseName}"
+      fi
+      $PSQL '${cfg.databaseName}' -tAc "CREATE EXTENSION IF NOT EXISTS pg_trgm"
+    '');
+
     # Use postfix to send out mails.
     services.postfix.enable = mkDefault true;
 
-    users.users = [
-      { name = cfg.user;
-        group = cfg.group;
+    users.users.${cfg.user} =
+      { group = cfg.group;
         home = "${cfg.statePath}/home";
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.gitlab;
-      }
-    ];
+      };
 
-    users.groups = [
-      { name = cfg.group;
-        gid = config.ids.gids.gitlab;
-      }
-    ];
+    users.groups.${cfg.group}.gid = config.ids.gids.gitlab;
 
     systemd.tmpfiles.rules = [
       "d /run/gitlab 0755 ${cfg.user} ${cfg.group} -"
       "d ${gitlabEnv.HOME} 0750 ${cfg.user} ${cfg.group} -"
+      "z ${gitlabEnv.HOME}/.ssh/authorized_keys 0600 ${cfg.user} ${cfg.group} -"
       "d ${cfg.backupPath} 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath} 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/builds 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/config 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/config/initializers 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/db 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/log 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/repositories 2770 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/shell 0750 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/tmp 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/tmp/pids 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/tmp/sockets 0750 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/uploads 0700 ${cfg.user} ${cfg.group} -"
+      "d ${cfg.statePath}/custom_hooks 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/pre-receive.d 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/post-receive.d 0700 ${cfg.user} ${cfg.group} -"
       "d ${cfg.statePath}/custom_hooks/update.d 0700 ${cfg.user} ${cfg.group} -"
+      "d ${gitlabConfig.production.shared.path} 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/artifacts 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/lfs-objects 0750 ${cfg.user} ${cfg.group} -"
       "d ${gitlabConfig.production.shared.path}/pages 0750 ${cfg.user} ${cfg.group} -"
+      "L+ /run/gitlab/config - - - - ${cfg.statePath}/config"
+      "L+ /run/gitlab/log - - - - ${cfg.statePath}/log"
+      "L+ /run/gitlab/tmp - - - - ${cfg.statePath}/tmp"
+      "L+ /run/gitlab/uploads - - - - ${cfg.statePath}/uploads"
+
+      "L+ /run/gitlab/shell-config.yml - - - - ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)}"
+
+      "L+ ${cfg.statePath}/config/unicorn.rb - - - - ${./defaultUnicornConfig.rb}"
+      "L+ ${cfg.statePath}/config/initializers/extra-gitlab.rb - - - - ${extraGitlabRb}"
     ];
 
     systemd.services.gitlab-sidekiq = {
@@ -525,12 +683,16 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        postgresqlPackage
         gitAndTools.git
         ruby
         openssh
         nodejs
         gnupg
+
+        # Needed for GitLab project imports
+        gnutar
+        gzip
       ];
       serviceConfig = {
         Type = "simple";
@@ -570,6 +732,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = with pkgs; [
+        exiftool
         gitAndTools.git
         gnutar
         gzip
@@ -577,7 +740,6 @@ in {
         gitlab-workhorse
       ];
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
@@ -601,95 +763,109 @@ in {
       wantedBy = [ "multi-user.target" ];
       environment = gitlabEnv;
       path = with pkgs; [
-        config.services.postgresql.package
+        postgresqlPackage
         gitAndTools.git
         openssh
         nodejs
         procps
         gnupg
       ];
-      preStart = ''
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
-        rm -rf ${cfg.statePath}/config
-        mkdir ${cfg.statePath}/config
-        if [ -e ${cfg.statePath}/lib ]; then
-          rm ${cfg.statePath}/lib
-        fi
-
-        ln -sf ${cfg.packages.gitlab}/share/gitlab/lib ${cfg.statePath}/lib
-        [ -L /run/gitlab/config ] || ln -sf ${cfg.statePath}/config /run/gitlab/config
-        [ -L /run/gitlab/log ] || ln -sf ${cfg.statePath}/log /run/gitlab/log
-        [ -L /run/gitlab/tmp ] || ln -sf ${cfg.statePath}/tmp /run/gitlab/tmp
-        [ -L /run/gitlab/uploads ] || ln -sf ${cfg.statePath}/uploads /run/gitlab/uploads
-        cp ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
-        cp -rf ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
-        ln -sf ${extraGitlabRb} ${cfg.statePath}/config/initializers/extra-gitlab.rb
-        ${optionalString cfg.smtp.enable ''
-          ln -sf ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
-        ''}
-        ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/config/gitlab_shell_secret
-
-        # JSON is a subset of YAML
-        ln -sf ${pkgs.writeText "gitlab.yml" (builtins.toJSON gitlabConfig)} ${cfg.statePath}/config/gitlab.yml
-        ln -sf ${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} ${cfg.statePath}/config/database.yml
-        ln -sf ${pkgs.writeText "secrets.yml" (builtins.toJSON secretsConfig)} ${cfg.statePath}/config/secrets.yml
-        ln -sf ${./defaultUnicornConfig.rb} ${cfg.statePath}/config/unicorn.rb
-
-        # Install the shell required to push repositories
-        ln -sf ${pkgs.writeText "config.yml" (builtins.toJSON gitlabShellConfig)} /run/gitlab/shell-config.yml
-        [ -L ${cfg.statePath}/shell/hooks ] ||  ln -sf ${cfg.packages.gitlab-shell}/hooks ${cfg.statePath}/shell/hooks
-        ${cfg.packages.gitlab-shell}/bin/install
-
-        chown -R ${cfg.user}:${cfg.group} ${cfg.statePath}/
-        chmod -R ug+rwX,o-rwx+X ${cfg.statePath}/
-        chown -R ${cfg.user}:${cfg.group} /run/gitlab
-
-        if ! test -e "${cfg.statePath}/db-created"; then
-          if [ "${cfg.databaseHost}" = "127.0.0.1" ]; then
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql postgres -c "CREATE ROLE ${cfg.databaseUsername} WITH LOGIN NOCREATEDB NOCREATEROLE ENCRYPTED PASSWORD '${cfg.databasePassword}'"
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} ${config.services.postgresql.package}/bin/createdb --owner ${cfg.databaseUsername} ${cfg.databaseName}
-
-            # enable required pg_trgm extension for gitlab
-            ${pkgs.sudo}/bin/sudo -u ${pgSuperUser} psql ${cfg.databaseName} -c "CREATE EXTENSION IF NOT EXISTS pg_trgm"
-          fi
-
-          ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake db:schema:load
-
-          touch "${cfg.statePath}/db-created"
-        fi
-
-        # Always do the db migrations just to be sure the database is up-to-date
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake db:migrate
-
-        if ! test -e "${cfg.statePath}/db-seeded"; then
-          ${pkgs.sudo}/bin/sudo -u ${cfg.user} ${gitlab-rake}/bin/gitlab-rake db:seed_fu \
-            GITLAB_ROOT_PASSWORD='${cfg.initialRootPassword}' GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}'
-          touch "${cfg.statePath}/db-seeded"
-        fi
-
-        # The gitlab:shell:create_hooks task seems broken for fixing links
-        # so we instead delete all the hooks and create them anew
-        rm -f ${cfg.statePath}/repositories/**/*.git/hooks
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${gitlab-rake}/bin/gitlab-rake gitlab:shell:create_hooks
-
-        ${pkgs.sudo}/bin/sudo -u ${cfg.user} -H ${pkgs.git}/bin/git config --global core.autocrlf "input"
-
-        # Change permissions in the last step because some of the
-        # intermediary scripts like to create directories as root.
-        chmod -R u+rwX,go-rwx+X ${gitlabEnv.HOME}
-        chmod -R ug+rwX,o-rwx ${cfg.statePath}/repositories
-        chmod -R ug-s ${cfg.statePath}/repositories
-        find ${cfg.statePath}/repositories -type d -print0 | xargs -0 chmod g+s
-      '';
 
       serviceConfig = {
-        PermissionsStartOnly = true; # preStart must be run as root
         Type = "simple";
         User = cfg.user;
         Group = cfg.group;
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        ExecStartPre = let
+          preStartFullPrivileges = ''
+            shopt -s dotglob nullglob
+            set -eu
+
+            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/*
+            chown --no-dereference '${cfg.user}':'${cfg.group}' '${cfg.statePath}'/config/*
+          '';
+          preStart = ''
+            set -eu
+
+            cp -f ${cfg.packages.gitlab}/share/gitlab/VERSION ${cfg.statePath}/VERSION
+            rm -rf ${cfg.statePath}/db/*
+            rm -rf ${cfg.statePath}/config/initializers/*
+            rm -f ${cfg.statePath}/lib
+            cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/config.dist/* ${cfg.statePath}/config
+            cp -rf --no-preserve=mode ${cfg.packages.gitlab}/share/gitlab/db/* ${cfg.statePath}/db
+
+            ${cfg.packages.gitlab-shell}/bin/install
+
+            ${optionalString cfg.smtp.enable ''
+              install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
+              ${optionalString (cfg.smtp.passwordFile != null) ''
+                smtp_password=$(<'${cfg.smtp.passwordFile}')
+                ${pkgs.replace}/bin/replace-literal -e '@smtpPassword@' "$smtp_password" '${cfg.statePath}/config/initializers/smtp_settings.rb'
+              ''}
+            ''}
+
+            (
+              umask u=rwx,g=,o=
+
+              ${pkgs.openssl}/bin/openssl rand -hex 32 > ${cfg.statePath}/gitlab_shell_secret
+
+              if [[ -h '${cfg.statePath}/config/database.yml' ]]; then
+                rm '${cfg.statePath}/config/database.yml'
+              fi
+
+              ${if cfg.databasePasswordFile != null then ''
+                  export db_password="$(<'${cfg.databasePasswordFile}')"
+
+                  if [[ -z "$db_password" ]]; then
+                    >&2 echo "Database password was an empty string!"
+                    exit 1
+                  fi
+
+                  ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                    '.production.password = $ENV.db_password' \
+                                    >'${cfg.statePath}/config/database.yml'
+                ''
+                else ''
+                  ${pkgs.jq}/bin/jq <${pkgs.writeText "database.yml" (builtins.toJSON databaseConfig)} \
+                                    >'${cfg.statePath}/config/database.yml'
+                ''
+              }
+
+              ${utils.genJqSecretsReplacementSnippet
+                  gitlabConfig
+                  "${cfg.statePath}/config/gitlab.yml"
+              }
+
+              if [[ -h '${cfg.statePath}/config/secrets.yml' ]]; then
+                rm '${cfg.statePath}/config/secrets.yml'
+              fi
+
+              export secret="$(<'${cfg.secrets.secretFile}')"
+              export db="$(<'${cfg.secrets.dbFile}')"
+              export otp="$(<'${cfg.secrets.otpFile}')"
+              export jws="$(<'${cfg.secrets.jwsFile}')"
+              ${pkgs.jq}/bin/jq -n '{production: {secret_key_base: $ENV.secret,
+                                                  otp_key_base: $ENV.otp,
+                                                  db_key_base: $ENV.db,
+                                                  openid_connect_signing_key: $ENV.jws}}' \
+                                > '${cfg.statePath}/config/secrets.yml'
+            )
+
+            initial_root_password="$(<'${cfg.initialRootPasswordFile}')"
+            ${gitlab-rake}/bin/gitlab-rake gitlab:db:configure GITLAB_ROOT_PASSWORD="$initial_root_password" \
+                                                               GITLAB_ROOT_EMAIL='${cfg.initialRootEmail}' > /dev/null
+
+            # We remove potentially broken links to old gitlab-shell versions
+            rm -Rf ${cfg.statePath}/repositories/**/*.git/hooks
+
+            ${pkgs.git}/bin/git config --global core.autocrlf "input"
+          '';
+        in [
+          "+${pkgs.writeShellScript "gitlab-pre-start-full-privileges" preStartFullPrivileges}"
+          "${pkgs.writeShellScript "gitlab-pre-start" preStart}"
+        ];
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/unicorn -c ${cfg.statePath}/config/unicorn.rb -E production";
       };
 

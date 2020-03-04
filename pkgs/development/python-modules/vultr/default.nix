@@ -11,7 +11,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
       owner = "spry-group";
       repo = "python-vultr";
-      rev = "${version}";
+      rev = version;
       sha256 = "1qjvvr2v9gfnwskdl0ayazpcmiyw9zlgnijnhgq9mcri5gq9jw5h";
   };
 

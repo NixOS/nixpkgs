@@ -1,11 +1,14 @@
-{stdenv, fetchurl, scons, zlib, SDL, lua5_1, pkgconfig}:
+{stdenv, fetchFromGitHub, scons, zlib, SDL, lua5_1, pkgconfig}:
 
 stdenv.mkDerivation {
-  name = "fceux-2.2.3";
+  pname = "fceux-unstable";
+  version = "2020-01-29";
 
-  src = fetchurl {
-    url = mirror://sourceforge/fceultra/Source%20Code/2.2.3%20src/fceux-2.2.3.src.tar.gz;
-    sha256 = "0gl2i3qdmcm7v9m5kpfz98w05d8m33990jiwka043ya7lflxvrjb";
+  src = fetchFromGitHub {
+    owner = "TASVideos";
+    repo = "fceux";
+    rev = "fb8d46d9697cb24b0ebe79d84eedf282f69ab337";
+    sha256 = "0gpz411dzfwx9mr34yi4zb1hphd5hha1nvwgzxki0sviwafca992";
   };
 
   nativeBuildInputs = [ pkgconfig scons ];
@@ -30,6 +33,7 @@ stdenv.mkDerivation {
   meta = {
     description = "A Nintendo Entertainment System (NES) Emulator";
     license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.scubed2 ];
     homepage = http://www.fceux.com/;
     platforms = stdenv.lib.platforms.linux;
   };

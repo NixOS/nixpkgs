@@ -1,4 +1,4 @@
-import ./make-test.nix {
+import ./make-test-python.nix {
   name = "opensmtpd";
 
   nodes = {
@@ -53,14 +53,14 @@ import ./make-test.nix {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $server->waitForUnit("network-online.target");
-    $server->waitForUnit("opensmtpd");
-    $server->waitForUnit("dovecot2");
-    $server->waitForUnit("nginx");
-    $server->waitForUnit("rss2email");
+    server.wait_for_unit("network-online.target")
+    server.wait_for_unit("opensmtpd")
+    server.wait_for_unit("dovecot2")
+    server.wait_for_unit("nginx")
+    server.wait_for_unit("rss2email")
 
-    $server->waitUntilSucceeds('check-mail-landed >&2');
+    server.wait_until_succeeds("check-mail-landed >&2")
   '';
 }

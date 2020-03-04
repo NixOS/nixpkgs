@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
       sha256 = "1v956yf5spw0156rni5z77hzqwmby7ajwdcd6mkhb6zvl36awr90";
     };
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   installPhase =
     ''

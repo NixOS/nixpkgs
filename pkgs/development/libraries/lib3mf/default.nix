@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake, ninja, libuuid, gtest }:
+{ stdenv, fetchFromGitHub, cmake, ninja, libuuid, libossp_uuid, gtest }:
 
 stdenv.mkDerivation rec {
   pname = "lib3mf";
@@ -13,11 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ninja ];
 
-  buildInputs = [ libuuid ];
+  buildInputs = if stdenv.isDarwin then [ libossp_uuid ] else [ libuuid ];
 
   postPatch = ''
     rmdir UnitTests/googletest
     ln -s ${gtest.src} UnitTests/googletest
+
+    # fix libdir=''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@
+    sed -i 's,=''${\(exec_\)\?prefix}/,=,' lib3MF.pc.in
   '';
 
   meta = with stdenv.lib; {

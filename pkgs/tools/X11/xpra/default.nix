@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, callPackage, substituteAll, python3, pkgconfig
-, xorg, gtk3, glib, pango, cairo, gdk_pixbuf, atk
+, xorg, gtk3, glib, pango, cairo, gdk-pixbuf, atk
 , wrapGAppsHook, xorgserver, getopt, xauth, utillinux, which
-, ffmpeg, x264, libvpx, libwebp
+, ffmpeg_4, x264, libvpx, libwebp, x265
 , libfakeXinerama
 , gst_all_1, pulseaudio, gobject-introspection
 , pam }:
@@ -14,11 +14,11 @@ let
   xf86videodummy = callPackage ./xf86videodummy { };
 in buildPythonApplication rec {
   pname = "xpra";
-  version = "2.3.4";
+  version = "3.0.6";
 
   src = fetchurl {
     url = "https://xpra.org/src/${pname}-${version}.tar.xz";
-    sha256 = "0wa3kx54himy3i1b2801hlzfilh3cf4kjk40k1cjl0ds28m5hija";
+    sha256 = "0msm53iphb6zr1phb2knkrn94hjcg3a9n1vvbis5sipdvlx50m08";
   };
 
   patches = [
@@ -28,7 +28,11 @@ in buildPythonApplication rec {
     })
   ];
 
-  nativeBuildInputs = [ pkgconfig gobject-introspection wrapGAppsHook ];
+  postPatch = ''
+    substituteInPlace setup.py --replace '/usr/include/security' '${pam}/include/security'
+  '';
+
+  nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
   buildInputs = with xorg; [
     libX11 xorgproto libXrender libXi
     libXtst libXfixes libXcomposite libXdamage
@@ -36,9 +40,9 @@ in buildPythonApplication rec {
     ] ++ [
     cython
 
-    pango cairo gdk_pixbuf atk gtk3 glib
+    pango cairo gdk-pixbuf atk.out gtk3 glib
 
-    ffmpeg libvpx x264 libwebp
+    ffmpeg_4 libvpx x264 libwebp x265
 
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
@@ -47,23 +51,26 @@ in buildPythonApplication rec {
     gst_all_1.gst-libav
 
     pam
+    gobject-introspection
   ];
-
   propagatedBuildInputs = with python3.pkgs; [
     pillow rencode pycrypto cryptography pycups lz4 dbus-python
-    netifaces numpy websockify pygobject3 pycairo gst-python pam
+    netifaces numpy pygobject3 pycairo gst-python pam
+    pyopengl paramiko opencv4 python-uinput pyxdg
+    ipaddress idna
   ];
 
-  NIX_CFLAGS_COMPILE = [
     # error: 'import_cairo' defined but not used
-    "-Wno-error=unused-function"
-  ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
   setupPyBuildFlags = [
     "--with-Xdummy"
     "--without-strict"
     "--with-gtk3"
     "--without-gtk2"
+    # Override these, setup.py checks for headers in /usr/* paths
+    "--with-pam"
+    "--with-vsock"
   ];
 
   preFixup = ''
@@ -76,6 +83,8 @@ in buildPythonApplication rec {
 
   doCheck = false;
 
+  enableParallelBuilding = true;
+
   passthru = { inherit xf86videodummy; };
 
   meta = {
@@ -85,8 +94,6 @@ in buildPythonApplication rec {
     description = "Persistent remote applications for X";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    # https://github.com/NixOS/nixpkgs/pull/48872#issuecomment-433559636
-    broken = true;
     maintainers = with maintainers; [ tstrobel offline numinit ];
   };
 }

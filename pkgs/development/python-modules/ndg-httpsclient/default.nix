@@ -5,7 +5,7 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.4.2";
+  version = "0.5.1";
   pname = "ndg-httpsclient";
 
   propagatedBuildInputs = [ pyopenssl ];
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     owner = "cedadev";
     repo = "ndg_httpsclient";
     rev = version;
-    sha256 = "1kk4knv029j0cicfiv23c1rayc1n3f1j3rhl0527gxiv0qv4jw8h";
+    sha256 = "0lhsgs4am4xyjssng5p0vkfwqncczj1dpa0vss4lrhzq86mnn5rz";
   };
 
   # uses networking

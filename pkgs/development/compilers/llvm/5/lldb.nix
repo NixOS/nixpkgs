@@ -9,13 +9,14 @@
 , libxml2
 , llvm
 , clang-unwrapped
-, python
+, python3
 , version
 , darwin
 }:
 
 stdenv.mkDerivation {
-  name = "lldb-${version}";
+  pname = "lldb";
+  inherit version;
 
   src = fetch "lldb" "05j2a63yzln43852nng8a7y47spzlyr1cvdmgmbxgd29c8r0bfkq";
 
@@ -29,9 +30,9 @@ stdenv.mkDerivation {
       cmake/modules/LLDBStandalone.cmake
   '';
 
-  nativeBuildInputs = [ cmake python which swig ];
+  nativeBuildInputs = [ cmake python3 which swig ];
   buildInputs = [ ncurses zlib libedit libxml2 llvm ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa darwin.cf-private ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.libobjc darwin.apple_sdk.libs.xpc darwin.apple_sdk.frameworks.Foundation darwin.bootstrap_cmds darwin.apple_sdk.frameworks.Carbon darwin.apple_sdk.frameworks.Cocoa ];
 
   CXXFLAGS = "-fno-rtti";
   hardeningDisable = [ "format" ];

@@ -1,6 +1,6 @@
 {stdenv, buildOcamlJane, type_conv}:
 
-buildOcamlJane rec {
+buildOcamlJane {
   name = "bin_prot";
   version = "113.33.03";
   minimumSupportedOcamlVersion = "4.02";

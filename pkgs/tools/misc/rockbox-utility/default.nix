@@ -5,7 +5,7 @@
 let inherit (stdenv.lib) getDev; in
 
 stdenv.mkDerivation  rec {
-  name = "rockbox-utility-${version}";
+  pname = "rockbox-utility";
   version = "1.4.0";
 
   src = fetchurl {

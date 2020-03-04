@@ -1,11 +1,11 @@
 { lowPrio, newScope, pkgs, stdenv, cmake, libstdcxxHook
-, libxml2, python, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
+, libxml2, python3, isl, fetchurl, overrideCC, wrapCCWith, wrapBintoolsWith
 , buildLlvmTools # tools, but from the previous stage, for cross
 , targetLlvmLibraries # libraries, but from the next stage, for cross
 }:
 
 let
-  release_version = "7.0.1";
+  release_version = "7.1.0";
   version = release_version; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
@@ -13,10 +13,10 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1v9vc7id1761qm7mywlknsp810232iwyz8rd4y5km4h7pg9cg4sc";
+  clang-tools-extra_src = fetch "clang-tools-extra" "0lb4kdh7j2fhfz8kd6iv5df7m3pikiryk1vvwsf87spc90n09q0w";
 
   tools = stdenv.lib.makeExtensible (tools: let
-    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });
+    callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
     mkExtraBuildCommands = cc: ''
       rsrc="$out/resource-root"
       mkdir "$rsrc"
@@ -32,6 +32,7 @@ let
     llvm-polly = callPackage ./llvm.nix { enablePolly = true; };
 
     clang-unwrapped = callPackage ./clang {
+      inherit (tools) lld;
       inherit clang-tools-extra_src;
     };
     clang-polly-unwrapped = callPackage ./clang {
@@ -42,12 +43,12 @@ let
 
     llvm-manpages = lowPrio (tools.llvm.override {
       enableManpages = true;
-      python = pkgs.python;  # don't use python-boot
+      python3 = pkgs.python3;  # don't use python-boot
     });
 
     clang-manpages = lowPrio (tools.clang-unwrapped.override {
       enableManpages = true;
-      python = pkgs.python;  # don't use python-boot
+      python3 = pkgs.python3;  # don't use python-boot
     });
 
     libclang = tools.clang-unwrapped.lib;
@@ -111,7 +112,7 @@ let
       '' + mkExtraBuildCommands cc;
     };
 
-    lldClangNoCompilerRt = wrapCCWith rec {
+    lldClangNoCompilerRt = wrapCCWith {
       cc = tools.clang-unwrapped;
       bintools = wrapBintoolsWith {
         inherit (tools) bintools;
@@ -126,7 +127,7 @@ let
   });
 
   libraries = stdenv.lib.makeExtensible (libraries: let
-    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python isl release_version version fetch; });
+    callPackage = newScope (libraries // buildLlvmTools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
   in {
 
     compiler-rt = callPackage ./compiler-rt.nix {

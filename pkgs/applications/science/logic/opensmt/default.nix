@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "opensmt-${version}";
+  pname = "opensmt";
   version = "20101017";
 
   src = fetchurl {

@@ -1,25 +1,16 @@
-{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k, fetchpatch }:
+{ fetchPypi, buildPythonPackage, lib, six, singledispatch, isPy3k }:
 
 buildPythonPackage rec {
-  version = "3.4";
+  version = "3.4.5";
   pname = "nltk";
 
   src = fetchPypi {
     inherit pname version;
     extension = "zip";
-    sha256 = "286f6797204ffdb52525a1d21ec0a221ec68b8e3fa4f2d25f412ac8e63c70e8d";
+    sha256 = "153x2clrnigs74jdgnn3qmljdjj4gprmvpdvh49i18ls4m8mbm5y";
   };
 
   propagatedBuildInputs = [ six ] ++ lib.optional (!isPy3k) singledispatch;
-
-  # TODO: remove patch during update to new version
-  patches = [
-    (fetchpatch {
-      url = https://github.com/nltk/nltk/commit/3966111cbf2f35fb86082b2f12acd90d75e9b8bb.patch;
-      includes = [ "setup.py" ];
-      sha256 = "1sxafnvf6nzv6d996xc1rys06x62s36swgpfqhsyh6l1lj7y38jw";
-    })
-  ];
 
   # Tests require some data, the downloading of which is impure. It would
   # probably make sense to make the data another derivation, but then feeding

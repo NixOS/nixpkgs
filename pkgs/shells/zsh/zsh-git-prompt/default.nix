@@ -25,7 +25,6 @@
 # installed.
 #
 { fetchFromGitHub
-, haskell
 , python
 , git
 , lib
@@ -64,7 +63,7 @@ haskellPackages.callPackage
      libraryHaskellDepends = [ base parsec process QuickCheck ];
      executableHaskellDepends = libraryHaskellDepends;
      testHaskellDepends = [HUnit] ++ libraryHaskellDepends;
-     homepage = "http://github.com/olivierverdier/zsh-git-prompt#readme";
+     homepage = "https://github.com/olivierverdier/zsh-git-prompt#readme";
      description = "Informative git prompt for zsh";
      license = stdenv.lib.licenses.mit;
      maintainers = [lib.maintainers.league];

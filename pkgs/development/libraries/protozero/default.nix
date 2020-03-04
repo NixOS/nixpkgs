@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, cmake }:
 
 stdenv.mkDerivation rec {
-  name = "protozero-${version}";
-  version = "1.6.7";
+  pname = "protozero";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner = "mapbox";
     repo = "protozero";
     rev = "v${version}";
-    sha256 = "1ryvn3iwxiaih3mvyy45nbwxnhzfc8vby0xh9m6d6fpakhcpf6s3";
+    sha256 = "1hfijpfylf1c71wa3mk70gjc88b6k1q7cxb87cwqdflw5q2x8ma6";
   };
 
   nativeBuildInputs = [ cmake ];

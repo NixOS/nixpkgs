@@ -1,18 +1,20 @@
 { stdenv, fetchurl, bzip2, gfortran, libX11, libXmu, libXt, libjpeg, libpng
 , libtiff, ncurses, pango, pcre, perl, readline, tcl, texLive, tk, xz, zlib
 , less, texinfo, graphviz, icu, pkgconfig, bison, imake, which, jdk, openblas
-, curl, Cocoa, Foundation, libobjc, libcxx, tzdata
+, curl, Cocoa, Foundation, libobjc, libcxx, tzdata, fetchpatch
 , withRecommendedPackages ? true
 , enableStrictBarrier ? false
-, javaSupport ? (!stdenv.hostPlatform.isAarch32 && !stdenv.hostPlatform.isAarch64)
+# R as of writing does not support outputting both .so and .a files; it outputs:
+#     --enable-R-static-lib conflicts with --enable-R-shlib and will be ignored
+, static ? false
 }:
 
 stdenv.mkDerivation rec {
-  name = "R-3.5.3";
+  name = "R-3.6.2";
 
   src = fetchurl {
     url = "https://cran.r-project.org/src/base/R-3/${name}.tar.gz";
-    sha256 = "1337irx9y0r3jm1rcq1dcwnxsgfhnvgjs5wadcyh17vhpnvkgyib";
+    sha256 = "0m69pfi0nxyriyb2yz74xfzaxwfkinnf9kpvf1rz727vvmfa8rdx";
   };
 
   dontUseImakeConfigure = true;
@@ -20,16 +22,22 @@ stdenv.mkDerivation rec {
   buildInputs = [
     bzip2 gfortran libX11 libXmu libXt libXt libjpeg libpng libtiff ncurses
     pango pcre perl readline texLive xz zlib less texinfo graphviz icu
-    pkgconfig bison imake which openblas curl
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ tcl tk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ]
-    ++ stdenv.lib.optional javaSupport jdk;
+    pkgconfig bison imake which openblas curl tcl tk jdk
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ Cocoa Foundation libobjc libcxx ];
 
-  patches = [ ./no-usr-local-search-paths.patch ];
+  patches = [
+    ./no-usr-local-search-paths.patch
+  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isAarch64 [
+    # Remove a test which fails on aarch64.
+    # See https://bugs.r-project.org/bugzilla/show_bug.cgi?id=17718
+    ./0001-Disable-test-pending-upstream-fix.patch
+  ];
 
   prePatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace configure --replace "-install_name libR.dylib" "-install_name $out/lib/R/lib/libR.dylib"
   '';
+
+  dontDisableStatic = static;
 
   preConfigure = ''
     configureFlagsArray=(
@@ -45,18 +53,16 @@ stdenv.mkDerivation rec {
       --with-libtiff
       --with-ICU
       ${stdenv.lib.optionalString enableStrictBarrier "--enable-strict-barrier"}
-      --enable-R-shlib
+      ${if static then "--enable-R-static-lib" else "--enable-R-shlib"}
       AR=$(type -p ar)
       AWK=$(type -p gawk)
       CC=$(type -p cc)
       CXX=$(type -p c++)
       FC="${gfortran}/bin/gfortran" F77="${gfortran}/bin/gfortran"
-      ${stdenv.lib.optionalString javaSupport "JAVA_HOME=\"${jdk}\""}
+      JAVA_HOME="${jdk}"
       RANLIB=$(type -p ranlib)
       R_SHELL="${stdenv.shell}"
   '' + stdenv.lib.optionalString stdenv.isDarwin ''
-      --without-tcltk
-      --without-aqua
       --disable-R-framework
       OBJC="clang"
       CPPFLAGS="-isystem ${libcxx}/include/c++/v1"
@@ -108,6 +114,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     hydraPlatforms = platforms.linux;
 
-    maintainers = [ maintainers.peti ];
+    maintainers = with maintainers; [ peti timokau ];
   };
 }

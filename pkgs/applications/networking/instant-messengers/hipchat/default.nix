@@ -39,7 +39,8 @@ let
     libGL
   ] + ":${stdenv.cc.cc.lib}/lib64";
 in stdenv.mkDerivation {
-  name = "hipchat-${version}";
+  pname = "hipchat";
+  inherit version;
 
   src = fetchurl {
     url = "https://atlassian.artifactoryonline.com/atlassian/hipchat-apt-client/pool/HipChat4-${version}-Linux.deb";

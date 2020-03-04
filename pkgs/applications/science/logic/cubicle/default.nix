@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ocamlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "cubicle-${version}";
+  pname = "cubicle";
   version = "1.1.2";
   src = fetchurl {
     url = "http://cubicle.lri.fr/cubicle-${version}.tar.gz";
@@ -19,6 +19,6 @@ stdenv.mkDerivation rec {
     homepage = http://cubicle.lri.fr/;
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
   };
 }

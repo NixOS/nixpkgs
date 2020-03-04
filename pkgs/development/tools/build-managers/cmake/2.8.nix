@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
       --replace '"-framework CoreServices"' '""'
   '';
 
-  buildInputs = [ curl expat zlib bzip2 ]
+  buildInputs = [ setupHook curl expat zlib bzip2 ]
     ++ optional useNcurses ncurses
     ++ optional useQt4 qt4;
 
@@ -67,7 +67,6 @@ stdenv.mkDerivation rec {
   dontUseCmakeConfigure = true;
 
   preConfigure = with stdenv; ''
-      source $setupHook
       fixCmakeFiles .
       substituteInPlace Modules/Platform/UnixPaths.cmake \
         --subst-var-by libc_bin ${getBin cc.libc} \
@@ -82,7 +81,7 @@ stdenv.mkDerivation rec {
     homepage = https://cmake.org;
     description = "Cross-Platform Makefile Generator";
     platforms = if useQt4 then qt4.meta.platforms else stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ ];
+    maintainers = with stdenv.lib.maintainers; [ xfix ];
     license = stdenv.lib.licenses.bsd3;
   };
 }

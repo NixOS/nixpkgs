@@ -1,7 +1,7 @@
 { stdenv, fetchzip, gnugrep }:
 
 stdenv.mkDerivation rec {
-  name = "bats-${version}";
+  pname = "bats";
   version = "1.1.0";
 
   src = fetchzip {

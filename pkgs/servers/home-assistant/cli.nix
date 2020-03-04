@@ -1,12 +1,12 @@
-{ lib, python3, glibcLocales }:
+{ lib, python3 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "homeassistant-cli";
-  version = "0.6.0";
+  version = "0.8.0";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "0yjqjfqr1gc4c9k5z5i7ngcpcwmyp3lzs4xv7allgqvglmw26ji4";
+    sha256 = "0qq42b2a0rlrzaxwf3zqks5gzgv0hf4pz4yjjl6ldnizw8fcj40n";
   };
 
   postPatch = ''
@@ -14,15 +14,9 @@ python3.pkgs.buildPythonApplication rec {
     sed -i "s/'\(.*\)\(==\|>=\).*'/'\1'/g" setup.py
   '';
 
-  nativeBuildInputs = [
-    glibcLocales
-  ];
-
   propagatedBuildInputs = with python3.pkgs; [
     requests netdisco click click-log tabulate jsonpath_rw jinja2 dateparser regex ruamel_yaml aiohttp
   ];
-
-  LC_ALL = "en_US.UTF-8";
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"
@@ -39,7 +33,7 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   meta = with lib; {
-    description = "Command-line tool for Home Asssistant";
+    description = "Command-line tool for Home Assistant";
     homepage = https://github.com/home-assistant/home-assistant-cli;
     license = licenses.asl20;
     maintainers = with maintainers; [ dotlambda ];

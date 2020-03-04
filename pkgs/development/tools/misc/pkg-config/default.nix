@@ -1,23 +1,27 @@
-{stdenv, fetchurl, libiconv, vanilla ? false }:
+{ stdenv, fetchurl, libiconv, vanilla ? false }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "pkg-config-0.29.2";
+  pname = "pkg-config";
+  version = "0.29.2";
 
   setupHook = ./setup-hook.sh;
 
   src = fetchurl {
-    urls = [
-      "https://pkgconfig.freedesktop.org/releases/${name}.tar.gz"
-      "http://fossies.org/linux/misc/${name}.tar.gz"
-    ];
+    url = "https://pkgconfig.freedesktop.org/releases/${pname}-${version}.tar.gz";
     sha256 = "14fmwzki1rlz8bs2p810lk6jqdxsk966d8drgsjmi54cd00rrikg";
   };
-    # Process Requires.private properly, see
-    # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
+
+  # Process Requires.private properly, see
+  # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
   patches = optional (!vanilla) ./requires-private.patch
     ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
+
+  # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
+  postPatch = ''
+    rm -f check/check-requires-private check/check-gtk check/missing
+  '';
 
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
@@ -31,7 +35,8 @@ stdenv.mkDerivation rec {
          "ac_cv_func_posix_getgrgid_r=yes"
        ];
 
-  doCheck = false; # fails
+  enableParallelBuilding = true;
+  doCheck = true;
 
   postInstall = ''rm -f "$out"/bin/*-pkg-config''; # clean the duplicate file
 
@@ -41,5 +46,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
     license = licenses.gpl2Plus;
   };
-
 }

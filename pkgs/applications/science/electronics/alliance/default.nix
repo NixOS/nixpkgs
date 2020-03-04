@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "alliance-${version}";
+  pname = "alliance";
   version = "5.1.1";
 
   src = fetchurl {
-    url = "http://www-asim.lip6.fr/pub/alliance/distribution/5.0/${name}.tar.bz2";
+    url = "http://www-asim.lip6.fr/pub/alliance/distribution/5.0/${pname}-${version}.tar.bz2";
     sha256 = "046c9qwl1vbww0ljm4xyxf5jpz9nq62b2q0wdz9xjimgh4c207w1";
   };
 
@@ -20,7 +20,6 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--prefix=$(out)"
-    "--disable-static"
   ];
 
   preConfigure = ''

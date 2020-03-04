@@ -119,6 +119,11 @@ in {
   config = mkIf cfg.enable {
     environment.systemPackages = [cfg.package];
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' 0700 zookeeper - - -"
+      "Z '${cfg.dataDir}' 0700 zookeeper - - -"
+    ];
+
     systemd.services.zookeeper = {
       description = "Zookeeper Daemon";
       wantedBy = [ "multi-user.target" ];
@@ -135,17 +140,13 @@ in {
             ${configDir}/zoo.cfg
         '';
         User = "zookeeper";
-        PermissionsStartOnly = true;
       };
       preStart = ''
-        mkdir -m 0700 -p ${cfg.dataDir}
-        if [ "$(id -u)" = 0 ]; then chown zookeeper ${cfg.dataDir}; fi
         echo "${toString cfg.id}" > ${cfg.dataDir}/myid
       '';
     };
 
-    users.users = singleton {
-      name = "zookeeper";
+    users.users.zookeeper = {
       uid = config.ids.uids.zookeeper;
       description = "Zookeeper daemon user";
       home = cfg.dataDir;

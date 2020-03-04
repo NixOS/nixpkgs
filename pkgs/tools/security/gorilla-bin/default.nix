@@ -1,7 +1,7 @@
 { fetchurl, makeWrapper, patchelf, stdenv, libXft, libX11, freetype, fontconfig, libXrender, libXScrnSaver, libXext }:
 
 stdenv.mkDerivation rec {
-  name = "gorilla-bin-${version}";
+  pname = "gorilla-bin";
   version = "1.5.3.7";
 
   src = fetchurl {

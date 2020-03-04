@@ -8,7 +8,8 @@
 , qtsvg
 , qtwebengine
 
-, kcalcore
+, akonadi-contacts
+, kcalendarcore
 , kconfigwidgets
 , kcoreaddons
 , kdoctools
@@ -25,7 +26,7 @@
 , exiv2
 , ffmpeg
 , flex
-, jasper
+, jasper ? null, withJpeg2k ? false  # disable JPEG2000 support, jasper has unfixed CVE
 , lcms2
 , lensfun
 , libgphoto2
@@ -50,14 +51,14 @@
 }:
 
 mkDerivation rec {
-  name    = "digikam-${version}";
-  version = "6.0.0";
+  pname   = "digikam";
+  version = "6.2.0";
 
   src = fetchFromGitHub {
     owner  = "KDE";
     repo   = "digikam";
     rev    = "v${version}";
-    sha256 = "1ifvrn0bm7fp07d059rl4dy146qzdxafl36ipxg1fg00dkv95hh4";
+    sha256 = "1l1nb1nwicmip2jxhn5gzr7h60igvns0zs3kzp36r6qf4wvg3v2z";
   };
 
   nativeBuildInputs = [ cmake doxygen extra-cmake-modules kdoctools wrapGAppsHook ];
@@ -69,7 +70,6 @@ mkDerivation rec {
     exiv2
     ffmpeg
     flex
-    jasper
     lcms2
     lensfun
     libgphoto2
@@ -88,7 +88,8 @@ mkDerivation rec {
     qtsvg
     qtwebengine
 
-    kcalcore
+    akonadi-contacts
+    kcalendarcore
     kconfigwidgets
     kcoreaddons
     kfilemetadata
@@ -101,7 +102,10 @@ mkDerivation rec {
     marble
     oxygen
     threadweaver
-  ];
+  ]
+  ++ lib.optionals withJpeg2k [ jasper ];
+
+  enableParallelBuilding = true;
 
   cmakeFlags = [
     "-DENABLE_MYSQLSUPPORT=1"
@@ -112,6 +116,7 @@ mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    gappsWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \
       --replace "/usr/bin/sqlite3" "${sqlite}/bin/sqlite3"

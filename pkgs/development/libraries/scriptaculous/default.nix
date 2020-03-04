@@ -1,5 +1,5 @@
 { stdenv, fetchurl, unzip, ... }: stdenv.mkDerivation rec {
-  name = "scriptaculous-${version}";
+  pname = "scriptaculous";
   version = "1.9.0";
 
   src = fetchurl {

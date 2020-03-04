@@ -2,16 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "aws-checksums";
-  version = "0.1.2";
+  version = "0.1.5";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1r21sfs1ik6cb8bz17w6gp6y2xa9rbjxjka0p6airb3qds094iv5";
+    sha256 = "018fnpn0jc686jxp5wf8qxmjphk3z43l8n1mgcgaa9zw94i24jgk";
   };
 
   nativeBuildInputs = [ cmake ];
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS:BOOL=ON" ];
 
   meta = with lib; {
     description = "HW accelerated CRC32c and CRC32";

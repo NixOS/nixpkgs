@@ -1,21 +1,20 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook }:
+{ stdenv, fetchFromGitHub, autoreconfHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "editline-${version}";
-  version = "1.16.0";
+  pname = "editline";
+  version = "1.17.0";
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "editline";
     rev = version;
-    sha256 = "0a751dp34mk9hwv59ss447csknpm5i5cgd607m3fqf24rszyhbf2";
+    sha256 = "0vjm42y6zjmi6hdcng0l7wkksw7s50agbmk5dxsc3292q8mvq8v6";
   };
 
   patches = [
-    # will be in 1.17.0
     (fetchpatch {
-      name = "redisplay-clear-screen.patch";
-      url = "https://github.com/troglobit/editline/commit/a4b67d226829a55bc8501f36708d5e104a52fbe4.patch";
-      sha256 = "0dbgdqxa4x9wgr9kx89ql74np4qq6fzdbph9j9c65ns3gnaanjkw";
+      name = "fix-for-multiline-as-one-line.patch";
+      url = "https://github.com/troglobit/editline/commit/ceee039cfc819c8e09eebbfca192091b0cf8df75.patch";
+      sha256 = "149fmfva05ghzwkd0bq1sahdbkys3qyyky28ssqb5jq7q9hw3ddm";
     })
   ];
 

@@ -1,12 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, numpy, nose, pyyaml }:
+{ stdenv, buildPythonPackage, fetchPypi, fetchpatch, numpy, nose, pyyaml }:
 
 buildPythonPackage rec {
   pname = "spglib";
-  version = "1.12.2.post0";
+  version = "1.14.1.post0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15b02b74c0f06179bc3650c43a710a5200abbba387c6eda3105bfd9236041443";
+    sha256 = "0kmllcch5p20ylxirqiqzls567jr2808rbld9i8f1kf0205al8qq";
   };
 
   propagatedBuildInputs = [ numpy ];

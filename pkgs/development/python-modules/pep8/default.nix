@@ -1,7 +1,6 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, pythonAtLeast
 }:
 
 buildPythonPackage rec {
@@ -17,10 +16,10 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = "http://pep8.readthedocs.org/";
+    homepage = "https://pep8.readthedocs.org/";
     description = "Python style guide checker";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 
 }

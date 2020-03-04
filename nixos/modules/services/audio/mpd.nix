@@ -18,7 +18,6 @@ let
     ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
-    log_file            "syslog"
     user                "${cfg.user}"
     group               "${cfg.group}"
 
@@ -158,18 +157,18 @@ in {
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - ${cfg.user} ${cfg.group} - -"
+      "d '${cfg.playlistDirectory}' - ${cfg.user} ${cfg.group} - -"
+    ];
+
     systemd.services.mpd = {
       after = [ "network.target" "sound.target" ];
       description = "Music Player Daemon";
       wantedBy = optional (!cfg.startWhenNeeded) "multi-user.target";
 
-      preStart = ''
-        mkdir -p "${cfg.dataDir}" && chown -R ${cfg.user}:${cfg.group} "${cfg.dataDir}"
-        mkdir -p "${cfg.playlistDirectory}" && chown -R ${cfg.user}:${cfg.group} "${cfg.playlistDirectory}"
-      '';
       serviceConfig = {
         User = "${cfg.user}";
-        PermissionsStartOnly = true;
         ExecStart = "${pkgs.mpd}/bin/mpd --no-daemon ${mpdConf}";
         Type = "notify";
         LimitRTPRIO = 50;
@@ -181,22 +180,23 @@ in {
         ProtectKernelModules = true;
         RestrictAddressFamilies = "AF_INET AF_INET6 AF_UNIX AF_NETLINK";
         RestrictNamespaces = true;
+        Restart = "always";
       };
     };
 
-    users.users = optionalAttrs (cfg.user == name) (singleton {
-      inherit uid;
-      inherit name;
-      group = cfg.group;
-      extraGroups = [ "audio" ];
-      description = "Music Player Daemon user";
-      home = "${cfg.dataDir}";
-    });
+    users.users = optionalAttrs (cfg.user == name) {
+      ${name} = {
+        inherit uid;
+        group = cfg.group;
+        extraGroups = [ "audio" ];
+        description = "Music Player Daemon user";
+        home = "${cfg.dataDir}";
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == name) (singleton {
-      inherit name;
-      gid = gid;
-    });
+    users.groups = optionalAttrs (cfg.group == name) {
+      ${name}.gid = gid;
+    };
   };
 
 }

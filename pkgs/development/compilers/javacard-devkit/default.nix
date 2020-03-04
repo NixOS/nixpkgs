@@ -3,7 +3,6 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "javacard-devkit";
   version = "2.2.2";
   uscoreVersion = builtins.replaceStrings ["."] ["_"] version;

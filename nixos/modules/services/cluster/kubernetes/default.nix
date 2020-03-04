@@ -72,14 +72,11 @@ let
       default = null;
     };
   };
-
-  kubeConfigDefaults = {
-    server = mkDefault cfg.kubeconfig.server;
-    caFile = mkDefault cfg.kubeconfig.caFile;
-    certFile = mkDefault cfg.kubeconfig.certFile;
-    keyFile = mkDefault cfg.kubeconfig.keyFile;
-  };
 in {
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "kubernetes" "verbose" ] "")
+  ];
 
   ###### interface
 
@@ -263,38 +260,13 @@ in {
         wantedBy = [ "multi-user.target" ];
       };
 
-      systemd.targets.kube-control-plane-online = {
-        wantedBy = [ "kubernetes.target" ];
-        before = [ "kubernetes.target" ];
-      };
-
-      systemd.services.kube-control-plane-online = rec {
-        description = "Kubernetes control plane is online";
-        wantedBy = [ "kube-control-plane-online.target" ];
-        after = [ "kube-scheduler.service" "kube-controller-manager.service" ];
-        before = [ "kube-control-plane-online.target" ];
-        environment.KUBECONFIG = cfg.lib.mkKubeConfig "default" cfg.kubeconfig;
-        path = [ pkgs.kubectl ];
-        preStart = ''
-          until kubectl get --raw=/healthz 2>/dev/null; do
-            echo kubectl get --raw=/healthz: exit status $?
-            sleep 3
-          done
-        '';
-        script = "echo Ok";
-        serviceConfig = {
-          TimeoutSec = "500";
-        };
-      };
-
       systemd.tmpfiles.rules = [
         "d /opt/cni/bin 0755 root root -"
         "d /run/kubernetes 0755 kubernetes kubernetes -"
         "d /var/lib/kubernetes 0755 kubernetes kubernetes -"
       ];
 
-      users.users = singleton {
-        name = "kubernetes";
+      users.users.kubernetes = {
         uid = config.ids.uids.kubernetes;
         description = "Kubernetes user";
         extraGroups = [ "docker" ];
@@ -310,8 +282,6 @@ in {
       services.kubernetes.apiserverAddress = mkDefault ("https://${if cfg.apiserver.advertiseAddress != null
                           then cfg.apiserver.advertiseAddress
                           else "${cfg.masterAddress}:${toString cfg.apiserver.securePort}"}");
-
-      services.kubernetes.kubeconfig.server = mkDefault cfg.apiserverAddress;
     })
   ];
 }

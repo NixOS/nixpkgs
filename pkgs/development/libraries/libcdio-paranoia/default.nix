@@ -30,6 +30,6 @@ stdenv.mkDerivation {
     license = licenses.gpl3;
     homepage = https://github.com/rocky/libcdio-paranoia;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = [ maintainers.pbogdan ];
+    maintainers = [ ];
   };
 }

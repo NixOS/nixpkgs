@@ -1,16 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, makeWrapper }:
+{ stdenv, lib, fetchFromGitHub, buildGoModule, makeWrapper }:
 
 let
 
   # Cache schema as a package so network calls are not
   # necessary at runtime, allowing use in package builds
-  schema = stdenv.mkDerivation rec {
+  schema = stdenv.mkDerivation {
     name = "kubeval-schema";
     src = fetchFromGitHub {
-      owner = "garethr";
+      owner = "instrumenta";
       repo = "kubernetes-json-schema";
-      rev = "c7672fd48e1421f0060dd54b6620baa2ab7224ba";
-      sha256 = "0picr3wvjx4qv158jy4f60pl225rm4mh0l97pf8nqi9h9x4x888p";
+      rev = "6a498a60dc68c5f6a1cc248f94b5cd1e7241d699";
+      sha256 = "1y9m2ma3n4h7sf2lg788vjw6pkfyi0fa7gzc870faqv326n6x2jr";
     };
 
     installPhase = ''
@@ -21,26 +21,26 @@ let
 
 in
 
-buildGoPackage rec {
-  name = "kubeval-${version}";
-  version = "0.7.3";
+buildGoModule rec {
+  pname = "kubeval";
+  version = "0.14.0";
 
-  goPackagePath = "github.com/garethr/kubeval";
   src = fetchFromGitHub {
-    owner = "garethr";
+    owner = "instrumenta";
     repo = "kubeval";
-    rev = version;
-    sha256 = "042v4mc5p80vmk56wp6aw89yiibjnfqn79c0zcd6y179br4gpfnb";
+    rev = "${version}";
+    sha256 = "0kpwk7bv36m3i8vavm1pqc8l611c6l9qbagcc64v6r85qig4w5xv";
   };
-  goDeps = ./deps.nix;
 
   buildInputs = [ makeWrapper ];
 
-  postFixup = "wrapProgram $bin/bin/kubeval --set KUBEVAL_SCHEMA_LOCATION file:///${schema}";
+  modSha256 = "0y9x44y3bchi8xg0a6jmp2rmi8dybkl6qlywb6nj1viab1s8dd4y";
+
+  postFixup = "wrapProgram $out/bin/kubeval --set KUBEVAL_SCHEMA_LOCATION file:///${schema}/kubernetes-json-schema/master";
 
   meta = with lib; {
     description = "Validate your Kubernetes configuration files";
-    homepage = https://github.com/garethr/kubeval;
+    homepage = https://github.com/instrumenta/kubeval;
     license = licenses.asl20;
     maintainers = with maintainers; [ nicknovitski ];
     platforms = platforms.all;

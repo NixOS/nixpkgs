@@ -17,7 +17,8 @@ in
 let inherit (param) version; in
 
 stdenv.mkDerivation {
-  name = "ocsigen-deriving-${version}";
+  pname = "ocsigen-deriving";
+  inherit version;
   src = fetchzip {
     url = "https://github.com/ocsigen/deriving/archive/${version}.tar.gz";
     inherit (param) sha256;

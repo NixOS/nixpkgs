@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "goklp-${version}";
+  pname = "goklp";
   version = "1.6";
 
   goPackagePath = "github.com/AppliedTrust/goklp";

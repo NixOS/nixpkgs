@@ -3,12 +3,12 @@
 with stdenv.lib;
 stdenv.mkDerivation rec{
 
-  name = "vms-empire-${version}";
-  version = "1.14";
+  pname = "vms-empire";
+  version = "1.15";
 
   src = fetchurl{
-    url = "http://www.catb.org/~esr/vms-empire/${name}.tar.gz";
-    sha256 = "0cymzhivvaahgqz0p11w25a710ls4w0jhyqj789jas5s07nvd890";
+    url = "http://www.catb.org/~esr/vms-empire/${pname}-${version}.tar.gz";
+    sha256 = "1vcpglkimcljb8s1dp6lzr5a0vbfxmh6xf37cmb8rf9wc3pghgn3";
   };
 
   buildInputs =

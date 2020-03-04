@@ -1,4 +1,4 @@
-{ buildPythonPackage, dlib, python, pytest, avxSupport ? true }:
+{ buildPythonPackage, dlib, python, pytest, more-itertools, avxSupport ? true, lib }:
 
 buildPythonPackage {
   inherit (dlib) name src nativeBuildInputs buildInputs meta;
@@ -10,9 +10,18 @@ buildPythonPackage {
     ${python.interpreter} nix_run_setup test --no USE_AVX_INSTRUCTIONS
   '';
 
-  setupPyBuildFlags = [ "--${if avxSupport then "yes" else "no"} USE_AVX_INSTRUCTIONS" ];
+  setupPyBuildFlags = lib.optional avxSupport "--no USE_AVX_INSTRUCTIONS";
 
   patches = [ ./build-cores.patch ];
 
-  checkInputs = [ pytest ];
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "more-itertools<6.0.0" "more-itertools" \
+      --replace "pytest==3.8" "pytest"
+  '';
+
+  checkInputs = [ pytest more-itertools ];
+
+  enableParallelBuilding = true;
+  dontUseCmakeConfigure = true;
 }

@@ -1,6 +1,6 @@
 { buildDunePackage, gtkspell3, lablgtk3 }:
 
-buildDunePackage rec {
+buildDunePackage {
   pname = "lablgtk3-gtkspell3";
   buildInputs = [ gtkspell3 ] ++ lablgtk3.buildInputs;
   propagatedBuildInputs = [ lablgtk3 ];

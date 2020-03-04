@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, cmake, itk, python }:
+{ stdenv, fetchFromGitHub, cmake, itk, python }:
 
 stdenv.mkDerivation rec {
   pname    = "elastix";
-  pversion = "4.9.0";
-  name  = "${pname}-${pversion}";
+  version = "5.0.0";
 
-  src = fetchurl {
-    url    = "https://github.com/SuperElastix/${pname}/archive/${pversion}.tar.gz";
-    sha256 = "02pbln36nq98xxfyqwlxg7b6gmigdq4fgfqr9mym1qn58aj04shg";
+  src = fetchFromGitHub {
+    owner  = "SuperElastix";
+    repo   = pname;
+    rev    = version;
+    sha256 = "1zrl7rz4lwsx88b2shnl985f3a97lmp4ksbd437h9y0hfjq8l0lj";
   };
-
   nativeBuildInputs = [ cmake python ];
   buildInputs = [ itk ];
 

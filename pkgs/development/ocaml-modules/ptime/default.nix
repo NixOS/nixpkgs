@@ -1,15 +1,16 @@
 { stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, result, js_of_ocaml }:
 
 stdenv.mkDerivation rec {
-  version = "0.8.4";
+  version = "0.8.5";
   name = "ocaml${ocaml.version}-ptime-${version}";
 
   src = fetchurl {
-    url = "http://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
-    sha256 = "0z2snhda8bg136xkw2msw6k2dz84vb49p8bgzrxfs8mawdlk0kkg";
+    url = "https://erratique.ch/software/ptime/releases/ptime-${version}.tbz";
+    sha256 = "1fxq57xy1ajzfdnvv5zfm7ap2nf49znw5f9gbi4kb9vds942ij27";
   };
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg js_of_ocaml ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+  buildInputs = [ findlib topkg js_of_ocaml ];
 
   propagatedBuildInputs = [ result ];
 

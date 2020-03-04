@@ -12,9 +12,9 @@ let
   boolOpt = k: v: k + " = " + boolToString v;
   intOpt = k: v: k + " = " + toString v;
   lstOpt = k: xs: k + " = " + concatStringsSep "," xs;
-  optionalNullString = o: s: optional (! isNull s) (strOpt o s);
-  optionalNullBool = o: b: optional (! isNull b) (boolOpt o b);
-  optionalNullInt = o: i: optional (! isNull i) (intOpt o i);
+  optionalNullString = o: s: optional (s != null) (strOpt o s);
+  optionalNullBool = o: b: optional (b != null) (boolOpt o b);
+  optionalNullInt = o: i: optional (i != null) (intOpt o i);
   optionalEmptyList = o: l: optional ([] != l) (lstOpt o l);
 
   mkEnableTrueOption = name: mkEnableOption name // { default = true; };
@@ -159,7 +159,7 @@ let
       (strOpt "defaulturl" cfg.addressbook.defaulturl)
     ] ++ (optionalEmptyList "subscriptions" cfg.addressbook.subscriptions)
       ++ (flip map
-      (collect (proto: proto ? port && proto ? address && proto ? name) cfg.proto)
+      (collect (proto: proto ? port && proto ? address) cfg.proto)
       (proto: let protoOpts = [
         (sec proto.name)
         (boolOpt "enabled" proto.enable)
@@ -225,7 +225,7 @@ let
   i2pdSh = pkgs.writeScriptBin "i2pd" ''
     #!/bin/sh
     exec ${pkgs.i2pd}/bin/i2pd \
-      ${if isNull cfg.address then "" else "--host="+cfg.address} \
+      ${if cfg.address == null then "" else "--host="+cfg.address} \
       --service \
       --conf=${i2pdConf} \
       --tunconf=${tunnelConf}
@@ -234,6 +234,10 @@ let
 in
 
 {
+
+  imports = [
+    (mkRenamedOptionModule [ "services" "i2pd" "extIp" ] [ "services" "i2pd" "address" ])
+  ];
 
   ###### interface
 
@@ -470,7 +474,7 @@ in
         '';
       };
 
-      trust.hidden = mkEnableOption "Router concealment.";
+      trust.hidden = mkEnableOption "Router concealment";
 
       websocket = mkEndpointOpt "websockets" "127.0.0.1" 7666;
 
@@ -478,7 +482,7 @@ in
       exploratory.outbound = i2cpOpts "exploratory";
 
       ntcp2.enable = mkEnableTrueOption "NTCP2.";
-      ntcp2.published = mkEnableOption "NTCP2 publication.";
+      ntcp2.published = mkEnableOption "NTCP2 publication";
       ntcp2.port = mkOption {
         type = types.int;
         default = 0;
@@ -602,7 +606,7 @@ in
 
       outTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule (
+        type = with types; attrsOf (submodule (
           { name, ... }: {
             options = {
               destinationPort = mkOption {
@@ -623,7 +627,7 @@ in
 
       inTunnels = mkOption {
         default = {};
-        type = with types; loaOf (submodule (
+        type = with types; attrsOf (submodule (
           { name, ... }: {
             options = {
               inPort = mkOption {

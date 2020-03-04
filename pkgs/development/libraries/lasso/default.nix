@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
 
-  name = "lasso-${version}";
+  pname = "lasso";
   version = "2.6.0";
 
   src = fetchurl {
