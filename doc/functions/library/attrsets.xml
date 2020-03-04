@@ -1667,4 +1667,48 @@ recursiveUpdate
 ]]></programlisting>
   </example>
  </section>
+
+ <section xml:id="function-library-lib.attrsets.recurseIntoAttrs">
+  <title><function>lib.attrsets.recurseIntoAttrs</function></title>
+
+  <subtitle><literal>recurseIntoAttrs :: AttrSet -> AttrSet</literal>
+  </subtitle>
+
+  <xi:include href="./locations.xml" xpointer="lib.attrsets.recurseIntoAttrs" />
+
+  <para>
+   Make various Nix tools consider the contents of the resulting
+   attribute set when looking for what to build, find, etc.
+  </para>
+
+  <para>
+   This function only affects a single attribute set; it does not apply itself recursively for nested attribute sets.
+  </para>
+
+  <variablelist>
+   <varlistentry>
+    <term>
+     <varname>attrs</varname>
+    </term>
+    <listitem>
+     <para>
+      An attribute set to scan for derivations.
+     </para>
+    </listitem>
+   </varlistentry>
+  </variablelist>
+
+  <example xml:id="function-library-lib.attrsets.recurseIntoAttrs-example">
+   <title>Making Nix look inside an attribute set</title>
+<programlisting><![CDATA[
+{ pkgs ? import <nixpkgs> {} }:
+{
+  myTools = pkgs.lib.recurseIntoAttrs {
+    inherit (pkgs) hello figlet;
+  };
+}
+]]></programlisting>
+  </example>
+ </section>
+
 </section>

@@ -190,7 +190,7 @@ in {
 
   argon2_cffi = callPackage ../development/python-modules/argon2_cffi { };
 
-  aria2p = callPackage ../development/python-modules/aria2p { inherit (pkgs) aria2 poetry; };
+  aria2p = callPackage ../development/python-modules/aria2p { inherit (pkgs) aria2; };
 
   arviz = callPackage ../development/python-modules/arviz { };
 
@@ -806,7 +806,11 @@ in {
 
   janus = callPackage ../development/python-modules/janus { };
 
+  jc = callPackage ../development/python-modules/jc { };
+
   jira = callPackage ../development/python-modules/jira { };
+
+  jsonpath = callPackage ../development/python-modules/jsonpath { };
 
   junit-xml = callPackage ../development/python-modules/junit-xml { };
 
@@ -882,6 +886,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
@@ -950,6 +956,8 @@ in {
 
   osmnx = callPackage ../development/python-modules/osmnx { };
 
+  osmpythontools = callPackage ../development/python-modules/osmpythontools { };
+
   outcome = callPackage ../development/python-modules/outcome {};
 
   ovito = toPythonModule (pkgs.libsForQt5.callPackage ../development/python-modules/ovito {
@@ -977,6 +985,8 @@ in {
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
+
+  pushover-complete = callPackage ../development/python-modules/pushover-complete { };
 
   pyicloud = callPackage ../development/python-modules/pyicloud { };
 
@@ -2778,6 +2788,8 @@ in {
 
   gtimelog = callPackage ../development/python-modules/gtimelog { };
 
+  gtts = callPackage ../development/python-modules/gtts { };
+
   gurobipy = if stdenv.hostPlatform.system == "x86_64-darwin"
   then callPackage ../development/python-modules/gurobipy/darwin.nix {
     inherit (pkgs.darwin) cctools insert_dylib;
@@ -3721,7 +3733,7 @@ in {
 
   git-sweep = callPackage ../development/python-modules/git-sweep { };
 
-  glances = callPackage ../development/python-modules/glances { };
+  glances = throw "glances has moved to pkgs.glances"; # added 2020-20-28
 
   github3_py = callPackage ../development/python-modules/github3_py { };
 
@@ -3928,6 +3940,8 @@ in {
   ics = callPackage ../development/python-modules/ics { };
 
   ifaddr = callPackage ../development/python-modules/ifaddr { };
+
+  ifconfig-parser = callPackage ../development/python-modules/ifconfig-parser { };
 
   imagecorruptions = callPackage ../development/python-modules/imagecorruptions { };
 
@@ -4887,7 +4901,7 @@ in {
   protobuf = callPackage ../development/python-modules/protobuf {
     disabled = isPyPy;
     doCheck = !isPy3k;
-    protobuf = pkgs.protobuf;
+    protobuf = pkgs.protobuf3_8;
   };
 
   psd-tools = callPackage ../development/python-modules/psd-tools { };
@@ -6648,6 +6662,7 @@ in {
   zerobin = callPackage ../development/python-modules/zerobin { };
 
   tensorflow-estimator = callPackage ../development/python-modules/tensorflow-estimator { };
+  tensorflow-estimator_1_15_1 = callPackage ../development/python-modules/tensorflow-estimator/1_15_1.nix { };
 
   tensorflow-probability = callPackage ../development/python-modules/tensorflow-probability { };
 
@@ -6666,7 +6681,7 @@ in {
     cudatoolkit = pkgs.cudatoolkit_10;
     cudnn = pkgs.cudnn_cudatoolkit_10;
     nccl = pkgs.nccl_cudatoolkit_10;
-    openssl = pkgs.openssl_1_0_2;
+    openssl = pkgs.openssl_1_1;
     inherit (pkgs.darwin.apple_sdk.frameworks) Foundation Security;
   };
 

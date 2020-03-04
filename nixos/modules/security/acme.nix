@@ -136,6 +136,27 @@ let
           challenge to ensure the DNS entries required are available.
         '';
       };
+
+      ocspMustStaple = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          Turns on the OCSP Must-Staple TLS extension.
+          Make sure you know what you're doing! See:
+          <itemizedlist>
+            <listitem><para><link xlink:href="https://blog.apnic.net/2019/01/15/is-the-web-ready-for-ocsp-must-staple/" /></para></listitem>
+            <listitem><para><link xlink:href="https://blog.hboeck.de/archives/886-The-Problem-with-OCSP-Stapling-and-Must-Staple-and-why-Certificate-Revocation-is-still-broken.html" /></para></listitem>
+          </itemizedlist>
+        '';
+      };
+
+      extraLegoRenewFlags = mkOption {
+        type = types.listOf types.str;
+        default = [];
+        description = ''
+          Additional flags to pass to lego renew.
+        '';
+      };
     };
   };
 
@@ -174,7 +195,7 @@ in
 
       renewInterval = mkOption {
         type = types.str;
-        default = "weekly";
+        default = "daily";
         description = ''
           Systemd calendar expression when to check for renewal. See
           <citerefentry><refentrytitle>systemd.time</refentrytitle>
@@ -288,12 +309,16 @@ in
                           ++ concatLists (mapAttrsToList (name: root: [ "-d" name ]) data.extraDomains)
                           ++ (if data.dnsProvider != null then [ "--dns" data.dnsProvider ] else [ "--http" "--http.webroot" data.webroot ])
                           ++ optionals (cfg.server != null || data.server != null) ["--server" (if data.server == null then cfg.server else data.server)];
-                runOpts = escapeShellArgs (globalOpts ++ [ "run" ]);
-                renewOpts = escapeShellArgs (globalOpts ++ [ "renew" "--days" (toString cfg.validMinDays) ]);
+                certOpts = optionals data.ocspMustStaple [ "--must-staple" ];
+                runOpts = escapeShellArgs (globalOpts ++ [ "run" ] ++ certOpts);
+                renewOpts = escapeShellArgs (globalOpts ++
+                  [ "renew" "--days" (toString cfg.validMinDays) ] ++
+                  certOpts ++ data.extraLegoRenewFlags);
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
                   after = [ "network.target" "network-online.target" ];
                   wants = [ "network-online.target" ];
+                  wantedBy = [ "multi-user.target" ];
                   serviceConfig = {
                     Type = "oneshot";
                     # With RemainAfterExit the service is considered active even
@@ -327,7 +352,7 @@ in
                             cp -p ${spath}/certificates/${keyName}.key key.pem
                             cp -p ${spath}/certificates/${keyName}.crt fullchain.pem
                             cp -p ${spath}/certificates/${keyName}.issuer.crt chain.pem
-                            ln -s fullchain.pem cert.pem
+                            ln -sf fullchain.pem cert.pem
                             cat key.pem fullchain.pem > full.pem
                             chmod ${rights} *.pem
                             chown '${data.user}:${data.group}' *.pem
@@ -399,7 +424,17 @@ in
       systemd.tmpfiles.rules =
         map (data: "d ${data.webroot}/.well-known/acme-challenge - ${data.user} ${data.group}") (filter (data: data.webroot != null) (attrValues cfg.certs));
 
-      systemd.timers = flip mapAttrs' cfg.certs (cert: data: nameValuePair
+      systemd.timers = let
+        # Allow systemd to pick a convenient time within the day
+        # to run the check.
+        # This allows the coalescing of multiple timer jobs.
+        # We divide by the number of certificates so that if you
+        # have many certificates, the renewals are distributed over
+        # the course of the day to avoid rate limits.
+        numCerts = length (attrNames cfg.certs);
+        _24hSecs = 60 * 60 * 24;
+        AccuracySec = "${toString (_24hSecs / numCerts)}s";
+      in flip mapAttrs' cfg.certs (cert: data: nameValuePair
         ("acme-${cert}")
         ({
           description = "Renew ACME Certificate for ${cert}";
@@ -408,8 +443,9 @@ in
             OnCalendar = cfg.renewInterval;
             Unit = "acme-${cert}.service";
             Persistent = "yes";
-            AccuracySec = "5m";
-            RandomizedDelaySec = "1h";
+            inherit AccuracySec;
+            # Skew randomly within the day, per https://letsencrypt.org/docs/integration-guide/.
+            RandomizedDelaySec = "24h";
           };
         })
       );

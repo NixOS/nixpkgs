@@ -5,11 +5,11 @@
 
 buildPythonPackage rec {
   pname = "dash_core_components";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "16jjanq4glj6c2cwyw94954hrqqv49fknisbxj03lfmflg61j32k";
+    sha256 = "0qqf51mphv1pqqc2ff50rkbw44sp9liifg0mg7xkh41sgnv032cs";
   };
 
   # No tests in archive
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A dash component starter pack";
-    homepage = https://dash.plot.ly/dash-core-components;
+    homepage = "https://dash.plot.ly/dash-core-components";
     license = licenses.mit;
     maintainers = [ maintainers.antoinerg ];
   };

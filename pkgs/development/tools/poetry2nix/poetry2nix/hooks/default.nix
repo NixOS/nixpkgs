@@ -22,4 +22,12 @@ in
       } ./remove-path-dependencies.sh
   ) {};
 
+  poetry2nixFixupHook = callPackage (
+    {}:
+      makeSetupHook {
+        name = "fixup-hook.sh";
+        deps = [];
+      } ./fixup-hook.sh
+  ) {};
+
 }

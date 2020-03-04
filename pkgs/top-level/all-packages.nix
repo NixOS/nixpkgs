@@ -62,9 +62,7 @@ in
 
   inherit (lib) lowPrio hiPrio appendToName makeOverridable;
 
-  # Applying this to an attribute set will cause nix-env to look
-  # inside the set for derivations.
-  recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+  inherit (lib) recurseIntoAttrs;
 
   # This is intended to be the reverse of recurseIntoAttrs, as it is
   # defined now it exists mainly for documentation purposes, but you
@@ -72,7 +70,7 @@ in
   # the Attrs which is useful for testing massive changes. Ideally,
   # every package subset not marked with recurseIntoAttrs should be
   # marked with this.
-  dontRecurseIntoAttrs = x: x;
+  inherit (lib) dontRecurseIntoAttrs;
 
   stringsWithDeps = lib.stringsWithDeps;
 
@@ -928,6 +926,8 @@ in
   gitter = callPackage  ../applications/networking/instant-messengers/gitter { };
 
   gjs = callPackage ../development/libraries/gjs { };
+
+  glances = python3Packages.callPackage ../applications/system/glances { };
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
@@ -4062,7 +4062,7 @@ in
   pixd = callPackage ../tools/misc/pixd { };
 
   hey = callPackage ../tools/networking/hey { };
-  
+
   hhpc = callPackage ../tools/misc/hhpc { };
 
   hiera-eyaml = callPackage ../tools/system/hiera-eyaml { };
@@ -4263,9 +4263,7 @@ in
 
   ipget = callPackage ../applications/networking/ipget { };
 
-  ipmitool = callPackage ../tools/system/ipmitool {
-    openssl = openssl_1_0_2;
-  };
+  ipmitool = callPackage ../tools/system/ipmitool {};
 
   ipmiutil = callPackage ../tools/system/ipmiutil {};
 
@@ -4308,6 +4306,8 @@ in
   jade = callPackage ../tools/text/sgml/jade { };
 
   jazzy = callPackage ../development/tools/jazzy { };
+
+  jc = with python3Packages; toPythonApplication jc;
 
   jd = callPackage ../development/tools/jd { };
 
@@ -5215,6 +5215,8 @@ in
   nasty = callPackage ../tools/security/nasty { };
 
   nat-traverse = callPackage ../tools/networking/nat-traverse { };
+
+  navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
   nawk = callPackage ../tools/text/nawk { };
 
@@ -9445,6 +9447,8 @@ in
 
   pipewire = callPackage ../development/libraries/pipewire {};
 
+  pyradio = callPackage ../applications/radio/pyradio {};
+
   pyrex = pyrex095;
 
   pyrex095 = callPackage ../development/interpreters/pyrex/0.9.5.nix { };
@@ -9766,7 +9770,16 @@ in
 
   bam = callPackage ../development/tools/build-managers/bam {};
 
-  bazel = callPackage ../development/tools/build-managers/bazel {
+  bazel = callPackage ../development/tools/build-managers/bazel/bazel-latest {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    buildJdk = jdk8;
+    buildJdkName = "jdk8";
+    runJdk = jdk11_headless;
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
+
+  bazel_1 = callPackage ../development/tools/build-managers/bazel/bazel_1 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk8;
@@ -11383,7 +11396,6 @@ in
     frei0r = if stdenv.isDarwin then null else frei0r;
     game-music-emu = if stdenv.isDarwin then null else game-music-emu;
     libjack2 = if stdenv.isDarwin then null else libjack2;
-    libvmaf = if stdenv.isDarwin then null else libvmaf;
     libmodplug = if stdenv.isDarwin then null else libmodplug;
     openal = if stdenv.isDarwin then null else openal;
     libmfx = if stdenv.isDarwin then null else intel-media-sdk;
@@ -12648,9 +12660,7 @@ in
 
   libgpiod = callPackage ../development/libraries/libgpiod { };
 
-  libgpod = callPackage ../development/libraries/libgpod {
-    inherit (pkgs.pythonPackages) mutagen;
-  };
+  libgpod = callPackage ../development/libraries/libgpod { };
 
   libgssglue = callPackage ../development/libraries/libgssglue { };
 
@@ -13508,6 +13518,8 @@ in
   ndi = callPackage ../development/libraries/ndi { };
 
   neardal = callPackage ../development/libraries/neardal { };
+
+  neatvnc = callPackage ../development/libraries/neatvnc { };
 
   neon = callPackage ../development/libraries/neon { };
 
@@ -15244,7 +15256,7 @@ in
 
   clickhouse = callPackage ../servers/clickhouse {
     # clickhouse doesn't build on llvm8.
-    inherit (llvmPackages_7) clang-unwrapped lld llvm;
+    inherit (llvmPackages_7) clang-unwrapped lld lldClang llvm;
   };
 
   couchdb = callPackage ../servers/http/couchdb {
@@ -17945,6 +17957,8 @@ in
 
   sierra-gtk-theme = callPackage ../data/themes/sierra { };
 
+  snowblind = callPackage ../data/themes/snowblind { };
+
   solarc-gtk-theme = callPackage ../data/themes/solarc { };
 
   soundfont-fluid = callPackage ../data/soundfonts/fluid { };
@@ -18742,6 +18756,7 @@ in
   djview4 = pkgs.djview;
 
   dmenu = callPackage ../applications/misc/dmenu { };
+  dmenu-wayland = callPackage ../applications/misc/dmenu/wayland.nix { };
 
   dmensamenu = callPackage ../applications/misc/dmensamenu {
     inherit (python3Packages) buildPythonApplication requests;
@@ -18786,6 +18801,8 @@ in
   draftsight = callPackage ../applications/graphics/draftsight { };
 
   dragonfly-reverb = callPackage ../applications/audio/dragonfly-reverb { };
+
+  drawing = callPackage ../applications/graphics/drawing { };
 
   drawio = callPackage ../applications/graphics/drawio {};
 
@@ -19035,9 +19052,7 @@ in
 
   fehlstart = callPackage ../applications/misc/fehlstart { };
 
-  fetchmail = callPackage ../applications/misc/fetchmail {
-    openssl = openssl_1_0_2;
-  };
+  fetchmail = callPackage ../applications/misc/fetchmail { };
 
   fff = callPackage ../applications/misc/fff { };
 
@@ -21074,6 +21089,8 @@ in
 
   plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
 
+  plex-mpv-shim = python3Packages.callPackage ../applications/video/plex-mpv-shim { };
+
   plover = recurseIntoAttrs (libsForQt5.callPackage ../applications/misc/plover { });
 
   plugin-torture = callPackage ../applications/audio/plugin-torture { };
@@ -21176,6 +21193,8 @@ in
   qgroundcontrol = libsForQt5.callPackage ../applications/science/robotics/qgroundcontrol { };
 
   qjackctl = libsForQt5.callPackage ../applications/audio/qjackctl { };
+
+  qimgv = libsForQt5.callPackage ../applications/graphics/qimgv { };
 
   qlandkartegt = libsForQt5.callPackage ../applications/misc/qlandkartegt {};
 
@@ -22221,6 +22240,8 @@ in
 
   wayv = callPackage ../tools/X11/wayv {};
 
+  wayvnc = callPackage ../applications/networking/remote/wayvnc { };
+
   webmacs = libsForQt5.callPackage ../applications/networking/browsers/webmacs {};
 
   webtorrent_desktop = callPackage ../applications/video/webtorrent_desktop {};
@@ -22879,6 +22900,18 @@ in
   adom = callPackage ../games/adom { };
 
   airstrike = callPackage ../games/airstrike { };
+
+  alephone = callPackage ../games/alephone { ffmpeg = ffmpeg_2; };
+  alephone-durandal = callPackage ../games/alephone/durandal { };
+  alephone-eternal = callPackage ../games/alephone/eternal { };
+  alephone-evil = callPackage ../games/alephone/evil { };
+  alephone-infinity = callPackage ../games/alephone/infinity { };
+  alephone-marathon = callPackage ../games/alephone/marathon { };
+  alephone-pheonix = callPackage ../games/alephone/pheonix { };
+  alephone-red = callPackage ../games/alephone/red { };
+  alephone-rubicon-x = callPackage ../games/alephone/rubicon-x { };
+  alephone-pathways-into-darkness =
+    callPackage ../games/alephone/pathways-into-darkness { };
 
   alienarena = callPackage ../games/alienarena { };
 
@@ -23803,7 +23836,7 @@ in
     drop-down-terminal = callPackage ../desktops/gnome-3/extensions/drop-down-terminal { };
     gsconnect = callPackage ../desktops/gnome-3/extensions/gsconnect { };
     icon-hider = callPackage ../desktops/gnome-3/extensions/icon-hider { };
-    impatience = callPackage ../desktops/gnome-3/extensions/impatience.nix { };
+    impatience = callPackage ../desktops/gnome-3/extensions/impatience { };
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
@@ -23821,6 +23854,8 @@ in
     nohotcorner = throw "gnomeExtensions.nohotcorner removed since 2019-10-09: Since 3.34, it is a part of GNOME Shell configurable through GNOME Tweaks.";
     mediaplayer = throw "gnomeExtensions.mediaplayer deprecated since 2019-09-23: retired upstream https://github.com/JasonLG1979/gnome-shell-extensions-mediaplayer/blob/master/README.md";
   };
+
+  gnome-tour = callPackage ../desktops/gnome-3/core/gnome-tour { };
 
   hsetroot = callPackage ../tools/X11/hsetroot { };
 

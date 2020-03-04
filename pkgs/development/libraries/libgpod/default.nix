@@ -1,6 +1,6 @@
 { stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
   libxml2, sqlite, zlib, sg3_utils, gdk-pixbuf, taglib,
-  libimobiledevice, mutagen,
+  libimobiledevice,
   monoSupport ? false, mono, gtk-sharp-2_0
 }:
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   dontStrip = true;
 
   propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
-    gdk-pixbuf taglib libimobiledevice  mutagen ];
+    gdk-pixbuf taglib libimobiledevice ];
 
   nativeBuildInputs = [ gettext intltool pkgconfig ]
     ++ (with perlPackages; [ perl XMLParser ])

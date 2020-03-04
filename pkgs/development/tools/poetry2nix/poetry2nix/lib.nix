@@ -96,6 +96,38 @@ let
         [ pythonPackages.${drvAttr} or (throw "unsupported build system ${buildSystem}") ]
       );
 
+  # Find gitignore files recursively in parent directory stopping with .git
+  findGitIgnores = path: let
+    parent = path + "/..";
+    gitIgnore = path + "/.gitignore";
+    isGitRoot = builtins.pathExists (path + "/.git");
+    hasGitIgnore = builtins.pathExists gitIgnore;
+    gitIgnores = if hasGitIgnore then [ gitIgnore ] else [];
+  in
+    lib.optionals (builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
+
+  /*
+  Provides a source filtering mechanism that:
+
+  - Filters gitignore's
+  - Filters pycache/pyc files
+  - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
+  */
+  cleanPythonSources = { src }: let
+    gitIgnores = findGitIgnores src;
+    pycacheFilter = name: type:
+      (type == "directory" && ! lib.strings.hasInfix "__pycache__" name)
+      || (type == "regular" && ! lib.strings.hasSuffix ".pyc" name)
+    ;
+  in
+    lib.cleanSourceWith {
+      filter = lib.cleanSourceFilter;
+      src = lib.cleanSourceWith {
+        filter = pkgs.nix-gitignore.gitignoreFilterPure pycacheFilter gitIgnores src;
+        inherit src;
+      };
+    };
+
 in
 {
   inherit
@@ -105,5 +137,6 @@ in
     readTOML
     getBuildSystemPkgs
     satisfiesSemver
+    cleanPythonSources
     ;
 }

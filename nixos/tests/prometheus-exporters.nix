@@ -287,7 +287,7 @@ let
         services.nginx = {
           enable = true;
           statusPage = true;
-          virtualHosts."/".extraConfig = "return 204;";
+          virtualHosts."test".extraConfig = "return 204;";
         };
       };
       exporterTest = ''

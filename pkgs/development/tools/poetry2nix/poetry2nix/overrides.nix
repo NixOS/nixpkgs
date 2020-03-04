@@ -6,6 +6,13 @@
 self: super:
 
 {
+  astroid = super.astroid.overrideAttrs (
+    old: rec {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
+    }
+  );
+
   av = super.av.overrideAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -82,16 +89,35 @@ self: super:
 
   faker = super.faker.overrideAttrs (
     old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
+    }
+  );
+
+  fancycompleter = super.fancycompleter.overrideAttrs (
+    old: {
       postPatch = ''
-        substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"],' 'setup_requires=[],' || true
+        substituteInPlace setup.py \
+          --replace 'setup_requires="setupmeta"' 'setup_requires=[]' \
+          --replace 'versioning="devcommit"' 'version="${old.version}"'
       '';
     }
   );
 
   grandalf = super.grandalf.overrideAttrs (
     old: {
-      postPatch = ''
-        substituteInPlace setup.py --replace "setup_requires=['pytest-runner',]," "setup_requires=[]," || true
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
+    }
+  );
+
+  h5py = super.h5py.overrideAttrs (
+    old: rec {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkgs.hdf5 self.pkgconfig self.cython ];
+      configure_flags = "--hdf5=${pkgs.hdf5}";
+      postConfigure = ''
+        ${self.python.executable} setup.py configure ${configure_flags}
       '';
     }
   );
@@ -103,9 +129,18 @@ self: super:
   );
 
   # importlib-metadata has an incomplete dependency specification
-  importlib-metadata = if super.importlib-metadata == null then null else super.importlib-metadata.overrideAttrs (
+  importlib-metadata = super.importlib-metadata.overrideAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional self.python.isPy2 self.pathlib2;
+    }
+  );
+
+  jupyter = super.jupyter.overrideAttrs (
+    old: rec {
+      # jupyter is a meta-package. Everything relevant comes from the
+      # dependencies. It does however have a jupyter.py file that conflicts
+      # with jupyter-core so this meta solves this conflict.
+      meta.priority = 100;
     }
   );
 
@@ -202,9 +237,8 @@ self: super:
 
   mccabe = super.mccabe.overrideAttrs (
     old: {
-      postPatch = ''
-        substituteInPlace setup.py --replace "setup_requires=['pytest-runner']," "setup_requires=[]," || true
-      '';
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
     }
   );
 
@@ -262,6 +296,13 @@ self: super:
           inherit blasImplementation cfg;
         };
       }
+  );
+
+  openexr = super.openexr.overrideAttrs (
+    old: rec {
+      buildInputs = old.buildInputs ++ [ pkgs.openexr pkgs.ilmbase ];
+      NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
+    }
   );
 
   peewee = super.peewee.overridePythonAttrs (
@@ -343,6 +384,13 @@ self: super:
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       buildInputs = old.buildInputs ++ [ pkgs.glib pkgs.gobject-introspection ];
+    }
+  );
+
+  pylint = super.pylint.overrideAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
     }
   );
 
@@ -461,6 +509,14 @@ self: super:
     }
   );
 
+  pytest = super.pytest.overridePythonAttrs (
+    old: {
+      doCheck = false;
+    }
+  );
+
+  pytest-runner = super.pytest-runner or super.pytestrunner;
+
   python-prctl = super.python-prctl.overrideAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
@@ -469,11 +525,32 @@ self: super:
     }
   );
 
+  pyzmq = super.pyzmq.overrideAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.zeromq ];
+    }
+  );
+
+  rockset = super.rockset.overrideAttrs (
+    old: rec {
+      postPatch = ''
+        cp ./setup_rockset.py ./setup.py
+      '';
+    }
+  );
+
   scaleapi = super.scaleapi.overrideAttrs (
     old: {
       postPatch = ''
         substituteInPlace setup.py --replace "install_requires = ['requests>=2.4.2', 'enum34']" "install_requires = ['requests>=2.4.2']" || true
       '';
+    }
+  );
+
+  pandas = super.pandas.overrideAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ self.cython ];
     }
   );
 
@@ -526,6 +603,30 @@ self: super:
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.geos self.cython ];
       inherit (pkgs.python3.pkgs.shapely) patches GEOS_LIBRARY_PATH;
+    }
+  );
+
+  shellingham = if lib.versionAtLeast super.shellingham.version "1.3.2" then (
+    super.shellingham.overridePythonAttrs (
+      old: {
+        format = "pyproject";
+      }
+    )
+  ) else super.shellingham;
+
+  tables = super.tables.overrideAttrs (
+    old: {
+      HDF5_DIR = "${pkgs.hdf5}";
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+      propagatedBuildInputs = old.nativeBuildInputs ++ [ pkgs.hdf5 self.numpy self.numexpr ];
+    }
+  );
+
+  tensorpack = super.tensorpack.overrideAttrs (
+    old: {
+      postPatch = ''
+        substituteInPlace setup.cfg --replace "# will call find_packages()" ""
+      '';
     }
   );
 

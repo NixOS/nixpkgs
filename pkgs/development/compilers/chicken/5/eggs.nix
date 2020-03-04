@@ -19,12 +19,12 @@ rec {
   };
 
   matchable = eggDerivation {
-    name = "matchable-1.0";
+    name = "matchable-1.1";
 
     src = fetchegg {
       name = "matchable";
-      version = "1.0";
-      sha256 = "01vy2ppq3sq0wirvsvl3dh0bwa5jqs1i6rdjdd7pnwj4nncxd1ga";
+      version = "1.1";
+      sha256 = "084hm5dvbvgnpb32ispkp3hjili8z02hamln860r99jx68jx6j2v";
     };
 
     buildInputs = [

@@ -532,6 +532,21 @@ let
     };
   };
 
+  Applify = buildPerlPackage {
+    pname = "Applify";
+    version = "0.21";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/Applify-0.21.tar.gz";
+      sha256 = "e34bc64c12c42369af6db7d17e3e20059b9d97ed50f8e487bf610008525eb84d";
+    };
+    meta = {
+      homepage = "https://github.com/jhthorsen/applify";
+      description = "Write object oriented scripts with ease";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   Appperlbrew = buildPerlModule {
     pname = "App-perlbrew";
     version = "0.88";
@@ -9708,10 +9723,10 @@ let
 
   JSONValidator = buildPerlPackage {
     pname = "JSON-Validator";
-    version = "3.18";
+    version = "3.23";
     src = fetchurl {
-      url = mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.18.tar.gz;
-      sha256 = "a62474311b57c0a01ad06a5e340ec10d3723d74fd019304c769ffc7a61b5a47a";
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/JSON-Validator-3.23.tar.gz";
+      sha256 = "1fzy2z7mkg5vgcjvykh5ay8yg6q496wi14x9wp5hc9agplsq7f0s";
     };
     buildInputs = [ TestDeep ];
     propagatedBuildInputs = [ DataValidateDomain DataValidateIP Mojolicious NetIDNEncode YAMLLibYAML ];
@@ -13120,6 +13135,11 @@ let
       url = mirror://cpan/authors/id/A/AB/ABH/Mozilla-CA-20180117.tar.gz;
       sha256 = "f2cc9fbe119f756313f321e0d9f1fac0859f8f154ac9d75b1a264c1afdf4e406";
     };
+
+    postPatch = ''
+      ln -s --force ${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt lib/Mozilla/CA/cacert.pem
+    '';
+
     meta = {
       description = "Mozilla's CA cert bundle in PEM format";
       license = stdenv.lib.licenses.mpl20;
@@ -14055,6 +14075,22 @@ let
     meta = {
       description = "More Opcodes information from opnames.h and opcode.h";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  OpenAPIClient = buildPerlPackage rec {
+    pname = "OpenAPI-Client";
+    version = "0.24";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/J/JH/JHTHORSEN/OpenAPI-Client-0.24.tar.gz";
+      sha256 = "2420a2d1a9bc24a644c9ba12d77f1252ac2209ef0ac5a432153fe49c840faf28";
+    };
+    propagatedBuildInputs = [ JSONValidator MojoliciousPluginOpenAPI ];
+    meta = {
+      homepage = "https://github.com/jhthorsen/openapi-client";
+      description = "A client for talking to an Open API powered server";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -19274,6 +19310,20 @@ let
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
     buildInputs = [ FileFindRule TestPod TestPodCoverage ];
+  };
+
+  TextLorem = buildPerlModule {
+    pname = "Text-Lorem";
+    version = "0.3";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/A/AD/ADEOLA/Text-Lorem-0.3.tar.gz";
+      sha256 = "64bb636fb21213101a646b414ecbdc1b55edf905cbcdc7f5d24774ec5061fe2d";
+    };
+    meta = {
+      description = "Generate random Latin looking text";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
   };
 
   TestManifest = buildPerlPackage {
