@@ -54,6 +54,7 @@ in
     ${(lib.concatMapStrings (s: "makeWrapper $out/bin/$(basename ${s}) $srcdir/${s} " +
                                 "--set BUNDLE_GEMFILE ${basicEnv.confFiles}/Gemfile "+
                                 "--set BUNDLE_FROZEN 1 "+
+                                "--unset BUNDLE_PATH "+
                                 "--set GEM_HOME ${basicEnv}/${ruby.gemPath} "+
                                 "--set GEM_PATH ${basicEnv}/${ruby.gemPath} "+
                                 "--run \"cd $srcdir\";\n") scripts)}

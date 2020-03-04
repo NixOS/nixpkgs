@@ -33,6 +33,7 @@ paths.each do |path|
 
 ENV["BUNDLE_GEMFILE"] = #{gemfile.dump}
 ENV['BUNDLE_FROZEN'] = '1'
+ENV.delete('BUNDLE_PATH')
 ENV["GEM_HOME"] = #{bundle_path.dump}
 ENV["GEM_PATH"] = #{bundle_path.dump}
 

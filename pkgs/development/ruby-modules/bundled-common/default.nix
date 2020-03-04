@@ -123,6 +123,7 @@ let
             makeWrapper "$i" $out/bin/$(basename "$i") \
               --set BUNDLE_GEMFILE ${confFiles}/Gemfile \
               --set BUNDLE_FROZEN 1 \
+              --unset BUNDLE_PATH \
               --set GEM_HOME ${basicEnv}/${ruby.gemPath} \
               --set GEM_PATH ${basicEnv}/${ruby.gemPath}
           done
