@@ -63,17 +63,38 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      rebootWindow = mkOption {
+        description = ''
+          Define a lower and upper time value (in HH:MM format) which
+          constitute a time window during which reboots are allowed.
+        '';
+        default = null;
+        example = { lower = "01:00"; upper = "05:00"; };
+        type = with types; nullOr (submodule {
+          options = {
+            lower = mkOption {
+              description = "Lower limit of the reboot window";
+              type = types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
+              example = "01:00";
+            };
+
+            upper = mkOption {
+              description = "Upper limit of the reboot window";
+              type = types.strMatching "[[:digit:]]{2}:[[:digit:]]{2}";
+              example = "05:00";
+            };
+          };
+        });
+      };
+
     };
 
   };
 
   config = lib.mkIf cfg.enable {
 
-    system.autoUpgrade.flags =
-      [ "--no-build-output" ]
-      ++ (if cfg.channel == null
-          then [ "--upgrade" ]
-          else [ "-I" "nixpkgs=${cfg.channel}/nixexprs.tar.xz" ]);
+    system.autoUpgrade.flags = [ "--no-build-output" ] ++
+      optionals (cfg.channel != null) [ "-I" "nixpkgs=${cfg.channel}/nixexprs.tar.xz" ];
 
     systemd.services.nixos-upgrade = {
       description = "NixOS Upgrade";
@@ -91,20 +112,31 @@ let cfg = config.system.autoUpgrade; in
       path = with pkgs; [ coreutils gnutar xz.bin gzip gitMinimal config.nix.package.out ];
 
       script = let
-          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
-        in
+        nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+        date     = "${pkgs.coreutils}/bin/date";
+        readlink = "${pkgs.coreutils}/bin/readlink";
+        shutdown = "${pkgs.systemd}/bin/shutdown";
+        upgradeFlag = optional (cfg.channel == null) "--upgrade";
+      in
         if cfg.allowReboot then ''
-            ${nixos-rebuild} boot ${toString cfg.flags}
-            booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
-            built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
-            if [ "$booted" = "$built" ]; then
-              ${nixos-rebuild} switch ${toString cfg.flags}
-            else
-              /run/current-system/sw/bin/shutdown -r +1
-            fi
-          '' else ''
+          ${nixos-rebuild} boot ${toString (cfg.flags ++ upgradeFlag)}
+          booted="$(${readlink} /run/booted-system/{initrd,kernel,kernel-modules})"
+          built="$(${readlink} /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+          ${optionalString (cfg.rebootWindow != null) ''current_time="$(${date} +%H:%M)"''}
+
+          if [ "''${booted}" = "''${built}" ]; then
             ${nixos-rebuild} switch ${toString cfg.flags}
-        '';
+          ${optionalString (cfg.rebootWindow != null) ''
+            elif [[ "''${current_time}" < "${cfg.rebootWindow.lower}" ]] || \
+                 [[ "''${current_time}" > "${cfg.rebootWindow.upper}" ]]; then
+              echo "Outside of configured reboot window, skipping."
+          ''}
+          else
+            ${shutdown} -r +1
+          fi
+        '' else ''
+          ${nixos-rebuild} switch ${toString (cfg.flags ++ upgradeFlag)}
+      '';
 
       startAt = cfg.dates;
     };
@@ -112,3 +144,4 @@ let cfg = config.system.autoUpgrade; in
   };
 
 }
+
