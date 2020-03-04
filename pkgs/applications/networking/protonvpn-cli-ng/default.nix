@@ -2,13 +2,13 @@
 
 python3Packages.buildPythonApplication rec {
   name = "protonvpn-cli-ng";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "protonvpn";
     repo = "protonvpn-cli-ng";
     rev = "v${version}";
-    sha256 = "11fvnnr5p3qdc4y10815jnydcjvxlxwkkq9kvaajg0yszq84rwkz";
+    sha256 = "0ixjb02kj4z79whm1izd8mrn2h0rp9cmw4im1qvp93rahqxdd4n8";
   };
 
   propagatedBuildInputs = (with python3Packages; [
@@ -27,7 +27,7 @@ python3Packages.buildPythonApplication rec {
   meta = with stdenv.lib; {
     description = "Linux command-line client for ProtonVPN";
     homepage = "https://github.com/protonvpn/protonvpn-cli-ng";
-    maintainers = [ maintainers.jtcoolen ];
+    maintainers = [ maintainers.jtcoolen maintainers.jefflabonte ];
     license = licenses.gpl3;
     platforms = platforms.unix;
   };
