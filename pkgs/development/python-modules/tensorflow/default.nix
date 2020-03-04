@@ -69,7 +69,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.1";
+  version = "1.15.2";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -100,7 +100,7 @@ let
       owner = "tensorflow";
       repo = "tensorflow";
       rev = "v${version}";
-      sha256 = "1j8vysfblkyydrr67qr3i7kvaq5ygnjlx8hw9a9pc95ac462jq7i";
+      sha256 = "1q0848drjvnaaa38dgns8knmpmkj5plzsc98j20m5ybv68s55w78";
     };
 
     patches = [
@@ -294,12 +294,10 @@ let
       TF_SYSTEM_LIBS = null;
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
-      # FIXME: can't (re)produce this output with current bazel.
-      # FIXME: build log: https://gist.github.com/andir/eff3e9c8eda5b56c8ea84903aed9cc35
       sha256 = if cudaSupport then
-        "0bzkqjnw1crf0v91yb1frvy0l7kmjawbfwdhm89h73i8fqjab8jw"
+        "1qygfcvvn9vysap9nk6xccxi9mgmzyxiywz6k456f811l1v70p2c"
       else
-        "1d7czp43a3a4aksvdcskbdy7dgifily1amqbz9fa6d8mkhdj5if5";
+        "0kfjanw0mfbh30vi1ms2xlg8yp429cbyfriik6yxd5cla2pncg2j";
     };
 
     buildAttrs = {
