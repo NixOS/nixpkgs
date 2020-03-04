@@ -73,9 +73,6 @@ stdenv.mkDerivation rec {
     pkgconfig
     file
   ]
-    ++ optionals (enableOpenvpn) [ openvpn ]
-    ++ optionals (enableOpenconnect) [ openconnect ]
-    ++ optionals (enableVpnc) [ vpnc ]
     ++ optionals (enablePolkit) [ polkit ]
     ++ optionals (enablePptp) [ pptp ppp ]
     ++ optionals (firewallType == "iptables") [ iptables ]
