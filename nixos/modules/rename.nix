@@ -38,8 +38,8 @@ with lib;
       The services.xserver.displayManager.auto module has been removed
       because it was only intended for use in internal NixOS tests, and gave the
       false impression of it being a special display manager when it's actually
-      LightDM. Please use the services.xserver.displayManager.autoLogin options
-      instead, or any other display manager in NixOS as they all support auto-login.
+      LightDM. Please use the generic services.xserver.displayManager.autoLogin options
+      instead, as all display managers in NixOS support auto-login.
     '')
     (mkRemovedOptionModule [ "services" "dnscrypt-proxy" ] "Use services.dnscrypt-proxy2 instead")
     (mkRemovedOptionModule ["hardware" "brightnessctl" ] ''
