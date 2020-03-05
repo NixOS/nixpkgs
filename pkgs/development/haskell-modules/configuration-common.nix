@@ -1074,9 +1074,16 @@ self: super: {
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
 
   stack =
+    let
+      stackWithOverrides =
+        super.stack.override {
+          # stack-2.1.3.1 requires pantry-0.2.0.0.
+          pantry = self.pantry_0_2_0_0;
+        };
+    in
     generateOptparseApplicativeCompletion
       "stack"
-      (appendPatches super.stack [
+      (appendPatches stackWithOverrides [
         # This PR fixes stack up to be able to build with Cabal-3.  This patch
         # can probably be dropped when the next stack release is made after
         # 2.1.3.1.
@@ -1416,11 +1423,12 @@ self: super: {
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
 
-  pantry = appendPatches super.pantry [
-    # Pantry has been updated for ghc-8.8 upstream, but there hasn't been a
-    # release yet with this patch. This can probably be removed when a
-    # version of pantry is released after 0.2.0.0.
+  pantry_0_2_0_0 = appendPatches super.pantry_0_2_0_0 [
+    # pantry-0.2.0.0 doesn't build with ghc-8.8, but there is a PR adding support.
     # https://github.com/commercialhaskell/pantry/pull/6
+    # Currently stack-2.1.3.1 requires pantry-0.2.0.0, but when a newer version of
+    # stack is released, it will probably use the newer pantry version, so we
+    # can completely get rid of pantry-0.2.0.0.
     (pkgs.fetchpatch {
       url = "https://github.com/commercialhaskell/pantry/pull/6.diff";
       sha256 = "0aml06jshpjh3aiscs5av7y33m3d6s6x5pzdvh7pky476izfg87k";
