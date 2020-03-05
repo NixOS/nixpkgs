@@ -1,4 +1,4 @@
-{ stdenv, makeStaticLibraries,
+{ stdenv, makeStaticLibraries, makeWrapper,
   coreutils, rsync, bash,
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
   version, git-version, gambit, src }:
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs_libraries = [ openssl zlib sqlite libxml2 libyaml libmysqlclient lmdb leveldb postgresql ];
   buildInputs_staticLibraries = map makeStaticLibraries buildInputs_libraries;
 
-  buildInputs = [ gambit rsync bash ]
+  buildInputs = [ gambit rsync bash makeWrapper ]
     ++ buildInputs_libraries ++ buildInputs_staticLibraries;
 
   NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
@@ -85,6 +85,11 @@ else
   exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
 fi
 EOF
+
+    for exe in gxpkg gxprof gxtags; do
+      wrapProgram "$out/bin/$exe" --set-default GERBIL_HOME "$out"
+    done
+
     runHook postInstall
   '';
 
