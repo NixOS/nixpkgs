@@ -12,15 +12,15 @@ with lib;
   # Wayland can be problematic for some hardware like Nvidia graphics cards.
   services.xserver.displayManager.defaultSession = "gnome-xorg";
 
-  services.xserver.displayManager.gdm = {
-    enable = true;
+  services.xserver.displayManager = {
+    gdm.enable = true;
     # autoSuspend makes the machine automatically suspend after inactivity.
     # It's possible someone could/try to ssh'd into the machine and obviously
     # have issues because it's inactive.
     # See:
     # * https://github.com/NixOS/nixpkgs/pull/63790
     # * https://gitlab.gnome.org/GNOME/gnome-control-center/issues/22
-    autoSuspend = false;
+    gdm.autoSuspend = false;
     autoLogin = {
       enable = true;
       user = "nixos";

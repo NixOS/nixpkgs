@@ -53,8 +53,8 @@ let
       ${optionalString cfg.greeter.enable ''
         greeter-session = ${cfg.greeter.name}
       ''}
-      ${optionalString cfg.autoLogin.enable ''
-        autologin-user = ${cfg.autoLogin.user}
+      ${optionalString config.services.xserver.displayManager.autoLogin.enable ''
+        autologin-user = ${config.services.xserver.displayManager.autoLogin.user}
         autologin-user-timeout = ${toString cfg.autoLogin.timeout}
         autologin-session = ${sessionData.autologinSession}
       ''}
@@ -77,6 +77,10 @@ in
     ./lightdm-greeters/mini.nix
     ./lightdm-greeters/enso-os.nix
     ./lightdm-greeters/pantheon.nix
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "enable" ]
+      "Set the option `services.xserver.displayManager.autoLogin.enable' instead.")
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "lightdm" "autoLogin" "user" ]
+      "Set the option `services.xserver.displayManager.autoLogin.user' instead.")
   ];
 
   options = {
@@ -143,39 +147,13 @@ in
         description = "Extra lines to append to SeatDefaults section.";
       };
 
-      autoLogin = mkOption {
-        default = {};
+      # Configuration for automatic login specific to LightDM
+      autoLogin.timeout = mkOption {
+        type = types.int;
+        default = 0;
         description = ''
-          Configuration for automatic login.
+          Show the greeter for this many seconds before automatic login occurs.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as the specified <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the automatic login.
-              '';
-            };
-
-            timeout = mkOption {
-              type = types.int;
-              default = 0;
-              description = ''
-                Show the greeter for this many seconds before automatic login occurs.
-              '';
-            };
-          };
-        };
       };
 
     };
@@ -189,17 +167,12 @@ in
           LightDM requires services.xserver.enable to be true
         '';
       }
-      { assertion = cfg.autoLogin.enable -> cfg.autoLogin.user != null;
-        message = ''
-          LightDM auto-login requires services.xserver.displayManager.lightdm.autoLogin.user to be set
-        '';
-      }
-      { assertion = cfg.autoLogin.enable -> sessionData.autologinSession != null;
+      { assertion = config.services.xserver.displayManager.autoLogin.enable -> sessionData.autologinSession != null;
         message = ''
           LightDM auto-login requires that services.xserver.displayManager.defaultSession is set.
         '';
       }
-      { assertion = !cfg.greeter.enable -> (cfg.autoLogin.enable && cfg.autoLogin.timeout == 0);
+      { assertion = !cfg.greeter.enable -> (config.services.xserver.displayManager.autoLogin.enable && cfg.autoLogin.timeout == 0);
         message = ''
           LightDM can only run without greeter if automatic login is enabled and the timeout for it
           is set to zero.
@@ -209,7 +182,7 @@ in
 
     # Set default session in session chooser to a specified values – basically ignore session history.
     # Auto-login is already covered by a config value.
-    services.xserver.displayManager.job.preStart = optionalString (!cfg.autoLogin.enable && dmcfg.defaultSession != null) ''
+    services.xserver.displayManager.job.preStart = optionalString (!config.services.xserver.displayManager.autoLogin.enable && dmcfg.defaultSession != null) ''
       ${setSessionScript}/bin/set-session ${dmcfg.defaultSession}
     '';
 
@@ -302,7 +275,7 @@ in
     security.pam.services.lightdm-autologin.text = ''
         auth      requisite     pam_nologin.so
 
-        auth      required      pam_succeed_if.so ${optionalString (cfg.autoLogin.user != "root") "uid >= 1000"} quiet
+        auth      required      pam_succeed_if.so ${optionalString (config.services.xserver.displayManager.autoLogin.user != "root") "uid >= 1000"} quiet
         auth      required      pam_permit.so
 
         account   sufficient    pam_unix.so

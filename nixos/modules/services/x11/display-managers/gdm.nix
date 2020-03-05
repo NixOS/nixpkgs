@@ -37,6 +37,13 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "enable" ]
+      "Set the option `services.xserver.displayManager.autoLogin.enable' instead.")
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "gdm" "autoLogin" "user" ]
+      "Set the option `services.xserver.displayManager.autoLogin.user' instead.")
+  ];
+
 
   ###### interface
 
@@ -52,40 +59,13 @@ in
         debugging messages in GDM
       '';
 
-      autoLogin = mkOption {
-        default = {};
+      # Auto login options specific to GDM
+      autoLogin.delay = mkOption {
+        type = types.int;
+        default = 0;
         description = ''
-          Auto login configuration attrset.
+          Seconds of inactivity after which the autologin will be performed.
         '';
-
-        type = types.submodule {
-          options = {
-            enable = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                Automatically log in as the sepecified <option>autoLogin.user</option>.
-              '';
-            };
-
-            user = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = ''
-                User to be used for the autologin.
-              '';
-            };
-
-            delay = mkOption {
-              type = types.int;
-              default = 0;
-              description = ''
-                Seconds of inactivity after which the autologin will be performed.
-              '';
-            };
-
-          };
-        };
       };
 
       wayland = mkOption {
@@ -122,12 +102,6 @@ in
   ###### implementation
 
   config = mkIf cfg.gdm.enable {
-
-    assertions = [
-      { assertion = cfg.gdm.autoLogin.enable -> cfg.gdm.autoLogin.user != null;
-        message = "GDM auto-login requires services.xserver.displayManager.gdm.autoLogin.user to be set";
-      }
-    ];
 
     services.xserver.displayManager.lightdm.enable = false;
 
@@ -278,14 +252,14 @@ in
     environment.etc."gdm/custom.conf".text = ''
       [daemon]
       WaylandEnable=${if cfg.gdm.wayland then "true" else "false"}
-      ${optionalString cfg.gdm.autoLogin.enable (
+      ${optionalString cfg.autoLogin.enable (
         if cfg.gdm.autoLogin.delay > 0 then ''
           TimedLoginEnable=true
-          TimedLogin=${cfg.gdm.autoLogin.user}
+          TimedLogin=${cfg.autoLogin.user}
           TimedLoginDelay=${toString cfg.gdm.autoLogin.delay}
         '' else ''
           AutomaticLoginEnable=true
-          AutomaticLogin=${cfg.gdm.autoLogin.user}
+          AutomaticLogin=${cfg.autoLogin.user}
         '')
       }
 
@@ -331,7 +305,7 @@ in
       gdm-autologin.text = ''
         auth      requisite     pam_nologin.so
 
-        auth      required      pam_succeed_if.so uid >= 1000 quiet
+        auth      required      pam_succeed_if.so ${optionalString (config.services.xserver.displayManager.autoLogin.user != "root") "uid >= 1000"} quiet
         auth      required      pam_permit.so
 
         account   sufficient    pam_unix.so

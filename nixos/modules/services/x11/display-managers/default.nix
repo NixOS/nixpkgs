@@ -339,12 +339,36 @@ in
 
       };
 
+      # Configuration for automatic login. Common for all DM.
+      autoLogin = {
+        enable = mkOption {
+          type = types.bool;
+          default = config.services.xserver.displayManager.autoLogin.user != null;
+          description = ''
+            Automatically log in as <option>autoLogin.user</option>.
+          '';
+        };
+
+        user = mkOption {
+          type = types.nullOr types.str;
+          default = null;
+          description = ''
+            User to be used for the automatic login.
+          '';
+        };
+      };
+
     };
 
   };
 
   config = {
     assertions = [
+      { assertion = config.services.xserver.displayManager.autoLogin.enable -> config.services.xserver.displayManager.autoLogin.user != null;
+        message = ''
+          config.services.xserver.displayManager.autoLogin.enable requires services.xserver.displayManager.autoLogin.user to be set
+        '';
+      }
       {
         assertion = cfg.desktopManager.default != null || cfg.windowManager.default != null -> cfg.displayManager.defaultSession == defaultSessionFromLegacyOptions;
         message = "You cannot use both services.xserver.displayManager.defaultSession option and legacy options (services.xserver.desktopManager.default and services.xserver.windowManager.default).";

@@ -14,8 +14,8 @@ with lib;
     };
 
     # Automatically login as nixos.
-    displayManager.sddm = {
-      enable = true;
+    displayManager = {
+      sddm.enable = true;
       autoLogin = {
         enable = true;
         user = "nixos";
