@@ -4161,7 +4161,7 @@ in
 
   icecast = callPackage ../servers/icecast { };
 
-  icepeak = haskellPackages.icepeak;
+  icepeak = haskell.lib.justStaticExecutables haskellPackages.icepeak;
 
   iceshelf = callPackage ../tools/backup/iceshelf { };
 
