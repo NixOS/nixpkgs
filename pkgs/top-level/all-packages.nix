@@ -933,6 +933,8 @@ in
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  gomatrix = callPackage ../applications/misc/gomatrix { };
+
   gucci = callPackage ../tools/text/gucci { };
 
   grc = callPackage ../tools/misc/grc { };
