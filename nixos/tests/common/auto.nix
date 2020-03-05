@@ -39,15 +39,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
-
-    services.xserver.displayManager = {
-      lightdm.enable = true;
-      autoLogin = {
-        enable = true;
-        user = cfg.user;
-      };
-    };
+  config = {
+    services.xserver.displayManager.autoLogin.enable = cfg.enable;
+    services.xserver.displayManager.autoLogin.user   = cfg.user;
   };
 
 }
