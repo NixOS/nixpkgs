@@ -2476,6 +2476,8 @@ package-maintainers:
     - purescript
     - spago
     - termonad
+  rkrzr:
+    - icepeak
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
