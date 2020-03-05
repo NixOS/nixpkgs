@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoPackage, fetchFromGitHub, buildPackages }:
 
 buildGoPackage rec {
   pname = "rclone";
@@ -17,9 +17,19 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "man" ];
 
-  postInstall = ''
-    install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
-  '';
+  postInstall =
+    let
+      rcloneBin =
+        if stdenv.buildPlatform == stdenv.hostPlatform
+        then "$bin"
+        else stdenv.lib.getBin buildPackages.rclone;
+    in
+      ''
+        install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
+        mkdir -p $bin/share/zsh/site-functions $bin/share/bash-completion/completions/
+        ${rcloneBin}/bin/rclone genautocomplete zsh $bin/share/zsh/site-functions/_rclone
+        ${rcloneBin}/bin/rclone genautocomplete bash $bin/share/bash-completion/completions/rclone.bash
+      '';
 
   meta = with stdenv.lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";
