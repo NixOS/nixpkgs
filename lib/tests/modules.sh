@@ -279,6 +279,10 @@ checkConfigError 'A definition for option .fun.\[function body\]. is not of type
 checkConfigOutput '^"b a"$' config.result ./functionTo/list-order.nix
 checkConfigOutput '^"a c"$' config.result ./functionTo/merging-attrs.nix
 
+## types.attrs
+checkConfigError 'The option .* has conflicting definition values in .*foo.bar.*' config.value.foo.bar ./define-conflicting-attrs.nix
+checkConfigOutput '^42$' config.value.foo.baz ./define-merging-attrs.nix
+
 # moduleType
 checkConfigOutput '^"a b"$' config.resultFoo ./declare-variants.nix ./define-variant.nix
 checkConfigOutput '^"a y z"$' config.resultFooBar ./declare-variants.nix ./define-variant.nix

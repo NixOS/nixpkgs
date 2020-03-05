@@ -27,6 +27,7 @@ let
     ;
   inherit (lib.attrsets)
     optionalAttrs
+    recursiveUpdateUntil
     ;
   inherit (lib.strings)
     concatMapStrings
@@ -146,6 +147,16 @@ rec {
         throw "The option `${showOption loc}' has conflicting definition values:${showDefs [ first def ]}"
       else
         first) (head defs) (tail defs)).value;
+
+  /* Merge attribute sets of non-conflicting values. */
+  mergeAttrSetOptions = loc: defs:
+    foldl' (val: def: recursiveUpdateUntil (path: lhs: rhs:
+      if isAttrs lhs && isAttrs rhs then
+        false
+      else if lhs != rhs then
+        throw ''The option `${showOption loc}' has conflicting definition values in '${concatStringsSep "." path}':${showFiles (getFiles defs)}.''
+      else
+        true) val def.value) {} defs;
 
   /* Extracts values of all "value" keys of the given list.
 
