@@ -59,8 +59,8 @@ in
     serviceConfig = {
       ExecStart = ''
         ${pkgs.prometheus-snmp-exporter.bin}/bin/snmp_exporter \
-          --config.file=${configFile} \
-          --log.format=${cfg.logFormat} \
+          --config.file=${escapeShellArg configFile} \
+          --log.format=${escapeShellArg cfg.logFormat} \
           --log.level=${cfg.logLevel} \
           --web.listen-address=${cfg.listenAddress}:${toString cfg.port} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
