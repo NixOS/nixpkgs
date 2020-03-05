@@ -21,6 +21,14 @@ let
           sha256 = "0glsvaz8igi2wy1hsnhm9fkn6560vdvdixzvkq6dn20z3hpaa5hk";
         };
       });
+
+      tomlkit = super.tomlkit.overridePythonAttrs (oldAttrs: rec {
+        version = "0.5.8";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "0sf2a4q61kf344hjbw8kb6za1hlccl89j9lzqw0l2zpddp0hrh9j";
+        };
+      });
     };
   };
 
