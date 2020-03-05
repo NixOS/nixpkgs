@@ -29,6 +29,7 @@ let
     "fritzbox"
     "json"
     "mail"
+    "mikrotik"
     "minio"
     "nextcloud"
     "nginx"
@@ -203,6 +204,14 @@ in
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
+      '';
+    } {
+      assertion = cfg.mikrotik.enable -> (
+        (cfg.mikrotik.configFile == null) != (cfg.mikrotik.configuration == null)
+      );
+      message = ''
+        Please specify either `services.prometheus.exporters.mikrotik.configuration'
+          or `services.prometheus.exporters.mikrotik.configFile'.
       '';
     } {
       assertion = cfg.mail.enable -> (

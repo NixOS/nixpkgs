@@ -245,6 +245,46 @@ let
       '';
     };
 
+    mikrotik = {
+      exporterConfig = {
+        enable = true;
+        extraFlags = [ "-timeout=1s" ];
+        configuration = {
+          devices = [
+            {
+              name = "router";
+              address = "192.168.42.48";
+              user = "prometheus";
+              password = "shh";
+            }
+          ];
+          features = {
+            bgp = true;
+            dhcp = true;
+            dhcpl = true;
+            dhcpv6 = true;
+            health = true;
+            routes = true;
+            poe = true;
+            pools = true;
+            optics = true;
+            w60g = true;
+            wlansta = true;
+            wlanif = true;
+            monitor = true;
+            ipsec = true;
+          };
+        };
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-mikrotik-exporter.service")
+        wait_for_open_port(9436)
+        succeed(
+            "curl -sSf http://localhost:9436/metrics | grep -q 'mikrotik_scrape_collector_success{device=\"router\"} 0'"
+        )
+      '';
+    };
+
     nextcloud = {
       exporterConfig = {
         enable = true;
