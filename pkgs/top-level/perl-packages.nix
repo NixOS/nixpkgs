@@ -14493,6 +14493,19 @@ let
     };
   };
 
+  ParseYapp = buildPerlPackage {
+    pname = "Parser-Yapp";
+    version = "1.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/W/WB/WBRASWELL/Parse-Yapp-1.21.tar.gz;
+      sha256 = "1r8kbyk0qd4ficmabj753kjpq0ib0csk01169w7jxflg62cfj41q";
+    };
+    meta = {
+      description = "Perl extension for generating and using LALR parsers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PathClass = buildPerlModule {
     pname = "Path-Class";
     version = "0.37";
