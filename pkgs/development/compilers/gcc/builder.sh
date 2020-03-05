@@ -247,13 +247,6 @@ postInstall() {
             NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
             patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
         done
-
-        # For some reason the libs retain RPATH to $out
-        for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
     fi
 
     if type "install_name_tool"; then
