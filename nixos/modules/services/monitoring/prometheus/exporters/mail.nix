@@ -148,7 +148,7 @@ in
         ${pkgs.prometheus-mail-exporter}/bin/mailexporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --config.file ${
-            if cfg.configuration != {} then configurationFile else cfg.configFile
+            if cfg.configuration != {} then configurationFile else (escapeShellArg cfg.configFile)
           } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
