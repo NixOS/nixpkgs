@@ -42,38 +42,35 @@ import ./make-test-python.nix ({ pkgs, ... }: {
 
       services.nginx.enableReload = true;
 
-      nesting.clone = [
-        {
-          services.nginx.virtualHosts.localhost = {
-            root = lib.mkForce (pkgs.runCommand "testdir2" {} ''
-              mkdir "$out"
-              echo content changed > "$out/index.html"
-            '');
-          };
-        }
+      specialisation.etagSystem.configuration = {
+        services.nginx.virtualHosts.localhost = {
+          root = lib.mkForce (pkgs.runCommand "testdir2" {} ''
+            mkdir "$out"
+            echo content changed > "$out/index.html"
+          '');
+        };
+      };
 
-        {
-          services.nginx.virtualHosts."1.my.test".listen = [ { addr = "127.0.0.1"; port = 8080; }];
-        }
+      specialisation.justReloadSystem.configuration = {
+        services.nginx.virtualHosts."1.my.test".listen = [ { addr = "127.0.0.1"; port = 8080; }];
+      };
 
-        {
-          services.nginx.package = pkgs.nginxUnstable;
-        }
+      specialisation.reloadRestartSystem.configuration = {
+        services.nginx.package = pkgs.nginxUnstable;
+      };
 
-        {
-          services.nginx.package = pkgs.nginxUnstable;
-          services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
-        }
-      ];
+      specialisation.reloadWithErrorsSystem.configuration = {
+        services.nginx.package = pkgs.nginxUnstable;
+        services.nginx.virtualHosts."!@$$(#*%".locations."~@#*$*!)".proxyPass = ";;;";
+      };
     };
-
   };
 
   testScript = { nodes, ... }: let
-    etagSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-1";
-    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-2";
-    reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-3";
-    reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/fine-tune/child-4";
+    etagSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/etagSystem";
+    justReloadSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/justReloadSystem";
+    reloadRestartSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadRestartSystem";
+    reloadWithErrorsSystem = "${nodes.webserver.config.system.build.toplevel}/specialisation/reloadWithErrorsSystem";
   in ''
     url = "http://localhost/index.html"
 
