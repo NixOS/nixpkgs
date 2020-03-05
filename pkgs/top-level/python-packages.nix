@@ -812,6 +812,8 @@ in {
 
   jc = callPackage ../development/python-modules/jc { };
 
+  jellyfin-apiclient-python = callPackage ../development/python-modules/jellyfin-apiclient-python { };
+
   jira = callPackage ../development/python-modules/jira { };
 
   jsonpath = callPackage ../development/python-modules/jsonpath { };
