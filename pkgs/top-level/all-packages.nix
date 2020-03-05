@@ -12878,9 +12878,7 @@ in
 
   libksba = callPackage ../development/libraries/libksba { };
 
-  libksi = callPackage ../development/libraries/libksi {
-    openssl = openssl_1_0_2;
-  };
+  libksi = callPackage ../development/libraries/libksi { };
 
   liblinear = callPackage ../development/libraries/liblinear { };
 
