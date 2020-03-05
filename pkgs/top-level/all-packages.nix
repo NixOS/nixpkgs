@@ -1904,6 +1904,8 @@ in
 
   jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
 
+  jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   jwt-cli = callPackage ../tools/security/jwt-cli {
