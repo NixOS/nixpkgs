@@ -878,6 +878,39 @@ let
     };
   };
 
+  AuthenSASLSASLprep = buildPerlModule {
+    pname = "Authen-SASL-SASLprep";
+    version = "1.100";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CF/CFAERBER/Authen-SASL-SASLprep-1.100.tar.gz";
+      sha256 = "a4cccc34bb3f53acf0ba78c9fc61af8d156d109d1c10487ba5988a55077d1f70";
+    };
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [ UnicodeStringprep ];
+    meta = {
+      description = "A Stringprep Profile for User Names and Passwords (RFC 4013)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  AuthenSCRAM = buildPerlPackage {
+    pname = "Authen-SCRAM";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Authen-SCRAM-0.011.tar.gz";
+      sha256 = "45108c239a7373d00941dcf0d171acd03e7c16a63ce6f7d9568ff052b17cf5a8";
+    };
+    buildInputs = [ TestFailWarnings TestFatal ];
+    propagatedBuildInputs = [ AuthenSASLSASLprep CryptURandom Moo PBKDF2Tiny TryTiny TypeTiny namespaceclean ];
+    meta = {
+      homepage = "https://github.com/dagolden/Authen-SCRAM";
+      description = "Salted Challenge Response Authentication Mechanism (RFC 5802)";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AuthenSimple = buildPerlPackage {
     pname = "Authen-Simple";
     version = "0.5";
@@ -3631,6 +3664,20 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BO/BORISZ/Crypt-UnixCrypt_XS-0.11.tar.gz;
       sha256 = "1ajg3x6kwxy4x9p3nw1j36qjxpjvdpi9wkca5gfd86y9q8939sv2";
+    };
+  };
+
+  CryptURandom = buildPerlPackage {
+    pname = "Crypt-URandom";
+    version = "0.36";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.36.tar.gz";
+      sha256 = "81fec9921adc5d3c91cbe0ad8cb2bb89b045c4fb0de9cb3c43f17e58e477f8a1";
+    };
+    meta = {
+      description = "Provide non blocking randomness";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -14555,6 +14602,21 @@ let
     };
   };
 
+  PBKDF2Tiny = buildPerlPackage {
+    pname = "PBKDF2-Tiny";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/PBKDF2-Tiny-0.005.tar.gz";
+      sha256 = "b4e21dc59b30265eaaa41b705087ec03447d9c655a14ac40ff46e4de29eabf8e";
+    };
+    meta = {
+      homepage = "https://github.com/dagolden/PBKDF2-Tiny";
+      description = "Minimalist PBKDF2 (RFC 2898) with HMAC-SHA1 or HMAC-SHA2";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   pcscperl = buildPerlPackage {
     pname = "pcsc-perl";
     version = "1.4.14";
@@ -20240,6 +20302,21 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/G/GA/GAAS/GAAS/Unicode-String-2.10.tar.gz;
       sha256 = "0s4vp8k7ag7z9lsnnkpa9mnch83kxhp9gh7yiapld5a7rq712jl9";
+    };
+  };
+
+  UnicodeStringprep = buildPerlModule {
+    pname = "Unicode-Stringprep";
+    version = "1.105";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CF/CFAERBER/Unicode-Stringprep-1.105.tar.gz";
+      sha256 = "e6bebbc58408231fd1317db9102449b3e7da4fa437e79f637382d36313efd011";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Preparation of Internationalized Strings (RFC 3454)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
