@@ -258,6 +258,12 @@ self: super:
     outputs = [ "out" "dev" "devdoc" ];
   });
 
+  libXScrnSaver = super.libXScrnSaver.overrideAttrs (attrs: {
+    buildInputs = with self; attrs.buildInputs ++ [ utilmacros ];
+    configureFlags = attrs.configureFlags or []
+      ++ malloc0ReturnsNullCrossFlag;
+  });
+
   libXv = super.libXv.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "devdoc" ];
     configureFlags = attrs.configureFlags or []
