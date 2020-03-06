@@ -10,16 +10,12 @@ diff -Nur a/compat/tests/settings.py b/compat/tests/settings.py
      'compat.tests.test_app',
  ]
  
+-MIDDLEWARE_CLASSES = (
 +MIDDLEWARE = (
-+    'django.contrib.auth.middleware.AuthenticationMiddleware',
-+    'django.contrib.messages.middleware.MessageMiddleware',
-+    'django.contrib.sessions.middleware.SessionMiddleware',
-+)
-+
- MIDDLEWARE_CLASSES = (
      'django.contrib.sessions.middleware.SessionMiddleware',
      'django.middleware.common.CommonMiddleware',
-@@ -43,6 +50,7 @@
+     'django.middleware.csrf.CsrfViewMiddleware',
+@@ -43,6 +44,7 @@
                  'django.template.context_processors.i18n',
                  'django.template.context_processors.tz',
                  'django.template.context_processors.request',
