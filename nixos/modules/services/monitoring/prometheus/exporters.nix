@@ -197,7 +197,9 @@ in
 
   config = mkMerge ([{
     assertions = [ {
-      assertion = (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null);
+      assertion = cfg.snmp.enable -> (
+        (cfg.snmp.configurationPath == null) != (cfg.snmp.configuration == null)
+      );
       message = ''
         Please ensure you have either `services.prometheus.exporters.snmp.configuration'
           or `services.prometheus.exporters.snmp.configurationPath' set!
