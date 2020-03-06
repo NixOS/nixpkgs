@@ -363,6 +363,7 @@ let
       };
       metricProvider = {
         services.rspamd.enable = true;
+        virtualisation.memorySize = 1024;
       };
       exporterTest = ''
         wait_for_unit("rspamd.service")
