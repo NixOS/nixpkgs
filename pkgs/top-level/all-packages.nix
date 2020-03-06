@@ -947,6 +947,8 @@ in
 
   hpe-ltfs = callPackage ../tools/backup/hpe-ltfs { };
 
+  http2tcp = callPackage ../tools/networking/http2tcp { };
+
   httperf = callPackage ../tools/networking/httperf { };
 
   ili2c = callPackage ../tools/misc/ili2c { };
