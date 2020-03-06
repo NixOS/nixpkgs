@@ -381,6 +381,11 @@ systemd.services.nginx.serviceConfig.ReadWritePaths = [ "/var/www" ];
       will have changed.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The rkt module has been removed, it was archived by upstream.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
