@@ -10140,6 +10140,7 @@ broken-packages:
   - tree-sitter-json
   - tree-sitter-php
   - tree-sitter-python
+  - tree-sitter-ql
   - tree-sitter-ruby
   - tree-sitter-tsx
   - tree-sitter-typescript
