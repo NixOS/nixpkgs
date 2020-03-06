@@ -3,7 +3,7 @@
 buildGoModule rec {
   pname = "kube3d";
   version = "1.6.0";
-  k3sVersion = "1.17.3+k3s1";
+  k3sVersion = "1.17.3-k3s1";
 
   goPackagePath = "github.com/rancher/k3d";
 

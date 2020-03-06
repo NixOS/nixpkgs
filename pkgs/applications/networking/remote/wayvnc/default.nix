@@ -4,14 +4,19 @@
 
 stdenv.mkDerivation rec {
   pname = "wayvnc";
-  version = "0.1.0";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "any1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "17c30c33zzhhlqzc4a5dd1y74ch7c8gsm98wvcn4n1fv50fbmpbd";
+    sha256 = "1qk8xrqd8ls2hpkj7g4aknr73x3lbzzdjpja16rbp2r0m4iv95ld";
   };
+
+  postPatch = ''
+    substituteInPlace meson.build \
+      --replace "version: '0.1.0'" "version: '${version}'"
+  '';
 
   nativeBuildInputs = [ meson pkg-config ninja ];
   buildInputs = [ pixman libuv libGL libxkbcommon wayland neatvnc libdrm libX11 ];
@@ -26,6 +31,7 @@ stdenv.mkDerivation rec {
       display attached.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/any1/wayvnc/releases/tag/v${version}";
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
