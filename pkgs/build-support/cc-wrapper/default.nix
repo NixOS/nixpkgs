@@ -41,7 +41,9 @@ let
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
   libc_lib = if libc == null then null else getLib libc;
-  cc_solib = getLib cc;
+  cc_solib = getLib cc
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
