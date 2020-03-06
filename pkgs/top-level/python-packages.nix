@@ -6282,9 +6282,9 @@ in {
 
   libvirt = if isPy3k then (callPackage ../development/python-modules/libvirt {
     inherit (pkgs) libvirt pkgconfig;
-  }) else (callPackage ../development/python-modules/libvirt/5.4.0.nix {
+  }) else (callPackage ../development/python-modules/libvirt/5.9.0.nix {
     inherit (pkgs) pkgconfig;
-    libvirt = pkgs.libvirt_5_4_0;
+    libvirt = pkgs.libvirt_5_9_0;
   });
 
   rpdb = callPackage ../development/python-modules/rpdb { };
