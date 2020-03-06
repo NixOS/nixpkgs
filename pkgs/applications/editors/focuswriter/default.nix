@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "focuswriter";
-  version = "1.7.4";
+  version = "1.7.5";
 
   src = fetchurl {
     url = "https://gottcode.org/focuswriter/focuswriter-${version}-src.tar.bz2";
-    sha256 = "1fli85p9d58gsg2kwmncqdcw1nmx062kddbrhr50mnsn04dc4j3g";
+    sha256 = "19fqxyas941xcqjj68qpj42ayq0vw5rbd4ms5kvx8jyspp7wysqc";
   };
 
   nativeBuildInputs = [ pkgconfig qmake qttools ];
@@ -22,6 +22,6 @@ mkDerivation rec {
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ madjar ];
     platforms = platforms.linux;
-    homepage = https://gottcode.org/focuswriter/;
+    homepage = "https://gottcode.org/focuswriter/";
   };
 }
