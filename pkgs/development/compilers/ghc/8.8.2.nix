@@ -88,12 +88,12 @@ let
 
 in
 stdenv.mkDerivation (rec {
-  version = "8.8.2";
+  version = "8.8.3";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/8.8.2/ghc-${version}-src.tar.xz";
-    sha256 = "02qa6wgjpxgakg7hv4zfdlrx9k7zxa5i02wnr6y9fsv8j16sbkh1";
+    url = "https://downloads.haskell.org/ghc/8.8.3/ghc-${version}-src.tar.xz";
+    sha256 = "128g932i3wix6ic03v04nh5755vyjiidzri9iybwad72yfmc1p70";
   };
 
   enableParallelBuilding = true;
@@ -227,7 +227,7 @@ stdenv.mkDerivation (rec {
   };
 
   meta = {
-    homepage = http://haskell.org/ghc;
+    homepage = "http://haskell.org/ghc";
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
     inherit (ghc.meta) license platforms;
