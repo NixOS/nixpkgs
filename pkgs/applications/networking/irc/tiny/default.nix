@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tiny";
-  version = "0.5.1";
+  version = "0.5.2-test";
 
   src = fetchFromGitHub {
     owner = "osa1";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1m57xsrc7lzkrm8k1wh3yx3in5bhd0qjzygxdwr8lvigpsiy5caa";
+    sha256 = "09i0vkf9k4qga588wmz1z2mnnjz57bziff98vhwdvlw8dlidp7ip";
   };
 
-  cargoSha256 = "1s93zxk85wa7zw8745ba1sgipal75w1y18nc9vca6sig4pzvvj41";
+  cargoSha256 = "02iwc14df0vflp8l5gsaj7sqc08lmvsbs64bi1xaqrnvp0li8bvx";
 
   RUSTC_BOOTSTRAP = 1;
 
