@@ -1422,7 +1422,7 @@ self: super: {
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
 
-  pantry_0_2_0_0 = appendPatches super.pantry_0_2_0_0 [
+  pantry_0_2_0_0 = appendPatches (dontCheck super.pantry_0_2_0_0) [
     # pantry-0.2.0.0 doesn't build with ghc-8.8, but there is a PR adding support.
     # https://github.com/commercialhaskell/pantry/pull/6
     # Currently stack-2.1.3.1 requires pantry-0.2.0.0, but when a newer version of
