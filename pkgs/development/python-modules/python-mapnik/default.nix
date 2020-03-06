@@ -18,13 +18,13 @@ let
 
 in buildPythonPackage rec {
   pname = "python-mapnik";
-  version = "3.0.16";
+  version = "unstable-2020-02-24";
 
   src = pkgs.fetchFromGitHub {
     owner = "mapnik";
     repo = "python-mapnik";
-    rev = "v${version}";
-    sha256 = "1gqs4kvmjawdgl80j0ab5r8y0va9kw0rvwix3093xsv4hwd00lcc";
+    rev = "7da019cf9eb12af8f8aa88b7d75789dfcd1e901b";
+    sha256 = "0snn7q7w1ab90311q8wgd1z64kw1svm5w831q0xd6glqhah86qc8";
   };
 
   disabled = isPyPy;

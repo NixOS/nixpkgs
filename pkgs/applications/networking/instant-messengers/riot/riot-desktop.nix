@@ -1,4 +1,4 @@
-{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_5, riot-web, mkYarnPackage }:
+{ pkgs, stdenv, fetchFromGitHub, makeWrapper, makeDesktopItem, electron_7, riot-web, mkYarnPackage }:
 
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
@@ -6,13 +6,14 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.5.10";
+  version = "1.5.12";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "0yr5f3i24qh9b8hjfalpqxwr0qhs7hax450g83vf06skap1l5i5j";
+    sha256 = "1qz3n2dlklhbi6rbhv2v769xbr4rcp9s6pm2cc9r33ak6axn4aym";
   };
+  electron = electron_7;
 
 in mkYarnPackage rec {
   name = "riot-desktop-${version}";
@@ -45,7 +46,7 @@ in mkYarnPackage rec {
     ln -s "${desktopItem}/share/applications" "$out/share/applications"
 
     # executable wrapper
-    makeWrapper '${electron_5}/bin/electron' "$out/bin/${executableName}" \
+    makeWrapper '${electron}/bin/electron' "$out/bin/${executableName}" \
       --add-flags "$out/share/riot/electron"
   '';
 
@@ -78,6 +79,6 @@ in mkYarnPackage rec {
     homepage = https://about.riot.im/;
     license = licenses.asl20;
     maintainers = with maintainers; [ pacien worldofpeace ];
-    inherit (electron_5.meta) platforms;
+    inherit (electron.meta) platforms;
   };
 }

@@ -154,7 +154,7 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
-     The <literal>99-main.network</literal> file was removed. Maching all
+     The <literal>99-main.network</literal> file was removed. Matching all
      network interfaces caused many breakages, see
      <link xlink:href="https://github.com/NixOS/nixpkgs/pull/18962">#18962</link>
        and <link xlink:href="https://github.com/NixOS/nixpkgs/pull/71106">#71106</link>.
