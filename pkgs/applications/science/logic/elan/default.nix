@@ -8,10 +8,10 @@ rustPlatform.buildRustPackage rec {
     owner = "kha";
     repo = "elan";
     rev = "v${version}";
-    sha256 = "1147f3lzr6lgvf580ppspn20bdwnf6l8idh1h5ana0p0lf5a0dn1";
+    sha256 = "0n2ncssjcmp3x5kbnci7xbq5fgcihlr3vaglyhhwzrxkjy2vpmpd";
   };
 
-  cargoSha256 = "19bhfpbj1isr448kpjws8w6b08gl9pafjd4fry7kzh9mhkf0rf7i";
+  cargoSha256 = "1pkg0n7kxckr0zhr8dr12b9fxg5q185kj3r9k2rmnkj2dpa2mxh3";
 
   nativeBuildInputs = [ pkgconfig ];
 
