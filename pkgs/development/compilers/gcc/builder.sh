@@ -133,7 +133,7 @@ if test "$noSysDirs" = "1"; then
 
     if test "$crossStageStatic" == 1; then
         # We don't want the gcc build to assume there will be a libc providing
-        # limits.h in this stagae
+        # limits.h in this stage
         makeFlagsArray+=(
             'LIMITS_H_TEST=false'
         )
@@ -203,31 +203,31 @@ postConfigure() {
 preInstall() {
     # Make ‘lib64’ symlinks to ‘lib’.
     if [ -n "$is64bit" -a -z "$enableMultilib" ]; then
-        mkdir -p "$out/lib"
-        ln -s lib "$out/lib64"
-        mkdir -p "$lib/lib"
-        ln -s lib "$lib/lib64"
+        mkdir -p "$out/${targetConfig}/lib"
+        ln -s lib "$out/${targetConfig}/lib64"
+        mkdir -p "$lib/${targetConfig}/lib"
+        ln -s lib "$lib/${targetConfig}/lib64"
     fi
 }
 
 
 postInstall() {
     # Move runtime libraries to $lib.
-    moveToOutput "lib/lib*.so*" "$lib"
-    moveToOutput "lib/lib*.la"  "$lib"
-    moveToOutput "lib/lib*.dylib" "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.so*" "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.la"  "$lib"
+    moveToOutput "${targetConfig+$targetConfig/}lib/lib*.dylib" "$lib"
     moveToOutput "share/gcc-*/python" "$lib"
 
-    for i in "$lib"/lib/*.{la,py}; do
+    for i in "$lib/${targetConfig}"/lib/*.{la,py}; do
         substituteInPlace "$i" --replace "$out" "$lib"
     done
 
     if [ -n "$enableMultilib" ]; then
-        moveToOutput "lib64/lib*.so*" "$lib"
-        moveToOutput "lib64/lib*.la"  "$lib"
-        moveToOutput "lib64/lib*.dylib" "$lib"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.so*" "$lib"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.la"  "$lib"
+        moveToOutput "${targetConfig+$targetConfig/}lib64/lib*.dylib" "$lib"
 
-        for i in "$lib"/lib64/*.{la,py}; do
+        for i in "$lib/${targetConfig}"/lib64/*.{la,py}; do
             substituteInPlace "$i" --replace "$out" "$lib"
         done
     fi
@@ -245,13 +245,6 @@ postInstall() {
         for i in $(find "$out"/libexec/gcc/*/*/* -type f -a \! -name '*.la'); do
             PREV_RPATH=`patchelf --print-rpath "$i"`
             NEW_RPATH=`echo "$PREV_RPATH" | sed 's,:[^:]*bootstrap-tools/lib,,g'`
-            patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
-        done
-
-        # For some reason the libs retain RPATH to $out
-        for i in "$lib"/lib/{libtsan,libasan,libubsan}.so.*.*.*; do
-            PREV_RPATH=`patchelf --print-rpath "$i"`
-            NEW_RPATH=`echo "$PREV_RPATH" | sed "s,:${out}[^:]*,,g"`
             patchelf --set-rpath "$NEW_RPATH" "$i" && echo OK
         done
     fi
