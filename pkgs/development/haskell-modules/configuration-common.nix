@@ -1450,4 +1450,7 @@ self: super: {
   # https://github.com/serokell/nixfmt/pull/62
   nixfmt = doJailbreak super.nixfmt;
 
+  # https://github.com/phadej/binary-orphans/issues/45
+  binary-instances = dontCheck super.binary-instances;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
