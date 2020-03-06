@@ -5881,6 +5881,12 @@
     githubId = 4579165;
     name = "Danny Bautista";
   };
+  peelz = {
+    email = "peelz.dev+nixpkgs@gmail.com";
+    github = "louistakepillz";
+    githubId = 920910;
+    name = "peelz";
+  };
   q3k = {
     email = "q3k@q3k.org";
     github = "q3k";
