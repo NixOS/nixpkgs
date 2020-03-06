@@ -1453,4 +1453,11 @@ self: super: {
   # https://github.com/phadej/binary-orphans/issues/45
   binary-instances = dontCheck super.binary-instances;
 
+  # Disabling the test suite lets the build succeed on older CPUs
+  # that are unable to run the generated library because they
+  # lack support for AES-NI, like some of our Hydra build slaves
+  # do. See https://github.com/NixOS/nixpkgs/issues/81915 for
+  # details.
+  cryptonite = dontCheck super.cryptonite;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
