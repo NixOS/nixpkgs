@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-mahjongg";
-  version = "3.34.0";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-mahjongg/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qyi3jkg112jysrsy5p330b7b92sl09mr8zsimq06q68kj1wzkz5";
+    sha256 = "0b9r43s9zkgqzkh787l3rbxihz9gic3d1446k7s7kb0zsl8lhglx";
   };
 
   passthru = {
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Mahjongg;
+    homepage = "https://wiki.gnome.org/Apps/Mahjongg";
     description = "Disassemble a pile of tiles by removing matching pairs";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;
