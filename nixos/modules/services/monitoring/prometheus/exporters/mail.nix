@@ -127,8 +127,8 @@ in
       '';
     };
     configuration = mkOption {
-      type = types.submodule exporterOptions;
-      default = {};
+      type = types.nullOr (types.submodule exporterOptions);
+      default = null;
       description = ''
         Specify the mailexporter configuration file to use.
       '';
@@ -148,7 +148,7 @@ in
         ${pkgs.prometheus-mail-exporter}/bin/mailexporter \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --config.file ${
-            if cfg.configuration != {} then configurationFile else (escapeShellArg cfg.configFile)
+            if cfg.configuration != null then configurationFile else (escapeShellArg cfg.configFile)
           } \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
