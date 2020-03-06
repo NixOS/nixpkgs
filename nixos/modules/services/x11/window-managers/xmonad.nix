@@ -83,7 +83,7 @@ in
       session = [{
         name = "xmonad";
         start = if (cfg.config != null) then ''
-          ${xmonadBin}
+          ${xmonadBin} &
           waitPID=$!
         '' else ''
           systemd-cat -t xmonad ${xmonad}/bin/xmonad &
