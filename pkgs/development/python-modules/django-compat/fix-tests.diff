@@ -1,7 +1,7 @@
-diff -Nur a/compat/tests/settings.py b/compat/tests/settings.py
+diff -ur a/compat/tests/settings.py b/compat/tests/settings.py
 --- a/compat/tests/settings.py	2020-03-06 15:32:07.548482597 +0100
-+++ b/compat/tests/settings.py	2020-03-06 15:36:45.270265678 +0100
-@@ -16,10 +16,17 @@
++++ b/compat/tests/settings.py	2020-03-06 22:19:25.422934249 +0100
+@@ -16,11 +16,12 @@
      'django.contrib.admin',
      'django.contrib.auth',
      'django.contrib.contenttypes',
@@ -23,7 +23,7 @@ diff -Nur a/compat/tests/settings.py b/compat/tests/settings.py
              ],
              'loaders': [
                  'django.template.loaders.filesystem.Loader',
-diff -Nur a/compat/tests/test_compat.py b/compat/tests/test_compat.py
+diff -ur a/compat/tests/test_compat.py b/compat/tests/test_compat.py
 --- a/compat/tests/test_compat.py	2020-03-06 15:32:07.548482597 +0100
 +++ b/compat/tests/test_compat.py	2020-03-06 15:37:39.202835075 +0100
 @@ -9,7 +9,7 @@
@@ -44,8 +44,7 @@ diff -Nur a/compat/tests/test_compat.py b/compat/tests/test_compat.py
          self.assertEqual('/accounts/logout/', resolved_url)
  
      '''
-Les fichiers binaires a/compat/tests/.test_compat.py.swp et b/compat/tests/.test_compat.py.swp sont différents
-diff -Nur a/compat/tests/urls.py b/compat/tests/urls.py
+diff -ur a/compat/tests/urls.py b/compat/tests/urls.py
 --- a/compat/tests/urls.py	2020-03-06 15:32:07.548482597 +0100
 +++ b/compat/tests/urls.py	2020-03-06 15:34:25.962377799 +0100
 @@ -2,5 +2,5 @@
