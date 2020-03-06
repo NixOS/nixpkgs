@@ -2359,7 +2359,6 @@ extra-packages:
   - ansi-terminal == 0.10.3             # required by cabal-plan, and policeman in ghc-8.8.x
   - aeson-pretty < 0.8                  # required by elm compiler
   - apply-refact < 0.4                  # newer versions don't work with GHC 8.0.x
-  - aws ^>= 0.18                        # pre-lts-11.x versions neeed by git-annex 6.20180227
   - binary > 0.7 && < 0.8               # keep a 7.x major release around for older compilers
   - binary > 0.8 && < 0.9               # keep a 8.x major release around for older compilers
   - blank-canvas < 0.6.3                # more recent versions depend on base-compat-batteries == 0.10.* but we're on base-compat-0.9.*
@@ -2968,29 +2967,17 @@ broken-packages:
   - awesomium
   - awesomium-glut
   - awesomium-raw
-  - aws
   - aws-configuration-tools
   - aws-dynamodb-conduit
-  - aws-dynamodb-streams
-  - aws-easy
-  - aws-ec2
   - aws-ec2-knownhosts
   - aws-elastic-transcoder
-  - aws-general
-  - aws-kinesis
   - aws-kinesis-client
   - aws-kinesis-reshard
-  - aws-lambda
-  - aws-lambda-haskell-runtime
   - aws-mfa-credentials
   - aws-performance-tests
-  - aws-route53
   - aws-sdk
-  - aws-sdk-text-converter
-  - aws-sdk-xml-unordered
   - aws-sign4
   - aws-simple
-  - aws-sns
   - axel
   - axiom
   - azubi
@@ -3369,7 +3356,6 @@ broken-packages:
   - cabal-install-bundle
   - cabal-install-ghc72
   - cabal-install-ghc74
-  - cabal-install-parsers
   - cabal-lenses
   - cabal-meta
   - cabal-mon
@@ -5512,7 +5498,6 @@ broken-packages:
   - haskell-bitmex-client
   - haskell-bitmex-rest
   - haskell-brainfuck
-  - haskell-ci
   - haskell-cnc
   - haskell-coffee
   - haskell-compression
@@ -7076,6 +7061,7 @@ broken-packages:
   - liquid-fixpoint
   - liquidhaskell
   - liquidhaskell-cabal
+  - Liquorice
   - list-fusion-probe
   - list-mux
   - list-prompt
@@ -10140,6 +10126,7 @@ broken-packages:
   - tree-sitter-json
   - tree-sitter-php
   - tree-sitter-python
+  - tree-sitter-ql
   - tree-sitter-ruby
   - tree-sitter-tsx
   - tree-sitter-typescript
