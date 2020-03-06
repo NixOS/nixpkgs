@@ -7,7 +7,7 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
-, python2Packages, perl, pkgconfig
+, python2Packages, perl, pkgconfig, clang-tools
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -103,6 +103,8 @@ let
        then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
             result
        else result;
+
+  llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
 
   base = rec {
     name = "${packageName}-unwrapped-${version}";
@@ -214,6 +216,8 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
+    '' + optionalString (stdenv.lib.versionAtLeast version "82") ''
+      ln -s ${llvm-clang-tools}/bin/clang-format buildtools/linux64/clang-format
     '';
 
     gnFlags = mkGnFlags ({

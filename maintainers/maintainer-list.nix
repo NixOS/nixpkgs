@@ -1461,6 +1461,16 @@
     githubId = 5684605;
     name = "Cole Scott";
   };
+  cole-h = {
+    name = "Cole Helbling";
+    email = "cole.e.helbling@outlook.com";
+    github = "cole-h";
+    githubId = 28582702;
+    keys = [{
+      longkeyid = "rsa4096/0xB37E0F2371016A4C";
+      fingerprint = "68B8 0D57 B2E5 4AC3 EC1F  49B0 B37E 0F23 7101 6A4C";
+    }];
+  };
   copumpkin = {
     email = "pumpkingod@gmail.com";
     github = "copumpkin";
@@ -4938,6 +4948,12 @@
     github = "MostAwesomeDude";
     githubId = 118035;
     name = "Corbin Simpson";
+  };
+  mothsart = {
+    email = "jerem.ferry@gmail.com";
+    github = "mothsart";
+    githubId = 10601196;
+    name = "Jérémie Ferry";
   };
   mounium = {
     email = "muoniurn@gmail.com";

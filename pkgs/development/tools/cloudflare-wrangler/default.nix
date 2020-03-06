@@ -3,18 +3,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cloudflare-wrangler";
-  version = "1.7.0";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "wrangler";
     rev = "v" + version;
-    sha256 = "0vc7f3jki2fdwlgpwhaxzm58g2898wpwbib7dmibb9kxv4jna8gj";
+    sha256 = "0lh06cnjddmy5h5xvbkg8f97vw2v0wr5fi7vrs3nnidiz7x4rsja";
   };
 
   # Delete this on next update; see #79975 for details
   legacyCargoFetcher = true;
-  cargoSha256 = "1f3gy3agpdg6pck5acxjfrd89hyp9x1byqhfizlizbfmwrqs4il8";
+  cargoSha256 = "0s07143vsrb2vwj4rarx5w3wcz1zh0gi8al6cdrfqyl7nhm1mshm";
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "A CLI tool designed for folks who are interested in using Cloudflare Workers.";
-    homepage = https://github.com/cloudflare/wrangler;
+    homepage = "https://github.com/cloudflare/wrangler";
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = with maintainers; [ ];
     platforms = platforms.all;

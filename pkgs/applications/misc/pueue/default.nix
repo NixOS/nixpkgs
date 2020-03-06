@@ -2,21 +2,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pueue";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "Nukesor";
     repo = pname;
     rev = "v${version}";
-    sha256 = "03aj4vw8kvwqk1i1a4kah5b574ahs930ij7xmqsvdy7f8c2g6pbq";
+    sha256 = "1qp9h1xlfxwswcqi1qn2hfybxl547z13xjbvfgsx1nc8yj51bi3c";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1y33n0dmrssv35l0apfq1mchyh92cfbzjarh0m8zb2nxwhvk7paw";
+  cargoSha256 = "00va292bjdp42bkqdkjqajmzc2nshhqa1fj0yfwdf3rrx4nhssjd";
 
   postInstall = ''
     installShellCompletion utils/completions/pueue.{bash,fish} --zsh utils/completions/_pueue

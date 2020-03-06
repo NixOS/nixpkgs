@@ -139,8 +139,6 @@ stdenv.mkDerivation {
       # Install contrib stuff.
       mkdir -p $out/share/git
       cp -a contrib $out/share/git/
-      mkdir -p $out/share/emacs/site-lisp
-      ln -s "$out/share/git/contrib/emacs/"*.el $out/share/emacs/site-lisp/
       mkdir -p $out/share/bash-completion/completions
       ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/git
       mkdir -p $out/etc/bash_completion.d

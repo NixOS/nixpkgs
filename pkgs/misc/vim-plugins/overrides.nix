@@ -1,6 +1,6 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip
+, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -28,9 +28,6 @@
 
 # vCoolor dependency
 , gnome3
-
-# notational-fzf-vim dependencies
-, ripgrep
 }:
 
 self: super: {
@@ -252,17 +249,6 @@ self: super: {
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
   });
-  
-  notational-fzf-vim = super.notational-fzf-vim.overrideAttrs(old: {
-    dependencies = with self; [ fzf-vim ];
-    patchPhase = ''
-      substituteInPlace plugin/notational_fzf.vim \
-        --replace "'rg'" "'${ripgrep}/bin/rg'" \
-        --replace \
-        "let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'" \
-        "let s:python_executable = '${python3}/bin/python3'"
-    '';
-  });
 
   fzf-vim = super.fzf-vim.overrideAttrs(old: {
     dependencies = [ self.fzfWrapper ];
@@ -365,6 +351,12 @@ self: super: {
 
   vim-easytags = super.vim-easytags.overrideAttrs(old: {
     dependencies = with super; [ vim-misc ];
+    patches = [
+      (fetchpatch { # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
+        url = https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch;
+        sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
+      })
+    ];
   });
 
   # change the go_bin_path to point to a path in the nix store. See the code in

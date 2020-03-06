@@ -9,11 +9,11 @@
 }:
 
 stdenv.mkDerivation {
-  name = "gromacs-2020";
+  name = "gromacs-2020.1";
 
   src = fetchurl {
-    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2020.tar.gz";
-    sha256 = "00ds83n5wnm7g7wq91jycp8h82vnam5b4rwg3fv9rk9x5ca5czj7";
+    url = "ftp://ftp.gromacs.org/pub/gromacs/gromacs-2020.1.tar.gz";
+    sha256 = "1kwrk3i1dxp8abhqqsl049lh361n4910h0415g052f8shdc6arp1";
   };
 
   nativeBuildInputs = [ cmake ];

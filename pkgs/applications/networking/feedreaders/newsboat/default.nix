@@ -12,10 +12,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1bg2qjkzdawn4fnn0w7jhw1dk6191w8axnqra43z21pinfyim6da";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0q0iqd8y9rph8pwild5i2kv00h217a166c88hxpmbrigq9w960lp";
+  cargoSha256 = "0q7bira2adfmx0ghb1c5nqz200iajaxap9bq8j5wvvk9l2wywslp";
 
   postPatch = ''
     substituteInPlace Makefile --replace "|| true" ""

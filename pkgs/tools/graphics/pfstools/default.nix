@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_LIBRARY `find ${netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_LIBRARIES `find ${netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
-    echo "SET(NETPBM_INCLUDE_DIR ${netpbm}/include/netpbm)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARY `find ${stdenv.lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_LIBRARIES `find ${stdenv.lib.getLib netpbm} -name "*.${stdenv.hostPlatform.extensions.sharedLibrary}*" -type f`)" >> cmake/FindNETPBM.cmake
+    echo "SET(NETPBM_INCLUDE_DIR ${stdenv.lib.getDev netpbm}/include/netpbm)" >> cmake/FindNETPBM.cmake
     echo "INCLUDE(FindPackageHandleStandardArgs)" >> cmake/FindNETPBM.cmake
     echo "FIND_PACKAGE_HANDLE_STANDARD_ARGS(NETPBM DEFAULT_MSG NETPBM_LIBRARY NETPBM_INCLUDE_DIR)" >> cmake/FindNETPBM.cmake
   '';

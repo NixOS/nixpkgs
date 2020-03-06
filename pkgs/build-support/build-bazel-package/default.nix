@@ -4,8 +4,13 @@
 , lib
 }:
 
+let
+  bazelPkg = bazel;
+in
+
 args@{
   name
+, bazel ? bazelPkg
 , bazelFlags ? []
 , bazelBuildFlags ? []
 , bazelFetchFlags ? []
@@ -117,6 +122,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       cp -r $bazelOut/external $out
 
+      echo '${bazel.name}' > $out/.nix-bazel-version
+
       runHook postInstall
     '';
 
@@ -138,6 +145,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
   preConfigure = ''
     mkdir -p "$bazelOut"
+
+    test "${bazel.name}" = "$(<$deps/.nix-bazel-version)" || {
+      echo "fixed output derivation was built for a different bazel version" >&2
+      echo "     got: $(<$deps/.nix-bazel-version)" >&2
+      echo "expected: ${bazel.name}" >&2
+      exit 1
+    }
+
     cp -r $deps $bazelOut/external
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do

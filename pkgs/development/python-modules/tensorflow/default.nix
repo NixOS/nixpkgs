@@ -1,4 +1,4 @@
-{ stdenv, pkgs, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_0, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
@@ -7,7 +7,7 @@
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
 , functools32
 , opt-einsum
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_1_15_1
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
@@ -69,7 +69,7 @@ let
 
   tfFeature = x: if x then "1" else "0";
 
-  version = "1.15.0";
+  version = "1.15.1";
   variant = if cudaSupport then "-gpu" else "";
   pname = "tensorflow${variant}";
 
@@ -94,6 +94,7 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
+    bazel = bazel_0;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -114,8 +115,12 @@ let
         url = "https://github.com/tensorflow/tensorflow/pull/29673/commits/498e35a3bfe38dd75cf1416a1a23c07c3b59e6af.patch";
         sha256 = "1m2qmwv1ysqa61z6255xggwbq6mnxbig749bdvrhnch4zydxb4di";
       })
+      (fetchpatch {
+        name = "backport-pr-18950.patch";
+        url = "https://github.com/tensorflow/tensorflow/commit/73640aaec2ab0234d9fff138e3c9833695570c0a.patch";
+        sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
+      })
 
-      ./tf-1.15-bazel-1.0.patch
 
       (fetchpatch {
         # be compatible with gast >0.2 instead of only gast 0.2.2
@@ -277,7 +282,6 @@ let
     bazelFlags = [
       # temporary fixes to make the build work with bazel 0.27
       "--incompatible_no_support_tools_in_action_inputs=false"
-      "--incompatible_use_native_patch=false"
     ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
@@ -290,10 +294,12 @@ let
       TF_SYSTEM_LIBS = null;
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
+      # FIXME: can't (re)produce this output with current bazel.
+      # FIXME: build log: https://gist.github.com/andir/eff3e9c8eda5b56c8ea84903aed9cc35
       sha256 = if cudaSupport then
-        "1rbg8w8pjf15hpvzrclsi19lhsrwdns6f8psb1wz35ay0ggdw8c0"
+        "0bzkqjnw1crf0v91yb1frvy0l7kmjawbfwdhm89h73i8fqjab8jw"
       else
-        "0d8wq89iz9vrzvr971mgdclxxjcjr32r7aj817h019x3pc53qnwx";
+        "1d7czp43a3a4aksvdcskbdy7dgifily1amqbz9fa6d8mkhdj5if5";
     };
 
     buildAttrs = {
@@ -368,7 +374,7 @@ in buildPythonPackage {
     numpy
     six
     protobuf
-    tensorflow-estimator
+    tensorflow-estimator_1_15_1
     termcolor
     wrapt
     grpcio
@@ -414,6 +420,9 @@ in buildPythonPackage {
     x = np.random.uniform(size=(1,1))
     y = np.random.uniform(size=(1,))
     model.fit(x, y, epochs=1)
+
+    # regression test for #77626
+    from tensorflow.contrib import tensor_forest
     EOF
   '';
 

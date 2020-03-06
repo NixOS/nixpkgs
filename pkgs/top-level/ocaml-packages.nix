@@ -413,7 +413,9 @@ let
 
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
-    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {
+      ppxlib = ppxlib.override { version = "0.12.0"; };
+    };
 
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
@@ -1229,7 +1231,7 @@ in let inherit (pkgs) callPackage; in rec
 
   ocamlPackages_4_10 = mkOcamlPackages (callPackage ../development/compilers/ocaml/4.10.nix { });
 
-  ocamlPackages_latest = ocamlPackages_4_09;
+  ocamlPackages_latest = ocamlPackages_4_10;
 
   ocamlPackages = ocamlPackages_4_07;
 }
