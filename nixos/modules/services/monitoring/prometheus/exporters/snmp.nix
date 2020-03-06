@@ -19,7 +19,7 @@ in
 
     configuration = mkOption {
       type = types.nullOr types.attrs;
-      default = {};
+      default = null;
       description = ''
         Snmp exporter configuration as nix attribute set. Mutually exclusive with 'configurationPath' option.
       '';
@@ -54,7 +54,7 @@ in
   serviceOpts = let
     configFile = if cfg.configurationPath != null
                  then cfg.configurationPath
-                 else "${pkgs.writeText "snmp-eporter-conf.yml" (builtins.toJSON cfg.configuration)}";
+                 else "${pkgs.writeText "snmp-exporter-conf.yml" (builtins.toJSON cfg.configuration)}";
     in {
     serviceConfig = {
       ExecStart = ''
