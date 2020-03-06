@@ -36,15 +36,15 @@ in
     };
 
     logFormat = mkOption {
-      type = types.str;
-      default = "logger:stderr";
+      type = types.enum ["logfmt" "json"];
+      default = "logfmt";
       description = ''
-        Set the log target and format.
+        Output format of log messages.
       '';
     };
 
     logLevel = mkOption {
-      type = types.enum ["debug" "info" "warn" "error" "fatal"];
+      type = types.enum ["debug" "info" "warn" "error"];
       default = "info";
       description = ''
         Only log messages with the given severity or above.
