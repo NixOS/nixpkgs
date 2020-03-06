@@ -205,7 +205,9 @@ in
           or `services.prometheus.exporters.snmp.configurationPath' set!
       '';
     } {
-      assertion = (cfg.mail.configFile == null) != (cfg.mail.configuration == {});
+      assertion = cfg.mail.enable -> (
+        (cfg.mail.configFile == null) != (cfg.mail.configuration == null)
+      );
       message = ''
         Please specify either 'services.prometheus.exporters.mail.configuration'
           or 'services.prometheus.exporters.mail.configFile'.
