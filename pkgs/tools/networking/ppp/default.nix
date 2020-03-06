@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
         url = https://www.nikhef.nl/~janjust/ppp/ppp-2.4.7-eaptls-mppe-1.102.patch;
         sha256 = "04war8l5szql53l36043hvzgfwqp3v76kj8brbz7wlf7vs2mlkia";
       })
+      (fetchpatch {
+        name = "CVE-2020-8597.patch";
+        url = "https://github.com/paulusmack/ppp/commit/8d7970b8f3db727fe798b65f3377fe6787575426.patch";
+        sha256 = "129wnhwxmzvr3y9gzxv82jnb5y8m4yg8vkpa0xl2rwkl8anbzgkh";
+      })
       ./musl-fix-headers.patch
     ];
 
