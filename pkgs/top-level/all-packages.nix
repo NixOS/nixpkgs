@@ -16676,6 +16676,8 @@ in
 
     ply = callPackage ../os-specific/linux/ply { };
 
+    r8125 = callPackage ../os-specific/linux/r8125 { };
+
     r8168 = callPackage ../os-specific/linux/r8168 { };
 
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
