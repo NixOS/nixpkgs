@@ -46,7 +46,6 @@ in stdenv.mkDerivation {
     ./0001-Start-device-units-for-uninitialised-encrypted-devic.patch
     ./0003-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0004-Fix-NixOS-containers.patch
-    ./0005-kmod-static-nodes.service-Don-t-require-lib-modules.patch
     ./0006-Look-for-fsck-in-the-right-place.patch
     ./0007-Add-some-NixOS-specific-unit-directories.patch
     ./0009-Get-rid-of-a-useless-message-in-user-sessions.patch
@@ -61,6 +60,7 @@ in stdenv.mkDerivation {
     ./0021-add-rootprefix-to-lookup-dir-paths.patch
     ./0022-systemd-shutdown-execute-scripts-in-etc-systemd-syst.patch
     ./0023-systemd-sleep-execute-scripts-in-etc-systemd-system-.patch
+    ./0024-kmod-static-nodes.service-Update-ConditionFileNotEmpty.patch
   ];
 
   outputs = [ "out" "lib" "man" "dev" ];
