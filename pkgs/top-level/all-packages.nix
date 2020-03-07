@@ -6448,6 +6448,8 @@ in
 
   shunit2 = callPackage ../tools/misc/shunit2 { };
 
+  sia-ui = callPackage ../applications/blockchains/sia-ui { };
+
   sic = callPackage ../applications/networking/irc/sic { };
 
   siege = callPackage ../tools/networking/siege {};
