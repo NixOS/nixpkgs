@@ -140,13 +140,15 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = {
-            "192.168.1.1:27313" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
-              publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
-            };
-          };
+          example = literalExample ''
+            {
+              "192.168.1.1:27313" = {
+                hostname = "homer.hype";
+                password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+                publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+              };
+            }
+          '';
           description = ''
             Credentials for making UDP tunnels.
           '';
@@ -185,13 +187,15 @@ in
         connectTo = mkOption {
           type = types.attrsOf ( types.submodule ( connectToSubmodule ) );
           default = { };
-          example = {
-            "01:02:03:04:05:06" = {
-              hostname = "homer.hype";
-              password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
-              publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
-            };
-          };
+          example = literalExample ''
+            {
+              "01:02:03:04:05:06" = {
+                hostname = "homer.hype";
+                password = "5kG15EfpdcKNX3f2GSQ0H1HC7yIfxoCoImnO5FHM";
+                publicKey = "371zpkgs8ss387tmr81q04mp0hg1skb51hw34vk1cq644mjqhup0.k";
+              };
+            }
+          '';
           description = ''
             Credentials for connecting look similar to UDP credientials
             except they begin with the mac address.
