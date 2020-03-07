@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, perl, libxcb, libXft }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "lemonbar-xft-unstable-2016-02-17";
 
   src = fetchFromGitHub {

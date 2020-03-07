@@ -15,7 +15,8 @@ let
 
 in stdenv.mkDerivation rec {
 
-  name = "betaflight-${version}";
+  pname = "betaflight";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "betaflight";
@@ -61,6 +62,7 @@ in stdenv.mkDerivation rec {
     homepage = https://github.com/betaflight/betaflight;
     license = licenses.gpl3;
     maintainers = with maintainers; [ elitak ];
+    broken = true;
   };
 
 }

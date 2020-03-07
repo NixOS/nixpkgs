@@ -46,7 +46,10 @@ rec {
     else if isList     v then err "lists" v
     # same as for lists, might want to replace
     else if isAttrs    v then err "attrsets" v
+    # functions can’t be printed of course
     else if isFunction v then err "functions" v
+    # let’s not talk about floats. There is no sensible `toString` for them.
+    else if isFloat    v then err "floats" v
     else err "this value is" (toString v);
 
 
@@ -178,7 +181,7 @@ rec {
   toPlist = {}: v: let
     isFloat = builtins.isFloat or (x: false);
     expr = ind: x:  with builtins;
-      if isNull x   then "" else
+      if x == null  then "" else
       if isBool x   then bool ind x else
       if isInt x    then int ind x else
       if isString x then str ind x else

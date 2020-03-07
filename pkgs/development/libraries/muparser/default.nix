@@ -1,7 +1,7 @@
-{stdenv, fetchurl, unzip}:
+{stdenv, fetchurl, unzip, setfile}:
 
 stdenv.mkDerivation rec {
-  name = "muparser-${version}";
+  pname = "muparser";
   version = "2.2.3";
   url-version = stdenv.lib.replaceChars ["."] ["_"] version;
 
@@ -10,12 +10,14 @@ stdenv.mkDerivation rec {
     sha256 = "00l92k231yb49wijzkspa2l58mapn6vh2dlxnlg0pawjjfv33s6z";
   };
 
-  buildInputs = [ unzip ];
+  buildInputs = [
+    unzip
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [setfile];
 
   meta = {
     homepage = http://muparser.sourceforge.net;
     description = "An extensible high performance math expression parser library written in C++";
     license = stdenv.lib.licenses.mit;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
   };
 }

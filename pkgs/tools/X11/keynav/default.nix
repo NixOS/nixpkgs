@@ -2,7 +2,7 @@
 , libXinerama, libXrandr, glib, cairo, xdotool }:
 
 let release = "20180821"; in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "keynav-0.${release}.0";
 
   src = fetchFromGitHub {

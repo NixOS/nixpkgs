@@ -1,19 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gnome3
+{ stdenv, fetchurl, meson, ninja, pkgconfig, gettext, gnome3
 , glib, gtk3, gobject-introspection, python3, ncurses
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "1.22.0";
+  version = "1.24.1";
+
+  outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0qm908kisyjzjxvygdl18hjqxvvgkq9w0phs2g55pck277sw0bsv";
+    sha256 = "1162dr7smmfb02czmhshr0f93hqj7w0nw29bys5lzfvwarxcyflw";
   };
 
-  configureFlags = [ "--enable-python3" ];
-
-  nativeBuildInputs = [ pkgconfig intltool gobject-introspection ];
+  nativeBuildInputs = [ pkgconfig meson ninja gettext gobject-introspection ];
   buildInputs =  [ glib gtk3 ncurses python3 python3.pkgs.pygobject3 ];
   propagatedBuildInputs = [
     # Required by libpeas-1.0.pc

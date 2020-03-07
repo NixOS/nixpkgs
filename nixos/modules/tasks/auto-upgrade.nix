@@ -53,6 +53,16 @@ let cfg = config.system.autoUpgrade; in
         '';
       };
 
+      allowReboot = mkOption {
+        default = false;
+        type = types.bool;
+        description = ''
+          Reboot the system into the new generation instead of a switch
+          if the new generation uses a different kernel, kernel modules
+          or initrd than the booted system.
+        '';
+      };
+
     };
 
   };
@@ -78,11 +88,23 @@ let cfg = config.system.autoUpgrade; in
           HOME = "/root";
         } // config.networking.proxy.envVars;
 
-      path = [ pkgs.gnutar pkgs.xz.bin pkgs.gitMinimal config.nix.package.out ];
+      path = with pkgs; [ coreutils gnutar xz.bin gzip gitMinimal config.nix.package.out ];
 
-      script = ''
-        ${config.system.build.nixos-rebuild}/bin/nixos-rebuild switch ${toString cfg.flags}
-      '';
+      script = let
+          nixos-rebuild = "${config.system.build.nixos-rebuild}/bin/nixos-rebuild";
+        in
+        if cfg.allowReboot then ''
+            ${nixos-rebuild} boot ${toString cfg.flags}
+            booted="$(readlink /run/booted-system/{initrd,kernel,kernel-modules})"
+            built="$(readlink /nix/var/nix/profiles/system/{initrd,kernel,kernel-modules})"
+            if [ "$booted" = "$built" ]; then
+              ${nixos-rebuild} switch ${toString cfg.flags}
+            else
+              /run/current-system/sw/bin/shutdown -r +1
+            fi
+          '' else ''
+            ${nixos-rebuild} switch ${toString cfg.flags}
+        '';
 
       startAt = cfg.dates;
     };

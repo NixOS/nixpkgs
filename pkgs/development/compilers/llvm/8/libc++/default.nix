@@ -1,9 +1,11 @@
-{ lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+, enableShared ? true }:
 
-stdenv.mkDerivation rec {
-  name = "libc++-${version}";
+stdenv.mkDerivation {
+  pname = "libc++";
+  inherit version;
 
-  src = fetch "libcxx" "1qlx3wlxrnc5cwc1fcfc2vhfsl7j4294hi8y5kxj8hy8wxsjd462";
+  src = fetch "libcxx" "0y4vc9z36c1zlq15cnibdzxnc1xi5glbc6klnm8a41q3db4541kz";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -22,7 +24,8 @@ stdenv.mkDerivation rec {
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python;
+  nativeBuildInputs = [ cmake ]
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) python3;
 
   buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -30,8 +33,13 @@ stdenv.mkDerivation rec {
     "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
-    ++ stdenv.lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON";
+  ] ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) "-DLIBCXX_HAS_MUSL_LIBC=1"
+    ++ stdenv.lib.optional (stdenv.hostPlatform.useLLVM or false) "-DLIBCXX_USE_COMPILER_RT=ON"
+    ++ stdenv.lib.optional stdenv.hostPlatform.isWasm [
+      "-DLIBCXX_ENABLE_THREADS=OFF"
+      "-DLIBCXX_ENABLE_FILESYSTEM=OFF"
+      "-DLIBCXX_ENABLE_EXCEPTIONS=OFF"
+    ] ++ stdenv.lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF";
 
   enableParallelBuilding = true;
 
@@ -46,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = http://libcxx.llvm.org/;
     description = "A new implementation of the C++ standard library, targeting C++11";
     license = with stdenv.lib.licenses; [ ncsa mit ];
-    platforms = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.all;
   };
 }

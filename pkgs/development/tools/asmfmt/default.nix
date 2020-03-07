@@ -5,7 +5,7 @@
 }:
 
 buildGoPackage rec {
-  name = "asmfmt-${version}";
+  pname = "asmfmt";
   version = "1.1";
 
   goPackagePath = "github.com/klauspost/asmfmt";

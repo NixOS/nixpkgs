@@ -2,6 +2,7 @@
 , maintainer ? null
 , path ? null
 , max-workers ? null
+, include-overlays ? false
 , keep-going ? null
 }:
 
@@ -20,7 +21,7 @@ let
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix { };
+  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
 
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)
@@ -67,9 +68,12 @@ let
     let
       attrSet = pkgs.lib.attrByPath (pkgs.lib.splitString "." path) null pkgs;
     in
-      packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
-                     (name: pkg: pkg)
-                     attrSet;
+      if attrSet == null then
+        builtins.throw "Attribute path `${path}` does not exists."
+      else
+        packagesWith (name: pkg: builtins.hasAttr "updateScript" pkg)
+                       (name: pkg: pkg)
+                       attrSet;
 
   packageByName = name:
     let
@@ -100,7 +104,7 @@ let
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package garbas
+        % nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus
 
     to run update script for specific package, or
 
@@ -121,9 +125,17 @@ let
 
   packageData = package: {
     name = package.name;
-    pname = (builtins.parseDrvName package.name).name;
-    updateScript = pkgs.lib.toList package.updateScript;
+    pname = pkgs.lib.getName package;
+    updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
+
+  packagesJson = pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages));
+
+  optionalArgs =
+    pkgs.lib.optional (max-workers != null) "--max-workers=${max-workers}"
+    ++ pkgs.lib.optional (keep-going == "true") "--keep-going";
+
+  args = [ packagesJson ] ++ optionalArgs;
 
 in pkgs.stdenv.mkDerivation {
   name = "nixpkgs-update-script";
@@ -139,6 +151,6 @@ in pkgs.stdenv.mkDerivation {
   '';
   shellHook = ''
     unset shellHook # do not contaminate nested shells
-    exec ${pkgs.python3.interpreter} ${./update.py} ${pkgs.writeText "packages.json" (builtins.toJSON (map packageData packages))}${pkgs.lib.optionalString (max-workers != null) " --max-workers=${max-workers}"}${pkgs.lib.optionalString (keep-going == "true") " --keep-going"}
+    exec ${pkgs.python3.interpreter} ${./update.py} ${builtins.concatStringsSep " " args}
   '';
 }

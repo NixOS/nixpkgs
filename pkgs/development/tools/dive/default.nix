@@ -1,21 +1,23 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, gpgme, lvm2 }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "dive";
-  version = "0.6.0";
-
-  goPackagePath = "github.com/wagoodman/dive";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "wagoodman";
-    repo = "dive";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "05n19a5q1yi8r6r72z634z93lz2i347zccs9qm7gx5h86nh147zd";
+    sha256 = "1v69xbkjmyzm5g4wi9amjk65fs4qgxkqc0dvq55vqjigzrranp22";
   };
 
-  goDeps = ./deps.nix;
+  modSha256 = "1y8mqxlzbizra2m9aayp6w07s39gddvm5igdaw9kwxwjwvd1dbfc";
 
-  doCheck = true;
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with stdenv.lib; {
     description = "A tool for exploring each layer in a docker image";

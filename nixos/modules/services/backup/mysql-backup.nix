@@ -84,13 +84,14 @@ in
   };
 
   config = mkIf cfg.enable {
-    users.users = optionalAttrs (cfg.user == defaultUser) (singleton
-      { name = defaultUser;
+    users.users = optionalAttrs (cfg.user == defaultUser) {
+      ${defaultUser} = {
         isSystemUser = true;
         createHome = false;
         home = cfg.location;
         group = "nogroup";
-      });
+      };
+    };
 
     services.mysql.ensureUsers = [{
       name = cfg.user;
@@ -103,7 +104,7 @@ in
     }];
 
     systemd = {
-      timers."mysql-backup" = {
+      timers.mysql-backup = {
         description = "Mysql backup timer";
         wantedBy = [ "timers.target" ];
         timerConfig = {
@@ -112,7 +113,7 @@ in
           Unit = "mysql-backup.service";
         };
       };
-      services."mysql-backup" = {
+      services.mysql-backup = {
         description = "Mysql backup service";
         enable = true;
         serviceConfig = {

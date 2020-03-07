@@ -1,7 +1,7 @@
 #!/usr/bin/env nix-shell
 #!nix-shell -i bash -p libarchive curl common-updater-scripts
 
-set -xeu -o pipefail
+set -eu -o pipefail
 
 cd "$(dirname "${BASH_SOURCE[0]}")"
 root=../../../../..

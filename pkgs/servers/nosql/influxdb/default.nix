@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "influxdb";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gwivazjvxw6fflf2637qn0crq564fjzhncsl3agph5ciqyv48gx";
+    sha256 = "07abzhmsgj7krmhf7jis50a4fc4w29h48nyzgvrll5lz3cax979q";
   };
 
   buildFlagsArray = [ ''-ldflags=

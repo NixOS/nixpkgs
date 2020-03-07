@@ -1,5 +1,4 @@
 { stdenv
-, lib
 , python3Packages
 , python3
 , fetchFromGitHub
@@ -7,8 +6,8 @@
 , makeWrapper
 } :
 
-stdenv.mkDerivation rec {
-  name = "fusee-launcher-${version}";
+stdenv.mkDerivation {
+  pname = "fusee-launcher";
   version = "unstable-2018-07-14";
 
   src = fetchFromGitHub {

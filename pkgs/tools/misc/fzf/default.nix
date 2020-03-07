@@ -1,64 +1,66 @@
-{ stdenv, ncurses, buildGoPackage, fetchFromGitHub, writeText, runtimeShell }:
+{ lib, buildGoModule, fetchFromGitHub, writeText, runtimeShell, ncurses, }:
 
-buildGoPackage rec {
-  name = "fzf-${version}";
-  version = "0.17.5";
-  rev = "${version}";
-
-  goPackagePath = "github.com/junegunn/fzf";
+buildGoModule rec {
+  pname = "fzf";
+  version = "0.20.0";
 
   src = fetchFromGitHub {
-    inherit rev;
     owner = "junegunn";
-    repo = "fzf";
-    sha256 = "04kalm25sn5k24nrdmbkafp4zvxpm2l3rxchvccl0kz0j3szh62z";
+    repo = pname;
+    rev = version;
+    sha256 = "02zy3c4k84rzqdkaf04idbj10v286hi0ix1xl2qsz1wrblh168w8";
   };
 
-  outputs = [ "bin" "out" "man" ];
+  modSha256 = "12lnv8b96adpcg9qfizcyd9nxz590nxd82xch6ij719zlqyps143";
+
+  outputs = [ "out" "man" ];
 
   fishHook = writeText "load-fzf-keybindings.fish" "fzf_key_bindings";
 
   buildInputs = [ ncurses ];
 
-  goDeps = ./deps.nix;
-
+  # The vim plugin expects a relative path to the binary; patch it to abspath.
   patchPhase = ''
-    sed -i -e "s|expand('<sfile>:h:h')|'$bin'|" plugin/fzf.vim
+    sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/fzf.vim
 
-    # Original and output files can't be the same
-    if cmp -s $src/plugin/fzf.vim plugin/fzf.vim; then
-      echo "Vim plugin patch not applied properly. Aborting" && \
-      exit 1
+    if ! grep -q $out plugin/fzf.vim; then
+        echo "Failed to replace vim base_dir path with $out"
+        exit 1
     fi
   '';
 
+  doCheck = true;
+
   preInstall = ''
-    mkdir -p $bin/share/fish/vendor_functions.d $bin/share/fish/vendor_conf.d
-    cp $src/shell/key-bindings.fish $bin/share/fish/vendor_functions.d/fzf_key_bindings.fish
-    cp ${fishHook} $bin/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
+    mkdir -p $out/share/fish/{vendor_functions.d,vendor_conf.d}
+    cp shell/key-bindings.fish $out/share/fish/vendor_functions.d/fzf_key_bindings.fish
+    cp ${fishHook} $out/share/fish/vendor_conf.d/load-fzf-key-bindings.fish
   '';
 
   postInstall = ''
-    cp $src/bin/fzf-tmux $bin/bin
-    mkdir -p $man/share/man
-    cp -r $src/man/man1 $man/share/man
-    mkdir -p $out/share/vim-plugins/${name}
-    cp -r $src/plugin $out/share/vim-plugins/${name}
+    cp bin/fzf-tmux $out/bin
 
-    cp -R $src/shell $bin/share/fzf
-    cat <<SCRIPT > $bin/bin/fzf-share
+    mkdir -p $man/share/man
+    cp -r man/man1 $man/share/man
+
+    mkdir -p $out/share/vim-plugins/${pname}
+    cp -r plugin $out/share/vim-plugins/${pname}
+
+    cp -R shell $out/share/fzf
+    cat <<SCRIPT > $out/bin/fzf-share
     #!${runtimeShell}
     # Run this script to find the fzf shared folder where all the shell
     # integration scripts are living.
-    echo $bin/share/fzf
+    echo $out/share/fzf
     SCRIPT
-    chmod +x $bin/bin/fzf-share
+    chmod +x $out/bin/fzf-share
   '';
 
-  meta = with stdenv.lib; {
-    homepage = https://github.com/junegunn/fzf;
+  meta = with lib; {
+    homepage = "https://github.com/junegunn/fzf";
     description = "A command-line fuzzy finder written in Go";
     license = licenses.mit;
+    maintainers = with maintainers; [ filalex77 ma27 ];
     platforms = platforms.unix;
   };
 }

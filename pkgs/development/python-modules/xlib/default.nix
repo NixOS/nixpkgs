@@ -30,6 +30,8 @@ buildPythonPackage rec {
   buildInputs = [ xorg.libX11 ];
   propagatedBuildInputs = [ six ];
 
+  doCheck = !stdenv.isDarwin;
+
   meta = with stdenv.lib; {
     description = "Fully functional X client library for Python programs";
     homepage = http://python-xlib.sourceforge.net/;

@@ -5,17 +5,17 @@
 
 rec {
   composeAndroidPackages = import ./compose-android-packages.nix {
-    inherit (pkgs) stdenv fetchurl requireFile makeWrapper unzip autoPatchelfHook;
+    inherit (pkgs) requireFile autoPatchelfHook;
     inherit pkgs pkgs_i686 licenseAccepted;
   };
 
   buildApp = import ./build-app.nix {
-    inherit (pkgs) stdenv jdk ant gnumake gawk;
+    inherit (pkgs) stdenv lib jdk ant gnumake gawk;
     inherit composeAndroidPackages;
   };
 
   emulateApp = import ./emulate-app.nix {
-    inherit (pkgs) stdenv;
+    inherit (pkgs) stdenv lib;
     inherit composeAndroidPackages;
   };
 

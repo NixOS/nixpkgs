@@ -20,7 +20,7 @@ let
   allTestsForSystem = system:
     import ./tests/all-tests.nix {
       inherit system;
-      pkgs = import nixpkgs { inherit system; };
+      pkgs = import ./.. { inherit system; };
       callTest = t: {
         ${system} = hydraJob t.test;
       };
@@ -28,7 +28,7 @@ let
   allTests =
     foldAttrs recursiveUpdate {} (map allTestsForSystem supportedSystems);
 
-  pkgs = import nixpkgs { system = "x86_64-linux"; };
+  pkgs = import ./.. { system = "x86_64-linux"; };
 
 
   versionModule =
@@ -41,7 +41,7 @@ let
   makeIso =
     { module, type, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -54,7 +54,7 @@ let
   makeSdImage =
     { module, system, ... }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -65,7 +65,7 @@ let
   makeSystemTarball =
     { module, maintainers ? ["viric"], system }:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     let
 
@@ -149,9 +149,9 @@ in rec {
     inherit system;
   });
 
-  iso_graphical = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
-    module = ./modules/installer/cd-dvd/installation-cd-graphical-kde.nix;
-    type = "graphical";
+  iso_plasma5 = forMatchingSystems [ "x86_64-linux" ] (system: makeIso {
+    module = ./modules/installer/cd-dvd/installation-cd-graphical-plasma5.nix;
+    type = "plasma5";
     inherit system;
   });
 
@@ -180,10 +180,15 @@ in rec {
     inherit system;
   });
 
+  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
+    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
+    inherit system;
+  });
+
   # A bootable VirtualBox virtual appliance as an OVA file (i.e. packaged OVF).
   ova = forMatchingSystems [ "x86_64-linux" ] (system:
 
-    with import nixpkgs { inherit system; };
+    with import ./.. { inherit system; };
 
     hydraJob ((import lib/eval-config.nix {
       inherit system;
@@ -192,6 +197,23 @@ in rec {
           ./modules/installer/virtualbox-demo.nix
         ];
     }).config.system.build.virtualBoxOVA)
+
+  );
+
+
+  # A disk image that can be imported to Amazon EC2 and registered as an AMI
+  amazonImage = forMatchingSystems [ "x86_64-linux" "aarch64-linux" ] (system:
+
+    with import ./.. { inherit system; };
+
+    hydraJob ((import lib/eval-config.nix {
+      inherit system;
+      modules =
+        [ configuration
+          versionModule
+          ./maintainers/scripts/ec2/amazon-image.nix
+        ];
+    }).config.system.build.amazonImage)
 
   );
 
@@ -274,6 +296,12 @@ in rec {
     xfce = makeClosure ({ ... }:
       { services.xserver.enable = true;
         services.xserver.desktopManager.xfce.enable = true;
+      });
+
+    gnome3 = makeClosure ({ ... }:
+      { services.xserver.enable = true;
+        services.xserver.displayManager.gdm.enable = true;
+        services.xserver.desktopManager.gnome3.enable = true;
       });
 
     # Linux/Apache/PostgreSQL/PHP stack.

@@ -2,7 +2,7 @@
 
 let
   pname = "uuseg";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 stdenv.mkDerivation rec {
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An OCaml library for segmenting Unicode text";
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

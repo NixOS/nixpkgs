@@ -1,6 +1,6 @@
 { stdenv, fetchgit, pidgin, glib, libxml2 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "purple-xmpp-upload-2017-12-31";
 
   src = fetchgit {

@@ -2,7 +2,6 @@
 
 buildGoPackage rec {
   pname = "json2hcl";
-  name = "${pname}-${version}";
   version = "0.0.6";
 
   src = fetchFromGitHub {

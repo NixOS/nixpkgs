@@ -1,19 +1,23 @@
-{ lib, python3Packages }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, pyyaml
+, setuptools
+}:
 
-python3Packages.buildPythonApplication rec {
-  version = "0.8.2";
+buildPythonApplication rec {
+  version = "0.9.9";
   pname = "gita";
 
-  src = python3Packages.fetchPypi {
+  src = fetchPypi {
     inherit pname version;
-    sha256 = "16jpnl323x86dkrnh4acyvi9jknhgi3r0ccv63rkjcmd0srkaxkk";
+    sha256 = "1si2f9nyisbrvv8cvrjxj8r4cbrgc97ic0wdlbf34gvp020dsmgv";
   };
 
-  propagatedBuildInputs = with python3Packages; [
+  propagatedBuildInputs = [
     pyyaml
+    setuptools
   ];
-
-  doCheck = false;  # Releases don't include tests
 
   meta = with lib; {
     description = "A command-line tool to manage multiple git repos";

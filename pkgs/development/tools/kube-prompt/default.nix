@@ -1,7 +1,7 @@
 { lib, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "kube-prompt-${version}";
+  pname = "kube-prompt";
   version = "1.0.5";
   rev = "v${version}";
 

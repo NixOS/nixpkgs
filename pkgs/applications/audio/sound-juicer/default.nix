@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, glib, gtk3, intltool, itstool, libxml2, brasero
 , libcanberra-gtk3, gnome3, gst_all_1, libmusicbrainz5, libdiscid, isocodes
-, wrapGAppsHook }:
+, gsettings-desktop-schemas, wrapGAppsHook }:
 
 let
   pname = "sound-juicer";
@@ -16,7 +16,7 @@ in stdenv.mkDerivation rec{
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 wrapGAppsHook ];
   buildInputs = [
     glib gtk3 brasero libcanberra-gtk3 gnome3.adwaita-icon-theme
-    gnome3.gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes
+    gsettings-desktop-schemas libmusicbrainz5 libdiscid isocodes
     gst_all_1.gstreamer gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good gst_all_1.gst-plugins-bad
     gst_all_1.gst-libav

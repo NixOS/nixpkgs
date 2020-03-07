@@ -20,7 +20,7 @@ let
   inherit (stdenv.lib) optionalString concatMapStringsSep;
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "urn-${optionalString (extraLibraries != []) "with-libraries-"}${version}";
 
   src = fetchFromGitLab {

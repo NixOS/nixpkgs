@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info, hicolor-icon-theme }:
+{ stdenv, fetchurl, pkgconfig, libxml2, gtk, libSM, shared-mime-info }:
 
 let
   version = "2.11";
@@ -12,8 +12,8 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libxml2 gtk shared-mime-info hicolor-icon-theme libSM ];
-  NIX_LDFLAGS = [ "-ldl" "-lm" ];
+  buildInputs = [ libxml2 gtk shared-mime-info libSM ];
+  NIX_LDFLAGS = "-ldl -lm";
 
   patches = [
     ./rox-filer-2.11-in-source-build.patch
@@ -23,7 +23,7 @@ in stdenv.mkDerivation {
   setSourceRoot = "export sourceRoot=rox-filer-${version}/ROX-Filer/";
 
   # patch source with defined patches
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
 
   # patch the main.c to disable the lookup of the APP_DIR environment variable,
   # which is used to lookup the location for certain images when rox-filer

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, libX11, libXinerama }:
 
 stdenv.mkDerivation  rec {
-  name = "libfakeXinerama-${version}";
+  pname = "libfakeXinerama";
   version = "0.1.0";
 
   src = fetchurl {
-    url = "https://www.xpra.org/src/${name}.tar.bz2";
+    url = "https://www.xpra.org/src/${pname}-${version}.tar.bz2";
     sha256 = "0gxb8jska2anbb3c1m8asbglgnwylgdr44x9lr8yh91hjxsqadkx";
   };
 

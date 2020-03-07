@@ -2,7 +2,7 @@
 , buildFHSUserEnv
 , cairo
 , dpkg
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , gtk2-x11
 , makeWrapper
@@ -39,7 +39,7 @@ let
     libs = attrs.libs or [
       atk
       cairo
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       gtk2-x11
       pango

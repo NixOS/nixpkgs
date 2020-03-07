@@ -1,57 +1,118 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, glib, babl, libpng, cairo, libjpeg, which
-, librsvg, pango, gtk, bzip2, json-glib, gettext, autoreconfHook, libraw
-, gexiv2, libwebp, gnome3, libintl }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, vala
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, glib
+, babl
+, libpng
+, cairo
+, libjpeg
+, librsvg
+, lensfun
+, libspiro
+, netsurf
+, pango
+, poly2tri-c
+, poppler
+, bzip2
+, json-glib
+, gettext
+, meson
+, ninja
+, libraw
+, gexiv2
+, libwebp
+, luajit
+, openexr
+, OpenCL
+, suitesparse
+}:
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.14";
+  version = "0.4.22";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
-    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "00crhngwi07f5b9x77kx5p7p4cl6l5g6glpz9rqv7pfqk62xa0ac";
+    url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "0q9cckf90fb82qc5d496fjz459f1xw4j4p3rff1f57yivx0yr20q";
   };
 
-  patches = stdenv.lib.optionals stdenv.isDarwin [
-    # Make the Darwin patches below apply cleanly
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gegl/commit/141a7aa76cd36143f624f06b1c43d2483945653c.patch;
-      sha256 = "0ijv9ra6723jn60krjwzbc6l9qr08h76bsz9xgddvfgsgr1nnpbi";
-    })
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gegl/commit/b3ff0df080d133bbdb394c3db40d4f9d2980a8a6.patch;
-      sha256 = "0im0rqk8mz9vi7qqx06vj4wm5hjwv1544jwdaaywlcrs9g266hl0";
-    })
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gegl/commit/fe756be6f0c776a45201a61f67d3e5e42f6398de.patch;
-      sha256 = "0h3rqwfsph2gisbwvc2v5a9r5b0djcxlm790xpi6yfndj42b0v2b";
-    })
-    # Fix build on Darwin
-    # https://gitlab.gnome.org/GNOME/gegl/merge_requests/28
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gegl/commit/ac331b5c0e3d940b64bb811b0f54e86c7d312917.patch;
-      sha256 = "1yj9jh8q9cbr1szrxhdapknk4nfhbkbc1njv50ifrj7vyfislj34";
-    })
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/gegl/commit/d05eb01170728f45f561ca937708a293e29e02d9.patch;
-      sha256 = "0gwz12sm8kkmzyxsiq0sl30cabs5q0ckj743yrzimspkhrvc1ya2";
-    })
+  patches = [
+    # Remove gegl:simple / backend-file test that times out frequently
+    ./patches/no-simple-backend-file-test.patch
   ];
 
-  enableParallelBuilding = true;
-
-  doCheck = true;
+  nativeBuildInputs = [
+    pkgconfig
+    gettext
+    meson
+    ninja
+    vala
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
+  ];
 
   buildInputs = [
-    libpng cairo libjpeg librsvg pango gtk bzip2
-    libraw libwebp gexiv2
+    libpng
+    cairo
+    libjpeg
+    librsvg
+    lensfun
+    libspiro
+    netsurf.libnsgif
+    pango
+    poly2tri-c
+    poppler
+    bzip2
+    libraw
+    libwebp
+    gexiv2
+    luajit
+    openexr
+    suitesparse
+  ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
+
+  # for gegl-4.0.pc
+  propagatedBuildInputs = [
+    glib
+    json-glib
+    babl
   ];
 
-  propagatedBuildInputs = [ glib json-glib babl ]; # for gegl-4.0.pc
+  mesonFlags = [
+    "-Ddocs=true"
+    "-Dmrg=disabled" # not sure what that is
+    "-Dsdl2=disabled"
+    "-Dpygobject=disabled"
+    "-Dlibav=disabled"
+    "-Dlibv4l=disabled"
+    "-Dlibv4l2=disabled"
+    # Disabled due to multiple vulnerabilities, see
+    # https://github.com/NixOS/nixpkgs/pull/73586
+    "-Djasper=disabled"
+  ];
 
-  nativeBuildInputs = [ pkgconfig gettext which autoreconfHook libintl ];
+  # TODO: Fix missing math symbols in gegl seamless clone.
+  # It only appears when we use packaged poly2tri-c instead of vendored one.
+  NIX_CFLAGS_COMPILE = "-lm";
+
+  postPatch = ''
+    chmod +x tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh
+    patchShebangs tests/ff-load-save/tests_ff_load_save.sh tests/opencl/opencl_test.sh tests/buffer/buffer-tests-run.sh tools/xml_insert.sh
+  '';
+
+  # tests fail to connect to the com.apple.fonts daemon in sandboxed mode
+  doCheck = !stdenv.isDarwin;
 
   meta = with stdenv.lib; {
     description = "Graph-based image processing framework";

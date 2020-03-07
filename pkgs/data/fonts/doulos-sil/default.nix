@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "5.000";
@@ -16,7 +16,7 @@ in
 
     sha256 = "04a9cr7jbw7d8llcj8xsqp9rp8w6gcgbd9sdwvi02kz7jhqa0vad";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = https://software.sil.org/doulos;
       description = "A font that provides complete support for the International Phonetic Alphabet";
       longDescription = ''

@@ -1,6 +1,5 @@
 { lib, fetchurl, buildPythonPackage
 , zip, ffmpeg_4, rtmpdump, phantomjs2, atomicparsley, pycryptodome, pandoc
-, fetchpatch
 # Pandoc is required to build the package's man page. Release tarballs contain a
 # formatted man page already, though, it will still be installed. We keep the
 # manpage argument in place in case someone wants to use this derivation to
@@ -19,11 +18,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2019.04.17";
+  version = "2020.03.06";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0dznw06qbb75glzirhnsbsd5xqix08jxdngbd21wndxcj1yq5y8a";
+    sha256 = "16c10rgkjrjv115w4r7gsr9hcakqq5s2cg250b1hwvxdsxqp8vnv";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -42,6 +41,10 @@ buildPythonPackage rec {
         ++ lib.optional phantomjsSupport phantomjs2;
     in [ ''--prefix PATH : "${lib.makeBinPath packagesToBinPath}"'' ];
 
+  setupPyBuildFlags = [
+    "build_lazy_extractors"
+  ];
+
   postInstall = ''
     mkdir -p $out/share/zsh/site-functions
     cp youtube-dl.zsh $out/share/zsh/site-functions/_youtube-dl
@@ -51,8 +54,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://rg3.github.io/youtube-dl/;
-    repositories.git = https://github.com/rg3/youtube-dl.git;
+    homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
       youtube-dl is a small, Python-based command-line program
@@ -62,6 +64,6 @@ buildPythonPackage rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu fpletz enzime ];
+    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fpletz enzime ma27 ];
   };
 }

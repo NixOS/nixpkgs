@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "envsubst-${version}";
+  pname = "envsubst";
   version = "1.1.0";
 
   goPackagePath = "github.com/a8m/envsubst";

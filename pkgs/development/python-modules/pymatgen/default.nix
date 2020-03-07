@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pymatgen";
-  version = "2019.2.4";
+  version = "2019.12.22";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0932024a8703236dce861bcadd9568455baa8c70c0f7a1fc52d8ca4b52342091";
+    sha256 = "0ffc6efcc2ba15bff22cca29c07b93b01fac400f649c41d5dd01bfff7915f80b";
   };
 
   nativeBuildInputs = [ glibcLocales ];
@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A robust materials analysis code that defines core object representations for structures and molecules";
-    homepage = http://pymatgen.org/;
+    homepage = https://pymatgen.org/;
     license = licenses.mit;
     maintainers = with maintainers; [ psyanticy ];
   };

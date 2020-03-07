@@ -1,6 +1,6 @@
 { stdenv, socat, fetchFromGitHub, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "mpvc-unstable-2017-03-18";
 
   src = fetchFromGitHub {

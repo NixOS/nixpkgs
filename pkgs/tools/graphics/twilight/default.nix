@@ -4,7 +4,8 @@
 let
   version = "2018-04-19";
 in stdenv.mkDerivation rec {
-  name = "twilight-${version}";
+  pname = "twilight";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "tweakoz";

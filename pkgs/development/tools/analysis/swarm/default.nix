@@ -1,23 +1,18 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "swarm-${version}";
-  version = "3.1";
+stdenv.mkDerivation {
+  name = "swarm-2019-03-11";
 
-  src = fetchurl {
-    url = "http://www.spinroot.com/swarm/swarm${version}.tar";
-    sha256 = "12hi6wy0v0jfbrmgfxpnz7vxfzz3g1c6z7dj8p8kc2nm0q5bii47";
+  src = fetchFromGitHub {
+    owner = "nimble-code";
+    repo = "swarm";
+    rev = "4b36ed83c8fbb074f2dc5777fe1c0ab4d73cc7d9";
+    sha256 = "18zwlwsiiksivjpg6agmbmg0zsw2fl9475ss66b6pgcsya2q4afs";
   };
 
-  sourceRoot = ".";
-
-  buildPhase = ''
-    gcc -O2 -lm swarm.c -o swarm
-  '';
-
   installPhase = ''
-    install -Dm755 swarm $out/bin/swarm
-    install -Dm644 swarm.1 $out/share/man/man1/swarm.1
+    install -Dm755 Src/swarm $out/bin/swarm
+    install -Dm644 Doc/swarm.1 $out/share/man/man1/swarm.1
   '';
 
   meta = with stdenv.lib; {

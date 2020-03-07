@@ -1,18 +1,18 @@
-{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk_pixbuf, gnome2, gtk2, cairo
+{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gnome2, gtk2, cairo
 , freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr
 , libXcomposite, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver
 , libxcb, nss, nspr, alsaLib, cups, expat, udev, libpulseaudio }:
 
 let
   libPath = stdenv.lib.makeLibraryPath [
-    stdenv.cc.cc gtk2 gnome2.GConf atk glib pango gdk_pixbuf cairo freetype fontconfig dbus
+    stdenv.cc.cc gtk2 gnome2.GConf atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
     libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
     libXrender libX11 libXtst libXScrnSaver nss nspr alsaLib cups expat udev libpulseaudio
   ];
 in
 stdenv.mkDerivation rec {
   version = "2.1.2";
-  name = "hyper-${version}";
+  pname = "hyper";
   src = fetchurl {
     url = "https://github.com/zeit/hyper/releases/download/${version}/hyper_${version}_amd64.deb";
     sha256 = "1n4qlbk7q9zkhhg72mdks95g15xgyrc6ixf882ghvrqghd4zxplm";

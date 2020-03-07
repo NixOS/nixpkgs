@@ -1,21 +1,21 @@
-{ stdenv, fetchurl, fetchFromGitHub
-, qmake, qtbase, qtquickcontrols, qtsvg
-, python3, pyotherside, ncurses
+{ stdenv, fetchurl, mkDerivation
+, qmake, qtbase, qtquickcontrols2, qtgraphicaleffects
+, python3, pyotherside
 , pcsclite, yubikey-personalization
 , yubikey-manager, makeWrapper }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "yubioath-desktop";
-  version = "4.3.4";
+  version = "5.0.2";
 
   src = fetchurl {
     url = "https://developers.yubico.com/yubioath-desktop/Releases/yubioath-desktop-${version}.tar.gz";
-    sha256 = "0hb7j71032sigs8zd5r8yr0m59sjkb24vhs2l4jarpvj8q7hv30d";
+    sha256 = "19ingk0ab88a22s04apcw8kx9xygxlbk8kp4xnb8pmf8z3k6l2gf";
   };
 
   doCheck = false;
 
-  buildInputs = [ stdenv qtbase qtquickcontrols python3 ];
+  buildInputs = [ stdenv qtbase qtquickcontrols2 qtgraphicaleffects python3 ];
 
   nativeBuildInputs = [ qmake makeWrapper python3.pkgs.wrapPython ];
 
@@ -44,14 +44,22 @@ stdenv.mkDerivation rec {
       cp resources/icons/*.{icns,ico,png,xpm} $out/share/yubioath/icons
       substituteInPlace $out/share/applications/yubioath-desktop.desktop \
         --replace 'Exec=yubioath-desktop' "Exec=$out/bin/yubioath-desktop" \
+        --replace 'Icon=yubioath' "Icon=$out/share/yubioath/icons/yubioath.png"
   '';
 
   meta = with stdenv.lib; {
-    description = "Yubikey Desktop Authenticator";
+    description = "Yubico Authenticator";
+    longDescription = ''
+      Application for generating Open Authentication (OATH) time-based TOTP and
+      event-based HOTP one-time password codes, with the help of a YubiKey that
+      protects the shared secrets.
+    '';
 
-    homepage = https://www.yubico.com/support/knowledge-base/categories/articles/yubico-authenticator-download/;
+    homepage = "https://developers.yubico.com/yubioath-desktop";
+    downloadPage = "https://developers.yubico.com/yubioath-desktop/Releases/";
+    changelog = "https://developers.yubico.com/yubioath-desktop/Release_Notes.html";
 
-    license = stdenv.lib.licenses.gpl3;
-    maintainers = with maintainers; [ mic92 ];
+    license = stdenv.lib.licenses.bsd2;
+    maintainers = with maintainers; [ mic92 risson ];
   };
 }

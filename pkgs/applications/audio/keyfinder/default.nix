@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libav_0_8, libkeyfinder, qtbase, qtxmlpatterns, qmake, taglib }:
 
 stdenv.mkDerivation rec {
-  name = "keyfinder-${version}";
+  pname = "keyfinder";
   version = "2.2";
 
   src = fetchFromGitHub {

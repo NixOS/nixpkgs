@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "snake4-1.0.14";
 
   src = fetchurl {
-    url = "http://shh.thathost.com/pub-unix/files/${name}.tar.gz";
+    url = "https://shh.thathost.com/pub-unix/files/${name}.tar.gz";
     sha256 = "14cng9l857np42zixp440mbc8y5675frb6lhsds53j1cws9cncw9";
   };
 
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A game starring a fruit-eating snake";
-    homepage = http://shh.thathost.com/pub-unix/html/snake4.html;
+    homepage = https://shh.thathost.com/pub-unix/html/snake4.html;
     license = licenses.artistic1;
     platforms = platforms.linux;
   };

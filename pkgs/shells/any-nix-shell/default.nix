@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "any-nix-shell-${version}";
+  pname = "any-nix-shell";
   version = "1.1.0";
 
   src = fetchFromGitHub {

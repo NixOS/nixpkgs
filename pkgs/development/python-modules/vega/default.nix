@@ -1,17 +1,17 @@
 { stdenv, buildPythonPackage , fetchPypi
-, pytest, jupyter_core, pandas }:
+, pytest, jupyter_core, pandas, ipywidgets }:
 
 buildPythonPackage rec {
   pname = "vega";
-  version = "2.0.1";
+  version = "2.6.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "097jlh1xarnqmcnym5jkfa6rg2f0i6b17v9pck2242axgyi692rm";
+    sha256 = "c66354d6d164cc3d7254bcd129d8d861daf4a9e9cb8738b1724791777f6c29f0";
   };
 
   buildInputs = [ pytest ];
-  propagatedBuildInputs = [ jupyter_core pandas ];
+  propagatedBuildInputs = [ jupyter_core pandas ipywidgets ];
 
   meta = with stdenv.lib; {
     description = "An IPython/Jupyter widget for Vega and Vega-Lite";

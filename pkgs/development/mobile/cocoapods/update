@@ -3,6 +3,8 @@
 
 set -e
 
+cd "$(dirname "${BASH_SOURCE[0]}")"
+
 rm -f Gemfile.lock Gemfile-beta.lock
 bundler lock
 BUNDLE_GEMFILE=Gemfile-beta bundler lock --lockfile=Gemfile-beta.lock

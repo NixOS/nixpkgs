@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Google's IP address manipulation library";
-    homepage = http://code.google.com/p/ipaddr-py/;
+    homepage = "https://github.com/google/ipaddr-py";
     license = licenses.asl20;
   };
 

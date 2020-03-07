@@ -13,13 +13,13 @@
 with stdenv.lib;
 stdenv.mkDerivation rec {
 
-  name = "dvdstyler-${version}";
+  pname = "dvdstyler";
   srcName = "DVDStyler-${version}";
-  version = "3.0.4";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/dvdstyler/dvdstyler/${version}/${srcName}.tar.bz2";
-    sha256 = "0lwc0hn94m9r8fi07sjqz3fr618l6lnw3zsakxw7nlgnxbjsk7pi";
+    sha256 = "03lsblqficcadlzkbyk8agh5rqcfz6y6dqvy9y866wqng3163zq4";
   };
 
   nativeBuildInputs =

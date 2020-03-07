@@ -1,6 +1,6 @@
 { fetchurl, stdenv, pkgconfig, pcre, perl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "maildrop-2.6.0";
 
   src = fetchurl {

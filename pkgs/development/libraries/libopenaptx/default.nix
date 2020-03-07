@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "libopenaptx-${version}";
+  pname = "libopenaptx";
   version = "0.1.0";
 
   src = fetchFromGitHub {

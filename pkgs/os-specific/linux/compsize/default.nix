@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, btrfs-progs }:
 
 stdenv.mkDerivation rec {
-  name = "compsize-${version}";
-  version = "2018-04-07";
+  pname = "compsize";
+  version = "1.3";
 
   src = fetchFromGitHub {
     owner = "kilobyte";
     repo = "compsize";
-    rev = "903f772e37fc0ac6d6cf94ddbc98c691763c1e62";
-    sha256 = "0jps8n0xsdh4mcww5q29rzysbv50iq6rmihxrf99lzgrw0sw5m7k";
+    rev = "v${version}";
+    sha256 = "1c69whla844nwis30jxbj00zkpiw3ccndhkmzjii8av5358mjn43";
   };
 
   buildInputs = [ btrfs-progs ];

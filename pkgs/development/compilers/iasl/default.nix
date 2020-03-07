@@ -1,17 +1,17 @@
-{stdenv, fetchurl, bison, flex}:
+{stdenv, fetchurl, fetchpatch, bison, flex}:
 
 stdenv.mkDerivation rec {
-  name = "iasl-${version}";
-  version = "20181213";
+  pname = "iasl";
+  version = "20200110";
 
   src = fetchurl {
     url = "https://acpica.org/sites/acpica/files/acpica-unix-${version}.tar.gz";
-    sha256 = "1vgqlv9pvxc52faxixpgz7hi1awqmj88bw5vqn3bldf6fmkh147w";
+    sha256 = "1cb6aa6acrixmdzvj9vv4qs9lmlsbkd27pjlz14i1kq1x3xn0gwx";
   };
 
   NIX_CFLAGS_COMPILE = "-O3";
 
-  buildFlags = "iasl";
+  buildFlags = [ "iasl" ];
 
   buildInputs = [ bison flex ];
 

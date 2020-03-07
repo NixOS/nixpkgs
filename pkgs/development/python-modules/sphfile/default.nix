@@ -3,10 +3,9 @@
 buildPythonPackage rec {
   pname = "sphfile";
   version = "1.0.1";
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/s/sphfile/${name}.tar.gz";
+    url = "mirror://pypi/s/sphfile/${pname}-${version}.tar.gz";
     sha256 = "422b0704107b02ef3ca10e55ccdc80b0bb5ad8e2613b6442f8e2ea372c7cf5d8";
   };
 

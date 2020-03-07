@@ -1,21 +1,36 @@
-{ stdenv, fetchFromGitHub, pantheon, pkgconfig, cmake, ninja, gtk3, gtksourceview3, webkitgtk, gtkspell3, glib, libgee, sqlite, discount, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, pantheon
+, pkgconfig
+, vala
+, cmake
+, ninja
+, gtk3
+, gtksourceview3
+, webkitgtk
+, gtkspell3
+, glib
+, libgee
+, sqlite
+, discount
+, wrapGAppsHook
 , withPantheon ? false }:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";
-  version = "2.0.0";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "Philip-Scott";
     repo = "Notes-up";
     rev = version;
-    sha256 = "16bb9ffsg2csps1cb636rff5vc6f1yyhg65g3y5b4wf2hlbmzgql";
+    sha256 = "0bklgp8qrrj9y5m77xqbpy1ld2d9ya3rlxklgzx3alffq5312i4s";
   };
 
   nativeBuildInputs = [
     cmake
     ninja
-    pantheon.vala
+    vala
     pkgconfig
     wrapGAppsHook
   ];
@@ -33,7 +48,13 @@ stdenv.mkDerivation rec {
   ];
 
   # Whether to build with contractor support (Pantheon specific)
-  cmakeFlags = if withPantheon then null else [ "-Dnoele=yes" ];
+  cmakeFlags = stdenv.lib.optional (!withPantheon) "-Dnoele=yes";
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Markdown notes editor and manager designed for elementary OS"

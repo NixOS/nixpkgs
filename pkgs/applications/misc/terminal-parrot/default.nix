@@ -1,13 +1,13 @@
 { stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
-  name = "terminal-parrot-${version}";
+  pname = "terminal-parrot";
   version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "jmhobbs";
     repo = "terminal-parrot";
-    rev = "${version}";
+    rev = version;
     sha256 = "1b4vr4s1zpkpf5kc1r2kdlp3hf88qp1f7h05g8kd62zf4sfbj722";
   };
 

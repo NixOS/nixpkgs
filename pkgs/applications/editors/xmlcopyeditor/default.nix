@@ -1,12 +1,12 @@
-{ stdenv, fetchurl, aspell, boost, expat, expect, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
+{ stdenv, fetchurl, aspell, boost, expat, intltool, libxml2, libxslt, pcre, wxGTK, xercesc }:
 
 stdenv.mkDerivation rec {
-  name = "xmlcopyeditor-${version}";
+  pname = "xmlcopyeditor";
   version = "1.2.1.3";
 
   src = fetchurl {
-    name = "${name}.tar.gz";
-    url = "mirror://sourceforge/xml-copy-editor/${name}.tar.gz";
+    name = "${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/xml-copy-editor/${pname}-${version}.tar.gz";
     sha256 = "0bwxn89600jbrkvlwyawgc0c0qqxpl453mbgcb9qbbxl8984ns4v";
   };
 

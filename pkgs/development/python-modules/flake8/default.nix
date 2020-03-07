@@ -1,15 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , mock, pytest, pytestrunner
 , configparser, enum34, mccabe, pycodestyle, pyflakes, entrypoints, functools32, typing
 }:
 
 buildPythonPackage rec {
   pname = "flake8";
-  version = "3.7.6";
+  version = "3.7.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6d8c66a65635d46d54de59b027a1dda40abbe2275b3164b634835ac9c13fd048";
+    sha256 = "45681a117ecc81e870cbf1262835ae4af5e7a8b08e40b944a8a6e6b895914cfb";
   };
 
   checkInputs = [ pytest mock pytestrunner ];
@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Code checking using pep8 and pyflakes";
     homepage = https://pypi.python.org/pypi/flake8;
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

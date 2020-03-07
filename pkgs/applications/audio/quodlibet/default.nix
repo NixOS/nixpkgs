@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk_pixbuf,
+{ stdenv, fetchurl, python3, wrapGAppsHook, gettext, libsoup, gnome3, gtk3, gdk-pixbuf,
   tag ? "", xvfb_run, dbus, glibcLocales, glib, glib-networking, gobject-introspection,
   gst_all_1, withGstPlugins ? true,
   xineBackend ? false, xineLib,
@@ -18,9 +18,9 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ wrapGAppsHook gettext ];
 
-  checkInputs = with python3.pkgs; [ pytest pytest_xdist pyflakes pycodestyle polib xvfb_run dbus.daemon glibcLocales ];
+  checkInputs = [ gdk-pixbuf ] ++ (with python3.pkgs; [ pytest pytest_xdist polib xvfb_run dbus.daemon glibcLocales ]);
 
-  buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk_pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
+  buildInputs = [ gnome3.adwaita-icon-theme libsoup glib glib-networking gtk3 webkitgtk gdk-pixbuf keybinder3 gtksourceview libmodplug libappindicator-gtk3 kakasi gobject-introspection ]
     ++ (if xineBackend then [ xineLib ] else with gst_all_1;
     [ gstreamer gst-plugins-base ] ++ optionals withGstPlugins [ gst-plugins-good gst-plugins-ugly gst-plugins-bad ]);
 
@@ -33,24 +33,34 @@ python3.pkgs.buildPythonApplication rec {
 
   LC_ALL = "en_US.UTF-8";
 
+  pytestFlags = stdenv.lib.optionals (xineBackend || !withGstPlugins) [
+    "--ignore=tests/plugin/test_replaygain.py"
+  ] ++ [
+    # upstream does actually not enforce source code linting
+    "--ignore=tests/quality"
+    # build failure on Arch Linux
+    # https://github.com/NixOS/nixpkgs/pull/77796#issuecomment-575841355
+    "--ignore=tests/test_operon.py"
+  ];
+
   checkPhase = ''
     runHook preCheck
-    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS" \
+    env XDG_DATA_DIRS="$out/share:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_ICON_DIRS:$XDG_DATA_DIRS" \
       HOME=$(mktemp -d) \
       xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
         --config-file=${dbus.daemon}/share/dbus-1/session.conf \
-        py.test${stdenv.lib.optionalString (xineBackend || !withGstPlugins) " --ignore=tests/plugin/test_replaygain.py"}
+        py.test $pytestFlags
     runHook postCheck
   '';
 
   preFixup = stdenv.lib.optionalString (kakasi != null) "gappsWrapperArgs+=(--prefix PATH : ${kakasi}/bin)";
 
   meta = with stdenv.lib; {
-    description = "GTK+-based audio player written in Python, using the Mutagen tagging library";
+    description = "GTK-based audio player written in Python, using the Mutagen tagging library";
     license = licenses.gpl2Plus;
 
     longDescription = ''
-      Quod Libet is a GTK+-based audio player written in Python, using
+      Quod Libet is a GTK-based audio player written in Python, using
       the Mutagen tagging library. It's designed around the idea that
       you know how to organize your music better than we do. It lets
       you make playlists based on regular expressions (don't worry,

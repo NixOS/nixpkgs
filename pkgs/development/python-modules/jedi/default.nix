@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "jedi";
-  version = "0.13.2";
+  version = "0.15.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "571702b5bd167911fe9036e5039ba67f820d6502832285cde8c881ab2b2149fd";
+    sha256 = "e909527104a903606dd63bea6e8e888833f0ef087057829b89a18364a856f807";
   };
 
   postPatch = ''
@@ -28,6 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/davidhalter/jedi;
     description = "An autocompletion tool for Python that can be used for text editors";
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

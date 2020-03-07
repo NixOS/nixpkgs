@@ -3,6 +3,7 @@
 , oggSupport ? true, libogg, libvorbis
 , openalSupport ? true, openal
 , zipSupport ? true, zlib
+, Cocoa, OpenAL
 }:
 
 let
@@ -13,7 +14,7 @@ let
   wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2; };
 
   yquake2 = stdenv.mkDerivation rec {
-    name = "yquake2-${version}";
+    pname = "yquake2";
     version = "7.30";
 
     src = fetchFromGitHub {
@@ -28,6 +29,7 @@ let
     nativeBuildInputs = [ cmake ];
 
     buildInputs = [ SDL2 libGL ]
+      ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
       ++ lib.optionals oggSupport [ libogg libvorbis ]
       ++ lib.optional openalSupport openal
       ++ lib.optional zipSupport zlib;
@@ -64,7 +66,7 @@ let
     };
   };
 
-in rec {
+in {
   inherit yquake2;
 
   yquake2-ctf = wrapper {

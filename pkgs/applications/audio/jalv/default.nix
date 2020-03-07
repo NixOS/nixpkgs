@@ -1,18 +1,18 @@
-{ stdenv, fetchurl, gtk2, libjack2, lilv, lv2, pkgconfig, python
+{ stdenv, fetchurl, gtk3, libjack2, lilv, lv2, pkgconfig, python
 , serd, sord , sratom, suil, wafHook }:
 
 stdenv.mkDerivation  rec {
-  name = "jalv-${version}";
-  version = "1.6.0";
+  pname = "jalv";
+  version = "1.6.4";
 
   src = fetchurl {
-    url = "https://download.drobilla.net/${name}.tar.bz2";
-    sha256 = "1x2wpzzx2cgvz3dgdcgsj8dr0w3zsasy62mvl199bsdj5fbjaili";
+    url = "https://download.drobilla.net/${pname}-${version}.tar.bz2";
+    sha256 = "1wwfn7yzbs37s2rdlfjgks63svd5g14yyzd2gdl7h0z12qncwsy2";
   };
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    gtk2 libjack2 lilv lv2 python serd sord sratom suil
+    gtk3 libjack2 lilv lv2 python serd sord sratom suil
   ];
 
   meta = with stdenv.lib; {

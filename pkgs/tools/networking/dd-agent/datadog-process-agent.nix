@@ -1,15 +1,15 @@
 { stdenv, fetchFromGitHub, buildGoPackage  }:
 
 buildGoPackage rec {
-  name = "datadog-process-agent-${version}";
-  version = "6.10.0";
+  pname = "datadog-process-agent";
+  version = "6.11.1";
   owner   = "DataDog";
   repo    = "datadog-process-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = "${version}";
-    sha256 = "16lr1gp6n0aph8zikk5kmaib9i5b1jbndxlxfi84bd9f8lhvmkhk";
+    rev    = version;
+    sha256 = "0fc2flm0pa44mjxvn4fan0mkvg9yyg27w68xdgrnpdifj99kxxjf";
   };
 
   goDeps = ./datadog-process-agent-deps.nix;

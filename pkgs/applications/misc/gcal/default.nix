@@ -1,13 +1,20 @@
-{ stdenv, fetchurl, ncurses  }:
+{ stdenv, fetchurl, ncurses, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "gcal-${version}";
+  pname = "gcal";
   version = "4.1";
 
   src = fetchurl {
-    url = "mirror://gnu/gcal/${name}.tar.xz";
+    url = "mirror://gnu/gcal/${pname}-${version}.tar.xz";
     sha256 = "1av11zkfirbixn05hyq4xvilin0ncddfjqzc4zd9pviyp506rdci";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://src.fedoraproject.org/rpms/gcal/raw/master/f/gcal-glibc-no-libio.patch";
+      sha256 = "0l4nw9kgzsay32rsdwvs75pbp4fhx6pfm85paynfbd20cdm2n2kv";
+    })
+  ];
 
   enableParallelBuilding = true;
 

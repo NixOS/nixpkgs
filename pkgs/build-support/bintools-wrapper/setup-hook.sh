@@ -2,8 +2,6 @@
 #
 # See comments in cc-wrapper's setup hook. This works exactly the same way.
 
-set -u
-
 # Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
 # native compile.
 #
@@ -24,7 +22,8 @@ bintoolsWrapper_addLDVars () {
         # Python and Haskell packages often only have directories like $out/lib/ghc-8.4.3/ or
         # $out/lib/python3.6/, so having them in LDFLAGS just makes the linker search unnecessary
         # directories and bloats the size of the environment variable space.
-        if [[ -n "$(echo $1/lib/lib*)" ]]; then
+        local -a glob=( $1/lib/lib* )
+        if [ "${#glob[*]}" -gt 0 ]; then
             export NIX_${role_pre}LDFLAGS+=" -L$1/lib"
         fi
     fi
@@ -61,9 +60,8 @@ do
     if
         PATH=$_PATH type -p "@targetPrefix@${cmd}" > /dev/null
     then
-        upper_case="$(echo "$cmd" | tr "[:lower:]" "[:upper:]")"
-        export "${role_pre}${upper_case}=@targetPrefix@${cmd}";
-        export "${upper_case}${role_post}=@targetPrefix@${cmd}";
+        export "${role_pre}${cmd^^}=@targetPrefix@${cmd}";
+        export "${cmd^^}${role_post}=@targetPrefix@${cmd}";
     fi
 done
 
@@ -73,4 +71,3 @@ export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
 unset -v role_pre role_post cmd upper_case
-set +u

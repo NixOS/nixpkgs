@@ -100,7 +100,7 @@ in import ./make-test.nix ({ pkgs, ...} : {
   meta.maintainers = with pkgs.stdenv.lib.maintainers;
     [ thoughtpolice ];
 
-  nodes = rec {
+  nodes = {
     node1 = makeNode "country=us,region=east,dc=1"  "192.168.1.1" null;
     node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
     node3 = makeNode "country=eu,region=west,dc=2"  "192.168.1.3" "192.168.1.1";

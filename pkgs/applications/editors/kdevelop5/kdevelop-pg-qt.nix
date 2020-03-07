@@ -2,7 +2,7 @@
 
 let
   pname = "kdevelop-pg-qt";
-  version = "2.1.0";
+  version = "2.2.1";
 
 in
 stdenv.mkDerivation rec {
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/src/${name}.tar.xz";
-    sha256 = "20d84d25bd40610bd6c0964e4fe0642e56c41b76a65575122dc5196649621e5d";
+    sha256 = "0ay6m6j6zgrbcm48f14bass83bk4w5qnx76xihc05p69i9w32ff1";
   };
 
   nativeBuildInputs = [ cmake pkgconfig extra-cmake-modules ];

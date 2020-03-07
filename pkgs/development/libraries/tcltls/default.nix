@@ -1,7 +1,7 @@
 { stdenv, fetchurl, tcl, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "tcltls-${version}";
+  pname = "tcltls";
   version = "1.6.7";
 
   src = fetchurl {

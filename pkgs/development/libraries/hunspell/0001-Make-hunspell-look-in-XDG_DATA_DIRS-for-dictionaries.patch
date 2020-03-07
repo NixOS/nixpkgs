@@ -1,0 +1,37 @@
+From 8c67f314de2684d77315eecd99ef091d441f17dd Mon Sep 17 00:00:00 2001
+From: Matthew Bauer <mjbauer95@gmail.com>
+Date: Wed, 24 Jul 2019 15:35:18 -0400
+Subject: [PATCH] Make hunspell look in XDG_DATA_DIRS for dictionaries
+
+Some dictionaries may exist but only show up under XDG_DATA_DIRS. For
+instance, $HOME/.local/share/hunspell could contain some dictionaries.
+
+This patch adds each directory in the hunspell subdir of each
+XDG_DATA_DIRS to the lookup path.
+
+Upstream pr is available at: https://github.com/hunspell/hunspell/pull/637
+---
+ src/tools/hunspell.cxx | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/src/tools/hunspell.cxx b/src/tools/hunspell.cxx
+index 690e34a..6cd127e 100644
+--- a/src/tools/hunspell.cxx
++++ b/src/tools/hunspell.cxx
+@@ -2044,6 +2044,13 @@ int main(int argc, char** argv) {
+     if (getenv("DICPATH")) {
+       path_std_str.append(getenv("DICPATH")).append(PATHSEP);
+     }
++    if (getenv("XDG_DATA_DIRS")) {
++      char* dir = strtok(getenv("XDG_DATA_DIRS"), ":");
++      while (dir != NULL) {
++        path_std_str.append(dir).append("/hunspell:");
++        dir = strtok(NULL, ":");
++      }
++    }
+     path_std_str.append(LIBDIR).append(PATHSEP);
+     if (HOME) {
+       const char * userooodir[] = USEROOODIR;
+-- 
+2.22.0
+

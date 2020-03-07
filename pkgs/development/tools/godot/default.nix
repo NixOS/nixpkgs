@@ -9,14 +9,14 @@ let
     pulseaudio = false;
   };
 in stdenv.mkDerivation rec {
-  name    = "godot-${version}";
-  version = "3.1";
+  pname = "godot";
+  version = "3.2";
 
   src = fetchFromGitHub {
     owner  = "godotengine";
     repo   = "godot";
     rev    = "${version}-stable";
-    sha256 = "1z37znqzbn0x8s04pb9dxzni9jzl8m59nfrr14vypww42f9l5i7i";
+    sha256 = "0f15izjl4i2xlz1xj5pcslzl9gm3rmr3c21gh256ynpi2zhhkcdd";
   };
 
   nativeBuildInputs = [ pkgconfig ];

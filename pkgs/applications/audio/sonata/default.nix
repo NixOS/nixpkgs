@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, pkgconfig, gettext, intltool, wrapGAppsHook
-, python3Packages, gnome3, gtk3, gobject-introspection}:
+, python3Packages, gnome3, gtk3, gsettings-desktop-schemas, gobject-introspection }:
 
 let
-  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2;
+  inherit (python3Packages) buildPythonApplication isPy3k dbus-python pygobject3 mpd2 setuptools;
 in buildPythonApplication rec {
   pname = "sonata";
   version = "1.7b1";
@@ -20,7 +20,7 @@ in buildPythonApplication rec {
   buildInputs = [
     intltool wrapGAppsHook
     gnome3.adwaita-icon-theme
-    gnome3.gsettings-desktop-schemas
+    gsettings-desktop-schemas
   ];
 
   postPatch = ''
@@ -29,7 +29,7 @@ in buildPythonApplication rec {
   '';
 
   propagatedBuildInputs = [
-    gobject-introspection gtk3 pygobject3
+    gobject-introspection gtk3 pygobject3 setuptools
   ];
 
   # The optional tagpy dependency (for editing metadata) is not yet
@@ -41,7 +41,7 @@ in buildPythonApplication rec {
     longDescription = ''
       Sonata is an elegant client for the Music Player Daemon.
 
-      Written in Python and using the GTK+ 3 widget set, its features
+      Written in Python and using the GTK 3 widget set, its features
       include:
 
        - Expanded and collapsed views

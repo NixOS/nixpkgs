@@ -54,8 +54,6 @@
 # For more details, read the individual files where the mechanisms used to
 # accomplish this will be individually documented.
 
-set -u
-
 # Skip setup hook if we're neither a build-time dep, nor, temporarily, doing a
 # native compile.
 #
@@ -70,12 +68,12 @@ ccWrapper_addCVars () {
     local role_post role_pre
     getHostRoleEnvHook
 
-    if [[ -d "$1/include" ]]; then
-        export NIX_${role_pre}CFLAGS_COMPILE+=" ${ccIncludeFlag:--isystem} $1/include"
+    if [ -d "$1/include" ]; then
+        export NIX_${role_pre}CFLAGS_COMPILE+=" -isystem $1/include"
     fi
 
-    if [[ -d "$1/Library/Frameworks" ]]; then
-        export NIX_${role_pre}CFLAGS_COMPILE+=" -F$1/Library/Frameworks"
+    if [ -d "$1/Library/Frameworks" ]; then
+        export NIX_${role_pre}CFLAGS_COMPILE+=" -iframework $1/Library/Frameworks"
     fi
 }
 
@@ -120,4 +118,3 @@ export NIX_HARDENING_ENABLE
 
 # No local scope in sourced file
 unset -v role_pre role_post
-set +u

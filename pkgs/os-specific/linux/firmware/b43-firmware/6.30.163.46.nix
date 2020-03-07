@@ -1,7 +1,7 @@
 { stdenv, fetchurl, b43FirmwareCutter }:
 
 stdenv.mkDerivation rec {
-  name = "b43-firmware-${version}";
+  pname = "b43-firmware";
   version = "6.30.163.46";
 
   src = fetchurl {

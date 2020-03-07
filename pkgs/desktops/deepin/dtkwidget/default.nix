@@ -1,17 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
+{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtmultimedia,
   qtsvg, qtx11extras, librsvg, libstartup_notification, gsettings-qt,
   dde-qt-dbus-factory, dtkcore, deepin }:
 
-stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+mkDerivation rec {
   pname = "dtkwidget";
-  version = "2.0.10";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "11a7yirfkcj3rq7va9av4m1pr22mq1yx1j9k18xrqv36n0rlbrr6";
+    sha256 = "0yqrm1p0k1843ldvcd79dxl26ybyl5kljl6vwhzc58sx7pw4qmvh";
   };
 
   nativeBuildInputs = [
@@ -31,16 +30,17 @@ stdenv.mkDerivation rec {
     dtkcore
   ];
 
-  preConfigure = ''
-    qmakeFlags="$qmakeFlags \
-      INCLUDE_INSTALL_DIR=$out/include \
-      LIB_INSTALL_DIR=$out/lib \
-      QT_HOST_DATA=$out"
-  '';
+  outRef = placeholder "out";
+
+  qmakeFlags = [
+    "INCLUDE_INSTALL_DIR=${outRef}/include"
+    "LIB_INSTALL_DIR=${outRef}/lib"
+    "QT_HOST_DATA=${outRef}"
+  ];
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = deepin.updateScript { inherit name; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Deepin graphical user interface library";

@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "dogpile.cache";
-  version = "0.7.1";
+  version = "0.9.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "691b7f199561c4bd6e7e96f164a43cc3781b0c87bea29b7d59d859f873fd4a31";
+    sha256 = "0sr1fn6b4k5bh0cscd9yi8csqxvj4ngzildav58x5p694mc86j5k";
   };
 
   # Disable concurrency tests that often fail,
@@ -17,6 +17,11 @@ buildPythonPackage rec {
     rm tests/test_lock.py
     # Failing tests. https://bitbucket.org/zzzeek/dogpile.cache/issues/116
     rm tests/cache/test_memcached_backend.py
+  '';
+
+  dontUseSetuptoolsCheck = true;
+  checkPhase = ''
+    pytest
   '';
 
   checkInputs = [ pytest pytestcov mock Mako ];

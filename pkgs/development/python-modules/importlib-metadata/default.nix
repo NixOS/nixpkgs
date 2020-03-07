@@ -13,12 +13,12 @@
 
 buildPythonPackage rec {
   pname = "importlib-metadata";
-  version = "0.8";
+  version = "1.5.0";
 
   src = fetchPypi {
     pname = "importlib_metadata";
     inherit version;
-    sha256 = "b50191ead8c70adfa12495fba19ce6d75f2e0275c14c5a7beb653d6799b512bd";
+    sha256 = "00ikdj4gjhankdljnz7g5ggak4k9lql2926x0x117ir9j2lv7x86";
   };
 
   nativeBuildInputs = [ setuptools_scm ];
@@ -27,6 +27,12 @@ buildPythonPackage rec {
     ++ lib.optionals (!isPy3k) [ pathlib2 contextlib2 configparser ];
 
   checkInputs = [ importlib-resources packaging ];
+
+  # removing test_main.py - it requires 'pyflakefs'
+  # and adding `pyflakefs` to `checkInputs` causes infinite recursion.
+  preCheck = ''
+    rm importlib_metadata/tests/test_main.py
+  '';
 
   meta = with lib; {
     description = "Read metadata from Python packages";

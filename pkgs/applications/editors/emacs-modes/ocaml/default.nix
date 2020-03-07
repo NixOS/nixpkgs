@@ -5,7 +5,8 @@
 
 let version = stdenv.lib.removePrefix "ocaml-" ocaml.name;
 in stdenv.mkDerivation {
-  name = "ocaml-mode-${version}";
+  pname = "ocaml-mode";
+  inherit version;
   inherit (ocaml) prefixKey src;
 
   # a quick configure to get the Makefile generated. Since

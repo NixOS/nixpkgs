@@ -1,10 +1,9 @@
 { stdenv, fetchurl, makeWrapper
-, coreutils, jdk, rlwrap, gnupg1compat }:
+, coreutils, jdk, rlwrap, gnupg }:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";
   version = "2.9.1";
-  name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://raw.github.com/technomancy/leiningen/${version}/bin/lein-pkg";
@@ -13,13 +12,13 @@ stdenv.mkDerivation rec {
 
   jarsrc = fetchurl {
     # NOTE: This is actually a .jar, Github has issues
-    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${name}-standalone.zip";
+    url = "https://github.com/technomancy/leiningen/releases/download/${version}/${pname}-${version}-standalone.zip";
     sha256 = "1y2mva5s2w2szzn1b9rhz0dvkffls4ravii677ybcf2w9wd86z7a";
   };
 
-  JARNAME = "${name}-standalone.jar";
+  JARNAME = "${pname}-${version}-standalone.jar";
 
-  unpackPhase = "true";
+  dontUnpack = true;
 
   buildInputs = [ makeWrapper ];
   propagatedBuildInputs = [ jdk ];
@@ -40,7 +39,7 @@ stdenv.mkDerivation rec {
       --replace 'LEIN_JAR=/usr/share/java/leiningen-$LEIN_VERSION-standalone.jar' "LEIN_JAR=$out/share/$JARNAME"
     wrapProgram $out/bin/lein \
       --prefix PATH ":" "${stdenv.lib.makeBinPath [ rlwrap coreutils ]}" \
-      --set LEIN_GPG ${gnupg1compat}/bin/gpg \
+      --set LEIN_GPG ${gnupg}/bin/gpg \
       --set JAVA_CMD ${jdk}/bin/java
   '';
 

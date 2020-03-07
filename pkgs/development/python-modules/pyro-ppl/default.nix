@@ -1,12 +1,12 @@
 { buildPythonPackage, fetchPypi, lib, pytorch, contextlib2
 , graphviz, networkx, six, opt-einsum, tqdm }:
 buildPythonPackage rec {
-  version = "0.3.1.post1";
+  version = "1.1.0";
   pname = "pyro-ppl";
 
   src = fetchPypi {
     inherit version pname;
-    sha256 = "f5174bcd1b74fb455db948413dcbf5ac1a13dbddc6c54c6d215dd2e4b6b9548d";
+    sha256 = "5ca2fd19276fcfcf52babb48d22892a41d6238d7a6c65e63f704b070a3816479";
   };
 
   propagatedBuildInputs = [
@@ -34,5 +34,6 @@ buildPythonPackage rec {
     homepage = http://pyro.ai;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ teh ];
+    broken = true;
   };
 }

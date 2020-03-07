@@ -5,17 +5,17 @@
 
 buildPythonPackage rec {
   pname = "pox";
-  version = "0.2.5";
+  version = "0.2.7";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2b53fbdf02596240483dc2cb94f94cc21252ad1b1858c7b1c151afeec9022cc8";
+    sha256 = "06afe1a4a1dbf8b47f7ad5a3c1d8ada9104c64933a1da11338269a2bd8642778";
   };
 
   meta = with stdenv.lib; {
     description = "Utilities for filesystem exploration and automated builds";
     license = licenses.bsd3;
-    homepage = http://www.cacr.caltech.edu/~mmckerns/pox.htm;
+    homepage = https://github.com/uqfoundation/pox/;
   };
 
 }

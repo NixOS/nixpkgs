@@ -1,9 +1,0 @@
---- a/src/Makefile
-+++ b/src/Makefile
-@@ -77,4 +77,6 @@ FreezeScript: Freeze
- Glacier2 IceGridLib Glacier2CryptPermissionsVerifier: Glacier2Lib
- 
-+Glacier2: IceSSL
-+
- IcePatch2: IcePatch2Lib
- 

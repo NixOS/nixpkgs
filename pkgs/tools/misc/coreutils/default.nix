@@ -1,5 +1,5 @@
 { stdenv, lib, buildPackages
-, autoreconfHook, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
+, autoreconfHook, bison, texinfo, fetchurl, perl, xz, libiconv, gmp ? null
 , aclSupport ? stdenv.isLinux, acl ? null
 , attrSupport ? stdenv.isLinux, attr ? null
 , selinuxSupport? false, libselinux ? null, libsepol ? null
@@ -15,7 +15,7 @@ assert selinuxSupport -> libselinux != null && libsepol != null;
 
 with lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (rec {
   pname = "coreutils";
   version = "8.31";
 
@@ -24,7 +24,14 @@ stdenv.mkDerivation rec {
     sha256 = "1zg9m79x1i2nifj4kb0waf9x3i5h6ydkypkjnbsb9rnwis8rqypz";
   };
 
-  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch;
+  patches = optional stdenv.hostPlatform.isCygwin ./coreutils-8.23-4.cygwin.patch
+         # Fix failing test with musl. See https://lists.gnu.org/r/coreutils/2019-05/msg00031.html
+         # To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./avoid-false-positive-in-date-debug-test.patch
+         # Fix compilation in musl-cross environments. To be removed in coreutils-8.32.
+         ++ optional stdenv.hostPlatform.isMusl ./coreutils-8.31-musl-cross.patch
+         # Fix compilation in android-cross environments. To be removed in coreutils-8.32.
+         ++ [ ./coreutils-8.31-android-cross.patch ];
 
   postPatch = ''
     # The test tends to fail on btrfs,f2fs and maybe other unusual filesystems.
@@ -34,12 +41,20 @@ stdenv.mkDerivation rec {
     sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
     sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
+    # Some target platforms, especially when building inside a container have
+    # issues with the inotify test.
+    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail-2/inotify-dir-recreate.sh
+
     # sandbox does not allow setgid
     sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
     substituteInPlace ./tests/install/install-C.sh \
       --replace 'mode3=2755' 'mode3=1755'
 
     sed '2i print "Skipping env -S test";  exit 77;' -i ./tests/misc/env-S.pl
+
+    # Fails on systems with a rootfs. Looks like a bug in the test, see
+    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
 
     # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
     for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
@@ -48,14 +63,18 @@ stdenv.mkDerivation rec {
     for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
       echo "int main() { return 77; }" > "$f"
     done
-  '' + optionalString (stdenv.hostPlatform.libc == "musl") ''
-    echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-    echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-  '';
+  '' + optionalString (stdenv.hostPlatform.libc == "musl") (lib.concatStringsSep "\n" [
+    ''
+      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+    ''
+  ]);
 
   outputs = [ "out" "info" ];
 
-  nativeBuildInputs = [ perl xz.bin ];
+  nativeBuildInputs = [ perl xz.bin ]
+    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
+    ++ optionals stdenv.hostPlatform.isMusl [ autoreconfHook bison ];   # due to patch
   configureFlags = [ "--with-packager=https://NixOS.org" ]
     ++ optional (singleBinary != false)
       ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
@@ -73,7 +92,6 @@ stdenv.mkDerivation rec {
     ++ optional aclSupport acl
     ++ optional attrSupport attr
     ++ optional withOpenssl openssl
-    ++ optionals stdenv.hostPlatform.isCygwin [ autoreconfHook texinfo ]   # due to patch
     ++ optionals selinuxSupport [ libselinux libsepol ]
        # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (stdenv.hostPlatform != stdenv.buildPlatform && stdenv.hostPlatform.libc != "glibc") libiconv;
@@ -131,5 +149,9 @@ stdenv.mkDerivation rec {
 
     maintainers = [ maintainers.eelco ];
   };
-
-}
+} // optionalAttrs stdenv.hostPlatform.isMusl {
+  # Work around a bogus warning in conjunction with musl.
+  NIX_CFLAGS_COMPILE = "-Wno-error";
+} // stdenv.lib.optionalAttrs stdenv.hostPlatform.isAndroid {
+  NIX_CFLAGS_COMPILE = "-D__USE_FORTIFY_LEVEL=0";
+})

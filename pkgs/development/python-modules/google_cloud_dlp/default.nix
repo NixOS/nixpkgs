@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-dlp";
-  version = "0.10.0";
+  version = "0.13.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5cc7e40842b6c3dc586d04e3d2b2326b44afbe3896da6a30032d64650a7c6b00";
+    sha256 = "844f5e63597c2a15561eec68397ee5f425e9be7728d2d7072f50f983fab31b9a";
   };
 
   checkInputs = [ pytest mock ];

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, fcitx, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "fcitx-table-other-${version}";
+  pname = "fcitx-table-other";
   version = "0.2.4";
 
   src = fetchurl {
-    url = "http://download.fcitx-im.org/fcitx-table-other/${name}.tar.xz";
+    url = "http://download.fcitx-im.org/fcitx-table-other/${pname}-${version}.tar.xz";
     sha256 = "1di60lr6l5k2sdwi3yrc0hl89j2k0yipayrsn803vd040w1fgfhq";
   };
 

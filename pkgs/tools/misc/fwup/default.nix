@@ -3,14 +3,14 @@
 , libarchive, darwin, coreutils }:
 
 stdenv.mkDerivation rec {
-  name = "fwup-${version}";
-  version = "1.3.0";
+  pname = "fwup";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "fhunleth";
     repo = "fwup";
     rev = "v${version}";
-    sha256 = "1npxps5kg5z9f52k3p62sxf4cvdrdddrggfpip0n0whm1dx9rjrx";
+    sha256 = "08gscwdq7fwfpk3mf7dfdf64n5ijm5kjb7f5wrzzvpnnqz24xnb0";
   };
 
   doCheck = true;

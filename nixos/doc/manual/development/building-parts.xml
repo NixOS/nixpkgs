@@ -8,8 +8,8 @@
   With the command <command>nix-build</command>, you can build specific parts
   of your NixOS configuration. This is done as follows:
 <screen>
-$ cd <replaceable>/path/to/nixpkgs/nixos</replaceable>
-$ nix-build -A config.<replaceable>option</replaceable></screen>
+<prompt>$ </prompt>cd <replaceable>/path/to/nixpkgs/nixos</replaceable>
+<prompt>$ </prompt>nix-build -A config.<replaceable>option</replaceable></screen>
   where <replaceable>option</replaceable> is a NixOS option with type
   “derivation” (i.e. something that can be built). Attributes of interest
   include:
@@ -28,7 +28,7 @@ $ nix-build -A config.<replaceable>option</replaceable></screen>
      <para>
       A shortcut to build this is:
 <screen>
-$ nix-build -A system</screen>
+<prompt>$ </prompt>nix-build -A system</screen>
      </para>
     </listitem>
    </varlistentry>
@@ -66,9 +66,9 @@ $ nix-build -A system</screen>
       test whether the kernel and the initial ramdisk boot correctly, by using
       QEMU’s <option>-kernel</option> and <option>-initrd</option> options:
 <screen>
-$ nix-build -A config.system.build.initialRamdisk -o initrd
-$ nix-build -A config.system.build.kernel -o kernel
-$ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/null
+<prompt>$ </prompt>nix-build -A config.system.build.initialRamdisk -o initrd
+<prompt>$ </prompt>nix-build -A config.system.build.kernel -o kernel
+<prompt>$ </prompt>qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/null
 </screen>
      </para>
     </listitem>
@@ -99,15 +99,15 @@ $ qemu-system-x86_64 -kernel ./kernel/bzImage -initrd ./initrd/initrd -hda /dev/
       contain dots (e.g. <literal>httpd.service</literal>), you need to put
       them between quotes, like this:
 <screen>
-$ nix-build -A 'config.systemd.units."httpd.service".unit'
+<prompt>$ </prompt>nix-build -A 'config.systemd.units."httpd.service".unit'
 </screen>
       You can also test individual units, without rebuilding the whole system,
       by putting them in <filename>/run/systemd/system</filename>:
 <screen>
-$ cp $(nix-build -A 'config.systemd.units."httpd.service".unit')/httpd.service \
+<prompt>$ </prompt>cp $(nix-build -A 'config.systemd.units."httpd.service".unit')/httpd.service \
     /run/systemd/system/tmp-httpd.service
-# systemctl daemon-reload
-# systemctl start tmp-httpd.service
+<prompt># </prompt>systemctl daemon-reload
+<prompt># </prompt>systemctl start tmp-httpd.service
 </screen>
       Note that the unit must not have the same name as any unit in
       <filename>/etc/systemd/system</filename> since those take precedence over

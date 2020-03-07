@@ -1,11 +1,13 @@
 diff --git a/configure.ac b/configure.ac
-index 1e55b1cc..0832a387 100644
+index 5c00aca..eb78060 100644
 --- a/configure.ac
 +++ b/configure.ac
-@@ -22,7 +22,6 @@ AC_CANONICAL_HOST
- PLATFORM="unknown"
+@@ -23,7 +23,6 @@ PLATFORM="unknown"
  AS_CASE([$host_os],
      [freebsd*], [PLATFORM="freebsd"],
+     [openbsd*], [PLATFORM="openbsd"],
 -    [darwin*], [PLATFORM="osx"],
      [cygwin], [PLATFORM="cygwin"],
      [PLATFORM="nix"])
+ 
+

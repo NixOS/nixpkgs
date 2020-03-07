@@ -12,15 +12,17 @@ let
 
 in
 buildGoPackage rec {
-  name = "cockroach-${version}";
-  version = "2.1.5";
+  pname = "cockroach";
+  version = "19.1.5";
 
   goPackagePath = "github.com/cockroachdb/cockroach";
 
   src = fetchurl {
     url = "https://binaries.cockroachdb.com/cockroach-v${version}.src.tgz";
-    sha256 = "0bdbkz917175vp28kc513996ik0m61hfbvnqnv0alxv0mfx8djzn";
+    sha256 = "1pnzzmxxb7qxiiy8qpl2sifk4qrijjbhmzy47bnjj5ssdsjjjcqy";
   };
+
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionals stdenv.cc.isGNU [ "-Wno-error=deprecated-copy" "-Wno-error=redundant-move" "-Wno-error=pessimizing-move" ];
 
   inherit nativeBuildInputs buildInputs;
 
@@ -59,6 +61,6 @@ buildGoPackage rec {
     description = "A scalable, survivable, strongly-consistent SQL database";
     license     = licenses.asl20;
     platforms   = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" ];
-    maintainers = with maintainers; [ rushmorem thoughtpolice ];
+    maintainers = with maintainers; [ rushmorem thoughtpolice rvolosatovs ];
   };
 }

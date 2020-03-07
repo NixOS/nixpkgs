@@ -1,26 +1,28 @@
-{stdenv, fetchurl, unzip}:
+{ stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "pmd-${version}";
-  version = "6.13.0";
+  pname = "pmd";
+  version = "6.17.0";
 
-  buildInputs = [ unzip ];
+  nativeBuildInputs = [ unzip ];
 
   src = fetchurl {
     url = "mirror://sourceforge/pmd/pmd-bin-${version}.zip";
-    sha256 = "1g8ds38zwprjswm71y7l10l15rbh2s6ha9xpp20wjy823q9agbpq";
+    sha256 = "0000w28dg5z8gs7cxhx7d0fv10ry0yxamk5my28ncqqsg7a4qy8w";
   };
 
   installPhase = ''
+    runHook preInstall
     mkdir -p $out
-    cp -R * $out
+    cp -R {bin,lib} $out
+    runHook postInstall
   '';
 
   meta = with stdenv.lib; {
     description = "An extensible cross-language static code analyzer";
-    homepage = https://pmd.github.io/;
+    homepage = "https://pmd.github.io/";
+    changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
     platforms = platforms.unix;
-    license = with licenses; [ bsdOriginal asl20 ];
+    license = with licenses; [ bsdOriginal asl20 lgpl3Plus ];
   };
 }
-

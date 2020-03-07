@@ -1,14 +1,14 @@
 { stdenv, lib, fetchFromGitHub, autoreconfHook, libsodium }:
 
 stdenv.mkDerivation rec {
-  name = "mkp224o-${version}";
-  version = "1.2.0";
+  pname = "mkp224o";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "cathugger";
     repo = "mkp224o";
     rev = "v${version}";
-    sha256 = "1m7r0jfm6na6rk75v1kals3bx2cs6jsfxdgpxdljn39j3qr4mxvd";
+    sha256 = "0b7xs4gnyfhdkwl8wkb6mazas88ybnlbxck59p4n2mnlndvd8kb7";
   };
 
   buildCommand =

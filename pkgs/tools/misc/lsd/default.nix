@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "lsd";
-  version = "0.14.0";
+  version = "0.16.0";
 
   src = fetchFromGitHub {
     owner = "Peltoche";
-    repo = "lsd";
+    repo = pname;
     rev = version;
-    sha256 = "1k054c4mz0z9knfn7kvvs3305z2g2w44l0cjg4k3cax06ic1grlr";
+    sha256 = "0fh5rz6slyjzz03bpjcl9gplk36vm7qcc0i0gvhsikwvw0cf3hym";
   };
 
-  cargoSha256 = "0pg4wsk2qaljrqklnl5p3iv83314wmybyxsn1prvsjsl4b64mil9";
+  cargoSha256 = "1z7sg9b7qsjw1hhc7dkvxz8xgf4k8jddr7gbnjr4d2569g97jf3f";
 
   preFixup = ''
     install -Dm644 -t $out/share/zsh/site-functions/ target/release/build/lsd-*/out/_lsd

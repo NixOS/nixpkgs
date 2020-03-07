@@ -8,7 +8,7 @@ let beat = package : extraArgs : buildGoPackage (rec {
         owner = "elastic";
         repo = "beats";
         rev = "v${version}";
-        sha256 = "0n1sjngc82b7wysw5aaiqvllq4c8rx2jj7khw4vrypc40f8ahjs5";
+        sha256 = "192ygz3ppfah8d2b811x67jfqhcr5ivz7qh4vwrd729rjfr0bbgb";
       };
 
       goPackagePath = "github.com/elastic/beats";
@@ -45,5 +45,8 @@ in {
       journal entries from Linuxes with systemd.
     '';
     buildInputs = [ systemd.dev ];
+    postFixup = let libPath = stdenv.lib.makeLibraryPath [ systemd.lib ]; in ''
+      patchelf --set-rpath ${libPath} "$bin/bin/journalbeat"
+    '';
   };
 }

@@ -1,14 +1,11 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, lib
 , python
 , six
 }:
 
 buildPythonPackage rec {
-
-  name = "${pname}-${version}";
   pname = "selectors34";
   version = "1.2";
 

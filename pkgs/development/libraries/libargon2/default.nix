@@ -1,28 +1,31 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenv, fetchFromGitHub, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "libargon2-${version}";
-  version = "20171227";
+  pname = "libargon2";
+  version = "20190702";
 
   src = fetchFromGitHub {
     owner = "P-H-C";
     repo = "phc-winner-argon2";
-    rev = "${version}";
-    sha256 = "0sc9zca1anqk41017vjpas4kxi4cbn0zvicv8vj8p2sb2gy94bh8";
+    rev = version;
+    sha256 = "0p4ry9dn0mi9js0byijxdyiwx74p1nr8zj7wjpd1fjgqva4sk23i";
   };
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/lib/pkgconfig
-    substitute libargon2.pc $out/lib/pkgconfig/libargon2.pc \
-      --replace @UPSTREAM_VER@ "${version}"                 \
-      --replace @HOST_MULTIARCH@ ""                         \
-      --replace 'prefix=/usr' "prefix=$out"
+  patches = [
+    # TODO: remove when https://github.com/P-H-C/phc-winner-argon2/pull/277 is merged + released
+    (fetchpatch {
+      url = "https://github.com/P-H-C/phc-winner-argon2/commit/cd1c1d8d204e4ec4557e358013567c097cb70562.patch";
+      sha256 = "0whqv8b6q9602n7vxpzbd8bk8wz22r1jz9x5lrm9z7ib3wz81c8a";
+    })
+  ];
 
-    make install PREFIX=$out
-    ln -s $out/lib/libargon2.so $out/lib/libargon2.so.0
-    runHook postInstall
-  '';
+  makeFlags = [
+    "AR=${stdenv.cc.targetPrefix}ar" # Fix cross-compilation
+    "PREFIX=${placeholder "out"}"
+    "ARGON2_VERSION=${version}"
+    "LIBRARY_REL=lib"
+    "PKGCONFIG_REL=lib"
+  ];
 
   meta = with stdenv.lib; {
     description = "A key derivation function that was selected as the winner of the Password Hashing Competition in July 2015";
@@ -33,7 +36,7 @@ stdenv.mkDerivation rec {
       Catena, Lyra2, Makwa and yescrypt were given special recognition. The PHC
       recommends using Argon2 rather than legacy algorithms.
     '';
-    homepage = https://www.argon2.com/;
+    homepage = "https://www.argon2.com/";
     license = with licenses; [ asl20 cc0 ];
     maintainers = with maintainers; [ taeer olynch ];
     platforms = platforms.linux ++ platforms.darwin;

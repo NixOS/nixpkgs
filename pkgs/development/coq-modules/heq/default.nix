@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "cd src";
 
-  installFlags = "COQLIB=$(out)/lib/coq/${coq.coq-version}";
+  installFlags = [ "COQLIB=$(out)/lib/coq/${coq.coq-version}" ];
 
   meta = with stdenv.lib; {
     homepage = https://www.mpi-sws.org/~gil/Heq/;

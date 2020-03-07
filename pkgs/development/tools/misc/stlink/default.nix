@@ -1,17 +1,17 @@
-{ stdenv, fetchurl, cmake, libusb1 }:
+{ stdenv, fetchFromGitHub, cmake, libusb1 }:
 
 # IMPORTANT: You need permissions to access the stlink usb devices. 
 # Add services.udev.pkgs = [ pkgs.stlink ] to your configuration.nix
 
-let
-  version = "1.3.0";
-in
-stdenv.mkDerivation {
-  name = "stlink-${version}";
+stdenv.mkDerivation rec {
+  pname = "stlink";
+  version = "1.6.0";
 
-  src = fetchurl {
-    url = "https://github.com/texane/stlink/archive/${version}.tar.gz";
-    sha256 = "3e8cba21744d2c38a0557f6835a05189e1b98202931bb0183d22efc462c893dd";
+  src = fetchFromGitHub {
+    owner = "texane";
+    repo = "stlink";
+    rev = "v${version}";
+    sha256 = "1mlkrxjxg538335g59hjb0zc739dx4mhbspb26z5gz3lf7d4xv6x";
   };
 
   buildInputs = [ cmake libusb1 ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
   meta = with stdenv.lib; {
     description = "In-circuit debug and programming for ST-Link devices";
     license = licenses.bsd3;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.bjornfor maintainers.rongcuid ];
   };
 }

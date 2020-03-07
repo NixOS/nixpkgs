@@ -2,13 +2,13 @@
 , lua52Packages, libXft, ncurses, ninja, readline, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "wordgrinder-${version}";
+  pname = "wordgrinder";
   version = "0.7.2";
 
   src = fetchFromGitHub {
     repo = "wordgrinder";
     owner = "davidgiven";
-    rev = "${version}";
+    rev = version;
     sha256 = "08lnq5wmspfqdjmqm15gizcq0xr7mg4h62qhvwj63v0sd6ks1cal";
   };
 
@@ -16,7 +16,11 @@ stdenv.mkDerivation rec {
     "PREFIX=$(out)"
     "LUA_INCLUDE=${lua52Packages.lua}/include"
     "LUA_LIB=${lua52Packages.lua}/lib/liblua.so"
-  ] ++ stdenv.lib.optional stdenv.isLinux "XFT_PACKAGE=--libs=\{-lX11 -lXft\}";
+  ];
+
+  preBuild = stdenv.lib.optionalString stdenv.isLinux ''
+    makeFlagsArray+=('XFT_PACKAGE=--cflags={} --libs={-lX11 -lXft}')
+  '';
 
   dontUseNinjaBuild = true;
   dontUseNinjaInstall = true;

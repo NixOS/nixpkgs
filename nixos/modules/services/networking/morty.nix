@@ -27,7 +27,7 @@ in
       };
 
       key = mkOption {
-        type = types.string;
+        type = types.str;
         default = "";
         description = "HMAC url validation key (hexadecimal encoded).
 	Leave blank to disable. Without validation key, anyone can
@@ -56,7 +56,7 @@ in
       };
 
       listenAddress = mkOption {
-        type = types.string;
+        type = types.str;
         default = "127.0.0.1";
         description = "The address on which the service listens";
         defaultText = "127.0.0.1 (localhost)";
@@ -74,6 +74,7 @@ in
       { description = "Morty user";
         createHome = true;
         home = "/var/lib/morty";
+        isSystemUser = true;
       };
 
     systemd.services.morty =

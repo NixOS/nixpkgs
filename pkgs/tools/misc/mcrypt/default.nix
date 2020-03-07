@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   version = "2.6.8";
-  name = "mcrypt-${version}";
+  pname = "mcrypt";
 
   src = fetchurl {
-    url = "mirror://sourceforge/mcrypt/MCrypt/${version}/${name}.tar.gz";
+    url = "mirror://sourceforge/mcrypt/MCrypt/${version}/${pname}-${version}.tar.gz";
     sha256 = "5145aa844e54cca89ddab6fb7dd9e5952811d8d787c4f4bf27eb261e6c182098";
   };
 

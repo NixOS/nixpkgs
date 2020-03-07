@@ -1,7 +1,7 @@
 { stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "bibtool-${version}";
+  pname = "bibtool";
   version = "2.67";
 
   src = fetchurl {
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   # Perl for running test suite.
   buildInputs = [ perl ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   doCheck = true;
 

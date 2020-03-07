@@ -6,8 +6,8 @@
 
 # Gtk deps
 # upstream gImagereader supports Qt too
-, gtk3, gobject-introspection, wrapGAppsHook
-, gnome3, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
+, gobject-introspection, wrapGAppsHook
+, gtkmm3, gtksourceview3, gtksourceviewmm, gtkspell3, gtkspellmm, cairomm
 }:
 
 let
@@ -15,14 +15,14 @@ let
   pythonEnv = python3.withPackages( ps: with ps;[ pygobject3 ] );
 in
 stdenv.mkDerivation rec {
-  name = "gImageReader-${version}";
-  version = "3.3.0";
+  pname = "gImageReader";
+  version = "3.3.1";
 
   src = fetchFromGitHub {
     owner= "manisandro";
     repo = "gImageReader";
     rev = "v${version}";
-    sha256 = "0pjk4kr7bc5q4hi1xf7na2zln9fyqdazgzq62r3bg41nzy7fakcz";
+    sha256 = "17hz2dgxx2j7hsk0lx3riidqvlsg0ylnicjd2gphsi3yp7w20zdj";
   };
 
   nativeBuildInputs = [

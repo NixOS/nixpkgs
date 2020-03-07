@@ -26,12 +26,12 @@ assert gpgmeSupport -> gpgme      != null && openssl != null;
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "mutt-${version}";
-  version = "1.11.4";
+  pname = "mutt";
+  version = "1.13.4";
 
   src = fetchurl {
-    url = "http://ftp.mutt.org/pub/mutt/${name}.tar.gz";
-    sha256 = "0098pr4anmq2a0id8wfi2vci3cgcfwf9k4q411w22xn8lrz3aldn";
+    url = "http://ftp.mutt.org/pub/mutt/${pname}-${version}.tar.gz";
+    sha256 = "016dzx2c0kr9xgnw4nfzpkn4nvpk56rdlcqhrwa820fq8083yzdm";
   };
 
   patches = optional smimeSupport (fetchpatch {

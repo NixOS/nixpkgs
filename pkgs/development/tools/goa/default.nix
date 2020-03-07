@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "goa-${version}";
+  pname = "goa";
   version = "1.4.1";
 
   goPackagePath = "github.com/goadesign/goa";

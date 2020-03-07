@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, unzip, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "zdbsp-${version}";
+  pname = "zdbsp";
   version = "1.19";
 
   src = fetchurl {

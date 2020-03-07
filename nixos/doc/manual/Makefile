@@ -24,7 +24,7 @@ fix-misc-xml:
 clean:
 	rm -f manual-combined.xml generated
 
-generated: ./options-to-docbook.xsl
+generated:
 	nix-build ../../release.nix \
 		--attr manualGeneratedSources.x86_64-linux \
 		--out-link ./generated

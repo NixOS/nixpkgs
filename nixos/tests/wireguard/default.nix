@@ -2,7 +2,7 @@ let
   wg-snakeoil-keys = import ./snakeoil-keys.nix;
 in
 
-import ../make-test.nix ({ pkgs, ...} : {
+import ../make-test-python.nix ({ pkgs, ...} : {
   name = "wireguard";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ma27 ];
@@ -86,12 +86,12 @@ import ../make-test.nix ({ pkgs, ...} : {
   };
 
   testScript = ''
-    startAll;
+    start_all()
 
-    $peer0->waitForUnit("wireguard-wg0.service");
-    $peer1->waitForUnit("wireguard-wg0.service");
+    peer0.wait_for_unit("wireguard-wg0.service")
+    peer1.wait_for_unit("wireguard-wg0.service")
 
-    $peer1->succeed("ping -c5 fc00::1");
-    $peer1->succeed("ping -c5 10.23.42.1")
+    peer1.succeed("ping -c5 fc00::1")
+    peer1.succeed("ping -c5 10.23.42.1")
   '';
 })

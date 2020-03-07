@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, file, wrapGAppsHook
-, openssl, curl, libevent, inotify-tools, systemd, zlib, hicolor-icon-theme
+, openssl, curl, libevent, inotify-tools, systemd, zlib
 , enableGTK3 ? false, gtk3
 , enableSystemd ? stdenv.isLinux
 , enableDaemon ? true
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool file openssl curl libevent zlib ]
     ++ optionals enableGTK3 [ gtk3 ]
     ++ optionals enableSystemd [ systemd ]
-    ++ optionals stdenv.isLinux [ inotify-tools ]
-    ++ optionals enableGTK3 [ hicolor-icon-theme ];
+    ++ optionals stdenv.isLinux [ inotify-tools ];
 
   postPatch = ''
     substituteInPlace ./configure \
@@ -49,7 +48,7 @@ stdenv.mkDerivation rec {
       on top of a cross-platform back-end.
       Feature spotlight:
         * Uses fewer resources than other clients
-        * Native Mac, GTK+ and Qt GUI clients
+        * Native Mac, GTK and Qt GUI clients
         * Daemon ideal for servers, embedded systems, and headless use
         * All these can be remote controlled by Web and Terminal clients
         * Bluetack (PeerGuardian) blocklists with automatic updates

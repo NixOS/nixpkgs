@@ -1,4 +1,4 @@
-{ stdenv,  fetchzip }:
+{ lib, fetchzip }:
 
 let
   majorVersion = "1";
@@ -6,7 +6,7 @@ let
   pname = "route159";
 in
 
-fetchzip rec {
+fetchzip {
   name = "${pname}-font-${majorVersion}.${minorVersion}";
 
   url = "http://dotcolon.net/DL/font/${pname}_${majorVersion}${minorVersion}.zip";
@@ -17,7 +17,7 @@ fetchzip rec {
     unzip -j $downloadedFile \*.otf  -d $out/share/fonts/opentype/${pname}
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "http://dotcolon.net/font/${pname}/";
     description = "A weighted sans serif font";
     platforms = platforms.all;

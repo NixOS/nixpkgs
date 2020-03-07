@@ -3,7 +3,7 @@
 , pkgconfig, imlib2, libast }:
 
 stdenv.mkDerivation rec {
-  name = "eterm-${version}";
+  pname = "eterm";
   version = "0.9.6";
   srcName = "Eterm-${version}";
 

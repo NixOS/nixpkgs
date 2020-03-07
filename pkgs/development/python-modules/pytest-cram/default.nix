@@ -22,7 +22,7 @@ buildPythonPackage rec {
   # the imported and collected modules are different.
   checkPhase = ''
     rm pytest_cram/tests/__init__.py
-    pytest pytest_cram
+    pytest pytest_cram/ --ignore=pytest_cram/tests/test_examples.py
   '';
 
   meta = {

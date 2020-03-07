@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix ({ pkgs, lib, ... }:
 {
   name = "codimd";
 
@@ -35,20 +35,18 @@ import ./make-test.nix ({ pkgs, lib, ... }:
   };
 
   testScript = ''
-    startAll();
+    start_all()
 
-    subtest "CodiMD sqlite", sub {
-      $codimdSqlite->waitForUnit("codimd.service");
-      $codimdSqlite->waitForOpenPort(3000);
-      $codimdSqlite->waitUntilSucceeds("curl -sSf http://localhost:3000/new");
-    };
+    with subtest("CodiMD sqlite"):
+        codimdSqlite.wait_for_unit("codimd.service")
+        codimdSqlite.wait_for_open_port(3000)
+        codimdSqlite.wait_until_succeeds("curl -sSf http://localhost:3000/new")
 
-    subtest "CodiMD postgres", sub {
-      $codimdPostgres->waitForUnit("postgresql.service");
-      $codimdPostgres->waitForUnit("codimd.service");
-      $codimdPostgres->waitForOpenPort(5432);
-      $codimdPostgres->waitForOpenPort(3000);
-      $codimdPostgres->waitUntilSucceeds("curl -sSf http://localhost:3000/new");
-    };
+    with subtest("CodiMD postgres"):
+        codimdPostgres.wait_for_unit("postgresql.service")
+        codimdPostgres.wait_for_unit("codimd.service")
+        codimdPostgres.wait_for_open_port(5432)
+        codimdPostgres.wait_for_open_port(3000)
+        codimdPostgres.wait_until_succeeds("curl -sSf http://localhost:3000/new")
   '';
 })

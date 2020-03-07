@@ -6,7 +6,8 @@ let
   version = "0.1.2";
 
 in stdenv.mkDerivation {
-  name = "soapyairspy-${version}";
+  pname = "soapyairspy";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "pothosware";

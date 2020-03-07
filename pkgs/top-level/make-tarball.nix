@@ -6,25 +6,29 @@
 , officialRelease
 , pkgs ? import nixpkgs.outPath {}
 , nix ? pkgs.nix
+, lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
 }:
 
 with pkgs;
 
-releaseTools.sourceTarball rec {
+releaseTools.sourceTarball {
   name = "nixpkgs-tarball";
   src = nixpkgs;
 
   inherit officialRelease;
   version = pkgs.lib.fileContents ../../.version;
-  versionSuffix = "pre${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+  versionSuffix = "pre${
+    if nixpkgs ? lastModified
+    then builtins.substring 0 8 nixpkgs.lastModified
+    else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
-  buildInputs = [ nix.out jq ];
+  buildInputs = [ nix.out jq lib-tests ];
 
   configurePhase = ''
     eval "$preConfigure"
     releaseName=nixpkgs-$VERSION$VERSION_SUFFIX
     echo -n $VERSION_SUFFIX > .version-suffix
-    echo -n ${nixpkgs.rev or nixpkgs.shortRev} > .git-revision
+    echo -n ${nixpkgs.rev or nixpkgs.shortRev or "dirty"} > .git-revision
     echo "release name is $releaseName"
     echo "git-revision is $(cat .git-revision)"
   '';
@@ -57,20 +61,6 @@ releaseTools.sourceTarball rec {
     p2=$(nix-instantiate $TMPDIR/foo/bar --dry-run -A firefox --show-trace)
     if [ "$p1" != "$p2" ]; then
         echo "Nixpkgs evaluation depends on Nixpkgs path ($p1 vs $p2)!"
-        exit 1
-    fi
-
-    # Run the regression tests in `lib'.
-    if
-        # `set -e` doesn't work inside here, so need to && instead :(
-        res="$(nix-instantiate --eval --strict lib/tests/misc.nix --show-trace)" \
-        && [[ "$res" == "[ ]" ]] \
-        && res="$(nix-instantiate --eval --strict lib/tests/systems.nix --show-trace)" \
-        && [[ "$res" == "[ ]" ]]
-    then
-        true
-    else
-        echo "regression tests for lib failed, got: $res"
         exit 1
     fi
 

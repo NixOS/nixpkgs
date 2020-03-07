@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libsepol, python }:
 
 stdenv.mkDerivation rec {
-  name = "sepolgen-${version}";
+  pname = "sepolgen";
   version = "1.2.2";
   inherit (libsepol) se_release se_url;
 

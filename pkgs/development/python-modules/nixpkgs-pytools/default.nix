@@ -3,22 +3,24 @@
 , fetchPypi
 , jinja2
 , setuptools
+, rope
 , isPy27
 }:
 
 buildPythonPackage rec {
   pname = "nixpkgs-pytools";
-  version = "1.0.0";
+  version = "1.3.0";
   disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6aaf1e990be639a0d01afb454756606f3111dd8c596b6e848d4a0cec019168d0";
+    sha256 = "11skcbi1lf9qcv9j5ikifb4pakhbbygqpcmv3390j7gxsa85cn19";
   };
 
   propagatedBuildInputs = [
     jinja2
     setuptools
+    rope
   ];
 
   # tests require network ..

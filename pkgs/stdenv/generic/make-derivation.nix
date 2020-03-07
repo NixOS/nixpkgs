@@ -86,6 +86,8 @@ in rec {
     , hardeningEnable ? []
     , hardeningDisable ? []
 
+    , patches ? []
+
     , ... } @ attrs:
 
     let
@@ -97,7 +99,6 @@ in rec {
       separateDebugInfo' = separateDebugInfo && stdenv.hostPlatform.isLinux && !(stdenv.hostPlatform.useLLVM or false);
       outputs' = outputs ++ lib.optional separateDebugInfo' "debug";
 
-      fixedOutputDrv = attrs ? outputHash;
       noNonNativeDeps = builtins.length (depsBuildTarget ++ depsBuildTargetPropagated
                                       ++ depsHostHost ++ depsHostHostPropagated
                                       ++ buildInputs ++ propagatedBuildInputs
@@ -235,6 +236,8 @@ in rec {
             ++ optional (elem "host"   configurePlatforms) "--host=${stdenv.hostPlatform.config}"
             ++ optional (elem "target" configurePlatforms) "--target=${stdenv.targetPlatform.config}";
 
+          inherit patches;
+
           inherit doCheck doInstallCheck;
 
           inherit outputs;
@@ -243,7 +246,7 @@ in rec {
             (/**/ if lib.isString cmakeFlags then [cmakeFlags]
              else if cmakeFlags == null      then []
              else                                     cmakeFlags)
-          ++ lib.optional (stdenv.hostPlatform.uname.system != null) "-DCMAKE_SYSTEM_NAME=${stdenv.hostPlatform.uname.system}"
+          ++ [ "-DCMAKE_SYSTEM_NAME=${lib.findFirst lib.isString "Generic" [ stdenv.hostPlatform.uname.system ]}" ]
           ++ lib.optional (stdenv.hostPlatform.uname.processor != null) "-DCMAKE_SYSTEM_PROCESSOR=${stdenv.hostPlatform.uname.processor}"
           ++ lib.optional (stdenv.hostPlatform.uname.release != null) "-DCMAKE_SYSTEM_VERSION=${stdenv.hostPlatform.release}"
           ++ lib.optional (stdenv.buildPlatform.uname.system != null) "-DCMAKE_HOST_SYSTEM_NAME=${stdenv.buildPlatform.uname.system}"
@@ -253,6 +256,8 @@ in rec {
           enableParallelChecking = attrs.enableParallelChecking or true;
         } // lib.optionalAttrs (hardeningDisable != [] || hardeningEnable != []) {
           NIX_HARDENING_ENABLE = enabledHardeningOptions;
+        } // lib.optionalAttrs (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform ? platform.gcc.arch) {
+          requiredSystemFeatures = attrs.requiredSystemFeatures or [] ++ [ "gccarch-${stdenv.hostPlatform.platform.gcc.arch}" ];
         } // lib.optionalAttrs (stdenv.buildPlatform.isDarwin) {
           inherit __darwinAllowLocalNetworking;
           # TODO: remove lib.unique once nix has a list canonicalization primitive

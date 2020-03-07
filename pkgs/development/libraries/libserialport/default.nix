@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, udev }:
+{ stdenv, fetchurl, pkgconfig, udev, darwin }:
 
 stdenv.mkDerivation rec {
   name = "libserialport-0.1.1";
@@ -9,14 +9,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ udev ];
+  buildInputs = stdenv.lib.optional stdenv.isLinux udev
+    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   meta = with stdenv.lib; {
     description = "Cross-platform shared library for serial port access";
     homepage = https://sigrok.org/;
     license = licenses.gpl3Plus;
-    # macOS, Windows and Android is also supported (according to upstream).
-    platforms = platforms.linux;
+    platforms = platforms.linux ++ platforms.darwin;
     maintainers = [ maintainers.bjornfor ];
   };
 }

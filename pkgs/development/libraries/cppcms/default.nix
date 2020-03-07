@@ -1,11 +1,11 @@
 { stdenv, fetchurl, cmake, pcre, zlib, python, openssl }:
 
 stdenv.mkDerivation rec {
-  name = "cppcms-${version}";
+  pname = "cppcms";
   version = "1.2.1";
 
   src = fetchurl {
-      url = "mirror://sourceforge/cppcms/${name}.tar.bz2";
+      url = "mirror://sourceforge/cppcms/${pname}-${version}.tar.bz2";
       sha256 = "0lmcdjzicmzhnr8pa0q3f5lgapz2cnh9w0dr56i4kj890iqwgzhh";
   };
 

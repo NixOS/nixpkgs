@@ -3,7 +3,7 @@
 let
   pname = "uucp";
   version = "11.0.0";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert stdenv.lib.versionAtLeast ocaml.version "4.01";
@@ -27,7 +27,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "An OCaml library providing efficient access to a selection of character properties of the Unicode character database";
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.vbgl ];

@@ -1,8 +1,8 @@
-{stdenv, fetchurl, SDL2, SDL2_image, libGLU_combined, cmake, physfs, boost, zip, zlib
+{stdenv, fetchurl, SDL2, SDL2_image, libGLU, libGL, cmake, physfs, boost, zip, zlib
 , pkgconfig, unzip}:
 stdenv.mkDerivation rec {
   version = "1.0";
-  name = "blobby-volley-${version}";
+  pname = "blobby-volley";
 
   src = fetchurl {
     url = "mirror://sourceforge/blobby/Blobby%20Volley%202%20%28Linux%29/1.0/blobby2-linux-1.0.tar.gz";
@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [SDL2 SDL2_image libGLU_combined cmake physfs boost zip zlib
+  buildInputs = [SDL2 SDL2_image libGLU libGL cmake physfs boost zip zlib
     unzip];
 
   preConfigure=''

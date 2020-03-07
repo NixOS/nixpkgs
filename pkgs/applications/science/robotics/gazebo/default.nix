@@ -24,10 +24,10 @@
 
 stdenv.mkDerivation rec {
   inherit version;
-  name = "gazebo-${version}";
+  pname = "gazebo";
 
   src = fetchurl {
-    url = "https://osrf-distributions.s3.amazonaws.com/gazebo/releases/${name}.tar.bz2";
+    url = "https://osrf-distributions.s3.amazonaws.com/gazebo/releases/${pname}-${version}.tar.bz2";
     sha256 = src-sha256;
   };
 

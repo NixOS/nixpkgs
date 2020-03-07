@@ -1,19 +1,24 @@
-{ stdenv, fetchurl, makeWrapper,
+{ stdenv, fetchFromGitLab, makeWrapper, nixosTests,
 # optional dependencies, the command(s) they provide
 coreutils,  # mktemp
 grub2,      # grub-mount and grub-probe
 cryptsetup, # cryptsetup
 libuuid,    # blkid and blockdev
 udev,    # udevadm udevinfo
-ntfs3g      # ntfs3g
+ntfs3g,     # ntfs3g
+dmraid,     # dmraid
+lvm2        # lvs
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.76";
-  name = "os-prober-${version}";
-  src = fetchurl {
-    url = "https://salsa.debian.org/philh/os-prober/-/archive/${version}/os-prober-${version}.tar.bz2";
-    sha256 = "07rw3092pckh21vx6y4hzqcn3wn4cqmwxaaiq100lncnhmszg11g";
+  version = "1.77";
+  pname = "os-prober";
+  src = fetchFromGitLab {
+    domain = "salsa.debian.org";
+    owner = "installer-team";
+    repo = pname;
+    rev = version;
+    sha256 = "05sji756xdl67pp2sf7rk0ih9h6f6kgk9nvxlyv1bzbmcizlh2d2";
   };
 
   buildInputs = [ makeWrapper ];
@@ -51,11 +56,14 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 udev coreutils cryptsetup libuuid ntfs3g ]} \
+        --suffix PATH : ${stdenv.lib.makeBinPath [ grub2 udev coreutils cryptsetup libuuid ntfs3g lvm2 dmraid ]} \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';
 
+  passthru.tests = {
+    os-prober = nixosTests.os-prober;
+  };
   meta = with stdenv.lib; {
     description = "Utility to detect other OSs on a set of drives";
     homepage = http://packages.debian.org/source/sid/os-prober;

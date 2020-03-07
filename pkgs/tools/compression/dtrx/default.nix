@@ -12,7 +12,7 @@ let
   ++ [ bzip2 xz lzip ]);
 
 in pythonPackages.buildPythonApplication rec {
-  name = "dtrx-${version}";
+  pname = "dtrx";
   version = "7.1";
 
   src = fetchurl {

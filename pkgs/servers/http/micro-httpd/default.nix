@@ -1,6 +1,6 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "micro-httpd-20140814";
 
   src = fetchurl {

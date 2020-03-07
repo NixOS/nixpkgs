@@ -1,18 +1,18 @@
 { lib, buildPythonPackage, fetchPypi, libxml2
-, m2crypto, ply, pyyaml, six, pbr, pythonOlder, isPy37, python
+, m2crypto, ply, pyyaml, six, pbr, pythonOlder, isPy37
 , httpretty, lxml, mock, pytest, requests, decorator, unittest2
 }:
 
 buildPythonPackage rec {
   pname = "pywbem";
-  version = "0.12.6";
+  version = "0.15.0";
 
   # Support added in master https://github.com/pywbem/pywbem/commit/b2f2f1a151a30355bbc6652dca69a7b30bfe941e awaiting release
   disabled = isPy37;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1dc6b745rrys600n05apdf6lb2vv5arlcwv7aiz9whgkbcd9qhki";
+    sha256 = "6f4304518b2ba89a97bd4f5f0decc8ad382b38a9303032ae17a1a601d95d24b8";
   };
 
   propagatedBuildInputs = [

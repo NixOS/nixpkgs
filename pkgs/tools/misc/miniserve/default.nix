@@ -1,19 +1,22 @@
-{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib }:
+{ stdenv, rustPlatform, fetchFromGitHub, cmake, pkgconfig, zlib, openssl }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "miniserve-${version}";
-  version = "0.2.1";
+  pname = "miniserve";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner  = "svenstaro";
     repo   = "miniserve";
     rev    = "v${version}";
-    sha256 = "1g8ggqs4fyscb1r98qj22f61jgkqnr4vdyps0drrvydl9lafdmpl";
+    sha256 = "06cxkkf3sf84prba65dymr1hg7mwizmsax0dlljh0lcmvlcpzi08";
   };
 
-  cargoSha256 = "18wyr0q5pkxds5hrl4g3mqmk46mr0nvs0id94aiw87729ly4vi8c";
+  cargoSha256 = "1v4rvk6h78797wshw3m0qabb7g4i4mbj1vs5d41izgb0swnzk4vy";
+
+  RUSTC_BOOTSTRAP = 1;
 
   nativeBuildInputs = [ cmake pkgconfig zlib ];
+  buildInputs = [ openssl ];
 
   meta = with stdenv.lib; {
     description = "For when you really just want to serve some files over HTTP right now!";

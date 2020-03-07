@@ -1,7 +1,7 @@
 { stdenv, fetchurl, flex, bison }:
 
 stdenv.mkDerivation rec {
-  name = "cproto-${version}";
+  pname = "cproto";
   version = "4.7o";
 
   src = fetchurl {

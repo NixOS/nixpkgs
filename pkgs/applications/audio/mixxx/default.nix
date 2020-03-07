@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, chromaprint, fetchpatch
+{ stdenv, mkDerivation, fetchFromGitHub, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , libGLU, libxcb, lilv, lv2, opusfile
@@ -6,24 +6,24 @@
 , qtx11extras, rubberband, scons, sqlite, taglib, upower, vampSDK
 }:
 
-stdenv.mkDerivation rec {
-  name = "mixxx-${version}";
-  version = "2.2.0";
+mkDerivation rec {
+  pname = "mixxx";
+  version = "2.2.3";
 
   src = fetchFromGitHub {
     owner = "mixxxdj";
     repo = "mixxx";
     rev = "release-${version}";
-    sha256 = "1rp2nyhz2j695k5kk0m94x30akwrlr9jgs0n4pi4snnvjpwmbfp9";
+    sha256 = "1h7q25fv62c5m74d4cn1m6mpanmqpbl2wqbch4qvn488jb2jw1dv";
   };
-
-  nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
     chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
     libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
     qtx11extras rubberband scons sqlite taglib upower vampSDK
   ];
+
+  enableParallelBuilding = true;
 
   sconsFlags = [
     "build=release"
@@ -32,10 +32,9 @@ stdenv.mkDerivation rec {
     "opus=1"
   ];
 
-  fixupPhase = ''
-    wrapProgram $out/bin/mixxx \
-      --set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive;
-  '';
+  qtWrapperArgs = [
+    "--set LOCALE_ARCHIVE ${glibcLocales}/lib/locale/locale-archive"
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://mixxx.org;

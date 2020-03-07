@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "plymouth-${version}";
+  pname = "plymouth";
   version = "0.9.4";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/plymouth/releases/${name}.tar.xz";
+    url = "https://www.freedesktop.org/software/plymouth/releases/${pname}-${version}.tar.xz";
     sha256 = "0l8kg7b2vfxgz9gnrn0v2w4jvysj2cirp0nxads5sy05397pl6aa";
   };
 

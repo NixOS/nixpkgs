@@ -1,12 +1,12 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "shaarli-${version}";
-  version = "0.10.3";
+  pname = "shaarli";
+  version = "0.11.1";
 
   src = fetchurl {
     url = "https://github.com/shaarli/Shaarli/releases/download/v${version}/shaarli-v${version}-full.tar.gz";
-    sha256 = "1jcjkyhqwh1pv0a98bidf8az6mc34l4snnsl6lc7m2gxr55099j8";
+    sha256 = "1psijcmi24hk0gxh1zdsm299xj11i7find2045nnx3r96cgnwjpn";
   };
 
   outputs = [ "out" "doc" ];

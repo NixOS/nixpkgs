@@ -1,11 +1,11 @@
 { stdenv, fetchurl, sqlite, postgresql, zlib, acl, ncurses, openssl, readline }:
 
 stdenv.mkDerivation rec {
-  name = "bacula-9.4.2";
+  name = "bacula-9.6.2";
 
   src = fetchurl {
     url    = "mirror://sourceforge/bacula/${name}.tar.gz";
-    sha256 = "1878jk541b8gvqbh15f0k3bvki1mx02q8mxnxhn9fdc1qk9083d4";
+    sha256 = "0hw7wvgh7ymyyar5diqjn9kflhcb8a9kjgz6phb0x9r06j8yahaw";
   };
 
   buildInputs = [ postgresql sqlite zlib ncurses openssl readline ]
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     "--with-logdir=/var/log/bacula"
     "--with-working-dir=/var/lib/bacula"
     "--mandir=\${out}/share/man"
-  ];
+  ] ++ stdenv.lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) "ac_cv_func_setpgrp_void=yes";
 
   installFlags = [
     "logdir=\${out}/logdir"
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Enterprise ready, Network Backup Tool";
-    homepage    = http://bacula.org/;
+    homepage    = "http://bacula.org/";
     license     = licenses.gpl2;
     maintainers = with maintainers; [ domenkozar lovek323 eleanor ];
     platforms   = platforms.all;

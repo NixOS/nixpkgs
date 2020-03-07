@@ -2,17 +2,19 @@
   runtimeShell }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rust-bindgen-${version}";
-  version = "0.42.2";
+  pname = "rust-bindgen";
+  version = "0.53.1";
+
+  RUSTFLAGS = "--cap-lints warn"; # probably OK to remove after update
 
   src = fetchFromGitHub {
-    owner = "rust-lang-nursery";
-    repo = "rust-bindgen";
+    owner = "rust-lang";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "10h0h7x8yf4dsyw2p2nas2jg5p3i29np0y3rfzrdq898d70gvq4j";
+    sha256 = "0zxqryqks9in9q7az0lrw8fq9wnc5p4yf6b1fxnzy2j6qhlw2c5c";
   };
 
-  cargoSha256 = "01jvi86xgz0r7ia9agnfpms6b6x68lzwj6f085m0w659i94acgpi";
+  cargoSha256 = "1fdgm83l9d469garfbgny6jk1fvwnwh32sybz9g7s2qzrvzzrx1d";
 
   libclang = llvmPackages.libclang.lib; #for substituteAll
 
@@ -56,8 +58,9 @@ rustPlatform.buildRustPackage rec {
       As with most compiler related software, this will only work
       inside a nix-shell with the required libraries as buildInputs.
     '';
-    homepage = https://github.com/rust-lang-nursery/rust-bindgen;
+    homepage = https://github.com/rust-lang/rust-bindgen;
     license = with licenses; [ bsd3 ];
+    platforms = platforms.unix;
     maintainers = [ maintainers.ralith ];
   };
 }

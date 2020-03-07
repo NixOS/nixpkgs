@@ -1,12 +1,12 @@
 { stdenv, fetchurl, SDL, SDL_mixer }:
 
 stdenv.mkDerivation rec {
-  name = "ltris-${version}";
+  pname = "ltris";
   version = "1.0.19";
   buildInputs = [ SDL SDL_mixer ];
 
   src = fetchurl {
-    url = "mirror://sourceforge/lgames/${name}.tar.gz";
+    url = "mirror://sourceforge/lgames/${pname}-${version}.tar.gz";
     sha256 = "1895wv1fqklrj4apkz47rnkcfhfav7zjknskw6p0886j35vrwslg";
   };
 

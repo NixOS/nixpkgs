@@ -8,7 +8,7 @@
 , cymem
 , darwin
 , msgpack-numpy
-, msgpack-python
+, msgpack
 , preshed
 , numpy
 , murmurhash
@@ -21,15 +21,18 @@
 , mock
 , wrapt
 , dill
+, blis
+, srsly
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "6.12.1";
+  version = "7.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1kkp8b3xcs3yn3ia5sxrh086c9xv27s2khdxd17abdypxxa99ich";
+    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -37,10 +40,11 @@ buildPythonPackage rec {
   ]);
 
   propagatedBuildInputs = [
+   blis
    cython
    cymem
    msgpack-numpy
-   msgpack-python
+   msgpack
    preshed
    numpy
    murmurhash
@@ -48,8 +52,10 @@ buildPythonPackage rec {
    cytoolz
    plac
    six
+   srsly
    wrapt
    dill
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
@@ -58,16 +64,6 @@ buildPythonPackage rec {
     mock
     pytest
   ];
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "pathlib==1.0.1" "pathlib>=1.0.0,<2.0.0" \
-      --replace "plac>=0.9.6,<1.0.0" "plac>=0.9.6" \
-      --replace "msgpack-numpy<0.4.4" "msgpack-numpy" \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel" \
-      --replace "wrapt>=1.10.0,<1.11.0" "wrapt" \
-      --replace "msgpack>=0.5.6,<0.6.0" "msgpack"
-  '';
 
   # Cannot find cython modules.
   doCheck = false;
@@ -80,6 +76,6 @@ buildPythonPackage rec {
     description = "Practical Machine Learning for NLP in Python";
     homepage = https://github.com/explosion/thinc;
     license = licenses.mit;
-    maintainers = with maintainers; [ aborsu sdll ];
+    maintainers = with maintainers; [ aborsu danieldk sdll ];
     };
 }

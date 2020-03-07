@@ -1,4 +1,4 @@
-import ../make-test.nix ({ pkgs, ...}: let
+import ../make-test-python.nix ({ pkgs, ...}: let
   adminpass = "notproduction";
   adminuser = "root";
 in {
@@ -21,6 +21,10 @@ in {
         config = {
           # Don't inherit adminuser since "root" is supposed to be the default
           inherit adminpass;
+        };
+        autoUpdateApps = {
+          enable = true;
+          startAt = "20:00";
         };
       };
     };
@@ -46,11 +50,15 @@ in {
       diff <(echo 'hi') <(${pkgs.rclone}/bin/rclone cat nextcloud:test-shared-file)
     '';
   in ''
-    startAll();
-    $nextcloud->waitForUnit("multi-user.target");
-    $nextcloud->succeed("curl -sSf http://nextcloud/login");
-    $nextcloud->succeed("${withRcloneEnv} ${copySharedFile}");
-    $client->waitForUnit("multi-user.target");
-    $client->succeed("${withRcloneEnv} ${diffSharedFile}");
+    start_all()
+    nextcloud.wait_for_unit("multi-user.target")
+    nextcloud.succeed("curl -sSf http://nextcloud/login")
+    nextcloud.succeed(
+        "${withRcloneEnv} ${copySharedFile}"
+    )
+    client.wait_for_unit("multi-user.target")
+    client.succeed(
+        "${withRcloneEnv} ${diffSharedFile}"
+    )
   '';
 })

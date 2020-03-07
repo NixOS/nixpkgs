@@ -11,7 +11,7 @@
 , fetchFromGitHub
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "wordfreq";
   version = "2.2.0";
 

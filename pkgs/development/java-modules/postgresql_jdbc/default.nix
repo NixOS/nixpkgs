@@ -1,7 +1,7 @@
 { stdenv, fetchMavenArtifact }:
 
 stdenv.mkDerivation rec {
-  name = "postgresql-jdbc-${version}";
+  pname = "postgresql-jdbc";
   version = "42.2.5";
 
   src = fetchMavenArtifact {

@@ -1,17 +1,17 @@
 { stdenv, fetchFromGitHub
 , autoreconfHook, docbook2x, pkgconfig
 , gtk3, dconf, gobject-introspection
-, ibus, python3 }:
+, ibus, python3, wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
-  name = "ibus-table-${version}";
-  version = "1.9.21";
+  pname = "ibus-table";
+  version = "1.9.25";
 
   src = fetchFromGitHub {
     owner  = "kaio";
     repo   = "ibus-table";
     rev    = version;
-    sha256 = "1rswbhbfvir443mw3p7xw6calkpfss4fcgn8nhfnrbin49q6w1vm";
+    sha256 = "0v570qpnb2q79aqr9f0xnska34y7hw34ibiwsf7ybcw69fhi1zkg";
   };
 
   postPatch = ''
@@ -30,22 +30,32 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    dconf gtk3 gobject-introspection ibus (python3.withPackages (pypkgs: with pypkgs; [ pygobject3 ]))
+    dconf
+    gtk3
+    ibus
+    (python3.withPackages (pypkgs: with pypkgs; [
+      pygobject3
+      (toPythonModule ibus)
+    ]))
   ];
 
-  nativeBuildInputs = [ autoreconfHook docbook2x pkgconfig python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    autoreconfHook
+    docbook2x
+    pkgconfig
+    gobject-introspection
+    wrapGAppsHook
+  ];
 
   postUnpack = ''
     substituteInPlace $sourceRoot/engine/Makefile.am \
       --replace "docbook2man" "docbook2man --sgml"
   '';
 
-  postFixup = "wrapPythonPrograms";
-
   meta = with stdenv.lib; {
     isIbusEngine = true;
     description  = "An IBus framework for table-based input methods";
-    homepage     = https://github.com/kaio/ibus-table/wiki;
+    homepage     = "https://github.com/kaio/ibus-table/wiki";
     license      = licenses.lgpl21;
     platforms    = platforms.linux;
     maintainers  = with maintainers; [ mudri ];

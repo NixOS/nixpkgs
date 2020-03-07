@@ -1,6 +1,6 @@
 {stdenv, autoreconfHook, fetchurl, gmp, openblas}:
 stdenv.mkDerivation rec {
-  name = "iml-${version}";
+  pname = "iml";
   version = "1.0.5";
   src = fetchurl {
     url = "http://www.cs.uwaterloo.ca/~astorjoh/iml-${version}.tar.bz2";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     description = ''Algorithms for computing exact solutions to dense systems of linear equations over the integers'';
     license = stdenv.lib.licenses.gpl2Plus;
     maintainers = [stdenv.lib.maintainers.raskin];
-    platforms = stdenv.lib.platforms.linux;
+    platforms = stdenv.lib.platforms.unix;
     homepage = https://cs.uwaterloo.ca/~astorjoh/iml.html;
     updateWalker = true;
   };

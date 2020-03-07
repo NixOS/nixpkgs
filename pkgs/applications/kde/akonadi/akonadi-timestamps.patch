@@ -1,8 +1,8 @@
-Index: akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
+Index: akonadi-19.08.0/src/server/storage/dbconfigmysql.cpp
 ===================================================================
---- akonadi-17.04.0.orig/src/server/storage/dbconfigmysql.cpp
-+++ akonadi-17.04.0/src/server/storage/dbconfigmysql.cpp
-@@ -229,8 +229,7 @@ bool DbConfigMysql::startInternalServer(
+--- akonadi-19.08.0.orig/src/server/storage/dbconfigmysql.cpp
++++ akonadi-19.08.0/src/server/storage/dbconfigmysql.cpp
+@@ -235,8 +235,7 @@ bool DbConfigMysql::startInternalServer(
      bool confUpdate = false;
      QFile actualFile(actualConfig);
      // update conf only if either global (or local) is newer than actual

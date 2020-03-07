@@ -1,5 +1,5 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
   extra-cmake-modules, kdoctools,
   kcompletion, kconfig, kconfigwidgets, kcoreaddons, kcrash,
   kdbusaddons, kdnssd, kglobalaccel, kiconthemes, kitemmodels,
@@ -9,7 +9,7 @@
   grantlee, grantleetheme, qtx11extras,
   akonadi, akonadi-notes, akonadi-search, kcalutils,
   kontactinterface, libkdepim, kmime, pimcommon, kpimtextedit,
-  kcalcore
+  kcalendarcore
 }:
 
 mkDerivation {
@@ -24,6 +24,6 @@ mkDerivation {
     akonadi akonadi-notes kcalutils kontactinterface
     libkdepim kmime pimcommon kpimtextedit
     akonadi-search
-    kcalcore
+    kcalendarcore
   ];
 }

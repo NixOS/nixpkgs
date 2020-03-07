@@ -3,7 +3,7 @@
 , utillinux, yodl }:
 
 stdenv.mkDerivation rec {
-  name = "bobcat-${version}";
+  pname = "bobcat";
   version = "4.08.03";
 
   src = fetchFromGitHub {

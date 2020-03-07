@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitHub
-, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
+, vala, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
 , gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
 
 
@@ -11,16 +11,16 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "sequeler";
-  version = "0.7.0";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "Alecaddd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1x2ikagjsgnhhhwkj09ihln17mq4wjq3wwbnf02j2p3jpp4i8w1i";
+    sha256 = "16vc3v9qls9fxg9h8fsi67z68s4acl5hj14gbcrnqm7mf3kmk3aw";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig pantheon.vala gettext wrapGAppsHook python3 desktop-file-utils ];
+  nativeBuildInputs = [ meson ninja pkgconfig vala gettext wrapGAppsHook python3 desktop-file-utils ];
 
   buildInputs = [ gtk3 glib pantheon.granite libgee sqlGda gtksourceview libxml2 libsecret libssh2 ];
 
@@ -28,6 +28,12 @@ in stdenv.mkDerivation rec {
     chmod +x build-aux/meson_post_install.py
     patchShebangs build-aux/meson_post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Friendly SQL Client";

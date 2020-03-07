@@ -1,12 +1,12 @@
 { stdenv, fetchurl, ncurses, zlib, bzip2, sqlite, pkgconfig, glib, gnutls }:
 
 stdenv.mkDerivation rec {
-  name = "ncdc-${version}";
-  version = "1.21";
+  pname = "ncdc";
+  version = "1.22.1";
 
   src = fetchurl {
     url = "https://dev.yorhel.nl/download/ncdc-${version}.tar.gz";
-    sha256 = "10hrk7pcvfl9cj6d0kr4qf3l068ikqhccbg7lf25pr2kln9lz412";
+    sha256 = "1bdgqd07f026qk6vpbxqsin536znd33931m3b4z44prlm9wd6pyi";
   };
 
   nativeBuildInputs = [ pkgconfig ];

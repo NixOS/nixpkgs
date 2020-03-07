@@ -2,20 +2,20 @@
 
 buildPythonPackage rec {
   pname = "httplib2";
-  version = "0.12.1";
+  version = "0.15.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4ba6b8fd77d0038769bf3c33c9a96a6f752bc4cdf739701fdcaf210121f399d4";
+    sha256 = "a5f914f18f99cb9541660454a159e3b3c63241fc3ab60005bb88d97cc7a4fb58";
   };
 
   # Needs setting up
   doCheck = false;
 
   meta = with lib; {
-    homepage = http://code.google.com/p/httplib2;
+    homepage = "https://github.com/httplib2/httplib2";
     description = "A comprehensive HTTP client library";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas ];
+    maintainers = with maintainers; [ ];
   };
 }

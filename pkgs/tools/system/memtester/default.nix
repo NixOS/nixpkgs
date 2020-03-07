@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "memtester-${version}";
+  pname = "memtester";
   version = "4.3.0";
 
   preConfigure = ''

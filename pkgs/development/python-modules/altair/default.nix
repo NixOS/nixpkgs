@@ -1,30 +1,55 @@
-{ stdenv, buildPythonPackage, fetchPypi, fetchpatch
-, pytest, jinja2, sphinx, vega_datasets, ipython, glibcLocales
-, entrypoints, jsonschema, numpy, pandas, six, toolz, typing
-, pythonOlder, recommonmark }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, entrypoints
+, glibcLocales
+, ipython
+, jinja2
+, jsonschema
+, numpy
+, pandas
+, pytest
+, pythonOlder
+, recommonmark
+, six
+, sphinx
+, toolz
+, typing
+, vega_datasets
+}:
 
 buildPythonPackage rec {
   pname = "altair";
-  version = "2.4.1";
+  version = "4.0.1";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1lqln4510qqqla6s8z4ca0271qrhq6yyznsijsdn3nssvxsynqpc";
+    sha256 = "145gjad415zjfp0ciq1b19i97ibavj8fki1vzhjppqz55k4704nk";
   };
 
-  postPatch = ''
-    # Tests require network
-    rm altair/examples/boxplot_max_min.py altair/examples/line_percent.py
-  '';
+  propagatedBuildInputs = [
+    entrypoints
+    jsonschema
+    numpy
+    pandas
+    six
+    toolz
+  ] ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
-  checkInputs = [ pytest jinja2 sphinx vega_datasets ipython glibcLocales recommonmark ];
-
-  propagatedBuildInputs = [ entrypoints jsonschema numpy pandas six toolz ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  checkInputs = [
+    glibcLocales
+    ipython
+    jinja2
+    pytest
+    recommonmark
+    sphinx
+    vega_datasets
+  ];
 
   checkPhase = ''
     export LANG=en_US.UTF-8
-    py.test altair --doctest-modules
+    # histogram_responsive.py attempt network access, and cannot be disabled through pytest flags
+    rm altair/examples/histogram_responsive.py
+    pytest --doctest-modules altair
   '';
 
   meta = with stdenv.lib; {

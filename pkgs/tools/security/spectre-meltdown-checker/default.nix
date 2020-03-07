@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, coreutils, binutils-unwrapped }:
 
 stdenv.mkDerivation rec {
-  name = "spectre-meltdown-checker-${version}";
-  version = "0.40";
+  pname = "spectre-meltdown-checker";
+  version = "0.43";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "spectre-meltdown-checker";
     rev = "v${version}";
-    sha256 = "0lhykc2andl0611bbs9b5dzp7c753crppvir2i7aw6bgwis23gjs";
+    sha256 = "1ys5m1yvm26qjlsjpqqd33lwpb880p0ay289hmifxjjawkqddjgg";
   };
 
   prePatch = ''

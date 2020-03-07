@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "1.0";
-  name = "bloaty-${version}";
+  pname = "bloaty";
 
   src = fetchFromGitHub {
     owner = "google";

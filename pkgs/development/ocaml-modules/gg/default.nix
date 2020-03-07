@@ -5,12 +5,12 @@ let
 
   pname = "gg";
   version = "0.9.1";
-  webpage = "http://erratique.ch/software/${pname}";
+  webpage = "https://erratique.ch/software/${pname}";
 in
 
 assert versionAtLeast (getVersion ocaml) "4.01.0";
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
 
   name = "ocaml-${pname}-${version}";
 
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
       matrices, quaternions, axis aligned boxes, colors, color spaces, and
       raster data.
     '';
-    homepage = "${webpage}";
+    homepage = webpage;
     platforms = ocaml.meta.platforms or [];
     license = licenses.bsd3;
     maintainers = [ maintainers.jirkamarsik ];

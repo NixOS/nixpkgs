@@ -1,6 +1,5 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
 , pytest
 , Wand
 , webob
@@ -16,7 +15,7 @@ buildPythonPackage rec {
   src = pkgs.fetchFromGitHub {
     repo = "sqlalchemy-imageattach";
     owner = "dahlia";
-    rev = "${version}";
+    rev = version;
     sha256 = "0ba97pn5dh00qvxyjbr0mr3pilxqw5kb3a6jd4wwbsfcv6nngqig";
   };
 

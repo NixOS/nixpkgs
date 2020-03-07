@@ -11,11 +11,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "gd-${version}";
+  pname = "gd";
   version = "2.2.5";
 
   src = fetchurl {
-    url = "https://github.com/libgd/libgd/releases/download/${name}/libgd-${version}.tar.xz";
+    url = "https://github.com/libgd/libgd/releases/download/${pname}-${version}/libgd-${version}.tar.xz";
     sha256 = "0lfy5f241sbv8s3splm2zqiaxv7lxrcshh875xryryk7yk5jqc4c";
   };
 

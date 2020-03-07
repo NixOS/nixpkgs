@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "libjpeg-drop-9b";
 
   srcs = [
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = []
-    ++ optional static [ "--enable-static" "--disable-shared" ];
+    ++ optionals static [ "--enable-static" "--disable-shared" ];
 
   outputs = [ "bin" "dev" "out" "man" ];
 

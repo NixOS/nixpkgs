@@ -1,7 +1,7 @@
 { stdenv, fetchgit, libtool, autoconf, automake }:
 
 stdenv.mkDerivation rec {
-  name = "libmkv-${version}";
+  pname = "libmkv";
   version = "0.6.5.1";
 
   src = fetchgit {

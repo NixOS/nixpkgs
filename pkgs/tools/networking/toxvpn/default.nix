@@ -4,14 +4,14 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
-  name = "toxvpn-2018-04-17";
+stdenv.mkDerivation {
+  name = "toxvpn-2019-09-09";
 
   src = fetchFromGitHub {
     owner  = "cleverca22";
     repo   = "toxvpn";
-    rev    = "dc766f98888f500ea51f002f59007eac3f3a0a06";
-    sha256 = "19br3fmrdm45fvymj9kvwikkn8m657yd5fkhx6grv35ckrj83mxz";
+    rev    = "45083dec172ce167f7ed84d571ec2822ebe4d51a";
+    sha256 = "193crarrx6q0zd2p6dn67pzv8kngwi440zm1y54njgcz0v3fpxmb";
   };
 
   buildInputs = [ libtoxcore nlohmann_json libsodium zeromq ]
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage    = https://github.com/cleverca22/toxvpn;
     license     = licenses.gpl3;
-    maintainers = with maintainers; [ cleverca22 obadz ];
+    maintainers = with maintainers; [ cleverca22 obadz toonn ];
     platforms   = platforms.linux ++ platforms.darwin;
   };
 }

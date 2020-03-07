@@ -1,28 +1,30 @@
 { stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
 , desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
-, libnotify, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext
+, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext, fetchpatch
 , sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
-, xvfb_run, dbus, shared-mime-info, libunwind, folks, glib-networking }:
+, xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking
+, gobject-introspection, gspell, appstream-glib, libytnef, libhandy }:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.32.0";
+  version = "3.34.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1mxlzkmwzg1fyf4r1izwnskm5z681c6hiby48n606n89gjcq565j";
+    sha256 = "1a6j70pzr57ga7m4nypqdkqwlzk2dablpz93yaympgrlqpf5zkvm";
   };
 
   nativeBuildInputs = [
     desktop-file-utils gettext itstool libxml2 meson ninja
-    pkgconfig vala wrapGAppsHook python3
+    pkgconfig vala wrapGAppsHook python3 appstream-glib
+    gobject-introspection
   ];
 
   buildInputs = [
     adwaita-icon-theme enchant2 gcr gmime gnome-online-accounts
     gsettings-desktop-schemas gtk3 isocodes json-glib libcanberra-gtk3
-    libgee libnotify libsecret sqlite webkitgtk glib-networking
-    libunwind folks
+    libgee libsecret sqlite webkitgtk glib-networking
+    libunwind libunity folks gspell libytnef libhandy
   ];
 
   checkInputs = [ xvfb_run dbus ];
@@ -31,9 +33,17 @@ stdenv.mkDerivation rec {
     "-Dcontractor=true" # install the contractor file (Pantheon specific)
   ];
 
+  patches = [
+    # Longer timeout for client test.
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/geary/raw/04be1e058a2e65075dd8cf8843d469ee45a9e09a/debian/patches/Bump-client-test-timeout-to-300s.patch";
+      sha256 = "1zvnq8bgla160531bjdra8hcg15mp8r1j1n53m1xfgm0ssnj5knx";
+    })
+  ];
+
   postPatch = ''
-    chmod +x build-aux/post_install.py
-    patchShebangs build-aux/post_install.py
+    chmod +x build-aux/post_install.py build-aux/git_version.py
+    patchShebangs build-aux/post_install.py build-aux/git_version.py
 
     chmod +x desktop/geary-attach
   '';

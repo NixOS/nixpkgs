@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2.1.11";
-  name = "ggobi-${version}";
+  pname = "ggobi";
 
   src = fetchurl {
     url = "http://www.ggobi.org/downloads/ggobi-${version}.tar.bz2";

@@ -5,17 +5,13 @@
 , libesmtp
 }:
 
-let
-  pname = "syslog-ng";
-in
-
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  version = "3.20.1";
+  pname = "syslog-ng";
+  version = "3.25.1";
 
   src = fetchurl {
-    url = "https://github.com/balabit/${pname}/releases/download/${name}/${name}.tar.gz";
-    sha256 = "185xixf48rp6isg2bs2y0hm6kf6a8ncncqgz4fd12jf6x6pmhn56";
+    url = "https://github.com/${pname}/${pname}/releases/download/${pname}-${version}/${pname}-${version}.tar.gz";
+    sha256 = "05v8vgs4fbzslqjca9zjk7hkiyb6yj4i2v0fi51xan6ypirrdjrl";
   };
 
   nativeBuildInputs = [ pkgconfig which ];
@@ -59,10 +55,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://www.balabit.com/network-security/syslog-ng/;
+    homepage = https://www.syslog-ng.com;
     description = "Next-generation syslogd with advanced networking and filtering capabilities";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ rickynils  fpletz ];
+    maintainers = with maintainers; [ fpletz ];
     platforms = platforms.linux;
   };
 }

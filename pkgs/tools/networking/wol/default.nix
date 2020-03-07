@@ -1,22 +1,24 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, perl }:
 
 stdenv.mkDerivation rec {
-  name = "wol-${version}";
+  pname = "wol";
   version = "0.7.1";
-  proj = "wake-on-lan";
-
-  enableParallelBuilding = true;
 
   src = fetchurl {
-    url = "mirror://sourceforge/${proj}/${name}.tar.gz";
+    url = "mirror://sourceforge/wake-on-lan/${pname}-${version}.tar.gz";
     sha256 = "08i6l5lr14mh4n3qbmx6kyx7vjqvzdnh3j9yfvgjppqik2dnq270";
   };
 
-  meta = {
+  # for pod2man in order to get a manpage
+  nativeBuildInputs = [ perl ];
+
+  enableParallelBuilding = true;
+
+  meta = with stdenv.lib; {
     description = "Implements Wake On LAN functionality in a small program";
     homepage = https://sourceforge.net/projects/wake-on-lan/;
-    license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [ makefu ];
+    license = licenses.gpl2;
+    maintainers = with maintainers; [ makefu ];
+    platforms = platforms.linux;
   };
 }

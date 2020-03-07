@@ -4,8 +4,8 @@ buildRubyGem rec {
   inherit ruby;
   name = "${gemName}-${version}";
   gemName = "gist";
-  version = "5.0.0";
-  source.sha256 = "1i0a73mzcjv4mj5vjqwkrx815ydsppx3v812lxxd9mk2s7cj1vyd";
+  version = "5.1.0";
+  source.sha256 = "0s69y6hi5iq5k6317j1kjmhi3mk586j1543q8wa608grwcmbq3fw";
 
   meta = with lib; {
     description = "Upload code to https://gist.github.com (or github enterprise)";

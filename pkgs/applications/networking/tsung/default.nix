@@ -5,7 +5,7 @@
   gnuplot }:
 
 stdenv.mkDerivation rec {
-  name = "tsung-${version}";
+  pname = "tsung";
   version = "1.7.0";
   src = fetchurl {
     url = "http://tsung.erlang-projects.org/dist/tsung-${version}.tar.gz";

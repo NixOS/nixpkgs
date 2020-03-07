@@ -1,0 +1,33 @@
+From 247baa7e9210bbe5462b6155014c3dcd4a60e56a Mon Sep 17 00:00:00 2001
+From: Peter Simons <simons@cryp.to>
+Date: Tue, 24 Sep 2019 10:27:17 +0200
+Subject: [PATCH] encodedock.cpp: connect to VAAPI via DRM, not X11
+
+---
+ src/docks/encodedock.cpp | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/src/docks/encodedock.cpp b/src/docks/encodedock.cpp
+index f2d64fc8..63d20787 100644
+--- a/src/docks/encodedock.cpp
++++ b/src/docks/encodedock.cpp
+@@ -766,7 +766,6 @@ Mlt::Properties* EncodeDock::collectProperties(int realtime)
+                     setIfNotSet(p, "pix_fmt", "nv12");
+                 } else if (vcodec.endsWith("_vaapi")) {
+                     setIfNotSet(p, "vprofile", "main");
+-                    setIfNotSet(p, "connection_type", "x11");
+                 }
+             }
+             setIfNotSet(p, "width", ui->widthSpinner->value());
+@@ -1890,7 +1889,7 @@ void EncodeDock::on_hwencodeCheckBox_clicked(bool checked)
+             QStringList args;
+             args << "-hide_banner" << "-f" << "lavfi" << "-i" << "color=s=640x360" << "-frames" << "1" << "-an";
+             if (codec.endsWith("_vaapi"))
+-                args << "-init_hw_device" << "vaapi=vaapi0:,connection_type=x11" << "-filter_hw_device" << "vaapi0" << "-vf" << "format=nv12,hwupload";
++                args << "-init_hw_device" << "vaapi=vaapi0" << "-filter_hw_device" << "vaapi0" << "-vf" << "format=nv12,hwupload";
+             else if (codec == "hevc_qsv")
+                 args << "-load_plugin" << "hevc_hw";
+             args << "-c:v" << codec << "-f" << "rawvideo" << "pipe:";
+-- 
+2.24.1
+

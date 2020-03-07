@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "sounddevice";
-  version = "0.3.12";
+  version = "0.3.14";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f59ae4e2ec12cb1e5940f06f08804ecca855d959de25ca45a3938de45d0f81a2";
+    sha256 = "c7b0f7ad86550668da55404eabcb63d4212ec622fcce86510092306b77d2e80a";
   };
 
   propagatedBuildInputs = [ cffi numpy portaudio ];

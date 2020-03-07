@@ -1,7 +1,7 @@
 { stdenv, fetchurl, autoreconfHook, makeWrapper
 , gnugrep, openssl }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "easyrsa-2.2.0";
 
   src = fetchurl {

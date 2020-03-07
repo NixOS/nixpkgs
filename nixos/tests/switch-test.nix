@@ -1,6 +1,6 @@
 # Test configuration switching.
 
-import ./make-test.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ...} : {
   name = "switch-test";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ gleber ];
@@ -28,7 +28,11 @@ import ./make-test.nix ({ pkgs, ...} : {
       exec env -i "$@" | tee /dev/stderr
     '';
   in ''
-    $machine->succeed("${stderrRunner} ${originalSystem}/bin/switch-to-configuration test");
-    $machine->succeed("${stderrRunner} ${otherSystem}/bin/switch-to-configuration test");
+    machine.succeed(
+        "${stderrRunner} ${originalSystem}/bin/switch-to-configuration test"
+    )
+    machine.succeed(
+        "${stderrRunner} ${otherSystem}/bin/switch-to-configuration test"
+    )
   '';
 })

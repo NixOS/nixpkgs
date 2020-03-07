@@ -1,69 +1,86 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    addressable (2.6.0)
+      public_suffix (>= 2.0.2, < 4.0)
     amq-protocol (2.0.1)
     amqp (1.6.0)
       amq-protocol (>= 2.0.1)
       eventmachine
-    aws-sdk (2.10.34)
-      aws-sdk-resources (= 2.10.34)
-    aws-sdk-core (2.10.34)
+    aws-eventstream (1.0.3)
+    aws-sdk (2.11.264)
+      aws-sdk-resources (= 2.11.264)
+    aws-sdk-core (2.11.264)
       aws-sigv4 (~> 1.0)
       jmespath (~> 1.0)
-    aws-sdk-resources (2.10.34)
-      aws-sdk-core (= 2.10.34)
-    aws-sigv4 (1.0.1)
+    aws-sdk-resources (2.11.264)
+      aws-sdk-core (= 2.11.264)
+    aws-sigv4 (1.1.0)
+      aws-eventstream (~> 1.0, >= 1.0.2)
     cause (0.1)
     childprocess (0.5.8)
       ffi (~> 1.0, >= 1.0.11)
+    cookiejar (0.3.3)
     dentaku (2.0.9)
-    domain_name (0.5.20170404)
+    domain_name (0.5.20180417)
       unf (>= 0.0.5, < 1.0.0)
+    em-http-request (1.1.5)
+      addressable (>= 2.3.4)
+      cookiejar (!= 0.3.1)
+      em-socksify (>= 0.3)
+      eventmachine (>= 1.0.3)
+      http_parser.rb (>= 0.6.0)
     em-http-server (0.1.8)
       eventmachine
+    em-socksify (0.3.2)
+      eventmachine (>= 1.0.0.beta.4)
     em-worker (0.0.2)
       eventmachine
-    eventmachine (1.2.5)
-    ffi (1.9.18)
+    eventmachine (1.2.7)
+    ffi (1.9.21)
     http-cookie (1.0.3)
       domain_name (~> 0.5)
+    http_parser.rb (0.6.0)
     influxdb (0.3.13)
       cause
       json
-    jmespath (1.3.1)
+    jmespath (1.4.0)
     json (1.8.6)
     jsonpath (0.5.8)
       multi_json
-    mime-types (3.1)
+    mime-types (3.2.2)
       mime-types-data (~> 3.2015)
-    mime-types-data (3.2016.0521)
+    mime-types-data (3.2019.0331)
     mixlib-cli (1.7.0)
-    multi_json (1.12.1)
+    multi_json (1.13.1)
     netrc (0.11.0)
     oj (2.18.1)
     parse-cron (0.1.4)
+    public_suffix (3.0.3)
     rest-client (2.0.2)
       http-cookie (>= 1.0.2, < 2.0)
       mime-types (>= 1.16, < 4.0)
       netrc (~> 0.8)
-    sensu (1.0.3)
+    sensu (1.7.0)
+      em-http-request (= 1.1.5)
       em-http-server (= 0.1.8)
-      eventmachine (= 1.2.5)
+      eventmachine (= 1.2.7)
       parse-cron (= 0.1.4)
-      sensu-extension (= 1.5.1)
-      sensu-extensions (= 1.9.0)
-      sensu-json (= 2.1.0)
-      sensu-logger (= 1.2.1)
-      sensu-redis (= 2.2.0)
-      sensu-settings (= 10.3.0)
-      sensu-spawn (= 2.2.1)
-      sensu-transport (= 7.0.2)
-    sensu-extension (1.5.1)
+      sensu-extension (= 1.5.2)
+      sensu-extensions (= 1.11.0)
+      sensu-json (= 2.1.1)
+      sensu-logger (= 1.2.2)
+      sensu-redis (= 2.4.0)
+      sensu-settings (= 10.15.0)
+      sensu-spawn (= 2.5.0)
+      sensu-transport (= 8.2.0)
+    sensu-extension (1.5.2)
       eventmachine
-    sensu-extensions (1.9.0)
+    sensu-extensions (1.11.0)
       sensu-extension
-      sensu-extensions-check-dependencies (= 1.0.1)
+      sensu-extensions-check-dependencies (= 1.1.0)
       sensu-extensions-debug (= 1.0.0)
+      sensu-extensions-deregistration (= 1.0.0)
       sensu-extensions-json (= 1.0.0)
       sensu-extensions-occurrences (= 1.2.0)
       sensu-extensions-only-check-output (= 1.0.0)
@@ -71,9 +88,11 @@ GEM
       sensu-json (>= 1.1.0)
       sensu-logger
       sensu-settings
-    sensu-extensions-check-dependencies (1.0.1)
+    sensu-extensions-check-dependencies (1.1.0)
       sensu-extension
     sensu-extensions-debug (1.0.0)
+      sensu-extension
+    sensu-extensions-deregistration (1.0.0)
       sensu-extension
     sensu-extensions-json (1.0.0)
       sensu-extension
@@ -83,40 +102,41 @@ GEM
       sensu-extension
     sensu-extensions-ruby-hash (1.0.0)
       sensu-extension
-    sensu-json (2.1.0)
+    sensu-json (2.1.1)
       oj (= 2.18.1)
-    sensu-logger (1.2.1)
+    sensu-logger (1.2.2)
       eventmachine
       sensu-json
-    sensu-plugin (1.4.5)
+    sensu-plugin (1.4.7)
       json (< 2.0.0)
-      mixlib-cli (>= 1.5.0)
-    sensu-plugins-disk-checks (2.4.2)
+      mixlib-cli (~> 1.5)
+    sensu-plugins-disk-checks (4.0.1)
       sensu-plugin (~> 1.2)
       sys-filesystem (= 1.1.7)
-    sensu-plugins-http (2.6.0)
+    sensu-plugins-http (2.11.0)
       aws-sdk (~> 2.3)
       rest-client (~> 2.0.2)
       sensu-plugin (~> 1.2)
-    sensu-plugins-influxdb (1.2.0)
+    sensu-plugins-influxdb (1.4.0)
       dentaku (= 2.0.9)
       influxdb (= 0.3.13)
       jsonpath (= 0.5.8)
       sensu-plugin (~> 1.3)
-    sensu-plugins-logs (1.2.0)
+    sensu-plugins-logs (1.3.2)
       sensu-plugin (~> 1.2)
-    sensu-plugins-systemd (0.0.5)
+    sensu-plugins-systemd (0.1.0)
       sensu-plugin (~> 1.2)
-    sensu-redis (2.2.0)
+    sensu-redis (2.4.0)
       eventmachine
-    sensu-settings (10.3.0)
+    sensu-settings (10.15.0)
       parse-cron
       sensu-json (>= 1.1.0)
-    sensu-spawn (2.2.1)
+    sensu-spawn (2.5.0)
       childprocess (= 0.5.8)
       em-worker (= 0.0.2)
       eventmachine
-    sensu-transport (7.0.2)
+      ffi (= 1.9.21)
+    sensu-transport (8.2.0)
       amq-protocol (= 2.0.1)
       amqp (= 1.6.0)
       eventmachine
@@ -125,7 +145,7 @@ GEM
       ffi
     unf (0.1.4)
       unf_ext
-    unf_ext (0.0.7.4)
+    unf_ext (0.0.7.6)
 
 PLATFORMS
   ruby
@@ -139,4 +159,4 @@ DEPENDENCIES
   sensu-plugins-systemd
 
 BUNDLED WITH
-   1.15.3
+   1.17.2

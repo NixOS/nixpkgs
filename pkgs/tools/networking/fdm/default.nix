@@ -7,7 +7,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${baseName}-${version}";
 
   src = fetchFromGitHub {

@@ -1,0 +1,14 @@
+diff --git a/tensorflow/cc/saved_model/BUILD b/tensorflow/cc/saved_model/BUILD
+index 8626ed0087..27deb34387 100644
+--- a/tensorflow/cc/saved_model/BUILD
++++ b/tensorflow/cc/saved_model/BUILD
+@@ -49,9 +49,6 @@ cc_library(
+         # tf_lib depending on the build platform.
+         "//tensorflow/core:lib",
+         "//tensorflow/core:protos_all_cc",
+-    ]) + if_mobile([
+-        # Mobile-friendly SavedModel proto. See go/portable-proto for more info.
+-        "//tensorflow/core:saved_model_portable_proto",
+     ]) + if_android([
+         "//tensorflow/core:android_tensorflow_lib",
+     ]) + if_ios([

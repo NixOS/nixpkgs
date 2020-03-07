@@ -24,8 +24,8 @@ let
     genericName = "NixUI";
   };
 in
-stdenv.mkDerivation rec {
-  name = "nixui-${version}";
+stdenv.mkDerivation {
+  pname = "nixui";
   inherit version src;
   installPhase = ''
     mkdir -p $out/bin

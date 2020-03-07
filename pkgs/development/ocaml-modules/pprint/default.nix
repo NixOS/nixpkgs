@@ -26,7 +26,7 @@ stdenv.mkDerivation {
   createFindlibDestdir = true;
 
   dontBuild = true;
-  installFlags = "-C src";
+  installFlags = [ "-C" "src" ];
 
   meta = with stdenv.lib; {
     homepage = http://gallium.inria.fr/~fpottier/pprint/;

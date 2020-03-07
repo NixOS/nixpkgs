@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub, rustPlatform, libiconv, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "git-absorb-${version}";
-  version = "0.3.0";
+  pname = "git-absorb";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner  = "tummychow";
-    repo   = "git-absorb";
+    repo   = pname;
     rev    = "refs/tags/${version}";
-    sha256 = "1dm442lyk7f44bshm2ajync5pzdwvdc5xfpw2lkvjzxflmh5572z";
+    sha256 = "0lggv3knh6iglkh8x2zqvqcs3dlwfsdiclg7pmdrycny72la4k2j";
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libiconv Security ];
 
-  cargoSha256 = "0fvxs09b9x38vp0psvlvbj09myxrhabp95pp3nz7nxsgr7fxflrr";
+  cargoSha256 = "13gikjswbb0kkpvb5zhj88qq5l667624gkfb7hd3zygh4qyhsy05";
 
   meta = with stdenv.lib; {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
     maintainers = [ maintainers.marsam ];

@@ -1,9 +1,9 @@
-{ lib, stdenv, fetchurl, python, pkgconfig, perl, libxslt, docbook_xsl
-, fetchpatch
+{ lib, stdenv, fetchurl, fetchpatch, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+, fixDarwinDylibNames
 , docbook_xml_dtd_42, readline
 , popt, iniparser, libbsd, libarchive, libiconv, gettext
 , krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme
+, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme, libuuid
 
 , enableLDAP ? false
 , enablePrinting ? false
@@ -19,36 +19,42 @@
 with lib;
 
 stdenv.mkDerivation rec {
-  name = "samba-${version}";
-  version = "4.10.2";
+  pname = "samba";
+  version = "4.11.5";
 
   src = fetchurl {
-    url = "mirror://samba/pub/samba/stable/${name}.tar.gz";
-    sha256 = "112yizx9cpjhi8c7mh9znqg0c9dkj3383hwr8dhgpykl3g2zv347";
+    url = "mirror://samba/pub/samba/stable/${pname}-${version}.tar.gz";
+    sha256 = "0gyr773dl0krcra6pvyp8i9adj3r16ihrrm2b71c0974cbzrkqpk";
   };
 
   outputs = [ "out" "dev" "man" ];
 
-  patches =
-    [ ./4.x-no-persistent-install.patch
-      ./patch-source3__libads__kerberos_keytab.c.patch
-      ./4.x-no-persistent-install-dynconfig.patch
-      ./4.x-fix-makeflags-parsing.patch
-    ];
+  patches = [
+    ./4.x-no-persistent-install.patch
+    ./patch-source3__libads__kerberos_keytab.c.patch
+    ./4.x-no-persistent-install-dynconfig.patch
+    ./4.x-fix-makeflags-parsing.patch
+    (fetchpatch {
+      name = "test-oLschema2ldif-fmemopen.patch";
+      url = "https://gitlab.com/samba-team/samba/commit/5e517e57c9d4d35e1042a49d3592652b05f0c45b.patch";
+      sha256 = "1bbldf794svsdvcbp649imghmj0jck7545d3k9xs953qkkgwkbxi";
+    })
+  ];
 
-  buildInputs =
-    [ python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-      docbook_xml_dtd_45 */ readline popt iniparser jansson
-      libbsd libarchive zlib fam libiconv gettext libunwind krb5Full
-    ]
-    ++ optionals stdenv.isLinux [ libaio systemd ]
+  nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
+
+  buildInputs = [
+    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
+    docbook_xml_dtd_45 */ readline popt iniparser jansson
+    libbsd libarchive zlib fam libiconv gettext libunwind krb5Full gnutls
+  ] ++ optionals stdenv.isLinux [ libaio systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gnutls gpgme lmdb ]
+    ++ optionals enableDomainController [ gpgme lmdb ]
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
-    ++ optional (enableGlusterFS && stdenv.isLinux) glusterfs
+    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
     ++ optional enableAcl acl
     ++ optional enablePam pam;
 
@@ -62,24 +68,24 @@ stdenv.mkDerivation rec {
     patchShebangs ./buildtools/bin
   '';
 
-  configureFlags =
-    [ "--with-static-modules=NONE"
-      "--with-shared-modules=ALL"
-      "--with-system-mitkrb5"
-      "--with-system-mitkdc" "${krb5Full}"
-      "--enable-fhs"
-      "--sysconfdir=/etc"
-      "--localstatedir=/var"
-    ]
-    ++ [(if enableDomainController
+  configureFlags = [
+    "--with-static-modules=NONE"
+    "--with-shared-modules=ALL"
+    "--with-system-mitkrb5"
+    "--with-system-mitkdc" krb5Full
+    "--enable-fhs"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
+    "--disable-rpath"
+  ] ++ singleton (if enableDomainController
          then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")]
+         else "--without-ad-dc")
     ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
     ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
   preBuild = ''
-      export MAKEFLAGS="-j $NIX_BUILD_CORES"
+    export MAKEFLAGS="-j $NIX_BUILD_CORES"
   '';
 
   # Some libraries don't have /lib/samba in RPATH but need it.
@@ -99,7 +105,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.samba.org/;
+    homepage = "https://www.samba.org";
     description = "The standard Windows interoperability suite of programs for Linux and Unix";
     license = licenses.gpl3;
     platforms = platforms.unix;

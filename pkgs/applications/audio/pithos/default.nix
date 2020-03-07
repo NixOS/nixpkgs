@@ -1,33 +1,29 @@
-{ fetchFromGitHub, stdenv, pythonPackages, gtk3, gobject-introspection, libnotify
-, gst_all_1, wrapGAppsHook }:
+{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, appstream-glib
+, wrapGAppsHook, pythonPackages, gtk3, gnome3, gobject-introspection
+, libnotify, libsecret, gst_all_1 }:
 
 pythonPackages.buildPythonApplication rec {
   pname = "pithos";
-  version = "1.1.2";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo  = pname;
     rev = version;
-    sha256 = "0zk9clfawsnwmgjbk7y5d526ksxd1pkh09ln6sb06v4ygaiifcxp";
+    sha256 = "10nnm55ql86x1qfmq6dx9a1igf7myjxibmvyhd7fyv06vdhfifgy";
   };
 
-  # No tests in repo
-  doCheck = false;
+  format = "other";
 
   postPatch = ''
-    substituteInPlace setup.py --replace "/usr/share" "$out/share"
+    chmod +x meson_post_install.py
+    patchShebangs meson_post_install.py
   '';
 
-  postInstall = ''
-    mkdir -p $out/share/applications
-    cp -v data/pithos.desktop $out/share/applications
-  '';
-
-  buildInputs = [ wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkgconfig appstream-glib wrapGAppsHook ];
 
   propagatedBuildInputs =
-    [ gtk3 gobject-introspection libnotify ] ++
+    [ gtk3 gobject-introspection libnotify libsecret gnome3.adwaita-icon-theme ] ++
     (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad ]) ++
     (with pythonPackages; [ pygobject3 pylast ]);
 

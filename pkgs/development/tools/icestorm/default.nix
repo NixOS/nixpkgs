@@ -1,27 +1,32 @@
 { stdenv, fetchFromGitHub
-, pkgconfig, libftdi
+, pkgconfig, libftdi1
 , python3, pypy3
+
+# PyPy yields large improvements in build time and runtime performance,
+# and IceStorm isn't intended to be used as a library other than by the
+# nextpnr build process (which is also sped up by using PyPy), so we
+# use it by default. See 18839e1 for more details.
+, usePyPy ? stdenv.hostPlatform.system == "x86_64-linux"
 }:
 
-let
-  pypyCompatible = stdenv.isx86_64; /* pypy3 seems broken on i686 */
-  pythonPkg      = if pypyCompatible then pypy3 else python3;
-  pythonInterp   = pythonPkg.interpreter;
-in
-
 stdenv.mkDerivation rec {
-  name = "icestorm-${version}";
-  version = "2019.03.11";
+  pname = "icestorm";
+  version = "2019.09.13";
+
+  passthru = rec {
+    pythonPkg = if usePyPy then pypy3 else python3;
+    pythonInterp = pythonPkg.interpreter;
+  };
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
     repo   = "icestorm";
-    rev    = "fa1c932452e8efe1dfcc6ff095e3f7130a7906b1";
-    sha256 = "06rc1sfpdb2682dr1df3hk4m9padjnhjn0p35xq872kil276gnsk";
+    rev    = "0ec00d892a91cc68e45479b46161f649caea2933";
+    sha256 = "1qlh99fafb7xga702k64fmc9m700nsddrfgcq4x8qn8fplsb64f1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pythonPkg libftdi ];
+  buildInputs = [ passthru.pythonPkg libftdi1 ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
@@ -36,12 +41,12 @@ stdenv.mkDerivation rec {
       --replace /usr/local/share "$out/share"
 
     for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
-      substituteInPlace "$x" --replace python3 "${pythonInterp}"
+      substituteInPlace "$x" --replace python3 "${passthru.pythonInterp}"
     done
 
     for x in $(find . -type f -iname '*.py'); do
       substituteInPlace "$x" \
-        --replace '/usr/bin/env python3' '${pythonInterp}'
+        --replace '/usr/bin/env python3' '${passthru.pythonInterp}'
     done
   '';
 
@@ -55,7 +60,7 @@ stdenv.mkDerivation rec {
     '';
     homepage    = http://www.clifford.at/icestorm/;
     license     = stdenv.lib.licenses.isc;
-    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice ];
-    platforms   = stdenv.lib.platforms.linux;
+    maintainers = with stdenv.lib.maintainers; [ shell thoughtpolice emily ];
+    platforms   = stdenv.lib.platforms.all;
   };
 }

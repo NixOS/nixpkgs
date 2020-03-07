@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, perlPackages, pythonPackages }:
 
 stdenv.mkDerivation rec {
-  name = "shocco-${version}";
+  pname = "shocco";
   version = "1.0";
 
   src = fetchFromGitHub {

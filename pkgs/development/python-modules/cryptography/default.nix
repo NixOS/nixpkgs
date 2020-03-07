@@ -1,10 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , openssl
 , cryptography_vectors
 , darwin
-, asn1crypto
 , packaging
 , six
 , pythonOlder
@@ -20,21 +20,19 @@
 }:
 
 buildPythonPackage rec {
-  # also bump cryptography_vectors
   pname = "cryptography";
-  version = "2.5";
+  version = "2.8"; # Also update the hash in vectors.nix
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "00c4d7gvsymlaw0r13zrm32dcnarmpayjyrh65yymlmr6mrbcij9";
+    sha256 = "0l8nhw14npknncxdnp7n4hpmjyscly6g7fbivyxkjwvlv071zniw";
   };
 
   outputs = [ "out" "dev" ];
 
-  buildInputs = [ openssl cryptography_vectors ]
+  buildInputs = [ openssl ]
              ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
   propagatedBuildInputs = [
-    asn1crypto
     packaging
     six
   ] ++ stdenv.lib.optional (pythonOlder "3.4") enum34
@@ -42,23 +40,17 @@ buildPythonPackage rec {
   ++ stdenv.lib.optional (!isPyPy) cffi;
 
   checkInputs = [
-    pytest
-    pretend
-    iso8601
-    pytz
+    cryptography_vectors
     hypothesis
+    iso8601
+    pretend
+    pytest
+    pytz
   ];
 
+  # remove when https://github.com/pyca/cryptography/issues/4998 is fixed
   checkPhase = ''
-    py.test --disable-pytest-warnings tests
-  '';
-
-  # The test assumes that if we're on Sierra or higher, that we use `getentropy`, but for binary
-  # compatibility with pre-Sierra for binary caches, we hide that symbol so the library doesn't
-  # use it. This boils down to them checking compatibility with `getentropy` in two different places,
-  # so let's neuter the second test.
-  postPatch = ''
-    substituteInPlace ./tests/hazmat/backends/test_openssl.py --replace '"16.0"' '"99.0"'
+    py.test --disable-pytest-warnings tests -k 'not load_ecdsa_no_named_curve'
   '';
 
   # IOKit's dependencies are inconsistent between OSX versions, so this is the best we

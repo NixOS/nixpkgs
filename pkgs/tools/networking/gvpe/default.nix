@@ -1,7 +1,7 @@
 { stdenv, fetchurl, openssl, gmp, zlib, iproute, nettools }:
 
 stdenv.mkDerivation rec {
-  name = "gvpe-${version}";
+  pname = "gvpe";
   version = "3.0";
 
   src = fetchurl {

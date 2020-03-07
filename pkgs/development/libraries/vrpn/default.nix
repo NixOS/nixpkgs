@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, unzip, cmake, libGLU_combined }:
+{ stdenv, fetchFromGitHub, unzip, cmake, libGLU, libGL }:
 
 stdenv.mkDerivation rec {
   name    = "${pname}-${date}";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "032q295d68w34rk5q8nfqdd29s55n00bfik84y7xzkjrpspaprlh";
   };
 
-  buildInputs = [ unzip cmake libGLU_combined ];
+  buildInputs = [ unzip cmake libGLU libGL ];
 
   doCheck = false; # FIXME: test failure
   checkTarget = "test";

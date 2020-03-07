@@ -1,4 +1,5 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchurl
 , cmake
 , extra-cmake-modules
@@ -31,7 +32,7 @@
 , enableKisTablet ? false # enable improved graphics tablet support
 }:
 
-with stdenv.lib;
+with lib;
 
 let
   commonDeps = [
@@ -57,13 +58,13 @@ let
     qtx11extras
   ];
 
-in stdenv.mkDerivation rec {
-  name = "drawpile-${version}";
-  version = "2.1.7";
+in mkDerivation rec {
+  pname = "drawpile";
+  version = "2.1.17";
 
   src = fetchurl {
     url = "https://drawpile.net/files/src/drawpile-${version}.tar.gz";
-    sha256 = "1nk1rb1syrlkxq7qs101ifaf012mq42nmq1dbkssnx6niydi3bbd";
+    sha256 = "11lhn1mymhqk9g5sh384xhj3qw8h9lv88pr768y9q6kg3sl7nzzf";
   };
 
   nativeBuildInputs = [

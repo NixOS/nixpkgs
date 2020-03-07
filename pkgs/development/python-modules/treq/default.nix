@@ -17,9 +17,9 @@ buildPythonPackage rec {
     incremental
     service-identity
     twisted
+  ]
     # twisted [tls] requirements (we should find a way to list "extras")
-    twisted.extras.tls
-  ];
+    ++ twisted.extras.tls;
 
   checkInputs = [
     pep8

@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, lib }:
 
 stdenv.mkDerivation rec {
-  name = "vitetris-${version}";
+  pname = "vitetris";
   version = "0.58.0";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  makeFlags = "INSTALL=install";
+  makeFlags = [ "INSTALL=install" ];
 
   meta = {
     description = "Terminal-based Tetris clone by Victor Nilsson";

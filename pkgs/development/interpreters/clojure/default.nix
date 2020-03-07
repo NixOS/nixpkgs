@@ -1,32 +1,42 @@
-{ stdenv, fetchurl, jdk, rlwrap, makeWrapper }:
+{ stdenv, fetchurl, jdk11, rlwrap, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "clojure-${version}";
-  version = "1.10.0.442";
+  pname = "clojure";
+  version = "1.10.1.507";
 
   src = fetchurl {
     url = "https://download.clojure.org/install/clojure-tools-${version}.tar.gz";
-    sha256 = "147pkid3pvw60gq8vansid3x6wwfy9pqdbla3wfd5qaxqbcrhclw";
+    sha256 = "1k0jwa3481g3mkalwlb9gkcz9aq9zjpwmzckv823fr2d8djp41cc";
   };
+
+  patches = [ ./TDEPS-150.patch ];
 
   buildInputs = [ makeWrapper ];
 
-  outputs = [ "out" "prefix" ];
+  installPhase =
+    let
+      binPath = stdenv.lib.makeBinPath [ rlwrap jdk11 ];
+    in
+      ''
+        mkdir -p $out/libexec
+        cp clojure-tools-${version}.jar $out/libexec
+        cp example-deps.edn $out
+        cp deps.edn $out
 
-  installPhase = let
-    binPath = stdenv.lib.makeBinPath [ rlwrap jdk ];
-  in ''
-    mkdir -p $prefix/libexec
-    cp clojure-tools-${version}.jar $prefix/libexec
-    cp {,example-}deps.edn $prefix
+        substituteInPlace clojure --replace PREFIX $out
 
-    substituteInPlace clojure --replace PREFIX $prefix
+        install -Dt $out/bin clj clojure
+        wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
+        wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
+      '';
 
-    install -Dt $out/bin clj clojure
-    wrapProgram $out/bin/clj --prefix PATH : $out/bin:${binPath}
-    wrapProgram $out/bin/clojure --prefix PATH : $out/bin:${binPath}
+  doInstallCheck = true;
+  installCheckPhase = ''
+    CLJ_CONFIG=$out CLJ_CACHE=$out/libexec $out/bin/clojure \
+      -Spath \
+      -Sverbose \
+      -Scp $out/libexec/clojure-tools-${version}.jar
   '';
-
   meta = with stdenv.lib; {
     description = "A Lisp dialect for the JVM";
     homepage = https://clojure.org/;
@@ -50,7 +60,7 @@ stdenv.mkDerivation rec {
       offers a software transactional memory system and reactive Agent
       system that ensure clean, correct, multithreaded designs.
     '';
-    maintainers = with maintainers; [ the-kenny ];
+    maintainers = with maintainers; [ jlesquembre ];
     platforms = platforms.unix;
   };
 }

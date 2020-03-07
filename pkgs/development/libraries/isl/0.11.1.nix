@@ -1,6 +1,6 @@
 { stdenv, fetchurl, gmp }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "isl-0.11.1"; # CLooG 0.16.3 fails to build with ISL 0.08.
 
   src = fetchurl {

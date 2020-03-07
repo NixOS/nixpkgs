@@ -47,14 +47,14 @@ services.foundationdb.package = pkgs.foundationdb52; # FoundationDB 5.2.x
    After running <command>nixos-rebuild</command>, you can verify whether
    FoundationDB is running by executing <command>fdbcli</command> (which is
    added to <option>environment.systemPackages</option>):
-<programlisting>
-$ sudo -u foundationdb fdbcli
+<screen>
+<prompt>$ </prompt>sudo -u foundationdb fdbcli
 Using cluster file `/etc/foundationdb/fdb.cluster'.
 
 The database is available.
 
 Welcome to the fdbcli. For help, type `help'.
-fdb> status
+<prompt>fdb> </prompt>status
 
 Using cluster file `/etc/foundationdb/fdb.cluster'.
 
@@ -72,8 +72,8 @@ Cluster:
 
 ...
 
-fdb>
-</programlisting>
+<prompt>fdb></prompt>
+</screen>
   </para>
 
   <para>
@@ -82,8 +82,8 @@ fdb>
    cluster status, as a quick example. (This example uses
    <command>nix-shell</command> shebang support to automatically supply the
    necessary Python modules).
-<programlisting>
-a@link> cat fdb-status.py
+<screen>
+<prompt>a@link> </prompt>cat fdb-status.py
 #! /usr/bin/env nix-shell
 #! nix-shell -i python -p python pythonPackages.foundationdb52
 
@@ -103,11 +103,11 @@ def main():
 
 if __name__ == "__main__":
     main()
-a@link> chmod +x fdb-status.py
-a@link> ./fdb-status.py
+<prompt>a@link> </prompt>chmod +x fdb-status.py
+<prompt>a@link> </prompt>./fdb-status.py
 FoundationDB available: True
-a@link>
-</programlisting>
+<prompt>a@link></prompt>
+</screen>
   </para>
 
   <para>
@@ -266,10 +266,10 @@ services.foundationdb.dataDir = "/data/fdb";
    <emphasis>every</emphasis> node a coordinator automatically:
   </para>
 
-<programlisting>
-fdbcli> configure double ssd
-fdbcli> coordinators auto
-</programlisting>
+<screen>
+<prompt>fdbcli> </prompt>configure double ssd
+<prompt>fdbcli> </prompt>coordinators auto
+</screen>
 
   <para>
    This will transparently update all the servers within seconds, and
@@ -386,10 +386,10 @@ services.foundationdb.extraReadWritePaths = [ "/opt/fdb-backups" ];
    You can now perform a backup:
   </para>
 
-<programlisting>
-$ sudo -u foundationdb fdbbackup start  -t default -d file:///opt/fdb-backups
-$ sudo -u foundationdb fdbbackup status -t default
-</programlisting>
+<screen>
+<prompt>$ </prompt>sudo -u foundationdb fdbbackup start  -t default -d file:///opt/fdb-backups
+<prompt>$ </prompt>sudo -u foundationdb fdbbackup status -t default
+</screen>
  </section>
  <section xml:id="module-services-foundationdb-limitations">
   <title>Known limitations</title>

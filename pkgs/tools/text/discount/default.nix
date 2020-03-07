@@ -1,12 +1,14 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  version = "2.2.4";
-  name = "discount-${version}";
+  version = "2.2.6";
+  pname = "discount";
 
-  src = fetchurl {
-    url = "http://www.pell.portland.or.us/~orc/Code/discount/discount-${version}.tar.bz2";
-    sha256 = "199hwajpspqil0a4y3yxsmhdp2dm73gqkzfk4mrwzsmlq8y1xzbl";
+  src = fetchFromGitHub {
+    owner = "Orc";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1y066jkxfas0vdixbqq66j9p00a102sbfgq5gbrblfczqjrmc38w";
   };
 
   patches = ./fix-configure-path.patch;
@@ -19,11 +21,13 @@ stdenv.mkDerivation rec {
     "--with-fenced-code"
   ];
 
+  doCheck = true;
+
   meta = with stdenv.lib; {
     description = "Implementation of Markdown markup language in C";
     homepage = http://www.pell.portland.or.us/~orc/Code/discount/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ shell ndowens ];
+    maintainers = with maintainers; [ shell ];
     platforms = platforms.unix;
   };
 }

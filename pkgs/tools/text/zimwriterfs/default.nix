@@ -16,13 +16,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "zimwriterfs-${version}";
+  pname = "zimwriterfs";
   version = "1.0";
 
   src = fetchFromGitHub {
     owner = "wikimedia";
     repo = "openzim";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1vkrrq929a8s3m5rri1lg0l2vd0mc9n2fsb2z1g88k4n4j2l6f19";
   };
 

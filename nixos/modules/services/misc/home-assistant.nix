@@ -11,6 +11,9 @@ let
     (recursiveUpdate defaultConfig cfg.config) else cfg.config));
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
+    # Hack to support secrets, that are encoded as custom yaml objects,
+    # https://www.home-assistant.io/docs/configuration/secrets/
+    sed -i -e "s/'\!secret \(.*\)'/\!secret \1/" $out
   '';
 
   lovelaceConfigJSON = pkgs.writeText "ui-lovelace.json"
@@ -21,32 +24,23 @@ let
 
   availableComponents = cfg.package.availableComponents;
 
-  # Given component "parentConfig.platform", returns whether config.parentConfig
-  # is a list containing a set with set.platform == "platform".
+  usedPlatforms = config:
+    if isAttrs config then
+      optional (config ? platform) config.platform
+      ++ concatMap usedPlatforms (attrValues config)
+    else if isList config then
+      concatMap usedPlatforms config
+    else [ ];
+
+  # Given a component "platform", looks up whether it is used in the config
+  # as `platform = "platform";`.
   #
-  # For example, the component sensor.luftdaten is used as follows:
+  # For example, the component mqtt.sensor is used as follows:
   # config.sensor = [ {
-  #   platform = "luftdaten";
+  #   platform = "mqtt";
   #   ...
   # } ];
-  #
-  # Beginning with 0.87 Home Assistant is migrating their components to the
-  # scheme "platform.subComponent", e.g. "hue.light" instead of "light.hue".
-  # See https://developers.home-assistant.io/blog/2019/02/19/the-great-migration.html.
-  # Hence, we also check whether we find an entry in the config when interpreting
-  # the first part of the path as the component.
-  useComponentPlatform = component:
-    let
-      path = splitString "." component;
-      # old: platform is the last part of path
-      parentConfig = attrByPath (init path) null cfg.config;
-      platform = last path;
-      # new: platform is the first part of the path
-      parentConfig' = attrByPath (tail path) null cfg.config;
-      platform' = head path;
-    in
-      (isList parentConfig && any (item: item.platform or null == platform) parentConfig)
-      || (isList parentConfig' && any (item: item.platform or null == platform') parentConfig');
+  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
 
   # Returns whether component is used in config
   useComponent = component:
@@ -102,11 +96,28 @@ in {
 
     config = mkOption {
       default = null;
-      type = with types; nullOr attrs;
+      # Migrate to new option types later: https://github.com/NixOS/nixpkgs/pull/75584
+      type =  with lib.types; let
+          valueType = nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            (lazyAttrsOf valueType)
+            (listOf valueType)
+          ]) // {
+            description = "Yaml value";
+            emptyValue.value = {};
+          };
+        in valueType;
       example = literalExample ''
         {
           homeassistant = {
             name = "Home";
+            latitude = "!secret latitude";
+            longitude = "!secret longitude";
+            elevation = "!secret elevation";
+            unit_system = "metric";
             time_zone = "UTC";
           };
           frontend = { };
@@ -117,6 +128,8 @@ in {
       description = ''
         Your <filename>configuration.yaml</filename> as a Nix attribute set.
         Beware that setting this option will delete your previous <filename>configuration.yaml</filename>.
+        <link xlink:href="https://www.home-assistant.io/docs/configuration/secrets/">Secrets</link>
+        are encoded as strings as shown in the example.
       '';
     };
 
@@ -233,6 +246,7 @@ in {
         KillSignal = "SIGINT";
         PrivateTmp = true;
         RemoveIPC = true;
+        AmbientCapabilities = "cap_net_raw,cap_net_admin+eip";
       };
       path = [
         "/run/wrappers" # needed for ping
@@ -250,6 +264,7 @@ in {
       home = cfg.configDir;
       createHome = true;
       group = "hass";
+      extraGroups = [ "dialout" ];
       uid = config.ids.uids.hass;
     };
 

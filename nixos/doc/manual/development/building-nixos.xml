@@ -14,14 +14,14 @@
   Default CD/DVD configurations are available inside
   <filename>nixos/modules/installer/cd-dvd</filename>.
 <screen>
-$ git clone https://github.com/NixOS/nixpkgs.git
-$ cd nixpkgs/nixos
-$ nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-minimal.nix default.nix</screen>
+<prompt>$ </prompt>git clone https://github.com/NixOS/nixpkgs.git
+<prompt>$ </prompt>cd nixpkgs/nixos
+<prompt>$ </prompt>nix-build -A config.system.build.isoImage -I nixos-config=modules/installer/cd-dvd/installation-cd-minimal.nix default.nix</screen>
  </para>
  <para>
   Before burning your CD/DVD, you can check the content of the image by
   mounting anywhere like suggested by the following command:
 <screen>
-# mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
+<prompt># </prompt>mount -o loop -t iso9660 ./result/iso/cd.iso /mnt/iso</screen>
  </para>
 </chapter>

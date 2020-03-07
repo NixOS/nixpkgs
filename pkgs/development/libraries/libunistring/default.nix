@@ -1,11 +1,11 @@
 { fetchurl, stdenv, libiconv }:
 
 stdenv.mkDerivation rec {
-  name = "libunistring-${version}";
+  pname = "libunistring";
   version = "0.9.10";
 
   src = fetchurl {
-    url = "mirror://gnu/libunistring/${name}.tar.gz";
+    url = "mirror://gnu/libunistring/${pname}-${version}.tar.gz";
     sha256 = "02v17za10mxnj095x4pvm80jxyqwk93kailfc2j8xa1r6crmnbm8";
   };
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "--with-libiconv-prefix=${libiconv}"
   ];
 
-  doCheck = true;
+  doCheck = false;
 
   /* This seems to cause several random failures like these, which I assume
      is because of bad or missing target dependencies in their build system:

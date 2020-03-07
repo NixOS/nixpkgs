@@ -1,17 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, go-md2man
+{ lib, fetchFromGitHub, buildGoPackage, go-md2man
 , pkgconfig, libapparmor, apparmor-parser, libseccomp, which }:
 
 with lib;
 
 buildGoPackage rec {
-  name = "runc-${version}";
-  version = "1.0.0-rc7";
+  pname = "runc";
+  version = "1.0.0-rc10";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "1baryjpka8wmzc6c66bir12i390ix3641a06j33shpsb683ws3fj";
+    sha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
   };
 
   goPackagePath = "github.com/opencontainers/runc";
@@ -22,14 +22,14 @@ buildGoPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ go-md2man libseccomp libapparmor apparmor-parser which ];
 
-  makeFlags = ''BUILDTAGS+=seccomp BUILDTAGS+=apparmor'';
+  makeFlags = [ "BUILDTAGS+=seccomp" "BUILDTAGS+=apparmor" ];
 
   buildPhase = ''
     cd go/src/${goPackagePath}
     patchShebangs .
     substituteInPlace libcontainer/apparmor/apparmor.go \
       --replace /sbin/apparmor_parser ${apparmor-parser}/bin/apparmor_parser
-    make ${makeFlags} runc
+    make ${toString makeFlags} runc
   '';
 
   installPhase = ''
@@ -53,7 +53,7 @@ buildGoPackage rec {
     homepage = https://runc.io/;
     description = "A CLI tool for spawning and running containers according to the OCI specification";
     license = licenses.asl20;
-    maintainers = with maintainers; [ offline vdemeester ];
+    maintainers = with maintainers; [ offline vdemeester saschagrunert ];
     platforms = platforms.linux;
   };
 }

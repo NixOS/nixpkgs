@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "3.7";
-  name = "xtermcontrol-${version}";
+  pname = "xtermcontrol";
 
   src = fetchurl {
     url = "https://thrysoee.dk/xtermcontrol/xtermcontrol-${version}.tar.gz";

@@ -1,0 +1,9 @@
+@@ -35,7 +35,7 @@
+     BIN_DIR=${SMLNJ_HOME}/bin
+ fi
+ 
+-ARCH_N_OPSYS=`"$BIN_DIR/.arch-n-opsys $SIZE_OPT"`
++ARCH_N_OPSYS=`$BIN_DIR/.arch-n-opsys $SIZE_OPT`
+ if [ "$?" != "0" ]; then
+ 	die "unable to determine architecture/operating system"
+ fi

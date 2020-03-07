@@ -1,7 +1,7 @@
 { lib, fetchFromGitHub, buildGoPackage }:
 
 buildGoPackage rec {
-  name = "bosun-${version}";
+  pname = "bosun";
   version = "0.5.0";
 
   src = fetchFromGitHub {

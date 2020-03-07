@@ -50,7 +50,7 @@ in
       };
 
       dataDir = mkOption {
-        type = types.string;
+        type = types.path;
         default = "/var/lib/softether";
         description = ''
           Data directory for SoftEther VPN.
@@ -68,7 +68,7 @@ in
     mkMerge [{
       environment.systemPackages = [ package ];
 
-      systemd.services."softether-init" = {
+      systemd.services.softether-init = {
         description = "SoftEther VPN services initial task";
         wantedBy = [ "network.target" ];
         serviceConfig = {

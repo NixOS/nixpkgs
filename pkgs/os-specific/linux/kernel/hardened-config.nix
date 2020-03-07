@@ -83,6 +83,9 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
 
   SLAB_FREELIST_HARDENED = whenAtLeast "4.14" yes;
 
+  # Randomize page allocator when page_alloc.shuffle=1
+  SHUFFLE_PAGE_ALLOCATOR = whenAtLeast "5.2" yes;
+
   # Allow enabling slub/slab free poisoning with slub_debug=P
   SLUB_DEBUG = yes;
 
@@ -90,6 +93,9 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   PAGE_POISONING           = yes;
   PAGE_POISONING_NO_SANITY = yes;
   PAGE_POISONING_ZERO      = yes;
+
+  # Enable the SafeSetId LSM
+  SECURITY_SAFESETID = whenAtLeast "5.1" yes;
 
   # Reboot devices immediately if kernel experiences an Oops.
   PANIC_ON_OOPS = yes;

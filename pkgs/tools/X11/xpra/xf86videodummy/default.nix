@@ -1,7 +1,6 @@
 { stdenv, lib, fetchurl
 , xorgproto, xorgserver
-, pkgconfig
-, xpra }:
+, pkgconfig }:
 
 with lib;
 

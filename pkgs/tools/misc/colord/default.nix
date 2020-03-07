@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, nixosTests
 , bash-completion
 , glib
 , polkit
@@ -14,7 +15,6 @@
 , argyllcms
 , meson
 , ninja
-, libxml2
 , vala
 , libgudev
 , wrapGAppsHook
@@ -25,7 +25,6 @@
 , docbook_xml_dtd_412
 , gtk-doc
 , libxslt
-, substituteAll
 }:
 
 stdenv.mkDerivation rec {
@@ -98,6 +97,12 @@ stdenv.mkDerivation rec {
   PKG_CONFIG_SYSTEMD_TMPFILESDIR = "${placeholder "out"}/lib/tmpfiles.d";
   PKG_CONFIG_BASH_COMPLETION_COMPLETIONSDIR= "${placeholder "out"}/share/bash-completion/completions";
   PKG_CONFIG_UDEV_UDEVDIR = "${placeholder "out"}/lib/udev";
+
+  passthru = {
+    tests = {
+      installedTests = nixosTests.installed-tests.colord;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "System service to manage, install and generate color profiles to accurately color manage input and output devices";

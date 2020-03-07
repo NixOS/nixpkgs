@@ -2,10 +2,13 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, isPy38
 # python dependencies
 , click
 , configparser ? null
 , dateutil
+, etelemetry
+, filelock
 , funcsigs
 , future
 , futures
@@ -14,8 +17,10 @@
 , nibabel
 , numpy
 , packaging
+, pathlib2
 , prov
 , psutil
+, pybids
 , pydot
 , pytest
 , pytest_xdist
@@ -44,11 +49,11 @@ in
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.1.8";
+  version = "1.3.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d5eec6de7d8e7020106c42b37d17f99de92824440cc79dfa6080f7c2e6d9fecc";
+    sha256 = "bb190964b568d64b04b73d2aa7eae31061fdbc3051d8c27bb34b1632db07ec71";
   };
 
   postPatch = ''
@@ -59,6 +64,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     dateutil
+    etelemetry
+    filelock
     funcsigs
     future
     networkx
@@ -73,12 +80,14 @@ buildPythonPackage rec {
     simplejson
     traits
     xvfbwrapper
-  ] ++ stdenv.lib.optional (!isPy3k) [
+  ] ++ stdenv.lib.optionals (!isPy3k) [
     configparser
     futures
+    pathlib2 # darwin doesn't receive this transitively, but it is in install_requires
   ];
 
   checkInputs = [
+    pybids
     codecov
     glibcLocales
     mock
@@ -89,17 +98,19 @@ buildPythonPackage rec {
     which
   ];
 
+  # checks on darwin inspect memory which doesn't work in build environment
+  doCheck = !stdenv.isDarwin;
+  # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
-    LC_ALL="en_US.UTF-8" pytest -v --doctest-modules nipype
+    LC_ALL="en_US.UTF-8" pytest -v nipype -k 'not display'
   '';
 
-  # See: https://github.com/nipy/nipype/issues/2839
-  doCheck = false;
-
   meta = with stdenv.lib; {
-    homepage = http://nipy.org/nipype/;
+    homepage = https://nipy.org/nipype/;
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
+    # tests hang, blocking reviews of other packages
+    broken = isPy38;
   };
 }

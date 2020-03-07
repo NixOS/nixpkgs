@@ -6,6 +6,9 @@ let
       , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
+      # This is important to obtain a version of `libpq` that does not depend on systemd.
+      , enableSystemd ? (lib.versionAtLeast version "9.6" && !stdenv.isDarwin)
+
       # for postgreql.pkgs
       , this, self, newScope, buildEnv
 
@@ -17,11 +20,11 @@ let
     icuEnabled = atLeast "10";
 
   in stdenv.mkDerivation rec {
-    name = "postgresql-${version}";
+    pname = "postgresql";
     inherit version;
 
     src = fetchurl {
-      url = "mirror://postgresql/source/v${version}/${name}.tar.bz2";
+      url = "mirror://postgresql/source/v${version}/${pname}-${version}.tar.bz2";
       inherit sha256;
     };
 
@@ -31,16 +34,16 @@ let
     buildInputs =
       [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals icuEnabled [ icu ]
-      ++ lib.optionals (atLeast "9.6" && !stdenv.isDarwin) [ systemd ]
+      ++ lib.optionals enableSystemd [ systemd ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
 
     enableParallelBuilding = !stdenv.isDarwin;
 
-    makeFlags = [ "world" ];
+    buildFlags = [ "world" ];
 
-    NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+    NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
     # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
     preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
@@ -51,7 +54,7 @@ let
       "--sysconfdir=/etc"
       "--libdir=$(lib)/lib"
       "--with-system-tzdata=${tzdata}/share/zoneinfo"
-      (lib.optionalString (atLeast "9.6" && !stdenv.isDarwin) "--with-systemd")
+      (lib.optionalString enableSystemd "--with-systemd")
       (if stdenv.isDarwin then "--with-uuid=e2fs" else "--with-ossp-uuid")
     ] ++ lib.optionals icuEnabled [ "--with-icu" ];
 
@@ -60,6 +63,7 @@ let
         (if atLeast "9.6" then ./patches/less-is-more-96.patch             else ./patches/less-is-more.patch)
         (if atLeast "9.6" then ./patches/hardcode-pgxs-path-96.patch       else ./patches/hardcode-pgxs-path.patch)
         ./patches/specify_pkglibdir_at_runtime.patch
+        ./patches/findstring.patch
       ] ++ lib.optional stdenv.isLinux ./patches/socketdir-in-run.patch;
 
     installTargets = [ "install-world" ];
@@ -76,8 +80,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon.a" "$out"
-        moveToOutput "lib/libpgport.a" "$out"
+        moveToOutput "lib/libpgcommon*.a" "$out"
+        moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -100,6 +104,21 @@ let
         # initdb needs access to "locale" command from glibc.
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
+
+    doCheck = !stdenv.isDarwin;
+    # autodetection doesn't seem to able to find this, but it's there.
+    checkTarget = "check";
+
+    preCheck =
+      # On musl, comment skip the following tests, because they break due to
+      #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
+      # See also here:
+      #     https://git.alpinelinux.org/aports/tree/main/postgresql/disable-broken-tests.patch?id=6d7d32c12e073a57a9e5946e55f4c1fbb68bd442
+      if stdenv.hostPlatform.isMusl then ''
+        substituteInPlace src/test/regress/parallel_schedule \
+          --replace "subscription" "" \
+          --replace "object_address" ""
+      '' else null;
 
     doInstallCheck = false; # needs a running daemon?
 
@@ -125,7 +144,7 @@ let
       homepage    = https://www.postgresql.org;
       description = "A powerful, open source object-relational database system";
       license     = licenses.postgresql;
-      maintainers = with maintainers; [ ocharles thoughtpolice danbst ];
+      maintainers = with maintainers; [ ocharles thoughtpolice danbst globin ];
       platforms   = platforms.unix;
       knownVulnerabilities = optional (!atLeast "9.4")
         "PostgreSQL versions older than 9.4 are not maintained anymore!";
@@ -146,53 +165,59 @@ let
     # below. See #22653
     pathsToLink = ["/" "/bin"];
 
+    # Note: the duplication of executables is about 4MB size.
+    # So a nicer solution was patching postgresql to allow setting the
+    # libdir explicitely.
     postBuild = ''
       mkdir -p $out/bin
       rm $out/bin/{pg_config,postgres,pg_ctl}
       cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
       wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
     '';
+
+    passthru.version = postgresql.version;
+    passthru.psqlSchema = postgresql.psqlSchema;
   };
 
 in self: {
 
-  postgresql_9_4 = self.callPackage generic {
-    version = "9.4.21";
-    psqlSchema = "9.4";
-    sha256 = "01k0s3a7qy8639zsjp1bjbfnnymyl0rgyylrjbkm81m0779b8j80";
-    this = self.postgresql_9_4;
-    inherit self;
-  };
-
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.16";
+    version = "9.5.21";
     psqlSchema = "9.5";
-    sha256 = "0cg10ri0475vg1c8k1sb5qi4i64hiv9k7crmg15qvvnwsjanqmx4";
+    sha256 = "0b3kzc0431bvp55jns42q9h1119gy075mp4aywnkq93pm17nxdby";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.12";
+    version = "9.6.17";
     psqlSchema = "9.6";
-    sha256 = "114xay230xia2fagisxahs5fc2mza8hmmkr6ibd7nxllp938931f";
+    sha256 = "1hm0w6n988n9qn2wylhjq02i5ayzb16rzhgkcv09fpsl68ny7qgn";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.7";
+    version = "10.12";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "1piyfcrcqscjhnnwn91kdvr764s7d0qz4lgygf9bl6qc71ji1vdz";
+    sha256 = "1rsab4zf4rx7pvvhlwhb04kb95aiad9cwazc4ksbvg2gij47z3rq";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.2";
+    version = "11.7";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "01clq2lw0v83zh5dc89xdr3mmap0jr37kdkh401ph6f2177bjxi6";
+    sha256 = "04x343i4v0w4jf1v5ial8rwsizs1qhdjfbanbnibdys6i0xfjjij";
     this = self.postgresql_11;
+    inherit self;
+  };
+
+  postgresql_12 = self.callPackage generic {
+    version = "12.2";
+    psqlSchema = "12";
+    sha256 = "1pmmd59pvfs50gsi728bw9f1jl59xghsjdanfimph0659x6cq7dd";
+    this = self.postgresql_12;
     inherit self;
   };
 

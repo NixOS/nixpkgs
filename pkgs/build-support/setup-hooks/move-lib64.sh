@@ -8,7 +8,7 @@
 fixupOutputHooks+=(_moveLib64)
 
 _moveLib64() {
-    if [ "$dontMoveLib64" = 1 ]; then return; fi
+    if [ "${dontMoveLib64-}" = 1 ]; then return; fi
     if [ ! -e "$prefix/lib64" -o -L "$prefix/lib64" ]; then return; fi
     echo "moving $prefix/lib64/* to $prefix/lib"
     mkdir -p $prefix/lib
