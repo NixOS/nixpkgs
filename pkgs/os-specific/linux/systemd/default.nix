@@ -49,7 +49,6 @@ in stdenv.mkDerivation {
     ./0005-kmod-static-nodes.service-Don-t-require-lib-modules.patch
     ./0006-Look-for-fsck-in-the-right-place.patch
     ./0007-Add-some-NixOS-specific-unit-directories.patch
-    ./0008-Don-t-try-to-unmount-nix-or-nix-store.patch
     ./0009-Get-rid-of-a-useless-message-in-user-sessions.patch
     ./0010-hostnamed-localed-timedated-disable-methods-that-cha.patch
     ./0011-Fix-hwdb-paths.patch

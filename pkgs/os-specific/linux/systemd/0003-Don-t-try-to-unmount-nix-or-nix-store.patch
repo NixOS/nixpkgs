@@ -1,4 +1,4 @@
-From 620047803b70b941606398e77f253645058007dd Mon Sep 17 00:00:00 2001
+From fd9c882581877eef8ba1b34a9502a1ff546b3833 Mon Sep 17 00:00:00 2001
 From: Eelco Dolstra <eelco.dolstra@logicblox.com>
 Date: Fri, 12 Apr 2013 13:16:57 +0200
 Subject: [PATCH 03/27] Don't try to unmount /nix or /nix/store
@@ -7,11 +7,27 @@ They'll still be remounted read-only.
 
 https://github.com/NixOS/nixos/issues/126
 ---
+ src/core/mount.c      | 4 +++-
  src/shutdown/umount.c | 2 ++
- 1 file changed, 2 insertions(+)
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
+diff --git a/src/core/mount.c b/src/core/mount.c
+index eef362f0c8..600393ffc1 100644
+--- a/src/core/mount.c
++++ b/src/core/mount.c
+@@ -409,7 +409,9 @@ static bool mount_is_extrinsic(Mount *m) {
+ 
+         if (PATH_IN_SET(m->where,  /* Don't bother with the OS data itself */
+                         "/",
+-                        "/usr"))
++                        "/usr",
++                        "/nix/",
++                        "/nix/store"))
+                 return true;
+ 
+         if (PATH_STARTSWITH_SET(m->where,
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
-index 00e268855d..08f3590f2a 100644
+index 2d07d3d6c1..8b112f464e 100644
 --- a/src/shutdown/umount.c
 +++ b/src/shutdown/umount.c
 @@ -373,6 +373,8 @@ static int delete_dm(dev_t devnum) {
@@ -24,5 +40,5 @@ index 00e268855d..08f3590f2a 100644
                  || path_equal(path, "/usr")
  #endif
 -- 
-2.24.1
+2.25.1
 
