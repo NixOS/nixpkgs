@@ -31,7 +31,7 @@ let gnupg-minimal = gnupg.override {
   bzip2 = null;
 };
 in stdenv.mkDerivation {
-  version = "244.3";
+  version = "245";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
@@ -39,8 +39,8 @@ in stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "systemd";
     repo = "systemd-stable";
-    rev = "c4280c342bbf4fa8da833103482362236c18f835";
-    sha256 = "0y83nsrbdn0y3wfyfx53ac8c3wy9jrra86aaxix568vigi48g9zi";
+    rev = "ea500ac513cf51bcb79a5666f1519499d029428f";
+    sha256 = "10jjj3maqhi6qschw9c45phjg9azpp84wlfackcqc20vj5dqm5sq";
   };
 
   patches = [
