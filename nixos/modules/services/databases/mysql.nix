@@ -21,6 +21,11 @@ let
   installOptions =
     "${mysqldOptions} ${lib.optionalString isMysqlAtLeast57 "--insecure"}";
 
+  settingsFile = pkgs.writeText "my.cnf" (
+    generators.toINI { listsAsDuplicateKeys = true; } cfg.settings +
+    optionalString (cfg.extraOptions != null) "[mysqld]\n${cfg.extraOptions}"
+  );
+
 in
 
 {
@@ -76,9 +81,64 @@ in
         description = "Location where MySQL stores its table files";
       };
 
+      configFile = mkOption {
+        type = types.path;
+        default = settingsFile;
+        defaultText = "settingsFile";
+        description = ''
+          Override the configuration file used by MySQL. By default,
+          NixOS generates one automatically from <option>services.mysql.settings</option>.
+        '';
+        example = literalExample ''
+          pkgs.writeText "my.cnf" '''
+            [mysqld]
+            datadir = /var/lib/mysql
+            bind-address = 127.0.0.1
+            port = 3336
+            plugin-load-add = auth_socket.so
+
+            !includedir /etc/mysql/conf.d/
+          ''';
+        '';
+      };
+
+      settings = mkOption {
+        type = with types; attrsOf (attrsOf (oneOf [ bool int str (listOf str) ]));
+        default = {};
+        description = ''
+          MySQL configuration. Refer to
+          <link xlink:href="https://dev.mysql.com/doc/refman/5.7/en/server-system-variables.html"/>,
+          <link xlink:href="https://dev.mysql.com/doc/refman/8.0/en/server-system-variables.html"/>,
+          and <link xlink:href="https://mariadb.com/kb/en/server-system-variables/"/>
+          for details on supported values.
+
+          <note>
+            <para>
+              MySQL configuration options such as <literal>--quick</literal> should be treated as
+              boolean options and provided values such as <literal>true</literal>, <literal>false</literal>,
+              <literal>1</literal>, or <literal>0</literal>. See the provided example below.
+            </para>
+          </note>
+        '';
+        example = literalExample ''
+          {
+            mysqld = {
+              key_buffer_size = "6G";
+              table_cache = 1600;
+              log-error = "/var/log/mysql_err.log";
+              plugin-load-add = [ "server_audit" "ed25519=auth_ed25519" ];
+            };
+            mysqldump = {
+              quick = true;
+              max_allowed_packet = "16M";
+            };
+          }
+        '';
+      };
+
       extraOptions = mkOption {
-        type = types.lines;
-        default = "";
+        type = with types; nullOr lines;
+        default = null;
         example = ''
           key_buffer_size = 6G
           table_cache = 1600
@@ -252,9 +312,26 @@ in
 
   config = mkIf config.services.mysql.enable {
 
+    warnings = optional (cfg.extraOptions != null) "services.mysql.`extraOptions` is deprecated, please use services.mysql.`settings`.";
+
     services.mysql.dataDir =
       mkDefault (if versionAtLeast config.system.stateVersion "17.09" then "/var/lib/mysql"
                  else "/var/mysql");
+
+    services.mysql.settings.mysqld = mkMerge [
+      {
+        datadir = cfg.dataDir;
+        bind-address = mkIf (cfg.bind != null) cfg.bind;
+        port = cfg.port;
+        plugin-load-add = optional (cfg.ensureUsers != []) "auth_socket.so";
+      }
+      (mkIf (cfg.replication.role == "master" || cfg.replication.role == "slave") {
+        log-bin = "mysql-bin-${toString cfg.replication.serverId}";
+        log-bin-index = "mysql-bin-${toString cfg.replication.serverId}.index";
+        relay-log = "mysql-relay-bin";
+        server-id = cfg.replication.serverId;
+      })
+    ];
 
     users.users.mysql = {
       description = "MySQL server user";
@@ -266,25 +343,7 @@ in
 
     environment.systemPackages = [mysql];
 
-    environment.etc."my.cnf".text =
-    ''
-      [mysqld]
-      port = ${toString cfg.port}
-      datadir = ${cfg.dataDir}
-      ${optionalString (cfg.bind != null) "bind-address = ${cfg.bind}" }
-      ${optionalString (cfg.replication.role == "master" || cfg.replication.role == "slave")
-      ''
-        log-bin=mysql-bin-${toString cfg.replication.serverId}
-        log-bin-index=mysql-bin-${toString cfg.replication.serverId}.index
-        relay-log=mysql-relay-bin
-        server-id = ${toString cfg.replication.serverId}
-      ''}
-      ${optionalString (cfg.ensureUsers != [])
-      ''
-        plugin-load-add = auth_socket.so
-      ''}
-      ${cfg.extraOptions}
-    '';
+    environment.etc."my.cnf".source = cfg.configFile;
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 ${cfg.user} mysql -"
@@ -297,7 +356,7 @@ in
 
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
-        restartTriggers = [ config.environment.etc."my.cnf".source ];
+        restartTriggers = [ cfg.configFile ];
 
         unitConfig.RequiresMountsFor = "${cfg.dataDir}";
 
