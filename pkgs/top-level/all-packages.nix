@@ -20249,7 +20249,11 @@ in
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
 
-  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
+  kubernetes-helm = kubernetes-helm3;
+
+  kubernetes-helm2 = callPackage ../applications/networking/cluster/helm2 { };
+
+  kubernetes-helm3 = callPackage ../applications/networking/cluster/helm3 { };
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
