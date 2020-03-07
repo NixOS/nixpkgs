@@ -3635,12 +3635,10 @@ in {
     cudaSupport = pkgs.config.cudaSupport or false;
   };
 
-  pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
-
-  opt-einsum = if isPy27 then
-      callPackage ../development/python-modules/opt-einsum/2.nix {}
-    else
-      callPackage ../development/python-modules/opt-einsum {};
+  pytorch-bin = callPackage ../development/python-modules/pytorch/bin.nix {
+    cudnn = pkgs.cudnn_cudatoolkit_10_1;
+    cudatoolkit = pkgs.cudatoolkit_10_1;
+  };
 
   pytorchWithCuda = self.pytorch.override {
     cudaSupport = true;
@@ -3649,6 +3647,13 @@ in {
   pytorchWithoutCuda = self.pytorch.override {
     cudaSupport = false;
   };
+
+  pyro-ppl = callPackage ../development/python-modules/pyro-ppl {};
+
+  opt-einsum = if isPy27 then
+      callPackage ../development/python-modules/opt-einsum/2.nix {}
+    else
+      callPackage ../development/python-modules/opt-einsum {};
 
   pythondialog = callPackage ../development/python-modules/pythondialog { };
 
