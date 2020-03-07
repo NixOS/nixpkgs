@@ -48,6 +48,10 @@ buildRustPackage rec {
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;
     description = "Decentralized Issue Tracking for git";
+    # This has not had a release in years and its cargo vendored dependencies
+    # fail to compile. It also depends on an unsupported openssl:
+    # https://github.com/NixOS/nixpkgs/issues/77503
+    broken = true;
     license = licenses.gpl2;
     maintainers = with maintainers; [ Profpatsch matthiasbeyer ];
   };
