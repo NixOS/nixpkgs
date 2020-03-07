@@ -10,19 +10,19 @@
 
 buildGoModule rec {
   pname   = "minikube";
-  version = "1.6.2";
+  version = "1.8.1";
   # for -ldflags
-  commit  = "54f28ac5d3a815d1196cd5d57d707439ee4bb392";
+  commit  = "cbda04cf6bbe65e987ae52bb393c10099ab62014";
 
   goPackagePath = "k8s.io/minikube";
   subPackages   = [ "cmd/minikube" ];
-  modSha256     = "0ix9z0kifjlj9yjrj2m6lk1qya5cqz4v3pkp61cj6xfp36m4z3l2";
+  modSha256     = "1wyz8aq291lx614ilqrcgzdc8rjxbd6v3rv1fy6r2m6snyysycfn";
 
   src = fetchFromGitHub {
     owner  = "kubernetes";
     repo   = "minikube";
     rev    = "v${version}";
-    sha256 = "1s18asq6bn94i33chyzl8r8hkpq3cf7pip7byadf2i05n59i9ha2";
+    sha256 = "1nf0n701rw3anp8j7k3f553ipqwpzzxci41zsi0il4l35dpln5g0";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
