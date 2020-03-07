@@ -1284,6 +1284,8 @@ in
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
+  brutespray = callPackage ../tools/security/brutespray { };
+
   breakpointHook = assert stdenv.isLinux;
     makeSetupHook { } ../build-support/setup-hooks/breakpoint-hook.sh;
 
