@@ -1,4 +1,4 @@
-{ lib, runCommand, buildEnv, vscode, makeWrapper
+{ lib, stdenv, runCommand, buildEnv, vscode, makeWrapper
 , vscodeExtensions ? [] }:
 
 /*
@@ -42,8 +42,9 @@
 */
 
 let
+  inherit (stdenv.hostPlatform) system;
 
-  inherit (vscode) executableName;
+  inherit (vscode) executableName longName;
   wrappedPkgVersion = lib.getVersion vscode;
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
@@ -52,6 +53,9 @@ let
     paths = vscodeExtensions;
   };
 
+  extensionsFlag = lib.optionalString (vscodeExtensions != []) ''
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
+  '';
 in
 
 # When no extensions are requested, we simply redirect to the original
@@ -61,7 +65,17 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   dontPatchELF = true;
   dontStrip = true;
   meta = vscode.meta;
-} ''
+} (if system == "x86_64-darwin" then ''
+  mkdir -p $out/bin/
+  mkdir -p "$out/Applications/${longName}.app/Contents/MacOS"
+
+  for path in PkgInfo Frameworks Resources _CodeSignature Info.plist; do
+    cp -r "${vscode}/Applications/${longName}.app/Contents/$path" "$out/Applications/${longName}.app/Contents/"
+  done
+
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
+  makeWrapper "${vscode}/Applications/${longName}.app/Contents/MacOS/Electron" "$out/Applications/${longName}.app/Contents/MacOS/Electron" ${extensionsFlag}
+'' else ''
   mkdir -p "$out/bin"
   mkdir -p "$out/share/applications"
   mkdir -p "$out/share/pixmaps"
@@ -69,7 +83,5 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   ln -sT "${vscode}/share/pixmaps/code.png" "$out/share/pixmaps/code.png"
   ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
   ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
-  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
-    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
-  ''}
-''
+  makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${extensionsFlag}
+'')
