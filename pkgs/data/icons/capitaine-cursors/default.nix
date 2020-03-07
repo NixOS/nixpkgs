@@ -1,35 +1,38 @@
 { stdenv, fetchFromGitHub
-, inkscape, xcursorgen }:
+, bc, inkscape, xcursorgen }:
 
 stdenv.mkDerivation rec {
   pname = "capitaine-cursors";
-  version = "3";
+  version = "4";
 
   src = fetchFromGitHub {
     owner = "keeferrourke";
     repo = pname;
     rev = "r${version}";
-    sha256 = "0pnfbmrn9nv8pryv6cbjcq5hl9366hzvz1kd8vsdkgb2nlfv5gdv";
+    sha256 = "0652ydy73x29z7wc6ccyqihmfg4bk0ksl7yryycln6c7i0iqfmc9";
   };
 
   postPatch = ''
     patchShebangs .
   '';
 
-  buildInputs  =[
+  buildInputs = [
+    bc
     inkscape
     xcursorgen
   ];
 
   buildPhase = ''
-    # https://github.com/NixOS/nixpkgs/blob/master/pkgs/data/fonts/emojione/default.nix#L16
-    HOME="$NIX_BUILD_ROOT" ./build.sh
+    # Shut up inkscape's warnings
+    export HOME="$NIX_BUILD_ROOT"
+
+    ./build.sh --max-dpi xxxhd --type dark --platform unix
+    ./build.sh --max-dpi xxxhd --type light --platform unix
   '';
 
   installPhase = ''
     install -dm 0755 $out/share/icons
     cp -pr dist $out/share/icons/capitaine-cursors
-    cp -pr dist-white $out/share/icons/capitaine-cursors-white
   '';
 
   meta = with stdenv.lib; {
