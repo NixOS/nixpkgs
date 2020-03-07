@@ -140,6 +140,10 @@ let
 
   git-test = callPackage ./git-test { };
 
+  git-trim = callPackage ./git-trim {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
+
   git-workspace = callPackage ./git-workspace {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
