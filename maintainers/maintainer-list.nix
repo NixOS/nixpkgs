@@ -880,6 +880,12 @@
     githubId = 14111;
     name = "Brandon Dimcheff";
   };
+  be7a = {
+    email = "github@be7a.de";
+    github = "0xbe7a";
+    gitHubId = 6232980;
+    name = "Bela Stoyan";
+  };
   bendlas = {
     email = "herwig@bendlas.net";
     github = "bendlas";
