@@ -4225,7 +4225,6 @@ broken-packages:
   - dhall-check
   - dhall-fly
   - dhall-lsp-server
-  - dhall-nix
   - dhall-to-cabal
   - dhall-yaml
   - dhcp-lease-parser
