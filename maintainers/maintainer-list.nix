@@ -5492,6 +5492,12 @@
     githubId = 11016164;
     name = "Fedor Pakhomov";
   };
+  paluh = {
+    email = "paluho@gmail.com";
+    github = "paluh";
+    githubId = 190249;
+    name = "Tomasz Rybarczyk";
+  };
   pamplemousse = {
     email = "xav.maso@gmail.com";
     github = "Pamplemousse";

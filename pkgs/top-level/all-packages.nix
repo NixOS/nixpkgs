@@ -15409,6 +15409,8 @@ in
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
+  imgproxy = callPackage ../servers/imgproxy { };
+
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
   jboss = callPackage ../servers/http/jboss { };
