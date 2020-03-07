@@ -509,6 +509,8 @@ in
   abcm2ps = callPackage ../tools/audio/abcm2ps { };
 
   abcmidi = callPackage ../tools/audio/abcmidi { };
+  
+  alsaequal = callPackage ../tools/audio/alsaequal { };
 
   abduco = callPackage ../tools/misc/abduco { };
 
