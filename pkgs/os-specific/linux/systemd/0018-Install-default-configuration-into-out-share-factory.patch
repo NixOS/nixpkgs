@@ -11,7 +11,7 @@ this commit introduces two new configuration variables `factoryconfdir`
 and `factorypkgconfdir` to install systemd's own configuration into nix
 store again, while having executables looking up files in /etc.
 ---
- hwdb/meson.build               |  2 +-
+ hwdb.d/meson.build               |  2 +-
  meson.build                    | 11 +++++++----
  network/meson.build            |  2 +-
  src/core/meson.build           | 10 +++++-----
@@ -30,10 +30,10 @@ store again, while having executables looking up files in /etc.
  units/meson.build              |  3 ++-
  17 files changed, 30 insertions(+), 26 deletions(-)
 
-diff --git a/hwdb/meson.build b/hwdb/meson.build
+diff --git a/hwdb.d/meson.build b/hwdb.d/meson.build
 index badf39f555..8fd9c7639f 100644
---- a/hwdb/meson.build
-+++ b/hwdb/meson.build
+--- a/hwdb.d/meson.build
++++ b/hwdb.d/meson.build
 @@ -26,7 +26,7 @@ if conf.get('ENABLE_HWDB') == 1
                       install_dir : udevhwdbdir)
  

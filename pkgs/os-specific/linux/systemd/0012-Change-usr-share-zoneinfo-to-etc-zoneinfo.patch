@@ -1,15 +1,16 @@
-From 76f3fba3031d74647855ce0da2d4e317016cb7d6 Mon Sep 17 00:00:00 2001
+From 78479b75c9f9342646223b3db6b4b0744817dc24 Mon Sep 17 00:00:00 2001
 From: Nikolay Amiantov <ab@fmap.me>
 Date: Tue, 11 Oct 2016 13:12:08 +0300
-Subject: [PATCH 12/27] Change /usr/share/zoneinfo to /etc/zoneinfo
+Subject: [PATCH] Change /usr/share/zoneinfo to /etc/zoneinfo
 
 NixOS uses this path.
 ---
  man/localtime.xml         | 4 ++--
  src/basic/time-util.c     | 6 +++---
  src/firstboot/firstboot.c | 2 +-
+ src/nspawn/nspawn.c       | 4 ++--
  src/timedate/timedated.c  | 8 ++++----
- 4 files changed, 10 insertions(+), 10 deletions(-)
+ 5 files changed, 12 insertions(+), 12 deletions(-)
 
 diff --git a/man/localtime.xml b/man/localtime.xml
 index 0f1652ee2e..71c4f95c2e 100644
@@ -34,10 +35,10 @@ index 0f1652ee2e..71c4f95c2e 100644
      <literal>Etc/UTC</literal>. The resulting link should lead to the
      corresponding binary
 diff --git a/src/basic/time-util.c b/src/basic/time-util.c
-index e14ae8f2f7..a8a3488be1 100644
+index 105584e2e7..5238f69931 100644
 --- a/src/basic/time-util.c
 +++ b/src/basic/time-util.c
-@@ -1215,7 +1215,7 @@ int get_timezones(char ***ret) {
+@@ -1217,7 +1217,7 @@ int get_timezones(char ***ret) {
          n_allocated = 2;
          n_zones = 1;
  
@@ -46,7 +47,7 @@ index e14ae8f2f7..a8a3488be1 100644
          if (f) {
                  for (;;) {
                          _cleanup_free_ char *line = NULL;
-@@ -1310,7 +1310,7 @@ bool timezone_is_valid(const char *name, int log_level) {
+@@ -1312,7 +1312,7 @@ bool timezone_is_valid(const char *name, int log_level) {
          if (p - name >= PATH_MAX)
                  return false;
  
@@ -55,7 +56,7 @@ index e14ae8f2f7..a8a3488be1 100644
  
          fd = open(t, O_RDONLY|O_CLOEXEC);
          if (fd < 0) {
-@@ -1408,7 +1408,7 @@ int get_timezone(char **ret) {
+@@ -1410,7 +1410,7 @@ int get_timezone(char **ret) {
          if (r < 0)
                  return r; /* returns EINVAL if not a symlink */
  
@@ -77,11 +78,26 @@ index 528e6452cf..c712ca9072 100644
  
          (void) mkdir_parents(etc_localtime, 0755);
          if (symlink(e, etc_localtime) < 0)
+diff --git a/src/nspawn/nspawn.c b/src/nspawn/nspawn.c
+index 873a76596f..a024b10f32 100644
+--- a/src/nspawn/nspawn.c
++++ b/src/nspawn/nspawn.c
+@@ -1642,8 +1642,8 @@ static int userns_mkdir(const char *root, const char *path, mode_t mode, uid_t u
+ static const char *timezone_from_path(const char *path) {
+         return PATH_STARTSWITH_SET(
+                         path,
+-                        "../usr/share/zoneinfo/",
+-                        "/usr/share/zoneinfo/");
++                        "../etc/zoneinfo/",
++                        "/etc/zoneinfo/");
+ }
+ 
+ static bool etc_writable(void) {
 diff --git a/src/timedate/timedated.c b/src/timedate/timedated.c
-index fa20d22cde..8e6dbe1efb 100644
+index 5e2fb50d83..02eb2ca11d 100644
 --- a/src/timedate/timedated.c
 +++ b/src/timedate/timedated.c
-@@ -265,7 +265,7 @@ static int context_read_data(Context *c) {
+@@ -264,7 +264,7 @@ static int context_read_data(Context *c) {
  
          r = get_timezone(&t);
          if (r == -EINVAL)
@@ -90,7 +106,7 @@ index fa20d22cde..8e6dbe1efb 100644
          else if (r < 0)
                  log_warning_errno(r, "Failed to get target of /etc/localtime: %m");
  
-@@ -289,7 +289,7 @@ static int context_write_data_timezone(Context *c) {
+@@ -288,7 +288,7 @@ static int context_write_data_timezone(Context *c) {
  
          if (isempty(c->zone) || streq(c->zone, "UTC")) {
  
@@ -99,18 +115,18 @@ index fa20d22cde..8e6dbe1efb 100644
  
                          if (unlink("/etc/localtime") < 0 && errno != ENOENT)
                                  return -errno;
-@@ -297,9 +297,9 @@ static int context_write_data_timezone(Context *c) {
+@@ -296,9 +296,9 @@ static int context_write_data_timezone(Context *c) {
                          return 0;
                  }
  
 -                source = "../usr/share/zoneinfo/UTC";
-+                source = "zoneinfo/UTC";
++                source = "../etc/zoneinfo/UTC";
          } else {
 -                p = path_join("../usr/share/zoneinfo", c->zone);
-+                p = path_join("zoneinfo", c->zone);
++                p = path_join("../etc/zoneinfo", c->zone);
                  if (!p)
                          return -ENOMEM;
  
 -- 
-2.24.1
+2.25.1
 

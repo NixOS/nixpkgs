@@ -9,13 +9,13 @@ makes more sense to me: the device is ready; it's the filesystem
 that's not, but taking care of that is the responsibility of the mount
 unit.  (However, this ignores the fsck unit, so it's not perfect...)
 ---
- rules/99-systemd.rules.in | 4 ----
+ rules.d/99-systemd.rules.in | 4 ----
  1 file changed, 4 deletions(-)
 
-diff --git a/rules/99-systemd.rules.in b/rules/99-systemd.rules.in
+diff --git a/rules.d/99-systemd.rules.in b/rules.d/99-systemd.rules.in
 index c34b606216..3ab8c1c3fe 100644
---- a/rules/99-systemd.rules.in
-+++ b/rules/99-systemd.rules.in
+--- a/rules.d/99-systemd.rules.in
++++ b/rules.d/99-systemd.rules.in
 @@ -17,10 +17,6 @@ SUBSYSTEM=="ubi", TAG+="systemd"
  SUBSYSTEM=="block", TAG+="systemd"
  SUBSYSTEM=="block", ACTION=="add", ENV{DM_UDEV_DISABLE_OTHER_RULES_FLAG}=="1", ENV{SYSTEMD_READY}="0"

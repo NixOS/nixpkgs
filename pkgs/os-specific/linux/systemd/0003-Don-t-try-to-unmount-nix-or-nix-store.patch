@@ -12,20 +12,18 @@ https://github.com/NixOS/nixos/issues/126
  2 files changed, 5 insertions(+), 1 deletion(-)
 
 diff --git a/src/core/mount.c b/src/core/mount.c
-index eef362f0c8..600393ffc1 100644
+index a0dfa6a1a7..4ca6adcdc6 100644
 --- a/src/core/mount.c
 +++ b/src/core/mount.c
-@@ -409,7 +409,9 @@ static bool mount_is_extrinsic(Mount *m) {
+@@ -414,6 +414,8 @@ static bool mount_is_extrinsic(Mount *m) {
  
          if (PATH_IN_SET(m->where,  /* Don't bother with the OS data itself */
-                         "/",
--                        "/usr"))
-+                        "/usr",
-+                        "/nix/",
-+                        "/nix/store"))
+                         "/",       /* (strictly speaking redundant: should already be covered by the perpetual flag check above) */
++                        "/nix",
++                        "/nix/store",
+                         "/usr",
+                         "/etc"))
                  return true;
- 
-         if (PATH_STARTSWITH_SET(m->where,
 diff --git a/src/shutdown/umount.c b/src/shutdown/umount.c
 index 2d07d3d6c1..8b112f464e 100644
 --- a/src/shutdown/umount.c
