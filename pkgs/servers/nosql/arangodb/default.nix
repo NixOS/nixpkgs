@@ -1,7 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, openssl, zlib, cmake, python2, perl, snappy, lzo, which }:
+{ stdenv, gcc8Stdenv, lib, fetchFromGitHub, openssl_1_1, zlib, cmake, python2, python3, perl, snappy, lzo, which }:
 
 let
-  common = { version, sha256 }: stdenv.mkDerivation {
+  common = { version, sha256, stdenv, python }: stdenv.mkDerivation {
     pname = "arangodb";
     inherit version;
 
@@ -12,16 +12,16 @@ let
       inherit sha256;
     };
 
-    nativeBuildInputs = [ cmake python2 perl which ];
-    buildInputs = [ openssl zlib snappy lzo ];
+    nativeBuildInputs = [ cmake python perl which ];
+    buildInputs = [ openssl_1_1 zlib snappy lzo ];
 
     # prevent failing with "cmake-3.13.4/nix-support/setup-hook: line 10: ./3rdParty/rocksdb/RocksDBConfig.cmake.in: No such file or directory"
-    dontFixCmake       =                     lib.versionAtLeast version "3.5";
-    NIX_CFLAGS_COMPILE = lib.optionalString (lib.versionAtLeast version "3.5") "-Wno-error";
-    preConfigure       = lib.optionalString (lib.versionAtLeast version "3.5") "patchShebangs utils";
+    dontFixCmake       = true;
+    NIX_CFLAGS_COMPILE = "-Wno-error";
+    preConfigure       = "patchShebangs utils";
 
     postPatch = ''
-      sed -ie 's!/bin/echo!echo!' 3rdParty/V8/v*/gypfiles/*.gypi
+      find 3rdParty/V8  -type f  -name '*.gypi'  -exec sed -ie 's!/bin/echo!echo!' {} \;
 
       # with nixpkgs, it has no sense to check for a version update
       substituteInPlace js/client/client.js --replace "require('@arangodb').checkAvailableVersions();" ""
@@ -54,15 +54,33 @@ let
   };
 in {
   arangodb_3_3 = common {
-    version = "3.3.24";
-    sha256 = "18175789j4y586qvpcsaqxmw7d6vc3s29qm1fja5c7wzimx6ilyp";
+    version = "3.3.25";
+    sha256 = "0xpmksnvcwmv6dd9yig3ywbx12d1lxyp2wg68cg3rjlvsycrvm9n";
+    stdenv = gcc8Stdenv;
+    python = python2;
   };
   arangodb_3_4 = common {
     version = "3.4.8";
     sha256 = "0vm94lf1i1vvs04vy68bkkv9q43rsaf1y3kfs6s3jcrs3ay0h0jn";
+    stdenv = gcc8Stdenv;
+    python = python2;
   };
   arangodb_3_5 = common {
-    version = "3.5.1";
-    sha256 = "1jw3j7vaq3xgkxiqg0bafn4b2169jq7f3y0l7mrpnrpijn77rkrv";
+    version = "3.5.4";
+    sha256 = "1dcc4s415rararw5lw829p9c6qkj2nj5q0sb72rdyjm61l2q1zlj";
+    stdenv = stdenv;
+    python = python2;
+  };
+  arangodb_3_6 = common {
+    version = "3.6.2";
+    sha256 = "1wvx498jp3gi9r2zn6g8b4sc7i3arr125y0nw25w8gks8i8n4j48";
+    stdenv = stdenv;
+    python = python2;
+  };
+  arangodb_3_7 = common {
+    version = "3.7.0-alpha.1";
+    sha256 = "0a7vk8ffw6scz8014lz6v777fzyi4m0ghfqzbicfdy6acmpf9sql";
+    stdenv = stdenv;
+    python = python3;
   };
 }
