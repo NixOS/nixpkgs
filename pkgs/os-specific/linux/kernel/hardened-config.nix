@@ -8,7 +8,7 @@
 #
 # See also <nixos/modules/profiles/hardened.nix>
 
-{ stdenv, version }:
+{ stdenv, version, ia32Emulation ? false }:
 
 with stdenv.lib;
 with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
@@ -19,7 +19,7 @@ optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   DEFAULT_MMAP_MIN_ADDR = freeform "65536";  # Prevent allocation of first 64K of memory
 
   # Reduce attack surface by disabling various emulations
-  IA32_EMULATION     = no;
+  IA32_EMULATION     = if ia32Emulation then yes else no;
   X86_X32            = no;
   # Note: this config depends on EXPERT y and so will not take effect, hence
   # it is left "optional" for now.

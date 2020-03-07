@@ -16827,28 +16827,37 @@ in
   linuxPackages_latest_xen_dom0 = recurseIntoAttrs (linuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
 
   # Hardened linux
-  hardenedLinuxPackagesFor = kernel: linuxPackagesFor (kernel.override {
-    features.ia32Emulation = false;
+  hardenedLinuxPackagesFor = kernel: { ia32Emulation ? false }: linuxPackagesFor (kernel.override {
+    features = { inherit ia32Emulation; };
     structuredExtraConfig = import ../os-specific/linux/kernel/hardened-config.nix {
-      inherit stdenv;
+      inherit stdenv ia32Emulation;
       inherit (kernel) version;
     };
     kernelPatches = kernel.kernelPatches ++ [ kernelPatches.tag_hardened ];
     modDirVersionArg = kernel.modDirVersion + "-hardened";
   });
 
-  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux);
+  linuxPackages_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux {});
   linux_hardened = linuxPackages_hardened.kernel;
 
-  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest);
+  linuxPackages_hardened_ia32Emulation = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux { ia32Emulation = true; });
+  linux_hardened_ia32Emulation = linuxPackages_hardened_ia32Emulation.kernel;
+
+  linuxPackages_latest_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest {});
   linux_latest_hardened = linuxPackages_latest_hardened.kernel;
 
-  linuxPackages_testing_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_testing);
+  linuxPackages_latest_hardened_ia32Emulation = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_latest { ia32Emulation = true; });
+  linux_latest_hardened_ia32Emulation = linuxPackages_latest_hardened_ia32Emulation.kernel;
+
+  linuxPackages_testing_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_testing {});
   linux_testing_hardened = linuxPackages_testing_hardened.kernel;
 
-  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }));
+  linuxPackages_testing_hardened_ia32Emulation = recurseIntoAttrs (hardenedLinuxPackagesFor pkgs.linux_testing { ia32Emulation = true; });
+  linux_testing_hardened_ia32Emulation = linuxPackages_testing_hardened_ia32Emulation.kernel;
 
-  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }));
+  linuxPackages_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux.override { features.xen_dom0=true; }) {});
+
+  linuxPackages_latest_xen_dom0_hardened = recurseIntoAttrs (hardenedLinuxPackagesFor (pkgs.linux_latest.override { features.xen_dom0=true; }) {});
 
   # Hardkernel (Odroid) kernels.
   linuxPackages_hardkernel_4_14 = recurseIntoAttrs (linuxPackagesFor pkgs.linux_hardkernel_4_14);
