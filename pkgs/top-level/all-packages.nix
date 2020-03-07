@@ -5538,6 +5538,8 @@ in
 
   ipcalc = callPackage ../tools/networking/ipcalc {};
 
+  nemu = callPackage ../applications/misc/nemu {};
+
   netmask = callPackage ../tools/networking/netmask {};
 
   netifd = callPackage ../tools/networking/netifd {};
