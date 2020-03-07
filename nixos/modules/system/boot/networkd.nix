@@ -303,6 +303,7 @@ let
   checkDhcpV6 = checkUnitConfig "DHCPv6" [
     (assertOnlyFields [
       "UseDns" "UseNTP" "RapidCommit" "ForceDHCPv6PDOtherInformation"
+      "PrefixDelegationHint"
     ])
     (assertValueOneOf "UseDNS" boolValues)
     (assertValueOneOf "UseNTP" boolValues)
