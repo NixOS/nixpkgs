@@ -3509,6 +3509,8 @@ in {
 
   fastrlock = callPackage ../development/python-modules/fastrlock {};
 
+  fastscript = callPackage ../development/python-modules/fastai/script.nix {};
+
   feedgen = callPackage ../development/python-modules/feedgen { };
 
   feedgenerator = callPackage ../development/python-modules/feedgenerator {
