@@ -1336,19 +1336,17 @@ in
 
   cue2pops = callPackage ../tools/cd-dvd/cue2pops { };
 
-  cabal2nix = haskell.lib.overrideCabal (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskell.packages.ghc881.cabal2nix) (drv: {
-    isLibrary = false;
-    enableSharedExecutables = false;
-    executableToolDepends = (drv.executableToolDepends or []) ++ [ makeWrapper ];
-    postInstall = ''
-      exe=$out/libexec/${drv.pname}-${drv.version}/${drv.pname}
-      install -D $out/bin/${drv.pname} $exe
-      rm -rf $out/{bin,lib,share}
-      makeWrapper $exe $out/bin/${drv.pname} \
-        --prefix PATH ":" "${nix}/bin" \
-        --prefix PATH ":" "${nix-prefetch-scripts}/bin"
-    '' + (drv.postInstall or "");
-  });
+  cabal2nix-unwrapped = haskell.lib.justStaticExecutables (haskell.lib.generateOptparseApplicativeCompletion "cabal2nix" haskellPackages.cabal2nix);
+
+  cabal2nix = symlinkJoin {
+    inherit (cabal2nix-unwrapped) name meta;
+    nativeBuildInputs = [ makeWrapper ];
+    paths = [ cabal2nix-unwrapped ];
+    postBuild = ''
+      wrapProgram $out/bin/cabal2nix \
+        --prefix PATH ":" "${lib.makeBinPath [ nix nix-prefetch-scripts ]}"
+    '';
+  };
 
   stack2nix = with haskell.lib; overrideCabal (justStaticExecutables haskellPackages.stack2nix) (drv: {
     executableToolDepends = [ makeWrapper ];
