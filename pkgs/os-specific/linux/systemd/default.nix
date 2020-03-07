@@ -56,7 +56,6 @@ in stdenv.mkDerivation {
     ./0012-Change-usr-share-zoneinfo-to-etc-zoneinfo.patch
     ./0013-localectl-use-etc-X11-xkb-for-list-x11.patch
     ./0016-build-don-t-create-statedir-and-don-t-touch-prefixdi.patch
-    ./0017-Fix-mount-option-x-initrd.mount-handling-35268-16.patch
     ./0018-Install-default-configuration-into-out-share-factory.patch
     ./0019-inherit-systemd-environment-when-calling-generators.patch
     ./0020-reintroduce-the-no-such-path-PATH-that-was-dropped-s.patch
