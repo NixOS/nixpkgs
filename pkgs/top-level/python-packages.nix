@@ -935,6 +935,8 @@ in {
 
   nvchecker = callPackage ../development/python-modules/nvchecker { };
 
+  nvidia-ml-py3 = callPackage ../development/python-modules/nvidia-ml-py3 { };
+
   numericalunits = callPackage ../development/python-modules/numericalunits { };
 
   oath = callPackage ../development/python-modules/oath { };
