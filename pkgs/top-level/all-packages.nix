@@ -1964,6 +1964,8 @@ in
 
   massren = callPackage ../tools/misc/massren { };
 
+  medusa = callPackage ../tools/security/medusa { };
+
   megasync = libsForQt5.callPackage ../applications/misc/megasync { };
 
   megacmd = callPackage ../applications/misc/megacmd { };
