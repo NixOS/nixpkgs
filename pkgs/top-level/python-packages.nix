@@ -272,6 +272,8 @@ in {
 
   azure-batch = callPackage ../development/python-modules/azure-batch { };
 
+  azure-cognitiveservices-search-imagesearch = callPackage ../development/python-modules/azure-cognitiveservices-search-imagesearch { };
+
   azure-core = callPackage ../development/python-modules/azure-core { };
 
   azure-cosmosdb-nspkg = callPackage ../development/python-modules/azure-cosmosdb-nspkg { };
