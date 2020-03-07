@@ -80,15 +80,15 @@ let
   pos_str = meta: meta.position or "«unknown-file»";
 
   remediation = {
-    unfree = remediate_whitelist "Unfree";
-    broken = remediate_whitelist "Broken";
-    unsupported = remediate_whitelist "UnsupportedSystem";
+    unfree = remediate_whitelist "Unfree" "UNFREE";
+    broken = remediate_whitelist "Broken" "BROKEN";
+    unsupported = remediate_whitelist "UnsupportedSystem" "UNSUPPORTED_SYSTEM";
     blacklisted = x: "";
     insecure = remediate_insecure;
     broken-outputs = remediateOutputsToInstall;
     unknown-meta = x: "";
   };
-  remediate_whitelist = allow_attr: attrs:
+  remediate_whitelist = allow_attr: allow_env_var: attrs:
     ''
       a) For `nixos-rebuild` you can set
         { nixpkgs.config.allow${allow_attr} = true; }
@@ -96,7 +96,7 @@ let
 
       b) For `nix-env`, `nix-build`, `nix-shell` or any other Nix command you can add
         { allow${allow_attr} = true; }
-      to ~/.config/nixpkgs/config.nix.
+      to ~/.config/nixpkgs/config.nix, or you can set the NIXPKGS_ALLOW_${allow_env_var} environment variable.
     '';
 
   remediate_insecure = attrs:
@@ -127,6 +127,8 @@ let
                  "${getName attrs}"
                ];
              }
+
+           or you can set the NIXPKGS_ALLOW_INSECURE environment variable.
 
       '';
 
