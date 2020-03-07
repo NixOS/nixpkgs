@@ -4804,6 +4804,8 @@ in
 
   libgumath = callPackage ../development/libraries/libgumath { };
 
+  libinsane = callPackage ../development/libraries/libinsane { };
+
   libipfix = callPackage ../development/libraries/libipfix { };
 
   libircclient = callPackage ../development/libraries/libircclient { };
