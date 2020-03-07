@@ -38,14 +38,10 @@ in {
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        ensureDatabases = [ "testdb" ];
-        ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        }];
-        initialScript = pkgs.writeText "mariadb-init.sql" ''
+        statements = ''
+          CREATE DATABASE IF NOT EXISTS `testdb`;
+          CREATE USER IF NOT EXISTS 'testuser'@'localhost' IDENTIFIED WITH unix_socket;
+          GRANT ALL PRIVILEGES ON `testdb`.* TO 'testuser'@'localhost';
           GRANT ALL PRIVILEGES ON *.* TO 'check_repl'@'localhost' IDENTIFIED BY 'check_pass' WITH GRANT OPTION;
           FLUSH PRIVILEGES;
         '';

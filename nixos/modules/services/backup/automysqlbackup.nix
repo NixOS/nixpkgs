@@ -3,7 +3,7 @@
 let
 
   inherit (lib) concatMapStringsSep concatStringsSep isInt isList literalExample;
-  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optional types;
+  inherit (lib) mapAttrs mapAttrsToList mkDefault mkEnableOption mkIf mkOption optionalString types;
 
   cfg = config.services.automysqlbackup;
   pkg = pkgs.automysqlbackup;
@@ -109,10 +109,13 @@ in
       "d '${cfg.config.backup_dir}' 0750 ${user} ${group} - -"
     ];
 
-    services.mysql.ensureUsers = optional (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") {
-      name = user;
-      ensurePermissions = { "*.*" = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES"; };
-    };
+    services.mysql.statements =
+      let
+        unix_socket = if (lib.getName config.services.mysql.package == "mariadb-server") then "unix_socket" else "auth_socket";
+      in optionalString (config.services.mysql.enable && cfg.config.mysql_dump_host == "localhost") ''
+        create user if not exists '${user}'@'localhost' identified with ${unix_socket};
+        grant select, show view, trigger, lock tables on *.* to '${user}'@'localhost';
+      '';
 
   };
 }

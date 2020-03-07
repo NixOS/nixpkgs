@@ -22,7 +22,11 @@ in
         services.mysql.replication.slaveHost = "%";
         services.mysql.replication.masterUser = replicateUser;
         services.mysql.replication.masterPassword = replicatePassword;
-        services.mysql.initialDatabases = [ { name = "testdb"; schema = ./testdb.sql; } ];
+        services.mysql.statements = ''
+          create database if not exists `testdb`;
+          use `testdb`;
+          ${builtins.readFile ./testdb.sql}
+        '';
         networking.firewall.allowedTCPPorts = [ 3306 ];
       };
 

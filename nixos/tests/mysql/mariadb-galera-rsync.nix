@@ -38,13 +38,11 @@ in {
       services.mysql = {
         enable = true;
         package = pkgs.mariadb;
-        ensureDatabases = [ "testdb" ];
-        ensureUsers = [{
-          name = "testuser";
-          ensurePermissions = {
-            "testdb.*" = "ALL PRIVILEGES";
-          };
-        }];
+        statements = ''
+          CREATE DATABASE IF NOT EXISTS `testdb`;
+          CREATE USER IF NOT EXISTS 'testuser'@'localhost' IDENTIFIED WITH unix_socket;
+          GRANT ALL PRIVILEGES ON `testdb`.* TO 'testuser'@'localhost';
+        '';
         settings = {
           mysqld = {
             bind_address = "0.0.0.0";

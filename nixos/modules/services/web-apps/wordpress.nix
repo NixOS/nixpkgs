@@ -277,12 +277,14 @@ in
     services.mysql = mkIf (any (v: v.database.createLocally) (attrValues eachSite)) {
       enable = true;
       package = mkDefault pkgs.mariadb;
-      ensureDatabases = mapAttrsToList (hostName: cfg: cfg.database.name) eachSite;
-      ensureUsers = mapAttrsToList (hostName: cfg:
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ) eachSite;
+      statements =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == "mariadb-server") then "unix_socket" else "auth_socket";
+        in mapAttrsToList (hostName: cfg: ''
+          create database if not exists `${cfg.database.name}`;
+          create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};
+          grant all privileges on `${cfg.database.name}`.* to '${cfg.database.user}'@'localhost';
+        '');
     };
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (

@@ -90,11 +90,14 @@ in {
     services.mysql = mkIf cfg.createDatabase {
       enable = true;
       package = mkDefault pkgs.mysql;
-      ensureUsers = [{
-        name = "engelsystem";
-        ensurePermissions = { "engelsystem.*" = "ALL PRIVILEGES"; };
-      }];
-      ensureDatabases = [ "engelsystem" ];
+      statements =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == "mariadb-server") then "unix_socket" else "auth_socket";
+        in ''
+          create database if not exists `engelsystem`;
+          create user if not exists 'engelsystem'@'localhost' identified with ${unix_socket};
+          grant all privileges on `engelsystem`.* to 'engelsystem'@'localhost';
+        '';
     };
 
     environment.etc."engelsystem/config.php".source =

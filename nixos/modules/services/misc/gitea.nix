@@ -347,13 +347,14 @@ in
     services.mysql = optionalAttrs (useMysql && cfg.database.createDatabase) {
       enable = mkDefault true;
       package = mkDefault pkgs.mariadb;
-
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        { name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
-        }
-      ];
+      statements =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == "mariadb-server") then "unix_socket" else "auth_socket";
+        in ''
+          create database if not exists `${cfg.database.name}`;
+          create user if not exists '${cfg.database.user}'@'localhost' identified with ${unix_socket};
+          grant all privileges on `${cfg.database.name}`.* to '${cfg.database.user}'@'localhost';
+        '';
     };
 
     systemd.tmpfiles.rules = [

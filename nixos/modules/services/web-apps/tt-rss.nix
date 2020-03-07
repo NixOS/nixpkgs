@@ -647,15 +647,14 @@ let
     services.mysql = mkIf mysqlLocal {
       enable = true;
       package = mkDefault pkgs.mysql;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
-        {
-          name = cfg.user;
-          ensurePermissions = {
-            "${cfg.database.name}.*" = "ALL PRIVILEGES";
-          };
-        }
-      ];
+      statements =
+        let
+          unix_socket = if (lib.getName config.services.mysql.package == "mariadb-server") then "unix_socket" else "auth_socket";
+        in ''
+          create database if not exists `${cfg.database.name}`;
+          create user if not exists '${cfg.user}'@'localhost' identified with ${unix_socket};
+          grant all privileges on `${cfg.database.name}`.* to '${cfg.user}'@'localhost';
+        '';
     };
 
     services.postgresql = mkIf pgsqlLocal {
