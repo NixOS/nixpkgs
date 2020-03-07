@@ -324,6 +324,18 @@ let
     (assertMinimum "DNSLifetimeSec" 0)
   ];
 
+  checkIpv6Prefix = checkUnitConfig "IPv6Prefix" [
+    (assertOnlyFields [
+      "AddressAutoconfiguration"  "OnLink"  "Prefix"
+      "PreferredLifetimeSec" "ValidLifetimeSec"
+    ])
+    (assertValueOneOf "AddressAutoconfiguration" boolValues)
+    (assertValueOneOf "OnLink" boolValues)
+    (assertMinimum "PreferredLifetimeSec" 0)
+    (assertMinimum "ValidLifetimeSec" 0)
+  ];
+
+
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
       "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
@@ -647,6 +659,22 @@ let
     };
   };
 
+  ipv6PrefixOptions = {
+    options = {
+      ipv6PrefixConfig = mkOption {
+        default = {};
+        example = { Prefix = "fd00::/64"; };
+        type = types.addCheck (types.attrsOf unitOption) checkIpv6Prefix;
+        description = ''
+          Each attribute in this set specifies an option in the
+          <literal>[IPv6Prefix]</literal> section of the unit.  See
+          <citerefentry><refentrytitle>systemd.network</refentrytitle>
+          <manvolnum>5</manvolnum></citerefentry> for details.
+        '';
+      };
+    };
+  };
+
 
   networkOptions = commonNetworkOptions // {
 
@@ -700,6 +728,17 @@ let
       description = ''
         Each attribute in this set specifies an option in the
         <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
+    ipv6Prefixes = mkOption {
+      default = [];
+      example = { AddressAutoconfiguration = true; OnLink = true; };
+      type = with types; listOf (submodule ipv6PrefixOptions);
+      description = ''
+        A list of ipv6Prefix sections to be added to the unit.  See
         <citerefentry><refentrytitle>systemd.network</refentrytitle>
         <manvolnum>5</manvolnum></citerefentry> for details.
       '';
@@ -1045,6 +1084,11 @@ let
             ${attrsToSection def.ipv6PrefixDelegationConfig}
 
           ''}
+          ${flip concatMapStrings def.ipv6Prefixes (x: ''
+            [IPv6Prefix]
+            ${attrsToSection x.ipv6PrefixConfig}
+
+          '')}
           ${optionalString (def.dhcpServerConfig != { }) ''
             [DHCPServer]
             ${attrsToSection def.dhcpServerConfig}
