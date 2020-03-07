@@ -5078,8 +5078,6 @@ in {
 
   pyinotify = callPackage ../development/python-modules/pyinotify { };
 
-  pyinsane2 = callPackage ../development/python-modules/pyinsane2 { };
-
   pyjwt = callPackage ../development/python-modules/pyjwt { };
 
   pykickstart = callPackage ../development/python-modules/pykickstart { };
