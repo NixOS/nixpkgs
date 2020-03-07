@@ -310,6 +310,20 @@ let
     (assertValueOneOf "ForceDHCPv6PDOtherInformation" boolValues)
   ];
 
+  checkIpv6PrefixDelegation = checkUnitConfig "IPv6PrefixDelegation" [
+    (assertOnlyFields [
+      "Managed"  "OtherInformation"  "RouterLifetimeSec"
+      "RouterPreference"  "EmitDNS"  "DNS"  "EmitDomains"  "Domains"
+      "DNSLifetimeSec"
+    ])
+    (assertValueOneOf "Managed" boolValues)
+    (assertValueOneOf "OtherInformation" boolValues)
+    (assertValueOneOf "RouterPreference" ["high" "medium" "low" "normal" "default"])
+    (assertValueOneOf "EmitDNS" boolValues)
+    (assertValueOneOf "EmitDomains" boolValues)
+    (assertMinimum "DNSLifetimeSec" 0)
+  ];
+
   checkDhcpServer = checkUnitConfig "DHCPServer" [
     (assertOnlyFields [
       "PoolOffset" "PoolSize" "DefaultLeaseTimeSec" "MaxLeaseTimeSec"
@@ -679,6 +693,18 @@ let
       '';
     };
 
+    ipv6PrefixDelegationConfig = mkOption {
+      default = {};
+      example = { EmitDNS = true; Managed = true; OtherInformation = true; };
+      type = types.addCheck (types.attrsOf unitOption) checkIpv6PrefixDelegation;
+      description = ''
+        Each attribute in this set specifies an option in the
+        <literal>[IPv6PrefixDelegation]</literal> section of the unit.  See
+        <citerefentry><refentrytitle>systemd.network</refentrytitle>
+        <manvolnum>5</manvolnum></citerefentry> for details.
+      '';
+    };
+
     dhcpServerConfig = mkOption {
       default = {};
       example = { PoolOffset = 50; EmitDNS = false; };
@@ -1012,6 +1038,11 @@ let
           ${optionalString (def.dhcpV6Config != {}) ''
             [DHCPv6]
             ${attrsToSection def.dhcpV6Config}
+
+          ''}
+          ${optionalString (def.ipv6PrefixDelegationConfig != {}) ''
+            [IPv6PrefixDelegation]
+            ${attrsToSection def.ipv6PrefixDelegationConfig}
 
           ''}
           ${optionalString (def.dhcpServerConfig != { }) ''
