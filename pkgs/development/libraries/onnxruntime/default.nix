@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "onnxruntime";
-  version = "1.1.1";
+  version = "1.1.2";
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "onnxruntime";
     rev = "v${version}";
-    sha256 = "0d79adxw09cd6xfyb2sxp38j03h3g7gn4ki85zhp9nicrrm179qz";
+    sha256 = "0chbn2wkl1w3msw0zscajinzlaaahg4w3lrpb2l8xgqdwbln0ckj";
     # TODO: use nix-versions of grpc, onnx, eigen, googletest, etc.
     # submodules increase src size and compile times significantly
     # not currently feasible due to how integrated cmake build is with git

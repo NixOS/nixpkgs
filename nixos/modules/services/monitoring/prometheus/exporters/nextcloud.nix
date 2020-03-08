@@ -50,7 +50,7 @@ in
           -u ${cfg.username} \
           -t ${cfg.timeout} \
           -l ${cfg.url} \
-          -p @${cfg.passwordFile} \
+          -p ${escapeShellArg "@${cfg.passwordFile}"} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

@@ -15,6 +15,11 @@ mkDerivation rec {
 
   buildTools = [ hpack ];
 
+  prePatch = ''
+    substituteInPlace package.yaml \
+        --replace -Werror ""
+  '';
+
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [

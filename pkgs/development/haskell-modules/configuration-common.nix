@@ -1072,8 +1072,35 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
-  }));
+
+  stack =
+    let
+      stackWithOverrides =
+        super.stack.override {
+          # stack-2.1.3.1 requires pantry-0.2.0.0.
+          pantry = self.pantry_0_2_0_0;
+        };
+    in
+    generateOptparseApplicativeCompletion
+      "stack"
+      (appendPatches stackWithOverrides [
+        # This PR fixes stack up to be able to build with Cabal-3.  This patch
+        # can probably be dropped when the next stack release is made after
+        # 2.1.3.1.
+        (pkgs.fetchpatch {
+          url = "https://github.com/commercialhaskell/stack/pull/5156.diff";
+          sha256 = "0knk6f9fh1b4fxkhvx5gfrwclal4vi2va4zy34gpmwnjr7knf42y";
+          excludes = [
+            "snapshot-lts-12.yaml"
+            "snapshot-nightly.yaml"
+            "snapshot.yaml"
+          ];
+        })
+        # This patch fixes stack up to be able to build various GHC-8.8 changes.
+        # This can hopefully be dropped when the next stack release is made
+        # after 2.1.3.1 (assuming the next stack release uses GHC-8.8).
+        ./patches/stack-ghc882-support.patch
+      ]);
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1306,11 +1333,6 @@ self: super: {
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
-  ormolu = doJailbreak (super.ormolu.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_8_3_20200224;
-  });
-
   # krank-0.1.0 does not accept PyF-0.9.0.0.
   krank = doJailbreak super.krank;
 
@@ -1400,5 +1422,49 @@ self: super: {
 
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
+
+  pantry_0_2_0_0 = appendPatches (dontCheck super.pantry_0_2_0_0) [
+    # pantry-0.2.0.0 doesn't build with ghc-8.8, but there is a PR adding support.
+    # https://github.com/commercialhaskell/pantry/pull/6
+    # Currently stack-2.1.3.1 requires pantry-0.2.0.0, but when a newer version of
+    # stack is released, it will probably use the newer pantry version, so we
+    # can completely get rid of pantry-0.2.0.0.
+    (pkgs.fetchpatch {
+      url = "https://github.com/commercialhaskell/pantry/pull/6.diff";
+      sha256 = "0aml06jshpjh3aiscs5av7y33m3d6s6x5pzdvh7pky476izfg87k";
+      excludes = [
+        ".azure/azure-linux-template.yml"
+        ".azure/azure-osx-template.yml"
+        ".azure/azure-windows-template.yml"
+        "package.yaml"
+        "pantry.cabal"
+        "stack-lts-11.yaml"
+        "stack-lts-12.yaml"
+        "stack-nightly.yaml"
+        "stack-windows.yaml"
+        "stack.yaml"
+      ];
+    })
+  ];
+
+  # https://github.com/serokell/nixfmt/pull/62
+  nixfmt = doJailbreak super.nixfmt;
+
+  # https://github.com/phadej/binary-orphans/issues/45
+  binary-instances = dontCheck super.binary-instances;
+
+  # Disabling the test suite lets the build succeed on older CPUs
+  # that are unable to run the generated library because they
+  # lack support for AES-NI, like some of our Hydra build slaves
+  # do. See https://github.com/NixOS/nixpkgs/issues/81915 for
+  # details.
+  cryptonite = dontCheck super.cryptonite;
+
+  # The test suite depends on an impure cabal-install installation
+  # in $HOME, which we don't have in our build sandbox.
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
+
+  # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
+  haskell-ci = doJailbreak super.haskell-ci;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

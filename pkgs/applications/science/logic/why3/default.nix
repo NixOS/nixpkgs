@@ -1,4 +1,4 @@
-{ callPackage, fetchurl, stdenv
+{ callPackage, fetchurl, fetchpatch, stdenv
 , ocamlPackages, coqPackages, rubber, hevea, emacs }:
 
 stdenv.mkDerivation {
@@ -30,7 +30,13 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   # Remove unnecessary call to which
-  patches = [ ./configure.patch ];
+  patches = [ ./configure.patch
+    # Compatibility with js_of_ocaml 3.5
+    (fetchpatch {
+      url = "https://gitlab.inria.fr/why3/why3/commit/269ab313382fe3e64ef224813937314748bf7cf0.diff";
+      sha256 = "0i92wdnbh8pihvl93ac0ma1m5g95jgqqqj4kw6qqvbbjjqdgvzwa";
+    })
+  ];
 
   configureFlags = [ "--enable-verbose-make" ];
 
