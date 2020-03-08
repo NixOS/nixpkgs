@@ -3,7 +3,6 @@ if [ -n "$DEBUG" ] ; then
   set -x
 fi
 
-#export PATH=@path@
 PATH="@path@:$PATH"
 #DEBUG=0
 
@@ -69,7 +68,6 @@ apprun() {
   fi
 
   export PATH="$PATH:$PWD/usr/bin"
-  wrap "$@"
 }
 
 wrap() {
@@ -98,6 +96,7 @@ while getopts ":a:d:xrw" option; do
         a)  #AppImage file
             # why realpath?
             APPIMAGE="$(realpath "${OPTARG}")"
+            break
             ;;
         d)  #appimage Directory
             export APPDIR=${OPTARG}
@@ -124,7 +123,8 @@ if [[ $unpack_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
 fi
 
 if [[ $apprun_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
-  apprun "$@"
+  apprun
+  wrap "$@"
   exit
 fi
 
