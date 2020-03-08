@@ -1198,10 +1198,6 @@ let
 
     google-drive-ocamlfuse = callPackage ../applications/networking/google-drive-ocamlfuse { };
 
-    unison = callPackage ../applications/networking/sync/unison {
-      enableX11 = config.unison.enableX11 or true;
-    };
-
     hol_light = callPackage ../applications/science/logic/hol_light { };
 
   })).overrideScope' liftJaneStreet;
