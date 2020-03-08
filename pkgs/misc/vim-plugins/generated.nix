@@ -5888,6 +5888,17 @@ let
     };
   };
 
+  vimacs = buildVimPluginFrom2Nix {
+    pname = "vimacs";
+    version = "2016-03-24";
+    src = fetchFromGitHub {
+      owner = "andrep";
+      repo = "vimacs";
+      rev = "7b8e297722d55089f0f0535fe6422533c98112fb";
+      sha256 = "0x92jcpdlvxhhdpwkv7ig9ya7s96yqjy6ms9xnx8djkf12xql16f";
+    };
+  };
+
   vimagit = buildVimPluginFrom2Nix {
     pname = "vimagit";
     version = "2020-01-12";

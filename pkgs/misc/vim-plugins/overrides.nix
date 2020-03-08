@@ -460,6 +460,21 @@ self: super: {
       };
     });
 
+  vimacs = super.vimacs.overrideAttrs(old: {
+    buildPhase = ''
+      substituteInPlace bin/vim \
+        --replace '/usr/bin/vim' 'vim' \
+        --replace '/usr/bin/gvim' 'gvim'
+      # remove unnecessary duplicated bin wrapper script
+      rm -r plugin/vimacs
+    '';
+    meta = with stdenv.lib; {
+      description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
+      homepage = "http://algorithm.com.au/code/vimacs";
+      license = licenses.gpl2Plus;
+      maintainers = with stdenv.lib.maintainers; [ millerjason ];
+    };
+  });
 
   vimshell-vim = super.vimshell-vim.overrideAttrs(old: {
     dependencies = with super; [ vimproc-vim ];
