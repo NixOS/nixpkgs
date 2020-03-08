@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild }:
 
 if !stdenv.lib.versionAtLeast ocaml.version "4.02"
+ || stdenv.lib.versionAtLeast ocaml.version "4.08"
 then throw "wasm is not available for OCaml ${ocaml.version}"
 else
 
