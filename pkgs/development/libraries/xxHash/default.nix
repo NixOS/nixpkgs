@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "xxHash";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "Cyan4973";
     repo = "xxHash";
     rev = "v${version}";
-    sha256 = "1f9gl0cymmi92ihsfan0p4zmyf2hxwx4arjimpbmbp719nbcvdsx";
+    sha256 = "0bin0jch6lbzl4f8y052a7azfgq2n7iwqihzgqmcccv5vq4vcx5a";
   };
 
   outputs = [ "out" "dev" ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
       highly portable, and hashes are identical on all platforms (little / big
       endian).
     '';
-    homepage = https://github.com/Cyan4973/xxHash;
+    homepage = "https://github.com/Cyan4973/xxHash";
     license = with licenses; [ bsd2 gpl2 ];
     maintainers = with maintainers; [ orivej ];
     platforms = platforms.unix;
