@@ -1,5 +1,7 @@
-{stdenv, fetchFromGitHub, ocaml, lablgtk, fontschumachermisc, xset, makeWrapper, ncurses
+{stdenv, fetchFromGitHub, ocamlPackages, fontschumachermisc, xset, makeWrapper, ncurses
 , enableX11 ? true}:
+
+let inherit (ocamlPackages) ocaml lablgtk; in
 
 stdenv.mkDerivation (rec {
 
