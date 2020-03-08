@@ -4,6 +4,8 @@ if [ -n "$DEBUG" ] ; then
 fi
 
 PATH="@path@:$PATH"
+apprun_opt=true
+
 #DEBUG=0
 
 # src : AppImage
@@ -84,31 +86,34 @@ wrap() {
 }
 
 usage() {
-  echo "Usage: appimage-run [appimage-run options] <AppImage> [AppImage options]";
-  echo
-  echo 'Options are passed on to the appimage.'
-  echo "If you want to execute a custom command in the appimage's environment, set the APPIMAGE_DEBUG_EXEC environment variable."
+  cat <<EOF
+Usage: appimage-run [appimage-run options] <AppImage> [AppImage options]
+
+-h      show this message
+-d      debug mode
+-x      <directory> : extract appimage in the directory then exit.
+-w      <directory> : run uncompressed appimage directory (used in appimageTools)
+
+[AppImage options]: Options are passed on to the appimage.
+If you want to execute a custom command in the appimage's environment, set the APPIMAGE_DEBUG_EXEC environment variable.
+
+EOF
   exit 1
 }
 
-while getopts ":a:d:xrw" option; do
+while getopts "x:w:dh" option; do
     case "${option}" in
-        a)  #AppImage file
-            # why realpath?
-            APPIMAGE="$(realpath "${OPTARG}")"
-            break
-            ;;
-        d)  #appimage Directory
-            export APPDIR=${OPTARG}
+        d)  set -x
             ;;
         x)  # eXtract
             unpack_opt=true
-            ;;
-        r)  # appimage-Run
-            apprun_opt=true
+            APPDIR=${OPTARG}
             ;;
         w)  # WrapAppImage
+            export APPDIR=${OPTARG}
             wrap_opt=true
+            ;;
+        h)  usage
             ;;
         *)
             usage
@@ -117,6 +122,14 @@ while getopts ":a:d:xrw" option; do
 done
 shift $((OPTIND-1))
 
+if [[ $wrap_opt = true ]] && [[ -d "$APPDIR" ]]; then
+  wrap "$@"
+  exit
+else
+  APPIMAGE="$(realpath "$1")" || usage
+  shift
+fi
+
 if [[ $unpack_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
   unpack "$APPIMAGE" "$APPDIR"
   exit
@@ -124,11 +137,6 @@ fi
 
 if [[ $apprun_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
   apprun
-  wrap "$@"
-  exit
-fi
-
-if [[ $wrap_opt = true ]] && [[ -d "$APPDIR" ]]; then
   wrap "$@"
   exit
 fi

@@ -14,7 +14,7 @@ rec {
   extract = { name, src }: runCommand "${name}-extracted" {
     buildInputs = [ appimage-exec ];
   } ''
-    appimage-exec.sh -x -d $out -a ${src}
+    appimage-exec.sh -x $out ${src}
   '';
 
   # for compatibility, deprecated
@@ -28,7 +28,7 @@ rec {
     targetPkgs = pkgs: [ appimage-exec ]
       ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-    runScript = "appimage-exec.sh -w -d ${src}";
+    runScript = "appimage-exec.sh -w ${src}";
   } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
   wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
