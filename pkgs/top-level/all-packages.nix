@@ -7940,7 +7940,7 @@ in
 
   eql = callPackage ../development/compilers/eql {};
 
-  elm2nix = haskell.lib.justStaticExecutables haskellPackages.elm2nix;
+  elm2nix = haskell.lib.justStaticExecutables haskellPackages.elm2nix_0_2;
 
   elmPackages = recurseIntoAttrs (callPackage ../development/compilers/elm { });
 
