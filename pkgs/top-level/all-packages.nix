@@ -22016,7 +22016,10 @@ in
 
   unigine-valley = callPackage ../applications/graphics/unigine-valley { };
 
-  inherit (ocaml-ng.ocamlPackages_4_05) unison;
+  unison = callPackage ../applications/networking/sync/unison {
+    enableX11 = config.unison.enableX11 or true;
+    ocamlPackages = ocaml-ng.ocamlPackages_4_05;
+  };
 
   unpaper = callPackage ../tools/graphics/unpaper { };
 
