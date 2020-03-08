@@ -1,15 +1,19 @@
 #!@shell@
-if [ ! -z "$DEBUG" ] ; then
+if [ -n "$DEBUG" ] ; then
   set -x
 fi
 
-export PATH=@path@
+#export PATH=@path@
+PATH="@path@:$PATH"
+#DEBUG=0
 
 # src : AppImage
 # dest : let's unpack() create the directory
 unpack() {
-  src=$1
-  out=$2
+  local src=$1
+  local out=$2
+  local appimageSignature=""
+  local appimageType=0
 
   # https://github.com/AppImage/libappimage/blob/ca8d4b53bed5cbc0f3d0398e30806e0d3adeaaab/src/libappimage/utils/MagicBytesChecker.cpp#L45-L63
   eval "$(r2 "$src" -nn -Nqc "p8j 3 @ 8" |
@@ -19,16 +23,15 @@ unpack() {
   # check AppImage signature
   if [[ "$appimageSignature" != "AI" ]]; then
     echo "Not an appimage."
-    exit -1
+    exit
   fi
 
   case "$appimageType" in
-    1)  echo "Uncompress $(basename "$src") of Type: $appimageType."
+    1 ) echo "Uncompress $(basename "$src") of type $appimageType."
         mkdir "$out"
         pv "$src" | bsdtar -x -C "$out" -f -
         ;;
-
-    2)  echo "Uncompress $(basename "$src") of Type: $appimageType."
+    2)
         # This method avoid issues with non executable appimages,
         # non-native packer, packer patching and squashfs-root destination prefix.
 
@@ -37,6 +40,7 @@ unpack() {
         offset=$(r2 "$src" -nn -Nqc "pfj.elf_header @ 0" |\
           jq 'map({(.name): .value}) | add | .shoff + (.shnum * .shentsize)')
 
+        echo "Uncompress $(basename "$src") of type $appimageType @ offset $offset."
         unsquashfs -q -d "$out" -o "$offset" "$src"
         chmod go-w "$out"
         ;;
@@ -52,26 +56,25 @@ unpack() {
 apprun() {
 
   eval "$(rahash2 "$APPIMAGE" -j | jq -r '.[] | @sh "SHA256=\(.hash)"')"
-  echo sha256 = \"$SHA256\"\;
+  echo sha256 = \""$SHA256"\"\;
   export APPDIR="${XDG_CACHE_HOME:-$HOME/.cache}/appimage-run/$SHA256"
 
   #compatibility
   if [ -x "$APPDIR/squashfs-root" ]; then APPDIR="$APPDIR/squashfs-root"; fi
 
   if [ ! -x "$APPDIR" ]; then
-    mkdir -p $(dirname "$APPDIR")
+    mkdir -p "$(dirname "$APPDIR")"
     unpack "$APPIMAGE" "$APPDIR"
+  else echo "$(basename "$APPIMAGE")" installed in "$APPDIR"
   fi
 
-  echo $(basename "$APPIMAGE") installed in "$APPDIR"
-
   export PATH="$PATH:$PWD/usr/bin"
-  wrap
+  wrap "$@"
 }
 
 wrap() {
 
-  cd "$APPDIR"
+  cd "$APPDIR" || exit
   # quite same in appimageTools
   export APPIMAGE_SILENT_INSTALL=1
 
@@ -121,9 +124,11 @@ if [[ $unpack_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
 fi
 
 if [[ $apprun_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
-  apprun
+  apprun "$@"
+  exit
 fi
 
 if [[ $wrap_opt = true ]] && [[ -d "$APPDIR" ]]; then
-  wrap
+  wrap "$@"
+  exit
 fi
