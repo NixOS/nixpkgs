@@ -15,6 +15,6 @@ fetchzip {
   meta = {
     homepage = http://junicode.sourceforge.net/;
     description = "A Unicode font for medievalists";
-    license = lib.licenses.gpl2Plus;
+    license = lib.licenses.ofl;
   };
 }
