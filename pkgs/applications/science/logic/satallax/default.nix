@@ -9,6 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "1kvxn8mc35igk4vigi5cp7w3wpxk2z3bgwllfm4n3h2jfs0vkpib";
   };
 
+  patches = [
+    # GCC9 doesn't allow default value in friend declaration.
+    ./fix-declaration-gcc9.patch
+  ];
+
   preConfigure = ''
     mkdir fake-tools
     echo "echo 'Nix-build-host.localdomain'" > fake-tools/hostname
