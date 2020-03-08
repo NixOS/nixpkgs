@@ -16,18 +16,24 @@
     patches = [];
   }))
 }:
-stdenv.mkDerivation {
+
+let
+  bin_folder = if stdenv.isDarwin then "darwin" else "linux";
+in
+
+stdenv.mkDerivation rec {
   inherit src version;
   pname = "bs-platform";
+
   BS_RELEASE_BUILD = "true";
+  BS_TRAVIS_CI = "1";
+
   buildInputs = [ nodejs python3 custom-ninja ];
 
   patchPhase = ''
     sed -i 's:./configure.py --bootstrap:python3 ./configure.py --bootstrap:' ./scripts/install.js
     mkdir -p ./native/${ocaml-version}/bin
     ln -sf ${ocaml}/bin/*  ./native/${ocaml-version}/bin
-    rm -f vendor/ninja/snapshot/ninja.linux
-    cp ${custom-ninja}/bin/ninja vendor/ninja/snapshot/ninja.linux
   '';
 
   # avoid building the development version, will break aarch64 build
@@ -41,10 +47,13 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -rf jscomp lib vendor odoc_gen native $out
+    cp -rf jscomp lib ${bin_folder} vendor odoc_gen native bsb bsc $out
+    mkdir $out/lib/ocaml
+    cp jscomp/runtime/js.* jscomp/runtime/*.cm* $out/lib/ocaml
+    cp jscomp/others/*.ml jscomp/others/*.mli jscomp/others/*.cm* $out/lib/ocaml
+    cp jscomp/stdlib-406/*.ml jscomp/stdlib-406/*.mli jscomp/stdlib-406/*.cm* $out/lib/ocaml
     cp bsconfig.json package.json $out
-    ln -s $out/lib/bsb $out/bin/bsb
-    ln -s $out/lib/bsc $out/bin/bsc
-    ln -s $out/lib/bsrefmt $out/bin/bsrefmt
+    ln -s $out/bsb $out/bin/bsb
+    ln -s $out/bsc $out/bin/bsc
   '';
 }
