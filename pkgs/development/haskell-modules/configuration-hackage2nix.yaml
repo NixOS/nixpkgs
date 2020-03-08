@@ -8979,7 +8979,6 @@ broken-packages:
   - sajson
   - salak-toml
   - Salsa
-  - saltine
   - saltine-quickcheck
   - salvia
   - salvia-demo
