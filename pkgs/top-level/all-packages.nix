@@ -21508,6 +21508,8 @@ in
 
   sound-juicer = callPackage ../applications/audio/sound-juicer { };
 
+  soundtracker = callPackage ../applications/audio/soundtracker { };
+
   spice-vdagent = callPackage ../applications/virtualization/spice-vdagent { };
 
   spike = callPackage ../applications/virtualization/spike { };
