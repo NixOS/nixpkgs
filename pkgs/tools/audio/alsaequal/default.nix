@@ -38,5 +38,6 @@ stdenv.mkDerivation rec {
     description = "Real-time adjustable equalizer plugin for ALSA";
     homepage = "https://thedigitalmachine.net/alsaequal.html";
     license = licenses.gpl2;
+    maintainers = with maintainers; [ ymeister ];
   };
 }
