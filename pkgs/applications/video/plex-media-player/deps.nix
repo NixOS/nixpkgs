@@ -1,28 +1,28 @@
 { fetchurl }:
 
 rec {
-  webClientBuildId = "172-17d1db2564f6ac";
-  webClientDesktopBuildId = "4.27.0-564f6ac";
+  webClientBuildId = "173-17d1db2ca0ff70";
+  webClientDesktopBuildId = "4.26.1-ca0ff70";
   webClientTvBuildId = "4.27.1-17d1db2";
 
   webClient = fetchurl {
     url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/buildid.cmake";
-    sha256 = "0k62gn0kc3kd9g0vqdzay8ln98l6kg7hiqhzzbnfhhn531zdh83b";
+    sha256 = "0dlcr37cc4rq71j5ki1q6i4rh34rvlpv1pdlnsh4g3k3br513y0f";
   };
   webClientDesktopHash = fetchurl {
     url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz.sha1";
-    sha256 = "1mnw8c8acb0ds7k9hxz85cq3flg8as4izmlxhsm7h42n00dcz3qg";
+    sha256 = "1d54w82g12y1rc5didfpqr0fg1z372by5kygznz260my1cb78gk0";
   };
   webClientDesktop = fetchurl {
     url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-desktop-${webClientDesktopBuildId}.tar.xz";
-    sha256 = "14h9wsmrkhksvyh22rryqzvcc2dqgxhpj9xfrh0q5m43lldw2afr";
+    sha256 = "1ghv1s4mnbkk02plkfp092n59dga0kviwm9wdv95h71nx7h0ixc5";
   };
   webClientTvHash = fetchurl {
     url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz.sha1";
-    sha256 = "0qsic7dv290kvwraa6b6r8ghx22wkbb2hr2b6ix3w56wwc06a1x4";
+    sha256 = "0pxl4jxx1yjzi6a1pipkkz4b7fqncry1y0dimf5imbk3jrb15w24";
   };
   webClientTv = fetchurl {
     url = "https://artifacts.plex.tv/web-client-pmp/${webClientBuildId}/web-client-tv-${webClientTvBuildId}.tar.xz";
-    sha256 = "0jpbszf7q0h482nsqlvyymjlgc2sd4qan6pf7gq3vn0yswkjdaxq";
+    sha256 = "1w2x0fy5ayg185zpcmgphfgybrfrvrnij2z0xgab318v6c2fra0v";
   };
 }
