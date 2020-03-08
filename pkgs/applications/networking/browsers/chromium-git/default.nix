@@ -1,5 +1,5 @@
 { stdenv, stdenvNoCC, lib, fetchgit, fetchurl, runCommand
-, python2, gn, ninja, llvmPackages_10, nodejs, bison, gperf, pkg-config, protobuf
+, python2, gn, ninja, llvmPackages_9, llvmPackages_10, nodejs, bison, gperf, pkg-config, protobuf
 , dbus, systemd, glibc, at-spi2-atk, atk, at-spi2-core, nspr, nss, pciutils, utillinux, kerberos, gdk-pixbuf
 , glib, gtk3, alsaLib, pulseaudio, xdg_utils, libXScrnSaver, libXcursor, libXtst, libGLU, libGL, libXdamage
 , customGnFlags ? {}
@@ -63,7 +63,7 @@ let
     target_cpu = { i686-linux = "x86"; x86_64-linux = "x64"; armv7l-linux = "arm"; aarch64-linux = "arm64"; }.${stdenv.hostPlatform.system};
   } // customGnFlags;
 
-  common = { version }:
+  common = { version, llvmPackages }:
     let
       deps = import (./vendor- + version + ".nix") { inherit fetchgit fetchurl runCommand; };
       src = stdenvNoCC.mkDerivation rec {
@@ -150,12 +150,12 @@ let
           ln -s --force ${nodejs}/bin/node                                third_party/node/linux/node-linux-x64/bin/node      || true
 
           mkdir -p buildtools/linux64
-          ln -s --force ${llvmPackages_10.clang.cc}/bin/clang-format      buildtools/linux64/clang-format                     || true
+          ln -s --force ${llvmPackages   .clang.cc}/bin/clang-format      buildtools/linux64/clang-format                     || true
 
           mkdir -p third_party/llvm-build/Release+Asserts/bin
-          ln -s --force ${llvmPackages_10.clang}/bin/clang                third_party/llvm-build/Release+Asserts/bin/clang    || true
-          ln -s --force ${llvmPackages_10.clang}/bin/clang++              third_party/llvm-build/Release+Asserts/bin/clang++  || true
-          ln -s --force ${llvmPackages_10.llvm}/bin/llvm-ar               third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
+          ln -s --force ${llvmPackages   .clang}/bin/clang                third_party/llvm-build/Release+Asserts/bin/clang    || true
+          ln -s --force ${llvmPackages   .clang}/bin/clang++              third_party/llvm-build/Release+Asserts/bin/clang++  || true
+          ln -s --force ${llvmPackages   .llvm}/bin/llvm-ar               third_party/llvm-build/Release+Asserts/bin/llvm-ar  || true
 
           echo 'build_with_chromium = true'                > build/config/gclient_args.gni
           echo 'checkout_android = false'                 >> build/config/gclient_args.gni
@@ -200,9 +200,9 @@ let
     };
 
 in {
-  chromium-git_78 = common { version = "78.0.3905.1";   };
-  chromium-git_79 = common { version = "79.0.3945.147"; };
-  chromium-git_80 = common { version = "80.0.3987.139"; };
-  chromium-git_81 = common { version = "81.0.4044.56";  };
-  chromium-git_82 = common { version = "82.0.4079.0";   };
+  chromium-git_78 = common { version = "78.0.3905.1";   llvmPackages = llvmPackages_9;  };
+  chromium-git_79 = common { version = "79.0.3945.147"; llvmPackages = llvmPackages_9;  };
+  chromium-git_80 = common { version = "80.0.3987.139"; llvmPackages = llvmPackages_10; };
+  chromium-git_81 = common { version = "81.0.4044.56";  llvmPackages = llvmPackages_10; };
+  chromium-git_82 = common { version = "82.0.4079.0";   llvmPackages = llvmPackages_10; };
 }
