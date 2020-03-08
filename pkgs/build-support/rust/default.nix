@@ -114,15 +114,37 @@ stdenv.mkDerivation (filteredArgs // {
     EOF
 
     export RUST_LOG=${logLevel}
-  '' + stdenv.lib.optionalString validateCargoDeps ''
-    if ! diff source/Cargo.lock $cargoDepsCopy/Cargo.lock ; then
+  '' + (args.postUnpack or "");
+
+  # After unpacking and applying patches, check that the Cargo.lock matches our
+  # src package. Note that we do this after the patchPhase, because the
+  # patchPhase may create the Cargo.lock if upstream has not shipped one.
+  postPatch = (args.postPatch or "") + stdenv.lib.optionalString validateCargoDeps ''
+    cargoDepsLockfile=$NIX_BUILD_TOP/$cargoDepsCopy/Cargo.lock
+    srcLockfile=$NIX_BUILD_TOP/$sourceRoot/Cargo.lock
+
+    echo "Validating consistency between $srcLockfile and $cargoDepsLockfile"
+    if ! diff $srcLockfile $cargoDepsLockfile; then
+
+      # If the diff failed, first double-check that the file exists, so we can
+      # give a friendlier error msg.
+      if ! [ -e $srcLockfile ]; then
+        echo "ERROR: Missing Cargo.lock from src. Expected to find it at: $srcLockfile"
+        exit 1
+      fi
+
+      if ! [ -e $cargoDepsLockfile ]; then
+        echo "ERROR: Missing lockfile from cargo vendor. Expected to find it at: $cargoDepsLockfile"
+        exit 1
+      fi
+
       echo
       echo "ERROR: cargoSha256 is out of date"
       echo
       echo "Cargo.lock is not the same in $cargoDepsCopy"
       echo
       echo "To fix the issue:"
-      echo '1. Use "1111111111111111111111111111111111111111111111111111" as the cargoSha256 value'
+      echo '1. Use "0000000000000000000000000000000000000000000000000000" as the cargoSha256 value'
       echo "2. Build the derivation and wait it to fail with a hash mismatch"
       echo "3. Copy the 'got: sha256:' value back into the cargoSha256 field"
       echo
@@ -131,7 +153,7 @@ stdenv.mkDerivation (filteredArgs // {
     fi
   '' + ''
     unset cargoDepsCopy
-  '' + (args.postUnpack or "");
+  '';
 
   configurePhase = args.configurePhase or ''
     runHook preConfigure
