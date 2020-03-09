@@ -106,15 +106,12 @@ let
       # should be switching to the tlnet-final versions
       # (https://tug.org/historic/).
       urlPrefixes = args.urlPrefixes or [
-        # Snapshots hosted by one of the texlive release managers
-        https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
+        # tlnet-final snapshot
+        http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive
+        ftp://tug.org/texlive/historic/2019/tlnet-final/archive
 
-        # Mirror hosted by @veprbl
-        http://146.185.144.154/texlive-2019
-
-        # TODO: Upgrade to the final snapshot of the packages before 20.03
-        #http://ftp.math.utah.edu/pub/tex/historic/systems/texlive/2019/tlnet-final/archive
-        #ftp://tug.org/texlive/historic/2019/tlnet-final/archive
+        # Daily snapshots hosted by one of the texlive release managers
+        #https://texlive.info/tlnet-archive/2019/10/19/tlnet/archive
       ];
 
       src = fetchurl { inherit urls sha512; };
