@@ -6,7 +6,7 @@
 
 buildGoPackage rec {
   pname = "docker-slim";
-  version = "1.27.0";
+  version = "1.28.0";
 
   goPackagePath = "github.com/docker-slim/docker-slim";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     owner = "docker-slim";
     repo = "docker-slim";
     rev = version;
-    sha256 = "1pd9sz981qgr5lx6ikrhdp0n21nyrnpjpnyl8i4r2jx35zr8b5q8";
+    sha256 = "1yqg7ngrgq1382clyaal40v7rg9p54hyf78mdrzql454yzxfa819";
   };
 
   subPackages = [ "cmd/docker-slim" "cmd/docker-slim-sensor" ];
