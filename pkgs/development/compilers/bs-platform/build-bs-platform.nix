@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -rf jscomp lib ${bin_folder} vendor odoc_gen native bsb bsc $out
+    cp -rf jscomp lib ${bin_folder} vendor odoc_gen native bsb bsc bsrefmt $out
     mkdir $out/lib/ocaml
     cp jscomp/runtime/js.* jscomp/runtime/*.cm* $out/lib/ocaml
     cp jscomp/others/*.ml jscomp/others/*.mli jscomp/others/*.cm* $out/lib/ocaml
@@ -55,5 +55,6 @@ stdenv.mkDerivation rec {
     cp bsconfig.json package.json $out
     ln -s $out/bsb $out/bin/bsb
     ln -s $out/bsc $out/bin/bsc
+    ln -s $out/bsrefmt $out/bin/bsrefmt
   '';
 }
