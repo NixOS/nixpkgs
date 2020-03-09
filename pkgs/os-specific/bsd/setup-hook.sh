@@ -1,6 +1,4 @@
-source $stdenv/setup
-
-# NetBSD makefiles should be able to detect this
+# BSD makefiles should be able to detect this
 # but without they end up using gcc on Darwin stdenv
 addMakeFlags() {
   export setOutputFlags=
@@ -64,13 +62,12 @@ addMakeFlags() {
   makeFlags="-j $NIX_BUILD_CORES $makeFlags"
 }
 
-setNetBSDSourceDir() {
+setBSDSourceDir() {
   # merge together all extra paths
   # there should be a better way to do this
   sourceRoot=$PWD/$sourceRoot
-  export NETBSDSRCDIR=$sourceRoot
-  export BSDSRCDIR=$NETBSDSRCDIR
-  export _SRC_TOP_=$NETBSDSRCDIR
+  export BSDSRCDIR=$sourceRoot
+  export _SRC_TOP_=$BSDSRCDIR
   chmod -R u+w $sourceRoot
   for path in $extraPaths; do
     cd $path
@@ -80,13 +77,14 @@ setNetBSDSourceDir() {
   done
 
   cd $sourceRoot
-  if [ -d "$NETBSD_PATH" ]
-    then sourceRoot=$sourceRoot/$NETBSD_PATH
+  if [ -d "$BSD_PATH" ]
+    then sourceRoot=$sourceRoot/$BSD_PATH
   fi
 }
 
 includesPhase() {
   if [ -z "${skipIncludesPhase:-}" ]; then
+    runHook preIncludes
 
     local flagsArray=(
          $makeFlags ${makeFlagsArray+"${makeFlagsArray[@]}"}
@@ -98,6 +96,7 @@ includesPhase() {
 
     moveUsrDir
 
+    runHook postIncludes
   fi
 }
 
@@ -115,9 +114,7 @@ moveUsrDir() {
   fi
 }
 
-postUnpackHooks+=(setNetBSDSourceDir)
+postUnpackHooks+=(setBSDSourceDir)
 preConfigureHooks+=(addMakeFlags)
 preInstallHooks+=(includesPhase)
 fixupOutputHooks+=(moveUsrDir)
-
-genericBuild

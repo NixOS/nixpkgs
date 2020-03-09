@@ -30975,6 +30975,10 @@ in
 
   fts = if stdenv.hostPlatform.isMusl then netbsd.fts else null;
 
+  bsdSetupHook = makeSetupHook {
+    name = "bsd-setup-hook";
+  } ../os-specific/bsd/setup-hook.sh;
+
   netbsd = callPackages ../os-specific/bsd/netbsd {};
   netbsdCross = callPackages ../os-specific/bsd/netbsd {
     stdenv = crossLibcStdenv;
