@@ -521,6 +521,8 @@ in {
 
   browsermob-proxy = disabledIf isPy3k (callPackage ../development/python-modules/browsermob-proxy {});
 
+  bson = callPackage ../development/python-modules/bson { };
+
   bt_proximity = callPackage ../development/python-modules/bt-proximity { };
 
   bugseverywhere = throw "bugseverywhere has been removed: Abandoned by upstream."; # Added 2019-11-27
@@ -3632,6 +3634,8 @@ in {
 
   greatfet = callPackage ../development/python-modules/greatfet { };
 
+  hyperopt = callPackage ../development/python-modules/hyperopt { };
+  
   pygreat = callPackage ../development/python-modules/pygreat { };
 
   pytorch = callPackage ../development/python-modules/pytorch {
