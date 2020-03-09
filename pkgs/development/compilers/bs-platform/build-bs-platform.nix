@@ -26,6 +26,10 @@ stdenv.mkDerivation rec {
   pname = "bs-platform";
 
   BS_RELEASE_BUILD = "true";
+
+  # BuckleScript's idiosyncratic build process only builds artifacts required
+  # for editor-tooling to work when this environment variable is set:
+  # https://github.com/BuckleScript/bucklescript/blob/7.2.0/scripts/install.js#L225-L227
   BS_TRAVIS_CI = "1";
 
   buildInputs = [ nodejs python3 custom-ninja ];
