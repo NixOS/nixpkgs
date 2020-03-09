@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optional (!stdenv.isDarwin && !stdenv.isFreeBSD) libunwind;
+  buildInputs = lib.optional (!stdenv.isDarwin) libunwind;
 
   preInstall = lib.optionalString stdenv.isDarwin ''
     for file in lib/*.dylib; do

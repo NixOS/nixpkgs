@@ -1,7 +1,7 @@
 { lib, stdenv, llvm_meta, cmake, fetch, libcxx, libunwind, llvm, version
 , fetchpatch
 , standalone ? stdenv.hostPlatform.useLLVM or false
-, withLibunwind ? !stdenv.isDarwin && !stdenv.isFreeBSD && !stdenv.hostPlatform.isWasm
+, withLibunwind ? !stdenv.isDarwin && !stdenv.hostPlatform.isWasm
   # on musl the shared objects don't build
 , enableShared ? !stdenv.hostPlatform.isStatic
 }:
