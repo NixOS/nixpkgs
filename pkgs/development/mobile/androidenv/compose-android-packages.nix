@@ -4,7 +4,7 @@
 , platformToolsVersion ? "28.0.1"
 , buildToolsVersions ? [ "28.0.3" ]
 , includeEmulator ? false
-, emulatorVersion ? "28.0.14"
+, emulatorVersion ? "30.0.3"
 , platformVersions ? []
 , includeSources ? false
 , includeDocs ? false
