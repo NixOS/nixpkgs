@@ -2104,8 +2104,6 @@ in
 
   socklog = callPackage ../tools/system/socklog { };
 
-  staccato = callPackage ../tools/text/staccato { };
-
   stagit = callPackage ../development/tools/stagit { };
 
   step-ca = callPackage ../tools/security/step-ca { };
