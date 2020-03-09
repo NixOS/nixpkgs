@@ -8,6 +8,7 @@
 
 let
   sdkArgs = {
+    toolsVersion = "26.1.1";
     platformVersions = [ platformVersion ];
     includeEmulator = true;
     includeSystemImages = true;
@@ -67,12 +68,12 @@ stdenv.mkDerivation {
     export ANDROID_SERIAL="emulator-$port"
 
     # Create a virtual android device for testing if it does not exists
-    ${sdk}/libexec/android-sdk/tools/android list targets
+    ${sdk}/libexec/android-sdk/tools/bin/avdmanager list target
 
     if [ "$(${sdk}/libexec/android-sdk/tools/android list avd | grep 'Name: device')" = "" ]
     then
         # Create a virtual android device
-        yes "" | ${sdk}/libexec/android-sdk/tools/android create avd -n device -t 1 --abi ${systemImageType}/${abiVersion} $NIX_ANDROID_AVD_FLAGS
+        yes "" | ${sdk}/libexec/android-sdk/tools/bin/avdmanager create avd -n device -k "system-images;android-${platformVersion};${systemImageType};${abiVersion}" $NIX_ANDROID_AVD_FLAGS
 
         ${lib.optionalString enableGPU ''
           # Enable GPU acceleration
