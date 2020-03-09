@@ -291,13 +291,19 @@ let
 
               ${optionalString config.virtualisation.libvirtd.enable ''
                   # Enslave dynamically added interfaces which may be lost on nixos-rebuild
-                  for uri in qemu:///system lxc:///; do
-                    for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
-                      ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
-                      ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
-                      ${pkgs.bash}/bin/bash
+                  #
+                  # if `libvirtd.service` is not running, do not use `virsh` which would try activate it via 'libvirtd.socket' and thus start it out-of-order.
+                  # `libvirtd.service` will set up bridge interfaces when it will start normally.
+                  #
+                  if ${pkgs.systemd}/bin/systemctl --quiet is-active 'libvirtd.service'; then
+                    for uri in qemu:///system lxc:///; do
+                      for dom in $(${pkgs.libvirt}/bin/virsh -c $uri list --name); do
+                        ${pkgs.libvirt}/bin/virsh -c $uri dumpxml "$dom" | \
+                        ${pkgs.xmlstarlet}/bin/xmlstarlet sel -t -m "//domain/devices/interface[@type='bridge'][source/@bridge='${n}'][target/@dev]" -v "concat('ip link set ',target/@dev,' master ',source/@bridge,';')" | \
+                        ${pkgs.bash}/bin/bash
+                      done
                     done
-                  done
+                  fi
                 ''}
 
               # Enable stp on the interface
