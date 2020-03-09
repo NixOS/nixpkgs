@@ -2236,6 +2236,10 @@ in {
 
   jsonrpc-websocket = callPackage ../development/python-modules/jsonrpc-websocket { };
 
+  hepmc3 = toPythonModule (pkgs.hepmc3.override {
+    inherit python;
+  });
+
   onkyo-eiscp = callPackage ../development/python-modules/onkyo-eiscp { };
 
   tablib = callPackage ../development/python-modules/tablib { };
