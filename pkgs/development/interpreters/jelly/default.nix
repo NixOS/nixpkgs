@@ -1,0 +1,25 @@
+{ lib, python3Packages, fetchFromGitHub }:
+
+python3Packages.buildPythonApplication {
+  pname = "jelly";
+  version = "0.1.31";
+
+  src = fetchFromGitHub {
+    owner = "DennisMitchell";
+    repo = "jellylanguage";
+    rev = "70c9fd93ab009c05dc396f8cc091f72b212fb188";
+    sha256 = "1rpclqagvigp5qhvgnjavvy463f1drshnc1mfxm6z7ygzs0l0yz6";
+  };
+
+  propagatedBuildInputs = [ python3Packages.sympy ];
+
+  doCheck = false;
+
+  meta = with lib; {
+    description = "A recreational programming language inspired by J";
+    homepage    = https://github.com/DennisMitchell/jellylanguage;
+    license     = licenses.mit;
+    maintainers = [ maintainers.tckmn ];
+    platforms   = platforms.all;
+  };
+}

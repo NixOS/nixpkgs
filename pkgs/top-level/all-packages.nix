@@ -9166,6 +9166,8 @@ in
 
   janet = callPackage ../development/interpreters/janet {};
 
+  jelly = callPackage ../development/interpreters/jelly {};
+
   jimtcl = callPackage ../development/interpreters/jimtcl {};
 
   jmeter = callPackage ../applications/networking/jmeter {};
