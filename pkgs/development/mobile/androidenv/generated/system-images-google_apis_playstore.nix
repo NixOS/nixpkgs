@@ -47,16 +47,6 @@
     revision = "28-google_apis_playstore-x86";
     displayName = "Google Play Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86-28_r08.zip;
-      sha1 = "5381f9d52a3bf1967c9c92a25b20012cd68764c8";
-    };
-  };
-  "28".google_apis_playstore."x86" = {
-    name = "system-image-28-google_apis_playstore-x86";
-    path = "system-images/android-28/google_apis_playstore/x86";
-    revision = "28-google_apis_playstore-x86";
-    displayName = "Google Play Intel x86 Atom System Image";
-    archives.all = fetchurl {
       url = https://dl.google.com/android/repository/sys-img/google_apis_playstore/x86-28_r09.zip;
       sha1 = "97d9d4f4a2afa8b0f5d52e90748e19c10406ca93";
     };
