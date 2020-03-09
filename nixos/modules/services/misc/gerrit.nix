@@ -119,7 +119,7 @@ in
       gerrit = {
         inherit (cfg) basePath canonicalWebUrl;
       };
-      httpd.inheritChannel = true;
+      httpd.inheritChannel = "true";
       # TODO(edef): support SSH properly
       sshd.listenAddress = "off";
       cache.directory = "/var/cache/gerrit";
@@ -166,7 +166,7 @@ in
         EOF
 
         if [ "$(readlink -f plugins)" != ${pluginDir} ]; then
-          rm -f plugins
+          rm -rf plugins
           ln -s ${pluginDir} plugins
         fi
       '';
