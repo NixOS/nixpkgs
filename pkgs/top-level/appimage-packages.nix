@@ -1,4 +1,5 @@
-{ appimageTools, stdenv, fetchurl, fetchzip, fetchFromGitHub }:
+{ autoPatchelfHook, appimageTools, desktop-file-utils, stdenv, fetchurl
+  , fetchzip, fetchFromGitHub }:
 
 # fetchzip is for compatibility, bother AppImage builder about that :
 # https://docs.appimage.org/packaging-guide/distribution.html#do-not-put-appimages-into-other-archives
@@ -8,6 +9,7 @@ let
   self = appimagePackages;
   appimagePackages = with self; {
 
+  buildInputs = [ desktop-file-utils autoPatchelfHook ];
   buildAppImage = {
     name,
     version,
@@ -16,6 +18,18 @@ let
     ...
   } @ attrs:
     let
+      installPhase = ''
+        cd $src
+        # fixup and install desktop file
+        desktopitem="$(ls *.desktop)"
+        desktop-file-install "$desktopitem" --dir $out/share/applications \
+          --set-key Exec --set-value $binary
+        mv $out/share/applications/"$desktopitem" $out/share/applications/$name.desktop
+
+        #TODO: write a more generic code to read icon path from $desktopitem
+        
+        install -m 444 -D $icon $out/share/icons/hicolor/512x512/apps/$icon
+      '';
       name = "${attrs.name}-${attrs.version}";
       attrs' = builtins.removeAttrs attrs ["version"];
     in appimageTools.wrapType2 (attrs' //  {
@@ -24,7 +38,7 @@ let
         license = stdenv.lib.licenses.unfree;
         platforms = [ "x86_64-linux" ];
         description = throw "please write meta.description";
-      } // attrs.meta;
+      } // attrs'.meta;
   });
 
   beakerbrowser = buildAppImage rec {
