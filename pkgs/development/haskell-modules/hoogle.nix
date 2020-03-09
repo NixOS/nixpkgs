@@ -23,7 +23,8 @@
 # This will build mmorph and monadControl, and have the hoogle installation
 # refer to their documentation via symlink so they are not garbage collected.
 
-{ lib, stdenv, hoogle, writeText, ghc
+{ lib, stdenv, buildPackages
+, hoogle, writeText, ghc
 , packages
 }:
 
@@ -53,7 +54,7 @@ let
     (map (lib.getOutput "doc") packages);
 
 in
-stdenv.mkDerivation {
+buildPackages.stdenv.mkDerivation {
   name = "hoogle-local-0.1";
   buildInputs = [ghc hoogle];
 

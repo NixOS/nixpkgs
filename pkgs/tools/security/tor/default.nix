@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tor";
-  version = "0.4.1.6";
+  version = "0.4.2.6";
 
   src = fetchurl {
     url = "https://dist.torproject.org/${pname}-${version}.tar.gz";
-    sha256 = "0wgdid8w7srd218hh4rwslzdx2ickxw1pg18p2wry1r6wi65521a";
+    sha256 = "1i766s211nrbjvwvkd2375mjsbbc28yrg46564rbx6w46cj10005";
   };
 
   outputs = [ "out" "geoip" ];
@@ -28,16 +28,19 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
+  patches = [ ./disable-monotonic-timer-tests.patch ];
+
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
     substituteInPlace contrib/client-tools/torify \
       --replace 'pathfind torsocks' true          \
       --replace 'exec torsocks' 'exec ${torsocks}/bin/torsocks'
+
+    patchShebangs ./scripts/maint/checkShellScripts.sh
   '';
 
   enableParallelBuilding = true;
-  enableParallelChecking = false; # 4 tests fail randomly
 
   doCheck = true;
 

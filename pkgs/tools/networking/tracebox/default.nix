@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-lua=yes" ];
 
-  NIX_LDFLAGS = [ "${libpcap}/lib/libpcap.so" "${libcrafter}/lib/libcrafter.so" ];
+  NIX_LDFLAGS = "${libpcap}/lib/libpcap.so ${libcrafter}/lib/libcrafter.so";
 
   preAutoreconf = ''
     substituteInPlace Makefile.am --replace "noinst" ""

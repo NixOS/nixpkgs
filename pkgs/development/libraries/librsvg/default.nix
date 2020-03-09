@@ -4,14 +4,14 @@
 
 let
   pname = "librsvg";
-  version = "2.46.0";
+  version = "2.46.4";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1la3az2af2ccm6rp86b6wh0kq7kxzl4n8pli5qxhyic1rd91xj4n";
+    sha256 = "0afc82nsxc6kw136xid4vcq9kmq4rmgzzk8bh2pvln2cnvirwnxl";
   };
 
   outputs = [ "out" "dev" "installedTests" ];

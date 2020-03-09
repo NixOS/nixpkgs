@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1n2q5a6697bxvl0askywhad2x560cajv456gxihdqqmmyq2vf63h";
   };
 
-  cargoSha256 = "1wcpbqlglf9r0xhfjmyym8bnd4pgrsf9lrmb14hn1ml5zlshpd7p";
+  cargoSha256 = "0dd7b6iibjmmriwi081pc65crq0y1j2pmbm1iq0lkqdd89c9f1yp";
 
   meta = with stdenv.lib; {
     description = "A command-line hex viewer";

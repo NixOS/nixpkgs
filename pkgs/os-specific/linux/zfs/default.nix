@@ -7,6 +7,7 @@
 , libtirpc
 , nfs-utils
 , gawk, gnugrep, gnused, systemd
+, smartmontools, sysstat, sudo
 
 # Kernel dependencies
 , kernel ? null
@@ -55,6 +56,22 @@ let
         substituteInPlace ./config/zfs-build.m4       --replace "\$sysconfdir/init.d"     "$out/etc/init.d"
         substituteInPlace ./etc/zfs/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
         substituteInPlace ./cmd/zed/Makefile.am       --replace "\$(sysconfdir)"          "$out/etc"
+
+        substituteInPlace ./contrib/initramfs/hooks/Makefile.am \
+          --replace "/usr/share/initramfs-tools/hooks" "$out/usr/share/initramfs-tools/hooks"
+        substituteInPlace ./contrib/initramfs/Makefile.am \
+          --replace "/usr/share/initramfs-tools" "$out/usr/share/initramfs-tools"
+        substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
+        substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
+        substituteInPlace ./contrib/initramfs/scripts/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts" "$out/usr/share/initramfs-tools/scripts"
+        substituteInPlace ./contrib/initramfs/scripts/local-top/Makefile.am \
+          --replace "/usr/share/initramfs-tools/scripts/local-top" "$out/usr/share/initramfs-tools/scripts/local-top"
+        substituteInPlace ./etc/systemd/system/Makefile.am \
+          --replace '$(DESTDIR)$(systemdunitdir)' "$out"'$(DESTDIR)$(systemdunitdir)'
+
         substituteInPlace ./etc/systemd/system/zfs-share.service.in \
           --replace "/bin/rm " "${coreutils}/bin/rm "
 
@@ -131,6 +148,13 @@ let
         (cd $out/share/bash-completion/completions; ln -s zfs zpool)
       '';
 
+      postFixup = ''
+        path="PATH=${makeBinPath [ coreutils gawk gnused gnugrep utillinux smartmontools sysstat sudo ]}"
+        for i in $out/libexec/zfs/zpool.d/*; do
+          sed -i "2i$path" $i
+        done
+      '';
+
       outputs = [ "out" ] ++ optionals buildUser [ "lib" "dev" ];
 
       meta = {
@@ -140,7 +164,7 @@ let
           Copy-On-Write filesystem with data integrity detection and repair,
           snapshotting, cloning, block devices, deduplication, and more.
         '';
-        homepage = http://zfsonlinux.org/;
+        homepage = https://zfsonlinux.org/;
         license = licenses.cddl;
         platforms = platforms.linux;
         maintainers = with maintainers; [ jcumming wizeman fpletz globin ];
@@ -155,9 +179,9 @@ in {
     # incompatibleKernelVersion = "4.20";
 
     # this package should point to the latest release.
-    version = "0.8.2";
+    version = "0.8.3";
 
-    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
+    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
   };
 
   zfsUnstable = common {
@@ -165,9 +189,9 @@ in {
     # incompatibleKernelVersion = "4.19";
 
     # this package should point to a version / git revision compatible with the latest kernel release
-    version = "0.8.2";
+    version = "0.8.3";
 
-    sha256 = "0miax0h2wg4b2kn8n93804faajy2n1sh25knyy2hg3k77nlr4pni";
+    sha256 = "0viql8rnqr32diapkpdsrwm6xj8vw5vi4dk2x2m7s7g0q2zdkahw";
     isUnstable = true;
   };
 }

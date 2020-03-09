@@ -5,7 +5,6 @@
 , gettext
 , glib
 , gtk3
-, hicolor-icon-theme
 , libgee
 , libdazzle
 , meson
@@ -20,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ephemeral";
-  version = "5.4.0";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "cassidyjames";
     repo = "ephemeral";
     rev = version;
-    sha256 = "1bl5x79nvzq49azcghc2sx9l709524zixh7py8ddccfnhrq641w8";
+    sha256 = "0h159szljvphs2hvagxwv6nncx46q0mvr4ylhl2nimap9jvss91n";
   };
 
   nativeBuildInputs = [
@@ -44,7 +43,6 @@ stdenv.mkDerivation rec {
     glib
     glib-networking
     gtk3
-    hicolor-icon-theme
     libdazzle
     libgee
     pantheon.granite
@@ -55,6 +53,12 @@ stdenv.mkDerivation rec {
     chmod +x meson/post_install.py
     patchShebangs meson/post_install.py
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "The always-incognito web browser";

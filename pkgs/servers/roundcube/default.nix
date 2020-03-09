@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
-  version = "1.3.10";
+  version = "1.4.3";
 
   src = fetchurl {
     url = "https://github.com/roundcube/roundcubemail/releases/download/${version}/roundcubemail-${version}-complete.tar.gz";
-    sha256 = "1gx8dgrr3p6fksv3pm381a080i9r6snwcmfd1q112mqg19ai3zk9";
+    sha256 = "1gsl9rpdkv388i6zvciladhb15fw94a8xjyh4ai1664nkwl51wi4";
   };
 
   patches = [ ./0001-Don-t-resolve-symlinks-when-trying-to-find-INSTALL_P.patch ];
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Open Source Webmail Software";
-    maintainers = with stdenv.lib.maintainers; [ vskilet globin ];
+    maintainers = with stdenv.lib.maintainers; [ vskilet globin ma27 ];
     license = stdenv.lib.licenses.gpl3;
     platforms = stdenv.lib.platforms.all;
   };

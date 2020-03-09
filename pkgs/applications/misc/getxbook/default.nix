@@ -9,7 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "0ihwrx4gspj8l7fc8vxch6dpjrw1lvv9z3c19f0wxnmnxhv1cjvs";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=format-truncation" "-Wno-error=deprecated-declarations" ];
+  NIX_CFLAGS_COMPILE = builtins.toString [
+    "-Wno-error=format-truncation"
+    "-Wno-error=deprecated-declarations"
+    "-Wno-error=stringop-overflow"
+  ];
 
   buildInputs = [ openssl ];
 

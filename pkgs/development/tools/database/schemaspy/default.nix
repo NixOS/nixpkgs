@@ -1,12 +1,12 @@
 { lib, stdenv, fetchurl, jre, makeWrapper, graphviz }:
 
 stdenv.mkDerivation rec {
-  version = "6.0.0-rc2";
+  version = "6.1.0";
   pname = "schemaspy";
 
   src = fetchurl {
     url = "https://github.com/schemaspy/schemaspy/releases/download/v${version}/${pname}-${version}.jar";
-    sha256 = "0ph1l62hy163m2hgybhkccqbcj6brna1vdbr7536zc37lzjxq9rn";
+    sha256 = "0lgz6b17hx9857fb2l03ggz8y3n8a37vrcsylif0gmkwj1v4qgl7";
   };
 
   dontUnpack = true;

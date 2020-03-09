@@ -42,7 +42,8 @@ with super;
     ];
 
     # https://github.com/wahern/cqueues/issues/227
-    NIX_CFLAGS_COMPILE = if pkgs.stdenv.hostPlatform.isDarwin then [ "-DCLOCK_MONOTONIC" "-DCLOCK_REALTIME" ] else null;
+    NIX_CFLAGS_COMPILE = with pkgs.stdenv; lib.optionalString hostPlatform.isDarwin
+      "-DCLOCK_MONOTONIC -DCLOCK_REALTIME";
 
     disabled = luaOlder "5.1" || luaAtLeast "5.4";
     # Upstream rockspec is pointlessly broken into separate rockspecs, per Lua
@@ -105,7 +106,7 @@ with super;
     ];
     buildInputs = [
       pkgs.glib
-      pkgs.gobjectIntrospection
+      pkgs.gobject-introspection
     ];
     patches = [
       (pkgs.fetchpatch {
@@ -152,11 +153,11 @@ with super;
   });
 
   luadbi-mysql = super.luadbi-mysql.override({
-    extraVariables = ''
-      -- Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
-      MYSQL_INCDIR='${pkgs.libmysqlclient}/include/mysql';
-      MYSQL_LIBDIR='${pkgs.libmysqlclient}/lib/mysql';
-    '';
+    extraVariables = {
+      # Can't just be /include and /lib, unfortunately needs the trailing 'mysql'
+      MYSQL_INCDIR="${pkgs.libmysqlclient}/include/mysql";
+      MYSQL_LIBDIR="${pkgs.libmysqlclient}/lib/mysql";
+    };
     buildInputs = [
       pkgs.mysql.client
       pkgs.libmysqlclient
@@ -224,7 +225,7 @@ with super;
   });
 
   luasystem = super.luasystem.override({
-    buildInputs = [
+    buildInputs = pkgs.lib.optionals pkgs.stdenv.isLinux [
       pkgs.glibc
     ];
   });
@@ -253,7 +254,7 @@ with super;
     # Upstreams:
     # 5.1: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.1/luuid.tar.gz
     # 5.2: http://webserver2.tecgraf.puc-rio.br/~lhf/ftp/lua/5.2/luuid.tar.gz
-    patchFlags = "-p2";
+    patchFlags = [ "-p2" ];
     patches = [
       ./luuid.patch
     ];

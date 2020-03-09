@@ -6,7 +6,7 @@ buildGoPackage {
   inherit (keybase) src version;
 
   goPackagePath = "github.com/keybase/client";
-  subPackages = [ "go/kbfs/kbfsfuse" "go/kbfs/kbfsgit/git-remote-keybase" ];
+  subPackages = [ "go/kbfs/kbfsfuse" "go/kbfs/redirector" "go/kbfs/kbfsgit/git-remote-keybase" ];
 
   dontRenameImports = true;
 

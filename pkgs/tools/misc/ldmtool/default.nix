@@ -3,15 +3,15 @@
 , fetchpatch }:
 
 stdenv.mkDerivation rec {
-   pname = "ldmtool";
-   version = "0.2.4";
+  pname = "ldmtool";
+  version = "0.2.4";
 
-   src = fetchFromGitHub {
-     owner = "mdbooth";
-     repo = "libldm";
-     rev = "libldm-${version}";
-     sha256 = "1fy5wbmk8kwl86lzswq0d1z2j5y023qzfm2ppm8knzv9c47kniqk";
-   };
+  src = fetchFromGitHub {
+    owner = "mdbooth";
+    repo = "libldm";
+    rev = "libldm-${version}";
+    sha256 = "1fy5wbmk8kwl86lzswq0d1z2j5y023qzfm2ppm8knzv9c47kniqk";
+  };
 
   patches = [
     # Remove useage of deprecrated G_PARAM_PRIVATE
@@ -21,26 +21,26 @@ stdenv.mkDerivation rec {
     })
   ];
 
-   preConfigure = ''
-     sed -i docs/reference/ldmtool/Makefile.am \
-       -e 's|-nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl|--nonet ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl|g'
-   '';
+  preConfigure = ''
+    sed -i docs/reference/ldmtool/Makefile.am \
+      -e 's|-nonet http://docbook.sourceforge.net/release/xsl/current/manpages/docbook.xsl|--nonet ${docbook_xsl}/xml/xsl/docbook/manpages/docbook.xsl|g'
+  '';
 
-   # glib-2.62 deprecations
-   NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
-   configureScript = "sh autogen.sh";
+  configureScript = "sh autogen.sh";
 
-   nativeBuildInputs = [ pkgconfig ];
-   buildInputs = [ autoconf automake gtk-doc lvm2 libxslt.bin
-     libtool readline gobject-introspection json-glib libuuid
-   ];
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ autoconf automake gtk-doc lvm2 libxslt.bin
+    libtool readline gobject-introspection json-glib libuuid
+  ];
 
-   meta = with stdenv.lib; {
-     description = "Tool and library for managing Microsoft Windows Dynamic Disks";
-     homepage = https://github.com/mdbooth/libldm;
-     maintainers = with maintainers; [ jensbin ];
-     license = licenses.gpl3;
-     platforms = platforms.linux;
-   };
+  meta = with stdenv.lib; {
+    description = "Tool and library for managing Microsoft Windows Dynamic Disks";
+    homepage = https://github.com/mdbooth/libldm;
+    maintainers = with maintainers; [ jensbin ];
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+  };
 }

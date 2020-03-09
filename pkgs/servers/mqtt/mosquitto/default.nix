@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "mosquitto";
-  version = "1.6.6";
+  version = "1.6.8";
 
   src = fetchFromGitHub {
     owner  = "eclipse";
     repo   = "mosquitto";
     rev    = "v${version}";
-    sha256 = "01a1vf0rgncmhk7v9vnj4gdx0j8jfiy95f2hr4iwqdch7jy5q367";
+    sha256 = "1py13vg3vwwwg6jdnmq46z6rlzb84r4ggqsmsrn4yar5hrw9pa90";
   };
 
   postPatch = ''

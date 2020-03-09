@@ -1,7 +1,7 @@
 diff -Naur xapian-core.old/tests/api_db.cc xapian-core.new/tests/api_db.cc
 --- xapian-core.old/tests/api_db.cc
 +++ xapian-core.new/tests/api_db.cc
-@@ -998,6 +998,7 @@
+@@ -1020,6 +1020,7 @@
  
  // test for keepalives
  DEFINE_TESTCASE(keepalive1, remote) {

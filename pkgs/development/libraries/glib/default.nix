@@ -48,21 +48,15 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.62.0";
+  version = "2.62.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "046sqfmr84blxh4vkipmh8ff7wd19fxmh6lnr5ibchx3l02p49bc";
+    sha256 = "0bj5hagvfiqcjd20w543pvbnrlqvs8nbxvqjflyvcn36ljpwvldq";
   };
 
   patches = optionals stdenv.isDarwin [
     ./darwin-compilation.patch
-    # fix loading dylibs on darwin
-    # Remove on 2.62.1
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/glib/commit/e2409e5e180f1fa369d0e87e38e4d646d9f68791.patch";
-      sha256 = "1dhjwlsqdgnn8fr8pzfrnd63m7pdgf7mizdyn8lwg17ggvq6qsqf";
-    })
   ] ++ optionals stdenv.hostPlatform.isMusl [
     ./quark_init_on_demand.patch
     ./gobject_init_on_demand.patch
@@ -124,7 +118,7 @@ stdenv.mkDerivation rec {
     "-Ddevbindir=${placeholder ''dev''}/bin"
   ];
 
-  NIX_CFLAGS_COMPILE = [
+  NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=nonnull"
     # Default for release buildtype but passed manually because
     # we're using plain
@@ -143,9 +137,6 @@ stdenv.mkDerivation rec {
     patchShebangs tests/gen-casefold-txt.py
     patchShebangs tests/gen-casemap-txt.py
   '';
-
-  LIBELF_CFLAGS = optional stdenv.isFreeBSD "-I${libelf}";
-  LIBELF_LIBS = optional stdenv.isFreeBSD "-L${libelf} -lelf";
 
   DETERMINISTIC_BUILD = 1;
 
@@ -169,7 +160,7 @@ stdenv.mkDerivation rec {
   checkInputs = [ tzdata libxml2 desktop-file-utils shared-mime-info ];
 
   preCheck = optionalString doCheck ''
-    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs:$LD_LIBRARY_PATH"
+    export LD_LIBRARY_PATH="$NIX_BUILD_TOP/${pname}-${version}/glib/.libs''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH"
     export TZDIR="${tzdata}/share/zoneinfo"
     export XDG_CACHE_HOME="$TMP"
     export XDG_RUNTIME_HOME="$TMP"
@@ -194,6 +185,8 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
+  separateDebugInfo = stdenv.isLinux;
+
   passthru = rec {
     gioModuleDir = "lib/gio/modules";
     makeSchemaPath = dir: name: "${dir}/share/gsettings-schemas/${name}/glib-2.0/schemas";
@@ -206,7 +199,7 @@ stdenv.mkDerivation rec {
     description = "C library of programming buildings blocks";
     homepage    = https://www.gtk.org/;
     license     = licenses.lgpl21Plus;
-    maintainers = with maintainers; [ lovek323 raskin ];
+    maintainers = with maintainers; [ lovek323 raskin worldofpeace ];
     platforms   = platforms.unix;
 
     longDescription = ''

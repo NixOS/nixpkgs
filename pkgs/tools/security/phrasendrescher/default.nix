@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ openssl libssh2 gpgme ];
 
-  configureFlags = "--with-plugins";
+  configureFlags = [ "--with-plugins" ];
 
   meta = with stdenv.lib; {
     description = "A modular and multi processing pass phrase cracking tool";

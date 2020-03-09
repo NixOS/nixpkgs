@@ -1,4 +1,4 @@
-{ name, stdenv, perl, makeWrapper, sqitchModule, databaseModule }:
+{ name, stdenv, perl, makeWrapper, sqitchModule, databaseModule, shortenPerlShebang }:
 
 stdenv.mkDerivation {
   name = "${name}-${sqitchModule.version}";
@@ -7,6 +7,8 @@ stdenv.mkDerivation {
 
   src = sqitchModule;
   dontBuild = true;
+
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin shortenPerlShebang;
 
   installPhase = ''
     mkdir -p $out/bin
@@ -17,6 +19,8 @@ stdenv.mkDerivation {
         ln -s ${sqitchModule}/$d $out/$d
       fi
     done
+  '' + stdenv.lib.optionalString stdenv.isDarwin ''
+    shortenPerlShebang $out/bin/sqitch
   '';
   dontStrip = true;
   postFixup = "wrapProgram $out/bin/sqitch --prefix PERL5LIB : $PERL5LIB";

@@ -2,19 +2,20 @@
 
 stdenv.mkDerivation rec {
   pname = "bedtools";
-  version = "2.29.0";
+  version = "2.29.2";
 
   src = fetchFromGitHub {
     owner = "arq5x";
     repo = "bedtools2";
     rev = "v${version}";
-    sha256 = "0d6i985qqxp92ddq4n6558m70qi5rqhl724wrfys0hm0p6a9h56x";
+    sha256 = "015qq3pwrwgnyxyi959niijjlswl231b3wxlsm3l8msv6fdhmkz8";
   };
 
   buildInputs = [ zlib python bzip2 lzma ];
-  cc = if stdenv.cc.isClang then "clang++" else "g++";
-  buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cc} -j $NIX_BUILD_CORES";
-  installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cc} install";
+  cxx = if stdenv.cc.isClang then "clang++" else "g++";
+  cc = if stdenv.cc.isClang then "clang" else "gcc";
+  buildPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} -j $NIX_BUILD_CORES";
+  installPhase = "make prefix=$out SHELL=${stdenv.shell} CXX=${cxx} CC=${cc} install";
 
   meta = with stdenv.lib; {
     description = "A powerful toolset for genome arithmetic.";

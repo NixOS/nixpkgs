@@ -23,6 +23,9 @@ rustPlatform.buildRustPackage rec {
         wrapProgram $out/bin/leftwm-worker --prefix LD_LIBRARY_PATH : "${rpath}"
     '';
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
     cargoSha256 = "0mpvfix7bvc84vanha474l4gaq97ac1zy5l77z83m9jg0246yxd6";
 
     # patch wrong version in Cargo.lock

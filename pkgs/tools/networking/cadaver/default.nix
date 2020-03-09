@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, openssl }:
+{ stdenv, fetchurl, fetchpatch, openssl, readline }:
 
 stdenv.mkDerivation rec {
   name = "cadaver-0.23.3";
@@ -16,9 +16,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--with-ssl" ];
+  configureFlags = [ "--with-ssl" "--with-readline" ];
 
-  buildInputs = [ openssl ];
+  buildInputs = [ openssl readline ];
 
   meta = with stdenv.lib; {
     description = "A command-line WebDAV client";

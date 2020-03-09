@@ -1,7 +1,7 @@
 ---
 title: iOS
 author: Sander van der Burg
-date: 2018-11-18
+date: 2019-11-10
 ---
 # iOS
 
@@ -217,3 +217,13 @@ xcode.simulateApp {
 
 By providing the result of an `xcode.buildApp {}` function and configuring the
 app bundle id, the app gets deployed automatically and started.
+
+Troubleshooting
+---------------
+In some rare cases, it may happen that after a failure, changes are not picked
+up. Most likely, this is caused by a derived data cache that Xcode maintains.
+To wipe it you can run:
+
+```bash
+$ rm -rf ~/Library/Developer/Xcode/DerivedData
+```

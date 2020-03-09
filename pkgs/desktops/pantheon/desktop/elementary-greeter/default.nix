@@ -28,7 +28,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-greeter";
-  version = "5.0";
+  version = "5.0.2";
 
   repoName = "greeter";
 
@@ -36,13 +36,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "01c8acarxwpakyq69xm4bjwppjf8v3ijmns8masd8raxligb2v8b";
+    sha256 = "0557lr8czqwjrm39ykfacqw5x7nng7fmf1gxkif70xg7dk3lc7gd";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
 
     xgreeters = linkFarm "pantheon-greeter-xgreeters" [{

@@ -164,6 +164,10 @@ let
       ] ++ (optional isModular "INSTALL_MOD_PATH=$(out)")
       ++ optional installsFirmware "INSTALL_FW_PATH=$(out)/lib/firmware";
 
+      preInstall = ''
+        installFlagsArray+=("-j$NIX_BUILD_CORES")
+      '';
+
       # Some image types need special install targets (e.g. uImage is installed with make uinstall)
       installTargets = [ (
         if platform ? kernelInstallTarget then platform.kernelInstallTarget
@@ -179,7 +183,7 @@ let
       '' else "") + (if isModular then ''
         mkdir -p $dev
         cp vmlinux $dev/
-        if [ -z "$dontStrip" ]; then
+        if [ -z "''${dontStrip-}" ]; then
           installFlagsArray+=("INSTALL_MOD_STRIP=1")
         fi
         make modules_install $makeFlags "''${makeFlagsArray[@]}" \

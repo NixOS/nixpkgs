@@ -1,9 +1,11 @@
 { stdenv, fetchurl, pkgconfig, autoreconfHook, libestr, json_c, zlib, pythonPackages, fastJson
 , libkrb5 ? null, systemd ? null, jemalloc ? null, libmysqlclient ? null, postgresql ? null
-, libdbi ? null, net_snmp ? null, libuuid ? null, curl ? null, gnutls ? null
+, libdbi ? null, net-snmp ? null, libuuid ? null, curl ? null, gnutls ? null
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
-, libgt ? null, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
+, liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
+, libmaxminddb ? null
+, nixosTests ? null
 }:
 
 with stdenv.lib;
@@ -11,11 +13,12 @@ let
   mkFlag = cond: name: if cond then "--enable-${name}" else "--disable-${name}";
 in
 stdenv.mkDerivation rec {
-  name = "rsyslog-8.1907.0";
+  pname = "rsyslog";
+  version = "8.2001.0";
 
   src = fetchurl {
-    url = "https://www.rsyslog.com/files/download/rsyslog/${name}.tar.gz";
-    sha256 = "1dcz0w5xalqsi2xjb5j7c9mq5kf9s9kq9j2inpv4w5wkrrg569zb";
+    url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
+    sha256 = "1nm83s9abknli46sknjs50cmdhhqzkznbsjspjbdg96likshdgsq";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -23,13 +26,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
     fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
-    postgresql libdbi net_snmp libuuid curl gnutls libgcrypt liblognorm openssl
-    librelp libgt libksi liblogging libnet hadoop rdkafka libmongo-client czmq
-    rabbitmq-c hiredis mongoc
+    postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
+    librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
+    rabbitmq-c hiredis mongoc libmaxminddb
   ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
-
-  hardeningDisable = [ "format" ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -53,7 +54,7 @@ stdenv.mkDerivation rec {
     (mkFlag (libmysqlclient != null)  "mysql")
     (mkFlag (postgresql != null)      "pgsql")
     (mkFlag (libdbi != null)          "libdbi")
-    (mkFlag (net_snmp != null)        "snmp")
+    (mkFlag (net-snmp != null)        "snmp")
     (mkFlag (libuuid != null)         "uuid")
     (mkFlag (curl != null)            "elasticsearch")
     (mkFlag (gnutls != null)          "gnutls")
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
     (mkFlag true                      "rsyslogd")
     (mkFlag true                      "mail")
     (mkFlag (liblognorm != null)      "mmnormalize")
+    (mkFlag (libmaxminddb != null)    "mmdblookup")
     (mkFlag true                      "mmjsonparse")
     (mkFlag true                      "mmaudit")
     (mkFlag true                      "mmanon")
@@ -72,8 +74,7 @@ stdenv.mkDerivation rec {
     (mkFlag true                      "mmpstrucdata")
     (mkFlag (openssl != null)         "mmrfc5424addhmac")
     (mkFlag (librelp != null)         "relp")
-    (mkFlag (libgt != null)           "guardtime")
-    (mkFlag (libksi != null)          "gt-ksi")
+    (mkFlag (libksi != null)          "ksi-ls12")
     (mkFlag (liblogging != null)      "liblogging-stdlog")
     (mkFlag (liblogging != null)      "rfc3195")
     (mkFlag true                      "imfile")
@@ -95,9 +96,7 @@ stdenv.mkDerivation rec {
     (mkFlag (hadoop != null)          "omhdfs")
     (mkFlag (rdkafka != null)         "omkafka")
     (mkFlag (libmongo-client != null) "ommongodb")
-    (mkFlag (czmq != null)            "imzmq3")
     (mkFlag (czmq != null)            "imczmq")
-    (mkFlag (czmq != null)            "omzmq3")
     (mkFlag (czmq != null)            "omczmq")
     (mkFlag (rabbitmq-c != null)      "omrabbitmq")
     (mkFlag (hiredis != null)         "omhiredis")
@@ -105,9 +104,14 @@ stdenv.mkDerivation rec {
     (mkFlag true                      "generate-man-pages")
   ];
 
+  passthru.tests = {
+    nixos-rsyslogd = nixosTests.rsyslogd;
+  };
+
   meta = {
     homepage = https://www.rsyslog.com/;
     description = "Enhanced syslog implementation";
+    changelog = "https://raw.githubusercontent.com/rsyslog/rsyslog/v${version}/ChangeLog";
     license = licenses.gpl3;
     platforms = platforms.linux;
   };

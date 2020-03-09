@@ -4,14 +4,14 @@
 
 buildPythonPackage rec {
   pname = "mpv";
-  version = "0.3.9";
+  version = "0.4.5";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "jaseg";
     repo = "python-mpv";
     rev = "v${version}";
-    sha256 = "112kr9wppcyy3shsb7v7kq0s1pdw6vw3v2fvqicm7qb2f49y2p4q";
+    sha256 = "1y80c2k4s42lzvm5dz8wi186i7rsn1vs1wn30hp6v6vs62fb91fi";
   };
 
   buildInputs = [ mpv ];

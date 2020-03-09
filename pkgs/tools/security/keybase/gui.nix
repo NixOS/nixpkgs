@@ -1,19 +1,19 @@
 { stdenv, fetchurl, alsaLib, atk, cairo, cups, udev
-, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3
+, dbus, expat, fontconfig, freetype, gdk-pixbuf, glib, gtk3, libappindicator-gtk3
 , libnotify, nspr, nss, pango, systemd, xorg, autoPatchelfHook, wrapGAppsHook
 , runtimeShell, gsettings-desktop-schemas }:
 
 let
-  versionSuffix = "20190813132700.6f497ec371";
+  versionSuffix = "20200225210944.9845113a89";
 in
 
 stdenv.mkDerivation rec {
   pname = "keybase-gui";
-  version = "4.3.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
+  version = "5.2.1"; # Find latest version from https://prerelease.keybase.io/deb/dists/stable/main/binary-amd64/Packages
 
   src = fetchurl {
     url = "https://s3.amazonaws.com/prerelease.keybase.io/linux_binaries/deb/keybase_${version + "-" + versionSuffix}_amd64.deb";
-    sha256 = "1mbbfy1aijqr8209jjja6dm2nzw721qqw94839df047rcwnd38pg";
+    sha256 = "183vkwm12frdy50z6gyb1mffn3w8jvxxj472868af813r0n1akl5";
   };
 
   nativeBuildInputs = [
@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     glib
     gsettings-desktop-schemas
     gtk3
+    libappindicator-gtk3
     libnotify
     nspr
     nss
@@ -55,6 +56,7 @@ stdenv.mkDerivation rec {
 
   runtimeDependencies = [
     udev.lib
+    libappindicator-gtk3
   ];
 
   dontBuild = true;
@@ -106,7 +108,7 @@ stdenv.mkDerivation rec {
     homepage = https://www.keybase.io/;
     description = "The Keybase official GUI";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rvolosatovs puffnfresh np ];
+    maintainers = with maintainers; [ rvolosatovs puffnfresh np filalex77 ];
     license = licenses.bsd3;
   };
 }

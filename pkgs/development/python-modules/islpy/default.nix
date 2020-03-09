@@ -9,11 +9,11 @@
 
 buildPythonPackage rec {
   pname = "islpy";
-  version = "2018.2";
+  version = "2019.1.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "be422a53b576210a0bb9775866abb6580b1e568222fc3e4e39d9e82f6d1d7253";
+    sha256 = "834b6b946f33d578d5c6b2f863dd93f7ecc4c0a2bf73407c96ef9f95b6b71bbf";
   };
 
   postConfigure = ''

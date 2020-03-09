@@ -10,6 +10,7 @@
 
 , dbus
 , glib
+, dconf
 , libX11
 , libXtst # at-spi2-core can be build without X support, but due it is a client-side library, GUI-less usage is a very rare case
 , libXi
@@ -29,7 +30,9 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection makeWrapper ];
-  buildInputs = [ dbus glib libX11 libXtst libXi ];
+  buildInputs = [ libX11 libXtst libXi ];
+  # In atspi-2.pc dbus-1 glib-2.0
+  propagatedBuildInputs = [ dbus glib ];
 
   doCheck = false; # fails with "AT-SPI: Couldn't connect to accessibility bus. Is at-spi-bus-launcher running?"
 
@@ -48,7 +51,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     # Cannot use wrapGAppsHook'due to a dependency cycle
     wrapProgram $out/libexec/at-spi-bus-launcher \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 

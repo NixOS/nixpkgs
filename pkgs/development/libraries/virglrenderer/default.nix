@@ -1,24 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, libGLU, epoxy, libX11, libdrm, mesa }:
-
+{ stdenv, fetchurl, cmake, meson, ninja, pkgconfig, python3
+, libGLU, epoxy, libX11, libdrm, mesa
+}:
 
 stdenv.mkDerivation rec {
-
   pname = "virglrenderer";
-  version = "0.7.0";
+  version = "0.8.1";
 
   src = fetchurl {
-    url = "https://www.freedesktop.org/software/virgl/${pname}-${version}.tar.bz2";
-    sha256 = "041agg1d6i8hg250y30f08n3via0hs9rbijxdrfifb8ara805v0m";
+    url = "https://gitlab.freedesktop.org/virgl/virglrenderer/-/archive/virglrenderer-${version}/virglrenderer-virglrenderer-${version}.tar.bz2";
+    sha256 = "0ac39mplmy6lmcd6cljmfsrfby7m6ac3dzvmnn5pv200drl415l4";
   };
 
   buildInputs = [ libGLU epoxy libX11 libdrm mesa ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake meson ninja pkgconfig python3 ];
 
-  # Fix use of fd_set without proper include
-  prePatch = ''
-    sed -e '1i#include <sys/select.h>' -i vtest/util.c
-  '';
+  dontUseCmakeConfigure = true;
 
   meta = with stdenv.lib; {
     description = "A virtual 3D GPU library that allows a qemu guest to use the host GPU for accelerated 3D rendering";
@@ -27,5 +24,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.xeji ];
   };
-
 }

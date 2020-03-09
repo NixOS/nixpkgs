@@ -53,7 +53,7 @@ let
 
   shortArch = {
     x86_64-linux = "linux";
-    x86_64-darwin = "macos";
+    x86_64-darwin = "mac";
   }.${stdenv.hostPlatform.system} or throwSystem;
 
   # calculate the filename of a single zip file

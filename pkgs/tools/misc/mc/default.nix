@@ -1,5 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, glib, gpm, file, e2fsprogs
-, libX11, libICE, perl, zip, unzip, gettext, slang, libssh2, openssl}:
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, gpm
+, file
+, e2fsprogs
+, libX11
+, libICE
+, perl
+, zip
+, unzip
+, gettext
+, slang
+, libssh2
+, openssl
+, coreutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "mc";
@@ -13,26 +29,41 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [
-    perl glib slang zip unzip file gettext libX11 libICE libssh2 openssl
+    file
+    gettext
+    glib
+    libICE
+    libX11
+    libssh2
+    openssl
+    perl
+    slang
+    unzip
+    zip
   ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ e2fsprogs gpm ];
 
   enableParallelBuilding = true;
 
   configureFlags = [ "--enable-vfs-smb" ];
 
+  postPatch = ''
+    substituteInPlace src/filemanager/ext.c \
+      --replace /bin/rm ${coreutils}/bin/rm
+  '';
+
   postFixup = ''
     # remove unwanted build-dependency references
     sed -i -e "s!PKG_CONFIG_PATH=''${PKG_CONFIG_PATH}!PKG_CONFIG_PATH=$(echo "$PKG_CONFIG_PATH" | sed -e 's/./0/g')!" $out/bin/mc
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "File Manager and User Shell for the GNU Project";
-    homepage = http://www.midnight-commander.org;
     downloadPage = "http://www.midnight-commander.org/downloads/";
+    homepage = "http://www.midnight-commander.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ sander ];
+    platforms = with platforms; linux ++ darwin;
     repositories.git = git://github.com/MidnightCommander/mc.git;
-    license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = [ stdenv.lib.maintainers.sander ];
-    platforms = with stdenv.lib.platforms; linux ++ darwin;
     updateWalker = true;
   };
 }

@@ -102,6 +102,7 @@ in stdenv.mkDerivation rec {
   ] ++ optionals stdenv.isLinux [
     "QEMU_BRIDGE_HELPER=/run/wrappers/bin/qemu-bridge-helper"
     "QEMU_PR_HELPER=/run/libvirt/nix-helpers/qemu-pr-helper"
+    "EBTABLES_PATH=${ebtables}/bin/ebtables-legacy"
     "--with-attr"
     "--with-apparmor"
     "--with-secdriver-apparmor"

@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, pkgconfig, libtool, curl
 , python, munge, perl, pam, openssl, zlib
 , ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg, lz4
+, readline, freeipmi, libssh2, xorg, lz4, rdma-core
 # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
 stdenv.mkDerivation rec {
   pname = "slurm";
-  version = "19.05.3.2";
+  version = "19.05.5.1";
 
   # N.B. We use github release tags instead of https://www.schedmd.com/downloads.php
   # because the latter does not keep older releases.
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     repo = "slurm";
     # The release tags use - instead of .
     rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
-    sha256 = "1ds4dvwswyx9rjcmcwz2fm2zi3q4gcc2n0fxxihl31i5i6wg1kv0";
+    sha256 = "0f0gv3sirp6sxdrbwydsbcqicjbmrpm58yhgbsar8v6nx3g6y3hx";
   };
 
   outputs = [ "out" "dev" ];
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
     curl python munge perl pam openssl zlib
-      libmysqlclient ncurses gtk2 lz4
+      libmysqlclient ncurses gtk2 lz4 rdma-core
       lua hwloc numactl readline freeipmi
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
@@ -46,9 +46,11 @@ stdenv.mkDerivation rec {
       "--with-munge=${munge}"
       "--with-ssl=${openssl.dev}"
       "--with-zlib=${zlib}"
+      "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
     ] ++ (optional (gtk2 == null)  "--disable-gtktest")
-      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}");
+      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")
+      ++ (optional (!enableX11) "--disable-x11");
 
 
   preConfigure = ''

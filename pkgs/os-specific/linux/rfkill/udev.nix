@@ -8,18 +8,18 @@
 #   udev.packages = [ pkgs.rfkill_udev ];
 #
 # Add a hook script in the managed etc directory, e.g.:
-#   etc = [
-#     { source = pkgs.writeScript "rtfkill.hook" ''
-#         #!${pkgs.runtimeShell}
+#   etc."rfkill.hook" = {
+#     mode = "0755";
+#     text = ''
+#       #!${pkgs.runtimeShell}
 #
-#         if [ "$RFKILL_STATE" -eq "1" ]; then
-#           exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-on
-#         else
-#           exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-off
-#         fi
-#       '';
-#       target = "rfkill.hook";
-#     }
+#       if [ "$RFKILL_STATE" -eq "1" ]; then
+#         exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-on
+#       else
+#         exec ${config.system.build.upstart}/sbin/initctl emit -n antenna-off
+#       fi
+#     '';
+#   }
 
 # Note: this package does not need the binaries
 # in the rfkill package.

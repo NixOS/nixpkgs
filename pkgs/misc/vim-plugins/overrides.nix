@@ -1,6 +1,6 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip
+, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -14,11 +14,17 @@
 # coc-go dependency
 , go
 
-# vim-go denpencies
+# deoplete-khard dependency
+, khard
+
+# vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
+
+# direnv-vim dependencies
+, direnv
 
 # vCoolor dependency
 , gnome3
@@ -49,16 +55,19 @@ self: super: {
   };
 
   LanguageClient-neovim = let
-    version = "0.1.154";
+    version = "0.1.156";
     LanguageClient-neovim-src = fetchurl {
       url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
-      sha256 = "03sp643nihj9p2s9cx2dcazhz68s30qx7igqprgsmr1040rhg2py";
+      sha256 = "0bf2va6lpgw7wqpwpfidijbzphhvw48hyc2b529qv12vwgnd1shq";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "1bvbls2l1xa0s3k11crvd98il4i20z5sn0hqmsc1b915k03qq4zj";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+      cargoSha256 = "1w8g7pxwnjqp9zi47h4lz2mcg5daldsk5z72h8cjj750wng8a82c";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -80,17 +89,6 @@ self: super: {
     '';
   };
 
-  # do not auto-update this one, as the name clashes with vim-snippets
-  vim-docbk-snippets = buildVimPluginFrom2Nix {
-    pname = "vim-docbk-snippets";
-    version = "2017-11-02";
-    src = fetchgit {
-      url = "https://github.com/jhradilek/vim-snippets";
-      rev = "69cce66defdf131958f152ea7a7b26c21ca9d009";
-      sha256 = "1363b2fmv69axrl2hm74dmx51cqd8k7rk116890qllnapzw1zjgc";
-    };
-  };
-
   clang_complete = super.clang_complete.overrideAttrs(old: {
     # In addition to the arguments you pass to your compiler, you also need to
     # specify the path of the C++ std header (if you are using C++).
@@ -105,6 +103,14 @@ self: super: {
 
       substituteInPlace "$out"/share/vim-plugins/clang_complete/plugin/libclang.py \
         --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
+    '';
+  });
+
+  direnv-vim = super.direnv-vim.overrideAttrs(oa: {
+    preFixup = oa.preFixup or "" + ''
+      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+        --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
     '';
   });
 
@@ -123,14 +129,15 @@ self: super: {
   });
 
   # Only official releases contains the required index.js file
+  # NB: Make sure you pick a rev from the release branch!
   coc-nvim = buildVimPluginFrom2Nix rec {
     pname = "coc-nvim";
-    version = "0.0.74";
+    version = "2020-01-05";
     src = fetchFromGitHub {
       owner = "neoclide";
       repo = "coc.nvim";
-      rev = "v${version}";
-      sha256 = "1s4nib2mnhagd0ymx254vf7l1iijwrh2xdqn3bdm4f1jnip81r10";
+      rev = "984779f2f825626aa9d441746d8b4ee079137c65";
+      sha256 = "0w7qnhi7wikr789h3w5p59l8wd81czpvbzbdanf8klf9ap4ma3yg";
     };
   };
 
@@ -182,6 +189,17 @@ self: super: {
       popd
       find ./rplugin/ -name "ujson*.so" -exec mv -v {} ./rplugin/python3/ \;
    '';
+  });
+
+  deoplete-khard = super.deoplete-khard.overrideAttrs(old: {
+    dependencies = [ self.deoplete-nvim ];
+    passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
+    meta = {
+      description = "Address-completion for khard via deoplete";
+      homepage = "https://github.com/nicoe/deoplete-khard";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ jorsn ];
+    };
   });
 
   ensime-vim = super.ensime-vim.overrideAttrs(old: {
@@ -333,6 +351,12 @@ self: super: {
 
   vim-easytags = super.vim-easytags.overrideAttrs(old: {
     dependencies = with super; [ vim-misc ];
+    patches = [
+      (fetchpatch { # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
+        url = https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch;
+        sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
+      })
+    ];
   });
 
   # change the go_bin_path to point to a path in the nix store. See the code in
@@ -390,6 +414,10 @@ self: super: {
     '';
   });
 
+  vim-metamath = super.vim-metamath.overrideAttrs(old: {
+    preInstall = "cd vim";
+  });
+
   vim-snipmate = super.vim-snipmate.overrideAttrs(old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
@@ -437,8 +465,8 @@ self: super: {
   youcompleteme = super.youcompleteme.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_python_interpreter_path', '''" \
-        "'ycm_python_interpreter_path', '${python3}/bin/python'"
+        --replace "'ycm_path_to_python_interpreter', '''" \
+        "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
@@ -460,6 +488,10 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = stdenv.lib.licenses.mit;
     };
+  });
+
+  lf-vim = super.lf-vim.overrideAttrs(old: {
+    dependencies = with super; [ bclose-vim ];
   });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {

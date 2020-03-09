@@ -1,18 +1,12 @@
 { lib, stdenv, fetchurl, pkgconfig, zlib, shadow
 , ncurses ? null, perl ? null, pam, systemd ? null, minimal ? false }:
 
-let
-  version = lib.concatStringsSep "." ([ majorVersion ]
-    ++ lib.optional (patchVersion != "") patchVersion);
-  majorVersion = "2.33";
-  patchVersion = "2";
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "util-linux";
-  inherit version;
+  version = "2.33.2";
 
   src = fetchurl {
-    url = "mirror://kernel/linux/utils/util-linux/v${majorVersion}/${pname}-${version}.tar.xz";
+    url = "mirror://kernel/linux/utils/util-linux/v${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "15yf2dh4jd1kg6066hydlgdhhs2j3na13qld8yx30qngqvmfh6v3";
   };
 

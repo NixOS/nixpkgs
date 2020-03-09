@@ -1504,6 +1504,23 @@
     };
   };
   
+  "platforms"."29" = {
+    
+    name = "platforms";
+    path = "platforms/android-29";
+    revision = "29";
+    displayName = "Android SDK Platform 29";
+    archives = {
+      
+        all = fetchurl {
+          url = https://dl.google.com/android/repository/platform-29_r03.zip;
+          sha1 = "670e2e104333dae90e16ea3b615f0b63da5883ae";
+        };
+      
+    };
+  };
+
+
   "platforms"."3" = {
     
     name = "platforms";

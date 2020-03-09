@@ -14,7 +14,7 @@ with stdenv; mkDerivation rec {
 
   # Hack to avoid TMPDIR in RPATHs.
   preFixup = ''rm -rf "$(pwd)" '';
-  configureFlags = lib.optional (!isDarwin) [ "--with-async-mode" ];
+  configureFlags = lib.optional (!isDarwin) "--with-async-mode";
 
   # allow async mode. from ubuntu. see:
   #   https://bazaar.launchpad.net/~ubuntu-branches/ubuntu/trusty/libftdi/trusty/view/head:/debian/patches/04_async_mode.diff

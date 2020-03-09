@@ -89,7 +89,7 @@ stdenv.mkDerivation rec {
     ${lib.concatMapStringsSep "\n" (x: x.install or "") needed}
   '';
 
-  NIX_CFLAGS_LINK = lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed;
+  NIX_CFLAGS_LINK = toString (lib.optional withSystemd "-lsystemd" ++ lib.concatMap (x: x.NIX_CFLAGS_LINK or []) needed);
 
   meta = with stdenv.lib; {
     homepage = https://uwsgi-docs.readthedocs.org/en/latest/;

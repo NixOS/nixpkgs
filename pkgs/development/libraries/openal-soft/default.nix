@@ -20,6 +20,14 @@ stdenv.mkDerivation rec {
     sha256 = "0b0g0q1c36nfb289xcaaj3cmyfpiswvvgky3qyalsf9n4dj7vnzi";
   };
 
+  # this will make it find its own data files (e.g. HRTF profiles)
+  # without any other configuration
+  patches = [ ./search-out.patch ];
+  postPatch = ''
+    substituteInPlace Alc/helpers.c \
+      --replace "@OUT@" $out
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = []
@@ -27,9 +35,9 @@ stdenv.mkDerivation rec {
     ++ optional pulseSupport libpulseaudio
     ++ optionals stdenv.isDarwin [ CoreServices AudioUnit AudioToolbox ];
 
-  NIX_LDFLAGS = []
+  NIX_LDFLAGS = toString ([]
     ++ optional alsaSupport "-lasound"
-    ++ optional pulseSupport "-lpulse";
+    ++ optional pulseSupport "-lpulse");
 
   meta = {
     description = "OpenAL alternative";

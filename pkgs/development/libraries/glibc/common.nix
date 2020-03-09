@@ -19,10 +19,12 @@
 
 { stdenv, lib
 , buildPackages
-, fetchurl, fetchpatch
+, fetchurl
 , linuxHeaders ? null
 , gd ? null, libpng ? null
+, libidn2
 , bison
+, python3Minimal
 }:
 
 { name
@@ -34,9 +36,9 @@
 } @ args:
 
 let
-  version = "2.27";
+  version = "2.30";
   patchSuffix = "";
-  sha256 = "0wpwq7gsm7sd6ysidv0z575ckqdg13cr2njyfgrbgh4f65adwwji";
+  sha256 = "1bxqpg91d02qnaz837a5kamm0f43pr1il4r9pknygywsar713i72";
 in
 
 assert withLinuxHeaders -> linuxHeaders != null;
@@ -93,17 +95,12 @@ stdenv.mkDerivation ({
         sha256 = "0irj60hs2i91ilwg5w7sqrxb695c93xg0ik7yhhq9irprd7fidn4";
       })
     ]
-    ++ lib.optional stdenv.isx86_64 ./fix-x64-abi.patch
+    ++ lib.optionals stdenv.isx86_64 [
+      ./fix-x64-abi.patch
+      ./2.27-CVE-2019-19126.patch
+    ]
     ++ lib.optional stdenv.hostPlatform.isMusl ./fix-rpc-types-musl-conflicts.patch
-    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch
-
-    # Remove after upgrading to glibc 2.28+
-    ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) (fetchpatch {
-      url = "https://sourceware.org/git/?p=glibc.git;a=patch;h=780684eb04298977bc411ebca1eadeeba4877833";
-      name = "correct-pwent-parsing-issue-and-resulting-build.patch";
-      sha256 = "08fja894vzaj8phwfhsfik6jj2pbji7kypy3q8pgxvsd508zdv1q";
-      excludes = [ "ChangeLog" ];
-    });
+    ++ lib.optional stdenv.buildPlatform.isDarwin ./darwin-cross-build.patch;
 
   postPatch =
     ''
@@ -114,6 +111,19 @@ stdenv.mkDerivation ({
       # nscd needs libgcc, and we don't want it dynamically linked
       # because we don't want it to depend on bootstrap-tools libs.
       echo "LDFLAGS-nscd += -static-libgcc" >> nscd/Makefile
+    ''
+    # FIXME: find a solution for infinite recursion in cross builds.
+    # For now it's hopefully acceptable that IDN from libc doesn't reliably work.
+    + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform) ''
+
+      # Ensure that libidn2 is found.
+      patch -p 1 <<EOF
+      --- a/inet/idna.c
+      +++ b/inet/idna.c
+      @@ -25,1 +25,1 @@
+      -#define LIBIDN2_SONAME "libidn2.so.0"
+      +#define LIBIDN2_SONAME "${lib.getLib libidn2}/lib/libidn2.so.0"
+      EOF
     '';
 
   configureFlags =
@@ -145,7 +155,7 @@ stdenv.mkDerivation ({
   outputs = [ "out" "bin" "dev" "static" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ bison ];
+  nativeBuildInputs = [ bison python3Minimal ];
   buildInputs = [ linuxHeaders ] ++ lib.optionals withGd [ gd libpng ];
 
   # Needed to install share/zoneinfo/zone.tab.  Set to impure /bin/sh to

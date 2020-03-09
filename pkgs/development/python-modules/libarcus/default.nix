@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.3.0";
+  version = "4.4.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "1x06daijxbrqj0dlxmi2zn7ap74zf6hih3krmkwhvarm2nr052g4";
+    sha256 = "16m7m6ak5fqw3djn4azwiamkizcc1dv7brv11kv99n3b43zzgn6d";
   };
 
   disabled = pythonOlder "3.4.0";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
   buildInputs = [ protobuf ];
 
   postPatch = ''
-    sed -i 's#''${Python3_SITELIB}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
+    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
   meta = with stdenv.lib; {

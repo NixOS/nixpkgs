@@ -5,13 +5,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "mednaffe";
-  version = "0.8.6";
+  version = "0.8.8";
 
   src = fetchFromGitHub {
     owner = "AmatCoder";
     repo = "mednaffe";
-    rev = "v${version}";
-    sha256 = "13l7gls430dcslpan39k0ymdnib2v6crdsmn6bs9k9g30nfnqi6m";
+    rev = "${version}";
+    sha256 = "15qk3a3l1phr8bap2ayh3c0vyvw2jwhny1iz1ajq2adyjpm9fhr7";
   };
 
   nativeBuildInputs = [ autoreconfHook makeWrapper pkgconfig wrapGAppsHook ];
@@ -22,9 +22,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "GTK-based frontend for mednafen emulator";
-    homepage = https://github.com/AmatCoder/mednaffe;
+    homepage = "https://github.com/AmatCoder/mednaffe";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ sheenobu yegortimoshenko ];
+    maintainers = with maintainers; [ sheenobu yegortimoshenko AndersonTorres ];
     platforms = platforms.linux;
   };
 }

@@ -47,8 +47,8 @@ let
       grub = f grub;
       grubTarget = f (grub.grubTarget or "");
       shell = "${pkgs.runtimeShell}";
-      fullName = (builtins.parseDrvName realGrub.name).name;
-      fullVersion = (builtins.parseDrvName realGrub.name).version;
+      fullName = lib.getName realGrub;
+      fullVersion = lib.getVersion realGrub;
       grubEfi = f grubEfi;
       grubTargetEfi = if cfg.efiSupport && (cfg.version == 2) then f (grubEfi.grubTarget or "") else "";
       bootPath = args.path;
@@ -224,7 +224,11 @@ in
 
       extraConfig = mkOption {
         default = "";
-        example = "serial; terminal_output.serial";
+        example = ''
+          serial --unit=0 --speed=115200 --word=8 --parity=no --stop=1
+          terminal_input --append serial
+          terminal_output --append serial
+        '';
         type = types.lines;
         description = ''
           Additional GRUB commands inserted in the configuration file
@@ -630,7 +634,7 @@ in
 
       boot.loader.grub.extraPrepareConfig =
         concatStrings (mapAttrsToList (n: v: ''
-          ${pkgs.coreutils}/bin/cp -pf "${v}" "/boot/${n}"
+          ${pkgs.coreutils}/bin/cp -pf "${v}" "@bootPath@/${n}"
         '') config.boot.loader.grub.extraFiles);
 
       assertions = [

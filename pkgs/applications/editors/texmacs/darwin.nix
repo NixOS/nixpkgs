@@ -49,7 +49,7 @@ stdenv.mkDerivation {
     "${ghostscript}/bin:" +
     (if aspell == null then "" else "${aspell}/bin:") +
     (if tex == null then "" else "${tex}/bin:") +
-    (if netpbm == null then "" else "${netpbm}/bin:") +
+    (if netpbm == null then "" else "${stdenv.lib.getBin netpbm}/bin:") +
     (if imagemagick == null then "" else "${imagemagick}/bin:");
 
   enableParallelBuilding = true;

@@ -18,6 +18,12 @@
 , ecl
 , maxima-ecl
 , singular
+, fflas-ffpack
+, givaro
+, gd
+, libpng
+, linbox
+, m4ri
 , giac
 , palp
 , rWrapper
@@ -101,14 +107,21 @@ writeTextFile rec {
   name = "sage-env";
   destination = "/${name}";
   text = ''
-    export PKG_CONFIG_PATH='${lib.concatStringsSep ":" (map (pkg: "${pkg}/lib/pkgconfig") [
-        # This is only needed in the src/sage/misc/cython.py test and I'm not
-        # sure if there's really a usecase for it outside of the tests. However
-        # since singular and openblas are runtime dependencies anyways, it doesn't
-        # really hurt to include.
+    export PKG_CONFIG_PATH='${lib.makeSearchPathOutput "dev" "lib/pkgconfig" [
+        # This should only be needed during build. However, since the  doctests
+        # also test the cython build (for example in src/sage/misc/cython.py),
+        # it is also needed for the testsuite to pass. We could fix the
+        # testsuite instead, but since all the packages are also runtime
+        # dependencies it doesn't really hurt to include them here.
         singular
         openblasCompat
-      ])
+        fflas-ffpack givaro
+        gd
+        libpng zlib
+        gsl
+        linbox
+        m4ri
+      ]
     }'
     export SAGE_ROOT='${sagelib.src}'
     export SAGE_LOCAL='@sage-local@'
@@ -164,7 +177,7 @@ writeTextFile rec {
     export SAGE_EXTCODE='${sagelib.src}/src/ext'
 
   # for find_library
-    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}:$DYLD_LIBRARY_PATH"
+    export DYLD_LIBRARY_PATH="${lib.makeLibraryPath [stdenv.cc.libc singular]}''${DYLD_LIBRARY_PATH:+:}$DYLD_LIBRARY_PATH"
   '';
 } // {
   lib = sagelib; # equivalent of `passthru`, which `writeTextFile` doesn't support

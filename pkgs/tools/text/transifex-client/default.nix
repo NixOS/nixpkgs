@@ -15,9 +15,9 @@ buildPythonApplication rec {
   };
 
   prePatch = ''
-    substituteInPlace requirements.txt --replace "urllib3<1.24" "urllib3<2.0" \
-      --replace "six==1.11.0" "six<2.0.0" \
-      --replace "python-slugify==1.2.6" "python-slugify<4.0.0"
+    substituteInPlace requirements.txt --replace "urllib3<1.24" "urllib3>=1.24" \
+      --replace "six==1.11.0" "six>=1.11.0" \
+      --replace "python-slugify==1.2.6" "python-slugify>=1.2.6"
   '';
 
   # Requires external resources

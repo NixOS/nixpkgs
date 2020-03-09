@@ -23,7 +23,7 @@ buildGoPackage rec {
   buildInputs = [ trousers gtk3 gtkspell3 ]
     ++ stdenv.lib.optional stdenv.hostPlatform.isx86_64 dclxvi
     ++ stdenv.lib.optionals gui [ wrapGAppsHook ];
-  buildFlags = stdenv.lib.optionalString (!gui) "-tags nogui";
+  buildFlags = stdenv.lib.optionals (!gui) [ "-tags" "nogui" ];
   excludedPackages = "\\(appengine\\|bn256cgo\\)";
   postPatch = stdenv.lib.optionalString stdenv.hostPlatform.isx86_64 ''
     grep -r 'bn256' | awk -F: '{print $1}' | xargs sed -i \

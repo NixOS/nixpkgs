@@ -2,18 +2,20 @@
 
 buildGoModule rec {
   pname = "lab";
-  version = "0.16.0";
+  version = "0.17.2";
 
   src = fetchFromGitHub {
     owner = "zaquestion";
     repo = "lab";
     rev = "v${version}";
-    sha256 = "0f1gi4mlcxjvz2sgh0hzzsqxg5gfvq2ay7xjd0y1kz3pp8kxja7i";
+    sha256 = "0zkwvmzgj7h8lc8jkg2a81392b28c8hkwqzj6dds6q4asbmymx5c";
   };
 
   subPackages = [ "." ];
 
-  modSha256 = "0bw47dd1b46ywsian2b957a4ipm77ncidipzri9ra39paqlv7abb";
+  modSha256 = "03fqa7s6729g0a6ffiyc61dkldpi7vg8pvvpqak4c0mqi1dycivd";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions" "$out/share/zsh/site-functions"

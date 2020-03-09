@@ -9,8 +9,7 @@
 , python3
 , rustPlatform
 , pkgconfig
-, gtksourceview
-, hicolor-icon-theme
+, gtksourceview4
 , glib
 , libhandy
 , gtk3
@@ -26,17 +25,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fractal";
-  version = "4.2.0";
+  version = "4.2.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "fractal";
     rev = version;
-    sha256 = "0clwsmd6h759bzlazfq5ig56dbx7npx3h43yspk87j1rm2dp1177";
+    sha256 = "0r98km3c8naj3mdr1wppzj823ir7jnsia7r3cbg3vsq8q52i480r";
   };
 
-  cargoSha256 = "1hwjajkphl5439dymglgj3h92hxgbf7xpipzrga7ga8m10nx1dhl";
+  cargoSha256 = "10fgw9m6gdazrca73g43sgvsghhac7xc3bg7hr0vpynzqyfigwa9";
 
   nativeBuildInputs = [
     cargo
@@ -59,20 +58,12 @@ rustPlatform.buildRustPackage rec {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gstreamer
+    gst_all_1.gst-validate
     gtk3
-    gtksourceview
-    hicolor-icon-theme
+    gtksourceview4
     libhandy
     openssl
     sqlite
-  ];
-
-  cargoPatches = [
-    # https://gitlab.gnome.org/GNOME/fractal/merge_requests/446
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/fractal/commit/2778acdc6c50bc6f034513029b66b0b092bc4c38.patch";
-      sha256 = "08v17xmbwrjw688ps4hsnd60d5fm26xj72an3zf6yszha2b97j6y";
-    })
   ];
 
   postPatch = ''

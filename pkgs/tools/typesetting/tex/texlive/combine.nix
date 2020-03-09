@@ -128,8 +128,6 @@ in buildEnv {
       mkdir $out/share/texmf-local
     )
   '' +
-    # updmap.cfg seems like not needing changes
-
     # now filter hyphenation patterns, in a hacky way ATM
   (let
     pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
@@ -214,7 +212,12 @@ in buildEnv {
     texlinks.sh "$out/bin" && wrapBin
     (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
     #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
+
+    # Disable unavailable map files
     echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    # Regenerate the map files (this is optional)
+    perl `type -P updmap.pl` --sys --force
+
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive

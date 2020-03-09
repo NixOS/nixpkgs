@@ -31,10 +31,12 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  postInstall = ''
+  postInstall = let
+    dllExtension = stdenv.hostPlatform.extensions.sharedLibrary;
+  in ''
     make install-private-headers
     ln -s $out/bin/tclsh${release} $out/bin/tclsh
-    ln -s $out/lib/libtcl${release}.so $out/lib/libtcl.so
+    ln -s $out/lib/libtcl${release}${dllExtension} $out/lib/libtcl${dllExtension}
   '';
 
   meta = with stdenv.lib; {

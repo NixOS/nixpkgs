@@ -3,12 +3,12 @@
 
 stdenv.mkDerivation rec {
   pname = "modem-manager";
-  version = "1.10.0";
+  version = "1.12.4";
 
   package = "ModemManager";
   src = fetchurl {
     url = "https://www.freedesktop.org/software/${package}/${package}-${version}.tar.xz";
-    sha256 = "1qkfnxqvaraz1npahqvm5xc73mbxxic8msnsjmlwkni5c2ckj3zx";
+    sha256 = "0nx9b6wfz2r29gb3wgsi5vflycibfhnij5wvc068s6hcbrsn2bc5";
   };
 
   nativeBuildInputs = [ vala gobject-introspection gettext pkgconfig ];
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-polkit"
     "--with-udev-base-dir=${placeholder "out"}/lib/udev"
-    "--with-dbus-sys-dir=${placeholder "out"}/etc/dbus-1/system.d"
+    "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
     "--sysconfdir=/etc"
     "--localstatedir=/var"

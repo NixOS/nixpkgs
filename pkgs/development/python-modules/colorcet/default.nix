@@ -36,7 +36,8 @@ buildPythonPackage rec {
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib
 
-    pytest colorcet
+    # requires other backends to be available
+    pytest colorcet -k 'not matplotlib_default_colormap_plot'
   '';
 
   meta = with stdenv.lib; {

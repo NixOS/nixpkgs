@@ -68,10 +68,7 @@ in
 
     environment.systemPackages = [ pkgs.dbus.daemon pkgs.dbus ];
 
-    environment.etc = singleton
-      { source = configDir;
-        target = "dbus-1";
-      };
+    environment.etc."dbus-1".source = configDir;
 
     users.users.messagebus = {
       uid = config.ids.uids.messagebus;

@@ -1,20 +1,8 @@
 { config, lib, stdenv, fetchurl, pkgs, buildPackages, callPackage
-, enableThreading ? stdenv ? glibc, makeWrapper
+, enableThreading ? true, coreutils, makeWrapper
 }:
 
 with lib;
-
-# We can only compile perl with threading on platforms where we have a
-# real glibc in the stdenv.
-#
-# Instead of silently building an unthreaded perl if this is not the
-# case, we force callers to disableThreading explicitly, therefore
-# documenting the platforms where the perl is not threaded.
-#
-# In the case of stdenv linux boot stage1 it's not possible to use
-# threading because of the simpleness of the bootstrap glibc, so we
-# use enableThreading = false there.
-assert enableThreading -> (stdenv ? glibc);
 
 let
 
@@ -35,7 +23,7 @@ let
 
     # TODO: Add a "dev" output containing the header files.
     outputs = [ "out" "man" "devdoc" ] ++
-      stdenv.lib.optional crossCompiling "dev";
+      optional crossCompiling "dev";
     setOutputFlags = false;
 
     disallowedReferences = [ stdenv.cc ];
@@ -57,12 +45,20 @@ let
       ++ optionals stdenv.isDarwin [ ./cpp-precomp.patch ./sw_vers.patch ]
       ++ optional crossCompiling ./MakeMaker-cross.patch;
 
-    postPatch = ''
-      pwd="$(type -P pwd)"
+    # This is not done for native builds because pwd may need to come from
+    # bootstrap tools when building bootstrap perl.
+    postPatch = (if crossCompiling then ''
       substituteInPlace dist/PathTools/Cwd.pm \
-        --replace "/bin/pwd" "$pwd"
-    '' + stdenv.lib.optionalString crossCompiling ''
+        --replace "/bin/pwd" '${coreutils}/bin/pwd'
       substituteInPlace cnf/configure_tool.sh --replace "cc -E -P" "cc -E"
+    '' else ''
+      substituteInPlace dist/PathTools/Cwd.pm \
+        --replace "/bin/pwd" "$(type -P pwd)"
+    '') +
+    # Perl's build system uses the src variable, and its value may end up in
+    # the output in some cases (when cross-compiling)
+    ''
+      unset src
     '';
 
     # Build a thread-safe Perl with a dynamic libperls.o.  We need the
@@ -83,9 +79,14 @@ let
       ]
       ++ optionals ((builtins.match ''5\.[0-9]*[13579]\..+'' version) != null) [ "-Dusedevel" "-Uversiononly" ]
       ++ optional stdenv.isSunOS "-Dcc=gcc"
-      ++ optional enableThreading "-Dusethreads";
+      ++ optional enableThreading "-Dusethreads"
+      ++ optionals (!crossCompiling) [
+        "-Dprefix=${placeholder "out"}"
+        "-Dman1dir=${placeholder "out"}/share/man/man1"
+        "-Dman3dir=${placeholder "out"}/share/man/man3"
+      ];
 
-    configureScript = stdenv.lib.optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
+    configureScript = optionalString (!crossCompiling) "${stdenv.shell} ./Configure";
 
     dontAddPrefix = !crossCompiling;
 
@@ -94,10 +95,6 @@ let
     preConfigure = ''
         substituteInPlace ./Configure --replace '`LC_ALL=C; LANGUAGE=C; export LC_ALL; export LANGUAGE; $date 2>&1`' 'Thu Jan  1 00:00:01 UTC 1970'
         substituteInPlace ./Configure --replace '$uname -a' '$uname --kernel-name --machine --operating-system'
-      '' + optionalString (!crossCompiling) ''
-        configureFlags="$configureFlags -Dprefix=$out -Dman1dir=$out/share/man/man1 -Dman3dir=$out/share/man/man3"
-      '' + optionalString (stdenv.isAarch32 || stdenv.isMips) ''
-        configureFlagsArray=(-Dldflags="-lm -lrt")
       '' + optionalString stdenv.isDarwin ''
         substituteInPlace hints/darwin.sh --replace "env MACOSX_DEPLOYMENT_TARGET=10.3" ""
       '' + optionalString (!enableThreading) ''
@@ -136,11 +133,11 @@ let
         substituteInPlace "$out"/lib/perl5/*/*/Config_heavy.pl \
           --replace "${libcInc}" /no-such-path \
           --replace "${
-              if stdenv.cc.cc or null != null then stdenv.cc.cc else "/no-such-path"
+              if stdenv.hasCC then stdenv.cc.cc else "/no-such-path"
             }" /no-such-path \
           --replace "${stdenv.cc}" /no-such-path \
           --replace "$man" /no-such-path
-      '' + stdenv.lib.optionalString crossCompiling
+      '' + optionalString crossCompiling
       ''
         mkdir -p $dev/lib/perl5/cross_perl/${version}
         for dir in cnf/{stub,cpan}; do
@@ -172,12 +169,12 @@ let
       platforms = platforms.all;
       priority = 6; # in `buildEnv' (including the one inside `perl.withPackages') the library files will have priority over files in `perl`
     };
-  } // stdenv.lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
-    crossVersion = "980998f7d11baf97284426ca91f84681d49a08f5"; # Jul 20, 2019
+  } // optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) rec {
+    crossVersion = "ba90816ef2c24dc06fd6cd2c854abcfa1aae00a3"; # Nov 22, 2019
 
     perl-cross-src = fetchurl {
       url = "https://github.com/arsv/perl-cross/archive/${crossVersion}.tar.gz";
-      sha256 = "1hg3k2rhjs5gclrm05z87nvlh4j9pg7mkm9998h9gy6mzk8224q5";
+      sha256 = "19jq5fz6l64s0v6j64n5mkk5v2srpyfn9sc09hwbpkp9n74q82j4";
     };
 
     depsBuildBuild = [ buildPackages.stdenv.cc makeWrapper ];
@@ -205,15 +202,15 @@ in {
   perl530 = common {
     perl = pkgs.perl530;
     buildPerl = buildPackages.perl530;
-    version = "5.30.0";
-    sha256 = "1wkmz6xn3fswpqhz29akiklcxclnlykhp96a8bqcz36rak3i64l5";
+    version = "5.30.1";
+    sha256 = "0r7r8a7pkgxp3w5lza559ahxczw6hzpwvhkpc4c99vpi3xbjagdz";
   };
 
   # the latest Devel version
   perldevel = common {
     perl = pkgs.perldevel;
     buildPerl = buildPackages.perldevel;
-    version = "5.31.2";
-    sha256 = "00bdh9lmjb0m7dhk8mj7kab7cg2zn9zgw82y4hgkwydzg6d1jis0";
+    version = "5.31.6";
+    sha256 = "08n3c8xm1brxpckqy8i1xgjrpl4afrhcva9bhxswr938n675x71k";
   };
 }

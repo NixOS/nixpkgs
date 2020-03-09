@@ -3,11 +3,12 @@
 , pantheon
 , meson
 , ninja
+, gettext
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "5.2.5";
+  version = "5.4.2";
 
   repoName = "stylesheet";
 
@@ -15,17 +16,17 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0934rfdwkn4315mhayzba8a3b6i1xczp66gl6n45hh5c81gb2p65";
+    sha256 = "0aqq0d21mqgrfiyhpfa8k51wxw2pia0qlsgp0sli79v7nwn3ykbq";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
   nativeBuildInputs = [
+    gettext
     meson
     ninja
   ];

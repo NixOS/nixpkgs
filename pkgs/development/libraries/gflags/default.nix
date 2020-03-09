@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake }:
+{ stdenv, fetchFromGitHub, cmake, enableShared ? true}:
 
 stdenv.mkDerivation rec {
   pname = "gflags";
@@ -17,8 +17,8 @@ stdenv.mkDerivation rec {
   preConfigure = "rm BUILD";
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DBUILD_STATIC_LIBS=ON"
+    "-DGFLAGS_BUILD_SHARED_LIBS=${if enableShared then "ON" else "OFF"}"
+    "-DGFLAGS_BUILD_STATIC_LIBS=ON"
   ];
 
   doCheck = false;

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
      sha256 = "1h3jrygcjjbavdbkpx2hscsf0yf97gk487lzjdlvymd7dxdv9hy9";
    };
 
-   makeFlags = "PREFIX=$(out)";
+   makeFlags = [ "PREFIX=$(out)" ];
 
    buildInputs = [ libxcb xcbutilwm xcbutil ];
 

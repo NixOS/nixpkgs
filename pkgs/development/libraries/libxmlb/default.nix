@@ -1,12 +1,10 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , docbook_xml_dtd_43
 , docbook_xsl
 , glib
 , gobject-introspection
 , gtk-doc
-, libuuid
 , meson
 , ninja
 , pkgconfig
@@ -17,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
-  version = "0.1.11";
+  version = "0.1.14";
 
   outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
 
@@ -25,17 +23,10 @@ stdenv.mkDerivation rec {
     owner = "hughsie";
     repo = "libxmlb";
     rev = version;
-    sha256 = "1503v76w7543snqyjxykiqa5va62zb0ccn3jlw0gpdx8973v80mr";
+    sha256 = "05snbv1dvqa96k7xlwi2sj161315kps3baansr9xdpwim5ckmwc6";
   };
 
   patches = [
-    # Fix installed tests
-    # https://github.com/hughsie/libxmlb/pull/2
-    (fetchpatch {
-      url = "https://github.com/hughsie/libxmlb/commit/78850c8b0f644f729fa21e2bf9ebed0d9d6010f3.diff";
-      sha256 = "0zw7c6vy8hscln7za7ijqd9svirach3zdskvbzyxxcsm3xcwxpjm";
-    })
-
     ./installed-tests-path.patch
   ];
 
@@ -53,7 +44,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     glib
-    libuuid
   ];
 
   mesonFlags = [
@@ -70,7 +60,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      installed-tests = nixosTests.libxmlb;
+      installed-tests = nixosTests.installed-tests.libxmlb;
     };
   };
 

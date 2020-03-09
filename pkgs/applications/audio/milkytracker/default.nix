@@ -16,6 +16,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ SDL2 alsaLib libjack2 lhasa perl rtmidi zlib zziplib ];
 
+  # Somehow this does not get set automatically
+  cmakeFlags = [ "-DSDL2MAIN_LIBRARY=${SDL2}/lib/libSDL2.so" ];
+
   meta = with stdenv.lib; {
     description = "Music tracker application, similar to Fasttracker II";
     homepage = http://milkytracker.org;

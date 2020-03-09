@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, meson, ninja, pkgconfig, vala, gettext, python3
 , appstream-glib, desktop-file-utils, wrapGAppsHook, gnome-online-accounts, fetchpatch
-, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, hicolor-icon-theme
+, gtk3, libgee, libpeas, librest, webkitgtk, gsettings-desktop-schemas, pantheon
 , curl, glib, gnome3, gst_all_1, json-glib, libnotify, libsecret, sqlite, gumbo, libxml2
 }:
 
@@ -24,7 +24,6 @@ stdenv.mkDerivation rec {
     curl glib json-glib libnotify libsecret sqlite gumbo gtk3
     libgee libpeas gnome3.libsoup librest webkitgtk gsettings-desktop-schemas
     gnome-online-accounts
-    hicolor-icon-theme # for setup hook
   ] ++ (with gst_all_1; [
     gstreamer gst-plugins-base gst-plugins-good
   ]);
@@ -40,6 +39,12 @@ stdenv.mkDerivation rec {
       sha256 = "0anrwvcg6607dzvfrhy5qcnpxzflskb3iy3khdg191aw1h2mqhb5";
     })
   ];
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "A modern desktop application designed to complement existing web-based RSS accounts";

@@ -71,6 +71,8 @@ stdenv.mkDerivation rec {
     systemd
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=return-type" ];
+
   configureFlags = [ "--enable-locking" "--with-systemd=yes" ];
 
   enableParallelBuilding = true;

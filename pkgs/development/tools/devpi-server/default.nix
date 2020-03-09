@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "devpi-server";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "254fceee846532a5fec4e6bf52a59eb8f236efc657678a542b5200da4bb3abbc";
+    sha256 = "1dapd0bis7pb4fzq5yva7spby5amcsgl1970z5nq1rlprf6qbydg";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -33,8 +33,11 @@ python3Packages.buildPythonApplication rec {
   ] ++ stdenv.lib.optionals isPy27 [ mock ];
 
   # test_genconfig.py needs devpi-server on PATH
+  # root_passwd_hash tries to write to store
   checkPhase = ''
-    PATH=$PATH:$out/bin pytest ./test_devpi_server --slow -rfsxX
+    PATH=$PATH:$out/bin HOME=$TMPDIR pytest \
+      ./test_devpi_server --slow -rfsxX \
+      -k 'not root_passwd_hash_option'
   '';
 
   meta = with stdenv.lib;{

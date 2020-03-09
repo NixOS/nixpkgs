@@ -10,23 +10,23 @@ assert withMediaPlayback -> gst_all_1 != null;
 
 let
   pdfjs = let
-    version = "2.2.228";
+    version = "2.3.200";
   in
   fetchzip rec {
     name = "pdfjs-${version}";
     url = "https://github.com/mozilla/pdf.js/releases/download/v${version}/${name}-dist.zip";
-    sha256 = "0yik4vfnz46j844jfw1gq5cshgzry42kpy2d5rr7fbn9fjf98bw6";
+    sha256 = "1fpxsw0hzahccyng08acvc7g0gk29j2x701p6w6fg1718mvcrm1q";
     stripRoot = false;
   };
 
 in mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "qutebrowser";
-  version = "1.8.1";
+  version = "1.10.1";
 
   # the release tarballs are different from the git checkout!
   src = fetchurl {
     url = "https://github.com/qutebrowser/qutebrowser/releases/download/v${version}/${pname}-${version}.tar.gz";
-    sha256 = "0ckffbw2zlg0afz4rgyywzdprnqs74va5qj0xqlaqc14ziiypxnw";
+    sha256 = "06bcnsfb4kz92bh8xjxwaghhy9x2mmcb76wk3fv868jb1ga75vd8";
   };
 
   # Needs tox

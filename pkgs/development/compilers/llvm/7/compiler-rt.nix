@@ -1,11 +1,15 @@
-{ stdenv, version, fetch, cmake, python, llvm, libcxxabi }:
+{ stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
 stdenv.mkDerivation {
   pname = "compiler-rt";
   inherit version;
   src = fetch "compiler-rt" "1n48p8gjarihkws0i2bay5w9bdwyxyxxbpwyng7ba58jb30dlyq5";
 
-  nativeBuildInputs = [ cmake python llvm ];
+  nativeBuildInputs = [ cmake python3 llvm ];
   buildInputs = stdenv.lib.optional stdenv.hostPlatform.isDarwin libcxxabi;
+
+  NIX_CFLAGS_COMPILE = [
+    "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
+  ];
 
   cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false || stdenv.isDarwin) [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"

@@ -29,11 +29,11 @@
 # handle that.
 
 mkDerivation rec {
-  name = "qmmp-1.3.4";
+  name = "qmmp-1.3.6";
 
   src = fetchurl {
     url = "http://qmmp.ylsoftware.com/files/${name}.tar.bz2";
-    sha256 = "0j9vgm6216w7arwl919p9rps0a9r6s4415spl3qkpifhwlk90zg0";
+    sha256 = "0dihy6v6j1cfx4qgwgajdn8rx6nf8x5srk8yjki9xh1mlcaanhp8";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

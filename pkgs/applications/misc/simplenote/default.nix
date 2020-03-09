@@ -1,23 +1,37 @@
-{ atomEnv, autoPatchelfHook, dpkg, fetchurl, makeDesktopItem, makeWrapper
-, stdenv, udev, wrapGAppsHook }:
+{ atomEnv
+, autoPatchelfHook
+, dpkg
+, fetchurl
+, makeDesktopItem
+, makeWrapper
+, stdenv
+, udev
+, wrapGAppsHook
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
 
+  throwSystem = throw "Unsupported system: ${system}";
+
   pname = "simplenote";
 
-  version = "1.8.0";
+  version = "1.14.0";
 
   sha256 = {
-    x86_64-linux = "066gr1awdj5nwdr1z57mmvx7dd1z19g0wzsgbnrrb89bqfj67ykl";
-  }.${system};
+    x86_64-linux = "1l61xf1i80fd8ymmnrb3plqn70jsxd8wyg0n6f69bz3k8s5g8cxi";
+  }.${system} or throwSystem;
 
   meta = with stdenv.lib; {
     description = "The simplest way to keep notes";
     homepage = "https://github.com/Automattic/simplenote-electron";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ kiwi ];
-    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [
+      kiwi
+    ];
+    platforms = [
+      "x86_64-linux"
+    ];
   };
 
   linux = stdenv.mkDerivation rec {
@@ -31,14 +45,14 @@ let
     };
 
     desktopItem = makeDesktopItem {
-      name = "simplenote";
+      categories = "Development";
       comment = "Simplenote for Linux";
+      desktopName = "Simplenote";
       exec = "simplenote %U";
       icon = "simplenote";
-      type = "Application";
+      name = "simplenote";
       startupNotify = "true";
-      desktopName = "Simplenote";
-      categories = "Development";
+      type = "Application";
     };
 
     dontBuild = true;
@@ -46,9 +60,14 @@ let
     dontPatchELF = true;
     dontWrapGApps = true;
 
-    buildInputs = atomEnv.packages;
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+      makeWrapper
+      wrapGAppsHook
+    ];
 
-    nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook wrapGAppsHook ];
+    buildInputs = atomEnv.packages;
 
     unpackPhase = "dpkg-deb -x $src .";
 
@@ -62,14 +81,16 @@ let
       cp "${desktopItem}/share/applications/"* "$out/share/applications"
     '';
 
-    runtimeDependencies = [ udev.lib ];
+    runtimeDependencies = [
+      udev.lib
+    ];
 
     postFixup = ''
-      ls -ahl $out
       makeWrapper $out/opt/Simplenote/simplenote $out/bin/simplenote \
-      "''${gappsWrapperArgs[@]}"
+        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [ stdenv.cc.cc ] }" \
+        "''${gappsWrapperArgs[@]}"
     '';
   };
 
 in
-  linux
+linux

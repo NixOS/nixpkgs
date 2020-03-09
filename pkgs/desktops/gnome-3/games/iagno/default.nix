@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "iagno";
-  version = "3.34.1";
+  version = "3.34.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/iagno/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1y9sknc5k2vfhbv8bhbid4zwwzqj8g5m1jz0k5bfkixaa1kxvp35";
+    sha256 = "05qywjcar29vk29yvbxwlddxhwlrvllgjw7srmlz5811hc5m0a1m";
   };
 
   nativeBuildInputs = [

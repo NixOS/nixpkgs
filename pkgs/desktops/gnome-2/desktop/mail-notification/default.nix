@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     ./patches/mail-notification-dont-link-against-bsd-compat.patch
   ];
 
-  patchFlags = "-p0";
+  patchFlags = [ "-p0" ];
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   preConfigure = "./jb configure prefix=$out";

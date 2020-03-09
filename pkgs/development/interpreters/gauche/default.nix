@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gauche";
-  version = "0.9.8";
+  version = "0.9.9";
 
   src = fetchurl {
     url = "mirror://sourceforge/gauche/Gauche-${version}.tgz";
-    sha256 = "0jxp1ladpy8kvfvk561c64spf1c3d6giqla6zscqkd6qa480vcry";
+    sha256 = "1yzpszhw52vkpr65r5d4khf3489mnnvnw58dd2wsvvx7499k5aac";
   };
 
   nativeBuildInputs = [ pkgconfig texinfo ];

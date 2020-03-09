@@ -52,6 +52,27 @@ with lib;
     "ax25"
     "netrom"
     "rose"
+
+    # Old or rare or insufficiently audited filesystems
+    "adfs"
+    "affs"
+    "bfs"
+    "befs"
+    "cramfs"
+    "efs"
+    "erofs"
+    "exofs"
+    "freevxfs"
+    "f2fs"
+    "hfs"
+    "hpfs"
+    "jfs"
+    "minix"
+    "nilfs2"
+    "qnx4"
+    "qnx6"
+    "sysv"
+    "ufs"
   ];
 
   # Restrict ptrace() usage to processes with a pre-defined relationship

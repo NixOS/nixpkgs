@@ -12,6 +12,11 @@ stdenv.mkDerivation rec {
     sha256 = "1d9r2dhslll4kzdmxrj0qfgwq1b30d4l3s5cwr8yr93029dpj0jf";
   };
 
+  patches = [
+    ./allow-clock_adjtime.patch
+    ./fix-seccomp-build.patch
+  ];
+
   postPatch = ''
     patchShebangs test
   '';
@@ -23,7 +28,7 @@ stdenv.mkDerivation rec {
   hardeningEnable = [ "pie" ];
 
   configureFlags = [ "--chronyvardir=$(out)/var/lib/chrony" ]
-    ++ stdenv.lib.optional stdenv.isLinux [ "--enable-scfilter" ];
+    ++ stdenv.lib.optional stdenv.isLinux "--enable-scfilter";
 
   meta = with stdenv.lib; {
     description = "Sets your computer's clock from time servers on the Net";

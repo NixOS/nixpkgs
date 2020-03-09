@@ -23,12 +23,14 @@
 , zeitgeist
 , glib-networking
 , elementary-icon-theme
+, libcloudproviders
+, libgit2-glib
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "elementary-files";
-  version = "4.1.9";
+  version = "4.4.1";
 
   repoName = "files";
 
@@ -38,13 +40,12 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "12p1li9a7kqdlgkq20svaly5kr661ww93qngaiic6zv1bdw2bpmv";
+    sha256 = "0s874qnqbx20vyp2z2rhz3z8py0dm21v26xc0h6hyc2gfz4s3jcg";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      inherit repoName;
-      attrPath = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -66,8 +67,10 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libcanberra
+    libcloudproviders
     libdbusmenu-gtk3
     libgee
+    libgit2-glib
     libnotify
     libunity
     pango
@@ -76,7 +79,9 @@ stdenv.mkDerivation rec {
     zeitgeist
   ];
 
-  patches = [ ./hardcode-gsettings.patch ];
+  patches = [
+    ./hardcode-gsettings.patch
+  ];
 
   postPatch = ''
     chmod +x meson/post_install.py

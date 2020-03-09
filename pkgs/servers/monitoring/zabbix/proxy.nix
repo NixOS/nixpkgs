@@ -1,6 +1,6 @@
 { stdenv, fetchurl, pkgconfig, libevent, libiconv, openssl, pcre, zlib
 , odbcSupport ? true, unixODBC
-, snmpSupport ? true, net_snmp
+, snmpSupport ? true, net-snmp
 , sshSupport ? true, libssh2
 , sqliteSupport ? false, sqlite
 , mysqlSupport ? false, libmysqlclient
@@ -34,7 +34,7 @@ in
         zlib
       ]
       ++ optional odbcSupport unixODBC
-      ++ optional snmpSupport net_snmp
+      ++ optional snmpSupport net-snmp
       ++ optional sqliteSupport sqlite
       ++ optional sshSupport libssh2
       ++ optional mysqlSupport libmysqlclient

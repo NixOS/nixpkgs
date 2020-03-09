@@ -39,7 +39,7 @@
   can select an alternative one by picking one of the following lines:
 <programlisting>
 <xref linkend="opt-services.xserver.displayManager.sddm.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.slim.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.gdm.enable"/> = true;
 </programlisting>
  </para>
  <para>
@@ -83,14 +83,16 @@
   desktop environment. If you wanted no desktop environment and i3 as your your
   window manager, you'd define:
 <programlisting>
-<xref linkend="opt-services.xserver.desktopManager.default"/> = "none";
-<xref linkend="opt-services.xserver.windowManager.default"/> = "i3";
+<xref linkend="opt-services.xserver.displayManager.defaultSession"/> = "none+i3";
 </programlisting>
-  And, finally, to enable auto-login for a user <literal>johndoe</literal>:
+  Every display manager in NixOS supports auto-login, here is an example
+  using lightdm for a user <literal>alice</literal>:
 <programlisting>
-<xref linkend="opt-services.xserver.displayManager.auto.enable"/> = true;
-<xref linkend="opt-services.xserver.displayManager.auto.user"/> = "johndoe";
+<xref linkend="opt-services.xserver.displayManager.lightdm.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.enable"/> = true;
+<xref linkend="opt-services.xserver.displayManager.lightdm.autoLogin.user"/> = "alice";
 </programlisting>
+  The options are named identically for all other display managers.
   </para>
  </simplesect>
  <simplesect xml:id="sec-x11-graphics-cards-nvidia">

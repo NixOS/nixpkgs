@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, nixosTests }:
 
 stdenv.mkDerivation rec {
   pname = "babeld";
@@ -13,11 +13,13 @@ stdenv.mkDerivation rec {
     makeFlags="PREFIX=$out ETCDIR=$out/etc"
   '';
 
+  passthru.tests.babeld = nixosTests.babeld;
+
   meta = {
     homepage = http://www.pps.univ-paris-diderot.fr/~jch/software/babel/;
     description = "Loop-avoiding distance-vector routing protocol";
     license = stdenv.lib.licenses.mit;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu fpletz ];
+    maintainers = with stdenv.lib.maintainers; [ fpletz ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

@@ -1,35 +1,28 @@
 { lib
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , substituteAll
 , fetchpatch
 , nose
 , six
+, withGraphviz ? true
 , graphviz
 , fontconfig
 }:
 
 buildPythonPackage rec {
   pname = "anytree";
-  version = "2.6.0";
+  version = "2.7.3";
 
-  src = fetchFromGitHub {
-    owner = "c0fec0de";
-    repo = pname;
-    rev = version;
-    sha256 = "1k3yj9h3ssjlz57r4g1qzxvprxjp7n92vms9fv0d46pigylxm5i3";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "05736hamjv4f38jw6z9y4wckc7mz18ivbizm1s3pb0n6fp1sy4zk";
   };
 
-  patches = [
+  patches = lib.optionals withGraphviz [
     (substituteAll {
       src = ./graphviz.patch;
       inherit graphviz;
-    })
-    # Fix tests python3.7
-    # See: https://github.com/c0fec0de/anytree/pull/85
-    (fetchpatch {
-      url = "https://github.com/c0fec0de/anytree/commit/dd1b3d325546fef7436711e4cfea9a5fb61daaf8.patch";
-      sha256 = "1dpa2jh2kakfaapnqrz03frb67q5fwxzc8c70i6nv1b01i9xw0bn";
     })
   ];
 
@@ -41,10 +34,13 @@ buildPythonPackage rec {
     six
   ];
 
-  # Fontconfig error: Cannot load default config file
-  preCheck = ''
+  # tests print “Fontconfig error: Cannot load default config file”
+  preCheck = lib.optionalString withGraphviz ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
   '';
+
+  # circular dependency anytree → graphviz → pango → glib → gtk-doc → anytree
+  doCheck = withGraphviz;
 
   checkPhase = ''
     runHook preCheck

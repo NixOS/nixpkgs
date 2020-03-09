@@ -1,27 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, git
-, boost, miniupnpc_2, openssl, unbound, cppzmq
-, zeromq, pcsclite, readline, libsodium, rapidjson
+{ stdenv, fetchFromGitHub, cmake, boost, miniupnpc_2, openssl, unbound
+, readline, libsodium, rapidjson
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "wownero";
+  version = "0.7.0";
 
-  version = "0.6.1.2";
   src = fetchFromGitHub {
     owner = "wownero";
     repo = "wownero";
     rev    = "v${version}";
-    sha256 = "03q3pviyhrldpa3f4ly4d97jr39hvrz37chl102bap0790d9lk09";
+    sha256 = "0lji24s6346qxcj4pmylv8byb8fnqzpmz81rx4i3zhc1bcsvdwas";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkgconfig git ];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    boost miniupnpc_2 openssl unbound rapidjson
-    cppzmq zeromq pcsclite readline libsodium
+    boost miniupnpc_2 openssl unbound rapidjson readline libsodium
   ];
 
   cmakeFlags = [
@@ -30,15 +28,18 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "Wownero is a fork of the cryptocurrency Monero with primary alterations";
-    longDescription = ''
-      Wownero’s emission is capped and supply is finite. Wownero is a fairly
-      launched coin with no premine. It’s not a fork of another blockchain. With
-      its own genesis block there is no degradation of privacy caused by ring
-      signatures using different participants for the same transaction outputs.
-      Unlike opposing forks.
+    description = ''
+      A privacy-centric memecoin that was fairly launched on April 1, 2018 with
+      no pre-mine, stealth-mine or ICO
     '';
-    homepage    = http://wownero.org/;
+    longDescription = ''
+      Wownero has a maximum supply of around 184 million WOW with a slow and
+      steady emission over 50 years. It is a fork of Monero, but with its own
+      genesis block, so there is no degradation of privacy due to ring
+      signatures using different participants for the same tx outputs on
+      opposing forks.
+    '';
+    homepage    = https://wownero.org/;
     license     = licenses.bsd3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ fuwa ];

@@ -1,19 +1,24 @@
 { stdenv
 , lib
-, fetchurl
+, fetchgit
+, autoreconfHook
 , optimize ? false # impure hardware optimizations
 }:
 stdenv.mkDerivation rec {
   pname = "gf2x";
-  version = "1.2"; # remember to also update the url
+  version = "1.3.0";
 
-  src = fetchurl {
-    # find link to latest version (with file id) here: https://gforge.inria.fr/projects/gf2x/
-    # Requested a predictable link:
-    # https://gforge.inria.fr/tracker/index.php?func=detail&aid=21704&group_id=1874&atid=6982
-    url = "https://gforge.inria.fr/frs/download.php/file/36934/gf2x-${version}.tar.gz";
-    sha256 = "0d6vh1mxskvv3bxl6byp7gxxw3zzpkldrxnyajhnl05m0gx7yhk1";
+  # upstream has plans to move to gitlab:
+  # https://github.com/NixOS/nixpkgs/pull/45299#issuecomment-564477936
+  src = fetchgit {
+    url = "https://scm.gforge.inria.fr/anonscm/git/gf2x/gf2x.git";
+    rev = "gf2x-${version}";
+    sha256 = "04g5jg0i4vz46b4w2dvbmahwzi3k6b8g515mfw7im1inc78s14id";
   };
+
+  nativeBuildInputs = [
+    autoreconfHook
+  ];
 
   # no actual checks present yet (as of 1.2), but can't hurt trying
   # for an indirect test, run ntl's test suite

@@ -1,34 +1,28 @@
-{ lib, python3, platformio, esptool, git, protobuf3_7, fetchpatch }:
+{ lib, python3, platformio, esptool, git, protobuf3_10, fetchpatch }:
 
 let
   python = python3.override {
     packageOverrides = self: super: {
-      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.1";
+      protobuf = super.protobuf.override {
+        protobuf = protobuf3_10;
+      };
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
+          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
         };
       });
-      protobuf = super.protobuf.override {
-        protobuf = protobuf3_7;
-      };
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.13.6";
+  version = "1.14.3";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "53148fc43c6cc6736cb7aa4cc1189caa305812061f55289ff916f8bd731ac623";
-  };
-
-  patches = fetchpatch {
-    url = https://github.com/esphome/esphome/pull/694.patch;
-    includes = [ "esphome/voluptuous_schema.py" ];
-    sha256 = "0i2v1d6mcgc94i9rkaqmls7iyfbaisdji41sfc7bh7cf2j824im9";
+    sha256 = "0xnsl000c5a2li9qw9anrzzq437qn1n4hcfc24i4rfq37awzmig7";
   };
 
   ESPHOME_USE_SUBPROCESS = "";
@@ -36,7 +30,15 @@ in python.pkgs.buildPythonApplication rec {
   propagatedBuildInputs = with python.pkgs; [
     voluptuous pyyaml paho-mqtt colorlog
     tornado protobuf tzlocal pyserial ifaddr
+    protobuf
   ];
+
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace "protobuf==3.10.0" "protobuf~=3.10" \
+      --replace "paho-mqtt==1.4.0" "paho-mqtt~=1.4" \
+      --replace "tornado==5.1.1" "tornado~=5.1"
+  '';
 
   makeWrapperArgs = [
     # platformio is used in esphomeyaml/platformio_api.py

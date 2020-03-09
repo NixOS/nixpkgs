@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     wrapQtAppsHook
   ];
-  cmakeFlags = "-DCMAKE_BUILD_TYPE=Release";
+  cmakeFlags = [ "-DCMAKE_BUILD_TYPE=Release" ];
 
   meta = with stdenv.lib; {
     description      = "Provides extra functionality for the Nitrokey Pro and Storage";

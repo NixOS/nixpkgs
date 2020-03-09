@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   preBuild = "substituteInPlace Makefile --replace g++ c++";
 
-  installFlags = "PREFIX=$(out)";
+  installFlags = [ "PREFIX=$(out)" ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isClang "-Wno-error=reserved-user-defined-literal";
 

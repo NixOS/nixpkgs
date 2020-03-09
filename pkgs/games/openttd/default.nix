@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
     "--without-liblzo2"
   ];
 
-  makeFlags = "INSTALL_PERSONAL_DIR=";
+  makeFlags = [ "INSTALL_PERSONAL_DIR=" ];
 
   postInstall = ''
     mv $out/games/ $out/bin

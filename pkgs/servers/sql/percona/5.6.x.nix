@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
   NIX_LDFLAGS = "-lgcc_s";
 
   prePatch = ''

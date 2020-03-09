@@ -2,11 +2,11 @@
 
 python.pkgs.buildPythonPackage rec {
   pname   = "tld";
-  version = "0.9.6";
+  version = "0.11.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0figmf80y715zv6viqan2nyzpg9aia5dyl25nskirpm5lh1s99w9";
+    sha256 = "c5fe79df74b68ebc33406dfadc69f6484dee8005035a129fdb40b8fabfd06e9f";
   };
 
   propagatedBuildInputs = with python.pkgs; [ six ];

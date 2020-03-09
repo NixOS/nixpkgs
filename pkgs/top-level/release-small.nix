@@ -156,7 +156,6 @@ with import ./release-lib.nix { inherit supportedSystems; };
   time = linux;
   tinycc = linux;
   udev = linux;
-  unar = linux;
   unzip = all;
   usbutils = linux;
   utillinux = linux;

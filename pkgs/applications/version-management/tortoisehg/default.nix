@@ -1,43 +1,38 @@
-{ lib, fetchurl, python2Packages
-, mercurial
+{ lib, fetchurl, python3Packages
+, mercurial, qt5
 }@args:
 let
   tortoisehgSrc = fetchurl rec {
     meta.name = "tortoisehg-${meta.version}";
-    meta.version = "5.0.2";
-    url = "https://bitbucket.org/tortoisehg/targz/downloads/${meta.name}.tar.gz";
-    sha256 = "1fkawx4ymaacah2wpv2w7rxmv1mx08mg4x4r4fxh41jz1njjb8sz";
+    meta.version = "5.2.1";
+    url = "https://bitbucket.org/tortoisehg/thg/get/14221e991a5b623e0072d3bd340b759dbe9072ca.tar.gz";
+    sha256 = "01rpzf5z99izcdda1ps9bhqvhw6qghagd8c1y7x19rv223zi05dv";
   };
 
-  mercurial =
-    if args.mercurial.meta.version == tortoisehgSrc.meta.version
-      then args.mercurial
-      else args.mercurial.override {
-        mercurialSrc = fetchurl rec {
-          meta.name = "mercurial-${meta.version}";
-          meta.version = tortoisehgSrc.meta.version;
-          url = "https://mercurial-scm.org/release/${meta.name}.tar.gz";
-          sha256 = "1y60hfc8gh4ha9sw650qs7hndqmvbn0qxpmqwpn4q18z5xwm1f19";
-        };
-      };
+  tortoiseMercurial = mercurial.overridePythonAttrs (old: rec {
+    inherit (tortoisehgSrc.meta) version;
+    src = fetchurl {
+      url = "https://mercurial-scm.org/release/mercurial-${version}.tar.gz";
+      sha256 = "1pxkd37b0a1mi2zakk1hi122lgz1ffy2fxdnbs8acwlqpw55bc8q";
+    };
+  });
 
-in python2Packages.buildPythonApplication {
-
+in python3Packages.buildPythonApplication {
     inherit (tortoisehgSrc.meta) name version;
     src = tortoisehgSrc;
 
-    pythonPath = with python2Packages; [ pyqt4 mercurial qscintilla iniparse ];
-
-    propagatedBuildInputs = with python2Packages; [ qscintilla iniparse ];
+    propagatedBuildInputs = with python3Packages; [
+      tortoiseMercurial qscintilla-qt5 iniparse
+    ];
+    nativeBuildInputs = [ qt5.wrapQtAppsHook ];
 
     doCheck = false; # tests fail with "thg: cannot connect to X server"
-    dontStrip = true;
-    buildPhase = "";
-    installPhase = ''
-      ${python2Packages.python.executable} setup.py install --prefix=$out
+    postInstall = ''
       mkdir -p $out/share/doc/tortoisehg
-      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt.gz
-      ln -s $out/bin/thg $out/bin/tortoisehg     #convenient alias
+      cp COPYING.txt $out/share/doc/tortoisehg/Copying.txt
+      # convenient alias
+      ln -s $out/bin/thg $out/bin/tortoisehg
+      wrapQtApp $out/bin/thg
     '';
 
     checkPhase = ''
@@ -45,7 +40,7 @@ in python2Packages.buildPythonApplication {
       $out/bin/thg version
     '';
 
-    passthru.mercurial = mercurial;
+    passthru.mercurial = tortoiseMercurial;
 
     meta = {
       description = "Qt based graphical tool for working with Mercurial";

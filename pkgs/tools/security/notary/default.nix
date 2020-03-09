@@ -59,7 +59,7 @@ buildGoPackage rec {
     '';
     license = licenses.asl20;
     homepage = https://github.com/theupdateframework/notary;
-    maintainers = with maintainers; [ vdemeester ma27 ];
+    maintainers = with maintainers; [ vdemeester ];
     platforms = platforms.unix;
   };
 }

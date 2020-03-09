@@ -1,9 +1,10 @@
-{ stdenv, cacert, git, cargo, rustc, fetchcargo, buildPackages, windows }:
+{ stdenv, cacert, git, rust, cargo, rustc, fetchcargo, fetchCargoTarball, buildPackages, windows }:
 
 { name ? "${args.pname}-${args.version}"
 , cargoSha256 ? "unset"
 , src ? null
 , srcs ? null
+, unpackPhase ? null
 , cargoPatches ? []
 , patches ? []
 , sourceRoot ? null
@@ -13,12 +14,13 @@
 , cargoUpdateHook ? ""
 , cargoDepsHook ? ""
 , cargoBuildFlags ? []
-, # Set to true to verify if the cargo dependencies are up to date.
-  # This will change the value of cargoSha256.
-  verifyCargoDeps ? false
+  # Please set to true on any Rust package updates. Once all packages set this
+  # to true, we will delete and make it the default. For details, see the Rust
+  # section on the manual and ./README.md.
+, legacyCargoFetcher ? false
 , buildType ? "release"
 , meta ? {}
-
+, target ? null
 , cargoVendorDir ? null
 , ... } @ args:
 
@@ -26,39 +28,53 @@ assert cargoVendorDir == null -> cargoSha256 != "unset";
 assert buildType == "release" || buildType == "debug";
 
 let
+
+  cargoFetcher = if legacyCargoFetcher
+                 then fetchcargo
+                 else fetchCargoTarball;
+
   cargoDeps = if cargoVendorDir == null
-    then fetchcargo {
-        inherit name src srcs sourceRoot cargoUpdateHook;
-        copyLockfile = verifyCargoDeps;
+    then cargoFetcher {
+        inherit name src srcs sourceRoot unpackPhase cargoUpdateHook;
         patches = cargoPatches;
         sha256 = cargoSha256;
       }
     else null;
 
+  # If we're using the modern fetcher that always preserves the original Cargo.lock
+  # and have vendored deps, check them against the src attr for consistency.
+  validateCargoDeps = cargoSha256 != "unset" && !legacyCargoFetcher;
+
+  # Some cargo builds include build hooks that modify their own vendor
+  # dependencies. This copies the vendor directory into the build tree and makes
+  # it writable. If we're using a tarball, the unpackFile hook already handles
+  # this for us automatically.
   setupVendorDir = if cargoVendorDir == null
-    then ''
+    then (''
       unpackFile "$cargoDeps"
-      cargoDepsCopy=$(stripHash $(basename $cargoDeps))
+      cargoDepsCopy=$(stripHash $cargoDeps)
+    '' + stdenv.lib.optionalString legacyCargoFetcher ''
       chmod -R +w "$cargoDepsCopy"
-    ''
+    '')
     else ''
       cargoDepsCopy="$sourceRoot/${cargoVendorDir}"
     '';
 
-  hostConfig = stdenv.hostPlatform.config;
-
-  rustHostConfig = {
-    x86_64-pc-mingw32 = "x86_64-pc-windows-gnu";
-  }.${hostConfig} or hostConfig;
+  rustTarget = if target == null then rust.toRustTarget stdenv.hostPlatform else target;
 
   ccForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}cc";
   cxxForBuild="${buildPackages.stdenv.cc}/bin/${buildPackages.stdenv.cc.targetPrefix}c++";
   ccForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}cc";
   cxxForHost="${stdenv.cc}/bin/${stdenv.cc.targetPrefix}c++";
-  releaseDir = "target/${rustHostConfig}/${buildType}";
+  releaseDir = "target/${rustTarget}/${buildType}";
+
+  # Fetcher implementation choice should not be part of the hash in final
+  # derivation; only the cargoSha256 input matters.
+  filteredArgs = builtins.removeAttrs args [ "legacyCargoFetcher" ];
+
 in
 
-stdenv.mkDerivation (args // {
+stdenv.mkDerivation (filteredArgs // {
   inherit cargoDeps;
 
   patchRegistryDeps = ./patch-registry-deps;
@@ -85,10 +101,10 @@ stdenv.mkDerivation (args // {
       --subst-var-by vendor "$(pwd)/$cargoDepsCopy"
 
     cat >> .cargo/config <<'EOF'
-    [target."${stdenv.buildPlatform.config}"]
+    [target."${rust.toRustTarget stdenv.buildPlatform}"]
     "linker" = "${ccForBuild}"
     ${stdenv.lib.optionalString (stdenv.buildPlatform.config != stdenv.hostPlatform.config) ''
-    [target."${rustHostConfig}"]
+    [target."${rustTarget}"]
     "linker" = "${ccForHost}"
     ${# https://github.com/rust-lang/rust/issues/46651#issuecomment-433611633
       stdenv.lib.optionalString (stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64) ''
@@ -97,14 +113,13 @@ stdenv.mkDerivation (args // {
     ''}
     EOF
 
-    unset cargoDepsCopy
     export RUST_LOG=${logLevel}
-  '' + stdenv.lib.optionalString verifyCargoDeps ''
-    if ! diff source/Cargo.lock $cargoDeps/Cargo.lock ; then
+  '' + stdenv.lib.optionalString validateCargoDeps ''
+    if ! diff source/Cargo.lock $cargoDepsCopy/Cargo.lock ; then
       echo
-      echo "ERROR: cargoSha256 is out of date."
+      echo "ERROR: cargoSha256 is out of date"
       echo
-      echo "Cargo.lock is not the same in $cargoDeps."
+      echo "Cargo.lock is not the same in $cargoDepsCopy"
       echo
       echo "To fix the issue:"
       echo '1. Use "1111111111111111111111111111111111111111111111111111" as the cargoSha256 value'
@@ -114,6 +129,8 @@ stdenv.mkDerivation (args // {
 
       exit 1
     fi
+  '' + ''
+    unset cargoDepsCopy
   '' + (args.postUnpack or "");
 
   configurePhase = args.configurePhase or ''
@@ -127,13 +144,13 @@ stdenv.mkDerivation (args // {
     (
     set -x
     env \
-      "CC_${stdenv.buildPlatform.config}"="${ccForBuild}" \
-      "CXX_${stdenv.buildPlatform.config}"="${cxxForBuild}" \
-      "CC_${stdenv.hostPlatform.config}"="${ccForHost}" \
-      "CXX_${stdenv.hostPlatform.config}"="${cxxForHost}" \
+      "CC_${rust.toRustTarget stdenv.buildPlatform}"="${ccForBuild}" \
+      "CXX_${rust.toRustTarget stdenv.buildPlatform}"="${cxxForBuild}" \
+      "CC_${rust.toRustTarget stdenv.hostPlatform}"="${ccForHost}" \
+      "CXX_${rust.toRustTarget stdenv.hostPlatform}"="${cxxForHost}" \
       cargo build \
         ${stdenv.lib.optionalString (buildType == "release") "--release"} \
-        --target ${rustHostConfig} \
+        --target ${rustTarget} \
         --frozen ${concatStringsSep " " cargoBuildFlags}
     )
 
@@ -149,8 +166,8 @@ stdenv.mkDerivation (args // {
 
   checkPhase = args.checkPhase or ''
     runHook preCheck
-    echo "Running cargo test"
-    cargo test
+    echo "Running cargo cargo test -- ''${checkFlags} ''${checkFlagsArray+''${checkFlagsArray[@]}}"
+    cargo test -- ''${checkFlags} ''${checkFlagsArray+"''${checkFlagsArray[@]}"}
     runHook postCheck
   '';
 

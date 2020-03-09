@@ -1,8 +1,8 @@
 { stdenv, libXcomposite, libgnome-keyring, makeWrapper, udev, curl, alsaLib
 , libXfixes, atk, gtk3, libXrender, pango, gnome3, cairo, freetype, fontconfig
 , libX11, libXi, libxcb, libXext, libXcursor, glib, libXScrnSaver, libxkbfile, libXtst
-, nss, nspr, cups, fetchurl, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
-, dpkg, makeDesktopItem, openssl, wrapGAppsHook, hicolor-icon-theme, at-spi2-atk, libuuid
+, nss, nspr, cups, fetchzip, expat, gdk-pixbuf, libXdamage, libXrandr, dbus
+, makeDesktopItem, openssl, wrapGAppsHook, at-spi2-atk, at-spi2-core, libuuid
 , e2fsprogs, krb5
 }:
 
@@ -13,12 +13,15 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "gitkraken";
-  version = "6.2.1";
+  version = "6.5.3";
 
-  src = fetchurl {
-    url = "https://release.axocdn.com/linux/GitKraken-v${version}.deb";
-    sha256 = "1l1w8gr4ss0g2k7bfslnc7df4ls1av59jjjc8mrx97wsndrm3vxg";
+  src = fetchzip {
+    url = "https://release.axocdn.com/linux/GitKraken-v${version}.tar.gz";
+    sha256 = "0pw39cxh6p49h8gxxqfn1a2qf3gpxr5naz2cffd7dz0gwslgia2d";
   };
+
+  dontBuild = true;
+  dontConfigure = true;
 
   libPath = makeLibraryPath [
     stdenv.cc.cc.lib
@@ -54,6 +57,7 @@ stdenv.mkDerivation rec {
     libgnome-keyring
     openssl
     at-spi2-atk
+    at-spi2-core
     libuuid
     e2fsprogs
     krb5
@@ -70,25 +74,27 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
-  buildInputs = [ dpkg gtk3 gnome3.adwaita-icon-theme hicolor-icon-theme ];
-
-  unpackCmd = ''
-    mkdir out
-    dpkg -x $curSrc out
-  '';
+  buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 
   installPhase = ''
-    mkdir $out
-    pushd usr
-    pushd share
-    substituteInPlace applications/gitkraken.desktop \
-      --replace /usr/share/gitkraken $out/bin
-    popd
-    rm -rf bin/gitkraken share/lintian
-    cp -av share bin $out/
-    popd
+    runHook preInstall
 
+    mkdir -p $out/share/gitkraken/
+    cp -R $src/* $out/share/gitkraken/
+
+    mkdir -p $out/bin
     ln -s $out/share/gitkraken/gitkraken $out/bin/gitkraken
+
+    mkdir -p $out/share/applications
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+
+    substituteInPlace $out/share/applications/gitkraken.desktop \
+      --replace $out/usr/share/gitkraken $out/bin
+
+    mkdir -p $out/share/pixmaps
+    cp gitkraken.png $out/share/pixmaps/gitkraken.png
+
+    runHook postInstall
   '';
 
   postFixup = ''

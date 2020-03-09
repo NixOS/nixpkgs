@@ -4,13 +4,13 @@
 let
   unwrapped = mkDerivation rec {
     pname = "neovim-qt-unwrapped";
-    version = "0.2.12";
+    version = "0.2.15";
 
     src = fetchFromGitHub {
       owner  = "equalsraf";
       repo   = "neovim-qt";
       rev    = "v${version}";
-      sha256 = "09s3044j0y8nmyi8ykslfii6fx7k9mckmdvb0jn2xmdabpb60i20";
+      sha256 = "097nykglqp4jyvla4yp32sc1f1hph4cqqhp6rm9ww7br8c0j54xl";
     };
 
     cmakeFlags = [
@@ -60,8 +60,9 @@ in
         --prefix PATH : "${neovim}/bin"
 
       # link .desktop file
-      mkdir -p "$out/share"
+      mkdir -p "$out/share/pixmaps"
       ln -s '${unwrapped}/share/applications' "$out/share/applications"
+      ln -s '${unwrapped}/share/pixmaps/nvim-qt.png' "$out/share/pixmaps/nvim-qt.png"
     '';
 
     preferLocalBuild = true;

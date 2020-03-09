@@ -15,27 +15,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "2.2.0";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0mr25p7j5hl8zmvz5i3g30s4xbdhk6d22lw2akch3si40il9q5fv";
+    sha256 = "1ls5jxzmd7cmbv8h67q6mcmfrfksgwjndqd6r9gxivsz2lcji3x7";
   };
-
-  patches = [
-    ./hardcode-settings-daemon-gsettings.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace src/Views/General.vala \
-      --subst-var-by GSD_GSETTINGS ${glib.getSchemaPath elementary-settings-daemon}
-  '';
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -51,10 +42,9 @@ stdenv.mkDerivation rec {
     granite
     gtk3
     libgee
+    elementary-settings-daemon
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Mouse & Touchpad Plug";

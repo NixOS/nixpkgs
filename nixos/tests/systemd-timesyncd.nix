@@ -1,7 +1,7 @@
 # Regression test for systemd-timesync having moved the state directory without
 # upstream providing a migration path. https://github.com/systemd/systemd/issues/12131
 
-import ./make-test.nix (let
+import ./make-test-python.nix (let
   common = { lib, ... }: {
     # override the `false` value from the qemu-vm base profile
     services.timesyncd.enable = lib.mkForce true;
@@ -25,28 +25,28 @@ in {
   };
 
   testScript = ''
-    startAll;
-    $current->succeed('systemctl status systemd-timesyncd.service');
+    start_all()
+    current.succeed("systemctl status systemd-timesyncd.service")
     # on a new install with a recent systemd there should not be any
     # leftovers from the dynamic user mess
-    $current->succeed('test -e /var/lib/systemd/timesync');
-    $current->succeed('test ! -L /var/lib/systemd/timesync');
+    current.succeed("test -e /var/lib/systemd/timesync")
+    current.succeed("test ! -L /var/lib/systemd/timesync")
 
     # timesyncd should be running on the upgrading system since we fixed the
     # file bits in the activation script
-    $pre1909->succeed('systemctl status systemd-timesyncd.service');
+    pre1909.succeed("systemctl status systemd-timesyncd.service")
 
     # the path should be gone after the migration
-    $pre1909->succeed('test ! -e /var/lib/private/systemd/timesync');
+    pre1909.succeed("test ! -e /var/lib/private/systemd/timesync")
 
     # and the new path should no longer be a symlink
-    $pre1909->succeed('test -e /var/lib/systemd/timesync');
-    $pre1909->succeed('test ! -L /var/lib/systemd/timesync');
+    pre1909.succeed("test -e /var/lib/systemd/timesync")
+    pre1909.succeed("test ! -L /var/lib/systemd/timesync")
 
     # after a restart things should still work and not fail in the activation
     # scripts and cause the boot to fail..
-    $pre1909->shutdown;
-    $pre1909->start;
-    $pre1909->succeed('systemctl status systemd-timesyncd.service');
+    pre1909.shutdown()
+    pre1909.start()
+    pre1909.succeed("systemctl status systemd-timesyncd.service")
   '';
 })

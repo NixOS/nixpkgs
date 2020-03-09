@@ -1,7 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libpfm
@@ -28,7 +28,8 @@ let
     concatStringsSep "." (take 1 (splitVersion release_version));
 
 in stdenv.mkDerivation ({
-  name = "llvm-${version}";
+  pname = "llvm";
+  inherit version;
 
   src = fetch "llvm" "1rvm5gqp5v8hfn17kqws3zhk94w4kxndal12bqa0y57p09nply24";
   polly_src = fetch "polly" "1lfjdz3ilj5xmjxvicd8f5ykybks67ry2pdb777352r3mzlgg8g8";
@@ -45,8 +46,8 @@ in stdenv.mkDerivation ({
   outputs = [ "out" "python" ]
     ++ optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ optionals enableManpages [ python.pkgs.sphinx python.pkgs.recommonmark ];
+  nativeBuildInputs = [ cmake python3 ]
+    ++ optionals enableManpages [ python3.pkgs.sphinx python3.pkgs.recommonmark ];
 
   buildInputs = [ libxml2 libffi ]
     ++ optional enablePFM libpfm; # exegesis
@@ -108,7 +109,7 @@ in stdenv.mkDerivation ({
     "-DCAN_TARGET_i386=false"
   ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "-DCMAKE_CROSSCOMPILING=True"
-    "-DLLVM_TABLEGEN=${buildPackages.llvm_7}/bin/llvm-tblgen"
+    "-DLLVM_TABLEGEN=${buildPackages.llvm_8}/bin/llvm-tblgen"
   ];
 
   postBuild = ''
@@ -116,7 +117,7 @@ in stdenv.mkDerivation ({
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''
@@ -150,7 +151,7 @@ in stdenv.mkDerivation ({
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

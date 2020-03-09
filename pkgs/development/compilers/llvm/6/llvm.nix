@@ -1,7 +1,7 @@
 { stdenv
 , fetch
 , cmake
-, python
+, python3
 , libffi
 , libbfd
 , libxml2
@@ -26,7 +26,8 @@ let
 in
 
 stdenv.mkDerivation ({
-  name = "llvm-${version}";
+  pname = "llvm";
+  inherit version;
 
   src = fetch "llvm" "1qpls3vk85lydi5b4axl0809fv932qgsqgdgrk098567z4jc7mmn";
 
@@ -39,8 +40,8 @@ stdenv.mkDerivation ({
   outputs = [ "out" "python" ]
     ++ optional enableSharedLibraries "lib";
 
-  nativeBuildInputs = [ cmake python ]
-    ++ optional enableManpages python.pkgs.sphinx;
+  nativeBuildInputs = [ cmake python3 ]
+    ++ optional enableManpages python3.pkgs.sphinx;
 
   buildInputs = [ libxml2 libffi ];
 
@@ -119,7 +120,7 @@ stdenv.mkDerivation ({
   '';
 
   preCheck = ''
-    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$PWD/lib
+    export LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$PWD/lib
   '';
 
   postInstall = ''
@@ -154,7 +155,7 @@ stdenv.mkDerivation ({
     platforms   = stdenv.lib.platforms.all;
   };
 } // stdenv.lib.optionalAttrs enableManpages {
-  name = "llvm-manpages-${version}";
+  pname = "llvm-manpages";
 
   buildPhase = ''
     make docs-llvm-man

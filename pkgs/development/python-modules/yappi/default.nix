@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "yappi";
-  version = "1.0";
+  version = "1.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1gs48c5sy771lsjhca3m4j8ljc6yhk5qnim3n5idnlaxa4ql30bz";
+    sha256 = "b8db9bc607610d6da4e27e87ec828ebddec4bdaac89ca07ebfe9a153b0641580";
   };
 
   patches = [ ./tests.patch ];

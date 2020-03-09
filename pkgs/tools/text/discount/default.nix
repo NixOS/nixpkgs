@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "Implementation of Markdown markup language in C";
     homepage = http://www.pell.portland.or.us/~orc/Code/discount/;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ shell ndowens ];
+    maintainers = with maintainers; [ shell ];
     platforms = platforms.unix;
   };
 }

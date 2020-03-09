@@ -64,69 +64,30 @@ self: super: {
   tasty-hedgehog = doJailbreak super.tasty-hedgehog;
   test-framework = doJailbreak super.test-framework;
   th-expand-syns = doJailbreak super.th-expand-syns;
-
-  # use latest version to fix the build
-  hackage-db = self.hackage-db_2_1_0;
-  lens = self.lens_4_18_1;
-  memory = self.memory_0_15_0;
-  microlens = self.microlens_0_4_11_2;
-  optparse-applicative = self.optparse-applicative_0_15_1_0;
-  primitive = dontCheck super.primitive_0_7_0_0;  # evaluating the test suite gives an infinite recursion
-  regex-base = self.regex-base_0_94_0_0;
-  regex-pcre-builtin = self.regex-pcre-builtin_0_95_1_1_8_43;
-  regex-posix = self.regex-posix_0_96_0_0;
-  regex-tdfa = self.regex-tdfa_1_3_0;
-  shelly = self.shelly_1_9_0;
-  string-qq = self.string-qq_0_0_4;
-  tls = self.tls_1_5_1;
-  vector-th-unbox = self.vector-th-unbox_0_2_1_7;
-  X11 = self.X11_1_9_1;
-  xmonad-contrib = self.xmonad-contrib_0_16;
+  # TODO: remove when upstream accepts https://github.com/snapframework/io-streams-haproxy/pull/17
+  io-streams-haproxy = doJailbreak super.io-streams-haproxy; # base >=4.5 && <4.13
+  snap-server = doJailbreak super.snap-server;
+  xmobar = doJailbreak super.xmobar;
+  exact-pi = doJailbreak super.exact-pi;
+  time-compat = doJailbreak super.time-compat;
+  http-media = doJailbreak super.http-media;
+  servant-server = doJailbreak super.servant-server;
 
   # These packages don't work and need patching and/or an update.
   hackage-security = appendPatch (doJailbreak super.hackage-security) (pkgs.fetchpatch {
     url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/hackage-security-0.5.3.0.patch";
     sha256 = "0l8x0pbsn18fj5ak5q0g5rva4xw1s9yc4d86a1pfyaz467b9i5a4";
   });
-  socks = appendPatch (doJailbreak super.socks) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/socks-0.6.0.patch";
-    sha256 = "1dsqmx0sw62x4glh43c0sbizd2y00v5xybiqadn96v6pmfrap5cp";
-  });
-  polyparse = appendPatch (doJailbreak super.polyparse) (pkgs.fetchpatch {
-    url = "https://raw.githubusercontent.com/hvr/head.hackage/master/patches/polyparse-1.12.1.patch";
-    sha256 = "01b2gnsq0x4fd9na8zpk6pajym55mbz64hgzawlwxdw0y6681kr5";
-  });
   foundation = dontCheck super.foundation;
-  haskell-src-meta = appendPatch (dontCheck (doJailbreak super.haskell-src-meta)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/haskell-src-meta-0.8.3.patch";
-    sha256 = "1asl932mibr5y057xx8v1a7n3qy87lcnclsfh8pbxq1m3iwjkxy8";
-  });
-  asn1-encoding = appendPatch (dontCheck (doJailbreak super.asn1-encoding)) (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/asn1-encoding-0.9.5.patch";
-    sha256 = "0a3159rnaw6shjzdm46799crd4pxh33s23qy51xa7z6nv5q8wsb5";
-  });
   vault = dontHaddock super.vault;
-  monad-par = dontCheck super.monad-par;   # test suite does not compile in monad-par-0.3.4.8
 
-  # TODO dont fetch patch if https://github.com/simonmar/alex/issues/140 is resolved
-  alex = appendPatch super.alex (pkgs.fetchpatch {
-    url = "https://github.com/simonmar/alex/commit/deaae6eddef5186bfd0e42e2c3ced39e26afa4d6.patch";
-    sha256 = "1v40gmnw4lqyk271wngdwz8whpfdhmza58srbkka8icwwwrck3l5";
-  });
-
-  # https://github.com/sol/hpack/issues/371
-  hpack = appendPatch super.hpack (pkgs.fetchpatch {
-    url = "https://gitlab.haskell.org/ghc/head.hackage/raw/master/patches/hpack-0.32.0.patch";
-    sha256 = "11ccl9f7vwbf5cpzknlyvrwgkzpajk4vq9jk9yb5f9la9ggwb244";
-  });
+  # https://github.com/snapframework/snap-core/issues/288
+  snap-core = overrideCabal super.snap-core (drv: { prePatch = "substituteInPlace src/Snap/Internal/Core.hs --replace 'fail   = Fail.fail' ''"; });
 
   # Upstream ships a broken Setup.hs file.
   csv = overrideCabal super.csv (drv: { prePatch = "rm Setup.hs"; });
 
-  # mark broken packages
-  bencode = markBrokenVersion "0.6.0.0" super.bencode;
-  easytest = markBroken super.easytest;
-  easytest_0_3 = markBroken super.easytest_0_3;
-  haskell-src = markBrokenVersion "1.0.3.0" super.haskell-src;
+  # https://github.com/kowainik/relude/issues/241
+  relude = dontCheck super.relude;
 
 }

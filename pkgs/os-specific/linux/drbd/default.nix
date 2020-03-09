@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1w4889h1ak7gy9w33kd4fgjlfpgmp6hzfya16p1pkc13bjf22mm0";
   };
 
-  patches = [ ./pass-force.patch ];
+  patches = [ ./pass-force.patch ./fix-glibc-compilation.patch ];
 
   nativeBuildInputs = [ flex ];
   buildInputs = [ perl ];
@@ -31,9 +31,13 @@ stdenv.mkDerivation rec {
       substituteInPlace scripts/drbd.rules --replace /usr/sbin/drbdadm $out/sbin/drbdadm
     '';
 
-  makeFlags = "SHELL=${stdenv.shell}";
+  makeFlags = [ "SHELL=${stdenv.shell}" ];
 
-  installFlags = "localstatedir=$(TMPDIR)/var sysconfdir=$(out)/etc INITDIR=$(out)/etc/init.d";
+  installFlags = [
+    "localstatedir=$(TMPDIR)/var"
+    "sysconfdir=$(out)/etc"
+    "INITDIR=$(out)/etc/init.d"
+  ];
 
   meta = with stdenv.lib; {
     homepage = http://www.drbd.org/;

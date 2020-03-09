@@ -1,4 +1,5 @@
-{ lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version }:
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
+, enableShared ? ! stdenv.hostPlatform.isMusl }:
 
 stdenv.mkDerivation {
   pname = "libc++";
@@ -23,7 +24,7 @@ stdenv.mkDerivation {
   '' + lib.optionalString stdenv.hostPlatform.isMusl ''
     patchShebangs utils/cat_files.py
   '';
-  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python;
+  nativeBuildInputs = [ cmake ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl python3;
 
   buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -31,7 +32,8 @@ stdenv.mkDerivation {
     "-DLIBCXX_LIBCXXABI_LIB_PATH=${libcxxabi}/lib"
     "-DLIBCXX_LIBCPPABI_VERSION=2"
     "-DLIBCXX_CXX_ABI=libcxxabi"
-  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1";
+  ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "-DLIBCXX_HAS_MUSL_LIBC=1"
+  ++ stdenv.lib.optional (!enableShared) "-DLIBCXX_ENABLE_SHARED=OFF" ;
 
   enableParallelBuilding = true;
 

@@ -22,9 +22,9 @@ stdenv.mkDerivation {
     "-DLLVM_OCAML_EXTERNAL_LLVM_LIBDIR=${stdenv.lib.getLib llvm}/lib"
   ];
 
-  buildFlags = "ocaml_all";
+  buildFlags = [ "ocaml_all" ];
 
-  installFlags = "-C bindings/ocaml";
+  installFlags = [ "-C" "bindings/ocaml" ];
 
   postInstall = ''
     mkdir -p $OCAMLFIND_DESTDIR/

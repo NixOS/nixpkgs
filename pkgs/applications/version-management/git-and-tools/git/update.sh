@@ -1,9 +1,9 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i bash -p curl common-updater-scripts jq
+#!nix-shell -i bash -p curl common-updater-scripts jq git
 
 set -eu -o pipefail
 
-oldVersion="$(nix-instantiate --eval -E "with import ./. {}; git.version or (builtins.parseDrvName git.name).version" | tr -d '"')"
+oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion git" | tr -d '"')"
 latestTag="$(git ls-remote --tags --sort="v:refname" git://github.com/git/git.git | grep -v '\{\}' | grep -v '\-rc' | tail -1 | sed 's|^.*/v\(.*\)|\1|')"
 
 if [ ! "${oldVersion}" = "${latestTag}" ]; then

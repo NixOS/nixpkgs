@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mlarchive2maildir";
-  version = "0.0.6";
+  version = "0.0.8";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "025mv890zsk25cral9cas3qgqdsszh5025khz473zs36innjd0mw";
+    sha256 = "1din3yay2sas85178v0xr0hbm2396y4dalkcqql1ny9vdm94h6sp";
   };
 
   nativeBuildInputs = with python3.pkgs; [ setuptools_scm ];

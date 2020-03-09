@@ -2,6 +2,7 @@
 , maintainer ? null
 , path ? null
 , max-workers ? null
+, include-overlays ? false
 , keep-going ? null
 }:
 
@@ -20,9 +21,7 @@ let
       in
         [x] ++ nubOn f xs;
 
-  pkgs = import ./../../default.nix {
-    overlays = [];
-  };
+  pkgs = import ./../../default.nix (if include-overlays then { } else { overlays = []; });
 
   packagesWith = cond: return: set:
     nubOn (pkg: pkg.updateScript)
@@ -105,7 +104,7 @@ let
     to run all update scripts for all packages that lists \`garbas\` as a maintainer
     and have \`updateScript\` defined, or:
 
-        % nix-shell maintainers/scripts/update.nix --argstr package garbas
+        % nix-shell maintainers/scripts/update.nix --argstr package gnome3.nautilus
 
     to run update script for specific package, or
 
@@ -126,7 +125,7 @@ let
 
   packageData = package: {
     name = package.name;
-    pname = (builtins.parseDrvName package.name).name;
+    pname = pkgs.lib.getName package;
     updateScript = map builtins.toString (pkgs.lib.toList package.updateScript);
   };
 

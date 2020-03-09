@@ -4,7 +4,7 @@ with lib;
 
 qtModule {
   name = "qttools";
-  qtInputs = [ qtbase ];
+  qtInputs = [ qtbase qtdeclarative ];
   outputs = [ "out" "dev" "bin" ];
 
   # fixQtBuiltinPaths overwrites a builtin path we should keep

@@ -33,7 +33,7 @@ stdenv.mkDerivation {
 
   doCheck = true;
 
-  checkFlags = "units";
+  checkFlags = [ "units" ];
 
   meta = with stdenv.lib; {
     description = "A maintained ctags implementation";

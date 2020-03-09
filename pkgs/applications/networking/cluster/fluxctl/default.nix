@@ -2,23 +2,23 @@
 
 buildGoModule rec {
   pname = "fluxctl";
-  version = "1.13.3";
+  version = "1.17.1";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = "flux";
     rev = version;
-    sha256 = "0l2gc9p2jz1zyl527rr0r3qklm4j86d4biviq8a30jl9rsx6z4cy";
+    sha256 = "0kp4xk1b8vxajl3cl6any9gmf3412gsahm5fvkyaclnj20yvq807";
   };
 
-  modSha256 = "1q5g9hd0ansdc2acpysf6wi74q50w0psrpyhk4y6mm6kjvhlcn87";
+  modSha256 = "0fnlnavw4l3425c9nwjkd98xihrgxi9n5yc9yv15j5xzg47qnqav";
 
   subPackages = [ "cmd/fluxctl" ];
 
   meta = with stdenv.lib; {
     description = "CLI client for Flux, the GitOps Kubernetes operator";
-    homepage = https://github.com/weaveworks/flux;
+    homepage = "https://github.com/fluxcd/flux";
     license = licenses.asl20;
-    maintainers = with maintainers; [ Gonzih ];
+    maintainers = with maintainers; [ Gonzih filalex77 ];
   };
 }

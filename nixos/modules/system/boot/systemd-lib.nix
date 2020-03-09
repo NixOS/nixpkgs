@@ -59,6 +59,11 @@ in rec {
     optional (attr ? ${name} && ! isMacAddress attr.${name})
       "Systemd ${group} field `${name}' must be a valid mac address.";
 
+  isPort = i: i >= 0 && i <= 65535;
+
+  assertPort = name: group: attr:
+    optional (attr ? ${name} && ! isPort attr.${name})
+      "Error on the systemd ${group} field `${name}': ${attr.name} is not a valid port number.";
 
   assertValueOneOf = name: values: group: attr:
     optional (attr ? ${name} && !elem attr.${name} values)
@@ -147,7 +152,13 @@ in rec {
       done
 
       # Symlink all units provided listed in systemd.packages.
-      for i in ${toString cfg.packages}; do
+      packages="${toString cfg.packages}"
+
+      # Filter duplicate directories
+      declare -A unique_packages
+      for k in $packages ; do unique_packages[$k]=1 ; done
+
+      for i in ''${!unique_packages[@]}; do
         for fn in $i/etc/systemd/${type}/* $i/lib/systemd/${type}/*; do
           if ! [[ "$fn" =~ .wants$ ]]; then
             if [[ -d "$fn" ]]; then

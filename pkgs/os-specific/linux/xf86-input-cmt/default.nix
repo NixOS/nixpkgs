@@ -2,7 +2,7 @@
   utilmacros, libgestures, libevdevc }:
 
 stdenv.mkDerivation rec {
-  name = "xf86-input-cmt-${version}";
+  pname = "xf86-input-cmt";
   version = "2.0.2";
   src = fetchFromGitHub {
     owner = "hugegreenbug";
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     description = "Chromebook touchpad driver.";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    homepage = "www.github.com/hugegreenbug/xf86-input-cmt";
+    homepage = "https://www.github.com/hugegreenbug/xf86-input-cmt";
     maintainers = with maintainers; [ kcalvinalvin ];
   };
 }

@@ -24,12 +24,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "19.08";
+  version = "20.01";
   pname = "ejabberd";
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
-    sha256 = "0ivkw31civcznv9k645hvrzn1yc6a4qsrsywjrakniwaaxlsnj8w";
+    sha256 = "14bgwa6y17bhnwhcqb2hdl7psds0iqkcawb4kpaw6d7lzzsx4ay6";
   };
 
   nativeBuildInputs = [ fakegit ];
@@ -76,7 +76,7 @@ in stdenv.mkDerivation rec {
 
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash = "0h1amqp2x6ir29bdh9x8bm0abj67k81nmkqi8gidwccsa5z94s2c";
+    outputHash = "097c84qp00dq8x7ngfqcrv9fa0wm0k94grashmi1fxlasgbvxh18";
   };
 
   configureFlags =
@@ -115,7 +115,7 @@ in stdenv.mkDerivation rec {
     license = licenses.gpl2;
     homepage = https://www.ejabberd.im;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ sander abbradar ];
+    maintainers = with maintainers; [ sander abbradar ajs124 ];
     broken = withElixir;
   };
 }

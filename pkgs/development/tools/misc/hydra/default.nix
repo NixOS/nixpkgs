@@ -15,7 +15,7 @@ else
 let
   perlDeps = buildEnv {
     name = "hydra-perl-deps";
-    paths = with perlPackages;
+    paths = with perlPackages; lib.closePropagation
       [ ModulePluggable
         CatalystActionREST
         CatalystAuthenticationStoreDBIxClass
@@ -27,7 +27,7 @@ let
         CatalystPluginSessionStateCookie
         CatalystPluginSessionStoreFastMmap
         CatalystPluginStackTrace
-        CatalystRuntime
+        CatalystPluginUnicodeEncoding
         CatalystTraitForRequestProxyBase
         CatalystViewDownload
         CatalystViewJSON
@@ -51,6 +51,7 @@ let
         LWP
         LWPProtocolHttps
         NetAmazonS3
+        NetPrometheus
         NetStatsd
         PadWalker
         Readonly
@@ -58,6 +59,8 @@ let
         SetScalar
         Starman
         SysHostnameLong
+        TermSizeAny
+        TestMore
         TextDiff
         TextTable
         XMLSimple
@@ -69,20 +72,20 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "hydra";
-  version = "2019-08-30";
+  version = "2020-02-06";
 
   inherit stdenv;
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = pname;
-    rev = "242b8b7a314759ed33f69205d26a1b7c337511e0";
-    sha256 = "167ijcf9qdm10kjvqax3hcvs5mpa4mx2y2i9idwwc6xfvn8fhs84";
+    rev = "2b4f14963b16b21ebfcd6b6bfa7832842e9b2afc";
+    sha256 = "16q0cffcsfx5pqd91n9k19850c1nbh4vvbd9h8yi64ihn7v8bick";
   };
 
   buildInputs =
     [ makeWrapper autoconf automake libtool unzip nukeReferences sqlite libpqxx
-      gitAndTools.topGit mercurial darcs subversion bazaar openssl bzip2 libxslt
+      gitAndTools.top-git mercurial darcs subversion bazaar openssl bzip2 libxslt
       guile # optional, for Guile + Guix support
       perlDeps perl nix
       postgresql # for running the tests
@@ -92,14 +95,14 @@ in stdenv.mkDerivation rec {
 
   hydraPath = lib.makeBinPath (
     [ sqlite subversion openssh nix coreutils findutils pixz
-      gzip bzip2 lzma gnutar unzip git gitAndTools.topGit mercurial darcs gnused bazaar
+      gzip bzip2 lzma gnutar unzip git gitAndTools.top-git mercurial darcs gnused bazaar
     ] ++ lib.optionals stdenv.isLinux [ rpm dpkg cdrkit ] );
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   configureFlags = [ "--with-docbook-xsl=${docbook_xsl}/xml/xsl/docbook" ];
 
-  NIX_CFLAGS_COMPILE = [ "-pthread" ];
+  NIX_CFLAGS_COMPILE = "-pthread";
 
   shellHook = ''
     PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH

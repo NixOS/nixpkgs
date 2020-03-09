@@ -11,12 +11,13 @@
 , tcl ? null, tk ? null, tix ? null, libX11 ? null, xorgproto ? null, x11Support ? false
 , zlib
 , self
-, CF, configd
+, configd
 , python-setup-hook
 , nukeReferences
 # For the Python package set
 , packageOverrides ? (self: super: {})
 , buildPackages
+, pythonForBuild ? buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"}
 , sourceVersion
 , sha256
 , passthruFun
@@ -56,14 +57,14 @@ let
     pythonForBuild
   ];
 
-  buildInputs = filter (p: p != null) [
+  buildInputs = filter (p: p != null) ([
     zlib bzip2 expat lzma libffi gdbm sqlite readline ncurses openssl ]
     ++ optionals x11Support [ tcl tk libX11 xorgproto ]
-    ++ optionals stdenv.isDarwin [ CF configd ];
+    ++ optionals stdenv.isDarwin [ configd ]);
 
   hasDistutilsCxxPatch = !(stdenv.cc.isGNU or false);
 
-  pythonForBuild = buildPackages.${"python${sourceVersion.major}${sourceVersion.minor}"};
+  inherit pythonForBuild;
 
   pythonForBuildInterpreter = if stdenv.hostPlatform == stdenv.buildPlatform then
     "$out/bin/python"
@@ -100,12 +101,9 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals isPy35 [
     # Backports support for LD_LIBRARY_PATH from 3.6
     ./3.5/ld_library_path.patch
-  ] ++ optionals isPy37 [
+  ] ++ optionals (isPy37 || isPy38) [
     # Fix darwin build https://bugs.python.org/issue34027
-    (fetchpatch {
-      url = https://bugs.python.org/file47666/darwin-libutil.patch;
-      sha256 = "0242gihnw3wfskl4fydp2xanpl8k5q7fj4dp7dbbqf46a4iwdzpa";
-    })
+    ./3.7/darwin-libutil.patch
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
@@ -114,7 +112,7 @@ in with passthru; stdenv.mkDerivation {
     (
       if isPy35 then
         ./3.5/python-3.x-distutils-C++.patch
-      else if isPy37 then
+      else if isPy37 || isPy38 then
         ./3.7/python-3.x-distutils-C++.patch
       else
         fetchpatch {
@@ -206,9 +204,6 @@ in with passthru; stdenv.mkDerivation {
     touch $out/lib/${libPrefix}/test/__init__.py
 
     ln -s "$out/include/${executable}m" "$out/include/${executable}"
-
-    # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-    echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
     # Determinism: Windows installers were not deterministic.
     # We're also not interested in building Windows installers.

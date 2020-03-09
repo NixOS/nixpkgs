@@ -40,11 +40,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mullvad-vpn";
-  version = "2019.7";
+  version = "2020.2";
 
   src = fetchurl {
     url = "https://www.mullvad.net/media/app/MullvadVPN-${version}_amd64.deb";
-    sha256 = "1hjndcdkin98l6jv39r98zfw33qg0gnvlv8q80qsj5x36a19d4v9";
+    sha256 = "4f5970714684a86fba44b742d77f9bbe1147a111330e487d160d9844f34ae3d5";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ stdenv.mkDerivation rec {
 
     sed -i 's|\/opt\/Mullvad.*VPN|'$out'/bin|g' $out/share/applications/mullvad-vpn.desktop
 
-    ln -s $out/share/mullvad/mullvad-vpn $out/bin/mullvad-vpn
+    ln -s $out/share/mullvad/mullvad-{gui,vpn} $out/bin/
     ln -s $out/share/mullvad/resources/mullvad-daemon $out/bin/mullvad-daemon
 
     runHook postInstall
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = [ maintainers.xfix ];
+    maintainers = with maintainers ;[ filalex77 xfix ];
   };
 
 }

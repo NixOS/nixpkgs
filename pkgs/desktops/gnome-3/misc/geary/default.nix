@@ -1,17 +1,17 @@
 { stdenv, fetchurl, pkgconfig, gtk3, vala, enchant2, wrapGAppsHook, meson, ninja
 , desktop-file-utils, gnome-online-accounts, gsettings-desktop-schemas, adwaita-icon-theme
-, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext
+, libcanberra-gtk3, libsecret, gmime, isocodes, libxml2, gettext, fetchpatch
 , sqlite, gcr, json-glib, itstool, libgee, gnome3, webkitgtk, python3
 , xvfb_run, dbus, shared-mime-info, libunwind, libunity, folks, glib-networking
 , gobject-introspection, gspell, appstream-glib, libytnef, libhandy }:
 
 stdenv.mkDerivation rec {
   pname = "geary";
-  version = "3.34.1";
+  version = "3.34.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1bx57g8199pcqh1p90dlnca2g1kpyrifr6g8m1rdjmpm2a1r993v";
+    sha256 = "1a6j70pzr57ga7m4nypqdkqwlzk2dablpz93yaympgrlqpf5zkvm";
   };
 
   nativeBuildInputs = [
@@ -31,6 +31,14 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dcontractor=true" # install the contractor file (Pantheon specific)
+  ];
+
+  patches = [
+    # Longer timeout for client test.
+    (fetchpatch {
+      url = "https://salsa.debian.org/gnome-team/geary/raw/04be1e058a2e65075dd8cf8843d469ee45a9e09a/debian/patches/Bump-client-test-timeout-to-300s.patch";
+      sha256 = "1zvnq8bgla160531bjdra8hcg15mp8r1j1n53m1xfgm0ssnj5knx";
+    })
   ];
 
   postPatch = ''

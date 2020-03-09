@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.5.0";
+  version = "1.6.4";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -55,9 +55,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:e83beb5e43f8513fa735e77ffc5859640baea30a882a11cc75c4c3244a737d3c";
+        imageDigest = "sha256:493ee88e1a92abebac67cbd4b5658b4730e0f33512461442d8d9214ea6734a9b";
         finalImageTag = version;
-        sha256 = "15sbmhrxjxidj0j0cccn1qxpg6al175w43m6ngspl0mc132zqc9q";
+        sha256 = "0fm9zdjavpf5hni8g7fkdd3csjbhd7n7py7llxjc66sbii087028";
       };
     };
   };
@@ -68,7 +68,7 @@ in {
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        apiVersion = "rbac.authorization.k8s.io/v1";
         kind = "ClusterRole";
         metadata = {
           labels = {
@@ -94,7 +94,7 @@ in {
       };
 
       coredns-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        apiVersion = "rbac.authorization.k8s.io/v1";
         kind = "ClusterRoleBinding";
         metadata = {
           annotations = {
@@ -170,7 +170,7 @@ in {
       };
 
       coredns-deploy = {
-        apiVersion = "extensions/v1beta1";
+        apiVersion = "apps/v1";
         kind = "Deployment";
         metadata = {
           labels = {

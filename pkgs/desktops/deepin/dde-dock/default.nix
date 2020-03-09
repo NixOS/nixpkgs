@@ -7,13 +7,13 @@
 let
 unwrapped = mkDerivation rec {
   pname = "dde-dock";
-  version = "4.10.3";
+  version = "5.0.0";
 
   src = fetchFromGitHub {
     owner = "linuxdeepin";
     repo = pname;
     rev = version;
-    sha256 = "17iy78r0frpv42g521igfdcgdklbifzig1wzxq2nl14fq0bgxg4v";
+    sha256 = "12dshsqhzajnxm7r53qg0c84b6xlj313qnssnx2m25z4jdp5i7pr";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ unwrapped = mkDerivation rec {
     deepin-desktop-schemas
     dtkcore
     dtkwidget
-    glib.bin
+    glib
     gsettings-qt
     libdbusmenu
     polkit
@@ -64,11 +64,19 @@ unwrapped = mkDerivation rec {
 
   cmakeFlags = [ "-DDOCK_TRAY_USE_NATIVE_POPUP=YES" ];
 
+  dontWrapQtApps = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      "''${qtWrapperArgs[@]}"
+    )
+  '';
+
   postFixup = ''
     searchHardCodedPaths $out
   '';
 
-  passthru.updateScript = deepin.updateScript { inherit ;name = "${pname}-${version}"; };
+  passthru.updateScript = deepin.updateScript { name = "${pname}-${version}"; };
 
   meta = with stdenv.lib; {
     description = "Dock for Deepin Desktop Environment";

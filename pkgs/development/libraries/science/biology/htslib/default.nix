@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "htslib";
-  version = "1.9";
+  version = "1.10.2";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "16ljv43sc3fxmv63w7b2ff8m1s7h89xhazwmbm1bicz8axq8fjz0";
+    sha256 = "0f8rglbvf4aaw41i2sxlpq7pvhly93sjqiz0l4q3hwki5zg47dg3";
   };
 
   # perl is only used during the check phase.
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--enable-libcurl" ]; # optional but strongly recommended
 
-  installFlags = "prefix=$(out)";
+  installFlags = [ "prefix=$(out)" ];
 
   preCheck = ''
     patchShebangs test/

@@ -6,14 +6,14 @@
 
 let
   pname = "krusader";
-  version = "2.7.1";
+  version = "2.7.2";
 in mkDerivation rec {
   pname = "krusader";
   inherit version;
 
   src = fetchurl {
     url = "mirror://kde/stable/${pname}/${version}/${pname}-${version}.tar.xz";
-    sha256 = "1svxj1qygyr3a4dkx0nh2d6r4q7pfj00brzghl94mf4q0rz4vhfm";
+    sha256 = "02b1jz5a7cjr13v6c7fczrhs1xmg1krnva5fxk8x2bf4nd1rm8s1";
   };
 
   meta = with lib; {

@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, systemd }:
 
 buildGoPackage rec {
-  version = "0.3.0";
+  version = "1.3.0";
   pname = "grafana-loki";
   goPackagePath = "github.com/grafana/loki";
 
@@ -11,22 +11,28 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "grafana";
     repo = "loki";
-    sha256 = "1b61fqk6ah4qps4nq7ypdax4i7pkhjxdw4qrhc1zvzzhxr7x13rs";
+    sha256 = "0b1dpb3vh5i18467qk8kpb5ic14p4p1dfyr8hjkznf6bs7g8ka1q";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ systemd.dev ];
+  postPatch = ''
+    substituteInPlace pkg/distributor/distributor_test.go --replace \
+      '"eth0", "en0", "lo0"' \
+      '"lo"'
+  '';
 
-  preFixup = ''
+  nativeBuildInputs = [ makeWrapper ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ systemd.dev ];
+
+  preFixup = stdenv.lib.optionalString stdenv.isLinux ''
     wrapProgram $bin/bin/promtail \
       --prefix LD_LIBRARY_PATH : "${systemd.lib}/lib"
   '';
 
   meta = with stdenv.lib; {
-    description = "Like Prometheus, but for logs.";
+    description = "Like Prometheus, but for logs";
     license = licenses.asl20;
-    homepage = "https://grafana.com/loki";
-    maintainers = with maintainers; [ willibutz globin ];
-    platforms = platforms.linux;
+    homepage = "https://grafana.com/oss/loki/";
+    maintainers = with maintainers; [ willibutz globin mmahut ];
+    platforms = platforms.unix;
   };
 }

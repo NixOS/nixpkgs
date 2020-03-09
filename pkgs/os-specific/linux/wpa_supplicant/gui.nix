@@ -25,7 +25,7 @@ mkDerivation {
 
   meta = with stdenv.lib; {
     description = "Qt-based GUI for wpa_supplicant";
-    homepage = http://hostap.epitest.fi/wpa_supplicant/;
+    homepage = https://hostap.epitest.fi/wpa_supplicant/;
     license = licenses.bsd3;
     platforms = platforms.linux;
   };

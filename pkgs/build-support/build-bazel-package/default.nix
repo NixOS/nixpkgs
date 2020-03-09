@@ -4,10 +4,37 @@
 , lib
 }:
 
-args@{ name, bazelFlags ? [], bazelBuildFlags ? [], bazelFetchFlags ? [], bazelTarget, buildAttrs, fetchAttrs, ... }:
+let
+  bazelPkg = bazel;
+in
+
+args@{
+  name
+, bazel ? bazelPkg
+, bazelFlags ? []
+, bazelBuildFlags ? []
+, bazelFetchFlags ? []
+, bazelTarget
+, buildAttrs
+, fetchAttrs
+
+# Newer versions of Bazel are moving away from built-in rules_cc and instead
+# allow fetching it as an external dependency in a WORKSPACE file[1]. If
+# removed in the fixed-output fetch phase, building will fail to download it.
+# This can be seen e.g. in #73097
+#
+# This option allows configuring the removal of rules_cc in cases where a
+# project depends on it via an external dependency.
+#
+# [1]: https://github.com/bazelbuild/rules_cc
+, removeRulesCC ? true
+, removeLocalConfigCc ? true
+, removeLocal ? true
+, ...
+}:
 
 let
-  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" ];
+  fArgs = removeAttrs args [ "buildAttrs" "fetchAttrs" "removeRulesCC" ];
   fBuildAttrs = fArgs // buildAttrs;
   fFetchAttrs = fArgs // removeAttrs fetchAttrs [ "sha256" ];
 
@@ -24,8 +51,12 @@ in stdenv.mkDerivation (fBuildAttrs // {
       export bazelOut="$(echo ''${NIX_BUILD_TOP}/output | sed -e 's,//,/,g')"
       export bazelUserRoot="$(echo ''${NIX_BUILD_TOP}/tmp | sed -e 's,//,/,g')"
       export HOME="$NIX_BUILD_TOP"
+      export USER="nix"
       # This is needed for git_repository with https remotes
       export GIT_SSL_CAINFO="${cacert}/etc/ssl/certs/ca-bundle.crt"
+      # This is needed for Bazel fetchers that are themselves programs (e.g.
+      # rules_go using the go toolchain)
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
     '';
 
     buildPhase = fFetchAttrs.buildPhase or ''
@@ -60,9 +91,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       # Remove all built in external workspaces, Bazel will recreate them when building
       rm -rf $bazelOut/external/{bazel_tools,\@bazel_tools.marker}
-      rm -rf $bazelOut/external/{rules_cc,\@rules_cc.marker}
+      ${if removeRulesCC then "rm -rf $bazelOut/external/{rules_cc,\\@rules_cc.marker}" else ""}
       rm -rf $bazelOut/external/{embedded_jdk,\@embedded_jdk.marker}
-      rm -rf $bazelOut/external/{local_*,\@local_*.marker}
+      ${if removeLocalConfigCc then "rm -rf $bazelOut/external/{local_config_cc,\@local_config_cc.marker}" else ""}
+      ${if removeLocal then "rm -rf $bazelOut/external/{local_*,\@local_*.marker}" else ""}
 
       # Clear markers
       find $bazelOut/external -name '@*\.marker' -exec sh -c 'echo > {}' \;
@@ -90,6 +122,8 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
       cp -r $bazelOut/external $out
 
+      echo '${bazel.name}' > $out/.nix-bazel-version
+
       runHook postInstall
     '';
 
@@ -111,6 +145,14 @@ in stdenv.mkDerivation (fBuildAttrs // {
 
   preConfigure = ''
     mkdir -p "$bazelOut"
+
+    test "${bazel.name}" = "$(<$deps/.nix-bazel-version)" || {
+      echo "fixed output derivation was built for a different bazel version" >&2
+      echo "     got: $(<$deps/.nix-bazel-version)" >&2
+      echo "expected: ${bazel.name}" >&2
+      exit 1
+    }
+
     cp -r $deps $bazelOut/external
     chmod -R +w $bazelOut
     find $bazelOut -type l | while read symlink; do
@@ -121,7 +163,6 @@ in stdenv.mkDerivation (fBuildAttrs // {
   buildPhase = fBuildAttrs.buildPhase or ''
     runHook preBuild
 
-    '' + lib.optionalString stdenv.isDarwin ''
     # Bazel sandboxes the execution of the tools it invokes, so even though we are
     # calling the correct nix wrappers, the values of the environment variables
     # the wrappers are expecting will not be set. So instead of relying on the
@@ -144,7 +185,6 @@ in stdenv.mkDerivation (fBuildAttrs // {
       linkopts+=( "--linkopt=$flag" )
       host_linkopts+=( "--host_linkopt=$flag" )
     done
-    '' + ''
 
     BAZEL_USE_CPP_ONLY_TOOLCHAIN=1 \
     USER=homeless-shelter \
@@ -153,12 +193,10 @@ in stdenv.mkDerivation (fBuildAttrs // {
       --output_user_root="$bazelUserRoot" \
       build \
       -j $NIX_BUILD_CORES \
-      '' + lib.optionalString stdenv.isDarwin ''
       "''${copts[@]}" \
       "''${host_copts[@]}" \
       "''${linkopts[@]}" \
       "''${host_linkopts[@]}" \
-      '' + ''
       $bazelFlags \
       $bazelBuildFlags \
       $bazelTarget

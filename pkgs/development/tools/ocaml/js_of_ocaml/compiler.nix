@@ -1,5 +1,5 @@
 { lib, fetchFromGitHub, buildDunePackage
-, cmdliner, cppo, yojson
+, ocaml, findlib, cmdliner, dune, cppo, yojson
 }:
 
 buildDunePackage rec {
@@ -13,8 +13,10 @@ buildDunePackage rec {
 		sha256 = "0c537say0f3197zn8d83nrihabrxyn28xc6d7c9c3l0vvrv6qvfj";
 	};
 
-	buildInputs = [ cmdliner cppo ];
+	nativeBuildInputs = [ ocaml findlib dune cppo ];
+  buildInputs = [ cmdliner ];
 
+  configurePlatforms = [];
 	propagatedBuildInputs = [ yojson ];
 
 	meta = {

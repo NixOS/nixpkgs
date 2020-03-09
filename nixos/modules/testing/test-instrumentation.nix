@@ -15,7 +15,7 @@ with import ../../lib/qemu-flags.nix { inherit pkgs; };
   #
   # One particular example are the boot tests where we want instrumentation
   # within the images but not other stuff like setting up 9p filesystems.
-  options.virtualisation.qemu.program = mkOption { type = types.path; };
+  options.virtualisation.qemu = { };
 
   config = {
 

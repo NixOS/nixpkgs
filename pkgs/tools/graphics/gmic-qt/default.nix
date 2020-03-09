@@ -7,7 +7,7 @@
 , fetchFromGitLab
 , cmake
 , pkgconfig
-, opencv
+, opencv3
 , openexr
 , graphicsmagick
 , fftw
@@ -120,7 +120,7 @@ mkDerivation rec {
     libjpeg
     libtiff
     libpng
-    opencv
+    opencv3
     openexr
     graphicsmagick
     curl

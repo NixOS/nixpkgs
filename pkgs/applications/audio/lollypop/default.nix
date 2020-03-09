@@ -11,8 +11,11 @@
 , appstream-glib
 , desktop-file-utils
 , totem-pl-parser
-, hicolor-icon-theme
 , gobject-introspection
+, glib-networking
+, gdk-pixbuf
+, glib
+, pango
 , wrapGAppsHook
 , lastFMSupport ? true
 , youtubeSupport ? true
@@ -20,7 +23,7 @@
 
 python3.pkgs.buildPythonApplication rec  {
   pname = "lollypop";
-  version = "1.1.4.16";
+  version = "1.2.23";
 
   format = "other";
   doCheck = false;
@@ -29,7 +32,7 @@ python3.pkgs.buildPythonApplication rec  {
     url = "https://gitlab.gnome.org/World/lollypop";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    sha256 = "1azfxc1vc1j4ph0zrfsgz2gac1vwmbj65j6wjlxx3nr8kia4mccl";
+    sha256 = "059z7ri5qwkmfh2kvv8rq5wp80mz75423wc5hnm33wb9sgdd5x47";
   };
 
   nativeBuildInputs = [
@@ -43,7 +46,9 @@ python3.pkgs.buildPythonApplication rec  {
   ];
 
   buildInputs = with gst_all_1; [
-    gobject-introspection
+    gdk-pixbuf
+    glib
+    glib-networking
     gst-libav
     gst-plugins-bad
     gst-plugins-base
@@ -51,8 +56,8 @@ python3.pkgs.buildPythonApplication rec  {
     gst-plugins-ugly
     gstreamer
     gtk3
-    hicolor-icon-theme
     libsoup
+    pango
     totem-pl-parser
   ] ++ lib.optional lastFMSupport libsecret;
 
@@ -75,20 +80,22 @@ python3.pkgs.buildPythonApplication rec  {
     wrapPythonProgramsIn $out/libexec "$out $propagatedBuildInputs"
   '';
 
+  strictDeps = false;
+
   # Produce only one wrapper using wrap-python passing
   # gappsWrapperArgs to wrap-python additional wrapper
   # argument
   dontWrapGApps = true;
 
-  makeWrapperArgs = [
-    "\${gappsWrapperArgs[@]}"
-  ];
+  preFixup = ''
+    makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+  '';
 
   meta = with lib; {
+    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     description = "A modern music player for GNOME";
     homepage = https://wiki.gnome.org/Apps/Lollypop;
     license = licenses.gpl3Plus;
-    changelog = "https://gitlab.gnome.org/World/lollypop/tags/${version}";
     maintainers = with maintainers; [ worldofpeace ];
     platforms = platforms.linux;
   };

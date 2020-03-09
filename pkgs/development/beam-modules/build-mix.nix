@@ -1,4 +1,4 @@
-{ stdenv, writeText, elixir, erlang, hexRegistrySnapshot, hex, lib }:
+{ stdenv, writeText, elixir, erlang, hex, lib }:
 
 { name
 , version
@@ -43,7 +43,7 @@ let
     else setupHook;
 
     inherit buildInputs;
-    propagatedBuildInputs = [ hexRegistrySnapshot hex elixir ] ++ beamDeps;
+    propagatedBuildInputs = [ hex elixir ] ++ beamDeps;
 
     configurePhase = if configurePhase == null
     then ''

@@ -14,18 +14,18 @@
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-bluetooth";
-  version = "2.2.2";
+  version = "2.3.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "0rp9wa0yilc3wgwnybc6cryxphja7imixn45zhj475a4nb3afd0q";
+    sha256 = "06ws1swl2jg6a1b3m4b1v1rawgzs5k7rq4dcnd5v0czda110yhg0";
   };
 
   passthru = {
     updateScript = pantheon.updateScript {
-      repoName = pname;
+      attrPath = "pantheon.${pname}";
     };
   };
 
@@ -43,8 +43,6 @@ stdenv.mkDerivation rec {
     libgee
     switchboard
   ];
-
-  PKG_CONFIG_SWITCHBOARD_2_0_PLUGSDIR = "${placeholder "out"}/lib/switchboard";
 
   meta = with stdenv.lib; {
     description = "Switchboard Bluetooth Plug";

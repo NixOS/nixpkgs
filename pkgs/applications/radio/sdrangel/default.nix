@@ -39,7 +39,7 @@ let
 
 in mkDerivation rec {
   pname = "sdrangel";
-  version = "4.11.7";
+  version = "4.11.12";
 
   src = fetchFromGitHub {
     owner = "f4exb";

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "allpairspy";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "8ce160db245375a5ccf0831be77cd98394f514c1b3501ddff5f8edb780ee1748";
+    sha256 = "9358484c91abe74ba18daf9d6d6904c5be7cc8818397d05248c9d336023c28b1";
   };
 
   propagatedBuildInputs = [ six ];

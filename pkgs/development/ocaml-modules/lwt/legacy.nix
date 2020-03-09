@@ -52,7 +52,7 @@ buildOcaml {
     license = licenses.lgpl21;
     platforms = ocaml.meta.platforms or [];
     maintainers = with maintainers; [
-      z77z vbgl gal_bolle
+      maggesi vbgl gal_bolle
     ];
   };
 }

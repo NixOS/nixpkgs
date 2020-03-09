@@ -111,6 +111,12 @@ let
     '' + stdenv.lib.optionalString stdenv.isDarwin ''
       # 'pass edit' uses hdid, which is not available from the sandbox.
       rm -f tests/t0200-edit-tests.sh
+      rm -f tests/t0010-generate-tests.sh
+      rm -f tests/t0020-show-tests.sh
+      rm -f tests/t0050-mv-tests.sh
+      rm -f tests/t0100-insert-tests.sh
+      rm -f tests/t0300-reencryption.sh
+      rm -f tests/t0400-grep.sh
     '';
 
     doCheck = false;

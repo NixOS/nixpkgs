@@ -59,7 +59,8 @@ rec {
             mkdir disk
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
             mount /dev/${vmTools.hd} disk
-            cd disk
+            mkdir -p disk/img
+            cd disk/img
             mkdir proc sys dev
 
             # Run root script
@@ -84,8 +85,10 @@ rec {
               done
             done
 
-            # Create runScript
-            ln -s ${runScriptFile} singularity
+            # Create runScript and link shell
+            ln -s ${runtimeShell} bin/sh
+            mkdir -p .singularity.d
+            ln -s ${runScriptFile} .singularity.d/runscript
 
             # Fill out .singularity.d
             mkdir -p .singularity.d/env
@@ -94,7 +97,7 @@ rec {
             cd ..
             mkdir -p /var/singularity/mnt/{container,final,overlay,session,source}
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
-            singularity build $out ./disk
+            TMPDIR=$(pwd -P) singularity build $out ./img
           '');
 
     in result;

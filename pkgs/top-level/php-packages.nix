@@ -14,12 +14,13 @@ let
     });
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
+  isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
 
   apcu = buildPecl {
-    version = "5.1.17";
+    version = "5.1.18";
     pname = "apcu";
 
-    sha256 = "14y7alvj5q17q1b544bxidavkn6i40cjbq2nv1m0k70ai5vv84bb";
+    sha256 = "0ayykd4hfvdzk7qnr5k6yq5scwf6rb2i05xscfv76q5dmkkynvfl";
 
     buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
     doCheck = true;
@@ -39,10 +40,10 @@ let
   };
 
   ast = buildPecl {
-    version = "1.0.3";
+    version = "1.0.5";
     pname = "ast";
 
-    sha256 = "1sk9bkyw3ck9jgvlazxx8zl2nv6lc0gq66v1rfcby9v0zyydb7xr";
+    sha256 = "16c5isldm4csjbcvz1qk2mmrhgvh24sxsp6w6f5a37xpa3vciawp";
   };
 
   box = mkDerivation rec {
@@ -73,12 +74,12 @@ let
   };
 
   composer = mkDerivation rec {
-    version = "1.9.0";
+    version = "1.9.3";
     pname = "composer";
 
     src = pkgs.fetchurl {
       url = "https://getcomposer.org/download/${version}/composer.phar";
-      sha256 = "0x88bin1c749ajymz2cqjx8660a3wxvndpv4xr6w3pib16fzdpy9";
+      sha256 = "VRZVwvyB9BBlCPQrvEsk6r00sCKxO8Hn2WQr9IPQp9Q=";
     };
 
     dontUnpack = true;
@@ -140,6 +141,8 @@ let
              AC_MSG_WARN([Cannot find igbinary.h])
       '')
     ];
+
+    meta.broken = isPhp74; # Build error
   };
 
   event = buildPecl {
@@ -196,14 +199,35 @@ let
     sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
   };
 
+  maxminddb = buildPecl rec {
+    pname = "maxminddb";
+    version = "1.6.0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "maxmind";
+      repo = "MaxMind-DB-Reader-php";
+      rev = "v${version}";
+      sha256 = "0sa943ij9pgz55aik93lllb8lh063bvr66ibn77p3y3p41vdiabz";
+    };
+
+    buildInputs = [ pkgs.libmaxminddb ];
+    sourceRoot = "source/ext";
+
+    meta = with pkgs.lib; {
+      description = "C extension that is a drop-in replacement for MaxMind\\Db\\Reader";
+      license = with licenses; [ asl20 ];
+      maintainers = with maintainers; [ ajs124 das_j ];
+    };
+  };
+
   memcached = buildPecl rec {
-    version = "3.1.3";
+    version = "3.1.5";
     pname = "memcached";
 
     src = fetchgit {
       url = "https://github.com/php-memcached-dev/php-memcached";
       rev = "v${version}";
-      sha256 = "1w9g8k7bmq3nbzskskpsr5632gh9q75nqy7nkjdzgs17klq9khjk";
+      sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
     };
 
     configureFlags = [
@@ -217,9 +241,9 @@ let
 
   mongodb = buildPecl {
     pname = "mongodb";
-    version = "1.5.5";
+    version = "1.6.1";
 
-    sha256 = "0gpywk3wkimjrva1p95a7abvl3s8yccalf6yimn3nbkpvn2kknm6";
+    sha256 = "1j1w4n33347j9kwvxwsrix3gvjbiqcn1s5v59pp64s536cci8q0m";
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [
@@ -245,29 +269,54 @@ let
     '';
   };
 
+  pcov = buildPecl {
+    version = "1.0.6";
+    pname = "pcov";
+
+    sha256 = "1psfwscrc025z8mziq69pcx60k4fbkqa5g2ia8lplb94mmarj0v1";
+
+    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+  };
+
   pcs = buildPecl {
     version = "1.3.3";
     pname = "pcs";
 
     sha256 = "0d4p1gpl8gkzdiv860qzxfz250ryf0wmjgyc8qcaaqgkdyh5jy5p";
+
+    meta.broken = isPhp74; # Build error
+  };
+
+  pdo_oci = buildPecl rec {
+    inherit (php) src version;
+
+    pname = "pdo_oci";
+    sourceRoot = "php-${version}/ext/pdo_oci";
+
+    buildInputs = [ pkgs.oracle-instantclient ];
+    configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
+
+    postPatch = ''
+      sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
+    '';
   };
 
   pdo_sqlsrv = buildPecl {
-    version = "5.6.1";
+    version = "5.8.0";
     pname = "pdo_sqlsrv";
 
-    sha256 = "02ill1iqffa5fha9iz4y91823scml24ikfk8pn90jyycfwv07x6a";
+    sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
 
-    buildInputs = [ pkgs.unixODBC ];
+    buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
   };
 
   php-cs-fixer = mkDerivation rec {
-    version = "2.15.3";
+    version = "2.16.1";
     pname = "php-cs-fixer";
 
     src = pkgs.fetchurl {
       url = "https://github.com/FriendsOfPHP/PHP-CS-Fixer/releases/download/v${version}/php-cs-fixer.phar";
-      sha256 = "0hbc9y3676dd0841llgp1g7bhklfxi1cw47dcww0qmk69gjfv54c";
+      sha256 = "1dq1nhy666zg6d4fkfsjwhj1vwh1ncap2c9ljplxv98a9mm6fk68";
     };
 
     phases = [ "installPhase" ];
@@ -338,12 +387,12 @@ let
   };
 
   phpcbf = mkDerivation rec {
-    version = "3.5.0";
+    version = "3.5.3";
     pname = "phpcbf";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcbf.phar";
-      sha256 = "15n3r3sc62ar1kq38idw22y7gasvy747bix99zs0l0paapcbxz6n";
+      sha256 = "1mrsf9p6p64pyqyylnlxb2b7cirdfccch83g7yhfnka3znffq86v";
     };
 
     phases = [ "installPhase" ];
@@ -365,12 +414,12 @@ let
   };
 
   phpcs = mkDerivation rec {
-    version = "3.5.0";
+    version = "3.5.3";
     pname = "phpcs";
 
     src = pkgs.fetchurl {
       url = "https://github.com/squizlabs/PHP_CodeSniffer/releases/download/${version}/phpcs.phar";
-      sha256 = "078anf2r6a3p8v575m65vryazipgfchs07yb92m9xh41lk5wlndf";
+      sha256 = "0y4nhsifj4pdmf5g1nnm4951yjgiqswyz7wmjxx6kqiqc7chlkml";
     };
 
     phases = [ "installPhase" ];
@@ -392,12 +441,12 @@ let
   };
 
   phpstan = mkDerivation rec {
-    version = "0.11.16";
+    version = "0.12.14";
     pname = "phpstan";
 
     src = pkgs.fetchurl {
       url = "https://github.com/phpstan/phpstan/releases/download/${version}/phpstan.phar";
-      sha256 = "0c2417kwkj3nf1zya1flw7g1mz0dwhh27hjs3wz04b0kgnv4syzs";
+      sha256 = "JAq1/+bVhTgKRR7oFusqZ/yBOYewaOM38ZoiCjirsTg=";
     };
 
     phases = [ "installPhase" ];
@@ -420,7 +469,7 @@ let
         actual line.
       '';
       license = licenses.mit;
-      homepage = https://github.com/phpstan/phpstan;
+      homepage = "https://github.com/phpstan/phpstan";
       maintainers = with maintainers; [ etu ];
     };
   };
@@ -470,10 +519,10 @@ let
   };
 
   protobuf = buildPecl {
-    version = "3.9.0";
+    version = "3.11.2";
     pname = "protobuf";
 
-    sha256 = "1pyfxrfdbzzg5al4byyazdrvy7yad13zwq7papbb2d8gkvc3f3kh";
+    sha256 = "0bhdykdyk58ywqj940zb7jyvrlgdr6hdb4s8kn79fz3p0i79l9hz";
 
     buildInputs = with pkgs; [ (if isPhp73 then pcre2 else pcre) ];
 
@@ -487,12 +536,12 @@ let
   };
 
   psalm = mkDerivation rec {
-    version = "3.5.3";
+    version = "3.9.3";
     pname = "psalm";
 
     src = pkgs.fetchurl {
       url = "https://github.com/vimeo/psalm/releases/download/${version}/psalm.phar";
-      sha256 = "1n5pfzln82wzk1qa40c436lhbin1g06lfdk89q720yzrrs07r8sw";
+      sha256 = "KHm2n06y/yxN5B2rCVxT5ja7HxkyxAMsjZ5HLb3xr4M=";
     };
 
     phases = [ "installPhase" ];
@@ -513,12 +562,12 @@ let
   };
 
   psysh = mkDerivation rec {
-    version = "0.9.9";
+    version = "0.9.12";
     pname = "psysh";
 
     src = pkgs.fetchurl {
       url = "https://github.com/bobthecow/psysh/releases/download/v${version}/psysh-v${version}.tar.gz";
-      sha256 = "0knbib0afwq2z5fc639ns43x8pi3kmp85y13bkcl00dhvf46yinw";
+      sha256 = "0bzmc94li481xk81gv460ipq9zl03skbnq8m3rnw34i2c04hxczc";
     };
 
     phases = [ "installPhase" ];
@@ -570,19 +619,19 @@ let
   };
 
   redis = buildPecl {
-    version = "5.0.2";
+    version = "5.1.1";
     pname = "redis";
 
-    sha256 = "0b5pw17lzqknhijfymksvf8fm1zilppr97ypb31n599jw3mxf62f";
+    sha256 = "1041zv91fkda73w4c3pj6zdvwjgb3q7mxg6mwnq9gisl80mrs732";
   };
 
   sqlsrv = buildPecl {
-    version = "5.6.1";
+    version = "5.8.0";
     pname = "sqlsrv";
 
-    sha256 = "0ial621zxn9zvjh7k1h755sm2lc9aafc389yxksqcxcmm7kqmd0a";
+    sha256 = "1kv4krk1w4hri99b0sdgwgy9c4y0yh217wx2y3irhkfi46kdrjnw";
 
-    buildInputs = [ pkgs.unixODBC ];
+    buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
   };
 
   v8 = buildPecl {
@@ -608,10 +657,10 @@ let
   };
 
   xdebug = buildPecl {
-    version = "2.7.1";
+    version = "2.8.1";
     pname = "xdebug";
 
-    sha256 = "1hr4gy87a3gp682ggwp831xk1fxasil9wan8cxv23q3m752x3sdp";
+    sha256 = "080mwr7m72rf0jsig5074dgq2n86hhs7rdbfg6yvnm959sby72w3";
 
     doCheck = true;
     checkTarget = "test";

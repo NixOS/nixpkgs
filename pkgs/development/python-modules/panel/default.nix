@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "panel";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "04w8jjlf7yz3k84xnacahczc9mmddqyp756rj3n8hclks9c1ww40";
+    sha256 = "71d446f469b424cb190bc896e78d0415b2bbebf17c6e5b024ed1a73b4448f8f4";
   };
 
   propagatedBuildInputs = [
@@ -32,7 +32,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A high level dashboarding library for python visualization libraries";
-    homepage = http://pyviz.org;
+    homepage = https://pyviz.org;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

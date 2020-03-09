@@ -1,3 +1,4 @@
+# file generated from Gopkg.lock using dep2nix (https://github.com/nixcloud/dep2nix)
 [
   {
     goPackagePath  = "github.com/NYTimes/gziphandler";
@@ -49,8 +50,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/gorilla/websocket";
-      rev =  "5ed622c449da6d44c3c8329331ff47a9e5844f71";
-      sha256 = "1yhcwraijdk6lx7f6m9p6i1b3zfh2hq80l1nfpnckfn10gh72aw7";
+      rev =  "66b9c49e59c6c48f0ffce28c2d8b8a5678502c6d";
+      sha256 = "00i4vb31nsfkzzk7swvx3i75r2d960js3dri1875vypk3v2s0pzk";
     };
   }
   {
@@ -103,8 +104,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/mitchellh/mapstructure";
-      rev =  "f15292f7a699fcc1a38a80977f80a046874ba8ac";
-      sha256 = "0zm3nhdvmj3f8q0vg2sjfw1sm3pwsw0ggz501awz95w99664a8al";
+      rev =  "3536a929edddb9a5b34bd6861dc4a9647cb459fe";
+      sha256 = "03bpv28jz9zhn4947saqwi328ydj7f6g6pf1m2d4m5zdh5jlfkrr";
     };
   }
   {
@@ -166,8 +167,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/cast";
-      rev =  "8965335b8c7107321228e3e3702cab9832751bac";
-      sha256 = "177bk7lq40jbgv9p9r80aydpaccfk8ja3a7jjhfwiwk9r1pa4rr2";
+      rev =  "8c9545af88b134710ab1cd196795e7f2388358d7";
+      sha256 = "0xq1ffqj8y8h7dcnm0m9lfrh0ga7pssnn2c1dnr09chqbpn4bdc5";
     };
   }
   {
@@ -184,8 +185,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/spf13/pflag";
-      rev =  "3ebe029320b2676d667ae88da602a5f854788a8a";
-      sha256 = "11yxs0wqy70wj106fkz8r923yg4ncnc2mbw33v48zmlg4a1rasgp";
+      rev =  "298182f68c66c05229eb03ac171abe6e309ee79a";
+      sha256 = "1cj3cjm7d3zk0mf1xdybh0jywkbbw7a6yr3y22x9sis31scprswd";
     };
   }
   {

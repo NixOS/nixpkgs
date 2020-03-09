@@ -17,6 +17,7 @@ buildPythonPackage rec {
     ${python.interpreter} -m unittest discover -s test
   '';
 
+  checkInputs = [ postgresql ];
   propagatedBuildInputs = [ postgresql ];
 
   meta = with stdenv.lib; {
@@ -24,13 +25,12 @@ buildPythonPackage rec {
     description = "Checks the syntax of Postgresql SQL files";
     longDescription = ''
       PgSanity checks the syntax of Postgresql SQL files by
-      taking a file that has a list of bare SQL in it, 
-      making that file look like a C file with embedded SQL, 
-      run it through ecpg and 
+      taking a file that has a list of bare SQL in it,
+      making that file look like a C file with embedded SQL,
+      run it through ecpg and
       let ecpg report on the syntax errors of the SQL.
     '';
     license = stdenv.lib.licenses.mit;
     maintainers = with maintainers; [ nalbyuites ];
-    broken = true;
   };
 }

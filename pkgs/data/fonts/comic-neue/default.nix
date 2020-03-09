@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 
 let
-  version = "2.2";
+  version = "2.3";
 in fetchzip rec {
   name = "comic-neue-${version}";
 
@@ -9,15 +9,15 @@ in fetchzip rec {
 
   postFetch = ''
     mkdir -vp $out/share/{doc,fonts}
-    unzip -j $downloadedFile comic-neue-2.2/\*.otf   -d $out/share/fonts/opentype
-    unzip -j $downloadedFile comic-neue-2.2/\*.ttf   -d $out/share/fonts/truetype
-    unzip -j $downloadedFile comic-neue-2.2/\*.eot   -d $out/share/fonts/EOT
-    unzip -j $downloadedFile comic-neue-2.2/\*.woff  -d $out/share/fonts/WOFF
-    unzip -j $downloadedFile comic-neue-2.2/\*.woff2 -d $out/share/fonts/WOFF2
-    unzip -j $downloadedFile comic-neue-2.2/\*.pdf comic-neue-2.2/FONTLOG.txt comic-neue-2.2/OFL-FAQ.txt comic-neue-2.2/SIL-License.txt -d $out/share/doc/${name}
+    unzip -j $downloadedFile OTF/\*.otf   -d $out/share/fonts/opentype
+    unzip -j $downloadedFile Web/\*.ttf   -d $out/share/fonts/truetype
+    unzip -j $downloadedFile Web/\*.eot   -d $out/share/fonts/EOT
+    unzip -j $downloadedFile Web/\*.woff  -d $out/share/fonts/WOFF
+    unzip -j $downloadedFile Web/\*.woff2 -d $out/share/fonts/WOFF2
+    unzip -j $downloadedFile \*.pdf FONTLOG.txt OFL-FAQ.txt SIL-License.txt -d $out/share/doc/${name}
   '';
 
-  sha256 = "1yypq5aqqzv3q1c6vx5130mi2iwihzzvrawhwqpwsfjl0p25sq9q";
+  sha256 = "1gs4vhys0m3qsw06qaxzyi81f06w5v66kbyl64yw3pq2rb656779";
 
   meta = with lib; {
     homepage = http://comicneue.com/;

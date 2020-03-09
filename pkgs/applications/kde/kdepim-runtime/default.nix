@@ -14,7 +14,6 @@ mkDerivation {
     license = with lib.licenses; [ gpl2 lgpl21 fdl12 ];
     maintainers = kdepimTeam;
   };
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   nativeBuildInputs = [ extra-cmake-modules kdoctools shared-mime-info ];
   buildInputs = [
     akonadi akonadi-calendar akonadi-contacts akonadi-mime akonadi-notes
@@ -22,6 +21,4 @@ mkDerivation {
     kmailtransport kmbox kmime knotifications knotifyconfig qtwebengine
     pimcommon libkgapi qtnetworkauth qtspeech qtxmlpatterns
   ];
-  # Attempts to build some files before dependencies have been generated
-  enableParallelBuilding = false;
 }

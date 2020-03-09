@@ -2,16 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "racer";
-  version = "2.1.22";
+  version = "2.1.30";
 
   src = fetchFromGitHub {
     owner = "racer-rust";
     repo = "racer";
-    rev = "v${version}";
-    sha256 = "1n808h4jqxkvpjwmj8jgi4y5is5zvr8vn42mwb3yi13mix32cysa";
+    rev = "c2b0080243fefdad7f7b223e8a7fdef3e1f0fa77";
+    sha256 = "0svvdkfqpk2rw0wxyrhkxy553k55lg7jxc0ly4w1195iwv14ad3y";
   };
 
-  cargoSha256 = "0njaa9vk2i9g1c6sq20b7ls97nl532rfv3is7d8dwz51nrwk6jxs";
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
+  cargoSha256 = "1qxg9r6wpv811fh2l889jm0ya96gsra00kqpyxh41fb7myvl2a4i";
 
   buildInputs = [ makeWrapper ]
                 ++ stdenv.lib.optional stdenv.isDarwin Security;
@@ -21,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   RUST_SRC_PATH = rustPlatform.rustcSrc;
   postInstall = ''
-    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH $rustcSrc
+    wrapProgram $out/bin/racer --set-default RUST_SRC_PATH ${rustPlatform.rustcSrc}
   '';
 
   checkPhase = ''
@@ -31,7 +34,8 @@ rustPlatform.buildRustPackage rec {
       --skip util::test_get_rust_src_path_not_rust_source_tree \
       --skip extern --skip completes_pub_fn --skip find_crate_doc \
       --skip follows_use_local_package --skip follows_use_for_reexport \
-      --skip follows_rand_crate --skip get_completion_in_example_dir
+      --skip follows_rand_crate --skip get_completion_in_example_dir \
+      --skip test_resolve_global_path_in_modules
   '';
 
   doInstallCheck = true;
@@ -43,7 +47,7 @@ rustPlatform.buildRustPackage rec {
     description = "A utility intended to provide Rust code completion for editors and IDEs";
     homepage = https://github.com/racer-rust/racer;
     license = licenses.mit;
-    maintainers = with maintainers; [ jagajaga ];
+    maintainers = with maintainers; [ jagajaga ma27 ];
     platforms = platforms.all;
   };
 }

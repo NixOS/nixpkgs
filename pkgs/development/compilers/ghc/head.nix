@@ -2,12 +2,15 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
+, autoconf, autoreconfHook, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
 , bash
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !stdenv.targetPlatform.isx86
+, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
+                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
+
+, useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -27,7 +30,7 @@
 , # Whetherto build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.9.20190924"
+, version ? "8.10.20191119"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
   ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
@@ -71,15 +74,18 @@ let
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
+    ++ stdenv.lib.optional enableDwarf elfutils;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
+
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
 
 in
 stdenv.mkDerivation (rec {
@@ -89,8 +95,8 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "795986aaf33e2ffc233836b86a92a77366c91db2";
-    sha256 = "0a111x6c53r07q5qdg6c8mnydqp0wh4mpxmw7ga4x5wlap8i0bji";
+    rev = "0418c38d55c7a47967187dce2db5ea2ab1021b1e";
+    sha256 = "1d8g30ii0w4xh6fh61bxbalsqqyanny99nn3p727fx7favnhgvxi";
   };
 
   enableParallelBuilding = true;
@@ -98,13 +104,6 @@ stdenv.mkDerivation (rec {
   outputs = [ "out" "doc" ];
 
   patches = [
-    (fetchpatch { # https://github.com/haskell/haddock/issues/900
-     url = "https://patch-diff.githubusercontent.com/raw/haskell/haddock/pull/983.diff";
-     name = "loadpluginsinmodules.diff";
-     sha256 = "0bvvv0zsfq2581zsir97zfkggc1kkircbbajc2fz3b169ycpbha1";
-     extraPrefix = "utils/haddock/";
-     stripLen = 1;
-   })
   ];
 
   postPatch = "patchShebangs .";
@@ -120,7 +119,7 @@ stdenv.mkDerivation (rec {
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
     # and more generally have a faster linker.
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isLinux ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -164,25 +163,29 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
+  ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ stdenv.lib.optionals enableDwarf [
+    "--enable-dwarf-unwind"
+    "--with-libdw-includes=${stdenv.lib.getDev elfutils}/include"
+    "--with-libdw-libraries=${stdenv.lib.getLib elfutils}/lib"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3 sphinx
+    perl autoconf autoreconfHook automake m4 python3 sphinx
     ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 

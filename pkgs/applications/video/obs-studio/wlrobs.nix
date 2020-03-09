@@ -5,27 +5,32 @@
 # nix-env -f . -iA obs-wlrobs
 # mkdir -p ~/.config/obs-studio/plugins/wlrobs/bin/64bit
 # ln -s ~/.nix-profile/share/obs/obs-plugins/wlrobs/bin/64bit/libwlrobs.so ~/.config/obs-studio/plugins/wlrobs/bin/64bit
-{ stdenv, fetchhg, wayland, obs-studio }:
+{ stdenv, fetchhg, wayland, obs-studio
+, meson, ninja, pkgconfig, libX11
+, dmabufSupport ? false, libdrm ? null, libGL ? null}:
+
+assert dmabufSupport -> libdrm != null && libGL != null;
+
 stdenv.mkDerivation {
   pname = "obs-wlrobs";
-  version = "20191008";
+  version = "20200111";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wlrobs";
-    rev = "82e2b93c6f662dfd9d69f7826c0096bef585c3ae";
-    sha256 = "1d2mlybkwyr0jw6paamazla2a1cyj60bs10i0lk9jclxnp780fy6";
+    rev = "8345bf985e390896d89e35e2feae1fa37722f4be";
+    sha256 = "0j01wkhwhhla4qx8mwyrq2qj9cfhxksxaq2k8rskmy2qbdkvvdpb";
   };
 
-  buildInputs = [ wayland obs-studio ];
-
-  preBuild = ''
-    cd Release
-  '';
+  buildInputs = [ libX11 libGL libdrm meson ninja pkgconfig wayland obs-studio ];
 
   installPhase = ''
     mkdir -p $out/share/obs/obs-plugins/wlrobs/bin/64bit
     cp ./libwlrobs.so $out/share/obs/obs-plugins/wlrobs/bin/64bit/
   '';
+
+  mesonFlags = [
+    "-Duse_dmabuf=${if dmabufSupport then "true" else "false"}"
+  ];
 
   meta = with stdenv.lib; {
     description = "An obs-studio plugin that allows you to screen capture on wlroots based wayland compositors";

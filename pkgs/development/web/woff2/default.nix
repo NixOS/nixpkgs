@@ -1,4 +1,4 @@
-{ brotli, cmake, fetchFromGitHub, stdenv }:
+{ brotli, cmake, pkgconfig, fetchFromGitHub, stdenv, static ? false }:
 
 stdenv.mkDerivation rec {
   pname = "woff2";
@@ -13,18 +13,24 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "lib" ];
 
-  nativeBuildInputs = [ cmake ];
+  # Need to explicitly link to brotlicommon
+  patches = stdenv.lib.optional static ./brotli-static.patch;
+
+  nativeBuildInputs = [ cmake pkgconfig ];
+
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=${if static then "OFF" else "ON"}" ]
+    ++ stdenv.lib.optional static "-DCMAKE_SKIP_RPATH:BOOL=TRUE";
 
   propagatedBuildInputs = [ brotli ];
 
-  # without this binaries only get built if shared libs are disable
-  patchPhase = ''
+  postPatch = ''
+    # without this binaries only get built if shared libs are disable
     sed 's@^if (NOT BUILD_SHARED_LIBS)$@if (TRUE)@g' -i CMakeLists.txt
   '';
 
   meta = with stdenv.lib; {
     description = "Webfont compression reference code";
-    homepage = https://github.com/google/woff2;
+    homepage = "https://github.com/google/woff2";
     license = licenses.mit;
     maintainers = [ maintainers.hrdinka ];
     platforms = platforms.unix;

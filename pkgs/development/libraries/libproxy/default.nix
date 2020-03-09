@@ -11,7 +11,6 @@
 , gsettings-desktop-schemas
 , glib
 , makeWrapper
-, python2
 , python3
 , SystemConfiguration
 , CoreFoundation
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
     sha256 = "10swd3x576pinx33iwsbd4h15fbh2snmfxzcmab4c56nb08qlbrs";
   };
 
-  outputs = [ "out" "dev" "py2" "py3" ];
+  outputs = [ "out" "dev" "py3" ];
 
   nativeBuildInputs = [
     pkgconfig
@@ -39,7 +38,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     pcre
-    python2
     python3
     zlib
   ] ++ (if stdenv.hostPlatform.isDarwin then [
@@ -55,7 +53,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DWITH_MOZJS=ON"
-    "-DPYTHON2_SITEPKG_DIR=${placeholder "py2"}/${python2.sitePackages}"
+    "-DWITH_PYTHON2=OFF"
     "-DPYTHON3_SITEPKG_DIR=${placeholder "py3"}/${python3.sitePackages}"
   ];
 

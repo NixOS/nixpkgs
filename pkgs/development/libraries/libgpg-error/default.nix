@@ -39,6 +39,7 @@ in stdenv.mkDerivation (rec {
     sed '/BUILD_TIMESTAMP=/s/=.*/=1970-01-01T00:01+0000/' -i ./configure
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.buildPlatform != stdenv.hostPlatform) ''
     ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabihf.h
+    ln -s lock-obj-pub.arm-unknown-linux-gnueabi.h src/syscfg/lock-obj-pub.linux-gnueabi.h
   '' + lib.optionalString (stdenv.hostPlatform.isx86_64 && stdenv.hostPlatform.isMusl) ''
     ln -s lock-obj-pub.x86_64-pc-linux-musl.h src/syscfg/lock-obj-pub.linux-musl.h
   '' + lib.optionalString (stdenv.hostPlatform.isAarch32 && stdenv.hostPlatform.isMusl) ''
@@ -78,6 +79,6 @@ in stdenv.mkDerivation (rec {
 
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
-    maintainers = [ maintainers.fuuzetsu maintainers.vrthra ];
+    maintainers = [ maintainers.vrthra ];
   };
 } // genPosixLockObjOnlyAttrs)

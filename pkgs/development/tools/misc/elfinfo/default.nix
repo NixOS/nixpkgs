@@ -2,14 +2,14 @@
 
 buildGoPackage rec {
   pname = "elfinfo";
-  version = "0.7.6";
+  version = "1.0.1";
 
   goPackagePath = "github.com/xyproto/elfinfo";
   src = fetchFromGitHub {
     rev = version;
     owner = "xyproto";
     repo = "elfinfo";
-    sha256 = "0f6ik4d157assxdfslnyc91mg70kfh396rapikfv473znx2v2pg9";
+    sha256 = "1iahivc1jm9gv1dijykw2pryjdwb896bv42xmq9v6ax86rsnzqww";
   };
 
   meta = with stdenv.lib; {

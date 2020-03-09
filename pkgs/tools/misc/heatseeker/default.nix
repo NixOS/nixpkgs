@@ -13,6 +13,9 @@ buildRustPackage rec {
     sha256 = "1fcrbjwnhcz71i70ppy0rcgk5crwwmbkm9nrk1kapvks33pv0az7";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "0m3sxbz1iii31s30cnv1970i1mwfhl6gm19k8wv0n7zji30ayx07";
 
   # some tests require a tty, this variable turns them off for Travis CI,

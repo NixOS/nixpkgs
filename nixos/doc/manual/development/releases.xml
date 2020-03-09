@@ -45,12 +45,12 @@
     <listitem>
      <para>
       <literal>git tag -a -s -m &quot;Release 17.09-beta&quot; 17.09-beta
-      &amp;&amp; git push --tags</literal>
+      &amp;&amp; git push origin 17.09-beta</literal>
      </para>
     </listitem>
     <listitem>
      <para>
-      From the master branch run <literal>git checkout -B
+      From the master branch run <literal>git checkout -b
       release-17.09</literal>.
      </para>
     </listitem>
@@ -71,8 +71,9 @@
      <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/commit/d6b08acd1ccac0d9d502c4b635e00b04d3387f06">
       Update <literal>versionSuffix</literal> in
-      <literal>nixos/release.nix</literal></link>, use <literal>git log
-      --format=%an|wc -l</literal> to get the commit count
+      <literal>nixos/release.nix</literal></link>, use
+      <literal>git rev-list --count 17.09-beta</literal>
+      to get the commit count.
      </para>
     </listitem>
     <listitem>
@@ -157,7 +158,7 @@
     <listitem>
      <para>
       Release Nix (currently only Eelco Dolstra can do that).
-      <link xlink:href="https://github.com/NixOS/nixpkgs/commit/53710c752a85f00658882531bc90a23a3d1287e4">
+      <link xlink:href="https://github.com/NixOS/nixpkgs/blob/master/nixos/modules/installer/tools/nix-fallback-paths.nix">
       Make sure fallback is updated. </link>
      </para>
     </listitem>
@@ -169,8 +170,8 @@
     </listitem>
     <listitem>
      <para>
-      Change <literal>stableBranch</literal> to true and wait for channel to
-      update.
+      Change <literal>stableBranch</literal> to <literal>true</literal> in Hydra and wait for
+      the channel to update.
      </para>
     </listitem>
    </itemizedlist>
@@ -187,15 +188,17 @@
     </listitem>
     <listitem>
      <para>
-      Update "Chapter 4. Upgrading NixOS" section of the manual to match 
+      Update "Chapter 4. Upgrading NixOS" section of the manual to match
       new stable release version.
      </para>
     </listitem>
     <listitem>
      <para>
-      Update http://nixos.org/nixos/download.html and
-      http://nixos.org/nixos/manual in
-      https://github.com/NixOS/nixos-org-configurations
+      Update the
+      <link xlink:href="https://github.com/NixOS/nixos-homepage/commit/2a37975d5a617ecdfca94696242b6f32ffcba9f1"><code>NIXOS_SERIES</code></link>
+      in the
+      <link xlink:href="https://github.com/NixOS/nixos-homepage">nixos-homepage</link>
+      repository.
      </para>
     </listitem>
     <listitem>
@@ -212,7 +215,8 @@
     </listitem>
     <listitem>
      <para>
-      Send an email to nix-dev to announce the release with above information.
+      Create a new topic on <link xlink:href="https://discourse.nixos.org/">the
+      Discourse instance</link> to announce the release with the above information.
       Best to check how previous email was formulated to see what needs to be
       included.
      </para>
@@ -232,6 +236,10 @@
    manager who already has managed one release and one release manager being
    introduced to their role, making it easier to pass on knowledge and
    experience.
+  </para>
+  <para>
+   Release managers for the current NixOS release are tracked by GitHub team
+   <link xlink:href="https://github.com/orgs/NixOS/teams/nixos-release-managers/members"><literal>@NixOS/nixos-release-managers</literal></link>.
   </para>
   <para>
    A release manager's role and responsibilities are:

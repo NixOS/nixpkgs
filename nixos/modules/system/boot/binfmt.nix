@@ -134,6 +134,10 @@ let
   };
 
 in {
+  imports = [
+    (lib.mkRenamedOptionModule [ "boot" "binfmtMiscRegistrations" ] [ "boot" "binfmt" "registrations" ])
+  ];
+
   options = {
     boot.binfmt = {
       registrations = mkOption {

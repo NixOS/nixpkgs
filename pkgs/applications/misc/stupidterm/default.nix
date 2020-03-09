@@ -15,7 +15,7 @@ stdenv.mkDerivation {
     sha256 = "1f73wvqqvj5pr3fvb7jjc4bi1iwgkkknz24k8n69mdb75jnfjipp";
   };
 
-  makeFlags = "PKGCONFIG=${pkgconfig}/bin/pkg-config binary=stupidterm";
+  makeFlags = [ "PKGCONFIG=${pkgconfig}/bin/pkg-config" "binary=stupidterm" ];
 
   installPhase = ''
     install -D stupidterm $out/bin/stupidterm

@@ -40,6 +40,6 @@ mkDerivation rec {
     maintainers = [ maintainers.globin ];
     license = licenses.asl20;
     platforms = platforms.all;
-    homepage = "http://www.qlcplus.org/";
+    homepage = "https://www.qlcplus.org/";
   };
 }

@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "pcre2";
-  version = "10.33";
+  version = "10.34";
   src = fetchurl {
     url = "https://ftp.pcre.org/pub/pcre/${pname}-${version}.tar.bz2";
-    sha256 = "1anqi7vpbfzag7imccrc6di1zl5rl63ab7rfpmajpw6d1kzlsl9m";
+    sha256 = "1jlqnzcz2yi70dm40wyfa9w8is9z2kh4dl8zjnv3vqd9mgzp7i3l";
   };
 
   configureFlags = [

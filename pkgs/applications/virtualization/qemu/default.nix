@@ -35,16 +35,15 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "4.1.0";
-  name = "qemu-"
-    + stdenv.lib.optionalString xenSupport "xen-"
-    + stdenv.lib.optionalString hostCpuOnly "host-cpu-only-"
-    + stdenv.lib.optionalString nixosTestRunner "for-vm-tests-"
-    + version;
+  version = "4.2.0";
+  pname = "qemu"
+    + stdenv.lib.optionalString xenSupport "-xen"
+    + stdenv.lib.optionalString hostCpuOnly "-host-cpu-only"
+    + stdenv.lib.optionalString nixosTestRunner "-for-vm-tests";
 
   src = fetchurl {
     url = "https://wiki.qemu.org/download/qemu-${version}.tar.bz2";
-    sha256 = "1bpl6hwiw1jdxk4xmqp10qgki0dji0l2rzr10dyhyk8d85vxxw29";
+    sha256 = "1gczv8hn3wqci86css3mhzrppp3z8vppxw25l08j589k6bvz7x1w";
   };
 
   nativeBuildInputs = [ python python.pkgs.sphinx pkgconfig flex bison ];
@@ -78,6 +77,44 @@ stdenv.mkDerivation rec {
     ./no-etc-install.patch
     ./fix-qemu-ga.patch
     ./9p-ignore-noatime.patch
+    (fetchpatch {
+      name = "CVE-2019-15890.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=c59279437eda91841b9d26079c70b8a540d41204";
+      sha256 = "1q2rc67mfdz034mk81z9bw105x9zad7n954sy3kq068b1svrf7iy";
+      stripLen = 1;
+      extraPrefix = "slirp/";
+    })
+    # patches listed at: https://nvd.nist.gov/vuln/detail/CVE-2020-7039
+    (fetchpatch {
+      name = "CVE-2020-7039-1.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=2655fffed7a9e765bcb4701dd876e9dab975f289";
+      sha256 = "1jh0k3lg3553c2x1kq1kl3967jabhba5gm584wjpmr5mjqk3lnz1";
+      stripLen = 1;
+      extraPrefix = "slirp/";
+      excludes = ["slirp/CHANGELOG.md"];
+    })
+    (fetchpatch {
+      name = "CVE-2020-7039-2.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=82ebe9c370a0e2970fb5695aa19aa5214a6a1c80";
+      sha256 = "08ccxcmrhzknnzd1a1q2brszv3a7h02n26r73kpli10b0hn12r2l";
+      stripLen = 1;
+      extraPrefix = "slirp/";
+    })
+    (fetchpatch {
+      name = "CVE-2020-7039-3.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=ce131029d6d4a405cb7d3ac6716d03e58fb4a5d9";
+      sha256 = "18ypj9an2jmsmdn58853rbz42r10587h7cz5fdws2x4635778ibd";
+      stripLen = 1;
+      extraPrefix = "slirp/";
+    })
+    # patches listed at: https://nvd.nist.gov/vuln/detail/CVE-2020-7211
+    (fetchpatch {
+      name = "CVE-2020-7211.patch";
+      url = "https://git.qemu.org/?p=libslirp.git;a=patch;h=14ec36e107a8c9af7d0a80c3571fe39b291ff1d4";
+      sha256 = "1lc8zabqs580iqrsr5k7zwgkx6qjmja7apwfbc36lkvnrxwfzmrc";
+      stripLen = 1;
+      extraPrefix = "slirp/";
+    })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch
     ++ optionals stdenv.hostPlatform.isMusl [
     (fetchpatch {

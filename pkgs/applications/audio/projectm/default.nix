@@ -37,15 +37,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig cmake ];
 
-  cmakeFlags = ''
-    -DprojectM_FONT_MENU=${ttf_bitstream_vera}/share/fonts/truetype/VeraMono.ttf
-    -DprojectM_FONT_TITLE=${ttf_bitstream_vera}/share/fonts/truetype/Vera.ttf
-    -DINCLUDE-PROJECTM-TEST=OFF
-    -DINCLUDE-PROJECTM-QT=${if withQt then "ON" else "OFF"}
-    -DINCLUDE-PROJECTM-LIBVISUAL=${if withLibvisual then "ON" else "OFF"}
-    -DINCLUDE-PROJECTM-JACK=${if withJack then "ON" else "OFF"}
-    -DINCLUDE-PROJECTM-PULSEAUDIO=${if withPulseAudio then "ON" else "OFF"}
-  '';
+  cmakeFlags = [
+    "-DprojectM_FONT_MENU=${ttf_bitstream_vera}/share/fonts/truetype/VeraMono.ttf"
+    "-DprojectM_FONT_TITLE=${ttf_bitstream_vera}/share/fonts/truetype/Vera.ttf"
+    "-DINCLUDE-PROJECTM-TEST=OFF"
+    "-DINCLUDE-PROJECTM-QT=${if withQt then "ON" else "OFF"}"
+    "-DINCLUDE-PROJECTM-LIBVISUAL=${if withLibvisual then "ON" else "OFF"}"
+    "-DINCLUDE-PROJECTM-JACK=${if withJack then "ON" else "OFF"}"
+    "-DINCLUDE-PROJECTM-PULSEAUDIO=${if withPulseAudio then "ON" else "OFF"}"
+  ];
 
   buildInputs = with stdenv.lib;
     [ glew ftgl ]

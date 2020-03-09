@@ -1,19 +1,18 @@
 # Test printing via CUPS.
 
-import ./make-test.nix ({pkgs, ... }:
+import ./make-test-python.nix ({pkgs, ... }:
 let
   printingServer = startWhenNeeded: {
     services.printing.enable = true;
     services.printing.startWhenNeeded = startWhenNeeded;
     services.printing.listenAddresses = [ "*:631" ];
     services.printing.defaultShared = true;
-    services.printing.extraConf =
-      ''
-        <Location />
-          Order allow,deny
-          Allow from all
-        </Location>
-      '';
+    services.printing.extraConf = ''
+      <Location />
+        Order allow,deny
+        Allow from all
+      </Location>
+    '';
     networking.firewall.allowedTCPPorts = [ 631 ];
     # Add a HP Deskjet printer connected via USB to the server.
     hardware.printers.ensurePrinters = [{
@@ -34,9 +33,7 @@ let
     hardware.printers.ensureDefaultPrinter = "DeskjetRemote";
   };
 
-in
-
-{
+in {
   name = "printing";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ domenkozar eelco matthewbauer ];
@@ -50,65 +47,91 @@ in
     serviceClient = { ... }: (printingClient false);
   };
 
-  testScript =
-    ''
-      startAll;
+  testScript = ''
+    import os
+    import re
+    import sys
 
-      # Make sure that cups is up on both sides.
-      $serviceServer->waitForUnit("cups.service");
-      $serviceClient->waitForUnit("cups.service");
-      # wait until cups is fully initialized and ensure-printers has executed with 10s delay
-      $serviceClient->sleep(20);
-      $socketActivatedClient->waitUntilSucceeds("systemctl status ensure-printers | grep -q -E 'code=exited, status=0/SUCCESS'");
-      sub testPrinting {
-          my ($client, $server) = (@_);
-          my $clientHostname = $client->name();
-          my $serverHostname = $server->name();
-          $client->succeed("lpstat -r") =~ /scheduler is running/ or die;
-          # Test that UNIX socket is used for connections.
-          $client->succeed("lpstat -H") =~ "/var/run/cups/cups.sock" or die;
-          # Test that HTTP server is available too.
-          $client->succeed("curl --fail http://localhost:631/");
-          $client->succeed("curl --fail http://$serverHostname:631/");
-          $server->fail("curl --fail --connect-timeout 2  http://$clientHostname:631/");
-          # Do some status checks.
-          $client->succeed("lpstat -a") =~ /DeskjetRemote accepting requests/ or die;
-          $client->succeed("lpstat -h $serverHostname:631 -a") =~ /DeskjetLocal accepting requests/ or die;
-          $client->succeed("cupsdisable DeskjetRemote");
-          $client->succeed("lpq") =~ /DeskjetRemote is not ready.*no entries/s or die;
-          $client->succeed("cupsenable DeskjetRemote");
-          $client->succeed("lpq") =~ /DeskjetRemote is ready.*no entries/s or die;
-          # Test printing various file types.
-          foreach my $file ("${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
-                            "${pkgs.groff.doc}/share/doc/*/meref.ps",
-                            "${pkgs.cups.out}/share/doc/cups/images/cups.png",
-                            "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt")
-          {
-              $file =~ /([^\/]*)$/; my $fn = $1;
-              subtest "print $fn", sub {
-                  # Print the file on the client.
-                  $client->succeed("lp $file");
-                  $client->waitUntilSucceeds("lpq | grep -q -E 'active.*root.*$fn'");
-                  # Ensure that a raw PCL file appeared in the server's queue
-                  # (showing that the right filters have been applied).  Of
-                  # course, since there is no actual USB printer attached, the
-                  # file will stay in the queue forever.
-                  $server->waitForFile("/var/spool/cups/d*-001");
-                  $server->waitUntilSucceeds("lpq -a | grep -q -E '$fn'");
-                  # Delete the job on the client.  It should disappear on the
-                  # server as well.
-                  $client->succeed("lprm");
-                  $client->waitUntilSucceeds("lpq -a | grep -q -E 'no entries'");
-                  Machine::retry sub {
-                    return 1 if $server->succeed("lpq -a") =~ /no entries/;
-                  };
-                  # The queue is empty already, so this should be safe.
-                  # Otherwise, pairs of "c*"-"d*-001" files might persist.
-                  $server->execute("rm /var/spool/cups/*");
-              };
-          }
-      }
-      testPrinting($serviceClient, $serviceServer);
-      testPrinting($socketActivatedClient, $socketActivatedServer);
+    start_all()
+
+    with subtest("Make sure that cups is up on both sides"):
+        serviceServer.wait_for_unit("cups.service")
+        serviceClient.wait_for_unit("cups.service")
+
+    with subtest(
+        "Wait until cups is fully initialized and ensure-printers has "
+        "executed with 10s delay"
+    ):
+        serviceClient.sleep(20)
+        socketActivatedClient.wait_until_succeeds(
+            "systemctl status ensure-printers | grep -q -E 'code=exited, status=0/SUCCESS'"
+        )
+
+
+    def test_printing(client, server):
+        assert "scheduler is running" in client.succeed("lpstat -r")
+
+        with subtest("UNIX socket is used for connections"):
+            assert "/var/run/cups/cups.sock" in client.succeed("lpstat -H")
+        with subtest("HTTP server is available too"):
+            client.succeed("curl --fail http://localhost:631/")
+            client.succeed(f"curl --fail http://{server.name}:631/")
+            server.fail(f"curl --fail --connect-timeout 2 http://{client.name}:631/")
+
+        with subtest("LP status checks"):
+            assert "DeskjetRemote accepting requests" in client.succeed("lpstat -a")
+            assert "DeskjetLocal accepting requests" in client.succeed(
+                f"lpstat -h {server.name}:631 -a"
+            )
+            client.succeed("cupsdisable DeskjetRemote")
+            out = client.succeed("lpq")
+            print(out)
+            assert re.search(
+                "DeskjetRemote is not ready.*no entries",
+                client.succeed("lpq"),
+                flags=re.DOTALL,
+            )
+            client.succeed("cupsenable DeskjetRemote")
+            assert re.match(
+                "DeskjetRemote is ready.*no entries", client.succeed("lpq"), flags=re.DOTALL
+            )
+
+        # Test printing various file types.
+        for file in [
+            "${pkgs.groff.doc}/share/doc/*/examples/mom/penguin.pdf",
+            "${pkgs.groff.doc}/share/doc/*/meref.ps",
+            "${pkgs.cups.out}/share/doc/cups/images/cups.png",
+            "${pkgs.pcre.doc}/share/doc/pcre/pcre.txt",
+        ]:
+            file_name = os.path.basename(file)
+            with subtest(f"print {file_name}"):
+                # Print the file on the client.
+                print(client.succeed("lpq"))
+                client.succeed(f"lp {file}")
+                client.wait_until_succeeds(
+                    f"lpq; lpq | grep -q -E 'active.*root.*{file_name}'"
+                )
+
+                # Ensure that a raw PCL file appeared in the server's queue
+                # (showing that the right filters have been applied).  Of
+                # course, since there is no actual USB printer attached, the
+                # file will stay in the queue forever.
+                server.wait_for_file("/var/spool/cups/d*-001")
+                server.wait_until_succeeds(f"lpq -a | grep -q -E '{file_name}'")
+
+                # Delete the job on the client.  It should disappear on the
+                # server as well.
+                client.succeed("lprm")
+                client.wait_until_succeeds("lpq -a | grep -q -E 'no entries'")
+
+                retry(lambda _: "no entries" in server.succeed("lpq -a"))
+
+                # The queue is empty already, so this should be safe.
+                # Otherwise, pairs of "c*"-"d*-001" files might persist.
+                server.execute("rm /var/spool/cups/*")
+
+
+    test_printing(serviceClient, serviceServer)
+    test_printing(socketActivatedClient, socketActivatedServer)
   '';
 })

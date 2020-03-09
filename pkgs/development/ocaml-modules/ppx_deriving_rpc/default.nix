@@ -1,11 +1,11 @@
-{ lib, buildDunePackage, rpclib, ppxfind, ppx_deriving, cppo }:
+{ lib, buildDunePackage, rpclib, ppxlib, ppx_deriving }:
 
 buildDunePackage rec {
   pname = "ppx_deriving_rpc";
 
   inherit (rpclib) version src;
 
-  buildInputs = [ ppxfind cppo ];
+  buildInputs = [ ppxlib ];
 
   propagatedBuildInputs = [ rpclib ppx_deriving ];
 

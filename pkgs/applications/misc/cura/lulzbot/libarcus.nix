@@ -2,13 +2,13 @@
 
 buildPythonPackage {
   pname = "libarcus";
-  version = "3.6.18";
+  version = "3.6.21";
   format = "other";
 
   src = fetchgit {
     url = https://code.alephobjects.com/source/arcus.git;
-    rev = "c795c0644591703ce04e1fd799fc97b1539031aa";
-    sha256 = "1yap9wbqxbjx3kqyqcsldny4mlcm33ywiwpdjlfgs0wjahfg4ip0";
+    rev = "aeda02d7727f45b657afb72cef203283fbf09325";
+    sha256 = "1ak0d4k745sx7paic27was3s4987z9h3czscjs21hxbi6qy83g99";
   };
 
   disabled = pythonOlder "3.4.0";

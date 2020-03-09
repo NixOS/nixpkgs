@@ -2,13 +2,13 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fierce";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "mschwager";
     repo = pname;
     rev = version;
-    sha256 = "0cdp9rpabazyfnks30rsf3qfdi40z1bkspxk4ds9bm82kpq33jxy";
+    sha256 = "11yaz8ap9swx95j3wpqh0b6jhw6spqgfnsyn1liw9zqi4jwgiax7";
   };
 
   propagatedBuildInputs = [ python3.pkgs.dns ];

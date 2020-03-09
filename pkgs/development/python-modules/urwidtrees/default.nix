@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchFromGitHub
+, glibcLocales
 , urwid
 }:
 
@@ -16,6 +17,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ urwid ];
+
+  checkInputs = [ glibcLocales ];
+  LC_ALL="en_US.UTF-8";
 
   meta = with stdenv.lib; {
     description = "Tree widgets for urwid";

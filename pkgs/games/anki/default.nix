@@ -163,10 +163,13 @@ buildPythonApplication rec {
     '';
 
     dontWrapQtApps = true;
-    makeWrapperArgs = [
-        ''--prefix PATH ':' "${lame}/bin:${mplayer}/bin"''
-        "\${qtWrapperArgs[@]}"
-    ];
+
+    preFixup = ''
+      makeWrapperArgs+=(
+        "''${qtWrapperArgs[@]}"
+        --prefix PATH ':' "${lame}/bin:${mplayer}/bin"
+      )
+    '';
 
     # now wrapPythonPrograms from postFixup will add both python and qt env variables
 

@@ -8,8 +8,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://sourceforge/project/gcolor2/gcolor2/${version}/gcolor2-${version}.tar.bz2";
-    sha1 = "e410a52dcff3d5c6c3d448b68a026d04ccd744be";
-
+    sha256 = "1siv54vwx9dbfcflklvf7pkp5lk6h3nn63flg6jzifz9wp0c84q6";
   };
 
   preConfigure = ''

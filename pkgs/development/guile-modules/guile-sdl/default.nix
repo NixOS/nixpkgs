@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       name = "sdl-env";
       paths = buildInputs;
     };
-  in "SDLMINUSI=-I${sdl}/include/SDL";
+  in [ "SDLMINUSI=-I${sdl}/include/SDL" ];
 
   meta = with stdenv.lib; {
     description = "Guile bindings for SDL";

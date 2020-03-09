@@ -73,6 +73,9 @@ let
 in
 
 {
+  imports = [
+    (mkRemovedOptionModule [ "services" "openvpn" "enable" ] "")
+  ];
 
   ###### interface
 

@@ -1,11 +1,11 @@
-{ lib, stdenv, fetch, cmake, python, libcxxabi, fixDarwinDylibNames, version
+{ lib, stdenv, fetch, cmake, python3, libcxxabi, fixDarwinDylibNames, version
 , enableShared ? true }:
 
 stdenv.mkDerivation {
   pname = "libc++";
   inherit version;
 
-  src = fetch "libcxx" "136j3v7il9aq8wyp48klx6sifnl5asj4lf5c8yx08cjx5fbn4h9w";
+  src = fetch "libcxx" "0d2bj5i6mk4caq7skd5nsdmz8c2m5w5anximl5wz3x32p08zz089";
 
   postUnpack = ''
     unpackFile ${libcxxabi.src}
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     patchShebangs utils/cat_files.py
   '';
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) python;
+    ++ stdenv.lib.optional (stdenv.hostPlatform.isMusl || stdenv.hostPlatform.isWasi) python3;
 
   buildInputs = [ libcxxabi ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 

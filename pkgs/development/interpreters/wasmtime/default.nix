@@ -1,28 +1,28 @@
-{ rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang }:
+{ rustPlatform, fetchFromGitHub, lib, python, cmake, llvmPackages, clang, stdenv, darwin }:
 
-rustPlatform.buildRustPackage {
+rustPlatform.buildRustPackage rec {
   pname = "wasmtime";
-  version = "20190521";
+  version = "v0.12.0";
 
   src = fetchFromGitHub {
-    owner = "CraneStation";
-    repo = "wasmtime";
-    rev = "e530a582afe6a2b5735fd7cdf5e2e88391e58669";
-    sha256 = "13lqf9dp1cnw7ms7hcgirmlfkr0v7nrn3p5g7yacfasrqgnwsyl8";
+    owner = "bytecodealliance";
+    repo = "${pname}";
+    rev = "${version}";
+    sha256 = "08dhk5s8rv41mjqbwfqwqmp6p6p9y7qc5yc76ljjd9l7j1phl7mr";
     fetchSubmodules = true;
   };
 
-  cargoSha256 = "1jbpq09czm295316gdv3y0pfapqs0ynj3qbarwlnrv7valq5ak13";
-
-  cargoPatches = [ ./cargo-lock.patch ];
+  cargoSha256 = "0wqd2yy6ih1rcz1fq7x3aiqq1ma2nmif1w8r8x0vpxjxk395zil9";
 
   nativeBuildInputs = [ python cmake clang ];
-  buildInputs = [ llvmPackages.libclang ];
-
+  buildInputs = [ llvmPackages.libclang ] ++
+   lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
+  doCheck = false; # https://github.com/bytecodealliance/wasmtime/issues/1197
+
   meta = with lib; {
-    description = "Standalone JIT-style runtime for WebAsssembly, using Cranelift";
+    description = "Standalone JIT-style runtime for WebAssembly, using Cranelift";
     homepage = https://github.com/CraneStation/wasmtime;
     license = licenses.asl20;
     maintainers = [ maintainers.matthewbauer ];

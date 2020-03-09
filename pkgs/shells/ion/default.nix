@@ -13,6 +13,9 @@ buildRustPackage rec {
     sha256 = "0i0acl5nw254mw8dbfmb4792rr71is98a5wg32yylfnlrk7zlf8z";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1hs01b1rhbpafxlhw661k907rznqhcgyng85njkb99bg4lxwxaap";
 
   meta = with stdenv.lib; {
@@ -22,5 +25,9 @@ buildRustPackage rec {
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
+  };
+
+  passthru = {
+	  shellPath = "/bin/ion";
   };
 }

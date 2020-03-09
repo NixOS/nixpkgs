@@ -21,6 +21,8 @@ stdenv.mkDerivation rec {
 
   # Fix a /usr/bin/env reference in here that breaks sandboxed builds
   prePatch = "patchShebangs arch/lkl/scripts";
+  # Fixup build with newer Linux headers: https://github.com/lkl/linux/pull/484
+  postPatch = "sed '1i#include <linux/sockios.h>' -i tools/lkl/lib/hijack/xlate.c";
 
   installPhase = ''
     mkdir -p $out/bin $lib/lib $dev

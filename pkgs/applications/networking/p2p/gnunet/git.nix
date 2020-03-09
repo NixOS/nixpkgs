@@ -64,7 +64,7 @@ stdenv.mkDerivation {
     '';
   */
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "GNUnet, GNU's decentralized anonymous and censorship-resistant P2P framework";
 
     longDescription = ''
@@ -84,9 +84,9 @@ stdenv.mkDerivation {
 
     homepage = https://gnunet.org/;
 
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.agpl3Plus;
 
     maintainers = with stdenv.lib.maintainers; [ ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;
+    platforms = platforms.gnu ++ platforms.linux;
   };
 }

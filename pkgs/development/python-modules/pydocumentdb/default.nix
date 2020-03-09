@@ -6,13 +6,18 @@
 }:
 
 buildPythonPackage rec {
-  version = "2.3.3";
+  version = "2.3.5";
   pname = "pydocumentdb";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1fcp3g62pc9hpa0r6vdjhaln4h0azywjqfzi8bd4414ja0mxmj3p";
+    sha256 = "1e6f072ae516fc061c9442f8ca470463b53dc626f0f6a86ff3a803293f4b50dd";
   };
+
+  # https://github.com/Azure/azure-cosmos-python/issues/183
+  preBuild = ''
+    touch changelog.md
+  '';
 
   propagatedBuildInputs = [ six requests ];
 

@@ -3,7 +3,7 @@
 , makeWrapper, perlPackages, mkDerivation }:
 
 let
-  version = "1.6";
+  version = "1.6.1";
 in mkDerivation rec {
   pname = "qdirstat";
   inherit version;
@@ -12,14 +12,14 @@ in mkDerivation rec {
     owner = "shundhammer";
     repo = "qdirstat";
     rev = version;
-    sha256 = "0q4ccjmlbqifg251kyxwys8wspdskr8scqhacyfrs9cmnjxcjqan";
+    sha256 = "0q77a347qv1aka6sni6l03zh5jzyy9s74aygg554r73g01kxczpb";
   };
 
   nativeBuildInputs = [ qmake makeWrapper ];
 
   buildInputs = [ perlPackages.perl ];
 
-  preBuild = ''
+  postPatch = ''
     substituteInPlace scripts/scripts.pro \
       --replace /bin/true ${coreutils}/bin/true
 
@@ -37,9 +37,8 @@ in mkDerivation rec {
     substituteInPlace src/StdCleanup.cpp \
       --replace /bin/bash ${bash}/bin/bash
   '';
-  postPatch = ''
-    export qmakeFlags="$qmakeFlags INSTALL_PREFIX=$out"
-  '';
+
+  qmakeFlags = [ "INSTALL_PREFIX=${placeholder "out"}" ];
 
   postInstall = ''
     wrapProgram $out/bin/qdirstat-cache-writer \

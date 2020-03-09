@@ -9,25 +9,26 @@
 , pytest
 , pytest-astropy
 , astropy-helpers
+, isPy3k
 }:
 
 buildPythonPackage rec {
   pname = "astroquery";
-  version = "0.3.9";
+  version = "0.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0zw3xp2rfc6h2v569iqsyvzhfnzp7bfjb7jrj61is1hrqw1cqjrb";
+    sha256 = "1ddwnj9vpvxkrfb45c4pwv5f5za9kn2q0040dpw2ymj2bwlpl61h";
   };
 
-  # Fix tests using conftest.py from HEAD in the upstream GitHub
-  # repository.
-  patches = [ ./conftest-astropy-3-fix.patch ];
+  disabled = !isPy3k;
 
   propagatedBuildInputs = [ astropy requests keyring beautifulsoup4 html5lib ];
 
   nativeBuildInputs = [ astropy-helpers ];
 
+  # Tests disabled until pytest-astropy has been updated to include pytest-astropy-header
+  doCheck = false;
   checkInputs = [ pytest pytest-astropy ];
 
   # Disable automatic update of the astropy-helper module

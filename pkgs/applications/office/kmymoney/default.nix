@@ -10,17 +10,16 @@
 # Needed for running tests:
 , qtbase, xvfb_run
 
-# For weboob, which only supports Python 2.x:
-, python2Packages
+, python2, python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "kmymoney";
-  version = "5.0.5";
+  version = "5.0.8";
 
   src = fetchurl {
     url = "mirror://kde/stable/kmymoney/${version}/src/${pname}-${version}.tar.xz";
-    sha256 = "1hghs4676kn2giwpwz1y7p6djpmi41x64idf3ybiz8ky14a5s977";
+    sha256 = "1h6l01a08f1xgk4dfpndl7rmgbp9npm58qi760jwl2gggprwwsxc";
   };
 
   # Hidden dependency that wasn't included in CMakeLists.txt:
@@ -29,8 +28,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [
-    doxygen extra-cmake-modules graphviz kdoctools python2Packages.wrapPython
-    wrapQtAppsHook
+    doxygen extra-cmake-modules graphviz kdoctools python2
+    python3Packages.wrapPython wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -41,10 +40,10 @@ stdenv.mkDerivation rec {
 
     # Put it into buildInputs so that CMake can find it, even though we patch
     # it into the interface later.
-    python2Packages.weboob
+    python3Packages.weboob
   ];
 
-  weboobPythonPath = [ python2Packages.weboob ];
+  weboobPythonPath = [ python3Packages.weboob ];
 
   postInstall = ''
     buildPythonPath "$weboobPythonPath"
@@ -70,6 +69,5 @@ stdenv.mkDerivation rec {
     homepage = https://kmymoney.org/;
     platforms = lib.platforms.linux;
     license = lib.licenses.gpl2Plus;
-    broken = true;
   };
 }

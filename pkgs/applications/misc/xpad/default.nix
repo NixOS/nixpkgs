@@ -1,6 +1,6 @@
 { stdenv, fetchurl
 , autoreconfHook, pkgconfig, wrapGAppsHook
-, glib, intltool, gtk3, gtksourceview, hicolor-icon-theme }:
+, glib, intltool, gtk3, gtksourceview }:
 
 stdenv.mkDerivation rec {
   pname = "xpad";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig wrapGAppsHook ];
 
-  buildInputs = [ glib intltool gtk3 gtksourceview hicolor-icon-theme ];
+  buildInputs = [ glib intltool gtk3 gtksourceview ];
 
   meta = with stdenv.lib; {
     description = "A sticky note application for jotting down things to remember";

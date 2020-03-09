@@ -32,7 +32,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ zeroc_mcpp bzip2 expat openssl lmdb ]
     ++ lib.optionals stdenv.isDarwin [ darwin.cctools libiconv Security ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=class-memaccess" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=class-memaccess -Wno-error=deprecated-copy";
 
   prePatch = lib.optional stdenv.isDarwin ''
     substituteInPlace Make.rules.Darwin \

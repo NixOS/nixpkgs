@@ -2,10 +2,10 @@
 
 stdenv.mkDerivation rec {
   pname = "vnstat";
-  version = "2.4";
+  version = "2.6";
 
   src = fetchurl {
-    sha256 = "1amb8l97y6acp9j1xs2da3mdk6hykg6drzsps9im8vfmmfcmk5d0";
+    sha256 = "1xvzkxkq1sq33r2s4f1967f4gnca4xw411sbapdkx541f856w9w9";
     url = "https://humdi.net/${pname}/${pname}-${version}.tar.gz";
   };
 

@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "mahotas";
-  version = "1.4.7";
+  version = "1.4.9";
 
   src = fetchFromGitHub {
     owner = "luispedro";
     repo = "mahotas";
     rev = "v${version}";
-    sha256 = "1a3nzxb7is8n7lpxwq1fw3fr03qflig334rb1zzr2znjrhq6g94b";
+    sha256 = "151hri3lwcm9p7w1nyw99h8c70j51698cvzaiazvwb6gl4khwavv";
   };
 
   # remove this as soon as https://github.com/luispedro/mahotas/issues/97 is fixed
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Computer vision package based on numpy";
-    homepage = http://mahotas.readthedocs.io/;
+    homepage = https://mahotas.readthedocs.io/;
     maintainers = with maintainers; [ luispedro ];
     license = licenses.mit;
     platforms = platforms.unix;

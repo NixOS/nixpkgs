@@ -5,10 +5,11 @@
 
 let
 self = stdenv.mkDerivation rec {
-  name = "mysql-8.0.17";
+  pname = "mysql";
+  version = "8.0.17";
 
   src = fetchurl {
-    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${name}.tar.gz";
+    url = "https://dev.mysql.com/get/Downloads/MySQL-${self.mysqlVersion}/${pname}-${version}.tar.gz";
     sha256 = "1mjrlxn8vigi69r0r674j2dibdnkaar01ji5965gsyx7k60z7qy6";
   };
 
@@ -30,7 +31,6 @@ self = stdenv.mkDerivation rec {
   outputs = [ "out" "static" ];
 
   cmakeFlags = [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.12" # For std::shared_timed_mutex.
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # To run libmysql/libmysql_api_test during build.
     "-DFORCE_UNSUPPORTED_COMPILER=1" # To configure on Darwin.
     "-DWITH_ROUTER=OFF" # It may be packaged separately.

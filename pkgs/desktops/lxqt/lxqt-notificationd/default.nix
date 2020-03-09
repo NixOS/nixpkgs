@@ -30,7 +30,7 @@ mkDerivation rec {
     description = "The LXQt notification daemon";
     homepage = https://github.com/lxqt/lxqt-notificationd;
     license = licenses.lgpl21;
-    platforms = with platforms; unix;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ romildo ];
   };
 }

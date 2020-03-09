@@ -368,16 +368,16 @@ in {
     (mkIf cfg.enable {
       environment.systemPackages = [ nixos-taskserver ];
 
-      users.users = optional (cfg.user == "taskd") {
-        name = "taskd";
-        uid = config.ids.uids.taskd;
-        description = "Taskserver user";
-        group = cfg.group;
+      users.users = optionalAttrs (cfg.user == "taskd") {
+        taskd = {
+          uid = config.ids.uids.taskd;
+          description = "Taskserver user";
+          group = cfg.group;
+        };
       };
 
-      users.groups = optional (cfg.group == "taskd") {
-        name = "taskd";
-        gid = config.ids.gids.taskd;
+      users.groups = optionalAttrs (cfg.group == "taskd") {
+        taskd.gid = config.ids.gids.taskd;
       };
 
       services.taskserver.config = {

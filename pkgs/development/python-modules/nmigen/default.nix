@@ -5,58 +5,34 @@
 , setuptools
 , setuptools_scm
 , pyvcd
-, bitarray
 , jinja2
 
-# nmigen.{test,build} call out to these
+# for tests
 , yosys
 , symbiyosys
-, nextpnr ? null
-, icestorm ? null
-, trellis ? null
-
-# for tests
 , yices
 }:
 
 buildPythonPackage rec {
   pname = "nmigen";
-  version = "unstable-2019-09-28";
+  version = "unstable-2019-02-08";
   # python setup.py --version
-  realVersion = "0.1.dev689+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.2.dev49+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
-    owner = "m-labs";
+    owner = "nmigen";
     repo = "nmigen";
-    rev = "a02e3750bfeba44bcaad4c5de8d9eb0ef055d9c6";
-    sha256 = "0m399c2nm7y54q2f0fbkmi4h35csbc2llckm6k9kqdf5qc6355wd";
+    rev = "66f4510c4465be5d0763d7835770553434e4ee91";
+    sha256 = "19y39c4ywckm4yzrpjzcdl9pqy9d1sf1zsb4zpzajpmnfqccc3b0";
   };
 
   disabled = pythonOlder "3.6";
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ setuptools pyvcd bitarray jinja2 ];
+  propagatedBuildInputs = [ setuptools pyvcd jinja2 ];
 
-  checkInputs = [ yosys yices ];
-
-  postPatch = let
-    tool = pkg: name:
-      if pkg == null then {} else { ${name} = "${pkg}/bin/${name}"; };
-
-    # Only FOSS toolchain supported out of the box, sorry!
-    toolchainOverrides =
-      tool yosys "yosys" //
-      tool symbiyosys "sby" //
-      tool nextpnr "nextpnr-ice40" //
-      tool nextpnr "nextpnr-ecp5" //
-      tool icestorm "icepack" //
-      tool trellis "ecppack";
-  in ''
-    substituteInPlace nmigen/_toolchain.py \
-      --replace 'overrides = {}' \
-                'overrides = ${builtins.toJSON toolchainOverrides}'
-  '';
+  checkInputs = [ yosys symbiyosys yices ];
 
   preBuild = ''
     export SETUPTOOLS_SCM_PRETEND_VERSION="${realVersion}"
@@ -64,8 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A refreshed Python toolbox for building complex digital hardware";
-    homepage = https://github.com/m-labs/nmigen;
-    license = licenses.bsd0;
+    homepage = https://github.com/nmigen/nmigen;
+    license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];
   };
 }

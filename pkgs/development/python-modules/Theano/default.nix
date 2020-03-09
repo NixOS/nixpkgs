@@ -35,7 +35,11 @@ let
     '';
 
   # Theano spews warnings and disabled flags if the compiler isn't named g++
-  cxx_compiler = wrapped "g++" "\\$HOME/.theano"
+  cxx_compiler_name =
+    if stdenv.cc.isGNU then "g++" else
+    if stdenv.cc.isClang then "clang++" else
+    throw "Unknown C++ compiler";
+  cxx_compiler = wrapped cxx_compiler_name "\\$HOME/.theano"
     (    stdenv.lib.optional cudaSupport libgpuarray_
       ++ stdenv.lib.optional cudnnSupport cudnn );
 

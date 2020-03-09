@@ -1,21 +1,17 @@
-{stdenv, fetchFromGitHub, autoreconfHook, ncurses, libpcap }:
+{stdenv, fetchurl, ncurses, libpcap }:
 
 stdenv.mkDerivation rec {
-  version = "3.5.1";
+  version = "3.6.0";
 
   pname = "sipp";
 
-  src = fetchFromGitHub {
-    owner = "SIPp";
-    repo = "sipp";
-    rev = "v${version}";
-    sha256 = "179a1fvqyk3jpxbi28l1xfw22cw9vgvxrn19w5f38w74x0jwqg5k";
+  src = fetchurl {
+    url = "https://github.com/SIPp/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "1fx1iy2n0m2kr91n1ii30frbscq375k3lqihdgvrqxn0zq8pnzp4";
   };
 
-  patchPhase = ''
+  postPatch = ''
     sed -i "s@pcap/\(.*\).pcap@$out/share/pcap/\1.pcap@g" src/scenario.cpp
-    sed -i -e "s|AC_CHECK_LIB(curses|AC_CHECK_LIB(ncurses|" configure.ac
-    echo "#define SIPP_VERSION \"v${version}\"" > include/version.h
   '';
 
   configureFlags = [
@@ -28,8 +24,6 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ncurses libpcap];
-
-  nativeBuildInputs = [ autoreconfHook ];
 
   meta = with stdenv.lib; {
     homepage = http://sipp.sf.net;

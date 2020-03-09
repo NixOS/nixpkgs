@@ -16,6 +16,7 @@ buildPerlPackage {
   doCheck = false;  # TODO: almost all tests fail ... is this a real problem?
 
   meta = with stdenv.lib; {
+    homepage = "https://github.com/BIC-MNI/mni-perllib";
     license = with licenses; [ artistic1 gpl1Plus ];
     maintainers = with maintainers; [ bcdarwin ];
   };

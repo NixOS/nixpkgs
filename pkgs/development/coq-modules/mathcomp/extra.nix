@@ -74,7 +74,7 @@ versions = {
       core-deps = with coqPackages; [ mathcomp-field_1_9 ];
       extra-deps = with coqPackages; [ mathcomp_1_9-bigenough ];
     };
-  }; 
+  };
   "1.8.0" = {
     finmap.version = "1.2.1";
     bigenough.version = "1.0.0";
@@ -154,7 +154,7 @@ packageGen = {
 
     propagatedBuildInputs = [ coq ] ++ mc-core-deps ++ extra-deps;
 
-    installFlags = "-f Makefile.coq COQLIB=$(out)/lib/coq/${coq.coq-version}/";
+    installFlags = [ "-f" "Makefile.coq" "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
     meta = {
       inherit description;

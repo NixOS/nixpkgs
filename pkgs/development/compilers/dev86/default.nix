@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Linux 8086 development environment";

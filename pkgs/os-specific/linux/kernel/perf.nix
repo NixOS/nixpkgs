@@ -1,4 +1,4 @@
-{ lib, stdenv, kernel, elfutils, python, perl, newt, slang, asciidoc, xmlto, makeWrapper
+{ lib, stdenv, kernel, elfutils, python2, python3, perl, newt, slang, asciidoc, xmlto, makeWrapper
 , docbook_xsl, docbook_xml_dtd_45, libxslt, flex, bison, pkgconfig, libunwind, binutils
 , libiberty, audit, libbfd, libopcodes, openssl, systemtap, numactl
 , zlib, withGtk ? false, gtk2 ? null
@@ -36,31 +36,33 @@ stdenv.mkDerivation {
   # perf refers both to newt and slang
   nativeBuildInputs = [
     asciidoc xmlto docbook_xsl docbook_xml_dtd_45 libxslt
-    flex bison libiberty audit makeWrapper pkgconfig python perl
+    flex bison libiberty audit makeWrapper pkgconfig python3
   ];
   buildInputs = [
     elfutils newt slang libunwind libbfd zlib openssl systemtap.stapBuild numactl
-    libopcodes
-  ] ++ stdenv.lib.optional withGtk gtk2;
+    libopcodes python3 perl
+  ] ++ stdenv.lib.optional withGtk gtk2
+    ++ (if (versionAtLeast kernel.version "4.19") then [ python3 ] else [ python2 ]);
 
   # Note: we don't add elfutils to buildInputs, since it provides a
   # bad `ld' and other stuff.
-  NIX_CFLAGS_COMPILE =
-    [ "-Wno-error=cpp"
-      "-Wno-error=bool-compare"
-      "-Wno-error=deprecated-declarations"
-      "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
-    ]
-    # gcc before 6 doesn't know these options
-    ++ stdenv.lib.optionals (hasPrefix "gcc-6" stdenv.cc.cc.name) [
-      "-Wno-error=unused-const-variable" "-Wno-error=misleading-indentation"
-    ];
+  NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=cpp"
+    "-Wno-error=bool-compare"
+    "-Wno-error=deprecated-declarations"
+    "-DOBJDUMP_PATH=\"${binutils}/bin/objdump\""
+    "-Wno-error=stringop-truncation"
+  ];
+
+  postPatch = ''
+    patchShebangs scripts/bpf_helpers_doc.py
+  '';
 
   doCheck = false; # requires "sparse"
   doInstallCheck = false; # same
 
   separateDebugInfo = true;
-  installFlags = "install install-man ASCIIDOC8=1 prefix=$(out)";
+  installFlags = [ "install" "install-man" "ASCIIDOC8=1" "prefix=$(out)" ];
 
   preFixup = ''
     wrapProgram $out/bin/perf \

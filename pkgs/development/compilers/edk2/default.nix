@@ -14,13 +14,13 @@ else
 
 edk2 = stdenv.mkDerivation {
   pname = "edk2";
-  version = "201905";
+  version = "201911";
 
   # submodules
   src = fetchgit {
     url = "https://github.com/tianocore/edk2";
     rev = "edk2-stable${edk2.version}";
-    sha256 = "0fk40h4nj4qg8shg0yd1zj4iyspslms5fx95ysi04akv90k5sqkn";
+    sha256 = "1rmvb4w043v25cppsqxqrpzqqcay3yrzsrhhzm2q9bncrj56vm8q";
   };
 
   buildInputs = [ libuuid pythonEnv ];

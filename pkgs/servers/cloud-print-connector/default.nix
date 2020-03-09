@@ -1,4 +1,4 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, avahi, cups }:
+{ stdenv, buildGoPackage, fetchFromGitHub, avahi, cups, fetchpatch }:
 
 # TODO: Add a service for gcp-cups-connector and perhaps some other
 # kind of configuration for the same thing that gcp-connector-util
@@ -17,6 +17,14 @@ buildGoPackage rec {
   subPackages = [
     "gcp-connector-util"
     "gcp-cups-connector"
+  ];
+
+  patches = [
+    (fetchpatch {
+      # https://github.com/google/cloud-print-connector/pull/475
+      url = "https://github.com/google/cloud-print-connector/commit/6a77c7c283b83cbcc9cbfab59710023cd09da3ed.patch";
+      sha256 = "054pi9nz402va95z5k6wq3dalnv5rcya078wa99p1kdwb7cqmrcq";
+    })
   ];
 
   src = fetchFromGitHub {

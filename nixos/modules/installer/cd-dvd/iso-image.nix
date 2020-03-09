@@ -569,14 +569,18 @@ in
       };
 
     fileSystems."/nix/store" =
-      { fsType = "unionfs-fuse";
-        device = "unionfs";
-        options = [ "allow_other" "cow" "nonempty" "chroot=/mnt-root" "max_files=32768" "hide_meta_files" "dirs=/nix/.rw-store=rw:/nix/.ro-store=ro" ];
+      { fsType = "overlay";
+        device = "overlay";
+        options = [
+          "lowerdir=/nix/.ro-store"
+          "upperdir=/nix/.rw-store/store"
+          "workdir=/nix/.rw-store/work"
+        ];
       };
 
-    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" ];
+    boot.initrd.availableKernelModules = [ "squashfs" "iso9660" "uas" "overlay" ];
 
-    boot.initrd.kernelModules = [ "loop" ];
+    boot.initrd.kernelModules = [ "loop" "overlay" ];
 
     # Closures to be copied to the Nix store on the CD, namely the init
     # script and the top-level system configuration directory.
@@ -603,9 +607,6 @@ in
         { source = config.system.build.squashfsStore;
           target = "/nix-store.squashfs";
         }
-        { source = config.isoImage.efiSplashImage;
-          target = "/EFI/boot/efi-background.png";
-        }
         { source = config.isoImage.splashImage;
           target = "/isolinux/background.png";
         }
@@ -630,8 +631,8 @@ in
         { source = "${efiDir}/EFI";
           target = "/EFI";
         }
-        { source = pkgs.writeText "loopback.cfg" "source /EFI/boot/grub.cfg";
-          target = "/boot/grub/loopback.cfg";
+        { source = (pkgs.writeTextDir "grub/loopback.cfg" "source /EFI/boot/grub.cfg") + "/grub";
+          target = "/boot/grub";
         }
       ] ++ optionals (config.boot.loader.grub.memtest86.enable && canx86BiosBoot) [
         { source = "${pkgs.memtest86plus}/memtest.bin";
@@ -640,6 +641,10 @@ in
       ] ++ optionals (config.isoImage.grubTheme != null) [
         { source = config.isoImage.grubTheme;
           target = "/EFI/boot/grub-theme";
+        }
+      ] ++ [
+        { source = config.isoImage.efiSplashImage;
+          target = "/EFI/boot/efi-background.png";
         }
       ];
 

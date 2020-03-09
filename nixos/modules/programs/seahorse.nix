@@ -31,6 +31,8 @@ with lib;
 
   config = mkIf config.programs.seahorse.enable {
 
+    programs.ssh.askPassword = mkDefault "${pkgs.gnome3.seahorse}/libexec/seahorse/ssh-askpass";
+
     environment.systemPackages = [
       pkgs.gnome3.seahorse
     ];

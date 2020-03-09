@@ -1,38 +1,7 @@
-{ pkgs, lib, gnome3 }:
+{ config, pkgs, lib, gnome3 }:
 
 
 lib.makeScope pkgs.newScope (self: with self; {
-
-  apps = [
-    elementary-calculator elementary-calendar
-    elementary-camera elementary-code elementary-files
-    elementary-music elementary-photos elementary-screenshot-tool
-    elementary-terminal elementary-videos switchboard-with-plugs
-  ];
-
-  artwork = [
-    elementary-gtk-theme
-    elementary-icon-theme
-    elementary-sound-theme
-    elementary-wallpapers
-  ];
-
-  desktop = [
-    elementary-default-settings
-    elementary-session-settings
-    elementary-shortcut-overlay
-    gala
-    wingpanel-with-indicators
-  ];
-
-  services = [
-    cerbere
-    elementary-capnet-assist
-    elementary-settings-daemon
-    elementary-dpms-helper
-    pantheon-agent-geoclue2
-    pantheon-agent-polkit
-  ];
 
   switchboardPlugs = [
     switchboard-plug-a11y switchboard-plug-about
@@ -54,6 +23,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     wingpanel-indicator-session wingpanel-indicator-sound
   ];
 
+  nixpkgs-github-update = callPackage ./nixpkgs_github_update { };
+
   updateScript = callPackage ./update.nix { };
 
   maintainers = with pkgs.stdenv.lib.maintainers; [ worldofpeace ];
@@ -66,6 +37,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### APPS
 
+  appcenter = callPackage ./apps/appcenter { };
+
   elementary-calculator = callPackage ./apps/elementary-calculator { };
 
   elementary-calendar = callPackage ./apps/elementary-calendar { };
@@ -75,6 +48,8 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-code = callPackage ./apps/elementary-code { };
 
   elementary-files = callPackage ./apps/elementary-files { };
+
+  elementary-feedback = callPackage ./apps/elementary-feedback { };
 
   elementary-music = callPackage ./apps/elementary-music { };
 
@@ -86,11 +61,15 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-videos = callPackage ./apps/elementary-videos { };
 
+  sideload = callPackage ./apps/sideload { };
+
   #### DESKTOP
 
   elementary-default-settings = callPackage ./desktop/elementary-default-settings { };
 
   elementary-greeter = callPackage ./desktop/elementary-greeter { };
+
+  elementary-onboarding = callPackage ./desktop/elementary-onboarding { };
 
   elementary-print-shim = callPackage ./desktop/elementary-print-shim { };
 
@@ -147,9 +126,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   wingpanel-indicator-keyboard = callPackage ./desktop/wingpanel-indicators/keyboard { };
 
-  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  wingpanel-indicator-network = callPackage ./desktop/wingpanel-indicators/network { };
 
   wingpanel-indicator-nightlight = callPackage ./desktop/wingpanel-indicators/nightlight { };
 
@@ -185,9 +162,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   switchboard-plug-mouse-touchpad = callPackage ./apps/switchboard-plugs/mouse-touchpad { };
 
-  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network {
-    inherit (gnome3) networkmanagerapplet;
-  };
+  switchboard-plug-network = callPackage ./apps/switchboard-plugs/network { };
 
   switchboard-plug-notifications = callPackage ./apps/switchboard-plugs/notifications { };
 
@@ -219,8 +194,10 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
 
+} // lib.optionalAttrs (config.allowAliases or true) {
+
   ### ALIASES
 
-  vala = pkgs.vala; # added 2019-10-10
+  inherit (pkgs) vala; # added 2019-10-10
 
 })

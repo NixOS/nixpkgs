@@ -5,10 +5,6 @@ with lib;
 let
   cfg = config.services.uwsgi;
 
-  uwsgi = pkgs.uwsgi.override {
-    plugins = cfg.plugins;
-  };
-
   buildCfg = name: c:
     let
       plugins =
@@ -23,8 +19,8 @@ let
       python =
         if hasPython2 && hasPython3 then
           throw "`plugins` attribute in UWSGI configuration shouldn't contain both python2 and python3"
-        else if hasPython2 then uwsgi.python2
-        else if hasPython3 then uwsgi.python3
+        else if hasPython2 then cfg.package.python2
+        else if hasPython3 then cfg.package.python3
         else null;
 
       pythonEnv = python.withPackages (c.pythonPackages or (self: []));
@@ -75,6 +71,11 @@ in {
         type = types.path;
         default = "/run/uwsgi";
         description = "Where uWSGI communication sockets can live";
+      };
+
+      package = mkOption {
+        type = types.package;
+        internal = true;
       };
 
       instance = mkOption {
@@ -138,7 +139,7 @@ in {
       '';
       serviceConfig = {
         Type = "notify";
-        ExecStart = "${uwsgi}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${buildCfg "server" cfg.instance}/server.json";
+        ExecStart = "${cfg.package}/bin/uwsgi --uid ${cfg.user} --gid ${cfg.group} --json ${buildCfg "server" cfg.instance}/server.json";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStop = "${pkgs.coreutils}/bin/kill -INT $MAINPID";
         NotifyAccess = "main";
@@ -146,15 +147,19 @@ in {
       };
     };
 
-    users.users = optionalAttrs (cfg.user == "uwsgi") (singleton
-      { name = "uwsgi";
+    users.users = optionalAttrs (cfg.user == "uwsgi") {
+      uwsgi = {
         group = cfg.group;
         uid = config.ids.uids.uwsgi;
-      });
+      };
+    };
 
-    users.groups = optionalAttrs (cfg.group == "uwsgi") (singleton
-      { name = "uwsgi";
-        gid = config.ids.gids.uwsgi;
-      });
+    users.groups = optionalAttrs (cfg.group == "uwsgi") {
+      uwsgi.gid = config.ids.gids.uwsgi;
+    };
+
+    services.uwsgi.package = pkgs.uwsgi.override {
+      inherit (cfg) plugins;
+    };
   };
 }

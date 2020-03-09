@@ -14,6 +14,7 @@
 , supercollider
 , qscintilla
 , qwt
+, osmid
 }:
 
 let
@@ -59,6 +60,10 @@ mkDerivation rec {
   buildPhase = ''
     export SONIC_PI_HOME=$TMPDIR
     export AUBIO_LIB=${aubio}/lib/libaubio.so
+    export OSMID_DIR=app/server/native/osmid
+
+    mkdir -p $OSMID_DIR
+    cp ${osmid}/bin/{m2o,o2m} $OSMID_DIR
 
     pushd app/server/ruby/bin
       ./compile-extensions.rb
@@ -95,11 +100,12 @@ mkDerivation rec {
   '';
 
   meta = {
-    homepage = http://sonic-pi.net/;
+    homepage = "https://sonic-pi.net/";
     description = "Free live coding synth for everyone originally designed to support computing and music lessons within schools";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ Phlogistique kamilchm ];
     platforms = lib.platforms.linux;
+    # sonic-pi depends on ruby 2.4 which we don't support anymore
     broken = true;
   };
 }

@@ -18,7 +18,7 @@ stdenv.mkDerivation {
 
   buildInputs = [ perl ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   meta = {
     description = "Multiple Repository management tool";

@@ -1,22 +1,26 @@
 { stdenv, fetchurl, pkgconfig, systemd
 , boost, libsodium, libedit, re2
-, net_snmp, lua, protobuf, openssl }: stdenv.mkDerivation rec {
+, net-snmp, lua, protobuf, openssl, zlib, h2o
+}:
+
+stdenv.mkDerivation rec {
   pname = "dnsdist";
-  version = "1.3.2";
+  version = "1.4.0";
 
   src = fetchurl {
     url = "https://downloads.powerdns.com/releases/dnsdist-${version}.tar.bz2";
-    sha256 = "1i3b1vpk9a8zbx9aby2s1ckkzhlvzgn11hcgj3b8x2j1b9771rqb";
+    sha256 = "1h0x5xd13j8xxrrinb7d55851m6n9w0r15wx9m3c50dk7qngldm3";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ systemd boost libsodium libedit re2 net_snmp lua protobuf openssl ];
+  nativeBuildInputs = [ pkgconfig protobuf ];
+  buildInputs = [ systemd boost libsodium libedit re2 net-snmp lua openssl zlib h2o ];
 
   configureFlags = [
     "--enable-libsodium"
     "--enable-re2"
     "--enable-dnscrypt"
     "--enable-dns-over-tls"
+    "--enable-dns-over-https"
     "--with-protobuf=yes"
     "--with-net-snmp"
     "--disable-dependency-tracking"
@@ -25,6 +29,8 @@
   ];
 
   doCheck = true;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "DNS Loadbalancer";

@@ -53,12 +53,12 @@ stdenv.mkDerivation rec {
   ];
 
   # Disable assertions which include -dev QtBase file paths.
-  NIX_CFLAGS_COMPILE = [ "-DQT_NO_DEBUG" ];
+  NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
   configureFlags = [
     "--without-python"
   ] ++ (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/etc"
+    "--with-dbusconfdir=${placeholder "out"}/share"
   ] else [
     "--without-dbus"
   ]) ++ (if enableVideo then [

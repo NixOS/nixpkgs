@@ -1,7 +1,7 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-import ./make-test.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ...} : {
   name = "ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];
@@ -35,51 +35,56 @@ import ./make-test.nix ({ pkgs, lib, ...} : {
 
   testScript =
     ''
+      import re
+
       # Start the router first so that it respond to router solicitations.
-      $router->waitForUnit("radvd");
+      router.wait_for_unit("radvd")
 
-      startAll;
+      start_all()
 
-      $client->waitForUnit("network.target");
-      $server->waitForUnit("network.target");
-      $server->waitForUnit("httpd.service");
+      client.wait_for_unit("network.target")
+      server.wait_for_unit("network.target")
+      server.wait_for_unit("httpd.service")
 
       # Wait until the given interface has a non-tentative address of
       # the desired scope (i.e. has completed Duplicate Address
       # Detection).
-      sub waitForAddress {
-          my ($machine, $iface, $scope) = @_;
-          $machine->waitUntilSucceeds("[ `ip -o -6 addr show dev $iface scope $scope | grep -v tentative | wc -l` -ge 1 ]");
-          my $ip = (split /[ \/]+/, $machine->succeed("ip -o -6 addr show dev $iface scope $scope"))[3];
-          $machine->log("$scope address on $iface is $ip");
-          return $ip;
-      }
+      def wait_for_address(machine, iface, scope, temporary=False):
+          temporary_flag = "temporary" if temporary else "-temporary"
+          cmd = f"ip -o -6 addr show dev {iface} scope {scope} -tentative {temporary_flag}"
 
-      subtest "loopback address", sub {
-          $client->succeed("ping -c 1 ::1 >&2");
-          $client->fail("ping -c 1 ::2 >&2");
-      };
+          machine.wait_until_succeeds(f"[ `{cmd} | wc -l` -eq 1 ]")
+          output = machine.succeed(cmd)
+          ip = re.search(r"inet6 ([0-9a-f:]{2,})/", output).group(1)
 
-      subtest "local link addressing", sub {
-          my $clientIp = waitForAddress $client, "eth1", "link";
-          my $serverIp = waitForAddress $server, "eth1", "link";
-          $client->succeed("ping -c 1 $clientIp%eth1 >&2");
-          $client->succeed("ping -c 1 $serverIp%eth1 >&2");
-      };
+          if temporary:
+              scope = scope + " temporary"
+          machine.log(f"{scope} address on {iface} is {ip}")
+          return ip
 
-      subtest "global addressing", sub {
-          my $clientIp = waitForAddress $client, "eth1", "global";
-          my $serverIp = waitForAddress $server, "eth1", "global";
-          $client->succeed("ping -c 1 $clientIp >&2");
-          $client->succeed("ping -c 1 $serverIp >&2");
-          $client->succeed("curl --fail -g http://[$serverIp]");
-          $client->fail("curl --fail -g http://[$clientIp]");
-      };
-      subtest "privacy extensions", sub {
-          my $ip = waitForAddress $client, "eth1", "global temporary";
+
+      with subtest("Loopback address can be pinged"):
+          client.succeed("ping -c 1 ::1 >&2")
+          client.fail("ping -c 1 ::2 >&2")
+
+      with subtest("Local link addresses can be obtained and pinged"):
+          client_ip = wait_for_address(client, "eth1", "link")
+          server_ip = wait_for_address(server, "eth1", "link")
+          client.succeed(f"ping -c 1 {client_ip}%eth1 >&2")
+          client.succeed(f"ping -c 1 {server_ip}%eth1 >&2")
+
+      with subtest("Global addresses can be obtained, pinged, and reached via http"):
+          client_ip = wait_for_address(client, "eth1", "global")
+          server_ip = wait_for_address(server, "eth1", "global")
+          client.succeed(f"ping -c 1 {client_ip} >&2")
+          client.succeed(f"ping -c 1 {server_ip} >&2")
+          client.succeed(f"curl --fail -g http://[{server_ip}]")
+          client.fail(f"curl --fail -g http://[{client_ip}]")
+
+      with subtest("Privacy extensions: Global temporary address can be obtained and pinged"):
+          ip = wait_for_address(client, "eth1", "global", temporary=True)
           # Default route should have "src <temporary address>" in it
-          $client->succeed("ip r g ::2 | grep $ip");
-      };
+          client.succeed(f"ip r g ::2 | grep {ip}")
 
       # TODO: test reachability of a machine on another network.
     '';

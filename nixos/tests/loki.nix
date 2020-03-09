@@ -1,4 +1,4 @@
-import ./make-test.nix ({ lib, pkgs, ... }:
+import ./make-test-python.nix ({ lib, pkgs, ... }:
 
 {
   name = "loki";
@@ -26,12 +26,14 @@ import ./make-test.nix ({ lib, pkgs, ... }:
   };
 
   testScript = ''
-    $machine->start;
-    $machine->waitForUnit("loki.service");
-    $machine->waitForUnit("promtail.service");
-    $machine->waitForOpenPort(3100);
-    $machine->waitForOpenPort(9080);
-    $machine->succeed("echo 'Loki Ingestion Test' > /var/log/testlog");
-    $machine->waitUntilSucceeds("${pkgs.grafana-loki}/bin/logcli --addr='http://localhost:3100' query --no-labels '{job=\"varlogs\",filename=\"/var/log/testlog\"}' | grep -q 'Loki Ingestion Test'");
+    machine.start
+    machine.wait_for_unit("loki.service")
+    machine.wait_for_unit("promtail.service")
+    machine.wait_for_open_port(3100)
+    machine.wait_for_open_port(9080)
+    machine.succeed("echo 'Loki Ingestion Test' > /var/log/testlog")
+    machine.wait_until_succeeds(
+        "${pkgs.grafana-loki}/bin/logcli --addr='http://localhost:3100' query --no-labels '{job=\"varlogs\",filename=\"/var/log/testlog\"}' | grep -q 'Loki Ingestion Test'"
+    )
   '';
 })

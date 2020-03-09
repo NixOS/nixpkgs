@@ -1,16 +1,16 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
-buildGoPackage {
-  pname = "subfinder-git";
-  version = "2018-07-15";
+buildGoPackage rec {
+  pname = "subfinder";
+  version = "2.3.0";
 
-  goPackagePath = "github.com/subfinder/subfinder";
+  goPackagePath = "github.com/projectdiscovery/subfinder";
 
   src = fetchFromGitHub {
-    owner = "subfinder";
-    repo = "subfinder";
-    rev = "26596affed961c535676395f443acc5af95ac9e6";
-    sha256 = "0m842jyrwlg4kaja1m3kca07jf20fxva0frg66b13zpsm8hdp10q";
+    owner = "projectdiscovery";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1vjxi2h4njakyqkfzwwaacy37kqx66j2y3k5l752z9va73gv7xv1";
   };
 
   goDeps = ./deps.nix;
@@ -22,8 +22,8 @@ buildGoPackage {
       subdomains for websites. Designed as a passive framework to be
       useful for bug bounties and safe for penetration testing.
     '';
-    homepage = https://github.com/subfinder/subfinder;
+    homepage = "https://github.com/projectdiscovery/subfinder";
     license = licenses.mit;
-    maintainers = with maintainers; [ fpletz ];
+    maintainers = with maintainers; [ fpletz filalex77 ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg
+{ stdenv, mkDerivationWith, fetchFromGitHub, qtbase, openscenegraph, mygui, bullet, ffmpeg
 , boost, cmake, SDL2, unshield, openal, libXt, pkgconfig }:
 
 let
@@ -10,7 +10,7 @@ let
       sha256 = "0admnllxic6dcpic0h100927yw766ab55dix002vvdx36i6994jb";
     };
   });
-in mkDerivation rec {
+in mkDerivationWith stdenv.mkDerivation rec {
   version = "0.45.0";
   pname = "openmw";
 

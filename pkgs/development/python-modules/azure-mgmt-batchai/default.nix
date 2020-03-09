@@ -24,12 +24,17 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
+  postInstall = lib.optionalString isPy3k ''
+    rm $out/${python.sitePackages}/azure/__init__.py
+    rm $out/${python.sitePackages}/azure/mgmt/__init__.py
+  '';
+
   # has no tests
   doCheck = false;
 
   meta = with lib; {
     description = "This is the Microsoft Azure Batch AI Management Client Library";
-    homepage = https://github.com/Azure/sdk-for-python/tree/master/azure-mgmt-batchai;
+    homepage = "https://github.com/Azure/azure-sdk-for-python";
     license = licenses.mit;
     maintainers = with maintainers; [ mwilsoninsight ];
   };

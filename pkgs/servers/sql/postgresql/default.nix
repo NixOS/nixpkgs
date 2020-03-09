@@ -3,7 +3,7 @@ let
   generic =
       # dependencies
       { stdenv, lib, fetchurl, makeWrapper
-      , glibc, zlib, readline, openssl, openssl_1_0_2, icu, systemd, libossp_uuid
+      , glibc, zlib, readline, openssl, icu, systemd, libossp_uuid
       , pkgconfig, libxml2, tzdata
 
       # This is important to obtain a version of `libpq` that does not depend on systemd.
@@ -32,10 +32,9 @@ let
     setOutputFlags = false; # $out retains configureFlags :-/
 
     buildInputs =
-      [ zlib readline libxml2 makeWrapper ]
+      [ zlib readline openssl libxml2 makeWrapper ]
       ++ lib.optionals icuEnabled [ icu ]
       ++ lib.optionals enableSystemd [ systemd ]
-      ++ [ (if atLeast "9.5" then openssl else openssl_1_0_2) ]
       ++ lib.optionals (!stdenv.isDarwin) [ libossp_uuid ];
 
     nativeBuildInputs = lib.optionals icuEnabled [ pkgconfig ];
@@ -44,7 +43,7 @@ let
 
     buildFlags = [ "world" ];
 
-    NIX_CFLAGS_COMPILE = [ "-I${libxml2.dev}/include/libxml2" ];
+    NIX_CFLAGS_COMPILE = "-I${libxml2.dev}/include/libxml2";
 
     # Otherwise it retains a reference to compiler and fails; see #44767.  TODO: better.
     preConfigure = "CC=${stdenv.cc.targetPrefix}cc";
@@ -81,8 +80,8 @@ let
     postInstall =
       ''
         moveToOutput "lib/pgxs" "$out" # looks strange, but not deleting it
-        moveToOutput "lib/libpgcommon.a" "$out"
-        moveToOutput "lib/libpgport.a" "$out"
+        moveToOutput "lib/libpgcommon*.a" "$out"
+        moveToOutput "lib/libpgport*.a" "$out"
         moveToOutput "lib/libecpg*" "$out"
 
         # Prevent a retained dependency on gcc-wrapper.
@@ -109,6 +108,17 @@ let
     doCheck = !stdenv.isDarwin;
     # autodetection doesn't seem to able to find this, but it's there.
     checkTarget = "check";
+
+    preCheck =
+      # On musl, comment skip the following tests, because they break due to
+      #     ! ERROR:  could not load library "/build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so": Error loading shared library libpq.so.5: No such file or directory (needed by /build/postgresql-11.5/tmp_install/nix/store/...-postgresql-11.5-lib/lib/libpqwalreceiver.so)
+      # See also here:
+      #     https://git.alpinelinux.org/aports/tree/main/postgresql/disable-broken-tests.patch?id=6d7d32c12e073a57a9e5946e55f4c1fbb68bd442
+      if stdenv.hostPlatform.isMusl then ''
+        substituteInPlace src/test/regress/parallel_schedule \
+          --replace "subscription" "" \
+          --replace "object_address" ""
+      '' else null;
 
     doInstallCheck = false; # needs a running daemon?
 
@@ -164,39 +174,50 @@ let
       cp --target-directory=$out/bin ${postgresql}/bin/{postgres,pg_config,pg_ctl}
       wrapProgram $out/bin/postgres --set NIX_PGLIBDIR $out/lib
     '';
+
+    passthru.version = postgresql.version;
+    passthru.psqlSchema = postgresql.psqlSchema;
   };
 
 in self: {
 
   postgresql_9_5 = self.callPackage generic {
-    version = "9.5.19";
+    version = "9.5.21";
     psqlSchema = "9.5";
-    sha256 = "1cqvbsyfs9048wbvdv0vhhaksjyjqv2vvh6ij4vqmjibc4kal34n";
+    sha256 = "0b3kzc0431bvp55jns42q9h1119gy075mp4aywnkq93pm17nxdby";
     this = self.postgresql_9_5;
     inherit self;
   };
 
   postgresql_9_6 = self.callPackage generic {
-    version = "9.6.15";
+    version = "9.6.17";
     psqlSchema = "9.6";
-    sha256 = "02hp69h2p02asfblkaahblzdz2zmawd2r11h6237y5j7yadgxn9w";
+    sha256 = "1hm0w6n988n9qn2wylhjq02i5ayzb16rzhgkcv09fpsl68ny7qgn";
     this = self.postgresql_9_6;
     inherit self;
   };
 
   postgresql_10 = self.callPackage generic {
-    version = "10.10";
+    version = "10.12";
     psqlSchema = "10.0"; # should be 10, but changing it is invasive
-    sha256 = "0lzj46dwd9cw94gnqm36bxd7jlhfdyqjrfzr3c4xd3prfn2rnkxd";
+    sha256 = "1rsab4zf4rx7pvvhlwhb04kb95aiad9cwazc4ksbvg2gij47z3rq";
     this = self.postgresql_10;
     inherit self;
   };
 
   postgresql_11 = self.callPackage generic {
-    version = "11.5";
+    version = "11.7";
     psqlSchema = "11.1"; # should be 11, but changing it is invasive
-    sha256 = "106ikalvrilihlvhq7xj7snq98hgbgq6qsgjrd252wgw1c327pvz";
+    sha256 = "04x343i4v0w4jf1v5ial8rwsizs1qhdjfbanbnibdys6i0xfjjij";
     this = self.postgresql_11;
+    inherit self;
+  };
+
+  postgresql_12 = self.callPackage generic {
+    version = "12.2";
+    psqlSchema = "12";
+    sha256 = "1pmmd59pvfs50gsi728bw9f1jl59xghsjdanfimph0659x6cq7dd";
+    this = self.postgresql_12;
     inherit self;
   };
 

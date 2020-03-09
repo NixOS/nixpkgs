@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   # glib-2.62 deprecations
-  NIX_CFLAGS_COMPILE = [ "-DGLIB_DISABLE_DEPRECATION_WARNINGS" ];
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
 
   # Patches from Gentoo portage
   patches = [

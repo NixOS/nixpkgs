@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     sha256 = "0gh28spkry9wbmdj0hmvz3680fvbyzab9cifhj1p76f4fz27rnv9";
   };
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   buildInputs = [ libgit2 ];
 

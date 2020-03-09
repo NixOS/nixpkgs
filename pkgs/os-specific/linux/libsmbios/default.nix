@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libsmbios";
-  version = "2.4.2";
+  version = "2.4.3";
 
   src = fetchFromGitHub {
     owner = "dell";
     repo = "libsmbios";
     rev = "v${version}";
-    sha256 = "0bck3byk62a69ngyj0zjpzf4wxwjmkhwhvsqb8z24dww9wz41l9k";
+    sha256 = "0krwwydyvb9224r884y1mlmzyxhlfrcqw73vi1j8787rl0gl5a2i";
   };
 
   nativeBuildInputs = [ autoreconfHook doxygen gettext libxml2 help2man perl pkgconfig ];

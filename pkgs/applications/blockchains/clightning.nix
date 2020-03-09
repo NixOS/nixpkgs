@@ -1,19 +1,19 @@
 { stdenv, python3, pkgconfig, which, libtool, autoconf, automake,
-  autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch }:
+  autogen, sqlite, gmp, zlib, fetchurl, unzip, fetchpatch, gettext }:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "clightning";
-  version = "0.7.2.1";
+  version = "0.8.1";
 
   src = fetchurl {
     url = "https://github.com/ElementsProject/lightning/releases/download/v${version}/clightning-v${version}.zip";
-    sha256 = "3be716948efc1208b5e6a41e3034e4e4eecc5abbdac769fd1d999a104ac3a2ec";
+    sha256 = "079d3yx7yr7qrilqgaayvn18lxl8h6a1gwwbsgm5xsyxj4vdlz7r";
   };
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip ];
+  nativeBuildInputs = [ autoconf autogen automake libtool pkgconfig which unzip gettext ];
   buildInputs =
     let py3 = python3.withPackages (p: [ p.Mako ]);
     in [ sqlite gmp zlib py3 ];
@@ -28,7 +28,8 @@ stdenv.mkDerivation rec {
     patchShebangs \
       tools/generate-wire.py \
       tools/update-mocks.sh \
-      tools/mockup.sh
+      tools/mockup.sh \
+      devtools/sql-rewrite.py
   '';
 
   doCheck = false;

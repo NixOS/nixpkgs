@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchurl, cmake, makeWrapper, pkgconfig
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, mysql, pcre, perl, perlPackages
+, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mysql, pcre, perl, perlPackages
 , polkit, utillinuxMinimal, x264, zlib
 , coreutils, procps, psmisc }:
 
@@ -123,7 +123,7 @@ in stdenv.mkDerivation rec {
     done
 
     substituteInPlace scripts/zmdbbackup.in \
-      --replace /usr/bin/mysqldump ${mysql}/bin/mysqldump
+      --replace /usr/bin/mysqldump ${mysql.client}/bin/mysqldump
 
     for f in scripts/ZoneMinder/lib/ZoneMinder/Config.pm.in \
              scripts/zmupdate.pl.in \
@@ -140,7 +140,7 @@ in stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 mysql pcre perl polkit x264 zlib
+    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mysql.client pcre perl polkit x264 zlib
     utillinuxMinimal # for libmount
   ] ++ (with perlPackages; [
     # build-time dependencies
@@ -162,6 +162,10 @@ in stdenv.mkDerivation rec {
     "-DZM_CONFIG_DIR=${placeholder "out"}/etc/zoneminder"
     "-DZM_WEB_USER=${user}"
     "-DZM_WEB_GROUP=${user}"
+
+    # Workaround issue in CMakeLists.txt where ZM_CGIDIR set to ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBEXECDIR}/zoneminder/cgi-bin
+    # But CMAKE_INSTALL_LIBEXECDIR is already an absolute path from cmake setup-hook
+    "-DZM_CGIDIR=${placeholder "out"}/libexec/zoneminder/cgi-bin"
   ];
 
   passthru = { inherit dirName; };

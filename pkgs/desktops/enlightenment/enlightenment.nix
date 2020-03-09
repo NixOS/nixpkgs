@@ -17,10 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    (pkgconfig.override { vanilla = true; })
     gettext
     meson
     ninja
+    pkgconfig
   ];
 
   buildInputs = [

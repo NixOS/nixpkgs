@@ -1,13 +1,12 @@
-{ stdenv, fetchgit, alsaLib, libopus, ortp, bctoolbox }:
+{ stdenv, fetchurl, alsaLib, libopus, ortp, bctoolbox }:
 
-stdenv.mkDerivation {
-  pname = "trx-unstable";
-  version = "2018-01-23";
+stdenv.mkDerivation rec {
+  pname = "trx";
+  version = "0.4";
 
-  src = fetchgit {
-    url = "http://www.pogo.org.uk/~mark/trx.git";
-    rev = "66b4707a24172751a131e24d2a800496c699137f";
-    sha256 = "0w0960p25944b30lkc8n4lj14xgsf0fjpmxqwlz2r8wl642bqnfm";
+  src = fetchurl {
+    url = "https://www.pogo.org.uk/~mark/trx/releases/${pname}-${version}.tar.gz";
+    sha256 = "1wsrkbqc090px8i9p8awz38znxjcqjb1dzjjdd8xkjmiprayjhkl";
   };
 
   buildInputs = [ alsaLib libopus ortp bctoolbox ];

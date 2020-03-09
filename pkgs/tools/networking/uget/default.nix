@@ -1,5 +1,5 @@
 { stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify,
-  libappindicator-gtk3, gst_all_1, gtk3, gnome3, wrapGAppsHook, aria2 ? null
+  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     libnotify
     libappindicator-gtk3
     gtk3
-    (stdenv.lib.getLib gnome3.dconf)
+    (stdenv.lib.getLib dconf)
   ]
   ++ (with gst_all_1; [ gstreamer gst-plugins-base gst-plugins-good ])
   ++ (stdenv.lib.optional (aria2 != null) aria2);

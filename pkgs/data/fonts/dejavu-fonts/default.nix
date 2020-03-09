@@ -35,7 +35,7 @@ let
       sha256 = "1xknlg2h287dx34v2n5r33bpcl4biqf0cv7nak657rjki7s0k4bk";
     };
 
-    buildFlags = "full-ttf";
+    buildFlags = [ "full-ttf" ];
 
     preBuild = "patchShebangs scripts";
 

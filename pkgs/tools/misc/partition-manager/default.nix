@@ -27,6 +27,6 @@ in mkDerivation rec {
     description = "KDE Partition Manager";
     license = licenses.gpl2;
     homepage = https://www.kde.org/applications/system/kdepartitionmanager/;
-    maintainers = with maintainers; [ peterhoeg ma27 ];
+    maintainers = with maintainers; [ peterhoeg ];
   };
 }

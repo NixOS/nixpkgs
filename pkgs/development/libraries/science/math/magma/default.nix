@@ -24,6 +24,10 @@ in stdenv.mkDerivation {
 
   MKLROOT = optionalString mklSupport mkl;
 
+  preConfigure = ''
+    export CC=${cudatoolkit.cc}/bin/gcc CXX=${cudatoolkit.cc}/bin/g++
+  '';
+
   enableParallelBuilding=true;
   buildFlags = [ "magma" "magma_sparse" ];
 

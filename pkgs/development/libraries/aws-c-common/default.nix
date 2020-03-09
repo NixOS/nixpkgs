@@ -13,10 +13,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  NIX_CFLAGS_COMPILE = lib.optionals stdenv.isDarwin [
-    "-Wno-nullability-extension"
-    "-Wno-typedef-redefinition"
-  ];
+  NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
+    "-Wno-nullability-extension -Wno-typedef-redefinition";
 
   meta = with lib; {
     description = "AWS SDK for C common core";

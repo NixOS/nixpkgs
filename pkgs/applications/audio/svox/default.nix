@@ -31,7 +31,7 @@ stdenv.mkDerivation {
     cp lang/*.bin $out/share/pico/lang
   '';
 
-  NIX_CFLAGS_COMPILE = [ "-include stdint.h" ];
+  NIX_CFLAGS_COMPILE = "-include stdint.h";
 
   meta = with stdenv.lib; {
     description = "Text-to-speech engine";

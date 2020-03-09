@@ -5,6 +5,7 @@
 
   cmake,
   gzip,
+  installShellFiles,
   makeWrapper,
   ncurses,
   pkgconfig,
@@ -52,20 +53,21 @@ let
   ];
 in buildRustPackage rec {
   pname = "alacritty";
-  version = "0.3.3";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1h9zid7bi19qga3a8a2d4x3ma9wf1njmj74s4xnw7nzqqf3dh750";
+    sha256 = "05jcg33ifngpzw2hdhgb614j87ihhhlqgar0kky183rywg0dxikg";
   };
 
-  cargoSha256 = "1rxb5ljgvn881jkxm8772kf815mmp08ci7sqmn2x1jwdcrphhxr1";
+  cargoSha256 = "182j8ah67b2gw409vjfml3p41i00zh0klx9m8bwfkm64y2ki2bip";
 
   nativeBuildInputs = [
     cmake
     gzip
+    installShellFiles
     makeWrapper
     ncurses
     pkgconfig
@@ -77,7 +79,7 @@ in buildRustPackage rec {
 
   outputs = [ "out" "terminfo" ];
   postPatch = ''
-    substituteInPlace alacritty_terminal/src/config/mouse.rs \
+    substituteInPlace alacritty/src/config/mouse.rs \
       --replace xdg-open ${xdg_utils}/bin/xdg-open
   '';
 
@@ -97,15 +99,15 @@ in buildRustPackage rec {
     patchelf --set-rpath "${stdenv.lib.makeLibraryPath rpathLibs}" $out/bin/alacritty
   '') + ''
 
-    install -D extra/completions/_alacritty -t "$out/share/zsh/site-functions/"
-    install -D extra/completions/alacritty.bash -t "$out/etc/bash_completion.d/"
-    install -D extra/completions/alacritty.fish -t "$out/share/fish/vendor_completions.d/"
+    installShellCompletion --zsh extra/completions/_alacritty
+    installShellCompletion --bash extra/completions/alacritty.bash
+    installShellCompletion --fish extra/completions/alacritty.fish
 
     install -dm 755 "$out/share/man/man1"
     gzip -c extra/alacritty.man > "$out/share/man/man1/alacritty.1.gz"
 
     install -dm 755 "$terminfo/share/terminfo/a/"
-    tic -x -o "$terminfo/share/terminfo" extra/alacritty.info
+    tic -xe alacritty,alacritty-direct -o "$terminfo/share/terminfo" extra/alacritty.info
     mkdir -p $out/nix-support
     echo "$terminfo" >> $out/nix-support/propagated-user-env-packages
 
@@ -116,9 +118,9 @@ in buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "GPU-accelerated terminal emulator";
-    homepage = https://github.com/jwilm/alacritty;
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ mic92 ];
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-linux" ];
+    homepage = "https://github.com/jwilm/alacritty";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ filalex77 mic92 ];
+    platforms = platforms.unix;
   };
 }

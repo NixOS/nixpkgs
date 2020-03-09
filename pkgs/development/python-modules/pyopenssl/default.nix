@@ -10,6 +10,7 @@
 , flaky
 , glibcLocales
 , six
+, fetchpatch
 }:
 
 with stdenv.lib;
@@ -64,11 +65,11 @@ in
 
 buildPythonPackage rec {
   pname = "pyOpenSSL";
-  version = "19.0.0";
+  version = "19.1.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "aeca66338f6de19d1aa46ed634c3b9ae519a64b458f8468aec688e7e3c20f200";
+    sha256 = "9a24494b2602aaf402be5c9e30a0b82d4a5c67528fe8fb475e3f3bc00dd69507";
   };
 
   outputs = [ "out" "dev" ];
@@ -79,6 +80,27 @@ buildPythonPackage rec {
     py.test tests ${testExpression}
     runHook postCheck
   '';
+
+  patches = [
+    # 4 patches for 2020 bug
+    # https://github.com/pyca/pyopenssl/pull/828
+    (fetchpatch {
+      url = https://github.com/pyca/pyopenssl/commit/0d2fd1a24b30077ead6960bd63b4a9893a57c101.patch;
+      sha256 = "1c27g53qrwxddyx04sxf8yvj7xgbaabla7mc1cgbfd426rncbqf3";
+    })
+    (fetchpatch {
+      url = https://github.com/pyca/pyopenssl/commit/d08a742573c3205348a4eec9a65abaf6c16110c4.patch;
+      sha256 = "18xn8s1wpycz575ivrbsbs0qd2q48z8pdzsjzh8i60xba3f8yj2f";
+    })
+    (fetchpatch {
+      url = https://github.com/pyca/pyopenssl/commit/60b9e10e6da7ccafaf722def630285f54510ed12.patch;
+      sha256 = "0aw8qvy8m0bhgp39lmbcrpprpg4bhpssm327hyrk476wwgajk01j";
+    })
+    (fetchpatch {
+      url = https://github.com/pyca/pyopenssl/commit/7a37cc23fcbe43abe785cd4badd14bdc7acfb175.patch;
+      sha256 = "1c7zb568rs71rsl16p6dq7aixwlkgzfnba4vzmfvbmy3zsnaslq2";
+    })
+  ];
 
   # Seems to fail unpredictably on Darwin. See http://hydra.nixos.org/build/49877419/nixlog/1
   # for one example, but I've also seen ContextTests.test_set_verify_callback_exception fail.

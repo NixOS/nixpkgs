@@ -4,23 +4,23 @@
 }:
 
 buildDunePackage rec {
-  version = "2.6.1";
+  version = "2.7";
   pname = "containers";
 
   src = fetchFromGitHub {
     owner = "c-cube";
     repo = "ocaml-containers";
-    rev = version;
-    sha256 = "02iq01pq6047hab5s8zpprwr21cygvzfcfj2lpsyj823f28crhmv";
+    rev = "v${version}";
+    sha256 = "1nsxfgn1g1vpqihb9gd6gsab0bcm70nf9z84cp441c8wsc57hi6a";
   };
 
   buildInputs = [ iter ];
 
-  checkInputs = lib.optionals doCheck [ gen mdx ounit qcheck uutf ];
+  checkInputs = lib.optionals doCheck [ gen mdx.bin ounit qcheck uutf ];
 
   propagatedBuildInputs = [ result uchar ];
 
-  doCheck = !lib.versionAtLeast ocaml.version "4.08";
+  doCheck = true;
 
   meta = {
     homepage = https://github.com/c-cube/ocaml-containers;

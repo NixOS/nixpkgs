@@ -1,13 +1,14 @@
 { stdenv, lib, lndir, makeWrapper
 , fetchFromGitHub, cmake
 , libusb, pkgconfig
-, python, swig2, numpy, ncurses
+, usePython ? false
+, python, ncurses, swig2
 , extraPackages ? []
 } :
 
 let
 
-  version = "0.7.1";
+  version = "0.7.2";
   modulesVersion = with lib; versions.major version + "." + versions.minor version;
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
@@ -20,16 +21,18 @@ in stdenv.mkDerivation {
     owner = "pothosware";
     repo = "SoapySDR";
     rev = "soapy-sdr-${version}";
-    sha256 = "1rbnd3w12kzsh94fiywyn4vch7h0kf75m88fi6nq992b3vnmiwvl";
+    sha256 = "102wnpjxrwba20pzdh1vvx0yg1h8vqd8z914idxflg9p14r6v5am";
   };
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
-  buildInputs = [ libusb ncurses numpy python swig2 ];
+  buildInputs = [ libusb ncurses ]
+    ++ lib.optionals usePython [ python swig2 ];
+
+  propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
 
   cmakeFlags = [
     "-DCMAKE_BUILD_TYPE=Release"
-    "-DUSE_PYTHON_CONFIG=ON"
-  ];
+  ] ++ lib.optional usePython "-DUSE_PYTHON_CONFIG=ON";
 
   postFixup = lib.optionalString (lib.length extraPackages != 0) ''
     # Join all plugins via symlinking

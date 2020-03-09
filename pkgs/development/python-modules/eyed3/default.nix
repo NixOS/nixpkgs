@@ -13,13 +13,13 @@
 }:
 
 buildPythonPackage rec {
-  version = "0.8.10";
+  version = "0.8.12";
   pname    = "eyeD3";
   disabled = isPyPy;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jb22n1jczxgbpcnfiw12r8dcs74556g1d09mzms44f52kgs7lgc";
+    sha256 = "e54eec0a03fb8e7e9e8b509546c6d92efbc871ea7597611fe2c16f03e1c94b6d";
   };
 
   # https://github.com/nicfit/eyeD3/pull/284
@@ -44,7 +44,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A Python module and command line program for processing ID3 tags";
-    homepage    = http://eyed3.nicfit.net/;
+    homepage    = https://eyed3.nicfit.net/;
     license     = licenses.gpl2;
     maintainers = with maintainers; [ lovek323 ];
     platforms   = platforms.unix;

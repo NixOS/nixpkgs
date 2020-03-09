@@ -2,22 +2,23 @@
 
 buildGoModule rec {
   pname = "tflint";
-  version = "0.12.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
-    owner = "wata727";
+    owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1dma1nav6z9919lj4f7cqcf8h12l4gbwn24323y18l57zv988331";
+    sha256 = "0j1bx2180z6znfrg8k4sjwvm3cbvnklqjxdssbr2yd47h8kfwk3g";
   };
 
-  modSha256 = "1xjxaszpxv9k9s27y1i54cnp0ip47bq4ad2ziq7n8nb76zxw03mx";
+  modSha256 = "1qa7qfxpc43n9xyyfcd24d17g4fdcffkd57ny078ja219x13kay3";
 
   subPackages = [ "." ];
 
   meta = with lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";
-    homepage = "https://github.com/wata727/tflint";
+    homepage = "https://github.com/terraform-linters/tflint";
+    changelog = "https://github.com/terraform-linters/tflint/releases/tag/v${version}";
     license = licenses.mpl20;
     maintainers = [ maintainers.marsam ];
   };

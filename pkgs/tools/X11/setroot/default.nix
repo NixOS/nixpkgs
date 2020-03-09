@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libX11 imlib2 ]
     ++ stdenv.lib.optional enableXinerama libXinerama;
 
-  buildFlags = "CC=cc " + (if enableXinerama then "xinerama=1" else "xinerama=0");
+  buildFlags = [ "CC=cc" (if enableXinerama then "xinerama=1" else "xinerama=0") ] ;
 
-  installFlags = "DESTDIR=$(out) PREFIX=";
+  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
 
   meta = with stdenv.lib; {
     description = "Simple X background setter inspired by imlibsetroot and feh";

@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
       capability of monitoring and performance analysis for the Java
       SE platform.
     '';
-    homepage = https://visualvm.java.net/;
+    homepage = "https://visualvm.github.io";
     license = licenses.gpl2ClasspathPlus;
     platforms = platforms.all;
     maintainers = with maintainers; [ michalrus moaxcp ];

@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
 
-  version = "3.10.4";
+  version = "3.10.5";
   pname = "libdigidoc";
 
   src = fetchurl {
     url = "https://github.com/open-eid/libdigidoc/releases/download/v${version}/libdigidoc-${version}.tar.gz";
-    sha256 = "0w5wsaj2a5wss1r9j39bfsrkp3xz0w3v1gnr190v6k7l74l453w1";
+    sha256 = "0nw36a4i6rcq7z6jqz5h2ln9hmmsfhw65jga3rymlswk2k7bndgn";
   };
 
   nativeBuildInputs = [ cmake ];

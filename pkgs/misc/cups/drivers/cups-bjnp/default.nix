@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   preConfigure = ''configureFlags="--with-cupsbackenddir=$out/lib/cups/backend"'';
 
   buildInputs = [cups];
-  NIX_CFLAGS_COMPILE = "-include stdio.h";
+  NIX_CFLAGS_COMPILE = [ "-include stdio.h" "-Wno-error=stringop-truncation" ];
 
   meta = {
     description = "CUPS back-end for Canon printers";

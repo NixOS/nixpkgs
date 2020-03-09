@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, SDL, nasm, zlib, libpng, libGLU_combined }:
+{ stdenv, fetchurl, pkgconfig, gtk2, SDL, nasm, zlib, libpng, libGLU, libGL }:
 
 stdenv.mkDerivation {
   name = "gens-gs-7";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ gtk2 SDL nasm zlib libpng libGLU_combined ];
+  buildInputs = [ gtk2 SDL nasm zlib libpng libGLU libGL ];
 
   # Work around build failures on recent GTK.
   # See http://ubuntuforums.org/showthread.php?p=10535837

@@ -4,7 +4,7 @@
 
 let
   pname = "grilo";
-  version = "0.3.10"; # if you change minor, also change ./setup-hook.sh
+  version = "0.3.12"; # if you change minor, also change ./setup-hook.sh
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
@@ -13,7 +13,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1s7ilyywf18q26aj5c4709kfizqywjlnacp4jzmj9v9i9kkv4i3y";
+    sha256 = "0w8sq5g6g1rg85h53vbll8va70fcp6082mlpmy98aa03444ddyyv";
   };
 
   setupHook = ./setup-hook.sh;

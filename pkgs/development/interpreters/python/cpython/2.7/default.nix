@@ -11,7 +11,7 @@
 , tcl ? null, tk ? null, tix ? null, xlibsWrapper ? null, libX11 ? null, x11Support ? false
 , zlib
 , self
-, CF, configd, coreutils
+, configd, coreutils
 , python-setup-hook
 # Some proprietary libs assume UCS2 unicode, especially on darwin :(
 , ucsEncoding ? 4
@@ -77,12 +77,6 @@ let
         name = "re_match_index.patch";
         url = "https://bugs.python.org/file43084/re_match_index.patch";
         sha256 = "0l9rw6r5r90iybdkp3hhl2pf0h0s1izc68h5d3ywrm92pq32wz57";
-      })
-
-      (fetchpatch {
-        url = "https://github.com/python/cpython/commit/979daae300916adb399ab5b51410b6ebd0888f13.patch";
-        name = "CVE-2018-20852.patch";
-        sha256 = "0p838ycssd6abxzby69rhngjqqm59cmlp07910mpjx7lmsz049pb";
       })
 
       # Fix race-condition during pyc creation. Has a slight backwards
@@ -186,7 +180,7 @@ let
     ++ optional stdenv.hostPlatform.isCygwin expat
     ++ [ db gdbm ncurses sqlite readline ]
     ++ optionals x11Support [ tcl tk xlibsWrapper libX11 ]
-    ++ optionals stdenv.isDarwin ([ CF ] ++ optional (configd != null) configd);
+    ++ optional (stdenv.isDarwin && configd != null) configd;
   nativeBuildInputs =
     optionals (stdenv.hostPlatform != stdenv.buildPlatform)
     [ buildPackages.stdenv.cc buildPackages.python ];
@@ -239,9 +233,6 @@ in with passthru; stdenv.mkDerivation ({
         ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb
         ln -s $out/lib/${libPrefix}/pdb.py $out/bin/pdb${sourceVersion.major}.${sourceVersion.minor}
         ln -s $out/share/man/man1/{python2.7.1.gz,python.1.gz}
-
-        # Python on Nix is not manylinux1 compatible. https://github.com/NixOS/nixpkgs/issues/18484
-        echo "manylinux1_compatible=False" >> $out/lib/${libPrefix}/_manylinux.py
 
         rm "$out"/lib/python*/plat-*/regen # refers to glibc.dev
 

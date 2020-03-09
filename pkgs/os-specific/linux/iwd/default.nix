@@ -5,32 +5,25 @@
 , pkgconfig
 , ell
 , coreutils
+, docutils
 , readline
+, openssl
 , python3Packages
 }:
 
 stdenv.mkDerivation rec {
   pname = "iwd";
-  version = "0.20";
+  version = "1.5";
 
   src = fetchgit {
     url = https://git.kernel.org/pub/scm/network/wireless/iwd.git;
     rev = version;
-    sha256 = "03ca47d4hn28vkf5fr6ck1gz5py4lm1pw3nw9s1ckw7cqxw961sf";
+    sha256 = "09viyfv5j2rl6ly52b2xlc2zbmb6i22dv89jc6823bzdjjimkrg6";
   };
-
-  patches = [
-    # Undo creating ReadWritePaths as instalation target.
-    (fetchpatch {
-      name = "revert-create-dirs-on-install.patch";
-      url = "https://git.kernel.org/pub/scm/network/wireless/iwd.git/patch/?id=5a96c11664eb553bc28a2142af382b190254edbb";
-      sha256 = "08gkz3ia1l5xsh3pbx4abimgf7m88wygfpfyg77yi6dwavjqm6cx";
-      revert = true;
-    })
-  ];
 
   nativeBuildInputs = [
     autoreconfHook
+    docutils
     pkgconfig
     python3Packages.wrapPython
   ];
@@ -40,6 +33,8 @@ stdenv.mkDerivation rec {
     python3Packages.python
     readline
   ];
+
+  checkInputs = [ openssl ];
 
   pythonPath = [
     python3Packages.dbus-python
@@ -54,11 +49,14 @@ stdenv.mkDerivation rec {
     "--with-dbus-datadir=${placeholder "out"}/share/"
     "--with-systemd-modloaddir=${placeholder "out"}/etc/modules-load.d/" # maybe
     "--with-systemd-unitdir=${placeholder "out"}/lib/systemd/system/"
+    "--with-systemd-networkdir=${placeholder "out"}/lib/systemd/network/"
   ];
 
   postUnpack = ''
     patchShebangs .
   '';
+
+  doCheck = true;
 
   postInstall = ''
     cp -a test/* $out/bin/
@@ -85,6 +83,6 @@ stdenv.mkDerivation rec {
     description = "Wireless daemon for Linux";
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = with maintainers; [ dtzWill fpletz ];
   };
 }

@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, libuuid, openssl, libyaml, lzma }:
+{ stdenv, fetchFromGitiles, pkgconfig, libuuid, openssl, libyaml, lzma }:
 
 stdenv.mkDerivation rec {
   version = "20180311";
@@ -6,8 +6,8 @@ stdenv.mkDerivation rec {
 
   pname = "vboot_reference";
 
-  src = fetchgit {
-    url = https://chromium.googlesource.com/chromiumos/platform/vboot_reference;
+  src = fetchFromGitiles {
+    url = "https://chromium.googlesource.com/chromiumos/platform/vboot_reference";
     rev = checkout;
     sha256 = "1zja4ma6flch08h5j2l1hqnxmw2xwylidnddxxd5y2x05dai9ddj";
   };
@@ -18,6 +18,9 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [ ./dont_static_link.patch ];
+
+  # fix build with gcc9
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   postPatch = ''
     substituteInPlace Makefile \

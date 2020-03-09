@@ -3,13 +3,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "maestral${lib.optionalString withGui "-gui"}";
-  version = "0.4.0";
+  version = "0.4.2";
 
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "maestral-dropbox";
     rev = "v${version}";
-    sha256 = "1jjn9cz43850xvs52gvx16qc5z4l91y4kpn6fpl05iwgaisbi1ws";
+    sha256 = "0xis0cqfp3wgajwk44dmi2gbfirmz0a0zi25qxdzpdn0z19hp88m";
   };
 
   disabled = python3Packages.pythonOlder "3.6";

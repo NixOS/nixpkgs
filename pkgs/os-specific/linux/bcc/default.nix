@@ -1,38 +1,25 @@
 { stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap
+, systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.10.0";
+  version = "0.12.0";
   name = "bcc-${version}";
 
-  srcs = [
-    (fetchFromGitHub {
-      owner  = "iovisor";
-      repo   = "bcc";
-      rev    = "v${version}";
-      sha256 = "0qbqygj7ia494fbira9ajavvnxlpffx1jlzbb1vsf1wa8h3y4xn1";
-      name   = "bcc";
-    })
-
-    # note: keep this in sync with the version that was used at the time of the
-    # tagged release!
-    (fetchFromGitHub {
-      owner  = "libbpf";
-      repo   = "libbpf";
-      rev    = "0e37e0d03ac99987401e4496d3d76d44237b9963";
-      sha256 = "0wjf9dhvqkwiwnygzikamrgmpxgq77h2pxx6mi4pnbw0lxlppivr";
-      name   = "libbpf";
-    })
-  ];
-  sourceRoot = "bcc";
+  src = fetchFromGitHub {
+    owner  = "iovisor";
+    repo   = "bcc";
+    rev    = "v${version}";
+    sha256 = "1r2yjxam23k56prsvjhqf8i8d3irhcvmy0bly6x23h1jc3zc6yym";
+    fetchSubmodules = true;
+  };
   format = "other";
 
   buildInputs = with llvmPackages; [
     llvm clang-unwrapped kernel
     elfutils luajit netperf iperf
-    systemtap.stapBuild flex
+    systemtap.stapBuild flex bash
   ];
 
   patches = [
@@ -58,12 +45,6 @@ python.pkgs.buildPythonApplication rec {
     patch -p1 < libbcc-path.patch
   '';
 
-  preConfigure = ''
-    chmod -R u+w ../libbpf/
-    rmdir src/cc/libbpf
-    (cd src/cc && ln -svf ../../../libbpf/ libbpf)
-  '';
-
   postInstall = ''
     mkdir -p $out/bin $out/share
     rm -r $out/share/bcc/tools/old
@@ -76,6 +57,8 @@ python.pkgs.buildPythonApplication rec {
       if [ ! -e $bin ]; then
         ln -s $f $bin
       fi
+      substituteInPlace "$f" \
+        --replace '$(dirname $0)/lib' "$out/share/bcc/tools/lib"
     done
 
     sed -i -e "s!lib=.*!lib=$out/bin!" $out/bin/{java,ruby,node,python}gc

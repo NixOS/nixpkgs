@@ -4,7 +4,7 @@ author: Matthias Beyer
 date: 2017-03-05
 ---
 
-# User's Guide to the Rust Infrastructure
+# Rust
 
 To install the rust compiler and cargo put
 
@@ -16,12 +16,6 @@ cargo
 into the `environment.systemPackages` or bring them into
 scope with `nix-shell -p rustc cargo`.
 
-> If you are using NixOS and you want to use rust without a nix expression you
-> probably want to add the following in your `configuration.nix` to build
-> crates with C dependencies.
->
->     environment.systemPackages = [binutils gcc gnumake openssl pkgconfig]
-
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
 overlay](#using-the-rust-nightlies-overlay).
@@ -32,22 +26,21 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
 
 ```
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.4.0";
+  pname = "ripgrep";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
-    rev = "${version}";
-    sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
+    repo = pname;
+    rev = version;
+    sha256 = "1iga3320mgi7m853la55xip514a3chqsdi1a1rwv25lr9b1p7vd3";
   };
 
-  cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
-  verifyCargoDeps = true;
+  cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
@@ -65,8 +58,20 @@ When the `Cargo.lock`, provided by upstream, is not in sync with the
 added in `cargoPatches` will also be prepended to the patches in `patches` at
 build-time.
 
-When `verifyCargoDeps` is set to `true`, the build will also verify that the
-`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the `cargoDeps` and `src`. Note that this option changes the value of `cargoSha256` since it also copies the `Cargo.lock` in it. To avoid breaking backward-compatibility this option is not enabled by default but hopefully will be in the future.
+Unless `legacyCargoFetcher` is set to `true`, the fetcher will also verify that
+the `Cargo.lock` file is in sync with the `src` attribute, and will compress the
+vendor directory into a tar.gz archive.
+
+### Building a crate for a different target
+
+To build your crate with a different cargo `--target` simply specify the `target` attribute:
+
+```nix
+pkgs.rustPlatform.buildRustPackage {
+  (...)
+  target = "x86_64-fortanix-unknown-sgx";
+}
+```
 
 ## Compiling Rust crates using Nix instead of Cargo
 
@@ -192,7 +197,7 @@ argument and returns a set that contains all attribute that should be
 overwritten.
 
 For more complicated cases, such as when parts of the crate's
-derivation depend on the the crate's version, the `attrs` argument of
+derivation depend on the crate's version, the `attrs` argument of
 the override above can be read, as in the following example, which
 patches the derivation:
 

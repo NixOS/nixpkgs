@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
 
   preBuild = ''
     mkdir $out/bin

@@ -1,5 +1,5 @@
 { lib, python3Packages, fetchFromGitHub, imagemagick, librsvg, gtk3, jhead
-, hicolor-icon-theme, gnome3
+, gnome3
 
 # Test requirements
 , dbus, xvfb_run, xdotool
@@ -38,7 +38,7 @@ python3Packages.buildPythonApplication rec {
   '';
 
   checkInputs = [ python3Packages.nose dbus.daemon xvfb_run xdotool ];
-  buildInputs = [ hicolor-icon-theme gnome3.adwaita-icon-theme librsvg ];
+  buildInputs = [ gnome3.adwaita-icon-theme librsvg ];
   propagatedBuildInputs = with python3Packages; [ pillow pygobject3 gtk3 ];
 
   makeWrapperArgs = [

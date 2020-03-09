@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/FFMS/ffms2/;
     description = "Libav/ffmpeg based source library for easy frame accurate access";
     license = licenses.mit;
-    maintainers = with maintainers; [ fuuzetsu ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

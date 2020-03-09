@@ -14,16 +14,11 @@ let
       defaultScope = mkScope self;
       callPackage = drv: args: callPackageWithScope defaultScope drv args;
     in
-      import ./hex-packages.nix {
-        inherit pkgs stdenv callPackage;
-      } // rec {
+      rec {
         inherit callPackage erlang;
         beamPackages = self;
 
-        hexRegistrySnapshot = callPackage ./hex-registry-snapshot.nix { };
-
         rebar = callPackage ../tools/build-managers/rebar { };
-        rebar3-open = callPackage ../tools/build-managers/rebar3 { };
         rebar3 = callPackage ../tools/build-managers/rebar3 { };
 
         # rebar3 port compiler plugin is required by buildRebar3
@@ -41,7 +36,12 @@ let
         buildMix = callPackage ./build-mix.nix {};
 
         # BEAM-based languages.
-        elixir = elixir_1_9;
+        elixir = elixir_1_10;
+
+        elixir_1_10 = lib.callElixir ../interpreters/elixir/1.10.nix {
+          inherit rebar erlang;
+          debugInfo = true;
+        };
 
         elixir_1_9 = lib.callElixir ../interpreters/elixir/1.9.nix {
           inherit rebar erlang;
@@ -63,25 +63,18 @@ let
           debugInfo = true;
         };
 
-        elixir_1_5 = lib.callElixir ../interpreters/elixir/1.5.nix {
-          inherit rebar erlang;
-          debugInfo = true;
-        };
-
         # Remove old versions of elixir, when the supports fades out:
-        #   https://hexdocs.pm/elixir/compatibility-and-deprecations.html
+        # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-        lfe = lfe_1_2;
+        lfe = lfe_1_3;
         lfe_1_2 = lib.callLFE ../interpreters/lfe/1.2.nix { inherit erlang buildRebar3 buildHex; };
+        lfe_1_3 = lib.callLFE ../interpreters/lfe/1.3.nix { inherit erlang buildRebar3 buildHex; };
 
         # Non hex packages. Examples how to build Rebar/Mix packages with and
         # without helper functions buildRebar3 and buildMix.
         hex = callPackage ./hex {};
         webdriver = callPackage ./webdriver {};
         relxExe = callPackage ../tools/erlang/relx-exe {};
-
-        # The tool used to upgrade hex-packages.nix.
-        hex2nix = callPackage ../tools/erlang/hex2nix {};
 
         # An example of Erlang/C++ package.
         cuter = callPackage ../tools/erlang/cuter {};

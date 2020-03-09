@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ebtables";
-  version = "2.0.10-4";
+  version = "2.0.11";
 
   src = fetchurl {
-    url = "mirror://sourceforge/ebtables/ebtables-v${version}.tar.gz";
-    sha256 = "0pa5ljlk970yfyhpf3iqwfpbc30j8mgn90fapw9cfz909x47nvyw";
+    url = "http://ftp.netfilter.org/pub/${pname}/${pname}-${version}.tar.gz";
+    sha256 = "0apxgmkhsk3vxn9q3libxn3dgrdljrxyy4mli2gk49m7hi3na7xp";
   };
 
   makeFlags =
@@ -14,11 +14,6 @@ stdenv.mkDerivation rec {
       "ETCDIR=$(out)/etc" "INITDIR=$(TMPDIR)" "SYSCONFIGDIR=$(out)/etc/sysconfig"
       "LOCALSTATEDIR=/var"
     ];
-
-  preBuild =
-    ''
-      substituteInPlace Makefile --replace '-o root -g root' ""
-    '';
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 

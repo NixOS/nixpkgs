@@ -7,23 +7,22 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
-, python2Packages, perl, pkgconfig
+, python2Packages, perl, pkgconfig, clang-tools
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
 , glib, gtk3, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU_combined, libGL
+, libXScrnSaver, libXcursor, libXtst, libGLU, libGL
 , protobuf, speechd, libXdamage, cups
 , ffmpeg, libxslt, libxml2, at-spi2-core
-, jdk
+, jre
 
 # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
 
 # package customization
-, enableNaCl ? false
 , useVaapi ? false
 , gnomeSupport ? false, gnome ? null
 , gnomeKeyringSupport ? false, libgnome-keyring3 ? null
@@ -105,6 +104,8 @@ let
             result
        else result;
 
+  llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
+
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) channel version;
@@ -123,9 +124,9 @@ let
       utillinux alsaLib
       bison gperf kerberos
       glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libGLU_combined
+      libXScrnSaver libXcursor libXtst libGLU libGL
       pciutils protobuf speechd libXdamage at-spi2-core
-      jdk.jre
+      jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
       ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
       ++ optionals cupsSupport [ libgcrypt cups ]
@@ -136,19 +137,8 @@ let
       ./patches/nix_plugin_paths_68.patch
       ./patches/remove-webp-include-69.patch
       ./patches/no-build-timestamps.patch
-    ] ++ optionals (channel == "stable" || channel == "beta") [
-      ./patches/widevine.patch
-    ] ++ optionals (channel == "dev") [
       ./patches/widevine-79.patch
-    ] ++ optionals (channel == "stable") [
-      # Revert "Implement GetFallbackFont on Linux" to fix a performance regression
-      # Remove after https://bugs.chromium.org/p/chromium/issues/detail?id=1003997 is fixed
-      (fetchpatch {
-        url = "https://github.com/chromium/chromium/commit/5a32abe4247f80fdb55c55a289b906b0e42faa5f.patch";
-        sha256 = "1a4jqmki6cyi2dwvaszh01db2diqnz1d50mhpdpby3dd1cw0xmfy";
-        revert = true;
-      })
-
+      ./patches/dont-use-ANGLE-by-default.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -159,13 +149,9 @@ let
       # ++ optionals (channel == "dev") [ ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" ) ]
       # ++ optional (versionRange "68" "72") ( githubPatch "<patch>" "0000000000000000000000000000000000000000000000000000000000000000" )
     ] ++ optionals (useVaapi) [
-      # source: https://aur.archlinux.org/cgit/aur.git/plain/chromium-vaapi.patch?h=chromium-vaapi
-      ./patches/chromium-vaapi.patch
-    ] ++ optional stdenv.isAarch64 (fetchpatch {
-      url       = https://raw.githubusercontent.com/OSSystems/meta-browser/e4a667deaaf9a26a3a1aeb355770d1f29da549ad/recipes-browser/chromium/files/aarch64-skia-build-fix.patch;
-      postFetch = "substituteInPlace $out --replace __aarch64__ SK_CPU_ARM64";
-      sha256    = "018fbdzyw9rvia8m0qkk5gv8q8gl7x34rrjbn7mi1fgxdsayn22s";
-    });
+      # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
+      ./patches/vaapi-fix.patch
+    ];
 
     postPatch = ''
       # We want to be able to specify where the sandbox is via CHROME_DEVEL_SANDBOX
@@ -230,6 +216,8 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
+    '' + optionalString (stdenv.lib.versionAtLeast version "82") ''
+      ln -s ${llvm-clang-tools}/bin/clang-format buildtools/linux64/clang-format
     '';
 
     gnFlags = mkGnFlags ({
@@ -243,7 +231,12 @@ let
       use_sysroot = false;
       use_gnome_keyring = gnomeKeyringSupport;
       use_gio = gnomeSupport;
-      enable_nacl = enableNaCl;
+      # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
+      # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
+      enable_nacl = false;
+      # Enabling the Widevine component here doesn't affect whether we can
+      # redistribute the chromium package; the Widevine component is either
+      # added later in the wrapped -wv build or downloaded from Google.
       enable_widevine = true;
       use_cups = cupsSupport;
 

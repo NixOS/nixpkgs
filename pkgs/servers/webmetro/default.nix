@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1n2c7ygs8qsd5zgii6fqqcwg427bsij082bg4ijnzkq5630dx651";
   };
 
-  cargoSha256 = "07c8rrm70idmpvijvgkbgw5vswcyrghlrzv1km054xds5qxi2ldq";
+  cargoSha256 = "0xifc3jwj0c6ynx0gzm5zlnfcq023fjpjmdg9x0vs1fh3b42pdsy";
 
   meta = with stdenv.lib; {
     description = "Simple relay server for broadcasting a WebM stream";

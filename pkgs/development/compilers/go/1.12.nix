@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, tzdata, iana-etc, runCommand
+{ stdenv, fetchurl, tzdata, iana-etc, runCommand
 , perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
 , mailcap, runtimeShell
 , buildPackages, pkgsTargetTarget
@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.9";
+  version = "1.12.17";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1z32imbwmpkzgyh5c3vi7rbvzbq94xjk5qi2xm9sccj7kknmc3mb";
+    sha256 = "09cbl90maxry713wd18jdqrms3ivbvcm472csnxc78rsqhc851yy";
   };
 
   # perl is used for testing go vet
@@ -96,6 +96,12 @@ stdenv.mkDerivation rec {
     # Disable cgo lookup tests not works, they depend on resolver
     rm src/net/cgo_unix_test.go
 
+    # Disable TestGcSys because it's flakey in our tests, but the failure is not
+    # reproducible by multiple people in other environments.
+    # See https://github.com/NixOS/nixpkgs/issues/68361#issuecomment-537849272 and following
+    # NOTE: Try re-enabling for releases newer than 1.12.9
+    sed -i '/TestGcSys/areturn' src/runtime/gc_test.go
+
   '' + optionalString stdenv.isLinux ''
     sed -i 's,/usr/share/zoneinfo/,${tzdata}/share/zoneinfo/,' src/time/zoneinfo_unix.go
   '' + optionalString stdenv.isAarch32 ''
@@ -135,13 +141,11 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+  ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
-    ./skip-test-extra-files-on-386.patch
-    (fetchpatch { # probably included in >= 1.12.10
-      url = "https://github.com/golang/go/commit/aae0b5b0b.diff";
-      name = "TestGcSys-too-much-memory.diff";
-      sha256 = "1bl9d2pl6n99n9g65cq91sygmp1iva5rmrxbprwn4xd0ql36psa8";
-    })
+    (if stdenv.isAarch32
+    then ./skip-test-extra-files-on-aarch32.patch
+    else ./skip-test-extra-files-on-386.patch)
   ];
 
   postPatch = ''
@@ -238,7 +242,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
+    maintainers = with maintainers; [ cstrahan orivej mic92 rvolosatovs Frostman ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -88,6 +88,13 @@ in
           (mapAttrsToList pamVariable
           (zipAttrsWith (n: concatLists)
             [
+              # Make sure security wrappers are prioritized without polluting
+              # shell environments with an extra entry. Sessions which depend on
+              # pam for its environment will otherwise have eg. broken sudo. In
+              # particular Gnome Shell sometimes fails to source a proper
+              # environment from a shell.
+              { PATH = [ config.security.wrapperDir ]; }
+
               (mapAttrs (n: toList) cfg.sessionVariables)
               suffixedVariables
             ]));

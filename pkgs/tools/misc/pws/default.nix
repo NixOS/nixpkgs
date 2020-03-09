@@ -3,19 +3,19 @@
 stdenv.mkDerivation rec {
   name = "pws-${(import ./gemset.nix).pws.version}";
 
-  env = bundlerEnv {
-    name = "${name}-gems";
-
-    inherit ruby;
-
-    gemdir = ./.;
-  };
-
   buildInputs = [ makeWrapper ];
 
   phases = ["installPhase"];
 
-  installPhase = ''
+  installPhase = let
+    env = bundlerEnv {
+      name = "${name}-gems";
+
+      inherit ruby;
+
+      gemdir = ./.;
+    };
+  in ''
     mkdir -p $out/bin
     makeWrapper ${env}/bin/pws $out/bin/pws \
       --set PATH '"${xsel}/bin/:$PATH"'

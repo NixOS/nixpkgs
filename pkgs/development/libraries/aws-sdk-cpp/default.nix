@@ -21,7 +21,6 @@ stdenv.mkDerivation rec {
   # FIXME: might be nice to put different APIs in different outputs
   # (e.g. libaws-cpp-sdk-s3.so in output "s3").
   outputs = [ "out" "dev" ];
-  separateDebugInfo = stdenv.isLinux;
 
   nativeBuildInputs = [ cmake curl ];
 
@@ -42,6 +41,9 @@ stdenv.mkDerivation rec {
     "-DCURL_HAS_H2=0"
   ] ++ lib.optional (apis != ["*"])
     "-DBUILD_ONLY=${lib.concatStringsSep ";" apis}";
+
+  # fix build with gcc9, can be removed after bumping to current version
+  NIX_CFLAGS_COMPILE = [ "-Wno-error" ];
 
   preConfigure =
     ''

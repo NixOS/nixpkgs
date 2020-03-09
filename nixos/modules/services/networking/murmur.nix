@@ -46,6 +46,11 @@ let
   '';
 in
 {
+  imports = [
+    (mkRenamedOptionModule [ "services" "murmur" "welcome" ] [ "services" "murmur" "welcometext" ])
+    (mkRemovedOptionModule [ "services" "murmur" "pidfile" ] "Hardcoded to /run/murmur/murmurd.pid now")
+  ];
+
   options = {
     services.murmur = {
       enable = mkOption {

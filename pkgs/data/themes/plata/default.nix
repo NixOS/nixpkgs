@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "plata-theme";
-  version = "0.8.9";
+  version = "0.9.2";
 
   src = fetchFromGitLab {
     owner = "tista500";
     repo = "plata-theme";
     rev = version;
-    sha256 = "0a2wczxxfd2nfr7biawbs3rwy2sivcl2sv43y2638gmfp0w6zh9r";
+    sha256 = "1z8kiac3gb4hsyq92p5dd8fyjv7bad55q65kbnjiskpm4ircg4ja";
   };
 
   preferLocalBuild = true;

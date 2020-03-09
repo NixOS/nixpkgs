@@ -1,20 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, dbus-glib,
+{ stdenv, fetchurl, pkgconfig, gettext, itstool, libxml2, dbus-glib,
   libxklavier, libcanberra-gtk3, librsvg, libappindicator-gtk3,
-  desktop-file-utils, gnome3, gtk3, mate, hicolor-icon-theme, wrapGAppsHook
+  desktop-file-utils, dconf, gtk3, polkit, mate, hicolor-icon-theme, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "mate-control-center";
-  version = "1.22.2";
+  version = "1.24.0";
 
   src = fetchurl {
-    url = "http://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1ybdjibi6wgqn3587a66ckxp2qkvl4mcvv2smhflyxksl5djrjgh";
+    url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "192plsh83m2qz7jgakns2yvhqbj53v7i54iwb0z26i2awy0j9rcd";
   };
 
   nativeBuildInputs = [
     pkgconfig
-    intltool
+    gettext
     itstool
     desktop-file-utils
     wrapGAppsHook
@@ -28,18 +28,14 @@ stdenv.mkDerivation rec {
     librsvg
     libappindicator-gtk3
     gtk3
-    gnome3.dconf
+    dconf
+    polkit
     hicolor-icon-theme
     mate.mate-desktop
     mate.libmatekbd
     mate.mate-menus
     mate.marco
     mate.mate-settings-daemon
-  ];
-
-  patches = [
-    # look up keyboard shortcuts in system data dirs
-    ./mate-control-center.keybindings-dir.patch
   ];
 
   configureFlags = [ "--disable-update-mimedb" ];
@@ -55,7 +51,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Utilities to configure the MATE desktop";
-    homepage = https://github.com/mate-desktop/mate-control-center;
+    homepage = "https://github.com/mate-desktop/mate-control-center";
     license = licenses.gpl2;
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

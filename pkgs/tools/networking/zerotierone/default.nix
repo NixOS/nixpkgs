@@ -1,14 +1,14 @@
-{ stdenv, fetchFromGitHub, openssl, lzo, zlib, iproute, which, ronn }:
+{ stdenv, buildPackages, fetchFromGitHub, openssl, lzo, zlib, iproute, ronn }:
 
 stdenv.mkDerivation rec {
   pname = "zerotierone";
-  version = "1.4.4";
+  version = "1.4.6";
 
   src = fetchFromGitHub {
     owner = "zerotier";
     repo = "ZeroTierOne";
     rev = version;
-    sha256 = "1b9qm01ximz2j6yimp7bs86h4kaz8jsjxxb6c2js43dzp98k0m94";
+    sha256 = "1f8hh05wx59dc0fbzdzwq05x0gmrdfl4v103wbcyjmzsbazaw6p3";
   };
 
   preConfigure = ''
@@ -20,11 +20,14 @@ stdenv.mkDerivation rec {
 
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
-        --replace '/usr/bin/ronn' '${ronn}/bin/ronn' \
-        --replace 'ronn -r' '${ronn}/bin/ronn -r'
+        --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
   '';
 
-  buildInputs = [ openssl lzo zlib iproute which ronn ];
+
+  nativeBuildInputs = [ ronn ];
+  buildInputs = [ openssl lzo zlib iproute ];
+
+  enableParallelBuilding = true;
 
   installPhase = ''
     install -Dt "$out/bin/" zerotier-one
@@ -43,7 +46,7 @@ stdenv.mkDerivation rec {
     description = "Create flat virtual Ethernet networks of almost unlimited size";
     homepage = https://www.zerotier.com;
     license = licenses.bsl11;
-    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz ];
-    platforms = platforms.x86_64 ++ platforms.aarch64;
+    maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
+    platforms = with platforms; x86_64 ++ aarch64 ++ arm;
   };
 }

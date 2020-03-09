@@ -1,0 +1,22 @@
+From 7c6f939aea290bc3ec7629f26d02441d1d4bcb8a Mon Sep 17 00:00:00 2001
+From: Thomas Tuegel <ttuegel@mailbox.org>
+Date: Wed, 5 Feb 2020 05:03:11 -0600
+Subject: [PATCH 2/2] absolute-wallpaper-install-dir
+
+---
+ sddm-theme/theme.conf.cmake | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/sddm-theme/theme.conf.cmake b/sddm-theme/theme.conf.cmake
+index ea9a943..c8458ba 100644
+--- a/sddm-theme/theme.conf.cmake
++++ b/sddm-theme/theme.conf.cmake
+@@ -2,4 +2,4 @@
+ type=image
+ color=#1d99f3
+ fontSize=10
+-background=${CMAKE_INSTALL_PREFIX}/${WALLPAPER_INSTALL_DIR}/Next/contents/images/5120x2880.png
++background=${NIXPKGS_BREEZE_WALLPAPERS}/Next/contents/images/5120x2880.png
+-- 
+2.23.1
+

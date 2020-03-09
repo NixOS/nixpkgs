@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     ++ lib.optionals withCplex [ "--with-cplex-incdir=${cplex}/cplex/include/ilcplex" "--with-cplex-lib=-lcplex${cplex.libSuffix}" ];
 
   NIX_LDFLAGS =
-    lib.optional withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
+    lib.optionalString withCplex "-L${cplex}/cplex/bin/${cplex.libArch}";
 
-  # Compile errors 
-  NIX_CFLAGS_COMPILE = [ "-Wno-cast-qual" ];
+  # Compile errors
+  NIX_CFLAGS_COMPILE = "-Wno-cast-qual";
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;

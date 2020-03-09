@@ -1,4 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, systemd ? null, libobjc, IOKit, withStatic ? false }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, enableSystemd ? stdenv.isLinux && !stdenv.hostPlatform.isMusl
+, systemd ? null
+, libobjc
+, IOKit
+, withStatic ? false
+}:
+
+assert enableSystemd -> systemd != null;
 
 stdenv.mkDerivation (rec {
   pname = "libusb";
@@ -13,13 +23,13 @@ stdenv.mkDerivation (rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux systemd ++
+    stdenv.lib.optional enableSystemd systemd ++
     stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   NIX_LDFLAGS = stdenv.lib.optionalString stdenv.isLinux "-lgcc_s";
 
   preFixup = stdenv.lib.optionalString stdenv.isLinux ''
-    sed 's,-ludev,-L${systemd.lib}/lib -ludev,' -i $out/lib/libusb-1.0.la
+    sed 's,-ludev,-L${stdenv.lib.getLib systemd}/lib -ludev,' -i $out/lib/libusb-1.0.la
   '';
 
   meta = with stdenv.lib; {

@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     "MANPATH=$(out)/share/man"
   ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = with stdenv.lib; {
     description = "Launch a given program when your X session has been idle for a given time.";

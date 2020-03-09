@@ -77,7 +77,7 @@ in {
                 url = "https://raw.githubusercontent.com/melpa/melpa/${commit}/recipes/${ename}";
                 inherit sha256;
               };
-            packageRequires = lib.optional (! isNull deps)
+            packageRequires = lib.optionals (! isNull deps)
               (map (dep: pkgargs.${dep} or self.${dep} or null)
                    deps);
             meta = (sourceArgs.meta or {}) // {

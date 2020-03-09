@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "strace";
-  version = "5.3";
+  version = "5.5";
 
   src = fetchurl {
     url = "https://strace.io/files/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ix06z4vnc49mv76f22kixz8dsh7daqv9mpgwcgl0mlnfjc124vc";
+    sha256 = "1zrhpzjlgfwfl8dd53llswmmharm5rbi0zch7lln5sjris69an4z";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage = https://strace.io/;
+    homepage = "https://strace.io/";
     description = "A system call tracer for Linux";
     license =  with licenses; [ lgpl21Plus gpl2Plus ]; # gpl2Plus is for the test suite
     platforms = platforms.linux;

@@ -24,7 +24,6 @@
 , meson
 , ninja
 , python3
-, hicolor-icon-theme
 , libdazzle
 }:
 
@@ -66,7 +65,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     gobject-introspection
-    hicolor-icon-theme
     gettext
     meson
     ninja

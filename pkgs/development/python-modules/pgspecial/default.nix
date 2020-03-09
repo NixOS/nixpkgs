@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "1.11.7";
+  version = "1.11.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0wy1zmd44y0vl0kxx2y53g6lpipmixbwwrg6c2r7rc3nwa0icl7p";
+    sha256 = "77f8651450ccbde7d3036cfe93486a4eeeb5ade28d1ebc4b2ba186fea0023c56";
   };
 
   checkInputs = [ pytest ];

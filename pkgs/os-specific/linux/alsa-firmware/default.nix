@@ -1,11 +1,11 @@
 {stdenv, fetchurl}:
 
 stdenv.mkDerivation rec {
-  name = "alsa-firmware-1.0.29";
+  name = "alsa-firmware-1.2.1";
 
   src = fetchurl {
     url = "mirror://alsa/firmware/${name}.tar.bz2";
-    sha256 = "0gfcyj5anckjn030wcxx5v2xk2s219nyf99s9m833275b5wz2piw";
+    sha256 = "1aq8z8ajpjvcx7bwhwp36bh5idzximyn77ygk3ifs0my3mbpr8mf";
   };
 
   configureFlags = [

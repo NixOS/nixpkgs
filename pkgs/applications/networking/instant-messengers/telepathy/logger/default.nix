@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dbus-glib, libxml2, sqlite, telepathy-glib, pkgconfig
-, gnome3, makeWrapper, intltool, libxslt, gobject-introspection, dbus }:
+, dconf, makeWrapper, intltool, libxslt, gobject-introspection, dbus }:
 
 stdenv.mkDerivation rec {
   project = "telepathy-logger";
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram "$out/libexec/telepathy-logger" \
-      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib gnome3.dconf}/lib/gio/modules" \
+      --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules" \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH"
   '';
 

@@ -11,6 +11,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "11gb59lhc1sp5dxj2fdm6072f4nxxay0war3kmchdwsk41nvxlrh";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "00r5jf5qdw02vcv3522qqrnwj14mip0l58prcncbvyg4pxlm2rb2";
 
   buildInputs = [ gtk webkitgtk ];

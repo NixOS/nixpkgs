@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     "MANDIR=${placeholder "man"}/share/man"
   ];
 
-  installTargets = "install install.man";
+  installTargets = [ "install" "install.man" ];
 
   meta = {
     description = "A keyboard layout indicator and switcher";

@@ -2,28 +2,37 @@
 , buildPythonPackage
 , fetchPypi
 , flask
+, flask-compress
 , flask-cors
+, flask-sockets
 , numpy
+, scipy
 , pillow
 , gevent
 , wget
 , six
 , colorcet
+, unidecode
+, urllib3
 }:
 
 buildPythonPackage rec {
   pname = "runway-python";
-  version = "0.4.0";
+  version = "0.5.9";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "cd23550211aa8542d9c06516e25c32de3963fff50d0793d94def271a4e2b4514";
+    sha256 = "1d75c44008275213034977c75bc2dc6f419e7f11d087984e3faea1e0cf6da69d";
   };
 
-  propagatedBuildInputs = [ flask flask-cors numpy pillow gevent wget six colorcet ];
+  propagatedBuildInputs = [ flask flask-compress flask-cors flask-sockets numpy scipy pillow gevent wget six colorcet unidecode urllib3 ];
 
   # tests are not packaged in the released tarball
   doCheck = false;
+
+  pythonImportsCheck = [
+    "runway"
+  ];
 
   meta = {
     description = "Helper library for creating Runway models";

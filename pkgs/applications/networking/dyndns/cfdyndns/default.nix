@@ -12,6 +12,9 @@ buildRustPackage rec {
     sha256 = "1mcdjykrgh0jq6k6y664lai8sbgzk6j7k0r944f43vg63d1jql5b";
   };
 
+  # Delete this on next update; see #79975 for details
+  legacyCargoFetcher = true;
+
   cargoSha256 = "1d7jpffkw2m2v37bfdqsl9sqwsl19cgglpa00lwy4ih09kzbc2n9";
 
   buildInputs = [ makeWrapper openssl ];

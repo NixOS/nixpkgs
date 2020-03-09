@@ -1,7 +1,7 @@
 {
   "url": "https://github.com/tree-sitter/tree-sitter-javascript",
-  "rev": "a730b5c210904e2e3c1f601125a059fde1b35850",
-  "date": "2019-08-08T14:13:17-07:00",
-  "sha256": "1cr0vikbzrklksjj07fh34a5cabkgbpkbxwiw2alnana3zzzdhnq",
+  "rev": "6e3692292adf8750fece625fc06fc1503e00d75e",
+  "date": "2020-01-27T13:47:50-08:00",
+  "sha256": "1i8m7v0859109bf2dz0dhf4cnhqmwc4947z49g4rs07k8h8dfk99",
   "fetchSubmodules": false
 }

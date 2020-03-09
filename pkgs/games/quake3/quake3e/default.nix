@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "Quake3e";
-  version = "2019-09-09";
+  version = "2020-01-23";
 
   src = fetchFromGitHub {
     owner = "ec-";
     repo = pname;
     rev = version;
-    sha256 = "0i9flw8h87lagdpbci6vgqkriv05p3bidgqb4pwrxls947zwfcw8";
+    sha256 = "0crqn32nkqhlagamkp5nr0vl474ad4wx5ms7yr85s6zybpsk5jnz";
   };
 
   buildInputs = [ curl libGL libX11 libXxf86dga alsaLib libXrandr libXxf86vm libXext ];
@@ -33,5 +33,6 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ pmiddend ];
+    badPlatforms = [ platforms.aarch64 ];
   };  
 }

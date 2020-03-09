@@ -1,6 +1,15 @@
 let lib = import ../../../lib; in lib.makeOverridable (
 
-{ name ? "stdenv", preHook ? "", initialPath, cc, shell
+{ name ? "stdenv", preHook ? "", initialPath
+
+, # If we don't have a C compiler, we might either have `cc = null` or `cc =
+  # throw ...`, but if we do have a C compiler we should definiely have `cc !=
+  # null`.
+  #
+  # TODO(@Ericson2314): Add assert without creating infinite recursion
+  hasCC ? cc != null, cc
+
+, shell
 , allowedRequisites ? null, extraAttrs ? {}, overrides ? (self: super: {}), config
 
 , # The `fetchurl' to use for downloading curl and its dependencies
@@ -44,6 +53,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
@@ -57,7 +67,8 @@ let
       ../../build-support/setup-hooks/move-sbin.sh
       ../../build-support/setup-hooks/move-lib64.sh
       ../../build-support/setup-hooks/set-source-date-epoch-to-latest.sh
-      cc
+      # TODO use lib.optional instead
+      (if hasCC then cc else null)
     ];
 
   defaultBuildInputs = extraBuildInputs;
@@ -126,9 +137,6 @@ let
         isi686 isx86_32 isx86_64
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
-      isArm = lib.warn
-        "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
-        hostPlatform.isAarch32;
 
       # The derivation's `system` is `buildPlatform.system`.
       inherit (buildPlatform) system;
@@ -145,7 +153,7 @@ let
 
       inherit overrides;
 
-      inherit cc;
+      inherit cc hasCC;
     }
 
     # Propagate any extra attributes.  For instance, we use this to

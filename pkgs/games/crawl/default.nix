@@ -1,5 +1,5 @@
 { stdenv, lib, fetchFromGitHub, fetchpatch, which, sqlite, lua5_1, perl, python3, zlib, pkgconfig, ncurses
-, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU_combined, freetype, pngcrush, advancecomp
+, dejavu_fonts, libpng, SDL2, SDL2_image, SDL2_mixer, libGLU, libGL, freetype, pngcrush, advancecomp
 , tileMode ? false, enableSound ? tileMode
 
 # MacOS / Darwin builds
@@ -8,29 +8,24 @@
 
 stdenv.mkDerivation rec {
   name = "crawl-${version}${lib.optionalString tileMode "-tiles"}";
-  version = "0.23.2";
+  version = "0.24.0";
 
   src = fetchFromGitHub {
     owner = "crawl";
     repo = "crawl";
     rev = version;
-    sha256 = "1d6mip4rvp81839yf2xm63hf34aza5wg4g5z5hi5275j94szaacs";
+    sha256 = "1cdjd33z04gj70manavihc3lj9ckpmd75n09vvyw01z41s33fzs0";
   };
 
-  patches = [
-    ./crawl_purify.patch  # Patch hard-coded paths and remove force library builds
-    (fetchpatch {         # Use a nice high-res app icon
-      url = "https://github.com/crawl/crawl/commit/2aa1166087e44e6585b26cedf1fe81b3f3ba547f.patch";
-      sha256 = "1jqrdv4wy18shg1fdabdb421232hg5micphkixcyzxd1lrmvadg0";
-    })
-  ];
+  # Patch hard-coded paths and remove force library builds
+  patches = [ ./crawl_purify.patch ];
 
   nativeBuildInputs = [ pkgconfig which perl pngcrush advancecomp ];
 
   # Still unstable with luajit
   buildInputs = [ lua5_1 zlib sqlite ncurses ]
                 ++ (with python3.pkgs; [ pyyaml ])
-                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU_combined ]
+                ++ lib.optionals tileMode [ libpng SDL2 SDL2_image freetype libGLU libGL ]
                 ++ lib.optional enableSound SDL2_mixer
                 ++ (lib.optionals stdenv.isDarwin (
                   assert (lib.assertMsg (darwin != null) "Must have darwin frameworks available for darwin builds");

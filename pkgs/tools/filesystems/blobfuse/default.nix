@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1qh04z1fsj1l6l12sz9yl2sy9hwlrnzac54hwrr7wvsgv90n9gbp";
   };
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=catch-value" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=catch-value";
 
   buildInputs = [ curl gnutls libgcrypt libuuid fuse ];
   nativeBuildInputs = [ cmake pkgconfig ];

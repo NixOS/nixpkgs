@@ -2,16 +2,16 @@
 
 stdenv.mkDerivation rec {
   pname = "dpic";
-  version = "2019.08.30";
+  version = "2019.11.30";
 
   src = fetchurl {
     url = "https://ece.uwaterloo.ca/~aplevich/dpic/${pname}-${version}.tar.gz";
-    sha256 = "059m53cppw67hwygm7l03ciaxbnaldx63bqdhx1vzbx3kiwz8iw2";
+    sha256 = "0rgd31mdbaqbm9rz49872s17n25n5ajxcn61xailz3f0kzr4f3dg";
   };
 
   phases = [ "unpackPhase" "buildPhase" "installPhase" ];
 
-  makeFlags = "CC=${stdenv.cc.outPath}/bin/cc";
+  makeFlags = [ "CC=${stdenv.cc.outPath}/bin/cc" ];
 
   installPhase = ''
     mkdir -p $out/bin

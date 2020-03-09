@@ -1,13 +1,14 @@
-{ stdenv, fetchurl, glib, pkgconfig, gettext, libxslt, python3, docbook_xsl, docbook_xml_dtd_42
-, libgcrypt, gobject-introspection, vala, gtk-doc, gnome3, libintl, dbus, xvfb_run }:
+{ stdenv, fetchurl, fetchpatch, glib, pkgconfig, gettext, libxslt, python3
+, docbook_xsl, docbook_xml_dtd_42 , libgcrypt, gobject-introspection, vala
+, gtk-doc, gnome3, gjs, libintl, dbus, xvfb_run }:
 
 stdenv.mkDerivation rec {
   pname = "libsecret";
-  version = "0.19.1";
+  version = "0.20.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0fhflcsr70b1pps2pcvqcbdhip2ny5am9nbm634f4sj5g40y30w5";
+    sha256 = "0ir4ynpf8b64xss1azvsi5x6697lik7hkf3z0xxa2qv2xja3xxsp";
   };
 
   postPatch = ''
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   propagatedBuildInputs = [ glib ];
-  nativeBuildInputs = [ pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl gobject-introspection vala gtk-doc ];
+  nativeBuildInputs = [
+    pkgconfig gettext libxslt docbook_xsl docbook_xml_dtd_42 libintl
+    gobject-introspection vala gtk-doc
+  ];
   buildInputs = [ libgcrypt ];
   # optional: build docs with gtk-doc? (probably needs a flag as well)
 
@@ -27,7 +31,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installCheckInputs = [ python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb_run dbus gnome3.gjs ];
+  installCheckInputs = [
+    python3 python3.pkgs.dbus-python python3.pkgs.pygobject3 xvfb_run dbus gjs
+  ];
 
   # needs to run after install because typelibs point to absolute paths
   doInstallCheck = false; # Failed to load shared library '/force/shared/libmock_service.so.0' referenced by the typelib

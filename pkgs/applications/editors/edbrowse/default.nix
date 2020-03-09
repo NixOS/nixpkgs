@@ -1,18 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
+{ stdenv, fetchFromGitHub, duktape, curl, pcre, readline, openssl, perl, html-tidy }:
 
 stdenv.mkDerivation rec {
   pname = "edbrowse";
-  version = "3.7.4";
+  version = "3.7.6";
 
   buildInputs = [ curl pcre readline openssl duktape perl html-tidy ];
-
-  patches = [
-    # Fix build against recent libcurl
-    (fetchpatch {
-      url = https://github.com/CMB/edbrowse/commit/5d2b9e21fdf019f461ebe62738d615428d5db963.diff;
-      sha256 = "167q8n0syj3iv6lxrbpv4kvb63j4byj4qxrxayy08bah3pss3gky";
-    })
-  ];
 
   postPatch = ''
     for i in ./tools/*.pl
@@ -21,13 +13,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  makeFlags = "-C src prefix=$(out)";
+  makeFlags = [
+    "-C" "src"
+    "prefix=${placeholder "out"}"
+  ];
 
   src = fetchFromGitHub {
     owner = "CMB";
     repo = "edbrowse";
     rev = "v${version}";
-    sha256 = "0i9ivyfy1dd16c89f392kwx6wxgkkpyq2hl32jhzra0fb0zyl0k6";
+    sha256 = "0yk4djb9q8ll94fs57y706bsqlar4pfx6ysasvkzj146926lrh8a";
   };
   meta = with stdenv.lib; {
     description = "Command Line Editor Browser";
@@ -39,8 +34,8 @@ stdenv.mkDerivation rec {
       edbrowse can also tap into databases through odbc. It was primarily written by Karl Dahlke.
       '';
     license = licenses.gpl1Plus;
-    homepage = http://edbrowse.org/;
-    maintainers = [ maintainers.schmitthenner maintainers.vrthra ];
+    homepage = "https://edbrowse.org/";
+    maintainers = with maintainers; [ schmitthenner vrthra equirosa ];
     platforms = platforms.linux;
   };
 }

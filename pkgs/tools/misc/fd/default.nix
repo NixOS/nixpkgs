@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "108p1p9bxhg4qzwfs6wqcakcvlpqw3w498jkz1vhmg6jp1mbmgdr";
   };
 
-  cargoSha256 = "0ylanxcb1vrhvm9h3lvq8nh28362wi5hjy0pqdv5lh40pphcknnz";
+  cargoSha256 = "1nhlarrl0m6as3j2547yf1xxjm88qy3v8jgvhd47z3f5s63bb6w5";
 
   preFixup = ''
     install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/sharkdp/fd";
     license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ dywedir globin ];
+    maintainers = with maintainers; [ dywedir globin ma27 ];
     platforms = platforms.all;
   };
 }

@@ -33,6 +33,8 @@ mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
+    homepage = "https://amarok.kde.org";
+    description = "A powerful music player with an intuitive interface";
     license = licenses.gpl2;
     maintainers = with maintainers; [ peterhoeg ];
   };

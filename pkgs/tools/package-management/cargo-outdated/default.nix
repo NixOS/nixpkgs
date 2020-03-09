@@ -2,16 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "unstable-2019-04-13";
+  version = "0.9.5";
 
   src = fetchFromGitHub {
     owner = "kbknapp";
     repo = pname;
-    rev = "ce4b6baddc94b77a155abbb5a4fa4d3b31a45598";
-    sha256 = "0x00vn0ldnm2hvndfmq4g4q5w6axyg9vsri3i5zxhmir7423xabp";
+    # This is the git commit that produced 0.9.5, according to crates.io, but
+    # the tag is missing in git. See here for details:
+    # https://github.com/kbknapp/cargo-outdated/issues/206
+    rev = "7685da3265749bb7ae2b436a132f51d19b409bff";
+    sha256 = "08prksns7d3g7ha601z8p28p36rg44rjl5ph76vg6nriww96zzca";
   };
 
-  cargoSha256 = "1xqii2z0asgkwn1ny9n19w7d4sjz12a6i55x2pf4cfrciapdpvdl";
+  cargoSha256 = "0kxfavyd9slpp2kzxhjp47q1pzw9rlmn7yhxnjsg88sxbjxfzv95";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
@@ -26,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/kbknapp/cargo-outdated;
     license = with licenses; [ asl20 /* or */ mit ];
     platforms = platforms.all;
-    maintainers = [ maintainers.sondr3 ];
+    maintainers = with maintainers; [ sondr3 ivan ];
   };
 }

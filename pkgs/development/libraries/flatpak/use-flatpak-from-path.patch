@@ -1,8 +1,8 @@
 diff --git a/common/flatpak-dir.c b/common/flatpak-dir.c
-index 8f9dc66c..d3ab6e5f 100644
+index 52b222ea..9489441f 100644
 --- a/common/flatpak-dir.c
 +++ b/common/flatpak-dir.c
-@@ -6701,7 +6701,7 @@ export_desktop_file (const char         *app,
+@@ -6956,7 +6956,7 @@ export_desktop_file (const char         *app,
  
        new_exec = g_string_new ("");
        g_string_append_printf (new_exec,
@@ -11,7 +11,7 @@ index 8f9dc66c..d3ab6e5f 100644
                                escaped_branch,
                                escaped_arch);
  
-@@ -7891,8 +7891,8 @@ flatpak_dir_deploy (FlatpakDir          *self,
+@@ -8290,8 +8290,8 @@ flatpak_dir_deploy (FlatpakDir          *self,
                                         error))
          return FALSE;
  
@@ -23,10 +23,10 @@ index 8f9dc66c..d3ab6e5f 100644
                                      G_FILE_CREATE_REPLACE_DESTINATION, NULL, cancellable, error))
          return FALSE;
 diff --git a/tests/test-bundle.sh b/tests/test-bundle.sh
-index dff17f33..a9857adc 100755
+index d1682344..5e2b9a97 100755
 --- a/tests/test-bundle.sh
 +++ b/tests/test-bundle.sh
-@@ -59,7 +59,7 @@ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/files
+@@ -67,7 +67,7 @@ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/files
  assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/master/active/export
  assert_has_file $FL_DIR/exports/share/applications/org.test.Hello.desktop
  # Ensure Exec key is rewritten
@@ -36,7 +36,7 @@ index dff17f33..a9857adc 100755
  assert_has_file $FL_DIR/exports/share/icons/HighContrast/64x64/apps/org.test.Hello.png
  
 diff --git a/tests/test-run.sh b/tests/test-run.sh
-index 233df9ad..76e0b23b 100644
+index fecb756e..64043281 100644
 --- a/tests/test-run.sh
 +++ b/tests/test-run.sh
 @@ -45,7 +45,7 @@ assert_has_dir $FL_DIR/app/org.test.Hello/$ARCH/stable/active/files
@@ -45,6 +45,6 @@ index 233df9ad..76e0b23b 100644
  # Ensure Exec key is rewritten
 -assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=.*/flatpak run --branch=stable --arch=$ARCH --command=hello\.sh org\.test\.Hello$"
 +assert_file_has_content $FL_DIR/exports/share/applications/org.test.Hello.desktop "^Exec=flatpak run --branch=stable --arch=$ARCH --command=hello\.sh org\.test\.Hello$"
+ assert_has_file $FL_DIR/exports/share/gnome-shell/search-providers/org.test.Hello.search-provider.ini
+ assert_file_has_content $FL_DIR/exports/share/gnome-shell/search-providers/org.test.Hello.search-provider.ini "^DefaultDisabled=true$"
  assert_has_file $FL_DIR/exports/share/icons/hicolor/64x64/apps/org.test.Hello.png
- assert_not_has_file $FL_DIR/exports/share/icons/hicolor/64x64/apps/dont-export.png
- assert_has_file $FL_DIR/exports/share/icons/HighContrast/64x64/apps/org.test.Hello.png

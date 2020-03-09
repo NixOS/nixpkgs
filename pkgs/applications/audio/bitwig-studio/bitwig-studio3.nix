@@ -1,16 +1,23 @@
-{ fetchurl, bitwig-studio1,
-  pulseaudio }:
+{ fetchurl, bitwig-studio1, pulseaudio, xorg }:
 
 bitwig-studio1.overrideAttrs (oldAttrs: rec {
   name = "bitwig-studio-${version}";
-  version = "3.0.1";
+  version = "3.1.2";
 
   src = fetchurl {
     url = "https://downloads.bitwig.com/stable/${version}/bitwig-studio-${version}.deb";
-    sha256 = "0k25p1j4kgnhm7p90qp1cz79xddgi6nh1nx1y5wz42x8qrpxya0s";
+    sha256 = "07djn52lz43ls6fa4k1ncz3m1nc5zv2j93hwyavnr66r0hlqy7l9";
   };
 
-  runtimeDependencies = [
-    pulseaudio
-  ];
+  buildInputs = oldAttrs.buildInputs ++ [ xorg.libXtst ];
+
+  runtimeDependencies = [ pulseaudio ];
+
+  installPhase = ''
+    ${oldAttrs.installPhase}
+
+    # recover commercial jre
+    rm -f $out/libexec/lib/jre
+    cp -r opt/bitwig-studio/lib/jre $out/libexec/lib
+  '';
 })

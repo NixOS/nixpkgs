@@ -30,11 +30,11 @@ let
 
 in buildPythonPackage rec {
   pname = "pandas";
-  version = "0.25.1";
+  version = "1.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1xm9dmbngsq46vj836csnb5j0bs88b1d713b0b5vx1q6gdxijbnb";
+    sha256 = "3c07765308f091d81b6735d4f2242bb43c332cc3461cae60543df6b10967fe27";
   };
 
   checkInputs = [ pytest glibcLocales moto hypothesis ];
@@ -84,6 +84,11 @@ in buildPythonPackage rec {
     "io"
     # KeyError Timestamp
     "test_to_excel"
+    # ordering logic has changed
+    "numpy_ufuncs_other"
+    "order_without_freq"
+    # tries to import from pandas.tests post install
+    "util_in_top_level"
   ] ++ optionals isDarwin [
     "test_locale"
     "test_clipboard"
@@ -111,7 +116,7 @@ in buildPythonPackage rec {
     # https://github.com/pandas-dev/pandas/issues/14866
     # pandas devs are no longer testing i686 so safer to assume it's broken
     broken = stdenv.isi686;
-    homepage = http://pandas.pydata.org/;
+    homepage = https://pandas.pydata.org/;
     description = "Python Data Analysis Library";
     license = stdenv.lib.licenses.bsd3;
     maintainers = with stdenv.lib.maintainers; [ raskin fridh knedlsepp ];

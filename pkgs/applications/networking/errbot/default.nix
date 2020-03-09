@@ -1,41 +1,76 @@
-{ stdenv, fetchurl, pythonPackages, glibcLocales }:
+{ lib, fetchFromGitHub, python, glibcLocales }:
 
-pythonPackages.buildPythonApplication rec {
-  pname = "errbot";
-  version = "5.2.0";
+let
+  py = python.override {
+    packageOverrides = self: super: {
+      # errbot requires markdown<3, and is not compatible with it either.
+      markdown = super.markdown.overridePythonAttrs (oldAttrs: rec {
+        version = "2.6.11";
+        src = super.fetchPypi {
+          pname = "Markdown";
+          inherit version;
+          sha256 = "108g80ryzykh8bj0i7jfp71510wrcixdi771lf2asyghgyf8cmm8";
+        };
+      });
 
-  src = fetchurl {
-    url = "mirror://pypi/e/errbot/${pname}-${version}.tar.gz";
-    sha256 = "0q5fg113s3gnym38d4y5mlnxw6vrm388zw5mlapf7b2zgx34r053";
+      # errbot requires slackclient 1.x, see https://github.com/errbotio/errbot/pull/1367
+      # latest 1.x release would be 1.3.2, but it requires an older websocket_client than the one in nixpkgs
+      # so let's just vendor the known-working version until they've migrated to 2.x.
+      slackclient = super.slackclient.overridePythonAttrs (oldAttrs: rec {
+        version = "1.2.1";
+        pname = "slackclient";
+        src = fetchFromGitHub {
+          owner  = "slackapi";
+          repo   = "python-slackclient";
+          rev    = version;
+          sha256 = "073fwf6fm2sqdp5ms3vm1v3ljh0pldi69k048404rp6iy3cfwkp0";
+        };
+
+        propagatedBuildInputs = with self; [ websocket_client requests six ];
+
+        checkInputs = with self; [ pytest codecov coverage mock pytestcov pytest-mock responses flake8 ];
+        # test_server.py fails because it needs connection (I think);
+        checkPhase = ''
+          py.test --cov-report= --cov=slackclient tests --ignore=tests/test_server.py
+        '';
+      });
+    };
   };
 
-  disabled = !pythonPackages.isPy3k;
+in
+py.pkgs.buildPythonApplication rec {
+  pname = "errbot";
+  version = "6.1.1";
+
+  src = fetchFromGitHub {
+    owner = "errbotio";
+    repo = "errbot";
+    rev = version;
+    sha256 = "1s4dl1za5imwsv6j3y7m47dy91hmqd5n221kkqm9ni4mpzgpffz0";
+  };
 
   LC_ALL = "en_US.utf8";
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace dnspython3 dnspython \
-      --replace 'cryptography<2.1.0' cryptography \
-      --replace 'pyOpenSSL<17.3.0' pyOpenSSL
-  '';
-
-  # tests folder is not included in release
-  doCheck = false;
-
   buildInputs = [ glibcLocales ];
-  propagatedBuildInputs = with pythonPackages; [
-    webtest bottle threadpool rocket-errbot requests jinja2
-    pyopenssl colorlog Yapsy markdown ansi pygments dnspython pep8
+  propagatedBuildInputs = with py.pkgs; [
+    webtest requests jinja2 flask dulwich
+    pyopenssl colorlog markdown ansi pygments
     daemonize pygments-markdown-lexer telegram irc slackclient
-    sleekxmpp hypchat pytest
+    sleekxmpp pyasn1 pyasn1-modules hypchat
   ];
 
-  meta = with stdenv.lib; {
+  checkInputs = with py.pkgs; [ mock pytest ];
+  # avoid tests that do network calls
+  checkPhase = ''
+    pytest tests -k 'not backup and not broken_plugin and not plugin_cycle'
+  '';
+
+  meta = with lib; {
     description = "Chatbot designed to be simple to extend with plugins written in Python";
     homepage = http://errbot.io/;
     maintainers = with maintainers; [ fpletz globin ];
     license = licenses.gpl3;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
+    # flaky on darwin, "RuntimeError: can't start new thread"
   };
 }

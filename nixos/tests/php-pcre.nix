@@ -1,7 +1,7 @@
 
 let testString = "can-use-subgroups"; in
 
-import ./make-test.nix ({ ...}: {
+import ./make-test-python.nix ({ ...}: {
   name = "php-httpd-pcre-jit-test";
   machine = { lib, pkgs, ... }: {
     time.timeZone = "UTC";
@@ -31,9 +31,10 @@ import ./make-test.nix ({ ...}: {
   };
   testScript = { ... }:
   ''
-    $machine->waitForUnit('httpd.service');
+    machine.wait_for_unit("httpd.service")
     # Ensure php evaluation by matching on the var_dump syntax
-    $machine->succeed('curl -vvv -s http://127.0.0.1:80/index.php \
-      | grep "string(${toString (builtins.stringLength testString)}) \"${testString}\""');
+    assert 'string(${toString (builtins.stringLength testString)}) "${testString}"' in machine.succeed(
+        "curl -vvv -s http://127.0.0.1:80/index.php"
+    )
   '';
 })

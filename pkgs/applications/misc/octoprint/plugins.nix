@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
+{ stdenv, fetchgit, fetchFromGitHub, octoprint, python2Packages, marlin-calc }:
 
 let
   buildPlugin = args: python2Packages.buildPythonPackage (args // {
@@ -47,13 +47,13 @@ let
 
     mqtt = buildPlugin rec {
       pname = "MQTT";
-      version = "0.8.0";
+      version = "0.8.6";
 
       src = fetchFromGitHub {
         owner = "OctoPrint";
         repo = "OctoPrint-MQTT";
         rev = version;
-        sha256 = "1318pgwy39gkdqgll3q5lwm7avslgdwyiwb5v8m23cgyh5w8cjq7";
+        sha256 = "0y1jnfplcy8mh3szrfbbvngl02j49cbdizglrfsry4fvqg50zjxd";
       };
 
       propagatedBuildInputs = with python2Packages; [ paho-mqtt ];
@@ -87,13 +87,13 @@ let
 
     stlviewer = buildPlugin rec {
       pname = "STLViewer";
-      version = "0.4.1";
+      version = "0.4.2";
 
       src = fetchFromGitHub {
         owner = "jneilliii";
         repo = "OctoPrint-STLViewer";
-        rev = "v${version}";
-        sha256 = "1f64s37g2d79g76v0vjnjrc2jp2gwrsnfgx7w3n0hkf1lz1pjkm0";
+        rev = version;
+        sha256 = "0mkvh44fn2ch4z2avsdjwi1rp353ylmk9j5fln4x7rx8ph8y7g2b";
       };
 
       meta = with stdenv.lib; {
@@ -168,13 +168,13 @@ let
 
     printtimegenius = buildPlugin rec {
       pname = "PrintTimeGenius";
-      version = "1.3.1";
+      version = "2.2.1";
 
       src = fetchFromGitHub {
         owner = "eyal0";
         repo = "OctoPrint-${pname}";
         rev = version;
-        sha256 = "0ijv1nxmikv06a00hqqkqri6wnydqh6lwcx07pmvw6jy706jhy28";
+        sha256 = "1dr93vbpxgxw3b1q4rwam8f4dmiwr5vnfr9796g6jx8xkpfzzy1h";
       };
 
       preConfigure = ''
@@ -182,6 +182,10 @@ let
         rm */analyzers/marlin-calc*
         sed 's@"{}.{}".format(binary_base_name, machine)@"${marlin-calc}/bin/marlin-calc"@' -i */analyzers/analyze_progress.py
       '';
+
+      patches = [
+        ./printtimegenius-logging.patch
+      ];
 
       meta = with stdenv.lib; {
         description = "Better print time estimation for OctoPrint";
@@ -191,6 +195,61 @@ let
       };
     };
 
+    abl-expert = buildPlugin rec {
+      pname = "ABL_Expert";
+      version = "2019-12-21";
+
+      src = fetchgit {
+        url = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+        rev = "f11fbe05088ad618bfd9d064ac3881faec223f33";
+        sha256 = "026r4prkyvwzxag5pv36455q7s3gaig37nmr2nbvhwq3d2lbi5s4";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Marlin auto bed leveling control, mesh correction, and z probe handling";
+        homepage = "https://framagit.org/razer/Octoprint_ABL_Expert/";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
+
+    gcodeeditor = buildPlugin rec {
+      pname = "GcodeEditor";
+      version = "0.2.6";
+
+      src = fetchFromGitHub {
+        owner = "ieatacid";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "0c6p78r3vd6ys3kld308pyln09zjbr9yif1ljvcx6wlml2i5l1vh";
+      };
+
+      meta = with stdenv.lib; {
+        description = "Edit gcode on OctoPrint";
+        homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
+
+    simpleemergencystop = buildPlugin rec {
+      pname = "SimpleEmergencyStop";
+      version = "0.2.5";
+
+      src = fetchFromGitHub {
+        owner = "Sebclem";
+        repo = "OctoPrint-${pname}";
+        rev = version;
+        sha256 = "10wadv09wv2h96igvq3byw9hz1si82n3c7v5y0ii3j7hm2d06y8p";
+      };
+
+      meta = with stdenv.lib; {
+        description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
+        homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
+        license = licenses.agpl3;
+        maintainers = with maintainers; [ WhittlesJr ];
+      };
+    };
   };
 
 in self

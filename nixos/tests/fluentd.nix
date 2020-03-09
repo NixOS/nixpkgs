@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, lib, ... }: {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "fluentd";
 
   machine = { pkgs, ... }: {
@@ -33,14 +33,17 @@ import ./make-test.nix ({ pkgs, lib, ... }: {
       inherit testMessage;
     });
   in ''
-    $machine->start;
-    $machine->waitForUnit('fluentd.service');
-    $machine->waitForOpenPort(9880);
+    machine.start()
+    machine.wait_for_unit("fluentd.service")
+    machine.wait_for_open_port(9880)
 
-    $machine->succeed("curl -fsSL -X POST -H 'Content-type: application/json' -d @${payload} http://localhost:9880/test.tag");
+    machine.succeed(
+        "curl -fsSL -X POST -H 'Content-type: application/json' -d @${payload} http://localhost:9880/test.tag"
+    )
 
-    $machine->succeed("systemctl stop fluentd"); # blocking flush
+    # blocking flush
+    machine.succeed("systemctl stop fluentd")
 
-    $machine->succeed("grep '${testMessage}' /tmp/current-log");
+    machine.succeed("grep '${testMessage}' /tmp/current-log")
   '';
 })

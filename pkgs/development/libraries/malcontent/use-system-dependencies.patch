@@ -1,0 +1,22 @@
+diff --git a/meson.build b/meson.build
+index f4a05ba..dd31537 100644
+--- a/meson.build
++++ b/meson.build
+@@ -33,9 +33,8 @@ polkit_gobject = dependency('polkit-gobject-1')
+ polkitpolicydir = polkit_gobject.get_pkgconfig_variable('policydir',
+   define_variable: ['prefix', prefix])
+ 
+-libglib_testing = subproject('libglib-testing')
+ libglib_testing_dep = dependency(
+-  'libglib-testing',
++  'glib-testing-0',
+   fallback: ['libglib-testing', 'libglib_testing_dep'],
+ )
+ 
+@@ -120,4 +119,4 @@ test_env = [
+ 
+ subdir('accounts-service')
+ subdir('malcontent-client')
+-subdir('libmalcontent')
+\ No newline at end of file
++subdir('libmalcontent')

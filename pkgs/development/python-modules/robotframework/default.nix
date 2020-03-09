@@ -12,7 +12,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Generic test automation framework";
-    homepage = http://robotframework.org/;
+    homepage = https://robotframework.org/;
     license = licenses.asl20;
     maintainers = with maintainers; [ bjornfor ];
   };

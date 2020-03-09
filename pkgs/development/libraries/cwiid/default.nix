@@ -23,9 +23,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
-  NIX_LDFLAGS = [
-    "-lbluetooth"
-  ];
+  NIX_LDFLAGS = "-lbluetooth";
 
   postInstall = ''
     # Some programs (for example, cabal-install) have problems with the double 0

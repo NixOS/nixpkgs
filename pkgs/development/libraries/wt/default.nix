@@ -27,13 +27,17 @@ let
       ];
 
       cmakeFlags = [
-        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
         "-DWT_CPP_11_MODE=-std=c++11"
-        "-DGM_PREFIX=${graphicsmagick}"
-        "-DMYSQL_PREFIX=${libmysqlclient}"
-        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
         "--no-warn-unused-cli"
-      ];
+      ]
+      ++ stdenv.lib.optionals (graphicsmagick != null) [
+        "-DWT_WRASTERIMAGE_IMPLEMENTATION=GraphicsMagick"
+        "-DGM_PREFIX=${graphicsmagick}"
+      ]
+      ++ stdenv.lib.optional (harfbuzz != null)
+        "-DHARFBUZZ_INCLUDE_DIR=${harfbuzz.dev}/include"
+      ++ stdenv.lib.optional (libmysqlclient != null)
+        "-DMYSQL_PREFIX=${libmysqlclient}";
 
       meta = with stdenv.lib; {
         homepage = "https://www.webtoolkit.eu/wt";
@@ -45,12 +49,12 @@ let
     };
 in {
   wt3 = generic {
-    version = "3.4.1";
-    sha256 = "1bsx7hmy6g2x9p3vl5xw9lv1xk891pnvs93a87s15g257gznkjmj";
+    version = "3.5.0";
+    sha256 = "1xcwzldbval5zrf7f3n2gkpscagg51cw2jp6p3q1yh6bi59haida";
   };
 
   wt4 = generic {
-    version = "4.1.1";
-    sha256 = "1f1imx5kbpqlysrqx5h75hf2f8pkq972rz42x0pl6cxbnsyzngid";
+    version = "4.2.0";
+    sha256 = "0zrrdjz0sa8hrmybjp4aap1lcqcqvsicd7dj49zj1m5k8gnfpm4v";
   };
 }

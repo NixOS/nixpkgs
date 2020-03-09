@@ -1,6 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, cmake, qt5, libuchardet, pkgconfig, makeWrapper
+{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkgconfig
 , shntool, flac, opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain
 , gtk3
+, qtbase, qttools, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +15,8 @@ stdenv.mkDerivation rec {
     sha256 = "05pvg5xhc2azwzld08m81r4b2krqdbcbm5lmdvg2zkk67xq9pqyd";
   };
 
-  nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
-  buildInputs = [ qt5.qtbase qt5.qttools libuchardet ];
+  nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
+  buildInputs = [ qtbase qttools libuchardet ];
 
   postInstall = ''
     wrapProgram $out/bin/flacon \
@@ -29,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = https://flacon.github.io/;
     license = licenses.lgpl21;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ndowens nico202 ];
+    maintainers = with maintainers; [ snglth ];
   };
 }

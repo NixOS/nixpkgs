@@ -4,14 +4,14 @@
 , srht, redis, celery, pyyaml, markdown }:
 
 let
-  version = "0.47.8";
+  version = "0.52.5";
 
   buildWorker = src: buildGoModule {
     inherit src version;
     pname = "builds-sr-ht-worker";
     goPackagePath = "git.sr.ht/~sircmpwn/builds.sr.ht/worker";
 
-    modSha256 = "1jm259ncw8dgqp0fqbjn30c4y3v3vwqj41gfh99jx30bwlmpgfax";
+    modSha256 = "1dwp87zsbh4a48q0pacssy329kchrd4sa47c5a1k8smbqn078424";
   };
 in buildPythonPackage rec {
   inherit version;
@@ -20,7 +20,7 @@ in buildPythonPackage rec {
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/builds.sr.ht";
     rev = version;
-    sha256 = "0agnxf118nlfykxbja8mnk4cal56rb2z8mhvyphnxm0ac28iq6jx";
+    sha256 = "142aycnary6yfi0y1i3zgpyndi0756fingavcz2dnqi36pkajaaj";
   };
 
   patches = [

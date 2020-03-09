@@ -16,7 +16,7 @@
 
 * [NixOS Manual](https://nixos.org/nixos/manual) - how to install, configure, and maintain a purely-functional Linux distribution
 * [Nixpkgs Manual](https://nixos.org/nixpkgs/manual/) - contributing to Nixpkgs and using programming-language-specific Nix expressions
-* [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expresssions (programs), and how to use Nix command line tools
+* [Nix Package Manager Manual](https://nixos.org/nix/manual) - how to write Nix expressions (programs), and how to use Nix command line tools
 
 # Community
 
@@ -24,10 +24,11 @@
 * [IRC - #nixos on freenode.net](irc://irc.freenode.net/#nixos)
 * [NixOS Weekly](https://weekly.nixos.org/)
 * [Community-maintained wiki](https://nixos.wiki/)
+* [Community-maintained list of ways to get in touch](https://nixos.wiki/wiki/Get_In_Touch#Chat) (Discord, Matrix, Telegram, other IRC channels, etc.)
 
 # Other Project Repositories
 
-The sources of all offical Nix-related projects are in the [NixOS
+The sources of all official Nix-related projects are in the [NixOS
 organization on GitHub](https://github.com/NixOS/). Here are some of
 the main ones:
 
@@ -51,9 +52,7 @@ system, [Hydra](https://hydra.nixos.org/).
 Artifacts successfully built with Hydra are published to cache at
 https://cache.nixos.org/. When successful build and test criteria are
 met, the Nixpkgs expressions are distributed via [Nix
-channels](https://nixos.org/nix/manual/#sec-channels). The channels
-are provided via a read-only mirror of the Nixpkgs repository called
-[nixpkgs-channels](https://github.com/NixOS/nixpkgs-channels).
+channels](https://nixos.org/nix/manual/#sec-channels).
 
 # Contributing
 

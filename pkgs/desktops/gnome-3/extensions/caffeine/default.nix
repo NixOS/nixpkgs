@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-caffeine";
-  version = "unstable-2019-04-02";
+  version = "33";
 
   src = fetchFromGitHub {
     owner = "eonpatapon";
     repo = "gnome-shell-extension-caffeine";
-    rev = "a6b37dee108cddf50a0f0a19f0101854a75bf173";
-    sha256 = "1j3q12j36v97551sjb0c8qc8zr7a7gmxibygczryfdfmwjzp6icl";
+    rev = "v${version}";
+    sha256 = "1v74xfk7csgc4kw1fg75brmhk2aby3d453ksnmj4k8ivyxkzxmfg";
   };
 
   uuid = "caffeine@patapon.info";
@@ -32,6 +32,5 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
     maintainers = with maintainers; [ eperuffo ];
     homepage = https://github.com/eonpatapon/gnome-shell-extension-caffeine;
-    broken = versionAtLeast gnome3.gnome-shell.version "3.32"; # Doesn't support 3.34
   };
 }

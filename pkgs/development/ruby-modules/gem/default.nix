@@ -39,7 +39,7 @@ lib.makeOverridable (
 , meta ? {}
 , patches ? []
 , gemPath ? []
-, dontStrip ? true
+, dontStrip ? false
 # Assume we don't have to build unless strictly necessary (e.g. the source is a
 # git checkout).
 # If you need to apply patches, make sure to set `dontBuild = false`;
@@ -99,7 +99,7 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
     runHook preUnpack
 
     if [[ -f $src && $src == *.gem ]]; then
-      if [[ -z "$dontBuild" ]]; then
+      if [[ -z "''${dontBuild-}" ]]; then
         # we won't know the name of the directory that RubyGems creates,
         # so we'll just use a glob to find it and move it over.
         gempkg="$src"
@@ -205,8 +205,11 @@ stdenv.mkDerivation ((builtins.removeAttrs attrs ["source"]) // {
       $gempkg $gemFlags -- $buildFlags
 
     # looks like useless files which break build repeatability and consume space
-    rm -fv $out/${ruby.gemPath}/doc/*/*/created.rid || true
-    rm -fv $out/${ruby.gemPath}/gems/*/ext/*/mkmf.log || true
+    pushd $out/${ruby.gemPath}
+    rm -fv doc/*/*/created.rid || true
+    rm -fv {gems/*/ext/*,extensions/*/*/*}/{mkmf.log,gem_make.out} || true
+    rm -fvr cache
+    popd
 
     # write out metadata and binstubs
     spec=$(echo $out/${ruby.gemPath}/specifications/*.gemspec)

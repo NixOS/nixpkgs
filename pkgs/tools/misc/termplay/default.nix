@@ -1,18 +1,18 @@
-{ rustPlatform, fetchFromGitHub, lib, makeWrapper, gst_all_1, libsixel }:
+{ rustPlatform, fetchFromGitLab, lib, makeWrapper, gst_all_1, libsixel }:
+
 rustPlatform.buildRustPackage rec {
   pname = "termplay";
-  version = "2.0.4";
+  version = "2.0.6";
 
-  src = fetchFromGitHub {
+  src = fetchFromGitLab {
     owner = "jD91mZM2";
     repo = "termplay";
-    rev = version;
-
-    sha256 = "0qgx9xmi8n3sq5n5m6gai777sllw9hyki2kwsj2k4h1ykibzq9r0";
+    rev = "v${version}";
+    sha256 = "1w7hdqgqr1jgxid3k7f2j52wz31gv8bzr9rsm6xzp7nnihp6i45p";
   };
 
   cargoBuildFlags = ["--features" "bin"];
-  cargoSha256 = "06vf2lhdsp7vsln8007zd1xcswn5akk9gnhh7582x1siiijksmn7";
+  cargoSha256 = "0nxm2k8dx6nxyghvpw44wqfd1n65947v2wqxxvy641hin4d7xzma";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [

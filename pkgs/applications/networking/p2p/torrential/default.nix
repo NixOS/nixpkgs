@@ -2,12 +2,11 @@
 , fetchFromGitHub
 , cmake
 , pkgconfig
-, vala
+, vala_0_40
 , pantheon
 , curl
 , glib
 , gtk3
-, hicolor-icon-theme
 , libb64
 , libevent
 , libgee
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    vala
+    vala_0_40 # https://github.com/davidmhewitt/torrential/issues/135
     pkgconfig
     wrapGAppsHook
   ];
@@ -41,7 +40,6 @@ stdenv.mkDerivation rec {
     curl
     glib
     gtk3
-    hicolor-icon-theme
     libb64
     libevent
     libgee
@@ -51,6 +49,12 @@ stdenv.mkDerivation rec {
     openssl
     pantheon.granite
   ];
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     description = "Download torrents in style with this speedy, minimalist torrent client for elementary OS";

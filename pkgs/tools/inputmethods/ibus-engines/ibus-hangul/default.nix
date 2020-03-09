@@ -1,7 +1,8 @@
 { stdenv
 , fetchurl
 , substituteAll
-, intltool
+, appstream-glib
+, gettext
 , pkgconfig
 , wrapGAppsHook
 , gtk3
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ibus-hangul";
-  version = "1.5.1";
+  version = "1.5.3";
 
   src = fetchurl {
     url = "https://github.com/choehwanjin/ibus-hangul/releases/download/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0gha8dfdf54rx8fv3yfikbgdg6lqq6l883lhg7q68ybvkjx9bwbs";
+    sha256 = "1400ba2p34vr9q285lqvjm73f6m677cgfdymmjpiwyrjgbbiqrjy";
   };
 
   patches = [
@@ -27,9 +28,9 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    intltool
+    appstream-glib
+    gettext
     pkgconfig
-    python3.pkgs.wrapPython
     wrapGAppsHook
   ];
 

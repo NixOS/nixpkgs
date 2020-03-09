@@ -85,6 +85,7 @@ stdenv.mkDerivation rec {
     license = ["IDPL" "Interbase-1.0"];
     maintainers = [stdenv.lib.maintainers.marcweber];
     platforms = stdenv.lib.platforms.linux;
+    broken = true;
   };
 
 }

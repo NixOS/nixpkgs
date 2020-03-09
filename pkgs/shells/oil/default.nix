@@ -2,21 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "oil";
-  version = "0.7.pre5";
+  version = "0.7.0";
 
   src = fetchurl {
     url = "https://www.oilshell.org/download/oil-${version}.tar.xz";
-    sha256 = "1vpk4my8lp7wik8ywspawimya2a7hb1qjkp5vpm7ypmkya5jqivc";
+    sha256 = "12c9s462879adb6mwd3fqafk0dnqsm16s18rhym6cmzfzy8v8zm3";
   };
-
-
-  # TODO remove at next bump
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/oilshell/oil/commit/81551d76ae5a8b53179f2472492d0b44f13f84fd.patch";
-      sha256 = "0v99cx13ajqmf489vvxkqhqi9pjyc8jn0dgc8wp78gsv9js2k7km";
-    })
-  ];
 
   postPatch = ''
     patchShebangs build
@@ -34,7 +25,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A new unix shell";
-    homepage = https://www.oilshell.org/;
+    homepage = "https://www.oilshell.org/";
 
     license = with lib.licenses; [
       psfl # Includes a portion of the python interpreter and standard library

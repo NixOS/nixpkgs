@@ -1,22 +1,26 @@
 { stdenv, buildPythonPackage
 , fetchPypi, isPy3k, linuxPackages
-, fastrlock, numpy, six, wheel, pytest, mock
+, fastrlock, numpy, six, wheel, pytest, mock, setuptools
 , cudatoolkit, cudnn, nccl
 }:
 
 buildPythonPackage rec {
   pname = "cupy";
-  version = "6.3.0";
+  version = "7.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1q38riv63110ch170c1pyhq5jfbg8y0qmcdsqn8vb9sb79amvg93";
+    sha256 = "7230b25052b2b9074cc338b44338b4bd43575a48ad7b9c2ce7f36d7e0d117012";
   };
 
   checkInputs = [
     pytest
     mock
   ];
+
+  preConfigure = ''
+      export CUDA_PATH=${cudatoolkit}
+  ''; 
 
   propagatedBuildInputs = [
     cudatoolkit
@@ -26,11 +30,14 @@ buildPythonPackage rec {
     fastrlock
     numpy
     six
+    setuptools
     wheel
   ];
 
   # In python3, test was failed...
   doCheck = !isPy3k;
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "A NumPy-compatible matrix library accelerated by CUDA";

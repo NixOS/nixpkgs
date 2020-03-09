@@ -1,15 +1,15 @@
-{ stdenv, fetchurl, pythonPackages }:
+{ stdenv, fetchurl, python2Packages }:
 
-pythonPackages.buildPythonApplication rec {
+python2Packages.buildPythonApplication rec {
   pname = "hy";
   version = "0.17.0";
 
-  src = pythonPackages.fetchPypi {
+  src = python2Packages.fetchPypi {
     inherit pname version;
     sha256 = "1gdbqsirsdxj320wnp7my5awzs1kfs6m4fqmkzbd1zd47qzj0zfi";
   };
 
-  propagatedBuildInputs = with pythonPackages; [
+  propagatedBuildInputs = with python2Packages; [
     appdirs
     astor
     clint

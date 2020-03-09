@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, six, django }:
+{ stdenv, buildPythonPackage, fetchFromGitHub, six, django, fetchpatch }:
 buildPythonPackage rec {
   pname = "django-appconf";
   version = "1.0.3";
@@ -11,6 +11,14 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six django ];
+
+  patches = [
+    (fetchpatch {
+      name = "backport_django_2_2.patch";
+      url = "https://github.com/django-compressor/django-appconf/commit/1526a842ee084b791aa66c931b3822091a442853.patch";
+      sha256 = "1vl2s6vlf15089s8p4c3g4d5iqm8jva66bdw683r8440f80ixgmw";
+    })
+  ];
 
   checkPhase = ''
     # prove we're running tests against installed package, not build dir

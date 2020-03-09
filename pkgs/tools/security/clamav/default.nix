@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "clamav";
-  version = "0.102.0";
+  version = "0.102.2";
 
   src = fetchurl {
     url = "https://www.clamav.net/downloads/production/${pname}-${version}.tar.gz";
-    sha256 = "1qdyj4r39266bmbsd2nwyspm20k9wh3c30awrg8c54y78s61izj8";
+    sha256 = "1lq7r6r2yl8pp3fkn32b0bsmbbl9pg90kpvhsa2clad3xg0drz49";
   };
 
   # don't install sample config files into the absolute sysconfdir folder

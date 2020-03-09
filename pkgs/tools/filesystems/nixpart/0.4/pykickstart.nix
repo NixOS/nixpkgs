@@ -19,7 +19,6 @@ buildPythonApplication rec {
   propagatedBuildInputs = [ urlgrabber ];
 
   checkPhase = ''
-    export PYTHONPATH="$PYTHONPATH:."
     ${python}/bin/${python.executable} tests/baseclass.py -vv
   '';
 

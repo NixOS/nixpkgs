@@ -22,7 +22,9 @@ stdenv.mkDerivation rec {
       --replace "-Werror" ""
   '';
 
-  makeFlags = "prefix=$(out)";
+  makeFlags = [
+    "prefix=${placeholder ''out''}"
+  ];
 
   hardeningDisable = stdenv.lib.optional (stdenv.isi686) "stackprotector";
 
@@ -33,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = http://lse.sourceforge.net/io/aio.html;
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.lgpl21;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 }

@@ -8,7 +8,7 @@
 
 in symlinkJoin {
 
-  name = "vdr-with-plugins-${(builtins.parseDrvName vdr.name).version}";
+  name = "vdr-with-plugins-${lib.getVersion vdr}";
 
   paths = [ vdr ] ++ plugins;
 

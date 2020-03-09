@@ -24,6 +24,6 @@ stdenv.mkDerivation {
     homepage = http://robotmonkeys.net/2010/03/30/imlibsetroot/;
     license = licenses.gpl2;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ lucas8 ];
+    maintainers = with maintainers; [ dwarfmaster ];
   };
 }

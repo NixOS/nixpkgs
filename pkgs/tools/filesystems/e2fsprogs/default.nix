@@ -1,12 +1,12 @@
-{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo }:
+{ stdenv, buildPackages, fetchurl, fetchpatch, pkgconfig, libuuid, gettext, texinfo, shared ? true }:
 
 stdenv.mkDerivation rec {
   pname = "e2fsprogs";
-  version = "1.45.3";
+  version = "1.45.5";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0gcqfnp9h7wgz1vq402kxd2w398vqaim26aq9i722v3lrgh5cm9s";
+    sha256 = "1n8ffss5044j9382rlvmhyr1f6kmnfjfbv6q4jbbh8gfdwpjmrwi";
   };
 
   outputs = [ "bin" "dev" "out" "man" "info" ];
@@ -36,7 +36,9 @@ stdenv.mkDerivation rec {
 
   configureFlags =
     if stdenv.isLinux then [
-      "--enable-elf-shlibs"
+      # It seems that the e2fsprogs is one of the few packages that cannot be
+      # build with shared and static libs.
+      (if shared then "--enable-elf-shlibs" else "--disable-elf-shlibs")
       "--enable-symlink-install"
       "--enable-relative-symlinks"
       "--with-crond-dir=no"

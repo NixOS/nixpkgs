@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2019.09.28";
+  version = "2020.03.01";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "0nrk0bk6lksnmng8lwhcpkc57iibzjjamlqz8rxjpsw6dnzxz82h";
+    sha256 = "01hk00nbxxa81yajkbv65nv5amwyavhjs127xkyqqcrq6ws3z92w";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,8 +54,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = https://rg3.github.io/youtube-dl/;
-    repositories.git = https://github.com/rg3/youtube-dl.git;
+    homepage = "https://rg3.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
       youtube-dl is a small, Python-based command-line program
@@ -65,6 +64,6 @@ buildPythonPackage rec {
     '';
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ darwin;
-    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fuuzetsu fpletz enzime ];
+    maintainers = with maintainers; [ bluescreen303 phreedom AndersonTorres fpletz enzime ma27 ];
   };
 }

@@ -1,9 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, makeWrapper, isPy3k,
+{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, makeWrapper, isPy3k,
   python, twisted, jinja2, zope_interface, future, sqlalchemy,
   sqlalchemy_migrate, dateutil, txaio, autobahn, pyjwt, pyyaml, treq,
   txrequests, pyjade, boto3, moto, mock, python-lz4, setuptoolsTrial,
-  isort, pylint, flake8, buildbot-worker, buildbot-pkg, parameterized,
-  git, glibcLocales }:
+  isort, pylint, flake8, buildbot-worker, buildbot-pkg, buildbot-plugins,
+  parameterized, git, openssh, glibcLocales, nixosTests }:
 
 let
   withPlugins = plugins: buildPythonPackage {
@@ -25,11 +25,11 @@ let
 
   package = buildPythonPackage rec {
     pname = "buildbot";
-    version = "2.4.1";
+    version = "2.7.0";
 
     src = fetchPypi {
       inherit pname version;
-      sha256 = "0sqsp7ikmg5v48n1sy7l4913g906hyi1g9sikxd07n8vysp0ncx8";
+      sha256 = "0jj8fh611n7xc3vsfbgpqsllp38cfj3spkr2kz3ara2x7jvh3406";
     };
 
     propagatedBuildInputs = [
@@ -44,10 +44,9 @@ let
       autobahn
       pyjwt
       pyyaml
-
+    ]
       # tls
-      twisted.extras.tls
-    ];
+      ++ twisted.extras.tls;
 
     checkInputs = [
       treq
@@ -63,8 +62,10 @@ let
       flake8
       buildbot-worker
       buildbot-pkg
+      buildbot-plugins.www
       parameterized
       git
+      openssh
       glibcLocales
     ];
 
@@ -90,10 +91,11 @@ let
 
     passthru = {
       inherit withPlugins;
+      tests.buildbot = nixosTests.buildbot;
     };
 
     meta = with lib; {
-      homepage = http://buildbot.net/;
+      homepage = "https://buildbot.net/";
       description = "Buildbot is an open-source continuous integration framework for automating software build, test, and release processes";
       maintainers = with maintainers; [ nand0p ryansydnor lopsided98 ];
       license = licenses.gpl2;

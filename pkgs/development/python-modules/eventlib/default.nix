@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Eventlib bindings for python";
-    homepage    = "http://ag-projects.com/";
+    homepage    = "https://ag-projects.com/";
     license     = licenses.lgpl2;
   };
 

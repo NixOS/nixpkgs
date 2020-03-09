@@ -2,7 +2,7 @@
 , pkgconfig, cmake, doxygen
 , libopenshot-audio, imagemagick, ffmpeg
 , swig, python3
-, unittest-cpp, cppzmq, czmqpp
+, unittest-cpp, cppzmq, zeromq
 , qtbase, qtmultimedia }:
 
 with stdenv.lib;
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
   [ imagemagick ffmpeg swig python3 unittest-cpp
-    cppzmq czmqpp qtbase qtmultimedia ];
+    cppzmq zeromq qtbase qtmultimedia ];
 
   LIBOPENSHOT_AUDIO_DIR = libopenshot-audio;
   "UNITTEST++_INCLUDE_DIR" = "${unittest-cpp}/include/UnitTest++";

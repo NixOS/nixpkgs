@@ -1,15 +1,15 @@
 { stdenv, fetchgit, buildPythonPackage
 , python
-, srht, asyncpg, unidiff, aiosmtpd, emailthreads }:
+, srht, asyncpg, aiosmtpd, pygit2, emailthreads }:
 
 buildPythonPackage rec {
   pname = "listssrht";
-  version = "0.38.1";
+  version = "0.40.3";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/lists.sr.ht";
     rev = version;
-    sha256 = "02nfl9xnqx0p98kmcy8bzdwzlnl57k5a04i6gnvimc84c11a9chz";
+    sha256 = "1s736i5wm04pqa5k7455bdjdi7vjgvq32q1v6mdsp1w7jhgy1ags";
   };
 
   patches = [
@@ -20,8 +20,8 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     srht
+    pygit2
     asyncpg
-    unidiff
     aiosmtpd
     emailthreads
   ];

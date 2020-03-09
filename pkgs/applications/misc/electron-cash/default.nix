@@ -1,14 +1,14 @@
-{ lib, fetchurl, python3Packages, qtbase, wrapQtAppsHook }:
+{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.10";
+  version = "4.0.11";
 
-  src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
-    # Verified using official SHA-1 and signature from
-    # https://github.com/fyookball/keys-n-hashes
-    sha256 = "48270e12956a2f4ef4d2b0cb60611e47f136b734a3741dab176542a32ae59ee5";
+  src = fetchFromGitHub {
+    owner = "Electron-Cash";
+    repo = "Electron-Cash";
+    rev = version;
+    sha256 = "1k4zbaj0g8bgk1l5vrb835a8bqfay2707bcb4ql2vx4igcwpb680";
   };
 
   propagatedBuildInputs = with python3Packages; [

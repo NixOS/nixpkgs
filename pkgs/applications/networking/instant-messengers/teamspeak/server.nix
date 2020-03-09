@@ -4,13 +4,13 @@ let
   arch = if stdenv.is64bit then "amd64" else "x86";
 in stdenv.mkDerivation rec {
   pname = "teamspeak-server";
-  version = "3.9.1";
+  version = "3.10.2";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
     sha256 = if stdenv.is64bit
-      then "0vzi0prnqhjxrwlghwgii0rsmml6aa3qk3yv227g9wz5m3b9f10a"
-      else "1nn0fh4s5rmnn27djbsk21jaah1kxyvap9qaf5p4r7cydwr1bzm6";
+      then "03c717qjlbym02nwy82l6jhrkbidsdm1jv5k8p3c10p6a46jy9nl"
+      else "1ay0lmbv2rw9klz289yg0hhsac83kfzzlbwwhjpi28xndl2lq4bf";
   };
 
   buildInputs = [ stdenv.cc.cc ];
@@ -28,12 +28,12 @@ in stdenv.mkDerivation rec {
     ln -s $out/lib/teamspeak/tsdns/tsdnsserver $out/bin/tsdnsserver
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "TeamSpeak voice communication server";
     homepage = https://teamspeak.com/;
-    license = stdenv.lib.licenses.unfreeRedistributable;
-    platforms = stdenv.lib.platforms.linux;
-    maintainers = [ stdenv.lib.maintainers.arobyn ];
+    license = licenses.unfreeRedistributable;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ arobyn gerschtli ];
   };
 }
 

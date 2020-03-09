@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname }:
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [] }:
 
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
@@ -42,7 +42,7 @@ in buildGoPackage rec {
       "-r ${python}/lib"
     ];
   in ''
-    buildFlagsArray=( "-tags" "ec2 systemd cpython process log" "-ldflags" "${ldFlags}")
+    buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
   '';
 
   # DataDog use paths relative to the agent binary, so fix these.

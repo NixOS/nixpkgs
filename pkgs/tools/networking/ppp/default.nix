@@ -10,10 +10,17 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ ( substituteAll {
+    [
+      # fix for glibc>=2.28
+      (fetchurl {
+        url = "https://github.com/paulusmack/ppp/commit/3c7b86229f7bd2600d74db14b1fe5b3896be3875.patch";
+        sha256 = "0qlbi247lx3injpy8a1gcij9yilik0vfaibkpvdp88k3sa1rs69z";
+      })
+      ( substituteAll {
         src = ./nix-purity.patch;
         inherit libpcap;
         glibc = stdenv.cc.libc.dev or stdenv.cc.libc;
+        openssl = openssl.dev;
       })
       # Without nonpriv.patch, pppd --version doesn't work when not run as
       # root.
@@ -64,6 +71,6 @@ stdenv.mkDerivation rec {
     description = "Point-to-point implementation for Linux and Solaris";
     license = with licenses; [ bsdOriginal publicDomain gpl2 lgpl2 ];
     platforms = platforms.linux;
-    maintainers = [ maintainers.falsifian ];
+    maintainers = [ ];
   };
 }

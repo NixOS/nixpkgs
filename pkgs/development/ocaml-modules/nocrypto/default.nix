@@ -1,11 +1,19 @@
 { stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
 , cpuid, ocb-stubblr, sexplib
-, cstruct, zarith, ppx_sexp_conv, ppx_deriving
+, cstruct, zarith, ppx_sexp_conv, ppx_deriving, writeScriptBin
 , cstruct-lwt ? null
 }:
 
 with stdenv.lib;
-let withLwt = cstruct-lwt != null; in
+let
+  withLwt = cstruct-lwt != null;
+  # the build system will call 'cc' with no way to override
+  # this is wrong when we're cross-compiling, so insert a wrapper
+  cc-wrapper = writeScriptBin "cc" ''
+    set -e
+    $CC "$@"
+  '';
+in
 
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
@@ -43,10 +51,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ ocaml findlib ocamlbuild topkg cpuid ocb-stubblr ];
+  nativeBuildInputs = [ ocaml findlib ocamlbuild cc-wrapper ];
+  buildInputs = [ ocamlbuild findlib topkg cpuid ocb-stubblr ];
   propagatedBuildInputs = [ cstruct ppx_deriving ppx_sexp_conv sexplib zarith ] ++ optional withLwt cstruct-lwt;
 
-  buildPhase = "${topkg.buildPhase} --with-lwt ${boolToString withLwt}";
+  buildPhase = "${topkg.buildPhase} --accelerate false --with-lwt ${boolToString withLwt}";
   inherit (topkg) installPhase;
 
   meta = {

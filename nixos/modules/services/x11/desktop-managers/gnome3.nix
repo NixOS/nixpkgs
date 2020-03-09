@@ -30,6 +30,10 @@ let
 
      cp -f ${pkgs.gnome3.gnome-shell}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
 
+     ${optionalString flashbackEnabled ''
+       cp -f ${pkgs.gnome3.gnome-flashback}/share/gsettings-schemas/*/glib-2.0/schemas/*.gschema.override $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas
+     ''}
+
      chmod -R a+w $out/share/gsettings-schemas/nixos-gsettings-overrides
      cat - > $out/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas/nixos-defaults.gschema.override <<- EOF
        [org.gnome.desktop.background]
@@ -140,7 +144,7 @@ in
       services.gnome3.core-shell.enable = true;
       services.gnome3.core-utilities.enable = mkDefault true;
 
-      services.xserver.displayManager.extraSessionFilePackages = [ pkgs.gnome3.gnome-session ];
+      services.xserver.displayManager.sessionPackages = [ pkgs.gnome3.gnome-session.sessions ];
 
       environment.extraInit = ''
         ${concatMapStrings (p: ''
@@ -167,7 +171,7 @@ in
     })
 
     (mkIf flashbackEnabled {
-      services.xserver.displayManager.extraSessionFilePackages =  map
+      services.xserver.displayManager.sessionPackages =  map
         (wm: pkgs.gnome3.gnome-flashback.mkSessionForWm {
           inherit (wm) wmName wmLabel wmCommand;
         }) (optional cfg.flashback.enableMetacity {
@@ -179,6 +183,13 @@ in
       security.pam.services.gnome-screensaver = {
         enableGnomeKeyring = true;
       };
+
+      systemd.packages = with pkgs.gnome3; [
+        gnome-flashback
+      ] ++ (map
+        (wm: gnome-flashback.mkSystemdTargetForWm {
+          inherit (wm) wmName;
+        }) cfg.flashback.customSessions);
 
       services.dbus.packages = [
         pkgs.gnome3.gnome-screensaver
@@ -213,6 +224,12 @@ in
 
       services.xserver.updateDbusEnvironment = true;
 
+      # gnome has a custom alert theme but it still
+      # inherits from the freedesktop theme.
+      environment.systemPackages = with pkgs; [
+        sound-theme-freedesktop
+      ];
+
       # Needed for themes and backgrounds
       environment.pathsToLink = [
         "/share" # TODO: https://github.com/NixOS/nixpkgs/issues/47173
@@ -232,11 +249,17 @@ in
       services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.telepathy.enable = mkDefault true;
 
-      systemd.packages = with pkgs.gnome3; [ vino gnome-session ];
+      systemd.packages = with pkgs.gnome3; [
+        gnome-session
+        gnome-shell
+        vino
+      ];
 
       services.avahi.enable = mkDefault true;
 
-      xdg.portal.extraPortals = [ pkgs.gnome3.gnome-shell ];
+      xdg.portal.extraPortals = [
+        pkgs.gnome3.gnome-shell
+      ];
 
       services.geoclue2.enable = mkDefault true;
       services.geoclue2.enableDemoAgent = false; # GNOME has its own geoclue agent
@@ -261,6 +284,26 @@ in
         source-sans-pro
       ];
 
+      ## Enable soft realtime scheduling, only supported on wayland ##
+
+      security.wrappers.".gnome-shell-wrapped" = {
+        source = "${pkgs.gnome3.gnome-shell}/bin/.gnome-shell-wrapped";
+        capabilities = "cap_sys_nice=ep";
+      };
+
+      systemd.user.services.gnome-shell-wayland = let
+        gnomeShellRT = with pkgs.gnome3; pkgs.runCommand "gnome-shell-rt" {} ''
+          mkdir -p $out/bin/
+          cp ${gnome-shell}/bin/gnome-shell $out/bin
+          sed -i "s@${gnome-shell}/bin/@${config.security.wrapperDir}/@" $out/bin/gnome-shell
+        '';
+      in {
+        # Note we need to clear ExecStart before overriding it
+        serviceConfig.ExecStart = ["" "${gnomeShellRT}/bin/gnome-shell"];
+        # Do not use the default environment, it provides a broken PATH
+        environment = mkForce {};
+      };
+
       # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
@@ -272,7 +315,7 @@ in
         gnome-shell
         gnome-shell-extensions
         gnome-themes-extra
-        gnome-user-docs
+        pkgs.gnome-user-docs
         pkgs.orca
         pkgs.glib # for gsettings
         pkgs.gnome-menus
@@ -291,7 +334,6 @@ in
         cheese
         eog
         epiphany
-        geary
         gedit
         gnome-calculator
         gnome-calendar
@@ -318,6 +360,7 @@ in
       # Enable default programs
       programs.evince.enable = mkDefault true;
       programs.file-roller.enable = mkDefault true;
+      programs.geary.enable = mkDefault true;
       programs.gnome-disks.enable = mkDefault true;
       programs.gnome-terminal.enable = mkDefault true;
       programs.seahorse.enable = mkDefault true;

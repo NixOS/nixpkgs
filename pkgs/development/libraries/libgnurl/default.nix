@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libgnurl";
-  version = "7.66.0";
+  version = "7.67.0";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnurl-${version}.tar.gz";
-    sha256 = "03bkzcld384z7i3zh3k9k3pr0xpyqbcr8cxjqya1zqs5lk7i55x5";
+    sha256 = "0ima9hz5d54iyvvih51s8xn6dsfxd3qyzgnj9l7w9f1smia295rb";
   };
 
   nativeBuildInputs = [ libtool groff perl pkgconfig python2 ];
@@ -38,8 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A fork of libcurl used by GNUnet";
-    homepage    = https://gnunet.org/gnurl;
-    maintainers = with maintainers; [ falsifian vrthra ];
+    homepage    = "https://gnunet.org/en/gnurl.html";
+    maintainers = with maintainers; [ vrthra ];
     platforms = platforms.linux;
     license = licenses.curl;
   };

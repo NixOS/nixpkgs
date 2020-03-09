@@ -425,8 +425,8 @@
 
   # Maven Central
   maven = [
-    http://repo1.maven.org/maven2/
-    http://central.maven.org/maven2/
+    https://repo1.maven.org/maven2/
+    https://central.maven.org/maven2/
   ];
 
   # Alsa Project

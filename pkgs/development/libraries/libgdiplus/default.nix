@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libgdiplus";
-  version = "6.0.2";
+  version = "6.0.4";
 
   src = fetchFromGitHub {
     owner = "mono";
     repo = "libgdiplus";
     rev = version;
-    sha256 = "07a3n7i35mn5j2djah64by785b1hzy8ckk1pz0xwvk716yzb7sxg";
+    sha256 = "1pf3yhwq9qk0w3yv9bb8qlwwqkffg7xb4sgc8yqdnn6pa56i3vmn";
   };
 
   NIX_LDFLAGS = "-lgif";
@@ -20,6 +20,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
+
+  configureFlags = stdenv.lib.optional stdenv.cc.isClang "--host=${stdenv.hostPlatform.system}";
 
   buildInputs =
     [ glib cairo fontconfig libtiff giflib

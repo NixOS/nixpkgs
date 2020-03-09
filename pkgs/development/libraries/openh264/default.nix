@@ -2,25 +2,23 @@
 
 stdenv.mkDerivation rec {
   pname = "openh264";
-  version = "1.8.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
-    repo = "openh264";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "1pl7hpk25nh7lcx1lbbv984gvnim0d6hxf4qfmrjjfjf6w37sjw4";
+    sha256 = "0sa4n4xshmiiv6h767jjq9qxapxxjwwwm3bpcignkxv5xn5sls5r";
   };
 
-  buildInputs = [ nasm ];
+  nativeBuildInputs = [ nasm ];
 
-  installPhase = ''
-    make PREFIX=$out install
-  '';
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   meta = with stdenv.lib; {
     description = "A codec library which supports H.264 encoding and decoding";
-    homepage = http://www.openh264.org;
-    license = stdenv.lib.licenses.bsd2;
+    homepage = "https://www.openh264.org";
+    license = licenses.bsd2;
     platforms = platforms.unix;
   };
 }

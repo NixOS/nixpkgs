@@ -1,16 +1,16 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkg-config, Security, libiconv }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-audit";
-  version = "0.9.1";
+  version = "0.11.2";
 
   src = fetchFromGitHub {
     owner = "RustSec";
     repo = "cargo-audit";
     rev = "v${version}";
-    sha256 = "0j556dh0lf2l8nq7pfl5bbypgsvp00fh6ckms9wr4dgb8xvpf2r1";
+    sha256 = "0py4z50ld4vs0g7vh8ga6v5h11nz2yfcpr3xqzpihf4p7sg1mdf4";
   };
 
-  cargoSha256 = "0200x0bdllq7mpxmp7ly5jarpkc3gpg22gxq8qvdbnmyd39b7wx0";
+  cargoSha256 = "0n4q8767aby6fgq0z7wj966zgqydlwirrzgyahf234dz6arsxw2l";
 
   buildInputs = [ openssl libiconv ] ++ lib.optionals stdenv.isDarwin [ Security ];
   nativeBuildInputs = [ pkg-config ];

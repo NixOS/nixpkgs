@@ -1,18 +1,18 @@
-{ stdenv, fetchFromGitHub, llvm, makeWrapper, pcre2, coreutils, which, libressl,
+{ stdenv, fetchFromGitHub, llvm, makeWrapper, pcre2, coreutils, which, libressl, libxml2,
   cc ? stdenv.cc, lto ? !stdenv.isDarwin }:
 
 stdenv.mkDerivation ( rec {
   pname = "ponyc";
-  version = "0.31.0";
+  version = "0.33.2";
 
   src = fetchFromGitHub {
     owner = "ponylang";
     repo = pname;
     rev = version;
-    sha256 = "0cchikwga59b3p7ip9d6kxz50w5yvk1dh1dcmbix4fwfwc3zdm75";
+    sha256 = "0jcdr1r3g8sm3q9fcc87d6x98fg581n6hb90hz7r08mzn4bwvysw";
   };
 
-  buildInputs = [ llvm makeWrapper which ];
+  buildInputs = [ llvm makeWrapper which libxml2 ];
   propagatedBuildInputs = [ cc ];
 
   # Disable problematic networking tests
@@ -53,6 +53,8 @@ stdenv.mkDerivation ( rec {
   doCheck = true;
 
   checkTarget = "test-ci";
+
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=redundant-move" ];
 
   preCheck = ''
     export PONYPATH="$out/lib:${stdenv.lib.makeLibraryPath [ pcre2 libressl ]}"

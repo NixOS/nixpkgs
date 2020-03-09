@@ -1,13 +1,13 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d
+{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d, fetchpatch
 , pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
 , libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
 , alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO
 , withX ? !stdenv.isDarwin
 , withGTK2 ? false, gtk2 ? null
 , withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk24x-gtk3 ? null, wrapGAppsHook ? null, glib-networking ? null
+, withXwidgets ? false, webkitgtk, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
-, srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
+, autoconf ? null, automake ? null, texinfo ? null
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -16,7 +16,7 @@ assert withGTK2 -> withX || stdenv.isDarwin;
 assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
 assert withGTK3 -> !withGTK2 && gtk3 != null;
-assert withXwidgets -> withGTK3 && webkitgtk24x-gtk3 != null;
+assert withXwidgets -> withGTK3 && webkitgtk != null;
 
 let
   toolkit =
@@ -46,10 +46,21 @@ stdenv.mkDerivation rec {
       url = "https://gist.githubusercontent.com/aaronjensen/f45894ddf431ecbff78b1bcf533d3e6b/raw/6a5cd7f57341aba673234348d8b0d2e776f86719/Emacs-25-OS-X-use-vfork.patch";
       sha256 = "1nlsxiaynswqhy99jf4mw9x0sndhwcrwy8713kq1l3xqv9dbrzgj";
     })
+  ] ++ [
+    # Backport patches so we can use webkitgtk with xwidgets.
+    (fetchpatch {
+      name = "0001-Omit-unnecessary-includes-from-xwidget-c.patch";
+      url = "https://github.com/emacs-mirror/emacs/commit/a36ed9b5e95afea5716256bac24d883263aefbaf.patch";
+      sha256 = "1j34c0vkj87il87xy1px23yk6bw73adpr7wqa79ncj89i4lc8qkb";
+    })
+    (fetchpatch {
+      name = "0002-xwidget-Use-WebKit2-API.patch";
+      url = "https://github.com/emacs-mirror/emacs/commit/d781662873f228b110a128f7a2b6583a4d5e0a3a.patch";
+      sha256 = "1lld56zi4cw2hmjxhhdcc0f07k8lbj32h10wcq4ml3asdwa31ryr";
+    })
   ];
 
-  nativeBuildInputs = [ pkgconfig ]
-    ++ lib.optionals srcRepo [ autoconf automake texinfo ]
+  nativeBuildInputs = [ pkgconfig autoconf automake texinfo ]
     ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
@@ -61,7 +72,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withX && withGTK2) gtk2
     ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk24x-gtk3 glib-networking ]
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals stdenv.isDarwin [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
@@ -75,7 +86,7 @@ stdenv.mkDerivation rec {
              "--with-gif=no" "--with-tiff=no" ])
     ++ lib.optional withXwidgets "--with-xwidgets";
 
-  preConfigure = lib.optionalString srcRepo ''
+  preConfigure = ''
     ./autogen.sh
   '' + ''
     substituteInPlace lisp/international/mule-cmds.el \
@@ -86,7 +97,7 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  installTargets = "tags install";
+  installTargets = [ "tags" "install" ];
 
   postInstall = ''
     mkdir -p $out/share/emacs/site-lisp
