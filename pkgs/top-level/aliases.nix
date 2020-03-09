@@ -132,6 +132,7 @@ mapAliases ({
 
   firestr = throw "firestr has been removed."; # added 2019-12-08
   flameGraph = flamegraph; # added 2018-04-25
+  foldingathome = fahclient; # added 2020-09-03
   font-awesome-ttf = font-awesome; # 2018-02-25
   # 2019-10-31
   fontconfig-ultimate = throw ''
