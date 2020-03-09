@@ -1,5 +1,5 @@
 { stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
+, pkgconfig, makeWrapper, autoreconfHook, fetchpatch
 , coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
@@ -17,28 +17,26 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.0.0";
+  version = "6.1.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "0xkz6n6pyv7k4jj7762v65jdsj8pkcpbnas65hjy7b5vi4in9fz6";
+        sha256 = "1h7bmd7zgl64mwnxx4ji8l0mqmcbfxsx6kp1scyyfq2mwidihz0n";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "0j0rvymxaqavak03w7gblm8ingvbcwczpwfk8s0iqvsgfgk9974p";
+        sha256 = "18sr3jvpxn45c4vrjzpa4qgnnfxxh95v6l6qk31zka3siv8rrwqx";
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig docutils ];
+  nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
-  ] ++ optionals (!buildFromTarball) [
-    libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
@@ -53,7 +51,6 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-    ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
     PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
