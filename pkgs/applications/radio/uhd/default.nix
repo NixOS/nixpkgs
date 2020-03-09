@@ -36,8 +36,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DLIBUSB_INCLUDE_DIRS=${libusb1.dev}/include/libusb-1.0"
   ]
+    # TODO: Check if this still needed
     # ABI differences GCC 7.1
     # /nix/store/wd6r25miqbk9ia53pp669gn4wrg9n9cj-gcc-7.3.0/include/c++/7.3.0/bits/vector.tcc:394:7: note: parameter passing for argument of type 'std::vector<uhd::range_t>::iterator {aka __gnu_cxx::__normal_iterator<uhd::range_t*, std::vector<uhd::range_t> >}' changed in GCC 7.1
     ++ [ (stdenv.lib.optionalString stdenv.isAarch32 "-DCMAKE_CXX_FLAGS=-Wno-psabi") ]
@@ -56,6 +56,8 @@ stdenv.mkDerivation rec {
 
   # Build only the host software
   preConfigure = "cd host";
+  # TODO: Check if this still needed, perhaps relevant:
+  # https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html#build_instructions_unix_arm
   patches = if stdenv.isAarch32 then ./neon.patch else null;
 
   postPhases = [ "installFirmware" ];
