@@ -2,27 +2,31 @@
 
 stdenv.mkDerivation rec {
   pname = "hepmc3";
-  version = "3.1.2";
+  version = "3.2.0";
 
   src = fetchurl {
     url = "http://hepmc.web.cern.ch/hepmc/releases/HepMC3-${version}.tar.gz";
-    sha256 = "1izcldnjbyn6myr7nv7b4jivf2vmdi64ng9gk1vjh998755hfcs1";
+    sha256 = "1z491x3blqs0a2jxmhzhmh4kqdw3ddcbvw69gidg4w6icdvkhcpi";
   };
 
-  buildInputs = [ cmake root ];
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ root ];
+
+  cmakeFlags = [
+    "-DHEPMC3_ENABLE_PYTHON=OFF"
+  ];
 
   postInstall = ''
     substituteInPlace "$out"/bin/HepMC3-config \
-      --replace 'greadlink' '${coreutils}/bin/readlink'
+      --replace 'greadlink' '${coreutils}/bin/readlink' \
+      --replace 'readlink' '${coreutils}/bin/readlink'
   '';
-
-  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "The HepMC package is an object oriented, C++ event record for High Energy Physics Monte Carlo generators and simulation";
-    license     = licenses.gpl3;
-    homepage    = http://hepmc.web.cern.ch/hepmc/;
-    platforms   = platforms.unix;
+    license = licenses.gpl3;
+    homepage = "http://hepmc.web.cern.ch/hepmc/";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }
