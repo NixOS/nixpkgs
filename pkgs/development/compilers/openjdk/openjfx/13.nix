@@ -4,8 +4,8 @@
 
 let
   major = "13";
-  update = "";
-  build = "14";
+  update = ".0.2";
+  build = "1";
   repover = "${major}${update}+${build}";
   gradle_ = (gradleGen.override {
     java = openjdk11_headless;
@@ -16,7 +16,7 @@ let
 
     src = fetchurl {
       url = "https://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
-      sha256 = "0nviv9fiwzp1z4gjbp8iz9mf601nadzcy0sx74f5y3v41a3l59qb";
+      sha256 = "1si9wpb9malnf8zzz57l6b80088z2370zfxp1b0kk6rs0cnvpr74";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
