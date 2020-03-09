@@ -4978,6 +4978,8 @@ in {
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
+  pycotap = callPackage ../development/python-modules/pycotap { };
+
   pycryptopp = callPackage ../development/python-modules/pycryptopp { };
 
   pyct = callPackage ../development/python-modules/pyct { };
