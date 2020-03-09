@@ -11,10 +11,7 @@ rustPlatform.buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1887fjkk641cn6dpmyc5r3r2li61yw1nvfb0f2dp3169gycka15h";
+  cargoSha256 = "1i8qfphynwi42pkhhgllxq42dnw9f0dd6f829z94a3g91czyqvsw";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ];
