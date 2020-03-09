@@ -247,9 +247,10 @@
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
   ./services/computing/boinc/client.nix
-  ./services/computing/torque/server.nix
-  ./services/computing/torque/mom.nix
+  ./services/computing/foldingathome/client.nix
   ./services/computing/slurm/slurm.nix
+  ./services/computing/torque/mom.nix
+  ./services/computing/torque/server.nix
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
@@ -430,7 +431,6 @@
   ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
-  ./services/misc/folding-at-home.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
