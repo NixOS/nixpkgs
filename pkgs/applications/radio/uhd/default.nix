@@ -7,28 +7,22 @@
 #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="fffe", ATTRS{idProduct}=="0002", MODE:="0666"
 #   SUBSYSTEMS=="usb", ATTRS{idVendor}=="2500", ATTRS{idProduct}=="0002", MODE:="0666"
 
-let
-  uhdVer = "v" + version;
-
+stdenv.mkDerivation rec {
+  pname = "uhd";
   # UHD seems to use three different version number styles: x.y.z, xxx_yyy_zzz
   # and xxx.yyy.zzz. Hrmpf... style keeps changing
-  version = "3.14.0.0";
-
-  # Firmware images are downloaded (pre-built) from the respective release on Github
-  uhdImagesSrc = fetchurl {
-    url = "https://github.com/EttusResearch/uhd/releases/download/${uhdVer}/uhd-images_${version}.tar.xz";
-    sha256 = "1fp37wgqkbr14cxg9l7ghfd4r92y2bxwgb7cfjzs96hbpd9s6al0";
-  };
-
-in stdenv.mkDerivation {
-  pname = "uhd";
-  inherit version;
+  version = "3.15.0.0";
 
   src = fetchFromGitHub {
     owner = "EttusResearch";
     repo = "uhd";
-    rev = uhdVer;
-    sha256 = "0y1hff4vslfv36vxgvjqajg4862a11d4wgr0vcb0visgh1bi8qgy";
+    rev = "v${version}";
+    sha256 = "0jknln88a69fh244670nb7qrflbyv0vvdxfddb5g8ncpb6hcg8qf";
+  };
+  # Firmware images are downloaded (pre-built) from the respective release on Github
+  uhdImagesSrc = fetchurl {
+    url = "https://github.com/EttusResearch/uhd/releases/download/v${version}/uhd-images_${version}.tar.xz";
+    sha256 = "1fir1a13ac07mqhm4sr34cixiqj2difxq0870qv1wr7a7cbfw6vp";
   };
 
   enableParallelBuilding = true;
