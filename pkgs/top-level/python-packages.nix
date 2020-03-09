@@ -571,6 +571,8 @@ in {
 
   codespell = callPackage ../development/python-modules/codespell { };
 
+  convertdate = callPackage ../development/python-modules/convertdate { };
+
   crc32c = callPackage ../development/python-modules/crc32c { };
 
   curio = callPackage ../development/python-modules/curio { };
