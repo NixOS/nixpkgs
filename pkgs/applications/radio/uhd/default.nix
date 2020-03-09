@@ -8,7 +8,7 @@
 , enableLibuhd_C_api ? true
 # requires numpy
 , enableLibuhd_Python_api ? false
-, python ? null
+, python3 ? null
 , enableExamples ? false
 , enableUtils ? false
 , enableLiberio ? false
@@ -87,7 +87,7 @@ stdenv.mkDerivation rec {
   ;
 
   # Python + Mako are always required for the build itself but not necessary for runtime.
-  pythonEnv = python.withPackages (ps: with ps; [ Mako ]
+  pythonEnv = python3.withPackages (ps: with ps; [ Mako ]
     ++ optionals (enableLibuhd_Python_api) [ numpy setuptools ]
     ++ optionals (enableUtils) [ requests six ]
   );
