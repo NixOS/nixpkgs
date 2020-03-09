@@ -4978,6 +4978,8 @@ in {
 
   pycosat = callPackage ../development/python-modules/pycosat { };
 
+  pycotap = callPackage ../development/python-modules/pycotap { };
+
   pycryptopp = callPackage ../development/python-modules/pycryptopp { };
 
   pyct = callPackage ../development/python-modules/pyct { };
@@ -5127,6 +5129,8 @@ in {
   pysnmp = callPackage ../development/python-modules/pysnmp { };
 
   pysocks = callPackage ../development/python-modules/pysocks { };
+
+  pysol_cards = callPackage ../development/python-modules/pysol_cards { };
 
   python_fedora = callPackage ../development/python-modules/python_fedora {};
 

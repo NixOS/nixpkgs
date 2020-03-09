@@ -3,11 +3,11 @@
 
 buildPythonApplication rec {
   pname = "PySolFC";
-  version = "2.6.4";
+  version = "2.8.0";
 
   src = fetchzip {
     url = "https://versaweb.dl.sourceforge.net/project/pysolfc/PySolFC/PySolFC-${version}/PySolFC-${version}.tar.xz";
-    sha256 = "1bd84law5b1yga3pryggdvlfvm0l62gci2q8y3q79cysdk3z4w3z";
+    sha256 = "01j7lyp7hbybmvph2ww67a6jp455a5ln7pzbs9d1762r323yz5sy";
   };
 
   cardsets = fetchzip {
@@ -15,22 +15,19 @@ buildPythonApplication rec {
     sha256 = "0h0fibjv47j8lkc1bwnlbbvrx2nr3l2hzv717kcgagwhc7v2mrqh";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    tkinter six random2
-    # optional :
-    pygame freecell-solver pillow
-  ];
+  dontUseSetuptoolsCheck = true; #pycotap
 
-  patches = [
-    ./pysolfc-datadir.patch
+  propagatedBuildInputs = with python3Packages; [
+    attrs configobj six random2 pysol_cards pycotap
+    # tkinter optional :
+    pygame freecell-solver pillow
   ];
 
   nativeBuildInputs = [ desktop-file-utils ];
   postPatch = ''
-    desktop-file-edit --set-key Icon --set-value ${placeholder "out"}/share/icons/pysol01.png data/pysol.desktop
-    desktop-file-edit --set-key Comment --set-value "${meta.description}" data/pysol.desktop
+    desktop-file-edit --set-key Exec --set-value pysol data/pysol.desktop
   '';
-
+  
   postInstall = ''
     mkdir $out/share/PySolFC/cardsets
     cp -r $cardsets/* $out/share/PySolFC/cardsets
