@@ -12029,7 +12029,12 @@ in
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra = callPackage ../development/tools/misc/hydra { };
+  hydra-unwrapped = callPackage ../development/tools/misc/hydra/common.nix { };
+
+  inherit (callPackage ../development/tools/misc/hydra { })
+    hydra-stable hydra-unstable hydra-flakes;
+
+  hydra = hydra-unstable;
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 

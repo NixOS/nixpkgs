@@ -75,6 +75,24 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
 </programlisting>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     <package>hydra</package> has been updated to the latest <literal>master</literal>. This
+     includes a massive performance improvement thanks to several optimized queries.
+    </para>
+    <para>
+     Hydra will remain usable after the upgrade since the newly introduced <literal>ID</literal>-columns
+     are currently nullable. To use the performance gain, all empty IDs need to be filled
+     automatically by running the following command:
+<screen>
+<prompt>$ </prompt>hydra-backfill-ids
+</screen>
+    </para>
+    <para>
+     For further reference, please read the full description of the change
+     in the <link xlink:href="https://github.com/NixOS/hydra/pull/710">upstream PR</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
