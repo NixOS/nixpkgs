@@ -21,10 +21,12 @@ buildRustPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dywedir ];
     platforms = platforms.all;
-    broken = stdenv.isDarwin;
+    # This has not had a release since 2017, and no longer compiles with the
+    # latest Rust compiler.
+    broken = false;
   };
 
   passthru = {
-	  shellPath = "/bin/ion";
+    shellPath = "/bin/ion";
   };
 }
