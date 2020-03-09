@@ -31,12 +31,6 @@
 , enableE320 ? true
 }:
 
-# You need these udev rules to not have to run as root (copied from
-# ${uhd}/share/uhd/utils/uhd-usrp.rules):
-#
-#   SUBSYSTEMS=="usb", ATTRS{idVendor}=="fffe", ATTRS{idProduct}=="0002", MODE:="0666"
-#   SUBSYSTEMS=="usb", ATTRS{idVendor}=="2500", ATTRS{idProduct}=="0002", MODE:="0666"
-
 let
   onOffBool = b: if b then "ON" else "OFF";
   inherit (stdenv.lib) optionals;
@@ -127,7 +121,9 @@ stdenv.mkDerivation rec {
   # https://files.ettus.com/manual_archive/v3.15.0.0/html/page_build_guide.html#build_instructions_unix_arm
   patches = if stdenv.isAarch32 then ./neon.patch else null;
 
-  postPhases = [ "installFirmware" "removeInstalledTests" ];
+  postPhases = [ "installFirmware" "removeInstalledTests" ]
+    ++ optionals (enableUtils) [ "moveUdevRules" ]
+  ;
 
   # UHD expects images in `$CMAKE_INSTALL_PREFIX/share/uhd/images`
   installFirmware = ''
@@ -138,6 +134,13 @@ stdenv.mkDerivation rec {
   # -DENABLE_TESTS=ON installs the tests, we don't need them in the output
   removeInstalledTests = ''
     rm -r $out/lib/uhd/tests
+  '';
+
+  # Moves the udev rules to the standard location, needed only if utils are
+  # enabled
+  moveUdevRules = ''
+    mkdir -p $out/lib/udev/rules.d
+    mv $out/lib/uhd/utils/uhd-usrp.rules $out/lib/udev/rules.d/
   '';
 
   meta = with stdenv.lib; {
