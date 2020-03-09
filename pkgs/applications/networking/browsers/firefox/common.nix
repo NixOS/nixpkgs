@@ -120,6 +120,11 @@ let
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
   ]
+  ++ lib.optional (lib.versionAtLeast ffversion "73") (fetchpatch {
+    # https://phabricator.services.mozilla.com/D60667
+    url = "https://hg.mozilla.org/mozilla-central/raw-rev/b3d8b08265b800165d684281d19ac845a8ff9a66";
+    sha256 = "0b4s75w7sl619rglcjmlyvyibpj2ar5cpy6pnywl1xpd9qzyb27p";
+  })
   ++ patches;
 
   nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_49_2 else nss;
