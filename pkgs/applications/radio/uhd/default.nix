@@ -4,7 +4,6 @@
 , cmake
 , pkgconfig
 , python
-, orc
 , libusb1
 , boost
 }:
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
   ];
   buildInputs = [
     (python.withPackages (ps: with ps; [ Mako six requests ]))
-    orc
     libusb1
     boost
   ];
