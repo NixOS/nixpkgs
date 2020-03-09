@@ -63,8 +63,7 @@ in lib.makeScopeWithSplicing
     ];
     buildInputs = with self; compatIfNeeded;
 
-    OBJCOPY = if stdenv.isDarwin then "true" else "objcopy";
-    HOST_SH = "${buildPackages.bash}/bin/sh";
+    HOST_SH = stdenv'.shell;
 
     MACHINE_ARCH = {
       i686 = "i386";
@@ -78,13 +77,6 @@ in lib.makeScopeWithSplicing
     }.${stdenv'.hostPlatform.parsed.cpu.name}
       or stdenv'.hostPlatform.parsed.cpu.name;
 
-    AR = "${stdenv'.cc.targetPrefix or ""}ar";
-    CC = "${stdenv'.cc.targetPrefix or ""}cc";
-    CPP = "${stdenv'.cc.targetPrefix or ""}cpp";
-    CXX = "${stdenv'.cc.targetPrefix or ""}c++";
-    LD = "${stdenv'.cc.targetPrefix or ""}ld";
-    STRIP = "${stdenv'.cc.targetPrefix or ""}strip";
-
     BSD_PATH = attrs.path;
 
     strictDeps = true;
@@ -94,6 +86,9 @@ in lib.makeScopeWithSplicing
       platforms = platforms.unix;
       license = licenses.bsd2;
     };
+  } // lib.optionalAttrs stdenv'.hasCC {
+    # TODO should CC wrapper set this?
+    CPP = "${stdenv'.cc.targetPrefix}cpp";
   } // lib.optionalAttrs stdenv'.isDarwin {
     MKRELRO = "no";
   } // lib.optionalAttrs (stdenv'.cc.isClang or false) {
