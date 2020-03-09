@@ -421,6 +421,8 @@ let
 
     jsonm = callPackage ../development/ocaml-modules/jsonm { };
 
+    jupyter = callPackage ../development/ocaml-modules/jupyter { };
+
     kafka = callPackage ../development/ocaml-modules/kafka { };
 
     ke = callPackage ../development/ocaml-modules/ke { };
