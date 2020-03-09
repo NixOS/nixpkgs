@@ -115,6 +115,8 @@ in
 
   appimageTools = callPackage ../build-support/appimage { };
 
+  appimagePackages = recurseIntoAttrs (callPackage ./appimage-packages.nix { });
+
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
@@ -140,6 +142,8 @@ in
     name = "gog-unpack-hook";
     deps = [ innoextract file-rename ]; }
     ../build-support/setup-hooks/gog-unpack.sh;
+
+  buildAppImage = callPackage ../build-support/appimage/build-appimage.nix { };
 
   buildEnv = callPackage ../build-support/buildenv { }; # not actually a package
 
@@ -2465,6 +2469,8 @@ in
     nodejs = nodejs-10_x;
   };
 
+  colobot = callPackage ../games/colobot {};
+
   colord = callPackage ../tools/misc/colord { };
 
   colord-gtk = callPackage ../tools/misc/colord-gtk { };
@@ -3492,7 +3498,7 @@ in
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
-  
+
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
@@ -9819,6 +9825,8 @@ in
   bazelisk = callPackage ../development/tools/bazelisk { };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
+
+  beakerbrowser = callPackage ../applications/networking/browsers/beakerbrowser { };
 
   bear = callPackage ../development/tools/build-managers/bear { };
 
