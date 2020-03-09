@@ -115,6 +115,8 @@ in
 
   appimageTools = callPackage ../build-support/appimage { };
 
+  appimagePackages = recurseIntoAttrs (callPackage ./appimage-packages.nix { });
+
   ensureNewerSourcesHook = { year }: makeSetupHook {}
     (writeScript "ensure-newer-sources-hook.sh" ''
       postUnpackHooks+=(_ensureNewerSources)
@@ -3492,7 +3494,7 @@ in
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
-  
+
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
