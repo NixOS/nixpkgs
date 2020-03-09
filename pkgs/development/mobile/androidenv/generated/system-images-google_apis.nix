@@ -327,8 +327,8 @@
     revision = "28-google_apis-x86";
     displayName = "Google APIs Intel x86 Atom System Image";
     archives.all = fetchurl {
-      url = https://dl.google.com/android/repository/sys-img/google_apis/x86-28_r10.zip;
-      sha1 = "075e2253f1e93b49c134142a9717180dc7636685";
+      url = https://dl.google.com/android/repository/sys-img/google_apis/x86-28_r09.zip;
+      sha1 = "7c84ba5cbc009132ce38df52830c17b9bffc54bb";
     };
   };
   "28".google_apis."x86_64" = {
