@@ -43,7 +43,7 @@ rec {
   extractType1 = extract;
   extractType2 = extract;
 
-  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
+  wrapAppImage = args@{ name, src, extraPkgs ? pkgs: [], ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
 
     targetPkgs = pkgs: defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
@@ -58,13 +58,11 @@ rec {
     '';
   } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType1 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
+  wrapType1 = args@{ name, src, ... }: wrapAppImage (args // {
     src = extractType1 { inherit name src; };
   });
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
+  wrapType2 = args@{ name, src, ... }: wrapAppImage (args // {
     src = extractType2 { inherit name src; };
   });
 
