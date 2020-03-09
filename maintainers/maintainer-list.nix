@@ -4000,6 +4000,12 @@
     githubId = 2422454;
     name = "Kai Wohlfahrt";
   };
+  kwshi = {
+    email = "shi.kye@gmail.com";
+    github = "kwshi";
+    githubId = 3887189;
+    name = "Kye W. Shi";
+  };
   kylesferrazza = {
     name = "Kyle Sferrazza";
     email = "kyle.sferrazza@gmail.com";
