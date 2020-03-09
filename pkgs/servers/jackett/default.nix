@@ -35,6 +35,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/Jackett/Jackett/;
     license = licenses.gpl2;
     maintainers = with maintainers; [ edwtjo nyanloutre ];
-    platforms = platforms.all;
+    platforms = platforms.linux;
   };
 }
