@@ -5130,6 +5130,8 @@ in {
 
   pysocks = callPackage ../development/python-modules/pysocks { };
 
+  pysol_cards = callPackage ../development/python-modules/pysol_cards { };
+
   python_fedora = callPackage ../development/python-modules/python_fedora {};
 
   python-simple-hipchat = callPackage ../development/python-modules/python-simple-hipchat {};
