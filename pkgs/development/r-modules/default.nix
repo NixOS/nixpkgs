@@ -339,7 +339,7 @@ let
     rtiff = [ pkgs.libtiff.dev ];
     runjags = [ pkgs.jags ];
     RVowpalWabbit = [ pkgs.zlib.dev pkgs.boost ];
-    rzmq = [ pkgs.zeromq3 ];
+    rzmq = [ pkgs.zeromq3 pkgs.pkgconfig ];
     SAVE = [ pkgs.zlib pkgs.bzip2 pkgs.icu pkgs.lzma pkgs.pcre ];
     sdcTable = [ pkgs.gmp pkgs.glpk ];
     seewave = [ pkgs.fftw.dev pkgs.libsndfile.dev ];
@@ -715,6 +715,10 @@ let
 
     Cairo = old.Cairo.overrideDerivation (attrs: {
       NIX_LDFLAGS = "-lfontconfig";
+    });
+
+    rzmq = old.rzmq.overrideDerivation (attrs: {
+      preConfigure = "patchShebangs configure";
     });
 
     curl = old.curl.overrideDerivation (attrs: {
