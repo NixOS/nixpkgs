@@ -45,9 +45,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkgconfig
+    # Python + Mako are always required for the build itself but not necessary for runtime
+    (python.withPackages (ps: with ps; [ Mako ]))
   ];
   buildInputs = [
-    (python.withPackages (ps: with ps; [ Mako six requests ]))
     libusb1
     boost
   ];
