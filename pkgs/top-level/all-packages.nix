@@ -1459,6 +1459,8 @@ in
 
   clingo = callPackage ../applications/science/logic/potassco/clingo.nix { };
 
+  clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { };
+
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
   coloredlogs = with python3Packages; toPythonApplication coloredlogs;
