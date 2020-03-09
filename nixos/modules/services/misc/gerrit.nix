@@ -6,7 +6,16 @@ let
 
   cfg = config.services.gerrit;
 
-  cmd = "${pkgs.jre_headless}/bin/java -jar ${cfg.package}/webapps/gerrit-${cfg.package.version}.war";
+  gerrit-cli = pkgs.writeShellScriptBin "gerrit" ''
+    set -euo pipefail
+    jvmOpts=(
+      ${lib.escapeShellArgs cfg.jvmOpts}
+    )
+    ${pkgs.jre_headless}/bin/java \
+      "''${jvmOpts[@]}" \
+      -jar ${cfg.package}/webapps/gerrit-${cfg.package.version}.war \
+      "$@"
+  '';
 
   mkPluginSectionName = plugin: ''plugin "${escape [ "\"" ] plugin}"'';
 
@@ -87,11 +96,24 @@ in
         default = {};
       };
 
-    };
+      jvmOpts = mkOption {
+        type = with types; listOf str;
+        default = [];
+        example = [
+          "-Xmx1024m"
+        ];
+        description = ''
+          A list of JVM options to tune the runtime.
 
+          Please refer to the docs (https://help.sonatype.com/repomanager3/installation/configuring-the-runtime-environment)
+          for further information.
+        '';
+      };
+    };
   };
 
   config = mkIf cfg.enable {
+    environment.systemPackages = [ gerrit-cli ];
 
     services.gerrit.settings = {
       gerrit = {
@@ -149,7 +171,7 @@ in
         fi
       '';
 
-      serviceConfig.ExecStart = "${cmd} daemon --init --console-log";
+      serviceConfig.ExecStart = "${gerrit-cli}/bin/gerrit daemon --init --console-log";
     };
 
   };
