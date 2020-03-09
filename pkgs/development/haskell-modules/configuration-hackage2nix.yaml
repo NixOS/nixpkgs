@@ -9376,7 +9376,6 @@ broken-packages:
   - smuggler
   - snake
   - snake-game
-  - snap
   - snap-accept
   - snap-auth-cli
   - snap-blaze-clay
