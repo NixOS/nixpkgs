@@ -413,7 +413,9 @@ let
 
     js_of_ocaml-ppx = callPackage ../development/tools/ocaml/js_of_ocaml/ppx.nix {};
 
-    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {};
+    js_of_ocaml-ppx_deriving_json = callPackage ../development/tools/ocaml/js_of_ocaml/ppx_deriving_json.nix {
+      ppxlib = ppxlib.override { version = "0.12.0"; };
+    };
 
     js_of_ocaml-tyxml = callPackage ../development/tools/ocaml/js_of_ocaml/tyxml.nix {};
 
@@ -603,6 +605,8 @@ let
     ocaml_pcre = callPackage ../development/ocaml-modules/pcre {};
 
     pgocaml = callPackage ../development/ocaml-modules/pgocaml {};
+
+    pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
 
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
