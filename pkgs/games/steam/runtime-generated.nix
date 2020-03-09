@@ -292,18 +292,18 @@
       };
     }
     rec {
-      name = "libcurl3_7.22.0-3ubuntu4.17+steamrt1.1+srt5_amd64";
-      sha256 = "a3c56793a0751a819897d5cd40562e0bd04b0c1fe56e4f865f0f1653e7190bab";
-      url = "mirror://steamrt/pool/main/c/curl/libcurl3_7.22.0-3ubuntu4.17+steamrt1.1+srt5_amd64.deb";
+      name = "libcurl3_7.22.0-3ubuntu4.17+steamrt1.2+srt1_amd64";
+      sha256 = "b8ce9330efb568bff45d00b678f461c1b45184db97afb34c85a96320dbedcb45";
+      url = "mirror://steamrt/pool/main/c/curl/libcurl3_7.22.0-3ubuntu4.17+steamrt1.2+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libcurl3.deb";
       };
     }
     rec {
-      name = "libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.1+srt5_amd64";
-      sha256 = "0692b46e931815d81421198c35b9c0923d7685c3d2541ad8cc3251d18981305d";
-      url = "mirror://steamrt/pool/main/c/curl/libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.1+srt5_amd64.deb";
+      name = "libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.2+srt1_amd64";
+      sha256 = "d130968581123872aa448f1bd92b969c3df5c3c47ffb034c7635f723c7f9a9ff";
+      url = "mirror://steamrt/pool/main/c/curl/libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.2+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libcurl3-gnutls.deb";
@@ -343,6 +343,15 @@
       source = fetchurl {
         inherit url sha256;
         name = "libdbusmenu-gtk4.deb";
+      };
+    }
+    rec {
+      name = "libelf1_0.152-1ubuntu3.1+srt3_amd64";
+      sha256 = "16f5a035ab04bf0a90d2172820265e56e000fa3b4a5461bda293534f3e39a061";
+      url = "mirror://steamrt/pool/main/e/elfutils/libelf1_0.152-1ubuntu3.1+srt3_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libelf1.deb";
       };
     }
     rec {
@@ -517,9 +526,9 @@
       };
     }
     rec {
-      name = "libgnutls30_3.4.10-4ubuntu1.4+steamrt1.1+srt4_amd64";
-      sha256 = "3fb1f7644d1c83c1cf2271dd6e30dde50adf5ada859530431d205ba24cef8734";
-      url = "mirror://steamrt/pool/main/g/gnutls28/libgnutls30_3.4.10-4ubuntu1.4+steamrt1.1+srt4_amd64.deb";
+      name = "libgnutls30_3.4.10-4ubuntu1.4+steamrt1.2+srt1_amd64";
+      sha256 = "c6e07fb2f90549d741378a211babd4d1c802e93dde401839c2e89504410ed228";
+      url = "mirror://steamrt/pool/main/g/gnutls28/libgnutls30_3.4.10-4ubuntu1.4+steamrt1.2+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libgnutls30.deb";
@@ -712,6 +721,15 @@
       source = fetchurl {
         inherit url sha256;
         name = "libjpeg62.deb";
+      };
+    }
+    rec {
+      name = "libjson-glib-1.0-0_1.0.2-1~steamrt1.1+srt1_amd64";
+      sha256 = "636c77a5f10b1861d4ebe7722a0c832e1fdbcc995d248e36280966e387ffaa89";
+      url = "mirror://steamrt/pool/main/j/json-glib/libjson-glib-1.0-0_1.0.2-1~steamrt1.1+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libjson-glib-1.0-0.deb";
       };
     }
     rec {
@@ -1084,48 +1102,48 @@
       };
     }
     rec {
-      name = "libsdl2_2.0.9.~reimport-0+steamrt1.1+srt2_amd64";
-      sha256 = "907391ea4512c3372f86afd8a9a409632d90b9e260de43f8082f90175e08c56c";
-      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2_2.0.9.~reimport-0+steamrt1.1+srt2_amd64.deb";
+      name = "libsdl2-2.0-0_2.0.10-0+steamrt1.3+srt1_amd64";
+      sha256 = "a69cf30f4c0f7ee02d9c37bd2ec25bab76a8c1175674959738e945bae05c7ed6";
+      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2-2.0-0_2.0.10-0+steamrt1.3+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2.deb";
+        name = "libsdl2-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-image_2.0.4.~reimport-0+steamrt1.1+srt2_amd64";
-      sha256 = "136a0c68b520f4eaec9ff81321785b09dc6843431b10ba6941faee82af3b215d";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-image/libsdl2-image_2.0.4.~reimport-0+steamrt1.1+srt2_amd64.deb";
+      name = "libsdl2-image-2.0-0_2.0.5-0+steamrt1.1+srt1_amd64";
+      sha256 = "13a3c69b92a72490eb1dd7e6c09244047b22765882944dc4bb335cb356f423a1";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-image/libsdl2-image-2.0-0_2.0.5-0+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-image.deb";
+        name = "libsdl2-image-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-mixer_2.0.4.~reimport-0+steamrt1.1+srt2_amd64";
-      sha256 = "98f77bb9019649440a96e9c70bd160fa03aa0bd306fa51110b861882cb62df0d";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer_2.0.4.~reimport-0+steamrt1.1+srt2_amd64.deb";
+      name = "libsdl2-mixer-2.0-0_2.0.4.~reimport-0+steamrt1.2+srt1_amd64";
+      sha256 = "78860d794928a0f7a31cd4ee83f395151dedb74f0e2613c6833438aa0d3f1d54";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer-2.0-0_2.0.4.~reimport-0+steamrt1.2+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-mixer.deb";
+        name = "libsdl2-mixer-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-net_2.0.1+srt3_amd64";
-      sha256 = "492a6e5f4efc454dd720be4028efd89a212e039d3f3f7b01c94c0144d8d8d621";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-net/libsdl2-net_2.0.1+srt3_amd64.deb";
+      name = "libsdl2-net-2.0-0_2.0.1.~reimport-0+steamrt1.1+srt1_amd64";
+      sha256 = "cea2cc24af441eca4e23227bcc9eef80047befcf4f79c9c5dc796f157068da45";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-net/libsdl2-net-2.0-0_2.0.1.~reimport-0+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-net.deb";
+        name = "libsdl2-net-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-ttf_2.0.14+srt3_amd64";
-      sha256 = "f117047ffeaf77a93fc0932470e80ace2d07d7e672191c9dd50ca5f2a033f56c";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf_2.0.14+srt3_amd64.deb";
+      name = "libsdl2-ttf-2.0-0_2.0.15-0+steamrt1.1+srt2_amd64";
+      sha256 = "4444fb73f3bc2b7229dea2564baba233958158d82c73489724d4107bd31e3e6c";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf-2.0-0_2.0.15-0+steamrt1.1+srt2_amd64.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-ttf.deb";
+        name = "libsdl2-ttf-2.0-0.deb";
       };
     }
     rec {
@@ -1345,30 +1363,75 @@
       };
     }
     rec {
-      name = "libva-glx1_1.7.0-1+steamos1+srt2_amd64";
-      sha256 = "c25662535e0bcc1fc349c1f61710f31dcc1be846ea2ba4282225756809b13e15";
-      url = "mirror://steamrt/pool/main/libv/libva/libva-glx1_1.7.0-1+steamos1+srt2_amd64.deb";
+      name = "libva-drm1_1.7.0-1+steamrt1.1+srt1_amd64";
+      sha256 = "ee98522c6c69c1f6134a37d63a74f6c4f4ef5be2944bd504e8886333115f1f06";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva-drm1_1.7.0-1+steamrt1.1+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-drm1.deb";
+      };
+    }
+    rec {
+      name = "libva-drm2_2.1.0-3~steamrt1.2+srt1_amd64";
+      sha256 = "5add6487f678a13cc71d039b1ebd6991b1395dd8ce78124ac3675ea80f10e1b8";
+      url = "mirror://steamrt/pool/main/libv/libva/libva-drm2_2.1.0-3~steamrt1.2+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-drm2.deb";
+      };
+    }
+    rec {
+      name = "libva-glx1_1.7.0-1+steamrt1.1+srt1_amd64";
+      sha256 = "938db19eecb0a2fbc5058e90962cdbc05f3ef2b1601341b7b6d7be429da97259";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva-glx1_1.7.0-1+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libva-glx1.deb";
       };
     }
     rec {
-      name = "libva-x11-1_1.7.0-1+steamos1+srt2_amd64";
-      sha256 = "ddfd440a2bfe3174b33ac5b459ce4261ddbcfa36d443ad237d41e5e41dd17bae";
-      url = "mirror://steamrt/pool/main/libv/libva/libva-x11-1_1.7.0-1+steamos1+srt2_amd64.deb";
+      name = "libva-glx2_2.1.0-3~steamrt1.2+srt1_amd64";
+      sha256 = "7a14fde5181a5c313e97bcb25d6233c7343ebc009c3c5065bb65e8d3ec74f643";
+      url = "mirror://steamrt/pool/main/libv/libva/libva-glx2_2.1.0-3~steamrt1.2+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-glx2.deb";
+      };
+    }
+    rec {
+      name = "libva-x11-1_1.7.0-1+steamrt1.1+srt1_amd64";
+      sha256 = "6f0894f499b44346af1d35a3d1300b9cc2d9b1674fca879345daf392620322ae";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva-x11-1_1.7.0-1+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libva-x11-1.deb";
       };
     }
     rec {
-      name = "libva1_1.7.0-1+steamos1+srt2_amd64";
-      sha256 = "a06f1a3af4679bb44722458d956177468e78d662cf97dc1ec6c8ee38dc7408a2";
-      url = "mirror://steamrt/pool/main/libv/libva/libva1_1.7.0-1+steamos1+srt2_amd64.deb";
+      name = "libva-x11-2_2.1.0-3~steamrt1.2+srt1_amd64";
+      sha256 = "47f70088a25e92b036374d8ff132e11b38546f26ee2e6cba141d42f766d8c748";
+      url = "mirror://steamrt/pool/main/libv/libva/libva-x11-2_2.1.0-3~steamrt1.2+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-x11-2.deb";
+      };
+    }
+    rec {
+      name = "libva1_1.7.0-1+steamrt1.1+srt1_amd64";
+      sha256 = "f0c27f86e0ec4e210e05b2217d2d51fe52994add7df2fe5ff41e7f8aeee6f426";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva1_1.7.0-1+steamrt1.1+srt1_amd64.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libva1.deb";
+      };
+    }
+    rec {
+      name = "libva2_2.1.0-3~steamrt1.2+srt1_amd64";
+      sha256 = "08c60888e39e4656fa4c41dbbb2baa0d99f91a8fabbf5336261b255c0ea4f185";
+      url = "mirror://steamrt/pool/main/libv/libva/libva2_2.1.0-3~steamrt1.2+srt1_amd64.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva2.deb";
       };
     }
     rec {
@@ -2301,18 +2364,18 @@
       };
     }
     rec {
-      name = "libcurl3_7.22.0-3ubuntu4.17+steamrt1.1+srt5_i386";
-      sha256 = "f92d0bdda8d394104824fca2ac6d19cb9c95a863893ef604e45c43d0eeb16ac1";
-      url = "mirror://steamrt/pool/main/c/curl/libcurl3_7.22.0-3ubuntu4.17+steamrt1.1+srt5_i386.deb";
+      name = "libcurl3_7.22.0-3ubuntu4.17+steamrt1.2+srt1_i386";
+      sha256 = "6199cf8f81ddc6484bf59ac4941e17808cfa09b3c9141895b18a301bd0729547";
+      url = "mirror://steamrt/pool/main/c/curl/libcurl3_7.22.0-3ubuntu4.17+steamrt1.2+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libcurl3.deb";
       };
     }
     rec {
-      name = "libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.1+srt5_i386";
-      sha256 = "b210ce907bded1db660df24365861a10421d758cfd7fdb2fe64b058ecb92cdce";
-      url = "mirror://steamrt/pool/main/c/curl/libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.1+srt5_i386.deb";
+      name = "libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.2+srt1_i386";
+      sha256 = "2ff0f70b5d522f429c4d9607cf3f1f35fb742693276e874c5f6f50d04553c628";
+      url = "mirror://steamrt/pool/main/c/curl/libcurl3-gnutls_7.22.0-3ubuntu4.17+steamrt1.2+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libcurl3-gnutls.deb";
@@ -2352,6 +2415,15 @@
       source = fetchurl {
         inherit url sha256;
         name = "libdbusmenu-gtk4.deb";
+      };
+    }
+    rec {
+      name = "libelf1_0.152-1ubuntu3.1+srt3_i386";
+      sha256 = "85aab224f4808b664cb827cd46dc4d559a1568e467db56e7047d26493f90cbf1";
+      url = "mirror://steamrt/pool/main/e/elfutils/libelf1_0.152-1ubuntu3.1+srt3_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libelf1.deb";
       };
     }
     rec {
@@ -2526,9 +2598,9 @@
       };
     }
     rec {
-      name = "libgnutls30_3.4.10-4ubuntu1.4+steamrt1.1+srt4_i386";
-      sha256 = "a630adb25ecfa209aef8a1b14fac45293f044f652ee91249489dfe9bb0d5001d";
-      url = "mirror://steamrt/pool/main/g/gnutls28/libgnutls30_3.4.10-4ubuntu1.4+steamrt1.1+srt4_i386.deb";
+      name = "libgnutls30_3.4.10-4ubuntu1.4+steamrt1.2+srt1_i386";
+      sha256 = "b841c274bf8478136cdf8d2dfaa156d680dd0b2bdd20fb96f5645b4e9c09ef9a";
+      url = "mirror://steamrt/pool/main/g/gnutls28/libgnutls30_3.4.10-4ubuntu1.4+steamrt1.2+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libgnutls30.deb";
@@ -2721,6 +2793,15 @@
       source = fetchurl {
         inherit url sha256;
         name = "libjpeg62.deb";
+      };
+    }
+    rec {
+      name = "libjson-glib-1.0-0_1.0.2-1~steamrt1.1+srt1_i386";
+      sha256 = "e92b6a5be06128f88d885d2da927ce3a2bf274bf9f812ba102a0966fd17fd2ee";
+      url = "mirror://steamrt/pool/main/j/json-glib/libjson-glib-1.0-0_1.0.2-1~steamrt1.1+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libjson-glib-1.0-0.deb";
       };
     }
     rec {
@@ -3093,48 +3174,48 @@
       };
     }
     rec {
-      name = "libsdl2_2.0.9.~reimport-0+steamrt1.1+srt2_i386";
-      sha256 = "b33446315351af70d2cfd602d5ee9e2390e2805b10f199dff383917469a3b344";
-      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2_2.0.9.~reimport-0+steamrt1.1+srt2_i386.deb";
+      name = "libsdl2-2.0-0_2.0.10-0+steamrt1.3+srt1_i386";
+      sha256 = "88f38095f8574cf3792b42da2a13b89c4011904e7d5043a911af4cd3f749f62b";
+      url = "mirror://steamrt/pool/main/libs/libsdl2/libsdl2-2.0-0_2.0.10-0+steamrt1.3+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2.deb";
+        name = "libsdl2-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-image_2.0.4.~reimport-0+steamrt1.1+srt2_i386";
-      sha256 = "4783fc8d0012b5a1b917336af3fd7db097c0c43153bb088df0fdd9018b8c4072";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-image/libsdl2-image_2.0.4.~reimport-0+steamrt1.1+srt2_i386.deb";
+      name = "libsdl2-image-2.0-0_2.0.5-0+steamrt1.1+srt1_i386";
+      sha256 = "27b47158e7af64376f0fc4382e54b9c3130a0990d4d8b4e421b0729bf6e543a9";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-image/libsdl2-image-2.0-0_2.0.5-0+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-image.deb";
+        name = "libsdl2-image-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-mixer_2.0.4.~reimport-0+steamrt1.1+srt2_i386";
-      sha256 = "4c7f511b947e416898b169694ef112d137674c9add49162ba1185c36e83b3604";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer_2.0.4.~reimport-0+steamrt1.1+srt2_i386.deb";
+      name = "libsdl2-mixer-2.0-0_2.0.4.~reimport-0+steamrt1.2+srt1_i386";
+      sha256 = "36f917c204f56c0836fb1829ecfb36ca5458b121857387afbf9e5afab6c4a36a";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-mixer/libsdl2-mixer-2.0-0_2.0.4.~reimport-0+steamrt1.2+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-mixer.deb";
+        name = "libsdl2-mixer-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-net_2.0.1+srt3_i386";
-      sha256 = "f5eba8169255366fdfc809183c89cd6d7ce88da96c6a56cd3da5f8af68cb31d0";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-net/libsdl2-net_2.0.1+srt3_i386.deb";
+      name = "libsdl2-net-2.0-0_2.0.1.~reimport-0+steamrt1.1+srt1_i386";
+      sha256 = "73316e94bfd4fc2382fd255c93469fdb8fa8a142c64b02522cbd84f972b17acf";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-net/libsdl2-net-2.0-0_2.0.1.~reimport-0+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-net.deb";
+        name = "libsdl2-net-2.0-0.deb";
       };
     }
     rec {
-      name = "libsdl2-ttf_2.0.14+srt3_i386";
-      sha256 = "db1b89ffc678d7845adb3fa57b04865921521bd97603d28751248fb8f367d909";
-      url = "mirror://steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf_2.0.14+srt3_i386.deb";
+      name = "libsdl2-ttf-2.0-0_2.0.15-0+steamrt1.1+srt2_i386";
+      sha256 = "1a0a7c17206ed42dbb0a4c36a6be819b2e405c7f2a5c402b44773422bb717fe0";
+      url = "mirror://steamrt/pool/main/libs/libsdl2-ttf/libsdl2-ttf-2.0-0_2.0.15-0+steamrt1.1+srt2_i386.deb";
       source = fetchurl {
         inherit url sha256;
-        name = "libsdl2-ttf.deb";
+        name = "libsdl2-ttf-2.0-0.deb";
       };
     }
     rec {
@@ -3354,30 +3435,75 @@
       };
     }
     rec {
-      name = "libva-glx1_1.7.0-1+steamos1+srt2_i386";
-      sha256 = "d9e84658add810853ef5c07729afa864ea07be31b513a2eb5fd569328a9555a9";
-      url = "mirror://steamrt/pool/main/libv/libva/libva-glx1_1.7.0-1+steamos1+srt2_i386.deb";
+      name = "libva-drm1_1.7.0-1+steamrt1.1+srt1_i386";
+      sha256 = "4f5fdcaf46a2e337fe1cad9c936809b5a38aff7af0b926bb9284930d23a9e09c";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva-drm1_1.7.0-1+steamrt1.1+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-drm1.deb";
+      };
+    }
+    rec {
+      name = "libva-drm2_2.1.0-3~steamrt1.2+srt1_i386";
+      sha256 = "8f2ca36ca81167017bc3921753ef6d9e3097172d52007ad16484f1f5eaa26a18";
+      url = "mirror://steamrt/pool/main/libv/libva/libva-drm2_2.1.0-3~steamrt1.2+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-drm2.deb";
+      };
+    }
+    rec {
+      name = "libva-glx1_1.7.0-1+steamrt1.1+srt1_i386";
+      sha256 = "8360c4e6d65b444e4a985410101ddddcd7c1c955f25debdf20ccda9664695d44";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva-glx1_1.7.0-1+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libva-glx1.deb";
       };
     }
     rec {
-      name = "libva-x11-1_1.7.0-1+steamos1+srt2_i386";
-      sha256 = "1d2e3d83d02dbb83156edba8f6b1564baf795e84bf9c4549db100722f42d4a04";
-      url = "mirror://steamrt/pool/main/libv/libva/libva-x11-1_1.7.0-1+steamos1+srt2_i386.deb";
+      name = "libva-glx2_2.1.0-3~steamrt1.2+srt1_i386";
+      sha256 = "41e935fbb2fd67af1d3477959703ff1211bd34c0902d96e53e073e8b18d9def7";
+      url = "mirror://steamrt/pool/main/libv/libva/libva-glx2_2.1.0-3~steamrt1.2+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-glx2.deb";
+      };
+    }
+    rec {
+      name = "libva-x11-1_1.7.0-1+steamrt1.1+srt1_i386";
+      sha256 = "bf8a787f375533dbb847aea5ab9bb316476d0c8a3e772d449356920fa9b045ce";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva-x11-1_1.7.0-1+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libva-x11-1.deb";
       };
     }
     rec {
-      name = "libva1_1.7.0-1+steamos1+srt2_i386";
-      sha256 = "f32d8049e071903b6b20648b0a30c4300603b2eb0635c71243beb58d9746dce6";
-      url = "mirror://steamrt/pool/main/libv/libva/libva1_1.7.0-1+steamos1+srt2_i386.deb";
+      name = "libva-x11-2_2.1.0-3~steamrt1.2+srt1_i386";
+      sha256 = "766bfc01ee038b21bd48eaacd1aaac1556817a999bdd83c605b4efdaf6c54a1d";
+      url = "mirror://steamrt/pool/main/libv/libva/libva-x11-2_2.1.0-3~steamrt1.2+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva-x11-2.deb";
+      };
+    }
+    rec {
+      name = "libva1_1.7.0-1+steamrt1.1+srt1_i386";
+      sha256 = "561d0e3f3a670ee8f6d2e1d4cfa41983d688e0d6233f07e541392016e517aa4d";
+      url = "mirror://steamrt/pool/main/libv/libva1/libva1_1.7.0-1+steamrt1.1+srt1_i386.deb";
       source = fetchurl {
         inherit url sha256;
         name = "libva1.deb";
+      };
+    }
+    rec {
+      name = "libva2_2.1.0-3~steamrt1.2+srt1_i386";
+      sha256 = "9ea2f165352428378bb6dc987256d37f2d2aace0be23a1ba70db69fab65e82dd";
+      url = "mirror://steamrt/pool/main/libv/libva/libva2_2.1.0-3~steamrt1.2+srt1_i386.deb";
+      source = fetchurl {
+        inherit url sha256;
+        name = "libva2.deb";
       };
     }
     rec {
