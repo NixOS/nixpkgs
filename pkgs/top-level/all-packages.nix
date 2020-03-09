@@ -2188,6 +2188,8 @@ in
 
   xmousepasteblock = callPackage ../tools/X11/xmousepasteblock { };
 
+  zoxide = callPackage ../tools/misc/zoxide { };
+
   mar1d = callPackage ../games/mar1d { } ;
 
   mcrypt = callPackage ../tools/misc/mcrypt { };
