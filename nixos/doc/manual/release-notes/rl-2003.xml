@@ -1010,7 +1010,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
       </para></listitem>
      </itemizedlist>
     </para>
-   </listitem>
+  </listitem>
+  <listitem>
+   <para>
+    The <link linkend="opt-systemd.network.links">systemd.network.links</link> option is now respected
+    even when <link linkend="opt-systemd.network.enable">systemd-networkd</link> is disabled.
+    This mirrors the behaviour of systemd - It's udev that parses <literal>.link</literal> files,
+    not <command>systemd-networkd</command>.
+   </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>
