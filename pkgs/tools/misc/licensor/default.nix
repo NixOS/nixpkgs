@@ -16,10 +16,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0kfyg06wa2v7swm7hs9kkazjg34mircd4nm4qmljyzjh2yh8icg3";
   })];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "042dplm0cdxkv73m5qlkc61h0x9fpzxn2b0c8gjx2hwvigcia139";
+  cargoSha256 = "1z2r8nfizifj8sk1ghppyqk5r65sgmbk47fiq95pnwpadm5drvqa";
 
   meta = with lib; {
     description = "Write licenses to stdout";
