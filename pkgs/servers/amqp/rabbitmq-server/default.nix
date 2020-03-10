@@ -2,6 +2,7 @@
 , docbook_xml_dtd_45, docbook_xsl, zip, unzip, rsync, getconf, socat
 , procps, coreutils, gnused, systemd, glibcLocales
 , AppKit, Carbon, Cocoa
+, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -64,5 +65,9 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mpl11;
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ Profpatsch ];
+  };
+
+  passthru.tests = {
+    vm-test = nixosTests.rabbitmq;
   };
 }
