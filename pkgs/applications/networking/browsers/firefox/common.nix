@@ -14,7 +14,7 @@
 , rust-cbindgen, nodejs, nasm, fetchpatch
 
 # backports of newer libraries for stable firefox >= 70
-, nss_3_49_2
+, nss_3_51
 , sqlite_3_30_1
 , nspr_4_25
 , rustc_1_41
@@ -127,7 +127,7 @@ let
   })
   ++ patches;
 
-  nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_49_2 else nss;
+  nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_51 else nss;
   nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_25 else nspr;
   sqlite_pkg = if lib.versionAtLeast ffversion "70" then sqlite_3_30_1 else sqlite;
   rustc_pkg = if lib.versionAtLeast ffversion "73" then rustc_1_41 else rustc;

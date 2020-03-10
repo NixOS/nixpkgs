@@ -12833,7 +12833,7 @@ in
   nss = lowPrio (callPackage ../development/libraries/nss { });
 
   # newer NSS version for newer firefox stable releases
-  nss_3_49_2 = callPackage ../development/libraries/nss/3_49_2.nix { };
+  nss_3_51 = callPackage ../development/libraries/nss/3_51.nix { };
 
   nssTools = nss.tools;
 
