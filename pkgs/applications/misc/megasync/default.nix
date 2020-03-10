@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "megasync";
-  version = "4.2.5.0";
+  version = "4.3.0.8";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "1zw7x8gpvzhnzyirs5ishjl5idzyyin4wdxa67d6gzfgvqi33n7w";
+    sha256 = "1rhxkc6j3039rcsi8cxy3n00g6w7acir82ymnksbpsnp4yxqv5r3";
     fetchSubmodules = true;
   };
 
@@ -40,13 +40,6 @@ mkDerivation rec {
     ./noinstall-distro-version.patch
     # megasync target is not part of the install rule thanks to a commented block
     ./install-megasync.patch
-
-    # Fix build errror also described upstream:
-    # https://github.com/meganz/MEGAsync/pull/313
-    (fetchpatch {
-      url = "https://github.com/meganz/MEGAsync/pull/313.patch";
-      sha256 = "1ld00cnh9afxibvkzkqi8gz59xlzidw2dy4yqngwwdqy76sfsn3w";
-    })
   ];
 
   postPatch = ''
