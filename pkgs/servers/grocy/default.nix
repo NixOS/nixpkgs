@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grocy";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchurl {
     url = "https://github.com/grocy/grocy/releases/download/v${version}/grocy_${version}.zip";
-    sha256 = "1d4hy495in7p0i4fnhai1yqhjhmblv1g30siggmqpjrzdiiw3bak";
+    sha256 = "1fq1zlxxhpcxj67xxlgf20dia95xcimgnm13cr56sy9f2vjx58m6";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
     unzip ${src} -d .
   '';
 
-  patches = [ ./config-locations.patch ];
+  patches = [ ./0001-Define-configs-with-env-vars.patch ];
+  patchFlags = [ "--binary" "-p1" ];
 
   dontBuild = true;
 
