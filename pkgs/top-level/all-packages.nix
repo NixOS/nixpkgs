@@ -24398,6 +24398,8 @@ in
 
   bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq { };
 
+  bppsuite = callPackage ../applications/science/biology/bppsuite { };
+
   cd-hit = callPackage ../applications/science/biology/cd-hit { };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
