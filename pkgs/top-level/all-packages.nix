@@ -26531,6 +26531,8 @@ in
 
   hashdeep = callPackage ../tools/security/hashdeep { };
 
+  pdf-parser = callPackage ../tools/misc/pdf-parser {};
+
   fluxboxlauncher = callPackage ../applications/misc/fluxboxlauncher {};
 
   btcdeb = callPackage ../applications/blockchains/btcdeb {};
