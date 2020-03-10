@@ -3,7 +3,6 @@
 , gfortran
 , openblas
 , metis
-, cmake
 , fixDarwinDylibNames
 , gnum4
 , enableCuda ? false
@@ -24,7 +23,6 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake
     gnum4
   ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
@@ -34,12 +32,13 @@ stdenv.mkDerivation rec {
     gfortran.cc.lib
   ] ++ stdenv.lib.optional enableCuda cudatoolkit;
 
-  dontUseCmakeConfigure = true;
-
   preConfigure = ''
     mkdir -p $out/lib
     mkdir -p $dev/include
     mkdir -p $doc/share/doc/${pname}-${version}
+
+    # Mongoose and GraphBLAS are packaged separately
+    sed -i "Makefile" -e '/GraphBLAS\|Mongoose/d'
 
     sed -i "SuiteSparse_config/SuiteSparse_config.mk" \
         -e '/CHOLMOD_CONFIG ?=/ s/$/ -DNPARTITION/'
