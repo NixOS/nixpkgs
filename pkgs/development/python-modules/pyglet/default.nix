@@ -11,6 +11,7 @@
 , gdk-pixbuf
 , fontconfig
 , freetype
+, ffmpeg-full
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,8 @@ buildPythonPackage rec {
                 path = '${fontconfig.lib}/lib/libfontconfig${ext}'
             elif name == 'freetype':
                 path = '${freetype}/lib/libfreetype${ext}'
+            elif name[0:2] == 'av' or name[0:2] == 'sw':
+                path = '${ffmpeg-full}/lib/lib' + name + '${ext}'
             if path is not None:
                 return ctypes.cdll.LoadLibrary(path)
         raise Exception("Could not load library {}".format(names))
