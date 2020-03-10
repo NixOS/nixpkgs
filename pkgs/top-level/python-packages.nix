@@ -1354,6 +1354,8 @@ in {
 
   pywebpush = callPackage ../development/python-modules/pywebpush { };
 
+  pywebview = callPackage ../development/python-modules/pywebview { };
+
   pywick = callPackage ../development/python-modules/pywick { };
 
   pyxml = disabledIf isPy3k (callPackage ../development/python-modules/pyxml{ });
