@@ -1222,6 +1222,12 @@ self: super: {
   # Requires dhall >= 1.23.0
   ats-pkg = dontCheck (super.ats-pkg.override { dhall = self.dhall_1_29_0; });
 
+  # fake a home dir and capture generated man page
+  ats-format = overrideCabal super.ats-format (old : {
+    preConfigure = "export HOME=$PWD";
+    postBuild = "mv .local/share $out";
+  });
+
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
   heap = dontCheck super.heap;
