@@ -2,7 +2,7 @@
 , CoreServices ? null
 , buildPackages }:
 
-let version = "4.24"; in
+let version = "4.25"; in
 
 stdenv.mkDerivation {
   pname = "nspr";
@@ -10,7 +10,7 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "mirror://mozilla/nspr/releases/v${version}/src/nspr-${version}.tar.gz";
-    sha256 = "1l0ksiny032jijgk0g76wf0kiq673i01izj7jrs2h5d1yq6rm9ch";
+    sha256 = "0mjjk2b7ika3v4y99cnaqz3z1iq1a50r1psn9i3s87gr46z0khqb";
   };
 
   patches = [

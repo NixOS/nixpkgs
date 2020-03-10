@@ -16,7 +16,7 @@
 # backports of newer libraries for stable firefox >= 70
 , nss_3_49_2
 , sqlite_3_30_1
-, nspr_4_24
+, nspr_4_25
 , rustc_1_41
 , cargo_1_41
 , rust-cbindgen_0_1_13
@@ -128,7 +128,7 @@ let
   ++ patches;
 
   nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_49_2 else nss;
-  nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_24 else nspr;
+  nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_25 else nspr;
   sqlite_pkg = if lib.versionAtLeast ffversion "70" then sqlite_3_30_1 else sqlite;
   rustc_pkg = if lib.versionAtLeast ffversion "73" then rustc_1_41 else rustc;
   cargo_pkg = if lib.versionAtLeast ffversion "73" then cargo_1_41 else cargo;

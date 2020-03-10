@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, nspr_4_24, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
+{ stdenv, fetchurl, nspr_4_25, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
 
 let
   nssPEM = fetchurl {
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ zlib sqlite ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  propagatedBuildInputs = [ nspr_4_24 ];
+  propagatedBuildInputs = [ nspr_4_25 ];
 
   prePatch = ''
     # strip the trailing whitespace from the patch line…
@@ -51,8 +51,8 @@ in stdenv.mkDerivation rec {
   makeFlags = let
     cpu = stdenv.hostPlatform.parsed.cpu.name;
   in [
-    "NSPR_INCLUDE_DIR=${nspr_4_24.dev}/include"
-    "NSPR_LIB_DIR=${nspr_4_24.out}/lib"
+    "NSPR_INCLUDE_DIR=${nspr_4_25.dev}/include"
+    "NSPR_LIB_DIR=${nspr_4_25.out}/lib"
     "NSDISTMODE=copy"
     "BUILD_OPT=1"
     "SOURCE_PREFIX=\$(out)"
@@ -117,10 +117,10 @@ in stdenv.mkDerivation rec {
     (if stdenv.isDarwin
      then ''
        libfile="$out/lib/lib$libname.dylib"
-       DYLD_LIBRARY_PATH=$out/lib:${nspr_4_24.out}/lib \
+       DYLD_LIBRARY_PATH=$out/lib:${nspr_4_25.out}/lib \
      '' else ''
        libfile="$out/lib/lib$libname.so"
-       LD_LIBRARY_PATH=$out/lib:${nspr_4_24.out}/lib \
+       LD_LIBRARY_PATH=$out/lib:${nspr_4_25.out}/lib \
      '') + ''
         ${nss}/bin/shlibsign -v -i "$libfile"
     done
