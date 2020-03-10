@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "quandl";
-  version = "3.4.6";
+  version = "3.4.8";
 
   src = fetchPypi {
     inherit version;
     pname = "Quandl";
-    sha256 = "15b58nj45bdax0aha6kwjz5pxj3bz8bs6ajwxqp9r89j13xxn94g";
+    sha256 = "179knz21filz6x6qk66b7dk2pj1x4jnvxxd5x71ap19f367dkkb3";
   };
 
   doCheck = true;

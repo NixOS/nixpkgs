@@ -14,10 +14,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security curl ];
   nativeBuildInputs = [ pkgconfig ];
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1cp8ns0cywzqchdw5hkg4fhxhqb6apxwjjasf1ksf3dgjwynlhzm";
+  cargoSha256 = "1ylk9vrpajslx1zy4vqmlyqa5ygcmvir1gcn8hsr6liigf5kcz7p";
   cargoPatches = [ ./0001-Add-cargo.lock.patch ];
   cargoBuildFlags = [ "-p" pname ];
 

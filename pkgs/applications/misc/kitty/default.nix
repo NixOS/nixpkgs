@@ -12,8 +12,6 @@
   libcanberra,
   libicns,
   libpng,
-  librsvg,
-  optipng,
   python3,
   zlib,
 }:
@@ -55,8 +53,6 @@ buildPythonApplication rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
-    librsvg
-    optipng
   ];
 
   propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;

@@ -933,6 +933,8 @@ in
 
   glasgow = with python3Packages; toPythonApplication glasgow;
 
+  gomatrix = callPackage ../applications/misc/gomatrix { };
+
   gucci = callPackage ../tools/text/gucci { };
 
   grc = callPackage ../tools/misc/grc { };
@@ -1284,6 +1286,8 @@ in
 
   bruteforce-luks = callPackage ../tools/security/bruteforce-luks { };
 
+  brutespray = callPackage ../tools/security/brutespray { };
+
   breakpointHook = assert stdenv.isLinux;
     makeSetupHook { } ../build-support/setup-hooks/breakpoint-hook.sh;
 
@@ -1456,6 +1460,8 @@ in
   clib = callPackage ../tools/package-management/clib { };
 
   clingo = callPackage ../applications/science/logic/potassco/clingo.nix { };
+
+  clingcon = callPackage ../applications/science/logic/potassco/clingcon.nix { };
 
   clprover = callPackage ../applications/science/logic/clprover/clprover.nix { };
 
@@ -1963,6 +1969,8 @@ in
   };
 
   massren = callPackage ../tools/misc/massren { };
+
+  medusa = callPackage ../tools/security/medusa { };
 
   megasync = libsForQt5.callPackage ../applications/misc/megasync { };
 
@@ -2683,7 +2691,8 @@ in
     cudatoolkit_9_2
     cudatoolkit_10
     cudatoolkit_10_0
-    cudatoolkit_10_1;
+    cudatoolkit_10_1
+    cudatoolkit_10_2;
 
   cudatoolkit = cudatoolkit_10;
 
@@ -2699,7 +2708,8 @@ in
     cudnn_cudatoolkit_9_2
     cudnn_cudatoolkit_10
     cudnn_cudatoolkit_10_0
-    cudnn_cudatoolkit_10_1;
+    cudnn_cudatoolkit_10_1
+    cudnn_cudatoolkit_10_2;
 
   cudnn = cudnn_cudatoolkit_10;
 
@@ -3488,6 +3498,8 @@ in
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
+  
+  fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
 
@@ -10708,7 +10720,7 @@ in
 
   sqlite-web = callPackage ../development/tools/database/sqlite-web { };
 
-  sqlmap = python3Packages.sqlmap;
+  sqlmap = with python3Packages; toPythonApplication sqlmap;
 
   sselp = callPackage ../tools/X11/sselp{ };
 
@@ -14931,6 +14943,8 @@ in
   zita-alsa-pcmi = callPackage ../development/libraries/audio/zita-alsa-pcmi { };
 
   zita-resampler = callPackage ../development/libraries/audio/zita-resampler { };
+
+  zz = callPackage ../development/compilers/zz { };
 
   zziplib = callPackage ../development/libraries/zziplib { };
 
@@ -25495,6 +25509,8 @@ in
   ricty = callPackage ../data/fonts/ricty { };
 
   rmount = callPackage ../tools/filesystems/rmount {};
+
+  romdirfs = callPackage ../tools/filesystems/romdirfs {};
 
   rss-glx = callPackage ../misc/screensavers/rss-glx { };
 
