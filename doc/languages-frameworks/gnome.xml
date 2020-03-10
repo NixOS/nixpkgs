@@ -224,7 +224,7 @@ mkDerivation {
     </term>
     <listitem>
      <para>
-      You can rely on applications depending on the library set the necessary environment variables but that it often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
+      You can rely on applications depending on the library setting the necessary environment variables but that is often easy to miss. Instead we recommend to patch the paths in the source code whenever possible. Here are some examples:
       <itemizedlist>
        <listitem xml:id="ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext">
         <para>
