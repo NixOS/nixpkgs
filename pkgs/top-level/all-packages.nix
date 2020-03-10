@@ -26168,4 +26168,6 @@ in
   go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
 
   fluxboxlauncher = callPackage ../applications/misc/fluxboxlauncher {};
+
+  btcdeb = callPackage ../applications/blockchains/btcdeb {};
 }
