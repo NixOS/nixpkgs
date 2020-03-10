@@ -24392,6 +24392,8 @@ in
 
   bpp-core = callPackage ../development/libraries/science/biology/bpp-core { };
 
+  bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq { };
+
   cd-hit = callPackage ../applications/science/biology/cd-hit { };
 
   cmtk = callPackage ../applications/science/biology/cmtk { };
