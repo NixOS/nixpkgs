@@ -5673,6 +5673,10 @@ in
 
   openobex = callPackage ../tools/bluetooth/openobex { };
 
+  openrgb = callPackage ../applications/misc/openrgb {
+    inherit (qt5) qmake wrapQtAppsHook;
+  };
+
   openresolv = callPackage ../tools/networking/openresolv { };
 
   opensc = callPackage ../tools/security/opensc {
