@@ -23005,6 +23005,8 @@ in
 
   braincurses = callPackage ../games/braincurses { };
 
+  brainworkshop = callPackage ../games/brainworkshop { };
+
   brogue = callPackage ../games/brogue { };
 
   bsdgames = callPackage ../games/bsdgames { };
