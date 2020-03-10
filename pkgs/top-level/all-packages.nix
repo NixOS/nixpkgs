@@ -1633,6 +1633,8 @@ in
 
   discount = callPackage ../tools/text/discount { };
 
+  disk-filltest = callPackage ../tools/system/disk-filltest { };
+
   diskscan = callPackage ../tools/misc/diskscan { };
 
   disorderfs = callPackage ../tools/filesystems/disorderfs {
