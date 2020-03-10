@@ -712,6 +712,14 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      For further reference, please read <link xlink:href="https://github.com/NixOS/nixpkgs/pull/68953">#68953</link> or the corresponding <link xlink:href="https://discourse.nixos.org/t/predictable-network-interface-names-in-initrd/4055">discourse thread</link>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The <link linkend="opt-systemd.network.links">systemd.network.links</link> option is now respected
+     even when <link linkend="opt-systemd.network.enable">systemd-networkd</command> is disabled.
+     This mirrors the behaviour of systemd - It's udev that parses <literal>.link</literal> files,
+     not <command>systemd-networkd</command>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 </section>
