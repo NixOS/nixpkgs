@@ -14819,6 +14819,19 @@ let
     };
   };
 
+  PerlIOLayers = buildPerlModule rec {
+    pname = "PerlIO-Layers";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/L/LE/LEONT/${pname}-${version}.tar.gz";
+      sha256 = "1d77e164aa5d5d24699a5479a423abdc1b07973fbe5a22d304fef2c560254b42";
+    };
+    meta = {
+      description = "Querying your filehandle's capabilities";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
   PerlIOutf8_strict = buildPerlPackage {
     pname = "PerlIO-utf8_strict";
     version = "0.007";
