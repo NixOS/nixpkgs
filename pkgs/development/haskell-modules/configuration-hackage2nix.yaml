@@ -2920,7 +2920,6 @@ broken-packages:
   - atomic-primops-vector
   - atomo
   - atp-haskell
-  - ats-format
   - ats-setup
   - ats-storable
   - attempt
