@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "ocaml-ppx";
     repo = "ppx_deriving_yojson";
     rev = "v${version}";
-    sha256 = "098rpjbykp7ffhs62mgxlk7349l665xh1w1m8ldj6rjb690cc945";
+    sha256 = "1vbhmnhnj1aa4jrp8xqi52nggwj7vrml83z2j0r0qzvl65v02mc0";
   };
 
   buildInputs = [ ppxfind ounit ];
