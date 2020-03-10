@@ -11,11 +11,22 @@ let
       });
     };
 
-  py = python2.override {
+  py = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
-      (mkOverride "flask"       "0.10.1" "0wrkavjdjndknhp8ya8j850jq7a1cli4g5a93mg8nh1xz2gq50sc")
-      (mkOverride "flask_login" "0.2.11" "1rg3rsjs1gwi2pw6vr9jmhaqm9b3vc9c4hfcsvp4y8agbh7g3mc3")
+      (mkOverride "flask"       "0.12.5" "fac2b9d443e49f7e7358a444a3db5950bdd0324674d92ba67f8f1f15f876b14f")
       (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
+      (mkOverride "psutil"      "5.6.7"  "ffad8eb2ac614518bbe3c0b8eb9dffdb3a8d2e3a7d5da51c5b974fb723a5c5aa")
+
+      (pself: psuper: {
+        sentry-sdk = psuper.sentry-sdk.overridePythonAttrs (oldAttrs: rec {
+          version = "0.13.2";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "ff1fa7fb85703ae9414c8b427ee73f8363232767c9cd19158f08f6e4f0b58fc7";
+          };
+          checkInputs = with pself; [flask bottle falcon];
+        });
+      })
 
       # Octoprint holds back jinja2 to 2.8.1 due to breaking changes.
       # This old version does not have updated test config for pytest 4,
