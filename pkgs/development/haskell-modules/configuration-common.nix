@@ -1222,6 +1222,9 @@ self: super: {
   # Requires dhall >= 1.23.0
   ats-pkg = dontCheck (super.ats-pkg.override { dhall = self.dhall_1_29_0; });
 
+  # Disable manpage generation by patching Setup.hs
+  ats-format = appendPatch super.ats-format ./patches/ats-format.patch;
+
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
   heap = dontCheck super.heap;

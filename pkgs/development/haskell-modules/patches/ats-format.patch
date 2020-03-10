@@ -1,0 +1,21 @@
+diff --git a/Setup.hs b/Setup.hs
+index ddf27ae..aa3453b 100644
+--- a/Setup.hs
++++ b/Setup.hs
+@@ -1,15 +1,6 @@
+ {-# OPTIONS_GHC -Wall #-}
+ 
+-import           Data.Foldable            (sequence_)
+-import           Distribution.CommandLine
+ import           Distribution.Simple
+-import           System.FilePath
+ 
+ main :: IO ()
+-main = sequence_ [ writeManpages ("man" </> "atsfmt.1") "atsfmt.1"
+-                 , writeBashCompletions "atsfmt"
+-                 , setManpathBash
+-                 , setManpathFish
+-                 , setManpathZsh
+-                 , defaultMain
+-                 ]
++main = defaultMain
