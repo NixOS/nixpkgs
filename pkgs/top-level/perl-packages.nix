@@ -17211,8 +17211,8 @@ let
     version = "6.1.0";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
-      rev = "299f3ba34ae4daea966bf1cb07d90f4151da895f"; # there is no "v6.1.0" tag
-      sha256 = "0k18spb6r8fym5v4rsnma1fspnzqf1mgr2wkvb8s4cwn915sccp4";
+      rev = "v${version}";
+      sha256 = "00w4fmki7ff7i9bi39w2w15mvv38b5ifwk3zib90ny536r3n63sb";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];
