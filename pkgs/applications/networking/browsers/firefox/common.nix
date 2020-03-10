@@ -120,11 +120,6 @@ let
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast ffversion "73") (fetchpatch {
-    # https://phabricator.services.mozilla.com/D60667
-    url = "https://hg.mozilla.org/mozilla-central/raw-rev/b3d8b08265b800165d684281d19ac845a8ff9a66";
-    sha256 = "0b4s75w7sl619rglcjmlyvyibpj2ar5cpy6pnywl1xpd9qzyb27p";
-  })
   ++ patches;
 
   nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_51 else nss;
@@ -382,6 +377,9 @@ stdenv.mkDerivation (rec {
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
+} //
+lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
 } //
 # the build system verifies checksums of the bundled rust sources
 # ./third_party/rust is be patched by our libtool fixup code in stdenv

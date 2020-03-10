@@ -16,10 +16,10 @@ in
 rec {
   firefox = common rec {
     pname = "firefox";
-    ffversion = "73.0.1";
+    ffversion = "74.0";
     src = fetchurl {
       url = "mirror://mozilla/firefox/releases/${ffversion}/source/firefox-${ffversion}.source.tar.xz";
-      sha512 = "1vdz711v44xdiry5vm4rrg7fjkrlnyn5jjkaq0bcf98jwrn9bjklmgwblrrnvmpc9pjd2ff3m7354q7vy6gd6c3yh2jhbq91v2w5yl9";
+      sha512 = "245n2ilfgx3rd0xlxzpg4gcwddcy0cgaqnaf5pwixjx0n8py1imiylwlsbihf70s41cq5q8awckchs287yysr4v6pdfqqbj7s0f02ki";
     };
 
     patches = [
