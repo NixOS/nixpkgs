@@ -327,6 +327,8 @@ in
 
   fet-sh = callPackage ../tools/misc/fet-sh { };
 
+  feed2mail = callPackage ../tools/misc/feed2mail { };
+
   fetchbower = callPackage ../build-support/fetchbower {
     inherit (nodePackages) bower2nix;
   };
