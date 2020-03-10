@@ -93,7 +93,7 @@
 , "node-inspector"
 , "node-pre-gyp"
 , "node-red"
-, "node2nix"
+, {"node2nix": "git+https://github.com/nix-community/node2nix#node2nix-1.7.1"}
 , "nodemon"
 , "npm"
 , "npm-check-updates"

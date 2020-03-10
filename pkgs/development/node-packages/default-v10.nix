@@ -70,7 +70,7 @@ nodePackages // {
     buildInputs = [ nodePackages.node-pre-gyp ];
   };
 
-  node2nix =  nodePackages.node2nix.override {
+  node2nix =  nodePackages."node2nix-git+https://github.com/nix-community/node2nix#node2nix-1.7.1".override {
     buildInputs = [ pkgs.makeWrapper ];
     postInstall = ''
       wrapProgram "$out/bin/node2nix" --prefix PATH : ${stdenv.lib.makeBinPath [ pkgs.nix ]}

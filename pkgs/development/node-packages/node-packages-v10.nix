@@ -14567,7 +14567,7 @@ let
         sha512 = "7vmuyh5+kuUyJKePhQfRQBhXV5Ce+RnaeeQArKu1EAMpL3WbgMt5WG6uQZpEVvYSSsxMXRKOewtDk9RaTKXRlA==";
       };
     };
-    "electron-to-chromium-1.3.360" = {
+    "electron-to-chromium-1.3.374" = {
       name = "electron-to-chromium";
       packageName = "electron-to-chromium";
       version = "1.3.374";
@@ -41419,13 +41419,13 @@ let
         sha512 = "rzS0heiNf8Xn7/mpdSVVSMAWAoy9bfb1WOTYC78Z0UQKeKa/CWS8FOq0lKGNa8DWKAn9gxjCvMLYc5PGXYlK2A==";
       };
     };
-    "tar-stream-2.1.0" = {
+    "tar-stream-2.1.2" = {
       name = "tar-stream";
       packageName = "tar-stream";
-      version = "2.1.0";
+      version = "2.1.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/tar-stream/-/tar-stream-2.1.0.tgz";
-        sha512 = "+DAn4Nb4+gz6WZigRzKEZl1QuJVOLtAwwF+WUxy1fJ6X63CaGaUAxJRD2KEn1OMfcbCjySTYpNC6WmfQoIEOdw==";
+        url = "https://registry.npmjs.org/tar-stream/-/tar-stream-2.1.2.tgz";
+        sha512 = "UaF6FoJ32WqALZGOIAApXx+OdxhekNMChu6axLJR85zMMjXKWFGjbIRe+J6P4UnRGg9rAwWvbTT0oI7hD/Un7Q==";
       };
     };
     "taskkill-3.1.0" = {
@@ -48787,7 +48787,7 @@ in
       sources."ecc-jsbn-0.1.2"
       sources."ee-first-1.1.1"
       sources."ejs-2.7.4"
-      sources."electron-to-chromium-1.3.360"
+      sources."electron-to-chromium-1.3.374"
       sources."elegant-spinner-1.0.1"
       sources."emoji-regex-7.0.3"
       sources."encodeurl-1.0.2"
@@ -59346,7 +59346,7 @@ in
         ];
       })
       sources."tar-fs-2.0.0"
-      sources."tar-stream-2.1.0"
+      sources."tar-stream-2.1.2"
       (sources."tcp-port-used-0.1.2" // {
         dependencies = [
           sources."debug-0.7.4"
@@ -63433,7 +63433,7 @@ in
       sources."supports-color-5.5.0"
       sources."syntax-error-1.4.0"
       sources."tapable-1.1.3"
-      (sources."tar-stream-2.1.0" // {
+      (sources."tar-stream-2.1.2" // {
         dependencies = [
           sources."readable-stream-3.6.0"
         ];
@@ -65786,13 +65786,14 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  node2nix = nodeEnv.buildNodePackage {
+  "node2nix-git+https://github.com/nix-community/node2nix#node2nix-1.7.1" = nodeEnv.buildNodePackage {
     name = "node2nix";
     packageName = "node2nix";
     version = "1.7.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/node2nix/-/node2nix-1.7.0.tgz";
-      sha512 = "p9lcFtr02Ryoo0FqNNGJ7lklDzVCT1vHHQ0Qg81SdbSQ+Ib4DwzAItJSy8EMwUvDdim1o9K3wMQljURxApvItg==";
+    src = fetchgit {
+      url = "https://github.com/nix-community/node2nix";
+      rev = "db4225f98fd2dae6ceb06f8d61922f4f9f9d3d2f";
+      sha256 = "20c763d91bcbe5a53b3455bc08601c2266a2ca3023fb669ef173eeb97711b2f0";
     };
     dependencies = [
       sources."abbrev-1.1.1"
@@ -68513,7 +68514,7 @@ in
       sources."statuses-1.5.0"
       sources."string2compact-1.3.0"
       sources."string_decoder-1.1.1"
-      sources."tar-stream-2.1.0"
+      sources."tar-stream-2.1.2"
       sources."thirty-two-0.0.2"
       sources."thunky-1.1.0"
       sources."to-array-0.1.4"
@@ -71068,7 +71069,7 @@ in
       sources."strip-eof-1.0.0"
       sources."strip-json-comments-2.0.1"
       sources."supports-color-5.5.0"
-      (sources."tar-stream-2.1.0" // {
+      (sources."tar-stream-2.1.2" // {
         dependencies = [
           sources."readable-stream-3.6.0"
           sources."string_decoder-1.3.0"
