@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , gfortran
 , openblas
+, metis
 , cmake
 , fixDarwinDylibNames
 , gnum4
@@ -29,6 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     openblas
+    metis
     gfortran.cc.lib
   ] ++ stdenv.lib.optional enableCuda cudatoolkit;
 
@@ -71,6 +73,7 @@ stdenv.mkDerivation rec {
     make library        \
         JOBS=$NIX_BUILD_CORES \
         BLAS=-lopenblas \
+        MY_METIS_LIB=-lmetis \
         LAPACK=""       \
         ${stdenv.lib.optionalString openblas.blas64 "CFLAGS=-DBLAS64"}
 
@@ -78,7 +81,9 @@ stdenv.mkDerivation rec {
     # Bundling is done by building the static libraries, extracting objects from
     # them and combining the objects into one shared library.
     mkdir -p static
-    make static JOBS=$NIX_BUILD_CORES AR_TARGET=$(pwd)/static/'$(LIBRARY).a'
+    make static JOBS=$NIX_BUILD_CORES \
+        MY_METIS_LIB=-lmetis \
+        AR_TARGET=$(pwd)/static/'$(LIBRARY).a'
     (
         cd static
         for i in lib*.a; do
