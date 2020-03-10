@@ -4,12 +4,9 @@ if [ -n "$DEBUG" ] ; then
 fi
 
 PATH="@path@:$PATH"
-apprun_opt=true
-
-#DEBUG=0
 
 # src : AppImage
-# dest : let's unpack() create the directory
+# out : target directory, assumed to not exist yet
 unpack() {
   local src=$1
   local out=$2
@@ -66,7 +63,8 @@ apprun() {
   if [ ! -x "$APPDIR" ]; then
     mkdir -p "$(dirname "$APPDIR")"
     unpack "$APPIMAGE" "$APPDIR"
-  else echo "$(basename "$APPIMAGE")" installed in "$APPDIR"
+  else
+    echo "$(basename "$APPIMAGE")" installed in "$APPDIR"
   fi
 
   export PATH="$PATH:$PWD/usr/bin"
@@ -91,8 +89,10 @@ Usage: appimage-run [appimage-run options] <AppImage> [AppImage options]
 
 -h      show this message
 -d      debug mode
--x      <directory> : extract appimage in the directory then exit.
--w      <directory> : run uncompressed appimage directory (used in appimageTools)
+-x      <APPDIR> : extract appimage in the directory then exit.
+
+<AppImage> could be an uncompressed appimage directory (APPDIR).
+This is the use case in appimageTools.
 
 [AppImage options]: Options are passed on to the appimage.
 If you want to execute a custom command in the appimage's environment, set the APPIMAGE_DEBUG_EXEC environment variable.
@@ -101,17 +101,13 @@ EOF
   exit 1
 }
 
-while getopts "x:w:dh" option; do
+while getopts "x:dh" option; do
     case "${option}" in
         d)  set -x
             ;;
         x)  # eXtract
             unpack_opt=true
             APPDIR=${OPTARG}
-            ;;
-        w)  # WrapAppImage
-            export APPDIR=${OPTARG}
-            wrap_opt=true
             ;;
         h)  usage
             ;;
@@ -122,21 +118,18 @@ while getopts "x:w:dh" option; do
 done
 shift $((OPTIND-1))
 
-if [[ $wrap_opt = true ]] && [[ -d "$APPDIR" ]]; then
-  wrap "$@"
-  exit
-else
-  APPIMAGE="$(realpath "$1")" || usage
-  shift
-fi
-
-if [[ $unpack_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
+if [[ $unpack_opt = true ]] && [[ -f "$1" ]]; then
+  APPIMAGE="$1"
   unpack "$APPIMAGE" "$APPDIR"
   exit
-fi
-
-if [[ $apprun_opt = true ]] && [[ -f "$APPIMAGE" ]]; then
-  apprun
+elif [[ -d "$1" ]]; then
+  export APPDIR="$1"
+  shift
   wrap "$@"
   exit
+elif [[ -f "$1" ]]; then
+  APPIMAGE="$(realpath "$1")" || usage
+  shift
+  apprun
+  wrap "$@"
 fi

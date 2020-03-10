@@ -20,19 +20,19 @@ rec {
   # for compatibility, deprecated
   extractType1 = extract;
   extractType2 = extract;
-  wrapType1 = wrapType2;
+  wrapType1 = wrap;
+  wrapType2 = wrap;
 
-  wrapAppImage = args@{ name, src, extraPkgs, ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
+  wrapAppImage = args@{ name, src, extraPkgs ? pkgs: [], ... }: buildFHSUserEnv (defaultFhsEnvArgs // {
     inherit name;
 
     targetPkgs = pkgs: [ appimage-exec ]
       ++ defaultFhsEnvArgs.targetPkgs pkgs ++ extraPkgs pkgs;
 
-    runScript = "appimage-exec.sh -w ${src}";
+    runScript = "appimage-exec.sh ${src}";
   } // (removeAttrs args (builtins.attrNames (builtins.functionArgs wrapAppImage))));
 
-  wrapType2 = args@{ name, src, extraPkgs ? pkgs: [], ... }: wrapAppImage (args // {
-    inherit name extraPkgs;
+  wrap = args@{ name, src, ... }: wrapAppImage (args // {
     src = extract { inherit name src; };
   });
 
