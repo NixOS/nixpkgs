@@ -4,8 +4,8 @@ let
   hts-nim = fetchFromGitHub {
     owner = "brentp";
     repo = "hts-nim";
-    rev = "v0.2.14";
-    sha256 = "0d1z4b6mrppmz3hgkxd4wcy79w68icvhi7q7n3m2k17n8f3xbdx3";
+    rev = "v0.3.4";
+    sha256 = "0670phk1bq3l9j2zaa8i5wcpc5dyfrc0l2a6c21g0l2mmdczffa7";
   };
 
   docopt = fetchFromGitHub {
@@ -17,13 +17,13 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "mosdepth";
-  version = "0.2.6";
+  version = "0.2.9";
 
   src = fetchFromGitHub {
     owner = "brentp";
     repo = "mosdepth";
     rev = "v${version}";
-    sha256 = "0i9pl9lsli3y84ygxanrr525gfg8fs9h481944cbzsmqmbldwvgk";
+    sha256 = "01gm9gj2x2zs4yx6wk761fi1papi7qr3gp4ln1kkn8n2f9y9h849";
   };
 
   buildInputs = [ nim ];
