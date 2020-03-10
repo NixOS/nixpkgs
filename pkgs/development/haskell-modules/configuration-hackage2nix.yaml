@@ -2922,7 +2922,6 @@ broken-packages:
   - atomo
   - atp-haskell
   - ats-format
-  - ats-pkg
   - ats-setup
   - ats-storable
   - attempt
