@@ -1468,4 +1468,6 @@ self: super: {
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
+  persistent-mysql = dontCheck super.persistent-mysql;
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
