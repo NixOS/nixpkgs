@@ -24394,6 +24394,8 @@ in
 
   bpp-phyl = callPackage ../development/libraries/science/biology/bpp-phyl { };
 
+  bpp-popgen = callPackage ../development/libraries/science/biology/bpp-popgen { };
+
   bpp-seq = callPackage ../development/libraries/science/biology/bpp-seq { };
 
   cd-hit = callPackage ../applications/science/biology/cd-hit { };
