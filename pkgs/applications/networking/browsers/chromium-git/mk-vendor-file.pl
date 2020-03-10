@@ -21,12 +21,13 @@ sub checkout {
   system('nix-prefetch-git',
          '--builder',
          '--url', $url,
-         '--out', $dir,
+         '--out', "$dir.$$", # unique name to allow concurrent runs
          '--rev', $rev,
          '--fetch-submodules') == 0 or die;
 
-  my $hash = `nix hash-path --base32 --type sha256 $dir` =~ s|\s+$||r;
+  my $hash = `nix hash-path --base32 --type sha256 $dir.$$` =~ s|\s+$||r;
   die "bad hash `$hash'" unless $hash =~ /^[0-9a-z]{52}$/;
+  rename("$dir.$$", $dir); # ignore error
   return $hash;
 }
 
@@ -94,6 +95,7 @@ sub make_vendor_file {
       my $rev = $3;
       my $path = $1 =~ s|\\|/|gr;
       next if $url =~ /chrome-internal\.googlesource\.com/; # access denied to this domain
+      $url =~ s|^\Qhttps://chromium.googlesource.com/external/github.com/google/EarlGrey\E|https://github.com/google/EarlGrey|;  # some commits are not on the mirror (https://groups.google.com/a/chromium.org/forum/#!topic/chromium-dev/m6xJJhsGrLI)
       if (!exists($deps{$path})) {
         print("path=$path url=$url rev=$rev\n");
         my $hash;
