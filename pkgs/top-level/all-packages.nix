@@ -8014,6 +8014,8 @@ in
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
+  flyctl = callPackage ../development/web/flyctl { };
+
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
