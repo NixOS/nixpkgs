@@ -1,12 +1,43 @@
-{ stdenv, fetchurl, substituteAll, cmake, ninja, pkgconfig
-, glibc, gtk3, gtkmm3, pcre, swig, antlr4_7, sudo
-, mysql, libxml2, libmysqlconnectorcpp
-, vsqlite, gdal, libiodbc, libpthreadstubs
-, libXdmcp, libuuid, libzip, libsecret, libssh
-, python2, jre
-, boost, libsigcxx, libX11, openssl
-, proj, cairo, libxkbcommon, epoxy, wrapGAppsHook
-, at-spi2-core, dbus, bash, coreutils
+{ stdenv
+, fetchurl
+, substituteAll
+, cmake
+, ninja
+, pkgconfig
+, glibc
+, gtk3
+, gtkmm3
+, pcre
+, swig
+, antlr4_7
+, sudo
+, mysql
+, libxml2
+, libmysqlconnectorcpp
+, vsqlite
+, gdal
+, libiodbc
+, libpthreadstubs
+, libXdmcp
+, libuuid
+, libzip
+, libsecret
+, libssh
+, python2
+, jre
+, boost
+, libsigcxx
+, libX11
+, openssl
+, proj
+, cairo
+, libxkbcommon
+, epoxy
+, wrapGAppsHook
+, at-spi2-core
+, dbus
+, bash
+, coreutils
 }:
 
 let
@@ -22,6 +53,7 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./fix-gdal-includes.patch
+
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
@@ -44,25 +76,57 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ninja pkgconfig jre swig wrapGAppsHook
+    cmake
+    ninja
+    pkgconfig
+    jre
+    swig
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 gtkmm3 libX11 antlr4_7.runtime.cpp python2 mysql libxml2
-    libmysqlconnectorcpp vsqlite gdal boost libssh openssl
-    libiodbc pcre cairo libuuid libzip libsecret
-    libsigcxx proj
+    gtk3
+    gtkmm3
+    libX11
+    antlr4_7.runtime.cpp
+    python2
+    mysql
+    libxml2
+    libmysqlconnectorcpp
+    vsqlite
+    gdal
+    boost
+    libssh
+    openssl
+    libiodbc
+    pcre
+    cairo
+    libuuid
+    libzip
+    libsecret
+    libsigcxx
+    proj
+
     # python dependencies:
-    paramiko pycairo pyodbc # sqlanydb
+    paramiko
+    pycairo
+    pyodbc
+    # TODO: package sqlanydb and add it here
+
     # transitive dependencies:
-    libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core dbus
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    epoxy
+    at-spi2-core
+    dbus
   ];
 
   postPatch = ''
     patchShebangs tools/get_wb_version.sh
   '';
 
-    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   cmakeFlags = [
@@ -104,7 +168,7 @@ in stdenv.mkDerivation rec {
       and execute SQL queries.
     '';
 
-    homepage = http://wb.mysql.com/;
+    homepage = "http://wb.mysql.com/";
     license = licenses.gpl2;
     maintainers = [ maintainers.kkallio ];
     platforms = platforms.linux;
