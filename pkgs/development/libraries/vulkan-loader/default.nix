@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
     sha256 = "12n4mxc6db89258k8i47ql1zna7k94lkwv7lpxg39nm8ypa1ywrv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake python3 xlibsWrapper libxcb libXrandr libXext wayland ];
+  nativeBuildInputs = [ pkgconfig cmake ];
+  buildInputs = [ python3 xlibsWrapper libxcb libXrandr libXext wayland ];
   enableParallelBuilding = true;
 
   preConfigure = ''
