@@ -38,14 +38,8 @@ in {
 
   tomcat8 = common {
     versionMajor = "8";
-    versionMinor = "0.53";
-    sha256 = "1ymp5n6xjqzpqjjlwql195v8r5fsmry7nfax46bafkjw8b24g80r";
-  };
-
-  tomcat85 = common {
-    versionMajor = "8";
-    versionMinor = "5.42";
-    sha256 = "1d90abwwvl0ghr0g0drk48j37wr2zgw74vws9z2rshyzrwgbvgp3";
+    versionMinor = "5.51";
+    sha256 = "1zmg0hi4nw4y5sknd0jgq9lb3bncjjscay5fdiiq3qh5cs0wsvl3";
   };
 
   tomcat9 = common {
