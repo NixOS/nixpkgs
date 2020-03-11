@@ -5,11 +5,10 @@
 , networkd }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
-with pkgs.lib;
 
 let
-  router = { config, pkgs, ... }:
-    with pkgs.lib;
+  router = { config, pkgs, lib, ... }:
+    with lib;
     let
       vlanIfs = range 1 (length config.virtualisation.vlans);
     in {
@@ -85,7 +84,7 @@ let
     static = {
       name = "Static";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -137,7 +136,7 @@ let
     dhcpSimple = {
       name = "SimpleDHCP";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -193,7 +192,7 @@ let
     dhcpOneIf = {
       name = "OneInterfaceDHCP";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -232,7 +231,7 @@ let
         '';
     };
     bond = let
-      node = address: { pkgs, ... }: with pkgs.lib; {
+      node = address: { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -268,7 +267,7 @@ let
         '';
     };
     bridge = let
-      node = { address, vlan }: { pkgs, ... }: with pkgs.lib; {
+      node = { address, vlan }: { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ vlan ];
         networking = {
           useNetworkd = networkd;
@@ -281,7 +280,7 @@ let
       name = "Bridge";
       nodes.client1 = node { address = "192.168.1.2"; vlan = 1; };
       nodes.client2 = node { address = "192.168.1.3"; vlan = 2; };
-      nodes.router = { pkgs, ... }: with pkgs.lib; {
+      nodes.router = { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 2 ];
         networking = {
           useNetworkd = networkd;
@@ -318,7 +317,7 @@ let
     macvlan = {
       name = "MACVLAN";
       nodes.router = router;
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, lib, ... }: with lib; {
         environment.systemPackages = [ pkgs.iptables ]; # to debug firewall rules
         virtualisation.vlans = [ 1 ];
         networking = {
@@ -372,7 +371,7 @@ let
         '';
     };
     sit = let
-      node = { address4, remote, address6 }: { pkgs, ... }: with pkgs.lib; {
+      node = { address4, remote, address6 }: { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -414,7 +413,7 @@ let
         '';
     };
     vlan = let
-      node = address: { pkgs, ... }: with pkgs.lib; {
+      node = address: { pkgs, lib, ... }: with lib; {
         #virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -527,7 +526,7 @@ let
           '';
         };
       };
-      nodes.client_with_privacy = { pkgs, ... }: with pkgs.lib; {
+      nodes.client_with_privacy = { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -540,7 +539,7 @@ let
           };
         };
       };
-      nodes.client = { pkgs, ... }: with pkgs.lib; {
+      nodes.client = { pkgs, lib, ... }: with lib; {
         virtualisation.vlans = [ 1 ];
         networking = {
           useNetworkd = networkd;
@@ -603,9 +602,9 @@ let
 
       testScript = ''
         targetIPv4Table = """
-        10.0.0.0/16 proto static scope link mtu 1500 
-        192.168.1.0/24 proto kernel scope link src 192.168.1.2 
-        192.168.2.0/24 via 192.168.1.1 proto static 
+        10.0.0.0/16 proto static scope link mtu 1500
+        192.168.1.0/24 proto kernel scope link src 192.168.1.2
+        192.168.2.0/24 via 192.168.1.1 proto static
         """.strip()
 
         targetIPv6Table = """
@@ -657,6 +656,6 @@ let
     };
   };
 
-in mapAttrs (const (attrs: makeTest (attrs // {
+in pkgs.lib.mapAttrs (pkgs.lib.const (attrs: makeTest (attrs // {
   name = "${attrs.name}-Networking-${if networkd then "Networkd" else "Scripted"}";
 }))) testCases
