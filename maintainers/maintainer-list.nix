@@ -7253,6 +7253,12 @@
     githubId = 844343;
     name = "Thiago K. Okada";
   };
+  thmzlt = {
+    email = "git@thomazleite.com";
+    github = "thmzlt";
+    githubId = 7709;
+    name = "Thomaz Leite";
+  };
   ThomasMader = {
     email = "thomas.mader@gmail.com";
     github = "ThomasMader";
