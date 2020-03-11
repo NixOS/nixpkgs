@@ -1476,4 +1476,24 @@ self: super: {
 
   persistent-mysql = dontCheck super.persistent-mysql;
 
+  # Fix EdisonAPI and EdisonCore for GHC 8.8:
+  # https://github.com/robdockins/edison/pull/16
+  EdisonAPI = appendPatch super.EdisonAPI (pkgs.fetchpatch {
+    url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
+    postFetch = ''
+      ${pkgs.patchutils}/bin/filterdiff --include='a/edison-api/*' --strip=1 "$out" > "$tmpfile"
+      mv "$tmpfile" "$out"
+    '';
+    sha256 = "0yi5pz039lcm4pl9xnl6krqxyqq5rgb5b6m09w0sfy06x0n4x213";
+  });
+
+  EdisonCore = appendPatch super.EdisonCore (pkgs.fetchpatch {
+    url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
+    postFetch = ''
+      ${pkgs.patchutils}/bin/filterdiff --include='a/edison-core/*' --strip=1 "$out" > "$tmpfile"
+      mv "$tmpfile" "$out"
+    '';
+    sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
+  });
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
