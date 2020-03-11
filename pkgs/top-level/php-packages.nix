@@ -1,4 +1,4 @@
-{ pkgs, fetchgit, php }:
+{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c }:
 
 let
   self = with self; {
@@ -693,4 +693,57 @@ let
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
+
+  exts = let
+    # Function to build a single php extension based on the php version.
+    #
+    # Name passed is the name of the extension and is automatically used
+    # to add the configureFlag "--enable-${name}", which can be overriden.
+    #
+    # Build inputs is used for extra deps that may be needed.
+    mkExtension = {
+      name
+      , configureFlags ? [ "--enable-${name}" ]
+      , buildInputs ? []
+      , ...
+    }: stdenv.mkDerivation {
+      pname = "php-ext-${name}";
+
+      inherit (php) version src;
+      sourceRoot = "php-${php.version}/ext/${name}";
+
+      enableParallelBuilding = true;
+      nativeBuildInputs = [ php autoconf pkgconfig re2c ];
+      inherit configureFlags buildInputs;
+
+      preConfigure = "phpize";
+
+      installPhase = ''
+        mkdir -p $out/lib/php/extensions
+        cp modules/${name}.so $out/lib/php/extensions/ext-${name}.so
+      '';
+    };
+
+    # This list contains build instructions for different modules that one may
+    # want to build.
+    #
+    # These will be passed as arguments to mkExtension above.
+    extensionData = [
+    ];
+
+    # Convert the list of attrs:
+    # [ { name = <name>; ... } ... ]
+    # to a list of
+    # [ { name = <name>; value = <extension drv>; } ... ]
+    #
+    # which we later use listToAttrs to make all attrs available by name.
+    #
+    # Also filter out extensions based on the enable property.
+    namedExtensions = builtins.map (drv: {
+      name = drv.name;
+      value = mkExtension drv;
+    }) (builtins.filter (i: i.enable or true) extensionData);
+
+    # Produce the final attribute set of all extensions defined.
+  in builtins.listToAttrs namedExtensions;
 }; in self
