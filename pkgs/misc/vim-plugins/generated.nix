@@ -3434,6 +3434,17 @@ let
     };
   };
 
+  vim-automkdir = buildVimPluginFrom2Nix {
+    pname = "vim-automkdir";
+    version = "2016-01-17";
+    src = fetchFromGitHub {
+      owner = "benizi";
+      repo = "vim-automkdir";
+      rev = "dec143a8d9b266f73a42c63ede85bfc26280f79d";
+      sha256 = "00ix0y1ijbis8pj7pf6gv2g5z2s7kxwlr0viybwrs0li5acym6jp";
+    };
+  };
+
   vim-bazel = buildVimPluginFrom2Nix {
     pname = "vim-bazel";
     version = "2019-08-14";
