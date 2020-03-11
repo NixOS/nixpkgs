@@ -199,7 +199,7 @@ let
 in {
   chromium-git_78 = common { version = "78.0.3905.1"  ; llvmPackages = llvmPackages_9;  };
   chromium-git_79 = common { version = "79.0.3945.147"; llvmPackages = llvmPackages_9;  };
-  chromium-git_80 = common { version = "80.0.3987.142"; llvmPackages = llvmPackages_10; };
-  chromium-git_81 = common { version = "81.0.4044.60" ; llvmPackages = llvmPackages_10; };
+  chromium-git_80 = common { version = "80.0.3987.142"; llvmPackages = llvmPackages_9;  };
+  chromium-git_81 = common { version = "81.0.4044.60" ; llvmPackages = llvmPackages_9;  };
   chromium-git_82 = common { version = "82.0.4082.1"  ; llvmPackages = llvmPackages_10; };
 }
