@@ -26507,6 +26507,8 @@ in
 
   coz = callPackage ../development/tools/analysis/coz {};
 
+  bulk_extractor = callPackage ../tools/misc/bulk-extractor {};
+
   keycard-cli = callPackage ../tools/security/keycard-cli {};
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
