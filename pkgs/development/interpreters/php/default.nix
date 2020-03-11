@@ -6,7 +6,8 @@
 , libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
 , gd, freetype, libXpm, libjpeg, libpng, libwebp
-, libzip, valgrind, oniguruma
+, libzip, valgrind, oniguruma, symlinkJoin, writeText
+, makeWrapper, callPackage
 }:
 
 with lib;
@@ -255,7 +256,7 @@ let
         description = "An HTML-embedded scripting language";
         homepage = https://www.php.net/;
         license = licenses.php301;
-        maintainers = with maintainers; [ globin etu ];
+        maintainers = with maintainers; [ globin etu ma27 ];
         platforms = platforms.all;
         outputsToInstall = [ "out" "dev" ];
       };
@@ -268,8 +269,32 @@ let
 
     };
 
+    generic' = { version, sha256, ... }@args: let php = generic args; in php.overrideAttrs (_: {
+      passthru.buildEnv = { exts ? (_: []), extraConfig ? "" }: let
+        extraInit = writeText "custom-php.ini" ''
+          ${extraConfig}
+          ${concatMapStringsSep "\n" (ext: let
+            extName = lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+            type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
+          in ''
+            ${type}=${ext}/lib/php/extensions/${extName}.so
+          '') (exts (callPackage ../../../top-level/php-packages.nix { inherit php; }))}
+        '';
+      in symlinkJoin {
+        name = "php-custom-${version}";
+        nativeBuildInputs = [ makeWrapper ];
+        paths = [ php ];
+        postBuild = ''
+          wrapProgram $out/bin/php \
+            --add-flags "-c ${extraInit}"
+          wrapProgram $out/bin/php-fpm \
+            --add-flags "-c ${extraInit}"
+        '';
+      };
+    });
+
 in {
-  php72 = generic {
+  php72 = generic' {
     version = "7.2.27";
     sha256 = "0jbhc8x2i6xx6p7zc30ahg9xplsqlz334m1w13mhr1qv2xdnkh2v";
 
@@ -277,7 +302,7 @@ in {
     extraPatches = optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
-  php73 = generic {
+  php73 = generic' {
     version = "7.3.14";
     sha256 = "0wn2qsfrnch90l8nxbpcjd2q0ijzdiiyhvcpbycngki9r6xwppxr";
 
@@ -285,7 +310,7 @@ in {
     extraPatches = optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
 
-  php74 = generic {
+  php74 = generic' {
     version = "7.4.3";
     sha256 = "wVF7pJV4+y3MZMc6Ptx21PxQfEp6xjmYFYTMfTtMbRQ=";
   };
