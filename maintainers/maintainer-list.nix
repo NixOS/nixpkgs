@@ -1560,6 +1560,16 @@
     githubId = 490965;
     name = "Craig Swank";
   };
+  cust0dian = {
+    name = "Serg Nesterov";
+    email = "i.am.cust0dian@gmail.com";
+    github = "cust0dian";
+    githubId = 389387;
+    keys = [{
+      longkeyid = "rsa4096/0x1512F6EB84AECC8C";
+      fingerprint = "6E7D BA30 DB5D BA60 693C  3BE3 1512 F6EB 84AE CC8C";
+    }];
+  };
   cwoac = {
     email = "oliver@codersoffortune.net";
     github = "cwoac";
