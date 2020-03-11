@@ -1,5 +1,5 @@
 { stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
-, qt5, requireFile, unzip, wine
+, qt5, fetchurl, unzip, wine
 }:
 
 let
@@ -14,13 +14,12 @@ let
   };
 
   vst-sdk = stdenv.mkDerivation rec {
-    name = "vstsdk368_08_11_2017_build_121";
-    src = requireFile {
-      name = "${name}.zip";
-      url = "http://www.steinberg.net/en/company/developers.html";
-      sha256 = "e0f235d8826d70f1ae0ae5929cd198acae1ecff74612fde5c60cbfb45c2f4a70";
-    };
+    name = "vstsdk366_27_06_2016_build_61";
     nativeBuildInputs = [ unzip ];
+    src = fetchurl {
+      url = "https://www.steinberg.net/sdk_downloads/${name}.zip";
+      sha256 = "05gsr13bpi2hhp34rvhllsvmn44rqvmjdpg9fsgfzgylfkz0kiki";
+    };
     installPhase = "cp -r . $out";
     meta.license = stdenv.lib.licenses.unfree;
   };
@@ -63,7 +62,7 @@ multiStdenv.mkDerivation {
   # Cf. https://github.com/phantom-code/airwave/issues/57
   hardeningDisable = [ "format" ];
 
-  cmakeFlags = [ "-DVSTSDK_PATH=${vst-sdk}/VST2_SDK" ];
+  cmakeFlags = [ "-DVSTSDK_PATH=${vst-sdk}" ];
 
   postInstall = ''
     mv $out/bin $out/libexec
