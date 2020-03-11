@@ -12,7 +12,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = [
-    # Example Run-time Additional Dependencies
     fzf
   ];
 
