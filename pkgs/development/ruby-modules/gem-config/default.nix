@@ -39,15 +39,6 @@ let
 in
 
 {
-  asciidoctor-diagram = { version, ruby, ... }: {
-    postInstall = ''
-      # Delete vendored JAR files unless using JRuby.
-      if ruby -e 'exit(RUBY_PLATFORM != "java")'; then
-          rm -v $out/${ruby.gemPath}/gems/$gemName-${version}/lib/*.jar
-      fi
-    '';
-  };
-
   atk = attrs: {
     dependencies = attrs.dependencies ++ [ "gobject-introspection" ];
     nativeBuildInputs = [ rake bundler pkgconfig ];
@@ -506,7 +497,7 @@ in
         --replace "gobject-2.0" "${glib.out}/lib/libgobject-2.0${stdenv.hostPlatform.extensions.sharedLibrary}"
 
       substituteInPlace lib/vips.rb \
-        --replace "vips_libname = 'vips'" "vips_libname = '${vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
+        --replace "vips_libname = 'vips'" "vips_libname = '${stdenv.lib.getLib vips}/lib/libvips${stdenv.hostPlatform.extensions.sharedLibrary}'"
     '';
   };
 

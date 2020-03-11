@@ -2,25 +2,18 @@
 
 stdenv.mkDerivation rec {
   pname = "evdi";
-  version = "-unstable-20190116";
+  version = "unstable-20200222";
 
   src = fetchFromGitHub {
     owner = "DisplayLink";
     repo = pname;
-    rev = "391f1f71e4c86fc18de27947c78e02b5e3e9f128";
-    sha256 = "147cwmk57ldchvzr06lila6av7jvcdggs9jgifqscklp9x6dc4ny";
+    rev = "bb3038c1b10aae99feddc7354c74a5bf22341246";
+    sha256 = "058f8gdma6fndg2w512l08mwl79h4hffacx4rnfkjxrb2ard3gd1";
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   buildInputs = [ kernel libdrm ];
-
-  patches = [
-    (fetchpatch {
-      url    = "https://crazy.dev.frugalware.org/evdi-all-in-one-fixes.patch";
-      sha256 = "03hs68v8c2akf8a4rc02m15fzyp14ay70rcx8kwg2y98qkqh7w30";
-    })
-  ];
 
   makeFlags = [
     "KVER=${kernel.modDirVersion}"

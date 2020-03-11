@@ -2190,17 +2190,6 @@ let
     };
   };
 
-  notational-fzf-vim = buildVimPluginFrom2Nix {
-    pname = "notational-fzf-vim";
-    version = "2019-12-03";
-    src = fetchFromGitHub {
-      owner = "alok";
-      repo = "notational-fzf-vim";
-      rev = "16ea3477c8dbf3167f15246a29bd1d1fcc18c914";
-      sha256 = "1j1nfb297rqmg2h96hx4bmgxq55z179fh4f1ak79d6v815mr72bi";
-    };
-  };
-
   NrrwRgn = buildVimPluginFrom2Nix {
     pname = "NrrwRgn";
     version = "2019-12-12";

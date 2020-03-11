@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng ];
 
   configureFlags = [
-    "--with-rgbtxt=${netpbm}/share/netpbm/misc/rgb.txt"
+    "--with-rgbtxt=${netpbm.out}/share/netpbm/misc/rgb.txt"
   ];
 
   meta = with stdenv.lib; {

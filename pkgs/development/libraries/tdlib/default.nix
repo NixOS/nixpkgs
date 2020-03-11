@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
     description = "Cross-platform library for building Telegram clients";
     homepage = "https://core.telegram.org/tdlib/";
     license = [ licenses.boost ];
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = [ maintainers.vyorkin ];
   };
 }

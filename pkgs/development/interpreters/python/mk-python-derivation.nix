@@ -17,6 +17,7 @@
 , pythonCatchConflictsHook
 , pythonImportsCheckHook
 , pythonRemoveBinBytecodeHook
+, pythonRemoveTestsDirHook
 , setuptoolsBuildHook
 , setuptoolsCheckHook
 , wheelUnpackHook
@@ -108,6 +109,7 @@ let
     python
     wrapPython
     ensureNewerSourcesForZipFilesHook  # move to wheel installer (pip) or builder (setuptools, flit, ...)?
+    pythonRemoveTestsDirHook
   ] ++ lib.optionals catchConflicts [
     setuptools pythonCatchConflictsHook
   ] ++ lib.optionals removeBinBytecode [

@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libabigail";
-  version = "1.6";
+  version = "1.7";
 
   outputs = [ "bin" "out" "dev" ];
 
   src = fetchurl {
     url = "https://mirrors.kernel.org/sourceware/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "04j07lhvwbp6qp8pdwbf7iqnr7kgpabmqylsw4invpmzwnyp6g6g";
+    sha256 = "0bf8w01l6wm7mm4clfg5rqi30m1ws11qqa4bp2vxghfwgi9ai8i7";
   };
 
   nativeBuildInputs = [

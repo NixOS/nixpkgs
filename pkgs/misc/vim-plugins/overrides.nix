@@ -28,9 +28,6 @@
 
 # vCoolor dependency
 , gnome3
-
-# notational-fzf-vim dependencies
-, ripgrep
 }:
 
 self: super: {
@@ -67,10 +64,7 @@ self: super: {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-      cargoSha256 = "1w8g7pxwnjqp9zi47h4lz2mcg5daldsk5z72h8cjj750wng8a82c";
+      cargoSha256 = "0w66fcrlaxf6zgkrfpgfybfbm759fzimnr3pjq6sm14frar7lhr6";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -251,17 +245,6 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
-  });
-  
-  notational-fzf-vim = super.notational-fzf-vim.overrideAttrs(old: {
-    dependencies = with self; [ fzf-vim ];
-    patchPhase = ''
-      substituteInPlace plugin/notational_fzf.vim \
-        --replace "'rg'" "'${ripgrep}/bin/rg'" \
-        --replace \
-        "let s:python_executable = executable('pypy3') ? 'pypy3' : 'python3'" \
-        "let s:python_executable = '${python3}/bin/python3'"
-    '';
   });
 
   fzf-vim = super.fzf-vim.overrideAttrs(old: {

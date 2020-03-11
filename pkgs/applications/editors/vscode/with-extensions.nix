@@ -48,7 +48,7 @@ let
   wrappedPkgName = lib.removeSuffix "-${wrappedPkgVersion}" vscode.name;
 
   combinedExtensionsDrv = buildEnv {
-    name = "${wrappedPkgName}-extensions-${wrappedPkgVersion}";
+    name = "vscode-extensions";
     paths = vscodeExtensions;
   };
 
@@ -70,6 +70,6 @@ runCommand "${wrappedPkgName}-with-extensions-${wrappedPkgVersion}" {
   ln -sT "${vscode}/share/applications/${executableName}.desktop" "$out/share/applications/${executableName}.desktop"
   ln -sT "${vscode}/share/applications/${executableName}-url-handler.desktop" "$out/share/applications/${executableName}-url-handler.desktop"
   makeWrapper "${vscode}/bin/${executableName}" "$out/bin/${executableName}" ${lib.optionalString (vscodeExtensions != []) ''
-    --add-flags "--extensions-dir ${combinedExtensionsDrv}/share/${wrappedPkgName}/extensions"
+    --add-flags "--extensions-dir ${combinedExtensionsDrv}"
   ''}
 ''

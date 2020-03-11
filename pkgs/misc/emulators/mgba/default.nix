@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, makeDesktopItem, wrapQtAppsHook, pkgconfig
-, cmake, epoxy, libzip, ffmpeg, imagemagick, SDL2, qtbase, qtmultimedia, libedit
-, qttools, minizip }:
+, cmake, epoxy, libzip, libelf, libedit, ffmpeg, SDL2, imagemagick
+, qtbase, qtmultimedia, qttools, minizip }:
 
 let
   desktopItem = makeDesktopItem {
@@ -15,21 +15,21 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "mgba";
-  version = "0.8.0";
+  version = "0.8.1";
 
   src = fetchFromGitHub {
     owner = "mgba-emu";
     repo = "mgba";
     rev = version;
-    sha256 = "0m3rgcdv32ms98j7rrmk2hphvn462bwsd6xfz2ssy05398pj4ljh";
+    sha256 = "1if82mfaak3696w5d5yshynpzywrxgvg3ifdfi2rwlpvq1gpd429";
   };
 
   enableParallelBuilding = true;
   nativeBuildInputs = [ wrapQtAppsHook pkgconfig cmake ];
 
   buildInputs = [
-    libzip epoxy ffmpeg imagemagick SDL2 qtbase qtmultimedia libedit minizip
-    qttools
+    epoxy libzip libelf libedit ffmpeg SDL2 imagemagick
+    qtbase qtmultimedia qttools minizip
   ];
 
   postInstall = ''

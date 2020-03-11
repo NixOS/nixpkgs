@@ -30,7 +30,17 @@ in
         Whether to perform certificate verification for https.
       '';
     };
-
+    constLabels = mkOption {
+      type = types.listOf types.str;
+      default = [];
+      example = [
+        "label1=value1"
+        "label2=value2"
+      ];
+      description = ''
+        A list of constant labels that will be used in every metric.
+      '';
+    };
   };
   serviceOpts = {
     serviceConfig = {
@@ -40,6 +50,7 @@ in
           --nginx.ssl-verify ${toString cfg.sslVerify} \
           --web.listen-address ${cfg.listenAddress}:${toString cfg.port} \
           --web.telemetry-path ${cfg.telemetryPath} \
+          --prometheus.const-labels ${concatStringsSep "," cfg.constLabels} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

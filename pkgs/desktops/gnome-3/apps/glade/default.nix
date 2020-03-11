@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "glade";
-  version = "3.22.1";
+  version = "3.22.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glade/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "16p38xavpid51qfy0s26n0n21f9ws1w9k5s65bzh1w7ay8p9my6z";
+    sha256 = "08bayb1rrpblxf6jhhbw2n3c425w170is4l94pampldl4kmsdvzd";
   };
 
   passthru = {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Glade;
+    homepage = "https://wiki.gnome.org/Apps/Glade";
     description = "User interface designer for GTK applications";
     maintainers = gnome3.maintainers;
     license = licenses.lgpl2;

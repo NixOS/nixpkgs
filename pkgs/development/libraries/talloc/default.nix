@@ -5,11 +5,11 @@
 
 stdenv.mkDerivation rec {
   pname = "talloc";
-  version = "2.1.16";
+  version = "2.3.1";
 
   src = fetchurl {
     url = "mirror://samba/talloc/${pname}-${version}.tar.gz";
-    sha256 = "1aajda08yf7njgvg6r21ccxlvkarb9bwvf4jqh8yn3871a1zcnqr";
+    sha256 = "0xwzgzrqamfdlklwacp9d219pqkah0yfrhxb1j7bxlmgzp924j7g";
   };
 
   nativeBuildInputs = [ pkgconfig fixDarwinDylibNames python wafHook
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Hierarchical pool based memory allocator with destructors";
-    homepage = https://tdb.samba.org/;
+    homepage = "https://tdb.samba.org/";
     license = licenses.gpl3;
     platforms = platforms.all;
   };

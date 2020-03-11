@@ -319,6 +319,8 @@ rec {
       enableParallelBuilding = true;
     }
     ''
+      mkdir layers
+
       # Delete impurities for store path layers, so they don't get
       # shared and taint other projects.
       cat ${configJson} \
@@ -330,13 +332,12 @@ rec {
       # created, and that no paths are missed. If you change the
       # following head and tail call lines, double-check that your
       # code behaves properly when the number of layers equals:
-      #      maxLayers-1, maxLayers, and maxLayers+1
+      #      maxLayers-1, maxLayers, and maxLayers+1, 0
       paths() {
-        cat $paths ${lib.concatMapStringsSep " " (path: "| grep -v ${path}") (closures ++ [ overallClosure ])}
+        cat $paths ${lib.concatMapStringsSep " " (path: "| (grep -v ${path} || true)") (closures ++ [ overallClosure ])}
       }
 
-      # We need to sponge to avoid grep broken pipe error when maxLayers == 1
-      paths | sponge | head -n $((maxLayers - 1)) | cat -n | xargs -r -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
+      paths | head -n $((maxLayers - 1)) | cat -n | xargs -r -P$NIX_BUILD_CORES -n2 ${storePathToLayer}
       if [ $(paths | wc -l) -ge $maxLayers ]; then
         paths | tail -n+$maxLayers | xargs ${storePathToLayer} $maxLayers
       fi

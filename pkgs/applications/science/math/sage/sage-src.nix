@@ -52,6 +52,11 @@ stdenv.mkDerivation rec {
     # Parallelize docubuild using subprocesses, fixing an isolation issue. See
     # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
     ./patches/sphinx-docbuild-subprocesses.patch
+
+    # Fix doctest failures with docutils 0.15:
+    # https://nix-cache.s3.amazonaws.com/log/dzmzrb2zvardsmpy7idg7djkizmkzdhs-sage-tests-8.9.drv
+    # https://trac.sagemath.org/ticket/28856#comment:19
+    ./patches/docutils-0.15.patch
   ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must

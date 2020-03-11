@@ -315,10 +315,10 @@ in package-set { inherit pkgs stdenv callPackage; } self // {
 
           in self.mkDerivation genericBuilderArgs;
 
-        envFuncArgs = builtins.removeAttrs args [ "packages" ];
-      in (combinedPackageFor packages).env.overrideAttrs (old: envFuncArgs // {
-        nativeBuildInputs = old.nativeBuildInputs ++ envFuncArgs.nativeBuildInputs or [];
-        buildInputs = old.buildInputs ++ envFuncArgs.buildInputs or [];
+        mkDerivationArgs = builtins.removeAttrs args [ "packages" "withHoogle" ];
+      in ((combinedPackageFor packages).envFunc { inherit withHoogle; }).overrideAttrs (old: mkDerivationArgs // {
+        nativeBuildInputs = old.nativeBuildInputs ++ mkDerivationArgs.nativeBuildInputs or [];
+        buildInputs = old.buildInputs ++ mkDerivationArgs.buildInputs or [];
       });
 
     ghc = ghc // {

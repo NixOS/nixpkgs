@@ -36,7 +36,6 @@
 , desktop-file-utils
 , gtk3
 , fuse
-, malcontent
 , nixosTests
 , libsoup
 , lzma
@@ -140,7 +139,6 @@ stdenv.mkDerivation rec {
     systemd
     xorg.libXau
     fuse
-    malcontent
     gsettings-desktop-schemas
     glib-networking
     librsvg # for flatpak-validate-icon
