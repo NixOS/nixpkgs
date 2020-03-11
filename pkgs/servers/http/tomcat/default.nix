@@ -44,7 +44,7 @@ in {
 
   tomcat9 = common {
     versionMajor = "9";
-    versionMinor = "0.21";
-    sha256 = "0nsylbqvky4pf3wpsx3a29b85lvwk91ay37mljk9636qffjj1vjh";
+    versionMinor = "0.31";
+    sha256 = "0hybcy280qhhp9if58xw0rmyyqz1m1bzby7qnwz3y2wc1y4is48v";
   };
 }
