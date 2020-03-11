@@ -103,13 +103,13 @@ let
         sha512 = "MPtoySlAZQ37VoLaPcTHCu1RWJ4llDkULYZIzOYxlhxBqYPB0RsRlmMU0R6tahtFe27mIdkHV+551ZWV4PLmVw==";
       };
     };
-    "@types/node-13.9.1" = {
+    "@types/node-13.9.2" = {
       name = "_at_types_slash_node";
       packageName = "@types/node";
-      version = "13.9.1";
+      version = "13.9.2";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/node/-/node-13.9.1.tgz";
-        sha512 = "E6M6N0blf/jiZx8Q3nb0vNaswQeEyn0XlupO+xN6DtJ6r6IT4nXrTry7zhIfYvFCl3/8Cu6WIysmUBKiqV0bqQ==";
+        url = "https://registry.npmjs.org/@types/node/-/node-13.9.2.tgz";
+        sha512 = "bnoqK579sAYrQbp73wwglccjJ4sfRdKU7WNEZ5FW4K2U6Kc0/eZ5kvXG0JKsEKFB50zrFmfFt52/cvBbZa7eXg==";
       };
     };
     "@types/responselike-1.0.0" = {
@@ -6573,7 +6573,7 @@ in
       sources."@types/cacheable-request-6.0.1"
       sources."@types/http-cache-semantics-4.0.0"
       sources."@types/keyv-3.1.1"
-      sources."@types/node-13.9.1"
+      sources."@types/node-13.9.2"
       sources."@types/responselike-1.0.0"
       sources."cacheable-lookup-2.0.0"
       sources."cacheable-request-7.0.1"
