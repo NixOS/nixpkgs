@@ -24,11 +24,11 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "SDL2";
-  version = "2.0.10";
+  version = "2.0.12";
 
   src = fetchurl {
     url = "https://www.libsdl.org/release/${pname}-${version}.tar.gz";
-    sha256 = "0mqxp6w5jhbq6y1j690g9r3gpzwjxh4czaglw8x05l7hl49nqrdl";
+    sha256 = "0qy8wbqvfkb5ps8kxgaaf2zzpkjqbsw712hlp74znbn0jpv6i4il";
   };
 
   outputs = [ "out" "dev" ];
