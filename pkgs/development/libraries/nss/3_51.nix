@@ -1,11 +1,11 @@
-{ stdenv, fetchurl, nspr_4_24, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
+{ stdenv, fetchurl, nspr_4_25, perl, zlib, sqlite, fixDarwinDylibNames, buildPackages }:
 
 let
   nssPEM = fetchurl {
     url = http://dev.gentoo.org/~polynomial-c/mozilla/nss-3.15.4-pem-support-20140109.patch.xz;
     sha256 = "10ibz6y0hknac15zr6dw4gv9nb5r5z9ym6gq18j3xqx7v7n3vpdw";
   };
-  version = "3.49.2";
+  version = "3.51";
   underscoreVersion = builtins.replaceStrings ["."] ["_"] version;
 
 in stdenv.mkDerivation rec {
@@ -14,7 +14,7 @@ in stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://mozilla/security/nss/releases/NSS_${underscoreVersion}_RTM/src/${pname}-${version}.tar.gz";
-    sha256 = "1ck0c4ikr0d747pn63h62b2iqzfgi0yzd25aw95hs9797hn519zs";
+    sha256 = "1725d0idf5zzqafdqfdn9vprc7ys2ywhv23sqn328di968xqnd3m";
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -24,7 +24,7 @@ in stdenv.mkDerivation rec {
   buildInputs = [ zlib sqlite ]
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  propagatedBuildInputs = [ nspr_4_24 ];
+  propagatedBuildInputs = [ nspr_4_25 ];
 
   prePatch = ''
     # strip the trailing whitespace from the patch line…
@@ -51,8 +51,8 @@ in stdenv.mkDerivation rec {
   makeFlags = let
     cpu = stdenv.hostPlatform.parsed.cpu.name;
   in [
-    "NSPR_INCLUDE_DIR=${nspr_4_24.dev}/include"
-    "NSPR_LIB_DIR=${nspr_4_24.out}/lib"
+    "NSPR_INCLUDE_DIR=${nspr_4_25.dev}/include"
+    "NSPR_LIB_DIR=${nspr_4_25.out}/lib"
     "NSDISTMODE=copy"
     "BUILD_OPT=1"
     "SOURCE_PREFIX=\$(out)"
@@ -117,10 +117,10 @@ in stdenv.mkDerivation rec {
     (if stdenv.isDarwin
      then ''
        libfile="$out/lib/lib$libname.dylib"
-       DYLD_LIBRARY_PATH=$out/lib:${nspr_4_24.out}/lib \
+       DYLD_LIBRARY_PATH=$out/lib:${nspr_4_25.out}/lib \
      '' else ''
        libfile="$out/lib/lib$libname.so"
-       LD_LIBRARY_PATH=$out/lib:${nspr_4_24.out}/lib \
+       LD_LIBRARY_PATH=$out/lib:${nspr_4_25.out}/lib \
      '') + ''
         ${nss}/bin/shlibsign -v -i "$libfile"
     done
