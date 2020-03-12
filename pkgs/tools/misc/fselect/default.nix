@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ stdenv, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fselect";
@@ -12,6 +12,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "0mjd9nmaggsszf0kx68yrvy3fqbn35v34c7q3584fv50ipqn6drb";
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installManPage docs/fselect.1
+  '';
 
   meta = with stdenv.lib; {
     description = "Find files with SQL-like queries";
