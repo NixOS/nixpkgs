@@ -21,6 +21,10 @@ paths = os.environ.pop('NIX_PYTHONPATH', None)
 if paths:
     functools.reduce(lambda k, p: site.addsitedir(p, k), paths.split(':'), site._init_pathinfo())
 
+prefixes = os.environ.pop('NIX_PYTHONPREFIX', None)
+if prefixes:
+    site.PREFIXES.extend(prefixes.split(':'))
+
 executable = os.environ.pop('NIX_PYTHONEXECUTABLE', None)
 if 'PYTHONEXECUTABLE' not in os.environ and executable:
     sys.executable = executable
