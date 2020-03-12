@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoPackage, git, which }:
+{ stdenv, fetchFromGitHub, buildGoPackage, git, which }:
   
 buildGoPackage rec {
   pname = "quorum";
@@ -25,10 +25,11 @@ buildGoPackage rec {
     cp -v build/bin/geth build/bin/bootnode build/bin/swarm $bin/bin
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A permissioned implementation of Ethereum supporting data privacy";
     homepage = "https://www.goquorum.com/";
-    license = lib.licenses.lgpl3;
-    maintainers = with lib.maintainers; [ mmahut ];
+    license = licenses.lgpl3;
+    maintainers = with maintainers; [ mmahut ];
+    platforms = subtractLists ["aarch64-linux"] platforms.linux;
   };
 }
