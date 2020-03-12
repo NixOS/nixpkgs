@@ -18929,7 +18929,7 @@ in
   elvis = callPackage ../applications/editors/elvis { };
 
   emacs = emacs26;
-  emacsPackages = emacs26Packages;
+  emacsPackages = recurseIntoAttrs emacs26Packages;
   emacs-nox = emacs26-nox;
 
   emacs26 = callPackage ../applications/editors/emacs {
