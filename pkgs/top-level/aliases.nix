@@ -96,8 +96,8 @@ mapAliases ({
   desktop_file_utils = desktop-file-utils; # added 2018-02-25
   devicemapper = lvm2; # added 2018-04-25
   digikam5 = digikam; # added 2017-02-18
-  django_1_8 = throw "django 1.8 is EOL and has been removed"; # added 2020-03-11
-  django_tagging_0_4_3 = throw "removed django_tagging_0_4_3, use django_tagging instead"; # added 2020-03-11
+  django_1_8 = throw "django_1_8 has been removed: EOL upstream and unpatches vulnerabilities"; # added 2020-03-11
+  django_tagging_0_4_3 = throw "django_tagging_0_4_3 has been removed, use django_tagging instead"; # added 2020-03-11
   dmtx = dmtx-utils; # added 2018-04-25
   docbook5_xsl = docbook_xsl_ns; # added 2018-04-25
   docbook_xml_xslt = docbook_xsl; # added 2018-04-25
@@ -170,7 +170,7 @@ mapAliases ({
   google-gflags = gflags; # added 2019-07-25
   googleAuthenticator = google-authenticator; # added 2016-10-16
   grantlee5 = libsForQt5.grantlee;  # added 2015-12-19
-  graphite-web = throw "removed, unmaintained in nixpkgs"; # added 2020-03-11
+  graphite-web = throw "graphite-web has been removed: unmaintained in nixpkgs"; # added 2020-03-11
   gsettings_desktop_schemas = gsettings-desktop-schemas; # added 2018-02-25
   gst_plugins_bad = gst-plugins-bad;  # added 2017-02
   gst_plugins_base = gst-plugins-base;  # added 2017-02
@@ -513,7 +513,7 @@ mapAliases ({
   virtmanager = virt-manager; # added 2019-10-29
   virtmanager-qt = virt-manager-qt; # added 2019-10-29
   vorbisTools = vorbis-tools; # added 2016-01-26
-  waitress-django = throw "removed, use waitress instead"; # added 2020-03-11
+  waitress-django = throw "waitress-django has been removed, use waitress instead"; # added 2020-03-11
   webkit = webkitgtk; # added 2019-03-05
   webkitgtk24x-gtk3 = throw "webkitgtk24x-gtk3 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
   webkitgtk24x-gtk2 = throw "webkitgtk24x-gtk2 has been removed because it's insecure. Please use webkitgtk."; # added 2019-12-05
