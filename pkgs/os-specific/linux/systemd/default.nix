@@ -19,16 +19,16 @@ let
   pythonLxmlEnv = buildPackages.python3Packages.python.withPackages ( ps: with ps; [ python3Packages.lxml ]);
 
 in stdenv.mkDerivation {
-  version = "243.3";
+  version = "243.7";
   pname = "systemd";
 
   # When updating, use https://github.com/systemd/systemd-stable tree, not the development one!
   # Also fresh patches should be cherry-picked from that tree to our current one.
   src = fetchFromGitHub {
-    owner = "NixOS";
+    owner = "nixos";
     repo = "systemd";
-    rev = "491a247eff9b7ce1e5877f5f3431517c95f3222f";
-    sha256 = "1xqiahapg480m165glrwqbfmc1fxw5sacdlm933cwyi1q8x4537g";
+    rev = "e7d881488292fc8bdf96acd12767eca1bd65adae";
+    sha256 = "0haj3iff3y13pm4w5dbqj1drp5wryqfad58jbbmnb6zdgis56h8f";
   };
 
   outputs = [ "out" "lib" "man" "dev" ];
@@ -226,7 +226,7 @@ in stdenv.mkDerivation {
   passthru.interfaceVersion = 2;
 
   meta = with stdenv.lib; {
-    homepage = http://www.freedesktop.org/wiki/Software/systemd;
+    homepage = "https://www.freedesktop.org/wiki/Software/systemd/";
     description = "A system and service manager for Linux";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
