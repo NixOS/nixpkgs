@@ -1,7 +1,7 @@
 { stdenv, fetchurl, jre, makeWrapper, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "astrolabe-generator-${version}";
+  pname = "astrolabe-generator";
   version = "3.3";
 
   src = fetchurl {

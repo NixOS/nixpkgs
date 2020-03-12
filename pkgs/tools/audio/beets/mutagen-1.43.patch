@@ -1,0 +1,29 @@
+Backport https://github.com/beetbox/mediafile/commit/b3343c4ee08d1251ae5e2344401a2f5892b4e868
+to Beets 1.4.9.
+
+diff --git i/setup.py w/setup.py
+index 79278f8..b8d6068 100755
+--- i/setup.py
++++ w/setup.py
+@@ -87,7 +87,7 @@ setup(
+ 
+     install_requires=[
+         'six>=1.9',
+-        'mutagen>=1.33',
++        'mutagen>=1.43',
+         'unidecode',
+         'musicbrainzngs>=0.4',
+         'pyyaml',
+diff --git i/test/test_mediafile.py w/test/test_mediafile.py
+index 36a2c53..54ef9dd 100644
+--- i/test/test_mediafile.py
++++ w/test/test_mediafile.py
+@@ -912,7 +912,7 @@ class AIFFTest(ReadWriteTestBase, unittest.TestCase):
+         'bitrate': 705600,
+         'format': u'AIFF',
+         'samplerate': 44100,
+-        'bitdepth': 0,
++        'bitdepth': 16,
+         'channels': 1,
+     }
+ 

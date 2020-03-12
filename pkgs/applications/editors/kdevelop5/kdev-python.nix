@@ -1,15 +1,12 @@
 { stdenv, lib, fetchurl, cmake, extra-cmake-modules, threadweaver, ktexteditor, kdevelop-unwrapped, python }:
 
-let
-  pname = "kdev-python";
-  version = "5.3.2";
-in
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  pname = "kdev-python";
+  version = "5.5.0";
 
   src = fetchurl {
     url = "https://github.com/KDE/${pname}/archive/v${version}.tar.gz";
-    sha256 = "0gqv1abzfpxkrf538rb62d2291lmlra8rghm9q9r3x8a46wh96zm";
+    sha256 = "0kna6vkxc6lrfzb3gzn11qvw8jpa86gi1k996hdk83gn0lhmkvx5";
   };
 
   cmakeFlags = [
@@ -23,7 +20,7 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.aanderse ];
     platforms = platforms.linux;
     description = "Python support for KDevelop";
-    homepage = https://www.kdevelop.org;
+    homepage = "https://www.kdevelop.org";
     license = [ licenses.gpl2 ];
   };
 }

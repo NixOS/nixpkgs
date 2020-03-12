@@ -1,25 +1,35 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
+{ stdenv, buildGoPackage, fetchFromGitHub, buildPackages }:
 
-buildGoModule rec {
+buildGoPackage rec {
   pname = "rclone";
-  version = "1.47.0";
+  version = "1.51.0";
 
   src = fetchFromGitHub {
-    owner = "ncw";
+    owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "1nxwjr9jly6wh1ixr6a7zhlg4b3298v940040fsm0n3lcljd37zx";
+    sha256 = "0z4kaq6wnj5dgl52g7f86phxlvnk5pbpda7prgh3hahpyhxj0z7d";
   };
 
-  modSha256 = "02p5dd450bbfyq80nd0w8f9kpv25k1855mf0gcv0cy9zq3f3r7q7";
+  goPackagePath = "github.com/rclone/rclone";
 
   subPackages = [ "." ];
 
-  outputs = [ "out" "man" ];
+  outputs = [ "bin" "out" "man" ];
 
-  postInstall = ''
-    install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
-  '';
+  postInstall =
+    let
+      rcloneBin =
+        if stdenv.buildPlatform == stdenv.hostPlatform
+        then "$bin"
+        else stdenv.lib.getBin buildPackages.rclone;
+    in
+      ''
+        install -D -m644 $src/rclone.1 $man/share/man/man1/rclone.1
+        mkdir -p $bin/share/zsh/site-functions $bin/share/bash-completion/completions/
+        ${rcloneBin}/bin/rclone genautocomplete zsh $bin/share/zsh/site-functions/_rclone
+        ${rcloneBin}/bin/rclone genautocomplete bash $bin/share/bash-completion/completions/rclone.bash
+      '';
 
   meta = with stdenv.lib; {
     description = "Command line program to sync files and directories to and from major cloud storage";

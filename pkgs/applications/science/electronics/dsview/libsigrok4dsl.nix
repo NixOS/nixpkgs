@@ -3,10 +3,10 @@ glib, libzip, libserialport, check, libusb, libftdi,
 systemd, alsaLib, dsview
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (dsview) version src;
 
-  name = "libsigrok4dsl-${version}";
+  pname = "libsigrok4dsl";
 
   postUnpack = ''
     export sourceRoot=$sourceRoot/libsigrok4DSL

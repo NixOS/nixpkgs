@@ -1,5 +1,6 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, coreutils, gnugrep, gnused, lm_sensors, net_snmp, openssh, openssl, perl
+{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, runCommand
+, coreutils, gnugrep, gnused, lm_sensors, net-snmp, openssh, openssl, perl
+, dnsutils, libdbi, libmysqlclient, zlib, openldap, procps
 , runtimeShell }:
 
 with stdenv.lib;
@@ -8,9 +9,9 @@ let
   majorVersion = "2.2";
   minorVersion = ".0";
 
-  binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net_snmp ];
+  binPath = makeBinPath [ coreutils gnugrep gnused lm_sensors net-snmp procps ];
 
-in stdenv.mkDerivation rec {
+in stdenv.mkDerivation {
   name = "monitoring-plugins-${majorVersion}${minorVersion}";
 
   src = fetchFromGitHub {
@@ -19,6 +20,14 @@ in stdenv.mkDerivation rec {
     rev    = "v${majorVersion}";
     sha256 = "1pw7i6d2cnb5nxi2lbkwps2qzz04j9zd86fzpv9ka896b4aqrwv1";
   };
+
+  patches = [
+    # https://github.com/monitoring-plugins/monitoring-plugins/issues/1508
+    (fetchpatch {
+      url = "https://github.com/monitoring-plugins/monitoring-plugins/commit/ac0437ff896ba9ce2549b2d2ec3de146a886f08a.patch";
+      sha256 = "0jf6fqkyzag66rid92m7asnr2dp8rr8kn4zjvhqg0mqvf8imppky";
+    })
+  ];
 
   # !!! Awful hack. Grrr... this of course only works on NixOS.
   # Anyway the check that configure performs to figure out the ping
@@ -35,11 +44,16 @@ in stdenv.mkDerivation rec {
     configureFlagsArray=(
       --with-ping-command='/run/wrappers/bin/ping -4 -n -U -w %d -c %d %s'
       --with-ping6-command='/run/wrappers/bin/ping -6 -n -U -w %d -c %d %s'
+      --with-sudo-command='/run/wrappers/bin/sudo'
+      --with-mailq-command='${runCommand "mailq-wrapper" {preferLocalBuild=true;} ''
+        mkdir -p $out/bin
+        ln -s /run/wrappers/bin/sendmail $out/bin/mailq
+        ''}/bin/mailq'
     )
   '';
 
   # !!! make openssh a runtime dependency only
-  buildInputs = [ net_snmp openssh openssl perl ];
+  buildInputs = [ dnsutils libdbi libmysqlclient net-snmp openldap openssh openssl perl procps zlib ];
 
   nativeBuildInputs = [ autoreconfHook ];
 

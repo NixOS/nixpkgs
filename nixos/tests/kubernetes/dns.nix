@@ -3,8 +3,6 @@ with import ./base.nix { inherit system; };
 let
   domain = "my.zyx";
 
-  certs = import ./certs.nix { externalDomain = domain; kubelets = [ "machine1" "machine2" ]; };
-
   redisPod = pkgs.writeText "redis-pod.json" (builtins.toJSON {
     kind = "Pod";
     apiVersion = "v1";
@@ -77,7 +75,6 @@ let
   singleNodeTest = {
     test = ''
       # prepare machine1 for test
-      $machine1->waitForUnit("kubernetes.target");
       $machine1->waitUntilSucceeds("kubectl get node machine1.${domain} | grep -w Ready");
       $machine1->waitUntilSucceeds("docker load < ${redisImage}");
       $machine1->waitUntilSucceeds("kubectl create -f ${redisPod}");
@@ -103,8 +100,6 @@ let
       # Node token exchange
       $machine1->waitUntilSucceeds("cp -f /var/lib/cfssl/apitoken.secret /tmp/shared/apitoken.secret");
       $machine2->waitUntilSucceeds("cat /tmp/shared/apitoken.secret | nixos-kubernetes-node-join");
-      $machine1->waitForUnit("kubernetes.target");
-      $machine2->waitForUnit("kubernetes.target");
 
       # prepare machines for test
       $machine1->waitUntilSucceeds("kubectl get node machine2.${domain} | grep -w Ready");

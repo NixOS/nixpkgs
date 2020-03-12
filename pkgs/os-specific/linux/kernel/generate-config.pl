@@ -28,7 +28,7 @@ open ANSWERS, "<$ENV{KERNEL_CONFIG}" or die "Could not open answer file";
 while (<ANSWERS>) {
     chomp;
     s/#.*//;
-    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(\S+)\s*$/) {
+    if (/^\s*([A-Za-z0-9_]+)(\?)?\s+(.*\S)\s*$/) {
         $answers{$1} = $3;
         $requiredAnswers{$1} = !(defined $2);
     } elsif (!/^\s*$/) {
@@ -136,10 +136,12 @@ while (<CONFIG>) {
 }
 close CONFIG;
 
+my $ret = 0;
 foreach my $name (sort (keys %answers)) {
     my $f = $requiredAnswers{$name} && $ignoreConfigErrors ne "1"
-        ? sub { die "error: " . $_[0]; } : sub { warn "warning: " . $_[0]; };
+        ? sub { warn "error: " . $_[0]; $ret = -1; } : sub { warn "warning: " . $_[0]; };
     &$f("unused option: $name\n") unless defined $config{$name};
     &$f("option not set correctly: $name (wanted '$answers{$name}', got '$config{$name}')\n")
         if $config{$name} && $config{$name} ne $answers{$name};
 }
+exit $ret;

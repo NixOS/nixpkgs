@@ -5,7 +5,7 @@ with lib;
 let
   cfg = config.programs.firejail;
 
-  wrappedBins = pkgs.stdenv.mkDerivation rec {
+  wrappedBins = pkgs.stdenv.mkDerivation {
     name = "firejail-wrapped-binaries";
     nativeBuildInputs = with pkgs; [ makeWrapper ];
     buildCommand = ''
@@ -25,8 +25,14 @@ in {
     enable = mkEnableOption "firejail";
 
     wrappedBinaries = mkOption {
-      type = types.attrs;
+      type = types.attrsOf types.path;
       default = {};
+      example = literalExample ''
+        {
+          firefox = "''${lib.getBin pkgs.firefox}/bin/firefox";
+          mpv = "''${lib.getBin pkgs.mpv}/bin/mpv";
+        }
+      '';
       description = ''
         Wrap the binaries in firejail and place them in the global path.
         </para>

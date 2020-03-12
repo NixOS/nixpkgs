@@ -11,8 +11,8 @@ let
 
   desktopItem = makeDesktopItem {
     name = "sienna";
-    exec = "${pname}";
-    icon = "${icon}";
+    exec = pname;
+    icon = icon;
     comment = "Fast-paced one button platformer"; 
     desktopName = "Sienna";
     genericName = "sienna";
@@ -21,7 +21,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

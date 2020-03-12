@@ -3,11 +3,11 @@
 }:
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "1.9.5";
+  version = "1.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "94423d1a56cdec2ef47699e02c9a48cf8827b9c4465b836c0cefb30afe85e59a";
+    sha256 = "a37f522cf3b6a34abddfedb61c4546f60023b3799b22d1cd971eacdc0861530a";
   };
 
   doCheck = false; # bash-completion test fails with "compgen: command not found".

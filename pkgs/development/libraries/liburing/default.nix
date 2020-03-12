@@ -1,39 +1,43 @@
 { stdenv, fetchgit
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
-  name = "liburing-${version}";
-  version = "1.0.0pre92_${builtins.substring 0 7 src.rev}";
+  pname = "liburing";
+  version = "0.4pre514_${builtins.substring 0 8 src.rev}";
 
   src = fetchgit {
-    url    = "http://git.kernel.dk/liburing";
-    rev    = "7b989f34191302011b5b49bf5b26b36862d54056";
-    sha256 = "12kfqvwzxksmsm8667a1g4vxr6xsaq63cz9wrfhwq6hrsv3ynydc";
+    url    = "http://git.kernel.dk/${pname}";
+    rev    = "2454d6301d83a714d0775662b512fd46dbf82a0d";
+    sha256 = "0qdycr0w0rymnizc4p5rh2qcnzr05afris4ggaawdg4zr07jms7k";
   };
 
+  separateDebugInfo = true;
   enableParallelBuilding = true;
 
   outputs = [ "out" "lib" "dev" "man" ];
 
-  installFlags =
-    [ "prefix=$(out)"
-      "includedir=$(dev)/include"
-      "libdir=$(lib)/lib"
-      "mandir=$(man)/share/man"
-    ];
+  configurePhase = ''
+    ./configure \
+      --prefix=$out \
+      --includedir=$dev/include \
+      --libdir=$lib/lib \
+      --mandir=$man/share/man \
+  '';
 
   # Copy the examples into $out.
   postInstall = ''
     mkdir -p $out/bin
     cp ./examples/io_uring-cp examples/io_uring-test $out/bin
+    cp ./examples/link-cp $out/bin/io_uring-link-cp
+    cp ./examples/ucontext-cp $out/bin/io_uring-ucontext-cp
   '';
 
   meta = with stdenv.lib; {
     description = "Userspace library for the Linux io_uring API";
-    homepage    = http://git.kernel.dk/cgit/liburing/;
+    homepage    = https://git.kernel.dk/cgit/liburing/;
     license     = licenses.lgpl21;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice ];
-    badPlatforms = [ "aarch64-linux" ];
   };
 }

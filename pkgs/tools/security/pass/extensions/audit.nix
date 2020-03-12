@@ -4,7 +4,7 @@ let
   pythonEnv = pythonPackages.python.withPackages (p: [ p.requests ]);
 
 in stdenv.mkDerivation rec {
-  name = "pass-audit-${version}";
+  pname = "pass-audit";
   version = "0.1";
 
   src = fetchFromGitHub {

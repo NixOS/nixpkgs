@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
+{ lib, fetchurl, buildDunePackage, ocaml
 , ounit, ppx_deriving, ppx_tools_versioned
 }:
 
@@ -8,24 +8,21 @@ else
 
 buildDunePackage rec {
   pname = "ppx_import";
-  version = "1.5-3";
+  version = "1.7.1";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-ppx";
-    repo = "ppx_import";
-    rev = "bd627d5afee597589761d6fee30359300b5e1d80";
-    sha256 = "1f9bphif1izhyx72hvwpkd9kxi9lfvygaicy6nbxyp6qgc87z4nm";
+  src = fetchurl {
+    url = "https://github.com/ocaml-ppx/ppx_import/releases/download/v${version}/ppx_import-v${version}.tbz";
+    sha256 = "16dyxfb7syz659rqa7yq36ny5vzl7gkqd7f4m6qm2zkjc1gc8j4v";
   };
 
   buildInputs = [ ounit ppx_deriving ];
   propagatedBuildInputs = [ ppx_tools_versioned ];
 
   doCheck = true;
-  checkTarget = "test";
 
   meta = {
     description = "A syntax extension that allows to pull in types or signatures from other compiled interface files";
     license = lib.licenses.mit;
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/ocaml-ppx/ppx_import";
   };
 }

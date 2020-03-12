@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, fetchpatch
+{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
 , cryptography
 , bcrypt, gssapi, libnacl, libsodium, nettle, pyopenssl
 , openssl, openssh }:
 
 buildPythonPackage rec {
   pname = "asyncssh";
-  version = "1.16.1";
+  version = "2.1.0";
   disabled = pythonOlder "3.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0qia1ay2dhwps5sfh0hif7mrv7yxvykxs9l7cmfp4m6hmqnn3r5r";
+    sha256 = "19d0b4c65115d09b42ed21c748884157babfb3055a6e130ea349dfdcbcef3380";
   };
 
   patches = [
@@ -21,13 +21,6 @@ buildPythonPackage rec {
     # However that broke the test on NixOS, failing with
     # "Operation not permitted"
     ./fix-sftp-chmod-test-nixos.patch
-
-    # Restore libnacl support for curve25519/ed25519 as a fallback for PyCA
-    # Fixes https://github.com/ronf/asyncssh/issues/206 with older openssl
-    (fetchpatch {
-      url = "https://github.com/ronf/asyncssh/commit/1dee113bb3e4a6888de562b0413e9abd6a0f0f04.patch";
-      sha256 = "04bckdj7i6xk24lizkn3a8cj375pkz7yc57fc0vk222c6jzwzaml";
-    })
   ];
 
   propagatedBuildInputs = [

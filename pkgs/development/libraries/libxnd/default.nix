@@ -4,8 +4,8 @@
 , libndtypes
 }:
 
-stdenv.mkDerivation rec {
-  name = "libxnd-${version}";
+stdenv.mkDerivation {
+  pname = "libxnd";
   version = "unstable-2018-11-27";
 
   src = fetchFromGitHub {

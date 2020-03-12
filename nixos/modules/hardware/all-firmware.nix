@@ -6,6 +6,14 @@ let
   cfg = config.hardware;
 in {
 
+  imports = [
+    (mkRenamedOptionModule [ "networking" "enableRT73Firmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableIntel3945ABGFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableIntel2100BGFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableRalinkFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+    (mkRenamedOptionModule [ "networking" "enableRTL8192cFirmware" ] [ "hardware" "enableRedistributableFirmware" ])
+  ];
+
   ###### interface
 
   options = {
@@ -63,8 +71,7 @@ in {
         b43Firmware_5_1_138
         b43Firmware_6_30_163_46
         b43FirmwareCutter
-        facetimehd-firmware
-      ];
+      ] ++ optional (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) facetimehd-firmware;
     })
   ];
 }

@@ -1,18 +1,18 @@
 { stdenv, fetchurl, makeWrapper, jre }:
 
 stdenv.mkDerivation rec {
-  version = "8.20";
-  name = "checkstyle-${version}";
+  version = "8.30";
+  pname = "checkstyle";
 
   src = fetchurl {
     url = "https://github.com/checkstyle/checkstyle/releases/download/checkstyle-${version}/checkstyle-${version}-all.jar";
-    sha256 = "1vsszdmdpyjdwlc9qqw4m8s6rw3pkdrczrmlmydwqmzvzr559nyp";
+    sha256 = "1wsgpfdqasfz6chhy0w5pdjm4by6ih2g0l44lxwks9kik2lrs4av";
   };
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ jre ];
 
-  unpackPhase = ":";
+  dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
       adheres to a coding standard. By default it supports the Sun Code
       Conventions, but is highly configurable.
     '';
-    homepage = http://checkstyle.sourceforge.net/;
+    homepage = "http://checkstyle.sourceforge.net/";
     license = licenses.lgpl21;
     maintainers = with maintainers; [ pSub ];
-    platforms = with platforms; linux;
+    platforms = jre.meta.platforms;
   };
 }

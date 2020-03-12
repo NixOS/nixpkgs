@@ -5,8 +5,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/crypto";
-      rev = "505ab145d0a9";
-      sha256 = "1vbsvcvmjz6c00p5vf8ls533p52fx2y3gy6v4k5qrdlzl4wf0i5s";
+      rev = "34f69633bfdc";
+      sha256 = "0169vcn9s4c851y9vm7xqnar3vdfjrp7qsvcxadpfhsmwlfhxzgg";
     };
   }
   {
@@ -14,8 +14,8 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/net";
-      rev = "610586996380";
-      sha256 = "1sqwmvf70rq1j65lv5jzyiy7gd53l37dxlnjf2xj6p2i4fcwkk4z";
+      rev = "d98b1b443823";
+      sha256 = "1vzwpy56g056dsq304xga3d55jg2cxx89bijpfwjlhwyqyskybsz";
     };
   }
   {
@@ -23,8 +23,26 @@
     fetch = {
       type = "git";
       url = "https://go.googlesource.com/sys";
-      rev = "2a47403f2ae5";
-      sha256 = "0ww1iz1zcw995957h32289yascl37pkvfj3qcvyghvnzf7xg9v6z";
+      rev = "c178f38b412c";
+      sha256 = "1r6v8xnvb4z5vdckbj6vd08kn6h4ivr9hvdpgq4drj6l1mp79rf7";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/text";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/text";
+      rev = "v0.3.2";
+      sha256 = "0flv9idw0jm5nm8lx25xqanbkqgfiym6619w575p7nrdh0riqwqh";
+    };
+  }
+  {
+    goPackagePath = "golang.org/x/tools";
+    fetch = {
+      type = "git";
+      url = "https://go.googlesource.com/tools";
+      rev = "90fa682c2a6e";
+      sha256 = "03ic2xsy51jw9749wl7gszdbz99iijbd2bckgygl6cm9w5m364ak";
     };
   }
 ]

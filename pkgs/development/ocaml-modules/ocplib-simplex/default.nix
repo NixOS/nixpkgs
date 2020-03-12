@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ ocaml findlib ];
 
-  installFlags = "LIBDIR=$(OCAMLFIND_DESTDIR)";
+  installFlags = [ "LIBDIR=$(OCAMLFIND_DESTDIR)" ];
 
   createFindlibDestdir = true;
 

@@ -5,7 +5,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "shmig-${version}";
+  pname = "shmig";
   version = "1.0.0";
 
   src = fetchFromGitHub {

@@ -15,7 +15,7 @@ let
     realms = optionalAttrs (lib.all (value: value != null) [
       cfg.defaultRealm cfg.kdc cfg.kerberosAdminServer
     ]) {
-      "${cfg.defaultRealm}" = {
+      ${cfg.defaultRealm} = {
         kdc = cfg.kdc;
         admin_server = cfg.kerberosAdminServer;
       };
@@ -25,7 +25,7 @@ let
       cfg.domainRealm cfg.defaultRealm
     ]) {
       ".${cfg.domainRealm}" = cfg.defaultRealm;
-      "${cfg.domainRealm}" = cfg.defaultRealm;
+      ${cfg.domainRealm} = cfg.defaultRealm;
     };
   };
 

@@ -1,4 +1,4 @@
-{ stdenv, lib, appleDerivation, xcbuildHook
+{ lib, appleDerivation, xcbuildHook
 
 # headersOnly is true when building for libSystem
 , headersOnly ? false }:
@@ -11,7 +11,7 @@ appleDerivation {
       --replace '#include <xpc/xpc.h>' ""
   '';
 
-  xcbuildFlags = "-target util";
+  xcbuildFlags = [ "-target" "util" ];
 
   installPhase = ''
     mkdir -p $out/include

@@ -1,9 +1,9 @@
-{stdenv, fetchurl, libGLU_combined, freeglut, glew, libXmu, libXext, libX11
+{stdenv, fetchurl, libGLU, libGL, freeglut, glew, libXmu, libXext, libX11
 , qmake, GLUT, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
-  name = "opencsg-${version}";
+  pname = "opencsg";
   src = fetchurl {
     url = "http://www.opencsg.org/OpenCSG-${version}.tar.gz";
     sha256 = "1ysazynm759gnw1rdhn9xw9nixnzrlzrc462340a6iif79fyqlnr";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ glew ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libGLU_combined freeglut libXmu libXext libX11 ]
+    ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL freeglut libXmu libXext libX11 ]
     ++ stdenv.lib.optional stdenv.isDarwin GLUT;
 
   doCheck = false;
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     rm example/Makefile src/Makefile
-    qmakeFlags="$qmakeFlags INSTALLDIR=$out"
+    qmakeFlags=("''${qmakeFlags[@]}" "INSTALLDIR=$out")
   '';
 
   postInstall = ''

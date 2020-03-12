@@ -1,25 +1,23 @@
-{ stdenv, lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
+{ lib, fetchFromGitHub, buildGoPackage, btrfs-progs, go-md2man, utillinux }:
 
 with lib;
 
 buildGoPackage rec {
-  name = "containerd-${version}";
-  version = "1.2.6";
+  pname = "containerd";
+  version = "1.2.13";
 
   src = fetchFromGitHub {
     owner = "containerd";
     repo = "containerd";
     rev = "v${version}";
-    sha256 = "0sp5mn5wd3xma4svm6hf67hyhiixzkzz6ijhyjkwdrc4alk81357";
+    sha256 = "1rac3iak3jpz57yarxc72bxgxvravwrl0j6s6w2nxrmh2m3kxqzn";
   };
 
   goPackagePath = "github.com/containerd/containerd";
   outputs = [ "bin" "out" "man" ];
 
-  hardeningDisable = [ "fortify" ];
-
   buildInputs = [ btrfs-progs go-md2man utillinux ];
-  buildFlags = "VERSION=v${version}";
+  buildFlags = [ "VERSION=v${version}" ];
 
   BUILDTAGS = []
     ++ optional (btrfs-progs == null) "no_btrfs";

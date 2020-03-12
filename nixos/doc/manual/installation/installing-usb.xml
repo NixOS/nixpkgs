@@ -15,16 +15,16 @@
   <note>
    <title>On macOS</title>
    <para>
-<programlisting>
-$ diskutil list
+<screen>
+<prompt>$ </prompt>diskutil list
 [..]
 /dev/diskN (external, physical):
    #:                       TYPE NAME                    SIZE       IDENTIFIER
 [..]
-$ diskutil unmountDisk diskN
+<prompt>$ </prompt>diskutil unmountDisk diskN
 Unmount of all volumes on diskN was successful
-$ sudo dd if=nix.iso of=/dev/rdiskN
-</programlisting>
+<prompt>$ </prompt>sudo dd if=nix.iso of=/dev/rdiskN
+</screen>
     Using the 'raw' <command>rdiskN</command> device instead of
     <command>diskN</command> completes in minutes instead of hours. After
     <command>dd</command> completes, a GUI dialog "The disk you inserted was

@@ -1,11 +1,11 @@
 { stdenv, fetchurl, unzip, doxygen }:
 
 stdenv.mkDerivation rec {
-  name = "bliss-${version}";
+  pname = "bliss";
   version = "0.73";
 
   src = fetchurl {
-    url = "http://www.tcs.hut.fi/Software/bliss/${name}.zip";
+    url = "http://www.tcs.hut.fi/Software/bliss/${pname}-${version}.zip";
     sha256 = "f57bf32804140cad58b1240b804e0dbd68f7e6bf67eba8e0c0fa3a62fd7f0f84";
   };
 

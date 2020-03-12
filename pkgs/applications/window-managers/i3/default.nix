@@ -4,12 +4,12 @@
 , xorgserver, xvfb_run }:
 
 stdenv.mkDerivation rec {
-  name = "i3-${version}";
-  version = "4.16.1";
+  pname = "i3";
+  version = "4.18";
 
   src = fetchurl {
-    url = "https://i3wm.org/downloads/${name}.tar.bz2";
-    sha256 = "0xl56y196vxv001gvx35xwfr25zah8m3xwizp9ycdgdc0rfc4rdb";
+    url = "https://i3wm.org/downloads/${pname}-${version}.tar.bz2";
+    sha256 = "0dv5g8ycfmijxfjyw8hzsxaf80v09lb73zh7x2vszy78h3amifqz";
   };
 
   nativeBuildInputs = [ which pkgconfig makeWrapper ];
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "A tiling window manager";
     homepage    = "https://i3wm.org";
-    maintainers = with maintainers; [ garbas modulistic fpletz ];
+    maintainers = with maintainers; [ modulistic fpletz globin ];
     license     = licenses.bsd3;
     platforms   = platforms.all;
 

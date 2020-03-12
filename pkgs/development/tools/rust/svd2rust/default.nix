@@ -3,7 +3,7 @@
 with rustPlatform;
 
 buildRustPackage rec {
-  name = "svd2rust-${version}";
+  pname = "svd2rust";
   version = "0.14.0";
 
   src = fetchFromGitHub {
@@ -14,7 +14,7 @@ buildRustPackage rec {
   };
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0wsiaa6q9hr9x1cbg6sc8ajg846jjci5qwhdga4d408fmqav72ih";
+  cargoSha256 = "0n0xc8b982ra007l6gygssf1n60gfc2rphwyi7n95dbys1chciyg";
 
   # doc tests fail due to missing dependency
   doCheck = false;

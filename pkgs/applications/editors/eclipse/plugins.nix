@@ -254,12 +254,12 @@ rec {
 
   cdt = buildEclipseUpdateSite rec {
     name = "cdt-${version}";
-    version = "9.6.0";
+    version = "9.10.0";
 
     src = fetchzip {
       stripRoot = false;
-      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.6/${name}/${name}.zip";
-      sha256 = "08rk3b1va57jcy4s161fx0xmb8dn47akhhxd2f28hspq6i2jqicm";
+      url = "https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/tools/cdt/releases/9.10/${name}/${name}.zip";
+      sha256 = "11nbrcvgbg9l3cmp3v3y8y0vldzcf6qlpp185a6dzabdcij6gz5m";
     };
 
     meta = with stdenv.lib; {
@@ -392,29 +392,6 @@ rec {
     };
   };
 
-  emacsplus = buildEclipsePlugin rec {
-    name = "emacsplus-${version}";
-    version = "4.2.0";
-
-    srcFeature = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/features/com.mulgasoft.emacsplus.feature_${version}.jar";
-      sha256 = "0wja3cd7gq8w25797fxnafvcncjnmlv8qkl5iwqj7zja2f45vka8";
-    };
-
-    srcPlugin = fetchurl {
-      url = "http://www.mulgasoft.com/emacsplus/e4/update-site/plugins/com.mulgasoft.emacsplus_${version}.jar";
-      sha256 = "08yw45nr90mlpdzim74vsvdaxj41sgpxcrqk5ia6l2dzvrqlsjs1";
-    };
-
-    meta = with stdenv.lib; {
-      homepage = http://www.mulgasoft.com/emacsplus/;
-      description = "Provides a more Emacs-like experience in the Eclipse text editors";
-      license = licenses.epl10;
-      platforms = platforms.all;
-      maintainers = [ maintainers.rycee ];
-    };
-  };
-
   findbugs = buildEclipsePlugin rec {
     name = "findbugs-${version}";
     version = "3.0.1.20150306-5afe4d1";
@@ -497,12 +474,12 @@ rec {
 
   jdt = buildEclipseUpdateSite rec {
     name = "jdt-${version}";
-    version = "4.10";
+    version = "4.14";
 
     src = fetchzip {
       stripRoot = false;
-      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.10-201812060815/org.eclipse.jdt-4.10.zip;
-      sha256 = "1h11w3zd6xy5w4sk6xnyb2a27wxwhp83qfx67ji7bzdrwbvljqkz";
+      url = https://www.eclipse.org/downloads/download.php?r=1&nf=1&file=/eclipse/downloads/drops4/R-4.14-201912100610/org.eclipse.jdt-4.14.zip;
+      sha256 = "1c2a23qviv58xljpq3yb37ra8cqw7jh52hmzqlg1nij2sdxb6hm5";
     };
 
     meta = with stdenv.lib; {

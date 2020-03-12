@@ -2,7 +2,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "machine-${version}";
+  pname = "machine";
   version = "0.16.1";
 
   goPackagePath = "github.com/docker/machine";

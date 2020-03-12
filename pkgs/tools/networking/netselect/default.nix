@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
-  name = "netselect-${version}";
+  pname = "netselect";
   version = "0.4";
 
   src = fetchFromGitHub {
     owner = "apenwarr";
     repo = "netselect";
-    rev = name;
+    rev = "${pname}-${version}";
     sha256 = "1zncyvjzllrjbdvz7c50d1xjyhs9mwqfy92ndpfc5b3mxqslw4kx";
   };
 

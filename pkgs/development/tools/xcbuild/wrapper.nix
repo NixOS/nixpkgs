@@ -1,9 +1,9 @@
-{ stdenv, lib, buildPackages, makeWrapper, writeText, runCommand
+{ stdenv, makeWrapper, writeText, runCommand
 , CoreServices, ImageIO, CoreGraphics
 , runtimeShell, callPackage
 , xcodePlatform ? stdenv.targetPlatform.xcodePlatform or "MacOSX"
 , xcodeVer ? stdenv.targetPlatform.xcodeVer or "9.4.1"
-, sdkVer ? stdenv.targetPlatform.sdkVer or "10.10" }:
+, sdkVer ? stdenv.targetPlatform.sdkVer or "10.12" }:
 
 let
 
@@ -107,6 +107,9 @@ runCommand "xcodebuild-${xcbuild.version}" {
   ln -s ${platforms} $out/Platforms
   ln -s ${toolchains} $out/Toolchains
 
+  mkdir -p $out/Applications/Xcode.app/Contents
+  ln -s $out $out/Applications/Xcode.app/Contents/Developer
+
   makeWrapper ${xcbuild}/bin/xcodebuild $out/bin/xcodebuild \
     --add-flags "-xcconfig ${xcconfig}" \
     --add-flags "DERIVED_DATA_DIR=." \
@@ -116,7 +119,7 @@ runCommand "xcodebuild-${xcbuild.version}" {
     --run '[ "$1" = "-license" ] && exit 0'
 
   substitute ${xcode-select} $out/bin/xcode-select \
-    --subst-var-by DEVELOPER_DIR $out
+    --subst-var-by DEVELOPER_DIR $out/Applications/Xcode.app/Contents/Developer
   chmod +x $out/bin/xcode-select
 
   substitute ${xcrun} $out/bin/xcrun

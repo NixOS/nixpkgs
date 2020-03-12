@@ -3,9 +3,7 @@
 let
   name = "scilab-bin-${ver}";
 
-  ver = "6.0.1";
-
-  majorVer = builtins.elemAt (lib.splitString "." ver) 0;
+  ver = "6.0.2";
 
   badArch = throw "${name} requires i686-linux or x86_64-linux";
 
@@ -17,7 +15,7 @@ let
     else
       badArch;
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {
@@ -26,7 +24,7 @@ stdenv.mkDerivation rec {
       if stdenv.hostPlatform.system == "i686-linux" then
         "0fgjc2ak3b2qi6yin3fy50qwk2bcj0zbz1h4lyyic9n1n1qcliib"
       else if stdenv.hostPlatform.system == "x86_64-linux" then
-        "1scswlznc14vyzg0gqa1q9gcpwx05kz1sbn563463mzkdp7nd35d"
+        "05clcdgry90drirl3swbxn5q36fmgknnhs6h5pr7mmrzfr6r818w"
       else
         badArch;
   };

@@ -1,11 +1,11 @@
 { stdenv, fetchzip, vim, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "microscheme-${version}";
+  pname = "microscheme";
   version = "0.9.3";
 
   src = fetchzip {
-    name = "${name}-src";
+    name = "${pname}-${version}-src";
     url = "https://github.com/ryansuchocki/microscheme/archive/v${version}.tar.gz";
     sha256 = "1r3ng4pw1s9yy1h5rafra1rq19d3vmb5pzbpcz1913wz22qdd976";
   };

@@ -2,7 +2,8 @@
 
 let version = "1.09"; in
 stdenv.mkDerivation {
-  name = "xautomation-${version}";
+  pname = "xautomation";
+  inherit version;
   src = fetchurl {
     url = "https://www.hoopajoo.net/static/projects/xautomation-${version}.tar.gz";
     sha256 = "03azv5wpg65h40ip2kk1kdh58vix4vy1r9bihgsq59jx2rhjr3zf";

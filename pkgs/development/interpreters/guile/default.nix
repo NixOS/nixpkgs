@@ -12,11 +12,11 @@
 
 (rec {
   name = "guile-${version}";
-  version = "2.2.3";
+  version = "2.2.7";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "11j01agvnci2cx32wwpqs9078856yxmvs15gcsz7ganpkj2ahlw3";
+    sha256 = "013mydzhfswqci6xmyc1ajzd59pfbdak15i0b090nhr9bzm7dxyd";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -42,7 +42,6 @@
 
   patches = [
     ./eai_system.patch
-    ./riscv.patch
   ] ++ stdenv.lib.optional (coverageAnalysis != null) ./gcov-file-name.patch
     ++ stdenv.lib.optional stdenv.isDarwin (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gtk-osx/raw/52898977f165777ad9ef169f7d4818f2d4c9b731/patches/guile-clocktime.patch";
@@ -94,7 +93,7 @@
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = https://www.gnu.org/software/guile/;
+    homepage    = "https://www.gnu.org/software/guile/";
     license     = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
     platforms   = stdenv.lib.platforms.all;

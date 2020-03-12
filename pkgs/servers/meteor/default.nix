@@ -1,22 +1,20 @@
 { stdenv, lib, fetchurl, zlib, patchelf, runtimeShell }:
 
 let
-  bootstrap = fetchurl {
-    url = "https://meteorinstall-4168.kxcdn.com/packages-bootstrap/1.5/meteor-bootstrap-os.linux.x86_64.tar.gz";
-    sha256 = "0cwwqv88h1ji7g4zmfz34xsrxkn640wr11ddjq5c6b9ygcljci3p";
-  };
+  version = "1.8.2";
 in
 
-stdenv.mkDerivation rec {
-  name = "meteor-${version}";
-  version = "1.5";
+stdenv.mkDerivation {
+  inherit version;
+  pname = "meteor";
+  src = fetchurl {
+    url = "https://static-meteor.netdna-ssl.com/packages-bootstrap/${version}/meteor-bootstrap-os.linux.x86_64.tar.gz";
+    sha256 = "1pydmwx1yjbw54qfq7ndw2l3i3v302bvasvf71x4y9572r2p99mp";
+  };
 
-  dontStrip = true;
+  #dontStrip = true;
 
-  unpackPhase = ''
-    tar xf ${bootstrap}
-    sourceRoot=.meteor
-  '';
+  sourceRoot = ".meteor";
 
   installPhase = ''
     mkdir $out
@@ -25,7 +23,6 @@ stdenv.mkDerivation rec {
     chmod -R +w $out/packages
 
     cp -r package-metadata $out
-    chmod -R +w $out/package-metadata
 
     devBundle=$(find $out/packages/meteor-tool -name dev_bundle)
     ln -s $devBundle $out/dev_bundle

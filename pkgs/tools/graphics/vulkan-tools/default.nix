@@ -2,14 +2,14 @@
   glslang, pkgconfig, xlibsWrapper, libxcb, libXrandr, wayland }:
 
 stdenv.mkDerivation rec {
-  name = "vulkan-tools-${version}";
-  version = "1.1.106.0";
+  pname = "vulkan-tools";
+  version = "1.2.131.1";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "Vulkan-Tools";
     rev = "sdk-${version}";
-    sha256 = "0swqyk16mbkivyk79dpqbhpw05a7yrakqynywznr5zgqbc0z4gj8";
+    sha256 = "0ws47ansrr8cq4qjf6k4q0ygm9wwd3w7mhwqcl1qxms8lh5vmhfq";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

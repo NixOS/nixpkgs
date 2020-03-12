@@ -3,18 +3,18 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "nnn-${version}";
-  version = "2.4";
+  pname = "nnn";
+  version = "3.0";
 
   src = fetchFromGitHub {
     owner = "jarun";
-    repo = "nnn";
+    repo = pname;
     rev = "v${version}";
-    sha256 = "0y55h5pxd20qw2ajhz8fsk45aynx0xzgr9kfr545hyhmfkg2nc49";
+    sha256 = "0kmfg61v3xnf8m4m9nna28sr7hdwqbxwivc7j91zhfj2wpdswywp";
   };
 
-  configFile = optionalString (conf!=null) (builtins.toFile "nnn.h" conf);
-  preBuild = optionalString (conf!=null) "cp ${configFile} nnn.h";
+  configFile = optionalString (conf != null) (builtins.toFile "nnn.h" conf);
+  preBuild = optionalString (conf != null) "cp ${configFile} nnn.h";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ readline ncurses ];
@@ -23,16 +23,16 @@ stdenv.mkDerivation rec {
 
   # shell completions
   postInstall = ''
-    install -Dm555 scripts/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
-    install -Dm555 scripts/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
-    install -Dm555 scripts/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
+    install -Dm555 misc/auto-completion/bash/nnn-completion.bash $out/share/bash-completion/completions/nnn.bash
+    install -Dm555 misc/auto-completion/zsh/_nnn -t $out/share/zsh/site-functions
+    install -Dm555 misc/auto-completion/fish/nnn.fish -t $out/share/fish/vendor_completions.d
   '';
 
   meta = {
     description = "Small ncurses-based file browser forked from noice";
-    homepage = https://github.com/jarun/nnn;
+    homepage = "https://github.com/jarun/nnn";
     license = licenses.bsd2;
     platforms = platforms.all;
-    maintainers = with maintainers; [ jfrankenau ];
+    maintainers = with maintainers; [ jfrankenau filalex77 ];
   };
 }

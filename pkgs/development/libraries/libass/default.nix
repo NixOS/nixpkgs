@@ -18,11 +18,11 @@ in
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  name = "libass-${version}";
+  pname = "libass";
   version = "0.14.0";
 
   src = fetchurl {
-    url = "https://github.com/libass/libass/releases/download/${version}/${name}.tar.xz";
+    url = "https://github.com/libass/libass/releases/download/${version}/${pname}-${version}.tar.xz";
     sha256 = "18iqznl4mabhj9ywfsz4kwvbsplcv1jjxq50nxssvbj8my1267w8";
   };
 

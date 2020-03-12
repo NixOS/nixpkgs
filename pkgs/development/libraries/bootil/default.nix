@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, fetchpatch, premake4 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "bootil-unstable-2015-12-17";
 
   meta = {

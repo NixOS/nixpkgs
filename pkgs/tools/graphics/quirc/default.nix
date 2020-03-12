@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     mkdir -p "$out"/{bin,lib,include}
     find . -maxdepth 1 -type f -perm -0100 -exec cp '{}' "$out"/bin ';'
   '';
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ];
   meta = {
     inherit (s) version;
     description = ''A small QR code decoding library'';

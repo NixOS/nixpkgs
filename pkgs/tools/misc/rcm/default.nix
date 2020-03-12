@@ -1,7 +1,7 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "rcm-${version}";
+  pname = "rcm";
   version = "1.3.3";
 
   src = fetchurl {

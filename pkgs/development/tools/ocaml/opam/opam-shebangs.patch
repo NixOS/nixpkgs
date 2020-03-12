@@ -64,7 +64,7 @@ index 00000000..3ea84e2d
 +header() { echo "$1"; }
 +stopNest() { true; }
 +
-+fixupOutputHooks+=('if [ -z "$dontPatchShebangs" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
++fixupOutputHooks+=('if [ -z "${dontPatchShebangs-}" -a -e "$prefix" ]; then patchShebangs "$prefix"; fi')
 +
 +patchShebangs() {
 +    local dir="$1"

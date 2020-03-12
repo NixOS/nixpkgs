@@ -5,8 +5,9 @@ let
   sha256 = "039rh4z3lsj4vqjsqgakk0b7dkrdrkkzj0p1cjikpc9gn36zpghc";
 in
 
-stdenv.mkDerivation rec {
-  name = "ior-${version}";
+stdenv.mkDerivation {
+  pname = "ior";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/LLNL/ior/archive/${version}.tar.gz";

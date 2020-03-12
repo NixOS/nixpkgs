@@ -1,7 +1,7 @@
 { fetchFromGitHub, lib, rustPlatform }:
 
 rustPlatform.buildRustPackage rec {
-  name    = "mq-cli-${version}";
+  pname = "mq-cli";
   version = "1.0.0";
 
   src = fetchFromGitHub {
@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "02z85waj5jc312biv2qhbgplsggxgjmfmyv9v8b1ky0iq1mpxjw7";
   };
 
-  cargoSha256 = "0kpv52474bp3k2wmz8xykca8iz46dwnjmly2nivblnaap49w2zsz";
+  cargoSha256 = "19ccylnmmlm2d8kc178cffpjwrjlia6b4v3nzvxcs81a396ymr7b";
 
   meta = with lib; {
     description      = "CLI tool to manage POSIX message queues";

@@ -1,8 +1,8 @@
 { stdenv, fetchurl, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   version = "2.0.3";
-  name = "redo-sh-${version}";
+  pname = "redo-sh";
 
   src = fetchurl {
     url = "http://news.dieweltistgarnichtso.net/bin/archives/redo-sh.tar.gz";

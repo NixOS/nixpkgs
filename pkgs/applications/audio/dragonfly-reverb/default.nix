@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dragonfly-reverb";
-  version = "1.1.4";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "michaelwillis";
     repo = "dragonfly-reverb";
     rev = version;
-    sha256 = "060g4ddh1z222n39wqj8jxj0zgmpjrgraw76qgyg6xkn15cn9q9y";
+    sha256 = "1z2x33lzpd26dv1p29ca7vy8mjfzkfpin35iq46spwd9k3sqn1ja";
     fetchSubmodules = true;
   };
 
@@ -26,9 +26,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/lib/lv2/
     mkdir -p $out/lib/vst/
     cd bin
-    cp -a DragonflyReverb        $out/bin/
-    cp -a DragonflyReverb-vst.so $out/lib/vst/
-    cp -a DragonflyReverb.lv2/   $out/lib/lv2/
+    for bin in DragonflyEarlyReflections DragonflyPlateReverb DragonflyHallReverb DragonflyRoomReverb; do
+      cp -a $bin        $out/bin/
+      cp -a $bin-vst.so $out/lib/vst/
+      cp -a $bin.lv2/   $out/lib/lv2/ ;
+    done
   '';
 
   meta = with stdenv.lib; {

@@ -30,6 +30,13 @@
   <link linkend="opt-users.users._name__.openssh.authorizedKeys.keys">users.users.root.openssh.authorizedKeys.keys</link> = ["ssh-dss AAAAB3N…"];
 '
 </screen>
+  By default the next free address in the <literal>10.233.0.0/16</literal> subnet will be chosen
+  as container IP. This behavior can be altered by setting <literal>--host-address</literal> and
+  <literal>--local-address</literal>:
+<screen>
+# nixos-container create test --config-file test-container.nix \
+    --local-address 10.235.1.2 --host-address 10.235.1.1
+</screen>
  </para>
 
  <para>

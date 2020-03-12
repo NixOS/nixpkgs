@@ -1,7 +1,7 @@
-{stdenv, fetchurl, ocaml, findlib, lablgtk}:
+{stdenv, fetchurl, ocaml, findlib, lablgtk ? null}:
 
 stdenv.mkDerivation rec {
-  name = "ocamlgraph-${version}";
+  pname = "ocamlgraph";
   version = "1.8.8";
 
   src = fetchurl {
@@ -16,7 +16,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     sed -i 's@$(DESTDIR)$(OCAMLLIB)/ocamlgraph@$(DESTDIR)/lib/ocaml/${ocaml.version}/site-lib/ocamlgraph@' Makefile.in
     sed -i 's@OCAMLFINDDEST := -destdir $(DESTDIR)@@' Makefile.in
-    sed -i 's@+lablgtk2@${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2 -I ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/stublibs@' configure Makefile.in editor/Makefile
+    ${stdenv.lib.optionalString (lablgtk != null)
+      "sed -i 's@+lablgtk2@${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/lablgtk2 -I ${lablgtk}/lib/ocaml/${ocaml.version}/site-lib/stublibs@' configure Makefile.in editor/Makefile"}
   '';
 
   createFindlibDestdir = true;

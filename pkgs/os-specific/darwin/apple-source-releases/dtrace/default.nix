@@ -6,7 +6,7 @@ appleDerivation {
   buildInputs = [ CoreSymbolication darling xnu ];
   NIX_CFLAGS_COMPILE = "-DCTF_OLD_VERSIONS -DPRIVATE -DYYDEBUG=1 -I${xnu}/Library/Frameworks/System.framework/Headers -Wno-error=implicit-function-declaration";
   NIX_LDFLAGS = "-L./Products/Release";
-  xcbuildFlags = "-target dtrace_frameworks -target dtrace";
+  xcbuildFlags = [ "-target" "dtrace_frameworks" "-target" "dtrace" ];
 
   doCheck = false;
   checkPhase = "xcodebuild -target dtrace_tests";

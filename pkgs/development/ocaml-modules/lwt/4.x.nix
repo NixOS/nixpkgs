@@ -1,29 +1,28 @@
-{ stdenv, fetchzip, pkgconfig, ncurses, libev, buildDunePackage, ocaml
-, cppo, ocaml-migrate-parsetree, ppx_tools_versioned, result
+{ lib, fetchzip, pkgconfig, ncurses, libev, buildDunePackage, ocaml
+, cppo, ocaml-migrate-parsetree, ocplib-endian, result
+, mmap, seq
 }:
 
-let inherit (stdenv.lib) optional versionAtLeast; in
+let inherit (lib) optional versionAtLeast; in
 
 buildDunePackage rec {
   pname = "lwt";
-  version = "4.1.0";
+  version = "4.5.0";
 
   src = fetchzip {
     url = "https://github.com/ocsigen/${pname}/archive/${version}.tar.gz";
-    sha256 = "16wnc61kfj54z4q8sn9f5iik37pswz328hcz3z6rkza3kh3s6wmm";
+    sha256 = "0l836z5zr38969bi77aga7ismj4wb01i3ffxf5v59jsgd3g44r2w";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cppo ocaml-migrate-parsetree ppx_tools_versioned ]
+  buildInputs = [ cppo ocaml-migrate-parsetree ]
    ++ optional (!versionAtLeast ocaml.version "4.07") ncurses;
-  propagatedBuildInputs = [ libev result ];
-
-  configurePhase = "ocaml src/util/configure.ml -use-libev true";
+  propagatedBuildInputs = [ libev mmap ocplib-endian seq result ];
 
   meta = {
     homepage = "https://ocsigen.org/lwt/";
     description = "A cooperative threads library for OCaml";
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
-    license = stdenv.lib.licenses.lgpl21;
+    maintainers = [ lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
   };
 }

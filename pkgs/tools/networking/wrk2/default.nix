@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, luajit, openssl, zlib }:
 
 stdenv.mkDerivation rec {
-  name = "wrk2-${version}";
+  pname = "wrk2";
   version = "4.0.0-${builtins.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
       --replace 'struct luaL_reg ' 'struct luaL_Reg '
   '';
 
-  configurePhase = ":";
+  dontConfigure = true;
   installPhase = ''
     mkdir -p $out/bin
     mv ./wrk $out/bin/wrk2

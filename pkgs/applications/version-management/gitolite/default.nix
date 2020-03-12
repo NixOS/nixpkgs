@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, git, nettools, perl }:
+{ stdenv, fetchFromGitHub, git, lib, makeWrapper, nettools, perl }:
 
 stdenv.mkDerivation rec {
-  name = "gitolite-${version}";
+  pname = "gitolite";
   version = "3.6.11";
 
   src = fetchFromGitHub {
@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
     sha256 = "1rkj7gknwjlc5ij9w39zf5mr647bm45la57yjczydmvrb8c56yrh";
   };
 
-  buildInputs = [ git nettools perl ];
+  buildInputs = [ nettools perl ];
+  nativeBuildInputs = [ makeWrapper ];
+  propagatedBuildInputs = [ git ];
 
   dontBuild = true;
 
@@ -25,6 +27,11 @@ stdenv.mkDerivation rec {
       --replace hostname "${nettools}/bin/hostname"
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/gitolite-shell \
+      --prefix PATH : "${git}/bin"
+  '';
+
   installPhase = ''
     mkdir -p $out/bin
     perl ./install -to $out/bin
@@ -33,7 +40,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Finely-grained git repository hosting";
-    homepage    = http://gitolite.com/gitolite/index.html;
+    homepage    = https://gitolite.com/gitolite/index.html;
     license     = licenses.gpl2;
     platforms   = platforms.unix;
     maintainers = [ maintainers.thoughtpolice maintainers.lassulus maintainers.tomberek ];

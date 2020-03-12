@@ -1,7 +1,7 @@
 { stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation rec {
-  name = "dhex-${version}";
+  pname = "dhex";
   version = "0.69";
 
   src = fetchurl {

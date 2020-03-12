@@ -1,7 +1,7 @@
 { stdenv, buildPackages, fetchurl, which, pkgconfig, perl, guile, libxml2 }:
 
 stdenv.mkDerivation rec {
-  name = "autogen-${version}";
+  pname = "autogen";
   version = "5.18.12";
 
   src = fetchurl {

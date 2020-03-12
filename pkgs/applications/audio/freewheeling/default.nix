@@ -7,7 +7,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "freewheeling-${version}";
+  pname = "freewheeling";
   version = "0.6.5";
 
   src = fetchFromGitHub {
@@ -25,7 +25,8 @@ stdenv.mkDerivation rec {
       configureFlags = oldAttrs.configureFlags ++ [ "--enable-openssl-compatibility" ];
     }))
   ];
-  NIX_CFLAGS_COMPILE = makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ];
+  NIX_CFLAGS_COMPILE = toString
+    (makeSDLFlags [ SDL SDL_ttf SDL_gfx ] ++ [ "-I${libxml2.dev}/include/libxml2" ]);
 
   hardeningDisable = [ "format" ];
 

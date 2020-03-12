@@ -6,15 +6,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "toybox";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "landley";
     repo = pname;
     rev = version;
-    sha256 = "00q6vlc06xbhcjcyqkyp66d1pv7qgwhs00gk4vyixhjqh80giwzl";
+    sha256 = "02mliqz2lry779ba6vmyaa13nxcmj91f8pyhzim9wvcnjq8vc5cj";
   };
 
   buildInputs = lib.optionals enableStatic [ stdenv.cc.libc stdenv.cc.libc.static ];
@@ -45,7 +44,7 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "PREFIX=$(out)/bin" ] ++ lib.optional enableStatic "LDFLAGS=--static";
 
-  installTargets = "install_flat";
+  installTargets = [ "install_flat" ];
 
   # tests currently (as of 0.8.0) get stuck in an infinite loop...
   # ...this is fixed in latest git, so doCheck can likely be enabled for next release

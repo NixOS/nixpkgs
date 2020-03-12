@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
 
 stdenv.mkDerivation rec {
-  name = "sieve-connect-${version}";
-  version = "0.89";
+  pname = "sieve-connect";
+  version = "0.90";
 
   src = fetchFromGitHub {
     owner = "philpennock";
     repo = "sieve-connect";
     rev = "v${version}";
-    sha256 = "0g7cv29wd5673inl4c87xb802k86bj6gcwh131xrbbg0a0g1c8fp";
+    sha256 = "1ghvfa5ifa68b6imh85bkmy00r93c5f9hs6d039axb73gmma580p";
   };
 
   buildInputs = [ perlPackages.perl ];

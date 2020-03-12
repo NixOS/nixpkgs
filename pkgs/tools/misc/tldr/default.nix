@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, curl, libzip, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "tldr-${version}";
+  pname = "tldr";
   version = "1.3.0";
 
   src = fetchFromGitHub {

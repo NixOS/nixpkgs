@@ -8,12 +8,12 @@
 
 buildPythonPackage rec {
   pname = "marionette_driver";
-  version = "2.7.0";
+  version = "3.0.0";
   disabled = isPy3k;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "15c77ba548847dc05ce1b663a22c3324623f217dce5a859c3aaced31fd16707b";
+    sha256 = "99ca2513d4e2ca29a08e550346f23947a50627a2b02f6ad36a4550e779fa0ce8";
   };
 
   propagatedBuildInputs = [ mozversion mozrunner ]; 

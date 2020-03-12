@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   version = "2017-05-15";
-  name = "tasknc-${version}";
+  pname = "tasknc";
 
   src = fetchFromGitHub {
     owner = "lharding";

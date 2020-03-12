@@ -1,9 +1,9 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, fetchFromGitHub, fetchpatch
 , sqlite, isPyPy }:
 
 buildPythonPackage rec {
   pname = "apsw";
-  version = "3.22.0-r1";
+  version = "3.30.1-r1";
 
   disabled = isPyPy;
 
@@ -11,7 +11,7 @@ buildPythonPackage rec {
     owner = "rogerbinns";
     repo = "apsw";
     rev = version;
-    sha256 = "02ldvshcgr4c7c8anp4flfnw8g8ys5bflkb8b51rb618qxhhwyak";
+    sha256 = "1zp38gj44bmzfxxpvgd7nixkp8vs2fpl839ag8vrh9z70dax22f0";
   };
 
   buildInputs = [ sqlite ];

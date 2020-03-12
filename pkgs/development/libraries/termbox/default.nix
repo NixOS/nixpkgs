@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, python3, wafHook, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "termbox-${version}";
+  pname = "termbox";
   version = "1.1.2";
   src = fetchFromGitHub {
     owner = "nsf";

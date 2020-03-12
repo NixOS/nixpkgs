@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub
+{ lib, mkDerivation, fetchFromGitHub
 , qmake, qtbase, pkgconfig, taglib, libbass, libbass_fx }:
 
 # TODO: get rid of (unfree) libbass
@@ -6,8 +6,8 @@
 # there’s a WIP branch here:
 # https://github.com/UltraStar-Deluxe/UltraStar-Creator/commits/BASS_removed
 
-stdenv.mkDerivation rec {
-  name = "ultrastar-creator-${version}";
+mkDerivation {
+  pname = "ultrastar-creator";
   version = "2019-04-23";
 
   src = fetchFromGitHub {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "1rzz04l7s7pxj74xam0cxlq569lfpgig35kpbsplq531d4007pc9";
   };
 
-  postPatch = with stdenv.lib; ''
+  postPatch = with lib; ''
     # we don’t want prebuild binaries checked into version control!
     rm -rf lib include
     sed -e "s|DESTDIR =.*$|DESTDIR = $out/bin|" \
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ qmake pkgconfig ];
   buildInputs = [ qtbase taglib libbass libbass_fx ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Ultrastar karaoke song creation tool";
     homepage = https://github.com/UltraStar-Deluxe/UltraStar-Creator;
     license = licenses.gpl2;

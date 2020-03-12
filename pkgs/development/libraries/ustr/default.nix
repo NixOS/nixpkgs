@@ -1,11 +1,11 @@
 { stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "ustr-${version}";
+  pname = "ustr";
   version = "1.0.4";
 
   src = fetchurl {
-    url = "http://www.and.org/ustr/${version}/${name}.tar.bz2";
+    url = "http://www.and.org/ustr/${version}/${pname}-${version}.tar.bz2";
     sha256 = "1i623ygdj7rkizj7985q9d6vj5amwg686aqb5j3ixpkqkyp6xbrx";
   };
 

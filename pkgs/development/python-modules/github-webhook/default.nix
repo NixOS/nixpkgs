@@ -1,28 +1,25 @@
-{ stdenv
-, buildPythonPackage
-, fetchgit
+{ lib, buildPythonPackage, fetchPypi
 , flask
+, six
 }:
 
 buildPythonPackage rec {
   pname = "github-webhook";
-  version = "unstable-2016-03-11";
+  version = "1.0.2";
 
-  # There is a PyPI package but an older one.
-  src = fetchgit {
-    url = "https://github.com/bloomberg/python-github-webhook.git";
-    rev = "ca1855479ee59c4373da5425dbdce08567605d49";
-    sha256 = "0mqwig9281iyzbphp1d21a4pqdrf98vs9k8lqpqx6spzgqaczx5f";
+  src = fetchPypi {
+    inherit pname version;
+    sha256 = "04jdf595gv97s4br0ym8izca3i6d1nfwcrpi4s26hkvn3czz84sv";
   };
 
-  propagatedBuildInputs = [ flask ];
-  # No tests
+  propagatedBuildInputs = [ flask six ];
+
+  # touches network
   doCheck = false;
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A framework for writing webhooks for GitHub";
+    homepage = "https://github.com/bloomberg/python-github-webhook";
     license = licenses.mit;
-    homepage = https://github.com/bloomberg/python-github-webhook;
   };
-
 }

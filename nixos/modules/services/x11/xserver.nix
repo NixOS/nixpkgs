@@ -4,8 +4,6 @@ with lib;
 
 let
 
-  kernelPackages = config.boot.kernelPackages;
-
   # Abbreviations.
   cfg = config.services.xserver;
   xorg = pkgs.xorg;
@@ -15,6 +13,9 @@ let
   knownVideoDrivers = {
     # Alias so people can keep using "virtualbox" instead of "vboxvideo".
     virtualbox = { modules = [ xorg.xf86videovboxvideo ]; driverName = "vboxvideo"; };
+
+    # Alias so that "radeon" uses the xf86-video-ati driver.
+    radeon = { modules = [ xorg.xf86videoati ]; driverName = "ati"; };
 
     # modesetting does not have a xf86videomodesetting package as it is included in xorgserver
     modesetting = {};
@@ -77,7 +78,7 @@ let
   in imap1 mkHead cfg.xrandrHeads;
 
   xrandrDeviceSection = let
-    monitors = flip map xrandrHeads (h: ''
+    monitors = forEach xrandrHeads (h: ''
       Option "monitor-${h.config.output}" "${h.name}"
     '');
     # First option is indented through the space in the config but any
@@ -148,6 +149,8 @@ in
     [ ./display-managers/default.nix
       ./window-managers/default.nix
       ./desktop-managers/default.nix
+      (mkRemovedOptionModule [ "services" "xserver" "startGnuPGAgent" ]
+        "See the 16.09 release notes for more information.")
     ];
 
 
@@ -243,7 +246,7 @@ in
       videoDrivers = mkOption {
         type = types.listOf types.str;
         # !!! We'd like "nv" here, but it segfaults the X server.
-        default = [ "ati" "cirrus" "vesa" "vmware" "modesetting" ];
+        default = [ "radeon" "cirrus" "vesa" "vmware" "modesetting" ];
         example = [
           "ati_unfree" "amdgpu" "amdgpu-pro"
           "nv" "nvidia" "nvidiaLegacy390" "nvidiaLegacy340" "nvidiaLegacy304"
@@ -328,9 +331,9 @@ in
       };
 
       xkbOptions = mkOption {
-        type = types.str;
+        type = types.commas;
         default = "terminate:ctrl_alt_bksp";
-        example = "grp:caps_toggle, grp_led:scroll";
+        example = "grp:caps_toggle,grp_led:scroll";
         description = ''
           X keyboard options; layout switching goes here.
         '';
@@ -347,6 +350,7 @@ in
 
       xkbDir = mkOption {
         type = types.path;
+        default = "${pkgs.xkeyboard_config}/etc/X11/xkb";
         description = ''
           Path used for -xkbdir xserver parameter.
         '';
@@ -552,10 +556,8 @@ in
 
     services.xserver.displayManager.lightdm.enable =
       let dmconf = cfg.displayManager;
-          default = !( dmconf.auto.enable
-                    || dmconf.gdm.enable
+          default = !(dmconf.gdm.enable
                     || dmconf.sddm.enable
-                    || dmconf.slim.enable
                     || dmconf.xpra.enable );
       in mkIf (default) true;
 
@@ -571,7 +573,7 @@ in
            then { modules = [xorg.${"xf86video" + name}]; }
            else null)
           knownVideoDrivers;
-      in optional (driver != null) ({ inherit name; modules = []; driverName = name; } // driver));
+      in optional (driver != null) ({ inherit name; modules = []; driverName = name; display = true; } // driver));
 
     assertions = [
       { assertion = config.security.polkit.enable;
@@ -587,19 +589,15 @@ in
     ];
 
     environment.etc =
-      (optionals cfg.exportConfiguration
-        [ { source = "${configFile}";
-            target = "X11/xorg.conf";
-          }
-          # -xkbdir command line option does not seems to be passed to xkbcomp.
-          { source = "${cfg.xkbDir}";
-            target = "X11/xkb";
-          }
-        ])
-      # localectl looks into 00-keyboard.conf
-      ++ [
+      (optionalAttrs cfg.exportConfiguration
         {
-          text = ''
+          "X11/xorg.conf".source = "${configFile}";
+          # -xkbdir command line option does not seems to be passed to xkbcomp.
+          "X11/xkb".source = "${cfg.xkbDir}";
+        })
+      # localectl looks into 00-keyboard.conf
+      //{
+          "X11/xorg.conf.d/00-keyboard.conf".text = ''
             Section "InputClass"
               Identifier "Keyboard catchall"
               MatchIsKeyboard "on"
@@ -609,16 +607,12 @@ in
               Option "XkbVariant" "${cfg.xkbVariant}"
             EndSection
           '';
-          target = "X11/xorg.conf.d/00-keyboard.conf";
         }
-      ]
       # Needed since 1.18; see https://bugs.freedesktop.org/show_bug.cgi?id=89023#c5
-      ++ (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
-        [{
-          source = xorg.xf86inputevdev.out + "/share" + cfgPath;
-          target = cfgPath;
-        }]
-      );
+      // (let cfgPath = "/X11/xorg.conf.d/10-evdev.conf"; in
+        {
+          ${cfgPath}.source = xorg.xf86inputevdev.out + "/share" + cfgPath;
+        });
 
     environment.systemPackages =
       [ xorg.xorgserver.out
@@ -657,16 +651,15 @@ in
     systemd.services.display-manager =
       { description = "X11 Server";
 
-        after = [ "systemd-udev-settle.service" "local-fs.target" "acpid.service" "systemd-logind.service" ];
+        after = [ "systemd-udev-settle.service" "acpid.service" "systemd-logind.service" ];
         wants = [ "systemd-udev-settle.service" ];
 
         restartIfChanged = false;
 
         environment =
-          {
-            LD_LIBRARY_PATH = concatStringsSep ":" ([ "/run/opengl-driver/lib" ]
-              ++ concatLists (catAttrs "libPath" cfg.drivers));
-          } // cfg.displayManager.job.environment;
+          optionalAttrs config.hardware.opengl.setLdLibraryPath
+            { LD_LIBRARY_PATH = pkgs.addOpenGLRunpath.driverLink; }
+          // cfg.displayManager.job.environment;
 
         preStart =
           ''
@@ -708,14 +701,12 @@ in
         xorg.xf86inputevdev.out
       ];
 
-    services.xserver.xkbDir = mkDefault "${pkgs.xkeyboard_config}/etc/X11/xkb";
-
     system.extraDependencies = singleton (pkgs.runCommand "xkb-validated" {
       inherit (cfg) xkbModel layout xkbVariant xkbOptions;
       nativeBuildInputs = [ pkgs.xkbvalidate ];
       preferLocalBuild = true;
     } ''
-      validate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
+      xkbvalidate "$xkbModel" "$layout" "$xkbVariant" "$xkbOptions"
       touch "$out"
     '');
 
@@ -749,7 +740,7 @@ in
           ${cfg.serverLayoutSection}
           # Reference the Screen sections for each driver.  This will
           # cause the X server to try each in turn.
-          ${flip concatMapStrings cfg.drivers (d: ''
+          ${flip concatMapStrings (filter (d: d.display) cfg.drivers) (d: ''
             Screen "Screen-${d.name}[0]"
           '')}
         EndSection
@@ -773,42 +764,44 @@ in
             ${driver.deviceSection or ""}
             ${xrandrDeviceSection}
           EndSection
+          ${optionalString driver.display ''
 
-          Section "Screen"
-            Identifier "Screen-${driver.name}[0]"
-            Device "Device-${driver.name}[0]"
-            ${optionalString (cfg.monitorSection != "") ''
-              Monitor "Monitor[0]"
-            ''}
+            Section "Screen"
+              Identifier "Screen-${driver.name}[0]"
+              Device "Device-${driver.name}[0]"
+              ${optionalString (cfg.monitorSection != "") ''
+                Monitor "Monitor[0]"
+              ''}
 
-            ${cfg.screenSection}
-            ${driver.screenSection or ""}
+              ${cfg.screenSection}
+              ${driver.screenSection or ""}
 
-            ${optionalString (cfg.defaultDepth != 0) ''
-              DefaultDepth ${toString cfg.defaultDepth}
-            ''}
+              ${optionalString (cfg.defaultDepth != 0) ''
+                DefaultDepth ${toString cfg.defaultDepth}
+              ''}
 
-            ${optionalString
-                (driver.name != "virtualbox" &&
-                 (cfg.resolutions != [] ||
-                  cfg.extraDisplaySettings != "" ||
-                  cfg.virtualScreen != null))
-              (let
-                f = depth:
-                  ''
-                    SubSection "Display"
-                      Depth ${toString depth}
-                      ${optionalString (cfg.resolutions != [])
-                        "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
-                      ${cfg.extraDisplaySettings}
-                      ${optionalString (cfg.virtualScreen != null)
-                        "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
-                    EndSubSection
-                  '';
-              in concatMapStrings f [8 16 24]
-            )}
+              ${optionalString
+                  (driver.name != "virtualbox" &&
+                  (cfg.resolutions != [] ||
+                    cfg.extraDisplaySettings != "" ||
+                    cfg.virtualScreen != null))
+                (let
+                  f = depth:
+                    ''
+                      SubSection "Display"
+                        Depth ${toString depth}
+                        ${optionalString (cfg.resolutions != [])
+                          "Modes ${concatMapStrings (res: ''"${toString res.x}x${toString res.y}"'') cfg.resolutions}"}
+                        ${cfg.extraDisplaySettings}
+                        ${optionalString (cfg.virtualScreen != null)
+                          "Virtual ${toString cfg.virtualScreen.x} ${toString cfg.virtualScreen.y}"}
+                      EndSubSection
+                    '';
+                in concatMapStrings f [8 16 24]
+              )}
 
-          EndSection
+            EndSection
+          ''}
         '')}
 
         ${xrandrMonitorSections}

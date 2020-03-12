@@ -1,6 +1,4 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
+{ buildPythonPackage
 , numpy
 , libndtypes
 , isPy27

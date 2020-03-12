@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchgit }:
 
 buildGoPackage rec {
-  name = "gotags-${version}";
+  pname = "gotags";
   version = "20150803-${stdenv.lib.strings.substring 0 7 rev}";
   rev = "be986a34e20634775ac73e11a5b55916085c48e7";
   

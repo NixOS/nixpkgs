@@ -1,4 +1,4 @@
-import ./make-test.nix ({ pkgs, ... }: {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "powerdns";
 
   nodes.server = { ... }: {
@@ -6,7 +6,7 @@ import ./make-test.nix ({ pkgs, ... }: {
   };
 
   testScript = ''
-    $server->waitForUnit("pdns-recursor");
-    $server->waitForOpenPort("53");
+    server.wait_for_unit("pdns-recursor")
+    server.wait_for_open_port("53")
   '';
 })

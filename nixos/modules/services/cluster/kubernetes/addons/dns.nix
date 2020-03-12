@@ -3,7 +3,7 @@
 with lib;
 
 let
-  version = "1.3.1";
+  version = "1.6.4";
   cfg = config.services.kubernetes.addons.dns;
   ports = {
     dns = 10053;
@@ -55,9 +55,9 @@ in {
       type = types.attrs;
       default = {
         imageName = "coredns/coredns";
-        imageDigest = "sha256:02382353821b12c21b062c59184e227e001079bb13ebd01f9d3270ba0fcbf1e4";
+        imageDigest = "sha256:493ee88e1a92abebac67cbd4b5658b4730e0f33512461442d8d9214ea6734a9b";
         finalImageTag = version;
-        sha256 = "0vbylgyxv2jm2mnzk6f28jbsj305zsxmx3jr6ngjq461czcl5fi5";
+        sha256 = "0fm9zdjavpf5hni8g7fkdd3csjbhd7n7py7llxjc66sbii087028";
       };
     };
   };
@@ -68,12 +68,12 @@ in {
 
     services.kubernetes.addonManager.bootstrapAddons = {
       coredns-cr = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        apiVersion = "rbac.authorization.k8s.io/v1";
         kind = "ClusterRole";
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/bootstrapping" = "rbac-defaults";
           };
@@ -94,7 +94,7 @@ in {
       };
 
       coredns-crb = {
-        apiVersion = "rbac.authorization.k8s.io/v1beta1";
+        apiVersion = "rbac.authorization.k8s.io/v1";
         kind = "ClusterRoleBinding";
         metadata = {
           annotations = {
@@ -102,7 +102,7 @@ in {
           };
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/bootstrapping" = "rbac-defaults";
           };
@@ -130,7 +130,7 @@ in {
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
           };
           name = "coredns";
@@ -144,7 +144,7 @@ in {
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
           };
           name = "coredns";
@@ -160,7 +160,7 @@ in {
               fallthrough in-addr.arpa ip6.arpa
             }
             prometheus :${toString ports.metrics}
-            proxy . /etc/resolv.conf
+            forward . /etc/resolv.conf
             cache 30
             loop
             reload
@@ -170,12 +170,12 @@ in {
       };
 
       coredns-deploy = {
-        apiVersion = "extensions/v1beta1";
+        apiVersion = "apps/v1";
         kind = "Deployment";
         metadata = {
           labels = {
             "addonmanager.kubernetes.io/mode" = cfg.reconcileMode;
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/name" = "CoreDNS";
           };
@@ -301,7 +301,7 @@ in {
           };
           labels = {
             "addonmanager.kubernetes.io/mode" = "Reconcile";
-            "k8s-app" = "kube-dns";
+            k8s-app = "kube-dns";
             "kubernetes.io/cluster-service" = "true";
             "kubernetes.io/name" = "CoreDNS";
           };

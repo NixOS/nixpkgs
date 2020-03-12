@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hdf-${version}";
+  pname = "hdf";
   version = "4.2.14";
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${version}/src/hdf-${version}.tar.bz2";
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     export DYLD_LIBRARY_PATH=$(pwd)/bin
   '';
 
-  excludedTests = [
+  excludedTests = stdenv.lib.optionals stdenv.isDarwin [
     "MFHDF_TEST-hdftest"
     "MFHDF_TEST-hdftest-shared"
     "HDP-dumpsds-18"

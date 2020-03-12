@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip, openblas, gfortran }:
 
 stdenv.mkDerivation rec {
-  name = "ipopt-${version}";
+  pname = "ipopt";
   version = "3.12.13";
 
   src = fetchurl {

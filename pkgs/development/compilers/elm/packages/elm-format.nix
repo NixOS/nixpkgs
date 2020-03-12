@@ -1,24 +1,28 @@
 { mkDerivation, fetchgit, ansi-terminal, ansi-wl-pprint, base, binary
-, bytestring, Cabal, cmark, containers, directory, filepath, free
-, HUnit, indents, json, mtl, optparse-applicative, parsec, process
+, bytestring, cmark, containers, directory, filepath, free, HUnit
+, indents, json, mtl, optparse-applicative, parsec, process
 , QuickCheck, quickcheck-io, split, stdenv, tasty, tasty-golden
 , tasty-hunit, tasty-quickcheck, text
 }:
 mkDerivation {
   pname = "elm-format";
-  version = "0.8.1";
+  version = "0.8.3";
   src = fetchgit {
     url = "https://github.com/avh4/elm-format";
-    sha256 = "0p1dy1m6illsl7i04zsv5jqw7i4znv7pfpdfm53zy0k7mq0fk09j";
-    rev = "89694e858664329e3cbdaeb71b15c4456fd739ff";
+    sha256 = "0n6lrqj6mq044hdyraj3ss5cg74dn8k4z05xmwn2apjpm146iaw8";
+    rev = "b97e3593d564a1e069c0a022da8cbd98ca2c5a4b";
   };
   postPatch = ''
-    sed -i "s|desc <-.*||" ./Setup.hs
-    sed -i "s|gitDescribe = .*|gitDescribe = \\\\\"0.8.1\\\\\"\"|" ./Setup.hs
+    mkdir -p ./generated
+    cat <<EOHS > ./generated/Build_elm_format.hs
+    module Build_elm_format where
+
+    gitDescribe :: String
+    gitDescribe = "0.8.3"
+    EOHS
   '';
-  isLibrary = true;
+  isLibrary = false;
   isExecutable = true;
-  setupHaskellDepends = [ base Cabal directory filepath process ];
   libraryHaskellDepends = [
     ansi-terminal ansi-wl-pprint base binary bytestring containers
     directory filepath free indents json mtl optparse-applicative

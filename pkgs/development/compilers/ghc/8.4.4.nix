@@ -3,10 +3,11 @@
 # build-tools
 , bootPkgs
 , autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, bash
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
+, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform) || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -68,7 +69,7 @@ let
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
     ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
@@ -78,13 +79,15 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
+
 in
 stdenv.mkDerivation (rec {
   version = "8.4.4";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
-    url = "https://downloads.haskell.org/~ghc/${version}/ghc-${version}-src.tar.xz";
+    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
     sha256 = "1ch4j2asg7pr52ai1hwzykxyj553wndg7wq93i47ql4fllspf48i";
   };
 
@@ -125,7 +128,7 @@ stdenv.mkDerivation (rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -166,13 +169,13 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
+  ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
@@ -195,7 +198,7 @@ stdenv.mkDerivation (rec {
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl ] ++ (libDeps hostPlatform);
+  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -206,6 +209,10 @@ stdenv.mkDerivation (rec {
   # required, because otherwise all symbols from HSffi.o are stripped, and
   # that in turn causes GHCi to abort
   stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
+
+  # See #63511 - the only unstripped file is the debug rts which isn't meant to
+  # be stripped.
+  dontStrip = true;
 
   checkTarget = "test";
 

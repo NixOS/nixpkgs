@@ -2,7 +2,7 @@
   pkgconfig, soapysdr-with-plugins, wxGTK, enableDigitalLab ? false }:
 
 stdenv.mkDerivation rec {
-  name = "cubicsdr-${version}";
+  pname = "cubicsdr";
   version = "0.2.5";
 
   src = fetchFromGitHub {

@@ -1,7 +1,7 @@
 { stdenv, perl, ronn, fetchurl }:
 
 stdenv.mkDerivation rec {
-  name = "geteltorito-${version}";
+  pname = "geteltorito";
   version = "0.6";
 
   src = fetchurl {

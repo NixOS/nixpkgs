@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, python, fetchFromGitHub, lm_sensors }:
-buildPythonPackage rec {
+buildPythonPackage {
   version = "2017-07-13";
   pname = "pysensors";
 

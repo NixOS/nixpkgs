@@ -1,6 +1,6 @@
 { lib, stdenv
 , python, cmake, meson, vim, ruby
-, which, fetchgit, fetchurl
+, which, fetchFromGitHub, fetchgit, fetchurl, fetchzip, fetchpatch
 , llvmPackages, rustPlatform
 , xkb-switch, fzf, skim, stylish-haskell
 , python3, boost, icu, ncurses
@@ -11,13 +11,22 @@
 , Cocoa, CoreFoundation, CoreServices
 , buildVimPluginFrom2Nix
 
-# vim-go denpencies
+# coc-go dependency
+, go
+
+# deoplete-khard dependency
+, khard
+
+# vim-go dependencies
 , asmfmt, delve, errcheck, godef, golint
 , gomodifytags, gotags, gotools, go-motion
 , gnused, reftools, gogetdoc, gometalinter
 , impl, iferr, gocode, gocode-gomod, go-tools
 
-# vCoolor dep
+# direnv-vim dependencies
+, direnv
+
+# vCoolor dependency
 , gnome3
 }:
 
@@ -30,6 +39,9 @@ self: super: {
     dependencies = with super; [ vim-addon-manager ];
   };
 
+  # Mainly used as a dependency for fzf-vim. Wraps the fzf program as a vim
+  # plugin, since part of the fzf vim plugin is included in the main fzf
+  # program.
   fzfWrapper = buildVimPluginFrom2Nix {
     pname = "fzf";
     version = fzf.version;
@@ -43,15 +55,16 @@ self: super: {
   };
 
   LanguageClient-neovim = let
+    version = "0.1.156";
     LanguageClient-neovim-src = fetchurl {
-      url = "https://github.com/autozimu/LanguageClient-neovim/archive/0.1.140.tar.gz";
-      sha256 = "0cixwm9wnn6vlam6mp57j436n92c4bvj5rs6j2qcv7qip8d2ggyw";
+      url = "https://github.com/autozimu/LanguageClient-neovim/archive/${version}.tar.gz";
+      sha256 = "0bf2va6lpgw7wqpwpfidijbzphhvw48hyc2b529qv12vwgnd1shq";
     };
     LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-      cargoSha256 = "0f591zv4f7spks2hx22nkq78sj42259gi7flnnpr1nfs40d7n13n";
+      cargoSha256 = "0w66fcrlaxf6zgkrfpgfybfbm759fzimnr3pjq6sm14frar7lhr6";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.
@@ -62,7 +75,7 @@ self: super: {
     };
   in buildVimPluginFrom2Nix {
     pname = "LanguageClient-neovim";
-    version = "0.1.140";
+    inherit version;
     src = LanguageClient-neovim-src;
 
     propagatedBuildInputs = [ LanguageClient-neovim-bin ];
@@ -71,17 +84,6 @@ self: super: {
       substituteInPlace "$out"/share/vim-plugins/LanguageClient-neovim/autoload/LanguageClient.vim \
         --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
     '';
-  };
-
-  # do not auto-update this one, as the name clashes with vim-snippets
-  vim-docbk-snippets = buildVimPluginFrom2Nix {
-    pname = "vim-docbk-snippets";
-    version = "2017-11-02";
-    src = fetchgit {
-      url = "https://github.com/jhradilek/vim-snippets";
-      rev = "69cce66defdf131958f152ea7a7b26c21ca9d009";
-      sha256 = "1363b2fmv69axrl2hm74dmx51cqd8k7rk116890qllnapzw1zjgc";
-    };
   };
 
   clang_complete = super.clang_complete.overrideAttrs(old: {
@@ -101,12 +103,40 @@ self: super: {
     '';
   });
 
+  direnv-vim = super.direnv-vim.overrideAttrs(oa: {
+    preFixup = oa.preFixup or "" + ''
+      substituteInPlace $out/share/vim-plugins/direnv-vim/autoload/direnv.vim \
+        --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
+    '';
+  });
+
   clighter8 = super.clighter8.overrideAttrs(old: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \
         -i "$out"/share/vim-plugins/clighter8/plugin/clighter8.vim
     '';
   });
+
+  coc-go = super.coc-go.overrideAttrs(old: {
+    preFixup = ''
+      substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
+        --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
+    '';
+  });
+
+  # Only official releases contains the required index.js file
+  # NB: Make sure you pick a rev from the release branch!
+  coc-nvim = buildVimPluginFrom2Nix rec {
+    pname = "coc-nvim";
+    version = "2020-01-05";
+    src = fetchFromGitHub {
+      owner = "neoclide";
+      repo = "coc.nvim";
+      rev = "984779f2f825626aa9d441746d8b4ee079137c65";
+      sha256 = "0w7qnhi7wikr789h3w5p59l8wd81czpvbzbdanf8klf9ap4ma3yg";
+    };
+  };
 
   command-t = super.command-t.overrideAttrs(old: {
     buildInputs = [ ruby rake ];
@@ -140,6 +170,10 @@ self: super: {
     '';
   });
 
+  defx-nvim = super.defx-nvim.overrideAttrs(old: {
+    dependencies = with super; [ nvim-yarp ];
+  });
+
   deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
     dependencies = with super; [ deoplete-nvim vim-fish ];
   });
@@ -154,6 +188,17 @@ self: super: {
    '';
   });
 
+  deoplete-khard = super.deoplete-khard.overrideAttrs(old: {
+    dependencies = [ self.deoplete-nvim ];
+    passthru.python3Dependencies = ps: [ (ps.toPythonModule khard) ];
+    meta = {
+      description = "Address-completion for khard via deoplete";
+      homepage = "https://github.com/nicoe/deoplete-khard";
+      license = stdenv.lib.licenses.mit;
+      maintainers = with stdenv.lib.maintainers; [ jorsn ];
+    };
+  });
+
   ensime-vim = super.ensime-vim.overrideAttrs(old: {
     passthru.python3Dependencies = ps: with ps; [ sexpdata websocket_client ];
     dependencies = with super; [ vimproc-vim vimshell-vim super.self forms ];
@@ -163,9 +208,25 @@ self: super: {
     dependencies = with super; [ super.self ];
   });
 
+  ghcid = super.ghcid.overrideAttrs(old: {
+    configurePhase = "cd plugins/nvim";
+  });
+
   gist-vim = super.gist-vim.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
+
+  gruvbox-community = buildVimPluginFrom2Nix {
+    pname = "gruvbox-community";
+    version = "2019-05-31";
+    src = fetchFromGitHub {
+      owner = "gruvbox-community";
+      repo = "gruvbox";
+      rev = "e122091dad968a5524f3e8136615a479c7b6f247";
+      sha256 = "1hncjyfi1gbw62b2pngy5qxyzibrhbyzgfmm9a58sdh1272l8ls8";
+    };
+    meta.maintainers = with stdenv.lib.maintainers; [ minijackson ];
+  };
 
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
@@ -184,6 +245,10 @@ self: super: {
 
   ncm2-ultisnips = super.ncm2-ultisnips.overrideAttrs(old: {
     dependencies = with super; [ ultisnips ];
+  });
+
+  fzf-vim = super.fzf-vim.overrideAttrs(old: {
+    dependencies = [ self.fzfWrapper ];
   });
 
   sved = let
@@ -283,6 +348,12 @@ self: super: {
 
   vim-easytags = super.vim-easytags.overrideAttrs(old: {
     dependencies = with super; [ vim-misc ];
+    patches = [
+      (fetchpatch { # https://github.com/xolox/vim-easytags/pull/170 fix version detection for universal-ctags
+        url = https://github.com/xolox/vim-easytags/commit/46e4709500ba3b8e6cf3e90aeb95736b19e49be9.patch;
+        sha256 = "0x0xabb56xkgdqrg1mpvhbi3yw4d829n73lsnnyj5yrxjffy4ax4";
+      })
+    ];
   });
 
   # change the go_bin_path to point to a path in the nix store. See the code in
@@ -340,6 +411,10 @@ self: super: {
     '';
   });
 
+  vim-metamath = super.vim-metamath.overrideAttrs(old: {
+    preInstall = "cd vim";
+  });
+
   vim-snipmate = super.vim-snipmate.overrideAttrs(old: {
     dependencies = with super; [ vim-addon-mw-utils tlib_vim ];
   });
@@ -388,18 +463,18 @@ self: super: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
         --replace "'ycm_path_to_python_interpreter', '''" \
-        "'ycm_path_to_python_interpreter', '${python}/bin/python'"
+        "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
 
       rm -r third_party/ycmd
       ln -s ${ycmd}/lib/ycmd third_party
     '';
 
-    meta = {
+    meta = with stdenv.lib; {
       description = "A code-completion engine for Vim";
-      homepage = https://github.com/Valloric/YouCompleteMe;
-      license = stdenv.lib.licenses.gpl3;
-      maintainers = with stdenv.lib.maintainers; [marcweber jagajaga];
-      platforms = stdenv.lib.platforms.unix;
+      homepage = "https://github.com/Valloric/YouCompleteMe";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ marcweber jagajaga ];
+      platforms = platforms.unix;
     };
   });
 
@@ -410,6 +485,10 @@ self: super: {
       description = "code-completion for python using python-jedi";
       license = stdenv.lib.licenses.mit;
     };
+  });
+
+  lf-vim = super.lf-vim.overrideAttrs(old: {
+    dependencies = with super; [ bclose-vim ];
   });
 
   vim-stylish-haskell = super.vim-stylish-haskell.overrideAttrs (old: {

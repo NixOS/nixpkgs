@@ -1,6 +1,6 @@
 {stdenv, fetchurl}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "dog-1.7";
 
   src = fetchurl {

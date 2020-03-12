@@ -1,6 +1,6 @@
 { fetchzip
 , libX11
-, libGLU_combined
+, libGLU, libGL
 , makeWrapper
 , stdenv
 }:
@@ -8,7 +8,7 @@
 let
 
   libPath = stdenv.lib.makeLibraryPath [
-    libGLU_combined
+    libGLU libGL
     stdenv.cc.cc
     libX11
   ];
@@ -17,7 +17,7 @@ let
 
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "kisslicer-1.6.3";
 
   src = fetchzip {
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     makeWrapper
-    libGLU_combined
+    libGLU libGL
     libX11
   ];
 

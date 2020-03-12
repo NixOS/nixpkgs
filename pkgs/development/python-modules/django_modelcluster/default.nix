@@ -2,17 +2,20 @@
 , buildPythonPackage
 , fetchPypi
 , pytz
+, pythonOlder
 , six
 }:
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "4.4";
+  version = "5.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "02mrs7aapabapfh7h7n71s8r7zxkmad3yk4rdyfwcf0x36326rsr";
+    sha256 = "1fk7fh30i0fzi0hjd841vxh25iryvgp4lirmxfpq428w4nq7p1bg";
   };
+
+  disabled = pythonOlder "3.5";
 
   doCheck = false;
 

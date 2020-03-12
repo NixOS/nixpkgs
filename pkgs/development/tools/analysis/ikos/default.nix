@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake boost gmp clang llvm sqlite python
                   ocamlPackages.apron mpfr ppl doxygen graphviz ];
 
-  cmakeFlags = "-DAPRON_ROOT=${ocamlPackages.apron}";
+  cmakeFlags = [ "-DAPRON_ROOT=${ocamlPackages.apron}" ];
 
   postBuild = "make doc";
 

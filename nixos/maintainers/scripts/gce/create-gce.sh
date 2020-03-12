@@ -15,7 +15,7 @@ nix-build '<nixpkgs/nixos/lib/eval-config.nix>' \
    -j 10
 
 img_path=$(echo gce/*.tar.gz)
-img_name=$(basename "$img_path")
+img_name=${IMAGE_NAME:-$(basename "$img_path")}
 img_id=$(echo "$img_name" | sed 's|.raw.tar.gz$||;s|\.|-|g;s|_|-|g')
 if ! gsutil ls "gs://${BUCKET_NAME}/$img_name"; then
   gsutil cp "$img_path" "gs://${BUCKET_NAME}/$img_name"

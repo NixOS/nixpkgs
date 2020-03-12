@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, dpkg, makeWrapper, gcc, libGLU_combined, xdg_utils,
+{ stdenv, fetchurl, dpkg, makeWrapper, gcc, libGLU, libGL, xdg_utils,
   dbus, alsaLib, cups, fontconfig, glib, icu, libpng12,
   xkeyboard_config, zlib, libxslt, libxml2, sqlite, orc,
   libX11, libXcursor, libXrandr, libxcb, libXi, libSM, libICE,
@@ -6,7 +6,8 @@
 
 let version = "2018SP2"; in
 stdenv.mkDerivation {
-  name = "draftsight-${version}";
+  pname = "draftsight";
+  inherit version;
 
   nativeBuildInputs = [ dpkg makeWrapper ];
 
@@ -70,7 +71,7 @@ stdenv.mkDerivation {
     sha256 = "05lrvml0zkzqg0sj6sj2h8h66hxdmsw5fg9fwz923r1y8j48qxdx";
   };
 
-  libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU_combined xdg_utils
+  libPath = stdenv.lib.makeLibraryPath [ gcc.cc libGLU libGL xdg_utils
     dbus alsaLib cups.lib fontconfig glib icu libpng12
     xkeyboard_config zlib libxslt libxml2 sqlite orc libX11
     libXcursor libXrandr libxcb libXi libSM libICE libXrender

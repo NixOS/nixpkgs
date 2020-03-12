@@ -19,9 +19,7 @@ in
       patchShebangs ./tools
     '';
 
-    preConfigure = ''
-      configureFlags="$configureFlags --with-udevdir=$out/lib/udev"
-    '';
+    configureFlags = [ "--with-udevdir=${placeholder "out"}/lib/udev" ];
 
     meta = with stdenv.lib; {
       description = "A repository of data files describing media player capabilities";

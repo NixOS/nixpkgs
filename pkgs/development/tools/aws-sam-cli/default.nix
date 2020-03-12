@@ -1,39 +1,24 @@
 { lib
 , python
+, enableTelemetry ? false
 }:
 
 let
   py = python.override {
     packageOverrides = self: super: {
-      click = super.click.overridePythonAttrs (oldAttrs: rec {
-        version = "6.7";
+      flask = super.flask.overridePythonAttrs (oldAttrs: rec {
+        version = "1.0.2";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "f15516df478d5a56180fbf80e68f206010e6d160fc39fa508b65e035fd75130b";
+          sha256 = "0j6f4a9rpfh25k1gp7azqhnni4mb4fgy50jammgjgddw1l3w0w92";
         };
       });
 
-      requests = super.requests.overridePythonAttrs (oldAttrs: rec {
-        version = "2.20.1";
+      cookiecutter = super.cookiecutter.overridePythonAttrs (oldAttrs: rec {
+        version = "1.6.0";
         src = oldAttrs.src.override {
           inherit version;
-          sha256 = "ea881206e59f41dbd0bd445437d792e43906703fff75ca8ff43ccdb11f33f263";
-        };
-      });
-
-      idna = super.idna.overridePythonAttrs (oldAttrs: rec {
-        version = "2.7";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "684a38a6f903c1d71d6d5fac066b58d7768af4de2b832e426ec79c30daa94a16";
-        };
-      });
-
-      six = super.six.overridePythonAttrs (oldAttrs: rec {
-        version = "1.11";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "70e8a77beed4562e7f14fe23a786b54f6296e34344c23bc42f07b15018ff98e9";
+          sha256 = "0glsvaz8igi2wy1hsnhm9fkn6560vdvdixzvkq6dn20z3hpaa5hk";
         };
       });
     };
@@ -45,11 +30,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.14.2";
+  version = "0.43.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "b7f80838d57c1096a9a03ed703a91a8a5775a6ead33df8f31765ecf39b3a956f";
+    sha256 = "0v852636chil5n4cjqjvh29hhik881pkljs64jy5jiznbrph9ryr";
   };
 
   # Tests are not included in the PyPI package
@@ -69,12 +54,28 @@ buildPythonApplication rec {
     requests
     serverlessrepo
     six
+    tomlkit
   ];
+
+  postFixup = if enableTelemetry then "echo aws-sam-cli TELEMETRY IS ENABLED" else ''
+    # Disable telemetry: https://github.com/awslabs/aws-sam-cli/issues/1272
+    wrapProgram $out/bin/sam --set  SAM_CLI_TELEMETRY 0
+  '';
+
+  # fix over-restrictive version bounds
+  postPatch = ''
+    substituteInPlace requirements/base.txt \
+      --replace "requests==2.20.1" "requests==2.22.0" \
+      --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9" \
+      --replace "six~=1.11.0" "six~=1.12.0" \
+      --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
+      --replace "PyYAML~=3.12" "PyYAML~=5.1"
+  '';
 
   meta = with lib; {
     homepage = https://github.com/awslabs/aws-sam-cli;
     description = "CLI tool for local development and testing of Serverless applications";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andreabedini dhkl ];
+    maintainers = with maintainers; [ andreabedini lo1tuma ];
   };
 }

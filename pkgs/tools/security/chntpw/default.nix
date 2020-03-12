@@ -1,7 +1,7 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-  name = "chntpw-${version}";
+  pname = "chntpw";
 
   version = "140201";
 

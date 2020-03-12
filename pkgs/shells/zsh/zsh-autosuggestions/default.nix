@@ -3,14 +3,14 @@
 # To make use of this derivation, use the `programs.zsh.enableAutoSuggestions` option
 
 stdenv.mkDerivation rec {
-  name = "zsh-autosuggestions-${version}";
-  version = "0.5.2";
+  pname = "zsh-autosuggestions";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "zsh-users";
     repo = "zsh-autosuggestions";
     rev = "v${version}";
-    sha256 = "1xhrdv6cgmq9qslb476rcs8ifw8i2vf43yvmmscjcmpz0jac4sbx";
+    sha256 = "0h52p2waggzfshvy1wvhj4hf06fmzd44bv6j18k3l9rcx6aixzn6";
   };
 
   buildInputs = [ zsh ];

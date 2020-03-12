@@ -6,6 +6,7 @@
 , python-daemon
 , pyyaml
 , six
+, stdenv
 , ansible
 , pytest
 , mock
@@ -13,11 +14,11 @@
 
 buildPythonPackage rec {
   pname = "ansible-runner";
-  version = "1.3.3";
+  version = "1.4.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "2a2b83e63b830de3ff01c2992342cfe09f96e410953c85904ee7e301b21fa513";
+    sha256 = "e6ccb7ccf9bab9c49a391db37e0d399ba0e73f969801ae35ff74020bfd4fc346";
   };
 
   checkInputs = [ pytest mock ];
@@ -30,8 +31,12 @@ buildPythonPackage rec {
     six
   ];
 
+  # test_process_isolation_settings is currently broken on Darwin Catalina
+  # https://github.com/ansible/ansible-runner/issues/413
   checkPhase = ''
-    HOME=$(mktemp -d) pytest --ignore test/unit/test_runner.py -k "not test_prepare"
+    HOME=$TMPDIR pytest \
+      --ignore test/unit/test_runner.py \
+      -k "not prepare ${lib.optionalString stdenv.isDarwin "and not process_isolation_settings"}"
   '';
 
   meta = with lib; {

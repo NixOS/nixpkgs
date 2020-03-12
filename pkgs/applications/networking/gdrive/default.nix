@@ -1,9 +1,9 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name    = "gdrive-${version}";
+  pname = "gdrive";
   version = "2.1.0";
-  rev     = "${version}";
+  rev     = version;
 
   goPackagePath = "github.com/prasmussen/gdrive";
 

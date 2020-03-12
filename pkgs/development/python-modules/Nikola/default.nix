@@ -2,7 +2,6 @@
 , buildPythonPackage
 , isPy3k
 , fetchPypi
-, fetchpatch
 , doit
 , glibcLocales
 , pytest
@@ -36,7 +35,7 @@
 
 buildPythonPackage rec {
   pname = "Nikola";
-  version = "8.0.2";
+  version = "8.0.3";
 
   # Nix contains only Python 3 supported version of doit, which is a dependency
   # of Nikola. Python 2 support would require older doit 0.29.0 (which on the
@@ -55,8 +54,14 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a5y1qriy76hl4yxvbf365b1ggsxybm06mi1pwb5jkgbkwk2gkrf";
+    sha256 = "a53470be082fce1843fb73002be2504828f9abc49a84eab5d1effc06ae2a5ddc";
   };
+
+  patchPhase = ''
+    # upstream added bound so that requires.io doesn't send mails about update
+    # nikola should work with markdown 3.0: https://github.com/getnikola/nikola/pull/3175#issue-220147596
+    sed -i 's/Markdown>.*/Markdown/' requirements.txt
+  '';
 
   checkPhase = ''
     LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" py.test .

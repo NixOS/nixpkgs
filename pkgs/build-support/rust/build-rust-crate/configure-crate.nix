@@ -1,4 +1,4 @@
-{ lib, stdenv, echo_build_heading, noisily, makeDeps }:
+{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs }:
 { build
 , buildDependencies
 , colors
@@ -9,6 +9,7 @@
 , crateHomepage
 , crateFeatures
 , crateName
+, crateRenames
 , crateVersion
 , extraLinkFlags
 , extraRustcOpts
@@ -19,21 +20,36 @@
 , verbose
 , workspace_member }:
 let version_ = lib.splitString "-" crateVersion;
-    versionPre = if lib.tail version_ == [] then "" else builtins.elemAt version_ 1;
-    version = lib.splitString "." (lib.head version_);
-    rustcOpts = lib.lists.foldl' (opts: opt: opts + " " + opt)
+    versionPre = if lib.tail version_ == [] then "" else lib.elemAt version_ 1;
+    version = lib.splitVersion (lib.head version_);
+    rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
         (if release then "-C opt-level=3" else "-C debuginfo=2")
         (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
-    buildDeps = makeDeps buildDependencies;
+    buildDeps = mkRustcDepArgs buildDependencies crateRenames;
     authors = lib.concatStringsSep ":" crateAuthors;
     optLevel = if release then 3 else 0;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
 in ''
-  cd ${workspace_member}
-  runHook preConfigure
-  ${echo_build_heading colors}
+  ${echo_colored colors}
   ${noisily colors verbose}
+  source ${./lib.sh}
+
+  ${lib.optionalString (workspace_member != null) ''
+  noisily cd "${workspace_member}"
+''}
+  ${lib.optionalString (workspace_member == null) ''
+  echo_colored "Searching for matching Cargo.toml (${crateName})" 
+  local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
+  if [ -z "$cargo_toml_dir" ]; then
+    echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
+    exit 23
+  fi
+  noisily cd "$cargo_toml_dir"
+''}
+
+  runHook preConfigure
+ 
   symlink_dependency() {
     # $1 is the nix-store path of a dependency
     # $2 is the target path
@@ -89,9 +105,9 @@ in ''
   export HOST="${stdenv.hostPlatform.config}"
   export PROFILE=${if release then "release" else "debug"}
   export OUT_DIR=$(pwd)/target/build/${crateName}.out
-  export CARGO_PKG_VERSION_MAJOR=${builtins.elemAt version 0}
-  export CARGO_PKG_VERSION_MINOR=${builtins.elemAt version 1}
-  export CARGO_PKG_VERSION_PATCH=${builtins.elemAt version 2}
+  export CARGO_PKG_VERSION_MAJOR=${lib.elemAt version 0}
+  export CARGO_PKG_VERSION_MINOR=${lib.elemAt version 1}
+  export CARGO_PKG_VERSION_PATCH=${lib.elemAt version 2}
   export CARGO_PKG_VERSION_PRE="${versionPre}"
   export CARGO_PKG_HOMEPAGE="${crateHomepage}"
   export NUM_JOBS=1
@@ -136,17 +152,7 @@ in ''
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/")
      grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
        | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
-
      set -e
-     if [[ -n "$(ls target/build/${crateName}.out)" ]]; then
-
-        if [[ -e "${libPath}" ]]; then
-           cp -r target/build/${crateName}.out/* $(dirname ${libPath}) #*/
-        else
-           cp -r target/build/${crateName}.out/* src #*/
-        fi
-     fi
   fi
   runHook postConfigure
 ''
-

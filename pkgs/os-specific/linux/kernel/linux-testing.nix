@@ -1,13 +1,17 @@
-{ stdenv, buildPackages, fetchurl, perl, buildLinux, libelf, utillinux, ... } @ args:
+{ stdenv, buildPackages, fetchurl, perl, buildLinux, modDirVersionArg ? null, ... } @ args:
+
+with stdenv.lib;
 
 buildLinux (args // rec {
-  version = "5.1-rc7";
-  modDirVersion = "5.1.0-rc7";
-  extraMeta.branch = "5.1";
+  version = "5.6-rc5";
+  extraMeta.branch = "5.6";
+
+  # modDirVersion needs to be x.y.z, will always add .0
+  modDirVersion = if (modDirVersionArg == null) then builtins.replaceStrings ["-"] [".0-"] version else modDirVersionArg;
 
   src = fetchurl {
     url = "https://git.kernel.org/torvalds/t/linux-${version}.tar.gz";
-    sha256 = "05085j84kn3mf5s2hy8i9jgvnglpr9v918kmc9lmpn5vq7frh9s1";
+    sha256 = "0ys4wdv1rf9vshras1n6syy2pgg8kv50f27nprfzhrllni044whr";
   };
 
   # Should the testing kernels ever be built on Hydra?

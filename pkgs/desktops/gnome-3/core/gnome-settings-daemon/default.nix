@@ -27,6 +27,7 @@
 , libwacom
 , libxslt
 , libxml2
+, modemmanager
 , networkmanager
 , gnome-desktop
 , geocode-glib
@@ -35,15 +36,16 @@
 , python3
 , tzdata
 , nss
+, gcr
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-settings-daemon";
-  version = "3.32.0";
+  version = "3.34.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-settings-daemon/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "15w3sn9qf1zqlmk8c93kgrh2a20s62m5yfizkp21m5ylrrd07f63";
+    sha256 = "1vfpgbdxkhh9xwvb3ja174jk3gpzj4n3jzcy9ygbjlvy45zfdflz";
   };
 
   patches = [
@@ -71,6 +73,7 @@ stdenv.mkDerivation rec {
     gtk3
     glib
     gsettings-desktop-schemas
+    modemmanager
     networkmanager
     libnotify
     libgnomekbd # for org.gnome.libgnomekbd.keyboard schema
@@ -89,11 +92,16 @@ stdenv.mkDerivation rec {
     systemd
     libgudev
     libwacom
+    gcr
   ];
 
   mesonFlags = [
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
+
+  # Default for release buildtype but passed manually because
+  # we're using plain
+  NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   # So the polkit policy can reference /run/current-system/sw/bin/gnome-settings-daemon/gsd-backlight-helper
   postFixup = ''

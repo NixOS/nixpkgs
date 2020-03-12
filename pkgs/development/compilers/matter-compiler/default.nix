@@ -1,9 +1,11 @@
-{ lib, bundlerApp }:
+{ lib, bundlerApp, bundlerUpdateScript }:
 
 bundlerApp {
   pname = "matter_compiler";
   gemdir = ./.;
   exes = [ "matter_compiler" ];
+
+  passthru.updateScript = bundlerUpdateScript "matter-compiler";
 
   meta = with lib; {
     description = ''
@@ -12,7 +14,7 @@ bundlerApp {
     '';
     homepage    = https://github.com/apiaryio/matter_compiler/;
     license     = licenses.mit;
-    maintainers = with maintainers; [ rvlander manveru ];
+    maintainers = with maintainers; [ rvlander manveru nicknovitski ];
     platforms   = platforms.unix;
   };
 }

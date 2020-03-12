@@ -1,7 +1,7 @@
-{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, makeWrapper }:
+{ stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook, fetchpatch }:
 
-stdenv.mkDerivation rec {
-  name = "nifskope-${version}";
+stdenv.mkDerivation {
+  pname = "nifskope";
   version = "2.0.dev7";
 
   src = fetchFromGitHub {
@@ -18,10 +18,15 @@ stdenv.mkDerivation rec {
       src = ./qttools-bins.patch;
       qttools = "${qttools.dev}/bin";
     })
-  ];
+    (fetchpatch {
+      name = "qt512-build-fix.patch";
+      url = "https://github.com/niftools/nifskope/commit/30954e7f01f3d779a2a1fd37d363e8a6ad560bd3.patch";
+      sha256 = "0d6xjj2mjjhdd7w1aig5f75jksjni16jyj0lxsz51pys6xqb6fpj";
+    })
+  ] ++ (stdenv.lib.optional stdenv.isAarch64 ./no-sse-on-arm.patch);
 
-  buildInputs = [ qtbase qttools libGLU.dev makeWrapper ];
-  nativeBuildInputs = [ qmake ];
+  buildInputs = [ qtbase qttools libGLU.dev ];
+  nativeBuildInputs = [ qmake wrapQtAppsHook ];
 
   preConfigure = ''
     shopt -s globstar
@@ -33,9 +38,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   # Inspired by install/linux-install/nifskope.spec.in.
-  installPhase = let
-    qtVersion = "5.${stdenv.lib.versions.minor qtbase.version}";
-  in ''
+  installPhase = ''
     runHook preInstall
 
     d=$out/share/nifskope
@@ -52,8 +55,6 @@ stdenv.mkDerivation rec {
       --replace 'Icon=nifskope' "Icon=$out/share/pixmaps/nifskope.png"
 
     find $out/share -type f -exec chmod -x {} \;
-
-    wrapProgram $out/bin/NifSkope --prefix QT_PLUGIN_PATH : "${qtbase}/lib/qt-${qtVersion}/plugins"
 
     runHook postInstall
   '';

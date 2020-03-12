@@ -2,21 +2,22 @@
 , fetchFromGitHub
 , cmake
 , libyamlcpp
+, git
 }:
 
 stdenv.mkDerivation rec {
-  version = "1.0.20170130";
-  name = "dcm2niix-${version}";
+  version = "1.0.20190902";
+  pname = "dcm2niix";
 
   src = fetchFromGitHub {
     owner = "rordenlab";
     repo = "dcm2niix";
     rev = "v${version}";
-    sha256 = "1f2nzd8flp1rfn725bi64z7aw3ccxyyygzarxijw6pvgl476i532";
+    sha256 = "0h8jsadgv831lqb0jhnaxm7lldirmnp5agrhgg5bcxvn860fl15b";
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake git ];
   buildInputs = [ libyamlcpp ];
 
   meta = with stdenv.lib; {

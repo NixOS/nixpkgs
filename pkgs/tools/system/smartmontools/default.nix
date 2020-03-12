@@ -1,23 +1,24 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook
+{ stdenv, fetchurl, autoreconfHook
 , IOKit ? null , ApplicationServices ? null }:
 
 let
-  version = "7.0";
+  version = "7.1";
 
-  dbrev = "4883";
-  drivedbBranch = "RELEASE_${builtins.replaceStrings ["."] ["_"] version}_DRIVEDB";
+  dbrev = "5033";
+  drivedbBranch = "RELEASE_7_0_DRIVEDB";
   driverdb = fetchurl {
     url    = "https://sourceforge.net/p/smartmontools/code/${dbrev}/tree/branches/${drivedbBranch}/smartmontools/drivedb.h?format=raw";
-    sha256 = "07x3haz65jyhj579h4z17v6jkw6bbyid34442gl4qddmgv2qzvwx";
+    sha256 = "029j118lwiazn56vg6d3i7ayv73wrpv1fypw3ff4nd4hgs2mlcrg";
     name   = "smartmontools-drivedb.h";
   };
 
 in stdenv.mkDerivation rec {
-  name = "smartmontools-${version}";
+  pname = "smartmontools";
+  inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/smartmontools/${name}.tar.gz";
-    sha256 = "077nx2rn9szrg6isdh0938zbp7vr3dsyxl4jdyyzv1xwhqksrqg5";
+    url = "mirror://sourceforge/smartmontools/${pname}-${version}.tar.gz";
+    sha256 = "0imqb7ka4ia5573w8rnpck571pjjc9698pdjcapy9cfyk4n4swrz";
   };
 
   patches = [ ./smartmontools.patch ];
@@ -31,7 +32,7 @@ in stdenv.mkDerivation rec {
     description = "Tools for monitoring the health of hard drives";
     homepage    = https://www.smartmontools.org/;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ peti ];
+    maintainers = with maintainers; [ peti Frostman ];
     platforms   = with platforms; linux ++ darwin;
   };
 }

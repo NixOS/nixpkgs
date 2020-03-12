@@ -6,7 +6,7 @@
 
 buildPythonPackage rec {
   pname = "astropy-helpers";
-  version = "3.1.1";
+  version = "4.0.1";
 
   disabled = !isPy3k;
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "214cc37cffd7a21e573c4543e47b5289b07b2b77511627802d9778a4c96a5caf";
+    sha256 = "f1096414d108778218d6bea06d4d9c7b2ff7c83856a451331ac194e74de9f413";
   };
 
   meta = with lib; {

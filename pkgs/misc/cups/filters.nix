@@ -8,12 +8,12 @@ let
   binPath = stdenv.lib.makeBinPath [ coreutils gnused bc gawk gnugrep which ];
 
 in stdenv.mkDerivation rec {
-  name = "cups-filters-${version}";
-  version = "1.22.5";
+  pname = "cups-filters";
+  version = "1.25.12";
 
   src = fetchurl {
-    url = "https://openprinting.org/download/cups-filters/${name}.tar.xz";
-    sha256 = "19h7yy92wjfs401jzwyr03f3lp2xwg7sw83728r302rg2ni57m1h";
+    url = "https://openprinting.org/download/cups-filters/${pname}-${version}.tar.xz";
+    sha256 = "1kv25011iyzvd33n5zmmn1z2p6pzk26hmmw6qvjjnx8p3sp7raqn";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];

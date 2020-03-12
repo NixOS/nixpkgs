@@ -38,12 +38,27 @@ diff -ur cmake-3.9.1/Modules/Platform/UnixPaths.cmake cmake-3.9.1-mod/Modules/Pl
 +  @libc_lib@/lib
    )
  
- list(APPEND CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES
--  /usr/include
+ if(CMAKE_SYSROOT_COMPILE)
+   set(_cmake_sysroot_compile "${CMAKE_SYSROOT_COMPILE}")
+ else()
+   set(_cmake_sysroot_compile "${CMAKE_SYSROOT}")
+ endif()
+ 
+ # Default per-language values.  These may be later replaced after
+ # parsing the implicit directory information from compiler output.
+ set(_CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES_INIT
+   ${CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES}
+-  "${_cmake_sysroot_compile}/usr/include"
 +  @libc_dev@/include
    )
- list(APPEND CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES
--  /usr/include
+ set(_CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES_INIT
+   ${CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES}
+-  "${_cmake_sysroot_compile}/usr/include"
++  @libc_dev@/include
+   )
+ set(_CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES_INIT
+   ${CMAKE_CUDA_IMPLICIT_INCLUDE_DIRECTORIES}
+-  "${_cmake_sysroot_compile}/usr/include"
 +  @libc_dev@/include
    )
  

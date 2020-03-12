@@ -1,20 +1,14 @@
-{ lib, fetchurl, python3Packages, qtbase, makeWrapper }:
-
-let
-
-  python = python3Packages.python;
-
-in
+{ lib, fetchFromGitHub, python3Packages, qtbase, wrapQtAppsHook }:
 
 python3Packages.buildPythonApplication rec {
   pname = "electron-cash";
-  version = "4.0.2";
+  version = "4.0.11";
 
-  src = fetchurl {
-    url = "https://electroncash.org/downloads/${version}/win-linux/Electron-Cash-${version}.tar.gz";
-    # Verified using official SHA-1 and signature from
-    # https://github.com/fyookball/keys-n-hashes
-    sha256 = "6255cd0493442ec57c10ae70ca2e84c6a29497f90a1393e6ac5772afe7572acf";
+  src = fetchFromGitHub {
+    owner = "Electron-Cash";
+    repo = "Electron-Cash";
+    rev = version;
+    sha256 = "1k4zbaj0g8bgk1l5vrb835a8bqfay2707bcb4ql2vx4igcwpb680";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -38,11 +32,11 @@ python3Packages.buildPythonApplication rec {
     btchip
   ];
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ wrapQtAppsHook ];
 
   postPatch = ''
     substituteInPlace contrib/requirements/requirements.txt \
-      --replace "qdarkstyle<2.6" "qdarkstyle<3"
+      --replace "qdarkstyle==2.6.8" "qdarkstyle<3"
 
     substituteInPlace setup.py \
       --replace "(share_dir" "(\"share\""
@@ -60,10 +54,10 @@ python3Packages.buildPythonApplication rec {
   postInstall = ''
     substituteInPlace $out/share/applications/electron-cash.desktop \
       --replace "Exec=electron-cash" "Exec=$out/bin/electron-cash"
+  '';
 
-    # Please remove this when #44047 is fixed
-    wrapProgram $out/bin/electron-cash \
-      --prefix QT_PLUGIN_PATH : ${qtbase}/lib/qt-5.${lib.versions.minor qtbase.version}/plugins
+  postFixup = ''
+    wrapQtApp $out/bin/electron-cash
   '';
 
   doInstallCheck = true;

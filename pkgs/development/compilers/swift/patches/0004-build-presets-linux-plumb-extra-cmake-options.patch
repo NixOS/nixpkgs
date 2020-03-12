@@ -1,17 +1,8 @@
-From 4a46b12f580d0a9779937d07c4f1fd347570c4ef Mon Sep 17 00:00:00 2001
-From: Will Dietz <w@wdtz.org>
-Date: Tue, 28 Mar 2017 15:02:37 -0500
-Subject: [PATCH 4/4] build-presets: (linux) plumb extra-cmake-options
+plumb extra-cmake-options
 
----
- utils/build-presets.ini | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/utils/build-presets.ini b/utils/build-presets.ini
-index 1739e91dc2..0608fed9c1 100644
 --- a/utils/build-presets.ini
 +++ b/utils/build-presets.ini
-@@ -743,6 +743,8 @@ install-destdir=%(install_destdir)s
+@@ -766,6 +766,8 @@ install-destdir=%(install_destdir)s
  # Path to the .tar.gz package we would create.
  installable-package=%(installable_package)s
  
@@ -20,6 +11,3 @@ index 1739e91dc2..0608fed9c1 100644
  [preset: buildbot_linux]
  mixin-preset=mixin_linux_installation
  build-subdir=buildbot_linux
--- 
-2.12.2
-

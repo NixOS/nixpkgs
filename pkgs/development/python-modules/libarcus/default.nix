@@ -1,16 +1,16 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv, buildPythonPackage, python, fetchFromGitHub
 , cmake, sip, protobuf, pythonOlder }:
 
 buildPythonPackage rec {
   pname = "libarcus";
-  version = "4.0.0";
+  version = "4.4.0";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "Ultimaker";
     repo = "libArcus";
     rev = version;
-    sha256 = "14c62bsc2cynhaajpdidcqpq2vqwshrdkqyzwvpsjjbfmlx3b1ay";
+    sha256 = "16m7m6ak5fqw3djn4azwiamkizcc1dv7brv11kv99n3b43zzgn6d";
   };
 
   disabled = pythonOlder "3.4.0";
@@ -20,8 +20,7 @@ buildPythonPackage rec {
   buildInputs = [ protobuf ];
 
   postPatch = ''
-    # To workaround buggy SIP detection which overrides PYTHONPATH
-    sed -i '/SET(ENV{PYTHONPATH}/d' cmake/FindSIP.cmake
+    sed -i 's#''${Python3_SITEARCH}#${placeholder "out"}/${python.sitePackages}#' cmake/SIPMacros.cmake
   '';
 
   meta = with stdenv.lib; {
@@ -29,6 +28,6 @@ buildPythonPackage rec {
     homepage = https://github.com/Ultimaker/libArcus;
     license = licenses.lgpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ abbradar ];
+    maintainers = with maintainers; [ abbradar gebner ];
   };
 }

@@ -1,21 +1,31 @@
-{ stdenv, buildPythonPackage, fetchPypi, scikitlearn, pandas, nose, pytest }:
+{ stdenv, buildPythonPackage, fetchPypi, isPy27
+, nose
+, pandas
+, pytest
+, scikitlearn
+, tensorflow
+}:
 
 buildPythonPackage rec {
   pname = "imbalanced-learn";
-  version = "0.4.3";
+  version = "0.6.1";
+  disabled = isPy27; # scikit-learn>=0.21 doesn't work on python2
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "5bd9e86e40ce4001a57426541d7c79b18143cbd181e3330c1a3e5c5c43287083";
+    sha256 = "94f846ff8d19ee9ea42ba6feddfbc85d5b42098bd3b62318f8d3bc5c7133b274";
   };
 
   propagatedBuildInputs = [ scikitlearn ];
   checkInputs = [ nose pytest pandas ];
   checkPhase = ''
-    export HOME=$PWD
+    export HOME=$TMPDIR
     # skip some tests that fail because of minimal rounding errors
-    py.test imblearn --ignore=imblearn/metrics/classification.py
-    py.test doc/*.rst
+    # or very large dependencies (keras + tensorflow)
+    py.test imblearn -k 'not estimator \
+                         and not classification \
+                         and not _generator \
+                         and not show_versions'
   '';
 
   meta = with stdenv.lib; {

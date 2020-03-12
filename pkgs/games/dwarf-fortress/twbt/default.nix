@@ -36,19 +36,20 @@ let
       sha256 = "10gfd6vv0vk4v1r5hjbz7vf1zqys06dsad695gysc7fbcik2dakh";
       prerelease = false;
     };
+    "0.47.02" = {
+      twbtRelease = "6.61";
+      sha256 = "07bqy9rkd64h033sxdpigp5zq4xrr0xd36wdr1b21g649mv8j6yw";
+      prerelease = false;
+    };
   };
 
   release = if hasAttr dfVersion twbt-releases
             then getAttr dfVersion twbt-releases
             else throw "[TWBT] Unsupported Dwarf Fortress version: ${dfVersion}";
-
-  warning = if release.prerelease then builtins.trace "[TWBT] Version ${version} is a prerelease. Careful!"
-                                  else null;
-
 in
 
 stdenvNoCC.mkDerivation rec {
-  name = "twbt-${version}";
+  pname = "twbt";
   version = release.twbtRelease;
 
   src = fetchurl {

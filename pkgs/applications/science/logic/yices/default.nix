@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, gmp-static, gperf, autoreconfHook, libpoly }:
 
 stdenv.mkDerivation rec {
-  name    = "yices-${version}";
+  pname = "yices";
   version = "2.6.1";
 
   src = fetchFromGitHub {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   # Includes a fix for the embedded soname being libyices.so.2.5, but
   # only installing the libyices.so.2.5.x file.
   installPhase = let
-    ver_XdotY = builtins.concatStringsSep "." (stdenv.lib.take 2 (stdenv.lib.splitString "." version));
+    ver_XdotY = stdenv.lib.versions.majorMinor version;
   in ''
       make install LDCONFIG=true
       ln -sfr $out/lib/libyices.so.{${version},${ver_XdotY}}

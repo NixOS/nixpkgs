@@ -8,7 +8,7 @@ let
     name = "${baseName}-${version}";
   };
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   src = fetchurl {
     url = sourceInfo.url;
     sha256 = sourceInfo.sha256;

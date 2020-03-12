@@ -9,7 +9,8 @@
 }:
 
 stdenv.mkDerivation {
-  name = "mlton-${version}";
+  pname = "mlton";
+  inherit version;
 
   src = fetchgit {
     inherit url rev sha256;

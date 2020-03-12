@@ -1,25 +1,21 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib }:
+{ lib, buildDunePackage, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
-  name = "ocaml${ocaml.version}-owee-${version}";
-  version = "0.2";
+buildDunePackage rec {
+  minimumOCamlVersion = "4.06";
+  pname = "owee";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "let-def";
     repo = "owee";
     rev = "v${version}";
-    sha256 = "025a8sm03mm9qr7grdmdhzx7pyrd0dr7ndr5mbj5baalc0al132z";
+    sha256 = "0jp8ca57488d7sj2nqy4yxcdpda6sxx51yyi8k6888hbinhyqp0j";
   };
-
-  buildInputs = [ ocaml findlib ];
-
-  createFindlibDestdir = true;
 
   meta = {
     description = "An experimental OCaml library to work with DWARF format";
     inherit (src.meta) homepage;
-    inherit (ocaml.meta) platforms;
-    license = stdenv.lib.licenses.mit;
-    maintainers = [ stdenv.lib.maintainers.vbgl ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.vbgl ];
   };
 }

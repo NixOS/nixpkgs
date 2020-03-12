@@ -8,7 +8,7 @@ buildDunePackage {
 	pname = "cstruct-unix";
 	inherit (cstruct) version src meta;
 
-  minimumOCamlVersion = "4.02";
+	minimumOCamlVersion = "4.06";
 
 	propagatedBuildInputs = [ cstruct ];
 }

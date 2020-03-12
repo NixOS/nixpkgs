@@ -1,0 +1,13 @@
+diff --git a/Makefile b/Makefile
+index 4ff069b..3b8714a 100644
+--- a/Makefile
++++ b/Makefile
+@@ -58,7 +58,7 @@ cppcheck:
+ install:
+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/share/man/man3
+ 	install -m 644 doc/$(NAME).3 $(DESTDIR)$(PREFIX)/share/man/man3/
+-	gzip -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
++	gzip -n -9 $(DESTDIR)$(PREFIX)/share/man/man3/$(NAME).3
+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(LIBDIR)
+ 	install -m 0755 -s lib$(NAME).so.$(LIBVERSION) $(DESTDIR)$(PREFIX)/$(LIBDIR)/
+ 	install -d -m 0755 $(DESTDIR)$(PREFIX)/$(INCDIR)

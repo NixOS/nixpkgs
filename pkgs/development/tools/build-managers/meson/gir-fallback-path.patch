@@ -1,8 +1,8 @@
 --- a/mesonbuild/modules/gnome.py
 +++ b/mesonbuild/modules/gnome.py
-@@ -805,6 +805,13 @@
-         scan_command += self._scan_langs(state, [lc[0] for lc in langs_compilers])
-         scan_command += list(external_ldflags)
+@@ -801,6 +801,13 @@ class GnomeModule(ExtensionModule):
+             scan_command += ['--sources-top-dirs', os.path.join(state.environment.get_source_dir(), self.interpreter.subproject_dir, state.subproject)]
+             scan_command += ['--sources-top-dirs', os.path.join(state.environment.get_build_dir(), self.interpreter.subproject_dir, state.subproject)]
  
 +        if len(set([girtarget.get_custom_install_dir()[0] for girtarget in girtargets])) > 1:
 +            raise MesonException('generate_gir tries to build multiple libraries with different install_dir at once: {}'.format(','.join([str(girtarget) for girtarget in girtargets])))

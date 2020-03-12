@@ -1,21 +1,22 @@
-{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools
-, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2
+{ stdenv, fetchurl, cmake, makedepend, perl, pkgconfig, qttools, wrapQtAppsHook
+, dssi, fftwSinglePrec, ladspaH, ladspaPlugins, libjack2, alsaLib
 , liblo, liblrdf, libsamplerate, libsndfile, lirc ? null, qtbase }:
 
 stdenv.mkDerivation (rec {
-  version = "18.12";
-  name = "rosegarden-${version}";
+  version = "19.12";
+  pname = "rosegarden";
 
   src = fetchurl {
-    url = "mirror://sourceforge/rosegarden/${name}.tar.bz2";
-    sha256 = "15i9fm0vkn3wsgahaxqi1j5zs0wc0j3wdwml0x49084gk2p328vb";
+    url = "mirror://sourceforge/rosegarden/${pname}-${version}.tar.bz2";
+    sha256 = "1qcaxc6hdzva7kwxxhgl95437fagjbxzv4mihsgpr7y9qk08ppw1";
   };
 
   patchPhase = ''
     substituteInPlace src/CMakeLists.txt --replace svnheader svnversion
   '';
 
-  nativeBuildInputs = [ cmake makedepend perl pkgconfig qttools ];
+  nativeBuildInputs =
+    [ cmake makedepend perl pkgconfig qttools wrapQtAppsHook ];
 
   buildInputs = [
     dssi
@@ -29,6 +30,7 @@ stdenv.mkDerivation (rec {
     libsndfile
     lirc
     qtbase
+    alsaLib
   ];
 
   enableParallelBuilding = true;

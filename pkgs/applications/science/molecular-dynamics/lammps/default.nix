@@ -13,12 +13,12 @@ in
 stdenv.mkDerivation rec {
   # LAMMPS has weird versioning converted to ISO 8601 format
   version = "stable_22Aug2018";
-  name = "lammps-${version}";
+  pname = "lammps";
 
   src = fetchFromGitHub {
     owner = "lammps";
     repo = "lammps";
-    rev = "${version}";
+    rev = version;
     sha256 = "1dlifm9wm1jcw2zwal3fnzzl41ng08c7v48w6hx2mz84zljg1nsj";
   };
 

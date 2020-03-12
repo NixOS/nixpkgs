@@ -45,7 +45,7 @@ EOF
 
   createFindlibDestdir = true;
 
-  buildFlags = "all";
+  buildFlags = [ "all" ];
 
   doCheck = true;
   checkTarget = "tests";

@@ -33,6 +33,15 @@ in with pkgs; rec {
     '';
   };
 
+  bootGCC = gcc.cc.override { enableLTO = false; };
+  bootBinutils = binutils.bintools.override {
+    withAllTargets = false;
+    # Don't need two linkers, disable whatever's not primary/default.
+    gold = false;
+    # bootstrap is easier w/static
+    enableShared = false;
+  };
+
   build =
 
     stdenv.mkDerivation {
@@ -109,12 +118,14 @@ in with pkgs; rec {
         cp -d ${gnugrep.pcre.out}/lib/libpcre*.so* $out/lib # needed by grep
 
         # Copy what we need of GCC.
-        cp -d ${gcc.cc.out}/bin/gcc $out/bin
-        cp -d ${gcc.cc.out}/bin/cpp $out/bin
-        cp -d ${gcc.cc.out}/bin/g++ $out/bin
-        cp -d ${gcc.cc.lib}/lib/libgcc_s.so* $out/lib
-        cp -d ${gcc.cc.lib}/lib/libstdc++.so* $out/lib
-        cp -rd ${gcc.cc.out}/lib/gcc $out/lib
+        cp -d ${bootGCC.out}/bin/gcc $out/bin
+        cp -d ${bootGCC.out}/bin/cpp $out/bin
+        cp -d ${bootGCC.out}/bin/g++ $out/bin
+        cp -d ${bootGCC.lib}/lib/libgcc_s.so* $out/lib
+        cp -d ${bootGCC.lib}/lib/libstdc++.so* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp.a* $out/lib
+        cp -d ${bootGCC.out}/lib/libssp_nonshared.a $out/lib
+        cp -rd ${bootGCC.out}/lib/gcc $out/lib
         chmod -R u+w $out/lib
         rm -f $out/lib/gcc/*/*/include*/linux
         rm -f $out/lib/gcc/*/*/include*/sound
@@ -122,11 +133,11 @@ in with pkgs; rec {
         rm -f $out/lib/gcc/*/*/include-fixed/asm
         rm -rf $out/lib/gcc/*/*/plugin
         #rm -f $out/lib/gcc/*/*/*.a
-        cp -rd ${gcc.cc.out}/libexec/* $out/libexec
+        cp -rd ${bootGCC.out}/libexec/* $out/libexec
         chmod -R u+w $out/libexec
         rm -rf $out/libexec/gcc/*/*/plugin
         mkdir -p $out/include
-        cp -rd ${gcc.cc.out}/include/c++ $out/include
+        cp -rd ${bootGCC.out}/include/c++ $out/include
         chmod -R u+w $out/include
         rm -rf $out/include/c++/*/ext/pb_ds
         rm -rf $out/include/c++/*/ext/parallel
@@ -148,7 +159,7 @@ in with pkgs; rec {
 
         # Copy binutils.
         for i in as ld ar ranlib nm strip readelf objdump; do
-          cp ${binutils.bintools.out}/bin/$i $out/bin
+          cp ${bootBinutils.out}/bin/$i $out/bin
         done
         cp '${lib.getLib binutils.bintools}'/lib/* "$out/lib/"
 
@@ -166,13 +177,14 @@ in with pkgs; rec {
         nuke-refs $out/lib/*
         nuke-refs $out/libexec/gcc/*/*/*
         nuke-refs $out/lib/gcc/*/*/*
+        nuke-refs $out/lib/gcc/*/*/include-fixed/*/*
 
         mkdir $out/.pack
         mv $out/* $out/.pack
         mv $out/.pack $out/pack
 
         mkdir $out/on-server
-        XZ_OPT=-9 tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
+        XZ_OPT="-9 -e" tar cvJf $out/on-server/bootstrap-tools.tar.xz --hard-dereference --sort=name --numeric-owner --owner=0 --group=0 --mtime=@1 -C $out/pack .
         cp ${busyboxMinimal}/bin/busybox $out/on-server
         chmod u+w $out/on-server/busybox
         nuke-refs $out/on-server/busybox

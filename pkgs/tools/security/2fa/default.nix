@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   version = "1.1.0";
-  name = "2fa-${version}";
+  pname = "2fa";
 
   goPackagePath = "rsc.io/2fa";
 

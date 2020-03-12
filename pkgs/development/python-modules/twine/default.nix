@@ -1,24 +1,35 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
+{ lib, buildPythonPackage, fetchPypi, pythonOlder
+, importlib-metadata
+, keyring
 , pkginfo
-, requests
-, requests_toolbelt
-, tqdm
 , pyblake2
 , readme_renderer
+, requests
+, requests_toolbelt
+, setuptools_scm
+, tqdm
 }:
 
 buildPythonPackage rec {
   pname = "twine";
-  version = "1.13.0";
+  version = "3.1.1";
+  disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d6c29c933ecfc74e9b1d9fa13aa1f87c5d5770e119f5a4ce032092f0ff5b14dc";
+    sha256 = "d561a5e511f70275e5a485a6275ff61851c16ffcb3a95a602189161112d9f160";
   };
 
-  propagatedBuildInputs = [ pkginfo requests requests_toolbelt tqdm pyblake2 readme_renderer ];
+  nativeBuildInputs = [ setuptools_scm ];
+  propagatedBuildInputs = [
+    keyring
+    pkginfo
+    pyblake2
+    readme_renderer
+    requests
+    requests_toolbelt
+    tqdm
+  ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   # Requires network
   doCheck = false;

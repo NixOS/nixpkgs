@@ -3,22 +3,23 @@
 }:
 
 let
-  version = "10.0";
+  version = "11.2";
   desktopItem = makeDesktopItem {
     name = "netbeans";
     exec = "netbeans";
     comment = "Integrated Development Environment";
-    desktopName = "Netbeans IDE";
+    desktopName = "Apache NetBeans IDE";
     genericName = "Integrated Development Environment";
     categories = "Application;Development;";
     icon = "netbeans";
   };
 in
 stdenv.mkDerivation {
-  name = "netbeans-${version}";
+  pname = "netbeans";
+  inherit version;
   src = fetchurl {
-    url = "mirror://apache/incubator/netbeans/incubating-netbeans/incubating-${version}/incubating-netbeans-${version}-bin.zip";
-    sha512 = "ba83575f42c1d5515e2a5336a621bc2b4087b2e0bcacb6edb76f376f8272555609bdd4eefde8beae8ffc6c1a7db2fb721b844638ce27933c3dd78f71cbb41ad8";
+    url = "mirror://apache/netbeans/netbeans/${version}/netbeans-${version}-bin.zip";
+    sha512 = "d589481808832c4f0391ee1ecb8e18202cebeee8bd844cb4bdbf6125113b41f9138a34c4c2ef1fdf228294ef8c24b242ffec9ba5fdc4f1d288db4a3f19ba1509";
   };
 
   buildCommand = ''
@@ -47,7 +48,7 @@ stdenv.mkDerivation {
         convert -resize "$size"x"$size" netbeans_1024x1024x32.png $out/share/icons/hicolor/"$size"x"$size"/apps/netbeans.png
       fi
     done;
-    
+
     # Create desktop item, so we can pick it from the KDE/GNOME menu
     mkdir -pv $out/share/applications
     ln -s ${desktopItem}/share/applications/* $out/share/applications
@@ -57,7 +58,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "An integrated development environment for Java, C, C++ and PHP";
-    homepage = "https://netbeans.org/";
+    homepage = "https://netbeans.apache.org/";
     license = stdenv.lib.licenses.asl20;
     maintainers = with stdenv.lib.maintainers; [ sander rszibele ];
     platforms = stdenv.lib.platforms.unix;

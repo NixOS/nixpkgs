@@ -1,6 +1,6 @@
 { fetchMaven }:
 
-rec {
+{
   log4j_1_2_12 = map (obj: fetchMaven {
     version = "1.2.12";
     artifactId = "log4j";

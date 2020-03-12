@@ -1,7 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, isPy3k
+, pythonOlder
 , boto3
 , enum34
 , jsonschema
@@ -10,11 +10,11 @@
 
 buildPythonPackage rec {
   pname = "aws-sam-translator";
-  version = "1.10.0";
+  version = "1.20.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0axr4598b1h9kyb5mv104cpn5q667s0g1wkkbqzj66vrqsaa07qf";
+    sha256 = "17n7kajqf35g0bxqd30jpm2vq275l3b45l77lfh6r9llpkd1zxnx";
   };
 
   # Tests are not included in the PyPI package
@@ -22,10 +22,9 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     boto3
-    enum34
     jsonschema
     six
-  ];
+  ] ++ lib.optionals (pythonOlder "3.4") [ enum34 ];
 
   meta = {
     homepage = https://github.com/awslabs/serverless-application-model;

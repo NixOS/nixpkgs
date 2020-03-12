@@ -1,10 +1,10 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, installShellFiles }:
 
 buildGoPackage rec {
-  name = "skaffold-${version}";
-  version = "0.28.0";
-  # rev is the 0.28.0 commit, mainly for skaffold version command output
-  rev = "2b6143bb6d185de9b9fbf2eaa981c8e7acff7339";
+  pname = "skaffold";
+  version = "1.4.0";
+  # rev is the ${version} commit, mainly for skaffold version command output
+  rev = "bb324609b4254ceb9f76d35eb03642a6a1807867";
 
   goPackagePath = "github.com/GoogleContainerTools/skaffold";
   subPackages = ["cmd/skaffold"];
@@ -20,13 +20,21 @@ buildGoPackage rec {
     owner = "GoogleContainerTools";
     repo = "skaffold";
     rev = "v${version}";
-    sha256 = "1j7wf2a5xmrk944nc0b9634qa9al3cln3lrij8383avylbx68prw";
+    sha256 = "0nrz2gnp722cq4p8lcfl0nlws53c2bfq17jgr2jad4vyjglgfscw";
   };
 
-  meta = {
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    for shell in bash zsh; do
+      $bin/bin/skaffold completion $shell > skaffold.$shell
+      installShellCompletion skaffold.$shell
+    done
+  '';
+
+  meta = with lib; {
     description = "Easy and Repeatable Kubernetes Development";
-    homepage = https://github.com/GoogleContainerTools/skaffold;
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ vdemeester ];
+    homepage = "https://skaffold.dev/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [ vdemeester ];
   };
 }

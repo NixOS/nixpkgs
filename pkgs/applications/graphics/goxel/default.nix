@@ -2,23 +2,21 @@
 , glfw3, gtk3, libpng12 }:
 
 stdenv.mkDerivation rec {
-  name = "goxel-${version}";
-  version = "0.8.3";
+  pname = "goxel";
+  version = "0.10.5";
 
   src = fetchFromGitHub {
     owner = "guillaumechereau";
     repo = "goxel";
     rev = "v${version}";
-    sha256 = "03hyy0i65zdplggaxlndgyvffvnb9g5kvxq2qbicirvz5zcsghk2";
+    sha256 = "1b63jqryq19qa81g1ml6d85f27wj1ci3h56r02cl9xn8di5p674f";
   };
 
   patches = [ ./disable-imgui_ini.patch ];
 
   nativeBuildInputs = [ scons pkgconfig wrapGAppsHook ];
   buildInputs = [ glfw3 gtk3 libpng12 ];
-  NIX_LDFLAGS = [
-    "-lpthread"
-  ];
+  NIX_LDFLAGS = "-lpthread";
 
   buildPhase = ''
     make release

@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "hardinfo-${version}";
+  pname = "hardinfo";
   version = "0.5.1";
 
   src = fetchurl {
@@ -45,6 +45,6 @@ stdenv.mkDerivation rec {
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = platforms.linux;
+    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
   };
 }

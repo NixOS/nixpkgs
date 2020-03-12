@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "vis-${version}";
+  pname = "vis";
   version  = "0.5";
 
   src = fetchFromGitHub {
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
       --prefix VIS_PATH : "\$HOME/.config:$out/share/vis"
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "vis";
     exec = "vis %U";
     type = "Application";

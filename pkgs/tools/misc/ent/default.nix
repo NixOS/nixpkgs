@@ -1,6 +1,6 @@
 {stdenv, fetchurl, unzip}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "ent-1.1";
 
   src = fetchurl {
@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ unzip ];
 
-  buildFlags = if stdenv.cc.isClang then [ "CC=clang" ] else null;
+  buildFlags = stdenv.lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''
     mkdir -p $out/bin

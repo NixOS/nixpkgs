@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {}
 , lib ? pkgs.lib
 
-, domains ? [ "acme-v01.api.letsencrypt.org" "letsencrypt.org" ]
+, domains ? [ "acme-v02.api.letsencrypt.org" "letsencrypt.org" ]
 }:
 
 pkgs.runCommand "letsencrypt-snakeoil-ca" {

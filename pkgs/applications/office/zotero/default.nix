@@ -5,9 +5,10 @@
 , cups
 , dbus-glib
 , dbus
+, dconf
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , gtk3
@@ -25,25 +26,23 @@
 , libXt
 , libnotify
 , gnome3
-, libGLU_combined
+, libGLU, libGL
 , nspr
 , nss
 , pango
-, coreutils
-, gnused
 , gsettings-desktop-schemas
 }:
 
 stdenv.mkDerivation rec {
-  name    = "zotero-${version}";
-  version = "5.0.66";
-  
+  pname = "zotero";
+  version = "5.0.83";
+
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "1dpcwpag95a4r46z03a3gqklis0q7nzqgjg34qfxxxb2lr7s1lsm";
+    sha256 = "1abkwxdi154hnry8nsvxbklvbsnvd7cs2as0041h2kbiz824pv31";
   };
-  
-  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme gnome3.dconf ];
+
+  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme dconf ];
 
   phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
 
@@ -60,7 +59,7 @@ stdenv.mkDerivation rec {
       dbus
       fontconfig
       freetype
-      gdk_pixbuf
+      gdk-pixbuf
       glib
       glibc
       gtk3
@@ -77,7 +76,7 @@ stdenv.mkDerivation rec {
       libXrender
       libXt
       libnotify
-      libGLU_combined
+      libGLU libGL
       nspr
       nss
       pango
@@ -89,7 +88,7 @@ stdenv.mkDerivation rec {
     sed -i '/pref("app.update.enabled", true);/c\pref("app.update.enabled", false);' defaults/preferences/prefs.js
   '';
 
-  desktopItem = makeDesktopItem rec {
+  desktopItem = makeDesktopItem {
     name = "zotero-${version}";
     exec = "zotero -url %U";
     icon = "zotero";
@@ -132,7 +131,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.zotero.org;
+    homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
     license = licenses.agpl3;
     platforms = platforms.linux;

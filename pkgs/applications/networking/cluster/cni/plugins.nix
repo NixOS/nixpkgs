@@ -1,38 +1,40 @@
-{ stdenv, lib, fetchFromGitHub, go, removeReferencesTo }:
-
-stdenv.mkDerivation rec {
-  name = "cni-plugins-${version}";
-  version = "0.7.5";
+{ stdenv, lib, fetchFromGitHub, go, removeReferencesTo, buildGoPackage }:
+buildGoPackage rec {
+  pname = "cni-plugins";
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "containernetworking";
     repo = "plugins";
     rev = "v${version}";
-    sha256 = "1kfi0iz2hs4rq3cdkw12j8d47ac4f5vrpzcwcrs2yzmh2j4n5sz5";
+    sha256 = "02kz6y3klhbriybsskn4hmldwli28cycnp2klsm2x0y9c73iczdp";
   };
 
-  buildInputs = [ removeReferencesTo go ];
-
-  buildPhase = ''
-    patchShebangs build.sh
-    export "GOCACHE=$TMPDIR/go-cache"
-    ./build.sh
-  '';
-
-  installPhase = ''
-    mkdir -p $out/bin
-    mv bin/* $out/bin
-  '';
-
-  preFixup = ''
-    find $out/bin -type f -exec remove-references-to -t ${go} '{}' +
-  '';
-
+  goDeps = ./plugins-deps.nix;
+  goPackagePath = "github.com/containernetworking/plugins";
+  subPackages = [
+    "plugins/meta/bandwidth"
+    "plugins/meta/firewall"
+    "plugins/meta/flannel"
+    "plugins/meta/portmap"
+    "plugins/meta/sbr"
+    "plugins/meta/tuning"
+    "plugins/main/bridge"
+    "plugins/main/host-device"
+    "plugins/main/ipvlan"
+    "plugins/main/loopback"
+    "plugins/main/macvlan"
+    "plugins/main/ptp"
+    "plugins/main/vlan"
+    "plugins/ipam/dhcp"
+    "plugins/ipam/host-local"
+    "plugins/ipam/static"
+  ];
   meta = with lib; {
     description = "Some standard networking plugins, maintained by the CNI team";
     homepage = https://github.com/containernetworking/plugins;
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ cstrahan ];
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ cstrahan saschagrunert ];
   };
 }

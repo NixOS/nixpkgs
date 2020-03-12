@@ -4,7 +4,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "jitsi-${version}";
+  pname = "jitsi";
   version = "2.10.5550";
 
   src = fetchurl {
@@ -66,6 +66,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Video Calls and Chat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ ndowens ];
+    maintainers = with maintainers; [];
   };
 }

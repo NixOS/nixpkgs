@@ -1,6 +1,6 @@
-{ stdenv
+{ lib
 , buildPythonPackage
-, fetchdarcs
+, fetchFromGitHub
 , isPy3k
 , pkgs
 , cython
@@ -14,17 +14,21 @@
 
 buildPythonPackage rec {
   pname = "sipsimple";
-  version = "3.1.1";
+  version = "3.4.2";
   disabled = isPy3k;
 
-  src = fetchdarcs {
-    url = http://devel.ag-projects.com/repositories/python-sipsimple;
+  src = fetchFromGitHub {
+    owner = "AGProjects";
+    repo = "python-sipsimple";
     rev = "release-${version}";
-    sha256 = "0jdilm11f5aahxrzrkxrfx9sgjgkbla1r0wayc5dzd2wmjrdjyrg";
+    sha256 = "094xf343d6zjhg9jwbm3dr74zq264cyqnn22byvm2m88lnagmhmr";
   };
 
   preConfigure = ''
+    # TODO: Executable bits are set by upstream with the next release
+    # see AGProjects/python-sipsimple/commit/a36d66cf758afb43c59f7ac48b193c4148eb1848
     chmod +x ./deps/pjsip/configure ./deps/pjsip/aconfigure
+
     export LD=$CC
   '';
 
@@ -32,9 +36,9 @@ buildPythonPackage rec {
   buildInputs = with pkgs; [ alsaLib ffmpeg libv4l sqlite libvpx ];
   propagatedBuildInputs = [ cython pkgs.openssl dnspython dateutil xcaplib msrplib lxml python-otr ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "SIP SIMPLE implementation for Python";
-    homepage = http://sipsimpleclient.org/;
+    homepage = https://sipsimpleclient.org/;
     license = licenses.gpl3;
     maintainers = with maintainers; [ pSub ];
   };

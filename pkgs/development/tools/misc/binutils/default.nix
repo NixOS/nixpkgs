@@ -1,10 +1,13 @@
 { stdenv, lib, buildPackages
-, fetchurl, zlib, autoreconfHook
+, fetchFromGitHub, fetchurl, zlib, autoreconfHook, gettext
 # Enabling all targets increases output size to a multiple.
 , withAllTargets ? false, libbfd, libopcodes
 , enableShared ? true
-, noSysDirs, gold ? true, bison ? null
-, fetchpatch
+, noSysDirs
+, gold ? !stdenv.buildPlatform.isDarwin || stdenv.hostPlatform == stdenv.targetPlatform
+, bison ? null
+, flex
+, texinfo
 }:
 
 let
@@ -14,21 +17,29 @@ let
   # is now upstream.
   # https://sourceware.org/git/gitweb.cgi?p=binutils-gdb.git;a=commitdiff;h=330b90b5ffbbc20c5de6ae6c7f60c40fab2e7a4f;hp=99181ccac0fc7d82e7dabb05dc7466e91f1645d3
   version = "2.31.1";
-  basename = "binutils-${version}";
+  basename = "binutils";
   # The targetPrefix prepended to binary names to allow multiple binuntils on the
   # PATH to both be usable.
   targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
                   "${stdenv.targetPlatform.config}-";
-in
-
-stdenv.mkDerivation rec {
-  name = targetPrefix + basename;
-
+  vc4-binutils-src = fetchFromGitHub {
+    owner = "itszor";
+    repo = "binutils-vc4";
+    rev = "708acc851880dbeda1dd18aca4fd0a95b2573b36";
+    sha256 = "1kdrz6fki55lm15rwwamn74fnqpy0zlafsida2zymk76n3656c63";
+  };
   # HACK to ensure that we preserve source from bootstrap binutils to not rebuild LLVM
-  src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
-    url = "mirror://gnu/binutils/${basename}.tar.bz2";
+  normal-src = stdenv.__bootPackages.binutils-unwrapped.src or (fetchurl {
+    url = "mirror://gnu/binutils/${basename}-${version}.tar.bz2";
     sha256 = "1l34hn1zkmhr1wcrgf0d4z7r3najxnw3cx2y2fk7v55zjlk3ik7z";
   });
+in
+
+stdenv.mkDerivation {
+  pname = targetPrefix + basename;
+  inherit version;
+
+  src = if stdenv.targetPlatform.isVc4 then vc4-binutils-src else normal-src;
 
   patches = [
     # Make binutils output deterministic by default.
@@ -53,6 +64,8 @@ stdenv.mkDerivation rec {
     # cross-compiling.
     ./always-search-rpath.patch
 
+  ] ++ lib.optionals (!stdenv.targetPlatform.isVc4)
+  [
     # https://sourceware.org/bugzilla/show_bug.cgi?id=22868
     ./gold-symbol-visibility.patch
 
@@ -61,24 +74,17 @@ stdenv.mkDerivation rec {
     ./0001-x86-Add-a-GNU_PROPERTY_X86_ISA_1_USED-note-if-needed.patch
     ./0001-x86-Properly-merge-GNU_PROPERTY_X86_ISA_1_USED.patch
     ./0001-x86-Properly-add-X86_ISA_1_NEEDED-property.patch
-  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch
-    ++ lib.optional (stdenv.hostPlatform.isDarwin && stdenv.targetPlatform != stdenv.hostPlatform) [
-    (fetchpatch {
-      url = "https://sourceware.org/bugzilla/attachment.cgi?id=11141";
-      name = "gold-threads.patch";
-      sha256 = "0p26dxpba8n7z3pwjg7qf94f0gzbvwkjq0j9ng1w3sljj0gyaf1j";
-    })
-  ];
+  ] ++ lib.optional stdenv.targetPlatform.isiOS ./support-ios.patch;
 
   outputs = [ "out" "info" "man" ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     bison
-  ] ++ lib.optionals stdenv.targetPlatform.isiOS [
+  ] ++ (lib.optionals stdenv.targetPlatform.isiOS [
     autoreconfHook
-  ];
-  buildInputs = [ zlib ];
+  ]) ++ lib.optionals stdenv.targetPlatform.isVc4 [ texinfo flex ];
+  buildInputs = [ zlib gettext ];
 
   inherit noSysDirs;
 
@@ -138,7 +144,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   passthru = {
-    inherit targetPrefix version;
+    inherit targetPrefix;
   };
 
   meta = with lib; {

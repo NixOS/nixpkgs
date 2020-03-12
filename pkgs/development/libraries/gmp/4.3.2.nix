@@ -69,6 +69,7 @@ let self = stdenv.mkDerivation rec {
 
     maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
+    badPlatforms = [ "x86_64-darwin" ];
   };
 };
   in self

@@ -1,6 +1,6 @@
 { fetchurl, stdenv, lib, pkgconfig, gst-plugins-base, aalib, cairo
 , flac, libjpeg, speex, libpng, libdv, libcaca, libvpx
-, taglib, libpulseaudio, gdk_pixbuf, orc
+, taglib, libpulseaudio, gdk-pixbuf, orc
 , glib, gstreamer, bzip2, libsoup, libshout, ncurses, libintl
 , # Whether to build no plugins that have external dependencies
   # (except the PulseAudio plugin).
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional stdenv.isLinux libpulseaudio
     ++ lib.optionals (!minimalDeps)
       [ aalib libcaca cairo libdv flac libjpeg libpng speex
-        taglib bzip2 libvpx gdk_pixbuf orc libsoup libshout ];
+        taglib bzip2 libvpx gdk-pixbuf orc libsoup libshout ];
 
   enableParallelBuilding = true;
 

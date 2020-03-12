@@ -9,7 +9,7 @@ let
 in
 
 perlPackages.buildPerlPackage rec {
-  name = "feedgnuplot-${version}";
+  pname = "feedgnuplot";
   version = "1.51";
 
   src = fetchFromGitHub {

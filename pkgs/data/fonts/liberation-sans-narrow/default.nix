@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, fontforge, pythonPackages, python }:
+{ stdenv, fetchFromGitHub, fontforge, python3Packages, python3 }:
 
 stdenv.mkDerivation rec {
   pname = "liberation-sans-narrow";
@@ -11,14 +11,11 @@ stdenv.mkDerivation rec {
     sha256 = "1qw554jbdnqkg6pjjl4cqkgsalq3398kzvww2naw30vykcz752bm";
   };
 
-  buildInputs = [ fontforge pythonPackages.fonttools python ];
+  buildInputs = [ fontforge python3Packages.fonttools python3 ];
 
   installPhase = ''
-    mkdir -p $out/share/fonts/truetype
-    cp -v $(find . -name '*Narrow*.ttf') $out/share/fonts/truetype
-
-    mkdir -p "$out/doc/${pname}-${version}"
-    cp -v AUTHORS ChangeLog COPYING License.txt README "$out/doc/${pname}-${version}" || true
+    find . -name '*Narrow*.ttf' -exec install -m444 -Dt $out/share/fonts/truetype {} \;
+    install -m444 -Dt $out/doc/${pname}-${version} AUTHORS ChangeLog COPYING License.txt README.rst
   '';
 
   meta = with stdenv.lib; {

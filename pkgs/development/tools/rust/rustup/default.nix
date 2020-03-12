@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "rustup";
-  version = "1.18.2";
+  version = "1.21.1";
 
   src = fetchFromGitHub {
     owner = "rust-lang";
-    repo = "rustup.rs";
+    repo = "rustup";
     rev = version;
-    sha256 = "0lyn06vzp5406sjng7msifigkal2lafppqjbdnigx8yvgxqgd06f";
+    sha256 = "0d7l3j8js16zgdx37kykavr343v65vchldz88j38jjyc43pcm2pg";
   };
 
-  cargoSha256 = "0yxjy1kls80fcpwskklmihkqva16s6mawa8rdxc3zz8g588am03c";
+  cargoSha256 = "1y13kfski36rfvqkp3mxxn12aidp339j7rigv49msyr004ac5y8s";
 
   nativeBuildInputs = [ pkgconfig ];
 
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     '')
   ];
 
-  doCheck = !stdenv.isAarch64;
+  doCheck = !stdenv.isAarch64 && !stdenv.isDarwin;
 
   postInstall = ''
     pushd $out/bin
@@ -66,5 +66,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://www.rustup.rs/;
     license = with licenses; [ asl20 /* or */ mit ];
     maintainers = [ maintainers.mic92 ];
+    platforms = platforms.all;
   };
 }

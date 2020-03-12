@@ -5,14 +5,27 @@ let
   cfg = config.docker-containers;
 
   dockerContainer =
-    { name, config, ... }: {
+    { ... }: {
 
       options = {
 
         image = mkOption {
-          type = types.str;
+          type = with types; str;
           description = "Docker image to run.";
           example = "library/hello-world";
+        };
+
+        imageFile = mkOption {
+          type = with types; nullOr package;
+          default = null;
+          description = ''
+            Path to an image file to load instead of pulling from a registry.
+            If defined, do not pull from registry.
+
+            You still need to set the <literal>image</literal> attribute, as it
+            will be used as the image name for docker to start a container.
+          '';
+          example = literalExample "pkgs.dockerTools.buildDockerImage {...};";
         };
 
         cmd = mkOption {
@@ -26,7 +39,7 @@ let
 
         entrypoint = mkOption {
           type = with types; nullOr str;
-          description = "Overwrite the default entrypoint of the image.";
+          description = "Override the default entrypoint of the image.";
           default = null;
           example = "/bin/my-app";
         };
@@ -65,10 +78,9 @@ let
           default = [];
           description = ''
             Network ports to publish from the container to the outer host.
-            </para>
-            <para>
+
             Valid formats:
-            </para>
+
             <itemizedlist>
               <listitem>
                 <para>
@@ -91,21 +103,19 @@ let
                 </para>
               </listitem>
             </itemizedlist>
-            <para>
+
             Both <literal>hostPort</literal> and
             <literal>containerPort</literal> can be specified as a range of
             ports.  When specifying ranges for both, the number of container
             ports in the range must match the number of host ports in the
             range.  Example: <literal>1234-1236:1234-1236/tcp</literal>
-            </para>
-            <para>
+
             When specifying a range for <literal>hostPort</literal> only, the
             <literal>containerPort</literal> must <emphasis>not</emphasis> be a
             range.  In this case, the container port is published somewhere
             within the specified <literal>hostPort</literal> range.  Example:
             <literal>1234-1236:1234/tcp</literal>
-            </para>
-            <para>
+
             Refer to the
             <link xlink:href="https://docs.docker.com/engine/reference/run/#expose-incoming-ports">
             Docker engine documentation</link> for full details.
@@ -135,7 +145,7 @@ let
 
             Note that this is a list of <literal>"src:dst"</literal> strings to
             allow for <literal>src</literal> to refer to
-            <literal>/nix/store</literal> paths, which would difficult with an
+            <literal>/nix/store</literal> paths, which would be difficult with an
             attribute set.  There are also a variety of mount options available
             as a third field; please refer to the
             <link xlink:href="https://docs.docker.com/engine/reference/run/#volume-shared-filesystems">
@@ -156,6 +166,24 @@ let
           example = "/var/lib/hello_world";
         };
 
+        dependsOn = mkOption {
+          type = with types; listOf str;
+          default = [];
+          description = ''
+            Define which other containers this one depends on. They will be added to both After and Requires for the unit.
+
+            Use the same name as the attribute under <literal>services.docker-containers</literal>.
+          '';
+          example = literalExample ''
+            services.docker-containers = {
+              node1 = {};
+              node2 = {
+                dependsOn = [ "node1" ];
+              }
+            }
+          '';
+        };
+
         extraDockerOptions = mkOption {
           type = with types; listOf str;
           default = [];
@@ -164,33 +192,53 @@ let
             ["--network=host"]
           '';
         };
+
+        autoStart = mkOption {
+          type = types.bool;
+          default = true;
+          description = ''
+            When enabled, the container is automatically started on boot.
+            If this option is set to false, the container has to be started on-demand via its service.
+          '';
+        };
       };
     };
 
-  mkService = name: container: {
-    wantedBy = [ "multi-user.target" ];
-    after = [ "docker.service" "docker.socket" ];
-    requires = [ "docker.service" "docker.socket" ];
+  mkService = name: container: let
+    mkAfter = map (x: "docker-${x}.service") container.dependsOn;
+  in rec {
+    wantedBy = [] ++ optional (container.autoStart) "multi-user.target";
+    after = [ "docker.service" "docker.socket" ] ++ mkAfter;
+    requires = after;
+    path = [ pkgs.docker ];
+
+    preStart = ''
+      docker rm -f ${name} || true
+      ${optionalString (container.imageFile != null) ''
+        docker load -i ${container.imageFile}
+        ''}
+      '';
+    postStop = "docker rm -f ${name} || true";
+        
     serviceConfig = {
       ExecStart = concatStringsSep " \\\n  " ([
         "${pkgs.docker}/bin/docker run"
         "--rm"
-        "--name=%n"
+        "--name=${name}"
         "--log-driver=${container.log-driver}"
-      ] ++ optional (! isNull container.entrypoint)
+      ] ++ optional (container.entrypoint != null)
         "--entrypoint=${escapeShellArg container.entrypoint}"
         ++ (mapAttrsToList (k: v: "-e ${escapeShellArg k}=${escapeShellArg v}") container.environment)
         ++ map (p: "-p ${escapeShellArg p}") container.ports
-        ++ optional (! isNull container.user) "-u ${escapeShellArg container.user}"
+        ++ optional (container.user != null) "-u ${escapeShellArg container.user}"
         ++ map (v: "-v ${escapeShellArg v}") container.volumes
-        ++ optional (! isNull container.workdir) "-w ${escapeShellArg container.workdir}"
+        ++ optional (container.workdir != null) "-w ${escapeShellArg container.workdir}"
         ++ map escapeShellArg container.extraDockerOptions
         ++ [container.image]
         ++ map escapeShellArg container.cmd
       );
-      ExecStartPre = "-${pkgs.docker}/bin/docker rm -f %n";
-      ExecStop = "${pkgs.docker}/bin/docker stop %n";
-      ExecStopPost = "-${pkgs.docker}/bin/docker rm -f %n";
+
+      ExecStop = ''${pkgs.bash}/bin/sh -c "[ $SERVICE_RESULT = success ] || docker stop ${name}"'';
 
       ### There is no generalized way of supporting `reload` for docker
       ### containers. Some containers may respond well to SIGHUP sent to their

@@ -24,28 +24,29 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "gnucash-${version}";
-  version = "3.5";
+  pname = "gnucash";
+  version = "3.8b";
 
   src = fetchurl {
-    url = "mirror://sourceforge/gnucash/${name}.tar.bz2";
-    sha256 = "0ibp7g6aknvnkwkin97kv04ipksy3l18dsz9qysjb7h2nr8hnvbp";
+    url = "mirror://sourceforge/gnucash/${pname}-${version}.tar.bz2";
+    sha256 = "0dvzm3bib7jcj685sklpzyy9mrak9mxyvih2k9fk4sl3v21wlphg";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper cmake gtest ];
 
   buildInputs = [
     boost icu libxml2 libxslt gettext swig isocodes gtk3 glibcLocales
-    webkitgtk dconf hicolor-icon-theme libofx aqbanking gwenhywfar libdbi
+    webkitgtk dconf libofx aqbanking gwenhywfar libdbi
     libdbiDrivers guile
     perlWrapper perl
   ] ++ (with perlPackages; [ FinanceQuote DateManip ]);
 
   propagatedUserEnvPkgs = [ dconf ];
 
-  # glib-2.58 deprecrated g_type_class_add_private
-  # Should probably be removed next version bump
-  CXXFLAGS = [ "-Wno-deprecated-declarations" ];
+  # glib-2.62 deprecations
+  NIX_CFLAGS_COMPILE = "-DGLIB_DISABLE_DEPRECATION_WARNINGS";
+
+  patches = [ ./cmake_check_symbol_exists.patch ];
 
   postPatch = ''
     patchShebangs .
@@ -61,7 +62,7 @@ stdenv.mkDerivation rec {
     rm $out/bin/gnucash-valgrind
 
     wrapProgram "$out/bin/gnucash" \
-      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${name}" \
+      --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share/gsettings-schemas/${pname}-${version}" \
       --prefix XDG_DATA_DIRS : "${hicolor-icon-theme}/share" \
       --prefix PERL5LIB ":" "$PERL5LIB" \
       --prefix GIO_EXTRA_MODULES : "${stdenv.lib.getLib dconf}/lib/gio/modules"
@@ -78,7 +79,7 @@ stdenv.mkDerivation rec {
   #   80 - test-gnc-module-scm-module (Failed)
   #   81 - test-gnc-module-scm-multi (Failed)
   preCheck = ''
-    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test:$LD_LIBRARY_PATH
+    export LD_LIBRARY_PATH=$PWD/lib:$PWD/lib/gnucash:$PWD/lib/gnucash/test''${LD_LIBRARY_PATH:+:}$LD_LIBRARY_PATH
     export NIX_CFLAGS_LINK="-lgtest -lgtest_main"
   '';
   doCheck = false;

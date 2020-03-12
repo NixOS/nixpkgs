@@ -1,17 +1,17 @@
 { stdenv, fetchurl, jre, makeWrapper }:
 
 stdenv.mkDerivation rec {
-  name = "mill-${version}";
-  version = "0.3.6";
+  pname = "mill";
+  version = "0.6.1";
 
   src = fetchurl {
     url = "https://github.com/lihaoyi/mill/releases/download/${version}/${version}";
-    sha256 = "1dal08l96a5w8g27vxpsykbwcpfbna4prxqvqk89n0y9jn9s44l1";
+    sha256 = "1blar5dxhmxlwxhmq8wv0xvhy200qks6xj12n54qx9d5qp300ncw";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
-  unpackPhase = "true";
+  dontUnpack = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -19,12 +19,15 @@ stdenv.mkDerivation rec {
     runHook preInstall
     install -Dm555 "$src" "$out/bin/.mill-wrapped"
     # can't use wrapProgram because it sets --argv0
-    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]}
+    makeWrapper "$out/bin/.mill-wrapped" "$out/bin/mill" \
+      --prefix PATH : "${jre}/bin" \
+      --set JAVA_HOME "${jre}" \
+      --set MILL_VERSION "${version}"
     runHook postInstall
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.lihaoyi.com/mill;
+    homepage = "https://www.lihaoyi.com/mill";
     license = licenses.mit;
     description = "A build tool for Scala, Java and more";
     longDescription = ''

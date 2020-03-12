@@ -8,13 +8,13 @@ with stdenv.lib;
 
 buildGoPackage rec {
   pname = "gitea";
-  version = "1.8.0";
+  version = "1.10.3";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${version}";
-    sha256 = "1x5r732rh1g23smgvvk10nlqbv14m7cf3y6zgwwl2bwkvax4z49b";
+    sha256 = "04jg1b0d1fbhnk434dnffc2c118gs084za3m33lxwf5lxzlbbimc";
     # Required to generate the same checksum on MacOS due to unicode encoding differences
     # More information: https://github.com/NixOS/nixpkgs/pull/48128
     extraPostFetch = ''
@@ -62,8 +62,8 @@ buildGoPackage rec {
 
   meta = {
     description = "Git with a cup of tea";
-    homepage = https://gitea.io;
+    homepage = "https://gitea.io";
     license = licenses.mit;
-    maintainers = [ maintainers.disassembler ];
+    maintainers = with maintainers; [ disassembler kolaente ];
   };
 }

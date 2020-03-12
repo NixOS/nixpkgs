@@ -28,12 +28,12 @@
 
 buildPythonPackage rec {
   pname = "distributed";
-  version = "1.27.1";
+  version = "2.9.1";
 
   # get full repository need conftest.py to run tests
   src = fetchPypi {
     inherit pname version;
-    sha256 = "117q16ha03m8y9ydxg5svwx2cv1r2703hcy4a0zgjh5nhx4rfhiy";
+    sha256 = "d37a5c5be992f3b16db24b54d2801cbe370990fbc63089c6e7ef40d6f03cf5dd";
   };
 
   checkInputs = [ pytest pytest-repeat pytest-faulthandler pytest-timeout mock joblib ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "Distributed computation in Python.";
-    homepage = http://distributed.readthedocs.io/en/latest/;
+    homepage = https://distributed.readthedocs.io/en/latest/;
     license = lib.licenses.bsd3;
     platforms = lib.platforms.x86; # fails on aarch64
     maintainers = with lib.maintainers; [ teh costrouc ];

@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Launch jobs, organize the output, and dissect the results";
-    homepage = http://pyviz.org/;
+    homepage = https://pyviz.org/;
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

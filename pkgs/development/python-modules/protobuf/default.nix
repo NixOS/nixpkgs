@@ -1,17 +1,19 @@
 { stdenv, fetchpatch, python, buildPythonPackage, isPy37
-, protobuf, google_apputils, pyext, libcxx
+, protobuf, google_apputils, pyext, libcxx, isPy27
 , disabled, doCheck ? true }:
 
 with stdenv.lib;
 
-buildPythonPackage rec {
+buildPythonPackage {
   inherit (protobuf) name src version;
-  inherit disabled doCheck;
+  inherit disabled;
+  doCheck = doCheck && !isPy27; # setuptools>=41.4 no longer collects correctly on python2
 
-  NIX_CFLAGS_COMPILE =
+  NIX_CFLAGS_COMPILE = toString (
     # work around python distutils compiling C++ with $CC
     optional stdenv.isDarwin "-I${libcxx}/include/c++/v1"
-    ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98";
+    ++ optional (versionOlder protobuf.version "2.7.0") "-std=c++98"
+  );
 
   propagatedBuildInputs = [ google_apputils ];
   propagatedNativeBuildInputs = [ protobuf ];  # For protoc.
@@ -59,6 +61,7 @@ buildPythonPackage rec {
   meta = {
     description = "Protocol Buffers are Google's data interchange format";
     homepage = https://developers.google.com/protocol-buffers/;
+    license = licenses.bsd3;
   };
 
   passthru.protobuf = protobuf;

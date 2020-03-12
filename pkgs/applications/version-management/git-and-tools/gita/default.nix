@@ -2,22 +2,22 @@
 , buildPythonApplication
 , fetchPypi
 , pyyaml
+, setuptools
 }:
 
 buildPythonApplication rec {
-  version = "0.9.2";
+  version = "0.9.9";
   pname = "gita";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1aycqq4crsa57ghpv7xc497rf4y8x43fcfd0v9prd2kn6h1793r0";
+    sha256 = "1si2f9nyisbrvv8cvrjxj8r4cbrgc97ic0wdlbf34gvp020dsmgv";
   };
 
   propagatedBuildInputs = [
     pyyaml
+    setuptools
   ];
-
-  doCheck = false;  # Releases don't include tests
 
   meta = with lib; {
     description = "A command-line tool to manage multiple git repos";

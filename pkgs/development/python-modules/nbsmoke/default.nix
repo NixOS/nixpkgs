@@ -4,6 +4,7 @@
 , pytest
 , jupyter_client
 , ipykernel
+, holoviews
 , nbformat
 , nbconvert
 , pyflakes
@@ -13,15 +14,16 @@
 
 buildPythonPackage rec {
   pname = "nbsmoke";
-  version = "0.2.7";
+  version = "0.3.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "40891e556dc9e252da2a649028cacb949fc8efb81062ada7d9a87a01b08bb454";
+    sha256 = "070e999db3902a0c62a94d76de8fb98da21eaee22d9e90eb42f1636c87e1b805";
   };
 
   propagatedBuildInputs = [
     pytest
+    holoviews
     jupyter_client
     ipykernel
     nbformat

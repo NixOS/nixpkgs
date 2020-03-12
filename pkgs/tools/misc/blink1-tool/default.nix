@@ -1,7 +1,7 @@
 { stdenv, fetchurl, libusb1, pkgconfig, ... }:
 
 stdenv.mkDerivation rec {
-  name = "blink1-${version}";
+  pname = "blink1";
   version = "1.98a";
 
   src = fetchurl {

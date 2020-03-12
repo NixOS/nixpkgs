@@ -34,6 +34,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkgconfig
+    wrapGAppsHook
   ];
 
   buildInputs = [
@@ -45,7 +46,6 @@ stdenv.mkDerivation rec {
     libXext
     libXxf86vm
     systemd
-    wrapGAppsHook
   ];
 
   mesonFlags = [
@@ -63,6 +63,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     ${glib.dev}/bin/glib-compile-schemas $out/share/glib-2.0/schemas
   '';
+
+  passthru = {
+    updateScript = pantheon.updateScript {
+      attrPath = pname;
+    };
+  };
 
   meta = with stdenv.lib; {
     homepage = https://github.com/the-cavalry/light-locker;

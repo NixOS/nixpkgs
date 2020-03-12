@@ -1,0 +1,22 @@
+diff --git a/OSMPythonTools.egg-info/requires.txt b/OSMPythonTools.egg-info/requires.txt
+index 16a5019..e58155c 100644
+--- a/OSMPythonTools.egg-info/requires.txt
++++ b/OSMPythonTools.egg-info/requires.txt
+@@ -1,5 +1,4 @@
+ beautifulsoup4
+-datetime
+ geojson
+ lxml
+ matplotlib
+diff --git a/setup.py b/setup.py
+index 08e9455..1a6435e 100644
+--- a/setup.py
++++ b/setup.py
+@@ -14,7 +14,6 @@ setup(
+     packages = ['OSMPythonTools', 'OSMPythonTools.internal'],
+     install_requires = [
+         'beautifulsoup4',
+-        'datetime',
+         'geojson',
+         'lxml',
+         'matplotlib',

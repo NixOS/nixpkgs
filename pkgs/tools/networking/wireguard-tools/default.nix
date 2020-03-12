@@ -1,20 +1,28 @@
-{ stdenv, fetchzip, openresolv ? null, libmnl ? null, procps ? null, iproute ? null, makeWrapper ? null, wireguard-go ? null }:
+{
+  stdenv, fetchzip,
+
+  iptables ? null,
+  iproute ? null,
+  makeWrapper ? null,
+  openresolv ? null,
+  procps ? null,
+  wireguard-go ? null,
+}:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "wireguard-tools-${version}";
-  version = "0.0.20190406";
+  pname = "wireguard-tools";
+  version = "1.0.20200206";
 
   src = fetchzip {
-    url = "https://git.zx2c4.com/WireGuard/snapshot/WireGuard-${version}.tar.xz";
-    sha256 = "1rqyyyx7j41vpp4jigagqs2qdyfngh15y48ghdqfrkv7v93vwdak";
+    url = "https://git.zx2c4.com/wireguard-tools/snapshot/wireguard-tools-${version}.tar.xz";
+    sha256 = "0ivc08lds5w39a6f2xdfih9wlk5g724hl3kpdvxvh5yff4l84qb7";
   };
 
-  sourceRoot = "source/src/tools";
+  sourceRoot = "source/src";
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = optional stdenv.isLinux libmnl;
 
   makeFlags = [
     "DESTDIR=$(out)"
@@ -29,7 +37,7 @@ stdenv.mkDerivation rec {
       --replace /usr/bin $out/bin
   '' + optionalString stdenv.isLinux ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute openresolv]}
+      wrapProgram $f --prefix PATH : ${makeBinPath [procps iproute iptables openresolv]}
     done
   '' + optionalString stdenv.isDarwin ''
     for f in $out/bin/*; do
@@ -37,12 +45,14 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Tools for the WireGuard secure network tunnel";
-    downloadPage = https://git.zx2c4.com/WireGuard/refs/;
-    homepage = https://www.wireguard.com/;
+    downloadPage = "https://git.zx2c4.com/wireguard-tools/refs/";
+    homepage = "https://www.wireguard.com/";
     license = licenses.gpl2;
-    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 ];
+    maintainers = with maintainers; [ elseym ericsagnes mic92 zx2c4 globin ma27 xwvvvvwx ];
     platforms = platforms.unix;
   };
 }

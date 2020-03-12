@@ -2,18 +2,19 @@
 , buildPythonPackage
 , fetchPypi
 , six
+, pbr
 }:
 
 buildPythonPackage rec {
   pname = "munch";
-  version = "2.3.2";
+  version = "2.5.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "6ae3d26b837feacf732fb8aa5b842130da1daf221f5af9f9d4b2a0a6414b0d51";
+    sha256 = "2d735f6f24d4dba3417fa448cae40c6e896ec1fdab6cdb5e6510999758a4dbd2";
   };
 
-  propagatedBuildInputs = [ six ];
+  propagatedBuildInputs = [ six pbr ];
 
   # No tests in archive
   doCheck = false;

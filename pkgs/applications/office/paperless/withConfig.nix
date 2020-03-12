@@ -39,7 +39,7 @@ let
     PAPERLESS_CONSUMPTION_DIR = "${dataDir}/consume";
     PAPERLESS_MEDIADIR = "${dataDir}/media";
     PAPERLESS_STATICDIR = "${dataDir}/static";
-    PAPERLESS_DBDIR = "${dataDir}";
+    PAPERLESS_DBDIR = dataDir;
   }) // config;
 
   envVarDefs = mapAttrsToList (n: v: ''export ${n}="${toString v}"'') envVars;

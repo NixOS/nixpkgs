@@ -1,12 +1,12 @@
 { stdenv, fetchurl, gmp, perl }:
 
 stdenv.mkDerivation rec {
-  name = "mosml-${version}";
+  pname = "mosml";
   version = "2.10.1";
 
   buildInputs = [ gmp perl ];
 
-  makeFlags = "PREFIX=$(out)";
+  makeFlags = [ "PREFIX=$(out)" ] ++ stdenv.lib.optionals stdenv.isDarwin [ "CC=cc" ];
 
   src = fetchurl {
     url = "https://github.com/kfl/mosml/archive/ver-${version}.tar.gz";
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://mosml.org/;
     license = licenses.gpl2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ vaibhavsagar ];
   };
 }

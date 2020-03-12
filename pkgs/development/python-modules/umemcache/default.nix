@@ -4,10 +4,9 @@ buildPythonPackage rec {
   pname = "umemcache";
   version = "1.6.3";
   disabled = isPy3k;
-  name = pname + "-" + version;
 
   src = fetchurl {
-    url = "mirror://pypi/u/umemcache/${name}.zip";
+    url = "mirror://pypi/u/umemcache/${pname}-${version}.zip";
     sha256 = "211031a03576b7796bf277dbc9c9e3e754ba066bbb7fb601ab5c6291b8ec1918";
   };
 

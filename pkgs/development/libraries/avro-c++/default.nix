@@ -3,7 +3,8 @@
 let version = "1.8.2"; in
 
 stdenv.mkDerivation {
-  name = "avro-c++-${version}";
+  pname = "avro-c++";
+  inherit version;
 
   src = fetchurl {
     url = "mirror://apache/avro/avro-${version}/cpp/avro-cpp-${version}.tar.gz";

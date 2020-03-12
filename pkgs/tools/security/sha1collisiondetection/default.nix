@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libtool, which }:
 
 stdenv.mkDerivation  rec {
-  name = "sha1collisiondetection-${version}";
+  pname = "sha1collisiondetection";
   version = "1.0.3";
 
   src = fetchFromGitHub {

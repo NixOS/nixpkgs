@@ -1,0 +1,13 @@
+diff --git a/uniemoji.xml.in b/uniemoji.xml.in
+index 5fbfd0f..6fb8ad3 100644
+--- a/uniemoji.xml.in
++++ b/uniemoji.xml.in
+@@ -7,7 +7,7 @@
+     <license>GPL</license>
+     <author>Lalo Martins &lt;lalo.martins@gmail.com&gt;</author>
+     <homepage>https://github.com/salty-horse/ibus-uniemoji</homepage>
+-    <exec>@PYTHON@ @DATADIR@/ibus-uniemoji/uniemoji.py --ibus</exec>
++    <exec>@DATADIR@/ibus-uniemoji/uniemoji.py --ibus</exec>
+     <textdomain>uniemoji</textdomain>
+     <engines>
+         <engine>

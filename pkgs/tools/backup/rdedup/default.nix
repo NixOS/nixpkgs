@@ -1,9 +1,9 @@
 { stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
-, llvmPackages, clang_39, lzma
+, llvmPackages, clang, lzma
 , Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "rdedup-${version}";
+  pname = "rdedup";
   version = "3.1.1";
 
   src = fetchFromGitHub {
@@ -13,13 +13,13 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0y34a3mpghdmcb2rx4z62q0s351bfmy1287d75mm07ryfgglgsd7";
   };
 
-  cargoSha256 = "0p19qcz2ph6axfccjwc6z72hrlb48l7sf1n0hc1gfq8hj2s3k2s1";
+  cargoSha256 = "1zvg68ilgpnd95b36jvna9h1jr5d72x1a0g6flw2x6sd0msc0mdw";
 
   patches = [
     ./v3.1.1-fix-Cargo.lock.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang_39 ];
+  nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang ];
   buildInputs = [ openssl libsodium lzma ]
     ++ (stdenv.lib.optional stdenv.isDarwin Security);
 

@@ -1,15 +1,15 @@
 { fetchurl, stdenv }:
 
 stdenv.mkDerivation rec {
-  name = "gsl-2.5";
+  name = "gsl-2.6";
 
   src = fetchurl {
     url = "mirror://gnu/gsl/${name}.tar.gz";
-    sha256 = "1395y9hlhqadn5g9j8q22224fds5sd92jxi9czfavjj24myasq04";
+    sha256 = "1a460zj9xmbgvcymkdhqh313c4l29mn9cffbi5vf33x3qygk70mp";
   };
 
   # do not let -march=skylake to enable FMA (https://lists.gnu.org/archive/html/bug-gsl/2011-11/msg00019.html)
-  NIX_CFLAGS_COMPILE = stdenv.lib.optional stdenv.isx86_64 "-mno-fma";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isx86_64 "-mno-fma";
 
   # https://lists.gnu.org/archive/html/bug-gsl/2015-11/msg00012.html
   doCheck = stdenv.hostPlatform.system != "i686-linux" && stdenv.hostPlatform.system != "aarch64-linux";

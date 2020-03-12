@@ -12,7 +12,7 @@ let
 
 in
 stdenv.mkDerivation rec {
-  name = "i3blocks-gaps-${version}";
+  pname = "i3blocks-gaps";
   version = "1.4";
 
   src = fetchFromGitHub {
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
     sha256 = "0v9307ij8xzwdaxay3r75sd2cp453s3qb6q7dy9fks2p6wwqpazi";
   };
 
-  makeFlags = "all";
-  installFlags = "PREFIX=\${out} VERSION=${version}";
+  makeFlags = [ "all" ];
+  installFlags = [ "PREFIX=\${out}" "VERSION=${version}" ];
 
   buildInputs = optional (contains_any scripts perlscripts) perl;
   nativeBuildInputs = [ makeWrapper ];

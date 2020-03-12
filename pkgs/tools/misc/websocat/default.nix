@@ -1,26 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, Security
-}:
+{ stdenv, fetchFromGitHub, pkgconfig, openssl, rustPlatform, Security }:
 
 rustPlatform.buildRustPackage rec {
-  name = "websocat-${version}";
-  version = "1.3.0";
+  pname = "websocat";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
-    owner  = "vi";
-    repo   = "websocat";
-    rev    = "v${version}";
-    sha256 = "1gf2snr12vnx2mhsrwkb5274r1pvdrf8m3bybrqbh8s9wd83nrh6";
+    owner = "vi";
+    repo = "websocat";
+    rev = "v${version}";
+    sha256 = "1lmra91ahpk4gamhnbdr066hl4vzwfh5i09fbabzdnxcvylbx8zf";
   };
 
-  cargoSha256 = "0vkb3jmyb3zg3xiig5vlxhh74m27rvqbkgrwdqzprifn9vcj17ir";
+  cargoBuildFlags = [ "--features=ssl" ];
+  cargoSha256 = "09chj0bgf4r8v5cjq0hvb84zvh98nrzrh1m0wdqjy5gi7zc30cis";
 
-  buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ openssl ] ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   meta = with stdenv.lib; {
     description = "Command-line client for WebSockets (like netcat/socat)";
-    homepage    = https://github.com/vi/websocat;
-    license     = with licenses; [ mit ];
-    maintainers = [ maintainers.thoughtpolice ];
-    platforms   = platforms.all;
+    homepage = "https://github.com/vi/websocat";
+    license = licenses.mit;
+    maintainers = with maintainers; [ thoughtpolice filalex77 ];
+    platforms = platforms.all;
   };
 }

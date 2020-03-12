@@ -3,14 +3,14 @@
 
 buildPythonPackage rec {
   pname = "acoustics";
-  version = "0.2.0.post2";
+  version = "0.2.4";
 
   checkInputs = [ pytest ];
   propagatedBuildInputs = [ numpy scipy matplotlib pandas tabulate ];
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c0ca4d7ca67fd867c3a7e34232a98a1fc210ee7ff845f3d2eed445a01737b2ff";
+    sha256 = "8ccb68ac258ba81a0b9064523e85eae013f9bfce7244d01db42d7d2d21d712cc";
   };
 
   checkPhase = ''
@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "A package for acousticians";
     maintainers = with maintainers; [ fridh ];
     license = with licenses; [ bsd3 ];
-    homepage = https://github.com/python-acoustics/python-acoustics;
+    homepage = "https://github.com/python-acoustics/python-acoustics";
   };
 }

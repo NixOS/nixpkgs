@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpkg, makeWrapper
 , alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gtk3, gdk_pixbuf, libnotify, libxcb, nspr, nss, pango
+, gnome2, gtk3, gdk-pixbuf, libnotify, libxcb, nspr, nss, pango
 , systemd, xorg, xprintidle-ng }:
 
 let
@@ -19,7 +19,7 @@ let
     freetype
     glib
     gnome2.GConf
-    gdk_pixbuf
+    gdk-pixbuf
     gtk3
     pango
     libnotify
@@ -53,7 +53,8 @@ let
       throw "super-productivity is not supported on ${stdenv.hostPlatform.system}";
 
 in stdenv.mkDerivation {
-  name = "super-productivity-${version}";
+  pname = "super-productivity";
+  inherit version;
 
   inherit src;
 

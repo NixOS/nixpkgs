@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, bison, ncurses, openssl, zlib, libaio, perl }:
 
 stdenv.mkDerivation rec {
-  name = "percona-server-${version}";
+  pname = "percona-server";
   version = "5.6.43-84.3";
 
   src = fetchurl {
@@ -38,6 +38,7 @@ stdenv.mkDerivation rec {
     "-DINSTALL_SHAREDIR=share/mysql"
   ];
 
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=address-of-packed-member" ];
   NIX_LDFLAGS = "-lgcc_s";
 
   prePatch = ''

@@ -1,4 +1,4 @@
-{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg1, trousers, squashfsTools,
+{ stdenv, lib, autoreconfHook, acl, go, file, git, wget, gnupg, trousers, squashfsTools,
   cpio, fetchurl, fetchFromGitHub, iptables, systemd, makeWrapper, glibc }:
 
 let
@@ -13,8 +13,8 @@ let
 
 in stdenv.mkDerivation rec {
   version = "1.30.0";
-  name = "rkt-${version}";
-  BUILDDIR="build-${name}";
+  pname = "rkt";
+  BUILDDIR="build-${pname}-${version}";
 
   src = fetchFromGitHub {
     owner = "coreos";
@@ -30,7 +30,7 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [
     glibc.out glibc.static
-    autoreconfHook go file git wget gnupg1 trousers squashfsTools cpio acl systemd
+    autoreconfHook go file git wget gnupg trousers squashfsTools cpio acl systemd
     makeWrapper
   ];
 
@@ -69,5 +69,10 @@ in stdenv.mkDerivation rec {
     license = licenses.asl20;
     maintainers = with maintainers; [ ragge steveej ];
     platforms = [ "x86_64-linux" ];
+    knownVulnerabilities = [
+      "CVE-2019-10144: processes run with `rkt enter` are given all capabilities during stage 2"
+      "CVE-2019-10145: processes run with `rkt enter` do not have seccomp filtering during stage 2"
+      "CVE-2019-10147: processes run with `rkt enter` are not limited by cgroups during stage 2"
+    ];
   };
 }

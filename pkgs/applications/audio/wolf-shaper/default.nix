@@ -1,14 +1,14 @@
 { stdenv, fetchFromGitHub , libjack2, lv2, xorg, liblo, libGL, libXcursor, pkgconfig }:
 
 stdenv.mkDerivation rec {
-  name = "wolf-shaper-${version}";
-  version = "0.1.6";
+  pname = "wolf-shaper";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "pdesaulniers";
     repo = "wolf-shaper";
     rev = "v${version}";
-    sha256 = "01h5dm1nrr0i54ancwznr7wn4vpw08dw0b69v3axy32r5j7plw6s";
+    sha256 = "0lllgcbnnh1m95bp29hh17x170hl7170zizjrvy892qfkn36830d";
     fetchSubmodules = true;
   };
 

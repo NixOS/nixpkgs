@@ -20,7 +20,7 @@ buildPythonPackage rec {
   meta = with stdenv.lib; {
     homepage = https://ws4py.readthedocs.org;
     description = "A WebSocket package for Python";
-    maintainers = with maintainers; [ rickynils ];
+    maintainers = [];
     license = licenses.bsd3;
   };
 }

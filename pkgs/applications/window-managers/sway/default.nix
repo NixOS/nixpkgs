@@ -1,39 +1,34 @@
-{ stdenv, fetchFromGitHub, fetchpatch
+{ stdenv, fetchFromGitHub, makeWrapper
 , meson, ninja
 , pkgconfig, scdoc
 , wayland, libxkbcommon, pcre, json_c, dbus, libevdev
-, pango, cairo, libinput, libcap, pam, gdk_pixbuf
+, pango, cairo, libinput, libcap, pam, gdk-pixbuf
 , wlroots, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
-  pname = "sway";
-  version = "1.0";
+  pname = "sway-unwrapped";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "swaywm";
     repo = "sway";
     rev = version;
-    sha256 = "09cndc2nl39d3l7g5634xp0pxcz60pvc5277mfw89r22mh0j78rx";
+    sha256 = "11qf89y3q92g696a6f4d23qb44gqixg6qxq740vwv2jw59ms34ja";
   };
 
   patches = [
-    # Fix for a compiler warning that causes a build failure
-    # (see https://github.com/swaywm/sway/issues/3862):
-    (fetchpatch {
-      url = "https://github.com/swaywm/sway/commit/bcde298a719f60b9913133dbd2a169dedbc8dd7d.patch";
-      sha256 = "0r583nmqvq43ib93yv6flw8pj833v32lbs0q0xld56s3rnzvvdcp";
-    })
     ./sway-config-no-nix-store-references.patch
     ./load-configuration-from-etc.patch
   ];
 
-  nativeBuildInputs = [ pkgconfig meson ninja scdoc ];
+  nativeBuildInputs = [
+    pkgconfig meson ninja scdoc
+  ];
 
   buildInputs = [
     wayland libxkbcommon pcre json_c dbus libevdev
-    pango cairo libinput libcap pam gdk_pixbuf
+    pango cairo libinput libcap pam gdk-pixbuf
     wlroots wayland-protocols
   ];
 
@@ -49,6 +44,6 @@ stdenv.mkDerivation rec {
     homepage    = https://swaywm.org;
     license     = licenses.mit;
     platforms   = platforms.linux;
-    maintainers = with maintainers; [ primeos synthetica ];
+    maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

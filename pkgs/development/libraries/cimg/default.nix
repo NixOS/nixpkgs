@@ -1,13 +1,12 @@
 { stdenv, fetchurl, unzip }:
 
 stdenv.mkDerivation rec {
-
-  name = "cimg-${version}";
-  version = "2.5.7";
+  pname = "cimg";
+  version = "2.8.4";
 
   src = fetchurl {
     url = "http://cimg.eu/files/CImg_${version}.zip";
-    sha256 = "155mmxrd2gm81v4ayff43xhi341ivqfpx2n6x9imldkr35hchzvm";
+    sha256 = "1y4j2dmk4nnc5rx65c2px7r0nfq5117pmqpvi7klp9wmgcjs29gf";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -25,7 +24,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A small, open source, C++ toolkit for image processing";
-    homepage = http://cimg.eu/;
+    homepage = "http://cimg.eu/";
     license = licenses.cecill-c;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.unix;

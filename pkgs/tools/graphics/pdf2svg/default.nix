@@ -2,7 +2,7 @@
 , cairo, gtk2, poppler }:
 
 stdenv.mkDerivation rec {
-  name = "pdf2svg-${version}";
+  pname = "pdf2svg";
   version = "0.2.3";
 
   src = fetchFromGitHub {

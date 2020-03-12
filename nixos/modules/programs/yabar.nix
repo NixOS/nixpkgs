@@ -76,7 +76,7 @@ in
             font = mkOption {
               default = "sans bold 9";
               example = "Droid Sans, FontAwesome Bold 9";
-              type = types.string;
+              type = types.str;
 
               description = ''
                 The font that will be used to draw the status bar.
@@ -95,7 +95,7 @@ in
 
             extra = mkOption {
               default = {};
-              type = types.attrsOf types.string;
+              type = types.attrsOf types.str;
 
               description = ''
                 An attribute set which contains further attributes of a bar.
@@ -107,7 +107,7 @@ in
               type = types.attrsOf(types.submodule {
                 options.exec = mkOption {
                   example = "YABAR_DATE";
-                  type = types.string;
+                  type = types.str;
                   description = ''
                      The type of the indicator to be executed.
                   '';
@@ -125,7 +125,7 @@ in
 
                 options.extra = mkOption {
                   default = {};
-                  type = types.attrsOf (types.either types.string types.int);
+                  type = types.attrsOf (types.either types.str types.int);
 
                   description = ''
                     An attribute set which contains further attributes of a indicator.

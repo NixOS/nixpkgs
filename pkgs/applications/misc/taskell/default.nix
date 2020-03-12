@@ -1,8 +1,8 @@
-{ haskell, lib, haskellPackages, fetchFromGitHub }:
+{ lib, haskellPackages, fetchFromGitHub }:
 
 let
-  version = "1.4.2";
-  sha256  = "1kpzjsbx2xbp43hd62nq03jcknp0dqvdlxjc9gc3fagaqfbfzny2";
+  version = "1.7.3";
+  sha256  = "1439fh79ilc6jvz894cfzhk7gy5r2sv4v79bvqmmqbzbqk9qsbvx";
 
 in (haskellPackages.mkDerivation {
   pname = "taskell";
@@ -57,5 +57,9 @@ in (haskellPackages.mkDerivation {
     tasty-hunit
   ];
 
-  license = lib.licenses.bsd3;
+  description = "Command-line Kanban board/task manager with support for Trello boards and GitHub projects";
+  homepage    = "https://taskell.app";
+  license     = lib.licenses.bsd3;
+  maintainers = with lib.maintainers; [ matthiasbeyer ];
+  platforms   = with lib.platforms; unix ++ darwin;
 })

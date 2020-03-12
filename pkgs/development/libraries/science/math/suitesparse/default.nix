@@ -56,6 +56,7 @@ stdenv.mkDerivation rec {
 
     # Build individual shared libraries
     make library        \
+        JOBS=$NIX_BUILD_CORES \
         BLAS=-lopenblas \
         LAPACK=""       \
         ${stdenv.lib.optionalString openblas.blas64 "CFLAGS=-DBLAS64"}
@@ -64,7 +65,7 @@ stdenv.mkDerivation rec {
     # Bundling is done by building the static libraries, extracting objects from
     # them and combining the objects into one shared library.
     mkdir -p static
-    make static AR_TARGET=$(pwd)/static/'$(LIBRARY).a'
+    make static JOBS=$NIX_BUILD_CORES AR_TARGET=$(pwd)/static/'$(LIBRARY).a'
     (
         cd static
         for i in lib*.a; do

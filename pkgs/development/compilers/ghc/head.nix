@@ -2,11 +2,15 @@
 
 # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchgit, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, autoconf, autoreconfHook, automake, coreutils, fetchgit, fetchpatch, perl, python3, m4, sphinx
+, bash
 
 , libiconv ? null, ncurses
 
-, useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform)
+, enableDwarf ? !stdenv.targetPlatform.isDarwin &&
+                !stdenv.targetPlatform.isWindows, elfutils # for DWARF support
+
+, useLLVM ? !stdenv.targetPlatform.isx86 || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
@@ -26,10 +30,11 @@
 , # Whetherto build terminfo.
   enableTerminfo ? !stdenv.targetPlatform.isWindows
 
-, version ? "8.7.20190115"
+, version ? "8.10.20191119"
 , # What flavour to build. An empty string indicates no
   # specific flavour and falls back to ghc default values.
-  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform) "perf-cross"
+  ghcFlavour ? stdenv.lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
+    (if useLLVM then "perf-cross" else "perf-cross-ncg")
 
 , # Whether to disable the large address space allocator
   # necessary fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
@@ -69,15 +74,18 @@ let
   '';
 
   # Splicer will pull out correct variations
-  libDeps = platform: stdenv.lib.optional enableTerminfo [ ncurses ]
+  libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
     ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv
+    ++ stdenv.lib.optional enableDwarf elfutils;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
   ] ++ stdenv.lib.optional useLLVM buildLlvmPackages.llvm;
 
   targetCC = builtins.head toolsForTarget;
+
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
 
 in
 stdenv.mkDerivation (rec {
@@ -87,13 +95,16 @@ stdenv.mkDerivation (rec {
 
   src = fetchgit {
     url = "https://gitlab.haskell.org/ghc/ghc.git/";
-    rev = "c9756dbf1ee58b117ea5c4ded45dea88030efd65";
-    sha256 = "0ja3ivyz4jrqkw6z1mdgsczxaqkjy5vw0nyyqlqr0bqxiw9p8834";
+    rev = "0418c38d55c7a47967187dce2db5ea2ab1021b1e";
+    sha256 = "1d8g30ii0w4xh6fh61bxbalsqqyanny99nn3p727fx7favnhgvxi";
   };
 
   enableParallelBuilding = true;
 
   outputs = [ "out" "doc" ];
+
+  patches = [
+  ];
 
   postPatch = "patchShebangs .";
 
@@ -107,7 +118,8 @@ stdenv.mkDerivation (rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString targetPlatform.isAarch32 ".gold"}"
+    # and more generally have a faster linker.
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -151,32 +163,36 @@ stdenv.mkDerivation (rec {
   configureFlags = [
     "--datadir=$doc/share/doc/ghc"
     "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && !enableIntegerSimple) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
     "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
-  ] ++ stdenv.lib.optional (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
+  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
+  ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
   ] ++ stdenv.lib.optionals (disableLargeAddressSpace) [
     "--disable-large-address-space"
+  ] ++ stdenv.lib.optionals enableDwarf [
+    "--enable-dwarf-unwind"
+    "--with-libdw-includes=${stdenv.lib.getDev elfutils}/include"
+    "--with-libdw-libraries=${stdenv.lib.getLib elfutils}/lib"
   ];
 
   # Make sure we never relax`$PATH` and hooks support for compatability.
   strictDeps = true;
 
   nativeBuildInputs = [
-    perl autoconf automake m4 python3 sphinx
-    bootPkgs.ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
+    perl autoconf autoreconfHook automake m4 python3 sphinx
+    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
   ];
 
   # For building runtime libs
   depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl ] ++ (libDeps hostPlatform);
+  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
   propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
@@ -211,14 +227,14 @@ stdenv.mkDerivation (rec {
     inherit enableShared;
 
     # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.7";
+    haskellCompilerName = "ghc-${version}";
   };
 
   meta = {
     homepage = http://haskell.org/ghc;
     description = "The Glasgow Haskell Compiler";
     maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
-    inherit (bootPkgs.ghc.meta) license platforms;
+    inherit (ghc.meta) license platforms;
   };
 
 } // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {

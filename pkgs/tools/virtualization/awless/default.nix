@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "awless-${version}";
+  pname = "awless";
   version = "0.1.11";
 
   goPackagePath = "github.com/wallix/awless";

@@ -1,32 +1,65 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkgconfig, doxygen, graphviz, valgrind
-, glib, dbus, gst_all_1, libv4l, alsaLib, ffmpeg, libjack2, udev, libva, xorg
-, sbc, SDL2, makeFontsConf, freefont_ttf
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkgconfig
+, doxygen
+, graphviz
+, valgrind
+, glib
+, dbus
+, gst_all_1
+, alsaLib
+, ffmpeg
+, libjack2
+, udev
+, libva
+, xorg
+, sbc
+, SDL2
+, makeFontsConf
 }:
 
 let
-  version = "0.2.5";
-
   fontsConf = makeFontsConf {
-    fontDirectories = [ freefont_ttf ];
+    fontDirectories = [];
   };
-in stdenv.mkDerivation rec {
-  name = "pipewire-${version}";
+in
+stdenv.mkDerivation rec {
+  pname = "pipewire";
+  version = "0.2.7";
+
+  outputs = [ "out" "lib" "dev" "doc" ];
 
   src = fetchFromGitHub {
     owner = "PipeWire";
     repo = "pipewire";
     rev = version;
-    sha256 = "0hxm89ps6p75zm7rndrdr715p4ixx4f521fkjkyi7q2wh0b769s7";
+    sha256 = "1q5wrqnhhs6r49p8yvkw1pl0cnsd4rndxy4h5lvdydwgf1civcwc";
   };
 
-  outputs = [ "out" "lib" "dev" "doc" ];
-
   nativeBuildInputs = [
-    meson ninja pkgconfig doxygen graphviz valgrind
+    doxygen
+    graphviz
+    meson
+    ninja
+    pkgconfig
+    valgrind
   ];
+
   buildInputs = [
-    glib dbus gst_all_1.gst-plugins-base gst_all_1.gstreamer libv4l
-    alsaLib ffmpeg libjack2 udev libva xorg.libX11 sbc SDL2
+    SDL2
+    alsaLib
+    dbus
+    ffmpeg
+    glib
+    gst_all_1.gst-plugins-base
+    gst_all_1.gstreamer
+    libjack2
+    libva
+    sbc
+    udev
+    xorg.libX11
   ];
 
   mesonFlags = [

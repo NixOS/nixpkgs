@@ -1,38 +1,24 @@
-{ stdenv, fetchpatch, python3, acl, libb2, lz4, zstd, openssl, openssh }:
+{ stdenv, python3, acl, libb2, lz4, zstd, openssl, openssh }:
 
-let
-  python = python3.override {
-    packageOverrides = self: super: {
-      # https://github.com/borgbackup/borg/issues/3753#issuecomment-454011810
-      msgpack-python = super.msgpack-python.overridePythonAttrs (oldAttrs: rec {
-        version = "0.5.6";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0ee8c8c85aa651be3aa0cd005b5931769eaa658c948ce79428766f1bd46ae2c3";
-        };
-      });
-    };
-  };
-
-in python.pkgs.buildPythonApplication rec {
+python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.9";
+  version = "1.1.11";
 
-  src = python.pkgs.fetchPypi {
+  src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "7d0ff84e64c4be35c43ae2c047bb521a94f15b278c2fe63b43950c4836b42575";
+    sha256 = "190gjzx83b6p64nqj840x382dgz9gfv0gm7wj585lnkrpa90j29n";
   };
 
-  nativeBuildInputs = with python.pkgs; [
+  nativeBuildInputs = with python3.pkgs; [
     # For building documentation:
     sphinx guzzle_sphinx_theme
   ];
   buildInputs = [
-    libb2 lz4 zstd openssl python.pkgs.setuptools_scm
+    libb2 lz4 zstd openssl python3.pkgs.setuptools_scm
   ] ++ stdenv.lib.optionals stdenv.isLinux [ acl ];
-  propagatedBuildInputs = with python.pkgs; [
-    cython msgpack-python
-  ] ++ stdenv.lib.optionals (!stdenv.isDarwin) [ llfuse ];
+  propagatedBuildInputs = with python3.pkgs; [
+    cython llfuse
+  ];
 
   preConfigure = ''
     export BORG_OPENSSL_PREFIX="${openssl.dev}"
@@ -64,7 +50,7 @@ in python.pkgs.buildPythonApplication rec {
     cp scripts/shell_completions/zsh/_borg $out/share/zsh/site-functions/
   '';
 
-  checkInputs = with python.pkgs; [
+  checkInputs = with python3.pkgs; [
     pytest
   ];
 
@@ -72,7 +58,7 @@ in python.pkgs.buildPythonApplication rec {
     HOME=$(mktemp -d) py.test --pyargs borg.testsuite
   '';
 
-  # 63 failures, needs pytest-benchmark
+  # 64 failures, needs pytest-benchmark
   doCheck = false;
 
   meta = with stdenv.lib; {
@@ -80,6 +66,6 @@ in python.pkgs.buildPythonApplication rec {
     homepage = https://www.borgbackup.org;
     license = licenses.bsd3;
     platforms = platforms.unix; # Darwin and FreeBSD mentioned on homepage
-    maintainers = with maintainers; [ flokli dotlambda ];
+    maintainers = with maintainers; [ flokli dotlambda globin ];
   };
 }

@@ -3,16 +3,16 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ipe-7.2.11";
+  name = "ipe-7.2.13";
 
   src = fetchurl {
     url = "https://dl.bintray.com/otfried/generic/ipe/7.2/${name}-src.tar.gz";
-    sha256 = "09d71fdpiz359mcnb57460w2mcfizvlnidd6g1k4c3v6rglwlbd2";
+    sha256 = "1a6a88r7j5z01z6k1z72a8g3n6lxdjjxxkdrzrfdd6df2gbs6g5g";
   };
 
   sourceRoot = "${name}/src";
 
-  IPEPREFIX="${placeholder "out"}";
+  IPEPREFIX=placeholder "out";
   URWFONTDIR="${texlive}/texmf-dist/fonts/type1/urw/";
   LUA_PACKAGE = "lua";
 

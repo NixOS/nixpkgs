@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, libX11, libXi, libconfuse }:
 
 stdenv.mkDerivation rec {
-  name = "dispad-${version}";
+  pname = "dispad";
   version = "0.3.1";
 
   src = fetchFromGitHub {

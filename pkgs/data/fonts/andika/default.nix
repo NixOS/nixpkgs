@@ -1,4 +1,4 @@
-{stdenv, fetchzip}:
+{ lib, fetchzip }:
 
 let
   version = "5.000";
@@ -16,7 +16,7 @@ in
 
     sha256 = "1jy9vpcprpd1k48p20wh6jhyn909ibia8lr5i747p41l0s8a7lqy";
 
-    meta = with stdenv.lib; {
+    meta = with lib; {
       homepage = https://software.sil.org/andika;
       description = "A family designed especially for literacy use taking into account the needs of beginning readers";
       longDescription = ''

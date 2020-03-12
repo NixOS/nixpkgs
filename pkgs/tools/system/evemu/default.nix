@@ -3,7 +3,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "evemu-${version}";
+  pname = "evemu";
   version = "2.6.0";
 
   # We could have downloaded a release tarball from cgit, but it changes hash

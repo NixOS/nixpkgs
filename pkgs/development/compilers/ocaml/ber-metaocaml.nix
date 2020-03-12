@@ -14,7 +14,7 @@ let
 in
 
 stdenv.mkDerivation rec {
-  name = "ber-metaocaml-${version}";
+  pname = "ber-metaocaml";
   version = metaocamlPatch;
 
   src = fetchurl {
@@ -43,21 +43,21 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     tar -xvzf $metaocaml
-    cd ${name}
+    cd ${pname}-${version}
     make patch
     cd ..
   '';
 
   buildPhase = ''
     make world
-    make -i install
 
     make bootstrap
     make opt.opt
+    make -i install
     make installopt
     mkdir -p $out/include
     ln -sv $out/lib/ocaml/caml $out/include/caml
-    cd ${name}
+    cd ${pname}-${version}
     make all
   '';
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
   '';
 
   checkPhase = ''
-    cd ${name}
+    cd ${pname}-${version}
     make test
     make test-compile
     make test-native

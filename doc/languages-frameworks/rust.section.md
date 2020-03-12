@@ -4,7 +4,7 @@ author: Matthias Beyer
 date: 2017-03-05
 ---
 
-# User's Guide to the Rust Infrastructure
+# Rust
 
 To install the rust compiler and cargo put
 
@@ -16,12 +16,6 @@ cargo
 into the `environment.systemPackages` or bring them into
 scope with `nix-shell -p rustc cargo`.
 
-> If you are using NixOS and you want to use rust without a nix expression you
-> probably want to add the following in your `configuration.nix` to build
-> crates with C dependencies.
->
->     environment.systemPackages = [binutils gcc gnumake openssl pkgconfig]
-
 For daily builds (beta and nightly) use either rustup from
 nixpkgs or use the [Rust nightlies
 overlay](#using-the-rust-nightlies-overlay).
@@ -32,21 +26,21 @@ Rust applications are packaged by using the `buildRustPackage` helper from `rust
 
 ```
 rustPlatform.buildRustPackage rec {
-  name = "ripgrep-${version}";
-  version = "0.4.0";
+  pname = "ripgrep";
+  version = "11.0.2";
 
   src = fetchFromGitHub {
     owner = "BurntSushi";
-    repo = "ripgrep";
-    rev = "${version}";
-    sha256 = "0y5d1n6hkw85jb3rblcxqas2fp82h3nghssa4xqrhqnz25l799pj";
+    repo = pname;
+    rev = version;
+    sha256 = "1iga3320mgi7m853la55xip514a3chqsdi1a1rwv25lr9b1p7vd3";
   };
 
-  cargoSha256 = "0q68qyl2h6i0qsz82z840myxlnjay8p1w5z7hfyr8fqp7wgwa9cx";
+  cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
@@ -59,10 +53,27 @@ all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
 checksum can be then take from the failed build.
 
-When the `Cargo.lock`, provided by upstream, is not in sync with the
-`Cargo.toml`, it is possible to use `cargoPatches` to update it. All patches
-added in `cargoPatches` will also be prepended to the patches in `patches` at
-build-time.
+Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
+best practices guide, Rust applications should always commit the `Cargo.lock`
+file in git to ensure a reproducible build. However, a few packages do not, and
+Nix depends on this file, so if it missing you can use `cargoPatches` to apply
+it in the `patchPhase`. Consider sending a PR upstream with a note to the
+maintainer describing why it's important to include in the application.
+
+Unless `legacyCargoFetcher` is set to `true`, the fetcher will also verify that
+the `Cargo.lock` file is in sync with the `src` attribute, and will compress the
+vendor directory into a tar.gz archive.
+
+### Building a crate for a different target
+
+To build your crate with a different cargo `--target` simply specify the `target` attribute:
+
+```nix
+pkgs.rustPlatform.buildRustPackage {
+  (...)
+  target = "x86_64-fortanix-unknown-sgx";
+}
+```
 
 ## Compiling Rust crates using Nix instead of Cargo
 
@@ -188,7 +199,7 @@ argument and returns a set that contains all attribute that should be
 overwritten.
 
 For more complicated cases, such as when parts of the crate's
-derivation depend on the the crate's version, the `attrs` argument of
+derivation depend on the crate's version, the `attrs` argument of
 the override above can be read, as in the following example, which
 patches the derivation:
 
@@ -336,9 +347,9 @@ with import <nixpkgs> {};
 let src = fetchFromGitHub {
       owner = "mozilla";
       repo = "nixpkgs-mozilla";
-      # commit from: 2018-03-27
-      rev = "2945b0b6b2fd19e7d23bac695afd65e320efcebe";
-      sha256 = "034m1dryrzh2lmjvk3c0krgip652dql46w5yfwpvh7gavd3iypyw";
+      # commit from: 2019-05-15
+      rev = "9f35c4b09fd44a77227e79ff0c1b4b6a69dff533";
+      sha256 = "18h0nvh55b5an4gmlgfbvwbyqj91bklf1zymis6lbdh75571qaz0";
    };
 in
 with import "${src.out}/rust-overlay.nix" pkgs pkgs;

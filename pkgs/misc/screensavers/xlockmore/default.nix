@@ -2,15 +2,15 @@
 , libXdmcp, libXt }:
 
 stdenv.mkDerivation rec {
-  name = "xlockmore-5.56";
+  name = "xlockmore-5.62";
 
   src = fetchurl {
     url = "http://sillycycle.com/xlock/${name}.tar.xz";
-    sha256 = "1dg1n79rnswhxqz36mxnl5lp8p37i9fbibnzzyrqknmvf2s8xpd0";
+    sha256 = "0b05wgj4mpssy4hd7km5c48i454dfg45p11mfmsr7xjd2gnz5gqi";
     curlOpts = "--user-agent 'Mozilla/5.0'";
   };
 
-  # Optionally, it can use GTK+.
+  # Optionally, it can use GTK.
   buildInputs = [ pam libX11 libXext libXinerama libXdmcp libXt ];
 
   # Don't try to install `xlock' setuid. Password authentication works

@@ -1,22 +1,27 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, darwin }:
+{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libiconv, curl, darwin }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "unstable-2019-04-13";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "kbknapp";
     repo = pname;
-    rev = "ce4b6baddc94b77a155abbb5a4fa4d3b31a45598";
-    sha256 = "0x00vn0ldnm2hvndfmq4g4q5w6axyg9vsri3i5zxhmir7423xabp";
+    rev = "v${version}";
+    sha256 = "0g91cfja4h9qhpxgnimczjna528ml645iz7hgpwl6yp0742qcal4";
   };
 
-  cargoSha256 = "1xqii2z0asgkwn1ny9n19w7d4sjz12a6i55x2pf4cfrciapdpvdl";
+  # Can be removed when updating to the next release.
+  cargoPatches = [ ./0001-Fix-outdated-Cargo.lock.patch ];
+
+  cargoSha256 = "0pr57g41lnn8srcbc11sb15qchf01zwqcb1802xdayj6wlc3g3dy";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
+    libiconv
+    curl
   ];
 
   meta = with stdenv.lib; {
@@ -24,6 +29,6 @@ rustPlatform.buildRustPackage rec {
     homepage = https://github.com/kbknapp/cargo-outdated;
     license = with licenses; [ asl20 /* or */ mit ];
     platforms = platforms.all;
-    maintainers = [ maintainers.sondr3 ];
+    maintainers = with maintainers; [ sondr3 ivan ];
   };
 }

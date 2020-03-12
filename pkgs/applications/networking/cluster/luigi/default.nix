@@ -2,19 +2,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "luigi";
-  version = "2.8.0";
+  version = "2.8.12";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1869lb6flmca6s7ccws7mvyn66nvrqjky40jwf2liv9fg0lp8899";
+    sha256 = "1p83mxqs7w5v27a58ps7wji5mlyfz66cpkbyrndix0pv9hdyzpxn";
   };
 
-  # Relax version constraint
-  postPatch = ''
-    sed -i 's/<2.2.0//' setup.py
-  '';
-
-  propagatedBuildInputs = with python3Packages; [ tornado_4 python-daemon boto3 ];
+  propagatedBuildInputs = with python3Packages; [ dateutil tornado_4 python-daemon boto3 ];
 
   # Requires tox, hadoop, and google cloud
   doCheck = false;

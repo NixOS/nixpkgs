@@ -26,7 +26,6 @@ in
 
       wantedBy = [ "sshd.service" "waagent.service" ];
       before = [ "sshd.service" "waagent.service" ];
-      after = [ "local-fs.target" ];
 
       path  = [ pkgs.coreutils ];
       script =

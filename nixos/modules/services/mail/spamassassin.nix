@@ -5,16 +5,6 @@ with lib;
 let
   cfg = config.services.spamassassin;
   spamassassin-local-cf = pkgs.writeText "local.cf" cfg.config;
-  spamassassin-init-pre = pkgs.writeText "init.pre" cfg.initPreConf;
-
-  spamdEnv = pkgs.buildEnv {
-    name = "spamd-env";
-    paths = [];
-    postBuild = ''
-      ln -sf ${spamassassin-init-pre} $out/init.pre
-      ln -sf ${spamassassin-local-cf} $out/local.cf
-    '';
-  };
 
 in
 
@@ -65,8 +55,9 @@ in
       };
 
       initPreConf = mkOption {
-        type = types.str;
+        type = with types; either str path;
         description = "The SpamAssassin init.pre config.";
+        apply = val: if builtins.isPath val then val else pkgs.writeText "init.pre" val;
         default =
         ''
           #
@@ -120,30 +111,26 @@ in
   };
 
   config = mkIf cfg.enable {
+    environment.etc."mail/spamassassin/init.pre".source = cfg.initPreConf;
+    environment.etc."mail/spamassassin/local.cf".source = spamassassin-local-cf;
 
     # Allow users to run 'spamc'.
+    environment.systemPackages = [ pkgs.spamassassin ];
 
-    environment = {
-      etc = singleton { source = spamdEnv; target = "spamassassin"; };
-      systemPackages = [ pkgs.spamassassin ];
-    };
-
-    users.users = singleton {
-      name = "spamd";
+    users.users.spamd = {
       description = "Spam Assassin Daemon";
       uid = config.ids.uids.spamd;
       group = "spamd";
     };
 
-    users.groups = singleton {
-      name = "spamd";
+    users.groups.spamd = {
       gid = config.ids.gids.spamd;
     };
 
     systemd.services.sa-update = {
       script = ''
         set +e
-        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
+        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/" spamd
 
         v=$?
         set -e
@@ -174,7 +161,7 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        ExecStart = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --siteconfigpath=${spamdEnv} --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
+        ExecStart = "${pkgs.spamassassin}/bin/spamd ${optionalString cfg.debug "-D"} --username=spamd --groupname=spamd --virtual-config-dir=/var/lib/spamassassin/user-%u --allow-tell --pidfile=/run/spamd.pid";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
 
@@ -185,7 +172,7 @@ in
         mkdir -p /var/lib/spamassassin
         chown spamd:spamd /var/lib/spamassassin -R
         set +e
-        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/ --siteconfigpath=${spamdEnv}/" spamd
+        ${pkgs.su}/bin/su -s "${pkgs.bash}/bin/bash" -c "${pkgs.spamassassin}/bin/sa-update --gpghomedir=/var/lib/spamassassin/sa-update-keys/" spamd
         v=$?
         set -e
         if [ $v -gt 1 ]; then

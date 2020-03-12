@@ -4,7 +4,8 @@ let
   version = "2.4.0";
 in
 stdenv.mkDerivation {
-  name = "svn2git-${version}";
+  pname = "svn2git";
+  inherit version;
 
   src = fetchurl {
     url = "https://github.com/nirvdrum/svn2git/archive/v${version}.tar.gz";

@@ -1,10 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, cmake
+{ mkDerivation, stdenv, lib, fetchFromGitHub, cmake
 , qtbase, qtquickcontrols, qtkeychain, qtmultimedia, qttools
-, libqmatrixclient_0_4, libqmatrixclient_0_5 }:
+, libqmatrixclient_0_5
+, gnome3
+}:
 
 let
-  generic = version: sha256: prefix: library: stdenv.mkDerivation rec {
-    name = "quaternion-${version}";
+  generic = version: sha256: prefix: library: mkDerivation {
+    pname = "quaternion";
+    inherit version;
 
     src = fetchFromGitHub {
       owner = "QMatrixClient";
@@ -13,9 +16,9 @@ let
       inherit sha256;
     };
 
-    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain qttools library ];
+    buildInputs = [ qtbase qtmultimedia qtquickcontrols qtkeychain library gnome3.libsecret ];
 
-    nativeBuildInputs = [ cmake ];
+    nativeBuildInputs = [ cmake qttools ];
 
     postInstall = if stdenv.isDarwin then ''
       mkdir -p $out/Applications
@@ -28,7 +31,7 @@ let
 
     meta = with lib; {
       description = "Cross-platform desktop IM client for the Matrix protocol";
-      homepage    = https://matrix.org/docs/projects/client/quaternion.html;
+      homepage    = "https://matrix.org/docs/projects/client/quaternion.html";
       license     = licenses.gpl3;
       maintainers = with maintainers; [ peterhoeg ];
       inherit (qtbase.meta) platforms;
@@ -37,6 +40,7 @@ let
   };
 
 in rec {
-  quaternion     = generic "0.0.9.4"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
+  quaternion     = generic "0.0.9.4c"     "12mkwiqqbi4774kwl7gha72jyf0jf547acy6rw8ry249zl4lja54" "" libqmatrixclient_0_5;
+
   quaternion-git = quaternion;
 }

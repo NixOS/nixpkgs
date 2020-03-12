@@ -1,6 +1,6 @@
 { config, stdenv
+, mkDerivation
 , fetchFromGitHub
-, fetchpatch
 , cmake
 , fdk_aac
 , ffmpeg
@@ -34,21 +34,19 @@
 }:
 
 let
-  optional = stdenv.lib.optional;
-in stdenv.mkDerivation rec {
-  name = "obs-studio-${version}";
-  version = "23.1.0";
+  inherit (stdenv.lib) optional optionals;
+in mkDerivation rec {
+  pname = "obs-studio";
+  version = "24.0.6";
 
   src = fetchFromGitHub {
-    owner = "jp9000";
+    owner = "obsproject";
     repo = "obs-studio";
-    rev = "${version}";
-    sha256 = "1iavrkjp7vgg0blm4lmj4mc4hrfx8yjaiwx55wmc5ynw80v37ybc";
+    rev = version;
+    sha256 = "07grnab5v4fd4lw25adhnlifs5c5phc3rsz7h80m663nbszy7abh";
   };
 
-  nativeBuildInputs = [ cmake
-                        pkgconfig
-                      ];
+  nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ curl
                   fdk_aac
@@ -68,7 +66,7 @@ in stdenv.mkDerivation rec {
                   makeWrapper
                   mbedtls
                 ]
-                ++ optional scriptingSupport [ luajit swig python3 ]
+                ++ optionals scriptingSupport [ luajit swig python3 ]
                 ++ optional alsaSupport alsaLib
                 ++ optional pulseaudioSupport libpulseaudio;
 

@@ -1,29 +1,26 @@
-{ buildGoPackage
+{ buildGoModule
 , fetchFromGitHub
-, fetchpatch
 , lib
 }:
 
-buildGoPackage rec {
-  name = "amass-${version}";
-  version = "2.9.1";
-
-  goPackagePath = "github.com/OWASP/Amass";
+buildGoModule rec {
+  pname = "amass";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "OWASP";
     repo = "Amass";
-    rev = version;
-    sha256 = "07vs741vmhi735ba26wscldwdx0i2yamr2g8bq7jr3sjik8ncd29";
+    rev = "v${version}";
+    sha256 = "1qr9cd22m6w5r32bsvg08bmvyvzz7agaklrghf8n1d23ijj1563p";
   };
 
-  outputs = [ "bin" "out" "wordlists" ];
+  modSha256 = "00pd0xi0m3w4xqdqq7ldqcpirq9plln45nhpjrsp5r9bz7yc5wn9";
 
-  goDeps = ./deps.nix;
+  outputs = [ "out" "wordlists" ];
 
   postInstall = ''
     mkdir -p $wordlists
-    cp -R $src/wordlists/*.txt $wordlists
+    cp -R $src/examples/wordlists/*.txt $wordlists
     gzip $wordlists/*.txt
   '';
 
@@ -40,9 +37,8 @@ buildGoPackage rec {
       Amass ships with a set of wordlist (to be used with the amass -w flag)
       that are found under the wordlists output.
       '';
-    homepage = https://www.owasp.org/index.php/OWASP_Amass_Project;
+    homepage = "https://www.owasp.org/index.php/OWASP_Amass_Project";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];
-    platforms = platforms.linux ++ platforms.darwin;
   };
 }

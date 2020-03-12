@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, beets, pythonPackages, glibcLocales }:
 
-pythonPackages.buildPythonApplication rec {
+pythonPackages.buildPythonApplication {
   name = "beets-copyartifacts";
 
   src = fetchFromGitHub {

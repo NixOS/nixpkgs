@@ -5,7 +5,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  name = "fpm2-${version}";
+  pname = "fpm2";
   version = "0.79";
 
   src = fetchurl {

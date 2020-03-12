@@ -1,9 +1,11 @@
 { appleDerivation, lib, bootstrap_cmds, bison, flex
-, gnum4, unifdef, perl, python
+, gnum4, unifdef, perl, python3
 , headersOnly ? true }:
 
 appleDerivation ({
-  nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python ];
+  nativeBuildInputs = [ bootstrap_cmds bison flex gnum4 unifdef perl python3 ];
+
+  patches = [ ./python3.patch ];
 
   postPatch = ''
     substituteInPlace Makefile \
@@ -81,8 +83,8 @@ appleDerivation ({
     export DSTROOT=$out
   '';
 
-  buildFlags = lib.optionalString headersOnly "exporthdrs";
-  installTargets = lib.optionalString headersOnly "installhdrs";
+  buildFlags = lib.optional headersOnly "exporthdrs";
+  installTargets = lib.optional headersOnly "installhdrs";
 
   postInstall = lib.optionalString headersOnly ''
     mv $out/usr/include $out

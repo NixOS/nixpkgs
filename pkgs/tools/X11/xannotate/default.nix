@@ -1,6 +1,5 @@
 {stdenv, fetchFromBitbucket, libX11}:
 stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
   pname = "xannotate";
   version = "20150301";
   

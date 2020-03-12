@@ -1,12 +1,12 @@
 { stdenv, fetchurl, utillinux}:
 
 stdenv.mkDerivation rec {
-  version = "6.34";
-  name = "profile-sync-daemon-${version}";
+  version = "6.36";
+  pname = "profile-sync-daemon";
 
   src = fetchurl {
     url = "https://github.com/graysky2/profile-sync-daemon/archive/v${version}.tar.gz";
-    sha256 = "0v6yzgfwv3mhf1q2fp6abrvr15p9b1c1gahj3mdh5b4bfcsg3n5a";
+    sha256 = "0zw9fqpfiz1ld443cw2vp54y86maksmq4mnjs73nlp00nn5z2047";
   };
 
   installPhase = ''
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
       between the two. One of the major design goals of psd is a completely
       transparent user experience.
     '';
-    homepage = https://github.com/graysky2/profile-sync-daemon;
+    homepage = "https://github.com/graysky2/profile-sync-daemon";
     downloadPage = https://github.com/graysky2/profile-sync-daemon/releases;
     license = licenses.mit;
     maintainers = [ maintainers.prikhi ];

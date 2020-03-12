@@ -6,7 +6,7 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   name = "rtl8192eu-${kernel.version}-${version}";
-  version = "4.4.1";
+  version = "4.4.1.20190319";
 
   src = fetchFromGitHub {
     owner = "Mange";
@@ -19,7 +19,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  makeFlags = "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build";
+  makeFlags = [ "KSRC=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build" ];
 
   enableParallelBuilding = true;
 

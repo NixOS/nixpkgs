@@ -9,7 +9,7 @@
 , expat
 , fontconfig
 , freetype
-, gdk_pixbuf
+, gdk-pixbuf
 , glib
 , glibc
 , graphite2
@@ -48,9 +48,9 @@
 , debug ? false
 }:
 
-stdenv.mkDerivation rec {
-  name = "flashplayer-standalone-${version}";
-  version = "32.0.0.171";
+stdenv.mkDerivation {
+  pname = "flashplayer-standalone";
+  version = "32.0.0.330";
 
   src = fetchurl {
     url =
@@ -60,9 +60,9 @@ stdenv.mkDerivation rec {
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
       if debug then
-        "0z4fkqbq1s63lpzfkyxllwx2wpizbabr4zim1dn7n59ld75vjxq8"
+        "0wrkg2in4c0bnbifm06m4rdggzs8zbaxwrh6z3mpbf4p3bl6xg84"
       else
-        "0nvgcdmgvgbj6axrh0yzkk437bxwsaxl0mvfkcyyz1hxnq51dvvg";
+        "08qxa3zanlgmn8sn7crz242adx10jqymd4gzf1m0zlczw20ar09c";
   };
 
   nativeBuildInputs = [ unzip ];
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
 
   rpath = lib.makeLibraryPath
     [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk_pixbuf glib
+      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
       glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
       libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
       libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
@@ -97,7 +97,7 @@ stdenv.mkDerivation rec {
     description = "Adobe Flash Player standalone executable";
     homepage = https://www.adobe.com/support/flashplayer/debug_downloads.html;
     license = stdenv.lib.licenses.unfree;
-    maintainers = [];
+    maintainers = with stdenv.lib.maintainers; [ taku0 ];
     platforms = [ "x86_64-linux" ];
     # Application crashed with an unhandled SIGSEGV
     # Not on all systems, though. Video driver problem?

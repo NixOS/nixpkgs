@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, autoreconfHook,
   which }:
 
-stdenv.mkDerivation rec {
-  name = "libbap-${version}";
+stdenv.mkDerivation {
+  pname = "libbap";
   version = "master-2019-04-05";
 
   src = fetchFromGitHub {

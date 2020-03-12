@@ -1,9 +1,6 @@
-{ stdenv, lib, fetchurl, vscode, unzip }:
+{ stdenv, lib, fetchurl, unzip }:
 
 let
-  extendedPkgVersion = lib.getVersion vscode;
-  extendedPkgName = lib.removeSuffix "-${extendedPkgVersion}" vscode.name;
-
   mktplcExtRefToFetchArgs = ext: {
     url = "https://${ext.publisher}.gallery.vsassets.io/_apis/public/gallery/publisher/${ext.publisher}/extension/${ext.name}/${ext.version}/assetbyname/Microsoft.VisualStudio.Services.VSIXPackage";
     sha256 = ext.sha256;
@@ -14,7 +11,6 @@ let
 
   buildVscodeExtension = a@{
     name,
-    namePrefix ? "${extendedPkgName}-extension-",
     src,
     # Same as "Unique Identifier" on the extension's web page.
     # For the moment, only serve as unique extension dir.
@@ -28,16 +24,22 @@ let
   }:
   stdenv.mkDerivation ((removeAttrs a [ "vscodeExtUniqueId" ]) //  {
 
-    name = namePrefix + name;
+    name = "vscode-extension-${name}";
 
     inherit vscodeExtUniqueId;
     inherit configurePhase buildPhase dontPatchELF dontStrip;
 
+    installPrefix = "${vscodeExtUniqueId}";
+
     buildInputs = [ unzip ] ++ buildInputs;
 
     installPhase = ''
-      mkdir -p "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}"
-      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/share/${extendedPkgName}/extensions/${vscodeExtUniqueId}/"
+      runHook preInstall
+
+      mkdir -p "$out/$installPrefix"
+      find . -mindepth 1 -maxdepth 1 | xargs -d'\n' mv -t "$out/$installPrefix/"
+
+      runHook postInstall
     '';
 
   });

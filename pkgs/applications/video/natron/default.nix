@@ -12,7 +12,7 @@ let
   };
   seexpr = stdenv.mkDerivation rec {
     version = "1.0.1";
-    name = "seexpr-${version}";
+    pname = "seexpr";
     src = fetchurl {
       url = "https://github.com/wdas/SeExpr/archive/rel-${version}.tar.gz";
       sha256 = "1ackh0xs4ip7mk34bam8zd4qdymkdk0dgv8x0f2mf6gbyzzyh7lp";

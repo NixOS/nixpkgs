@@ -1,7 +1,7 @@
 { stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
-  name = "fcgi-${version}";
+  pname = "fcgi";
   version = "2.4.0";
 
   src = fetchurl {

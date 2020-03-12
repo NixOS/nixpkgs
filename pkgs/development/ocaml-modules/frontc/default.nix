@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = "PREFIX=$(out) OCAML_SITE=$(OCAMLFIND_DESTDIR)";
+  makeFlags = [ "PREFIX=$(out)" "OCAML_SITE=$(OCAMLFIND_DESTDIR)" ];
 
   postInstall = "cp ${meta_file} $OCAMLFIND_DESTDIR/FrontC/META";
 }

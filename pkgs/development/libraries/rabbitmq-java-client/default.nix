@@ -1,6 +1,6 @@
 { fetchurl, stdenv, ant, jdk, jre, python, makeWrapper }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   name = "rabbitmq-java-client-3.3.4";
 
   src = fetchurl {
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "RabbitMQ Java client library which allows Java code to interface to AMQP servers";
-    homepage = http://www.rabbitmq.com/java-client.html;
+    homepage = https://www.rabbitmq.com/java-client.html;
     license = with licenses; [ mpl11 gpl2 ];
     platforms = platforms.linux;
   };

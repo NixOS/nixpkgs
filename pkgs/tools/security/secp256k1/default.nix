@@ -15,8 +15,8 @@
 
 let inherit (stdenv.lib) optionals; in
 
-stdenv.mkDerivation rec {
-  name = "secp256k1-${version}";
+stdenv.mkDerivation {
+  pname = "secp256k1";
 
   # I can't find any version numbers, so we're just using the date of the
   # last commit.

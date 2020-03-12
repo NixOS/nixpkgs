@@ -3,7 +3,7 @@
 
 buildPythonPackage rec {
   pname = "opentimestamps";
-  version = "0.4.0";
+  version = "0.4.1";
   disabled = (!isPy3k);
 
   # We can't use the pypi source because it doesn't include README.md which is
@@ -12,7 +12,7 @@ buildPythonPackage rec {
     owner = "opentimestamps";
     repo = "python-opentimestamps";
     rev = "python-opentimestamps-v${version}";
-    sha256 = "165rj08hwmbn44ra9n0cj5vfn6p49dqfn5lz2mks962mx19c7l0m";
+    sha256 = "0c45ij8absfgwizq6dfgg81siq3y8605sgg184vazp292w8nqmqr";
   };
 
   # Remove a failing test which expects the test source file to reside in the

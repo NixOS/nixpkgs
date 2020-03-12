@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
 , which
 , buildPackages
 , toolset ? /**/ if stdenv.cc.isClang  then "clang"
@@ -14,6 +14,7 @@
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
 , patches ? []
 , mpi ? null
+, extraB2Args ? []
 
 # Attributes inherit from specific versions
 , version, src
@@ -92,16 +93,17 @@ let
     ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
     "threadapi=win32"
-  ]);
+  ] ++ extraB2Args
+  );
 
 in
 
 stdenv.mkDerivation {
-  name = "boost-${version}";
+  pname = "boost";
 
-  inherit src;
+  inherit src version;
 
-  patchFlags = "";
+  patchFlags = [];
 
   patches = patches
   ++ optional stdenv.isDarwin (
@@ -112,11 +114,10 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://boost.org/;
     description = "Collection of C++ libraries";
-    license = stdenv.lib.licenses.boost;
-
+    license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
-    badPlatforms = stdenv.lib.optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ stdenv.lib.optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
+    badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
+                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
     maintainers = with maintainers; [ peti ];
   };
 
@@ -158,16 +159,22 @@ stdenv.mkDerivation {
     ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
+    runHook preBuild
     ./b2 ${b2Args}
+    runHook postBuild
   '';
 
   installPhase = ''
+    runHook preInstall
+
     # boostbook is needed by some applications
     mkdir -p $dev/share/boostbook
     cp -a tools/boostbook/{xsl,dtd} $dev/share/boostbook/
 
     # Let boost install everything else
     ./b2 ${b2Args} install
+
+    runHook postInstall
   '';
 
   postFixup = ''

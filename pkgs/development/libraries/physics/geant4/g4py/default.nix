@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, cmake, xercesc
+{ stdenv, cmake, xercesc
 
 # The target version of Geant4
 , geant4
@@ -14,16 +14,18 @@ let
   boost_python = boost.override { enablePython = true; inherit python; };
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   inherit (geant4_nomt) version src;
-  name = "g4py-${version}";
-
-  sourceRoot = "geant4.10.04.p01/environments/g4py";
+  pname = "g4py";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ geant4_nomt xercesc boost_python python ];
 
   GEANT4_INSTALL = geant4_nomt;
+
+  postPatch = ''
+    cd environments/g4py
+  '';
 
   preConfigure = ''
     # Fix for boost 1.67+

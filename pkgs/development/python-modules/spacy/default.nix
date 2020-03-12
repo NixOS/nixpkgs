@@ -15,25 +15,24 @@
 , regex
 , cymem
 , pathlib
-, msgpack-python
+, msgpack
 , msgpack-numpy
+, jsonschema
+, blis
+, wasabi
+, srsly
+, catalogue
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.0.18";
+  version = "2.2.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0mybdms7c40jvk8ak180n65anjiyg4c8gkaqwkzicrd1mxq3ngqj";
+    sha256 = "0shfjk6nhm6gzp5p88pz5k7bkg5dr3x9yvandkayqb2vsvkwj50x";
   };
-
-  prePatch = ''
-    substituteInPlace setup.py \
-      --replace "regex==" "regex>=" \
-      --replace "plac<1.0.0,>=0.9.6" "plac>=0.9.6" \
-      --replace "wheel>=0.32.0,<0.33.0" "wheel>=0.32.0"
-  '';
 
   propagatedBuildInputs = [
    numpy
@@ -47,8 +46,14 @@ buildPythonPackage rec {
    requests
    regex
    ftfy
-   msgpack-python
+   msgpack
    msgpack-numpy
+   jsonschema
+   blis
+   wasabi
+   srsly
+   catalogue
+   setuptools
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [
@@ -64,6 +69,6 @@ buildPythonPackage rec {
     description = "Industrial-strength Natural Language Processing (NLP) with Python and Cython";
     homepage = https://github.com/explosion/spaCy;
     license = licenses.mit;
-    maintainers = with maintainers; [ sdll ];
+    maintainers = with maintainers; [ danieldk sdll ];
     };
 }

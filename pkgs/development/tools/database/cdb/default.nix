@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, writeText }:
+{ stdenv, lib, fetchurl, fetchFromGitHub }:
 
 let
   version = "0.75";
@@ -16,7 +16,8 @@ let
   };
 
 in stdenv.mkDerivation {
-  name = "cdb-${version}";
+  pname = "cdb";
+  inherit version;
 
   src = fetchurl {
     url = "https://cr.yp.to/cdb/cdb-${version}.tar.gz";

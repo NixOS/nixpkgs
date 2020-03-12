@@ -3,9 +3,7 @@
 , extraOutputsToInstall ? []
 , postBuild ? ""
 , ignoreCollisions ? false
-, lib
 , requiredPerlModules
-, makeWrapperArgs ? []
 }:
 
 # Create a perl executable that knows about additional packages.
@@ -37,7 +35,7 @@ let
             if [ -f "$prg" ]; then
               rm -f "$out/bin/$prg"
               if [ -x "$prg" ]; then
-                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --set PERL5LIB "$out/${perl.libPrefix}"
+                makeWrapper "$path/bin/$prg" "$out/bin/$prg" --suffix PERL5LIB ':' "$out/${perl.libPrefix}"
               fi
             fi
           done

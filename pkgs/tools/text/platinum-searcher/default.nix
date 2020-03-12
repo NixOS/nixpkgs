@@ -1,7 +1,7 @@
 { stdenv, buildGoPackage, fetchFromGitHub }:
 
 buildGoPackage rec {
-  name = "the_platinum_searcher-${version}";
+  pname = "the_platinum_searcher";
   version = "2.1.5";
   rev = "v${version}";
 

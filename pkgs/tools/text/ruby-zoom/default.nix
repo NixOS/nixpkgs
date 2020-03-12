@@ -1,4 +1,4 @@
-{ lib, bundlerEnv, ruby, stdenv }:
+{ lib, bundlerEnv, ruby, bundlerUpdateScript }:
 
 bundlerEnv {
   pname = "ruby-zoom";
@@ -6,11 +6,13 @@ bundlerEnv {
   inherit ruby;
   gemdir = ./.;
 
+  passthru.updateScript = bundlerUpdateScript "ruby-zoom";
+
   meta = with lib; {
     description = "Quickly open CLI search results in your favorite editor!";
     homepage    = https://gitlab.com/mjwhitta/zoom;
     license     = with licenses; gpl3;
-    maintainers = with stdenv.lib.maintainers; [ vmandela ];
+    maintainers = with maintainers; [ vmandela nicknovitski ];
     platforms   = platforms.unix;
   };
 }

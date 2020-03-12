@@ -1,13 +1,13 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k
+{ lib, buildPythonPackage, fetchPypi
 , httplib2, google_auth, google-auth-httplib2, six, uritemplate, oauth2client }:
 
 buildPythonPackage rec {
   pname = "google-api-python-client";
-  version = "1.7.8";
+  version = "1.7.11";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n18frf0ghmwf5lxmkyski4b5h1rsx93ibq3iw0k3s2wxl371406";
+    sha256 = "137vwb9544vjxkwnbr98x0f4p6ri5i678wxxxgbsx4kdyrs83a58";
   };
 
   # No tests included in archive

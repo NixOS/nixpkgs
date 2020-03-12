@@ -1,6 +1,6 @@
 { stdenv, fetchurl, autoreconfHook }:
 stdenv.mkDerivation rec {
-  name = "sdate-${version}";
+  pname = "sdate";
   version = "0.5";
   src = fetchurl {
     url = "https://github.com/ChristophBerg/sdate/archive/${version}.tar.gz";

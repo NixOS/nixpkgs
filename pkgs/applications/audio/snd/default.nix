@@ -4,11 +4,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "snd-19.3";
+  name = "snd-20.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/snd/${name}.tar.gz";
-    sha256 = "16j3fqyw361wdsr1076f0p3va2y7wdzq1lvr4ijz1ajmbxdlc723";
+    sha256 = "0v7zhavkkbh1bagzy3l08kb235hhdqn28y0m4znkd3k31p4l4dz8";
   };
 
   nativeBuildInputs = [ pkgconfig ];
@@ -20,10 +20,10 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Sound editor";
-    homepage = http://ccrma.stanford.edu/software/snd;
+    homepage = "http://ccrma.stanford.edu/software/snd";
     platforms = stdenv.lib.platforms.linux;
     license = stdenv.lib.licenses.free;
-    maintainers = with stdenv.lib.maintainers; [ fuuzetsu ];
+    maintainers = with stdenv.lib.maintainers; [ ];
   };
 
 

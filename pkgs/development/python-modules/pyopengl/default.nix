@@ -7,17 +7,20 @@
 
 buildPythonPackage rec {
   pname = "pyopengl";
-  version = "3.1.0";
+  version = "3.1.4";
 
   src = fetchPypi {
-    inherit pname version;
-    sha256 = "9b47c5c3a094fa518ca88aeed35ae75834d53e4285512c61879f67a48c94ddaf";
+    pname = "PyOpenGL";
+    inherit version;
+    sha256 = "0bdf5ed600df30c8830455702338902528717c0af85ac5914f1dc5aa0bfa6eee";
   };
 
-  propagatedBuildInputs = [ pkgs.libGLU_combined pkgs.freeglut pillow ];
+  propagatedBuildInputs = [ pkgs.libGLU pkgs.libGL pkgs.freeglut pillow ];
 
   patchPhase = let
     ext = stdenv.hostPlatform.extensions.sharedLibrary; in ''
+    # Theses lines are patching the name of dynamic libraries
+    # so pyopengl can find them at runtime.
     substituteInPlace OpenGL/platform/glx.py \
       --replace "'GL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
       --replace "'GLU'" "'${pkgs.libGLU}/lib/libGLU${ext}'" \
@@ -25,6 +28,16 @@ buildPythonPackage rec {
     substituteInPlace OpenGL/platform/darwin.py \
       --replace "'OpenGL'" "'${pkgs.libGL}/lib/libGL${ext}'" \
       --replace "'GLUT'" "'${pkgs.freeglut}/lib/libglut${ext}'"
+
+    # https://github.com/NixOS/nixpkgs/issues/76822
+    # pyopengl introduced a new "robust" way of loading libraries in 3.1.4.
+    # The later patch of the filepath does not work anymore because
+    # pyopengl takes the "name" (for us: the path) and tries to add a
+    # few suffix during its loading phase.
+    # The following patch put back the "name" (i.e. the path) in the
+    # list of possible files.
+    substituteInPlace OpenGL/platform/ctypesloader.py \
+      --replace "filenames_to_try = []" "filenames_to_try = [name]"
   '';
 
   # Need to fix test runner

@@ -126,21 +126,17 @@ in buildEnv {
       patchCnfLua "./texmfcnf.lua"
 
       mkdir $out/share/texmf-local
-
-      rm updmap.cfg
     )
   '' +
-    # updmap.cfg seems like not needing changes
-
     # now filter hyphenation patterns, in a hacky way ATM
   (let
     pnames = uniqueStrings (map (p: p.pname) pkgList.splitBin.wrong);
     script =
       writeText "hyphens.sed" (
         # pick up the header
-        "1,/^\% from/p;"
+        "1,/^% from/p;"
         # pick up all sections matching packages that we combine
-        + lib.concatMapStrings (pname: "/^\% from ${pname}:$/,/^\%/p;\n") pnames
+        + lib.concatMapStrings (pname: "/^% from ${pname}:$/,/^%/p;\n") pnames
       );
   in ''
     (
@@ -216,7 +212,12 @@ in buildEnv {
     texlinks.sh "$out/bin" && wrapBin
     (perl `type -P fmtutil.pl` --sys --all || true) | grep '^fmtutil' # too verbose
     #texlinks.sh "$out/bin" && wrapBin # do we need to regenerate format links?
-    perl `type -P updmap.pl` --sys --syncwithtrees --force
+
+    # Disable unavailable map files
+    echo y | perl `type -P updmap.pl` --sys --syncwithtrees --force
+    # Regenerate the map files (this is optional)
+    perl `type -P updmap.pl` --sys --force
+
     perl `type -P mktexlsr.pl` ./share/texmf-* # to make sure
   '' +
     # install (wrappers for) scripts, based on a list from upstream texlive

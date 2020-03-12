@@ -1,11 +1,11 @@
 { stdenv, fetchurl, bash, perl }:
 
 stdenv.mkDerivation rec {
-  name = "gecode-${version}";
+  pname = "gecode";
   version = "3.7.3";
 
   src = fetchurl {
-    url = "http://www.gecode.org/download/${name}.tar.gz";
+    url = "http://www.gecode.org/download/${pname}-${version}.tar.gz";
     sha256 = "0k45jas6p3cyldgyir1314ja3174sayn2h2ly3z9b4dl3368pk77";
   };
 

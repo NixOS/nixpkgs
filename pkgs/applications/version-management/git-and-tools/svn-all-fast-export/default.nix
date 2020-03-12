@@ -1,16 +1,17 @@
 { stdenv, fetchFromGitHub, qmake, qtbase, qttools, subversion, apr }:
 
 let
-  version = "1.0.13";
+  version = "1.0.17";
 in
 stdenv.mkDerivation {
-  name = "svn-all-fast-export-${version}";
+  pname = "svn-all-fast-export";
+  inherit version;
 
   src = fetchFromGitHub {
     owner = "svn-all-fast-export";
     repo = "svn2git";
     rev = version;
-    sha256 = "0f1qj0c4cdq46mz54wcy17g7rq1fy2q0bq3sswhr7r5a2s433x4f";
+    sha256 = "13gmrxh4i34scv51h9x38v8jqfjykbbd9w7zzqjnxzvzpzsczg9a";
   };
 
   nativeBuildInputs = [ qmake qttools ];
@@ -22,9 +23,7 @@ stdenv.mkDerivation {
     "SVN_INCLUDE=${subversion.dev}/include/subversion-1"
   ];
 
-  NIX_LDFLAGS = [
-    "-lsvn_fs-1"
-  ];
+  NIX_LDFLAGS = "-lsvn_fs-1";
 
   meta = with stdenv.lib; {
     homepage = https://github.com/svn-all-fast-export/svn2git;

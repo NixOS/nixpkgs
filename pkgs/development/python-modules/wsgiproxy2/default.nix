@@ -24,7 +24,7 @@ buildPythonPackage rec {
     homepage = http://pythonpaste.org/wsgiproxy/;
     description = "HTTP proxying tools for WSGI apps";
     license = licenses.mit;
-    maintainers = with maintainers; [ garbas domenkozar ];
+    maintainers = with maintainers; [ domenkozar ];
   };
 
 }

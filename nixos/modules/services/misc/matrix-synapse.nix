@@ -79,7 +79,11 @@ turn_user_lifetime: "${cfg.turn_user_lifetime}"
 user_creation_max_duration: ${cfg.user_creation_max_duration}
 bcrypt_rounds: ${cfg.bcrypt_rounds}
 allow_guest_access: ${boolToString cfg.allow_guest_access}
-trusted_third_party_id_servers: ${builtins.toJSON cfg.trusted_third_party_id_servers}
+
+account_threepid_delegates:
+  ${optionalString (cfg.account_threepid_delegates.email != null) "email: ${cfg.account_threepid_delegates.email}"}
+  ${optionalString (cfg.account_threepid_delegates.msisdn != null) "msisdn: ${cfg.account_threepid_delegates.msisdn}"}
+
 room_invite_state_types: ${builtins.toJSON cfg.room_invite_state_types}
 ${optionalString (cfg.macaroon_secret_key != null) ''
   macaroon_secret_key: "${cfg.macaroon_secret_key}"
@@ -102,6 +106,7 @@ perspectives:
     '') cfg.servers)}
     }
   }
+redaction_retention_period: ${toString cfg.redaction_retention_period}
 app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
 
 ${cfg.extraConfig}
@@ -374,7 +379,7 @@ in {
             user = cfg.database_user;
             database = cfg.database_name;
           };
-        }."${cfg.database_type}";
+        }.${cfg.database_type};
         description = ''
           Arguments to pass to the engine.
         '';
@@ -402,6 +407,9 @@ in {
           "192.168.0.0/16"
           "100.64.0.0/10"
           "169.254.0.0/16"
+          "::1/128"
+          "fe80::/64"
+          "fc00::/7"
         ];
         description = ''
           List of IP address CIDR ranges that the URL preview spider is denied
@@ -552,14 +560,18 @@ in {
           accessible to anonymous users.
         '';
       };
-      trusted_third_party_id_servers = mkOption {
-        type = types.listOf types.str;
-        default = [
-          "matrix.org"
-          "vector.im"
-        ];
+      account_threepid_delegates.email = mkOption {
+        type = types.nullOr types.str;
+        default = null;
         description = ''
-          The list of identity servers trusted to verify third party identifiers by this server.
+          Delegate email sending to https://example.org
+        '';
+      };
+      account_threepid_delegates.msisdn = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Delegate SMS sending to this local process (https://localhost:8090)
         '';
       };
       room_invite_state_types = mkOption {
@@ -600,6 +612,13 @@ in {
           A list of application service config file to use
         '';
       };
+      redaction_retention_period = mkOption {
+        type = types.int;
+        default = 7;
+        description = ''
+          How long to keep redacted events in unredacted form in the database.
+        '';
+      };
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -638,57 +657,42 @@ in {
   };
 
   config = mkIf cfg.enable {
-    users.users = [
-      { name = "matrix-synapse";
+    users.users.matrix-synapse = { 
         group = "matrix-synapse";
         home = cfg.dataDir;
         createHome = true;
         shell = "${pkgs.bash}/bin/bash";
         uid = config.ids.uids.matrix-synapse;
-      } ];
+      };
 
-    users.groups = [
-      { name = "matrix-synapse";
-        gid = config.ids.gids.matrix-synapse;
-      } ];
+    users.groups.matrix-synapse = {
+      gid = config.ids.gids.matrix-synapse;
+    };
 
-    services.postgresql.enable = mkIf usePostgresql (mkDefault true);
+    services.postgresql = mkIf (usePostgresql && cfg.create_local_database) {
+      enable = mkDefault true;
+      ensureDatabases = [ cfg.database_name ];
+      ensureUsers = [{
+        name = cfg.database_user;
+        ensurePermissions = { "DATABASE \"${cfg.database_name}\"" = "ALL PRIVILEGES"; };
+      }];
+    };
 
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" "postgresql.service" ];
+      after = [ "network.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service" ;
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
           --config-path ${configFile} \
           --keys-directory ${cfg.dataDir} \
           --generate-keys
-      '' + optionalString (usePostgresql && cfg.create_local_database) ''
-        if ! test -e "${cfg.dataDir}/db-created"; then
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createuser \
-            --login \
-            --no-createdb \
-            --no-createrole \
-            --encrypted \
-            ${cfg.database_user}
-          ${pkgs.sudo}/bin/sudo -u ${pg.superUser} \
-            ${pg.package}/bin/createdb \
-            --owner=${cfg.database_user} \
-            --encoding=UTF8 \
-            --lc-collate=C \
-            --lc-ctype=C \
-            --template=template0 \
-            ${cfg.database_name}
-          touch "${cfg.dataDir}/db-created"
-        fi
       '';
       serviceConfig = {
-        Type = "simple";
+        Type = "notify";
         User = "matrix-synapse";
         Group = "matrix-synapse";
         WorkingDirectory = cfg.dataDir;
-        PermissionsStartOnly = true;
         ExecStart = ''
           ${cfg.package}/bin/homeserver \
             ${ concatMapStringsSep "\n  " (x: "--config-path ${x} \\") ([ configFile ] ++ cfg.extraConfigFiles) }
@@ -699,4 +703,12 @@ in {
       };
     };
   };
+
+  imports = [
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "trusted_third_party_id_servers" ] ''
+      The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
+      as the behavior is now obsolete.
+    '')
+  ];
+
 }

@@ -41,31 +41,31 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-	description = "Whether to enable the uhub ADC hub.";
+        description = "Whether to enable the uhub ADC hub.";
       };
 
       port = mkOption {
         type = types.int;
         default = 1511;
-	description = "TCP port to bind the hub to.";
+        description = "TCP port to bind the hub to.";
       };
 
       address = mkOption {
-        type = types.string;
+        type = types.str;
         default = "any";
-	description = "Address to bind the hub to.";
+        description = "Address to bind the hub to.";
       };
 
       enableTLS = mkOption {
         type = types.bool;
         default = false;
-	description = "Whether to enable TLS support.";
+        description = "Whether to enable TLS support.";
       };
 
       hubConfig = mkOption {
         type = types.lines;
         default = "";
-	description = "Contents of uhub configuration file.";
+        description = "Contents of uhub configuration file.";
       };
 
       aclConfig = mkOption {
@@ -77,13 +77,13 @@ in
       plugins = {
 
         authSqlite = {
-	  enable = mkOption {
+          enable = mkOption {
             type = types.bool;
             default = false;
             description = "Whether to enable the Sqlite authentication database plugin";
-	  };
+          };
           file = mkOption {
-            type = types.string;
+            type = types.path;
             example = "/var/db/uhub-users";
             description = "Path to user database. Use the uhub-passwd utility to create the database and add/remove users.";
           };
@@ -96,7 +96,7 @@ in
             description = "Whether to enable the logging plugin.";
           };
           file = mkOption {
-            type = types.string;
+            type = types.str;
             default = "";
             description = "Path of log file.";
           };
@@ -117,7 +117,7 @@ in
             default = "";
             type = types.lines;
             description = ''
-              Welcome message displayed to clients after connecting 
+              Welcome message displayed to clients after connecting
               and with the <literal>!motd</literal> command.
             '';
           };
@@ -161,14 +161,8 @@ in
   config = mkIf cfg.enable {
 
     users = {
-      users = singleton {
-        name = "uhub";
-        uid = config.ids.uids.uhub;
-      };
-      groups = singleton {
-        name = "uhub";
-        gid = config.ids.gids.uhub;
-      };
+      users.uhub.uid = config.ids.uids.uhub;
+      groups.uhub.gid = config.ids.gids.uhub;
     };
 
     systemd.services.uhub = {
