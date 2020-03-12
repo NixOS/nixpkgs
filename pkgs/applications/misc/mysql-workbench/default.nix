@@ -29,6 +29,7 @@
 , libsigcxx
 , libX11
 , openssl
+, rapidjson
 , proj
 , cairo
 , libxkbcommon
@@ -44,11 +45,11 @@ let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.15";
+  version = "8.0.19";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0ca93azasya5xiw6j2map8drmxf445qqydpvrb512kjfqdiv67x6";
+    sha256 = "unrszSK+tKcARSHxRSAAos+jDtYxdDcSnFENixaDJsw=";
   };
 
   patches = [
@@ -66,6 +67,13 @@ in stdenv.mkDerivation rec {
       rm = "${coreutils}/bin/rm";
       rmdir = "${coreutils}/bin/rmdir";
       sudo = "${sudo}/bin/sudo";
+    })
+
+    # Fix swig not being able to find headers
+    # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
+    (substituteAll {
+      src = ./fix-swig-build.patch;
+      cairoDev = "${cairo.dev}";
     })
   ];
 
@@ -98,6 +106,7 @@ in stdenv.mkDerivation rec {
     boost
     libssh
     openssl
+    rapidjson
     libiodbc
     pcre
     cairo
@@ -133,6 +142,10 @@ in stdenv.mkDerivation rec {
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
     "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
+    # mysql-workbench 8.0.19 depends on libmysqlconnectorcpp 1.1.8.
+    # Newer versions of connector still provide the legacy library when enabled
+    # but the headers are in a different location.
+    "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
   # There is already an executable and a wrapper in bindir
