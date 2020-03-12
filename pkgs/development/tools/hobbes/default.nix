@@ -35,5 +35,6 @@ stdenv.mkDerivation {
     license = licenses.asl20;
     maintainers = [ maintainers.thmzlt ];
     platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    broken = stdenv.isDarwin;
   };
 }
