@@ -48,7 +48,8 @@ in rec {
       "nixos.channel"
       "nixos.dummy.x86_64-linux"
       "nixos.iso_minimal.aarch64-linux"
-      "nixos.iso_minimal.i686-linux"
+      # https://github.com/NixOS/nixpkgs/issues/82435
+      # "nixos.iso_minimal.i686-linux"
       "nixos.iso_minimal.x86_64-linux"
       "nixos.iso_plasma5.x86_64-linux"
       "nixos.manual.x86_64-linux"
