@@ -2399,6 +2399,8 @@ in {
 
   pytest-forked = callPackage ../development/python-modules/pytest-forked { };
 
+  pytest-metadata = callPackage ../development/python-modules/pytest-metadata { };
+
   pytest-rerunfailures = callPackage ../development/python-modules/pytest-rerunfailures { };
 
   pytest-relaxed = callPackage ../development/python-modules/pytest-relaxed { };
