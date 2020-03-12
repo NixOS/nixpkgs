@@ -14,7 +14,7 @@
 
 let
   apparmor-series = "2.13";
-  apparmor-patchver = "3";
+  apparmor-patchver = "4";
   apparmor-version = apparmor-series + "." + apparmor-patchver;
 
   apparmor-meta = component: with stdenv.lib; {
@@ -27,7 +27,7 @@ let
 
   apparmor-sources = fetchurl {
     url = "https://launchpad.net/apparmor/${apparmor-series}/${apparmor-version}/+download/apparmor-${apparmor-version}.tar.gz";
-    sha256 = "0fbnk9fzjsffwcijsv2wwykmybvfdckpqk99qlib3kb89him6w16";
+    sha256 = "03nislxccnbxld89giak2s8xa4mdbwscfxbdwhmw5qpvgz08dgwh";
   };
 
   prePatchCommon = ''
@@ -49,13 +49,6 @@ let
       sha256 = "1m4dx901biqgnr4w4wz8a2z9r9dxyw7wv6m6mqglqwf2lxinqmp4";
     })
     # (alpine patches {1,4,5,6,8} are needed for apparmor 2.11, but not 2.12)
-    ] ++ [
-      ./cross.patch
-      # Support Python 3.8
-      (fetchpatch {
-        url = https://gitlab.com/apparmor/apparmor/commit/ccbf1e0bf1bf5c3bbab47029fbbc5415ef73bac1.patch;
-        sha256 = "0kfzc0wyjybj38n10yvwakaaqvglalzigd3kk7gcrbp1xdn70pq2";
-      })
     ];
 
   # Set to `true` after the next FIXME gets fixed or this gets some
