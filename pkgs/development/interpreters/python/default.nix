@@ -143,6 +143,7 @@ in {
     stripTkinter = true;
     rebuildBytecode = false;
     stripBytecode = true;
+    includeSiteCustomize = false;
   }).overrideAttrs(old: {
     pname = "python3-minimal";
     meta = old.meta // {
