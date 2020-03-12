@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.12.c";
+  version = "2.12.c.1";
   pname = "i3lock-color";
 
   src = fetchFromGitHub {
     owner = "PandorasFox";
     repo = "i3lock-color";
     rev = version;
-    sha256 = "08fhnchf187b73h52xgzb86g6byzxz085zs9galsvl687g5zxk34";
+    sha256 = "1q09cfgkikqbrkk1kljg8dsgbs5nacixhdqaww18h94hmlnbbssc";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -51,7 +51,7 @@ stdenv.mkDerivation rec {
         - clock: time/date with configurable format
         - keyboard-layout
     '';
-    homepage = https://github.com/PandorasFox/i3lock-color;
+    homepage = "https://github.com/PandorasFox/i3lock-color";
     maintainers = with maintainers; [ malyn ];
     license = licenses.bsd3;
 
