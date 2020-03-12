@@ -175,6 +175,8 @@ def update_gitaly():
             f.write(repo.get_file(fn, f"v{gitaly_server_version}"))
 
     subprocess.check_output(['bundix'], cwd=gitaly_dir)
+
+    os.environ['GOROOT'] = ""
     subprocess.check_output(['vgo2nix'], cwd=gitaly_dir)
 
     for fn in ['go.mod', 'go.sum']:
@@ -197,6 +199,7 @@ def update_gitlab_shell():
         with open(gitlab_shell_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, f"v{gitlab_shell_version}"))
 
+    os.environ['GOROOT'] = ""
     subprocess.check_output(['vgo2nix'], cwd=gitlab_shell_dir)
 
     for fn in ['go.mod', 'go.sum']:
@@ -217,6 +220,7 @@ def update_gitlab_workhorse():
         with open(gitlab_workhorse_dir / fn, 'w') as f:
             f.write(repo.get_file(fn, f"v{gitlab_workhorse_version}"))
 
+    os.environ['GOROOT'] = ""
     subprocess.check_output(['vgo2nix'], cwd=gitlab_workhorse_dir)
 
     for fn in ['go.mod', 'go.sum']:
