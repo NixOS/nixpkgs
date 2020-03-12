@@ -6,23 +6,27 @@ let
 
   gid = config.ids.gids.mediatomb;
   cfg = config.services.mediatomb;
+  name = cfg.package.pname;
+  pkg = cfg.package;
 
   mtConf = pkgs.writeText "config.xml" ''
   <?xml version="1.0" encoding="UTF-8"?>
   <config version="2" xmlns="http://mediatomb.cc/config/2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://mediatomb.cc/config/2 http://mediatomb.cc/config/2.xsd">
+    <interface>${cfg.interface}</interface>
     <server>
       <ui enabled="yes" show-tooltips="yes">
         <accounts enabled="no" session-timeout="30">
-          <account user="mediatomb" password="mediatomb"/>
+          <account user="${name}" password="${name}"/>
         </accounts>
       </ui>
       <name>${cfg.serverName}</name>
       <udn>uuid:${cfg.uuid}</udn>
       <home>${cfg.dataDir}</home>
-      <webroot>${pkgs.mediatomb}/share/mediatomb/web</webroot>
+      <interface>${cfg.interface}</interface>
+      <webroot>${pkg}/share/${name}/web</webroot>
       <storage>
         <sqlite3 enabled="yes">
-          <database-file>mediatomb.db</database-file>
+          <database-file>${name}.db</database-file>
         </sqlite3>
       </storage>
       <protocolInfo extend="${if cfg.ps3Support then "yes" else "no"}"/>
@@ -48,10 +52,10 @@ let
     </server>
     <import hidden-files="no">
       <scripting script-charset="UTF-8">
-        <common-script>${pkgs.mediatomb}/share/mediatomb/js/common.js</common-script>
-        <playlist-script>${pkgs.mediatomb}/share/mediatomb/js/playlists.js</playlist-script>
+        <common-script>${pkg}/share/${name}/js/common.js</common-script>
+        <playlist-script>${pkg}/share/${name}/js/playlists.js</playlist-script>
         <virtual-layout type="builtin">
-          <import-script>${pkgs.mediatomb}/share/mediatomb/js/import.js</import-script>
+          <import-script>${pkg}/share/${name}/js/import.js</import-script>
         </virtual-layout>
       </scripting>
       <mappings>
@@ -164,15 +168,24 @@ in {
 
       serverName = mkOption {
         type = types.str;
-        default = "mediatomb";
+        default = "Gerbera (Mediatomb)";
         description = ''
           How to identify the server on the network.
         '';
       };
 
+      package = mkOption {
+        type = types.package;
+        example = literalExample "pkgs.mediatomb";
+        default = pkgs.gerbera;
+        description = ''
+          Underlying package to be used with the module (default: pkgs.gerbera).
+        '';
+      };
+
       ps3Support = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           Whether to enable ps3 specific tweaks.
           WARNING: incompatible with DSM 320 support.
@@ -206,20 +219,20 @@ in {
 
       dataDir = mkOption {
         type = types.path;
-        default = "/var/lib/mediatomb";
+        default = "/var/lib/" + name;
         description = ''
-          The directory where mediatomb stores its state, data, etc.
+          The directory where ${name} stores its state, data, etc.
         '';
       };
 
       user = mkOption {
         default = "mediatomb";
-        description = "User account under which mediatomb runs.";
+        description = "User account under which ${name} runs.";
       };
 
       group = mkOption {
         default = "mediatomb";
-        description = "Group account under which mediatomb runs.";
+        description = "Group account under which ${name} runs.";
       };
 
       port = mkOption {
@@ -247,7 +260,7 @@ in {
         type = types.bool;
         default = false;
         description = ''
-          Allow mediatomb to create and use its own config file inside ${cfg.dataDir}.
+          Allow ${name} to create and use its own config file inside ${cfg.dataDir}.
         '';
       };
     };
@@ -257,12 +270,12 @@ in {
   ###### implementation
 
   config = mkIf cfg.enable {
-    systemd.services.mediatomb = {
-      description = "MediaTomb media Server";
+    systemd.services."${name}"= {
+      description = "${cfg.serverName} media Server";
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
-      path = [ pkgs.mediatomb ];
-      serviceConfig.ExecStart = "${pkgs.mediatomb}/bin/mediatomb -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
+      path = [ pkg ];
+      serviceConfig.ExecStart = "${pkg}/bin/${name} -p ${toString cfg.port} ${if cfg.interface!="" then "-e ${cfg.interface}" else ""} ${if cfg.customCfg then "" else "-c ${mtConf}"} -m ${cfg.dataDir}";
       serviceConfig.User = "${cfg.user}";
     };
 
@@ -280,7 +293,7 @@ in {
       };
     };
 
-    networking.firewall = {
+    networking.firewall.interfaces."${cfg.interface}" = {
       allowedUDPPorts = [ 1900 cfg.port ];
       allowedTCPPorts = [ cfg.port ];
     };
