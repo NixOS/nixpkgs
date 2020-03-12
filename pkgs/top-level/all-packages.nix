@@ -1910,6 +1910,8 @@ in
 
   jellyfin = callPackage ../servers/jellyfin { ffmpeg = ffmpeg_4; };
 
+  jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
+
   jotta-cli = callPackage ../applications/misc/jotta-cli { };
 
   jwt-cli = callPackage ../tools/security/jwt-cli {
@@ -3078,6 +3080,8 @@ in
 
   zeek = callPackage ../applications/networking/ids/zeek { };
 
+  zoxide = callPackage ../tools/misc/zoxide { };
+
   zzuf = callPackage ../tools/security/zzuf { };
 
   ### DEVELOPMENT / EMSCRIPTEN
@@ -3498,7 +3502,7 @@ in
   fuse-7z-ng = callPackage ../tools/filesystems/fuse-7z-ng { };
 
   fuse-overlayfs = callPackage ../tools/filesystems/fuse-overlayfs {};
-  
+
   fusee-interfacee-tk = callPackage ../applications/misc/fusee-interfacee-tk { };
 
   fusee-launcher = callPackage ../development/tools/fusee-launcher { };
@@ -8014,6 +8018,8 @@ in
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
+  flyctl = callPackage ../development/web/flyctl { };
+
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
@@ -8906,7 +8912,6 @@ in
   };
 
   maturin = callPackage ../development/tools/rust/maturin { };
-  rainicorn = callPackage ../development/tools/rust/rainicorn { };
   inherit (rustPackages) rls;
   rustfmt = rustPackages.rustfmt;
   rustracer = callPackage ../development/tools/rust/racer {
@@ -9289,8 +9294,8 @@ in
 
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
-  php = php73;
-  phpPackages = php73Packages;
+  php = php74;
+  phpPackages = php74Packages;
 
   php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php72;
@@ -9304,7 +9309,7 @@ in
     php = php74;
   });
 
-  phpPackages-unit = php72Packages-unit;
+  phpPackages-unit = php74Packages-unit;
 
   php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
     php = php72-unit;
@@ -9325,7 +9330,7 @@ in
     php73
     php72;
 
-  php-embed = php73-embed;
+  php-embed = php74-embed;
 
   php72-embed = php72.override {
     config.php.embed = true;
@@ -9342,7 +9347,7 @@ in
     config.php.apxs2 = false;
   };
 
-  php-unit = php73-unit;
+  php-unit = php74-unit;
 
   php72-unit = php72.override {
     config.php.embed = true;
@@ -14568,6 +14573,8 @@ in
 
   tidyp = callPackage ../development/libraries/tidyp { };
 
+  tinycdb = callPackage ../development/libraries/tinycdb { };
+
   tinyxml = tinyxml2;
 
   tinyxml2 = callPackage ../development/libraries/tinyxml/2.6.2.nix { };
@@ -16705,6 +16712,8 @@ in
 
     ply = callPackage ../os-specific/linux/ply { };
 
+    r8125 = callPackage ../os-specific/linux/r8125 { };
+
     r8168 = callPackage ../os-specific/linux/r8168 { };
 
     rtl8192eu = callPackage ../os-specific/linux/rtl8192eu { };
@@ -18430,8 +18439,6 @@ in
     ffmpeg = ffmpeg_4;
     glew = glew110;
   };
-
-  bitcoinarmory = callPackage ../applications/misc/bitcoinarmory { pythonPackages = python2Packages; };
 
   bitkeeper = callPackage ../applications/version-management/bitkeeper {
     gperf = gperf_3_0;
@@ -21393,6 +21400,8 @@ in
 
   ries = callPackage ../applications/science/math/ries { };
 
+  ripcord = qt5.callPackage ../applications/networking/instant-messengers/ripcord { };
+
   ripser = callPackage ../applications/science/math/ripser { };
 
   rkt = callPackage ../applications/virtualization/rkt { };
@@ -21609,6 +21618,10 @@ in
   };
 
   lightdm-mini-greeter = callPackage ../applications/display-managers/lightdm-mini-greeter { };
+
+  lightdm-tiny-greeter = callPackage ../applications/display-managers/lightdm-tiny-greeter {
+    conf = config.lightdm-tiny-greeter.conf or "";
+  };
 
   ly = callPackage ../applications/display-managers/ly { };
 
@@ -23871,6 +23884,7 @@ in
     mpris-indicator-button = callPackage ../desktops/gnome-3/extensions/mpris-indicator-button { };
     night-theme-switcher = callPackage ../desktops/gnome-3/extensions/night-theme-switcher { };
     no-title-bar = callPackage ../desktops/gnome-3/extensions/no-title-bar { };
+    paperwm = callPackage ../desktops/gnome-3/extensions/paperwm { };
     pidgin-im-integration = callPackage ../desktops/gnome-3/extensions/pidgin-im-integration { };
     remove-dropdown-arrows = callPackage ../desktops/gnome-3/extensions/remove-dropdown-arrows { };
     sound-output-device-chooser = callPackage ../desktops/gnome-3/extensions/sound-output-device-chooser { };
@@ -26166,4 +26180,6 @@ in
   go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
 
   fluxboxlauncher = callPackage ../applications/misc/fluxboxlauncher {};
+
+  btcdeb = callPackage ../applications/blockchains/btcdeb {};
 }

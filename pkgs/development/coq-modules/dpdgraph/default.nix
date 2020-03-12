@@ -1,6 +1,18 @@
 { stdenv, fetchFromGitHub, autoreconfHook, coq }:
 
 let params = {
+  "8.11" = {
+    version = "0.6.7";
+    sha256 = "01vpi7scvkl4ls1z2k2x9zd65wflzb667idj759859hlz3ps9z09";
+  };
+  "8.10" = {
+    version = "0.6.6";
+    sha256 = "1gjrm5zjzw4cisiwdr5b3iqa7s4cssa220xr0k96rwgk61rcjd8w";
+  };
+  "8.9" = {
+    version = "0.6.5";
+    sha256 = "1f34z24yg05b1096gqv36jr3vffkcjkf9qncii3pzhhvagxd0w2f";
+  };
   "8.8" = {
     version = "0.6.3";
     rev = "0acbd0a594c7e927574d5f212cc73a486b5305d2";
@@ -18,7 +30,6 @@ let params = {
   };
   "8.5" = {
     version = "0.6";
-    rev = "v0.6";
     sha256 = "0qvar8gfbrcs9fmvkph5asqz4l5fi63caykx3bsn8zf0xllkwv0n";
   };
 };
@@ -30,7 +41,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "Karmaki";
     repo = "coq-dpdgraph";
-    inherit (param) rev sha256;
+    rev = param.rev or "v${param.version}";
+    inherit (param) sha256;
   };
 
   nativeBuildInputs = [ autoreconfHook ];

@@ -664,6 +664,8 @@ let
 
     doCheck = true;
     checkTarget = "test";
+
+    zendExtension = true;
   };
 
   yaml = buildPecl {

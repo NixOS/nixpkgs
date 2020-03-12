@@ -12,11 +12,11 @@
 
 (rec {
   name = "guile-${version}";
-  version = "2.2.6";
+  version = "2.2.7";
 
   src = fetchurl {
     url = "mirror://gnu/guile/${name}.tar.xz";
-    sha256 = "1269ymxm56j1z1lvq1y42rm961f2n7rinm3k6l00p9k52hrpcddk";
+    sha256 = "013mydzhfswqci6xmyc1ajzd59pfbdak15i0b090nhr9bzm7dxyd";
   };
 
   outputs = [ "out" "dev" "info" ];
@@ -93,7 +93,7 @@
 
   meta = {
     description = "Embeddable Scheme implementation";
-    homepage    = https://www.gnu.org/software/guile/;
+    homepage    = "https://www.gnu.org/software/guile/";
     license     = stdenv.lib.licenses.lgpl3Plus;
     maintainers = with stdenv.lib.maintainers; [ ludo lovek323 vrthra ];
     platforms   = stdenv.lib.platforms.all;

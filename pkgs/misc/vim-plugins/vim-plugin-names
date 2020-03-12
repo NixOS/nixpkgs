@@ -21,6 +21,7 @@ ayu-theme/ayu-vim
 bazelbuild/vim-bazel
 bbchung/clighter8
 benmills/vimux
+benizi/vim-automkdir
 bhurlow/vim-parinfer
 bitc/vim-hdevtools
 bkad/camelcasemotion
