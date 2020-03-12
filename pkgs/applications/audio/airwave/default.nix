@@ -41,7 +41,7 @@ multiStdenv.mkDerivation {
 
   src = airwave-src;
 
-  nativeBuildInputs = [ cmake makeWrapper ];
+  nativeBuildInputs = [ cmake makeWrapper qt5.wrapQtAppsHook ];
 
   buildInputs = [ file libX11 qt5.qtbase wine-xembed ];
 
