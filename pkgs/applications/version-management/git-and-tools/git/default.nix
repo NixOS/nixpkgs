@@ -80,6 +80,8 @@ stdenv.mkDerivation {
   configureFlags = stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "ac_cv_fread_reads_directories=yes"
     "ac_cv_snprintf_returns_bogus=no"
+    "ac_cv_iconv_omits_bom=no"
+    "ac_cv_prog_CURL_CONFIG=${curl.dev}/bin/curl-config"
   ];
 
   preBuild = ''
