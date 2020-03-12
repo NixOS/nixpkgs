@@ -8825,17 +8825,17 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_41_0 = callPackage ../development/compilers/rust/1_41_0.nix {
+  rust_1_42_0 = callPackage ../development/compilers/rust/1_42_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
   rust_1_38_0 = callPackage ../development/compilers/rust/1_38_0.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_41_0;
+  rust = rust_1_42_0;
 
-  rustPackages_1_41_0 = rust_1_41_0.packages.stable;
+  rustPackages_1_42_0 = rust_1_42_0.packages.stable;
   rustPackages_1_38_0 = rust_1_38_0.packages.stable;
-  rustPackages = rustPackages_1_41_0;
+  rustPackages = rustPackages_1_42_0;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
   inherit (rust) makeRustPlatform;
