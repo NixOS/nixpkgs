@@ -867,6 +867,9 @@ in
 
   cue = callPackage ../development/tools/cue { };
 
+  deltachat-electron = callPackage
+    ../applications/networking/instant-messengers/deltachat-electron { };
+
   deskew = callPackage ../applications/graphics/deskew { };
 
   detect-secrets = python3Packages.callPackage ../development/tools/detect-secrets { };
