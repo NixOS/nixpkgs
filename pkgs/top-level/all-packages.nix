@@ -15387,6 +15387,8 @@ in
 
   gatling = callPackage ../servers/http/gatling { };
 
+  gerbera = callPackage ../servers/gerbera { };
+
   glabels = callPackage ../applications/graphics/glabels { };
 
   nats-server = callPackage ../servers/nats-server { };
