@@ -11,17 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
-  version = "2.5.0";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "nabijaczleweli";
     repo = pname;
     rev = "v${version}";
-    sha256 = "143aczay7i3zbhbvv4cjf6hns5w8j52rfdaq8ff0r8v3qghd2972";
+    sha256 = "1jyfv8aa0gp67pvv8l2vkqq4j9rgjl4rq1wn4nqxb44gmvkg15l3";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "0mxc752hmd7r29camq4f4qzwx0w008rqlq07j2r26z4ygvlrkc3a";
+  cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v3.0.0.patch ];
+  cargoSha256 = "034v1ql5k3n3rgi3aqszkybvv3vc80v263c9nlwxcwbswsh9jpp1";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libgit2 libssh2 openssl pkg-config zlib ]

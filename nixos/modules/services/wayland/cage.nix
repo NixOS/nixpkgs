@@ -51,6 +51,7 @@ in {
       conflicts = [ "getty@tty1.service" ];
 
       restartIfChanged = false;
+      unitConfig.ConditionPathExists = "/dev/tty1";
       serviceConfig = {
         ExecStart = ''
           ${pkgs.cage}/bin/cage \
@@ -59,7 +60,6 @@ in {
         '';
         User = cfg.user;
 
-        ConditionPathExists = "/dev/tty1";
         IgnoreSIGPIPE = "no";
 
         # Log this user with utmp, letting it show up with commands 'w' and

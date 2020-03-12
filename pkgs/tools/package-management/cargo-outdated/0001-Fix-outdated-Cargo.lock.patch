@@ -1,0 +1,25 @@
+From fd0ccac1b3d4f78faa4c642dc2a413dfb54200fd Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Wed, 11 Mar 2020 22:27:23 +0100
+Subject: [PATCH] Fix outdated Cargo.lock
+
+---
+ Cargo.lock | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 8458954..8083e81 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -171,7 +171,7 @@ dependencies = [
+ 
+ [[package]]
+ name = "cargo-outdated"
+-version = "0.9.6"
++version = "0.9.7"
+ dependencies = [
+  "cargo",
+  "docopt",
+-- 
+2.25.0
+

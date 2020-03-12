@@ -2,7 +2,7 @@
 
 buildPythonPackage rec {
   pname = "stripe";
-  version = "2.42.0";
+  version = "2.43.0";
 
   # Tests require network connectivity and there's no easy way to disable
   # them. ~ C.
@@ -10,7 +10,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1vrs0mydj2j789slzfv5413qxa067zi7p34h2p63612gm3vdrcl9";
+    sha256 = "0jikvcapg2xp3w824wz0wn74mx91nl3vmd92a10il3gli2p4wcnp";
   };
 
   propagatedBuildInputs = [ requests ];
@@ -19,7 +19,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Stripe Python bindings";
-    homepage = https://github.com/stripe/stripe-python;
+    homepage = "https://github.com/stripe/stripe-python";
     license = licenses.mit;
   };
 }

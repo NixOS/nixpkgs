@@ -2,11 +2,11 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "borgbackup";
-  version = "1.1.10";
+  version = "1.1.11";
 
   src = python3.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1pp70p4n5kamvcbl4d8021ggrxhyykmg9isjg4yd3wags8b19d7g";
+    sha256 = "190gjzx83b6p64nqj840x382dgz9gfv0gm7wj585lnkrpa90j29n";
   };
 
   nativeBuildInputs = with python3.pkgs; [
@@ -58,7 +58,7 @@ python3.pkgs.buildPythonApplication rec {
     HOME=$(mktemp -d) py.test --pyargs borg.testsuite
   '';
 
-  # 63 failures, needs pytest-benchmark
+  # 64 failures, needs pytest-benchmark
   doCheck = false;
 
   meta = with stdenv.lib; {
