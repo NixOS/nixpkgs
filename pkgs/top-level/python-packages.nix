@@ -3325,8 +3325,6 @@ in {
 
   django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
-  django_1_8 = callPackage ../development/python-modules/django/1_8.nix { };
-
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
   django-anymail = callPackage ../development/python-modules/django-anymail {};
@@ -3406,20 +3404,6 @@ in {
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
-
-  django_tagging_0_4_3 = if
-       self.django.version != "1.8.19"
-  then throw "django_tagging_0_4_3 should be build with django_1_8"
-  else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
-    pname = "django-tagging";
-    version = "0.4.3";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
-    };
-    propagatedBuildInputs = with self; [ django ];
-  });
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
 
@@ -6223,8 +6207,6 @@ in {
 
   waitress = callPackage ../development/python-modules/waitress { };
 
-  waitress-django = callPackage ../development/python-modules/waitress-django { };
-
   web = callPackage ../development/python-modules/web { };
 
   webob = callPackage ../development/python-modules/webob { };
@@ -6373,8 +6355,6 @@ in {
   versiontools = callPackage ../development/python-modules/versiontools { };
 
   veryprettytable = callPackage ../development/python-modules/veryprettytable { };
-
-  graphite-web = callPackage ../development/python-modules/graphite-web { };
 
   graphite_api = callPackage ../development/python-modules/graphite-api { };
 

@@ -112,7 +112,6 @@ in
   gocd-server = handleTest ./gocd-server.nix {};
   google-oslogin = handleTest ./google-oslogin {};
   grafana = handleTest ./grafana.nix {};
-  graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
   gvisor = handleTest ./gvisor.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
