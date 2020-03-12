@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
       sha256 = "0h2q71mcz3gvlrbfkqcgla74jdg73hvzcrwr4max2ckpxx8x9207";
     })
     (fetchpatch {
-      url = "https://sources.debian.org/data/main/q/qemu/1:3.1+dfsg-8+deb10u2/debian/patches/qemu-bridge-helper-restrict-interface-name-to-IFNAMSIZ-CVE-2019-13164.patch";
+      url = "https://sources.debian.org/data/main/q/qemu/1:3.1+dfsg-8+deb10u3/debian/patches/qemu-bridge-helper-restrict-interface-name-to-IFNAMSIZ-CVE-2019-13164.patch";
       sha256 = "1ypcdlpg3nap0kg9xkrgrqw33j5ah4j7l4i2cp6d5ap8vrw9nn3l";
     })
   ] ++ optional nixosTestRunner ./force-uid0-on-9p.patch

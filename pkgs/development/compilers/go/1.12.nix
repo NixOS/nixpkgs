@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.9";
+  version = "1.12.17";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1z32imbwmpkzgyh5c3vi7rbvzbq94xjk5qi2xm9sccj7kknmc3mb";
+    sha256 = "09cbl90maxry713wd18jdqrms3ivbvcm472csnxc78rsqhc851yy";
   };
 
   # perl is used for testing go vet
@@ -141,8 +141,11 @@ stdenv.mkDerivation rec {
     ./go-1.9-skip-flaky-20072.patch
     ./skip-external-network-tests.patch
     ./skip-nohup-tests.patch
+  ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
-    ./skip-test-extra-files-on-386.patch
+    (if stdenv.isAarch32
+    then ./skip-test-extra-files-on-aarch32.patch
+    else ./skip-test-extra-files-on-386.patch)
   ];
 
   postPatch = ''

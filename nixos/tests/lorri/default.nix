@@ -13,12 +13,12 @@ import ../make-test.nix {
 
     # Start the daemon and wait until it is ready
     $machine->execute("lorri daemon > lorri.stdout 2> lorri.stderr &");
-    $machine->waitUntilSucceeds("grep --fixed-strings 'lorri: ready' lorri.stdout");
+    $machine->waitUntilSucceeds("grep --fixed-strings 'ready' lorri.stdout");
 
     # Ping the daemon
-    $machine->execute("lorri ping_ \$(readlink -f shell.nix)");
+    $machine->succeed("lorri internal__ping shell.nix");
 
     # Wait for the daemon to finish the build
-    $machine->waitUntilSucceeds("grep --fixed-strings 'OutputPaths' lorri.stdout");
+    $machine->waitUntilSucceeds("grep --fixed-strings 'Completed' lorri.stdout");
   '';
 }

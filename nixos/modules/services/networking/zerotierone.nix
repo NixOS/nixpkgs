@@ -63,5 +63,15 @@ in
     networking.firewall.allowedUDPPorts = [ cfg.port ];
 
     environment.systemPackages = [ cfg.package ];
+
+    # Prevent systemd from potentially changing the MAC address
+    environment.etc."systemd/network/50-zerotier.link".text = ''
+      [Match]
+      OriginalName=zt*
+
+      [Link]
+      AutoNegotiation=false
+      MACAddressPolicy=none
+    '';
   };
 }

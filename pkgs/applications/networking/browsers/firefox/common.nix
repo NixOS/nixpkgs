@@ -14,9 +14,12 @@
 , rust-cbindgen, nodejs, nasm, fetchpatch
 
 # backports of newer libraries for stable firefox >= 70
-, nss_3_48
-, sqlite_3_30_1
-, nspr_4_24
+, nss_3_51
+, sqlite_3_31_1
+, nspr_4_25
+, rustc_1_41
+, cargo_1_41
+, rust-cbindgen_0_1_13
 
 , debugBuild ? false
 
@@ -117,15 +120,14 @@ let
       sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
     })
   ]
-  ++ lib.optional (lib.versionAtLeast ffversion "71") (fetchpatch {
-    url = "https://phabricator.services.mozilla.com/D56873?download=true";
-    sha256 = "183949phd2n27nhiq85a04j4fjn0jxmldic6wcjrczsd8g2rrr5k";
-  })
   ++ patches;
 
-  nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_48 else nss;
-  nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_24 else nspr;
-  sqlite_pkg = if lib.versionAtLeast ffversion "70" then sqlite_3_30_1 else sqlite;
+  nss_pkg = if lib.versionAtLeast ffversion "71" then nss_3_51 else nss;
+  nspr_pkg = if lib.versionAtLeast ffversion "71" then nspr_4_25 else nspr;
+  sqlite_pkg = if lib.versionAtLeast ffversion "70" then sqlite_3_31_1 else sqlite;
+  rustc_pkg = if lib.versionAtLeast ffversion "73" then rustc_1_41 else rustc;
+  cargo_pkg = if lib.versionAtLeast ffversion "73" then cargo_1_41 else cargo;
+  cbindgen_pkg = if lib.versionAtLeast ffversion "73" then rust-cbindgen_0_1_13 else rust-cbindgen;
 
 in
 
@@ -185,11 +187,11 @@ stdenv.mkDerivation (rec {
   '';
 
   nativeBuildInputs =
-    [ autoconf213 which gnused pkgconfig perl python2 cargo rustc ]
+    [ autoconf213 which gnused pkgconfig perl python2 cargo_pkg rustc_pkg ]
     ++ lib.optional gtk3Support wrapGAppsHook
     ++ lib.optionals stdenv.isDarwin [ xcbuild rsync ]
     ++ lib.optional  (lib.versionAtLeast ffversion "61.0") [ python3 ]
-    ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ rust-cbindgen nodejs ]
+    ++ lib.optionals (lib.versionAtLeast ffversion "63.0") [ cbindgen_pkg nodejs ]
     ++ lib.optionals (lib.versionAtLeast ffversion "67.0") [ llvmPackages.llvm ] # llvm-objdump is required in version >=67.0
     ++ extraNativeBuildInputs;
 
@@ -375,6 +377,9 @@ stdenv.mkDerivation (rec {
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
 
+} //
+lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
 } //
 # the build system verifies checksums of the bundled rust sources
 # ./third_party/rust is be patched by our libtool fixup code in stdenv
