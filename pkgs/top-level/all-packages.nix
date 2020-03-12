@@ -22931,6 +22931,8 @@ in
 
   particl-core = callPackage ../applications/blockchains/particl/particl-core.nix { miniupnpc = miniupnpc_2; };
 
+  quorum = callPackage ../applications/blockchains/quorum.nix { };
+
   ### GAMES
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
