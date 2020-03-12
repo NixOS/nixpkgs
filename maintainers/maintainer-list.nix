@@ -1958,7 +1958,7 @@
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
     github = "drewrisinger";
-    gitHubId = 10198051;
+    githubId = 10198051;
     name = "Drew Risinger";
   };
   dsferruzza = {
@@ -3099,7 +3099,7 @@
   illiusdope = {
     email = "mat@marini.ca";
     github = "illiusdope";
-    gitHubId = 61913481;
+    githubId = 61913481;
     name = "Mat Marini";
   };
   ilya-fedin = {
@@ -4890,7 +4890,7 @@
   mmilata = {
     email = "martin@martinmilata.cz";
     github = "mmilata";
-    gitHubId = 85857;
+    githubId = 85857;
     name = "Martin Milata";
   };
   mmlb = {
