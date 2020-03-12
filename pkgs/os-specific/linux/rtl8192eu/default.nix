@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, kernel }:
+{ stdenv, lib, fetchFromGitHub, kernel, bc }:
 
 with lib;
 
@@ -6,16 +6,18 @@ let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wi
 
 in stdenv.mkDerivation rec {
   name = "rtl8192eu-${kernel.version}-${version}";
-  version = "4.4.1.20190319";
+  version = "4.4.1.20200122";
 
   src = fetchFromGitHub {
     owner = "Mange";
     repo = "rtl8192eu-linux-driver";
-    rev = "0a7199b";
-    sha256 = "0xxb8z7fd997ny53bgmf95hyqsmwjplbj6fry0rf65k9x9nggx71";
+    rev = "83b5aff";
+    sha256 = "08c4x4m80la13697nzm1bqfa468sjp4hllvbz1yqgpiphrk35gci";
   };
 
   hardeningDisable = [ "pic" ];
+
+  buildInputs = [ bc ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
