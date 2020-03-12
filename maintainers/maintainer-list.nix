@@ -14731,4 +14731,10 @@
     github = "jali-clarke";
     githubId = 17733984;
   };
+  maksteel = {
+    email = "kukreja.m@gmail.com";
+    github = "maksteel";
+    githubId = 6572855;
+    name = "Manish Kukreja";
+  };
 }
