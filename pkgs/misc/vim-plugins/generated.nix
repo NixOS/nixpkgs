@@ -378,6 +378,17 @@ let
     };
   };
 
+  coc-fzf = buildVimPluginFrom2Nix {
+    pname = "coc-fzf";
+    version = "2020-03-06";
+    src = fetchFromGitHub {
+      owner = "antoinemadec";
+      repo = "coc-fzf";
+      rev = "ca394b48ac9c78ce95d6cdf3807927a7b6bcfcbe";
+      sha256 = "1nsqdp2zma7rlzynm58z43vk5hyrcz8kn7ak32979p4a3fvdyj5c";
+    };
+  };
+
   coc-highlight = buildVimPluginFrom2Nix {
     pname = "coc-highlight";
     version = "2019-10-18";

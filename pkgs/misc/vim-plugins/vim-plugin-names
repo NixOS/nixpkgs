@@ -13,6 +13,7 @@ andreshazard/vim-logreview
 andsild/peskcolor.vim
 andviro/flake8-vim
 andys8/vim-elm-syntax
+antoinemadec/coc-fzf
 ap/vim-css-color
 arcticicestudio/nord-vim
 artur-shaik/vim-javacomplete2
