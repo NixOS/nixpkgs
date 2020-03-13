@@ -247,7 +247,7 @@ stdenv.mkDerivation ({
 
   # In this particular combination it stopped creating lib output at all.
   # TODO: perhaps find a better fix?  (ideally understand what's going on)
-  postFixup = if crossStageStatic && targetPlatform.isMusl && targetPlatform.isi686
+  postFixup = if crossStageStatic && targetPlatform.isMusl && targetPlatform.is32bit
     then ''mkdir "$lib"''
     else null;
 
