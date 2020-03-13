@@ -10249,6 +10249,8 @@ in
 
   cloud-nuke = callPackage ../development/tools/cloud-nuke { };
 
+  cloudcompare = libsForQt5.callPackage ../applications/graphics/cloudcompare {};
+
   cloudfoundry-cli = callPackage ../development/tools/cloudfoundry-cli { };
 
   coan = callPackage ../development/tools/analysis/coan { };
