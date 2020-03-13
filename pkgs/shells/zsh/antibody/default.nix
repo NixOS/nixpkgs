@@ -4,8 +4,6 @@ buildGoModule rec {
   pname = "antibody";
   version = "4.3.1";
 
-  goPackagePath = "github.com/getantibody/antibody";
-
   src = fetchFromGitHub {
     owner = "getantibody";
     repo = "antibody";
@@ -14,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "08k4mzqcva7yq1zmfxhlqnd8kk70zry6cfghxl1bgmhnfjqh61qr";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     description = "The fastest shell plugin manager";
