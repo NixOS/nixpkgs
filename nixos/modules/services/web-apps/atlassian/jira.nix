@@ -170,7 +170,7 @@ in
       description = "Atlassian Jira";
 
       wantedBy = [ "multi-user.target" ];
-      requires = [ "postgresql.service" ];
+      requires = mkIf cfg.services.postgresql.enable [ "postgresql.service" ];
       after = [ "postgresql.service" ];
 
       path = [ cfg.jrePackage pkgs.bash ];
