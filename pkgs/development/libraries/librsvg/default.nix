@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2, libgsf
+{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2
 , bzip2, libintl, darwin, rustc, cargo, gnome3
 , vala, gobject-introspection }:
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ];
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
