@@ -1,6 +1,6 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.8.2
+compiler: ghc-8.8.3
 
 core-packages:
   - array-0.5.4.0
@@ -10,23 +10,23 @@ core-packages:
   - Cabal-3.0.1.0
   - containers-0.6.2.1
   - deepseq-1.4.4.0
-  - directory-1.3.4.0
+  - directory-1.3.6.0
   - filepath-1.4.2.1
-  - ghc-8.8.2
-  - ghc-boot-8.8.2
-  - ghc-boot-th-8.8.2
+  - ghc-8.8.3
+  - ghc-boot-8.8.3
+  - ghc-boot-th-8.8.3
   - ghc-compact-0.1.0.0
-  - ghc-heap-8.8.2
+  - ghc-heap-8.8.3
   - ghc-prim-0.5.3
-  - ghci-8.8.2
+  - ghci-8.8.3
   - haskeline-0.7.5.0
   - hpc-0.6.0.3
   - integer-gmp-1.0.2.0
-  - libiserv-8.8.2
+  - libiserv-8.8.3
   - mtl-2.2.2
   - parsec-3.1.14.0
   - pretty-1.1.3.6
-  - process-1.6.7.0
+  - process-1.6.8.0
   - rts-1.0
   - stm-2.5.0.0
   - template-haskell-2.15.0.0
