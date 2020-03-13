@@ -13,6 +13,8 @@ pythonPackages.buildPythonApplication rec {
 
   propagatedBuildInputs = with pythonPackages; [ urwid beautifulsoup4 lxml ];
 
+  doCheck = false;
+
   meta = {
     description = "A simple curses interface for MediaWiki sites such as Wikipedia";
     homepage = https://github.com/ids1024/wikicurses/;
