@@ -6,13 +6,12 @@
 {
 
   vampSDK = stdenv.mkDerivation {
-    name = "vamp-sdk-2.7.1";
-    # version = "2.7.1";
+    name = "vamp-sdk-2.9.0";
 
     src = fetchFromGitHub {
       owner = "c4dm";
       repo = "vamp-plugin-sdk";
-      rev = "vamp-plugin-sdk-v2.7.1";
+      rev = "vamp-plugin-sdk-v2.9.0";
       sha256 = "1ifd6l6b89pg83ss4gld5i72fr0cczjnl2by44z5jnndsg3sklw4";
     };
 

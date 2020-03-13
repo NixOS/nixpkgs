@@ -21971,6 +21971,10 @@ in
 
   toggldesktop = libsForQt5.callPackage ../applications/misc/toggldesktop { };
 
+  tony = libsForQt5.callPackage ../applications/audio/tony {
+    inherit (pkgs.vamp) vampSDK;
+  };
+
   topydo = callPackage ../applications/misc/topydo {};
 
   torchat = callPackage ../applications/networking/instant-messengers/torchat {
