@@ -11,7 +11,8 @@
 { stdenv, version }:
 
 with stdenv.lib;
-with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
+with stdenv.lib.kernel;
+with (stdenv.lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
 

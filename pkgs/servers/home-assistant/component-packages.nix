@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.106.1";
+  version = "0.106.6";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -124,6 +124,7 @@
     "configurator" = ps: with ps; [ ];
     "conversation" = ps: with ps; [ aiohttp-cors];
     "coolmaster" = ps: with ps; [ ]; # missing inputs: pycoolmasternet
+    "coronavirus" = ps: with ps; [ ]; # missing inputs: coronavirus
     "counter" = ps: with ps; [ ];
     "cover" = ps: with ps; [ ];
     "cppm_tracker" = ps: with ps; [ ]; # missing inputs: clearpasspy

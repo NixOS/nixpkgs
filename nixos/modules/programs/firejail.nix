@@ -47,7 +47,7 @@ in {
   config = mkIf cfg.enable {
     security.wrappers.firejail.source = "${lib.getBin pkgs.firejail}/bin/firejail";
 
-    environment.systemPackages = [ wrappedBins ];
+    environment.systemPackages = [ pkgs.firejail ] ++ [ wrappedBins ];
   };
 
   meta.maintainers = with maintainers; [ peterhoeg ];

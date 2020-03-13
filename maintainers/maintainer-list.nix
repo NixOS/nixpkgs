@@ -1958,7 +1958,7 @@
   drewrisinger = {
     email = "drisinger+nixpkgs@gmail.com";
     github = "drewrisinger";
-    gitHubId = 10198051;
+    githubId = 10198051;
     name = "Drew Risinger";
   };
   dsferruzza = {
@@ -3099,7 +3099,7 @@
   illiusdope = {
     email = "mat@marini.ca";
     github = "illiusdope";
-    gitHubId = 61913481;
+    githubId = 61913481;
     name = "Mat Marini";
   };
   ilya-fedin = {
@@ -4544,6 +4544,12 @@
     githubId = 1711539;
     name = "matklad";
   };
+  matt-snider = {
+    email = "matt.snider@protonmail.com";
+    github = "matt-snider";
+    githubId = 11810057;
+    name = "Matt Snider";
+  };
   matthewbauer = {
     email = "mjbauer95@gmail.com";
     github = "matthewbauer";
@@ -4884,7 +4890,7 @@
   mmilata = {
     email = "martin@martinmilata.cz";
     github = "mmilata";
-    gitHubId = 85857;
+    githubId = 85857;
     name = "Martin Milata";
   };
   mmlb = {
@@ -7252,6 +7258,12 @@
     github = "thiagokokada";
     githubId = 844343;
     name = "Thiago K. Okada";
+  };
+  thmzlt = {
+    email = "git@thomazleite.com";
+    github = "thmzlt";
+    githubId = 7709;
+    name = "Thomaz Leite";
   };
   ThomasMader = {
     email = "thomas.mader@gmail.com";

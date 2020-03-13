@@ -175,13 +175,13 @@ in rec {
 
       nodeNames = builtins.attrNames nodes;
       invalidNodeNames = lib.filter
-        (node: builtins.match "^[A-z_][A-z0-9_]+$" node == null) nodeNames;
+        (node: builtins.match "^[A-z_]([A-z0-9_]+)?$" node == null) nodeNames;
 
     in
       if lib.length invalidNodeNames > 0 then
         throw ''
           Cannot create machines out of (${lib.concatStringsSep ", " invalidNodeNames})!
-          All machines are referenced as perl variables in the testing framework which will break the
+          All machines are referenced as python variables in the testing framework which will break the
           script when special characters are used.
 
           Please stick to alphanumeric chars and underscores as separation.
