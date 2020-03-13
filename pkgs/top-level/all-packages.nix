@@ -1299,8 +1299,6 @@ in
 
   btrfs-progs = callPackage ../tools/filesystems/btrfs-progs { };
 
-  btrfs-dedupe = callPackage ../tools/filesystems/btrfs-dedupe {};
-
   btrbk = callPackage ../tools/backup/btrbk {
     asciidoc = asciidoc-full;
   };
