@@ -4,7 +4,7 @@
 let
   inherit (builtins) head tail length;
   inherit (lib.trivial) and;
-  inherit (lib.strings) concatStringsSep;
+  inherit (lib.strings) concatStrings concatStringsSep;
   inherit (lib.lists) fold concatMap concatLists;
 in
 
@@ -232,6 +232,30 @@ rec {
   */
   mapAttrsToList = f: attrs:
     map (name: f name attrs.${name}) (attrNames attrs);
+
+
+  /* Call a function for each attribute in the given set and
+     concatenate the returned strings.
+
+     Example:
+       mapAttrsToString (name: value: name + value)
+          { x = "a"; y = "b"; }
+       => "xayb"
+  */
+  mapAttrsToString = f: attrs:
+    concatStrings (mapAttrsToList f attrs);
+
+
+  /* Call a function for each attribute in the given set and
+     concatenate the returned strings with a separator between each element.
+
+     Example:
+       mapAttrsToStringSep "," (name: value: name + value)
+          { x = "a"; y = "b"; }
+       => "xa,yb"
+  */
+  mapAttrsToStringSep = sep: f: attrs:
+    concatStringsSep sep (mapAttrsToList f attrs);
 
 
   /* Like `mapAttrs', except that it recursively applies itself to
