@@ -5,10 +5,12 @@ with lib;
 let
   cfg = config.services.home-assistant;
 
-  # cfg.config != null can be assumed here
+  # Combined config
+  hassConfig = recursiveUpdate
+    (optionalAttrs cfg.applyDefaultConfig defaultConfig)
+    (optionalAttrs (cfg.config != null) cfg.config);
   configJSON = pkgs.writeText "configuration.json"
-    (builtins.toJSON (if cfg.applyDefaultConfig then
-    (recursiveUpdate defaultConfig cfg.config) else cfg.config));
+    (builtins.toJSON hassConfig);
   configFile = pkgs.runCommand "configuration.yaml" { preferLocalBuild = true; } ''
     ${pkgs.remarshal}/bin/json2yaml -i ${configJSON} -o $out
     # Hack to support secrets, that are encoded as custom yaml objects,
@@ -40,11 +42,11 @@ let
   #   platform = "mqtt";
   #   ...
   # } ];
-  useComponentPlatform = component: elem component (usedPlatforms cfg.config);
+  useComponentPlatform = component: elem component (usedPlatforms hassConfig);
 
   # Returns whether component is used in config
   useComponent = component:
-    hasAttrByPath (splitString "." component) cfg.config
+    hasAttrByPath (splitString "." component) hassConfig
     || useComponentPlatform component;
 
   # List of components used in config
@@ -56,8 +58,10 @@ let
 
   # If you are changing this, please update the description in applyDefaultConfig
   defaultConfig = {
-    homeassistant.time_zone = config.time.timeZone;
+    frontend = {};
     http.server_port = cfg.port;
+  } // optionalAttrs (config.time.timeZone != null) {
+    homeassistant.time_zone = config.time.timeZone;
   } // optionalAttrs (cfg.lovelaceConfig != null) {
     lovelace.mode = "yaml";
   };
@@ -87,10 +91,9 @@ in {
         Setting this option enables a few configuration options for HA based on NixOS configuration (such as time zone) to avoid having to manually specify configuration we already have.
         </para>
         <para>
-        Currently one side effect of enabling this is that the <literal>http</literal> component will be enabled.
+        Currently one side effect of enabling this is that the <literal>http</literal> and <literal>frontend</literal> components will be enabled.
         </para>
         <para>
-        This only takes effect if <literal>config != null</literal> in order to ensure that a manually managed <filename>configuration.yaml</filename> is not overwritten.
       '';
     };
 
@@ -225,7 +228,7 @@ in {
     systemd.services.home-assistant = {
       description = "Home Assistant";
       after = [ "network.target" ];
-      preStart = optionalString (cfg.config != null) (if cfg.configWritable then ''
+      preStart = (if cfg.configWritable then ''
         cp --no-preserve=mode ${configFile} "${cfg.configDir}/configuration.yaml"
       '' else ''
         rm -f "${cfg.configDir}/configuration.yaml"
