@@ -18,5 +18,5 @@ import ./default.nix {
     x86_64-apple-darwin = "b2310c97ffb964f253c4088c8d29865f876a49da2a45305493af5b5c7a3ca73d";
   };
 
-  selectRustPackage = pkgs: pkgs.rust_1_38_0;
+  selectRustPackage = pkgs: pkgs.rust_1_38;
 }
