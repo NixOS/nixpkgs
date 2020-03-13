@@ -102,19 +102,16 @@ in ''
 
   # Remove duplicate linker flags from the build dependencies.
   if [[ -e target/link.build ]]; then
-    sort -u target/link.build > target/link.build.sorted
-    mv target/link.build.sorted target/link.build
+    sort -uo target/link.build target/link.build
   fi
 
   # Remove duplicate linker flags from the dependencies.
-  sort -u target/link > target/link.sorted
-  mv target/link.sorted target/link
+  sort -uo target/link target/link
   tr '\n' ' ' < target/link > target/link_
 
   # Remove duplicate linker flags from the that are written
   # to the derivation's output.
-  sort -u target/link.final > target/link.final.sorted
-  mv target/link.final.sorted target/link.final
+  sort -uo target/link.final target/link.final
 
   EXTRA_BUILD=""
   BUILD_OUT_DIR=""
