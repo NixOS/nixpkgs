@@ -35,8 +35,8 @@ rustPlatform.buildRustPackage {
     # precedence
     wrapProgram "$out/bin/cargo" \
       --suffix PATH : "${rustc}/bin" \
-      --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
-      --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+      --set-default CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
+      --set-default SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
 
     installManPage src/tools/cargo/src/etc/man/*
   '';
