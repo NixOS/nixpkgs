@@ -18625,6 +18625,9 @@ in
   claws-mail = callPackage ../applications/networking/mailreaders/claws-mail {
     inherit (xorg) libSM;
   };
+  claws-mail-gtk3 = callPackage ../applications/networking/mailreaders/claws-mail/gtk3.nix {
+    inherit (xorg) libSM;
+  };
 
   clfswm = callPackage ../applications/window-managers/clfswm { };
 
