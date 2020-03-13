@@ -1,4 +1,4 @@
-{ buildFHSUserEnv, makeDesktopItem, stdenv, lib, requireFile, unstick,
+{ buildFHSUserEnv, makeDesktopItem, writeScript, stdenv, lib, requireFile, unstick,
   supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ] }:
 
 let
@@ -25,7 +25,7 @@ let
 
   quartus = stdenv.mkDerivation rec {
     version = "19.1.0.670";
-    pname = "quartus-prime-lite";
+    pname = "quartus-prime-lite-unwrapped";
 
     src = let
       require = {name, sha256}: requireFile {
@@ -74,18 +74,18 @@ let
         "modelsim_ae"
       ] ++ (lib.attrValues unsupportedDeviceIds);
     in ''
-    ${lib.concatMapStringsSep "\n" copyInstaller installers}
-    ${lib.concatMapStringsSep "\n" copyComponent components}
+      ${lib.concatMapStringsSep "\n" copyInstaller installers}
+      ${lib.concatMapStringsSep "\n" copyComponent components}
 
-    unstick $TEMP/${(builtins.head installers).name} \
-      --disable-components ${lib.concatStringsSep "," disabledComponents} \
-      --mode unattended --installdir $out --accept_eula 1
+      unstick $TEMP/${(builtins.head installers).name} \
+        --disable-components ${lib.concatStringsSep "," disabledComponents} \
+        --mode unattended --installdir $out --accept_eula 1
 
-    # This patch is from https://wiki.archlinux.org/index.php/Altera_Design_Software
-    patch --force --strip 0 --directory $out < ${./vsim.patch}
+      # This patch is from https://wiki.archlinux.org/index.php/Altera_Design_Software
+      patch --force --strip 0 --directory $out < ${./vsim.patch}
 
-    rm -r $out/uninstall $out/logs
-  '';
+      rm -r $out/uninstall $out/logs
+    '';
 
     meta = {
       homepage = "https://fpgasoftware.intel.com";
@@ -97,17 +97,17 @@ let
   };
 
   desktopItem = makeDesktopItem {
-    name = quartus.name;
+    name = "quartus-prime-lite";
     exec = "quartus";
     icon = "quartus";
     desktopName = "Quartus";
-    genericName = "Quartus FPGA IDE";
+    genericName = "Quartus Prime";
     categories = "Development;";
   };
 
 # I think modelsim_ase/linux/vlm checksums itself, so use FHSUserEnv instead of `patchelf`
-in buildFHSUserEnv {
-  name = "quartus-prime-lite";
+in buildFHSUserEnv rec {
+  name = "quartus-prime-lite"; # wrapped
 
   targetPkgs = pkgs: with pkgs; [
     # quartus requirements
@@ -138,10 +138,43 @@ in buildFHSUserEnv {
     xorg.libXrender
   ];
 
-  extraInstallCommands = ''
-    mkdir -p $out/share/applications
-    cp ${desktopItem}/share/applications/* $out/share/applications
+  passthru = {
+    unwrapped = quartus;
+  };
+
+  extraInstallCommands = let
+    quartusExecutables = (map (c: "quartus/bin/quartus_${c}") [
+      "asm" "cdb" "cpf" "drc" "eda" "fit" "jbcc" "jli" "map" "pgm" "pow"
+      "sh" "si" "sim" "sta" "stp" "tan"
+    ]) ++ [ "quartus/bin/quartus" ];
+
+    qsysExecutables = map (c: "quartus/sopc_builder/bin/qsys-${c}") [
+      "generate" "edit" "script"
+    ];
+    # Should we install all executables ?
+    modelsimExecutables = map (c: "modelsim_ase/bin/${c}") [
+      "vsim" "vlog" "vlib"
+    ];
+  in ''
+    mkdir -p $out/share/applications $out/share/icons/128x128
+    ln -s ${desktopItem}/share/applications/* $out/share/applications
+    ln -s ${quartus}/licenses/images/dc_quartus_panel_logo.png $out/share/icons/128x128/quartus.png
+
+    mkdir -p $out/quartus/bin $out/quartus/sopc_builder/bin $out/modelsim_ase/bin
+    WRAPPER=$out/bin/${name}
+    EXECUTABLES="${lib.concatStringsSep " " (quartusExecutables ++ qsysExecutables ++ modelsimExecutables)}"
+    for executable in $EXECUTABLES; do
+        echo "#!${stdenv.shell}" >> $out/$executable
+        echo "$WRAPPER ${quartus}/$executable \$@" >> $out/$executable
+    done
+
+    cd $out
+    chmod +x $EXECUTABLES
+    # link into $out/bin so executables become available on $PATH
+    ln --symbolic --relative --target-directory ./bin $EXECUTABLES
   '';
 
-  runScript = "${quartus}/quartus/bin/quartus";
+  runScript = writeScript "${name}-wrapper" ''
+    exec $@
+  '';
 }
