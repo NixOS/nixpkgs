@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "brainworkshop";
-  version = "2020-01-20";
+  version = "2020-03-10";
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {
     repo = pname;
     owner = "samcv";
-    rev = "e33c4c7ee34ce058dc4e099f2cf32db4d56582f3";
-    sha256 = "100j348dkrm1a6cym1wynl0xaas5apavpa3vwxj0d4s8n87a4dvn";
+    rev = "ea817f7e163c4fb07a60b2066c694cba92d23818";
+    sha256 = "1ygbpc3ph0k6iv77b8qcv9qjdnmibi4qaxninrsaxpafa68v1a1h";
   };
 
   buildInputs = [
@@ -18,8 +18,6 @@ stdenv.mkDerivation rec {
       pyglet
     ]))
   ];
-
-  patches = [ ./changes.patch ];
 
   installPhase = ''
     mkdir -p $out/bin
