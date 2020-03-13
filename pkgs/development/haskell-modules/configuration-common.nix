@@ -81,12 +81,12 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc (appendPatch super.git-annex ./patches/git-annex-fix-build-with-ghc-8.8.x.patch) {
+  git-annex = (overrideSrc super.git-annex {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0pl0yip7zp4i78cj9jqkmm33wqaaaxjq3ggnfmv95y79yijd6yh4";
+      sha256 = "0y2qcjahi705c6nnypqpa5w3bzyzk4kqvbwfnpiaxzk5vna589gg";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
