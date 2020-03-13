@@ -625,6 +625,8 @@ in
 
   amp = callPackage ../applications/editors/amp {};
 
+  ams = callPackage ../applications/audio/ams {};
+
   amtterm = callPackage ../tools/system/amtterm {};
 
   analog = callPackage ../tools/admin/analog {};
