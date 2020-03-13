@@ -50,10 +50,7 @@ in {
     };
 
     boot.kernelModules = [ "kvmgt" ];
-
-    boot.extraModprobeConfig = ''
-      options i915 enable_gvt=1
-    '';
+    boot.kernelParams = [ "i915.enable_gvt=1" ];
 
     systemd.paths = mapAttrs' (name: value:
       nameValuePair "kvmgt-${name}" {
