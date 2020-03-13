@@ -36,8 +36,10 @@ with lib;
         skipstatichosts = mkDefault true;
       };
 
-      networking.hostFiles = [( pkgs.StevenBlack-hosts.override {
-        inherit (cfg) flags whitelist;
-      })];
+      networking.hostFiles = let
+        hosts = pkgs.StevenBlack-hosts.override {
+          inherit (cfg) flags whitelist;
+        };
+      in [( "${hosts}/share/StevenBlack-hosts/hosts" )];
     };
 }
