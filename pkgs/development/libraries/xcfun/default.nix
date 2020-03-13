@@ -1,6 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , cmake
+, gfortran
 , perl
 , bzip2
 }:
@@ -12,8 +13,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "dftlibs";
     repo = pname;
-    rev = "4436c86f905119628a5155c27b347f31d576f5af"; # tip of stable-1.X
-    sha256 = "0b53f11pr0xydiz6hqn0crymahkhrhh5yi96xr8gglj0j8rk7p1v";
+    rev = "355f42497a9cd17d16ae91da1f1aaaf93756ae8b"; # rev recommended by pythonPackages.pyscf: https://sunqm.github.io/pyscf/install.html#installation-without-network
+    sha256 = "09hs8lxks2d98a5q2xky9dz5sfsrxaww3kyryksi9b6l1f1m3hxp";
   };
 
   nativeBuildInputs = [
@@ -21,15 +22,18 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    perl
     bzip2
+    gfortran
+    perl
   ];
 
   cmakeFlags = [
     "-DBUILD_TESTING=1"
     "-DBUILD_SHARED_LIBS=1"
+    "-DXC_MAX_ORDER=3"
   ];
 
+  # TODO: tests are very quick. check it actually does something.
   doCheck = true;
   checkPhase = ''
     # set path for finding libxc.so for tests

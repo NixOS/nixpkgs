@@ -1,10 +1,12 @@
 { lib
 , buildPythonPackage
+, isPy27
 , fetchFromGitHub
 , cmake
 , openblas
 , libcint
 , libxc
+, xcfun
 , h5py
 , numpy
 , scipy
@@ -15,15 +17,17 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "1.7.0";
+  version = "1.6.6";
 
   # must download from GitHub to get the Cmake & C source files
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0gdmc04nr699bq6gkw9isfzahj0k2gqhxnjg6gj9rybmglarkn15";
+    sha256 = "097cm1823r1v3hv7nk3m2k2xg2z4knsczhahxdgipwgrpank8fab";
   };
+
+  disabled = isPy27;
 
   nativeBuildInputs = [ cmake ];
 
@@ -31,14 +35,38 @@ buildPythonPackage rec {
     libcint
     libxc
     openblas
+    xcfun
   ];
+
+  prePatch = ''
+    mkdir -p ./pyscf/lib/deps/include ./pyscf/lib/deps/lib
+    ln -s ${lib.strings.makeSearchPath "include" [xcfun] }/xc.h ./pyscf/lib/deps/include/xcfun.h
+    ln -s ${lib.strings.makeLibraryPath [ xcfun ] }/libxc.so ./pyscf/lib/deps/lib/libxcfun.so
+  '';
+
+
   cmakeFlags = [
     # disable rebuilding/downloading the required libraries
     "-DBUILD_LIBCINT=0"
     "-DBUILD_LIBXC=0"
     "-DBUILD_XCFUN=0"
+    "-DENABLE_XCFUN=1"
   ];
-  dontUseCmakeConfigure = true;
+  # Configure CMake to build C files in pyscf/lib
+  preConfigure = ''
+    pushd pyscf/lib
+  '';
+  postConfigure = ''
+    popd
+  '';
+
+  # Build C dependencies
+  preBuild = ''
+    pushd pyscf/lib/build
+    export LD_LIBRARY_PATH=$(pwd)/lib/deps/include:$LD_LIBRARY_PATH
+    make
+    popd
+  '';
 
   propagatedBuildInputs = [
     h5py
@@ -46,7 +74,7 @@ buildPythonPackage rec {
     scipy
   ];
 
-  PYSCF_INC_DIR = lib.strings.makeLibraryPath [ libcint libxc ];
+  PYSCF_INC_DIR = lib.strings.makeLibraryPath [ libcint libxc ] + ":" + lib.strings.makeSearchPath "include" [ xcfun ];
 
   pythonImportsCheck = [ "pyscf" ];
 
@@ -65,9 +93,8 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    nosetests \
+    nosetests -vv \
       --where=pyscf \
-      --no-path \
       --exclude-dir=geomopt \
       --exclude-dir=dmrgscf \
       --exclude-dir=fciqmcscf \
@@ -108,6 +135,8 @@ buildPythonPackage rec {
 
       runHook postCheck
   '';
+
+  # failed tests: test_rsh_df4c_get_jk
 
   meta = with lib; {
     description = "Python-based Simulations of Chemistry Framework";
