@@ -80,10 +80,10 @@ in
 
   fastcgi-cache-purge = {
     src = fetchFromGitHub {
-      owner  = "FRiCKLE";
+      owner  = "nginx-modules";
       repo   = "ngx_cache_purge";
-      rev    = "2.3";
-      sha256 = "0ib2jrbjwrhvmihhnzkp4w87fxssbbmmmj6lfdwpm6ni8p9g60dw";
+      rev    = "2.5";
+      sha256 = "1f4kxagzvz10vqbcjwi57wink6xw3s1h7wlrrlrlpkmhfbf9704y";
     };
   };
 
