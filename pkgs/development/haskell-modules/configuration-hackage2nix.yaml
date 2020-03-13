@@ -2847,6 +2847,7 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arbtt
+  - archive-tar-bytestring
   - archiver
   - archlinux
   - archlinux-web
@@ -3177,6 +3178,8 @@ broken-packages:
   - bitcoin-rpc
   - bitcoin-script
   - bitcoin-tx
+  - bitcoind-regtest
+  - bitcoind-rpc
   - Bitly
   - bitly-cli
   - bitmaps
@@ -3425,6 +3428,7 @@ broken-packages:
   - carte
   - cartel
   - Cartesian
+  - cas-store
   - casa-abbreviations-and-acronyms
   - casadi-bindings
   - casadi-bindings-control
