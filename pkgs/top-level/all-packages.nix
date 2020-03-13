@@ -25655,7 +25655,10 @@ in
     buildGoModule = buildGo112Module;
   };
 
-  inherit (callPackage ../applications/networking/cluster/terraform {})
+  inherit (callPackage ../applications/networking/cluster/terraform {
+    # terraform 0.12 crashes with go1.14 on darwin https://github.com/hashicorp/terraform/issues/24287
+    buildGoPackage = if stdenv.isDarwin then buildGo113Package else buildGoPackage;
+  })
     terraform_0_11
     terraform_0_11-full
     terraform_0_12
