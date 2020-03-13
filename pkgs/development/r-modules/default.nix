@@ -452,6 +452,7 @@ let
     sundialr = [ pkgs.libiconv ];
     ucminf = [ pkgs.libiconv ];
     glmnet = [ pkgs.libiconv ];
+    mvtnorm = [ pkgs.libiconv ];
   };
 
   packagesRequireingX = [
