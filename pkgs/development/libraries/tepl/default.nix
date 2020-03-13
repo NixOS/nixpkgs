@@ -16,8 +16,11 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    amtk
     libxml2
+  ];
+
+  propagatedBuildInputs = [
+    amtk
     gtksourceview4
     libuchardet
     gtk3
