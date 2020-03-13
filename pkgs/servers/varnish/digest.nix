@@ -1,15 +1,29 @@
 { stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, varnish, libmhash, docutils }:
 
-stdenv.mkDerivation rec {
-  version = "1.0.2";
-  name = "${varnish.name}-digest-${version}";
+stdenv.mkDerivation {
+  pname = "${varnish.name}-digest";
+  version = "2019-09-27";
 
-  src = fetchFromGitHub {
-    owner = "varnish";
-    repo = "libvmod-digest";
-    rev = "libvmod-digest-${version}";
-    sha256 = "0jwkqqalydn0pwfdhirl5zjhbc3hldvhh09hxrahibr72fgmgpbx";
-  };
+  src = {
+    "6.0.5" = fetchFromGitHub {
+      owner = "varnish";
+      repo = "libvmod-digest";
+      rev = "2b7f74b8897765372f2c7d7c760229bd8740fea2";  # https://github.com/varnish/libvmod-digest/commits/6.0
+      sha256 = "1zpnj7wrhn3qia2jfzawb0kz0ryk2hxmky44dd12pz0yww04ig96";
+    };
+    "6.2.2" = fetchFromGitHub {
+      owner = "varnish";
+      repo = "libvmod-digest";
+      rev = "2b7f74b8897765372f2c7d7c760229bd8740fea2";  # https://github.com/varnish/libvmod-digest/commits/6.2
+      sha256 = "1zpnj7wrhn3qia2jfzawb0kz0ryk2hxmky44dd12pz0yww04ig96";
+    };
+    "6.3.1" = fetchFromGitHub {
+      owner = "varnish";
+      repo = "libvmod-digest";
+      rev = "1793bea9e9b7c7dce4d8df82397d22ab9fa296f0";  # https://github.com/varnish/libvmod-digest/commits/6.3
+      sha256 = "0n33g8ml4bsyvcvl5lk7yng1ikvmcv8dd6bc1mv2lj4729pp97nn";
+    };
+  }.${varnish.version};
 
   nativeBuildInputs = [ autoreconfHook pkgconfig docutils ];
   buildInputs = [ varnish libmhash ];
@@ -21,7 +35,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "VMOD_DIR=$(out)/lib/varnish/vmods" ];
 
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=deprecated-declarations" ];
+  NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   doCheck = true;
 
@@ -29,5 +43,6 @@ stdenv.mkDerivation rec {
     description = "Digest and HMAC vmod";
     homepage = https://github.com/varnish/libvmod-digest;
     inherit (varnish.meta) license platforms maintainers;
+    broken = versionAtLeast varnish.version "6.2"; # tests crash with core dump
   };
 }
