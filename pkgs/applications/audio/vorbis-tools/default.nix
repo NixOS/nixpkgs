@@ -3,8 +3,8 @@
 
 let
   debPatch = fetchzip {
-    url = "mirror://debian/pool/main/v/vorbis-tools/vorbis-tools_1.4.0-6.debian.tar.xz";
-    sha256 = "1xmmpdvxyr84lazlg23c6ck5ic97ga2rkiqabb1d98ix2zdzyqz5";
+    url = "mirror://debian/pool/main/v/vorbis-tools/vorbis-tools_1.4.0-11.debian.tar.xz";
+    sha256 = "0kvmd5nslyqplkdb7pnmqj47ir3y5lmaxd12wmrnqh679a8jhcyi";
   };
 in
 stdenv.mkDerivation {
