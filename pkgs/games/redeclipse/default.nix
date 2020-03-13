@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       environments.
     '';
     homepage = "https://www.redeclipse.net";
-    license = with licenses; [ zlib cc-by-sa-30 ];
+    license = with licenses; [ licenses.zlib cc-by-sa-30 ];
     maintainers = with maintainers; [ lambda-11235 ];
     platforms = platforms.linux;
     hydraPlatforms = [];
