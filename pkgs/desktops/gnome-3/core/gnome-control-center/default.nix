@@ -60,7 +60,6 @@
 , tzdata
 , udisks2
 , upower
-, vino
 , epoxy
 , gnome-user-share
 , gnome-remote-desktop
@@ -133,7 +132,6 @@ stdenv.mkDerivation rec {
     tracker
     udisks2
     upower
-    vino
     epoxy
   ];
 

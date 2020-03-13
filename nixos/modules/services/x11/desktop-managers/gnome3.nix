@@ -253,7 +253,6 @@ in
       systemd.packages = with pkgs.gnome3; [
         gnome-session
         gnome-shell
-        vino
       ];
 
       services.avahi.enable = mkDefault true;
@@ -305,7 +304,7 @@ in
         environment = mkForce {};
       };
 
-      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-shell.bst
+      # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-shell.bst
       environment.systemPackages = with pkgs.gnome3; [
         adwaita-icon-theme
         gnome-backgrounds
@@ -324,11 +323,10 @@ in
         pkgs.hicolor-icon-theme
         pkgs.shared-mime-info # for update-mime-database
         pkgs.xdg-user-dirs # Update user dirs as described in http://freedesktop.org/wiki/Software/xdg-user-dirs/
-        vino
       ];
     })
 
-    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-32/elements/core/meta-gnome-core-utilities.bst
+    # Adapt from https://gitlab.gnome.org/GNOME/gnome-build-meta/blob/gnome-3-36/elements/core/meta-gnome-core-utilities.bst
     (mkIf serviceCfg.core-utilities.enable {
       environment.systemPackages = (with pkgs.gnome3; removePackagesByName [
         baobab

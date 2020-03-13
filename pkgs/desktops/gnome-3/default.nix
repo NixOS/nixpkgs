@@ -146,8 +146,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   totem = callPackage ./core/totem { };
 
-  vino = callPackage ./core/vino { };
-
   yelp = callPackage ./core/yelp { };
 
   yelp-xsl = callPackage ./core/yelp-xsl { };
@@ -358,4 +356,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) dconf; # added 2019-11-30
 
   inherit (pkgs) networkmanagerapplet; # added 2019-12-12
+
+  vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
 })
