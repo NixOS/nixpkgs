@@ -28,24 +28,24 @@ in
 {
   options = {
     services.jira = {
-      enable = mkEnableOption "Atlassian JIRA service";
+      enable = mkEnableOption "Atlassian Jira service";
 
       user = mkOption {
         type = types.str;
         default = "jira";
-        description = "User which runs JIRA.";
+        description = "User which runs Jira.";
       };
 
       group = mkOption {
         type = types.str;
         default = "jira";
-        description = "Group which runs JIRA.";
+        description = "Group which runs Jira.";
       };
 
       home = mkOption {
         type = types.str;
         default = "/var/lib/jira";
-        description = "Home directory of the JIRA instance.";
+        description = "Home directory of the Jira instance.";
       };
 
       listenAddress = mkOption {
@@ -109,12 +109,12 @@ in
         applicationName = mkOption {
           type = types.str;
           example = "jira";
-          description = "Exact name of this JIRA instance in Crowd";
+          description = "Exact name of this Jira instance in Crowd";
         };
 
         applicationPassword = mkOption {
           type = types.str;
-          description = "Application password of this JIRA instance in Crowd";
+          description = "Application password of this Jira instance in Crowd";
         };
 
         validationInterval = mkOption {
@@ -135,7 +135,7 @@ in
         type = types.package;
         default = pkgs.atlassian-jira;
         defaultText = "pkgs.atlassian-jira";
-        description = "Atlassian JIRA package to use.";
+        description = "Atlassian Jira package to use.";
       };
 
       jrePackage = mkOption {
@@ -167,7 +167,7 @@ in
     ];
 
     systemd.services.atlassian-jira = {
-      description = "Atlassian JIRA";
+      description = "Atlassian Jira";
 
       wantedBy = [ "multi-user.target" ];
       requires = [ "postgresql.service" ];
