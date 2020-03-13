@@ -1,0 +1,16 @@
+diff --git a/brainworkshop.pyw b/brainworkshop.pyw
+index 1da53fd..42af693 100644
+--- a/brainworkshop.pyw
++++ b/brainworkshop.pyw
+@@ -686,8 +686,9 @@ class Message:
+ def check_and_move_user_data():
+     if not '--datadir' in sys.argv and \
+       (not os.path.exists(get_data_dir()) or len(os.listdir(get_data_dir())) < 1):
+-        import shutil
+-        shutil.copytree(get_old_data_dir(), get_data_dir())
++        import subprocess
++        subprocess.run(["mkdir", "-p", get_data_dir()], check=True)
++        subprocess.run(["cp", "--no-preserve=mode,ownership", "-r", get_old_data_dir(), get_data_dir()], check=True)
+         if len(os.listdir(get_old_data_dir())) > 2:
+             Message(
+ """Starting with version 4.8.2, Brain Workshop stores its user profiles \

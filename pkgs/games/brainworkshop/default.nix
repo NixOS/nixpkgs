@@ -19,6 +19,8 @@ stdenv.mkDerivation rec {
     ]))
   ];
 
+  patches = [ ./datadir.patch ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp -r ./* $out/bin/
