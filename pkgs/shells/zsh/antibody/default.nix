@@ -2,22 +2,22 @@
 
 buildGoModule rec {
   pname = "antibody";
-  version = "4.2.0";
-
-  goPackagePath = "github.com/getantibody/antibody";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "getantibody";
     repo = "antibody";
     rev = "v${version}";
-    sha256 = "1vds7mxqxa7xlhvjvmnh1nr1ra3dciav0qlv45s1dmwn5qrcilci";
+    sha256 = "1cxg0173d3xnpyzbisj926vh3qql9rw3q4j1z900m34gw7cvsdpf";
   };
 
-  modSha256 = "1n9sgrm16iig600f4q1cmbwwk0822isjvbyazplylha843510b17";
+  modSha256 = "08k4mzqcva7yq1zmfxhlqnd8kk70zry6cfghxl1bgmhnfjqh61qr";
+
+  buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
   meta = with lib; {
     description = "The fastest shell plugin manager";
-    homepage = https://github.com/getantibody/antibody;
+    homepage = "https://github.com/getantibody/antibody";
     license = licenses.mit;
     maintainers = with maintainers; [ filalex77 worldofpeace ];
   };

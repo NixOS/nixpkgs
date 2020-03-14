@@ -1,6 +1,6 @@
 # pkgs/development/haskell-modules/configuration-hackage2nix.yaml
 
-compiler: ghc-8.8.2
+compiler: ghc-8.8.3
 
 core-packages:
   - array-0.5.4.0
@@ -10,23 +10,23 @@ core-packages:
   - Cabal-3.0.1.0
   - containers-0.6.2.1
   - deepseq-1.4.4.0
-  - directory-1.3.4.0
+  - directory-1.3.6.0
   - filepath-1.4.2.1
-  - ghc-8.8.2
-  - ghc-boot-8.8.2
-  - ghc-boot-th-8.8.2
+  - ghc-8.8.3
+  - ghc-boot-8.8.3
+  - ghc-boot-th-8.8.3
   - ghc-compact-0.1.0.0
-  - ghc-heap-8.8.2
+  - ghc-heap-8.8.3
   - ghc-prim-0.5.3
-  - ghci-8.8.2
+  - ghci-8.8.3
   - haskeline-0.7.5.0
   - hpc-0.6.0.3
   - integer-gmp-1.0.2.0
-  - libiserv-8.8.2
+  - libiserv-8.8.3
   - mtl-2.2.2
   - parsec-3.1.14.0
   - pretty-1.1.3.6
-  - process-1.6.7.0
+  - process-1.6.8.0
   - rts-1.0
   - stm-2.5.0.0
   - template-haskell-2.15.0.0
@@ -76,7 +76,7 @@ default-package-overrides:
   # gi-gdkx11-4.x requires gtk-4.x, which is still under development and
   # not yet available in Nixpkgs
   - gi-gdkx11 < 4
-  # LTS Haskell 15.2
+  # LTS Haskell 15.3
   - abstract-deque ==0.3
   - abstract-par ==0.3.3
   - AC-Angle ==1.0
@@ -361,7 +361,7 @@ default-package-overrides:
   - bytes ==0.17
   - byteset ==0.1.1.0
   - byteslice ==0.2.2.0
-  - bytesmith ==0.3.5.0
+  - bytesmith ==0.3.6.0
   - bytestring-builder ==0.10.8.2.0
   - bytestring-conversion ==0.3.1
   - bytestring-lexing ==0.5.0.2
@@ -407,7 +407,7 @@ default-package-overrides:
   - Chart-diagrams ==1.9.3
   - chaselev-deque ==0.5.0.5
   - ChasingBottoms ==1.3.1.7
-  - checkers ==0.5.2
+  - checkers ==0.5.4
   - checksum ==0.0
   - chimera ==0.3.0.0
   - choice ==0.2.2
@@ -444,7 +444,7 @@ default-package-overrides:
   - co-log ==0.4.0.0
   - co-log-core ==0.2.1.0
   - co-log-polysemy ==0.0.1.1
-  - Color ==0.1.3.1
+  - Color ==0.1.4
   - colorful-monoids ==0.2.1.2
   - colorize-haskell ==1.0.1
   - colour ==2.3.5
@@ -577,7 +577,7 @@ default-package-overrides:
   - data-tree-print ==0.1.0.2
   - dataurl ==0.1.0.0
   - DAV ==1.3.4
-  - dbus ==1.2.11
+  - dbus ==1.2.12
   - debian-build ==0.10.2.0
   - debug-trace-var ==0.2.0
   - dec ==0.0.3
@@ -707,7 +707,7 @@ default-package-overrides:
   - extended-reals ==0.2.3.0
   - extensible-effects ==5.0.0.1
   - extensible-exceptions ==0.1.1.4
-  - extra ==1.6.20
+  - extra ==1.6.21
   - extractable-singleton ==0.0.1
   - extrapolate ==0.4.1
   - fail ==4.9.0.0
@@ -785,12 +785,12 @@ default-package-overrides:
   - funcmp ==1.9
   - function-builder ==0.3.0.1
   - functor-classes-compat ==1
-  - fused-effects ==1.0.0.1
+  - fused-effects ==1.0.2.0
   - fusion-plugin ==0.1.1
   - fusion-plugin-types ==0.1.0
   - fuzzcheck ==0.1.1
   - fuzzy ==0.1.0.0
-  - fuzzy-dates ==0.1.1.1
+  - fuzzy-dates ==0.1.1.2
   - fuzzyset ==0.2.0
   - fuzzy-time ==0.1.0.0
   - gauge ==0.2.5
@@ -868,9 +868,9 @@ default-package-overrides:
   - gi-pango ==1.0.22
   - giphy-api ==0.7.0.0
   - githash ==0.1.3.3
-  - github-rest ==1.0.1
+  - github-rest ==1.0.2
   - github-types ==0.2.1
-  - gitlab-haskell ==0.1.5
+  - gitlab-haskell ==0.1.7
   - gitrev ==1.3.1
   - gi-xlib ==2.0.8
   - gl ==0.9
@@ -1059,8 +1059,8 @@ default-package-overrides:
   - hunit-dejafu ==2.0.0.1
   - hvect ==0.4.0.0
   - hvega ==0.5.0.0
-  - hw-balancedparens ==0.3.0.4
-  - hw-bits ==0.7.1.0
+  - hw-balancedparens ==0.3.0.5
+  - hw-bits ==0.7.1.2
   - hw-conduit ==0.2.0.6
   - hw-conduit-merges ==0.2.0.0
   - hw-diagnostics ==0.0.0.7
@@ -1287,7 +1287,7 @@ default-package-overrides:
   - markdown-unlit ==0.5.0
   - markov-chain ==0.0.3.4
   - massiv ==0.4.5.0
-  - massiv-io ==0.2.0.0
+  - massiv-io ==0.2.1.0
   - massiv-test ==0.1.2
   - mathexpr ==0.3.0.0
   - math-functions ==0.3.3.0
@@ -1331,9 +1331,9 @@ default-package-overrides:
   - mime-types ==0.1.0.9
   - mini-egison ==0.1.6
   - minimal-configuration ==0.1.4
-  - minimorph ==0.2.1.0
+  - minimorph ==0.2.2.0
   - minio-hs ==1.5.2
-  - miniutter ==0.5.0.0
+  - miniutter ==0.5.1.0
   - mintty ==0.1.2
   - miso ==1.4.0.0
   - missing-foreign ==0.1.1
@@ -1356,7 +1356,7 @@ default-package-overrides:
   - monad-extras ==0.6.0
   - monadic-arrays ==0.2.2
   - monad-journal ==0.8.1
-  - monad-logger ==0.3.31
+  - monad-logger ==0.3.32
   - monad-logger-json ==0.1.0.0
   - monad-logger-prefix ==0.1.11
   - monad-loops ==0.4.3
@@ -1551,7 +1551,7 @@ default-package-overrides:
   - persistent-sqlite ==2.10.6.2
   - persistent-template ==2.8.2.3
   - persistent-test ==2.0.3.1
-  - persistent-typed-db ==0.1.0.0
+  - persistent-typed-db ==0.1.0.1
   - pg-harness-client ==0.6.0
   - pgp-wordlist ==0.1.0.3
   - pg-transact ==0.3.1.1
@@ -1739,7 +1739,7 @@ default-package-overrides:
   - rerebase ==1.4.1
   - resolv ==0.1.1.3
   - resource-pool ==0.2.3.2
-  - resourcet ==1.2.2
+  - resourcet ==1.2.3
   - result ==0.2.6.0
   - rethinkdb-client-driver ==0.0.25
   - retry ==0.8.1.0
@@ -1747,7 +1747,7 @@ default-package-overrides:
   - rfc1751 ==0.1.2
   - rfc5051 ==0.1.0.4
   - rigel-viz ==0.2.0.0
-  - rio ==0.1.14.0
+  - rio ==0.1.14.1
   - rio-orphans ==0.1.1.0
   - rio-prettyprint ==0.1.0.0
   - roc-id ==0.1.0.0
@@ -1792,7 +1792,7 @@ default-package-overrides:
   - sdl2-gfx ==0.2
   - sdl2-image ==2.0.0
   - sdl2-mixer ==1.1.0
-  - sdl2-ttf ==2.1.0
+  - sdl2-ttf ==2.1.1
   - search-algorithms ==0.3.1
   - secp256k1-haskell ==0.1.8
   - securemem ==0.1.10
@@ -2178,7 +2178,7 @@ default-package-overrides:
   - unix-bytestring ==0.3.7.3
   - unix-compat ==0.5.2
   - unix-time ==0.4.7
-  - unliftio ==0.2.12
+  - unliftio ==0.2.12.1
   - unliftio-core ==0.1.2.0
   - unliftio-pool ==0.2.1.0
   - unlit ==0.4.0.0
@@ -2239,7 +2239,7 @@ default-package-overrides:
   - wai-app-static ==3.1.7.1
   - wai-conduit ==3.0.0.4
   - wai-cors ==0.2.7
-  - wai-enforce-https ==0.0.1
+  - wai-enforce-https ==0.0.2
   - wai-eventsource ==3.0.0
   - wai-extra ==3.0.29.1
   - wai-handler-launch ==3.0.3.1
@@ -2324,7 +2324,7 @@ default-package-overrides:
   - yesod-auth ==1.6.9
   - yesod-auth-hashdb ==1.7.1.2
   - yesod-bin ==1.6.0.4
-  - yesod-core ==1.6.17.2
+  - yesod-core ==1.6.17.3
   - yesod-form ==1.6.7
   - yesod-gitrev ==0.2.1
   - yesod-newsfeed ==1.7.0.0
@@ -2344,7 +2344,7 @@ default-package-overrides:
   - zeromq4-haskell ==0.8.0
   - zeromq4-patterns ==0.3.1.0
   - zim-parser ==0.2.1.0
-  - zip ==1.3.1
+  - zip ==1.3.2
   - zip-archive ==0.4.1
   - zippers ==0.3
   - zip-stream ==0.2.0.1
@@ -2847,6 +2847,7 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arbtt
+  - archive-tar-bytestring
   - archiver
   - archlinux
   - archlinux-web
@@ -2920,8 +2921,6 @@ broken-packages:
   - atomic-primops-vector
   - atomo
   - atp-haskell
-  - ats-format
-  - ats-pkg
   - ats-setup
   - ats-storable
   - attempt
@@ -3179,6 +3178,8 @@ broken-packages:
   - bitcoin-rpc
   - bitcoin-script
   - bitcoin-tx
+  - bitcoind-regtest
+  - bitcoind-rpc
   - Bitly
   - bitly-cli
   - bitmaps
@@ -3427,6 +3428,7 @@ broken-packages:
   - carte
   - cartel
   - Cartesian
+  - cas-store
   - casa-abbreviations-and-acronyms
   - casadi-bindings
   - casadi-bindings-control
@@ -4383,8 +4385,6 @@ broken-packages:
   - edentv
   - edge
   - edges
-  - EdisonAPI
-  - EdisonCore
   - edit
   - edit-lenses
   - editable
@@ -8156,7 +8156,6 @@ broken-packages:
   - persistent-map
   - persistent-migration
   - persistent-mongoDB
-  - persistent-mysql
   - persistent-mysql-haskell
   - persistent-protobuf
   - persistent-ratelimit
@@ -8979,7 +8978,6 @@ broken-packages:
   - sajson
   - salak-toml
   - Salsa
-  - saltine
   - saltine-quickcheck
   - salvia
   - salvia-demo
@@ -9377,7 +9375,6 @@ broken-packages:
   - smuggler
   - snake
   - snake-game
-  - snap
   - snap-accept
   - snap-auth-cli
   - snap-blaze-clay
@@ -10962,5 +10959,3 @@ broken-packages:
   - ztar
   - zuramaru
   - Zwaluw
-  - zxcvbn-dvorak
-  - zxcvbn-hs

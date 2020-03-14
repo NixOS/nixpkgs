@@ -511,6 +511,8 @@ in {
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
 
+  bravado-core = callPackage ../development/python-modules/bravado-core { };
+
   breathe = callPackage ../development/python-modules/breathe { };
 
   brotli = callPackage ../development/python-modules/brotli { };
@@ -570,6 +572,8 @@ in {
   cozy = callPackage ../development/python-modules/cozy { };
 
   codespell = callPackage ../development/python-modules/codespell { };
+
+  convertdate = callPackage ../development/python-modules/convertdate { };
 
   crc32c = callPackage ../development/python-modules/crc32c { };
 
@@ -1174,6 +1178,8 @@ in {
   pymatgen-lammps = callPackage ../development/python-modules/pymatgen-lammps { };
 
   pymavlink = callPackage ../development/python-modules/pymavlink { };
+
+  pymeeus = callPackage ../development/python-modules/pymeeus { };
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
 
@@ -5098,8 +5104,6 @@ in {
   pyinputevent = callPackage ../development/python-modules/pyinputevent { };
 
   pyinotify = callPackage ../development/python-modules/pyinotify { };
-
-  pyinsane2 = callPackage ../development/python-modules/pyinsane2 { };
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
 

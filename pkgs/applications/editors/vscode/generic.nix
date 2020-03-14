@@ -62,7 +62,7 @@ in
       else [ gtk2 at-spi2-atk wrapGAppsHook ] ++ atomEnv.packages)
         ++ [ libsecret libXScrnSaver ];
 
-    runtimeDependencies = [ systemd.lib fontconfig.lib ];
+    runtimeDependencies = lib.optional (stdenv.isLinux) [ systemd.lib fontconfig.lib ];
 
     nativeBuildInputs = lib.optional (!stdenv.isDarwin) autoPatchelfHook;
 
