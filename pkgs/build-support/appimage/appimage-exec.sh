@@ -1,4 +1,6 @@
 #!@shell@
+# shellcheck shell=bash
+
 if [ -n "$DEBUG" ] ; then
   set -x
 fi

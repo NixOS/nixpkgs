@@ -4,11 +4,15 @@
 , lib, runCommand }:
 
 rec {
-  appimage-exec = pkgs.substituteAll {
+  appimage-exec = with pkgs; substituteAll {
     src = ./appimage-exec.sh;
     isExecutable = true;
     dir = "bin";
-    path = with pkgs; lib.makeBinPath [ pv ripgrep file radare2 libarchive jq squashfsTools coreutils bash ];
+    path = lib.makeBinPath [ shellcheck pv ripgrep file radare2 libarchive jq squashfsTools coreutils bash ];
+    #checkPhase is not enabled in substituteAll
+    postInstall = ''
+      ${shellcheck}/bin/shellcheck $out/bin/appimage-exec.sh
+    '';
   };
 
   extract = { name, src }: runCommand "${name}-extracted" {
