@@ -498,6 +498,9 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
+  # requires libsecp256k1 in pkgconfig-depends
+  secp256k1-haskell = addPkgconfigDepend super.secp256k1-haskell pkgs.secp256k1;
+
   # tests require git and zsh
   hapistrano = addBuildTools super.hapistrano [ pkgs.buildPackages.git pkgs.buildPackages.zsh ];
 

@@ -9072,7 +9072,6 @@ broken-packages:
   - seclib
   - second-transfer
   - secp256k1
-  - secp256k1-haskell
   - secp256k1-legacy
   - secret-santa
   - secret-sharing
