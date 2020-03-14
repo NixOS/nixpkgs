@@ -1,4 +1,7 @@
-{ stdenv, lib, fetchFromGitHub, python3 }:
+{ pkgs, stdenv, lib, fetchFromGitHub, python3
+# To include additional plugins, pass them here as an overlay.
+, packageOverrides ? self: super: {}
+}:
 let
   mkOverride = attrname: version: sha256:
     self: super: {
@@ -11,6 +14,7 @@ let
     };
 
   py = python3.override {
+    self = py;
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) ([
       (mkOverride "flask"       "0.12.5" "fac2b9d443e49f7e7358a444a3db5950bdd0324674d92ba67f8f1f15f876b14f")
       (mkOverride "tornado"     "4.5.3"  "02jzd23l4r6fswmwxaica9ldlyc2p6q8dk6dyff7j58fmdzf853d")
@@ -19,8 +23,8 @@ let
       # Octoprint holds back jinja2 to 2.8.1 due to breaking changes.
       # This old version does not have updated test config for pytest 4,
       # and pypi tarball doesn't contain tests dir anyways.
-      (pself: psuper: {
-        jinja2 = psuper.jinja2.overridePythonAttrs (oldAttrs: rec {
+      (self: super: {
+        jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
           version = "2.8.1";
           src = oldAttrs.src.override {
             inherit version;
@@ -29,69 +33,72 @@ let
           doCheck = false;
         });
 
-        httpretty = psuper.httpretty.overridePythonAttrs (oldAttrs: rec {
+        httpretty = super.httpretty.overridePythonAttrs (oldAttrs: rec {
           doCheck = false;
         });
 
-        celery = psuper.celery.overridePythonAttrs (oldAttrs: rec {
+        celery = super.celery.overridePythonAttrs (oldAttrs: rec {
           doCheck = false;
         });
       })
+      (self: super: {
+        octoprint = self.buildPythonPackage rec {
+          pname = "OctoPrint";
+          version = "1.4.0";
+
+          src = fetchFromGitHub {
+            owner  = "foosel";
+            repo   = "OctoPrint";
+            rev    = version;
+            sha256 = "1zla1ayr62lkvkr828dh3y287rzj3rv1hpij9kws44ynn4i582ga";
+          };
+
+          propagatedBuildInputs = with super; [
+            awesome-slugify flask flask_assets rsa requests pkginfo watchdog
+            semantic-version werkzeug flaskbabel tornado
+            psutil pyserial flask_login netaddr markdown
+            pylru pyyaml sarge feedparser netifaces click websocket_client
+            scandir chainmap future wrapt monotonic emoji jinja2
+            frozendict cachelib sentry-sdk filetype markupsafe
+          ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
+
+          checkInputs = with super; [ pytestCheckHook mock ddt ];
+
+          postPatch = let
+            ignoreVersionConstraints = [
+              "sentry-sdk"
+            ];
+          in ''
+            sed -r -i \
+              ${lib.concatStringsSep "\n" (map (e:
+                ''-e 's@${e}[<>=]+.*@${e}",@g' \''
+              ) ignoreVersionConstraints)}
+              setup.py
+          '';
+
+          dontUseSetuptoolsCheck = true;
+
+          preCheck = ''
+            export HOME=$(mktemp -d)
+            rm pytest.ini
+          '';
+
+          disabledTests = [
+            "test_check_setup" # Why should it be able to call pip?
+          ] ++ lib.optionals stdenv.isDarwin [
+            "test_set_external_modification"
+          ];
+
+          meta = with stdenv.lib; {
+            homepage = https://octoprint.org/;
+            description = "The snappy web interface for your 3D printer";
+            license = licenses.agpl3;
+            maintainers = with maintainers; [ abbradar gebner WhittlesJr ];
+          };
+        };
+      })
+      (import ./plugins.nix {inherit pkgs;})
+      packageOverrides
     ]);
   };
-
-  ignoreVersionConstraints = [
-    "sentry-sdk"
-  ];
-
-in
-py.pkgs.buildPythonApplication rec {
-  pname = "OctoPrint";
-  version = "1.4.0";
-
-  src = fetchFromGitHub {
-    owner  = "foosel";
-    repo   = "OctoPrint";
-    rev    = version;
-    sha256 = "1zla1ayr62lkvkr828dh3y287rzj3rv1hpij9kws44ynn4i582ga";
-  };
-
-  propagatedBuildInputs = with py.pkgs; [
-    awesome-slugify flask flask_assets rsa requests pkginfo watchdog
-    semantic-version werkzeug flaskbabel tornado
-    psutil pyserial flask_login netaddr markdown
-    pylru pyyaml sarge feedparser netifaces click websocket_client
-    scandir chainmap future wrapt monotonic emoji jinja2
-    frozendict cachelib sentry-sdk filetype markupsafe
-  ] ++ lib.optionals stdenv.isDarwin [ py.pkgs.appdirs ];
-
-  checkInputs = with py.pkgs; [ pytestCheckHook mock ddt ];
-
-  postPatch = ''
-    sed -r -i \
-      ${lib.concatStringsSep "\n" (map (e:
-        ''-e 's@${e}[<>=]+.*@${e}",@g' \''
-      ) ignoreVersionConstraints)}
-      setup.py
-  '';
-
-  dontUseSetuptoolsCheck = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    rm pytest.ini
-  '';
-
-  disabledTests = [
-    "test_check_setup" # Why should it be able to call pip?
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_set_external_modification"
-  ];
-
-  meta = with stdenv.lib; {
-    homepage = https://octoprint.org/;
-    description = "The snappy web interface for your 3D printer";
-    license = licenses.agpl3;
-    maintainers = with maintainers; [ abbradar gebner WhittlesJr ];
-  };
-}
+in with py.pkgs; toPythonApplication octoprint

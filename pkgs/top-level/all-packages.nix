@@ -20900,7 +20900,7 @@ in
 
   octoprint = callPackage ../applications/misc/octoprint { };
 
-  octoprint-plugins = callPackage ../applications/misc/octoprint/plugins.nix { };
+  octoprint-plugins = throw ''octoprint-plugins are now part of the octoprint package set.'';
 
   ocrad = callPackage ../applications/graphics/ocrad { };
 
