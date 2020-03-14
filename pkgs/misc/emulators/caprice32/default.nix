@@ -17,9 +17,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ libpng SDL freetype zlib ];
 
   makeFlags = [
-    "APP_PATH=${placeholder ''out''}/share/caprice32/"
+    "APP_PATH=${placeholder "out"}/share/caprice32"
     "RELEASE=1"
-    "DESTDIR=${placeholder ''out''}"
+    "DESTDIR=${placeholder "out"}"
     "prefix=/"
   ];
 
