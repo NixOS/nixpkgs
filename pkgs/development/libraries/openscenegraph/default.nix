@@ -2,7 +2,6 @@
   libX11, libXinerama, libXrandr, libGLU, libGL,
   glib, ilmbase, libxml2, pcre, zlib,
   jpegSupport ? true, libjpeg,
-  jasperSupport ? false, jasper,  # disable jasper by default (many CVE)
   exrSupport ? false, openexr,
   gifSupport ? true, giflib,
   pngSupport ? true, libpng,
@@ -42,7 +41,6 @@ stdenv.mkDerivation rec {
     libX11 libXinerama libXrandr libGLU libGL
     glib ilmbase libxml2 pcre zlib
   ] ++ lib.optional jpegSupport libjpeg
-    ++ lib.optional jasperSupport jasper
     ++ lib.optional exrSupport openexr
     ++ lib.optional gifSupport giflib
     ++ lib.optional pngSupport libpng
