@@ -228,7 +228,7 @@ in {
 
     meta = with stdenv.lib; {
       description = "Edit gcode on OctoPrint";
-      homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
+      homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
       license = licenses.agpl3;
       maintainers = with maintainers; [ WhittlesJr ];
     };
@@ -247,7 +247,7 @@ in {
 
     meta = with stdenv.lib; {
       description = "A simple plugin that add an emergency stop buton on NavBar of OctoPrint";
-      homepage = "https://github.com/ieatacid/OctoPrint-GcodeEditor";
+      homepage = "https://github.com/Sebclem/OctoPrint-SimpleEmergencyStop";
       license = licenses.agpl3;
       maintainers = with maintainers; [ WhittlesJr ];
     };
