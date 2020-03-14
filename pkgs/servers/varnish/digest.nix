@@ -43,6 +43,5 @@ stdenv.mkDerivation {
     description = "Digest and HMAC vmod";
     homepage = https://github.com/varnish/libvmod-digest;
     inherit (varnish.meta) license platforms maintainers;
-    broken = versionAtLeast varnish.version "6.2"; # tests crash with core dump
   };
 }

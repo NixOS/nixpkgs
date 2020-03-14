@@ -48,6 +48,5 @@ stdenv.mkDerivation {
     description = "Collection of Varnish Cache modules (vmods) by Varnish Software";
     homepage = https://github.com/varnish/varnish-modules;
     inherit (varnish.meta) license platforms maintainers;
-    broken = versionAtLeast varnish.version "6.2"; # tests crash with core dump
   };
 }

@@ -27,6 +27,5 @@ stdenv.mkDerivation {
     description = "A Varnish master VMOD to query MaxMind GeoIP2 DB files";
     homepage = https://github.com/fgsch/libvmod-geoip2;
     inherit (varnish.meta) license platforms maintainers;
-    broken = versionAtLeast varnish.version "6.2"; # tests crash with core dump
   };
 }

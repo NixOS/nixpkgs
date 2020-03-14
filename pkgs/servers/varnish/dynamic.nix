@@ -38,6 +38,5 @@ stdenv.mkDerivation {
     description = "Dynamic director similar to the DNS director from Varnish 3";
     homepage = https://github.com/nigoroll/libvmod-dynamic;
     inherit (varnish.meta) license platforms maintainers;
-    broken = versionAtLeast varnish.version "6.2"; # tests crash with core dump
   };
 }
