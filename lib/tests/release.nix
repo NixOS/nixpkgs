@@ -1,4 +1,4 @@
-{ pkgs ? import ((import ../.).cleanSource ../..) {} }:
+{ pkgs ? import ../.. {} }:
 
 pkgs.runCommandNoCC "nixpkgs-lib-tests" {
   buildInputs = [ pkgs.nix (import ./check-eval.nix) ];
@@ -17,8 +17,8 @@ pkgs.runCommandNoCC "nixpkgs-lib-tests" {
     cacheDir=$TEST_ROOT/binary-cache
     nix-store --init
 
-    cd ${pkgs.path}/lib/tests
-    bash ./modules.sh
+    cp -r ${../.} lib
+    bash lib/tests/modules.sh
 
     touch $out
 ''
