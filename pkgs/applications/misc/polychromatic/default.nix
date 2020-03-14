@@ -85,4 +85,16 @@
       substituteInPlace $file --replace /usr/lib $out/lib
     done
   '';
+
+  meta = with stdenv.lib; {
+    homepage = "https://polychromatic.app/";
+    description = "Graphical front-end and tray applet for configuring Razer peripherals on GNU/Linux.";
+    longDescription = ''
+      Polychromatic is a frontend for OpenRazer that enables Razer devices
+      to control lighting effects and more on GNU/Linux.
+    '';
+    license = licenses.gpl3;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ evanjs ];
+  };
 }
