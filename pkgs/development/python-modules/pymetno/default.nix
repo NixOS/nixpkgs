@@ -24,7 +24,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "A library to communicate with the met.no api";
-    homepage = https://github.com/Danielhiversen/pyMetno/;
+    homepage = "https://github.com/Danielhiversen/pyMetno/";
     license = licenses.mit;
     maintainers = with maintainers; [ flyfloh ];
   };
