@@ -12996,8 +12996,6 @@ in
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  jasper = callPackage ../development/libraries/jasper { };
-
   jama = callPackage ../development/libraries/jama { };
 
   jansson = callPackage ../development/libraries/jansson { };
