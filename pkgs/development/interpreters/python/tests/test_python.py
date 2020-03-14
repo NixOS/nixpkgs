@@ -35,7 +35,7 @@ class TestCasePython(unittest.TestCase):
     def test_site_prefix(self):
         self.assertTrue(sys.prefix in site.PREFIXES)
 
-    @unittest.skipIf(sys.version_info.major==2, "Python 2 does not have base_prefix")
+    @unittest.skipIf(IS_PYPY or sys.version_info.major==2, "Python 2 does not have base_prefix")
     def test_base_prefix(self):
         if IS_VENV:
             self.assertNotEqual(sys.prefix, sys.base_prefix)

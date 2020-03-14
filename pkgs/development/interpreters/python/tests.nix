@@ -36,6 +36,7 @@ let
       is_venv = "True";
       is_nixenv = "False";
     };
+
     # Venv built using Python Nix environment (python.buildEnv)
     # TODO: Cannot create venv from a  nix env
     # Error: Command '['/nix/store/ddc8nqx73pda86ibvhzdmvdsqmwnbjf7-python3-3.7.6-venv/bin/python3.7', '-Im', 'ensurepip', '--upgrade', '--default-pip']' returned non-zero exit status 1.
