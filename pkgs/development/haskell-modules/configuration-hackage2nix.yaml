@@ -5602,7 +5602,6 @@ broken-packages:
   - haskmon
   - haskoin
   - haskoin-bitcoind
-  - haskoin-core
   - haskoin-crypto
   - haskoin-node
   - haskoin-protocol
