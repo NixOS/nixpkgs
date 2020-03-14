@@ -21,8 +21,8 @@
 , gdk-pixbuf
 , imagemagick
 , desktop-file-utils
-, webkit
 , ninja
+, webkitgtk
 , meson
 , sass
 , sassc
@@ -68,7 +68,7 @@
       desktop-file-utils
       gobject-introspection
       wrapGAppsHook
-      webkit
+      webkitgtk
       gnome3.librsvg
       sass
       sassc
