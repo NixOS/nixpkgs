@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://www.opendap.org/pub/source/${pname}-${version}.tar.gz";
-    sha256 = "17j6ca2qsp69a91lm11mwbs4l8q13xqcdz60l94avl5krymrqg47";
+    sha256 = "15jysnsmdjs7q4iafb4qzq4b76cfyvmbxgcxnqg4sr0x4bplwfnb";
   };
 
   meta = with stdenv.lib; {
