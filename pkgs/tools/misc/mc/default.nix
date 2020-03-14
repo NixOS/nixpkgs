@@ -60,11 +60,11 @@ stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = "File Manager and User Shell for the GNU Project";
     downloadPage = "https://www.midnight-commander.org/downloads/";
-    homepage = https://www.midnight-commander.org;
+    homepage = "https://www.midnight-commander.org";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ sander ];
     platforms = with platforms; linux ++ darwin;
-    repositories.git = git://github.com/MidnightCommander/mc.git;
+    repositories.git = "https://github.com/MidnightCommander/mc.git";
     updateWalker = true;
   };
 }
