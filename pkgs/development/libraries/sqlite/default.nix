@@ -10,12 +10,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sqlite";
-  version = "3.31.0";
+  version = "3.31.1";
 
   # NB! Make sure to update analyzer.nix src (in the same directory).
   src = fetchurl {
     url = "https://sqlite.org/2020/sqlite-autoconf-${archiveVersion version}.tar.gz";
-    sha256 = "1w7i954349sjd5a6rvy118prra43k07y9hy8rpajs6vmjmnnx7bw";
+    sha256 = "1bj936svd8i5g25xd1bj52hj4zca01fgl3sqkj86z9q5pkz4wa32";
   };
 
   outputs = [ "bin" "dev" "out" ];
@@ -76,7 +76,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "A self-contained, serverless, zero-configuration, transactional SQL database engine";
     downloadPage = https://sqlite.org/download.html;
-    homepage = https://www.sqlite.org/;
+    homepage = "https://www.sqlite.org/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ eelco np ];
     platforms = platforms.unix ++ platforms.windows;
