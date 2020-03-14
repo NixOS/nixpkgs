@@ -15,6 +15,7 @@
 , libssh2
 , openssl
 , coreutils
+, autoreconfHook
 }:
 
 stdenv.mkDerivation rec {
@@ -26,17 +27,7 @@ stdenv.mkDerivation rec {
     sha256 = "0ikd2yql44p7nagmb08dmjqdwadclnvgr7ri9pmzc2s5f301r7w5";
   };
 
-  preConfigure = ''
-    for f in \
-      ./configure \
-      ./config/ltmain.sh \
-      ./m4/libtool.m4 \
-      ; do
-      substituteInPlace $f --replace /usr/bin/file ${file}/bin/file
-    done
-  '';
-
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig autoreconfHook ];
 
   buildInputs = [
     file
