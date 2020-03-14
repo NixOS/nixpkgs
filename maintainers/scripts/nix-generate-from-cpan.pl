@@ -164,7 +164,7 @@ Readonly::Hash my %LICENSE_MAP => (
 
     # License not provided in metadata.
     unknown => {
-        licenses => [qw( unknown )],
+        licenses => [],
         amb      => 1
     }
 );
