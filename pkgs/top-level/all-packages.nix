@@ -24528,6 +24528,10 @@ with pkgs;
 
   poly = callPackage ../data/fonts/poly { };
 
+  polychromatic = callPackage ../applications/misc/polychromatic {
+    inherit (python3Packages) buildPythonApplication distro openrazer pygobject3 requests setproctitle;
+  };
+
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
   pop-gtk-theme = callPackage ../data/themes/pop-gtk { };
