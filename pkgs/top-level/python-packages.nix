@@ -5754,7 +5754,7 @@ in {
 
   smmap = callPackage ../development/python-modules/smmap { };
 
-  smmap2 = callPackage ../development/python-modules/smmap2 { };
+  smmap2 = throw "smmap2 has been deprecated, use smmap instead."; # added 2020-03-14
 
   transaction = callPackage ../development/python-modules/transaction { };
 
