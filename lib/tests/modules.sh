@@ -3,7 +3,10 @@
 # This script is used to test that the module system is working as expected.
 # By default it test the version of nixpkgs which is defined in the NIX_PATH.
 
-cd ./modules
+# https://stackoverflow.com/a/246128/6605742
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+
+cd "$DIR"/modules
 
 pass=0
 fail=0
