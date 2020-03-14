@@ -446,10 +446,10 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
-     There is now only one Xfce package-set and module. This means attributes, <literal>xfce4-14</literal>
-     <literal>xfce4-12</literal>, and <literal>xfceUnstable</literal> all now point to the latest Xfce 4.14
-     packages. And in future NixOS releases will be the latest released version of Xfce available at the
-     time during the releases development (if viable).
+     There is now only one Xfce package-set and module. This means that attributes <literal>xfce4-14</literal>
+     and <literal>xfceUnstable</literal> all now point to the latest Xfce 4.14
+     packages. And in the future NixOS releases will be the latest released version of Xfce available at the
+     time of the release's development (if viable).
     </para>
    </listitem>
    <listitem>
