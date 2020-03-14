@@ -728,7 +728,9 @@ let
     # want to build.
     #
     # These will be passed as arguments to mkExtension above.
-    extensionData = [
+    extensionData = let
+      pcre' = if (lib.versionAtLeast php.version "7.3") then pcre2 else pcre;
+    in [
     ];
 
     # Convert the list of attrs:
