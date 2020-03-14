@@ -5,27 +5,20 @@
 , glibcLocales
 , coreutils
 , git
+, python3
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.13";
+  version = "0.9.14";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
-    rev    = "refs/tags/${version}";
-    sha256 = "0nk6rjdkbxli510iwqspvray48kdxvbdmq1k8nxn14kqfpqzlbcv";
+    rev    = version;
+    sha256 = "03g8ilg4dxin3v3rzccdxx9zf8rvyqpxakn1dlpqbgsnwdwa19p4";
   };
-
-  patches = [
-    (fetchpatch {
-      name = "fix-ptk-tests.patch";
-      url = "https://github.com/xonsh/xonsh/commit/ca7acecc968dcda7dd56c1f5d5b4df349c98d734.patch";
-      sha256 = "00nhbf9wzm6r86r9zq8mnhds30w6gdhkgsx5kpl0jppiz4ll96iw";
-    })
-  ];
 
   LC_ALL = "en_US.UTF-8";
   postPatch = ''
@@ -34,6 +27,7 @@ python3Packages.buildPythonApplication rec {
 
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' tests/test_integrations.py
     sed -ie 's|/usr/bin/env|${coreutils}/bin/env|' scripts/xon.sh
+    find scripts -name 'xonsh*' -exec sed -i -e "s|env -S|env|" {} \;
     find -name "*.xsh" | xargs sed -ie 's|/usr/bin/env|${coreutils}/bin/env|'
     patchShebangs .
   '';
@@ -41,7 +35,7 @@ python3Packages.buildPythonApplication rec {
   doCheck = !stdenv.isDarwin;
 
   checkPhase = ''
-    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight'
+    HOME=$TMPDIR pytest -k 'not test_repath_backslash and not test_os and not test_man_completion and not test_builtins and not test_main and not test_ptk_highlight and not test_pyghooks'
     HOME=$TMPDIR pytest -k 'test_builtins or test_main' --reruns 5
     HOME=$TMPDIR pytest -k 'test_ptk_highlight'
   '';
