@@ -3,7 +3,6 @@
 , enableGSL ? true, gsl
 , enableGhostScript ? true, ghostscript
 , enableMuPDF ? true, mupdf
-, enableJPEG2K ? false, jasper ? null  # disabled by default, jasper has unfixed CVE
 , enableDJVU ? true, djvulibre
 , enableGOCR ? false, gocr # Disabled by default due to crashes
 , enableTesseract ? true, leptonica, tesseract4
@@ -144,7 +143,6 @@ in stdenv.mkDerivation rec {
     optional enableGSL gsl ++
     optional enableGhostScript ghostscript ++
     optional enableMuPDF mupdf_modded ++
-    optional enableJPEG2K jasper ++
     optional enableDJVU djvulibre ++
     optional enableGOCR gocr ++
     optionals enableTesseract [ leptonica_modded tesseract_modded ];
