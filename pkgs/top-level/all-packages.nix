@@ -24729,9 +24729,7 @@ with pkgs;
 
   poly = callPackage ../data/fonts/poly { };
 
-  polychromatic = callPackage ../applications/misc/polychromatic {
-    inherit (python3Packages) buildPythonApplication distro openrazer pygobject3 requests setproctitle;
-  };
+  polychromatic = python3Packages.callPackage ../applications/misc/polychromatic { };
 
   polytopes_db = callPackage ../data/misc/polytopes_db { };
 
