@@ -17,7 +17,7 @@ let
     ${cfg.extraConfig}
     EOL
 
-    ssh-keygen -f mock-hostkey -N ""
+    ssh-keygen -q -f mock-hostkey -N ""
     sshd -t -f $out -h mock-hostkey
   '';
 
