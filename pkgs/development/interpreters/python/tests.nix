@@ -2,6 +2,7 @@
 , runCommand
 , substituteAll
 , lib
+, callPackage
 }:
 
 let
@@ -50,6 +51,14 @@ let
     # };
   };
 
+  # All PyPy package builds are broken at the moment
+  integrationTests = lib.optionalAttrs (python.isPy3k  && (!python.isPyPy)) rec {
+    # Before the addition of NIX_PYTHONPREFIX mypy was broken with typed packages
+    nix-pythonprefix-mypy = callPackage ./tests/test_nix_pythonprefix {
+      interpreter = python;
+    };
+  };
+
   testfun = name: attrs: runCommand "${python.name}-tests-${name}" ({
     inherit (python) pythonVersion;
   } // attrs) ''
@@ -61,4 +70,4 @@ let
     touch $out/success
   '';
 
-in lib.mapAttrs testfun envs 
+in lib.mapAttrs testfun envs // integrationTests
