@@ -2770,7 +2770,7 @@ in {
 
   gitdb = callPackage ../development/python-modules/gitdb { };
 
-  gitdb2 = callPackage ../development/python-modules/gitdb2 { };
+  gitdb2 = throw "gitdb2 has been deprecated, use gitdb instead."; # added 2020-03-14
 
   GitPython = callPackage ../development/python-modules/GitPython { };
 
