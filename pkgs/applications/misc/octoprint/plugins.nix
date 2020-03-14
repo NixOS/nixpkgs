@@ -1,6 +1,6 @@
 { pkgs }:
 
-with pkgs; 
+with pkgs;
 
 self: super: let
   buildPlugin = args: self.buildPythonPackage (args // {
@@ -146,13 +146,13 @@ in {
 
   psucontrol = buildPlugin rec {
     pname = "PSUControl";
-    version = "0.1.8";
+    version = "0.1.9";
 
     src = fetchFromGitHub {
       owner = "kantlivelong";
       repo = "OctoPrint-${pname}";
       rev = version;
-      sha256 = "0aj38d7b7d5pzmzq841pip18cpg18wy2vrxq2nd13875597y54b8";
+      sha256 = "1cn009bdgn6c9ba9an5wfj8z02wi0xcsmbhkqggiqlnqy1fq45ca";
     };
 
     preConfigure = ''
