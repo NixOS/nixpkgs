@@ -27,6 +27,7 @@
 , sass
 , sassc
 , ibus
+, usbutils
 }:
 
   buildPythonApplication rec {
@@ -55,6 +56,7 @@
       openrazer-daemon
       requests
       ibus
+      usbutils
     ];
 
     nativePropagatedBuildInputs = [
