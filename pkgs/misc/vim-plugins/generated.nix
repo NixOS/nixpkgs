@@ -554,6 +554,17 @@ let
     };
   };
 
+  coc-spell-checker = buildVimPluginFrom2Nix {
+    pname = "coc-spell-checker";
+    version = "2020-02-19";
+    src = fetchFromGitHub {
+      owner = "iamcco";
+      repo = "coc-spell-checker";
+      rev = "c956e288a4d0ffff85e920970776d89dc9c65099";
+      sha256 = "00xavbkdx019f6xm6bwf3xqgyvbp3sz7ddnjxfvgah97gwy0q7xs";
+    };
+  };
+
   coc-stylelint = buildVimPluginFrom2Nix {
     pname = "coc-stylelint";
     version = "2019-08-20";

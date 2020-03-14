@@ -133,6 +133,7 @@ honza/vim-snippets
 hotwatermorning/auto-git-diff
 hsanson/vim-android
 hsitz/VimOrganizer
+iamcco/coc-spell-checker
 ianks/vim-tsx
 icymind/NeoSolarized
 idris-hackers/idris-vim
