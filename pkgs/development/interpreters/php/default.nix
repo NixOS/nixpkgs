@@ -3,7 +3,7 @@
 , autoconf, automake, bison, file, flex, libtool, pkgconfig, re2c
 , libxml2, readline, zlib, curl, postgresql, gettext
 , openssl, pcre, pcre2, sqlite
-, libxslt, libmcrypt, bzip2, icu, openldap, cyrus_sasl, libmhash, unixODBC
+, libxslt, bzip2, icu, openldap, cyrus_sasl, unixODBC
 , uwimap, pam, gmp, apacheHttpd, libiconv, systemd, libsodium, html-tidy, libargon2
 , gd, freetype, libXpm, libjpeg, libpng, libwebp
 , libzip, valgrind, oniguruma, symlinkJoin, writeText
@@ -20,7 +20,6 @@ let
   , withSystemd ? config.php.systemd or stdenv.isLinux
   , imapSupport ? config.php.imap or (!stdenv.isDarwin)
   , ldapSupport ? config.php.ldap or true
-  , mhashSupport ? config.php.mhash or false
   , mysqlndSupport ? config.php.mysqlnd or true
   , mysqliSupport ? (config.php.mysqli or true) && (mysqlndSupport)
   , pdo_mysqlSupport ? (config.php.pdo_mysql or true) && (mysqlndSupport)
@@ -45,7 +44,6 @@ let
   , intlSupport ? config.php.intl or true
   , exifSupport ? config.php.exif or true
   , xslSupport ? config.php.xsl or false
-  , mcryptSupport ? (config.php.mcrypt or true) && (versionOlder version "7.2")
   , bz2Support ? config.php.bz2 or false
   , zipSupport ? config.php.zip or true
   , ftpSupport ? config.php.ftp or true
@@ -66,10 +64,7 @@ let
   , valgrindSupport ? (config.php.valgrind or true) && (versionAtLeast version "7.2")
   , ipv6Support ? config.php.ipv6 or true
   , pearSupport ? (config.php.pear or true) && (libxml2Support)
-  }:
-  let
-    libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
-  in stdenv.mkDerivation {
+  }: stdenv.mkDerivation {
     pname = "php";
 
     inherit version;
@@ -90,7 +85,6 @@ let
       ++ optionals opensslSupport [ openssl openssl.dev ]
       ++ optional apxs2Support apacheHttpd
       ++ optional (ldapSupport && stdenv.isLinux) cyrus_sasl
-      ++ optional mhashSupport libmhash
       ++ optional zlibSupport zlib
       ++ optional libxml2Support libxml2
       ++ optional readlineSupport readline
@@ -102,7 +96,6 @@ let
       ++ optional gettextSupport gettext
       ++ optional intlSupport icu
       ++ optional xslSupport libxslt
-      ++ optional mcryptSupport libmcrypt'
       ++ optional bz2Support bzip2
       ++ optional sodiumSupport libsodium
       ++ optional tidySupport html-tidy
@@ -131,7 +124,6 @@ let
       ++ optional (ldapSupport && stdenv.isLinux) "--with-ldap-sasl=${cyrus_sasl.dev}"
       ++ optional apxs2Support "--with-apxs2=${apacheHttpd.dev}/bin/apxs"
       ++ optional embedSupport "--enable-embed"
-      ++ optional mhashSupport "--with-mhash"
       ++ optional curlSupport "--with-curl=${curl.dev}"
       ++ optional zlibSupport "--with-zlib=${zlib.dev}"
       ++ optional (libxml2Support && (versionOlder version "7.4")) "--with-libxml-dir=${libxml2.dev}"
@@ -180,7 +172,6 @@ let
       ++ optional intlSupport "--enable-intl"
       ++ optional exifSupport "--enable-exif"
       ++ optional xslSupport "--with-xsl=${libxslt.dev}"
-      ++ optional mcryptSupport "--with-mcrypt=${libmcrypt'}"
       ++ optional bz2Support "--with-bz2=${bzip2.dev}"
       ++ optional (zipSupport && (versionOlder version "7.4")) "--enable-zip"
       ++ optional (zipSupport && (versionAtLeast version "7.4")) "--with-zip"
