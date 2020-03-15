@@ -29,12 +29,12 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.8.1";
+  version = "1.8.4";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "0y7rcpz7psf8k3agsrq277jdm651vbnn9xpqvmj2in1a786idya7";
+    sha256 = "0zs86s6rg6c87hry52mjri5ff3lpc79wdiq4wr3rmkv7bzqrd9ca";
     rev = "v${version}";
   };
 
@@ -50,7 +50,7 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = if stdenv.isLinux then [ "--enable-kms" ] else "";
+  configureFlags = stdenv.lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
@@ -86,6 +86,6 @@ in stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer ];
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
   };
 }
