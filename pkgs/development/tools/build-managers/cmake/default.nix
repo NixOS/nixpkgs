@@ -8,6 +8,7 @@
 , useNcurses ? false, ncurses
 , useQt4 ? false, qt4
 , withQt5 ? false, qtbase
+, enableManpages ? false, sphinx ? null
 }:
 
 assert withQt5 -> useQt4 == false;
@@ -39,7 +40,7 @@ stdenv.mkDerivation rec {
 
   ] ++ lib.optional stdenv.isCygwin ./3.2.2-cygwin.patch;
 
-  outputs = [ "out" ];
+  outputs = [ "out" ] ++ lib.optional enableManpages "man";
   setOutputFlags = false;
 
   setupHook = ./setup-hook.sh;
@@ -48,6 +49,7 @@ stdenv.mkDerivation rec {
     [ setupHook pkgconfig ]
     ++ lib.optionals useSharedLibraries [ bzip2 curl expat libarchive xz zlib libuv rhash ]
     ++ lib.optional useNcurses ncurses
+    ++ lib.optional enableManpages sphinx
     ++ lib.optional useQt4 qt4
     ++ lib.optional withQt5 qtbase;
 
@@ -71,6 +73,7 @@ stdenv.mkDerivation rec {
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
     ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+    ++ lib.optional enableManpages "--sphinx-man"
     ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.

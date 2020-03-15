@@ -9971,6 +9971,9 @@ in
   cmake_2_8 = callPackage ../development/tools/build-managers/cmake/2.8.nix { };
 
   cmake = libsForQt5.callPackage ../development/tools/build-managers/cmake { };
+  cmake-manpages = cmake.override {
+    enableManpages = true; inherit (python3Packages) sphinx;
+  };
 
   cmakeCurses = cmake.override { useNcurses = true; };
 
