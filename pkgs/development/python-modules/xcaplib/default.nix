@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchdarcs
+, fetchFromGitHub
 , isPy3k
 , eventlib
 , application
@@ -8,13 +8,14 @@
 
 buildPythonPackage rec {
   pname = "python-xcaplib";
-  version = "1.2.1";
+  version = "1.2.2";
   disabled = isPy3k;
 
-  src = fetchdarcs {
-    url = "http://devel.ag-projects.com/repositories/${pname}";
+  src = fetchFromGitHub {
+    owner = "AGProjects";
+    repo = pname;
     rev = "release-${version}";
-    sha256 = "15ww8f0a9zh37mypw5s4q1qk44cwf7jlhc9q1z4vjlpvnzimg54v";
+    hash = "sha256-K05xcZ7SVStgDeboxhFQILNpegrO7ke2jrti+Nxe+QY=";
   };
 
   propagatedBuildInputs = [ eventlib application ];
