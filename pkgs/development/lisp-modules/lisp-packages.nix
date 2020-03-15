@@ -8,7 +8,7 @@ let lispPackages = rec {
 
   quicklisp = buildLispPackage rec {
     baseName = "quicklisp";
-    version = "2017-03-06";
+    version = "2019-02-16";
 
     buildSystems = [];
 
@@ -17,7 +17,7 @@ let lispPackages = rec {
     src = pkgs.fetchgit {
       url = "https://github.com/quicklisp/quicklisp-client/";
       rev = "refs/tags/version-${version}";
-      sha256 = "11ywk7ggc1axivpbqvrd7m1lxsj4yp38d1h9w1d8i9qnn7zjpqj4";
+      sha256 = "0x9b4vf36n2hh102gqgjxg5f5ymxcr9j5khn4rskjdprfgd8d1y9";
     };
     overrides = x: rec {
       inherit clwrapper;
