@@ -14,21 +14,17 @@
 
 buildPythonPackage rec {
   pname = "sipsimple";
-  version = "3.4.2";
+  version = "3.5.0";
   disabled = isPy3k;
 
   src = fetchFromGitHub {
     owner = "AGProjects";
     repo = "python-sipsimple";
     rev = "release-${version}";
-    sha256 = "094xf343d6zjhg9jwbm3dr74zq264cyqnn22byvm2m88lnagmhmr";
+    hash = "sha256-sH4oDMdhh01RTxiUReussWCVvOl3T7DhruthK8GK/M4=";
   };
 
   preConfigure = ''
-    # TODO: Executable bits are set by upstream with the next release
-    # see AGProjects/python-sipsimple/commit/a36d66cf758afb43c59f7ac48b193c4148eb1848
-    chmod +x ./deps/pjsip/configure ./deps/pjsip/aconfigure
-
     export LD=$CC
   '';
 
