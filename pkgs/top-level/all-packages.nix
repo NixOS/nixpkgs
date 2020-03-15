@@ -7565,6 +7565,8 @@ in
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = xfsprogs.dev;
 
+  xmage = callPackage ../games/xmage { };
+
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
   xmlformat = callPackage ../tools/text/xml/xmlformat { };
