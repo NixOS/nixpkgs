@@ -505,8 +505,10 @@ in
         PrintMotd no # handled by pam_motd
 
         AuthorizedKeysFile ${toString cfg.authorizedKeysFiles}
-        AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
-        AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+        ${optionalString (cfg.authorizedKeysCommand != "none") ''
+          AuthorizedKeysCommand ${cfg.authorizedKeysCommand}
+          AuthorizedKeysCommandUser ${cfg.authorizedKeysCommandUser}
+        ''}
 
         ${flip concatMapStrings cfg.hostKeys (k: ''
           HostKey ${k.path}
