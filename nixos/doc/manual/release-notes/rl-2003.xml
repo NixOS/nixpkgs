@@ -746,21 +746,10 @@ auth required pam_succeed_if.so uid >= 1000 quiet
 }</programlisting>
       </para></listitem>
       <listitem><para>If you deploy a fresh <package>matrix-synapse</package>, you need to configure
-       the database yourself. An example for this can be found in <literal>&lt;nixpkgs/nixos/tests/matrix-synapse.nix&gt;</literal>:
-<programlisting>{ ... }: {
-  services.matrix-synapse = {
-   <link linkend="opt-services.matrix-synapse.enable">enable</link> = true;
-   /* and all the other config you've defined here */
-  };
-  <link linkend="opt-services.postgresql.enable">services.postgresql.enable</link> = true;
-  <link linkend="opt-services.postgresql.initialScript">services.postgresql.initialScript</link> = ''
-    CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
-    CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
-      TEMPLATE template0
-      LC_COLLATE = "C"
-      LC_CTYPE = "C";
-  '';
-}</programlisting>
+       the database yourself (e.g. by using the
+       <link linkend="opt-services.postgresql.initialScript">services.postgresql.initialScript</link>
+       option). An example for this can be found in the
+       <link linkend="module-services-matrix">documentation of the Matrix module</link>.
       </para></listitem>
       <listitem><para>If you initially deployed your <package>matrix-synapse</package> on
        <literal>nixos-unstable</literal> <emphasis>after</emphasis> the <literal>19.09</literal>-release,

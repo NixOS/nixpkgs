@@ -113,7 +113,7 @@ ${cfg.extraConfig}
 '';
 
   hasLocalPostgresDB = let args = cfg.database_args; in
-    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" ]));
+    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
 in {
   options = {
     services.matrix-synapse = {
@@ -720,5 +720,7 @@ in {
       <nixpkgs/nixos/tests/matrix-synapse.nix>
     '')
   ];
+
+  meta.doc = ./matrix-synapse.xml;
 
 }
