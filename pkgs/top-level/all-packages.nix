@@ -8832,17 +8832,17 @@ in
     inherit (darwin) apple_sdk;
   };
 
-  rust_1_42_0 = callPackage ../development/compilers/rust/1_42_0.nix {
+  rust_1_42 = callPackage ../development/compilers/rust/1_42.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust_1_38_0 = callPackage ../development/compilers/rust/1_38_0.nix {
+  rust_1_38 = callPackage ../development/compilers/rust/1_38.nix {
     inherit (darwin.apple_sdk.frameworks) CoreFoundation Security;
   };
-  rust = rust_1_42_0;
+  rust = rust_1_42;
 
-  rustPackages_1_42_0 = rust_1_42_0.packages.stable;
-  rustPackages_1_38_0 = rust_1_38_0.packages.stable;
-  rustPackages = rustPackages_1_42_0;
+  rustPackages_1_42 = rust_1_42.packages.stable;
+  rustPackages_1_38 = rust_1_38.packages.stable;
+  rustPackages = rustPackages_1_42;
 
   inherit (rustPackages) cargo clippy rustc rustPlatform;
   inherit (rust) makeRustPlatform;
@@ -8925,7 +8925,7 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rustracerd = callPackage ../development/tools/rust/racerd {
-    inherit (rustPackages_1_38_0) rustPlatform;
+    inherit (rustPackages_1_38) rustPlatform;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
   rust-bindgen = callPackage ../development/tools/rust/bindgen { };
@@ -21910,7 +21910,7 @@ in
 
   thunderbird = callPackage ../applications/networking/mailreaders/thunderbird {
     inherit (gnome2) libIDL;
-    inherit (rustPackages_1_38_0) cargo rustc;
+    inherit (rustPackages_1_38) cargo rustc;
     libpng = libpng_apng;
     gtk3Support = true;
   };

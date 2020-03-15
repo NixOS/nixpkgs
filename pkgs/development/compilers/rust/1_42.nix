@@ -34,7 +34,7 @@ import ./default.nix {
     x86_64-apple-darwin = "b6504003ab70b11f278e0243a43ba9d6bf75e8ad6819b4058a2b6e3991cc8d7a";
   };
 
-  selectRustPackage = pkgs: pkgs.rust_1_42_0;
+  selectRustPackage = pkgs: pkgs.rust_1_42;
 
   rustcPatches = [
     ./0001-Allow-getting-no_std-from-the-config-file.patch
