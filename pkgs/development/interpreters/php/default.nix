@@ -67,58 +67,52 @@ let
   , ipv6Support ? config.php.ipv6 or true
   , pearSupport ? (config.php.pear or true) && (libxml2Support)
   }:
+  let
+    libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
+  in stdenv.mkDerivation {
+    pname = "php";
 
-    let
-      libmcrypt' = libmcrypt.override { disablePosixThreads = true; };
-    in stdenv.mkDerivation {
+    inherit version;
 
-      inherit version;
+    enableParallelBuilding = true;
 
-      pname = "php";
+    nativeBuildInputs = [ autoconf automake bison file flex libtool pkgconfig re2c ];
 
-      enableParallelBuilding = true;
+    buildInputs = [ ]
+      ++ optional (versionOlder version "7.3") pcre
+      ++ optional (versionAtLeast version "7.3") pcre2
+      ++ optional (versionAtLeast version "7.4") oniguruma
+      ++ optional withSystemd systemd
+      ++ optionals imapSupport [ uwimap openssl pam ]
+      ++ optionals curlSupport [ curl openssl ]
+      ++ optionals ldapSupport [ openldap openssl ]
+      ++ optionals gdSupport [ gd freetype libXpm libjpeg libpng libwebp ]
+      ++ optionals opensslSupport [ openssl openssl.dev ]
+      ++ optional apxs2Support apacheHttpd
+      ++ optional (ldapSupport && stdenv.isLinux) cyrus_sasl
+      ++ optional mhashSupport libmhash
+      ++ optional zlibSupport zlib
+      ++ optional libxml2Support libxml2
+      ++ optional readlineSupport readline
+      ++ optional sqliteSupport sqlite
+      ++ optional postgresqlSupport postgresql
+      ++ optional pdo_odbcSupport unixODBC
+      ++ optional pdo_pgsqlSupport postgresql
+      ++ optional gmpSupport gmp
+      ++ optional gettextSupport gettext
+      ++ optional intlSupport icu
+      ++ optional xslSupport libxslt
+      ++ optional mcryptSupport libmcrypt'
+      ++ optional bz2Support bzip2
+      ++ optional sodiumSupport libsodium
+      ++ optional tidySupport html-tidy
+      ++ optional argon2Support libargon2
+      ++ optional libzipSupport libzip
+      ++ optional valgrindSupport valgrind;
 
-      nativeBuildInputs = [
-        autoconf automake bison file flex libtool pkgconfig re2c
-      ];
+    CXXFLAGS = optionalString stdenv.cc.isClang "-std=c++11";
 
-      buildInputs = [ ]
-        ++ optional (versionOlder version "7.3") pcre
-        ++ optional (versionAtLeast version "7.3") pcre2
-        ++ optional (versionAtLeast version "7.4") oniguruma
-        ++ optional withSystemd systemd
-        ++ optionals imapSupport [ uwimap openssl pam ]
-        ++ optionals curlSupport [ curl openssl ]
-        ++ optionals ldapSupport [ openldap openssl ]
-        ++ optionals gdSupport [ gd freetype libXpm libjpeg libpng libwebp ]
-        ++ optionals opensslSupport [ openssl openssl.dev ]
-        ++ optional apxs2Support apacheHttpd
-        ++ optional (ldapSupport && stdenv.isLinux) cyrus_sasl
-        ++ optional mhashSupport libmhash
-        ++ optional zlibSupport zlib
-        ++ optional libxml2Support libxml2
-        ++ optional readlineSupport readline
-        ++ optional sqliteSupport sqlite
-        ++ optional postgresqlSupport postgresql
-        ++ optional pdo_odbcSupport unixODBC
-        ++ optional pdo_pgsqlSupport postgresql
-        ++ optional gmpSupport gmp
-        ++ optional gettextSupport gettext
-        ++ optional intlSupport icu
-        ++ optional xslSupport libxslt
-        ++ optional mcryptSupport libmcrypt'
-        ++ optional bz2Support bzip2
-        ++ optional sodiumSupport libsodium
-        ++ optional tidySupport html-tidy
-        ++ optional argon2Support libargon2
-        ++ optional libzipSupport libzip
-        ++ optional valgrindSupport valgrind;
-
-      CXXFLAGS = optionalString stdenv.cc.isClang "-std=c++11";
-
-      configureFlags = [
-        "--with-config-file-scan-dir=/etc/php.d"
-      ]
+    configureFlags = [ "--with-config-file-scan-dir=/etc/php.d" ]
       ++ optionals (versionOlder version "7.3") [ "--with-pcre-regex=${pcre.dev}" "PCRE_LIBDIR=${pcre}" ]
       ++ optionals (versions.majorMinor version == "7.3") [ "--with-pcre-regex=${pcre2.dev}" "PCRE_LIBDIR=${pcre2}" ]
       ++ optionals (versionAtLeast version "7.4") [ "--with-external-pcre=${pcre2.dev}" "PCRE_LIBDIR=${pcre2}" ]
@@ -209,89 +203,88 @@ let
       ++ optional (!ipv6Support) "--disable-ipv6"
       ++ optional (pearSupport && libxml2Support) "--with-pear=$(out)/lib/php/pear";
 
-      hardeningDisable = [ "bindnow" ];
+    hardeningDisable = [ "bindnow" ];
 
-      preConfigure = ''
-        # Don't record the configure flags since this causes unnecessary
-        # runtime dependencies
-        for i in main/build-defs.h.in scripts/php-config.in; do
-          substituteInPlace $i \
-            --replace '@CONFIGURE_COMMAND@' '(omitted)' \
-            --replace '@CONFIGURE_OPTIONS@' "" \
-            --replace '@PHP_LDFLAGS@' ""
-        done
+    preConfigure = ''
+      # Don't record the configure flags since this causes unnecessary
+      # runtime dependencies
+      for i in main/build-defs.h.in scripts/php-config.in; do
+        substituteInPlace $i \
+          --replace '@CONFIGURE_COMMAND@' '(omitted)' \
+          --replace '@CONFIGURE_OPTIONS@' "" \
+          --replace '@PHP_LDFLAGS@' ""
+      done
 
-        substituteInPlace ./build/libtool.m4 --replace /usr/bin/file ${file}/bin/file
+      substituteInPlace ./build/libtool.m4 --replace /usr/bin/file ${file}/bin/file
 
-        export EXTENSION_DIR=$out/lib/php/extensions
+      export EXTENSION_DIR=$out/lib/php/extensions
 
-        ./buildconf --copy --force
+      ./buildconf --copy --force
 
-        if test -f $src/genfiles; then
-          ./genfiles
-        fi
-      '' + optionalString stdenv.isDarwin ''
-        substituteInPlace configure --replace "-lstdc++" "-lc++"
-      '';
+      if test -f $src/genfiles; then
+        ./genfiles
+      fi
+    '' + optionalString stdenv.isDarwin ''
+      substituteInPlace configure --replace "-lstdc++" "-lc++"
+    '';
 
-      postInstall = ''
-        test -d $out/etc || mkdir $out/etc
-        cp php.ini-production $out/etc/php.ini
-      '';
+    postInstall = ''
+      test -d $out/etc || mkdir $out/etc
+      cp php.ini-production $out/etc/php.ini
+    '';
 
-      postFixup = ''
-        mkdir -p $dev/bin $dev/share/man/man1
-        mv $out/bin/phpize $out/bin/php-config $dev/bin/
-        mv $out/share/man/man1/phpize.1.gz \
-           $out/share/man/man1/php-config.1.gz \
-           $dev/share/man/man1/
-      '';
+    postFixup = ''
+      mkdir -p $dev/bin $dev/share/man/man1
+      mv $out/bin/phpize $out/bin/php-config $dev/bin/
+      mv $out/share/man/man1/phpize.1.gz \
+         $out/share/man/man1/php-config.1.gz \
+         $dev/share/man/man1/
+    '';
 
-      src = fetchurl {
-        url = "https://www.php.net/distributions/php-${version}.tar.bz2";
-        inherit sha256;
-      };
-
-      meta = with stdenv.lib; {
-        description = "An HTML-embedded scripting language";
-        homepage = https://www.php.net/;
-        license = licenses.php301;
-        maintainers = with maintainers; [ globin etu ma27 ];
-        platforms = platforms.all;
-        outputsToInstall = [ "out" "dev" ];
-      };
-
-      patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
-
-      stripDebugList = "bin sbin lib modules";
-
-      outputs = [ "out" "dev" ];
-
+    src = fetchurl {
+      url = "https://www.php.net/distributions/php-${version}.tar.bz2";
+      inherit sha256;
     };
 
-    generic' = { version, sha256, ... }@args: let php = generic args; in php.overrideAttrs (_: {
-      passthru.buildEnv = { exts ? (_: []), extraConfig ? "" }: let
-        extraInit = writeText "custom-php.ini" ''
-          ${extraConfig}
-          ${concatMapStringsSep "\n" (ext: let
-            extName = lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-            type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
-          in ''
-            ${type}=${ext}/lib/php/extensions/${extName}.so
-          '') (exts (callPackage ../../../top-level/php-packages.nix { inherit php; }))}
-        '';
-      in symlinkJoin {
-        name = "php-custom-${version}";
-        nativeBuildInputs = [ makeWrapper ];
-        paths = [ php ];
-        postBuild = ''
-          wrapProgram $out/bin/php \
-            --add-flags "-c ${extraInit}"
-          wrapProgram $out/bin/php-fpm \
-            --add-flags "-c ${extraInit}"
-        '';
-      };
-    });
+    meta = with stdenv.lib; {
+      description = "An HTML-embedded scripting language";
+      homepage = https://www.php.net/;
+      license = licenses.php301;
+      maintainers = with maintainers; [ globin etu ma27 ];
+      platforms = platforms.all;
+      outputsToInstall = [ "out" "dev" ];
+    };
+
+    patches = [ ./fix-paths-php7.patch ] ++ extraPatches;
+
+    stripDebugList = "bin sbin lib modules";
+
+    outputs = [ "out" "dev" ];
+  };
+
+  generic' = { version, sha256, ... }@args: let php = generic args; in php.overrideAttrs (_: {
+    passthru.buildEnv = { exts ? (_: []), extraConfig ? "" }: let
+      extraInit = writeText "custom-php.ini" ''
+        ${extraConfig}
+        ${concatMapStringsSep "\n" (ext: let
+          extName = lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+          type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
+        in ''
+          ${type}=${ext}/lib/php/extensions/${extName}.so
+        '') (exts (callPackage ../../../top-level/php-packages.nix { inherit php; }))}
+      '';
+    in symlinkJoin {
+      name = "php-custom-${version}";
+      nativeBuildInputs = [ makeWrapper ];
+      paths = [ php ];
+      postBuild = ''
+        wrapProgram $out/bin/php \
+          --add-flags "-c ${extraInit}"
+        wrapProgram $out/bin/php-fpm \
+          --add-flags "-c ${extraInit}"
+      '';
+    };
+  });
 
 in {
   php72 = generic' {
