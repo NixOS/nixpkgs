@@ -2,7 +2,7 @@
 , bzip2, curl, libxml2, openssl, gmp5, icu, oniguruma, libsodium, html-tidy
 , libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
 , pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
-, libffi, freetds, postgresql, sqlite, recode, net-snmp }:
+, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC }:
 
 let
   self = with self; {
@@ -821,7 +821,7 @@ let
       # pdo_firebird (7.4, 7.3, 7.2)
       { name = "pdo_mysql"; configureFlags = [ "--with-pdo-mysql=mysqlnd" ]; }
       # pdo_oci (7.4, 7.3, 7.2)
-      # pdo_odbc (7.4, 7.3, 7.2)
+      { name = "pdo_odbc"; configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ]; }
       { name = "pdo_pgsql"; configureFlags = [ "--with-pdo-pgsql=${postgresql}" ]; }
       { name = "pdo_sqlite"; buildInputs = [ sqlite ]; configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ]; }
       { name = "pgsql"; buildInputs = [ pcre' ]; configureFlags = [ "--with-pgsql=${postgresql}" ]; }
