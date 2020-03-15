@@ -22492,8 +22492,6 @@ in
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
-  wtftw = callPackage ../applications/window-managers/wtftw {};
-
   wxhexeditor = callPackage ../applications/editors/wxhexeditor {
     wxGTK = wxGTK31;
   };
