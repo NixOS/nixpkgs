@@ -18638,6 +18638,8 @@ in
 
   cadence =  qt5.callPackage ../applications/audio/cadence { };
 
+  cheesecutter = callPackage ../applications/audio/cheesecutter { };
+
   milkytracker = callPackage ../applications/audio/milkytracker { };
 
   schismtracker = callPackage ../applications/audio/schismtracker { };
