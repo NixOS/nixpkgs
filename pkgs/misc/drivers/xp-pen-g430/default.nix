@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, tar, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, libglvnd }:
+{ stdenv, fetchzip, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, libglvnd }:
 stdenv.mkDerivation rec {
   name = "xp-pen-G430";
   version = "20190820";
@@ -6,10 +6,9 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://download01.xp-pen.com/file/2019/08/Linux%20Beta%20Driver(${version}).zip";
     sha256 = "091kfqxxj90pdmwncgfl8ldi70pdhwryh3cls30654983m8cgnby";
-  };
+  } + ./Linux_Pentablet_V1.3.0.0.tar.gz;
 
   nativeBuildInputs = [
-    tar
     autoPatchelfHook
   ];
 
@@ -21,10 +20,6 @@ stdenv.mkDerivation rec {
     libglvnd
     stdenv.cc.cc.lib
   ];
-
-  unpackPhase = ''
-    tar -xzf Linux_Pentablet_V1.3.0.0.tar.gz
-  '';
 
   installPhase = ''
     mkdir -p $out/bin
