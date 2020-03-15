@@ -2279,7 +2279,7 @@
   Enteee = {
     email = "nix@duckpond.ch";
     github = "Enteee";
-    githubid = 5493775;
+    githubId = 5493775;
     name = "Ente";
   };
   enzime = {
@@ -3035,6 +3035,7 @@
     name = "Guanpeng Xu";
   };
   hexa = {
+    email = "hexa@darmstadt.ccc.de";
     github = "mweinelt";
     githubId = 131599;
     name = "Martin Weinelt";
@@ -3225,6 +3226,7 @@
     name = "Michele Catalano";
   };
   isgy = {
+    name = "isgy";
     email = "isgy@teiyg.com";
     github = "isgy";
     githubId = 13622947;
@@ -3263,7 +3265,7 @@
     email = "ivar.scholten@protonmail.com";
     github = "IvarWithoutBones";
     githubId = 41924494;
-    Name = "Ivar";
+    name = "Ivar";
   };
   ivegotasthma = {
     email = "ivegotasthma@protonmail.com";
@@ -3797,7 +3799,7 @@
     email = "KAction@disroot.org";
     github = "kaction";
     githubId = 44864956;
-    key = [{
+    keys = [{
       longkeyid = "ed25519/0x749FD4DFA2E94236";
       fingerprint = "3F87 0A7C A7B4 3731 2F13  6083 749F D4DF A2E9 4236";
     }];
@@ -4064,7 +4066,7 @@
   kristian-brucaj = {
     email = "kbrucaj@gmail.com";
     github = "kristian-brucaj";
-    githubID = "8893110";
+    githubId = 8893110;
     name = "Kristian Brucaj";
   };
   kristoff3r = {
@@ -6644,6 +6646,7 @@
     name = "Fabian Schmitthenner";
   };
   schmittlauch = {
+    name = "Trolli Schmittlauch";
     email = "t.schmittlauch+nixos@orlives.de";
     github = "schmittlauch";
   };
@@ -6743,7 +6746,7 @@
   servalcatty = {
     email = "servalcat@pm.me";
     github = "servalcatty";
-    githubid = 51969817;
+    githubId = 51969817;
     name = "Serval";
     keys = [{
       longkeyid = "rsa4096/0x4A2AAAA382F8294C";
@@ -7783,7 +7786,7 @@
   valebes = {
     email = "valebes@gmail.com";
     github = "valebes";
-    githubid = 10956211;
+    githubId = 10956211;
     name = "Valerio Besozzi";
   };
   valeriangalliat = {
