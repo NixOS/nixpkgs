@@ -6417,7 +6417,6 @@ broken-packages:
   - iban
   - ical
   - iCalendar
-  - icepeak
   - IcoGrid
   - iconv-typed
   - ide-backend
@@ -9537,7 +9536,6 @@ broken-packages:
   - sql-simple-sqlite
   - sqlcipher
   - sqlite
-  - sqlite-simple
   - sqlite-simple-errors
   - sqlite-simple-typed
   - sqlvalue-list
