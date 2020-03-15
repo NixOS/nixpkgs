@@ -47,10 +47,9 @@ in
         environment = { LD_LIBRARY_PATH = nssModulesPath; };
 
         restartTriggers = [
-          config.environment.etc.hosts.source
           config.environment.etc."nsswitch.conf".source
           config.environment.etc."nscd.conf".source
-        ];
+        ] ++ optional ((config.environment.etc).hosts.enable or false) config.environment.etc.hosts.source;
 
         # We use DynamicUser because in default configurations nscd doesn't
         # create any files that need to survive restarts. However, in some

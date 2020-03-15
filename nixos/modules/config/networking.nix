@@ -8,6 +8,12 @@ let
 
   cfg = config.networking;
 
+  upstreamNetworkUnits = [
+    "network.target"
+    "network-pre.target"
+    "network-online.target"
+  ];
+
   localhostMapped4 = cfg.hosts ? "127.0.0.1" && elem "localhost" cfg.hosts."127.0.0.1";
   localhostMapped6 = cfg.hosts ? "::1"       && elem "localhost" cfg.hosts."::1";
 
@@ -21,6 +27,16 @@ in
   ];
 
   options = {
+
+    networking.enable = mkOption {
+      type = types.bool;
+      default = true;
+      description =
+        ''
+          Whether to enable networking.  Disabling this option
+          also disables all services which require network access.
+        '';
+    };
 
     networking.hosts = lib.mkOption {
       type = types.attrsOf (types.listOf types.str);
@@ -144,7 +160,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
 
     assertions = [{
       assertion = localhostMapped4;
@@ -220,6 +236,10 @@ in
 
     # Install the proxy environment variables
     environment.sessionVariables = cfg.proxy.envVars;
+
+    systemd.additionalUpstreamSystemUnits = upstreamNetworkUnits;
+
+    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
 
   };
 

@@ -1045,7 +1045,7 @@ in
 
   };
 
-  config = mkIf config.systemd.network.enable {
+  config = mkIf (config.networking.enable && config.systemd.network.enable) {
 
     users.users.systemd-network.group = "systemd-network";
 

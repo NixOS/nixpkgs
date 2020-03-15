@@ -122,7 +122,7 @@ in
           ProtectHome = true;
           Restart = if cfg.alwaysKeepRunning then "always" else "on-failure";
         };
-        restartTriggers = [ config.environment.etc.hosts.source ];
+        restartTriggers = optional ((config.environment.etc).hosts.enable or false) config.environment.etc.hosts.source;
     };
   };
 }

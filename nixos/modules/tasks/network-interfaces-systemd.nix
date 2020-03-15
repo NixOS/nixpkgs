@@ -27,7 +27,7 @@ in
 
 {
 
-  config = mkIf cfg.useNetworkd {
+  config = mkIf (cfg.enable && cfg.useNetworkd) {
 
     assertions = [ {
       assertion = cfg.defaultGatewayWindowSize == null;

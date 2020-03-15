@@ -1,7 +1,6 @@
 { config, options, lib, pkgs, utils, ... }:
 
 with lib;
-with utils;
 
 let
 
@@ -48,7 +47,7 @@ let
 
   # We must escape interfaces due to the systemd interpretation
   subsystemDevice = interface:
-    "sys-subsystem-net-devices-${escapeSystemdPath interface}.device";
+    "sys-subsystem-net-devices-${utils.escapeSystemdPath interface}.device";
 
   addrOpts = v:
     assert v == 4 || v == 6;
@@ -996,7 +995,7 @@ in
 
   ###### implementation
 
-  config = {
+  config = mkIf cfg.enable {
 
     warnings = concatMap (i: i.warnings) interfaces;
 

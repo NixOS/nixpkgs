@@ -19,9 +19,6 @@ let
       "exit.target"
       "graphical.target"
       "multi-user.target"
-      "network.target"
-      "network-pre.target"
-      "network-online.target"
       "nss-lookup.target"
       "nss-user-lookup.target"
       "time-sync.target"
@@ -1018,7 +1015,6 @@ in
     systemd.services.systemd-journald.stopIfChanged = false;
     systemd.targets.local-fs.unitConfig.X-StopOnReconfiguration = true;
     systemd.targets.remote-fs.unitConfig.X-StopOnReconfiguration = true;
-    systemd.targets.network-online.wantedBy = [ "multi-user.target" ];
     systemd.services.systemd-binfmt.wants = [ "proc-sys-fs-binfmt_misc.mount" ];
 
     # Don't bother with certain units in containers.
