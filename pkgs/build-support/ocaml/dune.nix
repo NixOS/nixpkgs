@@ -1,6 +1,8 @@
-{ stdenv, ocaml, findlib, dune, opaline }:
+{ stdenv, ocaml, findlib, dune, dune_2, opaline }:
 
 { pname, version, buildInputs ? [], ... }@args:
+
+let Dune = if args.useDune2 or false then dune_2 else dune; in
 
 if args ? minimumOCamlVersion &&
    ! stdenv.lib.versionAtLeast ocaml.version args.minimumOCamlVersion
@@ -29,7 +31,7 @@ stdenv.mkDerivation ({
 
   name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  buildInputs = [ ocaml dune findlib ] ++ buildInputs;
+  buildInputs = [ ocaml Dune findlib ] ++ buildInputs;
 
   meta = (args.meta or {}) // { platforms = args.meta.platforms or ocaml.meta.platforms; };
 
