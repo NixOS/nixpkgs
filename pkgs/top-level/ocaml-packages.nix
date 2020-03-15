@@ -347,6 +347,11 @@ let
 
     gmetadom = callPackage ../development/ocaml-modules/gmetadom { };
 
+    graphics =
+    if lib.versionOlder "4.09" ocaml.version
+    then callPackage ../development/ocaml-modules/graphics { }
+    else null;
+
     graphql = callPackage ../development/ocaml-modules/graphql { };
 
     graphql-cohttp = callPackage ../development/ocaml-modules/graphql/cohttp.nix { };
