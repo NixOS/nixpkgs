@@ -1,5 +1,5 @@
-{ stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, pkgconfig, which
-, gettext, libffi, libiconv, libtasn1
+{ stdenv, fetchFromGitHub, fetchpatch, meson, pkgconfig, which
+, gettext, libffi, libiconv, libtasn1, ninja
 }:
 
 stdenv.mkDerivation rec {
@@ -16,17 +16,12 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev"];
   outputBin = "dev";
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig which ];
+  nativeBuildInputs = [ meson pkgconfig which ninja ];
   buildInputs = [ gettext libffi libiconv libtasn1 ];
 
-  autoreconfPhase = ''
-    NOCONFIGURE=1 ./autogen.sh
-  '';
-
-  configureFlags = [
-    "--sysconfdir=/etc"
-    "--localstatedir=/var"
-    "--without-trust-paths"
+  mesonFlags = [
+    "-Dsystem_config=${placeholder "out"}/etc"
+    "-Dsystemd=disabled"
   ]; # TODO: store trust anchors in a directory common to Nix and NixOS
 
   enableParallelBuilding = true;
