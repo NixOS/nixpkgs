@@ -4154,6 +4154,16 @@
     githubId = 3425311;
     name = "Antoine Eiche";
   };
+  lexuge = {
+    name = "Harry Ying";
+    email = "lexugeyky@outlook.com";
+    github = "LEXUGE";
+    githubId = 13804737;
+    keys = [{
+      longkeyid = "rsa4096/0xAE53B4C2E58EDD45";
+      fingerprint = "7FE2 113A A08B 695A C8B8  DDE6 AE53 B4C2 E58E DD45";
+    }];
+  };
   lheckemann = {
     email = "git@sphalerite.org";
     github = "lheckemann";

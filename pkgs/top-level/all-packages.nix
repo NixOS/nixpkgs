@@ -6540,6 +6540,8 @@ in
     conf = config.slstatus.conf or null;
   };
 
+  smartdns = callPackage ../tools/networking/smartdns { };
+
   smartmontools = callPackage ../tools/system/smartmontools {
     inherit (darwin.apple_sdk.frameworks) IOKit ApplicationServices;
   };
