@@ -76,12 +76,13 @@ in
 
       s3tcSupport = mkOption {
         type = types.bool;
-        default = false;
+        default = true;
         description = ''
           Make S3TC(S3 Texture Compression) via libtxc_dxtn available
-          to OpenGL drivers instead of the patent-free S2TC replacement.
+          to OpenGL drivers.
 
-          Using this library may require a patent license depending on your location.
+          Using this library may previously have required a patent
+          license depending on your location, but they expired in 2017.
         '';
       };
 
