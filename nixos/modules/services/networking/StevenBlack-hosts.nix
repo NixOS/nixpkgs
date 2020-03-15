@@ -19,7 +19,7 @@ with lib;
 
     };
     whitelist = mkOption {
-      description = "List of hosts to allow";
+      description = "List of hosts to allow,one host per line.";
       default = "";
       type = types.lines;
 
