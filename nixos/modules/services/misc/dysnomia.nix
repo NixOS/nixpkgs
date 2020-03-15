@@ -74,7 +74,7 @@ in
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable Dysnomia";
+        description = "Whether to enable Dysnomia, a tool for managing mutable components, primarily in combination with Disnix";
       };
 
       enableAuthentication = mkOption {
