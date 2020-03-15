@@ -2,19 +2,15 @@
 , fetchurl
 , meson
 , ninja
-, intltool
-, gtk-doc
+, gettext
 , pkg-config
 , networkmanager
 , gnome3
 , libnotify
 , libsecret
 , polkit
-, isocodes
 , modemmanager
-, libxml2
-, docbook_xsl
-, docbook_xml_dtd_43
+, libnma
 , mobile-broadband-provider-info
 , glib-networking
 , gsettings-desktop-schemas
@@ -25,70 +21,54 @@
 , python3
 , gtk3
 , libappindicator-gtk3
-, withGnome ? true
-, gcr
 , glib
 }:
 
-let
+stdenv.mkDerivation rec {
   pname = "network-manager-applet";
-  version = "1.8.24";
-in stdenv.mkDerivation rec {
-  name = "${pname}-${version}";
+  version = "1.16.0";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "1gzvz4wfqfsfclqg56y954al8x6fmz71cnxlx1i4nqr7a25bp2qi";
+    url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    sha256 = "1rf3nm0hjcy9f8ajb4vmvwy503w8yj8d4daxkcb7w7i7b92qmyfn";
   };
 
   mesonFlags = [
-    "-Dlibnm_gtk=false" # It is deprecated
     "-Dselinux=false"
     "-Dappindicator=yes"
-    "-Dgcr=${if withGnome then "true" else "false"}"
   ];
 
-  outputs = [ "out" "lib" "dev" "devdoc" "man" ];
+  outputs = [ "out" "man" ];
 
   buildInputs = [
+    libnma
     gtk3
     networkmanager
     libnotify
     libsecret
     gsettings-desktop-schemas
     polkit
-    isocodes
-    mobile-broadband-provider-info
     libgudev
     modemmanager
     jansson
     glib-networking
     libappindicator-gtk3
     gnome3.adwaita-icon-theme
-  ] ++ stdenv.lib.optionals withGnome [ gcr ]; # advanced certificate chooser
+  ];
 
   nativeBuildInputs = [
     meson
     ninja
-    intltool
+    gettext
     pkg-config
     wrapGAppsHook
     gobject-introspection
     python3
-    gtk-doc
-    docbook_xsl
-    docbook_xml_dtd_43
-    libxml2
   ];
-
-  # Needed for wingpanel-indicator-network and switchboard-plug-network
-  patches = [ ./hardcode-gsettings.patch ];
 
   postPatch = ''
     chmod +x meson_post_install.py # patchShebangs requires executable file
     patchShebangs meson_post_install.py
-
-    substituteInPlace src/wireless-security/eap-method.c --subst-var-by NM_APPLET_GSETTINGS ${glib.makeSchemaPath "$lib" "${pname}-${version}"}
   '';
 
   passthru = {
@@ -99,7 +79,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Projects/NetworkManager;
+    homepage = "https://gitlab.gnome.org/GNOME/network-manager-applet/";
     description = "NetworkManager control applet for GNOME";
     license = licenses.gpl2;
     maintainers = with maintainers; [ phreedom ];
