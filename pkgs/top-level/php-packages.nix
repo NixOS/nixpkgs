@@ -704,11 +704,13 @@ let
     # Name passed is the name of the extension and is automatically used
     # to add the configureFlag "--enable-${name}", which can be overriden.
     #
-    # Build inputs is used for extra deps that may be needed.
+    # Build inputs is used for extra deps that may be needed. And zendExtension
+    # will mark the extension as a zend extension or not.
     mkExtension = {
       name
       , configureFlags ? [ "--enable-${name}" ]
       , buildInputs ? []
+      , zendExtension ? false
       , ...
     }: stdenv.mkDerivation {
       pname = "php-ext-${name}";
@@ -718,7 +720,7 @@ let
 
       enableParallelBuilding = true;
       nativeBuildInputs = [ php autoconf pkgconfig re2c ];
-      inherit configureFlags buildInputs;
+      inherit configureFlags buildInputs zendExtension;
 
       preConfigure = "phpize";
 
@@ -811,7 +813,7 @@ let
       { name = "mysqli"; configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ]; }
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
-      { name = "opcache"; buildInputs = [ pcre' ]; }
+      { name = "opcache"; buildInputs = [ pcre' ]; zendExtension = true; }
       { name = "pcntl"; }
       { name = "pdo"; }
       { name = "pdo_dblib";
