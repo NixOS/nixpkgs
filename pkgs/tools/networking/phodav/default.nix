@@ -2,23 +2,26 @@
 , pkgconfig, libsoup, meson, ninja }:
 
 let
-  version = "2.3";
+  version = "2.4";
 in stdenv.mkDerivation rec {
   pname = "phodav";
   inherit version;
 
   src = fetchurl {
     url = "http://ftp.gnome.org/pub/GNOME/sources/phodav/${version}/${pname}-${version}.tar.xz";
-    sha256 = "0ndy5qva6bq7vhk06jq2d4nr5fp98xsdwypg42vjz91h9ii1xxkf";
+    sha256 = "1hxq8c5qfah3w7mxcyy3yhzdgswplll31a69p5mqdl04bsvw5pbx";
   };
 
   mesonFlags = [
     "-Davahi=disabled"
     "-Dsystemd=disabled"
     "-Dgtk_doc=disabled"
+    "-Dudev=disabled"
   ];
 
   nativeBuildInputs = [ libsoup pkgconfig meson ninja ];
+
+  outputs = [ "out" "dev" "lib" ];
 
   meta = with stdenv.lib; {
     description = "WebDav server implementation and library using libsoup";
