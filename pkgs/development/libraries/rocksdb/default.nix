@@ -6,29 +6,17 @@
 
 stdenv.mkDerivation rec {
   pname = "rocksdb";
-  version = "6.4.6";
+  version = "6.6.4";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0s0n4p1b4jzmslz9d2xd4ajra0m6l9x26mjwlbgw0klxjggmy8qn";
+    sha256 = "1h7y31b05w4vv4v509l368j9qlbv5assmdq9hp2788zipqbpywc0";
   };
 
   nativeBuildInputs = [ cmake ninja ];
   buildInputs = [ bzip2 lz4 snappy zlib zstd ];
-
-  patches = [
-    # https://github.com/facebook/rocksdb/pull/6076
-    (fetchpatch {
-      url = "https://github.com/facebook/rocksdb/commit/c0be4b2ff1a5393419673fab961cb9b09ba38752.diff";
-      sha256 = "1f2wg9kqlmf2hiiihmbp8m5fr2wnn7896g6i9yg9hdgi40pw30w6";
-    })
-  ];
-
-  postPatch = ''
-    substituteInPlace CMakeLists.txt --replace "find_package(zlib " "find_package(ZLIB "
-  '';
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.cc.isGNU "-Wno-error=deprecated-copy -Wno-error=pessimizing-move";
 
