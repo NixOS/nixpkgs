@@ -641,6 +641,13 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      The previous behavior can be restored by setting <literal>config.riot-web.conf = { disable_guests = false; piwik = true; }</literal>.
     </para>
    </listitem>
+   <listitem>
+     <para>
+       Stand-alone usage of <literal>Upower</literal> now requires
+       <option>services.upower.enable</option> instead of just installing into
+       <xref linkend="opt-environment.systemPackages"/>.
+     </para>
+   </listitem>
   </itemizedlist>
  </section>
 
