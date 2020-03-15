@@ -1,15 +1,16 @@
-{ stdenv, fetchdarcs, pythonPackages, libvncserver, zlib
+{ stdenv, fetchFromGitHub, pythonPackages, libvncserver, zlib
 , gnutls, libvpx, makeDesktopItem, mkDerivationWith }:
 
 mkDerivationWith pythonPackages.buildPythonApplication rec {
 
   pname = "blink";
-  version = "3.2.0";
+  version = "3.2.1";
 
-  src = fetchdarcs {
-    url = http://devel.ag-projects.com/repositories/blink-qt;
+  src = fetchFromGitHub {
+    owner = "AGProjects";
+    repo = "blink-qt";
     rev = "release-${version}";
-    sha256 = "19rcwr5scw48qnj79q1pysw95fz9h98nyc3161qy2kph5g7dwkc3";
+    sha256 = "12rcwr5scw48qnj79q1pysw95fz9h98nyc3161qy2kph5g7dwkc3";
   };
 
   patches = [ ./pythonpath.patch ];
