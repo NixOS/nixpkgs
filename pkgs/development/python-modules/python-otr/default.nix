@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchFromGitHub
+, fetchPypi
 , isPy3k
 , zope_interface
 , cryptography
@@ -10,17 +10,17 @@
 
 buildPythonPackage rec {
   pname = "python-otr";
-  version = "1.2.0";
+  version = "1.2.1";
   disabled = isPy3k;
 
-  src = fetchFromGitHub {
-    owner = "AGProjects";
-    repo = pname;
-    rev = "release-${version}";
-    sha256 = "0p3b1n8jlxwd65gbk2k5007fkhdyjwcvr4982s42hncivxvabzzy";
+  src = fetchPypi {
+    inherit pname version;
+    hash = "sha256-qKJcphUgJ0M1gMAHZNzkTsSzvHSBjPvQWBt5clNEH2k=";
   };
 
   propagatedBuildInputs = [ zope_interface cryptography application gmpy2 ];
+
+  doCheck = false;
 
   meta = with stdenv.lib; {
     description = "A pure python implementation of OTR";
