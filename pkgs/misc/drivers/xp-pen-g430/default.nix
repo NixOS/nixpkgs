@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, tar, autoPatchelfHook, libusb1, libX11, libXtst, qt5, libglvnd }:
+{ stdenv, fetchzip, tar, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, libglvnd }:
 stdenv.mkDerivation rec {
   name = "xp-pen-G430";
   version = "20190820";
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     libusb1
     libX11
     libXtst
-    qt5.qtbase
+    qtbase
     libglvnd
     stdenv.cc.cc.lib
   ];
