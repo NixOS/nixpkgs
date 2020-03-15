@@ -7906,4 +7906,10 @@
     githubId = 8686360;
     name = "Illia Shestakov";
   };
+  ivar = {
+    email = "ivar.scholten@protonmail.com";
+    github = "IvarWithoutBones";
+    githubId = 41924494;
+    name = "Ivar";
+  };
 }
