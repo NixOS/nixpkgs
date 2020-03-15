@@ -1,6 +1,6 @@
 { stdenv
 , buildPythonPackage
-, fetchdarcs
+, fetchFromGitHub
 , eventlib
 , application
 , gnutls
@@ -8,12 +8,13 @@
 
 buildPythonPackage rec {
   pname = "python-msrplib";
-  version = "0.19.2";
+  version = "0.20.0";
 
-  src = fetchdarcs {
-    url = "http://devel.ag-projects.com/repositories/${pname}";
+  src = fetchFromGitHub {
+    owner = "AGProjects";
+    repo = pname;
     rev = "release-${version}";
-    sha256 = "0d0krwv4hhspjgppnvh0iz51bvdbz23cjasgrppip7x8b00514gz";
+    hash = "sha256-/etzjVmafexXn4Xp6+o/xNmxRESmI5zAecXF7YSL4r4=";
   };
 
   propagatedBuildInputs = [ eventlib application gnutls ];
