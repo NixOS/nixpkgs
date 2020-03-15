@@ -6337,6 +6337,8 @@ in
 
   safecopy = callPackage ../tools/system/safecopy { };
 
+  sacd = callPackage ../tools/cd-dvd/sacd { };
+
   safe = callPackage ../tools/security/safe { };
 
   safe-rm = callPackage ../tools/system/safe-rm { };
