@@ -205,6 +205,7 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
+        Type = "notify";
         AmbientCapabilities = "CAP_NET_BIND_SERVICE";
         CapabilityBoundingSet = "CAP_NET_BIND_SERVICE";
         ExecStart = "${pkgs.stubby}/bin/stubby -C ${confFile} ${optionalString cfg.debugLogging "-l"}";
