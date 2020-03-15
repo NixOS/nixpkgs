@@ -3,33 +3,33 @@
 stdenv.mkDerivation rec {
   pname = "aucatctl";
   version = "0.1";
+
   src = fetchurl {
     url = "http://www.sndio.org/${pname}-${version}.tar.gz";
     sha256 = "524f2fae47db785234f166551520d9605b9a27551ca438bd807e3509ce246cf0";
   };
 
-  buildInputs = [ sndio ] ++ stdenv.lib.optionals stdenv.isLinux [ libbsd ];
+  buildInputs = [ sndio ]
+    ++ stdenv.lib.optional (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD)
+    libbsd;
 
   outputs = [ "out" "man" ];
 
-  prePatch = stdenv.lib.optionalString stdenv.isLinux ''
-    # Required patching to build on Linux.
-    substituteInPlace Makefile \
-      --replace '-lsndio' '-lsndio -lbsd' \
-      --replace '/usr/local' '${placeholder "out"}'
+  preBuild = ''
+    makeFlagsArray+=("PREFIX=$out")
+  '' + stdenv.lib.optionalString
+    (!stdenv.isDarwin && !stdenv.hostPlatform.isBSD) ''
+      makeFlagsArray+=(LDADD="-lsndio -lbsd")
 
-    # Fix warning about implicit declaration of function 'strlcpy'
-    substituteInPlace aucatctl.c \
-      --replace '#include <string.h>' '#include <bsd/string.h>'
-  '';
-
-  postInstall = ''
-    moveToOutput share/man $man
-  '';
+      # Fix warning about implicit declaration of function 'strlcpy'
+      substituteInPlace aucatctl.c \
+        --replace '#include <string.h>' '#include <bsd/string.h>'
+    '';
 
   meta = with stdenv.lib; {
-    description = "The aucatctl utility sends MIDI messages to control sndiod and/or aucat volumes";
-    homepage = http://www.sndio.org;
+    description =
+      "The aucatctl utility sends MIDI messages to control sndiod and/or aucat volumes";
+    homepage = "http://www.sndio.org";
     license = licenses.isc;
     maintainers = with maintainers; [ sna ];
     platforms = platforms.unix;
