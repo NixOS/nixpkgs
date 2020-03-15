@@ -39,7 +39,13 @@ stdenv.mkDerivation rec {
     cl-css
     cl-json
     cl-markup
-    cl-ppcre
+    (cl-ppcre.override rec {
+      version = "v2.1.1";
+      src = pkgs.fetchurl {
+        url = "https://github.com/edicl/cl-ppcre/archive/${version}.tar.gz";
+        sha256 = "1vsxv12hpzh5nz0vk0r0m915g7bai7v2iab5qpkdjj0nnxwi2qw9";
+      };
+    })
     cl-ppcre-unicode
     cl-prevalence
     closer-mop
