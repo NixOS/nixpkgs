@@ -16,8 +16,6 @@ let
 
     buildDunePackage = callPackage ../build-support/ocaml/dune.nix {};
 
-    buildDune2Package = buildDunePackage.override { dune = dune_2; };
-
     alcotest = callPackage ../development/ocaml-modules/alcotest {};
 
     alcotest-lwt = callPackage ../development/ocaml-modules/alcotest/lwt.nix {};
@@ -232,9 +230,9 @@ let
 
     dune_2 = callPackage ../development/tools/ocaml/dune/2.nix { };
 
-    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { buildDunePackage = buildDune2Package; };
+    dune-configurator = callPackage ../development/ocaml-modules/dune-configurator { };
 
-    dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { buildDunePackage = buildDune2Package; };
+    dune-private-libs = callPackage ../development/ocaml-modules/dune-private-libs { };
 
     earley = callPackage ../development/ocaml-modules/earley { };
 
