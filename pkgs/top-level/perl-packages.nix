@@ -1243,6 +1243,22 @@ let
     };
   };
 
+  BytesRandomSecure = buildPerlPackage {
+    pname = "Bytes-Random-Secure";
+    version = "0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-0.29.tar.gz";
+      sha256 = "53bbd339e6a11efca07c619a615c7c188a68bb2be849a1cb7efc3dd4d9ae85ae";
+    };
+    propagatedBuildInputs = [ CryptRandomSeed MathRandomISAAC ];
+    checkInputs = [ StatisticsBasic ];
+    meta = {
+      description = "Perl extension to generate cryptographically-secure random bytes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.xfix ];
+    };
+  };
+
   CacheCache = buildPerlPackage {
     pname = "Cache-Cache";
     version = "1.08";
@@ -3605,6 +3621,22 @@ let
     };
   };
 
+  CryptRandomSeed = buildPerlPackage {
+    pname = "Crypt-Random-Seed";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-Seed-0.03.tar.gz";
+      sha256 = "593da54b522c09cc26bbcc0e4e49c1c8e688a6fd33b0726af801d722a5c8d0f1";
+    };
+    propagatedBuildInputs = [ CryptRandomTESHA2 ];
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-Seed";
+      description = "Provide strong randomness for seeding";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.xfix ];
+    };
+  };
+
   CryptRandomSource = buildPerlModule {
     pname = "Crypt-Random-Source";
     version = "0.14";
@@ -3617,6 +3649,21 @@ let
     meta = {
       description = "Get weak or strong random data from pluggable sources";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CryptRandomTESHA2 = buildPerlPackage {
+    pname = "Crypt-Random-TESHA2";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-TESHA2-0.01.tar.gz";
+      sha256 = "a0912b42c52be173da528d5527e40d967324bc04ac78d9fc2ddc91ff16fe9633";
+    };
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-TESHA2";
+      description = "Random numbers using timer/schedule entropy, aka userspace voodoo entropy";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.xfix ];
     };
   };
 
@@ -3826,14 +3873,19 @@ let
 
   CryptSSLeay = buildPerlPackage {
     pname = "Crypt-SSLeay";
-    version = "0.72";
+    version = "0.73_06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.72.tar.gz;
-      sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
+      url = mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.73_06.tar.gz;
+      sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
     };
     makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
-    propagatedBuildInputs = [ LWPProtocolHttps ];
+    propagatedBuildInputs = [ BytesRandomSecure LWPProtocolHttps ];
+    meta = {
+      description = "OpenSSL support for LWP";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.xfix ];
+    };
   };
 
   CSSDOM = buildPerlPackage {
