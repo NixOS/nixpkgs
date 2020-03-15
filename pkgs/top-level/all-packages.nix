@@ -2472,6 +2472,8 @@ in
 
   cmst = libsForQt5.callPackage ../tools/networking/cmst { };
 
+  cmt = callPackage ../applications/audio/cmt {};
+
   codimd = callPackage ../servers/web-apps/codimd {
     nodejs = nodejs-10_x;
   };
