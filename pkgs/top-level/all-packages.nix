@@ -30410,6 +30410,8 @@ in
 
   faustlive = callPackage ../applications/audio/faust/faustlive.nix { };
 
+  faustPhysicalModeling = callPackage ../applications/audio/faustPhysicalModeling  { };
+
   faustStk = callPackage ../applications/audio/faustStk  { };
 
   fceux = callPackage ../misc/emulators/fceux { };
