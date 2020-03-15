@@ -1,10 +1,10 @@
 {
-  stdenv, fetchFromGitHub, cmake, extra-cmake-modules,
+  lib, mkDerivation, fetchFromGitHub, cmake, extra-cmake-modules,
   zlib, boost, libunwind, elfutils, sparsehash,
   qtbase, kio, kitemmodels, threadweaver, kconfigwidgets, kcoreaddons, kdiagram
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "heaptrack";
   version = "1.1.0";
 
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     qtbase kio kitemmodels threadweaver kconfigwidgets kcoreaddons kdiagram
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Heap memory profiler for Linux";
     homepage = https://github.com/KDE/heaptrack;
     license = licenses.lgpl21Plus;

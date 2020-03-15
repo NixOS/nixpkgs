@@ -10,9 +10,11 @@ rustPlatform.buildRustPackage rec {
     rev = "v${version}";
     sha256 = "0vl996y58a9b62d8sqrpfn2h8qkya7qbg5zqsmy7nxhph1vhbspj";
   };
+
+  # Upstreamed in https://github.com/tiffany352/rink-rs/pull/53
   cargoPatches = [ ./cargo-lock.patch ];
 
-  cargoSha256 = "0q2g1hkqyzq9lsas4fhsbpk3jn5hikchh6i1jf9c08ca2xm136c2";
+  cargoSha256 = "0shlh0m9k0iqxpv9zmiw7a6v197swrvpz9x6qzhximzkdwni9gz9";
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ openssl gmp ncurses ];

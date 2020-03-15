@@ -8,7 +8,7 @@
 , enableRaytracerX11   ? false
 
 # Standard build environment with cmake.
-, stdenv, fetchurl, cmake
+, stdenv, fetchurl, fetchpatch, cmake
 
 # Optional system packages, otherwise internal GEANT4 packages are used.
 , clhep ? null # not packaged currently
@@ -36,12 +36,12 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "10.5.1";
+  version = "10.6.1";
   pname = "geant4";
 
   src = fetchurl{
-    url = "http://cern.ch/geant4-data/releases/geant4.10.05.p01.tar.gz";
-    sha256 = "f4a292220500fad17e0167ce3153e96e3410ecbe96284e572dc707f63523bdff";
+    url = "https://geant4-data.web.cern.ch/geant4-data/releases/geant4.10.06.p01.tar.gz";
+    sha256 = "0ssxg7dd7vxljb3fdyb0llg7gsxack21qjfsb3n23k107a19yibk";
   };
 
   cmakeFlags = [
@@ -64,11 +64,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   nativeBuildInputs =  [ cmake ];
-  buildInputs = [ clhep expat zlib libGLU libGL xlibsWrapper libXmu ]
+
+  buildInputs = [ libGLU xlibsWrapper libXmu ]
+    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
+
+  propagatedBuildInputs = [ clhep expat zlib libGL ]
     ++ stdenv.lib.optionals enableGDML [ xercesc ]
     ++ stdenv.lib.optionals enableXM [ motif ]
-    ++ stdenv.lib.optionals enableQT [ qtbase ]
-    ++ stdenv.lib.optionals enableInventor [ libXpm coin3d soxt motif ];
+    ++ stdenv.lib.optionals enableQT [ qtbase ];
 
   postFixup = ''
     # Don't try to export invalid environment variables.

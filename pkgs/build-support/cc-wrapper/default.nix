@@ -41,7 +41,9 @@ let
   libc_bin = if libc == null then null else getBin libc;
   libc_dev = if libc == null then null else getDev libc;
   libc_lib = if libc == null then null else getLib libc;
-  cc_solib = getLib cc;
+  cc_solib = getLib cc
+    + optionalString (targetPlatform != hostPlatform) "/${targetPlatform.config}";
+
   # The wrapper scripts use 'cat' and 'grep', so we may need coreutils.
   coreutils_bin = if nativeTools then "" else getBin coreutils;
 
@@ -361,7 +363,13 @@ stdenv.mkDerivation {
       done
     ''
 
+    # There are a few tools (to name one libstdcxx5) which do not work
+    # well with multi line flags, so make the flags single line again
     + ''
+      if [ -e "$out/nix-support/libc-cflags" ]; then
+        substituteInPlace "$out/nix-support/libc-cflags" --replace $'\n' ' '
+      fi
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash

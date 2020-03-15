@@ -62,7 +62,7 @@ in buildRustPackage rec {
     sha256 = "05jcg33ifngpzw2hdhgb614j87ihhhlqgar0kky183rywg0dxikg";
   };
 
-  cargoSha256 = "1kc9n10kb4j87x337pzl6wpi0qj5ib2mqmrjag2yld3138dag71n";
+  cargoSha256 = "182j8ah67b2gw409vjfml3p41i00zh0klx9m8bwfkm64y2ki2bip";
 
   nativeBuildInputs = [
     cmake
@@ -78,6 +78,10 @@ in buildRustPackage rec {
     ++ lib.optionals stdenv.isDarwin [ AppKit CoreGraphics CoreServices CoreText Foundation OpenGL ];
 
   outputs = [ "out" "terminfo" ];
+  postPatch = ''
+    substituteInPlace alacritty/src/config/mouse.rs \
+      --replace xdg-open ${xdg_utils}/bin/xdg-open
+  '';
 
   postBuild = lib.optionalString stdenv.isDarwin "make app";
 

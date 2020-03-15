@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, cmake, SDL2, boost, fltk, rustPlatform }:
-with rustPlatform;
 let
   version = "0.16.1";
   src = fetchFromGitHub {
@@ -18,11 +17,11 @@ let
       cp ${lockfile} $out/Cargo.lock
     '';
   };
-  libstracciatella = buildRustPackage {
-    name = "libstracciatella-${version}";
+  libstracciatella = rustPlatform.buildRustPackage {
+    pname = "libstracciatella";
     inherit version;
     src = libstracciatellaSrc;
-    cargoSha256 = "0a1pc8wyvgmna0a5cbpv3mh0h4nzjxlm887ymcq00cy1ciq5nmj4";
+    cargoSha256 = "15djs4xaz4y1hpfyfqxdgdasxr0b5idy9i5a7c8cmh0jkxjv8bqc";
     doCheck = false;
   };
 in
@@ -36,15 +35,17 @@ stdenv.mkDerivation {
   patches = [
     ./remove-rust-buildstep.patch
   ];
+
   preConfigure = ''
     sed -i -e 's|rust-stracciatella|${libstracciatella}/lib/libstracciatella.so|g' CMakeLists.txt
     cmakeFlagsArray+=("-DEXTRA_DATA_DIR=$out/share/ja2")
   '';
 
   enableParallelBuilding = true;
+
   meta = {
     description = "Jagged Alliance 2, with community fixes";
     license = "SFI Source Code license agreement";
-    homepage = https://ja2-stracciatella.github.io/;
+    homepage = "https://ja2-stracciatella.github.io/";
   };
 }

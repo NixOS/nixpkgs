@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "tJnF1X+NI1hP0J/n3rGy8TD/yIveqRPVlJvJvn0C7Do=";
   };
 
-  cargoSha256 = "TL2WehcCwygLMVVrBHOX1HgVtDhgVsIgUeiadEjCj1o=";
+  cargoSha256 = "0sbhij8qh9n05nzhp47dm46hbc59awar515f9nhd3wvahwz53zam";
 
   meta = with lib; {
     description = "Minimal X screenshot utility";

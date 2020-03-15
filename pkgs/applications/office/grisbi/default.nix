@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "grisbi";
-  version = "1.2.1";
+  version = "1.2.2";
 
   src = fetchurl {
     url = "mirror://sourceforge/grisbi/${pname}-${version}.tar.bz2";
-    sha1 = "1159c5491967fa7afd251783013579ffb45b891b";
+    sha1 = "crv3bga72v6fw07wad0nkrgdg4war66j";
   };
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];

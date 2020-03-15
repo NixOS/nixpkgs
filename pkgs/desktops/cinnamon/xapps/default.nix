@@ -44,7 +44,6 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    gobject-introspection
     meson
     ninja
     pkgconfig
@@ -54,6 +53,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    gobject-introspection
     (python3.withPackages(ps: with ps; [
       pygobject3
       setproctitle # mate applet

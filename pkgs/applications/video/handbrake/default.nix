@@ -49,11 +49,11 @@ assert stdenv.isDarwin -> AudioToolbox != null && Foundation != null
 
 stdenv.mkDerivation rec {
   pname = "handbrake";
-  version = "1.3.0";
+  version = "1.3.1";
 
   src = fetchurl {
-    url = ''https://download2.handbrake.fr/${version}/HandBrake-${version}-source.tar.bz2'';
-    sha256 = "15hxncswmaj62hb40fxixsa6d519zb712z9xbdq979q4rasjxa59";
+    url = ''https://download.handbrake.fr/releases/${version}/HandBrake-${version}-source.tar.bz2'';
+    sha256 = "09rcrq0kjs1lc1as7w3glbpbfvzldwpx3xv0pfmkn4pl7acxw1f0";
   };
 
   nativeBuildInputs = [
@@ -102,8 +102,6 @@ stdenv.mkDerivation rec {
   # NOTE: 2018-12-27: Check NixOS HandBrake test if changing
   NIX_LDFLAGS = toString [
     "-lx265"
-    # NOTE: The -ldl flag was fixed upstream for a release after 1.3.0
-    "-ldl"
   ];
 
   preBuild = ''

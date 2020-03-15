@@ -4,16 +4,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";
-  version = "0.4.2";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "killercup";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0y0sq0kll6bg0qrfdyas8rcx5dj50j9f05qx244kv7vqxp2q25jq";
+    sha256 = "16gpljbzk6cibry9ssnl22xbcsx2cr57mrs3x3n6cfmldbp6bhbr";
   };
 
-  cargoSha256 = "0prd53p20cha2y2qp8dmq0ywd32f6jm8mszdkbi4x606dj9bcgbl";
+  cargoSha256 = "1zwkar914zyghky09lgk0s374m5d6yccn0m15bqlgxxyymg4b59y";
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];

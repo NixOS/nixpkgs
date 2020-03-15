@@ -8,6 +8,137 @@ let
   cfg = xcfg.desktopManager.plasma5;
 
   inherit (pkgs) kdeApplications plasma5 libsForQt5 qt5;
+  inherit (pkgs) writeText;
+
+  pulseaudio = config.hardware.pulseaudio;
+  pactl = "${getBin pulseaudio.package}/bin/pactl";
+  startplasma-x11 = "${getBin plasma5.plasma-workspace}/bin/startplasma-x11";
+  sed = "${getBin pkgs.gnused}/bin/sed";
+
+  gtkrc2 = writeText "gtkrc-2.0" ''
+    # Default GTK+ 2 config for NixOS Plasma 5
+    include "/run/current-system/sw/share/themes/Breeze/gtk-2.0/gtkrc"
+    style "user-font"
+    {
+      font_name="Sans Serif Regular"
+    }
+    widget_class "*" style "user-font"
+    gtk-font-name="Sans Serif Regular 10"
+    gtk-theme-name="Breeze"
+    gtk-icon-theme-name="breeze"
+    gtk-fallback-icon-theme="hicolor"
+    gtk-cursor-theme-name="breeze_cursors"
+    gtk-toolbar-style=GTK_TOOLBAR_ICONS
+    gtk-menu-images=1
+    gtk-button-images=1
+  '';
+
+  gtk3_settings = writeText "settings.ini" ''
+    [Settings]
+    gtk-font-name=Sans Serif Regular 10
+    gtk-theme-name=Breeze
+    gtk-icon-theme-name=breeze
+    gtk-fallback-icon-theme=hicolor
+    gtk-cursor-theme-name=breeze_cursors
+    gtk-toolbar-style=GTK_TOOLBAR_ICONS
+    gtk-menu-images=1
+    gtk-button-images=1
+  '';
+
+  kcminputrc = writeText "kcminputrc" ''
+    [Mouse]
+    cursorTheme=breeze_cursors
+    cursorSize=0
+  '';
+
+  activationScript = ''
+    ${set_XDG_CONFIG_HOME}
+
+    # The KDE icon cache is supposed to update itself automatically, but it uses
+    # the timestamp on the icon theme directory as a trigger. This doesn't work
+    # on NixOS because the timestamp never changes. As a workaround, delete the
+    # icon cache at login and session activation.
+    # See also: http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
+    rm -fv $HOME/.cache/icon-cache.kcache
+
+    # xdg-desktop-settings generates this empty file but
+    # it makes kbuildsyscoca5 fail silently. To fix this
+    # remove that menu if it exists.
+    rm -fv ''${XDG_CONFIG_HOME}/menus/applications-merged/xdg-desktop-menu-dummy.menu
+
+    # Qt writes a weird ‘libraryPath’ line to
+    # ~/.config/Trolltech.conf that causes the KDE plugin
+    # paths of previous KDE invocations to be searched.
+    # Obviously using mismatching KDE libraries is potentially
+    # disastrous, so here we nuke references to the Nix store
+    # in Trolltech.conf.  A better solution would be to stop
+    # Qt from doing this wackiness in the first place.
+    trolltech_conf="''${XDG_CONFIG_HOME}/Trolltech.conf"
+    if [ -e "$trolltech_conf" ]; then
+        ${sed} -i "$trolltech_conf" -e '/nix\\store\|nix\/store/ d'
+    fi
+
+    # Remove the kbuildsyscoca5 cache. It will be regenerated
+    # immediately after. This is necessary for kbuildsyscoca5 to
+    # recognize that software that has been removed.
+    rm -fv $HOME/.cache/ksycoca*
+
+    ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
+  '';
+
+  set_XDG_CONFIG_HOME = ''
+      # Set the default XDG_CONFIG_HOME if it is unset.
+      # Per the XDG Base Directory Specification:
+      # https://specifications.freedesktop.org/basedir-spec/latest
+      # 1. Never export this variable! If it is unset, then child processes are
+      # expected to set the default themselves.
+      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
+  '';
+
+  startplasma =
+    ''
+      ${set_XDG_CONFIG_HOME}
+      mkdir -p "''${XDG_CONFIG_HOME}"
+
+    ''
+    + optionalString pulseaudio.enable ''
+      # Load PulseAudio module for routing support.
+      # See also: http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
+        ${pactl} load-module module-device-manager "do_routing=1"
+
+    ''
+    + ''
+      ${activationScript}
+
+      # Create default configurations if Plasma has never been started.
+      kdeglobals="''${XDG_CONFIG_HOME}/kdeglobals"
+      if ! [ -f "$kdeglobals" ]
+      then
+          kcminputrc="''${XDG_CONFIG_HOME}/kcminputrc"
+          if ! [ -f "$kcminputrc" ]
+          then
+              cat ${kcminputrc} >"$kcminputrc"
+          fi
+
+          gtkrc2="$HOME/.gtkrc-2.0"
+          if ! [ -f "$gtkrc2" ]
+          then
+              cat ${gtkrc2} >"$gtkrc2"
+          fi
+
+          gtk3_settings="''${XDG_CONFIG_HOME}/gtk-3.0/settings.ini"
+          if ! [ -f "$gtk3_settings" ]
+          then
+              mkdir -p "$(dirname "$gtk3_settings")"
+              cat ${gtk3_settings} >"$gtk3_settings"
+          fi
+      fi
+
+    ''
+    + ''
+      exec "${startplasma-x11}"
+    '';
 
 in
 
@@ -41,27 +172,7 @@ in
       services.xserver.desktopManager.session = singleton {
         name = "plasma5";
         bgSupport = true;
-        start = ''
-          # Load PulseAudio module for routing support.
-          # See http://colin.guthr.ie/2009/10/so-how-does-the-kde-pulseaudio-support-work-anyway/
-          ${optionalString config.hardware.pulseaudio.enable ''
-            ${getBin config.hardware.pulseaudio.package}/bin/pactl load-module module-device-manager "do_routing=1"
-          ''}
-
-          if [ -f "$HOME/.config/kdeglobals" ]
-          then
-              # Remove extraneous font style names.
-              # See also: https://phabricator.kde.org/D9070
-              ${getBin pkgs.gnused}/bin/sed -i "$HOME/.config/kdeglobals" \
-                  -e '/^fixed=/ s/,Regular$//' \
-                  -e '/^font=/ s/,Regular$//' \
-                  -e '/^menuFont=/ s/,Regular$//' \
-                  -e '/^smallestReadableFont=/ s/,Regular$//' \
-                  -e '/^toolBarFont=/ s/,Regular$//'
-          fi
-
-          exec "${getBin plasma5.plasma-workspace}/bin/startkde"
-        '';
+        start = startplasma;
       };
 
       security.wrappers = {
@@ -137,6 +248,7 @@ in
           libkscreen
           libksysguard
           milou
+          plasma-browser-integration
           plasma-integration
           polkit-kde-agent
           systemsettings
@@ -226,29 +338,7 @@ in
       xdg.portal.extraPortals = [ pkgs.xdg-desktop-portal-kde ];
 
       # Update the start menu for each user that is currently logged in
-      system.userActivationScripts.plasmaSetup = ''
-        # The KDE icon cache is supposed to update itself
-        # automatically, but it uses the timestamp on the icon
-        # theme directory as a trigger.  Since in Nix the
-        # timestamp is always the same, this doesn't work.  So as
-        # a workaround, nuke the icon cache on login.  This isn't
-        # perfect, since it may require logging out after
-        # installing new applications to update the cache.
-        # See http://lists-archives.org/kde-devel/26175-what-when-will-icon-cache-refresh.html
-        rm -fv $HOME/.cache/icon-cache.kcache
-
-        # xdg-desktop-settings generates this empty file but
-        # it makes kbuildsyscoca5 fail silently. To fix this
-        # remove that menu if it exists.
-        rm -fv $HOME/.config/menus/applications-merged/xdg-desktop-menu-dummy.menu
-
-        # Remove the kbuildsyscoca5 cache. It will be regenerated
-        # immediately after. This is necessary for kbuildsyscoca5 to
-        # recognize that software that has been removed.
-        rm -fv $HOME/.cache/ksycoca*
-
-        ${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5
-      '';
+      system.userActivationScripts.plasmaSetup = activationScript;
     })
   ];
 

@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl, fixDarwinDylibNames }:
 
 stdenv.mkDerivation rec {
   pname = "liblinear";
@@ -14,20 +14,21 @@ stdenv.mkDerivation rec {
     make lib
   '';
 
-  installPhase = let
-    libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
-  in ''
+  installPhase = ''
     mkdir -p $out/lib $out/bin $out/include
-    cp liblinear.so.3 $out/lib/liblinear.3${libSuff}
-    ln -s $out/lib/liblinear.3${libSuff} $out/lib/liblinear${libSuff}
+    ${if stdenv.isDarwin then ''
+      cp liblinear.so.3 $out/lib/liblinear.3.dylib
+      ln -s $out/lib/liblinear.3.dylib $out/lib/liblinear.dylib
+    '' else ''
+      cp liblinear.so.3 $out/lib/liblinear.so.3
+      ln -s $out/lib/liblinear.so.3 $out/lib/liblinear.so
+    ''}
     cp train $out/bin/liblinear-train
     cp predict $out/bin/liblinear-predict
     cp linear.h $out/include
   '';
 
-  postFixup = stdenv.lib.optionalString stdenv.isDarwin ''
-    install_name_tool -id liblinear.3.dylib $out/lib/liblinear.3.dylib
-  '';
+  nativeBuildInputs = stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
 
   meta = with stdenv.lib; {
     description = "A library for large linear classification";

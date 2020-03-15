@@ -1,18 +1,15 @@
-{ stdenv, fetchFromGitHub, makeWrapper, cmake, llvmPackages, kernel
+{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
 , flex, bison, elfutils, python, luajit, netperf, iperf, libelf
 , systemtap, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
-  version = "0.12.0";
+  version = "0.13.0";
   name = "bcc-${version}";
 
-  src = fetchFromGitHub {
-    owner  = "iovisor";
-    repo   = "bcc";
-    rev    = "v${version}";
-    sha256 = "1r2yjxam23k56prsvjhqf8i8d3irhcvmy0bly6x23h1jc3zc6yym";
-    fetchSubmodules = true;
+  src = fetchurl {
+    url = "https://github.com/iovisor/bcc/releases/download/v${version}/bcc-src-with-submodule.tar.gz";
+    sha256 = "15xpwf17x2j1c1wcb84cgfs35dp5w0rjd9mllmddmdjvn303wffx";
   };
   format = "other";
 

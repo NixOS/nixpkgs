@@ -20,7 +20,8 @@
 
 pythonPackages.callPackage (
   { preferWheel ? false
-  }:
+  , ...
+  }@args:
 
     let
 
@@ -82,7 +83,15 @@ pythonPackages.callPackage (
             else (builtins.elemAt (lib.strings.splitString "-" name) 2);
         };
 
-      baseBuildInputs = lib.optional (name != "setuptools_scm" && name != "setuptools-scm") pythonPackages.setuptools_scm;
+      # Prevent infinite recursion
+      skipSetupToolsSCM = [
+        "setuptools_scm"
+        "setuptools-scm"
+        "toml" # Toml is an extra for setuptools-scm
+      ];
+      baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
+
+      format = if isLocal then "pyproject" else if isGit then "setuptools" else fileInfo.format;
 
     in
 
@@ -90,24 +99,48 @@ pythonPackages.callPackage (
         pname = name;
         version = version;
 
+        inherit format;
+
         doCheck = false; # We never get development deps
-        dontStrip = true;
-        format = if isLocal then "pyproject" else if isGit then "setuptools" else fileInfo.format;
 
-        nativeBuildInputs = if (!isSource && (getManyLinuxDeps fileInfo.name).str != null) then [ autoPatchelfHook ] else [];
-        buildInputs = baseBuildInputs ++ (if !isSource then (getManyLinuxDeps fileInfo.name).pkg else []);
+        # Stripping pre-built wheels lead to `ELF load command address/offset not properly aligned`
+        dontStrip = format == "wheel";
 
-        propagatedBuildInputs =
-          let
-            # Some dependencies like django gets the attribute name django
-            # but dependencies try to access Django
-            deps = builtins.map (d: lib.toLower d) (builtins.attrNames dependencies);
-          in
-            (builtins.map (n: pythonPackages.${n}) deps) ++ (if isLocal then buildSystemPkgs else []);
+        nativeBuildInputs = [
+          pythonPackages.poetry2nixFixupHook
+        ]
+        ++ lib.optional (!isSource && (getManyLinuxDeps fileInfo.name).str != null) autoPatchelfHook
+        ++ lib.optional (format == "pyproject") pythonPackages.removePathDependenciesHook
+        ;
+
+        buildInputs = (
+          baseBuildInputs
+          ++ lib.optional (!isSource) (getManyLinuxDeps fileInfo.name).pkg
+          ++ lib.optional isLocal buildSystemPkgs
+        );
+
+        propagatedBuildInputs = let
+          compat = isCompatible python.pythonVersion;
+          deps = lib.filterAttrs (n: v: v) (
+            lib.mapAttrs (
+              n: v: let
+                constraints = v.python or "";
+              in
+                compat constraints
+            ) dependencies
+          );
+          depAttrs = lib.attrNames deps;
+        in
+          builtins.map (n: pythonPackages.${lib.toLower n}) depAttrs;
 
         meta = {
-          broken = ! isCompatible python.version python-versions;
+          broken = ! isCompatible python.pythonVersion python-versions;
           license = [];
+          inherit (python.meta) platforms;
+        };
+
+        passthru = {
+          inherit args;
         };
 
         # We need to retrieve kind from the interpreter and the filename of the package
@@ -118,7 +151,7 @@ pythonPackages.callPackage (
             inherit (source) url;
             rev = source.reference;
           }
-        ) else if isLocal then (localDepPath) else fetchFromPypi {
+        ) else if isLocal then (poetryLib.cleanPythonSources { src = localDepPath; }) else fetchFromPypi {
           pname = name;
           inherit (fileInfo) file hash kind;
         };

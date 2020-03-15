@@ -1,4 +1,4 @@
-{ stdenv, fetchgit, xorgproto, libX11, bison, ksh, perl, gnum4
+{ stdenv, fetchurl, xorgproto, libX11, bison, ksh, perl, gnum4
 , libXinerama, libXt, libXext, libtirpc, motif, libXft, xbitmaps
 , libjpeg, libXmu, libXdmcp, libXScrnSaver, symlinkJoin, bdftopcf
 , ncompress, mkfontdir, tcl, libXaw, gcc, glibcLocales, gawk
@@ -14,15 +14,18 @@ let
     ];
   };
 in stdenv.mkDerivation rec {
-  version = "2019-11-30";
+  version = "2.3.2";
   name = "cde-${version}";
 
-  src = fetchgit {
-    url = "https://git.code.sf.net/p/cdesktopenv/code";
-    rev = "5cebd7c4da1afea353a3baef250e31a4cf867bc5";
-    sha256 = "06wvnb3n8hn98kxvmrf6v3lyqp8bxpzl8wrixlw9jinmsivfs4b9";
+  src = fetchurl {
+    url = "mirror://sourceforge/cdesktopenv/${name}.tar.gz";
+    sha256 = "029rljhi5r483x8rzdpl8625z0wx8r7k2m0364nbw66h5pig9lbx";
   };
-  setSourceRoot = ''export sourceRoot="$(echo */cde)"'';
+
+  # remove with next release
+  patches = [
+    ./2.3.2.patch
+  ];
 
   buildInputs = [
     libX11 libXinerama libXt libXext libtirpc motif libXft xbitmaps

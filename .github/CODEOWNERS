@@ -14,7 +14,9 @@
 /lib                        @edolstra @nbp @infinisil
 /lib/systems                @nbp @ericson2314 @matthewbauer
 /lib/generators.nix         @edolstra @nbp @Profpatsch
+/lib/cli.nix                @edolstra @nbp @Profpatsch
 /lib/debug.nix              @edolstra @nbp @Profpatsch
+/lib/asserts.nix            @edolstra @nbp @Profpatsch
 
 # Nixpkgs Internals
 /default.nix                          @nbp
@@ -28,6 +30,9 @@
 /pkgs/build-support/cc-wrapper        @Ericson2314 @orivej
 /pkgs/build-support/bintools-wrapper  @Ericson2314 @orivej
 /pkgs/build-support/setup-hooks       @Ericson2314
+
+# Nixpkgs build-support
+/pkgs/build-support/writers @lassulus @Profpatsch
 
 # NixOS Internals
 /nixos/default.nix          @nbp @infinisil
@@ -61,11 +66,11 @@
 /doc/languages-frameworks/python.section.md     @FRidh
 
 # Haskell
-/pkgs/development/compilers/ghc                       @basvandijk @cdepillabout
-/pkgs/development/haskell-modules                     @basvandijk @cdepillabout @infinisil
-/pkgs/development/haskell-modules/default.nix         @basvandijk @cdepillabout
-/pkgs/development/haskell-modules/generic-builder.nix @basvandijk @cdepillabout
-/pkgs/development/haskell-modules/hoogle.nix          @basvandijk @cdepillabout
+/pkgs/development/compilers/ghc                       @cdepillabout
+/pkgs/development/haskell-modules		      @cdepillabout @infinisil
+/pkgs/development/haskell-modules/default.nix	      @cdepillabout
+/pkgs/development/haskell-modules/generic-builder.nix @cdepillabout
+/pkgs/development/haskell-modules/hoogle.nix	      @cdepillabout
 
 # Perl
 /pkgs/development/interpreters/perl @volth
@@ -162,7 +167,7 @@
 /pkgs/top-level/emacs-packages.nix     @adisbladis
 
 # VimPlugins
-/pkgs/misc/vim-plugins         @jonringer
+/pkgs/misc/vim-plugins         @jonringer @softinio
 
 # VsCode Extensions
 /pkgs/misc/vscode-extensions   @jonringer

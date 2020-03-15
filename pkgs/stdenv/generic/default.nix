@@ -53,6 +53,7 @@ let lib = import ../../../lib; in lib.makeOverridable (
 let
   defaultNativeBuildInputs = extraNativeBuildInputs ++
     [ ../../build-support/setup-hooks/move-docs.sh
+      ../../build-support/setup-hooks/make-symlinks-relative.sh
       ../../build-support/setup-hooks/compress-man-pages.sh
       ../../build-support/setup-hooks/strip.sh
       ../../build-support/setup-hooks/patch-shebangs.sh
@@ -136,9 +137,6 @@ let
         isi686 isx86_32 isx86_64
         is32bit is64bit
         isAarch32 isAarch64 isMips isBigEndian;
-      isArm = lib.warn
-        "`stdenv.isArm` is deprecated after 18.03. Please use `stdenv.isAarch32` instead"
-        hostPlatform.isAarch32;
 
       # The derivation's `system` is `buildPlatform.system`.
       inherit (buildPlatform) system;

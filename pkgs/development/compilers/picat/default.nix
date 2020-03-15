@@ -1,12 +1,15 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, zlib }:
 
 stdenv.mkDerivation {
-  name = "picat-1.9-4";
+  pname = "picat";
+  version = "2.8-2";
 
   src = fetchurl {
-    url = http://picat-lang.org/download/picat19_src.tar.gz;
-    sha256 = "0wvl95gf4pjs93632g4wi0mw1glzzhjp9g4xg93ll2zxggbxibli";
+    url = http://picat-lang.org/download/picat28_src.tar.gz;
+    sha256 = "10hf2fxxbpq28gi39icr8c9wafdiy9ddfkk6l4rx7kkqyrdi7n85";
   };
+
+  buildInputs = [ zlib ];
 
   ARCH = if stdenv.hostPlatform.system == "i686-linux" then "linux32"
          else if stdenv.hostPlatform.system == "x86_64-linux" then "linux64"
@@ -16,12 +19,12 @@ stdenv.mkDerivation {
 
   buildPhase = ''
     cd emu
-    make -f Makefile.picat.$ARCH
+    make -f Makefile.$ARCH
   '';
 
   installPhase = ''
     mkdir -p $out/bin
-    cp picat_$ARCH $out/bin/picat
+    cp picat $out/bin/picat
   '';
 
   meta = {

@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, fetchFromGitHub, attrs, cryptography, async-timeout, pytest-aiohttp, pytest }:
+{ lib, stdenv, buildPythonPackage, python, fetchFromGitHub, attrs, cryptography, async-timeout, pytest-aiohttp, pytest }:
 
 buildPythonPackage rec {
   pname = "snitun";
@@ -16,7 +16,8 @@ buildPythonPackage rec {
   checkInputs = [ pytest pytest-aiohttp ];
 
   checkPhase = ''
-    pytest tests/
+    # https://github.com/NabuCasa/snitun/issues/61
+    pytest ${lib.optionalString stdenv.isDarwin "-k 'not test_multiplexer_data_channel_abort_full'"} tests/
   '';
 
   meta = with lib; {

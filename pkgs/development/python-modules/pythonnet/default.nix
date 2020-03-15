@@ -5,6 +5,7 @@
 , python
 , pytest
 , pycparser
+, psutil
 , pkgconfig
 , dotnetbuildhelpers
 , clang
@@ -20,10 +21,10 @@ let
     outputFiles = [ "*" ];
   };
 
-  NUnit360 = fetchNuGet {
+  NUnit371 = fetchNuGet {
     baseName = "NUnit";
-    version = "3.6.0";
-    sha256 = "0wz4sb0hxlajdr09r22kcy9ya79lka71w0k1jv5q2qj3d6g2frz1";
+    version = "3.7.1";
+    sha256 = "1yc6dwaam4w2ss1193v735nnl79id78yswmpvmjr1w4bgcbdza4l";
     outputFiles = [ "*" ];
   };
 
@@ -31,11 +32,11 @@ in
 
 buildPythonPackage rec {
   pname = "pythonnet";
-  version = "2.3.0";
+  version = "2.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1hxnkrfj8ark9sbamcxzd63p98vgljfvdwh79qj3ac8pqrgghq80";
+    sha256 = "1ach9jic7a9rd3vmc4bphkr9fq01a0qk81f8a7gr9npwzmkqx8x3";
   };
 
   postPatch = ''
@@ -55,20 +56,26 @@ buildPythonPackage rec {
     dotnetbuildhelpers
     clang
 
-    NUnit360
+    mono
+
+    NUnit371
     UnmanagedExports127
   ];
 
   buildInputs = [
     mono
+    psutil # needed for memory leak tests
   ];
 
   preBuild = ''
     rm -rf packages
     mkdir packages
 
-    ln -s ${NUnit360}/lib/dotnet/NUnit/ packages/NUnit.3.6.0
+    ln -s ${NUnit371}/lib/dotnet/NUnit/ packages/NUnit.3.7.1
     ln -s ${UnmanagedExports127}/lib/dotnet/NUnit/ packages/UnmanagedExports.1.2.7
+
+    # Setting TERM=xterm fixes an issue with terminfo in mono: System.Exception: Magic number is wrong: 542
+    export TERM=xterm
   '';
 
   checkPhase = ''

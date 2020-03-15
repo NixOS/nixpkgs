@@ -8,27 +8,30 @@ let
     genList (i: if i == idx then value else (builtins.elemAt list i)) (length list)
   );
 
-  # Returns true if pythonVersion matches with the expression in pythonVersions
-  isCompatible = pythonVersion: pythonVersions:
-    let
-      operators = {
-        "||" = cond1: cond2: cond1 || cond2;
-        "," = cond1: cond2: cond1 && cond2; # , means &&
-      };
-      # split string at "," and "||"
-      tokens = builtins.filter (x: x != "") (builtins.split "(,|\\|\\|)" pythonVersions);
-      combine = acc: v:
-        let
-          isOperator = builtins.typeOf v == "list";
-          operator = if isOperator then (builtins.elemAt v 0) else acc.operator;
-        in
-          if isOperator then (acc // { inherit operator; }) else {
-            inherit operator;
-            state = operators."${operator}" acc.state (satisfiesSemver pythonVersion v);
-          };
-      initial = { operator = ","; state = true; };
-    in
-      (builtins.foldl' combine initial tokens).state;
+  # Compare a semver expression with a version
+  isCompatible = version: let
+    operators = {
+      "||" = cond1: cond2: cond1 || cond2;
+      "," = cond1: cond2: cond1 && cond2; # , means &&
+      "&&" = cond1: cond2: cond1 && cond2;
+    };
+    splitRe = "(" + (builtins.concatStringsSep "|" (builtins.map (x: lib.replaceStrings [ "|" ] [ "\\|" ] x) (lib.attrNames operators))) + ")";
+  in
+    expr:
+      let
+        tokens = builtins.filter (x: x != "") (builtins.split splitRe expr);
+        combine = acc: v:
+          let
+            isOperator = builtins.typeOf v == "list";
+            operator = if isOperator then (builtins.elemAt v 0) else acc.operator;
+          in
+            if isOperator then (acc // { inherit operator; }) else {
+              inherit operator;
+              state = operators."${operator}" acc.state (satisfiesSemver version v);
+            };
+        initial = { operator = "&&"; state = true; };
+      in
+        if expr == "" then true else (builtins.foldl' combine initial tokens).state;
 
   fromTOML = builtins.fromTOML or
     (
@@ -93,6 +96,38 @@ let
         [ pythonPackages.${drvAttr} or (throw "unsupported build system ${buildSystem}") ]
       );
 
+  # Find gitignore files recursively in parent directory stopping with .git
+  findGitIgnores = path: let
+    parent = path + "/..";
+    gitIgnore = path + "/.gitignore";
+    isGitRoot = builtins.pathExists (path + "/.git");
+    hasGitIgnore = builtins.pathExists gitIgnore;
+    gitIgnores = if hasGitIgnore then [ gitIgnore ] else [];
+  in
+    lib.optionals (builtins.toString path != "/" && ! isGitRoot) (findGitIgnores parent) ++ gitIgnores;
+
+  /*
+  Provides a source filtering mechanism that:
+
+  - Filters gitignore's
+  - Filters pycache/pyc files
+  - Uses cleanSourceFilter to filter out .git/.hg, .o/.so, editor backup files & nix result symlinks
+  */
+  cleanPythonSources = { src }: let
+    gitIgnores = findGitIgnores src;
+    pycacheFilter = name: type:
+      (type == "directory" && ! lib.strings.hasInfix "__pycache__" name)
+      || (type == "regular" && ! lib.strings.hasSuffix ".pyc" name)
+    ;
+  in
+    lib.cleanSourceWith {
+      filter = lib.cleanSourceFilter;
+      src = lib.cleanSourceWith {
+        filter = pkgs.nix-gitignore.gitignoreFilterPure pycacheFilter gitIgnores src;
+        inherit src;
+      };
+    };
+
 in
 {
   inherit
@@ -101,5 +136,7 @@ in
     isCompatible
     readTOML
     getBuildSystemPkgs
+    satisfiesSemver
+    cleanPythonSources
     ;
 }

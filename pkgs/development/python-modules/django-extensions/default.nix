@@ -1,55 +1,63 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchpatch, pythonOlder
-, six, typing, pygments
-, django, shortuuid, python-dateutil, pytest
-, pytest-django, pytestcov, mock, vobject
-, werkzeug, glibcLocales, factory_boy
+{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python
+, django
+, factory_boy
+, glibcLocales
+, mock
+, pygments
+, pytest
+, pytestcov
+, pytest-django
+, python-dateutil
+, shortuuid
+, six
+, tox
+, typing
+, vobject
+, werkzeug
 }:
 
 buildPythonPackage rec {
   pname = "django-extensions";
-  version = "2.2.5";
+  version = "2.2.8";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "0053yqq4vq3mwy7zkfs5vfm3g8j9sfy3vrc6xby83qlj9wz43ipi";
+    sha256 = "1gd3nykwzh3azq1p9cvgkc3l5dwrv7y86sfjxd9llbyj8ky71iaj";
   };
 
-  # This patch fixes a single failing test and can be removed when updating this pkg
-  # to the next version
-  patches = [
-    (fetchpatch {
-      url = "https://github.com/django-extensions/django-extensions/commit/1d21786da2e6868d98ae34c82079e1e03ad1aa97.patch";
-      sha256 = "0d81zpj0f8a7ijrfb12j0b67fgj89k3axaskz1nwqsr4wc6n4bw2";
-    })
-  ];
+  LC_ALL = "en_US.UTF-8";
+  __darwinAllowLocalNetworking = true;
 
-  postPatch = ''
-    substituteInPlace setup.py --replace "'tox'," ""
-
-    # not yet pytest 5 compatible?
-    rm tests/management/commands/test_set_fake_emails.py
-    rm tests/management/commands/test_set_fake_passwords.py
-    rm tests/management/commands/test_validate_templates.py
-
-    # pip should not be used during tests...
-    rm tests/management/commands/test_pipchecker.py
-  '';
-
-  propagatedBuildInputs = [ six ] ++ lib.optional (pythonOlder "3.5") typing;
+  propagatedBuildInputs = [ six ]
+    ++ lib.optional (pythonOlder "3.5") typing;
 
   checkInputs = [
-    django shortuuid python-dateutil pytest
-    pytest-django pytestcov mock vobject
-    werkzeug glibcLocales factory_boy pygments
+    django
+    factory_boy
+    glibcLocales
+    mock
+    pygments # not explicitly declared in setup.py, but some tests require it
+    pytest
+    pytestcov
+    pytest-django
+    python-dateutil
+    shortuuid
+    tox
+    vobject
+    werkzeug
   ];
 
-  LC_ALL = "en_US.UTF-8";
+  # tests not compatible with pip>=20
+  checkPhase = ''
+    rm tests/management/commands/test_pipchecker.py
+    ${python.interpreter} setup.py test
+  '';
 
   meta = with lib; {
     description = "A collection of custom extensions for the Django Framework";
-    homepage = https://github.com/django-extensions/django-extensions;
+    homepage = "https://github.com/django-extensions/django-extensions";
     license = licenses.mit;
   };
 }

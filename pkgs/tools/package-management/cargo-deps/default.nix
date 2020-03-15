@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deps";
-  version = "1.1.1";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "m-cat";
     repo = pname;
-    rev = "ab93f5655900e49fb0360ccaf72b2b61b6b428ef";
-    sha256 = "16181p7ghvy9mqippg1xi2cw7yxvicis8v6n39wly5qw05i57aw2";
+    rev = "4033018eaa53134fd6169653b709b195a5f5958b";
+    sha256 = "1cdmgdag9chjifsp2hxr9j15hb6l6anqq38y8srj1nk047a3kbcw";
   };
 
-  cargoSha256 = "1a9svdw1cgk6s7gqpsq3r25wxa2gr2xddqkc1cjk7hf6sk327cpv";
+  cargoSha256 = "1gjbvgpicy9n311qh9a5n0gdyd2rnc0b9zypnzk2ibn1pgaikafy";
 
   meta = with lib; {
     description = "Cargo subcommand for building dependency graphs of Rust projects";

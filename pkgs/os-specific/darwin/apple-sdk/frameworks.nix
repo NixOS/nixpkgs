@@ -65,6 +65,8 @@ with frameworks; with libs; {
   InstallerPlugins        = [];
   InstantMessage          = [];
   JavaFrameEmbedding      = [];
+  JavaNativeFoundation    = [];
+  JavaRuntimeSupport      = [];
   JavaScriptCore          = [];
   Kerberos                = [];
   Kernel                  = [ IOKit ];
@@ -73,6 +75,7 @@ with frameworks; with libs; {
   LocalAuthentication     = [];
   MapKit                  = [];
   MediaAccessibility      = [ CoreGraphics CoreText QuartzCore ];
+  MediaPlayer             = [];
   MediaToolbox            = [ AudioToolbox AudioUnit CoreMedia ];
   Metal                   = [];
   MetalKit                = [ ModelIO Metal ];

@@ -1,0 +1,22 @@
+--- a/sound-output-device-chooser@kgshank.net/convenience.js
++++ b/sound-output-device-chooser@kgshank.net/convenience.js
+@@ -111,7 +111,7 @@ function refreshCards() {
+         log("New logic");
+         let pyLocation =  Me.dir.get_child('utils/pa_helper.py').get_path();
+         try {
+-            let [result, out, err, exit_code] = GLib.spawn_command_line_sync('python ' + pyLocation);
++            let [result, out, err, exit_code] = GLib.spawn_command_line_sync('@python@ ' + pyLocation);
+             // log("result" + result +" out"+out + " exit_code" + exit_code + "
+             // err" +err);
+             if(result && !exit_code) {
+--- a/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
++++ b/sound-output-device-chooser@kgshank.net/utils/libpulse_introspect.py
+@@ -86,7 +86,7 @@ else:
+ 
+ _libraries = {}
+ 
+-libpulse_library_name = find_library('pulse')
++libpulse_library_name = '@libpulse@'
+ if libpulse_library_name is None:
+     raise Exception('No libpulse.so library found!')
+ 

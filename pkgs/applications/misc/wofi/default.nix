@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "wofi";
-  version = "1.0";
+  version = "1.1";
 
   src = fetchhg {
     url = "https://hg.sr.ht/~scoopta/wofi";
     rev = "v${version}";
-    sha256 = "147yarm26nl0zc0a2rs7qi4jd7bz48vvyaygsif1qsv8fx0xiqqf";
+    sha256 = "0rq6c8fv0h7xj3jw1i01r39dz0f31k7jgf7hpgl6mlsyn0ddc80z";
   };
 
   nativeBuildInputs = [ pkg-config meson ninja ];

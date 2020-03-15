@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "clipman";
-  version = "1.2.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "yory8";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0266qb8p5l8j25nn51ajsbiij8bh5r7ywphf2x1l7wfhbzgxz12d";
+    sha256 = "0d5w94cylrzhwyb4zfgidh6rr1h82dx5y7cxfa37wx5xxcjyyja1";
   };
 
-  modSha256 = "0aw0ng8pk8qzn1iv79iw0v9zr8xdc8p9xnigr3ij86038f7aqdhv";
+  modSha256 = "1sim3x794kj3wdw0g432zbgh1cimdmmg1hjgynh9jgm3y8w9q7ij";
 
   nativeBuildInputs = [ makeWrapper ];
 

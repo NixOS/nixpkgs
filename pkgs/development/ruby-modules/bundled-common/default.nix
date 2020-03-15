@@ -1,4 +1,4 @@
-{ stdenv, runCommand, ruby, lib
+{ stdenv, runCommand, ruby, lib, rsync
 , defaultGemConfig, buildRubyGem, buildEnv
 , makeWrapper
 , bundler
@@ -13,6 +13,7 @@
 , lockfile ? null
 , gemset ? null
 , ruby ? defs.ruby
+, copyGemFiles ? false # Copy gem files instead of symlinking
 , gemConfig ? defaultGemConfig
 , postBuild ? null
 , document ? []
@@ -96,7 +97,8 @@ let
 
   envPaths = lib.attrValues gems ++ lib.optional (!hasBundler) bundler;
 
-  basicEnv = buildEnv {
+
+  basicEnvArgs = {
     inherit buildInputs ignoreCollisions;
 
     name = name';
@@ -154,5 +156,17 @@ let
         };
     };
   };
+
+  basicEnv =
+    if copyGemFiles then
+      runCommand name' basicEnvArgs ''
+        mkdir -p $out
+        for i in $paths; do
+          ${rsync}/bin/rsync -a $i/lib $out/
+        done
+        eval "$postBuild"
+      ''
+    else
+      buildEnv basicEnvArgs;
 in
   basicEnv

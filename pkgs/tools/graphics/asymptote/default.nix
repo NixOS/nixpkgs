@@ -9,14 +9,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "2.61";
+  version = "2.63";
   pname = "asymptote";
 
   src = fetchFromGitHub {
     owner = "vectorgraphics";
     repo = pname;
     rev = version;
-    sha256 = "0nblcxqzaxv1286zl2fjkivgp478l0nf3m0wnk78rd99lscjlw71";
+    sha256 = "1szy0hmh8fx73ngpfn5p934snv148kf1amdnbcjc0n5zb4x9vzck";
   };
 
   nativeBuildInputs = [

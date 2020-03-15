@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "snappy";
-  version = "1.1.7";
+  version = "1.1.8";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "snappy";
     rev = version;
-    sha256 = "1x7r8sjmdqlqjz0xfiwdyrqpgaj5yrvrgb28ivgpvnxgar5qv6m2";
+    sha256 = "1j0kslq2dvxgkcxl1gakhvsa731yrcvcaipcp5k8k7ayicvkv9jv";
   };
 
   patches = [ ./disable-benchmark.patch ];

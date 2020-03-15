@@ -60,6 +60,13 @@ buildPythonPackage rec {
   # Lots of tests. Needs network as well at some point.
   doCheck = false;
 
+  patches = [
+    # Since pygments 2.5, PythonLexer refers to python3. If we want to use
+    # python2, we need to explicitly specify Python2Lexer.
+    # Not upstreamed since there doesn't seem to be any upstream maintenance
+    # branch for 1.8 (and this patch doesn't make any sense for 2.x).
+    ./python2-lexer.patch
+  ];
   # https://github.com/NixOS/nixpkgs/issues/22501
   # Do not run `python sphinx-build arguments` but `sphinx-build arguments`.
   postPatch = ''

@@ -8,24 +8,24 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "trellis";
-  version = "2019.10.13";
+  version = "2020.02.04";
   # git describe --tags
   realVersion = with stdenv.lib; with builtins;
-    "1.0-95-g${substring 0 7 (elemAt srcs 0).rev}";
+    "1.0-130-g${substring 0 7 (elemAt srcs 0).rev}";
 
   srcs = [
     (fetchFromGitHub {
        owner  = "SymbiFlow";
        repo   = "prjtrellis";
-       rev    = "e2e10bfdfaa29fed5d19e83dc7460be9880f5af4";
-       sha256 = "0l59nliv75rdxnajl2plilib0r0bzbr3qqzc88cdal841x1m0izs";
+       rev    = "4e4b95c8e03583d48d76d1229f9c7825e2ee5be1";
+       sha256 = "02kg48393bjiys56r62b4ks2xvfarw9phi5bips2xsnj9c99pmg0";
        name   = "trellis";
      })
     (fetchFromGitHub {
       owner  = "SymbiFlow";
       repo   = "prjtrellis-db";
-      rev    = "5b5bb70bae13e6b8c971b4b2d26931f4a64b51bc";
-      sha256 = "1fi963zdny3gxdvq564037qs22i7b4y7mxc3yij2a1ww8rzrnpdj";
+      rev    = "717478b757a702bbc7e3e11a5fbecee2a64f7922";
+      sha256 = "0q4j8qz3m2hissn2a82ck542cx62bp4f0wwzl3g22yv59i13yg83";
       name   = "trellis-database";
     })
   ];
@@ -33,7 +33,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ boostWithPython3 ];
   nativeBuildInputs = [ cmake python3 ];
-  cmakeFlags = [ "-DCURRENT_GIT_VERSION=${realVersion}" ];
+  cmakeFlags = [
+    "-DCURRENT_GIT_VERSION=${realVersion}"
+    # TODO: should this be in stdenv instead?
+    "-DCMAKE_INSTALL_DATADIR=${placeholder "out"}/share"
+  ];
+  enableParallelBuilding = true;
 
   preConfigure = with builtins; ''
     rmdir database && ln -sfv ${elemAt srcs 1} ./database
@@ -50,7 +55,7 @@ stdenv.mkDerivation rec {
       to provide sufficient information to develop a free and
       open Verilog to bitstream toolchain for these devices.
     '';
-    homepage    = https://github.com/symbiflow/prjtrellis;
+    homepage    = https://github.com/SymbiFlow/prjtrellis;
     license     = stdenv.lib.licenses.isc;
     maintainers = with maintainers; [ q3k thoughtpolice emily ];
     platforms   = stdenv.lib.platforms.all;

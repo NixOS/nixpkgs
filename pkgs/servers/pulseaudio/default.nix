@@ -108,7 +108,10 @@ stdenv.mkDerivation rec {
     rm -rf $out/{bin,share,etc,lib/{pulse-*,systemd}}
     sed 's|-lltdl|-L${libtool.lib}/lib -lltdl|' -i $out/lib/pulseaudio/libpulsecore-${version}.la
   ''
-    + ''moveToOutput lib/cmake "$dev" '';
+    + ''
+    moveToOutput lib/cmake "$dev"
+    rm -f $out/bin/qpaeq # this is packaged by the "qpaeq" package now, because of missing deps
+  '';
 
   preFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/libexec/pulse/gsettings-helper \

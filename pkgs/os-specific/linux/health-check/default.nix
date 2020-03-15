@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "health-check";
-  version = "0.03.04";
+  version = "0.03.05";
 
   src = fetchurl {
     url = "https://kernel.ubuntu.com/~cking/tarballs/${pname}/${pname}-${version}.tar.gz";
-    sha256 = "0p85ai31n9hh6d4b79zzlczf9arsy7vmkjak1x3g9f5qj8fy4avp";
+    sha256 = "1qxmkdl4pa043yg4kq5ffapm0c2cmm64h3v2c3xhnx0ad5pbhy5z";
   };
 
   buildInputs = [ json_c libbsd ];

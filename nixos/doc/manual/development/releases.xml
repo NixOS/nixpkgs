@@ -71,8 +71,9 @@
      <para>
       <link xlink:href="https://github.com/NixOS/nixpkgs/commit/d6b08acd1ccac0d9d502c4b635e00b04d3387f06">
       Update <literal>versionSuffix</literal> in
-      <literal>nixos/release.nix</literal></link>, use <literal>git log
-      --format=%an|wc -l</literal> to get the commit count
+      <literal>nixos/release.nix</literal></link>, use
+      <literal>git rev-list --count 17.09-beta</literal>
+      to get the commit count.
      </para>
     </listitem>
     <listitem>
@@ -187,7 +188,7 @@
     </listitem>
     <listitem>
      <para>
-      Update "Chapter 4. Upgrading NixOS" section of the manual to match 
+      Update "Chapter 4. Upgrading NixOS" section of the manual to match
       new stable release version.
      </para>
     </listitem>
@@ -235,6 +236,10 @@
    manager who already has managed one release and one release manager being
    introduced to their role, making it easier to pass on knowledge and
    experience.
+  </para>
+  <para>
+   Release managers for the current NixOS release are tracked by GitHub team
+   <link xlink:href="https://github.com/orgs/NixOS/teams/nixos-release-managers/members"><literal>@NixOS/nixos-release-managers</literal></link>.
   </para>
   <para>
    A release manager's role and responsibilities are:

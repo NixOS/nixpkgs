@@ -3,27 +3,26 @@
 let
   python = python3.override {
     packageOverrides = self: super: {
-      tornado = super.tornado.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "4e5158d97583502a7e2739951553cbd88a72076f152b4b11b64b9a10c4c49409";
-        };
-      });
       protobuf = super.protobuf.override {
         protobuf = protobuf3_10;
       };
-
+      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
+        version = "5.1.2";
+        src = oldAttrs.src.override {
+          inherit version;
+          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
+        };
+      });
     };
   };
 
 in python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "1.14.1";
+  version = "1.14.3";
 
   src = python.pkgs.fetchPypi {
     inherit pname version;
-    sha256 = "1hw1q2fck9429077w207rk65a1krzyi6qya5pzjkpw4av5s0v0g3";
+    sha256 = "0xnsl000c5a2li9qw9anrzzq437qn1n4hcfc24i4rfq37awzmig7";
   };
 
   ESPHOME_USE_SUBPROCESS = "";

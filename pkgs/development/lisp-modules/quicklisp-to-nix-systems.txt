@@ -120,6 +120,7 @@ prove-asdf
 query-fs
 quri
 salza2
+serapeum
 simple-date
 smart-buffer
 split-sequence

@@ -2,11 +2,11 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "termtosvg";
-  version = "1.0.0";
+  version = "1.1.0";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1d0lmvprraspdqpn0rsqzvkkmpj8zk0crid5l39kxpjpxrv2irfg";
+    sha256 = "1vk5kn8w3zf2ymi76l8cpwmvvavkmh3b9lb18xw3x1vzbmhz2f7d";
   };
 
   propagatedBuildInputs = with python3Packages; [ lxml pyte wcwidth ];

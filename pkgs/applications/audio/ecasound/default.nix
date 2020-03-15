@@ -15,11 +15,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ecasound";
-  version = "2.9.2";
+  version = "2.9.3";
 
   src = fetchurl {
     url = "https://ecasound.seul.org/download/ecasound-${version}.tar.gz";
-    sha256 = "15rcs28fq2wfvfs66p5na7adq88b55qszbhshpizgdbyqzgr2jf1";
+    sha256 = "1m7njfjdb7sqf0lhgc4swihgdr4snkg8v02wcly08wb5ar2fr2s6";
   };
 
   buildInputs = [ alsaLib audiofile libjack2 liblo liboil libsamplerate libsndfile lilv lv2 ];

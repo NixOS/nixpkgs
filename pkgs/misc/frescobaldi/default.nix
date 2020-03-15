@@ -2,13 +2,13 @@
 
 buildPythonApplication rec {
   name = "frescobaldi-${version}";
-  version = "3.1";
+  version = "3.1.1";
 
   src = fetchFromGitHub {
     owner = "wbsoft";
     repo = "frescobaldi";
     rev = "v${version}";
-    sha256 = "0sv6dc1l34rrhfbn1wqkl9zs9hiacmmbviw87d0d03987s1iirb1";
+    sha256 = "07hjlq29npasn2bsb3qrzr1gikyvcc85avx0sxybfih329bvjk03";
   };
 
   propagatedBuildInputs = with python3Packages; [

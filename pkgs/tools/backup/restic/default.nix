@@ -1,4 +1,4 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
 
 buildGoPackage rec {
   pname = "restic";
@@ -17,6 +17,8 @@ buildGoPackage rec {
     cd go/src/${goPackagePath}
     go run build.go
   '';
+
+  passthru.tests.restic = nixosTests.restic;
 
   installPhase = ''
     mkdir -p \

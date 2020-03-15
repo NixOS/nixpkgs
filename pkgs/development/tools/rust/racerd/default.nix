@@ -1,10 +1,9 @@
-{ stdenv, fetchFromGitHub, rustPlatform, makeWrapper , Security }:
+{ stdenv, fetchFromGitHub, fetchpatch, rustPlatform, makeWrapper, Security }:
 
-with rustPlatform;
-
-buildRustPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "racerd";
   version = "unstable-2019-09-02";
+
   src = fetchFromGitHub {
     owner = "jwilm";
     repo = "racerd";
@@ -12,12 +11,19 @@ buildRustPackage rec {
     sha256 = "13jqdvjk4savcl03mrn2vzgdsd7vxv2racqbyavrxp2cm9h6cjln";
   };
 
+  cargoPatches = [
+    (fetchpatch {
+      url = "https://github.com/jwilm/racerd/commit/856f3656e160cd2909c5166e962f422c901720ee.patch";
+      sha256 = "1qq2k4bnwjz5qgn7s8yxd090smwn2wvdm8dd1rrlgpln0a5vxkpb";
+    })
+  ];
+
+  cargoSha256 = "1z0dh2j9ik66i6nww3z7z2gw7nhc0b061zxbjzamk1jybpc845lq";
+
   # a nightly compiler is required unless we use this cheat code.
   RUSTC_BOOTSTRAP=1;
 
   doCheck = false;
-
-  cargoSha256 = "07130587drrdkrk7aqb8pl8i3p485qr6xh1m86630ydlnb9z6s6i";
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
@@ -32,7 +38,7 @@ buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "JSON/HTTP Server based on racer for adding Rust support to editors and IDEs";
-    homepage = https://github.com/jwilm/racerd;
+    homepage = "https://github.com/jwilm/racerd";
     license = licenses.asl20;
     platforms = platforms.all;
   };

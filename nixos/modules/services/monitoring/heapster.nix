@@ -49,7 +49,7 @@ in {
       };
     };
 
-    users.users.heapsterrs = {
+    users.users.heapster = {
       uid = config.ids.uids.heapster;
       description = "Heapster user";
     };

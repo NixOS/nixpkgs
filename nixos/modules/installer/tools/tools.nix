@@ -31,6 +31,7 @@ let
       nix = config.nix.package.out;
       nix_x86_64_linux = fallback.x86_64-linux;
       nix_i686_linux = fallback.i686-linux;
+      path = makeBinPath [ pkgs.jq ];
     };
 
   nixos-generate-config = makeProg {
@@ -47,6 +48,14 @@ let
     name = "nixos-version";
     src = ./nixos-version.sh;
     inherit (config.system.nixos) version codeName revision;
+    inherit (config.system) configurationRevision;
+    json = builtins.toJSON ({
+      nixosVersion = config.system.nixos.version;
+    } // optionalAttrs (config.system.nixos.revision != null) {
+      nixpkgsRevision = config.system.nixos.revision;
+    } // optionalAttrs (config.system.configurationRevision != null) {
+      configurationRevision = config.system.configurationRevision;
+    });
   };
 
   nixos-enter = makeProg {

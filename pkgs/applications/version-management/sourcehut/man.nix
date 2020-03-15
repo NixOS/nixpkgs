@@ -4,12 +4,12 @@
 
 buildPythonPackage rec {
   pname = "mansrht";
-  version = "0.13.5";
+  version = "0.14.1";
 
   src = fetchgit {
     url = "https://git.sr.ht/~sircmpwn/man.sr.ht";
     rev = version;
-    sha256 = "1hfxhczppn8yng6m3kdzj9rn6zjhwpm6dq3pzaiaii92b3d4cyh3";
+    sha256 = "13yar0sa24jyiq0l4p4bgq6p5crj148f26sxwyi37g76jqba4rfi";
   };
 
   patches = [

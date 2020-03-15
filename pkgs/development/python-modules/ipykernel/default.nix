@@ -15,12 +15,11 @@
 
 buildPythonPackage rec {
   pname = "ipykernel";
-  version = "5.1.3";
-  disabled = pythonOlder "3.4";
+  version = "5.1.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1a08y677lpn80qzvv7z0smgggmr5m5ayf0bs6vds47xpxl9sss5k";
+    sha256 = "7f1f01df22f1229c8879501057877ccaf92a3b01c1d00db708aad5003e5f9238";
   };
 
   propagatedBuildInputs = [ ipython jupyter_client traitlets tornado ];
@@ -38,12 +37,23 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.isDarwin ([
     # see https://github.com/NixOS/nixpkgs/issues/76197
     "test_subprocess_print"
     "test_subprocess_error"
     "test_ipython_start_kernel_no_userns"
-  ];
+  ] ++ lib.optionals (pythonOlder "3.8") [
+    # flaky test https://github.com/ipython/ipykernel/issues/485
+    "test_shutdown"
+
+    # test regression https://github.com/ipython/ipykernel/issues/486
+    "test_sys_path_profile_dir"
+    "test_save_history"
+    "test_help_output"
+    "test_write_kernel_spec"
+    "test_ipython_start_kernel_userns"
+    "ZMQDisplayPublisherTests"
+  ]);
 
   # Some of the tests use localhost networking.
   __darwinAllowLocalNetworking = true;

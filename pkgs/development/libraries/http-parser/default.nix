@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub }:
 
 let
-  version = "2.9.2";
+  version = "2.9.3";
 in stdenv.mkDerivation {
   pname = "http-parser";
   inherit version;
@@ -10,7 +10,7 @@ in stdenv.mkDerivation {
     owner = "nodejs";
     repo = "http-parser";
     rev = "v${version}";
-    sha256 = "1qs6x3n2nrcj1wiik5pg5i16inykf7rcfdfdy7rwyzf40pvdl3c2";
+    sha256 = "189zi61vczqgmqjd2myjcjbbi5icrk7ccs0kn6nj8hxqiv5j3811";
   };
 
   NIX_CFLAGS_COMPILE = "-Wno-error";

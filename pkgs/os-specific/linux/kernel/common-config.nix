@@ -16,13 +16,21 @@
 }:
 
 with stdenv.lib;
-
-  with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
+with stdenv.lib.kernel;
+with (stdenv.lib.kernel.whenHelpers version);
 
 let
 
+
   # configuration items have to be part of a subattrs
   flattenKConf =  nested: mapAttrs (_: head) (zipAttrs (attrValues nested));
+
+  whenPlatformHasEBPFJit =
+    mkIf (stdenv.hostPlatform.isAarch32 ||
+          stdenv.hostPlatform.isAarch64 ||
+          stdenv.hostPlatform.isx86_64 ||
+          (stdenv.hostPlatform.isPowerPC && stdenv.hostPlatform.is64bit) ||
+          (stdenv.hostPlatform.isMips && stdenv.hostPlatform.is64bit));
 
   options = {
 
@@ -97,6 +105,7 @@ let
 
     networking = {
       NET                = yes;
+      IP_ADVANCED_ROUTER = yes;
       IP_PNP             = no;
       IP_VS_PROTO_TCP    = yes;
       IP_VS_PROTO_UDP    = yes;
@@ -106,7 +115,12 @@ let
       IP_DCCP_CCID3      = no; # experimental
       CLS_U32_PERF       = yes;
       CLS_U32_MARK       = yes;
-      BPF_JIT            = mkIf (stdenv.hostPlatform.system == "x86_64-linux") yes;
+      BPF_JIT            = whenPlatformHasEBPFJit yes;
+      BPF_JIT_ALWAYS_ON  = no; # whenPlatformHasEBPFJit yes; # see https://github.com/NixOS/nixpkgs/issues/79304
+      HAVE_EBPF_JIT      = whenPlatformHasEBPFJit yes;
+      BPF_STREAM_PARSER  = whenAtLeast "4.19" yes;
+      XDP_SOCKETS        = whenAtLeast "4.19" yes;
+      XDP_SOCKETS_DIAG   = whenAtLeast "4.19" yes;
       WAN                = yes;
       # Required by systemd per-cgroup firewalling
       CGROUP_BPF                  = option yes;
@@ -114,6 +128,7 @@ let
       IP_ROUTE_VERBOSE            = yes;
       IP_MROUTE_MULTIPLE_TABLES   = yes;
       IP_MULTICAST                = yes;
+      IP_MULTIPLE_TABLES          = yes;
       IPV6_ROUTER_PREF            = yes;
       IPV6_ROUTE_INFO             = yes;
       IPV6_OPTIMISTIC_DAD         = yes;
@@ -698,6 +713,7 @@ let
 
       HWMON         = yes;
       THERMAL_HWMON = yes; # Hardware monitoring support
+      NVME_HWMON    = whenAtLeast "5.5" yes; # NVMe drives temperature reporting
       UEVENT_HELPER = no;
 
       USERFAULTFD   = yes;

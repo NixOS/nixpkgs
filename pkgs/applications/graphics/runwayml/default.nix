@@ -6,12 +6,12 @@
 
 let
   pname = "runwayml";
-  version = "0.10.11";
+  version = "0.10.20";
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "https://runway-releases.s3.amazonaws.com/Runway%20${version}.AppImage";
-    sha256 = "0f3icgpwj1sk9bkycqw65c8bhrzzpw5yzacw52siv4j1gl4casnl";
+    sha256 = "1wi94xi8nrwfc4v2j1crlmwr0nxg95ffp5h4hxd84crvya8ibxgz";
     name="${pname}-${version}.AppImage";
   };
 

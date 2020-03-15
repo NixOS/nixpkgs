@@ -2,7 +2,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snakemake";
-  version = "5.8.1";
+  version = "5.10.0";
 
   propagatedBuildInputs = with python3Packages; [
     appdirs
@@ -11,16 +11,18 @@ python3Packages.buildPythonApplication rec {
     docutils
     GitPython
     jsonschema
+    nbformat
     psutil
     pyyaml
     ratelimiter
     requests
+    toposort
     wrapt
   ];
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "1r1qi14klmxmmw7vcivp45jrjka5rcwlcfggj5npnfb378fx3hb0";
+    sha256 = "0n8d5c8sc90kfdw740ad9ffbkg1ic3k1pmlnk68qr4w4vc98pym3";
   };
 
   doCheck = false; # Tests depend on Google Cloud credentials at ${HOME}/gcloud-service-key.json
@@ -36,6 +38,6 @@ python3Packages.buildPythonApplication rec {
       workflows are essentially Python scripts extended by declarative code to define
       rules. Rules describe how to create output files from input files.
     '';
-    maintainers = with maintainers; [ helkafen renatoGarcia ];
+    maintainers = with maintainers; [ helkafen renatoGarcia veprbl ];
   };
 }

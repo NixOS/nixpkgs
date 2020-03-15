@@ -6,27 +6,15 @@ assert mysqlSupport -> mysql_jdbc != null;
 with stdenv.lib;
 let
   extraJars = optional mysqlSupport mysql_jdbc;
-  logback-core = fetchurl {
-    url = "http://central.maven.org/maven2/ch/qos/logback/logback-core/1.2.3/logback-core-1.2.3.jar";
-    sha256 = "5946d837fe6f960c02a53eda7a6926ecc3c758bbdd69aa453ee429f858217f22";
-  };
-  logback-classic = fetchurl {
-    url = "http://central.maven.org/maven2/ch/qos/logback/logback-classic/1.2.3/logback-classic-1.2.3.jar";
-    sha256 = "fb53f8539e7fcb8f093a56e138112056ec1dc809ebb020b59d8a36a5ebac37e0";
-  };
-  slf4j = fetchurl {
-    url = "http://central.maven.org/maven2/org/slf4j/slf4j-api/1.7.25/slf4j-api-1.7.25.jar";
-    sha256 = "18c4a0095d5c1da6b817592e767bb23d29dd2f560ad74df75ff3961dbde25b79";
-  };
 in
 
 stdenv.mkDerivation rec {
   pname = "liquibase";
-  version = "3.6.2";
+  version = "3.8.7";
 
   src = fetchurl {
-    url = "https://github.com/liquibase/liquibase/releases/download/${pname}-parent-${version}/${pname}-${version}-bin.tar.gz";
-    sha256 = "199ybjk0xxsg04v5x5l4arljmzj96hxva6ym6bp7av7dny0nqvfx";
+    url = "https://github.com/liquibase/liquibase/releases/download/v${version}/${pname}-${version}.tar.gz";
+    sha256 = "0gs3pmzyx2bz6af2fr5jla3s33vfaw64pgahfvj5bgpj6d7vx1wg";
   };
 
   buildInputs = [ jre makeWrapper ];
@@ -42,22 +30,17 @@ stdenv.mkDerivation rec {
       done
     '';
     in ''
-      mkdir -p $out/{bin,lib,sdk}
-      mv ./* $out/
-      cp ${logback-core} ${logback-classic} ${slf4j} $out/lib
+      mkdir -p $out
+      mv ./{lib,licenses,liquibase.jar} $out/
 
-      # Clean up documentation.
       mkdir -p $out/share/doc/${pname}-${version}
-      mv $out/LICENSE.txt \
-         $out/README.txt \
+      mv LICENSE.txt \
+         README.txt \
+         ABOUT.txt \
+         changelog.txt \
          $out/share/doc/${pname}-${version}
 
-      # Remove silly files.
-      rm $out/liquibase.bat $out/liquibase.spec
-
-      # we provide our own script
-      rm $out/liquibase
-
+      mkdir -p $out/bin
       # there’s a lot of escaping, but I’m not sure how to improve that
       cat > $out/bin/liquibase <<EOF
       #!/usr/bin/env bash
@@ -74,7 +57,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Version Control for your database";
-    homepage = http://www.liquibase.org/;
+    homepage = "http://www.liquibase.org/";
+    changelog = "https://raw.githubusercontent.com/liquibase/liquibase/v${version}/changelog.txt";
     license = licenses.asl20;
     maintainers = with maintainers; [ nequissimus ];
     platforms = with platforms; unix;

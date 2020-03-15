@@ -20,7 +20,7 @@ let
 in stdenv.mkDerivation {
   name = "${pname}-${version}";
   src = fetchurl {
-    url = "http://www.thedarkmod.com/sources/thedarkmod.${version}.src.7z";
+    url = "https://www.thedarkmod.com/sources/thedarkmod.${version}.src.7z";
     sha256 = "17wdpip8zvm2njz0xrf7xcxl73hnsc6i83zj18kn8rnjkpy50dd6";
   };
   nativeBuildInputs = [

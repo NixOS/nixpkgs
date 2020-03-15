@@ -88,7 +88,6 @@ self: super: let
 in {
   stdenv = foldl (flip id) super.stdenv staticAdapters;
   gcc49Stdenv = foldl (flip id) super.gcc49Stdenv staticAdapters;
-  gcc5Stdenv = foldl (flip id) super.gcc5Stdenv staticAdapters;
   gcc6Stdenv = foldl (flip id) super.gcc6Stdenv staticAdapters;
   gcc7Stdenv = foldl (flip id) super.gcc7Stdenv staticAdapters;
   gcc8Stdenv = foldl (flip id) super.gcc8Stdenv staticAdapters;
@@ -161,14 +160,10 @@ in {
   };
   mkl = super.mkl.override { enableStatic = true; };
   nix = super.nix.override { withAWS = false; };
-  # openssl 1.1 doesn't compile
-  openssl = super.openssl_1_0_2.override {
-    static = true;
-
-    # Don’t use new stdenv for openssl because it doesn’t like the
-    # --disable-shared flag
-    stdenv = super.stdenv;
-  };
+  openssl = (super.openssl_1_1.override { static = true; }).overrideAttrs (o: {
+    # OpenSSL doesn't like the `--enable-static` / `--disable-shared` flags.
+    configureFlags = (removeUnknownConfigureFlags o.configureFlags);
+  });
   arrow-cpp = super.arrow-cpp.override {
     enableShared = false;
     python = { pkgs = { python = null; numpy = null; }; };

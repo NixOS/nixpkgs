@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "kcli";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "cswank";
     repo = "kcli";
     rev = version;
-    sha256 = "1m9967f9wk1113ap2qmqinqg7gvpmg5y2g1ji0q818qbandzlh23";
+    sha256 = "0whijr2r2j5bvfy8jgmpxsa0zvwk5kfjlpnkw4za5k35q7bjffls";
   };
 
   modSha256 = "1wcqh3306q9wxb6pnl8cpk73vmy36bjv2gil03j7j4pajs1f2lwn";

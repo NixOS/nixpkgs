@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python, clang_6 }:
+{ lib, stdenv, fetchFromGitHub, cmake, python3, clang_6 }:
 
 stdenv.mkDerivation {
   name = "libtapi-1000.10.8";
@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     sha256 = "1a19h39a48agvnmal99n9j1fjadiqwib7hfzmn342wmgh9z3vk0g";
   };
 
-  nativeBuildInputs = [ cmake python ];
+  nativeBuildInputs = [ cmake python3 ];
   buildInputs = [ clang_6.cc ];
 
   preConfigure = ''

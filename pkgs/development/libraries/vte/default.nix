@@ -22,13 +22,13 @@
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.58.2";
+  version = "0.58.3";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1h1bljr090cgnzim00q4pnsmjqblzn1sig3d87wv1hzjn796dj9k";
+    sha256 = "0xa9ipwic4jnhhbzlnqbhssz10xkzv61cpkl1ammc6mdq95bbp12";
   };
 
   passthru = {

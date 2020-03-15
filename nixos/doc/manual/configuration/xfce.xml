@@ -9,7 +9,6 @@
 <programlisting>
 <xref linkend="opt-services.xserver.desktopManager.xfce.enable" /> = true;
 <xref linkend="opt-services.xserver.displayManager.defaultSession" /> = "xfce";
-};
 </programlisting>
  </para>
  <para>
@@ -28,25 +27,14 @@
  <para>
   Some Xfce programs are not installed automatically. To install them manually
   (system wide), put them into your
-  <xref linkend="opt-environment.systemPackages"/>.
+  <xref linkend="opt-environment.systemPackages"/> from <literal>pkgs.xfce</literal>.
  </para>
- <simplesect xml:id="sec-xfce-thunar-volumes">
-  <title>Thunar Volume Support</title>
+ <simplesect xml:id="sec-xfce-thunar-plugins">
+  <title>Thunar Plugins</title>
   <para>
-   To enable <emphasis>Thunar</emphasis> volume support, put
-<programlisting>
-<xref linkend="opt-services.xserver.desktopManager.xfce.enable"/> = true;
-</programlisting>
-   into your <emphasis>configuration.nix</emphasis>.
-  </para>
- </simplesect>
- <simplesect xml:id="sec-xfce-polkit">
-  <title>Polkit Authentication Agent</title>
-  <para>
-   There is no authentication agent automatically installed alongside Xfce. To
-   allow mounting of local (non-removable) filesystems, you will need to
-   install one. Installing <emphasis>polkit_gnome</emphasis>, a rebuild, logout
-   and login did the trick.
+    If you'd like to add extra plugins to Thunar, add them to
+    <xref linkend="opt-services.xserver.desktopManager.xfce.thunarPlugins"/>.
+    You shouldn't just add them to <xref linkend="opt-environment.systemPackages"/>.
   </para>
  </simplesect>
  <simplesect xml:id="sec-xfce-troubleshooting">

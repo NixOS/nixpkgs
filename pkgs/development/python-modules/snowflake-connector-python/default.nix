@@ -1,4 +1,5 @@
 { buildPythonPackage
+, isPy27
 , asn1crypto
 , azure-storage-blob
 , boto3
@@ -24,11 +25,12 @@
 
 buildPythonPackage rec {
   pname = "snowflake-connector-python";
-  version = "2.1.2";
+  version = "2.2.0";
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "06061d59lapqrlg3gzdk4bi3v9c3q5zxfs0if5v2chg1f2l80ncr";
+    sha256 = "1d3qxjqc79fi2l4sns5svbc6kfaihivsrpycflmh50h7x0k9sv7f";
   };
 
   propagatedBuildInputs = [

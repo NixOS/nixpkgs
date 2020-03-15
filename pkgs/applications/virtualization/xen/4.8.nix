@@ -185,7 +185,10 @@ callPackage (import ./generic.nix (rec {
     # Avoid a glibc >= 2.25 deprecation warnings that get fatal via -Werror.
     sed 1i'#include <sys/sysmacros.h>' \
       -i tools/blktap2/control/tap-ctl-allocate.c \
-      -i tools/libxl/libxl_device.c
+      -i tools/libxl/libxl_device.c \
+      ${optionalString withInternalQemu "-i tools/qemu-xen/hw/9pfs/9p.c"}
+
+    sed -i -e '/sys\/sysctl\.h/d' tools/blktap2/drivers/block-remus.c
   '';
 
   passthru.qemu-system-i386 = if withInternalQemu

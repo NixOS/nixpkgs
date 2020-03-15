@@ -52,7 +52,7 @@ let
     set  -s escape-time       ${toString cfg.escapeTime}
     set  -g history-limit     ${toString cfg.historyLimit}
 
-    ${cfg.extraTmuxConf}
+    ${cfg.extraConfig}
   '';
 
 in {
@@ -102,7 +102,7 @@ in {
         description = "Time in milliseconds for which tmux waits after an escape is input.";
       };
 
-      extraTmuxConf = mkOption {
+      extraConfig = mkOption {
         default = "";
         description = ''
           Additional contents of /etc/tmux.conf
@@ -181,4 +181,8 @@ in {
       };
     };
   };
+
+  imports = [
+    (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [ "programs" "tmux" "extraConfig" ])
+  ];
 }

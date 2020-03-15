@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, python
+, isPy27
+, nose
 }:
 
 buildPythonPackage rec {
@@ -13,15 +14,20 @@ buildPythonPackage rec {
     sha256 = "42d8ef819367516592a825746a18073ced42ca169ab1f5f4044134703e7a049c";
   };
 
-  # Messy test suite. Even when running the tests like tox does, it fails
-  doCheck = false;
+  # python2 can't import a test fixture
+  doCheck = !isPy27;
+  checkInputs = [ nose ];
   checkPhase = ''
-    for test in tests/*.py; do
-      ${python.interpreter} $test
-    done
+    PYTHONPATH=$PWD/tests:$PYTHONPATH
+    nosetests \
+      --ignore-files="test_classdef" \
+      --ignore-files="test_objects" \
+      --ignore-files="test_selected" \
+      --exclude="test_the_rest" \
+      --exclude="test_importable"
   '';
-  # Following error without setting checkPhase
-  # TypeError: don't know how to make test from: {'byref': False, 'recurse': False, 'protocol': 3, 'fmode': 0}
+  # Tests seem to fail because of import pathing and referencing items/classes in modules.
+  # Seems to be a Nix/pathing related issue, not the codebase, so disabling failing tests.
 
   meta = {
     description = "Serialize all of python (almost)";

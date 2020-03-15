@@ -5,13 +5,13 @@
 
 stdenv.mkDerivation rec {
   pname = "h3";
-  version = "3.6.2";
+  version = "3.6.3";
 
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3";
     rev = "v${version}";
-    sha256 = "0mlv3jk0j340l0bhr3brxm3hbdcfmyp86h7d85537c81cl64y7kg";
+    sha256 = "1zgq496m2pk2c1l0r1di0p39nxwza00kxzqa971qd4xgbrvd4w55";
   };
 
   nativeBuildInputs = [ cmake ];

@@ -17,6 +17,7 @@
 , "browserify"
 , "castnow"
 , "clean-css"
+, "coc-prettier"
 , "coffee-script"
 , "coinmon"
 , "configurable-http-proxy"
@@ -54,6 +55,7 @@
 , "hueadm"
 , "imapnotify"
 , "indium"
+, "insect"
 , "ionic"
 , "ios-deploy"
 , { "iosevka-build-deps": "../../data/fonts/iosevka" }
@@ -99,6 +101,7 @@
 , {"npm2nix": "git://github.com/NixOS/npm2nix.git#5.12.0"}
 , "ocaml-language-server"
 , "parcel-bundler"
+, "parsoid"
 , "peerflix"
 , "peerflix-server"
 , "pnpm"
@@ -158,9 +161,12 @@
 , "web-ext"
 , "webpack"
 , "webpack-cli"
+, "webpack-dev-server"
+, "copy-webpack-plugin"
 , "webtorrent-cli"
 , "wring"
 , "write-good"
+, "yaml-language-server"
 , "yarn"
 , "yo"
 ]

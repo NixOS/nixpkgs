@@ -1,4 +1,4 @@
-{ stdenv, fetchurl }:
+{ stdenv, fetchurl, cmake }:
 
 stdenv.mkDerivation rec {
   pname = "olm";
@@ -9,17 +9,9 @@ stdenv.mkDerivation rec {
     sha256 = "0f7azjxc77n4ib9nj3cwyk3vhk8r2dsyf7id6nvqyxqxwxn95a8w";
   };
 
+  nativeBuildInputs = [ cmake ];
+
   doCheck = true;
-  checkTarget = "test";
-
-  # requires optimisation but memory operations are compiled with -O0
-  hardeningDisable = ["fortify"];
-
-  makeFlags = stdenv.lib.optional stdenv.cc.isClang "CC=cc";
-
-  installFlags = [
-    "PREFIX=${placeholder ''out''}"
-  ];
 
   meta = {
     description = "Implements double cryptographic ratchet and Megolm ratchet";

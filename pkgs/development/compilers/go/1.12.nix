@@ -30,11 +30,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "go";
-  version = "1.12.15";
+  version = "1.12.17";
 
   src = fetchurl {
     url = "https://dl.google.com/go/go${version}.src.tar.gz";
-    sha256 = "1hw4xjywcl883dnvfbb92w85sy8n231fdri4aynj8xajgr0p9fla";
+    sha256 = "09cbl90maxry713wd18jdqrms3ivbvcm472csnxc78rsqhc851yy";
   };
 
   # perl is used for testing go vet
@@ -242,7 +242,7 @@ stdenv.mkDerivation rec {
     homepage = http://golang.org/;
     description = "The Go Programming language";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ cstrahan orivej velovix mic92 rvolosatovs ];
+    maintainers = with maintainers; [ cstrahan orivej mic92 rvolosatovs Frostman ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

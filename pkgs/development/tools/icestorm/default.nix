@@ -13,8 +13,10 @@ stdenv.mkDerivation rec {
   pname = "icestorm";
   version = "2019.09.13";
 
-  pythonPkg = if usePyPy then pypy3 else python3;
-  pythonInterp = pythonPkg.interpreter;
+  passthru = rec {
+    pythonPkg = if usePyPy then pypy3 else python3;
+    pythonInterp = pythonPkg.interpreter;
+  };
 
   src = fetchFromGitHub {
     owner  = "cliffordwolf";
@@ -24,7 +26,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ pythonPkg libftdi1 ];
+  buildInputs = [ passthru.pythonPkg libftdi1 ];
   makeFlags = [ "PREFIX=$(out)" ];
 
   enableParallelBuilding = true;
@@ -39,12 +41,12 @@ stdenv.mkDerivation rec {
       --replace /usr/local/share "$out/share"
 
     for x in icefuzz/Makefile icebox/Makefile icetime/Makefile; do
-      substituteInPlace "$x" --replace python3 "${pythonInterp}"
+      substituteInPlace "$x" --replace python3 "${passthru.pythonInterp}"
     done
 
     for x in $(find . -type f -iname '*.py'); do
       substituteInPlace "$x" \
-        --replace '/usr/bin/env python3' '${pythonInterp}'
+        --replace '/usr/bin/env python3' '${passthru.pythonInterp}'
     done
   '';
 

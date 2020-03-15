@@ -1,7 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi, isPy27
-, ldap , django_2_2 
+, ldap , django 
 , mock
 }:
 
@@ -14,7 +14,7 @@ buildPythonPackage rec {
     sha256 = "5f48232c85ddfa33e3573153e6080526ac2eef5e7ec9cf42b5c4ba3c62afb96d";
   };
 
-  propagatedBuildInputs = [ ldap django_2_2 ]; 
+  propagatedBuildInputs = [ ldap django ]; 
   checkInputs = [ mock ]; 
 
   # django.core.exceptions.ImproperlyConfigured: Requested setting INSTALLED_APPS, but settings are not configured. You must either define the environment variable DJANGO_SETTINGS_MODULE or call settings.configure() before accessing settings

@@ -1,16 +1,17 @@
 { stdenv, lib, rustPlatform, fetchFromGitHub, pkgconfig, cmake, curl, libiconv, darwin }:
+
 rustPlatform.buildRustPackage rec {
   pname = "cargo-tree";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "sfackler";
     repo = "cargo-tree";
-    rev = "37030742fbf83106707525913ab6c4c3c701cd0e";
-    sha256 = "1mi52n02j9dmi19af6js0vmmqnl8rf4zxind3cxh401530cd8ml4";
+    rev = "v${version}";
+    sha256 = "16k41pj66m2221n1v2szir7x7qwx4i0g3svck2c8cj76h0bqyy15";
   };
 
-  cargoSha256 = "12p9dqlxa1b1sx8572w7hj0rlkkpv3k440pffdyjgyx4s1r9m0s0";
+  cargoSha256 = "0762gdj4n5mlflhzynnny1h8z792zyxmb4kcn54jj7qzdask4qdy";
 
   nativeBuildInputs = [ pkgconfig cmake ];
   buildInputs = [ curl ] ++ lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A cargo subcommand that visualizes a crate's dependency graph in a tree-like format";
     license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ jD91mZM2 ];
+    maintainers = with maintainers; [ jD91mZM2 ma27 ];
     homepage = "https://crates.io/crates/cargo-tree";
   };
 }

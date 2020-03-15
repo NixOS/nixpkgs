@@ -1,16 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, pkgconfig, qmake
+{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qmake
 , SDL2, fluidsynth, libsndfile, libvorbis, mpg123, qtbase
 }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "qtads";
-  version = "2.1.99.2019-04-12";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
     owner = "realnc";
     repo = pname;
-    rev = "43289a830a18c66a293c2b1ee75a08e92e8dd5dc";
-    sha256 = "0zscf6nmjjc4i7c38iy8znv2s453xc49gn7knyi3g1l6iinjwbx7";
+    rev = "v${version}";
+    sha256 = "02kk2hs20h9ffhylwms9f8zikmmlrz1nvbrm97gis9iljkyx035c";
   };
 
   nativeBuildInputs = [ pkgconfig qmake ];

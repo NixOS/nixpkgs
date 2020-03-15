@@ -137,12 +137,12 @@
     version = "${versionMajor}.${versionMinor}.${versionAdditional}-1";
 
     versionMajor = "17";
-    versionMinor = "4";
+    versionMinor = "5";
     versionAdditional = "1.1";
 
     src = fetchurl {
       url = "https://packages.microsoft.com/debian/9/prod/pool/main/m/msodbcsql17/msodbcsql${versionMajor}_${version}_amd64.deb";
-      sha256 = "0jb16irr7qlgd2zshg0vyia7zqipd0pcvwfcr6z807pss1mnzj8w";
+      sha256 = "0ysrl01z5ca72qw8n8kwwcl432cgiyw4pibfwg5nifx0kd7i7z4z";
     };
 
     nativeBuildInputs = [ dpkg patchelf ];

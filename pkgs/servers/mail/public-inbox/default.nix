@@ -1,4 +1,4 @@
-{ buildPerlPackage, lib, fetchurl, makeWrapper
+{ buildPerlPackage, lib, fetchurl, fetchpatch, makeWrapper
 , DBDSQLite, EmailMIME, IOSocketSSL, IPCRun, Plack, PlackMiddlewareReverseProxy
 , SearchXapian, TimeDate, URI
 , git, highlight, openssl, xapian
@@ -28,6 +28,14 @@ buildPerlPackage rec {
     url = "https://public-inbox.org/releases/public-inbox-${version}.tar.gz";
     sha256 = "0sa2m4f2x7kfg3mi4im7maxqmqvawafma8f7g92nyfgybid77g6s";
   };
+
+  patches = [
+    (fetchpatch {
+      url = "https://public-inbox.org/meta/20200101032822.GA13063@dcvr/raw";
+      sha256 = "0ncxqqkvi5lwi8zaa7lk7l8mf8h278raxsvbvllh3z7jhfb48r3l";
+    })
+    ./0002-msgtime-drop-Date-Parse-for-RFC2822.patch
+  ];
 
   outputs = [ "out" "devdoc" "sa_config" ];
 

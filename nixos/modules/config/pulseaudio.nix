@@ -248,6 +248,9 @@ in {
       security.rtkit.enable = true;
 
       systemd.packages = [ overriddenPackage ];
+
+      # PulseAudio is packaged with udev rules to handle various audio device quirks
+      services.udev.packages = [ overriddenPackage ];
     })
 
     (mkIf (cfg.extraModules != []) {

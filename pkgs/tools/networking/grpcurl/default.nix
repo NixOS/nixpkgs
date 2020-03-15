@@ -4,7 +4,7 @@
 
 buildGoPackage rec {
   pname = "grpcurl";
-  version = "1.0.0";
+  version = "1.4.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/fullstorydev/grpcurl";
@@ -12,13 +12,11 @@ buildGoPackage rec {
   src = fetchFromGitHub {
     owner = "fullstorydev";
     repo = "grpcurl";
-    rev = "d4d048fade4abcc2f0c3fb6f3e207289401d0a10";
-    sha256 = "0v45lwjw2phavhi6m4ql49ri1423m249a6xcf00v9hi2x1y9dh6q";
+    rev = "ccc9007156e7177388c8dd45ec694aebeb2da996";
+    sha256 = "1zgiqg9c6vk45x16n04bpfvj9z838nck7ihdcsbfz89xgq7f1c0b";
   };
 
-  goDeps = if stdenv.isDarwin
-           then ./deps-darwin.nix
-           else ./deps-linux.nix;
+  goDeps = ./deps.nix;
 
   meta = {
     description = "Like cURL, but for gRPC: Command-line tool for interacting with gRPC servers";

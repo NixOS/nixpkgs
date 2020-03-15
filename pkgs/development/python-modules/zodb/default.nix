@@ -1,5 +1,6 @@
 { stdenv
 , fetchPypi
+, fetchpatch
 , buildPythonPackage
 , python
 , zope_testrunner
@@ -22,6 +23,14 @@ buildPythonPackage rec {
       inherit pname version;
       sha256 = "20155942fa326e89ad8544225bafd74237af332ce9d7c7105a22318fe8269666";
     };
+
+    patches = [
+      # Compatibility with transaction v3.0
+      (fetchpatch {
+        url = "https://github.com/zopefoundation/ZODB/commit/0adcc6877f690186c97cc5da7e13788946d5e0df.patch";
+        sha256 = "1zmbgm7r36nj5w7icpinp61fm81svh2wk213pzr3l0jxzr9i5qi4";
+      })
+    ];
 
     # remove broken test
     postPatch = ''

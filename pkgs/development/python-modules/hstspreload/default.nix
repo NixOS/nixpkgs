@@ -6,14 +6,14 @@
 
 buildPythonPackage rec {
   pname = "hstspreload";
-  version = "2019.12.25";
+  version = "2020.2.29";
   disabled = isPy27;
 
   src = fetchFromGitHub {
     owner = "sethmlarson";
     repo = pname;
     rev = version;
-    sha256 = "1aa7jccwldxw3s0z668qqb0i0plsark1q3jvkmqkyp645w5bfilk";
+    sha256 = "1s6f9sdr5l9dqri92s8qr7r1nyvai3vnpcaw06293kc8dribi0m2";
   };
 
   # tests require network connection
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Chromium HSTS Preload list as a Python package and updated daily";
-    homepage = https://github.com/sethmlarson/hstspreload;
+    homepage = "https://github.com/sethmlarson/hstspreload";
     license = licenses.bsd3;
     maintainers = [ maintainers.costrouc ];
   };

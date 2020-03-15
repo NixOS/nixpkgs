@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "subfinder";
-  version = "2.2.4";
+  version = "2.3.0";
 
   goPackagePath = "github.com/projectdiscovery/subfinder";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner = "projectdiscovery";
     repo = pname;
     rev = "v${version}";
-    sha256 = "00ni835zvgrj8gmmmpjdszrcijyd6apig8rpb4g2z3g016b6gwar";
+    sha256 = "1vjxi2h4njakyqkfzwwaacy37kqx66j2y3k5l752z9va73gv7xv1";
   };
 
   goDeps = ./deps.nix;

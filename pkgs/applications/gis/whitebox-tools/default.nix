@@ -1,18 +1,18 @@
 { stdenv, rustPlatform , fetchFromGitHub, Security }:
 rustPlatform.buildRustPackage rec {
   pname = "whitebox_tools";
-  version = "0.16.0";
+  version = "1.2.0";
 
   src = fetchFromGitHub {
     owner = "jblindsay";
     repo = "whitebox-tools";
     rev = "v${version}";
-    sha256 = "1vs4hf2x3qjnffs9kjx56rzl67kpcy8xvng6p0r9fp9mfnblxg6j";
+    sha256 = "0zi32d0wrbl2763dcllv2g0liwacsfiza5lkx52620prjjbhby8i";
   };
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin Security;
 
-  cargoSha256 = "1y3vk8bzsaisx7wrncjxcqdh355f2wk4n59vq5qgj37fph2zpy7f";
+  cargoSha256 = "13k21akyfqgamywj39bw73sldby1s02vyvxfglxbaqq1x96xcy4i";
 
   # failures: structures::polyline::test::test_polyline_split
   doCheck = false;

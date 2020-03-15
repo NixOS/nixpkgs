@@ -82,18 +82,42 @@ in rec {
       vim;
   };
 
-  tested = lib.hydraJob (pkgs.releaseTools.aggregate {
+  tested = pkgs.releaseTools.aggregate {
     name = "nixos-${nixos.channel.version}";
     meta = {
       description = "Release-critical builds for the NixOS channel";
       maintainers = [ lib.maintainers.eelco ];
     };
     constituents =
-      let all = x: map (system: x.${system}) supportedSystems; in
-      [ nixpkgs.tarball
-        (all nixpkgs.jdk)
-      ]
-      ++ lib.collect lib.isDerivation nixos;
-  });
+      [ "nixos.channel"
+        "nixos.dummy.x86_64-linux"
+        "nixos.iso_minimal.x86_64-linux"
+        "nixos.manual.x86_64-linux"
+        "nixos.tests.boot.biosCdrom.x86_64-linux"
+        "nixos.tests.containers-imperative.x86_64-linux"
+        "nixos.tests.containers-ip.x86_64-linux"
+        "nixos.tests.firewall.x86_64-linux"
+        "nixos.tests.installer.lvm.x86_64-linux"
+        "nixos.tests.installer.separateBoot.x86_64-linux"
+        "nixos.tests.installer.simple.x86_64-linux"
+        "nixos.tests.ipv6.x86_64-linux"
+        "nixos.tests.login.x86_64-linux"
+        "nixos.tests.misc.x86_64-linux"
+        "nixos.tests.nat.firewall-conntrack.x86_64-linux"
+        "nixos.tests.nat.firewall.x86_64-linux"
+        "nixos.tests.nat.standalone.x86_64-linux"
+        "nixos.tests.nfs3.simple.x86_64-linux"
+        "nixos.tests.openssh.x86_64-linux"
+        "nixos.tests.php-pcre.x86_64-linux"
+        "nixos.tests.predictable-interface-names.predictable.x86_64-linux"
+        "nixos.tests.predictable-interface-names.predictableNetworkd.x86_64-linux"
+        "nixos.tests.predictable-interface-names.unpredictable.x86_64-linux"
+        "nixos.tests.predictable-interface-names.unpredictableNetworkd.x86_64-linux"
+        "nixos.tests.proxy.x86_64-linux"
+        "nixos.tests.simple.x86_64-linux"
+        "nixpkgs.jdk.x86_64-linux"
+        "nixpkgs.tarball"
+      ];
+  };
 
 }

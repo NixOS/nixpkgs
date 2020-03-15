@@ -10,11 +10,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sdcc";
-  version = "3.9.0";
+  version = "4.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/sdcc/sdcc-src-${version}.tar.bz2";
-    sha256 = "0dn0cy6whcrvbfh9x467jdi8dmzjrvixz2bz63pgxwzpz9rsxv4l";
+    sha256 = "042fxw5mnsfhpc0z9lxfsw88kdkm32pwrxacp88kj2n2dy0814a8";
   };
 
   buildInputs = [ autoconf bison boost flex gputils texinfo zlib ];

@@ -1,0 +1,15 @@
+diff --git a/meson.build b/meson.build
+index 3575224..0abea63 100644
+--- a/meson.build
++++ b/meson.build
+@@ -40,9 +40,8 @@ polkit_gobject = dependency('polkit-gobject-1')
+ polkitpolicydir = polkit_gobject.get_pkgconfig_variable('policydir',
+   define_variable: ['prefix', prefix])
+ 
+-libglib_testing = subproject('libglib-testing')
+ libglib_testing_dep = dependency(
+-  'libglib-testing',
++  'glib-testing-0',
+   fallback: ['libglib-testing', 'libglib_testing_dep'],
+ )
+ 

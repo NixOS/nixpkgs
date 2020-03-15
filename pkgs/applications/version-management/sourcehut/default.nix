@@ -6,7 +6,7 @@
 # https://github.com/NixOS/nixpkgs/pull/54425#discussion_r250688781
 
 let
-  fetchNodeModules = callPackage ../../networking/instant-messengers/rambox/fetchNodeModules.nix { };
+  fetchNodeModules = callPackage ./fetchNodeModules.nix { };
 
   python = python37.override {
     packageOverrides = self: super: {

@@ -1,25 +1,27 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, fetchpatch, isPyPy, libgit2, six, cffi }:
+{ stdenv, lib, buildPythonPackage, fetchPypi, isPyPy, isPy3k, libgit2, cached-property, pytestCheckHook, cffi, cacert }:
 
 buildPythonPackage rec {
   pname = "pygit2";
-  version = "0.27.2";
+  version = "1.1.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d9bgxd6ch5jxz0j5cmx7c4kw933g8pgm2zxf3id1a6w9g2r7hpw";
+    sha256 = "klXVB9XYe/It/VeZeniQgBAzH8IfmoPsoSGlP2V76zw=";
   };
 
   preConfigure = lib.optionalString stdenv.isDarwin ''
     export DYLD_LIBRARY_PATH="${libgit2}/lib"
   '';
 
-  patches = [ (fetchpatch {
-    name = "dont-require-old-pycparser"; # https://github.com/libgit2/pygit2/issues/819
-    url = https://github.com/libgit2/pygit2/commit/1eaba181577de206d3d43ec7886d0353fc0c9f2a.patch;
-    sha256 = "18x1fpmywhjjr4lvakwmy34zpxfqi8pqqj48g1wcib39lh3s7l4f";
-  }) ];
+  buildInputs = [
+    libgit2
+  ];
 
-  propagatedBuildInputs = [ libgit2 six ] ++ lib.optional (!isPyPy) cffi;
+  propagatedBuildInputs = [
+    cached-property
+  ] ++ lib.optional (!isPyPy) cffi;
+
+  checkInputs = [ pytestCheckHook ];
 
   preCheck = ''
     # disable tests that require networking
@@ -27,6 +29,20 @@ buildPythonPackage rec {
     rm test/test_credentials.py
     rm test/test_submodule.py
   '';
+
+  # Tests require certificates
+  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582674047
+  SSL_CERT_FILE = "${cacert}/etc/ssl/certs/ca-bundle.crt";
+
+  # setup.py check is broken
+  # https://github.com/libgit2/pygit2/issues/868
+  dontUseSetuptoolsCheck = true;
+
+  # TODO: Test collection is failing
+  # https://github.com/NixOS/nixpkgs/pull/72544#issuecomment-582681068
+  doCheck = false;
+
+  disabled = !isPy3k;
 
   meta = with lib; {
     description = "A set of Python bindings to the libgit2 shared library";

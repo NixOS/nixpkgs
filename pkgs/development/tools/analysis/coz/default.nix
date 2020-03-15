@@ -7,14 +7,18 @@
 }:
 stdenv.mkDerivation rec {
   pname = "coz";
-  version = "0.2.0";
+  version = "0.2.1";
 
   src = fetchFromGitHub {
     owner = "plasma-umass";
     repo = "coz";
     rev = version;
-    sha256 = "0a55q3s8ih1r9x6fp7wkg3n5h1yd9pcwg74k33d1r94y3j3m0znr";
+    sha256 = "0val36yw987b1558iiyk3nqg0yy5k9y5wh49v91zj3cs58mmfyhc";
   };
+
+  postPatch = ''
+    sed -i -e '/pid_t gettid/,+2d' libcoz/ccutil/thread.h
+  '';
 
   postConfigure = ''
     # This is currently hard-coded. Will be fixed in the next release.

@@ -1,15 +1,15 @@
-{ stdenv, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
+{ lib, mkDerivation, fetchFromGitHub, qtbase, qttools, qmake, wrapQtAppsHook }:
 
-stdenv.mkDerivation {
+mkDerivation {
   pname = "librepcb";
-  version = "0.1.2";
+  version = "0.1.3";
 
   src = fetchFromGitHub {
     owner = "LibrePCB";
     repo = "LibrePCB";
     fetchSubmodules = true;
-    rev = "acdd94d9d2310f79215125b999153e9da88a9376";
-    sha256 = "1bbl01rp75sl6k1cmch7x90v00lck578xvqmb856s9fx75bdgnv5";
+    rev = "56bc60d347ff67df0fe1d57807d03f0606de557f";
+    sha256 = "0z6jn5zawp0x5i9zda7l787jnsv3yl8aqwnpii3g4hsnf2q3hhrh";
   };
 
   enableParallelBuilding = true;
@@ -29,7 +29,7 @@ stdenv.mkDerivation {
     wrapQtApp $out/bin/librepcb
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A free EDA software to develop printed circuit boards";
     homepage = https://librepcb.org/;
     maintainers = with maintainers; [ luz ];

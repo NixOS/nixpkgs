@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "0q9c02b6nmw41yfsiqsnphgc3f0yg3fj31wkccp47cmwvy634lc3";
   };
 
-  buildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake ];
 
   cmakeFlags = [
     "-DCMAKE_SKIP_BUILD_RPATH=OFF" # for tests

@@ -5,11 +5,11 @@
 
 python.pkgs.buildPythonApplication rec {
   pname = "mnemosyne";
-  version = "2.7";
+  version = "2.7.1";
 
   src = fetchurl {
     url    = "mirror://sourceforge/project/mnemosyne-proj/mnemosyne/mnemosyne-${version}/Mnemosyne-${version}.tar.gz";
-    sha256 = "0lx70vl3pa3c42lr59s459b2bqi7fm0c80lsm06l34ggfwdadq24";
+    sha256 = "0dhvg9cxc6m6kzk75h363h1g0bl80cqz11cijh0zpz9f4w6lnqsq";
   };
 
   nativeBuildInputs = with python.pkgs; [ wrapPython pyqtwebengine.wrapQtAppsHook ];
@@ -17,6 +17,8 @@ python.pkgs.buildPythonApplication rec {
   buildInputs = [ anki ];
 
   propagatedBuildInputs = with python.pkgs; [
+    googletrans
+    gtts
     pyqtwebengine
     pyqt5
     matplotlib
@@ -46,7 +48,7 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   meta = {
-    homepage = https://mnemosyne-proj.org/;
+    homepage = "https://mnemosyne-proj.org/";
     description = "Spaced-repetition software";
     longDescription = ''
       The Mnemosyne Project has two aspects:

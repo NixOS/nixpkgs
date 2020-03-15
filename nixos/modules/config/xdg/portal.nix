@@ -42,6 +42,10 @@ with lib;
     let
       cfg = config.xdg.portal;
       packages = [ pkgs.xdg-desktop-portal ] ++ cfg.extraPortals;
+      joinedPortals = pkgs.symlinkJoin {
+        name = "xdg-portals";
+        paths = cfg.extraPortals;
+      };
 
     in mkIf cfg.enable {
 
@@ -56,7 +60,7 @@ with lib;
 
       environment.variables = {
         GTK_USE_PORTAL = mkIf cfg.gtkUsePortal "1";
-        XDG_DESKTOP_PORTAL_PATH = map (p: "${p}/share/xdg-desktop-portal/portals") cfg.extraPortals;
+        XDG_DESKTOP_PORTAL_DIR = "${joinedPortals}/share/xdg-desktop-portal/portals";
       };
     };
 }

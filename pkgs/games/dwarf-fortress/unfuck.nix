@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitHub, cmake
 , libGL, libSM, SDL, SDL_image, SDL_ttf, glew, openalSoft
 , ncurses, glib, gtk2, libsndfile, zlib
-, dfVersion
+, dfVersion, pkg-config
 }:
 
 with lib;
@@ -32,6 +32,18 @@ let
       unfuckRelease = "0.44.12";
       sha256 = "1kszkb1d1vll8p04ja41nangsaxb5lv4p3xh2jhmsmipfixw7nvz";
     };
+    "0.47.01" = {
+      unfuckRelease = "0.47.01";
+      sha256 = "11xvb3qh4crdf59pwfwpi73rzm3ysd1r1xp2k1jp7527jmqapk4k";
+    };
+    "0.47.02" = {
+      unfuckRelease = "0.47.01";
+      sha256 = "11xvb3qh4crdf59pwfwpi73rzm3ysd1r1xp2k1jp7527jmqapk4k";
+    };
+    "0.47.04" = {
+      unfuckRelease = "0.47.04";
+      sha256 = "1wa990xbsyiiz7abq153xmafvvk1dmgz33rp907d005kzl1z86i9";
+    };
   };
 
   release = if hasAttr dfVersion unfuck-releases
@@ -54,7 +66,7 @@ stdenv.mkDerivation {
     "-DGTK2_GDKCONFIG_INCLUDE_DIR=${gtk2.out}/lib/gtk-2.0/include"
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [ cmake pkg-config ];
   buildInputs = [
     libSM SDL SDL_image SDL_ttf glew openalSoft
     ncurses gtk2 libsndfile zlib libGL

@@ -24,7 +24,7 @@ rustPlatform.buildRustPackage rec {
      git
   ];
 
-  cargoSha256 = "1fsxd7yzb38h1d52yyz7kj1v0riycjydb1b1bn1zkhgwm5sm2kbs";
+  cargoSha256 = "1hdsn011y9invfy7can8c02zwa7birj9y1rxhrj7wyv4gh3659i0";
   doCheck = false;
 
   postInstall = ''

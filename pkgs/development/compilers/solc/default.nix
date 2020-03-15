@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
   checkPhase = ''
     while IFS= read -r -d ''' dir
     do
-      LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)/$dir
+      LD_LIBRARY_PATH=$LD_LIBRARY_PATH''${LD_LIBRARY_PATH:+:}$(pwd)/$dir
       export LD_LIBRARY_PATH
     done <   <(find . -type d -print0)
 

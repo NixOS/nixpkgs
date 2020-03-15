@@ -8,11 +8,11 @@
 
 buildPythonApplication rec {
   pname = "catt";
-  version = "0.10.2";
+  version = "0.10.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0n6aa2vvbq0z3vcg4cylhpqxch783cxvxk234647knklgg9vdf1r";
+    sha256 = "08rjimcy9n7nvh4dz9693gjmkq6kaq5pq1nmjjsdrb7vb89yl53i";
   };
 
   propagatedBuildInputs = [

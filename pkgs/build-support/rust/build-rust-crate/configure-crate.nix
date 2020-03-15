@@ -1,4 +1,4 @@
-{ lib, stdenv, echo_build_heading, noisily, mkRustcDepArgs }:
+{ lib, stdenv, echo_colored, noisily, mkRustcDepArgs }:
 { build
 , buildDependencies
 , colors
@@ -31,10 +31,25 @@ let version_ = lib.splitString "-" crateVersion;
     completeDepsDir = lib.concatStringsSep " " completeDeps;
     completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
 in ''
-  cd ${workspace_member}
-  runHook preConfigure
-  ${echo_build_heading colors}
+  ${echo_colored colors}
   ${noisily colors verbose}
+  source ${./lib.sh}
+
+  ${lib.optionalString (workspace_member != null) ''
+  noisily cd "${workspace_member}"
+''}
+  ${lib.optionalString (workspace_member == null) ''
+  echo_colored "Searching for matching Cargo.toml (${crateName})" 
+  local cargo_toml_dir=$(matching_cargo_toml_dir "${crateName}")
+  if [ -z "$cargo_toml_dir" ]; then
+    echo_error "ERROR configuring ${crateName}: No matching Cargo.toml in $(pwd) found." >&2
+    exit 23
+  fi
+  noisily cd "$cargo_toml_dir"
+''}
+
+  runHook preConfigure
+ 
   symlink_dependency() {
     # $1 is the nix-store path of a dependency
     # $2 is the target path
@@ -137,16 +152,7 @@ in ''
      CRATENAME=$(echo ${crateName} | sed -e "s/\(.*\)-sys$/\U\1/")
      grep -P "^cargo:(?!(rustc-|warning=|rerun-if-changed=|rerun-if-env-changed))" target/build/${crateName}.opt \
        | sed -e "s/cargo:\([^=]*\)=\(.*\)/export DEP_$(echo $CRATENAME)_\U\1\E=\2/" > target/env
-
      set -e
-     if [[ -n "$(ls target/build/${crateName}.out)" ]]; then
-
-        if [[ -e "${libPath}" ]]; then
-           cp -r target/build/${crateName}.out/* $(dirname ${libPath}) #*/
-        else
-           cp -r target/build/${crateName}.out/* src #*/
-        fi
-     fi
   fi
   runHook postConfigure
 ''

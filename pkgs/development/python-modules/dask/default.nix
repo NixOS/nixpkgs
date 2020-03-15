@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "dask";
-  version = "2.9.1";
+  version = "2.10.1";
 
   disabled = pythonOlder "3.5";
 
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "1xayr4gkp4slvmh2ksdr0d196giz3yhknqjjg1vw2j0la9gwfwxs";
+    sha256 = "035mr7385yf5ng5wf60qxr80529h8dsla5hymkyg68dxhkd0jvbr";
   };
 
   checkInputs = [

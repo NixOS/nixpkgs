@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "0dhfz7aj3cqi974ybf0axchih40rzrs9m8bxhwz1hgig57aisfc0";
   };
 
-  cargoSha256 = "0xkwza9fx61pvlsm0s3dxc9i09mqp6c9df8w63fyiq7174vjxryx";
+  cargoSha256 = "088drkpkgq8psv5j6igxyhfvvbalzg6nd98r9z0nxkawck5i2clz";
 
   meta = with stdenv.lib; {
     description = "A container debugging tool based on FUSE";

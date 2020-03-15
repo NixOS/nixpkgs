@@ -84,14 +84,16 @@ let
 
   targetCC = builtins.head toolsForTarget;
 
+  useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
+
 in
 stdenv.mkDerivation (rec {
-  version = "8.10.0.20200108";
+  version = "8.10.0.20200123";
   name = "${targetPrefix}ghc-${version}";
 
   src = fetchurl {
     url = "https://downloads.haskell.org/ghc/8.10.1-rc1/ghc-${version}-src.tar.xz";
-    sha256 = "1xm6cb3s2x3rycnyvkh12mp65xi3zbwrk5ima8sg7c245f3dl0ay";
+    sha256 = "162s5g33s918i12qfcqdj5wanc10xg07g5lq3gpm5j7c1v0y1zrf";
   };
 
   enableParallelBuilding = true;
@@ -110,7 +112,7 @@ stdenv.mkDerivation (rec {
     export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
     export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
     # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString (targetPlatform.isLinux && !(targetPlatform.useLLVM or false)) ".gold"}"
+    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
     export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
     export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
     export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
@@ -158,7 +160,7 @@ stdenv.mkDerivation (rec {
     "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
   ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
     "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals (targetPlatform.isAarch32) [
+  ] ++ stdenv.lib.optionals useLdGold [
     "CFLAGS=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
     "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"

@@ -2,17 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.9.1";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "kbknapp";
     repo = pname;
     rev = "v${version}";
-    sha256 = "02gsarwm4gjkr9m4sfbjwp37xmqhch8qpyy027bxqkg8iyipxm69";
+    sha256 = "0g91cfja4h9qhpxgnimczjna528ml645iz7hgpwl6yp0742qcal4";
   };
 
-  cargoPatches = [ ./cargo-lock.patch ];
-  cargoSha256 = "1ywmrvkwwwwh99l4j8vc4cyk8qjd0jx8hn68yr2h31ya1bzcqbd1";
+  # Can be removed when updating to the next release.
+  cargoPatches = [ ./0001-Fix-outdated-Cargo.lock.patch ];
+
+  cargoSha256 = "0pr57g41lnn8srcbc11sb15qchf01zwqcb1802xdayj6wlc3g3dy";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]

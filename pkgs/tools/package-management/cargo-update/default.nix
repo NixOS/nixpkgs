@@ -1,29 +1,37 @@
-{ stdenv, callPackage, defaultCrateOverrides, fetchFromGitHub, cmake, curl, libssh2, libgit2, openssl, zlib }:
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, cmake
+, curl
+, libgit2
+, libssh2
+, openssl
+, pkg-config
+, zlib }:
 
-((callPackage ./cargo-update.nix {}).cargo_update {}).override {
-  crateOverrides = defaultCrateOverrides // {
-    cargo-update = attrs: rec {
-      name = "cargo-update-${version}";
-      version = "1.5.2";
+rustPlatform.buildRustPackage rec {
+  pname = "cargo-update";
+  version = "3.0.0";
 
-      src = fetchFromGitHub {
-        owner = "nabijaczleweli";
-        repo = "cargo-update";
-        rev = "v${version}";
-        sha256 = "1bvrdgcw2akzd78wgvsisvghi8pvdk3szyg9s46qxv4km9sf88s7";
-      };
+  src = fetchFromGitHub {
+    owner = "nabijaczleweli";
+    repo = pname;
+    rev = "v${version}";
+    sha256 = "1jyfv8aa0gp67pvv8l2vkqq4j9rgjl4rq1wn4nqxb44gmvkg15l3";
+  };
 
-      nativeBuildInputs = [ cmake ];
-      buildInputs = [ libssh2 libgit2 openssl zlib ]
-        ++ stdenv.lib.optional stdenv.isDarwin curl;
+  cargoPatches = [ ./0001-Generate-lockfile-for-cargo-update-v3.0.0.patch ];
+  cargoSha256 = "034v1ql5k3n3rgi3aqszkybvv3vc80v263c9nlwxcwbswsh9jpp1";
 
-      meta = with stdenv.lib; {
-        description = "A cargo subcommand for checking and applying updates to installed executables";
-        homepage = https://github.com/nabijaczleweli/cargo-update;
-        license = with licenses; [ mit ];
-        maintainers = with maintainers; [ gerschtli ];
-        platforms = platforms.all;
-      };
-    };
+  nativeBuildInputs = [ cmake ];
+  buildInputs = [ libgit2 libssh2 openssl pkg-config zlib ]
+    ++ stdenv.lib.optional stdenv.isDarwin curl;
+
+  meta = with stdenv.lib; {
+    description = "A cargo subcommand for checking and applying updates to installed executables";
+    homepage = "https://github.com/nabijaczleweli/cargo-update";
+    license = licenses.mit;
+    maintainers = with maintainers; [ gerschtli filalex77 ];
+    platforms = platforms.all;
   };
 }

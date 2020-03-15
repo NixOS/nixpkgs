@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "delta";
-  version = "0.0.15";
+  version = "0.0.17";
 
   src = fetchFromGitHub {
     owner = "dandavison";
     repo = pname;
     rev = version;
-    sha256 = "1c2zqvkzkrj8rcz226vfk43yw113b1fdcz2gx0xh8fs72arqx6wh";
+    sha256 = "1j01h60snciqp4psyxf67j3gbmi02c1baprsg9frzjacawbx8cz7";
   };
 
-  cargoSha256 = "1888bvkpalfcw9bc9zmf9bmil6x35l9ia31x6mx1h2dvrfpw3bb1";
+  cargoSha256 = "176bfd57gc9casvk0p10ilvzw3q3rkkv7qflja778vrwr9zrmkzq";
 
   meta = with lib; {
     homepage = "https://github.com/dandavison/delta";

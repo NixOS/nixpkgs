@@ -1,15 +1,23 @@
-{ stdenv, fetchFromGitHub, cmake, python3 }:
+{ stdenv, fetchFromGitHub, cmake, python3, substituteAll }:
 
 stdenv.mkDerivation rec {
   pname = "wabt";
-  version = "1.0.12";
+  version = "1.0.13";
 
   src = fetchFromGitHub {
-    owner  = "WebAssembly";
-    repo   = "wabt";
-    rev    = version;
-    sha256 = "1zlv3740wkqj4mn6sr84h0x6wk2lcp4pwwmqsh5yyqp1j1glbsa0";
+    owner = "WebAssembly";
+    repo = "wabt";
+    rev = version;
+    sha256 = "07x8m5sf4c7zjq1flypycw1d15ylqdp38l81vn961ds089ngvpgg";
+    fetchSubmodules = true;
   };
+
+  patches = [
+    (substituteAll {
+      src = ./version.patch;
+      inherit version;
+    })
+  ];
 
   nativeBuildInputs = [ cmake ];
   cmakeFlags = [ "-DBUILD_TESTS=OFF" ];

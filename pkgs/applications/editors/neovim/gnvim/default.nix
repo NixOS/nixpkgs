@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "11gb59lhc1sp5dxj2fdm6072f4nxxay0war3kmchdwsk41nvxlrh";
   };
 
-  cargoSha256 = "00r5jf5qdw02vcv3522qqrnwj14mip0l58prcncbvyg4pxlm2rb2";
+  cargoSha256 = "0ay7hx5bzchp772ywgxzia12c44kbyarrshl689cmqh59wphsrx5";
 
   buildInputs = [ gtk webkitgtk ];
 
@@ -40,8 +40,7 @@ rustPlatform.buildRustPackage rec {
   meta = with stdenv.lib; {
     description = "GUI for neovim, without any web bloat";
     homepage = "https://github.com/vhakulinen/gnvim";
-    license     = licenses.mit;
-    maintainers =  with maintainers; [ minijackson ];
-    inherit version;
+    license = licenses.mit;
+    maintainers = with maintainers; [ minijackson ];
   };
 }

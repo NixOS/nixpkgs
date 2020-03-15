@@ -2,17 +2,15 @@
 , asciidoc, docbook_xml_dtd_45, docbook_xsl, libxml2, libxslt
 , coreutils, gawk, gnugrep, gnused, jq, nix }:
 
-with stdenv.lib;
-
 stdenv.mkDerivation rec {
   pname = "nix-prefetch";
-  version = "0.1.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "msteen";
     repo = "nix-prefetch";
-    rev = "f9507a655651b51f3a3ebacde85bb40758853615";
-    sha256 = "0ykrbvbwwpz348424yy2452idgw8dffi3klh7n85n96dfflyyd4s";
+    rev = version;
+    sha256 = "0b9gdi7xzmfq0j258x724xsll8gi31m0m4pzfjkqinlm6zwr3sgm";
   };
 
   nativeBuildInputs = [
@@ -40,7 +38,7 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     makeWrapper $lib/main.sh $out/bin/${pname} \
-      --prefix PATH : '${makeBinPath [ coreutils gawk gnugrep gnused jq nix ]}'
+      --prefix PATH : '${stdenv.lib.makeBinPath [ coreutils gawk gnugrep gnused jq nix ]}'
 
     substitute src/tests.sh $lib/tests.sh \
       --subst-var-by bin $out/bin
@@ -55,13 +53,13 @@ stdenv.mkDerivation rec {
     install -D contrib/nix-prefetch-completion.bash $out/share/bash-completion/completions/nix-prefetch
     install -D contrib/nix-prefetch-completion.zsh $out/share/zsh/site-functions/_nix_prefetch
 
-    mkdir $out/contrib
-    cp -r contrib/hello_rs $out/contrib/
+    mkdir -p $out/share/doc/${pname}/contrib
+    cp -r contrib/hello_rs $out/share/doc/${pname}/contrib/
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "Prefetch any fetcher function call, e.g. package sources";
-    homepage = https://github.com/msteen/nix-prefetch;
+    homepage = "https://github.com/msteen/nix-prefetch";
     license = licenses.mit;
     maintainers = with maintainers; [ msteen ];
     platforms = platforms.all;

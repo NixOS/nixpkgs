@@ -18,11 +18,11 @@ let
 
 in stdenv.mkDerivation rec {
   name = "${pname}-${version}";
-  version = "1.6.5";
+  version = "1.6.7";
 
   src = fetchurl {
     url = "https://te4.org/dl/t-engine/t-engine4-src-${version}.tar.bz2";
-    sha256 = "0ifi057idid8xq7af8ybs99b6939hyfif1ml1ihjpx02vinmd419";
+    sha256 = "0283hvms5hr29zr0grd6gq059k0hg8hcz3fsmwjmysiih8790i68";
   };
 
   prePatch = ''
@@ -72,7 +72,7 @@ in stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Tales of Maj'eyal (rogue-like game)";
-    homepage = https://te4.org/;
+    homepage = "https://te4.org/";
     license = licenses.gpl3;
     maintainers = with maintainers; [ chattered peterhoeg ];
     platforms = with platforms; [ "i686-linux" "x86_64-linux" ];

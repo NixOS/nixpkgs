@@ -20,7 +20,7 @@ buildPythonPackage rec {
       Think about the ideal way to write a web app.
       Write the code to make it happen.
     '';
-    homepage = "http://webpy.org/";
+    homepage = "https://webpy.org/";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ layus ];
   };

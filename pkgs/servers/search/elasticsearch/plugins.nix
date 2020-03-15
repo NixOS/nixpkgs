@@ -18,6 +18,9 @@ let
       inherit installPhase;
       pname = "elasticsearch-${pluginName}";
       dontUnpack = true;
+      # Work around the "unpacker appears to have produced no directories"
+      # case that happens when the archive doesn't have a subdirectory.
+      setSourceRoot = "sourceRoot=$(pwd)";
       buildInputs = [ unzip ];
       meta = a.meta // {
         platforms = elasticsearch.meta.platforms;
@@ -25,6 +28,24 @@ let
       };
     });
 in {
+
+  analysis-icu = esPlugin rec {
+    name = "elasticsearch-analysis-icu-${version}";
+    pluginName = "analysis-icu";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      sha256 =
+        if version == "7.5.1" then "0v6ynbk34g7pl9cwy8ga8bk1my18jb6pc3pqbjl8p93w38219vi6"
+        else if version == "6.8.3" then "0vbaqyj0lfy3ijl1c9h92b0nh605h5mjs57bk2zhycdvbw5sx2lv"
+        else throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = with stdenv.lib; {
+      homepage = https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-icu;
+      description = "The ICU Analysis plugin integrates the Lucene ICU module into elasticsearch";
+      license = licenses.asl20;
+    };
+  };
 
   analysis-lemmagen = esPlugin rec {
     pluginName = "analysis-lemmagen";

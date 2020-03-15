@@ -23,6 +23,11 @@ buildPythonPackage rec {
     sha256 = "0n80y9a6qhbhhbz64jdpscx0nha9jn9nygp9nkgszmw04ri5j5hm";
   };
 
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace pandas~=0.25.0 pandas
+  '';
+
   propagatedBuildInputs = [
     click
     dateparser

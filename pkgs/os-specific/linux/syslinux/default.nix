@@ -1,13 +1,14 @@
-{ stdenv, fetchFromGitHub, fetchurl, nasm, perl, python, libuuid, mtools, makeWrapper }:
+{ stdenv, fetchFromRepoOrCz, fetchurl, nasm, perl, python3, libuuid, mtools, makeWrapper }:
 
 stdenv.mkDerivation {
-  name = "syslinux-2015-11-09";
+  name = "syslinux-2019-02-07";
 
-  src = fetchFromGitHub {
-    owner = "geneC";
+  # This is syslinux-6.04-pre3^1; syslinux-6.04-pre3 fails to run.
+  # Same issue here https://www.syslinux.org/archives/2019-February/026330.html
+  src = fetchFromRepoOrCz {
     repo = "syslinux";
-    rev = "0cc9a99e560a2f52bcf052fd85b1efae35ee812f";
-    sha256 = "0wk3r5ki4lc334f9jpml07wpl8d0bnxi9h1l4h4fyf9a0d7n4kmw";
+    rev = "b40487005223a78c3bb4c300ef6c436b3f6ec1f7";
+    sha256 = "1qrxl1114sr2i2791z9rf8v53g200aq30f08808d7i8qnmgvxl2w";
   };
 
   patches = let
@@ -15,12 +16,13 @@ stdenv.mkDerivation {
       "https://salsa.debian.org/images-team/syslinux/raw/${commit}/debian/patches/"
       + patchName;
   in [
-    ./perl-deps.patch
     (fetchurl {
-      # ldlinux.elf: Not enough room for program headers, try linking with -N
-      name = "not-enough-room.patch";
-      url = mkURL "a556ad7" "0014_fix_ftbfs_no_dynamic_linker.patch";
-      sha256 = "0ijqjsjmnphmvsx0z6ppnajsfv6xh6crshy44i2a5klxw4nlvrsw";
+      url = mkURL "fa1349f1" "0002-gfxboot-menu-label.patch";
+      sha256 = "06ifgzbpjj4picpj17zgprsfi501zf4pp85qjjgn29i5rs291zni";
+    })
+    (fetchurl {
+      url = mkURL "477e56d2" "0005-gnu-efi-version-compatibility.patch";
+      sha256 = "041568b4abb79wynyps1n04lg4fr26rc3sbjncz99pp0mbz0ajlm";
     })
     (fetchurl {
       # mbr.bin: too big (452 > 440)
@@ -33,20 +35,22 @@ stdenv.mkDerivation {
       url = mkURL "012e1dd312eb" "0017-single-load-segment.patch";
       sha256 = "0azqzicsjw47b9ppyikhzaqmjl4lrvkxris1356bkmgcaiv6d98b";
     })
+    (fetchurl {
+      url = mkURL "26f0e7b2" "0018-prevent-pow-optimization.patch";
+      sha256 = "1c8g0jz5yj9a0rsmryx9vdjsw4hw8mjfcg05c9pmyjg85w3dfp3m";
+    })
   ];
 
   postPatch = ''
     substituteInPlace Makefile --replace /bin/pwd $(type -P pwd)
-    substituteInPlace gpxe/src/Makefile.housekeeping --replace /bin/echo $(type -P echo)
     substituteInPlace utils/ppmtolss16 --replace /usr/bin/perl $(type -P perl)
-    substituteInPlace gpxe/src/Makefile --replace /usr/bin/perl $(type -P perl)
 
     # fix tests
     substituteInPlace tests/unittest/include/unittest/unittest.h \
       --replace /usr/include/ ""
   '';
 
-  nativeBuildInputs = [ nasm perl python ];
+  nativeBuildInputs = [ nasm perl python3 ];
   buildInputs = [ libuuid makeWrapper ];
 
   enableParallelBuilding = false; # Fails very rarely with 'No rule to make target: ...'

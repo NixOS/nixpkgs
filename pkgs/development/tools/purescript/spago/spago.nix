@@ -11,11 +11,11 @@
 }:
 mkDerivation {
   pname = "spago";
-  version = "0.13.0";
+  version = "0.14.0";
   src = fetchgit {
-    url = "https://github.com/spacchetti/spago.git";
-    sha256 = "158xq5zn32iwswxmpma92763hl6kzq7kb01cyvphmmlilx55b6yk";
-    rev = "426838670ba9de4593f4c533a6947efb2d8ad4ba";
+    url = "https://github.com/purescript/spago.git";
+    sha256 = "12i1430prqspy73nwfxc17zf51yprhrxxcnhw4rks6jhkgwxf4a4";
+    rev = "7a99343e4876a465600eaa64b0697a9f0b2a49a9";
     fetchSubmodules = true;
   };
   isLibrary = true;
@@ -42,6 +42,6 @@ mkDerivation {
   ];
   testToolDepends = [ hspec-discover ];
   prePatch = "hpack";
-  homepage = "https://github.com/spacchetti/spago#readme";
+  homepage = "https://github.com/purescript/spago#readme";
   license = stdenv.lib.licenses.bsd3;
 }

@@ -90,7 +90,9 @@ in
   graphene = callInstalledTest ./graphene.nix {};
   ibus = callInstalledTest ./ibus.nix {};
   libgdata = callInstalledTest ./libgdata.nix {};
+  glib-testing = callInstalledTest ./glib-testing.nix {};
   libxmlb = callInstalledTest ./libxmlb.nix {};
+  malcontent = callInstalledTest ./malcontent.nix {};
   ostree = callInstalledTest ./ostree.nix {};
   xdg-desktop-portal = callInstalledTest ./xdg-desktop-portal.nix {};
 }

@@ -1,20 +1,21 @@
 { stdenv, fetchurl, pkgconfig, libdrm, libpciaccess, cairo, xorgproto, udev
 , libX11, libXext, libXv, libXrandr, glib, bison, libunwind, python3, kmod
-, procps, utilmacros, gtk-doc, openssl, peg }:
+, procps, utilmacros, gtk-doc, openssl, peg, elfutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "intel-gpu-tools";
-  version = "1.23";
+  version = "1.24";
 
   src = fetchurl {
     url = "https://xorg.freedesktop.org/archive/individual/app/igt-gpu-tools-${version}.tar.xz";
-    sha256 = "1l4s95m013p2wvddwr4cjqyvsgmc88zxx2887p1fbb1va5n0hjsd";
+    sha256 = "1gr1m18w73hmh6n9w2f6gky21qc0pls14bgxkhy95z7azrr7qdap";
   };
 
   nativeBuildInputs = [ pkgconfig utilmacros ];
   buildInputs = [ libdrm libpciaccess cairo xorgproto udev libX11 kmod
     libXext libXv libXrandr glib bison libunwind python3 procps
-    gtk-doc openssl peg ];
+    gtk-doc openssl peg elfutils ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=array-bounds" ];
 

@@ -27,9 +27,6 @@ let
     (mkOverride "colorlog" "4.0.2"
       "3cf31b25cbc8f86ec01fef582ef3b840950dea414084ed19ab922c8b493f9b42")
 
-    (mkOverride "pyyaml" "5.1.2"
-      "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81")
-
     # required by aioesphomeapi
     (self: super: {
       protobuf = super.protobuf.override {
@@ -70,13 +67,15 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.103.6";
+  hassVersion = "0.106.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
   disabled = pythonOlder "3.5";
+
+  patches = [ ./relax-importlib-metadata-pyaml.patch ];
 
   inherit availableComponents;
 
@@ -85,7 +84,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "1492q4icyhvz30fw5ysrwlnsls4iy5pv62ay3vq1ygcfnlapkqhl";
+    sha256 = "11kv5lmm8nxp7yv3w43mzmgzkafddy0z6wl2878p96iyil1w7qhb";
   };
 
   propagatedBuildInputs = [
@@ -98,15 +97,8 @@ in with py.pkgs; buildPythonApplication rec {
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco hass-nabucasa
-  ];
-
-  patches = [
-    # newer importlib-metadata version
-    (fetchpatch {
-      url = "https://github.com/home-assistant/home-assistant/commit/63c6b803dc2d835d57b97ed833ee5cd8318bf7ae.patch";
-      sha256 = "16q3qdnmgsw5415f70zvsv1z63dljp3c9glv06cyj4s6qsl13xdc";
-    })
+    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco
+    hass-nabucasa defusedxml
   ];
 
   postPatch = ''

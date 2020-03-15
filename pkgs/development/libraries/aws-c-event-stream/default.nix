@@ -16,6 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ aws-c-common aws-checksums ] ++ lib.optional stdenv.hostPlatform.isMusl libexecinfo;
 
   cmakeFlags = [
+    "-DBUILD_SHARED_LIBS:BOOL=ON"
     "-DCMAKE_MODULE_PATH=${aws-c-common}/lib/cmake"
   ];
 

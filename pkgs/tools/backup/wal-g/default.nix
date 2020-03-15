@@ -2,13 +2,13 @@
 
 buildGoPackage rec {
   pname = "wal-g";
-  version = "0.2.0";
+  version = "0.2.14";
 
   src = fetchFromGitHub {
     owner  = "wal-g";
     repo   = "wal-g";
     rev    = "v${version}";
-    sha256 = "08lk7by1anxpd9v97xbf9443kk4n1w63zaar2nz86w8i3k3b4id9";
+    sha256 = "0rrn9kzcg3nw9qvzy58m4qacghv0pj7iyjh4yspc71n5nkamkfgm";
   };
 
   buildInputs = [ brotli ];
@@ -16,11 +16,21 @@ buildGoPackage rec {
   doCheck = true;
 
   goPackagePath = "github.com/wal-g/wal-g";
+
+  goDeps = ./deps.nix;
+
+  subPackages = [ "main/pg" ];
+
+  buildFlagsArray = [ "-ldflags=-s -w -X ${goPackagePath}/cmd/pg.WalgVersion=${version} -X ${goPackagePath}/cmd/pg.GitRevision=${src.rev}" ];
+
+  postInstall = ''
+    mv $bin/bin/pg $bin/bin/wal-g
+  '';
+
   meta = {
-    inherit (src.meta) homepage;
+    homepage = "https://github.com/wal-g/wal-g";
     license = stdenv.lib.licenses.asl20;
-    description = "An archival restoration tool for Postgres";
+    description = "An archival restoration tool for PostgreSQL";
     maintainers = [ stdenv.lib.maintainers.ocharles ];
-    broken = true;
   };
 }

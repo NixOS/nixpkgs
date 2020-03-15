@@ -1,3 +1,10 @@
+/*
+ * A wrapper around execlineb, which provides all execline
+ * tools on execlineb’s PATH.
+ * It is implemented as a C program, because on non-Linux,
+ * nested shebang lines are not supported.
+ */
+
 #include <stdlib.h>
 #include <string.h>
 

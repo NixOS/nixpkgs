@@ -1,16 +1,18 @@
-{ stdenv
+{ lib
+, mkDerivation
 , fetchFromGitHub
 , pkgconfig
 , cmake
 , boost
 , fftwFloat
-, qt5
 , gnuradio
 , liquid-dsp
+, qtbase
 }:
 
-stdenv.mkDerivation {
-  name = "inspectrum-unstable-2017-05-31";
+mkDerivation {
+  pname = "inspectrum";
+  version = "unstable-2017-05-31";
 
   src = fetchFromGitHub {
     owner = "miek";
@@ -19,19 +21,18 @@ stdenv.mkDerivation {
     sha256 = "1fvnr8gca25i6s9mg9b2hyqs0zzr4jicw13mimc9dhrgxklrr1yv";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    cmake
-    qt5.qtbase
     fftwFloat
     boost
     gnuradio
     liquid-dsp
+    qtbase
   ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Tool for analysing captured signals from sdr receivers";
-    homepage = https://github.com/miek/inspectrum;
+    homepage = "https://github.com/miek/inspectrum";
     maintainers = with maintainers; [ mog ];
     platforms = platforms.linux;
     license = licenses.gpl3Plus;

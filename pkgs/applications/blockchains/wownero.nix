@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
       signatures using different participants for the same tx outputs on
       opposing forks.
     '';
-    homepage    = http://wownero.org/;
+    homepage    = https://wownero.org/;
     license     = licenses.bsd3;
     platforms   = platforms.linux;
     maintainers = with maintainers; [ fuwa ];

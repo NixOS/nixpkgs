@@ -2,6 +2,9 @@
 { python
 , callPackage
 , makeSetupHook
+, disabledIf
+, isPy3k
+, ensureNewerSourcesForZipFilesHook
 }:
 
 let
@@ -91,6 +94,14 @@ in rec {
       name = "python-remove-bin-bytecode-hook";
     } ./python-remove-bin-bytecode-hook.sh) {};
 
+  pythonRemoveTestsDirHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-remove-tests-dir-hook";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-remove-tests-dir-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";
@@ -108,6 +119,15 @@ in rec {
         inherit pythonCheckInterpreter setuppy;
       };
     } ./setuptools-check-hook.sh) {};
+
+  venvShellHook = disabledIf (!isPy3k) (callPackage ({ }:
+    makeSetupHook {
+      name = "venv-shell-hook";
+      deps = [ ensureNewerSourcesForZipFilesHook ];
+      substitutions = {
+        inherit pythonInterpreter;
+    };
+  } ./venv-shell-hook.sh) {});
 
   wheelUnpackHook = callPackage ({ wheel }:
     makeSetupHook {

@@ -24,12 +24,12 @@ let
   ctlpath = lib.makeBinPath [ bash gnused gnugrep coreutils utillinux procps ];
 
 in stdenv.mkDerivation rec {
-  version = "19.09.1";
+  version = "20.01";
   pname = "ejabberd";
 
   src = fetchurl {
     url = "https://www.process-one.net/downloads/ejabberd/${version}/${pname}-${version}.tgz";
-    sha256 = "1lj0zahsdg6naq007h8wp5p8ksdfwam3as7wiagvbj9gy8dgdp8q";
+    sha256 = "14bgwa6y17bhnwhcqb2hdl7psds0iqkcawb4kpaw6d7lzzsx4ay6";
   };
 
   nativeBuildInputs = [ fakegit ];

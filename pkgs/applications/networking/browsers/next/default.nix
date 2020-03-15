@@ -15,13 +15,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "next";
-  version = "1.3.4";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "atlas-engineer";
     repo = "next";
     rev = version;
-    sha256 = "00iqv4xarabl98gdl1rzqkc5v0vfljx1nawsxqsx9x3a9mnxmgxi";
+    sha256 = "1gqkp185wcwaxr8py90hqk44nqjblrrdwvig19gizrbzr2gx2zhy";
   };
 
   nativeBuildInputs = [
@@ -37,7 +37,6 @@ stdenv.mkDerivation rec {
     cl-annot
     cl-ansi-text
     cl-css
-    cl-hooks
     cl-json
     cl-markup
     cl-ppcre
@@ -52,12 +51,15 @@ stdenv.mkDerivation rec {
     lparallel
     mk-string-metrics
     parenscript
+    plump
     quri
+    serapeum
     sqlite
     str
     swank
     trivia
     trivial-clipboard
+    trivial-types
     unix-opts
   ];
 

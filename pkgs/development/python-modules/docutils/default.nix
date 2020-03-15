@@ -9,20 +9,18 @@
 
 buildPythonPackage rec {
   pname = "docutils";
-  version = "0.15.2";
+  version = "0.16";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "168s5v7bff5ar9jspr6wn823q1sbn0jhnbp9clk41nl8j09fmbm2";
+    sha256 = "c2de3a60e9e7d07be26b7f2b00ca0309c207e06c100f9cc2a94931fc75a478fc";
   };
 
   # Only Darwin needs LANG, but we could set it in general.
   # It's done here conditionally to prevent mass-rebuilds.
-  checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + (if isPy3k then ''
-    ${python.interpreter} test3/alltests.py
-  '' else ''
+  checkPhase = lib.optionalString (isPy3k && stdenv.isDarwin) ''LANG="en_US.UTF-8" LC_ALL="en_US.UTF-8" '' + ''
     ${python.interpreter} test/alltests.py
-  '');
+  '';
 
   # Create symlinks lacking a ".py" suffix, many programs depend on these names
   postFixup = ''
@@ -30,10 +28,6 @@ buildPythonPackage rec {
       ln -s $(basename $f) $out/bin/$(basename $f .py)
     done
   '';
-
-  # Four tests are broken with 3.8.
-  # test_writers.test_odt.DocutilsOdtTestCase
-  doCheck = !isPy38;
 
   meta = {
     description = "Docutils -- Python Documentation Utilities";

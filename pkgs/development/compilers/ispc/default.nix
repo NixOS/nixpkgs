@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, which, m4, python, bison, flex, llvmPackages,
+{stdenv, fetchFromGitHub, cmake, which, m4, python, bison, flex, llvmPackages,
 testedTargets ? ["sse2"] # the default test target is sse4, but that is not supported by all Hydra agents
 }:
 
@@ -17,11 +17,9 @@ stdenv.mkDerivation rec {
     sha256 = "1x07n2gaff3v32yvddrb659mx5gg12bnbsqbyfimp396wn04w60b";
   };
 
-  # there are missing dependencies in the Makefile, causing sporadic build failures
-  enableParallelBuilding = false;
-
   doCheck = stdenv.isLinux;
 
+  nativeBuildInputs = [ cmake ];
   buildInputs = with llvmPackages; [
     which
     m4
@@ -32,7 +30,7 @@ stdenv.mkDerivation rec {
     llvmPackages.clang-unwrapped # we need to link against libclang, so we need the unwrapped
   ];
 
-  postPatch = "sed -i -e 's,/bin/,,g' -e 's/-lcurses/-lncurses/g' Makefile";
+  postPatch = "sed -i -e 's/curses/ncurses/g' CMakeLists.txt";
 
   # TODO: this correctly catches errors early, but also some things that are just weird and don't seem to be real
   # errors
@@ -40,27 +38,23 @@ stdenv.mkDerivation rec {
   #  makeFlagsArray=( SHELL="${bash}/bin/bash -o pipefail" )
   #'';
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ispc $out/bin
-  '';
-
   checkPhase = ''
-    export ISPC_HOME=$PWD
+    export ISPC_HOME=$PWD/bin
     for target in $testedTargets
     do
       echo "Testing target $target"
       echo "================================"
       echo
-      PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
-      fgrep -q "No new fails"  test_output.log || exit 1
+      (cd ../
+       PATH=${llvmPackages.clang}/bin:$PATH python run_tests.py -t $target --non-interactive --verbose --file=test_output.log
+       fgrep -q "No new fails"  test_output.log || exit 1)
     done
   '';
 
-  makeFlags = [
-    "CXX=${stdenv.cc}/bin/clang++"
-    "CLANG=${stdenv.cc}/bin/clang"
-    "CLANG_INCLUDE=${llvmPackages.clang-unwrapped}/include"
+  cmakeFlags = [
+    "-DCLANG_EXECUTABLE=${llvmPackages.clang}/bin/clang"
+    "-DISPC_INCLUDE_EXAMPLES=OFF"
+    "-DISPC_INCLUDE_UTILS=OFF"
     ];
 
   meta = with stdenv.lib; {

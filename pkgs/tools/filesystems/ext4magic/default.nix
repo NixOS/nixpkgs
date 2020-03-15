@@ -14,6 +14,7 @@ stdenv.mkDerivation rec {
         url = https://sourceforge.net/p/ext4magic/tickets/10/attachment/ext4magic-0.3.2-i_dir_acl.patch;
         sha256 = "1accydd8kigid68yir2fbihm3r3x8ws3iyznp25snkx41w6y6x8c";
     })
+    ./glibc-fix.patch
   ];
 
   buildInputs = [ file libuuid e2fsprogs zlib bzip2 ];

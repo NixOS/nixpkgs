@@ -1,8 +1,8 @@
 diff --git a/meson.build b/meson.build
-index 4105a9c80..3d912557f 100644
+index 0af69f35d..9ab239c8a 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -884,9 +884,9 @@ meson.add_install_script(
+@@ -912,9 +912,9 @@ meson.add_install_script(
    join_paths('tools', 'meson-post-install.sh'),
    nm_datadir,
    nm_bindir,
@@ -11,19 +11,6 @@ index 4105a9c80..3d912557f 100644
    nm_pkglibdir,
 -  nm_pkgstatedir,
 +  nm_prefix + nm_pkgstatedir,
-   enable_docs ? 'install_docs' : '',
    nm_mandir,
- )
-diff --git a/src/settings/plugins/ifcfg-rh/meson.build b/src/settings/plugins/ifcfg-rh/meson.build
-index 58acdcfcb..e3a16d597 100644
---- a/src/settings/plugins/ifcfg-rh/meson.build
-+++ b/src/settings/plugins/ifcfg-rh/meson.build
-@@ -69,7 +69,7 @@ install_data(
- )
- 
- meson.add_install_script('sh', '-c',
--                         'mkdir -p $DESTDIR/@0@/sysconfig/network-scripts'.format(nm_sysconfdir))
-+                         'mkdir -p $DESTDIR/@0@/sysconfig/network-scripts'.format(nm_prefix + nm_sysconfdir))
- 
- if enable_tests
-   subdir('tests')
+   nm_sysconfdir,
+   enable_docs ? '1' : '0',

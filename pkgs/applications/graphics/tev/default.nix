@@ -1,22 +1,22 @@
 { stdenv, fetchFromGitHub
 , cmake, wrapGAppsHook
-, libX11, xorg, libzip, glfw, gnome3
+, libX11, libzip, glfw, libpng, xorg, gnome3
 }:
 
 stdenv.mkDerivation rec {
   pname = "tev";
-  version = "1.13";
+  version = "1.15";
 
   src = fetchFromGitHub {
     owner = "Tom94";
     repo = pname;
     rev = "v${version}";
     fetchSubmodules = true;
-    sha256 = "0c8md6yv1q449aszs05xfby6a2aiw8pac7x0zs169i5mpqrrbfa9";
+    sha256 = "173nxvj30xmbdj8fc3rbw0mlicxy6zbhxv01i7z5nmcdvpamkdx6";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
-  buildInputs = [ libX11 libzip glfw ]
+  buildInputs = [ libX11 libzip glfw libpng ]
     ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm ]);
 
   dontWrapGApps = true; # We also need zenity (see below)
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
       types of images can also be loaded.
     '';
     inherit (src.meta) homepage;
+    changelog = "https://github.com/Tom94/tev/releases/tag/v${version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers; [ primeos ];

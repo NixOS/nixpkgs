@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ xstatic-jquery ];
 
   meta = with lib;{
-    homepage = http://jqueryui.com/;
+    homepage = https://jqueryui.com/;
     description = "jquery-ui packaged static files for python";
     license = licenses.mit;
     maintainers = with maintainers; [ makefu ];

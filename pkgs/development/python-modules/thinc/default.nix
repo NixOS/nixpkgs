@@ -4,35 +4,30 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, cython
-, cymem
-, darwin
-, msgpack-numpy
-, msgpack
-, preshed
-, numpy
-, murmurhash
-, pathlib
-, hypothesis
-, tqdm
-, cytoolz
-, plac
-, six
-, mock
-, wrapt
-, dill
 , blis
+, catalogue
+, cymem
+, cython
+, darwin
+, hypothesis
+, mock
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
 , srsly
+, tqdm
 , wasabi
 }:
 
 buildPythonPackage rec {
   pname = "thinc";
-  version = "7.3.1";
+  version = "7.4.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1f9bg7iyhwnk8jfras8d4wzq0ypn5na0bdbwkl7y2mr06yrdd0ff";
+    sha256 = "1f2qpjb8nfdklqp3vf6m36bklydlnr8y8v207p8d2gmapzhrngjj";
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
@@ -41,20 +36,15 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
    blis
-   cython
+   catalogue
    cymem
-   msgpack-numpy
-   msgpack
-   preshed
-   numpy
+   cython
    murmurhash
-   tqdm
-   cytoolz
+   numpy
    plac
-   six
+   preshed
    srsly
-   wrapt
-   dill
+   tqdm
    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 

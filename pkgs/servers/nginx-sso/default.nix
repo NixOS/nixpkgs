@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "nginx-sso";
-  version = "0.23.0";
+  version = "0.24.0";
   rev = "v${version}";
 
   goPackagePath = "github.com/Luzifer/nginx-sso";
@@ -11,7 +11,7 @@ buildGoPackage rec {
     inherit rev;
     owner = "Luzifer";
     repo = "nginx-sso";
-    sha256 = "1wfk56xnjbx7cwrryrl3jy8zw7sz8akq55nsxiq2i6h3vafy4yaz";
+    sha256 = "0jkmd1hdr40i1wd3001ixjv1nminsxmwhvnhcgfqcdn5gnaradwn";
   };
 
   postInstall = ''

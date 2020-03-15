@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bviplus";
-  version = "0.9.4";
+  version = "1.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/bviplus/bviplus/${version}/bviplus-${version}.tgz";
-    sha256 = "10x6fbn8v6i0y0m40ja30pwpyqksnn8k2vqd290vxxlvlhzah4zb";
+    sha256 = "08q2fdyiirabbsp5qpn3v8jxp4gd85l776w6gqvrbjwqa29a8arg";
   };
 
   buildInputs = [

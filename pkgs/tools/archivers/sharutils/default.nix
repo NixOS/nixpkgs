@@ -25,6 +25,10 @@ stdenv.mkDerivation rec {
       url = "https://sources.debian.org/data/main/s/sharutils/1:4.15.2-2+deb9u1/debian/patches/01-fix-heap-buffer-overflow-cve-2018-1000097.patch";
       sha256 = "19g0sxc8g79aj5gd5idz5409311253jf2q8wqkasf0handdvsbxx";
     })
+    (fetchurl {
+      url = "https://sources.debian.org/data/main/s/sharutils/1:4.15.2-4/debian/patches/02-fix-ftbfs-with-glibc-2.28.patch";
+      sha256 = "15kpjqnfs98n6irmkh8pw7masr08xala7gx024agv7zv14722vkc";
+    })
   ];
 
   postPatch = let

@@ -137,6 +137,8 @@ buildPythonPackage rec {
 
    substituteInPlace setup.py \
      --replace "flask>=1.1.0, <2.0" "flask" \
+     --replace "jinja2>=2.10.1, <2.11.0" "jinja2" \
+     --replace "pandas>=0.17.1, <1.0.0" "pandas" \
      --replace "flask-caching>=1.3.3, <1.4.0" "flask-caching" \
      --replace "flask-appbuilder>=1.12.5, <2.0.0" "flask-appbuilder" \
      --replace "pendulum==1.4.4" "pendulum" \
@@ -154,8 +156,9 @@ buildPythonPackage rec {
      --replace "text-unidecode==1.2" "text-unidecode" \
      --replace "tzlocal>=1.4,<2.0.0" "tzlocal" \
      --replace "sqlalchemy~=1.3" "sqlalchemy" \
+     --replace "gunicorn>=19.5.0, <20.0" "gunicorn" \
      --replace "werkzeug>=0.14.1, <0.15.0" "werkzeug"
- 
+
   # dumb-init is only needed for CI and Docker, not relevant for NixOS.
   substituteInPlace setup.py \
      --replace "'dumb-init>=1.2.2'," ""

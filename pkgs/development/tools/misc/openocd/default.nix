@@ -40,6 +40,7 @@ stdenv.mkDerivation rec {
     "-Wno-format-overflow"
     "-Wno-error=tautological-compare"
     "-Wno-error=array-bounds"
+    "-Wno-error=cpp"
   ]);
 
   postInstall = lib.optionalString stdenv.isLinux ''

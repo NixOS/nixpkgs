@@ -4,6 +4,8 @@
 , libgcrypt ? null, liblognorm ? null, openssl ? null, librelp ? null, libksi ? null
 , liblogging ? null, libnet ? null, hadoop ? null, rdkafka ? null
 , libmongo-client ? null, czmq ? null, rabbitmq-c ? null, hiredis ? null, mongoc ? null
+, libmaxminddb ? null
+, nixosTests ? null
 }:
 
 with stdenv.lib;
@@ -12,11 +14,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "rsyslog";
-  version = "8.1911.0";
+  version = "8.2001.0";
 
   src = fetchurl {
     url = "https://www.rsyslog.com/files/download/rsyslog/${pname}-${version}.tar.gz";
-    sha256 = "01713vwz3w5fx9b97286h1rx9hxhjsdah96nyhh75bb23impgx71";
+    sha256 = "1nm83s9abknli46sknjs50cmdhhqzkznbsjspjbdg96likshdgsq";
   };
 
   #patches = [ ./fix-gnutls-detection.patch ];
@@ -26,7 +28,7 @@ stdenv.mkDerivation rec {
     fastJson libestr json_c zlib pythonPackages.docutils libkrb5 jemalloc
     postgresql libdbi net-snmp libuuid curl gnutls libgcrypt liblognorm openssl
     librelp libksi liblogging libnet hadoop rdkafka libmongo-client czmq
-    rabbitmq-c hiredis mongoc
+    rabbitmq-c hiredis mongoc libmaxminddb
   ] ++ stdenv.lib.optional (libmysqlclient != null) libmysqlclient
     ++ stdenv.lib.optional stdenv.isLinux systemd;
 
@@ -61,6 +63,7 @@ stdenv.mkDerivation rec {
     (mkFlag true                      "rsyslogd")
     (mkFlag true                      "mail")
     (mkFlag (liblognorm != null)      "mmnormalize")
+    (mkFlag (libmaxminddb != null)    "mmdblookup")
     (mkFlag true                      "mmjsonparse")
     (mkFlag true                      "mmaudit")
     (mkFlag true                      "mmanon")
@@ -100,6 +103,10 @@ stdenv.mkDerivation rec {
     (mkFlag (curl != null)            "omhttpfs")
     (mkFlag true                      "generate-man-pages")
   ];
+
+  passthru.tests = {
+    nixos-rsyslogd = nixosTests.rsyslogd;
+  };
 
   meta = {
     homepage = https://www.rsyslog.com/;

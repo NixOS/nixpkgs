@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libevdevplus";
-  version = "2019-10-01";
+  version = "unstable-2019-10-01";
 
   src  = fetchFromGitHub {
     owner  = "YukiWorkshop";

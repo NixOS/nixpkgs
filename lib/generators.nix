@@ -46,7 +46,10 @@ rec {
     else if isList     v then err "lists" v
     # same as for lists, might want to replace
     else if isAttrs    v then err "attrsets" v
+    # functions can’t be printed of course
     else if isFunction v then err "functions" v
+    # let’s not talk about floats. There is no sensible `toString` for them.
+    else if isFloat    v then err "floats" v
     else err "this value is" (toString v);
 
 
@@ -73,10 +76,14 @@ rec {
    * mkKeyValue is the same as in toINI.
    */
   toKeyValue = {
-    mkKeyValue ? mkKeyValueDefault {} "="
-  }: attrs:
-    let mkLine = k: v: mkKeyValue k v + "\n";
-    in libStr.concatStrings (libAttr.mapAttrsToList mkLine attrs);
+    mkKeyValue ? mkKeyValueDefault {} "=",
+    listsAsDuplicateKeys ? false
+  }:
+  let mkLine = k: v: mkKeyValue k v + "\n";
+      mkLines = if listsAsDuplicateKeys
+        then k: v: map (mkLine k) (if lib.isList v then v else [v])
+        else k: v: [ (mkLine k v) ];
+  in attrs: libStr.concatStrings (lib.concatLists (libAttr.mapAttrsToList mkLines attrs));
 
 
   /* Generate an INI-style config file from an
@@ -103,7 +110,9 @@ rec {
     # apply transformations (e.g. escapes) to section names
     mkSectionName ? (name: libStr.escape [ "[" "]" ] name),
     # format a setting line from key and value
-    mkKeyValue    ? mkKeyValueDefault {} "="
+    mkKeyValue    ? mkKeyValueDefault {} "=",
+    # allow lists as values for duplicate keys
+    listsAsDuplicateKeys ? false
   }: attrsOfAttrs:
     let
         # map function to string for each key val
@@ -112,7 +121,7 @@ rec {
             (libAttr.mapAttrsToList mapFn attrs);
         mkSection = sectName: sectValues: ''
           [${mkSectionName sectName}]
-        '' + toKeyValue { inherit mkKeyValue; } sectValues;
+        '' + toKeyValue { inherit mkKeyValue listsAsDuplicateKeys; } sectValues;
     in
       # map input to ini sections
       mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;

@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "magnetico";
-  version = "0.8.1";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner  = "boramalper";
     repo   = "magnetico";
     rev    = "v${version}";
-    sha256 = "1f7y3z9ql079ix6ycihkmd3z3da3sfiqw2fap31pbvvjs65sg644";
+    sha256 = "1flw7r8igc0hhm288p67lpy9aj1fnywva5b28yfknpw8g97c9r5x";
   };
 
   modSha256 = "1h9fij8mxlxfw7kxix00n10fkhkvmf8529fxbk1n30cxc1bs2szf";

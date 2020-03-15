@@ -5,13 +5,13 @@ with lib;
 
 buildGoPackage rec {
   pname = "runc";
-  version = "1.0.0-rc9";
+  version = "1.0.0-rc10";
 
   src = fetchFromGitHub {
     owner = "opencontainers";
     repo = "runc";
     rev = "v${version}";
-    sha256 = "1ss5b46cbbckyqlwgj8dbd5l59c5y0kp679hcpc0ybaj53pmwxj7";
+    sha256 = "0pi3rvj585997m4z9ljkxz2z9yxf9p2jr0pmqbqrc7bc95f5hagk";
   };
 
   goPackagePath = "github.com/opencontainers/runc";

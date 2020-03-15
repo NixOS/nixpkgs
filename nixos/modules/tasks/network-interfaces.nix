@@ -13,7 +13,7 @@ let
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches);
+    ++ concatMap (i: attrNames (filterAttrs (name: config: ! (config.type == "internal" || hasAttr name cfg.interfaces)) i.interfaces)) (attrValues cfg.vswitches);
 
   slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
@@ -143,13 +143,34 @@ let
         description = "Name of the interface.";
       };
 
-      preferTempAddress = mkOption {
-        type = types.bool;
-        default = cfg.enableIPv6;
-        defaultText = literalExample "config.networking.enableIPv6";
+      tempAddress = mkOption {
+        type = types.enum [ "default" "enabled" "disabled" ];
+        default = if cfg.enableIPv6 then "default" else "disabled";
+        defaultText = literalExample ''if cfg.enableIPv6 then "default" else "disabled"'';
         description = ''
-          When using SLAAC prefer a temporary (IPv6) address over the EUI-64
-          address for originating connections. This is used to reduce tracking.
+          When IPv6 is enabled with SLAAC, this option controls the use of
+          temporary address (aka privacy extensions). This is used to reduce tracking.
+          The three possible values are:
+
+          <itemizedlist>
+           <listitem>
+            <para>
+             <literal>"default"</literal> to generate temporary addresses and use
+             them by default;
+            </para>
+           </listitem>
+           <listitem>
+            <para>
+             <literal>"enabled"</literal> to generate temporary addresses but keep
+             using the standard EUI-64 ones by default;
+            </para>
+           </listitem>
+           <listitem>
+            <para>
+             <literal>"disabled"</literal> to completely disable temporary addresses.
+            </para>
+           </listitem>
+          </itemizedlist>
         '';
       };
 
@@ -287,6 +308,11 @@ let
       let
         defined = x: x != "_mkMergedOptionModule";
       in [
+        (mkChangedOptionModule [ "preferTempAddress" ] [ "tempAddress" ]
+         (config:
+          let bool = getAttrFromPath [ "preferTempAddress" ] config;
+          in if bool then "default" else "enabled"
+        ))
         (mkRenamedOptionModule [ "ip4" ] [ "ipv4" "addresses"])
         (mkRenamedOptionModule [ "ip6" ] [ "ipv6" "addresses"])
         (mkRemovedOptionModule [ "subnetMask" ] ''
@@ -308,6 +334,32 @@ let
         ({ options.warnings = options.warnings; options.assertions = options.assertions; })
       ];
 
+  };
+
+  vswitchInterfaceOpts = {name, ...}: {
+
+    options = {
+
+      name = mkOption {
+        description = "Name of the interface";
+        example = "eth0";
+        type = types.str;
+      };
+
+      vlan = mkOption {
+        description = "Vlan tag to apply to interface";
+        example = 10;
+        type = types.nullOr types.int;
+        default = null;
+      };
+
+      type = mkOption {
+        description = "Openvswitch type to assign to interface";
+        example = "internal";
+        type = types.nullOr types.str;
+        default = null;
+      };
+    };
   };
 
   hexChars = stringToCharacters "0123456789abcdef";
@@ -460,8 +512,8 @@ in
     networking.vswitches = mkOption {
       default = { };
       example =
-        { vs0.interfaces = [ "eth0" "eth1" ];
-          vs1.interfaces = [ "eth2" "wlan0" ];
+        { vs0.interfaces = { eth0 = { }; lo1 = { type="internal"; }; };
+          vs1.interfaces = [ { name = "eth2"; } { name = "lo2"; type="internal"; } ];
         };
       description =
         ''
@@ -478,9 +530,8 @@ in
 
           interfaces = mkOption {
             example = [ "eth0" "eth1" ];
-            type = types.listOf types.str;
-            description =
-              "The physical network interfaces connected by the vSwitch.";
+            description = "The physical network interfaces connected by the vSwitch.";
+            type = with types; loaOf (submodule vswitchInterfaceOpts);
           };
 
           controllers = mkOption {
@@ -501,6 +552,25 @@ in
             description = ''
               OpenFlow rules to insert into the Open vSwitch. All <literal>openFlowRules</literal> are
               loaded with <literal>ovs-ofctl</literal> within one atomic operation.
+            '';
+          };
+
+          # TODO: custom "openflow version" type, with list from existing openflow protocols
+          supportedOpenFlowVersions = mkOption {
+            type = types.listOf types.str;
+            example = [ "OpenFlow10" "OpenFlow13" "OpenFlow14" ];
+            default = [ "OpenFlow13" ];
+            description = ''
+              Supported versions to enable on this switch.
+            '';
+          };
+
+          # TODO: use same type as elements from supportedOpenFlowVersions
+          openFlowVersion = mkOption {
+            type = types.str;
+            default = "OpenFlow13";
+            description = ''
+              Version of OpenFlow protocol to use when communicating with the switch internally (e.g. with <literal>openFlowRules</literal>).
             '';
           };
 
@@ -945,7 +1015,7 @@ in
           The networking.interfaces."${i.name}" must not have any defined ips when it is a slave.
         '';
       })) ++ (forEach interfaces (i: {
-        assertion = i.preferTempAddress -> cfg.enableIPv6;
+        assertion = i.tempAddress != "disabled" -> cfg.enableIPv6;
         message = ''
           Temporary addresses are only needed when IPv6 is enabled.
         '';
@@ -973,8 +1043,11 @@ in
       "net.ipv6.conf.all.forwarding" = mkDefault (any (i: i.proxyARP) interfaces);
     } // listToAttrs (flip concatMap (filter (i: i.proxyARP) interfaces)
         (i: forEach [ "4" "6" ] (v: nameValuePair "net.ipv${v}.conf.${replaceChars ["."] ["/"] i.name}.proxy_arp" true)))
-      // listToAttrs (forEach (filter (i: i.preferTempAddress) interfaces)
-        (i: nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" 2));
+      // listToAttrs (forEach interfaces
+        (i: let
+          opt = i.tempAddress;
+          val = { disabled = 0; enabled = 1; default = 2; }.${opt};
+         in nameValuePair "net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr" val));
 
     # Capabilities won't work unless we have at-least a 4.3 Linux
     # kernel because we need the ambient capability
@@ -1103,10 +1176,18 @@ in
       (pkgs.writeTextFile rec {
         name = "ipv6-privacy-extensions.rules";
         destination = "/etc/udev/rules.d/99-${name}";
-        text = concatMapStrings (i: ''
-          # enable IPv6 privacy addresses but prefer EUI-64 addresses for ${i.name}
-          ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=1"
-        '') (filter (i: !i.preferTempAddress) interfaces);
+        text = concatMapStrings (i:
+          let
+            opt = i.tempAddress;
+            val = if opt == "disabled" then 0 else 1;
+            msg = if opt == "disabled"
+                  then "completely disable IPv6 privacy addresses"
+                  else "enable IPv6 privacy addresses but prefer EUI-64 addresses";
+          in
+          ''
+            # override to ${msg} for ${i.name}
+            ACTION=="add", SUBSYSTEM=="net", RUN+="${pkgs.procps}/bin/sysctl net.ipv6.conf.${replaceChars ["."] ["/"] i.name}.use_tempaddr=${toString val}"
+          '') (filter (i: i.tempAddress != "default") interfaces);
       })
     ] ++ lib.optional (cfg.wlanInterfaces != {})
       (pkgs.writeTextFile {

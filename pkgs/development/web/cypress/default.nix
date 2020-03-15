@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec{
   pname = "cypress";
-  version = "3.6.1";
+  version = "3.8.3";
 
   src = fetchzip {
     url = "https://cdn.cypress.io/desktop/${version}/linux-x64/cypress.zip";
-    sha256 = "0vlfmhsz7zkp3bjsgqmp9n716d5znicl42hm0m9hl7ndvgm9z9z0";
+    sha256 = "1ncq64s5y5dsx0lrz950vab2yzwihl2wd7yapp12305bjjsihj3z";
   };
 
   # don't remove runtime deps
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec{
     mkdir -p $out/bin/resources/app
     printf '{"version":"%b"}' $version > $out/bin/resources/app/package.json
     # Cypress now looks for binary_state.json in bin
-    echo '{"verified": true}' > $out/bin/binary_state.json
+    echo '{"verified": true}' > $out/binary_state.json
     ln -s $out/opt/cypress/Cypress $out/bin/Cypress
   '';
 

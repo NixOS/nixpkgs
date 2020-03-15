@@ -5,7 +5,6 @@
 , setuptools
 , setuptools_scm
 , pyvcd
-, bitarray
 , jinja2
 
 # for tests
@@ -16,22 +15,22 @@
 
 buildPythonPackage rec {
   pname = "nmigen";
-  version = "unstable-2019-10-17";
+  version = "unstable-2019-02-08";
   # python setup.py --version
-  realVersion = "0.1.rc2.dev5+g${lib.substring 0 7 src.rev}";
+  realVersion = "0.2.dev49+g${lib.substring 0 7 src.rev}";
 
   src = fetchFromGitHub {
-    owner = "m-labs";
+    owner = "nmigen";
     repo = "nmigen";
-    rev = "9fba5ccb513cfbd53f884b1efca699352d2471b9";
-    sha256 = "02bjry4sqjsrhl0s42zl1zl06gk5na9i6br6vmz7fvxic29vl83v";
+    rev = "66f4510c4465be5d0763d7835770553434e4ee91";
+    sha256 = "19y39c4ywckm4yzrpjzcdl9pqy9d1sf1zsb4zpzajpmnfqccc3b0";
   };
 
   disabled = pythonOlder "3.6";
 
   nativeBuildInputs = [ setuptools_scm ];
 
-  propagatedBuildInputs = [ setuptools pyvcd bitarray jinja2 ];
+  propagatedBuildInputs = [ setuptools pyvcd jinja2 ];
 
   checkInputs = [ yosys symbiyosys yices ];
 
@@ -41,8 +40,8 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "A refreshed Python toolbox for building complex digital hardware";
-    homepage = https://github.com/m-labs/nmigen;
-    license = licenses.bsd0;
+    homepage = https://github.com/nmigen/nmigen;
+    license = licenses.bsd2;
     maintainers = with maintainers; [ emily ];
   };
 }

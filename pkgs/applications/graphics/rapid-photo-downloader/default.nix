@@ -6,11 +6,11 @@
 
 mkDerivationWith python3Packages.buildPythonApplication rec {
   pname = "rapid-photo-downloader";
-  version = "0.9.17";
+  version = "0.9.18";
 
   src = fetchurl {
     url = "https://launchpad.net/rapid/pyqt/${version}/+download/${pname}-${version}.tar.gz";
-    sha256 = "10vqbi9rcg8r0jxpx2kn8xmahwgdcal28wpix2fg6nkp5rfwxnr6";
+    sha256 = "15p7sssg6vmqbm5xnc4j5dr89d7gl7y5qyq44a240yl5aqkjnybw";
   };
 
   # Disable version check and fix install tests
@@ -80,7 +80,7 @@ mkDerivationWith python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Photo and video importer for cameras, phones, and memory cards";
-    homepage = http://www.damonlynch.net/rapid/;
+    homepage = https://www.damonlynch.net/rapid/;
     license = licenses.gpl3;
     platforms = platforms.linux;
     maintainers = with maintainers; [ jfrankenau ];

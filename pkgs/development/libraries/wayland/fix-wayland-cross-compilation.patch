@@ -1,0 +1,14 @@
+diff --git a/src/meson.build b/src/meson.build
+index 3e8c9bf..75241cb 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -55,8 +55,7 @@ pkgconfig.generate(
+ )
+ 
+ if meson.is_cross_build()
+-	scanner_dep = dependency('wayland-scanner', native: true, version: '>=1.14.0')
+-	wayland_scanner_for_build = find_program(scanner_dep.get_pkgconfig_variable('wayland_scanner'))
++	wayland_scanner_for_build = find_program('wayland-scanner', native: true, version: '>=1.14.0')
+ else
+ 	wayland_scanner_for_build = wayland_scanner
+ endif

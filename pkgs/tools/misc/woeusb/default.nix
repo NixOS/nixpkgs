@@ -3,14 +3,14 @@
 , wxGTK30 }:
 
 stdenv.mkDerivation rec {
-  version = "3.3.0";
+  version = "3.3.1";
   pname = "woeusb";
 
   src = fetchFromGitHub {
     owner = "slacka";
     repo = "WoeUSB";
     rev = "v${version}";
-    sha256 = "1w3m3qbjn0igydsbpf22w29lzf1pkxv7dlny5mbyrb6j0q6wlx0b";
+    sha256 = "1hbr88sr943s4yqdvbny543jvgvnsa622wq4cmwd23hjsfcrvyiv";
   };
 
   patches = [ ./remove-workaround.patch ];

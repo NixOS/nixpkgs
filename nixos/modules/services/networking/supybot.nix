@@ -45,7 +45,7 @@ in
 
     environment.systemPackages = [ pkgs.pythonPackages.limnoria ];
 
-    users.users.supybotrs = {
+    users.users.supybot = {
       uid = config.ids.uids.supybot;
       group = "supybot";
       description = "Supybot IRC bot user";

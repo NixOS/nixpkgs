@@ -1,25 +1,25 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, jedi, pycodestyle,
+{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
-  spyder-kernels, qtpy, pyzmq, chardet
+  spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
 , pyqtwebengine
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "f2bfece9743188e3d1da68f02271a7c6eb7f0a3b692c3df4952458ab96b037a8";
+    sha256 = "4b279c16487d224368dd2213e1517185fa59fc528f539601fffb34ea97accb7b";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
 
   propagatedBuildInputs = [
-    jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
+    intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
-    pygments qtpy pyzmq chardet pyqtwebengine
+    pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
   ];
 
   # There is no test for spyder
@@ -66,5 +66,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
+    broken = true;
   };
 }

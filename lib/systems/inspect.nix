@@ -55,9 +55,6 @@ rec {
 
     isEfi          = map (family: { cpu.family = family; })
                        [ "x86" "arm" "aarch64" ];
-
-    # Deprecated after 18.03
-    isArm = isAarch32;
   };
 
   matchAnyAttrs = patterns:

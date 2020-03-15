@@ -30,7 +30,7 @@ in
         ${pkgs.prometheus-dnsmasq-exporter}/bin/dnsmasq_exporter \
           --listen ${cfg.listenAddress}:${toString cfg.port} \
           --dnsmasq ${cfg.dnsmasqListenAddress} \
-          --leases_path ${cfg.leasesPath} \
+          --leases_path ${escapeShellArg cfg.leasesPath} \
           ${concatStringsSep " \\\n  " cfg.extraFlags}
       '';
     };

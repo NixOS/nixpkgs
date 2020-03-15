@@ -1,17 +1,25 @@
-{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage }:
+{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
-      p = {
-        crateName = "nixtestcrate";
-        version = "0.1.0";
-        authors = [ "Test <test@example.com>" ];
-      } // args;
-    in buildRustCrate p;
+    p = {
+      crateName = "nixtestcrate";
+      version = "0.1.0";
+      authors = [ "Test <test@example.com>" ];
+    } // args;
+  in buildRustCrate p;
 
-    mkFile = destination: text: writeTextFile {
-      name = "src";
-      destination = "/${destination}";
-      inherit text;
+  mkCargoToml =
+    { name, crateVersion ? "0.1.0", path ? "Cargo.toml" }:
+      mkFile path ''
+        [package]
+        name = ${builtins.toJSON name}
+        version = ${builtins.toJSON crateVersion}
+      '';
+
+  mkFile = destination: text: writeTextFile {
+    name = "src";
+    destination = "/${destination}";
+    inherit text;
   };
 
   mkBin = name: mkFile name ''
@@ -89,10 +97,20 @@ let
   in rec {
 
   tests = let
-    cases = {
+    cases = rec {
       libPath =  { libPath = "src/my_lib.rs"; src = mkLib "src/my_lib.rs"; };
       srcLib =  { src = mkLib "src/lib.rs"; };
-      customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
+
+      # This used to be supported by cargo but as of 1.40.0 I can't make it work like that with just cargo anymore.
+      # This might be a regression or deprecated thing they finally removed…
+      # customLibName =  { libName = "test_lib"; src = mkLib "src/test_lib.rs"; };
+      # rustLibTestsCustomLibName = {
+      #   libName = "test_lib";
+      #   src = mkTestFile "src/test_lib.rs" "foo";
+      #   buildTests = true;
+      #   expectedTestOutputs = [ "test foo ... ok" ];
+      # };
+
       customLibNameAndLibPath =  { libName = "test_lib"; libPath = "src/best-lib.rs"; src = mkLib "src/best-lib.rs"; };
       crateBinWithPath =  { crateBin = [{ name = "test_binary1"; path = "src/foobar.rs"; }]; src = mkBin "src/foobar.rs"; };
       crateBinNoPath1 =  { crateBin = [{ name = "my-binary2"; }]; src = mkBin "src/my_binary2.rs"; };
@@ -121,12 +139,6 @@ let
         src = mkTestFile "src/lib.rs" "baz";
         buildTests = true;
         expectedTestOutputs = [ "test baz ... ok" ];
-      };
-      rustLibTestsCustomLibName = {
-        libName = "test_lib";
-        src = mkTestFile "src/test_lib.rs" "foo";
-        buildTests = true;
-        expectedTestOutputs = [ "test foo ... ok" ];
       };
       rustLibTestsCustomLibPath = {
         libPath = "src/test_path.rs";
@@ -181,7 +193,75 @@ let
           "test tests_bar ... ok"
         ];
       };
+      linkAgainstRlibCrate = {
+        crateName = "foo";
+        src = mkFile  "src/main.rs" ''
+          extern crate somerlib;
+          fn main() {}
+        '';
+        dependencies = [
+          (mkCrate {
+            crateName = "somerlib";
+            type = [ "rlib" ];
+            src = mkLib "src/lib.rs";
+          })
+        ];
+      };
+      # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
+      # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
+      buildRsOutDirOverlay = {
+        src = symlinkJoin {
+          name = "buildrs-out-dir-overlay";
+          paths = [
+            (mkLib "src/lib.rs")
+            (mkFile "build.rs" ''
+              use std::env;
+              use std::ffi::OsString;
+              use std::fs;
+              use std::path::Path;
+              fn main() {
+                let out_dir = env::var_os("OUT_DIR").expect("OUT_DIR not set");
+                let out_file = Path::new(&out_dir).join("lib.rs");
+                fs::write(out_file, "invalid rust code!").expect("failed to write lib.rs");
+              }
+            '')
+          ];
+        };
+      };
+      rustCargoTomlInSubDir = {
+        # The "workspace_member" can be set to the sub directory with the crate to build.
+        # By default ".", meaning the top level directory is assumed.
+        # Using null will trigger a search.
+        workspace_member = null;
+        src = symlinkJoin rec {
+          name = "find-cargo-toml";
+          paths = [
+            (mkCargoToml { name = "ignoreMe"; })
+            (mkTestFileWithMain "src/main.rs" "ignore_main")
 
+            (mkCargoToml { name = "rustCargoTomlInSubDir"; path = "subdir/Cargo.toml"; })
+            (mkTestFileWithMain "subdir/src/main.rs" "src_main")
+            (mkTestFile "subdir/tests/foo/main.rs" "tests_foo")
+            (mkTestFile "subdir/tests/bar/main.rs" "tests_bar")
+          ];
+        };
+        buildTests = true;
+        expectedTestOutputs = [
+          "test src_main ... ok"
+          "test tests_foo ... ok"
+          "test tests_bar ... ok"
+        ];
+      };
+
+      rustCargoTomlInTopDir =
+        let
+          withoutCargoTomlSearch = builtins.removeAttrs rustCargoTomlInSubDir [ "workspace_member" ];
+        in
+          withoutCargoTomlSearch // {
+            expectedTestOutputs = [
+              "test ignore_main ... ok"
+            ];
+          };
     };
     brotliCrates = (callPackage ./brotli-crates.nix {});
   in lib.mapAttrs (key: value: mkTest (value // lib.optionalAttrs (!value?crateName) { crateName = key; })) cases // {
@@ -207,9 +287,12 @@ let
       test -e ${pkg}/bin/brotli-decompressor && touch $out
     '';
   };
-  test = runCommand "run-buildRustCrate-tests" {
-    nativeBuildInputs = builtins.attrValues tests;
-  } "
-    touch $out
-  ";
+  test = releaseTools.aggregate {
+    name = "buildRustCrate-tests";
+    meta = {
+      description = "Test cases for buildRustCrate";
+      maintainers = [ lib.maintainers.andir ];
+    };
+    constituents = builtins.attrValues tests;
+  };
 }

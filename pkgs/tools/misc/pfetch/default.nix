@@ -1,24 +1,23 @@
-{ stdenv, fetchFromGitHub }:
+{ stdenvNoCC, lib, fetchFromGitHub }:
 
-stdenv.mkDerivation rec {
+stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "pfetch";
     rev = version;
-    sha256 = "180vvbmvak888vs4dgzlmqk0ss4qfsz09700n4p8s68j7krkxsfq";
+    sha256 = "0yg9nlrjnm2404ysm2qp1klpq1wlmyih302kzfqchn6l2sibsm4j";
   };
 
-  dontbuild = true;
+  dontBuild = true;
 
   installPhase = ''
-    mkdir -p $out/bin
-    cp pfetch $out/bin
+    install -Dm755 -t $out/bin pfetch
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A pretty system information tool written in POSIX sh";
     homepage = https://github.com/dylanaraps/pfetch;
     license = licenses.mit;

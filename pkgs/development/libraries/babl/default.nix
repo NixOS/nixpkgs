@@ -9,20 +9,14 @@
 
 stdenv.mkDerivation rec {
   pname = "babl";
-  version = "0.1.72";
+  version = "0.1.74";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/babl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0hkagjrnza77aasa1kss5hvy37ndm50y6i7hkdn2z8hzgc4i3qb4";
+    sha256 = "03nfcvy3453xkfvsfcnsfcjf2vg2pin09qnr9jlssdysa1lhnwcs";
   };
-
-  patches = [
-    # Apple linker does not know --version-script flag
-    # https://gitlab.gnome.org/GNOME/babl/merge_requests/26
-    ./fix-darwin.patch
-  ];
 
   nativeBuildInputs = [
     meson

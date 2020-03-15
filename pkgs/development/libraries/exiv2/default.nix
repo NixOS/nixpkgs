@@ -26,6 +26,11 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DEXIV2_BUILD_PO=ON"
     "-DEXIV2_BUILD_DOC=ON"
+    # the cmake package does not handle absolute CMAKE_INSTALL_INCLUDEDIR correctly
+    # (setting it to an absolute path causes include files to go to $out/$out/include,
+    #  because the absolute path is interpreted with root at $out).
+    "-DCMAKE_INSTALL_INCLUDEDIR=include"
+    "-DCMAKE_INSTALL_LIBDIR=lib"
   ];
 
   outputs = [ "out" "dev" "doc" "man" ];
@@ -69,7 +74,7 @@ stdenv.mkDerivation rec {
     ''}
 
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH:`pwd`/lib
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
       # Removing tests depending on charset conversion
       substituteInPlace ../test/Makefile --replace "conversions.sh" ""
       rm -f ../tests/bugfixes/redmine/test_issue_460.py

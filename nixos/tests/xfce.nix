@@ -4,12 +4,20 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   machine =
     { pkgs, ... }:
 
-    { imports = [ ./common/user-account.nix ];
+    {
+      imports = [
+        ./common/user-account.nix
+      ];
 
       services.xserver.enable = true;
 
-      services.xserver.displayManager.auto.enable = true;
-      services.xserver.displayManager.auto.user = "alice";
+      services.xserver.displayManager.lightdm = {
+        enable = true;
+        autoLogin = {
+          enable = true;
+          user = "alice";
+        };
+      };
 
       services.xserver.desktopManager.xfce.enable = true;
 
