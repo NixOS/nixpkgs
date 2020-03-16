@@ -5768,6 +5768,8 @@ in
 
   ostree = callPackage ../tools/misc/ostree { };
 
+  osu-lazer = callPackage ../games/osu-lazer { Nuget = dotnetPackages.Nuget; };
+
   otfcc = callPackage ../tools/misc/otfcc { };
 
   otpw = callPackage ../os-specific/linux/otpw { };

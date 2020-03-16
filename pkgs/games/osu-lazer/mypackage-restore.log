@@ -1,0 +1,119 @@
+Project 'osu.Game' has the following package references
+   [netstandard2.1]: 
+   Top-level Package                                Requested    Resolved  
+   > Humanizer                                      2.7.9        2.7.9     
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8        2.9.8     
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8        2.9.8     
+   > Microsoft.EntityFrameworkCore.Sqlite           2.2.6        2.2.6     
+   > Microsoft.EntityFrameworkCore.Sqlite.Core      2.2.6        2.2.6     
+   > Newtonsoft.Json                                12.0.3       12.0.3    
+   > NUnit                                          3.12.0       3.12.0    
+   > ppy.osu.Framework                              2020.305.0   2020.305.0
+   > ppy.osu.Game.Resources                         2020.304.0   2020.304.0
+   > Sentry                                         2.1.0        2.1.0     
+   > SharpCompress                                  0.24.0       0.24.0    
+   > System.ComponentModel.Annotations              4.7.0        4.7.0     
+
+Project 'osu.Game.Rulesets.Osu' has the following package references
+   [netstandard2.1]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+
+Project 'osu.Game.Rulesets.Catch' has the following package references
+   [netstandard2.1]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+
+Project 'osu.Game.Rulesets.Taiko' has the following package references
+   [netstandard2.1]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+
+Project 'osu.Game.Rulesets.Mania' has the following package references
+   [netstandard2.1]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+
+Project 'osu.Game.Tests' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > Appveyor.TestLogger                            2.0.0       2.0.0   
+   > DeepEqual                                      2.0.0       2.0.0   
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.NET.Test.Sdk                         16.5.0      16.5.0  
+   > NUnit                                          3.12.0      3.12.0  
+   > NUnit3TestAdapter                              3.15.1      3.15.1  
+
+Project 'osu.Desktop' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > DiscordRichPresence                            1.0.150     1.0.150 
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.EntityFrameworkCore.Design           2.2.6       2.2.6   
+   > Microsoft.EntityFrameworkCore.Sqlite           2.2.6       2.2.6   
+   > Microsoft.Win32.Registry                       4.7.0       4.7.0   
+   > ppy.squirrel.windows                           1.9.0.4     1.9.0.4 
+   > System.IO.Packaging                            4.7.0       4.7.0   
+
+Project 'osu.Game.Rulesets.Catch.Tests' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > Appveyor.TestLogger                            2.0.0       2.0.0   
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.NET.Test.Sdk                         16.5.0      16.5.0  
+   > NUnit                                          3.12.0      3.12.0  
+   > NUnit3TestAdapter                              3.15.1      3.15.1  
+
+Project 'osu.Game.Rulesets.Mania.Tests' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > Appveyor.TestLogger                            2.0.0       2.0.0   
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.NET.Test.Sdk                         16.5.0      16.5.0  
+   > NUnit                                          3.12.0      3.12.0  
+   > NUnit3TestAdapter                              3.15.1      3.15.1  
+
+Project 'osu.Game.Rulesets.Taiko.Tests' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > Appveyor.TestLogger                            2.0.0       2.0.0   
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.NET.Test.Sdk                         16.5.0      16.5.0  
+   > NUnit                                          3.12.0      3.12.0  
+   > NUnit3TestAdapter                              3.15.1      3.15.1  
+
+Project 'osu.Game.Rulesets.Osu.Tests' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > Appveyor.TestLogger                            2.0.0       2.0.0   
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.NET.Test.Sdk                         16.5.0      16.5.0  
+   > NUnit                                          3.12.0      3.12.0  
+   > NUnit3TestAdapter                              3.15.1      3.15.1  
+
+Project 'osu.Game.Tournament' has the following package references
+   [netstandard2.1]: 
+   Top-level Package                                Requested   Resolved
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.Win32.Registry                       4.7.0       4.7.0   
+
+Project 'osu.Game.Tournament.Tests' has the following package references
+   [netcoreapp3.1]: 
+   Top-level Package                                Requested   Resolved
+   > Appveyor.TestLogger                            2.0.0       2.0.0   
+   > Microsoft.CodeAnalysis.BannedApiAnalyzers      2.9.8       2.9.8   
+   > Microsoft.CodeAnalysis.FxCopAnalyzers          2.9.8       2.9.8   
+   > Microsoft.NET.Test.Sdk                         16.5.0      16.5.0  
+   > NUnit                                          3.12.0      3.12.0  
+   > NUnit3TestAdapter                              3.15.1      3.15.1  
