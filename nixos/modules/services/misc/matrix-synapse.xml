@@ -40,26 +40,35 @@ let
     in join config.networking.hostName config.networking.domain;
 in {
   networking = {
-    hostName = "myhostname";
-    domain = "example.org";
+    <link linkend="opt-networking.hostName">hostName</link> = "myhostname";
+    <link linkend="opt-networking.domain">domain</link> = "example.org";
   };
-  networking.firewall.allowedTCPPorts = [ 80 443 ];
+  <link linkend="opt-networking.firewall.allowedTCPPorts">networking.firewall.allowedTCPPorts</link> = [ 80 443 ];
+
+  <link linkend="opt-services.postgresql.enable">services.postgresql.enable</link> = true;
+  <link linkend="opt-services.postgresql.initialScript">services.postgresql.initialScript</link> = ''
+    CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
+    CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+      TEMPLATE template0
+      LC_COLLATE = "C"
+      LC_CTYPE = "C";
+  '';
 
   services.nginx = {
-    enable = true;
+    <link linkend="opt-services.nginx.enable">enable</link> = true;
     # only recommendedProxySettings and recommendedGzipSettings are strictly required,
     # but the rest make sense as well
-    recommendedTlsSettings = true;
-    recommendedOptimisation = true;
-    recommendedGzipSettings = true;
-    recommendedProxySettings = true;
+    <link linkend="opt-services.nginx.recommendedTlsSettings">recommendedTlsSettings</link> = true;
+    <link linkend="opt-services.nginx.recommendedOptimisation">recommendedOptimisation</link> = true;
+    <link linkend="opt-services.nginx.recommendedGzipSettings">recommendedGzipSettings</link> = true;
+    <link linkend="opt-services.nginx.recommendedProxySettings">recommendedProxySettings</link> = true;
 
-    virtualHosts = {
+    <link linkend="opt-services.nginx.virtualHosts">virtualHosts</link> = {
       # This host section can be placed on a different host than the rest,
       # i.e. to delegate from the host being accessible as ${config.networking.domain}
       # to another host actually running the Matrix homeserver.
       "${config.networking.domain}" = {
-        locations."= /.well-known/matrix/server".extraConfig =
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."= /.well-known/matrix/server".extraConfig</link> =
           let
             # use 443 instead of the default 8448 port to unite
             # the client-server and server-server port for simplicity
@@ -68,7 +77,7 @@ in {
             add_header Content-Type application/json;
             return 200 '${builtins.toJSON server}';
           '';
-        locations."= /.well-known/matrix/client".extraConfig =
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."= /.well-known/matrix/client".extraConfig</link> =
           let
             client = {
               "m.homeserver" =  { "base_url" = "https://${fqdn}"; };
@@ -84,34 +93,37 @@ in {
 
       # Reverse proxy for Matrix client-server and server-server communication
       ${fqdn} = {
-        enableACME = true;
-        forceSSL = true;
+        <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+        <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
 
         # Or do a redirect instead of the 404, or whatever is appropriate for you.
         # But do not put a Matrix Web client here! See the Riot Web section below.
-        locations."/".extraConfig = ''
+        <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.extraConfig">locations."/".extraConfig</link> = ''
           return 404;
         '';
 
         # forward all Matrix API calls to the synapse Matrix homeserver
         locations."/_matrix" = {
-          proxyPass = "http://[::1]:8008"; # without a trailing /
+          <link linkend="opt-services.nginx.virtualHosts._name_.locations._name_.proxyPass">proxyPass</link> = "http://[::1]:8008"; # without a trailing /
         };
       };
     };
   };
   services.matrix-synapse = {
-    enable = true;
-    server_name = config.networking.domain;
-    listeners = [
+    <link linkend="opt-services.matrix-synapse.enable">enable</link> = true;
+    <link linkend="opt-services.matrix-synapse.server_name">server_name</link> = config.networking.domain;
+    <link linkend="opt-services.matrix-synapse.listeners">listeners</link> = [
       {
-        port = 8008;
-        bind_address = "::1";
-        type = "http";
-        tls = false;
-        x_forwarded = true;
-        resources = [
-          { names = [ "client" "federation" ]; compress = false; }
+        <link linkend="opt-services.matrix-synapse.listeners._.port">port</link> = 8008;
+        <link linkend="opt-services.matrix-synapse.listeners._.bind_address">bind_address</link> = "::1";
+        <link linkend="opt-services.matrix-synapse.listeners._.type">type</link> = "http";
+        <link linkend="opt-services.matrix-synapse.listeners._.tls">tls</link> = false;
+        <link linkend="opt-services.matrix-synapse.listeners._.x_forwarded">x_forwarded</link> = true;
+        <link linkend="opt-services.matrix-synapse.listeners._.resources">resources</link> = [
+          {
+            <link linkend="opt-services.matrix-synapse.listeners._.resources._.names">names</link> = [ "client" "federation" ];
+            <link linkend="opt-services.matrix-synapse.listeners._.resources._.compress">compress</link> = false;
+          }
         ];
       }
     ];
@@ -135,10 +147,10 @@ in {
 
   <para>
    If you want to run a server with public registration by anybody, you can
-   then enable <option>services.matrix-synapse.enable_registration =
-   true;</option>. Otherwise, or you can generate a registration secret with
+   then enable <literal><link linkend="opt-services.matrix-synapse.enable_registration">services.matrix-synapse.enable_registration</link> =
+   true;</literal>. Otherwise, or you can generate a registration secret with
    <command>pwgen -s 64 1</command> and set it with
-   <option>services.matrix-synapse.registration_shared_secret</option>. To
+   <option><link linkend="opt-services.matrix-synapse.registration_shared_secret">services.matrix-synapse.registration_shared_secret</link></option>. To
    create a new user or admin, run the following after you have set the secret
    and have rebuilt NixOS:
 <screen>
@@ -154,8 +166,8 @@ Success!
    <literal>@your-username:example.org</literal>. Note that the registration
    secret ends up in the nix store and therefore is world-readable by any user
    on your machine, so it makes sense to only temporarily activate the
-   <option>registration_shared_secret</option> option until a better solution
-   for NixOS is in place.
+   <link linkend="opt-services.matrix-synapse.registration_shared_secret">registration_shared_secret</link>
+   option until a better solution for NixOS is in place.
   </para>
  </section>
  <section xml:id="module-services-matrix-riot-web">
@@ -177,15 +189,24 @@ Success!
    Matrix Now!</link> for a list of existing clients and their supported
    featureset.
 <programlisting>
-services.nginx.virtualHosts."riot.${fqdn}" = {
-  enableACME = true;
-  forceSSL = true;
-  serverAliases = [
-    "riot.${config.networking.domain}"
-  ];
+{
+  services.nginx.virtualHosts."riot.${fqdn}" = {
+    <link linkend="opt-services.nginx.virtualHosts._name_.enableACME">enableACME</link> = true;
+    <link linkend="opt-services.nginx.virtualHosts._name_.forceSSL">forceSSL</link> = true;
+    <link linkend="opt-services.nginx.virtualHosts._name_.serverAliases">serverAliases</link> = [
+      "riot.${config.networking.domain}"
+    ];
 
-  root = pkgs.riot-web;
-};
+    <link linkend="opt-services.nginx.virtualHosts._name_.root">root</link> = pkgs.riot-web.override {
+      conf = {
+        default_server_config."m.homeserver" = {
+          "base_url" = "${config.networking.domain}";
+          "server_name" = "${fqdn}";
+        };
+      };
+    };
+  };
+}
 </programlisting>
   </para>
 
