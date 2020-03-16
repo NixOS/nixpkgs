@@ -16,7 +16,7 @@ my $gidMap = -e $gidMapFile ? decode_json(read_file($gidMapFile)) : {};
 
 sub updateFile {
     my ($path, $contents, $perms) = @_;
-    write_file("$path.tmp", { binmode => ':utf8', perms => $perms // 0644 }, $contents);
+    write_file("$path.tmp", { binmode => ':utf8', perms => $perms // 0644, atomic => 1 }, $contents);
     rename("$path.tmp", $path) or die;
 }
 
