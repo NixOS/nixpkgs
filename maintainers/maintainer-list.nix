@@ -3924,11 +3924,6 @@
     githubId = 13721712;
     name = "Konrad Langenberg";
   };
-  kolbycrouch = {
-    email = "kjc.devel@gmail.com";
-    github = "kolbycrouch";
-    name = "Kolby Crouch";
-  };
   konimex = {
     email = "herdiansyah@netc.eu";
     github = "konimex";
