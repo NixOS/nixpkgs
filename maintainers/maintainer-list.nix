@@ -4061,6 +4061,12 @@
     github = "leonardoce";
     name = "Leonardo Cecchi";
   };
+  leshainc = {
+    email = "leshainc@fomalhaut.me";
+    github = "LeshaInc";
+    githubId = 42153076;
+    name = "Alexey Nikashkin";
+  };
   lethalman = {
     email = "lucabru@src.gnome.org";
     github = "lethalman";
