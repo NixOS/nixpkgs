@@ -28,18 +28,19 @@ let
 
   # Derivations built with `buildPythonPackage` can already be overriden with `override`, `overrideAttrs`, and `overrideDerivation`.
   # This function introduces `overridePythonAttrs` and it overrides the call to `buildPythonPackage`.
+  # It also aliases `overrideAttrs` to `overridePythonAttrs`
   makeOverridablePythonPackage = f: origArgs:
     let
       ff = f origArgs;
       overrideWith = newArgs: origArgs // (if pkgs.lib.isFunction newArgs then newArgs origArgs else newArgs);
+      overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
+      attrs = {
+        inherit overridePythonAttrs;
+        overrideAttrs = overridePythonAttrs;
+      };
     in
-      if builtins.isAttrs ff then (ff // {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-      })
-      else if builtins.isFunction ff then {
-        overridePythonAttrs = newArgs: makeOverridablePythonPackage f (overrideWith newArgs);
-        __functor = self: ff;
-      }
+      if builtins.isAttrs ff then (ff // attrs)
+      else if builtins.isFunction ff then (attrs // { __functor = self: ff; })
       else ff;
 
   buildPythonPackage = makeOverridablePythonPackage ( makeOverridable (callPackage ../development/interpreters/python/mk-python-derivation.nix {
@@ -90,7 +91,7 @@ let
         # Remove Python prefix from name so we have a "normal" name.
         # While the prefix shows up in the store path, it won't be
         # used by `nix-env`.
-        name = removePythonPrefix oldAttrs.name;
+        name = removePythonPrefix (oldAttrs.name or "${oldAttrs.pname}-${oldAttrs.version}");
         pythonModule = false;
       };
     });
