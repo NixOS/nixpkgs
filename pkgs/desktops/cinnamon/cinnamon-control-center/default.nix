@@ -33,7 +33,7 @@
 , wrapGAppsHook
 , tzdata
 , glibc
-, networkmanagerapplet
+, libnma
 , modemmanager
 , xorg
 , gdk-pixbuf
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
     gnome-online-accounts
     tzdata
     networkmanager
-    networkmanagerapplet
+    libnma
     modemmanager
     xorg.libXxf86misc
     xorg.libxkbfile
