@@ -10856,6 +10856,8 @@ in
 
   watson-ruby = callPackage ../development/tools/misc/watson-ruby {};
 
+  webdis = callPackage ../development/tools/database/webdis { };
+
   xc3sprog = callPackage ../development/tools/misc/xc3sprog { };
 
   xcodebuild = callPackage ../development/tools/xcbuild/wrapper.nix {
