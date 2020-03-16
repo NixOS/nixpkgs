@@ -49,6 +49,7 @@ in
   cjdns = handleTest ./cjdns.nix {};
   clickhouse = handleTest ./clickhouse.nix {};
   cloud-init = handleTest ./cloud-init.nix {};
+  cockroachdb = handleTest ./cockroachdb.nix {};
   codimd = handleTest ./codimd.nix {};
   consul = handleTest ./consul.nix {};
   containers-bridge = handleTest ./containers-bridge.nix {};

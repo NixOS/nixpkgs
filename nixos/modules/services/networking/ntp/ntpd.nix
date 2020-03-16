@@ -32,9 +32,6 @@ let
 in
 
 {
-
-  ###### interface
-
   options = {
 
     services.ntp = {
@@ -105,14 +102,12 @@ in
 
   };
 
-
-  ###### implementation
-
   config = mkIf config.services.ntp.enable {
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
 
     # Make tools such as ntpq available in the system path.
     environment.systemPackages = [ pkgs.ntp ];
+
     services.timesyncd.enable = mkForce false;
 
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
@@ -126,15 +121,15 @@ in
     systemd.services.ntpd =
       { description = "NTP Daemon";
 
-        wantedBy = [ "multi-user.target" ];
-        wants = [ "time-sync.target" ];
-        before = [ "time-sync.target" ];
+        wantedBy  = [ "multi-user.target" ];
+        wants     = [ "ntp-adjusted-ntpd.service" ];
+        after     = [ "network.target" ];
+        conflicts = [ "openntpd.service" "chronyd.service" "systemd-timesyncd.service" ];
 
-        preStart =
-          ''
-            mkdir -m 0755 -p ${stateDir}
-            chown ${ntpUser} ${stateDir}
-          '';
+        preStart = ''
+          mkdir -m 0755 -p ${stateDir}
+          chown ${ntpUser} ${stateDir}
+        '';
 
         serviceConfig = {
           ExecStart = "@${ntp}/bin/ntpd ntpd -g ${ntpFlags}";
@@ -142,6 +137,25 @@ in
         };
       };
 
-  };
+    # Blocker for time-sync.target
+    systemd.services.ntp-adjusted-ntpd =
+      { description = "Initial NTP adjustment and measurement service (ntpd)";
 
+        requires = [ "ntpd.service" "time-sync.target" ];
+        before   = [ "time-sync.target" ];
+        after    = [ "ntpd.service" ];
+
+        path = [ pkgs.ntp ];
+
+        serviceConfig =
+          { ExecStart = "${ntp}/bin/ntp-wait -v";
+            Type = "oneshot";
+            RemainAfterExit = "yes";
+
+            ProtectHome = "yes";
+            ProtectSystem = "full";
+            PrivateTmp = "yes";
+          };
+      };
+  };
 }

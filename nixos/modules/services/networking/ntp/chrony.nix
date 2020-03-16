@@ -25,6 +25,13 @@ let
   '';
 
   chronyFlags = "-n -m -u chrony -f ${configFile} ${toString cfg.extraFlags}";
+
+  chronyWaitSyncFlags = concatStringsSep " "
+    [ (toString cfg.bootAdjustmentOptions.maxTries)
+      (toString cfg.bootAdjustmentOptions.maxCorrection)
+      (toString cfg.bootAdjustmentOptions.maxSkew)
+      (toString cfg.bootAdjustmentOptions.interval)
+    ];
 in
 {
   options = {
@@ -56,6 +63,36 @@ in
         '';
       };
 
+      bootAdjustmentOptions = mkOption {
+        default = {
+          maxTries = 12;
+          maxCorrection = 0;
+          maxSkew = 0;
+          interval = 5;
+        };
+        description = ''
+          Parameters for initial boot-time synchronization. By default, once
+          Chrony starts at boot, it will attempt to do rapid adjustments of the
+          system time in order to get the clock within a measured threshold.
+          Once this has been achieved, the systemd service
+          <literal>time-sync.target</literal> will be activated. These
+          parameters control the timeout for waiting on initial NTP
+          synchronization. By default, Chrony will wait for 1 minute while
+          attempting to adjust the initial time at boot.
+        '';
+      };
+
+      skipInitialAdjustment = mkOption {
+        type = types.bool;
+        default = false;
+        description = ''
+          If set to <literal>true</literal>, then the default NTP adjustment at
+          boot will be skipped. This is useful in some advanced situations,
+          such as using a 'local stratum' clock in offline networks, where
+          <literal>chronyc waitsync</literal> may never return.
+        '';
+      };
+
       extraConfig = mkOption {
         type = types.lines;
         default = "";
@@ -67,7 +104,7 @@ in
 
       extraFlags = mkOption {
         default = [];
-        example = [ "-s" ];
+        example = [ "-s" "-F1" ];
         type = types.listOf types.str;
         description = "Extra flags passed to the chronyd command.";
       };
@@ -76,7 +113,6 @@ in
 
   config = mkIf cfg.enable {
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
-
     environment.systemPackages = [ pkgs.chrony ];
 
     users.groups.chrony.gid = config.ids.gids.chrony;
@@ -93,15 +129,13 @@ in
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "chronyd.service"; };
 
     systemd.services.chronyd =
-      { description = "chrony NTP daemon";
+      { description   = "Chrony NTP daemon";
+        documentation = [ "man:chronyd(8)" "man:chrony.conf(5)" "https://chrony.tuxfamily.org" ];
 
-        wantedBy = [ "multi-user.target" ];
-        wants    = [ "time-sync.target" ];
-        before   = [ "time-sync.target" ];
-        after    = [ "network.target" ];
-        conflicts = [ "ntpd.service" "systemd-timesyncd.service" ];
-
-        path = [ pkgs.chrony ];
+        wantedBy  = [ "multi-user.target" ];
+        wants     = [ "ntp-adjusted-chrony.service" ];
+        after     = [ "network.target" ];
+        conflicts = [ "openntpd.service" "ntpd.service" "systemd-timesyncd.service" ];
 
         preStart = ''
           mkdir -m 0755 -p ${stateDir}
@@ -118,9 +152,30 @@ in
             ProtectHome = "yes";
             ProtectSystem = "full";
             PrivateTmp = "yes";
-
           };
+      };
 
+    # Blocker for time-sync.target
+    systemd.services.ntp-adjusted-chrony =
+      { description = "initial NTP adjustment and measurement (chrony)";
+
+        requires = [ "chronyd.service" "time-sync.target" ];
+        before   = [ "time-sync.target" ];
+        after    = [ "chronyd.service" ];
+
+        serviceConfig =
+          { ExecStart =
+              if cfg.skipInitialAdjustment
+                then "${pkgs.coreutils}/bin/true"
+                else "${pkgs.chrony}/bin/chronyc waitsync ${chronyWaitSyncFlags}";
+
+            Type = "oneshot";
+            RemainAfterExit = "yes";
+
+            ProtectHome = "yes";
+            ProtectSystem = "full";
+            PrivateTmp = "yes";
+          };
       };
   };
 }

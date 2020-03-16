@@ -1,126 +1,220 @@
 # This performs a full 'end-to-end' test of a multi-node CockroachDB cluster
 # using the built-in 'cockroach workload' command, to simulate a semi-realistic
-# test load. It generally takes anywhere from 3-5 minutes to run and 1-2GB of
-# RAM (though each of 3 workers gets 1GB allocated)
+# test load. Under the default set of parameters, it generally takes anywhere
+# from 3-5 minutes to run and 1-2GB of RAM (though each of 3 workers gets 1GB
+# allocated)
 #
 # CockroachDB requires synchronized system clocks within a small error window
 # (~500ms by default) on each node in order to maintain a multi-node cluster.
 # Cluster joins that are outside this window will fail, and nodes that skew
 # outside the window after joining will promptly get kicked out.
 #
-# To accomodate this, we use QEMU/virtio infrastructure and load the 'ptp_kvm'
-# driver inside a guest. This driver allows the host machine to pass its clock
-# through to the guest as a hardware clock that appears as a Precision Time
-# Protocol (PTP) Clock device, generally /dev/ptp0. PTP devices can be measured
-# and used as hardware reference clocks (similar to an on-board GPS clock) by
-# NTP software. In our case, we use Chrony to synchronize to the reference
-# clock.
+# To accomodate this requirement, we set up an extra NTP daemon server node
+# that hosts a stable 'single source of truth' clock for all the database
+# nodes. This node always runs Chrony. The database nodes then depend on the
+# systemd time synchronization target (appropriately named 'time-sync.target')
+# in order to properly order themselves when joining the cluster. These nodes
+# can use any NTP daemon client that they wish.
 #
-# This test is currently NOT enabled as a continuously-checked NixOS test.
-# Ideally, this test would be run by Hydra and Borg on all relevant changes,
-# except:
-#
-#   - Not every build machine is compatible with the ptp_kvm driver.
-#     Virtualized EC2 instances, for example, do not support loading the ptp_kvm
-#     driver into guests. However, bare metal builders (e.g. Packet) do seem to
-#     work just fine. In practice, this means x86_64-linux builds would fail
-#     randomly, depending on which build machine got the job. (This is probably
-#     worth some investigation; I imagine it's based on ptp_kvm's usage of paravirt
-#     support which may not be available in 'nested' environments.)
-#
-#   - ptp_kvm is not supported on aarch64, otherwise it seems likely Cockroach
-#     could be tested there, as well. This seems to be due to the usage of
-#     the TSC in ptp_kvm, which isn't supported (easily) on AArch64. (And:
-#     testing stuff, not just making sure it builds, is important to ensure
-#     aarch64 support remains viable.)
-#
-# For future developers who are reading this message, are daring and would want
-# to fix this, some options are:
-#
-#   - Just test a single node cluster instead (boring and less thorough).
-#   - Move all CI to bare metal packet builders, and we can at least do x86_64-linux.
-#   - Get virtualized clocking working in aarch64, somehow.
-#   - Add a 4th node that acts as an NTP service and uses no PTP clocks for
-#     references, at the client level. This bloats the node and memory
-#     requirements, but would probably allow both aarch64/x86_64 to work.
-#
+# Furthermore, as an optional parameter, we can use KVM/virtio infrastructure
+# and load the 'ptp_kvm' driver inside the NTP guest. This driver allows the
+# host machine running the tests to pass its clock through to the guest as a
+# hardware clock that appears as a Precision Time Protocol (PTP) Clock device,
+# generally /dev/ptp0. PTP devices can be measured and used as hardware
+# reference clocks (similar to an on-board GPS clock) by NTP software. In our
+# case, we use Chrony to synchronize to the reference clock, as it is the only
+# NTP daemon we support that allows PTP sync. However, PTP virtio drivers are
+# only available on x86_64 and require certain hardware features which aren't
+# available in all scenarios for nested KVM guests (e.g. amazon ec2 can't
+# load this driver for the guest). Therefore it is disabled by default.
 
+{
+  # Duration of the CockroachDB workload test.
+  duration ? "1m"
+
+  # Which workload to execute. Valid parameters are 'bank', 'kv', and 'tpcc'
+, workload ? "bank"
+
+  # The number of CockroachDB nodes to start up.
+, nodeCount ? 3
+
+  # The NTP daemon to use for the CockroachDB nodes. (The NTP server node
+  # will always use Chrony.)
+, ntpDaemon ? "chrony"
+
+  # The amount of memory to give each database node. (The NTP server node
+  # has a fixed amount of memory.)
+, nodeMemSize ? 1024 # Benchmarks take a bit of memory by default...
+
+  # Whether or not to use the KVM PTP 'virtualized' Clock Driver in the chronyd
+  # node. This allows you to synchronize the chronyd clock to the host clock,
+  # but it isn't available on all platforms. See the notes above for more
+  # information.
+, usePtpClockDriver ? false
+
+  # Remaining arguments
+, ...
+}@args:
+
+with builtins;
+
+assert (nodeCount >= 1);
+assert (nodeMemSize >= 1024);
+assert (any (x: workload == x) [ "bank" "kv" ]); # tpcc seems unstable
+assert (any (x: ntpDaemon == x) [ "chrony" "ntp" "timesyncd" ]);
+
+import ./make-test.nix ({ pkgs, lib, ... }:
 let
+  ntpOpts = {
 
-  # Creates a node. If 'joinNode' parameter, a string containing an IP address,
-  # is non-null, then the CockroachDB server will attempt to join/connect to
-  # the cluster node specified at that address.
-  makeNode = locality: myAddr: joinNode:
+    chrony = {
+      initstepslew = {
+        enabled = true;
+        threshold = 0.1;
+      };
+      bootAdjustmentOptions = {
+        maxTries = 20;
+        interval = 3;
+        maxCorrection = 0.5;
+        maxSkew = 0;
+      };
+    };
+
+    ntp = {};
+    timesyncd = {};
+  };
+
+  # Creates a node with the specified locality parameter.
+  makeNode = locality:
     { nodes, pkgs, lib, config, ... }:
 
-    {
-      # Bank/TPC-C benchmarks take some memory to complete
-      virtualisation.memorySize = 1024;
+    let firstNodeIP = nodes.node1.config.networking.primaryIPAddress;
+        isFirstNode = config.networking.primaryIPAddress == firstNodeIP;
+    in {
+      virtualisation.memorySize = nodeMemSize;
 
-      # Install the KVM PTP "Virtualized Clock" driver. This allows a /dev/ptp0
-      # device to appear as a reference clock, synchronized to the host clock.
-      # Because CockroachDB *requires* a time-synchronization mechanism for
-      # the system time in a cluster scenario, this is necessary to work.
-      boot.kernelModules = [ "ptp_kvm" ];
+      # NTP Configuration of the daemon and the timeserver
+      networking.timeServers = [ nodes.ntp_server.config.networking.primaryIPAddress ];
 
-      # Enable and configure Chrony, using the given virtualized clock passed
-      # through by KVM.
-      services.chrony.enable = true;
-      services.chrony.servers = lib.mkForce [ ];
-      services.chrony.extraConfig = ''
-        refclock PHC /dev/ptp0 poll 2 prefer require refid KVM
-        makestep 0.1 3
-      '';
+      services."${ntpDaemon}" = {
+        enable = lib.mkForce true;
+        servers = lib.mkForce config.networking.timeServers;
+      } // ntpOpts."${ntpDaemon}";
 
-      # Enable CockroachDB. In order to ensure that Chrony has performed its
-      # first synchronization at boot-time (which may take ~10 seconds) before
-      # starting CockroachDB, we block the ExecStartPre directive using the
-      # 'waitsync' command. This ensures Cockroach doesn't have its system time
-      # leap forward out of nowhere during startup/execution.
-      #
-      # Note that the default threshold for NTP-based skew in CockroachDB is
-      # ~500ms by default, so making sure it's started *after* accurate time
-      # synchronization is extremely important.
+      # Enable CockroachDB. Note that Cockroach will not start until
+      # time-sync.target is active, which will require Chrony to perform its
+      # first full synchronization.
       services.cockroachdb.enable = true;
       services.cockroachdb.insecure = true;
       services.cockroachdb.openPorts = true;
       services.cockroachdb.locality = locality;
-      services.cockroachdb.listen.address = myAddr;
-      services.cockroachdb.join = lib.mkIf (joinNode != null) joinNode;
+      services.cockroachdb.listen.address = config.networking.primaryIPAddress;
+      services.cockroachdb.join = lib.mkIf (!isFirstNode) firstNodeIP;
 
-      # Hold startup until Chrony has performed its first measurement (which
-      # will probably result in a full timeskip, thanks to makestep)
-      systemd.services.cockroachdb.preStart = ''
-        ${pkgs.chrony}/bin/chronyc waitsync
-      '';
+      # These make 'cockroach sql' commands briefer...
+      environment.variables.COCKROACH_HOST = config.networking.primaryIPAddress;
+      environment.variables.COCKROACH_INSECURE = "true";
+      # ... but we need this too, because 'cockroach workload' currently
+      # doesn't respect those variables. this is an easy way to make the needed
+      # ODBC URI the same for any host. FIXME: remove if 'workload' ever
+      # respects the prior variables.
+      networking.extraHosts = "${config.networking.primaryIPAddress} crdb.local";
     };
 
-in import ./make-test.nix ({ pkgs, ...} : {
+  # A set of example localities, regions, and DCs for the node generator.
+  localities  = map (c: "zone=${c}")   [ "us" "eu" "ap" "sa" ];
+  regions     = map (r: "region=${r}") [ "east" "west" "south" ];
+  datacenters = map (d: "dc=${d}")     [ "1" "2" "2b" ];
+
+  # Picks out an element from one of the above sets, safely, based on
+  # an index.
+  getLocale = x: n: elemAt x (lib.mod (n - 1) (length x));
+
+  # Make the node locality string for CRDB.
+  makeNodeLocale = n: lib.concatStringsSep ","
+    [ (getLocale localities n)
+      (getLocale regions n)
+      (getLocale datacenters n)
+    ];
+
+  # Create a trivial attrset so we can build the final node attrset
+  nodeSet = map (n: { name = "node${toString n}"; value = n; }) (lib.range 1 nodeCount);
+  nodeNames = map (n: n.name) nodeSet;
+
+  # Turn the above nodeset into a set containing the NixOS configuration values
+  crdbNodes = listToAttrs (map (v: {
+    inherit (v) name;
+    value = makeNode (makeNodeLocale v.value);
+  }) nodeSet);
+
+in {
+
   name = "cockroachdb";
-  meta.maintainers = with pkgs.stdenv.lib.maintainers;
-    [ thoughtpolice ];
+  meta.maintainers = with pkgs.stdenv.lib.maintainers; [ thoughtpolice ];
 
+  # The set of all nodes includes 1 NTP daemon node + N crdb nodes.
   nodes = {
-    node1 = makeNode "country=us,region=east,dc=1"  "192.168.1.1" null;
-    node2 = makeNode "country=us,region=west,dc=2b" "192.168.1.2" "192.168.1.1";
-    node3 = makeNode "country=eu,region=west,dc=2"  "192.168.1.3" "192.168.1.1";
-  };
+    # Node that runs chrony as an NTP daemon for the Cockroach nodes. This lets
+    # the cockroach node configurations use any arbitrary NTP daemon for testing
+    # purposes without relying on PTP clock support.
+    ntp_server = { nodes, pkgs, lib, config, ... }:
+      { virtualisation.memorySize = 256;
 
-  # NOTE: All the nodes must start in order and you must NOT use startAll, because
-  # there's otherwise no way to guarantee that node1 will start before the others try
-  # to join it.
-  testScript = ''
-    $node1->start;
-    $node1->waitForUnit("cockroachdb");
+        # Install the KVM PTP "Virtualized Clock" driver, if asked. This allows
+        # a /dev/ptp0 device to appear as a reference clock, synchronized to
+        # the host clock.
+        boot.kernelModules = lib.mkIf usePtpClockDriver [ "ptp_kvm" ];
 
-    $node2->start;
-    $node2->waitForUnit("cockroachdb");
+        # Disable firewall (easy hack) and disable any upstream timeservers
+        networking.firewall.enable = false;
+        networking.timeServers = lib.mkForce [ ];
 
-    $node3->start;
-    $node3->waitForUnit("cockroachdb");
+        # Enable chrony and, optionally, use the PTP reference clock
+        services.chrony.enable = true;
+        services.chrony.skipInitialAdjustment = true;
+        services.chrony.extraConfig = ''
+          allow 192.168.0.0/16
+        '' + (if usePtpClockDriver then ''
+          refclock PHC /dev/ptp0 poll 2 prefer require refid KVM
+          makestep 0.1 5
+        '' else ''
+          local stratum 8
+        '');
+      };
 
-    $node1->mustSucceed("cockroach sql --host=192.168.1.1 --insecure -e 'SHOW ALL CLUSTER SETTINGS' 2>&1");
-    $node1->mustSucceed("cockroach workload init bank 'postgresql://root\@192.168.1.1:26257?sslmode=disable'");
-    $node1->mustSucceed("cockroach workload run bank --duration=1m 'postgresql://root\@192.168.1.1:26257?sslmode=disable'");
-  '';
-})
+    # Cluster nodes
+  } // crdbNodes;
+
+  # Main testing script, split into several pieces for easier generation.
+  testScript =
+    let
+      # Boot the NTP server for the DB nodes
+      bootScript = ''
+        $ntp_server->start; $ntp_server->waitForUnit("time-sync.target");
+      '';
+
+      # Script that starts all nodes, in order. NOTE: All the nodes must start
+      # in order and you must NOT use startAll, because there's otherwise no
+      # way to guarantee that node1 will start before the others try to join
+      # it.
+      startScript = lib.concatStringsSep "\n"
+        (map (n: "$"+n+"->start; $"+n+"->waitForUnit(\"cockroachdb\");") nodeNames);
+
+      # Script to initialize cluster from node1
+      initScript = ''
+        $node1->mustSucceed("cockroach sql -e 'SHOW ALL CLUSTER SETTINGS' 2>&1");
+        $node1->mustSucceed("cockroach workload init ${workload} 'postgresql://root\@crdb.local:26257?sslmode=disable'");
+      '';
+
+      # Execute the cluster workload
+      runScript = ''
+        $node1->mustSucceed("cockroach workload run ${workload} --duration=${duration} 'postgresql://root\@crdb.local:26257?sslmode=disable'");
+      '';
+
+    in lib.concatStringsSep "\n" [
+      bootScript
+      startScript
+      initScript
+      runScript
+    ];
+}) args
