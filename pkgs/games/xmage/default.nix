@@ -28,5 +28,11 @@ EOS
     chmod +x $out/bin/xmage
   '';
 
+  meta = with stdenv.lib; {
+    description = "Magic Another Game Engine";
+    license = licenses.mit;
+    maintainers = with maintainers; [ matthiasbeyer ];
+  };
+
 }
 
