@@ -385,6 +385,8 @@ mapAliases ({
   ruby_2_5_0 = throw "deprecated 2018-0213: use a newer version of ruby";
   rubyPackages_2_4 = throw "deprecated 2019-12: use a newer version of rubyPackages instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
+  rust_1_38_0 = rust_1_38; # added 2020-03-13
+  rust_1_42_0 = rust_1_42; # added 2020-03-13
   rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02

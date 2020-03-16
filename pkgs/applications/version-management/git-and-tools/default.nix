@@ -70,6 +70,8 @@ let
 
   git-codeowners = callPackage ./git-codeowners { };
 
+  git-codereview = callPackage ./git-codereview { };
+
   git-cola = callPackage ./git-cola { };
 
   git-crypt = callPackage ./git-crypt { };
@@ -137,6 +139,10 @@ let
   git-sync = callPackage ./git-sync { };
 
   git-test = callPackage ./git-test { };
+
+  git-trim = callPackage ./git-trim {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   git-workspace = callPackage ./git-workspace {
     inherit (darwin.apple_sdk.frameworks) Security;

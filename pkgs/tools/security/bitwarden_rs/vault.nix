@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
   };
 
   buildCommand = ''
-    mkdir -p $out/share/bitwarden_rs/vault
-    cd $out/share/bitwarden_rs/vault
+    mkdir -p $out/share/bitwarden_rs/
+    cd $out/share/bitwarden_rs/
     tar xf $src
+    mv web-vault vault
   '';
 
   meta = with stdenv.lib; {

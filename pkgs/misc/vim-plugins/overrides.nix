@@ -64,10 +64,7 @@ self: super: {
       name = "LanguageClient-neovim-bin";
       src = LanguageClient-neovim-src;
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-      cargoSha256 = "1w8g7pxwnjqp9zi47h4lz2mcg5daldsk5z72h8cjj750wng8a82c";
+      cargoSha256 = "0w66fcrlaxf6zgkrfpgfybfbm759fzimnr3pjq6sm14frar7lhr6";
       buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
       # FIXME: Use impure version of CoreFoundation because of missing symbols.

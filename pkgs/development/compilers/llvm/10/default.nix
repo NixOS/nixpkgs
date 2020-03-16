@@ -6,7 +6,7 @@
 
 let
   release_version = "10.0.0";
-  candidate = "rc2";
+  candidate = "rc3";
   version = "10.0.0${candidate}"; # differentiating these is important for rc's
 
   fetch = name: sha256: fetchurl {
@@ -14,7 +14,7 @@ let
     inherit sha256;
   };
 
-  clang-tools-extra_src = fetch "clang-tools-extra" "1yi34b6lspcpig0gnws2ba0shgmrs2jgjb3hp08mm0dg3blzk8ss";
+  clang-tools-extra_src = fetch "clang-tools-extra" "03669c93wzmbmfpv0pyzb7y4z1xc912l95iqywyx01xgdl1xws0r";
 
   tools = stdenv.lib.makeExtensible (tools: let
     callPackage = newScope (tools // { inherit stdenv cmake libxml2 python3 isl release_version version fetch; });
@@ -39,7 +39,6 @@ let
     clang-polly-unwrapped = callPackage ./clang {
       inherit clang-tools-extra_src;
       llvm = tools.llvm-polly;
-      enablePolly = true;
     };
 
     llvm-manpages = lowPrio (tools.llvm.override {

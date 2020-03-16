@@ -1,37 +1,33 @@
-{ stdenv, pkgs, makeWrapper, pango
-, glib, gnome2, gnome3, gtk2-x11, gtkspell2, poppler
+{ stdenv, pkgs
+, glib, gnome3, gtk3, gtksourceview3, gtkspell3, poppler, texlive
 , pkgconfig, intltool, autoreconfHook, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.6.6";
+  version = "0.8.1";
   pname = "gummi";
 
   src = pkgs.fetchFromGitHub {
     owner = "alexandervdm";
     repo = "gummi";
     rev = version;
-    sha256 = "1vw8rhv8qj82l6l22kpysgm9mxilnki2kjmvxsnajbqcagr6s7cn";
+    sha256 = "0wxgmzazqiq77cw42i5fn2hc22hhxf5gbpl9g8y3zlnp21lw9y16";
   };
 
   nativeBuildInputs = [
-    pkgconfig intltool autoreconfHook makeWrapper wrapGAppsHook
+    pkgconfig intltool autoreconfHook wrapGAppsHook
   ];
   buildInputs = [
-    glib gnome2.gtksourceview pango gtk2-x11 gtkspell2 poppler
-    gnome3.adwaita-icon-theme
+    glib gtksourceview3 gtk3 gtkspell3 poppler
+    texlive.bin.core # needed for synctex
   ];
-
-  preConfigure = ''
-    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${pkgs.gnome2.gtksourceview}/share")
-  '';
 
   postInstall = ''
     install -Dpm644 COPYING $out/share/licenses/$name/COPYING
   '';
 
   meta = {
-    homepage = http://gummi.midnightcoding.org/;
+    homepage = "https://gummi.app";
     description = "Simple LaTex editor for GTK users";
     license = stdenv.lib.licenses.mit;
     maintainers = with stdenv.lib.maintainers; [ flokli ];

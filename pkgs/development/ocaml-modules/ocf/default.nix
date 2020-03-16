@@ -1,6 +1,7 @@
 { stdenv, fetchFromGitHub, fetchpatch, ocaml, findlib, ppx_tools, yojson }:
 
 if stdenv.lib.versionOlder ocaml.version "4.03"
+|| stdenv.lib.versionAtLeast ocaml.version "4.08"
 then throw "ocf not supported for ocaml ${ocaml.version}"
 else
 stdenv.mkDerivation rec {

@@ -23,6 +23,11 @@
      Support is planned until the end of April 2021, handing over to 21.03.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP now defaults to PHP 7.4, updated from 7.3.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

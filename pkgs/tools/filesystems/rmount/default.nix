@@ -3,13 +3,13 @@
 stdenv.mkDerivation rec {
 
   pname   = "rmount";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "Luis-Hebendanz";
     repo = "rmount";
-    sha256 = "1wjmfvbsq3126z51f2ivj85cjmkrzdm2acqsiyqs57qga2g6w5p9";
+    sha256 = "0j1ayncw1nnmgna7vyx44vwinh4ah1b0l5y8agc7i4s8clbvy3h0";
   };
 
   buildInputs = [ makeWrapper ];

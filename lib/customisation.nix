@@ -131,7 +131,12 @@ rec {
       origArgs = auto // args;
       pkgs = f origArgs;
       mkAttrOverridable = name: _: makeOverridable (newArgs: (f newArgs).${name}) origArgs;
-    in lib.mapAttrs mkAttrOverridable pkgs;
+    in
+      if lib.isDerivation pkgs then throw
+        ("function `callPackages` was called on a *single* derivation "
+          + ''"${pkgs.name or "<unknown-name>"}";''
+          + " did you mean to use `callPackage` instead?")
+      else lib.mapAttrs mkAttrOverridable pkgs;
 
 
   /* Add attributes to each output of a derivation without changing

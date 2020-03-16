@@ -90,4 +90,8 @@ self: super: {
   # https://github.com/kowainik/relude/issues/241
   relude = dontCheck super.relude;
 
+  # The tests for semver-range need to be updated for the MonadFail change in
+  # ghc-8.8:
+  # https://github.com/adnelson/semver-range/issues/15
+  semver-range = dontCheck super.semver-range;
 }

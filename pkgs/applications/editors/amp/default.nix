@@ -3,19 +3,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "amp";
-  version = "0.6.1";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "jmacdonald";
     repo = pname;
     rev = version;
-    sha256 = "0jhxyl27nwp7rp0lc3kic69g8x55d0azrwlwwhz3z74icqa8f03j";
+    sha256 = "0l1vpcfq6jrq2dkrmsa4ghwdpp7c54f46gz3n7nk0i41b12hnigw";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "0rk5c8knx8swqzmj7wd18hq2h5ndkzvcbq4lzggpavkk01a8hlb1";
+  cargoSha256 = "09v991rl2w4c4jh7ga7q1lk6wyl2vr71j5cpniij8mcvszrz78qf";
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ openssl python3 xorg.libxcb libgit2 ] ++ stdenv.lib.optionals stdenv.isDarwin

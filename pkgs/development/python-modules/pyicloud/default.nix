@@ -15,11 +15,11 @@
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.9.2";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1jjkzf7vwms6pymnmdr893830vrymxnq455xnqp21wqhjjiy2amd";
+    sha256 = "0r171wnq2g5bw7gd59vh6flm0104ix1a6s2vhdrf8s74hipw57si";
   };
 
   propagatedBuildInputs = [

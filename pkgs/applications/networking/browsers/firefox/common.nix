@@ -93,15 +93,6 @@ stdenv.mkDerivation ({
 
   patches = [
     ./env_var_for_system_dir.patch
-  ] ++ lib.optionals (stdenv.isAarch64) [
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/arm.patch";
-      sha256 = "1vbpih23imhv5r3g21m3m541z08n9n9j1nvmqax76bmyhn7mxp32";
-    })
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/archlinuxarm/PKGBUILDs/09c7fa0dc1d87922e3b464c0fa084df1227fca79/extra/firefox/build-arm-libopus.patch";
-      sha256 = "1zg56v3lc346fkzcjjx21vjip2s9hb2xw4pvza1dsfdnhsnzppfp";
-    })
   ]
   ++ patches;
 
@@ -300,6 +291,9 @@ stdenv.mkDerivation ({
     inherit execdir;
     inherit browserName;
   } // lib.optionalAttrs gtk3Support { inherit gtk3; };
+} //
+lib.optionalAttrs (lib.versionAtLeast ffversion "74") {
+  hardeningDisable = [ "format" ]; # -Werror=format-security
 } //
 # the build system verifies checksums of the bundled rust sources
 # ./third_party/rust is be patched by our libtool fixup code in stdenv

@@ -26,13 +26,14 @@ in {
         description = "The shorewall package to use.";
       };
       configs = lib.mkOption {
-        type        = types.attrsOf types.str;
+        type        = types.attrsOf types.lines;
         default     = {};
         description = ''
           This option defines the Shorewall configs.
           The attribute name defines the name of the config,
           and the attribute value defines the content of the config.
         '';
+        apply = lib.mapAttrs (name: text: pkgs.writeText "${name}" text);
       };
     };
   };
@@ -62,7 +63,7 @@ in {
       '';
     };
     environment = {
-      etc = lib.mapAttrs' (name: conf: lib.nameValuePair "shorewall6/${name}" {text=conf;}) cfg.configs;
+      etc = lib.mapAttrs' (name: conf: lib.nameValuePair "shorewall6/${name}" {source=conf;}) cfg.configs;
       systemPackages = [ cfg.package ];
     };
   };

@@ -5,14 +5,14 @@
 , pango, gdk-pixbuf, atk }:
 
 buildPythonApplication rec {
-  version = "0.9.4";
+  version = "0.9.4.4";
   pname = "syncthing-gtk";
 
   src = fetchFromGitHub {
     owner = "syncthing";
     repo = "syncthing-gtk";
     rev = "v${version}";
-    sha256 = "0d3rjd1xjd7zravks9a2ph7gv1cm8wxaxkkvl1fvcx15v7f3hff9";
+    sha256 = "0nc0wd7qvyri7841c3dd9in5d7367hys0isyw8znv5fj4c0a6v1f";
   };
 
   nativeBuildInputs = [
@@ -34,16 +34,15 @@ buildPythonApplication rec {
   ];
 
   patches = [
-    (fetchpatch {
-      url = https://github.com/syncthing/syncthing-gtk/commit/b2535e5a9cdb31c4987ab7af37f62d58d38255b7.patch;
-      sha256 = "047v79wz2a9334gbzywlqwpacrk53s26ksvfqaddk06avv8742w7";
-    })
     (substituteAll {
       src = ./paths.patch;
       killall = "${killall}/bin/killall";
       syncthing = "${syncthing}/bin/syncthing";
     })
   ];
+
+  # repo doesn't have any tests
+  doCheck = false;
 
   setupPyBuildFlags = [ "build_py" "--nofinddaemon" "--nostdownloader" ];
 

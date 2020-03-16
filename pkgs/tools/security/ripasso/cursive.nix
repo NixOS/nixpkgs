@@ -12,10 +12,7 @@ buildRustPackage rec {
     sha256 = "164da20j727p8l7hh37j2r8pai9sj402nhswvg0nrlgj53nr6083";
   };
 
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "1vyhdbia7khh0ixim00knai5d270jl5a5crqik1qaz7bkwc02bsp";
+  cargoSha256 = "1wpn67v0xmxhn1dgzhh1pwz1yc3cizmfxhpb7qv9b27ynx4486ji";
 
   cargoBuildFlags = [ "-p ripasso-cursive -p ripasso-man" ];
 

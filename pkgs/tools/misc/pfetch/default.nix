@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
-  version = "0.4.0";
+  version = "0.5.0";
 
   src = fetchFromGitHub {
     owner = "dylanaraps";
     repo = "pfetch";
     rev = version;
-    sha256 = "180vvbmvak888vs4dgzlmqk0ss4qfsz09700n4p8s68j7krkxsfq";
+    sha256 = "0yg9nlrjnm2404ysm2qp1klpq1wlmyih302kzfqchn6l2sibsm4j";
   };
 
   dontBuild = true;

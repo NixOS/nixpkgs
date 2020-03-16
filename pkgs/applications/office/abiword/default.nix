@@ -5,22 +5,28 @@
 
 stdenv.mkDerivation rec {
   pname = "abiword";
-  version = "3.0.2";
+  version = "3.0.4";
 
   src = fetchurl {
     url = "https://www.abisource.com/downloads/abiword/${version}/source/${pname}-${version}.tar.gz";
-    sha256 = "08imry821g81apdwym3gcs4nss0l9j5blqk31j5rv602zmcd9gxg";
+    sha256 = "1mx5l716n0z5788i19qmad30cck4v9ggr071cafw2nrf375rcc79";
   };
 
   enableParallelBuilding = true;
 
   patches = [
-    # https://bugzilla.abisource.com/show_bug.cgi?id=13791
+    # Switch to using enchant2; note by the next update enchant2 should be
+    # default and this patch can be removed.
+    # https://github.com/NixOS/nixpkgs/issues/38506
     (fetchurl {
-      url = https://bugzilla.abisource.com/attachment.cgi?id=5860;
-      sha256 = "02p8kz02xm1197zcpzjs010mna9hxsbq5lwgxr8b7qhh9yxja7al";
+      url = "https://git.archlinux.org/svntogit/packages.git/plain/trunk/enchant-2.1.patch?h=packages/abiword";
+      sha256 = "444dc2aadea3c80310a509b690097541573f6d2652c573d04da66a0f385fcfb2";
     })
   ];
+
+  postPatch = ''
+    substituteInPlace configure --replace 'enchant >=' 'enchant-2 >='
+  '';
 
   nativeBuildInputs = [ pkgconfig wrapGAppsHook ];
 
@@ -34,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.abisource.com/;
     license = licenses.gpl3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pSub ylwghst ];
+    maintainers = with maintainers; [ pSub ylwghst sna ];
   };
 }
