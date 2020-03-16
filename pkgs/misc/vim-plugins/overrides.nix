@@ -124,6 +124,10 @@ self: super: {
       substituteInPlace "$out"/share/vim-plugins/coc-go/src/utils/tools.ts \
         --replace 'const cmd = `GOPATH=''${gopath}; go ''${args}`' 'const cmd = `GOPATH=''${gopath}; ${go}/bin/go ''${args}`'
     '';
+
+    pname = "coc-go";
+    version = nodePackages.coc-go.version;
+    src = "${nodePackages.coc-go}/lib/node_modules/coc-go";
   });
 
   coc-css = buildVimPluginFrom2Nix {
