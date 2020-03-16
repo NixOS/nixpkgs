@@ -321,7 +321,27 @@ in
 
     # nixpkgs kernels are assumed to have all required features
     assertions = if config.boot.kernelPackages.kernel ? features then [] else
-      let cfg = config.boot.kernelPackages.kernel.config; in map (attrs:
+      let
+        structuredCfg = lib.kernel.loadConfig config.boot.kernelPackages.kernel.configfile;
+
+        # temporary duplicate of os-specific/linux/kernel/manual-config.nix
+        # they will be consolidated in lib/kernel.nix
+        cfg = let attrName = attr: attr; in {
+          isSet = attr: hasAttr (attrName attr) cfg;
+
+          getValue = attr: if cfg.isSet attr then getAttr (attrName attr) cfg else null;
+
+          isYes = attr: (cfg.getValue attr) == "y";
+
+          isNo = attr: (cfg.getValue attr) == "n";
+
+          isModule = attr: (cfg.getValue attr) == "m";
+
+          isEnabled = attr: (cfg.isModule attr) || (cfg.isYes attr);
+
+          isDisabled = attr: (!(cfg.isSet attr)) || (cfg.isNo attr);
+        } // structuredCfg;
+      in map (attrs:
         { assertion = attrs.assertion cfg; inherit (attrs) message; }
       ) config.system.requiredKernelConfig;
 
