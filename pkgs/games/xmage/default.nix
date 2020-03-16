@@ -13,6 +13,8 @@ stdenv.mkDerivation rec {
     sha256 = "14s4885ldi0rplqmab5m775plsqmmm0m89j402caiqm2q9mzvkhd";
   };
 
+  preferLocalBuild = true;
+
   unpackPhase = ''
     ${unzip}/bin/unzip $src
   '';
