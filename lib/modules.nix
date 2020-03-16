@@ -93,7 +93,11 @@ rec {
             res set._definedNames
         else
           res;
-      result = { inherit options config; };
+      result = {
+        inherit options;
+        config = removeAttrs config [ "_module" ];
+        inherit (config) _module;
+      };
     in result;
 
   # collectModules :: (modulesPath: String) -> (modules: [ Module ]) -> (args: Attrs) -> [ Module ]
