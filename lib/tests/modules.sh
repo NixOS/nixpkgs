@@ -198,6 +198,10 @@ checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-c
 checkConfigError 'The option path .* is an attribute set of options, but it is defined to not be an attribute set in' \
   config.value ./declare-option-set.nix ./define-value-int-zero.nix
 
+# Even with multiple assignments, a type error should be thrown if any of them aren't valid
+checkConfigError 'The option value .* in .* is not of type .*' \
+  config.value ./declare-int-unsigned-value.nix ./define-value-list.nix ./define-value-int-positive.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
