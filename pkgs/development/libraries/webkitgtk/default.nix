@@ -98,8 +98,8 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     ruby
-    glib
-    wayland
+    glib # for gdbus-codegen
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
