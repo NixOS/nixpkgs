@@ -36,6 +36,7 @@ stdenv.mkDerivation ({
   installPhase = ''
     runHook preInstall
     mkdir -p $out/library
+    echo "$rCommand CMD INSTALL $installFlags --configure-args="$configureFlags" -l $out/library ."
     $rCommand CMD INSTALL $installFlags --configure-args="$configureFlags" -l $out/library .
     runHook postInstall
   '';

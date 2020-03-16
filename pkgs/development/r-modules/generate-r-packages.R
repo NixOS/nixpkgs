@@ -3,16 +3,18 @@ library(data.table)
 library(parallel)
 cl <- makeCluster(10)
 
-biocVersion <- 3.8
+biocVersion <- "3.10"
 snapshotDate <- Sys.Date()-1
 
 mirrorUrls <- list( bioc=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/bioc/src/contrib/")
-                  , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/annotation/src/contrib/")
-                  , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/experiment/src/contrib/")
-                  , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
+                 , "bioc-annotation"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/annotation/src/contrib/")
+                 , "bioc-experiment"=paste0("http://bioconductor.statistik.tu-dortmund.de/packages/", biocVersion, "/data/experiment/src/contrib/")
+                 , "bioc-workflows"=paste0("http://www.bioconductor.org/packages/", biocVersion, "/workflows/src/contrib/") #need a working url for workflows
+                 , cran=paste0("http://mran.revolutionanalytics.com/snapshot/", snapshotDate, "/src/contrib/")
                   )
 
 mirrorType <- commandArgs(trailingOnly=TRUE)[1]
+#mirrorType <- "bioc-workflows"
 stopifnot(mirrorType %in% names(mirrorUrls))
 packagesFile <- paste(mirrorType, 'packages.nix', sep='-')
 readFormatted <- as.data.table(read.table(skip=8, sep='"', text=head(readLines(packagesFile), -1)))
@@ -27,7 +29,8 @@ knownPackages <- sapply(knownPackages, gsub, pattern=".", replacement="_", fixed
 mirrorUrl <- mirrorUrls[mirrorType][[1]]
 nixPrefetch <- function(name, version) {
   prevV <- readFormatted$V2 == name & readFormatted$V4 == version
-  if (sum(prevV) == 1)
+  # if ( 1 == 0 ) # force everything. needed too often sadly
+  if  (sum(prevV) == 1) # assume links point to immutable files. 
     as.character(readFormatted$V6[ prevV ])
 
   else {
@@ -40,7 +43,6 @@ nixPrefetch <- function(name, version) {
     cmd <- paste0(cmd, " ; rm -rf '", tmp, "'")
     system(cmd, intern=TRUE)
   }
-
 }
 
 formatPackage <- function(name, version, sha256, depends, imports, linkingTo) {

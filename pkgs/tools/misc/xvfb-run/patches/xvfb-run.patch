@@ -1,0 +1,30 @@
+diff --git a/trunk/xvfb-run b/trunk/xvfb-run
+index 9d088c1c28e..bdc79ce917e 100644
+--- a/trunk/xvfb-run
++++ b/trunk/xvfb-run
+@@ -156,7 +156,10 @@ if [ -z "$AUTHFILE" ]; then
+ fi
+ 
+ # Start Xvfb.
+-MCOOKIE=$(mcookie)
++mcookie=`dd if=/dev/urandom bs=16 count=1 2>/dev/null | hexdump -e \\"%08x\\"`
++MCOOKIE="$mcookie"
++
++
+ 
+ if [ -z "$AUTO_DISPLAY" ]; then
+   # Old style using a pre-computed SERVERNUM
+@@ -182,8 +185,12 @@ DISPLAY=:$SERVERNUM XAUTHORITY=$AUTHFILE "$@" 2>&1
+ RETVAL=$?
+ set -e
+ 
+-# Kill Xvfb now that the command has exited.
++
++# Kill Xvfb now that the command has exited,
++# but don't die if you can't kill a zombie.
++set +e
+ kill $XVFBPID
++set -e
+ 
+ # Clean up.
+ XAUTHORITY=$AUTHFILE xauth remove ":$SERVERNUM" >"$ERRORFILE" 2>&1

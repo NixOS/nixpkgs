@@ -14,13 +14,14 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/bin
     cp ${xvfb_run} $out/bin/xvfb-run
-
+    patch -p1 $out/bin/xvfb-run $patchfile
     chmod a+x $out/bin/xvfb-run
     patchShebangs $out/bin/xvfb-run
     wrapProgram $out/bin/xvfb-run \
       --set FONTCONFIG_FILE "${fontsConf}" \
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux gawk coreutils ]}
   '';
+  patchfile = stdenv.lib.optionalString stdenv.isDarwin ./patches/xvfb-run.patch;
 
   meta = with stdenv.lib; {
     platforms = platforms.linux;
