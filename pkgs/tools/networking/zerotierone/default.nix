@@ -29,6 +29,13 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
+  buildFlags = [ "all" "selftest" ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkPhase = ''
+    ./zerotier-selftest
+  '';
+
   installPhase = ''
     install -Dt "$out/bin/" zerotier-one
     ln -s $out/bin/zerotier-one $out/bin/zerotier-idtool
