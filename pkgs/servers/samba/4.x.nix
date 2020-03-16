@@ -34,6 +34,11 @@ stdenv.mkDerivation rec {
     ./patch-source3__libads__kerberos_keytab.c.patch
     ./4.x-no-persistent-install-dynconfig.patch
     ./4.x-fix-makeflags-parsing.patch
+    (fetchurl {
+      name = "CVE-2019-14902+CVE-2019-14907+CVE-2019-19344.patch";
+      url = "https://www.samba.org/samba/ftp/patches/security/samba-4.10.11-security-2020-01-21.patch";
+      sha256 = "1mglfzyb6wv85rrlspqa0hlga1c9f3v123j2dvywrsp3waxhb651";
+    })
   ];
 
   nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
