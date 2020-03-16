@@ -194,6 +194,10 @@ checkConfigOutput "true" config.conditionalWorks ./declare-attrsOf.nix ./attrsOf
 checkConfigOutput "false" config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 
+# Check error for when an option set is defined to be a non-attribute set value
+checkConfigError 'The option path .* is an attribute set of options, but it is defined to not be an attribute set in' \
+  config.value ./declare-option-set.nix ./define-value-int-zero.nix
+
 cat <<EOF
 ====== module tests ======
 $pass Pass
