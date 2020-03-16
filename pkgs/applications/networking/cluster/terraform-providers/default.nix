@@ -33,5 +33,6 @@ in
     gandi = callPackage ./gandi {};
     ibm = callPackage ./ibm {};
     libvirt = callPackage ./libvirt {};
+    lxd = callPackage ./lxd {};
     ansible = callPackage ./ansible {};
   } // lib.mapAttrs (n: v: toDrv v) list
