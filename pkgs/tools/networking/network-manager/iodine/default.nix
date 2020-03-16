@@ -1,5 +1,5 @@
 { stdenv, fetchFromGitLab, substituteAll, autoreconfHook, iodine, intltool, pkgconfig, networkmanager, libsecret, gtk3
-, withGnome ? true, gnome3, fetchpatch, networkmanagerapplet }:
+, withGnome ? true, gnome3, fetchpatch, libnma }:
 
 let
   pname = "NetworkManager-iodine";
@@ -28,7 +28,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [ iodine networkmanager ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
+    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret libnma ];
 
   nativeBuildInputs = [ intltool autoreconfHook pkgconfig ];
 
