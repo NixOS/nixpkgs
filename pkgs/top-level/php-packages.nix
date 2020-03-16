@@ -779,10 +779,6 @@ let
           "--enable-gd-jis-conv"
         ];
         enable = lib.versionOlder php.version "7.4"; }
-      ## gettext (7.2, 7.3, 7.4) -- configure: error: Cannot locate header file libintl.h
-      #{ name = "gettext";
-      #  buildInputs = [ gettext ];
-      #  configureFlags = "--with-gettext=${gettext}"; }
       { name = "gmp";
         buildInputs = [ gmp5 ];
         configureFlags = [ "--with-gmp=${gmp5.dev}" ];
@@ -827,13 +823,8 @@ let
       { name = "pdo_pgsql"; configureFlags = [ "--with-pdo-pgsql=${postgresql}" ]; }
       { name = "pdo_sqlite"; buildInputs = [ sqlite ]; configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ]; }
       { name = "pgsql"; buildInputs = [ pcre' ]; configureFlags = [ "--with-pgsql=${postgresql}" ]; }
-      { name = "phar"; buildInputs = [ pcre' openssl ]; }
       { name = "posix"; }
       { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
-      ## readline (7.4, 7.3, 7.2) -- configure: error: Please reinstall libedit - I cannot find readline.h
-      #{ name = "readline";
-      #  buildInputs = [ libedit readline ];
-      #  configureFlags = [ "--with-readline=${readline.dev}" ]; }
       { name = "recode";
         configureFlags = [ "--with-recode=${recode}" ];
         # Removed in php 7.4.
