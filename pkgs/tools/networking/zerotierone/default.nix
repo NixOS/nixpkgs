@@ -50,6 +50,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.zerotier.com;
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    platforms = platforms.all;
   };
 }
