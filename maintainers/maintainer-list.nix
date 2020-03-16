@@ -8191,6 +8191,11 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  maksteel = {
+    email = "kukreja.m@gmail.com";
+    github = "maksteel";
+    name = "Manish Kukreja";
+  };
 }
 
   

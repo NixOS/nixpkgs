@@ -11,4 +11,14 @@ stdenv.mkDerivation {
         sha256 = "6a76da12746a51bfcd1a87461c9578b6eef741933c83d7a5e5b16f605b44afdc";
   };
   system = builtins.currentSystem;
+  meta = with stdenv.lib; {
+  description = "A library for reading and writing files in the formats used by PhysioBank databases";
+  longDescription = ''
+    This is a set of functions (subroutines) for reading and writing files in the formats used by PhysioBank databases (among others). The WFDB library is LGPLed, and can be used by programs written in ANSI/ISO C, K&R C, C++, or Fortran, running under any operating system for which an ANSI/ISO or K&R C compiler is available, including all versions of Unix, MS-DOS, MS-Windows, the Macintosh OS, and VMS.
+  '';
+  homepage = https://archive.physionet.org/physiotools/wfdb.shtml;
+  license = licenses.lgpl2;
+  maintainers = [ maintainers.maksteel ];
+  platforms = platforms.all;
+};
 }
