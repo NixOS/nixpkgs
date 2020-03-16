@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
         --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+
+      substituteInPlace ./make-linux.mk \
+        --replace 'armv5' 'armv6'
   '';
 
 
