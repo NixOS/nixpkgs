@@ -17,11 +17,11 @@ appimageTools.wrapType2 rec {
 
   src = fetchurl {
     url = "https://public-cdn.cloud.unity3d.com/hub/prod/UnityHub.AppImage";
-    sha256 = "1rx7ih94ig3pd1yx1d3fpx7zpixq3j5birkpnzkh778qqsdrg0nf";
+    sha256 = "05p5kqbwgqyk2aw2lix5dk1ql16aj6iczxrc63a1l0vj8wrha7z4";
   };
 
   meta = with stdenv.lib; {
-    homepage = https://unity3d.com/;
+    homepage = "https://unity3d.com/";
     description = "Game development tool";
     longDescription = ''
       Popular development platform for creating 2D and 3D multiplatform games
