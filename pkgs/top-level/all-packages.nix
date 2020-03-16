@@ -21577,6 +21577,8 @@ in
 
   qmetro = callPackage ../applications/misc/qmetro { };
 
+  qmidiarp = callPackage ../applications/audio/qmidiarp {};
+
   qmidinet = libsForQt5.callPackage ../applications/audio/qmidinet { };
 
   qmidiroute = callPackage ../applications/audio/qmidiroute { };
