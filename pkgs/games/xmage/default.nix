@@ -32,6 +32,7 @@ EOS
     description = "Magic Another Game Engine";
     license = licenses.mit;
     maintainers = with maintainers; [ matthiasbeyer ];
+    homepage = "http://xmage.de/";
   };
 
 }
