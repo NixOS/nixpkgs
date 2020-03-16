@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig meson ninja gettext libxslt libxml2 gobject-introspection
-    gtk-doc docbook_xsl
+    gtk-doc docbook_xsl glib
   ];
   buildInputs = [
     libX11 bubblewrap xkeyboard_config isocodes wayland

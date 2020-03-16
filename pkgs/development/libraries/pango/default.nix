@@ -23,6 +23,7 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     meson ninja
+    glib # for glib-mkenum
     pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
   ];
   buildInputs = [

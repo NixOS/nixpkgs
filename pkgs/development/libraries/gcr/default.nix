@@ -32,6 +32,8 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" "dev" ];
 
+  configureFlags = [ "--with-libgcrypt-prefix=${stdenv.lib.getDev libgcrypt}" ];
+
   nativeBuildInputs = [
     pkgconfig
     gettext

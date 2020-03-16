@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gkqx26pvlw00b3fgx6sh87yyjfzyj51jwxvbf9k117npkrf4b2g";
   };
 
-  nativeBuildInputs = [ meson ninja pkgconfig makeWrapper ];
+  nativeBuildInputs = [ meson ninja pkgconfig makeWrapper wayland ];
 
   buildInputs = [
     wlroots wayland wayland-protocols pixman libxkbcommon

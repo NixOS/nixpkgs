@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" ];
 
   buildInputs = [ python3 sqlite libpsl brotli ];
-  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala ];
+  nativeBuildInputs = [ meson ninja pkgconfig gobject-introspection vala glib ];
   propagatedBuildInputs = [ glib libxml2 ];
 
   mesonFlags = [

@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
-  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection ];
+  nativeBuildInputs = [ meson ninja pkgconfig gettext gobject-introspection glib ];
 
   propagatedBuildInputs = [
     # Required by atk.pc

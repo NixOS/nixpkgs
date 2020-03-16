@@ -30,6 +30,7 @@
 , json-glib
 , libdazzle
 , libhandy
+, buildPackages
 }:
 
 stdenv.mkDerivation rec {
@@ -56,6 +57,7 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     wrapGAppsHook
+    buildPackages.glib
   ];
 
   buildInputs = [
