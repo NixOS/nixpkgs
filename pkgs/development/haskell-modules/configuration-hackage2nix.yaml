@@ -2476,6 +2476,8 @@ package-maintainers:
     - purescript
     - spago
     - termonad
+  rkrzr:
+    - icepeak
 
 unsupported-platforms:
   alsa-mixer:                                   [ x86_64-darwin ]
@@ -6416,7 +6418,6 @@ broken-packages:
   - iban
   - ical
   - iCalendar
-  - icepeak
   - IcoGrid
   - iconv-typed
   - ide-backend
@@ -9537,7 +9538,6 @@ broken-packages:
   - sql-simple-sqlite
   - sqlcipher
   - sqlite
-  - sqlite-simple
   - sqlite-simple-errors
   - sqlite-simple-typed
   - sqlvalue-list
