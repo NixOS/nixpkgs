@@ -108,6 +108,8 @@ in {
       Background = false;
       Syslog = true;
 
+      UMask = mkDefault "0002";
+
       # Set this to null so we don't have to check for this key existing below
       KeyTable = mkOptionDefault null;
 
