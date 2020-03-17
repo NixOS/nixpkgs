@@ -5,19 +5,12 @@
 
 stdenv.mkDerivation rec {
   pname = "rethinkdb";
-  version = "2.3.6";
+  version = "2.3.7";
 
   src = fetchurl {
     url = "https://download.rethinkdb.com/dist/${pname}-${version}.tgz";
-    sha256 = "0a6wlgqa2flf87jrp4fq4y9aihwyhgwclmss56z03b8hd5k5j8f4";
+    sha256 = "11zahnwgbl11lvfr0q2z4lixh41007vgjj6vy3qnh5caa7l2anf5";
   };
-
-  patches = [
-    (fetchurl {
-        url = "https://github.com/rethinkdb/rethinkdb/commit/871bd3705a1f29c4ab07a096d562a4b06231a97c.patch";
-        sha256 = "05nagixlwnq3x7441fhll5vs70pxppbsciw8qjqp660bdb5m4jm1";
-    })
-  ];
 
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/raise.*No Xcode or CLT version detected.*/version = "7.0.0"/' external/v8_3.30.33.16/build/gyp/pylib/gyp/xcode_emulation.py
@@ -57,10 +50,9 @@ stdenv.mkDerivation rec {
       query language that supports really useful queries like table
       joins and group by, and is easy to setup and learn.
     '';
-    homepage    = http://www.rethinkdb.com;
-    license     = stdenv.lib.licenses.agpl3;
+    homepage    = "http://www.rethinkdb.com";
+    license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice bluescreen303 ];
-    broken = true;  # broken with openssl 1.1
   };
 }
