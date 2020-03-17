@@ -5719,6 +5719,8 @@ in
 
   pazi = callPackage ../tools/misc/pazi { };
 
+  peep = callPackage ../tools/misc/peep { };
+
   pell = callPackage ../applications/misc/pell { };
 
   pepper = callPackage ../tools/admin/salt/pepper { };
