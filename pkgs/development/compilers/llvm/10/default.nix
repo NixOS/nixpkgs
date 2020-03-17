@@ -30,15 +30,10 @@ let
   in {
 
     llvm = callPackage ./llvm.nix { };
-    llvm-polly = callPackage ./llvm.nix { enablePolly = true; };
 
     clang-unwrapped = callPackage ./clang {
       inherit (tools) lld;
       inherit clang-tools-extra_src;
-    };
-    clang-polly-unwrapped = callPackage ./clang {
-      inherit clang-tools-extra_src;
-      llvm = tools.llvm-polly;
     };
 
     llvm-manpages = lowPrio (tools.llvm.override {
