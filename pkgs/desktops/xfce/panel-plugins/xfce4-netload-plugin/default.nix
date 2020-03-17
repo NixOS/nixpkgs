@@ -10,6 +10,6 @@ mkXfceDerivation rec {
   buildInputs = [ gtk3 libxfce4ui libxfce4util xfce4-panel xfconf ];
 
   meta = {
-    description = "Battery plugin for Xfce panel";
+    description = "Internet load speed plugin for Xfce panel";
   };
 }
