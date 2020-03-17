@@ -16,6 +16,10 @@ buildPythonPackage rec {
     sha256 = "1pr6v38ahrsvxlgmcx69s4b5q5082f44gzi4h3c32sccdc4pwqxp";
   };
 
+  patches = [
+    ./fix-tests.diff
+  ];
+
   checkPhase = ''
     runHook preCheck
 

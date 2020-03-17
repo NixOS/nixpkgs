@@ -122,7 +122,8 @@ stdenv.mkDerivation rec {
   # --python-expr is used to workaround https://developer.blender.org/T74304
   postInstall = ''
     wrapProgram $blenderExecutable \
-      --add-flags '--python-expr "import sys; sys.path.append(\"${python3Packages.numpy}/${python.sitePackages}\")"'
+      --prefix PYTHONPATH : ${python3Packages.numpy}/${python.sitePackages} \
+      --add-flags '--python-use-system-env'
   '';
 
   # Set RUNPATH so that libcuda and libnvrtc in /run/opengl-driver(-32)/lib can be

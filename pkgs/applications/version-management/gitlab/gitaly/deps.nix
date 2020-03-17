@@ -1319,8 +1319,8 @@
     fetch = {
       type = "git";
       url = "https://github.com/ugorji/go";
-      rev = "d75b2dcb6bc8";
-      sha256 = "0di1k35gpq9bp958ywranpbskx2vdwlb38s22vl9rybm3wa5g3ps";
+      rev = "v1.1.4";
+      sha256 = "0ma2qvn5wqvjidpdz74x832a813qnr1cxbx6n6n125ak9b3wbn5w";
     };
   }
   {
@@ -1670,8 +1670,8 @@
     fetch = {
       type = "git";
       url = "https://gopkg.in/yaml.v2";
-      rev = "v2.2.5";
-      sha256 = "08smz8dfyxp02ha74my9iszqa5qzgl3ksi28ilyp8lqipssiq6fg";
+      rev = "v2.2.8";
+      sha256 = "1inf7svydzscwv9fcjd2rm61a4xjk6jkswknybmns2n58shimapw";
     };
   }
   {

@@ -2,11 +2,11 @@
 
 buildPythonPackage rec {
   pname = "buildbot-pkg";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "07ynk46c9h47ibbdm93h15xbrzflsl4llm0jr4c8pm6krs6byb4z";
+    sha256 = "03zb09r8w8dvd9qas7h6gdwlqc7q482ikph6h3708lpnkn72xdkb";
   };
 
   postPatch = ''

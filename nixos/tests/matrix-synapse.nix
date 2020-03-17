@@ -35,12 +35,31 @@ in {
 
   nodes = {
     # Since 0.33.0, matrix-synapse doesn't allow underscores in server names
-    serverpostgres = args: {
+    serverpostgres = { pkgs, ... }: {
       services.matrix-synapse = {
         enable = true;
         database_type = "psycopg2";
         tls_certificate_path = "${cert}";
         tls_private_key_path = "${key}";
+        database_args = {
+          password = "synapse";
+        };
+      };
+      services.postgresql = {
+        enable = true;
+
+        # The database name and user are configured by the following options:
+        #   - services.matrix-synapse.database_name
+        #   - services.matrix-synapse.database_user
+        #
+        # The values used here represent the default values of the module.
+        initialScript = pkgs.writeText "synapse-init.sql" ''
+          CREATE ROLE "matrix-synapse" WITH LOGIN PASSWORD 'synapse';
+          CREATE DATABASE "matrix-synapse" WITH OWNER "matrix-synapse"
+            TEMPLATE template0
+            LC_COLLATE = "C"
+            LC_CTYPE = "C";
+        '';
       };
     };
 

@@ -1,0 +1,56 @@
+diff -ur a/compat/tests/settings.py b/compat/tests/settings.py
+--- a/compat/tests/settings.py	2020-03-06 15:32:07.548482597 +0100
++++ b/compat/tests/settings.py	2020-03-06 22:19:25.422934249 +0100
+@@ -16,11 +16,12 @@
+     'django.contrib.admin',
+     'django.contrib.auth',
+     'django.contrib.contenttypes',
++    'django.contrib.messages',
+     'compat',
+     'compat.tests.test_app',
+ ]
+ 
+-MIDDLEWARE_CLASSES = (
++MIDDLEWARE = (
+     'django.contrib.sessions.middleware.SessionMiddleware',
+     'django.middleware.common.CommonMiddleware',
+     'django.middleware.csrf.CsrfViewMiddleware',
+@@ -43,6 +44,7 @@
+                 'django.template.context_processors.i18n',
+                 'django.template.context_processors.tz',
+                 'django.template.context_processors.request',
++                'django.contrib.messages.context_processors.messages',
+             ],
+             'loaders': [
+                 'django.template.loaders.filesystem.Loader',
+diff -ur a/compat/tests/test_compat.py b/compat/tests/test_compat.py
+--- a/compat/tests/test_compat.py	2020-03-06 15:32:07.548482597 +0100
++++ b/compat/tests/test_compat.py	2020-03-06 15:37:39.202835075 +0100
+@@ -9,7 +9,7 @@
+ from django.core.serializers.json import DjangoJSONEncoder
+ from django.test import TestCase, SimpleTestCase
+ from django.test.client import RequestFactory
+-from django.contrib.auth.views import logout
++from django.contrib.auth.views import auth_logout
+ try:
+     from django.urls import NoReverseMatch
+ except ImportError:
+@@ -103,7 +103,7 @@
+         Tests that passing a view name to ``resolve_url`` will result in the
+         URL path mapping to that view name.
+         """
+-        resolved_url = resolve_url(logout)
++        resolved_url = resolve_url(auth_logout)
+         self.assertEqual('/accounts/logout/', resolved_url)
+ 
+     '''
+diff -ur a/compat/tests/urls.py b/compat/tests/urls.py
+--- a/compat/tests/urls.py	2020-03-06 15:32:07.548482597 +0100
++++ b/compat/tests/urls.py	2020-03-06 15:34:25.962377799 +0100
+@@ -2,5 +2,5 @@
+ from django.contrib.auth import views
+ 
+ urlpatterns = [
+-    url(r'^accounts/logout/$', views.logout, name='logout'),
++    url(r'^accounts/logout/$', views.auth_logout, name='logout'),
+ ]

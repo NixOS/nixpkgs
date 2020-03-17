@@ -57,7 +57,7 @@ import ../make-test-python.nix ({ lib, ... }:
     start_all()
     client.wait_for_unit("network.target")
     client.wait_until_succeeds("ping -c 1 server")
-    client.succeed(
+    client.wait_until_succeeds(
         "ssh -i /etc/sshKey -o UserKnownHostsFile=/etc/knownHosts server 'touch /fnord'"
     )
     client.shutdown()
