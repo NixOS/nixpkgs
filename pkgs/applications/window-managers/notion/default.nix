@@ -7,22 +7,22 @@
 
 stdenv.mkDerivation rec{
   pname = "notion";
-  version = "3-2019050101";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "raboof";
     repo = pname;
     rev = version;
-    sha256 = "09kvgqyw0gnj3jhz9gmwq81ak8qy32vyanx1hw79r6m181aysspz";
+    sha256 = "0rqfvwkj0j862hf6i4wsmb6185xibsskfj9kwy896qcpcg8w4kk7";
   };
 
   nativeBuildInputs = [ pkgconfig makeWrapper groff ];
   buildInputs = [ lua gettext which readline fontconfig libX11 libXext libSM
                   libXinerama libXrandr libXft xlibsWrapper ];
 
-  buildFlags = [ "CC=cc" "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
+  buildFlags = [ "LUA_DIR=${lua}" "X11_PREFIX=/no-such-path" ];
 
-  makeFlags = [ "PREFIX=\${out}" ];
+  makeFlags = [ "NOTION_RELEASE=${version}" "PREFIX=\${out}" ];
 
   postInstall = ''
     wrapProgram $out/bin/notion \
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec{
   '';
 
   meta = with stdenv.lib; {
-    description = "Tiling tabbed window manager, follow-on to the Ion";
-    homepage = "https://notionwm.net/";
+    description = "Tiling tabbed window manager";
+    homepage = "https://notionwm.net";
     license   = licenses.lgpl21;
-    maintainers = with maintainers; [ jfb AndersonTorres ];
+    maintainers = with maintainers; [ jfb AndersonTorres raboof ];
     platforms = platforms.linux;
   };
 }
