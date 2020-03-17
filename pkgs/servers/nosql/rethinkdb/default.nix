@@ -54,5 +54,7 @@ stdenv.mkDerivation rec {
     license     = stdenv.lib.licenses.asl20;
     platforms   = stdenv.lib.platforms.linux;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice bluescreen303 ];
+    # causes "unsupported architecture" error
+    badPlatforms = [ "aarch64-linux" ];
   };
 }
