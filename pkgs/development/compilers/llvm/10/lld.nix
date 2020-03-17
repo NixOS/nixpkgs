@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   pname = "lld";
   inherit version;
 
-  src = fetch pname "1w9c9xmzbdnkwgal612hqz2lxj9jgqpfzxr2rllcspmf6v7arvf4";
+  src = fetch pname "1c8s5jcp1h2lvws6dxy7c3a36ic10q6lbmd4i38l3g3irl6dj871";
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvm libxml2 ];
