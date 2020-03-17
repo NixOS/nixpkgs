@@ -1,6 +1,7 @@
 { lib
 , python
 , buildPythonPackage
+, fetchpatch
 , fetchPypi
 , isPyPy
 , R
@@ -68,6 +69,14 @@ buildPythonPackage rec {
       # R_LIBS_SITE is used by the nix r package to point to the installed R libraries.
       # This patch sets R_LIBS_SITE when rpy2 is imported.
       ./rpy2-3.x-r-libs-site.patch
+
+      # pandas 1.x compatibility, already merged upstream
+      # https://github.com/rpy2/rpy2/issues/636
+      (fetchpatch {
+        name = "pandas-1.x.patch";
+        url = "https://github.com/rpy2/rpy2/commit/fbd060e364b70012e8d26cc74df04ee53f769379.patch";
+        sha256 = "19rdqydwjmqg25ibmsbx7lggrr9fsyjn283zgvz1wj4iyfjwp1za";
+      })
     ];
     postPatch = ''
       substituteInPlace 'rpy2/rinterface_lib/embedded.py' --replace '@NIX_R_LIBS_SITE@' "$R_LIBS_SITE"
