@@ -1,6 +1,7 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
+, six
 }:
 
 buildPythonPackage rec {
@@ -11,6 +12,8 @@ buildPythonPackage rec {
     inherit pname version;
     sha256 = "e1c1f8ad93bc1c6f2aaa73afc333c57d505d8cc08c437d78a5c1eb8dc4b7e8c2";
   };
+
+  propagatedBuildInputs = [ six ];
 
   doCheck = false;
 
