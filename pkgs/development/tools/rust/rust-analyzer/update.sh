@@ -27,6 +27,16 @@ sed -e "s/rev = \".*\"/rev = \"$rev\"/" \
     -e "s/sha256 = \".*\"/sha256 = \"$sha256\"/" \
     -e "s/cargoSha256 = \".*\"/cargoSha256 = \"0000000000000000000000000000000000000000000000000000\"/" \
     --in-place ./default.nix
+node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"
+
+# Check vscode compatibility
+req_vscode_ver="$(jq '.engines.vscode' "$node_src/package.json" --raw-output)"
+req_vscode_ver="${req_vscode_ver#^}"
+cur_vscode_ver="$(nix eval --raw -f "$nixpkgs" vscode.version)"
+if [[ "$(nix eval "(builtins.compareVersions \"$req_vscode_ver\" \"$cur_vscode_ver\")")" != "-1" ]]; then
+    echo "vscode $cur_vscode_ver is incompatible with the extension requiring ^$req_vscode_ver"
+    exit 1
+fi
 
 echo "Prebuilding nix"
 cargo_sha256=$({
@@ -40,7 +50,6 @@ sed "s/cargoSha256 = \".*\"/cargoSha256 = \"$cargo_sha256\"/" \
 # Update vscode extension
 
 echo "Generating node lock"
-node_src="$(nix-build "$nixpkgs" -A rust-analyzer.src --no-out-link)/editors/code"
 pushd "$nixpkgs/pkgs/misc/vscode-extensions/rust-analyzer"
 ext_version=$(jq '.version' "$node_src/package.json" --raw-output)
 ext_publisher=$(jq '.publisher' "$node_src/package.json" --raw-output)
