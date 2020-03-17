@@ -8,7 +8,24 @@ let
   envs = let
     inherit python;
     pythonEnv = python.withPackages(ps: with ps; [ ]);
-  in {
+
+    # Pure nix tests that do not require building
+    asserts = [
+      # Test that overrideAttrs is an alias of overridePythonAttrs by checking that buildPythonPackage invoked again
+      # Assert this is by adding to propagatedBuildInputs and testing it has an affect on requiredPythonModules
+      # which serves as input to python.buildEnv.
+      {
+        errorMsg = "Pyzmq not found in requiredPythonModules";
+        test = lib.elem "pyzmq" (map (x: x.pname) (python.pkgs.requests.overrideAttrs(old: {
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [ python.pkgs.pyzmq ];
+        })).requiredPythonModules);
+      }
+    ];
+
+    assertAll = builtins.foldl' (acc: v: (acc && v.test) || throw v.errorMsg) true asserts;
+
+  in
+  assert assertAll; {
     # Plain Python interpreter
     plain = rec {
       env = python;
@@ -60,4 +77,4 @@ let
     touch $out/success
   '';
 
-in lib.mapAttrs testfun envs 
+in lib.mapAttrs testfun envs
