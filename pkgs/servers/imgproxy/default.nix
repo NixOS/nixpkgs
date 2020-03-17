@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "0kgd8lwcdns3skvd4bj4z85mq6hkk79mb0zzwky0wqxni8f73s6w";
 
-  buildInputs = [
-    gobject-introspection
-    pkg-config
-    vips
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ gobject-introspection vips ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'
