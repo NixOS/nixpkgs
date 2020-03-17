@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "hyperrogue";
-  version = "11.2d";
+  version = "11.3a";
 
   src = fetchFromGitHub {
     owner = "zenorogue";
     repo = "hyperrogue";
-    rev = stdenv.lib.strings.stringAsChars (x: if x == "." then "" else x) "v${version}";
-    sha256 = "0aj4xy5xjdj32l5mk8796ldh9d7h8rx35kgc1vr7acb4fhpppb0f";
+    rev = stdenv.lib.strings.stringAsChars (x: if x == "." then "" else x) "${version}";
+    sha256 = "0asx70v1ywzxqqc7raq46f0glkq781kdrl6zf69pp402c6hlxzk4";
   };
 
   CPPFLAGS = "-I${SDL.dev}/include/SDL";
