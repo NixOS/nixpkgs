@@ -1,5 +1,5 @@
 { stdenv, fetchurl, autoconf, automake, libtool, bison
-, libasr, libevent, zlib, libressl, db, pam, nixosTests
+, libasr, libevent, zlib, openssl, db, pam, nixosTests
 }:
 
 stdenv.mkDerivation rec {
@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
   version = "6.6.4p1";
 
   nativeBuildInputs = [ autoconf automake libtool bison ];
-  buildInputs = [ libasr libevent zlib libressl db pam ];
+  buildInputs = [ libasr libevent zlib openssl db pam ];
 
   src = fetchurl {
     url = "https://www.opensmtpd.org/archives/${pname}-${version}.tar.gz";
