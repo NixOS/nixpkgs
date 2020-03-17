@@ -5465,6 +5465,7 @@ in
   onioncircuits = callPackage ../tools/security/onioncircuits { };
 
   openapi-generator-cli = callPackage ../tools/networking/openapi-generator-cli { };
+  openapi-generator-cli-unstable = callPackage ../tools/networking/openapi-generator-cli/unstable.nix { };
 
   opencc = callPackage ../tools/text/opencc { };
 
