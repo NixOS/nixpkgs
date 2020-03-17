@@ -47,6 +47,7 @@ let
             Path to the unix socket file on which to accept FastCGI requests.
             <note><para>This option is read-only and managed by NixOS.</para></note>
           '';
+          example = "${runtimeDir}/<name>.sock";
         };
 
         listen = mkOption {
