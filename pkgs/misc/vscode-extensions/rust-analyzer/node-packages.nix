@@ -103,13 +103,13 @@ let
         sha512 = "auApPaJf3NPfe18hSoJkp8EbZzer2ISk7o8mCC3M9he/a04+gbMF97NkpD2S8riMGvm4BMRI59/SZQSaLTKpsQ==";
       };
     };
-    "@types/vscode-1.42.0" = {
+    "@types/vscode-1.43.0" = {
       name = "_at_types_slash_vscode";
       packageName = "@types/vscode";
-      version = "1.42.0";
+      version = "1.43.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@types/vscode/-/vscode-1.42.0.tgz";
-        sha512 = "ds6TceMsh77Fs0Mq0Vap6Y72JbGWB8Bay4DrnJlf5d9ui2RSe1wis13oQm+XhguOeH1HUfLGzaDAoupTUtgabw==";
+        url = "https://registry.npmjs.org/@types/vscode/-/vscode-1.43.0.tgz";
+        sha512 = "kIaR9qzd80rJOxePKpCB/mdy00mz8Apt2QA5Y6rdrKFn13QNFNeP3Hzmsf37Bwh/3cS7QjtAeGSK7wSqAU0sYQ==";
       };
     };
     "@typescript-eslint/eslint-plugin-2.22.0" = {
@@ -1889,7 +1889,7 @@ let
   args = {
     name = "rust-analyzer";
     packageName = "rust-analyzer";
-    version = "0.2.20200211-dev";
+    version = "0.2.20200309-nightly";
 
     dependencies = [
       sources."@babel/code-frame-7.8.3"
@@ -1907,7 +1907,7 @@ let
       sources."@types/node-12.12.29"
       sources."@types/node-fetch-2.5.5"
       sources."@types/resolve-0.0.8"
-      sources."@types/vscode-1.42.0"
+      sources."@types/vscode-1.43.0"
       sources."@typescript-eslint/eslint-plugin-2.22.0"
       sources."@typescript-eslint/experimental-utils-2.22.0"
       sources."@typescript-eslint/parser-2.22.0"
