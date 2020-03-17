@@ -4,7 +4,7 @@
 
 let
   name = "toggldesktop-${version}";
-  version = "7.5.42";
+  version = "7.4.231";
 
   src = fetchzip {
     url = "https://github.com/toggl/toggldesktop/archive/v${version}.tar.gz";
