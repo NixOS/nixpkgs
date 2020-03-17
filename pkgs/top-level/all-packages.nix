@@ -14510,6 +14510,8 @@ in
 
   svxlink = libsForQt5.callPackage ../applications/radio/svxlink { };
 
+  sylkserver = callPackage ../servers/sip/sylkserver { };
+
   swiftclient = python3.pkgs.callPackage ../tools/admin/swiftclient { };
 
   sword = callPackage ../development/libraries/sword { };

@@ -1,20 +1,21 @@
 { stdenv
+, fetchFromGitHub
 , buildPythonPackage
 , isPy3k
-, fetchdarcs
 , greenlet
 }:
 
 buildPythonPackage rec {
   pname = "python-eventlib";
-  version = "0.2.4";
+  version = "0.2.5";
   # Judging from SyntaxError
   disabled = isPy3k;
 
-  src = fetchdarcs {
-    url = "http://devel.ag-projects.com/repositories/${pname}";
+  src = fetchFromGitHub {
+    owner = "AGProjects";
+    repo = pname;
     rev = "release-${version}";
-    sha256 = "1w1axsm6w9bl2smzxmyk4in1lsm8gk8ma6y183m83cpj66aqxg4z";
+    hash = "sha256-ZTQfar6Jf0pRQVR6OXR77Em8a4y2qsTu7ZZ1+EZfvEQ=";
   };
 
   propagatedBuildInputs = [ greenlet ];

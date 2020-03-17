@@ -725,9 +725,10 @@
   ./services/networking/stubby.nix
   ./services/networking/supplicant.nix
   ./services/networking/supybot.nix
-  ./services/networking/syncthing.nix
+  ./services/networking/sylkserver.nix
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncplay.nix
+  ./services/networking/syncthing.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
