@@ -20002,8 +20002,6 @@ in
 
   josm = callPackage ../applications/misc/josm { };
 
-  jbrout = callPackage ../applications/graphics/jbrout { };
-
   jwm = callPackage ../applications/window-managers/jwm { };
 
   jwm-settings-manager = callPackage ../applications/window-managers/jwm/jwm-settings-manager.nix { };
