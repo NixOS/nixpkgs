@@ -325,14 +325,6 @@ let
   };
 
   linkOptions = commonNetworkOptions // {
-    # overwrite enable option from above
-    enable = mkOption {
-      default = true;
-      type = types.bool;
-      description = ''
-        Whether to enable this .link unit. It's handled by udev no matter if <command>systemd-networkd</command> is enabled or not
-      '';
-    };
 
     linkConfig = mkOption {
       default = {};
@@ -992,49 +984,44 @@ in
 
   };
 
-  config = mkMerge [
-    # .link units are honored by udev, no matter if systemd-networkd is enabled or not.
-    {
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links;
-      environment.etc = unitFiles;
-    }
+  config = mkIf config.systemd.network.enable {
 
-    (mkIf config.systemd.network.enable {
+    users.users.systemd-network.group = "systemd-network";
 
-      users.users.systemd-network.group = "systemd-network";
+    systemd.additionalUpstreamSystemUnits = [
+      "systemd-networkd.service" "systemd-networkd-wait-online.service"
+    ];
 
-      systemd.additionalUpstreamSystemUnits = [
-        "systemd-networkd.service" "systemd-networkd-wait-online.service"
-      ];
+    systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.link" (linkToUnit n v)) cfg.links
+      // mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
+      // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
 
-      systemd.network.units = mapAttrs' (n: v: nameValuePair "${n}.netdev" (netdevToUnit n v)) cfg.netdevs
-        // mapAttrs' (n: v: nameValuePair "${n}.network" (networkToUnit n v)) cfg.networks;
+    environment.etc = unitFiles;
 
-      systemd.services.systemd-networkd = {
-        wantedBy = [ "multi-user.target" ];
-        restartTriggers = attrNames unitFiles;
-        # prevent race condition with interface renaming (#39069)
-        requires = [ "systemd-udev-settle.service" ];
-        after = [ "systemd-udev-settle.service" ];
+    systemd.services.systemd-networkd = {
+      wantedBy = [ "multi-user.target" ];
+      restartTriggers = attrNames unitFiles;
+      # prevent race condition with interface renaming (#39069)
+      requires = [ "systemd-udev-settle.service" ];
+      after = [ "systemd-udev-settle.service" ];
+    };
+
+    systemd.services.systemd-networkd-wait-online = {
+      wantedBy = [ "network-online.target" ];
+    };
+
+    systemd.services."systemd-network-wait-online@" = {
+      description = "Wait for Network Interface %I to be Configured";
+      conflicts = [ "shutdown.target" ];
+      requisite = [ "systemd-networkd.service" ];
+      after = [ "systemd-networkd.service" ];
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+        ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
       };
+    };
 
-      systemd.services.systemd-networkd-wait-online = {
-        wantedBy = [ "network-online.target" ];
-      };
-
-      systemd.services."systemd-network-wait-online@" = {
-        description = "Wait for Network Interface %I to be Configured";
-        conflicts = [ "shutdown.target" ];
-        requisite = [ "systemd-networkd.service" ];
-        after = [ "systemd-networkd.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I";
-        };
-      };
-
-      services.resolved.enable = mkDefault true;
-    })
-  ];
+    services.resolved.enable = mkDefault true;
+  };
 }
