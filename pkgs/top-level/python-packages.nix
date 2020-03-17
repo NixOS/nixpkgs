@@ -1126,7 +1126,7 @@ in {
 
   pydy = callPackage ../development/python-modules/pydy { };
 
-  pyexiv2 = disabledIf isPy3k (toPythonModule (callPackage ../development/python-modules/pyexiv2 {}));
+  pyexiv2 = callPackage ../development/python-modules/pyexiv2 {};
 
   py3exiv2 = callPackage ../development/python-modules/py3exiv2 { };
 
