@@ -15667,6 +15667,8 @@ in
 
   tomcat_connectors = callPackage ../servers/http/apache-modules/tomcat-connectors { };
 
+  tomcat-native = callPackage ../servers/http/tomcat/tomcat-native.nix { };
+
   pies = callPackage ../servers/pies { };
 
   rpcbind = callPackage ../servers/rpcbind { };
