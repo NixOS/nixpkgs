@@ -22,6 +22,8 @@ buildPythonPackage rec {
   # this is just a meta package, which contains keys and secrets
   doCheck = false;
 
+  pythonNamespaces = [ "azure" ];
+
   pythonImportsCheck = [
     "azure.keyvault.keys"
     "azure.keyvault.secrets"

@@ -21,6 +21,8 @@ buildPythonPackage rec {
     msrest
   ];
 
+  pythonNamespaces = [ "azure.keyvault" ];
+
   # requires checkout from mono-repo
   doCheck = false;
 

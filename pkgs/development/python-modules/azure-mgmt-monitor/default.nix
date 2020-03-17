@@ -27,10 +27,7 @@ buildPythonPackage rec {
     azure-mgmt-nspkg
   ];
 
-  postInstall = lib.optionalString isPy3k ''
-    rm -rf $out/${python.sitePackages}/azure/__init__.py
-    rm -rf $out/${python.sitePackages}/azure/mgmt/__init__.py
-  '';
+  pythonNamespaces = [ "azure.mgmt" ];
 
   # has no tests
   doCheck = false;
