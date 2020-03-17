@@ -1,22 +1,26 @@
-{ buildPythonPackage, fetchurl, meson, ninja, stdenv, pkgconfig, python, pygobject3
-, gobject-introspection, gst-plugins-base, isPy3k
+{ buildPythonPackage
+, fetchurl
+, meson
+, ninja
+, stdenv
+, pkgconfig
+, python
+, pygobject3
+, gobject-introspection
+, gst-plugins-base
+, isPy3k
 }:
 
-let
+buildPythonPackage rec {
   pname = "gst-python";
   version = "1.14.4";
-  name = "${pname}-${version}";
-in buildPythonPackage rec {
-  inherit pname version;
+
   format = "other";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
-    urls = [
-      "${meta.homepage}/src/gst-python/${name}.tar.xz"
-      "mirror://gentoo/distfiles/${name}.tar.xz"
-      ];
+    url = "${meta.homepage}/src/gst-python/${pname}-${version}.tar.xz";
     sha256 = "06ssx19fs6pg4d32p9ph9w4f0xwmxaw2dxfj17rqkn5njd7v5zfh";
   };
 
@@ -41,12 +45,19 @@ in buildPythonPackage rec {
     })
   ];
 
-  # TODO: First python_dep in meson.build needs to be removed
-  postPatch = ''
-    substituteInPlace meson.build --replace python3 python${if isPy3k then "3" else "2"}
-  '';
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkgconfig
+    python
+    gobject-introspection
+    gst-plugins-base
+  ];
 
-  nativeBuildInputs = [ meson ninja pkgconfig python gobject-introspection gst-plugins-base ];
+  propagatedBuildInputs = [
+    gst-plugins-base
+    pygobject3
+  ];
 
   mesonFlags = [
     "-Dpython=python${if isPy3k then "3" else "2"}"
@@ -59,10 +70,13 @@ in buildPythonPackage rec {
   # https://github.com/NixOS/nixpkgs/issues/47390
   installCheckPhase = "meson test --print-errorlogs";
 
-  propagatedBuildInputs = [ gst-plugins-base pygobject3 ];
+  # TODO: First python_dep in meson.build needs to be removed
+  postPatch = ''
+    substituteInPlace meson.build --replace python3 python${if isPy3k then "3" else "2"}
+  '';
 
   meta = {
-    homepage = https://gstreamer.freedesktop.org;
+    homepage = "https://gstreamer.freedesktop.org";
 
     description = "Python bindings for GStreamer";
 
