@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.linux;
     maintainers = with maintainers; [ rickynils obadz ekleog ];
+    knownVulnerabilities = [ "CVE-2020-8794 / NixOS PR #80978 has not been backported. Upgrade to NixOS 20.03." ];
   };
   passthru.tests = {
     basic-functionality-and-dovecot-interaction = nixosTests.opensmtpd;
