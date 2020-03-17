@@ -8,22 +8,12 @@ stdenv.mkDerivation rec {
     sha256 = "1acjgf8zlyk7qckdk19iqaca4jcmywd7vxjbcs1mm6kaf8icqcv2";
   };
 
-  buildInputs = [ (python3.withPackages(ps: with ps; [ libxml2 ])) ];
+  pythonPath = [ python3.pkgs.libxml2 ];
+  buildInputs = [ python3 python3.pkgs.libxml2 ];
+  nativeBuildInputs = [ python3.pkgs.wrapPython ];
 
-  # bin/itstool's shebang is "#!${python3.withPackages(...)/bin/python} -s"
-  # withPackages' shebang is "#!#{bash}/bin/bash -e
-  #
-  # macOS won't allow the target of a shebang to be an interpreted script,
-  # causing bin/itstool to get interpreted as bash.
-  #
-  # By prefixing /usr/bin/env to the shebang, we have env fork/exec the python
-  # wrapper, which is perfectly happy to execute an interpreted script.
-  #
-  # However, we don't want to do this on Linux, which only allows one argument
-  # in a shebang.
-  postFixup = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace $out/bin/itstool \
-      --replace "#!/" "#!/usr/bin/env /"
+  postFixup = ''
+    wrapPythonPrograms
   '';
 
   meta = {
