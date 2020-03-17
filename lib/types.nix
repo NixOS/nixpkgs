@@ -58,6 +58,9 @@ rec {
     , # Function applied to each definition that should return true if
       # its type-correct, false otherwise.
       check ? (x: true)
+    , # Function for additional error message in case the type check fails for
+      # a value. Ideally includes type-related recovery hints
+      checkFailedMessage ? (x: "")
     , # Merge a list of definitions together into a single value.
       # This function is called with two arguments: the location of
       # the option in the configuration as a list of strings
@@ -93,7 +96,7 @@ rec {
       functor ? defaultFunctor name
     }:
     { _type = "option-type";
-      inherit name check merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor;
+      inherit name check checkFailedMessage merge emptyValue getSubOptions getSubModules substSubModules typeMerge functor;
       description = if description == null then name else description;
     };
 
@@ -251,6 +254,8 @@ rec {
       check = x: isCoercibleToString x && builtins.substring 0 1 (toString x) == "/";
       merge = mergeEqualOption;
     };
+
+    inherit (lib.secrets) secretPath;
 
     # drop this in the future:
     list = builtins.trace "`types.list` is deprecated; use `types.listOf` instead" types.listOf;
@@ -625,6 +630,7 @@ rec {
     addCheck = elemType: check: elemType // { check = x: elemType.check x && check x; };
 
   };
+
 };
 
 in outer_types // outer_types.types

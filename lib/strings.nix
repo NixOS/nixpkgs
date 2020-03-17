@@ -678,4 +678,36 @@ rec {
        => "1.0"
   */
   fileContents = file: removeSuffix "\n" (builtins.readFile file);
+
+
+  /* Creates a valid derivation name from a potentially invalid one.
+
+     Type: validDerivationName :: String -> String
+
+     Example:
+       validDerivationName "../hello.bar # foo"
+       => "-hello.bar-foo"
+       validDerivationName ""
+       => "unknown"
+       validDerivationName pkgs.hello
+       => "-nix-store-2g75chlbpxlrqn15zlby2dfh8hr9qwbk-hello-2.10"
+  */
+  validDerivationName = lib.flip lib.pipe [
+    # Get rid of string context. This is safe under the assumption that the
+    # resulting string is only used as a derivation name
+    builtins.unsafeDiscardStringContext
+    # Strip all leading "."
+    (x: builtins.elemAt (builtins.match "\\.*(.*)" x) 0)
+    # Split out all invalid characters
+    # https://github.com/NixOS/nix/blob/2.3.2/src/libstore/store-api.cc#L85-L112
+    # https://github.com/NixOS/nix/blob/2242be83c61788b9c0736a92bb0b5c7bbfc40803/nix-rust/src/store/path.rs#L100-L125
+    (builtins.split "[^[:alnum:]+-._?=]+")
+    # Replace invalid character ranges with a "-"
+    (concatMapStrings (s: if lib.isList s then "-" else s))
+    # Limit to 211 characters
+    (x: substring (lib.max (stringLength x - 211) 0) (-1) x)
+    # If the result is empty, replace it with "unknown"
+    (x: if stringLength x == 0 then "unknown" else x)
+  ];
+
 }
