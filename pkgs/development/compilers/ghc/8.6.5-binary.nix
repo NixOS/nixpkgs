@@ -1,12 +1,15 @@
 { stdenv
 , fetchurl, perl, gcc
 , ncurses5, gmp, glibc, libiconv
+, llvmPackages
 }:
 
 # Prebuilt only does native
 assert stdenv.targetPlatform == stdenv.hostPlatform;
 
 let
+  useLLVM = !stdenv.targetPlatform.isx86;
+
   libPath = stdenv.lib.makeLibraryPath ([
     ncurses5 gmp
   ] ++ stdenv.lib.optional (stdenv.hostPlatform.isDarwin) libiconv);
@@ -38,6 +41,10 @@ stdenv.mkDerivation rec {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-deb9-linux.tar.xz";
       sha256 = "1pqlx6rdjs2110g0y1i9f8x18lmdizibjqd15f5xahcz39hgaxdw";
     };
+    aarch64-linux = {
+      url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-aarch64-ubuntu18.04-linux.tar.xz";
+      sha256 = "11n7l2a36i5vxzzp85la2555q4m34l747g0pnmd81cp46y85hlhq";
+    };
     x86_64-darwin = {
       url = "http://haskell.org/ghc/dist/${version}/ghc-${version}-x86_64-apple-darwin.tar.xz";
       sha256 = "0s9188vhhgf23q3rjarwhbr524z6h2qga5xaaa2pma03sfqvvhfz";
@@ -46,6 +53,7 @@ stdenv.mkDerivation rec {
     or (throw "cannot bootstrap GHC on this platform"));
 
   nativeBuildInputs = [ perl ];
+  propagatedBuildInputs = stdenv.lib.optionals useLLVM [ llvmPackages.llvm ];
 
   # Cannot patchelf beforehand due to relative RPATHs that anticipate
   # the final install location/
@@ -169,5 +177,5 @@ stdenv.mkDerivation rec {
   };
 
   meta.license = stdenv.lib.licenses.bsd3;
-  meta.platforms = ["x86_64-linux" "i686-linux" "x86_64-darwin"];
+  meta.platforms = ["x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin"];
 }
