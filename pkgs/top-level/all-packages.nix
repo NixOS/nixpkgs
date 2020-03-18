@@ -17480,7 +17480,13 @@ in
 
   anonymousPro = callPackage ../data/fonts/anonymous-pro { };
 
-  ant-theme = callPackage ../data/themes/ant-theme { };
+  ant-theme = callPackage ../data/themes/ant-theme/ant.nix { };
+
+  ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
+
+  ant-dracula-theme = callPackage ../data/themes/ant-theme/ant-dracula.nix { };
+
+  ant-nebula-theme = callPackage ../data/themes/ant-theme/ant-nebula.nix { };
 
   arc-icon-theme = callPackage ../data/icons/arc-icon-theme { };
 
