@@ -3,14 +3,14 @@
 let
   version = "1.959";
 in fetchzip rec {
-  name = "latinmodern-math-${version}";
+  name = "lmmath-${version}";
 
   url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
   postFetch = ''
     mkdir -p $out/share/fonts/opentype/
-    mkdir -p $out/share/doc/${name}/
+    mkdir -p $out/share/doc/latinmodern-math-${version}/
     unzip -j $downloadedFile "*/otf/*.otf" -d $out/share/fonts/opentype/
-    unzip -j $downloadedFile "*/doc/*.txt" -d $out/share/doc/${name}/
+    unzip -j $downloadedFile "*/doc/*.txt" -d $out/share/doc/latinmodern-math-${version}/
   '';
   sha256 = "05k145bxgxjh7i9gx1ahigxfpc2v2vwzsy2mc41jvvg51kjr8fnn";
 
