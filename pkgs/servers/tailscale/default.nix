@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "0.96-33";
+  version = "0.97-0";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    rev = "19cc4f8b8ecfdc16136d8489a1c2b899f556fda7";
-    sha256 = "0kcf3mz7fs15dm1dnkvrmdkm3agrl1zlg9ngb7cwfmvkkw1rkl6i";
+    rev = "dd14b658a2f42a3b4d78682e4f4f82f730262c5c";
+    sha256 = "0ckjqhj99c25h8xgyfkrd19nw5w4a7972nvba9r5faw5micjs02n";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -16,7 +16,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   goPackagePath = "tailscale.com";
-  modSha256 = "1pjqfzw411k6kw8hqf56irnlhnl8947p1ad8yd84zvqqpzfs3jmz";
+  modSha256 = "0anpakcqz4irwxnm0iwm7wqzh84kv3yxxdvyr38154pbd0ys5pa2";
   subPackages = [ "cmd/tailscale" "cmd/tailscaled" ];
 
   postInstall = ''
