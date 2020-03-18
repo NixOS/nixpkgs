@@ -5561,6 +5561,8 @@ in
 
   openjade = callPackage ../tools/text/sgml/openjade { };
 
+  openimagedenoise = callPackage ../development/libraries/openimagedenoise { };
+
   openmvg = callPackage ../applications/science/misc/openmvg { };
 
   openmvs = callPackage ../applications/science/misc/openmvs { };
