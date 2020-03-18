@@ -711,6 +711,12 @@
     githubId = 55833;
     name = "Troels Henriksen";
   };
+  atkinschang = {
+    email = "atkinschang+nixpkgs@gmail.com";
+    github = "AtkinsChang";
+    githubId = 5193600;
+    name = "Atkins Chang";
+  };
   atnnn = {
     email = "etienne@atnnn.com";
     github = "atnnn";
