@@ -13,6 +13,7 @@
 , libxml2
 , systemd
 , upower
+, gnome-online-accounts
 , cinnamon-settings-daemon
 , colord
 , polkit
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     colord
     cinnamon-settings-daemon
     libwacom
-    gnome3.gnome-online-accounts
+    gnome-online-accounts
     tzdata
     networkmanager
     networkmanagerapplet

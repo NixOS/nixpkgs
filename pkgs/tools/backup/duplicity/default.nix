@@ -11,27 +11,24 @@
 , rsync
 , backblaze-b2
 , makeWrapper
+, gettext
 }:
-
+let
+  inherit (stdenv.lib.versions) majorMinor splitVersion;
+  majorMinorPatch = v: builtins.concatStringsSep "." (stdenv.lib.take 3 (splitVersion v));
+in
 pythonPackages.buildPythonApplication rec {
   pname = "duplicity";
-  version = "0.8.10";
+  version = "0.8.11.1596";
 
   src = fetchurl {
-    url = "https://code.launchpad.net/duplicity/${stdenv.lib.versions.majorMinor version}-series/${version}/+download/${pname}-${version}fin1558.tar.gz";
-    sha256 = "13apmavdc2cx3wxv2ymy97c575hc37xjhpa6b4sds8fkx2vrb0mh";
+    url = "https://code.launchpad.net/duplicity/${majorMinor version}-series/${majorMinorPatch version}/+download/duplicity-${version}.tar.gz";
+    sha256 = "1qdaaybwdc13nfwnwrqij4lc23iwy73lyqn5lb4iznq6axp6m0h9";
   };
 
   patches = [
     # We use the tar binary on all platforms.
     ./gnutar-in-test.patch
-
-    # Make test respect TMPDIR env var.
-    # https://bugs.launchpad.net/duplicity/+bug/1862672
-    (fetchurl {
-      url = "https://launchpadlibrarian.net/464404371/0001-Make-LogTest-respect-TMPDIR-env-variable.patch";
-      hash = "sha256-wdy8mMurLhBS0ZTXmlIGGrIkS2gGBDwTp7TRxTSXBGo=";
-    })
 
     # Our Python infrastructure runs test in installCheckPhase so we need
     # to make the testing code stop assuming it is run from the source directory.
@@ -40,10 +37,13 @@ pythonPackages.buildPythonApplication rec {
     ./linux-disable-timezone-test.patch
   ];
 
+  nativeBuildInputs = [
+    makeWrapper
+    gettext
+    pythonPackages.wrapPython
+  ];
   buildInputs = [
     librsync
-    makeWrapper
-    pythonPackages.wrapPython
   ];
 
   propagatedBuildInputs = [

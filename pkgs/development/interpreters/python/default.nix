@@ -44,6 +44,10 @@ with pkgs;
         pythonAtLeast = lib.versionAtLeast pythonVersion;
         pythonOlder = lib.versionOlder pythonVersion;
         inherit hasDistutilsCxxPatch pythonForBuild;
+
+        tests = callPackage ./tests.nix {
+          python = self;
+        };
   };
 
 in {

@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "inadyn";
-  version = "2.5";
+  version = "2.6";
 
   src = fetchFromGitHub {
     owner = "troglobit";
     repo = "inadyn";
     rev = "v${version}";
-    sha256 = "0izhynqfj4xafsrc653wym8arwps0qim203w8l0g5z9vzfxfnvqw";
+    sha256 = "013kxlglxliajv3lrsix4w88w40g709rvycajb6ad6gbh8giqv47";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = http://troglobit.com/project/inadyn/;
+    homepage = "http://troglobit.com/project/inadyn/";
     description = "Free dynamic DNS client";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ ];

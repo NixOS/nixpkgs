@@ -125,7 +125,7 @@ let
 
       mkdir -p $out/share
       for dir in applications icons kde4; do
-        ln -s "$free/share/$dir" "$out/share/$dir"
+        ln -s "${free}/share/$dir" "$out/share/$dir"
       done
     '';
     enableParallelBuilding = true;

@@ -21,6 +21,9 @@ stdenv.mkDerivation rec {
       patchShebangs ./doc/build.sh
       substituteInPlace ./doc/build.sh \
         --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+
+      substituteInPlace ./make-linux.mk \
+        --replace 'armv5' 'armv6'
   '';
 
 
@@ -28,6 +31,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl lzo zlib iproute ];
 
   enableParallelBuilding = true;
+
+  buildFlags = [ "all" "selftest" ];
+
+  doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
+  checkPhase = ''
+    ./zerotier-selftest
+  '';
 
   installPhase = ''
     install -Dt "$out/bin/" zerotier-one
@@ -47,6 +57,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.zerotier.com;
     license = licenses.bsl11;
     maintainers = with maintainers; [ sjmackenzie zimbatm ehmry obadz danielfullmer ];
-    platforms = with platforms; x86_64 ++ aarch64 ++ arm;
+    platforms = platforms.all;
   };
 }

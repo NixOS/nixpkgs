@@ -363,7 +363,13 @@ stdenv.mkDerivation {
       done
     ''
 
+    # There are a few tools (to name one libstdcxx5) which do not work
+    # well with multi line flags, so make the flags single line again
     + ''
+      if [ -e "$out/nix-support/libc-cflags" ]; then
+        substituteInPlace "$out/nix-support/libc-cflags" --replace $'\n' ' '
+      fi
+
       substituteAll ${./add-flags.sh} $out/nix-support/add-flags.sh
       substituteAll ${./add-hardening.sh} $out/nix-support/add-hardening.sh
       substituteAll ${../wrapper-common/utils.bash} $out/nix-support/utils.bash

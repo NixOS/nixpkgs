@@ -21,4 +21,13 @@ with lib.maintainers; {
     members = [ jtojnar worldofpeace ];
     scope = "Maintain Freedesktop.org packages for graphical desktop.";
   };
+
+  gnome = {
+    members = [
+      hedning
+      jtojnar
+      worldofpeace
+    ];
+    scope = "Maintain GNOME desktop environment and platform.";
+  };
 }
