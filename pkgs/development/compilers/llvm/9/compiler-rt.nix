@@ -1,4 +1,13 @@
 { stdenv, version, fetch, cmake, python3, llvm, libcxxabi }:
+
+let
+
+  useLLVM = stdenv.hostPlatform.useLLVM or false;
+  bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
+  inherit (stdenv.hostPlatform) isMusl;
+
+in
+
 stdenv.mkDerivation rec {
   pname = "compiler-rt";
   inherit version;
@@ -11,27 +20,26 @@ stdenv.mkDerivation rec {
     "-DSCUDO_DEFAULT_OPTIONS=DeleteSizeMismatch=0:DeallocationTypeMismatch=0"
   ];
 
-  cmakeFlags = stdenv.lib.optionals (stdenv.hostPlatform.useLLVM or false) [
+  cmakeFlags = stdenv.lib.optionals (useLLVM || stdenv.isDarwin) [
     "-DCOMPILER_RT_DEFAULT_TARGET_ONLY=ON"
     "-DCMAKE_C_COMPILER_TARGET=${stdenv.hostPlatform.config}"
     "-DCMAKE_ASM_COMPILER_TARGET=${stdenv.hostPlatform.config}"
-    "-DCMAKE_C_FLAGS=-nodefaultlibs"
-    "-DCMAKE_CXX_COMPILER_WORKS=ON"
+  ] ++ stdenv.lib.optionals (useLLVM || bareMetal || isMusl) [
     "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
     "-DCOMPILER_RT_BUILD_XRAY=OFF"
     "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
     "-DCOMPILER_RT_BUILD_PROFILE=OFF"
+  ] ++ stdenv.lib.optionals (useLLVM || bareMetal) [
+    "-DCMAKE_C_COMPILER_WORKS=ON"
+    "-DCMAKE_CXX_COMPILER_WORKS=ON"
     "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+    "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
+  ] ++ stdenv.lib.optionals (useLLVM) [
+    "-DCOMPILER_RT_BUILD_BUILTINS=ON"
+    "-DCMAKE_C_FLAGS=-nodefaultlibs"
     #https://stackoverflow.com/questions/53633705/cmake-the-c-compiler-is-not-able-to-compile-a-simple-test-program
     "-DCMAKE_TRY_COMPILE_TARGET_TYPE=STATIC_LIBRARY"
-    "-DCMAKE_SIZEOF_VOID_P=${toString (stdenv.hostPlatform.parsed.cpu.bits / 8)}"
-  ] ++ stdenv.lib.optionals stdenv.hostPlatform.isMusl [
-    "-DCOMPILER_RT_BUILD_SANITIZERS=OFF"
-    "-DCOMPILER_RT_BUILD_XRAY=OFF"
-    "-DCOMPILER_RT_BUILD_LIBFUZZER=OFF"
-    "-DCOMPILER_RT_BUILD_PROFILE=OFF"
-  ] ++ stdenv.lib.optionals (stdenv.hostPlatform.parsed.kernel.name == "none") [
-    "-DCOMPILER_RT_BAREMETAL_BUILD=ON"
+  ] ++ stdenv.lib.optionals (bareMetal) [
     "-DCOMPILER_RT_OS_DIR=baremetal"
   ];
 
@@ -49,7 +57,7 @@ stdenv.mkDerivation rec {
   postPatch = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace cmake/config-ix.cmake \
       --replace 'set(COMPILER_RT_HAS_TSAN TRUE)' 'set(COMPILER_RT_HAS_TSAN FALSE)'
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform.useLLVM or false) ''
+  '' + stdenv.lib.optionalString (useLLVM) ''
     substituteInPlace lib/builtins/int_util.c \
       --replace "#include <stdlib.h>" ""
     substituteInPlace lib/builtins/clear_cache.c \
@@ -61,7 +69,7 @@ stdenv.mkDerivation rec {
   # Hack around weird upsream RPATH bug
   postInstall = stdenv.lib.optionalString (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isWasm) ''
     ln -s "$out/lib"/*/* "$out/lib"
-  '' + stdenv.lib.optionalString (stdenv.hostPlatform.useLLVM or false) ''
+  '' + stdenv.lib.optionalString (useLLVM) ''
     ln -s $out/lib/*/clang_rt.crtbegin-*.o $out/lib/crtbegin.o
     ln -s $out/lib/*/clang_rt.crtend-*.o $out/lib/crtend.o
     ln -s $out/lib/*/clang_rt.crtbegin_shared-*.o $out/lib/crtbeginS.o
