@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mullvad/mullvadvpn-app/blob/${version}/CHANGELOG.md";
     license = licenses.gpl3;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers ;[ filalex77 xfix ];
+    maintainers = with maintainers; [ filalex77 ];
   };
 
 }
