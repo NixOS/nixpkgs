@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perlPackages, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "help2man-1.47.12";
+  name = "help2man-1.47.13";
 
   src = fetchurl {
     url = "mirror://gnu/help2man/${name}.tar.xz";
-    sha256 = "0q5ixbxz1v7wqnpg4bq7k7nbv9ssnmcvdbqsq5ycjvniz56ac2vx";
+    sha256 = "08q5arxz4j4pyx5q4712c2rn7p7dw7as9xg38yvmsh1c3ynvpy5p";
   };
 
   nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
          ‘--version’ output of other commands.
       '';
 
-    homepage = https://www.gnu.org/software/help2man/;
+    homepage = "https://www.gnu.org/software/help2man/";
 
     license = licenses.gpl3Plus;
     platforms = platforms.all;
