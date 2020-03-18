@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "gede";
-  version = "2.15.4";
+  version = "2.16.1";
 
   src = fetchurl {
     url = "http://gede.acidron.com/uploads/source/${pname}-${version}.tar.xz";
-    sha256 = "0bg7vyvznn1gn6w5yn14j59xph9psf2fyxr434pk62wmbzdpmkfg";
+    sha256 = "0r8vxsw6q93iip522ghy53wf45rdyzw6npm3ndcfvdg774fkgkln";
   };
 
   nativeBuildInputs = [ qmake makeWrapper python ];
@@ -25,7 +25,7 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "Graphical frontend (GUI) to GDB";
-    homepage = http://gede.acidron.com;
+    homepage = "http://gede.acidron.com";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ juliendehos ];
