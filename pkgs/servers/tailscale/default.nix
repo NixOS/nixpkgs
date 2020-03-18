@@ -1,6 +1,6 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, iptables, iproute }:
+{ lib, buildGo113Module, fetchFromGitHub, makeWrapper, iptables, iproute }:
 
-buildGoModule rec {
+buildGo113Module rec {
   pname = "tailscale";
   version = "0.97";
 
