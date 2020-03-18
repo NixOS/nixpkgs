@@ -66,6 +66,7 @@ stdenv.mkDerivation {
     "DATADIR=$(out)/share"
     "MANDIR=$(out)/share/man"
     "PERL=perl"
+    "HEXDATE=0x00000000" # hardcode HEXDATE to improve reproducibility
     "bios"
   ];
 
