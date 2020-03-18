@@ -900,6 +900,8 @@ in {
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
+  music21 = callPackage ../development/python-modules/music21 { };
+
   msal = callPackage ../development/python-modules/msal { };
 
   msal-extensions = callPackage ../development/python-modules/msal-extensions { };
