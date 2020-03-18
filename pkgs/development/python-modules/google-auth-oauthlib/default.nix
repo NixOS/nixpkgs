@@ -27,8 +27,9 @@ buildPythonPackage rec {
     google_auth requests_oauthlib
   ];
 
+  doCheck = isPy3k;
   checkPhase = ''
-    rm -fr tests/__pycache__/
+    rm -fr tests/__pycache__/ google
     py.test
   '';
 
