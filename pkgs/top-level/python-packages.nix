@@ -2995,6 +2995,8 @@ in {
 
   midiutil = callPackage ../development/python-modules/midiutil {};
 
+  mir_eval = callPackage ../development/python-modules/mir_eval { };
+
   misaka = callPackage ../development/python-modules/misaka {};
 
   mlrose = callPackage ../development/python-modules/mlrose { };
