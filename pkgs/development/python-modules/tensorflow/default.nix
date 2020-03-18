@@ -1,7 +1,7 @@
 { stdenv, pkgs, bazel_0, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
-, buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
+, buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
 # Python libraries
 , numpy, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
@@ -348,6 +348,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
+  disabled = isPy27 || (pythonAtLeast "3.8");
 
   src = bazel-build.python;
 
