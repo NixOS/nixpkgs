@@ -15949,6 +15949,8 @@ in
 
   jetty = callPackage ../servers/http/jetty { };
 
+  jicofo = callPackage ../servers/jicofo { };
+
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
   kapow = callPackage ../servers/kapow { };
