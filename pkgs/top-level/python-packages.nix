@@ -3001,6 +3001,8 @@ in {
 
   mir_eval = callPackage ../development/python-modules/mir_eval { };
 
+  mirdata = callPackage ../development/python-modules/mirdata { };
+
   misaka = callPackage ../development/python-modules/misaka {};
 
   mlrose = callPackage ../development/python-modules/mlrose { };
