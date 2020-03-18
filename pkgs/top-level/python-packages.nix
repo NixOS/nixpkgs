@@ -7096,6 +7096,8 @@ in {
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
 
+  pymetno = callPackage ../development/python-modules/pymetno { };
+
   pytado = callPackage ../development/python-modules/pytado { };
 
   casttube = callPackage ../development/python-modules/casttube { };
