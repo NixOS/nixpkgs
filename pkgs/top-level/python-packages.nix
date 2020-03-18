@@ -509,6 +509,8 @@ in {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  ciso8601 = callPackage ../development/python-modules/ciso8601 { };
+
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
