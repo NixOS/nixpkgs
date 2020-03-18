@@ -1,53 +1,109 @@
-{ stdenv, lib, crystal, linkFarm, fetchFromGitHub }:
-{ # Generate shards.nix with `nix-shell -p crystal2nix --run crystal2nix` in the projects root
-  shardsFile ? null
+{ stdenv, lib, crystal, shards, git, pkgconfig, which, linkFarm, fetchFromGitHub, installShellFiles }:
+
+{ # Some projects do not include a lock file, so you can pass one
+  lockFile ? null
+  # Generate shards.nix with `nix-shell -p crystal2nix --run crystal2nix` in the projects root
+, shardsFile ? null
+  # We support different builders. To make things more straight forward, make it
+  # user selectable instead of trying to autodetect
+, format ? "make"
+, installManPages ? true
   # Specify binaries to build in the form { foo.src = "src/foo.cr"; }
   # The default `crystal build` options can be overridden with { foo.options = [ "--no-debug" ]; }
-, crystalBinaries ? {}
-, ...
-}@args:
+, crystalBinaries ? { }, ... }@args:
+
+assert (builtins.elem format [ "make" "crystal" "shards" ]);
+
 let
-  mkDerivationArgs = builtins.removeAttrs args [ "shardsFile" "crystalBinaries" ];
+  mkDerivationArgs = builtins.removeAttrs args [
+    "format"
+    "installManPages"
+    "lockFile"
+    "shardsFile"
+    "crystalBinaries"
+  ];
 
   crystalLib = linkFarm "crystal-lib" (lib.mapAttrsToList (name: value: {
     inherit name;
     path = fetchFromGitHub value;
   }) (import shardsFile));
 
-  defaultOptions = [ "--release" "--progress" "--no-debug" "--verbose" ];
+  # we previously had --no-debug here but that is not recommended by upstream
+  defaultOptions = [ "--release" "--progress" "--verbose" ];
 
+  buildDirectly = shardsFile == null || crystalBinaries != { };
 in stdenv.mkDerivation (mkDerivationArgs // {
 
-  configurePhase = args.configurePhase or ''
-    runHook preConfigure
-    ${lib.optionalString (shardsFile != null) "ln -s ${crystalLib} lib"}
-    runHook postConfigure
+  configurePhase = args.configurePhase or lib.concatStringsSep "\n" ([
+    "runHook preConfigure"
+  ] ++ lib.optional (lockFile != null)   "ln -s ${lockFile} ./shard.lock"
+    ++ lib.optional (shardsFile != null) "ln -s ${crystalLib} lib"
+    ++ [ "runHook postConfigure "]);
+
+  CRFLAGS = lib.concatStringsSep " " defaultOptions;
+
+  PREFIX = placeholder "out";
+
+  buildInputs = args.buildInputs or [ ] ++ [ crystal ]
+    ++ lib.optional (format != "crystal") shards;
+
+  nativeBuildInputs = args.nativeBuildInputs or [ ] ++ [ git installShellFiles pkgconfig which ];
+
+  buildPhase = args.buildPhase or (lib.concatStringsSep "\n" ([
+    "runHook preBuild"
+  ] ++ lib.optional (format == "make")
+    ''make ''${buildTargets:-build} $makeFlags''
+  ++ lib.optionals (format == "crystal") (lib.mapAttrsToList (bin: attrs: ''
+        crystal ${lib.escapeShellArgs (["build" "-o" bin
+            (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
+        ] ++ (attrs.options or defaultOptions))}
+      '') crystalBinaries)
+  ++ lib.optional (format == "shards")
+      "shards build --local --production ${lib.concatStringsSep " " defaultOptions}"
+  ++ [ "runHook postBuild" ]));
+
+  installPhase = args.installPhase or (lib.concatStringsSep "\n" ([
+    "runHook preInstall"
+  ] ++ lib.optional (format == "make")
+    ''make ''${installTargets:-install} $installFlags''
+  ++ lib.optionals (format == "crystal") (map (bin: ''
+      install -Dm555 ${lib.escapeShellArgs [ bin "${placeholder "out"}/bin/${bin}" ]}
+    '') (lib.attrNames crystalBinaries))
+  ++ lib.optional (format == "shards")
+      ''install -Dm555 bin/* -t $out/bin''
+  ++ [
+    ''
+      for f in README* *.md LICENSE; do
+        test -f $f && install -Dm444 $f -t $out/share/doc/${args.pname}
+      done
+    ''
+  ] ++ (lib.optional installManPages ''
+      if [ -d man ]; then
+        installManPage man/*.?
+      fi
+  '') ++ [
+    "runHook postInstall"
+  ]));
+
+  doCheck = args.doCheck or true;
+
+  checkPhase = args.checkPhase or (lib.concatStringsSep "\n" ([
+    "runHook preCheck"
+  ] ++ lib.optional (format == "make")
+    ''make ''${checkTarget:-test} $checkFlags''
+  ++ lib.optional (format != "make")
+    ''crystal ''${checkTarget:-spec} $checkFlags''
+  ++ [ "runHook postCheck" ]));
+
+  doInstallCheck = args.doInstallCheck or true;
+
+  installCheckPhase = args.installCheckPhase or ''
+    for f in $out/bin/*; do
+      $f --help
+    done
   '';
 
-  buildInputs = args.buildInputs or [] ++ [ crystal ];
-
-  buildPhase = args.buildPhase or ''
-    runHook preBuild
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (bin: attrs: ''
-      crystal ${lib.escapeShellArgs ([
-        "build"
-        "-o" bin
-        (attrs.src or (throw "No source file for crystal binary ${bin} provided"))
-      ] ++ attrs.options or defaultOptions)}
-    '') crystalBinaries)}
-    runHook postBuild
-  '';
-
-  installPhase = args.installPhase or ''
-    runHook preInstall
-    mkdir -p "$out/bin"
-    ${lib.concatMapStringsSep "\n" (bin: ''
-      mv ${lib.escapeShellArgs [ bin "${placeholder "out"}/bin/${bin}" ]}
-    '') (lib.attrNames crystalBinaries)}
-    runHook postInstall
-  '';
-
-  meta = args.meta or {} // {
+  meta = args.meta or { } // {
     platforms = args.meta.platforms or crystal.meta.platforms;
   };
 })
