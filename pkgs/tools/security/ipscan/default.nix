@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "ipscan";
-  version = "3.6.2";
+  version = "3.7.0";
 
   src = fetchurl {
     url = "https://github.com/angryip/ipscan/releases/download/${version}/ipscan_${version}_amd64.deb";
-    sha256 = "0wnnnabpj0dsxdijvss5sl9kd4i6rmcq55zbas33xs3c5g305ssk";
+    sha256 = "1g7nh0zl56m9042xqpzim7iydlgiqjw131203f37l4bg0w65mw2q";
   };
 
   sourceRoot = ".";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Fast and friendly network scanner";
-    homepage = https://angryip.org;
+    homepage = "https://angryip.org";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ kylesferrazza ];
