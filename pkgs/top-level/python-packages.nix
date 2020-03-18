@@ -902,6 +902,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  pycognito = callPackage ../development/python-modules/pycognito { };
+
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
   msal = callPackage ../development/python-modules/msal { };
