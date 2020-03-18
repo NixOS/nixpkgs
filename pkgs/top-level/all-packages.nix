@@ -15774,6 +15774,8 @@ in
 
   jicofo = callPackage ../servers/jicofo { };
 
+  jitsi-meet = callPackage ../servers/web-apps/jitsi-meet { };
+
   jitsi-videobridge = callPackage ../servers/jitsi-videobridge { };
 
   kapow = callPackage ../servers/kapow { };
