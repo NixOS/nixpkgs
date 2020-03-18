@@ -6855,7 +6855,7 @@ in
 
   textadept = callPackage ../applications/editors/textadept { };
 
-  texworks = callPackage ../applications/editors/texworks { };
+  texworks = libsForQt5.callPackage ../applications/editors/texworks { };
 
   thc-hydra = callPackage ../tools/security/thc-hydra { };
 
