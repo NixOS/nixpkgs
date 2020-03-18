@@ -42,33 +42,88 @@ stdenv.mkDerivation rec {
 
   patches = [ ./override-generated.patch ];
 
-  buildInputs = [
-    makeWrapper
-    perl
-    (buildEnv {
-      name = "rt-perl-deps";
-      paths = (with perlPackages; [
-        ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
-        CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
-        CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID
-        DataICal DataPagePageset DateExtract DateManip
-        DateTimeFormatNatural DevelGlobalDestruction EmailAddress
-        EmailAddressList FCGI FCGIProcManager FileShareDir FileWhich
-        GD GDGraph GnuPGInterface GraphViz HTMLFormatTextWithLinks
-        HTMLFormatTextWithLinksAndTables HTMLMason
-        HTMLMasonPSGIHandler HTMLQuoted HTMLRewriteAttributes
-        HTMLScrubber IPCRun IPCRun3 JSON JavaScriptMinifierXS LWP
-        LWPProtocolHttps LocaleMaketextFuzzy LocaleMaketextLexicon
-        LogDispatch MIMETools MIMETypes MailTools ModuleRefresh
-        ModuleVersionsReport MozillaCA NetCIDR NetIP PerlIOeol Plack
-        RegexpCommon RegexpCommonnetCIDR RegexpIPv6 RoleBasic
-        ScopeUpper Starlet SymbolGlobalName TermReadKey
-        TextPasswordPronounceable TextQuoted TextTemplate
-        TextWikiFormat TextWrapper TimeParseDate TreeSimple
-        UNIVERSALrequire XMLRSS
-      ]);
-    })
-  ];
+  buildInputs = [ makeWrapper perl ] ++ (with perlPackages; [
+    ApacheSession
+    BusinessHours
+    CGI
+    CGIEmulatePSGI
+    CGIPSGI
+    CSSMinifierXS
+    CSSSquish
+    ClassAccessorFast
+    Clone
+    ConvertColor
+    CryptEksblowfish
+    DBDSQLite
+    DBI
+    DBIxSearchBuilder
+    DataGUID
+    DataICal
+    DataPagePageset
+    DateExtract
+    DateManip
+    DateTime
+    DateTimeFormatNatural
+    DateTimeLocale
+    DevelGlobalDestruction
+    DevelStackTrace
+    EmailAddress
+    EmailAddressList
+    FCGI
+    FileShareDir
+    FileWhich
+    GD
+    GDGraph
+    GDText
+    GnuPGInterface
+    GraphViz
+    HTMLFormatTextWithLinks
+    HTMLFormatTextWithLinksAndTables
+    HTMLMason
+    HTMLMasonPSGIHandler
+    HTMLQuoted
+    HTMLRewriteAttributes
+    HTMLScrubber
+    HTTPMessage
+    IPCRun
+    IPCRun3
+    JSON
+    JavaScriptMinifierXS
+    LWP
+    LWPProtocolhttps
+    LWPUserAgent
+    ListMoreUtils
+    LocaleMaketextFuzzy
+    LocaleMaketextLexicon
+    LogDispatch
+    MIMETools
+    MIMETypes
+    ModuleRefresh
+    ModuleVersionsReport
+    MozillaCA
+    NetCIDR
+    NetIP
+    PerlIOeol
+    Plack
+    RegexpCommon
+    RegexpCommonnetCIDR
+    RegexpIPv6
+    RoleBasic
+    ScopeUpper
+    Starlet
+    SymbolGlobalName
+    TermReadKey
+    TextPasswordPronounceable
+    TextQuoted
+    TextTemplate
+    TextWikiFormat
+    TextWrapper
+    TimeParseDate
+    TreeSimple
+    UNIVERSALrequire
+    URI
+    XMLRSS
+  ]);
 
   preConfigure = ''
     configureFlags="$configureFlags --with-web-user=$UID"
@@ -96,7 +151,11 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  meta = {
-    platforms = stdenv.lib.platforms.unix;
+  meta = with stdenv.lib; {
+    homepage = "https://bestpractical.com/request-tracker";
+    description = "Extensible trouble-ticket tracking system";
+    maintainers = [ maintainers.xfix ];
+    license = licenses.gpl2;
+    platforms = platforms.unix;
   };
 }
