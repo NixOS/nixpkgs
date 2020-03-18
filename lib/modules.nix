@@ -65,38 +65,24 @@ rec {
         };
       };
 
-      options =
+      merged =
         let collected = collectModules
           (specialArgs.modulesPath or "")
           (modules ++ [ internalModule ])
           ({ inherit lib options config; } // specialArgs);
         in mergeModules prefix (reverseList collected);
 
-      config =
-        let
-          # Traverse options and extract the option values into the final
-          # config set.  At the same time, check whether all option
-          # definitions have matching declarations.
-          # !!! _module.check's value can't depend on any other config values
-          # without an infinite recursion. One way around this is to make the
-          # 'config' passed around to the modules be unconditionally unchecked,
-          # and only do the check in 'result'.
-          yieldConfig = prefix: set:
-            let res = removeAttrs (mapAttrs (n: v:
-              if isOption v then v.value
-              else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
-            in
-            if options._module.check.value && set ? _definedNames then
-              foldl' (res: m:
-                foldl' (res: name:
-                  if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
-                  res m.names)
-                res set._definedNames
-            else
-              res;
-        in yieldConfig prefix options;
+      options = merged.matchedOptions;
 
-      result = {
+      config = mapAttrsRecursiveCond (v: ! isOption v) (_: v: v.value) options;
+
+      checkUnmatched =
+        if config._module.check && merged.unmatchedDefns != [] then
+          let inherit (head merged.unmatchedDefns) file prefix;
+          in throw "The option `${showOption prefix}' defined in `${file}' does not exist."
+        else null;
+
+      result = builtins.seq checkUnmatched {
         inherit options;
         config = removeAttrs config [ "_module" ];
         inherit (config) _module;
@@ -236,7 +222,23 @@ rec {
      declarations in all modules, combining them into a single set.
      At the same time, for each option declaration, it will merge the
      corresponding option definitions in all machines, returning them
-     in the ‘value’ attribute of each option. */
+     in the ‘value’ attribute of each option.
+
+     This returns a set like
+       {
+         # A recursive set of options along with their final values
+         matchedOptions = {
+           foo = { _type = "option"; value = "option value of foo"; ... };
+           bar.baz = { _type = "option"; value = "option value of bar.baz"; ... };
+           ...
+         };
+         # A list of definitions that weren't matched by any option
+         unmatchedDefns = [
+           { file = "file.nix"; prefix = [ "qux" ]; value = "qux"; }
+           ...
+         ];
+       }
+  */
   mergeModules = prefix: modules:
     mergeModules' prefix modules
       (concatMap (m: map (config: { file = m._file; inherit config; }) (pushDownProperties m.config)) modules);
@@ -283,9 +285,9 @@ rec {
       defnsByName' = byName "config" (module: value:
           [{ inherit (module) file; inherit value; }]
         ) configs;
-    in
-    (flip mapAttrs declsByName (name: decls:
-      # We're descending into attribute ‘name’.
+
+      resultsByName = flip mapAttrs declsByName (name: decls:
+        # We're descending into attribute ‘name’.
         let
           loc = prefix ++ [name];
           defns = defnsByName.${name} or [];
@@ -294,7 +296,10 @@ rec {
         in
           if nrOptions == length decls then
             let opt = fixupOptionType loc (mergeOptionDecls loc decls);
-            in evalOptionValue loc opt defns'
+            in {
+              matchedOptions = evalOptionValue loc opt defns';
+              unmatchedDefns = [];
+            }
           else if nrOptions != 0 then
             let
               firstOption = findFirst (m: isOption m.options) "" decls;
@@ -302,9 +307,27 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
-            mergeModules' loc decls defns
-      ))
-    // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
+            mergeModules' loc decls defns);
+
+      matchedOptions = mapAttrs (n: v: v.matchedOptions) resultsByName;
+
+      # an attrset 'name' => list of unmatched definitions for 'name'
+      unmatchedDefnsByName =
+        # Propagate all unmatched definitions from nested option sets
+        mapAttrs (n: v: v.unmatchedDefns) resultsByName
+        # Plus the definitions for the current prefix that don't have a matching option
+        // removeAttrs defnsByName' (attrNames matchedOptions);
+    in {
+      inherit matchedOptions;
+
+      # Transforms unmatchedDefnsByName into a list of definitions
+      unmatchedDefns = concatLists (mapAttrsToList (name: defs:
+        map (def: def // {
+          # Set this so we know when the definition first left unmatched territory
+          prefix = [name] ++ (def.prefix or []);
+        }) defs
+      ) unmatchedDefnsByName);
+    };
 
   /* Merge multiple option declarations into a single declaration.  In
      general, there should be only one declaration of each option.
