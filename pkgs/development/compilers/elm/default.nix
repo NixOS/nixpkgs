@@ -91,11 +91,11 @@ let
           inherit nodejs pkgs;
           inherit (stdenv.hostPlatform) system;
         };
-    in with hsPkgs.elmPkgs; rec {
+    in with hsPkgs.elmPkgs; {
       elm-test = patchBinwrap [elmi-to-json] nodePkgs.elm-test;
       elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
       elm-coverage =
-        let patched = patchBinwrap [elm elmi-to-json] nodePkgs.elm-coverage;
+        let patched = patchBinwrap [elmi-to-json] nodePkgs.elm-coverage;
         in patched.override {
           preRebuild = ''
             sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
