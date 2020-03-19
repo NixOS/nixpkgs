@@ -1,6 +1,7 @@
 { stdenv
 , autoPatchelfHook
 , dpkg
+, fahviewer
 , fetchurl
 , makeWrapper
 , python2
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ python ];
+  buildInputs = [ fahviewer python ];
 
   doBuild = false;
 
@@ -45,6 +46,7 @@ stdenv.mkDerivation rec {
   postFixup = ''
     sed -e 's|/usr/bin|$out/bin|g' -i $out/share/applications/FAHControl.desktop
     wrapProgram "$out/bin/FAHControl" \
+      --suffix PATH : "${fahviewer.outPath}/bin" \
       --set PYTHONPATH "$out/lib/python2.7/dist-packages"
   '';
 
