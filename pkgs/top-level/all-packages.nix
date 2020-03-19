@@ -20655,6 +20655,8 @@ in
       else null;
   };
 
+  mup = callPackage ../applications/audio/mup { };
+
   # TODO: we should probably merge these 2
   musescore =
     if stdenv.isDarwin then
