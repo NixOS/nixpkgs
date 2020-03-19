@@ -30,14 +30,8 @@
       inherit cargo;
     };
 
-    # N.B. This is a legacy fetcher implementation that is being phased out and deleted.
-    # See ../../../build-support/rust/README.md for details.
-    fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
-      inherit cargo;
-    };
-
     buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo fetchcargo fetchCargoTarball;
+      inherit rustc cargo fetchCargoTarball;
     };
 
     rustcSrc = callPackage ./rust-src.nix {
