@@ -299,9 +299,7 @@ rec {
             in
               throw "The option `${showOption loc}' in `${firstOption._file}' is a prefix of options in `${firstNonOption._file}'."
           else
-            if all (def: isAttrs def.value) defns' then mergeModules' loc decls defns
-            else let firstInvalid = findFirst (def: ! isAttrs def.value) null defns';
-            in throw "The option path `${showOption loc}' is an attribute set of options, but it is defined to not be an attribute set in `${firstInvalid.file}'. Did you define its value at the correct and complete path?"
+            mergeModules' loc decls defns
       ))
     // { _definedNames = map (m: { inherit (m) file; names = attrNames m.config; }) configs; };
 
