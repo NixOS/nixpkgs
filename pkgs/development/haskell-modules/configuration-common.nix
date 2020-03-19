@@ -1250,10 +1250,6 @@ self: super: {
     '';
   });
 
-  # Version bounds for http-client are too strict:
-  # https://github.com/bitnomial/prometheus/issues/34
-  prometheus = doJailbreak super.prometheus;
-
   # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
   # 1.5.0 should be fixed, so this should be able to be removed.
   universum = dontCheck super.universum;
