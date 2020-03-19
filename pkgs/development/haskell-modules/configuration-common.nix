@@ -1254,13 +1254,6 @@ self: super: {
   # https://github.com/bitnomial/prometheus/issues/34
   prometheus = doJailbreak super.prometheus;
 
-  # Tasty-tap tests are out-of-date with TAP format
-  # https://github.com/MichaelXavier/tasty-tap/issues/2
-  tasty-tap = appendPatch super.tasty-tap (pkgs.fetchpatch {
-    url = https://patch-diff.githubusercontent.com/raw/MichaelXavier/tasty-tap/pull/3.diff;
-    sha256 = "0l8zbc56dy8ilxl3k49aiknmfhgpcg3jhs72lh3dk51d0a09d9sv";
-  });
-
   # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
   # 1.5.0 should be fixed, so this should be able to be removed.
   universum = dontCheck super.universum;
