@@ -12,7 +12,7 @@ buildPythonPackage rec {
   };
 
   meta = with stdenv.lib; {
-    description = "pdfposter is much like poster does for Postscript files, but working with PDF.";
+    description = "Split large pages of a PDF into smaller ones for poster printing";
     homepage = https://gitlab.com/pdftools/pdfposter;
     license = licenses.gpl3;
     maintainers = with maintainers; [ wamserma ];
