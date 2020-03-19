@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform }:
+{ lib, fetchFromGitHub, rustPlatform, installShellFiles }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
@@ -13,18 +13,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "1nhlarrl0m6as3j2547yf1xxjm88qy3v8jgvhd47z3f5s63bb6w5";
 
-  preFixup = ''
-    install -Dm644 "$src/doc/fd.1" "$out/man/man1/fd.1"
+  nativeBuildInputs = [ installShellFiles ];
 
-    install -Dm644 target/release/build/fd-find-*/out/fd.bash \
-      "$out/share/bash-completion/completions/fd.bash"
-    install -Dm644 target/release/build/fd-find-*/out/fd.fish \
-      "$out/share/fish/vendor_completions.d/fd.fish"
-    install -Dm644 target/release/build/fd-find-*/out/_fd \
-      "$out/share/zsh/site-functions/_fd"
+  preFixup = ''
+    installManPage "$src/doc/fd.1"
+
+    (cd target/release/build/fd-find-*/out
+    installShellCompletion fd.{bash,fish}
+    installShellCompletion --zsh _fd)
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A simple, fast and user-friendly alternative to find";
     longDescription = ''
       `fd` is a simple, fast and user-friendly alternative to `find`.
