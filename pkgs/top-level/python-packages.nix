@@ -992,6 +992,8 @@ in {
 
   pdfminer = callPackage ../development/python-modules/pdfminer_six { };
 
+  pdfposter = callPackage ../development/python-modules/pdfposter { };
+
   pdftotext = callPackage ../development/python-modules/pdftotext { };
 
   pdfx = callPackage ../development/python-modules/pdfx { };
