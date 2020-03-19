@@ -37,13 +37,13 @@ let
   inherit (stdenv.lib) optional optionals;
 in mkDerivation rec {
   pname = "obs-studio";
-  version = "24.0.6";
+  version = "25.0.0";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "07grnab5v4fd4lw25adhnlifs5c5phc3rsz7h80m663nbszy7abh";
+    sha256 = "1xbvj69zk1x2sv39wqjp5s929c61szn32d3d0ykhxr6jxb0sih4w";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];
@@ -87,7 +87,7 @@ in mkDerivation rec {
       Software", software originally designed for recording and streaming live
       video content, efficiently
     '';
-    homepage = https://obsproject.com;
+    homepage = "https://obsproject.com";
     maintainers = with maintainers; [ jb55 MP2E ];
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
