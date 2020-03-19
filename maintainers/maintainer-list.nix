@@ -3481,6 +3481,12 @@
     githubId = 587870;
     name = "Jonathan Mettes";
   };
+  jmorag = {
+    email = "jm@josephmorag.com";
+    github = "jmorag";
+    githubId = 24941170;
+    name = "Joseph Morag";
+  };
   joachifm = {
     email = "joachifm@fastmail.fm";
     github = "joachifm";
