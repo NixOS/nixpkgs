@@ -30,7 +30,9 @@ let
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
-  gh = callPackage ./gh { };
+  gh = callPackage ./gh {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ghq = callPackage ./ghq { };
 
