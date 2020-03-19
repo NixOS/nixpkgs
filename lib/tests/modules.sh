@@ -189,6 +189,9 @@ checkConfigOutput "true" config.enable ./import-from-store.nix
 checkConfigOutput true config.enable ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
 checkConfigOutput 360 config.value ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
 checkConfigOutput 7 config.value ./define-option-dependently.nix ./declare-int-positive-value.nix
+checkConfigOutput true config.set.enable ./define-option-dependently-nested.nix ./declare-enable-nested.nix ./declare-int-positive-value-nested.nix
+checkConfigOutput 360 config.set.value ./define-option-dependently-nested.nix ./declare-enable-nested.nix ./declare-int-positive-value-nested.nix
+checkConfigOutput 7 config.set.value ./define-option-dependently-nested.nix ./declare-int-positive-value-nested.nix
 
 # Check attrsOf and lazyAttrsOf. Only lazyAttrsOf should be lazy, and only
 # attrsOf should work with conditional definitions
