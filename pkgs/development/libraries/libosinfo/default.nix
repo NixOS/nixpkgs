@@ -1,5 +1,21 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, gettext, gobject-introspection, gtk-doc, docbook_xsl
-, glib, libsoup, libxml2, libxslt, check, curl, perl, hwdata, osinfo-db, substituteAll
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, gettext
+, gobject-introspection
+, gtk-doc
+, docbook_xsl
+, glib
+, libsoup
+, libxml2
+, libxslt
+, check
+, curl
+, perl
+, hwdata
+, osinfo-db
+, substituteAll
 , vala ? null
 }:
 
@@ -15,10 +31,24 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   nativeBuildInputs = [
-    pkgconfig vala gettext gobject-introspection gtk-doc docbook_xsl
+    pkgconfig
+    vala
+    gettext
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
   ];
-  buildInputs = [ glib libsoup libxml2 libxslt ];
-  checkInputs = [ check curl perl ];
+  buildInputs = [
+    glib
+    libsoup
+    libxml2
+    libxslt
+  ];
+  checkInputs = [
+    check
+    curl
+    perl
+  ];
 
   patches = [
     (substituteAll {
