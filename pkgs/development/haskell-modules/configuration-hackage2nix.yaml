@@ -9837,7 +9837,6 @@ broken-packages:
   - tasty-laws
   - tasty-lens
   - tasty-stats
-  - tasty-tap
   - tateti-tateti
   - Taxonomy
   - TaxonomyTools
