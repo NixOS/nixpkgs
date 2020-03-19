@@ -269,8 +269,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-panel = callPackage ./misc/gnome-panel { };
 
-  gnome-screensaver = callPackage ./misc/gnome-screensaver { };
-
   gnome-tweaks = callPackage ./misc/gnome-tweaks { };
 
   gpaste = callPackage ./misc/gpaste { };
@@ -358,4 +356,6 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) networkmanagerapplet; # added 2019-12-12
 
   vino = throw "vino is deprecated, use gnome-remote-desktop instead."; # added 2020-03-13
+
+  gnome-screensaver = throw "gnome-screensaver is deprecated. If you are using GNOME Flashback, it now has a built-in lock screen. If you are using it elsewhere, you can try xscreenlock or other alternatives."; # added 2020-03-19
 })
