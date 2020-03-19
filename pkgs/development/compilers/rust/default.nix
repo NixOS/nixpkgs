@@ -17,8 +17,9 @@
       "armv7a" = "armv7";
       "armv7l" = "armv7";
       "armv6l" = "arm";
-    }.${cpu.name} or cpu.name;
-  in "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+    }.${cpu.name} or platform.rustc.arch or cpu.name;
+  in platform.rustc.config
+    or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
   makeRustPlatform = { rustc, cargo, ... }: rec {
     rust = {
