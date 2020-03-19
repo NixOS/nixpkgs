@@ -189,6 +189,9 @@ checkConfigOutput "true" config.enable ./import-from-store.nix
 checkConfigOutput true config.enable ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
 checkConfigOutput 360 config.value ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
 checkConfigOutput 7 config.value ./define-option-dependently.nix ./declare-int-positive-value.nix
+checkConfigOutput true config.set.enable ./define-option-dependently-nested.nix ./declare-enable-nested.nix ./declare-int-positive-value-nested.nix
+checkConfigOutput 360 config.set.value ./define-option-dependently-nested.nix ./declare-enable-nested.nix ./declare-int-positive-value-nested.nix
+checkConfigOutput 7 config.set.value ./define-option-dependently-nested.nix ./declare-int-positive-value-nested.nix
 
 # Check attrsOf and lazyAttrsOf. Only lazyAttrsOf should be lazy, and only
 # attrsOf should work with conditional definitions
@@ -199,9 +202,6 @@ checkConfigOutput "true" config.conditionalWorks ./declare-attrsOf.nix ./attrsOf
 checkConfigOutput "false" config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 
-# Check error for when an option set is defined to be a non-attribute set value
-checkConfigError 'The option path .* is an attribute set of options, but it is defined to not be an attribute set in' \
-  config.value ./declare-option-set.nix ./define-value-int-zero.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'The option value .* in .* is not of type .*' \
