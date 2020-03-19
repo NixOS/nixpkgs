@@ -2754,6 +2754,12 @@
     githubId = 3217744;
     name = "Peter Ferenczy";
   };
+  gila = {
+    email = "jeffry.molanus@gmail.com";
+    github = "gila";
+    githubId = 15957973;
+    name = "Jeffry Molanus";
+  };
   gilligan = {
     email = "tobias.pflug@gmail.com";
     github = "gilligan";
