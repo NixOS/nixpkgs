@@ -5606,6 +5606,12 @@
     githubId = 101514;
     name = "Orivej Desh";
   };
+  oro = {
+    email = "marco@orovecchia.at";
+    github = "oro";
+    githubId = 357005;
+    name = "Marco Orovecchia";
+  };
   osener = {
     email = "ozan@ozansener.com";
     github = "osener";
