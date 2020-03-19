@@ -151,6 +151,17 @@ in {
       (if stdenv.hostPlatform.isDarwin
        then ./1.1/use-etc-ssl-certs-darwin.patch
        else ./1.1/use-etc-ssl-certs.patch)
+
+      # not able to use fetchpatch here: infinite recursion
+      # CVE-2019-1551 patches
+      (fetchurl {
+        url = "https://github.com/openssl/openssl/commit/75d8b191a0940db110e84844fea0b023fbf07ca4.patch";
+        sha256 = "0rqwiyhb6avgyg97rbms8n6pd3v3y4zzla3v7kkwly8iixcjpx35";
+      })
+      (fetchurl {
+        url = "https://github.com/openssl/openssl/commit/69f98d55165526f2e5547f3b22ecedca21ea88a7.patch";
+        sha256 = "0xi6zlgc46k8yl43h0zsdaz5j4kk9h0ypyrgiaaks31jhj4cqf8g";
+      })
     ];
     withDocs = true;
   };
