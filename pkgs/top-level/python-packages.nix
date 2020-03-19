@@ -1455,6 +1455,7 @@ in {
   sniffio = callPackage ../development/python-modules/sniffio { };
 
   spyder = callPackage ../development/python-modules/spyder {};
+  spyder_3 = callPackage ../development/python-modules/spyder/3.nix { };
 
   spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
   spyder-kernels_0_5 = callPackage ../development/python-modules/spyder-kernels/0.x.nix {};
