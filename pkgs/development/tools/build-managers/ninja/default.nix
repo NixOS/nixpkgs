@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     #
     (fetchpatch {
       name = "fix-issue-1510.patch";
-      url = https://github.com/makepost/ninja/commit/567815df38a2ff54ad7478a90bd75c91e434236a.patch;
+      url = https://github.com/ninja-build/ninja/commit/567815df38a2ff54ad7478a90bd75c91e434236a.patch;
       sha256 = "0zd0xyi7h2066nw1dsk76c7yf71b0f7v4p5nljda7jxi01vpdh69";
     })
   ];
