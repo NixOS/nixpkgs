@@ -58,6 +58,23 @@ rec {
             default = check;
             description = "Whether to check whether all option definitions have matching declarations.";
           };
+
+          _module.freeformType = mkOption {
+            # Disallow merging for now, but could be implemented nicely with a `types.optionType`
+            type = types.nullOr (types.uniq types.attrs);
+            internal = true;
+            default = null;
+            description = ''
+              If set, merge all definitions that don't have an associated option
+              together using this type. The result then gets combined with the
+              values of all declared options to produce the final <literal>
+              config</literal> value.
+
+              If this is <literal>null</literal>, definitions without an option
+              will throw an error unless <option>_module.check</option> is
+              turned off.
+            '';
+          };
         };
 
         config = {
@@ -74,10 +91,29 @@ rec {
 
       options = merged.matchedOptions;
 
-      config = mapAttrsRecursiveCond (v: ! isOption v) (_: v: v.value) options;
+      config =
+        let
+
+          # For definitions that have an associated option
+          declaredConfig = mapAttrsRecursiveCond (v: ! isOption v) (_: v: v.value) options;
+
+          # If freeformType is set, this is for definitions that don't have an associated option
+          freeformConfig =
+            let
+              defs = map (def: {
+                file = def.file;
+                value = setAttrByPath def.prefix def.value;
+              }) merged.unmatchedDefns;
+            in declaredConfig._module.freeformType.merge prefix defs;
+
+        in if declaredConfig._module.freeformType == null then declaredConfig
+          # Because all definitions that had an associated option ended in
+          # declaredConfig, freeformConfig can only contain the non-option
+          # paths, meaning recursiveUpdate will never override any value
+          else recursiveUpdate freeformConfig declaredConfig;
 
       checkUnmatched =
-        if config._module.check && merged.unmatchedDefns != [] then
+        if config._module.check && config._module.freeformType == null && merged.unmatchedDefns != [] then
           let inherit (head merged.unmatchedDefns) file prefix;
           in throw "The option `${showOption prefix}' defined in `${file}' does not exist."
         else null;
