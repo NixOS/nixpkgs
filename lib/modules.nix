@@ -65,34 +65,37 @@ rec {
         };
       };
 
-      collected = collectModules
-        (specialArgs.modulesPath or "")
-        (modules ++ [ internalModule ])
-        ({ inherit config options lib; } // specialArgs);
+      options =
+        let collected = collectModules
+          (specialArgs.modulesPath or "")
+          (modules ++ [ internalModule ])
+          ({ inherit lib options config; } // specialArgs);
+        in mergeModules prefix (reverseList collected);
 
-      options = mergeModules prefix (reverseList collected);
+      config =
+        let
+          # Traverse options and extract the option values into the final
+          # config set.  At the same time, check whether all option
+          # definitions have matching declarations.
+          # !!! _module.check's value can't depend on any other config values
+          # without an infinite recursion. One way around this is to make the
+          # 'config' passed around to the modules be unconditionally unchecked,
+          # and only do the check in 'result'.
+          yieldConfig = prefix: set:
+            let res = removeAttrs (mapAttrs (n: v:
+              if isOption v then v.value
+              else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
+            in
+            if options._module.check.value && set ? _definedNames then
+              foldl' (res: m:
+                foldl' (res: name:
+                  if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
+                  res m.names)
+                res set._definedNames
+            else
+              res;
+        in yieldConfig prefix options;
 
-      # Traverse options and extract the option values into the final
-      # config set.  At the same time, check whether all option
-      # definitions have matching declarations.
-      # !!! _module.check's value can't depend on any other config values
-      # without an infinite recursion. One way around this is to make the
-      # 'config' passed around to the modules be unconditionally unchecked,
-      # and only do the check in 'result'.
-      config = yieldConfig prefix options;
-      yieldConfig = prefix: set:
-        let res = removeAttrs (mapAttrs (n: v:
-          if isOption v then v.value
-          else yieldConfig (prefix ++ [n]) v) set) ["_definedNames"];
-        in
-        if options._module.check.value && set ? _definedNames then
-          foldl' (res: m:
-            foldl' (res: name:
-              if set ? ${name} then res else throw "The option `${showOption (prefix ++ [name])}' defined in `${m.file}' does not exist.")
-              res m.names)
-            res set._definedNames
-        else
-          res;
       result = {
         inherit options;
         config = removeAttrs config [ "_module" ];
