@@ -1185,6 +1185,8 @@ in {
 
   pymsgbox = callPackage ../development/python-modules/pymsgbox { };
 
+  pynanoleaf = callPackage ../development/python-modules/pynanoleaf { };
+
   pynisher = callPackage ../development/python-modules/pynisher { };
 
   pyparser = callPackage ../development/python-modules/pyparser { };

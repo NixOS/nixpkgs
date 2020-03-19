@@ -496,7 +496,7 @@
     "n26" = ps: with ps; [ ]; # missing inputs: n26
     "nad" = ps: with ps; [ ]; # missing inputs: nad_receiver
     "namecheapdns" = ps: with ps; [ defusedxml];
-    "nanoleaf" = ps: with ps; [ ]; # missing inputs: pynanoleaf
+    "nanoleaf" = ps: with ps; [ pynanoleaf];
     "neato" = ps: with ps; [ pybotvac];
     "nederlandse_spoorwegen" = ps: with ps; [ ]; # missing inputs: nsapi
     "nello" = ps: with ps; [ ]; # missing inputs: pynello
