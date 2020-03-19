@@ -8343,8 +8343,7 @@ in
 
   purescript = callPackage ../development/compilers/purescript/purescript { };
 
-  psc-package = haskell.lib.justStaticExecutables
-    (haskellPackages.callPackage ../development/compilers/purescript/psc-package { });
+  psc-package = callPackage ../development/compilers/purescript/psc-package { };
 
   purescript-psa = nodePackages.purescript-psa;
 
