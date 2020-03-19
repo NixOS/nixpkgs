@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
 
   configurePhase = "";
   buildPhase = "";
-  
+
   patches = [ ./numpy-cast.patch ];
 
   installPhase = ''

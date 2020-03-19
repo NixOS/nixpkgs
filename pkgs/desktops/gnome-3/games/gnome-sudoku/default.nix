@@ -1,5 +1,22 @@
-{ stdenv, fetchurl, meson, ninja, vala, pkgconfig, gobject-introspection, gettext, gtk3, gnome3, wrapGAppsHook
-, libgee, json-glib, qqwing, itstool, libxml2, python3, desktop-file-utils }:
+{ stdenv
+, fetchurl
+, meson
+, ninja
+, vala
+, pkgconfig
+, gobject-introspection
+, gettext
+, gtk3
+, gnome3
+, wrapGAppsHook
+, libgee
+, json-glib
+, qqwing
+, itstool
+, libxml2
+, python3
+, desktop-file-utils
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-sudoku";

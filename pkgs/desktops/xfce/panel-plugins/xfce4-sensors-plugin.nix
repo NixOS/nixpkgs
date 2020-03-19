@@ -1,10 +1,20 @@
-{ stdenv, fetchurl, pkgconfig, intltool, gtk2, libxfce4ui,
-  libxfce4util, xfce4-panel, libnotify, lm_sensors, hddtemp, netcat-gnu
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, gtk2
+, libxfce4ui
+, libxfce4util
+, xfce4-panel
+, libnotify
+, lm_sensors
+, hddtemp
+, netcat-gnu
 }:
 
 stdenv.mkDerivation rec {
   name = "${pname}-${ver_maj}.${ver_min}";
-  pname  = "xfce4-sensors-plugin";
+  pname = "xfce4-sensors-plugin";
   ver_maj = "1.2";
   ver_min = "6";
 
@@ -27,7 +37,7 @@ stdenv.mkDerivation rec {
     lm_sensors
     hddtemp
     netcat-gnu
-   ];
+  ];
 
   enableParallelBuilding = true;
 

@@ -6,14 +6,15 @@
     protected_customvars = "${concatStringsSep "," cfg.generalConfig.protectedVars}"
   '';
 
-  backendsIni = let
-    formatBool = b: if b then "1" else "0";
-  in concatStringsSep "\n" (mapAttrsToList (name: config: ''
-    [${name}]
-    type = "ido"
-    resource = "${config.resource}"
-    disabled = "${formatBool config.disabled}"
-  '') cfg.backends);
+  backendsIni =
+    let
+      formatBool = b: if b then "1" else "0";
+    in concatStringsSep "\n" (mapAttrsToList (name: config: ''
+      [${name}]
+      type = "ido"
+      resource = "${config.resource}"
+      disabled = "${formatBool config.disabled}"
+    '') cfg.backends);
 
   transportsIni = concatStringsSep "\n" (mapAttrsToList (name: config: ''
     [${name}]
@@ -21,15 +22,15 @@
     ${optionalString (config.instance != null) ''instance = "${config.instance}"''}
     ${optionalString (config.type == "local" || config.type == "remote") ''path = "${config.path}"''}
     ${optionalString (config.type != "local") ''
-      host = "${config.host}"
-      ${optionalString (config.port != null) ''port = "${toString config.port}"''}
-      user${optionalString (config.type == "api") "name"} = "${config.username}"
-    ''}
+    host = "${config.host}"
+    ${optionalString (config.port != null) ''port = "${toString config.port}"''}
+    user${optionalString (config.type == "api") "name"} = "${config.username}"
+  ''}
     ${optionalString (config.type == "api") ''password = "${config.password}"''}
     ${optionalString (config.type == "remote") ''resource = "${config.resource}"''}
   '') cfg.transports);
-
-in {
+in
+{
   options.services.icingaweb2.modules.monitoring = with types; {
     enable = mkOption {
       type = bool;
@@ -90,7 +91,7 @@ in {
     };
 
     transports = mkOption {
-      default = {};
+      default = { };
       description = "Command transports to define";
       type = attrsOf (submodule ({ name, ... }: {
         options = {
@@ -149,7 +150,9 @@ in {
   };
 
   config = mkIf (config.services.icingaweb2.enable && cfg.enable) {
-    environment.etc = { "icingaweb2/enabledModules/monitoring" = { source = "${pkgs.icingaweb2}/modules/monitoring"; }; }
+    environment.etc =
+      { "icingaweb2/enabledModules/monitoring" = { source = "${pkgs.icingaweb2}/modules/monitoring"; };
+      }
       // optionalAttrs (!cfg.generalConfig.mutable) { "icingaweb2/modules/monitoring/config.ini".text = configIni; }
       // optionalAttrs (!cfg.mutableBackends) { "icingaweb2/modules/monitoring/backends.ini".text = backendsIni; }
       // optionalAttrs (!cfg.mutableTransports) { "icingaweb2/modules/monitoring/commandtransports.ini".text = transportsIni; };

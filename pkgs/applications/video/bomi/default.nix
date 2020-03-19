@@ -1,7 +1,22 @@
-{ config, stdenv, fetchFromGitHub
-, fetchpatch, pkgconfig, perl, python, which
-, libX11, libxcb, libGLU, libGL
-, qtbase, qtdeclarative, qtquickcontrols, qttools, qtx11extras, qmake, makeWrapper
+{ config
+, stdenv
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, perl
+, python
+, which
+, libX11
+, libxcb
+, libGLU
+, libGL
+, qtbase
+, qtdeclarative
+, qtquickcontrols
+, qttools
+, qtx11extras
+, qmake
+, makeWrapper
 , libchardet
 , ffmpeg
 
@@ -12,13 +27,19 @@
 , icu
 , libquvi
 , alsaLib
-, libvdpau, libva
+, libvdpau
+, libva
 , libbluray
-, jackSupport ? false, jack ? null
-, portaudioSupport ? false, portaudio ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
-, cddaSupport ? false, libcdda ? null
-, youtubeSupport ? true, youtube-dl ? null
+, jackSupport ? false
+, jack ? null
+, portaudioSupport ? false
+, portaudio ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio ? null
+, cddaSupport ? false
+, libcdda ? null
+, youtubeSupport ? true
+, youtube-dl ? null
 }:
 
 with stdenv.lib;
@@ -54,32 +75,34 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = with stdenv.lib;
-                [ libX11
-                  libxcb
-                  libGLU libGL
-                  qtbase
-                  qtx11extras
-                  qtdeclarative
-                  qtquickcontrols
-                  ffmpeg
-                  libchardet
+    [
+      libX11
+      libxcb
+      libGLU
+      libGL
+      qtbase
+      qtx11extras
+      qtdeclarative
+      qtquickcontrols
+      ffmpeg
+      libchardet
 
-                  mpg123
-                  libass
-                  libdvdread
-                  libdvdnav
-                  icu
-                  libquvi
-                  alsaLib
-                  libvdpau
-                  libva
-                  libbluray
-                ]
-                ++ optional jackSupport jack
-                ++ optional portaudioSupport portaudio
-                ++ optional pulseSupport libpulseaudio
-                ++ optional cddaSupport libcdda
-                ;
+      mpg123
+      libass
+      libdvdread
+      libdvdnav
+      icu
+      libquvi
+      alsaLib
+      libvdpau
+      libva
+      libbluray
+    ]
+    ++ optional jackSupport jack
+    ++ optional portaudioSupport portaudio
+    ++ optional pulseSupport libpulseaudio
+    ++ optional cddaSupport libcdda
+  ;
 
   preConfigure = ''
     patchShebangs configure
@@ -98,12 +121,12 @@ stdenv.mkDerivation rec {
   dontUseQmakeConfigure = true;
 
   configureFlags = with stdenv.lib;
-                   [ "--qmake=qmake" ]
-                   ++ optional jackSupport "--enable-jack"
-                   ++ optional portaudioSupport "--enable-portaudio"
-                   ++ optional pulseSupport "--enable-pulseaudio"
-                   ++ optional cddaSupport "--enable-cdda"
-                   ;
+    [ "--qmake=qmake" ]
+    ++ optional jackSupport "--enable-jack"
+    ++ optional portaudioSupport "--enable-portaudio"
+    ++ optional pulseSupport "--enable-pulseaudio"
+    ++ optional cddaSupport "--enable-cdda"
+  ;
 
   nativeBuildInputs = [ makeWrapper pkgconfig perl python which qttools qmake ];
 

@@ -1,4 +1,6 @@
-{ fetchurl, stdenv, lib
+{ fetchurl
+, stdenv
+, lib
 , enableStatic ? stdenv.hostPlatform.useAndroidPrebuilt
 , enableShared ? !stdenv.hostPlatform.useAndroidPrebuilt
 }:

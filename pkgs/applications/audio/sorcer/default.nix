@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub , boost, cairomm, cmake, libsndfile, lv2, ntk, pkgconfig, python }:
+{ stdenv, fetchFromGitHub, boost, cairomm, cmake, libsndfile, lv2, ntk, pkgconfig, python }:
 
 stdenv.mkDerivation rec {
   pname = "sorcer";

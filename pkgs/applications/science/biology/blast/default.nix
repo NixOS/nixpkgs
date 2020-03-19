@@ -10,15 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   sourceRoot = "ncbi-blast-${version}+-src/c++";
-  
-  configureFlags = [ 
+
+  configureFlags = [
     # With flat Makefile we can use all_projects in order not to build extra.
     # These extra cause clang to hang on Darwin.
     "--with-flat-makefile"
-    "--without-makefile-auto-update" 
-    "--with-dll"  # build dynamic libraries (static are default)
-    ];
-  
+    "--without-makefile-auto-update"
+    "--with-dll" # build dynamic libraries (static are default)
+  ];
+
   makeFlags = [ "all_projects=app/" ];
 
   preConfigure = ''
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
   # perl is necessary in buildInputs so that installed perl scripts get patched
   # correctly
   buildInputs = [ coreutils perl gawk zlib bzip2 cpio ]
-    ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  ++ lib.optionals stdenv.isDarwin [ ApplicationServices ];
   hardeningDisable = [ "format" ];
 
   postInstall = ''

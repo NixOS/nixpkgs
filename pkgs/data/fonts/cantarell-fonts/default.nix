@@ -1,9 +1,9 @@
 { stdenv, fetchurl, meson, ninja, gettext, appstream-glib, gnome3 }:
-
 let
   pname = "cantarell-fonts";
   version = "0.111";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

@@ -1,6 +1,6 @@
 { stdenv, fetchurl, dpkg }:
-
-let version = "20030809";
+let
+  version = "20030809";
 in
 stdenv.mkDerivation {
   pname = "kochi-substitute";

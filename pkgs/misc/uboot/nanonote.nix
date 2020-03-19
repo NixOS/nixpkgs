@@ -1,10 +1,10 @@
-{stdenv, fetchurl, fetchgit}:
+{ stdenv, fetchurl, fetchgit }:
 
 # All this file is made for the Marvell Sheevaplug
-   
+
 stdenv.mkDerivation {
   name = "uboot-qb-2010.06";
-   
+
   src = fetchurl {
     url = "ftp://ftp.denx.de/pub/u-boot/u-boot-2010.06.tar.bz2";
     sha256 = "1j0bl8x5i5m1pn62z450gbw30pbrj7sgs3fjp2l2giczv49cn33r";
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
     make qi_lb60_config
   '';
 
-  preBuild= ''
+  preBuild = ''
     # A variable named 'src' used to affect the build in some uboot...
     unset -v src
   '';

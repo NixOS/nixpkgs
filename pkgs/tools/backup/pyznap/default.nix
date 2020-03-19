@@ -15,7 +15,7 @@ buildPythonApplication rec {
 
   propagatedBuildInputs = [
     setuptools
-  ];  
+  ];
 
   # tests aren't included in the PyPI packages
   doCheck = false;

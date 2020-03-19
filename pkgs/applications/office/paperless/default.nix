@@ -30,7 +30,6 @@
 #     source ${paperless}/share/paperless/setup-env.sh
 #     PYTHONPATH=$paperlessSrc ${pythonEnv}/bin/gunicorn paperless.wsgi
 #   ''
-
 let
   paperless = stdenv.mkDerivation rec {
     pname = "paperless";
@@ -48,7 +47,7 @@ let
     doCheck = true;
     dontInstall = true;
 
-    pythonEnv      = python.withPackages (_: runtimePackages);
+    pythonEnv = python.withPackages (_: runtimePackages);
     pythonCheckEnv = python.withPackages (_: (runtimePackages ++ checkPackages));
 
     unpackPhase = ''
@@ -63,21 +62,22 @@ let
         --replace "localhost:8080" "http://localhost:8080"
     '';
 
-    buildPhase = let
-      # Paperless has explicit runtime checks that expect these binaries to be in PATH
-      extraBin = lib.makeBinPath [ imagemagick7 ghostscript optipng tesseract unpaper ];
-    in ''
-      ${python.interpreter} -m compileall $srcDir
+    buildPhase =
+      let
+        # Paperless has explicit runtime checks that expect these binaries to be in PATH
+        extraBin = lib.makeBinPath [ imagemagick7 ghostscript optipng tesseract unpaper ];
+      in ''
+        ${python.interpreter} -m compileall $srcDir
 
-      makeWrapper $pythonEnv/bin/python $out/bin/paperless \
-        --set PATH ${extraBin} --add-flags $out/share/paperless/manage.py
+        makeWrapper $pythonEnv/bin/python $out/bin/paperless \
+          --set PATH ${extraBin} --add-flags $out/share/paperless/manage.py
 
-      # A shell snippet that can be sourced to setup a paperless env
-      cat > $out/share/paperless/setup-env.sh <<EOF
-      export PATH="$pythonEnv/bin:${extraBin}''${PATH:+:}$PATH"
-      export paperlessSrc=$out/share/paperless
-      EOF
-    '';
+        # A shell snippet that can be sourced to setup a paperless env
+        cat > $out/share/paperless/setup-env.sh <<EOF
+        export PATH="$pythonEnv/bin:${extraBin}''${PATH:+:}$PATH"
+        export paperlessSrc=$out/share/paperless
+        EOF
+      '';
 
     checkPhase = ''
       source $out/share/paperless/setup-env.sh
@@ -93,7 +93,7 @@ let
     '';
 
     passthru = {
-      withConfig = callPackage ./withConfig.nix {};
+      withConfig = callPackage ./withConfig.nix { };
       inherit python runtimePackages checkPackages tesseract;
     };
 
@@ -111,20 +111,21 @@ let
       django = django_2_0 super;
       pyocr = pyocrWithUserTesseract super;
       # These are pre-release versions, hence they are private to this pkg
-      django-filter = self.callPackage ./python-modules/django-filter.nix {};
-      django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix {};
+      django-filter = self.callPackage ./python-modules/django-filter.nix { };
+      django-crispy-forms = self.callPackage ./python-modules/django-crispy-forms.nix { };
     };
   };
 
-  django_2_0 = pyPkgs: pyPkgs.django_2_2.overrideDerivation (_: rec {
-    pname = "Django";
-    version = "2.0.12";
-    name = "${pname}-${version}";
-    src = pyPkgs.fetchPypi {
-      inherit pname version;
-      sha256 = "15s8z54k0gf9brnz06521bikm60ddw5pn6v3nbvnl47j1jjsvwz2";
-    };
-  });
+  django_2_0 = pyPkgs: pyPkgs.django_2_2.overrideDerivation
+    (_: rec {
+      pname = "Django";
+      version = "2.0.12";
+      name = "${pname}-${version}";
+      src = pyPkgs.fetchPypi {
+        inherit pname version;
+        sha256 = "15s8z54k0gf9brnz06521bikm60ddw5pn6v3nbvnl47j1jjsvwz2";
+      };
+    });
 
   runtimePackages = with python.pkgs; [
     dateparser
@@ -167,8 +168,9 @@ let
         # The user has provided a custom tesseract derivation that might be
         # missing some languages that are required for PyOCR's tests. Disable them to
         # avoid build errors.
-        pyocr.overridePythonAttrs (attrs: {
-          doCheck = false;
-        });
+        pyocr.overridePythonAttrs
+          (attrs: {
+            doCheck = false;
+          });
 in
-  paperless
+paperless

@@ -14,7 +14,7 @@ rec {
 
   packageName = "clsql-postgresql-socket";
 
-  asdFilesToKeep = ["clsql-postgresql-socket.asd"];
+  asdFilesToKeep = [ "clsql-postgresql-socket.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clsql-postgresql-socket DESCRIPTION

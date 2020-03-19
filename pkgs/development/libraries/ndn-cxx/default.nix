@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, openssl, doxygen
-, boost, sqlite, pkgconfig, python, pythonPackages, wafHook }:
+{ stdenv
+, fetchFromGitHub
+, openssl
+, doxygen
+, boost
+, sqlite
+, pkgconfig
+, python
+, pythonPackages
+, wafHook
+}:
 let
   version = "0.6.3";
 in
@@ -13,7 +22,7 @@ stdenv.mkDerivation {
     sha256 = "076jhrjigisqz5n8dgxwd5fhimg69zhm834m7w9yvf9afgzrr50h";
   };
   nativeBuildInputs = [ pkgconfig wafHook ];
-  buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx];
+  buildInputs = [ openssl doxygen boost sqlite python pythonPackages.sphinx ];
   wafConfigureFlags = [
     "--with-openssl=${openssl.dev}"
     "--boost-includes=${boost.dev}/include"

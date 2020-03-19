@@ -5,9 +5,18 @@
 # nix-env -f . -iA obs-wlrobs
 # mkdir -p ~/.config/obs-studio/plugins/wlrobs/bin/64bit
 # ln -s ~/.nix-profile/share/obs/obs-plugins/wlrobs/bin/64bit/libwlrobs.so ~/.config/obs-studio/plugins/wlrobs/bin/64bit
-{ stdenv, fetchhg, wayland, obs-studio
-, meson, ninja, pkgconfig, libX11
-, dmabufSupport ? false, libdrm ? null, libGL ? null}:
+{ stdenv
+, fetchhg
+, wayland
+, obs-studio
+, meson
+, ninja
+, pkgconfig
+, libX11
+, dmabufSupport ? false
+, libdrm ? null
+, libGL ? null
+}:
 
 assert dmabufSupport -> libdrm != null && libGL != null;
 

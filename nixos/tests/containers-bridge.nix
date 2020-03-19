@@ -1,13 +1,11 @@
 # Test for NixOS' container support.
-
 let
   hostIp = "192.168.0.1";
   containerIp = "192.168.0.100/24";
   hostIp6 = "fc00::1";
   containerIp6 = "fc00::2/7";
 in
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "containers-bridge";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ];
@@ -15,19 +13,20 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   machine =
     { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    {
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
       virtualisation.writableStore = true;
       virtualisation.memorySize = 768;
 
       networking.bridges = {
         br0 = {
-          interfaces = [];
+          interfaces = [ ];
         };
       };
       networking.interfaces = {
         br0 = {
-          ipv4.addresses = [{ address = hostIp; prefixLength = 24; }];
-          ipv6.addresses = [{ address = hostIp6; prefixLength = 7; }];
+          ipv4.addresses = [ { address = hostIp; prefixLength = 24; } ];
+          ipv6.addresses = [ { address = hostIp6; prefixLength = 7; } ];
         };
       };
 
@@ -39,7 +38,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           localAddress = containerIp;
           localAddress6 = containerIp6;
           config =
-            { services.httpd.enable = true;
+            {
+              services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };
@@ -51,7 +51,8 @@ import ./make-test-python.nix ({ pkgs, ...} : {
           privateNetwork = true;
           hostBridge = "br0";
           config =
-            { services.httpd.enable = true;
+            {
+              services.httpd.enable = true;
               services.httpd.adminAddr = "foo@example.org";
               networking.firewall.allowedTCPPorts = [ 80 ];
             };

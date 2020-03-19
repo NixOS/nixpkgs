@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   pname = "assimp";
   version = "5.0.1";
 
-  src = fetchFromGitHub{
+  src = fetchFromGitHub {
     owner = "assimp";
     repo = "assimp";
     rev = "v${version}";

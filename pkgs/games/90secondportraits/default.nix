@@ -1,5 +1,4 @@
 { stdenv, fetchurl, love, lua, makeWrapper, makeDesktopItem }:
-
 let
   pname = "90secondportraits";
   version = "1.01b";
@@ -18,9 +17,7 @@ let
     genericName = "90secondportraits";
     categories = "Game;";
   };
-
 in
-
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -35,18 +32,18 @@ stdenv.mkDerivation {
   phases = "installPhase";
 
   installPhase =
-  ''
-    mkdir -p $out/bin
-    mkdir -p $out/share/games/lovegames
+    ''
+      mkdir -p $out/bin
+      mkdir -p $out/share/games/lovegames
 
-    cp -v $src $out/share/games/lovegames/${pname}.love
+      cp -v $src $out/share/games/lovegames/${pname}.love
 
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
+      makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
 
-    chmod +x $out/bin/${pname}
-    mkdir -p $out/share/applications
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-  '';
+      chmod +x $out/bin/${pname}
+      mkdir -p $out/share/applications
+      ln -s ${desktopItem}/share/applications/* $out/share/applications/
+    '';
 
   meta = with stdenv.lib; {
     description = "A silly speed painting game";

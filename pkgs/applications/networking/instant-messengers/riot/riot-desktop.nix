@@ -3,7 +3,6 @@
 # Notes for maintainers:
 # * versions of `riot-web` and `riot-desktop` should be kept in sync.
 # * the Yarn dependency expression must be updated with `./update-riot-desktop.sh <git release tag>`
-
 let
   executableName = "riot-desktop";
   version = "1.5.13";
@@ -14,8 +13,8 @@ let
     sha256 = "1p2bdqq8yziv3l7kjkwqvi27a8djav7rk3lsipl7dvdjk1926941";
   };
   electron = electron_7;
-
-in mkYarnPackage rec {
+in
+mkYarnPackage rec {
   name = "riot-desktop-${version}";
   inherit version;
 

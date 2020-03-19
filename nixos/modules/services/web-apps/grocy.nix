@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.grocy;
-in {
+in
+{
   options.services.grocy = {
     enable = mkEnableOption "grocy";
 
@@ -133,7 +133,8 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${pkgs.grocy}/public";
+        {
+          root = "${pkgs.grocy}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';

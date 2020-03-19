@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage
-, bigarray-compat, eqaf, stdlib-shims
+{ lib
+, fetchurl
+, buildDunePackage
+, bigarray-compat
+, eqaf
+, stdlib-shims
 , alcotest
 }:
 

@@ -17,8 +17,13 @@ mkDerivation rec {
   isExecutable = true;
 
   executableHaskellDepends = with haskellPackages; [
-    aeson aeson-pretty either errors optparse-applicative
-    system-filepath turtle
+    aeson
+    aeson-pretty
+    either
+    errors
+    optparse-applicative
+    system-filepath
+    turtle
   ];
 
   description = "A package manager for PureScript based on package sets";

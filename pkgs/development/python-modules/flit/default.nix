@@ -29,7 +29,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ docutils requests requests_download pytoml ]
-    ++ lib.optional (pythonOlder "3.6") zipfile36;
+  ++ lib.optional (pythonOlder "3.6") zipfile36;
 
   checkInputs = [ pytest_4 testpath responses ];
 

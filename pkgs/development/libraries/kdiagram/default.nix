@@ -1,7 +1,11 @@
-{
-  mkDerivation, fetchurl, lib,
-  extra-cmake-modules, qttools,
-  qtbase, qtsvg,
+{ mkDerivation
+, fetchurl
+, lib
+, extra-cmake-modules
+, qttools
+, qtbase
+, qtsvg
+,
 }:
 
 mkDerivation {

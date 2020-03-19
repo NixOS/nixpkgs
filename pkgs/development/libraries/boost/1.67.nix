@@ -36,4 +36,5 @@ callPackage ./generic.nix (args // {
     # SHA256 from http://www.boost.org/users/history/version_1_66_0.html
     sha256 = "2684c972994ee57fc5632e03bf044746f6eb45d4920c343937a465fd67a5adba";
   };
-})
+}
+)

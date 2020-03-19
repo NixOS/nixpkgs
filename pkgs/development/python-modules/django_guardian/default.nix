@@ -1,6 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, django_environ, mock, django
-, pytest, pytestrunner, pytest-django
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, django_environ
+, mock
+, django
+, pytest
+, pytestrunner
+, pytest-django
 }:
 buildPythonPackage rec {
   pname = "django-guardian";

@@ -1,5 +1,4 @@
 { buildGoModule, stdenv, lib, procps, fetchFromGitHub }:
-
 let
   common = { stname, target, postInstall ? "" }:
     buildGoModule rec {
@@ -7,9 +6,9 @@ let
       name = "${stname}-${version}";
 
       src = fetchFromGitHub {
-        owner  = "syncthing";
-        repo   = "syncthing";
-        rev    = "v${version}";
+        owner = "syncthing";
+        repo = "syncthing";
+        rev = "v${version}";
         sha256 = "076k06p2vqqz2r5bgvqkjipnhznbfbalp3pa2gjm2j9hy7nldr9f";
       };
 
@@ -20,8 +19,8 @@ let
       patches = [
         ./add-stcli-target.patch
       ];
-      BUILD_USER="nix";
-      BUILD_HOST="nix";
+      BUILD_USER = "nix";
+      BUILD_HOST = "nix";
 
       buildPhase = ''
         runHook preBuild
@@ -45,8 +44,8 @@ let
         platforms = platforms.unix;
       };
     };
-
-in {
+in
+{
   syncthing = common {
     stname = "syncthing";
     target = "syncthing";

@@ -1,13 +1,13 @@
 { stdenv, fetchFromGitHub, fetchpatch, cmake, makeWrapper, itk4, vtk }:
 
 stdenv.mkDerivation rec {
-  pname    = "ANTs";
+  pname = "ANTs";
   version = "2.2.0";
 
   src = fetchFromGitHub {
-    owner  = "ANTsX";
-    repo   = "ANTs";
-    rev    = "37ad4e20be3a5ecd26c2e4e41b49e778a0246c3d";
+    owner = "ANTsX";
+    repo = "ANTs";
+    rev = "37ad4e20be3a5ecd26c2e4e41b49e778a0246c3d";
     sha256 = "1hrdwv3m9xh3yf7l0rm2ggxc2xzckfb8srs88g485ibfszx7i03q";
   };
 

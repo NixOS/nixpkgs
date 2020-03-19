@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, fftwFloat, gtk2, ladspaPlugins, libjack2, liblo, libxml2
-, makeWrapper, pkgconfig, perlPackages
+{ stdenv
+, fetchurl
+, fftwFloat
+, gtk2
+, ladspaPlugins
+, libjack2
+, liblo
+, libxml2
+, makeWrapper
+, pkgconfig
+, perlPackages
 }:
 
 stdenv.mkDerivation {
@@ -12,7 +21,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ fftwFloat gtk2 ladspaPlugins libjack2 liblo libxml2 makeWrapper ]
-    ++ (with perlPackages; [ perl XMLParser ]);
+  ++ (with perlPackages; [ perl XMLParser ]);
 
   NIX_LDFLAGS = "-ldl";
 

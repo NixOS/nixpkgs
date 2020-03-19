@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Early OOM Daemon for Linux";
-    homepage    = https://github.com/rfjakob/earlyoom;
-    license     = lib.licenses.mit;
-    platforms   = lib.platforms.linux;
+    homepage = https://github.com/rfjakob/earlyoom;
+    license = lib.licenses.mit;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ ];
   };
 }

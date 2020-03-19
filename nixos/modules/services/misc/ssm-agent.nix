@@ -15,7 +15,8 @@ let
       -r) echo "${config.system.nixos.version}";;
     esac
   '';
-in {
+in
+{
   options.services.ssm-agent = {
     enable = mkEnableOption "AWS SSM agent";
 
@@ -30,7 +31,7 @@ in {
   config = mkIf cfg.enable {
     systemd.services.ssm-agent = {
       inherit (cfg.package.meta) description;
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
 
       path = [ fake-lsb-release ];
@@ -43,4 +44,3 @@ in {
     };
   };
 }
-

@@ -1,11 +1,23 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, zlib, bzip2, lzma, lzo, lz4, zstd, xz
-, libgcrypt, e2fsprogs, utillinux, libgpgerror }:
-
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, zlib
+, bzip2
+, lzma
+, lzo
+, lz4
+, zstd
+, xz
+, libgcrypt
+, e2fsprogs
+, utillinux
+, libgpgerror
+}:
 let
   version = "0.8.5";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "fsarchiver";
   inherit version;
 
@@ -17,12 +29,22 @@ in stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkgconfig
+    autoreconfHook
+    pkgconfig
   ];
 
   buildInputs = [
-    zlib bzip2 lzma lzo lz4 zstd xz
-    libgcrypt e2fsprogs utillinux libgpgerror
+    zlib
+    bzip2
+    lzma
+    lzo
+    lz4
+    zstd
+    xz
+    libgcrypt
+    e2fsprogs
+    utillinux
+    libgpgerror
   ];
 
   meta = with stdenv.lib; {

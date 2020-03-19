@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, which, curl, makeWrapper, jdk }:
-
 let
   rev = "f0669e9b6745b65fae3ec58c2d6a2bef133db456";
   version = "2019-10-21";

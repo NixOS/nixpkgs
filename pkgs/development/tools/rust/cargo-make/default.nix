@@ -13,16 +13,16 @@ rustPlatform.buildRustPackage rec {
         sha256 = "1sf4hjsylk68d3wb7bs8gfkz5az41hjs7hvb8mbhyc7nryklkq4d";
       };
     in
-    runCommand "source" {} ''
-      cp -R ${source} $out
-      chmod +w $out
-      cp ${./Cargo.lock} $out/Cargo.lock
-    '';
+      runCommand "source" { } ''
+        cp -R ${source} $out
+        chmod +w $out
+        cp ${./Cargo.lock} $out/Cargo.lock
+      '';
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   cargoSha256 = "1x0lb68d47nhggnj7jf90adz7shb0cg305mavgqvxizd2s9789dx";
 

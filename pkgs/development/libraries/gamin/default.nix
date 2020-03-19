@@ -1,26 +1,28 @@
 { stdenv, fetchurl, fetchpatch, pkgconfig, glib }:
 
-stdenv.mkDerivation (rec {
-  name = "gamin-0.1.10";
+stdenv.mkDerivation
+  (rec
+  {
+    name = "gamin-0.1.10";
 
-  src = fetchurl {
-    url = "https://www.gnome.org/~veillard/gamin/sources/${name}.tar.gz";
-    sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
-  };
+    src = fetchurl {
+      url = "https://www.gnome.org/~veillard/gamin/sources/${name}.tar.gz";
+      sha256 = "18cr51y5qacvs2fc2p1bqv32rs8bzgs6l67zhasyl45yx055y218";
+    };
 
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ glib ];
+    buildInputs = [ glib ];
 
-  # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
-  # <sys/socket.h> with Glibc 2.9.
-  configureFlags = [
-    "--disable-debug"
-    "--without-python" # python3 not supported
-    "CPPFLAGS=-D_GNU_SOURCE"
-  ];
+    # `_GNU_SOURCE' is needed, e.g., to get `struct ucred' from
+    # <sys/socket.h> with Glibc 2.9.
+    configureFlags = [
+      "--disable-debug"
+      "--without-python" # python3 not supported
+      "CPPFLAGS=-D_GNU_SOURCE"
+    ];
 
-  patches = [ ./deadlock.patch ]
+    patches = [ ./deadlock.patch ]
     ++ map fetchurl (import ./debian-patches.nix)
     ++ stdenv.lib.optional stdenv.cc.isClang ./returnval.patch
     ++ stdenv.lib.optional stdenv.hostPlatform.isMusl (fetchpatch {
@@ -30,17 +32,17 @@ stdenv.mkDerivation (rec {
     });
 
 
-  meta = with stdenv.lib; {
-    homepage    = https://people.gnome.org/~veillard/gamin/;
-    description = "A file and directory monitoring system";
-    maintainers = with maintainers; [ lovek323 ];
-    license = licenses.gpl2;
-    platforms   = platforms.unix;
-  };
-}
-
-// stdenv.lib.optionalAttrs stdenv.isDarwin {
-  preBuild =  ''
-    sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
-  '';
-})
+    meta = with stdenv.lib; {
+      homepage = https://people.gnome.org/~veillard/gamin/;
+      description = "A file and directory monitoring system";
+      maintainers = with maintainers; [ lovek323 ];
+      license = licenses.gpl2;
+      platforms = platforms.unix;
+    };
+  }
+  // stdenv.lib.optionalAttrs stdenv.isDarwin {
+    preBuild = ''
+      sed -i 's/,--version-script=.*$/\\/' libgamin/Makefile
+    '';
+  }
+  )

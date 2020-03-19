@@ -1,5 +1,16 @@
-{ buildPythonPackage, stdenv, libffi, isPy3k, pyasn1, clint, ndg-httpsclient
-, protobuf, requests, args, gpapi, pyaxmlparser, fetchFromGitHub
+{ buildPythonPackage
+, stdenv
+, libffi
+, isPy3k
+, pyasn1
+, clint
+, ndg-httpsclient
+, protobuf
+, requests
+, args
+, gpapi
+, pyaxmlparser
+, fetchFromGitHub
 }:
 
 buildPythonPackage rec {

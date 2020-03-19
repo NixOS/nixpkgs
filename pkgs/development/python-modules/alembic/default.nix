@@ -1,6 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcov, mock, coverage, setuptools
-, Mako, sqlalchemy, python-editor, dateutil
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestcov
+, mock
+, coverage
+, setuptools
+, Mako
+, sqlalchemy
+, python-editor
+, dateutil
 }:
 
 buildPythonPackage rec {

@@ -1,5 +1,9 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, requests }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "pyupdate";

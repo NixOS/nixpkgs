@@ -1,6 +1,10 @@
-{ stdenv, fetchhg
-, qmake, qttools
-, qtbase, qtsvg, qtxmlpatterns
+{ stdenv
+, fetchhg
+, qmake
+, qttools
+, qtbase
+, qtsvg
+, qtxmlpatterns
 , poppler_utils
 }:
 

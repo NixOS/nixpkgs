@@ -1,8 +1,20 @@
-{ stdenv, fetchFromGitHub, cairo, cmake, libxkbcommon
-, pango, fribidi, harfbuzz, pcre, pkgconfig
-, ncursesSupport ? true, ncurses ? null
-, waylandSupport ? true, wayland ? null
-, x11Support ? true, xlibs ? null, xorg ? null
+{ stdenv
+, fetchFromGitHub
+, cairo
+, cmake
+, libxkbcommon
+, pango
+, fribidi
+, harfbuzz
+, pcre
+, pkgconfig
+, ncursesSupport ? true
+, ncurses ? null
+, waylandSupport ? true
+, wayland ? null
+, x11Support ? true
+, xlibs ? null
+, xorg ? null
 }:
 
 assert ncursesSupport -> ncurses != null;
@@ -22,7 +34,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig pcre ];
 
-  cmakeFlags =  [
+  cmakeFlags = [
     "-DBEMENU_CURSES_RENDERER=${if ncursesSupport then "ON" else "OFF"}"
     "-DBEMENU_WAYLAND_RENDERER=${if waylandSupport then "ON" else "OFF"}"
     "-DBEMENU_X11_RENDERER=${if x11Support then "ON" else "OFF"}"
@@ -35,11 +47,15 @@ stdenv.mkDerivation rec {
     libxkbcommon
     pango
   ] ++ optionals ncursesSupport [ ncurses ]
-    ++ optionals waylandSupport [ wayland ]
-    ++ optionals x11Support [
-      xlibs.libX11 xlibs.libXinerama xlibs.libXft
-      xorg.libXdmcp xorg.libpthreadstubs xorg.libxcb
-    ];
+  ++ optionals waylandSupport [ wayland ]
+  ++ optionals x11Support [
+    xlibs.libX11
+    xlibs.libXinerama
+    xlibs.libXft
+    xorg.libXdmcp
+    xorg.libpthreadstubs
+    xorg.libxcb
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/Cloudef/bemenu";

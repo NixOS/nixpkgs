@@ -1,5 +1,12 @@
-{ lib, buildPythonPackage, fetchPypi, requests, beautifulsoup4, pytest, requests-mock,
-  pytestrunner }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, beautifulsoup4
+, pytest
+, requests-mock
+, pytestrunner
+}:
 
 buildPythonPackage rec {
   pname = "favicon";

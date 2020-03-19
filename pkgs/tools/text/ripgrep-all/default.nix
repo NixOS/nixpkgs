@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchFromGitHub, rustPlatform, makeWrapper, ffmpeg
-, pandoc, poppler_utils, ripgrep, Security, imagemagick, tesseract
+{ stdenv
+, lib
+, fetchFromGitHub
+, rustPlatform
+, makeWrapper
+, ffmpeg
+, pandoc
+, poppler_utils
+, ripgrep
+, Security
+, imagemagick
+, tesseract
 }:
 
 rustPlatform.buildRustPackage rec {

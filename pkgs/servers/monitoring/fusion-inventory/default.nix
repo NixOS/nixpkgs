@@ -1,5 +1,15 @@
-{ stdenv, lib, fetchurl, perlPackages, nix, dmidecode, pciutils, usbutils, iproute, nettools
-, fetchFromGitHub, makeWrapper
+{ stdenv
+, lib
+, fetchurl
+, perlPackages
+, nix
+, dmidecode
+, pciutils
+, usbutils
+, iproute
+, nettools
+, fetchFromGitHub
+, makeWrapper
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -25,7 +35,7 @@ perlPackages.buildPerlPackage rec {
       url = https://github.com/fusioninventory/fusioninventory-agent/pull/397.diff;
       sha256 = "0pyf7mp0zsb3zcqb6yysr1zfp54p9ciwjn1pzayw6s9flmcgrmbw";
     })
-    ];
+  ];
 
   postPatch = ''
 
@@ -37,7 +47,7 @@ perlPackages.buildPerlPackage rec {
       --replace /sbin/ip ${iproute}/sbin/ip
   '';
 
-  buildTools = [];
+  buildTools = [ ];
   buildInputs = [ makeWrapper ] ++ (with perlPackages; [
     CGI
     DataStructureUtil
@@ -77,7 +87,7 @@ perlPackages.buildPerlPackage rec {
     for cur in $out/bin/*; do
       if [ -x "$cur" ]; then
         sed -e "s|./lib|$out/lib|" -i "$cur"
-        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [nix dmidecode pciutils usbutils nettools iproute]}
+        wrapProgram "$cur" --prefix PATH : ${lib.makeBinPath [ nix dmidecode pciutils usbutils nettools iproute ]}
       fi
     done
   '';

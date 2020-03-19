@@ -1,11 +1,23 @@
-{ buildPerlPackage, lib, fetchurl, fetchpatch, makeWrapper
-, DBDSQLite, EmailMIME, IOSocketSSL, IPCRun, Plack, PlackMiddlewareReverseProxy
-, SearchXapian, TimeDate, URI
-, git, highlight, openssl, xapian
+{ buildPerlPackage
+, lib
+, fetchurl
+, fetchpatch
+, makeWrapper
+, DBDSQLite
+, EmailMIME
+, IOSocketSSL
+, IPCRun
+, Plack
+, PlackMiddlewareReverseProxy
+, SearchXapian
+, TimeDate
+, URI
+, git
+, highlight
+, openssl
+, xapian
 }:
-
 let
-
   # These tests would fail, and produce "Operation not permitted"
   # errors from git, because they use git init --shared.  This tries
   # to set the setgid bit, which isn't permitted inside build
@@ -17,9 +29,7 @@ let
 
   testConditions = with lib;
     concatMapStringsSep " " (n: "! -name ${escapeShellArg n}.t") skippedTests;
-
 in
-
 buildPerlPackage rec {
   pname = "public-inbox";
   version = "1.2.0";
@@ -47,8 +57,16 @@ buildPerlPackage rec {
   nativeBuildInputs = [ makeWrapper ];
 
   buildInputs = [
-    DBDSQLite EmailMIME IOSocketSSL IPCRun Plack PlackMiddlewareReverseProxy
-    SearchXapian TimeDate URI highlight
+    DBDSQLite
+    EmailMIME
+    IOSocketSSL
+    IPCRun
+    Plack
+    PlackMiddlewareReverseProxy
+    SearchXapian
+    TimeDate
+    URI
+    highlight
   ];
 
   checkInputs = [ git openssl xapian ];

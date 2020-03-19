@@ -1,12 +1,25 @@
-{ stdenv, fetchurl, makeWrapper, gtk2, libcddb, intltool, pkgconfig, cdparanoia
-, mp3Support ? false, lame
-, oggSupport ? true, vorbis-tools
-, flacSupport ? true, flac
-, opusSupport ? false, opusTools
-, wavpackSupport ? false, wavpack
-#, musepackSupport ? false, TODO: mpcenc
-, monkeysAudioSupport ? false, monkeysAudio
-#, aacSupport ? false, TODO: neroAacEnc
+{ stdenv
+, fetchurl
+, makeWrapper
+, gtk2
+, libcddb
+, intltool
+, pkgconfig
+, cdparanoia
+, mp3Support ? false
+, lame
+, oggSupport ? true
+, vorbis-tools
+, flacSupport ? true
+, flac
+, opusSupport ? false
+, opusTools
+, wavpackSupport ? false
+, wavpack
+  #, musepackSupport ? false, TODO: mpcenc
+, monkeysAudioSupport ? false
+, monkeysAudio
+  #, aacSupport ? false, TODO: neroAacEnc
 }:
 
 with stdenv.lib;
@@ -23,13 +36,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ gtk2 libcddb ];
 
   runtimeDeps =
-    optional mp3Support lame ++
-    optional oggSupport vorbis-tools ++
-    optional flacSupport flac ++
-    optional opusSupport opusTools ++
-    optional wavpackSupport wavpack ++
-    optional monkeysAudioSupport monkeysAudio ++
-    [ cdparanoia ];
+    optional mp3Support lame
+    ++ optional oggSupport vorbis-tools
+    ++ optional flacSupport flac
+    ++ optional opusSupport opusTools
+    ++ optional wavpackSupport wavpack
+    ++ optional monkeysAudioSupport monkeysAudio
+    ++ [ cdparanoia ];
 
   postInstall = ''
     wrapProgram "$out/bin/asunder" \

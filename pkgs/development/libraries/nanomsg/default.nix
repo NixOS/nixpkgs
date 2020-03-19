@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ cmake ];
 
   meta = with stdenv.lib; {
-    description= "Socket library that provides several common communication patterns";
+    description = "Socket library that provides several common communication patterns";
     homepage = https://nanomsg.org/;
     license = licenses.mit;
     platforms = platforms.unix;

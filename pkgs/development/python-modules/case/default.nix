@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, nose, unittest2, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, six
+, nose
+, unittest2
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "case";

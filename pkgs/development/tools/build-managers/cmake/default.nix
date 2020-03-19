@@ -1,13 +1,26 @@
-{ stdenv, lib, fetchurl, pkgconfig
-, bzip2, curl, expat, libarchive, xz, zlib, libuv, rhash
+{ stdenv
+, lib
+, fetchurl
+, pkgconfig
+, bzip2
+, curl
+, expat
+, libarchive
+, xz
+, zlib
+, libuv
+, rhash
 , buildPackages
-# darwin attributes
+  # darwin attributes
 , ps
 , isBootstrap ? false
 , useSharedLibraries ? (!isBootstrap && !stdenv.isCygwin)
-, useNcurses ? false, ncurses
-, useQt4 ? false, qt4
-, withQt5 ? false, qtbase
+, useNcurses ? false
+, ncurses
+, useQt4 ? false
+, qt4
+, withQt5 ? false
+, qtbase
 }:
 
 assert withQt5 -> useQt4 == false;
@@ -15,10 +28,10 @@ assert useQt4 -> withQt5 == false;
 
 stdenv.mkDerivation rec {
   pname = "cmake"
-          + lib.optionalString isBootstrap "-boot"
-          + lib.optionalString useNcurses "-cursesUI"
-          + lib.optionalString withQt5 "-qt5UI"
-          + lib.optionalString useQt4 "-qt4UI";
+  + lib.optionalString isBootstrap "-boot"
+  + lib.optionalString useNcurses "-cursesUI"
+  + lib.optionalString withQt5 "-qt5UI"
+  + lib.optionalString useQt4 "-qt4UI";
   version = "3.16.5";
 
   src = fetchurl {
@@ -70,8 +83,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--docdir=share/doc/${pname}${version}"
   ] ++ (if useSharedLibraries then [ "--no-system-jsoncpp" "--system-libs" ] else [ "--no-system-libs" ]) # FIXME: cleanup
-    ++ lib.optional (useQt4 || withQt5) "--qt-gui"
-    ++ [
+  ++ lib.optional (useQt4 || withQt5) "--qt-gui"
+  ++ [
     "--"
     # We should set the proper `CMAKE_SYSTEM_NAME`.
     # http://www.cmake.org/Wiki/CMake_Cross_Compiling
@@ -85,8 +98,8 @@ stdenv.mkDerivation rec {
     "-DCMAKE_RANLIB=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}ranlib"
     "-DCMAKE_STRIP=${lib.getBin stdenv.cc.bintools.bintools}/bin/${stdenv.cc.targetPrefix}strip"
   ]
-    # Avoid depending on frameworks.
-    ++ lib.optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
+  # Avoid depending on frameworks.
+  ++ lib.optional (!useNcurses) "-DBUILD_CursesDialog=OFF";
 
   # make install attempts to use the just-built cmake
   preInstall = lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) ''

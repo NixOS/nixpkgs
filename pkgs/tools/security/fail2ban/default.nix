@@ -7,9 +7,9 @@ python3.pkgs.buildPythonApplication {
   inherit version;
 
   src = fetchFromGitHub {
-    owner  = "fail2ban";
-    repo   = "fail2ban";
-    rev    = version;
+    owner = "fail2ban";
+    repo = "fail2ban";
+    rev = version;
     sha256 = "0kqvkxpb72y3kgmxf6g36w67499c6gcd2a9yyblagwx12y05f1sh";
   };
 
@@ -42,18 +42,19 @@ python3.pkgs.buildPythonApplication {
     ${stdenv.shell} ./fail2ban-2to3
   '';
 
-  postInstall = let
-    sitePackages = "$out/${python3.sitePackages}";
-  in ''
-    # see https://github.com/NixOS/nixpkgs/issues/4968
-    rm -rf ${sitePackages}/etc ${sitePackages}/usr ${sitePackages}/var;
-  '';
+  postInstall =
+    let
+      sitePackages = "$out/${python3.sitePackages}";
+    in ''
+      # see https://github.com/NixOS/nixpkgs/issues/4968
+      rm -rf ${sitePackages}/etc ${sitePackages}/usr ${sitePackages}/var;
+    '';
 
   meta = with stdenv.lib; {
-    homepage    = https://www.fail2ban.org/;
+    homepage = https://www.fail2ban.org/;
     description = "A program that scans log files for repeated failing login attempts and bans IP addresses";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ eelco lovek323 fpletz ];
-    platforms   = platforms.linux ++ platforms.darwin;
+    platforms = platforms.linux ++ platforms.darwin;
   };
 }

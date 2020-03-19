@@ -14,7 +14,7 @@ rec {
 
   packageName = "str";
 
-  asdFilesToKeep = ["str.asd"];
+  asdFilesToKeep = [ "str.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM str DESCRIPTION

@@ -12,7 +12,10 @@ python2.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python2.pkgs; [
-    pygtk pyserial libxml2 future
+    pygtk
+    pyserial
+    libxml2
+    future
   ];
 
   meta = with stdenv.lib; {

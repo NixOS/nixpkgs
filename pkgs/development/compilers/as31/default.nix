@@ -1,10 +1,8 @@
 { stdenv, fetchpatch, fetchurl, yacc }:
-
 let
-
   version = "2.3.1";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "as31";
   inherit version;
   src = fetchurl {
@@ -17,10 +15,10 @@ in stdenv.mkDerivation {
 
   patches = [
     (fetchpatch {
-       name = "CVE-2012-0808.patch";
-       url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=655496;filename=as31-mkstemps.patch;msg=5";
-       sha256 = "0iia4wa8m141bwz4588yxb1dp2qwhapcii382sncm6jvwyngwh21";
-     })
+      name = "CVE-2012-0808.patch";
+      url = "https://bugs.debian.org/cgi-bin/bugreport.cgi?att=1;bug=655496;filename=as31-mkstemps.patch;msg=5";
+      sha256 = "0iia4wa8m141bwz4588yxb1dp2qwhapcii382sncm6jvwyngwh21";
+    })
   ];
 
   preConfigure = ''

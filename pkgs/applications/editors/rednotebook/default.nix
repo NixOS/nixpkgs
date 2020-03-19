@@ -1,6 +1,15 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gdk-pixbuf, glib, gobject-introspection, gtk3, gtksourceview, pango, webkitgtk
-, pygobject3, pyyaml
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, gdk-pixbuf
+, glib
+, gobject-introspection
+, gtk3
+, gtksourceview
+, pango
+, webkitgtk
+, pygobject3
+, pyyaml
 }:
 
 buildPythonApplication rec {
@@ -20,8 +29,14 @@ buildPythonApplication rec {
   nativeBuildInputs = [ gobject-introspection ];
 
   propagatedBuildInputs = [
-    gdk-pixbuf glib gtk3 gtksourceview pango webkitgtk
-    pygobject3 pyyaml
+    gdk-pixbuf
+    glib
+    gtk3
+    gtksourceview
+    pango
+    webkitgtk
+    pygobject3
+    pyyaml
   ];
 
   makeWrapperArgs = [

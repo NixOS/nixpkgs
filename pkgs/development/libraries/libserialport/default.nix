@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = stdenv.lib.optional stdenv.isLinux udev
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
+  ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   meta = with stdenv.lib; {
     description = "Cross-platform shared library for serial port access";

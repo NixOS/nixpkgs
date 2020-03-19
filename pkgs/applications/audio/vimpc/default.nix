@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, mpd_clientlib, ncurses, pcre, pkgconfig
-, taglib, curl }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, mpd_clientlib
+, ncurses
+, pcre
+, pkgconfig
+, taglib
+, curl
+}:
 
 stdenv.mkDerivation rec {
   version = "0.09.2";

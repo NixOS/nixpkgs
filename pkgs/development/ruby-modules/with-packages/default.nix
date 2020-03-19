@@ -13,7 +13,6 @@ using a nix-shell shebang:
 Run the following in the nixpkgs root directory to update the ruby-packages.nix:
 ./maintainers/scripts/update-ruby-packages
 */
-
 let
   functions = import ../bundled-common/functions.nix { inherit lib gemConfig; };
 
@@ -21,12 +20,16 @@ let
     let
       realGemset = if builtins.isAttrs gemset then gemset else import gemset;
       builtGems =
-        lib.mapAttrs (name: initialAttrs:
-          let
-            attrs = functions.applyGemConfigs ({ inherit ruby; gemName = name; } // initialAttrs);
-          in
-            buildRubyGem (functions.composeGemAttrs ruby builtGems name attrs)
-        ) realGemset;
+        lib.mapAttrs
+          (name: initialAttrs:
+            let
+              attrs = functions.applyGemConfigs (
+                { inherit ruby; gemName = name;
+                }
+                // initialAttrs);
+            in
+              buildRubyGem (functions.composeGemAttrs ruby builtGems name attrs)
+          ) realGemset;
     in builtGems;
 
   gems = buildGems (import ../../../top-level/ruby-packages.nix);
@@ -51,7 +54,6 @@ let
           done
         '';
       };
-
     in stdenv.mkDerivation {
       name = "${ruby.name}-with-packages";
       nativeBuildInputs = [ makeWrapper ];
@@ -73,5 +75,5 @@ let
         gems = selected;
       };
     };
-
-in { inherit withPackages gems buildGems; }
+in
+{ inherit withPackages gems buildGems; }

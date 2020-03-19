@@ -3,9 +3,7 @@
 , makeWrapper
 , common-updater-scripts
 }:
-
 let
-
   poison_4 = beamPackages.buildMix {
     name = "poison";
     version = "4.0.1";
@@ -16,10 +14,7 @@ let
       sha256 = "098gdz7xzfmnjzgnnv80nl4h3zl8l9czqqd132vlnfabxbz3d25s";
     };
   };
-
-
 in
-
 beamPackages.buildMix {
   name = "nixpkgs-github-update";
   version = "0.1.0";

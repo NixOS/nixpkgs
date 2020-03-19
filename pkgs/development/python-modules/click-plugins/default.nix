@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  click, pytest
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, click
+, pytest
 }:
 
 buildPythonPackage rec {

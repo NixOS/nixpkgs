@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, requests, requests_oauthlib
-, django, python3-openid, mock, coverage }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, requests_oauthlib
+, django
+, python3-openid
+, mock
+, coverage
+}:
 
 buildPythonPackage rec {
   pname = "django-allauth";

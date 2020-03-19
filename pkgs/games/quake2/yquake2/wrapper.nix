@@ -4,14 +4,13 @@
 , name
 , description
 }:
-
 let
   env = buildEnv {
     name = "${name}-env";
     paths = [ yquake2 ] ++ games;
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${name}-${stdenv.lib.getVersion yquake2}";
 
   nativeBuildInputs = [ makeWrapper ];

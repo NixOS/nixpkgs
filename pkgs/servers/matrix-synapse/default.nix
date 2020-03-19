@@ -1,9 +1,12 @@
-{ lib, stdenv, python3, openssl
-, enableSystemd ? stdenv.isLinux, nixosTests
+{ lib
+, stdenv
+, python3
+, openssl
+, enableSystemd ? stdenv.isLinux
+, nixosTests
 }:
 
 with python3.pkgs;
-
 let
   matrix-synapse-ldap3 = buildPythonPackage rec {
     pname = "matrix-synapse-ldap3";
@@ -20,8 +23,8 @@ let
     doCheck = !isPy3k;
     checkInputs = [ ldaptor mock ];
   };
-
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "matrix-synapse";
   version = "1.11.1";
 
@@ -50,13 +53,14 @@ in buildPythonApplication rec {
     netaddr
     phonenumbers
     pillow
-    (prometheus_client.overrideAttrs (x: {
-      src = fetchPypi {
-        pname = "prometheus_client";
-        version = "0.3.1";
-        sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
-      };
-    }))
+    (prometheus_client.overrideAttrs
+      (x: {
+        src = fetchPypi {
+          pname = "prometheus_client";
+          version = "0.3.1";
+          sha256 = "093yhvz7lxl7irnmsfdnf2030lkj4gsfkg6pcmy4yr1ijk029g0p";
+        };
+      }))
     psutil
     psycopg2
     pyasn1

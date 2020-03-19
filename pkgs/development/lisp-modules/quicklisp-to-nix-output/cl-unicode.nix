@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-unicode";
 
-  asdFilesToKeep = ["cl-unicode.asd"];
+  asdFilesToKeep = [ "cl-unicode.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-unicode DESCRIPTION Portable Unicode Library SHA256

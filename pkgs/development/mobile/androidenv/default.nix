@@ -1,4 +1,5 @@
-{ config, pkgs ? import <nixpkgs> {}
+{ config
+, pkgs ? import <nixpkgs> { }
 , pkgs_i686 ? import <nixpkgs> { system = "i686-linux"; }
 , licenseAccepted ? config.android_sdk.accept_license or false
 }:
@@ -21,6 +22,6 @@ rec {
 
   androidPkgs_9_0 = composeAndroidPackages {
     platformVersions = [ "28" ];
-    abiVersions = [ "x86" "x86_64"];
+    abiVersions = [ "x86" "x86_64" ];
   };
 }

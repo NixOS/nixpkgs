@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, curl, python, bind, iproute, bc, gitMinimal }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, curl
+, python
+, bind
+, iproute
+, bc
+, gitMinimal
+}:
 let
   version = "1.23.0";
   deps = lib.makeBinPath [

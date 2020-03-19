@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
   buildInputs = [ btrfs-progs ];
   propagatedBuildInputs = [ contextlib2 pyxdg pycparser alembic ]
-    ++ stdenv.lib.optionals (!isPyPy) [ cffi ];
+  ++ stdenv.lib.optionals (!isPyPy) [ cffi ];
 
   meta = with stdenv.lib; {
     description = "Deduplication for Btrfs";

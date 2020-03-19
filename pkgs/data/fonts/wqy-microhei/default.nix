@@ -20,4 +20,3 @@ fetchzip rec {
     platforms = lib.platforms.all;
   };
 }
-

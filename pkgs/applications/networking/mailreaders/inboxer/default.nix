@@ -1,6 +1,26 @@
-{ stdenv, fetchurl, binutils, patchelf, makeWrapper
-, expat, xorg, gdk-pixbuf, glib, gnome2, cairo, atk, freetype
-, fontconfig, dbus, nss, nspr, gtk2-x11, alsaLib, cups, libpulseaudio, udev }:
+{ stdenv
+, fetchurl
+, binutils
+, patchelf
+, makeWrapper
+, expat
+, xorg
+, gdk-pixbuf
+, glib
+, gnome2
+, cairo
+, atk
+, freetype
+, fontconfig
+, dbus
+, nss
+, nspr
+, gtk2-x11
+, alsaLib
+, cups
+, libpulseaudio
+, udev
+}:
 
 stdenv.mkDerivation rec {
   pname = "inboxer";
@@ -8,10 +28,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Unofficial, free and open-source Google Inbox Desktop App";
-    homepage    = "https://denysdovhan.com/inboxer";
+    homepage = "https://denysdovhan.com/inboxer";
     maintainers = [ maintainers.mgttlinger ];
-    license     = licenses.mit;
-    platforms   = [ "x86_64-linux" ];
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
   };
 
   src = fetchurl {

@@ -40,5 +40,5 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.mit;
     maintainers = [ stdenv.lib.maintainers.Baughn ];
     platforms = stdenv.lib.platforms.all;
-  };    
+  };
 }

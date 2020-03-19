@@ -1,10 +1,23 @@
-{ stdenv, fetchurl
-, gpm, openssl, pkgconfig, libev # Misc.
-, libpng, libjpeg, libtiff, librsvg # graphic formats
-, bzip2, zlib, xz # Transfer encodings
+{ stdenv
+, fetchurl
+, gpm
+, openssl
+, pkgconfig
+, libev # Misc.
+, libpng
+, libjpeg
+, libtiff
+, librsvg # graphic formats
+, bzip2
+, zlib
+, xz # Transfer encodings
 , enableFB ? true
-, enableDirectFB ? false, directfb
-, enableX11 ? true, libX11, libXt, libXau # GUI support
+, enableDirectFB ? false
+, directfb
+, enableX11 ? true
+, libX11
+, libXt
+, libXau # GUI support
 }:
 
 stdenv.mkDerivation rec {
@@ -25,10 +38,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig bzip2 ];
 
   configureFlags = [ "--with-ssl" ]
-    ++ stdenv.lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
-    ++ stdenv.lib.optional enableX11 "--with-x"
-    ++ stdenv.lib.optional enableFB "--with-fb"
-    ++ stdenv.lib.optional enableDirectFB "--with-directfb";
+  ++ stdenv.lib.optional (enableX11 || enableFB || enableDirectFB) "--enable-graphics"
+  ++ stdenv.lib.optional enableX11 "--with-x"
+  ++ stdenv.lib.optional enableFB "--with-fb"
+  ++ stdenv.lib.optional enableDirectFB "--with-directfb";
 
   meta = with stdenv.lib; {
     homepage = http://links.twibright.com/;

@@ -7,4 +7,5 @@ callPackage ./generic.nix (args // {
     rev = "e895ee55bec8a3320a0e972b32c05d35b47fe226";
     url = "https://gitlab.com/sane-project/backends.git";
   };
-})
+}
+)

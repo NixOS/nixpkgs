@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.parsoid;
 
   parsoid = pkgs.nodePackages.parsoid;
@@ -11,19 +9,20 @@ let
   confTree = {
     worker_heartbeat_timeout = 300000;
     logging = { level = "info"; };
-    services = [{
-      module = "lib/index.js";
-      entrypoint = "apiServiceWorker";
-      conf = {
-        mwApis = map (x: if isAttrs x then x else { uri = x; }) cfg.wikis;
-        serverInterface = cfg.interface;
-        serverPort = cfg.port;
-      };
-    }];
+    services = [
+      {
+        module = "lib/index.js";
+        entrypoint = "apiServiceWorker";
+        conf = {
+          mwApis = map (x: if isAttrs x then x else { uri = x; }) cfg.wikis;
+          serverInterface = cfg.interface;
+          serverPort = cfg.port;
+        };
+      }
+    ];
   };
 
   confFile = pkgs.writeText "config.yml" (builtins.toJSON (recursiveUpdate confTree cfg.extraConfig));
-
 in
 {
   imports = [
@@ -79,7 +78,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Extra configuration to add to parsoid configuration.
         '';

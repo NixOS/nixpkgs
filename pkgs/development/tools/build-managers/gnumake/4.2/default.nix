@@ -1,7 +1,6 @@
-{ stdenv, fetchurl, guileSupport ? false, pkgconfig ? null , guile ? null }:
+{ stdenv, fetchurl, guileSupport ? false, pkgconfig ? null, guile ? null }:
 
-assert guileSupport -> ( pkgconfig != null && guile != null );
-
+assert guileSupport -> (pkgconfig != null && guile != null);
 let
   version = "4.2.1";
 in
@@ -30,14 +29,14 @@ stdenv.mkDerivation {
 
   configureFlags = stdenv.lib.optional guileSupport "--with-guile"
 
-    # Make uses this test to decide whether it should keep track of
-    # subseconds. Apple made this possible with APFS and macOS 10.13.
-    # However, we still support macOS 10.11 and 10.12. Binaries built
-    # in Nixpkgs will be unable to use futimens to set mtime less than
-    # a second. So, tell Make to ignore nanoseconds in mtime here by
-    # overriding the autoconf test for the struct.
-    # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
-    ++ stdenv.lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
+  # Make uses this test to decide whether it should keep track of
+  # subseconds. Apple made this possible with APFS and macOS 10.13.
+  # However, we still support macOS 10.11 and 10.12. Binaries built
+  # in Nixpkgs will be unable to use futimens to set mtime less than
+  # a second. So, tell Make to ignore nanoseconds in mtime here by
+  # overriding the autoconf test for the struct.
+  # See https://github.com/NixOS/nixpkgs/issues/51221 for discussion.
+  ++ stdenv.lib.optional stdenv.isDarwin "ac_cv_struct_st_mtim_nsec=no";
 
   outputs = [ "out" "man" "info" ];
 

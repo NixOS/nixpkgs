@@ -9,7 +9,6 @@
 , gdk-pixbuf
 , gobject-introspection
 }:
-
 let
   version = "2019.02.14";
   dropboxd = "${dropbox}/bin/dropbox";
@@ -40,10 +39,11 @@ stdenv.mkDerivation {
     gdk-pixbuf
     # only for build, the install command also wants to use GTK through introspection
     # but we are using Nix for installation so we will not need that.
-    (python3.withPackages (ps: with ps; [
-      docutils
-      pygobject3
-    ]))
+    (python3.withPackages
+      (ps: with ps; [
+        docutils
+        pygobject3
+      ]))
   ];
 
   buildInputs = [

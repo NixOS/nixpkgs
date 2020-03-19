@@ -1,9 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchurl, pkgconfig, intltool, itstool, python3, wrapGAppsHook
-, python3Packages, gst_all_1, gtk3
-, gobject-introspection, librsvg, gnome3, libnotify, gsound
-, meson, ninja, gsettings-desktop-schemas
+{ stdenv
+, fetchFromGitHub
+, fetchurl
+, pkgconfig
+, intltool
+, itstool
+, python3
+, wrapGAppsHook
+, python3Packages
+, gst_all_1
+, gtk3
+, gobject-introspection
+, librsvg
+, gnome3
+, libnotify
+, gsound
+, meson
+, ninja
+, gsettings-desktop-schemas
 }:
-
 let
   version = "0.999";
 
@@ -22,8 +36,8 @@ let
     nativeBuildInputs = [ pkgconfig meson ninja gobject-introspection python3 ];
     buildInputs = with gst_all_1; [ gstreamer gst-plugins-base ];
   };
-
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   name = "pitivi-${version}";
 
   src = fetchurl {
@@ -47,14 +61,24 @@ in python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [ meson ninja pkgconfig intltool itstool python3 wrapGAppsHook ];
 
   buildInputs = [
-    gobject-introspection gtk3 librsvg gnome3.gnome-desktop gsound
+    gobject-introspection
+    gtk3
+    librsvg
+    gnome3.gnome-desktop
+    gsound
     gnome3.adwaita-icon-theme
-    gsettings-desktop-schemas libnotify
+    gsettings-desktop-schemas
+    libnotify
     gst-transcoder
   ] ++ (with gst_all_1; [
-    gstreamer gst-editing-services
-    gst-plugins-base (gst-plugins-good.override { gtkSupport = true; })
-    gst-plugins-bad gst-plugins-ugly gst-libav gst-validate
+    gstreamer
+    gst-editing-services
+    gst-plugins-base
+    (gst-plugins-good.override { gtkSupport = true; })
+    gst-plugins-bad
+    gst-plugins-ugly
+    gst-libav
+    gst-validate
   ]);
 
   pythonPath = with python3Packages; [ pygobject3 gst-python pyxdg numpy pycairo matplotlib dbus-python ];
@@ -75,7 +99,7 @@ in python3Packages.buildPythonApplication rec {
       that can appeal to newbies and professionals alike.
     '';
     license = licenses.lgpl21Plus;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
   };
 }

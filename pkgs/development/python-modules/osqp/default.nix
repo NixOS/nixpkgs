@@ -29,7 +29,7 @@ buildPythonPackage rec {
 
   checkInputs = [ scipy pytestCheckHook mkl ];
   pythonImportsCheck = [ "osqp" ];
-  dontUseSetuptoolsCheck = true;  # running setup.py fails if false
+  dontUseSetuptoolsCheck = true; # running setup.py fails if false
   preCheck = ''
     export LD_LIBRARY_PATH=${lib.strings.makeLibraryPath [ mkl ]}:$LD_LIBRARY_PATH;
   '';

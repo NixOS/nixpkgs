@@ -19,7 +19,8 @@ let
   installationPath = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
   appendPath = if stdenv.hostPlatform.system == "x86_64-linux" then "64" else "";
   libPath = stdenv.lib.makeLibraryPath [ cups libusb ] + ":$out/lib:${stdenv.cc.cc.lib}/lib${appendPath}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "samsung-UnifiedLinuxDriver";
   version = "4.01.17";
 

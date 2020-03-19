@@ -1,6 +1,19 @@
-{ stdenv, fetchurl, unzip, libjpeg, libtiff, zlib
-, postgresql, mysql57, libgeotiff, python, pythonPackages, proj, geos, openssl
-, libpng }:
+{ stdenv
+, fetchurl
+, unzip
+, libjpeg
+, libtiff
+, zlib
+, postgresql
+, mysql57
+, libgeotiff
+, python
+, pythonPackages
+, proj
+, geos
+, openssl
+, libpng
+}:
 
 stdenv.mkDerivation rec {
   pname = "gdal";
@@ -28,15 +41,15 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-jpeg=${libjpeg.dev}"
     "--with-libtiff=${libtiff.dev}" # optional (without largetiff support)
-    "--with-libpng=${libpng.dev}"   # optional
-    "--with-libz=${zlib.dev}"       # optional
+    "--with-libpng=${libpng.dev}" # optional
+    "--with-libz=${zlib.dev}" # optional
 
     "--with-pg=${postgresql}/bin/pg_config"
     "--with-mysql=${mysql57.connector-c}/bin/mysql_config"
     "--with-geotiff=${libgeotiff.dev}"
-    "--with-python"               # optional
+    "--with-python" # optional
     "--with-static-proj4=${proj}" # optional
-    "--with-geos=${geos}/bin/geos-config"# optional
+    "--with-geos=${geos}/bin/geos-config" # optional
   ];
 
   # Allow use of old proj_api.h

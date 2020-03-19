@@ -1,4 +1,4 @@
-{stdenv, fetchurl, erlang, pam, perl }:
+{ stdenv, fetchurl, erlang, pam, perl }:
 
 stdenv.mkDerivation rec {
   pname = "yaws";

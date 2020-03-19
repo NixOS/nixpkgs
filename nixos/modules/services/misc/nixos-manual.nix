@@ -5,12 +5,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.nixosManual;
   cfgd = config.documentation;
 in
-
 {
 
   options = {
@@ -48,7 +46,7 @@ in
     (mkIf cfg.showManual {
       assertions = singleton {
         assertion = cfgd.enable && cfgd.nixos.enable;
-        message   = "Can't enable `services.nixosManual.showManual` without `documentation.nixos.enable`";
+        message = "Can't enable `services.nixosManual.showManual` without `documentation.nixos.enable`";
       };
     })
     (mkIf (cfg.showManual && cfgd.enable && cfgd.nixos.enable) {

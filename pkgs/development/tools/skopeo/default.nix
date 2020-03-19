@@ -1,9 +1,18 @@
-{ stdenv, lib, buildGoPackage, fetchFromGitHub, runCommand
-, gpgme, libgpgerror, lvm2, btrfs-progs, pkgconfig, libselinux
-, go-md2man }:
+{ stdenv
+, lib
+, buildGoPackage
+, fetchFromGitHub
+, runCommand
+, gpgme
+, libgpgerror
+, lvm2
+, btrfs-progs
+, pkgconfig
+, libselinux
+, go-md2man
+}:
 
 with stdenv.lib;
-
 let
   version = "0.1.41";
 
@@ -14,10 +23,9 @@ let
     sha256 = "0aqw17irj2wn4a8g9hzfm5z5azqq33z6r1dbg1gyn2c8qxy1vfxs";
   };
 
-  defaultPolicyFile = runCommand "skopeo-default-policy.json" {} "cp ${src}/default-policy.json $out";
+  defaultPolicyFile = runCommand "skopeo-default-policy.json" { } "cp ${src}/default-policy.json $out";
 
   goPackagePath = "github.com/containers/skopeo";
-
 in
 buildGoPackage {
   pname = "skopeo";

@@ -1,5 +1,13 @@
-{ stdenv, fetchgit, cmake, bison, pkgconfig
-, libuecc, libsodium, libcap, json_c }:
+{ stdenv
+, fetchgit
+, cmake
+, bison
+, pkgconfig
+, libuecc
+, libsodium
+, libcap
+, json_c
+}:
 
 stdenv.mkDerivation rec {
   version = "18";

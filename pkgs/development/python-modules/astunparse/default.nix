@@ -3,11 +3,11 @@
 , buildPythonPackage
 , six
 , wheel
- }:
+}:
 
 buildPythonPackage rec {
   pname = "astunparse";
-  version =  "1.6.3";
+  version = "1.6.3";
 
   src = fetchPypi {
     inherit pname version;

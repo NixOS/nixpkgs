@@ -14,7 +14,7 @@ rec {
 
   packageName = "global-vars";
 
-  asdFilesToKeep = ["global-vars.asd"];
+  asdFilesToKeep = [ "global-vars.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM global-vars DESCRIPTION Define efficient global variables. SHA256

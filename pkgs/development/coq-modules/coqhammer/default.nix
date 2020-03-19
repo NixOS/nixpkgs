@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, coq }:
-
 let
   params = {
     "8.8" = {
@@ -11,7 +10,6 @@ let
   };
   param = params.${coq.coq-version};
 in
-
 stdenv.mkDerivation rec {
   version = "1.1";
   name = "coq${coq.coq-version}-coqhammer-${version}";
@@ -31,7 +29,9 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ coq ] ++ (with coq.ocamlPackages; [
-    ocaml findlib camlp5
+    ocaml
+    findlib
+    camlp5
   ]);
 
   preInstall = ''

@@ -3,7 +3,8 @@
 with lib;
 let
   cfg = config.services.shiori;
-in {
+in
+{
   options = {
     services.shiori = {
       enable = mkEnableOption "Shiori simple bookmarks manager";

@@ -1,7 +1,15 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem, which, unzip, libicns, imagemagick
-, jdk, perl, python
+{ stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, which
+, unzip
+, libicns
+, imagemagick
+, jdk
+, perl
+, python
 }:
-
 let
   version = "11.2";
   desktopItem = makeDesktopItem {

@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pygments }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pygments
+}:
 
 buildPythonPackage rec {
   pname = "alabaster";

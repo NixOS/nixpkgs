@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   concatMapLines = f: l: lib.concatStringsSep "\n" (map f l);
 
   cfg = config.services.mlmmj;
@@ -20,24 +18,23 @@ let
   footer = domain: list: "To unsubscribe send a mail to ${list}+unsubscribe@${domain}";
   createList = d: l:
     let ctlDir = listCtl d l; in
-    ''
-      for DIR in incoming queue queue/discarded archive text subconf unsubconf \
-                 bounce control moderation subscribers.d digesters.d requeue \
-                 nomailsubs.d
-      do
-             mkdir -p '${listDir d l}'/"$DIR"
-      done
-      ${pkgs.coreutils}/bin/mkdir -p ${ctlDir}
-      echo ${listAddress d l} > '${ctlDir}/listaddress'
-      [ ! -e ${ctlDir}/customheaders ] && \
-          echo "${lib.concatStringsSep "\n" (customHeaders d l)}" > '${ctlDir}/customheaders'
-      [ ! -e ${ctlDir}/footer ] && \
-          echo ${footer d l} > '${ctlDir}/footer'
-      [ ! -e ${ctlDir}/prefix ] && \
-          echo ${subjectPrefix l} > '${ctlDir}/prefix'
-    '';
+      ''
+        for DIR in incoming queue queue/discarded archive text subconf unsubconf \
+                   bounce control moderation subscribers.d digesters.d requeue \
+                   nomailsubs.d
+        do
+               mkdir -p '${listDir d l}'/"$DIR"
+        done
+        ${pkgs.coreutils}/bin/mkdir -p ${ctlDir}
+        echo ${listAddress d l} > '${ctlDir}/listaddress'
+        [ ! -e ${ctlDir}/customheaders ] && \
+            echo "${lib.concatStringsSep "\n" (customHeaders d l)}" > '${ctlDir}/customheaders'
+        [ ! -e ${ctlDir}/footer ] && \
+            echo ${footer d l} > '${ctlDir}/footer'
+        [ ! -e ${ctlDir}/prefix ] && \
+            echo ${subjectPrefix l} > '${ctlDir}/prefix'
+      '';
 in
-
 {
 
   ###### interface
@@ -72,7 +69,7 @@ in
 
       mailLists = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "The collection of hosted maillists";
       };
 
@@ -109,7 +106,7 @@ in
 
     services.postfix = {
       enable = true;
-      recipientDelimiter= "+";
+      recipientDelimiter = "+";
       extraMasterConf = ''
         mlmmj unix - n n - - pipe flags=ORhu user=mlmmj argv=${pkgs.mlmmj}/bin/mlmmj-receive -F -L ${spoolDir}/$nexthop
       '';
@@ -126,14 +123,14 @@ in
     environment.systemPackages = [ pkgs.mlmmj ];
 
     system.activationScripts.mlmmj = ''
-          ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
-          ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
-          ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
-          echo "${concatMapLines (virtual cfg.listDomain) cfg.mailLists}" > ${stateDir}/virtuals
-          echo "${concatMapLines (transport cfg.listDomain) cfg.mailLists}" > ${stateDir}/transports
-          ${pkgs.postfix}/bin/postmap ${stateDir}/virtuals
-          ${pkgs.postfix}/bin/postmap ${stateDir}/transports
-      '';
+      ${pkgs.coreutils}/bin/mkdir -p ${stateDir} ${spoolDir}/${cfg.listDomain}
+      ${pkgs.coreutils}/bin/chown -R ${cfg.user}:${cfg.group} ${spoolDir}
+      ${concatMapLines (createList cfg.listDomain) cfg.mailLists}
+      echo "${concatMapLines (virtual cfg.listDomain) cfg.mailLists}" > ${stateDir}/virtuals
+      echo "${concatMapLines (transport cfg.listDomain) cfg.mailLists}" > ${stateDir}/transports
+      ${pkgs.postfix}/bin/postmap ${stateDir}/virtuals
+      ${pkgs.postfix}/bin/postmap ${stateDir}/transports
+    '';
 
     systemd.services.mlmmj-maintd = {
       description = "mlmmj maintenance daemon";

@@ -1,6 +1,6 @@
 # Test for NixOS' container support.
 
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "containers-imperative";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ aristid aszlig eelco kampfschlaefer ];
@@ -8,34 +8,45 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
   machine =
     { config, pkgs, lib, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
+    {
+      imports = [ ../modules/installer/cd-dvd/channel.nix ];
 
       # XXX: Sandbox setup fails while trying to hardlink files from the host's
       #      store file system into the prepared chroot directory.
       nix.useSandbox = false;
-      nix.binaryCaches = []; # don't try to access cache.nixos.org
+      nix.binaryCaches = [ ]; # don't try to access cache.nixos.org
 
       virtualisation.writableStore = true;
       virtualisation.memorySize = 1024;
       # Make sure we always have all the required dependencies for creating a
       # container available within the VM, because we don't have network access.
-      virtualisation.pathsInNixDB = let
-        emptyContainer = import ../lib/eval-config.nix {
-          inherit (config.nixpkgs.localSystem) system;
-          modules = lib.singleton {
-            containers.foo.config = {
-              system.stateVersion = "18.03";
+      virtualisation.pathsInNixDB =
+        let
+          emptyContainer = import ../lib/eval-config.nix {
+            inherit (config.nixpkgs.localSystem) system;
+            modules = lib.singleton {
+              containers.foo.config = {
+                system.stateVersion = "18.03";
+              };
             };
           };
-        };
-      in with pkgs; [
-        stdenv stdenvNoCC emptyContainer.config.containers.foo.path
-        libxslt desktop-file-utils texinfo docbook5 libxml2
-        docbook_xsl_ns xorg.lndir documentation-highlighter
-      ];
+        in with pkgs; [
+          stdenv
+          stdenvNoCC
+          emptyContainer.config.containers.foo.path
+          libxslt
+          desktop-file-utils
+          texinfo
+          docbook5
+          libxml2
+          docbook_xsl_ns
+          xorg.lndir
+          documentation-highlighter
+        ];
     };
 
-  testScript = let
+  testScript =
+    let
       tmpfilesContainerConfig = pkgs.writeText "container-config-tmpfiles" ''
         {
           systemd.tmpfiles.rules = [ "d /foo - - - - -" ];

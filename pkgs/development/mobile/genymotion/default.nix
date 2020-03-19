@@ -1,11 +1,29 @@
-{ stdenv, fetchurl, makeWrapper, which, zlib, libGL, glib, xorg, libxkbcommon
+{ stdenv
+, fetchurl
+, makeWrapper
+, which
+, zlib
+, libGL
+, glib
+, xorg
+, libxkbcommon
 , xdg_utils
-# For glewinfo
-, libXmu, libXi, libXext }:
-
+  # For glewinfo
+, libXmu
+, libXi
+, libXext
+}:
 let
   packages = [
-    stdenv.cc.cc zlib glib xorg.libX11 libxkbcommon libXmu libXi libXext libGL
+    stdenv.cc.cc
+    zlib
+    glib
+    xorg.libX11
+    libxkbcommon
+    libXmu
+    libXi
+    libXext
+    libGL
   ];
   libPath = stdenv.lib.makeLibraryPath packages;
 in
@@ -72,10 +90,10 @@ stdenv.mkDerivation rec {
       Genymotion is a relatively fast Android emulator which comes with
       pre-configured Android (x86 with OpenGL hardware acceleration) images,
       suitable for application testing.
-     '';
+    '';
     homepage = https://www.genymotion.com/;
     license = stdenv.lib.licenses.unfree;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = [ stdenv.lib.maintainers.puffnfresh ];
   };
 }

@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, steam-run, bash, coreutils
+{ stdenv
+, fetchurl
+, steam-run
+, bash
+, coreutils
 , steamRoot ? "~/.local/share/Steam"
 }:
 

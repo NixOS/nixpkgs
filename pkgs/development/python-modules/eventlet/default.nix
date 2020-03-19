@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   checkInputs = [ nose ];
 
-  doCheck = false;  # too much transient errors to bother
+  doCheck = false; # too much transient errors to bother
 
   propagatedBuildInputs = [ dnspython greenlet monotonic six ] ++ lib.optional (pythonOlder "3.4") enum34;
 

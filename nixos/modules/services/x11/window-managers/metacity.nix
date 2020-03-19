@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver.windowManager.metacity;
   inherit (pkgs) gnome3;
 in
-
 {
   options = {
     services.xserver.windowManager.metacity.enable = mkEnableOption "metacity";
@@ -16,7 +13,8 @@ in
   config = mkIf cfg.enable {
 
     services.xserver.windowManager.session = singleton
-      { name = "metacity";
+      {
+        name = "metacity";
         start = ''
           ${gnome3.metacity}/bin/metacity &
           waitPID=$!

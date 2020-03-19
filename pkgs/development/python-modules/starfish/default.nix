@@ -52,7 +52,7 @@ buildPythonPackage rec {
     validators
     xarray
     ipywidgets
-    ] ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
+  ] ++ lib.optionals (pythonOlder "3.7") [ dataclasses ];
 
   checkInputs = [
     pytest

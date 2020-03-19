@@ -1,7 +1,8 @@
 { stdenv, fetchurl, openssl, libbsd }:
-
-let version = "332.25";
-    package_name = "hfsprogs"; in
+let
+  version = "332.25";
+  package_name = "hfsprogs";
+in
 stdenv.mkDerivation {
   name = "${package_name}-${version}";
   srcs = [

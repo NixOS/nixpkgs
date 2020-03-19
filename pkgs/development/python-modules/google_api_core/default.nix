@@ -1,5 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi, pythonOlder, isPy27
-, google_auth, protobuf, googleapis_common_protos, requests, setuptools, grpcio, mock }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy27
+, google_auth
+, protobuf
+, googleapis_common_protos
+, requests
+, setuptools
+, grpcio
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "google-api-core";
@@ -12,8 +23,12 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    googleapis_common_protos protobuf
-    google_auth requests setuptools grpcio
+    googleapis_common_protos
+    protobuf
+    google_auth
+    requests
+    setuptools
+    grpcio
   ];
 
   # requires nox

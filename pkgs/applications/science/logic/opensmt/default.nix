@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, automake, libtool, autoconf, intltool, perl
-, gmpxx, flex, bison
+{ stdenv
+, fetchurl
+, automake
+, libtool
+, autoconf
+, intltool
+, perl
+, gmpxx
+, flex
+, bison
 }:
 
 stdenv.mkDerivation rec {

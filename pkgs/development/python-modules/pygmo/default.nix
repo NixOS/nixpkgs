@@ -11,23 +11,23 @@
 , numba
 , python
 }:
-
 let
   propagatedBuildInputs = [ numpy cloudpickle ipyparallel numba ];
 
-  pagmo2WithPython = pagmo2.overrideAttrs (oldAttrs: {
-    cmakeFlags = oldAttrs.cmakeFlags ++ [
-      "-DPAGMO_BUILD_PYGMO=yes"
-      "-DPAGMO_BUILD_PAGMO=no"
-      "-DPagmo_DIR=${pagmo2}"
-    ];
-    buildInputs = [ eigen nlopt ipopt boost pagmo2 ] ++ propagatedBuildInputs;
-    postInstall = ''
-      mv wheel $out
-    '';
-  });
-
-in buildPythonPackage {
+  pagmo2WithPython = pagmo2.overrideAttrs
+    (oldAttrs: {
+      cmakeFlags = oldAttrs.cmakeFlags ++ [
+        "-DPAGMO_BUILD_PYGMO=yes"
+        "-DPAGMO_BUILD_PAGMO=no"
+        "-DPagmo_DIR=${pagmo2}"
+      ];
+      buildInputs = [ eigen nlopt ipopt boost pagmo2 ] ++ propagatedBuildInputs;
+      postInstall = ''
+        mv wheel $out
+      '';
+    });
+in
+buildPythonPackage {
   pname = "pygmo";
   version = pagmo2WithPython.version;
 

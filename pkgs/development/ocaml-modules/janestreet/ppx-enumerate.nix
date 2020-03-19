@@ -1,5 +1,9 @@
-{stdenv, buildOcamlJane,
- ppx_core, ppx_tools, ppx_type_conv}:
+{ stdenv
+, buildOcamlJane
+, ppx_core
+, ppx_tools
+, ppx_type_conv
+}:
 
 buildOcamlJane {
   name = "ppx_enumerate";

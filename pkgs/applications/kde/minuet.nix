@@ -1,8 +1,17 @@
 { mkDerivation
-, lib, extra-cmake-modules, gettext, python
-, drumstick, fluidsynth
-, kcoreaddons, kcrash, kdoctools
-, qtquickcontrols2, qtsvg, qttools, qtdeclarative
+, lib
+, extra-cmake-modules
+, gettext
+, python
+, drumstick
+, fluidsynth
+, kcoreaddons
+, kcrash
+, kdoctools
+, qtquickcontrols2
+, qtsvg
+, qttools
+, qtdeclarative
 }:
 
 mkDerivation {
@@ -15,9 +24,13 @@ mkDerivation {
   nativeBuildInputs = [ extra-cmake-modules gettext kdoctools python qtdeclarative ];
 
   propagatedBuildInputs = [
-    drumstick fluidsynth
-    kcoreaddons kcrash
-    qtquickcontrols2 qtsvg qttools
+    drumstick
+    fluidsynth
+    kcoreaddons
+    kcrash
+    qtquickcontrols2
+    qtsvg
+    qttools
   ];
 
   enableParallelBuilding = true;

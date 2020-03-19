@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, flac, lame, zlib, libjpeg, libvorbis, libtheora, libxml2
-, lzo, libdvdread, pkgconfig, x264, libmpeg2, xvidcore }:
+{ stdenv
+, fetchurl
+, flac
+, lame
+, zlib
+, libjpeg
+, libvorbis
+, libtheora
+, libxml2
+, lzo
+, libdvdread
+, pkgconfig
+, x264
+, libmpeg2
+, xvidcore
+}:
 
 stdenv.mkDerivation rec {
   name = "transcode-1.1.7";
@@ -8,12 +22,33 @@ stdenv.mkDerivation rec {
     sha256 = "1e4e72d8e0dd62a80b8dd90699f5ca64c9b0cb37a5c9325c184166a9654f0a92";
   };
 
-  buildInputs = [ flac lame zlib libjpeg libvorbis libtheora libxml2 lzo
-                  libdvdread pkgconfig x264 libmpeg2 xvidcore ];
+  buildInputs = [
+    flac
+    lame
+    zlib
+    libjpeg
+    libvorbis
+    libtheora
+    libxml2
+    lzo
+    libdvdread
+    pkgconfig
+    x264
+    libmpeg2
+    xvidcore
+  ];
   configureFlags = [
-    "--disable-ffmpeg" "--disable-libavcodec" "--disable-libavformat"
-    "--enable-lzo" "--enable-ogg" "--enable-vorbis" "--enable-theora" "--enable-libxml2"
-    "--enable-x264" "--enable-libmpeg2" "--enable-xvid"
+    "--disable-ffmpeg"
+    "--disable-libavcodec"
+    "--disable-libavformat"
+    "--enable-lzo"
+    "--enable-ogg"
+    "--enable-vorbis"
+    "--enable-theora"
+    "--enable-libxml2"
+    "--enable-x264"
+    "--enable-libmpeg2"
+    "--enable-xvid"
   ];
 
   enableParallelBuilding = true;

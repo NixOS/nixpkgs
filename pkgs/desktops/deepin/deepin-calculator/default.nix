@@ -1,5 +1,14 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qttools, qtsvg, dtkcore,
-  dtkwidget, deepin }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, qtsvg
+, dtkcore
+, dtkwidget
+, deepin
+}:
 
 mkDerivation rec {
   pname = "deepin-calculator";

@@ -1,6 +1,19 @@
-{ stdenv, fetchurl, makeWrapper, cmake, llvmPackages, kernel
-, flex, bison, elfutils, python, luajit, netperf, iperf, libelf
-, systemtap, bash
+{ stdenv
+, fetchurl
+, makeWrapper
+, cmake
+, llvmPackages
+, kernel
+, flex
+, bison
+, elfutils
+, python
+, luajit
+, netperf
+, iperf
+, libelf
+, systemtap
+, bash
 }:
 
 python.pkgs.buildPythonApplication rec {
@@ -14,9 +27,16 @@ python.pkgs.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm clang-unwrapped kernel
-    elfutils luajit netperf iperf
-    systemtap.stapBuild flex bash
+    llvm
+    clang-unwrapped
+    kernel
+    elfutils
+    luajit
+    netperf
+    iperf
+    systemtap.stapBuild
+    flex
+    bash
   ];
 
   patches = [
@@ -27,8 +47,8 @@ python.pkgs.buildPythonApplication rec {
 
   propagatedBuildInputs = [ python.pkgs.netaddr ];
   nativeBuildInputs = [ makeWrapper cmake flex bison ]
-    # libelf is incompatible with elfutils-libelf
-    ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
+  # libelf is incompatible with elfutils-libelf
+  ++ stdenv.lib.filter (x: x != libelf) kernel.moduleBuildDependencies;
 
   cmakeFlags = [
     "-DBCC_KERNEL_MODULES_DIR=${kernel.dev}/lib/modules"
@@ -67,8 +87,8 @@ python.pkgs.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = https://iovisor.github.io/bcc/;
-    license     = licenses.asl20;
+    homepage = https://iovisor.github.io/bcc/;
+    license = licenses.asl20;
     maintainers = with maintainers; [ ragge mic92 thoughtpolice ];
   };
 }

@@ -1,5 +1,4 @@
 { stdenv, requireFile, makeDesktopItem, libicns, imagemagick, zstd, jre }:
-
 let
   version = "5.3.0";
   desktopItem = makeDesktopItem {
@@ -21,8 +20,8 @@ stdenv.mkDerivation rec {
       Please proceed with the following steps to download and add it to the Nix
       store yourself:
 
-      1. get en.STM32CubeMX_${builtins.replaceStrings ["."] ["-"] version}.zip
-      2. unzip en.STM32CubeMX_${builtins.replaceStrings ["."] ["-"] version}.zip
+      1. get en.STM32CubeMX_${builtins.replaceStrings [ "." ] [ "-" ] version}.zip
+      2. unzip en.STM32CubeMX_${builtins.replaceStrings [ "." ] [ "-" ] version}.zip
       3. run the setup: java -jar SetupSTM32CubeMX-${version}.exe
       4. create a tar from created folder: tar --zstd -cf ${name} STM32CubeMX
       5. add the result to the store: nix-prefetch-url file://\$PWD/${name}

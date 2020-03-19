@@ -1,6 +1,23 @@
-{ stdenv, fetchFromGitHub, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, makeWrapper, movit, pkgconfig, sox, qtbase, qtsvg
-, fftw, vid-stab, opencv3, ladspa-sdk
+{ stdenv
+, fetchFromGitHub
+, SDL
+, ffmpeg
+, frei0r
+, libjack2
+, libdv
+, libsamplerate
+, libvorbis
+, libxml2
+, makeWrapper
+, movit
+, pkgconfig
+, sox
+, qtbase
+, qtsvg
+, fftw
+, vid-stab
+, opencv3
+, ladspa-sdk
 }:
 
 let inherit (stdenv.lib) getDev; in
@@ -17,8 +34,23 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig qtbase qtsvg sox fftw vid-stab opencv3
+    SDL
+    ffmpeg
+    frei0r
+    libjack2
+    libdv
+    libsamplerate
+    libvorbis
+    libxml2
+    makeWrapper
+    movit
+    pkgconfig
+    qtbase
+    qtsvg
+    sox
+    fftw
+    vid-stab
+    opencv3
     ladspa-sdk
   ];
 
@@ -27,7 +59,10 @@ stdenv.mkDerivation rec {
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl" "--enable-gpl3"
+    "--avformat-swscale"
+    "--enable-gpl"
+    "--enable-gpl"
+    "--enable-gpl3"
     "--enable-opengl"
   ];
 

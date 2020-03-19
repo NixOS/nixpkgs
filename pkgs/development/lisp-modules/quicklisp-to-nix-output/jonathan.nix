@@ -14,7 +14,7 @@ rec {
 
   packageName = "jonathan";
 
-  asdFilesToKeep = ["jonathan.asd"];
+  asdFilesToKeep = [ "jonathan.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM jonathan DESCRIPTION

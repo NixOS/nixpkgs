@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-protobufs";
 
-  asdFilesToKeep = ["cl-protobufs.asd"];
+  asdFilesToKeep = [ "cl-protobufs.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-protobufs DESCRIPTION Protobufs for Common Lisp SHA256

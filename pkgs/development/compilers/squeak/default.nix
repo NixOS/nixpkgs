@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, cmake, coreutils, dbus, freetype, glib, gnused
-, libpthreadstubs, pango, pkgconfig, libpulseaudio, which }:
+{ stdenv
+, fetchurl
+, cmake
+, coreutils
+, dbus
+, freetype
+, glib
+, gnused
+, libpthreadstubs
+, pango
+, pkgconfig
+, libpulseaudio
+, which
+}:
 
 stdenv.mkDerivation rec {
   pname = "squeak";
@@ -10,8 +22,17 @@ stdenv.mkDerivation rec {
     url = "http://squeakvm.org/unix/release/Squeak-${version}-src.tar.gz";
   };
 
-  buildInputs = [ coreutils dbus freetype glib gnused libpthreadstubs
-    pango libpulseaudio which ];
+  buildInputs = [
+    coreutils
+    dbus
+    freetype
+    glib
+    gnused
+    libpthreadstubs
+    pango
+    libpulseaudio
+    which
+  ];
   nativeBuildInputs = [ cmake pkgconfig ];
 
   postPatch = ''

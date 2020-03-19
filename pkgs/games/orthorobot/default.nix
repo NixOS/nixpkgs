@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchFromGitHub, zip, love, lua, makeWrapper, makeDesktopItem }:
-
 let
   pname = "orthorobot";
   version = "1.1.1";
@@ -18,9 +17,7 @@ let
     genericName = "orthorobot";
     categories = "Game;";
   };
-
 in
-
 stdenv.mkDerivation {
   name = "${pname}-${version}";
 
@@ -37,14 +34,14 @@ stdenv.mkDerivation {
   phases = [ "unpackPhase" "installPhase" ];
 
   installPhase =
-  ''
-    mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
-    zip -9 -r ${pname}.love ./*
-    mv ${pname}.love $out/share/games/lovegames/${pname}.love
-    makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
-    ln -s ${desktopItem}/share/applications/* $out/share/applications/
-    chmod +x $out/bin/${pname}
-  '';
+    ''
+      mkdir -p $out/bin $out/share/games/lovegames $out/share/applications
+      zip -9 -r ${pname}.love ./*
+      mv ${pname}.love $out/share/games/lovegames/${pname}.love
+      makeWrapper ${love}/bin/love $out/bin/${pname} --add-flags $out/share/games/lovegames/${pname}.love
+      ln -s ${desktopItem}/share/applications/* $out/share/applications/
+      chmod +x $out/bin/${pname}
+    '';
 
   meta = with stdenv.lib; {
     description = "Recharge the robot";

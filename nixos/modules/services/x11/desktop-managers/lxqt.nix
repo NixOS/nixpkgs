@@ -1,13 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lxqt;
-
 in
-
 {
   options = {
 
@@ -18,7 +15,7 @@ in
     };
 
     environment.lxqt.excludePackages = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.lxqt.qterminal ]";
       type = types.listOf types.package;
       description = "Which LXQt packages to exclude from the default environment";
@@ -49,9 +46,9 @@ in
     };
 
     environment.systemPackages =
-      pkgs.lxqt.preRequisitePackages ++
-      pkgs.lxqt.corePackages ++
-      (pkgs.gnome3.removePackagesByName
+      pkgs.lxqt.preRequisitePackages
+      ++ pkgs.lxqt.corePackages
+      ++ (pkgs.gnome3.removePackagesByName
         pkgs.lxqt.optionalPackages
         config.environment.lxqt.excludePackages);
 

@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub
-, boost, zlib, openssl
-, upnpSupport ? true, miniupnpc ? null
+{ stdenv
+, fetchFromGitHub
+, boost
+, zlib
+, openssl
+, upnpSupport ? true
+, miniupnpc ? null
 , aesniSupport ? false
 , avxSupport ? false
 }:
@@ -19,13 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib; [ boost zlib openssl ]
-    ++ optional upnpSupport miniupnpc;
+  ++ optional upnpSupport miniupnpc;
   makeFlags =
     let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
-    [ (ynf "USE_AESNI" aesniSupport)
-      (ynf "USE_AVX"   avxSupport)
-      (ynf "USE_UPNP"  upnpSupport)
-    ];
+      [
+        (ynf "USE_AESNI" aesniSupport)
+        (ynf "USE_AVX" avxSupport)
+        (ynf "USE_UPNP" upnpSupport)
+      ];
 
   installPhase = ''
     install -D i2pd $out/bin/i2pd

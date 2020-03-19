@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib bzip2 openssl lzo libgcrypt gpgme xz ]
-    ++ optionals stdenv.isLinux [ attr e2fsprogs ];
+  ++ optionals stdenv.isLinux [ attr e2fsprogs ];
 
   configureFlags = [
     "--disable-birthtime"

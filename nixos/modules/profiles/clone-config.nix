@@ -1,9 +1,7 @@
 { config, lib, pkgs, modules, ... }:
 
 with lib;
-
 let
-
   # Location of the repository on the harddrive
   nixosPath = toString ../..;
 
@@ -23,7 +21,7 @@ let
   # files may change if the repository is updated.
   partitionedModuleFiles =
     let p = partition isNixOSFile moduleFiles; in
-    { nixos = p.right; others = p.wrong; };
+      { nixos = p.right; others = p.wrong; };
 
   # Path transformed to be valid on the installation device.  Thus the
   # device configuration could be rebuild.
@@ -32,8 +30,9 @@ let
       relocateNixOS = path:
         "<nixpkgs/nixos" + removePrefix nixosPath (toString path) + ">";
     in
-      { nixos = map relocateNixOS partitionedModuleFiles.nixos;
-        others = []; # TODO: copy the modules to the install-device repository.
+      {
+        nixos = map relocateNixOS partitionedModuleFiles.nixos;
+        others = [ ]; # TODO: copy the modules to the install-device repository.
       };
 
   # A dummy /etc/nixos/configuration.nix in the booted CD that
@@ -52,9 +51,7 @@ let
         ${config.installer.cloneConfigExtra}
       }
     '';
-
 in
-
 {
 
   options = {
@@ -68,7 +65,7 @@ in
     };
 
     installer.cloneConfigIncludes = mkOption {
-      default = [];
+      default = [ ];
       example = [ "./nixos/modules/hardware/network/rt73.nix" ];
       description = ''
         List of modules used to re-build this installation device profile.
@@ -95,13 +92,13 @@ in
         mkdir -p /mnt
 
         ${optionalString config.installer.cloneConfig ''
-          # Provide a configuration for the CD/DVD itself, to allow users
-          # to run nixos-rebuild to change the configuration of the
-          # running system on the CD/DVD.
-          if ! [ -e /etc/nixos/configuration.nix ]; then
-            cp ${configClone} /etc/nixos/configuration.nix
-          fi
-       ''}
+        # Provide a configuration for the CD/DVD itself, to allow users
+        # to run nixos-rebuild to change the configuration of the
+        # running system on the CD/DVD.
+        if ! [ -e /etc/nixos/configuration.nix ]; then
+          cp ${configClone} /etc/nixos/configuration.nix
+        fi
+      ''}
       '';
 
   };

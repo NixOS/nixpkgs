@@ -1,6 +1,27 @@
-{ stdenv, lib, fetchurl, unzip, glib, systemd, nss, nspr, gtk3-x11, gnome2,
-atk, cairo, gdk-pixbuf, xorg, xorg_sys_opengl, utillinux, alsaLib, dbus, at-spi2-atk,
-cups, vivaldi-ffmpeg-codecs, libpulseaudio, at-spi2-core }:
+{ stdenv
+, lib
+, fetchurl
+, unzip
+, glib
+, systemd
+, nss
+, nspr
+, gtk3-x11
+, gnome2
+, atk
+, cairo
+, gdk-pixbuf
+, xorg
+, xorg_sys_opengl
+, utillinux
+, alsaLib
+, dbus
+, at-spi2-atk
+, cups
+, vivaldi-ffmpeg-codecs
+, libpulseaudio
+, at-spi2-core
+}:
 
 stdenv.mkDerivation rec {
   pname = "exodus";
@@ -13,7 +34,7 @@ stdenv.mkDerivation rec {
 
   sourceRoot = ".";
   unpackCmd = ''
-      ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
+    ${unzip}/bin/unzip "$src" -x "Exodus*/lib*so"
   '';
 
   installPhase = ''
@@ -30,45 +51,46 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   dontBuild = true;
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      glib
-      nss
-      nspr
-      gtk3-x11
-      gnome2.pango
-      atk
-      cairo
-      gdk-pixbuf
-      xorg.libX11
-      xorg.libxcb
-      xorg.libXcomposite
-      xorg.libXcursor
-      xorg.libXdamage
-      xorg.libXext
-      xorg.libXfixes
-      xorg.libXi
-      xorg.libXrender
-      xorg.libXtst
-      xorg_sys_opengl
-      utillinux
-      xorg.libXrandr
-      xorg.libXScrnSaver
-      alsaLib
-      dbus.lib
-      at-spi2-atk
-      at-spi2-core
-      cups.lib
-      libpulseaudio
-      systemd
-      vivaldi-ffmpeg-codecs
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/Exodus
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        glib
+        nss
+        nspr
+        gtk3-x11
+        gnome2.pango
+        atk
+        cairo
+        gdk-pixbuf
+        xorg.libX11
+        xorg.libxcb
+        xorg.libXcomposite
+        xorg.libXcursor
+        xorg.libXdamage
+        xorg.libXext
+        xorg.libXfixes
+        xorg.libXi
+        xorg.libXrender
+        xorg.libXtst
+        xorg_sys_opengl
+        utillinux
+        xorg.libXrandr
+        xorg.libXScrnSaver
+        alsaLib
+        dbus.lib
+        at-spi2-atk
+        at-spi2-core
+        cups.lib
+        libpulseaudio
+        systemd
+        vivaldi-ffmpeg-codecs
+      ];
+    in ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/Exodus
+    '';
 
   meta = with stdenv.lib; {
     homepage = "https://www.exodus.io/";

@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub }:
-
 let
   version = "unstable-2018-08-12";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "gelasio-${version}";
   owner = "SorkinType";
   repo = "Gelasio";
@@ -28,4 +28,3 @@ in fetchFromGitHub {
     maintainers = with maintainers; [ colemickens ];
   };
 }
-

@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, dbus, nettle, fetchpatch
-, libidn, libnetfilter_conntrack }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, dbus
+, nettle
+, fetchpatch
+, libidn
+, libnetfilter_conntrack
+}:
 
 with stdenv.lib;
 let
@@ -75,7 +82,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ nettle libidn ]
-    ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
+  ++ optionals stdenv.isLinux [ dbus libnetfilter_conntrack ];
 
   meta = {
     description = "An integrated DNS, DHCP and TFTP server for small networks";

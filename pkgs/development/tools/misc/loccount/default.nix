@@ -26,8 +26,8 @@ buildGoPackage rec {
       an exception; loccount corrects buggy counting of single-quote multiline
       literals in sloccount 2.26.
     '';
-    homepage="https://gitlab.com/esr/loccount";
-    downloadPage="https://gitlab.com/esr/loccount/tree/master";
+    homepage = "https://gitlab.com/esr/loccount";
+    downloadPage = "https://gitlab.com/esr/loccount/tree/master";
     license = licenses.bsd2;
     maintainers = with maintainers; [ calvertvl ];
     platforms = platforms.unix;

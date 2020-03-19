@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, pytest, pytestcache, pep8 }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+, pytestcache
+, pep8
+}:
 
 buildPythonPackage rec {
   pname = "pytest-pep8";

@@ -1,4 +1,8 @@
-{ buildPythonPackage, lib, fetchFromGitHub, isPy27, nixosTests
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, isPy27
+, nixosTests
 , alembic
 , aniso8601
 , Babel
@@ -88,5 +92,3 @@ buildPythonPackage rec {
     maintainers = [ maintainers.symphorien ];
   };
 }
-
-

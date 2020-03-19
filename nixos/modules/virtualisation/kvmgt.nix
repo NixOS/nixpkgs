@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.virtualisation.kvmgt;
 
@@ -13,8 +12,8 @@ let
       description = "UUID of VGPU device. You can generate one with <package>libossp_uuid</package>.";
     };
   };
-
-in {
+in
+{
   options = {
     virtualisation.kvmgt = {
       enable = mkEnableOption ''
@@ -29,7 +28,7 @@ in {
         description = "PCI ID of graphics card. You can figure it with <command>ls /sys/class/mdev_bus</command>.";
       };
       vgpus = mkOption {
-        default = {};
+        default = { };
         type = with types; attrsOf (submodule [ { options = vgpuOptions; } ]);
         description = ''
           Virtual GPUs to be used in Qemu. You can find devices via <command>ls /sys/bus/pci/devices/*/mdev_supported_types</command>
@@ -51,30 +50,32 @@ in {
     boot.kernelModules = [ "kvmgt" ];
     boot.kernelParams = [ "i915.enable_gvt=1" ];
 
-    systemd.paths = mapAttrs' (name: value:
-      nameValuePair "kvmgt-${name}" {
-        description = "KVMGT VGPU ${name} path";
-        wantedBy = [ "multi-user.target" ];
-        pathConfig = {
-          PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create";
-        };
-      }
+    systemd.paths = mapAttrs' (
+      name: value:
+        nameValuePair "kvmgt-${name}" {
+          description = "KVMGT VGPU ${name} path";
+          wantedBy = [ "multi-user.target" ];
+          pathConfig = {
+            PathExists = "/sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create";
+          };
+        }
     ) cfg.vgpus;
 
     services.udev.extraRules = ''
       SUBSYSTEM=="vfio", OWNER="root", GROUP="kvm"
     '';
 
-    systemd.services = mapAttrs' (name: value:
-      nameValuePair "kvmgt-${name}" {
-        description = "KVMGT VGPU ${name}";
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${pkgs.runtimeShell} -c 'echo ${value.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create'";
-          ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${value.uuid}/remove'";
-        };
-      }
+    systemd.services = mapAttrs' (
+      name: value:
+        nameValuePair "kvmgt-${name}" {
+          description = "KVMGT VGPU ${name}";
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+            ExecStart = "${pkgs.runtimeShell} -c 'echo ${value.uuid} > /sys/bus/pci/devices/${cfg.device}/mdev_supported_types/${name}/create'";
+            ExecStop = "${pkgs.runtimeShell} -c 'echo 1 > /sys/bus/pci/devices/${cfg.device}/${value.uuid}/remove'";
+          };
+        }
     ) cfg.vgpus;
   };
 

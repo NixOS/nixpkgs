@@ -1,5 +1,15 @@
-{ stdenv, buildPythonPackage, fetchPypi, pyramid_mako, nose, django, jinja2
-, tornado, pyramid, Mako, six }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pyramid_mako
+, nose
+, django
+, jinja2
+, tornado
+, pyramid
+, Mako
+, six
+}:
 
 buildPythonPackage rec {
   pname = "pyjade";
@@ -22,8 +32,8 @@ buildPythonPackage rec {
   doCheck = false;
   meta = with stdenv.lib; {
     description = "Jade syntax template adapter for Django, Jinja2, Mako and Tornado templates";
-    homepage    = "https://github.com/syrusakbary/pyjade";
-    license     = licenses.mit;
+    homepage = "https://github.com/syrusakbary/pyjade";
+    license = licenses.mit;
     maintainers = with maintainers; [ nand0p ];
   };
 }

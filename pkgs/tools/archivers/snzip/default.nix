@@ -1,4 +1,6 @@
-{ lib, stdenv, fetchFromGitHub
+{ lib
+, stdenv
+, fetchFromGitHub
 , autoreconfHook
 , pkgconfig
 , snappy
@@ -28,4 +30,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

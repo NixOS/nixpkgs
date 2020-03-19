@@ -1,16 +1,19 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../../.. { inherit system config; }
 }:
 
 with import ../../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
-
 let
   mkKubernetesBaseTest =
-    { name, domain ? "my.zyx", test, machines
+    { name
+    , domain ? "my.zyx"
+    , test
+    , machines
     , pkgs ? import <nixpkgs> { inherit system; }
-    , extraConfiguration ? null }:
+    , extraConfiguration ? null
+    }:
     let
       masterName = head (filter (machineName: any (role: role == "master") machines.${machineName}.roles) (attrNames machines));
       master = machines.${masterName};
@@ -26,8 +29,9 @@ let
     in makeTest {
       inherit name;
 
-      nodes = mapAttrs (machineName: machine:
-        { config, pkgs, lib, nodes, ... }:
+      nodes = mapAttrs (
+        machineName: machine:
+          { config, pkgs, lib, nodes, ... }:
           mkMerge [
             {
               boot.postBootCommands = "rm -fr /var/lib/kubernetes/secrets /tmp/shared/*";
@@ -41,11 +45,12 @@ let
                   allowedTCPPorts = [
                     10250 # kubelet
                   ];
-                  trustedInterfaces = ["docker0"];
+                  trustedInterfaces = [ "docker0" ];
 
-                  extraCommands = concatMapStrings  (node: ''
-                    iptables -A INPUT -s ${node.config.networking.primaryIPAddress} -j ACCEPT
-                  '') (attrValues nodes);
+                  extraCommands = concatMapStrings
+                    (node: ''
+                      iptables -A INPUT -s ${node.config.networking.primaryIPAddress} -j ACCEPT
+                    '') (attrValues nodes);
                 };
               };
               programs.bash.enableCompletion = true;
@@ -81,31 +86,38 @@ let
       '';
     };
 
-  mkKubernetesMultiNodeTest = attrs: mkKubernetesBaseTest ({
-    machines = {
-      machine1 = {
-        roles = ["master"];
-        ip = "192.168.1.1";
+  mkKubernetesMultiNodeTest = attrs: mkKubernetesBaseTest (
+    {
+      machines = {
+        machine1 = {
+          roles = [ "master" ];
+          ip = "192.168.1.1";
+        };
+        machine2 = {
+          roles = [ "node" ];
+          ip = "192.168.1.2";
+        };
       };
-      machine2 = {
-        roles = ["node"];
-        ip = "192.168.1.2";
-      };
-    };
-  } // attrs // {
-    name = "kubernetes-${attrs.name}-multinode";
-  });
+    }
+    // attrs // {
+      name = "kubernetes-${attrs.name}-multinode";
+    }
+  );
 
-  mkKubernetesSingleNodeTest = attrs: mkKubernetesBaseTest ({
-    machines = {
-      machine1 = {
-        roles = ["master" "node"];
-        ip = "192.168.1.1";
+  mkKubernetesSingleNodeTest = attrs: mkKubernetesBaseTest (
+    {
+      machines = {
+        machine1 = {
+          roles = [ "master" "node" ];
+          ip = "192.168.1.1";
+        };
       };
-    };
-  } // attrs // {
-    name = "kubernetes-${attrs.name}-singlenode";
-  });
-in {
+    }
+    // attrs // {
+      name = "kubernetes-${attrs.name}-singlenode";
+    }
+  );
+in
+{
   inherit mkKubernetesBaseTest mkKubernetesSingleNodeTest mkKubernetesMultiNodeTest;
 }

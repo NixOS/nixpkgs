@@ -1,30 +1,45 @@
-{ stdenv, lib, pkgs, fetchurl, buildEnv
-, coreutils, gnused, getopt, git, tree, gnupg, openssl, which, procps
-, qrencode , makeWrapper
+{ stdenv
+, lib
+, pkgs
+, fetchurl
+, buildEnv
+, coreutils
+, gnused
+, getopt
+, git
+, tree
+, gnupg
+, openssl
+, which
+, procps
+, qrencode
+, makeWrapper
 
-, xclip ? null, xdotool ? null, dmenu ? null
+, xclip ? null
+, xdotool ? null
+, dmenu ? null
 , x11Support ? !stdenv.isDarwin
-, waylandSupport ? false, wl-clipboard ? null
+, waylandSupport ? false
+, wl-clipboard ? null
 
-# For backwards-compatibility
+  # For backwards-compatibility
 , tombPluginSupport ? false
 }:
 
 with lib;
 
 assert x11Support -> xclip != null
-                  && xdotool != null
-                  && dmenu != null;
+&& xdotool != null
+&& dmenu != null;
 
 assert waylandSupport -> wl-clipboard != null;
-
 let
   passExtensions = import ./extensions { inherit pkgs; };
 
   env = extensions:
     let
       selected = extensions passExtensions
-        ++ stdenv.lib.optional tombPluginSupport passExtensions.tomb;
+      ++ stdenv.lib.optional tombPluginSupport passExtensions.tomb;
     in buildEnv {
       name = "pass-extensions-env";
       paths = selected;
@@ -36,15 +51,15 @@ let
     pname = "password-store";
 
     src = fetchurl {
-      url    = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
+      url = "https://git.zx2c4.com/password-store/snapshot/${pname}-${version}.tar.xz";
       sha256 = "1x53k5dn3cdmvy8m4fqdld4hji5n676ksl0ql4armkmsds26av1b";
     };
 
     patches = [ ./set-correct-program-name-for-sleep.patch ]
-      ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
-      # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
-      # version bump.
-      ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
+    ++ stdenv.lib.optional stdenv.isDarwin ./no-darwin-getopt.patch
+    # TODO (@Ma27) this patch adds support for wl-clipboard and can be removed during the next
+    # version bump.
+    ++ stdenv.lib.optional waylandSupport ./clip-wayland-support.patch;
 
     nativeBuildInputs = [ makeWrapper ];
 
@@ -73,8 +88,8 @@ let
       qrencode
       procps
     ] ++ optional stdenv.isDarwin openssl
-      ++ ifEnable x11Support [ dmenu xclip xdotool ]
-      ++ optional waylandSupport wl-clipboard);
+    ++ ifEnable x11Support [ dmenu xclip xdotool ]
+    ++ optional waylandSupport wl-clipboard);
 
     postFixup = ''
       # Link extensions env
@@ -125,16 +140,18 @@ let
     installCheckInputs = [ git ];
     installCheckTarget = "test";
 
-    passthru = {
-      extensions = passExtensions;
-    } // extraPassthru;
+    passthru =
+      {
+        extensions = passExtensions;
+      }
+      // extraPassthru;
 
     meta = with stdenv.lib; {
       description = "Stores, retrieves, generates, and synchronizes passwords securely";
-      homepage    = https://www.passwordstore.org/;
-      license     = licenses.gpl2Plus;
+      homepage = https://www.passwordstore.org/;
+      license = licenses.gpl2Plus;
       maintainers = with maintainers; [ lovek323 the-kenny fpletz tadfisher globin ];
-      platforms   = platforms.unix;
+      platforms = platforms.unix;
 
       longDescription = ''
         pass is a very simple password store that keeps passwords inside gpg2
@@ -145,9 +162,7 @@ let
       '';
     };
   };
-
 in
-
-generic (env (_: [])) {
-  withExtensions = extensions: generic (env extensions) {};
+generic (env (_: [ ])) {
+  withExtensions = extensions: generic (env extensions) { };
 }

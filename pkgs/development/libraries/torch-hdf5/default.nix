@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, torch, cmake, hdf5}:
+{ stdenv, fetchFromGitHub, torch, cmake, hdf5 }:
 stdenv.mkDerivation rec {
   pname = "torch-hdf5";
   version = "0.0pre2016-07-01";
-  buildInputs = [cmake torch hdf5];
+  buildInputs = [ cmake torch hdf5 ];
   src = fetchFromGitHub {
     owner = "deepmind";
     repo = "torch-hdf5";
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     inherit version;
     description = ''HDF5 format support for Torch'';
     license = stdenv.lib.licenses.bsd3;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

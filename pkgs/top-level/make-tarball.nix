@@ -4,7 +4,7 @@
 
 { nixpkgs
 , officialRelease
-, pkgs ? import nixpkgs.outPath {}
+, pkgs ? import nixpkgs.outPath { }
 , nix ? pkgs.nix
 , lib-tests ? import ../../lib/tests/release.nix { inherit pkgs; }
 }:
@@ -18,9 +18,9 @@ releaseTools.sourceTarball {
   inherit officialRelease;
   version = pkgs.lib.fileContents ../../.version;
   versionSuffix = "pre${
-    if nixpkgs ? lastModified
-    then builtins.substring 0 8 nixpkgs.lastModified
-    else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
+      if nixpkgs ? lastModified
+      then builtins.substring 0 8 nixpkgs.lastModified
+      else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
   buildInputs = [ nix.out jq lib-tests ];
 

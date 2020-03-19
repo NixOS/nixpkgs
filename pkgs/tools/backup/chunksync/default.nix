@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1gwqp1kjwhcmwhynilakhzpzgc0c6kk8c9vkpi30gwwrwpz3cf00";
   };
 
-  buildInputs = [openssl perl];
+  buildInputs = [ openssl perl ];
 
   NIX_LDFLAGS = "-lgcc_s";
 

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "devdoc" ];
 
   buildInputs = [ openssl zlib ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
+  ++ stdenv.lib.optional stdenv.hostPlatform.isMinGW windows.mingw_w64;
 
   patches = [
     # not able to use fetchpatch here: infinite recursion

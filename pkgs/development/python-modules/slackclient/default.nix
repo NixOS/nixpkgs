@@ -24,9 +24,9 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
-    owner  = "slackapi";
-    repo   = pname;
-    rev    = version;
+    owner = "slackapi";
+    repo = pname;
+    rev = version;
     sha256 = "1ngj1mivbln19546195k400w9yaw69g0w6is7c75rqwyxr8wgzsk";
   };
 

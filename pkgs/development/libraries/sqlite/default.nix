@@ -3,11 +3,9 @@
 assert interactive -> readline != null && ncurses != null;
 
 with stdenv.lib;
-
 let
   archiveVersion = import ./archive-version.nix stdenv.lib;
 in
-
 stdenv.mkDerivation rec {
   pname = "sqlite";
   version = "3.31.1";

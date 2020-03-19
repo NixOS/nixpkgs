@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.caddy;
   configFile = pkgs.writeText "Caddyfile" cfg.config;
-in {
+in
+{
   options.services.caddy = {
     enable = mkEnableOption "Caddy web server";
 

@@ -1,13 +1,13 @@
 { stdenv, antBuild, fetchgit, perl }:
-
 let
   version = "4.11";
-in antBuild {
+in
+antBuild {
   name = "junit-${version}";
 
   # I think this is only used to generate the docs, and will likely disappear
   # with the next release of junit since its build system completely changes.
-  buildInputs = [perl];
+  buildInputs = [ perl ];
 
   src = fetchgit {
     url = "https://github.com/junit-team/junit.git";

@@ -1,11 +1,18 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, bc, dbus, gawk, gnused, libnotify, pulseaudio }:
-
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, bc
+, dbus
+, gawk
+, gnused
+, libnotify
+, pulseaudio
+}:
 let
   path = stdenv.lib.makeBinPath [ bc dbus gawk gnused libnotify pulseaudio ];
   pname = "pulseaudio-ctl";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.67";
 

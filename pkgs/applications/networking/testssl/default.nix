@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, makeWrapper, lib
-, dnsutils, coreutils, openssl, nettools, utillinux, procps }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, lib
+, dnsutils
+, coreutils
+, openssl
+, nettools
+, utillinux
+, procps
+}:
 
 stdenv.mkDerivation rec {
   pname = "testssl.sh";
@@ -15,10 +24,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [
     coreutils # for pwd and printf
-    dnsutils  # for dig
-    nettools  # for hostname
-    openssl   # for openssl
-    procps    # for ps
+    dnsutils # for dig
+    nettools # for hostname
+    openssl # for openssl
+    procps # for ps
     utillinux # for hexdump
   ];
 

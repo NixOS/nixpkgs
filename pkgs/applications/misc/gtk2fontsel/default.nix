@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2 }:
+{ stdenv, fetchurl, pkgconfig, gtk2 }:
 
 stdenv.mkDerivation rec {
   version = "0.1";

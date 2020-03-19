@@ -1,7 +1,10 @@
-{ lib, appleDerivation, xcbuildHook
+{ lib
+, appleDerivation
+, xcbuildHook
 
-# headersOnly is true when building for libSystem
-, headersOnly ? false }:
+  # headersOnly is true when building for libSystem
+, headersOnly ? false
+}:
 
 appleDerivation {
   nativeBuildInputs = lib.optional (!headersOnly) xcbuildHook;
@@ -17,7 +20,7 @@ appleDerivation {
     mkdir -p $out/include
   '' + lib.optionalString headersOnly ''
     cp *.h $out/include
-  '' + lib.optionalString (!headersOnly)''
+  '' + lib.optionalString (!headersOnly) ''
     mkdir -p $out/lib $out/include
 
     cp Products/Release/*.dylib $out/lib
@@ -29,7 +32,7 @@ appleDerivation {
 
   meta = with lib; {
     maintainers = with maintainers; [ copumpkin ];
-    platforms   = platforms.darwin;
-    license     = licenses.apsl20;
+    platforms = platforms.darwin;
+    license = licenses.apsl20;
   };
 }

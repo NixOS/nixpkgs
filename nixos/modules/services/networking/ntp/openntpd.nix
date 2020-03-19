@@ -1,7 +1,6 @@
 { pkgs, lib, config, options, ... }:
 
 with lib;
-
 let
   cfg = config.services.openntpd;
 
@@ -13,7 +12,6 @@ let
   '';
 
   pidFile = "/run/openntpd.pid";
-
 in
 {
   ###### interface

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.jack;
 
@@ -12,7 +11,8 @@ let
 
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
-in {
+in
+{
   options = {
     services.jack = {
       jackd = {
@@ -125,7 +125,6 @@ in {
   };
 
   config = mkMerge [
-
     (mkIf pcmPlugin {
       sound.extraConfig = ''
         pcm_type.jack {
@@ -140,13 +139,11 @@ in {
         }
       '';
     })
-
     (mkIf loopback {
       boot.kernelModules = [ "snd-aloop" ];
       boot.kernelParams = [ "snd-aloop.index=${toString cfg.loopback.index}" ];
       sound.extraConfig = cfg.loopback.config;
     })
-
     (mkIf cfg.jackd.enable {
       services.jack.jackd.session = ''
         ${lib.optionalString bridgeNeeded "${pkgs.a2jmidid}/bin/a2jmidid -e &"}
@@ -230,7 +227,7 @@ in {
         { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
         { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
       ];
-      users.groups.jackaudio = {};
+      users.groups.jackaudio = { };
 
       environment = {
         systemPackages = [ cfg.jackd.package ];
@@ -244,14 +241,16 @@ in {
 
       systemd.services.jack = {
         description = "JACK Audio Connection Kit";
-        serviceConfig = {
-          User = "jackaudio";
-          ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
-          LimitRTPRIO = 99;
-          LimitMEMLOCK = "infinity";
-        } // optionalAttrs umaskNeeded {
-          UMask = "007";
-        };
+        serviceConfig =
+          {
+            User = "jackaudio";
+            ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
+            LimitRTPRIO = 99;
+            LimitMEMLOCK = "infinity";
+          }
+          // optionalAttrs umaskNeeded {
+            UMask = "007";
+          };
         path = [ cfg.jackd.package ];
         environment = {
           JACK_PROMISCUOUS_SERVER = "jackaudio";
@@ -283,7 +282,8 @@ in {
         after = [ "jack.service" ];
         restartIfChanged = false;
       };
-    })
+    }
+    )
 
   ];
 

@@ -2,12 +2,11 @@
 
 let buildFHSEnv = callPackage ./env.nix { }; in
 
-args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? {}, passthru ? {}, ... }:
-
+args@{ name, runScript ? "bash", extraInstallCommands ? "", meta ? { }, passthru ? { }, ... }:
 let
   env = buildFHSEnv (removeAttrs args [ "runScript" "extraInstallCommands" "meta" "passthru" ]);
 
-  chrootenv = callPackage ./chrootenv {};
+  chrootenv = callPackage ./chrootenv { };
 
   init = run: writeScript "${name}-init" ''
     #! ${stdenv.shell}
@@ -22,8 +21,8 @@ let
     source /etc/profile
     exec ${run} "$@"
   '';
-
-in runCommandLocal name {
+in
+runCommandLocal name {
   inherit meta;
 
   passthru = passthru // {

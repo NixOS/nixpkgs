@@ -1,7 +1,6 @@
 { stable, branch, version, sha256Hash, mkOverride }:
 
 { lib, stdenv, python3, fetchFromGitHub }:
-
 let
   # TODO: This package requires qt5Full to launch
   defaultOverrides = [
@@ -14,7 +13,8 @@ let
   python = python3.override {
     packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) defaultOverrides;
   };
-in python.pkgs.buildPythonPackage rec {
+in
+python.pkgs.buildPythonPackage rec {
   name = "${pname}-${version}";
   pname = "gns3-gui";
 
@@ -26,9 +26,14 @@ in python.pkgs.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    raven psutil jsonschema # tox for check
+    raven
+    psutil
+    jsonschema # tox for check
     # Runtime dependencies
-    sip (pyqt5.override { withWebSockets = true; }) distro setuptools
+    sip
+    (pyqt5.override { withWebSockets = true; })
+    distro
+    setuptools
   ];
 
   doCheck = false; # Failing

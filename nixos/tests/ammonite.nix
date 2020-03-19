@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "ammonite";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ nequissimus ];
@@ -7,10 +7,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
   nodes = {
     amm =
       { pkgs, ... }:
-        {
-          environment.systemPackages = [ pkgs.ammonite ];
-        };
-    };
+      {
+        environment.systemPackages = [ pkgs.ammonite ];
+      };
+  };
 
   testScript = ''
     start_all()

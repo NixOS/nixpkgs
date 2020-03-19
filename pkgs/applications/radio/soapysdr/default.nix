@@ -1,19 +1,24 @@
-{ stdenv, lib, lndir, makeWrapper
-, fetchFromGitHub, cmake
-, libusb, pkgconfig
+{ stdenv
+, lib
+, lndir
+, makeWrapper
+, fetchFromGitHub
+, cmake
+, libusb
+, pkgconfig
 , usePython ? false
-, python, ncurses, swig2
-, extraPackages ? []
-} :
-
+, python
+, ncurses
+, swig2
+, extraPackages ? [ ]
+}:
 let
-
   version = "0.7.2";
   modulesVersion = with lib; versions.major version + "." + versions.minor version;
   modulesPath = "lib/SoapySDR/modules" + modulesVersion;
   extraPackagesSearchPath = lib.makeSearchPath modulesPath extraPackages;
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapysdr";
   inherit version;
 
@@ -26,7 +31,7 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake makeWrapper pkgconfig ];
   buildInputs = [ libusb ncurses ]
-    ++ lib.optionals usePython [ python swig2 ];
+  ++ lib.optionals usePython [ python swig2 ];
 
   propagatedBuildInputs = lib.optional usePython python.pkgs.numpy;
 

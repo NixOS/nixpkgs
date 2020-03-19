@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.exhibitor;
   exhibitorConfig = ''
@@ -57,12 +56,15 @@ let
       noneconfigdir = configDir;
     };
   };
-  cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (cliOptionsCommon //
-               cliOptionsPerConfig.${cfg.configType} //
-               s3CommonOptions //
-               optionalAttrs cfg.s3Backup { s3backup = "true"; } //
-               optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
-               )));
+  cliOptions = concatStringsSep " " (mapAttrsToList (k: v: "--${k} ${v}") (filterAttrs (k: v: v != null && v != "") (
+    cliOptionsCommon
+    // cliOptionsPerConfig.${cfg.configType}
+    // s3CommonOptions
+    // optionalAttrs cfg.s3Backup { s3backup = "true"; }
+    // optionalAttrs cfg.fileSystemBackup { filesystembackup = "true"; }
+  )
+  )
+  );
 in
 {
   options = {
@@ -135,7 +137,7 @@ in
       logLines = mkOption {
         type = types.int;
         description = ''
-        Max lines of logging to keep in memory for display.
+          Max lines of logging to keep in memory for display.
         '';
         default = 1000;
       };
@@ -220,7 +222,7 @@ in
       };
       zkServersSpec = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Zookeeper server spec for all servers in the ensemble.
         '';
@@ -249,7 +251,7 @@ in
         description = ''
           The initial connection string for ZooKeeper shared config storage
         '';
-        example = ["host1:2181" "host2:2181"];
+        example = [ "host1:2181" "host2:2181" ];
       };
       zkConfigExhibitorPath = mkOption {
         type = types.str;

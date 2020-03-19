@@ -27,6 +27,6 @@ stdenv.mkDerivation {
     homepage = https://github.com/c-cube/gen;
     description = "Simple, efficient iterators for OCaml";
     license = stdenv.lib.licenses.bsd3;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

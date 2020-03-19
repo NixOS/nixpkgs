@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-mimes";
 
-  asdFilesToKeep = ["trivial-mimes.asd"];
+  asdFilesToKeep = [ "trivial-mimes.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-mimes DESCRIPTION

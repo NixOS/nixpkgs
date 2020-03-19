@@ -1,5 +1,11 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  m2r, setuptools_scm, six, attrs }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, m2r
+, setuptools_scm
+, six
+, attrs
+}:
 
 buildPythonPackage rec {
   version = "0.8.0";

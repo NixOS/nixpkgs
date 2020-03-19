@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, setuptools }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, setuptools
+}:
 
 buildPythonPackage rec {
   version = "2.1.0";

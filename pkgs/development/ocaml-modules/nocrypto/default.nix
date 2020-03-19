@@ -1,6 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, ocaml, findlib, ocamlbuild, topkg
-, cpuid, ocb-stubblr, sexplib
-, cstruct, zarith, ppx_sexp_conv, ppx_deriving, writeScriptBin
+{ stdenv
+, fetchurl
+, fetchpatch
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, cpuid
+, ocb-stubblr
+, sexplib
+, cstruct
+, zarith
+, ppx_sexp_conv
+, ppx_deriving
+, writeScriptBin
 , cstruct-lwt ? null
 }:
 
@@ -14,7 +26,6 @@ let
     $CC "$@"
   '';
 in
-
 stdenv.mkDerivation rec {
   name = "ocaml${ocaml.version}-nocrypto-${version}";
   version = "0.5.4";

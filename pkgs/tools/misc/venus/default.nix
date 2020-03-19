@@ -26,8 +26,14 @@ stdenv.mkDerivation rec {
   doCheck = true;
   checkPhase = "python runtests.py";
 
-  buildInputs = [ python libxslt
-    libxml2 pythonPackages.genshi pythonPackages.lxml makeWrapper ];
+  buildInputs = [
+    python
+    libxslt
+    libxml2
+    pythonPackages.genshi
+    pythonPackages.lxml
+    makeWrapper
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -48,6 +54,6 @@ stdenv.mkDerivation rec {
     homepage = http://intertwingly.net/code/venus/docs/index.html;
     license = stdenv.lib.licenses.psfl;
     platforms = stdenv.lib.platforms.all;
-    maintainers = [];
+    maintainers = [ ];
   };
 }

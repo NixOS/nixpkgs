@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, cloudpickle, ipykernel, wurlitzer,
-  jupyter_client, pyzmq }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, cloudpickle
+, ipykernel
+, wurlitzer
+, jupyter_client
+, pyzmq
+}:
 
 buildPythonPackage rec {
   pname = "spyder-kernels";

@@ -1,43 +1,46 @@
 { lib, python3, fetchFromGitHub }:
-
 let
   python = python3.override {
     packageOverrides = self: super: {
-      bcrypt = super.bcrypt.overridePythonAttrs (oldAttrs: rec {
-        version = "3.1.4";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "13cyrnqwkhc70rs6dg65z4yrrr3dc42fhk11804fqmci9hvimvb7";
-        };
-      });
+      bcrypt = super.bcrypt.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "3.1.4";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "13cyrnqwkhc70rs6dg65z4yrrr3dc42fhk11804fqmci9hvimvb7";
+          };
+        });
 
-      yarl = super.yarl.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "6af895b45bd49254cc309ac0fe6e1595636a024953d710e01114257736184698";
-        };
-      });
+      yarl = super.yarl.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "1.1.0";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "6af895b45bd49254cc309ac0fe6e1595636a024953d710e01114257736184698";
+          };
+        });
 
-      jinja2 = super.jinja2.overridePythonAttrs (oldAttrs: rec {
-        version = "2.10.1";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013";
-        };
-      });
+      jinja2 = super.jinja2.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "2.10.1";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "065c4f02ebe7f7cf559e49ee5a95fb800a9e4528727aec6f24402a5374c65013";
+          };
+        });
 
-      aiohttp-jinja2 = super.aiohttp-jinja2.overridePythonAttrs (oldAttrs: rec {
-        version = "0.15.0";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "0f390693f46173d8ffb95669acbb0e2a3ec54ecce676703510ad47f1a6d9dc83";
-        };
-      });
+      aiohttp-jinja2 = super.aiohttp-jinja2.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "0.15.0";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "0f390693f46173d8ffb95669acbb0e2a3ec54ecce676703510ad47f1a6d9dc83";
+          };
+        });
     };
   };
-
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "appdaemon";
   version = "4.0.1";
 
@@ -49,9 +52,26 @@ in python.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python.pkgs; [
-    daemonize astral requests websocket_client aiohttp yarl jinja2
-    aiohttp-jinja2 pyyaml voluptuous feedparser iso8601 bcrypt paho-mqtt setuptools
-    deepdiff dateutil bcrypt python-socketio pid
+    daemonize
+    astral
+    requests
+    websocket_client
+    aiohttp
+    yarl
+    jinja2
+    aiohttp-jinja2
+    pyyaml
+    voluptuous
+    feedparser
+    iso8601
+    bcrypt
+    paho-mqtt
+    setuptools
+    deepdiff
+    dateutil
+    bcrypt
+    python-socketio
+    pid
   ];
 
   # no tests implemented

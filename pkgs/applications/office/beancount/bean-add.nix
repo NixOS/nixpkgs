@@ -28,4 +28,3 @@ stdenv.mkDerivation {
     maintainers = with stdenv.lib.maintainers; [ matthiasbeyer ];
   };
 }
-

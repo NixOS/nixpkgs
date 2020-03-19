@@ -11,9 +11,7 @@
 , clang
 , mono
 }:
-
 let
-
   UnmanagedExports127 = fetchNuGet {
     baseName = "UnmanagedExports";
     version = "1.2.7";
@@ -27,9 +25,7 @@ let
     sha256 = "1yc6dwaam4w2ss1193v735nnl79id78yswmpvmjr1w4bgcbdza4l";
     outputFiles = [ "*" ];
   };
-
 in
-
 buildPythonPackage rec {
   pname = "pythonnet";
   version = "2.4.0";

@@ -1,9 +1,27 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, bison, flex, fontconfig, freetype, gperf, icu, openssl, libjpeg
-, libpng, perl, python, ruby, sqlite, qtwebkit, qmake, qtbase
-, darwin, writeScriptBin, cups, makeWrapper
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, bison
+, flex
+, fontconfig
+, freetype
+, gperf
+, icu
+, openssl
+, libjpeg
+, libpng
+, perl
+, python
+, ruby
+, sqlite
+, qtwebkit
+, qmake
+, qtbase
+, darwin
+, writeScriptBin
+, cups
+, makeWrapper
 }:
-
 let
   fakeClang = writeScriptBin "clang" ''
     #!${stdenv.shell}
@@ -13,8 +31,8 @@ let
       exec "${stdenv.cc}/bin/clang++" "$@"
     fi
   '';
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "phantomjs";
   version = "2.1.1";
 
@@ -27,12 +45,31 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [
-    bison flex fontconfig freetype gperf icu openssl
-    libjpeg libpng perl python ruby sqlite qtwebkit qtbase
+    bison
+    flex
+    fontconfig
+    freetype
+    gperf
+    icu
+    openssl
+    libjpeg
+    libpng
+    perl
+    python
+    ruby
+    sqlite
+    qtwebkit
+    qtbase
     makeWrapper
   ] ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    AGL ApplicationServices AppKit Cocoa OpenGL
-    darwin.libobjc fakeClang cups
+    AGL
+    ApplicationServices
+    AppKit
+    Cocoa
+    OpenGL
+    darwin.libobjc
+    fakeClang
+    cups
   ]);
 
   patches = [

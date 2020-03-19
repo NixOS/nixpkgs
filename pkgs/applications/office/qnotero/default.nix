@@ -15,11 +15,11 @@ python3Packages.buildPythonPackage rec {
   propagatedBuildInputs = [ python3Packages.pyqt5 wrapQtAppsHook ];
 
   patchPhase = ''
-      substituteInPlace ./setup.py \
-        --replace "/usr/share" "usr/share"
+    substituteInPlace ./setup.py \
+      --replace "/usr/share" "usr/share"
 
-      substituteInPlace ./libqnotero/_themes/light.py \
-         --replace "/usr/share" "$out/usr/share"
+    substituteInPlace ./libqnotero/_themes/light.py \
+       --replace "/usr/share" "$out/usr/share"
   '';
 
   preFixup = ''

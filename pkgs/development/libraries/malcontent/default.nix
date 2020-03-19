@@ -59,9 +59,10 @@ stdenv.mkDerivation rec {
     pam
     polkit
     glib-testing
-    (python3.withPackages (pp: with pp; [
-      pygobject3
-    ]))
+    (python3.withPackages
+      (pp: with pp; [
+        pygobject3
+      ]))
   ];
 
   propagatedBuildInputs = [

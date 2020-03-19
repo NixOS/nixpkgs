@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, intltool, openssl, curl, libnotify,
-  libappindicator-gtk3, gst_all_1, gtk3, dconf, wrapGAppsHook, aria2 ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, openssl
+, curl
+, libnotify
+, libappindicator-gtk3
+, gst_all_1
+, gtk3
+, dconf
+, wrapGAppsHook
+, aria2 ? null
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +42,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   preFixup = stdenv.lib.optionalString (aria2 != null)
-               ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
+    ''gappsWrapperArgs+=(--suffix PATH : "${aria2}/bin")'';
 
   meta = with stdenv.lib; {
     description = "Download manager using GTK and libcurl";

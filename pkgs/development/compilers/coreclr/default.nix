@@ -1,4 +1,5 @@
-{ config, stdenv
+{ config
+, stdenv
 , fetchFromGitHub
 , fetchpatch
 , which
@@ -22,9 +23,9 @@ stdenv.mkDerivation rec {
   version = "2.0.7";
 
   src = fetchFromGitHub {
-    owner  = "dotnet";
-    repo   = "coreclr";
-    rev    = "v${version}";
+    owner = "dotnet";
+    repo = "coreclr";
+    rev = "v${version}";
     sha256 = "0pzkrfgqywhpijbx7j1v4lxa6270h6whymb64jdkp7yj56ipqh2n";
   };
 

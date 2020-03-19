@@ -1,5 +1,4 @@
 { lib, fetchzip }:
-
 let
   version = "1.0";
 in
@@ -8,7 +7,7 @@ fetchzip {
   url = "https://int10h.org/oldschool-pc-fonts/download/ultimate_oldschool_pc_font_pack_v${version}.zip";
   sha256 = "0hid4dgqfy2w26734vcw2rxmpacd9vd1r2qpdr9ww1n3kgc92k9y";
 
-  postFetch= ''
+  postFetch = ''
     mkdir -p $out/share/fonts/truetype
     unzip -j $downloadedFile \*.ttf -d $out/share/fonts/truetype
   '';

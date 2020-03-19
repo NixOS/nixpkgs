@@ -1,9 +1,9 @@
 { lib, buildPythonPackage, fetchurl, pkgconfig, gtk2, libX11, libXtst, libXi, libxkbfile, xorgproto }:
-
 let
   majorVersion = "0.63";
   minorVersion = "0";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "virtkey";
   version = "${majorVersion}.${minorVersion}";
 

@@ -12,7 +12,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
-    libXt libXpm libXext
+    libXt
+    libXpm
+    libXext
   ];
 
   makeFlags = [ "BINDIR=$(out)/bin" "MANPATH=$(out)/share/man" ];

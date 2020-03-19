@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ freetype libXft pango fontconfig];
+  buildInputs = [ freetype libXft pango fontconfig ];
 
   NIX_CFLAGS_COMPILE = "-I${freetype.dev}/include/freetype2";
 

@@ -1,23 +1,22 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.scollector;
 
   collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; }
     ''
-    mkdir -p $out
-    ${lib.concatStringsSep
+      mkdir -p $out
+      ${lib.concatStringsSep
         "\n"
         (lib.mapAttrsToList
-          (frequency: binaries:
-            "mkdir -p $out/${frequency}\n" +
-            (lib.concatStringsSep
-              "\n"
-              (map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})")
-                   binaries)))
-          cfg.collectors)}
+            (frequency: binaries:
+                "mkdir -p $out/${frequency}\n"
+                  + (lib.concatStringsSep
+                    "\n"
+                    (map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})")
+                        binaries)))
+            cfg.collectors)}
     '';
 
   conf = pkgs.writeText "scollector.toml" ''
@@ -25,8 +24,8 @@ let
     ColDir = "${collectors}"
     ${cfg.extraConfig}
   '';
-
-in {
+in
+{
 
   options = {
 
@@ -77,7 +76,7 @@ in {
 
       collectors = mkOption {
         type = with types; attrsOf (listOf path);
-        default = {};
+        default = { };
         example = literalExample "{ \"0\" = [ \"\${postgresStats}/bin/collect-stats\" ]; }";
         description = ''
           An attribute set mapping the frequency of collection to a list of
@@ -88,7 +87,7 @@ in {
 
       extraOpts = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         example = [ "-d" ];
         description = ''
           Extra scollector command line options

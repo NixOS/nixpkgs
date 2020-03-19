@@ -18,13 +18,15 @@ pkg.override {
 
   # Manually install targets
   # by symlinking binaries into `node_modules`
-  postInstall = let
-    binFile = module: lib.strings.removeSuffix ("-" + module.version) module.name;
-  in ''
-    ${lib.concatStrings (map (module: ''
-        echo "linking ${binFile module}"
-        ln -sf ${module}/bin/${binFile module} \
-            node_modules/${binFile module}/bin/${binFile module}
-    '') targets)}
-  '';
+  postInstall =
+    let
+      binFile = module: lib.strings.removeSuffix ("-" + module.version) module.name;
+    in ''
+      ${lib.concatStrings
+        (map (module: ''
+          echo "linking ${binFile module}"
+          ln -sf ${module}/bin/${binFile module} \
+              node_modules/${binFile module}/bin/${binFile module}
+        '') targets)}
+    '';
 }

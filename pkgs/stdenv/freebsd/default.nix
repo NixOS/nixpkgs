@@ -1,5 +1,8 @@
 { lib
-, localSystem, crossSystem, config, overlays
+, localSystem
+, crossSystem
+, config
+, overlays
 }:
 
 assert crossSystem == localSystem;
@@ -7,7 +10,6 @@ let inherit (localSystem) system; in
 
 
 [
-
   ({}: {
     __raw = true;
 
@@ -22,7 +24,6 @@ let inherit (localSystem) system; in
       ln = "/bin/ln";
     };
   })
-
   ({ bootstrapTools, ... }: rec {
     __raw = true;
 
@@ -44,11 +45,9 @@ let inherit (localSystem) system; in
       shell = "${bootstrapTools}/bin/bash";
       fetchurlBoot = null;
       cc = null;
-      overrides = self: super: {
-      };
+      overrides = self: super: { };
     };
   })
-
   (prevStage: {
     __raw = true;
 
@@ -63,7 +62,6 @@ let inherit (localSystem) system; in
       cc = null;
     };
   })
-
   (prevStage: {
     inherit config overlays;
     stdenv = import ../generic {
@@ -75,16 +73,16 @@ let inherit (localSystem) system; in
         initialPath shell fetchurlBoot;
 
       cc = import ../../build-support/cc-wrapper {
-        nativeTools  = true;
+        nativeTools = true;
         nativePrefix = "/usr";
-        nativeLibc   = true;
+        nativeLibc = true;
         stdenvNoCC = prevStage.stdenv;
-        cc           = {
-          name    = "clang-9.9.9";
-          cc      = "/usr";
+        cc = {
+          name = "clang-9.9.9";
+          cc = "/usr";
           outPath = "/usr";
         };
-        isClang      = true;
+        isClang = true;
       };
 
       preHook = ''export NIX_NO_SELF_RPATH=1'';

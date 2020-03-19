@@ -1,9 +1,14 @@
-{ stdenv, fetchurl
-, pkgconfig, libsoup, meson, ninja }:
-
+{ stdenv
+, fetchurl
+, pkgconfig
+, libsoup
+, meson
+, ninja
+}:
 let
   version = "2.4";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "phodav";
   inherit version;
 

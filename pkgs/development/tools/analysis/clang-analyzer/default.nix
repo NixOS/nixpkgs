@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "3.4";
 
   src = fetchurl {
-    url    = "http://llvm.org/releases/${version}/clang-${version}.src.tar.gz";
+    url = "http://llvm.org/releases/${version}/clang-${version}.src.tar.gz";
     sha256 = "06rb4j1ifbznl3gfhl98s7ilj0ns01p7y7zap4p7ynmqnc6pia92";
   };
 
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Clang Static Analyzer";
-    homepage    = "http://clang-analyzer.llvm.org";
-    license     = stdenv.lib.licenses.bsd3;
-    platforms   = stdenv.lib.platforms.unix;
+    homepage = "http://clang-analyzer.llvm.org";
+    license = stdenv.lib.licenses.bsd3;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

@@ -11,14 +11,14 @@ stdenv.mkDerivation rec {
 
   suffix = {
     x86_64-darwin = "mac";
-    x86_64-linux  = "linux";
+    x86_64-linux = "linux";
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://developer.arm.com/-/media/Files/downloads/gnu-rm/${subdir}/gcc-arm-none-eabi-${version}-${suffix}.tar.bz2";
     sha256 = {
       x86_64-darwin = "0019ylpq4inq7p5gydpmc9m8ni72fz2csrjlqmgx1698998q0c3x";
-      x86_64-linux  = "1hvwi02mx34al525sngnl0cm7dkmzxfkb1brq9kvbv28wcplp3p6";
+      x86_64-linux = "1hvwi02mx34al525sngnl0cm7dkmzxfkb1brq9kvbv28wcplp3p6";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 

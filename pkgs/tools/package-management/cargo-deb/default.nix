@@ -2,7 +2,8 @@
 , lib
 , fetchFromGitHub
 , rustPlatform
-, Security }:
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-deb";

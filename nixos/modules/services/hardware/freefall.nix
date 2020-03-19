@@ -1,12 +1,10 @@
 { config, lib, pkgs, utils, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.freefall;
-
-in {
+in
+{
 
   options.services.freefall = {
 
@@ -37,28 +35,27 @@ in {
 
   };
 
-  config = let
+  config =
+    let
+      mkService = dev:
+        assert dev != "";
+        let dev' = utils.escapeSystemdPath dev; in
+          nameValuePair "freefall-${dev'}" {
+            description = "Free-fall protection for ${dev}";
+            after = [ "${dev'}.device" ];
+            wantedBy = [ "${dev'}.device" ];
+            serviceConfig = {
+              ExecStart = "${cfg.package}/bin/freefall ${dev}";
+              Restart = "on-failure";
+              Type = "forking";
+            };
+          };
+    in mkIf cfg.enable {
 
-    mkService = dev:
-      assert dev != "";
-      let dev' = utils.escapeSystemdPath dev; in
-      nameValuePair "freefall-${dev'}" {
-        description = "Free-fall protection for ${dev}";
-        after = [ "${dev'}.device" ];
-        wantedBy = [ "${dev'}.device" ];
-        serviceConfig = {
-          ExecStart = "${cfg.package}/bin/freefall ${dev}";
-          Restart = "on-failure";
-          Type = "forking";
-        };
-      };
+      environment.systemPackages = [ cfg.package ];
 
-  in mkIf cfg.enable {
+      systemd.services = builtins.listToAttrs (map mkService cfg.devices);
 
-    environment.systemPackages = [ cfg.package ];
-
-    systemd.services = builtins.listToAttrs (map mkService cfg.devices);
-
-  };
+    };
 
 }

@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   pname = "libmpdclient";
 
   src = fetchFromGitHub {
-    owner  = "MusicPlayerDaemon";
-    repo   = "libmpdclient";
-    rev    = "v${version}";
+    owner = "MusicPlayerDaemon";
+    repo = "libmpdclient";
+    rev = "v${version}";
     sha256 = "0p2dw3jwyl34azzvr9bm7q6ni8v4ix9qr5lig62xskvrrbjfc4a6";
   };
 

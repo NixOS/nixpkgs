@@ -1,4 +1,4 @@
-{stdenv
+{ stdenv
 , removeReferencesTo
 , lib
 , fetchFromGitHub
@@ -9,7 +9,8 @@
 , which
 , makeWrapper
 , squashfsTools
-, buildGoPackage}:
+, buildGoPackage
+}:
 
 with lib;
 

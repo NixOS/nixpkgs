@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.miniupnpd;
   configFile = pkgs.writeText "miniupnpd.conf" ''
@@ -10,8 +9,8 @@ let
     enable_upnp=${if cfg.upnp then "yes" else "no"}
 
     ${concatMapStrings (range: ''
-      listening_ip=${range}
-    '') cfg.internalIPs}
+    listening_ip=${range}
+  '') cfg.internalIPs}
 
     ${cfg.appendConfig}
   '';

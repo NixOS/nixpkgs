@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "xfce";
 
   machine =
@@ -26,9 +26,10 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       virtualisation.memorySize = 1024;
     };
 
-  testScript = { nodes, ... }: let
-    user = nodes.machine.config.users.users.alice;
-  in ''
+  testScript = { nodes, ... }:
+    let
+      user = nodes.machine.config.users.users.alice;
+    in ''
       machine.wait_for_x()
       machine.wait_for_file("${user.home}/.Xauthority")
       machine.succeed("xauth merge ${user.home}/.Xauthority")

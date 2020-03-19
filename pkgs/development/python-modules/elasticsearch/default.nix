@@ -1,7 +1,9 @@
 { buildPythonPackage
 , fetchPypi
-, urllib3, requests
-, nosexcover, mock
+, urllib3
+, requests
+, nosexcover
+, mock
 , stdenv
 }:
 

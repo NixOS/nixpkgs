@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, qtbase , qttools, python
-, libGLU, libGL , libXt, qtx11extras, qtxmlpatterns , mkDerivation }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, qtbase
+, qttools
+, python
+, libGLU
+, libGL
+, libXt
+, qtx11extras
+, qtxmlpatterns
+, mkDerivation
+}:
 
 mkDerivation rec {
   pname = "paraview";
@@ -39,7 +51,8 @@ mkDerivation rec {
   buildInputs = [
     python
     python.pkgs.numpy
-    libGLU libGL
+    libGLU
+    libGL
     libXt
     qtbase
     qtx11extras

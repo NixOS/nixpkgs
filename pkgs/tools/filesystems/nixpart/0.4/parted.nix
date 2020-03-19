@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, lvm2, libuuid, gettext, readline
-, utillinux, check, enableStatic ? false }:
+{ stdenv
+, fetchurl
+, lvm2
+, libuuid
+, gettext
+, readline
+, utillinux
+, check
+, enableStatic ? false
+}:
 
 stdenv.mkDerivation rec {
   name = "parted-3.1";
@@ -10,14 +18,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libuuid ]
-    ++ stdenv.lib.optional (readline != null) readline
-    ++ stdenv.lib.optional (gettext != null) gettext
-    ++ stdenv.lib.optional (lvm2 != null) lvm2;
+  ++ stdenv.lib.optional (readline != null) readline
+  ++ stdenv.lib.optional (gettext != null) gettext
+  ++ stdenv.lib.optional (lvm2 != null) lvm2;
 
   configureFlags =
-       (if (readline != null)
-        then [ "--with-readline" ]
-        else [ "--without-readline" ])
+    (
+      if (readline != null)
+      then [ "--with-readline" ]
+      else [ "--without-readline" ])
     ++ stdenv.lib.optional (lvm2 == null) "--disable-device-mapper"
     ++ stdenv.lib.optional enableStatic "--enable-static";
 

@@ -1,13 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, boost, gnuradio
-, pythonSupport ? true, python, swig, limesuite
-} :
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, boost
+, gnuradio
+, pythonSupport ? true
+, python
+, swig
+, limesuite
+}:
 
 assert pythonSupport -> python != null && swig != null;
-
 let
   version = "2.0.0";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "gr-limesdr";
   inherit version;
 
@@ -24,7 +31,9 @@ in stdenv.mkDerivation {
   ] ++ stdenv.lib.optionals pythonSupport [ swig ];
 
   buildInputs = [
-    boost gnuradio limesuite
+    boost
+    gnuradio
+    limesuite
   ] ++ stdenv.lib.optionals pythonSupport [ python ];
 
 

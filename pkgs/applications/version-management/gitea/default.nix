@@ -1,5 +1,12 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, makeWrapper
-, git, bash, gzip, openssh, pam
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, makeWrapper
+, git
+, bash
+, gzip
+, openssh
+, pam
 , sqliteSupport ? true
 , pamSupport ? true
 }:
@@ -33,18 +40,19 @@ buildGoPackage rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ]
-    ++ optional pamSupport pam;
+  ++ optional pamSupport pam;
 
-  preBuild = let
-    tags = optional pamSupport "pam"
-        ++ optional sqliteSupport "sqlite";
-    tagsString = concatStringsSep " " tags;
-  in ''
-    export buildFlagsArray=(
-      -tags="${tagsString}"
-      -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
-    )
-  '';
+  preBuild =
+    let
+      tags = optional pamSupport "pam"
+      ++ optional sqliteSupport "sqlite";
+      tagsString = concatStringsSep " " tags;
+    in ''
+      export buildFlagsArray=(
+        -tags="${tagsString}"
+        -ldflags='-X "main.Version=${version}" -X "main.Tags=${tagsString}"'
+      )
+    '';
 
   outputs = [ "bin" "out" "data" ];
 

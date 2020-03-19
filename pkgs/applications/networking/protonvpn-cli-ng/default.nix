@@ -12,14 +12,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = (with python3Packages; [
-      requests
-      docopt
-      setuptools
-      pythondialog
-    ]) ++ [
-      dialog
-      openvpn
-    ];
+    requests
+    docopt
+    setuptools
+    pythondialog
+  ]) ++ [
+    dialog
+    openvpn
+  ];
 
   # No tests
   doCheck = false;

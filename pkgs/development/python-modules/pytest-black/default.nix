@@ -1,4 +1,6 @@
-{ lib, buildPythonPackage, fetchPypi
+{ lib
+, buildPythonPackage
+, fetchPypi
 , black
 , pytest
 , setuptools_scm

@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, buildPackages, automake, autoconf, libtool, which,
-  fetchpatch }:
+{ stdenv
+, fetchurl
+, buildPackages
+, automake
+, autoconf
+, libtool
+, which
+, fetchpatch
+}:
 
 stdenv.mkDerivation rec {
   pname = "ilmbase";

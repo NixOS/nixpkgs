@@ -18,7 +18,7 @@ stdenv.mkDerivation {
   this is necessary for dsniff to compile; otherwise g_thread_init is a missing
   symbol when linking (?!?)
   */
-  NIX_CFLAGS_COMPILE="-Dg_thread_init= ";
+  NIX_CFLAGS_COMPILE = "-Dg_thread_init= ";
 
   meta = with stdenv.lib; {
     description = "An E-component of Network Intrusion Detection System which emulates the IP stack of Linux 2.0.x";

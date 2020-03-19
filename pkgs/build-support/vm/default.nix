@@ -2,15 +2,15 @@
 , kernel ? pkgs.linux
 , img ? pkgs.stdenv.hostPlatform.platform.kernelTarget
 , storeDir ? builtins.storeDir
-, rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
-      ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
+, rootModules ? [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "9p" "9pnet_virtio" "crc32c_generic" ]
+  ++ pkgs.lib.optional (pkgs.stdenv.isi686 || pkgs.stdenv.isx86_64) "rtc_cmos"
 }:
 
 with pkgs;
 with import ../../../nixos/lib/qemu-flags.nix { inherit pkgs; };
 
-rec {
+rec
+{
 
   qemu = pkgs.qemu_kvm;
 
@@ -23,7 +23,8 @@ rec {
   hd = "vda"; # either "sda" or "vda"
 
   initrdUtils = runCommand "initrd-utils"
-    { buildInputs = [ nukeReferences ];
+    {
+      buildInputs = [ nukeReferences ];
       allowedReferences = [ "out" modulesClosure ]; # prevent accidents like glibc being included in the initrd
     }
     ''
@@ -138,7 +139,8 @@ rec {
 
   initrd = makeInitrd {
     contents = [
-      { object = stage1Init;
+      {
+        object = stage1Init;
         symlink = "/init";
       }
     ];
@@ -257,7 +259,7 @@ rec {
   '';
 
 
-  createEmptyImage = {size, fullName}: ''
+  createEmptyImage = { size, fullName }: ''
     mkdir $out
     diskImage=$out/disk-image.qcow2
     ${qemu}/bin/qemu-img create -f qcow2 $diskImage "${toString size}M"
@@ -305,62 +307,64 @@ rec {
   runInLinuxVM = drv: lib.overrideDerivation drv ({ memSize ? 512, QEMU_OPTS ? "", args, builder, ... }: {
     requiredSystemFeatures = [ "kvm" ];
     builder = "${bash}/bin/sh";
-    args = ["-e" (vmRunCommand qemuCommandLinux)];
+    args = [ "-e" (vmRunCommand qemuCommandLinux) ];
     origArgs = args;
     origBuilder = builder;
     QEMU_OPTS = "${QEMU_OPTS} -m ${toString memSize}";
-    passAsFile = []; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
+    passAsFile = [ ]; # HACK fix - see https://github.com/NixOS/nixpkgs/issues/16742
   });
 
 
-  extractFs = {file, fs ? null} :
+  extractFs = { file, fs ? null }:
     with pkgs; runInLinuxVM (
-    stdenv.mkDerivation {
-      name = "extract-file";
-      buildInputs = [ utillinux ];
-      buildCommand = ''
-        ln -s ${kernel}/lib /lib
-        ${kmod}/bin/modprobe loop
-        ${kmod}/bin/modprobe ext4
-        ${kmod}/bin/modprobe hfs
-        ${kmod}/bin/modprobe hfsplus
-        ${kmod}/bin/modprobe squashfs
-        ${kmod}/bin/modprobe iso9660
-        ${kmod}/bin/modprobe ufs
-        ${kmod}/bin/modprobe cramfs
+      stdenv.mkDerivation {
+        name = "extract-file";
+        buildInputs = [ utillinux ];
+        buildCommand = ''
+          ln -s ${kernel}/lib /lib
+          ${kmod}/bin/modprobe loop
+          ${kmod}/bin/modprobe ext4
+          ${kmod}/bin/modprobe hfs
+          ${kmod}/bin/modprobe hfsplus
+          ${kmod}/bin/modprobe squashfs
+          ${kmod}/bin/modprobe iso9660
+          ${kmod}/bin/modprobe ufs
+          ${kmod}/bin/modprobe cramfs
 
-        mkdir -p $out
-        mkdir -p tmp
-        mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
-          mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
-        cp -Rv tmp/* $out/ || exit 0
-      '';
-    });
+          mkdir -p $out
+          mkdir -p tmp
+          mount -o loop,ro,ufstype=44bsd ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp ||
+            mount -o loop,ro ${lib.optionalString (fs != null) "-t ${fs} "}${file} tmp
+          cp -Rv tmp/* $out/ || exit 0
+        '';
+      }
+    );
 
 
-  extractMTDfs = {file, fs ? null} :
+  extractMTDfs = { file, fs ? null }:
     with pkgs; runInLinuxVM (
-    stdenv.mkDerivation {
-      name = "extract-file-mtd";
-      buildInputs = [ utillinux mtdutils ];
-      buildCommand = ''
-        ln -s ${kernel}/lib /lib
-        ${kmod}/bin/modprobe mtd
-        ${kmod}/bin/modprobe mtdram total_size=131072
-        ${kmod}/bin/modprobe mtdchar
-        ${kmod}/bin/modprobe mtdblock
-        ${kmod}/bin/modprobe jffs2
-        ${kmod}/bin/modprobe zlib
+      stdenv.mkDerivation {
+        name = "extract-file-mtd";
+        buildInputs = [ utillinux mtdutils ];
+        buildCommand = ''
+          ln -s ${kernel}/lib /lib
+          ${kmod}/bin/modprobe mtd
+          ${kmod}/bin/modprobe mtdram total_size=131072
+          ${kmod}/bin/modprobe mtdchar
+          ${kmod}/bin/modprobe mtdblock
+          ${kmod}/bin/modprobe jffs2
+          ${kmod}/bin/modprobe zlib
 
-        mkdir -p $out
-        mkdir -p tmp
+          mkdir -p $out
+          mkdir -p tmp
 
-        dd if=${file} of=/dev/mtd0
-        mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
+          dd if=${file} of=/dev/mtd0
+          mount ${lib.optionalString (fs != null) "-t ${fs} "}/dev/mtdblock0 tmp
 
-        cp -R tmp/* $out/
-      '';
-    });
+          cp -R tmp/* $out/
+        '';
+      }
+    );
 
 
   /* Like runInLinuxVM, but run the build not using the stdenv from
@@ -400,15 +404,22 @@ rec {
      a set of RPM packages. */
 
   fillDiskWithRPMs =
-    { size ? 4096, rpms, name, fullName, preInstall ? "", postInstall ? ""
-    , runScripts ? true, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512
+    { size ? 4096
+    , rpms
+    , name
+    , fullName
+    , preInstall ? ""
+    , postInstall ? ""
+    , runScripts ? true
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
     , unifiedSystemDir ? false
     }:
 
     runInLinuxVM (stdenv.mkDerivation {
       inherit name preInstall postInstall rpms QEMU_OPTS memSize;
-      preVM = createEmptyImage {inherit size fullName;};
+      preVM = createEmptyImage { inherit size fullName; };
 
       buildCommand = ''
         ${createRootFS}
@@ -422,13 +433,13 @@ rec {
         # Newer distributions like Fedora 18 require /lib etc. to be
         # symlinked to /usr.
         ${lib.optionalString unifiedSystemDir ''
-          mkdir -p /mnt/usr/bin /mnt/usr/sbin /mnt/usr/lib /mnt/usr/lib64
-          ln -s /usr/bin /mnt/bin
-          ln -s /usr/sbin /mnt/sbin
-          ln -s /usr/lib /mnt/lib
-          ln -s /usr/lib64 /mnt/lib64
-          ${utillinux}/bin/mount -t proc none /mnt/proc
-        ''}
+        mkdir -p /mnt/usr/bin /mnt/usr/sbin /mnt/usr/lib /mnt/usr/lib64
+        ln -s /usr/bin /mnt/bin
+        ln -s /usr/sbin /mnt/sbin
+        ln -s /usr/lib /mnt/lib
+        ln -s /usr/lib64 /mnt/lib64
+        ${utillinux}/bin/mount -t proc none /mnt/proc
+      ''}
 
         echo "unpacking RPMs..."
         set +o pipefail
@@ -492,65 +503,70 @@ rec {
      distribution installed in the filesystem `diskImage'.  The
      tarball must contain an RPM specfile. */
 
-  buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation ({
-    phases = "prepareImagePhase sysInfoPhase buildPhase installPhase";
+  buildRPM = attrs: runInLinuxImage (stdenv.mkDerivation
+    (
+      {
+        phases = "prepareImagePhase sysInfoPhase buildPhase installPhase";
 
-    outDir = "rpms/${attrs.diskImage.name}";
+        outDir = "rpms/${attrs.diskImage.name}";
 
-    prepareImagePhase = ''
-      if test -n "$extraRPMs"; then
-        for rpmdir in $extraRPMs ; do
-          rpm -iv $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)
-        done
-      fi
-    '';
+        prepareImagePhase = ''
+          if test -n "$extraRPMs"; then
+            for rpmdir in $extraRPMs ; do
+              rpm -iv $(ls $rpmdir/rpms/*/*.rpm | grep -v 'src\.rpm' | sort | head -1)
+            done
+          fi
+        '';
 
-    sysInfoPhase = ''
-      echo "System/kernel: $(uname -a)"
-      if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
-      if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
-      header "installed RPM packages"
-      rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
-      stopNest
-    '';
+        sysInfoPhase = ''
+          echo "System/kernel: $(uname -a)"
+          if test -e /etc/fedora-release; then echo "Fedora release: $(cat /etc/fedora-release)"; fi
+          if test -e /etc/SuSE-release; then echo "SUSE release: $(cat /etc/SuSE-release)"; fi
+          header "installed RPM packages"
+          rpm -qa --qf "%{Name}-%{Version}-%{Release} (%{Arch}; %{Distribution}; %{Vendor})\n"
+          stopNest
+        '';
 
-    buildPhase = ''
-      eval "$preBuild"
+        buildPhase = ''
+          eval "$preBuild"
 
-      # Hacky: RPM looks for <basename>.spec inside the tarball, so
-      # strip off the hash.
-      srcName="$(stripHash "$src")"
-      cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
+          # Hacky: RPM looks for <basename>.spec inside the tarball, so
+          # strip off the hash.
+          srcName="$(stripHash "$src")"
+          cp "$src" "$srcName" # `ln' doesn't work always work: RPM requires that the file is owned by root
 
-      export HOME=/tmp/home
-      mkdir $HOME
+          export HOME=/tmp/home
+          mkdir $HOME
 
-      rpmout=/tmp/rpmout
-      mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
+          rpmout=/tmp/rpmout
+          mkdir $rpmout $rpmout/SPECS $rpmout/BUILD $rpmout/RPMS $rpmout/SRPMS
 
-      echo "%_topdir $rpmout" >> $HOME/.rpmmacros
+          echo "%_topdir $rpmout" >> $HOME/.rpmmacros
 
-      if [ `uname -m` = i686 ]; then extra="--target i686-linux"; fi
-      rpmbuild -vv $extra -ta "$srcName"
+          if [ `uname -m` = i686 ]; then extra="--target i686-linux"; fi
+          rpmbuild -vv $extra -ta "$srcName"
 
-      eval "$postBuild"
-    '';
+          eval "$postBuild"
+        '';
 
-    installPhase = ''
-      eval "$preInstall"
+        installPhase = ''
+          eval "$preInstall"
 
-      mkdir -p $out/$outDir
-      find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
+          mkdir -p $out/$outDir
+          find $rpmout -name "*.rpm" -exec cp {} $out/$outDir \;
 
-      for i in $out/$outDir/*.rpm; do
-        header "Generated RPM/SRPM: $i"
-        rpm -qip $i
-        stopNest
-      done
+          for i in $out/$outDir/*.rpm; do
+            header "Generated RPM/SRPM: $i"
+            rpm -qip $i
+            stopNest
+          done
 
-      eval "$postInstall"
-    ''; # */
-  } // attrs));
+          eval "$postInstall"
+        ''; # */
+      }
+      // attrs
+    )
+  );
 
 
   /* Create a filesystem image of the specified size and fill it with
@@ -559,15 +575,22 @@ rec {
      strongly connected components.  See deb/deb-closure.nix. */
 
   fillDiskWithDebs =
-    { size ? 4096, debs, name, fullName, postInstall ? null, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
+    { size ? 4096
+    , debs
+    , name
+    , fullName
+    , postInstall ? null
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    }:
 
     runInLinuxVM (stdenv.mkDerivation {
       inherit name postInstall QEMU_OPTS memSize;
 
       debs = (lib.intersperse "|" debs);
 
-      preVM = createEmptyImage {inherit size fullName;};
+      preVM = createEmptyImage { inherit size fullName; };
 
       buildCommand = ''
         ${createRootFS}
@@ -650,14 +673,15 @@ rec {
      `primary.xml.gz' file of a Fedora or openSUSE distribution. */
 
   rpmClosureGenerator =
-    {name, packagesLists, urlPrefixes, packages, archs ? []}:
+    { name, packagesLists, urlPrefixes, packages, archs ? [ ] }:
     assert (builtins.length packagesLists) == (builtins.length urlPrefixes);
-    runCommand "${name}.nix" {buildInputs = [perl perlPackages.XMLSimple]; inherit archs;} ''
-      ${lib.concatImapStrings (i: pl: ''
-        gunzip < ${pl} > ./packages_${toString i}.xml
-      '') packagesLists}
+    runCommand "${name}.nix" { buildInputs = [ perl perlPackages.XMLSimple ]; inherit archs; } ''
+      ${lib.concatImapStrings
+        (i: pl: ''
+          gunzip < ${pl} > ./packages_${toString i}.xml
+        '') packagesLists}
       perl -w ${rpm/rpm-closure.pl} \
-        ${lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} " ) (lib.zipLists packagesLists urlPrefixes)} \
+        ${lib.concatImapStrings (i: pl: "./packages_${toString i}.xml ${pl.snd} ") (lib.zipLists packagesLists urlPrefixes)} \
         ${toString packages} > $out
     '';
 
@@ -667,14 +691,24 @@ rec {
      names. */
 
   makeImageFromRPMDist =
-    { name, fullName, size ? 4096
-    , urlPrefix ? "", urlPrefixes ? [urlPrefix]
-    , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? []
-    , preInstall ? "", postInstall ? "", archs ? ["noarch" "i386"]
-    , runScripts ? true, createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512
-    , unifiedSystemDir ? false }:
+    { name
+    , fullName
+    , size ? 4096
+    , urlPrefix ? ""
+    , urlPrefixes ? [ urlPrefix ]
+    , packagesList ? ""
+    , packagesLists ? [ packagesList ]
+    , packages
+    , extraPackages ? [ ]
+    , preInstall ? ""
+    , postInstall ? ""
+    , archs ? [ "noarch" "i386" ]
+    , runScripts ? true
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    , unifiedSystemDir ? false
+    }:
 
     fillDiskWithRPMs {
       inherit name fullName size preInstall postInstall runScripts createRootFS unifiedSystemDir QEMU_OPTS memSize;
@@ -689,7 +723,7 @@ rec {
      (i.e. generate a closure from a Packages.bz2 file). */
 
   debClosureGenerator =
-    {name, packagesLists, urlPrefix, packages}:
+    { name, packagesLists, urlPrefix, packages }:
 
     runCommand "${name}.nix" { buildInputs = [ perl dpkg ]; } ''
       for i in ${toString packagesLists}; do
@@ -720,12 +754,20 @@ rec {
      names. */
 
   makeImageFromDebDist =
-    { name, fullName, size ? 4096, urlPrefix
-    , packagesList ? "", packagesLists ? [packagesList]
-    , packages, extraPackages ? [], postInstall ? ""
-    , extraDebs ? [], createRootFS ? defaultCreateRootFS
-    , QEMU_OPTS ? "", memSize ? 512 }:
-
+    { name
+    , fullName
+    , size ? 4096
+    , urlPrefix
+    , packagesList ? ""
+    , packagesLists ? [ packagesList ]
+    , packages
+    , extraPackages ? [ ]
+    , postInstall ? ""
+    , extraDebs ? [ ]
+    , createRootFS ? defaultCreateRootFS
+    , QEMU_OPTS ? ""
+    , memSize ? 512
+    }:
     let
       expr = debClosureGenerator {
         inherit name packagesLists urlPrefix;
@@ -734,8 +776,8 @@ rec {
     in
       (fillDiskWithDebs {
         inherit name fullName size postInstall createRootFS QEMU_OPTS memSize;
-        debs = import expr {inherit fetchurl;} ++ extraDebs;
-      }) // {inherit expr;};
+        debs = import expr { inherit fetchurl; } ++ extraDebs;
+      }) // { inherit expr; };
 
 
   /* The set of supported RPM-based distributions. */
@@ -744,7 +786,8 @@ rec {
 
     # Note: no i386 release for Fedora >= 26
     fedora26x86_64 =
-      let version = "26";
+      let
+        version = "26";
       in {
         name = "fedora-${version}-x86_64";
         fullName = "Fedora ${version} (x86_64)";
@@ -753,13 +796,14 @@ rec {
           sha256 = "880055a50c05b20641530d09b23f64501a000b2f92fe252417c530178730a95e";
         };
         urlPrefix = "mirror://fedora/linux/releases/${version}/Everything/x86_64/os";
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
         unifiedSystemDir = true;
       };
 
     fedora27x86_64 =
-      let version = "27";
+      let
+        version = "27";
       in {
         name = "fedora-${version}-x86_64";
         fullName = "Fedora ${version} (x86_64)";
@@ -768,13 +812,14 @@ rec {
           sha256 = "48986ce4583cd09825c6d437150314446f0f49fa1a1bd62dcfa1085295030fe9";
         };
         urlPrefix = "mirror://fedora/linux/releases/${version}/Everything/x86_64/os";
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonFedoraPackages ++ [ "cronie" "util-linux" ];
         unifiedSystemDir = true;
       };
 
     centos6i386 =
-      let version = "6.9";
+      let
+        version = "6.9";
       in rec {
         name = "centos-${version}-i386";
         fullName = "CentOS ${version} (i386)";
@@ -783,12 +828,13 @@ rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "b826a45082ef68340325c0855f3d2e5d5a4d0f77d28ba3b871791d6f14a97aeb";
         };
-        archs = ["noarch" "i386"];
+        archs = [ "noarch" "i386" ];
         packages = commonCentOSPackages ++ [ "procps" ];
       };
 
     centos6x86_64 =
-      let version = "6.9";
+      let
+        version = "6.9";
       in rec {
         name = "centos-${version}-x86_64";
         fullName = "CentOS ${version} (x86_64)";
@@ -797,13 +843,14 @@ rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "ed2b2d4ac98d774d4cd3e91467e1532f7e8b0275cfc91a0d214b532dcaf1e979";
         };
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonCentOSPackages ++ [ "procps" ];
       };
 
     # Note: no i386 release for 7.x
     centos7x86_64 =
-      let version = "7.4.1708";
+      let
+        version = "7.4.1708";
       in rec {
         name = "centos-${version}-x86_64";
         fullName = "CentOS ${version} (x86_64)";
@@ -812,7 +859,7 @@ rec {
           url = "${urlPrefix}/repodata/${sha256}-primary.xml.gz";
           sha256 = "b686d3a0f337323e656d9387b9a76ce6808b26255fc3a138b1a87d3b1cb95ed5";
         };
-        archs = ["noarch" "x86_64"];
+        archs = [ "noarch" "x86_64" ];
         packages = commonCentOSPackages ++ [ "procps-ng" ];
       };
   };
@@ -830,7 +877,8 @@ rec {
       name = "ubuntu-12.04-precise-i386";
       fullName = "Ubuntu 12.04 Precise (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/precise/main/binary-i386/Packages.bz2;
             sha256 = "18ns9h4qhvjfcip9z55grzi371racxavgqkp6b5kfkdq2wwwax2d";
           })
@@ -847,7 +895,8 @@ rec {
       name = "ubuntu-12.04-precise-amd64";
       fullName = "Ubuntu 12.04 Precise (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/precise/main/binary-amd64/Packages.bz2;
             sha256 = "1aabpn0hdih6cbabyn87yvhccqj44q9k03mqmjsb920iqlckl3fc";
           })
@@ -864,7 +913,8 @@ rec {
       name = "ubuntu-14.04-trusty-i386";
       fullName = "Ubuntu 14.04 Trusty (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/trusty/main/binary-i386/Packages.bz2;
             sha256 = "1d5y3v3v079gdq45hc07ja0bjlmzqfwdwwlq0brwxi8m75k3iz7x";
           })
@@ -881,7 +931,8 @@ rec {
       name = "ubuntu-14.04-trusty-amd64";
       fullName = "Ubuntu 14.04 Trusty (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/trusty/main/binary-amd64/Packages.bz2;
             sha256 = "1hhzbyqfr5i0swahwnl5gfp5l9p9hspywb1vpihr3b74p1z935bh";
           })
@@ -898,7 +949,8 @@ rec {
       name = "ubuntu-16.04-xenial-i386";
       fullName = "Ubuntu 16.04 Xenial (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/xenial/main/binary-i386/Packages.xz;
             sha256 = "13r75sp4slqy8w32y5dnr7pp7p3cfvavyr1g7gwnlkyrq4zx4ahy";
           })
@@ -915,7 +967,8 @@ rec {
       name = "ubuntu-16.04-xenial-amd64";
       fullName = "Ubuntu 16.04 Xenial (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/xenial/main/binary-amd64/Packages.xz;
             sha256 = "110qnkhjkkwm316fbig3aivm2595ydz6zskc4ld5cr8ngcrqm1bn";
           })
@@ -932,7 +985,8 @@ rec {
       name = "ubuntu-17.10-artful-i386";
       fullName = "Ubuntu 17.10 Artful (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/artful/main/binary-i386/Packages.xz;
             sha256 = "18yrj4kqdzm39q0527m97h5ing58hkm9yq9iyj636zh2rclym3c8";
           })
@@ -949,7 +1003,8 @@ rec {
       name = "ubuntu-17.10-artful-amd64";
       fullName = "Ubuntu 17.10 Artful (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/artful/main/binary-amd64/Packages.xz;
             sha256 = "104g57j1l3vi8wb5f7rgjvjhf82ccs0vwhc59jfc4ynd51z7fqjk";
           })
@@ -966,7 +1021,8 @@ rec {
       name = "ubuntu-18.04-bionic-i386";
       fullName = "Ubuntu 18.04 Bionic (i386)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/bionic/main/binary-i386/Packages.xz;
             sha256 = "0f0v4131kwf7m7f8j3288rlqdxk1k3vqy74b7fcfd6jz9j8d840i";
           })
@@ -983,7 +1039,8 @@ rec {
       name = "ubuntu-18.04-bionic-amd64";
       fullName = "Ubuntu 18.04 Bionic (amd64)";
       packagesLists =
-        [ (fetchurl {
+        [
+          (fetchurl {
             url = mirror://ubuntu/dists/bionic/main/binary-amd64/Packages.xz;
             sha256 = "1ls81bjyvmfz6i919kszl7xks1ibrh1xqhsk6698ackndkm0wp39";
           })
@@ -1183,8 +1240,8 @@ rec {
      size = 8192; }' builds an 8 GiB image containing Firefox in
      addition to the default packages. */
   diskImageFuns =
-    (lib.mapAttrs (name: as: as2: makeImageFromRPMDist (as // as2)) rpmDistros) //
-    (lib.mapAttrs (name: as: as2: makeImageFromDebDist (as // as2)) debDistros);
+    (lib.mapAttrs (name: as: as2: makeImageFromRPMDist (as // as2)) rpmDistros)
+    // (lib.mapAttrs (name: as: as2: makeImageFromDebDist (as // as2)) debDistros);
 
 
   /* Shorthand for `diskImageFuns.<attr> { extraPackages = ... }'. */
@@ -1194,6 +1251,6 @@ rec {
 
   /* Default disk images generated from the `rpmDistros' and
      `debDistros' sets. */
-  diskImages = lib.mapAttrs (name: f: f {}) diskImageFuns;
-
-} // import ./windows pkgs
+  diskImages = lib.mapAttrs (name: f: f { }) diskImageFuns;
+}
+// import ./windows pkgs

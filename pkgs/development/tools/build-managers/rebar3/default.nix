@@ -1,7 +1,9 @@
-{ stdenv, fetchFromGitHub,
-  fetchHex, erlang,
-  tree }:
-
+{ stdenv
+, fetchFromGitHub
+, fetchHex
+, erlang
+, tree
+}:
 let
   version = "3.12.0";
 
@@ -65,7 +67,6 @@ let
     version = "3.3.0";
     sha256 = "0q5r871bzx1a8fa06yyxdi3xkkp7v5yqazzah03d6yl3vsmn7vqp";
   };
-
 in
 stdenv.mkDerivation rec {
   pname = "rebar3";
@@ -126,7 +127,7 @@ stdenv.mkDerivation rec {
       of build configuration work. rebar also provides dependency management,
       enabling application writers to easily re-use common libraries from a
       variety of locations (hex.pm, git, hg, and so on).
-      '';
+    '';
 
     platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ gleber tazjin ];

@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib c-ares c-ares.cmake-config openssl protobuf gflags ];
 
   cmakeFlags =
-    [ "-DgRPC_ZLIB_PROVIDER=package"
+    [
+      "-DgRPC_ZLIB_PROVIDER=package"
       "-DgRPC_CARES_PROVIDER=package"
       "-DgRPC_SSL_PROVIDER=package"
       "-DgRPC_PROTOBUF_PROVIDER=package"

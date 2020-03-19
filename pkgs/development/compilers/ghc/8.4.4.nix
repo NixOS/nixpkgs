@@ -1,21 +1,34 @@
-{ stdenv, pkgsBuildTarget, targetPackages
+{ stdenv
+, pkgsBuildTarget
+, targetPackages
 
-# build-tools
+  # build-tools
 , bootPkgs
-, autoconf, automake, coreutils, fetchurl, fetchpatch, perl, python3, m4, sphinx
+, autoconf
+, automake
+, coreutils
+, fetchurl
+, fetchpatch
+, perl
+, python3
+, m4
+, sphinx
 , bash
 
-, libiconv ? null, ncurses
+, libiconv ? null
+, ncurses
 
 , useLLVM ? !stdenv.targetPlatform.isx86 || (stdenv.targetPlatform.isMusl && stdenv.hostPlatform != stdenv.targetPlatform) || stdenv.targetPlatform.isiOS
 , # LLVM is conceptually a run-time-only depedendency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.
-  buildLlvmPackages, llvmPackages
+  buildLlvmPackages
+, llvmPackages
 
 , # If enabled, GHC will be built with the GPL-free but slower integer-simple
   # library instead of the faster but GPLed integer-gmp library.
-  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms), gmp
+  enableIntegerSimple ? !(stdenv.lib.any (stdenv.lib.meta.platformMatch stdenv.hostPlatform) gmp.meta.platforms)
+, gmp
 
 , # If enabled, use -fPIC when compiling static libs.
   enableRelocatedStaticLibs ? stdenv.targetPlatform != stdenv.hostPlatform
@@ -37,7 +50,6 @@
 }:
 
 assert !enableIntegerSimple -> gmp != null;
-
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
 
@@ -70,8 +82,8 @@ let
 
   # Splicer will pull out correct variations
   libDeps = platform: stdenv.lib.optional enableTerminfo ncurses
-    ++ stdenv.lib.optional (!enableIntegerSimple) gmp
-    ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
+  ++ stdenv.lib.optional (!enableIntegerSimple) gmp
+  ++ stdenv.lib.optional (platform.libc != "glibc" && !targetPlatform.isWindows) libiconv;
 
   toolsForTarget = [
     pkgsBuildTarget.targetPackages.stdenv.cc
@@ -80,71 +92,76 @@ let
   targetCC = builtins.head toolsForTarget;
 
   useLdGold = targetPlatform.isLinux && !(targetPlatform.useLLVM or false);
-
 in
-stdenv.mkDerivation (rec {
-  version = "8.4.4";
-  name = "${targetPrefix}ghc-${version}";
+stdenv.mkDerivation
+  (rec
+  {
+    version = "8.4.4";
+    name = "${targetPrefix}ghc-${version}";
 
-  src = fetchurl {
-    url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
-    sha256 = "1ch4j2asg7pr52ai1hwzykxyj553wndg7wq93i47ql4fllspf48i";
-  };
+    src = fetchurl {
+      url = "https://downloads.haskell.org/ghc/${version}/ghc-${version}-src.tar.xz";
+      sha256 = "1ch4j2asg7pr52ai1hwzykxyj553wndg7wq93i47ql4fllspf48i";
+    };
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  outputs = [ "out" "doc" ];
+    outputs = [ "out" "doc" ];
 
-  patches = [(fetchpatch {
-    url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
-    sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
-    extraPrefix = "utils/hsc2hs/";
-    stripLen = 1;
-  }) (fetchpatch rec { # https://phabricator.haskell.org/D5123
-    url = "http://tarballs.nixos.org/sha256/${sha256}";
-    name = "D5123.diff";
-    sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
-  })] ++ stdenv.lib.optional deterministicProfiling
-    (fetchpatch rec {
-      url = "http://tarballs.nixos.org/sha256/${sha256}";
-      name = "D4388.diff";
-      sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
-    })
+    patches = [
+      (fetchpatch {
+        url = "https://git.haskell.org/hsc2hs.git/patch/738f3666c878ee9e79c3d5e819ef8b3460288edf";
+        sha256 = "0plzsbfaq6vb1023lsarrjglwgr9chld4q3m99rcfzx0yx5mibp3";
+        extraPrefix = "utils/hsc2hs/";
+        stripLen = 1;
+      })
+      (fetchpatch rec {
+        # https://phabricator.haskell.org/D5123
+        url = "http://tarballs.nixos.org/sha256/${sha256}";
+        name = "D5123.diff";
+        sha256 = "0nhqwdamf2y4gbwqxcgjxs0kqx23w9gv5kj0zv6450dq19rji82n";
+      })
+    ] ++ stdenv.lib.optional deterministicProfiling
+      (fetchpatch rec {
+        url = "http://tarballs.nixos.org/sha256/${sha256}";
+        name = "D4388.diff";
+        sha256 = "0w6sdcvnqjlnlzpvnzw20b80v150ijjyjvs9548ildc1928j0w7s";
+      })
     ++ stdenv.lib.optional stdenv.isDarwin ./backport-dylib-command-size-limit.patch
     ++ stdenv.lib.optional (targetPlatform.isAarch32 || targetPlatform.isAarch64) (fetchpatch {
       url = "https://git.haskell.org/ghc.git/patch/d8495549ba9d194815c2d0eaee6797fc7c00756a";
       sha256 = "1yjcma507c609bcim4rnxq0gaj2dg4d001jklmbpbqpzqzxkn5sz";
     });
 
-  postPatch = "patchShebangs .";
+    postPatch = "patchShebangs .";
 
-  # GHC is a bit confused on its cross terminology.
-  preConfigure = ''
-    for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
-      export "''${env#TARGET_}=''${!env}"
-    done
-    # GHC is a bit confused on its cross terminology, as these would normally be
-    # the *host* tools.
-    export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
-    export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
-    # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
-    export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
-    export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
-    export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
-    export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
-    export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
-    export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
-    export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
+    # GHC is a bit confused on its cross terminology.
+    preConfigure = ''
+      for env in $(env | grep '^TARGET_' | sed -E 's|\+?=.*||'); do
+        export "''${env#TARGET_}=''${!env}"
+      done
+      # GHC is a bit confused on its cross terminology, as these would normally be
+      # the *host* tools.
+      export CC="${targetCC}/bin/${targetCC.targetPrefix}cc"
+      export CXX="${targetCC}/bin/${targetCC.targetPrefix}cxx"
+      # Use gold to work around https://sourceware.org/bugzilla/show_bug.cgi?id=16177
+      export LD="${targetCC.bintools}/bin/${targetCC.bintools.targetPrefix}ld${stdenv.lib.optionalString useLdGold ".gold"}"
+      export AS="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}as"
+      export AR="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ar"
+      export NM="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}nm"
+      export RANLIB="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}ranlib"
+      export READELF="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}readelf"
+      export STRIP="${targetCC.bintools.bintools}/bin/${targetCC.bintools.targetPrefix}strip"
 
-    echo -n "${buildMK}" > mk/build.mk
-    sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
-  '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
-    export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
-  '' + stdenv.lib.optionalString stdenv.isDarwin ''
-    export NIX_LDFLAGS+=" -no_dtrace_dof"
-  '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
-    sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
-  '' + stdenv.lib.optionalString targetPlatform.isMusl ''
+      echo -n "${buildMK}" > mk/build.mk
+      sed -i -e 's|-isysroot /Developer/SDKs/MacOSX10.5.sdk||' configure
+    '' + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+      export NIX_LDFLAGS+=" -rpath $out/lib/ghc-${version}"
+    '' + stdenv.lib.optionalString stdenv.isDarwin ''
+      export NIX_LDFLAGS+=" -no_dtrace_dof"
+    '' + stdenv.lib.optionalString targetPlatform.useAndroidPrebuilt ''
+      sed -i -e '5i ,("armv7a-unknown-linux-androideabi", ("e-m:e-p:32:32-i64:64-v128:64:128-a:0:32-n32-S64", "cortex-a8", ""))' llvm-targets
+    '' + stdenv.lib.optionalString targetPlatform.isMusl ''
       echo "patching llvm-targets for musl targets..."
       echo "Cloning these existing '*-linux-gnu*' targets:"
       grep linux-gnu llvm-targets | sed 's/^/  /'
@@ -160,95 +177,107 @@ stdenv.mkDerivation (rec {
           --replace '*-android*|*-gnueabi*)' \
                     '*-android*|*-gnueabi*|*-musleabi*)'
       done
-  '';
+    '';
 
-  # TODO(@Ericson2314): Always pass "--target" and always prefix.
-  configurePlatforms = [ "build" "host" ]
+    # TODO(@Ericson2314): Always pass "--target" and always prefix.
+    configurePlatforms = [ "build" "host" ]
     ++ stdenv.lib.optional (targetPlatform != hostPlatform) "target";
-  # `--with` flags for libraries needed for RTS linker
-  configureFlags = [
-    "--datadir=$doc/share/doc/ghc"
-    "--with-curses-includes=${ncurses.dev}/include" "--with-curses-libraries=${ncurses.out}/lib"
-  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
-    "--with-gmp-includes=${targetPackages.gmp.dev}/include" "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
-  ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
-    "--with-iconv-includes=${libiconv}/include" "--with-iconv-libraries=${libiconv}/lib"
-  ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
-    "--enable-bootstrap-with-devel-snapshot"
-  ] ++ stdenv.lib.optionals useLdGold [
-    "CFLAGS=-fuse-ld=gold"
-    "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
-    "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
-  ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
-    # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
-    "--disable-large-address-space"
-  ];
+    # `--with` flags for libraries needed for RTS linker
+    configureFlags = [
+      "--datadir=$doc/share/doc/ghc"
+      "--with-curses-includes=${ncurses.dev}/include"
+      "--with-curses-libraries=${ncurses.out}/lib"
+    ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && !enableIntegerSimple) [
+      "--with-gmp-includes=${targetPackages.gmp.dev}/include"
+      "--with-gmp-libraries=${targetPackages.gmp.out}/lib"
+    ] ++ stdenv.lib.optionals (targetPlatform == hostPlatform && hostPlatform.libc != "glibc" && !targetPlatform.isWindows) [
+      "--with-iconv-includes=${libiconv}/include"
+      "--with-iconv-libraries=${libiconv}/lib"
+    ] ++ stdenv.lib.optionals (targetPlatform != hostPlatform) [
+      "--enable-bootstrap-with-devel-snapshot"
+    ] ++ stdenv.lib.optionals useLdGold [
+      "CFLAGS=-fuse-ld=gold"
+      "CONF_GCC_LINKER_OPTS_STAGE1=-fuse-ld=gold"
+      "CONF_GCC_LINKER_OPTS_STAGE2=-fuse-ld=gold"
+    ] ++ stdenv.lib.optionals (targetPlatform.isDarwin && targetPlatform.isAarch64) [
+      # fix for iOS: https://www.reddit.com/r/haskell/comments/4ttdz1/building_an_osxi386_to_iosarm64_cross_compiler/d5qvd67/
+      "--disable-large-address-space"
+    ];
 
-  # Make sure we never relax`$PATH` and hooks support for compatability.
-  strictDeps = true;
+    # Make sure we never relax`$PATH` and hooks support for compatability.
+    strictDeps = true;
 
-  # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
-  dontAddExtraLibs = true;
+    # Don’t add -liconv to LDFLAGS automatically so that GHC will add it itself.
+    dontAddExtraLibs = true;
 
-  nativeBuildInputs = [
-    perl autoconf automake m4 python3 sphinx
-    ghc bootPkgs.alex bootPkgs.happy bootPkgs.hscolour
-  ];
+    nativeBuildInputs = [
+      perl
+      autoconf
+      automake
+      m4
+      python3
+      sphinx
+      ghc
+      bootPkgs.alex
+      bootPkgs.happy
+      bootPkgs.hscolour
+    ];
 
-  # For building runtime libs
-  depsBuildTarget = toolsForTarget;
+    # For building runtime libs
+    depsBuildTarget = toolsForTarget;
 
-  buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
+    buildInputs = [ perl bash ] ++ (libDeps hostPlatform);
 
-  propagatedBuildInputs = [ targetPackages.stdenv.cc ]
+    propagatedBuildInputs = [ targetPackages.stdenv.cc ]
     ++ stdenv.lib.optional useLLVM llvmPackages.llvm;
 
-  depsTargetTarget = map stdenv.lib.getDev (libDeps targetPlatform);
-  depsTargetTargetPropagated = map (stdenv.lib.getOutput "out") (libDeps targetPlatform);
+    depsTargetTarget = map stdenv.lib.getDev (libDeps targetPlatform);
+    depsTargetTargetPropagated = map (stdenv.lib.getOutput "out") (libDeps targetPlatform);
 
-  # required, because otherwise all symbols from HSffi.o are stripped, and
-  # that in turn causes GHCi to abort
-  stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
+    # required, because otherwise all symbols from HSffi.o are stripped, and
+    # that in turn causes GHCi to abort
+    stripDebugFlags = [ "-S" ] ++ stdenv.lib.optional (!targetPlatform.isDarwin) "--keep-file-symbols";
 
-  # See #63511 - the only unstripped file is the debug rts which isn't meant to
-  # be stripped.
-  dontStrip = true;
+    # See #63511 - the only unstripped file is the debug rts which isn't meant to
+    # be stripped.
+    dontStrip = true;
 
-  checkTarget = "test";
+    checkTarget = "test";
 
-  hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
+    hardeningDisable = [ "format" ] ++ stdenv.lib.optional stdenv.targetPlatform.isMusl "pie";
 
-  postInstall = ''
-    # Install the bash completion file.
-    install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
+    postInstall = ''
+      # Install the bash completion file.
+      install -D -m 444 utils/completion/ghc.bash $out/share/bash-completion/completions/${targetPrefix}ghc
 
-    # Patch scripts to include "readelf" and "cat" in $PATH.
-    for i in "$out/bin/"*; do
-      test ! -h $i || continue
-      egrep --quiet '^#!' <(head -n 1 $i) || continue
-      sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
-    done
-  '';
+      # Patch scripts to include "readelf" and "cat" in $PATH.
+      for i in "$out/bin/"*; do
+        test ! -h $i || continue
+        egrep --quiet '^#!' <(head -n 1 $i) || continue
+        sed -i -e '2i export PATH="$PATH:${stdenv.lib.makeBinPath [ targetPackages.stdenv.cc.bintools coreutils ]}"' $i
+      done
+    '';
 
-  passthru = {
-    inherit bootPkgs targetPrefix;
+    passthru = {
+      inherit bootPkgs targetPrefix;
 
-    inherit llvmPackages;
-    inherit enableShared;
+      inherit llvmPackages;
+      inherit enableShared;
 
-    # Our Cabal compiler name
-    haskellCompilerName = "ghc-8.4.4";
-  };
+      # Our Cabal compiler name
+      haskellCompilerName = "ghc-8.4.4";
+    };
 
-  meta = {
-    homepage = http://haskell.org/ghc;
-    description = "The Glasgow Haskell Compiler";
-    maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
-    inherit (ghc.meta) license platforms;
-  };
-
-} // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
-  dontStrip = true;
-  dontPatchELF = true;
-  noAuditTmpdir = true;
-})
+    meta = {
+      homepage = http://haskell.org/ghc;
+      description = "The Glasgow Haskell Compiler";
+      maintainers = with stdenv.lib.maintainers; [ marcweber andres peti ];
+      inherit (ghc.meta) license platforms;
+    };
+  }
+  // stdenv.lib.optionalAttrs targetPlatform.useAndroidPrebuilt {
+    dontStrip = true;
+    dontPatchELF = true;
+    noAuditTmpdir = true;
+  }
+  )

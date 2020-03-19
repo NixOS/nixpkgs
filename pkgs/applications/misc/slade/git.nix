@@ -10,7 +10,7 @@ stdenv.mkDerivation {
     sha256 = "14icxiy0r9rlcc10skqs1ylnxm1f0f3irhzfmx4sazq0pjv5ivld";
   };
 
-  cmakeFlags = ["-DNO_WEBVIEW=1"];
+  cmakeFlags = [ "-DNO_WEBVIEW=1" ];
   nativeBuildInputs = [ cmake pkgconfig zip ];
   buildInputs = [ wxGTK gtk2 sfml fluidsynth curl freeimage ftgl glew ];
 

@@ -9,12 +9,18 @@
 , settings32Bit ? false
 
 , prePatch ? ""
-, patches ? []
+, patches ? [ ]
 , broken ? false
 }:
 
-{ stdenv, callPackage, pkgs, pkgsi686Linux, fetchurl
-, kernel ? null, perl, nukeReferences
+{ stdenv
+, callPackage
+, pkgs
+, pkgsi686Linux
+, fetchurl
+, kernel ? null
+, perl
+, nukeReferences
 , # Whether to build the libraries only (i.e. not the kernel module or
   # nvidia-settings).  Used to support 32-bit binaries on 64-bit
   # Linux.
@@ -26,14 +32,21 @@ with stdenv.lib;
 assert !libsOnly -> kernel != null;
 assert versionOlder version "391" -> sha256_32bit != null;
 assert ! versionOlder version "391" -> stdenv.hostPlatform.system == "x86_64-linux";
-
 let
   nameSuffix = optionalString (!libsOnly) "-${kernel.version}";
   pkgSuffix = optionalString (versionOlder version "304") "-pkg0";
   i686bundled = versionAtLeast version "391";
 
-  libPathFor = pkgs: pkgs.lib.makeLibraryPath [ pkgs.libdrm pkgs.xorg.libXext pkgs.xorg.libX11
-    pkgs.xorg.libXv pkgs.xorg.libXrandr pkgs.xorg.libxcb pkgs.zlib pkgs.stdenv.cc.cc ];
+  libPathFor = pkgs: pkgs.lib.makeLibraryPath [
+    pkgs.libdrm
+    pkgs.xorg.libXext
+    pkgs.xorg.libX11
+    pkgs.xorg.libXv
+    pkgs.xorg.libXrandr
+    pkgs.xorg.libxcb
+    pkgs.zlib
+    pkgs.stdenv.cc.cc
+  ];
 
   self = stdenv.mkDerivation {
     name = "nvidia-x11-${version}${nameSuffix}";
@@ -41,17 +54,20 @@ let
     builder = ./builder.sh;
 
     src =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
+      if stdenv.hostPlatform.system == "x86_64-linux"
+      then
         fetchurl {
           url = "https://download.nvidia.com/XFree86/Linux-x86_64/${version}/NVIDIA-Linux-x86_64-${version}${pkgSuffix}.run";
           sha256 = sha256_64bit;
         }
-      else if stdenv.hostPlatform.system == "i686-linux" then
-        fetchurl {
-          url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
-          sha256 = sha256_32bit;
-        }
-      else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
+      else
+        if stdenv.hostPlatform.system == "i686-linux"
+        then
+          fetchurl {
+            url = "https://download.nvidia.com/XFree86/Linux-x86/${version}/NVIDIA-Linux-x86-${version}${pkgSuffix}.run";
+            sha256 = sha256_32bit;
+          }
+        else throw "nvidia-x11 does not support platform ${stdenv.hostPlatform.system}";
 
     patches = if libsOnly then null else patches;
     inherit prePatch;
@@ -60,8 +76,8 @@ let
     inherit i686bundled;
 
     outputs = [ "out" ]
-        ++ optional i686bundled "lib32"
-        ++ optional (!libsOnly) "bin";
+    ++ optional i686bundled "lib32"
+    ++ optional (!libsOnly) "bin";
     outputDev = if libsOnly then null else "bin";
 
     kernel = if libsOnly then null else kernel.dev;
@@ -76,7 +92,7 @@ let
     libPath32 = optionalString i686bundled (libPathFor pkgsi686Linux);
 
     nativeBuildInputs = [ perl nukeReferences ]
-      ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
+    ++ optionals (!libsOnly) kernel.moduleBuildDependencies;
 
     disallowedReferences = optional (!libsOnly) [ kernel.dev ];
 
@@ -98,5 +114,5 @@ let
       inherit broken;
     };
   };
-
-in self
+in
+self

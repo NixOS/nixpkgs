@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "tetgen-1.4.3";

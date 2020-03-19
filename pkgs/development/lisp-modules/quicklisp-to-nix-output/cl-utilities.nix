@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-utilities";
 
-  asdFilesToKeep = ["cl-utilities.asd"];
+  asdFilesToKeep = [ "cl-utilities.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-utilities DESCRIPTION System lacks description SHA256

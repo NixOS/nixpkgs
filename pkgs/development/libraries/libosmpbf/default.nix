@@ -1,4 +1,4 @@
-{stdenv, fetchurl, protobuf}:
+{ stdenv, fetchurl, protobuf }:
 
 stdenv.mkDerivation {
   name = "libosmpbf-1.3.3";

@@ -1,8 +1,15 @@
-{ config, stdenv, fetchurl, pkgconfig, gettext, glib
-, alsaSupport ? stdenv.isLinux, alsaLib
-, pulseaudioSupport ? config.pulseaudio or true, libpulseaudio
+{ config
+, stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, glib
+, alsaSupport ? stdenv.isLinux
+, alsaLib
+, pulseaudioSupport ? config.pulseaudio or true
+, libpulseaudio
 , ossSupport ? false
- }:
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmatemixer";
@@ -16,8 +23,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig gettext ];
 
   buildInputs = [ glib ]
-    ++ stdenv.lib.optional alsaSupport alsaLib
-    ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
+  ++ stdenv.lib.optional alsaSupport alsaLib
+  ++ stdenv.lib.optional pulseaudioSupport libpulseaudio;
 
   configureFlags = stdenv.lib.optional ossSupport "--enable-oss";
 

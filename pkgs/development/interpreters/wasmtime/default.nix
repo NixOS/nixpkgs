@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0wqd2yy6ih1rcz1fq7x3aiqq1ma2nmif1w8r8x0vpxjxk395zil9";
 
   nativeBuildInputs = [ python cmake clang ];
-  buildInputs = [ llvmPackages.libclang ] ++
-   lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  buildInputs = [ llvmPackages.libclang ]
+  ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 
   doCheck = false; # https://github.com/bytecodealliance/wasmtime/issues/1197

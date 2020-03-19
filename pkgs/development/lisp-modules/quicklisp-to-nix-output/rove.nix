@@ -14,7 +14,7 @@ rec {
 
   packageName = "rove";
 
-  asdFilesToKeep = ["rove.asd"];
+  asdFilesToKeep = [ "rove.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM rove DESCRIPTION

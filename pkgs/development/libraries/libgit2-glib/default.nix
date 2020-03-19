@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, gnome3, meson, ninja, pkgconfig, vala, libssh2
-, gtk-doc, gobject-introspection, libgit2, glib, python3 }:
+{ stdenv
+, fetchurl
+, gnome3
+, meson
+, ninja
+, pkgconfig
+, vala
+, libssh2
+, gtk-doc
+, gobject-introspection
+, libgit2
+, glib
+, python3
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
@@ -25,12 +37,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig vala gtk-doc gobject-introspection
+    meson
+    ninja
+    pkgconfig
+    vala
+    gtk-doc
+    gobject-introspection
   ];
 
   propagatedBuildInputs = [
     # Required by libgit2-glib-1.0.pc
-    libgit2 glib
+    libgit2
+    glib
   ];
 
   buildInputs = [

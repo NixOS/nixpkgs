@@ -1,4 +1,4 @@
-{ stdenv, fetchurl,  openssl }:
+{ stdenv, fetchurl, openssl }:
 
 stdenv.mkDerivation rec {
 

@@ -1,11 +1,28 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, cmake, pkgconfig
-, boost, cereal, curl, eigen, expat, glew, libpng, tbb, wxGTK31
-, gtest, nlopt, xorg, makeDesktopItem
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, cmake
+, pkgconfig
+, boost
+, cereal
+, curl
+, eigen
+, expat
+, glew
+, libpng
+, tbb
+, wxGTK31
+, gtest
+, nlopt
+, xorg
+, makeDesktopItem
 }:
 let
-  nloptVersion = if lib.hasAttr "version" nlopt
-                 then lib.getAttr "version" nlopt
-                 else "2.4";
+  nloptVersion =
+    if lib.hasAttr "version" nlopt
+    then lib.getAttr "version" nlopt
+    else "2.4";
 in
 stdenv.mkDerivation rec {
   pname = "prusa-slicer";

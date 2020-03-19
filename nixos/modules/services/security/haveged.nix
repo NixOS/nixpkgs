@@ -1,14 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.haveged;
-
 in
-
-
 {
 
   ###### interface
@@ -25,7 +20,7 @@ in
           /dev/random when low.
         '';
       };
-      
+
       refill_threshold = mkOption {
         type = types.int;
         default = 1024;
@@ -34,18 +29,19 @@ in
           haveged should refill the entropy pool.
         '';
       };
-      
+
     };
-    
+
   };
-  
-  
+
+
   ###### implementation
-  
+
   config = mkIf cfg.enable {
-  
+
     systemd.services.haveged =
-      { description = "Entropy Harvesting Daemon";
+      {
+        description = "Entropy Harvesting Daemon";
         unitConfig.Documentation = "man:haveged(8)";
         wantedBy = [ "multi-user.target" ];
 
@@ -63,5 +59,5 @@ in
       };
 
   };
-  
+
 }

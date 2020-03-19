@@ -15,7 +15,6 @@ stdenv.mkDerivation rec {
       url = "https://github.com/gdraheim/zziplib/commit/f609ae8971f3c0ce6.diff";
       sha256 = "0jhiz4fgr93wzh6q03avn95b2nsf6402jaki6hxirxyhs5v9ahry";
     })
-
     (fetchpatch {
       name = "CVE-2018-16548-part1.patch";
       url = "https://github.com/gdraheim/zziplib/commit/9411bde3e4a70a81ff3ffd256b71927b2d90dcbb.patch";

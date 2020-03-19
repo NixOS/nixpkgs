@@ -1,6 +1,17 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, intltool, itstool, gtk3
-, wrapGAppsHook, librsvg, libxml2, desktop-file-utils
-, guile_2_0, libcanberra-gtk3 }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnome3
+, intltool
+, itstool
+, gtk3
+, wrapGAppsHook
+, librsvg
+, libxml2
+, desktop-file-utils
+, guile_2_0
+, libcanberra-gtk3
+}:
 
 stdenv.mkDerivation rec {
   pname = "aisleriot";

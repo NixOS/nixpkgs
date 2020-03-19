@@ -1,5 +1,4 @@
 { stdenv, fetchurl, p7zip, win-virtio }:
-
 let
   src_usbdk_x86 = fetchurl {
     url = "https://www.spice-space.org/download/windows/usbdk/UsbDk_1.0.4_x86.msi";
@@ -26,8 +25,7 @@ let
     sha256 = "0djmvm66jcmcyhhbjppccbai45nqpva7vyvry6w8nyc0fwi1vm9l";
   };
 in
-
-stdenv.mkDerivation  {
+stdenv.mkDerivation {
   # use version number of qxlwddm as qxlwddm is the most important component
   name = "win-spice-0.11";
   version = "0.11";
@@ -45,7 +43,7 @@ stdenv.mkDerivation  {
 
     mkdir -p qxlwddm
     (cd qxlwddm; ${p7zip}/bin/7z x ${src_qxlwddm}; mv Win8 w8.1; cd w8.1; mv x64 amd64)
-    '';
+  '';
 
   installPhase =
     let

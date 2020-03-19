@@ -1,6 +1,8 @@
-{ stdenv, fetchurl,
-	openssl,
- } :
+{ stdenv
+, fetchurl
+, openssl
+,
+}:
 
 stdenv.mkDerivation rec {
   version = "20191016";
@@ -16,7 +18,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = "http://www.maier-komor.de/mbuffer.html";
-    description  = "A tool for buffering data streams with a large set of unique features";
+    description = "A tool for buffering data streams with a large set of unique features";
     license = stdenv.lib.licenses.gpl3;
     maintainers = with stdenv.lib.maintainers; [ tokudan ];
     platforms = stdenv.lib.platforms.linux; # Maybe other non-darwin Unix

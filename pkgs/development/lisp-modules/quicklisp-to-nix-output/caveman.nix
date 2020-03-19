@@ -14,7 +14,7 @@ rec {
 
   packageName = "caveman";
 
-  asdFilesToKeep = ["caveman.asd"];
+  asdFilesToKeep = [ "caveman.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM caveman DESCRIPTION Web Application Framework for Common Lisp SHA256

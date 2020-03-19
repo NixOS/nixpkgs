@@ -1,5 +1,11 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder
-, dateutil, pytzdata, typing }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, dateutil
+, pytzdata
+, typing
+}:
 
 buildPythonPackage rec {
   pname = "pendulum";

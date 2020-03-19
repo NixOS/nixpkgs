@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   pname = "scanmem";
 
   src = fetchFromGitHub {
-    owner  = "scanmem";
-    repo   = "scanmem";
-    rev    = "v${version}";
+    owner = "scanmem";
+    repo = "scanmem";
+    rev = "v${version}";
     sha256 = "17p8sh0rj8yqz36ria5bp48c8523zzw3y9g8sbm2jwq7sc27i7s9";
   };
 

@@ -20,8 +20,8 @@ stdenv.mkDerivation rec {
     inherit version;
     description = "Utilities library for Linphone";
     homepage = "https://github.com/BelledonneCommunications/bctoolbox";
-    license = stdenv.lib.licenses.gpl2Plus ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.gpl2Plus;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

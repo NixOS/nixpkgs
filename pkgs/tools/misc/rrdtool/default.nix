@@ -1,5 +1,15 @@
-{ fetchurl, stdenv, gettext, perl, pkgconfig, libxml2, pango, cairo, groff
-, tcl-8_5, darwin }:
+{ fetchurl
+, stdenv
+, gettext
+, perl
+, pkgconfig
+, libxml2
+, pango
+, cairo
+, groff
+, tcl-8_5
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   name = "rrdtool-1.7.2";
@@ -12,7 +22,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ gettext perl libxml2 pango cairo groff ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ tcl-8_5 darwin.apple_sdk.frameworks.ApplicationServices ];
 
   postInstall = ''
     # for munin and rrdtool support

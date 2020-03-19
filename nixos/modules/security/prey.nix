@@ -1,14 +1,14 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.prey;
   myPrey = pkgs.prey-bash-client.override {
     apiKey = cfg.apiKey;
     deviceKey = cfg.deviceKey;
   };
-in {
+in
+{
   options = {
 
     services.prey = {
@@ -44,8 +44,8 @@ in {
   };
 
   config = mkIf cfg.enable {
-      environment.systemPackages = [ myPrey ];
-      services.cron.systemCronJobs = [ "*/15 * * * * root ${myPrey}/prey.sh" ];
+    environment.systemPackages = [ myPrey ];
+    services.cron.systemCronJobs = [ "*/15 * * * * root ${myPrey}/prey.sh" ];
   };
 
 }

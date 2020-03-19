@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.liboping;
-in {
+in
+{
   options.programs.liboping = {
     enable = mkEnableOption "liboping";
   };

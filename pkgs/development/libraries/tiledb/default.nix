@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
     description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
     homepage = https://github.com/TileDB-Inc/TileDB;
     license = licenses.mit;
-    platforms = [ "x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ rakesh4g ];
   };
 

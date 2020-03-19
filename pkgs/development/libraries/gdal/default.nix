@@ -1,7 +1,34 @@
-{ stdenv, fetchFromGitHub, fetchpatch, unzip, libjpeg, libtiff, zlib, postgresql
-, libmysqlclient, libgeotiff, pythonPackages, proj, geos, openssl, libpng
-, sqlite, libspatialite, poppler, hdf4, qhull, giflib, expat, libiconv, libxml2
-, autoreconfHook, netcdfSupport ? true, netcdf, hdf5, curl, pkg-config }:
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, unzip
+, libjpeg
+, libtiff
+, zlib
+, postgresql
+, libmysqlclient
+, libgeotiff
+, pythonPackages
+, proj
+, geos
+, openssl
+, libpng
+, sqlite
+, libspatialite
+, poppler
+, hdf4
+, qhull
+, giflib
+, expat
+, libiconv
+, libxml2
+, autoreconfHook
+, netcdfSupport ? true
+, netcdf
+, hdf5
+, curl
+, pkg-config
+}:
 
 with stdenv.lib;
 
@@ -38,8 +65,8 @@ stdenv.mkDerivation rec {
     libxml2
     postgresql
   ] ++ (with pythonPackages; [ python numpy wrapPython ])
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv
-    ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
+  ++ stdenv.lib.optional stdenv.isDarwin libiconv
+  ++ stdenv.lib.optionals netcdfSupport [ netcdf hdf5 curl ];
 
   configureFlags = [
     "--with-expat=${expat.dev}"

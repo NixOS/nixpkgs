@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ openssl boost zlib rippled ];
 
-  hardeningDisable = ["format"];
+  hardeningDisable = [ "format" ];
 
   preConfigure = ''
     export CXX="$(command -v $CXX)"

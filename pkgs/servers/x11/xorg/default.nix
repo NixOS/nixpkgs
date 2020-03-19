@@ -16,7 +16,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   bdftopcf = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "bdftopcf-1.1";
@@ -29,7 +29,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   bitmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xbitmaps, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "bitmap-1.0.9";
@@ -42,7 +42,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw xbitmaps libXmu xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   editres = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "editres-1.0.7";
@@ -55,7 +55,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   encodings = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "encodings-1.0.5";
@@ -68,7 +68,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontadobe100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-100dpi-1.0.3";
@@ -82,7 +82,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontadobe75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-75dpi-1.0.3";
@@ -96,7 +96,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontadobeutopia100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-100dpi-1.0.4";
@@ -110,7 +110,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontadobeutopia75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-75dpi-1.0.4";
@@ -124,7 +124,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontadobeutopiatype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-adobe-utopia-type1-1.0.4";
@@ -138,7 +138,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontalias = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-alias-1.0.3";
@@ -151,7 +151,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontarabicmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-arabic-misc-1.0.3";
@@ -165,7 +165,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbh100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-100dpi-1.0.3";
@@ -179,7 +179,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbh75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-75dpi-1.0.3";
@@ -193,7 +193,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbhlucidatypewriter100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-100dpi-1.0.3";
@@ -207,7 +207,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbhlucidatypewriter75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-lucidatypewriter-75dpi-1.0.3";
@@ -221,7 +221,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbhttf = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-ttf-1.0.3";
@@ -235,7 +235,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbhtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bh-type1-1.0.3";
@@ -249,7 +249,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbitstream100dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-100dpi-1.0.3";
@@ -263,7 +263,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbitstream75dpi = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-75dpi-1.0.3";
@@ -277,7 +277,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontbitstreamtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-bitstream-type1-1.0.3";
@@ -291,7 +291,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontcronyxcyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-cronyx-cyrillic-1.0.3";
@@ -305,7 +305,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontcursormisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-cursor-misc-1.0.3";
@@ -319,7 +319,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontdaewoomisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-daewoo-misc-1.0.3";
@@ -333,7 +333,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontdecmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-dec-misc-1.0.3";
@@ -347,7 +347,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontibmtype1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-ibm-type1-1.0.3";
@@ -361,7 +361,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontisasmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-isas-misc-1.0.3";
@@ -375,7 +375,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontjismisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-jis-misc-1.0.3";
@@ -389,7 +389,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontmicromisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-micro-misc-1.0.3";
@@ -403,7 +403,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontmisccyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-cyrillic-1.0.3";
@@ -417,7 +417,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontmiscethiopic = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-ethiopic-1.0.3";
@@ -431,7 +431,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontmiscmeltho = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-meltho-1.0.3";
@@ -445,7 +445,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontmiscmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-misc-misc-1.1.2";
@@ -459,7 +459,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontmuttmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-mutt-misc-1.0.3";
@@ -473,7 +473,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontschumachermisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, fontutil, mkfontscale }: stdenv.mkDerivation {
     name = "font-schumacher-misc-1.1.2";
@@ -487,7 +487,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontscreencyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-screen-cyrillic-1.0.4";
@@ -501,7 +501,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontsonymisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-sony-misc-1.0.3";
@@ -515,7 +515,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontsunmisc = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-sun-misc-1.0.3";
@@ -529,7 +529,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fonttosfnt = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto }: stdenv.mkDerivation {
     name = "fonttosfnt-1.0.5";
@@ -542,7 +542,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libfontenc freetype xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontutil = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "font-util-1.3.1";
@@ -555,7 +555,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontwinitzkicyrillic = callPackage ({ stdenv, pkgconfig, fetchurl, bdftopcf, mkfontscale }: stdenv.mkDerivation {
     name = "font-winitzki-cyrillic-1.0.3";
@@ -569,7 +569,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   fontxfree86type1 = callPackage ({ stdenv, pkgconfig, fetchurl, mkfontscale }: stdenv.mkDerivation {
     name = "font-xfree86-type1-1.0.4";
@@ -583,7 +583,7 @@ lib.makeScope newScope (self: with self; {
     buildInputs = [ ];
     configureFlags = [ "--with-fontrootdir=$(out)/lib/X11/fonts" ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   gccmakedep = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "gccmakedep-1.0.3";
@@ -596,7 +596,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   iceauth = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xorgproto }: stdenv.mkDerivation {
     name = "iceauth-1.0.8";
@@ -609,7 +609,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   ico = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "ico-1.0.5";
@@ -622,7 +622,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   imake = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "imake-1.0.8";
@@ -635,7 +635,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libAppleWM = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libAppleWM-1.4.1";
@@ -648,7 +648,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libFS = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "libFS-1.0.8";
@@ -661,7 +661,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libICE = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "libICE-1.0.10";
@@ -674,7 +674,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libSM = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libuuid, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "libSM-1.2.3";
@@ -687,7 +687,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE libuuid xorgproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libWindowsWM = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libWindowsWM-1.0.1";
@@ -700,7 +700,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libX11 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libxcb, xtrans }: stdenv.mkDerivation {
     name = "libX11-1.6.8";
@@ -713,7 +713,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libxcb xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXScrnSaver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libXScrnSaver-1.2.3";
@@ -726,7 +726,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXTrap = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXt }: stdenv.mkDerivation {
     name = "libXTrap-1.0.1";
@@ -739,7 +739,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libXau-1.0.9";
@@ -752,7 +752,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXaw = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto, libXmu, libXpm, libXt }: stdenv.mkDerivation {
     name = "libXaw-1.0.13";
@@ -765,7 +765,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xorgproto libXmu libXpm libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXaw3d = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, libXpm, xorgproto, libXt }: stdenv.mkDerivation {
     name = "libXaw3d-1.6.3";
@@ -778,7 +778,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu libXpm xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXcomposite = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     name = "libXcomposite-0.4.5";
@@ -791,7 +791,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXfixes ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXcursor = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXfixes, libXrender }: stdenv.mkDerivation {
     name = "libXcursor-1.2.0";
@@ -804,7 +804,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXfixes libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXdamage = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXfixes }: stdenv.mkDerivation {
     name = "libXdamage-1.1.5";
@@ -817,7 +817,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXfixes ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXdmcp = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libXdmcp-1.1.3";
@@ -830,7 +830,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXext = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "libXext-1.3.4";
@@ -843,7 +843,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXfixes = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libXfixes-5.0.3";
@@ -856,7 +856,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXfont = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
     name = "libXfont-1.5.4";
@@ -869,7 +869,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libfontenc xorgproto freetype xtrans zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXfont2 = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, xorgproto, freetype, xtrans, zlib }: stdenv.mkDerivation {
     name = "libXfont2-2.0.4";
@@ -882,7 +882,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libfontenc xorgproto freetype xtrans zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXft = callPackage ({ stdenv, pkgconfig, fetchurl, fontconfig, freetype, libX11, xorgproto, libXrender }: stdenv.mkDerivation {
     name = "libXft-2.3.3";
@@ -895,7 +895,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ fontconfig freetype libX11 xorgproto libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXi = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXfixes }: stdenv.mkDerivation {
     name = "libXi-1.7.10";
@@ -908,7 +908,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext libXfixes ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXinerama = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXinerama-1.1.4";
@@ -921,7 +921,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXmu = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto, libXt }: stdenv.mkDerivation {
     name = "libXmu-1.1.3";
@@ -934,7 +934,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXp = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXau, libXext }: stdenv.mkDerivation {
     name = "libXp-1.0.3";
@@ -947,7 +947,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXau libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXpm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto, libXt, gettext }: stdenv.mkDerivation {
     name = "libXpm-3.5.13";
@@ -960,7 +960,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig gettext ];
     buildInputs = [ libX11 libXext xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXpresent = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libXpresent-1.0.0";
@@ -973,7 +973,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXrandr = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXrender }: stdenv.mkDerivation {
     name = "libXrandr-1.5.2";
@@ -986,7 +986,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXrender = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libXrender-0.9.10";
@@ -999,7 +999,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXres = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libXres-1.2.0";
@@ -1012,7 +1012,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXt = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, xorgproto, libSM, libX11 }: stdenv.mkDerivation {
     name = "libXt-1.2.0";
@@ -1025,7 +1025,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE xorgproto libSM libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXtst = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXi }: stdenv.mkDerivation {
     name = "libXtst-1.2.3";
@@ -1038,7 +1038,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext libXi ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXv = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libXv-1.0.11";
@@ -1051,7 +1051,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXvMC = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXv }: stdenv.mkDerivation {
     name = "libXvMC-1.0.11";
@@ -1064,7 +1064,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext libXv ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXxf86dga = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86dga-1.1.5";
@@ -1077,7 +1077,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXxf86misc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86misc-1.0.4";
@@ -1090,7 +1090,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libXxf86vm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, xorgproto }: stdenv.mkDerivation {
     name = "libXxf86vm-1.1.4";
@@ -1103,7 +1103,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libdmx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext }: stdenv.mkDerivation {
     name = "libdmx-1.1.4";
@@ -1116,7 +1116,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libfontenc = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, zlib }: stdenv.mkDerivation {
     name = "libfontenc-1.1.4";
@@ -1129,7 +1129,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libpciaccess = callPackage ({ stdenv, pkgconfig, fetchurl, zlib }: stdenv.mkDerivation {
     name = "libpciaccess-0.16";
@@ -1142,7 +1142,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libpthreadstubs = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "libpthread-stubs-0.4";
@@ -1155,7 +1155,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libxcb = callPackage ({ stdenv, pkgconfig, fetchurl, libxslt, libpthreadstubs, libXau, xcbproto, libXdmcp, python }: stdenv.mkDerivation {
     name = "libxcb-1.13.1";
@@ -1168,7 +1168,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig python ];
     buildInputs = [ libxslt libpthreadstubs libXau xcbproto libXdmcp ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libxkbfile = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "libxkbfile-1.1.0";
@@ -1181,7 +1181,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   libxshmfence = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "libxshmfence-1.3";
@@ -1194,7 +1194,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   listres = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "listres-1.0.4";
@@ -1207,7 +1207,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXaw libXmu xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   lndir = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "lndir-1.0.3";
@@ -1220,7 +1220,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   luit = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "luit-20190106";
@@ -1233,7 +1233,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   makedepend = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "makedepend-1.0.6";
@@ -1246,7 +1246,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   mkfontscale = callPackage ({ stdenv, pkgconfig, fetchurl, libfontenc, freetype, xorgproto, zlib }: stdenv.mkDerivation {
     name = "mkfontscale-1.2.1";
@@ -1259,7 +1259,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libfontenc freetype xorgproto zlib ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   oclock = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, libXext, libXmu, libXt }: stdenv.mkDerivation {
     name = "oclock-1.0.4";
@@ -1272,7 +1272,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxkbfile libX11 libXext libXmu libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   sessreg = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto }: stdenv.mkDerivation {
     name = "sessreg-1.1.2";
@@ -1285,7 +1285,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   setxkbmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     name = "setxkbmap-1.3.2";
@@ -1298,7 +1298,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   smproxy = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libXmu, libXt }: stdenv.mkDerivation {
     name = "smproxy-1.0.6";
@@ -1311,7 +1311,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE libSM libXmu libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   transset = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "transset-1.0.2";
@@ -1324,7 +1324,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   twm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXext, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "twm-1.0.10";
@@ -1337,7 +1337,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE libSM libX11 libXext libXmu xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   utilmacros = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "util-macros-1.19.2";
@@ -1350,7 +1350,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   viewres = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "viewres-1.0.5";
@@ -1363,7 +1363,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXaw libXmu libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   x11perf = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXft, libXmu, xorgproto, libXrender }: stdenv.mkDerivation {
     name = "x11perf-1.6.1";
@@ -1376,7 +1376,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXft libXmu xorgproto libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xauth = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXext, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xauth-1.1";
@@ -1389,7 +1389,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXau libXext libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xbacklight = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb, xcbutil }: stdenv.mkDerivation {
     name = "xbacklight-1.2.3";
@@ -1402,7 +1402,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxcb xcbutil ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xbitmaps = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xbitmaps-1.1.2";
@@ -1415,7 +1415,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcalc = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, xorgproto, libXt }: stdenv.mkDerivation {
     name = "xcalc-1.1.0";
@@ -1428,7 +1428,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbproto = callPackage ({ stdenv, pkgconfig, fetchurl, python }: stdenv.mkDerivation {
     name = "xcb-proto-1.13";
@@ -1441,7 +1441,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig python ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-0.4.0";
@@ -1454,7 +1454,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutilcursor = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xcbutilimage, xcbutilrenderutil, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-cursor-0.1.3";
@@ -1467,7 +1467,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xcbutilimage xcbutilrenderutil xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutilerrors = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xcbproto, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-errors-1.0";
@@ -1480,7 +1480,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xcbproto xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutilimage = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xcbutil, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-image-0.4.0";
@@ -1493,7 +1493,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xcbutil xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutilkeysyms = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-keysyms-0.4.0";
@@ -1506,7 +1506,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutilrenderutil = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-renderutil-0.3.9";
@@ -1519,7 +1519,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcbutilwm = callPackage ({ stdenv, pkgconfig, fetchurl, gperf, libxcb, xorgproto, m4 }: stdenv.mkDerivation {
     name = "xcb-util-wm-0.4.1";
@@ -1532,7 +1532,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig m4 ];
     buildInputs = [ gperf libxcb xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xclock = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXft, libxkbfile, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xclock-1.0.9";
@@ -1545,7 +1545,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw libXft libxkbfile libXmu xorgproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcmsdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11 }: stdenv.mkDerivation {
     name = "xcmsdb-1.0.5";
@@ -1558,7 +1558,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcompmgr = callPackage ({ stdenv, pkgconfig, fetchurl, libXcomposite, libXdamage, libXext, libXfixes, libXrender }: stdenv.mkDerivation {
     name = "xcompmgr-1.1.8";
@@ -1571,7 +1571,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXcomposite libXdamage libXext libXfixes libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xconsole = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt }: stdenv.mkDerivation {
     name = "xconsole-1.0.7";
@@ -1584,7 +1584,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcursorgen = callPackage ({ stdenv, pkgconfig, fetchurl, libpng, libX11, libXcursor }: stdenv.mkDerivation {
     name = "xcursorgen-1.0.7";
@@ -1597,7 +1597,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libpng libX11 libXcursor ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xcursorthemes = callPackage ({ stdenv, pkgconfig, fetchurl, libXcursor }: stdenv.mkDerivation {
     name = "xcursor-themes-1.0.6";
@@ -1610,7 +1610,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXcursor ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xdm = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXaw, libXdmcp, libXext, libXft, libXinerama, libXmu, libXpm, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xdm-1.1.12";
@@ -1623,7 +1623,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXau libXaw libXdmcp libXext libXft libXinerama libXmu libXpm xorgproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xdpyinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libdmx, libX11, libxcb, libXcomposite, libXext, libXi, libXinerama, xorgproto, libXrender, libXtst, libXxf86dga, libXxf86misc, libXxf86vm }: stdenv.mkDerivation {
     name = "xdpyinfo-1.3.2";
@@ -1636,7 +1636,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libdmx libX11 libxcb libXcomposite libXext libXi libXinerama xorgproto libXrender libXtst libXxf86dga libXxf86misc libXxf86vm ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xdriinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libGL, xorgproto, libX11 }: stdenv.mkDerivation {
     name = "xdriinfo-1.0.6";
@@ -1649,7 +1649,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libGL xorgproto libX11 ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xev = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr }: stdenv.mkDerivation {
     name = "xev-1.2.3";
@@ -1662,7 +1662,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto libXrandr ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xeyes = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, xorgproto, libXrender, libXt }: stdenv.mkDerivation {
     name = "xeyes-1.1.2";
@@ -1675,7 +1675,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu xorgproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputevdev = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libevdev, udev, mtdev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-evdev-2.10.6";
@@ -1688,7 +1688,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libevdev udev mtdev xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputjoystick = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-joystick-1.6.3";
@@ -1701,7 +1701,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputkeyboard = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-keyboard-1.9.0";
@@ -1714,7 +1714,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputlibinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libinput, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-libinput-0.28.2";
@@ -1727,7 +1727,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libinput xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputmouse = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-mouse-1.9.3";
@@ -1740,7 +1740,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputsynaptics = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libevdev, libX11, libXi, xorgserver, libXtst }: stdenv.mkDerivation {
     name = "xf86-input-synaptics-1.9.1";
@@ -1753,7 +1753,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libevdev libX11 libXi xorgserver libXtst ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputvmmouse = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, udev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-input-vmmouse-13.1.0";
@@ -1766,7 +1766,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto udev xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86inputvoid = callPackage ({ stdenv, pkgconfig, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
     name = "xf86-input-void-1.4.1";
@@ -1779,7 +1779,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgserver xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoamdgpu = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-amdgpu-19.0.1";
@@ -1792,7 +1792,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto mesa libGL libdrm udev xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoapm = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-apm-1.3.0";
@@ -1805,7 +1805,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoark = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ark-0.7.5";
@@ -1818,7 +1818,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoast = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ast-1.1.5";
@@ -1831,7 +1831,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoati = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-ati-19.0.1";
@@ -1844,7 +1844,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto mesa libGL libdrm udev libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videochips = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-chips-1.4.0";
@@ -1857,7 +1857,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videocirrus = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-cirrus-1.5.3";
@@ -1870,7 +1870,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videodummy = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-dummy-0.3.8";
@@ -1883,7 +1883,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videofbdev = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-fbdev-0.5.0";
@@ -1896,7 +1896,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videogeode = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-geode-2.11.19";
@@ -1909,7 +1909,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoglide = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-glide-1.2.2";
@@ -1922,7 +1922,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoglint = callPackage ({ stdenv, pkgconfig, fetchurl, libpciaccess, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-glint-1.2.9";
@@ -1935,7 +1935,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libpciaccess xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoi128 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-i128-1.4.0";
@@ -1948,7 +1948,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoi740 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-i740-1.4.0";
@@ -1961,7 +1961,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videointel = callPackage ({ stdenv, pkgconfig, fetchurl, cairo, xorgproto, libdrm, libpng, udev, libpciaccess, libX11, xcbutil, libxcb, libXcursor, libXdamage, libXext, libXfixes, xorgserver, libXrandr, libXrender, libxshmfence, libXtst, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-intel-2.99.917";
@@ -1974,7 +1974,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ cairo xorgproto libdrm libpng udev libpciaccess libX11 xcbutil libxcb libXcursor libXdamage libXext libXfixes xorgserver libXrandr libXrender libxshmfence libXtst libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videomach64 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-mach64-6.9.6";
@@ -1987,7 +1987,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videomga = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-mga-2.0.0";
@@ -2000,7 +2000,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoneomagic = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-neomagic-1.3.0";
@@ -2013,7 +2013,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videonewport = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-newport-0.2.4";
@@ -2026,7 +2026,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videonouveau = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-nouveau-1.0.15";
@@ -2039,7 +2039,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm udev libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videonv = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-nv-2.1.21";
@@ -2052,7 +2052,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoomap = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-omap-0.4.5";
@@ -2065,7 +2065,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoopenchrome = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver, libXvMC }: stdenv.mkDerivation {
     name = "xf86-video-openchrome-0.6.0";
@@ -2078,7 +2078,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm udev libpciaccess libX11 libXext xorgserver libXvMC ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoqxl = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-qxl-0.1.5";
@@ -2091,7 +2091,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm udev libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videor128 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-r128-6.11.0";
@@ -2104,7 +2104,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videorendition = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-rendition-4.2.7";
@@ -2117,7 +2117,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videos3virge = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-s3virge-1.11.0";
@@ -2130,7 +2130,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosavage = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-savage-2.3.9";
@@ -2143,7 +2143,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosiliconmotion = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-siliconmotion-1.7.9";
@@ -2156,7 +2156,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosis = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sis-0.11.0";
@@ -2169,7 +2169,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosisusb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sisusb-0.9.7";
@@ -2182,7 +2182,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosuncg6 = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-suncg6-1.1.2";
@@ -2195,7 +2195,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosunffb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sunffb-1.2.2";
@@ -2208,7 +2208,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videosunleo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-sunleo-1.2.2";
@@ -2221,7 +2221,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videotdfx = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-tdfx-1.5.0";
@@ -2234,7 +2234,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videotga = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-tga-1.2.2";
@@ -2247,7 +2247,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videotrident = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-trident-1.3.8";
@@ -2260,7 +2260,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videov4l = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-v4l-0.3.0";
@@ -2273,7 +2273,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videovboxvideo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-vboxvideo-1.0.0";
@@ -2286,7 +2286,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videovesa = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-vesa-2.4.0";
@@ -2299,7 +2299,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videovmware = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, udev, libpciaccess, libX11, libXext, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-vmware-13.3.0";
@@ -2312,7 +2312,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm udev libpciaccess libX11 libXext xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videovoodoo = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-voodoo-1.2.5";
@@ -2325,7 +2325,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videowsfb = callPackage ({ stdenv, pkgconfig, fetchurl, xorgserver, xorgproto }: stdenv.mkDerivation {
     name = "xf86-video-wsfb-0.4.0";
@@ -2338,7 +2338,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgserver xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xf86videoxgi = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libdrm, libpciaccess, xorgserver }: stdenv.mkDerivation {
     name = "xf86-video-xgi-1.6.1";
@@ -2351,7 +2351,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libdrm libpciaccess xorgserver ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xfd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, fontconfig, libXaw, libXft, libXmu, xorgproto, libXrender, libXt, gettext }: stdenv.mkDerivation {
     name = "xfd-1.1.3";
@@ -2364,7 +2364,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig gettext ];
     buildInputs = [ libxkbfile fontconfig libXaw libXft libXmu xorgproto libXrender libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xfontsel = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "xfontsel-1.0.6";
@@ -2377,7 +2377,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw libXmu libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xfs = callPackage ({ stdenv, pkgconfig, fetchurl, libXfont2, xorgproto, xtrans }: stdenv.mkDerivation {
     name = "xfs-1.2.0";
@@ -2390,7 +2390,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXfont2 xorgproto xtrans ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xfsinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libFS, xorgproto }: stdenv.mkDerivation {
     name = "xfsinfo-1.0.6";
@@ -2403,7 +2403,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libFS xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xgamma = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXxf86vm }: stdenv.mkDerivation {
     name = "xgamma-1.0.6";
@@ -2416,7 +2416,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto libXxf86vm ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xgc = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xgc-1.0.5";
@@ -2429,7 +2429,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xhost = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXau, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xhost-1.0.8";
@@ -2442,7 +2442,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXau libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xinit = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xinit-1.4.1";
@@ -2455,7 +2455,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xinput = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXext, libXi, libXinerama, libXrandr }: stdenv.mkDerivation {
     name = "xinput-1.6.3";
@@ -2468,7 +2468,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXext libXi libXinerama libXrandr ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xkbcomp = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     name = "xkbcomp-1.4.2";
@@ -2481,7 +2481,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xkbevd = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile }: stdenv.mkDerivation {
     name = "xkbevd-1.1.4";
@@ -2494,7 +2494,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xkbprint = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxkbfile, xorgproto }: stdenv.mkDerivation {
     name = "xkbprint-1.0.4";
@@ -2507,7 +2507,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxkbfile xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xkbutils = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, libX11, libXaw, libXt }: stdenv.mkDerivation {
     name = "xkbutils-1.0.4";
@@ -2520,7 +2520,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto libX11 libXaw libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xkeyboardconfig = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xkeyboard-config-2.27";
@@ -2533,7 +2533,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xkill = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xkill-1.0.5";
@@ -2546,7 +2546,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xload = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, xorgproto, libXt, gettext }: stdenv.mkDerivation {
     name = "xload-1.1.3";
@@ -2559,7 +2559,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig gettext ];
     buildInputs = [ libX11 libXaw libXmu xorgproto libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xlsatoms = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
     name = "xlsatoms-1.1.3";
@@ -2572,7 +2572,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxcb ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xlsclients = callPackage ({ stdenv, pkgconfig, fetchurl, libxcb }: stdenv.mkDerivation {
     name = "xlsclients-1.1.4";
@@ -2585,7 +2585,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxcb ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xlsfonts = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xlsfonts-1.0.6";
@@ -2598,7 +2598,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xmag = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXaw, libXmu, libXt }: stdenv.mkDerivation {
     name = "xmag-1.0.6";
@@ -2611,7 +2611,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXaw libXmu libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xmessage = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xmessage-1.0.5";
@@ -2624,7 +2624,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xmodmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xmodmap-1.0.10";
@@ -2637,7 +2637,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xmore = callPackage ({ stdenv, pkgconfig, fetchurl, libXaw, libXt }: stdenv.mkDerivation {
     name = "xmore-1.0.3";
@@ -2650,7 +2650,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXaw libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xorgcffiles = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-cf-files-1.0.6";
@@ -2663,7 +2663,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xorgdocs = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-docs-1.7.1";
@@ -2676,7 +2676,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xorgproto = callPackage ({ stdenv, pkgconfig, fetchurl, libXt }: stdenv.mkDerivation {
     name = "xorgproto-2019.1";
@@ -2689,7 +2689,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xorgserver = callPackage ({ stdenv, pkgconfig, fetchurl, xorgproto, openssl, libX11, libXau, libXaw, libxcb, xcbutil, xcbutilwm, xcbutilimage, xcbutilkeysyms, xcbutilrenderutil, libXdmcp, libXfixes, libxkbfile, libXmu, libXpm, libXrender, libXres, libXt }: stdenv.mkDerivation {
     name = "xorg-server-1.20.7";
@@ -2702,7 +2702,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ xorgproto openssl libX11 libXau libXaw libxcb xcbutil xcbutilwm xcbutilimage xcbutilkeysyms xcbutilrenderutil libXdmcp libXfixes libxkbfile libXmu libXpm libXrender libXres libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xorgsgmldoctools = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xorg-sgml-doctools-1.11";
@@ -2715,7 +2715,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xpr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xpr-1.0.5";
@@ -2728,7 +2728,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xprop = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xprop-1.2.4";
@@ -2741,7 +2741,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xrandr = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXrandr, libXrender }: stdenv.mkDerivation {
     name = "xrandr-1.5.0";
@@ -2754,7 +2754,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto libXrandr libXrender ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xrdb = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xrdb-1.2.0";
@@ -2767,7 +2767,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xrefresh = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xrefresh-1.0.6";
@@ -2780,7 +2780,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xset = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXext, libXmu, xorgproto, libXxf86misc }: stdenv.mkDerivation {
     name = "xset-1.2.4";
@@ -2793,7 +2793,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXext libXmu xorgproto libXxf86misc ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xsetroot = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xbitmaps, libXcursor, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xsetroot-1.1.2";
@@ -2806,7 +2806,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xbitmaps libXcursor libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xsm = callPackage ({ stdenv, pkgconfig, fetchurl, libICE, libSM, libX11, libXaw, libXt }: stdenv.mkDerivation {
     name = "xsm-1.0.4";
@@ -2819,7 +2819,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libICE libSM libX11 libXaw libXt ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xstdcmap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXmu, xorgproto }: stdenv.mkDerivation {
     name = "xstdcmap-1.0.4";
@@ -2832,7 +2832,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXmu xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xtrans = callPackage ({ stdenv, pkgconfig, fetchurl }: stdenv.mkDerivation {
     name = "xtrans-1.4.0";
@@ -2845,7 +2845,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xtrap = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libXt, libXTrap }: stdenv.mkDerivation {
     name = "xtrap-1.0.3";
@@ -2858,7 +2858,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libXt libXTrap ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xvinfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto, libXv }: stdenv.mkDerivation {
     name = "xvinfo-1.1.4";
@@ -2871,7 +2871,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto libXv ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xwd = callPackage ({ stdenv, pkgconfig, fetchurl, libxkbfile, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xwd-1.0.7";
@@ -2884,7 +2884,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libxkbfile libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xwininfo = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, libxcb, xorgproto }: stdenv.mkDerivation {
     name = "xwininfo-1.1.4";
@@ -2897,7 +2897,7 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 libxcb xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
   xwud = callPackage ({ stdenv, pkgconfig, fetchurl, libX11, xorgproto }: stdenv.mkDerivation {
     name = "xwud-1.0.5";
@@ -2910,6 +2910,6 @@ lib.makeScope newScope (self: with self; {
     nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ libX11 xorgproto ];
     meta.platforms = stdenv.lib.platforms.unix;
-  }) {};
+  }) { };
 
 })

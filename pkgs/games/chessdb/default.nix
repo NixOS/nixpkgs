@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   name = "chessdb-3.6.19-beta-1";
-  
+
   src = fetchurl {
     url = mirror://sourceforge/chessdb/ChessDB-3.6.19-beta-1.tar.gz;
     sha256 = "0brc3wln3bxp979iqj2w1zxpfd0pch8zzazhdmwf7acww4hrsz62";

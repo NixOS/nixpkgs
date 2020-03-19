@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ncurses ];
- 
+
   installPhase = ''
     mkdir -p $out/bin
     mkdir -p $out/share/man/man1
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A themeable hex editor with diff mode";
     homepage = http://www.dettus.net/dhex/;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = with stdenv.lib.maintainers; [qknight];
+    maintainers = with stdenv.lib.maintainers; [ qknight ];
     platforms = with stdenv.lib.platforms; linux;
   };
 }

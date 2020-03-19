@@ -1,7 +1,7 @@
 { stdenv
 , fetchPypi
 , buildPythonPackage
-# Python deps
+  # Python deps
 , singledispatch
 , logutils
 , webtest
@@ -26,7 +26,14 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ singledispatch logutils ];
   buildInputs = [
-    webtest Mako genshi Kajiki sqlalchemy gunicorn jinja2 virtualenv
+    webtest
+    Mako
+    genshi
+    Kajiki
+    sqlalchemy
+    gunicorn
+    jinja2
+    virtualenv
   ];
 
   checkInputs = [ mock ];

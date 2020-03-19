@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = "https://play0ad.com/";
     license = licenses.cc-by-sa-30;
     platforms = platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -2,7 +2,6 @@
 
 # Note: This mostly reimplements the default.nix already contained in
 # the tarball. Is there a nicer way than duplicating code?
-
 let
   version = "0.5";
 in
@@ -14,7 +13,8 @@ eggDerivation {
 
   name = "egg2nix-${version}";
   buildInputs = with chickenEggs; [
-    matchable http-client
+    matchable
+    http-client
   ];
 
   meta = {

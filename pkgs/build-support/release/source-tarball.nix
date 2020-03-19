@@ -3,128 +3,131 @@
 # by running `autoreconf', `configure' and `make dist'.
 
 { officialRelease ? false
-, buildInputs ? []
+, buildInputs ? [ ]
 , name ? "source-tarball"
 , version ? "0"
 , versionSuffix ?
-    if officialRelease
-    then ""
-    else "pre${toString (src.rev or src.revCount or "")}"
-, src, stdenv, autoconf, automake, libtool
+  if officialRelease
+  then ""
+  else "pre${toString (src.rev or src.revCount or "")}"
+, src
+, stdenv
+, autoconf
+, automake
+, libtool
 , # By default, provide all the GNU Build System as input.
   bootstrapBuildInputs ? [ autoconf automake libtool ]
-, ... } @ args:
+, ...
+} @ args:
 
-stdenv.mkDerivation (
+stdenv.mkDerivation
+  (
+    # First, attributes that can be overriden by the caller (via args):
+    {
+      # By default, only configure and build a source distribution.
+      # Some packages can only build a distribution after a general
+      # `make' (or even `make install').
+      dontBuild = true;
+      dontInstall = true;
+      doDist = true;
 
-  # First, attributes that can be overriden by the caller (via args):
-  {
-    # By default, only configure and build a source distribution.
-    # Some packages can only build a distribution after a general
-    # `make' (or even `make install').
-    dontBuild = true;
-    dontInstall = true;
-    doDist = true;
+      # If we do install, install to a dummy location.
+      useTempPrefix = true;
 
-    # If we do install, install to a dummy location.
-    useTempPrefix = true;
+      showBuildStats = true;
 
-    showBuildStats = true;
+      preConfigurePhases = "autoconfPhase";
+      postPhases = "finalPhase";
 
-    preConfigurePhases = "autoconfPhase";
-    postPhases = "finalPhase";
+      # Autoconfiscate the sources.
+      autoconfPhase = ''
+        export VERSION=${version}
+        export VERSION_SUFFIX=${versionSuffix}
 
-    # Autoconfiscate the sources.
-    autoconfPhase = ''
-      export VERSION=${version}
-      export VERSION_SUFFIX=${versionSuffix}
+        # `svn-revision' is set for backwards compatibility with the old
+        # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
+        # update it eventually.)
+        echo ${versionSuffix} | sed -e s/pre// > svn-revision
 
-      # `svn-revision' is set for backwards compatibility with the old
-      # Nix buildfarm.  (Stratego/XT's autoxt uses it.  We should
-      # update it eventually.)
-      echo ${versionSuffix} | sed -e s/pre// > svn-revision
+        eval "$preAutoconf"
 
-      eval "$preAutoconf"
+        if test -x ./bootstrap && test -f ./bootstrap; then ./bootstrap
+        elif test -x ./bootstrap.sh; then ./bootstrap.sh
+        elif test -x ./autogen.sh; then ./autogen.sh
+        elif test -x ./autogen ; then ./autogen
+        elif test -x ./reconf; then ./reconf
+        elif test -f ./configure.in || test -f ./configure.ac; then
+            autoreconf --install --force --verbose
+        else
+            echo "No bootstrap, bootstrap.sh, configure.in or configure.ac. Assuming this is not an GNU Autotools package."
+        fi
 
-      if test -x ./bootstrap && test -f ./bootstrap; then ./bootstrap
-      elif test -x ./bootstrap.sh; then ./bootstrap.sh
-      elif test -x ./autogen.sh; then ./autogen.sh
-      elif test -x ./autogen ; then ./autogen
-      elif test -x ./reconf; then ./reconf
-      elif test -f ./configure.in || test -f ./configure.ac; then
-          autoreconf --install --force --verbose
-      else
-          echo "No bootstrap, bootstrap.sh, configure.in or configure.ac. Assuming this is not an GNU Autotools package."
-      fi
+        eval "$postAutoconf"
+      '';
 
-      eval "$postAutoconf"
-    '';
+      failureHook = ''
+        if test -n "$succeedOnFailure"; then
+            if test -n "$keepBuildDirectory"; then
+                KEEPBUILDDIR="$out/`basename $TMPDIR`"
+                header "Copying build directory to $KEEPBUILDDIR"
+                mkdir -p $KEEPBUILDDIR
+                cp -R "$TMPDIR/"* $KEEPBUILDDIR
+                stopNest
+            fi
+        fi
+      '';
+    }
 
-    failureHook = ''
-      if test -n "$succeedOnFailure"; then
-          if test -n "$keepBuildDirectory"; then
-              KEEPBUILDDIR="$out/`basename $TMPDIR`"
-              header "Copying build directory to $KEEPBUILDDIR"
-              mkdir -p $KEEPBUILDDIR
-              cp -R "$TMPDIR/"* $KEEPBUILDDIR
-              stopNest
-          fi
-      fi
-    '';
-  }
+    # Then, the caller-supplied attributes.
+    // args
+    // # And finally, our own stuff.
+    {
+      name = name + "-" + version + versionSuffix;
 
-  # Then, the caller-supplied attributes.
-  // args //
+      buildInputs = buildInputs ++ bootstrapBuildInputs;
 
-  # And finally, our own stuff.
-  {
-    name = name + "-" + version + versionSuffix;
+      preUnpack = ''
+        mkdir -p $out/nix-support
+      '';
 
-    buildInputs = buildInputs ++ bootstrapBuildInputs;
+      postUnpack = ''
+        # Set all source files to the current date.  This is because Nix
+        # resets the timestamp on all files to 0 (1/1/1970), which some
+        # people don't like (in particular GNU tar prints harmless but
+        # frightening warnings about it).
+        touch now
+        touch -d "1970-01-01 00:00:00 UTC" then
+        find $sourceRoot ! -newer then -print0 | xargs -0r touch --reference now
+        rm now then
+        eval "$nextPostUnpack"
+      '';
 
-    preUnpack = ''
-      mkdir -p $out/nix-support
-    '';
+      nextPostUnpack = if args ? postUnpack then args.postUnpack else "";
 
-    postUnpack = ''
-      # Set all source files to the current date.  This is because Nix
-      # resets the timestamp on all files to 0 (1/1/1970), which some
-      # people don't like (in particular GNU tar prints harmless but
-      # frightening warnings about it).
-      touch now
-      touch -d "1970-01-01 00:00:00 UTC" then
-      find $sourceRoot ! -newer then -print0 | xargs -0r touch --reference now
-      rm now then
-      eval "$nextPostUnpack"
-    '';
+      # Cause distPhase to copy tar.bz2 in addition to tar.gz.
+      tarballs = "*.tar.gz *.tar.bz2 *.tar.xz";
 
-    nextPostUnpack = if args ? postUnpack then args.postUnpack else "";
+      finalPhase = ''
+        for i in "$out/tarballs/"*; do
+            echo "file source-dist $i" >> $out/nix-support/hydra-build-products
+        done
 
-    # Cause distPhase to copy tar.bz2 in addition to tar.gz.
-    tarballs = "*.tar.gz *.tar.bz2 *.tar.xz";
+        # Try to figure out the release name.
+        releaseName=$( (cd $out/tarballs && ls) | head -n 1 | sed -e 's^\.[a-z].*^^')
+        test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
+      '';
 
-    finalPhase = ''
-      for i in "$out/tarballs/"*; do
-          echo "file source-dist $i" >> $out/nix-support/hydra-build-products
-      done
+      passthru = {
+        inherit src;
+        version = version + versionSuffix;
+      };
 
-      # Try to figure out the release name.
-      releaseName=$( (cd $out/tarballs && ls) | head -n 1 | sed -e 's^\.[a-z].*^^')
-      test -n "$releaseName" && (echo "$releaseName" >> $out/nix-support/hydra-release-name)
-    '';
+      meta = (if args ? meta then args.meta else { }) // {
+        description = "Source distribution";
 
-    passthru = {
-      inherit src;
-      version = version + versionSuffix;
-    };
-
-    meta = (if args ? meta then args.meta else {}) // {
-      description = "Source distribution";
-
-      # Tarball builds are generally important, so give them a high
-      # default priority.
-      schedulingPriority = 200;
-    };
-  }
-
-)
+        # Tarball builds are generally important, so give them a high
+        # default priority.
+        schedulingPriority = 200;
+      };
+    }
+  )

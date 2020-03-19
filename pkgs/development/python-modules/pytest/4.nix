@@ -1,6 +1,24 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
+{ stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, attrs
+, hypothesis
+, py
+, setuptools_scm
+, setuptools
+, six
+, pluggy
+, funcsigs
+, isPy3k
+, more-itertools
+, atomicwrites
+, mock
+, writeText
+, pathlib2
+, wcwidth
+, packaging
+, isPyPy
 }:
 buildPythonPackage rec {
   version = "4.6.8";
@@ -19,8 +37,8 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis mock ];
   buildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
-    ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
-    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  ++ stdenv.lib.optionals (!isPy3k) [ funcsigs ]
+  ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
   checkPhase = ''

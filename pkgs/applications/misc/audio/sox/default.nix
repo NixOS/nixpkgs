@@ -1,16 +1,34 @@
-{ config, lib, stdenv, fetchurl, pkgconfig, CoreAudio
-, enableAlsa ? true, alsaLib ? null
-, enableLibao ? true, libao ? null
-, enableLame ? config.sox.enableLame or false, lame ? null
-, enableLibmad ? true, libmad ? null
-, enableLibogg ? true, libogg ? null, libvorbis ? null
-, enableOpusfile ? true, opusfile ? null
-, enableFLAC ? true, flac ? null
-, enablePNG ? true, libpng ? null
-, enableLibsndfile ? true, libsndfile ? null
-# amrnb and amrwb are unfree, disabled by default
-, enableAMR ? false, amrnb ? null, amrwb ? null
-, enableLibpulseaudio ? true, libpulseaudio ? null
+{ config
+, lib
+, stdenv
+, fetchurl
+, pkgconfig
+, CoreAudio
+, enableAlsa ? true
+, alsaLib ? null
+, enableLibao ? true
+, libao ? null
+, enableLame ? config.sox.enableLame or false
+, lame ? null
+, enableLibmad ? true
+, libmad ? null
+, enableLibogg ? true
+, libogg ? null
+, libvorbis ? null
+, enableOpusfile ? true
+, opusfile ? null
+, enableFLAC ? true
+, flac ? null
+, enablePNG ? true
+, libpng ? null
+, enableLibsndfile ? true
+, libsndfile ? null
+  # amrnb and amrwb are unfree, disabled by default
+, enableAMR ? false
+, amrnb ? null
+, amrwb ? null
+, enableLibpulseaudio ? true
+, libpulseaudio ? null
 }:
 
 with stdenv.lib;
@@ -27,18 +45,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = optional enableOpusfile pkgconfig;
 
   buildInputs =
-    optional (enableAlsa && stdenv.isLinux) alsaLib ++
-    optional enableLibao libao ++
-    optional enableLame lame ++
-    optional enableLibmad libmad ++
-    optionals enableLibogg [ libogg libvorbis ] ++
-    optional enableOpusfile opusfile ++
-    optional enableFLAC flac ++
-    optional enablePNG libpng ++
-    optional enableLibsndfile libsndfile ++
-    optionals enableAMR [ amrnb amrwb ] ++
-    optional enableLibpulseaudio libpulseaudio ++
-    optional (stdenv.isDarwin) CoreAudio;
+    optional (enableAlsa && stdenv.isLinux) alsaLib
+    ++ optional enableLibao libao
+    ++ optional enableLame lame
+    ++ optional enableLibmad libmad
+    ++ optionals enableLibogg [ libogg libvorbis ]
+    ++ optional enableOpusfile opusfile
+    ++ optional enableFLAC flac
+    ++ optional enablePNG libpng
+    ++ optional enableLibsndfile libsndfile
+    ++ optionals enableAMR [ amrnb amrwb ]
+    ++ optional enableLibpulseaudio libpulseaudio
+    ++ optional (stdenv.isDarwin) CoreAudio;
 
   meta = {
     description = "Sample Rate Converter for audio";

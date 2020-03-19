@@ -1,6 +1,16 @@
-{ janePackage, ocamlbuild, angstrom, cryptokit, ctypes,
-  magic-mime, ocaml-migrate-parsetree, octavius, ounit, ppx_deriving, re,
-  num, openssl
+{ janePackage
+, ocamlbuild
+, angstrom
+, cryptokit
+, ctypes
+, magic-mime
+, ocaml-migrate-parsetree
+, octavius
+, ounit
+, ppx_deriving
+, re
+, num
+, openssl
 , ppxlib
 }:
 

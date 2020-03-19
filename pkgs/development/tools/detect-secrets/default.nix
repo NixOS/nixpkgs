@@ -13,7 +13,7 @@ buildPythonApplication rec {
   };
 
   propagatedBuildInputs = [ pyyaml ]
-    ++ lib.optionals isPy27 [ configparser enum34 future functools32 ];
+  ++ lib.optionals isPy27 [ configparser enum34 future functools32 ];
 
   checkInputs = [ mock pytest unidiff ];
 

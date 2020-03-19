@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ expat zlib boost ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.CoreServices ];
 
   doCheck = stdenv.isLinux;
 

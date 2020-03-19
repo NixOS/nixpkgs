@@ -2,7 +2,8 @@
 , fetchFromGitHub
 , buildPythonPackage
 , pythonOlder
-, withVoice ? true, libopus
+, withVoice ? true
+, libopus
 , aiohttp
 , websockets
 , pynacl
@@ -48,7 +49,7 @@ buildPythonPackage rec {
 
   meta = {
     description = "A python wrapper for the Discord API";
-    homepage    = "https://discordpy.rtfd.org/";
-    license     = lib.licenses.mit;
+    homepage = "https://discordpy.rtfd.org/";
+    license = lib.licenses.mit;
   };
 }

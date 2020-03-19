@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-cookie";
 
-  asdFilesToKeep = ["cl-cookie.asd"];
+  asdFilesToKeep = [ "cl-cookie.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-cookie DESCRIPTION HTTP cookie manager SHA256

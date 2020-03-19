@@ -27,12 +27,12 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1bpb4p4j7lwb70qjsssbr878mfalil4xh8r954aaa2rlcf97fmb7";
 
   nativeBuildInputs = [ pkg-config ]
-    ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
+  ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ python3 ];
 
   buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ libiconv Security ]
-    ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
+  ++ lib.optionals stdenv.isDarwin [ libiconv Security ]
+  ++ lib.optionals (withStableFeatures && stdenv.isLinux) [ xorg.libX11 ]
+  ++ lib.optionals (withStableFeatures && stdenv.isDarwin) [ AppKit ];
 
   cargoBuildFlags = lib.optional withStableFeatures "--features stable";
 

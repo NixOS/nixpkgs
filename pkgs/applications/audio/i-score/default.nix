@@ -1,28 +1,27 @@
-{
-  alsaLib,
-  boost,
-  cln,
-  cmake,
-  fetchFromGitHub,
-  gcc,
-  ginac,
-  jamomacore,
-  kdnssd,
-  libsndfile,
-  ninja,
-  portaudio,
-  portmidi,
-  qtbase,
-  qtdeclarative,
-  qtimageformats,
-  qtmultimedia,
-  qtquickcontrols2,
-  qtserialport,
-  qtsvg,
-  qttools,
-  qtwebsockets,
-  rtaudio,
-  stdenv
+{ alsaLib
+, boost
+, cln
+, cmake
+, fetchFromGitHub
+, gcc
+, ginac
+, jamomacore
+, kdnssd
+, libsndfile
+, ninja
+, portaudio
+, portmidi
+, qtbase
+, qtdeclarative
+, qtimageformats
+, qtmultimedia
+, qtquickcontrols2
+, qtserialport
+, qtsvg
+, qttools
+, qtwebsockets
+, rtaudio
+, stdenv
 }:
 
 stdenv.mkDerivation rec {

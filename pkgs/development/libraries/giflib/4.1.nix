@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "giflib-4.1.6";
@@ -17,4 +17,3 @@ stdenv.mkDerivation {
     platforms = platforms.unix;
   };
 }
-

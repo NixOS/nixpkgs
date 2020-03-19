@@ -1,9 +1,11 @@
-{ lib, bundlerApp, makeWrapper,
-  # Optional dependencies, can be null
-  epubcheck, kindlegen,
-  bundlerUpdateScript
+{ lib
+, bundlerApp
+, makeWrapper
+, # Optional dependencies, can be null
+  epubcheck
+, kindlegen
+, bundlerUpdateScript
 }:
-
 let
   app = bundlerApp {
     pname = "asciidoctor";
@@ -19,10 +21,10 @@ let
     buildInputs = [ makeWrapper ];
 
     postBuild = ''
-        wrapProgram "$out/bin/asciidoctor-epub3" \
-          ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"} \
-          ${lib.optionalString (kindlegen != null) "--set KINDLEGEN ${kindlegen}/bin/kindlegen"}
-      '';
+      wrapProgram "$out/bin/asciidoctor-epub3" \
+        ${lib.optionalString (epubcheck != null) "--set EPUBCHECK ${epubcheck}/bin/epubcheck"} \
+        ${lib.optionalString (kindlegen != null) "--set KINDLEGEN ${kindlegen}/bin/kindlegen"}
+    '';
 
     passthru = {
       updateScript = bundlerUpdateScript "asciidoctor";
@@ -37,4 +39,4 @@ let
     };
   };
 in
-  app
+app

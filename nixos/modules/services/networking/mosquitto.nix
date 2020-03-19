@@ -1,7 +1,6 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mosquitto;
 
@@ -27,17 +26,16 @@ let
     ${cfg.extraConf}
   '';
 
-  userAcl = (concatStringsSep "\n\n" (mapAttrsToList (n: c:
-    "user ${n}\n" + (concatStringsSep "\n" c.acl)) cfg.users
+  userAcl = (concatStringsSep "\n\n" (
+    mapAttrsToList (n: c:
+      "user ${n}\n" + (concatStringsSep "\n" c.acl)) cfg.users
   ));
 
   aclFile = pkgs.writeText "mosquitto.acl" ''
     ${cfg.aclExtraConf}
     ${userAcl}
   '';
-
 in
-
 {
 
   ###### Interface
@@ -113,36 +111,37 @@ in
       };
 
       users = mkOption {
-        type = types.attrsOf (types.submodule {
-          options = {
-            password = mkOption {
-              type = with types; uniq (nullOr str);
-              default = null;
-              description = ''
-                Specifies the (clear text) password for the MQTT User.
-              '';
-            };
+        type = types.attrsOf
+          (types.submodule {
+            options = {
+              password = mkOption {
+                type = with types; uniq (nullOr str);
+                default = null;
+                description = ''
+                  Specifies the (clear text) password for the MQTT User.
+                '';
+              };
 
-            hashedPassword = mkOption {
-              type = with types; uniq (nullOr str);
-              default = null;
-              description = ''
-                Specifies the hashed password for the MQTT User.
-                <option>hashedPassword</option> overrides <option>password</option>.
-                To generate hashed password install <literal>mosquitto</literal>
-                package and use <literal>mosquitto_passwd</literal>.
-              '';
-            };
+              hashedPassword = mkOption {
+                type = with types; uniq (nullOr str);
+                default = null;
+                description = ''
+                  Specifies the hashed password for the MQTT User.
+                  <option>hashedPassword</option> overrides <option>password</option>.
+                  To generate hashed password install <literal>mosquitto</literal>
+                  package and use <literal>mosquitto_passwd</literal>.
+                '';
+              };
 
-            acl = mkOption {
-              type = types.listOf types.str;
-              example = [ "topic read A/B" "topic A/#" ];
-              description = ''
-                Control client access to topics on the broker.
-              '';
+              acl = mkOption {
+                type = types.listOf types.str;
+                example = [ "topic read A/B" "topic A/#" ];
+                description = ''
+                  Control client access to topics on the broker.
+                '';
+              };
             };
-          };
-        });
+          });
         example = { john = { password = "123456"; acl = [ "topic readwrite john/#" ]; }; };
         description = ''
           A set of users and their passwords and ACLs.
@@ -209,12 +208,15 @@ in
         rm -f ${cfg.dataDir}/passwd
         touch ${cfg.dataDir}/passwd
       '' + concatStringsSep "\n" (
-        mapAttrsToList (n: c:
-          if c.hashedPassword != null then
-            "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
-          else optionalString (c.password != null)
-            "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
-        ) cfg.users);
+        mapAttrsToList (
+          n: c:
+            if c.hashedPassword != null
+            then
+              "echo '${n}:${c.hashedPassword}' >> ${cfg.dataDir}/passwd"
+            else optionalString (c.password != null)
+              "${pkgs.mosquitto}/bin/mosquitto_passwd -b ${cfg.dataDir}/passwd ${n} '${c.password}'"
+        ) cfg.users
+      );
     };
 
     users.users.mosquitto = {

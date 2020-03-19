@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, pcsclite , libusb }:
+{ stdenv, fetchurl, pkgconfig, pcsclite, libusb }:
 
 stdenv.mkDerivation {
   version = "1.7.11";
@@ -38,4 +38,4 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ berce ];
     platforms = with platforms; unix;
   };
-} 
+}

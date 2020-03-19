@@ -39,7 +39,7 @@ buildGoModule rec {
 
       Amass ships with a set of wordlist (to be used with the amass -w flag)
       that are found under the wordlists output.
-      '';
+    '';
     homepage = "https://www.owasp.org/index.php/OWASP_Amass_Project";
     license = licenses.asl20;
     maintainers = with maintainers; [ kalbasit ];

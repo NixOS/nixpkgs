@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "17xgjk8li29b8q8p2bi56klqg0v2q0j6ich438c4p06jrszccx1f";
 
-  nativeBuildInputs = [];
+  nativeBuildInputs = [ ];
   buildInputs = (stdenv.lib.optional stdenv.isDarwin Security);
 
   meta = with stdenv.lib; {

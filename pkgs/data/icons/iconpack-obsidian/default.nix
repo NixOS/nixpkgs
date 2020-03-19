@@ -18,8 +18,8 @@ stdenv.mkDerivation rec {
   dontDropIconThemeCache = true;
 
   installPhase = ''
-     mkdir -p $out/share/icons
-     mv Obsidian* $out/share/icons
+    mkdir -p $out/share/icons
+    mv Obsidian* $out/share/icons
   '';
 
   postFixup = ''

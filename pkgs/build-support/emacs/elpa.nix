@@ -10,21 +10,24 @@ with lib;
 , ...
 }@args:
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+import ./generic.nix { inherit lib stdenv emacs texinfo; } (
+  {
 
-  phases = "installPhase fixupPhase distPhase";
+    phases = "installPhase fixupPhase distPhase";
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    emacs --batch -Q -l ${./elpa2nix.el} \
-        -f elpa2nix-install-package \
-        "${src}" "$out/share/emacs/site-lisp/elpa"
+      emacs --batch -Q -l ${./elpa2nix.el} \
+          -f elpa2nix-install-package \
+          "${src}" "$out/share/emacs/site-lisp/elpa"
 
-    runHook postInstall
-  '';
-}
-
-// removeAttrs args [ "files" "fileSpecs"
-                      "meta"
-                    ])
+      runHook postInstall
+    '';
+  }
+  // removeAttrs args [
+    "files"
+    "fileSpecs"
+    "meta"
+  ]
+)

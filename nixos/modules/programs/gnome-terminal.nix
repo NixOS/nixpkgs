@@ -3,13 +3,9 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.programs.gnome-terminal;
-
 in
-
 {
 
   # Added 2019-08-19

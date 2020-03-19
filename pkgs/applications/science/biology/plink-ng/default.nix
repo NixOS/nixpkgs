@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, zlib, openblas, darwin}:
+{ stdenv, fetchFromGitHub, zlib, openblas, darwin }:
 
 stdenv.mkDerivation rec {
   pname = "plink-ng";
@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1zhffjbwpd50dxywccbnv1rxy9njwz73l4awc5j7i28rgj3davcq";
   };
 
-  buildInputs = [ zlib ] ++ (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.Accelerate ] else [ openblas ]) ;
+  buildInputs = [ zlib ] ++ (if stdenv.isDarwin then [ darwin.apple_sdk.frameworks.Accelerate ] else [ openblas ]);
 
   buildPhase = ''
     sed -i 's|zlib-1.2.8/zlib.h|zlib.h|g' *.c *.h
@@ -31,4 +31,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

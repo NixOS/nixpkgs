@@ -9,7 +9,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    libX11 xorgproto unzip
+    libX11
+    xorgproto
+    unzip
   ];
 
   installPhase = ''
@@ -18,10 +20,10 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-      platforms = stdenv.lib.platforms.linux;
-      description = "Set an application's urgency hint (or not)";
-      maintainers = [ stdenv.lib.maintainers.yarr ];
-      homepage = https://github.com/hiltjo/seturgent;
-      license = stdenv.lib.licenses.mit;
+    platforms = stdenv.lib.platforms.linux;
+    description = "Set an application's urgency hint (or not)";
+    maintainers = [ stdenv.lib.maintainers.yarr ];
+    homepage = https://github.com/hiltjo/seturgent;
+    license = stdenv.lib.licenses.mit;
   };
 }

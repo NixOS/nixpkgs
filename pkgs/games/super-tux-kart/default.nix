@@ -1,42 +1,77 @@
-{ stdenv, fetchFromGitHub, fetchsvn, cmake, pkgconfig
-, openal, freealut, libGLU, libGL, libvorbis, libogg, gettext, curl, freetype
-, fribidi, libtool, bluez, libjpeg, libpng, zlib, libX11, libXrandr, enet, harfbuzz }:
-
+{ stdenv
+, fetchFromGitHub
+, fetchsvn
+, cmake
+, pkgconfig
+, openal
+, freealut
+, libGLU
+, libGL
+, libvorbis
+, libogg
+, gettext
+, curl
+, freetype
+, fribidi
+, libtool
+, bluez
+, libjpeg
+, libpng
+, zlib
+, libX11
+, libXrandr
+, enet
+, harfbuzz
+}:
 let
   dir = "stk-code";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "supertuxkart";
   version = "1.1";
 
   srcs = [
     (fetchFromGitHub {
-      owner  = "supertuxkart";
-      repo   = "stk-code";
-      rev    = version;
+      owner = "supertuxkart";
+      repo = "stk-code";
+      rev = version;
       sha256 = "01vxxl94583ixswzmi4caz8dk64r56pn3zxh7v63zml60yfvxbvp";
-      name   = dir;
+      name = dir;
     })
     (fetchsvn {
-      url    = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
-      rev    = "18212";
+      url = "https://svn.code.sf.net/p/supertuxkart/code/stk-assets";
+      rev = "18212";
       sha256 = "1dyj8r5rfifhnhayga8w8irkpa99vw57xjmy74cp8xz8g7zvdzqf";
-      name   = "stk-assets";
+      name = "stk-assets";
     })
   ];
 
   nativeBuildInputs = [ cmake gettext libtool pkgconfig ];
 
   buildInputs = [
-    libX11 libXrandr
-    openal freealut libGLU libGL libvorbis libogg zlib freetype
-    curl fribidi bluez libjpeg libpng enet harfbuzz
+    libX11
+    libXrandr
+    openal
+    freealut
+    libGLU
+    libGL
+    libvorbis
+    libogg
+    zlib
+    freetype
+    curl
+    fribidi
+    bluez
+    libjpeg
+    libpng
+    enet
+    harfbuzz
   ];
 
   enableParallelBuilding = true;
 
   cmakeFlags = [
-    "-DBUILD_RECORDER=OFF"         # libopenglrecorder is not in nixpkgs
+    "-DBUILD_RECORDER=OFF" # libopenglrecorder is not in nixpkgs
     "-DUSE_SYSTEM_ANGELSCRIPT=OFF" # doesn't work with 2.31.2 or 2.32.0
   ];
 

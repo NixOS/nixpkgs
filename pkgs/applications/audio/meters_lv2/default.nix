@@ -1,6 +1,15 @@
-{ stdenv, fetchurl, pkgconfig
-, lv2, libGLU, libGL, gtk2, cairo, pango, fftwFloat, libjack2 }:
-
+{ stdenv
+, fetchurl
+, pkgconfig
+, lv2
+, libGLU
+, libGL
+, gtk2
+, cairo
+, pango
+, fftwFloat
+, libjack2
+}:
 let
   version = "0.9.10";
   name = "meters.lv2-${version}";
@@ -20,7 +29,6 @@ let
     url = "https://github.com/x42/robtk/archive/v${robtkVersion}.tar.gz";
     sha256 = "1v79xys1k2923wpivdjd44vand6c4agwvnrqi4c8kdv9r07b559v";
   };
-
 in
 stdenv.mkDerivation {
   inherit name;
@@ -37,7 +45,8 @@ stdenv.mkDerivation {
   meter_VERSION = version;
 
   meta = with stdenv.lib;
-    { description = "Collection of audio level meters with GUI in LV2 plugin format";
+    {
+      description = "Collection of audio level meters with GUI in LV2 plugin format";
       homepage = http://x42.github.io/meters.lv2/;
       maintainers = with maintainers; [ ehmry ];
       license = licenses.gpl2;

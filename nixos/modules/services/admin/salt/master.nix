@@ -1,10 +1,8 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
-  cfg  = config.services.salt.master;
+  cfg = config.services.salt.master;
 
   fullConfig = lib.recursiveUpdate {
     # Provide defaults for some directories to allow an immutable config dir
@@ -14,16 +12,14 @@ let
     # Default is in /etc/salt/pki/master
     pki_dir = "/var/lib/salt/pki/master";
   } cfg.configuration;
-
 in
-
 {
   options = {
     services.salt.master = {
       enable = mkEnableOption "Salt master service";
       configuration = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = "Salt master configuration as Nix attribute set.";
       };
     };
@@ -45,7 +41,7 @@ in
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
       path = with pkgs; [
-        utillinux  # for dmesg
+        utillinux # for dmesg
       ];
       serviceConfig = {
         ExecStart = "${pkgs.salt}/bin/salt-master";

@@ -1,19 +1,16 @@
 { options, config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.matterbridge;
 
   matterbridgeConfToml =
-    if cfg.configPath == null then
+    if cfg.configPath == null
+    then
       pkgs.writeText "matterbridge.toml" (cfg.configFile)
     else
       cfg.configPath;
-
 in
-
 {
   options = {
     services.matterbridge = {
@@ -93,14 +90,16 @@ in
       "The option services.matterbridge.configFile is insecure and should be replaced with services.matterbridge.configPath";
 
     users.users = optionalAttrs (cfg.user == "matterbridge")
-      { matterbridge = {
+      {
+        matterbridge = {
           group = "matterbridge";
           isSystemUser = true;
         };
       };
 
     users.groups = optionalAttrs (cfg.group == "matterbridge")
-      { matterbridge = { };
+      {
+        matterbridge = { };
       };
 
     systemd.services.matterbridge = {

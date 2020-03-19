@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "rfc3986";

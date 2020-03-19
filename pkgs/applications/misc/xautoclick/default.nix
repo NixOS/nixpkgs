@@ -1,6 +1,11 @@
-{ stdenv, fetchurl, xorg, pkgconfig
-, gtkSupport ? true, gtk2
-, qtSupport ? true, qt4
+{ stdenv
+, fetchurl
+, xorg
+, pkgconfig
+, gtkSupport ? true
+, gtk2
+, qtSupport ? true
+, qt4
 }:
 
 stdenv.mkDerivation {
@@ -12,8 +17,8 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ xorg.libX11 xorg.libXtst xorg.xinput xorg.libXi xorg.libXext ]
-    ++ stdenv.lib.optionals gtkSupport [ gtk2 ]
-    ++ stdenv.lib.optionals qtSupport [ qt4 ];
+  ++ stdenv.lib.optionals gtkSupport [ gtk2 ]
+  ++ stdenv.lib.optionals qtSupport [ qt4 ];
   patchPhase = ''
     substituteInPlace configure --replace /usr/X11R6 ${xorg.libX11.dev}
   '';

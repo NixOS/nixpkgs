@@ -13,9 +13,9 @@ buildGoPackage rec {
 
   buildInputs = [ m4 ];
 
-  makeFlags = [ 
-    "PREFIX=${placeholder "out"}" 
-    "BINDIR=${placeholder "bin"}/bin" 
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+    "BINDIR=${placeholder "bin"}/bin"
   ];
 
   buildPhase = ''

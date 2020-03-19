@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.cfssl;
-in {
+in
+{
   options.services.cfssl = {
     enable = mkEnableOption "the CFSSL CA api-server";
 

@@ -148,8 +148,8 @@ stdenv.mkDerivation rec {
     "-Dudev_dir=${placeholder "out"}/lib/udev"
   ];
 
-    # Default for release buildtype but passed manually because
-    # we're using plain
+  # Default for release buildtype but passed manually because
+  # we're using plain
   NIX_CFLAGS_COMPILE = "-DG_DISABLE_CAST_CHECKS";
 
   passthru = {

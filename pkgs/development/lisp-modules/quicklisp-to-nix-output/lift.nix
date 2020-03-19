@@ -14,7 +14,7 @@ rec {
 
   packageName = "lift";
 
-  asdFilesToKeep = ["lift.asd"];
+  asdFilesToKeep = [ "lift.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lift DESCRIPTION LIsp Framework for Testing SHA256

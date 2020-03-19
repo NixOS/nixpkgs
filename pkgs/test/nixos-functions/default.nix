@@ -10,14 +10,14 @@ To run this test:
 
  */
 { pkgs, lib, stdenv, ... }:
-
 let
   dummyVersioning = {
     revision = "test";
     versionSuffix = "test";
     label = "test";
   };
-in lib.optionalAttrs stdenv.hostPlatform.isLinux (
+in
+lib.optionalAttrs stdenv.hostPlatform.isLinux (
   pkgs.recurseIntoAttrs {
 
     nixos-test = (pkgs.nixos {
@@ -26,16 +26,17 @@ in lib.optionalAttrs stdenv.hostPlatform.isLinux (
       fileSystems."/".device = "/dev/null";
     }).toplevel;
 
-    nixosTest-test = pkgs.nixosTest ({ lib, pkgs, ... }: {
-      name = "nixosTest-test";
-      machine = { pkgs, ... }: {
-        system.nixos = dummyVersioning;
-        environment.systemPackages = [ pkgs.hello ];
-      };
-      testScript = ''
-        machine.succeed("hello")
-      '';
-    });
+    nixosTest-test = pkgs.nixosTest
+      ({ lib, pkgs, ... }: {
+        name = "nixosTest-test";
+        machine = { pkgs, ... }: {
+          system.nixos = dummyVersioning;
+          environment.systemPackages = [ pkgs.hello ];
+        };
+        testScript = ''
+          machine.succeed("hello")
+        '';
+      });
 
   }
 )

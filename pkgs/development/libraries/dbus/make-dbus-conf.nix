@@ -1,5 +1,8 @@
-{ runCommand, writeText, libxslt, dbus
-, serviceDirectories ? []
+{ runCommand
+, writeText
+, libxslt
+, dbus
+, serviceDirectories ? [ ]
 , suidHelper ? "/var/setuid-wrappers/dbus-daemon-launch-helper"
 }:
 

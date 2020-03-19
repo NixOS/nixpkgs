@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   buildInputs = [ findlib ocaml ocamlbuild ];
   buildPhase = "ocaml pkg/build.ml native=true native-dynlink=${if withShared then "true" else "false"}";
   installPhase = "${opaline}/bin/opaline -libdir $OCAMLFIND_DESTDIR";
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   meta = {
     description = "Compatibility library for OCaml’s Uchar module";

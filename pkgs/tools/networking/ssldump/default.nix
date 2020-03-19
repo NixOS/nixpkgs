@@ -16,10 +16,12 @@ stdenv.mkDerivation {
     sed -i -e 's|#include.*net/bpf.h|#include <pcap/bpf.h>|' \
       base/pcap-snoop.c
   '';
-  configureFlags = [ "--with-pcap-lib=${libpcap}/lib"
-                     "--with-pcap-inc=${libpcap}/include"
-                     "--with-openssl-lib=${openssl}/lib"
-                     "--with-openssl-inc=${openssl}/include" ];
+  configureFlags = [
+    "--with-pcap-lib=${libpcap}/lib"
+    "--with-pcap-inc=${libpcap}/include"
+    "--with-openssl-lib=${openssl}/lib"
+    "--with-openssl-inc=${openssl}/include"
+  ];
   meta = {
     description = "ssldump is an SSLv3/TLS network protocol analyzer";
     homepage = http://ssldump.sourceforge.net;

@@ -15,8 +15,8 @@ stdenv.mkDerivation {
 
   configureScript = "./autogen.sh";
 
-  nativeBuildInputs = [which autoconf automake libtool];
-  buildInputs = [libpcap];
+  nativeBuildInputs = [ which autoconf automake libtool ];
+  buildInputs = [ libpcap ];
 
   meta = with stdenv.lib; {
     description = "A library for deep-packet inspection";

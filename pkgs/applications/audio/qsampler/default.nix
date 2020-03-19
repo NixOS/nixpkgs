@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, autoconf, automake, libtool, pkgconfig, qttools
-, liblscp, libgig, qtbase, mkDerivation }:
+{ stdenv
+, fetchurl
+, autoconf
+, automake
+, libtool
+, pkgconfig
+, qttools
+, liblscp
+, libgig
+, qtbase
+, mkDerivation
+}:
 
 mkDerivation rec {
   pname = "qsampler";

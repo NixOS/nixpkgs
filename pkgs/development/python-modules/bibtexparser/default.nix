@@ -1,7 +1,11 @@
 { lib
-, buildPythonPackage, fetchFromGitHub
-, future, pyparsing
-, glibcLocales, nose, unittest2
+, buildPythonPackage
+, fetchFromGitHub
+, future
+, pyparsing
+, glibcLocales
+, nose
+, unittest2
 }:
 
 buildPythonPackage rec {

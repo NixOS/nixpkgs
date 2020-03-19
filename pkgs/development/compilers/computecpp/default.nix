@@ -35,11 +35,13 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru = {
-    isClang = true;
-  } // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
-    gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
-  };
+  passthru =
+    {
+      isClang = true;
+    }
+    // stdenv.lib.optionalAttrs (stdenv.targetPlatform.isLinux || (stdenv.cc.isGNU && stdenv.cc.cc ? gcc)) {
+      gcc = if stdenv.cc.isGNU then stdenv.cc.cc else stdenv.cc.cc.gcc;
+    };
 
   meta = with stdenv.lib; {
     description =

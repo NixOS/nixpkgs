@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
 
   postConfigure = ''
     sed -i Makefile \
-      -e 's|^	/bin/rm |	rm |'
+      -e 's|^  /bin/rm |  rm |'
     mkdir -p $out/lib/ocaml/${ocaml.version}/site-lib/stublibs
   '';
 

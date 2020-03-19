@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, cmake }:
-
 let
   generic = { version, sha256 }:
     stdenv.mkDerivation {
@@ -7,9 +6,9 @@ let
       inherit version;
 
       src = fetchFromGitHub {
-        owner  = "gabime";
-        repo   = "spdlog";
-        rev    = "v${version}";
+        owner = "gabime";
+        repo = "spdlog";
+        rev = "v${version}";
         inherit sha256;
       };
 
@@ -25,11 +24,11 @@ let
       '';
 
       meta = with stdenv.lib; {
-        description    = "Very fast, header only, C++ logging library";
-        homepage       = "https://github.com/gabime/spdlog";
-        license        = licenses.mit;
-        maintainers    = with maintainers; [ obadz ];
-        platforms      = platforms.all;
+        description = "Very fast, header only, C++ logging library";
+        homepage = "https://github.com/gabime/spdlog";
+        license = licenses.mit;
+        maintainers = with maintainers; [ obadz ];
+        platforms = platforms.all;
       };
     };
 in

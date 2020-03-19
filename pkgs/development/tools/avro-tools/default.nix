@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-    "https://repo1.maven.org/maven2/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
+      "https://repo1.maven.org/maven2/org/apache/avro/avro-tools/${version}/${pname}-${version}.jar";
     sha256 = "0d73qbfx59pa4mgsjwgl5dvc4895rm90pdwr4sbd77biscjad94s";
   };
 
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://avro.apache.org/;
+    homepage = https://avro.apache.org/;
     description = "Avro command-line tools and utilities";
-    license     = lib.licenses.asl20;
+    license = lib.licenses.asl20;
     maintainers = [ lib.maintainers.nequissimus ];
   };
 }

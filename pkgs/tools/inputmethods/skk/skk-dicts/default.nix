@@ -1,5 +1,4 @@
 { stdenv, fetchurl, skktools }:
-
 let
   # kana to kanji
   small = fetchurl {
@@ -26,7 +25,6 @@ let
     sha256 = "12d6xpp1bfin9nwl35ydl5yc6vx0qpwhxss0khi19n1nsbyqnixm";
   };
 in
-
 stdenv.mkDerivation {
   pname = "skk-dicts-unstable";
   version = "2017-10-26";

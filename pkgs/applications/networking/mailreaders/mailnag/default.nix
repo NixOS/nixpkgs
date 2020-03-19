@@ -1,14 +1,21 @@
-{ stdenv, fetchurl, gettext, gtk3, pythonPackages
-, gdk-pixbuf, libnotify, gst_all_1
+{ stdenv
+, fetchurl
+, gettext
+, gtk3
+, pythonPackages
+, gdk-pixbuf
+, libnotify
+, gst_all_1
 , libgnome-keyring3
-, wrapGAppsHook, gnome3
-# otherwise passwords are stored unencrypted
+, wrapGAppsHook
+, gnome3
+  # otherwise passwords are stored unencrypted
 , withGnomeKeyring ? true
 }:
-
 let
   inherit (pythonPackages) python;
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   pname = "mailnag";
   version = "1.3.0";
 
@@ -18,8 +25,12 @@ in pythonPackages.buildPythonApplication rec {
   };
 
   buildInputs = [
-    gtk3 gdk-pixbuf libnotify gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good
+    gtk3
+    gdk-pixbuf
+    libnotify
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     gst_all_1.gst-plugins-bad
     gnome3.adwaita-icon-theme
   ] ++ stdenv.lib.optional withGnomeKeyring libgnome-keyring3;
@@ -30,7 +41,9 @@ in pythonPackages.buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pygobject3 dbus-python pyxdg
+    pygobject3
+    dbus-python
+    pyxdg
   ];
 
   buildPhase = "";

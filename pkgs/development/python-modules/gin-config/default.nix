@@ -18,7 +18,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ six enum34 ];
 
   # PyPI archive does not ship with tests
-  doCheck= false;
+  doCheck = false;
 
   meta = with lib; {
     homepage = https://github.com/google/gin-config;

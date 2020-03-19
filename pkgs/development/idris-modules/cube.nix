@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "cube";
   version = "2017-07-05";
 

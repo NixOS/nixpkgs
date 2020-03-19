@@ -15,10 +15,10 @@
 , pkgconfig
 , which
 }:
-
 let
   buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   project = "cri-o";
   version = "1.17.0";
   name = "${project}-${version}${flavor}";
@@ -34,9 +34,17 @@ in buildGoPackage rec {
 
   outputs = [ "bin" "out" ];
   nativeBuildInputs = [ git pkgconfig which ];
-  buildInputs = [ btrfs-progs gpgme libapparmor libassuan libgpgerror
-                 libseccomp libselinux lvm2 ]
-                ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
+  buildInputs = [
+    btrfs-progs
+    gpgme
+    libapparmor
+    libassuan
+    libgpgerror
+    libseccomp
+    libselinux
+    lvm2
+  ]
+  ++ stdenv.lib.optionals (glibc != null) [ glibc glibc.static ];
 
   buildPhase = ''
     pushd go/src/${goPackagePath}

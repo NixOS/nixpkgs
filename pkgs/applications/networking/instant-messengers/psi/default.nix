@@ -1,6 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, wrapQtAppsHook
-, qtbase, qtmultimedia, qtx11extras, qttools, qtwebengine
-, libidn, qca2-qt5, libXScrnSaver, hunspell
+{ stdenv
+, fetchFromGitHub
+, cmake
+, wrapQtAppsHook
+, qtbase
+, qtmultimedia
+, qtx11extras
+, qttools
+, qtwebengine
+, libidn
+, qca2-qt5
+, libXScrnSaver
+, hunspell
 }:
 stdenv.mkDerivation rec {
   pname = "psi";
@@ -17,8 +27,15 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [ cmake wrapQtAppsHook ];
   buildInputs = [
-    qtbase qtmultimedia qtx11extras qttools qtwebengine
-    libidn qca2-qt5 libXScrnSaver hunspell
+    qtbase
+    qtmultimedia
+    qtx11extras
+    qttools
+    qtwebengine
+    libidn
+    qca2-qt5
+    libXScrnSaver
+    hunspell
   ];
   enableParallelBuilding = true;
   meta = with stdenv.lib; {

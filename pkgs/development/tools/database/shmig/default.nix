@@ -1,6 +1,12 @@
-{ stdenv, fetchFromGitHub
-, withMySQL ? true, withPSQL ? false, withSQLite ? false
-, mysql, postgresql, sqlite, gawk
+{ stdenv
+, fetchFromGitHub
+, withMySQL ? true
+, withPSQL ? false
+, withSQLite ? false
+, mysql
+, postgresql
+, sqlite
+, gawk
 , lib
 }:
 

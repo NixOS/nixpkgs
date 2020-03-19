@@ -1,12 +1,22 @@
-{ stdenv, lib, rustPlatform, fetchFromGitHub, openssl, pkgconfig, Security
-, sqliteSupport ? true, sqlite
-, postgresqlSupport ? true, postgresql
-, mysqlSupport ? true, mysql, zlib, libiconv
+{ stdenv
+, lib
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, pkgconfig
+, Security
+, sqliteSupport ? true
+, sqlite
+, postgresqlSupport ? true
+, postgresql
+, mysqlSupport ? true
+, mysql
+, zlib
+, libiconv
 }:
 
 assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
   "support for at least one database must be enabled";
-
 let
   inherit (stdenv.lib) optional optionals optionalString;
   features = ''
@@ -15,7 +25,6 @@ let
     ${optionalString mysqlSupport "mysql"} \
   '';
 in
-
 rustPlatform.buildRustPackage rec {
   pname = "diesel-cli";
   version = "1.4.0";
@@ -41,11 +50,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
-    ++ optional stdenv.isDarwin Security
-    ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
-    ++ optional sqliteSupport sqlite
-    ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [ mysql zlib ];
+  ++ optional stdenv.isDarwin Security
+  ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
+  ++ optional sqliteSupport sqlite
+  ++ optional postgresqlSupport postgresql
+  ++ optionals mysqlSupport [ mysql zlib ];
 
   # We must `cd diesel_cli`, we cannot use `--package diesel_cli` to build
   # because --features fails to apply to the package:

@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, buildBowerComponents, buildGoPackage, makeWrapper }:
-
 let
   inherit (import ./src.nix) version sha256;
   owner = "sensu";
@@ -7,7 +6,7 @@ let
 
   src = fetchFromGitHub {
     inherit owner repo sha256;
-    rev    = version;
+    rev = version;
   };
 
   backend = buildGoPackage {
@@ -26,8 +25,8 @@ let
     generated = ./bower-packages.nix;
     inherit src;
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "uchiwa";
   inherit version;
 
@@ -45,9 +44,9 @@ in stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A Dashboard for the sensu monitoring framework";
-    homepage    = http://sensuapp.org/;
-    license     = licenses.mit;
+    homepage = http://sensuapp.org/;
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

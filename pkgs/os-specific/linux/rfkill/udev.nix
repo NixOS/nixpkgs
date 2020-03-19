@@ -23,7 +23,6 @@
 
 # Note: this package does not need the binaries
 # in the rfkill package.
-
 let
   rfkillHook =
     substituteAll {
@@ -31,7 +30,8 @@ let
       isExecutable = true;
       src = ./rfkill-hook.sh;
     };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "rfkill-udev";
 
   dontUnpack = true;

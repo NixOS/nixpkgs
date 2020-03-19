@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 with lib;
-
 let
   cfg = config.services.journalwatch;
   user = "journalwatch";
@@ -43,9 +42,8 @@ let
       ln -sf ${journalwatchConfig} $out/journalwatch/config
       ln -sf ${journalwatchPatterns} $out/journalwatch/patterns
     '';
-
-
-in {
+in
+{
   options = {
     services.journalwatch = {
       enable = mkOption {
@@ -102,42 +100,43 @@ in {
           Extra lines to be added verbatim to the journalwatch/config configuration file.
           You can add any commandline argument to the config, without the '--'.
           See <literal>journalwatch --help</literal> for all arguments and their description.
-          '';
+        '';
       };
 
       filterBlocks = mkOption {
-        type = types.listOf (types.submodule {
-          options = {
-           match = mkOption {
-              type = types.str;
-              example = "SYSLOG_IDENTIFIER = systemd";
-              description = ''
-                Syntax: <literal>field = value</literal>
-                Specifies the log entry <literal>field</literal> this block should apply to.
-                If the <literal>field</literal> of a message matches this <literal>value</literal>,
-                this patternBlock's <option>filters</option> are applied.
-                If <literal>value</literal> starts and ends with a slash, it is interpreted as
-                an extended python regular expression, if not, it's an exact match.
-                The journal fields are explained in systemd.journal-fields(7).
-              '';
-            };
+        type = types.listOf
+          (types.submodule {
+            options = {
+              match = mkOption {
+                type = types.str;
+                example = "SYSLOG_IDENTIFIER = systemd";
+                description = ''
+                  Syntax: <literal>field = value</literal>
+                  Specifies the log entry <literal>field</literal> this block should apply to.
+                  If the <literal>field</literal> of a message matches this <literal>value</literal>,
+                  this patternBlock's <option>filters</option> are applied.
+                  If <literal>value</literal> starts and ends with a slash, it is interpreted as
+                  an extended python regular expression, if not, it's an exact match.
+                  The journal fields are explained in systemd.journal-fields(7).
+                '';
+              };
 
-            filters = mkOption {
-              type = types.str;
-              example = ''
-                (Stopped|Stopping|Starting|Started) .*
-                (Reached target|Stopped target) .*
-              '';
-              description = ''
-                The filters to apply on all messages which satisfy <option>match</option>.
-                Any of those messages that match any specified filter will be removed from journalwatch's output.
-                Each filter is an extended Python regular expression.
-                You can specify multiple filters and separate them by newlines.
-                Lines starting with '#' are comments. Inline-comments are not permitted.
-              '';
+              filters = mkOption {
+                type = types.str;
+                example = ''
+                  (Stopped|Stopping|Starting|Started) .*
+                  (Reached target|Stopped target) .*
+                '';
+                description = ''
+                  The filters to apply on all messages which satisfy <option>match</option>.
+                  Any of those messages that match any specified filter will be removed from journalwatch's output.
+                  Each filter is an extended Python regular expression.
+                  You can specify multiple filters and separate them by newlines.
+                  Lines starting with '#' are comments. Inline-comments are not permitted.
+                '';
+              };
             };
-          };
-        });
+          });
 
         example = [
           # examples taken from upstream
@@ -241,8 +240,8 @@ in {
         StateDirectoryMode = 0750;
         ExecStart = "${pkgs.python3Packages.journalwatch}/bin/journalwatch mail";
         # lowest CPU and IO priority, but both still in best-effort class to prevent starvation
-        Nice=19;
-        IOSchedulingPriority=7;
+        Nice = 19;
+        IOSchedulingPriority = 7;
       };
     };
 

@@ -1,14 +1,43 @@
-{ config, fetchgit, stdenv, wrapGAppsHook, autoreconfHook, bison, flex
-, curl, dbus, dbus-glib, enchant, gtk3, gnutls, gnupg, gpgme
-, libarchive, libcanberra-gtk3, libetpan, libnotify, libsoup, libxml2, networkmanager
-, openldap, perl, pkgconfig, poppler, python, shared-mime-info, webkitgtk
-, glib-networking, gsettings-desktop-schemas, libSM, libytnef, libical
-# Build options
-# TODO: A flag to build the manual.
-# TODO: Plugins that complain about their missing dependencies, even when
-#       provided:
-#         gdata requires libgdata
-#         geolocation requires libchamplain
+{ config
+, fetchgit
+, stdenv
+, wrapGAppsHook
+, autoreconfHook
+, bison
+, flex
+, curl
+, dbus
+, dbus-glib
+, enchant
+, gtk3
+, gnutls
+, gnupg
+, gpgme
+, libarchive
+, libcanberra-gtk3
+, libetpan
+, libnotify
+, libsoup
+, libxml2
+, networkmanager
+, openldap
+, perl
+, pkgconfig
+, poppler
+, python
+, shared-mime-info
+, webkitgtk
+, glib-networking
+, gsettings-desktop-schemas
+, libSM
+, libytnef
+, libical
+  # Build options
+  # TODO: A flag to build the manual.
+  # TODO: Plugins that complain about their missing dependencies, even when
+  #       provided:
+  #         gdata requires libgdata
+  #         geolocation requires libchamplain
 , enableLdap ? false
 , enableNetworkManager ? config.networking.networkmanager.enable or false
 , enablePgp ? true
@@ -59,8 +88,18 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = with python.pkgs; [ python ] ++ optionals enablePluginPython [ pygtk pygobject2 ];
 
   buildInputs =
-    [ curl dbus dbus-glib gtk3 gnutls gsettings-desktop-schemas
-      libetpan perl glib-networking libSM libytnef
+    [
+      curl
+      dbus
+      dbus-glib
+      gtk3
+      gnutls
+      gsettings-desktop-schemas
+      libetpan
+      perl
+      glib-networking
+      libSM
+      libytnef
     ]
     ++ optional enableSpellcheck enchant
     ++ optionals (enablePgp || enablePluginSmime) [ gnupg gpgme ]

@@ -1,7 +1,23 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
-, vala, gobject-introspection }:
-
+{ lib
+, stdenv
+, fetchurl
+, pkgconfig
+, glib
+, gdk-pixbuf
+, pango
+, cairo
+, libxml2
+, libgsf
+, bzip2
+, libcroco
+, libintl
+, darwin
+, rustc
+, cargo
+, gnome3
+, vala
+, gobject-introspection
+}:
 let
   pname = "librsvg";
   version = "2.46.4";
@@ -21,9 +37,9 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 
   nativeBuildInputs = [ pkgconfig rustc cargo vala gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      ApplicationServices
-    ]);
+  ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
+    ApplicationServices
+  ]);
 
   configureFlags = [
     "--enable-introspection"
@@ -37,8 +53,7 @@ stdenv.mkDerivation rec {
     "installed_testdir=$(installedTests)/libexec/installed-tests/RSVG"
   ];
 
-  NIX_CFLAGS_COMPILE
-    = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
+  NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${cairo.dev}/include/cairo";
 
   # It wants to add loaders and update the loaders.cache in gdk-pixbuf
   # Patching the Makefiles to it creates rsvg specific loaders and the

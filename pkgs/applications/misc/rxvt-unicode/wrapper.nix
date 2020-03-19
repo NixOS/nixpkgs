@@ -6,12 +6,12 @@
 , rxvt-unicode-plugins
 , perlPackages
 , configure ? { availablePlugins, ... }:
-  { plugins = builtins.attrValues availablePlugins;
-    extraDeps = [ ];
-    perlDeps = [ ];
-  }
+    {
+      plugins = builtins.attrValues availablePlugins;
+      extraDeps = [ ];
+      perlDeps = [ ];
+    }
 }:
-
 let
   availablePlugins = rxvt-unicode-plugins;
 
@@ -19,7 +19,8 @@ let
   # It's needed for plugins like bidi who depends on the perl
   # package they provide themself.
   mkPerlDeps = p:
-    let deps = p.perlPackages or [ ];
+    let
+      deps = p.perlPackages or [ ];
     in map (x: if x == "self" then p else x) deps;
 
   # The wrapper is called with a `configure` function
@@ -29,7 +30,7 @@ let
   # This provides simple way to customize urxvt using
   # the `.override` mechanism.
   wrapper = { configure, ... }:
-    let 
+    let
       config = configure { inherit availablePlugins; };
       plugins = config.plugins or (builtins.attrValues availablePlugins);
       extraDeps = config.extraDeps or [ ];
@@ -53,6 +54,5 @@ let
 
         passthru.plugins = plugins;
       };
-
 in
-  lib.makeOverridable wrapper { inherit configure; }
+lib.makeOverridable wrapper { inherit configure; }

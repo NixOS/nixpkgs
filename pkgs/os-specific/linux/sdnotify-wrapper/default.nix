@@ -1,23 +1,22 @@
 { lib, runCommandCC, skawarePackages }:
 
 with skawarePackages;
-
 let
   # From https://skarnet.org/software/misc/sdnotify-wrapper.c,
   # which is unversioned.
   src = ./sdnotify-wrapper.c;
+in
+runCommandCC "sdnotify-wrapper" {
 
-in runCommandCC "sdnotify-wrapper" {
+  outputs = [ "bin" "doc" "out" ];
 
-   outputs = [ "bin" "doc" "out" ];
-
-   meta = {
-     homepage = "https://skarnet.org/software/misc/sdnotify-wrapper.c";
-     description = "Use systemd sd_notify without having to link against libsystemd";
-     platforms = lib.platforms.all;
-     license = lib.licenses.isc;
-     maintainers = with lib.maintainers; [ Profpatsch ];
-   };
+  meta = {
+    homepage = "https://skarnet.org/software/misc/sdnotify-wrapper.c";
+    description = "Use systemd sd_notify without having to link against libsystemd";
+    platforms = lib.platforms.all;
+    license = lib.licenses.isc;
+    maintainers = with lib.maintainers; [ Profpatsch ];
+  };
 
 } ''
   mkdir -p $bin/bin

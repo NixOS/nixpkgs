@@ -3,12 +3,12 @@ stdenv.mkDerivation rec {
   pname = "swiften";
   version = "4.0.2";
 
-  nativeBuildInputs = [ scons];
-  buildInputs           = [ python ];
+  nativeBuildInputs = [ scons ];
+  buildInputs = [ python ];
   propagatedBuildInputs = [ openssl boost ];
 
   src = fetchurl {
-    url    = "https://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
+    url = "https://swift.im/downloads/releases/swift-${version}/swift-${version}.tar.gz";
     sha256 = "0w0aiszjd58ynxpacwcgf052zpmbpcym4dhci64vbfgch6wryz0w";
   };
 
@@ -29,9 +29,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "An XMPP library for C++, used by the Swift client";
-    homepage    = http://swift.im/swiften.html;
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.linux;
+    homepage = http://swift.im/swiften.html;
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
     maintainers = [ maintainers.twey ];
   };
 }

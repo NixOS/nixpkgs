@@ -1,9 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
-let cfg = config.services.tailscale;
-in {
+let
+  cfg = config.services.tailscale;
+in
+{
   meta.maintainers = with maintainers; [ danderson mbaillie ];
 
   options.services.tailscale = {

@@ -1,6 +1,19 @@
-{ stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
-, installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
-, CoreFoundation, Security
+{ stdenv
+, file
+, curl
+, pkgconfig
+, python3
+, openssl
+, cmake
+, zlib
+, installShellFiles
+, makeWrapper
+, libiconv
+, cacert
+, rustPlatform
+, rustc
+, CoreFoundation
+, Security
 }:
 
 rustPlatform.buildRustPackage {
@@ -19,7 +32,7 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
   buildInputs = [ cacert file curl python3 openssl zlib ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
   # cargo uses git-rs which is made for a version of libgit2 from recent master that
   # is not compatible with the current version in nixpkgs.

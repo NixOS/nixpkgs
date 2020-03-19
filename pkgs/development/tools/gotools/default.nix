@@ -34,8 +34,8 @@ buildGoModule rec {
   '';
 
   excludedPackages = "\\("
-    + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
-    + "\\)";
+  + stdenv.lib.concatStringsSep "\\|" ([ "testdata" ] ++ stdenv.lib.optionals (stdenv.lib.versionAtLeast go.meta.branch "1.5") [ "vet" "cover" ])
+  + "\\)";
 
   # Set GOTOOLDIR for derivations adding this to buildInputs
   postInstall = ''

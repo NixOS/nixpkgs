@@ -1,7 +1,8 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  qtbase, qtx11extras
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, qtbase
+, qtx11extras
 }:
 
 mkDerivation {

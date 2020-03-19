@@ -1,9 +1,30 @@
-{ stdenv, fetchurl
-, libX11, glib, xorg, fontconfig, freetype
-, zlib, libpng12, libICE, libXrender, cups
-, alsaLib, atk, cairo, dbus, expat
-, gdk-pixbuf, gtk2-x11, lzma, pango, zotero
-, sqlite, libuuid, qt5, dpkg }:
+{ stdenv
+, fetchurl
+, libX11
+, glib
+, xorg
+, fontconfig
+, freetype
+, zlib
+, libpng12
+, libICE
+, libXrender
+, cups
+, alsaLib
+, atk
+, cairo
+, dbus
+, expat
+, gdk-pixbuf
+, gtk2-x11
+, lzma
+, pango
+, zotero
+, sqlite
+, libuuid
+, qt5
+, dpkg
+}:
 
 stdenv.mkDerivation rec{
   pname = "wpsoffice";
@@ -22,7 +43,7 @@ stdenv.mkDerivation rec{
     description = "Office program originally named Kingsoft Office";
     homepage = http://wps-community.org/;
     platforms = [ "i686-linux" "x86_64-linux" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = stdenv.lib.licenses.unfreeRedistributable;
     maintainers = [ stdenv.lib.maintainers.mlatus ];
   };

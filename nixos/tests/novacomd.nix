@@ -1,4 +1,4 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "novacomd";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ dtzWill ];

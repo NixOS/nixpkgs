@@ -14,7 +14,8 @@
 , sqlite
 , discount
 , wrapGAppsHook
-, withPantheon ? false }:
+, withPantheon ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "notes-up";

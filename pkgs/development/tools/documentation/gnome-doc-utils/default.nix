@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, libxml2Python, libxslt, intltool, gnome3
-, python2Packages }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, libxml2Python
+, libxslt
+, intltool
+, gnome3
+, python2Packages
+}:
 
 python2Packages.buildPythonApplication rec {
   pname = "gnome-doc-utils";

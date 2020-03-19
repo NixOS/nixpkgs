@@ -1,5 +1,4 @@
 { stdenv, fetchurl, gnu-efi }:
-
 let
   archids = {
     x86_64-linux = { hostarch = "x86_64"; efiPlatform = "x64"; };
@@ -11,7 +10,6 @@ let
     (archids.${stdenv.hostPlatform.system} or (throw "unsupported system: ${stdenv.hostPlatform.system}"))
     hostarch efiPlatform;
 in
-
 stdenv.mkDerivation rec {
   pname = "refind";
   version = "0.12.0";
@@ -31,7 +29,8 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "stackprotector" ];
 
   makeFlags =
-    [ "prefix="
+    [
+      "prefix="
       "EFIINC=${gnu-efi}/include/efi"
       "EFILIB=${gnu-efi}/lib"
       "GNUEFILIB=${gnu-efi}/lib"

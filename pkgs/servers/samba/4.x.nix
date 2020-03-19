@@ -1,9 +1,41 @@
-{ lib, stdenv, fetchurl, fetchpatch, python, pkgconfig, perl, libxslt, docbook_xsl, rpcgen
+{ lib
+, stdenv
+, fetchurl
+, fetchpatch
+, python
+, pkgconfig
+, perl
+, libxslt
+, docbook_xsl
+, rpcgen
 , fixDarwinDylibNames
-, docbook_xml_dtd_42, readline
-, popt, iniparser, libbsd, libarchive, libiconv, gettext
-, krb5Full, zlib, openldap, cups, pam, avahi, acl, libaio, fam, libceph, glusterfs
-, gnutls, ncurses, libunwind, systemd, jansson, lmdb, gpgme, libuuid
+, docbook_xml_dtd_42
+, readline
+, popt
+, iniparser
+, libbsd
+, libarchive
+, libiconv
+, gettext
+, krb5Full
+, zlib
+, openldap
+, cups
+, pam
+, avahi
+, acl
+, libaio
+, fam
+, libceph
+, glusterfs
+, gnutls
+, ncurses
+, libunwind
+, systemd
+, jansson
+, lmdb
+, gpgme
+, libuuid
 
 , enableLDAP ? false
 , enablePrinting ? false
@@ -44,19 +76,36 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = optionals stdenv.isDarwin [ rpcgen fixDarwinDylibNames ];
 
   buildInputs = [
-    python pkgconfig perl libxslt docbook_xsl docbook_xml_dtd_42 /*
-    docbook_xml_dtd_45 */ readline popt iniparser jansson
-    libbsd libarchive zlib fam libiconv gettext libunwind krb5Full gnutls
+    python
+    pkgconfig
+    perl
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42 /*
+    docbook_xml_dtd_45 */
+    readline
+    popt
+    iniparser
+    jansson
+    libbsd
+    libarchive
+    zlib
+    fam
+    libiconv
+    gettext
+    libunwind
+    krb5Full
+    gnutls
   ] ++ optionals stdenv.isLinux [ libaio systemd ]
-    ++ optional enableLDAP openldap
-    ++ optional (enablePrinting && stdenv.isLinux) cups
-    ++ optional enableMDNS avahi
-    ++ optionals enableDomainController [ gpgme lmdb ]
-    ++ optional enableRegedit ncurses
-    ++ optional (enableCephFS && stdenv.isLinux) libceph
-    ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
-    ++ optional enableAcl acl
-    ++ optional enablePam pam;
+  ++ optional enableLDAP openldap
+  ++ optional (enablePrinting && stdenv.isLinux) cups
+  ++ optional enableMDNS avahi
+  ++ optionals enableDomainController [ gpgme lmdb ]
+  ++ optional enableRegedit ncurses
+  ++ optional (enableCephFS && stdenv.isLinux) libceph
+  ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
+  ++ optional enableAcl acl
+  ++ optional enablePam pam;
 
   postPatch = ''
     # Removes absolute paths in scripts
@@ -72,17 +121,19 @@ stdenv.mkDerivation rec {
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
     "--with-system-mitkrb5"
-    "--with-system-mitkdc" krb5Full
+    "--with-system-mitkdc"
+    krb5Full
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
     "--disable-rpath"
-  ] ++ singleton (if enableDomainController
-         then "--with-experimental-mit-ad-dc"
-         else "--without-ad-dc")
-    ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
-    ++ optional (!enableAcl) "--without-acl-support"
-    ++ optional (!enablePam) "--without-pam";
+  ] ++ singleton (
+    if enableDomainController
+    then "--with-experimental-mit-ad-dc"
+    else "--without-ad-dc")
+  ++ optionals (!enableLDAP) [ "--without-ldap" "--without-ads" ]
+  ++ optional (!enableAcl) "--without-acl-support"
+  ++ optional (!enablePam) "--without-pam";
 
   preBuild = ''
     export MAKEFLAGS="-j $NIX_BUILD_CORES"

@@ -32,7 +32,6 @@
 , gnumake
 , file
 }:
-
 let
   version = "5.1.1";
 
@@ -123,7 +122,6 @@ let
     "-DC_INCLUDE_DIRS=${stdenv.lib.makeSearchPathOutput "dev" "include" devInputs}:${libxml2.dev}/include/libxml2"
     "-DGCC_INSTALL_PREFIX=${clang.cc.gcc}"
   ];
-
 in
 stdenv.mkDerivation {
   name = "swift-${version}";

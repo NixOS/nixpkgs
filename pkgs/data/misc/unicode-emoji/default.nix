@@ -3,7 +3,6 @@
 , symlinkJoin
 , lib
 }:
-
 let
   version = "12.1";
 
@@ -42,7 +41,6 @@ let
     };
   };
 in
-
 symlinkJoin rec {
   name = "unicode-emoji-${version}";
 

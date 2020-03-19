@@ -1,11 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, gettext
-, guile, guile-reader, guile-lib
-, ploticus, imagemagick
-, ghostscript, transfig
-, enableEmacs ? false, emacs ? null
-, enableLout ? true, lout ? null
-, enableTex ? true, tex ? null
-, makeWrapper }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, guile
+, guile-reader
+, guile-lib
+, ploticus
+, imagemagick
+, ghostscript
+, transfig
+, enableEmacs ? false
+, emacs ? null
+, enableLout ? true
+, lout ? null
+, enableTex ? true
+, tex ? null
+, makeWrapper
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

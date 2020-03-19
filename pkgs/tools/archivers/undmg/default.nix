@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     repo = "undmg";
     rev = "v${version}";
     sha256 = "1pxqw92h2w75d4jwiihwnkhnsfk09cddh3flgrqwh9r3ry14fgbb";
-    
+
   };
 
   buildInputs = [ zlib bzip2 ];

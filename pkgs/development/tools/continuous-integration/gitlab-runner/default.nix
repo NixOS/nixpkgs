@@ -1,5 +1,4 @@
 { lib, buildGoPackage, fetchFromGitLab, fetchurl }:
-
 let
   version = "12.8.0";
   # Gitlab runner embeds some docker images these are prebuilt for arm and x86_64

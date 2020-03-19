@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "1v18fmlzhkkhv8xdc9dyvl8vamwg3ka4dsrg7vvmk1f2iczdx3dp";
   };
 
-  buildInputs = [unzip zlib];
+  buildInputs = [ unzip zlib ];
 
   installPhase = ''
     make -C . prefix="$out" install;

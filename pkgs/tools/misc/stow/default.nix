@@ -1,5 +1,4 @@
 { stdenv, fetchurl, perl, perlPackages }:
-
 let
   pname = "stow";
   version = "2.3.1";

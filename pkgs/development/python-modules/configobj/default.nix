@@ -1,7 +1,9 @@
-{ stdenv, buildPythonPackage
+{ stdenv
+, buildPythonPackage
 , fetchFromGitHub
 , six
-, mock, pytest
+, mock
+, pytest
 }:
 
 buildPythonPackage rec {

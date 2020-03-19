@@ -23,4 +23,3 @@ fetchzip {
     description = "Latin Modern font";
   };
 }
-

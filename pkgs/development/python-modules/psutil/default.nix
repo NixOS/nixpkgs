@@ -1,4 +1,9 @@
-{ lib, stdenv, buildPythonPackage, fetchPypi, isPy27, python
+{ lib
+, stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
+, python
 , darwin
 , pytest
 , mock
@@ -18,7 +23,7 @@ buildPythonPackage rec {
   # tests segfaults on darwin https://github.com/giampaolo/psutil/issues/1715
   doCheck = stdenv.isDarwin || stdenv.isx86_64;
   checkInputs = [ pytest ]
-    ++ lib.optionals isPy27 [ mock ipaddress ];
+  ++ lib.optionals isPy27 [ mock ipaddress ];
   # out must be referenced as test import paths are relative
   # disable tests which don't work in sandbox
   # cpu_times is flakey on darwin

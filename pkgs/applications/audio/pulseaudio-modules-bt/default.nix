@@ -14,15 +14,14 @@
 , sbc
 , lib
 }:
-
 let
-  pulseSources = runCommand "pulseaudio-sources" {} ''
+  pulseSources = runCommand "pulseaudio-sources" { } ''
     mkdir $out
     tar -xf ${pulseaudio.src}
     mv pulseaudio*/* $out/
   '';
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pulseaudio-modules-bt";
   version = "1.3";
 

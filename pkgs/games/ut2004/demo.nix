@@ -1,12 +1,14 @@
 { stdenv, fetchurl }:
-
 let
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86"
-    else throw "Unsupported architecture";
-
-in stdenv.mkDerivation rec {
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then "amd64"
+    else
+      if stdenv.hostPlatform.system == "i686-linux"
+      then "x86"
+      else throw "Unsupported architecture";
+in
+stdenv.mkDerivation rec {
   pname = "ut2004-demo";
   version = "3334";
 

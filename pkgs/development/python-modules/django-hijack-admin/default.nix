@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python,
-  django_hijack, django_nose }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, django_hijack
+, django_nose
+}:
 buildPythonPackage rec {
   pname = "django-hijack-admin";
   version = "2.1.10";

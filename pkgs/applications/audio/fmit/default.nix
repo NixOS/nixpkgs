@@ -1,7 +1,19 @@
-{ stdenv, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
-, alsaSupport ? true, alsaLib ? null
-, jackSupport ? false, libjack2 ? null
-, portaudioSupport ? false, portaudio ? null }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, fftw
+, qtbase
+, qtmultimedia
+, qmake
+, itstool
+, wrapQtAppsHook
+, alsaSupport ? true
+, alsaLib ? null
+, jackSupport ? false
+, libjack2 ? null
+, portaudioSupport ? false
+, portaudio ? null
+}:
 
 assert alsaSupport -> alsaLib != null;
 assert jackSupport -> libjack2 != null;
@@ -22,9 +34,9 @@ mkDerivation rec {
 
   nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
   buildInputs = [ fftw qtbase qtmultimedia ]
-    ++ optionals alsaSupport [ alsaLib ]
-    ++ optionals jackSupport [ libjack2 ]
-    ++ optionals portaudioSupport [ portaudio ];
+  ++ optionals alsaSupport [ alsaLib ]
+  ++ optionals jackSupport [ libjack2 ]
+  ++ optionals portaudioSupport [ portaudio ];
 
   postPatch = ''
     substituteInPlace fmit.pro --replace '$$FMITVERSIONGITPRO' '${version}'

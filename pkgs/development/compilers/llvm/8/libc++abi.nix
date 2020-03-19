@@ -1,5 +1,12 @@
-{ stdenv, cmake, fetch, libcxx, libunwind, llvm, version
-, enableShared ? true }:
+{ stdenv
+, cmake
+, fetch
+, libcxx
+, libunwind
+, llvm
+, version
+, enableShared ? true
+}:
 
 stdenv.mkDerivation {
   pname = "libc++abi";
@@ -34,7 +41,8 @@ stdenv.mkDerivation {
     patch -p1 -d $(ls -d llvm-*) -i ${./libcxxabi-wasm.patch}
   '';
 
-  installPhase = if stdenv.isDarwin
+  installPhase =
+    if stdenv.isDarwin
     then ''
       for file in lib/*.dylib; do
         # this should be done in CMake, but having trouble figuring out

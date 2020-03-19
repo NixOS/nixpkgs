@@ -1,9 +1,7 @@
 { stdenv, fetchzip, libGLU, libGL, unzip, libXrandr, libX11, libXxf86vm }:
-
 let
   common = import ./common.nix { inherit fetchzip; };
 in
-
 stdenv.mkDerivation rec {
   pname = common.pname;
   version = common.version;

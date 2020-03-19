@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
     description = "File format designed for highly efficient deltas while maintaining good compression";
     homepage = "https://github.com/zchunk/zchunk";
     license = licenses.bsd2;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
   };
 }

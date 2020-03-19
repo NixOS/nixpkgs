@@ -1,5 +1,14 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, pythonOlder, astroid,
-  isort, mccabe, pytestCheckHook, pytestrunner }:
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, astroid
+, isort
+, mccabe
+, pytestCheckHook
+, pytestrunner
+}:
 
 buildPythonPackage rec {
   pname = "pylint";
@@ -26,10 +35,10 @@ buildPythonPackage rec {
   disabledTests = [
     # https://github.com/PyCQA/pylint/issues/3198
     "test_by_module_statement_value"
-   ] ++ lib.optionals stdenv.isDarwin [
-      "test_parallel_execution"
-      "test_py3k_jobs_option"
-   ];
+  ] ++ lib.optionals stdenv.isDarwin [
+    "test_parallel_execution"
+    "test_py3k_jobs_option"
+  ];
 
   dontUseSetuptoolsCheck = true;
 

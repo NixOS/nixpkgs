@@ -8,7 +8,6 @@
 , recursiveHash ? false
 , postFetch ? null
 }:
-
 let
   mkCredentials = { access_key_id, secret_access_key, session_token ? null }: {
     AWS_ACCESS_KEY_ID = access_key_id;
@@ -17,20 +16,26 @@ let
   };
 
   credentialAttrs = stdenvNoCC.lib.optionalAttrs (credentials != null) (mkCredentials credentials);
-in runCommand name ({
-  nativeBuildInputs = [ awscli ];
+in
+runCommand name (
+  {
+    nativeBuildInputs = [ awscli ];
 
-  outputHashAlgo = "sha256";
-  outputHash = sha256;
-  outputHashMode = if recursiveHash then "recursive" else "flat";
+    outputHashAlgo = "sha256";
+    outputHash = sha256;
+    outputHashMode = if recursiveHash then "recursive" else "flat";
 
-  preferLocalBuild = true;
+    preferLocalBuild = true;
 
-  AWS_DEFAULT_REGION = region;
-} // credentialAttrs) (if postFetch != null then ''
-  downloadedFile="$(mktemp)"
-  aws s3 cp ${s3url} $downloadedFile
-  ${postFetch}
-'' else  ''
-  aws s3 cp ${s3url} $out
-'')
+    AWS_DEFAULT_REGION = region;
+  }
+  // credentialAttrs
+) (
+  if postFetch != null
+  then ''
+    downloadedFile="$(mktemp)"
+    aws s3 cp ${s3url} $downloadedFile
+    ${postFetch}
+  '' else ''
+    aws s3 cp ${s3url} $out
+  '')

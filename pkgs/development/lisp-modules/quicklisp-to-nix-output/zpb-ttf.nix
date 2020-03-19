@@ -14,7 +14,7 @@ rec {
 
   packageName = "zpb-ttf";
 
-  asdFilesToKeep = ["zpb-ttf.asd"];
+  asdFilesToKeep = [ "zpb-ttf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM zpb-ttf DESCRIPTION

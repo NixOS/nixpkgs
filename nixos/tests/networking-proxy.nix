@@ -2,18 +2,19 @@
 
 # TODO: use a real proxy node and put this test into networking.nix
 # TODO: test whether nix tools work as expected behind a proxy
+let
+  default-config = {
+    imports = [ ./common/user-account.nix ];
 
-let default-config = {
-        imports = [ ./common/user-account.nix ];
+    services.xserver.enable = false;
 
-        services.xserver.enable = false;
-
-        virtualisation.memorySize = 128;
-      };
-in import ./make-test-python.nix ({ pkgs, ...} : {
+    virtualisation.memorySize = 128;
+  };
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "networking-proxy";
   meta = with pkgs.stdenv.lib.maintainers; {
-    maintainers = [  ];
+    maintainers = [ ];
   };
 
   nodes = {
@@ -35,8 +36,8 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
     machine3 =
       { ... }:
 
-      default-config //
-      {
+      default-config
+      // {
         networking.proxy = {
           # useless because overriden by the next options
           default = "http://user:pass@host:port";
@@ -62,7 +63,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           noProxy = "131415-127.0.0.1,localhost,.localdomain";
         };
       };
-    };
+  };
 
   testScript =
     ''
@@ -132,4 +133,5 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           assert "000" in env["ftp_proxy"]
           assert "131415" in env["no_proxy"]
     '';
-})
+}
+)

@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
       tinycdb is a small, fast and reliable utility and subroutine
       library for creating and reading constant databases. The database
       structure is tuned for fast reading.
-      '';
+    '';
 
     homepage = https://www.corpit.ru/mjt/tinycdb.html;
     license = licenses.publicDomain;

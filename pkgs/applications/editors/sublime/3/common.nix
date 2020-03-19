@@ -1,11 +1,27 @@
 { buildVersion, x32sha256, x64sha256, dev ? false }:
 
-{ fetchurl, stdenv, xorg, glib, glibcLocales, gtk3, cairo, pango, libredirect, makeWrapper, wrapGAppsHook
+{ fetchurl
+, stdenv
+, xorg
+, glib
+, glibcLocales
+, gtk3
+, cairo
+, pango
+, libredirect
+, makeWrapper
+, wrapGAppsHook
 , pkexecPath ? "/run/wrappers/bin/pkexec"
-, writeScript, common-updater-scripts, curl, gnugrep
-, openssl, bzip2, bash, unzip, zip
+, writeScript
+, common-updater-scripts
+, curl
+, gnugrep
+, openssl
+, bzip2
+, bash
+, unzip
+, zip
 }:
-
 let
   pname = "sublimetext3";
   packageAttribute = "sublime3${stdenv.lib.optionalString dev "-dev"}";
@@ -16,19 +32,22 @@ let
   versionUrl = "https://www.sublimetext.com/${if dev then "3dev" else "3"}";
   versionFile = builtins.toString ./packages.nix;
   archSha256 =
-    if stdenv.hostPlatform.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux"
+    then
       x32sha256
     else
       x64sha256;
   arch =
-    if stdenv.hostPlatform.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux"
+    then
       "x32"
     else
       "x64";
 
   libPath = stdenv.lib.makeLibraryPath [ xorg.libX11 glib gtk3 cairo pango ];
   redirects = [ "/usr/bin/pkexec=${pkexecPath}" ];
-in let
+in
+let
   binaryPackage = stdenv.mkDerivation {
     pname = "${pname}-bin";
     version = buildVersion;
@@ -105,49 +124,51 @@ in let
       wrapProgram $out/plugin_host --prefix LD_PRELOAD : ${stdenv.cc.cc.lib}/lib${stdenv.lib.optionalString stdenv.is64bit "64"}/libgcc_s.so.1:${openssl.out}/lib/libssl.so:${bzip2.out}/lib/libbz2.so
     '';
   };
-in stdenv.mkDerivation (rec {
-  inherit pname;
-  version = buildVersion;
+in
+stdenv.mkDerivation
+  (rec {
+    inherit pname;
+    version = buildVersion;
 
-  phases = [ "installPhase" ];
+    phases = [ "installPhase" ];
 
-  ${primaryBinary} = binaryPackage;
+    ${primaryBinary} = binaryPackage;
 
-  nativeBuildInputs = [ makeWrapper ];
+    nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    mkdir -p "$out/bin"
-    makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-  '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
-    mkdir -p "$out/share/applications"
-    substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
-    for directory in ''$${primaryBinary}/Icon/*; do
-      size=$(basename $directory)
-      mkdir -p "$out/share/icons/hicolor/$size/apps"
-      ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
-    done
-  '';
+    installPhase = ''
+      mkdir -p "$out/bin"
+      makeWrapper "''$${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+    '' + builtins.concatStringsSep "" (map (binaryAlias: "ln -s $out/bin/${primaryBinary} $out/bin/${binaryAlias}\n") primaryBinaryAliases) + ''
+      mkdir -p "$out/share/applications"
+      substitute "''$${primaryBinary}/${primaryBinary}.desktop" "$out/share/applications/${primaryBinary}.desktop" --replace "/opt/${primaryBinary}/${primaryBinary}" "$out/bin/${primaryBinary}"
+      for directory in ''$${primaryBinary}/Icon/*; do
+        size=$(basename $directory)
+        mkdir -p "$out/share/icons/hicolor/$size/apps"
+        ln -s ''$${primaryBinary}/Icon/$size/* $out/share/icons/hicolor/$size/apps
+      done
+    '';
 
-  passthru.updateScript = writeScript "${pname}-update-script" ''
-    #!${stdenv.shell}
-    set -o errexit
-    PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
+    passthru.updateScript = writeScript "${pname}-update-script" ''
+      #!${stdenv.shell}
+      set -o errexit
+      PATH=${stdenv.lib.makeBinPath [ common-updater-scripts curl gnugrep ]}
 
-    latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
+      latestVersion=$(curl -s ${versionUrl} | grep -Po '(?<=<p class="latest"><i>Version:</i> Build )([0-9]+)')
 
-    for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
-        # The script will not perform an update when the version attribute is up to date from previous platform run
-        # We need to clear it before each run
-        update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
-        update-source-version ${packageAttribute}.${primaryBinary} $latestVersion --file=${versionFile} --version-key=buildVersion --system=$platform
-    done
-  '';
+      for platform in ${stdenv.lib.concatStringsSep " " meta.platforms}; do
+          # The script will not perform an update when the version attribute is up to date from previous platform run
+          # We need to clear it before each run
+          update-source-version ${packageAttribute}.${primaryBinary} 0 0000000000000000000000000000000000000000000000000000000000000000 --file=${versionFile} --version-key=buildVersion --system=$platform
+          update-source-version ${packageAttribute}.${primaryBinary} $latestVersion --file=${versionFile} --version-key=buildVersion --system=$platform
+      done
+    '';
 
-  meta = with stdenv.lib; {
-    description = "Sophisticated text editor for code, markup and prose";
-    homepage = https://www.sublimetext.com/;
-    maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
-    license = licenses.unfree;
-    platforms = [ "x86_64-linux" "i686-linux" ];
-  };
-})
+    meta = with stdenv.lib; {
+      description = "Sophisticated text editor for code, markup and prose";
+      homepage = https://www.sublimetext.com/;
+      maintainers = with maintainers; [ jtojnar wmertens demin-dmitriy zimbatm ];
+      license = licenses.unfree;
+      platforms = [ "x86_64-linux" "i686-linux" ];
+    };
+  })

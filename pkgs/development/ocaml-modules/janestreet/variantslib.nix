@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane, type_conv}:
+{ stdenv, buildOcamlJane, type_conv }:
 
 buildOcamlJane {
   name = "variantslib";

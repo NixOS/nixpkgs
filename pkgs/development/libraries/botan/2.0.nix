@@ -7,4 +7,5 @@ callPackage ./generic.nix (args // {
   postPatch = ''
     sed -e 's@lang_flags "@&--std=c++11 @' -i src/build-data/cc/{gcc,clang}.txt
   '';
-})
+}
+)

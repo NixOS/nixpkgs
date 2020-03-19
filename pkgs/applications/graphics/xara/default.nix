@@ -1,5 +1,16 @@
-{stdenv, fetchurl, automake, gettext, freetype, libxml2, pango, pkgconfig
-, wxGTK, gtk2, perl, zip}:
+{ stdenv
+, fetchurl
+, automake
+, gettext
+, freetype
+, libxml2
+, pango
+, pkgconfig
+, wxGTK
+, gtk2
+, perl
+, zip
+}:
 
 stdenv.mkDerivation {
   name = "xaralx-0.7r1785";

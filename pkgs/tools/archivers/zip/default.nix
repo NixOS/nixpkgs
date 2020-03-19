@@ -25,10 +25,10 @@ stdenv.mkDerivation {
     "INSTALL=cp"
   ];
 
-  patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [];
+  patches = if (enableNLS && !stdenv.isCygwin) then [ ./natspec-gentoo.patch.bz2 ] else [ ];
 
   buildInputs = stdenv.lib.optional enableNLS libnatspec
-    ++ stdenv.lib.optional stdenv.isCygwin libiconv;
+  ++ stdenv.lib.optional stdenv.isCygwin libiconv;
 
   meta = with stdenv.lib; {
     description = "Compressor/archiver for creating and modifying zipfiles";

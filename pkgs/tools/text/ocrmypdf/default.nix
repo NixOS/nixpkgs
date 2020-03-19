@@ -12,7 +12,6 @@
 , unpaper
 , substituteAll
 }:
-
 let
   inherit (python3Packages) buildPythonApplication;
 
@@ -26,8 +25,8 @@ let
     unpaper
     pillow
   ];
-
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "ocrmypdf";
   version = "9.6.1";
   disabled = ! python3Packages.isPy3k;

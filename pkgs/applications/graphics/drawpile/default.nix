@@ -4,27 +4,27 @@
 , cmake
 , extra-cmake-modules
 
-# common deps
+  # common deps
 , karchive
 
-# client deps
+  # client deps
 , qtbase
 , qtmultimedia
 , qtsvg
 , qttools
 
-# optional client deps
+  # optional client deps
 , giflib
 , kdnssd
 , libvpx
 , miniupnpc
 , qtx11extras # kis
 
-# optional server deps
+  # optional server deps
 , libmicrohttpd
 , libsodium
 
-# options
+  # options
 , buildClient ? true
 , buildServer ? true
 , buildServerGui ? true # if false builds a headless server
@@ -33,7 +33,6 @@
 }:
 
 with lib;
-
 let
   commonDeps = [
     karchive
@@ -57,8 +56,8 @@ let
   kisDeps = [
     qtx11extras
   ];
-
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "drawpile";
   version = "2.1.17";
 
@@ -72,17 +71,17 @@ in mkDerivation rec {
     extra-cmake-modules
   ];
   buildInputs =
-    commonDeps ++
-    optionals buildClient      clientDeps ++
-    optionals buildServer      serverDeps ++
-    optionals enableKisTablet  kisDeps    ;
+    commonDeps
+    ++ optionals buildClient clientDeps
+    ++ optionals buildServer serverDeps
+    ++ optionals enableKisTablet kisDeps;
 
   cmakeFlags =
-    optional (!buildClient    )  "-DCLIENT=off" ++
-    optional (!buildServer    )  "-DSERVER=off" ++
-    optional (!buildServerGui )  "-DSERVERGUI=off" ++
-    optional ( buildExtraTools)  "-DTOOLS=on" ++
-    optional ( enableKisTablet)  "-DKIS_TABLET=on";
+    optional (!buildClient) "-DCLIENT=off"
+    ++ optional (!buildServer) "-DSERVER=off"
+    ++ optional (!buildServerGui) "-DSERVERGUI=off"
+    ++ optional (buildExtraTools) "-DTOOLS=on"
+    ++ optional (enableKisTablet) "-DKIS_TABLET=on";
 
   meta = {
     description = "A collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
@@ -93,4 +92,3 @@ in mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

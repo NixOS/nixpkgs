@@ -1,33 +1,105 @@
-{
-  mkDerivation, lib, copyPathsToStore,
-  extra-cmake-modules, kdoctools,
-
-  boost, fontconfig, ibus, libXcursor, libXft, libcanberra_kde, libpulseaudio,
-  libxkbfile, xf86inputevdev, xf86inputsynaptics, xinput, xkeyboard_config,
-  xorgserver, utillinux,
-
-  qtdeclarative, qtquickcontrols, qtquickcontrols2, qtsvg, qtx11extras,
-
-  attica, baloo, kactivities, kactivities-stats, kauth, kcmutils, kdbusaddons,
-  kdeclarative, kded, kdelibs4support, kemoticons, kglobalaccel, ki18n,
-  kitemmodels, knewstuff, knotifications, knotifyconfig, kpeople, krunner,
-  kscreenlocker, ksysguard, kwallet, kwin, phonon, plasma-framework,
-  plasma-workspace, xf86inputlibinput
+{ mkDerivation
+, lib
+, copyPathsToStore
+, extra-cmake-modules
+, kdoctools
+, boost
+, fontconfig
+, ibus
+, libXcursor
+, libXft
+, libcanberra_kde
+, libpulseaudio
+, libxkbfile
+, xf86inputevdev
+, xf86inputsynaptics
+, xinput
+, xkeyboard_config
+, xorgserver
+, utillinux
+, qtdeclarative
+, qtquickcontrols
+, qtquickcontrols2
+, qtsvg
+, qtx11extras
+, attica
+, baloo
+, kactivities
+, kactivities-stats
+, kauth
+, kcmutils
+, kdbusaddons
+, kdeclarative
+, kded
+, kdelibs4support
+, kemoticons
+, kglobalaccel
+, ki18n
+, kitemmodels
+, knewstuff
+, knotifications
+, knotifyconfig
+, kpeople
+, krunner
+, kscreenlocker
+, ksysguard
+, kwallet
+, kwin
+, phonon
+, plasma-framework
+, plasma-workspace
+, xf86inputlibinput
 }:
 
 mkDerivation {
   name = "plasma-desktop";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    boost fontconfig ibus libcanberra_kde libpulseaudio libXcursor libXft
-    libxkbfile phonon xf86inputevdev xf86inputsynaptics xinput xkeyboard_config
+    boost
+    fontconfig
+    ibus
+    libcanberra_kde
+    libpulseaudio
+    libXcursor
+    libXft
+    libxkbfile
+    phonon
+    xf86inputevdev
+    xf86inputsynaptics
+    xinput
+    xkeyboard_config
 
-    qtdeclarative qtquickcontrols qtquickcontrols2 qtsvg qtx11extras
+    qtdeclarative
+    qtquickcontrols
+    qtquickcontrols2
+    qtsvg
+    qtx11extras
 
-    attica baloo kactivities kactivities-stats kauth kcmutils kdbusaddons
-    kdeclarative kded kdelibs4support kemoticons kglobalaccel ki18n kitemmodels
-    knewstuff knotifications knotifyconfig kpeople krunner kscreenlocker
-    ksysguard kwallet kwin plasma-framework plasma-workspace
+    attica
+    baloo
+    kactivities
+    kactivities-stats
+    kauth
+    kcmutils
+    kdbusaddons
+    kdeclarative
+    kded
+    kdelibs4support
+    kemoticons
+    kglobalaccel
+    ki18n
+    kitemmodels
+    knewstuff
+    knotifications
+    knotifyconfig
+    kpeople
+    krunner
+    kscreenlocker
+    ksysguard
+    kwallet
+    kwin
+    plasma-framework
+    plasma-workspace
   ];
 
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);

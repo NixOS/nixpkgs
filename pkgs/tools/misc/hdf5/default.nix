@@ -32,20 +32,20 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = []
-    ++ optional (gfortran != null) gfortran
-    ++ optional (szip != null) szip;
+  buildInputs = [ ]
+  ++ optional (gfortran != null) gfortran
+  ++ optional (szip != null) szip;
 
-  propagatedBuildInputs = []
-    ++ optional (zlib != null) zlib
-    ++ optional (mpi != null) mpi;
+  propagatedBuildInputs = [ ]
+  ++ optional (zlib != null) zlib
+  ++ optional (mpi != null) mpi;
 
-  configureFlags = []
-    ++ optional cpp "--enable-cxx"
-    ++ optional (gfortran != null) "--enable-fortran"
-    ++ optional (szip != null) "--with-szlib=${szip}"
-    ++ optionals (mpi != null) ["--enable-parallel" "CC=${mpi}/bin/mpicc"]
-    ++ optional enableShared "--enable-shared";
+  configureFlags = [ ]
+  ++ optional cpp "--enable-cxx"
+  ++ optional (gfortran != null) "--enable-fortran"
+  ++ optional (szip != null) "--with-szlib=${szip}"
+  ++ optionals (mpi != null) [ "--enable-parallel" "CC=${mpi}/bin/mpicc" ]
+  ++ optional enableShared "--enable-shared";
 
   patches = [
     ./bin-mv.patch

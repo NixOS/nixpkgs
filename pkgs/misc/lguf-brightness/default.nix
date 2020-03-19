@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
 
   version = "unstable-2018-02-11";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "periklis";
     repo = pname;
     rev = "fcb2bc1738d55c83b6395c24edc27267a520a725";

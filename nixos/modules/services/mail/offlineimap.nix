@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.offlineimap;
-in {
+in
+{
 
   options.services.offlineimap = {
     enable = mkEnableOption "OfflineIMAP, a software to dispose your mailbox(es) as a local Maildir(s)";
@@ -31,7 +31,7 @@ in {
 
     path = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.pass pkgs.bash pkgs.notmuch ]";
       description = "List of derivations to put in Offlineimap's path.";
     };
@@ -52,21 +52,23 @@ in {
     systemd.user.services.offlineimap = {
       description = "Offlineimap: a software to dispose your mailbox(es) as a local Maildir(s)";
       serviceConfig = {
-        Type      = "oneshot";
+        Type = "oneshot";
         ExecStart = "${cfg.package}/bin/offlineimap -u syslog -o -1";
         TimeoutStartSec = cfg.timeoutStartSec;
       };
       path = cfg.path;
     };
     environment.systemPackages = [ cfg.package ];
-    systemd.user.timers.offlineimap = {
-      description = "offlineimap timer";
-      timerConfig               = {
-        Unit = "offlineimap.service";
-        OnCalendar = cfg.onCalendar;
-        # start immediately after computer is started:
-        Persistent = "true";
-      };
-    } // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
+    systemd.user.timers.offlineimap =
+      {
+        description = "offlineimap timer";
+        timerConfig = {
+          Unit = "offlineimap.service";
+          OnCalendar = cfg.onCalendar;
+          # start immediately after computer is started:
+          Persistent = "true";
+        };
+      }
+      // optionalAttrs cfg.enable { wantedBy = [ "default.target" ]; };
   };
 }

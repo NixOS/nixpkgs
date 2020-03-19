@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
       name = "libre-caslon-text-${version}-src";
       sha256 = "0zczv9qm8cgc7w1p64mnf0p0fi7xv89zhf1zzf1qcna15kbgc705";
     })
-
     (fetchFromGitHub {
       owner = "impallari";
       repo = "Libre-Caslon-Display";

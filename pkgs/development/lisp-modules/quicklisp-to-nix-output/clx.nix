@@ -16,7 +16,7 @@ rec {
 
   packageName = "clx";
 
-  asdFilesToKeep = ["clx.asd"];
+  asdFilesToKeep = [ "clx.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clx DESCRIPTION

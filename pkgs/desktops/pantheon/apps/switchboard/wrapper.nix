@@ -8,10 +8,10 @@
   # Only useful to disable for development testing.
 , useDefaultPlugs ? true
 }:
-
 let
   selectedPlugs =
-    if plugs == null then switchboardPlugs
+    if plugs == null
+    then switchboardPlugs
     else plugs ++ (lib.optionals useDefaultPlugs switchboardPlugs);
 in
 symlinkJoin {
@@ -25,7 +25,7 @@ symlinkJoin {
     wrapGAppsHook
     glib
   ] ++ (lib.forEach selectedPlugs (x: x.buildInputs))
-    ++ selectedPlugs;
+  ++ selectedPlugs;
 
   postBuild = ''
     make_glib_find_gsettings_schemas

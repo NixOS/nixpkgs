@@ -1,24 +1,50 @@
-{ stdenv, fetchFromGitHub, makeDesktopItem
-, pkgconfig, autoconf213, alsaLib, bzip2, cairo
-, dbus, dbus-glib, ffmpeg, file, fontconfig, freetype
-, gnome2, gnum4, gtk2, hunspell, libevent, libjpeg
-, libnotify, libstartup_notification, makeWrapper
-, libGLU, libGL, perl, python, libpulseaudio
-, unzip, xorg, wget, which, yasm, zip, zlib
+{ stdenv
+, fetchFromGitHub
+, makeDesktopItem
+, pkgconfig
+, autoconf213
+, alsaLib
+, bzip2
+, cairo
+, dbus
+, dbus-glib
+, ffmpeg
+, file
+, fontconfig
+, freetype
+, gnome2
+, gnum4
+, gtk2
+, hunspell
+, libevent
+, libjpeg
+, libnotify
+, libstartup_notification
+, makeWrapper
+, libGLU
+, libGL
+, perl
+, python
+, libpulseaudio
+, unzip
+, xorg
+, wget
+, which
+, yasm
+, zip
+, zlib
 }:
-
 let
-
   libPath = stdenv.lib.makeLibraryPath [ ffmpeg ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "palemoon";
   version = "28.8.4";
 
   src = fetchFromGitHub {
-    owner  = "MoonchildProductions";
-    repo   = "UXP";
-    rev    = "PM${version}_Release";
+    owner = "MoonchildProductions";
+    repo = "UXP";
+    rev = "PM${version}_Release";
     sha256 = "1k2j4rlgjwkns3a592pbiwwhrpja3fachvzby1his3d1mhdvyc6f";
   };
 
@@ -41,13 +67,46 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib bzip2 cairo dbus dbus-glib ffmpeg file fontconfig freetype
-    gnome2.GConf gnum4 gtk2 hunspell libevent libjpeg libnotify
-    libstartup_notification makeWrapper libGLU libGL perl
-    pkgconfig python libpulseaudio unzip wget which yasm zip zlib
+    alsaLib
+    bzip2
+    cairo
+    dbus
+    dbus-glib
+    ffmpeg
+    file
+    fontconfig
+    freetype
+    gnome2.GConf
+    gnum4
+    gtk2
+    hunspell
+    libevent
+    libjpeg
+    libnotify
+    libstartup_notification
+    makeWrapper
+    libGLU
+    libGL
+    perl
+    pkgconfig
+    python
+    libpulseaudio
+    unzip
+    wget
+    which
+    yasm
+    zip
+    zlib
   ] ++ (with xorg; [
-    libX11 libXext libXft libXi libXrender libXScrnSaver
-    libXt pixman xorgproto
+    libX11
+    libXext
+    libXft
+    libXi
+    libXrender
+    libXScrnSaver
+    libXt
+    pixman
+    xorgproto
   ]);
 
   enableParallelBuilding = true;
@@ -125,9 +184,9 @@ in stdenv.mkDerivation rec {
       experience, while offering full customization and a growing collection of
       extensions and themes to make the browser truly your own.
     '';
-    homepage    = "https://www.palemoon.org/";
-    license     = licenses.mpl20;
+    homepage = "https://www.palemoon.org/";
+    license = licenses.mpl20;
     maintainers = with maintainers; [ AndersonTorres OPNA2608 ];
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    platforms = [ "i686-linux" "x86_64-linux" ];
   };
 }

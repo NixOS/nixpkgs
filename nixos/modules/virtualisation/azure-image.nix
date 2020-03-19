@@ -22,12 +22,13 @@ in
   fileSystems."/metadata".device = "/dev/sr0";
 
   systemd.services.fetch-ssh-keys =
-    { description = "Fetch host keys and authorized_keys for root user";
+    {
+      description = "Fetch host keys and authorized_keys for root user";
 
       wantedBy = [ "sshd.service" "waagent.service" ];
       before = [ "sshd.service" "waagent.service" ];
 
-      path  = [ pkgs.coreutils ];
+      path = [ pkgs.coreutils ];
       script =
         ''
           eval "$(cat /metadata/CustomData.bin)"
@@ -54,6 +55,6 @@ in
       serviceConfig.RemainAfterExit = true;
       serviceConfig.StandardError = "journal+console";
       serviceConfig.StandardOutput = "journal+console";
-     };
+    };
 
 }

@@ -1,9 +1,9 @@
 { stdenv, fetchurl, pkgconfig, guile, texinfo }:
-
 let
   name = "guile-xcb-${version}";
   version = "1.3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit name;
 
   src = fetchurl {

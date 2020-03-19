@@ -1,4 +1,4 @@
-{stdenv, fetchurl, libvorbis, libmad, pkgconfig, libao}:
+{ stdenv, fetchurl, libvorbis, libmad, pkgconfig, libao }:
 
 stdenv.mkDerivation {
   name = "cdrdao-1.2.3";

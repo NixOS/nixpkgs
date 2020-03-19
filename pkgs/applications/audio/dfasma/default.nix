@@ -1,7 +1,5 @@
 { stdenv, fetchFromGitHub, fftw, libsndfile, qtbase, qtmultimedia, qmake }:
-
 let
-
   reaperFork = {
     src = fetchFromGitHub {
       sha256 = "07m2wf2gqyya95b65gawrnr4pvc9jyzmg6h8sinzgxlpskz93wwc";
@@ -10,7 +8,7 @@ let
       owner = "gillesdegottex";
     };
     meta = with stdenv.lib; {
-     license = licenses.asl20;
+      license = licenses.asl20;
     };
   };
 
@@ -22,11 +20,11 @@ let
       owner = "gillesdegottex";
     };
     meta = with stdenv.lib; {
-     license = licenses.gpl3Plus;
+      license = licenses.gpl3Plus;
     };
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dfasma";
   version = "1.4.5";
 

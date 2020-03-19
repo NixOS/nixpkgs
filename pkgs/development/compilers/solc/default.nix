@@ -1,11 +1,19 @@
-{ stdenv, fetchzip, boost, cmake, ncurses, python2
-, z3Support ? true, z3 ? null, cvc4Support ? true, cvc4 ? null
-, cln ? null, gmp ? null
+{ stdenv
+, fetchzip
+, boost
+, cmake
+, ncurses
+, python2
+, z3Support ? true
+, z3 ? null
+, cvc4Support ? true
+, cvc4 ? null
+, cln ? null
+, gmp ? null
 }:
 
 assert z3Support -> z3 != null && stdenv.lib.versionAtLeast z3.version "4.6.0";
 assert cvc4Support -> cvc4 != null && cln != null && gmp != null;
-
 let
   jsoncppURL = https://github.com/open-source-parsers/jsoncpp/archive/1.9.2.tar.gz;
   jsoncpp = fetchzip {
@@ -39,8 +47,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost ]
-    ++ stdenv.lib.optionals z3Support [ z3 ]
-    ++ stdenv.lib.optionals cvc4Support [ cvc4 cln gmp ];
+  ++ stdenv.lib.optionals z3Support [ z3 ]
+  ++ stdenv.lib.optionals cvc4Support [ cvc4 cln gmp ];
   checkInputs = [ ncurses python2 ];
 
   # Test fails on darwin for unclear reason

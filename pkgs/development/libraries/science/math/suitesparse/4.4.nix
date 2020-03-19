@@ -1,7 +1,10 @@
-{ stdenv, fetchurl, gfortran, openblas
-, enableCuda  ? false, cudatoolkit
+{ stdenv
+, fetchurl
+, gfortran
+, openblas
+, enableCuda ? false
+, cudatoolkit
 }:
-
 let
   version = "4.4.4";
   name = "suitesparse-${version}";

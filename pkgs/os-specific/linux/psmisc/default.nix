@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses}:
+{ stdenv, fetchFromGitLab, autoconf, automake, gettext, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "psmisc";

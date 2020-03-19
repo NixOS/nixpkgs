@@ -1,5 +1,14 @@
-{ stdenv, lib, pythonPackages, python3Packages, less, patchutils, git
-, subversion, coreutils, which }:
+{ stdenv
+, lib
+, pythonPackages
+, python3Packages
+, less
+, patchutils
+, git
+, subversion
+, coreutils
+, which
+}:
 
 with pythonPackages;
 

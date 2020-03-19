@@ -1,15 +1,28 @@
-{ fetchFromGitHub, stdenv, perl, makeWrapper
-, iproute, acpi, sysstat, alsaUtils
-, scripts ? [ "bandwidth" "battery" "cpu_usage" "disk" "iface"
-              "load_average" "memory" "volume" "wifi" ]
+{ fetchFromGitHub
+, stdenv
+, perl
+, makeWrapper
+, iproute
+, acpi
+, sysstat
+, alsaUtils
+, scripts ? [
+    "bandwidth"
+    "battery"
+    "cpu_usage"
+    "disk"
+    "iface"
+    "load_average"
+    "memory"
+    "volume"
+    "wifi"
+  ]
 }:
 
 with stdenv.lib;
-
 let
   perlscripts = [ "battery" "cpu_usage" "openvpn" "temperature" ];
-  contains_any = l1: l2: 0 < length( intersectLists l1 l2 );
-
+  contains_any = l1: l2: 0 < length (intersectLists l1 l2);
 in
 stdenv.mkDerivation rec {
   pname = "i3blocks-gaps";

@@ -10,9 +10,9 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs =
-    stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ] ++
-    stdenv.lib.optionals stdenv.isDarwin [ darwin.IOKit darwin.apple_sdk.frameworks.CoreFoundation ] ++
-    [ cython ];
+    stdenv.lib.optionals stdenv.isLinux [ libusb1 udev ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.IOKit darwin.apple_sdk.frameworks.CoreFoundation ]
+    ++ [ cython ];
 
   # Fix the USB backend library lookup
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''

@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     ln -s "$out/opt/ipmicfg/IPMICFG-Linux.x86_64" "$out/bin/ipmicfg"
   '';
 
-   dontPatchShebangs = true; # There are no scripts and it complains about null bytes.
+  dontPatchShebangs = true; # There are no scripts and it complains about null bytes.
 
-   meta = with stdenv.lib; {
-     description = "Supermicro IPMI configuration tool";
-     homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
-     license = licenses.unfree;
-     platforms = [ "x86_64-linux" ];
-     maintainers = with maintainers; [ sorki ];
-   };
+  meta = with stdenv.lib; {
+    description = "Supermicro IPMI configuration tool";
+    homepage = "http://www.supermicro.com/products/nfo/ipmi.cfm";
+    license = licenses.unfree;
+    platforms = [ "x86_64-linux" ];
+    maintainers = with maintainers; [ sorki ];
+  };
 }

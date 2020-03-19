@@ -1,9 +1,9 @@
 { stdenv, fetchurl, xorg, jre, makeWrapper, makeDesktopItem }:
-
 let
-  rpath = stdenv.lib.makeLibraryPath (with xorg; [
-    libXtst
-  ]);
+  rpath = stdenv.lib.makeLibraryPath
+    (with xorg; [
+      libXtst
+    ]);
 
   desktopItem = makeDesktopItem {
     name = "apache-directory-studio";
@@ -22,17 +22,20 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
       fetchurl {
         url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86_64.tar.gz";
         sha256 = "0kq4l3755q69p7bry9xpm5xxw56ksncp76fdqqd1xzbvsg309bps";
       }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86.tar.gz";
-        sha256 = "038dy8jjgq5gj5r56y9ps3ycqi9gn57i4q1r3mmjx1b1950wmh1q";
-      }
-    else throw "Unsupported system: ${stdenv.hostPlatform.system}";
+    else
+      if stdenv.hostPlatform.system == "i686-linux"
+      then
+        fetchurl {
+          url = "mirror://apache/directory/studio/${versionWithDate}/ApacheDirectoryStudio-${versionWithDate}-linux.gtk.x86.tar.gz";
+          sha256 = "038dy8jjgq5gj5r56y9ps3ycqi9gn57i4q1r3mmjx1b1950wmh1q";
+        }
+      else throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   buildInputs = [ makeWrapper ];
 

@@ -12,8 +12,8 @@ let
     sha256 = "1by1dy4ql61f5c6njq9ibf9kaqm3y633g2q8j54iyjr4cxvqwqz9";
     name = "lua-arch.patch";
   };
-
-in rec {
+in
+rec {
 
   lua5_3 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "3"; patch = "5"; };
@@ -32,9 +32,10 @@ in rec {
     '';
   };
 
-  lua5_3_compat = lua5_3.override({
-    compat = true;
-  });
+  lua5_3_compat = lua5_3.override
+    ({
+      compat = true;
+    });
 
 
   lua5_2 = callPackage ./interpreter.nix {
@@ -43,16 +44,17 @@ in rec {
     patches = if stdenv.isDarwin then [ ./5.2.darwin.patch ] else [ dsoPatch52 ];
   };
 
-  lua5_2_compat = lua5_2.override({
-    compat = true;
-  });
+  lua5_2_compat = lua5_2.override
+    ({
+      compat = true;
+    });
 
 
   lua5_1 = callPackage ./interpreter.nix {
     sourceVersion = { major = "5"; minor = "1"; patch = "5"; };
     hash = "2640fc56a795f29d28ef15e13c34a47e223960b0240e8cb0a82d9b0738695333";
     patches = (if stdenv.isDarwin then [ ./5.1.darwin.patch ] else [ dsoPatch51 ])
-      ++ [ ./CVE-2014-5461.patch ];
+    ++ [ ./CVE-2014-5461.patch ];
   };
 
   luajit_2_0 = import ../luajit/2.0.nix {

@@ -1,7 +1,7 @@
 { stdenv
 , fetchFromGitHub
 , fetchpatch
-# Python bits:
+  # Python bits:
 , buildPythonPackage
 , pytest
 , responses
@@ -38,8 +38,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ docopt flask markdown path-and-address pygments requests tabulate ];
 
   checkPhase = ''
-      export PATH="$PATH:$out/bin"
-      py.test -xm "not assumption"
+    export PATH="$PATH:$out/bin"
+    py.test -xm "not assumption"
   '';
 
   meta = with stdenv.lib; {

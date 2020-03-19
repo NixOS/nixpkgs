@@ -1,5 +1,14 @@
-{ fetchurl, stdenv, pkgconfig, autoconf, automake, clutter, clutter-gst
-, gdk-pixbuf, cairo, clutter-gtk }:
+{ fetchurl
+, stdenv
+, pkgconfig
+, autoconf
+, automake
+, clutter
+, clutter-gst
+, gdk-pixbuf
+, cairo
+, clutter-gtk
+}:
 
 stdenv.mkDerivation rec {
   pname = "pinpoint";
@@ -9,8 +18,15 @@ stdenv.mkDerivation rec {
     sha256 = "1jp8chr9vjlpb5lybwp5cg6g90ak5jdzz9baiqkbg0anlg8ps82s";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ autoconf automake clutter clutter-gst gdk-pixbuf
-                  cairo clutter-gtk ];
+  buildInputs = [
+    autoconf
+    automake
+    clutter
+    clutter-gst
+    gdk-pixbuf
+    cairo
+    clutter-gtk
+  ];
 
   meta = with stdenv.lib; {
     homepage = https://wiki.gnome.org/action/show/Apps/Pinpoint;

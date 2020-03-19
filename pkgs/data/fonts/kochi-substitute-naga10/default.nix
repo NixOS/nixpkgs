@@ -1,6 +1,6 @@
 { lib, fetchzip }:
-
-let version = "20030809";
+let
+  version = "20030809";
 in
 fetchzip {
   name = "kochi-substitute-naga10-${version}";

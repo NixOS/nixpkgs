@@ -33,7 +33,8 @@ buildPythonPackage {
   ];
 
   buildInputs = (
-    if useOpenblas then
+    if useOpenblas
+    then
       [ openblas ]
     else
       [ blas liblapack ]

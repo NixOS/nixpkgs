@@ -1,23 +1,22 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.shadowsocks;
 
-  opts = {
-    server = cfg.localAddress;
-    server_port = cfg.port;
-    method = cfg.encryptionMethod;
-    mode = cfg.mode;
-    user = "nobody";
-    fast_open = true;
-  } // optionalAttrs (cfg.password != null) { password = cfg.password; };
+  opts =
+    {
+      server = cfg.localAddress;
+      server_port = cfg.port;
+      method = cfg.encryptionMethod;
+      mode = cfg.mode;
+      user = "nobody";
+      fast_open = true;
+    }
+    // optionalAttrs (cfg.password != null) { password = cfg.password; };
 
   configFile = pkgs.writeText "shadowsocks.json" (builtins.toJSON opts);
-
 in
-
 {
 
   ###### interface
@@ -91,7 +90,8 @@ in
 
   config = mkIf cfg.enable {
     assertions = singleton
-      { assertion = cfg.password == null || cfg.passwordFile == null;
+      {
+        assertion = cfg.password == null || cfg.passwordFile == null;
         message = "Cannot use both password and passwordFile for shadowsocks-libev";
       };
 
@@ -103,8 +103,8 @@ in
       serviceConfig.PrivateTmp = true;
       script = ''
         ${optionalString (cfg.passwordFile != null) ''
-          cat ${configFile} | jq --arg password "$(cat "${cfg.passwordFile}")" '. + { password: $password }' > /tmp/shadowsocks.json
-        ''}
+        cat ${configFile} | jq --arg password "$(cat "${cfg.passwordFile}")" '. + { password: $password }' > /tmp/shadowsocks.json
+      ''}
         exec ss-server -c ${if cfg.passwordFile != null then "/tmp/shadowsocks.json" else configFile}
       '';
     };

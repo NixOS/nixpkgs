@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildGoPackage}:
+{ stdenv, fetchurl, buildGoPackage }:
 
 buildGoPackage rec {
 
@@ -29,6 +29,6 @@ buildGoPackage rec {
     homepage = "https://harmonist.tuxfamily.org/";
     license = licenses.isc;
     platforms = platforms.unix;
-    maintainers = with maintainers; [freepotion];
+    maintainers = with maintainers; [ freepotion ];
   };
 }

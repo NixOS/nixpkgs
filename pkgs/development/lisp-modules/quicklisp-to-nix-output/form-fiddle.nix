@@ -14,7 +14,7 @@ rec {
 
   packageName = "form-fiddle";
 
-  asdFilesToKeep = ["form-fiddle.asd"];
+  asdFilesToKeep = [ "form-fiddle.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM form-fiddle DESCRIPTION

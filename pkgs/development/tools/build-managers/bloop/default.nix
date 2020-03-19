@@ -1,5 +1,4 @@
 { stdenv, lib, fetchurl, coursier, python, makeWrapper }:
-
 let
   baseName = "bloop";
   version = "1.3.4";
@@ -33,7 +32,7 @@ let
     '';
     outputHashMode = "recursive";
     outputHashAlgo = "sha256";
-    outputHash     = "1z33ip6hgfwiixm2gimz819p5cnxn1fmxb3ryyf77jzwsx7py718";
+    outputHash = "1z33ip6hgfwiixm2gimz819p5cnxn1fmxb3ryyf77jzwsx7py718";
   };
 
   zsh = stdenv.mkDerivation {

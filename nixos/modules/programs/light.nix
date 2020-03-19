@@ -1,10 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.light;
-
 in
 {
   options = {

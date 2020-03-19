@@ -1,7 +1,11 @@
-{
-  mkDerivation,
-  extra-cmake-modules,
-  kguiaddons, kidletime, kwayland, kwindowsystem, qtbase,
+{ mkDerivation
+, extra-cmake-modules
+, kguiaddons
+, kidletime
+, kwayland
+, kwindowsystem
+, qtbase
+,
 }:
 
 mkDerivation {

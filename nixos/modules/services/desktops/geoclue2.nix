@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   # the demo agent isn't built by default, but we need it here
   package = pkgs.geoclue2.override { withDemoAgent = config.services.geoclue2.enableDemoAgent; };
@@ -12,41 +11,42 @@ let
 
   defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
 
-  appConfigModule = types.submodule ({ name, ... }: {
-    options = {
-      desktopID = mkOption {
-        type = types.str;
-        description = "Desktop ID of the application.";
+  appConfigModule = types.submodule
+    ({ name, ... }: {
+      options = {
+        desktopID = mkOption {
+          type = types.str;
+          description = "Desktop ID of the application.";
+        };
+
+        isAllowed = mkOption {
+          type = types.bool;
+          default = null;
+          description = ''
+            Whether the application will be allowed access to location information.
+          '';
+        };
+
+        isSystem = mkOption {
+          type = types.bool;
+          default = null;
+          description = ''
+            Whether the application is a system component or not.
+          '';
+        };
+
+        users = mkOption {
+          type = types.listOf types.str;
+          default = [ ];
+          description = ''
+            List of UIDs of all users for which this application is allowed location
+            info access, Defaults to an empty string to allow it for all users.
+          '';
+        };
       };
 
-      isAllowed = mkOption {
-        type = types.bool;
-        default = null;
-        description = ''
-          Whether the application will be allowed access to location information.
-        '';
-      };
-
-      isSystem = mkOption {
-        type = types.bool;
-        default = null;
-        description = ''
-          Whether the application is a system component or not.
-        '';
-      };
-
-      users = mkOption {
-        type = types.listOf types.str;
-        default = [];
-        description = ''
-          List of UIDs of all users for which this application is allowed location
-          info access, Defaults to an empty string to allow it for all users.
-        '';
-      };
-    };
-
-    config.desktopID = mkDefault name;
-  });
+      config.desktopID = mkDefault name;
+    });
 
   appConfigToINICompatible = _: { desktopID, isAllowed, isSystem, users, ... }: {
     name = desktopID;
@@ -56,7 +56,6 @@ let
       users = concatStringsSep ";" users;
     };
   };
-
 in
 {
 
@@ -161,7 +160,7 @@ in
 
       appConfig = mkOption {
         type = types.loaOf appConfigModule;
-        default = {};
+        default = { };
         example = literalExample ''
           "com.github.app" = {
             isAllowed = true;
@@ -197,7 +196,7 @@ in
         description = "Geoinformation service";
       };
 
-      groups.geoclue = {};
+      groups.geoclue = { };
     };
 
     systemd.services.geoclue = {
@@ -237,31 +236,34 @@ in
     };
 
     environment.etc."geoclue/geoclue.conf".text =
-      generators.toINI {} ({
-        agent = {
-          whitelist = concatStringsSep ";"
-            (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
-        };
-        network-nmea = {
-          enable = cfg.enableNmea;
-        };
-        "3g" = {
-          enable = cfg.enable3G;
-        };
-        cdma = {
-          enable = cfg.enableCDMA;
-        };
-        modem-gps = {
-          enable = cfg.enableModemGPS;
-        };
-        wifi = {
-          enable = cfg.enableWifi;
-          url = cfg.geoProviderUrl;
-          submit-data = boolToString cfg.submitData;
-          submission-url = cfg.submissionUrl;
-          submission-nick = cfg.submissionNick;
-        };
-      } // mapAttrs' appConfigToINICompatible cfg.appConfig);
+      generators.toINI { } (
+        {
+          agent = {
+            whitelist = concatStringsSep ";"
+              (optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
+          };
+          network-nmea = {
+            enable = cfg.enableNmea;
+          };
+          "3g" = {
+            enable = cfg.enable3G;
+          };
+          cdma = {
+            enable = cfg.enableCDMA;
+          };
+          modem-gps = {
+            enable = cfg.enableModemGPS;
+          };
+          wifi = {
+            enable = cfg.enableWifi;
+            url = cfg.geoProviderUrl;
+            submit-data = boolToString cfg.submitData;
+            submission-url = cfg.submissionUrl;
+            submission-nick = cfg.submissionNick;
+          };
+        }
+        // mapAttrs' appConfigToINICompatible cfg.appConfig
+      );
   };
 
   meta.maintainers = with lib.maintainers; [ worldofpeace ];

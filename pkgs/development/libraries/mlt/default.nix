@@ -1,6 +1,17 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, SDL, ffmpeg, frei0r, libjack2, libdv, libsamplerate
-, libvorbis, libxml2, movit, pkgconfig, sox
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, SDL
+, ffmpeg
+, frei0r
+, libjack2
+, libdv
+, libsamplerate
+, libvorbis
+, libxml2
+, movit
+, pkgconfig
+, sox
 , gtk2
 }:
 
@@ -16,15 +27,28 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    SDL ffmpeg frei0r libjack2 libdv libsamplerate libvorbis libxml2
-    makeWrapper movit pkgconfig sox
+    SDL
+    ffmpeg
+    frei0r
+    libjack2
+    libdv
+    libsamplerate
+    libvorbis
+    libxml2
+    makeWrapper
+    movit
+    pkgconfig
+    sox
     gtk2
   ];
 
   # Mostly taken from:
   # http://www.kdenlive.org/user-manual/downloading-and-installing-kdenlive/installing-source/installing-mlt-rendering-engine
   configureFlags = [
-    "--avformat-swscale" "--enable-gpl" "--enable-gpl3" "--enable-opengl"
+    "--avformat-swscale"
+    "--enable-gpl"
+    "--enable-gpl3"
+    "--enable-opengl"
   ];
 
   enableParallelBuilding = true;

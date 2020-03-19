@@ -36,7 +36,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
     description = "A module allowing arbitrary ACPI calls; use case: hybrid video";
   };

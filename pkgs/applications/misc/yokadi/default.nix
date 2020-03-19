@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, buildPythonApplication, dateutil,
-  sqlalchemy, setproctitle, icalendar }:
+{ stdenv
+, fetchurl
+, buildPythonApplication
+, dateutil
+, sqlalchemy
+, setproctitle
+, icalendar
+}:
 
 buildPythonApplication rec {
   pname = "yokadi";

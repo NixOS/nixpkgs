@@ -33,7 +33,7 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
-     pytest
+    pytest
   '';
 
   meta = with lib; {

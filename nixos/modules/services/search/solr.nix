@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.solr;
-
 in
-
 {
   options = {
     services.solr = {
@@ -34,7 +30,7 @@ in
 
       extraJavaOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Extra command line options given to the java process running Solr.";
       };
 
@@ -87,8 +83,8 @@ in
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
-        ExecStart="${cfg.package}/bin/solr start -f -a \"${concatStringsSep " " cfg.extraJavaOptions}\"";
-        ExecStop="${cfg.package}/bin/solr stop";
+        ExecStart = "${cfg.package}/bin/solr start -f -a \"${concatStringsSep " " cfg.extraJavaOptions}\"";
+        ExecStop = "${cfg.package}/bin/solr stop";
       };
     };
 

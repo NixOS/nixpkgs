@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitLab, gradle_5, jre, perl, writeText, runtimeShell }:
-
 let
   pname = "pdftk";
   version = "3.0.8";
@@ -37,32 +36,32 @@ let
 
   # Point to our local deps repo
   gradleInit = writeText "init.gradle" ''
-    logger.lifecycle 'Replacing Maven repositories with ${deps}...'
-    gradle.projectsLoaded {
-      rootProject.allprojects {
-        buildscript {
+      logger.lifecycle 'Replacing Maven repositories with ${deps}...'
+      gradle.projectsLoaded {
+        rootProject.allprojects {
+          buildscript {
+            repositories {
+              clear()
+              maven { url '${deps}' }
+            }
+          }
           repositories {
             clear()
             maven { url '${deps}' }
           }
         }
-        repositories {
-          clear()
-          maven { url '${deps}' }
-        }
       }
+
+      settingsEvaluated { settings ->
+        settings.pluginManagement {
+          repositories {
+            maven { url '${deps}' }
+          }
+        }
     }
-
-    settingsEvaluated { settings ->
-      settings.pluginManagement {
-        repositories {
-          maven { url '${deps}' }
-        }
-      }
-  }
   '';
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit pname version src;
 
   nativeBuildInputs = [ gradle_5 ];

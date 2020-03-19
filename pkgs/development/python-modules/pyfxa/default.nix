@@ -1,6 +1,16 @@
-{ lib, buildPythonPackage, fetchPypi
-, requests, cryptography, pybrowserid, hawkauthlib, six
-, grequests, mock, responses, pytest }:
+{ lib
+, buildPythonPackage
+, fetchPypi
+, requests
+, cryptography
+, pybrowserid
+, hawkauthlib
+, six
+, grequests
+, mock
+, responses
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "PyFxA";
@@ -17,11 +27,18 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    requests cryptography pybrowserid hawkauthlib six
+    requests
+    cryptography
+    pybrowserid
+    hawkauthlib
+    six
   ];
 
   checkInputs = [
-    grequests mock responses pytest
+    grequests
+    mock
+    responses
+    pytest
   ];
 
   checkPhase = ''

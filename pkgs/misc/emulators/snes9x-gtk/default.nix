@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, wrapGAppsHook, intltool, pkgconfig
-, SDL2, zlib, gtk3, libxml2, libXv, epoxy, minizip, portaudio }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, wrapGAppsHook
+, intltool
+, pkgconfig
+, SDL2
+, zlib
+, gtk3
+, libxml2
+, libXv
+, epoxy
+, minizip
+, portaudio
+}:
 
 stdenv.mkDerivation rec {
   pname = "snes9x-gtk";

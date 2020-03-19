@@ -17,9 +17,11 @@ buildGoPackage rec {
     sha256 = "031hq9dg87cqj4am7qkbgfan2s6bqc2hf48h0gnrv78hbz8icxa1";
   };
 
-  buildFlagsArray = [ ''-ldflags=
+  buildFlagsArray = [
+    ''-ldflags=
     -w -s -X main.version=${version}
-  '' ];
+  ''
+  ];
 
   passthru.tests = { inherit (nixosTests) telegraf; };
 

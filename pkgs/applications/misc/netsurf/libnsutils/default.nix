@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, fetchurl
+, pkgconfig
 , buildsystem
 }:
 
@@ -14,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ buildsystem];
+  buildInputs = [ buildsystem ];
 
   makeFlags = [
     "PREFIX=$(out)"

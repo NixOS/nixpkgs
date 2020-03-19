@@ -3,7 +3,8 @@
 , isPy3k
 , fetchPypi
 , pytest
-, markupsafe }:
+, markupsafe
+}:
 
 buildPythonPackage rec {
   pname = "Jinja2";

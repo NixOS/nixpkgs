@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, python, pkgconfig, readline, gettext, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+{ stdenv
+, fetchurl
+, python
+, pkgconfig
+, readline
+, gettext
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +19,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    python readline gettext libxslt docbook_xsl docbook_xml_dtd_42
+    python
+    readline
+    gettext
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
   ];
 
   preConfigure = ''

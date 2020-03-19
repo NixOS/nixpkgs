@@ -1,10 +1,30 @@
-{ stdenv, fetchurl, dpkg, makeWrapper
-, alsaLib, atk, cairo, cups, curl, dbus, expat, fontconfig, freetype, glib
-, gnome2, gtk3, gdk-pixbuf, libnotify, libxcb, nspr, nss, pango
-, systemd, xorg, xprintidle-ng }:
-
+{ stdenv
+, fetchurl
+, dpkg
+, makeWrapper
+, alsaLib
+, atk
+, cairo
+, cups
+, curl
+, dbus
+, expat
+, fontconfig
+, freetype
+, glib
+, gnome2
+, gtk3
+, gdk-pixbuf
+, libnotify
+, libxcb
+, nspr
+, nss
+, pango
+, systemd
+, xorg
+, xprintidle-ng
+}:
 let
-
   version = "1.10.45";
 
   rpath = stdenv.lib.makeLibraryPath [
@@ -44,15 +64,16 @@ let
   ] + ":${stdenv.cc.cc.lib}/lib64";
 
   src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
       fetchurl {
         url = "https://github.com/johannesjo/super-productivity/releases/download/v${version}/superProductivity_${version}_amd64.deb";
         sha256 = "0jfi0lfijnhij9jvkhxgyvq8m1jzaym8n1c7707fv3hjh1h0vxn1";
       }
     else
       throw "super-productivity is not supported on ${stdenv.hostPlatform.system}";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "super-productivity";
   inherit version;
 
@@ -60,7 +81,7 @@ in stdenv.mkDerivation {
 
   buildInputs = [
     dpkg
-    gtk3  # needed for GSETTINGS_SCHEMAS_PATH
+    gtk3 # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
   nativeBuildInputs = [ makeWrapper ];

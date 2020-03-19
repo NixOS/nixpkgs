@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libroxml, proj, libyamlcpp, boost } :
+{ stdenv, fetchFromGitHub, libroxml, proj, libyamlcpp, boost }:
 
 stdenv.mkDerivation rec {
   pname = "osm2xmap";

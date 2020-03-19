@@ -1,5 +1,4 @@
 { stdenv, fetchurl, makeWrapper, jre }:
-
 let
   zshCompletion = version: fetchurl {
     url = "https://raw.githubusercontent.com/coursier/coursier/v${version}/modules/cli/src/main/resources/completions/zsh";

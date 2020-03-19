@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) prayer;
 
   cfg = config.services.prayer;
@@ -30,9 +28,7 @@ let
     cat ${prayer}/etc/prayer.cf | grep -v http_port > $out
     cat ${prayerExtraCfg} >> $out
   '';
-
 in
-
 {
 
   ###### interface
@@ -57,7 +53,7 @@ in
 
       extraConfig = mkOption {
         type = types.lines;
-        default = "" ;
+        default = "";
         description = ''
           Extra configuration. Contents will be added verbatim to the configuration file.
         '';
@@ -73,7 +69,8 @@ in
     environment.systemPackages = [ prayer ];
 
     users.users.${prayerUser} =
-      { uid = config.ids.uids.prayer;
+      {
+        uid = config.ids.uids.prayer;
         description = "Prayer daemon user";
         home = stateDir;
       };

@@ -10,7 +10,6 @@
 , pipInstallHook
 , setuptoolsBuildHook
 }:
-
 let
   pname = "setuptools";
   version = "44.0.0";
@@ -37,7 +36,8 @@ let
       mv dist/*.tar.gz $out
     '';
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   inherit pname version;
   # Because of bootstrapping we don't use the setuptoolsBuildHook that comes with format="setuptools" directly.
   # Instead, we override it to remove setuptools to avoid a circular dependency.
@@ -48,8 +48,8 @@ in buildPythonPackage rec {
 
   nativeBuildInputs = [
     bootstrapped-pip
-    (pipInstallHook.override{pip=null;})
-    (setuptoolsBuildHook.override{setuptools=null; wheel=null;})
+    (pipInstallHook.override { pip = null; })
+    (setuptoolsBuildHook.override { setuptools = null; wheel = null; })
   ];
 
   preBuild = lib.strings.optionalString (!stdenv.hostPlatform.isWindows) ''

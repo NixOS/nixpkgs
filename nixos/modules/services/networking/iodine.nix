@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.iodine;
 
@@ -27,7 +26,7 @@ in
 
     services.iodine = {
       clients = mkOption {
-        default = {};
+        default = { };
         description = ''
           Each attribute of this option defines a systemd service that
           runs iodine. Many or none may be defined.
@@ -45,40 +44,40 @@ in
             }
           }
         '';
-        type = types.attrsOf (
-          types.submodule (
-            {
-              options = {
-                server = mkOption {
-                  type = types.str;
-                  default = "";
-                  description = "Hostname of server running iodined";
-                  example = "tunnel.mydomain.com";
-                };
+        type = types.attrsOf
+          (
+            types.submodule
+              ({
+                options = {
+                  server = mkOption {
+                    type = types.str;
+                    default = "";
+                    description = "Hostname of server running iodined";
+                    example = "tunnel.mydomain.com";
+                  };
 
-                relay = mkOption {
-                  type = types.str;
-                  default = "";
-                  description = "DNS server to use as an intermediate relay to the iodined server";
-                  example = "8.8.8.8";
-                };
+                  relay = mkOption {
+                    type = types.str;
+                    default = "";
+                    description = "DNS server to use as an intermediate relay to the iodined server";
+                    example = "8.8.8.8";
+                  };
 
-                extraConfig = mkOption {
-                  type = types.str;
-                  default = "";
-                  description = "Additional command line parameters";
-                  example = "-l 192.168.1.10 -p 23";
-                };
+                  extraConfig = mkOption {
+                    type = types.str;
+                    default = "";
+                    description = "Additional command line parameters";
+                    example = "-l 192.168.1.10 -p 23";
+                  };
 
-                passwordFile = mkOption {
-                  type = types.str;
-                  default = "";
-                  description = "Path to a file containing the password.";
+                  passwordFile = mkOption {
+                    type = types.str;
+                    default = "";
+                    description = "Path to a file containing the password.";
+                  };
                 };
-              };
-            }
-          )
-        );
+              })
+          );
       };
 
       server = {
@@ -121,7 +120,7 @@ in
 
   ### implementation
 
-  config = mkIf (cfg.server.enable || cfg.clients != {}) {
+  config = mkIf (cfg.server.enable || cfg.clients != { }) {
     environment.systemPackages = [ pkgs.iodine ];
     boot.kernelModules = [ "tun" ];
 
@@ -140,7 +139,7 @@ in
               # hardening :
               # Filesystem access
               ProtectSystem = "strict";
-              ProtectHome = if isProtected cfg.passwordFile then "read-only" else "true" ;
+              ProtectHome = if isProtected cfg.passwordFile then "read-only" else "true";
               PrivateTmp = true;
               ReadWritePaths = "/dev/net/tun";
               PrivateDevices = false;
@@ -170,7 +169,7 @@ in
             serviceConfig = {
               # Filesystem access
               ProtectSystem = "strict";
-              ProtectHome = if isProtected cfg.server.passwordFile then "read-only" else "true" ;
+              ProtectHome = if isProtected cfg.server.passwordFile then "read-only" else "true";
               PrivateTmp = true;
               ReadWritePaths = "/dev/net/tun";
               PrivateDevices = false;

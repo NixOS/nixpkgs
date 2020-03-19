@@ -1,5 +1,18 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libjpeg, libpng, xorg, libX11, libGL, libdrm,
-  python27, wayland, udev, mesa, wafHook }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, libjpeg
+, libpng
+, xorg
+, libX11
+, libGL
+, libdrm
+, python27
+, wayland
+, udev
+, mesa
+, wafHook
+}:
 
 stdenv.mkDerivation {
   pname = "glmark2";
@@ -14,10 +27,19 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    libjpeg libpng xorg.libxcb libX11 libGL libdrm python27 wayland udev mesa
+    libjpeg
+    libpng
+    xorg.libxcb
+    libX11
+    libGL
+    libdrm
+    python27
+    wayland
+    udev
+    mesa
   ];
 
-  wafConfigureFlags = ["--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2"];
+  wafConfigureFlags = [ "--with-flavors=x11-gl,x11-glesv2,drm-gl,drm-glesv2,wayland-gl,wayland-glesv2" ];
 
   meta = with stdenv.lib; {
     description = "OpenGL (ES) 2.0 benchmark";

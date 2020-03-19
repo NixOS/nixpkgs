@@ -1,4 +1,9 @@
-{ stdenv, fetchgit, coq, haskellPackages, which, ott
+{ stdenv
+, fetchgit
+, coq
+, haskellPackages
+, which
+, ott
 }:
 
 stdenv.mkDerivation rec {

@@ -1,5 +1,4 @@
 { buildGoModule, fetchFromGitHub, lib }:
-
 let
   generic = { subPackages, pname, postInstall ? "" }:
     buildGoModule rec {
@@ -20,13 +19,14 @@ let
 
       modSha256 = "02h4cav6ivzs3z0qakwxzf5lfy6hzax5c0i2icp0qymqc2789npw";
 
-      buildFlagsArray = let
-        versionPkg = "github.com/sensu/sensu-go/version";
-      in ''
-        -ldflags=
-          -X ${versionPkg}.Version=${version}
-          -X ${versionPkg}.BuildSHA=${shortRev}
-      '';
+      buildFlagsArray =
+        let
+          versionPkg = "github.com/sensu/sensu-go/version";
+        in ''
+          -ldflags=
+            -X ${versionPkg}.Version=${version}
+            -X ${versionPkg}.BuildSHA=${shortRev}
+        '';
 
       meta = {
         homepage = "https://sensu.io";

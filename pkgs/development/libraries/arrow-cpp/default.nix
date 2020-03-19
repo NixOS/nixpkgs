@@ -1,8 +1,28 @@
-{ stdenv, lib, fetchurl, fetchFromGitHub, fetchpatch, fixDarwinDylibNames, autoconf, boost
-, brotli, cmake, flatbuffers, gflags, glog, gtest, lz4, perl
-, python, rapidjson, snappy, thrift, which, zlib, zstd
-, enableShared ? true }:
-
+{ stdenv
+, lib
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, fixDarwinDylibNames
+, autoconf
+, boost
+, brotli
+, cmake
+, flatbuffers
+, gflags
+, glog
+, gtest
+, lz4
+, perl
+, python
+, rapidjson
+, snappy
+, thrift
+, which
+, zlib
+, zstd
+, enableShared ? true
+}:
 let
   parquet-testing = fetchFromGitHub {
     owner = "apache";
@@ -10,8 +30,8 @@ let
     rev = "46c9e977f58f6c5ef1b81f782f3746b3656e5a8c";
     sha256 = "1z2s6zh58nf484s0yraw7b1aqgx66dn2wzp1bzv9ndq03msklwly";
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "arrow-cpp";
   version = "0.16.0";
 
@@ -111,17 +131,17 @@ in stdenv.mkDerivation rec {
     if doInstallCheck then "${parquet-testing}/data" else null;
   installCheckInputs = [ perl which ];
   installCheckPhase =
-  let
-    excludedTests = lib.optionals stdenv.isDarwin [
-      # Some plasma tests need to be patched to use a shorter AF_UNIX socket
-      # path on Darwin. See https://github.com/NixOS/nix/pull/1085
-      "plasma-external-store-tests"
-      "plasma-client-tests"
-    ];
-  in ''
-    ctest -L unittest -V \
-      --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
-  '';
+    let
+      excludedTests = lib.optionals stdenv.isDarwin [
+        # Some plasma tests need to be patched to use a shorter AF_UNIX socket
+        # path on Darwin. See https://github.com/NixOS/nix/pull/1085
+        "plasma-external-store-tests"
+        "plasma-client-tests"
+      ];
+    in ''
+      ctest -L unittest -V \
+        --exclude-regex '^(${builtins.concatStringsSep "|" excludedTests})$'
+    '';
 
   meta = {
     description = "A  cross-language development platform for in-memory data";

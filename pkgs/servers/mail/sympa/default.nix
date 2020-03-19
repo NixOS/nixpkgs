@@ -1,66 +1,69 @@
-{ stdenv, perl, fetchFromGitHub, autoreconfHook
+{ stdenv
+, perl
+, fetchFromGitHub
+, autoreconfHook
 }:
-
 let
   dataDir = "/var/lib/sympa";
   runtimeDir = "/run/sympa";
-  perlEnv = perl.withPackages (p: with p; [
-    ArchiveZip
-    CGI
-    CGIFast
-    ClassSingleton
-    DateTime
-    DBI
-    DateTimeFormatMail
-    DateTimeTimeZone
-    DigestMD5
-    Encode
-    FCGI
-    FileCopyRecursive
-    FileNFSLock
-    FilePath
-    HTMLParser
-    HTMLFormatter
-    HTMLTree
-    HTMLStripScriptsParser
-    IO
-    IOStringy
-    LWP
-    libintl_perl
+  perlEnv = perl.withPackages
+    (p: with p; [
+      ArchiveZip
+      CGI
+      CGIFast
+      ClassSingleton
+      DateTime
+      DBI
+      DateTimeFormatMail
+      DateTimeTimeZone
+      DigestMD5
+      Encode
+      FCGI
+      FileCopyRecursive
+      FileNFSLock
+      FilePath
+      HTMLParser
+      HTMLFormatter
+      HTMLTree
+      HTMLStripScriptsParser
+      IO
+      IOStringy
+      LWP
+      libintl_perl
 
-    MHonArc
-    MIMEBase64
-    MIMECharset
-    MIMETools
-    MIMEEncWords
-    MIMELiteHTML
-    MailTools
-    NetCIDR
-    ScalarListUtils
-    SysSyslog
-    TermProgressBar
-    TemplateToolkit
-    URI
-    UnicodeLineBreak
-    XMLLibXML
+      MHonArc
+      MIMEBase64
+      MIMECharset
+      MIMETools
+      MIMEEncWords
+      MIMELiteHTML
+      MailTools
+      NetCIDR
+      ScalarListUtils
+      SysSyslog
+      TermProgressBar
+      TemplateToolkit
+      URI
+      UnicodeLineBreak
+      XMLLibXML
 
-    ### Features
-    Clone
-    CryptEksblowfish
+      ### Features
+      Clone
+      CryptEksblowfish
 
-    DBDPg
-    DBDSQLite
-    DBDmysql
+      DBDPg
+      DBDSQLite
+      DBDmysql
 
-    DataPassword
-    EncodeLocale
-    IOSocketSSL
-    MailDKIM
-    NetDNS
-    NetLDAP
-    NetSMTP
-    SOAPLite
-  ]);
+      DataPassword
+      EncodeLocale
+      IOSocketSSL
+      MailDKIM
+      NetDNS
+      NetLDAP
+      NetSMTP
+      SOAPLite
+    ]);
 in
 stdenv.mkDerivation rec {
   pname = "sympa";

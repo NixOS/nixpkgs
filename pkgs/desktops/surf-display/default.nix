@@ -1,6 +1,15 @@
-{ stdenv, fetchgit, makeWrapper
-, surf, wmctrl, matchbox, xdotool, unclutter
-, xorg, pulseaudio, xprintidle-ng }:
+{ stdenv
+, fetchgit
+, makeWrapper
+, surf
+, wmctrl
+, matchbox
+, xdotool
+, unclutter
+, xorg
+, pulseaudio
+, xprintidle-ng
+}:
 
 stdenv.mkDerivation rec {
   pname = "surf-display";

@@ -1,9 +1,7 @@
 { stdenv, python3Packages }:
-
 let
   inherit (python3Packages) buildPythonApplication fetchPypi iowait psutil pyzmq tornado_4 mock;
 in
-
 buildPythonApplication rec {
   pname = "circus";
   version = "0.15.0";

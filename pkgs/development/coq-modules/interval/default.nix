@@ -1,8 +1,16 @@
-{ stdenv, fetchurl, which, coq, coquelicot, flocq, mathcomp
-, bignums ? null }:
+{ stdenv
+, fetchurl
+, which
+, coq
+, coquelicot
+, flocq
+, mathcomp
+, bignums ? null
+}:
 
 let params =
-  if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
+  if stdenv.lib.versionAtLeast coq.coq-version "8.7"
+  then {
     version = "3.4.1";
     uid = "38104";
     sha256 = "1zklv2w34k866fpwmw8q692mid5n6s75d2mmhhigrzpx5l3d4z6y";

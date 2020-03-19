@@ -1,4 +1,7 @@
-{ buildPythonPackage, lib, fetchPypi, isPy27
+{ buildPythonPackage
+, lib
+, fetchPypi
+, isPy27
 , ipaddress
 , maxminddb
 , mock
@@ -16,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ requests maxminddb ]
-    ++ lib.optionals isPy27 [ ipaddress ];
+  ++ lib.optionals isPy27 [ ipaddress ];
 
   checkInputs = [ requests-mock ];
 

@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, astring, cmdliner, cppo, fpath, result, tyxml
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, astring
+, cmdliner
+, cppo
+, fpath
+, result
+, tyxml
 }:
 
 buildDunePackage rec {

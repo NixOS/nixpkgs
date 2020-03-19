@@ -9,25 +9,25 @@
 }:
 
 buildGoModule rec {
-  pname   = "minikube";
+  pname = "minikube";
   version = "1.8.1";
   # for -ldflags
-  commit  = "cbda04cf6bbe65e987ae52bb393c10099ab62014";
+  commit = "cbda04cf6bbe65e987ae52bb393c10099ab62014";
 
   goPackagePath = "k8s.io/minikube";
-  subPackages   = [ "cmd/minikube" ];
-  modSha256     = "1wyz8aq291lx614ilqrcgzdc8rjxbd6v3rv1fy6r2m6snyysycfn";
+  subPackages = [ "cmd/minikube" ];
+  modSha256 = "1wyz8aq291lx614ilqrcgzdc8rjxbd6v3rv1fy6r2m6snyysycfn";
 
   src = fetchFromGitHub {
-    owner  = "kubernetes";
-    repo   = "minikube";
-    rev    = "v${version}";
+    owner = "kubernetes";
+    repo = "minikube";
+    rev = "v${version}";
     sha256 = "1nf0n701rw3anp8j7k3f553ipqwpzzxci41zsi0il4l35dpln5g0";
   };
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ libvirt ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet ];
 
   preBuild = ''
     go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...
@@ -58,10 +58,10 @@ buildGoModule rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/kubernetes/minikube;
+    homepage = https://github.com/kubernetes/minikube;
     description = "A tool that makes it easy to run Kubernetes locally";
-    license     = licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang ];
-    platforms   = with platforms; unix;
+    platforms = with platforms; unix;
   };
 }

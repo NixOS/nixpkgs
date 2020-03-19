@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "fsm";
   version = "2017-04-16";
 

@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
     # subsecond values in timetamps. This bug has been fixed in Bash
     # 5, and seemingly doesn't affect Darwin.
     ./disable-t810.patch
-
     (fetchpatch {
       url = "https://raw.githubusercontent.com/macports/macports-ports/b76d1e48dac/editors/nano/files/secure_snprintf.patch";
       extraPrefix = "";

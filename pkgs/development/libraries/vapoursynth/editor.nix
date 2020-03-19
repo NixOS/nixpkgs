@@ -1,6 +1,11 @@
-{ stdenv, mkDerivation, fetchFromBitbucket
-, python3, vapoursynth
-, qmake, qtbase, qtwebsockets
+{ stdenv
+, mkDerivation
+, fetchFromBitbucket
+, python3
+, vapoursynth
+, qmake
+, qtbase
+, qtwebsockets
 }:
 
 mkDerivation rec {

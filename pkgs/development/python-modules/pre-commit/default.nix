@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonApplication, pythonOlder
+{ lib
+, fetchPypi
+, buildPythonApplication
+, pythonOlder
 , aspy-yaml
 , cached-property
 , cfgv
@@ -38,7 +41,7 @@ buildPythonApplication rec {
     virtualenv
     importlib-metadata
   ] ++ lib.optional (pythonOlder "3.7") importlib-resources
-    ++ lib.optional (pythonOlder "3.2") futures;
+  ++ lib.optional (pythonOlder "3.2") futures;
 
   # slow and impure
   doCheck = false;

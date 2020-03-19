@@ -1,6 +1,13 @@
-{ mkDerivation, fetchpatch
-, base, containers, gomp, hspec, QuickCheck, stdenv
-, transformers, z3
+{ mkDerivation
+, fetchpatch
+, base
+, containers
+, gomp
+, hspec
+, QuickCheck
+, stdenv
+, transformers
+, z3
 }:
 mkDerivation {
   pname = "z3";

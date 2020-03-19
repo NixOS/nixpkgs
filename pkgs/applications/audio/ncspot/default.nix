@@ -1,14 +1,21 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config, ncurses, openssl
-, withALSA ? true, alsaLib ? null
-, withPulseAudio ? false, libpulseaudio ? null
-, withPortAudio ? false, portaudio ? null
+{ lib
+, fetchFromGitHub
+, rustPlatform
+, pkg-config
+, ncurses
+, openssl
+, withALSA ? true
+, alsaLib ? null
+, withPulseAudio ? false
+, libpulseaudio ? null
+, withPortAudio ? false
+, portaudio ? null
 }:
-
 let
   features = [ "cursive/pancurses-backend" ]
-    ++ lib.optional withALSA "alsa_backend"
-    ++ lib.optional withPulseAudio "pulseaudio_backend"
-    ++ lib.optional withPortAudio "portaudio_backend";
+  ++ lib.optional withALSA "alsa_backend"
+  ++ lib.optional withPulseAudio "pulseaudio_backend"
+  ++ lib.optional withPortAudio "portaudio_backend";
 in
 rustPlatform.buildRustPackage rec {
   pname = "ncspot";
@@ -28,9 +35,9 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ ncurses openssl ]
-    ++ lib.optional withALSA alsaLib
-    ++ lib.optional withPulseAudio libpulseaudio
-    ++ lib.optional withPortAudio portaudio;
+  ++ lib.optional withALSA alsaLib
+  ++ lib.optional withPulseAudio libpulseaudio
+  ++ lib.optional withPortAudio portaudio;
 
   doCheck = false;
 

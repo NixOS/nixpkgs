@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake udev libcec_platform ] ++
-    stdenv.lib.optional (libraspberrypi != null) libraspberrypi;
+  buildInputs = [ cmake udev libcec_platform ]
+  ++ stdenv.lib.optional (libraspberrypi != null) libraspberrypi;
 
   cmakeFlags = [ "-DBUILD_SHARED_LIBS=1" ];
 

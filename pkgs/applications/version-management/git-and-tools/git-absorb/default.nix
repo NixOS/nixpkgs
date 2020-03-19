@@ -5,9 +5,9 @@ rustPlatform.buildRustPackage rec {
   version = "0.5.0";
 
   src = fetchFromGitHub {
-    owner  = "tummychow";
-    repo   = pname;
-    rev    = "refs/tags/${version}";
+    owner = "tummychow";
+    repo = pname;
+    rev = "refs/tags/${version}";
     sha256 = "0lggv3knh6iglkh8x2zqvqcs3dlwfsdiclg7pmdrycny72la4k2j";
   };
 

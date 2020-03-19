@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, django
-, redis, async-timeout, hiredis
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, django
+, redis
+, async-timeout
+, hiredis
 }:
 
 buildPythonPackage rec {

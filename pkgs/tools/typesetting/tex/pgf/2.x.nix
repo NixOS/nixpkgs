@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "pgf-2.00";

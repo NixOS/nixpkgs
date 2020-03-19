@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, pkgconfig
-, docSupport ? true, doxygen ? null, graphviz ? null }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, docSupport ? true
+, doxygen ? null
+, graphviz ? null
+}:
 
 assert docSupport -> doxygen != null && graphviz != null;
 
@@ -16,10 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ stdenv.lib.optionals docSupport [ doxygen graphviz ];
+  ++ stdenv.lib.optionals docSupport [ doxygen graphviz ];
 
   installTargets = [ "install" ]
-    ++ stdenv.lib.optionals docSupport [ "doc" ];
+  ++ stdenv.lib.optionals docSupport [ "doc" ];
 
   outputs = [ "out" ] ++ stdenv.lib.optionals docSupport [ "doc" ];
 

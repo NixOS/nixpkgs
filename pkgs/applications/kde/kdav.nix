@@ -1,7 +1,12 @@
-{
-  mkDerivation, lib, kdepimTeam,
-  extra-cmake-modules, kdoctools,
-  kcoreaddons, kio, qtxmlpatterns,
+{ mkDerivation
+, lib
+, kdepimTeam
+, extra-cmake-modules
+, kdoctools
+, kcoreaddons
+, kio
+, qtxmlpatterns
+,
 }:
 
 mkDerivation {

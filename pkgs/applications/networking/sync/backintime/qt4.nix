@@ -1,4 +1,4 @@
-{stdenv, makeWrapper, gettext, backintime-common, python3, python3Packages }:
+{ stdenv, makeWrapper, gettext, backintime-common, python3, python3Packages }:
 
 stdenv.mkDerivation {
   inherit (backintime-common) version src installFlags;
@@ -8,12 +8,12 @@ stdenv.mkDerivation {
   buildInputs = [ makeWrapper gettext python3 python3Packages.pyqt4 backintime-common python3 ];
 
   preConfigure = "cd qt4";
-  configureFlags = [  ];
+  configureFlags = [ ];
 
   dontAddPrefix = true;
 
   preFixup =
-      ''
+    ''
       substituteInPlace "$out/bin/backintime-qt4" \
         --replace "=\"/usr/share" "=\"$prefix/share"
 

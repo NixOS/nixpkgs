@@ -1,15 +1,19 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, six, pytest, arrow
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, six
+, pytest
+, arrow
 }:
 
 buildPythonPackage rec {
-  pname   = "construct";
+  pname = "construct";
   version = "2.9.45";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
     sha256 = "0ig66xrzswpkhhmw123p2nvr15a9lxz54a1fmycfdh09327c1d3y";
   };
 

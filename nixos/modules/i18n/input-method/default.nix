@@ -5,7 +5,8 @@ let
   cfg = config.i18n.inputMethod;
 
   gtk2_cache = pkgs.runCommand "gtk2-immodule.cache"
-    { preferLocalBuild = true;
+    {
+      preferLocalBuild = true;
       allowSubstitutes = false;
       buildInputs = [ pkgs.gtk2 cfg.package ];
     }
@@ -15,7 +16,8 @@ let
     '';
 
   gtk3_cache = pkgs.runCommand "gtk3-immodule.cache"
-    { preferLocalBuild = true;
+    {
+      preferLocalBuild = true;
       allowSubstitutes = false;
       buildInputs = [ pkgs.gtk3 cfg.package ];
     }
@@ -23,13 +25,12 @@ let
       mkdir -p $out/etc/gtk-3.0/
       GTK_PATH=${cfg.package}/lib/gtk-3.0/ gtk-query-immodules-3.0 > $out/etc/gtk-3.0/immodules.cache
     '';
-
 in
 {
   options.i18n = {
     inputMethod = {
       enabled = mkOption {
-        type    = types.nullOr (types.enum [ "ibus" "fcitx" "nabi" "uim" ]);
+        type = types.nullOr (types.enum [ "ibus" "fcitx" "nabi" "uim" ]);
         default = null;
         example = "fcitx";
         description = ''
@@ -50,8 +51,8 @@ in
 
       package = mkOption {
         internal = true;
-        type     = types.nullOr types.path;
-        default  = null;
+        type = types.nullOr types.path;
+        default = null;
         description = ''
           The input method method package.
         '';

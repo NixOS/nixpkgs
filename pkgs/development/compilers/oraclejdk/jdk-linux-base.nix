@@ -34,21 +34,20 @@
 }:
 
 assert swingSupport -> xorg != null;
-
 let
-
   /**
    * The JRE libraries are in directories that depend on the CPU.
    */
   architecture = {
-    i686-linux    = "i386";
-    x86_64-linux  = "amd64";
-    armv7l-linux  = "arm";
+    i686-linux = "i386";
+    x86_64-linux = "amd64";
+    armv7l-linux = "arm";
     aarch64-linux = "aarch64";
   }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
 
   jce =
-    if installjce then
+    if installjce
+    then
       requireFile {
         name = jceName;
         url = "http://www.oracle.com/technetwork/java/javase/downloads/jce8-download-2133166.html";
@@ -63,9 +62,7 @@ let
     "lib/${architecture}/xawt"
     "lib/${architecture}"
   ];
-
 in
-
 let result = stdenv.mkDerivation rec {
   pname = if installjdk then "oraclejdk" else "oraclejre";
   version = "${productVersion}u${patchVersion}";
@@ -73,9 +70,9 @@ let result = stdenv.mkDerivation rec {
   src =
     let
       platformName = {
-        i686-linux    = "linux-i586";
-        x86_64-linux  = "linux-x64";
-        armv7l-linux  = "linux-arm32-vfp-hflt";
+        i686-linux = "linux-i586";
+        x86_64-linux = "linux-x64";
+        armv7l-linux = "linux-arm32-vfp-hflt";
         aarch64-linux = "linux-arm64-vfp-hflt";
       }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}");
     in requireFile {
@@ -85,7 +82,7 @@ let result = stdenv.mkDerivation rec {
     };
 
   nativeBuildInputs = [ file ]
-    ++ stdenv.lib.optional installjce unzip;
+  ++ stdenv.lib.optional installjce unzip;
 
   buildInputs = [ makeWrapper ];
 
@@ -171,8 +168,8 @@ let result = stdenv.mkDerivation rec {
    * libXt is only needed on amd64
    */
   libraries =
-    [stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk] ++
-    (if swingSupport then [xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc] else []);
+    [ stdenv.cc.libc glib libxml2 libav_0_8 ffmpeg libxslt libGL xorg.libXxf86vm alsaLib fontconfig freetype pango gtk2 cairo gdk-pixbuf atk ]
+    ++ (if swingSupport then [ xorg.libX11 xorg.libXext xorg.libXtst xorg.libXi xorg.libXp xorg.libXt xorg.libXrender stdenv.cc.cc ] else [ ]);
 
   rpath = stdenv.lib.strings.makeLibraryPath libraries;
 

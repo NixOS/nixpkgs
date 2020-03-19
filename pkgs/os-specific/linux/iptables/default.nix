@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, pruneLibtoolFiles, flex, bison
-, libmnl, libnetfilter_conntrack, libnfnetlink, libnftnl, libpcap
+{ stdenv
+, fetchurl
+, pkgconfig
+, pruneLibtoolFiles
+, flex
+, bison
+, libmnl
+, libnetfilter_conntrack
+, libnfnetlink
+, libnftnl
+, libpcap
 , nftablesCompat ? false
 }:
 

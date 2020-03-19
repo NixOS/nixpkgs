@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, python, pytest, sortedcontainers }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, python
+, pytest
+, sortedcontainers
+}:
 
 buildPythonPackage rec {
   version = "3.0.2";
@@ -23,8 +28,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Editable interval tree data structure for Python 2 and 3";
-    homepage =  https://github.com/chaimleib/intervaltree;
+    homepage = https://github.com/chaimleib/intervaltree;
     license = [ licenses.asl20 ];
-    maintainers =  [ maintainers.bennofs ];
+    maintainers = [ maintainers.bennofs ];
   };
 }

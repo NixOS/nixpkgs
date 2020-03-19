@@ -9,10 +9,10 @@
   # Only useful to disable for development testing.
 , useDefaultIndicators ? true
 }:
-
 let
   selectedIndicators =
-    if indicators == null then wingpanelIndicators
+    if indicators == null
+    then wingpanelIndicators
     else indicators ++ (lib.optionals useDefaultIndicators wingpanelIndicators);
 in
 symlinkJoin {
@@ -26,7 +26,7 @@ symlinkJoin {
     glib
     wrapGAppsHook
   ] ++ (lib.forEach selectedIndicators (x: x.buildInputs))
-    ++ selectedIndicators;
+  ++ selectedIndicators;
 
   # We have to set SWITCHBOARD_PLUGS_PATH because wingpanel-applications-menu
   # has a plugin to search switchboard settings

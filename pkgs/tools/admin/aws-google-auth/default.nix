@@ -14,7 +14,8 @@
 , tzlocal
 , nose
 , mock
-, withU2F ? false, python-u2flib-host
+, withU2F ? false
+, python-u2flib-host
 }:
 
 buildPythonApplication rec {
@@ -30,7 +31,7 @@ buildPythonApplication rec {
     sha256 = "12c5ssdy870szrizhs4d7dzcpq3hvszjvl8ba60qf1ak5jsr1ay4";
   };
 
-  propagatedBuildInputs = [ 
+  propagatedBuildInputs = [
     beautifulsoup4
     boto3
     configparser
@@ -43,10 +44,10 @@ buildPythonApplication rec {
     tabulate
     tzlocal
   ] ++ lib.optional withU2F python-u2flib-host;
-  
-  checkInputs = [ 
+
+  checkInputs = [
     mock
-    nose 
+    nose
   ];
 
   preCheck = ''

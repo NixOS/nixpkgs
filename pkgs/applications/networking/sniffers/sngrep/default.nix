@@ -12,11 +12,16 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libpcap ncurses pcre openssl ncurses
+    libpcap
+    ncurses
+    pcre
+    openssl
+    ncurses
   ];
 
   nativeBuildInputs = [
-    autoconf automake
+    autoconf
+    automake
   ];
 
   configureFlags = [

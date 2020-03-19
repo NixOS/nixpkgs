@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , unzip
 }:
 
@@ -28,6 +29,6 @@ stdenv.mkDerivation rec {
     homepage = "https://www.widevine.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ betaboon ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

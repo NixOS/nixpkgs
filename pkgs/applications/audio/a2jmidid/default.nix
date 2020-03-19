@@ -1,10 +1,18 @@
-{ stdenv, fetchurl, fetchpatch, makeWrapper, pkgconfig, alsaLib, dbus, libjack2
+{ stdenv
+, fetchurl
+, fetchpatch
+, makeWrapper
+, pkgconfig
+, alsaLib
+, dbus
+, libjack2
 , wafHook
-, python2Packages}:
-
+, python2Packages
+}:
 let
   inherit (python2Packages) python dbus-python;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "a2jmidid";
   version = "8";
 

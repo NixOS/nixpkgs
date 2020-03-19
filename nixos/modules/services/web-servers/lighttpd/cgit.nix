@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.lighttpd.cgit;
   pathPrefix = if stringLength cfg.subdir == 0 then "" else "/" + cfg.subdir;

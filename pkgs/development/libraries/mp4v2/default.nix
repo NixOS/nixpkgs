@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     (fetchurl {
       name = "gcc-7.patch";
       url = "https://src.fedoraproject.org/cgit/rpms/libmp4v2.git/plain/"
-          + "0004-Fix-GCC7-build.patch?id=d7aeedabb";
+      + "0004-Fix-GCC7-build.patch?id=d7aeedabb";
       sha256 = "0sbn0il7lmk77yrjyb4f0a3z3h8gsmdkscvz5n9hmrrrhrwf672w";
     })
   ];

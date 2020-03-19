@@ -6,7 +6,7 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "cdepillabout";
-    repo  = "nix-query-tree-viewer";
+    repo = "nix-query-tree-viewer";
     rev = "v${version}";
     sha256 = "0vjcllhgq64n7mwxvyhmbqd6fpa9lwrpsnggc1kdlgd14ggq6jj6";
   };
@@ -24,9 +24,9 @@ rustPlatform.buildRustPackage rec {
 
   meta = with stdenv.lib; {
     description = "GTK viewer for the output of `nix store --query --tree`";
-    homepage    = "https://github.com/cdepillabout/nix-query-tree-viewer";
-    license     = with licenses; [ mit ];
+    homepage = "https://github.com/cdepillabout/nix-query-tree-viewer";
+    license = with licenses; [ mit ];
     maintainers = with maintainers; [ cdepillabout ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

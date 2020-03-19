@@ -1,6 +1,15 @@
-{ stdenv, fetchurl, makeWrapper
-, xorg, imlib2, libjpeg, libpng
-, curl, libexif, jpegexiforient, perlPackages }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, xorg
+, imlib2
+, libjpeg
+, libpng
+, curl
+, libexif
+, jpegexiforient
+, perlPackages
+}:
 
 with stdenv.lib;
 
@@ -20,7 +29,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
 
   makeFlags = [
-    "PREFIX=${placeholder "out"}" "exif=1"
+    "PREFIX=${placeholder "out"}"
+    "exif=1"
   ] ++ optional stdenv.isDarwin "verscmp=0";
 
   installTargets = [ "install" ];

@@ -1,10 +1,10 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
 
 with lib;
-
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtlwifi";
-
-in stdenv.mkDerivation rec {
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/rtlwifi";
+in
+stdenv.mkDerivation rec {
   pname = "rtlwifi_new";
   version = "2019-08-21";
 

@@ -10,9 +10,10 @@ stdenv.mkDerivation rec {
     sha256 = "1r0r3nx6x6vkpal6vci0zaa1n9dfacypldf6k8fxg7919vzxdn1w";
   };
 
-  pyenv = python3.withPackages (pythonPackages: with pythonPackages; [
-    ConfigArgParse
-  ]);
+  pyenv = python3.withPackages
+    (pythonPackages: with pythonPackages; [
+      ConfigArgParse
+    ]);
 
   postConfigure = ''
     substituteInPlace 90-backlight.rules --replace /bin ${coreutils}/bin

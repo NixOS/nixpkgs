@@ -14,7 +14,7 @@ rec {
 
   packageName = "rt";
 
-  asdFilesToKeep = ["rt.asd"];
+  asdFilesToKeep = [ "rt.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM rt DESCRIPTION MIT Regression Tester SHA256

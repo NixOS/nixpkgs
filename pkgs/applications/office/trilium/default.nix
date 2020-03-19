@@ -1,5 +1,4 @@
 { stdenv, nixosTests, fetchurl, autoPatchelfHook, atomEnv, makeWrapper, makeDesktopItem, gtk3, wrapGAppsHook, zlib, libxkbfile }:
-
 let
   description = "Trilium Notes is a hierarchical note taking application with focus on building large personal knowledge bases.";
   desktopItem = makeDesktopItem {
@@ -20,9 +19,9 @@ let
   };
 
   version = "0.40.5";
+in
+{
 
-in {
-  
   trilium-desktop = stdenv.mkDerivation rec {
     pname = "trilium-desktop";
     inherit version;
@@ -32,7 +31,7 @@ in {
       url = "https://github.com/zadam/trilium/releases/download/v${version}/trilium-linux-x64-${version}.tar.xz";
       sha256 = "02hmfgv8viy1hn2ix4b0gdzbcj7piddsmjdnb0b5hpwahqrikiyi";
     };
-  
+
     # Fetch from source repo, no longer included in release.
     # (they did special-case icon.png but we want the scalable svg)
     # Use the version here to ensure we get any changes.
@@ -40,16 +39,16 @@ in {
       url = "https://raw.githubusercontent.com/zadam/trilium/v${version}/images/trilium.svg";
       sha256 = "1rgj7pza20yndfp8n12k93jyprym02hqah36fkk2b3if3kcmwnfg";
     };
-  
-  
+
+
     nativeBuildInputs = [
       autoPatchelfHook
       makeWrapper
       wrapGAppsHook
     ];
-  
+
     buildInputs = atomEnv.packages ++ [ gtk3 ];
-  
+
     installPhase = ''
       mkdir -p $out/bin
       mkdir -p $out/share/trilium
@@ -61,12 +60,12 @@ in {
       ln -s ${trilium_svg} $out/share/icons/hicolor/scalable/apps/trilium.svg
       cp ${desktopItem}/share/applications/* $out/share/applications
     '';
-  
+
     # LD_LIBRARY_PATH "shouldn't" be needed, remove when possible :)
     preFixup = ''
       gappsWrapperArgs+=(--prefix LD_LIBRARY_PATH : ${atomEnv.libPath})
     '';
-  
+
     dontStrip = true;
   };
 
@@ -91,7 +90,7 @@ in {
       libxkbfile
     ];
 
-    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ] ;
+    patches = [ ./0001-Use-console-logger-instead-of-rolling-files.patch ];
     installPhase = ''
       mkdir -p $out/bin
       mkdir -p $out/share/trilium-server

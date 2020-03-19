@@ -8,7 +8,6 @@
 , udev
 , wrapGAppsHook
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 
@@ -91,6 +90,5 @@ let
         "''${gappsWrapperArgs[@]}"
     '';
   };
-
 in
 linux

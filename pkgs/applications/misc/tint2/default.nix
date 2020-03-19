@@ -1,7 +1,25 @@
-{ stdenv, fetchFromGitLab, pkgconfig, cmake, gettext, cairo, pango, pcre
-, glib, imlib2, gtk2, libXinerama, libXrender, libXcomposite, libXdamage
-, libX11, libXrandr, librsvg, libpthreadstubs, libXdmcp
-, libstartup_notification, wrapGAppsHook
+{ stdenv
+, fetchFromGitLab
+, pkgconfig
+, cmake
+, gettext
+, cairo
+, pango
+, pcre
+, glib
+, imlib2
+, gtk2
+, libXinerama
+, libXrender
+, libXcomposite
+, libXdamage
+, libX11
+, libXrandr
+, librsvg
+, libpthreadstubs
+, libXdmcp
+, libstartup_notification
+, wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +37,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig cmake gettext wrapGAppsHook ];
 
-  buildInputs = [ cairo pango pcre glib imlib2 gtk2 libXinerama libXrender
-    libXcomposite libXdamage libX11 libXrandr librsvg libpthreadstubs
-    libXdmcp libstartup_notification ];
+  buildInputs = [
+    cairo
+    pango
+    pcre
+    glib
+    imlib2
+    gtk2
+    libXinerama
+    libXrender
+    libXcomposite
+    libXdamage
+    libX11
+    libXrandr
+    librsvg
+    libpthreadstubs
+    libXdmcp
+    libstartup_notification
+  ];
 
   postPatch = ''
     for f in ./src/launcher/apps-common.c \

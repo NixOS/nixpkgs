@@ -1,13 +1,19 @@
 { stdenv, fetchurl, makeWrapper, bootstrap-chicken ? null }:
-
 let
   version = "5.2.0";
   platform = with stdenv;
-    if isDarwin then "macosx"
-    else if isCygwin then "cygwin"
-    else if (isFreeBSD || isOpenBSD) then "bsd"
-    else if isSunOS then "solaris"
-    else "linux"; # Should be a sane default
+    if isDarwin
+    then "macosx"
+    else
+      if isCygwin
+      then "cygwin"
+      else
+        if (isFreeBSD || isOpenBSD)
+        then "bsd"
+        else
+          if isSunOS
+          then "solaris"
+          else "linux"; # Should be a sane default
   lib = stdenv.lib;
 in
 stdenv.mkDerivation {

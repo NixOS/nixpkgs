@@ -1,6 +1,19 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, pkgconfig, cmake, ffmpeg-full
-, ghostscript, graphicsmagick, quicktemplate, go-bindata, easyjson
-, nodePackages, emscripten, opencv, statik }:
+{ stdenv
+, buildGoPackage
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, ffmpeg-full
+, ghostscript
+, graphicsmagick
+, quicktemplate
+, go-bindata
+, easyjson
+, nodePackages
+, emscripten
+, opencv
+, statik
+}:
 
 buildGoPackage {
   pname = "meguca-unstable";
@@ -20,8 +33,15 @@ buildGoPackage {
   nativeBuildInputs = [ pkgconfig cmake ];
 
   buildInputs = [
-    ffmpeg-full graphicsmagick ghostscript quicktemplate go-bindata
-    easyjson emscripten opencv statik
+    ffmpeg-full
+    graphicsmagick
+    ghostscript
+    quicktemplate
+    go-bindata
+    easyjson
+    emscripten
+    opencv
+    statik
   ];
 
   buildPhase = ''

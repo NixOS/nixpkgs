@@ -1,4 +1,6 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , aiohttp
 , eventlet
 , iana-etc

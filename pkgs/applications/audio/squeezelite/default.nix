@@ -1,25 +1,34 @@
-{ stdenv, fetchFromGitHub
-, alsaLib, flac, libmad, libvorbis, mpg123
+{ stdenv
+, fetchFromGitHub
+, alsaLib
+, flac
+, libmad
+, libvorbis
+, mpg123
 , dsdSupport ? true
-, faad2Support ? true, faad2
-, ffmpegSupport ? true, ffmpeg
-, opusSupport ? true, opusfile
-, resampleSupport ? true, soxr
-, sslSupport ? true, openssl
+, faad2Support ? true
+, faad2
+, ffmpegSupport ? true
+, ffmpeg
+, opusSupport ? true
+, opusfile
+, resampleSupport ? true
+, soxr
+, sslSupport ? true
+, openssl
 }:
-
 let
   concatStringsSep = stdenv.lib.concatStringsSep;
   optional = stdenv.lib.optional;
   opts = [ "-DLINKALL" ]
-    ++ optional dsdSupport "-DDSD"
-    ++ optional (!faad2Support) "-DNO_FAAD"
-    ++ optional ffmpegSupport "-DFFMPEG"
-    ++ optional opusSupport "-DOPUS"
-    ++ optional resampleSupport "-DRESAMPLE"
-    ++ optional sslSupport "-DUSE_SSL";
-
-in stdenv.mkDerivation {
+  ++ optional dsdSupport "-DDSD"
+  ++ optional (!faad2Support) "-DNO_FAAD"
+  ++ optional ffmpegSupport "-DFFMPEG"
+  ++ optional opusSupport "-DOPUS"
+  ++ optional resampleSupport "-DRESAMPLE"
+  ++ optional sslSupport "-DUSE_SSL";
+in
+stdenv.mkDerivation {
   pname = "squeezelite";
 
   # versions are specified in `squeezelite.h`
@@ -27,18 +36,18 @@ in stdenv.mkDerivation {
   version = "1.9.6.1196";
 
   src = fetchFromGitHub {
-    owner  = "ralph-irving";
-    repo   = "squeezelite";
-    rev    = "2b508464dce2cbdb2a3089c58df2a6fbc36328c0";
+    owner = "ralph-irving";
+    repo = "squeezelite";
+    rev = "2b508464dce2cbdb2a3089c58df2a6fbc36328c0";
     sha256 = "024ypr1da2r079k3hgiifzd3d3wcfprhbl5zdm40zm0c7frzmr8i";
   };
 
   buildInputs = [ alsaLib flac libmad libvorbis mpg123 ]
-    ++ optional faad2Support faad2
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional opusSupport opusfile
-    ++ optional resampleSupport soxr
-    ++ optional sslSupport openssl;
+  ++ optional faad2Support faad2
+  ++ optional ffmpegSupport ffmpeg
+  ++ optional opusSupport opusfile
+  ++ optional resampleSupport soxr
+  ++ optional sslSupport openssl;
 
   enableParallelBuilding = true;
 

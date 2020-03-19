@@ -40,7 +40,7 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
-    ''}
+  ''}
 
     pytest trackpy --ignore trackpy/tests/test_motion.py \
                    --ignore trackpy/tests/test_feature_saving.py \

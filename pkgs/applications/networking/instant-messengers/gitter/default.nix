@@ -1,23 +1,85 @@
-{ stdenv, alsaLib, atk, cairo, cups, dbus, dpkg, expat, fetchurl
-, fontconfig, freetype, gdk-pixbuf, glib, gnome2, gtk3, libX11
-, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext, libXfixes
-, libXi, libXrandr, libXrender, libXtst, libappindicator-gtk3, libcxx
-, libnotify, libpulseaudio, libxcb, makeDesktopItem, makeWrapper, nspr, nss
-, pango, systemd }:
-
-let gitterDirectorySuffix = "opt/gitter";
-    doELFPatch = target: ''
-      patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
-         --set-rpath "$out/${gitterDirectorySuffix}/lib:${libPath}" \
-         $out/${gitterDirectorySuffix}/${target}
-       '';
-   libPath = stdenv.lib.makeLibraryPath [
-     alsaLib atk cairo cups dbus expat fontconfig freetype gdk-pixbuf glib
-     gnome2.GConf gtk3 libX11 libXScrnSaver libXcomposite libXcursor libXdamage
-     libXext libXfixes libXi libXrandr libXrender libXtst libappindicator-gtk3
-     libcxx libnotify libpulseaudio libxcb nspr nss pango stdenv.cc.cc systemd
+{ stdenv
+, alsaLib
+, atk
+, cairo
+, cups
+, dbus
+, dpkg
+, expat
+, fetchurl
+, fontconfig
+, freetype
+, gdk-pixbuf
+, glib
+, gnome2
+, gtk3
+, libX11
+, libXScrnSaver
+, libXcomposite
+, libXcursor
+, libXdamage
+, libXext
+, libXfixes
+, libXi
+, libXrandr
+, libXrender
+, libXtst
+, libappindicator-gtk3
+, libcxx
+, libnotify
+, libpulseaudio
+, libxcb
+, makeDesktopItem
+, makeWrapper
+, nspr
+, nss
+, pango
+, systemd
+}:
+let
+  gitterDirectorySuffix = "opt/gitter";
+  doELFPatch = target: ''
+    patchelf --set-interpreter ${stdenv.cc.bintools.dynamicLinker} \
+       --set-rpath "$out/${gitterDirectorySuffix}/lib:${libPath}" \
+       $out/${gitterDirectorySuffix}/${target}
+  '';
+  libPath = stdenv.lib.makeLibraryPath [
+    alsaLib
+    atk
+    cairo
+    cups
+    dbus
+    expat
+    fontconfig
+    freetype
+    gdk-pixbuf
+    glib
+    gnome2.GConf
+    gtk3
+    libX11
+    libXScrnSaver
+    libXcomposite
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    libappindicator-gtk3
+    libcxx
+    libnotify
+    libpulseaudio
+    libxcb
+    nspr
+    nss
+    pango
+    stdenv.cc.cc
+    systemd
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gitter";
   version = "4.1.0";
 

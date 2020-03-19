@@ -1,8 +1,18 @@
-{ stdenv, fetchzip, alsaLib, freetype, ftgl, libjack2, libX11, lv2
-, libGLU, libGL, pkgconfig, ttf_bitstream_vera
+{ stdenv
+, fetchzip
+, alsaLib
+, freetype
+, ftgl
+, libjack2
+, libX11
+, lv2
+, libGLU
+, libGL
+, pkgconfig
+, ttf_bitstream_vera
 }:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "setbfree";
   version = "0.8.11";
 
@@ -19,7 +29,14 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    alsaLib freetype ftgl libjack2 libX11 lv2 libGLU libGL
+    alsaLib
+    freetype
+    ftgl
+    libjack2
+    libX11
+    lv2
+    libGLU
+    libGL
     ttf_bitstream_vera
   ];
 

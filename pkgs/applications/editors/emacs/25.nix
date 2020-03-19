@@ -1,13 +1,47 @@
-{ stdenv, lib, fetchurl, ncurses, xlibsWrapper, libXaw, libXpm, Xaw3d, fetchpatch
-, pkgconfig, gettext, libXft, dbus, libpng, libjpeg, libungif
-, libtiff, librsvg, gconf, libxml2, imagemagick, gnutls, libselinux
-, alsaLib, cairo, acl, gpm, AppKit, GSS, ImageIO
+{ stdenv
+, lib
+, fetchurl
+, ncurses
+, xlibsWrapper
+, libXaw
+, libXpm
+, Xaw3d
+, fetchpatch
+, pkgconfig
+, gettext
+, libXft
+, dbus
+, libpng
+, libjpeg
+, libungif
+, libtiff
+, librsvg
+, gconf
+, libxml2
+, imagemagick
+, gnutls
+, libselinux
+, alsaLib
+, cairo
+, acl
+, gpm
+, AppKit
+, GSS
+, ImageIO
 , withX ? !stdenv.isDarwin
-, withGTK2 ? false, gtk2 ? null
-, withGTK3 ? true, gtk3 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk, wrapGAppsHook ? null, glib-networking ? null
+, withGTK2 ? false
+, gtk2 ? null
+, withGTK3 ? true
+, gtk3 ? null
+, gsettings-desktop-schemas ? null
+, withXwidgets ? false
+, webkitgtk
+, wrapGAppsHook ? null
+, glib-networking ? null
 , withCsrc ? true
-, autoconf ? null, automake ? null, texinfo ? null
+, autoconf ? null
+, automake ? null
+, texinfo ? null
 }:
 
 assert (libXft != null) -> libpng != null;      # probably a bug
@@ -17,12 +51,14 @@ assert withGTK3 -> withX || stdenv.isDarwin;
 assert withGTK2 -> !withGTK3 && gtk2 != null;
 assert withGTK3 -> !withGTK2 && gtk3 != null;
 assert withXwidgets -> withGTK3 && webkitgtk != null;
-
 let
   toolkit =
-    if withGTK2 then "gtk2"
-    else if withGTK3 then "gtk3"
-    else "lucid";
+    if withGTK2
+    then "gtk2"
+    else
+      if withGTK3
+      then "gtk3"
+      else "lucid";
 in
 stdenv.mkDerivation rec {
   name = "emacs-${version}${versionModifier}";
@@ -61,14 +97,26 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkgconfig autoconf automake texinfo ]
-    ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+  ++ lib.optional (withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
 
   buildInputs =
     [ ncurses gconf libxml2 gnutls alsaLib acl gpm gettext ]
     ++ lib.optionals stdenv.isLinux [ dbus libselinux ]
     ++ lib.optionals withX
-      [ xlibsWrapper libXaw Xaw3d libXpm libpng libjpeg libungif libtiff librsvg libXft
-        imagemagick gconf ]
+      [
+        xlibsWrapper
+        libXaw
+        Xaw3d
+        libXpm
+        libpng
+        libjpeg
+        libungif
+        libtiff
+        librsvg
+        libXft
+        imagemagick
+        gconf
+      ]
     ++ lib.optional (withX && withGTK2) gtk2
     ++ lib.optionals (withX && withGTK3) [ gtk3 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
@@ -77,14 +125,22 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = [ "--with-modules" ] ++
-   (if stdenv.isDarwin
-      then [ "--with-ns" "--disable-ns-self-contained" ]
-    else if withX
+  configureFlags = [ "--with-modules" ]
+  ++ (
+    if stdenv.isDarwin
+    then [ "--with-ns" "--disable-ns-self-contained" ]
+    else
+      if withX
       then [ "--with-x-toolkit=${toolkit}" "--with-xft" ]
-      else [ "--with-x=no" "--with-xpm=no" "--with-jpeg=no" "--with-png=no"
-             "--with-gif=no" "--with-tiff=no" ])
-    ++ lib.optional withXwidgets "--with-xwidgets";
+      else [
+        "--with-x=no"
+        "--with-xpm=no"
+        "--with-jpeg=no"
+        "--with-png=no"
+        "--with-gif=no"
+        "--with-tiff=no"
+      ])
+  ++ lib.optional withXwidgets "--with-xwidgets";
 
   preConfigure = ''
     ./autogen.sh
@@ -121,10 +177,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The extensible, customizable GNU text editor";
-    homepage    = https://www.gnu.org/software/emacs/;
-    license     = licenses.gpl3Plus;
+    homepage = https://www.gnu.org/software/emacs/;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
 
     longDescription = ''
       GNU Emacs is an extensible, customizable text editor—and more.  At its

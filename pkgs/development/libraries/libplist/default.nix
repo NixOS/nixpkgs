@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "19yw80yblq29i2jx9yb7bx0lfychy9dncri3fk4as35kq5bf26i8";
   };
 
-  outputs = ["bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
+  outputs = [ "bin" "dev" "out" ] ++ stdenv.lib.optional enablePython "py";
 
   nativeBuildInputs = [
     pkgconfig

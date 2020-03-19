@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, python, pythonOlder, fetchFromGitHub
-, django, django-crispy-forms, djangorestframework, mock, pytz }:
+{ lib
+, buildPythonPackage
+, python
+, pythonOlder
+, fetchFromGitHub
+, django
+, django-crispy-forms
+, djangorestframework
+, mock
+, pytz
+}:
 
 buildPythonPackage rec {
   pname = "django-filter";

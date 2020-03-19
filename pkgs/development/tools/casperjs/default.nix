@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, fontsConf, phantomjs2, python, nodePackages }:
-
-let version = "1.1.1";
-
-in stdenv.mkDerivation {
+let
+  version = "1.1.1";
+in
+stdenv.mkDerivation {
 
   pname = "casperjs";
   inherit version;

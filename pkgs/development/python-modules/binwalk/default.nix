@@ -12,8 +12,8 @@
 , lzma
 , nose
 , pycrypto
-, pyqtgraph ? null }:
-
+, pyqtgraph ? null
+}:
 let
   visualizationSupport = (pyqtgraph != null);
   version = "2.2.0";

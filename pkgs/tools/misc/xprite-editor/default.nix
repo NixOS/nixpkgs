@@ -25,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ gtk3 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit ];
 
   nativeBuildInputs = stdenv.lib.optionals stdenv.isLinux [ pkg-config python3 ];
 

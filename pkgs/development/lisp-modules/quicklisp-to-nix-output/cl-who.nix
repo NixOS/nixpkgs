@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-who";
 
-  asdFilesToKeep = ["cl-who.asd"];
+  asdFilesToKeep = [ "cl-who.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-who DESCRIPTION (X)HTML generation macros SHA256

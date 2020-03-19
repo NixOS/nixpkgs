@@ -1,14 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lumina;
-
 in
-
 {
   options = {
 
@@ -31,8 +27,8 @@ in
     };
 
     environment.systemPackages =
-      pkgs.lumina.preRequisitePackages ++
-      pkgs.lumina.corePackages;
+      pkgs.lumina.preRequisitePackages
+      ++ pkgs.lumina.corePackages;
 
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [

@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.lgpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ lethalman ];
-    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = stdenv.lib.platforms.gnu ++ stdenv.lib.platforms.linux; # arbitrary choice
   };
 }

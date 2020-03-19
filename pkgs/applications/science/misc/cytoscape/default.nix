@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "125vgr8vqbmy2nsm1yl0h0q8p49lxxqfw5cmxzbx1caklcn4rryc";
   };
 
-  buildInputs = [jre makeWrapper];
+  buildInputs = [ jre makeWrapper ];
 
   installPhase = ''
     mkdir -pv $out/{share,bin}
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
     homepage = http://www.cytoscape.org;
     description = "A general platform for complex network analysis and visualization";
     license = stdenv.lib.licenses.lgpl21;
-    maintainers = [stdenv.lib.maintainers.mimame];
+    maintainers = [ stdenv.lib.maintainers.mimame ];
     platforms = stdenv.lib.platforms.unix;
   };
 }

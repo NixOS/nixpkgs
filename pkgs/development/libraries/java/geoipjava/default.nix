@@ -1,4 +1,4 @@
-{stdenv, fetchurl, jdk, unzip}:
+{ stdenv, fetchurl, jdk, unzip }:
 
 stdenv.mkDerivation {
   name = "GeoIPJava-1.2.5";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "1gb2d0qvvq7xankz7l7ymbr3qprwk9bifpy4hlgw0sq4i6a55ypd";
   };
   buildInputs = [ jdk unzip ];
-  buildPhase = 
+  buildPhase =
     ''
       cd source
       javac $(find . -name \*.java)

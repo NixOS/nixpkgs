@@ -1,7 +1,5 @@
 { stdenv, fetchurl, unzip }:
-
 let
-
   src = fetchurl {
     url = http://www.oasis-open.org/docbook/sgml/3.1/docbk31.zip;
     sha256 = "0f25ch7bywwhdxb1qa0hl28mgq1blqdap3rxzamm585rf4kis9i0";
@@ -11,9 +9,7 @@ let
     url = http://www.oasis-open.org/cover/ISOEnts.zip;
     sha256 = "1clrkaqnvc1ja4lj8blr0rdlphngkcda3snm7b9jzvcn76d3br6w";
   };
-
 in
-
 stdenv.mkDerivation {
   name = "docbook-sgml-3.1";
 

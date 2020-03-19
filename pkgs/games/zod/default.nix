@@ -1,5 +1,14 @@
-{ fetchurl, stdenv, unrar, unzip, SDL, SDL_image, SDL_ttf, SDL_mixer
-, libmysqlclient, makeWrapper }:
+{ fetchurl
+, stdenv
+, unrar
+, unzip
+, SDL
+, SDL_image
+, SDL_ttf
+, SDL_mixer
+, libmysqlclient
+, makeWrapper
+}:
 
 stdenv.mkDerivation {
   name = "zod-engine-2011-03-18";

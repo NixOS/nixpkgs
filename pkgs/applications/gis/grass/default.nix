@@ -1,6 +1,28 @@
-{ stdenv, fetchFromGitHub, flex, bison, pkgconfig, zlib, libtiff, libpng, fftw
-, cairo, readline, ffmpeg, makeWrapper, wxGTK30, netcdf, blas
-, proj, gdal, geos, sqlite, postgresql, libmysqlclient, python2Packages, libLAS, proj-datumgrid
+{ stdenv
+, fetchFromGitHub
+, flex
+, bison
+, pkgconfig
+, zlib
+, libtiff
+, libpng
+, fftw
+, cairo
+, readline
+, ffmpeg
+, makeWrapper
+, wxGTK30
+, netcdf
+, blas
+, proj
+, gdal
+, geos
+, sqlite
+, postgresql
+, libmysqlclient
+, python2Packages
+, libLAS
+, proj-datumgrid
 }:
 
 stdenv.mkDerivation rec {
@@ -10,15 +32,36 @@ stdenv.mkDerivation rec {
   src = with stdenv.lib; fetchFromGitHub {
     owner = "OSGeo";
     repo = "grass";
-    rev = "${name}_${replaceStrings ["."] ["_"] version}";
+    rev = "${name}_${replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1amjk9rz7vw5ha7nyl5j2bfwj5if9w62nlwx5qbp1x7spldimlll";
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ flex bison zlib proj gdal libtiff libpng fftw sqlite cairo proj
-  readline ffmpeg makeWrapper wxGTK30 netcdf geos postgresql libmysqlclient blas
-  libLAS proj-datumgrid ]
-    ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
+  buildInputs = [
+    flex
+    bison
+    zlib
+    proj
+    gdal
+    libtiff
+    libpng
+    fftw
+    sqlite
+    cairo
+    proj
+    readline
+    ffmpeg
+    makeWrapper
+    wxGTK30
+    netcdf
+    geos
+    postgresql
+    libmysqlclient
+    blas
+    libLAS
+    proj-datumgrid
+  ]
+  ++ (with python2Packages; [ python dateutil wxPython30 numpy ]);
 
   # On Darwin the installer tries to symlink the help files into a system
   # directory
@@ -26,7 +69,7 @@ stdenv.mkDerivation rec {
 
   # Correct mysql_config query
   patchPhase = ''
-      substituteInPlace configure --replace "--libmysqld-libs" "--libs"
+    substituteInPlace configure --replace "--libmysqld-libs" "--libs"
   '';
 
   configureFlags = [
@@ -103,6 +146,6 @@ stdenv.mkDerivation rec {
     description = "GIS software suite used for geospatial data management and analysis, image processing, graphics and maps production, spatial modeling, and visualization";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.all;
-    maintainers = with stdenv.lib.maintainers; [mpickering];
+    maintainers = with stdenv.lib.maintainers; [ mpickering ];
   };
 }

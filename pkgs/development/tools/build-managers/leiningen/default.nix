@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, makeWrapper
-, coreutils, jdk, rlwrap, gnupg }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, coreutils
+, jdk
+, rlwrap
+, gnupg
+}:
 
 stdenv.mkDerivation rec {
   pname = "leiningen";

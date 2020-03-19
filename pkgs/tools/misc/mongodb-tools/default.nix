@@ -6,7 +6,6 @@
 , pkgconfig
 , libpcap
 }:
-
 let
   tools = [
     "bsondump"
@@ -20,8 +19,8 @@ let
     "mongoreplay"
   ];
   version = "4.2.0";
-
-in buildGoPackage {
+in
+buildGoPackage {
   pname = "mongo-tools";
   inherit version;
 
@@ -44,9 +43,10 @@ in buildGoPackage {
     # move vendored codes so nixpkgs go builder could find it
     runHook preBuild
 
-    ${stdenv.lib.concatMapStrings (t: ''
-      go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
-    '') tools}
+    ${stdenv.lib.concatMapStrings
+      (t: ''
+        go build -o "$bin/bin/${t}" -tags ssl -ldflags "-s -w" $goPackagePath/${t}/main
+      '') tools}
 
     runHook postBuild
   '';

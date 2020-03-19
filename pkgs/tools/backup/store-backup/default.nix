@@ -1,4 +1,4 @@
-{stdenv, which, coreutils, perl, fetchurl, perlPackages, makeWrapper, diffutils , writeScriptBin, bzip2}:
+{ stdenv, which, coreutils, perl, fetchurl, perlPackages, makeWrapper, diffutils, writeScriptBin, bzip2 }:
 
 # quick usage:
 # storeBackup.pl --sourceDir /home/user --backupDir /tmp/my_backup_destination
@@ -8,10 +8,9 @@
 # btrfs warning: you may run out of hardlinks soon
 
 # known impurity: test cases seem to bu using /tmp/storeBackup.lock ..
-
-let dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
+let
+  dummyMount = writeScriptBin "mount" "#!${stdenv.shell}";
 in
-
 stdenv.mkDerivation rec {
 
   version = "3.5";
@@ -105,7 +104,7 @@ stdenv.mkDerivation rec {
     description = "A backup suite that stores files on other disks";
     homepage = https://savannah.nongnu.org/projects/storebackup;
     license = stdenv.lib.licenses.gpl3Plus;
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

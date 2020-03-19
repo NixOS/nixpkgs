@@ -1,92 +1,111 @@
-{ fetchFromGitHub, stdenv, lib, pkgconfig, autoreconfHook
-, ncurses, gnutls, readline
-, openssl, perl, sqlite, libjpeg, speex, pcre
-, ldns, libedit, yasm, which, libsndfile, libtiff
+{ fetchFromGitHub
+, stdenv
+, lib
+, pkgconfig
+, autoreconfHook
+, ncurses
+, gnutls
+, readline
+, openssl
+, perl
+, sqlite
+, libjpeg
+, speex
+, pcre
+, ldns
+, libedit
+, yasm
+, which
+, libsndfile
+, libtiff
 
-, curl, lua, libmysqlclient, postgresql, libopus, libctb, gsmlib
+, curl
+, lua
+, libmysqlclient
+, postgresql
+, libopus
+, libctb
+, gsmlib
 
 , SystemConfiguration
 
 , modules ? null
 }:
-
 let
+  availableModules = import ./modules.nix {
+    inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
+  };
 
-availableModules = import ./modules.nix {
-  inherit curl lua libmysqlclient postgresql libopus libctb gsmlib;
-};
+  # the default list from v1.8.7, except with applications/mod_signalwire also disabled
+  defaultModules = mods: with mods; [
+    applications.commands
+    applications.conference
+    applications.db
+    applications.dptools
+    applications.enum
+    applications.esf
+    applications.expr
+    applications.fifo
+    applications.fsv
+    applications.hash
+    applications.httapi
+    applications.sms
+    applications.spandsp
+    applications.valet_parking
+    applications.voicemail
 
-# the default list from v1.8.7, except with applications/mod_signalwire also disabled
-defaultModules = mods: with mods; [
-  applications.commands
-  applications.conference
-  applications.db
-  applications.dptools
-  applications.enum
-  applications.esf
-  applications.expr
-  applications.fifo
-  applications.fsv
-  applications.hash
-  applications.httapi
-  applications.sms
-  applications.spandsp
-  applications.valet_parking
-  applications.voicemail
+    applications.curl
 
-  applications.curl
+    codecs.amr
+    codecs.b64
+    codecs.g723_1
+    codecs.g729
+    codecs.h26x
+    codecs.opus
 
-  codecs.amr
-  codecs.b64
-  codecs.g723_1
-  codecs.g729
-  codecs.h26x
-  codecs.opus
+    databases.mariadb
+    databases.pgsql
 
-  databases.mariadb
-  databases.pgsql
+    dialplans.asterisk
+    dialplans.xml
 
-  dialplans.asterisk
-  dialplans.xml
+    endpoints.loopback
+    endpoints.rtc
+    endpoints.skinny
+    endpoints.sofia
+    endpoints.verto
 
-  endpoints.loopback
-  endpoints.rtc
-  endpoints.skinny
-  endpoints.sofia
-  endpoints.verto
+    event_handlers.cdr_csv
+    event_handlers.cdr_sqlite
+    event_handlers.event_socket
 
-  event_handlers.cdr_csv
-  event_handlers.cdr_sqlite
-  event_handlers.event_socket
+    formats.local_stream
+    formats.native_file
+    formats.png
+    formats.sndfile
+    formats.tone_stream
 
-  formats.local_stream
-  formats.native_file
-  formats.png
-  formats.sndfile
-  formats.tone_stream
+    languages.lua
 
-  languages.lua
+    loggers.console
+    loggers.logfile
+    loggers.syslog
 
-  loggers.console
-  loggers.logfile
-  loggers.syslog
+    say.en
 
-  say.en
+    xml_int.cdr
+    xml_int.rpc
+    xml_int.scgi
+  ] ++ lib.optionals stdenv.isLinux [ endpoints.gsmopen ];
 
-  xml_int.cdr
-  xml_int.rpc
-  xml_int.scgi
-] ++ lib.optionals stdenv.isLinux [ endpoints.gsmopen ];
+  enabledModules = (if modules != null then modules else defaultModules) availableModules;
 
-enabledModules = (if modules != null then modules else defaultModules) availableModules;
-
-modulesConf = let
-  lst = builtins.map (mod: mod.path) enabledModules;
-  str = lib.strings.concatStringsSep "\n" lst;
-  in builtins.toFile "modules.conf" str;
-
+  modulesConf =
+    let
+      lst = builtins.map (mod: mod.path) enabledModules;
+      str = lib.strings.concatStringsSep "\n" lst;
+    in builtins.toFile "modules.conf" str;
 in
-
 stdenv.mkDerivation rec {
   pname = "freeswitch";
   version = "1.10.2";
@@ -104,9 +123,21 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   buildInputs = [
-    openssl ncurses gnutls readline perl libjpeg
-    sqlite pcre speex ldns libedit yasm which
-    libsndfile libtiff
+    openssl
+    ncurses
+    gnutls
+    readline
+    perl
+    libjpeg
+    sqlite
+    pcre
+    speex
+    ldns
+    libedit
+    yasm
+    which
+    libsndfile
+    libtiff
   ]
   ++ lib.unique (lib.concatMap (mod: mod.inputs) enabledModules)
   ++ lib.optionals stdenv.isDarwin [ SystemConfiguration ];

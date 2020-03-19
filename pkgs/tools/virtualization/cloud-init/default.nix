@@ -1,8 +1,8 @@
 { lib, pythonPackages, fetchurl, cloud-utils }:
-
-let version = "0.7.9";
-
-in pythonPackages.buildPythonApplication {
+let
+  version = "0.7.9";
+in
+pythonPackages.buildPythonApplication {
   pname = "cloud-init";
   inherit version;
   namePrefix = "";
@@ -27,10 +27,19 @@ in pythonPackages.buildPythonApplication {
 
     # Argparse is part of python stdlib
     sed -i s/argparse// requirements.txt
-    '';
+  '';
 
-  propagatedBuildInputs = with pythonPackages; [ cheetah jinja2 prettytable
-    oauthlib pyserial configobj pyyaml requests jsonpatch ];
+  propagatedBuildInputs = with pythonPackages; [
+    cheetah
+    jinja2
+    prettytable
+    oauthlib
+    pyserial
+    configobj
+    pyyaml
+    requests
+    jsonpatch
+  ];
 
   checkInputs = with pythonPackages; [ contextlib2 httpretty mock unittest2 ];
 

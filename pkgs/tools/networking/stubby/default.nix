@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake libyaml ];
 
   buildInputs = [ doxygen getdns systemd ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ darwin.Security ];
 
   meta = with stdenv.lib; {
     description = "A local DNS Privacy stub resolver (using DNS-over-TLS)";
@@ -28,6 +28,7 @@ stdenv.mkDerivation rec {
     homepage = "https://dnsprivacy.org/wiki/x/JYAT";
     downloadPage = "https://github.com/getdnsapi/stubby";
     maintainers = with maintainers; [ leenaars ehmry ];
-    license = licenses.bsd3; platforms = platforms.all;
+    license = licenses.bsd3;
+    platforms = platforms.all;
   };
 }

@@ -14,7 +14,7 @@ buildGoPackage rec {
     sha256 = "18h5sj4lcivrwjq2hzn7c3g4mblw17zicb5nma8sh7sakwzyg1k9";
   };
 
-  subPackages = ["."];
+  subPackages = [ "." ];
   goPackagePath = "github.com/kubicorn/kubicorn";
 
   meta = {

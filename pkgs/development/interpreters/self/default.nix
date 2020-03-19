@@ -15,8 +15,8 @@ stdenv.mkDerivation {
   pname = "self";
 
   src = fetchgit {
-    url    = "https://github.com/russellallen/self";
-    rev    = "d16bcaad3c5092dae81ad0b16d503f2a53b8ef86";
+    url = "https://github.com/russellallen/self";
+    rev = "d16bcaad3c5092dae81ad0b16d503f2a53b8ef86";
     sha256 = "1dhs6209407j0ll9w9id31vbawdrm9nz1cjak8g8hixrw1nid4i5";
   };
 

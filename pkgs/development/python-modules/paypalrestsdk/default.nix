@@ -1,5 +1,9 @@
-{ buildPythonPackage, fetchPypi
-, requests, six, pyopenssl }:
+{ buildPythonPackage
+, fetchPypi
+, requests
+, six
+, pyopenssl
+}:
 
 buildPythonPackage rec {
   pname = "paypalrestsdk";

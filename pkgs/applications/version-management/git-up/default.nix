@@ -17,10 +17,10 @@ pythonPackages.buildPythonApplication rec {
   # 2. $HOME is by default not a valid dir, so we have to set that too
   # https://github.com/NixOS/nixpkgs/issues/12591
   preCheck = ''
-      export HOME=$TMPDIR
-      git config --global user.email "nobody@example.com"
-      git config --global user.name "Nobody"
-    '';
+    export HOME=$TMPDIR
+    git config --global user.email "nobody@example.com"
+    git config --global user.name "Nobody"
+  '';
 
   postInstall = ''
     rm -r $out/${pythonPackages.python.sitePackages}/PyGitUp/tests

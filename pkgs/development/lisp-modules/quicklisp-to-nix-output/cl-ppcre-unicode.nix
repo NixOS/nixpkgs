@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-ppcre-unicode";
 
-  asdFilesToKeep = ["cl-ppcre-unicode.asd"];
+  asdFilesToKeep = [ "cl-ppcre-unicode.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-ppcre-unicode DESCRIPTION

@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub
-, bash, python3, yosys
-, yices, boolector, aiger
+{ stdenv
+, fetchFromGitHub
+, bash
+, python3
+, yosys
+, yices
+, boolector
+, aiger
 }:
 
 stdenv.mkDerivation {
@@ -8,9 +13,9 @@ stdenv.mkDerivation {
   version = "2020.02.11";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "SymbiYosys";
-    rev    = "0a7013017f9d583ef6cc8d10712f4bf11cf6e024";
+    owner = "YosysHQ";
+    repo = "SymbiYosys";
+    rev = "0a7013017f9d583ef6cc8d10712f4bf11cf6e024";
     sha256 = "08xz8sgvs1qy7jxp8ma5yl49i6nl7k6bkhry4afdvwg3fvwis39c";
   };
 
@@ -45,9 +50,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Tooling for Yosys-based verification flows";
-    homepage    = "https://symbiyosys.readthedocs.io/";
-    license     = stdenv.lib.licenses.isc;
+    homepage = "https://symbiyosys.readthedocs.io/";
+    license = stdenv.lib.licenses.isc;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice emily ];
-    platforms   = stdenv.lib.platforms.all;
+    platforms = stdenv.lib.platforms.all;
   };
 }

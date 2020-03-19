@@ -1,37 +1,63 @@
-{ config, stdenv, fetchFromGitHub
+{ config
+, stdenv
+, fetchFromGitHub
 , autoconf
 , automake
 , libtool
 , intltool
 , pkgconfig
 , jansson
-# deadbeef can use either gtk2 or gtk3
-, gtk2Support ? false, gtk2 ? null
-, gtk3Support ? true, gtk3 ? null, gsettings-desktop-schemas ? null, wrapGAppsHook ? null
-# input plugins
-, vorbisSupport ? true, libvorbis ? null
-, mp123Support ? true, libmad ? null
-, flacSupport ? true, flac ? null
-, wavSupport ? true, libsndfile ? null
-, cdaSupport ? true, libcdio ? null, libcddb ? null
-, aacSupport ? true, faad2 ? null
-, opusSupport ? true, opusfile ? null
-, wavpackSupport ? false, wavpack ? null
-, ffmpegSupport ? false, ffmpeg ? null
-, apeSupport ? true, yasm ? null
-# misc plugins
-, zipSupport ? true, libzip ? null
-, artworkSupport ? true, imlib2 ? null
-, hotkeysSupport ? true, libX11 ? null
-, osdSupport ? true, dbus ? null
-# output plugins
-, alsaSupport ? true, alsaLib ? null
-, pulseSupport ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
-# effect plugins
-, resamplerSupport ? true, libsamplerate ? null
-, overloadSupport ? true, zlib ? null
-# transports
-, remoteSupport ? true, curl ? null
+  # deadbeef can use either gtk2 or gtk3
+, gtk2Support ? false
+, gtk2 ? null
+, gtk3Support ? true
+, gtk3 ? null
+, gsettings-desktop-schemas ? null
+, wrapGAppsHook ? null
+  # input plugins
+, vorbisSupport ? true
+, libvorbis ? null
+, mp123Support ? true
+, libmad ? null
+, flacSupport ? true
+, flac ? null
+, wavSupport ? true
+, libsndfile ? null
+, cdaSupport ? true
+, libcdio ? null
+, libcddb ? null
+, aacSupport ? true
+, faad2 ? null
+, opusSupport ? true
+, opusfile ? null
+, wavpackSupport ? false
+, wavpack ? null
+, ffmpegSupport ? false
+, ffmpeg ? null
+, apeSupport ? true
+, yasm ? null
+  # misc plugins
+, zipSupport ? true
+, libzip ? null
+, artworkSupport ? true
+, imlib2 ? null
+, hotkeysSupport ? true
+, libX11 ? null
+, osdSupport ? true
+, dbus ? null
+  # output plugins
+, alsaSupport ? true
+, alsaLib ? null
+, pulseSupport ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio ? null
+  # effect plugins
+, resamplerSupport ? true
+, libsamplerate ? null
+, overloadSupport ? true
+, zlib ? null
+  # transports
+, remoteSupport ? true
+, curl ? null
 }:
 
 assert gtk2Support || gtk3Support;
@@ -69,28 +95,28 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib; [ jansson ]
-    ++ optional gtk2Support gtk2
-    ++ optionals gtk3Support [ gtk3 gsettings-desktop-schemas ]
-    ++ optional vorbisSupport libvorbis
-    ++ optional mp123Support libmad
-    ++ optional flacSupport flac
-    ++ optional wavSupport libsndfile
-    ++ optionals cdaSupport [ libcdio libcddb ]
-    ++ optional aacSupport faad2
-    ++ optional opusSupport opusfile
-    ++ optional zipSupport libzip
-    ++ optional ffmpegSupport ffmpeg
-    ++ optional apeSupport yasm
-    ++ optional artworkSupport imlib2
-    ++ optional hotkeysSupport libX11
-    ++ optional osdSupport dbus
-    ++ optional alsaSupport alsaLib
-    ++ optional pulseSupport libpulseaudio
-    ++ optional resamplerSupport libsamplerate
-    ++ optional overloadSupport zlib
-    ++ optional wavpackSupport wavpack
-    ++ optional remoteSupport curl
-    ;
+  ++ optional gtk2Support gtk2
+  ++ optionals gtk3Support [ gtk3 gsettings-desktop-schemas ]
+  ++ optional vorbisSupport libvorbis
+  ++ optional mp123Support libmad
+  ++ optional flacSupport flac
+  ++ optional wavSupport libsndfile
+  ++ optionals cdaSupport [ libcdio libcddb ]
+  ++ optional aacSupport faad2
+  ++ optional opusSupport opusfile
+  ++ optional zipSupport libzip
+  ++ optional ffmpegSupport ffmpeg
+  ++ optional apeSupport yasm
+  ++ optional artworkSupport imlib2
+  ++ optional hotkeysSupport libX11
+  ++ optional osdSupport dbus
+  ++ optional alsaSupport alsaLib
+  ++ optional pulseSupport libpulseaudio
+  ++ optional resamplerSupport libsamplerate
+  ++ optional overloadSupport zlib
+  ++ optional wavpackSupport wavpack
+  ++ optional remoteSupport curl
+  ;
 
   nativeBuildInputs = [
     autoconf

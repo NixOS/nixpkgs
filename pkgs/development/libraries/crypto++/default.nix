@@ -4,7 +4,7 @@ with stdenv.lib;
 stdenv.mkDerivation rec {
   pname = "crypto++";
   version = "8.2.0";
-  underscoredVersion = strings.replaceStrings ["."] ["_"] version;
+  underscoredVersion = strings.replaceStrings [ "." ] [ "_" ] version;
 
   src = fetchFromGitHub {
     owner = "weidai11";

@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.plasma5;
 
@@ -87,13 +85,13 @@ let
   '';
 
   set_XDG_CONFIG_HOME = ''
-      # Set the default XDG_CONFIG_HOME if it is unset.
-      # Per the XDG Base Directory Specification:
-      # https://specifications.freedesktop.org/basedir-spec/latest
-      # 1. Never export this variable! If it is unset, then child processes are
-      # expected to set the default themselves.
-      # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
-      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
+    # Set the default XDG_CONFIG_HOME if it is unset.
+    # Per the XDG Base Directory Specification:
+    # https://specifications.freedesktop.org/basedir-spec/latest
+    # 1. Never export this variable! If it is unset, then child processes are
+    # expected to set the default themselves.
+    # 2. Contaminate / if $HOME is unset; do not check if $HOME is set.
+    XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-$HOME/.config}
   '';
 
   startplasma =
@@ -139,9 +137,7 @@ let
     + ''
       exec "${startplasma-x11}"
     '';
-
 in
-
 {
   options = {
 
@@ -270,7 +266,8 @@ in
           breeze-icons
           pkgs.hicolor-icon-theme
 
-          kde-gtk-config breeze-gtk
+          kde-gtk-config
+          breeze-gtk
 
           qtvirtualkeyboard
 

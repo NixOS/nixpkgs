@@ -36,12 +36,12 @@
 , cmake
 , asio
 }:
-
 let
-  myPython = python3.withPackages (ps: with ps; [
-    pygobject3
-    dbus-python
-  ]);
+  myPython = python3.withPackages
+    (ps: with ps; [
+      pygobject3
+      dbus-python
+    ]);
 
   src = fetchgit {
     url = https://gitlab.savoirfairelinux.com/ring/ring-daemon.git;
@@ -54,11 +54,11 @@ let
   restbed = import ./restbed.nix {
     inherit stdenv fetchFromGitHub cmake asio openssl;
     patches = [
-    "${patchdir}/restbed/CMakeLists.patch"
-    "${patchdir}/restbed/strand.patch"
-    "${patchdir}/restbed/uri_cpp.patch"
-    "${patchdir}/restbed/dns-resolution-error.patch"
-    "${patchdir}/restbed/string.patch"
+      "${patchdir}/restbed/CMakeLists.patch"
+      "${patchdir}/restbed/strand.patch"
+      "${patchdir}/restbed/uri_cpp.patch"
+      "${patchdir}/restbed/dns-resolution-error.patch"
+      "${patchdir}/restbed/string.patch"
     ];
   };
 

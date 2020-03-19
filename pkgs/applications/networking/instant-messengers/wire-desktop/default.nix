@@ -10,9 +10,7 @@
 , cpio
 , xar
 }:
-
 let
-
   inherit (stdenv.hostPlatform) system;
 
   throwSystem = throw "Unsupported system: ${system}";
@@ -144,7 +142,6 @@ let
       cp -r Wire.app $out/Applications
     '';
   };
-
 in
 if stdenv.isDarwin
 then darwin

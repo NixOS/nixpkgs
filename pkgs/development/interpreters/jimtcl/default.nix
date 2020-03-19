@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub, sqlite, readline, asciidoc, SDL, SDL_gfx }:
-
 let
   makeSDLFlags = map (p: "-I${stdenv.lib.getDev p}/include/SDL");
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "jimtcl";
   version = "0.79";
 
@@ -19,7 +18,10 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    sqlite readline SDL SDL_gfx
+    sqlite
+    readline
+    SDL
+    SDL_gfx
   ];
 
   configureFlags = [

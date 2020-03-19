@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, pkgconfig, glib, libXaw, libX11, libXext
-  , libDSKSupport ? true, libdsk
-  , motifSupport ? false, lesstif
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, libXaw
+, libX11
+, libXext
+, libDSKSupport ? true
+, libdsk
+, motifSupport ? false
+, lesstif
 }:
 
 with stdenv.lib;
@@ -16,8 +24,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ glib libdsk libXaw libX11 libXext ]
-    ++ optional libDSKSupport libdsk
-    ++ optional motifSupport lesstif;
+  ++ optional libDSKSupport libdsk
+  ++ optional motifSupport lesstif;
 
   meta = {
     description = "A portable Amstrad CPC 464/664/6128 emulator written in C";

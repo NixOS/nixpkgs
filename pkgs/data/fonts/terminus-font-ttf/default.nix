@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "4.47.0";
-in fetchzip {
+in
+fetchzip {
   name = "terminus-font-ttf-${version}";
 
   url = "http://files.ax86.net/terminus-ttf/files/${version}/terminus-ttf-${version}.zip";

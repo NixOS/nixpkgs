@@ -1,9 +1,22 @@
-{ stdenv, fetchurl, pkgconfig, openssl, libxslt, perl
-, curl, pcre, libxml2, librdf_rasqal, gmp
-, libmysqlclient, withMysql ? false
-, postgresql, withPostgresql ? false
-, sqlite, withSqlite ? true
-, db, withBdb ? false
+{ stdenv
+, fetchurl
+, pkgconfig
+, openssl
+, libxslt
+, perl
+, curl
+, pcre
+, libxml2
+, librdf_rasqal
+, gmp
+, libmysqlclient
+, withMysql ? false
+, postgresql
+, withPostgresql ? false
+, sqlite
+, withSqlite ? true
+, db
+, withBdb ? false
 }:
 
 stdenv.mkDerivation rec {
@@ -17,10 +30,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ perl pkgconfig ];
 
   buildInputs = [ openssl libxslt curl pcre libxml2 gmp ]
-    ++ stdenv.lib.optional withMysql libmysqlclient
-    ++ stdenv.lib.optional withSqlite sqlite
-    ++ stdenv.lib.optional withPostgresql postgresql
-    ++ stdenv.lib.optional withBdb db;
+  ++ stdenv.lib.optional withMysql libmysqlclient
+  ++ stdenv.lib.optional withSqlite sqlite
+  ++ stdenv.lib.optional withPostgresql postgresql
+  ++ stdenv.lib.optional withBdb db;
 
   propagatedBuildInputs = [ librdf_rasqal ];
 

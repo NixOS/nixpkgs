@@ -15,7 +15,6 @@
 assert withJpegSupport -> libjpeg != null;
 assert withPngSupport -> libpng != null;
 assert withTiffSupport -> libtiff != null;
-
 let
   deb_patch = "25";
 in
@@ -34,7 +33,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libX11 libXt
+    libX11
+    libXt
   ] ++ stdenv.lib.optionals withJpegSupport [
     libjpeg
   ] ++ stdenv.lib.optionals withPngSupport [
@@ -83,6 +83,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl2Plus;
 
     maintainers = with stdenv.lib.maintainers; [ andrew-d ];
-    platforms = stdenv.lib.platforms.linux;  # arbitrary choice
+    platforms = stdenv.lib.platforms.linux; # arbitrary choice
   };
 }

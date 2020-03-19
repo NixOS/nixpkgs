@@ -11,7 +11,6 @@
 , perl
 , lib
 }:
-
 let
   model = "mfcl3770cdw";
   version = "1.0.2-0";
@@ -20,8 +19,8 @@ let
     sha256 = "09fhbzhpjymhkwxqyxzv24b06ybmajr6872yp7pri39595mhrvay";
   };
   reldir = "opt/brother/Printers/${model}/";
-
-in rec {
+in
+rec {
   driver = pkgsi686Linux.stdenv.mkDerivation rec {
     inherit src version;
     name = "${model}drv-${version}";
@@ -31,18 +30,22 @@ in rec {
     unpackPhase = "dpkg-deb -x $src $out";
 
     installPhase = ''
-      dir="$out/${reldir}"
-      substituteInPlace $dir/lpd/filter_${model} \
-        --replace /usr/bin/perl ${perl}/bin/perl \
-        --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
-        --replace "PRINTER =~" "PRINTER = \"${model}\"; #"
-      wrapProgram $dir/lpd/filter_${model} \
-        --prefix PATH : ${stdenv.lib.makeBinPath [
-          coreutils ghostscript gnugrep gnused which
-        ]}
-    # need to use i686 glibc here, these are 32bit proprietary binaries
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      $dir/lpd/brmfcl3770cdwfilter
+        dir="$out/${reldir}"
+        substituteInPlace $dir/lpd/filter_${model} \
+          --replace /usr/bin/perl ${perl}/bin/perl \
+          --replace "BR_PRT_PATH =~" "BR_PRT_PATH = \"$dir\"; #" \
+          --replace "PRINTER =~" "PRINTER = \"${model}\"; #"
+        wrapProgram $dir/lpd/filter_${model} \
+          --prefix PATH : ${stdenv.lib.makeBinPath [
+        coreutils
+        ghostscript
+        gnugrep
+        gnused
+        which
+      ]}
+      # need to use i686 glibc here, these are 32bit proprietary binaries
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        $dir/lpd/brmfcl3770cdwfilter
     '';
 
     meta = {

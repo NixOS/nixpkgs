@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, SDL, SDL_mixer, SDL_net
+{ stdenv
+, fetchurl
+, SDL
+, SDL_mixer
+, SDL_net
 , libGLU ? null
 , libGL ? null
 , useOpenGL ? stdenv.hostPlatform == stdenv.buildPlatform
@@ -14,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ SDL SDL_mixer SDL_net ]
-    ++ stdenv.lib.optionals useOpenGL [ libGL libGLU ];
+  ++ stdenv.lib.optionals useOpenGL [ libGL libGLU ];
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 

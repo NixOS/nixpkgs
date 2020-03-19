@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) ntp;
 
   cfg = config.services.ntp;
@@ -28,9 +26,7 @@ let
   '';
 
   ntpFlags = "-c ${configFile} -u ${ntpUser}:nogroup ${toString cfg.extraFlags}";
-
 in
-
 {
 
   ###### interface
@@ -98,7 +94,7 @@ in
         type = types.listOf types.str;
         description = "Extra flags passed to the ntpd command.";
         example = literalExample ''[ "--interface=eth0" ]'';
-        default = [];
+        default = [ ];
       };
 
     };
@@ -118,13 +114,15 @@ in
     systemd.services.systemd-timedated.environment = { SYSTEMD_TIMEDATED_NTP_SERVICES = "ntpd.service"; };
 
     users.users.${ntpUser} =
-      { uid = config.ids.uids.ntp;
+      {
+        uid = config.ids.uids.ntp;
         description = "NTP daemon user";
         home = stateDir;
       };
 
     systemd.services.ntpd =
-      { description = "NTP Daemon";
+      {
+        description = "NTP Daemon";
 
         wantedBy = [ "multi-user.target" ];
         wants = [ "time-sync.target" ];

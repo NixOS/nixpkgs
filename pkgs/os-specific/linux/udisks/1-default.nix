@@ -1,6 +1,23 @@
-{ stdenv, fetchurl, pkgconfig, sg3_utils, udev, glib, dbus, dbus-glib
-, polkit, parted, lvm2, libatasmart, intltool, libuuid, mdadm
-, libxslt, docbook_xsl, utillinux, libgudev }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, sg3_utils
+, udev
+, glib
+, dbus
+, dbus-glib
+, polkit
+, parted
+, lvm2
+, libatasmart
+, intltool
+, libuuid
+, mdadm
+, libxslt
+, docbook_xsl
+, utillinux
+, libgudev
+}:
 
 stdenv.mkDerivation rec {
   name = "udisks-1.0.5";
@@ -27,8 +44,21 @@ stdenv.mkDerivation rec {
     '';
 
   buildInputs =
-    [ sg3_utils udev glib dbus dbus-glib polkit parted libgudev
-      lvm2 libatasmart intltool libuuid libxslt docbook_xsl
+    [
+      sg3_utils
+      udev
+      glib
+      dbus
+      dbus-glib
+      polkit
+      parted
+      libgudev
+      lvm2
+      libatasmart
+      intltool
+      libuuid
+      libxslt
+      docbook_xsl
     ];
 
   nativeBuildInputs = [ pkgconfig ];
@@ -41,6 +71,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl2Plus ];
     broken = true;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

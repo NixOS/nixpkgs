@@ -1,5 +1,16 @@
-{stdenv, fetchurl, libGLU, libGL, freeglut, glew, libXmu, libXext, libX11
-, qmake, GLUT, fixDarwinDylibNames }:
+{ stdenv
+, fetchurl
+, libGLU
+, libGL
+, freeglut
+, glew
+, libXmu
+, libXext
+, libX11
+, qmake
+, GLUT
+, fixDarwinDylibNames
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -10,11 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ qmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ glew ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL freeglut libXmu libXext libX11 ]
-    ++ stdenv.lib.optional stdenv.isDarwin GLUT;
+  ++ stdenv.lib.optionals stdenv.isLinux [ libGLU libGL freeglut libXmu libXext libX11 ]
+  ++ stdenv.lib.optional stdenv.isDarwin GLUT;
 
   doCheck = false;
 
@@ -49,4 +60,3 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2;
   };
 }
-

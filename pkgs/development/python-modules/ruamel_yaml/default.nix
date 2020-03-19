@@ -21,8 +21,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ ruamel_base ]
-    ++ lib.optional (!isPy3k) ruamel_ordereddict
-    ++ lib.optional (!isPyPy) ruamel_yaml_clib;
+  ++ lib.optional (!isPy3k) ruamel_ordereddict
+  ++ lib.optional (!isPyPy) ruamel_yaml_clib;
 
   # causes namespace clash on py27
   dontUsePythonImportsCheck = !isPy3k;

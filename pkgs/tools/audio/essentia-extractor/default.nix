@@ -14,7 +14,8 @@ let
 
   arch = arch_table.${stdenv.system};
   sha = sha_table.${stdenv.system};
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "essentia-extractor";
   version = "2.1_beta2";
 

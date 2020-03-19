@@ -10,7 +10,6 @@
 , systemd
 , yajl
 }:
-
 let
   # these tests require additional permissions
   disabledTests = [
@@ -29,7 +28,6 @@ let
     "test_update.py"
     "tests_libcrun_utils"
   ];
-
 in
 stdenv.mkDerivation rec {
   pname = "crun";
@@ -55,8 +53,9 @@ stdenv.mkDerivation rec {
     echo ${version} > .tarball-version
     echo '#define GIT_VERSION "${src.rev}"' > git-version.h
 
-    ${lib.concatMapStringsSep "\n" (e:
-      "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
+    ${lib.concatMapStringsSep "\n" (
+      e:
+          "substituteInPlace Makefile.am --replace 'tests/${e}' ''"
     ) disabledTests}
   '';
 

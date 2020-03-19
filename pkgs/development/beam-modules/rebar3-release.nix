@@ -1,83 +1,97 @@
-{ stdenv, writeText, erlang, rebar3, openssl,
-  lib }:
+{ stdenv
+, writeText
+, erlang
+, rebar3
+, openssl
+, lib
+}:
 
-{ name, version
+{ name
+, version
 , src
 , checkouts ? null
 , releaseType
-, buildInputs ? []
+, buildInputs ? [ ]
 , setupHook ? null
 , profile ? "default"
 , installPhase ? null
 , buildPhase ? null
 , configurePhase ? null
-, meta ? {}
+, meta ? { }
 , enableDebugInfo ? false
-, ... }@attrs:
+, ...
+}@attrs:
 
 with stdenv.lib;
-
 let
   shell = drv: stdenv.mkDerivation {
-          name = "interactive-shell-${drv.name}";
-          buildInputs = [ drv ];
-    };
+    name = "interactive-shell-${drv.name}";
+    buildInputs = [ drv ];
+  };
 
   customPhases = filterAttrs
     (_: v: v != null)
     { inherit setupHook configurePhase buildPhase installPhase; };
 
-  pkg = self: stdenv.mkDerivation (attrs // {
+  pkg = self: stdenv.mkDerivation
+    (attrs // {
 
-    name = "${name}-${version}";
-    inherit version;
+      name = "${name}-${version}";
+      inherit version;
 
-    buildInputs = buildInputs ++ [ erlang rebar3 openssl ];
-    propagatedBuildInputs = [checkouts];
+      buildInputs = buildInputs ++ [ erlang rebar3 openssl ];
+      propagatedBuildInputs = [ checkouts ];
 
-    dontStrip = true;
+      dontStrip = true;
 
-    inherit src;
+      inherit src;
 
-    setupHook = writeText "setupHook.sh" ''
-       addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
-    '';
+      setupHook = writeText "setupHook.sh" ''
+        addToSearchPath ERL_LIBS "$1/lib/erlang/lib/"
+      '';
 
-    configurePhase = ''
-      runHook preConfigure
-      ${if checkouts != null then
-          ''cp --no-preserve=all -R ${checkouts}/_checkouts .''
-        else
-          ''''}
-      runHook postConfigure
-    '';
+      configurePhase = ''
+        runHook preConfigure
+        ${
+          if checkouts != null
+          then
+              ''cp --no-preserve=all -R ${checkouts}/_checkouts .''
+          else
+              ''''}
+        runHook postConfigure
+      '';
 
-    buildPhase = ''
-      runHook preBuild
-      HOME=. DEBUG=1 rebar3 as ${profile} ${if releaseType == "escript"
-                                            then '' escriptize''
-                                            else '' release''}
-      runHook postBuild
-    '';
+      buildPhase = ''
+        runHook preBuild
+        HOME=. DEBUG=1 rebar3 as ${profile} ${
+          if releaseType == "escript"
+          then '' escriptize''
+          else '' release''}
+        runHook postBuild
+      '';
 
-    installPhase = ''
-      runHook preInstall
-      dir=${if releaseType == "escript"
-            then ''bin''
-            else ''rel''}
-      mkdir -p "$out/$dir"
-      cp -R --preserve=mode "_build/${profile}/$dir" "$out"
-      runHook postInstall
-    '';
+      installPhase = ''
+        runHook preInstall
+        dir=${
+          if releaseType == "escript"
+          then ''bin''
+          else ''rel''}
+        mkdir -p "$out/$dir"
+        cp -R --preserve=mode "_build/${profile}/$dir" "$out"
+        runHook postInstall
+      '';
 
-    meta = {
-      inherit (erlang.meta) platforms;
-    } // meta;
+      meta =
+        {
+          inherit (erlang.meta) platforms;
+        }
+        // meta;
 
-    passthru = {
-      packageName = name;
-      env = shell self;
-   };
-  } // customPhases);
+      passthru = {
+        packageName = name;
+        env = shell self;
+      };
+    } // customPhases
+    );
 in
-  fix pkg
+fix pkg

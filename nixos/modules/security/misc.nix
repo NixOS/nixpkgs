@@ -109,27 +109,24 @@ with lib;
       boot.kernel.sysctl."user.max_user_namespaces" = 0;
 
       assertions = [
-        { assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
+        {
+          assertion = config.nix.useSandbox -> config.security.allowUserNamespaces;
           message = "`nix.useSandbox = true` conflicts with `!security.allowUserNamespaces`.";
         }
       ];
     })
-
     (mkIf config.security.protectKernelImage {
       # Disable hibernation (allows replacing the running kernel)
       boot.kernelParams = [ "nohibernate" ];
       # Prevent replacing the running kernel image w/o reboot
       boot.kernel.sysctl."kernel.kexec_load_disabled" = mkDefault true;
     })
-
     (mkIf (!config.security.allowSimultaneousMultithreading) {
       boot.kernelParams = [ "nosmt" ];
     })
-
     (mkIf config.security.forcePageTableIsolation {
       boot.kernelParams = [ "pti=on" ];
     })
-
     (mkIf (config.security.virtualisation.flushL1DataCache != null) {
       boot.kernelParams = [ "kvm-intel.vmentry_l1d_flush=${config.security.virtualisation.flushL1DataCache}" ];
     })

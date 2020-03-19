@@ -1,8 +1,9 @@
 { config, stdenv, pkgs, lib }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: with self;
+{
 
-#### PLATFORM
+  #### PLATFORM
 
   libIDL = callPackage ./platform/libIDL {
     gettext = if stdenv.isDarwin then pkgs.gettext else null;
@@ -53,7 +54,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gtkglext = callPackage ./platform/gtkglext { };
 
-#### DESKTOP
+  #### DESKTOP
 
   # Removed from recent GNOME releases, but still required
   scrollkeeper = callPackage ./desktop/scrollkeeper { };
@@ -64,11 +65,11 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   vte = callPackage ./desktop/vte { };
 
-#### BINDINGS
+  #### BINDINGS
 
   libglademm = callPackage ./bindings/libglademm { };
-
-} // lib.optionalAttrs (config.allowAliases or true) {
+}
+// lib.optionalAttrs (config.allowAliases or true) {
   inherit (pkgs)
     # GTK Libs
     glib glibmm atk atkmm cairo pango pangomm gdk_pixbuf gtkmm2 libcanberra-gtk2
@@ -76,8 +77,8 @@ lib.makeScope pkgs.newScope (self: with self; {
     # Included for backwards compatibility
     libsoup libwnck gtk-doc gnome-doc-utils rarian
 
-    gvfs # added 2019-09-03
-  ;
+    gvfs# added 2019-09-03
+    ;
 
   gtk = pkgs.gtk2;
   gtkmm = pkgs.gtkmm2;
@@ -89,4 +90,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnomedocutils = pkgs.gnome-doc-utils;
   gnomeicontheme = self.gnome_icon_theme;
   gnome_common = gnome-common;
-})
+}
+)

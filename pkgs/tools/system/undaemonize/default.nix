@@ -19,4 +19,3 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
   };
 }
-

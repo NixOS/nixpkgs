@@ -7,7 +7,7 @@ import ./make-test-python.nix ({ pkgs, ... }: {
   nodes = {
     machine = { pkgs, lib, ... }: {
       services.nginx.enable = true;
-      services.nginx.virtualHosts.machine.root = pkgs.runCommand "webroot" {} ''
+      services.nginx.virtualHosts.machine.root = pkgs.runCommand "webroot" { } ''
         mkdir $out
         echo 'yay' >$out/index.html
       '';

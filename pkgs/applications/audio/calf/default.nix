@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, cairo, expat, fftwSinglePrec, fluidsynth, glib
-, gtk2, libjack2, ladspaH , libglade, lv2, pkgconfig }:
+{ stdenv
+, fetchurl
+, cairo
+, expat
+, fftwSinglePrec
+, fluidsynth
+, glib
+, gtk2
+, libjack2
+, ladspaH
+, libglade
+, lv2
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
   pname = "calf";
@@ -13,8 +25,17 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   buildInputs = [
-    cairo expat fftwSinglePrec fluidsynth glib gtk2 libjack2 ladspaH
-    libglade lv2 pkgconfig
+    cairo
+    expat
+    fftwSinglePrec
+    fluidsynth
+    glib
+    gtk2
+    libjack2
+    ladspaH
+    libglade
+    lv2
+    pkgconfig
   ];
 
   meta = with stdenv.lib; {

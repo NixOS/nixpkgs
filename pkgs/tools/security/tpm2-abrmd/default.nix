@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, lib
-, tpm2-tss, pkgconfig, glib, which, dbus, cmocka }:
+{ stdenv
+, fetchurl
+, lib
+, tpm2-tss
+, pkgconfig
+, glib
+, which
+, dbus
+, cmocka
+}:
 
 stdenv.mkDerivation rec {
   pname = "tpm2-abrmd";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    tpm2-tss glib which dbus cmocka
+    tpm2-tss
+    glib
+    which
+    dbus
+    cmocka
   ];
 
   # Unit tests are currently broken as the check phase attempts to start a dbus daemon etc.

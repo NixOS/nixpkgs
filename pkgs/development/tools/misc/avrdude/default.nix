@@ -1,6 +1,16 @@
-{ stdenv, fetchurl, yacc, flex, libusb, libelf, libftdi1, readline
-# docSupport is a big dependency, disabled by default
-, docSupport ? false, texLive ? null, texinfo ? null, texi2html ? null
+{ stdenv
+, fetchurl
+, yacc
+, flex
+, libusb
+, libelf
+, libftdi1
+, readline
+  # docSupport is a big dependency, disabled by default
+, docSupport ? false
+, texLive ? null
+, texinfo ? null
+, texi2html ? null
 }:
 
 assert docSupport -> texLive != null && texinfo != null && texi2html != null;
@@ -16,7 +26,7 @@ stdenv.mkDerivation rec {
   configureFlags = stdenv.lib.optionals docSupport "--enable-doc";
 
   buildInputs = [ yacc flex libusb libelf libftdi1 readline ]
-    ++ stdenv.lib.optionals docSupport [ texLive texinfo texi2html ];
+  ++ stdenv.lib.optionals docSupport [ texLive texinfo texi2html ];
 
   meta = with stdenv.lib; {
     description = "Command-line tool for programming Atmel AVR microcontrollers";

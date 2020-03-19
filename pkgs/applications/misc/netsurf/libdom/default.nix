@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, expat
+{ stdenv
+, fetchurl
+, pkgconfig
+, expat
 , buildsystem
 , libparserutils
 , libwapcaplet
@@ -17,7 +20,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ expat
+  buildInputs = [
+    expat
     buildsystem
     libparserutils
     libwapcaplet

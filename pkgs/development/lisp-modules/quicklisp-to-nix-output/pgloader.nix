@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "pgloader";
 
-  asdFilesToKeep = ["pgloader.asd"];
+  asdFilesToKeep = [ "pgloader.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM pgloader DESCRIPTION Load data into PostgreSQL SHA256

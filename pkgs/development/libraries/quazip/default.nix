@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib qtbase ];
   nativeBuildInputs = [ cmake ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   meta = with stdenv.lib; {
     description = "Provides access to ZIP archives from Qt programs";

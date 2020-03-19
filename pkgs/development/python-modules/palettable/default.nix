@@ -10,7 +10,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest ];
- 
+
   checkPhase = ''
     pytest 
   '';
@@ -22,4 +22,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy ];
   };
 }
-

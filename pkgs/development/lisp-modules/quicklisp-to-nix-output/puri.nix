@@ -16,7 +16,7 @@ rec {
 
   packageName = "puri";
 
-  asdFilesToKeep = ["puri.asd"];
+  asdFilesToKeep = [ "puri.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM puri DESCRIPTION Portable Universal Resource Indentifier Library

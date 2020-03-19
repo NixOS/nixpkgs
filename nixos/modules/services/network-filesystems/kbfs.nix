@@ -3,8 +3,8 @@ with lib;
 let
   inherit (config.security) wrapperDir;
   cfg = config.services.kbfs;
-
-in {
+in
+{
 
   ###### interface
 
@@ -37,7 +37,7 @@ in {
 
       extraFlags = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [
           "-label kbfs"
           "-mount-type normal"
@@ -88,7 +88,6 @@ in {
 
       environment.systemPackages = [ pkgs.kbfs ];
     }
-
     (mkIf cfg.enableRedirector {
       security.wrappers."keybase-redirector".source = "${pkgs.kbfs}/bin/redirector";
 

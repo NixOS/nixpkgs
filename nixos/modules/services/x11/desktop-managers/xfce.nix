@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.desktopManager.xfce;
 in
-
 {
 
   imports = [
@@ -43,7 +41,7 @@ in
       };
 
       thunarPlugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         example = literalExample "[ pkgs.xfce.thunar-archive-plugin ]";
         description = ''
@@ -102,23 +100,23 @@ in
 
       (thunar.override { thunarPlugins = cfg.thunarPlugins; })
     ] # TODO: NetworkManager doesn't belong here
-      ++ optional config.networking.networkmanager.enable networkmanagerapplet
-      ++ optional config.powerManagement.enable xfce4-power-manager
-      ++ optionals config.hardware.pulseaudio.enable [
-        pavucontrol
-        # volume up/down keys support:
-        # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
-        # but can only be used with xfce4-panel, so for no-desktop usage we still include
-        # xfce4-volumed-pulse
-        (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
-      ] ++ optionals cfg.enableXfwm [
-        xfwm4
-        xfwm4-themes
-      ] ++ optionals (!cfg.noDesktop) [
-        xfce4-notifyd
-        xfce4-panel
-        xfdesktop
-      ];
+    ++ optional config.networking.networkmanager.enable networkmanagerapplet
+    ++ optional config.powerManagement.enable xfce4-power-manager
+    ++ optionals config.hardware.pulseaudio.enable [
+      pavucontrol
+      # volume up/down keys support:
+      # xfce4-pulseaudio-plugin includes all the functionalities of xfce4-volumed-pulse
+      # but can only be used with xfce4-panel, so for no-desktop usage we still include
+      # xfce4-volumed-pulse
+      (if cfg.noDesktop then xfce4-volumed-pulse else xfce4-pulseaudio-plugin)
+    ] ++ optionals cfg.enableXfwm [
+      xfwm4
+      xfwm4-themes
+    ] ++ optionals (!cfg.noDesktop) [
+      xfce4-notifyd
+      xfce4-panel
+      xfdesktop
+    ];
 
     environment.pathsToLink = [
       "/share/xfce4"
@@ -127,14 +125,16 @@ in
       "/share/gtksourceview-4.0"
     ];
 
-    services.xserver.desktopManager.session = [{
-      name = "xfce";
-      bgSupport = true;
-      start = ''
-        ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
-        waitPID=$!
-      '';
-    }];
+    services.xserver.desktopManager.session = [
+      {
+        name = "xfce";
+        bgSupport = true;
+        start = ''
+          ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &
+          waitPID=$!
+        '';
+      }
+    ];
 
     services.xserver.updateDbusEnvironment = true;
     services.xserver.gdk-pixbuf.modulePackages = [ pkgs.librsvg ];

@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.tinc;
-
 in
-
 {
 
   ###### interface
@@ -128,83 +124,91 @@ in
   config = mkIf (cfg.networks != { }) {
 
     environment.etc = fold (a: b: a // b) { }
-      (flip mapAttrsToList cfg.networks (network: data:
-        flip mapAttrs' data.hosts (host: text: nameValuePair
-          ("tinc/${network}/hosts/${host}")
-          ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
-        ) // {
-          "tinc/${network}/tinc.conf" = {
-            mode = "0444";
-            text = ''
-              Name = ${if data.name == null then "$HOST" else data.name}
-              DeviceType = ${data.interfaceType}
-              ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
-              ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
-              ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
-              Interface = tinc.${network}
-              ${data.extraConfig}
-            '';
+      (flip mapAttrsToList cfg.networks (
+        network: data:
+          flip mapAttrs' data.hosts (
+            host: text: nameValuePair
+              ("tinc/${network}/hosts/${host}")
+              ({ mode = "0644"; user = "tinc.${network}"; inherit text; })
+          ) // {
+            "tinc/${network}/tinc.conf" = {
+              mode = "0444";
+              text = ''
+                Name = ${if data.name == null then "$HOST" else data.name}
+                DeviceType = ${data.interfaceType}
+                ${optionalString (data.ed25519PrivateKeyFile != null) "Ed25519PrivateKeyFile = ${data.ed25519PrivateKeyFile}"}
+                ${optionalString (data.listenAddress != null) "ListenAddress = ${data.listenAddress}"}
+                ${optionalString (data.bindToAddress != null) "BindToAddress = ${data.bindToAddress}"}
+                Interface = tinc.${network}
+                ${data.extraConfig}
+              '';
+            };
+          }
+      )
+      );
+
+    systemd.services = flip mapAttrs' cfg.networks (
+      network: data: nameValuePair
+        ("tinc.${network}")
+        ({
+          description = "Tinc Daemon - ${network}";
+          wantedBy = [ "multi-user.target" ];
+          path = [ data.package ];
+          restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
+          serviceConfig = {
+            Type = "simple";
+            Restart = "always";
+            RestartSec = "3";
+            ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
           };
-        }
-      ));
+          preStart = ''
+            mkdir -p /etc/tinc/${network}/hosts
+            chown tinc.${network} /etc/tinc/${network}/hosts
+            mkdir -p /etc/tinc/${network}/invitations
+            chown tinc.${network} /etc/tinc/${network}/invitations
 
-    systemd.services = flip mapAttrs' cfg.networks (network: data: nameValuePair
-      ("tinc.${network}")
-      ({
-        description = "Tinc Daemon - ${network}";
-        wantedBy = [ "multi-user.target" ];
-        path = [ data.package ];
-        restartTriggers = [ config.environment.etc."tinc/${network}/tinc.conf".source ];
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          RestartSec = "3";
-          ExecStart = "${data.package}/bin/tincd -D -U tinc.${network} -n ${network} ${optionalString (data.chroot) "-R"} --pidfile /run/tinc.${network}.pid -d ${toString data.debugLevel}";
-        };
-        preStart = ''
-          mkdir -p /etc/tinc/${network}/hosts
-          chown tinc.${network} /etc/tinc/${network}/hosts
-          mkdir -p /etc/tinc/${network}/invitations
-          chown tinc.${network} /etc/tinc/${network}/invitations
-
-          # Determine how we should generate our keys
-          if type tinc >/dev/null 2>&1; then
-            # Tinc 1.1+ uses the tinc helper application for key generation
-          ${if data.ed25519PrivateKeyFile != null then "  # Keyfile managed by nix" else ''
-            # Prefer ED25519 keys (only in 1.1+)
-            [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
-          ''}
-            # Otherwise use RSA keys
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
-          else
-            # Tinc 1.0 uses the tincd application
-            [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
-          fi
-        '';
-      })
+            # Determine how we should generate our keys
+            if type tinc >/dev/null 2>&1; then
+              # Tinc 1.1+ uses the tinc helper application for key generation
+            ${
+              if data.ed25519PrivateKeyFile != null
+              then "  # Keyfile managed by nix" else ''
+                # Prefer ED25519 keys (only in 1.1+)
+                [ -f "/etc/tinc/${network}/ed25519_key.priv" ] || tinc -n ${network} generate-ed25519-keys
+              ''}
+              # Otherwise use RSA keys
+              [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tinc -n ${network} generate-rsa-keys 4096
+            else
+              # Tinc 1.0 uses the tincd application
+              [ -f "/etc/tinc/${network}/rsa_key.priv" ] || tincd -n ${network} -K 4096
+            fi
+          '';
+        })
     );
 
-    environment.systemPackages = let
-      cli-wrappers = pkgs.stdenv.mkDerivation {
-        name = "tinc-cli-wrappers";
-        buildInputs = [ pkgs.makeWrapper ];
-        buildCommand = ''
-          mkdir -p $out/bin
-          ${concatStringsSep "\n" (mapAttrsToList (network: data:
-            optionalString (versionAtLeast data.package.version "1.1pre") ''
-              makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
-                --add-flags "--pidfile=/run/tinc.${network}.pid" \
-                --add-flags "--config=/etc/tinc/${network}"
-            '') cfg.networks)}
-        '';
-      };
-    in [ cli-wrappers ];
+    environment.systemPackages =
+      let
+        cli-wrappers = pkgs.stdenv.mkDerivation {
+          name = "tinc-cli-wrappers";
+          buildInputs = [ pkgs.makeWrapper ];
+          buildCommand = ''
+            mkdir -p $out/bin
+            ${concatStringsSep "\n" (mapAttrsToList (network: data:
+              optionalString (versionAtLeast data.package.version "1.1pre") ''
+                makeWrapper ${data.package}/bin/tinc "$out/bin/tinc.${network}" \
+                  --add-flags "--pidfile=/run/tinc.${network}.pid" \
+                  --add-flags "--config=/etc/tinc/${network}"
+              '') cfg.networks)}
+          '';
+        };
+      in [ cli-wrappers ];
 
-    users.users = flip mapAttrs' cfg.networks (network: _:
-      nameValuePair ("tinc.${network}") ({
-        description = "Tinc daemon user for ${network}";
-        isSystemUser = true;
-      })
+    users.users = flip mapAttrs' cfg.networks (
+      network: _:
+        nameValuePair ("tinc.${network}") ({
+          description = "Tinc daemon user for ${network}";
+          isSystemUser = true;
+        })
     );
 
   };

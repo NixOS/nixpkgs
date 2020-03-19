@@ -1,5 +1,4 @@
 { stdenv, lib, runCommand, buildEnv, makeWrapper, makeDesktopItem, gamePacks, libstdcxx5, SDL, openal }:
-
 let
   game = buildEnv {
     name = "ut2004-game";
@@ -30,8 +29,8 @@ let
     categories = "Application;Game;";
     exec = "ut2004";
   };
-
-in runCommand "ut2004" {
+in
+runCommand "ut2004" {
   nativeBuildInputs = [ makeWrapper ];
 } ''
   mkdir -p $out/bin

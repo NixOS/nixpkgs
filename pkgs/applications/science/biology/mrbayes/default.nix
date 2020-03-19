@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline}:
+{ stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation rec {
   # FIXME: replace Makefile so we can build MPI & MAC support
@@ -9,10 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "1x7j8ca5wjrqrxmcpvd375ydm3s2pbkzykv8xfhg1jc037g560n6";
   };
   builder = ./builder.sh;
-  buildInputs = [readline];
+  buildInputs = [ readline ];
 
   meta = {
-    description     = "Bayesian Inference of Phylogeny";
+    description = "Bayesian Inference of Phylogeny";
     longDescription = ''
       Bayesian inference of phylogeny is based upon a
       quantity called the posterior probability distribution of trees, which is
@@ -22,8 +22,8 @@ stdenv.mkDerivation rec {
       MrBayes uses a simulation technique called Markov chain Monte Carlo (or
       MCMC) to approximate the posterior probabilities of trees.
     '';
-    license     = "GPL2";
-    homepage    = http://mrbayes.csit.fsu.edu/;
+    license = "GPL2";
+    homepage = http://mrbayes.csit.fsu.edu/;
     platforms = stdenv.lib.platforms.linux;
   };
 }

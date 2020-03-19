@@ -1,10 +1,9 @@
 { config, lib, callPackage, fetchurl }:
-
 let
-  common = opts: callPackage (import ./common.nix opts) {};
+  common = opts: callPackage (import ./common.nix opts) { };
 in
-
-rec {
+rec
+{
   firefox = common rec {
     pname = "firefox";
     ffversion = "74.0";
@@ -52,7 +51,8 @@ rec {
       versionKey = "ffversion";
     };
   };
-} // lib.optionalAttrs (config.allowAliases or true) {
+}
+// lib.optionalAttrs (config.allowAliases or true) {
   #### ALIASES
   #### remove after 20.03 branchoff
 

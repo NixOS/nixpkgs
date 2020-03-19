@@ -9,23 +9,26 @@
 , isPyPy
 , cython
 , setuptoolsBuildHook
- }:
-
+}:
 let
   blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
-    text = (lib.generators.toINI {} {
-      ${blasImplementation} = {
-        include_dirs = "${blas}/include";
-        library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
-        mkl_libs = "mkl_rt";
-        lapack_libs = "";
-      };
-    });
+    text = (lib.generators.toINI { } {
+      ${blasImplementation} =
+        {
+          include_dirs = "${blas}/include";
+          library_dirs = "${blas}/lib";
+        }
+        // lib.optionalAttrs (blasImplementation == "mkl") {
+          mkl_libs = "mkl_rt";
+          lapack_libs = "";
+        };
+    }
+    );
   };
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "numpy";
   version = "1.18.1";
   format = "pyproject.toml";
@@ -74,7 +77,7 @@ in buildPythonPackage rec {
 
   # Disable test
   # - test_large_file_support: takes a long time and can cause the machine to run out of disk space
-  NOSE_EXCLUDE="test_large_file_support";
+  NOSE_EXCLUDE = "test_large_file_support";
 
   meta = {
     description = "Scientific tools for Python";

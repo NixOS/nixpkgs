@@ -1,17 +1,16 @@
 { stdenv, fetchFromGitHub, python2Packages }:
-
 let
   bName = "check_esxi_hardware";
   pName = stdenv.lib.replaceStrings [ "_" ] [ "-" ] bName;
-
-in python2Packages.buildPythonApplication rec {
+in
+python2Packages.buildPythonApplication rec {
   name = "${pName}-${version}";
   version = "20181001";
 
   src = fetchFromGitHub {
-    owner  = "Napsty";
-    repo   = bName;
-    rev    = version;
+    owner = "Napsty";
+    repo = bName;
+    rev = version;
     sha256 = "0azfacxcnnxxfqzrhh29k8cnjyr88gz35bi6h8fq931fl3plv10l";
   };
 

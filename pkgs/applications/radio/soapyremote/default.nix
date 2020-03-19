@@ -1,9 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, soapysdr, avahi }:
-
 let
   version = "0.5.1";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapyremote";
   inherit version;
 

@@ -1,18 +1,18 @@
-{stdenv, fetchurl, which, pkgconfig, file, glib, gtk2, gtk3, curl, libXt}:
+{ stdenv, fetchurl, which, pkgconfig, file, glib, gtk2, gtk3, curl, libXt }:
 let
   srcData = # Generated upstream information 
-  rec {
-    baseName="nspluginwrapper";
-    version="1.4.4";
-    name="${baseName}-${version}";
-    hash="1fxjz9ifhw0drm12havlsl4jpsq1nv930gqa005kgddv5pa99vgj";
-    url="http://nspluginwrapper.org/download/nspluginwrapper-1.4.4.tar.gz";
-  };
+    rec {
+      baseName = "nspluginwrapper";
+      version = "1.4.4";
+      name = "${baseName}-${version}";
+      hash = "1fxjz9ifhw0drm12havlsl4jpsq1nv930gqa005kgddv5pa99vgj";
+      url = "http://nspluginwrapper.org/download/nspluginwrapper-1.4.4.tar.gz";
+    };
 in
 stdenv.mkDerivation {
   inherit (srcData) name version;
 
-  src = fetchurl{
+  src = fetchurl {
     inherit (srcData) url;
     sha256 = srcData.hash;
   };
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [which file glib gtk2 gtk3 curl libXt];
+  buildInputs = [ which file glib gtk2 gtk3 curl libXt ];
 
   preferLocalBuild = true;
 

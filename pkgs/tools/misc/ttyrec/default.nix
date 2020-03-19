@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   patches = [ ./clang-fixes.patch ];
 
   makeFlags = stdenv.lib.optional stdenv.buildPlatform.isLinux "CFLAGS=-DSVR4"
-    ++ stdenv.lib.optional stdenv.cc.isClang "CC=clang";
+  ++ stdenv.lib.optional stdenv.cc.isClang "CC=clang";
 
   installPhase = ''
     mkdir -p $out/{bin,man}

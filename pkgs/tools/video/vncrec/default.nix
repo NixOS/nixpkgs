@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
-, libXaw, libXext, libSM, libICE, libXpm, libXp
+{ stdenv
+, fetchurl
+, libX11
+, xorgproto
+, imake
+, gccmakedep
+, libXt
+, libXmu
+, libXaw
+, libXext
+, libSM
+, libICE
+, libXpm
+, libXp
 }:
 
 stdenv.mkDerivation {
@@ -14,8 +26,16 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ imake gccmakedep ];
   buildInputs = [
-    libX11 xorgproto libXt libXmu libXaw
-    libXext libSM libICE libXpm libXp
+    libX11
+    xorgproto
+    libXt
+    libXmu
+    libXaw
+    libXext
+    libSM
+    libICE
+    libXpm
+    libXp
   ];
 
   makeFlags = [

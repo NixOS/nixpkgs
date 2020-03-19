@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, base64, bos, core, lwt_react, ocamlgraph, rresult, tyxml
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, base64
+, bos
+, core
+, lwt_react
+, ocamlgraph
+, rresult
+, tyxml
 }:
 
 buildDunePackage rec {

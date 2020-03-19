@@ -1,8 +1,8 @@
 { pkgs, fetchurl, python2Packages }:
-
 let
   pythonPackages = python2Packages;
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   version = "0.9.7";
   pname = "nvpy";
 

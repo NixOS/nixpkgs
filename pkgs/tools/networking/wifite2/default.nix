@@ -21,11 +21,12 @@ python3.pkgs.buildPythonApplication rec {
     which
   ];
 
-  postFixup = let
-    sitePackagesDir = "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
-  in ''
-    mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
-  '';
+  postFixup =
+    let
+      sitePackagesDir = "$out/lib/python3.${lib.versions.minor python3.version}/site-packages";
+    in ''
+      mv ${sitePackagesDir}/wifite/__main__.py ${sitePackagesDir}/wifite/wifite.py
+    '';
 
   # which is not found
   doCheck = false;

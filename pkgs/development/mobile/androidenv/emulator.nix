@@ -1,9 +1,9 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgs_i686}:
+{ deployAndroidPackage, lib, package, os, autoPatchelfHook, makeWrapper, pkgs, pkgs_i686 }:
 
 deployAndroidPackage {
   inherit package os;
   buildInputs = [ autoPatchelfHook makeWrapper ]
-    ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xlibs.libX11 pkgs.xlibs.libXext pkgs.xlibs.libXdamage pkgs.xlibs.libXfixes pkgs.xlibs.libxcb pkgs.libGL pkgs.libpulseaudio pkgs.zlib pkgs.ncurses5 pkgs.stdenv.cc.cc pkgs_i686.glibc ];
+  ++ lib.optional (os == "linux") [ pkgs.glibc pkgs.xlibs.libX11 pkgs.xlibs.libXext pkgs.xlibs.libXdamage pkgs.xlibs.libXfixes pkgs.xlibs.libxcb pkgs.libGL pkgs.libpulseaudio pkgs.zlib pkgs.ncurses5 pkgs.stdenv.cc.cc pkgs_i686.glibc ];
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib
     addAutoPatchelfSearchPath $packageBaseDir/lib64

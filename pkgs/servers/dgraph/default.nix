@@ -17,7 +17,7 @@ buildGoPackage rec {
   buildFlags = [ "-tags oss" ];
 
   goDeps = ./deps.nix;
-  subPackages = [ "dgraph"];
+  subPackages = [ "dgraph" ];
 
   preBuild = ''
     export buildFlagsArray="-ldflags=\

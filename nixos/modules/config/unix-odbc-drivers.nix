@@ -4,21 +4,20 @@ with lib;
 
 # unixODBC drivers (this solution is not perfect.. Because the user has to
 # ask the admin to add a driver.. but it's simple and works
-
 let
   iniDescription = pkg: ''
     [${pkg.fancyName}]
     Description = ${pkg.meta.description}
     Driver = ${pkg}/${pkg.driver}
   '';
-
-in {
+in
+{
   ###### interface
 
   options = {
     environment.unixODBCDrivers = mkOption {
       type = types.listOf types.package;
-      default = [];
+      default = [ ];
       example = literalExample "with pkgs.unixODBCDrivers; [ sqlite psql ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in
@@ -31,7 +30,7 @@ in {
 
   ###### implementation
 
-  config = mkIf (config.environment.unixODBCDrivers != []) {
+  config = mkIf (config.environment.unixODBCDrivers != [ ]) {
     environment.etc."odbcinst.ini".text = concatMapStringsSep "\n" iniDescription config.environment.unixODBCDrivers;
   };
 

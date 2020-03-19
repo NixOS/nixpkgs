@@ -1,6 +1,26 @@
-{ stdenv, fetchFromGitHub, fetchpatch, makeWrapper, cmake, pkgconfig, wxGTK30, glib, pcre, m4, bash,
-  xdg_utils, gvfs, zip, unzip, gzip, bzip2, gnutar, p7zip, xz, imagemagick, darwin }:
-
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, makeWrapper
+, cmake
+, pkgconfig
+, wxGTK30
+, glib
+, pcre
+, m4
+, bash
+, xdg_utils
+, gvfs
+, zip
+, unzip
+, gzip
+, bzip2
+, gnutar
+, p7zip
+, xz
+, imagemagick
+, darwin
+}:
 let
   newer-colorer-schemes = fetchFromGitHub {
     owner = "colorer";
@@ -23,7 +43,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig m4 makeWrapper imagemagick ];
 
   buildInputs = [ wxGTK30 glib pcre ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
+  ++ stdenv.lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa;
 
   postPatch = stdenv.lib.optionalString stdenv.isLinux ''
     substituteInPlace far2l/bootstrap/trash.sh \

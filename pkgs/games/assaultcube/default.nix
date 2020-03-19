@@ -1,6 +1,18 @@
-{ fetchFromGitHub, stdenv, makeDesktopItem, openal, pkgconfig, libogg,
-  libvorbis, SDL, SDL_image, makeWrapper, zlib, file,
-  client ? true, server ? true }:
+{ fetchFromGitHub
+, stdenv
+, makeDesktopItem
+, openal
+, pkgconfig
+, libogg
+, libvorbis
+, SDL
+, SDL_image
+, makeWrapper
+, zlib
+, file
+, client ? true
+, server ? true
+}:
 
 with stdenv.lib;
 
@@ -12,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "assaultcube";
-    repo  = "AC";
+    repo = "AC";
     rev = "f58ea22b46b5013a520520670434b3c235212371";
     sha256 = "1vfn3d55vmmipdykrcfvgk6dddi9y95vlclsliirm7jdp20f15hd";
   };

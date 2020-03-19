@@ -1,6 +1,10 @@
-{ stdenv, fetchFromGitHub, buildDotnetPackage, dotnetPackages, gtksharp,
-  gettext }:
-
+{ stdenv
+, fetchFromGitHub
+, buildDotnetPackage
+, dotnetPackages
+, gtksharp
+, gettext
+}:
 let
   mono-addins = dotnetPackages.MonoAddins;
 in
@@ -37,7 +41,8 @@ buildDotnetPackage rec {
       "Mono\\.Addins\\.Setup"
     ];
 
-    stripVersion = name: file: let
+    stripVersion = name: file:
+      let
         match = ''<Reference Include="${name}([ ,][^"]*)?"'';
         replace = ''<Reference Include="${name}"'';
       in "sed -i -re 's/${match}/${replace}/g' ${file}\n";

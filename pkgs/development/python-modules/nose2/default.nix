@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six coverage ]
-    ++ stdenv.lib.optionals (pythonOlder "3.4") [ mock ];
+  ++ stdenv.lib.optionals (pythonOlder "3.4") [ mock ];
 
   # AttributeError: 'module' object has no attribute 'collector'
   doCheck = false;

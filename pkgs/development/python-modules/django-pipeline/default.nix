@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, django, futures, mock, jinja2, jsmin, slimit }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, django
+, futures
+, mock
+, jinja2
+, jsmin
+, slimit
+}:
 
 buildPythonPackage rec {
   pname = "django-pipeline";

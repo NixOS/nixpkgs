@@ -5,9 +5,9 @@ python2Packages.buildPythonApplication rec {
   version = "1.2.0";
 
   src = fetchFromGitHub {
-    owner  = "keithgg";
-    repo   = "puddletag";
-    rev    = "v${version}";
+    owner = "keithgg";
+    repo = "puddletag";
+    rev = "v${version}";
     sha256 = "1g6wa91awy17z5b704yi9kfynnvfm9lkrvpfvwccscr1h8s3qmiz";
   };
 
@@ -24,14 +24,14 @@ python2Packages.buildPythonApplication rec {
     pyqt4
   ]);
 
-  doCheck = false;   # there are no tests
-  dontStrip = true;  # we are not generating any binaries
+  doCheck = false; # there are no tests
+  dontStrip = true; # we are not generating any binaries
 
   meta = with stdenv.lib; {
     description = "An audio tag editor similar to the Windows program, Mp3tag";
-    homepage    = https://docs.puddletag.net;
-    license     = licenses.gpl3;
+    homepage = https://docs.puddletag.net;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

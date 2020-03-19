@@ -1,4 +1,12 @@
-{ stdenv, fetchurl, gmp, bison, perl, ncurses, readline, coreutils, pkgconfig
+{ stdenv
+, fetchurl
+, gmp
+, bison
+, perl
+, ncurses
+, readline
+, coreutils
+, pkgconfig
 , lib
 , fetchpatch
 , autoreconfHook
@@ -14,16 +22,17 @@ stdenv.mkDerivation rec {
   pname = "singular";
   version = "4.1.1p2";
 
-  src = let
-    # singular sorts its tarballs in directories by base release (without patch version)
-    # for example 4.1.1p1 will be in the directory 4-1-1
-    baseVersion = builtins.head (lib.splitString "p" version);
-    urlVersion = builtins.replaceStrings [ "." ] [ "-" ] baseVersion;
-  in
-  fetchurl {
-    url = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/${urlVersion}/singular-${version}.tar.gz";
-    sha256 = "07x9kri8vl4galik7lr6pscq3c51n8570pyw64i7gbj0m706f7wf";
-  };
+  src =
+    let
+      # singular sorts its tarballs in directories by base release (without patch version)
+      # for example 4.1.1p1 will be in the directory 4-1-1
+      baseVersion = builtins.head (lib.splitString "p" version);
+      urlVersion = builtins.replaceStrings [ "." ] [ "-" ] baseVersion;
+    in
+      fetchurl {
+        url = "http://www.mathematik.uni-kl.de/ftp/pub/Math/Singular/SOURCES/${urlVersion}/singular-${version}.tar.gz";
+        sha256 = "07x9kri8vl4galik7lr6pscq3c51n8570pyw64i7gbj0m706f7wf";
+      };
 
   configureFlags = [
     "--with-ntl=${ntl}"

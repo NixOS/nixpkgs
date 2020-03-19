@@ -1,5 +1,17 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, pkgconfig, help2man, python3,
-  alsaLib, xlibsWrapper, libxslt, systemd, libusb, libftdi1 }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, pkgconfig
+, help2man
+, python3
+, alsaLib
+, xlibsWrapper
+, libxslt
+, systemd
+, libusb
+, libftdi1
+}:
 
 stdenv.mkDerivation rec {
   name = "lirc-0.10.1";
@@ -10,10 +22,12 @@ stdenv.mkDerivation rec {
   };
 
   # Fix installation of Python bindings
-  patches = [ (fetchpatch {
-    url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
-    sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
-  }) ];
+  patches = [
+    (fetchpatch {
+      url = "https://sourceforge.net/p/lirc/tickets/339/attachment/0001-Fix-Python-bindings.patch";
+      sha256 = "088a39x8c1qd81qwvbiqd6crb2lk777wmrs8rdh1ga06lglyvbly";
+    })
+  ];
 
   postPatch = ''
     patchShebangs .
@@ -30,8 +44,12 @@ stdenv.mkDerivation rec {
     touch lib/lirc/input_map.inc
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkgconfig help2man
-    (python3.withPackages (p: with p; [ pyyaml setuptools ])) ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkgconfig
+    help2man
+    (python3.withPackages (p: with p; [ pyyaml setuptools ]))
+  ];
 
   buildInputs = [ alsaLib xlibsWrapper libxslt systemd libusb libftdi1 ];
 

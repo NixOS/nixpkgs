@@ -1,5 +1,12 @@
-{ buildPythonPackage, lib, fetchFromGitHub, pytest, dissononce, python-axolotl-curve25519
-, transitions, protobuf, nose
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, pytest
+, dissononce
+, python-axolotl-curve25519
+, transitions
+, protobuf
+, nose
 }:
 
 buildPythonPackage rec {

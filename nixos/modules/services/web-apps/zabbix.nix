@@ -1,7 +1,5 @@
 { config, lib, pkgs, ... }:
-
 let
-
   inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption types;
   inherit (lib) literalExample mapAttrs optionalString;
 
@@ -29,7 +27,6 @@ let
     $ZBX_SERVER_NAME = ''';
     $IMAGE_FORMAT_DEFAULT = IMAGE_FORMAT_PNG;
   '';
-
 in
 {
   # interface
@@ -76,9 +73,12 @@ in
         port = mkOption {
           type = types.int;
           default =
-            if cfg.database.type == "mysql" then config.services.mysql.port
-            else if cfg.database.type == "pgsql" then config.services.postgresql.port
-            else 1521;
+            if cfg.database.type == "mysql"
+            then config.services.mysql.port
+            else
+              if cfg.database.type == "pgsql"
+              then config.services.postgresql.port
+              else 1521;
           description = "Database host port.";
         };
 
@@ -176,31 +176,36 @@ in
         extension=${pkgs.phpPackages.oci8}/lib/php/extensions/oci8.so
       '';
       phpEnv.ZABBIX_CONFIG = "${zabbixConfig}";
-      settings = {
-        "listen.owner" = config.services.httpd.user;
-        "listen.group" = config.services.httpd.group;
-      } // cfg.poolConfig;
+      settings =
+        {
+          "listen.owner" = config.services.httpd.user;
+          "listen.group" = config.services.httpd.group;
+        }
+        // cfg.poolConfig;
     };
 
     services.httpd = {
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${cfg.package}/share/zabbix";
-        extraConfig = ''
-          <Directory "${cfg.package}/share/zabbix">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
-            AllowOverride all
-            Options -Indexes
-            DirectoryIndex index.php
-          </Directory>
-        '';
-      } ];
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${cfg.package}/share/zabbix";
+          extraConfig = ''
+            <Directory "${cfg.package}/share/zabbix">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
+              AllowOverride all
+              Options -Indexes
+              DirectoryIndex index.php
+            </Directory>
+          '';
+        }
+      ];
     };
 
     users.users.${user} = mapAttrs (name: mkDefault) {

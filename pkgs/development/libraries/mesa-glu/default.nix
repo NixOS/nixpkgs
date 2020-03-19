@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   propagatedBuildInputs = [ libGL ]
-    ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
+  ++ stdenv.lib.optional stdenv.isDarwin ApplicationServices;
 
   outputs = [ "out" "dev" ];
 

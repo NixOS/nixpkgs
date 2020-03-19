@@ -3,7 +3,8 @@
 , fetchPypi
 , pythonOlder
 , dask
-, numpy, toolz # dask[array]
+, numpy
+, toolz # dask[array]
 , numba
 , pandas
 , scikitlearn

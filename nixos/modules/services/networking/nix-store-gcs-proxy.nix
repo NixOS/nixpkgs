@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   opts = { name, config, ... }: {
     options = {
@@ -30,7 +29,7 @@ in
 {
   options.services.nix-store-gcs-proxy = mkOption {
     type = types.attrsOf (types.submodule opts);
-    default = {};
+    default = { };
     description = ''
       An attribute set describing an HTTP to GCS proxy that allows us to use GCS
       bucket via HTTP protocol.
@@ -40,7 +39,7 @@ in
   config.systemd.services = mapProxies (name: cfg: {
     "nix-store-gcs-proxy-${name}" = {
       description = "A HTTP nix store that proxies requests to Google Storage";
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         RestartSec = 5;

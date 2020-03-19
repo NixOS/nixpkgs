@@ -1,13 +1,16 @@
-{ stdenv, fetchurl, python, buildPythonApplication
+{ stdenv
+, fetchurl
+, python
+, buildPythonApplication
 , libselinux
-# Propagated to blivet
+  # Propagated to blivet
 , useNixUdev ? true
-# Needed by NixOps
+  # Needed by NixOps
 , udevSoMajor ? null
-# Propagated dependencies
-, pkgs, urlgrabber
+  # Propagated dependencies
+, pkgs
+, urlgrabber
 }:
-
 let
   blivet = import ./blivet.nix {
     inherit stdenv fetchurl buildPythonApplication;
@@ -52,8 +55,8 @@ let
     inherit stdenv fetchurl python buildPythonApplication parted;
     inherit (pkgs) pkgconfig e2fsprogs;
   };
-
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "nixpart";
   version = "0.4.1";
   disabled = python.isPy3k;

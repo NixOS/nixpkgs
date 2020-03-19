@@ -22,10 +22,12 @@ stdenv.mkDerivation rec {
       --replace "Exec=lightdm-mini-greeter" "Exec=$out/bin/lightdm-mini-greeter"
   '';
 
-  passthru.xgreeters = linkFarm "lightdm-mini-greeter-xgreeters" [{
-    path = "${lightdm-mini-greeter}/share/xgreeters/lightdm-mini-greeter.desktop";
-    name = "lightdm-mini-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "lightdm-mini-greeter-xgreeters" [
+    {
+      path = "${lightdm-mini-greeter}/share/xgreeters/lightdm-mini-greeter.desktop";
+      name = "lightdm-mini-greeter.desktop";
+    }
+  ];
 
   meta = with stdenv.lib; {
     description = "A minimal, configurable, single-user GTK3 LightDM greeter";

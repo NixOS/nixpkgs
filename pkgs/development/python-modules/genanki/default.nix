@@ -1,5 +1,13 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, cached-property, frozendict, pystache, pyyaml, pytest, pytestrunner
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, cached-property
+, frozendict
+, pystache
+, pyyaml
+, pytest
+, pytestrunner
 }:
 
 buildPythonPackage rec {
@@ -12,7 +20,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-		pytestrunner
+    pytestrunner
     cached-property
     frozendict
     pystache
@@ -24,7 +32,7 @@ buildPythonPackage rec {
   disabled = !isPy3k;
 
   # relies on upstream anki
-	doCheck = false;
+  doCheck = false;
   checkPhase = ''
     py.test
   '';

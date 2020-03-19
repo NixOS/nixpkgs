@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-ppcre";
 
-  asdFilesToKeep = ["cl-ppcre.asd"];
+  asdFilesToKeep = [ "cl-ppcre.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-ppcre DESCRIPTION Perl-compatible regular expression library

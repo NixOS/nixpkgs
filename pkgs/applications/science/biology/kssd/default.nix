@@ -12,13 +12,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ zlib automake autoconf libtool ];
 
   installPhase = ''
-      install -vD kssd $out/bin/kssd
+    install -vD kssd $out/bin/kssd
   '';
 
   meta = with stdenv.lib; {
     description = "K-mer substring space decomposition";
-    license     = licenses.asl20;
-    homepage    = "https://github.com/yhg926/public_kssd";
+    license = licenses.asl20;
+    homepage = "https://github.com/yhg926/public_kssd";
     maintainers = with maintainers; [ unode ];
     platforms = [ "x86_64-linux" ];
   };

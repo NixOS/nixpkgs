@@ -1,6 +1,7 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 
-# Build runit-init as a static binary
+  # Build runit-init as a static binary
 , static ? false
 }:
 

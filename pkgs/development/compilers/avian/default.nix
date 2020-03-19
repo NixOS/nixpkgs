@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib jdk ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices Foundation ];
 
   NIX_CFLAGS_COMPILE = "-Wno-error";
 

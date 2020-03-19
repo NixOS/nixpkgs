@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql openssl ];
 
   src = fetchFromGitHub {
-    owner  = "timescale";
-    repo   = "timescaledb";
-    rev    = "refs/tags/${version}";
+    owner = "timescale";
+    repo = "timescaledb";
+    rev = "refs/tags/${version}";
     sha256 = "0b42rhkycr4pwwa4fxnmppd3bl0xz7azvlm145rd7warlsr5h0lb";
   };
 
@@ -38,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Scales PostgreSQL for time-series data via automatic partitioning across time and space";
-    homepage    = https://www.timescale.com/;
+    homepage = https://www.timescale.com/;
     maintainers = with maintainers; [ volth marsam ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.asl20;
+    platforms = postgresql.meta.platforms;
+    license = licenses.asl20;
   };
 }

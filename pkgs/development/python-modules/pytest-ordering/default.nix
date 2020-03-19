@@ -1,5 +1,8 @@
-{ lib, fetchFromGitHub, buildPythonPackage
-, pytest }:
+{ lib
+, fetchFromGitHub
+, buildPythonPackage
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "pytest-ordering";

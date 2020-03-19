@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   home = "/var/lib/tox-bootstrapd";
   PIDFile = "${home}/pid";
@@ -18,8 +17,10 @@ let
 in
 {
   options =
-    { services.toxBootstrapd =
-        { enable = mkOption {
+    {
+      services.toxBootstrapd =
+        {
+          enable = mkOption {
             type = types.bool;
             default = false;
             description =
@@ -48,16 +49,17 @@ in
                 Configuration for bootstrap daemon.
                 See <link xlink:href="https://github.com/irungentoo/toxcore/blob/master/other/bootstrap_daemon/tox-bootstrapd.conf"/>
                 and <link xlink:href="http://wiki.tox.im/Nodes"/>.
-             '';
+              '';
           };
-      };
+        };
 
     };
 
   config = mkIf config.services.toxBootstrapd.enable {
 
     users.users.tox-bootstrapd =
-      { uid = config.ids.uids.tox-bootstrapd;
+      {
+        uid = config.ids.uids.tox-bootstrapd;
         description = "Tox bootstrap daemon user";
         inherit home;
         createHome = true;
@@ -68,7 +70,8 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig =
-        { ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
+        {
+          ExecStart = "${pkg}/bin/tox-bootstrapd --config=${cfgFile}";
           Type = "forking";
           inherit PIDFile;
           User = "tox-bootstrapd";

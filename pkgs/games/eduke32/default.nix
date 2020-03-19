@@ -1,7 +1,18 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, nasm, makeDesktopItem
-, flac, gtk2, libvorbis, libvpx, libGLU, libGL
-, SDL2, SDL2_mixer }:
-
+{ stdenv
+, fetchurl
+, makeWrapper
+, pkgconfig
+, nasm
+, makeDesktopItem
+, flac
+, gtk2
+, libvorbis
+, libvpx
+, libGLU
+, libGL
+, SDL2
+, SDL2_mixer
+}:
 let
   version = "20190330";
   rev = "7470";
@@ -16,8 +27,8 @@ let
   };
 
   wrapper = "eduke32-wrapper";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "eduke32";
   inherit version;
 
@@ -29,7 +40,7 @@ in stdenv.mkDerivation {
   buildInputs = [ flac gtk2 libvorbis libvpx libGL libGLU SDL2 SDL2_mixer ];
 
   nativeBuildInputs = [ makeWrapper pkgconfig ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
+  ++ stdenv.lib.optional (stdenv.hostPlatform.system == "i686-linux") nasm;
 
   postPatch = ''
     substituteInPlace source/build/src/glbuild.cpp \

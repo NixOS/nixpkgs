@@ -1,9 +1,22 @@
-{ stdenv, fetchFromGitHub, mkDerivation
-, qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb
-, yacc, flex, zlib, qmake, makeDesktopItem, makeWrapper
+{ stdenv
+, fetchFromGitHub
+, mkDerivation
+, qtbase
+, qtsvg
+, qtserialport
+, qtwebengine
+, qtmultimedia
+, qttools
+, qtconnectivity
+, qtcharts
+, libusb
+, yacc
+, flex
+, zlib
+, qmake
+, makeDesktopItem
+, makeWrapper
 }:
-
 let
   desktopItem = makeDesktopItem {
     name = "goldencheetah";
@@ -14,7 +27,8 @@ let
     comment = "Performance software for cyclists, runners and triathletes";
     categories = "Application;Utility;";
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "golden-cheetah";
   version = "3.5-RC2X";
 
@@ -26,8 +40,16 @@ in mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtsvg qtserialport qtwebengine qtmultimedia qttools zlib
-    qtconnectivity qtcharts libusb
+    qtbase
+    qtsvg
+    qtserialport
+    qtwebengine
+    qtmultimedia
+    qttools
+    zlib
+    qtconnectivity
+    qtcharts
+    libusb
   ];
   nativeBuildInputs = [ flex makeWrapper qmake yacc ];
 

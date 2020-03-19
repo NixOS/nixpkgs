@@ -1,5 +1,8 @@
-{ stdenv, buildPythonPackage, fetchPypi,
-  matplotlib, shapely
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, matplotlib
+, shapely
 }:
 
 buildPythonPackage rec {

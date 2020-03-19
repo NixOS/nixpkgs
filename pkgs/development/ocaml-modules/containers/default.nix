@@ -1,6 +1,15 @@
-{ lib, fetchFromGitHub, buildDunePackage, ocaml
-, iter, result, uchar
-, gen, mdx, ounit, qcheck, uutf
+{ lib
+, fetchFromGitHub
+, buildDunePackage
+, ocaml
+, iter
+, result
+, uchar
+, gen
+, mdx
+, ounit
+, qcheck
+, uutf
 }:
 
 buildDunePackage rec {

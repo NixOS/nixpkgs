@@ -1,13 +1,15 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig
-# Transport
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+  # Transport
 , curl
-# Libraries
+  # Libraries
 , boost
 , jsoncpp
 , libbsd
 , pcre
-# GUI/Desktop
+  # GUI/Desktop
 , dbus
 , glibmm
 , gsettings-desktop-schemas
@@ -16,23 +18,25 @@
 , libnotify
 , libxdg_basedir
 , wxGTK
-# GStreamer
+  # GStreamer
 , gst_all_1
-# User-agent info
+  # User-agent info
 , lsb-release
-# rt2rtng
+  # rt2rtng
 , python3
-# Testing
+  # Testing
 , gtest
-# Fixup
+  # Fixup
 , wrapGAppsHook
 , makeWrapper
 }:
-
 let
   gstInputs = with gst_all_1; [
-    gstreamer gst-plugins-base
-    gst-plugins-good gst-plugins-bad gst-plugins-ugly
+    gstreamer
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-bad
+    gst-plugins-ugly
     gst-libav
   ];
   # For the rt2rtng utility for converting bookmark file to -ng format
@@ -53,13 +57,20 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     curl
-    boost jsoncpp libbsd pcre
-    glibmm hicolor-icon-theme gsettings-desktop-schemas libappindicator-gtk3 libnotify
+    boost
+    jsoncpp
+    libbsd
+    pcre
+    glibmm
+    hicolor-icon-theme
+    gsettings-desktop-schemas
+    libappindicator-gtk3
+    libnotify
     libxdg_basedir
     lsb-release
     wxGTK
   ] ++ gstInputs
-    ++ pythonInputs;
+  ++ pythonInputs;
 
   patches = [ ./no-dl-googletest.patch ];
 

@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , autoreconfHook
 , gtk2
 , libxml2

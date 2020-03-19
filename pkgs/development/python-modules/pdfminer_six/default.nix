@@ -13,7 +13,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ six pycryptodome sortedcontainers ]
-    ++ stdenv.lib.optionals isPy3k [ chardet ];
+  ++ stdenv.lib.optionals isPy3k [ chardet ];
 
   checkInputs = [ nose ];
   checkPhase = ''
@@ -27,4 +27,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ psyanticy marsam ];
   };
 }
-

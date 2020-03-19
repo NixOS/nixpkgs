@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, fetchpatch, darwin, callPackage
+{ stdenv
+, fetchurl
+, fetchpatch
+, darwin
+, callPackage
 , autoreconfHook
 , pkgconfig
 , libtool
@@ -30,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # do not create directories in /var during installPhase
   postConfigure = ''
-     substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
+    substituteInPlace Makefile --replace '$(mkinstalldirs) $(DESTDIR)$(localstatedir)/' '#'
   '';
 
   postInstall = ''

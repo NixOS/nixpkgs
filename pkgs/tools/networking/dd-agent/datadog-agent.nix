@@ -1,19 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [] }:
-
+{ lib, stdenv, fetchFromGitHub, buildGoPackage, makeWrapper, pythonPackages, pkgconfig, systemd, hostname, extraTags ? [ ] }:
 let
   # keep this in sync with github.com/DataDog/agent-payload dependency
   payloadVersion = "4.7.1";
   python = pythonPackages.python;
-
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   pname = "datadog-agent";
   version = "6.11.2";
-  owner   = "DataDog";
-  repo    = "datadog-agent";
+  owner = "DataDog";
+  repo = "datadog-agent";
 
   src = fetchFromGitHub {
     inherit owner repo;
-    rev    = version;
+    rev = version;
     sha256 = "1dwdiaf357l9c6b2cps5mdyfma3c1mp96zzxg1826fvz3x8ix68z";
   };
 
@@ -33,17 +32,18 @@ in buildGoPackage rec {
   PKG_CONFIG_PATH = "${python}/lib/pkgconfig";
 
 
-  preBuild = let
-    ldFlags = stdenv.lib.concatStringsSep " " [
-      "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
-      "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
-      "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
-      "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
-      "-r ${python}/lib"
-    ];
-  in ''
-    buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
-  '';
+  preBuild =
+    let
+      ldFlags = stdenv.lib.concatStringsSep " " [
+        "-X ${goPackagePath}/pkg/version.Commit=${src.rev}"
+        "-X ${goPackagePath}/pkg/version.AgentVersion=${version}"
+        "-X ${goPackagePath}/pkg/serializer.AgentPayloadVersion=${payloadVersion}"
+        "-X ${goPackagePath}/pkg/collector/py.pythonHome=${python}"
+        "-r ${python}/lib"
+      ];
+    in ''
+      buildFlagsArray=( "-tags" "ec2 systemd cpython process log secrets ${lib.concatStringsSep " " extraTags}" "-ldflags" "${ldFlags}")
+    '';
 
   # DataDog use paths relative to the agent binary, so fix these.
   postPatch = ''
@@ -73,9 +73,9 @@ in buildGoPackage rec {
       Event collector for the DataDog analysis service
       -- v6 new golang implementation.
     '';
-    homepage    = https://www.datadoghq.com;
-    license     = licenses.bsd3;
-    platforms   = platforms.all;
+    homepage = https://www.datadoghq.com;
+    license = licenses.bsd3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ thoughtpolice domenkozar rvl ];
   };
 }

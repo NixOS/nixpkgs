@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [ libxml2 libxslt docbook-xsl docbook_xml_dtd_44 makeWrapper ]
-    ++ optional stdenv.isDarwin darwin.cctools;
+  ++ optional stdenv.isDarwin darwin.cctools;
 
   propagatedBuildInputs = with perlPackages; [ perl IPCRun TimeDate TimeDuration ];
 

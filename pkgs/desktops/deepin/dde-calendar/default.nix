@@ -1,5 +1,13 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, cmake, qttools,
-  deepin-gettext-tools, dtkcore, dtkwidget, deepin
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, qttools
+, deepin-gettext-tools
+, dtkcore
+, dtkwidget
+, deepin
 }:
 
 mkDerivation rec {

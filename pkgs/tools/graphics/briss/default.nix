@@ -1,13 +1,11 @@
 # The releases of this project are apparently precompiled to .jar files.
 
 { stdenv, fetchurl, jre, makeWrapper }:
-
 let
-
   version = "0.9";
   sha256 = "45dd668a9ceb9cd59529a9fefe422a002ee1554a61be07e6fc8b3baf33d733d9";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "briss";
   inherit version;
   src = fetchurl {
@@ -15,7 +13,7 @@ in stdenv.mkDerivation {
     inherit sha256;
   };
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p "$out/bin";

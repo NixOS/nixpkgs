@@ -6,7 +6,8 @@
 # see the expression for `inter` (../inter/default.nix).
 let
   version = "3.2";
-in fetchzip {
+in
+fetchzip {
   name = "inter-ui-${version}";
 
   url = "https://github.com/rsms/inter/releases/download/v${version}/Inter-UI-${version}.zip";
@@ -26,4 +27,3 @@ in fetchzip {
     maintainers = with maintainers; [ demize ];
   };
 }
-

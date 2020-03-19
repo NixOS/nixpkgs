@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook,
-  fltk, jansson, rtmidi, libsamplerate, libsndfile,
-  jack2, alsaLib, libpulseaudio,
-  libXpm, libXinerama, libXcursor }:
+{ lib
+, stdenv
+, fetchFromGitHub
+, autoreconfHook
+, fltk
+, jansson
+, rtmidi
+, libsamplerate
+, libsndfile
+, jack2
+, alsaLib
+, libpulseaudio
+, libXpm
+, libXinerama
+, libXcursor
+}:
 
 stdenv.mkDerivation rec {
   pname = "giada";

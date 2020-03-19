@@ -1,7 +1,16 @@
-{ stdenv, git, clang,
-  fetchFromGitHub, requireFile,
-  openssl, xz, gnutar,
-  automake, autoconf, libtool, clangStdenv } :
+{ stdenv
+, git
+, clang
+, fetchFromGitHub
+, requireFile
+, openssl
+, xz
+, gnutar
+, automake
+, autoconf
+, libtool
+, clangStdenv
+}:
 
 clangStdenv.mkDerivation rec {
   name = "ios-cross-compile-${version}";
@@ -49,16 +58,16 @@ clangStdenv.mkDerivation rec {
       nix-prefetch-url file:///path/to/${name}
 
       and run this installation again.
-   '';
+    '';
   };
   buildInputs = [ git xz gnutar openssl automake autoconf libtool clang ];
   alt_wrapper = ./alt_wrapper.c;
   builder = ./9.2_builder.sh;
   meta = {
     description =
-    "Provides an iOS cross compiler from 7.1 up to iOS-${version} and ldid";
+      "Provides an iOS cross compiler from 7.1 up to iOS-${version} and ldid";
     platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     maintainers = with stdenv.lib.maintainers; [ fxfactorial ];
     license = stdenv.lib.licenses.gpl2;
   };

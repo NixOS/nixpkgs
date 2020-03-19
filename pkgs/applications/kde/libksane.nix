@@ -1,8 +1,12 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, qtbase,
-  ki18n, ktextwidgets, kwallet, kwidgetsaddons,
-  sane-backends
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, qtbase
+, ki18n
+, ktextwidgets
+, kwallet
+, kwidgetsaddons
+, sane-backends
 }:
 
 mkDerivation {

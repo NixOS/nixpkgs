@@ -1,4 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, isPy27
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, python
+, isPy27
 , dotnet-sdk
 , substituteAll
 , distro
@@ -28,7 +33,8 @@ buildPythonPackage rec {
   '';
 
   patches = [
-    ( substituteAll {
+    (
+      substituteAll {
         src = ./runtime.patch;
         dotnet = dotnet-sdk;
       }

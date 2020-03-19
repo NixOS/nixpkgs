@@ -37,4 +37,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ flyfloh ];
   };
 }
-

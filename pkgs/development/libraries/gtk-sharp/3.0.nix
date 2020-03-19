@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, mono
+{ stdenv
+, fetchurl
+, pkgconfig
+, mono
 , glib
 , pango
 , gtk3
@@ -33,8 +36,19 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    mono glib pango gtk3 GConf libglade libgnomecanvas
-    libgtkhtml libgnomeui libgnomeprint libgnomeprintui gtkhtml libxml2
+    mono
+    glib
+    pango
+    gtk3
+    GConf
+    libglade
+    libgnomecanvas
+    libgtkhtml
+    libgnomeui
+    libgnomeprint
+    libgnomeprintui
+    gtkhtml
+    libxml2
   ];
 
   dontStrip = true;

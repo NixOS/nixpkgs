@@ -1,11 +1,19 @@
-{ lib, stdenv, buildPackages, fetchurl, autoconf, automake, libtool, pkgconfig,
-  zlib, ilmbase, fetchpatch }:
-
+{ lib
+, stdenv
+, buildPackages
+, fetchurl
+, autoconf
+, automake
+, libtool
+, pkgconfig
+, zlib
+, ilmbase
+, fetchpatch
+}:
 let
   # Doesn't really do anything when not crosscompiling
   emulator = stdenv.hostPlatform.emulator buildPackages;
 in
-
 stdenv.mkDerivation rec {
   pname = "openexr";
   version = lib.getVersion ilmbase;
@@ -32,7 +40,7 @@ stdenv.mkDerivation rec {
     for file in b44ExpLogTable dwaLookups
     do
       # Ecape for both sh and Automake
-      emu=${lib.escapeShellArg (lib.replaceStrings ["$"] ["$$"] emulator)}
+      emu=${lib.escapeShellArg (lib.replaceStrings [ "$" ] [ "$$" ] emulator)}
       before="./$file > $file.h"
       after="$emu $before"
       substituteInPlace IlmImf/Makefile.am \

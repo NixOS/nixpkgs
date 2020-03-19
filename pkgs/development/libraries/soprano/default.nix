@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, cmake, qt4, clucene_core, librdf_redland, libiodbc
-, pkgconfig }:
+{ stdenv
+, fetchurl
+, cmake
+, qt4
+, clucene_core
+, librdf_redland
+, libiodbc
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
   name = "soprano-2.9.4";

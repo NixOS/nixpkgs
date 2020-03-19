@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   patches = [

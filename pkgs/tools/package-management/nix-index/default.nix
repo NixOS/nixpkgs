@@ -1,5 +1,12 @@
-{ stdenv, rustPlatform, fetchFromGitHub, pkgconfig, makeWrapper, openssl, curl
-, nix, Security
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkgconfig
+, makeWrapper
+, openssl
+, curl
+, nix
+, Security
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +24,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper ];
   buildInputs = [ openssl curl ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+  ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   doCheck = !stdenv.isDarwin;
 

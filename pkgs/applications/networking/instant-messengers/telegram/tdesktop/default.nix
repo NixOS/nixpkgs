@@ -1,10 +1,40 @@
-{ mkDerivation, lib, fetchurl, fetchsvn
-, pkgconfig, cmake, ninja, python3, wrapGAppsHook, wrapQtAppsHook
-, qtbase, qtimageformats, gtk3, libsForQt5, enchant2, lz4, xxHash
-, dee, ffmpeg_4, openalSoft, minizip, libopus, alsaLib, libpulseaudio, range-v3
-, tl-expected, microsoft_gsl, hunspell
-# TODO: Shouldn't be required:
-, pcre, xorg, utillinux, libselinux, libsepol, epoxy, at-spi2-core, libXtst
+{ mkDerivation
+, lib
+, fetchurl
+, fetchsvn
+, pkgconfig
+, cmake
+, ninja
+, python3
+, wrapGAppsHook
+, wrapQtAppsHook
+, qtbase
+, qtimageformats
+, gtk3
+, libsForQt5
+, enchant2
+, lz4
+, xxHash
+, dee
+, ffmpeg_4
+, openalSoft
+, minizip
+, libopus
+, alsaLib
+, libpulseaudio
+, range-v3
+, tl-expected
+, microsoft_gsl
+, hunspell
+  # TODO: Shouldn't be required:
+, pcre
+, xorg
+, utillinux
+, libselinux
+, libsepol
+, epoxy
+, at-spi2-core
+, libXtst
 , xdg_utils
 }:
 
@@ -41,11 +71,34 @@ mkDerivation rec {
   nativeBuildInputs = [ pkgconfig cmake ninja python3 wrapGAppsHook wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtimageformats gtk3 libsForQt5.libdbusmenu enchant2 lz4 xxHash
-    dee ffmpeg_4 openalSoft minizip libopus alsaLib libpulseaudio range-v3
-    tl-expected microsoft_gsl hunspell
+    qtbase
+    qtimageformats
+    gtk3
+    libsForQt5.libdbusmenu
+    enchant2
+    lz4
+    xxHash
+    dee
+    ffmpeg_4
+    openalSoft
+    minizip
+    libopus
+    alsaLib
+    libpulseaudio
+    range-v3
+    tl-expected
+    microsoft_gsl
+    hunspell
     # TODO: Shouldn't be required:
-    pcre xorg.libpthreadstubs xorg.libXdmcp utillinux libselinux libsepol epoxy at-spi2-core libXtst
+    pcre
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    utillinux
+    libselinux
+    libsepol
+    epoxy
+    at-spi2-core
+    libXtst
   ];
 
   enableParallelBuilding = true;

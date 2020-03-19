@@ -1,7 +1,25 @@
-{ lib, buildPythonApplication, fetchFromGitHub, pythonOlder, file, fetchpatch
-, cairo, ffmpeg, sox, xdg_utils, texlive
-, colour, numpy, pillow, progressbar, scipy, tqdm, opencv , pycairo, pydub
-, pbr, fetchPypi
+{ lib
+, buildPythonApplication
+, fetchFromGitHub
+, pythonOlder
+, file
+, fetchpatch
+, cairo
+, ffmpeg
+, sox
+, xdg_utils
+, texlive
+, colour
+, numpy
+, pillow
+, progressbar
+, scipy
+, tqdm
+, opencv
+, pycairo
+, pydub
+, pbr
+, fetchPypi
 }:
 buildPythonApplication rec {
   pname = "manim";
@@ -28,7 +46,10 @@ buildPythonApplication rec {
     pycairo
     pydub
 
-    cairo sox ffmpeg xdg_utils
+    cairo
+    sox
+    ffmpeg
+    xdg_utils
   ];
 
   # Test with texlive to see whether it works but don't propagate

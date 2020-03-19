@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.zookeeper;
 
@@ -20,8 +19,8 @@ let
       (pkgs.writeTextDir "log4j.properties" cfg.logging)
     ];
   };
-
-in {
+in
+{
 
   options.services.zookeeper = {
     enable = mkOption {
@@ -117,7 +116,7 @@ in {
 
 
   config = mkIf cfg.enable {
-    environment.systemPackages = [cfg.package];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' 0700 zookeeper - - -"

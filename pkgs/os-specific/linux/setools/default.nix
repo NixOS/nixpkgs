@@ -1,5 +1,9 @@
-{ stdenv, fetchFromGitHub, python3
-, libsepol, libselinux, checkpolicy
+{ stdenv
+, fetchFromGitHub
+, python3
+, libsepol
+, libselinux
+, checkpolicy
 , withGraphics ? false
 }:
 
@@ -20,7 +24,7 @@ buildPythonApplication rec {
   nativeBuildInputs = [ cython ];
   buildInputs = [ libsepol ];
   propagatedBuildInputs = [ enum34 libselinux networkx ]
-    ++ optionals withGraphics [ pyqt5 ];
+  ++ optionals withGraphics [ pyqt5 ];
 
   checkInputs = [ tox checkpolicy ];
   preCheck = ''

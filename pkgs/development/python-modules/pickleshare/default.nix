@@ -16,7 +16,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ pathpy ]
-    ++ stdenv.lib.optional (pythonOlder "3.4") pathlib2;
+  ++ stdenv.lib.optional (pythonOlder "3.4") pathlib2;
 
   # No proper test suite
   doCheck = false;

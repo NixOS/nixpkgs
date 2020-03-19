@@ -1,8 +1,17 @@
-{ stdenv, icu, expat, zlib, bzip2, python, fixDarwinDylibNames, libiconv
+{ stdenv
+, icu
+, expat
+, zlib
+, bzip2
+, python
+, fixDarwinDylibNames
+, libiconv
 , which
 , buildPackages
-, toolset ? /**/ if stdenv.cc.isClang  then "clang"
-            else null
+, toolset ? /**/
+  if stdenv.cc.isClang
+  then "clang"
+  else null
 , enableRelease ? true
 , enableDebug ? false
 , enableSingleThreaded ? false
@@ -12,12 +21,13 @@
 , enablePython ? false
 , enableNumpy ? false
 , taggedLayout ? ((enableRelease && enableDebug) || (enableSingleThreaded && enableMultiThreaded) || (enableShared && enableStatic))
-, patches ? []
+, patches ? [ ]
 , mpi ? null
-, extraB2Args ? []
+, extraB2Args ? [ ]
 
-# Attributes inherit from specific versions
-, version, src
+  # Attributes inherit from specific versions
+, version
+, src
 , ...
 }:
 
@@ -30,18 +40,17 @@ assert enableNumpy -> enablePython;
 
 with stdenv.lib;
 let
-
   variant = concatStringsSep ","
-    (optional enableRelease "release" ++
-     optional enableDebug "debug");
+    (optional enableRelease "release"
+    ++ optional enableDebug "debug");
 
   threading = concatStringsSep ","
-    (optional enableSingleThreaded "single" ++
-     optional enableMultiThreaded "multi");
+    (optional enableSingleThreaded "single"
+    ++ optional enableMultiThreaded "multi");
 
   link = concatStringsSep ","
-    (optional enableShared "shared" ++
-     optional enableStatic "static");
+    (optional enableShared "shared"
+    ++ optional enableStatic "static");
 
   runtime-link = if enableShared then "shared" else "static";
 
@@ -55,61 +64,70 @@ let
   # [0]: https://github.com/boostorg/build/commit/0ef40cb86728f1cd804830fef89a6d39153ff632
   # [1]: https://github.com/boostorg/build/commit/316e26ca718afc65d6170029284521392524e4f8
   jobs =
-    if versionOlder version "1.58" then
+    if versionOlder version "1.58"
+    then
       "$(($NIX_BUILD_CORES<=64 ? $NIX_BUILD_CORES : 64))"
-    else if versionOlder version "1.65" then
-      "$(($NIX_BUILD_CORES<=256 ? $NIX_BUILD_CORES : 256))"
     else
-      "$NIX_BUILD_CORES";
+      if versionOlder version "1.65"
+      then
+        "$(($NIX_BUILD_CORES<=256 ? $NIX_BUILD_CORES : 256))"
+      else
+        "$NIX_BUILD_CORES";
 
-  b2Args = concatStringsSep " " ([
-    "--includedir=$dev/include"
-    "--libdir=$out/lib"
-    "-j${jobs}"
-    "--layout=${layout}"
-    "variant=${variant}"
-    "threading=${threading}"
-    "link=${link}"
-    "-sEXPAT_INCLUDE=${expat.dev}/include"
-    "-sEXPAT_LIBPATH=${expat.out}/lib"
+  b2Args = concatStringsSep " " (
+    [
+      "--includedir=$dev/include"
+      "--libdir=$out/lib"
+      "-j${jobs}"
+      "--layout=${layout}"
+      "variant=${variant}"
+      "threading=${threading}"
+      "link=${link}"
+      "-sEXPAT_INCLUDE=${expat.dev}/include"
+      "-sEXPAT_LIBPATH=${expat.out}/lib"
 
-    # TODO: make this unconditional
-  ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
-    "architecture=${toString stdenv.hostPlatform.parsed.cpu.family}"
-    "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
-    "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
+      # TODO: make this unconditional
+    ] ++ optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "address-model=${toString stdenv.hostPlatform.parsed.cpu.bits}"
+      "architecture=${toString stdenv.hostPlatform.parsed.cpu.family}"
+      "binary-format=${toString stdenv.hostPlatform.parsed.kernel.execFormat.name}"
+      "target-os=${toString stdenv.hostPlatform.parsed.kernel.name}"
 
-    # adapted from table in boost manual
-    # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
-    "abi=${if stdenv.hostPlatform.parsed.cpu.family == "arm" then "aapcs"
-           else if stdenv.hostPlatform.isWindows then "ms"
-           else if stdenv.hostPlatform.isMips then "o32"
-           else "sysv"}"
-  ] ++ optional (link != "static") "runtime-link=${runtime-link}"
+      # adapted from table in boost manual
+      # https://www.boost.org/doc/libs/1_66_0/libs/context/doc/html/context/architectures.html
+      "abi=${
+          if stdenv.hostPlatform.parsed.cpu.family == "arm"
+          then "aapcs"
+          else
+              if stdenv.hostPlatform.isWindows
+              then "ms"
+              else
+                  if stdenv.hostPlatform.isMips
+                  then "o32"
+                  else "sysv"}"
+    ] ++ optional (link != "static") "runtime-link=${runtime-link}"
     ++ optional (variant == "release") "debug-symbols=off"
     ++ optional (toolset != null) "toolset=${toolset}"
     ++ optional (!enablePython) "--without-python"
     ++ optional (mpi != null || stdenv.hostPlatform != stdenv.buildPlatform) "--user-config=user-config.jam"
     ++ optionals (stdenv.hostPlatform.libc == "msvcrt") [
-    "threadapi=win32"
-  ] ++ extraB2Args
+      "threadapi=win32"
+    ] ++ extraB2Args
   );
-
 in
-
 stdenv.mkDerivation {
   pname = "boost";
 
   inherit src version;
 
-  patchFlags = [];
+  patchFlags = [ ];
 
   patches = patches
   ++ optional stdenv.isDarwin (
     if version == "1.55.0"
     then ./darwin-1.55-no-system-python.patch
-    else ./darwin-no-system-python.patch);
+    else ./darwin-no-system-python.patch
+  );
 
   meta = {
     homepage = http://boost.org/;
@@ -117,7 +135,7 @@ stdenv.mkDerivation {
     license = licenses.boost;
     platforms = platforms.unix ++ platforms.windows;
     badPlatforms = optional (versionOlder version "1.59") "aarch64-linux"
-                 ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
+    ++ optional ((versionOlder version "1.57") || version == "1.58") "x86_64-darwin";
     maintainers = with maintainers; [ peti ];
   };
 
@@ -137,26 +155,26 @@ stdenv.mkDerivation {
   '';
 
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.isDarwin
-                      "-headerpad_max_install_names";
+    "-headerpad_max_install_names";
 
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ which ];
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   buildInputs = [ expat zlib bzip2 libiconv ]
-    ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
-    ++ optional stdenv.isDarwin fixDarwinDylibNames
-    ++ optional enablePython python
-    ++ optional enableNumpy python.pkgs.numpy;
+  ++ optional (stdenv.hostPlatform == stdenv.buildPlatform) icu
+  ++ optional stdenv.isDarwin fixDarwinDylibNames
+  ++ optional enablePython python
+  ++ optional enableNumpy python.pkgs.numpy;
 
   configureScript = "./bootstrap.sh";
-  configurePlatforms = [];
+  configurePlatforms = [ ];
   configureFlags = [
     "--includedir=$(dev)/include"
     "--libdir=$(out)/lib"
   ] ++ optional enablePython "--with-python=${python.interpreter}"
-    ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
-    ++ optional (toolset != null) "--with-toolset=${toolset}";
+  ++ [ (if stdenv.hostPlatform == stdenv.buildPlatform then "--with-icu=${icu.dev}" else "--without-icu") ]
+  ++ optional (toolset != null) "--with-toolset=${toolset}";
 
   buildPhase = ''
     runHook preBuild

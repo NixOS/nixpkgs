@@ -1,6 +1,5 @@
 { config, lib, pkgs, ... }:
 with lib;
-
 let
   cfg = config.services.moinmoin;
   python = pkgs.python27;
@@ -25,8 +24,8 @@ let
 
     class Config(multiconfig.DefaultConfig):
         ${optionalString (w.webLocation != "/") ''
-          url_prefix_static = '${w.webLocation}' + url_prefix_static
-        ''}
+    url_prefix_static = '${w.webLocation}' + url_prefix_static
+  ''}
 
         sitename = u'${w.siteName}'
         page_front_page = u'${w.frontPage}'
@@ -35,14 +34,13 @@ let
         data_underlay_dir = '${dataDir}/${wikiIdent}/underlay'
 
         language_default = u'${w.languageDefault}'
-        ${optionalString (w.superUsers != []) ''
-          superuser = [${concatMapStringsSep ", " uLit w.superUsers}]
-        ''}
+        ${optionalString (w.superUsers != [ ]) ''
+    superuser = [${concatMapStringsSep ", " uLit w.superUsers}]
+  ''}
 
     ${indentLines 4 w.extraConfig}
   '';
   wikiConfigFile = name: wiki: pkgs.writeText "${name}.py" (wikiConfig name wiki);
-
 in
 {
   options.services.moinmoin = with types; {
@@ -105,7 +103,7 @@ in
 
           superUsers = mkOption {
             type = listOf str;
-            default = [];
+            default = [ ];
             example = [ "elvis" ];
             description = ''
               List of trusted user names with wiki system administration super powers.
@@ -175,10 +173,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    assertions = forEach (attrNames cfg.wikis) (wname:
-      { assertion = builtins.match "[A-Za-z_][A-Za-z0-9_]*" wname != null;
-        message = "${wname} is not valid Python identifier";
-      }
+    assertions = forEach (attrNames cfg.wikis) (
+      wname:
+        {
+          assertion = builtins.match "[A-Za-z_][A-Za-z0-9_]*" wname != null;
+          message = "${wname} is not valid Python identifier";
+        }
     );
 
     users.users = {
@@ -208,14 +208,15 @@ in
             restartIfChanged = true;
             restartTriggers = [ (wikiConfigFile wikiIdent wiki) ];
 
-            environment = let
-              penv = python.buildEnv.override {
-                # setuptools: https://github.com/benoitc/gunicorn/issues/1716
-                extraLibs = [ python.pkgs.gevent python.pkgs.setuptools pkg ];
+            environment =
+              let
+                penv = python.buildEnv.override {
+                  # setuptools: https://github.com/benoitc/gunicorn/issues/1716
+                  extraLibs = [ python.pkgs.gevent python.pkgs.setuptools pkg ];
+                };
+              in {
+                PYTHONPATH = "${dataDir}/${wikiIdent}/config:${penv}/${python.sitePackages}";
               };
-            in {
-              PYTHONPATH = "${dataDir}/${wikiIdent}/config:${penv}/${python.sitePackages}";
-            };
 
             preStart = ''
               umask 0007

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.virtualisation.rkt;
 in
@@ -59,6 +58,6 @@ in
       };
     };
 
-    users.groups.rkt = {};
+    users.groups.rkt = { };
   };
 }

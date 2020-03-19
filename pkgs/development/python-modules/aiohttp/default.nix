@@ -36,12 +36,20 @@ buildPythonPackage rec {
   };
 
   checkInputs = [
-    pytestrunner pytest gunicorn async_generator pytest_xdist
-    pytest-mock pytestcov trustme brotlipy freezegun
+    pytestrunner
+    pytest
+    gunicorn
+    async_generator
+    pytest_xdist
+    pytest-mock
+    pytestcov
+    trustme
+    brotlipy
+    freezegun
   ];
 
   propagatedBuildInputs = [ attrs chardet multidict async-timeout yarl ]
-    ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
+  ++ lib.optionals (pythonOlder "3.7") [ idna-ssl typing-extensions ];
 
   # disable tests which attempt to do loopback connections
   checkPhase = ''

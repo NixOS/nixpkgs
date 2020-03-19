@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.hardware.nitrokey;
-
 in
-
 {
   options.hardware.nitrokey = {
     enable = mkOption {
@@ -32,10 +28,12 @@ in
 
   config = mkIf cfg.enable {
     services.udev.packages = [
-      (pkgs.nitrokey-udev-rules.override (attrs:
-        { inherit (cfg) group; }
-      ))
+      (pkgs.nitrokey-udev-rules.override
+        (
+          attrs:
+            { inherit (cfg) group; }
+        ))
     ];
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
   };
 }

@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library and tools to manage Linux cgroups";
-    homepage    = "http://libcg.sourceforge.net/";
-    license     = stdenv.lib.licenses.lgpl2;
-    platforms   = stdenv.lib.platforms.linux;
+    homepage = "http://libcg.sourceforge.net/";
+    license = stdenv.lib.licenses.lgpl2;
+    platforms = stdenv.lib.platforms.linux;
     maintainers = [ stdenv.lib.maintainers.thoughtpolice ];
   };
 }

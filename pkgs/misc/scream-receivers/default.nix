@@ -1,5 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, alsaLib
-, pulseSupport ? false, libpulseaudio ? null
+{ stdenv
+, lib
+, fetchFromGitHub
+, alsaLib
+, pulseSupport ? false
+, libpulseaudio ? null
 }:
 
 stdenv.mkDerivation rec {

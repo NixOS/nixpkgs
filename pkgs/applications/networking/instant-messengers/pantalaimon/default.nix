@@ -1,10 +1,27 @@
-{ lib, stdenv, buildPythonApplication, fetchFromGitHub, pythonOlder,
-  attrs, aiohttp, appdirs, click, keyring, Logbook, peewee, janus,
-  prompt_toolkit, matrix-nio, dbus-python, pydbus, notify2, pygobject3,
-
-  pytest, faker, pytest-aiohttp, aioresponses,
-
-  enableDbusUi ? true
+{ lib
+, stdenv
+, buildPythonApplication
+, fetchFromGitHub
+, pythonOlder
+, attrs
+, aiohttp
+, appdirs
+, click
+, keyring
+, Logbook
+, peewee
+, janus
+, prompt_toolkit
+, matrix-nio
+, dbus-python
+, pydbus
+, notify2
+, pygobject3
+, pytest
+, faker
+, pytest-aiohttp
+, aioresponses
+, enableDbusUi ? true
 }:
 
 buildPythonApplication rec {
@@ -33,10 +50,10 @@ buildPythonApplication rec {
     peewee
     prompt_toolkit
   ] ++ lib.optional enableDbusUi [
-      dbus-python
-      notify2
-      pygobject3
-      pydbus
+    dbus-python
+    notify2
+    pygobject3
+    pydbus
   ];
 
   checkInputs = [

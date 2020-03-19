@@ -1,15 +1,11 @@
 { config, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.hardware.mwProCapture;
 
   kernelPackages = config.boot.kernelPackages;
-
 in
-
 {
 
   options.hardware.mwProCapture.enable = mkEnableOption "Magewell Pro Capture family kernel module";

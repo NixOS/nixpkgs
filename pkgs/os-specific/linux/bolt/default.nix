@@ -1,7 +1,20 @@
-{ stdenv, meson, ninja, pkgconfig, fetchFromGitLab,
-  python3, umockdev, gobject-introspection, dbus,
-  asciidoc, libxml2, libxslt, docbook_xml_dtd_45, docbook_xsl,
-  glib, systemd, polkit
+{ stdenv
+, meson
+, ninja
+, pkgconfig
+, fetchFromGitLab
+, python3
+, umockdev
+, gobject-introspection
+, dbus
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xml_dtd_45
+, docbook_xsl
+, glib
+, systemd
+, polkit
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +30,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja pkgconfig
-    asciidoc libxml2 libxslt docbook_xml_dtd_45 docbook_xsl
+    meson
+    ninja
+    pkgconfig
+    asciidoc
+    libxml2
+    libxslt
+    docbook_xml_dtd_45
+    docbook_xsl
   ] ++ stdenv.lib.optional (!doCheck) python3;
 
   buildInputs = [
-    glib systemd polkit
+    glib
+    systemd
+    polkit
   ];
 
   doCheck = true;
@@ -32,7 +53,9 @@ stdenv.mkDerivation rec {
   '';
 
   checkInputs = [
-    dbus umockdev gobject-introspection
+    dbus
+    umockdev
+    gobject-introspection
     (python3.withPackages
       (p: [ p.pygobject3 p.dbus-python p.python-dbusmock ]))
   ];

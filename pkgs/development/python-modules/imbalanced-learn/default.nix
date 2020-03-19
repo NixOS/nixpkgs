@@ -1,4 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy27
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy27
 , nose
 , pandas
 , pytest

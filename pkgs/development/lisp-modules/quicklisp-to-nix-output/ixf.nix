@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "ixf";
 
-  asdFilesToKeep = ["ixf.asd"];
+  asdFilesToKeep = [ "ixf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM ixf DESCRIPTION Tools to handle IBM PC version of IXF file format

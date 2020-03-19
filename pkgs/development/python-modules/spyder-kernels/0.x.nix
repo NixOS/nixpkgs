@@ -1,20 +1,19 @@
-{ 
-  lib
-  , buildPythonPackage
-  , fetchFromGitHub
-  , cloudpickle
-  , ipykernel
-  , wurlitzer
-  , jupyter_client
-  , pyzmq 
-  , numpy
-  , pandas
-  , scipy
-  , matplotlib
-  , xarray
-  , pytest
-  , flaky
-  , isPy3k
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, cloudpickle
+, ipykernel
+, wurlitzer
+, jupyter_client
+, pyzmq
+, numpy
+, pandas
+, scipy
+, matplotlib
+, xarray
+, pytest
+, flaky
+, isPy3k
 }:
 
 buildPythonPackage rec {

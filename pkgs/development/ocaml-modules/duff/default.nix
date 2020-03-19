@@ -1,6 +1,12 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, fmt
-, bos, cmdliner, fpath, logs
+{ lib
+, fetchurl
+, buildDunePackage
+, cstruct
+, fmt
+, bos
+, cmdliner
+, fpath
+, logs
 , alcotest
 }:
 

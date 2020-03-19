@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
 
-  buildInputs = [ openssl  ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv curl ];
+  buildInputs = [ openssl ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ Security libiconv curl ];
 
   preCheck = ''
     export HOME=$(mktemp -d) USER=nixbld

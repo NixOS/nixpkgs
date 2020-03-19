@@ -1,10 +1,9 @@
 { stdenv, lib, fetchFromGitHub, makeWrapper, git, gnupg, gawk }:
-
 let
   version = "0.3.2";
   repo = "git-secret";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${repo}-${version}";
 
   src = fetchFromGitHub {

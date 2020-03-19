@@ -23,7 +23,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     pytest tests/
-    '';
+  '';
 
   meta = with lib; {
     homepage = "https://github.com/NabuCasa/hass-nabucasa";

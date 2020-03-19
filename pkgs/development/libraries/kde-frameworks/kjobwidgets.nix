@@ -1,7 +1,10 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, qttools,
-  kcoreaddons, kwidgetsaddons, qtx11extras
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, qttools
+, kcoreaddons
+, kwidgetsaddons
+, qtx11extras
 }:
 
 mkDerivation {

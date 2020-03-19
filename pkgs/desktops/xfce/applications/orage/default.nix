@@ -1,12 +1,21 @@
-{ lib, fetchpatch, mkXfceDerivation, dbus-glib, gtk2, libical, libnotify, tzdata
-, popt, libxfce4ui, xfce4-panel, withPanelPlugin ? true }:
+{ lib
+, fetchpatch
+, mkXfceDerivation
+, dbus-glib
+, gtk2
+, libical
+, libnotify
+, tzdata
+, popt
+, libxfce4ui
+, xfce4-panel
+, withPanelPlugin ? true
+}:
 
 assert withPanelPlugin -> libxfce4ui != null && xfce4-panel != null;
-
 let
   inherit (lib) optionals;
 in
-
 mkXfceDerivation {
   category = "apps";
   pname = "orage";
@@ -14,7 +23,7 @@ mkXfceDerivation {
 
   sha256 = "04z6y1vfaz1im1zq1zr7cf8pjibjhj9zkyanbp7vn30q520yxa0m";
   buildInputs = [ dbus-glib gtk2 libical libnotify popt ]
-    ++ optionals withPanelPlugin [ libxfce4ui xfce4-panel ];
+  ++ optionals withPanelPlugin [ libxfce4ui xfce4-panel ];
 
   postPatch = ''
     substituteInPlace src/parameters.c        --replace "/usr/share/zoneinfo" "${tzdata}/share/zoneinfo"

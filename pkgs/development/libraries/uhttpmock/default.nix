@@ -1,7 +1,7 @@
 { stdenv, lib, fetchFromGitLab, autoconf, gtk-doc, automake, libtool, pkgconfig, glib, libsoup, gobject-introspection }:
 
 stdenv.mkDerivation rec {
-  version="0.5.0";
+  version = "0.5.0";
   pname = "uhttpmock";
 
   src = fetchFromGitLab {

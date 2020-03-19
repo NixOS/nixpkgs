@@ -15,11 +15,12 @@ buildGoPackage rec {
     sha256 = "0v3sx9hb03bdn4rvsv2r0jzif6p1rx47hrkpsbnwva31k396mck2";
   };
 
-  wrapperPath = stdenv.lib.makeBinPath ([
-    git
-    gnupg
-    xclip
-  ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
+  wrapperPath = stdenv.lib.makeBinPath
+    ([
+      git
+      gnupg
+      xclip
+    ] ++ stdenv.lib.optional stdenv.isLinux wl-clipboard);
 
   postInstall = ''
     mkdir -p \
@@ -37,11 +38,11 @@ buildGoPackage rec {
   '';
 
   meta = with stdenv.lib; {
-    description     = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
-    homepage        = https://www.gopass.pw/;
-    license         = licenses.mit;
-    maintainers     = with maintainers; [ andir ];
-    platforms       = platforms.unix;
+    description = "The slightly more awesome Standard Unix Password Manager for Teams. Written in Go.";
+    homepage = https://www.gopass.pw/;
+    license = licenses.mit;
+    maintainers = with maintainers; [ andir ];
+    platforms = platforms.unix;
 
     longDescription = ''
       gopass is a rewrite of the pass password manager in Go with the aim of

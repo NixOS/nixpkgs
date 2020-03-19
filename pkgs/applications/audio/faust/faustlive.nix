@@ -1,6 +1,16 @@
-{ stdenv, fetchFromGitHub
-, llvm, qt48Full, qrencode, libmicrohttpd, libjack2, alsaLib, faust, curl
-, bc, coreutils, which
+{ stdenv
+, fetchFromGitHub
+, llvm
+, qt48Full
+, qrencode
+, libmicrohttpd
+, libjack2
+, alsaLib
+, faust
+, curl
+, bc
+, coreutils
+, which
 }:
 
 stdenv.mkDerivation {
@@ -14,8 +24,17 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [
-    llvm qt48Full qrencode libmicrohttpd libjack2 alsaLib faust curl
-    bc coreutils which
+    llvm
+    qt48Full
+    qrencode
+    libmicrohttpd
+    libjack2
+    alsaLib
+    faust
+    curl
+    bc
+    coreutils
+    which
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

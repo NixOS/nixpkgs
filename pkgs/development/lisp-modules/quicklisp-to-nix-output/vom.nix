@@ -14,7 +14,7 @@ rec {
 
   packageName = "vom";
 
-  asdFilesToKeep = ["vom.asd"];
+  asdFilesToKeep = [ "vom.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM vom DESCRIPTION A tiny logging utility. SHA256

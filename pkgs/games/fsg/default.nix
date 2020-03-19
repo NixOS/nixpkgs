@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, gtk2, glib, pkgconfig, libGLU, libGL, wxGTK, libX11, xorgproto
-, runtimeShell }:
+{ stdenv
+, fetchurl
+, gtk2
+, glib
+, pkgconfig
+, libGLU
+, libGL
+, wxGTK
+, libX11
+, xorgproto
+, runtimeShell
+}:
 
 stdenv.mkDerivation {
   name = "fsg-4.4";
@@ -31,7 +41,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Cellular automata engine tuned towards the likes of Falling Sand";
-    maintainers = [stdenv.lib.maintainers.raskin];
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

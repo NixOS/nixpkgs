@@ -1,4 +1,6 @@
-{ mkDerivation, lib, fetchFromGitHub
+{ mkDerivation
+, lib
+, fetchFromGitHub
 , fetchpatch
 , libGLU
 , qtbase
@@ -9,7 +11,6 @@
 , muparser
 , levmar
 }:
-
 let
   meshlabRev = "25f3d17b1d1d47ddc51179cb955f3027b7638745";
   vcglibRev = "910da4c3e310f2e6557bd7a39c4f1529e61573e5";
@@ -45,8 +46,8 @@ let
     url = "https://aur.archlinux.org/cgit/aur.git/plain/muparser.patch?h=meshlab-git&id=f7250ea818470f07dc9b86726407091d39c0be6f";
     sha256 = "1sf7xqwc2j8xxdx2yklwifii9qqgknvx6ahk2hq76mg78ry1nzhq";
   };
-
-in mkDerivation {
+in
+mkDerivation {
   name = "meshlab-20190129-beta";
 
   srcs =
@@ -92,7 +93,7 @@ in mkDerivation {
       patch -Np1 -i ${_3ds_patch}
       patch -Np1 -i ${muparser_patch}
     ''
-    ;
+  ;
 
   buildPhase = ''
     cd src
@@ -128,7 +129,7 @@ in mkDerivation {
     description = "A system for processing and editing 3D triangular meshes.";
     homepage = http://www.meshlab.net/;
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

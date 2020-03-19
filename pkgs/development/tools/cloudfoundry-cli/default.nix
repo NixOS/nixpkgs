@@ -18,12 +18,16 @@ buildGoPackage rec {
   makeTarget = let hps = stdenv.hostPlatform.system; in
     if hps == "x86_64-darwin" then
       "out/cf-cli_osx"
-    else if hps == "x86_64-linux" then
-      "out/cf-cli_linux_x86-64"
-    else if hps == "i686-linux" then
-      "out/cf-cli_linux_i686"
     else
-      throw "make target for this platform unknown";
+      if hps == "x86_64-linux"
+      then
+        "out/cf-cli_linux_x86-64"
+      else
+        if hps == "i686-linux"
+        then
+          "out/cf-cli_linux_i686"
+        else
+          throw "make target for this platform unknown";
 
   buildPhase = ''
     cd go/src/${goPackagePath}

@@ -27,17 +27,17 @@ with pkgs;
   cc-multilib-gcc = callPackage ./cc-wrapper/multilib.nix { stdenv = gccMultiStdenv; };
   cc-multilib-clang = callPackage ./cc-wrapper/multilib.nix { stdenv = clangMultiStdenv; };
 
-  kernel-config = callPackage ./kernel.nix {};
+  kernel-config = callPackage ./kernel.nix { };
 
-  ld-library-path = callPackage ./ld-library-path {};
+  ld-library-path = callPackage ./ld-library-path { };
 
-  macOSSierraShared = callPackage ./macos-sierra-shared {};
+  macOSSierraShared = callPackage ./macos-sierra-shared { };
 
-  cross = callPackage ./cross {};
+  cross = callPackage ./cross { };
 
-  nixos-functions = callPackage ./nixos-functions {};
+  nixos-functions = callPackage ./nixos-functions { };
 
-  patch-shebangs = callPackage ./patch-shebangs {};
+  patch-shebangs = callPackage ./patch-shebangs { };
 
-  writers = callPackage ../build-support/writers/test.nix {};
+  writers = callPackage ../build-support/writers/test.nix { };
 }

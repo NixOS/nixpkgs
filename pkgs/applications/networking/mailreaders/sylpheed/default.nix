@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, pkgconfig, gtk2, openssl ? null, gpgme ? null
-, gpgSupport ? true, sslSupport ? true }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gtk2
+, openssl ? null
+, gpgme ? null
+, gpgSupport ? true
+, sslSupport ? true
+}:
 
 assert gpgSupport -> gpgme != null;
 assert sslSupport -> openssl != null;
@@ -18,11 +25,11 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ gtk2 ]
-    ++ optionals gpgSupport [ gpgme ]
-    ++ optionals sslSupport [ openssl ];
+  ++ optionals gpgSupport [ gpgme ]
+  ++ optionals sslSupport [ openssl ];
 
   configureFlags = optional gpgSupport "--enable-gpgme"
-    ++ optional sslSupport "--enable-ssl";
+  ++ optional sslSupport "--enable-ssl";
 
   meta = {
     homepage = http://sylpheed.sraoss.jp/en/;

@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.services.activemq;
 
   activemqBroker = stdenv.mkDerivation {
@@ -19,8 +17,8 @@ let
       javac -d $out/lib ActiveMQBroker.java
     '';
   };
-
-in {
+in
+{
 
   options = {
     services.activemq = {
@@ -66,12 +64,14 @@ in {
         example = {
           "java.net.preferIPv4Stack" = "true";
         };
-        apply = attrs: {
-          "activemq.base" = "${cfg.baseDir}";
-          "activemq.data" = "${cfg.baseDir}/data";
-          "activemq.conf" = "${cfg.configurationDir}";
-          "activemq.home" = "${activemq}";
-        } // attrs;
+        apply = attrs:
+          {
+            "activemq.base" = "${cfg.baseDir}";
+            "activemq.data" = "${cfg.baseDir}/data";
+            "activemq.conf" = "${cfg.configurationDir}";
+            "activemq.home" = "${activemq}";
+          }
+          // attrs;
         description = ''
           Specifies Java properties that are sent to the ActiveMQ
           broker service with the "-D" option. You can set properties

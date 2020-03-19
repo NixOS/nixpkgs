@@ -11,15 +11,15 @@ buildPythonPackage rec {
 
   # For Python 3, locale has to be set to en_US.UTF-8 for
   # tests to pass
-  checkInputs = if isPy3k then [ glibcLocales ] else [];
+  checkInputs = if isPy3k then [ glibcLocales ] else [ ];
 
   # py2 likes to reorder tests
   doCheck = isPy3k;
   checkPhase = ''
-  runHook preCheck
-  ${if isPy3k then "export LC_ALL=en_US.UTF-8" else ""}
-  PYTHONPATH=`pwd` ${python.interpreter} aenum/test.py
-  runHook postCheck
+    runHook preCheck
+    ${if isPy3k then "export LC_ALL=en_US.UTF-8" else ""}
+    PYTHONPATH=`pwd` ${python.interpreter} aenum/test.py
+    runHook postCheck
   '';
 
 

@@ -1,5 +1,4 @@
 { lib, mkDerivation, wrapQtAppsHook, callPackage, fetchgit, cmake, jq, python3, qtbase, qtquickcontrols2 }:
-
 let
   # admittedly, we're using (printer firmware) blobs when we could compile them ourselves.
   curaBinaryDataVersion = "3.6.21"; # Marlin v2.0.0.174 for Bio, v2.0.0.144 for others.
@@ -75,7 +74,7 @@ mkDerivation rec {
   meta = with lib; {
     description = "3D printer / slicing GUI built on top of the Uranium framework";
     homepage = https://code.alephobjects.com/diffusion/CURA/;
-    license = licenses.agpl3;  # a partial relicense to LGPL has happened, but not certain that all AGPL bits are expunged
+    license = licenses.agpl3; # a partial relicense to LGPL has happened, but not certain that all AGPL bits are expunged
     platforms = platforms.linux;
     maintainers = with maintainers; [ chaduffy ];
   };

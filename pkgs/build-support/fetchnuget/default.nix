@@ -8,36 +8,40 @@ attrs @
 , md5 ? ""
 , ...
 }:
-if md5 != "" then
+if md5 != ""
+then
   throw "fetchnuget does not support md5 anymore, please use sha256"
 else
-  buildDotnetPackage ({
-    src = fetchurl {
-      inherit url sha256;
-      name = "${baseName}.${version}.zip";
-    };
+  buildDotnetPackage (
+    {
+      src = fetchurl {
+        inherit url sha256;
+        name = "${baseName}.${version}.zip";
+      };
 
-    sourceRoot = ".";
+      sourceRoot = ".";
 
-    buildInputs = [ unzip ];
+      buildInputs = [ unzip ];
 
-    dontBuild = true;
+      dontBuild = true;
 
-    preInstall = ''
-      function traverseRename () {
-        for e in *
-        do
-          t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
-          [ "$t" != "$e" ] && mv -vn "$e" "$t"
-          if [ -d "$t" ]
-          then
-            cd "$t"
-            traverseRename
-            cd ..
-          fi
-        done
-      }
+      preInstall = ''
+        function traverseRename () {
+          for e in *
+          do
+            t="$(echo "$e" | sed -e "s/%20/\ /g" -e "s/%2B/+/g")"
+            [ "$t" != "$e" ] && mv -vn "$e" "$t"
+            if [ -d "$t" ]
+            then
+              cd "$t"
+              traverseRename
+              cd ..
+            fi
+          done
+        }
 
-      traverseRename
-   '';
-  } // attrs)
+        traverseRename
+      '';
+    }
+    // attrs
+  )

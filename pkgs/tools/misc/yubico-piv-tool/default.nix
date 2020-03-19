@@ -1,4 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, openssl, check, pcsclite, PCSC
+{ stdenv
+, fetchurl
+, pkgconfig
+, openssl
+, check
+, pcsclite
+, PCSC
 , withApplePCSC ? stdenv.isDarwin
 }:
 
@@ -12,7 +18,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl check ]
-    ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
+  ++ (if withApplePCSC then [ PCSC ] else [ pcsclite ]);
 
   configureFlags = [ "--with-backend=${if withApplePCSC then "macscard" else "pcsc"}" ];
 

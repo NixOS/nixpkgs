@@ -1,5 +1,16 @@
-{ stdenv, fetchFromGitHub, cmake, expat, proj, bzip2, zlib, boost, postgresql
-, withLuaJIT ? false, lua, luajit }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, expat
+, proj
+, bzip2
+, zlib
+, boost
+, postgresql
+, withLuaJIT ? false
+, lua
+, luajit
+}:
 
 stdenv.mkDerivation rec {
   pname = "osm2pgsql";
@@ -15,8 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ expat proj bzip2 zlib boost postgresql ]
-    ++ stdenv.lib.optional withLuaJIT luajit
-    ++ stdenv.lib.optional (!withLuaJIT) lua;
+  ++ stdenv.lib.optional withLuaJIT luajit
+  ++ stdenv.lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = stdenv.lib.optional withLuaJIT "-DWITH_LUAJIT:BOOL=ON";
 

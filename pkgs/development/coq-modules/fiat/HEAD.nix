@@ -1,4 +1,4 @@
-{stdenv, fetchgit, coq, python27}:
+{ stdenv, fetchgit, coq, python27 }:
 
 stdenv.mkDerivation rec {
 

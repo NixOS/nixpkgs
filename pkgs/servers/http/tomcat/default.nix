@@ -1,35 +1,34 @@
 { stdenv, lib, fetchurl }:
-
 let
+  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation
+    (rec {
+      pname = "apache-tomcat";
+      version = "${versionMajor}.${versionMinor}";
 
-  common = { versionMajor, versionMinor, sha256 }: stdenv.mkDerivation (rec {
-    pname = "apache-tomcat";
-    version = "${versionMajor}.${versionMinor}";
+      src = fetchurl {
+        url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
+        inherit sha256;
+      };
 
-    src = fetchurl {
-      url = "mirror://apache/tomcat/tomcat-${versionMajor}/v${version}/bin/${pname}-${version}.tar.gz";
-      inherit sha256;
-    };
+      outputs = [ "out" "webapps" ];
+      installPhase =
+        ''
+          mkdir $out
+          mv * $out
+          mkdir -p $webapps/webapps
+          mv $out/webapps $webapps/
+        '';
 
-    outputs = [ "out" "webapps" ];
-    installPhase =
-      ''
-        mkdir $out
-        mv * $out
-        mkdir -p $webapps/webapps
-        mv $out/webapps $webapps/
-      '';
-
-    meta = {
-      homepage = https://tomcat.apache.org/;
-      description = "An implementation of the Java Servlet and JavaServer Pages technologies";
-      platforms = with lib.platforms; all;
-      maintainers = with lib.maintainers; [ danbst ];
-      license = [ lib.licenses.asl20 ];
-    };
-  });
-
-in {
+      meta = {
+        homepage = https://tomcat.apache.org/;
+        description = "An implementation of the Java Servlet and JavaServer Pages technologies";
+        platforms = with lib.platforms; all;
+        maintainers = with lib.maintainers; [ danbst ];
+        license = [ lib.licenses.asl20 ];
+      };
+    });
+in
+{
   tomcat7 = common {
     versionMajor = "7";
     versionMinor = "0.100";

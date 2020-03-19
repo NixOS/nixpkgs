@@ -20,10 +20,10 @@ stdenv.mkDerivation {
 
   buildInputs = [ freetype ];
   nativeBuildInputs = [ perl ];
-  
+
   patches = ./gentoo-makefile.patch; # also contains the freetype patch
 
-  meta = { 
+  meta = {
     description = "True Type to Postscript Type 3 converter, fpdf";
     homepage = http://ttf2pt1.sourceforge.net/index.html;
     license = "ttf2pt1";

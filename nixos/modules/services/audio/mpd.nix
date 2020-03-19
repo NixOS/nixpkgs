@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   name = "mpd";
 
   uid = config.ids.uids.mpd;
@@ -14,20 +12,20 @@ let
     music_directory     "${cfg.musicDirectory}"
     playlist_directory  "${cfg.playlistDirectory}"
     ${lib.optionalString (cfg.dbFile != null) ''
-      db_file             "${cfg.dbFile}"
-    ''}
+    db_file             "${cfg.dbFile}"
+  ''}
     state_file          "${cfg.dataDir}/state"
     sticker_file        "${cfg.dataDir}/sticker.sql"
     user                "${cfg.user}"
     group               "${cfg.group}"
 
     ${optionalString (cfg.network.listenAddress != "any") ''bind_to_address "${cfg.network.listenAddress}"''}
-    ${optionalString (cfg.network.port != 6600)  ''port "${toString cfg.network.port}"''}
+    ${optionalString (cfg.network.port != 6600) ''port "${toString cfg.network.port}"''}
 
     ${cfg.extraConfig}
   '';
-
-in {
+in
+{
 
   ###### interface
 

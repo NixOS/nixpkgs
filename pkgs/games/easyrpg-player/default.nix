@@ -1,7 +1,32 @@
-{ stdenv, fetchFromGitHub, cmake, doxygen ? null, pkgconfig, freetype ? null, glib, harfbuzz ? null
-, liblcf, libpng, libsndfile ? null, libvorbis ? null, libxmp ? null
-, libXcursor, libXext, libXi, libXinerama, libXrandr, libXScrnSaver, libXxf86vm
-, mpg123 ? null, opusfile ? null, pcre, pixman, SDL2_mixer, speexdsp ? null, wildmidi ? null, zlib }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, doxygen ? null
+, pkgconfig
+, freetype ? null
+, glib
+, harfbuzz ? null
+, liblcf
+, libpng
+, libsndfile ? null
+, libvorbis ? null
+, libxmp ? null
+, libXcursor
+, libXext
+, libXi
+, libXinerama
+, libXrandr
+, libXScrnSaver
+, libXxf86vm
+, mpg123 ? null
+, opusfile ? null
+, pcre
+, pixman
+, SDL2_mixer
+, speexdsp ? null
+, wildmidi ? null
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "easyrpg-player";

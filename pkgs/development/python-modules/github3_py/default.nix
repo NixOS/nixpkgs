@@ -26,8 +26,8 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ betamax pytest betamax-matchers ]
-    ++ lib.optional (pythonOlder "3") unittest2
-    ++ lib.optional (pythonOlder "3.3") mock;
+  ++ lib.optional (pythonOlder "3") unittest2
+  ++ lib.optional (pythonOlder "3.3") mock;
   propagatedBuildInputs = [ requests uritemplate dateutil jwcrypto pyopenssl ndg-httpsclient pyasn1 ];
 
   postPatch = ''

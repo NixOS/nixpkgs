@@ -7,7 +7,10 @@
 , python
 , ocl-icd
 , opencl-headers
-, Accelerate, CoreGraphics, CoreVideo, OpenCL
+, Accelerate
+, CoreGraphics
+, CoreVideo
+, OpenCL
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
   '';
 
   cmakeFlags = [
-     "-DBUILD_TEST=OFF"
+    "-DBUILD_TEST=OFF"
   ];
 
   buildInputs = [

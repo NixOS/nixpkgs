@@ -1,17 +1,25 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.clight;
 
   toConf = v:
-    if builtins.isFloat v then toString v
-    else if isInt v       then toString v
-    else if isBool v      then boolToString v
-    else if isString v    then ''"${escape [''"''] v}"''
-    else if isList v      then "[ " + concatMapStringsSep ", " toConf v + " ]"
-    else abort "clight.toConf: unexpected type (v = ${v})";
+    if builtins.isFloat v
+    then toString v
+    else
+      if isInt v
+      then toString v
+      else
+        if isBool v
+        then boolToString v
+        else
+          if isString v
+          then ''"${escape [ ''"'' ] v}"''
+          else
+            if isList v
+            then "[ " + concatMapStringsSep ", " toConf v + " ]"
+            else abort "clight.toConf: unexpected type (v = ${v})";
 
   clightConf = pkgs.writeText "clight.conf"
     (concatStringsSep "\n" (mapAttrsToList
@@ -19,7 +27,8 @@ let
       (filterAttrs
         (_: value: value != null)
         cfg.settings)));
-in {
+in
+{
   options.services.clight = {
     enable = mkOption {
       type = types.bool;
@@ -48,18 +57,19 @@ in {
       };
     };
 
-    settings = let
-      validConfigTypes = with types; either int (either str (either bool float));
-    in mkOption {
-      type = with types; attrsOf (nullOr (either validConfigTypes (listOf validConfigTypes)));
-      default = {};
-      example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
-      description = ''
-        Additional configuration to extend clight.conf. See
-        <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a
-        sample configuration file.
-      '';
-    };
+    settings =
+      let
+        validConfigTypes = with types; either int (either str (either bool float));
+      in mkOption {
+        type = with types; attrsOf (nullOr (either validConfigTypes (listOf validConfigTypes)));
+        default = { };
+        example = { captures = 20; gamma_long_transition = true; ac_capture_timeouts = [ 120 300 60 ]; };
+        description = ''
+          Additional configuration to extend clight.conf. See
+          <link xlink:href="https://github.com/FedeDP/Clight/blob/master/Extra/clight.conf"/> for a
+          sample configuration file.
+        '';
+      };
   };
 
   config = mkIf cfg.enable {
@@ -68,12 +78,14 @@ in {
     services.dbus.packages = with pkgs; [ clight clightd ];
     services.upower.enable = true;
 
-    services.clight.settings = {
-      gamma_temp = with cfg.temperature; mkDefault [ day night ];
-    } // (optionalAttrs (config.location.provider == "manual") {
-      latitude = mkDefault config.location.latitude;
-      longitude = mkDefault config.location.longitude;
-    });
+    services.clight.settings =
+      {
+        gamma_temp = with cfg.temperature; mkDefault [ day night ];
+      }
+      // (optionalAttrs (config.location.provider == "manual") {
+        latitude = mkDefault config.location.latitude;
+        longitude = mkDefault config.location.longitude;
+      });
 
     services.geoclue2.appConfig.clightc = {
       isAllowed = true;

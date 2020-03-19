@@ -1,9 +1,9 @@
-{ stdenv, fetchFromGitHub, cmake, SDL2}:
+{ stdenv, fetchFromGitHub, cmake, SDL2 }:
 
 #TODO: tests
 
 stdenv.mkDerivation rec {
-	pname = "faudio";
+  pname = "faudio";
   version = "20.03";
 
   src = fetchFromGitHub {
@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
     sha256 = "0wlbh1py9074896fxa8lcfvjj3l943zz8wjl2rn7g21xf0ar9kyv";
   };
 
-	nativeBuildInputs = [cmake];
+  nativeBuildInputs = [ cmake ];
 
   buildInputs = [ SDL2 ];
 

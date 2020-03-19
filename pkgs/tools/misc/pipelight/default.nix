@@ -1,12 +1,10 @@
 { stdenv, fetchurl, bash, cabextract, curl, gnupg, libX11, libGLU, libGL, wine-staging }:
-
 let
   wine_custom = wine-staging;
 
   mozillaPluginPath = "/lib/mozilla/plugins";
-
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
 
   version = "0.2.8.2";
 

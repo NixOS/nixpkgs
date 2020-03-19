@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GTK-based config tool for Fcitx";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ cdepillabout ];
   };
 
@@ -16,8 +16,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ makeWrapper fcitx cmake isocodes gtk3
-    gnome3.adwaita-icon-theme ];
+  buildInputs = [
+    makeWrapper
+    fcitx
+    cmake
+    isocodes
+    gtk3
+    gnome3.adwaita-icon-theme
+  ];
 
   # Patch paths to `fcitx-remote`
   prePatch = ''
@@ -32,4 +38,3 @@ stdenv.mkDerivation rec {
       --prefix XDG_DATA_DIRS : "$XDG_ICON_DIRS";
   '';
 }
-

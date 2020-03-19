@@ -1,4 +1,4 @@
-{ stdenv , python3Packages }:
+{ stdenv, python3Packages }:
 
 python3Packages.buildPythonPackage rec {
   pname = "doge";

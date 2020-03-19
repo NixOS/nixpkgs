@@ -1,13 +1,13 @@
 { lib, fetchFromGitHub }:
-
 let
   version = "6.9";
-in fetchFromGitHub rec {
+in
+fetchFromGitHub rec {
   name = "libertinus-${version}";
 
-  owner  = "alif-type";
-  repo   = "libertinus";
-  rev    = "v${version}";
+  owner = "alif-type";
+  repo = "libertinus";
+  rev = "v${version}";
 
   postFetch = ''
     tar xf $downloadedFile --strip=1

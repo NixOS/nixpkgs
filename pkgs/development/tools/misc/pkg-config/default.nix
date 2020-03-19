@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   # Process Requires.private properly, see
   # http://bugs.freedesktop.org/show_bug.cgi?id=4738.
   patches = optional (!vanilla) ./requires-private.patch
-    ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
+  ++ optional stdenv.isCygwin ./2.36.3-not-win32.patch;
 
   # These three tests fail due to a (desired) behavior change from our ./requires-private.patch
   postPatch = ''
@@ -26,14 +26,15 @@ stdenv.mkDerivation rec {
   buildInputs = optional (stdenv.isCygwin || stdenv.isDarwin || stdenv.isSunOS) libiconv;
 
   configureFlags = [ "--with-internal-glib" ]
-    ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
-       # Can't run these tests while cross-compiling
-    ++ optional (stdenv.hostPlatform != stdenv.buildPlatform)
-       [ "glib_cv_stack_grows=no"
-         "glib_cv_uscore=no"
-         "ac_cv_func_posix_getpwuid_r=yes"
-         "ac_cv_func_posix_getgrgid_r=yes"
-       ];
+  ++ optional (stdenv.isSunOS) [ "--with-libiconv=gnu" "--with-system-library-path" "--with-system-include-path" "CFLAGS=-DENABLE_NLS" ]
+  # Can't run these tests while cross-compiling
+  ++ optional (stdenv.hostPlatform != stdenv.buildPlatform)
+    [
+      "glib_cv_stack_grows=no"
+      "glib_cv_uscore=no"
+      "ac_cv_func_posix_getpwuid_r=yes"
+      "ac_cv_func_posix_getgrgid_r=yes"
+    ];
 
   enableParallelBuilding = true;
   doCheck = true;

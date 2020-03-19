@@ -1,7 +1,18 @@
-{ lib, mkDerivation, fetchFromGitLab, cmake, luajit,
-  SDL2, SDL2_image, SDL2_ttf, physfs,
-  openal, libmodplug, libvorbis,
-  qtbase, qttools }:
+{ lib
+, mkDerivation
+, fetchFromGitLab
+, cmake
+, luajit
+, SDL2
+, SDL2_image
+, SDL2_ttf
+, physfs
+, openal
+, libmodplug
+, libvorbis
+, qtbase
+, qttools
+}:
 
 mkDerivation rec {
   pname = "solarus";
@@ -14,10 +25,19 @@ mkDerivation rec {
     sha256 = "0d0xfjbmamz84aajxfc0fwrj8862xxbxz6n4xnc05r1m4g7gba77";
   };
 
-  buildInputs = [ cmake luajit SDL2
-    SDL2_image SDL2_ttf physfs
-    openal libmodplug libvorbis
-    qtbase qttools ];
+  buildInputs = [
+    cmake
+    luajit
+    SDL2
+    SDL2_image
+    SDL2_ttf
+    physfs
+    openal
+    libmodplug
+    libvorbis
+    qtbase
+    qttools
+  ];
 
   enableParallelBuilding = true;
 

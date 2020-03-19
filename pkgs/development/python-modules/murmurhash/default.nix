@@ -18,7 +18,7 @@ buildPythonPackage rec {
   '';
 
   buildInputs = [
-   cython
+    cython
   ];
 
   # No test

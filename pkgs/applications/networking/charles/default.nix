@@ -1,26 +1,23 @@
-{
-stdenv
+{ stdenv
 , makeWrapper
 , makeDesktopItem
 , fetchurl
 , jre
 }:
-
 let
   generic = { version, sha256, ... }@attrs:
-  let
-    desktopItem = makeDesktopItem {
-      categories = "Network;Development;WebDevelopment;Java;";
-      desktopName = "Charles";
-      exec = "charles %F";
-      genericName  = "Web Debugging Proxy";
-      icon = "charles-proxy";
-      mimeType = "application/x-charles-savedsession;application/x-charles-savedsession+xml;application/x-charles-savedsession+json;application/har+json;application/vnd.tcpdump.pcap;application/x-charles-trace";
-      name = "Charles";
-      startupNotify = "true";
-    };
-
-  in stdenv.mkDerivation {
+    let
+      desktopItem = makeDesktopItem {
+        categories = "Network;Development;WebDevelopment;Java;";
+        desktopName = "Charles";
+        exec = "charles %F";
+        genericName = "Web Debugging Proxy";
+        icon = "charles-proxy";
+        mimeType = "application/x-charles-savedsession;application/x-charles-savedsession+xml;application/x-charles-savedsession+json;application/har+json;application/vnd.tcpdump.pcap;application/x-charles-trace";
+        name = "Charles";
+        startupNotify = "true";
+      };
+    in stdenv.mkDerivation {
       pname = "charles";
       inherit version;
 
@@ -53,8 +50,8 @@ let
         platforms = stdenv.lib.platforms.linux ++ stdenv.lib.platforms.darwin;
       };
     };
-
-in {
+in
+{
   charles4 = (generic {
     version = "4.2.8";
     sha256 = "1jzjdhzxgrq7pdfryfkg0hsjpyni14ma4x8jbdk1rqll78ccr080";
@@ -64,4 +61,3 @@ in {
     sha256 = "13zk82ny1w5zd9qcs9qkq0kdb22ni5byzajyshpxdfm4zv6p32ss";
   });
 }
-

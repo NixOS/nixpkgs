@@ -1,7 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, intltool, itstool, libxml2, gtk3, openssl, gnome3, gobject-introspection, vala, libgee
-, overrideCC, gcc6
-, mysqlSupport ? false, libmysqlclient ? null
-, postgresSupport ? false, postgresql ? null
+{ stdenv
+, fetchurl
+, pkgconfig
+, intltool
+, itstool
+, libxml2
+, gtk3
+, openssl
+, gnome3
+, gobject-introspection
+, vala
+, libgee
+, overrideCC
+, gcc6
+, mysqlSupport ? false
+, libmysqlclient ? null
+, postgresSupport ? false
+, postgresql ? null
 }:
 
 assert mysqlSupport -> libmysqlclient != null;
@@ -34,8 +48,8 @@ assert postgresSupport -> postgresql != null;
 
   nativeBuildInputs = [ pkgconfig intltool itstool libxml2 gobject-introspection vala ];
   buildInputs = with stdenv.lib; [ gtk3 openssl libgee ]
-    ++ optional (mysqlSupport) libmysqlclient
-    ++ optional (postgresSupport) postgresql;
+  ++ optional (mysqlSupport) libmysqlclient
+  ++ optional (postgresSupport) postgresql;
 
   passthru = {
     updateScript = gnome3.updateScript {

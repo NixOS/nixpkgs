@@ -1,5 +1,8 @@
-{ stdenv, fetchurl, fetchpatch
-, ncurses }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   pname = "tcsh";

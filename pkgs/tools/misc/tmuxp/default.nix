@@ -24,7 +24,10 @@ buildPythonApplication rec {
   doCheck = false;
 
   propagatedBuildInputs = [
-    click colorama kaptan libtmux
+    click
+    colorama
+    kaptan
+    libtmux
   ];
 
   meta = with stdenv.lib; {

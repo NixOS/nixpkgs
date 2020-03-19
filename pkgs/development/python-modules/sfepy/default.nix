@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "2019.2";
 
   src = fetchurl {
-    url="https://github.com/sfepy/sfepy/archive/release_${version}.tar.gz";
+    url = "https://github.com/sfepy/sfepy/archive/release_${version}.tar.gz";
     sha256 = "17dj0wbchcfa6x27yx4d4jix4z4nk6r2640xkqcsw0mf62x5l1pj";
   };
 

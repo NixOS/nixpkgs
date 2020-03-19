@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, perl, openldap, pam, db, cyrus_sasl, libcap
-, expat, libxml2, openssl, pkgconfig
+{ stdenv
+, fetchurl
+, perl
+, openldap
+, pam
+, db
+, cyrus_sasl
+, libcap
+, expat
+, libxml2
+, openssl
+, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +22,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    perl openldap db cyrus_sasl expat libxml2 openssl
+    perl
+    openldap
+    db
+    cyrus_sasl
+    expat
+    libxml2
+    openssl
   ] ++ stdenv.lib.optionals stdenv.isLinux [ libcap pam ];
 
   configureFlags = [

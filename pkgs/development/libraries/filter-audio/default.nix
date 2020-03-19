@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "irungentoo";
-    repo ="filter_audio";
+    repo = "filter_audio";
     rev = "v${version}";
     sha256 = "1dv4pram317c1w97cjsv9f6r8cdxhgri7ib0v364z08pk7r2avfn";
   };

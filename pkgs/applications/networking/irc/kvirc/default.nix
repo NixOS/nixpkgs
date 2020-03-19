@@ -1,6 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub
-, qtbase, qtmultimedia, qtsvg, qtx11extras
-, pkgconfig, cmake, gettext
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, qtbase
+, qtmultimedia
+, qtsvg
+, qtx11extras
+, pkgconfig
+, cmake
+, gettext
 }:
 
 mkDerivation rec {
@@ -15,11 +22,16 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtmultimedia qtsvg qtx11extras
+    qtbase
+    qtmultimedia
+    qtsvg
+    qtx11extras
   ];
 
   nativeBuildInputs = [
-    pkgconfig cmake gettext
+    pkgconfig
+    cmake
+    gettext
   ];
 
   meta = with lib; {

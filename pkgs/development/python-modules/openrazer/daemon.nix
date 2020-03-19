@@ -13,7 +13,6 @@
 , stdenv
 , wrapGAppsHook
 }:
-
 let
   common = import ./common.nix { inherit stdenv fetchFromGitHub; };
 in
@@ -45,4 +44,5 @@ buildPythonApplication (common // rec {
   meta = common.meta // {
     description = "An entirely open source user-space daemon that allows you to manage your Razer peripherals on GNU/Linux";
   };
-})
+}
+)

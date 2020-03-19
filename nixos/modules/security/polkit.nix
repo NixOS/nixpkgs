@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.security.polkit;
-
 in
-
 {
 
   options = {
@@ -80,7 +76,7 @@ in
 
     services.dbus.packages = [ pkgs.polkit.out ];
 
-    security.pam.services.polkit-1 = {};
+    security.pam.services.polkit-1 = { };
 
     security.wrappers = {
       pkexec.source = "${pkgs.polkit.bin}/bin/pkexec";
@@ -101,4 +97,3 @@ in
   };
 
 }
-

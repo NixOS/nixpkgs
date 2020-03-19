@@ -10,9 +10,9 @@ stdenv.mkDerivation rec {
 
   preConfigure =
     ''
-       # Fix for building on Glibc 2.16.  Won't be needed once the
-       # gnulib in idutils is updated.
-       sed -i '/gets is a security hole/d' lib/stdio.in.h
+      # Fix for building on Glibc 2.16.  Won't be needed once the
+      # gnulib in idutils is updated.
+      sed -i '/gets is a security hole/d' lib/stdio.in.h
     '';
 
   buildInputs = stdenv.lib.optional stdenv.isLinux emacs;

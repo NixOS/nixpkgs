@@ -14,7 +14,7 @@
 buildPythonPackage rec {
   pname = "nitime";
   version = "0.8.1";
-  disabled = python.pythonVersion != "3.7";  # gcc error when running Cython with Python 3.8
+  disabled = python.pythonVersion != "3.7"; # gcc error when running Cython with Python 3.8
 
   src = fetchPypi {
     inherit pname version;

@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, removeReferencesTo
-, file, openssl, perl, perlPackages, unzip, nettools, ncurses }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, removeReferencesTo
+, file
+, openssl
+, perl
+, perlPackages
+, unzip
+, nettools
+, ncurses
+}:
 
 stdenv.mkDerivation rec {
   name = "net-snmp-5.8";
@@ -10,20 +21,22 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    let fetchAlpinePatch = name: sha256: fetchpatch {
-      url = "https://git.alpinelinux.org/cgit/aports/plain/main/net-snmp/${name}?id=f25d3fb08341b60b6ccef424399f060dfcf3f1a5";
-      inherit name sha256;
-    };
-  in [
-    (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
-    (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
-    ./0002-autoconf-version.patch
-  ];
+    let
+      fetchAlpinePatch = name: sha256: fetchpatch {
+        url = "https://git.alpinelinux.org/cgit/aports/plain/main/net-snmp/${name}?id=f25d3fb08341b60b6ccef424399f060dfcf3f1a5";
+        inherit name sha256;
+      };
+    in [
+      (fetchAlpinePatch "fix-includes.patch" "0zpkbb6k366qpq4dax5wknwprhwnhighcp402mlm7950d39zfa3m")
+      (fetchAlpinePatch "netsnmp-swinst-crash.patch" "0gh164wy6zfiwiszh58fsvr25k0ns14r3099664qykgpmickkqid")
+      ./0002-autoconf-version.patch
+    ];
 
   outputs = [ "bin" "out" "dev" "lib" ];
 
   configureFlags =
-    [ "--with-default-snmp-version=3"
+    [
+      "--with-default-snmp-version=3"
       "--with-sys-location=Unknown"
       "--with-sys-contact=root@unknown"
       "--with-logfile=/var/log/net-snmpd.log"
@@ -41,7 +54,7 @@ stdenv.mkDerivation rec {
   buildInputs = with perlPackages; [ file perl unzip openssl ncurses JSON Tk TermReadKey ];
 
   enableParallelBuilding = true;
-  doCheck = false;  # tries to use networking
+  doCheck = false; # tries to use networking
 
   postInstall = ''
     for f in "$lib/lib/"*.la $bin/bin/net-snmp-config $bin/bin/net-snmp-create-v3-user; do

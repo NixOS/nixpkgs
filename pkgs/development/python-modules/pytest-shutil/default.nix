@@ -1,6 +1,19 @@
-{ stdenv, lib, isPyPy, buildPythonPackage, fetchPypi
-, pytest, cmdline, pytestcov, coverage, setuptools-git, mock, pathpy, execnet
-, contextlib2, termcolor }:
+{ stdenv
+, lib
+, isPyPy
+, buildPythonPackage
+, fetchPypi
+, pytest
+, cmdline
+, pytestcov
+, coverage
+, setuptools-git
+, mock
+, pathpy
+, execnet
+, contextlib2
+, termcolor
+}:
 
 buildPythonPackage rec {
   pname = "pytest-shutil";

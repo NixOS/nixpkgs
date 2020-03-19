@@ -1,5 +1,4 @@
 { stdenv, fetchurl, expat, curl, fftw }:
-
 let
   version = "0.9.3";
   deb_patch = "5";

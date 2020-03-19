@@ -1,6 +1,15 @@
-{ lib, buildPythonPackage, fetchFromGitHub, isPy3k
-, filelock, protobuf, numpy, pytest, mock, typing-extensions
-, cupy, cudaSupport ? false
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, isPy3k
+, filelock
+, protobuf
+, numpy
+, pytest
+, mock
+, typing-extensions
+, cupy
+, cudaSupport ? false
 }:
 
 buildPythonPackage rec {

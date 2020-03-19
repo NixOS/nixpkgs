@@ -1,6 +1,6 @@
 { lib, fetchFromGitHub, buildDunePackage, defaultVersion ? "0.12.0" }:
 
-{ pname, version ? defaultVersion, hash, ...}@args:
+{ pname, version ? defaultVersion, hash, ... }@args:
 
 buildDunePackage (args // {
   inherit version;
@@ -16,4 +16,5 @@ buildDunePackage (args // {
 
   meta.license = lib.licenses.mit;
   meta.homepage = "https://github.com/janestreet/${pname}";
-})
+}
+)

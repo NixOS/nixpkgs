@@ -7,8 +7,10 @@
 , Mako
 , numpy
 , funcsigs
-, withCuda ? false, pycuda
-, withOpenCL ? true, pyopencl
+, withCuda ? false
+, pycuda
+, withOpenCL ? true
+, pyopencl
 }:
 
 buildPythonPackage rec {
@@ -23,8 +25,8 @@ buildPythonPackage rec {
   checkInputs = [ sphinx pytestcov pytest ];
 
   propagatedBuildInputs = [ Mako numpy funcsigs ]
-    ++ stdenv.lib.optional withCuda pycuda
-    ++ stdenv.lib.optional withOpenCL pyopencl;
+  ++ stdenv.lib.optional withCuda pycuda
+  ++ stdenv.lib.optional withOpenCL pyopencl;
 
   checkPhase = ''
     py.test

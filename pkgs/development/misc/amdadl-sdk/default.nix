@@ -45,6 +45,6 @@ stdenv.mkDerivation {
     license = licenses.unfree;
     maintainers = [ maintainers.offline ];
     platforms = stdenv.lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -1,7 +1,6 @@
 { stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header }:
-
 let
-  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
+  makeLinuxHeaders = { src, version, patches ? [ ] }: stdenvNoCC.mkDerivation {
     inherit src;
 
     pname = "linux-headers";
@@ -15,7 +14,7 @@ let
     # `elf-header` is null when libc provides `elf.h`.
     nativeBuildInputs = [ perl elf-header ];
 
-    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC ["ppc"];
+    extraIncludeDirs = lib.optional stdenvNoCC.hostPlatform.isPowerPC [ "ppc" ];
 
     inherit patches;
 
@@ -66,7 +65,8 @@ let
       platforms = platforms.linux;
     };
   };
-in {
+in
+{
   inherit makeLinuxHeaders;
 
   linuxHeaders = let version = "5.5"; in
@@ -77,7 +77,7 @@ in {
         sha256 = "0c131fi6s7vgvka1c0597vnvcmwn1pp968rci5kq64iwj3pd9yx6";
       };
       patches = [
-         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
+        ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
       ];
     };
 }

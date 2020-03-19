@@ -1,14 +1,31 @@
-{ stdenv, fetchurl, fetchFromGitHub, cmake, pkgconfig
-, cudatoolkit, opencl-clhpp, ocl-icd, fftw, fftwFloat, mkl
-, blas, openblas, boost, mesa, libGLU, libGL
-, freeimage, python, clfft, clblas
-, doxygen, buildDocs ? false
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, cudatoolkit
+, opencl-clhpp
+, ocl-icd
+, fftw
+, fftwFloat
+, mkl
+, blas
+, openblas
+, boost
+, mesa
+, libGLU
+, libGL
+, freeimage
+, python
+, clfft
+, clblas
+, doxygen
+, buildDocs ? false
 }:
-
 let
   strOnLinux = stdenv.lib.optionalString stdenv.isLinux;
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "arrayfire";
   version = "3.6.4";
 
@@ -48,14 +65,19 @@ in stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    opencl-clhpp fftw fftwFloat
+    opencl-clhpp
+    fftw
+    fftwFloat
     mkl
     openblas
-    libGLU libGL
-    mesa freeimage
-    boost.out boost.dev
+    libGLU
+    libGL
+    mesa
+    freeimage
+    boost.out
+    boost.dev
   ] ++ (stdenv.lib.optional stdenv.isLinux [ cudatoolkit ocl-icd ])
-    ++ (stdenv.lib.optional buildDocs [ doxygen ]);
+  ++ (stdenv.lib.optional buildDocs [ doxygen ]);
 
   meta = with stdenv.lib; {
     description = "A general-purpose library for parallel and massively-parallel computations";

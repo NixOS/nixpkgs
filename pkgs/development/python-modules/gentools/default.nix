@@ -1,5 +1,10 @@
-{ buildPythonPackage, lib, fetchFromGitHub, pytest
-, typing, funcsigs, pythonOlder
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
+, pytest
+, typing
+, funcsigs
+, pythonOlder
 }:
 
 buildPythonPackage rec {
@@ -15,8 +20,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs =
-    lib.optionals (pythonOlder "3.5") [ typing ] ++
-    lib.optionals (pythonOlder "3.4") [ funcsigs ];
+    lib.optionals (pythonOlder "3.5") [ typing ]
+    ++ lib.optionals (pythonOlder "3.4") [ funcsigs ];
 
   checkInputs = [ pytest ];
   checkPhase = "pytest";

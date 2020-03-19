@@ -1,3 +1,3 @@
 {
-  options.value = {};
+  options.value = { };
 }

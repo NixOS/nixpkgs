@@ -11,7 +11,7 @@
 
 mkXfceDerivation rec {
   category = "thunar-plugins";
-  pname  = "thunar-archive-plugin";
+  pname = "thunar-archive-plugin";
   version = "0.4.0";
 
   sha256 = "1793zicm00fail4iknliwy2b668j239ndxhc9hy6jarvdyp08h38";

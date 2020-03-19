@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lavqmmsf53pim0nvming7fkng6p0nk2a51k2c2jdq0l7snpl31b";
   };
 
-  propagatedBuildInputs = [perl openssh rsync logger];
+  propagatedBuildInputs = [ perl openssh rsync logger ];
 
   configureFlags = [ "--sysconfdir=/etc --prefix=/" ];
   makeFlags = [ "DESTDIR=$(out)" ];

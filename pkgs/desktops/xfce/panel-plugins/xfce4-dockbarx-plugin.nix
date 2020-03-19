@@ -1,5 +1,15 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, bash, vala
-, dockbarx, gtk2, xfce, pythonPackages, wafHook }:
+{ stdenv
+, pkgconfig
+, fetchFromGitHub
+, python2
+, bash
+, vala
+, dockbarx
+, gtk2
+, xfce
+, pythonPackages
+, wafHook
+}:
 
 stdenv.mkDerivation rec {
   ver = "0.5";
@@ -17,8 +27,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [ python2 vala gtk2 pythonPackages.wrapPython ]
-    ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
-    ++ pythonPath;
+  ++ (with xfce; [ libxfce4util xfce4-panel xfconf xfce4-dev-tools ])
+  ++ pythonPath;
 
   postPatch = ''
     substituteInPlace wscript           --replace /usr/share/            "\''${PREFIX}/share/"

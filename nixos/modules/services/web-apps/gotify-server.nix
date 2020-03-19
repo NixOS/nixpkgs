@@ -1,10 +1,10 @@
 { pkgs, lib, config, ... }:
 
 with lib;
-
 let
   cfg = config.services.gotify;
-in {
+in
+{
   options = {
     services.gotify = {
       enable = mkEnableOption "Gotify webserver";

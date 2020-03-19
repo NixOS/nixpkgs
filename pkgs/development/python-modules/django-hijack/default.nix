@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, python,
-  django, django_compat, django_nose
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, python
+, django
+, django_compat
+, django_nose
 }:
 buildPythonPackage rec {
   pname = "django-hijack";

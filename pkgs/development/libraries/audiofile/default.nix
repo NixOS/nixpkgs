@@ -1,15 +1,11 @@
 { stdenv, lib, fetchurl, fetchpatch, alsaLib, AudioUnit, CoreServices }:
-
 let
-
   fetchDebianPatch = { name, debname, sha256 }:
     fetchpatch {
       inherit sha256 name;
       url = "https://salsa.debian.org/multimedia-team/audiofile/raw/debian/0.3.6-4/debian/patches/${debname}";
     };
-
 in
-
 stdenv.mkDerivation rec {
   name = "audiofile-0.3.6";
 
@@ -17,7 +13,8 @@ stdenv.mkDerivation rec {
     stdenv.lib.optionals stdenv.isLinux [
       alsaLib
     ] ++ stdenv.lib.optionals stdenv.isDarwin [
-      CoreServices AudioUnit
+      CoreServices
+      AudioUnit
     ];
 
   src = fetchurl {
@@ -31,7 +28,6 @@ stdenv.mkDerivation rec {
   patches = [
     ./gcc-6.patch
     ./CVE-2015-7747.patch
-
     (fetchDebianPatch {
       name = "CVE-2017-6829.patch";
       debname = "04_clamp-index-values-to-fix-index-overflow-in-IMA.cpp.patch";
@@ -71,9 +67,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Library for reading and writing audio files in various formats";
-    homepage    = http://www.68k.org/~michael/audiofile/;
-    license     = licenses.lgpl21Plus;
+    homepage = http://www.68k.org/~michael/audiofile/;
+    license = licenses.lgpl21Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

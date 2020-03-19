@@ -12,4 +12,3 @@
     { type = "pom"; sha512 = "2iavm6d9nmy4g2i6y7q4l68bpjpncng1qfhbxdj44l3nqi7ixcjw0y38ymial7g2z0r1kd9qydr5lawjspr0fbzpjkcln2q7gsf0hfw"; }
   ];
 }
-

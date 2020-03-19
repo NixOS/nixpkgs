@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, pkgconfig, jansson }:
-
 let
   libsailing = fetchFromGitHub {
     owner = "sails-simulator";

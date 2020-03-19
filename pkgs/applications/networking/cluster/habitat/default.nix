@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig
-, libsodium, libarchive, openssl, zeromq }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkgconfig
+, libsodium
+, libarchive
+, openssl
+, zeromq
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "habitat";
@@ -19,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libsodium libarchive openssl zeromq ];
 
-  cargoBuildFlags = ["--package hab"];
+  cargoBuildFlags = [ "--package hab" ];
 
   checkPhase = ''
     runHook preCheck

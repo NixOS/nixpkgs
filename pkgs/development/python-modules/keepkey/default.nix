@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, buildPythonPackage, pytest
-, ecdsa , mnemonic, protobuf, hidapi, trezor }:
+{ stdenv
+, fetchFromGitHub
+, buildPythonPackage
+, pytest
+, ecdsa
+, mnemonic
+, protobuf
+, hidapi
+, trezor
+}:
 
 buildPythonPackage rec {
   pname = "keepkey";

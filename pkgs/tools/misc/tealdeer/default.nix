@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "0jvgcf493rmkrh85j0fkf8ffanva80syyxclzkvkrzvvwwj78b5l";
 
   buildInputs = [ openssl cacert ]
-    ++ (stdenv.lib.optional stdenv.isDarwin Security);
+  ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   nativeBuildInputs = [ installShellFiles pkg-config ];
 

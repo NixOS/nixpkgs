@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub, python3}:
+{ stdenv, fetchFromGitHub, python3 }:
 
 stdenv.mkDerivation rec {
   version = "1.7";

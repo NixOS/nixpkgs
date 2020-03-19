@@ -1,5 +1,14 @@
-{ fetchurl, lib, mkDerivation, pkgconfig, python, file, bc
-, qtbase, qtsvg, hunspell, makeWrapper #, mythes, boost
+{ fetchurl
+, lib
+, mkDerivation
+, pkgconfig
+, python
+, file
+, bc
+, qtbase
+, qtsvg
+, hunspell
+, makeWrapper #, mythes, boost
 }:
 
 mkDerivation rec {
@@ -14,8 +23,13 @@ mkDerivation rec {
   # LaTeX is used from $PATH, as people often want to have it with extra pkgs
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    qtbase qtsvg python file/*for libmagic*/ bc
-    hunspell makeWrapper # enchant
+    qtbase
+    qtsvg
+    python
+    file /*for libmagic*/
+    bc
+    hunspell
+    makeWrapper # enchant
   ];
 
   configureFlags = [
@@ -42,4 +56,3 @@ mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

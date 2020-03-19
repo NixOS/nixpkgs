@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, pkgconfig, gettext, which
-, glib, gtk2
+{ stdenv
+, fetchurl
+, pkgconfig
+, gettext
+, which
+, glib
+, gtk2
 , enableSoftening ? true
 }:
 

@@ -18,9 +18,7 @@ let
   primus = pkgs.primus.override {
     inherit useNvidia;
   };
-
 in
-
 {
 
   options = {

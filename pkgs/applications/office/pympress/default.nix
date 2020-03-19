@@ -8,7 +8,7 @@
 , dbus
 , poppler_gi
 , python3
- }:
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pympress";

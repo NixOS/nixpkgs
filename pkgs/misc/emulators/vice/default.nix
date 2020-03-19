@@ -1,5 +1,21 @@
-{ stdenv, fetchurl, bison, flex, perl, libpng, giflib, libjpeg, alsaLib, readline, libGLU, libGL, libXaw
-, pkgconfig, gtk2, SDL, autoreconfHook, makeDesktopItem
+{ stdenv
+, fetchurl
+, bison
+, flex
+, perl
+, libpng
+, giflib
+, libjpeg
+, alsaLib
+, readline
+, libGLU
+, libGL
+, libXaw
+, pkgconfig
+, gtk2
+, SDL
+, autoreconfHook
+, makeDesktopItem
 }:
 
 stdenv.mkDerivation rec {
@@ -10,8 +26,23 @@ stdenv.mkDerivation rec {
     sha256 = "0h0jbml02s2a36hr78dxv1zshmfhxp1wadpcdl09aq416fb1bf1y";
   };
 
-  buildInputs = [ bison flex perl libpng giflib libjpeg alsaLib readline libGLU libGL
-    pkgconfig gtk2 SDL autoreconfHook libXaw ];
+  buildInputs = [
+    bison
+    flex
+    perl
+    libpng
+    giflib
+    libjpeg
+    alsaLib
+    readline
+    libGLU
+    libGL
+    pkgconfig
+    gtk2
+    SDL
+    autoreconfHook
+    libXaw
+  ];
   dontDisableStatic = true;
   configureFlags = [ "--enable-fullscreen --enable-gnomeui" ];
 

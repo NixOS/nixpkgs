@@ -1,6 +1,17 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, ant, jdk
-# Optional, Jitsi still runs without, but you may pass null:
-, alsaLib, dbus, gtk2, libpulseaudio, openssl, xorg
+{ stdenv
+, lib
+, fetchurl
+, makeDesktopItem
+, unzip
+, ant
+, jdk
+  # Optional, Jitsi still runs without, but you may pass null:
+, alsaLib
+, dbus
+, gtk2
+, libpulseaudio
+, openssl
+, xorg
 }:
 
 stdenv.mkDerivation rec {
@@ -23,18 +34,19 @@ stdenv.mkDerivation rec {
     categories = "Application;Internet;";
   };
 
-  libPath = lib.makeLibraryPath ([
-    stdenv.cc.cc  # For libstdc++.
-    alsaLib
-    dbus
-    gtk2
-    libpulseaudio
-    openssl
-    xorg.libX11
-    xorg.libXext
-    xorg.libXScrnSaver
-    xorg.libXv
-  ]);
+  libPath = lib.makeLibraryPath
+    ([
+      stdenv.cc.cc # For libstdc++.
+      alsaLib
+      dbus
+      gtk2
+      libpulseaudio
+      openssl
+      xorg.libX11
+      xorg.libXext
+      xorg.libXScrnSaver
+      xorg.libXv
+    ]);
 
   nativeBuildInputs = [ unzip ];
   buildInputs = [ ant jdk ];
@@ -66,6 +78,6 @@ stdenv.mkDerivation rec {
     description = "Open Source Video Calls and Chat";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
   };
 }

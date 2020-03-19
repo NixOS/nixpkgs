@@ -2,7 +2,7 @@
 # another library function file to this list, the include list in the
 # file `doc/functions/library.xml` must also be updated.
 
-{ pkgs ? import ./.. {}, locationsXml }:
+{ pkgs ? import ./.. { }, locationsXml }:
 
 with pkgs; stdenv.mkDerivation {
   name = "nixpkgs-lib-docs";

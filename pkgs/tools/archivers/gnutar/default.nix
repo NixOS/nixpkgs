@@ -26,16 +26,18 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "info" ];
 
   buildInputs = [ ]
-    ++ stdenv.lib.optional stdenv.isLinux acl
-    ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
+  ++ stdenv.lib.optional stdenv.isLinux acl
+  ++ stdenv.lib.optional stdenv.isDarwin autoreconfHook;
 
   # May have some issues with root compilation because the bootstrap tool
   # cannot be used as a login shell for now.
   FORCE_UNSAFE_CONFIGURE = stdenv.lib.optionalString (stdenv.hostPlatform.system == "armv7l-linux" || stdenv.isSunOS) "1";
 
-  preConfigure = if stdenv.isCygwin then ''
-    sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
-  '' else null;
+  preConfigure =
+    if stdenv.isCygwin
+    then ''
+      sed -i gnu/fpending.h -e 's,include <stdio_ext.h>,,'
+    '' else null;
 
   doCheck = false; # fails
   doInstallCheck = false; # fails

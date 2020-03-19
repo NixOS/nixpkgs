@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, gettext, libgpgerror, enableCapabilities ? false, libcap
+{ stdenv
+, fetchurl
+, gettext
+, libgpgerror
+, enableCapabilities ? false
+, libcap
 , buildPackages
 }:
 
@@ -24,11 +29,11 @@ stdenv.mkDerivation rec {
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   buildInputs = [ libgpgerror ]
-    ++ stdenv.lib.optional stdenv.isDarwin gettext
-    ++ stdenv.lib.optional enableCapabilities libcap;
+  ++ stdenv.lib.optional stdenv.isDarwin gettext
+  ++ stdenv.lib.optional enableCapabilities libcap;
 
   configureFlags = [ "--with-libgpg-error-prefix=${libgpgerror.dev}" ]
-   ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
+  ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-asm";
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config

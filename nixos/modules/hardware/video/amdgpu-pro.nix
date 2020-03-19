@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   drivers = config.services.xserver.videoDrivers;
 
   enabled = elem "amdgpu-pro" drivers;
@@ -20,9 +18,7 @@ let
       KALLSYMS_ALL y
     '';
   };
-
 in
-
 {
 
   config = mkIf enabled {

@@ -1,19 +1,19 @@
-{ stdenv, cmake, xercesc
+{ stdenv
+, cmake
+, xercesc
 
-# The target version of Geant4
+  # The target version of Geant4
 , geant4
 
-# Python (obviously) and boost::python for wrapping.
+  # Python (obviously) and boost::python for wrapping.
 , python
 , boost
 }:
-
 let
   # g4py does not support MT and will fail to build against MT geant
   geant4_nomt = geant4.override { enableMultiThreading = false; };
   boost_python = boost.override { enablePython = true; inherit python; };
 in
-
 stdenv.mkDerivation {
   inherit (geant4_nomt) version src;
   pname = "g4py";
@@ -30,7 +30,7 @@ stdenv.mkDerivation {
   preConfigure = ''
     # Fix for boost 1.67+
     substituteInPlace CMakeLists.txt \
-    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings ["."] [""] python.pythonVersion})"
+    --replace "find_package(Boost)" "find_package(Boost 1.40 REQUIRED COMPONENTS python${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion})"
     for f in `find . -name CMakeLists.txt`; do
       substituteInPlace "$f" \
         --replace "boost_python" "\''${Boost_LIBRARIES}"

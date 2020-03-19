@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.system.nixos;
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "system" "nixosVersion" ] [ "system" "nixos" "version" ])

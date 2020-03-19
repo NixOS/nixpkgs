@@ -40,9 +40,10 @@ stdenv.mkDerivation rec {
   ];
   installCheckInputs = [
     # running libical-glib tests
-    (python3.withPackages (pkgs: with pkgs; [
-      pygobject3
-    ]))
+    (python3.withPackages
+      (pkgs: with pkgs; [
+        pygobject3
+      ]))
   ];
 
   buildInputs = [

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, SDL, SDL_image, SDL_mixer}:
+{ stdenv, fetchurl, SDL, SDL_image, SDL_mixer }:
 
 stdenv.mkDerivation {
   name = "teeter-torture-20051018";
@@ -7,7 +7,7 @@ stdenv.mkDerivation {
     sha256 = "175gdbkx3m82icyzvwpyzs4v2fd69c695k5n8ca0lnjv81wnw2hr";
   };
 
-  buildInputs = [ SDL SDL_image SDL_mixer];
+  buildInputs = [ SDL SDL_image SDL_mixer ];
 
   configurePhase = ''
     sed -i s,data/,$out/share/teetertorture/, src/teetertorture.c

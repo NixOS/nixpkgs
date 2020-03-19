@@ -1,4 +1,7 @@
-{ back, base, gui, gsmakeDerivation
+{ back
+, base
+, gui
+, gsmakeDerivation
 , fetchurl
 , system_preferences
 }:

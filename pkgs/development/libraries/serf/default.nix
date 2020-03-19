@@ -1,5 +1,14 @@
-{ stdenv, fetchurl, apr, scons, openssl, aprutil, zlib, kerberos
-, pkgconfig, libiconv }:
+{ stdenv
+, fetchurl
+, apr
+, scons
+, openssl
+, aprutil
+, zlib
+, kerberos
+, pkgconfig
+, libiconv
+}:
 
 stdenv.mkDerivation rec {
   name = "serf-1.3.9";
@@ -11,7 +20,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig scons ];
   buildInputs = [ apr openssl aprutil zlib libiconv ]
-    ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
+  ++ stdenv.lib.optional (!stdenv.isCygwin) kerberos;
 
   patches = [ ./scons.patch ];
 

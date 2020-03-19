@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ meson ninja pkgconfig ]
-    ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
+  ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   doCheck = true;
   checkInputs = [ python3 ];

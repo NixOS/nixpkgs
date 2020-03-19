@@ -17,9 +17,8 @@ buildPythonPackage rec {
     sha256 = "d3279fd0f6f847cced9f7acc19bd3e5df54d34f93a2e7bb5f238f81545787078";
   };
 
-  propagatedBuildInputs = [
-  ] ++ lib.optional (!isPy3k) pathlib2
-    ++ lib.optional (pythonOlder "3.5") typing
+  propagatedBuildInputs = [ ] ++ lib.optional (!isPy3k) pathlib2
+  ++ lib.optional (pythonOlder "3.5") typing
   ;
 
   checkPhase = ''

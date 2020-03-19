@@ -1,12 +1,26 @@
-{ buildPythonPackage, isPy3k, fetchFromGitHub, lib,
-  z3, ply, python-igraph, oset, ordered-set, dictionaries }:
+{ buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, lib
+, z3
+, ply
+, python-igraph
+, oset
+, ordered-set
+, dictionaries
+}:
 
 buildPythonPackage {
   pname = "cozy";
   version = "2.0a1";
 
   propagatedBuildInputs = [
-    z3 ply python-igraph oset ordered-set dictionaries
+    z3
+    ply
+    python-igraph
+    oset
+    ordered-set
+    dictionaries
   ];
 
   src = fetchFromGitHub {

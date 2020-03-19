@@ -1,5 +1,14 @@
-{ lib, fetchPypi, buildPythonPackage, python, pkgconfig, dbus, dbus-glib, isPyPy
-, ncurses, pygobject3 }:
+{ lib
+, fetchPypi
+, buildPythonPackage
+, python
+, pkgconfig
+, dbus
+, dbus-glib
+, isPyPy
+, ncurses
+, pygobject3
+}:
 
 buildPythonPackage rec {
   pname = "dbus-python";
@@ -21,9 +30,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ dbus dbus-glib ]
-    # My guess why it's sometimes trying to -lncurses.
-    # It seems not to retain the dependency anyway.
-    ++ lib.optional (! python ? modules) ncurses;
+  # My guess why it's sometimes trying to -lncurses.
+  # It seems not to retain the dependency anyway.
+  ++ lib.optional (! python ? modules) ncurses;
 
   doCheck = true;
   checkInputs = [ dbus.out pygobject3 ];

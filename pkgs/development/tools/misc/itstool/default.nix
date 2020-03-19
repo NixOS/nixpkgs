@@ -8,7 +8,7 @@ stdenv.mkDerivation rec {
     sha256 = "1acjgf8zlyk7qckdk19iqaca4jcmywd7vxjbcs1mm6kaf8icqcv2";
   };
 
-  buildInputs = [ (python3.withPackages(ps: with ps; [ libxml2 ])) ];
+  buildInputs = [ (python3.withPackages (ps: with ps; [ libxml2 ])) ];
 
   meta = {
     homepage = http://itstool.org/;

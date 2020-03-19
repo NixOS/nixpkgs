@@ -19,16 +19,17 @@ stdenv.mkDerivation rec {
       --prefix LD_LIBRARY_PATH ':' "${curl.out}/lib:${icu60.out}/lib:${openssl.out}/lib:${zlib.out}/lib"
   '';
 
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib  # libstdc++.so.6
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/opt/${pname}-${version}/jackett
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        stdenv.cc.cc.lib # libstdc++.so.6
+      ];
+    in ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/opt/${pname}-${version}/jackett
+    '';
 
   meta = with stdenv.lib; {
     description = "API Support for your favorite torrent trackers.";

@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub
-, libusb1, systemd }:
+{ stdenv
+, fetchFromGitHub
+, libusb1
+, systemd
+}:
 
 stdenv.mkDerivation rec {
   pname = "dmrconfig";
@@ -13,7 +16,8 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    libusb1 systemd
+    libusb1
+    systemd
   ];
 
   preConfigure = ''

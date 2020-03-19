@@ -6,9 +6,8 @@
 , sha256 ? null
 , rev ? version
 , src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
-, patches ? []
+, patches ? [ ]
 }:
-
 let
   inherit (stdenv.lib)
     assertMsg makeBinPath optionalString
@@ -20,74 +19,73 @@ let
     name = "proper";
     version = "1.1.1-beta";
 
-    sha256  = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
+    sha256 = "0hnkhs761yjynw9382w8wm4j3x0r7lllzavaq2kh9n7qy3zc1rdx";
 
     configurePhase = ''
       ${erlang}/bin/escript write_compile_flags include/compile_flags.hrl
     '';
   };
-
 in
-assert (assertMsg (versionAtLeast maximumOTPVersion mainVersion)) ''
-  LFE ${version} is supported on OTP <=${maximumOTPVersion}, not ${mainVersion}.
-'';
-
-buildRebar3 {
-  name = baseName;
-
-  inherit src version;
-
-  buildInputs = [ erlang makeWrapper ];
-  beamDeps    = [ proper ];
-  patches     = [ ./no-test-deps.patch ./dedup-ebins.patch ] ++ patches;
-  doCheck     = true;
-  checkTarget = "travis";
-
-  makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out"];
-
-  # These installPhase tricks are based on Elixir's Makefile.
-  # TODO: Make, upload, and apply a patch.
-  installPhase = optionalString (versionOlder version "1.3") ''
-    local libdir=$out/lib/lfe
-    local ebindir=$libdir/ebin
-    local bindir=$libdir/bin
-
-    rm -Rf $ebindir
-    install -m755 -d $ebindir
-    install -m644 _build/default/lib/lfe/ebin/* $ebindir
-
-    install -m755 -d $bindir
-
-    for bin in bin/lfe{,c,doc,script}; do install -m755 $bin $bindir; done
-
-    install -m755 -d $out/bin
-    for file in $bindir/*; do ln -sf $file $out/bin/; done
+  assert (assertMsg (versionAtLeast maximumOTPVersion mainVersion)) ''
+    LFE ${version} is supported on OTP <=${maximumOTPVersion}, not ${mainVersion}.
   '';
 
-  # Thanks again, Elixir.
-  postFixup = ''
-    # LFE binaries are shell scripts which run erl and lfe.
-    # Add some stuff to PATH so the scripts can run without problems.
-    for f in $out/bin/*; do
-      wrapProgram $f \
-        --prefix PATH ":" "${makeBinPath [ erlang coreutils bash ]}:$out/bin"
-      substituteInPlace $f --replace "/usr/bin/env" "${coreutils}/bin/env"
-    done
-  '';
+  buildRebar3 {
+    name = baseName;
 
-  meta = with stdenv.lib; {
-    description     = "The best of Erlang and of Lisp; at the same time!";
-    longDescription = ''
-      LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
-      compiler. Code produced with it is compatible with "normal" Erlang
-      code. An LFE evaluator and shell is also included.
+    inherit src version;
+
+    buildInputs = [ erlang makeWrapper ];
+    beamDeps = [ proper ];
+    patches = [ ./no-test-deps.patch ./dedup-ebins.patch ] ++ patches;
+    doCheck = true;
+    checkTarget = "travis";
+
+    makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out" ];
+
+    # These installPhase tricks are based on Elixir's Makefile.
+    # TODO: Make, upload, and apply a patch.
+    installPhase = optionalString (versionOlder version "1.3") ''
+      local libdir=$out/lib/lfe
+      local ebindir=$libdir/ebin
+      local bindir=$libdir/bin
+
+      rm -Rf $ebindir
+      install -m755 -d $ebindir
+      install -m644 _build/default/lib/lfe/ebin/* $ebindir
+
+      install -m755 -d $bindir
+
+      for bin in bin/lfe{,c,doc,script}; do install -m755 $bin $bindir; done
+
+      install -m755 -d $out/bin
+      for file in $bindir/*; do ln -sf $file $out/bin/; done
     '';
 
-    homepage     = "http://lfe.io";
-    downloadPage = "https://github.com/rvirding/lfe/releases";
+    # Thanks again, Elixir.
+    postFixup = ''
+      # LFE binaries are shell scripts which run erl and lfe.
+      # Add some stuff to PATH so the scripts can run without problems.
+      for f in $out/bin/*; do
+        wrapProgram $f \
+          --prefix PATH ":" "${makeBinPath [ erlang coreutils bash ]}:$out/bin"
+        substituteInPlace $f --replace "/usr/bin/env" "${coreutils}/bin/env"
+      done
+    '';
 
-    license      = licenses.asl20;
-    maintainers  = with maintainers; [ yurrriq ankhers ];
-    platforms    = platforms.unix;
-  };
-}
+    meta = with stdenv.lib; {
+      description = "The best of Erlang and of Lisp; at the same time!";
+      longDescription = ''
+        LFE, Lisp Flavoured Erlang, is a lisp syntax front-end to the Erlang
+        compiler. Code produced with it is compatible with "normal" Erlang
+        code. An LFE evaluator and shell is also included.
+      '';
+
+      homepage = "http://lfe.io";
+      downloadPage = "https://github.com/rvirding/lfe/releases";
+
+      license = licenses.asl20;
+      maintainers = with maintainers; [ yurrriq ankhers ];
+      platforms = platforms.unix;
+    };
+  }

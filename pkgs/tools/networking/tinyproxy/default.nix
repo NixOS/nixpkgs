@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, asciidoc, libxml2,
-  libxslt, docbook_xsl }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xsl
+}:
 
 stdenv.mkDerivation rec{
   pname = "tinyproxy";
@@ -36,14 +42,14 @@ stdenv.mkDerivation rec{
   '';
 
   configureFlags = [
-    "--disable-debug"      # Turn off debugging
-    "--enable-xtinyproxy"  # Compile in support for the XTinyproxy header, which is sent to any web server in your domain.
-    "--enable-filter"      # Allows Tinyproxy to filter out certain domains and URLs.
-    "--enable-upstream"    # Enable support for proxying connections through another proxy server.
+    "--disable-debug" # Turn off debugging
+    "--enable-xtinyproxy" # Compile in support for the XTinyproxy header, which is sent to any web server in your domain.
+    "--enable-filter" # Allows Tinyproxy to filter out certain domains and URLs.
+    "--enable-upstream" # Enable support for proxying connections through another proxy server.
     "--enable-transparent" # Allow Tinyproxy to be used as a transparent proxy daemon.
-    "--enable-reverse"     # Enable reverse proxying.
-  ] ++
-  # See: https://github.com/tinyproxy/tinyproxy/issues/1
+    "--enable-reverse" # Enable reverse proxying.
+  ]
+  ++ # See: https://github.com/tinyproxy/tinyproxy/issues/1
   stdenv.lib.optional stdenv.isDarwin "--disable-regexcheck";
 
   meta = with stdenv.lib; {

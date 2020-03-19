@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
       ISO 8859.1 to print 8-bit characters.
     '';
 
-    license = "liberal";  # a non-copyleft license, see `Copyright' file
+    license = "liberal"; # a non-copyleft license, see `Copyright' file
     homepage = http://www.mesa.nl/pub/mpage/;
     platforms = stdenv.lib.platforms.linux;
   };

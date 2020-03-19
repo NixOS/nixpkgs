@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   # only with nscd up and running we can load NSS modules that are not integrated in NSS
   canLoadExternalModules = config.services.nscd.enable;
   myhostname = canLoadExternalModules;
@@ -18,29 +16,29 @@ let
   googleOsLogin = canLoadExternalModules && config.security.googleOsLogin.enable;
 
   hostArray = [ "files" ]
-    ++ optional mymachines "mymachines"
-    ++ optional nssmdns "mdns_minimal [NOTFOUND=return]"
-    ++ optional nsswins "wins"
-    ++ optional resolved "resolve [!UNAVAIL=return]"
-    ++ [ "dns" ]
-    ++ optional nssmdns "mdns"
-    ++ optional myhostname "myhostname";
+  ++ optional mymachines "mymachines"
+  ++ optional nssmdns "mdns_minimal [NOTFOUND=return]"
+  ++ optional nsswins "wins"
+  ++ optional resolved "resolve [!UNAVAIL=return]"
+  ++ [ "dns" ]
+  ++ optional nssmdns "mdns"
+  ++ optional myhostname "myhostname";
 
   passwdArray = [ "files" ]
-    ++ optional sssd "sss"
-    ++ optional ldap "ldap"
-    ++ optional mymachines "mymachines"
-    ++ optional googleOsLogin "cache_oslogin oslogin"
-    ++ [ "systemd" ];
+  ++ optional sssd "sss"
+  ++ optional ldap "ldap"
+  ++ optional mymachines "mymachines"
+  ++ optional googleOsLogin "cache_oslogin oslogin"
+  ++ [ "systemd" ];
 
   shadowArray = [ "files" ]
-    ++ optional sssd "sss"
-    ++ optional ldap "ldap";
+  ++ optional sssd "sss"
+  ++ optional ldap "ldap";
 
   servicesArray = [ "files" ]
-    ++ optional sssd "sss";
-
-in {
+  ++ optional sssd "sss";
+in
+{
   options = {
 
     # NSS modules.  Hacky!
@@ -48,7 +46,7 @@ in {
     system.nssModules = mkOption {
       type = types.listOf types.path;
       internal = true;
-      default = [];
+      default = [ ];
       description = ''
         Search path for NSS (Name Service Switch) modules.  This allows
         several DNS resolution methods to be specified via
@@ -63,7 +61,7 @@ in {
 
     system.nssHosts = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       example = [ "mdns" ];
       description = ''
         List of host entries to configure in <filename>/etc/nsswitch.conf</filename>.
@@ -111,6 +109,6 @@ in {
     # fallbacks. Systemd also provides nss-mymachines to return IP
     # addresses of local containers.
     system.nssModules = (optionals canLoadExternalModules [ config.systemd.package.out ])
-      ++ optional googleOsLogin pkgs.google-compute-engine-oslogin.out;
+    ++ optional googleOsLogin pkgs.google-compute-engine-oslogin.out;
   };
 }

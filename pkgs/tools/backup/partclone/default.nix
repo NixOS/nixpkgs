@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, pkgconfig, libuuid, e2fsprogs, nilfs-utils, ntfs3g
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, libuuid
+, e2fsprogs
+, nilfs-utils
+, ntfs3g
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [
-    e2fsprogs libuuid stdenv.cc.libc nilfs-utils ntfs3g 
+    e2fsprogs
+    libuuid
+    stdenv.cc.libc
+    nilfs-utils
+    ntfs3g
     (stdenv.lib.getOutput "static" stdenv.cc.libc)
   ];
 
@@ -44,7 +54,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://partclone.org;
     license = stdenv.lib.licenses.gpl2;
-    maintainers = [stdenv.lib.maintainers.marcweber];
+    maintainers = [ stdenv.lib.maintainers.marcweber ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

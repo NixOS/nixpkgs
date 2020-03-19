@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, neon, libusb, openssl, udev, avahi, freeipmi
-, libtool, makeWrapper, autoreconfHook, fetchpatch
+{ stdenv
+, fetchurl
+, pkgconfig
+, neon
+, libusb
+, openssl
+, udev
+, avahi
+, freeipmi
+, libtool
+, makeWrapper
+, autoreconfHook
+, fetchpatch
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +35,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook libtool pkgconfig makeWrapper ];
 
   configureFlags =
-    [ "--with-all"
+    [
+      "--with-all"
       "--with-ssl"
       "--without-snmp" # Until we have it ...
       "--without-powerman" # Until we have it ...

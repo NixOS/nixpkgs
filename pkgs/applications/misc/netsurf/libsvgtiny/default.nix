@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, pkgconfig, gperf
+{ stdenv
+, fetchurl
+, pkgconfig
+, gperf
 , buildsystem
 , libdom
 , libhubbub

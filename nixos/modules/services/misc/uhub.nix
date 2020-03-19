@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.uhub;
 
   uhubPkg = pkgs.uhub.override { tlsSupport = cfg.enableTLS; };
@@ -16,7 +14,7 @@ let
     plugin ${uhubPkg.mod_logging}/mod_logging.so ${if cfg.plugins.logging.syslog then "syslog=true" else "file=${cfg.plugins.logging.file}"}
   ''
   + optionalString cfg.plugins.welcome.enable ''
-    plugin ${uhubPkg.mod_welcome}/mod_welcome.so "motd=${pkgs.writeText "motd.txt"  cfg.plugins.welcome.motd} rules=${pkgs.writeText "rules.txt" cfg.plugins.welcome.rules}"
+    plugin ${uhubPkg.mod_welcome}/mod_welcome.so "motd=${pkgs.writeText "motd.txt" cfg.plugins.welcome.motd} rules=${pkgs.writeText "rules.txt" cfg.plugins.welcome.rules}"
   ''
   + optionalString cfg.plugins.history.enable ''
     plugin ${uhubPkg.mod_chat_history}/mod_chat_history.so "history_max=${toString cfg.plugins.history.max} history_default=${toString cfg.plugins.history.default} history_connect=${toString cfg.plugins.history.connect}"
@@ -30,9 +28,7 @@ let
     ${lib.optionalString cfg.enableTLS "tls_enable=yes"}
     ${cfg.hubConfig}
   '';
-
 in
-
 {
   options = {
 
@@ -171,7 +167,7 @@ in
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Type = "notify";
-        ExecStart  = "${uhubPkg}/bin/uhub -c ${uhubConfigFile} -u uhub -g uhub -L";
+        ExecStart = "${uhubPkg}/bin/uhub -c ${uhubConfigFile} -u uhub -g uhub -L";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
       };
     };

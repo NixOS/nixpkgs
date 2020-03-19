@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig
-, tokyocabinet, ncurses
-, cairo ? null, pango ? null
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, tokyocabinet
+, ncurses
+, cairo ? null
+, pango ? null
 , enableCairo ? stdenv.isLinux
 }:
 
@@ -18,8 +23,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ tokyocabinet ncurses ] ++
-    stdenv.lib.optionals enableCairo [ cairo pango ];
+  buildInputs = [ tokyocabinet ncurses ]
+  ++ stdenv.lib.optionals enableCairo [ cairo pango ];
 
   configureFlags =
     stdenv.lib.optionals (!enableCairo) [ "--disable-x11" "--disable-cairo" ];

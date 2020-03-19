@@ -1,5 +1,13 @@
-{ stdenv, python3Packages, fetchurl, makeWrapper
-, coreutils, iptables, nettools, openssh, procps }:
+{ stdenv
+, python3Packages
+, fetchurl
+, makeWrapper
+, coreutils
+, iptables
+, nettools
+, openssh
+, procps
+}:
 
 python3Packages.buildPythonApplication rec {
   name = "sshuttle-${version}";
@@ -19,12 +27,13 @@ python3Packages.buildPythonApplication rec {
 
   checkInputs = with python3Packages; [ mock pytest pytestcov pytestrunner flake8 ];
 
-  postInstall = let
-    mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
-  in ''
-  wrapProgram $out/bin/sshuttle \
-    --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
-  '';
+  postInstall =
+    let
+      mapPath = f: x: stdenv.lib.concatStringsSep ":" (map f x);
+    in ''
+      wrapProgram $out/bin/sshuttle \
+        --prefix PATH : "${mapPath (x: "${x}/bin") buildInputs}" \
+    '';
 
   meta = with stdenv.lib; {
     homepage = https://github.com/sshuttle/sshuttle/;

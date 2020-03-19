@@ -1,13 +1,19 @@
-{ llvmPackages, lib, fetchFromGitHub, cmake
-, libpng, libjpeg, mesa, eigen, openblas
+{ llvmPackages
+, lib
+, fetchFromGitHub
+, cmake
+, libpng
+, libjpeg
+, mesa
+, eigen
+, openblas
 }:
-
 let
   version = "2019_08_27";
+in
+llvmPackages.stdenv.mkDerivation {
 
-in llvmPackages.stdenv.mkDerivation {
-
-  name = "halide-${builtins.replaceStrings ["_"] ["."] version}";
+  name = "halide-${builtins.replaceStrings [ "_" ] [ "." ] version}";
 
   src = fetchFromGitHub {
     owner = "halide";

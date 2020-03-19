@@ -13,8 +13,8 @@
 }:
 
 assert
-  x11Support ->
-    libX11 != null && libICE != null && libSM != null;
+x11Support
+-> libX11 != null && libICE != null && libSM != null;
 
 assert enableSystemd -> systemd != null;
 

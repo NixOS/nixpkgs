@@ -1,5 +1,14 @@
-{ stdenv, lib, fetchurl, cmake, gst_all_1, phonon, pkgconfig
-, extra-cmake-modules, qttools, qtbase, qtx11extras
+{ stdenv
+, lib
+, fetchurl
+, cmake
+, gst_all_1
+, phonon
+, pkgconfig
+, extra-cmake-modules
+, qttools
+, qtbase
+, qtx11extras
 , debug ? false
 }:
 
@@ -27,8 +36,9 @@ stdenv.mkDerivation rec {
   patches = [ ./gst-plugin-paths.patch ];
 
   NIX_CFLAGS_COMPILE =
-    let gstPluginPaths =
-          lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"
+    let
+      gstPluginPaths =
+        lib.makeSearchPathOutput "lib" "/lib/gstreamer-1.0"
           (with gst_all_1; [
             gstreamer
             gst-plugins-base

@@ -14,7 +14,7 @@ rec {
 
   packageName = "myway";
 
-  asdFilesToKeep = ["myway.asd"];
+  asdFilesToKeep = [ "myway.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM myway DESCRIPTION Sinatra-compatible routing library. SHA256

@@ -13,9 +13,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    (python2.withPackages (pp: with pp; [
-      fontforge
-    ]))
+    (python2.withPackages
+      (pp: with pp; [
+        fontforge
+      ]))
   ];
 
   buildPhase = ''

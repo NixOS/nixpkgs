@@ -9,4 +9,5 @@ callPackage ./generic.nix (args // {
     rev = "ff3bb36f70a746f28554641d466e124098dfcb25";
     sha256 = "1rr3p4r145lnprxn8hqyyzh3qkj3idsbqp08g07ndrhqnxq0k0sw";
   };
-})
+}
+)

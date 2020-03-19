@@ -1,8 +1,32 @@
-{ stdenv, lib, fetchurl, ghostscript, gyre-fonts, texinfo, imagemagick, texi2html, guile
-, python2, gettext, flex, perl, bison, pkgconfig, autoreconfHook, dblatex
-, fontconfig, freetype, pango, fontforge, help2man, zip, netpbm, groff
-, makeWrapper, t1utils
-, texlive, tex ? texlive.combine {
+{ stdenv
+, lib
+, fetchurl
+, ghostscript
+, gyre-fonts
+, texinfo
+, imagemagick
+, texi2html
+, guile
+, python2
+, gettext
+, flex
+, perl
+, bison
+, pkgconfig
+, autoreconfHook
+, dblatex
+, fontconfig
+, freetype
+, pango
+, fontforge
+, help2man
+, zip
+, netpbm
+, groff
+, makeWrapper
+, t1utils
+, texlive
+, tex ? texlive.combine {
     inherit (texlive) scheme-small lh metafont epsf;
   }
 }:
@@ -30,7 +54,7 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--disable-documentation"
-     # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
+    # FIXME: these URW fonts are not OTF, configure reports "URW++ OTF files... no".
     "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
     "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
   ];
@@ -43,9 +67,26 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook bison flex makeWrapper pkgconfig ];
 
   buildInputs =
-    [ ghostscript texinfo imagemagick texi2html guile dblatex tex zip netpbm
-      python2 gettext perl fontconfig freetype pango
-      fontforge help2man groff t1utils
+    [
+      ghostscript
+      texinfo
+      imagemagick
+      texi2html
+      guile
+      dblatex
+      tex
+      zip
+      netpbm
+      python2
+      gettext
+      perl
+      fontconfig
+      freetype
+      pango
+      fontforge
+      help2man
+      groff
+      t1utils
     ];
 
   autoreconfPhase = "NOCONFIGURE=1 sh autogen.sh";

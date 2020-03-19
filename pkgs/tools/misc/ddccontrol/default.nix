@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, intltool, libxml2
-, pciutils, pkgconfig, gtk2, ddccontrol-db
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, intltool
+, libxml2
+, pciutils
+, pkgconfig
+, gtk2
+, ddccontrol-db
 , makeDesktopItem
 }:
 

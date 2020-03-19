@@ -22,7 +22,8 @@ stdenv.mkDerivation rec {
     gettext
     itstool
   ] ++ (with perlPackages; [
-    perl XMLParser
+    perl
+    XMLParser
   ]);
 
   buildInputs = [

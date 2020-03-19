@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.xserver.wacom;
-
 in
-
 {
 
   options = {

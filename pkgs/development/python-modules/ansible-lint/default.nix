@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ pyyaml six ansible ruamel_yaml ]
-    ++ lib.optionals isPy27 [ pathlib2 ];
+  ++ lib.optionals isPy27 [ pathlib2 ];
   checkInputs = [ nose ];
 
   postPatch = ''

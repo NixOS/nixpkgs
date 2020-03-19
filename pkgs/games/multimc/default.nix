@@ -1,8 +1,8 @@
 { stdenv, mkDerivation, fetchFromGitHub, cmake, jdk, zlib, file, makeWrapper, xorg, libpulseaudio, qtbase }:
-
 let
   libpath = with xorg; stdenv.lib.makeLibraryPath [ libX11 libXext libXcursor libXrandr libXxf86vm libpulseaudio ];
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "multimc";
   version = "0.6.7";
   src = fetchFromGitHub {

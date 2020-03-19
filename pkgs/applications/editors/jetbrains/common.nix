@@ -1,34 +1,44 @@
-{ stdenv, lib, makeDesktopItem, makeWrapper, patchelf, p7zip
-, coreutils, gnugrep, which, git, unzip, libsecret, libnotify
+{ stdenv
+, lib
+, makeDesktopItem
+, makeWrapper
+, patchelf
+, p7zip
+, coreutils
+, gnugrep
+, which
+, git
+, unzip
+, libsecret
+, libnotify
 }:
 
 { name, product, version, src, wmClass, jdk, meta }:
 
 with stdenv.lib;
-
-let loName = toLower product;
-    hiName = toUpper product;
-    execName = concatStringsSep "-" (init (splitString "-" name));
+let
+  loName = toLower product;
+  hiName = toUpper product;
+  execName = concatStringsSep "-" (init (splitString "-" name));
 in
+  with stdenv; lib.makeOverridable mkDerivation rec {
+    inherit name src meta;
+    desktopItem = makeDesktopItem {
+      name = execName;
+      exec = execName;
+      comment = lib.replaceChars [ "\n" ] [ " " ] meta.longDescription;
+      desktopName = product;
+      genericName = meta.description;
+      categories = "Application;Development;";
+      icon = execName;
+      extraEntries = ''
+        StartupWMClass=${wmClass}
+      '';
+    };
 
-with stdenv; lib.makeOverridable mkDerivation rec {
-  inherit name src meta;
-  desktopItem = makeDesktopItem {
-    name = execName;
-    exec = execName;
-    comment = lib.replaceChars ["\n"] [" "] meta.longDescription;
-    desktopName = product;
-    genericName = meta.description;
-    categories = "Application;Development;";
-    icon = execName;
-    extraEntries = ''
-      StartupWMClass=${wmClass}
-    '';
-  };
+    nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
 
-  nativeBuildInputs = [ makeWrapper patchelf p7zip unzip ];
-
-  patchPhase = lib.optionalString (!stdenv.isDarwin) ''
+    patchPhase = lib.optionalString (!stdenv.isDarwin) ''
       get_file_size() {
         local fname="$1"
         echo $(ls -l $fname | cut -d ' ' -f5)
@@ -51,32 +61,33 @@ with stdenv; lib.makeOverridable mkDerivation rec {
         patchelf --set-interpreter "$interpreter" bin/fsnotifier
         munge_size_hack bin/fsnotifier $target_size
       fi
-  '';
+    '';
 
-  installPhase = ''
-    mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
-    cp -a . $out/$name
-    ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
-    mv bin/fsnotifier* $out/libexec/${name}/.
+    installPhase = ''
+      mkdir -p $out/{bin,$name,share/pixmaps,libexec/${name}}
+      cp -a . $out/$name
+      ln -s $out/$name/bin/${loName}.png $out/share/pixmaps/${execName}.png
+      mv bin/fsnotifier* $out/libexec/${name}/.
 
-    jdk=${jdk.home}
-    item=${desktopItem}
+      jdk=${jdk.home}
+      item=${desktopItem}
 
-    makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
-      --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
-      --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
-        # Some internals want libstdc++.so.6
-        stdenv.cc.cc.lib libsecret
+      makeWrapper "$out/$name/bin/${loName}.sh" "$out/bin/${execName}" \
+        --prefix PATH : "$out/libexec/${name}:${lib.optionalString (stdenv.isDarwin) "${jdk}/jdk/Contents/Home/bin:"}${stdenv.lib.makeBinPath [ jdk coreutils gnugrep which git ]}" \
+        --prefix LD_LIBRARY_PATH : "${stdenv.lib.makeLibraryPath [
+      # Some internals want libstdc++.so.6
+        stdenv.cc.cc.lib
+        libsecret
         libnotify
       ]}" \
-      --set JDK_HOME "$jdk" \
-      --set ${hiName}_JDK "$jdk" \
-      --set ANDROID_JAVA_HOME "$jdk" \
-      --set JAVA_HOME "$jdk"
+        --set JDK_HOME "$jdk" \
+        --set ${hiName}_JDK "$jdk" \
+        --set ANDROID_JAVA_HOME "$jdk" \
+        --set JAVA_HOME "$jdk"
 
-    ln -s "$item/share/applications" $out/share
-  '';
+      ln -s "$item/share/applications" $out/share
+    '';
 
-} // stdenv.lib.optionalAttrs (!(meta.license.free or true)) {
-  preferLocalBuild = true;
-}
+  } // stdenv.lib.optionalAttrs (!(meta.license.free or true)) {
+    preferLocalBuild = true;
+  }

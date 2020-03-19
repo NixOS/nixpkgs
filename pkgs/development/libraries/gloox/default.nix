@@ -1,7 +1,11 @@
-{ stdenv, fetchurl
-, zlibSupport ? true, zlib ? null
-, sslSupport ? true, openssl ? null
-, idnSupport ? true, libidn ? null
+{ stdenv
+, fetchurl
+, zlibSupport ? true
+, zlib ? null
+, sslSupport ? true
+, openssl ? null
+, idnSupport ? true
+, libidn ? null
 }:
 
 assert zlibSupport -> zlib != null;
@@ -9,7 +13,6 @@ assert sslSupport -> openssl != null;
 assert idnSupport -> libidn != null;
 
 with stdenv.lib;
-
 let
   version = "1.0.23";
 in
@@ -23,9 +26,9 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ ]
-    ++ optional zlibSupport zlib
-    ++ optional sslSupport openssl
-    ++ optional idnSupport libidn;
+  ++ optional zlibSupport zlib
+  ++ optional sslSupport openssl
+  ++ optional idnSupport libidn;
 
   meta = {
     description = "A portable high-level Jabber/XMPP library for C++";

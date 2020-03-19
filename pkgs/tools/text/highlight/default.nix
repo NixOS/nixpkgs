@@ -1,7 +1,6 @@
 { stdenv, fetchFromGitLab, getopt, lua, boost, pkgconfig, swig, perl, gcc }:
 
 with stdenv.lib;
-
 let
   self = stdenv.mkDerivation rec {
     pname = "highlight";
@@ -52,7 +51,6 @@ let
       maintainers = with maintainers; [ willibutz ];
     };
   };
-
 in
-  if stdenv.isDarwin then self
-  else perl.pkgs.toPerlModule self
+if stdenv.isDarwin then self
+else perl.pkgs.toPerlModule self

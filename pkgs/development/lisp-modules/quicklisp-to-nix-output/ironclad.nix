@@ -16,7 +16,7 @@ rec {
 
   packageName = "ironclad";
 
-  asdFilesToKeep = ["ironclad.asd"];
+  asdFilesToKeep = [ "ironclad.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM ironclad DESCRIPTION

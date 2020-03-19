@@ -1,6 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, nix, git }: let
+{ stdenv, fetchurl, pkgconfig, nix, git }:
+let
   version = "4.1.6";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "nix-exec";
   inherit version;
 

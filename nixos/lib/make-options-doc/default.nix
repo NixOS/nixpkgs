@@ -22,22 +22,27 @@
 , transformOptions ? lib.id  # function for additional tranformations of the options
 , revision ? "" # Specify revision for the options
 }:
-
 let
   # Replace functions by the string <function>
   substFunction = x:
-    if builtins.isAttrs x then lib.mapAttrs (name: substFunction) x
-    else if builtins.isList x then map substFunction x
-    else if lib.isFunction x then "<function>"
-    else x;
+    if builtins.isAttrs x
+    then lib.mapAttrs (name: substFunction) x
+    else
+      if builtins.isList x
+      then map substFunction x
+      else
+        if lib.isFunction x
+        then "<function>"
+        else x;
 
   optionsListDesc = lib.flip map optionsListVisible
-   (opt: transformOptions opt
-    // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
-    // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
-    // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
-    // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != []) { relatedPackages = genRelatedPackages opt.relatedPackages; }
-   );
+    (
+      opt: transformOptions opt
+      // lib.optionalAttrs (opt ? example) { example = substFunction opt.example; }
+      // lib.optionalAttrs (opt ? default) { default = substFunction opt.default; }
+      // lib.optionalAttrs (opt ? type) { type = substFunction opt.type; }
+      // lib.optionalAttrs (opt ? relatedPackages && opt.relatedPackages != [ ]) { relatedPackages = genRelatedPackages opt.relatedPackages; }
+    );
 
   # Generate DocBook documentation for a list of packages. This is
   # what `relatedPackages` option of `mkOption` from
@@ -50,9 +55,13 @@ let
   #   (either of `name`, `path` is required, the rest are optional).
   genRelatedPackages = packages:
     let
-      unpack = p: if lib.isString p then { name = p; }
-                  else if lib.isList p then { path = p; }
-                  else p;
+      unpack = p:
+        if lib.isString p
+        then { name = p; }
+        else
+          if lib.isList p
+          then { path = p; }
+          else p;
       describe = args:
         let
           title = args.title or null;
@@ -76,7 +85,7 @@ let
       ise = lib.hasPrefix "enable";
       isp = lib.hasPrefix "package";
       cmp = lib.splitByAndCompare ise lib.compare
-                                 (lib.splitByAndCompare isp lib.compare lib.compare);
+        (lib.splitByAndCompare isp lib.compare lib.compare);
     in lib.compareLists cmp a.loc b.loc < 0;
 
   # Remove invisible and internal options.
@@ -88,7 +97,7 @@ let
   # Convert the list of options into an XML file.
   optionsXML = pkgs.writeText "options.xml" (builtins.toXML optionsList);
 
-  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
+  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o [ "name" "visible" "internal" ]; }) optionsList);
 
   # TODO: declarations: link to github
   singleAsciiDoc = name: value: ''
@@ -100,8 +109,9 @@ let
     === details
 
     Type:: ${value.type}
-    ${ if lib.hasAttr "default" value
-       then ''
+    ${
+      if lib.hasAttr "default" value
+      then ''
         Default::
         +
         ----
@@ -110,12 +120,14 @@ let
       ''
       else "No Default:: {blank}"
     }
-    ${ if value.readOnly
-       then "Read Only:: {blank}"
+    ${
+      if value.readOnly
+      then "Read Only:: {blank}"
       else ""
     }
-    ${ if lib.hasAttr "example" value
-       then ''
+    ${
+      if lib.hasAttr "example" value
+      then ''
         Example::
         +
         ----
@@ -125,14 +137,15 @@ let
       else "No Example:: {blank}"
     }
   '';
-
-in {
+in
+{
   inherit optionsNix;
 
   optionsAsciiDoc = lib.concatStringsSep "\n" (lib.mapAttrsToList singleAsciiDoc optionsNix);
 
   optionsJSON = pkgs.runCommand "options.json"
-    { meta.description = "List of NixOS options in JSON format";
+    {
+      meta.description = "List of NixOS options in JSON format";
     }
     ''
       # Export list of options in different format.
@@ -145,7 +158,7 @@ in {
       echo "file json $dst/options.json" >> $out/nix-support/hydra-build-products
     ''; # */
 
-  optionsDocBook = pkgs.runCommand "options-docbook.xml" {} ''
+  optionsDocBook = pkgs.runCommand "options-docbook.xml" { } ''
     optionsXML=${optionsXML}
     if grep /nixpkgs/nixos/modules $optionsXML; then
       echo "The manual appears to depend on the location of Nixpkgs, which is bad"

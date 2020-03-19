@@ -1,6 +1,16 @@
-{ stdenv, fetchurl
-, xorgproto, motif, libX11, libXt, libXpm, bison
-, flex, automake, autoconf, libtool, runtimeShell
+{ stdenv
+, fetchurl
+, xorgproto
+, motif
+, libX11
+, libXt
+, libXpm
+, bison
+, flex
+, automake
+, autoconf
+, libtool
+, runtimeShell
 }:
 
 stdenv.mkDerivation rec {

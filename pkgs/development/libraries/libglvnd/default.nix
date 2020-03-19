@@ -48,7 +48,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional stdenv.cc.isClang "-Wno-error");
 
   # Indirectly: https://bugs.freedesktop.org/show_bug.cgi?id=35268
-  configureFlags  = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
+  configureFlags = stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-tls";
 
   outputs = [ "out" "dev" ];
 

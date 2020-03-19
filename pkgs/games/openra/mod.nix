@@ -15,91 +15,92 @@
 }:
 
 with stdenv.lib;
-
 let
   engineSourceName = engine.src.name or "engine";
   modSourceName = mod.src.name or "mod";
 
-# Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
-in stdenv.mkDerivation (recursiveUpdate packageAttrs rec {
-  name = "${pname}-${version}";
-  pname = "openra-${mod.name}";
-  inherit (mod) version;
+  # Based on: https://build.opensuse.org/package/show/home:fusion809/openra-ura
+in
+stdenv.mkDerivation
+  (recursiveUpdate packageAttrs rec {
+    name = "${pname}-${version}";
+    pname = "openra-${mod.name}";
+    inherit (mod) version;
 
-  srcs = [
-    mod.src
-    engine.src
-  ];
+    srcs = [
+      mod.src
+      engine.src
+    ];
 
-  sourceRoot = ".";
+    sourceRoot = ".";
 
-  postUnpack = ''
-    mv ${engineSourceName} ${modSourceName}
-    cd ${modSourceName}
-  '';
+    postUnpack = ''
+      mv ${engineSourceName} ${modSourceName}
+      cd ${modSourceName}
+    '';
 
-  postPatch = ''
-    cat <<'EOF' > fetch-engine.sh
-    #!/bin/sh
-    exit 0
-    EOF
+    postPatch = ''
+      cat <<'EOF' > fetch-engine.sh
+      #!/bin/sh
+      exit 0
+      EOF
 
-    sed -i 's/^VERSION.*/VERSION = ${version}/g' Makefile
+      sed -i 's/^VERSION.*/VERSION = ${version}/g' Makefile
 
-    dos2unix *.md
+      dos2unix *.md
 
-    ${patchEngine engineSourceName engine.version}
-  '';
+      ${patchEngine engineSourceName engine.version}
+    '';
 
-  configurePhase = ''
-    runHook preConfigure
+    configurePhase = ''
+      runHook preConfigure
 
-    make version VERSION=${escapeShellArg version}
-    make -C ${engineSourceName} version VERSION=${escapeShellArg engine.version}
+      make version VERSION=${escapeShellArg version}
+      make -C ${engineSourceName} version VERSION=${escapeShellArg engine.version}
 
-    runHook postConfigure
-  '';
+      runHook postConfigure
+    '';
 
-  checkTarget = "test";
+    checkTarget = "test";
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    make -C ${engineSourceName} install-engine install-common-mod-files DATA_INSTALL_DIR=$out/lib/${pname}
+      make -C ${engineSourceName} install-engine install-common-mod-files DATA_INSTALL_DIR=$out/lib/${pname}
 
-    cp -r ${engineSourceName}/mods/{${concatStringsSep "," ([ "common" "modcontent" ] ++ engine.mods)}} mods/* \
-      $out/lib/${pname}/mods/
+      cp -r ${engineSourceName}/mods/{${concatStringsSep "," ([ "common" "modcontent" ] ++ engine.mods)}} mods/* \
+        $out/lib/${pname}/mods/
 
-    substitute ${./mod-launch-game.sh} $out/lib/${pname}/launch-game.sh \
-      --subst-var out \
-      --subst-var-by name ${escapeShellArg mod.name} \
-      --subst-var-by title ${escapeShellArg mod.title} \
-      --subst-var-by assetsError ${escapeShellArg mod.assetsError}
-    chmod +x $out/lib/${pname}/launch-game.sh
+      substitute ${./mod-launch-game.sh} $out/lib/${pname}/launch-game.sh \
+        --subst-var out \
+        --subst-var-by name ${escapeShellArg mod.name} \
+        --subst-var-by title ${escapeShellArg mod.title} \
+        --subst-var-by assetsError ${escapeShellArg mod.assetsError}
+      chmod +x $out/lib/${pname}/launch-game.sh
 
-    ${wrapLaunchGame "-${mod.name}"}
+      ${wrapLaunchGame "-${mod.name}"}
 
-    substitute ${./openra-mod.desktop} $(mkdirp $out/share/applications)/${pname}.desktop \
-      --subst-var-by name ${escapeShellArg mod.name} \
-      --subst-var-by title ${escapeShellArg mod.title} \
-      --subst-var-by description ${escapeShellArg mod.description}
+      substitute ${./openra-mod.desktop} $(mkdirp $out/share/applications)/${pname}.desktop \
+        --subst-var-by name ${escapeShellArg mod.name} \
+        --subst-var-by title ${escapeShellArg mod.title} \
+        --subst-var-by description ${escapeShellArg mod.description}
 
-    cp README.md $(mkdirp $out/share/doc/packages/${pname})/README.md
+      cp README.md $(mkdirp $out/share/doc/packages/${pname})/README.md
 
-    [[ -e mods/${mod.name}/icon.png ]] && mod_icon=mods/${mod.name}/icon.png || {
-      [[ -e mods/${mod.name}/logo.png ]] && mod_icon=mods/${mod.name}/logo.png || mod_icon=packaging/linux/mod_256x256.png
-    }
-    cp "$mod_icon" $(mkdirp $out/share/pixmaps)/${pname}.png
+      [[ -e mods/${mod.name}/icon.png ]] && mod_icon=mods/${mod.name}/icon.png || {
+        [[ -e mods/${mod.name}/logo.png ]] && mod_icon=mods/${mod.name}/logo.png || mod_icon=packaging/linux/mod_256x256.png
+      }
+      cp "$mod_icon" $(mkdirp $out/share/pixmaps)/${pname}.png
 
-    for size in 16 32 48 64 128 256; do
-      size=''${size}x''${size}
-      cp packaging/linux/mod_''${size}.png $(mkdirp $out/share/icons/hicolor/''${size}/apps)/${pname}.png
-    done
+      for size in 16 32 48 64 128 256; do
+        size=''${size}x''${size}
+        cp packaging/linux/mod_''${size}.png $(mkdirp $out/share/icons/hicolor/''${size}/apps)/${pname}.png
+      done
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  meta = {
-    inherit (mod) description homepage;
-  };
-})
+    meta = {
+      inherit (mod) description homepage;
+    };
+  })

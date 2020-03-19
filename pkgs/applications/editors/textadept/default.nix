@@ -5,7 +5,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk2 ncurses glib unzip zip
+    gtk2
+    ncurses
+    glib
+    unzip
+    zip
   ];
 
   src = fetchhg {
@@ -15,9 +19,11 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure =
-    lib.concatStringsSep "\n" (lib.mapAttrsToList (name: params:
-      "ln -s ${fetchurl params} $PWD/src/${name}"
-    ) (import ./deps.nix)) + ''
+    lib.concatStringsSep "\n" (lib.mapAttrsToList
+      (
+        name: params:
+          "ln -s ${fetchurl params} $PWD/src/${name}"
+      ) (import ./deps.nix)) + ''
 
     # work around trying to download stuff in `make deps`
     function wget() { true; }

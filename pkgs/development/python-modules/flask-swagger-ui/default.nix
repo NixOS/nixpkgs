@@ -9,7 +9,7 @@ buildPythonPackage rec {
     sha256 = "3282c770764c8053360f33b2fc120e1d169ecca2138537d0e6e1135b1f9d4ff2";
   };
 
-  doCheck = false;  # there are no tests
+  doCheck = false; # there are no tests
 
   propagatedBuildInputs = [
     flask

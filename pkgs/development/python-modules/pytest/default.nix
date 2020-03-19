@@ -1,6 +1,25 @@
-{ stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+{ stdenv
+, buildPythonPackage
+, pythonOlder
+, fetchPypi
+, attrs
+, hypothesis
+, py
+, setuptools_scm
+, setuptools
+, six
+, pluggy
+, funcsigs
+, isPy3k
+, more-itertools
+, atomicwrites
+, mock
+, writeText
+, pathlib2
+, wcwidth
+, packaging
+, isPyPy
+, python
 }:
 buildPythonPackage rec {
   version = "5.3.5";
@@ -21,7 +40,7 @@ buildPythonPackage rec {
   checkInputs = [ hypothesis mock ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
-    ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
+  ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
   doCheck = !isPyPy; # https://github.com/pytest-dev/pytest/issues/3460
 

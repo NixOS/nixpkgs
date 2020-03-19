@@ -1,40 +1,47 @@
 { stdenv, fetchurl, unzip, jre }:
-
 let
-  common = { pname, version, src, description
-           , prog ? null, jar ? null, license ? stdenv.lib.licenses.mpl20 }:
-    stdenv.mkDerivation {
-      name = "${pname}-${version}";
-      inherit pname version src;
+  common =
+    { pname
+    , version
+    , src
+    , description
+    , prog ? null
+    , jar ? null
+    , license ? stdenv.lib.licenses.mpl20
+    }:
+      stdenv.mkDerivation {
+        name = "${pname}-${version}";
+        inherit pname version src;
 
-      nativeBuildInputs = [ unzip ];
+        nativeBuildInputs = [ unzip ];
 
-      buildCommand = let
-        prog' = if prog == null then pname else prog;
-        jar' = if jar == null then pname else jar;
-      in ''
-        unzip $src -d $out
-        mkdir -p $out/bin $out/share $out/share/java
-        cp -s "$out"/*.jar "$out/share/java/"  # */
-        rm -rf $out/notices
-        mv $out/doc $out/share
-        cat > $out/bin/${prog'} <<EOF
-        #! $shell
-        export JAVA_HOME=${jre}
-        exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
-        EOF
-        chmod a+x $out/bin/${prog'}
-      '';
+        buildCommand =
+          let
+            prog' = if prog == null then pname else prog;
+            jar' = if jar == null then pname else jar;
+          in ''
+            unzip $src -d $out
+            mkdir -p $out/bin $out/share $out/share/java
+            cp -s "$out"/*.jar "$out/share/java/"  # */
+            rm -rf $out/notices
+            mv $out/doc $out/share
+            cat > $out/bin/${prog'} <<EOF
+            #! $shell
+            export JAVA_HOME=${jre}
+            exec ${jre}/bin/java -jar $out/${jar'}.jar "\$@"
+            EOF
+            chmod a+x $out/bin/${prog'}
+          '';
 
-      meta = with stdenv.lib; {
-        inherit description license;
-        homepage = http://saxon.sourceforge.net/;
-        maintainers = with maintainers; [ rvl ];
-        platforms = platforms.all;
+        meta = with stdenv.lib; {
+          inherit description license;
+          homepage = http://saxon.sourceforge.net/;
+          maintainers = with maintainers; [ rvl ];
+          platforms = platforms.all;
+        };
       };
-    };
-
-in {
+in
+{
   saxon = common {
     pname = "saxon";
     version = "6.5.3";

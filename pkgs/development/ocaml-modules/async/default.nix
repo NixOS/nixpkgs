@@ -1,5 +1,11 @@
-{stdenv, buildOcaml, fetchurl, async_kernel_p4,
- async_unix_p4, async_extra_p4, pa_ounit}:
+{ stdenv
+, buildOcaml
+, fetchurl
+, async_kernel_p4
+, async_unix_p4
+, async_extra_p4
+, pa_ounit
+}:
 
 buildOcaml rec {
   name = "async";

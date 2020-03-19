@@ -8,14 +8,14 @@
 #
 
 { stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, with-gce ? false }:
-
 let
-  pythonEnv = python.withPackages (p: with p; [
-    cffi
-    cryptography
-    pyopenssl
-    crcmod
-  ] ++ lib.optional (with-gce) google-compute-engine);
+  pythonEnv = python.withPackages
+    (p: with p; [
+      cffi
+      cryptography
+      pyopenssl
+      crcmod
+    ] ++ lib.optional (with-gce) google-compute-engine);
 
   baseUrl = "https://dl.google.com/dl/cloudsdk/channels/rapid/downloads";
   sources = name: system: {
@@ -31,8 +31,8 @@ let
   }.${system};
 
   strip = if stdenv.isDarwin then "strip -x" else "strip";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   version = "281.0.0";
 

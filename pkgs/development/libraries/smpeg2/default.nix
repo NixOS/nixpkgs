@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoconf automake pkgconfig makeWrapper ];
 
   buildInputs = [ SDL2 ]
-    ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
+  ++ stdenv.lib.optional stdenv.isDarwin darwin.libobjc;
 
   preConfigure = ''
     sh autogen.sh

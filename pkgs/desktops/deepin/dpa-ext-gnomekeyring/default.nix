@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, pkgconfig, qmake, qttools, gnome3,
-  dde-polkit-agent, deepin }:
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qttools
+, gnome3
+, dde-polkit-agent
+, deepin
+}:
 
 stdenv.mkDerivation rec {
   pname = "dpa-ext-gnomekeyring";

@@ -1,5 +1,4 @@
 { lib, fetchFromGitHub, rustPlatform, libusb }:
-
 let
   version = "0.6.9";
   src = fetchFromGitHub {

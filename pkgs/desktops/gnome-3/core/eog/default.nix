@@ -1,11 +1,34 @@
-{ fetchurl, stdenv, meson, ninja, gettext, itstool, pkgconfig, libxml2, libjpeg, libpeas, gnome3
-, gtk3, glib, gsettings-desktop-schemas, adwaita-icon-theme, gnome-desktop, lcms2, gdk-pixbuf, exempi
-, shared-mime-info, wrapGAppsHook, librsvg, libexif, gobject-introspection, python3 }:
-
+{ fetchurl
+, stdenv
+, meson
+, ninja
+, gettext
+, itstool
+, pkgconfig
+, libxml2
+, libjpeg
+, libpeas
+, gnome3
+, gtk3
+, glib
+, gsettings-desktop-schemas
+, adwaita-icon-theme
+, gnome-desktop
+, lcms2
+, gdk-pixbuf
+, exempi
+, shared-mime-info
+, wrapGAppsHook
+, librsvg
+, libexif
+, gobject-introspection
+, python3
+}:
 let
   pname = "eog";
   version = "3.34.2";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -16,8 +39,19 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig gettext itstool wrapGAppsHook libxml2 gobject-introspection python3 ];
 
   buildInputs = [
-    libjpeg gtk3 gdk-pixbuf glib libpeas librsvg lcms2 gnome-desktop libexif exempi
-    gsettings-desktop-schemas shared-mime-info adwaita-icon-theme
+    libjpeg
+    gtk3
+    gdk-pixbuf
+    glib
+    libpeas
+    librsvg
+    lcms2
+    gnome-desktop
+    libexif
+    exempi
+    gsettings-desktop-schemas
+    shared-mime-info
+    adwaita-icon-theme
   ];
 
   postPatch = ''

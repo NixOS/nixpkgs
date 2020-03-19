@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
     homepage = https://archlinux.org/;
     description = "ipconfig and nfsmount tools for root on NFS, ported from klibc";
     license = licenses.gpl2;
-    platforms  = platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ abbradar ];
   };
 }

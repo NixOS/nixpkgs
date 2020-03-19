@@ -1,7 +1,8 @@
 { runCommand, lcov, rsync, coverageRuns, lcovFilter ? [ "/nix/store/*" ], baseDirHack ? false }:
 
 runCommand "coverage"
-  { buildInputs = [ lcov rsync ];
+  {
+    buildInputs = [ lcov rsync ];
     inherit lcovFilter baseDirHack;
   }
   ''

@@ -1,7 +1,8 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-, libGLU, libGL
+, libGLU
+, libGL
 , xorg
 , numpy
 }:
@@ -16,11 +17,12 @@ buildPythonPackage rec {
   };
 
   buildInputs = [
-    libGLU libGL
+    libGLU
+    libGL
     xorg.libX11
   ];
 
-  propagatedBuildInputs =  [ numpy ];
+  propagatedBuildInputs = [ numpy ];
 
   patches = [
     # make sure X11 and OpenGL can be found at runtime

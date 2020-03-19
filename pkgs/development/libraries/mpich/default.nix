@@ -1,8 +1,12 @@
-{ stdenv, fetchurl, perl, gfortran
-,  openssh, hwloc
-} :
+{ stdenv
+, fetchurl
+, perl
+, gfortran
+, openssh
+, hwloc
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "mpich";
   version = "3.3.2";
 
@@ -34,7 +38,7 @@ stdenv.mkDerivation  rec {
       echo "fix rpath: $entry"
       patchelf --set-rpath "$out/lib" $entry
     done
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Implementation of the Message Passing Interface (MPI) standard";

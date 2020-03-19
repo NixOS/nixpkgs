@@ -1,9 +1,8 @@
 { stdenv, lib, fetchFromGitHub, kernel }:
-
-
-let modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
-
-in stdenv.mkDerivation rec {
+let
+  modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel/drivers/net/wireless/realtek/r8168";
+in
+stdenv.mkDerivation rec {
   name = "r8168-${kernel.version}-${version}";
   # on update please verify that the source matches the realtek version
   version = "8.047.04";

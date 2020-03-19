@@ -1,16 +1,12 @@
 { stdenv, fetchurl, pkgconfig, SDL, libogg, libvorbis, zlib, unzip }:
-
 let
-
   # Digital recordings of the music on an original Roland MT-32.  So
   # we don't need actual MIDI playback capability.
   audio = fetchurl {
     url = mirror://sourceforge/exult/exult_audio.zip;
     sha256 = "0s5wvgy9qja06v38g0qwzpaw76ff96vzd6gb1i3lb9k4hvx0xqbj";
   };
-
 in
-
 stdenv.mkDerivation rec {
   name = "exult-1.4.9rc1";
 
@@ -22,7 +18,8 @@ stdenv.mkDerivation rec {
   configureFlags = [ "--disable-tools" ];
 
   patches =
-    [ # Arch Linux patch set.
+    [
+      # Arch Linux patch set.
       ./arch.patch
     ];
 

@@ -14,7 +14,7 @@ rec {
 
   packageName = "prove-asdf";
 
-  asdFilesToKeep = ["prove-asdf.asd"];
+  asdFilesToKeep = [ "prove-asdf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM prove-asdf DESCRIPTION System lacks description SHA256

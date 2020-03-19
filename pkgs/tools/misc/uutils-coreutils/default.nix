@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, rustPlatform, cargo, cmake, sphinx, lib, prefix ? "uutils-"
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, cargo
+, cmake
+, sphinx
+, lib
+, prefix ? "uutils-"
 , Security
 }:
 

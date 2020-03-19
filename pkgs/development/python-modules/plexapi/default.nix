@@ -1,5 +1,14 @@
-{ lib, buildPythonPackage, fetchFromGitHub, requests
-, tqdm, websocket_client, pytest, pillow, mock, isPy27 }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, requests
+, tqdm
+, websocket_client
+, pytest
+, pillow
+, mock
+, isPy27
+}:
 
 buildPythonPackage rec {
   pname = "PlexAPI";
@@ -15,7 +24,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ requests tqdm websocket_client ];
 
   checkInputs = [ pytest pillow ]
-    ++ lib.optionals isPy27 [ mock ];
+  ++ lib.optionals isPy27 [ mock ];
 
   meta = with lib; {
     homepage = "https://github.com/pkkid/python-plexapi";

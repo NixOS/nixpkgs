@@ -1,4 +1,7 @@
-{ lib, stdenv, fetchurl, pkgconfig
+{ lib
+, stdenv
+, fetchurl
+, pkgconfig
 , wayland
 }:
 
@@ -24,9 +27,9 @@ stdenv.mkDerivation rec {
       protocol either in Wayland core, or some other protocol in
       wayland-protocols.
     '';
-    homepage    = https://gitlab.freedesktop.org/wayland/wayland-protocols;
-    license     = lib.licenses.mit; # Expat version
-    platforms   = lib.platforms.linux;
+    homepage = https://gitlab.freedesktop.org/wayland/wayland-protocols;
+    license = lib.licenses.mit; # Expat version
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ primeos ];
   };
 

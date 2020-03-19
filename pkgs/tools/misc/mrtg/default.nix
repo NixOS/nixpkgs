@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    perl gd rrdtool
+    perl
+    gd
+    rrdtool
   ];
 
   meta = {

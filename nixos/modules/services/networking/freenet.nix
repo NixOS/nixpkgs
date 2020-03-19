@@ -3,14 +3,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.freenet;
   varDir = "/var/lib/freenet";
-
 in
-
 {
 
   ### configuration

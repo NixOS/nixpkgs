@@ -1,7 +1,18 @@
-{ stdenv, fetchFromGitHub, which, perl, jdk
-, ocamlPackages, openssl
-, coreutils, zlib, ncurses, makeWrapper
-, gcc, binutils, gnumake, nodejs
+{ stdenv
+, fetchFromGitHub
+, which
+, perl
+, jdk
+, ocamlPackages
+, openssl
+, coreutils
+, zlib
+, ncurses
+, makeWrapper
+, gcc
+, binutils
+, gnumake
+, nodejs
 }:
 
 stdenv.mkDerivation rec {
@@ -40,10 +51,28 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "-ocamlfind ${ocamlPackages.findlib}/bin/ocamlfind" ];
 
-  buildInputs = [ which perl jdk openssl coreutils zlib ncurses
-    makeWrapper gcc binutils gnumake nodejs
+  buildInputs = [
+    which
+    perl
+    jdk
+    openssl
+    coreutils
+    zlib
+    ncurses
+    makeWrapper
+    gcc
+    binutils
+    gnumake
+    nodejs
   ] ++ (with ocamlPackages; [
-    ocaml findlib ssl cryptokit camlzip ulex ocamlgraph camlp4
+    ocaml
+    findlib
+    ssl
+    cryptokit
+    camlzip
+    ulex
+    ocamlgraph
+    camlp4
   ]);
 
   NIX_LDFLAGS = stdenv.lib.optionalString (!stdenv.isDarwin) "-lgcc_s";

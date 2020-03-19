@@ -2,7 +2,6 @@
 
 {
   config = lib.mkMerge [
-
     (lib.mkIf (lib.any (fs: fs == "unionfs-fuse") config.boot.initrd.supportedFilesystems) {
       boot.initrd.kernelModules = [ "fuse" ];
 
@@ -17,13 +16,12 @@
       '';
 
       boot.initrd.postDeviceCommands = ''
-          # Hacky!!! fuse hard-codes the path to mount
-          mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}-bin/bin
-          ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}-bin/bin
-          ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}-bin/bin
-        '';
+        # Hacky!!! fuse hard-codes the path to mount
+        mkdir -p /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}-bin/bin
+        ln -s $(which mount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}-bin/bin
+        ln -s $(which umount) /nix/store/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-${pkgs.utillinux.name}-bin/bin
+      '';
     })
-
     (lib.mkIf (lib.any (fs: fs == "unionfs-fuse") config.boot.supportedFilesystems) {
       system.fsPackages = [ pkgs.unionfs-fuse ];
     })

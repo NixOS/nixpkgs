@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     maintainers = [ maintainers.bjornfor ];
     broken = builtins.compareVersions kernel.version "3.18" == -1
-      || builtins.compareVersions kernel.version "4.16" == 1;
+    || builtins.compareVersions kernel.version "4.16" == 1;
   };
 
 }

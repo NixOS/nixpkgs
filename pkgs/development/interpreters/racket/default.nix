@@ -1,23 +1,34 @@
-{ stdenv, fetchurl, makeFontsConf
+{ stdenv
+, fetchurl
+, makeFontsConf
 , cacert
-, cairo, coreutils, fontconfig, freefont_ttf
-, glib, gmp
+, cairo
+, coreutils
+, fontconfig
+, freefont_ttf
+, glib
+, gmp
 , gtk3
-, libedit, libffi
+, libedit
+, libffi
 , libiconv
 , libGL
 , libGLU
 , libjpeg
-, libpng, libtool, mpfr, openssl, pango, poppler
-, readline, sqlite
+, libpng
+, libtool
+, mpfr
+, openssl
+, pango
+, poppler
+, readline
+, sqlite
 , disableDocs ? false
 , CoreFoundation
 , gsettings-desktop-schemas
 , wrapGAppsHook
 }:
-
 let
-
   fontsConf = makeFontsConf {
     fontDirectories = [ freefont_ttf ];
   };
@@ -41,19 +52,19 @@ let
     readline
     sqlite
   ];
-
 in
-
 stdenv.mkDerivation rec {
   pname = "racket";
   version = "7.6"; # always change at once with ./minimal.nix
 
-  src = (stdenv.lib.makeOverridable ({ name, sha256 }:
-    fetchurl {
-      url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
-      inherit sha256;
-    }
-  )) {
+  src = (stdenv.lib.makeOverridable
+    (
+      { name, sha256 }:
+        fetchurl {
+          url = "https://mirror.racket-lang.org/installers/${version}/${name}-src.tgz";
+          inherit sha256;
+        }
+    )) {
     name = "${pname}-${version}";
     sha256 = "0yagy7qrnz96gwafnj3whh2vs54788k1ci3vkm100h68gsw638b8";
   };
@@ -68,7 +79,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cacert wrapGAppsHook ];
 
   buildInputs = [ fontconfig libffi libtool sqlite gsettings-desktop-schemas gtk3 ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv CoreFoundation ];
 
   preConfigure = ''
     unset AR
@@ -82,9 +93,9 @@ stdenv.mkDerivation rec {
   '';
 
   shared = if stdenv.isDarwin then "dylib" else "shared";
-  configureFlags = [ "--enable-${shared}"  "--enable-lt=${libtool}/bin/libtool" ]
-                   ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
-                   ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
+  configureFlags = [ "--enable-${shared}" "--enable-lt=${libtool}/bin/libtool" ]
+  ++ stdenv.lib.optional disableDocs [ "--disable-docs" ]
+  ++ stdenv.lib.optional stdenv.isDarwin [ "--enable-xonx" ];
 
   configureScript = "../configure";
 

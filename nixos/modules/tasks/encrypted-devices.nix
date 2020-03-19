@@ -1,7 +1,6 @@
 { config, lib, ... }:
 
 with lib;
-
 let
   fileSystems = config.system.build.fileSystems ++ config.swapDevices;
   encDevs = filter (dev: dev.encrypted.enable) fileSystems;
@@ -42,7 +41,6 @@ let
     };
   };
 in
-
 {
 
   options = {
@@ -73,4 +71,3 @@ in
     };
   };
 }
-

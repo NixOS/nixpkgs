@@ -33,10 +33,9 @@
 #
 # [1]: https://github.com/DataDog/integrations-core
 
-{ pkgs, python, extraIntegrations ? {} }:
+{ pkgs, python, extraIntegrations ? { } }:
 
 with pkgs.lib;
-
 let
   src = pkgs.fetchFromGitHub {
     owner = "DataDog";
@@ -47,34 +46,41 @@ let
   version = "git-2018-09-18";
 
   # Build helper to build a single datadog integration package.
-  buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage (args // {
-    inherit src version;
-    name = "datadog-integration-${pname}-${version}";
+  buildIntegration = { pname, ... }@args: python.pkgs.buildPythonPackage
+    (args // {
+      inherit src version;
+      name = "datadog-integration-${pname}-${version}";
 
-    postPatch = ''
-      # jailbreak install_requires
-      sed -i 's/==.*//' requirements.in
-      cp requirements.in requirements.txt
-    '';
-    sourceRoot = "source/${args.sourceRoot or pname}";
-    doCheck = false;
-  });
+      postPatch = ''
+        # jailbreak install_requires
+        sed -i 's/==.*//' requirements.in
+        cp requirements.in requirements.txt
+      '';
+      sourceRoot = "source/${args.sourceRoot or pname}";
+      doCheck = false;
+    }
+    );
 
   # Base package depended on by all other integrations.
   datadog_checks_base = buildIntegration {
     pname = "checks-base";
     sourceRoot = "datadog_checks_base";
     propagatedBuildInputs = with python.pkgs; [
-      requests protobuf prometheus_client uuid simplejson uptime
+      requests
+      protobuf
+      prometheus_client
+      uuid
+      simplejson
+      uptime
     ];
   };
 
   # Default integrations that should be built:
   defaultIntegrations = {
-    disk     = (ps: [ ps.psutil ]);
-    mongo    = (ps: [ ps.pymongo ]);
-    network  = (ps: [ ps.psutil ]);
-    nginx    = (ps: []);
+    disk = (ps: [ ps.psutil ]);
+    mongo = (ps: [ ps.pymongo ]);
+    network = (ps: [ ps.psutil ]);
+    nginx = (ps: [ ]);
     postgres = (ps: with ps; [ pg8000_1_12 psycopg2 ]);
   };
 
@@ -84,8 +90,8 @@ let
     inherit pname;
     propagatedBuildInputs = (fdeps python.pkgs) ++ [ datadog_checks_base ];
   }) integrations;
-
-in builtIntegrations // {
+in
+builtIntegrations // {
   inherit datadog_checks_base;
   python = python.withPackages (_: (attrValues builtIntegrations));
 }

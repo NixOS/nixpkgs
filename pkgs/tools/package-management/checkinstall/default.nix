@@ -1,4 +1,4 @@
-{stdenv, fetchurl, gettext}:
+{ stdenv, fetchurl, gettext }:
 
 assert stdenv.isLinux && stdenv ? glibc;
 
@@ -37,12 +37,12 @@ stdenv.mkDerivation {
     ./set-buildroot.patch
   ]
 
-  ++ stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux") 
+  ++ stdenv.lib.optional (stdenv.hostPlatform.system == "x86_64-linux")
     # Force use of old memcpy so that installwatch works on Glibc <
     # 2.14.
     ./use-old-memcpy.patch;
 
-  buildInputs = [gettext];
+  buildInputs = [ gettext ];
 
   hardeningDisable = [ "fortify" ];
 
@@ -61,7 +61,7 @@ stdenv.mkDerivation {
     # as an LD_PRELOADed library on applications that load against a
     # different Glibc.
     ''
-       patchelf --set-rpath "" $out/lib/installwatch.so
+      patchelf --set-rpath "" $out/lib/installwatch.so
     '';
 
   meta = {

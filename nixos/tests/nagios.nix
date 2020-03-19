@@ -1,11 +1,11 @@
-import ./make-test-python.nix (
-  { pkgs, ... }: {
-    name = "nagios";
-    meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ symphorien ];
-    };
+import ./make-test-python.nix ({ pkgs, ... }: {
+  name = "nagios";
+  meta = with pkgs.stdenv.lib.maintainers; {
+    maintainers = [ symphorien ];
+  };
 
-    machine = { lib, ... }: let
+  machine = { lib, ... }:
+    let
       writer = pkgs.writeShellScript "write" ''
         set -x
         echo "$@"  >> /tmp/notifications
@@ -86,31 +86,31 @@ import ./make-test-python.nix (
         };
       };
 
-    testScript = { ... }: ''
-      with subtest("ensure sshd starts"):
-          machine.wait_for_unit("sshd.service")
+  testScript = { ... }: ''
+    with subtest("ensure sshd starts"):
+        machine.wait_for_unit("sshd.service")
 
 
-      with subtest("ensure nagios starts"):
-          machine.wait_for_file("/var/log/nagios/current")
+    with subtest("ensure nagios starts"):
+        machine.wait_for_file("/var/log/nagios/current")
 
 
-      def assert_notify(text):
-          machine.wait_for_file("/tmp/notifications")
-          real = machine.succeed("cat /tmp/notifications").strip()
-          print(f"got {real!r}, expected {text!r}")
-          assert text == real
+    def assert_notify(text):
+        machine.wait_for_file("/tmp/notifications")
+        real = machine.succeed("cat /tmp/notifications").strip()
+        print(f"got {real!r}, expected {text!r}")
+        assert text == real
 
 
-      with subtest("ensure we get a notification when sshd is down"):
-          machine.succeed("systemctl stop sshd")
-          assert_notify("ssh is CRITICAL")
+    with subtest("ensure we get a notification when sshd is down"):
+        machine.succeed("systemctl stop sshd")
+        assert_notify("ssh is CRITICAL")
 
 
-      with subtest("ensure tests can succeed"):
-          machine.succeed("systemctl start sshd")
-          machine.succeed("rm /tmp/notifications")
-          assert_notify("ssh is OK")
-    '';
-  }
+    with subtest("ensure tests can succeed"):
+        machine.succeed("systemctl start sshd")
+        machine.succeed("rm /tmp/notifications")
+        assert_notify("ssh is OK")
+  '';
+}
 )

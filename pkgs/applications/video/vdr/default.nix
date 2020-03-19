@@ -1,5 +1,15 @@
-{ stdenv, fetchurl, fontconfig, libjpeg, libcap, freetype, fribidi, pkgconfig
-, gettext, systemd, perl, lib
+{ stdenv
+, fetchurl
+, fontconfig
+, libjpeg
+, libcap
+, freetype
+, fribidi
+, pkgconfig
+, gettext
+, systemd
+, perl
+, lib
 , enableSystemd ? true
 , enableBidi ? true
 }: stdenv.mkDerivation rec {
@@ -34,14 +44,19 @@
     "PREFIX=" # needs to be empty, otherwise plugins try to install at same prefix
   ];
 
-  installTargets = [ "install-pc" "install-bin" "install-doc" "install-i18n"
-    "install-includes" ];
+  installTargets = [
+    "install-pc"
+    "install-bin"
+    "install-doc"
+    "install-i18n"
+    "install-includes"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/vdr # only needed if vdr is started without any plugin
     mkdir -p $out/share/vdr/conf
     cp *.conf $out/share/vdr/conf
-    '';
+  '';
 
   outputs = [ "out" "dev" "man" ];
 

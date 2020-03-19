@@ -1,15 +1,21 @@
-{ stdenv, lib, fetchurl, makeDesktopItem, unzip, writeText
-, scummvm, runtimeShell }:
-
+{ stdenv
+, lib
+, fetchurl
+, makeDesktopItem
+, unzip
+, writeText
+, scummvm
+, runtimeShell
+}:
 let
   desktopItem = name: short: long: description: makeDesktopItem {
-    categories  = "Game;AdventureGame;";
-    comment     = description;
+    categories = "Game;AdventureGame;";
+    comment = description;
     desktopName = long;
-    exec        = "@out@/bin/${short}";
+    exec = "@out@/bin/${short}";
     genericName = description;
-    icon        = "scummvm";
-    name        = name;
+    icon = "scummvm";
+    name = name;
   };
 
   run = name: short: code: writeText "${short}.sh" ''
@@ -25,42 +31,46 @@ let
     let
       attrs' = builtins.removeAttrs attrs [ "plong" "pshort" "pcode" "description" "docs" "files" "version" ];
       pname = lib.replaceStrings [ " " ":" ] [ "-" "" ] (lib.toLower plong);
-    in stdenv.mkDerivation ({
-      name = "${pname}-${version}";
+    in stdenv.mkDerivation
+      (
+        {
+          name = "${pname}-${version}";
 
-      nativeBuildInputs = [ unzip ];
+          nativeBuildInputs = [ unzip ];
 
-      dontBuild = true;
-      dontFixup = true;
+          dontBuild = true;
+          dontFixup = true;
 
-      installPhase = ''
-        runHook preInstall
+          installPhase = ''
+            runHook preInstall
 
-        mkdir -p $out/bin $out/share/{applications,${pname},doc/${pname}}
+            mkdir -p $out/bin $out/share/{applications,${pname},doc/${pname}}
 
-        ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/doc/${pname}") docs)}
-        ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/${pname}") files)}
+            ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/doc/${pname}") docs)}
+            ${lib.concatStringsSep "\n" (map (f: "mv ${f} $out/share/${pname}") files)}
 
-        substitute ${run pname pshort pcode} $out/bin/${pshort} \
-          --subst-var out
-        substitute ${desktopItem pname pshort plong description}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop \
-          --subst-var out
+            substitute ${run pname pshort pcode} $out/bin/${pshort} \
+              --subst-var out
+            substitute ${desktopItem pname pshort plong description}/share/applications/${pname}.desktop $out/share/applications/${pname}.desktop \
+              --subst-var out
 
-        chmod 0755 $out/bin/${pshort}
+            chmod 0755 $out/bin/${pshort}
 
-        runHook postInstall
-      '';
+            runHook postInstall
+          '';
 
-      meta = with stdenv.lib; {
-        homepage = https://www.scummvm.org;
-        license = licenses.free; # refer to the readme for exact wording
-        maintainers = with maintainers; [ peterhoeg ];
-        inherit description;
-        inherit (scummvm.meta) platforms;
-      };
-    } // attrs');
-
-in {
+          meta = with stdenv.lib; {
+            homepage = https://www.scummvm.org;
+            license = licenses.free; # refer to the readme for exact wording
+            maintainers = with maintainers; [ peterhoeg ];
+            inherit description;
+            inherit (scummvm.meta) platforms;
+          };
+        }
+        // attrs'
+      );
+in
+{
   beneath-a-steel-sky = generic rec {
     plong = "Beneath a Steel Sky";
     pshort = "bass";
@@ -81,14 +91,14 @@ in {
     description = "Spanish 2D classic point & click style adventure with tons of humor and an easy interface";
     version = "1.0";
     # srcs = {
-      src = fetchurl {
-        url = "mirror://sourceforge/scummvm/${pshort}-${version}.zip";
-        sha256 = "1pj29rpb754sn6a56f8brfv6f2m1p5qgaqik7d68pfi2bb5zccdp";
-      };
-      # audio = fetchurl {
-        # url = "mirror://sourceforge/scummvm/${pshort}-audio-flac-2.0.zip";
-        # sha256 = "1zmqhrby8f5sj1qy6xjdgkvk9wyhr3nw8ljrrl58fmxb83x1rryw";
-      # };
+    src = fetchurl {
+      url = "mirror://sourceforge/scummvm/${pshort}-${version}.zip";
+      sha256 = "1pj29rpb754sn6a56f8brfv6f2m1p5qgaqik7d68pfi2bb5zccdp";
+    };
+    # audio = fetchurl {
+    # url = "mirror://sourceforge/scummvm/${pshort}-audio-flac-2.0.zip";
+    # sha256 = "1zmqhrby8f5sj1qy6xjdgkvk9wyhr3nw8ljrrl58fmxb83x1rryw";
+    # };
     # };
     sourceRoot = ".";
     docs = [ "readme.txt" "drascula.doc" ];

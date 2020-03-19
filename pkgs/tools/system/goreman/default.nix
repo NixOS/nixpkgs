@@ -4,7 +4,7 @@ buildGoPackage rec {
   version = "0.2.1";
 
   goPackagePath = "github.com/mattn/goreman";
-  subPackages = ["."];
+  subPackages = [ "." ];
 
   src = fetchFromGitHub {
     owner = "mattn";
@@ -20,4 +20,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ zimbatm ];
   };
 }
-

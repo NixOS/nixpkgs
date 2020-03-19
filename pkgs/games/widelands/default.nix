@@ -1,6 +1,20 @@
-{ stdenv, fetchurl, cmake, python, gettext
-, boost, libpng, zlib, glew, lua, doxygen, icu
-, SDL2, SDL2_image, SDL2_mixer, SDL2_net, SDL2_ttf
+{ stdenv
+, fetchurl
+, cmake
+, python
+, gettext
+, boost
+, libpng
+, zlib
+, glew
+, lua
+, doxygen
+, icu
+, SDL2
+, SDL2_image
+, SDL2_mixer
+, SDL2_net
+, SDL2_ttf
 }:
 
 stdenv.mkDerivation rec {
@@ -9,16 +23,16 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "RTS with multiple-goods economy";
-    homepage    = "http://widelands.org/";
+    homepage = "http://widelands.org/";
     longDescription = ''
       Widelands is a real time strategy game based on "The Settlers" and "The
       Settlers II". It has a single player campaign mode, as well as a networked
       multiplayer mode.
     '';
-    license        = licenses.gpl2Plus;
-    platforms      = platforms.linux;
-    maintainers    = with maintainers; [ raskin jcumming ];
-    hydraPlatforms = [];
+    license = licenses.gpl2Plus;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [ raskin jcumming ];
+    hydraPlatforms = [ ];
   };
 
   patches = [
@@ -41,8 +55,18 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python gettext ];
 
   buildInputs = [
-    boost libpng zlib glew lua doxygen icu
-    SDL2 SDL2_image SDL2_mixer SDL2_net SDL2_ttf
+    boost
+    libpng
+    zlib
+    glew
+    lua
+    doxygen
+    icu
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_net
+    SDL2_ttf
   ];
 
   prePatch = ''

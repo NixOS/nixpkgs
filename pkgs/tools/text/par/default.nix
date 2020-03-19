@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation {
   pname = "par";

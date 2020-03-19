@@ -1,5 +1,18 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, which
-, django, django_tagging, whisper, pycairo, cairocffi, ldap, memcached, pytz, urllib3, scandir
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, which
+, django
+, django_tagging
+, whisper
+, pycairo
+, cairocffi
+, ldap
+, memcached
+, pytz
+, urllib3
+, scandir
 }:
 if django.version != "1.8.19"
 || django_tagging.version != "0.4.3"
@@ -16,8 +29,16 @@ else buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    django django_tagging whisper pycairo cairocffi
-    ldap memcached pytz urllib3 scandir
+    django
+    django_tagging
+    whisper
+    pycairo
+    cairocffi
+    ldap
+    memcached
+    pytz
+    urllib3
+    scandir
   ];
 
   postInstall = ''

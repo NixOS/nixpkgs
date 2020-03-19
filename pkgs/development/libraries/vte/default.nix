@@ -66,9 +66,9 @@ stdenv.mkDerivation rec {
     lib.optional
       stdenv.hostPlatform.isMusl
       (fetchpatch {
-            name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
-            url = "https://gitlab.gnome.org/GNOME/vte/uploads/c334f767f5d605e0f30ecaa2a0e4d226/0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
-            sha256 = "1ii9db9i5l3fy2alxz7bjfsgjs3lappnlx339dvxbi2141zknf5r";
+        name = "0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
+        url = "https://gitlab.gnome.org/GNOME/vte/uploads/c334f767f5d605e0f30ecaa2a0e4d226/0001-Add-W_EXITCODE-macro-for-non-glibc-systems.patch";
+        sha256 = "1ii9db9i5l3fy2alxz7bjfsgjs3lappnlx339dvxbi2141zknf5r";
       });
 
   postPatch = ''

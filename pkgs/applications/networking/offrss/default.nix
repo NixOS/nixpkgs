@@ -9,8 +9,8 @@ stdenv.mkDerivation {
   '';
 
   buildInputs = [ curl libmrss ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
-    ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
+  ++ stdenv.lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) podofo
+  ++ stdenv.lib.optional (!stdenv.isLinux) libiconv;
 
   configurePhase = ''
     substituteInPlace Makefile \
@@ -29,8 +29,8 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://vicerveza.homeunix.net/~viric/cgi-bin/offrss;
     description = "Offline RSS/Atom reader";
-    license="AGPLv3+";
-    maintainers = with stdenv.lib.maintainers; [viric];
+    license = "AGPLv3+";
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.linux;
   };
 }

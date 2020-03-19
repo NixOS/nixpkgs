@@ -1,9 +1,9 @@
-{deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs}:
+{ deployAndroidPackage, lib, package, os, autoPatchelfHook, pkgs }:
 
 deployAndroidPackage {
   inherit package os;
   buildInputs = [ autoPatchelfHook ]
-    ++ lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 ];
+  ++ lib.optionals (os == "linux") [ pkgs.glibc pkgs.zlib pkgs.ncurses5 ];
   patchInstructions = lib.optionalString (os == "linux") ''
     addAutoPatchelfSearchPath $packageBaseDir/lib64
     autoPatchelf --no-recurse $packageBaseDir/lib64

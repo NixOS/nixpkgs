@@ -14,7 +14,7 @@ rec {
 
   packageName = "closure-common";
 
-  asdFilesToKeep = ["closure-common.asd"];
+  asdFilesToKeep = [ "closure-common.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM closure-common DESCRIPTION System lacks description SHA256

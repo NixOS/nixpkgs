@@ -1,5 +1,4 @@
-{
-  bazel
+{ bazel
 , bazelTest
 , bazel-examples
 , gccStdenv
@@ -10,9 +9,7 @@
 , writeText
 , distDir
 }:
-
 let
-
   toolsBazel = writeScript "bazel" ''
     #! ${runtimeShell}
 
@@ -27,7 +24,7 @@ let
     exec "$BAZEL_REAL" "$@"
   '';
 
-  workspaceDir = runLocal "our_workspace" {} (''
+  workspaceDir = runLocal "our_workspace" { } (''
     cp -r ${bazel-examples}/cpp-tutorial/stage3 $out
     find $out -type d -exec chmod 755 {} \;
   ''
@@ -47,5 +44,5 @@ let
           //...
     '';
   };
-
-in testBazel
+in
+testBazel

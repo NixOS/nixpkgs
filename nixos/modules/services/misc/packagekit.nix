@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.packagekit;
 
   packagekitConf = ''
@@ -20,9 +18,7 @@ let
     FontUrl=https://github.com/NixOS/nixpkgs
     MimeUrl=https://github.com/NixOS/nixpkgs
   '';
-
 in
-
 {
 
   options = {

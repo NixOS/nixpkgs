@@ -1,6 +1,15 @@
-{ lib, fetchPypi, buildPythonPackage, pythonOlder, isPyPy
-, lazy-object-proxy, six, wrapt, typing, typed-ast
-, pytestrunner, pytest
+{ lib
+, fetchPypi
+, buildPythonPackage
+, pythonOlder
+, isPyPy
+, lazy-object-proxy
+, six
+, wrapt
+, typing
+, typed-ast
+, pytestrunner
+, pytest
 }:
 
 buildPythonPackage rec {
@@ -16,8 +25,8 @@ buildPythonPackage rec {
 
   # From astroid/__pkginfo__.py
   propagatedBuildInputs = [ lazy-object-proxy six wrapt ]
-    ++ lib.optional (pythonOlder "3.5") typing
-    ++ lib.optional (!isPyPy) typed-ast;
+  ++ lib.optional (pythonOlder "3.5") typing
+  ++ lib.optional (!isPyPy) typed-ast;
 
   checkInputs = [ pytestrunner pytest ];
 

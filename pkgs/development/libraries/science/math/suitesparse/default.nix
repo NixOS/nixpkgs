@@ -1,8 +1,13 @@
-{ stdenv, fetchurl, gfortran, openblas, cmake, fixDarwinDylibNames
+{ stdenv
+, fetchurl
+, gfortran
+, openblas
+, cmake
+, fixDarwinDylibNames
 , gnum4
-, enableCuda  ? false, cudatoolkit
+, enableCuda ? false
+, cudatoolkit
 }:
-
 let
   version = "5.4.0";
   name = "suitesparse-${version}";
@@ -89,8 +94,8 @@ stdenv.mkDerivation rec {
     cp -r lib $out/
     cp -r include $out/
     cp -r share $out/
-    ''
-    + stdenv.lib.optionalString stdenv.isDarwin ''
+  ''
+  + stdenv.lib.optionalString stdenv.isDarwin ''
     # The fixDarwinDylibNames in nixpkgs can't seem to fix all the libraries.
     # We manually fix them up here.
     fixDarwinDylibNames() {
@@ -109,17 +114,16 @@ stdenv.mkDerivation rec {
     }
 
     fixDarwinDylibNames $(find "$out" -name "*.dylib")
-    ''
-    + stdenv.lib.optionalString (!stdenv.isDarwin) ''
+  ''
+  + stdenv.lib.optionalString (!stdenv.isDarwin) ''
     # Fix rpaths
     cd $out
     find -name \*.so\* -type f -exec \
       patchelf --set-rpath "$out/lib:${stdenv.lib.makeLibraryPath buildInputs}" {} \;
-    ''
-    +
-    ''
+  ''
+  + ''
     runHook postInstall
-    '';
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -127,7 +131,7 @@ stdenv.mkDerivation rec {
   ] ++ stdenv.lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   buildInputs = [ openblas gfortran.cc.lib ]
-    ++ stdenv.lib.optional enableCuda cudatoolkit;
+  ++ stdenv.lib.optional enableCuda cudatoolkit;
 
   meta = with stdenv.lib; {
     homepage = http://faculty.cse.tamu.edu/davis/suitesparse.html;

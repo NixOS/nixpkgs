@@ -1,6 +1,19 @@
-{ stdenv, fetchurl, substituteAll, python3, gst_all_1, wrapGAppsHook, gobject-introspection
-, gtk3, libwnck3, keybinder3, intltool, libcanberra-gtk3, libappindicator-gtk3, libpulseaudio
-, fetchpatch }:
+{ stdenv
+, fetchurl
+, substituteAll
+, python3
+, gst_all_1
+, wrapGAppsHook
+, gobject-introspection
+, gtk3
+, libwnck3
+, keybinder3
+, intltool
+, libcanberra-gtk3
+, libappindicator-gtk3
+, libpulseaudio
+, fetchpatch
+}:
 
 python3.pkgs.buildPythonApplication rec {
   name = "kazam-${version}";
@@ -14,12 +27,17 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ gobject-introspection python3.pkgs.distutils_extra intltool wrapGAppsHook ];
   buildInputs = [
-    gst_all_1.gstreamer gst_all_1.gst-plugins-base gst_all_1.gst-plugins-good gtk3 libwnck3
-    keybinder3 libappindicator-gtk3
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
+    gtk3
+    libwnck3
+    keybinder3
+    libappindicator-gtk3
   ];
 
   propagatedBuildInputs = with python3.pkgs; [ pygobject3 pyxdg pycairo dbus-python ];
- 
+
   # workaround https://github.com/NixOS/nixpkgs/issues/56943
   strictDeps = false;
 

@@ -14,13 +14,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "yosys";
+  pname = "yosys";
   version = "2020.03.16";
 
   src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "yosys";
-    rev    = "ed4fa19ba2812c286562baf26bbbcb49afad83bc";
+    owner = "YosysHQ";
+    repo = "yosys";
+    rev = "ed4fa19ba2812c286562baf26bbbcb49afad83bc";
     sha256 = "1sza5ng0q8dy6p4hks9b2db129xjcid9n6l8aglf2cj5ks82k5nv";
   };
 
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ tcl readline libffi python3 bison flex protobuf zlib ];
 
-  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "ENABLE_PROTOBUF=1" "PREFIX=${placeholder "out"}" ];
 
   patchPhase = ''
     substituteInPlace ./Makefile \
@@ -41,21 +41,22 @@ stdenv.mkDerivation rec {
     patchShebangs tests
   '';
 
-  preBuild = let
-    shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
-  in ''
-    chmod -R u+w .
-    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
-    echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
+  preBuild =
+    let
+      shortAbcRev = builtins.substring 0 7 abc-verifier.rev;
+    in ''
+      chmod -R u+w .
+      make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
+      echo 'ABCEXTERNAL = ${abc-verifier}/bin/abc' >> Makefile.conf
 
-    # we have to do this ourselves for some reason...
-    (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
+      # we have to do this ourselves for some reason...
+      (cd misc && ${protobuf}/bin/protoc --cpp_out ../backends/protobuf/ ./yosys.proto)
 
-    if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
-      echo "yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
-      exit 1
-    fi
-  '';
+      if ! grep -q "ABCREV = ${shortAbcRev}" Makefile; then
+        echo "yosys isn't compatible with the provided abc (${shortAbcRev}), failing."
+        exit 1
+      fi
+    '';
 
   doCheck = true;
   checkInputs = [ verilog ];
@@ -72,9 +73,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Open RTL synthesis framework and tools";
-    homepage    = "http://www.clifford.at/yosys/";
-    license     = licenses.isc;
-    platforms   = platforms.all;
+    homepage = "http://www.clifford.at/yosys/";
+    license = licenses.isc;
+    platforms = platforms.all;
     maintainers = with maintainers; [ shell thoughtpolice emily ];
   };
 }

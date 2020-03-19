@@ -1,36 +1,38 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.mesos.slave;
 
   mkAttributes =
     attrs: concatStringsSep ";" (mapAttrsToList
-                                   (k: v: "${k}:${v}")
-                                   (filterAttrs (k: v: v != null) attrs));
-  attribsArg = optionalString (cfg.attributes != {})
-                              "--attributes=${mkAttributes cfg.attributes}";
+      (k: v: "${k}:${v}")
+      (filterAttrs (k: v: v != null) attrs));
+  attribsArg = optionalString (cfg.attributes != { })
+    "--attributes=${mkAttributes cfg.attributes}";
 
   containerizersArg = concatStringsSep "," (
-    lib.unique (
-      cfg.containerizers ++ (optional cfg.withDocker "docker")
-    )
+    lib.unique
+      (
+        cfg.containerizers ++ (optional cfg.withDocker "docker")
+      )
   );
 
   imageProvidersArg = concatStringsSep "," (
-    lib.unique (
-      cfg.imageProviders ++ (optional cfg.withDocker "docker")
-    )
+    lib.unique
+      (
+        cfg.imageProviders ++ (optional cfg.withDocker "docker")
+      )
   );
 
   isolationArg = concatStringsSep "," (
-    lib.unique (
-      cfg.isolation ++ (optionals cfg.withDocker [ "filesystem/linux" "docker/runtime"])
-    )
+    lib.unique
+      (
+        cfg.isolation ++ (optionals cfg.withDocker [ "filesystem/linux" "docker/runtime" ])
+      )
   );
-
-in {
+in
+{
 
   options.services.mesos = {
     slave = {
@@ -163,11 +165,13 @@ in {
           Use caution when changing this; you may need to manually reset slave
           metadata before the slave can re-register.
         '';
-        default = {};
+        default = { };
         type = types.attrsOf types.str;
-        example = { rack = "aa";
-                    host = "aabc123";
-                    os = "nixos"; };
+        example = {
+          rack = "aa";
+          host = "aabc123";
+          os = "nixos";
+        };
       };
 
       executorEnvironmentVariables = mkOption {
@@ -190,7 +194,7 @@ in {
     systemd.services.mesos-slave = {
       description = "Mesos Slave";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ++ optionals cfg.withDocker [ "docker.service" ] ;
+      after = [ "network.target" ] ++ optionals cfg.withDocker [ "docker.service" ];
       path = [ pkgs.runtimeShellPackage ];
       serviceConfig = {
         ExecStart = ''
@@ -202,7 +206,7 @@ in {
             --ip=${cfg.ip} \
             --port=${toString cfg.port} \
             ${optionalString (cfg.advertiseIp != null) "--advertise_ip=${cfg.advertiseIp}"} \
-            ${optionalString (cfg.advertisePort  != null) "--advertise_port=${toString cfg.advertisePort}"} \
+            ${optionalString (cfg.advertisePort != null) "--advertise_port=${toString cfg.advertisePort}"} \
             --master=${cfg.master} \
             --work_dir=${cfg.workDir} \
             --logging_level=${cfg.logLevel} \

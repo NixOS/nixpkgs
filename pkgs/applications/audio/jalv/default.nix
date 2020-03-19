@@ -1,7 +1,19 @@
-{ stdenv, fetchurl, gtk3, libjack2, lilv, lv2, pkgconfig, python
-, serd, sord , sratom, suil, wafHook }:
+{ stdenv
+, fetchurl
+, gtk3
+, libjack2
+, lilv
+, lv2
+, pkgconfig
+, python
+, serd
+, sord
+, sratom
+, suil
+, wafHook
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "jalv";
   version = "1.6.4";
 
@@ -12,7 +24,15 @@ stdenv.mkDerivation  rec {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    gtk3 libjack2 lilv lv2 python serd sord sratom suil
+    gtk3
+    libjack2
+    lilv
+    lv2
+    python
+    serd
+    sord
+    sratom
+    suil
   ];
 
   meta = with stdenv.lib; {

@@ -25,10 +25,11 @@ stdenv.mkDerivation rec {
     glib
     gtk3
     ibus
-    (python3.withPackages (ps: [
-      ps.pygobject3
-      (ps.toPythonModule ibus)
-    ]))
+    (python3.withPackages
+      (ps: [
+        ps.pygobject3
+        (ps.toPythonModule ibus)
+      ]))
   ];
 
   nativeBuildInputs = [

@@ -1,10 +1,9 @@
 { lib, haskellPackages, fetchFromGitHub }:
-
 let
   version = "1.7.3";
-  sha256  = "1439fh79ilc6jvz894cfzhk7gy5r2sv4v79bvqmmqbzbqk9qsbvx";
-
-in (haskellPackages.mkDerivation {
+  sha256 = "1439fh79ilc6jvz894cfzhk7gy5r2sv4v79bvqmmqbzbqk9qsbvx";
+in
+(haskellPackages.mkDerivation {
   pname = "taskell";
   inherit version;
 
@@ -48,7 +47,7 @@ in (haskellPackages.mkDerivation {
     vty
   ];
 
-  executableHaskellDepends = [];
+  executableHaskellDepends = [ ];
 
   testHaskellDepends = with haskellPackages; [
     tasty
@@ -58,8 +57,8 @@ in (haskellPackages.mkDerivation {
   ];
 
   description = "Command-line Kanban board/task manager with support for Trello boards and GitHub projects";
-  homepage    = "https://taskell.app";
-  license     = lib.licenses.bsd3;
+  homepage = "https://taskell.app";
+  license = lib.licenses.bsd3;
   maintainers = with lib.maintainers; [ matthiasbeyer ];
-  platforms   = with lib.platforms; unix ++ darwin;
+  platforms = with lib.platforms; unix ++ darwin;
 })

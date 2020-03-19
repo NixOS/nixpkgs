@@ -1,18 +1,14 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   initScriptBuilder = pkgs.substituteAll {
     src = ./init-script-builder.sh;
     isExecutable = true;
     inherit (pkgs) bash;
-    path = [pkgs.coreutils pkgs.gnused pkgs.gnugrep];
+    path = [ pkgs.coreutils pkgs.gnused pkgs.gnugrep ];
   };
-
 in
-
 {
 
   ###### interface

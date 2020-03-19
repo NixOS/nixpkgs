@@ -15,8 +15,8 @@ let mkContrib = repo: revs: param:
     buildInputs = with coq.ocamlPackages; [ ocaml camlp5 findlib coq ];
 
     installFlags =
-       stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
-    ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
+      stdenv.lib.optional (stdenv.lib.versionAtLeast coq.coq-version "8.9") "-f Makefile.coq"
+      ++ [ "COQLIB=$(out)/lib/coq/${coq.coq-version}/" ];
 
     passthru = {
       compatibleCoqVersions = v: builtins.elem v revs;

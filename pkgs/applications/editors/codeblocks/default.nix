@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, autoreconfHook, libtool, pkgconfig, file, zip, wxGTK, gtk2
-, contribPlugins ? false, hunspell, gamin, boost
+{ stdenv
+, fetchurl
+, autoreconfHook
+, libtool
+, pkgconfig
+, file
+, zip
+, wxGTK
+, gtk2
+, contribPlugins ? false
+, hunspell
+, gamin
+, boost
 }:
 
 with stdenv.lib;
@@ -16,13 +27,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook pkgconfig libtool file zip ];
   buildInputs = [ wxGTK gtk2 ]
-    ++ optionals contribPlugins [ hunspell gamin boost ];
+  ++ optionals contribPlugins [ hunspell gamin boost ];
   enableParallelBuilding = true;
   patches = [ ./writable-projects.patch ];
   preConfigure = "substituteInPlace ./configure --replace /usr/bin/file ${file}/bin/file";
   postConfigure = optionalString stdenv.isLinux "substituteInPlace libtool --replace ldconfig ${stdenv.cc.libc.bin}/bin/ldconfig";
   configureFlags = [ "--enable-pch=no" ]
-    ++ optionals contribPlugins [ "--with-contrib-plugins" "--with-boost-libdir=${boost}/lib" ];
+  ++ optionals contribPlugins [ "--with-contrib-plugins" "--with-boost-libdir=${boost}/lib" ];
 
   meta = {
     maintainers = [ maintainers.linquize ];

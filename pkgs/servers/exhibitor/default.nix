@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ maven ];
   buildInputs = [ makeWrapper ];
   buildPhase = ''
-      cd ${pomFileDir}
-      mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
+    cd ${pomFileDir}
+    mvn package --offline -Dmaven.repo.local=$(cp -dpR ${fetchedMavenDeps}/.m2 ./ && chmod +w -R .m2 && pwd)/.m2
   '';
   meta = with stdenv.lib; {
     homepage = https://github.com/soabase/exhibitor;

@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, texinfo, libiconv, gdbm, openssl, zlib
-, mbedtls, cacert
+{ stdenv
+, fetchurl
+, pkgconfig
+, texinfo
+, libiconv
+, gdbm
+, openssl
+, zlib
+, mbedtls
+, cacert
 }:
 
 stdenv.mkDerivation rec {

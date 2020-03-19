@@ -12,7 +12,10 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = with python3Packages; [ sphinx setuptools_scm ];
 
   propagatedBuildInputs = with python3Packages; [
-    python3Packages.setuptools python3Packages.notmuch chardet dkimpy
+    python3Packages.setuptools
+    python3Packages.notmuch
+    chardet
+    dkimpy
   ] ++ stdenv.lib.optional (!python3Packages.isPy3k) subprocess32;
 
   makeWrapperArgs = [
@@ -21,7 +24,7 @@ python3Packages.buildPythonApplication rec {
 
   outputs = [ "out" "doc" ];
 
-  postBuild =  ''
+  postBuild = ''
     ${python3Packages.python.interpreter} setup.py build_sphinx -b html,man
   '';
 

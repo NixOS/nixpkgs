@@ -1,5 +1,4 @@
 { stdenv, fetchzip }:
-
 let
   variants = {
     bonum = {
@@ -28,40 +27,40 @@ let
     };
   };
 
-  mkVariant = variant: {displayName, version, sha256, outputHash}:
-    let dotless_version = builtins.replaceStrings ["."] [""] version; in
-    stdenv.mkDerivation rec {
-      name = "tex-gyre-${variant}-math-${version}";
-      inherit version;
+  mkVariant = variant: { displayName, version, sha256, outputHash }:
+    let dotless_version = builtins.replaceStrings [ "." ] [ "" ] version; in
+      stdenv.mkDerivation rec {
+        name = "tex-gyre-${variant}-math-${version}";
+        inherit version;
 
-      src = fetchzip {
-        url = "http://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
-        inherit sha256;
-      };
+        src = fetchzip {
+          url = "http://www.gust.org.pl/projects/e-foundry/tg-math/download/texgyre${variant}-math-${dotless_version}.zip";
+          inherit sha256;
+        };
 
-      installPhase = ''
-        install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
-        install -m444 -Dt $out/share/doc/${name}    doc/*.txt
-      '';
-
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-      inherit outputHash;
-
-      meta = with stdenv.lib; {
-        longDescription = ''
-          TeX Gyre ${displayName} Math is a math companion for the TeX Gyre
-          ${displayName} family of fonts (see
-          http://www.gust.org.pl/projects/e-foundry/tex-gyre/) in the OpenType format.
+        installPhase = ''
+          install -m444 -Dt $out/share/fonts/opentype opentype/*.otf
+          install -m444 -Dt $out/share/doc/${name}    doc/*.txt
         '';
-        homepage = http://www.gust.org.pl/projects/e-foundry/tg-math;
-        # "The TeX Gyre Math fonts are licensed under the GUST Font License (GFL),
-        # which is a free license, legally equivalent to the LaTeX Project Public
-        # License (LPPL), version 1.3c or later." - GUST website
-        license = licenses.lppl13c;
-        maintainers = with maintainers; [ siddharthist ];
-        platforms = platforms.all;
+
+        outputHashAlgo = "sha256";
+        outputHashMode = "recursive";
+        inherit outputHash;
+
+        meta = with stdenv.lib; {
+          longDescription = ''
+            TeX Gyre ${displayName} Math is a math companion for the TeX Gyre
+            ${displayName} family of fonts (see
+            http://www.gust.org.pl/projects/e-foundry/tex-gyre/) in the OpenType format.
+          '';
+          homepage = http://www.gust.org.pl/projects/e-foundry/tg-math;
+          # "The TeX Gyre Math fonts are licensed under the GUST Font License (GFL),
+          # which is a free license, legally equivalent to the LaTeX Project Public
+          # License (LPPL), version 1.3c or later." - GUST website
+          license = licenses.lppl13c;
+          maintainers = with maintainers; [ siddharthist ];
+          platforms = platforms.all;
+        };
       };
-    };
 in
-  stdenv.lib.mapAttrs mkVariant variants
+stdenv.lib.mapAttrs mkVariant variants

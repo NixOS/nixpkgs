@@ -7,7 +7,8 @@
 , libssh2
 , openssl
 , pkg-config
-, zlib }:
+, zlib
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-update";
@@ -25,7 +26,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ libgit2 libssh2 openssl pkg-config zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin curl;
+  ++ stdenv.lib.optional stdenv.isDarwin curl;
 
   meta = with stdenv.lib; {
     description = "A cargo subcommand for checking and applying updates to installed executables";

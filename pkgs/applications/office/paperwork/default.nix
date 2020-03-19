@@ -50,9 +50,9 @@ python3Packages.buildPythonApplication rec {
   '';
 
   ASPELL_CONF = "dict-dir ${buildEnv {
-    name = "aspell-all-dicts";
-    paths = lib.collect lib.isDerivation aspellDicts;
-  }}/lib/aspell";
+      name = "aspell-all-dicts";
+      paths = lib.collect lib.isDerivation aspellDicts;
+    }}/lib/aspell";
 
   postInstall = ''
     # paperwork-shell needs to be re-wrapped with access to paperwork

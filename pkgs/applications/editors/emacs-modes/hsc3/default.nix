@@ -2,10 +2,10 @@
 
 # this package installs the emacs-mode which
 # resides in the hsc3 sources.
-
-let version = "0.15";
-
-in stdenv.mkDerivation {
+let
+  version = "0.15";
+in
+stdenv.mkDerivation {
   pname = "hsc3-mode";
   inherit version;
   src = fetchurl {

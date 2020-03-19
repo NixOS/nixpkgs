@@ -16,7 +16,7 @@ buildPythonPackage rec {
   pname = "pygal";
   version = "2.4.0";
 
-  doCheck = !isPyPy;  # one check fails with pypy
+  doCheck = !isPyPy; # one check fails with pypy
 
   src = fetchPypi {
     inherit pname version;
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ cairosvg tinycss cssselect ]
-    ++ stdenv.lib.optionals (!isPyPy) [ lxml ];
+  ++ stdenv.lib.optionals (!isPyPy) [ lxml ];
 
   meta = with stdenv.lib; {
     description = "Sexy and simple python charting";

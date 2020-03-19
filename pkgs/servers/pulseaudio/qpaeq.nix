@@ -5,7 +5,6 @@
 , lib
 , pulseaudio
 }:
-
 let
   desktopItem = makeDesktopItem {
     name = "qpaeq";
@@ -22,7 +21,9 @@ mkDerivation rec {
   inherit (pulseaudio) version src;
 
   buildInputs = [
-    ((python3.withPackages (ps: with ps; [
+    (
+      (python3.withPackages
+        (ps: with ps; [
           pyqt5
           dbus-python
         ])))

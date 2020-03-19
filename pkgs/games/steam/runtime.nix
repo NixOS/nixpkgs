@@ -1,10 +1,10 @@
 { stdenv, steamArch, fetchurl, writeText, python2, dpkg }:
+let
+  input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit fetchurl; });
 
-let input = builtins.getAttr steamArch (import ./runtime-generated.nix { inherit fetchurl; });
-
-    inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
-
-in stdenv.mkDerivation {
+  inputFile = writeText "steam-runtime.json" (builtins.toJSON input);
+in
+stdenv.mkDerivation {
   name = "steam-runtime-2016-08-13";
 
   nativeBuildInputs = [ python2 dpkg stdenv.cc.bintools ];

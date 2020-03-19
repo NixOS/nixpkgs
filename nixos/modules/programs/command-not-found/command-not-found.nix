@@ -6,7 +6,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.command-not-found;
   commandNotFound = pkgs.substituteAll {
@@ -19,9 +18,7 @@ let
     perlFlags = concatStrings (map (path: "-I ${path}/${pkgs.perl.libPrefix} ")
       [ pkgs.perlPackages.DBI pkgs.perlPackages.DBDSQLite pkgs.perlPackages.StringShellQuote ]);
   };
-
 in
-
 {
   options.programs.command-not-found = {
 
@@ -35,7 +32,7 @@ in
     };
 
     dbPath = mkOption {
-      default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite" ;
+      default = "/nix/var/nix/profiles/per-user/root/channels/nixos/programs.sqlite";
       description = ''
         Absolute path to programs.sqlite.
 

@@ -1,14 +1,25 @@
-{ stdenv, fetchFromGitHub, cmake, makeWrapper, flex, bison, perl, TextFormat,
-  libminc, libjpeg, nifticlib, zlib }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, makeWrapper
+, flex
+, bison
+, perl
+, TextFormat
+, libminc
+, libjpeg
+, nifticlib
+, zlib
+}:
 
 stdenv.mkDerivation rec {
-  pname   = "minc-tools";
+  pname = "minc-tools";
   version = "unstable-2019-12-04";
 
   src = fetchFromGitHub {
-    owner  = "BIC-MNI";
-    repo   = pname;
-    rev    = "d4dddfdb4e4fa0cea389b8fdce51cfc076565d94";
+    owner = "BIC-MNI";
+    repo = pname;
+    rev = "d4dddfdb4e4fa0cea389b8fdce51cfc076565d94";
     sha256 = "1wwdss59qq4hz1jp35qylfswzzv0d37if23al0srnxkkgc5f8zng";
   };
 
@@ -18,11 +29,13 @@ stdenv.mkDerivation rec {
   buildInputs = [ libminc libjpeg zlib ];
   propagatedBuildInputs = [ perl TextFormat ];
 
-  cmakeFlags = [ "-DLIBMINC_DIR=${libminc}/lib/"
-                 "-DZNZ_INCLUDE_DIR=${nifticlib}/include/"
-                 "-DZNZ_LIBRARY=${nifticlib}/lib/libznz.a"
-                 "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti/"
-                 "-DNIFTI_LIBRARY=${nifticlib}/lib/libniftiio.a" ];
+  cmakeFlags = [
+    "-DLIBMINC_DIR=${libminc}/lib/"
+    "-DZNZ_INCLUDE_DIR=${nifticlib}/include/"
+    "-DZNZ_LIBRARY=${nifticlib}/lib/libznz.a"
+    "-DNIFTI_INCLUDE_DIR=${nifticlib}/include/nifti/"
+    "-DNIFTI_LIBRARY=${nifticlib}/lib/libniftiio.a"
+  ];
 
   postFixup = ''
     for prog in minccomplete minchistory mincpik; do
@@ -37,6 +50,6 @@ stdenv.mkDerivation rec {
     description = "Command-line utilities for working with MINC files";
     maintainers = with maintainers; [ bcdarwin ];
     platforms = platforms.unix;
-    license   = licenses.free;
+    license = licenses.free;
   };
 }

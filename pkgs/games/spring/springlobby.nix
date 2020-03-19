@@ -1,6 +1,26 @@
-{ stdenv, fetchurl, cmake, wxGTK30, openal, pkgconfig, curl, libtorrentRasterbar
-, libpng, libX11, gettext, boost, libnotify, gtk2, doxygen, spring
-, makeWrapper, glib, minizip, alure, pcre, jsoncpp }:
+{ stdenv
+, fetchurl
+, cmake
+, wxGTK30
+, openal
+, pkgconfig
+, curl
+, libtorrentRasterbar
+, libpng
+, libX11
+, gettext
+, boost
+, libnotify
+, gtk2
+, doxygen
+, spring
+, makeWrapper
+, glib
+, minizip
+, alure
+, pcre
+, jsoncpp
+}:
 
 stdenv.mkDerivation rec {
   pname = "springlobby";
@@ -13,8 +33,24 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    cmake wxGTK30 openal curl gettext libtorrentRasterbar pcre jsoncpp
-    boost libpng libX11 libnotify gtk2 doxygen makeWrapper glib minizip alure
+    cmake
+    wxGTK30
+    openal
+    curl
+    gettext
+    libtorrentRasterbar
+    pcre
+    jsoncpp
+    boost
+    libpng
+    libX11
+    libnotify
+    gtk2
+    doxygen
+    makeWrapper
+    glib
+    minizip
+    alure
   ];
 
   patches = [ ./revert_58b423e.patch ./fix-certs.patch ]; # Allows springLobby to continue using system installed spring until #707 is fixed

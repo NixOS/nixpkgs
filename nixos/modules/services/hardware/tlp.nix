@@ -8,12 +8,21 @@ let
   mkTlpConfig = tlpConfig: generators.toKeyValue {
     mkKeyValue = generators.mkKeyValueDefault {
       mkValueString = val:
-        if isInt val then toString val
-        else if isString val then val
-        else if true == val then "1"
-        else if false == val then "0"
-        else if isList val then "\"" + (concatStringsSep " " val) + "\""
-        else err "invalid value provided to mkTlpConfig:" (toString val);
+        if isInt val
+        then toString val
+        else
+          if isString val
+          then val
+          else
+            if true == val
+            then "1"
+            else
+              if false == val
+              then "0"
+              else
+                if isList val
+                then "\"" + (concatStringsSep " " val) + "\""
+                else err "invalid value provided to mkTlpConfig:" (toString val);
     } "=";
   } tlpConfig;
 in
@@ -39,12 +48,14 @@ in
   config = mkIf cfg.enable {
     boot.kernelModules = [ "msr" ];
 
-    environment.etc = {
-      "tlp.conf".text = cfg.extraConfig;
-    } // optionalAttrs enableRDW {
-      "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
-        "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
-    };
+    environment.etc =
+      {
+        "tlp.conf".text = cfg.extraConfig;
+      }
+      // optionalAttrs enableRDW {
+        "NetworkManager/dispatcher.d/99tlp-rdw-nm".source =
+          "${tlp}/etc/NetworkManager/dispatcher.d/99tlp-rdw-nm";
+      };
 
     environment.systemPackages = [ tlp ];
 

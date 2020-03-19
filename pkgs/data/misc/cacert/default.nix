@@ -1,20 +1,19 @@
-{ stdenv, fetchurl, nss, python3
-, blacklist ? []
+{ stdenv
+, fetchurl
+, nss
+, python3
+, blacklist ? [ ]
 , includeEmail ? false
 }:
 
 with stdenv.lib;
-
 let
-
   certdata2pem = fetchurl {
     name = "certdata2pem.py";
     url = "https://salsa.debian.org/debian/ca-certificates/raw/debian/20170717/mozilla/certdata2pem.py";
     sha256 = "1d4q27j1gss0186a5m8bs5dk786w07ccyq0qi6xmd2zr1a8q16wy";
   };
-
 in
-
 stdenv.mkDerivation {
   name = "nss-cacert-${nss.version}";
 
@@ -34,9 +33,9 @@ stdenv.mkDerivation {
     cat ${certdata2pem} > certdata2pem.py
     patch -p1 < ${./fix-unicode-ca-names.patch}
     ${optionalString includeEmail ''
-      # Disable CAs used for mail signing
-      substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
-    ''}
+    # Disable CAs used for mail signing
+    substituteInPlace certdata2pem.py --replace \[\'CKA_TRUST_EMAIL_PROTECTION\'\] '''
+  ''}
   '';
 
   buildPhase = ''

@@ -1,18 +1,24 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , buildPackages
-, pkgconfig, which, makeWrapper
-, zlib, bzip2, libpng, gnumake, glib
+, pkgconfig
+, which
+, makeWrapper
+, zlib
+, bzip2
+, libpng
+, gnumake
+, glib
 
 , # FreeType supports LCD filtering (colloquially referred to as sub-pixel rendering).
   # LCD filtering is also known as ClearType and covered by several Microsoft patents.
   # This option allows it to be disabled. See http://www.freetype.org/patents.html.
   useEncumberedCode ? true
 }:
-
 let
   inherit (stdenv.lib) optional optionalString;
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "freetype";
   version = "2.10.1";
 
@@ -40,13 +46,14 @@ in stdenv.mkDerivation rec {
 
   # dependence on harfbuzz is looser than the reverse dependence
   nativeBuildInputs = [ pkgconfig which makeWrapper ]
-    # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
-    ++ optional (!stdenv.isLinux) gnumake;
+  # FreeType requires GNU Make, which is not part of stdenv on FreeBSD.
+  ++ optional (!stdenv.isLinux) gnumake;
 
   patches =
-    [ ./enable-table-validation.patch
-    ] ++
-    optional useEncumberedCode ./enable-subpixel-rendering.patch;
+    [
+      ./enable-table-validation.patch
+    ]
+    ++ optional useEncumberedCode ./enable-subpixel-rendering.patch;
 
   outputs = [ "out" "dev" ];
 

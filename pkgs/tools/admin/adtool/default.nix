@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://gp2x.org/adtool/${pname}-${version}.tar.gz";
-    sha256  = "1awmpjamrwivi69i0j2fyrziy9s096ckviqd9c4llc3990mfsn4n";
+    sha256 = "1awmpjamrwivi69i0j2fyrziy9s096ckviqd9c4llc3990mfsn4n";
   };
 
   configureFlags = [

@@ -21,7 +21,13 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    twisted passlib pycrypto pyopenssl pyparsing service-identity zope_interface
+    twisted
+    passlib
+    pycrypto
+    pyopenssl
+    pyparsing
+    service-identity
+    zope_interface
   ];
 
   disabled = isPy3k;

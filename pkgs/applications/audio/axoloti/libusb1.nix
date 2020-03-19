@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ pkgconfig ];
   propagatedBuildInputs =
-    stdenv.lib.optional stdenv.isLinux systemd ++
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    stdenv.lib.optional stdenv.isLinux systemd
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   patches = [
     (fetchpatch {

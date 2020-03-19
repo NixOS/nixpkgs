@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, gnome3, gtk3, wrapGAppsHook
-, libgtop, intltool, itstool, libxml2, nmap, inetutils }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, gnome3
+, gtk3
+, wrapGAppsHook
+, libgtop
+, intltool
+, itstool
+, libxml2
+, nmap
+, inetutils
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-nettool";
@@ -12,7 +23,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    gtk3 wrapGAppsHook libgtop intltool itstool libxml2
+    gtk3
+    wrapGAppsHook
+    libgtop
+    intltool
+    itstool
+    libxml2
     gnome3.adwaita-icon-theme
   ];
 

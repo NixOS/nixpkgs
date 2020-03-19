@@ -1,4 +1,6 @@
-{ stdenv, closureInfo, pixz
+{ stdenv
+, closureInfo
+, pixz
 
 , # The file name of the resulting tarball
   fileName ? "nixos-system-${stdenv.hostPlatform.system}"
@@ -14,7 +16,7 @@
   # a list of attribute sets {object, symlink} where `object' if a
   # store path whose closure will be copied, and `symlink' is a
   # symlink to `object' that will be added to the tarball.
-  storeContents ? []
+  storeContents ? [ ]
 
   # Extra commands to be executed before archiving files
 , extraCommands ? ""
@@ -28,12 +30,10 @@
   # extra inputs, like the compressor to use
 , extraInputs ? [ pixz ]
 }:
-
 let
   symlinks = map (x: x.symlink) storeContents;
   objects = map (x: x.object) storeContents;
 in
-
 stdenv.mkDerivation {
   name = "tarball";
   builder = ./make-system-tarball.sh;

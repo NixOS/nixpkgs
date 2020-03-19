@@ -1,11 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.programs.udevil;
-
-in {
+in
+{
   options.programs.udevil.enable = mkEnableOption "udevil";
 
   config = mkIf cfg.enable {

@@ -1,15 +1,23 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib
-, ocamlbuild, topkg
-, uri, xmlm, omd, ezjsonm }:
+{ stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
+, ocamlbuild
+, topkg
+, uri
+, xmlm
+, omd
+, ezjsonm
+}:
 
 stdenv.mkDerivation rec {
   version = "2.2.0";
   pname = "ocaml-cow";
 
   src = fetchFromGitHub {
-    owner  = "mirage";
-    repo   = "ocaml-cow";
-    rev    = "v${version}";
+    owner = "mirage";
+    repo = "ocaml-cow";
+    rev = "v${version}";
     sha256 = "0snhabg7rfrrcq2ksr3qghiawd61cw3y4kp6rl7vs87j4cnk3kr2";
   };
 

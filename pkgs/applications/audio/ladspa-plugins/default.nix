@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, autoreconfHook, automake, fftw, ladspaH, libxml2, pkgconfig
-, perlPackages }:
+{ stdenv
+, fetchurl
+, autoreconfHook
+, automake
+, fftw
+, ladspaH
+, libxml2
+, pkgconfig
+, perlPackages
+}:
 
 stdenv.mkDerivation rec {
   pname = "swh-plugins";
@@ -12,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
-  buildInputs = [ fftw ladspaH libxml2 perlPackages.perl  perlPackages.XMLParser ];
+  buildInputs = [ fftw ladspaH libxml2 perlPackages.perl perlPackages.XMLParser ];
 
   patchPhase = ''
     patchShebangs .

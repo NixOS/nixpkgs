@@ -5,9 +5,9 @@ stdenv.mkDerivation rec {
   version = "168";
 
   src = fetchFromGitHub {
-    owner  = "andikleen";
-    repo   = "mcelog";
-    rev    = "v${version}";
+    owner = "andikleen";
+    repo = "mcelog";
+    rev = "v${version}";
     sha256 = "0mcmmjvvc80nk20n4dknimv0jzvdkj1ajgyq33b2i4v6xq0bz1pb";
   };
 

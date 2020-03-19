@@ -1,5 +1,13 @@
-{ mkXfceDerivation, automakeAddFlags, exo, gtk3, glib, libexif
-, libxfce4ui, libxfce4util, xfconf }:
+{ mkXfceDerivation
+, automakeAddFlags
+, exo
+, gtk3
+, glib
+, libexif
+, libxfce4ui
+, libxfce4util
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "apps";

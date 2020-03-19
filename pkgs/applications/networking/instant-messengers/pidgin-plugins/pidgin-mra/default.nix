@@ -1,5 +1,4 @@
-{ stdenv, fetchgit, pkgconfig, pidgin } :
-
+{ stdenv, fetchgit, pkgconfig, pidgin }:
 let
   version = "54b2992";
 in

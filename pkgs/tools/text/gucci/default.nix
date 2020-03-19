@@ -27,4 +27,3 @@ buildGoPackage rec {
     platforms = platforms.unix;
   };
 }
-

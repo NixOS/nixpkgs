@@ -1,8 +1,8 @@
 { lib, fetchFromGitHub, python3Packages, wrapQtAppsHook }:
-
 let
   py = python3Packages;
-in py.buildPythonApplication rec {
+in
+py.buildPythonApplication rec {
   pname = "friture";
   version = "0.37";
 
@@ -17,8 +17,8 @@ in py.buildPythonApplication rec {
   # 1.3.0; use scipy.special.factorial instead
   patches = [ ./factorial.patch ];
 
-  nativeBuildInputs = (with py; [ numpy cython scipy ]) ++
-    [ wrapQtAppsHook ];
+  nativeBuildInputs = (with py; [ numpy cython scipy ])
+  ++ [ wrapQtAppsHook ];
 
   propagatedBuildInputs = with py; [
     sounddevice

@@ -1,14 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig
-, glib, zlib, pcre, libmysqlclient, libressl }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, glib
+, zlib
+, pcre
+, libmysqlclient
+, libressl
+}:
 
 stdenv.mkDerivation rec {
   version = "0.9.5";
   pname = "mydumper";
 
   src = fetchFromGitHub {
-    owner  = "maxbube";
-    repo   = "mydumper";
-    rev    = "v${version}";
+    owner = "maxbube";
+    repo = "mydumper";
+    rev = "v${version}";
     sha256 = "0vbz0ri5hm6yzkrcgnaj8px6bf59myr5dbhyy7fd4cv44hr685k6";
   };
 

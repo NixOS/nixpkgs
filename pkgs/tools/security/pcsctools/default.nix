@@ -1,10 +1,19 @@
-{ stdenv, lib, fetchurl, makeWrapper, pkgconfig, udev, dbus, pcsclite
-, wget, coreutils, perlPackages
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, pkgconfig
+, udev
+, dbus
+, pcsclite
+, wget
+, coreutils
+, perlPackages
 }:
-
-let deps = lib.makeBinPath [ wget coreutils ];
-
-in stdenv.mkDerivation rec {
+let
+  deps = lib.makeBinPath [ wget coreutils ];
+in
+stdenv.mkDerivation rec {
   name = "pcsc-tools-1.5.6";
 
   src = fetchurl {

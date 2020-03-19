@@ -1,4 +1,4 @@
-{stdenv, fetchurl, pkgconfig, gtk2, gettext, libxml2 }:
+{ stdenv, fetchurl, pkgconfig, gtk2, gettext, libxml2 }:
 
 stdenv.mkDerivation {
   name = "libgtkhtml-2.11.1";

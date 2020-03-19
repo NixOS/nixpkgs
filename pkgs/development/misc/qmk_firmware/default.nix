@@ -1,11 +1,17 @@
-{ stdenv, fetchFromGitHub
-, avrgcc, avrbinutils
-, gcc-arm-embedded, gcc-armhf-embedded
-, teensy-loader-cli, dfu-programmer, dfu-util }:
-
-let version = "0.6.144";
-
-in stdenv.mkDerivation {
+{ stdenv
+, fetchFromGitHub
+, avrgcc
+, avrbinutils
+, gcc-arm-embedded
+, gcc-armhf-embedded
+, teensy-loader-cli
+, dfu-programmer
+, dfu-util
+}:
+let
+  version = "0.6.144";
+in
+stdenv.mkDerivation {
   pname = "qmk_firmware";
   inherit version;
   src = fetchFromGitHub {

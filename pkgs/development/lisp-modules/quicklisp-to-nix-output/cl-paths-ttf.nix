@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-paths-ttf";
 
-  asdFilesToKeep = ["cl-paths-ttf.asd"];
+  asdFilesToKeep = [ "cl-paths-ttf.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-paths-ttf DESCRIPTION cl-paths-ttf: vectorial paths manipulation

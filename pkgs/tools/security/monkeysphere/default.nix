@@ -1,18 +1,32 @@
-{ stdenv, fetchurl, makeWrapper
-, perl, libassuan, libgcrypt
-, perlPackages, lockfileProgs, gnupg, coreutils
-# For the tests:
-, openssh, which, socat, cpio, hexdump, procps, openssl
+{ stdenv
+, fetchurl
+, makeWrapper
+, perl
+, libassuan
+, libgcrypt
+, perlPackages
+, lockfileProgs
+, gnupg
+, coreutils
+  # For the tests:
+, openssh
+, which
+, socat
+, cpio
+, hexdump
+, procps
+, openssl
 }:
-
 let
   # A patch is needed to run the tests inside the Nix sandbox:
   # /etc/passwd: "nixbld:x:1000:100:Nix build user:/build:/noshell"
   # sshd: "User nixbld not allowed because shell /noshell does not exist"
-  opensshUnsafe = openssh.overrideAttrs (oldAttrs: {
-    patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
-  });
-in stdenv.mkDerivation rec {
+  opensshUnsafe = openssh.overrideAttrs
+    (oldAttrs: {
+      patches = oldAttrs.patches ++ [ ./openssh-nixos-sandbox.patch ];
+    });
+in
+stdenv.mkDerivation rec {
   pname = "monkeysphere";
   version = "0.44";
 
@@ -32,9 +46,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ perl libassuan libgcrypt ]
-    ++ stdenv.lib.optional doCheck
-      ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ] ++
-      (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
+  ++ stdenv.lib.optional doCheck
+    ([ gnupg opensshUnsafe which socat cpio hexdump procps lockfileProgs ]
+    ++ (with perlPackages; [ CryptOpenSSLRSA CryptOpenSSLBignum ]));
 
   makeFlags = [
     "PREFIX=/"
@@ -58,31 +72,33 @@ in stdenv.mkDerivation rec {
   '';
 
   postFixup =
-    let wrapperArgs = runtimeDeps:
-          "--prefix PERL5LIB : "
-          + (with perlPackages; makePerlPath [ # Optional (only required for keytrans)
-              CryptOpenSSLRSA
-              CryptOpenSSLBignum
-            ])
-          + stdenv.lib.optionalString
-              (builtins.length runtimeDeps > 0)
-              " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
-        wrapMonkeysphere = runtimeDeps: program:
-          "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
-        wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
-          (wrapMonkeysphere runtimeDeps)
-          programs;
+    let
+      wrapperArgs = runtimeDeps:
+        "--prefix PERL5LIB : "
+        + (with perlPackages; makePerlPath [
+          # Optional (only required for keytrans)
+          CryptOpenSSLRSA
+          CryptOpenSSLBignum
+        ])
+        + stdenv.lib.optionalString
+          (builtins.length runtimeDeps > 0)
+          " --prefix PATH : ${stdenv.lib.makeBinPath runtimeDeps}";
+      wrapMonkeysphere = runtimeDeps: program:
+        "wrapProgram $out/bin/${program} ${wrapperArgs runtimeDeps}\n";
+      wrapPrograms = runtimeDeps: programs: stdenv.lib.concatMapStrings
+        (wrapMonkeysphere runtimeDeps)
+        programs;
     in wrapPrograms [ gnupg ] [ "monkeysphere-authentication" "monkeysphere-host" ]
-      + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
-      + ''
-        # These 4 programs depend on the program name ($0):
-        for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
-          rm $out/bin/$program
-          ln -sf keytrans $out/share/monkeysphere/$program
-          makeWrapper $out/share/monkeysphere/$program $out/bin/$program \
-            ${wrapperArgs [ ]}
-        done
-      '';
+    + wrapPrograms [ gnupg lockfileProgs ] [ "monkeysphere" ]
+    + ''
+      # These 4 programs depend on the program name ($0):
+      for program in openpgp2pem openpgp2spki openpgp2ssh pem2openpgp; do
+        rm $out/bin/$program
+        ln -sf keytrans $out/share/monkeysphere/$program
+        makeWrapper $out/share/monkeysphere/$program $out/bin/$program \
+          ${wrapperArgs [ ]}
+      done
+    '';
 
   meta = with stdenv.lib; {
     homepage = http://web.monkeysphere.info/;

@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, python3, python3Packages, intltool
-, glibcLocales, gnome3, gtk3, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, python3
+, python3Packages
+, intltool
+, glibcLocales
+, gnome3
+, gtk3
+, wrapGAppsHook
 , gobject-introspection
 }:
 
@@ -36,7 +43,8 @@ python3Packages.buildPythonApplication rec {
   ];
 
   checkInputs = with python3Packages; [
-    coverage minimock
+    coverage
+    minimock
   ];
 
   doCheck = true;

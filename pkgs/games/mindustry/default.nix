@@ -7,15 +7,14 @@
 , jre
 , libpulseaudio
 
-# Make the build version easily overridable.
-# Server and client build versions must match, and an empty build version means
-# any build is allowed, so this parameter acts as a simple whitelist.
-# Takes the package version and returns the build version.
+  # Make the build version easily overridable.
+  # Server and client build versions must match, and an empty build version means
+  # any build is allowed, so this parameter acts as a simple whitelist.
+  # Takes the package version and returns the build version.
 , makeBuildVersion ? (v: v)
 , enableClient ? true
 , enableServer ? true
 }:
-
 let
   pname = "mindustry";
   # Note: when raising the version, ensure that all SNAPSHOT versions in
@@ -95,35 +94,33 @@ let
     makeWrapper ${jre}/bin/java $out/bin/mindustry-server \
       --add-flags "-jar $out/share/mindustry-server.jar"
   '';
-
 in
-assert stdenv.lib.assertMsg (enableClient || enableServer)
-  "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
-stdenv.mkDerivation rec {
-  inherit pname version src postPatch;
+  assert stdenv.lib.assertMsg (enableClient || enableServer)
+    "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
+  stdenv.mkDerivation rec {
+    inherit pname version src postPatch;
 
-  nativeBuildInputs = [ gradle_5 makeWrapper ];
+    nativeBuildInputs = [ gradle_5 makeWrapper ];
 
-  buildPhase = with stdenv.lib; ''
-    export GRADLE_USER_HOME=$(mktemp -d)
-    # point to offline repo
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
-    ${optionalString enableClient buildClient}
-    ${optionalString enableServer buildServer}
-  '';
+    buildPhase = with stdenv.lib; ''
+      export GRADLE_USER_HOME=$(mktemp -d)
+      # point to offline repo
+      sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" build.gradle
+      ${optionalString enableClient buildClient}
+      ${optionalString enableServer buildServer}
+    '';
 
-  installPhase = with stdenv.lib; ''
-    ${optionalString enableClient installClient}
-    ${optionalString enableServer installServer}
-  '';
+    installPhase = with stdenv.lib; ''
+      ${optionalString enableClient installClient}
+      ${optionalString enableServer installServer}
+    '';
 
-  meta = with stdenv.lib; {
-    homepage = "https://mindustrygame.github.io/";
-    downloadPage = "https://github.com/Anuken/Mindustry/releases";
-    description = "A sandbox tower defense game";
-    license = licenses.gpl3;
-    maintainers = with maintainers; [ fgaz ];
-    platforms = platforms.all;
-  };
-}
-
+    meta = with stdenv.lib; {
+      homepage = "https://mindustrygame.github.io/";
+      downloadPage = "https://github.com/Anuken/Mindustry/releases";
+      description = "A sandbox tower defense game";
+      license = licenses.gpl3;
+      maintainers = with maintainers; [ fgaz ];
+      platforms = platforms.all;
+    };
+  }

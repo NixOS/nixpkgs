@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # PR: https://github.com/Ventto/mons/pull/36
   preConfigure = ''sed -i 's/usr\///' Makefile'';
-  
+
   nativeBuildInputs = [ help2man ];
   makeFlags = [ "DESTDIR=$(out)" ];
 

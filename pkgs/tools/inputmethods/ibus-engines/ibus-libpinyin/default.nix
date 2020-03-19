@@ -36,10 +36,11 @@ stdenv.mkDerivation rec {
     glib
     sqlite
     libpinyin
-    (python3.withPackages (pypkgs: with pypkgs; [
-      pygobject3
-      (toPythonModule ibus)
-    ]))
+    (python3.withPackages
+      (pypkgs: with pypkgs; [
+        pygobject3
+        (toPythonModule ibus)
+      ]))
     gtk3
     db
   ];

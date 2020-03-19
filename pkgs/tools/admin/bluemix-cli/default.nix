@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.8.0";
 
   src =
-    if stdenv.hostPlatform.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux"
+    then
       fetchurl {
         name = "linux32-${version}.tar.gz";
         url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux32";
@@ -17,7 +18,7 @@ stdenv.mkDerivation rec {
         url = "https://clis.ng.bluemix.net/download/bluemix-cli/${version}/linux64";
         sha256 = "056zbaca430ldcn0s86vy40m5abvwpfrmvqybbr6fjwfv9zngywx";
       }
-    ;
+  ;
 
   installPhase = ''
     install -m755 -D -t $out/bin bin/ibmcloud bin/ibmcloud-analytics
@@ -29,11 +30,11 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description  = "Administration CLI for IBM BlueMix";
-    homepage     = "https://console.bluemix.net/docs/cli/index.html";
+    description = "Administration CLI for IBM BlueMix";
+    homepage = "https://console.bluemix.net/docs/cli/index.html";
     downloadPage = "https://console.bluemix.net/docs/cli/reference/bluemix_cli/download_cli.html#download_install";
-    license      = licenses.unfree;
-    maintainers  = [ maintainers.tazjin maintainers.jensbin ];
-    platforms    = [ "x86_64-linux" "i686-linux" ];
+    license = licenses.unfree;
+    maintainers = [ maintainers.tazjin maintainers.jensbin ];
+    platforms = [ "x86_64-linux" "i686-linux" ];
   };
 }

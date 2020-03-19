@@ -1,5 +1,12 @@
-{ stdenv, fetchzip, perl, pkgconfig, libbson
-, openssl, which, zlib, snappy
+{ stdenv
+, fetchzip
+, perl
+, pkgconfig
+, libbson
+, openssl
+, which
+, zlib
+, snappy
 }:
 
 stdenv.mkDerivation rec {

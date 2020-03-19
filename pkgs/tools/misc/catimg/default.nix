@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, cmake } :
+{ stdenv, fetchFromGitHub, cmake }:
 
 with stdenv.lib;
 

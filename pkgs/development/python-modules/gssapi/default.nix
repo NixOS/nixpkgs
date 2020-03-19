@@ -38,7 +38,7 @@ buildPythonPackage rec {
     krb5Full
   ];
 
-  propagatedBuildInputs =  [
+  propagatedBuildInputs = [
     decorator
     six
   ] ++ lib.optional isPy27 enum34;

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [ ifaddr ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
 
   # tests not included with pypi release
   doCheck = false;

@@ -10,12 +10,12 @@ let
     ${lib.optionalString (tssUser != null) ''KERNEL=="tpm[0-9]*", MODE="0660", OWNER="${tssUser}"''}
     ${lib.optionalString (tssUser != null || tssGroup != null)
       ''KERNEL=="tpmrm[0-9]*", MODE="0660"''
-      + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
-      + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''
-     }
+    + lib.optionalString (tssUser != null) '', OWNER="${tssUser}"''
+    + lib.optionalString (tssGroup != null) '', GROUP="${tssGroup}"''
+    }
   '';
-
-in {
+in
+{
   options.security.tpm2 = {
     enable = lib.mkEnableOption "Trusted Platform Module 2 support";
 
@@ -26,8 +26,8 @@ in {
       '';
       type = lib.types.nullOr lib.types.str;
       default = if cfg.abrmd.enable then "tss" else "root";
-      defaultText = ''"tss" when using the userspace resource manager,'' +
-                    ''"root" otherwise'';
+      defaultText = ''"tss" when using the userspace resource manager,''
+      + ''"root" otherwise'';
     };
 
     tssGroup = lib.mkOption {
@@ -147,21 +147,23 @@ in {
       users.users.${cfg.tssUser} = lib.mkIf (cfg.tssUser == "tss") {
         isSystemUser = true;
       };
-      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") {};
+      users.groups.${cfg.tssGroup} = lib.mkIf (cfg.tssGroup == "tss") { };
 
-      environment.variables = lib.mkIf cfg.tctiEnvironment.enable (
-        lib.attrsets.genAttrs [
-          "TPM2TOOLS_TCTI"
-          "TPM2_PKCS11_TCTI"
-        ] (_: ''${cfg.tctiEnvironment.interface}:${
-          if cfg.tctiEnvironment.interface == "tabrmd" then
-            cfg.tctiEnvironment.tabrmdConf
-          else
-            cfg.tctiEnvironment.deviceConf
-        }'')
-      );
+      environment.variables = lib.mkIf cfg.tctiEnvironment.enable
+        (
+          lib.attrsets.genAttrs [
+            "TPM2TOOLS_TCTI"
+            "TPM2_PKCS11_TCTI"
+          ]
+            (_: ''${cfg.tctiEnvironment.interface}:${
+                if cfg.tctiEnvironment.interface == "tabrmd"
+                then
+                    cfg.tctiEnvironment.tabrmdConf
+                else
+                    cfg.tctiEnvironment.deviceConf
+              }'')
+        );
     }
-
     (lib.mkIf cfg.abrmd.enable {
       systemd.services."tpm2-abrmd" = {
         wantedBy = [ "multi-user.target" ];

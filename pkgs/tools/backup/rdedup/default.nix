@@ -1,6 +1,14 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, libsodium
-, llvmPackages, clang, lzma
-, Security }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, pkgconfig
+, openssl
+, libsodium
+, llvmPackages
+, clang
+, lzma
+, Security
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rdedup";
@@ -21,7 +29,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig llvmPackages.libclang clang ];
   buildInputs = [ openssl libsodium lzma ]
-    ++ (stdenv.lib.optional stdenv.isDarwin Security);
+  ++ (stdenv.lib.optional stdenv.isDarwin Security);
 
   configurePhase = ''
     export LIBCLANG_PATH="${llvmPackages.libclang}/lib"

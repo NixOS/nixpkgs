@@ -1,6 +1,13 @@
-{ stdenv, fetchFromGitHub
-, cmake, wrapGAppsHook
-, libX11, libzip, glfw, libpng, xorg, gnome3
+{ stdenv
+, fetchFromGitHub
+, cmake
+, wrapGAppsHook
+, libX11
+, libzip
+, glfw
+, libpng
+, xorg
+, gnome3
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapGAppsHook ];
   buildInputs = [ libX11 libzip glfw libpng ]
-    ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm ]);
+  ++ (with xorg; [ libXrandr libXinerama libXcursor libXi libXxf86vm ]);
 
   dontWrapGApps = true; # We also need zenity (see below)
 

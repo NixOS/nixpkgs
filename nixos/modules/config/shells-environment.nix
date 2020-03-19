@@ -4,9 +4,7 @@
 { config, lib, utils, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.environment;
 
   exportedEnvVars =
@@ -15,8 +13,9 @@ let
         mapAttrs (n: toList) cfg.variables;
 
       suffixedVariables =
-        flip mapAttrs cfg.profileRelativeEnvVars (envVar: listSuffixes:
-          concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
+        flip mapAttrs cfg.profileRelativeEnvVars (
+          envVar: listSuffixes:
+            concatMap (profile: map (suffix: "${profile}${suffix}") listSuffixes) cfg.profiles
         );
 
       allVariables =
@@ -27,13 +26,12 @@ let
     in
       concatStringsSep "\n" exportVariables;
 in
-
 {
 
   options = {
 
     environment.variables = mkOption {
-      default = {};
+      default = { };
       example = { EDITOR = "nvim"; VISUAL = "nvim"; };
       description = ''
         A set of environment variables used in the global environment.
@@ -47,7 +45,7 @@ in
     };
 
     environment.profiles = mkOption {
-      default = [];
+      default = [ ];
       description = ''
         A list of profiles used to setup the global environment.
       '';
@@ -143,7 +141,7 @@ in
     };
 
     environment.shells = mkOption {
-      default = [];
+      default = [ ];
       example = literalExample "[ pkgs.bashInteractive pkgs.zsh ]";
       description = ''
         A list of permissible login shells for user accounts.
@@ -170,7 +168,7 @@ in
     environment.shellAliases = mapAttrs (name: mkDefault) {
       ls = "ls --color=tty";
       ll = "ls -l";
-      l  = "ls -alh";
+      l = "ls -alh";
     };
 
     environment.etc.shells.text =
@@ -195,9 +193,9 @@ in
         ${cfg.extraInit}
 
         ${optionalString cfg.homeBinInPath ''
-          # ~/bin if it exists overrides other bin directories.
-          export PATH="$HOME/bin:$PATH"
-        ''}
+        # ~/bin if it exists overrides other bin directories.
+        export PATH="$HOME/bin:$PATH"
+      ''}
       '';
 
     system.activationScripts.binsh = stringAfter [ "stdio" ]

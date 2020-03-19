@@ -1,13 +1,13 @@
 { stdenv, buildPythonApplication, fetchFromGitHub, pyxdg }:
 
 buildPythonApplication rec {
-  pname   = "pass-git-helper";
+  pname = "pass-git-helper";
   version = "0.4";
 
   src = fetchFromGitHub {
-    owner  = "languitar";
-    repo   = "pass-git-helper";
-    rev    = version;
+    owner = "languitar";
+    repo = "pass-git-helper";
+    rev = version;
     sha256 = "1zccbmq5l6asl9qm1f90vg9467y3spmv3ayrw07qizrj43yfd9ap";
   };
 

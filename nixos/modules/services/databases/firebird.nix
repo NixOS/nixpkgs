@@ -20,18 +20,14 @@
 # http://www.firebirdsql.org/manual/qsg25-classic-or-super.html
 
 with lib;
-
 let
-
   cfg = config.services.firebird;
 
   firebird = cfg.package;
 
   dataDir = "${cfg.baseDir}/data";
   systemDir = "${cfg.baseDir}/system";
-
 in
-
 {
 
   ###### interface
@@ -93,7 +89,7 @@ in
 
   config = mkIf config.services.firebird.enable {
 
-    environment.systemPackages = [cfg.package];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.tmpfiles.rules = [
       "d '${dataDir}' 0700 ${cfg.user} - - -"
@@ -101,7 +97,8 @@ in
     ];
 
     systemd.services.firebird =
-      { description = "Firebird Super-Server";
+      {
+        description = "Firebird Super-Server";
 
         wantedBy = [ "multi-user.target" ];
 

@@ -1,7 +1,21 @@
-{ stdenv, lib, fetchurl, gettext, perlPackages, intltool, pkgconfig, glib,
-  libxml2, sqlite, zlib, sg3_utils, gdk-pixbuf, taglib,
-  libimobiledevice,
-  monoSupport ? false, mono, gtk-sharp-2_0
+{ stdenv
+, lib
+, fetchurl
+, gettext
+, perlPackages
+, intltool
+, pkgconfig
+, glib
+, libxml2
+, sqlite
+, zlib
+, sg3_utils
+, gdk-pixbuf
+, taglib
+, libimobiledevice
+, monoSupport ? false
+, mono
+, gtk-sharp-2_0
 }:
 
 
@@ -24,12 +38,20 @@ stdenv.mkDerivation rec {
 
   dontStrip = true;
 
-  propagatedBuildInputs = [ glib libxml2 sqlite zlib sg3_utils
-    gdk-pixbuf taglib libimobiledevice ];
+  propagatedBuildInputs = [
+    glib
+    libxml2
+    sqlite
+    zlib
+    sg3_utils
+    gdk-pixbuf
+    taglib
+    libimobiledevice
+  ];
 
   nativeBuildInputs = [ gettext intltool pkgconfig ]
-    ++ (with perlPackages; [ perl XMLParser ])
-    ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
+  ++ (with perlPackages; [ perl XMLParser ])
+  ++ lib.optionals monoSupport [ mono gtk-sharp-2_0 ];
 
   meta = {
     homepage = https://gtkpod.sourceforge.net/;

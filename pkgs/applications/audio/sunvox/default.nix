@@ -1,15 +1,16 @@
 { stdenv, fetchurl, unzip, alsaLib, libX11, libXi, SDL2 }:
-
 let
   libPath = stdenv.lib.makeLibraryPath [ stdenv.cc.cc alsaLib libX11 libXi SDL2 ];
   arch =
     if stdenv.isAarch64
     then "arm64"
-    else if stdenv.isAarch32
-    then "arm_armhf_raspberry_pi"
-    else if stdenv.is64bit
-    then "x86_64"
-    else "x86";
+    else
+      if stdenv.isAarch32
+      then "arm_armhf_raspberry_pi"
+      else
+        if stdenv.is64bit
+        then "x86_64"
+        else "x86";
 in
 stdenv.mkDerivation rec {
   pname = "SunVox";

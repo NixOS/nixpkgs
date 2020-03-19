@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   # ignore performance test which may fail when the system is under load
   # test_version fails with 3.8 https://github.com/jaraco/path.py/issues/172
-  disabledTests = [ "TestPerformance" ] ++ lib.optionals isPy38 [ "test_version"];
+  disabledTests = [ "TestPerformance" ] ++ lib.optionals isPy38 [ "test_version" ];
 
   dontUseSetuptoolsCheck = true;
 

@@ -1,11 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gollum;
 in
-
 {
   options.services.gollum = {
     enable = mkOption {

@@ -14,7 +14,7 @@ rec {
 
   packageName = "dbus";
 
-  asdFilesToKeep = ["dbus.asd"];
+  asdFilesToKeep = [ "dbus.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM dbus DESCRIPTION A D-BUS client library for Common Lisp SHA256

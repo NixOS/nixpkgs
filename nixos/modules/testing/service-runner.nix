@@ -1,9 +1,7 @@
 { lib, pkgs, ... }:
 
 with lib;
-
 let
-
   makeScript = name: service: pkgs.writeScript "${name}-runner"
     ''
       #! ${pkgs.perl}/bin/perl -w -I${pkgs.perlPackages.FileSlurp}/${pkgs.perl.libPrefix}
@@ -47,8 +45,8 @@ let
           delete $ENV{$key};
       }
       ${concatStrings (mapAttrsToList (n: v: ''
-        $ENV{'${n}'} = '${v}';
-      '') service.environment)}
+      $ENV{'${n}'} = '${v}';
+    '') service.environment)}
 
       # Run the ExecStartPre program.  FIXME: this could be a list.
       my $preStart = <<END_CMD;
@@ -106,18 +104,16 @@ let
 
   opts = { config, name, ... }: {
     options.runner = mkOption {
-    internal = true;
-    description = ''
+      internal = true;
+      description = ''
         A script that runs the service outside of systemd,
         useful for testing or for using NixOS services outside
         of NixOS.
-    '';
+      '';
     };
     config.runner = makeScript name config;
   };
-
 in
-
 {
   options = {
     systemd.services = mkOption {

@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.keepalived;
 
   keepalivedConf = pkgs.writeText "keepalived.conf" ''
@@ -28,105 +26,118 @@ let
     + optionalString enableTraps "enable_traps"
   );
 
-  vrrpScriptStr = concatStringsSep "\n" (map (s:
-    ''
-      vrrp_script ${s.name} {
-        script "${s.script}"
-        interval ${toString s.interval}
-        fall ${toString s.fall}
-        rise ${toString s.rise}
-        timeout ${toString s.timeout}
-        weight ${toString s.weight}
-        user ${s.user} ${optionalString (s.group != null) s.group}
+  vrrpScriptStr = concatStringsSep "\n" (map (
+    s:
+      ''
+        vrrp_script ${s.name} {
+          script "${s.script}"
+          interval ${toString s.interval}
+          fall ${toString s.fall}
+          rise ${toString s.rise}
+          timeout ${toString s.timeout}
+          weight ${toString s.weight}
+          user ${s.user} ${optionalString (s.group != null) s.group}
 
-        ${s.extraConfig}
-      }
-    ''
+          ${s.extraConfig}
+        }
+      ''
   ) vrrpScripts);
 
-  vrrpInstancesStr = concatStringsSep "\n" (map (i:
-    ''
-      vrrp_instance ${i.name} {
-        interface ${i.interface}
-        state ${i.state}
-        virtual_router_id ${toString i.virtualRouterId}
-        priority ${toString i.priority}
-        ${optionalString i.noPreempt "nopreempt"}
+  vrrpInstancesStr = concatStringsSep "\n" (map (
+    i:
+      ''
+        vrrp_instance ${i.name} {
+          interface ${i.interface}
+          state ${i.state}
+          virtual_router_id ${toString i.virtualRouterId}
+          priority ${toString i.priority}
+          ${optionalString i.noPreempt "nopreempt"}
 
-        ${optionalString i.useVmac (
+          ${optionalString i.useVmac (
           "use_vmac" + optionalString (i.vmacInterface != null) " ${i.vmacInterface}"
         )}
-        ${optionalString i.vmacXmitBase "vmac_xmit_base"}
+          ${optionalString i.vmacXmitBase "vmac_xmit_base"}
 
-        ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
-        unicast_peer {
-          ${concatStringsSep "\n" i.unicastPeers}
-        }
-
-        virtual_ipaddress {
-          ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
-        }
-
-        ${optionalString (builtins.length i.trackScripts > 0) ''
-          track_script {
-            ${concatStringsSep "\n" i.trackScripts}
+          ${optionalString (i.unicastSrcIp != null) "unicast_src_ip ${i.unicastSrcIp}"}
+          unicast_peer {
+            ${concatStringsSep "\n" i.unicastPeers}
           }
-        ''}
 
-        ${optionalString (builtins.length i.trackInterfaces > 0) ''
-          track_interface {
-            ${concatStringsSep "\n" i.trackInterfaces}
+          virtual_ipaddress {
+            ${concatMapStringsSep "\n" virtualIpLine i.virtualIps}
           }
-        ''}
 
-        ${i.extraConfig}
-      }
-    ''
+          ${optionalString (builtins.length i.trackScripts > 0) ''
+        track_script {
+          ${concatStringsSep "\n" i.trackScripts}
+        }
+      ''}
+
+          ${optionalString (builtins.length i.trackInterfaces > 0) ''
+        track_interface {
+          ${concatStringsSep "\n" i.trackInterfaces}
+        }
+      ''}
+
+          ${i.extraConfig}
+        }
+      ''
   ) vrrpInstances);
 
-  virtualIpLine = (ip:
-    ip.addr
-    + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
-    + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
-    + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
-    + optionalString (notNullOrEmpty ip.label) " label ${ip.label}"
+  virtualIpLine = (
+    ip:
+      ip.addr
+      + optionalString (notNullOrEmpty ip.brd) " brd ${ip.brd}"
+      + optionalString (notNullOrEmpty ip.dev) " dev ${ip.dev}"
+      + optionalString (notNullOrEmpty ip.scope) " scope ${ip.scope}"
+      + optionalString (notNullOrEmpty ip.label) " label ${ip.label}"
   );
 
   notNullOrEmpty = s: !(s == null || s == "");
 
-  vrrpScripts = mapAttrsToList (name: config:
-    {
-      inherit name;
-    } // config
+  vrrpScripts = mapAttrsToList (
+    name: config:
+      {
+        inherit name;
+      }
+      // config
   ) cfg.vrrpScripts;
 
-  vrrpInstances = mapAttrsToList (iName: iConfig:
-    {
-      name = iName;
-    } // iConfig
+  vrrpInstances = mapAttrsToList (
+    iName: iConfig:
+      {
+        name = iName;
+      }
+      // iConfig
   ) cfg.vrrpInstances;
 
   vrrpInstanceAssertions = i: [
-    { assertion = i.interface != "";
+    {
+      assertion = i.interface != "";
       message = "services.keepalived.vrrpInstances.${i.name}.interface option cannot be empty.";
     }
-    { assertion = i.virtualRouterId >= 0 && i.virtualRouterId <= 255;
+    {
+      assertion = i.virtualRouterId >= 0 && i.virtualRouterId <= 255;
       message = "services.keepalived.vrrpInstances.${i.name}.virtualRouterId must be an integer between 0..255.";
     }
-    { assertion = i.priority >= 0 && i.priority <= 255;
+    {
+      assertion = i.priority >= 0 && i.priority <= 255;
       message = "services.keepalived.vrrpInstances.${i.name}.priority must be an integer between 0..255.";
     }
-    { assertion = i.vmacInterface == null || i.useVmac;
+    {
+      assertion = i.vmacInterface == null || i.useVmac;
       message = "services.keepalived.vrrpInstances.${i.name}.vmacInterface has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
     }
-    { assertion = !i.vmacXmitBase || i.useVmac;
+    {
+      assertion = !i.vmacXmitBase || i.useVmac;
       message = "services.keepalived.vrrpInstances.${i.name}.vmacXmitBase has no effect when services.keepalived.vrrpInstances.${i.name}.useVmac is not set.";
     }
   ] ++ flatten (map (virtualIpAssertions i.name) i.virtualIps)
-    ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
+  ++ flatten (map (vrrpScriptAssertion i.name) i.trackScripts);
 
   virtualIpAssertions = vrrpName: ip: [
-    { assertion = ip.addr != "";
+    {
+      assertion = ip.addr != "";
       message = "The 'addr' option for an services.keepalived.vrrpInstances.${vrrpName}.virtualIps entry cannot be empty.";
     }
   ];
@@ -137,7 +148,6 @@ let
   };
 
   pidFile = "/run/keepalived.pid";
-
 in
 {
 
@@ -232,18 +242,22 @@ in
       };
 
       vrrpScripts = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-script-options.nix {
-          inherit lib;
-        }));
-        default = {};
+        type = types.attrsOf
+          (types.submodule
+            (import ./vrrp-script-options.nix {
+              inherit lib;
+            }));
+        default = { };
         description = "Declarative vrrp script config";
       };
 
       vrrpInstances = mkOption {
-        type = types.attrsOf (types.submodule (import ./vrrp-instance-options.nix {
-          inherit lib;
-        }));
-        default = {};
+        type = types.attrsOf
+          (types.submodule
+            (import ./vrrp-instance-options.nix {
+              inherit lib;
+            }));
+        default = { };
         description = "Declarative vhost config";
       };
 
@@ -291,9 +305,9 @@ in
         PIDFile = pidFile;
         KillMode = "process";
         ExecStart = "${pkgs.keepalived}/sbin/keepalived"
-          + " -f ${keepalivedConf}"
-          + " -p ${pidFile}"
-          + optionalString cfg.snmp.enable " --snmp";
+        + " -f ${keepalivedConf}"
+        + " -p ${pidFile}"
+        + optionalString cfg.snmp.enable " --snmp";
         ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         Restart = "always";
         RestartSec = "1s";

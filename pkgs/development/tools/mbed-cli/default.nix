@@ -31,4 +31,3 @@ buildPythonApplication rec {
     maintainers = with maintainers; [ rvolosatovs ];
   };
 }
-

@@ -7,7 +7,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.ec2;
   metadataFetcher = import ./ec2-metadata-fetcher.nix {
@@ -15,17 +14,18 @@ let
     wgetExtraOptions = "-q";
   };
 in
-
 {
   imports = [ ../profiles/headless.nix ./ec2-data.nix ./amazon-init.nix ];
 
   config = {
 
     assertions = [
-      { assertion = cfg.hvm;
+      {
+        assertion = cfg.hvm;
         message = "Paravirtualized EC2 instances are no longer supported.";
       }
-      { assertion = cfg.efi -> cfg.hvm;
+      {
+        assertion = cfg.efi -> cfg.hvm;
         message = "EC2 instances using EFI must be HVM instances.";
       }
     ];

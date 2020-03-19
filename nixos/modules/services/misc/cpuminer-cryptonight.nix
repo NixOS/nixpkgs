@@ -1,17 +1,17 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.cpuminer-cryptonight;
 
-  json = builtins.toJSON (
-    cfg // {
-       enable = null;
-       threads =
-         if cfg.threads == 0 then null else toString cfg.threads;
-    }
-  );
+  json = builtins.toJSON
+    (
+      cfg // {
+        enable = null;
+        threads =
+          if cfg.threads == 0 then null else toString cfg.threads;
+      }
+    );
 
   confFile = builtins.toFile "cpuminer.json" json;
 in

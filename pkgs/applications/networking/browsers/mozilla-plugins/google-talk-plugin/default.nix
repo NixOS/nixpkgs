@@ -1,16 +1,29 @@
-{ stdenv, fetchurl, libGL, xorg, cairo
-, libpng, gtk2, glib, gdk-pixbuf, fontconfig, freetype, curl
-, dbus-glib, alsaLib, libpulseaudio, systemd, pango
+{ stdenv
+, fetchurl
+, libGL
+, xorg
+, cairo
+, libpng
+, gtk2
+, glib
+, gdk-pixbuf
+, fontconfig
+, freetype
+, curl
+, dbus-glib
+, alsaLib
+, libpulseaudio
+, systemd
+, pango
 }:
 
 with stdenv.lib;
-
 let
-
   baseURL = "http://dl.google.com/linux/talkplugin/deb/pool/main/g/google-talkplugin";
 
   rpathPlugin = makeLibraryPath
-    [ libGL
+    [
+      libGL
       xorg.libXt
       xorg.libX11
       xorg.libXrender
@@ -24,7 +37,8 @@ let
     ];
 
   rpathProgram = makeLibraryPath
-    [ gdk-pixbuf
+    [
+      gdk-pixbuf
       glib
       gtk2
       xorg.libX11
@@ -42,9 +56,7 @@ let
       pango
       cairo
     ];
-
 in
-
 stdenv.mkDerivation rec {
   pname = "google-talk-plugin";
 
@@ -54,17 +66,20 @@ stdenv.mkDerivation rec {
   version = "5.41.3.0";
 
   src =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
       fetchurl {
         url = "${baseURL}/google-talkplugin_${version}-1_amd64.deb";
         sha256 = "af7e23d2b6215afc547f96615b99f04e0561557cc58c0c9302364b5a3840d97d";
       }
-    else if stdenv.hostPlatform.system == "i686-linux" then
-      fetchurl {
-        url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
-        sha256 = "4c46d2b7f2018640288cd7ac49adc47e309d0beadfd979eb03030e672016b4a7";
-      }
-    else throw "Google Talk does not support your platform.";
+    else
+      if stdenv.hostPlatform.system == "i686-linux"
+      then
+        fetchurl {
+          url = "${baseURL}/google-talkplugin_${version}-1_i386.deb";
+          sha256 = "4c46d2b7f2018640288cd7ac49adc47e309d0beadfd979eb03030e672016b4a7";
+        }
+      else throw "Google Talk does not support your platform.";
 
   unpackPhase = ''
     ar p "$src" data.tar.gz | tar xz

@@ -12,7 +12,14 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    click ludios_wpull manhole lmdb autobahn fb-re2 websockets cchardet
+    click
+    ludios_wpull
+    manhole
+    lmdb
+    autobahn
+    fb-re2
+    websockets
+    cchardet
   ];
 
   checkPhase = ''

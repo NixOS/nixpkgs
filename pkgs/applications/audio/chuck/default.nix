@@ -1,5 +1,17 @@
-{ stdenv, lib, fetchurl, alsaLib, bison, flex, libsndfile, which
-, AppKit, Carbon, CoreAudio, CoreMIDI, CoreServices, Kernel
+{ stdenv
+, lib
+, fetchurl
+, alsaLib
+, bison
+, flex
+, libsndfile
+, which
+, AppKit
+, Carbon
+, CoreAudio
+, CoreMIDI
+, CoreServices
+, Kernel
 }:
 
 stdenv.mkDerivation rec {
@@ -14,8 +26,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ flex bison which ];
 
   buildInputs = [ libsndfile ]
-    ++ lib.optional (!stdenv.isDarwin) alsaLib
-    ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
+  ++ lib.optional (!stdenv.isDarwin) alsaLib
+  ++ lib.optional stdenv.isDarwin [ AppKit Carbon CoreAudio CoreMIDI CoreServices Kernel ];
 
   patches = [ ./darwin-limits.patch ];
 

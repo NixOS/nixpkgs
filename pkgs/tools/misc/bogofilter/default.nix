@@ -1,4 +1,4 @@
-{fetchurl, stdenv, flex, db}:
+{ fetchurl, stdenv, flex, db }:
 
 stdenv.mkDerivation rec {
   name = "bogofilter-1.2.4";

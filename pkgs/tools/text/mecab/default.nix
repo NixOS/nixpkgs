@@ -1,9 +1,9 @@
 { stdenv, fetchurl, mecab-ipadic }:
-
 let
   mecab-base = import ./base.nix { inherit fetchurl; };
 in
-stdenv.mkDerivation (mecab-base // {
+stdenv.mkDerivation
+  (mecab-base // {
     name = "mecab-${mecab-base.version}";
 
     postInstall = ''
@@ -17,4 +17,5 @@ stdenv.mkDerivation (mecab-base // {
       platforms = platforms.unix;
       maintainers = with maintainers; [ auntie ];
     };
-})
+  }
+  )

@@ -28,11 +28,11 @@ rustPlatform.buildRustPackage rec {
   cargoSha256 = "1i0y3x5rmg27gxrr2lv04sqq7qyiv1bnazfy24l5zgb4akvdg3r5";
 
   buildInputs = [ llvmPackages.libclang expat freetype ]
-    ++ lib.optionals stdenv.isLinux [ libxcb ]
-    ++ lib.optionals stdenv.isDarwin [ AppKit CoreText Security ];
+  ++ lib.optionals stdenv.isLinux [ libxcb ]
+  ++ lib.optionals stdenv.isDarwin [ AppKit CoreText Security ];
 
   nativeBuildInputs = [ cmake pkgconfig ]
-    ++ lib.optionals stdenv.isLinux [ python3 ];
+  ++ lib.optionals stdenv.isLinux [ python3 ];
 
   LIBCLANG_PATH = "${llvmPackages.libclang}/lib";
 

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, fuse, libarchive }:
-
 let
   name = "archivemount-0.8.12";
 in

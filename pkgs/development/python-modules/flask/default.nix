@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, itsdangerous, click, werkzeug, jinja2, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, itsdangerous
+, click
+, werkzeug
+, jinja2
+, pytest
+}:
 
 buildPythonPackage rec {
   version = "1.1.1";

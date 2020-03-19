@@ -1,9 +1,10 @@
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "fancontrol";
 
   machine =
     { ... }:
-    { hardware.fancontrol.enable = true;
+    {
+      hardware.fancontrol.enable = true;
       hardware.fancontrol.config = ''
         INTERVAL=42
         DEVPATH=hwmon1=devices/platform/dummy

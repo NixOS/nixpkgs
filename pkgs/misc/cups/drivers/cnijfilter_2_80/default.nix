@@ -1,7 +1,15 @@
-{ stdenv, lib, fetchzip,
-  autoconf, automake, libtool,
-  cups, popt, libtiff, libpng,
-  ghostscript }:
+{ stdenv
+, lib
+, fetchzip
+, autoconf
+, automake
+, libtool
+, cups
+, popt
+, libtiff
+, libpng
+, ghostscript
+}:
 
 /* this derivation is basically just a transcription of the rpm .spec
    file included in the tarball */
@@ -25,12 +33,21 @@ stdenv.mkDerivation {
     sha256 = "06s9nl155yxmx56056y22kz1p5b2sb5fhr3gf4ddlczjkd1xch53";
   };
 
-  buildInputs = [ autoconf libtool automake
-                  cups popt libtiff libpng
-                  ghostscript ];
+  buildInputs = [
+    autoconf
+    libtool
+    automake
+    cups
+    popt
+    libtiff
+    libpng
+    ghostscript
+  ];
 
-  patches = [ ./patches/missing-include.patch
-              ./patches/libpng15.patch ];
+  patches = [
+    ./patches/missing-include.patch
+    ./patches/libpng15.patch
+  ];
 
   postPatch = ''
     sed -i "s|/usr/lib/cups/backend|$out/lib/cups/backend|" backend/src/Makefile.am;

@@ -1,7 +1,14 @@
-{
-  mkDerivation, lib, extra-cmake-modules
-, qtbase, qtdeclarative, ki18n, kmime, kpkpass
-, poppler, kcontacts, kcalendarcore
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, qtbase
+, qtdeclarative
+, ki18n
+, kmime
+, kpkpass
+, poppler
+, kcontacts
+, kcalendarcore
 }:
 
 mkDerivation {
@@ -12,8 +19,14 @@ mkDerivation {
   };
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    qtbase qtdeclarative ki18n kmime kpkpass poppler
-    kcontacts kcalendarcore
+    qtbase
+    qtdeclarative
+    ki18n
+    kmime
+    kpkpass
+    poppler
+    kcontacts
+    kcalendarcore
   ];
   outputs = [ "out" "dev" ];
 }

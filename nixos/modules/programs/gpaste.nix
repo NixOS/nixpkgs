@@ -14,7 +14,7 @@ with lib;
 
   ###### interface
   options = {
-     programs.gpaste = {
+    programs.gpaste = {
       enable = mkOption {
         type = types.bool;
         default = false;

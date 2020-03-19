@@ -1,9 +1,7 @@
 { config, lib, pkgs, baseModules, extraModules, modules, modulesPath, ... }:
 
 with lib;
-
 let
-
   cfg = config.documentation;
 
   manualModules = baseModules ++ optionals cfg.nixos.includeAllModules (extraModules ++ modules);
@@ -30,10 +28,10 @@ let
         scrubDerivations = namePrefix: pkgSet: mapAttrs
           (name: value:
             let wholeName = "${namePrefix}.${name}"; in
-            if isAttrs value then
-              scrubDerivations wholeName value
-              // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
-            else value
+              if isAttrs value then
+                scrubDerivations wholeName value
+                // (optionalAttrs (isDerivation value) { outPath = "\${${wholeName}}"; })
+              else value
           )
           pkgSet;
       in scrubbedEval.options;
@@ -66,13 +64,11 @@ let
     exec = "${helpScript}/bin/nixos-help";
     categories = "System";
   };
-
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "programs" "info" "enable" ] [ "documentation" "info" "enable" ])
-    (mkRenamedOptionModule [ "programs" "man"  "enable" ] [ "documentation" "man"  "enable" ])
+    (mkRenamedOptionModule [ "programs" "man" "enable" ] [ "documentation" "man" "enable" ])
     (mkRenamedOptionModule [ "services" "nixosManual" "enable" ] [ "documentation" "nixos" "enable" ])
   ];
 
@@ -168,14 +164,12 @@ in
   };
 
   config = mkIf cfg.enable (mkMerge [
-
     (mkIf cfg.man.enable {
       environment.systemPackages = [ pkgs.man-db ];
       environment.pathsToLink = [ "/share/man" ];
       environment.extraOutputsToInstall = [ "man" ] ++ optional cfg.dev.enable "devman";
       environment.etc."man.conf".source = "${pkgs.man-db}/etc/man_db.conf";
     })
-
     (mkIf cfg.info.enable {
       environment.systemPackages = [ pkgs.texinfoInteractive ];
       environment.pathsToLink = [ "/share/info" ];
@@ -189,25 +183,25 @@ in
         fi
       '';
     })
-
     (mkIf cfg.doc.enable {
       environment.pathsToLink = [ "/share/doc" ];
       environment.extraOutputsToInstall = [ "doc" ] ++ optional cfg.dev.enable "devdoc";
     })
-
     (mkIf cfg.nixos.enable {
       system.build.manual = manual;
 
-      environment.systemPackages = []
-        ++ optional cfg.man.enable manual.manpages
-        ++ optionals cfg.doc.enable ([ manual.manualHTML helpScript ]
-           ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
+      environment.systemPackages = [ ]
+      ++ optional cfg.man.enable manual.manpages
+      ++ optionals cfg.doc.enable
+        ([ manual.manualHTML helpScript ]
+        ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
 
-      services.mingetty.helpLine = mkIf cfg.doc.enable (
+      services.mingetty.helpLine = mkIf cfg.doc.enable
+        (
           "\nRun `nixos-help` "
-        + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
-        + "for the NixOS manual."
-      );
+          + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
+          + "for the NixOS manual."
+        );
     })
 
   ]);

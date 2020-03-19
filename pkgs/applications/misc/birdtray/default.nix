@@ -1,13 +1,13 @@
 { mkDerivation
-  , lib
-  , fetchFromGitHub
+, lib
+, fetchFromGitHub
 
-  , cmake
-  , pkgconfig
-  , qtbase
-  , qttools
-  , qtx11extras
-  , sqlite
+, cmake
+, pkgconfig
+, qtbase
+, qttools
+, qtx11extras
+, sqlite
 }:
 
 mkDerivation rec {
@@ -23,7 +23,9 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    qtbase qtx11extras sqlite
+    qtbase
+    qtx11extras
+    sqlite
   ];
 
   installPhase = ''

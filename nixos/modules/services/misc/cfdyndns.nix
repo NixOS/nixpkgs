@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.services.cfdyndns;
 in
@@ -25,7 +24,7 @@ in
       };
 
       records = mkOption {
-        default = [];
+        default = [ ];
         example = [ "host.tld" ];
         type = types.listOf types.str;
         description = ''
@@ -48,9 +47,9 @@ in
         ExecStart = "/bin/sh -c '${pkgs.cfdyndns}/bin/cfdyndns'";
       };
       environment = {
-        CLOUDFLARE_EMAIL="${cfg.email}";
-        CLOUDFLARE_APIKEY="${cfg.apikey}";
-        CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
+        CLOUDFLARE_EMAIL = "${cfg.email}";
+        CLOUDFLARE_APIKEY = "${cfg.apikey}";
+        CLOUDFLARE_RECORDS = "${concatStringsSep "," cfg.records}";
       };
     };
 

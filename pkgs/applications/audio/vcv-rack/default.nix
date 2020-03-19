@@ -1,7 +1,23 @@
-{ stdenv, makeWrapper, fetchFromBitbucket, fetchFromGitHub, pkgconfig
-, alsaLib, curl, glew, glfw, gtk2-x11, jansson, libjack2, libXext, libXi
-, libzip, rtaudio, rtmidi, speex, libsamplerate }:
-
+{ stdenv
+, makeWrapper
+, fetchFromBitbucket
+, fetchFromGitHub
+, pkgconfig
+, alsaLib
+, curl
+, glew
+, glfw
+, gtk2-x11
+, jansson
+, libjack2
+, libXext
+, libXi
+, libzip
+, rtaudio
+, rtmidi
+, speex
+, libsamplerate
+}:
 let
   # The package repo vendors some of the package dependencies as submodules.
   # Others are downloaded with `make deps`. Due to previous issues with the
@@ -38,66 +54,66 @@ let
     sha256 = "17kd0lh2x3x12bxkyhq6z8sg6vxln8m9qirf0basvcsmylr6rb64";
   };
 in
-with stdenv.lib; stdenv.mkDerivation rec {
-  pname = "VCV-Rack";
-  version = "1.1.6";
+  with stdenv.lib; stdenv.mkDerivation rec {
+    pname = "VCV-Rack";
+    version = "1.1.6";
 
-  src = fetchFromGitHub {
-    owner = "VCVRack";
-    repo = "Rack";
-    rev = "v${version}";
-    sha256 = "0ji64prr74qzxf5bx1sw022kbslx9nzll16lmk5in78hbl137b3i";
-  };
+    src = fetchFromGitHub {
+      owner = "VCVRack";
+      repo = "Rack";
+      rev = "v${version}";
+      sha256 = "0ji64prr74qzxf5bx1sw022kbslx9nzll16lmk5in78hbl137b3i";
+    };
 
-  patches = [
-    ./rack-minimize-vendoring.patch
-  ];
+    patches = [
+      ./rack-minimize-vendoring.patch
+    ];
 
-  prePatch = ''
-    # As we can't use `make dep` to set up the dependencies (as explained
-    # above), we do it here manually
-    mkdir -p dep/include
+    prePatch = ''
+      # As we can't use `make dep` to set up the dependencies (as explained
+      # above), we do it here manually
+      mkdir -p dep/include
 
-    cp -r ${pfft-source} dep/jpommier-pffft-source
-    cp -r ${nanovg-source}/* dep/nanovg
-    cp -r ${nanosvg-source}/* dep/nanosvg
-    cp -r ${osdialog-source}/* dep/osdialog
-    cp -r ${oui-blendish-source}/* dep/oui-blendish
+      cp -r ${pfft-source} dep/jpommier-pffft-source
+      cp -r ${nanovg-source}/* dep/nanovg
+      cp -r ${nanosvg-source}/* dep/nanosvg
+      cp -r ${osdialog-source}/* dep/osdialog
+      cp -r ${oui-blendish-source}/* dep/oui-blendish
 
-    cp dep/jpommier-pffft-source/*.h dep/include
-    cp dep/nanosvg/**/*.h dep/include
-    cp dep/nanovg/src/*.h dep/include
-    cp dep/osdialog/*.h dep/include
-    cp dep/oui-blendish/*.h dep/include
+      cp dep/jpommier-pffft-source/*.h dep/include
+      cp dep/nanosvg/**/*.h dep/include
+      cp dep/nanovg/src/*.h dep/include
+      cp dep/osdialog/*.h dep/include
+      cp dep/oui-blendish/*.h dep/include
 
-    substituteInPlace include/audio.hpp --replace "<RtAudio.h>" "<rtaudio/RtAudio.h>"
-    substituteInPlace compile.mk --replace "-march=nocona" ""
-  '';
+      substituteInPlace include/audio.hpp --replace "<RtAudio.h>" "<rtaudio/RtAudio.h>"
+      substituteInPlace compile.mk --replace "-march=nocona" ""
+    '';
 
-  enableParallelBuilding = true;
+    enableParallelBuilding = true;
 
-  nativeBuildInputs = [ makeWrapper pkgconfig ];
-  buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
+    nativeBuildInputs = [ makeWrapper pkgconfig ];
+    buildInputs = [ alsaLib curl glew glfw gtk2-x11 jansson libjack2 libsamplerate libzip rtaudio rtmidi speex ];
 
-  buildFlags = [ "Rack" ];
+    buildFlags = [ "Rack" ];
 
-  installPhase = ''
-    install -D -m755 -t $out/bin Rack
+    installPhase = ''
+      install -D -m755 -t $out/bin Rack
 
-    mkdir -p $out/share/vcv-rack
-    cp -r res Core.json template.vcv LICENSE* cacert.pem $out/share/vcv-rack
+      mkdir -p $out/share/vcv-rack
+      cp -r res Core.json template.vcv LICENSE* cacert.pem $out/share/vcv-rack
 
-    # Override the default global resource file directory
-    wrapProgram $out/bin/Rack --add-flags "-s $out/share/vcv-rack"
-  '';
+      # Override the default global resource file directory
+      wrapProgram $out/bin/Rack --add-flags "-s $out/share/vcv-rack"
+    '';
 
-  meta = with stdenv.lib; {
-    description = "Open-source virtual modular synthesizer";
-    homepage = https://vcvrack.com/;
-    # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
-    # no-derivatives clause
-    license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];
-    maintainers = with maintainers; [ moredread nathyong ];
-    platforms = platforms.linux;
-  };
-}
+    meta = with stdenv.lib; {
+      description = "Open-source virtual modular synthesizer";
+      homepage = https://vcvrack.com/;
+      # The source is BSD-3 licensed, some of the art is CC-BY-NC 4.0 or under a
+      # no-derivatives clause
+      license = with licenses; [ bsd3 cc-by-nc-40 unfreeRedistributable ];
+      maintainers = with maintainers; [ moredread nathyong ];
+      platforms = platforms.linux;
+    };
+  }

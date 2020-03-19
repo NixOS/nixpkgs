@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, flac, libogg, libvorbis, pkgconfig
-, Carbon, AudioToolbox
+{ stdenv
+, fetchurl
+, flac
+, libogg
+, libvorbis
+, pkgconfig
+, Carbon
+, AudioToolbox
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +51,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ flac libogg libvorbis ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ Carbon AudioToolbox ];
 
   enableParallelBuilding = true;
 
@@ -63,10 +69,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "A C library for reading and writing files containing sampled sound";
-    homepage    = http://www.mega-nerd.com/libsndfile/;
-    license     = licenses.lgpl2Plus;
+    homepage = http://www.mega-nerd.com/libsndfile/;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
 
     longDescription = ''
       Libsndfile is a C library for reading and writing files containing

@@ -1,8 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, autoconf, makeDesktopItem
-, libX11, gdk-pixbuf, cairo, libXft, gtk3, vte
+{ stdenv
+, fetchurl
+, pkgconfig
+, autoconf
+, makeDesktopItem
+, libX11
+, gdk-pixbuf
+, cairo
+, libXft
+, gtk3
+, vte
 , harfbuzz #substituting glyphs with opentype fonts
-, fribidi, m17n_lib #bidi and encoding
-, openssl, libssh2 #build-in ssh
+, fribidi
+, m17n_lib #bidi and encoding
+, openssl
+, libssh2 #build-in ssh
 }:
 
 stdenv.mkDerivation rec {
@@ -16,8 +27,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoconf ];
   buildInputs = [
-    libX11 gdk-pixbuf.dev cairo libXft gtk3 vte
-    harfbuzz fribidi m17n_lib openssl libssh2
+    libX11
+    gdk-pixbuf.dev
+    cairo
+    libXft
+    gtk3
+    vte
+    harfbuzz
+    fribidi
+    m17n_lib
+    openssl
+    libssh2
   ];
 
   #bad configure.ac and Makefile.in everywhere
@@ -59,9 +79,9 @@ stdenv.mkDerivation rec {
     "--enable-fribidi" #bidi scripts
     "--enable-m17nlib" #character encodings
     "--with-tools=mlclient,mlconfig,mlcc,mlterm-menu,mlimgloader,registobmp,mlfc"
-     #mlterm-menu and mlconfig depend on enabling gnome3.at-spi2-core
-     #and configuring ~/.mlterm/key correctly.
- ] ++ stdenv.lib.optional (libssh2 == null) "--disable-ssh2";
+    #mlterm-menu and mlconfig depend on enabling gnome3.at-spi2-core
+    #and configuring ~/.mlterm/key correctly.
+  ] ++ stdenv.lib.optional (libssh2 == null) "--disable-ssh2";
 
   postInstall = ''
     install -D contrib/icon/mlterm-icon.svg "$out/share/icons/hicolor/scalable/apps/mlterm.svg"
@@ -78,7 +98,9 @@ stdenv.mkDerivation rec {
     desktopName = "mlterm";
     genericName = "Terminal emulator";
     categories = stdenv.lib.concatStringsSep ";" [
-      "Application" "System" "TerminalEmulator"
+      "Application"
+      "System"
+      "TerminalEmulator"
     ];
     startupNotify = "false";
   };

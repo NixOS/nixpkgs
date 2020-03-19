@@ -23,4 +23,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ xrelkd ];
   };
 }
-

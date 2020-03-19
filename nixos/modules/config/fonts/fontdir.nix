@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   x11Fonts = pkgs.runCommand "X11-fonts" { preferLocalBuild = true; } ''
     mkdir -p "$out/share/X11-fonts"
     find ${toString config.fonts.fonts} \
@@ -15,9 +13,7 @@ let
     ${pkgs.xorg.mkfontscale}/bin/mkfontscale
     cat $(find ${pkgs.xorg.fontalias}/ -name fonts.alias) >fonts.alias
   '';
-
 in
-
 {
 
   options = {

@@ -1,6 +1,12 @@
-{ stdenv, lib, darwin
-, rustPlatform, fetchFromGitHub
-, openssl, pkg-config, libiconv }:
+{ stdenv
+, lib
+, darwin
+, rustPlatform
+, fetchFromGitHub
+, openssl
+, pkg-config
+, libiconv
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-edit";

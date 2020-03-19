@@ -16,7 +16,7 @@ rec {
 
   packageName = "cxml";
 
-  asdFilesToKeep = ["cxml.asd"];
+  asdFilesToKeep = [ "cxml.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cxml DESCRIPTION Closure XML - a Common Lisp XML parser SHA256

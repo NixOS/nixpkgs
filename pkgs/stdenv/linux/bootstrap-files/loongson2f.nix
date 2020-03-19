@@ -1,12 +1,11 @@
 let
-
   fetch = { file, sha256 }: import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/stdenv-linux/loongson2f/r22849/${file}";
     inherit sha256;
     executable = true;
   };
-
-in {
+in
+{
   sh = fetch {
     file = "sh";
     sha256 = "02jjl49wdq85pgh61aqf78yaknn9mi3rcspbpk7hs9c4mida2rhf";

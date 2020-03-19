@@ -1,13 +1,16 @@
-{ stdenv, fetchFromGitHub, makeWrapper, gawk
-, makeFontsConf, freefont_ttf, gnuplot, perl, perlPackages
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, gawk
+, makeFontsConf
+, freefont_ttf
+, gnuplot
+, perl
+, perlPackages
 }:
-
 let
-
   fontsConf = makeFontsConf { fontDirectories = [ freefont_ttf ]; };
-
 in
-
 perlPackages.buildPerlPackage rec {
   pname = "feedgnuplot";
   version = "1.51";
@@ -24,7 +27,7 @@ perlPackages.buildPerlPackage rec {
   nativeBuildInputs = [ makeWrapper gawk ];
 
   buildInputs = [ gnuplot perl ]
-    ++ (with perlPackages; [ ListMoreUtils IPCRun StringShellQuote ]);
+  ++ (with perlPackages; [ ListMoreUtils IPCRun StringShellQuote ]);
 
   # Fontconfig error: Cannot load default config file
   FONTCONFIG_FILE = fontsConf;

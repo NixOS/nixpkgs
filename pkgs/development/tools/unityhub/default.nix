@@ -3,13 +3,53 @@
 appimageTools.wrapType2 rec {
   name = "unityhub";
 
-  extraPkgs = (pkgs: with pkgs; with xorg; [ gtk2 gdk_pixbuf glib libGL libGLU nss nspr
-    alsaLib cups gnome2.GConf libcap fontconfig freetype pango
-    cairo dbus dbus-glib libdbusmenu libdbusmenu-gtk2 expat zlib libpng12 udev tbb
-    libpqxx gtk3 libsecret lsb-release openssl nodejs ncurses5
+  extraPkgs = (pkgs: with pkgs; with xorg; [
+    gtk2
+    gdk_pixbuf
+    glib
+    libGL
+    libGLU
+    nss
+    nspr
+    alsaLib
+    cups
+    gnome2.GConf
+    libcap
+    fontconfig
+    freetype
+    pango
+    cairo
+    dbus
+    dbus-glib
+    libdbusmenu
+    libdbusmenu-gtk2
+    expat
+    zlib
+    libpng12
+    udev
+    tbb
+    libpqxx
+    gtk3
+    libsecret
+    lsb-release
+    openssl
+    nodejs
+    ncurses5
 
-    libX11 libXcursor libXdamage libXfixes libXrender libXi
-    libXcomposite libXext libXrandr libXtst libSM libICE libxcb ]);
+    libX11
+    libXcursor
+    libXdamage
+    libXfixes
+    libXrender
+    libXi
+    libXcomposite
+    libXext
+    libXrandr
+    libXtst
+    libSM
+    libICE
+    libxcb
+  ]);
 
   profile = ''
     export XDG_DATA_DIRS=${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}:${gtk3}/share/gsettings-schemas/${gtk3.name}:$XDG_DATA_DIRS

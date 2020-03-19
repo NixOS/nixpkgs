@@ -1,4 +1,7 @@
-{ lib, fetchPypi, buildPythonPackage, isPy27
+{ lib
+, fetchPypi
+, buildPythonPackage
+, isPy27
 , awkward
 , backports_lzma
 , cachetools

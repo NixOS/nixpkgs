@@ -24,5 +24,3 @@ stdenv.mkDerivation {
     description = "Phonetic font for TeX";
   };
 }
-
-

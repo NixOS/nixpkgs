@@ -18,8 +18,8 @@ let
     SigningPublicKey = "de111da0ec781e45bf6c63ecb45a78c24d7d4655abfaeea83b26c36eb5c0fd5b";
     SigningPrivateKey = "2a6c21550f3fca0331df50668ffab66b6dce8237bcd5728e571e8033b363e247de111da0ec781e45bf6c63ecb45a78c24d7d4655abfaeea83b26c36eb5c0fd5b";
   };
-
-in import ./make-test-python.nix ({ pkgs, ...} : {
+in
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "yggdrasil";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ gazally ];
@@ -33,10 +33,12 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
       { ... }:
       {
         networking = {
-          interfaces.eth1.ipv4.addresses = [{
-            address = "192.168.1.200";
-            prefixLength = 24;
-          }];
+          interfaces.eth1.ipv4.addresses = [
+            {
+              address = "192.168.1.200";
+              prefixLength = 24;
+            }
+          ];
           firewall.allowedTCPPorts = [ 80 12345 ];
         };
         services.httpd.enable = true;
@@ -45,13 +47,13 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
         services.yggdrasil = {
           enable = true;
           config = {
-            Listen = ["tcp://0.0.0.0:12345"];
+            Listen = [ "tcp://0.0.0.0:12345" ];
             MulticastInterfaces = [ ];
           };
           configFile = toString (pkgs.writeTextFile {
-                         name = "yggdrasil-alice-conf";
-                         text = builtins.toJSON aliceKeys;
-                       });
+            name = "yggdrasil-alice-conf";
+            text = builtins.toJSON aliceKeys;
+          });
         };
       };
 
@@ -65,9 +67,9 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           enable = true;
           openMulticastPort = true;
           configFile = toString (pkgs.writeTextFile {
-                         name = "yggdrasil-bob-conf";
-                         text = builtins.toJSON bobConfig;
-                       });
+            name = "yggdrasil-bob-conf";
+            text = builtins.toJSON bobConfig;
+          });
         };
       };
 
@@ -87,7 +89,7 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           };
         };
       };
-    };
+  };
 
   testScript =
     ''

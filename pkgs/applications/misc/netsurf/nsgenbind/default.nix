@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, flex, bison
+{ stdenv
+, fetchurl
+, flex
+, bison
 , buildsystem
 }:
 

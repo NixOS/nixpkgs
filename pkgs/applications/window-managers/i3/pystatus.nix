@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [] }:
+{ stdenv, fetchFromGitHub, libpulseaudio, python3Packages, extraLibs ? [ ] }:
 
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
@@ -7,15 +7,15 @@ python3Packages.buildPythonApplication rec {
   pname = "i3pystatus";
 
   src = fetchFromGitHub
-  {
-    owner = "enkore";
-    repo = "i3pystatus";
-    rev = "56ce08d0ff8d5d64950d6b588ebede35a95e0ce2";
-    sha256 = "12938860jbcly1xwhd71jvy2dff28pwv9kqh6mab1859148bzmcg";
-  };
+    {
+      owner = "enkore";
+      repo = "i3pystatus";
+      rev = "56ce08d0ff8d5d64950d6b588ebede35a95e0ce2";
+      sha256 = "12938860jbcly1xwhd71jvy2dff28pwv9kqh6mab1859148bzmcg";
+    };
 
-  propagatedBuildInputs = with python3Packages; [ keyring colour netifaces psutil basiciw ] ++
-    [ libpulseaudio ] ++ extraLibs;
+  propagatedBuildInputs = with python3Packages; [ keyring colour netifaces psutil basiciw ]
+  ++ [ libpulseaudio ] ++ extraLibs;
 
   libpulseaudioPath = stdenv.lib.makeLibraryPath [ libpulseaudio ];
   ldWrapperSuffix = "--suffix LD_LIBRARY_PATH : \"${libpulseaudioPath}\"";

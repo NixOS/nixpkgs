@@ -1,9 +1,16 @@
-{ stdenv, lib, fetchgit, cmake, llvmPackages, boost, python
+{ stdenv
+, lib
+, fetchgit
+, cmake
+, llvmPackages
+, boost
+, python
 , gocode ? null
 , godef ? null
 , gotools ? null
 , rustracerd ? null
-, fixDarwinDylibNames, Cocoa ? null
+, fixDarwinDylibNames
+, Cocoa ? null
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +26,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [ boost llvmPackages.libclang ]
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
+  ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames Cocoa ];
 
   buildPhase = ''
     export EXTRA_CMAKE_ARGS=-DPATH_TO_LLVM_ROOT=${llvmPackages.clang-unwrapped}

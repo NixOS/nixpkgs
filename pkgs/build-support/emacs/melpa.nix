@@ -5,7 +5,8 @@
 
 with lib;
 
-{ /*
+{
+  /*
     pname: Nix package name without special symbols and without version or
     "emacs-" prefix.
   */
@@ -16,82 +17,79 @@ with lib;
 , ename ? null
 , version
 , recipe
-, meta ? {}
+, meta ? { }
 , ...
 }@args:
-
 let
-
   defaultMeta = {
     homepage = args.src.meta.homepage or "http://melpa.org/#/${pname}";
   };
-
 in
+import ./generic.nix { inherit lib stdenv emacs texinfo; } (
+  {
 
-import ./generic.nix { inherit lib stdenv emacs texinfo; } ({
+    ename =
+      if ename == null
+      then pname
+      else ename;
 
-  ename =
-    if ename == null
-    then pname
-    else ename;
+    packageBuild = fetchFromGitHub {
+      owner = "melpa";
+      repo = "package-build";
+      rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
+      sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
+    };
 
-  packageBuild = fetchFromGitHub {
-    owner = "melpa";
-    repo = "package-build";
-    rev = "0a22c3fbbf661822ec1791739953b937a12fa623";
-    sha256 = "0dpy5p34il600sc8ic5jdgb3glya9si3lrvhxab0swks8fdydjgs";
-  };
+    elpa2nix = ./elpa2nix.el;
+    melpa2nix = ./melpa2nix.el;
 
-  elpa2nix = ./elpa2nix.el;
-  melpa2nix = ./melpa2nix.el;
+    preUnpack = ''
+      mkdir -p "$NIX_BUILD_TOP/recipes"
+      if [ -n "$recipe" ]; then
+        cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
+      fi
 
-  preUnpack = ''
-    mkdir -p "$NIX_BUILD_TOP/recipes"
-    if [ -n "$recipe" ]; then
-      cp "$recipe" "$NIX_BUILD_TOP/recipes/$ename"
-    fi
+      ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
 
-    ln -s "$packageBuild" "$NIX_BUILD_TOP/package-build"
-
-    mkdir -p "$NIX_BUILD_TOP/packages"
-  '';
-
-  postUnpack = ''
-    mkdir -p "$NIX_BUILD_TOP/working"
-    ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
-  '';
-
-  buildPhase = ''
-    runHook preBuild
-
-    cd "$NIX_BUILD_TOP"
-
-    emacs --batch -Q \
-        -L "$NIX_BUILD_TOP/package-build" \
-        -l "$melpa2nix" \
-        -f melpa2nix-build-package \
-        $ename $version
-
-    runHook postBuild
+      mkdir -p "$NIX_BUILD_TOP/packages"
     '';
 
-  installPhase = ''
-    runHook preInstall
+    postUnpack = ''
+      mkdir -p "$NIX_BUILD_TOP/working"
+      ln -s "$NIX_BUILD_TOP/$sourceRoot" "$NIX_BUILD_TOP/working/$ename"
+    '';
 
-    archive="$NIX_BUILD_TOP/packages/$ename-$version.el"
-    if [ ! -f "$archive" ]; then
-        archive="$NIX_BUILD_TOP/packages/$ename-$version.tar"
-    fi
+    buildPhase = ''
+      runHook preBuild
 
-    emacs --batch -Q \
-        -l "$elpa2nix" \
-        -f elpa2nix-install-package \
-        "$archive" "$out/share/emacs/site-lisp/elpa"
+      cd "$NIX_BUILD_TOP"
 
-    runHook postInstall
-  '';
+      emacs --batch -Q \
+          -L "$NIX_BUILD_TOP/package-build" \
+          -l "$melpa2nix" \
+          -f melpa2nix-build-package \
+          $ename $version
 
-  meta = defaultMeta // meta;
-}
+      runHook postBuild
+    '';
 
-// removeAttrs args [ "meta" ])
+    installPhase = ''
+      runHook preInstall
+
+      archive="$NIX_BUILD_TOP/packages/$ename-$version.el"
+      if [ ! -f "$archive" ]; then
+          archive="$NIX_BUILD_TOP/packages/$ename-$version.tar"
+      fi
+
+      emacs --batch -Q \
+          -l "$elpa2nix" \
+          -f elpa2nix-install-package \
+          "$archive" "$out/share/emacs/site-lisp/elpa"
+
+      runHook postInstall
+    '';
+
+    meta = defaultMeta // meta;
+  }
+  // removeAttrs args [ "meta" ]
+)

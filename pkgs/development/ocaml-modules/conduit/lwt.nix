@@ -4,11 +4,11 @@ if !stdenv.lib.versionAtLeast conduit.version "1.0"
 then conduit
 else
 
-buildDunePackage {
-	pname = "conduit-lwt";
-	inherit (conduit) version src meta;
+  buildDunePackage {
+    pname = "conduit-lwt";
+    inherit (conduit) version src meta;
 
-	buildInputs = [ ppx_sexp_conv ];
+    buildInputs = [ ppx_sexp_conv ];
 
-	propagatedBuildInputs = [ conduit ocaml_lwt ];
-}
+    propagatedBuildInputs = [ conduit ocaml_lwt ];
+  }

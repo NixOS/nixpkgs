@@ -1,5 +1,18 @@
-{ fetchurl, stdenv, pkgconfig, intltool, gettext, glib, libxml2, zlib, bzip2
-, perl, gdk-pixbuf, libiconv, libintl, gnome3 }:
+{ fetchurl
+, stdenv
+, pkgconfig
+, intltool
+, gettext
+, glib
+, libxml2
+, zlib
+, bzip2
+, perl
+, gdk-pixbuf
+, libiconv
+, libintl
+, gnome3
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgsf";
@@ -30,10 +43,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "GNOME's Structured File Library";
-    homepage    = https://www.gnome.org/projects/libgsf;
-    license     = licenses.lgpl2Plus;
+    homepage = https://www.gnome.org/projects/libgsf;
+    license = licenses.lgpl2Plus;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = stdenv.lib.platforms.unix;
+    platforms = stdenv.lib.platforms.unix;
 
     longDescription = ''
       Libgsf aims to provide an efficient extensible I/O abstraction for

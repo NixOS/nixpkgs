@@ -1,9 +1,7 @@
-with import <nixpkgs> {};
-
+with import <nixpkgs> { };
 let
   inherit (lib) optional;
 in
-
 mkShell rec {
   name = "nixpkgs-github-update-shell";
 

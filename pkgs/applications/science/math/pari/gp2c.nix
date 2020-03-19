@@ -1,5 +1,8 @@
-{ stdenv, fetchurl
-, pari, perl }:
+{ stdenv
+, fetchurl
+, pari
+, perl
+}:
 
 stdenv.mkDerivation rec {
 
@@ -15,13 +18,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-paricfg=${pari}/lib/pari/pari.cfg"
-    "--with-perl=${perl}/bin/perl" ];
+    "--with-perl=${perl}/bin/perl"
+  ];
 
   meta = with stdenv.lib; {
-    description =  "A compiler to translate GP scripts to PARI programs";
-    homepage    = "http://pari.math.u-bordeaux.fr/";
+    description = "A compiler to translate GP scripts to PARI programs";
+    homepage = "http://pari.math.u-bordeaux.fr/";
     downloadPage = "http://pari.math.u-bordeaux.fr/download.html";
-    license     = licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ AndersonTorres ];
   };
 }

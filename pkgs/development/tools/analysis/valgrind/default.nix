@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   # GDB is needed to provide a sane default for `--db-command'.
   # Perl is needed for `callgrind_{annotate,control}'.
-  buildInputs = [ gdb perl ]  ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
+  buildInputs = [ gdb perl ] ++ stdenv.lib.optionals (stdenv.isDarwin) [ bootstrap_cmds xnu ];
 
   # Perl is also a native build input.
   nativeBuildInputs = [ perl ];
@@ -23,9 +23,10 @@ stdenv.mkDerivation rec {
   separateDebugInfo = stdenv.isLinux;
 
   preConfigure = stdenv.lib.optionalString stdenv.isDarwin (
-    let OSRELEASE = ''
-      $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
-      <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
+    let
+      OSRELEASE = ''
+        $(awk -F '"' '/#define OSRELEASE/{ print $2 }' \
+        <${xnu}/Library/Frameworks/Kernel.framework/Headers/libkern/version.h)'';
     in ''
       echo "Don't derive our xnu version using uname -r."
       substituteInPlace configure --replace "uname -r" "echo ${OSRELEASE}"
@@ -48,7 +49,8 @@ stdenv.mkDerivation rec {
       echo "substitute hardcoded /usr/bin/ld with ${cctools}/bin/ld"
       substituteInPlace coregrind/link_tool_exe_darwin.in \
         --replace /usr/bin/ld ${cctools}/bin/ld
-    '');
+    ''
+  );
 
   # To prevent rebuild on linux when moving darwin's postPatch fixes to preConfigure
   postPatch = "";
@@ -84,9 +86,13 @@ stdenv.mkDerivation rec {
     maintainers = [ stdenv.lib.maintainers.eelco ];
     platforms = stdenv.lib.platforms.unix;
     badPlatforms = [
-      "armv5tel-linux" "armv6l-linux" "armv6m-linux"
-      "sparc-linux" "sparc64-linux"
-      "riscv32-linux" "riscv64-linux"
+      "armv5tel-linux"
+      "armv6l-linux"
+      "armv6m-linux"
+      "sparc-linux"
+      "sparc64-linux"
+      "riscv32-linux"
+      "riscv64-linux"
       "alpha-linux"
     ];
   };

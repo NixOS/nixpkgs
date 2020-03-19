@@ -1,21 +1,59 @@
-{ qtModule, qtCompatVersion,
-  qtdeclarative, qtquickcontrols, qtlocation, qtwebchannel
+{ qtModule
+, qtCompatVersion
+, qtdeclarative
+, qtquickcontrols
+, qtlocation
+, qtwebchannel
 
-, bison, coreutils, flex, git, gperf, ninja, pkgconfig, python2, which
+, bison
+, coreutils
+, flex
+, git
+, gperf
+, ninja
+, pkgconfig
+, python2
+, which
 
-, xorg, libXcursor, libXScrnSaver, libXrandr, libXtst
-, fontconfig, freetype, harfbuzz, icu, dbus, libdrm
-, zlib, minizip, libjpeg, libpng, libtiff, libwebp, libopus
-, jsoncpp, protobuf, libvpx, srtp, snappy, nss, libevent
+, xorg
+, libXcursor
+, libXScrnSaver
+, libXrandr
+, libXtst
+, fontconfig
+, freetype
+, harfbuzz
+, icu
+, dbus
+, libdrm
+, zlib
+, minizip
+, libjpeg
+, libpng
+, libtiff
+, libwebp
+, libopus
+, jsoncpp
+, protobuf
+, libvpx
+, srtp
+, snappy
+, nss
+, libevent
 , alsaLib
 , libcap
 , pciutils
 , systemd
 , enableProprietaryCodecs ? true
 , gn
-, cups, darwin, openbsm, runCommand, xcbuild
+, cups
+, darwin
+, openbsm
+, runCommand
+, xcbuild
 , ffmpeg ? null
-, lib, stdenv
+, lib
+, stdenv
 }:
 
 with stdenv.lib;
@@ -24,7 +62,16 @@ qtModule {
   name = "qtwebengine";
   qtInputs = [ qtdeclarative qtquickcontrols qtlocation qtwebchannel ];
   nativeBuildInputs = [
-    bison coreutils flex git gperf ninja pkgconfig python2 which gn
+    bison
+    coreutils
+    flex
+    git
+    gperf
+    ninja
+    pkgconfig
+    python2
+    which
+    gn
   ] ++ optional stdenv.isDarwin xcbuild;
   doCheck = true;
   outputs = [ "bin" "dev" "out" ];
@@ -131,43 +178,63 @@ EOF
     if [ -d "$PWD/tools/qmake" ]; then
         QMAKEPATH="$PWD/tools/qmake''${QMAKEPATH:+:}$QMAKEPATH"
     fi
-   '';
+  '';
 
-  qmakeFlags = if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
+  qmakeFlags =
+    if stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64
     then [ "--" "-system-ffmpeg" ] ++ optional enableProprietaryCodecs "-proprietary-codecs"
     else optional enableProprietaryCodecs "-- -proprietary-codecs";
 
   propagatedBuildInputs = [
     # Image formats
-    libjpeg libpng libtiff libwebp
+    libjpeg
+    libpng
+    libtiff
+    libwebp
 
     # Video formats
-    srtp libvpx
+    srtp
+    libvpx
 
     # Audio formats
     libopus
 
     # Text rendering
-    harfbuzz icu
+    harfbuzz
+    icu
 
     libevent
   ] ++ optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
     ffmpeg
   ] ++ optionals (!stdenv.isDarwin) [
-    dbus zlib minizip snappy nss protobuf jsoncpp
+    dbus
+    zlib
+    minizip
+    snappy
+    nss
+    protobuf
+    jsoncpp
 
     # Audio formats
     alsaLib
 
     # Text rendering
-    fontconfig freetype
+    fontconfig
+    freetype
 
     libcap
     pciutils
 
     # X11 libs
-    xorg.xrandr libXScrnSaver libXcursor libXrandr xorg.libpciaccess libXtst
-    xorg.libXcomposite xorg.libXdamage libdrm
+    xorg.xrandr
+    libXScrnSaver
+    libXcursor
+    libXrandr
+    xorg.libpciaccess
+    libXtst
+    xorg.libXcomposite
+    xorg.libXdamage
+    libdrm
   ]
 
   # FIXME These dependencies shouldn't be needed but can't find a way
@@ -198,7 +265,7 @@ EOF
     cups
 
     # For sandbox.h include
-    (runCommand "MacOS_SDK_sandbox.h" {} ''
+    (runCommand "MacOS_SDK_sandbox.h" { } ''
       install -Dm444 "${lib.getDev darwin.apple_sdk.sdk}"/include/sandbox.h "$out"/include/sandbox.h
     '')
   ]);

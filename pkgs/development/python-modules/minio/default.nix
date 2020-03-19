@@ -1,5 +1,15 @@
-{ lib, buildPythonPackage, isPy3k, fetchPypi
-, urllib3, future, python-dateutil , pytz, faker, mock, nose }:
+{ lib
+, buildPythonPackage
+, isPy3k
+, fetchPypi
+, urllib3
+, future
+, python-dateutil
+, pytz
+, faker
+, mock
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "minio";

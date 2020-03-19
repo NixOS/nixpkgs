@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-features";
 
-  asdFilesToKeep = ["trivial-features.asd"];
+  asdFilesToKeep = [ "trivial-features.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-features DESCRIPTION

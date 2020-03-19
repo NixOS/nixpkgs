@@ -36,12 +36,12 @@ buildPythonPackage rec {
   hardeningDisable = [ "format" ];
 
   nativeBuildInputs = [ pkgconfig ]
-    ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
-    ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ]);
+  ++ (lib.optionals (!stdenv.isDarwin) [ wxGTK libX11 ])
+  ++ (lib.optionals stdenv.isDarwin [ wxmac darwin.apple_sdk.frameworks.Cocoa ]);
 
   buildInputs = [ ]
-    ++ (lib.optionals (!stdenv.isDarwin) [  (wxGTK.gtk) ])
-    ++ (lib.optional openglSupport pyopengl);
+  ++ (lib.optionals (!stdenv.isDarwin) [ (wxGTK.gtk) ])
+  ++ (lib.optional openglSupport pyopengl);
 
   preConfigure = ''
     cd wxPython

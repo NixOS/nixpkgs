@@ -1,9 +1,10 @@
 { config, lib, ... }:
 
 with lib;
-
-let cfg = config.programs.systemtap;
-in {
+let
+  cfg = config.programs.systemtap;
+in
+{
 
   options = {
     programs.systemtap = {

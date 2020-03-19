@@ -3,7 +3,7 @@ stdenv.mkDerivation rec {
   version = "1.11";
   pname = "beanstalkd";
 
-  installPhase=''make install "PREFIX=$out"'';
+  installPhase = ''make install "PREFIX=$out"'';
 
   src = fetchurl {
     url = "https://github.com/kr/beanstalkd/archive/v${version}.tar.gz";
@@ -20,4 +20,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

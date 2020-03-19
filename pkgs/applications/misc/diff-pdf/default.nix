@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, autoconf, automake, pkgconfig, cairo, poppler, wxGTK ? null, wxmac ? null, darwin ? null }:
-
 let
   wxInputs =
-    if stdenv.isDarwin then
+    if stdenv.isDarwin
+    then
       [ wxmac darwin.apple_sdk.frameworks.Cocoa ]
     else
       [ wxGTK ];

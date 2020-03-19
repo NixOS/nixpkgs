@@ -1,4 +1,4 @@
-{stdenv, fetchurl, readline}:
+{ stdenv, fetchurl, readline }:
 
 stdenv.mkDerivation {
   name = "renameutils-0.12.0";

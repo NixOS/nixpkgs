@@ -12,13 +12,22 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = with pkgs; [
-    swig qt5.qmake cmake
+    swig
+    qt5.qmake
+    cmake
   ];
 
   buildInputs = with pkgs; with xorg; [
-    coin3d soqt qt5.qtbase
-    libGLU libGL
-    libXi libXext libSM libICE libX11
+    coin3d
+    soqt
+    qt5.qtbase
+    libGLU
+    libGL
+    libXi
+    libXext
+    libSM
+    libICE
+    libX11
   ];
 
   NIX_CFLAGS_COMPILE = toString [

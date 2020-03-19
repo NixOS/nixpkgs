@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, which, git, ronn, perlPackages }:
 
 stdenv.mkDerivation {
-  version = "1.20170915";       # date of commit we're pulling
+  version = "1.20170915"; # date of commit we're pulling
   pname = "vcsh";
 
   src = fetchFromGitHub {
@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   buildInputs = [ which git ronn ]
-    ++ (with perlPackages; [ perl ShellCommand TestMost TestDifferences TestDeep TestException TestWarn ]);
+  ++ (with perlPackages; [ perl ShellCommand TestMost TestDifferences TestDeep TestException TestWarn ]);
 
   installPhase = "make install PREFIX=$out";
 

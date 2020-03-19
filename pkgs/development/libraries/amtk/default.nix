@@ -1,9 +1,16 @@
-{ stdenv, fetchurl, gtk3
-, pkgconfig, gnome3, dbus, xvfb_run }:
+{ stdenv
+, fetchurl
+, gtk3
+, pkgconfig
+, gnome3
+, dbus
+, xvfb_run
+}:
 let
   version = "5.0.2";
   pname = "amtk";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {

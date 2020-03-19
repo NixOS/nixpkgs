@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   enabled = elem "displaylink" config.services.xserver.videoDrivers;
 
   evdi = config.boot.kernelPackages.evdi;
@@ -11,9 +9,7 @@ let
   displaylink = pkgs.displaylink.override {
     inherit evdi;
   };
-
 in
-
 {
 
   config = mkIf enabled {

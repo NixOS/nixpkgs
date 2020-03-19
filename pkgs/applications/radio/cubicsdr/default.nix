@@ -1,5 +1,17 @@
-{ stdenv, fetchFromGitHub, cmake, fftw, hamlib, libpulseaudio, libGL, libX11, liquid-dsp,
-  pkgconfig, soapysdr-with-plugins, wxGTK, enableDigitalLab ? false }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, fftw
+, hamlib
+, libpulseaudio
+, libGL
+, libX11
+, liquid-dsp
+, pkgconfig
+, soapysdr-with-plugins
+, wxGTK
+, enableDigitalLab ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "cubicsdr";
@@ -16,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ fftw hamlib libpulseaudio libGL libX11 liquid-dsp soapysdr-with-plugins wxGTK ];
 
   cmakeFlags = [ "-DUSE_HAMLIB=ON" ]
-    ++ stdenv.lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
+  ++ stdenv.lib.optional enableDigitalLab "-DENABLE_DIGITAL_LAB=ON";
 
   meta = with stdenv.lib; {
     homepage = https://cubicsdr.com;
@@ -26,4 +38,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

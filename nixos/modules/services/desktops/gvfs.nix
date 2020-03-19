@@ -3,13 +3,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.gvfs;
-
 in
-
 {
 
   # Added 2019-08-19

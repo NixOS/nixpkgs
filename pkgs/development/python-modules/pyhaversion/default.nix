@@ -1,12 +1,12 @@
 { lib
 , buildPythonPackage
 , fetchPypi
-# propagatedBuildInputs
+  # propagatedBuildInputs
 , aiohttp
 , async-timeout
-# buildInputs
+  # buildInputs
 , pytestrunner
-# checkInputs
+  # checkInputs
 , pytest
 , pytest-asyncio
 , aresponses

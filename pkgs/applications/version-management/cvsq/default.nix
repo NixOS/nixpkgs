@@ -8,7 +8,7 @@
 , rsync
 , coreutils
 , diffutils
-} :
+}:
 
 stdenv.mkDerivation rec {
   pname = "cvsq";

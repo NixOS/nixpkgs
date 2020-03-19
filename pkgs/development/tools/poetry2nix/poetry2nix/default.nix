@@ -1,4 +1,4 @@
-{ pkgs ? import <nixpkgs> {}
+{ pkgs ? import <nixpkgs> { }
 , lib ? pkgs.lib
 , poetry ? null
 , poetryLib ? import ./lib.nix { inherit lib pkgs; }
@@ -34,7 +34,8 @@ let
     , overrides ? [ defaultPoetryOverrides ]
     , python ? pkgs.python3
     , pwd ? projectDir
-    }@attrs: let
+    }@attrs:
+    let
       poetryPkg = poetry.override { inherit python; };
 
       pyProject = readTOML pyproject;
@@ -51,10 +52,11 @@ let
       evalPep508 = mkEvalPep508 python;
 
       # Filter packages by their PEP508 markers & pyproject interpreter version
-      partitions = let
-        supportsPythonVersion = pkgMeta: if pkgMeta ? marker then (evalPep508 pkgMeta.marker) else true;
-      in
-        lib.partition supportsPythonVersion poetryLock.package;
+      partitions =
+        let
+          supportsPythonVersion = pkgMeta: if pkgMeta ? marker then (evalPep508 pkgMeta.marker) else true;
+        in
+          lib.partition supportsPythonVersion poetryLock.package;
 
       compatible = partitions.right;
       incompatible = partitions.wrong;
@@ -67,28 +69,31 @@ let
         let
           getDep = depName: self.${depName};
 
-          lockPkgs = builtins.listToAttrs (
-            builtins.map (
-              pkgMeta: rec {
-                name = pkgMeta.name;
-                value = self.mkPoetryDep (
-                  pkgMeta // {
-                    inherit pwd;
-                    source = pkgMeta.source or null;
-                    files = lockFiles.${name};
-                    pythonPackages = self;
+          lockPkgs = builtins.listToAttrs
+            (
+              builtins.map
+                (
+                  pkgMeta: rec {
+                    name = pkgMeta.name;
+                    value = self.mkPoetryDep
+                      (
+                        pkgMeta // {
+                          inherit pwd;
+                          source = pkgMeta.source or null;
+                          files = lockFiles.${name};
+                          pythonPackages = self;
+                        }
+                      );
                   }
-                );
-              }
-            ) compatible
-          );
+                ) compatible
+            );
         in
           lockPkgs;
       overlays = builtins.map getFunctorFn (
         [
-          (
-            self: super: let
-              hooks = self.callPackage ./hooks {};
+          (self: super:
+            let
+              hooks = self.callPackage ./hooks { };
             in
               {
                 mkPoetryDep = self.callPackage ./mk-poetry-dep.nix {
@@ -109,7 +114,7 @@ let
         overrides
       );
 
-      packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) overlays;
+      packageOverrides = lib.foldr lib.composeExtensions (self: super: { }) overlays;
 
       py = python.override { inherit packageOverrides; self = py; };
     in
@@ -133,14 +138,12 @@ let
     , pwd ? projectDir
     , python ? pkgs.python3
     }:
-      let
-        py = mkPoetryPackages (
-          {
-            inherit pyproject poetrylock overrides python pwd;
-          }
-        );
-      in
-        py.python.withPackages (_: py.poetryPackages);
+    let
+      py = mkPoetryPackages ({
+        inherit pyproject poetrylock overrides python pwd;
+      });
+    in
+      py.python.withPackages (_: py.poetryPackages);
 
   /* Creates a Python application from pyproject.toml and poetry.lock */
   mkPoetryApplication =
@@ -149,11 +152,12 @@ let
     , pyproject ? projectDir + "/pyproject.toml"
     , poetrylock ? projectDir + "/poetry.lock"
     , overrides ? [ defaultPoetryOverrides ]
-    , meta ? {}
+    , meta ? { }
     , python ? pkgs.python3
     , pwd ? projectDir
     , ...
-    }@attrs: let
+    }@attrs:
+    let
       poetryPython = mkPoetryPackages {
         inherit pyproject poetrylock overrides python pwd;
       };
@@ -170,59 +174,60 @@ let
       passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
       # Get dependencies and filter out depending on interpreter version
-      getDeps = depAttr: let
-        compat = isCompatible py.pythonVersion;
-        deps = pyProject.tool.poetry.${depAttr} or {};
-        depAttrs = builtins.map (d: lib.toLower d) (builtins.attrNames deps);
-      in
-        builtins.map (
-          dep: let
-            pkg = py.pkgs."${dep}";
-            constraints = deps.${dep}.python or "";
-            isCompat = compat constraints;
-          in
-            if isCompat then pkg else null
-        ) depAttrs;
+      getDeps = depAttr:
+        let
+          compat = isCompatible py.pythonVersion;
+          deps = pyProject.tool.poetry.${depAttr} or { };
+          depAttrs = builtins.map (d: lib.toLower d) (builtins.attrNames deps);
+        in
+          builtins.map
+            (dep:
+            let
+              pkg = py.pkgs."${dep}";
+              constraints = deps.${dep}.python or "";
+              isCompat = compat constraints;
+            in
+              if isCompat then pkg else null
+            ) depAttrs;
 
-      getInputs = attr: attrs.${attr} or [];
+      getInputs = attr: attrs.${attr} or [ ];
       mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
 
       buildSystemPkgs = poetryLib.getBuildSystemPkgs {
         inherit pyProject;
         pythonPackages = py.pkgs;
       };
-
     in
-      py.pkgs.buildPythonApplication (
-        passedAttrs // {
-          pname = pyProject.tool.poetry.name;
-          version = pyProject.tool.poetry.version;
+      py.pkgs.buildPythonApplication
+        (
+          passedAttrs // {
+            pname = pyProject.tool.poetry.name;
+            version = pyProject.tool.poetry.version;
 
-          inherit src;
+            inherit src;
 
-          format = "pyproject";
+            format = "pyproject";
 
-          buildInputs = mkInput "buildInputs" buildSystemPkgs;
-          propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
-          nativeBuildInputs = mkInput "nativeBuildInputs" [ pkgs.yj py.pkgs.removePathDependenciesHook ];
-          checkInputs = mkInput "checkInputs" (getDeps "dev-dependencies");
+            buildInputs = mkInput "buildInputs" buildSystemPkgs;
+            propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
+            nativeBuildInputs = mkInput "nativeBuildInputs" [ pkgs.yj py.pkgs.removePathDependenciesHook ];
+            checkInputs = mkInput "checkInputs" (getDeps "dev-dependencies");
 
-          passthru = {
-            python = py;
-          };
+            passthru = {
+              python = py;
+            };
 
-          meta = meta // {
-            inherit (pyProject.tool.poetry) description homepage;
-            inherit (py.meta) platforms;
-            license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
-          };
+            meta = meta // {
+              inherit (pyProject.tool.poetry) description homepage;
+              inherit (py.meta) platforms;
+              license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
+            };
 
-        }
-      );
+          }
+        );
 
   /* Poetry2nix CLI used to supplement SHA-256 hashes for git dependencies  */
   cli = import ./cli.nix { inherit pkgs lib version; };
-
 in
 {
   inherit mkPoetryEnv mkPoetryApplication mkPoetryPackages cli version;
@@ -236,11 +241,12 @@ in
   */
   defaultPoetryOverrides = {
     __functor = defaultPoetryOverrides;
-    overrideOverlay = fn: self: super: let
-      defaultSet = defaultPoetryOverrides self super;
-      customSet = fn self super;
-    in
-      defaultSet // customSet;
+    overrideOverlay = fn: self: super:
+      let
+        defaultSet = defaultPoetryOverrides self super;
+        customSet = fn self super;
+      in
+        defaultSet // customSet;
   };
 
   /*

@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, bap, ocaml, findlib, ctypes, autoreconfHook,
-  which }:
+{ stdenv
+, fetchFromGitHub
+, bap
+, ocaml
+, findlib
+, ctypes
+, autoreconfHook
+, which
+}:
 
 stdenv.mkDerivation {
   pname = "libbap";

@@ -57,9 +57,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "The music player for music lovers.";
-    homepage    = https://roonlabs.com;
-    license     = licenses.unfree;
+    homepage = https://roonlabs.com;
+    license = licenses.unfree;
     maintainers = with maintainers; [ steell ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

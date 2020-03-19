@@ -1,9 +1,14 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , fltk
 , openssl
-, libjpeg, libpng
+, libjpeg
+, libpng
 , perl
-, libXcursor, libXi, libXinerama }:
+, libXcursor
+, libXi
+, libXinerama
+}:
 
 stdenv.mkDerivation rec {
   version = "3.0.5";
@@ -15,7 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = with stdenv.lib;
-  [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
+    [ perl fltk openssl libjpeg libpng libXcursor libXi libXinerama ];
 
   configureFlags = [ "--enable-ssl" ];
 

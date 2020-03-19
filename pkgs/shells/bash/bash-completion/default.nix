@@ -1,4 +1,5 @@
-{ stdenv, fetchFromGitHub
+{ stdenv
+, fetchFromGitHub
 , fetchpatch
 , autoreconfHook
 , python3Packages
@@ -32,9 +33,9 @@ stdenv.mkDerivation rec {
     #       is availabe in a release in nixpkgs. see https://github.com/scop/bash-completion/issues/312.
     # Fixes a test failure with musl.
     (fetchpatch {
-     url = "https://github.com/scop/bash-completion/commit/2cdac1b9f24df62a1fa80c1824ee8524c9b02393.patch";
-     name = "bash-completion-musl-test_iconv-skip-option-completion-if-help-fails";
-     sha256 = "1l53d62zf01k625nzw3vcrxky93h7bzdpchgk4argxalrn17ckvb";
+      url = "https://github.com/scop/bash-completion/commit/2cdac1b9f24df62a1fa80c1824ee8524c9b02393.patch";
+      name = "bash-completion-musl-test_iconv-skip-option-completion-if-help-fails";
+      sha256 = "1l53d62zf01k625nzw3vcrxky93h7bzdpchgk4argxalrn17ckvb";
     })
   ];
 

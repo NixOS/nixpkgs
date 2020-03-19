@@ -1,18 +1,17 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.triggerhappy;
 
   socket = "/run/thd.socket";
 
   configFile = pkgs.writeText "triggerhappy.conf" ''
     ${concatMapStringsSep "\n"
-      ({ keys, event, cmd, ... }:
-        ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}''
-      )
+      (
+          { keys, event, cmd, ... }:
+              ''${concatMapStringsSep "+" (x: "KEY_" + x) keys} ${toString { press = 1; hold = 2; release = 0; }.${event}} ${cmd}''
+        )
       cfg.bindings}
     ${cfg.extraConfig}
   '';
@@ -26,7 +25,7 @@ let
       };
 
       event = mkOption {
-        type = types.enum ["press" "hold" "release"];
+        type = types.enum [ "press" "hold" "release" ];
         default = "press";
         description = "Event to match.";
       };
@@ -38,9 +37,7 @@ let
 
     };
   };
-
 in
-
 {
 
   ###### interface
@@ -68,7 +65,7 @@ in
 
       bindings = mkOption {
         type = types.listOf (types.submodule bindingCfg);
-        default = [];
+        default = [ ];
         example = lib.literalExample ''
           [ { keys = ["PLAYPAUSE"];  cmd = "''${pkgs.mpc_cli}/bin/mpc -q toggle"; } ]
         '';
@@ -108,14 +105,15 @@ in
       };
     };
 
-    services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "triggerhappy-udev-rules";
-      destination = "/etc/udev/rules.d/61-triggerhappy.rules";
-      text = ''
-        ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ATTRS{name}!="triggerhappy", \
-          RUN+="${pkgs.triggerhappy}/bin/th-cmd --socket ${socket} --passfd --udev"
-      '';
-    });
+    services.udev.packages = lib.singleton
+      (pkgs.writeTextFile {
+        name = "triggerhappy-udev-rules";
+        destination = "/etc/udev/rules.d/61-triggerhappy.rules";
+        text = ''
+          ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ATTRS{name}!="triggerhappy", \
+            RUN+="${pkgs.triggerhappy}/bin/th-cmd --socket ${socket} --passfd --udev"
+        '';
+      });
 
   };
 

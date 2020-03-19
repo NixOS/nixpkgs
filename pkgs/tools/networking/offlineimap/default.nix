@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, python2Packages,
-  asciidoc, cacert, libxml2, libxslt, docbook_xsl }:
+{ stdenv
+, fetchFromGitHub
+, python2Packages
+, asciidoc
+, cacert
+, libxml2
+, libxslt
+, docbook_xsl
+}:
 
 python2Packages.buildPythonApplication rec {
   version = "7.3.2";

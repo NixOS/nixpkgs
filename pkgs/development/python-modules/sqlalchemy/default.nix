@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchPypi, buildPythonPackage, isPy3k, isPy35
+{ stdenv
+, lib
+, fetchPypi
+, buildPythonPackage
+, isPy3k
+, isPy35
 , mock
 , pysqlite
 , pytestCheckHook
@@ -25,8 +30,8 @@ buildPythonPackage rec {
   dontUseSetuptoolsCheck = true;
 
   # disable mem-usage tests on mac, has trouble serializing pickle files
-  disabledTests = lib.optionals isPy35 [ "exception_persistent_flush_py3k "]
-    ++ lib.optionals stdenv.isDarwin [ "MemUsageWBackendTest" "MemUsageTest" ];
+  disabledTests = lib.optionals isPy35 [ "exception_persistent_flush_py3k " ]
+  ++ lib.optionals stdenv.isDarwin [ "MemUsageWBackendTest" "MemUsageTest" ];
 
   meta = with lib; {
     homepage = http://www.sqlalchemy.org/;

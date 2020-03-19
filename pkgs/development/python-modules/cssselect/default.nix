@@ -12,6 +12,5 @@ buildPythonPackage rec {
   # AttributeError: 'module' object has no attribute 'tests'
   doCheck = false;
 
-  meta = with stdenv.lib; {
-  };
+  meta = with stdenv.lib; { };
 }

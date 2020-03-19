@@ -1,34 +1,77 @@
-{ stdenv, llvmPackages, gn, ninja, which, nodejs, fetchpatch, gnutar
+{ stdenv
+, llvmPackages
+, gn
+, ninja
+, which
+, nodejs
+, fetchpatch
+, gnutar
 
-# default dependencies
-, bzip2, flac, speex, libopus
-, libevent, expat, libjpeg, snappy
-, libpng, libcap
-, xdg_utils, yasm, minizip, libwebp
-, libusb1, pciutils, nss, re2, zlib
+  # default dependencies
+, bzip2
+, flac
+, speex
+, libopus
+, libevent
+, expat
+, libjpeg
+, snappy
+, libpng
+, libcap
+, xdg_utils
+, yasm
+, minizip
+, libwebp
+, libusb1
+, pciutils
+, nss
+, re2
+, zlib
 
-, python2Packages, perl, pkgconfig, clang-tools
-, nspr, systemd, kerberos
-, utillinux, alsaLib
-, bison, gperf
-, glib, gtk3, dbus-glib
+, python2Packages
+, perl
+, pkgconfig
+, clang-tools
+, nspr
+, systemd
+, kerberos
+, utillinux
+, alsaLib
+, bison
+, gperf
+, glib
+, gtk3
+, dbus-glib
 , glibc
-, libXScrnSaver, libXcursor, libXtst, libGLU, libGL
-, protobuf, speechd, libXdamage, cups
-, ffmpeg, libxslt, libxml2, at-spi2-core
+, libXScrnSaver
+, libXcursor
+, libXtst
+, libGLU
+, libGL
+, protobuf
+, speechd
+, libXdamage
+, cups
+, ffmpeg
+, libxslt
+, libxml2
+, at-spi2-core
 , jre
 
-# optional dependencies
+  # optional dependencies
 , libgcrypt ? null # gnomeSupport || cupsSupport
 , libva ? null # useVaapi
 
-# package customization
+  # package customization
 , useVaapi ? false
-, gnomeSupport ? false, gnome ? null
-, gnomeKeyringSupport ? false, libgnome-keyring3 ? null
+, gnomeSupport ? false
+, gnome ? null
+, gnomeKeyringSupport ? false
+, libgnome-keyring3 ? null
 , proprietaryCodecs ? true
 , cupsSupport ? true
-, pulseSupport ? false, libpulseaudio ? null
+, pulseSupport ? false
+, libpulseaudio ? null
 
 , upstream-info
 }:
@@ -38,7 +81,6 @@ buildFun:
 with stdenv.lib;
 
 # see http://www.linuxfromscratch.org/blfs/view/cvs/xsoft/chromium.html
-
 let
   # The additional attributes for creating derivations based on the chromium
   # source tree.
@@ -53,25 +95,40 @@ let
     let
       # Serialize Nix types into GN types according to this document:
       # https://chromium.googlesource.com/chromium/src/+/master/tools/gn/docs/language.md
-      mkGnString = value: "\"${escape ["\"" "$" "\\"] value}\"";
+      mkGnString = value: "\"${escape [ "\"" "$" "\\" ] value}\"";
       sanitize = value:
-        if value == true then "true"
-        else if value == false then "false"
-        else if isList value then "[${concatMapStringsSep ", " sanitize value}]"
-        else if isInt value then toString value
-        else if isString value then mkGnString value
-        else throw "Unsupported type for GN value `${value}'.";
+        if value == true
+        then "true"
+        else
+          if value == false
+          then "false"
+          else
+            if isList value
+            then "[${concatMapStringsSep ", " sanitize value}]"
+            else
+              if isInt value
+              then toString value
+              else
+                if isString value
+                then mkGnString value
+                else throw "Unsupported type for GN value `${value}'.";
       toFlag = key: value: "${key}=${sanitize value}";
     in attrs: concatStringsSep " " (attrValues (mapAttrs toFlag attrs));
 
   gnSystemLibraries = [
-    "flac" "libwebp" "libxslt" "yasm" "opus" "snappy" "libpng"
+    "flac"
+    "libwebp"
+    "libxslt"
+    "yasm"
+    "opus"
+    "snappy"
+    "libpng"
     # "zlib" # version 77 reports unresolved dependency on //third_party/zlib:zlib_config
     # "libjpeg" # fails with multiple undefined references to chromium_jpeg_*
     # "re2" # fails with linker errors
     # "ffmpeg" # https://crbug.com/731766
     # "harfbuzz-ng" # in versions over 63 harfbuzz and freetype are being built together
-                    # so we can't build with one from system and other from source
+    # so we can't build with one from system and other from source
   ];
 
   opusWithCustomModes = libopus.override {
@@ -79,14 +136,28 @@ let
   };
 
   defaultDependencies = [
-    bzip2 flac speex opusWithCustomModes
-    libevent expat libjpeg snappy
-    libpng libcap
-    xdg_utils yasm minizip libwebp
-    libusb1 re2 zlib
-    ffmpeg libxslt libxml2
+    bzip2
+    flac
+    speex
+    opusWithCustomModes
+    libevent
+    expat
+    libjpeg
+    snappy
+    libpng
+    libcap
+    xdg_utils
+    yasm
+    minizip
+    libwebp
+    libusb1
+    re2
+    zlib
+    ffmpeg
+    libxslt
+    libxml2
     # harfbuzz # in versions over 63 harfbuzz and freetype are being built together
-               # so we can't build with one from system and other from source
+    # so we can't build with one from system and other from source
   ];
 
   # build paths and release info
@@ -96,13 +167,15 @@ let
   libExecPath = "$out/libexec/${packageName}";
 
   versionRange = min-version: upto-version:
-    let inherit (upstream-info) version;
-        result = versionAtLeast version min-version && versionOlder version upto-version;
-        stable-version = (import ./upstream-info.nix).stable.version;
-    in if versionAtLeast stable-version upto-version
-       then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
-            result
-       else result;
+    let
+      inherit (upstream-info) version;
+      result = versionAtLeast version min-version && versionOlder version upto-version;
+      stable-version = (import ./upstream-info.nix).stable.version;
+    in
+      if versionAtLeast stable-version upto-version
+      then warn "chromium: stable version ${stable-version} is newer than a patchset bounded at ${upto-version}. You can safely delete it."
+        result
+      else result;
 
   llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
 
@@ -114,24 +187,45 @@ let
     src = upstream-info.main;
 
     nativeBuildInputs = [
-      ninja which python2Packages.python perl pkgconfig
-      python2Packages.ply python2Packages.jinja2 nodejs
+      ninja
+      which
+      python2Packages.python
+      perl
+      pkgconfig
+      python2Packages.ply
+      python2Packages.jinja2
+      nodejs
       gnutar
     ];
 
     buildInputs = defaultDependencies ++ [
-      nspr nss systemd
-      utillinux alsaLib
-      bison gperf kerberos
-      glib gtk3 dbus-glib
-      libXScrnSaver libXcursor libXtst libGLU libGL
-      pciutils protobuf speechd libXdamage at-spi2-core
+      nspr
+      nss
+      systemd
+      utillinux
+      alsaLib
+      bison
+      gperf
+      kerberos
+      glib
+      gtk3
+      dbus-glib
+      libXScrnSaver
+      libXcursor
+      libXtst
+      libGLU
+      libGL
+      pciutils
+      protobuf
+      speechd
+      libXdamage
+      at-spi2-core
       jre
     ] ++ optional gnomeKeyringSupport libgnome-keyring3
-      ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
-      ++ optionals cupsSupport [ libgcrypt cups ]
-      ++ optional useVaapi libva
-      ++ optional pulseSupport libpulseaudio;
+    ++ optionals gnomeSupport [ gnome.GConf libgcrypt ]
+    ++ optionals cupsSupport [ libgcrypt cups ]
+    ++ optional useVaapi libva
+    ++ optional pulseSupport libpulseaudio;
 
     patches = [
       ./patches/nix_plugin_paths_68.patch
@@ -220,51 +314,54 @@ let
       ln -s ${llvm-clang-tools}/bin/clang-format buildtools/linux64/clang-format
     '';
 
-    gnFlags = mkGnFlags ({
-      linux_use_bundled_binutils = false;
-      use_lld = false;
-      use_gold = true;
-      gold_path = "${stdenv.cc}/bin";
-      is_debug = false;
+    gnFlags = mkGnFlags (
+      {
+        linux_use_bundled_binutils = false;
+        use_lld = false;
+        use_gold = true;
+        gold_path = "${stdenv.cc}/bin";
+        is_debug = false;
 
-      proprietary_codecs = false;
-      use_sysroot = false;
-      use_gnome_keyring = gnomeKeyringSupport;
-      use_gio = gnomeSupport;
-      # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
-      # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
-      enable_nacl = false;
-      # Enabling the Widevine component here doesn't affect whether we can
-      # redistribute the chromium package; the Widevine component is either
-      # added later in the wrapped -wv build or downloaded from Google.
-      enable_widevine = true;
-      use_cups = cupsSupport;
+        proprietary_codecs = false;
+        use_sysroot = false;
+        use_gnome_keyring = gnomeKeyringSupport;
+        use_gio = gnomeSupport;
+        # ninja: error: '../../native_client/toolchain/linux_x86/pnacl_newlib/bin/x86_64-nacl-objcopy',
+        # needed by 'nacl_irt_x86_64.nexe', missing and no known rule to make it
+        enable_nacl = false;
+        # Enabling the Widevine component here doesn't affect whether we can
+        # redistribute the chromium package; the Widevine component is either
+        # added later in the wrapped -wv build or downloaded from Google.
+        enable_widevine = true;
+        use_cups = cupsSupport;
 
-      treat_warnings_as_errors = false;
-      is_clang = stdenv.cc.isClang;
-      clang_use_chrome_plugins = false;
-      blink_symbol_level = 0;
-      enable_swiftshader = false;
-      fieldtrial_testing_like_official_build = true;
+        treat_warnings_as_errors = false;
+        is_clang = stdenv.cc.isClang;
+        clang_use_chrome_plugins = false;
+        blink_symbol_level = 0;
+        enable_swiftshader = false;
+        fieldtrial_testing_like_official_build = true;
 
-      # Google API keys, see:
-      #   http://www.chromium.org/developers/how-tos/api-keys
-      # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
-      # please get your own set of keys.
-      google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
-      google_default_client_id = "404761575300.apps.googleusercontent.com";
-      google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
-    } // optionalAttrs proprietaryCodecs {
-      # enable support for the H.264 codec
-      proprietary_codecs = true;
-      enable_hangout_services_extension = true;
-      ffmpeg_branding = "Chrome";
-    } // optionalAttrs useVaapi {
-      use_vaapi = true;
-    } // optionalAttrs pulseSupport {
-      use_pulseaudio = true;
-      link_pulseaudio = true;
-    } // (extraAttrs.gnFlags or {}));
+        # Google API keys, see:
+        #   http://www.chromium.org/developers/how-tos/api-keys
+        # Note: These are for NixOS/nixpkgs use ONLY. For your own distribution,
+        # please get your own set of keys.
+        google_api_key = "AIzaSyDGi15Zwl11UNe6Y-5XW_upsfyw31qwZPI";
+        google_default_client_id = "404761575300.apps.googleusercontent.com";
+        google_default_client_secret = "9rIFQjfnkykEmqb6FfjJQD1D";
+      }
+      // optionalAttrs proprietaryCodecs {
+        # enable support for the H.264 codec
+        proprietary_codecs = true;
+        enable_hangout_services_extension = true;
+        ffmpeg_branding = "Chrome";
+      } // optionalAttrs useVaapi {
+        use_vaapi = true;
+      } // optionalAttrs pulseSupport {
+        use_pulseaudio = true;
+        link_pulseaudio = true;
+      } // (extraAttrs.gnFlags or { })
+    );
 
     configurePhase = ''
       runHook preConfigure
@@ -281,26 +378,27 @@ let
       runHook postConfigure
     '';
 
-    buildPhase = let
-      # Build paralelism: on Hydra the build was frequently running into memory
-      # exhaustion, and even other users might be running into similar issues.
-      # -j is halved to avoid memory problems, and -l is slightly increased
-      # so that the build gets slight preference before others
-      # (it will often be on "critical path" and at risk of timing out)
-      buildCommand = target: ''
-        ninja -C "${buildPath}"  \
-          -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
-          "${target}"
-        (
-          source chrome/installer/linux/common/installer.include
-          PACKAGE=$packageName
-          MENUNAME="Chromium"
-          process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
-        )
-      '';
-      targets = extraAttrs.buildTargets or [];
-      commands = map buildCommand targets;
-    in concatStringsSep "\n" commands;
+    buildPhase =
+      let
+        # Build paralelism: on Hydra the build was frequently running into memory
+        # exhaustion, and even other users might be running into similar issues.
+        # -j is halved to avoid memory problems, and -l is slightly increased
+        # so that the build gets slight preference before others
+        # (it will often be on "critical path" and at risk of timing out)
+        buildCommand = target: ''
+          ninja -C "${buildPath}"  \
+            -j$(( ($NIX_BUILD_CORES+1) / 2 )) -l$(( $NIX_BUILD_CORES+1 )) \
+            "${target}"
+          (
+            source chrome/installer/linux/common/installer.include
+            PACKAGE=$packageName
+            MENUNAME="Chromium"
+            process_template chrome/app/resources/manpage.1.in "${buildPath}/chrome.1"
+          )
+        '';
+        targets = extraAttrs.buildTargets or [ ];
+        commands = map buildCommand targets;
+      in concatStringsSep "\n" commands;
 
     postFixup = ''
       # Make sure that libGLESv2 is found by dlopen (if using EGL).
@@ -310,7 +408,12 @@ let
     '';
   };
 
-# Remove some extraAttrs we supplied to the base attributes already.
-in stdenv.mkDerivation (base // removeAttrs extraAttrs [
-  "name" "gnFlags" "buildTargets"
-])
+  # Remove some extraAttrs we supplied to the base attributes already.
+in
+stdenv.mkDerivation
+  (base // removeAttrs extraAttrs [
+    "name"
+    "gnFlags"
+    "buildTargets"
+  ]
+  )

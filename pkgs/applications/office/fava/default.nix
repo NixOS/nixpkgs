@@ -1,5 +1,4 @@
 { stdenv, python3, beancount }:
-
 let
   inherit (python3.pkgs) buildPythonApplication fetchPypi;
 in
@@ -14,7 +13,7 @@ buildPythonApplication rec {
 
   checkInputs = [ python3.pkgs.pytest ];
   propagatedBuildInputs = with python3.pkgs;
-    [ 
+    [
       Babel
       cheroot
       flaskbabel

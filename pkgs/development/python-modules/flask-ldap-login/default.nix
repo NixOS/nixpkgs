@@ -1,6 +1,15 @@
-{ stdenv, buildPythonPackage, isPy3k, fetchFromGitHub, fetchpatch
-, flask, flask_wtf, flask_testing, ldap
-, mock, nose }:
+{ stdenv
+, buildPythonPackage
+, isPy3k
+, fetchFromGitHub
+, fetchpatch
+, flask
+, flask_wtf
+, flask_testing
+, ldap
+, mock
+, nose
+}:
 
 buildPythonPackage rec {
   pname = "flask-ldap-login";

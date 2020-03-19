@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.virtualisation.cri-o;
 in
@@ -10,13 +9,13 @@ in
     enable = mkEnableOption "Container Runtime Interface for OCI (CRI-O)";
 
     storageDriver = mkOption {
-      type = types.enum ["btrfs" "overlay" "vfs"];
+      type = types.enum [ "btrfs" "overlay" "vfs" ];
       default = "overlay";
       description = "Storage driver to be used";
     };
 
     logLevel = mkOption {
-      type = types.enum ["trace" "debug" "info" "warn" "error" "fatal"];
+      type = types.enum [ "trace" "debug" "info" "warn" "error" "fatal" ];
       default = "info";
       description = "Log level to be used";
     };

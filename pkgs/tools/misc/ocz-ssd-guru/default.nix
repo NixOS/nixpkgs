@@ -1,5 +1,4 @@
 { fetchurl, stdenv, xorg, freetype, fontconfig, libGLU, libGL, glibc, makeWrapper }:
-
 let
   system = if stdenv.hostPlatform.system == "x86_64-linux" then "linux64" else "linux32";
 in
@@ -15,16 +14,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ makeWrapper ];
 
   libPath = stdenv.lib.makeLibraryPath [
-      xorg.libX11
-      xorg.libxcb
-      freetype
-      fontconfig
-      xorg.libXext
-      xorg.libXi
-      xorg.libXrender
-      stdenv.cc.cc
-      glibc
-      libGLU libGL
+    xorg.libX11
+    xorg.libxcb
+    freetype
+    fontconfig
+    xorg.libXext
+    xorg.libXi
+    xorg.libXrender
+    stdenv.cc.cc
+    glibc
+    libGLU
+    libGL
   ];
 
   installPhase = ''

@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     cd src
     cp {.,}configsbox.h
   '';
-  
+
   doCheck = true;
   checkPhase = ''
     rm tests/test-*vim.sh tests/test-pip.sh
@@ -28,7 +28,8 @@ stdenv.mkDerivation {
   '';
 
   meta = with stdenv.lib;
-    { description = "Lightweight sandboxing mechanism that any user can use without special privileges";
+    {
+      description = "Lightweight sandboxing mechanism that any user can use without special privileges";
       homepage = http://pdos.csail.mit.edu/mbox/;
       maintainers = with maintainers; [ ehmry ];
       license = licenses.bsd3;

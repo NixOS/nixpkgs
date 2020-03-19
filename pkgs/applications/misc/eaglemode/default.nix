@@ -1,5 +1,22 @@
-{ stdenv, fetchurl, perl, libX11, libXinerama, libjpeg, libpng, libtiff, pkgconfig,
-librsvg, glib, gtk2, libXext, libXxf86vm, poppler, xineLib, ghostscript, makeWrapper }:
+{ stdenv
+, fetchurl
+, perl
+, libX11
+, libXinerama
+, libjpeg
+, libpng
+, libtiff
+, pkgconfig
+, librsvg
+, glib
+, gtk2
+, libXext
+, libXxf86vm
+, poppler
+, xineLib
+, ghostscript
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "eaglemode";
@@ -11,8 +28,23 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ perl libX11 libXinerama libjpeg libpng libtiff
-    librsvg glib gtk2 libXxf86vm libXext poppler xineLib ghostscript makeWrapper ];
+  buildInputs = [
+    perl
+    libX11
+    libXinerama
+    libjpeg
+    libpng
+    libtiff
+    librsvg
+    glib
+    gtk2
+    libXxf86vm
+    libXext
+    poppler
+    xineLib
+    ghostscript
+    makeWrapper
+  ];
 
   # The program tries to dlopen Xxf86vm, Xext and Xinerama, so we use the
   # trick on NIX_LDFLAGS and dontPatchELF to make it find them.

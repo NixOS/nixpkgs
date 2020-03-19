@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, removeReferencesTo, which, go, go-bindata, makeWrapper, rsync
+{ stdenv
+, lib
+, fetchFromGitHub
+, removeReferencesTo
+, which
+, go
+, go-bindata
+, makeWrapper
+, rsync
 , components ? [
     "cmd/kubeadm"
     "cmd/kubectl"
@@ -26,7 +34,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
-  outputs = ["out" "man" "pause"];
+  outputs = [ "out" "man" "pause" ];
 
   postPatch = ''
     # go env breaks the sandbox
@@ -41,7 +49,7 @@ stdenv.mkDerivation rec {
     patchShebangs ./hack
   '';
 
-  WHAT=concatStringsSep " " components;
+  WHAT = concatStringsSep " " components;
 
   postBuild = ''
     ./hack/update-generated-docs.sh
@@ -73,7 +81,7 @@ stdenv.mkDerivation rec {
     description = "Production-Grade Container Scheduling and Management";
     license = licenses.asl20;
     homepage = https://kubernetes.io;
-    maintainers = with maintainers; [johanot offline saschagrunert];
+    maintainers = with maintainers; [ johanot offline saschagrunert ];
     platforms = platforms.unix;
   };
 }

@@ -16,10 +16,13 @@ buildGoPackage {
 
   goDeps = ./json-exporter_deps.nix;
 
-  patches = [(fetchpatch { # adds bool support
-    url = "https://patch-diff.githubusercontent.com/raw/kawamuray/prometheus-json-exporter/pull/17.patch";
-    sha256 = "0mc5axhd2bykci41dgswl4r1552d70jsmb17lbih7czhsy6rgmrm";
-  })];
+  patches = [
+    (fetchpatch {
+      # adds bool support
+      url = "https://patch-diff.githubusercontent.com/raw/kawamuray/prometheus-json-exporter/pull/17.patch";
+      sha256 = "0mc5axhd2bykci41dgswl4r1552d70jsmb17lbih7czhsy6rgmrm";
+    })
+  ];
 
   meta = with lib; {
     description = "A prometheus exporter which scrapes remote JSON by JSONPath";

@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "2.34";
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ llvmPackages.llvm openssl emacs ]
-    ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
-    ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
+  ++ lib.optionals stdenv.cc.isGNU [ llvmPackages.clang-unwrapped ]
+  ++ lib.optionals stdenv.isDarwin [ apple_sdk.libs.xpc apple_sdk.frameworks.CoreServices ];
 
   src = fetchgit {
     rev = "refs/tags/v${version}";

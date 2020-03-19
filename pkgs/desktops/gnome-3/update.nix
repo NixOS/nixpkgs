@@ -1,6 +1,5 @@
 { stdenv, lib, writeScript, python3, common-updater-scripts }:
 { packageName, attrPath ? packageName, versionPolicy ? "odd-unstable" }:
-
 let
   python = python3.withPackages (p: [ p.requests ]);
   updateScript = writeScript "gnome-update-script" ''
@@ -13,4 +12,5 @@ let
     latest_tag=$(python "${./find-latest-version.py}" "$package_name" "$version_policy" "stable")
     update-source-version "$attr_path" "$latest_tag"
   '';
-in [ updateScript packageName attrPath versionPolicy ]
+in
+[ updateScript packageName attrPath versionPolicy ]

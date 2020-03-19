@@ -16,7 +16,7 @@ rec {
 
   packageName = "fiveam";
 
-  asdFilesToKeep = ["fiveam.asd"];
+  asdFilesToKeep = [ "fiveam.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fiveam DESCRIPTION A simple regression testing framework SHA256

@@ -3,11 +3,9 @@
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
 # TODO: compilazione di moduli dipendenti da zip, ssl, tcl, gtk, gtk2
-
 let
   pname = "ocaml-mysql";
 in
-
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
   version = "1.2.1";
@@ -17,9 +15,9 @@ stdenv.mkDerivation rec {
     sha256 = "06mb2bq7v37wn0lza61917zqgb4bsg1xxb73myjyn88p6khl6yl2";
   };
 
-  configureFlags = [ 
-     "--prefix=$out" 
-     "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
+  configureFlags = [
+    "--prefix=$out"
+    "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
   buildInputs = [ ocaml findlib ];

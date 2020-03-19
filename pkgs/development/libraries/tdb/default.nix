@@ -1,5 +1,11 @@
-{ stdenv, fetchurl, wafHook, pkgconfig, readline, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+{ stdenv
+, fetchurl
+, wafHook
+, pkgconfig
+, readline
+, libxslt
+, docbook_xsl
+, docbook_xml_dtd_42
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +18,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig wafHook ];
   buildInputs = [
-    readline libxslt docbook_xsl docbook_xml_dtd_42
+    readline
+    libxslt
+    docbook_xsl
+    docbook_xml_dtd_42
   ];
 
   wafPath = "buildtools/bin/waf";

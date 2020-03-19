@@ -9,7 +9,7 @@
 }:
 
 buildPythonPackage rec {
-  pname   = "pytaglib";
+  pname = "pytaglib";
   version = "1.4.5";
 
   src = fetchFromGitHub {

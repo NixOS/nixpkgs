@@ -1,11 +1,9 @@
 { stdenv, fetchurl, python3Packages }:
-
 let
-
   name = "doit";
   version = "0.32.0";
-
-in python3Packages.buildPythonApplication {
+in
+python3Packages.buildPythonApplication {
   name = "${name}-${version}";
 
   src = fetchurl {
@@ -16,8 +14,8 @@ in python3Packages.buildPythonApplication {
   buildInputs = with python3Packages; [ mock pytest ];
 
   propagatedBuildInputs = with python3Packages; [ cloudpickle ]
-    ++ stdenv.lib.optional stdenv.isLinux pyinotify
-    ++ stdenv.lib.optional stdenv.isDarwin macfsevents;
+  ++ stdenv.lib.optional stdenv.isLinux pyinotify
+  ++ stdenv.lib.optional stdenv.isDarwin macfsevents;
 
   # Tests fail due to mysterious gdbm.open() resource temporarily
   # unavailable errors.

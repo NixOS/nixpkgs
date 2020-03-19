@@ -14,7 +14,7 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gtk2 gettext ]
-    ++ stdenv.lib.optional withLibgladeConvert python2;
+  ++ stdenv.lib.optional withLibgladeConvert python2;
 
   NIX_LDFLAGS = "-lgmodule-2.0";
 

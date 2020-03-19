@@ -1,9 +1,27 @@
-{ stdenv, fetchzip, fetchpatch, atk, cairo, dmd, gdk-pixbuf, gnome3, gst_all_1, librsvg
-, glib, gtk3, gtksourceview4, libgda, libpeas, pango, pkgconfig, which, vte }:
-
+{ stdenv
+, fetchzip
+, fetchpatch
+, atk
+, cairo
+, dmd
+, gdk-pixbuf
+, gnome3
+, gst_all_1
+, librsvg
+, glib
+, gtk3
+, gtksourceview4
+, libgda
+, libpeas
+, pango
+, pkgconfig
+, which
+, vte
+}:
 let
   inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-bad;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gtkd";
   version = "3.9.0";
 
@@ -17,8 +35,19 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ dmd pkgconfig which ];
   propagatedBuildInputs = [
-    atk cairo gdk-pixbuf glib gstreamer gst-plugins-base gtk3 gtksourceview4
-    libgda libpeas librsvg pango vte
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gstreamer
+    gst-plugins-base
+    gtk3
+    gtksourceview4
+    libgda
+    libpeas
+    librsvg
+    pango
+    vte
   ];
 
   patches = [
@@ -115,7 +144,7 @@ in stdenv.mkDerivation rec {
       --replace libvte-2.91.0.dylib ${vte}/lib/libvte-2.91.0.dylib
   '';
 
-  makeFlags  = [
+  makeFlags = [
     "prefix=${placeholder "out"}"
     "PKG_CONFIG=${pkgconfig}/bin/pkg-config"
   ];

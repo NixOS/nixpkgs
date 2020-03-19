@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-cltl2";
 
-  asdFilesToKeep = ["trivial-cltl2.asd"];
+  asdFilesToKeep = [ "trivial-cltl2.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-cltl2 DESCRIPTION

@@ -1,10 +1,17 @@
-{ stdenv, fetchFromGitHub, autoreconfHook
-, libpcap, texinfo
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, libpcap
+, texinfo
 , iptables
-, gnupgSupport ? true, gnupg, gpgme # Increases dependencies!
-, wgetSupport ? true, wget
+, gnupgSupport ? true
+, gnupg
+, gpgme # Increases dependencies!
+, wgetSupport ? true
+, wget
 , buildServer ? true
-, buildClient ? true }:
+, buildClient ? true
+}:
 
 stdenv.mkDerivation rec {
   pname = "fwknop";
@@ -19,8 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
   buildInputs = [ libpcap texinfo ]
-    ++ stdenv.lib.optionals gnupgSupport [ gnupg gpgme.dev ]
-    ++ stdenv.lib.optionals wgetSupport [ wget ];
+  ++ stdenv.lib.optionals gnupgSupport [ gnupg gpgme.dev ]
+  ++ stdenv.lib.optionals wgetSupport [ wget ];
 
   configureFlags = [
     "--sysconfdir=/etc"

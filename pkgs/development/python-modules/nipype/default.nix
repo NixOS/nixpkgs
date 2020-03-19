@@ -3,7 +3,7 @@
 , fetchPypi
 , isPy3k
 , isPy38
-# python dependencies
+  # python dependencies
 , click
 , configparser ? null
 , dateutil
@@ -31,7 +31,7 @@
 , xvfbwrapper
 , pytestcov
 , codecov
-# other dependencies
+  # other dependencies
 , which
 , bash
 , glibcLocales
@@ -39,14 +39,10 @@
 }:
 
 assert !isPy3k -> configparser != null;
-
 let
-
- # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
- neurdflib = callPackage ./neurdflib.nix { };
-
+  # This is a temporary convenience package for changes waiting to be merged into the primary rdflib repo.
+  neurdflib = callPackage ./neurdflib.nix { };
 in
-
 buildPythonPackage rec {
   pname = "nipype";
   version = "1.3.1";

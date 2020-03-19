@@ -1,13 +1,18 @@
-{ stdenv, fetchurl, makeWrapper, jre
-, htmlunit-driver, chromedriver, chromeSupport ? true }:
+{ stdenv
+, fetchurl
+, makeWrapper
+, jre
+, htmlunit-driver
+, chromedriver
+, chromeSupport ? true
+}:
 
 with stdenv.lib;
-
 let
   minorVersion = "3.6";
   patchVersion = "0";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "selenium-server-standalone";
   version = "${minorVersion}.${patchVersion}";
 

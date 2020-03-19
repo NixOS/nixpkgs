@@ -1,6 +1,11 @@
-{ stdenv, fetchFromGitHub, cmake, openssh
-, gfortran, mpi, openblasCompat
-} :
+{ stdenv
+, fetchFromGitHub
+, cmake
+, openssh
+, gfortran
+, mpi
+, openblasCompat
+}:
 
 
 stdenv.mkDerivation rec {

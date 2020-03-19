@@ -1,7 +1,29 @@
-{ stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
-, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
-, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
-, wget }:
+{ stdenv
+, autoconf
+, automake
+, c-ares
+, cryptopp
+, curl
+, doxygen
+, fetchFromGitHub
+, fetchpatch
+, ffmpeg
+, libmediainfo
+, libraw
+, libsodium
+, libtool
+, libuv
+, libzen
+, lsb-release
+, mkDerivation
+, pkgconfig
+, qtbase
+, qttools
+, sqlite
+, swig
+, unzip
+, wget
+}:
 
 mkDerivation rec {
   pname = "megasync";

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   layouts = config.services.xserver.extraLayouts;
 
@@ -15,10 +14,10 @@ let
       languages = mkOption {
         type = types.listOf types.str;
         description =
-        ''
-          A list of languages provided by the layout.
-          (Use ISO 639-2 codes, for example: "eng" for english)
-        '';
+          ''
+            A list of languages provided by the layout.
+            (Use ISO 639-2 codes, for example: "eng" for english)
+          '';
       };
 
       compatFile = mkOption {
@@ -78,9 +77,7 @@ let
 
     };
   };
-
 in
-
 {
 
   ###### interface
@@ -88,17 +85,17 @@ in
   options.services.xserver = {
     extraLayouts = mkOption {
       type = types.attrsOf (types.submodule layoutOpts);
-      default = {};
+      default = { };
       example = literalExample
-      ''
-        {
-          mine = {
-            description = "My custom xkb layout.";
-            languages = [ "eng" ];
-            symbolsFile = /path/to/my/layout;
-          };
-        }
-      '';
+        ''
+          {
+            mine = {
+              description = "My custom xkb layout.";
+              languages = [ "eng" ];
+              symbolsFile = /path/to/my/layout;
+            };
+          }
+        '';
       description = ''
         Extra custom layouts that will be included in the xkb configuration.
         Information on how to create a new layout can be found here:
@@ -118,45 +115,50 @@ in
     # reduce the amount of packages to be recompiled.
     # Only the following packages are necessary to set
     # a custom layout anyway:
-    nixpkgs.overlays = lib.singleton (self: super: {
+    nixpkgs.overlays = lib.singleton
+      (self: super: {
 
-      xkb_patched = self.xorg.xkeyboardconfig_custom {
-        layouts = config.services.xserver.extraLayouts;
-      };
+        xkb_patched = self.xorg.xkeyboardconfig_custom {
+          layouts = config.services.xserver.extraLayouts;
+        };
 
-      xorg = super.xorg // {
-        xorgserver = super.xorg.xorgserver.overrideAttrs (old: {
-          configureFlags = old.configureFlags ++ [
-            "--with-xkb-bin-directory=${self.xorg.xkbcomp}/bin"
-            "--with-xkb-path=${self.xkb_patched}/share/X11/xkb"
-          ];
-        });
+        xorg = super.xorg // {
+          xorgserver = super.xorg.xorgserver.overrideAttrs
+            (old: {
+              configureFlags = old.configureFlags ++ [
+                "--with-xkb-bin-directory=${self.xorg.xkbcomp}/bin"
+                "--with-xkb-path=${self.xkb_patched}/share/X11/xkb"
+              ];
+            });
 
-        setxkbmap = super.xorg.setxkbmap.overrideAttrs (old: {
-          postInstall =
-            ''
-              mkdir -p $out/share
-              ln -sfn ${self.xkb_patched}/etc/X11 $out/share/X11
-            '';
-        });
+          setxkbmap = super.xorg.setxkbmap.overrideAttrs
+            (old: {
+              postInstall =
+                ''
+                  mkdir -p $out/share
+                  ln -sfn ${self.xkb_patched}/etc/X11 $out/share/X11
+                '';
+            });
 
-        xkbcomp = super.xorg.xkbcomp.overrideAttrs (old: {
-          configureFlags = [ "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb" ];
-        });
+          xkbcomp = super.xorg.xkbcomp.overrideAttrs
+            (old: {
+              configureFlags = [ "--with-xkb-config-root=${self.xkb_patched}/share/X11/xkb" ];
+            });
 
-      };
+        };
 
-      ckbcomp = super.ckbcomp.override {
-        xkeyboard_config = self.xkb_patched;
-      };
-
-      xkbvalidate = super.xkbvalidate.override {
-        libxkbcommon = self.libxkbcommon.override {
+        ckbcomp = super.ckbcomp.override {
           xkeyboard_config = self.xkb_patched;
         };
-      };
 
-    });
+        xkbvalidate = super.xkbvalidate.override {
+          libxkbcommon = self.libxkbcommon.override {
+            xkeyboard_config = self.xkb_patched;
+          };
+        };
+
+      }
+      );
 
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon

@@ -1,16 +1,23 @@
-{ stdenv, fetchFromGitHub, buildEnv
-, asio, boost, check, openssl, scons
-, version, sha256, ...
+{ stdenv
+, fetchFromGitHub
+, buildEnv
+, asio
+, boost
+, check
+, openssl
+, scons
+, version
+, sha256
+, ...
 }:
-
 let
   pname = "mariadb-galera";
   galeraLibs = buildEnv {
     name = "galera-lib-inputs-united";
     paths = [ openssl.out boost check ];
   };
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname;
   inherit version;
 

@@ -14,14 +14,14 @@ stdenv.mkDerivation rec {
   };
 
   postUnpack = ''
-      patchShebangs .
+    patchShebangs .
   '';
 
   # Can be removed with https://github.com/dlang/dub/pull/1368
   dubvar = "\\$DUB";
   postPatch = ''
-      substituteInPlace test/fetchzip.sh \
-          --replace "dub remove" "\"${dubvar}\" remove"
+    substituteInPlace test/fetchzip.sh \
+        --replace "dub remove" "\"${dubvar}\" remove"
   '';
 
   nativeBuildInputs = [ dmd libevent rsync ];
@@ -73,4 +73,3 @@ stdenv.mkDerivation rec {
     platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
   };
 }
-

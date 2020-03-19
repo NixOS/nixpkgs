@@ -1,8 +1,14 @@
-{ stdenv, fetchurl, writeText
-, xorgproto, libX11, libXext, libXrandr
-# default header can be obtained from
-# https://git.suckless.org/slock/tree/config.def.h
-, conf ? null }:
+{ stdenv
+, fetchurl
+, writeText
+, xorgproto
+, libX11
+, libXext
+, libXrandr
+  # default header can be obtained from
+  # https://git.suckless.org/slock/tree/config.def.h
+, conf ? null
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {

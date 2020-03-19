@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivial-indent";
 
-  asdFilesToKeep = ["trivial-indent.asd"];
+  asdFilesToKeep = [ "trivial-indent.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivial-indent DESCRIPTION

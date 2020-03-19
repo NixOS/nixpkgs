@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.gitlab-runner;
   configFile =
-    if (cfg.configFile == null) then
+    if (cfg.configFile == null)
+    then
       (pkgs.runCommand "config.toml" {
         buildInputs = [ pkgs.remarshal ];
         preferLocalBuild = true;
@@ -49,20 +49,22 @@ in
       type = types.attrs;
       example = {
         concurrent = 2;
-        runners = [{
-          name = "docker-nix-1.11";
-          url = "https://CI/";
-          token = "TOKEN";
-          executor = "docker";
-          builds_dir = "";
-          docker = {
-            host = "";
-            image = "nixos/nix:1.11";
-            privileged = true;
-            disable_cache = true;
-            cache_dir = "";
-          };
-        }];
+        runners = [
+          {
+            name = "docker-nix-1.11";
+            url = "https://CI/";
+            token = "TOKEN";
+            executor = "docker";
+            builds_dir = "";
+            docker = {
+              host = "";
+              image = "nixos/nix:1.11";
+              privileged = true;
+              disable_cache = true;
+              cache_dir = "";
+            };
+          }
+        ];
       };
     };
 
@@ -117,22 +119,23 @@ in
       };
       description = "Gitlab Runner";
       after = [ "network.target" ]
-        ++ optional hasDocker "docker.service";
+      ++ optional hasDocker "docker.service";
       requires = optional hasDocker "docker.service";
       wantedBy = [ "multi-user.target" ];
-      serviceConfig = {
-        ExecStart = ''${cfg.package.bin}/bin/gitlab-runner run \
+      serviceConfig =
+        {
+          ExecStart = ''${cfg.package.bin}/bin/gitlab-runner run \
           --working-directory ${cfg.workDir} \
           --config ${configFile} \
           --service gitlab-runner \
           --user gitlab-runner \
         '';
-
-      } //  optionalAttrs (cfg.gracefulTermination) {
-        TimeoutStopSec = "${cfg.gracefulTimeout}";
-        KillSignal = "SIGQUIT";
-        KillMode = "process";
-      };
+        }
+        // optionalAttrs (cfg.gracefulTermination) {
+          TimeoutStopSec = "${cfg.gracefulTimeout}";
+          KillSignal = "SIGQUIT";
+          KillMode = "process";
+        };
     };
 
     # Make the gitlab-runner command availabe so users can query the runner

@@ -14,9 +14,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ ocaml findlib dune base stdio ];
-  propagatedBuildInputs = [ liblapack blas ] ++
-    stdenv.lib.optionals stdenv.isDarwin
-      [ darwin.apple_sdk.frameworks.Accelerate ];
+  propagatedBuildInputs = [ liblapack blas ]
+  ++ stdenv.lib.optionals stdenv.isDarwin
+    [ darwin.apple_sdk.frameworks.Accelerate ];
 
   inherit (dune) installPhase;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     homepage = http://mmottl.github.io/lacaml;
     description = "OCaml bindings for BLAS and LAPACK";
     license = licenses.lgpl21Plus;
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = [ maintainers.rixed ];
   };
 }

@@ -3,12 +3,24 @@
 # - base (default): contains readline and i18n, regexp and syscalls modules
 #   by default
 # - full: contains base plus modules in withModules
-{ stdenv, fetchurl, libsigsegv, gettext, ncurses, readline, libX11
-, libXau, libXt, pcre, zlib, libXpm, xorgproto, libXext
+{ stdenv
+, fetchurl
+, libsigsegv
+, gettext
+, ncurses
+, readline
+, libX11
+, libXau
+, libXt
+, pcre
+, zlib
+, libXpm
+, xorgproto
+, libXext
 , libffi
 , libffcall
 , coreutils
-# build options
+  # build options
 , threadSupport ? (stdenv.isi686 || stdenv.isx86_64)
 , x11Support ? (stdenv.isi686 || stdenv.isx86_64)
 , dllSupport ? true
@@ -21,7 +33,7 @@
 }:
 
 assert x11Support -> (libX11 != null && libXau != null && libXt != null
-  && libXpm != null && xorgproto != null && libXext != null);
+&& libXpm != null && xorgproto != null && libXext != null);
 
 stdenv.mkDerivation rec {
   v = "2.49";
@@ -36,7 +48,7 @@ stdenv.mkDerivation rec {
 
   ffcallAvailable = stdenv.isLinux && (libffcall != null);
 
-  buildInputs = [libsigsegv]
+  buildInputs = [ libsigsegv ]
   ++ stdenv.lib.optional (gettext != null) gettext
   ++ stdenv.lib.optional (ncurses != null) ncurses
   ++ stdenv.lib.optional (pcre != null) pcre
@@ -45,7 +57,12 @@ stdenv.mkDerivation rec {
   ++ stdenv.lib.optional (ffcallAvailable && (libffi != null)) libffi
   ++ stdenv.lib.optional ffcallAvailable libffcall
   ++ stdenv.lib.optionals x11Support [
-    libX11 libXau libXt libXpm xorgproto libXext
+    libX11
+    libXau
+    libXt
+    libXpm
+    xorgproto
+    libXext
   ];
 
   patches = [
@@ -83,7 +100,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    stdenv.lib.optionalString (withModules != [])
+    stdenv.lib.optionalString (withModules != [ ])
       (''./clisp-link add "$out"/lib/clisp*/base "$(dirname "$out"/lib/clisp*/base)"/full''
       + stdenv.lib.concatMapStrings (x: " " + x) withModules);
 
@@ -95,7 +112,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "ANSI Common Lisp Implementation";
     homepage = http://clisp.cons.org;
-    maintainers = with stdenv.lib.maintainers; [raskin tohl];
+    maintainers = with stdenv.lib.maintainers; [ raskin tohl ];
     platforms = stdenv.lib.platforms.unix;
     # problems on Darwin: https://github.com/NixOS/nixpkgs/issues/20062
     broken = stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isAarch64;

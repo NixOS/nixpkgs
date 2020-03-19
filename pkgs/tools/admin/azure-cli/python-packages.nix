@@ -1,5 +1,4 @@
 { stdenv, python, lib, src, version }:
-
 let
   buildAzureCliPackage = with py.pkgs; attrs: buildPythonPackage (attrs // {
     # Remove overly restrictive version contraints and obsolete namespace setup
@@ -16,33 +15,35 @@ let
          $out/${python.sitePackages}/azure/cli/{,__pycache__/}__init__.*
     '';
 
-    checkInputs = [ mock pytest ] ++ (attrs.checkInputs or []);
+    checkInputs = [ mock pytest ] ++ (attrs.checkInputs or [ ]);
     checkPhase = attrs.checkPhase or ''
       cd azure
       HOME=$TMPDIR pytest
     '';
-  });
+  }
+  );
 
   overrideAzureMgmtPackage = package: version: extension: sha256:
-    package.overrideAttrs(oldAttrs: rec {
-      inherit version;
+    package.overrideAttrs
+      (oldAttrs: rec {
+        inherit version;
 
-      src = py.pkgs.fetchPypi {
-        inherit (oldAttrs) pname;
-        inherit version sha256 extension;
-      };
+        src = py.pkgs.fetchPypi {
+          inherit (oldAttrs) pname;
+          inherit version sha256 extension;
+        };
 
-      preBuild = ''
-        rm -f azure_bdist_wheel.py
-        substituteInPlace setup.cfg \
-          --replace "azure-namespace-package = azure-mgmt-nspkg" ""
-      '';
+        preBuild = ''
+          rm -f azure_bdist_wheel.py
+          substituteInPlace setup.cfg \
+            --replace "azure-namespace-package = azure-mgmt-nspkg" ""
+        '';
 
-      # force PEP420
-      postInstall = ''
-        rm -f $out/${py.sitePackages}/azure/{,mgmt/}__init__.py
-      '';
-    });
+        # force PEP420
+        postInstall = ''
+          rm -f $out/${py.sitePackages}/azure/{,mgmt/}__init__.py
+        '';
+      });
 
   py = python.override {
     packageOverrides = self: super: {
@@ -215,7 +216,7 @@ let
       azure-mgmt-monitor = overrideAzureMgmtPackage super.azure-mgmt-monitor "0.7.0" "zip"
         "1pprvk5255b6brbw73g0g13zygwa7a2px5x08wy3153rqlzan5l2";
 
-      azure-mgmt-advisor =  overrideAzureMgmtPackage super.azure-mgmt-advisor "2.0.1" "zip"
+      azure-mgmt-advisor = overrideAzureMgmtPackage super.azure-mgmt-advisor "2.0.1" "zip"
         "1wsfkprdrn22mwm24y2zlcms8ppp7jwq3s86r3ymbl29pbaxca8r";
 
       azure-mgmt-applicationinsights = overrideAzureMgmtPackage super.azure-mgmt-applicationinsights "0.1.1" "zip"
@@ -233,72 +234,81 @@ let
       azure-mgmt-hdinsight = overrideAzureMgmtPackage super.azure-mgmt-hdinsight "1.3.0" "zip"
         "1r7isr7hzq2dv1idwwa9xxxgk8wh0ncka45r4rdcsl1p7kd2kqam";
 
-      azure-graphrbac = super.azure-graphrbac.overrideAttrs(oldAttrs: rec {
-        version = "0.60.0";
+      azure-graphrbac = super.azure-graphrbac.overrideAttrs
+        (oldAttrs: rec {
+          version = "0.60.0";
 
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "1zna5vb887clvpyfp5439vhlz3j4z95blw9r7y86n6cfpzc65fyh";
-          extension = "zip";
-        };
-      });
+          src = super.fetchPypi {
+            inherit (oldAttrs) pname;
+            inherit version;
+            sha256 = "1zna5vb887clvpyfp5439vhlz3j4z95blw9r7y86n6cfpzc65fyh";
+            extension = "zip";
+          };
+        });
 
-      azure-storage-blob = super.azure-storage-blob.overrideAttrs(oldAttrs: rec {
-        version = "1.5.0";
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "0b15dzy75fml994gdfmaw5qcyij15gvh968mk3hg94d1wxwai1zi";
-        };
-      });
+      azure-storage-blob = super.azure-storage-blob.overrideAttrs
+        (oldAttrs: rec {
+          version = "1.5.0";
+          src = super.fetchPypi {
+            inherit (oldAttrs) pname;
+            inherit version;
+            sha256 = "0b15dzy75fml994gdfmaw5qcyij15gvh968mk3hg94d1wxwai1zi";
+          };
+        });
 
-      azure-storage-common = super.azure-storage-common.overrideAttrs(oldAttrs: rec {
-        version = "1.4.2";
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "00g41b5q4ijlv02zvzjgfwrwy71cgr3lc3if4nayqmyl6xsprj2f";
-        };
-      });
+      azure-storage-common = super.azure-storage-common.overrideAttrs
+        (oldAttrs: rec {
+          version = "1.4.2";
+          src = super.fetchPypi {
+            inherit (oldAttrs) pname;
+            inherit version;
+            sha256 = "00g41b5q4ijlv02zvzjgfwrwy71cgr3lc3if4nayqmyl6xsprj2f";
+          };
+        });
 
-      azure-keyvault = super.azure-keyvault.overrideAttrs(oldAttrs: rec {
-        version = "1.1.0";
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          extension = "zip";
-          sha256 = "0jfxm8lx8dzs3v2b04ljizk8gfckbm5l2v86rm7k0npbfvryba1p";
-        };
+      azure-keyvault = super.azure-keyvault.overrideAttrs
+        (oldAttrs: rec {
+          version = "1.1.0";
+          src = super.fetchPypi {
+            inherit (oldAttrs) pname;
+            inherit version;
+            extension = "zip";
+            sha256 = "0jfxm8lx8dzs3v2b04ljizk8gfckbm5l2v86rm7k0npbfvryba1p";
+          };
 
-        propagatedBuildInputs = with self; [
-          azure-common azure-nspkg msrest msrestazure cryptography
-        ];
-        postInstall = ''
-          rm -f $out/${self.python.sitePackages}/azure/__init__.py
-        '';
-        pythonImportsCheck = [ ];
-      });
+          propagatedBuildInputs = with self; [
+            azure-common
+            azure-nspkg
+            msrest
+            msrestazure
+            cryptography
+          ];
+          postInstall = ''
+            rm -f $out/${self.python.sitePackages}/azure/__init__.py
+          '';
+          pythonImportsCheck = [ ];
+        });
 
       # part of azure.mgmt.datalake namespace
-      azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs(oldAttrs: rec {
-        version = "0.2.1";
+      azure-mgmt-datalake-analytics = super.azure-mgmt-datalake-analytics.overrideAttrs
+        (oldAttrs: rec {
+          version = "0.2.1";
 
-        src = super.fetchPypi {
-          inherit (oldAttrs) pname;
-          inherit version;
-          sha256 = "192icfx82gcl3igr18w062744376r2ivh63c8nd7v17mjk860yac";
-          extension = "zip";
-        };
+          src = super.fetchPypi {
+            inherit (oldAttrs) pname;
+            inherit version;
+            sha256 = "192icfx82gcl3igr18w062744376r2ivh63c8nd7v17mjk860yac";
+            extension = "zip";
+          };
 
-        preBuild = ''
-          rm azure_bdist_wheel.py
-          substituteInPlace setup.cfg \
-            --replace "azure-namespace-package = azure-mgmt-datalake-nspkg" ""
-        '';
-      });
+          preBuild = ''
+            rm azure_bdist_wheel.py
+            substituteInPlace setup.cfg \
+              --replace "azure-namespace-package = azure-mgmt-datalake-nspkg" ""
+          '';
+        });
 
     };
   };
 in
-  py
+py

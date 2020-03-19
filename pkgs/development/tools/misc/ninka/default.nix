@@ -15,7 +15,7 @@ perlPackages.buildPerlPackage {
 
   buildInputs = with perlPackages; [ perl TestOutput DBDSQLite DBI TestPod TestPodCoverage SpreadsheetParseExcel ];
 
-  doCheck = false;    # hangs
+  doCheck = false; # hangs
 
   preConfigure = ''
     sed -i.bak -e 's;#!/usr/bin/perl;#!${perl}/bin/perl;g' \

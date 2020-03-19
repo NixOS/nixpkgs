@@ -22,10 +22,10 @@ stdenv.mkDerivation rec {
     # do not download a file during build
     ${xmlstarlet}/bin/xmlstarlet ed --inplace -P -d '//get[@src="http://download.processing.org/reference.zip"]' build/build.xml
     install -D -m0444 ${fetchurl {
-                          url    = http://download.processing.org/reference.zip;
-                          sha256 = "198bpk8mzns6w5h0zdf50wr6iv7sgdi6v7jznj5rbsnpgyilxz35";
-                        }
-                       } ./java/reference.zip
+      url = http://download.processing.org/reference.zip;
+      sha256 = "198bpk8mzns6w5h0zdf50wr6iv7sgdi6v7jznj5rbsnpgyilxz35";
+    }
+    } ./java/reference.zip
 
     # suppress "Not fond of this Java VM" message box
     substituteInPlace app/src/processing/app/platform/LinuxPlatform.java \

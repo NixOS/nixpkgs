@@ -18,9 +18,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ libX11 zlib xorgproto ]
-    ++ stdenv.lib.optional (libGL != null) libGL
-    ++ stdenv.lib.optional (libGLU != null) libGLU
-    ++ stdenv.lib.optional (freeglut != null) freeglut;
+  ++ stdenv.lib.optional (libGL != null) libGL
+  ++ stdenv.lib.optional (libGLU != null) libGLU
+  ++ stdenv.lib.optional (freeglut != null) freeglut;
 
   preConfigure = ''
     substituteInPlace src/Makefile.in \

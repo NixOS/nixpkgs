@@ -4,7 +4,8 @@ let
   pkg = pkgs._3proxy;
   cfg = config.services._3proxy;
   optionalList = list: if list == [ ] then "*" else concatMapStringsSep "," toString list;
-in {
+in
+{
   options.services._3proxy = {
     enable = mkEnableOption "3proxy";
     confFile = mkOption {
@@ -41,208 +42,210 @@ in {
       '';
     };
     services = mkOption {
-      type = types.listOf (types.submodule {
-        options = {
-          type = mkOption {
-            type = types.enum [
-              "proxy"
-              "socks"
-              "pop3p"
-              "ftppr"
-              "admin"
-              "dnspr"
-              "tcppm"
-              "udppm"
-            ];
-            example = "proxy";
-            description = ''
-              Service type. The following values are valid:
+      type = types.listOf
+        (types.submodule {
+          options = {
+            type = mkOption {
+              type = types.enum [
+                "proxy"
+                "socks"
+                "pop3p"
+                "ftppr"
+                "admin"
+                "dnspr"
+                "tcppm"
+                "udppm"
+              ];
+              example = "proxy";
+              description = ''
+                Service type. The following values are valid:
 
-              <itemizedlist>
-                <listitem><para>
-                  <literal>"proxy"</literal>: HTTP/HTTPS proxy (default port 3128).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"socks"</literal>: SOCKS 4/4.5/5 proxy (default port 1080).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"pop3p"</literal>: POP3 proxy (default port 110).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"ftppr"</literal>: FTP proxy (default port 21).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"admin"</literal>: Web interface (default port 80).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"dnspr"</literal>: Caching DNS proxy (default port 53).
-                </para></listitem>
-                <listitem><para>
-                  <literal>"tcppm"</literal>: TCP portmapper.
-                </para></listitem>
-                <listitem><para>
-                  <literal>"udppm"</literal>: UDP portmapper.
-                </para></listitem>
-              </itemizedlist>
-            '';
-          };
-          bindAddress = mkOption {
-            type = types.str;
-            default = "[::]";
-            example = "127.0.0.1";
-            description = ''
-              Address used for service.
-            '';
-          };
-          bindPort = mkOption {
-            type = types.nullOr types.int;
-            default = null;
-            example = 3128;
-            description = ''
-              Override default port used for service.
-            '';
-          };
-          maxConnections = mkOption {
-            type = types.int;
-            default = 100;
-            example = 1000;
-            description = ''
-              Maximum number of simulationeous connections to this service.
-            '';
-          };
-          auth = mkOption {
-            type = types.listOf (types.enum [ "none" "iponly" "strong" ]);
-            example = [ "iponly" "strong" ];
-            description = ''
-              Authentication type. The following values are valid:
+                <itemizedlist>
+                  <listitem><para>
+                    <literal>"proxy"</literal>: HTTP/HTTPS proxy (default port 3128).
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"socks"</literal>: SOCKS 4/4.5/5 proxy (default port 1080).
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"pop3p"</literal>: POP3 proxy (default port 110).
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"ftppr"</literal>: FTP proxy (default port 21).
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"admin"</literal>: Web interface (default port 80).
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"dnspr"</literal>: Caching DNS proxy (default port 53).
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"tcppm"</literal>: TCP portmapper.
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"udppm"</literal>: UDP portmapper.
+                  </para></listitem>
+                </itemizedlist>
+              '';
+            };
+            bindAddress = mkOption {
+              type = types.str;
+              default = "[::]";
+              example = "127.0.0.1";
+              description = ''
+                Address used for service.
+              '';
+            };
+            bindPort = mkOption {
+              type = types.nullOr types.int;
+              default = null;
+              example = 3128;
+              description = ''
+                Override default port used for service.
+              '';
+            };
+            maxConnections = mkOption {
+              type = types.int;
+              default = 100;
+              example = 1000;
+              description = ''
+                Maximum number of simulationeous connections to this service.
+              '';
+            };
+            auth = mkOption {
+              type = types.listOf (types.enum [ "none" "iponly" "strong" ]);
+              example = [ "iponly" "strong" ];
+              description = ''
+                Authentication type. The following values are valid:
 
-              <itemizedlist>
-                <listitem><para>
-                  <literal>"none"</literal>: disables both authentication and authorization. You can not use ACLs.
-                </para></listitem>
-                <listitem><para>
-                  <literal>"iponly"</literal>: specifies no authentication. ACLs authorization is used.
-                </para></listitem>
-                <listitem><para>
-                  <literal>"strong"</literal>: authentication by username/password. If user is not registered his access is denied regardless of ACLs.
-                </para></listitem>
-              </itemizedlist>
+                <itemizedlist>
+                  <listitem><para>
+                    <literal>"none"</literal>: disables both authentication and authorization. You can not use ACLs.
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"iponly"</literal>: specifies no authentication. ACLs authorization is used.
+                  </para></listitem>
+                  <listitem><para>
+                    <literal>"strong"</literal>: authentication by username/password. If user is not registered his access is denied regardless of ACLs.
+                  </para></listitem>
+                </itemizedlist>
 
-              Double authentication is possible, e.g.
+                Double authentication is possible, e.g.
 
-              <literal>
-                {
-                  auth = [ "iponly" "strong" ];
-                  acl = [
-                    {
-                      rule = "allow";
-                      targets = [ "192.168.0.0/16" ];
-                    }
-                    {
-                      rule = "allow"
-                      users = [ "user1" "user2" ];
-                    }
-                  ];
-                }
-              </literal>
-              In this example strong username authentication is not required to access 192.168.0.0/16.
-            '';
-          };
-          acl = mkOption {
-            type = types.listOf (types.submodule {
-              options = {
-                rule = mkOption {
-                  type = types.enum [ "allow" "deny" ];
-                  example = "allow";
-                  description = ''
-                    ACL rule. The following values are valid:
+                <literal>
+                  {
+                    auth = [ "iponly" "strong" ];
+                    acl = [
+                      {
+                        rule = "allow";
+                        targets = [ "192.168.0.0/16" ];
+                      }
+                      {
+                        rule = "allow"
+                        users = [ "user1" "user2" ];
+                      }
+                    ];
+                  }
+                </literal>
+                In this example strong username authentication is not required to access 192.168.0.0/16.
+              '';
+            };
+            acl = mkOption {
+              type = types.listOf
+                (types.submodule {
+                  options = {
+                    rule = mkOption {
+                      type = types.enum [ "allow" "deny" ];
+                      example = "allow";
+                      description = ''
+                        ACL rule. The following values are valid:
 
-                    <itemizedlist>
-                      <listitem><para>
-                        <literal>"allow"</literal>: connections allowed.
-                      </para></listitem>
-                      <listitem><para>
-                        <literal>"deny"</literal>: connections not allowed.
-                      </para></listitem>
-                    </itemizedlist>
-                  '';
-                };
-                users = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [ "user1" "user2" "user3" ];
-                  description = ''
-                    List of users, use empty list for any.
-                  '';
-                };
-                sources = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [ "127.0.0.1" "192.168.1.0/24" ];
-                  description = ''
-                    List of source IP range, use empty list for any.
-                  '';
-                };
-                targets = mkOption {
-                  type = types.listOf types.str;
-                  default = [ ];
-                  example = [ "127.0.0.1" "192.168.1.0/24" ];
-                  description = ''
-                    List of target IP ranges, use empty list for any.
-                    May also contain host names instead of addresses.
-                    It's possible to use wildmask in the begginning and in the the end of hostname, e.g. *badsite.com or *badcontent*.
-                    Hostname is only checked if hostname presents in request.
-                  '';
-                };
-                targetPorts = mkOption {
-                  type = types.listOf types.int;
-                  default = [ ];
-                  example = [ 80 443 ];
-                  description = ''
-                    List of target ports, use empty list for any.
-                  '';
-                };
-              };
-            });
-            default = [ ];
-            example = literalExample ''
-              [
-                {
-                  rule = "allow";
-                  users = [ "user1" ];
-                }
-                {
-                  rule = "allow";
-                  sources = [ "192.168.1.0/24" ];
-                }
-                {
-                  rule = "deny";
-                }
-              ]
-            '';
-            description = ''
-              Use this option to limit user access to resources.
-            '';
+                        <itemizedlist>
+                          <listitem><para>
+                            <literal>"allow"</literal>: connections allowed.
+                          </para></listitem>
+                          <listitem><para>
+                            <literal>"deny"</literal>: connections not allowed.
+                          </para></listitem>
+                        </itemizedlist>
+                      '';
+                    };
+                    users = mkOption {
+                      type = types.listOf types.str;
+                      default = [ ];
+                      example = [ "user1" "user2" "user3" ];
+                      description = ''
+                        List of users, use empty list for any.
+                      '';
+                    };
+                    sources = mkOption {
+                      type = types.listOf types.str;
+                      default = [ ];
+                      example = [ "127.0.0.1" "192.168.1.0/24" ];
+                      description = ''
+                        List of source IP range, use empty list for any.
+                      '';
+                    };
+                    targets = mkOption {
+                      type = types.listOf types.str;
+                      default = [ ];
+                      example = [ "127.0.0.1" "192.168.1.0/24" ];
+                      description = ''
+                        List of target IP ranges, use empty list for any.
+                        May also contain host names instead of addresses.
+                        It's possible to use wildmask in the begginning and in the the end of hostname, e.g. *badsite.com or *badcontent*.
+                        Hostname is only checked if hostname presents in request.
+                      '';
+                    };
+                    targetPorts = mkOption {
+                      type = types.listOf types.int;
+                      default = [ ];
+                      example = [ 80 443 ];
+                      description = ''
+                        List of target ports, use empty list for any.
+                      '';
+                    };
+                  };
+                });
+              default = [ ];
+              example = literalExample ''
+                [
+                  {
+                    rule = "allow";
+                    users = [ "user1" ];
+                  }
+                  {
+                    rule = "allow";
+                    sources = [ "192.168.1.0/24" ];
+                  }
+                  {
+                    rule = "deny";
+                  }
+                ]
+              '';
+              description = ''
+                Use this option to limit user access to resources.
+              '';
+            };
+            extraArguments = mkOption {
+              type = types.nullOr types.str;
+              default = null;
+              example = "-46";
+              description = ''
+                Extra arguments for service.
+                Consult "Options" section in <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available arguments.
+              '';
+            };
+            extraConfig = mkOption {
+              type = types.nullOr types.lines;
+              default = null;
+              description = ''
+                Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
+                Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available options.
+              '';
+            };
           };
-          extraArguments = mkOption {
-            type = types.nullOr types.str;
-            default = null;
-            example = "-46";
-            description = ''
-              Extra arguments for service.
-              Consult "Options" section in <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available arguments.
-            '';
-          };
-          extraConfig = mkOption {
-            type = types.nullOr types.lines;
-            default = null;
-            description = ''
-              Extra configuration for service. Use this to configure things like bandwidth limiter or ACL-based redirection.
-              Consult <link xlink:href="https://github.com/z3APA3A/3proxy/wiki/3proxy.cfg">documentation</link> for available options.
-            '';
-          };
-        };
-      });
+        });
       default = [ ];
       example = literalExample ''
         [
@@ -368,42 +371,42 @@ in {
       nscache6 ${toString cfg.resolution.nscache6}
 
       ${concatMapStringsSep "\n" (x: "nsrecord " + x)
-      (mapAttrsToList (name: value: "${name} ${value}")
-        cfg.resolution.nsrecord)}
+        (mapAttrsToList (name: value: "${name} ${value}")
+            cfg.resolution.nsrecord)}
 
       ${optionalString (cfg.usersFile != null)
         ''users $"${cfg.usersFile}"''
       }
 
       ${concatMapStringsSep "\n" (service: ''
-        auth ${concatStringsSep " " service.auth}
+      auth ${concatStringsSep " " service.auth}
 
-        ${optionalString (cfg.denyPrivate)
+      ${optionalString (cfg.denyPrivate)
         "deny * * ${optionalList cfg.privateRanges}"}
 
-        ${concatMapStringsSep "\n" (acl:
-          "${acl.rule} ${
+      ${concatMapStringsSep "\n" (acl:
+        "${acl.rule} ${
             concatMapStringsSep " " optionalList [
-              acl.users
-              acl.sources
-              acl.targets
-              acl.targetPorts
-            ]
+                acl.users
+                acl.sources
+                acl.targets
+                acl.targetPorts
+              ]
           }") service.acl}
 
-        maxconn ${toString service.maxConnections}
+      maxconn ${toString service.maxConnections}
 
-        ${optionalString (service.extraConfig != null) service.extraConfig}
+      ${optionalString (service.extraConfig != null) service.extraConfig}
 
-        ${service.type} -i${toString service.bindAddress} ${
-          optionalString (service.bindPort != null)
-          "-p${toString service.bindPort}"
-        } ${
-          optionalString (service.extraArguments != null) service.extraArguments
-        }
+      ${service.type} -i${toString service.bindAddress} ${
+        optionalString (service.bindPort != null)
+            "-p${toString service.bindPort}"
+      } ${
+        optionalString (service.extraArguments != null) service.extraArguments
+      }
 
-        flush
-      '') cfg.services}
+      flush
+    '') cfg.services}
       ${optionalString (cfg.extraConfig != null) cfg.extraConfig}
     '');
     systemd.services."3proxy" = {

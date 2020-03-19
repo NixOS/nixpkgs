@@ -47,27 +47,30 @@
 , unzip
 , debug ? false
 
-/* you have to add ~/mm.cfg :
+  /* you have to add ~/mm.cfg :
 
-    TraceOutputFileEnable=1
-    ErrorReportingEnable=1
-    MaxWarnings=1
+      TraceOutputFileEnable=1
+      ErrorReportingEnable=1
+      MaxWarnings=1
 
-  in order to read the flash trace at ~/.macromedia/Flash_Player/Logs/flashlog.txt
-  Then FlashBug (a FireFox plugin) shows the log as well
-*/
+    in order to read the flash trace at ~/.macromedia/Flash_Player/Logs/flashlog.txt
+    Then FlashBug (a FireFox plugin) shows the log as well
+  */
 
 }:
-
 let
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
       "x86_64"
-    else if stdenv.hostPlatform.system == "i686-linux"   then
-      "i386"
-    else throw "Flash Player is not supported on this platform";
+    else
+      if stdenv.hostPlatform.system == "i686-linux"
+      then
+        "i386"
+      else throw "Flash Player is not supported on this platform";
   lib_suffix =
-      if stdenv.hostPlatform.system == "x86_64-linux" then
+    if stdenv.hostPlatform.system == "x86_64-linux"
+    then
       "64"
     else
       "";
@@ -78,18 +81,22 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url =
-      if debug then
+      if debug
+      then
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_npapi_linux_debug.${arch}.tar.gz"
       else
         "https://fpdownload.adobe.com/get/flashplayer/pdc/${version}/flash_player_npapi_linux.${arch}.tar.gz";
     sha256 =
-      if debug then
-        if arch == "x86_64" then
+      if debug
+      then
+        if arch == "x86_64"
+        then
           "1kkwijxlcs1rlqxr1vj51h95fwwrp5m0c9lngqpncgmmhh8v9dyr"
         else
           "0r47s19fw7gsph73rd5jb2zfsjwz7mjawm6c49rir9rsa0zxrsks"
       else
-        if arch == "x86_64" then
+        if arch == "x86_64"
+        then
           "1ki3i7zw0q48xf01xjfm1mpizc5flk768p9hqxpg881r4h65dh6b"
         else
           "1v527i60sljwyvv4l1kg9ml05skjgm3naynlswd35hsz258jnxl4";
@@ -129,12 +136,51 @@ stdenv.mkDerivation rec {
   };
 
   rpath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
-      glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
-      libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
-      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
+    [
+      stdenv.cc.cc
+      alsaLib
+      atk
+      bzip2
+      cairo
+      curl
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      glibc
+      graphite2
+      gtk2
+      harfbuzz
+      libICE
+      libSM
+      libX11
+      libXau
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXdmcp
+      libXext
+      libXfixes
+      libXi
+      libXinerama
+      libXrandr
+      libXrender
+      libXt
+      libXxf86vm
+      libdrm
+      libffi
+      libglvnd
+      libpng
+      libvdpau
+      libxcb
+      libxshmfence
+      nspr
+      nss
+      pango
+      pcre
+      pixman
+      zlib
     ];
 
   meta = {

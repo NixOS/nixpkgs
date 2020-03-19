@@ -62,9 +62,11 @@ stdenv.mkDerivation rec {
   postUnpack =
     let
       rpmArch =
-        if stdenv.hostPlatform.isx86_32 then "i386" else
-        if stdenv.hostPlatform.isx86_64 then "x86_64" else
-        throw "unsupported system: ${stdenv.hostPlatform.system}";
+        if stdenv.hostPlatform.isx86_32
+        then "i386" else
+          if stdenv.hostPlatform.isx86_64
+          then "x86_64" else
+            throw "unsupported system: ${stdenv.hostPlatform.system}";
     in
       ''
         ls clickshare_baseunit_*.*_all.signed_release.ipk | wc --lines | xargs test 1 =

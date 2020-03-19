@@ -1,8 +1,8 @@
 { stdenv, fetchurl, fetchpatch, autoconf213, pkgconfig, perl, zip, which, readline, icu, zlib, nspr, buildPackages }:
-
 let
   version = "52.9.0";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "spidermonkey";
   inherit version;
 
@@ -58,7 +58,7 @@ in stdenv.mkDerivation {
     "--enable-readline"
     "--enable-shared-js"
   ] ++ stdenv.lib.optional stdenv.hostPlatform.isMusl "--disable-jemalloc"
-    ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+  ++ stdenv.lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
     "--host=${stdenv.buildPlatform.config}"
     "--target=${stdenv.hostPlatform.config}"
   ];

@@ -1,5 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, boost, libevent, double-conversion, glog
-, gflags, libiberty, openssl }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, boost
+, libevent
+, double-conversion
+, glog
+, gflags
+, libiberty
+, openssl
+}:
 
 stdenv.mkDerivation rec {
   pname = "folly";

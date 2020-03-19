@@ -1,5 +1,16 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, astring, cstruct, fmt, hex, jsonm, logs, ocaml_lwt, ocamlgraph, uri
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, astring
+, cstruct
+, fmt
+, hex
+, jsonm
+, logs
+, ocaml_lwt
+, ocamlgraph
+, uri
 }:
 
 buildDunePackage rec {

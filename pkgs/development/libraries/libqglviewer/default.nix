@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ qmake ];
   buildInputs = [ qtbase libGLU ]
-    ++ stdenv.lib.optional stdenv.isDarwin AGL;
+  ++ stdenv.lib.optional stdenv.isDarwin AGL;
 
   postPatch = ''
     cd QGLViewer

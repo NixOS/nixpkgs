@@ -2,22 +2,43 @@
 , minorVersion
 , maintenanceVersion
 , src_sha256
-# source deps
+  # source deps
 , libuvVersion
 , libuvSha256
 }:
-{ stdenv, fetchurl, fetchzip
-# build tools
-, gfortran, m4, makeWrapper, patchelf, perl, which, python2
+{ stdenv
+, fetchurl
+, fetchzip
+  # build tools
+, gfortran
+, m4
+, makeWrapper
+, patchelf
+, perl
+, which
+, python2
 , cmake
-# libjulia dependencies
-, libunwind, readline, utf8proc, zlib
-# standard library dependencies
-, curl, fftwSinglePrec, fftw, gmp, libgit2, mpfr, openlibm, openspecfun, pcre2
-# linear algebra
-, openblas, arpack
-# Darwin frameworks
-, CoreServices, ApplicationServices
+  # libjulia dependencies
+, libunwind
+, readline
+, utf8proc
+, zlib
+  # standard library dependencies
+, curl
+, fftwSinglePrec
+, fftw
+, gmp
+, libgit2
+, mpfr
+, openlibm
+, openspecfun
+, pcre2
+  # linear algebra
+, openblas
+, arpack
+  # Darwin frameworks
+, CoreServices
+, ApplicationServices
 }:
 
 with stdenv.lib;
@@ -29,7 +50,6 @@ in
 let
   arpack = arpack_.override { inherit openblas; };
 in
-
 let
   dsfmtVersion = "2.2.3";
   dsfmt = fetchurl {
@@ -73,7 +93,6 @@ let
   };
   version = "${majorVersion}.${minorVersion}.${maintenanceVersion}";
 in
-
 stdenv.mkDerivation rec {
   pname = "julia";
   inherit version;
@@ -117,11 +136,22 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    arpack fftw fftwSinglePrec gmp libgit2 libunwind mpfr
-    pcre2.dev openblas openlibm openspecfun readline utf8proc
+    arpack
+    fftw
+    fftwSinglePrec
+    gmp
+    libgit2
+    libunwind
+    mpfr
+    pcre2.dev
+    openblas
+    openlibm
+    openspecfun
+    readline
+    utf8proc
     zlib
   ]
-  ++ stdenv.lib.optionals stdenv.isDarwin [CoreServices ApplicationServices]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ CoreServices ApplicationServices ]
   ;
 
   nativeBuildInputs = [ curl gfortran m4 makeWrapper patchelf perl python2 which ];
@@ -130,10 +160,10 @@ stdenv.mkDerivation rec {
     let
       arch = head (splitString "-" stdenv.system);
       march = { x86_64 = stdenv.hostPlatform.platform.gcc.arch or "x86-64"; i686 = "pentium4"; }.${arch}
-              or (throw "unsupported architecture: ${arch}");
+        or (throw "unsupported architecture: ${arch}");
       # Julia requires Pentium 4 (SSE2) or better
       cpuTarget = { x86_64 = "x86-64"; i686 = "pentium4"; }.${arch}
-                  or (throw "unsupported architecture: ${arch}");
+        or (throw "unsupported architecture: ${arch}");
     in [
       "ARCH=${arch}"
       "MARCH=${march}"
@@ -173,8 +203,16 @@ stdenv.mkDerivation rec {
     ];
 
   LD_LIBRARY_PATH = makeLibraryPath [
-    arpack fftw fftwSinglePrec gmp libgit2 mpfr openblas openlibm
-    openspecfun pcre2
+    arpack
+    fftw
+    fftwSinglePrec
+    gmp
+    libgit2
+    mpfr
+    openblas
+    openlibm
+    openspecfun
+    pcre2
   ];
 
   enableParallelBuilding = true;

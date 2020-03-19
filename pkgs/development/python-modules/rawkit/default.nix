@@ -1,6 +1,11 @@
-{ stdenv, fetchPypi, buildPythonPackage, fetchpatch
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
 , libraw
-, pytest, mock }:
+, pytest
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "rawkit";

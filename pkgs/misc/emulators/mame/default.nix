@@ -1,7 +1,18 @@
-{ stdenv, mkDerivation, fetchFromGitHub, makeDesktopItem, makeWrapper
-, python, pkgconfig, SDL2, SDL2_ttf, alsaLib, which, qtbase, libXinerama
-, installShellFiles }:
-
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, makeDesktopItem
+, makeWrapper
+, python
+, pkgconfig
+, SDL2
+, SDL2_ttf
+, alsaLib
+, which
+, qtbase
+, libXinerama
+, installShellFiles
+}:
 let
   majorVersion = "0";
   minorVersion = "218";
@@ -15,7 +26,8 @@ let
   };
 
   dest = "$out/opt/mame";
-in mkDerivation {
+in
+mkDerivation {
   pname = "mame";
   version = "${majorVersion}.${minorVersion}";
 

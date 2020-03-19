@@ -19,11 +19,11 @@ stdenv.mkDerivation rec {
 
   # Disable install stripping as it breaks cross-compiling.
   # We strip binaries anyway in fixupPhase.
-  makeFlags= [ "STRIP=" ];
+  makeFlags = [ "STRIP=" ];
 
   configureFlags = [
     "--enable-overlays"
-    "--disable-dependency-tracking"   # speeds up one-time build
+    "--disable-dependency-tracking" # speeds up one-time build
     "--enable-modules"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -32,8 +32,8 @@ stdenv.mkDerivation rec {
     "--with-yielding_select=yes"
     "ac_cv_func_memcmp_working=yes"
   ] ++ stdenv.lib.optional (openssl == null) "--without-tls"
-    ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
-    ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
+  ++ stdenv.lib.optional (cyrus_sasl == null) "--without-cyrus-sasl"
+  ++ stdenv.lib.optional stdenv.isFreeBSD "--with-pic";
 
   doCheck = false; # needs a running LDAP server
 
@@ -58,10 +58,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = http://www.openldap.org/;
+    homepage = http://www.openldap.org/;
     description = "An open source implementation of the Lightweight Directory Access Protocol";
     license = licenses.openldap;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

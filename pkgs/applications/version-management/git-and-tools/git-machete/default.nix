@@ -1,6 +1,14 @@
-{ lib, buildPythonApplication, fetchPypi
-, installShellFiles, pbr
-, flake8, mock, pycodestyle, pylint, tox }:
+{ lib
+, buildPythonApplication
+, fetchPypi
+, installShellFiles
+, pbr
+, flake8
+, mock
+, pycodestyle
+, pylint
+, tox
+}:
 
 buildPythonApplication rec {
   pname = "git-machete";
@@ -19,8 +27,8 @@ buildPythonApplication rec {
   checkInputs = [ flake8 mock pycodestyle pylint tox ];
 
   postInstall = ''
-      installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
-      installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
+    installShellCompletion --bash --name git-machete completion/git-machete.completion.bash
+    installShellCompletion --zsh --name _git-machete completion/git-machete.completion.zsh
   '';
 
   meta = with lib; {

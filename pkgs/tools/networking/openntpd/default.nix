@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, libressl
+{ stdenv
+, fetchurl
+, libressl
 , privsepPath ? "/var/empty"
 , privsepUser ? "ntp"
 }:

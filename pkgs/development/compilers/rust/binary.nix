@@ -1,22 +1,23 @@
-{ stdenv, makeWrapper, bash, curl, darwin
+{ stdenv
+, makeWrapper
+, bash
+, curl
+, darwin
 , version
 , src
 , platform
 , versionType
 }:
-
 let
   inherit (stdenv.lib) optionalString;
   inherit (darwin.apple_sdk.frameworks) Security;
 
   bootstrapping = versionType == "bootstrap";
 
-  installComponents
-    = "rustc,rust-std-${platform}"
-    + (optionalString bootstrapping ",cargo")
-    ;
+  installComponents = "rustc,rust-std-${platform}"
+  + (optionalString bootstrapping ",cargo")
+  ;
 in
-
 rec {
   rustc = stdenv.mkDerivation {
     name = "rustc-${versionType}-${version}";
@@ -32,7 +33,7 @@ rec {
     };
 
     buildInputs = [ bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -43,16 +44,16 @@ rec {
         --components=${installComponents}
 
       ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/rustdoc"
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        "$out/bin/rustc"
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        "$out/bin/rustdoc"
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        "$out/bin/cargo"
+    ''}
 
       # Do NOT, I repeat, DO NOT use `wrapProgram` on $out/bin/rustc
       # (or similar) here. It causes strange effects where rustc loads
@@ -78,7 +79,7 @@ rec {
     };
 
     buildInputs = [ makeWrapper bash ]
-      ++ stdenv.lib.optional stdenv.isDarwin Security;
+    ++ stdenv.lib.optional stdenv.isDarwin Security;
 
     postPatch = ''
       patchShebangs .
@@ -90,10 +91,10 @@ rec {
         --components=cargo
 
       ${optionalString (stdenv.isLinux && bootstrapping) ''
-        patchelf \
-          --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-          "$out/bin/cargo"
-      ''}
+      patchelf \
+        --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+        "$out/bin/cargo"
+    ''}
 
       wrapProgram "$out/bin/cargo" \
         --suffix PATH : "${rustc}/bin"

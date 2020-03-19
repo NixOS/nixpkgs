@@ -17,13 +17,13 @@ stdenv.mkDerivation rec {
     cp -R $src/* $_
     makeWrapper $out/libexec/acme.sh $out/bin/acme.sh \
       --prefix PATH : "${
-        lib.makeBinPath [
+      lib.makeBinPath [
           socat
           openssl
           curl
           (if stdenv.isLinux then iproute else unixtools.netstat)
         ]
-      }"
+    }"
   '';
 
   meta = with stdenv.lib; {

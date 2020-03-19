@@ -1,15 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, perlPackages
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, perlPackages
 , cursesSupport ? true
 , uriFindSupport ? true
 }:
-
 let
   perlDeps =
     [ perlPackages.MIMEtools perlPackages.HTMLParser ]
     ++ lib.optional cursesSupport perlPackages.CursesUI
     ++ lib.optional uriFindSupport perlPackages.URIFind;
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "extract_url";
   version = "1.6.2";
 

@@ -32,4 +32,3 @@ pythonPackages.buildPythonApplication rec {
   };
 
 }
-

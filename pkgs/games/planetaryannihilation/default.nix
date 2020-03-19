@@ -1,5 +1,25 @@
-{ stdenv, config, fetchurl, patchelf, makeWrapper, gtk2, glib, udev, alsaLib, atk
-, nspr, fontconfig, cairo, pango, nss, freetype, gnome2, gdk-pixbuf, curl, systemd, xorg }:
+{ stdenv
+, config
+, fetchurl
+, patchelf
+, makeWrapper
+, gtk2
+, glib
+, udev
+, alsaLib
+, atk
+, nspr
+, fontconfig
+, cairo
+, pango
+, nss
+, freetype
+, gnome2
+, gdk-pixbuf
+, curl
+, systemd
+, xorg
+}:
 
 # TODO: use dynamic attributes once Nix 1.7 is out
 assert ((config.planetary_annihilation or null).url or null) != null;

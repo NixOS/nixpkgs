@@ -16,7 +16,7 @@
 , pytest-sugar
 , pytest-benchmark
 
-# required just httpcore / requests-async
+  # required just httpcore / requests-async
 , h11
 , h2
 , certifi
@@ -26,9 +26,7 @@
 , rfc3986
 , uvicorn
 }:
-
 let
-
   # This version of sanic depends on two packages that have been deprecated by
   # their development teams:
   #
@@ -52,7 +50,7 @@ let
     postConfigure = ''
       substituteInPlace setup.py \
         --replace "h11==0.8.*" "h11"
-      '';
+    '';
 
     # LICENCE.md gets propagated without this, causing collisions
     postInstall = ''
@@ -75,9 +73,7 @@ let
       rm $out/LICENSE.md
     '';
   };
-
 in
-
 buildPythonPackage rec {
   pname = "sanic";
   version = "19.6.3";

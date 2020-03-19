@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, pkgconfig
-, libelf, zlib
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, libelf
+, zlib
 }:
 
 with builtins;
@@ -35,9 +38,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Upstream mirror of libbpf";
-    homepage    = "https://github.com/libbpf/libbpf";
-    license     = with licenses; [ lgpl21 /* or */ bsd2 ];
+    homepage = "https://github.com/libbpf/libbpf";
+    license = with licenses; [ lgpl21 /* or */ bsd2 ];
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

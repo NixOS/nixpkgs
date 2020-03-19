@@ -3,15 +3,22 @@
 # Make sure both underlying packages claim to have prepended their binaries
 # with the same targetPrefix.
 assert binutils-unwrapped.targetPrefix == cctools.targetPrefix;
-
 let
   inherit (binutils-unwrapped) targetPrefix;
   cmds = [
-    "ar" "ranlib" "as" "install_name_tool"
-    "ld" "strip" "otool" "lipo" "nm" "strings" "size"
+    "ar"
+    "ranlib"
+    "as"
+    "install_name_tool"
+    "ld"
+    "strip"
+    "otool"
+    "lipo"
+    "nm"
+    "strings"
+    "size"
   ];
 in
-
 # TODO: loop over targetPrefixed binaries too
 stdenv.mkDerivation {
   pname = "${targetPrefix}cctools-binutils-darwin";

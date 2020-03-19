@@ -1,10 +1,10 @@
 { stdenv, fetchurl, mkfontscale }:
-
 let
   version = "1.5.1";
   releaseUrl =
     "https://github.com/slavfox/Cozette/releases/download/v.${version}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "Cozette";
   inherit version;
 

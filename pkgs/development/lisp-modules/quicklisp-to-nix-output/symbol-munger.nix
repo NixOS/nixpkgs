@@ -15,7 +15,7 @@ rec {
 
   packageName = "symbol-munger";
 
-  asdFilesToKeep = ["symbol-munger.asd"];
+  asdFilesToKeep = [ "symbol-munger.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM symbol-munger DESCRIPTION

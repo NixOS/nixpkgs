@@ -7,12 +7,10 @@
 , mpfr
 , libmpc
 }:
-
 let
   pname = "gmpy2";
   version = "2.1a4";
 in
-
 buildPythonPackage {
   inherit pname version;
 

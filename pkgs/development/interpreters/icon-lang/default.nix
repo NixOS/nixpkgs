@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "gtownsend";
     repo = "icon";
-    rev = "rel${builtins.replaceStrings ["."] [""] version}";
+    rev = "rel${builtins.replaceStrings [ "." ] [ "" ] version}";
     sha256 = "1gkvj678ldlr1m5kjhx6zpmq11nls8kxa7pyy64whgakfzrypynw";
   };
 
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     let
       _name = if stdenv.isDarwin then "macintosh" else "linux";
     in
-    ''
-      make ${stdenv.lib.optionalString withGraphics "X-"}Configure name=${_name}
-    '';
+      ''
+        make ${stdenv.lib.optionalString withGraphics "X-"}Configure name=${_name}
+      '';
 
   installPhase = ''
     make Install dest=$out

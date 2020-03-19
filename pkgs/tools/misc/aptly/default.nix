@@ -1,7 +1,5 @@
 { stdenv, buildGoPackage, fetchFromGitHub, makeWrapper, gnupg, bzip2, xz, graphviz }:
-
 let
-
   version = "1.3.0";
   rev = "v${version}";
 
@@ -18,9 +16,7 @@ let
     repo = "aptly-bash-completion";
     sha256 = "0dkc4z687yk912lpv8rirv0nby7iny1zgdvnhdm5b47qmjr1sm5q";
   };
-
 in
-
 buildGoPackage {
   pname = "aptly";
   inherit version;

@@ -48,10 +48,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage    = https://github.com/intel/compute-runtime;
+    homepage = https://github.com/intel/compute-runtime;
     description = "Intel Graphics Compute Runtime for OpenCL. Replaces Beignet for Gen8 (Broadwell) and beyond.";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ gloaming ];
   };
 }

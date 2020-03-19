@@ -1,6 +1,16 @@
-{ lib, fetchFromGitLab, buildPythonPackage, pillow, setuptools_scm,
-setuptools-scm-git-archive , tesseract, cuneiform, isPy3k, substituteAll,
-pytest, tox }:
+{ lib
+, fetchFromGitLab
+, buildPythonPackage
+, pillow
+, setuptools_scm
+, setuptools-scm-git-archive
+, tesseract
+, cuneiform
+, isPy3k
+, substituteAll
+, pytest
+, tox
+}:
 
 buildPythonPackage rec {
   pname = "pyocr";
@@ -17,10 +27,11 @@ buildPythonPackage rec {
     sha256 = "09ab86bmizpv94w3mdvdqkjyyvk1vafw3jqhkiw5xx7p180xn3il";
   };
 
-  patches = [ (substituteAll {
-    src = ./paths.patch;
-    inherit cuneiform tesseract;
-  })
+  patches = [
+    (substituteAll {
+      src = ./paths.patch;
+      inherit cuneiform tesseract;
+    })
   ];
 
   buildInputs = [ setuptools_scm setuptools-scm-git-archive ];

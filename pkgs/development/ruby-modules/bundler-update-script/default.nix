@@ -1,7 +1,6 @@
 { runtimeShell, lib, writeScript, bundix, bundler, bundler-audit, coreutils, git, nix }:
 
 attrPath:
-
 let
   updateScript = writeScript "bundler-update-script" ''
     #!${runtimeShell}
@@ -22,4 +21,5 @@ let
     bundler-audit check --update
     bundix
   '';
-in [ updateScript attrPath ]
+in
+[ updateScript attrPath ]

@@ -1,11 +1,33 @@
-{ lib, buildPythonPackage, fetchFromGitHub, xdg_utils
-, requests, filetype, pyparsing, configparser, arxiv2bib
-, pyyaml, chardet, beautifulsoup4, colorama, bibtexparser
-, pylibgen, click, python-slugify, habanero, isbnlib
-, prompt_toolkit, pygments, stevedore, tqdm, lxml
-, python-doi, isPy3k, pythonOlder
-#, optional, dependencies
-, whoosh, pytest
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, xdg_utils
+, requests
+, filetype
+, pyparsing
+, configparser
+, arxiv2bib
+, pyyaml
+, chardet
+, beautifulsoup4
+, colorama
+, bibtexparser
+, pylibgen
+, click
+, python-slugify
+, habanero
+, isbnlib
+, prompt_toolkit
+, pygments
+, stevedore
+, tqdm
+, lxml
+, python-doi
+, isPy3k
+, pythonOlder
+  #, optional, dependencies
+, whoosh
+, pytest
 , stdenv
 }:
 
@@ -23,11 +45,26 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    requests filetype pyparsing configparser arxiv2bib
-    pyyaml chardet beautifulsoup4 colorama bibtexparser
-    pylibgen click python-slugify habanero isbnlib
-    prompt_toolkit pygments
-    stevedore tqdm lxml
+    requests
+    filetype
+    pyparsing
+    configparser
+    arxiv2bib
+    pyyaml
+    chardet
+    beautifulsoup4
+    colorama
+    bibtexparser
+    pylibgen
+    click
+    python-slugify
+    habanero
+    isbnlib
+    prompt_toolkit
+    pygments
+    stevedore
+    tqdm
+    lxml
     python-doi
     # optional dependencies
     whoosh

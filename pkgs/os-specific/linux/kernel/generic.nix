@@ -21,7 +21,7 @@
   extraConfig ? ""
 
 , # kernel intermediate config overrides, as a set
- structuredExtraConfig ? {}
+  structuredExtraConfig ? { }
 
 , # The version number used for the module directory
   modDirVersion ? version
@@ -30,7 +30,7 @@
   # certain features in this kernel.  E.g. `{iwlwifi = true;}'
   # indicates a kernel that provides Intel wireless support.  Used in
   # NixOS to implement kernel-specific behaviour.
-  features ? {}
+  features ? { }
 
 , # Custom seed used for CONFIG_GCC_PLUGIN_RANDSTRUCT if enabled. This is
   # automatically extended with extra per-version and per-config values.
@@ -40,12 +40,12 @@
   # should be an attribute set {name, patch} where `name' is a
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
-  kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.platform.name != "pc" ||
-                       stdenv.hostPlatform != stdenv.buildPlatform
-, extraMeta ? {}
+  kernelPatches ? [ ]
+, ignoreConfigErrors ? stdenv.hostPlatform.platform.name != "pc"
+  || stdenv.hostPlatform != stdenv.buildPlatform
+, extraMeta ? { }
 
-# easy overrides to stdenv.hostPlatform.platform members
+  # easy overrides to stdenv.hostPlatform.platform members
 , autoModules ? stdenv.hostPlatform.platform.kernelAutoModules
 , preferBuiltin ? stdenv.hostPlatform.platform.kernelPreferBuiltin or false
 , kernelArch ? stdenv.hostPlatform.platform.kernelArch
@@ -54,42 +54,43 @@
 }:
 
 assert stdenv.isLinux;
-
 let
-
   lib = stdenv.lib;
 
   # Combine the `features' attribute sets of all the kernel patches.
-  kernelFeatures = lib.fold (x: y: (x.features or {}) // y) ({
-    iwlwifi = true;
-    efiBootStub = true;
-    needsCifsUtils = true;
-    netfilterRPFilter = true;
-    grsecurity = false;
-    xen_dom0 = false;
-    ia32Emulation = true;
-  } // features) kernelPatches;
+  kernelFeatures = lib.fold (x: y: (x.features or { }) // y) (
+    {
+      iwlwifi = true;
+      efiBootStub = true;
+      needsCifsUtils = true;
+      netfilterRPFilter = true;
+      grsecurity = false;
+      xen_dom0 = false;
+      ia32Emulation = true;
+    }
+    // features
+  ) kernelPatches;
 
   commonStructuredConfig = import ./common-config.nix {
-    inherit stdenv version ;
+    inherit stdenv version;
 
     features = kernelFeatures; # Ensure we know of all extra patches, etc.
   };
 
   intermediateNixConfig = configfile.moduleStructuredConfig.intermediateNixConfig
-    # extra config in legacy string format
-    + extraConfig
-    + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
+  # extra config in legacy string format
+  + extraConfig
+  + lib.optionalString (stdenv.hostPlatform.platform ? kernelExtraConfig) stdenv.hostPlatform.platform.kernelExtraConfig;
 
   structuredConfigFromPatches =
-        map ({extraStructuredConfig ? {}, ...}: {settings=extraStructuredConfig;}) kernelPatches;
+    map ({ extraStructuredConfig ? { }, ... }: { settings = extraStructuredConfig; }) kernelPatches;
 
   # appends kernel patches extraConfig
   kernelConfigFun = baseConfigStr:
     let
       configFromPatches =
-        map ({extraConfig ? "", ...}: extraConfig) kernelPatches;
-    in lib.concatStringsSep "\n" ([baseConfigStr] ++ configFromPatches);
+        map ({ extraConfig ? "", ... }: extraConfig) kernelPatches;
+    in lib.concatStringsSep "\n" ([ baseConfigStr ] ++ configFromPatches);
 
   configfile = stdenv.mkDerivation {
     inherit ignoreConfigErrors autoModules preferBuiltin kernelArch;
@@ -103,7 +104,7 @@ let
 
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     nativeBuildInputs = [ perl gmp libmpc mpfr ]
-      ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
+    ++ lib.optionals (stdenv.lib.versionAtLeast version "4.16") [ bison flex ];
 
     platformName = stdenv.hostPlatform.platform.name;
     # e.g. "defconfig"
@@ -154,7 +155,7 @@ let
           { settings = commonStructuredConfig; _file = "pkgs/os-specific/linux/kernel/common-config.nix"; }
           { settings = structuredExtraConfig; _file = "structuredExtraConfig"; }
         ]
-        ++  structuredConfigFromPatches
+        ++ structuredConfigFromPatches
         ;
       }).config;
 
@@ -165,7 +166,7 @@ let
 
   }; # end of configfile derivation
 
-  kernel = (callPackage ./manual-config.nix {}) {
+  kernel = (callPackage ./manual-config.nix { }) {
     inherit version modDirVersion src kernelPatches randstructSeed stdenv extraMeta configfile;
 
     config = { CONFIG_MODULES = "y"; CONFIG_FW_LOADER = "m"; };
@@ -176,5 +177,5 @@ let
     inherit commonStructuredConfig;
     passthru = kernel.passthru // (removeAttrs passthru [ "passthru" ]);
   };
-
-in lib.extendDerivation true passthru kernel
+in
+lib.extendDerivation true passthru kernel

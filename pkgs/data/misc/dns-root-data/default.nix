@@ -1,7 +1,5 @@
 { stdenv, lib, fetchurl }:
-
 let
-
   rootHints = fetchurl {
     # Original source https://www.internic.net/domain/named.root
     # occasionally suffers from pointless hash changes,
@@ -15,9 +13,7 @@ let
 
   rootKey = ./root.key;
   rootDs = ./root.ds;
-
 in
-
 stdenv.mkDerivation {
   name = "dns-root-data-2019-01-11";
 

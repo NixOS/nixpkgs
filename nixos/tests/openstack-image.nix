@@ -1,13 +1,12 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing.nix { inherit system pkgs; };
 with pkgs.lib;
 
 with import common/ec2.nix { inherit makeTest pkgs; };
-
 let
   image =
     (import ../lib/eval-config.nix {
@@ -28,15 +27,15 @@ let
   sshKeys = import ./ssh-keys.nix pkgs;
   snakeOilPrivateKey = sshKeys.snakeOilPrivateKey.text;
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
-
-in {
+in
+{
   metadata = makeEc2Test {
     name = "openstack-ec2-metadata";
     inherit image;
     sshPublicKey = snakeOilPublicKey;
     userData = ''
       SSH_HOST_ED25519_KEY_PUB:${snakeOilPublicKey}
-      SSH_HOST_ED25519_KEY:${replaceStrings ["\n"] ["|"] snakeOilPrivateKey}
+      SSH_HOST_ED25519_KEY:${replaceStrings [ "\n" ] [ "|" ] snakeOilPrivateKey}
     '';
     script = ''
       $machine->start;

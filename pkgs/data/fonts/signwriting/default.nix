@@ -25,8 +25,8 @@ runCommand "signwriting-1.1.4" {
     platforms = platforms.all;
   };
 }
-''
-  mkdir -p $out/share/fonts/truetype
-  cp $src1 $out/share/fonts/truetype/SignWriting_2010.ttf
-  cp $src2 $out/share/fonts/truetype/SignWriting_2010_Filling.ttf
-''
+  ''
+    mkdir -p $out/share/fonts/truetype
+    cp $src1 $out/share/fonts/truetype/SignWriting_2010.ttf
+    cp $src2 $out/share/fonts/truetype/SignWriting_2010_Filling.ttf
+  ''

@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkgconfig, cmake, hidapi
-, withExamples ? true, SDL2 ? null, libGL ? null, glew ? null
+{ lib
+, stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, hidapi
+, withExamples ? true
+, SDL2 ? null
+, libGL ? null
+, glew ? null
 }:
 
 with lib;
@@ -22,7 +30,9 @@ stdenv.mkDerivation {
   buildInputs = [
     hidapi
   ] ++ optionals withExamples [
-    SDL2 libGL glew
+    SDL2
+    libGL
+    glew
   ];
 
   cmakeFlags = [

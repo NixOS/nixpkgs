@@ -1,5 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, zlib, openssl, ncurses, libidn, pcre, libssh, libmysqlclient, postgresql
-, withGUI ? false, makeWrapper, pkgconfig, gtk2 }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, zlib
+, openssl
+, ncurses
+, libidn
+, pcre
+, libssh
+, libmysqlclient
+, postgresql
+, withGUI ? false
+, makeWrapper
+, pkgconfig
+, gtk2
+}:
 
 stdenv.mkDerivation rec {
   pname = "thc-hydra";
@@ -12,21 +26,29 @@ stdenv.mkDerivation rec {
     sha256 = "09d2f55wky1iabnl871d4r6dyyvr8zhp47d9j1p6d0pvdv93kl4z";
   };
 
-  postPatch = let
-    makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
-  in ''
-    substituteInPlace configure \
-      --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
-      --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
-      --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
-      --replace "libcurses.so" "libncurses.so" \
-      --replace "-lcurses" "-lncurses"
-  '';
+  postPatch =
+    let
+      makeDirs = output: subDir: lib.concatStringsSep " " (map (path: lib.getOutput output path + "/" + subDir) buildInputs);
+    in ''
+      substituteInPlace configure \
+        --replace '$LIBDIRS' "${makeDirs "lib" "lib"}" \
+        --replace '$INCDIRS' "${makeDirs "dev" "include"}" \
+        --replace "/usr/include/math.h" "${lib.getDev stdenv.cc.libc}/include/math.h" \
+        --replace "libcurses.so" "libncurses.so" \
+        --replace "-lcurses" "-lncurses"
+    '';
 
   nativeBuildInputs = lib.optionals withGUI [ pkgconfig makeWrapper ];
 
   buildInputs = [
-    zlib openssl ncurses libidn pcre libssh libmysqlclient postgresql
+    zlib
+    openssl
+    ncurses
+    libidn
+    pcre
+    libssh
+    libmysqlclient
+    postgresql
   ] ++ lib.optional withGUI gtk2;
 
   enableParallelBuilding = true;

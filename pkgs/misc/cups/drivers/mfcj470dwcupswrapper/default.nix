@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, mfcj470dwlpr, makeWrapper}:
+{ stdenv, fetchurl, mfcj470dwlpr, makeWrapper }:
 
 stdenv.mkDerivation rec {
   pname = "mfcj470dw-cupswrapper";
@@ -23,13 +23,13 @@ stdenv.mkDerivation rec {
     substituteInPlace $WRAPPER \
     --replace "\`cp " "\`cp -p " \
     --replace "\`mv " "\`cp -p "
-    '';
+  '';
 
   buildPhase = ''
     cd brcupsconfpt1
     make all
     cd ..
-    '';
+  '';
 
   installPhase = ''
     TARGETFOLDER=$out/opt/brother/Printers/mfcj470dw/cupswrapper/
@@ -38,12 +38,12 @@ stdenv.mkDerivation rec {
     cp brcupsconfpt1/brcupsconfpt1 $TARGETFOLDER
     cp cupswrapper/cupswrappermfcj470dw $TARGETFOLDER/
     cp PPD/brother_mfcj470dw_printer_en.ppd $TARGETFOLDER/
-    '';
+  '';
 
   cleanPhase = ''
     cd brcupsconfpt1
     make clean
-    '';
+  '';
 
   meta = {
     homepage = http://www.brother.com/;

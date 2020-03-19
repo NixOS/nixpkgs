@@ -5,7 +5,8 @@ let
 
   basicConfig =
     { ... }:
-    { services.cjdns.enable = true;
+    {
+      services.cjdns.enable = true;
 
       # Turning off DHCP isn't very realistic but makes
       # the sequence of address assignment less stochastic.
@@ -14,72 +15,78 @@ let
       # CJDNS output is incompatible with the XML log.
       systemd.services.cjdns.serviceConfig.StandardOutput = "null";
     };
-
 in
-
-import ./make-test-python.nix ({ pkgs, ...} : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "cjdns";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ ehmry ];
   };
 
-  nodes = { # Alice finds peers over over ETHInterface.
-      alice =
-        { ... }:
-        { imports = [ basicConfig ];
+  nodes = {
+    # Alice finds peers over over ETHInterface.
+    alice =
+      { ... }:
+      {
+        imports = [ basicConfig ];
 
-          services.cjdns.ETHInterface.bind = "eth1";
+        services.cjdns.ETHInterface.bind = "eth1";
 
-          services.httpd.enable = true;
-          services.httpd.adminAddr = "foo@example.org";
-          networking.firewall.allowedTCPPorts = [ 80 ];
-        };
+        services.httpd.enable = true;
+        services.httpd.adminAddr = "foo@example.org";
+        networking.firewall.allowedTCPPorts = [ 80 ];
+      };
 
-      # Bob explicitly connects to Carol over UDPInterface.
-      bob =
-        { ... }:
+    # Bob explicitly connects to Carol over UDPInterface.
+    bob =
+      { ... }:
 
-        { imports = [ basicConfig ];
+      {
+        imports = [ basicConfig ];
 
-          networking.interfaces.eth1.ipv4.addresses = [
-            { address = "192.168.0.2"; prefixLength = 24; }
-          ];
+        networking.interfaces.eth1.ipv4.addresses = [
+          { address = "192.168.0.2"; prefixLength = 24; }
+        ];
 
-          services.cjdns =
-            { UDPInterface =
-                { bind = "0.0.0.0:1024";
-                  connectTo."192.168.0.1:1024" =
-                    { password = carolPassword;
-                      publicKey = carolPubKey;
-                    };
-                };
-            };
-        };
+        services.cjdns =
+          {
+            UDPInterface =
+              {
+                bind = "0.0.0.0:1024";
+                connectTo."192.168.0.1:1024" =
+                  {
+                    password = carolPassword;
+                    publicKey = carolPubKey;
+                  };
+              };
+          };
+      };
 
-      # Carol listens on ETHInterface and UDPInterface,
-      # but knows neither Alice or Bob.
-      carol =
-        { ... }:
-        { imports = [ basicConfig ];
+    # Carol listens on ETHInterface and UDPInterface,
+    # but knows neither Alice or Bob.
+    carol =
+      { ... }:
+      {
+        imports = [ basicConfig ];
 
-          environment.etc."cjdns.keys".text = ''
-            CJDNS_PRIVATE_KEY=${carolKey}
-            CJDNS_ADMIN_PASSWORD=FOOBAR
-          '';
+        environment.etc."cjdns.keys".text = ''
+          CJDNS_PRIVATE_KEY=${carolKey}
+          CJDNS_ADMIN_PASSWORD=FOOBAR
+        '';
 
-          networking.interfaces.eth1.ipv4.addresses = [
-            { address = "192.168.0.1"; prefixLength = 24; }
-          ];
+        networking.interfaces.eth1.ipv4.addresses = [
+          { address = "192.168.0.1"; prefixLength = 24; }
+        ];
 
-          services.cjdns =
-            { authorizedPasswords = [ carolPassword ];
-              ETHInterface.bind = "eth1";
-              UDPInterface.bind = "192.168.0.1:1024";
-            };
-          networking.firewall.allowedUDPPorts = [ 1024 ];
-        };
+        services.cjdns =
+          {
+            authorizedPasswords = [ carolPassword ];
+            ETHInterface.bind = "eth1";
+            UDPInterface.bind = "192.168.0.1:1024";
+          };
+        networking.firewall.allowedUDPPorts = [ 1024 ];
+      };
 
-    };
+  };
 
   testScript =
     ''

@@ -1,8 +1,8 @@
-{stdenv, fetchurl, openssl, fuse}:
+{ stdenv, fetchurl, openssl, fuse }:
 
 throw "It still does not build"
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation {
   name = "fsfs-0.1.1";
   src = fetchurl {
     url = mirror://sourceforge/fsfs/fsfs-0.1.1.tar.gz;

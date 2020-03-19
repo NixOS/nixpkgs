@@ -1,6 +1,24 @@
-{ stdenv, fetchurl, fetchpatch, cmake, pcre, pkgconfig, python2
-, libX11, libXpm, libXft, libXext, libGLU, libGL, zlib, libxml2, lzma, gsl_1
-, Cocoa, OpenGL, noSplash ? false }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, cmake
+, pcre
+, pkgconfig
+, python2
+, libX11
+, libXpm
+, libXft
+, libXext
+, libGLU
+, libGL
+, zlib
+, libxml2
+, lzma
+, gsl_1
+, Cocoa
+, OpenGL
+, noSplash ? false
+}:
 
 stdenv.mkDerivation rec {
   pname = "root";
@@ -13,13 +31,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ cmake pcre python2 zlib libxml2 lzma gsl_1 ]
-    ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
-    ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
-    ;
+  ++ stdenv.lib.optionals (!stdenv.isDarwin) [ libX11 libXpm libXft libXext libGLU libGL ]
+  ++ stdenv.lib.optionals (stdenv.isDarwin) [ Cocoa OpenGL ]
+  ;
 
   patches = [
     ./sw_vers_root5.patch
-
     (fetchpatch {
       name = "enable_new_gcc.patch";
       url = "https://aur.archlinux.org/cgit/aur.git/plain/enable_new_gcc.patch?h=root5&id=91c50876081a0af36f84ec4f0f9dba869107fa4f";

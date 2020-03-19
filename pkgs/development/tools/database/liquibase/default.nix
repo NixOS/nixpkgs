@@ -1,5 +1,10 @@
-{ stdenv, fetchurl, jre, makeWrapper
-, mysqlSupport ? true, mysql_jdbc ? null }:
+{ stdenv
+, fetchurl
+, jre
+, makeWrapper
+, mysqlSupport ? true
+, mysql_jdbc ? null
+}:
 
 assert mysqlSupport -> mysql_jdbc != null;
 
@@ -7,7 +12,6 @@ with stdenv.lib;
 let
   extraJars = optional mysqlSupport mysql_jdbc;
 in
-
 stdenv.mkDerivation rec {
   pname = "liquibase";
   version = "3.8.7";
@@ -24,11 +28,12 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase =
-    let addJars = dir: ''
-      for jar in ${dir}/*.jar; do
-        CP="\$CP":"\$jar"
-      done
-    '';
+    let
+      addJars = dir: ''
+        for jar in ${dir}/*.jar; do
+          CP="\$CP":"\$jar"
+        done
+      '';
     in ''
       mkdir -p $out
       mv ./{lib,licenses,liquibase.jar} $out/
@@ -53,7 +58,7 @@ stdenv.mkDerivation rec {
         liquibase.integration.commandline.Main \''${1+"\$@"}
       EOF
       chmod +x $out/bin/liquibase
-  '';
+    '';
 
   meta = {
     description = "Version Control for your database";

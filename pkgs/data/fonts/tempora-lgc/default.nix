@@ -1,4 +1,4 @@
-{stdenv, fetchurl}:
+{ stdenv, fetchurl }:
 let
   srcs = [
     (fetchurl {
@@ -18,8 +18,7 @@ let
       sha256 = "0iwa8wyydcpjss6d1jy4jibqxpvzph4vmaxwwmndpsqy1fz64y9i";
     })
   ];
-  nativeBuildInputs = [
-  ];
+  nativeBuildInputs = [ ];
 in
 stdenv.mkDerivation {
   name = "tempora-lgc";
@@ -36,7 +35,7 @@ stdenv.mkDerivation {
 
   meta = {
     description = ''Tempora font'';
-    license = stdenv.lib.licenses.gpl2 ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.gpl2;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
   };
 }

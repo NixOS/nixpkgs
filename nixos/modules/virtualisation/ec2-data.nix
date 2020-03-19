@@ -14,7 +14,8 @@ with lib;
   config = {
 
     systemd.services.apply-ec2-data =
-      { description = "Apply EC2 Data";
+      {
+        description = "Apply EC2 Data";
 
         wantedBy = [ "multi-user.target" "sshd.service" ];
         before = [ "sshd.service" ];
@@ -24,11 +25,11 @@ with lib;
         script =
           ''
             ${optionalString (config.networking.hostName == "") ''
-              echo "setting host name..."
-              if [ -s /etc/ec2-metadata/hostname ]; then
-                  ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
-              fi
-            ''}
+            echo "setting host name..."
+            if [ -s /etc/ec2-metadata/hostname ]; then
+                ${pkgs.nettools}/bin/hostname $(cat /etc/ec2-metadata/hostname)
+            fi
+          ''}
 
             if ! [ -e /root/.ssh/authorized_keys ]; then
                 echo "obtaining SSH key..."
@@ -69,7 +70,8 @@ with lib;
       };
 
     systemd.services.print-host-key =
-      { description = "Print SSH Host Key";
+      {
+        description = "Print SSH Host Key";
         wantedBy = [ "multi-user.target" ];
         after = [ "sshd.service" ];
         script =

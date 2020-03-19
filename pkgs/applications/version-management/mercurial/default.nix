@@ -1,12 +1,16 @@
-{ stdenv, fetchurl, python3Packages, makeWrapper, unzip
-, guiSupport ? false, tk ? null
+{ stdenv
+, fetchurl
+, python3Packages
+, makeWrapper
+, unzip
+, guiSupport ? false
+, tk ? null
 , ApplicationServices
 }:
-
 let
   inherit (python3Packages) docutils dulwich python;
-
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   pname = "mercurial";
   version = "5.3";
 
@@ -20,7 +24,7 @@ in python3Packages.buildPythonApplication rec {
   inherit python; # pass it so that the same version can be used in hg2git
 
   buildInputs = [ makeWrapper docutils unzip ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
+  ++ stdenv.lib.optionals stdenv.isDarwin [ ApplicationServices ];
 
   propagatedBuildInputs = [ dulwich ];
 

@@ -16,11 +16,11 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with stdenv.lib; {
-    homepage    = "http://mpmath.org/";
+    homepage = "http://mpmath.org/";
     description = "A pure-Python library for multiprecision floating arithmetic";
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ lovek323 ];
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

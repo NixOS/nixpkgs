@@ -1,6 +1,13 @@
-{ stdenv, fetchurl, autoreconfHook,
-  gzip, bzip2, pkgconfig, flex, check,
-  pam, coreutils
+{ stdenv
+, fetchurl
+, autoreconfHook
+, gzip
+, bzip2
+, pkgconfig
+, flex
+, check
+, pam
+, coreutils
 }:
 
 stdenv.mkDerivation rec {
@@ -46,8 +53,8 @@ stdenv.mkDerivation rec {
       # We get a warning in armv5tel-linux and the fuloong2f, so we
       # disable -Werror in it.
       ${stdenv.lib.optionalString (stdenv.isAarch32 || stdenv.hostPlatform.isMips) ''
-        sed -i s/-Werror// src/Makefile.am
-      ''}
+      sed -i s/-Werror// src/Makefile.am
+    ''}
     '';
 
   postInstall = ''

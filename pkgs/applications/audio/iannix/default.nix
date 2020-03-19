@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, alsaLib, pkgconfig, qtbase, qtscript, qmake
+{ stdenv
+, fetchFromGitHub
+, alsaLib
+, pkgconfig
+, qtbase
+, qtscript
+, qmake
 }:
 
 stdenv.mkDerivation {

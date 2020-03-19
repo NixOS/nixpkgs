@@ -34,4 +34,5 @@ callPackage ./generic.nix (args // rec {
       sha256 = "16kykc8wbq9kx9w9kkf3i7snak82m184qrl9bpxvkjl7h0n9aw49";
     })
   ];
-})
+}
+)

@@ -24,8 +24,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "A Python library for the Quantum Experience API";
-    homepage    = https://github.com/QISKit/qiskit-api-py;
-    license     = lib.licenses.asl20;
+    homepage = https://github.com/QISKit/qiskit-api-py;
+    license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       pandaman
     ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, zlib, openssl}:
+{ stdenv, fetchurl, zlib, openssl }:
 stdenv.mkDerivation rec {
   version = "0.6.1";
   pname = "libre";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     description = "A library for real-time communications with async IO support and a complete SIP stack";
     homepage = "http://www.creytiv.com/re.html";
     platforms = with stdenv.lib.platforms; linux;
-    maintainers = with stdenv.lib.maintainers; [raskin];
+    maintainers = with stdenv.lib.maintainers; [ raskin ];
     license = stdenv.lib.licenses.bsd3;
     inherit version;
     downloadPage = "http://www.creytiv.com/pub/";

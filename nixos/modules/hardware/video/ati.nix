@@ -3,17 +3,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   drivers = config.services.xserver.videoDrivers;
 
   enabled = elem "ati_unfree" drivers;
 
   ati_x11 = config.boot.kernelPackages.ati_drivers_x11;
-
 in
-
 {
 
   config = mkIf enabled {

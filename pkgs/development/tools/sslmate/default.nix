@@ -15,10 +15,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/sslmate --prefix PERL5LIB : \
       "${with perlPackages; makePerlPath [
-        URI
-        JSONPP
-        TermReadKey
-      ]}" \
+      URI
+      JSONPP
+      TermReadKey
+    ]}" \
       --prefix PATH : "${openssl.bin}/bin"
   '';
 

@@ -1,4 +1,4 @@
-{stdenv, fetchFromGitHub}:
+{ stdenv, fetchFromGitHub }:
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   };
 
   postUnpack = ''
-        patchShebangs .
+    patchShebangs .
   '';
 
   meta = {
@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://github.com/namhyung/uftrace;
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.linux;
-    maintainers = [stdenv.lib.maintainers.nthorne];
+    maintainers = [ stdenv.lib.maintainers.nthorne ];
   };
 }

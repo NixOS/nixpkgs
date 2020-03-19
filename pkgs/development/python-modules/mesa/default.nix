@@ -1,6 +1,14 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, isPy27
-, cookiecutter, networkx , pandas, tornado, tqdm
-, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, isPy27
+, cookiecutter
+, networkx
+, pandas
+, tornado
+, tqdm
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "mesa";

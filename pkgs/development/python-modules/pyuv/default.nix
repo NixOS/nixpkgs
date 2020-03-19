@@ -7,7 +7,7 @@
 buildPythonPackage rec {
   pname = "pyuv";
   version = "1.2.0";
-  disabled = isPyPy;  # see https://github.com/saghul/pyuv/issues/49
+  disabled = isPyPy; # see https://github.com/saghul/pyuv/issues/49
 
   src = pkgs.fetchurl {
     url = "https://github.com/saghul/pyuv/archive/${pname}-${version}.tar.gz";

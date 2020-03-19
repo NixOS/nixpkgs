@@ -22,5 +22,5 @@ stdenv.mkDerivation {
 
   installPhase = ''
     install -vD subdl $out/bin/subdl
-  '';  
+  '';
 }

@@ -20,6 +20,6 @@ stdenv.mkDerivation rec {
     homepage = https://www.ebi.ac.uk/about/vertebrate-genomics/software/exonerate;
     license = licenses.gpl3;
     maintainers = [ maintainers.bzizou ];
-    platforms = platforms.unix ;
+    platforms = platforms.unix;
   };
 }

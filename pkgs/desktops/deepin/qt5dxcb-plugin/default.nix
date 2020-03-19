@@ -1,5 +1,15 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, qmake, qtx11extras, libSM,
-  mtdev, cairo, deepin, qtbase }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, qmake
+, qtx11extras
+, libSM
+, mtdev
+, cairo
+, deepin
+, qtbase
+}:
 
 mkDerivation rec {
   pname = "qt5dxcb-plugin";

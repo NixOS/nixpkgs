@@ -1,4 +1,4 @@
-{ lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes}:
+{ lib, fetchPypi, buildPythonPackage, isPy3k, keyring, pbkdf2, pyaes }:
 buildPythonPackage rec {
   pname = "browser-cookie3";
   version = "0.9.1";

@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, imagemagick, libdvdread, libxml2, freetype, fribidi, libpng, zlib, pkgconfig
-, flex, bison }:
+{ stdenv
+, fetchurl
+, imagemagick
+, libdvdread
+, libxml2
+, freetype
+, fribidi
+, libpng
+, zlib
+, pkgconfig
+, flex
+, bison
+}:
 
 stdenv.mkDerivation rec{
   name = "dvdauthor-0.7.1";
@@ -9,7 +20,7 @@ stdenv.mkDerivation rec{
     sha256 = "1s8zqlim0s3hk5sbdsilip3qqh0yv05l1jwx49d9rsy614dv27sh";
   };
 
-  buildInputs = [ libpng freetype libdvdread libxml2 zlib fribidi imagemagick flex bison];
+  buildInputs = [ libpng freetype libdvdread libxml2 zlib fribidi imagemagick flex bison ];
   nativeBuildInputs = [ pkgconfig ];
 
   patches = [

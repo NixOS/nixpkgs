@@ -1,5 +1,10 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, lxml, pycryptodome, colorama }:
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, lxml
+, pycryptodome
+, colorama
+}:
 
 buildPythonPackage rec {
   pname = "libkeepass";

@@ -1,17 +1,24 @@
-{ stdenv, lib, pkgs, fetchFromGitHub, nodejs, nodePackages, remarshal
-, ttfautohint-nox, otfcc
+{ stdenv
+, lib
+, pkgs
+, fetchFromGitHub
+, nodejs
+, nodePackages
+, remarshal
+, ttfautohint-nox
+, otfcc
 
-# Custom font set options.
-# See https://github.com/be5invis/Iosevka#build-your-own-style
-# Ex:
-# privateBuildPlan = {
-#   family = "Iosevka Expanded";
-#
-#   design = [
-#     "sans"
-#     "expanded"
-#   ];
-# };
+  # Custom font set options.
+  # See https://github.com/be5invis/Iosevka#build-your-own-style
+  # Ex:
+  # privateBuildPlan = {
+  #   family = "Iosevka Expanded";
+  #
+  #   design = [
+  #     "sans"
+  #     "expanded"
+  #   ];
+  # };
 , privateBuildPlan ? null
   # Extra parameters. Can be used for ligature mapping.
   # It must be a raw toml string.
@@ -23,7 +30,8 @@
   # sequence = "+>"
 , extraParameters ? null
   # Custom font set name. Required if any custom settings above.
-, set ? null }:
+, set ? null
+}:
 
 assert (privateBuildPlan != null) -> set != null;
 
@@ -55,12 +63,12 @@ stdenv.mkDerivation rec {
   configurePhase = ''
     runHook preConfigure
     ${lib.optionalString (privateBuildPlan != null) ''
-      remarshal -i "$privateBuildPlanJSONPath" -o private-build-plans.toml -if json -of toml
-    ''}
+    remarshal -i "$privateBuildPlanJSONPath" -o private-build-plans.toml -if json -of toml
+  ''}
     ${lib.optionalString (extraParameters != null) ''
-      echo -e "\n" >> parameters.toml
-      cat "$extraParametersPath" >> parameters.toml
-    ''}
+    echo -e "\n" >> parameters.toml
+    cat "$extraParametersPath" >> parameters.toml
+  ''}
     ln -s ${
       nodePackages."iosevka-build-deps-../../data/fonts/iosevka"
     }/lib/node_modules/iosevka-build-deps/node_modules .

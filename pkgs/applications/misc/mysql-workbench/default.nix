@@ -40,10 +40,10 @@
 , bash
 , coreutils
 }:
-
 let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mysql-workbench";
   version = "8.0.19";
 
@@ -54,7 +54,6 @@ in stdenv.mkDerivation rec {
 
   patches = [
     ./fix-gdal-includes.patch
-
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";

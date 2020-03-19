@@ -1,5 +1,4 @@
 { config, pkgs, lib, ... }:
-
 let
   cfg = config.services.mailcatcher;
 

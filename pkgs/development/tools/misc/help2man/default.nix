@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ gettext perlPackages.LocaleGettext ];
   buildInputs = [ perlPackages.perl perlPackages.LocaleGettext ];
 
-  doCheck = false;                                # target `check' is missing
+  doCheck = false; # target `check' is missing
 
   patches = if stdenv.hostPlatform.isCygwin then [ ./1.40.4-cygwin-nls.patch ] else null;
 
@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     #! $SHELL -e
     export PERL5LIB=\''${PERL5LIB:+:}${perlPackages.LocaleGettext}/${perlPackages.perl.libPrefix}
     ${stdenv.lib.optionalString stdenv.hostPlatform.isCygwin
-        ''export PATH=\''${PATH:+:}${gettext}/bin''}
+      ''export PATH=\''${PATH:+:}${gettext}/bin''}
     exec -a \$0 $out/bin/.help2man-wrapped "\$@"
     EOF
     chmod +x $out/bin/help2man

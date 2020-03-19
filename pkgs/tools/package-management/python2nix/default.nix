@@ -2,7 +2,7 @@
 
 pythonPackages.buildPythonApplication {
   name = "python2nix-20140927";
- 
+
   src = fetchFromGitHub {
     owner = "proger";
     repo = "python2nix";

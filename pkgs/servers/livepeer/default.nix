@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub, buildGoPackage
-, pkgconfig, ffmpeg
+{ stdenv
+, fetchFromGitHub
+, buildGoPackage
+, pkgconfig
+, ffmpeg
 }:
 
 buildGoPackage rec {

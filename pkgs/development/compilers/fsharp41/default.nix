@@ -93,22 +93,22 @@ stdenv.mkDerivation rec {
 
   doInstallCheck = true;
   installCheckPhase = ''
-    echo 'printf "int = %i" (6 * 7);;' > script.fsx
-    $out/bin/fsi --exec script.fsx | grep "int = 42"
-    $out/bin/fsharpi --exec script.fsx | grep "int = 42"
-    $out/bin/fsharpiAnyCpu --exec script.fsx | grep "int = 42"
+        echo 'printf "int = %i" (6 * 7);;' > script.fsx
+        $out/bin/fsi --exec script.fsx | grep "int = 42"
+        $out/bin/fsharpi --exec script.fsx | grep "int = 42"
+        $out/bin/fsharpiAnyCpu --exec script.fsx | grep "int = 42"
 
-    cat > answer.fs <<EOF
-open System
+        cat > answer.fs <<EOF
+    open System
 
-[<EntryPoint>]
-let main argv =
-    printfn "int = %i" (6 * 7)
-    0
-EOF
+    [<EntryPoint>]
+    let main argv =
+        printfn "int = %i" (6 * 7)
+        0
+    EOF
 
-    $out/bin/fsc answer.fs
-    ${mono}/bin/mono answer.exe | grep "int = 42"
+        $out/bin/fsc answer.fs
+        ${mono}/bin/mono answer.exe | grep "int = 42"
   '';
 
   # To fix this error when running:

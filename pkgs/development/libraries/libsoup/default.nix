@@ -1,6 +1,20 @@
-{ stdenv, fetchurl, glib, libxml2, meson, ninja, pkgconfig, gnome3
-, gnomeSupport ? true, sqlite, glib-networking, gobject-introspection, vala
-, libpsl, python3, brotli }:
+{ stdenv
+, fetchurl
+, glib
+, libxml2
+, meson
+, ninja
+, pkgconfig
+, gnome3
+, gnomeSupport ? true
+, sqlite
+, glib-networking
+, gobject-introspection
+, vala
+, libpsl
+, python3
+, brotli
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";

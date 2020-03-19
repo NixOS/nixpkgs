@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-cli";
 
-  asdFilesToKeep = ["cl-cli.asd"];
+  asdFilesToKeep = [ "cl-cli.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-cli DESCRIPTION Command line parser SHA256

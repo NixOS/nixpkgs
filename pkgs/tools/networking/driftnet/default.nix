@@ -1,6 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, libpcap, libjpeg , libungif, libpng
-, giflib, glib, gtk2, cairo, pango, gdk-pixbuf, atk
-, pkgconfig, autoreconfHook }:
+{ stdenv
+, lib
+, fetchFromGitHub
+, libpcap
+, libjpeg
+, libungif
+, libpng
+, giflib
+, glib
+, gtk2
+, cairo
+, pango
+, gdk-pixbuf
+, atk
+, pkgconfig
+, autoreconfHook
+}:
 
 with lib;
 
@@ -10,8 +24,19 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libpcap libjpeg libungif libpng giflib
-    glib gtk2 glib cairo pango gdk-pixbuf atk autoreconfHook
+    libpcap
+    libjpeg
+    libungif
+    libpng
+    giflib
+    glib
+    gtk2
+    glib
+    cairo
+    pango
+    gdk-pixbuf
+    atk
+    autoreconfHook
   ];
 
   src = fetchFromGitHub {

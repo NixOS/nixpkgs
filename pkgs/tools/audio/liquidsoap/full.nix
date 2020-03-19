@@ -1,18 +1,45 @@
-{ stdenv, makeWrapper, fetchurl, which, pkgconfig
+{ stdenv
+, makeWrapper
+, fetchurl
+, which
+, pkgconfig
 , ocamlPackages
-, libao, portaudio, alsaLib, libpulseaudio, libjack2
-, libsamplerate, libmad, taglib, lame, libogg
-, libvorbis, speex, libtheora, libopus, fdk_aac
-, faad2, flac, ladspaH, ffmpeg, frei0r, dssi
+, libao
+, portaudio
+, alsaLib
+, libpulseaudio
+, libjack2
+, libsamplerate
+, libmad
+, taglib
+, lame
+, libogg
+, libvorbis
+, speex
+, libtheora
+, libopus
+, fdk_aac
+, faad2
+, flac
+, ladspaH
+, ffmpeg
+, frei0r
+, dssi
 }:
-
 let
   pname = "liquidsoap";
   version = "1.3.4";
 
-  packageFilters = map (p: "-e '/ocaml-${p}/d'" )
-    [ "gstreamer" "shine" "aacplus" "schroedinger"
-      "voaacenc" "soundtouch" "gavl" "lo"
+  packageFilters = map (p: "-e '/ocaml-${p}/d'")
+    [
+      "gstreamer"
+      "shine"
+      "aacplus"
+      "schroedinger"
+      "voaacenc"
+      "soundtouch"
+      "gavl"
+      "lo"
     ];
 in
 stdenv.mkDerivation {
@@ -39,12 +66,33 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs =
-    [ which ocamlPackages.ocaml ocamlPackages.findlib
-      libao portaudio alsaLib libpulseaudio libjack2
-      libsamplerate libmad taglib lame libogg
-      libvorbis speex libtheora libopus fdk_aac
-      faad2 flac ladspaH ffmpeg frei0r dssi
-      ocamlPackages.xmlm ocamlPackages.ocaml_pcre
+    [
+      which
+      ocamlPackages.ocaml
+      ocamlPackages.findlib
+      libao
+      portaudio
+      alsaLib
+      libpulseaudio
+      libjack2
+      libsamplerate
+      libmad
+      taglib
+      lame
+      libogg
+      libvorbis
+      speex
+      libtheora
+      libopus
+      fdk_aac
+      faad2
+      flac
+      ladspaH
+      ffmpeg
+      frei0r
+      dssi
+      ocamlPackages.xmlm
+      ocamlPackages.ocaml_pcre
       ocamlPackages.camomile
     ];
 
@@ -55,6 +103,6 @@ stdenv.mkDerivation {
     homepage = https://www.liquidsoap.info/;
     maintainers = with maintainers; [ ehmry ];
     license = licenses.gpl2;
-    platforms = ocamlPackages.ocaml.meta.platforms or [];
+    platforms = ocamlPackages.ocaml.meta.platforms or [ ];
   };
 }

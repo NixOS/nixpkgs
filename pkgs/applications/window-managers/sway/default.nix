@@ -1,9 +1,24 @@
-{ stdenv, fetchFromGitHub, makeWrapper
-, meson, ninja
-, pkgconfig, scdoc
-, wayland, libxkbcommon, pcre, json_c, dbus, libevdev
-, pango, cairo, libinput, libcap, pam, gdk-pixbuf
-, wlroots, wayland-protocols
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, meson
+, ninja
+, pkgconfig
+, scdoc
+, wayland
+, libxkbcommon
+, pcre
+, json_c
+, dbus
+, libevdev
+, pango
+, cairo
+, libinput
+, libcap
+, pam
+, gdk-pixbuf
+, wlroots
+, wayland-protocols
 }:
 
 stdenv.mkDerivation rec {
@@ -23,27 +38,44 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    pkgconfig meson ninja scdoc
+    pkgconfig
+    meson
+    ninja
+    scdoc
   ];
 
   buildInputs = [
-    wayland libxkbcommon pcre json_c dbus libevdev
-    pango cairo libinput libcap pam gdk-pixbuf
-    wlroots wayland-protocols
+    wayland
+    libxkbcommon
+    pcre
+    json_c
+    dbus
+    libevdev
+    pango
+    cairo
+    libinput
+    libcap
+    pam
+    gdk-pixbuf
+    wlroots
+    wayland-protocols
   ];
 
   enableParallelBuilding = true;
 
   mesonFlags = [
-    "-Ddefault-wallpaper=false" "-Dxwayland=enabled" "-Dgdk-pixbuf=enabled"
-    "-Dtray=enabled" "-Dman-pages=enabled"
+    "-Ddefault-wallpaper=false"
+    "-Dxwayland=enabled"
+    "-Dgdk-pixbuf=enabled"
+    "-Dtray=enabled"
+    "-Dman-pages=enabled"
   ];
 
   meta = with stdenv.lib; {
     description = "i3-compatible tiling Wayland compositor";
-    homepage    = https://swaywm.org;
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    homepage = https://swaywm.org;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos synthetica ma27 ];
   };
 }

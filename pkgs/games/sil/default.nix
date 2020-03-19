@@ -1,5 +1,5 @@
 { stdenv, fetchzip, ncurses, libX11, libXaw, libXt, libXext, libXmu, makeWrapper, writeScript, ... }:
-let 
+let
   setup = writeScript "setup" ''
     mkdir -p "$ANGBAND_PATH"
     # Copy all the data files into place
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "http://www.amirrorclear.net/flowers/game/sil/Sil-130-src.zip";
     sha256 = "1amp2mr3fxascra0k76sdsvikjh8g76nqh46kka9379zd35lfq8w";
-    stripRoot=false;
+    stripRoot = false;
   };
 
   buildInputs = [ makeWrapper ncurses libX11 libXaw libXt libXext libXmu ];

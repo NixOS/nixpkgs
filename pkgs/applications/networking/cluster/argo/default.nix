@@ -1,5 +1,4 @@
 { lib, buildGoModule, buildGoPackage, fetchFromGitHub }:
-
 let
   # Argo can package a static server in the CLI using the `staticfiles` go module.
   # We build the CLI without the static server for simplicity, but the tool is still required for

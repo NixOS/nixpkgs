@@ -13,9 +13,9 @@ stdenv.mkDerivation rec {
   buildPhase = ''
     sed -i s/gcc/cc/g Makefile
     sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + ( stdenv.lib.optionalString stdenv.isDarwin ''
+  '' + (stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i s/-soname/-install_name/ Makefile
-  '' ) + ''
+  '') + ''
     make
   '';
 
@@ -27,10 +27,10 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    homepage    = http://www.clifford.at/stfl/;
+    homepage = http://www.clifford.at/stfl/;
     description = "A library which implements a curses-based widget set for text terminals";
     maintainers = with stdenv.lib.maintainers; [ lovek323 ];
-    license     = stdenv.lib.licenses.lgpl3;
-    platforms   = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.lgpl3;
+    platforms = stdenv.lib.platforms.unix;
   };
 }

@@ -1,9 +1,24 @@
-{ stdenv, mkDerivation, fetchurl, autoconf, automake
-, perl, unzip, zip, which, pkgconfig, qtbase, qtscript
-, SDL2, libtheora, openal, glew, physfs, fribidi, libXrandr
+{ stdenv
+, mkDerivation
+, fetchurl
+, autoconf
+, automake
+, perl
+, unzip
+, zip
+, which
+, pkgconfig
+, qtbase
+, qtscript
+, SDL2
+, libtheora
+, openal
+, glew
+, physfs
+, fribidi
+, libXrandr
 , withVideos ? false
 }:
-
 let
   pname = "warzone2100";
   sequences_src = fetchurl {
@@ -11,10 +26,9 @@ let
     sha256 = "90ff552ca4a70e2537e027e22c5098ea4ed1bc11bb7fc94138c6c941a73d29fa";
   };
 in
-
 mkDerivation rec {
   inherit pname;
-  version  = "3.3.0";
+  version = "3.3.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/releases/${version}/${pname}-${version}_src.tar.xz";
@@ -22,11 +36,23 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    qtbase qtscript SDL2 libtheora openal
-    glew physfs fribidi libXrandr
+    qtbase
+    qtscript
+    SDL2
+    libtheora
+    openal
+    glew
+    physfs
+    fribidi
+    libXrandr
   ];
   nativeBuildInputs = [
-    perl zip unzip pkgconfig autoconf automake
+    perl
+    zip
+    unzip
+    pkgconfig
+    autoconf
+    automake
   ];
 
   preConfigure = "./autogen.sh";

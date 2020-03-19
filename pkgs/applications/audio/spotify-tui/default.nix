@@ -15,8 +15,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
   buildInputs = [ openssl ]
-    ++ stdenv.lib.optional stdenv.isLinux libxcb
-    ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
+  ++ stdenv.lib.optional stdenv.isLinux libxcb
+  ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   meta = with stdenv.lib; {
     description = "Spotify for the terminal written in Rust";

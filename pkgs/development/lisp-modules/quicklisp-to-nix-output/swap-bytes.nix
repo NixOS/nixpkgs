@@ -16,7 +16,7 @@ rec {
 
   packageName = "swap-bytes";
 
-  asdFilesToKeep = ["swap-bytes.asd"];
+  asdFilesToKeep = [ "swap-bytes.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM swap-bytes DESCRIPTION Optimized byte-swapping primitives. SHA256

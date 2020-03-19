@@ -24,14 +24,14 @@
 , qttools
 , stdenv
 }:
-
 let
-  pythonEnv = python2.withPackages (
-    ps: [
-      ps.pillow
-      ps.tkinter
-    ]
-  );
+  pythonEnv = python2.withPackages
+    (
+      ps: [
+        ps.pillow
+        ps.tkinter
+      ]
+    );
 in
 mkDerivation rec {
   pname = "scribus";

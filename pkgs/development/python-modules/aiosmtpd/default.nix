@@ -1,5 +1,9 @@
-{ lib, isPy3k, fetchFromGitHub, buildPythonPackage
-, atpublic }:
+{ lib
+, isPy3k
+, fetchFromGitHub
+, buildPythonPackage
+, atpublic
+}:
 
 buildPythonPackage rec {
   pname = "aiosmtpd";

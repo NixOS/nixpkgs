@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-fuse";
 
-  asdFilesToKeep = ["cl-fuse.asd"];
+  asdFilesToKeep = [ "cl-fuse.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-fuse DESCRIPTION CFFI bindings to FUSE (Filesystem in user space)

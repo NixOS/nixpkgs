@@ -6,7 +6,8 @@
 , libcbor
 , openssl
 , udev
-, IOKit }:
+, IOKit
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfido2";
@@ -19,8 +20,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [ libcbor openssl ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ udev ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
+  ++ stdenv.lib.optionals stdenv.isLinux [ udev ]
+  ++ stdenv.lib.optionals stdenv.isDarwin [ IOKit ];
 
   patches = [
     # fix build on darwin
@@ -47,7 +48,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = ''
-    Provides library functionality for FIDO 2.0, including communication with a device over USB.
+      Provides library functionality for FIDO 2.0, including communication with a device over USB.
     '';
     homepage = https://github.com/Yubico/libfido2;
     license = licenses.bsd2;

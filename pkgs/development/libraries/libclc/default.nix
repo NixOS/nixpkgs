@@ -1,11 +1,9 @@
 { stdenv, fetchFromGitHub, python, llvmPackages }:
-
 let
   llvm = llvmPackages.llvm;
   clang = llvmPackages.clang;
   clang-unwrapped = llvmPackages.clang-unwrapped;
 in
-
 stdenv.mkDerivation {
   name = "libclc-2019-06-09";
 

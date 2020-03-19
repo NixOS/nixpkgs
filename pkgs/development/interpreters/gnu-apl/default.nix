@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=class-memaccess"
     "-Wno-error=restrict"
     "-Wno-error=format-truncation"
-   ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
+  ]) ++ optional stdenv.cc.isClang "-Wno-error=null-dereference");
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     substituteInPlace src/LApack.cc --replace "malloc.h" "malloc/malloc.h"
@@ -30,10 +30,10 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Free interpreter for the APL programming language";
-    homepage    = https://www.gnu.org/software/apl/;
-    license     = licenses.gpl3Plus;
+    homepage = https://www.gnu.org/software/apl/;
+    license = licenses.gpl3Plus;
     maintainers = [ maintainers.kovirobi ];
-    platforms   = with platforms; linux ++ darwin;
+    platforms = with platforms; linux ++ darwin;
     inherit version;
 
     longDescription = ''

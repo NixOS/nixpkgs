@@ -1,5 +1,15 @@
-{ lib, mkDerivation, fetchFromGitHub, fetchpatch, pkgconfig, qmake
-, SDL2, fluidsynth, libsndfile, libvorbis, mpg123, qtbase
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qmake
+, SDL2
+, fluidsynth
+, libsndfile
+, libvorbis
+, mpg123
+, qtbase
 }:
 
 mkDerivation rec {

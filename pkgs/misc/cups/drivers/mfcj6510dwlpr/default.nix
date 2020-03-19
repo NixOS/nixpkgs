@@ -1,5 +1,19 @@
-{ stdenv, fetchurl, pkgsi686Linux, dpkg, makeWrapper, coreutils, gnused, gawk, file, cups, utillinux, xxd, runtimeShell
-, ghostscript, a2ps }:
+{ stdenv
+, fetchurl
+, pkgsi686Linux
+, dpkg
+, makeWrapper
+, coreutils
+, gnused
+, gawk
+, file
+, cups
+, utillinux
+, xxd
+, runtimeShell
+, ghostscript
+, a2ps
+}:
 
 # Why:
 # The executable "brprintconf_mfcj6510dw" binary is looking for "/opt/brother/Printers/%s/inf/br%sfunc" and "/opt/brother/Printers/%s/inf/br%src".
@@ -76,14 +90,14 @@ stdenv.mkDerivation rec {
       --prefix PATH ":" ${ stdenv.lib.makeBinPath [ coreutils gnused gawk ] }
     wrapProgram $out/opt/brother/Printers/mfcj6510dw/lpd/filtermfcj6510dw \
       --prefix PATH ":" ${ stdenv.lib.makeBinPath [ coreutils gnused file ghostscript a2ps ] }
-    '';
+  '';
 
   meta = with stdenv.lib; {
-    description  = "Brother MFC-J6510DW LPR driver";
+    description = "Brother MFC-J6510DW LPR driver";
     downloadPage = http://support.brother.com/g/b/downloadlist.aspx?c=us&lang=en&prod=mfcj6510dw_all&os=128;
-    homepage     = http://www.brother.com/;
-    license      = with licenses; unfree;
-    maintainers  = with maintainers; [ ramkromberg ];
-    platforms    = with platforms; linux;
+    homepage = http://www.brother.com/;
+    license = with licenses; unfree;
+    maintainers = with maintainers; [ ramkromberg ];
+    platforms = with platforms; linux;
   };
 }

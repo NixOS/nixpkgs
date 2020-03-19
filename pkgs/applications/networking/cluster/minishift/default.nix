@@ -1,16 +1,28 @@
-{ lib, buildGoPackage, fetchFromGitHub, go-bindata, pkgconfig, makeWrapper
-, glib, gtk3, libappindicator-gtk3, gpgme, openshift, ostree, libselinux, btrfs-progs
-, lvm2, docker-machine-kvm
+{ lib
+, buildGoPackage
+, fetchFromGitHub
+, go-bindata
+, pkgconfig
+, makeWrapper
+, glib
+, gtk3
+, libappindicator-gtk3
+, gpgme
+, openshift
+, ostree
+, libselinux
+, btrfs-progs
+, lvm2
+, docker-machine-kvm
 }:
-
 let
   version = "1.34.0";
 
   # Update these on version bumps according to Makefile
   centOsIsoVersion = "v1.15.0";
   openshiftVersion = "v3.11.0";
-
-in buildGoPackage rec {
+in
+buildGoPackage rec {
   pname = "minishift";
   inherit version;
 

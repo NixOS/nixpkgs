@@ -17,7 +17,7 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-   cython
+    cython
   ];
 
   prePatch = ''
@@ -35,5 +35,5 @@ buildPythonPackage rec {
     homepage = https://github.com/explosion/cymem;
     license = licenses.mit;
     maintainers = with maintainers; [ sdll ];
-    };
+  };
 }

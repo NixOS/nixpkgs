@@ -1,12 +1,21 @@
-{ buildPythonPackage, fetchurl, meson, ninja, stdenv, pkgconfig, python, pygobject3
-, gobject-introspection, gst-plugins-base, isPy3k
+{ buildPythonPackage
+, fetchurl
+, meson
+, ninja
+, stdenv
+, pkgconfig
+, python
+, pygobject3
+, gobject-introspection
+, gst-plugins-base
+, isPy3k
 }:
-
 let
   pname = "gst-python";
   version = "1.14.4";
   name = "${pname}-${version}";
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   inherit pname version;
   format = "other";
 
@@ -16,7 +25,7 @@ in buildPythonPackage rec {
     urls = [
       "${meta.homepage}/src/gst-python/${name}.tar.xz"
       "mirror://gentoo/distfiles/${name}.tar.xz"
-      ];
+    ];
     sha256 = "06ssx19fs6pg4d32p9ph9w4f0xwmxaw2dxfj17rqkn5njd7v5zfh";
   };
 

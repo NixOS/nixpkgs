@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     gemdir = ./.;
   };
 
-  phases = ["installPhase"];
+  phases = [ "installPhase" ];
 
   buildInputs = [ makeWrapper ];
 

@@ -1,16 +1,15 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.boot.initrd.network;
 
-  dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or {}));
-  doDhcp = config.networking.useDHCP || dhcpInterfaces != [];
-  dhcpIfShellExpr = if config.networking.useDHCP
-                      then "$(ls /sys/class/net/ | grep -v ^lo$)"
-                      else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
+  dhcpInterfaces = lib.attrNames (lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or { }));
+  doDhcp = config.networking.useDHCP || dhcpInterfaces != [ ];
+  dhcpIfShellExpr =
+    if config.networking.useDHCP
+    then "$(ls /sys/class/net/ | grep -v ^lo$)"
+    else lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
 
   udhcpcScript = pkgs.writeScript "udhcp-script"
     ''
@@ -40,9 +39,7 @@ let
     '';
 
   udhcpcArgs = toString cfg.udhcpc.extraArgs;
-
 in
-
 {
 
   options = {
@@ -77,7 +74,7 @@ in
     };
 
     boot.initrd.network.udhcpc.extraArgs = mkOption {
-      default = [];
+      default = [ ];
       type = types.listOf types.str;
       description = ''
         Additional command-line arguments passed verbatim to udhcpc if
@@ -134,7 +131,8 @@ in
         done
       ''
 
-      + cfg.postCommands);
+      + cfg.postCommands
+    );
 
     boot.initrd.postMountCommands = mkIf cfg.flushBeforeStage2 ''
       for iface in $ifaces; do

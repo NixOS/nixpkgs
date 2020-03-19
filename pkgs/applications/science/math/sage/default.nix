@@ -5,7 +5,6 @@
 # Here sage and its dependencies are put together. Some dependencies may be pinned
 # as a last resort. Patching sage for compatibility with newer dependency versions
 # is always preferred, see `sage-src.nix` for that.
-
 let
   inherit (pkgs) symlinkJoin callPackage nodePackages;
 
@@ -20,15 +19,15 @@ let
       # The dependency on the sage notebook (and therefore these packages) will be
       # removed in the future:
       # https://trac.sagemath.org/ticket/25837
-      flask-oldsessions = self.callPackage ./flask-oldsessions.nix {};
-      flask-openid = self.callPackage ./flask-openid.nix {};
-      python-openid = self.callPackage ./python-openid.nix {};
+      flask-oldsessions = self.callPackage ./flask-oldsessions.nix { };
+      flask-openid = self.callPackage ./flask-openid.nix { };
+      python-openid = self.callPackage ./python-openid.nix { };
       sagenb = self.callPackage ./sagenb.nix {
         mathjax = nodePackages.mathjax;
       };
 
       # Package with a cyclic dependency with sage
-      pybrial = self.callPackage ./pybrial.nix {};
+      pybrial = self.callPackage ./pybrial.nix { };
 
       # `sagelib`, i.e. all of sage except some wrappers and runtime dependencies
       sagelib = self.callPackage ./sagelib.nix {
@@ -98,7 +97,7 @@ let
     inherit sage-with-env;
   };
 
-  sage-src = callPackage ./sage-src.nix {};
+  sage-src = callPackage ./sage-src.nix { };
 
   pythonRuntimeDeps = with python.pkgs; [
     sagelib

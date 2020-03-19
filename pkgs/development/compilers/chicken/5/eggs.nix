@@ -27,9 +27,7 @@ rec {
       sha256 = "084hm5dvbvgnpb32ispkp3hjili8z02hamln860r99jx68jx6j2v";
     };
 
-    buildInputs = [
-      
-    ];
+    buildInputs = [ ];
   };
 
   srfi-1 = eggDerivation {
@@ -41,9 +39,7 @@ rec {
       sha256 = "15x0ajdkw5gb3vgs8flzh5g0pzl3wmcpf11iimlm67mw6fxc8p7j";
     };
 
-    buildInputs = [
-      
-    ];
+    buildInputs = [ ];
   };
 
   srfi-13 = eggDerivation {
@@ -69,9 +65,7 @@ rec {
       sha256 = "0gc33cx4xll9vsf7fm8jvn3gc0604kn3bbi6jfn6xscqp86kqb9p";
     };
 
-    buildInputs = [
-      
-    ];
+    buildInputs = [ ];
   };
 
   srfi-37 = eggDerivation {
@@ -83,9 +77,6 @@ rec {
       sha256 = "17f593497n70gldkj6iab6ilgryiqar051v6azn1szhnm1lk7dwd";
     };
 
-    buildInputs = [
-      
-    ];
+    buildInputs = [ ];
   };
 }
-

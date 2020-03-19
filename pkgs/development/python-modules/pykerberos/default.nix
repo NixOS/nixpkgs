@@ -18,7 +18,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "High-level interface to Kerberos";
-    license     = licenses.asl20;
+    license = licenses.asl20;
     maintainers = with maintainers; [ catern ];
   };
 }

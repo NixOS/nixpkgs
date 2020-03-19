@@ -27,7 +27,7 @@ buildGoPackage rec {
     description = "Distributed reliable key-value store for the most critical data of a distributed system";
     license = licenses.asl20;
     homepage = https://coreos.com/etcd/;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = with platforms; linux;
   };
 }

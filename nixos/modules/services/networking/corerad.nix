@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.corerad;
-in {
+in
+{
   meta = {
     maintainers = with maintainers; [ mdlayher ];
   };

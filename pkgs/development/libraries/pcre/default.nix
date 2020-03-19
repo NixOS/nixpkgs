@@ -1,19 +1,24 @@
-{ stdenv, fetchurl
-, pcre, windows ? null
+{ stdenv
+, fetchurl
+, pcre
+, windows ? null
 , variant ? null
 }:
 
 with stdenv.lib;
 
 assert elem variant [ null "cpp" "pcre16" "pcre32" ];
-
 let
   version = "8.44";
-  pname = if (variant == null) then "pcre"
-    else  if (variant == "cpp") then "pcre-cpp"
-    else  variant;
-
-in stdenv.mkDerivation {
+  pname =
+    if (variant == null)
+    then "pcre"
+    else
+      if (variant == "cpp")
+      then "pcre-cpp"
+      else variant;
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -27,7 +32,7 @@ in stdenv.mkDerivation {
     "--enable-unicode-properties"
     "--disable-cpp"
   ]
-    ++ optional (variant != null) "--enable-${variant}";
+  ++ optional (variant != null) "--enable-${variant}";
 
   # https://bugs.exim.org/show_bug.cgi?id=2173
   patches = [ ./stacksize-detection.patch ];
@@ -37,13 +42,13 @@ in stdenv.mkDerivation {
   '';
 
   doCheck = !(with stdenv.hostPlatform; isCygwin || isFreeBSD) && stdenv.hostPlatform == stdenv.buildPlatform;
-    # XXX: test failure on Cygwin
-    # we are running out of stack on both freeBSDs on Hydra
+  # XXX: test failure on Cygwin
+  # we are running out of stack on both freeBSDs on Hydra
 
   postFixup = ''
     moveToOutput bin/pcre-config "$dev"
   ''
-    + optionalString (variant != null) ''
+  + optionalString (variant != null) ''
     ln -sf -t "$out/lib/" '${pcre.out}'/lib/libpcre{,posix}.{so.*.*.*,*dylib}
   '';
 

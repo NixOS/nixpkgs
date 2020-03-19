@@ -1,6 +1,9 @@
-{ buildPythonPackage, lib, fetchFromGitHub
+{ buildPythonPackage
+, lib
+, fetchFromGitHub
 , requests
-, nose, vcrpy
+, nose
+, vcrpy
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,25 @@
-{ stdenv, fetchurl, fetchpatch, openssl, zlib, asciidoc, libxml2, libxslt
-, docbook_xsl, pkgconfig, luajit
-, coreutils, gnused, groff, docutils
-, gzip, bzip2, xz
-, python, wrapPython, pygments, markdown
+{ stdenv
+, fetchurl
+, fetchpatch
+, openssl
+, zlib
+, asciidoc
+, libxml2
+, libxslt
+, docbook_xsl
+, pkgconfig
+, luajit
+, coreutils
+, gnused
+, groff
+, docutils
+, gzip
+, bzip2
+, xz
+, python
+, wrapPython
+, pygments
+, markdown
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +35,7 @@ stdenv.mkDerivation rec {
   # IMPORTANT: Remember to check which git version cgit needs on every version
   # bump (look for "GIT_VER" in the top-level Makefile).
   gitSrc = fetchurl {
-    url    = "mirror://kernel/software/scm/git/git-2.18.0.tar.xz";
+    url = "mirror://kernel/software/scm/git/git-2.18.0.tar.xz";
     sha256 = "14hfwfkrci829a9316hnvkglnqqw1p03cw9k56p4fcb078wbwh4b";
   };
 
@@ -32,7 +49,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ] ++ [ python wrapPython ];
   buildInputs = [
-    openssl zlib asciidoc libxml2 libxslt docbook_xsl luajit
+    openssl
+    zlib
+    asciidoc
+    libxml2
+    libxslt
+    docbook_xsl
+    luajit
   ];
   pythonPath = [ pygments markdown ];
 

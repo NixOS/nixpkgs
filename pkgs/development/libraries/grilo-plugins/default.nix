@@ -45,11 +45,12 @@ stdenv.mkDerivation rec {
     # * chromaprint (gst-plugins-bad)
     (substituteAll {
       src = ./chromaprint-gst-plugins.patch;
-      load_plugins = stdenv.lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'') (with gst_all_1; [
-        gstreamer
-        gst-plugins-base
-        gst-plugins-bad
-      ]);
+      load_plugins = stdenv.lib.concatMapStrings (plugin: ''gst_registry_scan_path(gst_registry_get(), "${plugin}/lib/gstreamer-1.0");'')
+        (with gst_all_1; [
+          gstreamer
+          gst-plugins-base
+          gst-plugins-bad
+        ]);
     })
   ];
 

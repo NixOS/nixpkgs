@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, oset, pybtex, pybtex-docutils, sphinx
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, oset
+, pybtex
+, pybtex-docutils
+, sphinx
 }:
 
 buildPythonPackage rec {

@@ -39,20 +39,21 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 
-  postFixup = let
-    desktopItem = makeDesktopItem {
-      name = "pgAdmin";
-      desktopName = "pgAdmin III";
-      genericName = "SQL Administration";
-      exec = "pgadmin3";
-      icon = "pgAdmin3";
-      type = "Application";
-      categories = "Application;Development;";
-      mimeType = "text/html";
-    };
-  in ''
-    mkdir -p $out/share/pixmaps;
-    cp pgadmin/include/images/pgAdmin3.png $out/share/pixmaps/;
-    cp -rv ${desktopItem}/share/applications $out/share/
-  '';
+  postFixup =
+    let
+      desktopItem = makeDesktopItem {
+        name = "pgAdmin";
+        desktopName = "pgAdmin III";
+        genericName = "SQL Administration";
+        exec = "pgadmin3";
+        icon = "pgAdmin3";
+        type = "Application";
+        categories = "Application;Development;";
+        mimeType = "text/html";
+      };
+    in ''
+      mkdir -p $out/share/pixmaps;
+      cp pgadmin/include/images/pgAdmin3.png $out/share/pixmaps/;
+      cp -rv ${desktopItem}/share/applications $out/share/
+    '';
 }

@@ -1,5 +1,14 @@
-{ stdenv, fetchPypi, buildPythonPackage, hidapi
-, pycrypto, pillow, protobuf, future, ecpy, python-u2flib-host, pycryptodomex
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, hidapi
+, pycrypto
+, pillow
+, protobuf
+, future
+, ecpy
+, python-u2flib-host
+, pycryptodomex
 , websocket_client
 }:
 
@@ -13,7 +22,15 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    hidapi pycrypto pillow protobuf future ecpy python-u2flib-host pycryptodomex websocket_client
+    hidapi
+    pycrypto
+    pillow
+    protobuf
+    future
+    ecpy
+    python-u2flib-host
+    pycryptodomex
+    websocket_client
   ];
 
   # No tests

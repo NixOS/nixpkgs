@@ -3,7 +3,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   scripts = builtins.attrNames config.boot.loader.grub.ipxe;
 
@@ -20,12 +19,13 @@ let
     let
       value = builtins.getAttr name config.boot.loader.grub.ipxe;
     in
-    if builtins.typeOf value == "path" then value
-    else builtins.toFile "${name}.ipxe" value;
+      if builtins.typeOf value == "path" then value
+      else builtins.toFile "${name}.ipxe" value;
 in
 {
   options =
-    { boot.loader.grub.ipxe = mkOption {
+    {
+      boot.loader.grub.ipxe = mkOption {
         type = types.attrsOf (types.either types.path types.str);
         description =
           ''
@@ -47,18 +47,21 @@ in
   config = mkIf (builtins.length scripts != 0) {
 
     boot.loader.grub.extraEntries =
-      if config.boot.loader.grub.version == 2 then
+      if config.boot.loader.grub.version == 2
+      then
         toString (map grubEntry scripts)
       else
         throw "iPXE is not supported with GRUB 1.";
 
     boot.loader.grub.extraFiles =
-      { "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn"; }
-      //
-      builtins.listToAttrs ( map
-        (name: { name = name+".ipxe"; value = scriptFile name; })
-        scripts
-      );
+      { "ipxe.lkrn" = "${pkgs.ipxe}/ipxe.lkrn";
+      }
+      // builtins.listToAttrs
+        (
+          map
+            (name: { name = name + ".ipxe"; value = scriptFile name; })
+            scripts
+        );
   };
 
 }

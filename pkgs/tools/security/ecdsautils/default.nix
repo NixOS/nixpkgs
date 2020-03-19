@@ -12,7 +12,7 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = with pkgs; [ cmake pkgconfig doxygen ];
-  buildInputs = with pkgs; [ libuecc  ];
+  buildInputs = with pkgs; [ libuecc ];
 
   meta = with stdenv.lib; {
     description = "Tiny collection of programs used for ECDSA (keygen, sign, verify)";

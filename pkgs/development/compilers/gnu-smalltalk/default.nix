@@ -1,21 +1,35 @@
-{ config, stdenv, fetchurl, pkgconfig, libtool
-, zip, libffi, libsigsegv, readline, gmp
-, gnutls, gnome2, cairo, SDL, sqlite
-, emacsSupport ? config.emacsSupport or false, emacs ? null }:
+{ config
+, stdenv
+, fetchurl
+, pkgconfig
+, libtool
+, zip
+, libffi
+, libsigsegv
+, readline
+, gmp
+, gnutls
+, gnome2
+, cairo
+, SDL
+, sqlite
+, emacsSupport ? config.emacsSupport or false
+, emacs ? null
+}:
 
 assert emacsSupport -> (emacs != null);
-
-let # The gnu-smalltalk project has a dependency to the libsigsegv library.
-    # The project ships with sources for this library, but deprecated this option.
-    # Using the vanilla libsigsegv library results in error: "cannot relocate [...]"
-    # Adding --enable-static=libsigsegv to the gnu-smalltalk configuration flags
-    # does not help, the error still occurs. The only solution is to build a
-    # shared version of libsigsegv.
-    libsigsegv-shared = stdenv.lib.overrideDerivation libsigsegv (oldAttrs: {
-      configureFlags = [ "--enable-shared" ];
-    });
-
-in stdenv.mkDerivation rec {
+let
+  # The gnu-smalltalk project has a dependency to the libsigsegv library.
+  # The project ships with sources for this library, but deprecated this option.
+  # Using the vanilla libsigsegv library results in error: "cannot relocate [...]"
+  # Adding --enable-static=libsigsegv to the gnu-smalltalk configuration flags
+  # does not help, the error still occurs. The only solution is to build a
+  # shared version of libsigsegv.
+  libsigsegv-shared = stdenv.lib.overrideDerivation libsigsegv (oldAttrs: {
+    configureFlags = [ "--enable-shared" ];
+  });
+in
+stdenv.mkDerivation rec {
 
   version = "3.2.5";
   pname = "gnu-smalltalk";
@@ -29,8 +43,17 @@ in stdenv.mkDerivation rec {
   # http://smalltalk.gnu.org/download
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    libtool zip libffi libsigsegv-shared readline gmp gnutls gnome2.gtk
-    cairo SDL sqlite
+    libtool
+    zip
+    libffi
+    libsigsegv-shared
+    readline
+    gmp
+    gnutls
+    gnome2.gtk
+    cairo
+    SDL
+    sqlite
   ]
   ++ stdenv.lib.optional emacsSupport emacs;
 

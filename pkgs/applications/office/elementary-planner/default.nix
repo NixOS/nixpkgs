@@ -1,6 +1,13 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, meson, ninja, pkgconfig, desktop-file-utils
-, python3, vala, wrapGAppsHook
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, meson
+, ninja
+, pkgconfig
+, desktop-file-utils
+, python3
+, vala
+, wrapGAppsHook
 , evolution-data-server
 , libical
 , libgee
@@ -68,4 +75,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ dtzWill ] ++ pantheon.maintainers;
   };
 }
-

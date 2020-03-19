@@ -1,8 +1,8 @@
 { lib, fetchzip }:
-
 let
   version = "3.0.4";
-in fetchzip rec {
+in
+fetchzip rec {
   name = "overpass-${version}";
 
   url = "https://github.com/RedHatBrand/Overpass/archive/${version}.zip";

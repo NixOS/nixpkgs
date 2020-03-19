@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k
-, twisted, whisper, txamqp, cachetools, urllib3
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, twisted
+, whisper
+, txamqp
+, cachetools
+, urllib3
 }:
 
 buildPythonPackage rec {

@@ -23,12 +23,11 @@
 , runtimeShell
 , libcxx ? null
 }:
-
 let
   inherit (stdenv.lib) optional optionals optionalString;
   inherit (stdenv) isDarwin;
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "pandas";
   version = "1.0.1";
 

@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub, pkgconfig, cmake,
-libzip, boost, fftw, qtbase,
-libusb, wrapQtAppsHook, libsigrok4dsl, libsigrokdecode4dsl
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, libzip
+, boost
+, fftw
+, qtbase
+, libusb
+, wrapQtAppsHook
+, libsigrok4dsl
+, libsigrokdecode4dsl
 }:
 
 stdenv.mkDerivation rec {
@@ -9,10 +18,10 @@ stdenv.mkDerivation rec {
   version = "0.99";
 
   src = fetchFromGitHub {
-      owner = "DreamSourceLab";
-      repo = "DSView";
-      rev = version;
-      sha256 = "189i3baqgn8k3aypalayss0g489xi0an9hmvyggvxmgg1cvcwka2";
+    owner = "DreamSourceLab";
+    repo = "DSView";
+    rev = version;
+    sha256 = "189i3baqgn8k3aypalayss0g489xi0an9hmvyggvxmgg1cvcwka2";
   };
 
   postUnpack = ''
@@ -27,7 +36,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
-   boost fftw qtbase libusb libzip libsigrokdecode4dsl libsigrok4dsl
+    boost
+    fftw
+    qtbase
+    libusb
+    libzip
+    libsigrokdecode4dsl
+    libsigrok4dsl
   ];
 
   enableParallelBuilding = true;

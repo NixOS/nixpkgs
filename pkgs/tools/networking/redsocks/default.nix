@@ -1,5 +1,4 @@
 { stdenv, fetchFromGitHub, libevent }:
-
 let
   pkg = "redsocks";
   version = "0.5";

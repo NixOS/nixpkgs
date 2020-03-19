@@ -1,10 +1,23 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, ncurses, boehmgc, gettext, zlib
-, sslSupport ? true, openssl ? null
-, graphicsSupport ? !stdenv.isDarwin, imlib2 ? null
-, x11Support ? graphicsSupport, libX11 ? null
-, mouseSupport ? !stdenv.isDarwin, gpm-ncurses ? null
-, perl, man, pkgconfig, buildPackages, w3m
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, ncurses
+, boehmgc
+, gettext
+, zlib
+, sslSupport ? true
+, openssl ? null
+, graphicsSupport ? !stdenv.isDarwin
+, imlib2 ? null
+, x11Support ? graphicsSupport
+, libX11 ? null
+, mouseSupport ? !stdenv.isDarwin
+, gpm-ncurses ? null
+, perl
+, man
+, pkgconfig
+, buildPackages
+, w3m
 }:
 
 assert sslSupport -> openssl != null;
@@ -13,7 +26,6 @@ assert x11Support -> graphicsSupport && libX11 != null;
 assert mouseSupport -> gpm-ncurses != null;
 
 with stdenv.lib;
-
 let
   mktable = buildPackages.stdenv.mkDerivation {
     name = "w3m-mktable";
@@ -24,7 +36,8 @@ let
       install -D mktable $out/bin/mktable
     '';
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "w3m";
   version = "0.5.3+git20190105";
 
@@ -61,10 +74,10 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig gettext ];
   buildInputs = [ ncurses boehmgc zlib ]
-    ++ optional sslSupport openssl
-    ++ optional mouseSupport gpm-ncurses
-    ++ optional graphicsSupport imlib2
-    ++ optional x11Support libX11;
+  ++ optional sslSupport openssl
+  ++ optional mouseSupport gpm-ncurses
+  ++ optional graphicsSupport imlib2
+  ++ optional x11Support libX11;
 
   postInstall = optionalString graphicsSupport ''
     ln -s $out/libexec/w3m/w3mimgdisplay $out/bin

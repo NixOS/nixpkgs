@@ -2,7 +2,7 @@
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
-  p_name  = "xfce4-notes-plugin";
+  p_name = "xfce4-notes-plugin";
   ver_maj = "1.7";
   ver_min = "7";
 

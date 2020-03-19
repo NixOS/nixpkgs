@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.cde;
-in {
+in
+{
   options.services.xserver.desktopManager.cde = {
     enable = mkEnableOption "Common Desktop Environment";
   };
@@ -29,7 +29,7 @@ in {
       }
     ];
 
-    users.groups.mail = {};
+    users.groups.mail = { };
     security.wrappers = {
       dtmail = {
         source = "${pkgs.cdesktopenv}/bin/dtmail";
@@ -44,11 +44,13 @@ in {
     '';
 
     services.xserver.desktopManager.session = [
-    { name = "CDE";
-      start = ''
-        exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
-      '';
-    }];
+      {
+        name = "CDE";
+        start = ''
+          exec ${pkgs.cdesktopenv}/opt/dt/bin/Xsession
+        '';
+      }
+    ];
   };
 
   meta.maintainers = [ maintainers.gnidorah ];

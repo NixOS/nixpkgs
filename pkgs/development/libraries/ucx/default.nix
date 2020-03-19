@@ -1,11 +1,18 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, doxygen
-, numactl, rdma-core, libbfd, libiberty, perl, zlib
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, doxygen
+, numactl
+, rdma-core
+, libbfd
+, libiberty
+, perl
+, zlib
 }:
-
 let
   version = "1.7.0";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "ucx-${version}";
 
   src = fetchFromGitHub {

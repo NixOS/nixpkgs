@@ -26,5 +26,5 @@ buildPythonPackage rec {
     homepage = https://github.com/ines/wasabi;
     license = licenses.mit;
     maintainers = with maintainers; [ danieldk ];
-    };
+  };
 }

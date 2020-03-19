@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libev";
-  version="4.31";
+  version = "4.31";
 
   src = fetchurl {
     url = "http://dist.schmorp.de/libev/Attic/${pname}-${version}.tar.gz";

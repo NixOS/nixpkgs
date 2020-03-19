@@ -1,20 +1,23 @@
-{ stdenv, fetchurl
-# TODO: links -lsigsegv but loses the reference for some reason
-, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin"), libsigsegv
-, interactive ? false, readline
+{ stdenv
+, fetchurl
+  # TODO: links -lsigsegv but loses the reference for some reason
+, withSigsegv ? (false && stdenv.hostPlatform.system != "x86_64-cygwin")
+, libsigsegv
+, interactive ? false
+, readline
 
-/* Test suite broke on:
-       stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
-    || stdenv.isDarwin # XXX: `locale' segfaults
-    || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
-    || stdenv.isFreeBSD
-*/
-, doCheck ? (interactive && stdenv.isLinux), glibcLocales ? null
+  /* Test suite broke on:
+         stdenv.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+      || stdenv.isDarwin # XXX: `locale' segfaults
+      || stdenv.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+      || stdenv.isFreeBSD
+  */
+, doCheck ? (interactive && stdenv.isLinux)
+, glibcLocales ? null
 , locale ? null
 }:
 
 assert (doCheck && stdenv.isLinux) -> glibcLocales != null;
-
 let
   inherit (stdenv.lib) optional;
 in
@@ -32,7 +35,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = optional (doCheck && stdenv.isLinux) glibcLocales;
 
   buildInputs =
-       optional withSigsegv libsigsegv
+    optional withSigsegv libsigsegv
     ++ optional interactive readline
     ++ optional stdenv.isDarwin locale;
 
@@ -81,4 +84,3 @@ stdenv.mkDerivation rec {
     maintainers = [ ];
   };
 }
-

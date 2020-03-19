@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "nika-fonts";
   version = "1.0.0";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
   owner = "font-store";
   repo = "NikaFont";

@@ -14,4 +14,5 @@ callPackage ./generic.nix (args // rec{
       --replace 'SUBDIRS = libcelt tests' \
                 'SUBDIRS = libcelt'
   '';
-})
+}
+)

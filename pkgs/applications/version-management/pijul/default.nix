@@ -1,17 +1,18 @@
 { stdenv, fetchurl, rustPlatform, darwin, openssl, libsodium, nettle, clang, libclang, pkgconfig }:
-
 let
   # nettle-sys=1.0.1 requires the des-compat.h header, but it was removed in
   # nettle 3.5.  See https://nest.pijul.com/pijul_org/pijul/discussions/416
   # Remove with the next release
-  nettle_34 = nettle.overrideAttrs (_oldAttrs: rec {
-    version = "3.4.1";
-    src = fetchurl {
-      url = "mirror://gnu/nettle/nettle-${version}.tar.gz";
-      sha256 = "1bcji95n1iz9p9vsgdgr26v6s7zhpsxfbjjwpqcihpfd6lawyhgr";
-    };
-  });
-in rustPlatform.buildRustPackage rec {
+  nettle_34 = nettle.overrideAttrs
+    (_oldAttrs: rec {
+      version = "3.4.1";
+      src = fetchurl {
+        url = "mirror://gnu/nettle/nettle-${version}.tar.gz";
+        sha256 = "1bcji95n1iz9p9vsgdgr26v6s7zhpsxfbjjwpqcihpfd6lawyhgr";
+      };
+    });
+in
+rustPlatform.buildRustPackage rec {
   pname = "pijul";
   version = "0.12.0";
 

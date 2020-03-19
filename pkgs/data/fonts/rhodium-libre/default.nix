@@ -1,9 +1,9 @@
 { lib, fetchFromGitHub }:
-
 let
   pname = "RhodiumLibre";
   version = "1.2.0";
-in fetchFromGitHub {
+in
+fetchFromGitHub {
   name = "${pname}-${version}";
 
   owner = "DunwichType";

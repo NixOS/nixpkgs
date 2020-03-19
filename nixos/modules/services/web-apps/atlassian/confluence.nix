@@ -1,30 +1,27 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.confluence;
 
-  pkg = cfg.package.override (optionalAttrs cfg.sso.enable {
-    enableSSO = cfg.sso.enable;
-    crowdProperties = ''
-      application.name                        ${cfg.sso.applicationName}
-      application.password                    ${cfg.sso.applicationPassword}
-      application.login.url                   ${cfg.sso.crowd}/console/
+  pkg = cfg.package.override
+    (optionalAttrs cfg.sso.enable {
+      enableSSO = cfg.sso.enable;
+      crowdProperties = ''
+        application.name                        ${cfg.sso.applicationName}
+        application.password                    ${cfg.sso.applicationPassword}
+        application.login.url                   ${cfg.sso.crowd}/console/
 
-      crowd.server.url                        ${cfg.sso.crowd}/services/
-      crowd.base.url                          ${cfg.sso.crowd}/
+        crowd.server.url                        ${cfg.sso.crowd}/services/
+        crowd.base.url                          ${cfg.sso.crowd}/
 
-      session.isauthenticated                 session.isauthenticated
-      session.tokenkey                        session.tokenkey
-      session.validationinterval              ${toString cfg.sso.validationInterval}
-      session.lastvalidation                  session.lastvalidation
-    '';
-  });
-
+        session.isauthenticated                 session.isauthenticated
+        session.tokenkey                        session.tokenkey
+        session.validationinterval              ${toString cfg.sso.validationInterval}
+        session.lastvalidation                  session.lastvalidation
+      '';
+    });
 in
-
 {
   options = {
     services.confluence = {
@@ -62,7 +59,7 @@ in
 
       catalinaOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "-Xms1024m" "-Xmx2048m" "-Dconfluence.disable.peopledirectory.all=true" ];
         description = "Java options to pass to catalina/tomcat.";
       };
@@ -147,7 +144,7 @@ in
       group = cfg.group;
     };
 
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.home}' - ${cfg.user} - - -"
@@ -179,10 +176,10 @@ in
         mkdir -p ${cfg.home}/{logs,work,temp,deploy}
 
         sed -e 's,port="8090",port="${toString cfg.listenPort}" address="${cfg.listenAddress}",' \
-        '' + (lib.optionalString cfg.proxy.enable ''
-          -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
-        '') + ''
-          ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
+      '' + (lib.optionalString cfg.proxy.enable ''
+        -e 's,protocol="org.apache.coyote.http11.Http11NioProtocol",protocol="org.apache.coyote.http11.Http11NioProtocol" proxyName="${cfg.proxy.name}" proxyPort="${toString cfg.proxy.port}" scheme="${cfg.proxy.scheme}",' \
+      '') + ''
+        ${pkg}/conf/server.xml.dist > ${cfg.home}/server.xml
       '';
 
       serviceConfig = {

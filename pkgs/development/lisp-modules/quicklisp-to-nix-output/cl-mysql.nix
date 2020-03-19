@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-mysql";
 
-  asdFilesToKeep = ["cl-mysql.asd"];
+  asdFilesToKeep = [ "cl-mysql.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-mysql DESCRIPTION Common Lisp MySQL library bindings SHA256

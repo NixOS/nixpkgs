@@ -16,13 +16,9 @@
 , qwt
 , osmid
 }:
-
 let
-
-  supercollider_single_prec = supercollider.override {  fftw = fftwSinglePrec; };
-
+  supercollider_single_prec = supercollider.override { fftw = fftwSinglePrec; };
 in
-
 mkDerivation rec {
   version = "3.1.0";
   pname = "sonic-pi";

@@ -14,7 +14,7 @@ rec {
 
   packageName = "uffi";
 
-  asdFilesToKeep = ["uffi.asd"];
+  asdFilesToKeep = [ "uffi.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM uffi DESCRIPTION Universal Foreign Function Library for Common Lisp

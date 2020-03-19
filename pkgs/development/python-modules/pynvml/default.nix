@@ -17,7 +17,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ cudatoolkit ];
 
-  doCheck = false;  # no tests in PyPi dist
+  doCheck = false; # no tests in PyPi dist
   pythonImportsCheck = [ "pynvml" "pynvml.smi" ];
 
   meta = with lib; {

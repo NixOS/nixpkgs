@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ makeWrapper ]
-    ++ optionals stdenv.isDarwin [ IOKit ];
+  ++ optionals stdenv.isDarwin [ IOKit ];
 
   installPhase = ''
     mkdir -p $out/bin $out/share/man/man1

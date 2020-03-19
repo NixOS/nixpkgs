@@ -1,17 +1,33 @@
-{ stdenv, fetchurl, makeWrapper, makeDesktopItem
-, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome
-, pulseaudio }:
-
+{ stdenv
+, fetchurl
+, makeWrapper
+, makeDesktopItem
+, atk
+, cairo
+, gdk-pixbuf
+, glib
+, gnome2
+, gtk2
+, libGLU
+, libGL
+, pango
+, xorg
+, lsb-release
+, freetype
+, fontconfig
+, polkit
+, polkit_gnome
+, pulseaudio
+}:
 let
   sha256 = {
     x86_64-linux = "1ry21zw5ghba4xjx8dvimlpprgap7n8j9lqhjsciahbvc16vx5ks";
-    i386-linux   = "0vjxbg5hwkqkh600rr75xviwy848r1xw9mxwf6bb6l8b0isvlsgg";
+    i386-linux = "0vjxbg5hwkqkh600rr75xviwy848r1xw9mxwf6bb6l8b0isvlsgg";
   }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   arch = {
     x86_64-linux = "amd64";
-    i386-linux   = "i386";
+    i386-linux = "i386";
   }.${stdenv.hostPlatform.system} or (throw "system ${stdenv.hostPlatform.system} not supported");
 
   description = "Desktop sharing application, providing remote support and online meetings";
@@ -25,8 +41,8 @@ let
     categories = "Application;Network;";
     startupNotify = "false";
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "anydesk";
   version = "5.5.4";
 
@@ -39,12 +55,36 @@ in stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU libGL freetype fontconfig
-    polkit polkit_gnome pulseaudio
+    atk
+    cairo
+    gdk-pixbuf
+    glib
+    gtk2
+    stdenv.cc.cc
+    pango
+    gnome2.gtkglext
+    libGLU
+    libGL
+    freetype
+    fontconfig
+    polkit
+    polkit_gnome
+    pulseaudio
   ] ++ (with xorg; [
-    libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
-    libXrandr libXtst libXt libICE libSM libXrender
+    libxcb
+    libxkbfile
+    libX11
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXmu
+    libXrandr
+    libXtst
+    libXt
+    libICE
+    libSM
+    libXrender
   ]);
 
   nativeBuildInputs = [ makeWrapper ];

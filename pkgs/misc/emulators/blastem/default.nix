@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchFromGitHub, pkgconfig, SDL2, glew, xcftools, python, pillow, makeWrapper }:
-
 let
   vasm =
     stdenv.mkDerivation {

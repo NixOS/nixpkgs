@@ -1,12 +1,11 @@
 { stdenv, fetchurl, cups, libusb, libxml2, perl }:
-
 let
-
-    arch = if stdenv.system == "x86_64-linux"
-      then "x86_64"
-      else "i386";
-
-in stdenv.mkDerivation rec {
+  arch =
+    if stdenv.system == "x86_64-linux"
+    then "x86_64"
+    else "i386";
+in
+stdenv.mkDerivation rec {
   pname = "samsung-unified-linux-driver";
   version = "1.00.36";
 

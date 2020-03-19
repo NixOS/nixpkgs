@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, cmake, fftw, fftwFloat, boost166, opencl-clhpp, ocl-icd }:
-
 let
   version = "2.12.2";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "clfft";
   inherit version;
 

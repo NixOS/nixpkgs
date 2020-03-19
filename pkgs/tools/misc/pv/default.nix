@@ -1,4 +1,4 @@
-{ stdenv, fetchurl } :
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation rec {
   name = "pv-1.6.6";

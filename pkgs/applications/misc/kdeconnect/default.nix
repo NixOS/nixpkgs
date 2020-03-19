@@ -29,9 +29,19 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    libfakekey libXtst
-    ki18n kiconthemes kcmutils kconfigwidgets kdbusaddons knotifications
-    qca-qt5 qtx11extras makeWrapper kwayland kio
+    libfakekey
+    libXtst
+    ki18n
+    kiconthemes
+    kcmutils
+    kconfigwidgets
+    kdbusaddons
+    knotifications
+    qca-qt5
+    qtx11extras
+    makeWrapper
+    kwayland
+    kio
   ];
 
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
@@ -44,8 +54,8 @@ mkDerivation rec {
 
   meta = with lib; {
     description = "KDE Connect provides several features to integrate your phone and your computer";
-    homepage    = https://community.kde.org/KDEConnect;
-    license     = with licenses; [ gpl2 ];
+    homepage = https://community.kde.org/KDEConnect;
+    license = with licenses; [ gpl2 ];
     maintainers = with maintainers; [ fridh ];
   };
 }

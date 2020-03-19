@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager.cwm;
 in
@@ -11,7 +10,8 @@ in
   };
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton
-      { name = "cwm";
+      {
+        name = "cwm";
         start =
           ''
             cwm &

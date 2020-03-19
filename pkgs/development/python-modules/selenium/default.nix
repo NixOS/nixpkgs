@@ -7,8 +7,6 @@
 , urllib3
 , xorg
 }:
-
-
 let
   # Recompiling x_ignore_nofocus.so as the original one dlopen's libX11.so.6 by some
   # absolute paths. Replaced by relative path so it is found when used in nix.
@@ -20,7 +18,6 @@ let
       sha256 = "13wf4hx4i7nhl4s8xkziwxl0km1j873syrj4amragj6mpip2wn8v";
     };
 in
-
 buildPythonPackage rec {
   pname = "selenium";
   version = "3.141.0";
@@ -30,10 +27,11 @@ buildPythonPackage rec {
     sha256 = "039hf9knvl4s3hp21bzwsp1g5ri9gxsh504dp48lc6nr1av35byy";
   };
 
-  buildInputs = [xorg.libX11];
+  buildInputs = [ xorg.libX11 ];
 
   propagatedBuildInputs = [
-    geckodriver urllib3
+    geckodriver
+    urllib3
   ];
 
   patchPhase = stdenv.lib.optionalString stdenv.isLinux ''

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.cgminer;
 
@@ -9,20 +8,20 @@ let
     v: if isBool v then boolToString v else toString v;
   mergedHwConfig =
     mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'')
-      (foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
+      (foldAttrs (n: a: [ n ] ++ a) [ ] cfg.hardware);
   mergedConfig = with builtins;
     mapAttrsToList (n: v: ''"${n}":  ${if isBool v then "" else ''"''}${convType v}${if isBool v then "" else ''"''}'')
       cfg.config;
 
   cgminerConfig = pkgs.writeText "cgminer.conf" ''
-  {
-  ${concatStringsSep ",\n" mergedHwConfig},
-  ${concatStringsSep ",\n" mergedConfig},
-  "pools": [
-  ${concatStringsSep ",\n"
-    (map (v: ''{"url": "${v.url}", "user": "${v.user}", "pass": "${v.pass}"}'')
+    {
+    ${concatStringsSep ",\n" mergedHwConfig},
+    ${concatStringsSep ",\n" mergedConfig},
+    "pools": [
+    ${concatStringsSep ",\n"
+      (map (v: ''{"url": "${v.url}", "user": "${v.user}", "pass": "${v.pass}"}'')
           cfg.pools)}]
-  }
+    }
   '';
 in
 {
@@ -52,43 +51,46 @@ in
       };
 
       pools = mkOption {
-        default = [];  # Run benchmark
+        default = [ ]; # Run benchmark
         description = "List of pools where to mine";
-        example = [{
-          url = "http://p2pool.org:9332";
-          username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
-          password="X";
-        }];
+        example = [
+          {
+            url = "http://p2pool.org:9332";
+            username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
+            password = "X";
+          }
+        ];
       };
 
       hardware = mkOption {
-        default = []; # Run without options
-        description= "List of config options for every GPU";
+        default = [ ]; # Run without options
+        description = "List of config options for every GPU";
         example = [
-        {
-          intensity = 9;
-          gpu-engine = "0-985";
-          gpu-fan = "0-85";
-          gpu-memclock = 860;
-          gpu-powertune = 20;
-          temp-cutoff = 95;
-          temp-overheat = 85;
-          temp-target = 75;
-        }
-        {
-          intensity = 9;
-          gpu-engine = "0-950";
-          gpu-fan = "0-85";
-          gpu-memclock = 825;
-          gpu-powertune = 20;
-          temp-cutoff = 95;
-          temp-overheat = 85;
-          temp-target = 75;
-        }];
+          {
+            intensity = 9;
+            gpu-engine = "0-985";
+            gpu-fan = "0-85";
+            gpu-memclock = 860;
+            gpu-powertune = 20;
+            temp-cutoff = 95;
+            temp-overheat = 85;
+            temp-target = 75;
+          }
+          {
+            intensity = 9;
+            gpu-engine = "0-950";
+            gpu-fan = "0-85";
+            gpu-memclock = 825;
+            gpu-powertune = 20;
+            temp-cutoff = 95;
+            temp-overheat = 85;
+            temp-target = 75;
+          }
+        ];
       };
 
       config = mkOption {
-        default = {};
+        default = { };
         description = "Additional config";
         example = {
           auto-fan = true;

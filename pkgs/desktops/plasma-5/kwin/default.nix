@@ -1,17 +1,50 @@
-{
-  mkDerivation, lib, copyPathsToStore,
-  extra-cmake-modules, kdoctools,
-
-  epoxy,libICE, libSM, libinput, libxkbcommon, udev, wayland, xcb-util-cursor,
-  xwayland,
-
-  qtdeclarative, qtmultimedia, qtscript, qtx11extras,
-
-  breeze-qt5, kactivities, kcompletion, kcmutils, kconfig, kconfigwidgets,
-  kcoreaddons, kcrash, kdeclarative, kdecoration, kglobalaccel, ki18n,
-  kiconthemes, kidletime, kinit, kio, knewstuff, knotifications, kpackage,
-  kscreenlocker, kservice, kwayland, kwidgetsaddons, kwindowsystem, kxmlgui,
-  plasma-framework, qtsensors, libcap, libdrm
+{ mkDerivation
+, lib
+, copyPathsToStore
+, extra-cmake-modules
+, kdoctools
+, epoxy
+, libICE
+, libSM
+, libinput
+, libxkbcommon
+, udev
+, wayland
+, xcb-util-cursor
+, xwayland
+, qtdeclarative
+, qtmultimedia
+, qtscript
+, qtx11extras
+, breeze-qt5
+, kactivities
+, kcompletion
+, kcmutils
+, kconfig
+, kconfigwidgets
+, kcoreaddons
+, kcrash
+, kdeclarative
+, kdecoration
+, kglobalaccel
+, ki18n
+, kiconthemes
+, kidletime
+, kinit
+, kio
+, knewstuff
+, knotifications
+, kpackage
+, kscreenlocker
+, kservice
+, kwayland
+, kwidgetsaddons
+, kwindowsystem
+, kxmlgui
+, plasma-framework
+, qtsensors
+, libcap
+, libdrm
 }:
 
 # TODO (ttuegel): investigate qmlplugindump failure
@@ -21,16 +54,50 @@ mkDerivation {
   name = "kwin";
   nativeBuildInputs = [ extra-cmake-modules kdoctools ];
   buildInputs = [
-    epoxy libICE libSM libinput libxkbcommon udev wayland xcb-util-cursor
+    epoxy
+    libICE
+    libSM
+    libinput
+    libxkbcommon
+    udev
+    wayland
+    xcb-util-cursor
     xwayland
 
-    qtdeclarative qtmultimedia qtscript qtx11extras qtsensors
+    qtdeclarative
+    qtmultimedia
+    qtscript
+    qtx11extras
+    qtsensors
 
-    breeze-qt5 kactivities kcmutils kcompletion kconfig kconfigwidgets
-    kcoreaddons kcrash kdeclarative kdecoration kglobalaccel ki18n kiconthemes
-    kidletime kinit kio knewstuff knotifications kpackage kscreenlocker kservice
-    kwayland kwidgetsaddons kwindowsystem kxmlgui plasma-framework
-    libcap libdrm
+    breeze-qt5
+    kactivities
+    kcmutils
+    kcompletion
+    kconfig
+    kconfigwidgets
+    kcoreaddons
+    kcrash
+    kdeclarative
+    kdecoration
+    kglobalaccel
+    ki18n
+    kiconthemes
+    kidletime
+    kinit
+    kio
+    knewstuff
+    knotifications
+    kpackage
+    kscreenlocker
+    kservice
+    kwayland
+    kwidgetsaddons
+    kwindowsystem
+    kxmlgui
+    plasma-framework
+    libcap
+    libdrm
   ];
   outputs = [ "bin" "dev" "out" ];
   patches = [

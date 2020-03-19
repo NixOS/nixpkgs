@@ -4,7 +4,6 @@
 # This ensures nothing is forgotten and new files
 # are correctly handled on update.
 { stdenv, file, writeScript }:
-
 let
   globWith = stdenv.lib.concatMapStringsSep "\n";
   rmNoise = noiseGlobs: globWith (f:
@@ -17,12 +16,14 @@ let
   # $1 is the doc directory (will be created).
   # Best used in conjunction with checkForRemainingFiles
   commonFileActions =
-    { # list of fileglobs that are removed from the source dir
+    {
+      # list of fileglobs that are removed from the source dir
       noiseFiles
       # files that are moved to the doc directory ($1)
       # TODO(Profpatsch): allow to set target dir with
       # { glob = …; to = "html" } (relative to docdir)
-    , docFiles }:
+    , docFiles
+    }:
     writeScript "common-file-actions.sh" ''
       #!${stdenv.shell}
       set -e
@@ -47,7 +48,7 @@ let
       exit 1
     fi
   '';
-
-in {
+in
+{
   inherit commonFileActions checkForRemainingFiles;
 }

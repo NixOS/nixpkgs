@@ -1,5 +1,4 @@
-{ stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam}:
-
+{ stdenv, fetchurl, fetchpatch, perl, openssl, db, zlib, uwimap, html-tidy, pam }:
 let
   ssl = stdenv.lib.optionals uwimap.withSSL
     "-e 's/CCLIENT_SSL_ENABLE.*= false/CCLIENT_SSL_ENABLE=true/'";

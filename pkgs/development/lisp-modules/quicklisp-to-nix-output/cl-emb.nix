@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-emb";
 
-  asdFilesToKeep = ["cl-emb.asd"];
+  asdFilesToKeep = [ "cl-emb.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-emb DESCRIPTION A templating system for Common Lisp SHA256

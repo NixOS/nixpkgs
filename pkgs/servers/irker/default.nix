@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitLab, python, pkgconfig
-, xmlto, docbook2x, docbook_xsl, docbook_xml_dtd_412 }:
+{ stdenv
+, fetchFromGitLab
+, python
+, pkgconfig
+, xmlto
+, docbook2x
+, docbook_xsl
+, docbook_xml_dtd_412
+}:
 
 stdenv.mkDerivation {
   pname = "irker";

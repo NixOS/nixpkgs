@@ -1,5 +1,8 @@
-{ stdenv, fetchPypi, buildPythonPackage
-, traits, apptools
+{ stdenv
+, fetchPypi
+, buildPythonPackage
+, traits
+, apptools
 , ipykernel
 }:
 

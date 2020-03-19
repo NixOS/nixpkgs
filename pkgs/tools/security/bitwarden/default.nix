@@ -9,7 +9,6 @@
 , udev
 , wrapGAppsHook
 }:
-
 let
   inherit (stdenv.hostPlatform) system;
 
@@ -81,7 +80,7 @@ let
         "''${gappsWrapperArgs[@]}"
     '';
   };
-
-in if stdenv.isDarwin
+in
+if stdenv.isDarwin
 then throw "Bitwarden has not been packaged for macOS yet"
 else linux

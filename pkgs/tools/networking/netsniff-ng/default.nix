@@ -1,6 +1,21 @@
-{ stdenv, fetchFromGitHub, makeWrapper, bison, flex, geoip, geolite-legacy
-, libcli, libnet, libnetfilter_conntrack, libnl, libpcap, libsodium
-, liburcu, ncurses, pkgconfig, zlib }:
+{ stdenv
+, fetchFromGitHub
+, makeWrapper
+, bison
+, flex
+, geoip
+, geolite-legacy
+, libcli
+, libnet
+, libnetfilter_conntrack
+, libnl
+, libpcap
+, libsodium
+, liburcu
+, ncurses
+, pkgconfig
+, zlib
+}:
 
 stdenv.mkDerivation rec {
   pname = "netsniff-ng";
@@ -16,8 +31,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig makeWrapper bison flex ];
   buildInputs = [
-    geoip geolite-legacy libcli libnet libnl
-    libnetfilter_conntrack libpcap libsodium liburcu ncurses zlib
+    geoip
+    geolite-legacy
+    libcli
+    libnet
+    libnl
+    libnetfilter_conntrack
+    libpcap
+    libsodium
+    liburcu
+    ncurses
+    zlib
   ];
 
   # ./configure is not autoGNU but some home-brewn magic
@@ -37,12 +61,12 @@ stdenv.mkDerivation rec {
     wrapProgram "$out/sbin/trafgen" --prefix PATH ":" "${stdenv.cc}/bin"
     wrapProgram "$out/sbin/bpfc" --prefix PATH ":" "${stdenv.cc}/bin"
 
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat		$out/etc/netsniff-ng/country4.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat		$out/etc/netsniff-ng/country6.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCity.dat		$out/etc/netsniff-ng/city4.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCityv6.dat	$out/etc/netsniff-ng/city6.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNum.dat		$out/etc/netsniff-ng/asname4.dat
-    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNumv6.dat	$out/etc/netsniff-ng/asname6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIP.dat    $out/etc/netsniff-ng/country4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPv6.dat    $out/etc/netsniff-ng/country6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCity.dat    $out/etc/netsniff-ng/city4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPCityv6.dat  $out/etc/netsniff-ng/city6.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNum.dat    $out/etc/netsniff-ng/asname4.dat
+    ln -sv ${geolite-legacy}/share/GeoIP/GeoIPASNumv6.dat  $out/etc/netsniff-ng/asname6.dat
     rm -v $out/etc/netsniff-ng/geoip.conf # updating databases after installation is impossible
   '';
 

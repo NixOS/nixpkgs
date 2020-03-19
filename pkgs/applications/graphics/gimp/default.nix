@@ -45,10 +45,10 @@
 , Cocoa
 , gtk-mac-integration-gtk2
 }:
-
 let
   inherit (python2Packages) pygtk wrapPython python;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gimp";
   version = "2.10.18";
 

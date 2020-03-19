@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git";
-    rev = lib.replaceStrings ["-"] [""] version;
+    rev = lib.replaceStrings [ "-" ] [ "" ] version;
     sha256 = "0256p99bqwf1d1s6gqnzpjcdmg6skcp1jzz64sd1p29xxrf0pzfa";
   };
 

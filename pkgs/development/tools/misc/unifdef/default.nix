@@ -4,7 +4,7 @@ stdenv.mkDerivation rec {
   name = "unifdef-2.6";
 
   src = fetchurl {
-    url    = "https://github.com/fanf2/unifdef/archive/${name}.tar.gz";
+    url = "https://github.com/fanf2/unifdef/archive/${name}.tar.gz";
     sha256 = "1p5wr5ms9w8kijy9h7qs1mz36dlavdj6ngz2bks588w7a20kcqxj";
   };
 

@@ -1,6 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake, perl
-, glib, luajit, openssl, pcre, pkgconfig, sqlite, ragel, icu
-, hyperscan, jemalloc, openblas, lua, libsodium
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, perl
+, glib
+, luajit
+, openssl
+, pcre
+, pkgconfig
+, sqlite
+, ragel
+, icu
+, hyperscan
+, jemalloc
+, openblas
+, lua
+, libsodium
 , withBlas ? true
 , withHyperscan ? stdenv.isx86_64
 , withLuaJIT ? stdenv.isx86_64
@@ -21,9 +36,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig perl ];
   buildInputs = [ glib openssl pcre sqlite ragel icu jemalloc libsodium ]
-    ++ lib.optional withHyperscan hyperscan
-    ++ lib.optional withBlas openblas
-    ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
+  ++ lib.optional withHyperscan hyperscan
+  ++ lib.optional withBlas openblas
+  ++ lib.optional withLuaJIT luajit ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
     "-DDEBIAN_BUILD=ON"

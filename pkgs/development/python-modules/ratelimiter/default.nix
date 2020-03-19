@@ -1,5 +1,4 @@
-{
-  stdenv
+{ stdenv
 , buildPythonPackage
 , fetchPypi
 , pytest
@@ -32,4 +31,3 @@ buildPythonPackage rec {
     maintainers = with maintainers; [ helkafen ];
   };
 }
-

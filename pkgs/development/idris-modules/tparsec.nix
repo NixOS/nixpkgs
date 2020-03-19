@@ -3,12 +3,12 @@
 , contrib
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "tparsec";
   version = "2020-02-11";
 
   ipkgName = "TParsec";
-  
+
   idrisDeps = [ contrib ];
 
   src = fetchFromGitHub {

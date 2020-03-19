@@ -4,11 +4,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   requiredPackages = map (pkg: setPrio ((pkg.meta.priority or 5) + 3) pkg)
-    [ config.nix.package
+    [
+      config.nix.package
       pkgs.acl
       pkgs.attr
       pkgs.bashInteractive # bash with ncurses support
@@ -44,9 +43,7 @@ let
       pkgs.utillinux
       pkgs.which # 88K size
     ];
-
 in
-
 {
   options = {
 
@@ -54,7 +51,7 @@ in
 
       systemPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         example = literalExample "[ pkgs.firefox pkgs.thunderbird ]";
         description = ''
           The set of packages that appear in
@@ -71,8 +68,8 @@ in
         type = types.listOf types.str;
         # Note: We need `/lib' to be among `pathsToLink' for NSS modules
         # to work.
-        default = [];
-        example = ["/"];
+        default = [ ];
+        example = [ "/" ];
         description = "List of directories to be symlinked in <filename>/run/current-system/sw</filename>.";
       };
 
@@ -109,7 +106,8 @@ in
     environment.systemPackages = requiredPackages;
 
     environment.pathsToLink =
-      [ "/bin"
+      [
+        "/bin"
         "/etc/xdg"
         "/etc/gtk-2.0"
         "/etc/gtk-3.0"

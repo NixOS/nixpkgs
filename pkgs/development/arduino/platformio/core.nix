@@ -1,11 +1,24 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, fetchpatch
-, bottle, click, colorama, semantic-version
-, lockfile, pyserial, requests
-, tabulate, pyelftools, marshmallow
-, pytest, tox, jsondiff
-, git, spdx-license-list-data
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchFromGitHub
+, fetchpatch
+, bottle
+, click
+, colorama
+, semantic-version
+, lockfile
+, pyserial
+, requests
+, tabulate
+, pyelftools
+, marshmallow
+, pytest
+, tox
+, jsondiff
+, git
+, spdx-license-list-data
 }:
-
 let
   args = lib.concatStringsSep " " ((map (e: "--deselect tests/${e}") [
     "commands/test_ci.py::test_ci_boards"
@@ -46,8 +59,8 @@ let
     "test_maintenance.py"
     "test_ino2cpp.py"
   ]));
-
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "platformio";
   version = "4.1.0";
 
@@ -59,10 +72,18 @@ in buildPythonApplication rec {
     sha256 = "10v9jw1zjfqr3wl6kills3cfp0ky7xbm1gc3z0n57wrqbc6cmz95";
   };
 
-  propagatedBuildInputs =  [
-    bottle click colorama git lockfile
-    pyserial requests semantic-version
-    tabulate pyelftools marshmallow
+  propagatedBuildInputs = [
+    bottle
+    click
+    colorama
+    git
+    lockfile
+    pyserial
+    requests
+    semantic-version
+    tabulate
+    pyelftools
+    marshmallow
   ];
 
   HOME = "/tmp";
@@ -82,7 +103,7 @@ in buildPythonApplication rec {
     (fetchpatch {
       url = "https://github.com/platformio/platformio-core/commit/442a7e357636522e844d95375c246644b21a7802.patch";
       sha256 = "0a3kj3k02237gr2yk30gpwc6vm04dsd1wxldj4dsbzs4a9yyi70m";
-      excludes = ["HISTORY.rst"];
+      excludes = [ "HISTORY.rst" ];
     })
     ./use-local-spdx-license-list.patch
   ];

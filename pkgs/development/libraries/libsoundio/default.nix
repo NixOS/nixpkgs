@@ -14,8 +14,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ libjack2 libpulseaudio ]
-    ++ stdenv.lib.optional stdenv.isLinux alsaLib
-    ++ stdenv.lib.optional stdenv.isDarwin AudioUnit;
+  ++ stdenv.lib.optional stdenv.isLinux alsaLib
+  ++ stdenv.lib.optional stdenv.isDarwin AudioUnit;
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-Wno-strict-prototypes";
 

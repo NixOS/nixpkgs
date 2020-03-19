@@ -14,7 +14,7 @@ rec {
 
   packageName = "clsql-sqlite3";
 
-  asdFilesToKeep = ["clsql-sqlite3.asd"];
+  asdFilesToKeep = [ "clsql-sqlite3.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clsql-sqlite3 DESCRIPTION Common Lisp Sqlite3 Driver SHA256

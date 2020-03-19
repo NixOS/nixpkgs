@@ -1,5 +1,9 @@
-{ lib, fetchurl, buildDunePackage, ounit
-, re, stringext
+{ lib
+, fetchurl
+, buildDunePackage
+, ounit
+, re
+, stringext
 }:
 
 buildDunePackage rec {

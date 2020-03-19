@@ -1,4 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, substituteAll, pythonOlder
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, substituteAll
+, pythonOlder
 , blessed
 , docutils
 , libcxx

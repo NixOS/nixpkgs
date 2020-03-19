@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "16v3pmva13skpfjja96zacjpxrwzs1nb1iqmrp2qzvdbcm9061pp";
   };
-  
+
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ ncurses ];
 

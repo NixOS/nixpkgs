@@ -12,12 +12,13 @@
 , pkgconfig
 , substituteAll
 , wrapGAppsHook
-, zenity }:
-
+, zenity
+}:
 let
   pname = "metacity";
   version = "3.34.1";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

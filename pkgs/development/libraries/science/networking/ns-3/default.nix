@@ -3,38 +3,46 @@
 , python
 , wafHook
 
-# for binding generation
+  # for binding generation
 , castxml ? null
 
-# can take a long time, generates > 30000 images/graphs
+  # can take a long time, generates > 30000 images/graphs
 , enableDoxygen ? false
 
-# e.g. "optimized" or "debug". If not set, use default one
+  # e.g. "optimized" or "debug". If not set, use default one
 , build_profile ? null
 
-# --enable-examples
+  # --enable-examples
 , withExamples ? false
 
-# very long
-, withManual ? false, doxygen ? null, graphviz ? null, imagemagick ? null
-# for manual, tetex is used to get the eps2pdf binary
-# texlive to get latexmk. building manual still fails though
-, dia, tetex ? null, ghostscript ? null, texlive ? null
+  # very long
+, withManual ? false
+, doxygen ? null
+, graphviz ? null
+, imagemagick ? null
+  # for manual, tetex is used to get the eps2pdf binary
+  # texlive to get latexmk. building manual still fails though
+, dia
+, tetex ? null
+, ghostscript ? null
+, texlive ? null
 
-# generates python bindings
-, pythonSupport ? false, ncurses ? null
+  # generates python bindings
+, pythonSupport ? false
+, ncurses ? null
 
-# All modules can be enabled by choosing 'all_modules'.
-# we include here the DCE mandatory ones
-, modules ? [ "core" "network" "internet" "point-to-point" "fd-net-device" "netanim"]
+  # All modules can be enabled by choosing 'all_modules'.
+  # we include here the DCE mandatory ones
+, modules ? [ "core" "network" "internet" "point-to-point" "fd-net-device" "netanim" ]
 , lib
 }:
-
 let
-  pythonEnv = python.withPackages(ps:
-    stdenv.lib.optional withManual ps.sphinx
-    ++ stdenv.lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
-  );
+  pythonEnv = python.withPackages
+    (
+      ps:
+        stdenv.lib.optional withManual ps.sphinx
+        ++ stdenv.lib.optionals pythonSupport (with ps;[ pybindgen pygccxml ])
+    );
 in
 stdenv.mkDerivation rec {
   pname = "ns-3";
@@ -42,8 +50,8 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitLab {
     owner = "nsnam";
-    repo   = "ns-3-dev";
-    rev    = "ns-3.${version}";
+    repo = "ns-3-dev";
+    rev = "ns-3.${version}";
     sha256 = "0smdi3gglmafpc7a20hj2lbmwks3d5fpsicpn39lmm3svazw0bvp";
   };
 
@@ -53,8 +61,8 @@ stdenv.mkDerivation rec {
 
   # ncurses is a hidden dependency of waf when checking python
   buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
-    ++ lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
+  ++ lib.optional enableDoxygen [ doxygen graphviz imagemagick ]
+  ++ lib.optional withManual [ dia tetex ghostscript texlive.combined.scheme-medium ];
 
   propagatedBuildInputs = [ pythonEnv ];
 
@@ -63,8 +71,8 @@ stdenv.mkDerivation rec {
   '';
 
   wafConfigureFlags = with stdenv.lib; [
-      "--enable-modules=${concatStringsSep "," modules}"
-      "--with-python=${pythonEnv.interpreter}"
+    "--enable-modules=${concatStringsSep "," modules}"
+    "--with-python=${pythonEnv.interpreter}"
   ]
   ++ optional (build_profile != null) "--build-profile=${build_profile}"
   ++ optional withExamples " --enable-examples "
@@ -74,17 +82,18 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   buildTargets = "build"
-    + lib.optionalString enableDoxygen " doxygen"
-    + lib.optionalString withManual "sphinx";
+  + lib.optionalString enableDoxygen " doxygen"
+  + lib.optionalString withManual "sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
   CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
-  postBuild = with stdenv.lib; let flags = concatStringsSep ";" (
+  postBuild = with stdenv.lib; let
+    flags = concatStringsSep ";" (
       optional enableDoxygen "./waf doxygen"
       ++ optional withManual "./waf sphinx"
     );
-    in "${flags}"
+  in "${flags}"
   ;
 
   postInstall = ''
@@ -93,12 +102,12 @@ stdenv.mkDerivation rec {
 
   # we need to specify the proper interpreter else ns3 can check against a
   # different version
-  checkPhase =  ''
+  checkPhase = ''
     ${pythonEnv.interpreter} ./test.py --nowaf
   '';
 
   # strictoverflow prevents clang from discovering pyembed when bindings
-  hardeningDisable = [ "fortify" "strictoverflow"];
+  hardeningDisable = [ "fortify" "strictoverflow" ];
 
   meta = with stdenv.lib; {
     homepage = "http://www.nsnam.org";

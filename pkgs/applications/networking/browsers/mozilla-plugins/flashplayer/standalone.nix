@@ -54,12 +54,14 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url =
-      if debug then
+      if debug
+      then
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux_debug.x86_64.tar.gz"
       else
         "https://fpdownload.macromedia.com/pub/flashplayer/updaters/32/flash_player_sa_linux.x86_64.tar.gz";
     sha256 =
-      if debug then
+      if debug
+      then
         "1ymsk07xmnanyv86r58ar1l4wgjarlq0fc111ajc76pp8dsxnfx8"
       else
         "0wiwpn4a0jxslw4ahalq74rksn82y0aqa3lrjr9qs7kdcak74vky";
@@ -85,12 +87,51 @@ stdenv.mkDerivation {
   '';
 
   rpath = lib.makeLibraryPath
-    [ stdenv.cc.cc
-      alsaLib atk bzip2 cairo curl expat fontconfig freetype gdk-pixbuf glib
-      glibc graphite2 gtk2 harfbuzz libICE libSM libX11 libXau libXcomposite
-      libXcursor libXdamage libXdmcp libXext libXfixes libXi libXinerama
-      libXrandr libXrender libXt libXxf86vm libdrm libffi libglvnd libpng
-      libvdpau libxcb libxshmfence nspr nss pango pcre pixman zlib
+    [
+      stdenv.cc.cc
+      alsaLib
+      atk
+      bzip2
+      cairo
+      curl
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      glibc
+      graphite2
+      gtk2
+      harfbuzz
+      libICE
+      libSM
+      libX11
+      libXau
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXdmcp
+      libXext
+      libXfixes
+      libXi
+      libXinerama
+      libXrandr
+      libXrender
+      libXt
+      libXxf86vm
+      libdrm
+      libffi
+      libglvnd
+      libpng
+      libvdpau
+      libxcb
+      libxshmfence
+      nspr
+      nss
+      pango
+      pcre
+      pixman
+      zlib
     ];
 
   meta = {

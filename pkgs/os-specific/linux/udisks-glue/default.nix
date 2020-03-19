@@ -17,9 +17,9 @@ stdenv.mkDerivation {
     homepage = https://github.com/fernandotcl/udisks-glue;
     description = "A tool to associate udisks events to user-defined actions";
     platforms = stdenv.lib.platforms.linux;
-    maintainers = with stdenv.lib.maintainers; [pSub];
+    maintainers = with stdenv.lib.maintainers; [ pSub ];
     license = stdenv.lib.licenses.bsd2;
     broken = true;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

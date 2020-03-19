@@ -1,5 +1,16 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder, numpy, pandas, pytz, six
-, pytest, mock, pytest-mock, requests }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, numpy
+, pandas
+, pytz
+, six
+, pytest
+, mock
+, pytest-mock
+, requests
+}:
 
 buildPythonPackage rec {
   pname = "pvlib";
@@ -8,7 +19,7 @@ buildPythonPackage rec {
   # Support for Python <3.5 dropped in 0.6.3 on June 1, 2019.
   disabled = pythonOlder "3.5";
 
-  src = fetchPypi{
+  src = fetchPypi {
     inherit pname version;
     sha256 = "1kqwnkbkdv4m3r68pd39va6wqvhr34a6hx4d6q5lfkibclg35c3d";
   };

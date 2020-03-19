@@ -14,7 +14,7 @@ rec {
 
   packageName = "lquery";
 
-  asdFilesToKeep = ["lquery.asd"];
+  asdFilesToKeep = [ "lquery.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lquery DESCRIPTION

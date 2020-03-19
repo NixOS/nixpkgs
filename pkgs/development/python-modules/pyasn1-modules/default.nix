@@ -30,6 +30,6 @@ buildPythonPackage rec {
     description = "A collection of ASN.1-based protocols modules";
     homepage = https://pypi.python.org/pypi/pyasn1-modules;
     license = licenses.bsd3;
-    platforms = platforms.unix;  # same as pyasn1
+    platforms = platforms.unix; # same as pyasn1
   };
 }

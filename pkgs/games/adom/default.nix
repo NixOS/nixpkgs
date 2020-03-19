@@ -1,13 +1,31 @@
-{ stdenv, fetchurl, patchelf, zlib, libmad, libpng12, libcaca, libGLU, libGL, alsaLib, libpulseaudio
-, xorg }:
-
+{ stdenv
+, fetchurl
+, patchelf
+, zlib
+, libmad
+, libpng12
+, libcaca
+, libGLU
+, libGL
+, alsaLib
+, libpulseaudio
+, xorg
+}:
 let
-
   inherit (xorg) libXext libX11;
 
   lpath = "${stdenv.cc.cc.lib}/lib64:" + stdenv.lib.makeLibraryPath [
-      zlib libmad libpng12 libcaca libXext libX11 libGLU libGL alsaLib libpulseaudio];
-
+    zlib
+    libmad
+    libpng12
+    libcaca
+    libXext
+    libX11
+    libGLU
+    libGL
+    alsaLib
+    libpulseaudio
+  ];
 in
 stdenv.mkDerivation rec {
   name = "adom-${version}-noteye";
@@ -51,9 +69,9 @@ stdenv.mkDerivation rec {
     description = "A rogue-like game with nice graphical interface";
     homepage = http://adom.de/;
     license = licenses.unfreeRedistributable;
-    maintainers = [maintainers.smironov];
+    maintainers = [ maintainers.smironov ];
 
     # Please, notify me (smironov) if you need the x86 version
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

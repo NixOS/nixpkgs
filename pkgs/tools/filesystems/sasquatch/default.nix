@@ -10,7 +10,6 @@
 }:
 
 assert lz4Support -> (lz4 != null);
-
 let
   patch = fetchFromGitHub {
     owner = "devttys0";
@@ -29,7 +28,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ lzma lzo xz zlib ]
-    ++ stdenv.lib.optional lz4Support lz4;
+  ++ stdenv.lib.optional lz4Support lz4;
 
   patches = [ patch ];
   patchFlags = [ "-p0" ];
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_DIR=\${out}/bin" ];
 
   makeFlags = [ "XZ_SUPPORT=1" ]
-    ++ stdenv.lib.optional lz4Support "LZ4_SUPPORT=1";
+  ++ stdenv.lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/devttys0/sasquatch";

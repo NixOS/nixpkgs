@@ -1,11 +1,16 @@
-{ stdenv, fetchFromGitHub, pkgconfig, autoreconfHook
-, boost, libbitcoin, libbitcoin-protocol }:
-
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, autoreconfHook
+, boost
+, libbitcoin
+, libbitcoin-protocol
+}:
 let
   pname = "libbitcoin-client";
   version = "3.5.0";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   name = "${pname}-${version}";
 
   src = fetchFromGitHub {

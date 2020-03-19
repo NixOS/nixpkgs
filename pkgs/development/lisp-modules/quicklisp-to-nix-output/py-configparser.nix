@@ -14,7 +14,7 @@ args @ { fetchurl, ... }:
 
   packageName = "py-configparser";
 
-  asdFilesToKeep = ["py-configparser.asd"];
+  asdFilesToKeep = [ "py-configparser.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM py-configparser DESCRIPTION

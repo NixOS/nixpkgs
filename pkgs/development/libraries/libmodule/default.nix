@@ -1,5 +1,8 @@
-{ stdenv, fetchFromGitHub
-, cmake, pkgconfig }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmodule";

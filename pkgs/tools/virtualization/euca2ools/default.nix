@@ -1,8 +1,8 @@
 { stdenv, fetchgit, python2Packages }:
-
 let
   inherit (python2Packages) buildPythonApplication boto m2crypto;
-in buildPythonApplication {
+in
+buildPythonApplication {
   name = "euca2ools-2.1.4";
   namePrefix = "";
 

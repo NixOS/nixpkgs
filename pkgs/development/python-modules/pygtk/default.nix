@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, fetchpatch, python, pkgconfig, gtk2, pygobject2, pycairo, pango
-, buildPythonPackage, libglade ? null, isPy3k }:
+{ stdenv
+, fetchurl
+, fetchpatch
+, python
+, pkgconfig
+, gtk2
+, pygobject2
+, pycairo
+, pango
+, buildPythonPackage
+, libglade ? null
+, isPy3k
+}:
 
 buildPythonPackage rec {
   pname = "pygtk";
@@ -48,11 +59,11 @@ buildPythonPackage rec {
              -e "s/.*(glade.*//" \
              tests/test_api.py
     '' + ''
-      sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
-             -e "s/sys.path.insert(0, buildDir)//" \
-             tests/common.py
-      make check
-    '';
+    sed -i -e "s/sys.path.insert(0, os.path.join(buildDir, 'gtk'))//" \
+           -e "s/sys.path.insert(0, buildDir)//" \
+           tests/common.py
+    make check
+  '';
   # XXX: TypeError: Unsupported type: <class 'gtk._gtk.WindowType'>
   # The check phase was not executed in the previous
   # non-buildPythonPackage setup - not sure why not.

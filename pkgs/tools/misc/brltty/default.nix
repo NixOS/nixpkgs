@@ -1,6 +1,13 @@
-{ stdenv, fetchurl, pkgconfig, python3, bluez
-, alsaSupport ? stdenv.isLinux, alsaLib ? null
-, systemdSupport ? stdenv.isLinux, systemd ? null }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, python3
+, bluez
+, alsaSupport ? stdenv.isLinux
+, alsaLib ? null
+, systemdSupport ? stdenv.isLinux
+, systemd ? null
+}:
 
 assert alsaSupport -> alsaLib != null;
 assert systemdSupport -> systemd != null;
@@ -15,8 +22,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig python3.pkgs.cython ];
   buildInputs = [ bluez ]
-    ++ stdenv.lib.optional alsaSupport alsaLib
-    ++ stdenv.lib.optional systemdSupport systemd;
+  ++ stdenv.lib.optional alsaSupport alsaLib
+  ++ stdenv.lib.optional systemdSupport systemd;
 
   meta = {
     description = "Access software for a blind person using a braille display";

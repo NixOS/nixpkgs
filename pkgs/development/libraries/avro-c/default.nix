@@ -1,8 +1,8 @@
 { stdenv, cmake, fetchurl, pkgconfig, jansson, zlib }:
-
 let
   version = "1.9.1";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "avro-c";
   inherit version;
 

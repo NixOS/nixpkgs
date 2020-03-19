@@ -117,7 +117,6 @@ stdenv.mkDerivation rec {
 
     # TODO: submit upstream
     ./0001-build-use-get_pkgconfig_variable-for-sysprof-dbusdir.patch
-
     (substituteAll {
       src = ./fix-paths.patch;
       inherit zenity;

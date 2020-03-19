@@ -1,7 +1,16 @@
 # based on https://github.com/nim-lang/Nim/blob/v0.18.0/.travis.yml
 
-{ stdenv, lib, fetchurl, makeWrapper, openssl, pcre, readline,
-  boehmgc, sfml, sqlite }:
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, openssl
+, pcre
+, readline
+, boehmgc
+, sfml
+, sqlite
+}:
 
 stdenv.mkDerivation rec {
   pname = "nim";
@@ -25,7 +34,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    openssl pcre readline boehmgc sfml sqlite
+    openssl
+    pcre
+    readline
+    boehmgc
+    sfml
+    sqlite
   ];
 
   buildPhase = ''

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
-
 let
   name = "qpid-cpp-${version}";
   version = "1.39.0";
@@ -52,7 +51,8 @@ let
 
     propagatedBuildInputs = [ qpid-python ];
   };
-in buildEnv {
+in
+buildEnv {
   name = "${name}-env";
   paths = [ qpid-cpp python-frontend ];
 }

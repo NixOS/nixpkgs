@@ -1,5 +1,4 @@
 { stdenv, fetchurl }:
-
 let
   version = "1.8.0";
 
@@ -7,21 +6,26 @@ let
   # way to select one ore the other setting other than editing the file
   # manually, so we have to duplicate the know how here.
   systemFlags = with stdenv;
-    if isDarwin then ''
+    if isDarwin
+    then ''
       CFLAGS="-O2 -Wall -fomit-frame-pointer"
       LDFLAGS=
       EXTRA_OBJS=strverscmp.o
-    '' else if isCygwin then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer -DCYGWIN"
-      LDFLAGS=-s
-      TREE_DEST=tree.exe
-      EXTRA_OBJS=strverscmp.o
-    '' else if (isFreeBSD || isOpenBSD) then ''
-      CFLAGS="-O2 -Wall -fomit-frame-pointer"
-      LDFLAGS=-s
-      EXTRA_OBJS=strverscmp.o
     '' else
-    ""; # use linux flags by default
+      if isCygwin
+      then ''
+        CFLAGS="-O2 -Wall -fomit-frame-pointer -DCYGWIN"
+        LDFLAGS=-s
+        TREE_DEST=tree.exe
+        EXTRA_OBJS=strverscmp.o
+      '' else
+        if (isFreeBSD || isOpenBSD)
+        then ''
+          CFLAGS="-O2 -Wall -fomit-frame-pointer"
+          LDFLAGS=-s
+          EXTRA_OBJS=strverscmp.o
+        '' else
+          ""; # use linux flags by default
 in
 stdenv.mkDerivation {
   pname = "tree";
@@ -54,6 +58,6 @@ stdenv.mkDerivation {
     '';
 
     platforms = stdenv.lib.platforms.all;
-    maintainers = [stdenv.lib.maintainers.peti];
+    maintainers = [ stdenv.lib.maintainers.peti ];
   };
 }

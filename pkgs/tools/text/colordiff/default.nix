@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, perl /*, xmlto */}:
+{ stdenv, fetchurl, perl /*, xmlto */ }:
 
 stdenv.mkDerivation rec {
   name = "colordiff-1.0.18";

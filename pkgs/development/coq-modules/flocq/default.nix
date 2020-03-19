@@ -1,7 +1,8 @@
 { stdenv, bash, which, autoconf, automake, fetchzip, coq }:
 
 let params =
-  if stdenv.lib.versionAtLeast coq.coq-version "8.7" then {
+  if stdenv.lib.versionAtLeast coq.coq-version "8.7"
+  then {
     version = "3.2.0";
     sha256 = "15bi36x7zj0glsb3s2gwqd4wswhfzh36rbp7imbyff53a7nna95l";
   } else {
@@ -22,7 +23,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ bash which autoconf automake ];
   buildInputs = [ coq ] ++ (with coq.ocamlPackages; [
-    ocaml camlp5
+    ocaml
+    camlp5
   ]);
 
   buildPhase = ''

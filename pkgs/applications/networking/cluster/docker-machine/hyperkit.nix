@@ -6,7 +6,7 @@ buildGoModule rec {
   pname = "docker-machine-hyperkit";
   subPackages = [ "cmd/drivers/hyperkit" ];
 
-  modSha256   = minikube.go-modules.outputHash;
+  modSha256 = minikube.go-modules.outputHash;
 
   postInstall = ''
     mv $out/bin/hyperkit $out/bin/docker-machine-driver-hyperkit

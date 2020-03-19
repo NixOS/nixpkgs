@@ -14,7 +14,7 @@ rec {
 
   packageName = "type-i";
 
-  asdFilesToKeep = ["type-i.asd"];
+  asdFilesToKeep = [ "type-i.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM type-i DESCRIPTION

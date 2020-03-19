@@ -14,7 +14,7 @@
 
   packageName = "asdf-finalizers";
 
-  asdFilesToKeep = ["asdf-finalizers.asd"];
+  asdFilesToKeep = [ "asdf-finalizers.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM asdf-finalizers DESCRIPTION

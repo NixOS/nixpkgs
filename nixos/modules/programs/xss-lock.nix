@@ -1,7 +1,6 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
   cfg = config.programs.xss-lock;
 in
@@ -34,10 +33,10 @@ in
       partOf = [ "graphical-session.target" ];
       serviceConfig.ExecStart = with lib;
         strings.concatStringsSep " " ([
-            "${pkgs.xss-lock}/bin/xss-lock"
-          ] ++ (map escapeShellArg cfg.extraOptions) ++ [
-            "--"
-            cfg.lockerCommand
+          "${pkgs.xss-lock}/bin/xss-lock"
+        ] ++ (map escapeShellArg cfg.extraOptions) ++ [
+          "--"
+          cfg.lockerCommand
         ]);
     };
   };

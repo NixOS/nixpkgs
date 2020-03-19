@@ -1,5 +1,13 @@
-{ stdenv, fetchurl, cmake, pkgconfig
-, qtbase, gsl, getdata, netcdf, muparser, matio
+{ stdenv
+, fetchurl
+, cmake
+, pkgconfig
+, qtbase
+, gsl
+, getdata
+, netcdf
+, muparser
+, matio
 }:
 stdenv.mkDerivation rec {
   name = "Kst-2.0.8";

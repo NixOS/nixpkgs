@@ -1,4 +1,4 @@
-{ config, lib, pkgs, ...}:
+{ config, lib, pkgs, ... }:
 with lib;
 let
   cfg = config.services.freeswitch;
@@ -8,14 +8,16 @@ let
     cp -rT ${cfg.configTemplate} $out
     chmod -R +w $out
     ${concatStringsSep "\n" (mapAttrsToList (fileName: filePath: ''
-      mkdir -p $out/$(dirname ${fileName})
-      cp ${filePath} $out/${fileName}
-    '') cfg.configDir)}
+    mkdir -p $out/$(dirname ${fileName})
+    cp ${filePath} $out/${fileName}
+  '') cfg.configDir)}
   '';
-  configPath = if cfg.enableReload
+  configPath =
+    if cfg.enableReload
     then "/etc/freeswitch"
     else configDirectory;
-in {
+in
+{
   options = {
     services.freeswitch = {
       enable = mkEnableOption "FreeSWITCH";

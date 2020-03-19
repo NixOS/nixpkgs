@@ -81,6 +81,6 @@ stdenv.mkDerivation {
     license = licenses.gpl2Plus;
 
     maintainers = with maintainers; [ gloaming ];
-    platforms   = with platforms; all;
+    platforms = with platforms; all;
   };
 }

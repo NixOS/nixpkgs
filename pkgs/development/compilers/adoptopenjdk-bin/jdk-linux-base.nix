@@ -10,13 +10,12 @@ sourcePerArch:
 , zlib
 , xorg
 }:
-
 let
   cpuName = stdenv.hostPlatform.parsed.cpu.name;
 in
-
 let result = stdenv.mkDerivation rec {
-  name = if sourcePerArch.packageType == "jdk"
+  name =
+    if sourcePerArch.packageType == "jdk"
     then "adoptopenjdk-${sourcePerArch.vmType}-bin-${version}"
     else "adoptopenjdk-${sourcePerArch.packageType}-${sourcePerArch.vmType}-bin-${version}";
 
@@ -27,8 +26,15 @@ let result = stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib freetype fontconfig zlib xorg.libX11 xorg.libXext xorg.libXtst
-    xorg.libXi xorg.libXrender
+    alsaLib
+    freetype
+    fontconfig
+    zlib
+    xorg.libX11
+    xorg.libXext
+    xorg.libXtst
+    xorg.libXi
+    xorg.libXrender
   ];
 
   nativeBuildInputs = [ autoPatchelfHook ];

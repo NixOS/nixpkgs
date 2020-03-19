@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, nose, amqplib, anyjson }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, nose
+, amqplib
+, anyjson
+}:
 
 buildPythonPackage rec {
   pname = "carrot";

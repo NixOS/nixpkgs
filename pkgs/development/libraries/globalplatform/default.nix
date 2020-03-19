@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation rec {
   pname = "globalplatform";
-  version  = "6.0.0";
+  version = "6.0.0";
 
   src = fetchurl {
     url = "mirror://sourceforge/globalplatform/${pname}-${version}.tar.gz";

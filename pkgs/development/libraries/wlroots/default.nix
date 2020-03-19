@@ -1,7 +1,22 @@
-{ stdenv, fetchFromGitHub, meson, ninja, pkg-config, wayland
-, libGL, wayland-protocols, libinput, libxkbcommon, pixman
-, xcbutilwm, libX11, libcap, xcbutilimage, xcbutilerrors, mesa
-, libpng, ffmpeg_4
+{ stdenv
+, fetchFromGitHub
+, meson
+, ninja
+, pkg-config
+, wayland
+, libGL
+, wayland-protocols
+, libinput
+, libxkbcommon
+, pixman
+, xcbutilwm
+, libX11
+, libcap
+, xcbutilimage
+, xcbutilerrors
+, mesa
+, libpng
+, ffmpeg_4
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +36,19 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkg-config wayland ];
 
   buildInputs = [
-    libGL wayland-protocols libinput libxkbcommon pixman
-    xcbutilwm libX11 libcap xcbutilimage xcbutilerrors mesa
-    libpng ffmpeg_4
+    libGL
+    wayland-protocols
+    libinput
+    libxkbcommon
+    pixman
+    xcbutilwm
+    libX11
+    libcap
+    xcbutilimage
+    xcbutilerrors
+    mesa
+    libpng
+    ffmpeg_4
   ];
 
   postInstall = ''
@@ -52,8 +77,8 @@ stdenv.mkDerivation rec {
     '';
     inherit (src.meta) homepage;
     changelog = "https://github.com/swaywm/wlroots/releases/tag/${version}";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
+    license = licenses.mit;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ primeos ];
   };
 }

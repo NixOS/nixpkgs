@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, callPackage
-, isPy27, isPy34, pythonOlder
+{ lib
+, buildPythonPackage
+, fetchPypi
+, callPackage
+, isPy27
+, isPy34
+, pythonOlder
 , cleo
 , requests
 , cachy
@@ -25,11 +30,10 @@
 , intreehooks
 , lockfile
 }:
-
 let
   glob2 = callPackage ./glob2.nix { };
-
-in buildPythonPackage rec {
+in
+buildPythonPackage rec {
   pname = "poetry";
   version = "1.0.3";
   format = "pyproject";
@@ -67,8 +71,8 @@ in buildPythonPackage rec {
     keyring
     lockfile
   ] ++ lib.optionals (isPy27 || isPy34) [ typing pathlib2 glob2 ]
-    ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ]
-    ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  ++ lib.optionals isPy27 [ virtualenv functools32 subprocess32 ]
+  ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   postInstall = ''
     mkdir -p "$out/share/bash-completion/completions"

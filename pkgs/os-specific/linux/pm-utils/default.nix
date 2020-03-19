@@ -1,16 +1,20 @@
-{ stdenv, fetchurl, coreutils, gnugrep, utillinux, kmod
-, procps, kbd, dbus }:
-
+{ stdenv
+, fetchurl
+, coreutils
+, gnugrep
+, utillinux
+, kmod
+, procps
+, kbd
+, dbus
+}:
 let
-
   binPath = stdenv.lib.makeBinPath
     [ coreutils gnugrep utillinux kmod procps kbd dbus ];
 
   sbinPath = stdenv.lib.makeSearchPathOutput "bin" "sbin"
     [ procps ];
-
 in
-
 stdenv.mkDerivation rec {
   name = "pm-utils-1.4.1";
 

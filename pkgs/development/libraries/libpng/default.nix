@@ -1,7 +1,6 @@
 { stdenv, fetchurl, zlib, apngSupport ? true }:
 
 assert zlib != null;
-
 let
   patchVersion = "1.6.37";
   patch_src = fetchurl {
@@ -9,8 +8,8 @@ let
     sha256 = "1dh0250mw9b2hx7cdmnb2blk7ddl49n6vx8zz7jdmiwxy38v4fw2";
   };
   whenPatched = stdenv.lib.optionalString apngSupport;
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "libpng" + whenPatched "-apng" + "-${version}";
   version = "1.6.37";
 

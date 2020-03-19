@@ -10,41 +10,46 @@
  * build: A simple build derivation that uses mvn compile and package to build
  *        the project.
  */
-infoFile: let
+infoFile:
+let
   info = lib.importJSON infoFile;
 
   script = writeText "build-maven-repository.sh" ''
-    ${lib.concatStrings (map (dep: let
-      inherit (dep) sha1 groupId artifactId version metadata repository-id;
+    ${lib.concatStrings
+      (map (dep:
+          let
+              inherit (dep) sha1 groupId artifactId version metadata repository-id;
 
-      versionDir = dep.unresolved-version or version;
-      authenticated = dep.authenticated or false;
-      url = dep.url or "";
+              versionDir = dep.unresolved-version or version;
+              authenticated = dep.authenticated or false;
+              url = dep.url or "";
 
-      fetch = if (url != "") then ((if authenticated then requireFile else fetchurl) {
-        inherit url sha1;
-      }) else "";
+              fetch =
+                  if (url != "")
+                  then ((if authenticated then requireFile else fetchurl) {
+                      inherit url sha1;
+                    }) else "";
 
-      fetchMetadata = (if authenticated then requireFile else fetchurl) {
-        inherit (metadata) url sha1;
-      };
-    in ''
-      dir=$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${versionDir}
-      mkdir -p $dir
+              fetchMetadata = (if authenticated then requireFile else fetchurl) {
+                  inherit (metadata) url sha1;
+                };
+            in ''
+            dir=$out/$(echo ${groupId} | sed 's|\.|/|g')/${artifactId}/${versionDir}
+            mkdir -p $dir
 
-      ${lib.optionalString (fetch != "") ''
-        ln -sv ${fetch} $dir/${fetch.name}
-      ''}
-      ${lib.optionalString (dep ? metadata) ''
-        ln -svf ${fetchMetadata} $dir/maven-metadata-${repository-id}.xml
-        ${lib.optionalString (fetch != "") ''
-          ln -sv ${fetch} $dir/$(echo ${fetch.name} | sed 's|${version}|${dep.unresolved-version}|')
-        ''}
-      ''}
-    '') info.dependencies)}
+            ${lib.optionalString (fetch != "") ''
+            ln -sv ${fetch} $dir/${fetch.name}
+          ''}
+            ${lib.optionalString (dep ? metadata) ''
+            ln -svf ${fetchMetadata} $dir/maven-metadata-${repository-id}.xml
+            ${lib.optionalString (fetch != "") ''
+            ln -sv ${fetch} $dir/$(echo ${fetch.name} | sed 's|${version}|${dep.unresolved-version}|')
+          ''}
+          ''}
+          '') info.dependencies)}
   '';
 
-  repo = runCommand "maven-repository" {} ''
+  repo = runCommand "maven-repository" { } ''
     bash ${script}
   '';
 
@@ -58,16 +63,19 @@ infoFile: let
   '';
 
   src = dirOf infoFile;
-in {
+in
+{
   inherit repo settings info;
 
   build = stdenv.mkDerivation {
     name = "${info.project.artifactId}-${info.project.version}.jar";
 
-    src = builtins.filterSource (path: type:
-      (toString path) != (toString (src + "/target")) &&
-        (toString path) != (toString (src + "/.git"))
-    ) src;
+    src = builtins.filterSource
+      (
+        path: type:
+          (toString path) != (toString (src + "/target"))
+          && (toString path) != (toString (src + "/.git"))
+      ) src;
 
     buildInputs = [ maven ];
 

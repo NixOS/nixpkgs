@@ -12,4 +12,5 @@ callPackage ./generic.nix (args // rec {
   };
 
   archive = "freeoffice${edition}.tar.lzma";
-})
+}
+)

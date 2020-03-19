@@ -16,7 +16,7 @@ stdenv.mkDerivation {
     inherit url rev sha256;
   };
 
-  buildInputs = [mltonBootstrap gmp];
+  buildInputs = [ mltonBootstrap gmp ];
 
   preBuild = ''
     find . -type f | grep -v -e '\.tgz''$' | xargs sed -i "s@/usr/bin/env bash@$(type -p bash)@"

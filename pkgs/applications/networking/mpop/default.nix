@@ -13,14 +13,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ gnutls gsasl libidn ]
-    ++ optional stdenv.isDarwin Security;
+  ++ optional stdenv.isDarwin Security;
 
   configureFlags = optional stdenv.isDarwin [ "--with-macosx-keyring" ];
 
   meta = {
-      description = "POP3 mail retrieval agent";
-      homepage = https://marlam.de/mpop;
-      license = licenses.gpl3Plus;
-      platforms = platforms.unix;
-    };
+    description = "POP3 mail retrieval agent";
+    homepage = https://marlam.de/mpop;
+    license = licenses.gpl3Plus;
+    platforms = platforms.unix;
+  };
 }

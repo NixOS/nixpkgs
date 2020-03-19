@@ -17,14 +17,14 @@ buildPythonPackage rec {
 
     export PYTHONPATH=$PYTHONPATH:$out/lib/${python.libPrefix}/site-packages
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
-    ''}
+    export QMAKESPEC="unsupported/macx-clang-libc++" # macOS target after bootstrapping phase \
+  ''}
 
     substituteInPlace configure.py \
       --replace 'install_dir=pydbusmoddir' "install_dir='$out/lib/${python.libPrefix}/site-packages/dbus/mainloop'" \
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
-    ''}
+    --replace "qt_macx_spec = 'macx-g++'" "qt_macx_spec = 'unsupported/macx-clang-libc++'" # for bootstrapping phase \
+  ''}
 
     chmod +x configure.py
     sed -i '1i#!${python.interpreter}' configure.py

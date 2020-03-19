@@ -7,9 +7,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ postgresql ];
 
   src = fetchFromGitHub {
-    owner  = "citusdata";
-    repo   = pname;
-    rev    = "refs/tags/v${version}";
+    owner = "citusdata";
+    repo = pname;
+    rev = "refs/tags/v${version}";
     sha256 = "1hkrk6jxl20k2b0ngchblwkrzigl77jaq1gvininp4yhjdlgaks8";
   };
 
@@ -23,9 +23,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Run Cron jobs through PostgreSQL";
-    homepage    = https://github.com/citusdata/pg_cron;
+    homepage = https://github.com/citusdata/pg_cron;
     maintainers = with maintainers; [ thoughtpolice ];
-    platforms   = postgresql.meta.platforms;
-    license     = licenses.postgresql;
+    platforms = postgresql.meta.platforms;
+    license = licenses.postgresql;
   };
 }

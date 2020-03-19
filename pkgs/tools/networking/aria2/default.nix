@@ -1,6 +1,16 @@
-{ stdenv, fetchpatch, fetchFromGitHub, pkgconfig, autoreconfHook
-, openssl, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit, sphinx
+{ stdenv
+, fetchpatch
+, fetchFromGitHub
+, pkgconfig
+, autoreconfHook
+, openssl
+, c-ares
+, libxml2
+, sqlite
+, zlib
+, libssh2
+, cppunit
+, sphinx
 , Security
 }:
 
@@ -17,8 +27,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook sphinx ];
 
-  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ] ++
-    stdenv.lib.optional stdenv.isDarwin Security;
+  buildInputs = [ openssl c-ares libxml2 sqlite zlib libssh2 ]
+  ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   configureFlags = [ "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt" ];
 

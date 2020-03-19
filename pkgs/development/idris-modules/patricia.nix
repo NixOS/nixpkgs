@@ -3,7 +3,7 @@
 , specdris
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "patricia";
   version = "2017-10-27";
 

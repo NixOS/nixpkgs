@@ -1,8 +1,8 @@
 { stdenv, fetchurl, pkgconfig, intltool, gtk-doc, glib, avahi, gnutls, libuuid, libsoup, gtk3, gnome3 }:
-
 let
   avahiWithGtk = avahi.override { gtk3Support = true; };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "libepc";
   version = "0.4.6";
 

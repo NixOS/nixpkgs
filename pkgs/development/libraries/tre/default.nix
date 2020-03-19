@@ -1,4 +1,4 @@
-{stdenv, fetchurl, fetchpatch}:
+{ stdenv, fetchurl, fetchpatch }:
 
 stdenv.mkDerivation rec {
   name = "tre-0.8.0";

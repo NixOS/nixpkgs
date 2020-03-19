@@ -1,4 +1,8 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub, makeWrapper
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchFromGitHub
+, makeWrapper
 , aria
 , libnotify
 , pulseaudio
@@ -24,7 +28,7 @@ buildPythonApplication rec {
   # see: https://github.com/persepolisdm/persepolis/blob/3.1.0/setup.py#L130
   doCheck = false;
 
-  preBuild=''
+  preBuild = ''
     substituteInPlace setup.py --replace "answer = input(" "answer = 'y'#"
   '';
 
@@ -34,9 +38,9 @@ buildPythonApplication rec {
   '';
 
   postInstall = ''
-     mkdir -p $out/share/applications
-     cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
-     wrapProgram $out/bin/persepolis --prefix PATH : "${lib.makeBinPath [aria libnotify ]}"
+    mkdir -p $out/share/applications
+    cp $src/xdg/com.github.persepolisdm.persepolis.desktop $out/share/applications
+    wrapProgram $out/bin/persepolis --prefix PATH : "${lib.makeBinPath [ aria libnotify ]}"
   '';
 
   buildInputs = [ makeWrapper ];

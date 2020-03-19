@@ -1,9 +1,7 @@
 { stdenv, fetchurl, glib, gtk2, pkgconfig, popt }:
-
 let
   version = "0.9.2";
 in
-
 stdenv.mkDerivation rec {
   pname = "gmrun";
   inherit version;
@@ -21,10 +19,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   patches = [
-      ./gcc43.patch
-      ./find-config-file-in-system-etc-dir.patch
-      ./gmrun-0.9.2-xdg.patch
-    ];
+    ./gcc43.patch
+    ./find-config-file-in-system-etc-dir.patch
+    ./gmrun-0.9.2-xdg.patch
+  ];
 
   meta = {
     description = "Gnome Completion-Run Utility";
@@ -36,7 +34,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = https://sourceforge.net/projects/gmrun/;
     license = "GPL";
-    maintainers = [];
+    maintainers = [ ];
     platforms = stdenv.lib.platforms.all;
   };
 }

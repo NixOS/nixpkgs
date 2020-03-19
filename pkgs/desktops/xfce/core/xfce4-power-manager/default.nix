@@ -1,5 +1,13 @@
-{ mkXfceDerivation, automakeAddFlags, exo, gtk3, libnotify
-, libxfce4ui, libxfce4util, upower, xfconf }:
+{ mkXfceDerivation
+, automakeAddFlags
+, exo
+, gtk3
+, libnotify
+, libxfce4ui
+, libxfce4util
+, upower
+, xfconf
+}:
 
 mkXfceDerivation {
   category = "xfce";

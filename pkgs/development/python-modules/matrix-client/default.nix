@@ -2,7 +2,9 @@
 , buildPythonPackage
 , fetchPypi
 , requests
-, pytest, pytestrunner, responses
+, pytest
+, pytestrunner
+, responses
 }:
 
 buildPythonPackage rec {

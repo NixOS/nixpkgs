@@ -12,7 +12,8 @@ stdenv.mkDerivation rec {
   };
 
   patches =
-    [ # Prevent the unionfs daemon from being killed during
+    [
+      # Prevent the unionfs daemon from being killed during
       # shutdown. See
       # http://www.freedesktop.org/wiki/Software/systemd/RootStorageDaemons/
       # for details.

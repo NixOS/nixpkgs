@@ -1,5 +1,10 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
-, pytest, pytestcov, mock }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pytest
+, pytestcov
+, mock
+}:
 
 buildPythonPackage rec {
   pname = "vdf";

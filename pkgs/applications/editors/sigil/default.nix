@@ -1,7 +1,17 @@
-{ stdenv, mkDerivation, fetchFromGitHub, cmake, pkgconfig, makeWrapper
-, boost, xercesc
-, qtbase, qttools, qtwebkit, qtxmlpatterns
-, python3, python3Packages
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, makeWrapper
+, boost
+, xercesc
+, qtbase
+, qttools
+, qtwebkit
+, qtxmlpatterns
+, python3
+, python3Packages
 }:
 
 mkDerivation rec {
@@ -20,8 +30,14 @@ mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig makeWrapper ];
 
   buildInputs = [
-    boost xercesc qtbase qttools qtwebkit qtxmlpatterns
-    python3Packages.lxml ];
+    boost
+    xercesc
+    qtbase
+    qttools
+    qtwebkit
+    qtxmlpatterns
+    python3Packages.lxml
+  ];
 
   dontWrapQtApps = true;
 

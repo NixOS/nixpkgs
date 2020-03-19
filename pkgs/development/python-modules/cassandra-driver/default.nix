@@ -1,4 +1,9 @@
-{ stdenv, lib, buildPythonPackage, fetchPypi, python, pythonOlder
+{ stdenv
+, lib
+, buildPythonPackage
+, fetchPypi
+, python
+, pythonOlder
 , cython
 , eventlet
 , futures
@@ -25,7 +30,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [ cython ];
   buildInputs = [ libev ];
   propagatedBuildInputs = [ six ]
-    ++ lib.optionals (pythonOlder "3.4") [ futures ];
+  ++ lib.optionals (pythonOlder "3.4") [ futures ];
 
   checkInputs = [ eventlet mock nose pytest pytz pyyaml sure ];
 

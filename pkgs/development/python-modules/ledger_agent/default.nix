@@ -17,7 +17,10 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = [
-    ledgerblue libagent setuptools wheel
+    ledgerblue
+    libagent
+    setuptools
+    wheel
   ];
 
   meta = with stdenv.lib; {

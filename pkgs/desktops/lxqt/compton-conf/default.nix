@@ -1,5 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, pkgconfig, qtbase, qttools, lxqt,
-  libconfig }:
+{ lib
+, mkDerivation
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, qtbase
+, qttools
+, lxqt
+, libconfig
+}:
 
 mkDerivation rec {
   pname = "compton-conf";
@@ -27,7 +35,7 @@ mkDerivation rec {
   preConfigure = ''
     substituteInPlace autostart/CMakeLists.txt \
       --replace "DESTINATION \"\''${LXQT_ETC_XDG_DIR}" "DESTINATION \"etc/xdg" \
-    '';
+  '';
 
   meta = with lib; {
     description = "GUI configuration tool for compton X composite manager";

@@ -1,7 +1,7 @@
 # Test of IPv6 functionality in NixOS, including whether router
 # solicication/advertisement using radvd works.
 
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
+import ./make-test-python.nix ({ pkgs, lib, ... }: {
   name = "ipv6";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];
@@ -10,18 +10,21 @@ import ./make-test-python.nix ({ pkgs, lib, ...} : {
   nodes =
     # Remove the interface configuration provided by makeTest so that the
     # interfaces are all configured implicitly
-    { client = { ... }: { networking.interfaces = lib.mkForce {}; };
+    {
+      client = { ... }: { networking.interfaces = lib.mkForce { }; };
 
       server =
         { ... }:
-        { services.httpd.enable = true;
+        {
+          services.httpd.enable = true;
           services.httpd.adminAddr = "foo@example.org";
           networking.firewall.allowedTCPPorts = [ 80 ];
         };
 
       router =
         { ... }:
-        { services.radvd.enable = true;
+        {
+          services.radvd.enable = true;
           services.radvd.config =
             ''
               interface eth1 {

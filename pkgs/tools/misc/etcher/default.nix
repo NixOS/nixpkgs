@@ -10,7 +10,6 @@
 , gtk3
 , wrapGAppsHook
 }:
-
 let
   libPath = lib.makeLibraryPath [
     # for libstdc++.so.6
@@ -26,8 +25,8 @@ let
     "x86_64-linux" = "amd64";
     "i686-linux" = "i386";
   }."${stdenv.system}";
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "etcher";
   version = "1.5.60";
 

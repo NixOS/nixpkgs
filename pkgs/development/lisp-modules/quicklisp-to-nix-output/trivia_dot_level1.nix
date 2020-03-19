@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivia.level1";
 
-  asdFilesToKeep = ["trivia.level1.asd"];
+  asdFilesToKeep = [ "trivia.level1.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivia.level1 DESCRIPTION Core patterns of Trivia SHA256

@@ -1,5 +1,4 @@
 { stdenv, fetchurl, zlib, pciutils, coreutils, acpica-tools, iasl, makeWrapper, gnugrep, gnused, file, buildEnv }:
-
 let
   version = "4.11";
 
@@ -11,25 +10,29 @@ let
     platforms = platforms.linux;
   };
 
-  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation (rec {
-    inherit pname version meta;
+  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation
+    (rec
+    {
+      inherit pname version meta;
 
-    src = fetchurl {
-      url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
-      sha256 = "11xdm2c1blaqb32j98085sak78jldsw0xhrkzqs5b8ir9jdqbzcp";
-    };
+      src = fetchurl {
+        url = "https://coreboot.org/releases/coreboot-${version}.tar.xz";
+        sha256 = "11xdm2c1blaqb32j98085sak78jldsw0xhrkzqs5b8ir9jdqbzcp";
+      };
 
-    enableParallelBuilding = true;
+      enableParallelBuilding = true;
 
-    postPatch = ''
-      cd ${path}
-    '';
+      postPatch = ''
+        cd ${path}
+      '';
 
-    makeFlags = [
-      "INSTALL=install"
-      "PREFIX=${placeholder "out"}"
-    ];
-  } // args);
+      makeFlags = [
+        "INSTALL=install"
+        "PREFIX=${placeholder "out"}"
+      ];
+    }
+    // args
+    );
 
   utils = {
     msrtool = generic {
@@ -87,13 +90,14 @@ let
       nativeBuildInputs = [ makeWrapper ];
       dontBuild = true;
       installPhase = "install -Dm755 acpidump-all $out/bin/acpidump-all";
-      postFixup = let 
-        binPath = [ coreutils  acpica-tools iasl gnugrep  gnused  file ];
-      in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
+      postFixup =
+        let
+          binPath = [ coreutils acpica-tools iasl gnugrep gnused file ];
+        in "wrapProgram $out/bin/acpidump-all --set PATH ${stdenv.lib.makeBinPath binPath}";
     };
   };
-
-in utils // {
+in
+utils // {
   coreboot-utils = (buildEnv {
     name = "coreboot-utils-${version}";
     paths = stdenv.lib.attrValues utils;

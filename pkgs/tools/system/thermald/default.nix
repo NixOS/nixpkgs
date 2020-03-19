@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, autoconf, automake, libtool
-, pkgconfig, dbus, dbus-glib, libxml2 }:
+{ stdenv
+, fetchFromGitHub
+, autoconf
+, automake
+, libtool
+, pkgconfig
+, dbus
+, dbus-glib
+, libxml2
+}:
 
 stdenv.mkDerivation rec {
   pname = "thermald";
@@ -27,7 +35,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--with-dbus-sys-dir=${placeholder "out"}/share/dbus-1/system.d"
     "--with-systemdsystemunitdir=${placeholder "out"}/etc/systemd/system"
-    ];
+  ];
 
   meta = with stdenv.lib; {
     description = "Thermal Daemon";

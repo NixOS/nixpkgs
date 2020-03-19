@@ -1,9 +1,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.opensmtpd;
   conf = pkgs.writeText "smtpd.conf" cfg.serverConfiguration;
   args = concatStringsSep " " cfg.extraServerArgs;
@@ -12,8 +10,8 @@ let
     mkdir -p $out/bin
     ln -s ${cfg.package}/sbin/smtpctl $out/bin/sendmail
   '';
-
-in {
+in
+{
 
   ###### interface
 
@@ -45,7 +43,7 @@ in {
 
       extraServerArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "-v" "-P mta" ];
         description = ''
           Extra command line arguments provided when the smtpd process
@@ -67,7 +65,7 @@ in {
 
       procPackages = mkOption {
         type = types.listOf types.package;
-        default = [];
+        default = [ ];
         description = ''
           Packages to search for filters, tables, queues, and schedulers.
 
@@ -107,18 +105,19 @@ in {
       "d /var/spool/smtpd/purge 700 smtpq root - -"
     ];
 
-    systemd.services.opensmtpd = let
-      procEnv = pkgs.buildEnv {
-        name = "opensmtpd-procs";
-        paths = [ cfg.package ] ++ cfg.procPackages;
-        pathsToLink = [ "/libexec/opensmtpd" ];
+    systemd.services.opensmtpd =
+      let
+        procEnv = pkgs.buildEnv {
+          name = "opensmtpd-procs";
+          paths = [ cfg.package ] ++ cfg.procPackages;
+          pathsToLink = [ "/libexec/opensmtpd" ];
+        };
+      in {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
+        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
       };
-    in {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
-      environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
-    };
 
     environment.systemPackages = mkIf cfg.addSendmailToSystemPath [ sendmail ];
   };

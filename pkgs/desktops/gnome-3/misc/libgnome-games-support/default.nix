@@ -1,10 +1,18 @@
-{ stdenv, fetchurl, pkgconfig, glib, gtk3, libgee, gettext, gnome3
-, libintl }:
-
+{ stdenv
+, fetchurl
+, pkgconfig
+, glib
+, gtk3
+, libgee
+, gettext
+, gnome3
+, libintl
+}:
 let
   pname = "libgnome-games-support";
   version = "1.4.4";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -16,7 +24,9 @@ in stdenv.mkDerivation rec {
   buildInputs = [ libintl ];
   propagatedBuildInputs = [
     # Required by libgnome-games-support-1.pc
-    glib gtk3 libgee
+    glib
+    gtk3
+    libgee
   ];
 
   passthru = {

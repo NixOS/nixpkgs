@@ -36,9 +36,9 @@ stdenv.mkDerivation {
 
   meta = {
     description = "Optimizing Scheme to C compiler, bootstrap step";
-    homepage    = "http://gambitscheme.org";
-    license     = stdenv.lib.licenses.lgpl2;
-    platforms   = stdenv.lib.platforms.unix;
+    homepage = "http://gambitscheme.org";
+    license = stdenv.lib.licenses.lgpl2;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ thoughtpolice raskin fare ];
   };
 }

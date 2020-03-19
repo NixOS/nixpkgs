@@ -1,9 +1,9 @@
 { lib
 , buildPythonPackage
 , fetchFromGitHub
-# Runtime inputs:
+  # Runtime inputs:
 , pyparsing
-# Check inputs:
+  # Check inputs:
 , pytest
 , mock
 }:

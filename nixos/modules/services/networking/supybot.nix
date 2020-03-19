@@ -1,9 +1,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-  cfg  = config.services.supybot;
+  cfg = config.services.supybot;
   isStateDirHome = hasPrefix "/home/" cfg.stateDir;
   isStateDirVar = cfg.stateDir == "/var/lib/supybot";
   pyEnv = pkgs.python3.withPackages (p: [ p.limnoria ] ++ (cfg.extraPackages p));
@@ -21,7 +20,8 @@ in
 
       stateDir = mkOption {
         type = types.path;
-        default = if versionAtLeast config.system.stateVersion "20.09"
+        default =
+          if versionAtLeast config.system.stateVersion "20.09"
           then "/var/lib/supybot"
           else "/home/supybot";
         defaultText = "/var/lib/supybot";
@@ -41,7 +41,7 @@ in
 
       plugins = mkOption {
         type = types.attrsOf types.path;
-        default = {};
+        default = { };
         description = ''
           Attribute set of additional plugins that will be symlinked to the
           <filename>plugin</filename> subdirectory.
@@ -64,7 +64,7 @@ in
       };
 
       extraPackages = mkOption {
-        default = p: [];
+        default = p: [ ];
         description = ''
           Extra Python packages available to supybot plugins. The
           value must be a function which receives the attrset defined
@@ -103,42 +103,43 @@ in
         rm -f '${cfg.stateDir}/supybot.cfg.bak'
       '';
 
-      serviceConfig = {
-        ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
-        PIDFile = "/run/supybot.pid";
-        User = "supybot";
-        Group = "supybot";
-        UMask = "0007";
-        Restart = "on-abort";
-        StartLimitInterval = "5m";
-        StartLimitBurst = "1";
+      serviceConfig =
+        {
+          ExecStart = "${pyEnv}/bin/supybot ${cfg.stateDir}/supybot.cfg";
+          PIDFile = "/run/supybot.pid";
+          User = "supybot";
+          Group = "supybot";
+          UMask = "0007";
+          Restart = "on-abort";
+          StartLimitInterval = "5m";
+          StartLimitBurst = "1";
 
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateMounts = true;
-        PrivateTmp = true;
-        ProtectControlGroups = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        RemoveIPC = true;
-        ProtectHostname = true;
-        CapabilityBoundingSet = "";
-        ProtectSystem = "full";
-      }
-      // optionalAttrs isStateDirVar {
-        StateDirectory = "supybot";
-        ProtectSystem = "strict";
-      }
-      // optionalAttrs (!isStateDirHome) {
-        ProtectHome = true;
-      };
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateMounts = true;
+          PrivateTmp = true;
+          ProtectControlGroups = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          RemoveIPC = true;
+          ProtectHostname = true;
+          CapabilityBoundingSet = "";
+          ProtectSystem = "full";
+        }
+        // optionalAttrs isStateDirVar {
+          StateDirectory = "supybot";
+          ProtectSystem = "strict";
+        }
+        // optionalAttrs (!isStateDirHome) {
+          ProtectHome = true;
+        };
     };
 
     systemd.tmpfiles.rules = [
@@ -153,8 +154,9 @@ in
       "d '${cfg.stateDir}/web'          0750 supybot supybot - -"
       "L '${cfg.stateDir}/supybot.cfg'  -    -       -       - ${cfg.configFile}"
     ]
-    ++ (flip mapAttrsToList cfg.plugins (name: dest:
-      "L+ '${cfg.stateDir}/plugins/${name}' - - - - ${dest}"
+    ++ (flip mapAttrsToList cfg.plugins (
+      name: dest:
+        "L+ '${cfg.stateDir}/plugins/${name}' - - - - ${dest}"
     ));
 
   };

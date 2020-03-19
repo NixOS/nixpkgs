@@ -20,7 +20,7 @@ stdenv.mkDerivation {
         --replace g++ c++
   '';
 
-  NIX_CFLAGS_COMPILE=''-I${ilmbase.dev}/include/OpenEXR
+  NIX_CFLAGS_COMPILE = ''-I${ilmbase.dev}/include/OpenEXR
                        -I${openexr.dev}/include/OpenEXR
                        -I${openfx.dev}/include/OpenFX
                       '';
@@ -30,18 +30,18 @@ stdenv.mkDerivation {
   enableParallelBuilding = true;
 
   buildPhase = ''
-      mkdir openexrid/release
+    mkdir openexrid/release
 
-      PREFIX=$out make -C openexrid install
+    PREFIX=$out make -C openexrid install
 
-      mkdir $dev;
-      mkdir $lib;
+    mkdir $dev;
+    mkdir $lib;
   '';
 
   installPhase = ''
-      find $out
-      mv $out/include $dev/
-      mv $out/lib $lib/
+    find $out
+    mv $out/include $dev/
+    mv $out/lib $lib/
   '';
 
   meta = with stdenv.lib; {

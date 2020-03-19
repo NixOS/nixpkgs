@@ -1,12 +1,25 @@
-{ stdenv, fetchurl, fetchpatch
-, pkgconfig, libtool, intltool
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, libtool
+, intltool
 , libXmu
 , lua
 , tinyxml
-, agg, alsaLib, soundtouch, openal
+, agg
+, alsaLib
+, soundtouch
+, openal
 , desktop-file-utils
-, gtk2, gtkglext, libglade
-, libGLU, libpcap, SDL, zziplib }:
+, gtk2
+, gtkglext
+, libglade
+, libGLU
+, libpcap
+, SDL
+, zziplib
+}:
 
 with stdenv.lib;
 stdenv.mkDerivation rec {
@@ -28,16 +41,34 @@ stdenv.mkDerivation rec {
   CXXFLAGS = "-fpermissive";
 
   buildInputs =
-  [ pkgconfig libtool intltool libXmu lua agg alsaLib soundtouch
-    openal desktop-file-utils gtk2 gtkglext libglade
-    libGLU libpcap SDL zziplib tinyxml ];
+    [
+      pkgconfig
+      libtool
+      intltool
+      libXmu
+      lua
+      agg
+      alsaLib
+      soundtouch
+      openal
+      desktop-file-utils
+      gtk2
+      gtkglext
+      libglade
+      libGLU
+      libpcap
+      SDL
+      zziplib
+      tinyxml
+    ];
 
   configureFlags = [
-    "--disable-glade"  # Failing on compile step
+    "--disable-glade" # Failing on compile step
     "--enable-openal"
     "--enable-glx"
     "--enable-hud"
-    "--enable-wifi" ];
+    "--enable-wifi"
+  ];
 
   meta = {
     description = "An open-source Nintendo DS emulator";
@@ -48,7 +79,7 @@ stdenv.mkDerivation rec {
       roms. DeSmuME is also able to emulate nearly all of the
       commercial nds rom titles which other DS Emulators aren't.
     '';
-    homepage = http://www.desmume.com ;
+    homepage = http://www.desmume.com;
     license = licenses.gpl1Plus;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;

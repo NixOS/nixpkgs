@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, uilib? "framebuffer", SDL
+{ stdenv
+, fetchurl
+, pkgconfig
+, uilib ? "framebuffer"
+, SDL
 , buildsystem
 }:
 

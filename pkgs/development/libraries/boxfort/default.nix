@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, cmake, pkg-config, gettext, libcsptr, dyncall
-, nanomsg, python37Packages }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkg-config
+, gettext
+, libcsptr
+, dyncall
+, nanomsg
+, python37Packages
+}:
 
 stdenv.mkDerivation rec {
   version = "unstable-2019-09-19";

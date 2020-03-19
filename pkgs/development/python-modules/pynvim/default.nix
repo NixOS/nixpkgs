@@ -28,8 +28,8 @@ buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = [ msgpack ]
-    ++ lib.optional (!isPyPy) greenlet
-    ++ lib.optional (pythonOlder "3.4") trollius;
+  ++ lib.optional (!isPyPy) greenlet
+  ++ lib.optional (pythonOlder "3.4") trollius;
 
   meta = {
     description = "Python client for Neovim";

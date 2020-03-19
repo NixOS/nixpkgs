@@ -1,13 +1,33 @@
-{ config, stdenv, lib, fetchurl, intltool, pkgconfig, python3Packages, bluez, gtk3
-, obex_data_server, xdg_utils, dnsmasq, dhcp, libappindicator, iproute
-, gnome3, librsvg, wrapGAppsHook, gobject-introspection, autoreconfHook
-, networkmanager, withPulseAudio ? config.pulseaudio or stdenv.isLinux, libpulseaudio, fetchpatch }:
-
+{ config
+, stdenv
+, lib
+, fetchurl
+, intltool
+, pkgconfig
+, python3Packages
+, bluez
+, gtk3
+, obex_data_server
+, xdg_utils
+, dnsmasq
+, dhcp
+, libappindicator
+, iproute
+, gnome3
+, librsvg
+, wrapGAppsHook
+, gobject-introspection
+, autoreconfHook
+, networkmanager
+, withPulseAudio ? config.pulseaudio or stdenv.isLinux
+, libpulseaudio
+, fetchpatch
+}:
 let
   pythonPackages = python3Packages;
   binPath = lib.makeBinPath [ xdg_utils dnsmasq dhcp iproute ];
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "blueman";
   version = "2.1.2";
 
@@ -17,15 +37,27 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    gobject-introspection intltool pkgconfig pythonPackages.cython
-    pythonPackages.wrapPython wrapGAppsHook
+    gobject-introspection
+    intltool
+    pkgconfig
+    pythonPackages.cython
+    pythonPackages.wrapPython
+    wrapGAppsHook
     autoreconfHook # drop when below patch is removed
   ];
 
-  buildInputs = [ bluez gtk3 pythonPackages.python librsvg
-                  gnome3.adwaita-icon-theme iproute libappindicator networkmanager ]
-                ++ pythonPath
-                ++ lib.optional withPulseAudio libpulseaudio;
+  buildInputs = [
+    bluez
+    gtk3
+    pythonPackages.python
+    librsvg
+    gnome3.adwaita-icon-theme
+    iproute
+    libappindicator
+    networkmanager
+  ]
+  ++ pythonPath
+  ++ lib.optional withPulseAudio libpulseaudio;
 
   patches = [
     # Don't use etc/dbus-1/system.d

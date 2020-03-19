@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     mkdir -p $out/bin
     cp zerofree $out/bin
-'';
+  '';
 
   meta = {
     homepage = https://frippery.org/uml/;

@@ -1,8 +1,18 @@
 { stdenv
-, fetchurl, qttools, pkgconfig
-, minizip, zlib
-, qtbase, qtsvg, qtmultimedia, qtwebkit, qttranslations, qtxmlpatterns
-, rsync, SDL2, xwininfo
+, fetchurl
+, qttools
+, pkgconfig
+, minizip
+, zlib
+, qtbase
+, qtsvg
+, qtmultimedia
+, qtwebkit
+, qttranslations
+, qtxmlpatterns
+, rsync
+, SDL2
+, xwininfo
 , utillinux
 , xorg
 }:
@@ -12,23 +22,37 @@ stdenv.mkDerivation rec {
   version = "0.195";
 
   src = fetchurl {
-      url = "mirror://sourceforge/project/qmc2/qmc2/${version}/${pname}-${version}.tar.gz";
-      sha256 = "1dzmjlfk8pdspns6zg1jmd5fqzg8igd4q38cz4a1vf39lx74svns";
+    url = "mirror://sourceforge/project/qmc2/qmc2/${version}/${pname}-${version}.tar.gz";
+    sha256 = "1dzmjlfk8pdspns6zg1jmd5fqzg8igd4q38cz4a1vf39lx74svns";
   };
-  
+
   preBuild = ''
     patchShebangs scripts
   '';
 
   nativeBuildInputs = [ qttools pkgconfig ];
-  buildInputs = [ minizip qtbase qtsvg qtmultimedia qtwebkit
-                  qttranslations qtxmlpatterns rsync SDL2
-                  xwininfo zlib utillinux xorg.libxcb ];
+  buildInputs = [
+    minizip
+    qtbase
+    qtsvg
+    qtmultimedia
+    qtwebkit
+    qttranslations
+    qtxmlpatterns
+    rsync
+    SDL2
+    xwininfo
+    zlib
+    utillinux
+    xorg.libxcb
+  ];
 
-  makeFlags = [ "DESTDIR=$(out)"
-                "PREFIX=/"
-                "DATADIR=/share/"
-                "SYSCONFDIR=/etc" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX=/"
+    "DATADIR=/share/"
+    "SYSCONFDIR=/etc"
+  ];
 
   meta = with stdenv.lib; {
     description = "A Qt frontend for MAME/MESS";

@@ -1,6 +1,6 @@
-{ system ? builtins.currentSystem,
-  config ? {},
-  pkgs ? import ../.. { inherit system config; }
+{ system ? builtins.currentSystem
+, config ? { }
+, pkgs ? import ../.. { inherit system config; }
 }:
 
 with import ../lib/testing-python.nix { inherit system pkgs; };
@@ -59,25 +59,27 @@ let
 
         systemd.services.cfssl-init = {
           description = "Initialize the cfssl CA";
-          wantedBy    = [ "multi-user.target" ];
+          wantedBy = [ "multi-user.target" ];
           serviceConfig = {
-            User             = "cfssl";
-            Type             = "oneshot";
+            User = "cfssl";
+            Type = "oneshot";
             WorkingDirectory = config.services.cfssl.dataDir;
           };
           script = ''
             ${pkgs.cfssl}/bin/cfssl genkey -initca ${pkgs.writeText "ca.json" (builtins.toJSON {
               hosts = [ "ca.example.com" ];
               key = {
-                algo = "rsa"; size = 4096; };
-                names = [
+                  algo = "rsa";
+                  size = 4096;
+                };
+              names = [
                   {
-                    C = "US";
-                    L = "San Francisco";
-                    O = "Internet Widgets, LLC";
-                    OU = "Certificate Authority";
-                    ST = "California";
-                  }
+                      C = "US";
+                      L = "San Francisco";
+                      O = "Internet Widgets, LLC";
+                      OU = "Certificate Authority";
+                      ST = "California";
+                    }
                 ];
             })} | ${pkgs.cfssl}/bin/cfssljson -bare ca
           '';
@@ -85,21 +87,22 @@ let
 
         services.nginx = {
           enable = true;
-          virtualHosts = lib.mkMerge (map (host: {
-            ${host} = {
-              sslCertificate = "/tmp/${host}-cert.pem";
-              sslCertificateKey = "/tmp/${host}-key.pem";
-              extraConfig = ''
-                ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
-              '';
-              onlySSL = true;
-              serverName = host;
-              root = pkgs.writeTextDir "index.html" "It works!";
-            };
-          }) [ "imp.example.org" "decl.example.org" ]);
+          virtualHosts = lib.mkMerge
+            (map (host: {
+              ${host} = {
+                sslCertificate = "/tmp/${host}-cert.pem";
+                sslCertificateKey = "/tmp/${host}-key.pem";
+                extraConfig = ''
+                  ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+                '';
+                onlySSL = true;
+                serverName = host;
+                root = pkgs.writeTextDir "index.html" "It works!";
+              };
+            }) [ "imp.example.org" "decl.example.org" ]);
         };
 
-        systemd.services.nginx.wantedBy = lib.mkForce [];
+        systemd.services.nginx.wantedBy = lib.mkForce [ ];
 
         systemd.services.certmgr.after = [ "cfssl.service" ];
         services.certmgr = {
@@ -117,10 +120,11 @@ in
   systemd = mkCertmgrTest {
     svcManager = "systemd";
     specs = {
-      decl = mkSpec { host = "decl.example.org"; service = "nginx"; action ="restart"; };
-      imp = toString (pkgs.writeText "test.json" (builtins.toJSON (
-        mkSpec { host = "imp.example.org"; service = "nginx"; action = "restart"; }
-      )));
+      decl = mkSpec { host = "decl.example.org"; service = "nginx"; action = "restart"; };
+      imp = toString (pkgs.writeText "test.json" (builtins.toJSON
+        (
+          mkSpec { host = "imp.example.org"; service = "nginx"; action = "restart"; }
+        )));
     };
     testScript = ''
       machine.wait_for_unit("cfssl.service")

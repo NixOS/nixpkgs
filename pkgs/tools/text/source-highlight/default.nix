@@ -1,5 +1,4 @@
 { stdenv, fetchurl, boost }:
-
 let
   name = "source-highlight";
   version = "3.1.9";

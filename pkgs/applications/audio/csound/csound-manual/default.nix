@@ -1,7 +1,10 @@
-{
-  stdenv, fetchFromGitHub, docbook_xsl,
-  docbook_xml_dtd_45, python, pygments,
-  libxslt
+{ stdenv
+, fetchFromGitHub
+, docbook_xsl
+, docbook_xml_dtd_45
+, python
+, pygments
+, libxslt
 }:
 
 stdenv.mkDerivation {

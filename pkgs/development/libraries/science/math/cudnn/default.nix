@@ -1,11 +1,10 @@
 { callPackage, cudatoolkit_7, cudatoolkit_7_5, cudatoolkit_8, cudatoolkit_9_0, cudatoolkit_9_1, cudatoolkit_9_2, cudatoolkit_10_0, cudatoolkit_10_1, cudatoolkit_10_2 }:
-
 let
-  generic = args: callPackage (import ./generic.nix (removeAttrs args ["cudatoolkit"])) {
+  generic = args: callPackage (import ./generic.nix (removeAttrs args [ "cudatoolkit" ])) {
     inherit (args) cudatoolkit;
   };
-
-in rec {
+in
+rec {
   cudnn_cudatoolkit_7 = generic rec {
     # Old URL is v4 instead of v4.0 for some reason...
     version = "4";

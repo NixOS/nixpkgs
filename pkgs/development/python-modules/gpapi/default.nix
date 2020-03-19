@@ -1,4 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
 , requests
 , protobuf
 , pycryptodome

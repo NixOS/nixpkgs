@@ -1,7 +1,21 @@
-{ stdenv, substituteAll, fetchFromGitHub, autoreconfHook, libtool, intltool, pkgconfig
-, file, findutils
-, gtk3, networkmanager, ppp, xl2tpd, strongswan, libsecret
-, withGnome ? true, networkmanagerapplet }:
+{ stdenv
+, substituteAll
+, fetchFromGitHub
+, autoreconfHook
+, libtool
+, intltool
+, pkgconfig
+, file
+, findutils
+, gtk3
+, networkmanager
+, ppp
+, xl2tpd
+, strongswan
+, libsecret
+, withGnome ? true
+, networkmanagerapplet
+}:
 
 stdenv.mkDerivation rec {
   name = "${pname}${if withGnome then "-gnome" else ""}-${version}";
@@ -23,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ networkmanager ppp ]
-    ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
+  ++ stdenv.lib.optionals withGnome [ gtk3 libsecret networkmanagerapplet ];
 
   nativeBuildInputs = [ autoreconfHook libtool intltool pkgconfig file findutils ];
 

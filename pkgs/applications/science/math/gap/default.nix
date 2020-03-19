@@ -5,18 +5,18 @@
 , makeWrapper
 , m4
 , gmp
-# one of
-# - "minimal" (~400M):
-#     Install the bare minimum of packages required by gap to start.
-#     This is likely to break a lot of stuff. Do not expect upstream support with
-#     this configuration.
-# - "standard" (~700M):
-#     Install the "standard packages" which gap autoloads by default. These
-#     packages are effectively considered a part of gap.
-# - "full" (~1.7G):
-#     Install all available packages. This takes a lot of space.
+  # one of
+  # - "minimal" (~400M):
+  #     Install the bare minimum of packages required by gap to start.
+  #     This is likely to break a lot of stuff. Do not expect upstream support with
+  #     this configuration.
+  # - "standard" (~700M):
+  #     Install the "standard packages" which gap autoloads by default. These
+  #     packages are effectively considered a part of gap.
+  # - "full" (~1.7G):
+  #     Install all available packages. This takes a lot of space.
 , packageSet ? "standard"
-# Kept for backwards compatibility. Overrides packageSet to "full".
+  # Kept for backwards compatibility. Overrides packageSet to "full".
 , keepAllPackages ? false
 }:
 let
@@ -163,11 +163,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Computational discrete algebra system";
     maintainers = with maintainers;
-    [
-      raskin
-      chrisjefferson
-      timokau
-    ];
+      [
+        raskin
+        chrisjefferson
+        timokau
+      ];
     platforms = platforms.all;
     broken = stdenv.isDarwin;
     # keeping all packages increases the package size considerably, wchich

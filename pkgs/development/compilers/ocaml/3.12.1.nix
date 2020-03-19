@@ -1,11 +1,9 @@
 { stdenv, fetchurl, ncurses, xlibsWrapper }:
-
 let
-   useX11 = !stdenv.isAarch32 && !stdenv.isMips;
-   useNativeCompilers = !stdenv.isMips;
-   inherit (stdenv.lib) optionals optionalString;
+  useX11 = !stdenv.isAarch32 && !stdenv.isMips;
+  useNativeCompilers = !stdenv.isMips;
+  inherit (stdenv.lib) optionals optionalString;
 in
-
 stdenv.mkDerivation rec {
 
   pname = "ocaml";
@@ -17,9 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   prefixKey = "-prefix ";
-  configureFlags = ["-no-tk"] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
+  configureFlags = [ "-no-tk" ] ++ optionals useX11 [ "-x11lib" xlibsWrapper ];
   buildFlags = [ "world" ] ++ optionals useNativeCompilers [ "bootstrap" "world.opt" ];
-  buildInputs = [ncurses] ++ optionals useX11 [ xlibsWrapper ];
+  buildInputs = [ ncurses ] ++ optionals useX11 [ xlibsWrapper ];
   installTargets = "install" + optionalString useNativeCompilers " installopt";
   patches = optionals stdenv.isDarwin [ ./3.12.1-darwin-fix-configure.patch ];
   preConfigure = ''

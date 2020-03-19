@@ -1,5 +1,9 @@
-{
-  runCommand, squashfsTools, closureInfo, lib, jq, writeText
+{ runCommand
+, squashfsTools
+, closureInfo
+, lib
+, jq
+, writeText
 }:
 
 {
@@ -18,8 +22,10 @@
   # for determining what you you're missing.
   #
   meta
-}: let
-    snap_yaml = let
+}:
+let
+  snap_yaml =
+    let
       # Validate the snap's meta contains a name.
       # Also: automatically set the `base` parameter and the layout for
       # the `/nix` bind.
@@ -30,7 +36,7 @@
           # base: built from https://github.com/NixOS/snapd-nix-base
           # and published as The NixOS Foundation on the Snapcraft store.
           base = "nix-base";
-          layout = (args.layout or {}) // {
+          layout = (args.layout or { }) // {
             # Bind mount the Snap's root nix directory to `/nix` in the
             # execution environment's filesystem namespace.
             "/nix".bind = "$SNAP/nix";
@@ -44,7 +50,11 @@
   # is to just mirror this list against how snapcraft creates images.
   # from: https://github.com/snapcore/snapcraft/blob/b88e378148134383ffecf3658e3a940b67c9bcc9/snapcraft/internal/lifecycle/_packer.py#L96-L98
   mksquashfs_args = [
-    "-noappend" "-comp" "xz" "-no-xattrs" "-no-fragments"
+    "-noappend"
+    "-comp"
+    "xz"
+    "-no-xattrs"
+    "-no-fragments"
 
     # Note: We want -all-root every time, since all the files are
     # owned by root anyway. This is true for Nix, but not true for
@@ -52,8 +62,8 @@
     # from: https://github.com/snapcore/snapcraft/blob/b88e378148134383ffecf3658e3a940b67c9bcc9/snapcraft/internal/lifecycle/_packer.py#L100
     "-all-root"
   ];
-
-in runCommand "squashfs.img" {
+in
+runCommand "squashfs.img" {
   nativeBuildInputs = [ squashfsTools jq ];
 
   closureInfo = closureInfo {

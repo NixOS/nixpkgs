@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.minio;
 in
@@ -88,14 +87,16 @@ in
         Group = "minio";
         LimitNOFILE = 65536;
       };
-      environment = {
-        MINIO_REGION = "${cfg.region}";
-        MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
-      } // optionalAttrs (cfg.accessKey != "") {
-        MINIO_ACCESS_KEY = "${cfg.accessKey}";
-      } // optionalAttrs (cfg.secretKey != "") {
-        MINIO_SECRET_KEY = "${cfg.secretKey}";
-      };
+      environment =
+        {
+          MINIO_REGION = "${cfg.region}";
+          MINIO_BROWSER = "${if cfg.browser then "on" else "off"}";
+        }
+        // optionalAttrs (cfg.accessKey != "") {
+          MINIO_ACCESS_KEY = "${cfg.accessKey}";
+        } // optionalAttrs (cfg.secretKey != "") {
+          MINIO_SECRET_KEY = "${cfg.secretKey}";
+        };
     };
 
     users.users.minio = {

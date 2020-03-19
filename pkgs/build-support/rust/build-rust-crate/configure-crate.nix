@@ -18,19 +18,22 @@
 , release
 , target_os
 , verbose
-, workspace_member }:
-let version_ = lib.splitString "-" crateVersion;
-    versionPre = if lib.tail version_ == [] then "" else lib.elemAt version_ 1;
-    version = lib.splitVersion (lib.head version_);
-    rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
-        (if release then "-C opt-level=3" else "-C debuginfo=2")
-        (["-C codegen-units=$NIX_BUILD_CORES"] ++ extraRustcOpts);
-    buildDeps = mkRustcDepArgs buildDependencies crateRenames;
-    authors = lib.concatStringsSep ":" crateAuthors;
-    optLevel = if release then 3 else 0;
-    completeDepsDir = lib.concatStringsSep " " completeDeps;
-    completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
-in ''
+, workspace_member
+}:
+let
+  version_ = lib.splitString "-" crateVersion;
+  versionPre = if lib.tail version_ == [ ] then "" else lib.elemAt version_ 1;
+  version = lib.splitVersion (lib.head version_);
+  rustcOpts = lib.foldl' (opts: opt: opts + " " + opt)
+    (if release then "-C opt-level=3" else "-C debuginfo=2")
+    ([ "-C codegen-units=$NIX_BUILD_CORES" ] ++ extraRustcOpts);
+  buildDeps = mkRustcDepArgs buildDependencies crateRenames;
+  authors = lib.concatStringsSep ":" crateAuthors;
+  optLevel = if release then 3 else 0;
+  completeDepsDir = lib.concatStringsSep " " completeDeps;
+  completeBuildDepsDir = lib.concatStringsSep " " completeBuildDeps;
+in
+''
   ${echo_colored colors}
   ${noisily colors verbose}
   source ${./lib.sh}

@@ -12,7 +12,9 @@ python3Packages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyserial colorama websocket_client
+    pyserial
+    colorama
+    websocket_client
   ];
 
   meta = with lib; {

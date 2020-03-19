@@ -14,7 +14,7 @@ rec {
 
   packageName = "swank";
 
-  asdFilesToKeep = ["swank.asd"];
+  asdFilesToKeep = [ "swank.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM swank DESCRIPTION System lacks description SHA256

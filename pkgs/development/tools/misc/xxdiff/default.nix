@@ -1,4 +1,10 @@
-{ lib, mkDerivation, fetchFromBitbucket, docutils, bison, flex, qmake
+{ lib
+, mkDerivation
+, fetchFromBitbucket
+, docutils
+, bison
+, flex
+, qmake
 , qtbase
 }:
 

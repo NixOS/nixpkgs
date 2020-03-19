@@ -1,8 +1,26 @@
-{ fetchFromGitHub, fetchpatch, stdenv, wrapQtAppsHook, git, pcre, pugixml, qtbase, libsForQt5, qtmultimedia, qttools, yajl, libzip, hunspell
-, boost, libGLU, lua, cmake,  which, }:
-
+{ fetchFromGitHub
+, fetchpatch
+, stdenv
+, wrapQtAppsHook
+, git
+, pcre
+, pugixml
+, qtbase
+, libsForQt5
+, qtmultimedia
+, qttools
+, yajl
+, libzip
+, hunspell
+, boost
+, libGLU
+, lua
+, cmake
+, which
+,
+}:
 let
-  luaEnv = lua.withPackages(ps: with ps; [ luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8 ]);
+  luaEnv = lua.withPackages (ps: with ps; [ luazip luafilesystem lrexlib-pcre luasql-sqlite3 lua-yajl luautf8 ]);
 in
 stdenv.mkDerivation rec {
   pname = "mudlet";
@@ -18,7 +36,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake wrapQtAppsHook git qttools which ];
   buildInputs = [
-    pcre pugixml qtbase libsForQt5.qtkeychain qtmultimedia luaEnv libzip libGLU yajl boost hunspell
+    pcre
+    pugixml
+    qtbase
+    libsForQt5.qtkeychain
+    qtmultimedia
+    luaEnv
+    libzip
+    libGLU
+    yajl
+    boost
+    hunspell
   ];
 
   WITH_FONTS = "NO";
@@ -26,7 +54,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  installPhase =  ''
+  installPhase = ''
     mkdir -pv $out/lib
     cp 3rdparty/edbee-lib/edbee-lib/qslog/lib/libQsLog.so $out/lib
     mkdir -pv $out/bin

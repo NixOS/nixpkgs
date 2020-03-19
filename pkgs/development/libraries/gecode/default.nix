@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   nativeBuildInputs = [ bison flex ];
   buildInputs = [ perl gmp mpfr ]
-    ++ stdenv.lib.optional enableGist qtbase;
+  ++ stdenv.lib.optional enableGist qtbase;
 
   meta = with stdenv.lib; {
     license = licenses.mit;

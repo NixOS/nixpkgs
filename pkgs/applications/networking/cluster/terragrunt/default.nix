@@ -7,9 +7,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
   src = fetchFromGitHub {
-    owner  = "gruntwork-io";
-    repo   = "terragrunt";
-    rev    = "v${version}";
+    owner = "gruntwork-io";
+    repo = "terragrunt";
+    rev = "v${version}";
     sha256 = "1r3q7faxys0h147cr9154pcix1qgj36v41ja9hhbggm4c7vig4s1";
   };
 

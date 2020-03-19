@@ -1,4 +1,4 @@
-{ stdenv 
+{ stdenv
 , fetchgit
 }:
 stdenv.mkDerivation {

@@ -1,11 +1,11 @@
 { pkgs }:
 
 with pkgs;
-
 let
   mavenbuild = callPackage ../development/java-modules/build-maven-package.nix { };
   fetchMaven = callPackage ../development/java-modules/m2install.nix { };
-in {
+in
+{
   inherit mavenbuild fetchMaven;
 
   mavenPlugins = recurseIntoAttrs (callPackage ../development/java-modules/mavenPlugins.nix { });

@@ -1,13 +1,9 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.calibre-server;
-
 in
-
 {
 
   ###### interface
@@ -21,8 +17,8 @@ in
       libraryDir = mkOption {
         description = ''
           The directory where the Calibre library to serve is.
-          '';
-          type = types.path;
+        '';
+        type = types.path;
       };
 
     };
@@ -50,13 +46,13 @@ in
     environment.systemPackages = [ pkgs.calibre ];
 
     users.users.calibre-server = {
-        uid = config.ids.uids.calibre-server;
-        group = "calibre-server";
-      };
+      uid = config.ids.uids.calibre-server;
+      group = "calibre-server";
+    };
 
     users.groups.calibre-server = {
-        gid = config.ids.gids.calibre-server;
-      };
+      gid = config.ids.gids.calibre-server;
+    };
 
   };
 

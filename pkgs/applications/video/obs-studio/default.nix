@@ -1,4 +1,5 @@
-{ config, stdenv
+{ config
+, stdenv
 , mkDerivation
 , fetchFromGitHub
 , cmake
@@ -32,10 +33,10 @@
 , pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
 , libpulseaudio
 }:
-
 let
   inherit (stdenv.lib) optional optionals;
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "obs-studio";
   version = "24.0.6";
 
@@ -48,27 +49,28 @@ in mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
 
-  buildInputs = [ curl
-                  fdk_aac
-                  ffmpeg
-                  jansson
-                  libjack2
-                  libv4l
-                  libxkbcommon
-                  libpthreadstubs
-                  libXdmcp
-                  qtbase
-                  qtx11extras
-                  qtsvg
-                  speex
-                  x264
-                  vlc
-                  makeWrapper
-                  mbedtls
-                ]
-                ++ optionals scriptingSupport [ luajit swig python3 ]
-                ++ optional alsaSupport alsaLib
-                ++ optional pulseaudioSupport libpulseaudio;
+  buildInputs = [
+    curl
+    fdk_aac
+    ffmpeg
+    jansson
+    libjack2
+    libv4l
+    libxkbcommon
+    libpthreadstubs
+    libXdmcp
+    qtbase
+    qtx11extras
+    qtsvg
+    speex
+    x264
+    vlc
+    makeWrapper
+    mbedtls
+  ]
+  ++ optionals scriptingSupport [ luajit swig python3 ]
+  ++ optional alsaSupport alsaLib
+  ++ optional pulseaudioSupport libpulseaudio;
 
   # obs attempts to dlopen libobs-opengl, it fails unless we make sure
   # DL_OPENGL is an explicit path. Not sure if there's a better way
@@ -76,8 +78,8 @@ in mkDerivation rec {
   cmakeFlags = [ "-DCMAKE_CXX_FLAGS=-DDL_OPENGL=\\\"$(out)/lib/libobs-opengl.so\\\"" ];
 
   postInstall = ''
-      wrapProgram $out/bin/obs \
-        --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
+    wrapProgram $out/bin/obs \
+      --prefix "LD_LIBRARY_PATH" : "${xorg.libX11.out}/lib:${vlc}/lib"
   '';
 
   meta = with stdenv.lib; {

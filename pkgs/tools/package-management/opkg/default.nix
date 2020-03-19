@@ -1,5 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, curl, gpgme, libarchive, bzip2, lzma, attr, acl, libxml2
-, autoreconfHook }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, curl
+, gpgme
+, libarchive
+, bzip2
+, lzma
+, attr
+, acl
+, libxml2
+, autoreconfHook
+}:
 
 stdenv.mkDerivation rec {
   version = "0.4.2";

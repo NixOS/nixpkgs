@@ -23,13 +23,12 @@ stdenv.mkDerivation {
     make install DESTDIR=$out
     mv $out/$out/sbin $out/bin
     rm -r $out/nix
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "LUKS key storage in TPM NVRAM";
-    homepage    = https://github.com/shpedoikal/tpm-luks/;
+    homepage = https://github.com/shpedoikal/tpm-luks/;
     maintainers = [ maintainers.tstrobel ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }
-

@@ -1,4 +1,7 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPyPy
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPyPy
 , dnspython
 , geoip2
 , ipython

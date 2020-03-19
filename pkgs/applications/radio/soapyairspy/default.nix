@@ -1,11 +1,13 @@
-{ stdenv, fetchFromGitHub, cmake
-, airspy, soapysdr
-} :
-
+{ stdenv
+, fetchFromGitHub
+, cmake
+, airspy
+, soapysdr
+}:
 let
   version = "0.1.2";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "soapyairspy";
   inherit version;
 

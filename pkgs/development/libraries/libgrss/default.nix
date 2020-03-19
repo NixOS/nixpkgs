@@ -1,5 +1,4 @@
 { stdenv, fetchurl, pkgconfig, vala, gobject-introspection, gtk-doc, docbook_xsl, docbook_xml_dtd_412, glib, libxml2, libsoup, gnome3 }:
-
 let
   version = "0.7.0";
   pname = "libgrss";

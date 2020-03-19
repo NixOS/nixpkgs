@@ -10,7 +10,15 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib libclthreads libclxclient libX11 libXft libXrender fftwFloat libjack2 zita-alsa-pcmi
+    alsaLib
+    libclthreads
+    libclxclient
+    libX11
+    libXft
+    libXrender
+    fftwFloat
+    libjack2
+    zita-alsa-pcmi
   ];
 
   makeFlags = [

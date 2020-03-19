@@ -8,13 +8,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "smugline";
+  pname = "smugline";
   version = "20160106";
 
   src = fetchFromGitHub {
-    owner  = "gingerlime";
-    repo   = pname;
-    rev    = "134554c574c2d282112ba60165a8c5ffe0f16fd4";
+    owner = "gingerlime";
+    repo = pname;
+    rev = "134554c574c2d282112ba60165a8c5ffe0f16fd4";
     sha256 = "00n012ijkdrx8wsl8x3ghdcxcdp29s4kwr3yxvlyj79g5yhfvaj6";
   };
 

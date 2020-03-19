@@ -1,5 +1,18 @@
-{ stdenv, fetchurl, SDL2, ftgl, pkgconfig, libpng, libjpeg, pcre
-, SDL2_image, freetype, glew, libGLU, libGL, boost, glm
+{ stdenv
+, fetchurl
+, SDL2
+, ftgl
+, pkgconfig
+, libpng
+, libjpeg
+, pcre
+, SDL2_image
+, freetype
+, glew
+, libGLU
+, libGL
+, boost
+, glm
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +26,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glew SDL2 ftgl libpng libjpeg pcre SDL2_image libGLU libGL
-    boost glm freetype
+    glew
+    SDL2
+    ftgl
+    libpng
+    libjpeg
+    pcre
+    SDL2_image
+    libGLU
+    libGL
+    boost
+    glm
+    freetype
   ];
 
   configureFlags = [ "--with-boost-libdir=${boost.out}/lib" ];

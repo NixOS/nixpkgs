@@ -1,7 +1,6 @@
 { stdenv, fetchgit, udev, utillinux, mountPath ? "/media/" }:
 
 assert mountPath != "";
-
 let
   version = "0.5";
   git = https://github.com/LemonBoy/ldm.git;

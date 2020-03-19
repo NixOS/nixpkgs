@@ -23,10 +23,8 @@
 , makeDesktopItem
 , removeReferencesTo
 }:
-
 let
   pypkgs = python2Packages;
-
 in
 mkDerivation rec {
   pname = "calibre";

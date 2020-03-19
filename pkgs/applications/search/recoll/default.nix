@@ -1,9 +1,33 @@
-{ stdenv, fetchurl, lib, bison
-, qt4, xapian, file, python, perl
-, djvulibre, groff, libxslt, unzip, poppler_utils, antiword, catdoc, lyx
-, libwpd, unrtf, untex
-, ghostscript, gawk, gnugrep, gnused, gnutar, gzip, libiconv, zlib
-, withGui ? true }:
+{ stdenv
+, fetchurl
+, lib
+, bison
+, qt4
+, xapian
+, file
+, python
+, perl
+, djvulibre
+, groff
+, libxslt
+, unzip
+, poppler_utils
+, antiword
+, catdoc
+, lyx
+, libwpd
+, unrtf
+, untex
+, ghostscript
+, gawk
+, gnugrep
+, gnused
+, gnutar
+, gzip
+, libiconv
+, zlib
+, withGui ? true
+}:
 
 assert stdenv.hostPlatform.system != "powerpc-linux";
 
@@ -17,12 +41,12 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [ "--enable-recollq" ]
-    ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
-    ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
+  ++ lib.optionals (!withGui) [ "--disable-qtgui" "--disable-x11mon" ]
+  ++ (if stdenv.isLinux then [ "--with-inotify" ] else [ "--without-inotify" ]);
 
   buildInputs = [ xapian file python bison zlib ]
-    ++ lib.optional withGui qt4
-    ++ lib.optional stdenv.isDarwin libiconv;
+  ++ lib.optional withGui qt4
+  ++ lib.optional stdenv.isDarwin libiconv;
 
   patchPhase = stdenv.lib.optionalString stdenv.isDarwin ''
     sed -i 's/-Wl,--no-undefined -Wl,--warn-unresolved-symbols//' Makefile.am

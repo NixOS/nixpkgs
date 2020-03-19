@@ -1,5 +1,4 @@
 { stdenv, appimage-run, fetchurl, runtimeShell }:
-
 let
   version = "3.0.15";
 
@@ -13,7 +12,6 @@ let
     x86_64-linux = "130n586cw0836zsbwqcz3pp3h0d4ny74ngqs4k4cvfb92556r7xh";
   }.${stdenv.hostPlatform.system};
 in
-
 stdenv.mkDerivation {
   pname = "standardnotes";
   inherit version;

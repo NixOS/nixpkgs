@@ -1,5 +1,4 @@
 { stdenv, fetchurl }:
-
 let
   fetchDB = src: sha256: fetchurl {
     inherit sha256;

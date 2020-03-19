@@ -1,17 +1,26 @@
-{ stdenv, fetchurl
-, automake, autoconf, libtool, pkgconfig, autoconf-archive
-, libxml2, icu, bzip2, libtar
-, languageMachines }:
-
+{ stdenv
+, fetchurl
+, automake
+, autoconf
+, libtool
+, pkgconfig
+, autoconf-archive
+, libxml2
+, icu
+, bzip2
+, libtar
+, languageMachines
+}:
 let
   release = builtins.fromJSON (builtins.readFile ./release-info/LanguageMachines-libfolia.json);
 in
-
 stdenv.mkDerivation {
   name = "libfolia-${release.version}";
   version = release.version;
-  src = fetchurl { inherit (release) url sha256;
-                   name = "libfolia-${release.version}.tar.gz"; };
+  src = fetchurl {
+    inherit (release) url sha256;
+    name = "libfolia-${release.version}.tar.gz";
+  };
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ automake autoconf bzip2 libtool autoconf-archive libtar libxml2 icu languageMachines.ticcutils ];
   preConfigure = "sh bootstrap.sh";
@@ -21,9 +30,9 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "A C++ API for FoLiA documents; an XML-based linguistic annotation format.";
-    homepage    = https://proycon.github.io/folia/;
-    license     = licenses.gpl3;
-    platforms   = platforms.all;
+    homepage = https://proycon.github.io/folia/;
+    license = licenses.gpl3;
+    platforms = platforms.all;
     maintainers = with maintainers; [ roberth ];
 
     longDescription = ''

@@ -35,7 +35,8 @@ with lib;
     services.xinetd.enable = true;
 
     services.xinetd.services = singleton
-      { name = "tftp";
+      {
+        name = "tftp";
         protocol = "udp";
         server = "${pkgs.netkittftp}/sbin/in.tftpd";
         serverArgs = "${config.services.tftpd.path}";

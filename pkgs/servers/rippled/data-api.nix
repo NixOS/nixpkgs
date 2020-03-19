@@ -1,10 +1,10 @@
 { lib, fetchgit, nodePackages }:
 
 with lib;
-
 let
   np = nodePackages.override { generated = ./package.nix; self = np; };
-in nodePackages.buildNodePackage rec {
+in
+nodePackages.buildNodePackage rec {
   name = "ripple-data-api-${version}";
   version = lib.strings.substring 0 7 rev;
   rev = "c56b860105f36c1c44ae011189d495272648c589";

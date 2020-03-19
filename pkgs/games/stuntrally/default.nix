@@ -1,5 +1,19 @@
-{ fetchurl, stdenv, cmake, boost, ogre, mygui, ois, SDL2, libvorbis, pkgconfig
-, makeWrapper, enet, libXcursor, bullet, openal }:
+{ fetchurl
+, stdenv
+, cmake
+, boost
+, ogre
+, mygui
+, ois
+, SDL2
+, libvorbis
+, pkgconfig
+, makeWrapper
+, enet
+, libXcursor
+, bullet
+, openal
+}:
 
 stdenv.mkDerivation rec {
   pname = "stunt-rally";
@@ -17,7 +31,7 @@ stdenv.mkDerivation rec {
 
   # include/OGRE/OgreException.h:265:126: error: invalid conversion from
   # 'int' to 'Ogre::Exception::ExceptionCodes' [-fpermissive]
-  NIX_CFLAGS_COMPILE="-fpermissive";
+  NIX_CFLAGS_COMPILE = "-fpermissive";
 
   preConfigure = ''
     pushd data
@@ -27,8 +41,19 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ cmake boost ogre mygui ois SDL2 libvorbis 
-    makeWrapper enet libXcursor bullet openal
+  buildInputs = [
+    cmake
+    boost
+    ogre
+    mygui
+    ois
+    SDL2
+    libvorbis
+    makeWrapper
+    enet
+    libXcursor
+    bullet
+    openal
   ];
 
   enableParallelBuilding = true;

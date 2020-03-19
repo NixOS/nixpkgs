@@ -1,8 +1,27 @@
-{ stdenv, fetchFromGitHub, pkgconfig, libtool, curl
-, python, munge, perl, pam, openssl, zlib
-, ncurses, libmysqlclient, gtk2, lua, hwloc, numactl
-, readline, freeipmi, libssh2, xorg, lz4, rdma-core
-# enable internal X11 support via libssh2
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, libtool
+, curl
+, python
+, munge
+, perl
+, pam
+, openssl
+, zlib
+, ncurses
+, libmysqlclient
+, gtk2
+, lua
+, hwloc
+, numactl
+, readline
+, freeipmi
+, libssh2
+, xorg
+, lz4
+, rdma-core
+  # enable internal X11 support via libssh2
 , enableX11 ? true
 }:
 
@@ -16,7 +35,7 @@ stdenv.mkDerivation rec {
     owner = "SchedMD";
     repo = "slurm";
     # The release tags use - instead of .
-    rev = "${pname}-${builtins.replaceStrings ["."] ["-"] version}";
+    rev = "${pname}-${builtins.replaceStrings [ "." ] [ "-" ] version}";
     sha256 = "0f0gv3sirp6sxdrbwydsbcqicjbmrpm58yhgbsar8v6nx3g6y3hx";
   };
 
@@ -34,13 +53,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig libtool ];
   buildInputs = [
-    curl python munge perl pam openssl zlib
-      libmysqlclient ncurses gtk2 lz4 rdma-core
-      lua hwloc numactl readline freeipmi
+    curl
+    python
+    munge
+    perl
+    pam
+    openssl
+    zlib
+    libmysqlclient
+    ncurses
+    gtk2
+    lz4
+    rdma-core
+    lua
+    hwloc
+    numactl
+    readline
+    freeipmi
   ] ++ stdenv.lib.optionals enableX11 [ libssh2 xorg.xauth ];
 
   configureFlags = with stdenv.lib;
-    [ "--with-freeipmi=${freeipmi}"
+    [
+      "--with-freeipmi=${freeipmi}"
       "--with-hwloc=${hwloc.dev}"
       "--with-lz4=${lz4.dev}"
       "--with-munge=${munge}"
@@ -48,9 +82,9 @@ stdenv.mkDerivation rec {
       "--with-zlib=${zlib}"
       "--with-ofed=${rdma-core}"
       "--sysconfdir=/etc/slurm"
-    ] ++ (optional (gtk2 == null)  "--disable-gtktest")
-      ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")
-      ++ (optional (!enableX11) "--disable-x11");
+    ] ++ (optional (gtk2 == null) "--disable-gtktest")
+    ++ (optional enableX11 "--with-libssh2=${libssh2.dev}")
+    ++ (optional (!enableX11) "--disable-x11");
 
 
   preConfigure = ''

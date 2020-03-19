@@ -41,7 +41,7 @@ buildPythonPackage rec {
   ];
 
   postInstall = ''
-  rm -r $out/bin
+    rm -r $out/bin
   '';
 
   meta = with lib; {

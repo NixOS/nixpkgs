@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.security.rngd;
 in
@@ -50,7 +49,7 @@ in
       unitConfig.DefaultDependencies = false;
       serviceConfig = {
         ExecStart = "${pkgs.rng-tools}/sbin/rngd -f"
-          + optionalString cfg.debug " -d";
+        + optionalString cfg.debug " -d";
         # PrivateTmp would introduce a circular dependency if /tmp is on tmpfs and swap is encrypted,
         # thus depending on rngd before swap, while swap depends on rngd to avoid entropy starvation.
         NoNewPrivileges = true;

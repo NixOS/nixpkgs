@@ -15,9 +15,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ openssl nettle ];
 
   configureFlags = [
-     "--with-ssl=${openssl.dev}"
-     "--sysconfdir=/etc"
-     "--localstatedir=/var"
+    "--with-ssl=${openssl.dev}"
+    "--sysconfdir=/etc"
+    "--localstatedir=/var"
   ];
 
   meta = with stdenv.lib; {

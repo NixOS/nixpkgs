@@ -14,7 +14,7 @@ rec {
 
   packageName = "trivia.quasiquote";
 
-  asdFilesToKeep = ["trivia.quasiquote.asd"];
+  asdFilesToKeep = [ "trivia.quasiquote.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM trivia.quasiquote DESCRIPTION fare-quasiquote extension for trivia

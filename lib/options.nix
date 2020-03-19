@@ -28,28 +28,28 @@ rec {
   */
   mkOption =
     {
-    # Default value used when no definition is given in the configuration.
-    default ? null,
-    # Textual representation of the default, for the manual.
-    defaultText ? null,
-    # Example value used in the manual.
-    example ? null,
-    # String describing the option.
-    description ? null,
-    # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
-    relatedPackages ? null,
-    # Option type, providing type-checking and value merging.
-    type ? null,
-    # Function that converts the option value to something else.
-    apply ? null,
-    # Whether the option is for NixOS developers only.
-    internal ? null,
-    # Whether the option shows up in the manual.
-    visible ? null,
-    # Whether the option can be set only once
-    readOnly ? null,
-    # Deprecated, used by types.optionSet.
-    options ? null
+      # Default value used when no definition is given in the configuration.
+      default ? null
+    , # Textual representation of the default, for the manual.
+      defaultText ? null
+    , # Example value used in the manual.
+      example ? null
+    , # String describing the option.
+      description ? null
+    , # Related packages used in the manual (see `genRelatedPackages` in ../nixos/lib/make-options-doc/default.nix).
+      relatedPackages ? null
+    , # Option type, providing type-checking and value merging.
+      type ? null
+    , # Function that converts the option value to something else.
+      apply ? null
+    , # Whether the option is for NixOS developers only.
+      internal ? null
+    , # Whether the option shows up in the manual.
+      visible ? null
+    , # Whether the option can be set only once
+      readOnly ? null
+    , # Deprecated, used by types.optionSet.
+      options ? null
     } @ attrs:
     attrs // { _type = "option"; };
 
@@ -63,52 +63,72 @@ rec {
   mkEnableOption =
     # Name for the created option
     name: mkOption {
-    default = false;
-    example = true;
-    description = "Whether to enable ${name}.";
-    type = lib.types.bool;
-  };
+      default = false;
+      example = true;
+      description = "Whether to enable ${name}.";
+      type = lib.types.bool;
+    };
 
   /* This option accepts anything, but it does not produce any result.
 
      This is useful for sharing a module across different module sets
      without having to implement similar features as long as the
      values of the options are not accessed. */
-  mkSinkUndeclaredOptions = attrs: mkOption ({
-    internal = true;
-    visible = false;
-    default = false;
-    description = "Sink for option definitions.";
-    type = mkOptionType {
-      name = "sink";
-      check = x: true;
-      merge = loc: defs: false;
-    };
-    apply = x: throw "Option value is not readable because the option is not declared.";
-  } // attrs);
+  mkSinkUndeclaredOptions = attrs: mkOption (
+    {
+      internal = true;
+      visible = false;
+      default = false;
+      description = "Sink for option definitions.";
+      type = mkOptionType {
+        name = "sink";
+        check = x: true;
+        merge = loc: defs: false;
+      };
+      apply = x: throw "Option value is not readable because the option is not declared.";
+    }
+    // attrs
+  );
 
   mergeDefaultOption = loc: defs:
     let list = getValues defs; in
-    if length list == 1 then head list
-    else if all isFunction list then x: mergeDefaultOption loc (map (f: f x) list)
-    else if all isList list then concatLists list
-    else if all isAttrs list then foldl' lib.mergeAttrs {} list
-    else if all isBool list then foldl' lib.or false list
-    else if all isString list then lib.concatStrings list
-    else if all isInt list && all (x: x == head list) list then head list
-    else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
+      if length list == 1 then head list
+      else
+        if all isFunction list
+        then x: mergeDefaultOption loc (map (f: f x) list)
+        else
+          if all isList list
+          then concatLists list
+          else
+            if all isAttrs list
+            then foldl' lib.mergeAttrs { } list
+            else
+              if all isBool list
+              then foldl' lib.or false list
+              else
+                if all isString list
+                then lib.concatStrings list
+                else
+                  if all isInt list && all (x: x == head list) list
+                  then head list
+                  else throw "Cannot merge definitions of `${showOption loc}' given in ${showFiles (getFiles defs)}.";
 
   mergeOneOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
-    else if length defs != 1 then
-      throw "The unique option `${showOption loc}' is defined multiple times, in:\n - ${concatStringsSep "\n - " (getFiles defs)}."
-    else (head defs).value;
+    if defs == [ ]
+    then abort "This case should never happen."
+    else
+      if length defs != 1
+      then
+        throw "The unique option `${showOption loc}' is defined multiple times, in:\n - ${concatStringsSep "\n - " (getFiles defs)}."
+      else (head defs).value;
 
   /* "Merge" option definitions by checking that they all have the same value. */
   mergeEqualOption = loc: defs:
-    if defs == [] then abort "This case should never happen."
+    if defs == [ ]
+    then abort "This case should never happen."
     else foldl' (val: def:
-      if def.value != val then
+      if def.value != val
+      then
         throw "The option `${showOption loc}' has conflicting definitions, in ${showFiles (getFiles defs)}."
       else
         val) (head defs).value defs;
@@ -135,12 +155,13 @@ rec {
 
   # Generate documentation template from the list of option declaration like
   # the set generated with filterOptionSets.
-  optionAttrSetToDocList = optionAttrSetToDocList' [];
+  optionAttrSetToDocList = optionAttrSetToDocList' [ ];
 
   optionAttrSetToDocList' = prefix: options:
     concatMap (opt:
       let
-        docOption = rec {
+        docOption = rec
+        {
           loc = opt.loc;
           name = showOption opt.loc;
           description = opt.description or (lib.warn "Option `${name}' has no description." "This option has no description.");
@@ -156,10 +177,12 @@ rec {
         // optionalAttrs (opt ? relatedPackages && opt.relatedPackages != null) { inherit (opt) relatedPackages; };
 
         subOptions =
-          let ss = opt.type.getSubOptions opt.loc;
-          in if ss != {} then optionAttrSetToDocList' opt.loc ss else [];
+          let
+            ss = opt.type.getSubOptions opt.loc;
+          in if ss != { } then optionAttrSetToDocList' opt.loc ss else [ ];
       in
-        [ docOption ] ++ subOptions) (collect isOption options);
+        [ docOption ] ++ subOptions
+    ) (collect isOption options);
 
 
   /* This function recursively removes all derivation attributes from
@@ -171,11 +194,16 @@ rec {
      manual generator.
   */
   scrubOptionValue = x:
-    if isDerivation x then
+    if isDerivation x
+    then
       { type = "derivation"; drvPath = x.name; outPath = x.name; name = x.name; }
-    else if isList x then map scrubOptionValue x
-    else if isAttrs x then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x ["_args"])
-    else x;
+    else
+      if isList x
+      then map scrubOptionValue x
+      else
+        if isAttrs x
+        then mapAttrs (n: v: scrubOptionValue v) (removeAttrs x [ "_args" ])
+        else x;
 
 
   /* For use in the `example` option attribute. It causes the given
@@ -193,13 +221,15 @@ rec {
        (showOption ["foo" "bar" "baz"]) == "foo.bar.baz"
        (showOption ["foo" "bar.baz" "tux"]) == "foo.\"bar.baz\".tux"
   */
-  showOption = parts: let
-    escapeOptionPart = part:
-      let
-        escaped = lib.strings.escapeNixString part;
-      in if escaped == "\"${part}\""
-         then part
-         else escaped;
+  showOption = parts:
+    let
+      escapeOptionPart = part:
+        let
+          escaped = lib.strings.escapeNixString part;
+        in
+          if escaped == "\"${part}\""
+          then part
+          else escaped;
     in (concatStringsSep ".") (map escapeOptionPart parts);
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
   unknownModule = "<unknown-file>";

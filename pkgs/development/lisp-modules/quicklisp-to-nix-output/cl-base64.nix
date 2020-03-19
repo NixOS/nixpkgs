@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-base64";
 
-  asdFilesToKeep = ["cl-base64.asd"];
+  asdFilesToKeep = [ "cl-base64.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-base64 DESCRIPTION Base64 encoding and decoding with URI support.

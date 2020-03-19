@@ -17,7 +17,7 @@ rec {
 
   packageName = "split-sequence";
 
-  asdFilesToKeep = ["split-sequence.asd"];
+  asdFilesToKeep = [ "split-sequence.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM split-sequence DESCRIPTION

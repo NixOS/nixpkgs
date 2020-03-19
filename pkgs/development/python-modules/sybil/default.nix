@@ -1,8 +1,13 @@
-{ stdenv, buildPythonApplication, fetchPypi, fetchpatch
-, pytest, nose }:
+{ stdenv
+, buildPythonApplication
+, fetchPypi
+, fetchpatch
+, pytest
+, nose
+}:
 
 buildPythonApplication rec {
-  pname   = "sybil";
+  pname = "sybil";
   version = "1.0.9";
 
   src = fetchPypi {
@@ -25,7 +30,7 @@ buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Automated testing for the examples in your documentation.";
-    homepage    = https://github.com/cjw296/sybil/;
-    license     = licenses.mit;
+    homepage = https://github.com/cjw296/sybil/;
+    license = licenses.mit;
   };
 }

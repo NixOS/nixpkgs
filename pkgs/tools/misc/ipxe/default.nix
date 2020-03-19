@@ -1,8 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, perl, cdrkit, syslinux, xz, openssl, gnu-efi, mtools
+{ stdenv
+, lib
+, fetchFromGitHub
+, perl
+, cdrkit
+, syslinux
+, xz
+, openssl
+, gnu-efi
+, mtools
 , embedScript ? null
-, additionalTargets ? {}
+, additionalTargets ? { }
 }:
-
 let
   targets = additionalTargets // lib.optionalAttrs stdenv.isx86_64 {
     "bin-x86_64-efi/ipxe.efi" = null;
@@ -16,7 +24,6 @@ let
     "bin/undionly.kpxe" = null;
   };
 in
-
 stdenv.mkDerivation rec {
   pname = "ipxe";
   version = "1.20.1";
@@ -36,7 +43,9 @@ stdenv.mkDerivation rec {
   NIX_CFLAGS_COMPILE = "-Wno-error";
 
   makeFlags =
-    [ "ECHO_E_BIN_ECHO=echo" "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
+    [
+      "ECHO_E_BIN_ECHO=echo"
+      "ECHO_E_BIN_ECHO_E=echo" # No /bin/echo here.
       "ISOLINUX_BIN_LIST=${syslinux}/share/syslinux/isolinux.bin"
       "LDLINUX_C32=${syslinux}/share/syslinux/ldlinux.c32"
     ] ++ lib.optional (embedScript != null) "EMBED=${embedScript}";
@@ -63,10 +72,11 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out
-    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (from: to:
-      if to == null
-      then "cp -v ${from} $out"
-      else "cp -v ${from} $out/${to}") targets)}
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList
+      (from: to:
+          if to == null
+          then "cp -v ${from} $out"
+          else "cp -v ${from} $out/${to}") targets)}
 
     # Some PXE constellations especially with dnsmasq are looking for the file with .0 ending
     # let's provide it as a symlink to be compatible in this case.
@@ -76,7 +86,8 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib;
-    { description = "Network boot firmware";
+    {
+      description = "Network boot firmware";
       homepage = https://ipxe.org/;
       license = licenses.gpl2;
       maintainers = with maintainers; [ ehmry ];

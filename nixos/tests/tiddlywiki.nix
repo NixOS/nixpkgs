@@ -13,8 +13,8 @@ import ./make-test-python.nix ({ ... }: {
         enable = true;
         listenOptions = {
           port = 3000;
-          credentials="../wikiusers.csv";
-          readers="(authenticated)";
+          credentials = "../wikiusers.csv";
+          readers = "(authenticated)";
         };
       };
     };

@@ -50,8 +50,6 @@
 # Also make sure that whenever you use a resolver from a different test node
 # that it has to be started _before_ the ACME service.
 { config, pkgs, lib, ... }:
-
-
 let
   snakeOilCerts = import ./snakeoil-certs.nix;
 
@@ -63,10 +61,11 @@ let
   siteCertFile = snakeOilCerts.${siteDomain}.cert;
   siteKeyFile = snakeOilCerts.${siteDomain}.key;
   pebble = pkgs.pebble;
-  resolver = let
-    message = "You need to define a resolver for the letsencrypt test module.";
-    firstNS = lib.head config.networking.nameservers;
-  in if config.networking.nameservers == [] then throw message else firstNS;
+  resolver =
+    let
+      message = "You need to define a resolver for the letsencrypt test module.";
+      firstNS = lib.head config.networking.nameservers;
+    in if config.networking.nameservers == [ ] then throw message else firstNS;
 
   pebbleConf.pebble = {
     listenAddress = "0.0.0.0:443";
@@ -80,8 +79,8 @@ let
 
   pebbleConfFile = pkgs.writeText "pebble.conf" (builtins.toJSON pebbleConf);
   pebbleDataDir = "/root/pebble";
-
-in {
+in
+{
   imports = [ ../resolver.nix ];
 
   options.test-support.letsencrypt.caCert = lib.mkOption {
@@ -95,9 +94,10 @@ in {
 
   config = {
     test-support = {
-      resolver.enable = let
-        isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
-      in lib.mkOverride 900 isLocalResolver;
+      resolver.enable =
+        let
+          isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
+        in lib.mkOverride 900 isLocalResolver;
       letsencrypt.caCert = snakeOilCerts.ca.cert;
     };
 

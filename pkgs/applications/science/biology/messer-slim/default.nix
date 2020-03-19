@@ -1,7 +1,7 @@
 { stdenv, fetchurl, cmake, gcc, gcc-unwrapped }:
 
 stdenv.mkDerivation rec {
-  version = "3.2.1"; 
+  version = "3.2.1";
   pname = "messer-slim";
 
   src = fetchurl {
@@ -13,15 +13,16 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake gcc gcc-unwrapped ];
 
-  cmakeFlags = [ "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar" 
-                 "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib" ];
+  cmakeFlags = [
+    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+  ];
 
   meta = {
-     description = "An evolutionary simulation framework";
-     homepage = https://messerlab.org/slim/;
-     license = with stdenv.lib.licenses; [ gpl3 ];
-     maintainers = with stdenv.lib.maintainers; [ bzizou ];
-     platforms = stdenv.lib.platforms.all;
+    description = "An evolutionary simulation framework";
+    homepage = https://messerlab.org/slim/;
+    license = with stdenv.lib.licenses; [ gpl3 ];
+    maintainers = with stdenv.lib.maintainers; [ bzizou ];
+    platforms = stdenv.lib.platforms.all;
   };
 }
-

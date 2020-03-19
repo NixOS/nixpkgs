@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ocaml, findlib}:
+{ stdenv, fetchurl, ocaml, findlib }:
 let
   pname = "xml-light";
   version = "2.4";
@@ -19,7 +19,7 @@ stdenv.mkDerivation {
     make all
     make opt
   '';
-  
+
   installPhase = ''
     make install_ocamlfind
     mkdir -p $out/share
@@ -38,6 +38,6 @@ stdenv.mkDerivation {
     homepage = http://tech.motion-twin.com/xmllight.html;
     license = stdenv.lib.licenses.lgpl21;
     maintainers = [ stdenv.lib.maintainers.romildo ];
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
   };
 }

@@ -1,11 +1,10 @@
 { pkgs, lib, config, ... }:
 
 with lib;
-
 let
   cfg = config.services.mathics;
-
-in {
+in
+{
   options = {
     services.mathics = {
       enable = mkEnableOption "Mathics notebook service";
@@ -45,7 +44,8 @@ in {
         Group = config.users.groups.mathics.name;
         ExecStart = concatStringsSep " " [
           "${pkgs.mathics}/bin/mathicsserver"
-          "--port" (toString cfg.port)
+          "--port"
+          (toString cfg.port)
           (if cfg.external then "--external" else "")
         ];
       };

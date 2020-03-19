@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi, beautifulsoup4, vcrpy, mock
-, django-mailman3, mailmanclient, readme_renderer
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, beautifulsoup4
+, vcrpy
+, mock
+, django-mailman3
+, mailmanclient
+, readme_renderer
 }:
 
 buildPythonPackage rec {

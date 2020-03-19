@@ -1,12 +1,18 @@
-{ stdenv, rustPlatform, fetchFromGitHub
-, pkgconfig, openssl
-, Security, CoreServices
-, dbBackend ? "sqlite", libmysqlclient, postgresql }:
-
+{ stdenv
+, rustPlatform
+, fetchFromGitHub
+, pkgconfig
+, openssl
+, Security
+, CoreServices
+, dbBackend ? "sqlite"
+, libmysqlclient
+, postgresql
+}:
 let
   featuresFlag = "--features ${dbBackend}";
-
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "bitwarden_rs";
   version = "1.14";
 
@@ -19,9 +25,9 @@ in rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = with stdenv.lib; [ openssl ]
-    ++ optionals stdenv.isDarwin [ Security CoreServices ]
-    ++ optional (dbBackend == "mysql") libmysqlclient
-    ++ optional (dbBackend == "postgresql") postgresql;
+  ++ optionals stdenv.isDarwin [ Security CoreServices ]
+  ++ optional (dbBackend == "mysql") libmysqlclient
+  ++ optional (dbBackend == "postgresql") postgresql;
 
   RUSTC_BOOTSTRAP = 1;
 

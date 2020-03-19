@@ -1,4 +1,4 @@
-{stdenv, fetchurl, perl, bash}:
+{ stdenv, fetchurl, perl, bash }:
 
 stdenv.mkDerivation {
   name = "atool-0.39.0";

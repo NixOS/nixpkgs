@@ -16,4 +16,3 @@ python2Packages.buildPythonApplication rec {
     description = "Version control tools integration tool";
   };
 }
-

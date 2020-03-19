@@ -123,13 +123,13 @@ in
     networking.firewall = mkIf cfg.openPorts {
       # https://help.ubnt.com/hc/en-us/articles/218506997
       allowedTCPPorts = [
-        8080  # Port for UAP to inform controller.
-        8880  # Port for HTTP portal redirect, if guest portal is enabled.
-        8843  # Port for HTTPS portal redirect, ditto.
-        6789  # Port for UniFi mobile speed test.
+        8080 # Port for UAP to inform controller.
+        8880 # Port for HTTP portal redirect, if guest portal is enabled.
+        8843 # Port for HTTPS portal redirect, ditto.
+        6789 # Port for UniFi mobile speed test.
       ];
       allowedUDPPorts = [
-        3478  # UDP port used for STUN.
+        3478 # UDP port used for STUN.
         10001 # UDP port used for device discovery.
       ];
     };
@@ -138,13 +138,13 @@ in
     # This is because the controller resolves all symlinks to absolute paths
     # to be used as the working directory.
     systemd.mounts = map ({ what, where }: {
-        bindsTo = [ "unifi.service" ];
-        partOf = [ "unifi.service" ];
-        unitConfig.RequiresMountsFor = stateDir;
-        options = "bind";
-        what = what;
-        where = where;
-      }) mountPoints;
+      bindsTo = [ "unifi.service" ];
+      partOf = [ "unifi.service" ];
+      unitConfig.RequiresMountsFor = stateDir;
+      options = "bind";
+      what = what;
+      where = where;
+    }) mountPoints;
 
     systemd.tmpfiles.rules = [
       "d '${stateDir}' 0700 unifi - - -"

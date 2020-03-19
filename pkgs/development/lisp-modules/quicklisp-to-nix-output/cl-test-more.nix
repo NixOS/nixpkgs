@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-test-more";
 
-  asdFilesToKeep = ["cl-test-more.asd"];
+  asdFilesToKeep = [ "cl-test-more.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-test-more DESCRIPTION System lacks description SHA256

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   };
 
   checkInputs = [ pytest pretend freezegun simplejson twisted ]
-    ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
+  ++ lib.optionals (pythonAtLeast "3.6") [ python-rapidjson ];
   propagatedBuildInputs = [ six ];
 
   checkPhase = ''

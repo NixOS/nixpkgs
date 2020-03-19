@@ -14,7 +14,7 @@ rec {
 
   packageName = "css-selectors-simple-tree";
 
-  asdFilesToKeep = ["css-selectors-simple-tree.asd"];
+  asdFilesToKeep = [ "css-selectors-simple-tree.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM css-selectors-simple-tree DESCRIPTION

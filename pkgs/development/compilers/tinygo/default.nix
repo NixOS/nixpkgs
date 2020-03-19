@@ -1,5 +1,15 @@
-{ lib, buildGoModule, fetchFromGitHub, llvm, clang-unwrapped, lld, avrgcc
-, avrdude, openocd, gcc-arm-embedded, makeWrapper }:
+{ lib
+, buildGoModule
+, fetchFromGitHub
+, llvm
+, clang-unwrapped
+, lld
+, avrgcc
+, avrdude
+, openocd
+, gcc-arm-embedded
+, makeWrapper
+}:
 
 buildGoModule rec {
   pname = "tinygo";

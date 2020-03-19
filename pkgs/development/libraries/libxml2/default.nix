@@ -1,9 +1,18 @@
-{ stdenv, lib, fetchurl, fetchpatch
-, zlib, xz, python, ncurses, findXMLCatalogs
+{ stdenv
+, lib
+, fetchurl
+, fetchpatch
+, zlib
+, xz
+, python
+, ncurses
+, findXMLCatalogs
 , pythonSupport ? stdenv.buildPlatform == stdenv.hostPlatform
-, icuSupport ? false, icu ? null
+, icuSupport ? false
+, icu ? null
 , enableShared ? stdenv.hostPlatform.libc != "msvcrt"
-, enableStatic ? !enableShared,
+, enableStatic ? !enableShared
+,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,15 +44,15 @@ stdenv.mkDerivation rec {
   ];
 
   outputs = [ "bin" "dev" "out" "man" "doc" ]
-    ++ lib.optional pythonSupport "py"
-    ++ lib.optional (enableStatic && enableShared) "static";
+  ++ lib.optional pythonSupport "py"
+  ++ lib.optional (enableStatic && enableShared) "static";
 
   buildInputs = lib.optional pythonSupport python
-    ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
-    # Libxml2 has an optional dependency on liblzma.  However, on impure
-    # platforms, it may end up using that from /usr/lib, and thus lack a
-    # RUNPATH for that, leading to undefined references for its users.
-    ++ lib.optional stdenv.isFreeBSD xz;
+  ++ lib.optional (pythonSupport && python?isPy3 && python.isPy3) ncurses
+  # Libxml2 has an optional dependency on liblzma.  However, on impure
+  # platforms, it may end up using that from /usr/lib, and thus lack a
+  # RUNPATH for that, leading to undefined references for its users.
+  ++ lib.optional stdenv.isFreeBSD xz;
 
   propagatedBuildInputs = [ zlib findXMLCatalogs ] ++ lib.optional icuSupport icu;
 
@@ -63,8 +72,8 @@ stdenv.mkDerivation rec {
     echo "" > python/tests/tstLastError.py
   '';
 
-  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin &&
-    stdenv.hostPlatform.libc != "musl";
+  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && !stdenv.isDarwin
+  && stdenv.hostPlatform.libc != "musl";
 
   preInstall = lib.optionalString pythonSupport
     ''substituteInPlace python/libxml2mod.la --replace "${python}" "$py"'';

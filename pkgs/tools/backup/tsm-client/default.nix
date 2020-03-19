@@ -6,11 +6,11 @@
 , makeWrapper
 , procps
 , zlib
-# optional packages that enable certain features
+  # optional packages that enable certain features
 , acl ? null  # EXT2/EXT3/XFS ACL support
 , jdk8 ? null  # Java GUI
 , lvm2 ? null  # LVM image backup and restore functions
-# path to `dsm.sys` configuration files
+  # path to `dsm.sys` configuration files
 , dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
 , dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
 }:
@@ -48,10 +48,7 @@
 # there to "Client Latest Downloads",
 # "IBM Spectrum Protect Client Downloads and READMEs",
 # then to "Linux x86_64 Ubuntu client" (as of 2019-07-15).
-
-
 let
-
   meta = {
     homepage = https://www.ibm.com/us-en/marketplace/data-protection-and-recovery;
     downloadPage = https://www-01.ibm.com/support/docview.wss?uid=swg21239415;
@@ -125,9 +122,7 @@ let
       done
     '';
   };
-
 in
-
 buildEnv {
   name = "tsm-client-${unwrapped.version}";
   inherit meta;
@@ -152,7 +147,7 @@ buildEnv {
     ln --symbolic --no-target-directory opt/tivoli/tsm/client/api/bin64 $out/dsmi_dir
     ln --symbolic --no-target-directory "${dsmSysCli}" $out/dsm_dir/dsm.sys
     ln --symbolic --no-target-directory "${dsmSysApi}" $out/dsmi_dir/dsm.sys
-    ${lib.strings.optionalString (jdk8==null) "rm $out/bin/dsmj"}
+    ${lib.strings.optionalString (jdk8 == null) "rm $out/bin/dsmj"}
     for bin in $out/bin/*
     do
       target=$(readlink "$bin")

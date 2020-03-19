@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, file, libco-canonical
-, libuv, raft-canonical, sqlite-replication }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, file
+, libco-canonical
+, libuv
+, raft-canonical
+, sqlite-replication
+}:
 
 with stdenv.lib;
 
@@ -15,10 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook file pkgconfig ];
-  buildInputs = [ libco-canonical.dev libuv raft-canonical.dev 
-                  sqlite-replication ];
+  buildInputs = [
+    libco-canonical.dev
+    libuv
+    raft-canonical.dev
+    sqlite-replication
+  ];
 
-  preConfigure= ''
+  preConfigure = ''
     substituteInPlace configure --replace /usr/bin/ " "
   '';
 

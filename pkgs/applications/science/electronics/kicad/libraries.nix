@@ -1,6 +1,11 @@
-{ lib, stdenv, cmake, gettext
-, fetchFromGitHub, fetchFromGitLab
-, version, libSources
+{ lib
+, stdenv
+, cmake
+, gettext
+, fetchFromGitHub
+, fetchFromGitLab
+, version
+, libSources
 }:
 
 # callPackage libraries {
@@ -23,7 +28,8 @@ let
             repo = "kicad-${name}";
             rev = version;
             inherit name;
-          } // (libSources.${name} or { })
+          }
+          // (libSources.${name} or { })
         );
         nativeBuildInputs = [ cmake ];
         meta.license = licenses.cc-by-sa-40;
@@ -52,7 +58,8 @@ in
           repo = "kicad-${name}";
           rev = version;
           inherit name;
-        } // (libSources.${name} or { })
+        }
+        // (libSources.${name} or { })
       );
       buildInputs = [ gettext ];
       nativeBuildInputs = [ cmake ];

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, ncurses}:
+{ stdenv, fetchurl, ncurses }:
 
 stdenv.mkDerivation {
   name = "iptraf-3.0.1";
@@ -21,7 +21,7 @@ stdenv.mkDerivation {
     cp iptraf $out/bin
   '';
 
-  buildInputs = [ncurses];
+  buildInputs = [ ncurses ];
 
   meta = {
     homepage = http://iptraf.seul.org/;

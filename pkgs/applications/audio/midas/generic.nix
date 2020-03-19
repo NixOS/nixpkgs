@@ -17,21 +17,22 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
     cp ${baseName} $out/bin
   '';
-  preFixup = let
-    # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation
-    libPath = lib.makeLibraryPath [
-      libX11           # libX11.so.6
-      libXext          # libXext.so.6
-      alsaLib          # libasound.so.2
-      freetype         # libfreetype.so.6
-      stdenv.cc.cc.lib # libstdc++.so.6
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/bin/${baseName}
-  '';
+  preFixup =
+    let
+      # we prepare our library path in the let clause to avoid it become part of the input of mkDerivation
+      libPath = lib.makeLibraryPath [
+        libX11 # libX11.so.6
+        libXext # libXext.so.6
+        alsaLib # libasound.so.2
+        freetype # libfreetype.so.6
+        stdenv.cc.cc.lib # libstdc++.so.6
+      ];
+    in ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/bin/${baseName}
+    '';
 
   meta = with stdenv.lib; {
     inherit homepage;

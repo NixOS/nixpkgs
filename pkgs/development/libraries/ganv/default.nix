@@ -21,4 +21,4 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.goibhniu ];
     platforms = platforms.linux;
   };
-  }
+}

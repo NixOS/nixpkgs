@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchurl, glibc, zlib
+{ stdenv
+, lib
+, fetchurl
+, glibc
+, zlib
 , enableStatic ? false
 , sftpPath ? "/run/current-system/sw/libexec/sftp-server"
 }:

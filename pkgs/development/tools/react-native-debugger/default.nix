@@ -1,7 +1,25 @@
-{ stdenv, fetchurl, unzip, cairo, xorg, gdk-pixbuf, fontconfig, pango, gnome2, atk, gtk2, glib
-, freetype, dbus, nss, nspr, alsaLib, cups, expat, udev, makeDesktopItem
+{ stdenv
+, fetchurl
+, unzip
+, cairo
+, xorg
+, gdk-pixbuf
+, fontconfig
+, pango
+, gnome2
+, atk
+, gtk2
+, glib
+, freetype
+, dbus
+, nss
+, nspr
+, alsaLib
+, cups
+, expat
+, udev
+, makeDesktopItem
 }:
-
 let
   rpath = stdenv.lib.makeLibraryPath [
     cairo
@@ -36,7 +54,8 @@ let
     xorg.libXrender
     xorg.libXScrnSaver
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "react-native-debugger";
   version = "0.9.10";
 

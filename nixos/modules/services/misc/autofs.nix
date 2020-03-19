@@ -1,15 +1,11 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.autofs;
 
   autoMaster = pkgs.writeText "auto.master" cfg.autoMaster;
-
 in
-
 {
 
   ###### interface
@@ -74,7 +70,8 @@ in
     boot.kernelModules = [ "autofs4" ];
 
     systemd.services.autofs =
-      { description = "Automounts filesystems on demand";
+      {
+        description = "Automounts filesystems on demand";
         after = [ "network.target" "ypbind.service" "sssd.service" "network-online.target" ];
         wants = [ "network-online.target" ];
         wantedBy = [ "multi-user.target" ];

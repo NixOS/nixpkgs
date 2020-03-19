@@ -1,6 +1,14 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, python3
-, zlib, libssh2, openssl, http-parser
-, libiconv, Security
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, python3
+, zlib
+, libssh2
+, openssl
+, http-parser
+, libiconv
+, Security
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +31,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake python3 pkgconfig ];
 
   buildInputs = [ zlib libssh2 openssl http-parser ]
-    ++ stdenv.lib.optional stdenv.isDarwin Security;
+  ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   propagatedBuildInputs = stdenv.lib.optional (!stdenv.isLinux) libiconv;
 

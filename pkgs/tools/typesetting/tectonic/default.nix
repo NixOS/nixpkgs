@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, rustPlatform
-, darwin, fontconfig, harfbuzz, openssl, pkgconfig }:
+{ stdenv
+, fetchFromGitHub
+, rustPlatform
+, darwin
+, fontconfig
+, harfbuzz
+, openssl
+, pkgconfig
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tectonic";
@@ -17,7 +24,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkgconfig ];
 
   buildInputs = [ fontconfig harfbuzz openssl ]
-    ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
+  ++ stdenv.lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
 
   # tests fail due to read-only nix store
   doCheck = false;

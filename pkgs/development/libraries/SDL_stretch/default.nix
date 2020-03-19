@@ -12,9 +12,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ SDL ];
 
   meta = with stdenv.lib; {
-     description = "Stretch Functions For SDL";
-     homepage = http://sdl-stretch.sourceforge.net/;
-     license = licenses.lgpl2;
-     platforms = platforms.linux;
+    description = "Stretch Functions For SDL";
+    homepage = http://sdl-stretch.sourceforge.net/;
+    license = licenses.lgpl2;
+    platforms = platforms.linux;
   };
 }

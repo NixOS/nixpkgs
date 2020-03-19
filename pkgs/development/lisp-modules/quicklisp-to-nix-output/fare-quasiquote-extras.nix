@@ -14,7 +14,7 @@ rec {
 
   packageName = "fare-quasiquote-extras";
 
-  asdFilesToKeep = ["fare-quasiquote-extras.asd"];
+  asdFilesToKeep = [ "fare-quasiquote-extras.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fare-quasiquote-extras DESCRIPTION fare-quasiquote plus extras

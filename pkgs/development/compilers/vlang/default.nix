@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
   propagatedBuildInputs = [ glfw freetype openssl ]
-    ++ stdenv.lib.optional stdenv.hostPlatform.isUnix upx;
+  ++ stdenv.lib.optional stdenv.hostPlatform.isUnix upx;
 
   buildPhase = ''
     runHook preBuild

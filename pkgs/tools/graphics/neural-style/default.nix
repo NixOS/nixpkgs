@@ -1,8 +1,8 @@
-{stdenv, fetchFromGitHub, torch, loadcaffe, fetchurl, bash}:
+{ stdenv, fetchFromGitHub, torch, loadcaffe, fetchurl, bash }:
 stdenv.mkDerivation rec {
   pname = "neural-style";
   version = "0.0pre2016.08.15";
-  buildInputs = [torch loadcaffe];
+  buildInputs = [ torch loadcaffe ];
   src = fetchFromGitHub {
     owner = "jcjohnson";
     repo = "neural-style";
@@ -50,9 +50,9 @@ stdenv.mkDerivation rec {
   meta = {
     inherit version;
     description = ''A torch implementation of the paper A Neural Algorithm of Artistic Style'';
-    license = stdenv.lib.licenses.mit ;
-    maintainers = [stdenv.lib.maintainers.raskin];
+    license = stdenv.lib.licenses.mit;
+    maintainers = [ stdenv.lib.maintainers.raskin ];
     # Eats a lot of RAM
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,5 +1,16 @@
-{ fetchFromGitHub, stdenv, cmake, pkgconfig, python, alsaLib
-, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
+{ fetchFromGitHub
+, stdenv
+, cmake
+, pkgconfig
+, python
+, alsaLib
+, libX11
+, libGLU
+, SDL2
+, lua5_3
+, zlib
+, freetype
+, wavpack
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +35,15 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake pkgconfig ];
 
   buildInputs = [
-    python alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
+    python
+    alsaLib
+    libX11
+    libGLU
+    SDL2
+    lua5_3
+    zlib
+    freetype
+    wavpack
   ];
 
   meta = {

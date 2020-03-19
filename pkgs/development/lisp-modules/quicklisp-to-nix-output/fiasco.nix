@@ -16,7 +16,7 @@ rec {
 
   packageName = "fiasco";
 
-  asdFilesToKeep = ["fiasco.asd"];
+  asdFilesToKeep = [ "fiasco.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM fiasco DESCRIPTION

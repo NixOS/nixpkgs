@@ -1,5 +1,13 @@
-{ stdenv, fetchFromGitHub, mkDerivation, qtbase, qtquick1, qmltermwidget
-, qtquickcontrols, qtgraphicaleffects, qmake }:
+{ stdenv
+, fetchFromGitHub
+, mkDerivation
+, qtbase
+, qtquick1
+, qmltermwidget
+, qtquickcontrols
+, qtgraphicaleffects
+, qmake
+}:
 
 mkDerivation rec {
   version = "1.1.1";

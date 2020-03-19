@@ -1,5 +1,12 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, six, click, requests, pytz, tabulate, pythonOlder
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, six
+, click
+, requests
+, pytz
+, tabulate
+, pythonOlder
 }:
 
 buildPythonPackage rec {

@@ -3,14 +3,12 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.networking.resolvconf;
 
   resolvconfOptions = cfg.extraOptions
-    ++ optional cfg.dnsSingleRequest "single-request"
-    ++ optional cfg.dnsExtensionMechanism "edns0";
+  ++ optional cfg.dnsSingleRequest "single-request"
+  ++ optional cfg.dnsExtensionMechanism "edns0";
 
   configText =
     ''
@@ -29,9 +27,7 @@ let
       # This hosts runs a full-blown DNS resolver.
       name_servers='127.0.0.1'
     '' + cfg.extraConfig;
-
 in
-
 {
   imports = [
     (mkRenamedOptionModule [ "networking" "dnsSingleRequest" ] [ "networking" "resolvconf" "dnsSingleRequest" ])
@@ -89,7 +85,7 @@ in
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "ndots:1" "rotate" ];
         description = ''
           Set the options in <filename>/etc/resolv.conf</filename>.
@@ -113,7 +109,8 @@ in
       networking.resolvconf.enable = !(config.environment.etc ? "resolv.conf");
 
       environment.etc."resolvconf.conf".text =
-        if !cfg.enable then
+        if !cfg.enable
+        then
           # Force-stop any attempts to use resolvconf
           ''
             echo "resolvconf is disabled on this system but was used anyway:" >&2
@@ -122,7 +119,6 @@ in
           ''
         else configText;
     }
-
     (mkIf cfg.enable {
       environment.systemPackages = [ pkgs.openresolv ];
 

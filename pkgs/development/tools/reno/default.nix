@@ -20,8 +20,8 @@ with pythonPackages; buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Release Notes Manager";
-    homepage    = http://docs.openstack.org/developer/reno/;
-    license     = licenses.asl20;
+    homepage = http://docs.openstack.org/developer/reno/;
+    license = licenses.asl20;
     maintainers = with maintainers; [ guillaumekoenig ];
   };
 }

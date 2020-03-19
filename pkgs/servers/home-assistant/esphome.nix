@@ -1,22 +1,22 @@
 { lib, python3, platformio, esptool, git, protobuf3_10, fetchpatch }:
-
 let
   python = python3.override {
     packageOverrides = self: super: {
       protobuf = super.protobuf.override {
         protobuf = protobuf3_10;
       };
-      pyyaml = super.pyyaml.overridePythonAttrs (oldAttrs: rec {
-        version = "5.1.2";
-        src = oldAttrs.src.override {
-          inherit version;
-          sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
-        };
-      });
+      pyyaml = super.pyyaml.overridePythonAttrs
+        (oldAttrs: rec {
+          version = "5.1.2";
+          src = oldAttrs.src.override {
+            inherit version;
+            sha256 = "1r5faspz73477hlbjgilw05xsms0glmsa371yqdd26znqsvg1b81";
+          };
+        });
     };
   };
-
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "esphome";
   version = "1.14.3";
 
@@ -28,8 +28,15 @@ in python.pkgs.buildPythonApplication rec {
   ESPHOME_USE_SUBPROCESS = "";
 
   propagatedBuildInputs = with python.pkgs; [
-    voluptuous pyyaml paho-mqtt colorlog
-    tornado protobuf tzlocal pyserial ifaddr
+    voluptuous
+    pyyaml
+    paho-mqtt
+    colorlog
+    tornado
+    protobuf
+    tzlocal
+    pyserial
+    ifaddr
     protobuf
   ];
 

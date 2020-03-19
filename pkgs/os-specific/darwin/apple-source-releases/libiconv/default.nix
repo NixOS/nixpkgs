@@ -1,4 +1,6 @@
-{ stdenv, appleDerivation, lib
+{ stdenv
+, appleDerivation
+, lib
 , enableStatic ? stdenv.targetPlatform.isiOS
 , enableShared ? !stdenv.targetPlatform.isiOS
 }:

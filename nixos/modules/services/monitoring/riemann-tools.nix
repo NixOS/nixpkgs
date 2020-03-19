@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.services.riemann-tools;
 
   riemannHost = "${cfg.riemannHost}";
@@ -13,9 +11,8 @@ let
     #!/bin/sh
     exec ${pkgs.riemann-tools}/bin/riemann-health ${builtins.concatStringsSep " " cfg.extraArgs} --host ${riemannHost}
   '';
-
-
-in {
+in
+{
 
   options = {
 
@@ -36,12 +33,12 @@ in {
       };
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           A list of commandline-switches forwarded to a riemann-tool.
           See for example `riemann-health --help` for available options.
         '';
-        example = ["-p 5555" "--timeout=30" "--attribute=myattribute=42"];
+        example = [ "-p 5555" "--timeout=30" "--attribute=myattribute=42" ];
       };
     };
   };

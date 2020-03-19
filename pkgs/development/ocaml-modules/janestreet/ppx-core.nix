@@ -1,4 +1,4 @@
-{stdenv, buildOcamlJane, ppx_tools}:
+{ stdenv, buildOcamlJane, ppx_tools }:
 
 buildOcamlJane {
   name = "ppx_core";

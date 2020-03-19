@@ -1,7 +1,10 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules, kdoctools,
-  kio, kparts, kwindowsystem
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kdoctools
+, kio
+, kparts
+, kwindowsystem
 }:
 
 mkDerivation {

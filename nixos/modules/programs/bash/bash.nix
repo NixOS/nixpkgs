@@ -4,9 +4,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfge = config.environment;
 
   cfg = config.programs.bash;
@@ -40,9 +38,7 @@ let
     mapAttrsFlatten (k: v: "alias ${k}=${escapeShellArg v}")
       (filterAttrs (k: v: v != null) cfg.shellAliases)
   );
-
 in
-
 {
   imports = [
     (mkRemovedOptionModule [ "programs" "bash" "enable" ] "")
@@ -68,7 +64,7 @@ in
       */
 
       shellAliases = mkOption {
-        default = {};
+        default = { };
         description = ''
           Set of aliases for bash shell, which overrides <option>environment.shellAliases</option>.
           See <option>environment.shellAliases</option> for an option format description.
@@ -242,7 +238,8 @@ in
       pkgs.nix-bash-completions;
 
     environment.shells =
-      [ "/run/current-system/sw/bin/bash"
+      [
+        "/run/current-system/sw/bin/bash"
         "/run/current-system/sw/bin/sh"
         "${pkgs.bashInteractive}/bin/bash"
         "${pkgs.bashInteractive}/bin/sh"

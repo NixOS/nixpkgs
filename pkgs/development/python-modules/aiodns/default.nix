@@ -1,5 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, isPy27, isPyPy, python, pycares, typing, trollius }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, pythonOlder
+, isPy27
+, isPyPy
+, python
+, pycares
+, typing
+, trollius
+}:
 
 buildPythonPackage rec {
   pname = "aiodns";
@@ -11,8 +20,8 @@ buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with stdenv.lib; [ pycares ]
-    ++ optional (pythonOlder "3.7") typing
-    ++ optional (isPy27 || isPyPy) trollius;
+  ++ optional (pythonOlder "3.7") typing
+  ++ optional (isPy27 || isPyPy) trollius;
 
   checkPhase = ''
     ${python.interpreter} tests.py

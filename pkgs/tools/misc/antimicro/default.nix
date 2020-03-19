@@ -13,7 +13,10 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [
-    SDL2 qtbase qttools xorg.libXtst
+    SDL2
+    qtbase
+    qttools
+    xorg.libXtst
   ];
 
   meta = with lib; {

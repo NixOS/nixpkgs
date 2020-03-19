@@ -1,5 +1,7 @@
-{ stdenv, python2Packages
-, withPostgresql ? true }:
+{ stdenv
+, python2Packages
+, withPostgresql ? true
+}:
 
 with stdenv.lib;
 

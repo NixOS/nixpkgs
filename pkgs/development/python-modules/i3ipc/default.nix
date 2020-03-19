@@ -1,7 +1,17 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
 , enum-compat
-, xorgserver, pytest, pytest-xvfb, pytest-asyncio, i3, python, xlib, xdpyinfo
-, makeFontsConf, coreutils
+, xorgserver
+, pytest
+, pytest-xvfb
+, pytest-asyncio
+, i3
+, python
+, xlib
+, xdpyinfo
+, makeFontsConf
+, coreutils
 }:
 
 buildPythonPackage rec {
@@ -9,9 +19,9 @@ buildPythonPackage rec {
   version = "2.1.1";
 
   src = fetchFromGitHub {
-    owner  = "acrisci";
-    repo   = "i3ipc-python";
-    rev    = "v${version}";
+    owner = "acrisci";
+    repo = "i3ipc-python";
+    rev = "v${version}";
     sha256 = "10zpbiw1gcndn439g1vxcdkxllwp02qcmaal4w7hi2rzgaw1xkdk";
   };
   propagatedBuildInputs = [ enum-compat xlib ];
@@ -35,8 +45,8 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "An improved Python library to control i3wm and sway";
-    homepage    = https://github.com/acrisci/i3ipc-python;
-    license     = licenses.bsd3;
+    homepage = https://github.com/acrisci/i3ipc-python;
+    license = licenses.bsd3;
     maintainers = with maintainers; [ vanzef ];
   };
 }

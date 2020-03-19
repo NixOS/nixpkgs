@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, lib, qtbase, qtmultimedia, qtsvg, qtdeclarative, qttools, qtgraphicaleffects, qtquickcontrols2, full
-, libsecret, libGL, libpulseaudio, glib, wrapQtAppsHook, mkDerivation }:
-
+{ stdenv
+, fetchurl
+, lib
+, qtbase
+, qtmultimedia
+, qtsvg
+, qtdeclarative
+, qttools
+, qtgraphicaleffects
+, qtquickcontrols2
+, full
+, libsecret
+, libGL
+, libpulseaudio
+, glib
+, wrapQtAppsHook
+, mkDerivation
+}:
 let
   version = "1.2.3-1";
 
@@ -10,7 +25,8 @@ let
 
     To work, gnome-keyring service must be enabled.
   '';
-in mkDerivation {
+in
+mkDerivation {
   pname = "protonmail-bridge";
   inherit version;
 
@@ -34,31 +50,32 @@ in mkDerivation {
     ln -s $out/lib/protonmail-bridge $out/bin/protonmail-bridge
   '';
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [
-      stdenv.cc.cc.lib
-      qtbase
-      qtquickcontrols2
-      qtgraphicaleffects
-      qtmultimedia
-      qtsvg
-      qtdeclarative
-      qttools
-      libGL
-      libsecret
-      libpulseaudio
-      glib
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${rpath}" \
-      $out/lib/protonmail-bridge
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath [
+        stdenv.cc.cc.lib
+        qtbase
+        qtquickcontrols2
+        qtgraphicaleffects
+        qtmultimedia
+        qtsvg
+        qtdeclarative
+        qttools
+        libGL
+        libsecret
+        libpulseaudio
+        glib
+      ];
+    in ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${rpath}" \
+        $out/lib/protonmail-bridge
 
-    substituteInPlace $out/share/applications/ProtonMail_Bridge.desktop \
-      --replace "/usr/" "$out/" \
-      --replace "Exec=protonmail-bridge" "Exec=$out/bin/protonmail-bridge"
-  '';
+      substituteInPlace $out/share/applications/ProtonMail_Bridge.desktop \
+        --replace "/usr/" "$out/" \
+        --replace "Exec=protonmail-bridge" "Exec=$out/bin/protonmail-bridge"
+    '';
 
   buildInputs = [ qtbase qtquickcontrols2 qtmultimedia qtgraphicaleffects qtdeclarative ];
 

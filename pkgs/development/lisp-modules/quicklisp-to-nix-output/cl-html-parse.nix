@@ -14,7 +14,7 @@ rec {
 
   packageName = "cl-html-parse";
 
-  asdFilesToKeep = ["cl-html-parse.asd"];
+  asdFilesToKeep = [ "cl-html-parse.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-html-parse DESCRIPTION HTML Parser SHA256

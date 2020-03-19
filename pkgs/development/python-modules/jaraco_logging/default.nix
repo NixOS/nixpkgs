@@ -1,5 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, setuptools_scm
-, tempora, six, pytest
+{ lib
+, buildPythonPackage
+, fetchPypi
+, setuptools_scm
+, tempora
+, six
+, pytest
 }:
 
 buildPythonPackage rec {

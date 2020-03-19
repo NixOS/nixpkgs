@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "8.244";
 
   src = fetchurl {
-    url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings ["."] [""] version}.tgz";
+    url = "http://home.thep.lu.se/~torbjorn/pythia8/pythia${builtins.replaceStrings [ "." ] [ "" ] version}.tgz";
     sha256 = "1jlj9hgmk2gcm5p0zqsiz0dpv9vvj8ip261si7frrwfsk7wq0j73";
   };
 
@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A program for the generation of high-energy physics events";
-    license     = stdenv.lib.licenses.gpl2;
-    homepage    = http://home.thep.lu.se/~torbjorn/Pythia.html;
-    platforms   = stdenv.lib.platforms.unix;
+    license = stdenv.lib.licenses.gpl2;
+    homepage = http://home.thep.lu.se/~torbjorn/Pythia.html;
+    platforms = stdenv.lib.platforms.unix;
     maintainers = with stdenv.lib.maintainers; [ veprbl ];
   };
 }

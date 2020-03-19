@@ -1,10 +1,16 @@
-{ stdenv, fetchurl, pkgconfig, file
-, bison, openssl, readline, bzip2
+{ stdenv
+, fetchurl
+, pkgconfig
+, file
+, bison
+, openssl
+, readline
+, bzip2
 }:
-
 let
   version = "11.35.19";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
 
   pname = "monetdb";
   inherit version;

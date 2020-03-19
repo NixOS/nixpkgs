@@ -1,6 +1,14 @@
-{ stdenv, fetchurl, lvm2, json_c
-, openssl, libuuid, pkgconfig, popt
-, enablePython ? false, python2 ? null }:
+{ stdenv
+, fetchurl
+, lvm2
+, json_c
+, openssl
+, libuuid
+, pkgconfig
+, popt
+, enablePython ? false
+, python2 ? null
+}:
 
 assert enablePython -> python2 != null;
 
@@ -20,8 +28,8 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs tests
     ${stdenv.lib.optionalString enablePython ''
-      patchShebangs ./python/pycryptsetup-test.py
-    ''}
+    patchShebangs ./python/pycryptsetup-test.py
+  ''}
 
     # O_DIRECT is filesystem dependent and fails in a sandbox (on tmpfs)
     # and on several filesystem types (btrfs, zfs) without sandboxing.
@@ -38,7 +46,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ lvm2 json_c openssl libuuid popt ]
-    ++ stdenv.lib.optional enablePython python2;
+  ++ stdenv.lib.optional enablePython python2;
 
   doCheck = true;
 

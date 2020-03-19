@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   outputs = [ "dev" "out" ];
 
   buildInputs = [ libgcrypt libgpgerror libksba zlib ]
-    ++ stdenv.lib.optional stdenv.isDarwin gettext;
+  ++ stdenv.lib.optional stdenv.isDarwin gettext;
 
   postInstall = ''
     moveToOutput "bin/ntbtls-config" $dev

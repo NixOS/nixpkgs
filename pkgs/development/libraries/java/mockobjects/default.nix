@@ -1,4 +1,4 @@
-{stdenv, fetchurl} :
+{ stdenv, fetchurl }:
 
 stdenv.mkDerivation {
   name = "mockobjects-0.09";

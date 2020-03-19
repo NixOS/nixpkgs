@@ -14,7 +14,7 @@ rec {
 
   packageName = "clack-v1-compat";
 
-  asdFilesToKeep = ["clack-v1-compat.asd"];
+  asdFilesToKeep = [ "clack-v1-compat.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM clack-v1-compat DESCRIPTION System lacks description SHA256

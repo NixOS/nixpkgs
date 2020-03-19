@@ -14,7 +14,7 @@ rec {
 
   packageName = "lev";
 
-  asdFilesToKeep = ["lev.asd"];
+  asdFilesToKeep = [ "lev.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM lev DESCRIPTION libev bindings for Common Lisp SHA256

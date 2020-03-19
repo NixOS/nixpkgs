@@ -1,7 +1,12 @@
-{
-  mkDerivation, lib,
-  extra-cmake-modules,
-  kcoreaddons, ki18n, kpty, kservice, qtbase,
+{ mkDerivation
+, lib
+, extra-cmake-modules
+, kcoreaddons
+, ki18n
+, kpty
+, kservice
+, qtbase
+,
 }:
 
 mkDerivation {

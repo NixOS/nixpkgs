@@ -1,8 +1,20 @@
-{stdenv, fetchurl, makeWrapper, flex, bison,
- asciidoc, docbook_xml_dtd_45, docbook_xsl,
- libxml2, libxslt,
- python27, rcs, cvs, git,
- coreutils, rsync}:
+{ stdenv
+, fetchurl
+, makeWrapper
+, flex
+, bison
+, asciidoc
+, docbook_xml_dtd_45
+, docbook_xsl
+, libxml2
+, libxslt
+, python27
+, rcs
+, cvs
+, git
+, coreutils
+, rsync
+}:
 with stdenv; with lib;
 mkDerivation rec {
   name = "cvs-fast-export-${meta.version}";
@@ -21,8 +33,18 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    flex bison asciidoc docbook_xml_dtd_45 docbook_xsl libxml2 libxslt
-    python27 rcs cvs git makeWrapper
+    flex
+    bison
+    asciidoc
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxml2
+    libxslt
+    python27
+    rcs
+    cvs
+    git
+    makeWrapper
   ];
 
   postPatch = "patchShebangs .";

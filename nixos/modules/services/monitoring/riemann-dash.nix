@@ -2,9 +2,7 @@
 
 with pkgs;
 with lib;
-
 let
-
   cfg = config.services.riemann-dash;
 
   conf = writeText "config.rb" ''
@@ -17,8 +15,8 @@ let
     #!/bin/sh
     exec ${pkgs.riemann-dash}/bin/riemann-dash ${conf}
   '';
-
-in {
+in
+{
 
   options = {
 

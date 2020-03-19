@@ -1,7 +1,28 @@
-{ stdenv, fetchurl, alsaLib, boost, bzip2, fftw, fftwFloat, libfishsound
-, libid3tag, liblo, liblrdf, libmad, liboggz, libpulseaudio, libsamplerate
-, libsndfile, opusfile, portaudio, rubberband, serd, sord, vampSDK, capnproto
-, wrapQtAppsHook, pkgconfig
+{ stdenv
+, fetchurl
+, alsaLib
+, boost
+, bzip2
+, fftw
+, fftwFloat
+, libfishsound
+, libid3tag
+, liblo
+, liblrdf
+, libmad
+, liboggz
+, libpulseaudio
+, libsamplerate
+, libsndfile
+, opusfile
+, portaudio
+, rubberband
+, serd
+, sord
+, vampSDK
+, capnproto
+, wrapQtAppsHook
+, pkgconfig
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +35,28 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ alsaLib boost bzip2 fftw fftwFloat libfishsound libid3tag liblo liblrdf
-      libmad liboggz libpulseaudio libsamplerate libsndfile opusfile pkgconfig
-      portaudio rubberband serd sord capnproto
+    [
+      alsaLib
+      boost
+      bzip2
+      fftw
+      fftwFloat
+      libfishsound
+      libid3tag
+      liblo
+      liblrdf
+      libmad
+      liboggz
+      libpulseaudio
+      libsamplerate
+      libsndfile
+      opusfile
+      pkgconfig
+      portaudio
+      rubberband
+      serd
+      sord
+      capnproto
     ];
 
   nativeBuildInputs = [ pkgconfig wrapQtAppsHook ];

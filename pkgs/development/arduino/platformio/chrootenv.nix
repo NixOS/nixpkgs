@@ -1,5 +1,4 @@
 { lib, buildFHSUserEnv }:
-
 let
   pio-pkgs = pkgs:
     let
@@ -18,8 +17,8 @@ let
       bottle
       platformio
     ]);
-
-in buildFHSUserEnv {
+in
+buildFHSUserEnv {
   name = "platformio";
 
   targetPkgs = pio-pkgs;

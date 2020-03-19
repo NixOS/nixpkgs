@@ -5,7 +5,8 @@ stdenv.mkDerivation rec {
   version = "2019c";
 
   srcs =
-    [ (fetchurl {
+    [
+      (fetchurl {
         url = "https://data.iana.org/time-zones/releases/tzdata${version}.tar.gz";
         sha256 = "0z7w1yv37cfk8yhix2cillam091vgp1j4g8fv84261q9mdnq1ivr";
       })
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   sourceRoot = ".";
 
   outputs = [ "out" "bin" "man" "dev" ];
-  propagatedBuildOutputs = [];
+  propagatedBuildOutputs = [ ];
 
   makeFlags = [
     "TOPDIR=$(out)"
@@ -42,12 +43,12 @@ stdenv.mkDerivation rec {
   installFlags = [ "ZIC=./zic-native" ];
 
   preInstall = ''
-     mv zic.o zic.o.orig
-     mv zic zic.orig
-     make $makeFlags cc=cc AR=ar zic
-     mv zic zic-native
-     mv zic.o.orig zic.o
-     mv zic.orig zic
+    mv zic.o zic.o.orig
+    mv zic zic.orig
+    make $makeFlags cc=cc AR=ar zic
+    mv zic zic-native
+    mv zic.o.orig zic.o
+    mv zic.orig zic
   '';
 
   postInstall =

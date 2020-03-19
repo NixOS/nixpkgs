@@ -1,7 +1,10 @@
 { stdenv
 , buildPythonPackage
 , fetchPypi
-, nose, six, pyyaml, mock
+, nose
+, six
+, pyyaml
+, mock
 }:
 
 buildPythonPackage rec {

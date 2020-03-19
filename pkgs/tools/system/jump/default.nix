@@ -13,7 +13,7 @@ buildGoModule rec {
 
   modSha256 = "1fzsm85c31vkdw80kijxmjhk8jyhjz8b21npgks2qrnizhm6iaf8";
 
-  outputs = [ "out" "man"];
+  outputs = [ "out" "man" ];
   postInstall = ''
     install -D --mode=444 man/j.1 man/jump.1 -t $man/man/man1/
 

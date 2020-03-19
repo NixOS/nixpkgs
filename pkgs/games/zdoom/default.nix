@@ -1,6 +1,18 @@
-{ stdenv, fetchurl, p7zip, cmake
-, SDL2, openal, fluidsynth, soundfont-fluid, bzip2, zlib, libjpeg, game-music-emu
-, libsndfile, mpg123 }:
+{ stdenv
+, fetchurl
+, p7zip
+, cmake
+, SDL2
+, openal
+, fluidsynth
+, soundfont-fluid
+, bzip2
+, zlib
+, libjpeg
+, game-music-emu
+, libsndfile
+, mpg123
+}:
 
 stdenv.mkDerivation rec {
   pname = "zdoom";
@@ -14,7 +26,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ p7zip cmake ];
   buildInputs = [
-    SDL2 openal fluidsynth bzip2 zlib libjpeg game-music-emu libsndfile mpg123
+    SDL2
+    openal
+    fluidsynth
+    bzip2
+    zlib
+    libjpeg
+    game-music-emu
+    libsndfile
+    mpg123
   ];
 
   cmakeFlags = [
@@ -54,4 +74,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ lassulus ];
   };
 }
-

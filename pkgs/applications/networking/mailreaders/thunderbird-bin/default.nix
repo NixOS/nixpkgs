@@ -1,4 +1,7 @@
-{ stdenv, fetchurl, config, makeWrapper
+{ stdenv
+, fetchurl
+, config
+, makeWrapper
 , gconf
 , alsaLib
 , at-spi2-atk
@@ -34,7 +37,8 @@
 , libgnome
 , libgnomeui
 , gnome3
-, libGLU, libGL
+, libGLU
+, libGL
 , nspr
 , nss
 , pango
@@ -49,9 +53,9 @@
 
 # imports `version` and `sources`
 with (import ./release_sources.nix);
-
 let
-  arch = if stdenv.hostPlatform.system == "i686-linux"
+  arch =
+    if stdenv.hostPlatform.system == "i686-linux"
     then "linux-i686"
     else "linux-x86_64";
 
@@ -59,17 +63,16 @@ let
     builtins.substring 0 (builtins.stringLength prefix) string == prefix;
 
   sourceMatches = locale: source:
-      (isPrefixOf source.locale locale) && source.arch == arch;
+    (isPrefixOf source.locale locale) && source.arch == arch;
 
   systemLocale = config.i18n.defaultLocale or "en-US";
 
-  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") {} sources;
+  defaultSource = stdenv.lib.findFirst (sourceMatches "en-US") { } sources;
 
   source = stdenv.lib.findFirst (sourceMatches systemLocale) defaultSource sources;
 
   name = "thunderbird-bin-${version}";
 in
-
 stdenv.mkDerivation {
   inherit name;
 
@@ -81,7 +84,8 @@ stdenv.mkDerivation {
   phases = "unpackPhase installPhase";
 
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc
+    [
+      stdenv.cc.cc
       gconf
       alsaLib
       at-spi2-atk
@@ -116,13 +120,14 @@ stdenv.mkDerivation {
       libcanberra-gtk2
       libgnome
       libgnomeui
-      libGLU libGL
+      libGLU
+      libGL
       nspr
       nss
       pango
     ] + ":" + stdenv.lib.makeSearchPathOutput "lib" "lib64" [
-      stdenv.cc.cc
-    ];
+    stdenv.cc.cc
+  ];
 
   buildInputs = [ gtk3 gnome3.adwaita-icon-theme ];
 

@@ -1,4 +1,5 @@
-{ stdenv, fetchurl
+{ stdenv
+, fetchurl
 , dpkg
 }:
 
@@ -24,9 +25,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Additional support for proprietary codecs for Vivaldi";
-    homepage    = "https://ffmpeg.org/";
-    license     = licenses.lgpl21;
+    homepage = "https://ffmpeg.org/";
+    license = licenses.lgpl21;
     maintainers = with maintainers; [ betaboon lluchs ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
   };
 }

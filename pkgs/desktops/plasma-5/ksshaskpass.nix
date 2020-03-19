@@ -1,7 +1,12 @@
-{
-  mkDerivation,
-  extra-cmake-modules, kdoctools,
-  kcoreaddons, ki18n, kwallet, kwidgetsaddons, qtbase,
+{ mkDerivation
+, extra-cmake-modules
+, kdoctools
+, kcoreaddons
+, ki18n
+, kwallet
+, kwidgetsaddons
+, qtbase
+,
 }:
 
 mkDerivation {

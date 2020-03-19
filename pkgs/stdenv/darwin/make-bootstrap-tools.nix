@@ -1,16 +1,17 @@
 { pkgspath ? ../../.., test-pkgspath ? pkgspath, system ? builtins.currentSystem }:
 
 with import pkgspath { inherit system; };
-
 let
   llvmPackages = llvmPackages_7;
-in rec {
-  coreutils_ = coreutils.override (args: {
-    # We want coreutils without ACL support.
-    aclSupport = false;
-    # Cannot use a single binary build, or it gets dynamically linked against gmp.
-    singleBinary = false;
-  });
+in
+rec {
+  coreutils_ = coreutils.override
+    (args: {
+      # We want coreutils without ACL support.
+      aclSupport = false;
+      # Cannot use a single binary build, or it gets dynamically linked against gmp.
+      singleBinary = false;
+    });
 
   cctools_ = darwin.cctools;
 
@@ -23,7 +24,7 @@ in rec {
   build = stdenv.mkDerivation {
     name = "stdenv-bootstrap-tools";
 
-    buildInputs = [nukeReferences cpio];
+    buildInputs = [ nukeReferences cpio ];
 
     buildCommand = ''
       mkdir -p $out/bin $out/lib $out/lib/system
@@ -150,7 +151,7 @@ in rec {
       (cd $out/pack && (find | cpio -o -H newc)) | bzip2 > $out/on-server/bootstrap-tools.cpio.bz2
     '';
 
-    allowedReferences = [];
+    allowedReferences = [ ];
 
     meta = {
       maintainers = [ stdenv.lib.maintainers.copumpkin ];
@@ -171,115 +172,117 @@ in rec {
   };
 
   bootstrapFiles = {
-    sh      = "${build}/on-server/sh";
-    bzip2   = "${build}/on-server/bzip2";
-    mkdir   = "${build}/on-server/mkdir";
-    cpio    = "${build}/on-server/cpio";
+    sh = "${build}/on-server/sh";
+    bzip2 = "${build}/on-server/bzip2";
+    mkdir = "${build}/on-server/mkdir";
+    cpio = "${build}/on-server/cpio";
     tarball = "${build}/on-server/bootstrap-tools.cpio.bz2";
   };
 
-  unpack = stdenv.mkDerivation (bootstrapFiles // {
-    name = "unpack";
+  unpack = stdenv.mkDerivation
+    (bootstrapFiles // {
+      name = "unpack";
 
-    reexportedLibrariesFile =
-      ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
+      reexportedLibrariesFile =
+        ../../os-specific/darwin/apple-source-releases/Libsystem/reexported_libraries;
 
-    # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
-    # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
-    # unpack-bootstrap-tools.sh for the next round of bootstrap tools.
-    # TODO: think through alternate designs, such as hosting this script as an output of the process.
-    buildCommand = ''
-      # Unpack the bootstrap tools tarball.
-      echo Unpacking the bootstrap tools...
-      $mkdir $out
-      $bzip2 -d < $tarball | (cd $out && $cpio -i)
+      # This is by necessity a near-duplicate of unpack-bootstrap-tools.sh. If we refer to it directly,
+      # we can't make any changes to it due to our testing stdenv depending on it. Think of this as the
+      # unpack-bootstrap-tools.sh for the next round of bootstrap tools.
+      # TODO: think through alternate designs, such as hosting this script as an output of the process.
+      buildCommand = ''
+        # Unpack the bootstrap tools tarball.
+        echo Unpacking the bootstrap tools...
+        $mkdir $out
+        $bzip2 -d < $tarball | (cd $out && $cpio -i)
 
-      # Set the ELF interpreter / RPATH in the bootstrap binaries.
-      echo Patching the tools...
+        # Set the ELF interpreter / RPATH in the bootstrap binaries.
+        echo Patching the tools...
 
-      export PATH=$out/bin
+        export PATH=$out/bin
 
-      for i in $out/bin/*; do
-        if ! test -L $i; then
-          echo patching $i
-          install_name_tool -add_rpath $out/lib $i || true
-        fi
-      done
-
-      install_name_tool \
-        -id $out/lib/system/libsystem_c.dylib \
-        $out/lib/system/libsystem_c.dylib
-
-      install_name_tool \
-        -id $out/lib/system/libsystem_kernel.dylib \
-        $out/lib/system/libsystem_kernel.dylib
-
-      # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
-      libs=$(cat $reexportedLibrariesFile | grep -v '^#')
-
-      for i in $libs; do
-        if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
-          args="$args -reexport_library $i"
-        fi
-      done
-
-      ld -macosx_version_min 10.7 \
-         -arch x86_64 \
-         -dylib \
-         -o $out/lib/libSystem.B.dylib \
-         -compatibility_version 1.0 \
-         -current_version 1226.10.1 \
-         -reexport_library $out/lib/system/libsystem_c.dylib \
-         -reexport_library $out/lib/system/libsystem_kernel.dylib \
-         $args
-
-      ln -s libSystem.B.dylib $out/lib/libSystem.dylib
-
-      for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
-        ln -s libSystem.dylib $out/lib/lib$name.dylib
-      done
-
-      ln -s libresolv.9.dylib $out/lib/libresolv.dylib
-
-      for i in $out/lib/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
-        if test ! -L "$i" -a "$i" != "$out/lib/libSystem*.dylib"; then
-          echo "Patching $i"
-
-          id=$(otool -D "$i" | tail -n 1)
-          install_name_tool -id "$(dirname $i)/$(basename $id)" $i
-
-          libs=$(otool -L "$i" | tail -n +2 | grep -v libSystem | cat)
-          if [ -n "$libs" ]; then
-            install_name_tool -add_rpath $out/lib $i
+        for i in $out/bin/*; do
+          if ! test -L $i; then
+            echo patching $i
+            install_name_tool -add_rpath $out/lib $i || true
           fi
-        fi
-      done
+        done
 
-      ln -s bash $out/bin/sh
-      ln -s bzip2 $out/bin/bunzip2
+        install_name_tool \
+          -id $out/lib/system/libsystem_c.dylib \
+          $out/lib/system/libsystem_c.dylib
 
-      # Provide a gunzip script.
-      cat > $out/bin/gunzip <<EOF
-      #!$out/bin/sh
-      exec $out/bin/gzip -d "\$@"
-      EOF
-      chmod +x $out/bin/gunzip
+        install_name_tool \
+          -id $out/lib/system/libsystem_kernel.dylib \
+          $out/lib/system/libsystem_kernel.dylib
 
-      # Provide fgrep/egrep.
-      echo "#! $out/bin/sh" > $out/bin/egrep
-      echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
-      echo "#! $out/bin/sh" > $out/bin/fgrep
-      echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+        # TODO: this logic basically duplicates similar logic in the Libsystem expression. Deduplicate them!
+        libs=$(cat $reexportedLibrariesFile | grep -v '^#')
 
-      cat >$out/bin/dsymutil << EOF
-      #!$out/bin/sh
-      EOF
+        for i in $libs; do
+          if [ "$i" != "/usr/lib/system/libsystem_kernel.dylib" ] && [ "$i" != "/usr/lib/system/libsystem_c.dylib" ]; then
+            args="$args -reexport_library $i"
+          fi
+        done
 
-      chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/dsymutil
-    '';
+        ld -macosx_version_min 10.7 \
+           -arch x86_64 \
+           -dylib \
+           -o $out/lib/libSystem.B.dylib \
+           -compatibility_version 1.0 \
+           -current_version 1226.10.1 \
+           -reexport_library $out/lib/system/libsystem_c.dylib \
+           -reexport_library $out/lib/system/libsystem_kernel.dylib \
+           $args
 
-    allowedReferences = [ "out" ];
-  });
+        ln -s libSystem.B.dylib $out/lib/libSystem.dylib
+
+        for name in c dbm dl info m mx poll proc pthread rpcsvc util gcc_s.10.4 gcc_s.10.5; do
+          ln -s libSystem.dylib $out/lib/lib$name.dylib
+        done
+
+        ln -s libresolv.9.dylib $out/lib/libresolv.dylib
+
+        for i in $out/lib/*.dylib $out/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation; do
+          if test ! -L "$i" -a "$i" != "$out/lib/libSystem*.dylib"; then
+            echo "Patching $i"
+
+            id=$(otool -D "$i" | tail -n 1)
+            install_name_tool -id "$(dirname $i)/$(basename $id)" $i
+
+            libs=$(otool -L "$i" | tail -n +2 | grep -v libSystem | cat)
+            if [ -n "$libs" ]; then
+              install_name_tool -add_rpath $out/lib $i
+            fi
+          fi
+        done
+
+        ln -s bash $out/bin/sh
+        ln -s bzip2 $out/bin/bunzip2
+
+        # Provide a gunzip script.
+        cat > $out/bin/gunzip <<EOF
+        #!$out/bin/sh
+        exec $out/bin/gzip -d "\$@"
+        EOF
+        chmod +x $out/bin/gunzip
+
+        # Provide fgrep/egrep.
+        echo "#! $out/bin/sh" > $out/bin/egrep
+        echo "exec $out/bin/grep -E \"\$@\"" >> $out/bin/egrep
+        echo "#! $out/bin/sh" > $out/bin/fgrep
+        echo "exec $out/bin/grep -F \"\$@\"" >> $out/bin/fgrep
+
+        cat >$out/bin/dsymutil << EOF
+        #!$out/bin/sh
+        EOF
+
+        chmod +x $out/bin/egrep $out/bin/fgrep $out/bin/dsymutil
+      '';
+
+      allowedReferences = [ "out" ];
+    }
+    );
 
   test = stdenv.mkDerivation {
     name = "test";
@@ -343,7 +346,8 @@ in rec {
   # The ultimate test: bootstrap a whole stdenv from the tools specified above and get a package set out of it
   test-pkgs = import test-pkgspath {
     inherit system;
-    stdenvStages = args: let
+    stdenvStages = args:
+      let
         args' = args // { inherit bootstrapFiles; };
       in (import (test-pkgspath + "/pkgs/stdenv/darwin") args').stagesDarwin;
   };

@@ -40,12 +40,12 @@
 , rpm
 , unzip
 }:
-
 let
   installed_testdir = "${placeholder "installedTests"}/libexec/installed-tests/flatpak-builder";
   installed_test_metadir = "${placeholder "installedTests"}/share/installed-tests/flatpak-builder";
   version = "1.0.9";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "flatpak-builder";
   inherit version;
 

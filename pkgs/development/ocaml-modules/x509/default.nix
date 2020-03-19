@@ -1,6 +1,15 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, alcotest, cstruct-unix
-, asn1-combinators, domain-name, fmt, gmap, nocrypto, rresult
+{ lib
+, fetchurl
+, buildDunePackage
+, ocaml
+, alcotest
+, cstruct-unix
+, asn1-combinators
+, domain-name
+, fmt
+, gmap
+, nocrypto
+, rresult
 }:
 
 buildDunePackage rec {

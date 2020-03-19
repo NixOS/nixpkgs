@@ -1,5 +1,13 @@
-{ lib, fetchPypi, buildPythonPackage, fetchpatch, astroid, six, coverage
-, lazy-object-proxy, nose, wrapt
+{ lib
+, fetchPypi
+, buildPythonPackage
+, fetchpatch
+, astroid
+, six
+, coverage
+, lazy-object-proxy
+, nose
+, wrapt
 }:
 
 buildPythonPackage rec {

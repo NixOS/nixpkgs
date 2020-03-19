@@ -5,15 +5,16 @@
 , python3
 , ibus
 }:
-
 let
-  python = python3.withPackages (ps: with ps; [
-    pygobject3
-    (toPythonModule ibus)
-    pyxdg
-    python-Levenshtein
-  ]);
-in stdenv.mkDerivation rec {
+  python = python3.withPackages
+    (ps: with ps; [
+      pygobject3
+      (toPythonModule ibus)
+      pyxdg
+      python-Levenshtein
+    ]);
+in
+stdenv.mkDerivation rec {
   pname = "ibus-uniemoji";
   version = "0.6.0";
 

@@ -14,7 +14,7 @@ rec {
 
   packageName = "usocket";
 
-  asdFilesToKeep = ["usocket.asd"];
+  asdFilesToKeep = [ "usocket.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM usocket DESCRIPTION Universal socket library for Common Lisp SHA256

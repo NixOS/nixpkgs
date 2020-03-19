@@ -1,11 +1,18 @@
-{ stdenv, fetchurl, xlibsWrapper, makeWrapper, libXpm
-, libXmu, libXi, libXp, Xaw3d, fig2dev
+{ stdenv
+, fetchurl
+, xlibsWrapper
+, makeWrapper
+, libXpm
+, libXmu
+, libXi
+, libXp
+, Xaw3d
+, fig2dev
 }:
-
 let
   version = "3.2.7a";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "xfig";
   inherit version;
 

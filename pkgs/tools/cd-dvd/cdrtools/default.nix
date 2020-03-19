@@ -32,6 +32,6 @@ stdenv.mkDerivation rec {
     # Licensing issues: This package contains code licensed under CDDL, GPL2
     # and LGPL2. There is a debate regarding the legality of distributing this
     # package in binary form.
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

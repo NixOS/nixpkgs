@@ -6,9 +6,7 @@
 }:
 
 with stdenv.lib.strings;
-
 let
-
   version = "0.9.90";
 
   src = fetchurl {
@@ -157,14 +155,15 @@ let
     , ...
     }@args:
 
-    stdenv.mkDerivation ((faust2ApplBase args) // {
+    stdenv.mkDerivation
+      ((faust2ApplBase args) // {
 
-      nativeBuildInputs = [ pkgconfig ];
-      buildInputs = [ makeWrapper ];
+        nativeBuildInputs = [ pkgconfig ];
+        buildInputs = [ makeWrapper ];
 
-      propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
+        propagatedBuildInputs = [ faust ] ++ propagatedBuildInputs;
 
-      postFixup = ''
+        postFixup = ''
 
         # export parts of the build environment
         for script in "$out"/bin/*; do
@@ -177,7 +176,8 @@ let
             --set NIX_LDFLAGS "$NIX_LDFLAGS"
         done
       '';
-    });
+      }
+      );
 
   # Builder for 'faust2appl' scripts, such as faust2firefox that
   # simply need to be wrapped with some dependencies on PATH.
@@ -188,21 +188,20 @@ let
     , runtimeInputs ? [ ]
     , ...
     }@args:
-
     let
-
       runtimePath = concatStringsSep ":" (map (p: "${p}/bin") ([ faust ] ++ runtimeInputs));
+    in stdenv.mkDerivation
+      ((faust2ApplBase args) // {
 
-    in stdenv.mkDerivation ((faust2ApplBase args) // {
+        buildInputs = [ makeWrapper ];
 
-      buildInputs = [ makeWrapper ];
+        postFixup = ''
+          for script in "$out"/bin/*; do
+            wrapProgram "$script" --prefix PATH : "${runtimePath}"
+          done
+        '';
 
-      postFixup = ''
-        for script in "$out"/bin/*; do
-          wrapProgram "$script" --prefix PATH : "${runtimePath}"
-        done
-      '';
-
-    });
-
-in faust
+      }
+      );
+in
+faust

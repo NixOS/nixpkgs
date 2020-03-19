@@ -1,8 +1,30 @@
-{ stdenv, buildPythonPackage, fetchPypi, isPy3k, isort, coverage, mock
-, robot-detection, django_extensions, rjsmin, cssmin, django-mailman3
-, django-haystack, flufl_lock, networkx, dateutil, defusedxml
-, django-paintstore, djangorestframework, django, django-q
-, django_compressor, beautifulsoup4, six, psycopg2, whoosh, elasticsearch
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, isPy3k
+, isort
+, coverage
+, mock
+, robot-detection
+, django_extensions
+, rjsmin
+, cssmin
+, django-mailman3
+, django-haystack
+, flufl_lock
+, networkx
+, dateutil
+, defusedxml
+, django-paintstore
+, djangorestframework
+, django
+, django-q
+, django_compressor
+, beautifulsoup4
+, six
+, psycopg2
+, whoosh
+, elasticsearch
 }:
 
 buildPythonPackage rec {
@@ -17,10 +39,24 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ isort ];
   propagatedBuildInputs = [
-    robot-detection django_extensions rjsmin cssmin django-mailman3
-    django-haystack flufl_lock networkx dateutil defusedxml
-    django-paintstore djangorestframework django django-q
-    django_compressor six psycopg2 isort
+    robot-detection
+    django_extensions
+    rjsmin
+    cssmin
+    django-mailman3
+    django-haystack
+    flufl_lock
+    networkx
+    dateutil
+    defusedxml
+    django-paintstore
+    djangorestframework
+    django
+    django-q
+    django_compressor
+    six
+    psycopg2
+    isort
   ];
 
   # Some of these are optional runtime dependencies that are not

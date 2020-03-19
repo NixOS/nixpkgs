@@ -1,4 +1,4 @@
-{stdenv, buildOcaml, fetchurl, async_p4, core_p4, core_extended_p4}:
+{ stdenv, buildOcaml, fetchurl, async_p4, core_p4, core_extended_p4 }:
 
 buildOcaml rec {
   name = "async_shell";

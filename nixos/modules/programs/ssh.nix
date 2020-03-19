@@ -3,10 +3,8 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
-  cfg  = config.programs.ssh;
+  cfg = config.programs.ssh;
 
   askPassword = cfg.askPassword;
 
@@ -20,11 +18,11 @@ let
   knownHosts = map (h: getAttr h cfg.knownHosts) (attrNames cfg.knownHosts);
 
   knownHostsText = (flip (concatMapStringsSep "\n") knownHosts
-    (h: assert h.hostNames != [];
+    (
+      h: assert h.hostNames != [ ];
       optionalString h.certAuthority "@cert-authority " + concatStringsSep "," h.hostNames + " "
       + (if h.publicKey != null then h.publicKey else readFile h.publicKeyFile)
     )) + "\n";
-
 in
 {
   ###### interface
@@ -135,53 +133,55 @@ in
       };
 
       knownHosts = mkOption {
-        default = {};
-        type = types.loaOf (types.submodule ({ name, ... }: {
-          options = {
-            certAuthority = mkOption {
-              type = types.bool;
-              default = false;
-              description = ''
-                This public key is an SSH certificate authority, rather than an
-                individual host's key.
-              '';
-            };
-            hostNames = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              description = ''
-                A list of host names and/or IP numbers used for accessing
-                the host's ssh service.
-              '';
-            };
-            publicKey = mkOption {
-              default = null;
-              type = types.nullOr types.str;
-              example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
-              description = ''
-                The public key data for the host. You can fetch a public key
-                from a running SSH server with the <command>ssh-keyscan</command>
-                command. The public key should not include any host names, only
-                the key type and the key itself.
-              '';
-            };
-            publicKeyFile = mkOption {
-              default = null;
-              type = types.nullOr types.path;
-              description = ''
-                The path to the public key file for the host. The public
-                key file is read at build time and saved in the Nix store.
-                You can fetch a public key file from a running SSH server
-                with the <command>ssh-keyscan</command> command. The content
-                of the file should follow the same format as described for
-                the <literal>publicKey</literal> option.
-              '';
-            };
-          };
-          config = {
-            hostNames = mkDefault [ name ];
-          };
-        }));
+        default = { };
+        type = types.loaOf
+          (types.submodule
+            ({ name, ... }: {
+              options = {
+                certAuthority = mkOption {
+                  type = types.bool;
+                  default = false;
+                  description = ''
+                    This public key is an SSH certificate authority, rather than an
+                    individual host's key.
+                  '';
+                };
+                hostNames = mkOption {
+                  type = types.listOf types.str;
+                  default = [ ];
+                  description = ''
+                    A list of host names and/or IP numbers used for accessing
+                    the host's ssh service.
+                  '';
+                };
+                publicKey = mkOption {
+                  default = null;
+                  type = types.nullOr types.str;
+                  example = "ecdsa-sha2-nistp521 AAAAE2VjZHN...UEPg==";
+                  description = ''
+                    The public key data for the host. You can fetch a public key
+                    from a running SSH server with the <command>ssh-keyscan</command>
+                    command. The public key should not include any host names, only
+                    the key type and the key itself.
+                  '';
+                };
+                publicKeyFile = mkOption {
+                  default = null;
+                  type = types.nullOr types.path;
+                  description = ''
+                    The path to the public key file for the host. The public
+                    key file is read at build time and saved in the Nix store.
+                    You can fetch a public key file from a running SSH server
+                    with the <command>ssh-keyscan</command> command. The content
+                    of the file should follow the same format as described for
+                    the <literal>publicKey</literal> option.
+                  '';
+                };
+              };
+              config = {
+                hostNames = mkDefault [ name ];
+              };
+            }));
         description = ''
           The set of system-wide known SSH hosts.
         '';
@@ -209,12 +209,14 @@ in
       mkDefault (config.services.xserver.enable || config.programs.ssh.forwardX11 || config.services.openssh.forwardX11);
 
     assertions =
-      [ { assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
+      [
+        {
+          assertion = cfg.forwardX11 -> cfg.setXAuthLocation;
           message = "cannot enable X11 forwarding without setting XAuth location";
         }
       ] ++ flip mapAttrsToList cfg.knownHosts (name: data: {
-        assertion = (data.publicKey == null && data.publicKeyFile != null) ||
-                    (data.publicKey != null && data.publicKeyFile == null);
+        assertion = (data.publicKey == null && data.publicKeyFile != null)
+        || (data.publicKey != null && data.publicKeyFile == null);
         message = "knownHost ${name} must contain either a publicKey or publicKeyFile";
       });
 
@@ -230,29 +232,31 @@ in
         AddressFamily ${if config.networking.enableIPv6 then "any" else "inet"}
 
         ${optionalString cfg.setXAuthLocation ''
-          XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
-        ''}
+        XAuthLocation ${pkgs.xorg.xauth}/bin/xauth
+      ''}
 
         ForwardX11 ${if cfg.forwardX11 then "yes" else "no"}
 
-        ${optionalString (cfg.pubkeyAcceptedKeyTypes != []) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
-        ${optionalString (cfg.hostKeyAlgorithms != []) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
+        ${optionalString (cfg.pubkeyAcceptedKeyTypes != [ ]) "PubkeyAcceptedKeyTypes ${concatStringsSep "," cfg.pubkeyAcceptedKeyTypes}"}
+        ${optionalString (cfg.hostKeyAlgorithms != [ ]) "HostKeyAlgorithms ${concatStringsSep "," cfg.hostKeyAlgorithms}"}
       '';
 
     environment.etc."ssh/ssh_known_hosts".text = knownHostsText;
 
     # FIXME: this should really be socket-activated for über-awesomeness.
     systemd.user.services.ssh-agent = mkIf cfg.startAgent
-      { description = "SSH Agent";
+      {
+        description = "SSH Agent";
         wantedBy = [ "default.target" ];
         unitConfig.ConditionUser = "!@system";
         serviceConfig =
-          { ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
+          {
+            ExecStartPre = "${pkgs.coreutils}/bin/rm -f %t/ssh-agent";
             ExecStart =
-                "${cfg.package}/bin/ssh-agent " +
-                optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ") +
-                optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ") +
-                "-a %t/ssh-agent";
+              "${cfg.package}/bin/ssh-agent "
+              + optionalString (cfg.agentTimeout != null) ("-t ${cfg.agentTimeout} ")
+              + optionalString (cfg.agentPKCS11Whitelist != null) ("-P ${cfg.agentPKCS11Whitelist} ")
+              + "-a %t/ssh-agent";
             StandardOutput = "null";
             Type = "forking";
             Restart = "on-failure";

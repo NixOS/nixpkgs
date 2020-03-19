@@ -1,13 +1,22 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, fetchurl
+, pkgconfig
 
-# Optional Dependencies
-, openssl ? null, zlib ? null
-, enableLibEv ? !stdenv.hostPlatform.isWindows, libev ? null
-, enableCAres ? !stdenv.hostPlatform.isWindows, c-ares ? null
-, enableHpack ? false, jansson ? null
-, enableAsioLib ? false, boost ? null
-, enableGetAssets ? false, libxml2 ? null
-, enableJemalloc ? false, jemalloc ? null
+  # Optional Dependencies
+, openssl ? null
+, zlib ? null
+, enableLibEv ? !stdenv.hostPlatform.isWindows
+, libev ? null
+, enableCAres ? !stdenv.hostPlatform.isWindows
+, c-ares ? null
+, enableHpack ? false
+, jansson ? null
+, enableAsioLib ? false
+, boost ? null
+, enableGetAssets ? false
+, libxml2 ? null
+, enableJemalloc ? false
+, jemalloc ? null
 , enableApp ? !stdenv.hostPlatform.isWindows
 }:
 
@@ -31,13 +40,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]
-    ++ optional enableLibEv libev
-    ++ [ zlib ]
-    ++ optional enableCAres c-ares
-    ++ optional enableHpack jansson
-    ++ optional enableAsioLib boost
-    ++ optional enableGetAssets libxml2
-    ++ optional enableJemalloc jemalloc;
+  ++ optional enableLibEv libev
+  ++ [ zlib ]
+  ++ optional enableCAres c-ares
+  ++ optional enableHpack jansson
+  ++ optional enableAsioLib boost
+  ++ optional enableGetAssets libxml2
+  ++ optional enableJemalloc jemalloc;
 
   enableParallelBuilding = true;
 

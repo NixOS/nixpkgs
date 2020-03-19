@@ -81,10 +81,10 @@
 }:
 
 assert faacSupport -> faac != null;
-
 let
   inherit (stdenv.lib) optional optionals;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gst-plugins-bad";
   version = "1.16.2";
 
@@ -259,7 +259,8 @@ in stdenv.mkDerivation rec {
     "-Dwebrtc=disabled" # requires libnice, which as of writing doesn't work on Darwin in nixpkgs
     "-Dwildmidi=disabled" # see dependencies above
   ] ++ optionals (!gst-plugins-base.glEnabled) [
-    "-Dgl=disabled"]
+    "-Dgl=disabled"
+  ]
   ++ optionals (!gst-plugins-base.waylandEnabled) [
     "-Dwayland=disabled"
   ] ++ optionals (!gst-plugins-base.glEnabled) [

@@ -7,11 +7,13 @@ let
   defaultUser = "paperless";
 
   manage = cfg.package.withConfig {
-    config = {
-      PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
-      PAPERLESS_INLINE_DOC = "true";
-      PAPERLESS_DISABLE_LOGIN = "true";
-    } // cfg.extraConfig;
+    config =
+      {
+        PAPERLESS_CONSUMPTION_DIR = cfg.consumptionDir;
+        PAPERLESS_INLINE_DOC = "true";
+        PAPERLESS_DISABLE_LOGIN = "true";
+      }
+      // cfg.extraConfig;
     inherit (cfg) dataDir ocrLanguages;
     paperlessPkg = cfg.package;
   };
@@ -74,7 +76,7 @@ in
 
     extraConfig = mkOption {
       type = types.attrs;
-      default = {};
+      default = { };
       description = ''
         Extra paperless config options.
 
@@ -124,8 +126,9 @@ in
 
     systemd.tmpfiles.rules = [
       "d '${cfg.dataDir}' - ${cfg.user} ${config.users.users.${cfg.user}.group} - -"
-    ] ++ (optional cfg.consumptionDirIsPublic
-      "d '${cfg.consumptionDir}' 777 - - - -"
+    ] ++ (
+      optional cfg.consumptionDirIsPublic
+        "d '${cfg.consumptionDir}' 777 - - - -"
       # If the consumption dir is not created here, it's automatically created by
       # 'manage' with the default permissions.
     );

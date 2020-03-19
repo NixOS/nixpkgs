@@ -1,11 +1,8 @@
 /* String manipulation functions. */
 { lib }:
 let
-
-inherit (builtins) length;
-
+  inherit (builtins) length;
 in
-
 rec {
 
   inherit (builtins) stringLength substring head tail isString replaceStrings;
@@ -54,9 +51,9 @@ rec {
     separator:
     # Input list
     list:
-    if list == [] || length list == 1
+    if list == [ ] || length list == 1
     then list
-    else tail (lib.concatMap (x: [separator x]) list);
+    else tail (lib.concatMap (x: [ separator x ]) list);
 
   /* Concatenate a list of strings with a separator between each element
 
@@ -213,8 +210,8 @@ rec {
     let
       lenContent = stringLength content;
       lenSuffix = stringLength suffix;
-    in lenContent >= lenSuffix &&
-       substring (lenContent - lenSuffix) lenContent content == suffix;
+    in lenContent >= lenSuffix
+    && substring (lenContent - lenSuffix) lenContent content == suffix;
 
   /* Determine whether a string contains the given infix
 
@@ -234,7 +231,7 @@ rec {
     let
       drop = x: substring 1 (stringLength x) x;
     in hasPrefix infix content
-      || content != "" && hasInfix infix (drop content);
+    || content != "" && hasInfix infix (drop content);
 
   /* Convert a string to a list of characters (i.e. singleton strings).
      This allows you to, e.g., map a function over each character.  However,
@@ -293,7 +290,7 @@ rec {
        escapeShellArg "esc'ape\nme"
        => "'esc'\\''ape\nme'"
   */
-  escapeShellArg = arg: "'${replaceStrings ["'"] ["'\\''"] (toString arg)}'";
+  escapeShellArg = arg: "'${replaceStrings [ "'" ] [ "'\\''" ] (toString arg)}'";
 
   /* Quote all arguments to be safely passed to the Bourne shell.
 
@@ -313,21 +310,21 @@ rec {
        escapeNixString "hello\${}\n"
        => "\"hello\\\${}\\n\""
   */
-  escapeNixString = s: escape ["$"] (builtins.toJSON s);
+  escapeNixString = s: escape [ "$" ] (builtins.toJSON s);
 
   # Obsolete - use replaceStrings instead.
-  replaceChars = builtins.replaceStrings or (
-    del: new: s:
+  replaceChars = builtins.replaceStrings or (del: new: s:
     let
       substList = lib.zipLists del new;
       subst = c:
         let found = lib.findFirst (sub: sub.fst == c) null substList; in
-        if found == null then
-          c
-        else
-          found.snd;
+          if found == null then
+            c
+          else
+            found.snd;
     in
-      stringAsChars subst s);
+      stringAsChars subst s
+  );
 
   # Case conversion utilities.
   lowerChars = stringToCharacters "abcdefghijklmnopqrstuvwxyz";
@@ -390,15 +387,16 @@ rec {
         substring startAt sepLen s == sep;
 
       recurse = index: startAt:
-        let cutUntil = i: [(substring startAt (i - startAt) s)]; in
-        if index <= lastSearch then
-          if startWithSep index then
-            let restartAt = index + sepLen; in
-            cutUntil index ++ recurse restartAt restartAt
+        let cutUntil = i: [ (substring startAt (i - startAt) s) ]; in
+          if index <= lastSearch then
+            if startWithSep index
+            then
+              let restartAt = index + sepLen; in
+                cutUntil index ++ recurse restartAt restartAt
+            else
+              recurse (index + 1) startAt
           else
-            recurse (index + 1) startAt
-        else
-          cutUntil sLen;
+            cutUntil sLen;
     in
       recurse 0 0;
 
@@ -483,9 +481,10 @@ rec {
        => "youtube-dl"
   */
   getName = x:
-   let
-     parse = drv: (builtins.parseDrvName drv).name;
-   in if isString x
+    let
+      parse = drv: (builtins.parseDrvName drv).name;
+    in
+      if isString x
       then parse x
       else x.pname or (parse x.name);
 
@@ -500,9 +499,10 @@ rec {
        => "2016.01.01"
   */
   getVersion = x:
-   let
-     parse = drv: (builtins.parseDrvName drv).version;
-   in if isString x
+    let
+      parse = drv: (builtins.parseDrvName drv).version;
+    in
+      if isString x
       then parse x
       else x.version or (parse x.name);
 
@@ -585,7 +585,7 @@ rec {
     in
       assert lib.assertMsg (strw <= width)
         "fixedWidthString: requested string length (${
-          toString width}) must not be shorter than actual length (${
+            toString width}) must not be shorter than actual length (${
             toString strw})";
       if strw == width then str else filler + fixedWidthString reqWidth filler str;
 
@@ -599,10 +599,10 @@ rec {
 
   /* Check whether a value can be coerced to a string */
   isCoercibleToString = x:
-    builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ] ||
-    (builtins.isList x && lib.all isCoercibleToString x) ||
-    x ? outPath ||
-    x ? __toString;
+    builtins.elem (builtins.typeOf x) [ "path" "string" "null" "int" "float" "bool" ]
+    || (builtins.isList x && lib.all isCoercibleToString x)
+    || x ? outPath
+    || x ? __toString;
 
   /* Check whether a value is a store path.
 
@@ -617,10 +617,11 @@ rec {
        => false
   */
   isStorePath = x:
-    if isCoercibleToString x then
+    if isCoercibleToString x
+    then
       let str = toString x; in
-      builtins.substring 0 1 str == "/"
-      && dirOf str == builtins.storeDir
+        builtins.substring 0 1 str == "/"
+        && dirOf str == builtins.storeDir
     else
       false;
 
@@ -639,9 +640,9 @@ rec {
   # Obviously, it is a bit hacky to use fromJSON this way.
   toInt = str:
     let may_be_int = builtins.fromJSON str; in
-    if builtins.isInt may_be_int
-    then may_be_int
-    else throw "Could not convert ${str} to int.";
+      if builtins.isInt may_be_int
+      then may_be_int
+      else throw "Could not convert ${str} to int.";
 
   /* Read a list of paths from `file`, relative to the `rootPath`.
      Lines beginning with `#` are treated as comments and ignored.

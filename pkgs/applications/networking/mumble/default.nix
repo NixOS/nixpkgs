@@ -1,11 +1,27 @@
-{ stdenv, fetchurl, fetchFromGitHub, fetchpatch, pkgconfig, qt5
-, avahi, boost, libopus, libsndfile, protobuf, speex, libcap
-, alsaLib, python
+{ stdenv
+, fetchurl
+, fetchFromGitHub
+, fetchpatch
+, pkgconfig
+, qt5
+, avahi
+, boost
+, libopus
+, libsndfile
+, protobuf
+, speex
+, libcap
+, alsaLib
+, python
 , rnnoise
-, jackSupport ? false, libjack2 ? null
-, speechdSupport ? false, speechd ? null
-, pulseSupport ? false, libpulseaudio ? null
-, iceSupport ? false, zeroc-ice ? null
+, jackSupport ? false
+, libjack2 ? null
+, speechdSupport ? false
+, speechd ? null
+, pulseSupport ? false
+, libpulseaudio ? null
+, iceSupport ? false
+, zeroc-ice ? null
 }:
 
 assert jackSupport -> libjack2 != null;
@@ -15,72 +31,74 @@ assert iceSupport -> zeroc-ice != null;
 
 with stdenv.lib;
 let
-  generic = overrides: source: qt5.mkDerivation (source // overrides // {
-    pname = overrides.type;
-    version = source.version;
+  generic = overrides: source: qt5.mkDerivation
+    (source // overrides // {
+      pname = overrides.type;
+      version = source.version;
 
-    patches = (source.patches or [])
+      patches = (source.patches or [ ])
       ++ [ ./fix-rnnoise-argument.patch ];
 
-    nativeBuildInputs = [ pkgconfig python qt5.qmake ]
+      nativeBuildInputs = [ pkgconfig python qt5.qmake ]
       ++ (overrides.nativeBuildInputs or [ ]);
 
-    buildInputs = [ boost protobuf avahi ]
+      buildInputs = [ boost protobuf avahi ]
       ++ (overrides.buildInputs or [ ]);
 
-    qmakeFlags = [
-      "CONFIG+=c++11"
-      "CONFIG+=shared"
-      "CONFIG+=no-g15"
-      "CONFIG+=packaged"
-      "CONFIG+=no-update"
-      "CONFIG+=no-embed-qt-translations"
-      "CONFIG+=bundled-celt"
-      "CONFIG+=no-bundled-opus"
-      "CONFIG+=no-bundled-speex"
-      "DEFINES+=PLUGIN_PATH=${placeholder "out"}/lib/mumble"
-    ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
+      qmakeFlags = [
+        "CONFIG+=c++11"
+        "CONFIG+=shared"
+        "CONFIG+=no-g15"
+        "CONFIG+=packaged"
+        "CONFIG+=no-update"
+        "CONFIG+=no-embed-qt-translations"
+        "CONFIG+=bundled-celt"
+        "CONFIG+=no-bundled-opus"
+        "CONFIG+=no-bundled-speex"
+        "DEFINES+=PLUGIN_PATH=${placeholder "out"}/lib/mumble"
+      ] ++ optional (!speechdSupport) "CONFIG+=no-speechd"
       ++ optional jackSupport "CONFIG+=no-oss CONFIG+=no-alsa CONFIG+=jackaudio"
       ++ (overrides.configureFlags or [ ]);
 
-    preConfigure = ''
-       patchShebangs scripts
-    '';
+      preConfigure = ''
+        patchShebangs scripts
+      '';
 
-    makeFlags = [ "release" ];
+      makeFlags = [ "release" ];
 
-    installPhase = ''
-      runHook preInstall
+      installPhase = ''
+        runHook preInstall
 
-      ${overrides.installPhase}
+        ${overrides.installPhase}
 
-      # doc stuff
-      mkdir -p $out/share/man/man1
-      install -Dm644 man/mum* $out/share/man/man1/
+        # doc stuff
+        mkdir -p $out/share/man/man1
+        install -Dm644 man/mum* $out/share/man/man1/
 
-      runHook postInstall
-    '';
+        runHook postInstall
+      '';
 
-    enableParallelBuilding = true;
+      enableParallelBuilding = true;
 
-    meta = {
-      description = "Low-latency, high quality voice chat software";
-      homepage = "https://mumble.info";
-      license = licenses.bsd3;
-      maintainers = with maintainers; [ petabyteboy infinisil ];
-      platforms = platforms.linux;
-    };
-  });
+      meta = {
+        description = "Low-latency, high quality voice chat software";
+        homepage = "https://mumble.info";
+        license = licenses.bsd3;
+        maintainers = with maintainers; [ petabyteboy infinisil ];
+        platforms = platforms.linux;
+      };
+    }
+    );
 
   client = source: generic {
     type = "mumble";
 
     nativeBuildInputs = [ qt5.qttools ];
     buildInputs = [ libopus libsndfile speex qt5.qtsvg rnnoise ]
-      ++ optional stdenv.isLinux alsaLib
-      ++ optional jackSupport libjack2
-      ++ optional speechdSupport speechd
-      ++ optional pulseSupport libpulseaudio;
+    ++ optional stdenv.isLinux alsaLib
+    ++ optional jackSupport libjack2
+    ++ optional speechdSupport speechd
+    ++ optional pulseSupport libpulseaudio;
 
     configureFlags = [
       "CONFIG+=no-server"
@@ -136,7 +154,8 @@ let
       fetchSubmodules = true;
     };
   };
-in {
-  mumble  = client source;
-  murmur  = server source;
+in
+{
+  mumble = client source;
+  murmur = server source;
 }

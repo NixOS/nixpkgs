@@ -8,8 +8,8 @@ stdenv.mkDerivation rec {
     sha256 = "04gi55lzgrhsb78qw8jmnccqim92rw6898knw0a7gfzn2sci30wj";
   };
 
-  propagatedBuildInputs = [ jre ] ;
-  buildInputs = [ makeWrapper ] ;
+  propagatedBuildInputs = [ jre ];
+  buildInputs = [ makeWrapper ];
 
   installPhase = ''
     mkdir -p $out

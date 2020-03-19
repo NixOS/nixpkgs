@@ -1,5 +1,4 @@
 { stdenv, fetchurl, ocaml, writeText }:
-
 let
   pname = "camlidl";
   webpage = "http://caml.inria.fr/pub/old_caml_site/camlidl/";

@@ -3,12 +3,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   inherit (pkgs) das_watchdog;
-
-in {
+in
+{
   ###### interface
 
   options = {

@@ -1,16 +1,32 @@
-{ stdenv, fetchurl, fetchpatch, pkgconfig, cairo, harfbuzz
-, libintl, gobject-introspection, darwin, fribidi, gnome3
-, gtk-doc, docbook_xsl, docbook_xml_dtd_43, makeFontsConf, freefont_ttf
-, meson, ninja, glib
-, x11Support? !stdenv.isDarwin, libXft
+{ stdenv
+, fetchurl
+, fetchpatch
+, pkgconfig
+, cairo
+, harfbuzz
+, libintl
+, gobject-introspection
+, darwin
+, fribidi
+, gnome3
+, gtk-doc
+, docbook_xsl
+, docbook_xml_dtd_43
+, makeFontsConf
+, freefont_ttf
+, meson
+, ninja
+, glib
+, x11Support ? !stdenv.isDarwin
+, libXft
 }:
 
 with stdenv.lib;
-
 let
   pname = "pango";
   version = "1.44.7";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -22,8 +38,13 @@ in stdenv.mkDerivation rec {
   outputs = [ "bin" "dev" "out" ] ++ optional (!stdenv.isDarwin) "devdoc";
 
   nativeBuildInputs = [
-    meson ninja
-    pkgconfig gobject-introspection gtk-doc docbook_xsl docbook_xml_dtd_43
+    meson
+    ninja
+    pkgconfig
+    gobject-introspection
+    gtk-doc
+    docbook_xsl
+    docbook_xml_dtd_43
   ];
   buildInputs = [
     fribidi
@@ -33,8 +54,8 @@ in stdenv.mkDerivation rec {
     CoreGraphics
     CoreText
   ]);
-  propagatedBuildInputs = [ cairo glib libintl harfbuzz ] ++
-    optional x11Support libXft;
+  propagatedBuildInputs = [ cairo glib libintl harfbuzz ]
+  ++ optional x11Support libXft;
 
   mesonFlags = [
     "-Dgtk_doc=${if stdenv.isDarwin then "false" else "true"}"

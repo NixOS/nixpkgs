@@ -17,7 +17,7 @@ buildPythonPackage rec {
   meta = with lib; {
     homepage = http://twill.idyll.org/;
     description = "A simple scripting language for Web browsing";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
 }

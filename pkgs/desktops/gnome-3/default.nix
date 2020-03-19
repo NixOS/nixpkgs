@@ -1,6 +1,7 @@
 { config, pkgs, lib }:
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: with self;
+{
   updateScript = callPackage ./update.nix { };
 
   /* Remove packages of packagesToRemove from packages, based on their names
@@ -24,10 +25,10 @@ lib.makeScope pkgs.newScope (self: with self; {
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };
   gnome3 = self // { recurseForDerivations = false; };
 
-# ISO installer
-# installerIso = callPackage ./installer.nix {};
+  # ISO installer
+  # installerIso = callPackage ./installer.nix {};
 
-#### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
+  #### Core (http://ftp.acc.umu.se/pub/GNOME/core/)
 
   adwaita-icon-theme = callPackage ./core/adwaita-icon-theme { };
 
@@ -155,7 +156,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   zenity = callPackage ./core/zenity { };
 
 
-#### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
+  #### Apps (http://ftp.acc.umu.se/pub/GNOME/apps/)
 
   accerciser = callPackage ./apps/accerciser { };
 
@@ -199,7 +200,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-sound-recorder = callPackage ./apps/gnome-sound-recorder { };
 
-  gnome-todo = callPackage ./apps/gnome-todo {};
+  gnome-todo = callPackage ./apps/gnome-todo { };
 
   gnome-weather = callPackage ./apps/gnome-weather { };
 
@@ -209,7 +210,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   vinagre = callPackage ./apps/vinagre { };
 
-#### Dev http://ftp.gnome.org/pub/GNOME/devtools/
+  #### Dev http://ftp.gnome.org/pub/GNOME/devtools/
 
   anjuta = callPackage ./devtools/anjuta { };
 
@@ -217,7 +218,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   gnome-devel-docs = callPackage ./devtools/gnome-devel-docs { };
 
-#### Games
+  #### Games
 
   aisleriot = callPackage ./games/aisleriot { };
 
@@ -257,7 +258,7 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   quadrapassel = callPackage ./games/quadrapassel { };
 
-#### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
+  #### Misc -- other packages on http://ftp.gnome.org/pub/GNOME/sources/
 
   geary = callPackage ./misc/geary { };
 
@@ -288,8 +289,9 @@ lib.makeScope pkgs.newScope (self: with self; {
   gnome-autoar = callPackage ./misc/gnome-autoar { };
 
   gnome-packagekit = callPackage ./misc/gnome-packagekit { };
-} // lib.optionalAttrs (config.allowAliases or true) {
-#### Legacy aliases
+}
+// lib.optionalAttrs (config.allowAliases or true) {
+  #### Legacy aliases
 
   bijiben = gnome-notes; # added 2018-09-26
   evolution_data_server = evolution-data-server; # added 2018-02-25
@@ -322,9 +324,9 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   # added 2019-02-08
   inherit (pkgs) atk glib gobject-introspection gspell webkitgtk gtk3 gtkmm3
-      libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
-      easytag meld orca rhythmbox shotwell gnome-usage
-      clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
+    libgtop libgudev libhttpseverywhere librsvg libsecret gdk_pixbuf gtksourceview gtksourceviewmm gtksourceview4
+    easytag meld orca rhythmbox shotwell gnome-usage
+    clutter clutter-gst clutter-gtk cogl gtk-vnc libdazzle libgda libgit2-glib libgxps libgdata libgepub libcroco libpeas libgee geocode-glib libgweather librest libzapojit libmediaart gfbgraph gexiv2 folks totem-pl-parser gcr gsound libgnomekbd vte vte_290 gnome-menus gdl;
   inherit (pkgs) gsettings-desktop-schemas; # added 2019-04-16
   inherit (pkgs) gnome-video-effects; # added 2019-08-19
   inherit (pkgs) gnome-online-accounts grilo grilo-plugins tracker tracker-miners gnome-photos; # added 2019-08-23
@@ -358,4 +360,5 @@ lib.makeScope pkgs.newScope (self: with self; {
   inherit (pkgs) dconf; # added 2019-11-30
 
   inherit (pkgs) networkmanagerapplet; # added 2019-12-12
-})
+}
+)

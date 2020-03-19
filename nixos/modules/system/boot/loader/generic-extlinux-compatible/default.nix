@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   blCfg = config.boot.loader;
   cfg = blCfg.generic-extlinux-compatible;

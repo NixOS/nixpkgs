@@ -1,13 +1,17 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper
-, coq, ocamlPackages, coq2html
+{ stdenv
+, lib
+, fetchFromGitHub
+, makeWrapper
+, coq
+, ocamlPackages
+, coq2html
 , tools ? stdenv.cc
 }:
 
 assert lib.versionAtLeast ocamlPackages.ocaml.version "4.02";
 assert lib.versionAtLeast coq.coq-version "8.8.0";
-
 let
-  ocaml-pkgs      = with ocamlPackages; [ ocaml findlib menhir ];
+  ocaml-pkgs = with ocamlPackages; [ ocaml findlib menhir ];
   ccomp-platform = if stdenv.isDarwin then "x86_64-macosx" else "x86_64-linux";
 in
 stdenv.mkDerivation rec {
@@ -65,9 +69,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Formally verified C compiler";
-    homepage    = "http://compcert.inria.fr";
-    license     = licenses.inria-compcert;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    homepage = "http://compcert.inria.fr";
+    license = licenses.inria-compcert;
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ thoughtpolice jwiegley vbgl ];
   };
 }

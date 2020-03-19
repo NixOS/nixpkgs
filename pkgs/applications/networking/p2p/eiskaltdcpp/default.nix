@@ -1,5 +1,20 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, qt4, boost, bzip2, libX11
-, fetchpatch, libiconv, pcre-cpp, libidn, lua5, miniupnpc, aspell, gettext }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, qt4
+, boost
+, bzip2
+, libX11
+, fetchpatch
+, libiconv
+, pcre-cpp
+, libidn
+, lua5
+, miniupnpc
+, aspell
+, gettext
+}:
 
 stdenv.mkDerivation rec {
   pname = "eiskaltdcpp";
@@ -14,7 +29,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake pkgconfig ];
   buildInputs = [ qt4 boost bzip2 libX11 pcre-cpp libidn lua5 miniupnpc aspell gettext ]
-    ++ stdenv.lib.optional stdenv.isDarwin libiconv;
+  ++ stdenv.lib.optional stdenv.isDarwin libiconv;
 
   patches = [
     (fetchpatch {

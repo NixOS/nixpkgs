@@ -1,34 +1,59 @@
-{ stdenv, fetchurl, makeDesktopItem, patchelf, zlib, freetype, fontconfig
-, openssl, libXrender, libXrandr, libXcursor, libX11, libXext, libXi
-, libxcb, cups, xkeyboardconfig, runtimeShell
+{ stdenv
+, fetchurl
+, makeDesktopItem
+, patchelf
+, zlib
+, freetype
+, fontconfig
+, openssl
+, libXrender
+, libXrandr
+, libXcursor
+, libX11
+, libXext
+, libXi
+, libxcb
+, cups
+, xkeyboardconfig
+, runtimeShell
 }:
-
 let
-
   libPath = stdenv.lib.makeLibraryPath
-    [ zlib freetype fontconfig openssl libXrender libXrandr libXcursor libX11
-      libXext libXi libxcb cups
+    [
+      zlib
+      freetype
+      fontconfig
+      openssl
+      libXrender
+      libXrandr
+      libXcursor
+      libX11
+      libXext
+      libXi
+      libxcb
+      cups
     ];
-
 in
-
 stdenv.mkDerivation rec {
   pname = "eagle";
   version = "7.7.0";
 
   src =
-    if stdenv.hostPlatform.system == "i686-linux" then
+    if stdenv.hostPlatform.system == "i686-linux"
+    then
       fetchurl {
         url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin32-${version}.run";
         sha256 = "16fa66p77xigc7zvzfm7737mllrcs6nrgk2p7wvkjw3p9lvbz7z1";
       }
-    else if stdenv.hostPlatform.system == "x86_64-linux" then
-      fetchurl {
-        url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin64-${version}.run";
-        sha256 = "18dcn6wqph1sqh0ah98qzfi05wip8a8ifbkaq79iskbrsi8iqnrg";
-      }
     else
-      throw "Unsupported system: ${stdenv.hostPlatform.system}";
+      if stdenv.hostPlatform.system == "x86_64-linux"
+      then
+        fetchurl {
+          url = "ftp://ftp.cadsoft.de/eagle/program/7.7/eagle-lin64-${version}.run";
+          sha256 = "18dcn6wqph1sqh0ah98qzfi05wip8a8ifbkaq79iskbrsi8iqnrg";
+        }
+      else
+        throw "Unsupported system: ${stdenv.hostPlatform.system}";
 
   desktopItem = makeDesktopItem {
     name = "eagle";
@@ -41,8 +66,18 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ patchelf zlib freetype fontconfig openssl libXrender libXrandr libXcursor
-      libX11 libXext libXi
+    [
+      patchelf
+      zlib
+      freetype
+      fontconfig
+      openssl
+      libXrender
+      libXrandr
+      libXcursor
+      libX11
+      libXext
+      libXi
     ];
 
   phases = [ "installPhase" ];

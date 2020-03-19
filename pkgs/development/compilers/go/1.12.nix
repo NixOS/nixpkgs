@@ -1,14 +1,26 @@
-{ stdenv, fetchurl, tzdata, iana-etc, runCommand
-, perl, which, pkgconfig, patch, procps, pcre, cacert, Security, Foundation
-, mailcap, runtimeShell
-, buildPackages, pkgsTargetTarget
+{ stdenv
+, fetchurl
+, tzdata
+, iana-etc
+, runCommand
+, perl
+, which
+, pkgconfig
+, patch
+, procps
+, pcre
+, cacert
+, Security
+, Foundation
+, mailcap
+, runtimeShell
+, buildPackages
+, pkgsTargetTarget
 }:
-
 let
-
   inherit (stdenv.lib) optionals optionalString;
 
-  goBootstrap = runCommand "go-bootstrap" {} ''
+  goBootstrap = runCommand "go-bootstrap" { } ''
     mkdir $out
     cp -rf ${buildPackages.go_bootstrap}/* $out/
     chmod -R u+w $out
@@ -25,9 +37,7 @@ let
     armv6l = "arm";
     armv7l = "arm";
   }.${platform.parsed.cpu.name} or (throw "Unsupported system");
-
 in
-
 stdenv.mkDerivation rec {
   pname = "go";
   version = "1.12.17";
@@ -40,8 +50,8 @@ stdenv.mkDerivation rec {
   # perl is used for testing go vet
   nativeBuildInputs = [ perl which pkgconfig patch procps ];
   buildInputs = [ cacert pcre ]
-    ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
-    ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
+  ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
+  ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
 
   propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
@@ -143,9 +153,10 @@ stdenv.mkDerivation rec {
     ./skip-nohup-tests.patch
   ] ++ [
     # breaks under load: https://github.com/golang/go/issues/25628
-    (if stdenv.isAarch32
-    then ./skip-test-extra-files-on-aarch32.patch
-    else ./skip-test-extra-files-on-386.patch)
+    (
+      if stdenv.isAarch32
+      then ./skip-test-extra-files-on-aarch32.patch
+      else ./skip-test-extra-files-on-386.patch)
   ];
 
   postPatch = ''
@@ -162,16 +173,20 @@ stdenv.mkDerivation rec {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CC_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform)
+    then
       "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}cc"
     else
       null;
-  CXX_FOR_TARGET = if (stdenv.buildPlatform != stdenv.targetPlatform) then
+  CXX_FOR_TARGET =
+    if (stdenv.buildPlatform != stdenv.targetPlatform)
+    then
       "${pkgsTargetTarget.stdenv.cc}/bin/${pkgsTargetTarget.stdenv.cc.targetPrefix}c++"
     else
       null;
 
-  GOARM = toString (stdenv.lib.intersectLists [(stdenv.hostPlatform.parsed.cpu.version or "")] ["5" "6" "7"]);
+  GOARM = toString (stdenv.lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
   GO386 = 387; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
   # Hopefully avoids test timeouts on Hydra
@@ -181,7 +196,7 @@ stdenv.mkDerivation rec {
   # Some tests assume things like home directories and users exists
   GO_BUILDER_NAME = "nix";
 
-  GOROOT_BOOTSTRAP="${goBootstrap}/share/go";
+  GOROOT_BOOTSTRAP = "${goBootstrap}/share/go";
 
   postConfigure = ''
     export GOCACHE=$TMPDIR/go-cache
@@ -212,18 +227,22 @@ stdenv.mkDerivation rec {
     # Contains the wrong perl shebang when cross compiling,
     # since it is not used for anything we can deleted as well.
     rm src/regexp/syntax/make_perl_groups.pl
-  '' + (if (stdenv.buildPlatform != stdenv.hostPlatform) then ''
-    mv bin/*_*/* bin
-    rmdir bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+  '' + (
+    if (stdenv.buildPlatform != stdenv.hostPlatform)
+    then ''
+      mv bin/*_*/* bin
+      rmdir bin/*_*
+      ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
       rm -rf pkg/${GOHOSTOS}_${GOHOSTARCH} pkg/tool/${GOHOSTOS}_${GOHOSTARCH}
     ''}
-  '' else if (stdenv.hostPlatform != stdenv.targetPlatform) then ''
-    rm -rf bin/*_*
-    ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
-      rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
-    ''}
-  '' else "");
+    '' else
+      if (stdenv.hostPlatform != stdenv.targetPlatform)
+      then ''
+        rm -rf bin/*_*
+        ${optionalString (!(GOHOSTARCH == GOARCH && GOOS == GOHOSTOS)) ''
+        rm -rf pkg/${GOOS}_${GOARCH} pkg/tool/${GOOS}_${GOARCH}
+      ''}
+      '' else "");
 
   installPhase = ''
     runHook preInstall

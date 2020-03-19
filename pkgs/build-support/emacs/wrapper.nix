@@ -37,14 +37,12 @@ in customEmacsPackages.emacsWithPackages (epkgs: [ epkgs.evil epkgs.magit ])
 with lib; let inherit (self) emacs; in
 
 packagesFun: # packages explicitly requested by the user
-
 let
   explicitRequires =
     if lib.isFunction packagesFun
-      then packagesFun self
+    then packagesFun self
     else packagesFun;
 in
-
 runCommand
   (appendToName "with-packages" emacs).name
   {

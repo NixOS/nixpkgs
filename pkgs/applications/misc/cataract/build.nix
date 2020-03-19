@@ -8,7 +8,8 @@
 , imagemagick
 , version
 , sha256
-, rev }:
+, rev
+}:
 
 stdenv.mkDerivation {
   inherit version;
@@ -39,5 +40,3 @@ stdenv.mkDerivation {
     platforms = with platforms; linux ++ darwin;
   };
 }
-
-

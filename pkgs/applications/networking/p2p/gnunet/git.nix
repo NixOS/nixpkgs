@@ -1,26 +1,60 @@
-{ stdenv, fetchgit, libextractor, libmicrohttpd, libgcrypt
-, zlib, gmp, curl, libtool, adns, sqlite, pkgconfig
-, libxml2, ncurses, gettext, libunistring, libidn
-, makeWrapper, autoconf, automake, texinfo, which
-, withVerbose ? false }:
-
+{ stdenv
+, fetchgit
+, libextractor
+, libmicrohttpd
+, libgcrypt
+, zlib
+, gmp
+, curl
+, libtool
+, adns
+, sqlite
+, pkgconfig
+, libxml2
+, ncurses
+, gettext
+, libunistring
+, libidn
+, makeWrapper
+, autoconf
+, automake
+, texinfo
+, which
+, withVerbose ? false
+}:
 let
-  rev = 	"ce2864cfaa27e55096b480bf35db5f8cee2a5e7e";
+  rev = "ce2864cfaa27e55096b480bf35db5f8cee2a5e7e";
 in
 stdenv.mkDerivation {
   name = "gnunet-git-${rev}";
 
   src = fetchgit {
-    url =  https://gnunet.org/git/gnunet.git;
+    url = https://gnunet.org/git/gnunet.git;
     inherit rev;
     sha256 = "0gbw920m9v4b3425c0d1h7drgl2m1fni1bwjn4fwqnyz7kdqzsgl";
   };
 
   buildInputs = [
-    libextractor libmicrohttpd libgcrypt gmp curl libtool
-    zlib adns sqlite libxml2 ncurses libidn
-    pkgconfig gettext libunistring makeWrapper
-    autoconf automake texinfo which
+    libextractor
+    libmicrohttpd
+    libgcrypt
+    gmp
+    curl
+    libtool
+    zlib
+    adns
+    sqlite
+    libxml2
+    ncurses
+    libidn
+    pkgconfig
+    gettext
+    libunistring
+    makeWrapper
+    autoconf
+    automake
+    texinfo
+    which
   ];
 
   configureFlags = stdenv.lib.optional withVerbose "--enable-logging=verbose ";

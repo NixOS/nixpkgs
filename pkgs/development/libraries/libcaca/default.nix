@@ -1,5 +1,12 @@
-{ stdenv, fetchurl, ncurses, zlib, pkgconfig, imlib2
-, x11Support ? !stdenv.isDarwin, libX11, libXext
+{ stdenv
+, fetchurl
+, ncurses
+, zlib
+, pkgconfig
+, imlib2
+, x11Support ? !stdenv.isDarwin
+, libX11
+, libXext
 }:
 
 stdenv.mkDerivation rec {
@@ -17,14 +24,14 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     (if x11Support then "--enable-x11" else "--disable-x11")
-    ];
+  ];
 
   NIX_CFLAGS_COMPILE = stdenv.lib.optionalString (!x11Support) "-DX_DISPLAY_MISSING";
 
   enableParallelBuilding = true;
 
   propagatedBuildInputs = [ ncurses zlib pkgconfig (imlib2.override { inherit x11Support; }) ]
-    ++ stdenv.lib.optionals x11Support [ libX11 libXext ];
+  ++ stdenv.lib.optionals x11Support [ libX11 libXext ];
 
   postInstall = ''
     mkdir -p $dev/bin

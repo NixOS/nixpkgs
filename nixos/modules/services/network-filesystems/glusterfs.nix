@@ -1,30 +1,31 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   inherit (pkgs) glusterfs rsync;
 
-  tlsCmd = if (cfg.tlsSettings != null) then
-  ''
-    mkdir -p /var/lib/glusterd
-    touch /var/lib/glusterd/secure-access
-  ''
-  else
-  ''
-    rm -f /var/lib/glusterd/secure-access
-  '';
+  tlsCmd =
+    if (cfg.tlsSettings != null)
+    then
+      ''
+        mkdir -p /var/lib/glusterd
+        touch /var/lib/glusterd/secure-access
+      ''
+    else
+      ''
+        rm -f /var/lib/glusterd/secure-access
+      '';
 
-  restartTriggers = if (cfg.tlsSettings != null) then [
-    config.environment.etc."ssl/glusterfs.pem".source
-    config.environment.etc."ssl/glusterfs.key".source
-    config.environment.etc."ssl/glusterfs.ca".source
-  ] else [];
+  restartTriggers =
+    if (cfg.tlsSettings != null)
+    then [
+      config.environment.etc."ssl/glusterfs.pem".source
+      config.environment.etc."ssl/glusterfs.key".source
+      config.environment.etc."ssl/glusterfs.ca".source
+    ] else [ ];
 
   cfg = config.services.glusterfs;
-
 in
-
 {
 
   ###### interface
@@ -36,7 +37,7 @@ in
       enable = mkEnableOption "GlusterFS Daemon";
 
       logLevel = mkOption {
-        type = types.enum ["DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" "TRACE" "NONE"];
+        type = types.enum [ "DEBUG" "INFO" "WARNING" "ERROR" "CRITICAL" "TRACE" "NONE" ];
         description = "Log level used by the GlusterFS daemon";
         default = "INFO";
       };
@@ -61,7 +62,7 @@ in
       };
 
       killMode = mkOption {
-        type = types.enum ["control-group" "process" "mixed" "none"];
+        type = types.enum [ "control-group" "process" "mixed" "none" ];
         description = ''
           The systemd KillMode to use for glusterd.
 
@@ -95,7 +96,7 @@ in
       extraFlags = mkOption {
         type = types.listOf types.str;
         description = "Extra flags passed to the GlusterFS daemon";
-        default = [];
+        default = [ ];
       };
 
       tlsSettings = mkOption {
@@ -110,27 +111,28 @@ in
           See also: https://gluster.readthedocs.io/en/latest/Administrator%20Guide/SSL/
         '';
         default = null;
-        type = types.nullOr (types.submodule {
-          options = {
-            tlsKeyPath = mkOption {
-              default = null;
-              type = types.str;
-              description = "Path to the private key used for TLS.";
-            };
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              tlsKeyPath = mkOption {
+                default = null;
+                type = types.str;
+                description = "Path to the private key used for TLS.";
+              };
 
-            tlsPem = mkOption {
-              default = null;
-              type = types.path;
-              description = "Path to the certificate used for TLS.";
-            };
+              tlsPem = mkOption {
+                default = null;
+                type = types.path;
+                description = "Path to the certificate used for TLS.";
+              };
 
-            caCert = mkOption {
-              default = null;
-              type = types.path;
-              description = "Path certificate authority used to sign the cluster certificates.";
+              caCert = mkOption {
+                default = null;
+                type = types.path;
+                description = "Path certificate authority used to sign the cluster certificates.";
+              };
             };
-          };
-        });
+          });
       };
     };
   };
@@ -176,10 +178,10 @@ in
       '';
 
       serviceConfig = {
-        LimitNOFILE=65536;
-        ExecStart="${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
-        KillMode=cfg.killMode;
-        TimeoutStopSec=cfg.stopKillTimeout;
+        LimitNOFILE = 65536;
+        ExecStart = "${glusterfs}/sbin/glusterd --no-daemon --log-level=${cfg.logLevel} ${toString cfg.extraFlags}";
+        KillMode = cfg.killMode;
+        TimeoutStopSec = cfg.stopKillTimeout;
       };
     };
 
@@ -200,11 +202,11 @@ in
       path = [ glusterfs ];
 
       serviceConfig = {
-        Type="simple";
-        PIDFile="/run/glustereventsd.pid";
-        ExecStart="${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
-        ExecReload="/bin/kill -SIGUSR2 $MAINPID";
-        KillMode="control-group";
+        Type = "simple";
+        PIDFile = "/run/glustereventsd.pid";
+        ExecStart = "${glusterfs}/sbin/glustereventsd --pid-file /run/glustereventsd.pid";
+        ExecReload = "/bin/kill -SIGUSR2 $MAINPID";
+        KillMode = "control-group";
       };
     };
   };

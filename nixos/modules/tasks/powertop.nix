@@ -1,10 +1,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.powerManagement.powertop;
-in {
+in
+{
   ###### interface
 
   options.powerManagement.powertop.enable = mkEnableOption "powertop auto tuning on startup";

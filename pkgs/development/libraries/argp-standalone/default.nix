@@ -1,5 +1,4 @@
 { stdenv, fetchurl, fetchpatch }:
-
 let
   patch-argp-fmtstream = fetchpatch {
     name = "patch-argp-fmtstream.h";
@@ -28,7 +27,7 @@ stdenv.mkDerivation {
   };
 
   patches =
-       stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ patch-argp-fmtstream ]
+    stdenv.lib.optionals stdenv.hostPlatform.isDarwin [ patch-argp-fmtstream ]
     ++ stdenv.lib.optionals stdenv.hostPlatform.isLinux [ patch-throw-in-funcdef patch-shared ];
 
   patchFlags = stdenv.lib.optional stdenv.hostPlatform.isDarwin "-p0";

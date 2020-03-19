@@ -30,7 +30,6 @@ buildGoPackage rec {
     description = "A command line utility used to interact with the Deis open source PaaS.";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [
-    ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -1,19 +1,18 @@
-{ runCommand,
-clang,
-gcc64,
-gcc32,
-glibc_multi
+{ runCommand
+, clang
+, gcc64
+, gcc32
+, glibc_multi
 }:
-
 let
-  combine = basegcc: runCommand "combine-gcc-libc" {} ''
+  combine = basegcc: runCommand "combine-gcc-libc" { } ''
     mkdir -p $out
     cp -r ${basegcc.cc}/lib $out/lib
 
     chmod u+rw -R $out/lib
     cp -r ${basegcc.libc}/lib/* $(ls -d $out/lib/gcc/*/*)
   '';
-  gcc_multi_sysroot = runCommand "gcc-multi-sysroot" {} ''
+  gcc_multi_sysroot = runCommand "gcc-multi-sysroot" { } ''
     mkdir -p $out/lib/gcc
 
     ln -s ${combine gcc64}/lib/gcc/* $out/lib/gcc/
@@ -44,5 +43,5 @@ let
       sed -e '$a --gcc-toolchain=${gcc_multi_sysroot}' -i $out/nix-support/libc-cflags
     '';
   };
-
-in clangMulti
+in
+clangMulti

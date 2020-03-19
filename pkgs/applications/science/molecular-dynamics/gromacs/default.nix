@@ -21,14 +21,16 @@ stdenv.mkDerivation {
   ++ (stdenv.lib.optionals mpiEnabled [ openmpi ]);
 
   cmakeFlags = (
-    if singlePrec then [
+    if singlePrec
+    then [
       "-DGMX_DOUBLE=OFF"
     ] else [
       "-DGMX_DOUBLE=ON"
       "-DGMX_DEFAULT_SUFFIX=OFF"
     ]
   ) ++ (
-    if mpiEnabled then [
+    if mpiEnabled
+    then [
       "-DGMX_MPI:BOOL=TRUE"
       "-DGMX_CPU_ACCELERATION:STRING=SSE4.1"
       "-DGMX_OPENMP:BOOL=TRUE"

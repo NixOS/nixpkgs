@@ -1,6 +1,6 @@
 { stdenv, fetchurl, libjpeg, zlib, perl }:
-
-let version = "9.1.1";
+let
+  version = "9.1.1";
 in
 stdenv.mkDerivation rec {
   pname = "qpdf";

@@ -14,7 +14,7 @@ rec {
 
   packageName = "marshal";
 
-  asdFilesToKeep = ["marshal.asd"];
+  asdFilesToKeep = [ "marshal.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM marshal DESCRIPTION

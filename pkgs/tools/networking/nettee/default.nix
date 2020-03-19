@@ -1,10 +1,9 @@
 { stdenv, lib, fetchurl, cleanPackaging }:
-
 let
   version = "0.3.4";
   sha256 = "00xbkp99x9v07r34w7m2p8gak5hdsdbka36n7a733rdrrkgf5z7r";
-
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "nettee";
   inherit version;
 
@@ -40,7 +39,7 @@ in stdenv.mkDerivation {
 
   installPhase = ''
     ${cleanPackaging.commonFileActions {
-        docFiles = [
+      docFiles = [
           "*.html"
           "*.TXT"
           "LICENSE"
@@ -49,12 +48,12 @@ in stdenv.mkDerivation {
           "beowulf.master"
           "topology_info"
         ];
-        noiseFiles = [
+      noiseFiles = [
           "*.c"
           "*.h"
           "nettee"
         ];
-      }} $doc/share/doc/nettee
+    }} $doc/share/doc/nettee
 
     mkdir -p $man/share/man/{man1,man3}
     mv nettee.1 $man/share/man/man1

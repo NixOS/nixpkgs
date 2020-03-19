@@ -1,7 +1,21 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuchardet, pkgconfig
-, shntool, flac, opusTools, vorbis-tools, mp3gain, lame, wavpack, vorbisgain
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuchardet
+, pkgconfig
+, shntool
+, flac
+, opusTools
+, vorbis-tools
+, mp3gain
+, lame
+, wavpack
+, vorbisgain
 , gtk3
-, qtbase, qttools, wrapQtAppsHook
+, qtbase
+, qttools
+, wrapQtAppsHook
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +35,16 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/flacon \
       --suffix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
-      --prefix PATH : "${lib.makeBinPath [ shntool flac opusTools vorbis-tools
-     mp3gain lame wavpack vorbisgain ]}"
+      --prefix PATH : "${lib.makeBinPath [
+      shntool
+      flac
+      opusTools
+      vorbis-tools
+      mp3gain
+      lame
+      wavpack
+      vorbisgain
+    ]}"
   '';
 
   meta = with stdenv.lib; {

@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-fad";
 
-  asdFilesToKeep = ["cl-fad.asd"];
+  asdFilesToKeep = [ "cl-fad.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-fad DESCRIPTION Portable pathname library SHA256

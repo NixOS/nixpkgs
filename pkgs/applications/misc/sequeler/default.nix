@@ -1,15 +1,30 @@
-{ stdenv, fetchFromGitHub
-, vala, meson, ninja, pkgconfig, pantheon, gettext, wrapGAppsHook, python3, desktop-file-utils
-, gtk3, glib, libgee, libgda, gtksourceview, libxml2, libsecret, libssh2 }:
-
-
+{ stdenv
+, fetchFromGitHub
+, vala
+, meson
+, ninja
+, pkgconfig
+, pantheon
+, gettext
+, wrapGAppsHook
+, python3
+, desktop-file-utils
+, gtk3
+, glib
+, libgee
+, libgda
+, gtksourceview
+, libxml2
+, libsecret
+, libssh2
+}:
 let
   sqlGda = libgda.override {
     mysqlSupport = true;
     postgresSupport = true;
   };
-
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "sequeler";
   version = "0.7.3";
 

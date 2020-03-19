@@ -1,5 +1,11 @@
-{ stdenv, fetchFromGitHub, autoreconfHook, pkgconfig, systemd, libusb
-, darwin }:
+{ stdenv
+, fetchFromGitHub
+, autoreconfHook
+, pkgconfig
+, systemd
+, libusb
+, darwin
+}:
 
 stdenv.mkDerivation rec {
   pname = "hidapi";
@@ -15,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
 
   buildInputs = [ ]
-    ++ stdenv.lib.optionals stdenv.isLinux [ libusb systemd ];
+  ++ stdenv.lib.optionals stdenv.isLinux [ libusb systemd ];
 
   enableParallelBuilding = true;
 

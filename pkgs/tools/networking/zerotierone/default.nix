@@ -12,18 +12,18 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-      substituteInPlace ./osdep/ManagedRoute.cpp \
-        --replace '/usr/sbin/ip' '${iproute}/bin/ip'
+    substituteInPlace ./osdep/ManagedRoute.cpp \
+      --replace '/usr/sbin/ip' '${iproute}/bin/ip'
 
-      substituteInPlace ./osdep/ManagedRoute.cpp \
-        --replace '/sbin/ip' '${iproute}/bin/ip'
+    substituteInPlace ./osdep/ManagedRoute.cpp \
+      --replace '/sbin/ip' '${iproute}/bin/ip'
 
-      patchShebangs ./doc/build.sh
-      substituteInPlace ./doc/build.sh \
-        --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
+    patchShebangs ./doc/build.sh
+    substituteInPlace ./doc/build.sh \
+      --replace '/usr/bin/ronn' '${buildPackages.ronn}/bin/ronn' \
 
-      substituteInPlace ./make-linux.mk \
-        --replace 'armv5' 'armv6'
+    substituteInPlace ./make-linux.mk \
+      --replace 'armv5' 'armv6'
   '';
 
 

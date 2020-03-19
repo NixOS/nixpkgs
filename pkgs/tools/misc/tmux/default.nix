@@ -7,18 +7,14 @@
 , ncurses
 , libevent
 }:
-
 let
-
   bashCompletion = fetchFromGitHub {
     owner = "imomaliev";
     repo = "tmux-bash-completion";
     rev = "fcda450d452f07d36d2f9f27e7e863ba5241200d";
     sha256 = "092jpkhggjqspmknw7h3icm0154rg21mkhbc71j5bxfmfjdxmya8";
   };
-
 in
-
 stdenv.mkDerivation rec {
   pname = "tmux";
   version = "3.0a";

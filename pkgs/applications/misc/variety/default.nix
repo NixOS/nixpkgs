@@ -1,6 +1,7 @@
-{
-  fehSupport ? false, feh
-, imagemagickSupport ? true, imagemagick
+{ fehSupport ? false
+, feh
+, imagemagickSupport ? true
+, imagemagick
 , stdenv
 , lib
 , python37Packages
@@ -44,23 +45,24 @@ buildPythonApplication rec {
   '';
 
   propagatedBuildInputs =
-       [ gtk3
-         gexiv2
-         libnotify
-         beautifulsoup4
-         lxml
-         pycairo
-         pygobject3
-         configobj
-         pillow
-         setuptools
-         requests
-         httplib2
-         dbus-python
-         gobject-introspection
-         hicolor-icon-theme
-         librsvg
-       ]
+    [
+      gtk3
+      gexiv2
+      libnotify
+      beautifulsoup4
+      lxml
+      pycairo
+      pygobject3
+      configobj
+      pillow
+      setuptools
+      requests
+      httplib2
+      dbus-python
+      gobject-introspection
+      hicolor-icon-theme
+      librsvg
+    ]
     ++ lib.optional fehSupport feh
     ++ lib.optional imagemagickSupport imagemagick;
 

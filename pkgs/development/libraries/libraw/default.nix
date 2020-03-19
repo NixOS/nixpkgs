@@ -1,6 +1,10 @@
-{ stdenv, fetchurl, lcms2, pkgconfig
-, jasper ? null, withJpeg2k ? false
-# disable JPEG2000 support by default as jasper has many CVE
+{ stdenv
+, fetchurl
+, lcms2
+, pkgconfig
+, jasper ? null
+, withJpeg2k ? false
+  # disable JPEG2000 support by default as jasper has many CVE
 }:
 
 stdenv.mkDerivation rec {
@@ -27,4 +31,3 @@ stdenv.mkDerivation rec {
     platforms = stdenv.lib.platforms.unix;
   };
 }
-

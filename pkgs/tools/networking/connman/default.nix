@@ -1,6 +1,21 @@
-{ stdenv, fetchurl, pkgconfig, openconnect, file, gawk,
-  openvpn, vpnc, glib, dbus, iptables, gnutls, polkit,
-  wpa_supplicant, readline6, pptp, ppp }:
+{ stdenv
+, fetchurl
+, pkgconfig
+, openconnect
+, file
+, gawk
+, openvpn
+, vpnc
+, glib
+, dbus
+, iptables
+, gnutls
+, polkit
+, wpa_supplicant
+, readline6
+, pptp
+, ppp
+}:
 
 stdenv.mkDerivation rec {
   pname = "connman";
@@ -10,9 +25,20 @@ stdenv.mkDerivation rec {
     sha256 = "05kfjiqhqfmbbwc4snnyvi5hc4zxanac62f6gcwaf5mvn0z9pqkc";
   };
 
-  buildInputs = [ openconnect polkit
-                  openvpn vpnc glib dbus iptables gnutls
-                  wpa_supplicant readline6 pptp ppp ];
+  buildInputs = [
+    openconnect
+    polkit
+    openvpn
+    vpnc
+    glib
+    dbus
+    iptables
+    gnutls
+    wpa_supplicant
+    readline6
+    pptp
+    ppp
+  ];
 
   nativeBuildInputs = [ pkgconfig file gawk ];
 

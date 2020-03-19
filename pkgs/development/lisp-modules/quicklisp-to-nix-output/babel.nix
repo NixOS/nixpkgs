@@ -14,7 +14,7 @@ rec {
 
   packageName = "babel";
 
-  asdFilesToKeep = ["babel.asd"];
+  asdFilesToKeep = [ "babel.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM babel DESCRIPTION Babel, a charset conversion library. SHA256

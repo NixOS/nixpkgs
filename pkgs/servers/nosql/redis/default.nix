@@ -12,10 +12,10 @@ stdenv.mkDerivation rec {
   # Cross-compiling fixes
   configurePhase = ''
     ${stdenv.lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-      # This fixes hiredis, which has the AR awkwardly coded.
-      # Probably a good candidate for a patch upstream.
-      makeFlagsArray+=('STLIB_MAKE_CMD=${stdenv.cc.targetPrefix}ar rcs $(STLIBNAME)')
-    ''}
+    # This fixes hiredis, which has the AR awkwardly coded.
+    # Probably a good candidate for a patch upstream.
+    makeFlagsArray+=('STLIB_MAKE_CMD=${stdenv.cc.targetPrefix}ar rcs $(STLIBNAME)')
+  ''}
   '';
 
   buildInputs = [ lua ];
@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   # Due to hardcoded configure flags in jemalloc, we can't cross-compile vendored jemalloc properly, and so we're forced to use libc allocator.
   # It's weird that the build isn't failing because of failure to compile dependencies, it's from failure to link them!
   makeFlags = [ "PREFIX=$(out)" ]
-    ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ];
+  ++ stdenv.lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [ "AR=${stdenv.cc.targetPrefix}ar" "RANLIB=${stdenv.cc.targetPrefix}ranlib" "MALLOC=libc" ];
 
   enableParallelBuilding = true;
 

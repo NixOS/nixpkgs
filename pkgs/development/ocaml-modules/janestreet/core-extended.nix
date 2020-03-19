@@ -1,22 +1,47 @@
-{stdenv, buildOcamlJane,
- core,
- bin_prot, fieldslib, sexplib, typerep, variantslib,
- ppx_assert, ppx_bench, ppx_driver, ppx_expect, ppx_inline_test, ppx_jane,
- re2, textutils}:
+{ stdenv
+, buildOcamlJane
+, core
+, bin_prot
+, fieldslib
+, sexplib
+, typerep
+, variantslib
+, ppx_assert
+, ppx_bench
+, ppx_driver
+, ppx_expect
+, ppx_inline_test
+, ppx_jane
+, re2
+, textutils
+}:
 
 buildOcamlJane {
   name = "core_extended";
   hash = "1j4ipcn741j8w3h4gpv5sygjzg6b5g6gc2jcrr4n0jyn5dq8b0p5";
   propagatedBuildInputs =
-    [ core bin_prot fieldslib sexplib typerep variantslib
-      ppx_assert ppx_bench ppx_driver ppx_expect ppx_inline_test ppx_jane
-      re2 textutils ];
+    [
+      core
+      bin_prot
+      fieldslib
+      sexplib
+      typerep
+      variantslib
+      ppx_assert
+      ppx_bench
+      ppx_driver
+      ppx_expect
+      ppx_inline_test
+      ppx_jane
+      re2
+      textutils
+    ];
 
   patchPhase = stdenv.lib.optionalString stdenv.isLinux ''
-    patch src/extended_unix_stubs.c <<EOF
-0a1
-> #define _LINUX_QUOTA_VERSION 2
-EOF
+        patch src/extended_unix_stubs.c <<EOF
+    0a1
+    > #define _LINUX_QUOTA_VERSION 2
+    EOF
   '';
 
   meta = with stdenv.lib; {

@@ -7,7 +7,7 @@
 
 buildPythonPackage rec {
   pname = "urwidtrees";
-  version  = "1.0.2";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "pazz";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ urwid ];
 
   checkInputs = [ glibcLocales ];
-  LC_ALL="en_US.UTF-8";
+  LC_ALL = "en_US.UTF-8";
 
   meta = with stdenv.lib; {
     description = "Tree widgets for urwid";

@@ -1,15 +1,27 @@
-{ stdenv, fetchFromGitHub, cmake, extra-cmake-modules, pkgconfig
-, qtbase, qtimageformats, qtwebkit, qtx11extras, mkDerivation
-, libarchive, libXdmcp, libpthreadstubs, xcbutilkeysyms  }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, extra-cmake-modules
+, pkgconfig
+, qtbase
+, qtimageformats
+, qtwebkit
+, qtx11extras
+, mkDerivation
+, libarchive
+, libXdmcp
+, libpthreadstubs
+, xcbutilkeysyms
+}:
 
 mkDerivation rec {
   pname = "zeal";
   version = "0.6.1";
 
   src = fetchFromGitHub {
-    owner  = "zealdocs";
-    repo   = "zeal";
-    rev    = "v${version}";
+    owner = "zealdocs";
+    repo = "zeal";
+    rev = "v${version}";
     sha256 = "05qcjpibakv4ibhxgl5ajbkby3w7bkxsv3nfv2a0kppi1z0f8n8v";
   };
 
@@ -19,9 +31,14 @@ mkDerivation rec {
 
   nativeBuildInputs = [ cmake extra-cmake-modules pkgconfig ];
   buildInputs = [
-    qtbase qtimageformats qtwebkit qtx11extras
+    qtbase
+    qtimageformats
+    qtwebkit
+    qtx11extras
     libarchive
-    libXdmcp libpthreadstubs xcbutilkeysyms
+    libXdmcp
+    libpthreadstubs
+    xcbutilkeysyms
   ];
 
   enableParallelBuilding = true;
@@ -32,9 +49,9 @@ mkDerivation rec {
       Zeal is a simple offline API documentation browser inspired by Dash (macOS
       app), available for Linux and Windows.
     '';
-    homepage    = https://zealdocs.org/;
-    license     = licenses.gpl3;
+    homepage = https://zealdocs.org/;
+    license = licenses.gpl3;
     maintainers = with maintainers; [ skeidel peterhoeg ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

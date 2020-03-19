@@ -1,7 +1,6 @@
 { config, lib, pkgs, options }:
 
 with lib;
-
 let
   cfg = config.services.prometheus.exporters.tor;
 in

@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.dwm-status;
 
@@ -13,7 +12,6 @@ let
     ${cfg.extraConfig}
   '';
 in
-
 {
 
   ###### interface

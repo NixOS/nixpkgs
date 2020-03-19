@@ -28,7 +28,6 @@
 , flite ? null
 , libXxf86vm ? null
 }:
-
 let
   desktopItem = makeDesktopItem {
     name = "minecraft-launcher";
@@ -40,50 +39,51 @@ let
   };
 
   envLibPath = stdenv.lib.makeLibraryPath [
-      curl
-      libpulseaudio
-      systemd
-      alsaLib # needed for narrator
-      flite # needed for narrator
-      libXxf86vm # needed only for versions <1.13
-    ];
+    curl
+    libpulseaudio
+    systemd
+    alsaLib # needed for narrator
+    flite # needed for narrator
+    libXxf86vm # needed only for versions <1.13
+  ];
 
-  libPath = stdenv.lib.makeLibraryPath ([
-    alsaLib
-    atk
-    cairo
-    cups
-    dbus
-    expat
-    fontconfig
-    freetype
-    gdk-pixbuf
-    glib
-    gnome2.GConf
-    gnome2.pango
-    gtk3-x11
-    gtk2-x11
-    nspr
-    nss
-    stdenv.cc.cc
-    zlib
-  ] ++
-  (with xorg; [
-    libX11
-    libxcb
-    libXcomposite
-    libXcursor
-    libXdamage
-    libXext
-    libXfixes
-    libXi
-    libXrandr
-    libXrender
-    libXtst
-    libXScrnSaver
-  ]));
+  libPath = stdenv.lib.makeLibraryPath
+    ([
+      alsaLib
+      atk
+      cairo
+      cups
+      dbus
+      expat
+      fontconfig
+      freetype
+      gdk-pixbuf
+      glib
+      gnome2.GConf
+      gnome2.pango
+      gtk3-x11
+      gtk2-x11
+      nspr
+      nss
+      stdenv.cc.cc
+      zlib
+    ]
+    ++ (with xorg; [
+      libX11
+      libxcb
+      libXcomposite
+      libXcursor
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXrandr
+      libXrender
+      libXtst
+      libXScrnSaver
+    ]));
 in
- stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "minecraft-launcher";
 
   version = "2.1.11314";

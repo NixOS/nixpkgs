@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, python, fetchPypi}:
+{ stdenv, buildPythonPackage, python, fetchPypi }:
 
 buildPythonPackage rec {
   pname = "fastimport";

@@ -1,4 +1,4 @@
-{stdenv, fetchurl, buildOcaml}:
+{ stdenv, fetchurl, buildOcaml }:
 
 buildOcaml rec {
   minimumSupportedOcamlVersion = "4.02";

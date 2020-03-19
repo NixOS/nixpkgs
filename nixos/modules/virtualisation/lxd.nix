@@ -3,14 +3,10 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.virtualisation.lxd;
   zfsCfg = config.boot.zfs;
-
 in
-
 {
   ###### interface
 

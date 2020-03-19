@@ -7,4 +7,5 @@ import ./generic.nix (args // {
 
   drvArgs.hardeningDisable = [ "format" ];
   drvArgs.doCheck = false;
-})
+}
+)

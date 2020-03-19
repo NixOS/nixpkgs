@@ -1,4 +1,4 @@
-{stdenv, fetchurl, cpio}:
+{ stdenv, fetchurl, cpio }:
 
 # The NCBI package only builds on 32bits - on 64bits it breaks because
 # of position dependent code. Debian packagers have written replacement
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     sha256 = "1b2v0dcdqn3bysgdkj57sxmd6s0hc9wpnxssviz399g6plhxggbr";
   };
 
-  configureFlags = [ 
+  configureFlags = [
     "--without-debug"
     "--with-bin-release"
     "--with-dll"
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = ''NCBI Bioinformatics toolbox (incl. BLAST)'';
     longDescription = ''The NCBI Bioinformatics toolsbox, including command-line utilties, libraries and include files. No X11 support'';
-    homepage = http://www.ncbi.nlm.nih.gov/IEB/ToolBox/; 
+    homepage = http://www.ncbi.nlm.nih.gov/IEB/ToolBox/;
     license = "GPL";
-    priority = 5;   # zlib.so gives a conflict with zlib
+    priority = 5; # zlib.so gives a conflict with zlib
     broken = true;
   };
 }

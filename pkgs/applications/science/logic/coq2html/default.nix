@@ -1,9 +1,7 @@
 { stdenv, fetchgit, ocaml }:
-
-let 
+let
   version = "20170720";
 in
-
 stdenv.mkDerivation {
   pname = "coq2html";
   inherit version;

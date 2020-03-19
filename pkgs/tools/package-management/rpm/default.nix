@@ -1,6 +1,21 @@
 { stdenv
-, pkgconfig, autoreconfHook
-, fetchurl, cpio, zlib, bzip2, file, elfutils, libbfd, libarchive, nspr, nss, popt, db, xz, python, lua
+, pkgconfig
+, autoreconfHook
+, fetchurl
+, cpio
+, zlib
+, bzip2
+, file
+, elfutils
+, libbfd
+, libarchive
+, nspr
+, nss
+, popt
+, db
+, xz
+, python
+, lua
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +34,7 @@ stdenv.mkDerivation rec {
 
   # rpm/rpmlib.h includes popt.h, and then the pkg-config file mentions these as linkage requirements
   propagatedBuildInputs = [ popt nss db bzip2 libarchive libbfd ]
-    ++ stdenv.lib.optional stdenv.isLinux elfutils;
+  ++ stdenv.lib.optional stdenv.isLinux elfutils;
 
   NIX_CFLAGS_COMPILE = "-I${nspr.dev}/include/nspr -I${nss.dev}/include/nss";
 

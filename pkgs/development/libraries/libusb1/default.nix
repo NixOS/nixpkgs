@@ -26,8 +26,8 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig autoreconfHook ];
   propagatedBuildInputs =
-    stdenv.lib.optional enableSystemd systemd ++
-    stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
+    stdenv.lib.optional enableSystemd systemd
+    ++ stdenv.lib.optionals stdenv.isDarwin [ libobjc IOKit ];
 
   dontDisableStatic = withStatic;
 

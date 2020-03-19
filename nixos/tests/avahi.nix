@@ -1,27 +1,28 @@
 # Test whether `avahi-daemon' and `libnss-mdns' work as expected.
-import ./make-test-python.nix ({ pkgs, ... } : {
+import ./make-test-python.nix ({ pkgs, ... }: {
   name = "avahi";
   meta = with pkgs.stdenv.lib.maintainers; {
     maintainers = [ eelco ];
   };
 
-  nodes = let
-    cfg = { ... }: {
-      services.avahi = {
-        enable = true;
-        nssmdns = true;
-        publish.addresses = true;
-        publish.domain = true;
-        publish.enable = true;
-        publish.userServices = true;
-        publish.workstation = true;
-        extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
+  nodes =
+    let
+      cfg = { ... }: {
+        services.avahi = {
+          enable = true;
+          nssmdns = true;
+          publish.addresses = true;
+          publish.domain = true;
+          publish.enable = true;
+          publish.userServices = true;
+          publish.workstation = true;
+          extraServiceFiles.ssh = "${pkgs.avahi}/etc/avahi/services/ssh.service";
+        };
       };
+    in {
+      one = cfg;
+      two = cfg;
     };
-  in {
-    one = cfg;
-    two = cfg;
-  };
 
   testScript = ''
     start_all()

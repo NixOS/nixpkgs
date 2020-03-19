@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, pkgconfig
+{ stdenv
+, fetchurl
+, pkgconfig
 , python3
 , perl
 , perlPackages
@@ -18,7 +20,8 @@
 let
   pname = "rhythmbox";
   version = "3.4.4";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -28,7 +31,9 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
-    intltool perl perlPackages.XMLParser
+    intltool
+    perl
+    perlPackages.XMLParser
     itstool
     wrapGAppsHook
   ];

@@ -1,19 +1,18 @@
 { stdenv, fetchurl, unzip }:
-
 let
   # Generated upstream information
   s = rec {
-    baseName="zpaqd";
-    version="715";
-    name="${baseName}-${version}";
-    hash="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
-    url="http://mattmahoney.net/dc/zpaqd715.zip";
-    sha256="0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
+    baseName = "zpaqd";
+    version = "715";
+    name = "${baseName}-${version}";
+    hash = "0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
+    url = "http://mattmahoney.net/dc/zpaqd715.zip";
+    sha256 = "0868lynb45lm79yvx5f10lj5h6bfv0yck8whcls2j080vmk3n7rk";
   };
 
   compileFlags = stdenv.lib.concatStringsSep " " ([ "-O3" "-DNDEBUG" ]
-    ++ stdenv.lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
-    ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
+  ++ stdenv.lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
+  ++ stdenv.lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
 in
 stdenv.mkDerivation {
   inherit (s) name version;
@@ -41,7 +40,7 @@ stdenv.mkDerivation {
 
   meta = with stdenv.lib; {
     description = "ZPAQ archive (de)compressor and algorithm development tool";
-    license = licenses.gpl3Plus ;
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
   };

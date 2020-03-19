@@ -2,7 +2,7 @@
 
 let version = "20.5"; in
 stdenv.mkDerivation {
-  name = "cjdns-"+version;
+  name = "cjdns-" + version;
 
   src = fetchFromGitHub {
     owner = "cjdelisle";
@@ -11,9 +11,9 @@ stdenv.mkDerivation {
     sha256 = "13f174bmbyqna899naja4fzpma3yaw815ylksk8klcc3glg07v7b";
   };
 
-  buildInputs = [ which python27 nodejs ] ++
-    # for flock
-    stdenv.lib.optional stdenv.isLinux utillinux;
+  buildInputs = [ which python27 nodejs ]
+  ++ # for flock
+  stdenv.lib.optional stdenv.isLinux utillinux;
 
   CFLAGS = "-O2 -Wno-error=stringop-truncation";
   buildPhase =

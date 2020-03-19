@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.xserver.windowManager.icewm;
 in
@@ -14,7 +13,8 @@ in
   ###### implementation
   config = mkIf cfg.enable {
     services.xserver.windowManager.session = singleton
-      { name = "icewm";
+      {
+        name = "icewm";
         start =
           ''
             ${pkgs.icewm}/bin/icewm &

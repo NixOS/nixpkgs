@@ -1,5 +1,7 @@
-{ stdenv, fetchurl
-, bison, flex
+{ stdenv
+, fetchurl
+, bison
+, flex
 , pam
 }:
 
@@ -7,8 +9,8 @@ stdenv.mkDerivation rec {
   pname = "gradm";
   version = "3.1-201903191516";
 
-  src  = fetchurl {
-    url    = "http://grsecurity.net/stable/${pname}-${version}.tar.gz";
+  src = fetchurl {
+    url = "http://grsecurity.net/stable/${pname}-${version}.tar.gz";
     sha256 = "1wszqwaswcf08s9zbvnqzmmfdykyfcy16w8xjia20ypr7wwbd86k";
   };
 
@@ -43,9 +45,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "grsecurity RBAC administration and policy analysis utility";
-    homepage    = "https://grsecurity.net";
-    license     = licenses.gpl2;
-    platforms   = platforms.linux;
+    homepage = "https://grsecurity.net";
+    license = licenses.gpl2;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ thoughtpolice joachifm ];
   };
 }

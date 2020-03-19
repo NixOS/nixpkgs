@@ -14,7 +14,8 @@ stdenv.mkDerivation rec {
   uuid = "caffeine@patapon.info";
 
   nativeBuildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   buildPhase = ''

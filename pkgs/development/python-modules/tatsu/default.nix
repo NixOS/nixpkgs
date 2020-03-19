@@ -1,7 +1,15 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, pythonOlder
-, colorama, mypy, pyyaml, regex
-, dataclasses, typing
-, pytestrunner, pytest-mypy
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, colorama
+, mypy
+, pyyaml
+, regex
+, dataclasses
+, typing
+, pytestrunner
+, pytest-mypy
 }:
 
 buildPythonPackage rec {
@@ -25,8 +33,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ pytestrunner ];
   propagatedBuildInputs = [ colorama mypy pyyaml regex ]
-    ++ stdenv.lib.optionals (pythonOlder "3.7") [ dataclasses ]
-    ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
+  ++ stdenv.lib.optionals (pythonOlder "3.7") [ dataclasses ]
+  ++ stdenv.lib.optionals (pythonOlder "3.5") [ typing ];
   checkInputs = [ pytest-mypy ];
 
   checkPhase = ''

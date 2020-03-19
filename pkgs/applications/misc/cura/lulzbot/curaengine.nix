@@ -23,4 +23,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ chaduffy ];
   };
 }
-

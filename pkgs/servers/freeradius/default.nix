@@ -1,6 +1,12 @@
-{ stdenv, fetchurl, fetchpatch, autoreconfHook, talloc, finger_bsd, perl
+{ stdenv
+, fetchurl
+, fetchpatch
+, autoreconfHook
+, talloc
+, finger_bsd
+, perl
 , openssl
-, linkOpenssl? true
+, linkOpenssl ? true
 , openldap
 , withLdap ? true
 , sqlite
@@ -53,17 +59,17 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs = [ openssl talloc finger_bsd perl ]
-    ++ optional withLdap openldap
-    ++ optional withSqlite sqlite
-    ++ optional withPcap libpcap
-    ++ optional withCap libcap
-    ++ optional withMemcached libmemcached
-    ++ optional withRedis hiredis
-    ++ optional withMysql libmysqlclient
-    ++ optional withJson json_c
-    ++ optional withYubikey libyubikey
-    ++ optional withCollectd collectd
-    ++ optional withRest curl;
+  ++ optional withLdap openldap
+  ++ optional withSqlite sqlite
+  ++ optional withPcap libpcap
+  ++ optional withCap libcap
+  ++ optional withMemcached libmemcached
+  ++ optional withRedis hiredis
+  ++ optional withMysql libmysqlclient
+  ++ optional withJson json_c
+  ++ optional withYubikey libyubikey
+  ++ optional withCollectd collectd
+  ++ optional withRest curl;
 
 
   configureFlags = [
@@ -107,4 +113,3 @@ stdenv.mkDerivation rec {
   };
 
 }
-

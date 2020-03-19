@@ -14,9 +14,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (python3.withPackages (ps: [
-      ps.wsgitools
-    ]))
+    (python3.withPackages
+      (ps: [
+        ps.wsgitools
+      ]))
   ];
 
   dontBuild = true;

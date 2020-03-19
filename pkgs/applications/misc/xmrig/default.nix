@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, cmake, libuv, libmicrohttpd, openssl, hwloc
+{ stdenv
+, lib
+, fetchFromGitHub
+, cmake
+, libuv
+, libmicrohttpd
+, openssl
+, hwloc
 , donateLevel ? 0
 }:
 
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
     description = "Monero (XMR) CPU miner";
     homepage = "https://github.com/xmrig/xmrig";
     license = licenses.gpl3Plus;
-    platforms   = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "x86_64-linux" "x86_64-darwin" ];
     maintainers = with maintainers; [ fpletz kim0 ];
   };
 }

@@ -1,8 +1,14 @@
-{ stdenv, runtimeShell, fetchFromGitHub, python3, writeText, writeScript
-, coreutils, sqlite }:
+{ stdenv
+, runtimeShell
+, fetchFromGitHub
+, python3
+, writeText
+, writeScript
+, coreutils
+, sqlite
+}:
 
 with python3.pkgs;
-
 let
   dbSql = writeText "create_pykms_db.sql" ''
     CREATE TABLE clients(
@@ -28,15 +34,15 @@ let
       ${getBin sqlite}/bin/sqlite3 $db < ${dbSql}
     fi
   '');
-
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "pykms";
   version = "20190611";
 
   src = fetchFromGitHub {
-    owner  = "SystemRage";
-    repo   = "py-kms";
-    rev    = "dead208b1593655377fe8bc0d74cc4bead617103";
+    owner = "SystemRage";
+    repo = "py-kms";
+    rev = "dead208b1593655377fe8bc0d74cc4bead617103";
     sha256 = "065qpkfqrahsam1rb43vnasmzrangan5z1pr3p6s0sqjz5l2jydp";
   };
 
@@ -85,8 +91,8 @@ in buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "Windows KMS (Key Management Service) server written in Python";
-    homepage    = "https://github.com/SystemRage/py-kms";
-    license     = licenses.mit;
+    homepage = "https://github.com/SystemRage/py-kms";
+    license = licenses.mit;
     maintainers = with maintainers; [ peterhoeg ];
   };
 }

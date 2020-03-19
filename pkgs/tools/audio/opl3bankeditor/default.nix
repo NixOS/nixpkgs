@@ -13,7 +13,8 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    alsaLib qttools
+    alsaLib
+    qttools
   ];
   nativeBuildInputs = [ cmake ];
 

@@ -1,5 +1,12 @@
-{ stdenv, fetchFromGitHub, lib
-, zsh, coreutils, inetutils, procps, txt2tags }:
+{ stdenv
+, fetchFromGitHub
+, lib
+, zsh
+, coreutils
+, inetutils
+, procps
+, txt2tags
+}:
 
 with lib;
 
@@ -15,7 +22,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zsh coreutils txt2tags procps ]
-    ++ optional stdenv.isLinux inetutils;
+  ++ optional stdenv.isLinux inetutils;
 
   buildPhase = ''
     cd doc

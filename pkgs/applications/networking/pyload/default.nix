@@ -1,11 +1,10 @@
 { stdenv, fetchFromGitHub, fetchpatch, pythonPackages, gocr, unrar, rhino, spidermonkey }:
-
 let
   beautifulsoup = pythonPackages.callPackage ./beautifulsoup.nix {
     inherit pythonPackages;
   };
-
-in pythonPackages.buildPythonApplication rec {
+in
+pythonPackages.buildPythonApplication rec {
   version = "0.4.9-next";
   name = "pyLoad-" + version;
 
@@ -30,12 +29,24 @@ in pythonPackages.buildPythonApplication rec {
     in [ configParserPatch setupPyPatch ];
 
   buildInputs = [
-    unrar rhino spidermonkey gocr pythonPackages.paver
+    unrar
+    rhino
+    spidermonkey
+    gocr
+    pythonPackages.paver
   ];
 
   propagatedBuildInputs = with pythonPackages; [
-    pycurl jinja2 beaker thrift simplejson pycrypto feedparser tkinter
-    beautifulsoup send2trash
+    pycurl
+    jinja2
+    beaker
+    thrift
+    simplejson
+    pycrypto
+    feedparser
+    tkinter
+    beautifulsoup
+    send2trash
   ];
 
   #remove this once the PR patches above are merged. Needed because githubs diff endpoint

@@ -3,9 +3,7 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.dbus;
 
   homeDir = "/run/dbus";
@@ -14,9 +12,7 @@ let
     suidHelper = "${config.security.wrapperDir}/dbus-daemon-launch-helper";
     serviceDirectories = cfg.packages;
   };
-
 in
-
 {
 
   ###### interface

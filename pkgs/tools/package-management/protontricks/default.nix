@@ -1,6 +1,12 @@
-{ stdenv, lib, buildPythonApplication, fetchFromGitHub
-, setuptools_scm, vdf
-, wine, winetricks, zenity
+{ stdenv
+, lib
+, buildPythonApplication
+, fetchFromGitHub
+, setuptools_scm
+, vdf
+, wine
+, winetricks
+, zenity
 , pytest
 }:
 

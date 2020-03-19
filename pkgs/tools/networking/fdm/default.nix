@@ -1,12 +1,8 @@
 { stdenv, fetchFromGitHub, autoreconfHook, openssl, tdb, zlib, flex, bison }:
-
 let
-
   baseName = "fdm";
   version = "1.9.0.20170124";
-
 in
-
 stdenv.mkDerivation {
   name = "${baseName}-${version}";
 

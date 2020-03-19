@@ -1,12 +1,23 @@
-{ stdenv, fetchurl, glib, intltool, menu-cache, pango, pkgconfig, vala
+{ stdenv
+, fetchurl
+, glib
+, intltool
+, menu-cache
+, pango
+, pkgconfig
+, vala
 , extraOnly ? false
-, withGtk3 ? false, gtk2, gtk3 }:
+, withGtk3 ? false
+, gtk2
+, gtk3
+}:
 let
-    gtk = if withGtk3 then gtk3 else gtk2;
-    inherit (stdenv.lib) optional;
+  gtk = if withGtk3 then gtk3 else gtk2;
+  inherit (stdenv.lib) optional;
 in
 stdenv.mkDerivation rec {
-  name = if extraOnly
+  name =
+    if extraOnly
     then "libfm-extra-${version}"
     else "libfm-${version}";
   version = "1.3.1";
@@ -22,7 +33,7 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--sysconfdir=/etc"
   ] ++ optional extraOnly "--with-extra-only"
-    ++ optional withGtk3 "--with-gtk=3";
+  ++ optional withGtk3 "--with-gtk=3";
 
   installFlags = [
     "sysconfdir=${placeholder "out"}/etc"

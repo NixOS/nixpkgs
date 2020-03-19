@@ -1,6 +1,26 @@
-{ stdenv, fetchsvn, boost, cmake, ffmpeg, freeglut, glib,
-  gtk2, libjpeg, libpng, libpthreadstubs, libvorbis, libXau, libXdmcp,
-  libXmu, libGLU, libGL, openal, pixman, pkgconfig, python27, SDL }:
+{ stdenv
+, fetchsvn
+, boost
+, cmake
+, ffmpeg
+, freeglut
+, glib
+, gtk2
+, libjpeg
+, libpng
+, libpthreadstubs
+, libvorbis
+, libXau
+, libXdmcp
+, libXmu
+, libGLU
+, libGL
+, openal
+, pixman
+, pkgconfig
+, python27
+, SDL
+}:
 
 stdenv.mkDerivation {
   name = "privateer-1.03";
@@ -13,9 +33,28 @@ stdenv.mkDerivation {
   };
 
   buildInputs =
-    [ boost cmake ffmpeg freeglut glib gtk2 libjpeg libpng
-      libpthreadstubs libvorbis libXau libXdmcp libXmu libGLU libGL openal
-      pixman pkgconfig python27 SDL ];
+    [
+      boost
+      cmake
+      ffmpeg
+      freeglut
+      glib
+      gtk2
+      libjpeg
+      libpng
+      libpthreadstubs
+      libvorbis
+      libXau
+      libXdmcp
+      libXmu
+      libGLU
+      libGL
+      openal
+      pixman
+      pkgconfig
+      python27
+      SDL
+    ];
 
   patches = [ ./0001-fix-VSFile-constructor.patch ];
 
@@ -37,7 +76,7 @@ stdenv.mkDerivation {
 
     maintainers = with maintainers; [ ];
     platforms = with platforms; linux ++ darwin;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     broken = true; # it won't build
   };
 }

@@ -1,7 +1,6 @@
 { lib, pkgs, config, ... }:
 
 with lib;
-
 let
   inherit (lib.types) attrsOf coercedTo listOf oneOf str int bool;
   cfg = config.services.smartdns;
@@ -10,7 +9,8 @@ let
     toKeyValue {
       mkKeyValue = mkKeyValueDefault {
         mkValueString = v:
-          if isBool v then
+          if isBool v
+          then
             if v then "yes" else "no"
           else
             mkValueStringDefault { } v;
@@ -18,7 +18,8 @@ let
       listsAsDuplicateKeys =
         true; # Allowing duplications because we need to deal with multiple entries with the same key.
     } cfg.settings);
-in {
+in
+{
   options.services.smartdns = {
     enable = mkEnableOption "SmartDNS DNS server";
 
@@ -30,8 +31,9 @@ in {
 
     settings = mkOption {
       type =
-      let atom = oneOf [ str int bool ];
-      in attrsOf (coercedTo atom toList (listOf atom));
+        let
+          atom = oneOf [ str int bool ];
+        in attrsOf (coercedTo atom toList (listOf atom));
       example = literalExample ''
         {
           bind = ":5353 -no-rule -group example";

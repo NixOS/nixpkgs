@@ -1,13 +1,52 @@
-{ stdenv, mkDerivation, fetchFromGitHub, pkgconfig, avfs, dde-daemon,
-  dde-dock, dde-polkit-agent, dde-qt-dbus-factory, deepin,
-  deepin-anything, deepin-desktop-schemas, deepin-gettext-tools,
-  deepin-movie-reborn, deepin-shortcut-viewer, deepin-terminal,
-  disomaster, dtkcore, dtkwidget, ffmpegthumbnailer, file, glib,
-  gnugrep, gsettings-qt, gvfs, jemalloc, kcodecs, libX11, libsecret,
-  polkit, polkit-qt, poppler, procps, qmake, qt5integration,
-  qtmultimedia, qtsvg, qttools, qtx11extras, runtimeShell, samba,
-  shadow, taglib, udisks2-qt5, xdg-user-dirs, xorg, zlib,
-  wrapGAppsHook }:
+{ stdenv
+, mkDerivation
+, fetchFromGitHub
+, pkgconfig
+, avfs
+, dde-daemon
+, dde-dock
+, dde-polkit-agent
+, dde-qt-dbus-factory
+, deepin
+, deepin-anything
+, deepin-desktop-schemas
+, deepin-gettext-tools
+, deepin-movie-reborn
+, deepin-shortcut-viewer
+, deepin-terminal
+, disomaster
+, dtkcore
+, dtkwidget
+, ffmpegthumbnailer
+, file
+, glib
+, gnugrep
+, gsettings-qt
+, gvfs
+, jemalloc
+, kcodecs
+, libX11
+, libsecret
+, polkit
+, polkit-qt
+, poppler
+, procps
+, qmake
+, qt5integration
+, qtmultimedia
+, qtsvg
+, qttools
+, qtx11extras
+, runtimeShell
+, samba
+, shadow
+, taglib
+, udisks2-qt5
+, xdg-user-dirs
+, xorg
+, zlib
+, wrapGAppsHook
+}:
 
 mkDerivation rec {
   pname = "dde-file-manager";

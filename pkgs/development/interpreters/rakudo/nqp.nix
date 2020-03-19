@@ -5,7 +5,7 @@ stdenv.mkDerivation rec {
   version = "2020.02";
 
   src = fetchurl {
-    url    = "https://github.com/perl6/nqp/releases/download/${version}/nqp-${version}.tar.gz";
+    url = "https://github.com/perl6/nqp/releases/download/${version}/nqp-${version}.tar.gz";
     sha256 = "0ik3fscywxjx1qxlbjf68msz83alpckzw3myj9jmkalvy8q5v0nk";
   };
 
@@ -21,9 +21,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Not Quite Perl -- a lightweight Raku-like environment for virtual machines";
-    homepage    = "https://github.com/perl6/nqp";
-    license     = licenses.artistic2;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/perl6/nqp";
+    license = licenses.artistic2;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice vrthra sgo ];
   };
 }

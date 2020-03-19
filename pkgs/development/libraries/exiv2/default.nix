@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "exiv2";
-    repo  = "exiv2";
+    repo = "exiv2";
     rev = "v${version}";
     sha256 = "0n8il52yzbmvbkryrl8waz7hd9a2fdkw8zsrmhyh63jlvmmc31gf";
   };
@@ -70,16 +70,16 @@ stdenv.mkDerivation rec {
 
     # Fix tests on Aarch64
     ${stdenv.lib.optionalString stdenv.isAarch64 ''
-      rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
-    ''}
+    rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
+  ''}
 
     ${stdenv.lib.optionalString stdenv.isDarwin ''
-      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
-      # Removing tests depending on charset conversion
-      substituteInPlace ../test/Makefile --replace "conversions.sh" ""
-      rm -f ../tests/bugfixes/redmine/test_issue_460.py
-      rm -f ../tests/bugfixes/redmine/test_issue_662.py
-     ''}
+    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}`pwd`/lib
+    # Removing tests depending on charset conversion
+    substituteInPlace ../test/Makefile --replace "conversions.sh" ""
+    rm -f ../tests/bugfixes/redmine/test_issue_460.py
+    rm -f ../tests/bugfixes/redmine/test_issue_662.py
+  ''}
   '';
 
   postCheck = ''

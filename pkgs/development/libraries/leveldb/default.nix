@@ -11,8 +11,8 @@ stdenv.mkDerivation rec {
     sha256 = "01kxga1hv4wp94agx5vl3ybxfw5klqrdsrb6p6ywvnjmjxm8322y";
   };
 
-  nativeBuildInputs = []
-    ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
+  nativeBuildInputs = [ ]
+  ++ stdenv.lib.optional stdenv.isDarwin [ fixDarwinDylibNames ];
 
   buildPhase = ''
     make all

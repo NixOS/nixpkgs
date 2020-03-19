@@ -16,7 +16,7 @@ rec {
 
   packageName = "stefil";
 
-  asdFilesToKeep = ["stefil.asd"];
+  asdFilesToKeep = [ "stefil.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM stefil DESCRIPTION Stefil - Simple Test Framework In Lisp SHA256

@@ -31,21 +31,24 @@ buildPythonPackage rec {
   };
 
   buildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Accelerate CoreFoundation CoreGraphics CoreVideo
+    Accelerate
+    CoreFoundation
+    CoreGraphics
+    CoreVideo
   ]);
 
   propagatedBuildInputs = [
-   blis
-   catalogue
-   cymem
-   cython
-   murmurhash
-   numpy
-   plac
-   preshed
-   srsly
-   tqdm
-   wasabi
+    blis
+    catalogue
+    cymem
+    cython
+    murmurhash
+    numpy
+    plac
+    preshed
+    srsly
+    tqdm
+    wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
 
@@ -67,5 +70,5 @@ buildPythonPackage rec {
     homepage = https://github.com/explosion/thinc;
     license = licenses.mit;
     maintainers = with maintainers; [ aborsu danieldk sdll ];
-    };
+  };
 }

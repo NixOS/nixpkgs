@@ -16,7 +16,7 @@ rec {
 
   packageName = "cl-l10n";
 
-  asdFilesToKeep = ["cl-l10n.asd"];
+  asdFilesToKeep = [ "cl-l10n.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM cl-l10n DESCRIPTION Portable CL Locale Support SHA256

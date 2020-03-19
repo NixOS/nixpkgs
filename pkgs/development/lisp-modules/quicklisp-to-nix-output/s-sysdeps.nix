@@ -14,7 +14,7 @@ rec {
 
   packageName = "s-sysdeps";
 
-  asdFilesToKeep = ["s-sysdeps.asd"];
+  asdFilesToKeep = [ "s-sysdeps.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM s-sysdeps DESCRIPTION

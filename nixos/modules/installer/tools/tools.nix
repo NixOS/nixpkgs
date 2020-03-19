@@ -4,12 +4,13 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
-  makeProg = args: pkgs.substituteAll (args // {
-    dir = "bin";
-    isExecutable = true;
-  });
+  makeProg = args: pkgs.substituteAll
+    (args // {
+      dir = "bin";
+      isExecutable = true;
+    }
+    );
 
   nixos-build-vms = makeProg {
     name = "nixos-build-vms";
@@ -25,14 +26,14 @@ let
 
   nixos-rebuild =
     let fallback = import ./nix-fallback-paths.nix; in
-    makeProg {
-      name = "nixos-rebuild";
-      src = ./nixos-rebuild.sh;
-      nix = config.nix.package.out;
-      nix_x86_64_linux = fallback.x86_64-linux;
-      nix_i686_linux = fallback.i686-linux;
-      path = makeBinPath [ pkgs.jq ];
-    };
+      makeProg {
+        name = "nixos-rebuild";
+        src = ./nixos-rebuild.sh;
+        nix = config.nix.package.out;
+        nix_x86_64_linux = fallback.x86_64-linux;
+        nix_i686_linux = fallback.i686-linux;
+        path = makeBinPath [ pkgs.jq ];
+      };
 
   nixos-generate-config = makeProg {
     name = "nixos-generate-config";
@@ -49,22 +50,24 @@ let
     src = ./nixos-version.sh;
     inherit (config.system.nixos) version codeName revision;
     inherit (config.system) configurationRevision;
-    json = builtins.toJSON ({
-      nixosVersion = config.system.nixos.version;
-    } // optionalAttrs (config.system.nixos.revision != null) {
-      nixpkgsRevision = config.system.nixos.revision;
-    } // optionalAttrs (config.system.configurationRevision != null) {
-      configurationRevision = config.system.configurationRevision;
-    });
+    json = builtins.toJSON
+      (
+        {
+          nixosVersion = config.system.nixos.version;
+        }
+        // optionalAttrs (config.system.nixos.revision != null) {
+          nixpkgsRevision = config.system.nixos.revision;
+        } // optionalAttrs (config.system.configurationRevision != null) {
+          configurationRevision = config.system.configurationRevision;
+        }
+      );
   };
 
   nixos-enter = makeProg {
     name = "nixos-enter";
     src = ./nixos-enter.sh;
   };
-
 in
-
 {
 
   options.system.nixos-generate-config.configuration = mkOption {
@@ -180,7 +183,8 @@ in
     '';
 
     environment.systemPackages =
-      [ nixos-build-vms
+      [
+        nixos-build-vms
         nixos-install
         nixos-rebuild
         nixos-generate-config

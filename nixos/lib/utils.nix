@@ -4,26 +4,29 @@ rec {
 
   # Check whenever fileSystem is needed for boot
   fsNeededForBoot = fs: fs.neededForBoot
-                     || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
+  || elem fs.mountPoint [ "/" "/nix" "/nix/store" "/var" "/var/log" "/var/lib" "/etc" ];
 
   # Check whenever `b` depends on `a` as a fileSystem
   fsBefore = a: b: a.mountPoint == b.device
-                || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
+  || hasPrefix "${a.mountPoint}${optionalString (!(hasSuffix "/" a.mountPoint)) "/"}" b.mountPoint;
 
   # Escape a path according to the systemd rules, e.g. /dev/xyzzy
   # becomes dev-xyzzy.  FIXME: slow.
   escapeSystemdPath = s:
-   replaceChars ["/" "-" " "] ["-" "\\x2d" "\\x20"]
-   (removePrefix "/" s);
+    replaceChars [ "/" "-" " " ] [ "-" "\\x2d" "\\x20" ]
+      (removePrefix "/" s);
 
   # Returns a system path for a given shell package
   toShellPath = shell:
-    if types.shellPackage.check shell then
+    if types.shellPackage.check shell
+    then
       "/run/current-system/sw${shell.shellPath}"
-    else if types.package.check shell then
-      throw "${shell} is not a shell package"
     else
-      shell;
+      if types.package.check shell
+      then
+        throw "${shell} is not a shell package"
+      else
+        shell;
 
   /* Recurse into a list or an attrset, searching for attrs named like
      the value of the "attr" parameter, and return an attrset where the
@@ -50,14 +53,19 @@ rec {
   recursiveGetAttrWithJqPrefix = item: attr:
     let
       recurse = prefix: item:
-        if item ? ${attr} then
+        if item ? ${attr}
+        then
           nameValuePair prefix item.${attr}
-        else if isAttrs item then
-          map (name: recurse (prefix + "." + name) item.${name}) (attrNames item)
-        else if isList item then
-          imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
         else
-          [];
+          if isAttrs item
+          then
+            map (name: recurse (prefix + "." + name) item.${name}) (attrNames item)
+          else
+            if isList item
+            then
+              imap0 (index: item: recurse (prefix + "[${toString index}]") item) item
+            else
+              [ ];
     in listToAttrs (flatten (recurse "" item));
 
   /* Takes an attrset and a file path and generates a bash snippet that
@@ -122,15 +130,15 @@ rec {
       fi
     ''
     + concatStringsSep
-        "\n"
-        (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
-               (attrNames secrets))
+      "\n"
+      (imap1 (index: name: "export secret${toString index}=$(<'${secrets.${name}}')")
+        (attrNames secrets))
     + "\n"
     + "${pkgs.jq}/bin/jq >'${output}' '"
     + concatStringsSep
       " | "
       (imap1 (index: name: ''${name} = $ENV.secret${toString index}'')
-             (attrNames secrets))
+        (attrNames secrets))
     + ''
       ' <<'EOF'
       ${builtins.toJSON set}

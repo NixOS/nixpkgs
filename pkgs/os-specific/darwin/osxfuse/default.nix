@@ -1,5 +1,4 @@
 { stdenv, runCommand, fetchFromGitHub, autoreconfHook }:
-
 let
   version = "3.8.3";
 
@@ -15,7 +14,6 @@ let
     cp --target-directory=$out/include $src/common/*.h
   '';
 in
-
 stdenv.mkDerivation {
 
   pname = "osxfuse";

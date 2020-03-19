@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ getopt gnused ]
-    ++ stdenv.lib.optional (!stdenv.isDarwin) libcap
-    ;
+  ++ stdenv.lib.optional (!stdenv.isDarwin) libcap
+  ;
 
   postUnpack = ''
     sed -i -e "s@getopt@$(type -p getopt)@g" -e "s@sed@$(type -p sed)@g" ${pname}-${version}/scripts/fakeroot.in
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
     homepage = https://salsa.debian.org/clint/fakeroot;
     description = "Give a fake root environment through LD_PRELOAD";
     license = stdenv.lib.licenses.gpl2Plus;
-    maintainers = with stdenv.lib.maintainers; [viric];
+    maintainers = with stdenv.lib.maintainers; [ viric ];
     platforms = stdenv.lib.platforms.unix;
   };
 

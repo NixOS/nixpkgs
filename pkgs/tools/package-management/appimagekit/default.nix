@@ -1,13 +1,29 @@
-{ stdenv, fetchFromGitHub
-, pkgconfig, cmake, autoconf, automake, libtool, makeWrapper
-, wget, xxd, desktop-file-utils, file
-, gnupg, glib, zlib, cairo, openssl, fuse, xz, squashfuse, inotify-tools, libarchive
+{ stdenv
+, fetchFromGitHub
+, pkgconfig
+, cmake
+, autoconf
+, automake
+, libtool
+, makeWrapper
+, wget
+, xxd
+, desktop-file-utils
+, file
+, gnupg
+, glib
+, zlib
+, cairo
+, openssl
+, fuse
+, xz
+, squashfuse
+, inotify-tools
+, libarchive
 , squashfsTools
 , gtest
 }:
-
 let
-
   appimagekit_src = fetchFromGitHub {
     owner = "AppImage";
     repo = "AppImageKit";
@@ -16,48 +32,52 @@ let
   };
 
   # squashfuse adapted to nix from cmake experession in "${appimagekit_src}/cmake/dependencies.cmake"
-  appimagekit_squashfuse = squashfuse.overrideAttrs (attrs: rec {
-    name = "squashfuse-${version}";
-    version = "20161009";
+  appimagekit_squashfuse = squashfuse.overrideAttrs
+    (attrs: rec {
+      name = "squashfuse-${version}";
+      version = "20161009";
 
-    src = fetchFromGitHub {
-      owner = "vasi";
-      repo  = "squashfuse";
-      rev   = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
-      sha256 = "0lrw9ff8k15l34wjwyllw3i35hl0cms97jj2hpnr2q8ipgxpb5q5";
-    };
+      src = fetchFromGitHub {
+        owner = "vasi";
+        repo = "squashfuse";
+        rev = "1f980303b89c779eabfd0a0fdd36d6a7a311bf92";
+        sha256 = "0lrw9ff8k15l34wjwyllw3i35hl0cms97jj2hpnr2q8ipgxpb5q5";
+      };
 
-    patches = [
-      "${appimagekit_src}/squashfuse.patch"
-      "${appimagekit_src}/squashfuse_dlopen.patch"
-    ];
+      patches = [
+        "${appimagekit_src}/squashfuse.patch"
+        "${appimagekit_src}/squashfuse_dlopen.patch"
+      ];
 
-    postPatch = ''
-      cp -v ${appimagekit_src}/squashfuse_dlopen.[hc] .
-    '';
+      postPatch = ''
+        cp -v ${appimagekit_src}/squashfuse_dlopen.[hc] .
+      '';
 
-    preConfigure = ''
-      sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
-      sed -i "s/typedef off_t sqfs_off_t/typedef int64_t sqfs_off_t/g" common.h
-    '';
+      preConfigure = ''
+        sed -i "/PKG_CHECK_MODULES.*/,/,:./d" configure
+        sed -i "s/typedef off_t sqfs_off_t/typedef int64_t sqfs_off_t/g" common.h
+      '';
 
-    configureFlags = [
-      "--disable-demo" "--disable-high-level" "--without-lzo" "--without-lz4"
-    ];
+      configureFlags = [
+        "--disable-demo"
+        "--disable-high-level"
+        "--without-lzo"
+        "--without-lz4"
+      ];
 
-    postConfigure = ''
-      sed -i "s|XZ_LIBS = -llzma |XZ_LIBS = -Bstatic -llzma/|g" Makefile
-    '';
+      postConfigure = ''
+        sed -i "s|XZ_LIBS = -llzma |XZ_LIBS = -Bstatic -llzma/|g" Makefile
+      '';
 
-    # only static libs and header files
-    installPhase = ''
-      mkdir -p $out/lib $out/include
-      cp -v ./.libs/*.a $out/lib
-      cp -v ./*.h $out/include
-    '';
-  });
-
-in stdenv.mkDerivation rec {
+      # only static libs and header files
+      installPhase = ''
+        mkdir -p $out/lib $out/include
+        cp -v ./.libs/*.a $out/lib
+        cp -v ./*.h $out/include
+      '';
+    });
+in
+stdenv.mkDerivation rec {
   name = "appimagekit-20180727";
 
   src = appimagekit_src;
@@ -65,14 +85,27 @@ in stdenv.mkDerivation rec {
   patches = [ ./nix.patch ];
 
   nativeBuildInputs = [
-    pkgconfig cmake autoconf automake libtool wget xxd
+    pkgconfig
+    cmake
+    autoconf
+    automake
+    libtool
+    wget
+    xxd
     desktop-file-utils
   ];
 
   buildInputs = [
-    glib zlib cairo openssl fuse
-    xz inotify-tools libarchive
-    squashfsTools makeWrapper
+    glib
+    zlib
+    cairo
+    openssl
+    fuse
+    xz
+    inotify-tools
+    libarchive
+    squashfsTools
+    makeWrapper
   ];
 
   postPatch = ''

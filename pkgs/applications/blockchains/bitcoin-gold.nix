@@ -19,7 +19,7 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  
+
   pname = "bitcoin" + toString (optional (!withGui) "d") + "-gold";
   version = "0.15.2";
 
@@ -54,10 +54,10 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags = [
-      "--with-boost-libdir=${boost.out}/lib"
+    "--with-boost-libdir=${boost.out}/lib"
   ] ++ optionals withGui [
-      "--with-gui=qt5"
-      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    "--with-gui=qt5"
+    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
   ];
 
   meta = {

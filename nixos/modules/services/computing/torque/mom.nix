@@ -1,9 +1,7 @@
 { config, pkgs, lib, ... }:
 
 with lib;
-
 let
-
   cfg = config.services.torque.mom;
   torque = pkgs.torque;
 
@@ -11,7 +9,6 @@ let
     $pbsserver ${cfg.serverNode}
     $logevent 225
   '';
-
 in
 {
   options = {
@@ -60,4 +57,4 @@ in
     };
 
   };
-}      
+}

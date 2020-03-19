@@ -1,5 +1,22 @@
-{ stdenv, fetchFromGitHub, cmake, pkgconfig, vala, gtk3, libgee, fetchpatch
-, poppler, libpthreadstubs, gstreamer, gst-plugins-base, gst-plugins-good, gst-libav, librsvg, pcre, gobject-introspection, wrapGAppsHook }:
+{ stdenv
+, fetchFromGitHub
+, cmake
+, pkgconfig
+, vala
+, gtk3
+, libgee
+, fetchpatch
+, poppler
+, libpthreadstubs
+, gstreamer
+, gst-plugins-base
+, gst-plugins-good
+, gst-libav
+, librsvg
+, pcre
+, gobject-introspection
+, wrapGAppsHook
+}:
 
 stdenv.mkDerivation rec {
   name = "${product}-${version}";
@@ -14,15 +31,21 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cmake pkgconfig vala
+    cmake
+    pkgconfig
+    vala
     # For setup hook
     gobject-introspection
     wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 libgee poppler
-    libpthreadstubs librsvg pcre
+    gtk3
+    libgee
+    poppler
+    libpthreadstubs
+    librsvg
+    pcre
     gstreamer
     gst-plugins-base
     (gst-plugins-good.override { gtkSupport = true; })

@@ -10,12 +10,13 @@
 , python3
 , desktop-file-utils
 , wrapGAppsHook
-, gnome3 }:
-
+, gnome3
+}:
 let
   pname = "gnome-power-manager";
   version = "3.32.0";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {

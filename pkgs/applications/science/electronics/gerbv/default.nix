@@ -13,7 +13,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ autoreconfHook pkgconfig ];
   buildInputs = [ gettext libtool automake autoconf cairo gtk2 ];
 
-  configureFlags = ["--disable-update-desktop-database"];
+  configureFlags = [ "--disable-update-desktop-database" ];
 
   meta = with stdenv.lib; {
     description = "A Gerber (RS-274X) viewer";

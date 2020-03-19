@@ -1,6 +1,9 @@
-{ stdenv, fetchPypi, buildPythonPackage
+{ stdenv
+, fetchPypi
+, buildPythonPackage
 , pkgconfig
-, libgphoto2 }:
+, libgphoto2
+}:
 
 buildPythonPackage rec {
   pname = "gphoto2";

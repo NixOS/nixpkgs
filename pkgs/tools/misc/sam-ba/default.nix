@@ -1,12 +1,27 @@
-{ stdenv, fetchzip, libX11, libXScrnSaver, libXext, libXft, libXrender
-, freetype, zlib, fontconfig
+{ stdenv
+, fetchzip
+, libX11
+, libXScrnSaver
+, libXext
+, libXft
+, libXrender
+, freetype
+, zlib
+, fontconfig
 }:
-
 let
   maybe64 = if stdenv.isx86_64 then "_64" else "";
   libPath = stdenv.lib.makeLibraryPath
-    [ stdenv.cc.cc.lib libX11 libXScrnSaver libXext libXft libXrender freetype
-      zlib fontconfig
+    [
+      stdenv.cc.cc.lib
+      libX11
+      libXScrnSaver
+      libXext
+      libXft
+      libXrender
+      freetype
+      zlib
+      fontconfig
     ];
 in
 stdenv.mkDerivation rec {
@@ -44,8 +59,8 @@ stdenv.mkDerivation rec {
     '';
     homepage = http://www.at91.com/linux4sam/bin/view/Linux4SAM/SoftwareTools;
     # License in <source>/doc/readme.txt
-    license = "BSD-like (partly binary-only)";  # according to Buildroot
-    platforms = [ "x86_64-linux" ];  # patchelf fails on i686-linux
+    license = "BSD-like (partly binary-only)"; # according to Buildroot
+    platforms = [ "x86_64-linux" ]; # patchelf fails on i686-linux
     maintainers = [ maintainers.bjornfor ];
   };
 }

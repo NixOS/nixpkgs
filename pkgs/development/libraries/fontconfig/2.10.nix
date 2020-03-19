@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, pkgconfig, freetype, expat
+{ stdenv
+, fetchurl
+, pkgconfig
+, freetype
+, expat
 }:
 
 stdenv.mkDerivation rec {

@@ -1,13 +1,22 @@
-{stdenv, fetchurl, unzip, xz, dpkg
-, libxslt, docbook_xsl, makeWrapper
+{ stdenv
+, fetchurl
+, unzip
+, xz
+, dpkg
+, libxslt
+, docbook_xsl
+, makeWrapper
 , python3Packages
-, perlPackages, curl, gnupg, diffutils
+, perlPackages
+, curl
+, gnupg
+, diffutils
 , sendmailPath ? "/run/wrappers/bin/sendmail"
 }:
-
 let
   inherit (python3Packages) python setuptools;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "2.16.8";
   pname = "debian-devscripts";
 
@@ -16,8 +25,8 @@ in stdenv.mkDerivation rec {
     sha256 = "0xy1nvqrnifx46g8ch69pk31by0va6hn10wpi1fkrsrgncanjjh1";
   };
 
-  buildInputs = [ unzip xz dpkg libxslt python setuptools makeWrapper curl gnupg diffutils ] ++
-    (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
+  buildInputs = [ unzip xz dpkg libxslt python setuptools makeWrapper curl gnupg diffutils ]
+  ++ (with perlPackages; [ perl CryptSSLeay LWP TimeDate DBFile FileDesktopEntry ParseDebControl LWPProtocolHttps ]);
 
   preConfigure = ''
     export PERL5LIB="$PERL5LIB''${PERL5LIB:+:}${dpkg}";
@@ -60,7 +69,7 @@ in stdenv.mkDerivation rec {
   meta = with stdenv.lib; {
     description = ''Debian package maintenance scripts'';
     license = licenses.free; # Mix of public domain, Artistic+GPL, GPL1+, GPL2+, GPL3+, and GPL2-only... TODO
-    maintainers = with maintainers; [raskin];
+    maintainers = with maintainers; [ raskin ];
     platforms = with platforms; linux;
   };
 }

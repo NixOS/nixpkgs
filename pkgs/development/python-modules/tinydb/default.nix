@@ -33,7 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "A lightweight document oriented database written in pure Python with no external dependencies";
     homepage = "https://github.com/msiemens/tinydb";
-    license = licenses.asl20;                                                                                                                                                                      
+    license = licenses.asl20;
     maintainers = with maintainers; [ marcus7070 ];
   };
 }

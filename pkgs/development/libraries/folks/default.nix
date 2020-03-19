@@ -80,13 +80,14 @@ stdenv.mkDerivation rec {
 
   checkInputs = [
     dbus
-    (python3.withPackages (pp: with pp; [
-      python-dbusmock
-      # The following possibly need to be propagated by dbusmock
-      # if they are not optional
-      dbus-python
-      pygobject3
-    ]))
+    (python3.withPackages
+      (pp: with pp; [
+        python-dbusmock
+        # The following possibly need to be propagated by dbusmock
+        # if they are not optional
+        dbus-python
+        pygobject3
+      ]))
   ];
 
   doCheck = true;
@@ -109,6 +110,6 @@ stdenv.mkDerivation rec {
     homepage = https://wiki.gnome.org/Projects/Folks;
     license = licenses.lgpl2Plus;
     maintainers = gnome3.maintainers;
-    platforms = platforms.gnu ++ platforms.linux;  # arbitrary choice
+    platforms = platforms.gnu ++ platforms.linux; # arbitrary choice
   };
 }

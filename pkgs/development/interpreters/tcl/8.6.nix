@@ -8,4 +8,5 @@ callPackage ./generic.nix (args // rec {
     url = "mirror://sourceforge/tcl/tcl${version}-src.tar.gz";
     sha256 = "0kjzj7mkzfnb7ksxanbibibfpciyvsh5ffdlhs0bmfc75kgd435d";
   };
-})
+}
+)

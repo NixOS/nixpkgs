@@ -13,10 +13,12 @@ stdenv.mkDerivation rec {
 
   # Generic fix merged upstream in https://github.com/intel/mkl-dnn/pull/631
   # Delete after next release
-  patches = [ (substituteAll {
-    src = ./bash-to-sh.patch;
-    inherit bash;
-  }) ];
+  patches = [
+    (substituteAll {
+      src = ./bash-to-sh.patch;
+      inherit bash;
+    })
+  ];
 
   outputs = [ "out" "dev" "doc" ];
 

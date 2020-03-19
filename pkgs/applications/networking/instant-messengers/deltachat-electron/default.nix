@@ -1,5 +1,4 @@
 { lib, fetchurl, appimageTools }:
-
 let
   pname = "deltachat-electron";
   version = "1.1.0";
@@ -12,8 +11,8 @@ let
   };
 
   appimageContents = appimageTools.extract { inherit name src; };
-
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit name src;
 
   extraInstallCommands = ''

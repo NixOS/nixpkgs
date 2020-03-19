@@ -7,9 +7,9 @@ buildPythonPackage rec {
   version = "4.0.4";
 
   src = fetchFromGitHub {
-    owner  = pname;
-    repo   = pname;
-    rev    = "v${version}";
+    owner = pname;
+    repo = pname;
+    rev = "v${version}";
     sha256 = "14i9dkafvyl15rq2qa8xldscn5lmkk2g52kbi2hl63nzx9yibx6r";
   };
 
@@ -61,23 +61,43 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [
-    blinker click certifi cryptography
-    h2 hyperframe kaitaistruct passlib
-    pyasn1 pyopenssl pyparsing pyperclip
-    ruamel_yaml tornado urwid brotlipy
-    sortedcontainers ldap3 wsproto setuptools
+    blinker
+    click
+    certifi
+    cryptography
+    h2
+    hyperframe
+    kaitaistruct
+    passlib
+    pyasn1
+    pyopenssl
+    pyparsing
+    pyperclip
+    ruamel_yaml
+    tornado
+    urwid
+    brotlipy
+    sortedcontainers
+    ldap3
+    wsproto
+    setuptools
   ];
 
   checkInputs = [
-    beautifulsoup4 flask pytest
-    requests glibcLocales
-    asynctest parver pytest-asyncio
+    beautifulsoup4
+    flask
+    pytest
+    requests
+    glibcLocales
+    asynctest
+    parver
+    pytest-asyncio
   ];
 
   meta = with stdenv.lib; {
     description = "Man-in-the-middle proxy";
-    homepage    = https://mitmproxy.org/;
-    license     = licenses.mit;
+    homepage = https://mitmproxy.org/;
+    license = licenses.mit;
     maintainers = with maintainers; [ fpletz kamilchm ];
   };
 }

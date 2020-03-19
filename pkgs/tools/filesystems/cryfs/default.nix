@@ -1,6 +1,15 @@
-{ stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkgconfig, python, gtest
-, boost, cryptopp, curl, fuse, openssl
+{ stdenv
+, fetchFromGitHub
+, fetchpatch
+, cmake
+, pkgconfig
+, python
+, gtest
+, boost
+, cryptopp
+, curl
+, fuse
+, openssl
 }:
 
 stdenv.mkDerivation rec {
@@ -8,9 +17,9 @@ stdenv.mkDerivation rec {
   version = "0.10.2";
 
   src = fetchFromGitHub {
-    owner  = "cryfs";
-    repo   = "cryfs";
-    rev    = version;
+    owner = "cryfs";
+    repo = "cryfs";
+    rev = version;
     sha256 = "1m6rcc82hbaiwcwcvf5xmxma8n0jal9zhcykv9xgwiax4ny0l8kz";
   };
 
@@ -70,9 +79,9 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Cryptographic filesystem for the cloud";
-    homepage    = https://www.cryfs.org;
-    license     = licenses.lgpl3;
+    homepage = https://www.cryfs.org;
+    license = licenses.lgpl3;
     maintainers = with maintainers; [ peterhoeg c0bw3b ];
-    platforms   = with platforms; linux;
+    platforms = with platforms; linux;
   };
 }

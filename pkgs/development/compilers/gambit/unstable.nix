@@ -2,7 +2,7 @@
 
 callPackage ./build.nix {
   version = "unstable-2020-02-24";
-# git-version = "4.9.3-979-gc69e9f70";
+  # git-version = "4.9.3-979-gc69e9f70";
   src = fetchFromGitHub {
     owner = "feeley";
     repo = "gambit";

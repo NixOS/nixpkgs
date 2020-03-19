@@ -1,5 +1,14 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, fftw, fftwFloat, fftwLongDouble, numpy, scipy, cython, dask }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, fftw
+, fftwFloat
+, fftwLongDouble
+, numpy
+, scipy
+, cython
+, dask
+}:
 
 buildPythonPackage rec {
   version = "0.12.0";
@@ -10,7 +19,7 @@ buildPythonPackage rec {
     sha256 = "60988e823ca75808a26fd79d88dbae1de3699e72a293f812aa4534f8a0a58cb0";
   };
 
-  buildInputs = [ fftw fftwFloat fftwLongDouble];
+  buildInputs = [ fftw fftwFloat fftwLongDouble ];
 
   propagatedBuildInputs = [ numpy scipy cython dask ];
 

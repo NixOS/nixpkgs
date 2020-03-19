@@ -19,17 +19,17 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with stdenv.lib; {
-    description      = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
-    longDescription  = ''
+    description = "Fast email-fetching and two-way tag synchronization between notmuch and GMail";
+    longDescription = ''
       This program can pull email and labels (and changes to labels)
       from your GMail account and store them locally in a maildir with
       the labels synchronized with a notmuch database. The changes to
       tags in the notmuch database may be pushed back remotely to your
       GMail account.
     '';
-    homepage         = https://github.com/gauteh/gmailieer;
+    homepage = https://github.com/gauteh/gmailieer;
     repositories.git = https://github.com/gauteh/gmailieer.git;
-    license          = licenses.gpl3Plus;
-    maintainers      = with maintainers; [ kaiha ];
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ kaiha ];
   };
 }

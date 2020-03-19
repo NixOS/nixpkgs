@@ -1,9 +1,16 @@
-{ stdenv, multiStdenv, cmake, fetchFromGitHub, file, libX11, makeWrapper
-, qt5, requireFile, unzip, wine
+{ stdenv
+, multiStdenv
+, cmake
+, fetchFromGitHub
+, file
+, libX11
+, makeWrapper
+, qt5
+, requireFile
+, unzip
+, wine
 }:
-
 let
-
   version = "1.3.3";
 
   airwave-src = fetchFromGitHub {
@@ -30,13 +37,12 @@ let
     wineBuild = "wineWow";
   };
 
-  wine-xembed = wine-wow64.overrideDerivation (oldAttrs: {
-    patchFlags = [ "-p2" ];
-    patches = [ "${airwave-src}/fix-xembed-wine-windows.patch" ];
-  });
-
+  wine-xembed = wine-wow64.overrideDerivation
+    (oldAttrs: {
+      patchFlags = [ "-p2" ];
+      patches = [ "${airwave-src}/fix-xembed-wine-windows.patch" ];
+    });
 in
-
 multiStdenv.mkDerivation {
   name = "airwave-${version}";
 
@@ -87,6 +93,6 @@ multiStdenv.mkDerivation {
     license = licenses.mit;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ michalrus ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

@@ -1,5 +1,8 @@
-{ stdenv, fetchzip
-, jre, makeWrapper }:
+{ stdenv
+, fetchzip
+, jre
+, makeWrapper
+}:
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";

@@ -1,9 +1,7 @@
 # TODO check that no license information gets lost
 { callPackage, config, lib, vimUtils, vim, darwin, llvmPackages }:
-
 let
-
-  inherit (vimUtils.override {inherit vim;}) buildVimPluginFrom2Nix;
+  inherit (vimUtils.override { inherit vim; }) buildVimPluginFrom2Nix;
 
   plugins = callPackage ./generated.nix {
     inherit buildVimPluginFrom2Nix overrides;
@@ -23,7 +21,5 @@ let
   };
 
   aliases = lib.optionalAttrs (config.allowAliases or true) (import ./aliases.nix lib plugins);
-
 in
-
 plugins // aliases

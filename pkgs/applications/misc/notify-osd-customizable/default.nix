@@ -10,9 +10,10 @@
 , pkgconfig
 , gsettings-desktop-schemas
 }:
-
-let baseURI = "https://launchpad.net/~leolik/+archive/leolik";
-in stdenv.mkDerivation rec {
+let
+  baseURI = "https://launchpad.net/~leolik/+archive/leolik";
+in
+stdenv.mkDerivation rec {
   pname = "notify-osd";
   version = "0.9.35+16.04.20160415";
 
@@ -26,8 +27,13 @@ in stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [
-    glib libwnck3 libnotify dbus-glib makeWrapper
-    gsettings-desktop-schemas gnome3.gnome-common
+    glib
+    libwnck3
+    libnotify
+    dbus-glib
+    makeWrapper
+    gsettings-desktop-schemas
+    gnome3.gnome-common
     libtool
   ];
 

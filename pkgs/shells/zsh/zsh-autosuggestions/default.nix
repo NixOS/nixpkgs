@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     install -D zsh-autosuggestions.zsh \
       $out/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-    '';
+  '';
 
   meta = with stdenv.lib; {
     description = "Fish shell autosuggestions for Zsh";

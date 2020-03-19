@@ -12,8 +12,8 @@ stdenv.mkDerivation {
   buildInputs = [ ocaml findlib ocamlbuild ounit ];
 
   configurePhase = "ocaml setup.ml -configure --prefix $out --enable-tests";
-  buildPhase     = "ocaml setup.ml -build";
-  installPhase   = "ocaml setup.ml -install";
+  buildPhase = "ocaml setup.ml -build";
+  installPhase = "ocaml setup.ml -install";
 
   doCheck = true;
 
@@ -24,7 +24,7 @@ stdenv.mkDerivation {
   meta = {
     homepage = http://forge.ocamlcore.org/projects/ocamlmod/ocamlmod;
     description = "Generate OCaml modules from source files";
-    platforms = ocaml.meta.platforms or [];
+    platforms = ocaml.meta.platforms or [ ];
     maintainers = with stdenv.lib.maintainers; [
       maggesi
     ];

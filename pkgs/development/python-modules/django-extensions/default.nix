@@ -1,4 +1,8 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pythonOlder, python
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, pythonOlder
+, python
 , django
 , factory_boy
 , glibcLocales
@@ -31,7 +35,7 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   propagatedBuildInputs = [ six ]
-    ++ lib.optional (pythonOlder "3.5") typing;
+  ++ lib.optional (pythonOlder "3.5") typing;
 
   checkInputs = [
     django

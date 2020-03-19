@@ -1,7 +1,6 @@
 { config, lib, pkgs, ... }:
 
 with lib;
-
 let
   cfg = config.services.codimd;
 
@@ -17,7 +16,7 @@ in
 
     groups = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Groups to which the codimd user should be added.
       '';
@@ -74,7 +73,7 @@ in
       };
       allowOrigin = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "localhost" "codimd.org" ];
         description = ''
           List of domains to whitelist.
@@ -207,7 +206,7 @@ in
       };
       db = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = literalExample ''
           {
             dialect = "sqlite";
@@ -222,7 +221,7 @@ in
           Note: This option overrides <option>db</option>.
         '';
       };
-      sslKeyPath= mkOption {
+      sslKeyPath = mkOption {
         type = types.nullOr types.str;
         default = null;
         example = "/var/lib/codimd/codimd.key";
@@ -240,7 +239,7 @@ in
       };
       sslCAPath = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         example = [ "/var/lib/codimd/ca.crt" ];
         description = ''
           SSL ca chain. Needed when <option>useSSL</option> is enabled.
@@ -403,68 +402,70 @@ in
         '';
       };
       minio = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            accessKey = mkOption {
-              type = types.str;
-              description = ''
-                Minio access key.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              accessKey = mkOption {
+                type = types.str;
+                description = ''
+                  Minio access key.
+                '';
+              };
+              secretKey = mkOption {
+                type = types.str;
+                description = ''
+                  Minio secret key.
+                '';
+              };
+              endpoint = mkOption {
+                type = types.str;
+                description = ''
+                  Minio endpoint.
+                '';
+              };
+              port = mkOption {
+                type = types.int;
+                default = 9000;
+                description = ''
+                  Minio listen port.
+                '';
+              };
+              secure = mkOption {
+                type = types.bool;
+                default = true;
+                description = ''
+                  Whether to use HTTPS for Minio.
+                '';
+              };
             };
-            secretKey = mkOption {
-              type = types.str;
-              description = ''
-                Minio secret key.
-              '';
-            };
-            endpoint = mkOption {
-              type = types.str;
-              description = ''
-                Minio endpoint.
-              '';
-            };
-            port = mkOption {
-              type = types.int;
-              default = 9000;
-              description = ''
-                Minio listen port.
-              '';
-            };
-            secure = mkOption {
-              type = types.bool;
-              default = true;
-              description = ''
-                Whether to use HTTPS for Minio.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the minio third-party integration.";
       };
       s3 = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            accessKeyId = mkOption {
-              type = types.str;
-              description = ''
-                AWS access key id.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              accessKeyId = mkOption {
+                type = types.str;
+                description = ''
+                  AWS access key id.
+                '';
+              };
+              secretAccessKey = mkOption {
+                type = types.str;
+                description = ''
+                  AWS access key.
+                '';
+              };
+              region = mkOption {
+                type = types.str;
+                description = ''
+                  AWS S3 region.
+                '';
+              };
             };
-            secretAccessKey = mkOption {
-              type = types.str;
-              description = ''
-                AWS access key.
-              '';
-            };
-            region = mkOption {
-              type = types.str;
-              description = ''
-                AWS S3 region.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the s3 third-party integration.";
       };
@@ -490,389 +491,400 @@ in
         '';
       };
       azure = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            connectionString = mkOption {
-              type = types.str;
-              description = ''
-                Azure Blob Storage connection string.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              connectionString = mkOption {
+                type = types.str;
+                description = ''
+                  Azure Blob Storage connection string.
+                '';
+              };
+              container = mkOption {
+                type = types.str;
+                description = ''
+                  Azure Blob Storage container name.
+                  It will be created if non-existent.
+                '';
+              };
             };
-            container = mkOption {
-              type = types.str;
-              description = ''
-                Azure Blob Storage container name.
-                It will be created if non-existent.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the azure third-party integration.";
       };
       oauth2 = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            authorizationURL = mkOption {
-              type = types.str;
-              description = ''
-                Specify the OAuth authorization URL.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              authorizationURL = mkOption {
+                type = types.str;
+                description = ''
+                  Specify the OAuth authorization URL.
+                '';
+              };
+              tokenURL = mkOption {
+                type = types.str;
+                description = ''
+                  Specify the OAuth token URL.
+                '';
+              };
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  Specify the OAuth client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Specify the OAuth client secret.
+                '';
+              };
             };
-            tokenURL = mkOption {
-              type = types.str;
-              description = ''
-                Specify the OAuth token URL.
-              '';
-            };
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                Specify the OAuth client ID.
-              '';
-            };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                Specify the OAuth client secret.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the OAuth integration.";
       };
       facebook = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                Facebook API client ID.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  Facebook API client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Facebook API client secret.
+                '';
+              };
             };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                Facebook API client secret.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the facebook third-party integration";
       };
       twitter = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            consumerKey = mkOption {
-              type = types.str;
-              description = ''
-                Twitter API consumer key.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              consumerKey = mkOption {
+                type = types.str;
+                description = ''
+                  Twitter API consumer key.
+                '';
+              };
+              consumerSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Twitter API consumer secret.
+                '';
+              };
             };
-            consumerSecret = mkOption {
-              type = types.str;
-              description = ''
-                Twitter API consumer secret.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the Twitter third-party integration.";
       };
       github = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                GitHub API client ID.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  GitHub API client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Github API client secret.
+                '';
+              };
             };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                Github API client secret.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the GitHub third-party integration.";
       };
       gitlab = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            baseURL = mkOption {
-              type = types.str;
-              default = "";
-              description = ''
-                GitLab API authentication endpoint.
-                Only needed for other endpoints than gitlab.com.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              baseURL = mkOption {
+                type = types.str;
+                default = "";
+                description = ''
+                  GitLab API authentication endpoint.
+                  Only needed for other endpoints than gitlab.com.
+                '';
+              };
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  GitLab API client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  GitLab API client secret.
+                '';
+              };
+              scope = mkOption {
+                type = types.enum [ "api" "read_user" ];
+                default = "api";
+                description = ''
+                  GitLab API requested scope.
+                  GitLab snippet import/export requires api scope.
+                '';
+              };
             };
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                GitLab API client ID.
-              '';
-            };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                GitLab API client secret.
-              '';
-            };
-            scope = mkOption {
-              type = types.enum [ "api" "read_user" ];
-              default = "api";
-              description = ''
-                GitLab API requested scope.
-                GitLab snippet import/export requires api scope.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the GitLab third-party integration.";
       };
       mattermost = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            baseURL = mkOption {
-              type = types.str;
-              description = ''
-                Mattermost authentication endpoint.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              baseURL = mkOption {
+                type = types.str;
+                description = ''
+                  Mattermost authentication endpoint.
+                '';
+              };
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  Mattermost API client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Mattermost API client secret.
+                '';
+              };
             };
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                Mattermost API client ID.
-              '';
-            };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                Mattermost API client secret.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the Mattermost third-party integration.";
       };
       dropbox = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                Dropbox API client ID.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  Dropbox API client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Dropbox API client secret.
+                '';
+              };
+              appKey = mkOption {
+                type = types.str;
+                description = ''
+                  Dropbox app key.
+                '';
+              };
             };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                Dropbox API client secret.
-              '';
-            };
-            appKey = mkOption {
-              type = types.str;
-              description = ''
-                Dropbox app key.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the Dropbox third-party integration.";
       };
       google = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            clientID = mkOption {
-              type = types.str;
-              description = ''
-                Google API client ID.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              clientID = mkOption {
+                type = types.str;
+                description = ''
+                  Google API client ID.
+                '';
+              };
+              clientSecret = mkOption {
+                type = types.str;
+                description = ''
+                  Google API client secret.
+                '';
+              };
             };
-            clientSecret = mkOption {
-              type = types.str;
-              description = ''
-                Google API client secret.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the Google third-party integration.";
       };
       ldap = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            providerName = mkOption {
-              type = types.str;
-              default = "";
-              description = ''
-                Optional name to be displayed at login form, indicating the LDAP provider.
-              '';
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              providerName = mkOption {
+                type = types.str;
+                default = "";
+                description = ''
+                  Optional name to be displayed at login form, indicating the LDAP provider.
+                '';
+              };
+              url = mkOption {
+                type = types.str;
+                example = "ldap://localhost";
+                description = ''
+                  URL of LDAP server.
+                '';
+              };
+              bindDn = mkOption {
+                type = types.str;
+                description = ''
+                  Bind DN for LDAP access.
+                '';
+              };
+              bindCredentials = mkOption {
+                type = types.str;
+                description = ''
+                  Bind credentials for LDAP access.
+                '';
+              };
+              searchBase = mkOption {
+                type = types.str;
+                example = "o=users,dc=example,dc=com";
+                description = ''
+                  LDAP directory to begin search from.
+                '';
+              };
+              searchFilter = mkOption {
+                type = types.str;
+                example = "(uid={{username}})";
+                description = ''
+                  LDAP filter to search with.
+                '';
+              };
+              searchAttributes = mkOption {
+                type = types.listOf types.str;
+                example = [ "displayName" "mail" ];
+                description = ''
+                  LDAP attributes to search with.
+                '';
+              };
+              userNameField = mkOption {
+                type = types.str;
+                default = "";
+                description = ''
+                  LDAP field which is used as the username on CodiMD.
+                  By default <option>useridField</option> is used.
+                '';
+              };
+              useridField = mkOption {
+                type = types.str;
+                example = "uid";
+                description = ''
+                  LDAP field which is a unique identifier for users on CodiMD.
+                '';
+              };
+              tlsca = mkOption {
+                type = types.str;
+                example = "server-cert.pem,root.pem";
+                description = ''
+                  Root CA for LDAP TLS in PEM format.
+                '';
+              };
             };
-            url = mkOption {
-              type = types.str;
-              example = "ldap://localhost";
-              description = ''
-                URL of LDAP server.
-              '';
-            };
-            bindDn = mkOption {
-              type = types.str;
-              description = ''
-                Bind DN for LDAP access.
-              '';
-            };
-            bindCredentials = mkOption {
-              type = types.str;
-              description = ''
-                Bind credentials for LDAP access.
-              '';
-            };
-            searchBase = mkOption {
-              type = types.str;
-              example = "o=users,dc=example,dc=com";
-              description = ''
-                LDAP directory to begin search from.
-              '';
-            };
-            searchFilter = mkOption {
-              type = types.str;
-              example = "(uid={{username}})";
-              description = ''
-                LDAP filter to search with.
-              '';
-            };
-            searchAttributes = mkOption {
-              type = types.listOf types.str;
-              example = [ "displayName" "mail" ];
-              description = ''
-                LDAP attributes to search with.
-              '';
-            };
-            userNameField = mkOption {
-              type = types.str;
-              default = "";
-              description = ''
-                LDAP field which is used as the username on CodiMD.
-                By default <option>useridField</option> is used.
-              '';
-            };
-            useridField = mkOption {
-              type = types.str;
-              example = "uid";
-              description = ''
-                LDAP field which is a unique identifier for users on CodiMD.
-              '';
-            };
-            tlsca = mkOption {
-              type = types.str;
-              example = "server-cert.pem,root.pem";
-              description = ''
-                Root CA for LDAP TLS in PEM format.
-              '';
-            };
-          };
-        });
+          });
         default = null;
         description = "Configure the LDAP integration.";
       };
       saml = mkOption {
-        type = types.nullOr (types.submodule {
-          options = {
-            idpSsoUrl = mkOption {
-              type = types.str;
-              example = "https://idp.example.com/sso";
-              description = ''
-                IdP authentication endpoint.
-              '';
-            };
-            idpCert = mkOption {
-              type = types.path;
-              example = "/path/to/cert.pem";
-              description = ''
-                Path to IdP certificate file in PEM format.
-              '';
-            };
-            issuer = mkOption {
-              type = types.str;
-              default = "";
-              description = ''
-                Optional identity of the service provider.
-                This defaults to the server URL.
-              '';
-            };
-            identifierFormat = mkOption {
-              type = types.str;
-              default = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
-              description = ''
-                Optional name identifier format.
-              '';
-            };
-            groupAttribute = mkOption {
-              type = types.str;
-              default = "";
-              example = "memberOf";
-              description = ''
-                Optional attribute name for group list.
-              '';
-            };
-            externalGroups = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              example = [ "Temporary-staff" "External-users" ];
-              description = ''
-                Excluded group names.
-              '';
-            };
-            requiredGroups = mkOption {
-              type = types.listOf types.str;
-              default = [];
-              example = [ "Hackmd-users" "Codimd-users" ];
-              description = ''
-                Required group names.
-              '';
-            };
-            attribute = {
-              id = mkOption {
+        type = types.nullOr
+          (types.submodule {
+            options = {
+              idpSsoUrl = mkOption {
+                type = types.str;
+                example = "https://idp.example.com/sso";
+                description = ''
+                  IdP authentication endpoint.
+                '';
+              };
+              idpCert = mkOption {
+                type = types.path;
+                example = "/path/to/cert.pem";
+                description = ''
+                  Path to IdP certificate file in PEM format.
+                '';
+              };
+              issuer = mkOption {
                 type = types.str;
                 default = "";
                 description = ''
-                  Attribute map for `id'.
-                  Defaults to `NameID' of SAML response.
+                  Optional identity of the service provider.
+                  This defaults to the server URL.
                 '';
               };
-              username = mkOption {
+              identifierFormat = mkOption {
                 type = types.str;
-                default = "";
+                default = "urn:oasis:names:tc:SAML:1.1:nameid-format:emailAddress";
                 description = ''
-                  Attribute map for `username'.
-                  Defaults to `NameID' of SAML response.
+                  Optional name identifier format.
                 '';
               };
-              email = mkOption {
+              groupAttribute = mkOption {
                 type = types.str;
                 default = "";
+                example = "memberOf";
                 description = ''
-                  Attribute map for `email'.
-                  Defaults to `NameID' of SAML response if
-                  <option>identifierFormat</option> has
-                  the default value.
+                  Optional attribute name for group list.
                 '';
+              };
+              externalGroups = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                example = [ "Temporary-staff" "External-users" ];
+                description = ''
+                  Excluded group names.
+                '';
+              };
+              requiredGroups = mkOption {
+                type = types.listOf types.str;
+                default = [ ];
+                example = [ "Hackmd-users" "Codimd-users" ];
+                description = ''
+                  Required group names.
+                '';
+              };
+              attribute = {
+                id = mkOption {
+                  type = types.str;
+                  default = "";
+                  description = ''
+                    Attribute map for `id'.
+                    Defaults to `NameID' of SAML response.
+                  '';
+                };
+                username = mkOption {
+                  type = types.str;
+                  default = "";
+                  description = ''
+                    Attribute map for `username'.
+                    Defaults to `NameID' of SAML response.
+                  '';
+                };
+                email = mkOption {
+                  type = types.str;
+                  default = "";
+                  description = ''
+                    Attribute map for `email'.
+                    Defaults to `NameID' of SAML response if
+                    <option>identifierFormat</option> has
+                    the default value.
+                  '';
+                };
               };
             };
-          };
-        });
+          });
         default = null;
         description = "Configure the SAML integration.";
       };
@@ -881,12 +893,15 @@ in
 
   config = mkIf cfg.enable {
     assertions = [
-      { assertion = cfg.configuration.db == {} -> (
+      {
+        assertion = cfg.configuration.db == { } ->
+        (
           cfg.configuration.dbURL != "" && cfg.configuration.dbURL != null
         );
-        message = "Database configuration for CodiMD missing."; }
+        message = "Database configuration for CodiMD missing.";
+      }
     ];
-    users.groups.codimd = {};
+    users.groups.codimd = { };
     users.users.codimd = {
       description = "CodiMD service user";
       group = "codimd";

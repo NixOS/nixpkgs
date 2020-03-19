@@ -30,8 +30,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [ fftw fftwFloat ]
-    ++ stdenv.lib.optional enablePython pythonPackages.python
-    ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp
+  ++ stdenv.lib.optional enablePython pythonPackages.python
+  ++ stdenv.lib.optional stdenv.isDarwin llvmPackages.openmp
   ;
 
   propagatedBuildInputs = stdenv.lib.optional enablePython [

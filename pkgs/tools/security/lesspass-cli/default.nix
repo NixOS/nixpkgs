@@ -1,5 +1,4 @@
 { stdenv, python3, fetchFromGitHub }:
-
 let
   inherit (python3.pkgs) buildPythonApplication pytest mock pexpect;
   repo = "lesspass";

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, perl, pkgconfig, wrapGAppsHook
-, SDL, bzip2, glib, gtk3, libgcrypt, libpng, libspectrum, libxml2, zlib
+{ lib
+, stdenv
+, fetchurl
+, perl
+, pkgconfig
+, wrapGAppsHook
+, SDL
+, bzip2
+, glib
+, gtk3
+, libgcrypt
+, libpng
+, libspectrum
+, libxml2
+, zlib
 }:
 
 stdenv.mkDerivation rec {

@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "pipes";
   version = "2017-12-02";
 

@@ -1,7 +1,6 @@
 { lib, pkgs, config, ... }:
 
 with lib;
-
 let
   cfg = config.programs.yabar;
 
@@ -11,18 +10,19 @@ let
 
   listKeys = r: concatStringsSep "," (map (n: "\"${n}\"") (attrNames r));
 
-  configFile = let
-    bars = mapAttrsToList (
-      name: cfg: ''
-        ${name}: {
-          font: "${cfg.font}";
-          position: "${cfg.position}";
+  configFile =
+    let
+      bars = mapAttrsToList (
+        name: cfg: ''
+          ${name}: {
+            font: "${cfg.font}";
+            position: "${cfg.position}";
 
-          ${mapExtra cfg.extra}
+            ${mapExtra cfg.extra}
 
-          block-list: [${listKeys cfg.indicators}]
+            block-list: [${listKeys cfg.indicators}]
 
-          ${concatStringsSep "\n" (mapAttrsToList (
+            ${concatStringsSep "\n" (mapAttrsToList (
             name: cfg: ''
               ${name}: {
                 exec: "${cfg.exec}";
@@ -31,25 +31,27 @@ let
               };
             ''
           ) cfg.indicators)}
-        };
-      ''
-    ) cfg.bars;
-  in pkgs.writeText "yabar.conf" ''
-    bar-list = [${listKeys cfg.bars}];
-    ${concatStringsSep "\n" bars}
-  '';
+          };
+        ''
+      ) cfg.bars;
+    in pkgs.writeText "yabar.conf" ''
+      bar-list = [${listKeys cfg.bars}];
+      ${concatStringsSep "\n" bars}
+    '';
 in
-  {
-    options.programs.yabar = {
-      enable = mkEnableOption "yabar";
+{
+  options.programs.yabar = {
+    enable = mkEnableOption "yabar";
 
-      package = mkOption {
-        default = pkgs.yabar-unstable;
-        example = literalExample "pkgs.yabar";
-        type = types.package;
+    package = mkOption {
+      default = pkgs.yabar-unstable;
+      example = literalExample "pkgs.yabar";
+      type = types.package;
 
-        # `yabar-stable` segfaults under certain conditions.
-        apply = x: if x == pkgs.yabar-unstable then x else flip warn x ''
+      # `yabar-stable` segfaults under certain conditions.
+      apply = x:
+        if x == pkgs.yabar-unstable
+        then x else flip warn x ''
           It's not recommended to use `yabar' with `programs.yabar', the (old) stable release
           tends to segfault under certain circumstances:
 
@@ -61,17 +63,18 @@ in
           to use `yabar-unstable'.
         '';
 
-        description = ''
-          The package which contains the `yabar` binary.
+      description = ''
+        The package which contains the `yabar` binary.
 
-          Nixpkgs provides the `yabar` and `yabar-unstable`
-          derivations since 18.03, so it's possible to choose.
-        '';
-      };
+        Nixpkgs provides the `yabar` and `yabar-unstable`
+        derivations since 18.03, so it's possible to choose.
+      '';
+    };
 
-      bars = mkOption {
-        default = {};
-        type = types.attrsOf(types.submodule {
+    bars = mkOption {
+      default = { };
+      type = types.attrsOf
+        (types.submodule {
           options = {
             font = mkOption {
               default = "sans bold 9";
@@ -94,7 +97,7 @@ in
             };
 
             extra = mkOption {
-              default = {};
+              default = { };
               type = types.attrsOf types.str;
 
               description = ''
@@ -103,35 +106,36 @@ in
             };
 
             indicators = mkOption {
-              default = {};
-              type = types.attrsOf(types.submodule {
-                options.exec = mkOption {
-                  example = "YABAR_DATE";
-                  type = types.str;
-                  description = ''
-                     The type of the indicator to be executed.
-                  '';
-                };
+              default = { };
+              type = types.attrsOf
+                (types.submodule {
+                  options.exec = mkOption {
+                    example = "YABAR_DATE";
+                    type = types.str;
+                    description = ''
+                      The type of the indicator to be executed.
+                    '';
+                  };
 
-                options.align = mkOption {
-                  default = "left";
-                  example = "right";
-                  type = types.enum [ "left" "center" "right" ];
+                  options.align = mkOption {
+                    default = "left";
+                    example = "right";
+                    type = types.enum [ "left" "center" "right" ];
 
-                  description = ''
-                    Whether to align the indicator at the left or right of the bar.
-                  '';
-                };
+                    description = ''
+                      Whether to align the indicator at the left or right of the bar.
+                    '';
+                  };
 
-                options.extra = mkOption {
-                  default = {};
-                  type = types.attrsOf (types.either types.str types.int);
+                  options.extra = mkOption {
+                    default = { };
+                    type = types.attrsOf (types.either types.str types.int);
 
-                  description = ''
-                    An attribute set which contains further attributes of a indicator.
-                  '';
-                };
-              });
+                    description = ''
+                      An attribute set which contains further attributes of a indicator.
+                    '';
+                  };
+                });
 
               description = ''
                 Indicators that should be rendered by yabar.
@@ -140,23 +144,23 @@ in
           };
         });
 
-        description = ''
-          List of bars that should be rendered by yabar.
-        '';
-      };
+      description = ''
+        List of bars that should be rendered by yabar.
+      '';
     };
+  };
 
-    config = mkIf cfg.enable {
-      systemd.user.services.yabar = {
-        description = "yabar service";
-        wantedBy = [ "graphical-session.target" ];
-        partOf = [ "graphical-session.target" ];
+  config = mkIf cfg.enable {
+    systemd.user.services.yabar = {
+      description = "yabar service";
+      wantedBy = [ "graphical-session.target" ];
+      partOf = [ "graphical-session.target" ];
 
-        script = ''
-          ${cfg.package}/bin/yabar -c ${configFile}
-        '';
+      script = ''
+        ${cfg.package}/bin/yabar -c ${configFile}
+      '';
 
-        serviceConfig.Restart = "always";
-      };
+      serviceConfig.Restart = "always";
     };
-  }
+  };
+}

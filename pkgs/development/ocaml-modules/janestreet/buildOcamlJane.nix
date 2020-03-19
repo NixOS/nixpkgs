@@ -1,8 +1,11 @@
-{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl } :
+{ buildOcaml, opaline, js_build_tools, ocaml_oasis, fetchurl }:
 
-{ name, version ? "113.33.03", buildInputs ? [],
-  hash ? "",
-  minimumSupportedOcamlVersion ? "4.02", ...
+{ name
+, version ? "113.33.03"
+, buildInputs ? [ ]
+, hash ? ""
+, minimumSupportedOcamlVersion ? "4.02"
+, ...
 }@args:
 
 buildOcaml (args // {
@@ -24,4 +27,5 @@ buildOcaml (args // {
 
   installPhase = "opaline -prefix $prefix -libdir $OCAMLFIND_DESTDIR ${name}.install";
 
-})
+}
+)

@@ -1,6 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi
-, aiohttp, zigpy
-, pytest }:
+{ stdenv
+, buildPythonPackage
+, fetchPypi
+, aiohttp
+, zigpy
+, pytest
+}:
 
 buildPythonPackage rec {
   pname = "zha-quirks";

@@ -1,5 +1,14 @@
-{ stdenv, pkgconfig, fetchFromGitHub, python2, vala_0_40
-, gtk2, libwnck, libxfce4util, xfce4-panel, wafHook }:
+{ stdenv
+, pkgconfig
+, fetchFromGitHub
+, python2
+, vala_0_40
+, gtk2
+, libwnck
+, libxfce4util
+, xfce4-panel
+, wafHook
+}:
 
 stdenv.mkDerivation rec {
   ver = "0.3.1";

@@ -14,7 +14,7 @@ rec {
 
   packageName = "blackbird";
 
-  asdFilesToKeep = ["blackbird.asd"];
+  asdFilesToKeep = [ "blackbird.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM blackbird DESCRIPTION A promise implementation for Common Lisp.

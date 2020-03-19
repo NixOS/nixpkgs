@@ -1,6 +1,9 @@
-{ stdenv, perl, buildEnv, makeWrapper
-, extraLibs ? []
-, extraOutputsToInstall ? []
+{ stdenv
+, perl
+, buildEnv
+, makeWrapper
+, extraLibs ? [ ]
+, extraOutputsToInstall ? [ ]
 , postBuild ? ""
 , ignoreCollisions ? false
 , requiredPerlModules
@@ -8,17 +11,18 @@
 
 # Create a perl executable that knows about additional packages.
 let
-  env = let
-    paths = requiredPerlModules (extraLibs ++ [ perl ] );
-  in buildEnv {
-    name = "${perl.name}-env";
+  env =
+    let
+      paths = requiredPerlModules (extraLibs ++ [ perl ]);
+    in buildEnv {
+      name = "${perl.name}-env";
 
-    inherit paths;
-    inherit ignoreCollisions;
-    extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
+      inherit paths;
+      inherit ignoreCollisions;
+      extraOutputsToInstall = [ "out" ] ++ extraOutputsToInstall;
 
-    # we create wrapper for the binaries in the different packages
-    postBuild = ''
+      # we create wrapper for the binaries in the different packages
+      postBuild = ''
 
       . "${makeWrapper}/nix-support/setup-hook"
 
@@ -43,11 +47,12 @@ let
       done
     '' + postBuild;
 
-    meta = perl.meta // { outputsToInstall = ["out"]; }; # remove "man" from meta.outputsToInstall. pkgs.buildEnv produces no "man", it puts everything to "out"
+      meta = perl.meta // { outputsToInstall = [ "out" ]; }; # remove "man" from meta.outputsToInstall. pkgs.buildEnv produces no "man", it puts everything to "out"
 
-    passthru = perl.passthru // {
-      interpreter = "${env}/bin/perl";
-      inherit perl;
+      passthru = perl.passthru // {
+        interpreter = "${env}/bin/perl";
+        inherit perl;
+      };
     };
-  };
-in env
+in
+env

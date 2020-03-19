@@ -3,7 +3,7 @@
 , idrisscript
 , lib
 }:
-build-idris-package  {
+build-idris-package {
   name = "webgl";
   version = "2017-05-08";
 

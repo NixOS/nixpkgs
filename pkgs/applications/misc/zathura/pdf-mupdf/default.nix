@@ -1,5 +1,15 @@
-{ stdenv, lib, meson, ninja, fetchFromGitHub
-, pkgconfig, zathura_core, cairo , gtk-mac-integration, girara, mupdf }:
+{ stdenv
+, lib
+, meson
+, ninja
+, fetchFromGitHub
+, pkgconfig
+, zathura_core
+, cairo
+, gtk-mac-integration
+, girara
+, mupdf
+}:
 
 stdenv.mkDerivation rec {
   version = "0.3.5";
@@ -20,10 +30,13 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ meson ninja pkgconfig ];
 
   buildInputs = [
-    zathura_core girara mupdf cairo
+    zathura_core
+    girara
+    mupdf
+    cairo
   ] ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
-  PKG_CONFIG_ZATHURA_PLUGINDIR= "lib/zathura";
+  PKG_CONFIG_ZATHURA_PLUGINDIR = "lib/zathura";
 
   meta = with lib; {
     homepage = https://pwmt.org/projects/zathura-pdf-mupdf/;

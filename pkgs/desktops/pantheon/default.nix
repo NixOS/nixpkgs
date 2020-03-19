@@ -1,26 +1,40 @@
 { config, pkgs, lib, gnome3 }:
 
 
-lib.makeScope pkgs.newScope (self: with self; {
+lib.makeScope pkgs.newScope (self: with self;
+{
 
   switchboardPlugs = [
-    switchboard-plug-a11y switchboard-plug-about
-    switchboard-plug-applications switchboard-plug-bluetooth
-    switchboard-plug-datetime switchboard-plug-display
-    switchboard-plug-keyboard switchboard-plug-mouse-touchpad
-    switchboard-plug-network switchboard-plug-notifications
-    switchboard-plug-onlineaccounts switchboard-plug-pantheon-shell
-    switchboard-plug-power switchboard-plug-printers
-    switchboard-plug-security-privacy switchboard-plug-sharing
+    switchboard-plug-a11y
+    switchboard-plug-about
+    switchboard-plug-applications
+    switchboard-plug-bluetooth
+    switchboard-plug-datetime
+    switchboard-plug-display
+    switchboard-plug-keyboard
+    switchboard-plug-mouse-touchpad
+    switchboard-plug-network
+    switchboard-plug-notifications
+    switchboard-plug-onlineaccounts
+    switchboard-plug-pantheon-shell
+    switchboard-plug-power
+    switchboard-plug-printers
+    switchboard-plug-security-privacy
+    switchboard-plug-sharing
     switchboard-plug-sound
   ];
 
   wingpanelIndicators = [
-    wingpanel-applications-menu wingpanel-indicator-bluetooth
-    wingpanel-indicator-datetime wingpanel-indicator-keyboard
-    wingpanel-indicator-network wingpanel-indicator-nightlight
-    wingpanel-indicator-notifications wingpanel-indicator-power
-    wingpanel-indicator-session wingpanel-indicator-sound
+    wingpanel-applications-menu
+    wingpanel-indicator-bluetooth
+    wingpanel-indicator-datetime
+    wingpanel-indicator-keyboard
+    wingpanel-indicator-network
+    wingpanel-indicator-nightlight
+    wingpanel-indicator-notifications
+    wingpanel-indicator-power
+    wingpanel-indicator-session
+    wingpanel-indicator-sound
   ];
 
   nixpkgs-github-update = callPackage ./nixpkgs_github_update { };
@@ -193,11 +207,12 @@ lib.makeScope pkgs.newScope (self: with self; {
   elementary-sound-theme = callPackage ./artwork/elementary-sound-theme { };
 
   elementary-wallpapers = callPackage ./artwork/elementary-wallpapers { };
-
-} // lib.optionalAttrs (config.allowAliases or true) {
+}
+// lib.optionalAttrs (config.allowAliases or true) {
 
   ### ALIASES
 
   inherit (pkgs) vala; # added 2019-10-10
 
-})
+}
+)

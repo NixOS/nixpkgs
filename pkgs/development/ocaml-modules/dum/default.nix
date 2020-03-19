@@ -1,4 +1,7 @@
-{ stdenv, fetchFromGitHub, ocaml, findlib
+{ stdenv
+, fetchFromGitHub
+, ocaml
+, findlib
 , easy-format
 }:
 

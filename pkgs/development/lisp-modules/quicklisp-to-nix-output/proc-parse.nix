@@ -14,7 +14,7 @@ rec {
 
   packageName = "proc-parse";
 
-  asdFilesToKeep = ["proc-parse.asd"];
+  asdFilesToKeep = [ "proc-parse.asd" ];
   overrides = x: x;
 }
 /* (SYSTEM proc-parse DESCRIPTION Procedural vector parser SHA256

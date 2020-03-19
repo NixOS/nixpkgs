@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Privacy-Focused Marketplace & Decentralized Application Platform";
-    longDescription= ''
+    longDescription = ''
       An open source, decentralized privacy platform built for global person to person eCommerce.
       RPC daemon and CLI client only.
     '';
