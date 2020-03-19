@@ -6527,6 +6527,12 @@
     githubId = 766350;
     name = "Richard Zetterberg";
   };
+  s1341 = {
+    email = "s1341@shmarya.net";
+    name = "Shmarya Rubenstein";
+    github = "s1341";
+    githubId = 5682183;
+  };
   samdoshi = {
     email = "sam@metal-fish.co.uk";
     github = "samdoshi";
