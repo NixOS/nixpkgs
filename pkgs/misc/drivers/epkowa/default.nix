@@ -244,6 +244,7 @@ stdenv.mkDerivation rec {
       sha256 = "04y70qjd220dpyh771fiq50lha16pms98mfigwjczdfmx6kpj1jd";
     })
     ./firmware_location.patch
+    ./sscanf.patch
     ];
   patchFlags = [ "-p0" ];
 
