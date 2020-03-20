@@ -112,21 +112,6 @@ self: super: {
     '';
   });
 
-  vim-pandoc = super.vim-pandoc.overrideAttrs(old: {
-    patches = (super.patches or []) ++ [
-      # Fix a failure on startup, which breaks the rplugin manifest generation
-      # https://github.com/vim-pandoc/vim-pandoc/pull/363#issuecomment-599080366
-      (fetchpatch {
-        name = "fix-fdetect.patch";
-        url = "https://github.com/vim-pandoc/vim-pandoc/commit/da4c0b0325c1bfad20f7cfd15abb53943fe22fc4.patch";
-        revert = true;
-        # For some reason that part was already reverted upstream.
-        excludes = ["ftdetect/pandoc.vim"];
-        sha256 = "10nykgsqpxx5hlagk83khjl8p58zx7z3bcryzinv5vv52wlqkq5p";
-      })
-    ];
-  });
-
   clighter8 = super.clighter8.overrideAttrs(old: {
     preFixup = ''
       sed "/^let g:clighter8_libclang_path/s|')$|${llvmPackages.clang.cc.lib}/lib/libclang.so')|" \

@@ -207,6 +207,36 @@ let
           })
         ];
       };
+      buildScriptDeps = let
+        depCrate = boolVal: mkCrate {
+          crateName = "bar";
+          src = mkFile "src/lib.rs" ''
+            pub const baz: bool = ${boolVal};
+          '';
+        };
+      in {
+        crateName = "foo";
+        src = symlinkJoin {
+          name = "build-script-and-main";
+          paths = [
+            (mkFile  "src/main.rs" ''
+              extern crate bar;
+              #[cfg(test)]
+              #[test]
+              fn baz_false() { assert!(!bar::baz); }
+              fn main() { }
+            '')
+            (mkFile  "build.rs" ''
+              extern crate bar;
+              fn main() { assert!(bar::baz); }
+            '')
+          ];
+        };
+        buildDependencies = [ (depCrate "true") ];
+        dependencies = [ (depCrate "false") ];
+        buildTests = true;
+        expectedTestOutputs = [ "test baz_false ... ok" ];
+      };
       # Regression test for https://github.com/NixOS/nixpkgs/issues/74071
       # Whenevever a build.rs file is generating files those should not be overlayed onto the actual source dir
       buildRsOutDirOverlay = {
