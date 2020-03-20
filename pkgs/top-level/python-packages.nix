@@ -6411,8 +6411,6 @@ in {
 
   influxgraph = callPackage ../development/python-modules/influxgraph { };
 
-  graphitepager = callPackage ../development/python-modules/graphitepager { };
-
   pyspotify = callPackage ../development/python-modules/pyspotify { };
 
   pykka = callPackage ../development/python-modules/pykka { };
