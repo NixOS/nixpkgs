@@ -1,4 +1,6 @@
-{ stdenv, fetchurl, autoreconfHook, autoconf-archive, pkgconfig, kmod, enable-tools ? true }:
+{ lib, stdenv, fetchurl, autoreconfHook, autoconf-archive, pkgconfig, kmod
+, enable-tools ? true
+, enablePython ? false, python3, ncurses }:
 
 stdenv.mkDerivation rec {
   pname = "libgpiod";
@@ -9,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1r337ici2nvi9v2h33nf3b7nisirc4s8p31cpv1cg8jbzn3wi15g";
   };
 
-  buildInputs = [ kmod ];
+  buildInputs = [ kmod ] ++ lib.optionals enablePython [ python3 ncurses ];
   nativeBuildInputs = [
     autoconf-archive
     pkgconfig
@@ -20,9 +22,9 @@ stdenv.mkDerivation rec {
     "--enable-tools=${if enable-tools then "yes" else "no"}"
     "--enable-bindings-cxx"
     "--prefix=${placeholder "out"}"
-  ];
+  ] ++ lib.optional enablePython "--enable-bindings-python";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "C library and tools for interacting with the linux GPIO character device";
     longDescription = ''
       Since linux 4.8 the GPIO sysfs interface is deprecated. User space should use
