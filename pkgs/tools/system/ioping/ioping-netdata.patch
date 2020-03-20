@@ -1,0 +1,128 @@
+diff --git a/ioping.1 b/ioping.1
+index 8eaa98e..8fec21e 100644
+--- a/ioping.1
++++ b/ioping.1
+@@ -3,7 +3,7 @@
+ ioping \- simple disk I/O latency monitoring tool
+ .SH SYNOPSYS
+ .SY ioping
+-.OP \-ABCDJLRWGYykq
++.OP \-ABCDJLRWGYykqN
+ .OP \-a count
+ .OP \-c count
+ .OP \-i interval
+@@ -123,6 +123,9 @@ Keep and reuse temporary working file "ioping.tmp" (only for directory target).
+ \fB\-q\fR, \fB\-quiet\fR
+ Suppress periodical human-readable output.
+ .TP
++\fB\-N\fR
++Use output format compatible with netdata.
++.TP
+ \fB\-h\fR, \fB\-help\fR
+ Display help message and exit.
+ .TP
+diff --git a/ioping.c b/ioping.c
+index 76835d2..6abb29d 100644
+--- a/ioping.c
++++ b/ioping.c
+@@ -484,6 +484,7 @@ int fd;
+ void *buf;
+ 
+ int quiet = 0;
++int netdata_output = 0;
+ int batch_mode = 0;
+ int direct = 0;
+ int cached = 0;
+@@ -525,7 +526,7 @@ int json_line = 0;
+ 
+ int exiting = 0;
+ 
+-const char *options = "hvkALRDCWGYBqyi:t:T:w:s:S:c:o:p:P:l:r:a:J";
++const char *options = "hvkALRDCWGYBNqyi:t:T:w:s:S:c:o:p:P:l:r:a:J";
+ 
+ #ifdef HAVE_GETOPT_LONG_ONLY
+ 
+@@ -610,6 +611,7 @@ void usage(void)
+ 			"      -B, -batch                 print final statistics in raw format\n"
+ 			"      -J, -json                  print output in JSON format\n"
+ 			"      -q, -quiet                 suppress human-readable output\n"
++      "      -N                         use output format compatible with netdata\n"
+ 			"      -h, -help                  display this message and exit\n"
+ 			"      -v, -version               display version and exit\n"
+ 			"\n"
+@@ -716,6 +718,9 @@ void parse_options(int argc, char **argv)
+ 			case 'q':
+ 				quiet = 1;
+ 				break;
++      case 'N':
++        netdata_output = 1;
++        break;
+ 			case 'B':
+ 				quiet = 1;
+ 				batch_mode = 1;
+@@ -743,6 +748,19 @@ void parse_options(int argc, char **argv)
+ 	if (optind < argc-1)
+ 		errx(1, "more than one destination specified");
+ 	path = argv[optind];
++
++  if (netdata_output) {
++    if (stop_at_request || custom_deadline || period_request || period_time || custom_deadline || write_read_test)
++      errx(1, "-c, -w, -p, -P, -R, and -G options are incompatible with netdata output (-N)");
++
++    if (interval < NSEC_PER_SEC) {
++      interval = NSEC_PER_SEC;
++      warnx("the minimal interval for netdata is 1 second");
++    } else {
++      interval = roundl(interval / NSEC_PER_SEC) * NSEC_PER_SEC;
++      warnx("round interval to %lld seconds", interval / NSEC_PER_SEC);
++    }
++  }
+ }
+ 
+ #ifdef __linux__
+@@ -1271,6 +1289,34 @@ static void dump_statistics(struct statistics *s) {
+ 			(unsigned long)s->load_time);
+ }
+ 
++void print_netdata(ssize_t ret_size, long long time_now, long long this_time) {
++  static int sent_chart = 0;
++  static long long time_prev = 0;
++
++  fflush(stdout);
++
++  if (!sent_chart) {
++    printf("CHART 'ioping.%s_", path);
++    print_size(ret_size);
++    printf("_%s_latency' '' '%s Latency for %s' microseconds '%s' ioping.latency line 110030 %lld '' ioping.plugin\n"
++         , write_test ? "write" : "read"
++         , write_test ? "Write" : "Read"
++         , path
++         , path
++         , interval / NSEC_PER_SEC);
++    printf("DIMENSION latency '' absolute 1 1000\n");
++    sent_chart = 1;
++  }
++
++  printf("BEGIN 'ioping.%s_", path);
++  print_size(ret_size);
++  printf("_%s_latency' %lld\n", write_test ? "write" : "read", time_prev ? (time_now - time_prev) / 1000 : 0);
++  time_prev = time_now;
++
++  printf("SET latency %lld\n", this_time);
++  printf("END\n");
++}
++
+ static void json_request(size_t io_size, long long io_time, int valid)
+ {
+ 	printf("%s{\n"
+@@ -1610,7 +1656,9 @@ skip_preparation:
+ 
+ 		valid = add_statistics(&part, this_time);
+ 
+-		if (quiet) {
++    if (netdata_output) {
++      print_netdata(ret_size, time_now, this_time);
++    } else if (quiet) {
+ 			/* silence */
+ 		} else if (json) {
+ 			json_request(ret_size, this_time, valid);
