@@ -2457,22 +2457,17 @@ package-maintainers:
     - streaming-wai
   kiwi:
     # - glirc
-    - matterhorn
     - Unique
   psibi:
     - path-pieces
     - persistent
-    - persistent-postgresql
     - persistent-sqlite
     - persistent-template
     - shakespeare
   abbradar:
     - Agda
-  roberth:
-    - arion-compose
   cdepillabout:
     - pretty-simple
-    - purescript
     - spago
     - termonad
   rkrzr:
@@ -2743,6 +2738,7 @@ broken-packages:
   - alex-prelude
   - alfred
   - alga
+  - algebra-checkers
   - algebra-dag
   - algebra-sql
   - algebraic
@@ -2848,6 +2844,7 @@ broken-packages:
   - arbor-monad-metric
   - arbor-monad-metric-datadog
   - arbtt
+  - archive-libarchive
   - archive-tar-bytestring
   - archiver
   - archlinux
@@ -2863,6 +2860,7 @@ broken-packages:
   - arguedit
   - ariadne
   - arion
+  - arion-compose
   - armada
   - armor
   - arpa
@@ -2922,6 +2920,7 @@ broken-packages:
   - atomic-primops-vector
   - atomo
   - atp-haskell
+  - ats-pkg
   - ats-setup
   - ats-storable
   - attempt
@@ -2970,15 +2969,26 @@ broken-packages:
   - awesomium-raw
   - aws-configuration-tools
   - aws-dynamodb-conduit
+  - aws-dynamodb-streams
+  - aws-easy
+  - aws-ec2
   - aws-ec2-knownhosts
   - aws-elastic-transcoder
+  - aws-general
+  - aws-kinesis
   - aws-kinesis-client
   - aws-kinesis-reshard
+  - aws-lambda
+  - aws-lambda-haskell-runtime
   - aws-mfa-credentials
   - aws-performance-tests
+  - aws-route53
   - aws-sdk
+  - aws-sdk-text-converter
+  - aws-sdk-xml-unordered
   - aws-sign4
   - aws-simple
+  - aws-sns
   - axel
   - axiom
   - azubi
@@ -3102,6 +3112,7 @@ broken-packages:
   - binary-tagged
   - binary-typed
   - bind-marshal
+  - BinderAnn
   - binding-core
   - binding-gtk
   - binding-wx
@@ -3495,6 +3506,7 @@ broken-packages:
   - cgrep
   - chalkboard
   - chalkboard-viewer
+  - character-cases
   - charade
   - chart-cli
   - Chart-fltkhs
@@ -3728,6 +3740,7 @@ broken-packages:
   - concurrent-buffer
   - Concurrent-Cache
   - concurrent-machines
+  - concurrent-resource-map
   - concurrent-state
   - concurrent-utilities
   - Concurrential
@@ -3750,6 +3763,10 @@ broken-packages:
   - conduit-vfs-zip
   - conf
   - confcrypt
+  - conferer-hedis
+  - conferer-provider-dhall
+  - conferer-provider-yaml
+  - conferer-snap
   - confetti
   - conffmt
   - confide
@@ -3852,6 +3869,7 @@ broken-packages:
   - cparsing
   - CPBrainfuck
   - cpio-conduit
+  - cpkg
   - CPL
   - cplusplus-th
   - cprng-aes-effect
@@ -4151,6 +4169,7 @@ broken-packages:
   - dhall-nix
   - dhall-text
   - dhall-to-cabal
+  - dhall-yaml
   - dhcp-lease-parser
   - dhrun
   - dia-base
@@ -4285,6 +4304,7 @@ broken-packages:
   - doublify-toolkit
   - dow
   - download-media-content
+  - downloader
   - dozenal
   - dozens
   - DP
@@ -4909,6 +4929,7 @@ broken-packages:
   - funspection
   - fused-effects-squeal
   - fusion
+  - fusion-plugin
   - futun
   - future
   - fuzzy-time-gen
@@ -5029,6 +5050,7 @@ broken-packages:
   - ghc-srcspan-plugin
   - ghc-syb
   - ghc-syb-utils
+  - ghc-tags-plugin
   - ghc-time-alloc-prof
   - ghc-usage
   - ghc-vis
@@ -5642,11 +5664,13 @@ broken-packages:
   - hasql-generic
   - hasql-implicits
   - hasql-migration
+  - hasql-notifications
   - hasql-optparse-applicative
   - hasql-pool
   - hasql-postgres
   - hasql-postgres-options
   - hasql-simple
+  - hasql-th
   - hastache
   - hastache-aeson
   - haste
@@ -5729,6 +5753,7 @@ broken-packages:
   - hdph-closure
   - hdr-histogram
   - HDRUtils
+  - headed-megaparsec
   - headergen
   - headroom
   - heapsort
@@ -5923,6 +5948,9 @@ broken-packages:
   - HLearn-datastructures
   - HLearn-distributions
   - hledger-api
+  - hledger-chart
+  - hledger-irr
+  - hledger-vty
   - hlibBladeRF
   - hlibev
   - hlibfam
@@ -6976,6 +7004,7 @@ broken-packages:
   - lhe
   - lhs2TeX-hl
   - lhslatex
+  - libarchive
   - LibClang
   - libconfig
   - libcspm
@@ -7201,6 +7230,7 @@ broken-packages:
   - lzma-streams
   - maam
   - mac
+  - macaroon-shop
   - macbeth-lib
   - machinecell
   - machines-amazonka
@@ -7291,6 +7321,9 @@ broken-packages:
   - matrix-as-xyz
   - matrix-market
   - matsuri
+  - matterhorn
+  - mattermost-api
+  - mattermost-api-qc
   - maude
   - maxent
   - maxent-learner-hw
@@ -7882,7 +7915,9 @@ broken-packages:
   - oidc-client
   - ois-input-manager
   - olwrapper
+  - om-actor
   - om-elm
+  - om-fail
   - omaketex
   - ombra
   - Omega
@@ -7919,7 +7954,9 @@ broken-packages:
   - opensoundcontrol-ht
   - openssh-github-keys
   - openssh-protocol
+  - opentelemetry-http-client
   - opentelemetry-lightstep
+  - opentelemetry-wai
   - opentheory-char
   - opentok
   - opentype
@@ -8154,6 +8191,7 @@ broken-packages:
   - persistent-migration
   - persistent-mongoDB
   - persistent-mysql-haskell
+  - persistent-postgresql
   - persistent-protobuf
   - persistent-ratelimit
   - persistent-redis
@@ -8496,6 +8534,7 @@ broken-packages:
   - pure-priority-queue
   - pure-priority-queue-tests
   - purebred-email
+  - purescript
   - purescript-iso
   - purescript-tsd-gen
   - push-notifications
@@ -8842,6 +8881,7 @@ broken-packages:
   - rethinkdb-client-driver
   - rethinkdb-model
   - rethinkdb-wereHamster
+  - retrie
   - retryer
   - reverse-geocoding
   - reversi
@@ -8871,6 +8911,7 @@ broken-packages:
   - ring-buffer
   - ring-buffers
   - riot
+  - risc-v
   - risc386
   - riscv-isa
   - Ritt-Wu
@@ -8927,6 +8968,7 @@ broken-packages:
   - rpc-framework
   - rpf
   - rpm
+  - rrule
   - rsagl
   - rsagl-frp
   - rsagl-math
@@ -8958,6 +9000,7 @@ broken-packages:
   - safe-failure-cme
   - safe-freeze
   - safe-globals
+  - safe-json
   - safe-lazy-io
   - safe-length
   - safe-money-xmlbf
@@ -9096,6 +9139,7 @@ broken-packages:
   - sendgrid-v3
   - sensei
   - sensenet
+  - sensu-run
   - sentence-jp
   - sentry
   - seonbi
@@ -9209,6 +9253,7 @@ broken-packages:
   - sha-streams
   - shade
   - shadower
+  - shake-bindist
   - shake-cabal-build
   - shake-extras
   - shake-minify
@@ -9326,6 +9371,7 @@ broken-packages:
   - skews
   - skulk
   - skylark-client
+  - skylighting-lucid
   - skype4hs
   - slack
   - slack-notify-haskell
@@ -10074,6 +10120,7 @@ broken-packages:
   - traced
   - tracetree
   - tracing
+  - tracked-files
   - tracker
   - trackit
   - traction
@@ -10375,6 +10422,7 @@ broken-packages:
   - validate-input
   - validated-types
   - Validation
+  - validation-selective
   - validations
   - validationt
   - value-supply
