@@ -3341,8 +3341,6 @@ in {
 
   django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
-  django_1_8 = callPackage ../development/python-modules/django/1_8.nix { };
-
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
   django-anymail = callPackage ../development/python-modules/django-anymail {};
