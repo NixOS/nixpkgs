@@ -11,15 +11,15 @@
 { stdenv, version }:
 
 with stdenv.lib;
-with import ../../../../lib/kernel.nix { inherit (stdenv) lib; inherit version; };
+with stdenv.lib.kernel;
+with (stdenv.lib.kernel.whenHelpers version);
 
 assert (versionAtLeast version "4.9");
 
 optionalAttrs (stdenv.hostPlatform.platform.kernelArch == "x86_64") {
   DEFAULT_MMAP_MIN_ADDR = freeform "65536";  # Prevent allocation of first 64K of memory
 
-  # Reduce attack surface by disabling various emulations
-  IA32_EMULATION     = no;
+  # Reduce attack surface by disabling X32
   X86_X32            = no;
   # Note: this config depends on EXPERT y and so will not take effect, hence
   # it is left "optional" for now.

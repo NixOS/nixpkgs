@@ -878,6 +878,39 @@ let
     };
   };
 
+  AuthenSASLSASLprep = buildPerlModule {
+    pname = "Authen-SASL-SASLprep";
+    version = "1.100";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CF/CFAERBER/Authen-SASL-SASLprep-1.100.tar.gz";
+      sha256 = "a4cccc34bb3f53acf0ba78c9fc61af8d156d109d1c10487ba5988a55077d1f70";
+    };
+    buildInputs = [ TestNoWarnings ];
+    propagatedBuildInputs = [ UnicodeStringprep ];
+    meta = {
+      description = "A Stringprep Profile for User Names and Passwords (RFC 4013)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
+  AuthenSCRAM = buildPerlPackage {
+    pname = "Authen-SCRAM";
+    version = "0.011";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/Authen-SCRAM-0.011.tar.gz";
+      sha256 = "45108c239a7373d00941dcf0d171acd03e7c16a63ce6f7d9568ff052b17cf5a8";
+    };
+    buildInputs = [ TestFailWarnings TestFatal ];
+    propagatedBuildInputs = [ AuthenSASLSASLprep CryptURandom Moo PBKDF2Tiny TryTiny TypeTiny namespaceclean ];
+    meta = {
+      homepage = "https://github.com/dagolden/Authen-SCRAM";
+      description = "Salted Challenge Response Authentication Mechanism (RFC 5802)";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   AuthenSimple = buildPerlPackage {
     pname = "Authen-Simple";
     version = "0.5";
@@ -1207,6 +1240,21 @@ let
     meta = {
       description = "Work with International Standard Serial Numbers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  BytesRandomSecure = buildPerlPackage {
+    pname = "Bytes-Random-Secure";
+    version = "0.29";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAVIDO/Bytes-Random-Secure-0.29.tar.gz";
+      sha256 = "53bbd339e6a11efca07c619a615c7c188a68bb2be849a1cb7efc3dd4d9ae85ae";
+    };
+    propagatedBuildInputs = [ CryptRandomSeed MathRandomISAAC ];
+    meta = {
+      description = "Perl extension to generate cryptographically-secure random bytes";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -3572,6 +3620,22 @@ let
     };
   };
 
+  CryptRandomSeed = buildPerlPackage {
+    pname = "Crypt-Random-Seed";
+    version = "0.03";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-Seed-0.03.tar.gz";
+      sha256 = "593da54b522c09cc26bbcc0e4e49c1c8e688a6fd33b0726af801d722a5c8d0f1";
+    };
+    propagatedBuildInputs = [ CryptRandomTESHA2 ];
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-Seed";
+      description = "Provide strong randomness for seeding";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   CryptRandomSource = buildPerlModule {
     pname = "Crypt-Random-Source";
     version = "0.14";
@@ -3583,6 +3647,20 @@ let
     propagatedBuildInputs = [ CaptureTiny ModuleFind Moo SubExporter TypeTiny namespaceclean ];
     meta = {
       description = "Get weak or strong random data from pluggable sources";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  CryptRandomTESHA2 = buildPerlPackage {
+    pname = "Crypt-Random-TESHA2";
+    version = "0.01";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DANAJ/Crypt-Random-TESHA2-0.01.tar.gz";
+      sha256 = "a0912b42c52be173da528d5527e40d967324bc04ac78d9fc2ddc91ff16fe9633";
+    };
+    meta = {
+      homepage = "https://github.com/danaj/Crypt-Random-TESHA2";
+      description = "Random numbers using timer/schedule entropy, aka userspace voodoo entropy";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };
@@ -3631,6 +3709,20 @@ let
     src = fetchurl {
       url = mirror://cpan/authors/id/B/BO/BORISZ/Crypt-UnixCrypt_XS-0.11.tar.gz;
       sha256 = "1ajg3x6kwxy4x9p3nw1j36qjxpjvdpi9wkca5gfd86y9q8939sv2";
+    };
+  };
+
+  CryptURandom = buildPerlPackage {
+    pname = "Crypt-URandom";
+    version = "0.36";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DD/DDICK/Crypt-URandom-0.36.tar.gz";
+      sha256 = "81fec9921adc5d3c91cbe0ad8cb2bb89b045c4fb0de9cb3c43f17e58e477f8a1";
+    };
+    meta = {
+      description = "Provide non blocking randomness";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
     };
   };
 
@@ -3779,14 +3871,15 @@ let
 
   CryptSSLeay = buildPerlPackage {
     pname = "Crypt-SSLeay";
-    version = "0.72";
+    version = "0.73_06";
     src = fetchurl {
-      url = mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.72.tar.gz;
-      sha256 = "1s7zm6ph37kg8jzaxnhi4ff4snxl7mi5h14arxbri0kp6s0lzlzm";
+      url = "mirror://cpan/authors/id/N/NA/NANIS/Crypt-SSLeay-0.73_06.tar.gz";
+      sha256 = "0b159lw3ia5r87qsgff3qhdnz3l09xcz04rbk4ji7fbyr12wmv7q";
     };
+
     makeMakerFlags = "--libpath=${pkgs.openssl.out}/lib --incpath=${pkgs.openssl.dev}/include";
     buildInputs = [ PathClass ];
-    propagatedBuildInputs = [ LWPProtocolHttps ];
+    propagatedBuildInputs = [ LWPProtocolHttps BytesRandomSecure ];
   };
 
   CSSDOM = buildPerlPackage {
@@ -14555,6 +14648,21 @@ let
     };
   };
 
+  PBKDF2Tiny = buildPerlPackage {
+    pname = "PBKDF2-Tiny";
+    version = "0.005";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/D/DA/DAGOLDEN/PBKDF2-Tiny-0.005.tar.gz";
+      sha256 = "b4e21dc59b30265eaaa41b705087ec03447d9c655a14ac40ff46e4de29eabf8e";
+    };
+    meta = {
+      homepage = "https://github.com/dagolden/PBKDF2-Tiny";
+      description = "Minimalist PBKDF2 (RFC 2898) with HMAC-SHA1 or HMAC-SHA2";
+      license = stdenv.lib.licenses.asl20;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   pcscperl = buildPerlPackage {
     pname = "pcsc-perl";
     version = "1.4.14";
@@ -19159,7 +19267,7 @@ let
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/biblex"
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/bibparse"
       install_name_tool -change "$oldPath" "$newPath" "$out/bin/dumpnames"
-      install_name_tool -change "$oldPath" "$newPath" "$out/${perl.libPrefix}/${perl.version}/darwin-2level/auto/Text/BibTeX/BibTeX.bundle"
+      install_name_tool -change "$oldPath" "$newPath" "$out/${perl.libPrefix}/${perl.version}/darwin"*"-2level/auto/Text/BibTeX/BibTeX.bundle"
     '';
     meta = {
       description = "Interface to read and parse BibTeX files";
@@ -20243,6 +20351,21 @@ let
     };
   };
 
+  UnicodeStringprep = buildPerlModule {
+    pname = "Unicode-Stringprep";
+    version = "1.105";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/C/CF/CFAERBER/Unicode-Stringprep-1.105.tar.gz";
+      sha256 = "e6bebbc58408231fd1317db9102449b3e7da4fa437e79f637382d36313efd011";
+    };
+    buildInputs = [ TestNoWarnings ];
+    meta = {
+      description = "Preparation of Internationalized Strings (RFC 3454)";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   UnixGetrusage = buildPerlPackage {
     pname = "Unix-Getrusage";
     version = "0.03";
@@ -21056,6 +21179,10 @@ let
       url = mirror://cpan/authors/id/M/MI/MIROD/XML-Twig-3.52.tar.gz;
       sha256 = "1bc0hrz4jp6199hi29sdxmb9gyy45whla9hd19yqfasgq8k5ixzy";
     };
+    postInstall = ''
+      mkdir -p $out/bin
+      cp tools/xml_grep/xml_grep $out/bin
+    '';
     propagatedBuildInputs = [ XMLParser ];
     doCheck = false;  # requires lots of extra packages
   };

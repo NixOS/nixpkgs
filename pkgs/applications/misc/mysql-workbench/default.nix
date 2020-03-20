@@ -1,27 +1,60 @@
-{ stdenv, fetchurl, substituteAll, cmake, ninja, pkgconfig
-, glibc, gtk3, gtkmm3, pcre, swig, antlr4_7, sudo
-, mysql, libxml2, libmysqlconnectorcpp
-, vsqlite, gdal, libiodbc, libpthreadstubs
-, libXdmcp, libuuid, libzip, libsecret, libssh
-, python2, jre
-, boost, libsigcxx, libX11, openssl
-, proj, cairo, libxkbcommon, epoxy, wrapGAppsHook
-, at-spi2-core, dbus, bash, coreutils
+{ stdenv
+, fetchurl
+, substituteAll
+, cmake
+, ninja
+, pkgconfig
+, glibc
+, gtk3
+, gtkmm3
+, pcre
+, swig
+, antlr4_7
+, sudo
+, mysql
+, libxml2
+, libmysqlconnectorcpp
+, vsqlite
+, gdal
+, libiodbc
+, libpthreadstubs
+, libXdmcp
+, libuuid
+, libzip
+, libsecret
+, libssh
+, python2
+, jre
+, boost
+, libsigcxx
+, libX11
+, openssl
+, rapidjson
+, proj
+, cairo
+, libxkbcommon
+, epoxy
+, wrapGAppsHook
+, at-spi2-core
+, dbus
+, bash
+, coreutils
 }:
 
 let
   inherit (python2.pkgs) paramiko pycairo pyodbc;
 in stdenv.mkDerivation rec {
   pname = "mysql-workbench";
-  version = "8.0.15";
+  version = "8.0.19";
 
   src = fetchurl {
     url = "http://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community-${version}-src.tar.gz";
-    sha256 = "0ca93azasya5xiw6j2map8drmxf445qqydpvrb512kjfqdiv67x6";
+    sha256 = "unrszSK+tKcARSHxRSAAos+jDtYxdDcSnFENixaDJsw=";
   };
 
   patches = [
     ./fix-gdal-includes.patch
+
     (substituteAll {
       src = ./hardcode-paths.patch;
       catchsegv = "${glibc.bin}/bin/catchsegv";
@@ -35,6 +68,13 @@ in stdenv.mkDerivation rec {
       rmdir = "${coreutils}/bin/rmdir";
       sudo = "${sudo}/bin/sudo";
     })
+
+    # Fix swig not being able to find headers
+    # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
+    (substituteAll {
+      src = ./fix-swig-build.patch;
+      cairoDev = "${cairo.dev}";
+    })
   ];
 
   # have it look for 4.7.2 instead of 4.7.1
@@ -44,31 +84,68 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [
-    cmake ninja pkgconfig jre swig wrapGAppsHook
+    cmake
+    ninja
+    pkgconfig
+    jre
+    swig
+    wrapGAppsHook
   ];
 
   buildInputs = [
-    gtk3 gtkmm3 libX11 antlr4_7.runtime.cpp python2 mysql libxml2
-    libmysqlconnectorcpp vsqlite gdal boost libssh openssl
-    libiodbc pcre cairo libuuid libzip libsecret
-    libsigcxx proj
+    gtk3
+    gtkmm3
+    libX11
+    antlr4_7.runtime.cpp
+    python2
+    mysql
+    libxml2
+    libmysqlconnectorcpp
+    vsqlite
+    gdal
+    boost
+    libssh
+    openssl
+    rapidjson
+    libiodbc
+    pcre
+    cairo
+    libuuid
+    libzip
+    libsecret
+    libsigcxx
+    proj
+
     # python dependencies:
-    paramiko pycairo pyodbc # sqlanydb
+    paramiko
+    pycairo
+    pyodbc
+    # TODO: package sqlanydb and add it here
+
     # transitive dependencies:
-    libpthreadstubs libXdmcp libxkbcommon epoxy at-spi2-core dbus
+    libpthreadstubs
+    libXdmcp
+    libxkbcommon
+    epoxy
+    at-spi2-core
+    dbus
   ];
 
   postPatch = ''
     patchShebangs tools/get_wb_version.sh
   '';
 
-    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+  # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
   NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
     "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
     "-DWITH_ANTLR_JAR=${antlr4_7.jarLocation}"
+    # mysql-workbench 8.0.19 depends on libmysqlconnectorcpp 1.1.8.
+    # Newer versions of connector still provide the legacy library when enabled
+    # but the headers are in a different location.
+    "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
   ];
 
   # There is already an executable and a wrapper in bindir
@@ -104,7 +181,7 @@ in stdenv.mkDerivation rec {
       and execute SQL queries.
     '';
 
-    homepage = http://wb.mysql.com/;
+    homepage = "http://wb.mysql.com/";
     license = licenses.gpl2;
     maintainers = [ maintainers.kkallio ];
     platforms = platforms.linux;

@@ -18,17 +18,19 @@
 , ibus
 , json-glib
 , pantheon
+, libwnck3
+, xorg
 }:
 
 stdenv.mkDerivation rec {
   pname = "snippetpixie";
-  version = "1.2.2";
+  version = "1.3.1";
 
   src = fetchFromGitHub {
     owner = "bytepixie";
     repo = pname;
     rev = version;
-    sha256 = "096xj7n1ypr8ss8mbwd1hyypvmzw5lc0hjlj2d1x8hbjljldfd13";
+    sha256 = "0cnx7snw3h7p77fhihvqxb6bgg4s2ffvjr8nbymb4bnqlg2a7v97";
   };
 
   nativeBuildInputs = [
@@ -52,6 +54,8 @@ stdenv.mkDerivation rec {
     dbus
     ibus
     json-glib
+    libwnck3
+    xorg.libXtst
     pantheon.granite
     pantheon.elementary-gtk-theme
     pantheon.elementary-icon-theme

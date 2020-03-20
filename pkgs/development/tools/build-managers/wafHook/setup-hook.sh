@@ -3,7 +3,7 @@ wafConfigurePhase() {
 
     if ! [ -f "${wafPath:=./waf}" ]; then
         echo "copying waf to $wafPath..."
-        cp @waf@ "$wafPath"
+        cp @waf@/bin/waf "$wafPath"
     fi
 
     if [ -z "${dontAddPrefix:-}" ] && [ -n "$prefix" ]; then

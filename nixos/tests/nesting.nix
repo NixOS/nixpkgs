@@ -29,10 +29,10 @@ import ./make-test-python.nix {
         )
         clone.succeed("cowsay hey")
         clone.succeed("hello")
-    
-        children.wait_for_unit("default.target")
-        children.succeed("cowsay hey")
-        children.fail("hello")
+
+    children.wait_for_unit("default.target")
+    children.succeed("cowsay hey")
+    children.fail("hello")
 
     with subtest("Nested children do not inherit from parent"):
         children.succeed(

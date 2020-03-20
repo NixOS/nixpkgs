@@ -39,6 +39,7 @@ in
   buildbot = handleTest ./buildbot.nix {};
   caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
+  cage = handleTest ./cage.nix {};
   cassandra = handleTest ./cassandra.nix {};
   ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
   ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
@@ -134,6 +135,7 @@ in
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   installer = handleTest ./installer.nix {};
+  iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
@@ -263,6 +265,7 @@ in
   samba = handleTest ./samba.nix {};
   sanoid = handleTest ./sanoid.nix {};
   sddm = handleTest ./sddm.nix {};
+  service-runner = handleTest ./service-runner.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
   simple = handleTest ./simple.nix {};
@@ -283,7 +286,7 @@ in
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
-  systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
+  systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};

@@ -81,12 +81,12 @@ self: super: {
 
   # The Hackage tarball is purposefully broken, because it's not intended to be, like, useful.
   # https://git-annex.branchable.com/bugs/bash_completion_file_is_missing_in_the_6.20160527_tarball_on_hackage/
-  git-annex = (overrideSrc (appendPatch super.git-annex ./patches/git-annex-fix-build-with-ghc-8.8.x.patch) {
+  git-annex = (overrideSrc super.git-annex {
     src = pkgs.fetchgit {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0pl0yip7zp4i78cj9jqkmm33wqaaaxjq3ggnfmv95y79yijd6yh4";
+      sha256 = "0y2qcjahi705c6nnypqpa5w3bzyzk4kqvbwfnpiaxzk5vna589gg";
     };
   }).override {
     dbus = if pkgs.stdenv.isLinux then self.dbus else null;
@@ -376,6 +376,7 @@ self: super: {
   Rlang-QQ = dontCheck super.Rlang-QQ;
   safecopy = dontCheck super.safecopy;
   sai-shape-syb = dontCheck super.sai-shape-syb;
+  saltine = dontCheck super.saltine; # https://github.com/tel/saltine/pull/56
   scp-streams = dontCheck super.scp-streams;
   sdl2 = dontCheck super.sdl2; # the test suite needs an x server
   sdl2-ttf = dontCheck super.sdl2-ttf; # as of version 0.2.1, the test suite requires user intervention
@@ -1072,8 +1073,35 @@ self: super: {
 
   # Generate shell completion.
   cabal2nix = generateOptparseApplicativeCompletion "cabal2nix" super.cabal2nix;
-  stack = generateOptparseApplicativeCompletion "stack" (super.stack.overrideScope (self: super: {
-  }));
+
+  stack =
+    let
+      stackWithOverrides =
+        super.stack.override {
+          # stack-2.1.3.1 requires pantry-0.2.0.0.
+          pantry = self.pantry_0_2_0_0;
+        };
+    in
+    generateOptparseApplicativeCompletion
+      "stack"
+      (appendPatches stackWithOverrides [
+        # This PR fixes stack up to be able to build with Cabal-3.  This patch
+        # can probably be dropped when the next stack release is made after
+        # 2.1.3.1.
+        (pkgs.fetchpatch {
+          url = "https://github.com/commercialhaskell/stack/pull/5156.diff";
+          sha256 = "0knk6f9fh1b4fxkhvx5gfrwclal4vi2va4zy34gpmwnjr7knf42y";
+          excludes = [
+            "snapshot-lts-12.yaml"
+            "snapshot-nightly.yaml"
+            "snapshot.yaml"
+          ];
+        })
+        # This patch fixes stack up to be able to build various GHC-8.8 changes.
+        # This can hopefully be dropped when the next stack release is made
+        # after 2.1.3.1 (assuming the next stack release uses GHC-8.8).
+        ./patches/stack-ghc882-support.patch
+      ]);
 
   # musl fixes
   # dontCheck: use of non-standard strptime "%s" which musl doesn't support; only used in test
@@ -1192,7 +1220,13 @@ self: super: {
   temporary-resourcet = doJailbreak super.temporary-resourcet;
 
   # Requires dhall >= 1.23.0
-  ats-pkg = super.ats-pkg.override { dhall = self.dhall_1_29_0; };
+  ats-pkg = dontCheck (super.ats-pkg.override { dhall = self.dhall_1_29_0; });
+
+  # fake a home dir and capture generated man page
+  ats-format = overrideCabal super.ats-format (old : {
+    preConfigure = "export HOME=$PWD";
+    postBuild = "mv .local/share $out";
+  });
 
   # Test suite doesn't work with current QuickCheck
   # https://github.com/pruvisto/heap/issues/11
@@ -1306,11 +1340,6 @@ self: super: {
   # https://github.com/haskell-servant/servant-ekg/issues/15
   servant-ekg = doJailbreak super.servant-ekg;
 
-  # Needs ghc-lib-parser 8.8.1 (does not build with 8.8.0)
-  ormolu = doJailbreak (super.ormolu.override {
-    ghc-lib-parser = self.ghc-lib-parser_8_8_3_20200224;
-  });
-
   # krank-0.1.0 does not accept PyF-0.9.0.0.
   krank = doJailbreak super.krank;
 
@@ -1400,5 +1429,71 @@ self: super: {
 
   # https://github.com/bergmark/feed/issues/43
   feed = dontCheck super.feed;
+
+  pantry_0_2_0_0 = appendPatches (dontCheck super.pantry_0_2_0_0) [
+    # pantry-0.2.0.0 doesn't build with ghc-8.8, but there is a PR adding support.
+    # https://github.com/commercialhaskell/pantry/pull/6
+    # Currently stack-2.1.3.1 requires pantry-0.2.0.0, but when a newer version of
+    # stack is released, it will probably use the newer pantry version, so we
+    # can completely get rid of pantry-0.2.0.0.
+    (pkgs.fetchpatch {
+      url = "https://github.com/commercialhaskell/pantry/pull/6.diff";
+      sha256 = "0aml06jshpjh3aiscs5av7y33m3d6s6x5pzdvh7pky476izfg87k";
+      excludes = [
+        ".azure/azure-linux-template.yml"
+        ".azure/azure-osx-template.yml"
+        ".azure/azure-windows-template.yml"
+        "package.yaml"
+        "pantry.cabal"
+        "stack-lts-11.yaml"
+        "stack-lts-12.yaml"
+        "stack-nightly.yaml"
+        "stack-windows.yaml"
+        "stack.yaml"
+      ];
+    })
+  ];
+
+  # https://github.com/serokell/nixfmt/pull/62
+  nixfmt = doJailbreak super.nixfmt;
+
+  # https://github.com/phadej/binary-orphans/issues/45
+  binary-instances = dontCheck super.binary-instances;
+
+  # Disabling the test suite lets the build succeed on older CPUs
+  # that are unable to run the generated library because they
+  # lack support for AES-NI, like some of our Hydra build slaves
+  # do. See https://github.com/NixOS/nixpkgs/issues/81915 for
+  # details.
+  cryptonite = dontCheck super.cryptonite;
+
+  # The test suite depends on an impure cabal-install installation
+  # in $HOME, which we don't have in our build sandbox.
+  cabal-install-parsers = dontCheck super.cabal-install-parsers;
+
+  # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
+  haskell-ci = doJailbreak super.haskell-ci;
+
+  persistent-mysql = dontCheck super.persistent-mysql;
+
+  # Fix EdisonAPI and EdisonCore for GHC 8.8:
+  # https://github.com/robdockins/edison/pull/16
+  EdisonAPI = appendPatch super.EdisonAPI (pkgs.fetchpatch {
+    url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
+    postFetch = ''
+      ${pkgs.patchutils}/bin/filterdiff --include='a/edison-api/*' --strip=1 "$out" > "$tmpfile"
+      mv "$tmpfile" "$out"
+    '';
+    sha256 = "0yi5pz039lcm4pl9xnl6krqxyqq5rgb5b6m09w0sfy06x0n4x213";
+  });
+
+  EdisonCore = appendPatch super.EdisonCore (pkgs.fetchpatch {
+    url = "https://github.com/robdockins/edison/pull/16/commits/8da6c0f7d8666766e2f0693425c347c0adb492dc.patch";
+    postFetch = ''
+      ${pkgs.patchutils}/bin/filterdiff --include='a/edison-core/*' --strip=1 "$out" > "$tmpfile"
+      mv "$tmpfile" "$out"
+    '';
+    sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
+  });
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

@@ -31,22 +31,21 @@ let
 
 in buildPythonPackage rec {
   pname = "poetry";
-  version = "1.0.3";
+  version = "1.0.5";
+  format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0fx1ilgkrsqjjnpgv5zljsp0wpcsywdqvvi8im9z396qq6qpk830";
+    sha256 = "0y528095njf28isbcp5iwbf12j67xhxnrkac93pws0zy133v7kc1";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
      --replace "pyrsistent = \"^0.14.2\"" "pyrsistent = \"^0.15.0\"" \
      --replace "requests-toolbelt = \"^0.8.0\"" "requests-toolbelt = \"^0.9.0\"" \
-     --replace "importlib-metadata = {version = \"~1.1.3\", python = \"<3.8\"}" \
-       "importlib-metadata = {version = \"~1.3.0\", python = \"<3.8\"}"
+     --replace 'importlib-metadata = {version = "~1.1.3", python = "<3.8"}' \
+       'importlib-metadata = {version = ">=1.3,<2", python = "<3.8"}'
   '';
-
-  format = "pyproject";
 
   nativeBuildInputs = [ intreehooks ];
 

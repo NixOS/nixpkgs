@@ -19,13 +19,15 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock ];
   propagatedBuildInputs = [ google_api_core google_cloud_core ];
 
+  # ignore tests which require credentials or network
   checkPhase = ''
-    pytest tests/unit
+    rm -r google
+    pytest tests/unit -k 'not client and not extra_headers'
   '';
 
   meta = with stdenv.lib; {
     description = "Google Cloud RuntimeConfig API client library";
-    homepage = https://github.com/GoogleCloudPlatform/google-cloud-python;
+    homepage = "https://github.com/GoogleCloudPlatform/google-cloud-python";
     license = licenses.asl20;
     maintainers = [ maintainers.costrouc ];
   };

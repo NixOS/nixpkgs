@@ -18,8 +18,9 @@
       "armv7a" = "armv7";
       "armv7l" = "armv7";
       "armv6l" = "arm";
-    }.${cpu.name} or cpu.name;
-  in "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
+    }.${cpu.name} or platform.rustc.arch or cpu.name;
+  in platform.rustc.config
+    or "${cpu_}-${vendor.name}-${kernel.name}${lib.optionalString (abi.name != "unknown") "-${abi.name}"}";
 
   makeRustPlatform = { rustc, cargo, ... }: rec {
     rust = {
@@ -30,14 +31,8 @@
       inherit cargo;
     };
 
-    # N.B. This is a legacy fetcher implementation that is being phased out and deleted.
-    # See ../../../build-support/rust/README.md for details.
-    fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
-      inherit cargo;
-    };
-
     buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo fetchcargo fetchCargoTarball;
+      inherit rustc cargo fetchCargoTarball;
     };
 
     rustcSrc = callPackage ./rust-src.nix {

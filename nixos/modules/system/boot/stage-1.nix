@@ -120,6 +120,7 @@ let
 
       # Copy udev.
       copy_bin_and_libs ${udev}/lib/systemd/systemd-udevd
+      copy_bin_and_libs ${udev}/lib/systemd/systemd-sysctl
       copy_bin_and_libs ${udev}/bin/udevadm
       for BIN in ${udev}/lib/udev/*_id; do
         copy_bin_and_libs $BIN
@@ -198,6 +199,14 @@ let
     ''; # */
 
 
+  linkUnits = pkgs.runCommand "link-units" {
+      allowedReferences = [ extraUtils ];
+      preferLocalBuild = true;
+    } ''
+      mkdir -p $out
+      cp -v ${udev}/lib/systemd/network/*.link $out/
+    '';
+
   udevRules = pkgs.runCommand "udev-rules" {
       allowedReferences = [ extraUtils ];
       preferLocalBuild = true;
@@ -208,7 +217,9 @@ let
 
       cp -v ${udev}/lib/udev/rules.d/60-cdrom_id.rules $out/
       cp -v ${udev}/lib/udev/rules.d/60-persistent-storage.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/75-net-description.rules $out/
       cp -v ${udev}/lib/udev/rules.d/80-drivers.rules $out/
+      cp -v ${udev}/lib/udev/rules.d/80-net-setup-link.rules $out/
       cp -v ${pkgs.lvm2}/lib/udev/rules.d/*.rules $out/
       ${config.boot.initrd.extraUdevRulesCommands}
 
@@ -222,7 +233,7 @@ let
             --replace ${pkgs.lvm2}/sbin ${extraUtils}/bin \
             --replace ${pkgs.mdadm}/sbin ${extraUtils}/sbin \
             --replace ${pkgs.bash}/bin/sh ${extraUtils}/bin/sh \
-            --replace ${udev}/bin/udevadm ${extraUtils}/bin/udevadm
+            --replace ${udev} ${extraUtils}
       done
 
       # Work around a bug in QEMU, which doesn't implement the "READ
@@ -257,7 +268,7 @@ let
       ${pkgs.buildPackages.busybox}/bin/ash -n $target
     '';
 
-    inherit udevRules extraUtils modulesClosure;
+    inherit linkUnits udevRules extraUtils modulesClosure;
 
     inherit (config.boot) resumeDevice;
 
@@ -376,6 +387,17 @@ in
         Specify here the device where the file resides.
         You should also use <varname>boot.kernelParams</varname> to specify
         <literal><replaceable>resume_offset</replaceable></literal>.
+      '';
+    };
+
+    boot.initrd.enable = mkOption {
+      type = types.bool;
+      default = !config.boot.isContainer;
+      defaultText = "!config.boot.isContainer";
+      description = ''
+        Whether to enable the NixOS initial RAM disk (initrd). This may be
+        needed to perform some initialisation tasks (like mounting
+        network/encrypted file systems) before continuing the boot process.
       '';
     };
 
@@ -544,7 +566,7 @@ in
 
   };
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf config.boot.initrd.enable {
     assertions = [
       { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";

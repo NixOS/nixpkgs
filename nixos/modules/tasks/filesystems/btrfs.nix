@@ -118,12 +118,17 @@ in
           fs' = utils.escapeSystemdPath fs;
         in nameValuePair "btrfs-scrub-${fs'}" {
           description = "btrfs scrub on ${fs}";
+          # scrub prevents suspend2ram or proper shutdown
+          conflicts = [ "shutdown.target" "sleep.target" ];
+          before = [ "shutdown.target" "sleep.target" ];
 
           serviceConfig = {
-            Type = "oneshot";
+            # simple and not oneshot, otherwise ExecStop is not used
+            Type = "simple";
             Nice = 19;
             IOSchedulingClass = "idle";
             ExecStart = "${pkgs.btrfs-progs}/bin/btrfs scrub start -B ${fs}";
+            ExecStop  = "${pkgs.btrfs-progs}/bin/btrfs scrub cancel ${fs}";
           };
         };
       in listToAttrs (map scrubService cfgScrub.fileSystems);

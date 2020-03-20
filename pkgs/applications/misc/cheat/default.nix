@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "cheat";
-  version = "3.0.3";
+  version = "3.0.7";
 
   src = fetchFromGitHub {
     owner = "chrisallenlane";
     repo = "cheat";
     rev = version;
-    sha256 = "19w1admdcgld9vlc4fsyc5d9bi6rmwhr2x2ji43za2vjlk34hnnx";
+    sha256 = "0i5j85ciimk14kndb81qxny1ksr57sr9xdvjn7x1ibc7h6pikjn5";
   };
 
   subPackages = [ "cmd/cheat" ];
 
-  modSha256 = "189cqnfl403f4lk7g9v68mwk93ciglqli639dk4x9091lvn5gq5q";
+  modSha256 = "1v9hvxygwvqma2j5yz7r95g34xpwb0n29hm39i89vgmvl3hy67s0";
 
   meta = with stdenv.lib; {
     description = "Create and view interactive cheatsheets on the command-line";

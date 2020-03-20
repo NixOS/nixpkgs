@@ -30,11 +30,11 @@ with py.pkgs;
 
 buildPythonApplication rec {
   pname = "aws-sam-cli";
-  version = "0.41.0";
+  version = "0.44.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1v21bhylys1mvrsvxqw88cvghl6s46hdni52xn661bbn4byrrv3b";
+    sha256 = "0r3m41xjmg8m2jwsqwc9kdkcs3xbz8dsl240ybwbnr7rp29pnirf";
   };
 
   # Tests are not included in the PyPI package
@@ -50,6 +50,7 @@ buildPythonApplication rec {
     docker
     flask
     idna
+    jmespath
     pathlib2
     requests
     serverlessrepo
@@ -65,11 +66,9 @@ buildPythonApplication rec {
   # fix over-restrictive version bounds
   postPatch = ''
     substituteInPlace requirements/base.txt \
-      --replace "requests==2.20.1" "requests==2.22.0" \
       --replace "serverlessrepo==0.1.9" "serverlessrepo~=0.1.9" \
-      --replace "six~=1.11.0" "six~=1.12.0" \
       --replace "python-dateutil~=2.6, <2.8.1" "python-dateutil~=2.6" \
-      --replace "PyYAML~=3.12" "PyYAML~=5.1"
+      --replace "tomlkit==0.5.8" "tomlkit~=0.5.8" \
   '';
 
   meta = with lib; {

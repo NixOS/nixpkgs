@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , gmp
 , readline
 , libX11
@@ -12,12 +13,21 @@ assert withThread -> libpthreadstubs != null;
 
 stdenv.mkDerivation rec {
   pname = "pari";
-  version = "2.11.2";
+  version = "2.11.3";
 
   src = fetchurl {
     url = "https://pari.math.u-bordeaux.fr/pub/pari/unix/${pname}-${version}.tar.gz";
-    sha256 = "0fck8ssmirl8fy7s4mspgrxjs5sag76xbshqlqzkcl3kqyrk4raa";
+    sha256 = "1jd65h2psrmba2dx7rkf5qidf9ka0cwbsg20pd18k45ggr30l467";
   };
+
+  patches = [
+    # https://trac.sagemath.org/ticket/29313#comment:1
+    (fetchpatch {
+      name = "backport-bug-fix.patch";
+      url = "https://git.archlinux.org/svntogit/community.git/plain/repos/community-x86_64/c7a1d35f.patch?h=packages/pari&id=27893d227290dc3821d68aa25877d9765c204dad";
+      sha256 = "0vm0fwyzj66cr32imip6srksd47s2s2sjl1rb26ph8gpfi3nalii";
+    })
+  ];
 
   buildInputs = [
     gmp

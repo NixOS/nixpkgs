@@ -30,7 +30,9 @@ let
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
-  gh = callPackage ./gh { };
+  gh = callPackage ./gh {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ghq = callPackage ./ghq { };
 
@@ -69,6 +71,8 @@ let
   git-bz = callPackage ./git-bz { };
 
   git-codeowners = callPackage ./git-codeowners { };
+
+  git-codereview = callPackage ./git-codereview { };
 
   git-cola = callPackage ./git-cola { };
 
@@ -137,6 +141,10 @@ let
   git-sync = callPackage ./git-sync { };
 
   git-test = callPackage ./git-test { };
+
+  git-trim = callPackage ./git-trim {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   git-workspace = callPackage ./git-workspace {
     inherit (darwin.apple_sdk.frameworks) Security;

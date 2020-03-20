@@ -2,6 +2,7 @@
 , fetchgit, fetchFromGitHub, fetchurl
 , writeShellScript, runCommand, which
 , rustPlatform, jq, nix-prefetch-git, xe, curl, emscripten
+, callPackage
 }:
 
 # TODO: move to carnix or https://github.com/kolloch/crate2nix
@@ -26,15 +27,23 @@ let
     inherit writeShellScript nix-prefetch-git curl jq xe src;
   };
 
+  fetchGrammar = (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
+
   grammars =
-    let fetch =
-      (v: fetchgit {inherit (v) url rev sha256 fetchSubmodules; });
-    in runCommand "grammars" {} (''
+    runCommand "grammars" {} (''
        mkdir $out
      '' + (lib.concatStrings (lib.mapAttrsToList
-            (name: grammar: "ln -s ${fetch grammar} $out/${name}\n")
+            (name: grammar: "ln -s ${fetchGrammar grammar} $out/${name}\n")
             (import ./grammars))));
 
+  builtGrammars = let
+    change = name: grammar:
+      callPackage ./library.nix {
+        language = name; inherit version; source = fetchGrammar grammar;
+      };
+  in
+    # typescript doesn't have parser.c in the same place as others
+    lib.mapAttrs change (removeAttrs (import ./grammars) ["typescript"]);
 
 in rustPlatform.buildRustPackage {
   pname = "tree-sitter";
@@ -64,6 +73,7 @@ in rustPlatform.buildRustPackage {
       inherit update-all-grammars;
     };
     inherit grammars;
+    inherit builtGrammars;
   };
 
   meta = {

@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
+{ stdenv, fetchFromGitHub, buildGoModule, installShellFiles, Security }:
 
 buildGoModule rec {
   pname = "gh";
-  version = "0.5.7";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "cli";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "14j8210c1dndnhb8l2ifxcljzhajjhil86lvk9y7ndjkq09805q1";
+    sha256 = "10vylfsc8lldmr1l6r882sx87pgxl687k419c19faq90vd403i14";
   };
 
-  modSha256 = "1qwcl74sg5az9vaivnvn7f40p72ilmkms5rp52sp5imfrql81lxf";
+  modSha256 = "03m193ny5z77yy586cwh099ypi1lmhb5vdj7d4kphxycnvpndr66";
 
   buildFlagsArray = [
     "-ldflags=-X github.com/cli/cli/command.Version=${version}"
@@ -20,6 +20,7 @@ buildGoModule rec {
   subPackages = [ "cmd/gh" ];
 
   nativeBuildInputs = [ installShellFiles ];
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
   postInstall = ''
     for shell in bash fish zsh; do
       $out/bin/gh completion -s $shell > gh.$shell
@@ -27,7 +28,7 @@ buildGoModule rec {
     done
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";
     license = licenses.mit;

@@ -5,13 +5,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "truvari";
-  version = "1.3.2";
+  version = "1.3.4";
 
   src = fetchFromGitHub {
     owner = "spiralgenetics";
     repo = "truvari";
     rev = "v${version}";
-    sha256 = "0wmjz8nzibvj0ixky1m0qi7iyd204prk7glbvig1cvaab33k19f1";
+    sha256 = "1bph7v48s7pyfagz8a2fzl5fycjliqzn5lcbv3m2bp2ih1f1gd1v";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -25,8 +25,9 @@ python3Packages.buildPythonApplication rec {
 
   prePatch = ''
     substituteInPlace ./setup.py \
-      --replace '"progressbar2==3.41.0",' "" \
-      --replace '"pysam==0.15.2",' ""
+      --replace '"progressbar2==3.41.0",' '"progressbar2==3.47.0",' \
+      --replace '"pysam==0.15.2",' '"pysam==0.15.4",' \
+      --replace '"pyfaidx==0.5.5.2",' '"pyfaidx==0.5.8",'
   '';
 
   meta = with lib; {

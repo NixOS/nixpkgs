@@ -1,31 +1,30 @@
 { stdenv
 , fetchFromGitHub
-, pkgconfig
+, pkg-config
 , glib
 , glibc
 , systemd
 }:
 
 stdenv.mkDerivation rec {
-  project = "conmon";
-  name = "${project}-${version}";
-  version = "2.0.10";
+  pname = "conmon";
+  version = "2.0.13";
 
   src = fetchFromGitHub {
     owner = "containers";
-    repo = project;
+    repo = pname;
     rev = "v${version}";
-    sha256 = "194wach3yrkvll2xaj0x77hzlngk2016mflgnd5k8knjn2b9dgvl";
+    sha256 = "1cp9hhanndr6c71g4hdxfgwk348vnnlgijkr12f7qmd5acwfl7jc";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkg-config ];
   buildInputs = [ glib systemd ] ++
     stdenv.lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
 
-  installPhase = "install -Dm755 bin/${project} $out/bin/${project}";
+  installPhase = "install -Dm755 bin/${pname} $out/bin/${pname}";
 
   meta = with stdenv.lib; {
-    homepage = https://github.com/containers/conmon;
+    homepage = "https://github.com/containers/conmon";
     description = "An OCI container runtime monitor";
     license = licenses.asl20;
     maintainers = with maintainers; [ vdemeester saschagrunert ];

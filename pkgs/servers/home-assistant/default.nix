@@ -67,13 +67,15 @@ let
   extraBuildInputs = extraPackages py.pkgs;
 
   # Don't forget to run parse-requirements.py after updating
-  hassVersion = "0.104.3";
+  hassVersion = "0.106.6";
 
 in with py.pkgs; buildPythonApplication rec {
   pname = "homeassistant";
   version = assert (componentPackages.version == hassVersion); hassVersion;
 
   disabled = pythonOlder "3.5";
+
+  patches = [ ./relax-importlib-metadata-pyaml.patch ];
 
   inherit availableComponents;
 
@@ -82,7 +84,7 @@ in with py.pkgs; buildPythonApplication rec {
     owner = "home-assistant";
     repo = "home-assistant";
     rev = version;
-    sha256 = "06bh9qrpa1d370pvw6in0isg3yw4p7gh9rpy4hm96p0mf53vxfdp";
+    sha256 = "11kv5lmm8nxp7yv3w43mzmgzkafddy0z6wl2878p96iyil1w7qhb";
   };
 
   propagatedBuildInputs = [
@@ -95,7 +97,8 @@ in with py.pkgs; buildPythonApplication rec {
   ] ++ componentBuildInputs ++ extraBuildInputs;
 
   checkInputs = [
-    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco hass-nabucasa
+    asynctest pytest pytest-aiohttp requests-mock pydispatcher aiohue netdisco
+    hass-nabucasa defusedxml
   ];
 
   postPatch = ''

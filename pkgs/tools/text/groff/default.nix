@@ -29,13 +29,13 @@ stdenv.mkDerivation rec {
       --replace "psselect" "${psutils}/bin/psselect"
   '' + stdenv.lib.optionalString (netpbm != null) ''
     substituteInPlace src/preproc/html/pre-html.cpp \
-      --replace "pnmcut" "${netpbm}/bin/pnmcut" \
-      --replace "pnmcrop" "${netpbm}/bin/pnmcrop" \
-      --replace "pnmtopng" "${netpbm}/bin/pnmtopng"
+      --replace "pnmcut" "${stdenv.lib.getBin netpbm}/bin/pnmcut" \
+      --replace "pnmcrop" "${stdenv.lib.getBin netpbm}/bin/pnmcrop" \
+      --replace "pnmtopng" "${stdenv.lib.getBin netpbm}/bin/pnmtopng"
     substituteInPlace tmac/www.tmac \
-      --replace "pnmcrop" "${netpbm}/bin/pnmcrop" \
-      --replace "pngtopnm" "${netpbm}/bin/pngtopnm" \
-      --replace "@PNMTOPS_NOSETPAGE@" "${netpbm}/bin/pnmtops -nosetpage"
+      --replace "pnmcrop" "${stdenv.lib.getBin netpbm}/bin/pnmcrop" \
+      --replace "pngtopnm" "${stdenv.lib.getBin netpbm}/bin/pngtopnm" \
+      --replace "@PNMTOPS_NOSETPAGE@" "${stdenv.lib.getBin netpbm}/bin/pnmtops -nosetpage"
   '';
 
   buildInputs = [ ghostscript psutils netpbm perl ];

@@ -7,7 +7,7 @@
 , withNS ? stdenv.isDarwin
 , withGTK2 ? false, gtk2-x11 ? null
 , withGTK3 ? true, gtk3-x11 ? null, gsettings-desktop-schemas ? null
-, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null
+, withXwidgets ? false, webkitgtk ? null, wrapGAppsHook ? null, glib-networking ? null
 , withCsrc ? true
 , srcRepo ? false, autoconf ? null, automake ? null, texinfo ? null
 , siteStart ? ./site-start.el
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withX && withGTK2) gtk2-x11
     ++ lib.optionals (withX && withGTK3) [ gtk3-x11 gsettings-desktop-schemas ]
     ++ lib.optional (stdenv.isDarwin && withX) cairo
-    ++ lib.optionals (withX && withXwidgets) [ webkitgtk ]
+    ++ lib.optionals (withX && withXwidgets) [ webkitgtk glib-networking ]
     ++ lib.optionals withNS [ AppKit GSS ImageIO ];
 
   hardeningDisable = [ "format" ];
@@ -134,7 +134,7 @@ stdenv.mkDerivation rec {
     description = "The extensible, customizable GNU text editor";
     homepage    = https://www.gnu.org/software/emacs/;
     license     = licenses.gpl3Plus;
-    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley ];
+    maintainers = with maintainers; [ lovek323 peti the-kenny jwiegley adisbladis ];
     platforms   = platforms.all;
 
     longDescription = ''

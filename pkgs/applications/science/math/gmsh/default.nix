@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gmsh";
-  version = "4.5.2";
+  version = "4.5.4";
 
   src = fetchurl {
     url = "http://gmsh.info/src/gmsh-${version}-source.tgz";
-    sha256 = "10i6i1s68lkccnl73lzr04cf1hc5rd8b7dpiaxs1vzrj1ljgw801";
+    sha256 = "1k9f7qxlwja9i40qy55070sjnr21bl165677mdqw7qyb8d7wgy6c";
   };
 
   buildInputs = [ openblasCompat gmm fltk libjpeg zlib libGLU libGL

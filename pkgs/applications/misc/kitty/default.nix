@@ -2,6 +2,7 @@
   harfbuzz, fontconfig, pkgconfig, ncurses, imagemagick, xsel,
   libstartup_notification, libGL, libX11, libXrandr, libXinerama, libXcursor,
   libxkbcommon, libXi, libXext, wayland-protocols, wayland,
+  installShellFiles,
   which, dbus,
   Cocoa,
   CoreGraphics,
@@ -12,8 +13,6 @@
   libcanberra,
   libicns,
   libpng,
-  librsvg,
-  optipng,
   python3,
   zlib,
 }:
@@ -55,8 +54,7 @@ buildPythonApplication rec {
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     imagemagick
     libicns  # For the png2icns tool.
-    librsvg
-    optipng
+    installShellFiles
   ];
 
   propagatedBuildInputs = stdenv.lib.optional stdenv.isLinux libGL;
@@ -82,6 +80,7 @@ buildPythonApplication rec {
 
   buildPhase = if stdenv.isDarwin then ''
     ${python.interpreter} setup.py kitty.app --update-check-interval=0
+    make man
   '' else ''
     ${python.interpreter} setup.py linux-package --update-check-interval=0
   '';
@@ -94,6 +93,8 @@ buildPythonApplication rec {
     ln -s ../Applications/kitty.app/Contents/MacOS/kitty "$out/bin/kitty"
     mkdir "$out/Applications"
     cp -r kitty.app "$out/Applications/kitty.app"
+
+    installManPage 'docs/_build/man/kitty.1'
     '' else ''
     cp -r linux-package/{bin,share,lib} $out
     ''}

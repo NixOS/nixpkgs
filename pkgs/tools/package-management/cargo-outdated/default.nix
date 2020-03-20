@@ -2,19 +2,19 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-outdated";
-  version = "0.9.5";
+  version = "0.9.7";
 
   src = fetchFromGitHub {
     owner = "kbknapp";
     repo = pname;
-    # This is the git commit that produced 0.9.5, according to crates.io, but
-    # the tag is missing in git. See here for details:
-    # https://github.com/kbknapp/cargo-outdated/issues/206
-    rev = "7685da3265749bb7ae2b436a132f51d19b409bff";
-    sha256 = "08prksns7d3g7ha601z8p28p36rg44rjl5ph76vg6nriww96zzca";
+    rev = "v${version}";
+    sha256 = "0g91cfja4h9qhpxgnimczjna528ml645iz7hgpwl6yp0742qcal4";
   };
 
-  cargoSha256 = "0kxfavyd9slpp2kzxhjp47q1pzw9rlmn7yhxnjsg88sxbjxfzv95";
+  # Can be removed when updating to the next release.
+  cargoPatches = [ ./0001-Fix-outdated-Cargo.lock.patch ];
+
+  cargoSha256 = "0pr57g41lnn8srcbc11sb15qchf01zwqcb1802xdayj6wlc3g3dy";
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ openssl ]

@@ -10,15 +10,16 @@
 , certifi
 , bitstring
 , unittest2
+, future
 }:
 
 buildPythonPackage rec {
   pname = "pyicloud";
-  version = "0.9.1";
+  version = "0.9.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "580b52e95f67a41ed86c56a514aa2b362f53fbaf23f16c69fb24e0d19fd373ee";
+    sha256 = "0r171wnq2g5bw7gd59vh6flm0104ix1a6s2vhdrf8s74hipw57si";
   };
 
   propagatedBuildInputs = [
@@ -30,6 +31,7 @@ buildPythonPackage rec {
     tzlocal
     certifi
     bitstring
+    future
   ];
 
   checkInputs = [ unittest2 ];
