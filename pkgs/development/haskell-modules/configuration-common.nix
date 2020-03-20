@@ -1485,4 +1485,7 @@ self: super: {
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
 
+  # Needs a version that's newer than LTS-15.x provides.
+  weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
+
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
