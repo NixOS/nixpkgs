@@ -12,14 +12,14 @@ let
   );
 
   ver1 = "120";
-  ver2 = "2";
-  ver3 = "2";
+  ver2 = "4";
+  ver3 = "1";
   version =   "${ver1}.${ver2}.${ver3}";
   ver_dash =  "${ver1}-${ver2}-${ver3}";
 
   binary_src = fetchurl {
     url = "mirror://sourceforge/simutrans/simutrans/${ver_dash}/simutrans-src-${ver_dash}.zip";
-    sha256 = "1yi6rwbrnfd65qfz63cncw2n56pbypvg6cllwh71mgvs6x2c28kz";
+    sha256 = "0yw7vjvmczp022mgk35swwhpbiszpz91mwsgicxglwivgc30vvic";
   };
 
 
@@ -39,7 +39,7 @@ let
 
     pak128 = {
       srcPath = "pak128%20for%20ST%20120.2.2%20%282.7%2C%20minor%20changes%29/pak128";
-      sha256 = "1x6g6yfv1hvjyh3ciccly1i2k2n2b63dw694gdg4j90a543rmclg";
+      sha256 = "0z01y7r0rz7q79vr17bbnkgcbjjrimphy1dwb1pgbiv4klz7j5xw";
     };
     "pak128.britain" = {
       srcPath = "pak128.Britain%20for%20120-1/pak128.Britain.1.17-120-1";
@@ -114,7 +114,7 @@ let
 
     sourceRoot = ".";
 
-  nativeBuildInputs = [ pkgconfig ];
+    nativeBuildInputs = [ pkgconfig ];
     buildInputs = [ zlib libpng bzip2 SDL SDL_mixer unzip ];
 
     configurePhase = let
@@ -164,7 +164,6 @@ let
       license = with licenses; [ artistic1 gpl1Plus ];
       maintainers = with maintainers; [ kkallio vcunat phile314 ];
       platforms = with platforms; linux; # TODO: ++ darwin;
-      broken = true;
     };
   };
 
