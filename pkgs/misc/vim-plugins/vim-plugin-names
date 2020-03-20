@@ -10,6 +10,7 @@ alx741/vim-hindent
 alx741/vim-stylishask
 amiorin/ctrlp-z
 andreshazard/vim-logreview
+AndrewRadev/splitjoin.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
 andys8/vim-elm-syntax
