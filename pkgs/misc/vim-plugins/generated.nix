@@ -1816,6 +1816,17 @@ let
     };
   };
 
+  lightline-bufferline = buildVimPluginFrom2Nix {
+    pname = "lightline-bufferline";
+    version = "2020-02-14";
+    src = fetchFromGitHub {
+      owner = "mengelbrecht";
+      repo = "lightline-bufferline";
+      rev = "17683bc5802de7f295f2583a15461e2bc662f98b";
+      sha256 = "1rlamxwk2gm9pyxl9vym9w6rhgimzqa2hjghy3qdqwvif6w8ir6l";
+    };
+  };
+
   lightline-vim = buildVimPluginFrom2Nix {
     pname = "lightline-vim";
     version = "2020-02-15";
