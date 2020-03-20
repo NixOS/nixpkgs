@@ -407,6 +407,12 @@ def parse_args():
         default=DEFAULT_OUT,
         help="Filename to save generated nix code",
     )
+    parser.add_argument(
+        "--sync",
+        dest="sync",
+        action="store_true",
+        help="Fetch plugins synchronously. This can be useful for debugging."
+    )
 
     return parser.parse_args()
 
@@ -421,10 +427,11 @@ def main() -> None:
     prefetch_with_cache = functools.partial(prefetch, cache=cache)
 
     try:
-        # synchronous variant for debugging
-        # results = list(map(prefetch_with_cache, plugin_names))
-        pool = Pool(processes=30)
-        results = pool.map(prefetch_with_cache, plugin_names)
+        if args.sync:
+            results = list(map(prefetch_with_cache, plugin_names))
+        else:
+            pool = Pool(processes=30)
+            results = pool.map(prefetch_with_cache, plugin_names)
     finally:
         cache.store()
 
