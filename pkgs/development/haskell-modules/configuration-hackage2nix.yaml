@@ -2467,6 +2467,8 @@ package-maintainers:
     - shakespeare
   abbradar:
     - Agda
+  roberth:
+    - arion-compose
   cdepillabout:
     - pretty-simple
     - spago
@@ -2861,7 +2863,6 @@ broken-packages:
   - arguedit
   - ariadne
   - arion
-  - arion-compose
   - armada
   - armor
   - arpa
