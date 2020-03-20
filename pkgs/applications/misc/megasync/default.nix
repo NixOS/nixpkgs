@@ -1,50 +1,22 @@
-{ stdenv
-, autoconf
-, automake
-, c-ares
-, cryptopp
-, curl
-, doxygen
-, fetchFromGitHub
-, ffmpeg
-, libmediainfo
-, libraw
-, libsodium
-, libtool
-, libuv
-, libzen
-, lsb-release
-, mkDerivation
-, pkgconfig
-, qtbase
-, qttools
-, sqlite
-, swig
-, unzip
-, wget
-}:
+{ stdenv, autoconf, automake, c-ares, cryptopp, curl, doxygen, fetchFromGitHub
+, fetchpatch, ffmpeg, libmediainfo, libraw, libsodium, libtool, libuv, libzen
+, lsb-release, mkDerivation, pkgconfig, qtbase, qttools, sqlite, swig, unzip
+, wget }:
 
 mkDerivation rec {
   pname = "megasync";
-  version = "4.2.3.0";
+  version = "4.3.0.8";
 
   src = fetchFromGitHub {
     owner = "meganz";
     repo = "MEGAsync";
     rev = "v${version}_Linux";
-    sha256 = "0l4yfrxjb62vc9dnlzy8rjqi68ga1bys5x5rfzs40daw13yf1adv";
+    sha256 = "1rhxkc6j3039rcsi8cxy3n00g6w7acir82ymnksbpsnp4yxqv5r3";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    autoconf
-    automake
-    doxygen
-    lsb-release
-    pkgconfig
-    qttools
-    swig
-  ];
+  nativeBuildInputs =
+    [ autoconf automake doxygen lsb-release pkgconfig qttools swig ];
   buildInputs = [
     c-ares
     cryptopp
@@ -85,21 +57,21 @@ mkDerivation rec {
   '';
 
   configureFlags = [
-          "--disable-examples"
-          "--disable-java"
-          "--disable-php"
-          "--enable-chat"
-          "--with-cares"
-          "--with-cryptopp"
-          "--with-curl"
-          "--with-ffmpeg"
-          "--without-freeimage"  # unreferenced even when found
-          "--without-readline"
-          "--without-termcap"
-          "--with-sodium"
-          "--with-sqlite"
-          "--with-zlib"
-    ];
+    "--disable-examples"
+    "--disable-java"
+    "--disable-php"
+    "--enable-chat"
+    "--with-cares"
+    "--with-cryptopp"
+    "--with-curl"
+    "--with-ffmpeg"
+    "--without-freeimage" # unreferenced even when found
+    "--without-readline"
+    "--without-termcap"
+    "--with-sodium"
+    "--with-sqlite"
+    "--with-zlib"
+  ];
 
   postConfigure = ''
     cd ../..
@@ -114,10 +86,11 @@ mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
-    homepage    = https://mega.nz/;
-    license     = licenses.unfree;
-    platforms   = [ "i686-linux" "x86_64-linux" ];
+    description =
+      "Easy automated syncing between your computers and your MEGA Cloud Drive";
+    homepage = "https://mega.nz/";
+    license = licenses.unfree;
+    platforms = [ "i686-linux" "x86_64-linux" ];
     maintainers = [ maintainers.michojel ];
   };
 }

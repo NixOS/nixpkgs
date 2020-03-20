@@ -53,7 +53,7 @@ def get_version():
         return m.group(1)
 
 
-def parse_components(version="master"):
+def parse_components(version: str = "master"):
     components = {}
     with tempfile.TemporaryDirectory() as tmp:
         with urlopen(
@@ -61,14 +61,13 @@ def parse_components(version="master"):
         ) as response:
             tarfile.open(fileobj=BytesIO(response.read())).extractall(tmp)
         # Use part of a script from the Home Assistant codebase
-        sys.path.append(os.path.join(tmp, f"home-assistant-{version}"))
+        core_path = os.path.join(tmp, f"core-{version}")
+        sys.path.append(core_path)
         from script.hassfest.model import Integration
 
         integrations = Integration.load_dir(
             pathlib.Path(
-                os.path.join(
-                    tmp, f"home-assistant-{version}", "homeassistant/components"
-                )
+                os.path.join(core_path, "homeassistant/components")
             )
         )
         for domain in sorted(integrations):

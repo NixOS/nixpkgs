@@ -31,8 +31,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "01azqqygm83s6l1g35kqkc7da06dkc8jxpb4zsd420lmhfhw4gws";
-  polly_src = fetch "polly" "00nvnh0jhi1s5gcyfnb30h9g2j18z79kipiy878bkawg53f4z2xf";
+  src = fetch pname "1pa322iwqg071gxdn5wxri263j6aki6ag36xbdzbyi3g8m8v8jci";
+  polly_src = fetch "polly" "0p9dmv4hxwx4f5k1v4r9b5jp7fbi71ajpmrv3xf3vmp6m4i3r0pc";
 
   unpackPhase = ''
     unpackFile $src
@@ -53,6 +53,11 @@ in stdenv.mkDerivation (rec {
     ++ optional enablePFM libpfm; # exegesis
 
   propagatedBuildInputs = [ ncurses zlib ];
+
+  patches = [
+    # 10.0.0rc3-only
+    ./llvm-extension-handling.patch
+  ];
 
   postPatch = optionalString stdenv.isDarwin ''
     substituteInPlace cmake/modules/AddLLVM.cmake \

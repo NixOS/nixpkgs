@@ -3,57 +3,45 @@
 , fetchPypi
 , pythonOlder
 , pytest
-, preshed
-, ftfy
-, numpy
-, murmurhash
-, plac
-, ujson
-, dill
-, requests
-, thinc
-, regex
-, cymem
-, pathlib
-, msgpack
-, msgpack-numpy
-, jsonschema
 , blis
-, wasabi
-, srsly
 , catalogue
+, cymem
+, jsonschema
+, murmurhash
+, numpy
+, pathlib
+, plac
+, preshed
+, requests
 , setuptools
+, srsly
+, thinc
+, wasabi
 }:
 
 buildPythonPackage rec {
   pname = "spacy";
-  version = "2.2.3";
+  version = "2.2.4";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0shfjk6nhm6gzp5p88pz5k7bkg5dr3x9yvandkayqb2vsvkwj50x";
+    sha256 = "1fgm1zlw8mjhmk64skxs79ymhcningml13y9c9fy7rj1b1yadwzh";
   };
 
   propagatedBuildInputs = [
-   numpy
-   murmurhash
-   cymem
-   preshed
-   thinc
-   plac
-   ujson
-   dill
-   requests
-   regex
-   ftfy
-   msgpack
-   msgpack-numpy
-   jsonschema
    blis
-   wasabi
-   srsly
    catalogue
+   cymem
+   jsonschema
+   murmurhash
+   numpy
+   plac
+   preshed
+   requests
    setuptools
+   srsly
+   thinc
+   wasabi
   ] ++ lib.optional (pythonOlder "3.4") pathlib;
 
   checkInputs = [

@@ -23,6 +23,20 @@
      Support is planned until the end of April 2021, handing over to 21.03.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     PHP now defaults to PHP 7.4, updated from 7.3.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+     Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
+     and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
+     been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
+     in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
+     make use of these new options instead.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 

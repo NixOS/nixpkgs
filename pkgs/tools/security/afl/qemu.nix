@@ -52,6 +52,8 @@ stdenv.mkDerivation {
     "../${afl.src.name}/qemu_mode/patches/memfd.diff"
     # nix-specific patches to make installation more well-behaved
     ./qemu-patches/no-etc-install.patch
+    # patch for fixing qemu build on glibc >= 2.30
+    ./qemu-patches/syscall-glibc2_30.diff
   ];
 
   configureFlags =

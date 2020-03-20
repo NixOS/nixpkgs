@@ -7,13 +7,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rar2fs";
-  version = "1.28.0";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "hasse69";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0fmdqrs5yvn89ngc26vj5ggnalpwrdm8pdcfszw1wflh78hvd8kb";
+    sha256 = "137hv2fhlbdca6qyf4vjv1sl87g02zn137ja0fdjbzcc9y1n96d3";
   };
 
   postPatch = ''
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "FUSE file system for reading RAR archives";
-    homepage = https://hasse69.github.io/rar2fs/;
+    homepage = "https://hasse69.github.io/rar2fs/";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ kraem ];
     platforms = with platforms; linux ++ freebsd;

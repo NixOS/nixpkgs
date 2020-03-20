@@ -93,7 +93,7 @@ let
   ]);
   sitePackages = ceph-python-env.python.sitePackages;
 
-  version = "14.2.6";
+  version = "14.2.7";
 in rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
@@ -101,7 +101,7 @@ in rec {
 
     src = fetchurl {
       url = "http://download.ceph.com/tarballs/ceph-${version}.tar.gz";
-      sha256 = "0qkyrb25r2a57n6k8ncb43x7hvhkmpi7abhfyi98mlz2lhmhzlm1";
+      sha256 = "0qiqhm6hvz299q54k3i4crnb5dhpq6xnn2yqih9pxn9van0dq1ln";
     };
 
     patches = [

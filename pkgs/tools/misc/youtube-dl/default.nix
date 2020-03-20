@@ -18,11 +18,11 @@ buildPythonPackage rec {
   # The websites youtube-dl deals with are a very moving target. That means that
   # downloads break constantly. Because of that, updates should always be backported
   # to the latest stable release.
-  version = "2020.03.01";
+  version = "2020.03.08";
 
   src = fetchurl {
     url = "https://yt-dl.org/downloads/${version}/${pname}-${version}.tar.gz";
-    sha256 = "01hk00nbxxa81yajkbv65nv5amwyavhjs127xkyqqcrq6ws3z92w";
+    sha256 = "1xbka14wnalcqkhibfcqw8f5bw1m9b1f44719yifv1jk0614q4bn";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    homepage = "https://rg3.github.io/youtube-dl/";
+    homepage = "https://ytdl-org.github.io/youtube-dl/";
     description = "Command-line tool to download videos from YouTube.com and other sites";
     longDescription = ''
       youtube-dl is a small, Python-based command-line program

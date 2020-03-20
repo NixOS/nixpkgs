@@ -4,7 +4,7 @@
 
 stdenv.mkDerivation rec {
   pname = "OpenOrienteering-Mapper";
-  version = "0.9.1";
+  version = "0.9.2";
 
   buildInputs = [ gdal qtbase qttools qtlocation qtimageformats
                   qtsensors clipper zlib proj doxygen cups];
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
     owner = "OpenOrienteering";
     repo = "mapper";
     rev = "v${version}";
-    sha256 = "1fyhvf2y89hj7wj89kxccx3dqcja6ndy3w4rx1vmzrp246jpz7wb";
+    sha256 = "1787f2agjzcyizk2m60icb44yv9dlwv6irw3k53fqfmwkhkd2h5p";
   };
 
   cmakeFlags =
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
       OpenOrienteering Mapper is an orienteering mapmaking program
       and provides a free alternative to the existing proprietary solution.
     '';
-    homepage = https://www.openorienteering.org/apps/mapper/;
+    homepage = "https://www.openorienteering.org/apps/mapper/";
     license = licenses.gpl3;
     platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ mpickering sikmir ];

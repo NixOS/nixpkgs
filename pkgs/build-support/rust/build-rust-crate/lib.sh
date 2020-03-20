@@ -1,3 +1,11 @@
+echo_build_heading() {
+  if (( $# == 1 )); then
+    echo_colored "Building $1"
+  else
+    echo_colored "Building $1 ($2)"
+  fi
+}
+
 build_lib() {
   lib_src=$1
   echo_build_heading $lib_src ${libName}
@@ -132,7 +140,41 @@ search_for_bin_path() {
   done
 
   if [[ -z "$BIN_PATH" ]]; then
-    echo "failed to find file for binary target: $BIN_NAME" >&2
+    echo_error "ERROR: failed to find file for binary target: $BIN_NAME" >&2
     exit 1
   fi
+}
+
+# Extracts cargo_toml_path of the matching crate.
+matching_cargo_toml_path() {
+  local manifest_path="$1"
+  local expected_crate_name="$2"
+
+  # If the Cargo.toml is not a workspace root,
+  # it will only contain one package in ".packages"
+  # because "--no-deps" suppressed dependency resolution.
+  #
+  # But to make it more general, we search for a matching
+  # crate in all packages and use the manifest path that
+  # is referenced there.
+  cargo metadata --no-deps --format-version 1 \
+    --manifest-path "$manifest_path" \
+    | jq -r '.packages[] 
+            | select( .name == "'$expected_crate_name'") 
+            | .manifest_path'
+}
+
+# Find a Cargo.toml in the current or any sub directory
+# with a matching crate name.
+matching_cargo_toml_dir() {
+  local expected_crate_name="$1"
+
+  find -L -name Cargo.toml | sort | while read manifest_path; do
+    echo "...checking manifest_path $manifest_path" >&2
+    local matching_path="$(matching_cargo_toml_path "$manifest_path" "$expected_crate_name")"
+    if [ -n "${matching_path}" ]; then
+      echo "$(dirname $matching_path)"
+      break
+    fi
+  done
 }

@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "khronos";
-  version = "1.0.5";
+  version = "1.0.6";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "0dk1b2d82gli3z35dn5p002lfkgq326janql0vn1z5hs8jvjakqh";
+    sha256 = "0s6yx05k0x90bmdmr61hw07nf9a1kyvvk6gwlg8m97zq1n3qc0f3";
   };
 
   nativeBuildInputs = [

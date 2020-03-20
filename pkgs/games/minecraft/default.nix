@@ -2,6 +2,8 @@
 , fetchurl
 , makeDesktopItem
 , makeWrapper
+, wrapGAppsHook
+, gobject-introspection
 , jre # old or modded versions of the game may require Java 8 (https://aur.archlinux.org/packages/minecraft-launcher/#pinned-674960)
 , xorg
 , zlib
@@ -96,10 +98,12 @@ in
     sha256 = "0w8z21ml79kblv20wh5lz037g130pxkgs8ll9s3bi94zn2pbrhim";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [ makeWrapper wrapGAppsHook ];
+  buildInputs = [ gobject-introspection ];
 
   sourceRoot = ".";
 
+  dontWrapGApps = true;
   dontConfigure = true;
   dontBuild = true;
 
@@ -109,11 +113,6 @@ in
 
     ${desktopItem.buildCommand}
     install -D $icon $out/share/icons/hicolor/symbolic/apps/minecraft-launcher.svg
-
-    makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
-      --prefix LD_LIBRARY_PATH : ${envLibPath} \
-      --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
-      --run "cd /tmp" # Do not create `GPUCache` in current directory
   '';
 
   preFixup = ''
@@ -127,6 +126,15 @@ in
     patchelf \
       --set-rpath '$ORIGIN/'":${libPath}" \
       $out/opt/minecraft-launcher/liblauncher.so
+  '';
+
+  postFixup = ''
+    # Do not create `GPUCache` in current directory
+    makeWrapper $out/opt/minecraft-launcher/minecraft-launcher $out/bin/minecraft-launcher \
+      --prefix LD_LIBRARY_PATH : ${envLibPath} \
+      --prefix PATH : ${stdenv.lib.makeBinPath [ jre ]} \
+      --run "cd /tmp" \
+      "''${gappsWrapperArgs[@]}"
   '';
 
   meta = with stdenv.lib; {

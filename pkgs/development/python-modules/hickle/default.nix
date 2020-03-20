@@ -6,20 +6,23 @@
 , astropy
 , scipy
 , pandas
+, codecov
 , pytest
 , pytestcov
 , pytestrunner
 , coveralls
+, twine
+, check-manifest
 , lib
 }:
 
 buildPythonPackage rec {
   pname   = "hickle";
-  version = "3.4.5";
+  version = "3.4.6";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "1d1qj3yl7635lgkqacz9r8fyhv71396l748ww4wy05ibpignjm2x";
+    sha256 = "026r6yg3amsi8k8plzsbw5rnifym6sc17y011daqyvcpb7mfs94b";
   };
 
   postPatch = ''
@@ -28,7 +31,9 @@ buildPythonPackage rec {
   '';
 
   propagatedBuildInputs = [ h5py numpy dill ];
-  checkInputs = [ pytest pytestcov pytestrunner coveralls scipy pandas astropy ];
+  checkInputs = [
+    pytest pytestcov pytestrunner coveralls scipy pandas astropy twine check-manifest codecov
+  ];
 
   meta = {
     description = "Serialize Python data to HDF5";
