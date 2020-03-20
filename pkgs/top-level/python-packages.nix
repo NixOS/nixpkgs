@@ -1619,6 +1619,8 @@ in {
 
   aioftp = callPackage ../development/python-modules/aioftp { };
 
+  aioharmony = callPackage ../development/python-modules/aioharmony { };
+
   aiohttp = callPackage ../development/python-modules/aiohttp { };
 
   aiohttp-cors = callPackage ../development/python-modules/aiohttp-cors { };
