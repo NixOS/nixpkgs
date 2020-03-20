@@ -67,6 +67,12 @@ in buildPythonPackage rec {
                 "['pandas/src/klib', 'pandas/src', '$cpp_sdk']"
   '';
 
+  setupPyBuildFlags = [
+    # As suggested by
+    # https://pandas.pydata.org/pandas-docs/stable/development/contributing.html#creating-a-python-environment
+    "--parallel=$NIX_BUILD_CORES"
+  ];
+
 
   disabledTests = stdenv.lib.concatMapStringsSep " and " (s: "not " + s) ([
     # since dateutil 0.6.0 the following fails: test_fallback_plural, test_ambiguous_flags, test_ambiguous_compat
