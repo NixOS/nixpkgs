@@ -20605,6 +20605,8 @@ in
     flavour = "git";
   };
 
+  lime = callPackage ../development/libraries/lime { };
+
   luakit = callPackage ../applications/networking/browsers/luakit {
     inherit (luajitPackages) luafilesystem;
   };
