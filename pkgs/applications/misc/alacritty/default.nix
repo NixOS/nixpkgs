@@ -95,7 +95,7 @@ rustPlatform.buildRustPackage rec {
   installPhase = ''
     runHook preInstall
 
-    install -D target/release/alacritty $out/bin/alacritty
+    install -D $releaseDir/alacritty $out/bin/alacritty
 
   '' + (
     if stdenv.isDarwin then ''
