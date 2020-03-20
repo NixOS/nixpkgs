@@ -18,9 +18,8 @@ rustPlatform.buildRustPackage rec {
   preFixup = ''
     installManPage "$src/doc/fd.1"
 
-    (cd target/release/build/fd-find-*/out
-    installShellCompletion fd.{bash,fish}
-    installShellCompletion --zsh _fd)
+    installShellCompletion $releaseDir/build/fd-find-*/out/fd.{bash,fish}
+    installShellCompletion --zsh $releaseDir/build/fd-find-*/out/_fd
   '';
 
   meta = with lib; {
