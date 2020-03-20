@@ -17,7 +17,7 @@ in stdenv.mkDerivation {
     description = "A set of cross-platform tools to compute hashes.";
     homepage = "https://github.com/jessek/hashdeep";
     license = licenses.gpl2;
-    platforms = with platforms; linux ++ freebsd ++ openbsd ++ darwin;
+    platforms = with platforms; linux ++ freebsd ++ openbsd;
     maintainers = [ stdenv.lib.maintainers.karantan ];
   };
 }
