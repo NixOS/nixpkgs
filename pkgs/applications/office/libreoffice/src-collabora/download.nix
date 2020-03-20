@@ -259,69 +259,6 @@
     md5name = "29acc15a4c4d6b51201ba5d60f303dfbc2e5acbfdb70413c9ae1ed34fa259994-noto-fonts-20171024.tar.gz";
   }
   {
-    name = "Noto-hinted.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/Noto-hinted.zip";
-    sha256 = "837b4a9352fce32ad7f298fbf155af1da5b6f3f8dbd995eb63fdd8e82117e4ae";
-    md5 = "";
-    md5name = "837b4a9352fce32ad7f298fbf155af1da5b6f3f8dbd995eb63fdd8e82117e4ae-Noto-hinted.zip";
-  }
-  {
-    name = "NotoSansJP.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSansJP.zip";
-    sha256 = "6886c5526628c08f1e21a84f4658ab3daf6d0233de8dc54526ccf9f40bfab18e";
-    md5 = "";
-    md5name = "6886c5526628c08f1e21a84f4658ab3daf6d0233de8dc54526ccf9f40bfab18e-NotoSansJP.zip";
-  }
-  {
-    name = "NotoSansKR.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSansKR.zip";
-    sha256 = "5147b755c29f16f82b706b1c7ff7982894fccbebcf99e6c5fb0d48c315604b98";
-    md5 = "";
-    md5name = "5147b755c29f16f82b706b1c7ff7982894fccbebcf99e6c5fb0d48c315604b98-NotoSansKR.zip";
-  }
-  {
-    name = "NotoSansSC.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSansSC.zip";
-    sha256 = "bee1af8c0722cfb3eb1b2fa91a7f3dc011dca231c25c8fcd9d9d544699ababf9";
-    md5 = "";
-    md5name = "bee1af8c0722cfb3eb1b2fa91a7f3dc011dca231c25c8fcd9d9d544699ababf9-NotoSansSC.zip";
-  }
-  {
-    name = "NotoSansTC.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSansTC.zip";
-    sha256 = "ec9e8a4156593e1b3ff7cff843989f43f114f96eff0b5db9691ef3c2bdefb73e";
-    md5 = "";
-    md5name = "ec9e8a4156593e1b3ff7cff843989f43f114f96eff0b5db9691ef3c2bdefb73e-NotoSansTC.zip";
-  }
-  {
-    name = "NotoSerifJP.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSerifJP.zip";
-    sha256 = "362438901cb871bf84b01ff4734c668dab57b4905f39e5ec76d8b68a7a7b5fa8";
-    md5 = "";
-    md5name = "362438901cb871bf84b01ff4734c668dab57b4905f39e5ec76d8b68a7a7b5fa8-NotoSerifJP.zip";
-  }
-  {
-    name = "NotoSerifKR.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSerifKR.zip";
-    sha256 = "3c0d276fb05aaefbbca808b4f8c7b1520b4b4e7c0be46296d6e8a5e42f559f5c";
-    md5 = "";
-    md5name = "3c0d276fb05aaefbbca808b4f8c7b1520b4b4e7c0be46296d6e8a5e42f559f5c-NotoSerifKR.zip";
-  }
-  {
-    name = "NotoSerifSC.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSerifSC.zip";
-    sha256 = "00ed5970680a82453619ac5952c5631ea138372bbb0f864d156d91a0fd9c8279";
-    md5 = "";
-    md5name = "00ed5970680a82453619ac5952c5631ea138372bbb0f864d156d91a0fd9c8279-NotoSerifSC.zip";
-  }
-  {
-    name = "NotoSerifTC.zip";
-    url = "https://noto-website-2.storage.googleapis.com/pkgs/NotoSerifTC.zip";
-    sha256 = "c33e04199f6d69056a6de0ebc5522dbe36e02f145208c71c9a4c803841151ad2";
-    md5 = "";
-    md5name = "c33e04199f6d69056a6de0ebc5522dbe36e02f145208c71c9a4c803841151ad2-NotoSerifTC.zip";
-  }
-  {
     name = "culmus-0.131.tar.gz";
     url = "http://dev-www.libreoffice.org/src/culmus-0.131.tar.gz";
     sha256 = "dcf112cfcccb76328dcfc095f4d7c7f4d2f7e48d0eed5e78b100d1d77ce2ed1b";
@@ -369,13 +306,6 @@
     sha256 = "251c8817ceb87d9b661ce1d5b49e732a0116add10abc046be4b8ba5196e149b5";
     md5 = "";
     md5name = "251c8817ceb87d9b661ce1d5b49e732a0116add10abc046be4b8ba5196e149b5-Scheherazade-2.100.zip";
-  }
-  {
-    name = "opendyslexic-0.9.10-beta-2019.09.16.zip";
-    url = "https://github.com/antijingoist/opendyslexic/releases/download/v0.9.10/opendyslexic-0.9.10-beta-2019.09.16.zip";
-    sha256 = "ff19e6ba9b4ed56bca374bdbd2ad7ed11267addd18478f3c2f96ad9d744975f1";
-    md5 = "";
-    md5name = "ff19e6ba9b4ed56bca374bdbd2ad7ed11267addd18478f3c2f96ad9d744975f1-opendyslexic-0.9.10-beta-2019.09.16.zip";
   }
   {
     name = "libfreehand-0.1.2.tar.xz";

@@ -20,6 +20,10 @@ def main():
     print('[')
 
     for x in packages:
+        if x.get('skip', False):
+            print('skipping {}: {}'.format(x['tarball'], x.get('skip', "(no reason)")),
+                  file=sys.stderr)
+            continue
 
         md5 = x['md5']
         upstream_sha256 = x['sha256']
