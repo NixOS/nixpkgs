@@ -2850,6 +2850,17 @@ let
     };
   };
 
+  splitjoin-vim = buildVimPluginFrom2Nix {
+    pname = "splitjoin-vim";
+    version = "2020-03-10";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "splitjoin.vim";
+      rev = "fef5079e9dee55c2cf879ce2a4412fb5dcb40808";
+      sha256 = "1v6cm86klzbmzx2grzxprpxci3001yjfbnwdd1891rfggjlm4wj9";
+    };
+  };
+
   starsearch-vim = buildVimPluginFrom2Nix {
     pname = "starsearch-vim";
     version = "2014-09-21";
