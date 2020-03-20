@@ -26226,7 +26226,10 @@ in
 
   go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
 
+  hashdeep = callPackage ../tools/security/hashdeep { };
+
   fluxboxlauncher = callPackage ../applications/misc/fluxboxlauncher {};
 
   btcdeb = callPackage ../applications/blockchains/btcdeb {};
+
 }
