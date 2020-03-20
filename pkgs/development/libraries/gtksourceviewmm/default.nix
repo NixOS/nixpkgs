@@ -12,7 +12,6 @@ stdenv.mkDerivation rec {
   passthru = {
     updateScript = gnome3.updateScript {
       packageName = "gtksourceviewmm";
-      attrPath = "gnome3.gtksourceviewmm";
       versionPolicy = "none";
     };
   };
