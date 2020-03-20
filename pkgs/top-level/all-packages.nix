@@ -14811,8 +14811,6 @@ in
     });
   };
 
-  vtkWithQt4 = vtk.override { qtLib = qt4; };
-
   vxl = callPackage ../development/libraries/vxl {
     libpng = libpng12;
     stdenv = gcc6Stdenv; # upstream code incompatible with gcc7
