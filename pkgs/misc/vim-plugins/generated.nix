@@ -2707,6 +2707,17 @@ let
     };
   };
 
+  SimpylFold = buildVimPluginFrom2Nix {
+    pname = "SimpylFold";
+    version = "2017-06-13";
+    src = fetchFromGitHub {
+      owner = "tmhedberg";
+      repo = "SimpylFold";
+      rev = "aa0371d9d708388f3ba385ccc67a7504586a20d9";
+      sha256 = "1gjv78x2cgh79a04l411kdhkm53f93czs54p07kadpa9659z93ss";
+    };
+  };
+
   sky-color-clock-vim = buildVimPluginFrom2Nix {
     pname = "sky-color-clock-vim";
     version = "2018-11-03";
