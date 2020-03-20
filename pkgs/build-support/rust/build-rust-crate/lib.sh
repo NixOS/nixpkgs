@@ -79,6 +79,7 @@ build_bin_test_file() {
     build_bin_test "$derived_crate_name" "$file"
 }
 
+# Add additional link options that were provided by the build script.
 setup_link_paths() {
   EXTRA_LIB=""
   if [[ -e target/link_ ]]; then
