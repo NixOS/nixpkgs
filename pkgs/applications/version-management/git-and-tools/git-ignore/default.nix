@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, rustPlatform, pkgconfig, openssl, darwin }:
+{ stdenv, fetchFromGitHub, installShellFiles, rustPlatform, pkgconfig, openssl, darwin }:
 
 with rustPlatform;
 
@@ -15,7 +15,7 @@ buildRustPackage rec {
 
   cargoSha256 = "0vcg2pl0s329fr8p23pwdx2jy7qahbr7n337ib61f69aaxi1xmq0";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig installShellFiles ];
   buildInputs = [ openssl ]
   ++ stdenv.lib.optionals stdenv.isDarwin [
     darwin.apple_sdk.frameworks.Security
@@ -23,8 +23,7 @@ buildRustPackage rec {
 
   outputs = [ "out" "man" ];
   preFixup = ''
-    mkdir -p "$man/man/man1"
-    cp target/release/build/git-ignore-*/out/git-ignore.1 "$man/man/man1/"
+    installManPage $releaseDir/build/git-ignore-*/out/git-ignore.1
   '';
 
   meta = with stdenv.lib; {
