@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "Set of two plugins which allows you to put the maximized window title and windows buttons on the panel";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;

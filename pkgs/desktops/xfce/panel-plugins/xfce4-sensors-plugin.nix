@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${pname}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${pname}";
     description = "A panel plug-in for different sensors using acpi, lm_sensors and hddtemp";
     license = stdenv.lib.licenses.gpl2;
     platforms = stdenv.lib.platforms.unix;

@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel xfconf gtk2 libunique ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "Sticky notes plugin for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];

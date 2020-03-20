@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "Weather plugin for the Xfce desktop environment";
     license = stdenv.lib.licenses.gpl2Plus;
     platforms = stdenv.lib.platforms.unix;

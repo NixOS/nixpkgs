@@ -40,7 +40,7 @@ mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Simple GUI screencast recorder, using ffmpeg";
-    homepage = "http://linuxecke.volkoh.de/vokoscreen/vokoscreen.html";
+    homepage = "https://linuxecke.volkoh.de/vokoscreen/vokoscreen.html";
     longDescription = ''
       vokoscreen is an easy to use screencast creator to record
       educational videos, live recordings of browser, installation,

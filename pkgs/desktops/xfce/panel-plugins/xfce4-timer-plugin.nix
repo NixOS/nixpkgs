@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "A simple XFCE panel plugin that lets the user run an alarm at a specified time or at the end of a specified countdown period";
     platforms = platforms.linux;
     license = licenses.gpl2;
