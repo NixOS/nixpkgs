@@ -310,7 +310,7 @@
     "habitica" = ps: with ps; [ ]; # missing inputs: habitipy
     "hangouts" = ps: with ps; [ ]; # missing inputs: hangups
     "harman_kardon_avr" = ps: with ps; [ ]; # missing inputs: hkavr
-    "harmony" = ps: with ps; [ ]; # missing inputs: aioharmony
+    "harmony" = ps: with ps; [ aioharmony];
     "hassio" = ps: with ps; [ aiohttp-cors];
     "haveibeenpwned" = ps: with ps; [ ];
     "hddtemp" = ps: with ps; [ ];
