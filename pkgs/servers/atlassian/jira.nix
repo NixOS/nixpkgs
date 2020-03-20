@@ -1,16 +1,22 @@
-{ stdenv, lib, fetchurl
+{ stdenv
+, lib
+, fetchurl
+, makeWrapper
+, gawk
 , enableSSO ? false
 , crowdProperties ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "atlassian-jira";
-  version = "8.7.1";
+  version = "8.8.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
-    sha256 = "0f46j94xjb5a5f74fsykjif64s9w2yd9ccy9098yrzaa8lbwdgpz";
+    sha256 = "1gn0iknli8pi3c3kxb8hdn19wzn2fx0193ppf0niw3cqf1h2c5cz";
   };
+
+  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     mv conf/server.xml conf/server.xml.dist
@@ -30,6 +36,9 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     cp -rva . $out
+    for f in $out/bin/*.sh; do
+      wrapProgram $f --prefix PATH : ${stdenv.lib.makeBinPath [ gawk ]}
+    done
   '';
 
   meta = with stdenv.lib; {
