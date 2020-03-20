@@ -22009,6 +22009,8 @@ in
 
   skanlite = libsForQt5.callPackage ../applications/office/skanlite { };
 
+  soci = callPackage ../development/libraries/soci { };
+
   sonic-lineup = libsForQt5.callPackage ../applications/audio/sonic-lineup { };
 
   sonic-visualiser = libsForQt5.callPackage ../applications/audio/sonic-visualiser { };
