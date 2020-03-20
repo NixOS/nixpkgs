@@ -4321,6 +4321,8 @@ in
 
   gopro = callPackage ../tools/video/gopro { };
 
+  goreleaser = callPackage ../tools/misc/goreleaser { };
+
   goreplay = callPackage ../tools/networking/goreplay { };
 
   gource = callPackage ../applications/version-management/gource { };
