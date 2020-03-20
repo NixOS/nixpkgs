@@ -4149,6 +4149,11 @@ in {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
+  libgpiod = disabledIf (!isPy3k) (toPythonModule (pkgs.libgpiod.override {
+    enablePython = true;
+    python3 = python;
+  }));
+
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
   librepo = pipe pkgs.librepo [
