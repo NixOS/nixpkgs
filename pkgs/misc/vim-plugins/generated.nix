@@ -5096,6 +5096,17 @@ let
     };
   };
 
+  vim-python-pep8-indent = buildVimPluginFrom2Nix {
+    pname = "vim-python-pep8-indent";
+    version = "2019-05-13";
+    src = fetchFromGitHub {
+      owner = "hynek";
+      repo = "vim-python-pep8-indent";
+      rev = "b3a7395ce49b13145bbb54b1cdbfe6a33585bfe9";
+      sha256 = "0gkbjcwdizqivsrn0p1gdn1170jimkk1vyxhyr286nb5qxj2n8hh";
+    };
+  };
+
   vim-qml = buildVimPluginFrom2Nix {
     pname = "vim-qml";
     version = "2019-12-20";

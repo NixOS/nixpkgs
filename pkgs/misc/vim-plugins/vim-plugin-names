@@ -134,6 +134,7 @@ honza/vim-snippets
 hotwatermorning/auto-git-diff
 hsanson/vim-android
 hsitz/VimOrganizer
+hynek/vim-python-pep8-indent
 iamcco/coc-spell-checker
 ianks/vim-tsx
 icymind/NeoSolarized
