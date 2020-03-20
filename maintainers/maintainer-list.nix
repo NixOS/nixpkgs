@@ -302,6 +302,12 @@
     githubId = 786394;
     name = "Alexander Krupenkin ";
   };
+  albakham = {
+    email = "dev@geber.ga";
+    github = "albakham";
+    githubId = 43479487;
+    name = "Titouan Biteau";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
