@@ -195,7 +195,7 @@ in
   config = mkMerge
     [ (mkIf config.boot.initrd.enable {
         boot.initrd.availableKernelModules =
-          [ # Note: most of these (especially the SATA/PATA modules)
+          [ # Note: most of these (especially the SATA/PATA and NVMe modules)
             # shouldn't be included by default since nixos-generate-config
             # detects them, but I'm keeping them for now for backwards
             # compatibility.
@@ -215,6 +215,9 @@ in
 
             # SD cards and internal eMMC drives.
             "mmc_block"
+            
+            # NVMe devices.
+            "nvme"
 
             # Support USB keyboards, in case the boot fails and we only have
             # a USB keyboard, or for LUKS passphrase prompt.
