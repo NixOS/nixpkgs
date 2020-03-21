@@ -19129,7 +19129,9 @@ in
 
   evilvte = callPackage ../applications/misc/evilvte (config.evilvte or {});
 
-  exercism = callPackage ../applications/misc/exercism { };
+  exercism = callPackage ../applications/misc/exercism {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   go-motion = callPackage ../development/tools/go-motion { };
 
