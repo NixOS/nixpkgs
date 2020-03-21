@@ -16210,7 +16210,9 @@ in
 
   shaarli-material = callPackage ../servers/web-apps/shaarli/material-theme.nix { };
 
-  shiori = callPackage ../servers/web-apps/shiori { };
+  shiori = callPackage ../servers/web-apps/shiori {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo
