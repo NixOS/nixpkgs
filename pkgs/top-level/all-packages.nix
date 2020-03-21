@@ -10935,7 +10935,9 @@ in
 
   tfsec = callPackage ../development/tools/analysis/tfsec { };
 
-  todoist = callPackage ../applications/misc/todoist { };
+  todoist = callPackage ../applications/misc/todoist {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   todoist-electron = callPackage ../applications/misc/todoist-electron { };
 
