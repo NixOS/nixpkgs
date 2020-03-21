@@ -191,7 +191,9 @@ in
 
   dieHook = makeSetupHook {} ../build-support/setup-hooks/die.sh;
 
-  archiver = callPackage ../applications/misc/archiver { };
+  archiver = callPackage ../applications/misc/archiver {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   digitalbitbox = libsForQt5.callPackage ../applications/misc/digitalbitbox { };
 
