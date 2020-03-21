@@ -10409,7 +10409,9 @@ in
 
   halfempty = callPackage ../development/tools/halfempty {};
 
-  hcloud = callPackage ../development/tools/hcloud { };
+  hcloud = callPackage ../development/tools/hcloud {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   help2man = callPackage ../development/tools/misc/help2man { };
 
