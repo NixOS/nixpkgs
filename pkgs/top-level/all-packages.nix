@@ -25323,7 +25323,9 @@ in
     stdenv = gcc8Stdenv;
   };
 
-  helmfile = callPackage ../applications/networking/cluster/helmfile { };
+  helmfile = callPackage ../applications/networking/cluster/helmfile {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   heptio-ark = callPackage ../applications/networking/cluster/heptio-ark { };
 
