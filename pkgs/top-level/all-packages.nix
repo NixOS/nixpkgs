@@ -10289,7 +10289,9 @@ in
 
   frame = callPackage ../development/libraries/frame { };
 
-  frp = callPackage ../tools/networking/frp { };
+  frp = callPackage ../tools/networking/frp {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   fsatrace = callPackage ../development/tools/misc/fsatrace { };
 
