@@ -10962,7 +10962,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  tflint = callPackage ../development/tools/analysis/tflint { };
+  tflint = callPackage ../development/tools/analysis/tflint {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   tfsec = callPackage ../development/tools/analysis/tfsec { };
 
