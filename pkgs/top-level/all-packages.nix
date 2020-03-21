@@ -20271,7 +20271,9 @@ in
 
   k9s = callPackage ../applications/networking/cluster/k9s { };
 
-  fluxctl = callPackage ../applications/networking/cluster/fluxctl { };
+  fluxctl = callPackage ../applications/networking/cluster/fluxctl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
 
