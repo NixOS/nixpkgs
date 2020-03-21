@@ -1,4 +1,4 @@
-{ stdenv, go, buildGoModule, fetchgit }:
+{ stdenv, go, buildGoModule, fetchgit, darwin }:
 
 buildGoModule rec {
   pname = "gotools-unstable";
@@ -10,6 +10,11 @@ buildGoModule rec {
     url = "https://go.googlesource.com/tools";
     sha256 = "16m62m303j4wqfjr1401xpqpb9m11bs6qc2dhf6x2za2d9pycish";
   };
+
+  buildInputs = []
+  ++ stdenv.lib.optionals stdenv.isDarwin [
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   # Build of golang.org/x/tools/gopls fails with:
   #   can't load package: package golang.org/x/tools/gopls: unknown import path "golang.org/x/tools/gopls": cannot find module providing package golang.org/x/tools/gopls
