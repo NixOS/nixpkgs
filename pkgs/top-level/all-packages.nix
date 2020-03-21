@@ -3920,6 +3920,7 @@ in
 
   grpcui = callPackage ../tools/networking/grpcui {
     buildGoModule = buildGo112Module;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   grub = pkgsi686Linux.callPackage ../tools/misc/grub ({
