@@ -25247,7 +25247,9 @@ in
     binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
   };
 
-  gobuster = callPackage ../tools/security/gobuster { };
+  gobuster = callPackage ../tools/security/gobuster {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   guetzli = callPackage ../applications/graphics/guetzli { };
 
