@@ -19030,7 +19030,9 @@ in
 
   eaglemode = callPackage ../applications/misc/eaglemode { };
 
-  echoip = callPackage ../servers/echoip { };
+  echoip = callPackage ../servers/echoip {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   eclipses = recurseIntoAttrs (callPackage ../applications/editors/eclipse {
     jdk = jdk11;
