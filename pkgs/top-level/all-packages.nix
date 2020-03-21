@@ -20318,7 +20318,9 @@ in
 
   linkerd = callPackage ../applications/networking/cluster/linkerd { };
 
-  kubernetes-helm = callPackage ../applications/networking/cluster/helm { };
+  kubernetes-helm = callPackage ../applications/networking/cluster/helm {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kubetail = callPackage ../applications/networking/cluster/kubetail { } ;
 
