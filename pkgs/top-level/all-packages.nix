@@ -22127,6 +22127,7 @@ in
 
   tendermint = callPackage ../tools/networking/tendermint {
     buildGoModule = buildGo112Module;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   termdown = (newScope pythonPackages) ../applications/misc/termdown { };
