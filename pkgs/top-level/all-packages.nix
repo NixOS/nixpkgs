@@ -2872,7 +2872,9 @@ in
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
 
-  dnsproxy = callPackage ../tools/networking/dnsproxy { };
+  dnsproxy = callPackage ../tools/networking/dnsproxy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dnsperf = callPackage ../tools/networking/dnsperf { };
 
