@@ -19690,7 +19690,9 @@ in
     inherit (darwin) IOKit;
   };
 
-  glow = callPackage ../applications/editors/glow { };
+  glow = callPackage ../applications/editors/glow {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   glowing-bear = callPackage ../applications/networking/irc/glowing-bear { };
 
