@@ -5308,7 +5308,9 @@ in
 
   munt = libsForQt5.callPackage ../applications/audio/munt { };
 
-  mutagen = callPackage ../tools/misc/mutagen { };
+  mutagen = callPackage ../tools/misc/mutagen {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   mycli = callPackage ../tools/admin/mycli { };
 
