@@ -24960,7 +24960,9 @@ in
 
   ataripp = callPackage ../misc/emulators/atari++ { };
 
-  atlantis = callPackage ../applications/networking/cluster/atlantis { };
+  atlantis = callPackage ../applications/networking/cluster/atlantis {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   auctex = callPackage ../tools/typesetting/tex/auctex { };
 
