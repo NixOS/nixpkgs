@@ -10582,7 +10582,9 @@ in
 
   mk = callPackage ../development/tools/build-managers/mk { };
 
-  mkcert = callPackage ../development/tools/misc/mkcert { };
+  mkcert = callPackage ../development/tools/misc/mkcert {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   mkdocs = callPackage ../development/tools/documentation/mkdocs { };
 
