@@ -1908,7 +1908,9 @@ in
 
   gosu = callPackage ../tools/misc/gosu { };
 
-  gotify-cli = callPackage ../tools/misc/gotify-cli { };
+  gotify-cli = callPackage ../tools/misc/gotify-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gping = callPackage ../tools/networking/gping { };
 
