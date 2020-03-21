@@ -15370,6 +15370,8 @@ in
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
+  filesender = callPackage ../servers/filesender { };
+
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
   firebird = callPackage ../servers/firebird { icu = null; /*stdenv = gcc5Stdenv;*/ };
