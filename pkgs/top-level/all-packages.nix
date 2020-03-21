@@ -17713,7 +17713,9 @@ in
 
   documentation-highlighter = callPackage ../misc/documentation-highlighter { };
 
-  documize-community = callPackage ../servers/documize-community { };
+  documize-community = callPackage ../servers/documize-community {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   doge = callPackage ../misc/doge { };
 
