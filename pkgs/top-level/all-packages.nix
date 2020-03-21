@@ -23676,7 +23676,6 @@ in
 
   spring = callPackage ../games/spring {
     boost = boost155;
-    cmake = cmake_2_8;
   };
 
   springLobby = callPackage ../games/spring/springlobby.nix { };

@@ -12,8 +12,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "spring";
     repo = "spring";
-    rev = version;
-    sha256 = "1z7c5yxsv0j4nlkmc0limxxkl5mp65jckjfh7nyv3a3zvzhv00zc";
+    rev = "9ee29da876f6d3d23e169185619b58df9c036703";
+    sha256 = "0m94i85k8k5ls1ff9z8djslzhkgr7b7vsbpic2axxjvki6sn2xjv";
     fetchSubmodules = true;
   };
 
