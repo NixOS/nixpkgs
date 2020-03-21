@@ -8044,7 +8044,9 @@ in
 
   scry = callPackage ../development/tools/scry {};
 
-  dbmate = callPackage ../development/tools/database/dbmate { };
+  dbmate = callPackage ../development/tools/database/dbmate {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client {};
 
