@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, lib, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoModule, Security }:
 
 buildGoModule rec {
     pname = "dolt";
@@ -15,7 +15,9 @@ buildGoModule rec {
     subPackages = [ "cmd/dolt" "cmd/git-dolt" "cmd/git-dolt-smudge" ];
     modSha256 = "04bsj8mfamnbq3y2aqbx1605azi8v15nbdh1zk5grni0ihlal75a";
 
-    meta = with lib; {
+    buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+    meta = with stdenv.lib; {
         description = "Relational database with version control and CLI a-la Git.";
         homepage = "https://github.com/liquidata-inc/dolt";
         license = licenses.asl20;

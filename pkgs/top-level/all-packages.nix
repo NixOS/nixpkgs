@@ -10182,7 +10182,9 @@ in
 
   doit = callPackage ../development/tools/build-managers/doit { };
 
-  dolt = callPackage ../servers/sql/dolt { };
+  dolt = callPackage ../servers/sql/dolt {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dot2tex = pythonPackages.dot2tex;
 
