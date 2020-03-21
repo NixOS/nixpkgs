@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, libglvnd }:
+{ stdenv, fetchzip, autoPatchelfHook, libusb1, libX11, libXtst, qtbase, wrapQtAppsHook, libglvnd }:
 stdenv.mkDerivation rec {
   name = "xp-pen-G430";
   version = "20190820";
@@ -10,6 +10,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     autoPatchelfHook
+    wrapQtAppsHook
   ];
 
   buildInputs = [
