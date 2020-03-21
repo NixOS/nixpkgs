@@ -15566,7 +15566,9 @@ in
     theme-spring = callPackage ../servers/icingaweb2/theme-spring { };
   };
 
-  imgproxy = callPackage ../servers/imgproxy { };
+  imgproxy = callPackage ../servers/imgproxy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ircdHybrid = callPackage ../servers/irc/ircd-hybrid { };
 
