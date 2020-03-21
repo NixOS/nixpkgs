@@ -26246,7 +26246,9 @@ in
 
   zimg = callPackage ../development/libraries/zimg { };
 
-  wtf = callPackage ../applications/misc/wtf { };
+  wtf = callPackage ../applications/misc/wtf {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   zk-shell = callPackage ../applications/misc/zk-shell { };
 
