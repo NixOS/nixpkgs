@@ -7810,7 +7810,9 @@ in
 
   zsh-git-prompt = callPackage ../shells/zsh/zsh-git-prompt { };
 
-  zsh-history = callPackage ../shells/zsh/zsh-history { };
+  zsh-history = callPackage ../shells/zsh/zsh-history {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   zsh-history-substring-search = callPackage ../shells/zsh/zsh-history-substring-search { };
 

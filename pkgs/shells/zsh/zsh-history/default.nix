@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests }:
+{ stdenv, fetchFromGitHub, buildGoModule, installShellFiles, nixosTests, Security }:
 
 buildGoModule rec {
   pname = "zsh-history";
@@ -13,6 +13,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   modSha256 = "0f10b86gyn7m7lw43c8y1m30mdg0i092a319v3cb2qj05jb9vn42";
   goPackagePath = "github.com/b4b4r07/history";
 
@@ -22,7 +24,7 @@ buildGoModule rec {
     installShellCompletion --zsh --name _history $out/share/zsh/completions/_history
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A CLI to provide enhanced history for your ZSH shell";
     license = licenses.mit;
     homepage = https://github.com/b4b4r07/history;
