@@ -10161,7 +10161,9 @@ in
       binutils = binutils;
     };
 
-  dive = callPackage ../development/tools/dive { };
+  dive = callPackage ../development/tools/dive {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   doclifter = callPackage ../development/tools/misc/doclifter { };
 
