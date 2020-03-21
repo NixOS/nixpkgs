@@ -20322,7 +20322,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  linkerd = callPackage ../applications/networking/cluster/linkerd { };
+  linkerd = callPackage ../applications/networking/cluster/linkerd {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kubernetes-helm = callPackage ../applications/networking/cluster/helm {
     inherit (darwin.apple_sdk.frameworks) Security;
