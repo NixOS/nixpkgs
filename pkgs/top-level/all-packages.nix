@@ -5915,7 +5915,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pgmetrics = callPackage ../tools/misc/pgmetrics { };
+  pgmetrics = callPackage ../tools/misc/pgmetrics {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   pdsh = callPackage ../tools/networking/pdsh {
     rsh = true;          # enable internal rsh implementation
