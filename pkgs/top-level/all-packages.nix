@@ -5346,6 +5346,8 @@ in
 
   networkmanagerapplet = callPackage ../tools/networking/network-manager/applet { };
 
+  libnma = callPackage ../tools/networking/network-manager/libnma { };
+
   networkmanager_dmenu = callPackage ../tools/networking/network-manager/dmenu  { };
 
   nm-tray = libsForQt5.callPackage ../tools/networking/network-manager/tray.nix { };

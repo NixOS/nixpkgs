@@ -11,6 +11,7 @@
 , gtk3
 , networkmanager
 , networkmanagerapplet
+, libnma
 , switchboard
 }:
 
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     gtk3
     libgee
     networkmanager
-    networkmanagerapplet
+    libnma
     switchboard
   ];
 
