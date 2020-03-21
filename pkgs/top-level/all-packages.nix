@@ -753,7 +753,9 @@ in
 
   aws-sam-cli = callPackage ../development/tools/aws-sam-cli { python = python3; };
 
-  aws-vault = callPackage ../tools/admin/aws-vault { };
+  aws-vault = callPackage ../tools/admin/aws-vault {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   iamy = callPackage ../tools/admin/iamy { };
 
