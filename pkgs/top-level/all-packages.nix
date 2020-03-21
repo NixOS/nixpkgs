@@ -2614,7 +2614,9 @@ in
     caps2esc = callPackage ../tools/inputmethods/interception-tools/caps2esc.nix { };
   };
 
-  age = callPackage ../tools/security/age { };
+  age = callPackage ../tools/security/age {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   brotli = callPackage ../tools/compression/brotli { };
 
