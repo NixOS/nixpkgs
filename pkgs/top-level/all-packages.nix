@@ -25919,7 +25919,9 @@ in
 
   sqsh = callPackage ../development/tools/sqsh { };
 
-  jx = callPackage ../applications/networking/cluster/jx {};
+  jx = callPackage ../applications/networking/cluster/jx {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   prow = callPackage ../applications/networking/cluster/prow {
     # Version 2019-08-14 fails to build with go 1.13 due to dependencies:
