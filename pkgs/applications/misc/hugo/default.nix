@@ -1,10 +1,8 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "hugo";
   version = "0.67.1";
-
-  goPackagePath = "github.com/gohugoio/hugo";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
@@ -14,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "0s7a13jkhsr6h19a9ysr8877imac5skdray0zg2qgwrapic2nw17";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   buildFlags = [ "-tags" "extended" ];
 

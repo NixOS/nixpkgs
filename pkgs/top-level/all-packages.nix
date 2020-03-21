@@ -19859,7 +19859,9 @@ in
     wxGTK = wxGTK30;
   };
 
-  hugo = callPackage ../applications/misc/hugo { };
+  hugo = callPackage ../applications/misc/hugo {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
