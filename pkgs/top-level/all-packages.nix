@@ -19876,7 +19876,9 @@ in
 
   hydrogen = callPackage ../applications/audio/hydrogen { };
 
-  hydroxide = callPackage ../applications/networking/hydroxide { };
+  hydroxide = callPackage ../applications/networking/hydroxide {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hyper = callPackage ../applications/misc/hyper { };
 
