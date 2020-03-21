@@ -16347,7 +16347,9 @@ in
 
   conntrack-tools = callPackage ../os-specific/linux/conntrack-tools { };
 
-  coredns = callPackage ../servers/dns/coredns { };
+  coredns = callPackage ../servers/dns/coredns {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   corerad = callPackage ../tools/networking/corerad { };
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "coredns";
@@ -14,6 +14,8 @@ buildGoModule rec {
   };
 
   modSha256 = "0wlffk6wkcyn2lphw2vmdsmzag0wxljcxrvm7sv3i124x2x3yvy4";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     homepage = "https://coredns.io";
