@@ -917,7 +917,9 @@ in
 
   sedutil = callPackage ../tools/security/sedutil { };
 
-  elvish = callPackage ../shells/elvish { };
+  elvish = callPackage ../shells/elvish {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   emplace = callPackage ../tools/package-management/emplace { };
 
