@@ -16351,7 +16351,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  corerad = callPackage ../tools/networking/corerad { };
+  corerad = callPackage ../tools/networking/corerad {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cpufrequtils = callPackage ../os-specific/linux/cpufrequtils { };
 
