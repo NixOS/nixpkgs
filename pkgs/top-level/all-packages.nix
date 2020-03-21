@@ -301,7 +301,9 @@ in
 
   run = callPackage ../development/tools/run { };
 
-  mod = callPackage ../development/tools/mod { };
+  mod = callPackage ../development/tools/mod {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   broadlink-cli = callPackage ../tools/misc/broadlink-cli {};
 
