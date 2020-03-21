@@ -1400,7 +1400,9 @@ in
     '';
   });
 
-  caddy = callPackage ../servers/caddy { };
+  caddy = callPackage ../servers/caddy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   caddy2 = callPackage ../servers/caddy/v2.nix { };
   traefik = callPackage ../servers/traefik { };
 
