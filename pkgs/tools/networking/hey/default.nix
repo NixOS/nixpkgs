@@ -1,4 +1,4 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{ buildGoModule, stdenv, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "hey";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   modSha256 = "0a00kcyagqczw0vhl8qs2xs1y8myw080y9kjs4qrcmj6kibdy55q";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "HTTP load generator, ApacheBench (ab) replacement";
     homepage = "https://github.com/rakyll/hey";
     license = licenses.asl20;

@@ -4147,7 +4147,9 @@ in
   hexd = callPackage ../tools/misc/hexd { };
   pixd = callPackage ../tools/misc/pixd { };
 
-  hey = callPackage ../tools/networking/hey { };
+  hey = callPackage ../tools/networking/hey {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hhpc = callPackage ../tools/misc/hhpc { };
 
