@@ -1475,7 +1475,9 @@ in
 
   clac = callPackage ../tools/misc/clac {};
 
-  clash = callPackage ../tools/networking/clash { };
+  clash = callPackage ../tools/networking/clash {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   clasp = callPackage ../tools/misc/clasp { };
 
