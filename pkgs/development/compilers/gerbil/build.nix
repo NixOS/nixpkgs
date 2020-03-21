@@ -1,34 +1,35 @@
-{ stdenv, makeStaticLibraries,
-  coreutils, rsync, bash,
+{ pkgs, gccStdenv, lib, coreutils, # makeStaticLibraries,
   openssl, zlib, sqlite, libxml2, libyaml, libmysqlclient, lmdb, leveldb, postgresql,
-  version, git-version, gambit, src }:
+  version, git-version,
+  gambit-support,
+  gambit ? pkgs.gambit, gambit-params ? pkgs.gambit-support.stable-params,
+  src, configurePhase, installPhase }:
+
+# We use Gambit, that works 10x better with GCC than Clang. See ../gambit/build.nix
+let stdenv = gccStdenv; in
 
 stdenv.mkDerivation rec {
   pname = "gerbil";
   inherit version;
   inherit src;
 
-  # Use makeStaticLibraries to enable creation of statically linked binaries
   buildInputs_libraries = [ openssl zlib sqlite libxml2 libyaml libmysqlclient lmdb leveldb postgresql ];
-  buildInputs_staticLibraries = map makeStaticLibraries buildInputs_libraries;
 
-  buildInputs = [ gambit rsync bash ]
-    ++ buildInputs_libraries ++ buildInputs_staticLibraries;
+  # TODO: either fix all of Gerbil's dependencies to provide static libraries,
+  # or give up and delete all tentative support for static libraries.
+  #buildInputs_staticLibraries = map makeStaticLibraries buildInputs_libraries;
+
+  buildInputs = [ gambit ]
+    ++ buildInputs_libraries; # ++ buildInputs_staticLibraries;
 
   NIX_CFLAGS_COMPILE = "-I${libmysqlclient}/include/mysql -L${libmysqlclient}/lib/mysql";
 
   postPatch = ''
-    echo '(define (gerbil-version-string) "v${git-version}")' > src/gerbil/runtime/gx-version.scm
-
-    patchShebangs .
-
+    echo '(define (gerbil-version-string) "v${git-version}")' > src/gerbil/runtime/gx-version.scm ;
+    patchShebangs . ;
     grep -Fl '#!/usr/bin/env' `find . -type f -executable` | while read f ; do
-      substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env'
-    done
-    grep -Fl '"gsc"' `find . -type f -name '*.s*'` | while read f ; do
-      substituteInPlace "$f" --replace '"gsc"' '"${gambit}/bin/gsc"'
-    done
-    substituteInPlace "etc/gerbil.el" --replace '"gxc"' "\"$out/bin/gxc\""
+      substituteInPlace "$f" --replace '#!/usr/bin/env' '#!${coreutils}/bin/env' ;
+    done ;
 '';
 
 ## TODO: make static compilation work.
@@ -47,22 +48,20 @@ stdenv.mkDerivation rec {
 # LEVELDB=${makeStaticLibraries leveldb}/lib/libleveldb.a
 # EOF
 
+  inherit configurePhase installPhase;
+
   buildPhase = ''
     runHook preBuild
 
-    # Enable all optional libraries
-    substituteInPlace "src/std/build-features.ss" --replace '#f' '#t'
-
-    # Enable autodetection of a default GERBIL_HOME
-    for i in src/gerbil/boot/gx-init-exe.scm src/gerbil/boot/gx-init.scm ; do
-      substituteInPlace "$i" --replace '(getenv "GERBIL_HOME" #f)' "(getenv \"GERBIL_HOME\" \"$out\")"
-    done
-    for i in src/gerbil/boot/gxi-init.scm src/gerbil/compiler/driver.ss src/gerbil/runtime/gx-gambc.scm src/std/build.ss src/tools/build.ss ; do
-      substituteInPlace "$i" --replace '(getenv "GERBIL_HOME")' "(getenv \"GERBIL_HOME\" \"$out\")"
-    done
-
     # gxprof testing uses $HOME/.cache/gerbil/gxc
-    export HOME=$$PWD
+    export HOME=$PWD
+    export GERBIL_BUILD_CORES=$NIX_BUILD_CORES
+    export GERBIL_GXC=$PWD/bin/gxc
+    export GERBIL_BASE=$PWD
+    export GERBIL_HOME=$PWD
+    export GERBIL_PATH=$PWD/lib
+    export PATH=$PWD/bin:$PATH
+    ${gambit-support.export-gambopt gambit-params}
 
     # Build, replacing make by build.sh
     ( cd src && sh build.sh )
@@ -70,33 +69,15 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out/
-    cp -fa bin lib etc doc $out/
-
-    cat > $out/bin/gxi <<EOF
-#!${bash}/bin/bash -e
-export GERBIL_HOME=$out
-case "\$1" in -:*) GSIOPTIONS=\$1 ; shift ;; esac
-if [[ \$# = 0 ]] ; then
-  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init \$GERBIL_HOME/lib/gxi-interactive -
-else
-  exec ${gambit}/bin/gsi \$GSIOPTIONS \$GERBIL_HOME/lib/gxi-init "\$@"
-fi
-EOF
-    runHook postInstall
-  '';
-
   dontStrip = true;
 
   meta = {
     description = "Gerbil Scheme";
     homepage    = "https://github.com/vyzo/gerbil";
-    license     = stdenv.lib.licenses.lgpl2;
+    license     = lib.licenses.lgpl21; # also asl20, like Gambit
     # NB regarding platforms: regularly tested on Linux, only occasionally on macOS.
     # Please report success and/or failure to fare.
-    platforms   = stdenv.lib.platforms.unix;
-    maintainers = with stdenv.lib.maintainers; [ fare ];
+    platforms   = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ fare ];
   };
 }
