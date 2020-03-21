@@ -10939,7 +10939,9 @@ in
 
   teensy-loader-cli = callPackage ../development/tools/misc/teensy-loader-cli { };
 
-  terracognita = callPackage ../development/tools/misc/terracognita { };
+  terracognita = callPackage ../development/tools/misc/terracognita {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   terraform-lsp = callPackage ../development/tools/misc/terraform-lsp { };
 
