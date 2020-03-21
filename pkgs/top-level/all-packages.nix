@@ -5575,7 +5575,9 @@ in
 
   obexd = callPackage ../tools/bluetooth/obexd { };
 
-  obfs4 = callPackage ../tools/networking/obfs4 { };
+  obfs4 = callPackage ../tools/networking/obfs4 {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   oci-image-tool = callPackage ../tools/misc/oci-image-tool { };
 
