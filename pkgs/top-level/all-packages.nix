@@ -9296,7 +9296,9 @@ in
 
   jmeter = callPackage ../applications/networking/jmeter {};
 
-  joker = callPackage ../development/interpreters/joker {};
+  joker = callPackage ../development/interpreters/joker {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   davmail = callPackage ../applications/networking/davmail {};
 
