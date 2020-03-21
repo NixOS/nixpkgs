@@ -23045,7 +23045,7 @@ in
   freicoin = callPackage ../applications/blockchains/freicoin.nix { boost = boost155; };
   go-ethereum = callPackage ../applications/blockchains/go-ethereum.nix {
     inherit (darwin) libobjc;
-    inherit (darwin.apple_sdk.frameworks) IOKit;
+    inherit (darwin.apple_sdk.frameworks) CoreServices IOKit;
   };
 
   ledger_agent = with python3Packages; toPythonApplication ledger_agent;
