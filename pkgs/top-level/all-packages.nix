@@ -553,7 +553,9 @@ in
     wxGTK = wxGTK30;
   } // (config.aegisub or {}));
 
-  aerc = callPackage ../applications/networking/mailreaders/aerc { };
+  aerc = callPackage ../applications/networking/mailreaders/aerc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   aerospike = callPackage ../servers/nosql/aerospike { };
 
