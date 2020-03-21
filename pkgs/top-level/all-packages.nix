@@ -1125,7 +1125,9 @@ in
 
   awstats = callPackage ../tools/system/awstats { };
 
-  awsweeper = callPackage ../tools/admin/awsweeper { };
+  awsweeper = callPackage ../tools/admin/awsweeper {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
