@@ -20302,7 +20302,9 @@ in
     go = buildPackages.go_1_13;
   };
 
-  kubeseal = callPackage ../applications/networking/cluster/kubeseal { };
+  kubeseal = callPackage ../applications/networking/cluster/kubeseal {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kubectl = callPackage ../applications/networking/cluster/kubectl { };
 
