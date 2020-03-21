@@ -6369,6 +6369,8 @@ in
 
   rlwrap = callPackage ../tools/misc/rlwrap { };
 
+  rmtrash = callPackage ../tools/misc/rmtrash { };
+
   rockbox_utility = libsForQt5.callPackage ../tools/misc/rockbox-utility { };
 
   rosegarden = libsForQt5.callPackage ../applications/audio/rosegarden { };
