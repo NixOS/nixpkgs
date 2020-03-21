@@ -7757,7 +7757,9 @@ in
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
 
-  yggdrasil = callPackage ../tools/networking/yggdrasil { };
+  yggdrasil = callPackage ../tools/networking/yggdrasil {
+    inherit (darwin.apple_sdk.frameworks) Foundation;
+  };
 
   # To expose more packages for Yi, override the extraPackages arg.
   yi = callPackage ../applications/editors/yi/wrapper.nix { };
