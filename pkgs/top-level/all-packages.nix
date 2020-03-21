@@ -22069,7 +22069,10 @@ in
 
   syncplay = python3.pkgs.callPackage ../applications/networking/syncplay { };
 
-  inherit (callPackages ../applications/networking/syncthing { })
+  inherit (callPackages ../applications/networking/syncthing {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) CoreServices Foundation;
+  })
     syncthing
     syncthing-cli
     syncthing-discovery
