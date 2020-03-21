@@ -65,7 +65,9 @@ let
 
   git-appraise = callPackage ./git-appraise {};
 
-  git-bug = callPackage ./git-bug { };
+  git-bug = callPackage ./git-bug {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
