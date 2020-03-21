@@ -10510,7 +10510,9 @@ in
 
   kubie = callPackage ../development/tools/kubie { };
 
-  kustomize = callPackage ../development/tools/kustomize { };
+  kustomize = callPackage ../development/tools/kustomize {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ktlint = callPackage ../development/tools/ktlint { };
 
