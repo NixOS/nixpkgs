@@ -1750,7 +1750,9 @@ in
 
   eggdrop = callPackage ../tools/networking/eggdrop { };
 
-  eksctl = callPackage ../tools/admin/eksctl { };
+  eksctl = callPackage ../tools/admin/eksctl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   elementary-xfce-icon-theme = callPackage ../data/icons/elementary-xfce-icon-theme { };
 
