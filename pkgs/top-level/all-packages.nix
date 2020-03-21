@@ -18385,7 +18385,9 @@ in
 
   arelle = with python3Packages; toPythonApplication arelle;
 
-  argo = callPackage ../applications/networking/cluster/argo { };
+  argo = callPackage ../applications/networking/cluster/argo {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   argocd = callPackage ../applications/networking/cluster/argocd { };
 
