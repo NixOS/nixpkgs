@@ -21782,7 +21782,9 @@ in
 
   sooperlooper = callPackage ../applications/audio/sooperlooper { };
 
-  sops = callPackage ../tools/security/sops { };
+  sops = callPackage ../tools/security/sops {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   sorcer = callPackage ../applications/audio/sorcer { };
 
