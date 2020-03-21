@@ -6457,7 +6457,10 @@ in
 
   samim-fonts = callPackage ../data/fonts/samim-fonts {};
 
-  saml2aws = callPackage ../tools/security/saml2aws {};
+  saml2aws = callPackage ../tools/security/saml2aws {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Foundation IOKit;
+  };
 
   samplicator = callPackage ../tools/networking/samplicator { };
 
