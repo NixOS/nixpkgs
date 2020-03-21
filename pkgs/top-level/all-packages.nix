@@ -19367,7 +19367,9 @@ in
     inherit (darwin) libiconv;
   };
 
-  gomuks = callPackage ../applications/networking/instant-messengers/gomuks { };
+  gomuks = callPackage ../applications/networking/instant-messengers/gomuks {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (ocamlPackages) google-drive-ocamlfuse;
 
