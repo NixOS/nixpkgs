@@ -10571,7 +10571,9 @@ in
 
   mdl = callPackage ../development/tools/misc/mdl { };
 
-  minify = callPackage ../development/web/minify { };
+  minify = callPackage ../development/web/minify {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   minizinc = callPackage ../development/tools/minizinc { };
   minizincide = qt5.callPackage ../development/tools/minizinc/ide.nix { };
