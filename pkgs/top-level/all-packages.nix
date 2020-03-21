@@ -20229,7 +20229,9 @@ in
 
   kega-fusion = pkgsi686Linux.callPackage ../misc/emulators/kega-fusion { };
 
-  kepubify = callPackage ../tools/misc/kepubify { };
+  kepubify = callPackage ../tools/misc/kepubify {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kermit = callPackage ../tools/misc/kermit { };
 
