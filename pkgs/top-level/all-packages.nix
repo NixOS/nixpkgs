@@ -23099,6 +23099,7 @@ in
 
   lnd = callPackage ../applications/blockchains/lnd.nix {
     buildGoModule = buildGo112Module;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   monero = callPackage ../applications/blockchains/monero {
