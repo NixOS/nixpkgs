@@ -16042,6 +16042,7 @@ in
     # Version 1.5.1 fails to build with go 1.13 due to test failure
     #  FAIL       github.com/jonnenauha/prometheus_varnish_exporter       0.041s
     buildGoModule = buildGo112Module;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
