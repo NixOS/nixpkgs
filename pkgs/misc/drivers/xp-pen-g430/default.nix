@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.xp-pen.com/download-46.html;
+    homepage = "https://www.xp-pen.com/download-46.html";
     description = "Driver for the XP-PEN G430 drawing tablet";
     license = licenses.unfree;
     platforms = platforms.linux;
