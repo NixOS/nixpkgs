@@ -841,7 +841,9 @@ in
 
   calls = callPackage ../applications/networking/calls { };
 
-  certigo = callPackage ../tools/admin/certigo { };
+  certigo = callPackage ../tools/admin/certigo {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   chezmoi = callPackage ../tools/misc/chezmoi {
     inherit (darwin.apple_sdk.frameworks) Security;
