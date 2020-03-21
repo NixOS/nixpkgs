@@ -20302,7 +20302,9 @@ in
 
   kubeless = callPackage ../applications/networking/cluster/kubeless { };
 
-  k9s = callPackage ../applications/networking/cluster/k9s { };
+  k9s = callPackage ../applications/networking/cluster/k9s {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   fluxctl = callPackage ../applications/networking/cluster/fluxctl {
     inherit (darwin.apple_sdk.frameworks) Security;
