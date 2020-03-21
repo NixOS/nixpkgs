@@ -5177,7 +5177,9 @@ in
 
   minetime = callPackage ../applications/office/minetime { };
 
-  minio-client = callPackage ../tools/networking/minio-client { };
+  minio-client = callPackage ../tools/networking/minio-client {
+    inherit (darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   minissdpd = callPackage ../tools/networking/minissdpd { };
 
