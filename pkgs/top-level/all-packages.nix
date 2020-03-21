@@ -1443,7 +1443,9 @@ in
 
   ccnet = callPackage ../tools/networking/ccnet { };
 
-  cassowary = callPackage ../tools/networking/cassowary { };
+  cassowary = callPackage ../tools/networking/cassowary {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   croc = callPackage ../tools/networking/croc {
     inherit (darwin.apple_sdk.frameworks) Security;
