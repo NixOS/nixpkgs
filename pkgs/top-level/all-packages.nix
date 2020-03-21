@@ -8156,7 +8156,9 @@ in
   };
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
-  flyctl = callPackage ../development/web/flyctl { };
+  flyctl = callPackage ../development/web/flyctl {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   fpc = callPackage ../development/compilers/fpc { };
 
