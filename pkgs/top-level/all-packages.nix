@@ -18785,7 +18785,9 @@ in
 
   csdp = callPackage ../applications/science/math/csdp { };
 
-  ctop = callPackage ../tools/system/ctop { };
+  ctop = callPackage ../tools/system/ctop {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cubicsdr = callPackage ../applications/radio/cubicsdr { wxGTK = wxGTK31; };
 
