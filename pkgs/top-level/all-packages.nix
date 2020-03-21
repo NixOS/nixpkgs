@@ -5348,7 +5348,9 @@ in
 
   ndppd = callPackage ../applications/networking/ndppd { };
 
-  nebula = callPackage ../tools/networking/nebula { };
+  nebula = callPackage ../tools/networking/nebula {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   nemiver = callPackage ../development/tools/nemiver { };
 
