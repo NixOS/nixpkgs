@@ -1403,7 +1403,9 @@ in
   caddy = callPackage ../servers/caddy {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  caddy2 = callPackage ../servers/caddy/v2.nix { };
+  caddy2 = callPackage ../servers/caddy/v2.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
   traefik = callPackage ../servers/traefik { };
 
   calamares = libsForQt5.callPackage ../tools/misc/calamares {
