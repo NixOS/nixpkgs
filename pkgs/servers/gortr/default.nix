@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoModule, Security }:
 
 buildGoModule rec {
   pname = "gortr";
@@ -12,7 +12,9 @@ buildGoModule rec {
   };
   modSha256 = "157dpalfz3z1s3mxq63xy6lrkwzyy9xzmvn7wsxkwznjq4djv1a1";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "The RPKI-to-Router server used at Cloudflare";
     homepage = "https://github.com/cloudflare/gortr/";
     license = licenses.gpl3;

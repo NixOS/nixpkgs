@@ -26339,7 +26339,9 @@ in
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
-  gortr = callPackage ../servers/gortr {};
+  gortr = callPackage ../servers/gortr {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
