@@ -10274,7 +10274,9 @@ in
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
 
-  fly = callPackage ../development/tools/continuous-integration/fly { };
+  fly = callPackage ../development/tools/continuous-integration/fly {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   foreman = callPackage ../tools/system/foreman { };
   goreman = callPackage ../tools/system/goreman { };

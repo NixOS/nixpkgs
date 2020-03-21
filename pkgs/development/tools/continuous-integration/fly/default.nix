@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib, writeText }:
+{ buildGoModule, fetchFromGitHub, stdenv, writeText, Security }:
 
 buildGoModule rec {
   pname = "fly";
@@ -20,6 +20,8 @@ buildGoModule rec {
       -X github.com/concourse/concourse.Version=${version}
   '';
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   # The fly.bash file included with this derivation can be replaced by a
   # call to `fly completion bash` once the `completion` subcommand has
   # made it into a release. Similarly, `fly completion zsh` will provide
@@ -28,7 +30,7 @@ buildGoModule rec {
     install -D -m 444 ${./fly.bash} $out/share/bash-completion/completions/fly
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A command line interface to Concourse CI";
     homepage = "https://concourse-ci.org";
     license = licenses.asl20;
