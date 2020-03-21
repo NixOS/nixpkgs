@@ -26375,7 +26375,9 @@ in
 
   sentencepiece = callPackage ../development/libraries/sentencepiece {};
 
-  kcli = callPackage ../development/tools/kcli {};
+  kcli = callPackage ../development/tools/kcli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   unstick = callPackage ../os-specific/linux/unstick {};
 
