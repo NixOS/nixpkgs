@@ -16158,7 +16158,9 @@ in
 
   sensu = callPackage ../servers/monitoring/sensu { };
 
-  inherit (callPackages ../servers/monitoring/sensu-go { })
+  inherit (callPackages ../servers/monitoring/sensu-go {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  })
     sensu-go-agent
     sensu-go-backend
     sensu-go-cli;
