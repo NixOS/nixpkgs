@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp Linux_Pentablet_V1.3.0.0/Pentablet_Driver Linux_Pentablet_V1.3.0.0/config.xml $out/bin
+    cp {Pentablet_Driver,config.xml} "$out"/bin
   '';
 
   meta = with stdenv.lib; {
