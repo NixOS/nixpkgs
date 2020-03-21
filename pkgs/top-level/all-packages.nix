@@ -18430,7 +18430,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  argocd = callPackage ../applications/networking/cluster/argocd { };
+  argocd = callPackage ../applications/networking/cluster/argocd {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ario = callPackage ../applications/audio/ario { };
 
