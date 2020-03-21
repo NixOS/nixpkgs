@@ -179,7 +179,9 @@ let
 
   lab = callPackage ./lab { };
 
-  lefthook = callPackage ./lefthook { };
+  lefthook = callPackage ./lefthook {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

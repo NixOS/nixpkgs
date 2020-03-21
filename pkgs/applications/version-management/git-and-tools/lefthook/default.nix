@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "lefthook";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "0ih11gw2y9dhv3zw1fzjmdfjln5h6zg1bj7sl68cglf6743siqnq";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Fast and powerful Git hooks manager for any type of projects";
