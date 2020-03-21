@@ -215,7 +215,9 @@ in
 
   docker-sync = callPackage ../tools/misc/docker-sync { };
 
-  docui = callPackage ../tools/misc/docui { };
+  docui = callPackage ../tools/misc/docui {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dotfiles = callPackage ../applications/misc/dotfiles { };
 
