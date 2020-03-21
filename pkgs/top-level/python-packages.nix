@@ -6987,6 +6987,8 @@ in {
 
   pyemd  = callPackage ../development/python-modules/pyemd { };
 
+  openwrt-luci-rpc = disabledIf (!isPy3k) (callPackage ../development/python-modules/openwrt-luci-rpc { });
+
   pulp  = callPackage ../development/python-modules/pulp { };
 
   behave = callPackage ../development/python-modules/behave { };
