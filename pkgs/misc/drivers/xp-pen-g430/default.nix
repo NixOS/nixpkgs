@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
   src = fetchzip {
     url = "https://download01.xp-pen.com/file/2019/08/Linux%20Beta%20Driver(${version}).zip";
     sha256 = "091kfqxxj90pdmwncgfl8ldi70pdhwryh3cls30654983m8cgnby";
-  } + ./Linux_Pentablet_V1.3.0.0.tar.gz;
+  } + /Linux_Pentablet_V1.3.0.0.tar.gz;
 
   nativeBuildInputs = [
     autoPatchelfHook
