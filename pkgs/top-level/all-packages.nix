@@ -15274,6 +15274,8 @@ in
 
   bftpd = callPackage ../servers/ftp/bftpd {};
 
+  bigbluebutton = callPackage ../servers/bigbluebutton { };
+
   bind = callPackage ../servers/dns/bind { };
   dnsutils = bind.dnsutils;
 
