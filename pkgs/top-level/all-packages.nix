@@ -17838,7 +17838,9 @@ in
 
   helvetica-neue-lt-std = callPackage ../data/fonts/helvetica-neue-lt-std { };
 
-  hetzner-kube = callPackage ../applications/networking/cluster/hetzner-kube { };
+  hetzner-kube = callPackage ../applications/networking/cluster/hetzner-kube {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hicolor-icon-theme = callPackage ../data/icons/hicolor-icon-theme { };
 
