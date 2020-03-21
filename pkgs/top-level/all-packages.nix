@@ -16206,7 +16206,9 @@ in
 
   tailscale = callPackage ../servers/tailscale { };
 
-  thanos = callPackage ../servers/monitoring/thanos { };
+  thanos = callPackage ../servers/monitoring/thanos {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (callPackages ../servers/http/tomcat { })
     tomcat7
