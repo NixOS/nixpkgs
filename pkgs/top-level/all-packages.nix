@@ -4596,7 +4596,9 @@ in
 
   lefthook = gitAndTools.lefthook;
 
-  lego = callPackage ../tools/admin/lego { };
+  lego = callPackage ../tools/admin/lego {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   leocad = callPackage ../applications/graphics/leocad { };
 
