@@ -13482,6 +13482,8 @@ in
 
   nvidia-video-sdk = callPackage ../development/libraries/nvidia-video-sdk { };
 
+  nvidia-optical-flow-sdk = callPackage ../development/libraries/nvidia-optical-flow-sdk { };
+
   nvtop = callPackage ../tools/system/nvtop {
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
   };
