@@ -20950,7 +20950,9 @@ in
 
   ptex = callPackage ../development/libraries/ptex {};
 
-  qbec = callPackage ../applications/networking/cluster/qbec { };
+  qbec = callPackage ../applications/networking/cluster/qbec {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   rssguard = libsForQt5.callPackage ../applications/networking/feedreaders/rssguard { };
 
