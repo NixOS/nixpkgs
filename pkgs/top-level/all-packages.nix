@@ -843,7 +843,9 @@ in
 
   certigo = callPackage ../tools/admin/certigo { };
 
-  chezmoi = callPackage ../tools/misc/chezmoi { };
+  chezmoi = callPackage ../tools/misc/chezmoi {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   chipsec = callPackage ../tools/security/chipsec {
     kernel = null;
