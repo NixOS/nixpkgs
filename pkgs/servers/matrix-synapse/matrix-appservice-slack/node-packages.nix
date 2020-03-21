@@ -40,13 +40,13 @@ let
         sha512 = "rzNIFst8iuVYyHdE7e3KSrbAtIA7sfS4Pth9ObKUm5KDemX0zyI7YfAijO1kgr1EMriQkjlpKBhlNq9Y+aQr6g==";
       };
     };
-    "@slack/types-1.4.0" = {
+    "@slack/types-1.5.0" = {
       name = "_at_slack_slash_types";
       packageName = "@slack/types";
-      version = "1.4.0";
+      version = "1.5.0";
       src = fetchurl {
-        url = "https://registry.npmjs.org/@slack/types/-/types-1.4.0.tgz";
-        sha512 = "G5u2gCl7oci0k4E9KIX33nmA4YPp1pXYwS/It7ct9dOglCcj63Ee5GRCgtplzOBS+2++DMdp6l3ZCq+VeAMrfw==";
+        url = "https://registry.npmjs.org/@slack/types/-/types-1.5.0.tgz";
+        sha512 = "oCYgatJYxHf9wE3tKXzOLeeTsF0ghX1TIcguNfVmO2V6NDe+cHAzZRglEOmJLdRINDS5gscAgSkeZpDhpKBeUA==";
       };
     };
     "@slack/web-api-5.8.0" = {
@@ -1922,6 +1922,15 @@ let
         sha1 = "30057438eac6cf7f8c4767f38648d6697d75c903";
       };
     };
+    "mkdirp-0.5.3" = {
+      name = "mkdirp";
+      packageName = "mkdirp";
+      version = "0.5.3";
+      src = fetchurl {
+        url = "https://registry.npmjs.org/mkdirp/-/mkdirp-0.5.3.tgz";
+        sha512 = "P+2gwrFqx8lhew375MQHHeTlY8AuOJSrGf0R5ddkEndUkmwpgUob/vQuBD1V22/Cw1/lJr4x+EjllSezBThzBg==";
+      };
+    };
     "mocha-6.2.2" = {
       name = "mocha";
       packageName = "mocha";
@@ -3221,14 +3230,14 @@ let
   };
 in
 {
-  "matrix-appservice-slack-git+https://github.com/matrix-org/matrix-appservice-slack.git#1.0.2" = nodeEnv.buildNodePackage {
+  "matrix-appservice-slack-git+https://github.com/matrix-org/matrix-appservice-slack.git#1.1.0" = nodeEnv.buildNodePackage {
     name = "matrix-appservice-slack";
     packageName = "matrix-appservice-slack";
-    version = "1.0.2";
+    version = "1.1.0";
     src = fetchgit {
       url = "https://github.com/matrix-org/matrix-appservice-slack.git";
-      rev = "8202c97c1fee0f8215f86b0fda1845ca17db3612";
-      sha256 = "b419d34771f4f4be56fe66ba4cbf690fb5a337e317a927e70e65be3f1ddd55ef";
+      rev = "62b2a05c99bbefb0b268adc8b0fedfe91a4f76bd";
+      sha256 = "64e930cecb11de9df3cb03367a22ff7dc78d44b7f992d9379fae8b692bf35157";
     };
     dependencies = [
       sources."@babel/code-frame-7.8.3"
@@ -3239,7 +3248,7 @@ in
           sources."p-queue-2.4.2"
         ];
       })
-      sources."@slack/types-1.4.0"
+      sources."@slack/types-1.5.0"
       (sources."@slack/web-api-5.8.0" // {
         dependencies = [
           sources."p-queue-2.4.2"
@@ -3464,15 +3473,13 @@ in
       sources."mime-types-2.1.26"
       sources."minimatch-3.0.4"
       sources."minimist-1.2.5"
-      (sources."mkdirp-0.5.1" // {
-        dependencies = [
-          sources."minimist-0.0.8"
-        ];
-      })
+      sources."mkdirp-0.5.3"
       (sources."mocha-6.2.2" // {
         dependencies = [
           sources."debug-3.2.6"
           sources."escape-string-regexp-1.0.5"
+          sources."minimist-0.0.8"
+          sources."mkdirp-0.5.1"
           sources."ms-2.1.1"
           sources."supports-color-6.0.0"
           sources."yargs-13.3.0"
