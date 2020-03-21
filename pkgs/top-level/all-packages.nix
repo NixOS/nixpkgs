@@ -17471,7 +17471,10 @@ in
 
   smem = callPackage ../os-specific/linux/smem { };
 
-  smimesign = callPackage ../os-specific/darwin/smimesign { };
+  smimesign = callPackage ../os-specific/darwin/smimesign {
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   speedometer = callPackage ../os-specific/linux/speedometer { };
 
