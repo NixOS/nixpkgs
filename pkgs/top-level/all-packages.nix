@@ -15640,7 +15640,9 @@ in
 
   micronaut = callPackage ../development/tools/micronaut {};
 
-  minio = callPackage ../servers/minio { };
+  minio = callPackage ../servers/minio {
+    inherit (pkgs.darwin.apple_sdk.frameworks) CoreServices;
+  };
 
   # Backwards compatibility.
   mod_dnssd = pkgs.apacheHttpdPackages.mod_dnssd;
