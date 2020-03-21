@@ -4351,7 +4351,9 @@ in
     buildGoModule = buildGo112Module;
   };
   ipfs-migrator = callPackage ../applications/networking/ipfs-migrator { };
-  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster { };
+  ipfs-cluster = callPackage ../applications/networking/ipfs-cluster {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ipget = callPackage ../applications/networking/ipget { };
 

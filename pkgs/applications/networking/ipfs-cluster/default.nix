@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchgx, gx-go }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "ipfs-cluster";
@@ -14,6 +14,8 @@ buildGoModule rec {
     sha256 = "1jh6ynj50jd4w79widaqrgm3h3yz5h03vq0lbsx717a8d9073blh";
   };
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   meta = with stdenv.lib; {
     description = "Allocate, replicate, and track Pins across a cluster of IPFS daemons";
     homepage = https://cluster.ipfs.io/;
@@ -22,4 +24,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ jglukasik ];
   };
 }
-
