@@ -818,6 +818,7 @@
   ./services/web-apps/cryptpad.nix
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
+  ./services/web-apps/filesender.nix
   ./services/web-apps/frab.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
