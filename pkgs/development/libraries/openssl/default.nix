@@ -143,14 +143,17 @@ in {
   };
 
   openssl_1_1 = common {
-    version = "1.1.1e";
-    sha256 = "1gnwlri1dphr5wdzmg9vlhkh6aq2yqgpfkpmffzwjlfb26n62kv9";
+    version = "1.1.1d";
+    sha256 = "1whinyw402z3b9xlb3qaxv4b9sk4w1bgh9k0y8df1z4x3yy92fhy";
     patches = [
       ./1.1/nix-ssl-cert-file.patch
 
       (if stdenv.hostPlatform.isDarwin
        then ./1.1/use-etc-ssl-certs-darwin.patch
        else ./1.1/use-etc-ssl-certs.patch)
+
+      ./1.1/cve-2019-1551.patch
+      ./1.1/cve-2019-1551-improve.patch
     ];
     withDocs = true;
   };
