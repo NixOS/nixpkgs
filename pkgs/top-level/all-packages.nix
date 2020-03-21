@@ -9889,7 +9889,9 @@ in
     go = go_1_12;
   };
 
-  bazelisk = callPackage ../development/tools/bazelisk { };
+  bazelisk = callPackage ../development/tools/bazelisk {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   buildBazelPackage = callPackage ../build-support/build-bazel-package { };
 
