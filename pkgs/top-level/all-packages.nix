@@ -10795,7 +10795,9 @@ in
     withPEPatterns = true;
   };
 
-  reviewdog = callPackage ../development/tools/misc/reviewdog { };
+  reviewdog = callPackage ../development/tools/misc/reviewdog {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   rman = callPackage ../development/tools/misc/rman { };
 
