@@ -5911,7 +5911,9 @@ in
 
   pg_top = callPackage ../tools/misc/pg_top { };
 
-  pgcenter = callPackage ../tools/misc/pgcenter { };
+  pgcenter = callPackage ../tools/misc/pgcenter {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   pgmetrics = callPackage ../tools/misc/pgmetrics { };
 
