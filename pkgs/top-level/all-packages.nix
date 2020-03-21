@@ -4732,7 +4732,9 @@ in
 
   motion = callPackage ../applications/video/motion { };
 
-  mtail = callPackage ../servers/monitoring/mtail { };
+  mtail = callPackage ../servers/monitoring/mtail {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   multitail = callPackage ../tools/misc/multitail { };
 
