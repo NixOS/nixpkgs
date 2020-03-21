@@ -9,11 +9,11 @@
 callPackage ../nginx/generic.nix args rec {
   pname = "openresty";
   nginxVersion = "1.15.8";
-  version = "${nginxVersion}.2";
+  version = "${nginxVersion}.3";
 
   src = fetchurl {
     url = "https://openresty.org/download/openresty-${version}.tar.gz";
-    sha256 = "05jxrb8hv758nm38jil8n63q1nhrz3d249bsrwc7maa7sn24wss3";
+    sha256 = "1a1la7vszv1parsnhphydblz64ffhycazncn3ividnvqg2mg735n";
   };
 
   fixPatch = patch:
