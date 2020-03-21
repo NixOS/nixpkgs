@@ -4691,7 +4691,9 @@ in
 
   mautrix-telegram = recurseIntoAttrs (callPackage ../servers/mautrix-telegram { });
 
-  mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp { };
+  mautrix-whatsapp = callPackage ../servers/mautrix-whatsapp {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   mcfly = callPackage ../tools/misc/mcfly {
     inherit (darwin.apple_sdk.frameworks) Security;
