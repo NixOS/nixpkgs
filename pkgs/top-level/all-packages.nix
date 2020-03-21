@@ -26026,7 +26026,9 @@ in
 
   webfs = callPackage ../servers/http/webfs { };
 
-  websocketd = callPackage ../applications/networking/websocketd { };
+  websocketd = callPackage ../applications/networking/websocketd {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   wikicurses = callPackage ../applications/misc/wikicurses {
     pythonPackages = python3Packages;
