@@ -301,7 +301,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pet = callPackage ../development/tools/pet { };
+  pet = callPackage ../development/tools/pet {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   run = callPackage ../development/tools/run { };
 
