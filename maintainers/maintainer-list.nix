@@ -5488,6 +5488,11 @@
     githubId = 1538622;
     name = "Michael Reilly";
   };
+  onny = {
+    email = "onny@project-insanity.org";
+    github = "onny";
+    name = "Jonas Heinrich";
+  };
   OPNA2608 = {
     email = "christoph.neidahl@gmail.com";
     github = "OPNA2608";
