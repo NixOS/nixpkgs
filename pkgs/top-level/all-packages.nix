@@ -16248,7 +16248,9 @@ in
     unifiStable;
   unifi = unifiStable;
 
-  victoriametrics = callPackage ../servers/nosql/victoriametrics { };
+  victoriametrics = callPackage ../servers/nosql/victoriametrics {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   virtlyst = libsForQt5.callPackage ../servers/web-apps/virtlyst { };
 
