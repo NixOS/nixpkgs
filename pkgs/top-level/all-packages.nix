@@ -528,7 +528,9 @@ in
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
-  act = callPackage ../development/tools/misc/act {};
+  act = callPackage ../development/tools/misc/act {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   actdiag = with python3.pkgs; toPythonApplication actdiag;
 
