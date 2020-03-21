@@ -761,7 +761,9 @@ in
 
   azure-cli = callPackage ../tools/admin/azure-cli { python = python3; };
 
-  azure-storage-azcopy = callPackage ../development/tools/azcopy { };
+  azure-storage-azcopy = callPackage ../development/tools/azcopy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   azure-vhd-utils  = callPackage ../tools/misc/azure-vhd-utils { };
 
