@@ -890,7 +890,9 @@ in
 
   crc32c = callPackage ../development/libraries/crc32c { };
 
-  cue = callPackage ../development/tools/cue { };
+  cue = callPackage ../development/tools/cue {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   deltachat-electron = callPackage
     ../applications/networking/instant-messengers/deltachat-electron { };
