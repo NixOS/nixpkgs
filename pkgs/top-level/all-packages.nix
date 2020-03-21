@@ -181,7 +181,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
+  protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   demoit = callPackage ../servers/demoit { };
 
