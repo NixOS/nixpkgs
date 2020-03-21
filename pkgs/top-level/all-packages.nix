@@ -177,7 +177,9 @@ in
 
   hobbes = callPackage ../development/tools/hobbes { stdenv = gcc6Stdenv; }; # GCC 6 is latest currently supported. See https://git.io/JvK6M.
 
-  proto-contrib = callPackage ../development/tools/proto-contrib {};
+  proto-contrib = callPackage ../development/tools/proto-contrib {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   protoc-gen-doc = callPackage ../development/tools/protoc-gen-doc {};
 
