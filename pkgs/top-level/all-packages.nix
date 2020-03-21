@@ -769,7 +769,9 @@ in
 
   awless = callPackage ../tools/virtualization/awless { };
 
-  berglas = callPackage ../tools/admin/berglas/default.nix { };
+  berglas = callPackage ../tools/admin/berglas/default.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   brakeman = callPackage ../development/tools/analysis/brakeman { };
 
