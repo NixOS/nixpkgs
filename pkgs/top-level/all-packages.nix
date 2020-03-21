@@ -19326,7 +19326,9 @@ in
   geany = callPackage ../applications/editors/geany { };
   geany-with-vte = callPackage ../applications/editors/geany/with-vte.nix { };
 
-  geoipupdate = callPackage ../applications/misc/geoipupdate/default.nix { };
+  geoipupdate = callPackage ../applications/misc/geoipupdate/default.nix {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   ghostwriter = libsForQt5.callPackage ../applications/editors/ghostwriter { };
 
