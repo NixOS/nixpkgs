@@ -10405,7 +10405,9 @@ in
 
   gocd-server = callPackage ../development/tools/continuous-integration/gocd-server { };
 
-  gotify-server = callPackage ../servers/gotify { };
+  gotify-server = callPackage ../servers/gotify {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gotty = callPackage ../servers/gotty { };
 
