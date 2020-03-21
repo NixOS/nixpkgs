@@ -161,7 +161,9 @@ in
 
   cm256cc = callPackage ../development/libraries/cm256cc {  };
 
-  conftest = callPackage ../development/tools/conftest { };
+  conftest = callPackage ../development/tools/conftest {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   corgi = callPackage ../development/tools/corgi { };
 
