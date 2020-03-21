@@ -2985,7 +2985,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  drone-cli = callPackage ../development/tools/continuous-integration/drone-cli { };
+  drone-cli = callPackage ../development/tools/continuous-integration/drone-cli {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   dropbear = callPackage ../tools/networking/dropbear { };
 
