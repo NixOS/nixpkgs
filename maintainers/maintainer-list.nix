@@ -4847,6 +4847,12 @@
     githubId = 3958340;
     name = "Eshin Kunishima";
   };
+  mikesperber = {
+    email = "sperber@deinprogramm.de";
+    github = "mikesperber";
+    githubId = 1387206;
+    name = "Mike Sperber";
+  };
   mildlyincompetent = {
     email = "nix@kch.dev";
     github = "mildlyincompetent";
