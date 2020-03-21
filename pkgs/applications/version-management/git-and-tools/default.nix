@@ -177,7 +177,9 @@ let
     inherit (darwin) Security;
   };
 
-  lab = callPackage ./lab { };
+  lab = callPackage ./lab {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   lefthook = callPackage ./lefthook {
     inherit (darwin.apple_sdk.frameworks) Security;
