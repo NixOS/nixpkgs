@@ -15536,6 +15536,7 @@ in
 
   gobetween = callPackage ../servers/gobetween {
     buildGoModule = buildGo112Module;
+    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   h2o = callPackage ../servers/http/h2o { };
