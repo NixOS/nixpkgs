@@ -34,7 +34,9 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ghq = callPackage ./ghq { };
+  ghq = callPackage ./ghq {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   git = appendToName "minimal" gitBase;
 
