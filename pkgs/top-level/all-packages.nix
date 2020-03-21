@@ -26348,7 +26348,9 @@ in
 
   quartus-prime-lite = callPackage ../applications/editors/quartus-prime {};
 
-  go-license-detector = callPackage ../development/tools/misc/go-license-detector { };
+  go-license-detector = callPackage ../development/tools/misc/go-license-detector {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   hashdeep = callPackage ../tools/security/hashdeep { };
 
