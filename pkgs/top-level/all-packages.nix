@@ -17136,7 +17136,9 @@ in
 
   govendor = callPackage ../development/tools/govendor { };
 
-  go-tools = callPackage ../development/tools/go-tools { };
+  go-tools = callPackage ../development/tools/go-tools {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gotools = callPackage ../development/tools/gotools { };
 
