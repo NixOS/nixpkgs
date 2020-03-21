@@ -10500,7 +10500,9 @@ in
 
   kube-prompt = callPackage ../development/tools/kube-prompt { };
 
-  kubeprompt = callPackage ../development/tools/kubeprompt { };
+  kubeprompt = callPackage ../development/tools/kubeprompt {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kubicorn = callPackage ../development/tools/kubicorn {  };
 
