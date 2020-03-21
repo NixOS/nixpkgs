@@ -25460,7 +25460,9 @@ in
 
   musly = callPackage ../applications/audio/musly { };
 
-  mynewt-newt = callPackage ../tools/package-management/mynewt-newt { };
+  mynewt-newt = callPackage ../tools/package-management/mynewt-newt {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   inherit (callPackage ../tools/package-management/nix {
       storeDir = config.nix.storeDir or "/nix/store";
