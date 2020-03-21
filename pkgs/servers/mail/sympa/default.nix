@@ -73,6 +73,7 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
+    "--enable-fhs"
     "--without-initdir"
     "--without-unitsdir"
     "--without-smrshdir"

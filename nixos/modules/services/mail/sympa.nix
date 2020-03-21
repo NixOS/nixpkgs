@@ -415,7 +415,7 @@ in
       # force-copy static_content so it's up to date with package
       # set permissions for wwsympa which needs write access (...)
       "R  ${dataDir}/static_content    -    -       -        - -"
-      "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/static_content"
+      "C  ${dataDir}/static_content    0711 ${user} ${group} - ${pkg}/var/lib/sympa/static_content"
       "e  ${dataDir}/static_content/*  0711 ${user} ${group} - -"
 
       "d  /run/sympa                   0755 ${user} ${group} - -"
@@ -497,7 +497,7 @@ in
           -F ${toString cfg.web.fcgiProcs} \
           -P /run/sympa/wwsympa.pid \
           -s /run/sympa/wwsympa.socket \
-          -- ${pkg}/bin/wwsympa.fcgi
+          -- ${pkg}/lib/sympa/cgi/wwsympa.fcgi
         '';
 
       } // commonServiceConfig;
@@ -518,7 +518,7 @@ in
           fastcgi_split_path_info ^(${loc})(.*)$;
 
           fastcgi_param PATH_INFO       $fastcgi_path_info;
-          fastcgi_param SCRIPT_FILENAME ${pkg}/bin/wwsympa.fcgi;
+          fastcgi_param SCRIPT_FILENAME ${pkg}/lib/sympa/cgi/wwsympa.fcgi;
         '';
       }) // {
         "/static-sympa/".alias = "${dataDir}/static_content/";
@@ -550,7 +550,7 @@ in
           args = [
             "flags=hqRu"
             "user=${user}"
-            "argv=${pkg}/bin/queue"
+            "argv=${pkg}/libexec/queue"
             "\${nexthop}"
           ];
         };
@@ -562,7 +562,7 @@ in
           args = [
             "flags=hqRu"
             "user=${user}"
-            "argv=${pkg}/bin/bouncequeue"
+            "argv=${pkg}/libexec/bouncequeue"
             "\${nexthop}"
           ];
         };
