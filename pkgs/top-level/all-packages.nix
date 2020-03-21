@@ -1434,7 +1434,9 @@ in
 
   cassowary = callPackage ../tools/networking/cassowary { };
 
-  croc = callPackage ../tools/networking/croc { };
+  croc = callPackage ../tools/networking/croc {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cddl = callPackage ../development/tools/cddl { };
 
