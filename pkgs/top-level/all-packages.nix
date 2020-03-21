@@ -757,7 +757,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  iamy = callPackage ../tools/admin/iamy { };
+  iamy = callPackage ../tools/admin/iamy {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   azure-cli = callPackage ../tools/admin/azure-cli { python = python3; };
 
