@@ -8203,7 +8203,8 @@ in
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
-  gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { stdenv = gccStdenv; };
+  gambit-unstable = callPackage ../development/compilers/gambit/unstable.nix { };
+  gambit-support = callPackage ../development/compilers/gambit/gambit-support.nix { };
   gerbil = callPackage ../development/compilers/gerbil { stdenv = gccStdenv; };
   gerbil-unstable = callPackage ../development/compilers/gerbil/unstable.nix { stdenv = gccStdenv; };
 
