@@ -20290,7 +20290,9 @@ in
 
   kubecfg = callPackage ../applications/networking/cluster/kubecfg { };
 
-  kubeval = callPackage ../applications/networking/cluster/kubeval { };
+  kubeval = callPackage ../applications/networking/cluster/kubeval {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   kubeval-schema = callPackage ../applications/networking/cluster/kubeval/schema.nix { };
 
