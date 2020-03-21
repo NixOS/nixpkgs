@@ -856,7 +856,9 @@ in
     withDriver = false;
   };
 
-  clair = callPackage ../tools/admin/clair { };
+  clair = callPackage ../tools/admin/clair {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   cloud-sql-proxy = callPackage ../tools/misc/cloud-sql-proxy { };
 
