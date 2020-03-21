@@ -21741,7 +21741,9 @@ in
 
   sfxr-qt = libsForQt5.callPackage ../applications/audio/sfxr-qt { };
 
-  shadowfox = callPackage ../tools/networking/shadowfox { };
+  shadowfox = callPackage ../tools/networking/shadowfox {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   shfmt = callPackage ../tools/text/shfmt { };
 
