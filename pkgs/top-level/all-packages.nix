@@ -20680,7 +20680,9 @@ in
   minidjvu = callPackage ../applications/graphics/minidjvu { };
 
   minikube = callPackage ../applications/networking/cluster/minikube {
-    inherit (darwin.apple_sdk.frameworks) vmnet;
+    inherit (darwin) libobjc;
+    inherit (darwin.apple_sdk.libs) xpc;
+    inherit (darwin.apple_sdk.frameworks) vmnet Foundation IOKit;
   };
 
   minishift = callPackage ../applications/networking/cluster/minishift { };
