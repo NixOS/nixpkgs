@@ -17195,7 +17195,9 @@ in
 
   golint = callPackage ../development/tools/golint { };
 
-  golangci-lint = callPackage ../development/tools/golangci-lint { };
+  golangci-lint = callPackage ../development/tools/golangci-lint {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gocyclo = callPackage ../development/tools/gocyclo { };
 
