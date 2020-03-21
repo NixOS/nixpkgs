@@ -19527,7 +19527,9 @@ in
 
   sngrep = callPackage ../applications/networking/sniffers/sngrep {};
 
-  termshark = callPackage ../tools/networking/termshark { };
+  termshark = callPackage ../tools/networking/termshark {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   fbida = callPackage ../applications/graphics/fbida { };
 
