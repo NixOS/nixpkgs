@@ -10233,7 +10233,9 @@ in
 
   drush = callPackage ../development/tools/misc/drush { };
 
-  editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker { };
+  editorconfig-checker = callPackage ../development/tools/misc/editorconfig-checker {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   editorconfig-core-c = callPackage ../development/tools/misc/editorconfig-core-c { };
 
