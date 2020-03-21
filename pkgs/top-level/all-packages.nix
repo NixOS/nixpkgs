@@ -17359,7 +17359,9 @@ in
 
   procdump = callPackage ../os-specific/linux/procdump { };
 
-  prototool = callPackage ../development/tools/prototool { };
+  prototool = callPackage ../development/tools/prototool {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   qemu_kvm = lowPrio (qemu.override { hostCpuOnly = true; });
 
