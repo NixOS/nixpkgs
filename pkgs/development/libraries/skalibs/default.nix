@@ -4,8 +4,8 @@ with skawarePackages;
 
 buildPackage {
   pname = "skalibs";
-  version = "2.9.1.0";
-  sha256 = "19c6s3f7vxi96l2yqzjk9x9i4xkfg4fdzxhn1jg6bfb2qjph9cnk";
+  version = "2.9.2.0";
+  sha256 = "1i9d7w031kh338aq6xdsf8vl5amxbwxbny8lnrxlzydqvn8nxhz4";
 
   description = "A set of general-purpose C programming libraries";
 
