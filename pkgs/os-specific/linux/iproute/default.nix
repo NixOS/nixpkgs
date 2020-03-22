@@ -1,4 +1,4 @@
-{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf }:
+{ fetchurl, stdenv, flex, bash, bison, db, iptables, pkgconfig, libelf, libmnl }:
 
 stdenv.mkDerivation rec {
   pname = "iproute2";
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
     "CONFDIR=$(out)/etc/iproute2"
   ];
 
-  buildInputs = [ db iptables libelf ];
+  buildInputs = [ db iptables libelf libmnl ];
   nativeBuildInputs = [ bison flex pkgconfig ];
 
   enableParallelBuilding = true;
