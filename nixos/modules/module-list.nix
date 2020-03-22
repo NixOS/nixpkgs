@@ -994,6 +994,7 @@
   ./services/networking/vdirsyncer.nix
   ./services/networking/vsftpd.nix
   ./services/networking/wasabibackend.nix
+  ./services/networking/webhook.nix
   ./services/networking/websockify.nix
   ./services/networking/wg-netmanager.nix
   ./services/networking/wg-quick.nix
