@@ -1,5 +1,5 @@
 { stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
-, bzip2, curl, libxml2, openssl, gmp5, icu, oniguruma, libsodium, html-tidy
+, bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium, html-tidy
 , libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
 , pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
 , libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit, readline
@@ -811,10 +811,8 @@ let
         postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
         configureFlags = "--with-gettext=${gettext}"; }
       { name = "gmp";
-        buildInputs = [ gmp5 ];
-        configureFlags = [ "--with-gmp=${gmp5.dev}" ];
-        # gmp5 doesn't build on darwin.
-        enable = (!stdenv.isDarwin); }
+        buildInputs = [ gmp ];
+        configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
       { name = "hash"; enable = lib.versionOlder php.version "7.4"; }
       { name = "iconv";
         configureFlags = if stdenv.isDarwin then
