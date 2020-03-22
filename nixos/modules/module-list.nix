@@ -748,6 +748,7 @@
   ./services/networking/vsftpd.nix
   ./services/networking/wakeonlan.nix
   ./services/networking/websockify.nix
+  ./services/networking/webhook.nix
   ./services/networking/wg-quick.nix
   ./services/networking/wicd.nix
   ./services/networking/wireguard.nix
