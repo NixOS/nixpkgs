@@ -15370,7 +15370,7 @@ in
 
   felix_remoteshell = callPackage ../servers/felix/remoteshell.nix { };
 
-  filesender = callPackage ../servers/filesender { };
+  filesender = callPackage ../servers/web-apps/filesender { };
 
   fingerd_bsd = callPackage ../servers/fingerd/bsd-fingerd { };
 
