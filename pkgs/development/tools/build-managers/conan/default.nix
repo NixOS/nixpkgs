@@ -88,8 +88,6 @@ in newPython.pkgs.buildPythonApplication rec {
   '';
 
   postPatch = ''
-    substituteInPlace conans/requirements_server.txt \
-      --replace "pluginbase>=0.5, < 1.0" "pluginbase>=0.5"
     substituteInPlace conans/requirements.txt \
       --replace "PyYAML>=3.11, <3.14.0" "PyYAML"
   '';
