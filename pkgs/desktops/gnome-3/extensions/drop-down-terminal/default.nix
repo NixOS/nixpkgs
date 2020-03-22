@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, substituteAll, gjs, vte }:
+{ stdenv, fetchFromGitHub, substituteAll, gjs, vte, gnome3 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-drop-down-terminal";
@@ -30,5 +30,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl3;
     maintainers = with maintainers; [ ericdallo ];
     homepage = https://github.com/zzrough/gs-extensions-drop-down-terminal;
+    # Doesn't support 3.36
+    broken = stdenv.lib.versionAtLeast gnome3.gnome-shell.version "3.34";
   };
 }
