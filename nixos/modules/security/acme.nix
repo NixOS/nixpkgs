@@ -99,7 +99,7 @@ let
 
       keyType = mkOption {
         type = types.str;
-        default = "ec384";
+        default = "ec256";
         description = ''
           Key type to use for private keys.
           For an up to date list of supported values check the --key-type option
