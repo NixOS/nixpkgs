@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "07gbjd7m1fj5dmavr0z20vkqwx1cz2522sj9022p257jifj1yl76";
   };
 
-  buildInputs = [ php which makeWrapper ];
+  nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''
     # install libraries
