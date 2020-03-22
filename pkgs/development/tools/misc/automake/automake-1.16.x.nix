@@ -1,11 +1,11 @@
 { stdenv, fetchurl, perl, autoconf }:
 
 stdenv.mkDerivation rec {
-  name = "automake-1.16.1";
+  name = "automake-1.16.2";
 
   src = fetchurl {
     url = "mirror://gnu/automake/${name}.tar.xz";
-    sha256 = "08g979ficj18i1w6w5219bgmns7czr03iadf20mk3lrzl8wbn1ax";
+    sha256 = "1l7dkqbsmbf94ax29jj1jf6a0r6ikc8jybg1p5m0c3ki7pg5ki6c";
   };
 
   nativeBuildInputs = [ autoconf perl ];
@@ -27,8 +27,8 @@ stdenv.mkDerivation rec {
   dontPatchShebangs = true;
 
   meta = {
-    branch = "1.15";
-    homepage = https://www.gnu.org/software/automake/;
+    branch = "1.16";
+    homepage = "https://www.gnu.org/software/automake/";
     description = "GNU standard-compliant makefile generator";
     license = stdenv.lib.licenses.gpl2Plus;
 
