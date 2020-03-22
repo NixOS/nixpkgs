@@ -16251,6 +16251,8 @@ in
   alsaOss = callPackage ../os-specific/linux/alsa-oss { };
   alsaTools = callPackage ../os-specific/linux/alsa-tools { };
 
+  alsa-ucm-conf = callPackage ../os-specific/linux/alsa-ucm-conf { };
+
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
     armTrustedFirmwareTools
