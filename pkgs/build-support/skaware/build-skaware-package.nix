@@ -51,7 +51,7 @@ let
   ];
 
 in stdenv.mkDerivation {
-  name = "${pname}-${version}";
+  inherit pname version;
 
   src = fetchurl {
     url = "https://skarnet.org/software/${pname}/${pname}-${version}.tar.gz";
