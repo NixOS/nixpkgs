@@ -1,36 +1,35 @@
-{ stdenv, wrapQtAppsHook, makeDesktopItem, fetchFromGitHub
-, qtbase, qmake, qtmultimedia, qttools
-, qtgraphicaleffects, qtdeclarative
-, qtlocation, qtquickcontrols, qtquickcontrols2
-, qtwebchannel, qtwebengine, qtx11extras, qtxmlpatterns
+{ stdenv, wrapQtAppsHook, makeDesktopItem
+, fetchFromGitHub, qmake, qttools, pkgconfig
+, qtbase, qtdeclarative, qtgraphicaleffects
+, qtmultimedia, qtxmlpatterns
+, qtquickcontrols, qtquickcontrols2
 , monero, unbound, readline, boost, libunwind
-, libsodium, pcsclite, zeromq, cppzmq, pkgconfig
-, hidapi, randomx
+, libsodium, pcsclite, zeromq, cppzmq
+, hidapi, libusb, protobuf, randomx
 }:
 
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "monero-gui";
-  version = "0.15.0.1";
+  version = "0.15.0.4";
 
   src = fetchFromGitHub {
     owner  = "monero-project";
     repo   = "monero-gui";
     rev    = "v${version}";
-    sha256 = "08j8kkncdn57xql0bhmlzjpjkdfhqbpda1p07r797q8qi0nl4w8n";
+    sha256 = "12m5fgnxkr11q2arx1m5ccpxqm5ljcvm6l547dwqn297zs5jim4z";
   };
 
   nativeBuildInputs = [ qmake pkgconfig wrapQtAppsHook ];
 
   buildInputs = [
-    qtbase qtmultimedia qtgraphicaleffects
-    qtdeclarative qtlocation
-    qtquickcontrols qtquickcontrols2
-    qtwebchannel qtwebengine qtx11extras
-    qtxmlpatterns monero unbound readline
+    qtbase qtdeclarative qtgraphicaleffects
+    qtmultimedia qtquickcontrols qtquickcontrols2
+    qtxmlpatterns
+    monero unbound readline
     boost libunwind libsodium pcsclite zeromq
-    cppzmq hidapi randomx
+    cppzmq hidapi libusb protobuf randomx
   ];
 
   NIX_CFLAGS_COMPILE = [ "-Wno-error=format-security" ];
