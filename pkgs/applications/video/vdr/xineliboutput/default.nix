@@ -1,6 +1,6 @@
 { stdenv, fetchurl, lib, vdr
 , libav, libcap, libvdpau
-, xineLib, libjpeg, libextractor, mesa, libGLU
+, xineLib, libjpeg, libextractor, libglvnd, libGLU
 , libX11, libXext, libXrender, libXrandr
 , makeWrapper
 }: let
@@ -15,6 +15,12 @@
       url = "mirror://sourceforge/project/xineliboutput/xineliboutput/${name}/${name}.tgz";
       sha256 = "1phrxpaz8li7z0qy241spawalhcmwkv5hh3gdijbv4h7mm899yba";
     };
+
+    postPatch = ''
+      # pkg-config is called with opengl, which do not contain needed glx symbols
+      substituteInPlace configure \
+        --replace "X11  opengl" "X11  gl"
+    '';
 
     # configure don't accept argument --prefix
     dontAddPrefix = true;
@@ -40,13 +46,13 @@
       libcap
       libextractor
       libjpeg
+      libglvnd
       libGLU
       libvdpau
       libXext
       libXrandr
       libXrender
       libX11
-      mesa
       vdr
       xineLib
     ];
