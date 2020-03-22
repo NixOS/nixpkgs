@@ -13,6 +13,9 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = [ python3Packages.sympy ];
 
+  # checks are disabled because jelly has no tests, and the default is to run
+  # the output binary with no arguments, which exits with status 1 and causes
+  # the build to fail
   doCheck = false;
 
   meta = with lib; {
