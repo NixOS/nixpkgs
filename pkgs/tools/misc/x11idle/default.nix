@@ -1,4 +1,4 @@
-{ stdenv, xlibs, fetchurl, libXScrnSaver, libX11 }:
+{ stdenv, fetchurl, libXScrnSaver, libX11 }:
 
 stdenv.mkDerivation rec {
 
