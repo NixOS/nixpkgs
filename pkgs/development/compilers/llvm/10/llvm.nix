@@ -17,7 +17,7 @@
 , enablePFM ? !(stdenv.isDarwin
   || stdenv.isAarch64 # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
 )
-, enablePolly ? false
+, enablePolly ? true
 }:
 
 let
@@ -31,8 +31,8 @@ in stdenv.mkDerivation (rec {
   pname = "llvm";
   inherit version;
 
-  src = fetch pname "1pa322iwqg071gxdn5wxri263j6aki6ag36xbdzbyi3g8m8v8jci";
-  polly_src = fetch "polly" "0p9dmv4hxwx4f5k1v4r9b5jp7fbi71ajpmrv3xf3vmp6m4i3r0pc";
+  src = fetch pname "1abfi0zqbcwxf68dk00szpjxkcd44589va243af8sg97hljq6709";
+  polly_src = fetch "polly" "1fzg5934km69rwam6vgznk0p4slzhr0icwmj3jibw3p93ppa8k9r";
 
   unpackPhase = ''
     unpackFile $src
