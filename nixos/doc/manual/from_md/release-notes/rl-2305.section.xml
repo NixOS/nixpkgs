@@ -39,6 +39,13 @@
       </listitem>
       <listitem>
         <para>
+          <link xlink:href="https://github.com/adnanh/webhook">webhook</link>,
+          a lightweight webhook server. Available as
+          <link linkend="opt-services.webhook.enable">services.webhook</link>.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
           <link xlink:href="https://github.com/alexivkin/CUPS-PDF-to-PDF">cups-pdf-to-pdf</link>,
           a pdf-generating cups backend based on
           <link xlink:href="https://www.cups-pdf.de/">cups-pdf</link>.
