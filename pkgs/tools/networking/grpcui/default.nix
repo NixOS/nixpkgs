@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 buildGoModule rec {
   pname = "grpcui";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   modSha256 = "1yq8484cjxad72nqsrim3zppr8hmn7dc6f8rgkw8fg952lqy5jjb";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "An interactive web UI for gRPC, along the lines of postman";
     homepage = "https://github.com/fullstorydev/grpcui";
     license = licenses.mit;

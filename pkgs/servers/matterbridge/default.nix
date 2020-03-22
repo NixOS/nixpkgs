@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchurl }:
+{ stdenv, buildGoModule, fetchurl, Security }:
 
 buildGoModule rec {
   pname = "matterbridge";
@@ -11,6 +11,8 @@ buildGoModule rec {
     url = "https://github.com/42wim/matterbridge/archive/v${version}.tar.gz";
     sha256 = "15wgjzy9l3xlgih2zb56l4jmval4nhcs42wn9axvz2h7kqfbmw3d";
   };
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Simple bridge between Mattermost, IRC, XMPP, Gitter, Slack, Discord, Telegram, Rocket.Chat, Hipchat(via xmpp), Matrix and Steam";

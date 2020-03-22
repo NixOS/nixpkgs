@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "websocketd";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   modSha256 = "18hamj557ln8k3vmvcrpvnydjr1dy7zi9490iacwdldw5vp870xs";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "Turn any program that uses STDIN/STDOUT into a WebSocket server";
     homepage = "http://websocketd.com/";
     maintainers = [ maintainers.bjornfor ];

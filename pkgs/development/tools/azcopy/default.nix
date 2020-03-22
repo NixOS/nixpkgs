@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoModule, Security }:
 
 buildGoModule rec {
   pname = "azure-storage-azcopy";
@@ -10,6 +10,8 @@ buildGoModule rec {
     rev = version;
     sha256 = "16pdvcgy1d5dfqk3as23j45rkwfrv232n384cj5wfz9qwijkcy5g";
   };
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [ "." ];
 

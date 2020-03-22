@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "caddy";
@@ -15,6 +15,8 @@ buildGoModule rec {
     sha256 = "0jrhwmr6gggppskg5h450wybzkv17iq69dgw36hd1dp56q002i7g";
   };
   modSha256 = "1gc0xvsihr4zp7hkrdfrplvzkaphz1y4q53rgwn2jhd8s98l57an";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   preBuild = ''
     cat << EOF > caddy/main.go

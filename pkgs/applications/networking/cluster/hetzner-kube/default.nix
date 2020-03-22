@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "hetzner-kube";
@@ -13,16 +13,18 @@ buildGoModule rec {
 
   modSha256 = "0jjrk93wdi13wrb5gchhqk7rgwm74kcizrbqsibgkgs2dszwfazh";
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   buildFlagsArray = ''
     -ldflags=
     -X github.com/xetys/hetzner-kube/cmd.version=${version}
   '';
 
-  meta = {
+  meta = with stdenv.lib; {
     description = "A CLI tool for provisioning Kubernetes clusters on Hetzner Cloud";
     homepage = "https://github.com/xetys/hetzner-kube";
-    license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ eliasp ];
-    platforms = lib.platforms.unix;
+    license = licenses.asl20;
+    maintainers = with maintainers; [ eliasp ];
+    platforms = platforms.unix;
   };
 }
