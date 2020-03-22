@@ -16253,6 +16253,8 @@ in
 
   alsa-ucm-conf = callPackage ../os-specific/linux/alsa-ucm-conf { };
 
+  alsa-topology-conf = callPackage ../os-specific/linux/alsa-topology-conf { };
+
   inherit (callPackage ../misc/arm-trusted-firmware {})
     buildArmTrustedFirmware
     armTrustedFirmwareTools
