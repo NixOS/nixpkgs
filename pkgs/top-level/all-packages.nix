@@ -8626,7 +8626,7 @@ in
 
   openjfx11 = callPackage ../development/compilers/openjdk/openjfx/11.nix { };
 
-  openjfx13 = callPackage ../development/compilers/openjdk/openjfx/13.nix { };
+  openjfx14 = callPackage ../development/compilers/openjdk/openjfx/14.nix { };
 
   openjdk8-bootstrap =
     if adoptopenjdk-hotspot-bin-8.meta.available then
@@ -8671,33 +8671,39 @@ in
     else
       openjdk11.override { headless = true; };
 
-  openjdk13-bootstrap =
+  openjdk14-bootstrap =
     if adoptopenjdk-hotspot-bin-13.meta.available then
       adoptopenjdk-hotspot-bin-13
     else
-      /* adoptopenjdk not available for i686, so fall back to our old build of 12 for bootstrapping */
-      callPackage ../development/compilers/openjdk/12.nix {
+      /* adoptopenjdk not available for i686, so fall back to our old builds of 12 & 13 for bootstrapping */
+      callPackage ../development/compilers/openjdk/13.nix {
         openjfx = openjfx11; /* need this despite next line :-( */
         enableJavaFX = false;
         headless = true;
         inherit (gnome2) GConf gnome_vfs;
+        openjdk13-bootstrap = callPackage ../development/compilers/openjdk/12.nix {
+          openjfx = openjfx11; /* need this despite next line :-( */
+          enableJavaFX = false;
+          headless = true;
+          inherit (gnome2) GConf gnome_vfs;
+        };
       };
 
   /* current JDK */
-  openjdk13 =
+  openjdk14 =
     if stdenv.isDarwin then
       callPackage ../development/compilers/openjdk/darwin { }
     else
       callPackage ../development/compilers/openjdk {
-        openjfx = openjfx13;
+        openjfx = openjfx14;
         inherit (gnome2) GConf gnome_vfs;
       };
 
-  openjdk13_headless =
+  openjdk14_headless =
     if stdenv.isDarwin then
-      openjdk13
+      openjdk14
     else
-      openjdk13.override { headless = true; };
+      openjdk14.override { headless = true; };
 
   openjdk = openjdk8;
   openjdk_headless = openjdk8_headless;
@@ -8709,8 +8715,8 @@ in
   jdk11 = openjdk11;
   jdk11_headless = openjdk11_headless;
 
-  jdk13 = openjdk13;
-  jdk13_headless = openjdk13_headless;
+  jdk14 = openjdk14;
+  jdk14_headless = openjdk14_headless;
 
   jdk = jdk8;
   jre = jre8;

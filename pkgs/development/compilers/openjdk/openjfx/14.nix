@@ -1,22 +1,24 @@
-{ stdenv, lib, fetchurl, writeText, openjdk11_headless, gradleGen
+{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradleGen
 , pkgconfig, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsaLib
 , ffmpeg, python, ruby }:
 
 let
-  major = "13";
-  update = ".0.2";
-  build = "1";
-  repover = "${major}${update}+${build}";
+  major = "14";
+  update = "";
+  build = "-ga";
+  repover = "${major}${update}${build}";
   gradle_ = (gradleGen.override {
     java = openjdk11_headless;
-  }).gradle_4_10;
+  }).gradle_5_6;
 
   makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}-${build}";
+    version = "${major}${update}${build}";
 
-    src = fetchurl {
-      url = "https://hg.openjdk.java.net/openjfx/${major}-dev/rt/archive/${repover}.tar.gz";
-      sha256 = "1si9wpb9malnf8zzz57l6b80088z2370zfxp1b0kk6rs0cnvpr74";
+    src = fetchFromGitHub {
+      owner = "openjdk";
+      repo = "jfx";
+      rev = repover;
+      sha256 = "16aj15xksc266gv3y42m0g277pfvp71901lrngndcnpr7i2zshnr";
     };
 
     buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsaLib ffmpeg ];
@@ -74,9 +76,6 @@ in makePackage {
     COMPILE_MEDIA = true
     COMPILE_WEBKIT = true
   '';
-
-  #openjdk build fails if licenses are identical, so we must patch this trivial difference
-  patches = [ ./openjfx-mesa-license.patch ];
 
   preBuild = ''
     swtJar="$(find ${deps} -name org.eclipse.swt\*.jar)"
