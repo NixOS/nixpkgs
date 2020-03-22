@@ -17,9 +17,9 @@
 , pkgconfig
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "muse-sequencer";
-  version = "3.1pre1";
+  version = "3.1.0";
 
   meta = with stdenv.lib; {
     homepage = "https://www.muse-sequencer.org/";
@@ -32,15 +32,15 @@ stdenv.mkDerivation {
       MusE aims to be a complete multitrack virtual studio for Linux,
       it is published under the GNU General Public License.
     '';
-    license = stdenv.lib.licenses.gpl2;
+    license = stdenv.lib.licenses.gpl2Plus;
   };
 
   src =
     fetchFromGitHub {
       owner = "muse-sequencer";
       repo = "muse";
-      rev = "2167ae053c16a633d8377acdb1debaac10932838";
-      sha256 = "0rsdx8lvcbz5bapnjvypw8h8bq587s9z8cf2znqrk6ah38s6fsrf";
+      rev = "muse_${builtins.replaceStrings ["."] ["_"] version}";
+      sha256 = "08k25652w88xf2i79lw305x1phpk7idrww9jkqwcs8q6wzgmz8aq";
     };
 
 
