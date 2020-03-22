@@ -7299,6 +7299,8 @@ in
 
   woof = callPackage ../tools/misc/woof { };
 
+  wootility = callPackage ../tools/misc/wootility { };
+
   wpscan = callPackage ../tools/security/wpscan { };
 
   wsmancli = callPackage ../tools/system/wsmancli {};
@@ -17467,6 +17469,8 @@ in
   windows = callPackages ../os-specific/windows {};
 
   wirelesstools = callPackage ../os-specific/linux/wireless-tools { };
+
+  wooting-udev-rules = callPackage ../os-specific/linux/wooting-udev-rules { };
 
   wpa_supplicant = callPackage ../os-specific/linux/wpa_supplicant { };
 

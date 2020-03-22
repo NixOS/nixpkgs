@@ -64,6 +64,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
+  ./hardware/wooting.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
