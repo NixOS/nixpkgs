@@ -17296,7 +17296,9 @@ in
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  gotools = callPackage ../development/tools/gotools { };
+  gotools = callPackage ../development/tools/gotools {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   gotop = callPackage ../tools/system/gotop { };
 
