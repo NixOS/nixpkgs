@@ -507,7 +507,7 @@ in with stdenv.lib.licenses;
       sha256 = "1jhgfys8hiipvbwq3gc48d7v6wq645d10rbr4w5m6px0fk6csshk";
     };
     description = "Port of Game and Watch to libretro";
-    license = zlib;
+    license = stdenv.lib.licenses.zlib;
     makefile = "Makefile";
   };
 
