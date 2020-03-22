@@ -4,10 +4,15 @@
 , pam, withPAM ? stdenv.isLinux
 , systemd, withSystemd ? stdenv.isLinux
 , python2, python3, ncurses
-, ruby, php-embed, libmysqlclient
+, ruby, php, libmysqlclient
 }:
 
-let pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
+let php-embed = php.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+    };
+
+    pythonPlugin = pkg : lib.nameValuePair "python${if pkg.isPy2 then "2" else "3"}" {
                            interpreter = pkg.interpreter;
                            path = "plugins/python";
                            inputs = [ pkg ncurses ];

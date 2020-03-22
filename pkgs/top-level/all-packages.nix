@@ -9386,23 +9386,6 @@ in
     php73
     php72;
 
-  php-embed = php74-embed;
-
-  php72-embed = php72.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-  };
-
-  php73-embed = php73.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-  };
-
-  php74-embed = php74.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-  };
-
   php-unit = php74-unit;
 
   php72-unit = php72.override {
