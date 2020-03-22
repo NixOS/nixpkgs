@@ -1,8 +1,8 @@
 { stdenv, fetchFromGitHub, which
 , withPython2 ? false, python2
 , withPython3 ? true, python3, ncurses
-, withPHP72 ? false, php72
-, withPHP73 ? true, php73
+, withPHP72 ? false, php72base
+, withPHP73 ? true, php73base
 , withPerl528 ? false, perl528
 , withPerl530 ? true, perl530
 , withPerldevel ? false, perldevel
@@ -16,7 +16,19 @@
 
 with stdenv.lib;
 
-stdenv.mkDerivation rec {
+let
+  phpConfig = {
+    config.php.embed = true;
+    config.php.apxs2 = false;
+    config.php.systemd = false;
+    config.php.phpdbg = false;
+    config.php.cgi = false;
+    config.php.fpm = false;
+  };
+
+  php72 = php72base.override phpConfig;
+  php73 = php73base.override phpConfig;
+in stdenv.mkDerivation rec {
   version = "1.16.0";
   pname = "unit";
 

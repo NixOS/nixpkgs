@@ -15597,10 +15597,7 @@ in
 
   neard = callPackage ../servers/neard { };
 
-  unit = callPackage ../servers/http/unit {
-    php72 = php72-unit;
-    php73 = php73-unit;
-  };
+  unit = callPackage ../servers/http/unit { };
 
   nginx = nginxStable;
 
