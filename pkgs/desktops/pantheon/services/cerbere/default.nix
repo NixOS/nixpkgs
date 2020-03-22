@@ -7,7 +7,7 @@
 , ninja
 , glib
 , libgee
-, vala
+, vala_0_46
 , wrapGAppsHook
 }:
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     python3
-    vala
+    vala_0_46
     wrapGAppsHook
   ];
 
