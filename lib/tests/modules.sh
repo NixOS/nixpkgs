@@ -185,6 +185,11 @@ checkConfigError 'The option .* defined in .* does not exist' config.enable ./di
 # Check that imports can depend on derivations
 checkConfigOutput "true" config.enable ./import-from-store.nix
 
+# Check that configs can be conditional on option existence
+checkConfigOutput true config.enable ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
+checkConfigOutput 360 config.value ./define-option-dependently.nix ./declare-enable.nix ./declare-int-positive-value.nix
+checkConfigOutput 7 config.value ./define-option-dependently.nix ./declare-int-positive-value.nix
+
 # Check attrsOf and lazyAttrsOf. Only lazyAttrsOf should be lazy, and only
 # attrsOf should work with conditional definitions
 # In addition, lazyAttrsOf should honor an options emptyValue
@@ -193,6 +198,14 @@ checkConfigOutput "true" config.isLazy ./declare-lazyAttrsOf.nix ./attrsOf-lazy-
 checkConfigOutput "true" config.conditionalWorks ./declare-attrsOf.nix ./attrsOf-conditional-check.nix
 checkConfigOutput "false" config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 checkConfigOutput "empty" config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
+
+# Check error for when an option set is defined to be a non-attribute set value
+checkConfigError 'The option path .* is an attribute set of options, but it is defined to not be an attribute set in' \
+  config.value ./declare-option-set.nix ./define-value-int-zero.nix
+
+# Even with multiple assignments, a type error should be thrown if any of them aren't valid
+checkConfigError 'The option value .* in .* is not of type .*' \
+  config.value ./declare-int-unsigned-value.nix ./define-value-list.nix ./define-value-int-positive.nix
 
 cat <<EOF
 ====== module tests ======

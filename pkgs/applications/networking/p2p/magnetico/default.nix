@@ -13,7 +13,7 @@ buildGoModule rec {
 
   modSha256 = "1h9fij8mxlxfw7kxix00n10fkhkvmf8529fxbk1n30cxc1bs2szf";
 
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata ];
   buildPhase = ''
     make magneticow magneticod
   '';

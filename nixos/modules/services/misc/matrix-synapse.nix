@@ -111,6 +111,9 @@ app_service_config_files: ${builtins.toJSON cfg.app_service_config_files}
 
 ${cfg.extraConfig}
 '';
+
+  hasLocalPostgresDB = let args = cfg.database_args; in
+    usePostgresql && (!(args ? host) || (elem args.host [ "localhost" "127.0.0.1" "::1" ]));
 in {
   options = {
     services.matrix-synapse = {
@@ -352,13 +355,6 @@ in {
           else "sqlite3";
         description = ''
           The database engine name. Can be sqlite or psycopg2.
-        '';
-      };
-      create_local_database = mkOption {
-        type = types.bool;
-        default = true;
-        description = ''
-          Whether to create a local database automatically.
         '';
       };
       database_name = mkOption {
@@ -657,6 +653,25 @@ in {
   };
 
   config = mkIf cfg.enable {
+    assertions = [
+      { assertion = hasLocalPostgresDB -> config.services.postgresql.enable;
+        message = ''
+          Cannot deploy matrix-synapse with a configuration for a local postgresql database
+            and a missing postgresql service. Since 20.03 it's mandatory to manually configure the
+            database (please read the thread in https://github.com/NixOS/nixpkgs/pull/80447 for
+            further reference).
+
+            If you
+            - try to deploy a fresh synapse, you need to configure the database yourself. An example
+              for this can be found in <nixpkgs/nixos/tests/matrix-synapse.nix>
+            - update your existing matrix-synapse instance, you simply need to add `services.postgresql.enable = true`
+              to your configuration.
+
+          For further information about this update, please read the release-notes of 20.03 carefully.
+        '';
+      }
+    ];
+
     users.users.matrix-synapse = { 
         group = "matrix-synapse";
         home = cfg.dataDir;
@@ -669,18 +684,9 @@ in {
       gid = config.ids.gids.matrix-synapse;
     };
 
-    services.postgresql = mkIf (usePostgresql && cfg.create_local_database) {
-      enable = mkDefault true;
-      ensureDatabases = [ cfg.database_name ];
-      ensureUsers = [{
-        name = cfg.database_user;
-        ensurePermissions = { "DATABASE \"${cfg.database_name}\"" = "ALL PRIVILEGES"; };
-      }];
-    };
-
     systemd.services.matrix-synapse = {
       description = "Synapse Matrix homeserver";
-      after = [ "network.target" ] ++ lib.optional config.services.postgresql.enable "postgresql.service" ;
+      after = [ "network.target" ] ++ optional hasLocalPostgresDB "postgresql.service";
       wantedBy = [ "multi-user.target" ];
       preStart = ''
         ${cfg.package}/bin/homeserver \
@@ -709,6 +715,12 @@ in {
       The `trusted_third_party_id_servers` option as been removed in `matrix-synapse` v1.4.0
       as the behavior is now obsolete.
     '')
+    (mkRemovedOptionModule [ "services" "matrix-synapse" "create_local_database" ] ''
+      Database configuration must be done manually. An exemplary setup is demonstrated in
+      <nixpkgs/nixos/tests/matrix-synapse.nix>
+    '')
   ];
+
+  meta.doc = ./matrix-synapse.xml;
 
 }

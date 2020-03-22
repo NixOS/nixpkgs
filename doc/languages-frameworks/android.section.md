@@ -235,5 +235,5 @@ package manager uses. To update the expressions run the `generate.sh` script
 that is stored in the `pkgs/development/mobile/androidenv/` sub directory:
 
 ```bash
-sh ./generate.sh
+./generate.sh
 ```
