@@ -188,8 +188,7 @@ let
     };
   });
 
-in {
-  php72 = generic' {
+  php72base = generic' {
     version = "7.2.28";
     sha256 = "18sjvl67z5a2x5s2a36g6ls1r3m4hbrsw52hqr2qsgfvg5dkm5bw";
 
@@ -197,7 +196,7 @@ in {
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
   };
 
-  php73 = generic' {
+  php73base = generic' {
     version = "7.3.15";
     sha256 = "0g84hws15s8gh8iq4h6q747dyfazx47vh3da3whz8d80x83ibgld";
 
@@ -205,8 +204,24 @@ in {
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
   };
 
-  php74 = generic' {
+  php74base = generic' {
     version = "7.4.3";
     sha256 = "wVF7pJV4+y3MZMc6Ptx21PxQfEp6xjmYFYTMfTtMbRQ=";
   };
+
+  defaultPhpExtensions = {
+    exts = pp: with pp.exts; ([
+      bcmath calendar curl ctype dom exif fileinfo filter ftp gd
+      gettext gmp iconv intl json ldap mbstring mysqli mysqlnd opcache
+      openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql pdo_sqlite pgsql
+      posix readline session simplexml sockets soap sodium sqlite3
+      tokenizer xmlreader xmlwriter zip zlib
+    ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
+  };
+in {
+  inherit php72base php73base php74base;
+
+  php74 = php74base.buildEnv defaultPhpExtensions;
+  php73 = php73base.buildEnv defaultPhpExtensions;
+  php72 = php72base.buildEnv defaultPhpExtensions;
 }
