@@ -9385,52 +9385,9 @@ in
     php = php74base;
   });
 
-  phpPackages-unit = php74Packages-unit;
-
-  php72Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php72-unit;
-  });
-
-  php73Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php73-unit;
-  });
-
-  php74Packages-unit = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php74-unit;
-  });
-
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   }) php74 php73 php72 php74base php73base php72base;
-
-  php-unit = php74-unit;
-
-  php72-unit = php72.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-    config.php.systemd = false;
-    config.php.phpdbg = false;
-    config.php.cgi = false;
-    config.php.fpm = false;
-  };
-
-  php73-unit = php73.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-    config.php.systemd = false;
-    config.php.phpdbg = false;
-    config.php.cgi = false;
-    config.php.fpm = false;
-  };
-
-  php74-unit = php74.override {
-    config.php.embed = true;
-    config.php.apxs2 = false;
-    config.php.systemd = false;
-    config.php.phpdbg = false;
-    config.php.cgi = false;
-    config.php.fpm = false;
-  };
 
   picoc = callPackage ../development/interpreters/picoc {};
 
@@ -15591,10 +15548,7 @@ in
 
   neard = callPackage ../servers/neard { };
 
-  unit = callPackage ../servers/http/unit {
-    php72 = php72-unit;
-    php73 = php73-unit;
-  };
+  unit = callPackage ../servers/http/unit { };
 
   nginx = nginxStable;
 

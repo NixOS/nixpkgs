@@ -339,6 +339,36 @@ mapAliases ({
   php73Packages-embed = phpPackages-embed;
   php72Packages-embed = phpPackages-embed;
 
+  php-unit = throw ''
+    php*-unit has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+      config.php.systemd = false;
+      config.php.phpdbg = false;
+      config.php.cgi = false;
+      config.php.fpm = false; })
+  ''; # added 2020-04-01
+  php72-unit = php-unit; # added 2020-04-01
+  php73-unit = php-unit; # added 2020-04-01
+  php74-unit = php-unit; # added 2020-04-01
+
+  phpPackages-unit = throw ''
+    php*Packages-unit has been dropped, you can build the same package by using
+     something similar with this following snippet:
+    (php74.override {
+      config.php.embed = true;
+      config.php.apxs2 = false;
+      config.php.systemd = false;
+      config.php.phpdbg = false;
+      config.php.cgi = false;
+      config.php.fpm = false; }).packages
+  ''; # added 2020-04-01
+  php74Packages-unit = phpPackages-unit;
+  php73Packages-unit = phpPackages-unit;
+  php72Packages-unit = phpPackages-unit;
+
   pidgin-with-plugins = pidgin; # added 2016-06
   pidginlatex = pidgin-latex; # added 2018-01-08
   pidginlatexSF = pidgin-latex; # added 2014-11-02
