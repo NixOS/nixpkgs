@@ -393,7 +393,7 @@ self: super: {
     configurePhase = "cd plugins/nvim";
   });
 
-  gist-vim = super.gist-vim.overrideAttrs(old: {
+  vim-gist = super.vim-gist.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
 
@@ -640,7 +640,7 @@ self: super: {
     sourceRoot = ".";
   });
 
-  youcompleteme = super.youcompleteme.overrideAttrs(old: {
+  YouCompleteMe = super.YouCompleteMe.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
         --replace "'ycm_path_to_python_interpreter', '''" \
