@@ -1,29 +1,17 @@
 # Build tools
 { stdenv, fetchurl, dpkg,
+  wrapGAppsHook, autoPatchelfHook,
 # Dependencies
-  alsaLib, atk, cairo, dbus,
+  alsaLib, atk, cairo, dbus, libsForQt5,
   expat, fontconfig, freetype, gdk-pixbuf,
   gtk2-x11, glib, primusLib, xorg,
   libtool, lzma, pango, nspr, qt5, qt4,
-  nss, sqlite, libuuid, zlib, cups, file,
-  wrapGAppsHook
+  nss, sqlite, libuuid, zlib, cups, file
 }:
 let
-  deps = [
-    alsaLib atk cairo dbus.lib
-    expat fontconfig.lib
-    freetype gdk-pixbuf gtk2-x11 glib
-    primusLib xorg.libICE libtool.lib
-    lzma pango nspr qt5.qtbase qt4
-    nss xorg.libSM sqlite libuuid
-    xorg.libX11 xorg.libxcb
-    xorg.libXcomposite xorg.libXcursor
-    xorg.libXdamage xorg.libXfixes
-    xorg.libXi xorg.libXrandr
-    xorg.libXrender xorg.libXScrnSaver
-    xorg.libXtst xorg.libXext zlib cups
+  runtimeLibPath = stdenv.lib.makeLibraryPath [
+    cups.lib
   ];
-  libPath = stdenv.lib.makeLibraryPath deps;
 in
 stdenv.mkDerivation rec {
   pname = "wpsoffice";
@@ -36,9 +24,25 @@ stdenv.mkDerivation rec {
   unpackCmd = "dpkg -x $src .";
   sourceRoot = ".";
 
-  nativeBuildInputs = [ wrapGAppsHook qt5.wrapQtAppsHook dpkg ];
+  nativeBuildInputs = [ wrapGAppsHook qt5.wrapQtAppsHook dpkg autoPatchelfHook ];
   dontWrapQtApps = true;
   dontWrapGApps = true;
+  
+  buildInputs = [
+    alsaLib atk cairo dbus.lib
+    expat fontconfig.lib stdenv.cc.cc.lib
+    freetype gdk-pixbuf gtk2-x11 glib
+    xorg.libICE libtool.lib
+    lzma pango nspr qt4 qt5.qtbase
+    nss xorg.libSM sqlite libuuid
+    xorg.libX11 xorg.libxcb
+    xorg.libXcomposite xorg.libXcursor
+    xorg.libXdamage xorg.libXfixes
+    xorg.libXi xorg.libXrandr
+    xorg.libXrender xorg.libXScrnSaver
+    xorg.libXtst xorg.libXext zlib
+    libsForQt5.qtstyleplugins
+  ];
 
   meta = {
     description = "Office program originally named Kingsoft Office";
@@ -62,12 +66,6 @@ stdenv.mkDerivation rec {
     cp -r usr/* $out
     # Avoid forbidden reference error due use of patchelf
     rm -r *
-    bins=$(find $prefix/office6 -maxdepth 1 -executable ! -type d|grep -v '.*\.so\.*')
-    for i in $bins; do
-      origin_rpath=$(patchelf --print-rpath $i)
-      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" $i || true
-      patchelf --force-rpath --set-rpath "$origin_rpath''${origin_rpath:+:}${stdenv.cc.cc.lib}/lib64:${libPath}" $i || true
-    done
 
     for i in et wpp wps wpspdf;do
       substituteInPlace $out/bin/$i \
@@ -85,8 +83,10 @@ stdenv.mkDerivation rec {
     bins=$(find $prefix/office6 -maxdepth 1 -executable ! -type d|grep -v '.*\.so\.*')
     for i in $bins;do
       echo Wrapping $i
-      wrapQtApp $i
-      wrapGApp $i
+      wrapProgram $i \
+        "''${gappsWrapperArgs[@]}" \
+        "''${qtWrapperArgs[@]}" \
+        --suffix LD_LIBRARY_PATH : ${runtimeLibPath}
     done
   '';
 }
