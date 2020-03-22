@@ -86,6 +86,6 @@ in stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer ];
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
   };
 }

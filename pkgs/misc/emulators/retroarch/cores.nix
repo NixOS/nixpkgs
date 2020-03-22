@@ -479,7 +479,7 @@ in with stdenv.lib.licenses;
       sha256 = "1krr4lmdiv0d7bxk37fqz5y412znb5bmxapv9g7ci6fp87sr69jq";
     };
     description = "FMSX libretro port";
-    license = "Non-commercial";
+    license = "Non-Commercial";
   }).override {
     makefile = "Makefile";
     dontConfigure = true;
