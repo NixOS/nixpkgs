@@ -19,6 +19,7 @@
 , libcrossguid, libmicrohttpd
 , bluez, doxygen, giflib, glib, harfbuzz, lcms2, libidn, libpthreadstubs, libtasn1, libXdmcp
 , libplist, p11-kit, zlib, flatbuffers, fmt, fstrcmp, rapidjson
+, lirc
 , dbusSupport ? true, dbus ? null
 , joystickSupport ? true, cwiid ? null
 , nfsSupport ? true, libnfs ? null
@@ -168,6 +169,7 @@ in stdenv.mkDerivation {
       libcrossguid cwiid libplist
       bluez giflib glib harfbuzz lcms2 libpthreadstubs libXdmcp
       ffmpeg flatbuffers fmt fstrcmp rapidjson
+      lirc
       # libdvdcss libdvdnav libdvdread
     ]
     ++ lib.optional  dbusSupport     dbus
@@ -211,7 +213,6 @@ in stdenv.mkDerivation {
       "-DENABLE_EVENTCLIENTS=ON"
       "-DENABLE_INTERNAL_CROSSGUID=OFF"
       "-DENABLE_OPTICAL=ON"
-      "-DLIRC_DEVICE=/run/lirc/lircd"
     ] ++ lib.optional useWayland [
       "-DCORE_PLATFORM_NAME=wayland"
       "-DWAYLAND_RENDER_SYSTEM=gl"
