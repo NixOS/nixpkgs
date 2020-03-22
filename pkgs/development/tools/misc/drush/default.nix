@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, php, which, makeWrapper, bash, coreutils, ncurses }:
+{ stdenv, fetchurl, php73, which, makeWrapper, bash, coreutils, ncurses }:
 
 stdenv.mkDerivation rec {
   name = "drush-6.1.0";
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     mkdir -p "$out"
     cp -r . "$out/src"
     mkdir "$out/bin"
-    wrapProgram "$out/src/drush" --prefix PATH : "${stdenv.lib.makeBinPath [ which php bash coreutils ncurses ]}"
+    wrapProgram "$out/src/drush" --prefix PATH : "${stdenv.lib.makeBinPath [ which php73 bash coreutils ncurses ]}"
     ln -s "$out/src/drush" "$out/bin/drush"
   '';
 }
