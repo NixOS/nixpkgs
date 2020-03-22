@@ -50,9 +50,22 @@ in newPython.pkgs.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with newPython.pkgs; [
-    colorama deprecation distro fasteners bottle
-    future node-semver patch pygments pluginbase
-    pyjwt pylint pyyaml requests six tqdm
+    bottle
+    colorama
+    deprecation
+    distro
+    fasteners
+    future
+    node-semver
+    patch
+    pluginbase
+    pygments
+    pyjwt
+    pylint
+    pyyaml
+    requests
+    six
+    tqdm
   ];
 
   checkInputs = [
