@@ -10397,6 +10397,8 @@ in
 
   eresi = callPackage ../development/tools/analysis/eresi { };
 
+  everdo = callPackage ../applications/office/everdo { };
+
   evmdis = callPackage ../development/tools/analysis/evmdis { };
 
   eweb = callPackage ../development/tools/literate-programming/eweb { };
