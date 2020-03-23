@@ -42,10 +42,7 @@ let
     inherit (config.system.nixos-generate-config) configuration;
   };
 
-  nixos-option =
-    if lib.versionAtLeast (lib.getVersion pkgs.nix) "2.4pre"
-    then null
-    else pkgs.callPackage ./nixos-option { };
+  nixos-option = pkgs.callPackage ./nixos-option { };
 
   nixos-version = makeProg {
     name = "nixos-version";
