@@ -1,25 +1,27 @@
-{ stdenv
-, fetchFromGitHub
-, libjack2
-, wrapQtAppsHook
-, qtsvg
-, qttools
-, cmake
-, libsndfile
-, libsamplerate
-, ladspaH
-, fluidsynth
-, alsaLib
-, rtaudio
-, lash
-, dssi
-, liblo
-, pkgconfig
+{ stdenv, fetchFromGitHub, cmake, pkgconfig, qttools, wrapQtAppsHook
+, alsaLib, dssi, fluidsynth, ladspaH, lash, libinstpatch, libjack2, liblo
+, libsamplerate, libsndfile, lilv, lrdf, lv2, qtsvg, rtaudio, rubberband, sord
 }:
 
 stdenv.mkDerivation rec {
   pname = "muse-sequencer";
   version = "3.1.0";
+
+  src = fetchFromGitHub {
+    owner = "muse-sequencer";
+    repo = "muse";
+    rev = "muse_${builtins.replaceStrings ["."] ["_"] version}";
+    sha256 = "08k25652w88xf2i79lw305x1phpk7idrww9jkqwcs8q6wzgmz8aq";
+  };
+
+  sourceRoot = "source/muse3";
+
+  nativeBuildInputs = [ cmake pkgconfig qttools wrapQtAppsHook ];
+
+  buildInputs = [
+    alsaLib dssi fluidsynth ladspaH lash libinstpatch libjack2 liblo
+    libsamplerate libsndfile lilv lrdf lv2 qtsvg rtaudio rubberband sord
+  ];
 
   meta = with stdenv.lib; {
     homepage = "https://www.muse-sequencer.org/";
@@ -32,38 +34,7 @@ stdenv.mkDerivation rec {
       MusE aims to be a complete multitrack virtual studio for Linux,
       it is published under the GNU General Public License.
     '';
-    license = stdenv.lib.licenses.gpl2Plus;
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [ orivej ];
   };
-
-  src =
-    fetchFromGitHub {
-      owner = "muse-sequencer";
-      repo = "muse";
-      rev = "muse_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "08k25652w88xf2i79lw305x1phpk7idrww9jkqwcs8q6wzgmz8aq";
-    };
-
-
-  nativeBuildInputs = [
-    pkgconfig
-    wrapQtAppsHook
-    qttools
-    cmake
-  ];
-
-  buildInputs = [
-    libjack2
-    qtsvg
-    libsndfile
-    libsamplerate
-    ladspaH
-    fluidsynth
-    alsaLib
-    rtaudio
-    lash
-    dssi
-    liblo
-  ];
-
-  sourceRoot = "source/muse3";
 }
