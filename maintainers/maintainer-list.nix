@@ -4506,6 +4506,12 @@
     githubId = 1269099;
     name = "Marius Bakke";
   };
+  mbaillie = {
+    email = "martin@baillie.email";
+    github = "martinbaillie";
+    githubId = 613740;
+    name = "Martin Baillie";
+  };
   mbbx6spp = {
     email = "me@susanpotter.net";
     github = "mbbx6spp";
