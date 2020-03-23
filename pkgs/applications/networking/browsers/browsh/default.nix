@@ -26,7 +26,7 @@ in buildGoPackage rec {
     sha256 = "0gvf5k1gm81xxg7ha309kgfkgl5357dli0fbc4z01rmfgbl0rfa0";
   };
 
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata ];
 
   # embed the web extension in a go file and place it where it's supposed to
   # be. See

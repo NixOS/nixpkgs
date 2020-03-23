@@ -19,7 +19,8 @@ buildGoPackage rec {
 
   outputs = [ "bin" "out" "man" ];
 
-  buildInputs = [ go-bindata gotools makeWrapper ];
+  nativeBuildInputs = [ go-bindata gotools makeWrapper ];
+
   preBuild = ''go generate ./...'';
 
   postInstall = ''
