@@ -2,7 +2,7 @@
 , python3, makeWrapper }:
 
 let
-  common = { version, sha256, extraNativeBuildInputs ? [] }:
+  common = { version, sha256 }:
     stdenv.mkDerivation rec {
       pname = "varnish";
       inherit version;
@@ -30,12 +30,15 @@ let
 
       outputs = [ "out" "dev" "man" ];
 
+      doCheck = true;
+
       meta = with stdenv.lib; {
         description = "Web application accelerator also known as a caching HTTP reverse proxy";
         homepage = https://www.varnish-cache.org;
         license = licenses.bsd2;
         maintainers = with maintainers; [ fpletz ];
         platforms = platforms.unix;
+        broken = versionAtLeast version "6.2"; # tests crash with core dump
       };
     };
 in

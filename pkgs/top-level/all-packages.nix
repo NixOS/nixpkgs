@@ -7373,7 +7373,7 @@ in
     varnish62Packages
     varnish63Packages;
 
-  varnishPackages = varnish63Packages;
+  varnishPackages = varnish60Packages;
   varnish = varnishPackages.varnish;
 
   hitch = callPackage ../servers/hitch { };
