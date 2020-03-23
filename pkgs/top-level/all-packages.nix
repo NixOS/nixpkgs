@@ -5813,6 +5813,8 @@ in
 
   parted = callPackage ../tools/misc/parted { };
 
+  passh = callPackage ../tools/networking/passh { };
+
   paulstretch = callPackage ../applications/audio/paulstretch { };
 
   pazi = callPackage ../tools/misc/pazi { };
