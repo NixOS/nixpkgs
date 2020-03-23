@@ -702,7 +702,7 @@ rec {
       unsafeChars = stringToCharacters (replaceStrings safeChars safeCharsEmpty path);
       unsafeCharsEmpty = listToEmptyStrings unsafeChars;
 
-      validPath = replaceStrings unsafeChars unsafeCharsEmpty path;
+      sanitizedPath = replaceStrings unsafeChars unsafeCharsEmpty path;
     in
-      "${safePrefix}${validPath}";
+      "${safePrefix}${sanitizedPath}";
 }
