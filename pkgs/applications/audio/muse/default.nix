@@ -16,6 +16,12 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "source/muse3";
 
+  prePatch = ''
+    chmod u+w $NIX_BUILD_TOP
+  '';
+
+  patches = [ ./fix-parallel-building.patch ];
+
   nativeBuildInputs = [ cmake pkgconfig qttools wrapQtAppsHook ];
 
   buildInputs = [
