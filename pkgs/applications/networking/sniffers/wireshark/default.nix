@@ -12,10 +12,10 @@ with stdenv.lib;
 let
   version = "3.2.2";
   variant = if withQt then "qt" else "cli";
+  pname = "wireshark-${variant}";
 
 in stdenv.mkDerivation {
-  pname = "wireshark-${variant}";
-  inherit version;
+  inherit pname version;
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
@@ -28,6 +28,7 @@ in stdenv.mkDerivation {
     "-DENABLE_APPLICATION_BUNDLE=${if withQt && stdenv.isDarwin then "ON" else "OFF"}"
     # Fix `extcap` and `plugins` paths. See https://bugs.wireshark.org/bugzilla/show_bug.cgi?id=16444
     "-DCMAKE_INSTALL_LIBDIR=lib"
+    "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
   ];
 
   nativeBuildInputs = [
