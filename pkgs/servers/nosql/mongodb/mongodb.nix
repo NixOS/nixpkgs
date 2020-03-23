@@ -110,7 +110,6 @@ in stdenv.mkDerivation rec {
     description = "A scalable, high-performance, open source NoSQL database";
     homepage = "http://www.mongodb.org";
     license = licenses.sspl;
-    broken = stdenv.hostPlatform.isAarch64; # g++ has internal compiler errors
 
     maintainers = with maintainers; [ bluescreen303 offline cstrahan ];
     platforms = subtractLists systems.doubles.i686 systems.doubles.unix;
