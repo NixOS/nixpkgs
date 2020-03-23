@@ -1,6 +1,28 @@
-{ buildFHSUserEnv, makeDesktopItem, stdenv, lib, requireFile, unstick, cycloneVSupport ? true }:
+{ buildFHSUserEnv, makeDesktopItem, stdenv, lib, requireFile, unstick,
+  supportedDevices ? [ "Arria II" "Cyclone V" "Cyclone IV" "Cyclone 10 LP" "MAX II/V" "MAX 10 FPGA" ] }:
 
 let
+  deviceIds = {
+    "Arria II" = "arria_lite";
+    "Cyclone V" = "cyclonev";
+    "Cyclone IV" = "cyclone";
+    "Cyclone 10 LP" = "cyclone10lp";
+    "MAX II/V" = "max";
+    "MAX 10 FPGA" = "max10";
+  };
+
+  supportedDeviceIds =
+    assert lib.assertMsg (lib.all (name: lib.hasAttr name deviceIds) supportedDevices)
+      "Supported devices are: ${lib.concatStringsSep ", " (lib.attrNames deviceIds)}";
+    lib.listToAttrs (map (name: {
+      inherit name;
+      value = deviceIds.${name};
+    }) supportedDevices);
+
+  unsupportedDeviceIds = lib.filterAttrs (name: value:
+    !(lib.hasAttr name supportedDeviceIds)
+  ) deviceIds;
+
   quartus = stdenv.mkDerivation rec {
     version = "19.1.0.670";
     pname = "quartus-prime-lite";
@@ -10,16 +32,27 @@ let
         inherit name sha256;
         url = "${meta.homepage}/${lib.versions.majorMinor version}/?edition=lite&platform=linux";
       };
+
+      hashes = {
+        "arria_lite" = "1flj9w0vb2p9f9zll136izr6qvmxn0lg72bvaqxs3sxc9vj06wm1";
+        "cyclonev" = "0bqxpvjgph0y6slk0jq75mcqzglmqkm0jsx10y9xz5llm6zxzqab";
+        "cyclone" = "0pzs8y4s3snxg4g6lrb21qi88abm48g279xzd98qv17qxb2z82rr";
+        "cyclone10lp" = "1ccxq8n20y40y47zddkijcv41w3cddvydddr3m4844q31in3nxha";
+        "max" = "1cxzbqscxvlcy74dpqmvlnxjyyxfwcx3spygpvpwi6dfj3ipgm2z";
+        "max10" = "14k83javivbk65mpb17wdwsyb8xk7x9gzj9x0wnd24mmijrvdy9s";
+      };
+
+      devicePackages = map (id: {
+        name = "${id}-${version}.qdz";
+        sha256 = lib.getAttr id hashes;
+      }) (lib.attrValues supportedDeviceIds);
     in map require ([{
       name = "QuartusLiteSetup-${version}-linux.run";
       sha256 = "15vxvqxqdk29ahlw3lkm1nzxyhzy4626wb9s5f2h6sjgq64r8m7f";
     } {
       name = "ModelSimSetup-${version}-linux.run";
       sha256 = "0j1vfr91jclv88nam2plx68arxmz4g50sqb840i60wqd5b0l3y6r";
-    }] ++ lib.optional cycloneVSupport {
-      name = "cyclonev-${version}.qdz";
-      sha256 = "0bqxpvjgph0y6slk0jq75mcqzglmqkm0jsx10y9xz5llm6zxzqab";
-    });
+    }] ++ devicePackages);
 
     nativeBuildInputs = [ unstick ];
 
@@ -37,14 +70,9 @@ let
       disabledComponents = [
         "quartus_help"
         "quartus_update"
+        # not modelsim_ase
         "modelsim_ae"
-        # Devices
-        "arria_lite"
-        "cyclone"
-        "cyclone10lp"
-        "max"
-        "max10"
-      ] ++ lib.optional (!cycloneVSupport) "cyclonev";
+      ] ++ (lib.attrValues unsupportedDeviceIds);
     in ''
     ${lib.concatMapStringsSep "\n" copyInstaller installers}
     ${lib.concatMapStringsSep "\n" copyComponent components}
