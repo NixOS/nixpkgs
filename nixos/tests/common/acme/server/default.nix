@@ -1,27 +1,27 @@
 # The certificate for the ACME service is exported as:
 #
-#   config.test-support.letsencrypt.caCert
+#   config.test-support.acme.caCert
 #
 # This value can be used inside the configuration of other test nodes to inject
 # the snakeoil certificate into security.pki.certificateFiles or into package
 # overlays.
 #
 # Another value that's needed if you don't use a custom resolver (see below for
-# notes on that) is to add the letsencrypt node as a nameserver to every node
+# notes on that) is to add the acme node as a nameserver to every node
 # that needs to acquire certificates using ACME, because otherwise the API host
-# for letsencrypt.org can't be resolved.
+# for acme.test can't be resolved.
 #
 # A configuration example of a full node setup using this would be this:
 #
 # {
-#   letsencrypt = import ./common/letsencrypt;
+#   acme = import ./common/acme/server;
 #
 #   example = { nodes, ... }: {
 #     networking.nameservers = [
-#       nodes.letsencrypt.config.networking.primaryIPAddress
+#       nodes.acme.config.networking.primaryIPAddress
 #     ];
 #     security.pki.certificateFiles = [
-#       nodes.letsencrypt.config.test-support.letsencrypt.caCert
+#       nodes.acme.config.test-support.acme.caCert
 #     ];
 #   };
 # }
@@ -33,8 +33,8 @@
 # override networking.nameservers like this:
 #
 # {
-#   letsencrypt = { nodes, ... }: {
-#     imports = [ ./common/letsencrypt ];
+#   acme = { nodes, ... }: {
+#     imports = [ ./common/acme/server ];
 #     networking.nameservers = [
 #       nodes.myresolver.config.networking.primaryIPAddress
 #     ];
@@ -55,16 +55,16 @@
 let
   snakeOilCerts = import ./snakeoil-certs.nix;
 
-  wfeDomain = "acme-v02.api.letsencrypt.org";
+  wfeDomain = "acme.test";
   wfeCertFile = snakeOilCerts.${wfeDomain}.cert;
   wfeKeyFile = snakeOilCerts.${wfeDomain}.key;
 
-  siteDomain = "letsencrypt.org";
+  siteDomain = "acme.test";
   siteCertFile = snakeOilCerts.${siteDomain}.cert;
   siteKeyFile = snakeOilCerts.${siteDomain}.key;
   pebble = pkgs.pebble;
   resolver = let
-    message = "You need to define a resolver for the letsencrypt test module.";
+    message = "You need to define a resolver for the acme test module.";
     firstNS = lib.head config.networking.nameservers;
   in if config.networking.nameservers == [] then throw message else firstNS;
 
@@ -83,9 +83,9 @@ let
   pebbleDataDir = "/root/pebble";
 
 in {
-  imports = [ ../resolver.nix ];
+  imports = [ ../../resolver.nix ];
 
-  options.test-support.letsencrypt.caCert = lib.mkOption {
+  options.test-support.acme.caCert = lib.mkOption {
     type = lib.types.path;
     description = ''
       A certificate file to use with the <literal>nodes</literal> attribute to
@@ -99,7 +99,7 @@ in {
       resolver.enable = let
         isLocalResolver = config.networking.nameservers == [ "127.0.0.1" ];
       in lib.mkOverride 900 isLocalResolver;
-      letsencrypt.caCert = snakeOilCerts.ca.cert;
+      acme.caCert = snakeOilCerts.ca.cert;
     };
 
     # This has priority 140, because modules/testing/test-instrumentation.nix
