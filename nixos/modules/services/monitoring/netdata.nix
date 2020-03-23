@@ -9,6 +9,7 @@ let
     mkdir -p $out/libexec/netdata/plugins.d
     ln -s /run/wrappers/bin/apps.plugin $out/libexec/netdata/plugins.d/apps.plugin
     ln -s /run/wrappers/bin/freeipmi.plugin $out/libexec/netdata/plugins.d/freeipmi.plugin
+    ln -s /run/wrappers/bin/slabinfo.plugin $out/libexec/netdata/plugins.d/slabinfo.plugin
   '';
 
   plugins = [
@@ -179,6 +180,14 @@ in {
       owner = cfg.user;
       group = cfg.group;
       permissions = "u+rx,g+rx,o-rwx";
+    };
+
+    security.wrappers."slabinfo.plugin" = {
+      source = "${cfg.package}/libexec/netdata/plugins.d/slabinfo.plugin.org";
+      capabilities = "cap_dac_override+ep";
+      owner = cfg.user;
+      group = cfg.group;
+      permissions = "u+rx,g+rx,o-rx";
     };
 
     security.pam.loginLimits = [
