@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "kcli";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1wcqh3306q9wxb6pnl8cpk73vmy36bjv2gil03j7j4pajs1f2lwn";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [ "." ];
 

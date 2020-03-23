@@ -16,7 +16,7 @@
 , libass
 , libkate
 , libmms
-, librdf
+, lrdf
 , ladspaH
 , libnice
 , webrtc-audio-processing
@@ -178,13 +178,12 @@ in stdenv.mkDerivation rec {
     libgudev
     libnice
     libofa
-    librdf
     sbc
     spandsp
 
     # ladspa plug-in
     ladspaH
-    librdf # TODO: make build on Darwin
+    lrdf # TODO: make build on Darwin
 
     # lv2 plug-in
     lilv

@@ -1,9 +1,6 @@
 { stdenv, fetchurl, fetchpatch
 , autoreconfHook
 
-# libffi is used in darwin and linux with glibc stdenv
-# we cannot run checks within it
-, doCheck ? stdenv.hostPlatform.isMusl, dejagnu
 }:
 
 stdenv.mkDerivation rec {
@@ -27,10 +24,6 @@ stdenv.mkDerivation rec {
     # The tests use -O0 which is not compatible with -D_FORTIFY_SOURCE.
     NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/fortify/}
   '';
-
-  checkInputs = [ dejagnu ];
-
-  inherit doCheck;
 
   dontStrip = stdenv.hostPlatform != stdenv.buildPlatform; # Don't run the native `strip' when cross-compiling.
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "dnsmasq_exporter";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1ag1k0z35zkazaxj8hh2wxfj73xg63xdybfm1565il2vxs5986dh";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

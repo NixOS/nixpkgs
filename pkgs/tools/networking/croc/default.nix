@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "croc";
@@ -14,6 +14,9 @@ buildGoModule rec {
   };
 
   modSha256 = "0d4mm840fjsbcyl98zg6d3i7qp1lmjkx07mh91d56jyf9j082g99";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   subPackages = [ "." ];
 
   meta = with stdenv.lib; {

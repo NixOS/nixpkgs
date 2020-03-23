@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 buildGoModule rec {
   pname = "prow-unstable";
@@ -19,6 +19,8 @@ buildGoModule rec {
   ];
 
   modSha256 = "06q1zvhm78k64aj475k1xl38h7nk83mysd0bja0wknja048ymgsq";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [
     "./prow/cmd/admission"
@@ -54,7 +56,7 @@ buildGoModule rec {
     "./prow/cmd/tot"
   ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Prow is a Kubernetes based CI/CD system";
     longDescription = ''
       Prow is a Kubernetes based CI/CD system. Jobs can be triggered by various

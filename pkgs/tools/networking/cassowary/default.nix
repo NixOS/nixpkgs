@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "cassowary";
@@ -13,9 +13,11 @@ buildGoModule rec {
 
   modSha256 = "1iylnnmj5slji89pkb3shp4xqar1zbpl7bzwddbzpp8y52fmsv1c";
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = "https://github.com/rogerwelin/cassowary";
     description = "Modern cross-platform HTTP load-testing tool written in Go";
     license = licenses.mit;

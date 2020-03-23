@@ -1,10 +1,11 @@
 [
-    "elm-test",
-    "elm-verify-examples",
-    "elm-doc-preview",
-    "elm-upgrade",
     "elm-analyse",
+    "elm-coverage",
+    "elm-doc-preview",
+    "@elm-tooling/elm-language-server",
     "elm-live",
-    "elm-xref",
-    "@elm-tooling/elm-language-server"
+    "elm-test",
+    "elm-upgrade",
+    "elm-verify-examples",
+    "elm-xref"
 ]

@@ -3,11 +3,11 @@
 
 stdenv.mkDerivation rec {
   pname = "five-or-more";
-  version = "3.32.0";
+  version = "3.32.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/five-or-more/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0v52i22ygv6y4zqs8nyb1qmacmj9whhqrw7qss6vn7by4nsikhrn";
+    sha256 = "0xw05dd2dwi9vsph9h158b4n89s5k07xrh6bjz1icm0pdmjwhpgk";
   };
 
   nativeBuildInputs = [
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://wiki.gnome.org/Apps/Five_or_more;
+    homepage = "https://wiki.gnome.org/Apps/Five_or_more";
     description = "Remove colored balls from the board by forming lines";
     maintainers = gnome3.maintainers;
     license = licenses.gpl2;

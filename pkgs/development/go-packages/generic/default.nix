@@ -243,7 +243,7 @@ let
     } // meta // {
       # add an extra maintainer to every package
       maintainers = (meta.maintainers or []) ++
-                    [ lib.maintainers.ehmry lib.maintainers.lethalman ];
+                    [ lib.maintainers.lethalman ];
     };
   });
 in if disabled then

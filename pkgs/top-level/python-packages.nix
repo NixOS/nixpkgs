@@ -878,6 +878,8 @@ in {
 
   markerlib = callPackage ../development/python-modules/markerlib { };
 
+  mask-rcnn = callPackage ../development/python-modules/mask-rcnn { };
+
   matchpy = callPackage ../development/python-modules/matchpy { };
 
   maxminddb = callPackage ../development/python-modules/maxminddb { };
@@ -1504,11 +1506,11 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
-  spyder-kernels = if isPy3k then callPackage ../development/python-modules/spyder-kernels {}
-    else callPackage ../development/python-modules/spyder-kernels/2.nix {};
+  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
+  spyder-kernels_0_5 = callPackage ../development/python-modules/spyder-kernels/0.x.nix {};
 
-  spyder = if isPy3k then callPackage ../development/python-modules/spyder {}
-    else callPackage ../development/python-modules/spyder/2.nix {};
+  spyder = callPackage ../development/python-modules/spyder {};
+  spyder_3 = callPackage ../development/python-modules/spyder/3.nix { };
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
@@ -2702,6 +2704,12 @@ in {
 
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
+  fenics = callPackage ../development/libraries/science/math/fenics {
+    inherit (pkgs) pkg-config;
+    mpi = pkgs.openmpi;
+    pytest = self.pytest_4;
+  };
+
   filetype = callPackage ../development/python-modules/filetype { };
 
   flammkuchen = callPackage ../development/python-modules/flammkuchen { };
@@ -3333,8 +3341,6 @@ in {
 
   django_2_2 = callPackage ../development/python-modules/django/2_2.nix { };
 
-  django_1_8 = callPackage ../development/python-modules/django/1_8.nix { };
-
   django-allauth = callPackage ../development/python-modules/django-allauth { };
 
   django-anymail = callPackage ../development/python-modules/django-anymail {};
@@ -3414,20 +3420,6 @@ in {
   django-webpack-loader = callPackage ../development/python-modules/django-webpack-loader { };
 
   django_tagging = callPackage ../development/python-modules/django_tagging { };
-
-  django_tagging_0_4_3 = if
-       self.django.version != "1.8.19"
-  then throw "django_tagging_0_4_3 should be build with django_1_8"
-  else (callPackage ../development/python-modules/django_tagging {}).overrideAttrs (attrs: rec {
-    pname = "django-tagging";
-    version = "0.4.3";
-
-    src = fetchPypi {
-      inherit pname version;
-      sha256 = "0617azpmp6jpg3d88v2ir97qrc9aqcs2s9gyvv9bgf2cp55khxhs";
-    };
-    propagatedBuildInputs = with self; [ django ];
-  });
 
   django_classytags = callPackage ../development/python-modules/django_classytags { };
 
@@ -4149,6 +4141,11 @@ in {
     inherit (pkgs.linuxPackages) nvidia_x11;
   };
 
+  libgpiod = disabledIf (!isPy3k) (toPythonModule (pkgs.libgpiod.override {
+    enablePython = true;
+    python3 = python;
+  }));
+
   libkeepass = callPackage ../development/python-modules/libkeepass { };
 
   librepo = pipe pkgs.librepo [
@@ -4619,7 +4616,7 @@ in {
 
   offtrac = callPackage ../development/python-modules/offtrac { };
 
-  openpyxl = if isPy3k then
+  openpyxl = if pythonAtLeast "3.6" then
     callPackage ../development/python-modules/openpyxl { }
   else
     callPackage ../development/python-modules/openpyxl/2.nix { };
@@ -4900,6 +4897,8 @@ in {
   pox = callPackage ../development/python-modules/pox { };
 
   ppft = callPackage ../development/python-modules/ppft { };
+
+  pproxy = callPackage ../development/python-modules/pproxy { };
 
   praw = if isPy3k then callPackage ../development/python-modules/praw { }
     else callPackage ../development/python-modules/praw/6.3.nix { };
@@ -6245,6 +6244,8 @@ in {
 
   wsgiproxy2 = callPackage ../development/python-modules/wsgiproxy2 { };
 
+  wsgitools = callPackage ../development/python-modules/wsgitools { };
+
   wurlitzer = callPackage ../development/python-modules/wurlitzer { };
 
   xcaplib = callPackage ../development/python-modules/xcaplib { };
@@ -6393,8 +6394,6 @@ in {
   graph_nets = callPackage ../development/python-modules/graph_nets { };
 
   influxgraph = callPackage ../development/python-modules/influxgraph { };
-
-  graphitepager = callPackage ../development/python-modules/graphitepager { };
 
   pyspotify = callPackage ../development/python-modules/pyspotify { };
 
@@ -7093,6 +7092,8 @@ in {
   pyatv = callPackage ../development/python-modules/pyatv { };
 
   pybotvac = callPackage ../development/python-modules/pybotvac { };
+
+  pymetno = callPackage ../development/python-modules/pymetno { };
 
   pytado = callPackage ../development/python-modules/pytado { };
 

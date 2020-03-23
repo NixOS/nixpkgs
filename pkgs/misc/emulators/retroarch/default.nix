@@ -19,22 +19,14 @@
 
 with stdenv.lib;
 
-let
-
-  # ibtool is closed source so we have to download the blob
-  osx-MainMenu = fetchurl {
-    url = "https://github.com/matthewbauer/RetroArch/raw/b146a9ac6b2b516652a7bf05a9db5a804eab323d/pkg/apple/OSX/en.lproj/MainMenu.nib";
-    sha256 = "13k1l628wy0rp6wxrpwr4g1m9c997d0q8ks50f8zhmh40l5j2sp8";
-  };
-
-in stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "retroarch-bare";
-  version = "1.8.1";
+  version = "1.8.5";
 
   src = fetchFromGitHub {
     owner = "libretro";
     repo = "RetroArch";
-    sha256 = "0y7rcpz7psf8k3agsrq277jdm651vbnn9xpqvmj2in1a786idya7";
+    sha256 = "1pg8j9wvwgrzsv4xdai6i6jgdcc922v0m42rbqxvbghbksrc8la3";
     rev = "v${version}";
   };
 
@@ -50,33 +42,10 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = if stdenv.isLinux then [ "--enable-kms" ] else "";
+  configureFlags = stdenv.lib.optionals stdenv.isLinux [ "--enable-kms" "--enable-egl" ];
 
   postInstall = optionalString withVulkan ''
     wrapProgram $out/bin/retroarch --prefix LD_LIBRARY_PATH ':' ${vulkan-loader}/lib
-  '' + optionalString stdenv.targetPlatform.isDarwin ''
-    EXECUTABLE_NAME=RetroArch
-    PRODUCT_NAME=RetroArch
-    MACOSX_DEPLOYMENT_TARGET=10.5
-    app=$out/Applications/$PRODUCT_NAME.app
-
-    install -D pkg/apple/OSX/Info.plist $app/Contents/Info.plist
-    echo "APPL????" > $app/Contents/PkgInfo
-    mkdir -p $app/Contents/MacOS
-    ln -s $out/bin/retroarch $app/Contents/MacOS/$EXECUTABLE_NAME
-
-    # Hack to fill in Info.plist template w/o using xcode
-    sed -i -e 's,''${EXECUTABLE_NAME}'",$EXECUTABLE_NAME," \
-           -e 's,''${MACOSX_DEPLOYMENT_TARGET}'",$MACOSX_DEPLOYMENT_TARGET," \
-           -e 's,''${PRODUCT_NAME}'",$PRODUCT_NAME," \
-           -e 's,''${PRODUCT_NAME:rfc1034identifier}'",$PRODUCT_NAME," \
-           $app/Contents/Info.plist
-
-    install -D ${osx-MainMenu} \
-               $app/Contents/Resources/en.lproj/MainMenu.nib
-    install -D pkg/apple/OSX/en.lproj/InfoPlist.strings \
-               $app/Contents/Resources/en.lproj/InfoPlist.strings
-    install -D media/retroarch.icns $app/Contents/Resources/retroarch.icns
   '';
 
   preFixup = "rm $out/bin/retroarch-cg2glsl";
@@ -86,6 +55,6 @@ in stdenv.mkDerivation rec {
     description = "Multi-platform emulator frontend for libretro cores";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MP2E edwtjo matthewbauer ];
+    maintainers = with maintainers; [ MP2E edwtjo matthewbauer kolbycrouch ];
   };
 }

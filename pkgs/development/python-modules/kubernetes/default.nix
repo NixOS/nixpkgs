@@ -17,6 +17,7 @@ buildPythonPackage rec {
     sed -e '/ipaddress/d' -i requirements.txt
   '' else "");
 
+  doCheck = pythonAtLeast "3";
   checkPhase = ''
     py.test
   '';

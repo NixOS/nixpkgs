@@ -1,6 +1,6 @@
 { stdenv, buildGoModule, fetchurl
 , go, ncurses, notmuch, scdoc
-, python3, perl, w3m, dante
+, python3, perl, w3m, dante, Security
 }:
 
 let
@@ -17,10 +17,8 @@ in buildGoModule rec {
   modSha256 = "127xrah6xxrvc224g5dxn432sagrssx8v7phzapcsdajsnmagq6x";
 
   nativeBuildInputs = [
-    go
     scdoc
     python3.pkgs.wrapPython
-    notmuch
   ];
 
   patches = [
@@ -31,7 +29,8 @@ in buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 perl ];
+  buildInputs = [ python3 notmuch ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   GOFLAGS="-tags=notmuch";
 

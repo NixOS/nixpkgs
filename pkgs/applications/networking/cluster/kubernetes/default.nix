@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
     sha256 = "0caqczz8hrwqb8j94158hz6919i7c9v1v0zknh9m2zbbng4b1awi";
   };
 
-  buildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
+  nativeBuildInputs = [ removeReferencesTo makeWrapper which go rsync go-bindata ];
 
   outputs = ["out" "man" "pause"];
 

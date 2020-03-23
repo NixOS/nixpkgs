@@ -24,8 +24,9 @@ buildGoPackage rec {
     substituteInPlace pkg/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ optional pamSupport pam;
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = optional pamSupport pam;
 
   buildFlags = [ "-tags" ];
 

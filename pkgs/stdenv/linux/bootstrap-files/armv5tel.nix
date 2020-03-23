@@ -1,12 +1,18 @@
 {
+  # Note: do not use Hydra as a source URL. Ask a member of the
+  # infrastructure team to mirror the job.
   busybox = import <nix/fetchurl.nix> {
-    url = https://hydra.nixos.org/build/112609163/download/2/busybox;
-    sha256 = "0dc5471dc6a5f69ad98eb7445f51a61e88aa5792d7a677025bf012bdb513b763";
+    # from job: https://hydra.nixos.org/job/nixpkgs/cross-trunk/bootstrapTools.armv5tel.dist/latest
+    # from build: https://hydra.nixos.org/build/114203025
+    url = "http://tarballs.nixos.org/stdenv-linux/armv5tel/0eb0ddc4dbe3cd5415c6b6e657538eb809fc3778/busybox";
+    # note: the following hash is different than the above hash, due to executable = true
+    sha256 = "0qxp2fsvs4phbc17g9npj9bsm20ylr8myi5pivcrmxm5qqflgi8d";
     executable = true;
   };
-
   bootstrapTools = import <nix/fetchurl.nix> {
-    url = https://hydra.nixos.org/build/112609163/download/1/bootstrap-tools.tar.xz;
-    sha256 = "ca0564eca4eb944649ce10ec70859640427bf2241243af62812b163176487e02";
+    # from job: https://hydra.nixos.org/job/nixpkgs/cross-trunk/bootstrapTools.armv5tel.dist/latest
+    # from build: https://hydra.nixos.org/build/114203025
+    url = "http://tarballs.nixos.org/stdenv-linux/armv5tel/0eb0ddc4dbe3cd5415c6b6e657538eb809fc3778/bootstrap-tools.tar.xz";
+    sha256 = "28327343db5ecc7f7811449ec69280d5867fa5d1d377cab0426beb9d4e059ed6";
   };
 }

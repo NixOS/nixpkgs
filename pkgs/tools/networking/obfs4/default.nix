@@ -1,4 +1,4 @@
-{ lib, fetchgit, buildGoModule }:
+{ stdenv, fetchgit, buildGoModule, Security }:
 
 buildGoModule rec {
   pname = "obfs4";
@@ -12,7 +12,9 @@ buildGoModule rec {
 
   modSha256 = "150kg22kznrdj5icjxk3qd70g7wpq8zd2zklw1y2fgvrggw8zvyv";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "A pluggable transport proxy";
     homepage = https://www.torproject.org/projects/obfsproxy;
     repositories.git = https://git.torproject.org/pluggable-transports/obfs4.git;

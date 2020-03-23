@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "mikrotik-exporter-unstable";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1cqjn6j3dfq51ssjx0qrajprlac1h0lb1r4af44lfpigzmrfyi07";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     inherit (src.meta) homepage;

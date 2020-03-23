@@ -60,9 +60,9 @@ Nix depends on this file, so if it missing you can use `cargoPatches` to apply
 it in the `patchPhase`. Consider sending a PR upstream with a note to the
 maintainer describing why it's important to include in the application.
 
-Unless `legacyCargoFetcher` is set to `true`, the fetcher will also verify that
-the `Cargo.lock` file is in sync with the `src` attribute, and will compress the
-vendor directory into a tar.gz archive.
+The fetcher will verify that the `Cargo.lock` file is in sync with the `src`
+attribute, and fail the build if not. It will also will compress the vendor
+directory into a tar.gz archive.
 
 ### Building a crate for a different target
 

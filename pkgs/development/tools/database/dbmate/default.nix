@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "dbmate";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "12x3m5bjyx3blh5i51pd99phv73m96pmm6i3ir4vf2kms3viif9i";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Database migration tool";

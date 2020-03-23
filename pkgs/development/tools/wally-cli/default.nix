@@ -7,10 +7,9 @@ buildGoPackage rec {
   goPackagePath = "github.com/zsa/wally";
   subPackages = [ "cli" ];
 
-  nativeBuildInputs = [
-    pkg-config
-    libusb1
-  ];
+  nativeBuildInputs = [ pkg-config ];
+
+  buildInputs = [ libusb1 ];
 
   src = fetchFromGitHub {
     owner = "zsa";
