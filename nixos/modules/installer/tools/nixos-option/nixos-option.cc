@@ -231,7 +231,7 @@ MakeError(OptionPathError, EvalError);
 
 Value getSubOptions(Context & ctx, Value & option)
 {
-    Value getSubOptions = evaluateValue(ctx, *findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option).first);
+    Value getSubOptions = evaluateValue(ctx, *findAlongAttrPath(ctx.state, "type.getSubOptions", ctx.autoArgs, option));
     if (getSubOptions.type != tLambda) {
         throw OptionPathError("Option's type.getSubOptions isn't a function");
     }
@@ -336,7 +336,7 @@ void mapConfigValuesInOption(
 {
     Value * option;
     try {
-        option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.configRoot).first;
+        option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.configRoot);
     } catch (Error &) {
         f(path, std::current_exception());
         return;
@@ -505,7 +505,7 @@ void printRecursive(Context & ctx, Out & out, const std::string & path)
 void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
 {
     try {
-        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, root).first, path);
+        printValue(ctx, out, *findAlongAttrPath(ctx.state, path, ctx.autoArgs, root), path);
     } catch (Error & e) {
         out << describeError(e);
     }
@@ -514,7 +514,7 @@ void printAttr(Context & ctx, Out & out, const std::string & path, Value & root)
 bool hasExample(Context & ctx, Value & option)
 {
     try {
-        findAlongAttrPath(ctx.state, "example", ctx.autoArgs, option).first;
+        findAlongAttrPath(ctx.state, "example", ctx.autoArgs, option);
         return true;
     } catch (Error &) {
         return false;
