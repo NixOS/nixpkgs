@@ -33,9 +33,9 @@
 # override networking.nameservers like this:
 #
 # {
-#   acme = { nodes, ... }: {
+#   acme = { nodes, lib, ... }: {
 #     imports = [ ./common/acme/server ];
-#     networking.nameservers = [
+#     networking.nameservers = lib.mkForce [
 #       nodes.myresolver.config.networking.primaryIPAddress
 #     ];
 #   };
