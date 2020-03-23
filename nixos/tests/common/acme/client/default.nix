@@ -5,10 +5,6 @@ let
 in
 
 {
-  networking.nameservers = [
-    nodes.acme.config.networking.primaryIPAddress
-  ];
-
   security.acme = {
     server = "https://acme.test/dir";
     email = "hostmaster@example.test";
