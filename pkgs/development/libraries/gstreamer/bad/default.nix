@@ -178,7 +178,6 @@ in stdenv.mkDerivation rec {
     libgudev
     libnice
     libofa
-    lrdf
     sbc
     spandsp
 
