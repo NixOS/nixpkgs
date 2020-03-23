@@ -4629,6 +4629,8 @@ in {
 
   omegaconf = callPackage ../development/python-modules/omegaconf { };
 
+  opuslib = callPackage ../development/python-modules/opuslib { };
+
   orderedset = callPackage ../development/python-modules/orderedset { };
 
   python-multipart = callPackage ../development/python-modules/python-multipart { };
