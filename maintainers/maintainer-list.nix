@@ -2342,6 +2342,12 @@
       fingerprint = "67FE 98F2 8C44 CF22 1828  E12F D57E FA62 5C9A 925F";
     }];
   };
+  euank = {
+    email = "euank-nixpkg@euank.com";
+    github = "euank";
+    githubId = 2147649;
+    name = "Euan Kemp";
+  };
   evanjs = {
     email = "evanjsx@gmail.com";
     github = "evanjs";
