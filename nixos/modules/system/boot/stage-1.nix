@@ -390,6 +390,17 @@ in
       '';
     };
 
+    boot.initrd.enable = mkOption {
+      type = types.bool;
+      default = !config.boot.isContainer;
+      defaultText = "!config.boot.isContainer";
+      description = ''
+        Whether to enable the NixOS initial RAM disk (initrd). This may be
+        needed to perform some initialisation tasks (like mounting
+        network/encrypted file systems) before continuing the boot process.
+      '';
+    };
+
     boot.initrd.prepend = mkOption {
       default = [ ];
       type = types.listOf types.str;
@@ -555,7 +566,7 @@ in
 
   };
 
-  config = mkIf (!config.boot.isContainer) {
+  config = mkIf config.boot.initrd.enable {
     assertions = [
       { assertion = any (fs: fs.mountPoint == "/") fileSystems;
         message = "The ‘fileSystems’ option does not specify your root file system.";

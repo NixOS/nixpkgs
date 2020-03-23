@@ -4,11 +4,11 @@
 
 buildPythonPackage rec {
   pname = "celery";
-  version = "4.4.0";
+  version = "4.4.2";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "d3363bb5df72d74420986a435449f3c3979285941dff57d5d97ecba352a0e3e2";
+    sha256 = "0ps1c6ill7q0m5kzb87hisgshdk3kzpa6cvcjch1d1wa07whp2hh";
   };
 
   postPatch = ''
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   # test_eventlet touches network
   # test_mongodb requires pymongo
   checkPhase = ''
-    pytest -k 'not restore_current_app_fallback and not msgpack' \
+    pytest -k 'not restore_current_app_fallback and not msgpack and not on_apply' \
       --ignore=t/unit/concurrency/test_eventlet.py \
       --ignore=t/unit/backends/test_mongodb.py
   '';

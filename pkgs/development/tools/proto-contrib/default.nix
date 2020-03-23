@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 buildGoModule rec {
   pname = "proto-contrib";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   modSha256 = "19cqz13jd95d5vibd10420gg69ldgf6afc51mkglhafgmmif56b0";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "Contributed tools and other packages on top of the Go proto package";
     homepage = https://github.com/emicklei/proto-contrib;
     license = licenses.mit;

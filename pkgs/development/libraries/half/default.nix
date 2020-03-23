@@ -1,12 +1,12 @@
 { stdenv, fetchzip }:
 
 stdenv.mkDerivation rec {
-  version = "1.12.0";
+  version = "2.1.0";
   pname = "half";
 
   src = fetchzip {
     url = "mirror://sourceforge/half/${version}/half-${version}.zip";
-    sha256 = "0096xiw8nj86vxnn3lfcl94vk9qbi5i8lnydri9ws358ly6002vc";
+    sha256 = "04v4rhs1ffd4c9zcnk4yjhq0gdqy020518wb7n8ryk1ckrdd7hbm";
     stripRoot = false;
   };
 

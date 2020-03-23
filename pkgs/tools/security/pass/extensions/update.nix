@@ -2,14 +2,19 @@
 
 stdenv.mkDerivation rec {
   pname = "pass-update";
-  version = "2.0";
+  version = "2.1";
 
   src = fetchFromGitHub {
     owner = "roddhjav";
     repo = "pass-update";
     rev = "v${version}";
-    sha256 = "0a81q0jfni185zmbislzbcv0qr1rdp0cgr9wf9riygis2xv6rs6k";
+    sha256 = "0yx8w97jcp6lv7ad5jxqnj04csbrn2hhc4pskssxknw2sbvg4g6c";
   };
+
+  postPatch = ''
+    substituteInPlace Makefile \
+      --replace "BASHCOMPDIR ?= /etc/bash_completion.d" "BASHCOMPDIR ?= $out/etc/bash_completion.d"
+  '';
 
   dontBuild = true;
 

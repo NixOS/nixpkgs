@@ -24,5 +24,6 @@ buildGoPackage {
     license = licenses.mit;
     maintainers = [ maintainers.magnetophon ];
     platforms = platforms.unix;
+    broken = true; # since 2020-02-08, libgit2 is incompatible upstream is dead.
   };
 }

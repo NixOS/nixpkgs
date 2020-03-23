@@ -1,8 +1,8 @@
 { stdenv, fetchgit, alsaLib, aubio, boost, cairomm, curl, doxygen
 , fftwSinglePrec, flac, glibc, glibmm, graphviz, gtkmm2, libjack2
-, libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg, librdf
+, libgnomecanvas, libgnomecanvasmm, liblo, libmad, libogg
 , librdf_raptor, librdf_rasqal, libsamplerate, libsigcxx, libsndfile
-, libusb, libuuid, libxml2, libxslt, lilv, lv2, makeWrapper
+, libusb, libuuid, libxml2, libxslt, lilv, lrdf, lv2, makeWrapper
 , perl, pkgconfig, python2, rubberband, serd, sord, sratom
 , taglib, vampSDK, dbus, fftw, pango, suil, libarchive
 , wafHook }:
@@ -34,8 +34,8 @@ stdenv.mkDerivation rec {
   buildInputs =
     [ alsaLib aubio boost cairomm curl doxygen dbus fftw fftwSinglePrec flac
       glibmm graphviz gtkmm2 libjack2 libgnomecanvas libgnomecanvasmm liblo
-      libmad libogg librdf librdf_raptor librdf_rasqal libsamplerate
-      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lv2
+      libmad libogg librdf_raptor librdf_rasqal libsamplerate
+      libsigcxx libsndfile libusb libuuid libxml2 libxslt lilv lrdf lv2
       makeWrapper pango perl pkgconfig python2 rubberband serd sord
       sratom suil taglib vampSDK libarchive
     ];

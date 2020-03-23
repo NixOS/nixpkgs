@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     perl
     (buildEnv {
       name = "rt-perl-deps";
-      paths = (with perlPackages; [
+      paths = with perlPackages; (requiredPerlModules [
         ApacheSession BusinessHours CGIEmulatePSGI CGIPSGI
         CSSMinifierXS CSSSquish ConvertColor CryptEksblowfish
         CryptSSLeay DBDSQLite DBDmysql DBIxSearchBuilder DataGUID

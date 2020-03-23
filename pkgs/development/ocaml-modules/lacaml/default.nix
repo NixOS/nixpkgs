@@ -4,13 +4,13 @@ assert stdenv.lib.versionAtLeast (stdenv.lib.getVersion ocaml) "4.05.0";
 
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-lacaml";
-  version = "11.0.3";
+  version = "11.0.6";
 
   src = fetchFromGitHub {
     owner = "mmottl";
     repo = "lacaml";
     rev = version;
-    sha256 = "1aflg07cc9ak9mg1cr0qr368c9s141glwlarl5nhalf6hhq7ibcb";
+    sha256 = "1vn5441fg45d0ni9x87dhz2x4jrmvg3w7qk3vvcrd436snvh07g0";
   };
 
   buildInputs = [ ocaml findlib dune base stdio ];

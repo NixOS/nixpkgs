@@ -11,11 +11,11 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-storage";
-  version = "1.23.0";
+  version = "1.26.0";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "c66e876ae9547884fa42566a2ebfec51d280f488d7a058af9611ba90c78bed78";
+    sha256 = "0caxqf6vda89cmc81fxhmfk3n61aypqz2sswnbsylzf436rsxpzz";
   };
 
   propagatedBuildInputs = [
@@ -26,8 +26,11 @@ buildPythonPackage rec {
   ];
   checkInputs = [ pytest mock ];
 
+  # remove directory from interferring with importing modules
+  # ignore tests which require credentials
   checkPhase = ''
-   pytest tests/unit
+    rm -r google
+    pytest tests/unit -k 'not create'
   '';
 
   meta = with stdenv.lib; {

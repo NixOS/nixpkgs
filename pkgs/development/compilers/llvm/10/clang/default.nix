@@ -8,7 +8,7 @@ let
     pname = "clang";
     inherit version;
 
-    src = fetch "clang" "1w7ixr16a9f0g5kv4irvhwq973wn0d418kb0p9rabyfscm05wfmq";
+    src = fetch "clang" "0ap63qhz0j6m63l4njwp055xni4s71dsxqi1w5d2p93hbswaiiw2";
 
     unpackPhase = ''
       unpackFile $src
@@ -36,7 +36,7 @@ let
     ];
 
     patches = [
-      # 10.0.0rc3-only
+      # 10.0.0 only, this should be present in 10.0.1
       ./clang-extension-handling.patch
 
       ./purity.patch
