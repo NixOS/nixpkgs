@@ -33,8 +33,7 @@ mkDerivation rec {
 
   prePatch = ''
     substituteInPlace ./support/tools/ffado-diag.in \
-      --replace /lib/modules/ "${kernel.dev}/lib/modules/" \
-      --replace 'stdout ("uname", "-r").rstrip ()' '"${kernel.modDirVersion}"'
+      --replace /lib/modules/ "/run/booted-system/kernel-modules/lib/modules/"
   '';
 
   patches = [
