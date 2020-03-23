@@ -15,7 +15,7 @@ let
       });
 
       cookiecutter = super.cookiecutter.overridePythonAttrs (oldAttrs: rec {
-        version = "1.6.0";
+        version = "1.7.0";
         src = oldAttrs.src.override {
           inherit version;
           sha256 = "0glsvaz8igi2wy1hsnhm9fkn6560vdvdixzvkq6dn20z3hpaa5hk";
