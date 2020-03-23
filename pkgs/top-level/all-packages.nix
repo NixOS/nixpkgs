@@ -20159,6 +20159,8 @@ in
     boost = boost155.override { enablePython = true; };
   };
 
+  k3s = callPackage ../applications/networking/cluster/k3s {};
+
   k9copy = libsForQt5.callPackage ../applications/video/k9copy {};
 
   kail = callPackage ../tools/networking/kail {  };
