@@ -29,6 +29,7 @@ stdenv.mkDerivation rec {
 
   cmakeFlags = [
     "-DBUILD_USERMANUAL=False"
+    "-DCMAKE_INSTALL_DOCDIR=share/doc/${pname}"
   ] ++ stdenv.lib.optionals stdenv.isDarwin [
     "-DUSE_COLORD=OFF"
     "-DUSE_KWALLET=OFF"
