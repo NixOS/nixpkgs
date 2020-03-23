@@ -8,6 +8,8 @@
 # Runtime
 , coreutils, libjpeg_turbo, pciutils, procps, utillinux
 , pulseaudioSupport ? true, libpulseaudio ? null
+# Double qt device pixel ratio if enabled
+, hidpiSupport ? false
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -30,6 +32,10 @@ let
     rev = "0d294e1fdd2a4ef4e05d414bc680511f24d835d7";
     sha256 = "0rm188844a10v8d6zgl2pnwsliwknawj09b02iabrvjw5w1lp6wl";
   };
+
+  desktopInvocation = "Exec=${
+      if hidpiSupport then "env QT_DEVICE_PIXEL_RATIO=2" else null
+    } $out/bin/zoom-us";
 
 in mkDerivation {
   pname = "zoom-us";
@@ -82,7 +88,7 @@ in mkDerivation {
     # Desktop File
     cp ${desktopIntegration}/us.zoom.Zoom.desktop $out/share/applications
     substituteInPlace $out/share/applications/us.zoom.Zoom.desktop \
-        --replace "Exec=zoom" "Exec=$out/bin/zoom-us"
+        --replace "Exec=zoom" "${desktopInvocation}"
 
     # Appdata
     cp ${desktopIntegration}/us.zoom.Zoom.appdata.xml $out/share/appdata
