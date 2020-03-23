@@ -50,3 +50,38 @@ Adapt linux version and the UUID to your disk!!
   };
 }
 ```
+
+## Automatically lock the desktop when removing the librem key
+
+The [instructions](https://docs.puri.sm/Librem_Key/Getting_Started/User_Manual.html#automatically-lock-the-desktop-when-removing-the-librem-key) to lock the screen after unplugging the [Librem Key](https://puri.sm/products/librem-key/#overview) don't work under NixOS.
+
+This snippet works on my Librem 15v3 laptop running KDE without wayland and is using the xlock from the package xlockmore.
+
+```nix
+{ pkgs, services , systemd, ... }:
+let
+  libremScreenSaver = pkgs.writeScriptBin "libremScreenSaver" ''
+  #!${pkgs.bash}/bin/bash
+  user=`ps aux | egrep "start_kdeinit|gdm-(wayland|x)-session"| head -n 1 | awk '{print $1}'`
+  if [ -n "$user" ]; then
+    sudo -u $user DISPLAY=:0 xlock 2>&1 | logger lockScreen for user $user
+  else
+    logger libremScreenSaver failed to find a user. Not running KDE?
+  fi
+  '';
+
+in {
+  services.udev.path = [ pkgs.procps pkgs.logger pkgs.gawk pkgs.xlockmore ];
+  services.udev.extraRules = ''
+    ACTION=="remove", ENV{PRODUCT}=="316d/4c4b/101" RUN+="${pkgs.systemd}/bin/systemctl --no-block start lockScreen@%k.service"
+  '';
+  systemd.services."lockScreen@" = {
+    bindsTo = [ "dev-%i.device"] ;
+    path = [ pkgs.procps pkgs.logger pkgs.sudo pkgs.xlockmore pkgs.gawk ] ;
+    serviceConfig = {
+        Type = "oneshot"; # was simple
+        ExecStart = "${libremScreenSaver}/bin/libremScreenSaver %I";
+    };
+  };
+}
+```
