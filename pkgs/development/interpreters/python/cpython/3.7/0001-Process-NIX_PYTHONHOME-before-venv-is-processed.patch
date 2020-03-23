@@ -1,0 +1,42 @@
+From b56a60dd058f86d765259bfb6cb52b4bcab3ca4f Mon Sep 17 00:00:00 2001
+From: Frederik Rietdijk <fridh@fridh.nl>
+Date: Sat, 14 Mar 2020 13:42:47 +0100
+Subject: [PATCH] Process NIX_PYTHONHOME before venv is processed
+
+---
+ Lib/site.py | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
+
+diff --git a/Lib/site.py b/Lib/site.py
+index e981a14208..adc02bd023 100644
+--- a/Lib/site.py
++++ b/Lib/site.py
+@@ -462,6 +462,17 @@ def enablerlcompleter():
+ 
+     sys.__interactivehook__ = register_readline
+ 
++
++def nixenv(known_paths):
++    global PREFIXES
++    prefix = os.environ.pop("NIX_PYTHONHOME", None)
++    if prefix and not os.environ.get("PYTHONHOME", None):
++        sys.prefix = sys.exec_prefix = prefix
++        addsitepackages(known_paths, [sys.prefix])
++        PREFIXES = [sys.prefix]
++    return known_paths
++
++
+ def venv(known_paths):
+     global PREFIXES, ENABLE_USER_SITE
+ 
+@@ -569,6 +580,7 @@ def main():
+         # fix __file__ and __cached__ of already imported modules too.
+         abs_paths()
+ 
++    known_paths = nixenv(known_paths)
+     known_paths = venv(known_paths)
+     if ENABLE_USER_SITE is None:
+         ENABLE_USER_SITE = check_enableusersite()
+-- 
+2.25.1
+

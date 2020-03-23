@@ -29,6 +29,7 @@
 , rebuildBytecode ? true
 , stripBytecode ? false
 , includeSiteCustomize ? true
+, includeNixEnvPatch ? true
 }:
 
 assert x11Support -> tcl != null
@@ -121,7 +122,11 @@ in with passthru; stdenv.mkDerivation {
           sha256 = "1h18lnpx539h5lfxyk379dxwr8m2raigcjixkf133l4xy3f4bzi2";
         }
     )
-  ];
+  ] ++ optionals includeNixEnvPatch [
+    (./. + "/${sourceVersion.major}.${sourceVersion.minor}/0001-Process-NIX_PYTHONHOME-before-venv-is-processed.patch")
+  ]
+  
+  ;
 
   postPatch = ''
   '' + optionalString (x11Support && (tix != null)) ''
