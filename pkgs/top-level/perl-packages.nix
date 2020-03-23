@@ -12270,6 +12270,23 @@ let
     };
   };
 
+  MojoPg = buildPerlPackage {
+    pname = "Mojo-Pg";
+    version = "4.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.18.tar.gz";
+      sha256 = "31baacc0d6693886b3580e4b3ec6f2d053be8578809c9c1750753576bd1bda3c";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstract ];
+    meta = {
+      homepage = "https://github.com/mojolicious/mojo-pg";
+      description = "Mojolicious <3 PostgreSQL";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
     version = "0.40";
