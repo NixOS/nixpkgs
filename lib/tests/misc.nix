@@ -127,18 +127,18 @@ runTests {
     expected = [ "2001" "db8" "0" "0042" "" "8a2e" "370" "" ];
   };
 
-  testStringToValidNixPath = {
-    expr = strings.stringToValidNixPath "foo_" ".stack/config.yml";
+  testSanitizeNixPath = {
+    expr = strings.sanitizeNixPath "foo_" ".stack/config.yml";
     expected = "foo_.stackconfig.yml";
   };
 
-  testStringToValidNixPathEmpty = {
-    expr = strings.stringToValidNixPath "" ".test9+8.7=6?5_4^3'2|1/foo.BAZ";
+  testSanitizeNixPathEmpty = {
+    expr = strings.sanitizeNixPath "" ".test9+8.7=6?5_4^3'2|1/foo.BAZ";
     expected = "safePrefix_.test9+8.7=6?5_4321foo.BAZ";
   };
 
-  testStringToValidNixPathEmptySpaces = {
-    expr = strings.stringToValidNixPath "   " ".test9+8.7=6?5_4^3'2|1/FOO.baz";
+  testSanitizeNixPathEmptySpaces = {
+    expr = strings.sanitizeNixPath "   " ".test9+8.7=6?5_4^3'2|1/FOO.baz";
     expected = "safePrefix_.test9+8.7=6?5_4321FOO.baz";
   };
 

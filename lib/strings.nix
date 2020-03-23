@@ -681,16 +681,16 @@ rec {
 
   /* Determines a valid nix store name for a path.
 
-     Type: stringToValidNixPath :: string -> string -> string
+     Type: sanitizeNixPath :: string -> string -> string
 
      Example:
-       stringToValidNixPath "foo_" ".stack/config.yml"
+       sanitizeNixPath "foo_" ".stack/config.yml"
        => "foo_.stackconfig.yml"
-       stringToValidNixPath "  " ".stack/config.yml"
+       sanitizeNixPath "  " ".stack/config.yml"
        => "safePrefix_.stackconfig.yml"
   */
 
-  stringToValidNixPath = prefix: path:
+  sanitizeNixPath = prefix: path:
     let
       safePrefix = if replaceStrings [" "] [""] prefix == "" then "safePrefix_" else prefix;
 
