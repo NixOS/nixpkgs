@@ -1,12 +1,14 @@
-{ stdenv, fetchurl, openssl, libsamplerate, alsaLib }:
+{ stdenv, fetchFromGitHub, openssl, libsamplerate, alsaLib }:
 
 stdenv.mkDerivation rec {
   pname = "pjsip";
-  version = "2.9";
+  version = "2.10";
 
-  src = fetchurl {
-    url = "https://www.pjsip.org/release/${version}/pjproject-${version}.tar.bz2";
-    sha256 = "0dm6l8fypkimmzvld35zyykbg957cm5zb4ny3lchgv68amwfz1fi";
+  src = fetchFromGitHub {
+    owner = pname;
+    repo = "pjproject";
+    rev = version;
+    sha256 = "1aklicpgwc88578k03i5d5cm5h8mfm7hmx8vfprchbmaa2p8f4z0";
   };
 
   patches = [ ./fix-aarch64.patch ];
