@@ -2,12 +2,12 @@
 
 buildGoModule rec {
   pname = "tailscale";
-  version = "0.97-0";
+  version = "0.97";
 
   src = fetchFromGitHub {
     owner = "tailscale";
     repo = "tailscale";
-    rev = "dd14b658a2f42a3b4d78682e4f4f82f730262c5c";
+    rev = "v${version}";
     sha256 = "0ckjqhj99c25h8xgyfkrd19nw5w4a7972nvba9r5faw5micjs02n";
   };
 
