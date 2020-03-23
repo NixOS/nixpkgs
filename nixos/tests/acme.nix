@@ -33,8 +33,7 @@ in import ./make-test-python.nix {
         serviceConfig = {
           ExecStart = "${pkgs.pebble}/bin/pebble-challtestsrv -dns01 ':53' -defaultIPv6 '' -defaultIPv4 '${nodes.webserver.config.networking.primaryIPAddress}'";
           # Required to bind on privileged ports.
-          User = "root";
-          Group = "root";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
       };
     };

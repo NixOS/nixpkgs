@@ -126,8 +126,7 @@ in {
         '';
         serviceConfig = {
           # Required to bind on privileged ports.
-          User = "root";
-          Group = "root";
+          AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
       };
     };
