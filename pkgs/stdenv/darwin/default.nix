@@ -36,9 +36,7 @@ in rec {
     export NIX_IGNORE_LD_THROUGH_GCC=1
     export SDKROOT=
 
-    # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
     export MACOSX_DEPLOYMENT_TARGET=${macosVersionMin}
-    export NIX_LDFLAGS+=" -macosx_version_min ${macosVersionMin} -sdk_version ${appleSdkVersion} -no_uuid"
 
     # Workaround for https://openradar.appspot.com/22671534 on 10.11.
     export gl_cv_func_getcwd_abort_bug=no

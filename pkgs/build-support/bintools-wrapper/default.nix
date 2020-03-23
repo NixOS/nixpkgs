@@ -248,6 +248,11 @@ stdenv.mkDerivation {
       printWords "''${ldflagsBefore[@]}" > $out/nix-support/libc-ldflags-before
     '')
 
+    + optionalString stdenv.targetPlatform.isMacOS ''
+      # Ensure consistent LC_VERSION_MIN_MACOSX and remove LC_UUID.
+      echo "-macosx_version_min 10.12 -sdk_version 10.12 -no_uuid" >> $out/nix-support/libc-ldflags-before
+    ''
+
     + optionalString (!nativeTools) ''
       ##
       ## User env support
