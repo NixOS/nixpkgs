@@ -7780,6 +7780,8 @@ in
 
   zdelta = callPackage ../tools/compression/zdelta { };
 
+  zenith = callPackage ../tools/system/zenith {};
+
   zerotierone = callPackage ../tools/networking/zerotierone { };
 
   zerofree = callPackage ../tools/filesystems/zerofree { };
