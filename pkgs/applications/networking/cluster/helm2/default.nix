@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles }:
+{ stdenv, buildGoModule, fetchFromGitHub, installShellFiles, Security }:
 
 buildGoModule rec {
   pname = "helm";
@@ -14,6 +14,8 @@ buildGoModule rec {
 
   subPackages = [ "cmd/helm" ];
   buildFlagsArray = [ "-ldflags=-w -s -X helm.sh/helm/v3/internal/version.version=v${version}" ];
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ installShellFiles ];
   postInstall = ''
