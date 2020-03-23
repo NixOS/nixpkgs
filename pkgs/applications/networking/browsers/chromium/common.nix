@@ -140,6 +140,8 @@ let
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
+      # fix race condition in the interaction with pulseaudio
+      ./patches/webrtc-pulse.patch
     ];
 
     postPatch = ''
