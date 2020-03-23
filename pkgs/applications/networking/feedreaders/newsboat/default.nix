@@ -39,7 +39,7 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = true;
 
-  checkPhase = ''
+  preCheck = ''
     make test
   '';
 
