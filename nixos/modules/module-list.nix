@@ -484,7 +484,6 @@
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
-  ./services/misc/rogue.nix
   ./services/misc/serviio.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sickbeard.nix
