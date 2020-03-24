@@ -5839,6 +5839,8 @@ in {
 
   user-agents = callPackage ../development/python-modules/user-agents { };
 
+  variants = callPackage ../development/python-modules/variants { };
+
   verboselogs = callPackage ../development/python-modules/verboselogs { };
 
   vega_datasets = callPackage ../development/python-modules/vega_datasets { };
