@@ -1,17 +1,14 @@
 # pcre functionality is tested in nixos/tests/php-pcre.nix
-{ callPackage, config, fetchurl, lib, makeWrapper, stdenv, symlinkJoin, writeText
-, autoconf, automake, bison, flex, libtool, pkgconfig, re2c
-, apacheHttpd, gettext, libargon2, libxml2, openssl, pcre, pcre2, readline
-, sqlite, systemd, valgrind, zlib, oniguruma }:
+{ callPackage, config, fetchurl, lib, makeWrapper, stdenv, symlinkJoin
+, writeText , autoconf, automake, bison, flex, libtool, pkgconfig, re2c
+, apacheHttpd, libargon2, libxml2, pcre, pcre2 , systemd, valgrind
+}:
 
 let
   generic =
   { version
   , sha256
   , extraPatches ? []
-
-  # Build a minimal php
-  , minimalBuild ? config.php.minimal or false
 
   # Sapi flags
   , cgiSupport ? config.php.cgi or true
@@ -42,17 +39,9 @@ let
 
     nativeBuildInputs = [ autoconf automake bison flex libtool pkgconfig re2c ];
 
-    buildInputs = [ ]
-      # Deps for some base extensions
-      ++ [ gettext ]             # Gettext extension
-      ++ [ openssl openssl.dev ] # Openssl extension
-      ++ [ pcre' ]               # PCRE extension
-      ++ [ readline ]            # Readline extension
-      ++ [ zlib ]                # Zlib extension
-      ++ [ oniguruma ]           # mbstring extension
-
-      # Deps needed when building all default extensions
-      ++ lib.optionals (!minimalBuild) [ sqlite ]
+    buildInputs =
+      # PCRE extension
+      [ pcre' ]
 
       # Enable sapis
       ++ lib.optional pearSupport [ libxml2.dev ]
@@ -66,18 +55,9 @@ let
 
     CXXFLAGS = lib.optionalString stdenv.cc.isClang "-std=c++11";
 
-    configureFlags = []
+    configureFlags =
       # Disable all extensions
-      ++ lib.optional minimalBuild [ "--disable-all" ]
-
-      # A bunch of base extensions
-      ++ [ "--with-gettext=${gettext}" ]
-      ++ [ "--with-openssl" ]
-      ++ [ "--with-readline=${readline.dev}" ]
-      ++ [ "--with-zlib=${zlib.dev}" ]
-      ++ [ "--enable-mysqlnd" ] # Required to be able to build mysqli and pdo_mysql
-      ++ [ "--enable-sockets" ]
-      ++ [ "--enable-mbstring" ]
+      [ "--disable-all" ]
 
       # PCRE
       ++ lib.optionals (lib.versionAtLeast version "7.4") [ "--with-external-pcre=${pcre'.dev}" ]
@@ -211,8 +191,9 @@ let
 
   defaultPhpExtensions = {
     exts = pp: with pp.exts; ([
-      bcmath calendar curl exif ftp gd gmp intl ldap mysqli pcntl pdo_mysql
-      pdo_odbc pdo_pgsql pgsql soap sodium zip
+      bcmath calendar curl exif ftp gd gettext gmp intl ldap mysqli
+      mysqlnd openssl pcntl pdo pdo_mysql pdo_odbc pdo_pgsql
+      pgsql readline soap sodium sqlite3 zip zlib
     ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
   };
 in {

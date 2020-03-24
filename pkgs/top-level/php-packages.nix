@@ -1,8 +1,10 @@
-{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c
+{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c, gettext
 , bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium, html-tidy
 , libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
 , pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
-, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC }:
+, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC, libedit
+, readline
+}:
 
 let
   self = with self; {
@@ -709,6 +711,8 @@ let
     mkExtension = {
       name
       , configureFlags ? [ "--enable-${name}" ]
+      , internalDeps ? []
+      , postPhpize ? ""
       , buildInputs ? []
       , zendExtension ? false
       , ...
@@ -720,10 +724,24 @@ let
 
       enableParallelBuilding = true;
       nativeBuildInputs = [ php autoconf pkgconfig re2c ];
-      inherit configureFlags buildInputs zendExtension;
+      inherit configureFlags internalDeps buildInputs zendExtension;
 
-      preConfigure = "phpize";
+      preConfigure = ''
+        nullglobRestore=$(shopt -p nullglob)
+        shopt -u nullglob   # To make ?-globbing work
 
+        # Some extensions have a config0.m4 or config9.m4
+        if [ -f config?.m4 ]; then
+          mv config?.m4 config.m4
+        fi
+
+        $nullglobRestore
+        phpize
+        ${postPhpize}
+        ${lib.concatMapStringsSep "\n"
+          (dep: "mkdir -p ext; ln -s ../../${dep} ext/")
+          internalDeps}
+      '';
       installPhase = ''
         mkdir -p $out/lib/php/extensions
         cp modules/${name}.so $out/lib/php/extensions/ext-${name}.so
@@ -779,6 +797,10 @@ let
           "--enable-gd-jis-conv"
         ];
         enable = lib.versionOlder php.version "7.4"; }
+      { name = "gettext";
+        buildInputs = [ gettext ];
+        postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
+        configureFlags = "--with-gettext=${gettext}"; }
       { name = "gmp";
         buildInputs = [ gmp ];
         configureFlags = [ "--with-gmp=${gmp.dev}" ]; }
@@ -805,24 +827,58 @@ let
         ] ++ lib.optional stdenv.isLinux "--with-ldap-sasl=${cyrus_sasl.dev}"; }
       { name = "mbstring"; buildInputs = [ oniguruma ]; }
       { name = "mysqli"; configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ]; }
+      { name = "mysqli";
+        internalDeps = [ "mysqlnd" ];
+        configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ]; }
+      { name = "mysqlnd";
+        buildInputs = [ zlib openssl ];
+        postPhpize = ''
+          sed '/#include "php.h"/i\
+          #ifdef HAVE_CONFIG_H\
+          #include "config.h"\
+          #endif' php_mysqlnd.c > php_mysqlnd.c.tmp
+
+          mv php_mysqlnd.c.tmp php_mysqlnd.c
+        ''; }
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache"; buildInputs = [ pcre' ]; zendExtension = true; }
+      { name = "openssl";
+        buildInputs = [ openssl ];
+        configureFlags = [ "--with-openssl" ]; }
       { name = "pcntl"; }
       { name = "pdo"; }
       { name = "pdo_dblib";
+        internalDeps = [ "pdo" ];
         configureFlags = [ "--with-pdo-dblib=${freetds}" ];
         # Doesn't seem to work on darwin.
         enable = (!stdenv.isDarwin); }
       # pdo_firebird (7.4, 7.3, 7.2)
-      { name = "pdo_mysql"; configureFlags = [ "--with-pdo-mysql=mysqlnd" ]; }
+      { name = "pdo_mysql";
+        internalDeps = [ "mysqlnd" "pdo" ];
+        configureFlags = [ "--with-pdo-mysql=mysqlnd" ]; }
       # pdo_oci (7.4, 7.3, 7.2)
-      { name = "pdo_odbc"; configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ]; }
-      { name = "pdo_pgsql"; configureFlags = [ "--with-pdo-pgsql=${postgresql}" ]; }
-      { name = "pdo_sqlite"; buildInputs = [ sqlite ]; configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ]; }
-      { name = "pgsql"; buildInputs = [ pcre' ]; configureFlags = [ "--with-pgsql=${postgresql}" ]; }
+      { name = "pdo_odbc";
+        internalDeps = [ "pdo" ];
+        configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ]; }
+      { name = "pdo_pgsql";
+        internalDeps = [ "pdo" ];
+        configureFlags = [ "--with-pdo-pgsql=${postgresql}" ]; }
+      { name = "pdo_sqlite";
+        internalDeps = [ "pdo" ];
+        buildInputs = [ sqlite ];
+        configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ]; }
+      { name = "pgsql";
+        buildInputs = [ pcre' ];
+        configureFlags = [ "--with-pgsql=${postgresql}" ]; }
       { name = "posix"; }
       { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
+      { name = "readline";
+        buildInputs = [ libedit readline ];
+        configureFlags = [ "--with-readline=${readline.dev}" ];
+        postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
+          substituteInPlace configure --replace 'as_fn_error $? "Please reinstall libedit - I cannot find readline.h" "$LINENO" 5' ':' 
+        ''; }
       { name = "recode";
         configureFlags = [ "--with-recode=${recode}" ];
         # Removed in php 7.4.
@@ -846,6 +902,7 @@ let
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "sockets"; }
       { name = "sodium"; buildInputs = [ libsodium ]; }
+      { name = "sqlite3"; buildInputs = [ sqlite ]; }
       { name = "sysvmsg"; }
       { name = "sysvsem"; }
       { name = "sysvshm"; }
@@ -882,6 +939,9 @@ let
         configureFlags = [ "--with-zip" ]
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
           ++ lib.optional (lib.versionOlder php.version "7.3") [ "--with-libzip" ]; }
+      { name = "zlib";
+        buildInputs = [ zlib ];
+        configureFlags = [ "--with-zlib" ]; }
     ];
 
     # Convert the list of attrs:
