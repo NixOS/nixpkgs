@@ -1,19 +1,17 @@
-{ stdenv, buildGoPackage, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
-buildGoPackage rec {
+buildGoModule rec {
   pname = "consul";
   version = "1.7.2";
   rev = "v${version}";
 
-  goPackagePath = "github.com/hashicorp/consul";
-
-  # Note: Currently only release tags are supported, because they have the Consul UI
-  # vendored. See
-  #   https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834
-  # If you want to use a non-release commit as `src`, you probably want to improve
-  # this derivation so that it can build the UI's JavaScript from source.
-  # See https://github.com/NixOS/nixpkgs/pull/49082 for something like that.
-  # Or, if you want to patch something that doesn't touch the UI, you may want
+  # Note: Currently only release tags are supported, because they have the Consul UI	
+  # vendored. See	
+  #   https://github.com/NixOS/nixpkgs/pull/48714#issuecomment-433454834	
+  # If you want to use a non-release commit as `src`, you probably want to improve	
+  # this derivation so that it can build the UI's JavaScript from source.	
+  # See https://github.com/NixOS/nixpkgs/pull/49082 for something like that.	
+  # Or, if you want to patch something that doesn't touch the UI, you may want	
   # to apply your changes as patches on top of a release commit.
   src = fetchFromGitHub {
     owner = "hashicorp";
@@ -22,8 +20,14 @@ buildGoPackage rec {
     sha256 = "1q587d8aqfkwg4fymr56fnf038vkxbdqz5yilz96dzny27dhspj4";
   };
 
-  preBuild = ''
-    buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")
+  # This corresponds to paths with package main - normally unneeded but consul
+  # has a split module structure in one repo
+  subPackages = ["." "connect/certgen"];
+
+  modSha256 = "164834gr8a7qvp72ccjpkbbg4h8idrcxvcp1fl7yi59iqsswfr7b";
+
+  preBuild = ''	
+  buildFlagsArray+=("-ldflags" "-X github.com/hashicorp/consul/version.GitDescribe=v${version} -X github.com/hashicorp/consul/version.Version=${version} -X github.com/hashicorp/consul/version.VersionPrerelease=")	
   '';
 
   meta = with stdenv.lib; {
