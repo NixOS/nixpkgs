@@ -1250,17 +1250,6 @@ self: super: {
     '';
   });
 
-  # Version bounds for http-client are too strict:
-  # https://github.com/bitnomial/prometheus/issues/34
-  prometheus = doJailbreak super.prometheus;
-
-  # Tasty-tap tests are out-of-date with TAP format
-  # https://github.com/MichaelXavier/tasty-tap/issues/2
-  tasty-tap = appendPatch super.tasty-tap (pkgs.fetchpatch {
-    url = https://patch-diff.githubusercontent.com/raw/MichaelXavier/tasty-tap/pull/3.diff;
-    sha256 = "0l8zbc56dy8ilxl3k49aiknmfhgpcg3jhs72lh3dk51d0a09d9sv";
-  });
-
   # The doctests in universum-1.5.0 are broken.  The doctests in versions of universum after
   # 1.5.0 should be fixed, so this should be able to be removed.
   universum = dontCheck super.universum;
@@ -1495,5 +1484,8 @@ self: super: {
     '';
     sha256 = "097wqn8hxsr50b9mhndg5pjim5jma2ym4ylpibakmmb5m98n17zp";
   });
+
+  # Needs a version that's newer than LTS-15.x provides.
+  weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

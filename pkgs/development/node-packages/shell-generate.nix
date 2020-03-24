@@ -4,6 +4,5 @@ mkShell {
   buildInputs = [
     bash nodePackages.node2nix
   ];
-  NODE_NIXPKGS_PATH = toString ./.;
+  NODE_NIXPKGS_PATH = builtins.toString ../../../.;
 }
-

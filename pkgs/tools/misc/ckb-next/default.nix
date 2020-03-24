@@ -27,6 +27,7 @@ mkDerivation rec {
     "-DINSTALL_DIR_ANIMATIONS=libexec"
     "-DUDEV_RULE_DIRECTORY=lib/udev/rules.d"
     "-DFORCE_INIT_SYSTEM=systemd"
+    "-DDISABLE_UPDATER=1"
   ];
 
   patches = [

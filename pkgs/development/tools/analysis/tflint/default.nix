@@ -1,21 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "tflint";
-  version = "0.15.1";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "terraform-linters";
     repo = pname;
     rev = "v${version}";
-    sha256 = "12a1jg4vcp6w72j8nsxf162i616g303cs783wlsa9iwm4w0cpb2h";
+    sha256 = "1j56dadkyg483i2p4i76d4kdkm229yjiyariga96zxp3s4rl0fni";
   };
 
-  modSha256 = "1k26i01sdgx9yik5fnd8kv300d8llqpvj9qpvga7hsbk58s2g8mv";
+  modSha256 = "14vgy5lavyp4w16g7wpi9xbni3js541rc3w9qn5ab3khqw5rdhgn";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [ "." ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";
     homepage = "https://github.com/terraform-linters/tflint";
     changelog = "https://github.com/terraform-linters/tflint/releases/tag/v${version}";

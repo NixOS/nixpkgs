@@ -2,7 +2,7 @@
 
 stdenv.mkDerivation {
   pname = "gitstatus";
-  version = "unstable-2020-03-06";
+  version = "unstable-2020-03-15";
 
   src = fetchFromGitHub {
     owner = "romkatv";

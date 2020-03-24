@@ -42,12 +42,30 @@ let
               doCheck = false;
               jailbreak = true;
             }));
+
             elmi-to-json = justStaticExecutables (overrideCabal (self.callPackage ./packages/elmi-to-json.nix {}) (drv: {
               prePatch = ''
                 substituteInPlace package.yaml --replace "- -Werror" ""
                 hpack
               '';
               jailbreak = true;
+            }));
+
+            elm-instrument = justStaticExecutables (overrideCabal (self.callPackage ./packages/elm-instrument.nix {}) (drv: {
+              patches = [(
+                # GHC 8.8.1 and Cabal >= 1.25.0 support
+                # https://github.com/zwilias/elm-instrument/pull/3
+                fetchpatch {
+                  url = "https://github.com/turboMaCk/elm-instrument/commit/4272db2aea742c8b54509e536fa4f35d04f95da5.patch";
+                  sha256 = "1d1lc43lp3x5jfhlyb1b7na7nj1g1i1vc1np26pcisg9c2s7gjz6";
+                }
+              )];
+              prePatch = ''
+                sed "s/desc <-.*/let desc = \"${drv.version}\"/g" Setup.hs --in-place
+              '';
+              jailbreak = true;
+              # Tests are failing because of missing instances for Eq and Show type classes
+              doCheck = false;
             }));
 
             inherit fetchElmDeps;
@@ -76,6 +94,26 @@ let
     in with hsPkgs.elmPkgs; {
       elm-test = patchBinwrap [elmi-to-json] nodePkgs.elm-test;
       elm-verify-examples = patchBinwrap [elmi-to-json] nodePkgs.elm-verify-examples;
+      elm-coverage =
+        let patched = patchBinwrap [elmi-to-json] nodePkgs.elm-coverage;
+        in patched.override {
+          preRebuild = ''
+            sed 's/\"install\".*/\"install\":\"echo no-op\"/g' --in-place package.json
+
+            # This should not be needed (thanks to binwrap* being nooped) but for some reason it still needs to be done
+            # in case of just this package
+            sed 's/\"install\".*/\"install\":\"echo no-op\",/g' --in-place node_modules/elmi-to-json/package.json
+
+            rm node_modules/elm/install.js
+            echo "console.log('no-op');" > node_modules/elm/install.js
+          '';
+
+          # Link Elm instrument binary
+          postInstall = patched.postInstall + ''
+            mkdir -p unpacked_bin
+            ln -sf ${elm-instrument}/bin/elm-instrument unpacked_bin/elm-instrument
+          '';
+        };
       elm-language-server = nodePkgs."@elm-tooling/elm-language-server";
 
       inherit (nodePkgs) elm-doc-preview elm-live elm-upgrade elm-xref elm-analyse;

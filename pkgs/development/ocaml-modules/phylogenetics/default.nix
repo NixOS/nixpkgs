@@ -1,9 +1,11 @@
-{ stdenv, buildDune2Package, fetchFromGitHub, ppx_deriving
+{ stdenv, buildDunePackage, fetchFromGitHub, ppx_deriving
 , alcotest, biocaml, gnuplot, lacaml, menhir, owl }:
 
-buildDune2Package rec {
+buildDunePackage rec {
   pname = "phylogenetics";
   version = "unstable-2019-11-15";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "biocaml";

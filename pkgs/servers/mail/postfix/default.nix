@@ -26,11 +26,11 @@ in stdenv.mkDerivation rec {
 
   pname = "postfix";
 
-  version = "3.4.9";
+  version = "3.4.10";
 
   src = fetchurl {
     url = "ftp://ftp.cs.uu.nl/mirror/postfix/postfix-release/official/${pname}-${version}.tar.gz";
-    sha256 = "19rdb92q77japw6gy7niiyj1h3nqfdakkcsq2avn9l160vxrqw54";
+    sha256 = "0m36wn5grm4cf8nnvlgsgwsm6v09xz01n7jnx13h0yjk73y6d2lh";
   };
 
   nativeBuildInputs = [ makeWrapper m4 ];
@@ -98,7 +98,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = http://www.postfix.org/;
+    homepage = "http://www.postfix.org/";
     description = "A fast, easy to administer, and secure mail server";
     license = with licenses; [ ipl10 epl20 ];
     platforms = platforms.linux;

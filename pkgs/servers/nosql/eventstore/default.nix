@@ -16,13 +16,13 @@ in
 stdenv.mkDerivation rec {
 
   pname = "EventStore";
-  version = "5.0.6";
+  version = "5.0.7";
 
   src = fetchFromGitHub {
     owner = "EventStore";
     repo = "EventStore";
     rev = "oss-v${version}";
-    sha256 = "0jlyyqs1z2xrw0dkai2k2zr3dsdbdsvmhx81qa92k7ga9hv04sqj";
+    sha256 = "0yvprql73g4lc88b6kp1kk8h64az2hn4am5hc4gyiaxfavaww3ci";
   };
 
   buildInputs = [

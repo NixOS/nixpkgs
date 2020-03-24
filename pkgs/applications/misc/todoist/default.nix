@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "todoist";
@@ -13,10 +13,12 @@ buildGoModule rec {
 
   modSha256 = "1nnp5ijz4n34gc97rar4wlvlbx21ndpjyb2mc6gxdk1wzx3mgswp";
 
-  meta = {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     homepage = https://github.com/sachaos/todoist;
     description = "Todoist CLI Client";
-    license = lib.licenses.mit;
-    platforms = lib.platforms.unix;
+    license = licenses.mit;
+    platforms = platforms.unix;
   };
 }

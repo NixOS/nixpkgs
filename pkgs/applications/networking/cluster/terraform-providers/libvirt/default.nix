@@ -30,7 +30,9 @@ buildGoPackage rec {
     sha256 = "1l2n97nj6g44n7bhnbjwmv36xi6754p4iq2qnpkdh39x4384a0zz";
   };
 
-  buildInputs = [ libvirt pkgconfig makeWrapper ];
+  nativeBuildInputs = [ pkgconfig makeWrapper ];
+
+  buildInputs = [ libvirt ];
 
   # mkisofs needed to create ISOs holding cloud-init data,
   # and wrapped to terraform via deecb4c1aab780047d79978c636eeb879dd68630
@@ -48,4 +50,3 @@ buildGoPackage rec {
     maintainers = with maintainers; [ mic92 ];
   };
 }
-

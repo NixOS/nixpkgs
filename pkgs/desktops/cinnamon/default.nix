@@ -8,5 +8,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   cinnamon-settings-daemon = callPackage ./cinnamon-settings-daemon { };
   cjs = callPackage ./cjs { };
   nemo = callPackage ./nemo { };
+  mint-themes = callPackage ./mint-themes { };
+  muffin = callPackage ./muffin { };
   xapps = callPackage ./xapps { };
 })

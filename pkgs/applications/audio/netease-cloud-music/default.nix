@@ -68,7 +68,6 @@ in stdenv.mkDerivation rec {
 
     wrapProgram $out/bin/netease-cloud-music \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
-      --set QT_AUTO_SCREEN_SCALE_FACTOR 1 \
       --set QCEF_INSTALL_PATH "${deepin.qcef}/lib/qcef"
   '';
 

@@ -2,7 +2,7 @@
 , buildGoPackage
 , fetchFromGitHub
 , callPackage
-, buildGo112Module
+, Security
 }:
 let
   list = import ./data.nix;
@@ -25,13 +25,11 @@ let
 in
   {
     elasticsearch = callPackage ./elasticsearch {
-      # Version 0.7.0 fails to build with go 1.13 due to dependencies:
-      #   verifying git.apache.org/thrift.git@v0.12.0/go.mod: git.apache.org/thrift.git@v0.12.0/go.mod: Get https://sum.golang.org/lookup/git.apache.org/thrift.git@v0.12.0: dial tcp: lookup sum.golang.org on [::1]:53: read udp [::1]:52968->[::1]:53: read: connection refused
-      #   verifying github.com/hashicorp/terraform@v0.12.0/go.mod: github.com/hashicorp/terraform@v0.12.0/go.mod: Get https://sum.golang.org/lookup/github.com/hashicorp/terraform@v0.12.0: dial tcp: lookup sum.golang.org on [::1]:53: read udp [::1]:52968->[::1]:53: read: connection refused
-      buildGoModule = buildGo112Module;
+     inherit Security;
     };
     gandi = callPackage ./gandi {};
     ibm = callPackage ./ibm {};
     libvirt = callPackage ./libvirt {};
+    lxd = callPackage ./lxd {};
     ansible = callPackage ./ansible {};
   } // lib.mapAttrs (n: v: toDrv v) list

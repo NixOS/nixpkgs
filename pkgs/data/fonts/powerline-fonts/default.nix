@@ -13,10 +13,10 @@ fetchFromGitHub {
     find . -name '*.ttf'    -exec install -Dt $out/share/fonts/truetype {} \;
     find . -name '*.bdf'    -exec install -Dt $out/share/fonts/bdf      {} \;
     find . -name '*.pcf.gz' -exec install -Dt $out/share/fonts/pcf      {} \;
-    find . -name '*.psf.gz' -exec install -Dt $out/share/fonts/psf      {} \;
+    find . -name '*.psf.gz' -exec install -Dt $out/share/consolefonts   {} \;
   '';
 
-  sha256 = "0irifak86gn7hawzgxcy53s22y215mxc2kjncv37h7q44jsqdqww";
+  sha256 = "0r8p4z3db17f5p8jr7sv80nglmjxhg83ncfvwg1dszldswr0dhvr";
 
   meta = with lib; {
     homepage = https://github.com/powerline/fonts;

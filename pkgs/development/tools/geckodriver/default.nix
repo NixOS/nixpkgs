@@ -21,10 +21,7 @@ rustPlatform.buildRustPackage {
   });
 
   cargoPatches = [ ./cargo-lock.patch ];
-  # Delete this on next update; see #79975 for details
-  legacyCargoFetcher = true;
-
-  cargoSha256 = "07w5lmvm5w6id0qikcs968n0c69bb6fav63l66bskxcjva67d6dy";
+  cargoSha256 = "1dv8vcjy8r9z19grj4gms05bhaafyr42y3q69h3azwq6dmacfd3y";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 

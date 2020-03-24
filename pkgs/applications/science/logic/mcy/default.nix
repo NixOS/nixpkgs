@@ -7,28 +7,31 @@ let
 in
 stdenv.mkDerivation {
   pname = "mcy";
-  version = "2020.02.05";
+  version = "2020.03.16";
 
   src = fetchFromGitHub {
     owner  = "YosysHQ";
     repo   = "mcy";
-    rev    = "83deeddd12d583a89ad4aa1d2147efa4d6adc33c";
-    sha256 = "1i0cabiqr68zflwzc6z894i4n7k6m3hbfck58vzh8zb9jwxwizav";
+    rev    = "562c02375067428bb657f57faa5131ee1ab44051";
+    sha256 = "0q77v2hxnmv61zx5bl4lrqiavgvsiyb5qxdp9hnihimj1m30bc5h";
   };
 
   buildInputs = [ python ];
   patchPhase = ''
     substituteInPlace mcy.py \
       --replace yosys '${yosys}/bin/yosys' \
-      --replace 'os.execvp("mcy-dash"' "os.execvp(\"$out/libexec/mcy/mcy-dash.py\""
+      --replace 'os.execvp("mcy-dash"' "os.execvp(\"$out/bin/mcy-dash\""
+    substituteInPlace mcy-dash.py \
+      --replace 'app.run(debug=True)' 'app.run(host="0.0.0.0",debug=True)'
   '';
 
   # the build needs a bit of work...
   buildPhase = "true";
   installPhase = ''
-    mkdir -p $out/bin $out/libexec/mcy
-    install mcy.py $out/bin/mcy && chmod +x $out/bin/mcy
-    install mcy-dash.py $out/libexec/mcy/mcy-dash.py
+    mkdir -p $out/bin $out/share/mcy/dash
+    install mcy.py      $out/bin/mcy      && chmod +x $out/bin/mcy
+    install mcy-dash.py $out/bin/mcy-dash && chmod +x $out/bin/mcy-dash
+    cp -r dash/. $out/share/mcy/dash/.
   '';
 
   meta = {

@@ -27,6 +27,12 @@ stdenv.mkDerivation (rec {
     "UISTYLE=${if enableX11 then "gtk2" else "text"}"
   ] ++ stdenv.lib.optional (!ocaml.nativeCompilers) "NATIVE=false";
 
+  patches = [
+    # NOTE: Only needed until Unison 2.51.3 is released!
+    ./4.08-compatibility.patch
+    ./lablgtk.patch
+  ];
+
   preInstall = "mkdir -p $out/bin";
 
   postInstall = if enableX11 then ''

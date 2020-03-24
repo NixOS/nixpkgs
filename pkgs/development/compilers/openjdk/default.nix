@@ -1,7 +1,7 @@
 { stdenv, lib, fetchurl, bash, pkgconfig, autoconf, cpio, file, which, unzip
 , zip, perl, cups, freetype, alsaLib, libjpeg, giflib, libpng, zlib, lcms2
 , libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11
+, libXcursor, libXrandr, fontconfig, openjdk13-bootstrap
 , setJavaClassPath
 , headless ? false
 , enableJavaFX ? openjfx.meta.available, openjfx
@@ -9,24 +9,24 @@
 }:
 
 let
-  major = "12";
+  major = "13";
   update = ".0.2";
-  build = "ga";
+  build = "-ga";
 
   openjdk = stdenv.mkDerivation rec {
     pname = "openjdk" + lib.optionalString headless "-headless";
-    version = "${major}${update}-${build}";
+    version = "${major}${update}${build}";
 
     src = fetchurl {
       url = "http://hg.openjdk.java.net/jdk-updates/jdk${major}u/archive/jdk-${version}.tar.gz";
-      sha256 = "1ndlxmikyy298z7lqpr1bd0zxq7yx6xidj8y3c8mw9m9fy64h9c7";
+      sha256 = "1871ziss7ny19rw8f7bay5vznmhpqbfi4ihn3yygs06wyxhm0zmv";
     };
 
     nativeBuildInputs = [ pkgconfig autoconf ];
     buildInputs = [
       cpio file which unzip zip perl zlib cups freetype alsaLib libjpeg giflib
       libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk11
+      libXi libXinerama libXcursor libXrandr fontconfig openjdk13-bootstrap
     ] ++ lib.optionals (!headless && enableGnome2) [
       gtk3 gnome_vfs GConf glib
     ];
@@ -35,7 +35,7 @@ let
       ./fix-java-home-jdk10.patch
       ./read-truststore-from-env-jdk10.patch
       ./currency-date-range-jdk10.patch
-      ./increase-javadoc-heap.patch
+      ./increase-javadoc-heap-jdk13.patch
       # -Wformat etc. are stricter in newer gccs, per
       # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
       # so grab the work-around from
@@ -45,7 +45,7 @@ let
         sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
       })
     ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk10.patch
+      ./swing-use-gtk-jdk13.patch
     ];
 
     prePatch = ''
@@ -54,7 +54,7 @@ let
     '';
 
     configureFlags = [
-      "--with-boot-jdk=${openjdk11.home}"
+      "--with-boot-jdk=${openjdk13-bootstrap.home}"
       "--enable-unlimited-crypto"
       "--with-native-debug-symbols=internal"
       "--with-libjpeg=system"
@@ -137,7 +137,7 @@ let
       done
     '';
 
-    disallowedReferences = [ openjdk11 ];
+    disallowedReferences = [ openjdk13-bootstrap ];
 
     meta = with stdenv.lib; {
       homepage = http://openjdk.java.net/;

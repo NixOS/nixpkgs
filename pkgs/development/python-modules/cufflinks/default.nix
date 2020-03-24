@@ -3,7 +3,7 @@
 , colorlover
 , ipython
 , ipywidgets
-, nose
+, pytest
 , numpy
 , pandas
 , six
@@ -12,11 +12,11 @@
 
 buildPythonPackage rec {
   pname = "cufflinks";
-  version = "0.16";
+  version = "0.17.3";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "163lag5g4micpqm3m4qy9b5r06a7pw45nq80x4skxc7dcrly2ygd";
+    sha256 = "0i56062k54dlg5iz3qyl1ykww62mpkp8jr4n450h0c60dm0b7ha8";
   };
 
   propagatedBuildInputs = [
@@ -30,24 +30,12 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  patches = [
-    # Plotly 4 compatibility. Remove with next release, assuming it gets merged.
-    (fetchpatch {
-      url = "https://github.com/santosjorge/cufflinks/pull/202/commits/e291dce14181858cb457404adfdaf2624b6d0594.patch";
-      sha256 = "1l0dahwqn3cxg49v3i3amwi80dmx2bi5zrazmgzpwsfargmk2kd1";
-    })
-  ];
+  checkInputs = [ pytest ];
 
-  # in plotly4+, the plotly.plotly module was moved to chart-studio.plotly
-  postPatch = ''
-    substituteInPlace requirements.txt \
-      --replace "plotly>=3.0.0,<4.0.0a0" "chart-studio"
-  '';
-
-  checkInputs = [ nose ];
-
+  # ignore tests which are incompatible with pandas>=1.0
+  # https://github.com/santosjorge/cufflinks/issues/236
   checkPhase = ''
-    nosetests -xv tests.py
+    pytest tests.py -k 'not bar_row'
   '';
 
   meta = with lib; {

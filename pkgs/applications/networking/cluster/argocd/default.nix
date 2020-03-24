@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub, packr }:
+{ stdenv, buildGoModule, fetchFromGitHub, packr, Security }:
 
 buildGoModule rec {
   pname = "argocd";
@@ -16,6 +16,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ packr ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   patches = [ ./use-go-module.patch ];
 
   buildFlagsArray = ''
@@ -31,7 +33,7 @@ buildGoModule rec {
     packr
   '';
   
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Argo CD is a declarative, GitOps continuous delivery tool for Kubernetes";
     homepage = "https://github.com/argoproj/argo";
     license = licenses.asl20;

@@ -28,6 +28,15 @@
      PHP now defaults to PHP 7.4, updated from 7.3.
     </para>
    </listitem>
+   <listitem>
+    <para>
+     Two new options, <link linkend="opt-services.openssh.authorizedKeysCommand">authorizedKeysCommand</link>
+     and <link linkend="opt-services.openssh.authorizedKeysCommandUser">authorizedKeysCommandUser</link>, have
+     been added to the <literal>openssh</literal> module. If you have <literal>AuthorizedKeysCommand</literal>
+     in your <link linkend="opt-services.openssh.extraConfig">services.openssh.extraConfig</link> you should
+     make use of these new options instead.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
@@ -75,6 +84,28 @@
     phantomJsSupport = false;
   });
 }</programlisting>
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <link linkend="opt-services.supybot.enable">supybot</link> module now uses <literal>/var/lib/supybot</literal>
+      as its default <link linkend="opt-services.supybot.stateDir">stateDir</link> path if <literal>stateVersion</literal>
+      is 20.09 or higher. It also enables number of
+      <link xlink:href="https://www.freedesktop.org/software/systemd/man/systemd.exec.html#Sandboxing">systemd sandboxing options</link>
+      which may possibly interfere with some plugins. If this is the case you can disable the options through attributes in
+      <option>systemd.services.supybot.serviceConfig</option>.
+    </para>
+   </listitem>
+   <listitem>
+    <para>
+      The <literal>security.duosec.skey</literal> option, which stored a secret in the
+      nix store, has been replaced by a new
+      <link linkend="opt-security.duosec.secretKeyFile">security.duosec.secretKeyFile</link>
+      option for better security.
+    </para>
+    <para>
+      <literal>security.duosec.ikey</literal> has been renamed to
+      <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
     </para>
    </listitem>
   </itemizedlist>

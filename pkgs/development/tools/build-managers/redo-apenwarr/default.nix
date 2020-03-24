@@ -1,27 +1,16 @@
-{ stdenv, lib, python27, fetchFromGitHub, mkdocs, which, findutils, coreutils
+{ stdenv, lib, python3, fetchFromGitHub, mkdocs, which, findutils, coreutils
 , perl
 , doCheck ? true
-}: let
-
-  # copy from 
-  # pkgs/applications/networking/pyload/beautifulsoup.nix
-  beautifulsoup = python27.pkgs.callPackage ./beautifulsoup.nix {
-    pythonPackages = python27.pkgs;
-  };
-
-  mkdocs-exclude = python27.pkgs.callPackage ./mkdocs-exclude.nix {
-    pythonPackages = python27.pkgs;
-  };
-in stdenv.mkDerivation rec {
+}: stdenv.mkDerivation rec {
 
   pname = "redo-apenwarr";
-  version = "0.42";
+  version = "0.42a";
 
   src = fetchFromGitHub rec {
     owner = "apenwarr";
     repo = "redo";
     rev = "${repo}-${version}";
-    sha256 = "1060yb7hrxm8c7bfvb0y4j0acpxsj6hbykw1d9549zpkxxr9nsgm";
+    sha256 = "172z2idslhcqibd4lw82k6349nl5fdda2vj10dqcjz0lvv6n7php";
   };
 
   postPatch = ''
@@ -60,10 +49,8 @@ in stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    python27
-    beautifulsoup
-    mkdocs
-    mkdocs-exclude
+    python3
+    (with python3.pkgs; [ beautifulsoup4 markdown ])
     which
     findutils
   ];

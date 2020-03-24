@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "conftest";
@@ -13,12 +13,14 @@ buildGoModule rec {
 
   modSha256 = "1p7fjg1vcrcxb4f5hd00qxx4fqcl051klcjs6ljn4v46qcpn6dcn";
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   buildFlagsArray = ''
     -ldflags=
         -X main.version=${version}
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Write tests against structured configuration data";
     homepage = https://github.com/instrumenta/conftest;
     license = licenses.asl20;

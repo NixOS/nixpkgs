@@ -1,11 +1,11 @@
 { stdenv
 , buildGoPackage
-, lib
 , fetchFromGitHub
 , buildGoModule
 , packr
 , sqlite
 , callPackage
+, Security
 }:
 
 buildGoModule rec {
@@ -28,7 +28,8 @@ buildGoModule rec {
       --replace 'Version = "unknown"' 'Version = "${version}"'
   '';
 
-  buildInputs = [ sqlite ];
+  buildInputs = [ sqlite ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   nativeBuildInputs = [ packr ];
 

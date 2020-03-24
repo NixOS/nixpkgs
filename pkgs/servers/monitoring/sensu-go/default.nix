@@ -1,10 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 let
   generic = { subPackages, pname, postInstall ? "" }:
     buildGoModule rec {
       inherit pname;
-      version = "5.14.1";
+      version = "5.18.1";
       shortRev = "1f6d16b"; # for internal version info
 
       goPackagePath = "github.com/sensu/sensu-go";
@@ -13,12 +13,14 @@ let
         owner = "sensu";
         repo = "sensu-go";
         rev = "v${version}";
-        sha256 = "1fhvw2hrn2zqpz3ypsx6i1zrn83pdifvsyzpbhzxmff6l9a290bq";
+        sha256 = "1iwlkm7ac7brap45r6ly0blywgq6f28r1nws3yf0ybydv30brfj4";
       };
 
       inherit subPackages postInstall;
 
-      modSha256 = "0c0cj0ylhifyb7l9kjmgdlfzcz8528fzw8kr3c5y7j5h6pih06sy";
+      modSha256 = "02h4cav6ivzs3z0qakwxzf5lfy6hzax5c0i2icp0qymqc2789npw";
+
+      buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
       buildFlagsArray = let
         versionPkg = "github.com/sensu/sensu-go/version";
@@ -28,11 +30,11 @@ let
           -X ${versionPkg}.BuildSHA=${shortRev}
       '';
 
-      meta = {
-        homepage = https://sensu.io;
+      meta = with stdenv.lib; {
+        homepage = "https://sensu.io";
         description = "Open source monitoring tool for ephemeral infrastructure & distributed applications";
-        license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ thefloweringash ];
+        license = licenses.mit;
+        maintainers = with maintainers; [ thefloweringash ];
       };
     };
 in

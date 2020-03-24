@@ -1,16 +1,7 @@
 { stdenv, fetchzip, fetchFromGitHub, ruby, dune, ocamlPackages
-, ipaexfont, junicode
+, ipaexfont, junicode, lmodern, lmmath
 }:
 let
-  lm = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/latin-modern/download/lm2.004otf.zip";
-    sha256 = "1mc88fbhfd2wki2vr700pgv96smya6d1z783xs3mfy138yb6ga2p";
-    stripRoot = false;
-  };
-  lm-math = fetchzip {
-    url = "http://www.gust.org.pl/projects/e-foundry/lm-math/download/latinmodern-math-1959.zip";
-    sha256 = "15l3lxjciyjmbh0q6jjvzz16ibk4ij79in9fs47qhrfr2wrddpvs";
-  };
   camlpdf = ocamlPackages.camlpdf.overrideAttrs (o: {
     src = fetchFromGitHub {
       owner = "gfngfn";
@@ -63,8 +54,8 @@ in
     installPhase = ''
       cp -r ${ipaexfont}/share/fonts/opentype/* lib-satysfi/dist/fonts/
       cp -r ${junicode}/share/fonts/junicode-ttf/* lib-satysfi/dist/fonts/
-      cp -r ${lm}/* lib-satysfi/dist/fonts/
-      cp -r ${lm-math}/otf/latinmodern-math.otf lib-satysfi/dist/fonts/
+      cp -r ${lmodern}/share/fonts/opentype/public/lm/* lib-satysfi/dist/fonts/
+      cp -r ${lmmath}/share/fonts/opentype/latinmodern-math.otf lib-satysfi/dist/fonts/
       make install PREFIX=$out LIBDIR=$out/share/satysfi
       mkdir -p $out/share/satysfi/
       cp -r lib-satysfi/dist/ $out/share/satysfi/

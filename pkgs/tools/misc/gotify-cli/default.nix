@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 buildGoModule rec {
   pname = "gotify-cli";
@@ -17,7 +17,9 @@ buildGoModule rec {
     mv $out/bin/cli $out/bin/gotify
   '';
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     license = licenses.mit;
     homepage = https://github.com/gotify/cli;
     description = "A command line interface for pushing messages to gotify/server.";

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "hcloud";
@@ -14,6 +14,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1zy41hi2qzrdmih3pkpng8im576lhkr64zm66w73p7jyvy0kf9sx";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   buildFlagsArray = [ "-ldflags=" "-w -X github.com/hetznercloud/cli/cli.Version=${version}" ];
 

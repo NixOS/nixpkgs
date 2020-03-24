@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoModule, Security }:
 
 buildGoModule rec {
   pname = "dnsproxy";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "0r5ybr4gpcdsldk12b0d4xiih6ckwnqkfwy89c97prv24v14zysv";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Simple DNS proxy with DoH, DoT, and DNSCrypt support";

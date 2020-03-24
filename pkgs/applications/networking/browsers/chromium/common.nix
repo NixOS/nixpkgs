@@ -7,7 +7,7 @@
 , xdg_utils, yasm, minizip, libwebp
 , libusb1, pciutils, nss, re2, zlib
 
-, python2Packages, perl, pkgconfig, clang-tools
+, python2Packages, perl, pkgconfig
 , nspr, systemd, kerberos
 , utillinux, alsaLib
 , bison, gperf
@@ -104,8 +104,6 @@ let
             result
        else result;
 
-  llvm-clang-tools = clang-tools.override { inherit llvmPackages; };
-
   base = rec {
     name = "${packageName}-unwrapped-${version}";
     inherit (upstream-info) channel version;
@@ -151,6 +149,8 @@ let
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
+      # fix race condition in the interaction with pulseaudio
+      ./patches/webrtc-pulse.patch
     ];
 
     postPatch = ''
@@ -216,8 +216,6 @@ let
       ln -s ${stdenv.cc}/bin/clang              third_party/llvm-build/Release+Asserts/bin/clang
       ln -s ${stdenv.cc}/bin/clang++            third_party/llvm-build/Release+Asserts/bin/clang++
       ln -s ${llvmPackages.llvm}/bin/llvm-ar    third_party/llvm-build/Release+Asserts/bin/llvm-ar
-    '' + optionalString (stdenv.lib.versionAtLeast version "82") ''
-      ln -s ${llvm-clang-tools}/bin/clang-format buildtools/linux64/clang-format
     '';
 
     gnFlags = mkGnFlags ({

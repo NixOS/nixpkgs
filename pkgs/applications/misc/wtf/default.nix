@@ -1,8 +1,9 @@
 { buildGoModule
 , fetchFromGitHub
-, lib
+, stdenv
 , makeWrapper
 , ncurses
+, Security
 }:
 
 buildGoModule rec {
@@ -24,12 +25,14 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   postInstall = ''
     mv "$out/bin/wtf" "$out/bin/wtfutil"
     wrapProgram "$out/bin/wtfutil" --prefix PATH : "${ncurses.dev}/bin"
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "The personal information dashboard for your terminal";
     homepage = "https://wtfutil.com/";
     license = licenses.mpl20;
