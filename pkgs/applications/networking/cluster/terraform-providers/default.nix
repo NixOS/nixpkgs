@@ -54,6 +54,81 @@ let
     google = patchGoModVendor automated-providers.google;
     google-beta = patchGoModVendor automated-providers.google-beta;
 
+    # providers that were moved to the `hashicorp` organization,
+    # but haven't updated their references yet:
+
+    # https://github.com/hashicorp/terraform-provider-archive/pull/67
+    archive = automated-providers.archive.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-archive hashicorp/terraform-provider-archive
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-archive hashicorp/terraform-provider-archive
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-dns/pull/101
+    dns = automated-providers.dns.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-dns hashicorp/terraform-provider-dns
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-dns hashicorp/terraform-provider-dns
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-external/pull/41
+    external = automated-providers.external.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-external hashicorp/terraform-provider-external
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-external hashicorp/terraform-provider-external
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-http/pull/40
+    http = automated-providers.http.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-http hashicorp/terraform-provider-http
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-http hashicorp/terraform-provider-http
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-local/pull/40
+    local = automated-providers.local.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-local hashicorp/terraform-provider-local
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-local hashicorp/terraform-provider-local
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-null/pull/43
+    null = automated-providers.null.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-null hashicorp/terraform-provider-null
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-null hashicorp/terraform-provider-null
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-random/pull/107
+    random = automated-providers.random.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-random hashicorp/terraform-provider-random
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-random hashicorp/terraform-provider-random
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-template/pull/79
+    template = automated-providers.template.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-template hashicorp/terraform-provider-template
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-template hashicorp/terraform-provider-template
+      '';
+    });
+
+    # https://github.com/hashicorp/terraform-provider-tls/pull/71
+    tls = automated-providers.tls.overrideAttrs (attrs: {
+      prePatch = attrs.prePatch or "" + ''
+        substituteInPlace go.mod --replace terraform-providers/terraform-provider-tls hashicorp/terraform-provider-tls
+        substituteInPlace main.go --replace terraform-providers/terraform-provider-tls hashicorp/terraform-provider-tls
+      '';
+    });
+
     elasticsearch = callPackage ./elasticsearch {};
     gandi = callPackage ./gandi {};
     ibm = callPackage ./ibm {};

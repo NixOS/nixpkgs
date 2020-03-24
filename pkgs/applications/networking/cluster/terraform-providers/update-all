@@ -124,9 +124,11 @@ slugs=(
 blacklist=(
   terraform-providers/terraform-provider-azure-classic
   terraform-providers/terraform-provider-cidr
-  terraform-providers/terraform-provider-quorum
+  terraform-providers/terraform-provider-circonus
   terraform-providers/terraform-provider-cloudinit
-  terraform-providers/terraform-provider-time
+  terraform-providers/terraform-provider-quorum
+  hashicorp/terraform-provider-time
+  terraform-providers/terraform-provider-vmc
 )
 
 cat <<HEADER > data.nix
