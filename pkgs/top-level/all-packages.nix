@@ -26414,7 +26414,9 @@ in
 
   dsniff = callPackage ../tools/networking/dsniff {};
 
-  wal-g = callPackage ../tools/backup/wal-g {};
+  wal-g = callPackage ../tools/backup/wal-g {
+    inherit (darwin.apple_sdk.frameworks) Security;
+  };
 
   tlwg = callPackage ../data/fonts/tlwg { };
 
