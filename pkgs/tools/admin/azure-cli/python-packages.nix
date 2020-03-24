@@ -131,6 +131,9 @@ let
       azure-mgmt-appconfiguration = overrideAzureMgmtPackage super.azure-mgmt-appconfiguration "0.4.0" "zip"
         "1dn5585nsizszjivx6lp677ka0mrg0ayqgag4yzfdz9ml8mj1xl5";
 
+      azure-mgmt-cognitiveservices = overrideAzureMgmtPackage super.azure-mgmt-cognitiveservices "5.0.0" "zip"
+        "1m7v3rfkvmdgghrpz15fm8pvmmhi40lcwfxdm2kxh7mx01r5l906";
+
       azure-mgmt-compute = overrideAzureMgmtPackage super.azure-mgmt-compute "11.0.0" "zip"
         "1dnlql4z9wawf8gc1v4rr386pifwcnx3ycr4gdccqwkgimgpsdg4";
 
