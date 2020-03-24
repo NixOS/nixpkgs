@@ -144,29 +144,57 @@ let
     };
   };
 
-  generic' = { version, sha256, ... }@args: let php = generic args; in php.overrideAttrs (_: {
-    passthru.buildEnv = { exts ? (_: []), extraConfig ? "" }: let
-      extraInit = writeText "custom-php.ini" ''
-        ${extraConfig}
-        ${lib.concatMapStringsSep "\n" (ext: let
-          extName = lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-          type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
-        in ''
-          ${type}=${ext}/lib/php/extensions/${extName}.so
-        '') (exts (callPackage ../../../top-level/php-packages.nix { inherit php; }))}
-      '';
-    in symlinkJoin {
-      name = "php-custom-${version}";
-      nativeBuildInputs = [ makeWrapper ];
-      paths = [ php ];
-      postBuild = ''
-        wrapProgram $out/bin/php \
-          --add-flags "-c ${extraInit}"
-        wrapProgram $out/bin/php-fpm \
-          --add-flags "-c ${extraInit}"
-      '';
-    };
-  });
+  generic' = { version, sha256, ... }@args:
+    let
+      php = generic args;
+      buildEnv = { exts ? (_: []), extraConfig ? "" }:
+        let
+          getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
+          extList = exts (callPackage ../../../top-level/php-packages.nix { inherit php; });
+
+          # Generate extension load configuration snippets from
+          # exts. This is an attrset suitable for use with
+          # textClosureList, which is used to put the strings in the
+          # right order - if a plugin which is dependent on another
+          # plugin is placed before its dependency, it will fail to
+          # load.
+          extensionTexts =
+            lib.listToAttrs
+              (map (ext:
+                let
+                  extName = getExtName ext;
+                  type = "${lib.optionalString (ext.zendExtension or false) "zend_"}extension";
+                in
+                  lib.nameValuePair extName {
+                    text = "${type}=${ext}/lib/php/extensions/${extName}.so";
+                    deps = lib.optionals (ext ? internalDeps) ext.internalDeps;
+                  })
+                extList);
+
+          extNames = map getExtName extList;
+          extraInit = writeText "custom-php.ini" ''
+            ${extraConfig}
+            ${lib.concatStringsSep "\n"
+              (lib.textClosureList extensionTexts extNames)}
+          '';
+        in
+          symlinkJoin {
+            name = "php-with-extensions-${version}";
+            inherit version;
+            nativeBuildInputs = [ makeWrapper ];
+            passthru.buildEnv = buildEnv;
+            paths = [ php ];
+            postBuild = ''
+              wrapProgram $out/bin/php \
+                --add-flags "-c ${extraInit}"
+              wrapProgram $out/bin/php-fpm \
+                --add-flags "-c ${extraInit}"
+            '';
+          };
+    in
+      php.overrideAttrs (_: {
+        passthru.buildEnv = buildEnv;
+      });
 
   php72base = generic' {
     version = "7.2.28";
