@@ -2892,6 +2892,8 @@ in
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
+  dnscontrol = callPackage ../applications/networking/dnscontrol { };
+
   dnsenum = callPackage ../tools/security/dnsenum { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
