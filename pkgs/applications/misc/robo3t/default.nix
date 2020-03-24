@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = {
     homepage = https://robomongo.org/;
-    description = "Query GUI for mongodb. Formerly called Robomongo.";
+    description = "Query GUI for mongodb. Formerly called Robomongo";
     platforms = [ "x86_64-linux" ];
     license = stdenv.lib.licenses.gpl3;
     maintainers = [ stdenv.lib.maintainers.eperuffo ];
