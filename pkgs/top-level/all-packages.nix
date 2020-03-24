@@ -20811,9 +20811,7 @@ in
 
   open-policy-agent = callPackage ../development/tools/open-policy-agent { };
 
-  openshift = callPackage ../applications/networking/cluster/openshift {
-    buildGoPackage = buildGo112Package;
-  };
+  openshift = callPackage ../applications/networking/cluster/openshift { };
 
   oroborus = callPackage ../applications/window-managers/oroborus {};
 
