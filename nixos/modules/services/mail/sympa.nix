@@ -25,8 +25,6 @@ let
     StateDirectory = "sympa";
     ProtectHome = true;
     ProtectSystem = "full";
-    ProtectKernelTunables = true;
-    ProtectKernelModules = true;
     ProtectControlGroups = true;
   };
 
