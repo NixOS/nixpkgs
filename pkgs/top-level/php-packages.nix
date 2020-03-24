@@ -2,7 +2,8 @@
 , bzip2, curl, libxml2, openssl, gmp5, icu, oniguruma, libsodium, html-tidy
 , libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
 , pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
-, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC }:
+, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit, readline
+, gettext }:
 
 let
   self = with self; {
@@ -709,20 +710,40 @@ let
     mkExtension = {
       name
       , configureFlags ? [ "--enable-${name}" ]
+      , internalDeps ? []
+      , postPhpize ? ""
       , buildInputs ? []
       , zendExtension ? false
+      , doCheck ? true
       , ...
     }@args: stdenv.mkDerivation (args // {
-      pname = "php-${name}";
+      name = "php-${name}-${php.version}";
 
       inherit (php) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
 
       enableParallelBuilding = true;
       nativeBuildInputs = [ php autoconf pkgconfig re2c ];
-      inherit configureFlags buildInputs zendExtension;
+      inherit configureFlags internalDeps buildInputs zendExtension doCheck;
 
-      preConfigure = "phpize";
+      preConfigure = ''
+        nullglobRestore=$(shopt -p nullglob)
+        shopt -u nullglob   # To make ?-globbing work
+
+        # Some extensions have a config0.m4 or config9.m4
+        if [ -f config?.m4 ]; then
+          mv config?.m4 config.m4
+        fi
+
+        $nullglobRestore
+        phpize
+        ${postPhpize}
+        ${lib.concatMapStringsSep "\n"
+          (dep: "mkdir -p ext; ln -s ../../${dep} ext/")
+          internalDeps}
+      '';
+
+      checkPhase = "echo n | make test";
 
       installPhase = ''
         mkdir -p $out/lib/php/extensions
@@ -741,7 +762,10 @@ let
       { name = "bz2"; buildInputs = [ bzip2 ]; configureFlags = [ "--with-bz2=${bzip2.dev}" ]; }
       { name = "calendar"; }
       { name = "ctype"; }
-      { name = "curl"; buildInputs = [ curl ]; configureFlags = [ "--with-curl=${curl.dev}" ]; }
+      { name = "curl";
+        buildInputs = [ curl ];
+        configureFlags = [ "--with-curl=${curl.dev}" ];
+        doCheck = false; }
       { name = "dba"; }
       { name = "dom";
         buildInputs = [ libxml2 ];
@@ -752,8 +776,9 @@ let
         buildInputs = [ enchant1 ];
         configureFlags = [ "--with-enchant=${enchant1}" ];
         # enchant1 doesn't build on darwin.
-        enable = (!stdenv.isDarwin); }
-      { name = "exif"; }
+        enable = (!stdenv.isDarwin);
+        doCheck = false; }
+      { name = "exif"; doCheck = false; }
       { name = "ffi"; buildInputs = [ libffi ]; enable = lib.versionAtLeast php.version "7.4"; }
       { name = "fileinfo"; buildInputs = [ pcre' ]; }
       { name = "filter"; buildInputs = [ pcre' ]; }
@@ -765,6 +790,7 @@ let
           "--with-external-gd=${gd.dev}"
           "--enable-gd-jis-conv"
         ];
+        doCheck = false;
         enable = lib.versionAtLeast php.version "7.4"; }
       { name = "gd";
         buildInputs = [ zlib gd libXpm ];
@@ -779,20 +805,22 @@ let
           "--enable-gd-jis-conv"
         ];
         enable = lib.versionOlder php.version "7.4"; }
-      ## gettext (7.2, 7.3, 7.4) -- configure: error: Cannot locate header file libintl.h
-      #{ name = "gettext";
-      #  buildInputs = [ gettext ];
-      #  configureFlags = "--with-gettext=${gettext}"; }
+      { name = "gettext";
+        buildInputs = [ gettext ];
+        postPhpize = ''substituteInPlace configure --replace 'as_fn_error $? "Cannot locate header file libintl.h" "$LINENO" 5' ':' '';
+        configureFlags = "--with-gettext=${gettext}"; }
       { name = "gmp";
         buildInputs = [ gmp5 ];
         configureFlags = [ "--with-gmp=${gmp5.dev}" ];
         # gmp5 doesn't build on darwin.
         enable = (!stdenv.isDarwin); }
       { name = "hash"; enable = lib.versionOlder php.version "7.4"; }
-      { name = "iconv"; configureFlags = if stdenv.isDarwin then
+      { name = "iconv";
+        configureFlags = if stdenv.isDarwin then
                            [ "--with-iconv=${libiconv}" ]
                          else
-                           [ "--with-iconv" ]; }
+                           [ "--with-iconv" ];
+        doCheck = false; }
       { name = "imap";
         buildInputs = [ uwimap openssl pam pcre' ];
         configureFlags = [ "--with-imap=${uwimap}" "--with-imap-ssl" ];
@@ -808,32 +836,70 @@ let
           "LDAP_DIR=${openldap.dev}"
           "LDAP_INCDIR=${openldap.dev}/include"
           "LDAP_LIBDIR=${openldap.out}/lib"
-        ] ++ lib.optional stdenv.isLinux "--with-ldap-sasl=${cyrus_sasl.dev}"; }
-      { name = "mbstring"; buildInputs = [ oniguruma ]; }
-      { name = "mysqli"; configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ]; }
+        ] ++ lib.optional stdenv.isLinux "--with-ldap-sasl=${cyrus_sasl.dev}";
+        doCheck = false; }
+      { name = "mbstring"; buildInputs = [ oniguruma ]; doCheck = false; }
+      { name = "mysqli";
+        internalDeps = [ "mysqlnd" ];
+        configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
+        doCheck = false; }
+      { name = "mysqlnd";
+        buildInputs = [ zlib openssl ];
+        postPhpize = ''
+          sed '/#include "php.h"/i\
+          #ifdef HAVE_CONFIG_H\
+          #include "config.h"\
+          #endif' php_mysqlnd.c > php_mysqlnd.c.tmp
+
+          mv php_mysqlnd.c.tmp php_mysqlnd.c
+        ''; }
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache"; buildInputs = [ pcre' ]; zendExtension = true; }
+      { name = "openssl";
+        buildInputs = [ openssl ];
+        configureFlags = [ "--with-openssl" ];
+        doCheck = false; }
       { name = "pcntl"; }
-      { name = "pdo"; }
+      { name = "pdo"; doCheck = false; }
       { name = "pdo_dblib";
+        internalDeps = [ "pdo" ];
         configureFlags = [ "--with-pdo-dblib=${freetds}" ];
         # Doesn't seem to work on darwin.
-        enable = (!stdenv.isDarwin); }
+        enable = (!stdenv.isDarwin);
+        doCheck = false; }
       # pdo_firebird (7.4, 7.3, 7.2)
-      { name = "pdo_mysql"; configureFlags = [ "--with-pdo-mysql=mysqlnd" ]; }
+      { name = "pdo_mysql";
+        internalDeps = [ "mysqlnd" "pdo" ];
+        configureFlags = [ "--with-pdo-mysql=mysqlnd" ];
+        doCheck = false; }
       # pdo_oci (7.4, 7.3, 7.2)
-      { name = "pdo_odbc"; configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ]; }
-      { name = "pdo_pgsql"; configureFlags = [ "--with-pdo-pgsql=${postgresql}" ]; }
-      { name = "pdo_sqlite"; buildInputs = [ sqlite ]; configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ]; }
-      { name = "pgsql"; buildInputs = [ pcre' ]; configureFlags = [ "--with-pgsql=${postgresql}" ]; }
-      { name = "phar"; buildInputs = [ pcre' openssl ]; }
-      { name = "posix"; }
+      { name = "pdo_odbc";
+        internalDeps = [ "pdo" ];
+        configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
+        doCheck = false; }
+      { name = "pdo_pgsql";
+        internalDeps = [ "pdo" ];
+        configureFlags = [ "--with-pdo-pgsql=${postgresql}" ];
+        doCheck = false; }
+      { name = "pdo_sqlite";
+        internalDeps = [ "pdo" ];
+        buildInputs = [ sqlite ];
+        configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ];
+        doCheck = false; }
+      { name = "pgsql";
+        buildInputs = [ pcre' ];
+        configureFlags = [ "--with-pgsql=${postgresql}" ];
+        doCheck = false; }
+      { name = "posix"; doCheck = false; }
       { name = "pspell"; configureFlags = [ "--with-pspell=${aspell}" ]; }
-      ## readline (7.4, 7.3, 7.2) -- configure: error: Please reinstall libedit - I cannot find readline.h
-      #{ name = "readline";
-      #  buildInputs = [ libedit readline ];
-      #  configureFlags = [ "--with-readline=${readline.dev}" ]; }
+      { name = "readline";
+        buildInputs = [ libedit readline ];
+        configureFlags = [ "--with-readline=${readline.dev}" ];
+        postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
+          substituteInPlace configure --replace 'as_fn_error $? "Please reinstall libedit - I cannot find readline.h" "$LINENO" 5' ':'
+        '';
+        doCheck = false; }
       { name = "recode";
         configureFlags = [ "--with-recode=${recode}" ];
         # Removed in php 7.4.
@@ -849,18 +915,21 @@ let
         buildInputs = [ net-snmp openssl ];
         configureFlags = [ "--with-snmp" ];
         # net-snmp doesn't build on darwin.
-        enable = (!stdenv.isDarwin); }
+        enable = (!stdenv.isDarwin);
+        doCheck = false; }
       { name = "soap";
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-soap" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
-      { name = "sockets"; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+        doCheck = false; }
+      { name = "sockets"; doCheck = false; }
       { name = "sodium"; buildInputs = [ libsodium ]; }
+      { name = "sqlite3"; buildInputs = [ sqlite ]; }
       { name = "sysvmsg"; }
       { name = "sysvsem"; }
       { name = "sysvshm"; }
-      { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; }
+      { name = "tidy"; configureFlags = [ "--with-tidy=${html-tidy}" ]; doCheck = false; }
       { name = "tokenizer"; }
       { name = "wddx";
         buildInputs = [ libxml2 ];
@@ -871,7 +940,8 @@ let
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xml" ]
           # Required to build on darwin.
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ];
+        doCheck = false; }
       { name = "xmlreader";
         buildInputs = [ libxml2 ];
         configureFlags = [ "--enable-xmlreader CFLAGS=-I../.." ]
@@ -889,10 +959,15 @@ let
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
       { name = "xsl"; buildInputs = [ libxslt libxml2 ]; configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
-      { name = "zip"; buildInputs = [ libzip pcre' ];
+      { name = "zip";
+        buildInputs = [ libzip pcre' ];
         configureFlags = [ "--with-zip" ]
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]
-          ++ lib.optional (lib.versionOlder php.version "7.3") [ "--with-libzip" ]; }
+          ++ lib.optional (lib.versionOlder php.version "7.3") [ "--with-libzip" ];
+        doCheck = false; }
+      { name = "zlib";
+        buildInputs = [ zlib ];
+        configureFlags = [ "--with-zlib" ]; }
     ];
 
     # Convert the list of attrs:
