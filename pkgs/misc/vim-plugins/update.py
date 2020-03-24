@@ -9,7 +9,6 @@
 # $ nix run nixpkgs.python3Packages.flake8 -c flake8 --ignore E501,E265 update.py
 
 import argparse
-import fileinput
 import functools
 import http
 import json
@@ -124,7 +123,7 @@ class Repo:
             new_owner, new_name = (
                 urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
             )
-            end_line = f" as {self.alias}\n" if self.alias else "\n"
+            end_line = "\n" if self.alias is None else f" as {self.alias}\n"
             plugin_line = "{owner}/{name}" + end_line
 
             old_plugin = plugin_line.format(owner=self.owner, name=self.name)
@@ -416,13 +415,14 @@ in lib.fix' (lib.extends overrides packages)
     print(f"updated {outfile}")
 
 
-def update_redirects(input_file: Path, output_file: Path, redirects: dict):
-    with fileinput.input(input_file, inplace=True) as f:
-        for line in f:
-            line = " ".join(line.split())
-            print(redirects.get(line, line), end="")
-    print(
-        f"""\
+def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
+    with open(input_file, "r") as f:
+        lines = f.readlines()
+
+    if redirects:
+        lines = [redirects.get(line, line) for line in lines]
+        print(
+            f"""\
 Redirects have been detected and {input_file} has been updated. Please take the
 following steps:
     1. Go ahead and commit just the updated expressions as you intended to do:
@@ -430,16 +430,19 @@ following steps:
             git commit -m "vimPlugins: Update"
     2. If any of the plugin names were changed, throw an error in aliases.nix:
             <oldName> = deprecateName "<oldName>" "<newName>"; # backwards compat, added YYYY-MM-DD
-    3. Make sure the updated {input_file} is still correctly sorted:
-            sort -udf ./vim-plugin-names > sorted && mv sorted vim-plugin-names
-    4. Run this script again so these changes will be reflected in the
+    3. Run this script again so these changes will be reflected in the
     generated expressions:
             ./update.py
-    5. Commit {input_file} along with aliases and generated expressions:
+    4. Commit {input_file} along with aliases and generated expressions:
             git add {output_file} {input_file} aliases.nix
             git commit -m "vimPlugins: Update redirects"
-"""
-    )
+        """
+        )
+
+    lines = sorted(lines, key=str.casefold)
+
+    with open(input_file, "w") as f:
+        f.writelines(lines)
 
 
 def parse_args():
@@ -488,8 +491,7 @@ def main() -> None:
 
     generate_nix(plugins, args.outfile)
 
-    if redirects:
-        update_redirects(args.input_file, args.outfile, redirects)
+    rewrite_input(args.input_file, args.outfile, redirects)
 
 
 if __name__ == "__main__":
