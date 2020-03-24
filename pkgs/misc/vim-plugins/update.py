@@ -419,6 +419,7 @@ in lib.fix' (lib.extends overrides packages)
 def update_redirects(input_file: Path, output_file: Path, redirects: dict):
     with fileinput.input(input_file, inplace=True) as f:
         for line in f:
+            line = " ".join(line.split())
             print(redirects.get(line, line), end="")
     print(
         f"""\
@@ -427,8 +428,8 @@ following steps:
     1. Go ahead and commit just the updated expressions as you intended to do:
             git add {output_file}
             git commit -m "vimPlugins: Update"
-    2. If any of the plugin names were changed, add the old names as aliases in
-    aliases.nix
+    2. If any of the plugin names were changed, throw an error in aliases.nix:
+            <oldName> = deprecateName "<oldName>" "<newName>"; # backwards compat, added YYYY-MM-DD
     3. Make sure the updated {input_file} is still correctly sorted:
             sort -udf ./vim-plugin-names > sorted && mv sorted vim-plugin-names
     4. Run this script again so these changes will be reflected in the

@@ -30,6 +30,9 @@ let
                              (removeRecurseForDerivations
                               (checkInPkgs n alias)))
                      aliases;
+
+  deprecateName = oldName: newName:
+    throw "${oldName} was renamed to ${newName}. Please update to ${newName}.";
 in
 
 mapAliases {
@@ -68,7 +71,7 @@ mapAliases {
   ghcmod              = ghcmod-vim;
   goyo                = goyo-vim;
   Gist                = vim-gist;
-  gist-vim            = vim-gist; # backwards compat, added 2020-3-22
+  gist-vim            = deprecateName "vim-gist" "gist-vim"; # backwards compat, added 2020-3-22
   gitgutter           = vim-gitgutter;
   gundo               = gundo-vim;
   Gundo               = gundo-vim; # backwards compat, added 2015-10-03
@@ -126,17 +129,17 @@ mapAliases {
   unite               = unite-vim;
   UltiSnips           = ultisnips;
   vim-addon-vim2nix   = vim2nix;
-  vim-jade            = vim-pug; # backwards compat, added 2020-3-22
+  vim-jade            = deprecateName "vim-pug" "vim-jade"; # backwards compat, added 2020-3-22
   vimproc             = vimproc-vim;
   vimshell            = vimshell-vim;
   vinegar             = vim-vinegar;
-  vundle              = Vundle-vim; # backwards compat, added 2020-3-22
+  vundle              = deprecateName "Vundle-vim" "vundle"; # backwards compat, added 2020-3-22
   watchdogs           = vim-watchdogs;
   WebAPI              = webapi-vim;
   wombat256           = wombat256-vim; # backwards compat, added 2015-7-8
   yankring            = YankRing-vim;
   Yankring            = YankRing-vim;
-  youcompleteme       = YouCompleteMe; # backwards compat, added 2020-3-22
+  youcompleteme       = deprecateName "YouCompleteMe" "youcompleteme"; # backwards compat, added 2020-3-22
   xterm-color-table   = xterm-color-table-vim;
   zeavim              = zeavim-vim;
 }
