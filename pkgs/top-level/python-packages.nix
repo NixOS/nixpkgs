@@ -7450,6 +7450,8 @@ in {
 
   behave = callPackage ../development/python-modules/behave { };
 
+  bellows = callPackage ../development/python-modules/bellows { };
+
   pyhamcrest = if isPy3k then
     callPackage ../development/python-modules/pyhamcrest { }
   else
