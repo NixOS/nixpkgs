@@ -15973,11 +15973,7 @@ in
   prometheus-statsd-exporter = callPackage ../servers/monitoring/prometheus/statsd-exporter.nix { };
   prometheus-surfboard-exporter = callPackage ../servers/monitoring/prometheus/surfboard-exporter.nix { };
   prometheus-unifi-exporter = callPackage ../servers/monitoring/prometheus/unifi-exporter { };
-  prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix {
-    # Version 1.5.1 fails to build with go 1.13 due to test failure
-    #  FAIL       github.com/jonnenauha/prometheus_varnish_exporter       0.041s
-    buildGoModule = buildGo112Module;
-  };
+  prometheus-varnish-exporter = callPackage ../servers/monitoring/prometheus/varnish-exporter.nix { };
   prometheus-jmx-httpserver = callPackage ../servers/monitoring/prometheus/jmx-httpserver.nix {  };
   prometheus-wireguard-exporter = callPackage ../servers/monitoring/prometheus/wireguard-exporter.nix {
     inherit (darwin.apple_sdk.frameworks) Security;
