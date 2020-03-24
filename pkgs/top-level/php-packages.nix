@@ -718,7 +718,7 @@ let
       , doCheck ? true
       , ...
     }: stdenv.mkDerivation {
-      pname = "php-ext-${name}";
+      pname = "php-${name}";
 
       inherit (php) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
@@ -747,7 +747,7 @@ let
       checkPhase = "echo n | make test";
       installPhase = ''
         mkdir -p $out/lib/php/extensions
-        cp modules/${name}.so $out/lib/php/extensions/ext-${name}.so
+        cp modules/${name}.so $out/lib/php/extensions/${name}.so
       '';
     };
 
