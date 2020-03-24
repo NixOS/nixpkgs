@@ -747,7 +747,7 @@ let
 
       installPhase = ''
         mkdir -p $out/lib/php/extensions
-        cp modules/${name}.so $out/lib/php/extensions/ext-${name}.so
+        cp modules/${name}.so $out/lib/php/extensions/${name}.so
       '';
     });
 
