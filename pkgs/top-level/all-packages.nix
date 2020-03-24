@@ -19450,6 +19450,8 @@ in
       ++ lib.optionals stdenv.isLinux [ gr-gsm gr-limesdr ];
   };
 
+  grandorgue = callPackage ../applications/audio/grandorgue { };
+
   gr-nacl = callPackage ../applications/radio/gnuradio/nacl.nix { };
 
   gr-gsm = callPackage ../applications/radio/gnuradio/gsm.nix { };
