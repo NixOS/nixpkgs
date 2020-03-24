@@ -2374,6 +2374,7 @@ extra-packages:
   - dhall == 1.29.0                     # required for spago 0.14.0.
   - doctemplates == 0.8                 # required by pandoc-2.9.x
   - generic-deriving == 1.10.5.*        # new versions don't compile with GHC 7.10.x
+  - ghc-tcplugins-extra ==0.3.2         # required for polysemy-plugin 0.2.5.0
   - gloss < 1.9.3                       # new versions don't compile with GHC 7.8.x
   - haddock == 2.22.*                   # required on GHC 8.0.x
   - haddock-api == 2.22.*               # required on GHC 7.8.x
