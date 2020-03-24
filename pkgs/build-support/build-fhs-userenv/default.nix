@@ -20,7 +20,7 @@ let
     shift
 
     source /etc/profile
-    exec ${run} "$@"
+    exec -a "$0" ${run} "$@"
   '';
 
 in runCommandLocal name {
