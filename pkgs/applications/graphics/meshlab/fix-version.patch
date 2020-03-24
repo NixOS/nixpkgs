@@ -1,0 +1,5 @@
+--- a/src/common/mlapplication.h
++++ b/src/common/mlapplication.h
+@@ -23 +23 @@ public:
+-        return QString::number(compileTimeYear()) + "." + (compileTimeMonth() < 10 ? "0" + QString::number(compileTimeMonth()) : QString::number(compileTimeMonth()));
++        return "@version@";
