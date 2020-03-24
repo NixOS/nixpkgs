@@ -22,7 +22,7 @@ releaseTools.sourceTarball {
     then builtins.substring 0 8 nixpkgs.lastModified
     else toString nixpkgs.revCount}.${nixpkgs.shortRev or "dirty"}";
 
-  buildInputs = [ nix.out jq lib-tests ];
+  buildInputs = [ nix.out jq lib-tests pkgs.brotli ];
 
   configurePhase = ''
     eval "$preConfigure"
@@ -38,6 +38,8 @@ releaseTools.sourceTarball {
   doCheck = true;
 
   checkPhase = ''
+    set -o pipefail
+
     export NIX_DB_DIR=$TMPDIR
     export NIX_STATE_DIR=$TMPDIR
     export NIX_PATH=nixpkgs=$TMPDIR/barf.nix
@@ -83,12 +85,10 @@ releaseTools.sourceTarball {
             --show-trace --argstr system "$platform" \
             -qa --drv-path --system-filter \* --system --meta --xml \
             "''${opts[@]}" > /dev/null
-        stopNest
     done
 
     header "checking eval-release.nix"
     nix-instantiate --eval --strict --show-trace ./maintainers/scripts/eval-release.nix > /dev/null
-    stopNest
 
     header "checking find-tarballs.nix"
     nix-instantiate --readonly-mode --eval --strict --show-trace --json \
@@ -100,7 +100,16 @@ releaseTools.sourceTarball {
       echo "suspiciously low number of URLs"
       exit 1
     fi
-    stopNest
+
+    header "generating packages.json"
+    mkdir -p $out/nix-support
+    echo -n '{"version":2,"packages":' > tmp
+    nix-env -f . -I nixpkgs=${src} -qa --json --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
+    echo -n '}' >> tmp
+    packages=$out/packages.json.br
+    jq -c < tmp | brotli -9 > $packages
+
+    echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';
 
   distPhase = ''
