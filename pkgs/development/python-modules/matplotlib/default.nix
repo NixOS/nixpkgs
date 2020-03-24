@@ -3,10 +3,10 @@
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection
 , certifi, pillow
 , enableGhostscript ? true, ghostscript ? null, gtk3
-, enableGtk3 ? false, cairo
+, enableGtk3 ? false, cairo ? null, wrapGAppsHook ? null
 # darwin has its own "MacOSX" backend
 , enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt5 ? null
+, enableQt ? false, pyqt5 ? null, wrapQtAppsHook ? null
 , Cocoa
 , pythonOlder
 }:
@@ -32,7 +32,9 @@ buildPythonPackage rec {
 
   XDG_RUNTIME_DIR = "/tmp";
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig ]
+    ++ stdenv.lib.optional enableQt wrapQtAppsHook
+    ++ stdenv.lib.optional enableGtk3 wrapGAppsHook;
 
   buildInputs = [ which sphinx ]
     ++ stdenv.lib.optional enableGhostscript ghostscript

@@ -3542,6 +3542,7 @@ in {
     stdenv = if stdenv.isDarwin then pkgs.clangStdenv else pkgs.stdenv;
     inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
     inherit (pkgs) pkgconfig;
+    inherit (pkgs.qt5) wrapQtAppsHook;
   };
 
   matrix-client = callPackage ../development/python-modules/matrix-client { };

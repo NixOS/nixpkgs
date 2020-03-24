@@ -3,10 +3,10 @@
 , freetype, libpng, pkgconfig, mock, pytz, pygobject3, gobject-introspection, functools32, subprocess32
 , fetchpatch
 , enableGhostscript ? false, ghostscript ? null, gtk3
-, enableGtk3 ? false, cairo
+, enableGtk3 ? false, cairo, wrapGAppsHook ? null
 # darwin has its own "MacOSX" backend
 , enableTk ? !stdenv.isDarwin, tcl ? null, tk ? null, tkinter ? null, libX11 ? null
-, enableQt ? false, pyqt4
+, enableQt ? false, pyqt4 ? null, wrapQtAppsHook ? null
 , Cocoa
 , pythonOlder
 }:
@@ -43,7 +43,9 @@ buildPythonPackage rec {
 
   buildInputs = [ which sphinx ]
     ++ stdenv.lib.optional enableGhostscript ghostscript
-    ++ stdenv.lib.optional stdenv.isDarwin [ Cocoa ];
+    ++ stdenv.lib.optional stdenv.isDarwin Cocoa
+    ++ stdenv.lib.optional enableQt wrapQtAppsHook
+    ++ stdenv.lib.optional enableGtk3 wrapGAppsHook;
 
   propagatedBuildInputs =
     [ cycler dateutil nose numpy pyparsing tornado freetype kiwisolver
