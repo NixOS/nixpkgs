@@ -433,7 +433,7 @@ following steps:
     3. Make sure the updated {input_file} is still correctly sorted:
             sort -udf ./vim-plugin-names > sorted && mv sorted vim-plugin-names
     4. Run this script again so these changes will be reflected in the
-    generated expressions (no need to use the --update-redirects flag again):
+    generated expressions:
             ./update.py
     5. Commit {input_file} along with aliases and generated expressions:
             git add {output_file} {input_file} aliases.nix
@@ -463,12 +463,6 @@ def parse_args():
         default=DEFAULT_OUT,
         help="Filename to save generated nix code",
     )
-    parser.add_argument(
-        "--update-redirects",
-        dest="update_redirects",
-        action="store_true",
-        help="Update input file if repos have been redirected.",
-    )
 
     return parser.parse_args()
 
@@ -495,13 +489,7 @@ def main() -> None:
     generate_nix(plugins, args.outfile)
 
     if redirects:
-        if args.update_redirects:
-            update_redirects(args.input_file, args.outfile, redirects)
-        else:
-            print(
-                "Outdated vim-plugin-names found. Please run with "
-                "--update-redirects flag."
-            )
+        update_redirects(args.input_file, args.outfile, redirects)
 
 
 if __name__ == "__main__":
