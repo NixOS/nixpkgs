@@ -4,11 +4,11 @@
 
 stdenv.mkDerivation rec {
   pname = "uget";
-  version = "2.2.2";
+  version = "2.2.3-1";
 
   src = fetchurl {
     url = "mirror://sourceforge/urlget/${pname}-${version}.tar.gz";
-    sha256 = "1hmzk907blgzc1z6wv4zbzqrwad06zfm1rqc3svh5garxw8z7xsw";
+    sha256 = "0jchvgkkphhwp2z7vd4axxr9ns8b6vqc22b2z8a906qm8916wd8i";
   };
 
   nativeBuildInputs = [
@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
       thinking that it "might be too powerful" because remember power is good
       and lightweight power is uGet!
     '';
-    homepage = http://www.ugetdm.com;
+    homepage = "http://www.ugetdm.com";
     license = licenses.lgpl21;
     platforms = platforms.unix;
     maintainers = with maintainers; [ romildo ];
