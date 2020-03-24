@@ -18,17 +18,19 @@
 , pcre2
 , fribidi
 , zlib
+, icu
+, systemd
 }:
 
 stdenv.mkDerivation rec {
   pname = "vte";
-  version = "0.58.3";
+  version = "0.60.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0xa9ipwic4jnhhbzlnqbhssz10xkzv61cpkl1ammc6mdq95bbp12";
+    sha256 = "06rs356lpyq60r3szhms152f7kj5jnki6a49b2w7ai0bnig9blbj";
   };
 
   passthru = {
@@ -51,6 +53,8 @@ stdenv.mkDerivation rec {
     gnutls
     pcre2
     zlib
+    icu
+    systemd
   ];
 
   propagatedBuildInputs = [

@@ -423,10 +423,10 @@ diff --git a/src/libedataserverui/e-reminders-widget.c b/src/libedataserverui/e-
 index f89cd4a5c..06cca9b5f 100644
 --- a/src/libedataserverui/e-reminders-widget.c
 +++ b/src/libedataserverui/e-reminders-widget.c
-@@ -1642,7 +1642,21 @@ static void
+@@ -1650,7 +1650,21 @@ static void
  e_reminders_widget_init (ERemindersWidget *reminders)
  {
- 	reminders->priv = G_TYPE_INSTANCE_GET_PRIVATE (reminders, E_TYPE_REMINDERS_WIDGET, ERemindersWidgetPrivate);
+ 	reminders->priv = e_reminders_widget_get_instance_private (reminders);
 -	reminders->priv->settings = g_settings_new ("org.gnome.evolution-data-server.calendar");
 +	{
 +		GSettingsSchemaSource *schema_source;

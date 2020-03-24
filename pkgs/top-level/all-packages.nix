@@ -4630,8 +4630,6 @@ in
 
   libcoap = callPackage ../applications/networking/libcoap {};
 
-  libcroco = callPackage ../development/libraries/libcroco { };
-
   libcryptui = callPackage ../development/libraries/libcryptui { };
 
   libsmi = callPackage ../development/libraries/libsmi { };
@@ -9193,6 +9191,7 @@ in
     vala_0_40
     vala_0_44
     vala_0_46
+    vala_0_48
     vala;
 
   wcc = callPackage ../development/compilers/wcc { };
@@ -9629,6 +9628,7 @@ in
   pipenv = callPackage ../development/tools/pipenv {};
 
   pipewire = callPackage ../development/libraries/pipewire {};
+  pipewire_0_2 = callPackage ../development/libraries/pipewire/2.nix {};
 
   pyradio = callPackage ../applications/radio/pyradio {};
 
@@ -9726,6 +9726,7 @@ in
       stdenv = gcc6Stdenv; # with gcc-7: undefined reference to `__divmoddi4'
   }));
   spidermonkey_60 = callPackage ../development/interpreters/spidermonkey/60.nix { };
+  spidermonkey_68 = callPackage ../development/interpreters/spidermonkey/68.nix { };
   spidermonkey = spidermonkey_38;
 
   ssm-agent = callPackage ../applications/networking/cluster/ssm-agent { };
@@ -22632,7 +22633,7 @@ in
 
   chatterino2 = libsForQt5.callPackage ../applications/networking/instant-messengers/chatterino2 {};
 
-  weston = callPackage ../applications/window-managers/weston { };
+  weston = callPackage ../applications/window-managers/weston { pipewire = pipewire_0_2; };
 
   whitebox-tools = callPackage ../applications/gis/whitebox-tools {
     inherit (darwin.apple_sdk.frameworks) Security;

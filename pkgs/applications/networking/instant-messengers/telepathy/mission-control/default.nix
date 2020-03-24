@@ -1,5 +1,6 @@
 { stdenv
 , fetchurl
+, fetchpatch
 , pkgconfig
 , dconf
 , telepathy-glib
@@ -18,6 +19,16 @@ stdenv.mkDerivation rec {
     url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
     sha256 = "00xxv38cfdirnfvgyd56m60j0nkmsv5fz6p2ydyzsychicxl6ssc";
   };
+
+  patches = [
+    # Fix property name (new GLib is stricter)
+    # https://github.com/NixOS/nixpkgs/pull/81626#issuecomment-601494939
+    # https://gitlab.gnome.org/GNOME/polari/-/merge_requests/141
+    (fetchpatch {
+      url = "https://github.com/TelepathyIM/telepathy-mission-control/commit/d8dab08fe8db137c6bbd8bbdc3d9b01d98c48910.patch";
+      sha256 = "Sw+V5QcWQ5zugwTTdkwa3pqV+v5XD0OhH6xI5ymgkOU=";
+    })
+  ];
 
   buildInputs = [
     python3

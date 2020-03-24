@@ -60,20 +60,19 @@
 , tzdata
 , udisks2
 , upower
-, vino
+, epoxy
 , gnome-user-share
 , gnome-remote-desktop
-, shadow
 , wrapGAppsHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-control-center";
-  version = "3.34.4";
+  version = "3.36.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bi7lsmr5hcf0v17brsa8j33p6i0wnh620bzwycmxryfp6s6vshp";
+    sha256 = "0gdadbkynldxqffdlw760039ci1vv9wsi5i0mdq4q9dblmb79q1b";
   };
 
   nativeBuildInputs = [
@@ -133,14 +132,13 @@ stdenv.mkDerivation rec {
     tracker
     udisks2
     upower
-    vino
+    epoxy
   ];
 
   patches = [
     (substituteAll {
       src = ./paths.patch;
       gcm = gnome-color-manager;
-      usermod = "${shadow}/bin/usermod";
       gnome_desktop = gnome-desktop;
       inherit glibc libgnomekbd tzdata;
       inherit cups networkmanagerapplet;

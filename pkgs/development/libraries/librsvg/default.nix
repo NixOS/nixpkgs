@@ -1,22 +1,22 @@
-{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2, libgsf
-, bzip2, libcroco, libintl, darwin, rustc, cargo, gnome3
+{ lib, stdenv, fetchurl, pkgconfig, glib, gdk-pixbuf, pango, cairo, libxml2
+, bzip2, libintl, darwin, rustc, cargo, gnome3
 , vala, gobject-introspection }:
 
 let
   pname = "librsvg";
-  version = "2.46.4";
+  version = "2.48.0";
 in
 stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${name}.tar.xz";
-    sha256 = "0afc82nsxc6kw136xid4vcq9kmq4rmgzzk8bh2pvln2cnvirwnxl";
+    sha256 = "19ndf9l99wcrmkwcrk20vd1ggrwgldksfz1kkj786ljcrxv8nd2a";
   };
 
   outputs = [ "out" "dev" "installedTests" ];
 
-  buildInputs = [ libxml2 libgsf bzip2 libcroco pango libintl ];
+  buildInputs = [ libxml2 bzip2 pango libintl ];
 
   propagatedBuildInputs = [ glib gdk-pixbuf cairo ];
 

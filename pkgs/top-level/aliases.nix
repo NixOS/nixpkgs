@@ -219,6 +219,7 @@ mapAliases ({
   libcanberra_gtk3 = libcanberra-gtk3; # added 2018-02-25
   libcap_manpages = libcap.doc; # added 2016-04-29
   libcap_pam = if stdenv.isLinux then libcap.pam else null; # added 2016-04-29
+  libcroco = throw "libcroco has been removed as it's no longer used in any derivations."; # added 2020-03-04
   libindicate = throw "libindacate has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   libindicate-gtk3 = throw "libindacate-gtk2 has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
   libindicate-gtk2 = throw "libindacate-gtk3 has been removed from nixpkgs, as it's abandoned and uses deprecated libraries"; # added 2019-12-10
