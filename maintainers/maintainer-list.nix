@@ -3349,6 +3349,12 @@
     githubId = 1608697;
     name = "Jens Binkert";
   };
+  jerengie = {
+    email = "me@jerengie.de";
+    github = "jerengie";
+    githubID = 1221065;
+    name = "Jens-Rene Giesen";
+  };
   jerith666 = {
     email = "github@matt.mchenryfamily.org";
     github = "jerith666";
