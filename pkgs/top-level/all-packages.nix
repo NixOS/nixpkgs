@@ -2850,6 +2850,8 @@ in
 
   deer = callPackage ../shells/zsh/zsh-deer { };
 
+  deezloader-remix = callPackage ../tools/audio/deezloader-remix { };
+
   detox = callPackage ../tools/misc/detox { };
 
   devilspie2 = callPackage ../applications/misc/devilspie2 {
