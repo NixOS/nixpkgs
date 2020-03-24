@@ -165,6 +165,17 @@ stdenv.mkDerivation (args // {
     runHook postBuild
   '';
 
+  postBuild = args.postBuild or "" + ''
+
+    # This needs to be done after postBuild: packages like `cargo` do a pushd/popd in
+    # the pre/postBuild-hooks that need to be taken into account before gathering
+    # all binaries to install.
+    bins=$(find $releaseDir \
+      -maxdepth 1 \
+      -type f \
+      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \))
+  '';
+
   checkPhase = args.checkPhase or (let
     argstr = "${stdenv.lib.optionalString (buildType == "release") "--release"} --target ${rustTarget} --frozen";
   in ''
@@ -191,11 +202,7 @@ stdenv.mkDerivation (args // {
     done
     mkdir -p $out/bin $out/lib
 
-    find $releaseDir \
-      -maxdepth 1 \
-      -type f \
-      -executable ! \( -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \) \
-      -print0 | xargs -r -0 cp -t $out/bin
+    xargs -r cp -t $out/bin <<< $bins
     find $releaseDir \
       -maxdepth 1 \
       -regex ".*\.\(so.[0-9.]+\|so\|a\|dylib\)" \
