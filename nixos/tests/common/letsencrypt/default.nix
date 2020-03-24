@@ -76,6 +76,7 @@ let
     httpPort = 80;
     tlsPort = 443;
     ocspResponderURL = "http://0.0.0.0:4002";
+    strict = true;
   };
 
   pebbleConfFile = pkgs.writeText "pebble.conf" (builtins.toJSON pebbleConf);
