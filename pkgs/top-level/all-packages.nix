@@ -1552,6 +1552,8 @@ in
 
   crudini = callPackage ../tools/misc/crudini { };
 
+  crytic-compile = with python3Packages; toPythonApplication crytic-compile;
+
   csv2odf = callPackage ../applications/office/csv2odf { };
 
   csvkit = callPackage ../tools/text/csvkit { };

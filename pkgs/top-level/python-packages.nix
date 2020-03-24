@@ -573,6 +573,8 @@ in {
 
   crc32c = callPackage ../development/python-modules/crc32c { };
 
+  crytic-compile = callPackage ../development/python-modules/crytic-compile { };
+
   curio = callPackage ../development/python-modules/curio { };
 
   dendropy = callPackage ../development/python-modules/dendropy { };
