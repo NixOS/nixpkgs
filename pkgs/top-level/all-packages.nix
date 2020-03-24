@@ -18712,11 +18712,7 @@ in
     poppler = poppler_0_61;
   };
 
-  perkeep = callPackage ../applications/misc/perkeep {
-    # Revision c9f78d02adf9740f3b8d403a1418554293cc9f41 fails to build with go 1.13 due to a dependency:
-    #   go: bazil.org/fuse@v0.0.0-20160811212531-371fbbdaa898: Get https://proxy.golang.org/bazil.org/fuse/@v/v0.0.0-20160811212531-371fbbdaa898.mod: dial tcp: lookup proxy.golang.org on [::1]:53: read udp [::1]:36526->[::1]:53: read: connection refused
-    buildGoPackage = buildGo112Package;
-  };
+  perkeep = callPackage ../applications/misc/perkeep { };
 
   canto-curses = callPackage ../applications/networking/feedreaders/canto-curses { };
 
