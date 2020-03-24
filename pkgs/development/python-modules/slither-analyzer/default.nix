@@ -2,6 +2,8 @@
 , prettytable
 , setuptools
 , solc
+, pysha3
+, crytic-compile
 }:
 
 buildPythonPackage rec {
@@ -19,7 +21,7 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ prettytable setuptools ];
+  propagatedBuildInputs = [ pysha3 crytic-compile prettytable setuptools ];
 
   postFixup = ''
     wrapProgram $out/bin/slither \
@@ -33,8 +35,8 @@ buildPythonPackage rec {
       runs a suite of vulnerability detectors, prints visual information about
       contract details, and provides an API to easily write custom analyses.
     '';
-    homepage = https://github.com/trailofbits/slither;
+    homepage = "https://github.com/trailofbits/slither";
     license = licenses.agpl3;
-    maintainers = [ maintainers.asymmetric ];
+    maintainers = [ maintainers.asymmetric maintainers.jerengie ];
   };
 }
