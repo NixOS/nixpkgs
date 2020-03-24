@@ -37,13 +37,13 @@ let
   inherit (stdenv.lib) optional optionals;
 in mkDerivation rec {
   pname = "obs-studio";
-  version = "25.0.0";
+  version = "25.0.2";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = version;
-    sha256 = "1xbvj69zk1x2sv39wqjp5s929c61szn32d3d0ykhxr6jxb0sih4w";
+    sha256 = "12c2p179fijz5606h3bp4g88479gwgr7d5f8vk6j2n0rlzs76nsn";
   };
 
   nativeBuildInputs = [ cmake pkgconfig ];

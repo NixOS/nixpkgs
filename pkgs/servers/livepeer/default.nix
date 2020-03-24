@@ -16,7 +16,9 @@ buildGoPackage rec {
     sha256 = "07vhw787wq5q4xm7zvswjdsmr20pwfa39wfkgamb7hkrffn3k2ia";
   };
 
-  buildInputs = [ pkgconfig ffmpeg ];
+  nativeBuildInputs = [ pkgconfig ];
+
+  buildInputs = [ ffmpeg ];
 
   enableParallelBuilding = true;
 

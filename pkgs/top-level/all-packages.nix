@@ -1073,6 +1073,8 @@ in
 
   ssh-agents = callPackage ../tools/networking/ssh-agents { };
 
+  ssh-import-id = python3Packages.callPackage ../tools/admin/ssh-import-id { };
+
   titaniumenv = callPackage ../development/mobile/titaniumenv { };
 
   abootimg = callPackage ../development/mobile/abootimg {};
@@ -4522,6 +4524,8 @@ in
 
   keepalived = callPackage ../tools/networking/keepalived { };
 
+  keeperrl = callPackage ../games/keeperrl { };
+
   kexectools = callPackage ../os-specific/linux/kexectools { };
 
   keepkey_agent = with python3Packages; toPythonApplication keepkey_agent;
@@ -5808,6 +5812,8 @@ in
   patchutils_0_3_3 = callPackage ../tools/text/patchutils/0.3.3.nix { };
 
   parted = callPackage ../tools/misc/parted { };
+
+  passh = callPackage ../tools/networking/passh { };
 
   paulstretch = callPackage ../applications/audio/paulstretch { };
 
@@ -7677,6 +7683,8 @@ in
 
   xfsprogs = callPackage ../tools/filesystems/xfsprogs { };
   libxfs = xfsprogs.dev;
+
+  xmage = callPackage ../games/xmage { };
 
   xml2 = callPackage ../tools/text/xml/xml2 { };
 
@@ -13066,6 +13074,8 @@ in
   };
 
   libinput-gestures = callPackage ../tools/inputmethods/libinput-gestures {};
+
+  libinstpatch = callPackage ../development/libraries/audio/libinstpatch { };
 
   libisofs = callPackage ../development/libraries/libisofs { };
 
@@ -25995,7 +26005,6 @@ in
 
   terraform-providers = recurseIntoAttrs (
     callPackage ../applications/networking/cluster/terraform-providers {
-      inherit buildGo112Module;
       inherit (darwin.apple_sdk.frameworks) Security;
     }
   );

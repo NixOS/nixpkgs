@@ -1,17 +1,19 @@
-{ stdenv, buildPythonPackage, fetchPypi, makeDesktopItem, intervaltree, jedi, pycodestyle,
+{ stdenv, buildPythonPackage, fetchPypi, isPy27, makeDesktopItem, intervaltree, jedi, pycodestyle,
   psutil, pyflakes, rope, numpy, scipy, matplotlib, pylint, keyring, numpydoc,
   qtconsole, qtawesome, nbconvert, mccabe, pyopengl, cloudpickle, pygments,
   spyder-kernels, qtpy, pyzmq, chardet, qdarkstyle, watchdog, python-language-server
-, pyqtwebengine
+, pyqtwebengine, atomicwrites, pyxdg, diff-match-patch
 }:
 
 buildPythonPackage rec {
   pname = "spyder";
-  version = "4.0.1";
+  version = "4.1.1";
+
+  disabled = isPy27;
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "4b279c16487d224368dd2213e1517185fa59fc528f539601fffb34ea97accb7b";
+    sha256 = "13ajjifyf7w895vpl0h9r59m73zisby81xjw2c5pk49fh5l6ycs9";
   };
 
   nativeBuildInputs = [ pyqtwebengine.wrapQtAppsHook ];
@@ -20,6 +22,7 @@ buildPythonPackage rec {
     intervaltree jedi pycodestyle psutil pyflakes rope numpy scipy matplotlib pylint keyring
     numpydoc qtconsole qtawesome nbconvert mccabe pyopengl cloudpickle spyder-kernels
     pygments qtpy pyzmq chardet pyqtwebengine qdarkstyle watchdog python-language-server
+    atomicwrites pyxdg diff-match-patch
   ];
 
   # There is no test for spyder
@@ -42,8 +45,12 @@ buildPythonPackage rec {
     substituteInPlace setup.py --replace "pyqt5<5.13" "pyqt5"
   '';
 
-  # Create desktop item
   postInstall = ''
+    # add Python libs to env so Spyder subprocesses
+    # created to run compute kernels don't fail with ImportErrors
+    wrapProgram $out/bin/spyder3 --prefix PYTHONPATH : "$PYTHONPATH"
+
+    # Create desktop item
     mkdir -p $out/share/icons
     cp spyder/images/spyder.svg $out/share/icons
     cp -r $desktopItem/share/applications/ $out/share
@@ -66,6 +73,5 @@ buildPythonPackage rec {
     license = licenses.mit;
     platforms = platforms.linux;
     maintainers = with maintainers; [ gebner ];
-    broken = true;
   };
 }

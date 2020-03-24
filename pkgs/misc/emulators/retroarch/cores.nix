@@ -786,7 +786,7 @@ in with stdenv.lib.licenses;
     SDL_CONFIG = "${SDL.dev}/bin/sdl-config";
     dontAddPrefix = true;
     configurePlatforms = [];
-    meta.badPlatforms = [ "aarch64-linux" ];
+    makeFlags = stdenv.lib.optional stdenv.hostPlatform.isAarch64 [ "platform=aarch64" ];
   };
 
   play = mkLibRetroCore {

@@ -49,6 +49,8 @@
 # - JIT compiler for loops:
 , enableJIT ? false
 , llvm ? null
+, libiconv
+, darwin
 }:
 
 let
@@ -107,10 +109,13 @@ stdenv.mkDerivation rec {
   ++ (stdenv.lib.optional (gnuplot != null) gnuplot)
   ++ (stdenv.lib.optional (python != null) python)
   ++ (stdenv.lib.optionals (!stdenv.isDarwin) [ libGL libGLU libX11 ])
+  ++ (stdenv.lib.optionals (stdenv.isDarwin) [ libiconv
+                                               darwin.apple_sdk.frameworks.Accelerate
+                                               darwin.apple_sdk.frameworks.Cocoa ])
   ;
   nativeBuildInputs = [
     pkgconfig
-    gfortran 
+    gfortran
     # Listed here as well because it's outputs are split
     fftw
     fftwSinglePrec
@@ -135,6 +140,7 @@ stdenv.mkDerivation rec {
     "--with-blas=openblas"
     "--with-lapack=openblas"
   ]
+    ++ (if stdenv.isDarwin then [ "--enable-link-all-dependencies" ] else [ ])
     ++ stdenv.lib.optionals enableReadline [ "--enable-readline" ]
     ++ stdenv.lib.optionals openblas.blas64 [ "--enable-64" ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ "--with-x=no" ]
@@ -161,7 +167,7 @@ stdenv.mkDerivation rec {
     # https://savannah.gnu.org/bugs/?func=detailitem&item_id=56425 is the best attempt to fix JIT
     broken = enableJIT;
     platforms = if overridePlatforms == null then
-      (with stdenv.lib.platforms; linux ++ darwin)
+      (with stdenv.lib; platforms.linux ++ platforms.darwin)
     else overridePlatforms;
   };
 }

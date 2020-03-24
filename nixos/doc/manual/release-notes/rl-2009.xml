@@ -96,6 +96,18 @@
       <option>systemd.services.supybot.serviceConfig</option>.
     </para>
    </listitem>
+   <listitem>
+    <para>
+      The <literal>security.duosec.skey</literal> option, which stored a secret in the
+      nix store, has been replaced by a new
+      <link linkend="opt-security.duosec.secretKeyFile">security.duosec.secretKeyFile</link>
+      option for better security.
+    </para>
+    <para>
+      <literal>security.duosec.ikey</literal> has been renamed to
+      <link linkend="opt-security.duosec.integrationKey">security.duosec.integrationKey</link>.
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
