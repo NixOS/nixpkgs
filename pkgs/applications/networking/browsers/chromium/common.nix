@@ -137,6 +137,8 @@ let
       ./patches/no-build-timestamps.patch
       ./patches/widevine-79.patch
       ./patches/dont-use-ANGLE-by-default.patch
+      # fix race condition in the interaction with pulseaudio
+      ./patches/webrtc-pulse.patch
       # Unfortunately, chromium regularly breaks on major updates and
       # then needs various patches backported in order to be compiled with GCC.
       # Good sources for such patches and other hints:
@@ -149,8 +151,6 @@ let
     ] ++ optionals (useVaapi) [
       # source: https://aur.archlinux.org/cgit/aur.git/tree/vaapi-fix.patch?h=chromium-vaapi
       ./patches/vaapi-fix.patch
-      # fix race condition in the interaction with pulseaudio
-      ./patches/webrtc-pulse.patch
     ];
 
     postPatch = ''
