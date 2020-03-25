@@ -224,8 +224,6 @@ let
     ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
   };
 in {
-  inherit php72base php73base php74base;
-
   php74 = php74base.buildEnv defaultPhpExtensions;
   php73 = php73base.buildEnv defaultPhpExtensions;
   php72 = php72base.buildEnv defaultPhpExtensions;

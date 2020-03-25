@@ -14,9 +14,6 @@ sufficient testing in nixpkgs. This may not be the latest and we tend to upgrade
 to the latest after branch-off for a new NixOS release so we get more testing
 before the next release.
 
-We also have an attribute called `phpbase` that contains a smaller set of default
-extensions but can be extended to your liking.
-
 We keep releases as long as they are supported for the entirety of the next
 NixOS release life cycle. See [PHP Supported Versions](https://www.php.net/supported-versions.php).
 
@@ -35,11 +32,7 @@ attribute is a mix of sources (such as `pecl` and other places).
 The different versions of PHP that nixpkgs fetch is located under attributes
 named based on major and minor version number (example: `php74` is PHP 7.4).
 
-The same pattern with the versioning applies to the packages attribute set and
-to the base attributes.
-
-The packages attribute set for PHP 7.4 is named `php74Packages` and the attribute
-for PHP 7.4 base package is named `php74base`.
+The packages attribute set for PHP 7.4 is named `php74Packages`.
 
 #### Installing PHP with packages
 
@@ -48,9 +41,9 @@ There's two different kinds of things you could install:
    automatically comes with the necessary PHP environment, certain extensions
    and libraries around it.
  - A PHP interpreter with certain extensions available.
-   The `phpbase` attribute provides `phpbase.buildEnv` that allows you to wrap
-   the PHP derivation with an additional config file that makes PHP import
-   additional libraries or dependencies.
+   The `php` attribute provides `php.buildEnv` that allows you to wrap the PHP
+   derivation with an additional config file that makes PHP import another set
+   of extensions instead of the default provided selection.
 
 ##### Example setup for `phpfpm`
 
@@ -59,7 +52,7 @@ the "foo" `phpfpm` pool:
 
 ```nix
 let
-  myPhp = phpbase.buildEnv { exts = pp: with pp; [ imagick exts.opcache ]; };
+  myPhp = php.buildEnv { exts = pp: with pp; [ imagick exts.opcache ]; };
 in {
   services.phpfpm.pools."foo".phpPackage = myPhp;
 };
@@ -71,5 +64,5 @@ This brings up a temporary environment that contains a PHP interpreter with
 `imagick` and `opcache` enabled.
 
 ```sh
-nix-shell -p 'phpbase.buildEnv { exts = pp: with pp; [ imagick exts.opcache ]; }'
+nix-shell -p 'php.buildEnv { exts = pp: with pp; [ imagick exts.opcache ]; }'
 ```

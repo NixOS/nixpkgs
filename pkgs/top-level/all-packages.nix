@@ -9351,24 +9351,23 @@ in
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php74;
-  phpbase = php74base;
   phpPackages = php74Packages;
 
   php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php72base;
+    php = php72;
   });
 
   php73Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php73base;
+    php = php73;
   });
 
   php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php74base;
+    php = php74;
   });
 
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  }) php74 php73 php72 php74base php73base php72base;
+  }) php74 php73 php72;
 
   picoc = callPackage ../development/interpreters/picoc {};
 
