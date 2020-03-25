@@ -338,7 +338,7 @@ in
                   wants = [ "network-online.target" ];
                   # We use `requires` to avoid lego running and falling
                   # back to its own acme-dns registration logic if ours
-                  # fails; see acmeDnsRegisterService for rationale.
+                  # fails; see acmeDnsService for rationale.
                   requires = acmeDnsDeps;
                   wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
 
@@ -396,7 +396,7 @@ in
                 # timing of the manual interventions required to add
                 # the CNAME records.
                 acmeDnsService = {
-                  description = "Register acme-dns Credentials for ${cert}";
+                  description = "Ensure acme-dns Credentials for ${cert}";
 
                   wants = [ "network-online.target" ];
                   after = [ "network-online.target" ];

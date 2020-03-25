@@ -23,6 +23,7 @@ in
 {
   _3proxy = handleTest ./3proxy.nix {};
   acme = handleTest ./acme.nix {};
+  acme-dns = handleTest ./acme-dns.nix {};
   agda = handleTest ./agda.nix {};
   atd = handleTest ./atd.nix {};
   avahi = handleTest ./avahi.nix {};
