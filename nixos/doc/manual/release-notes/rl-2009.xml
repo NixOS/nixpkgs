@@ -127,25 +127,30 @@
    </listitem>
    <listitem>
      <para>
-       Since this release we have an easy way to customize your PHP install to get a much smaller
-       base PHP with only wanted extensions enabled. See following snippet to install a smaller PHP
-       with <literal>imagick</literal>, <literal>opcache</literal> and <literal>pdo_mysql</literal>:
+       Since this release there's an easy way to customize your PHP install to get a much smaller
+       base PHP with only wanted extensions enabled. See the following snippet installing a smaller PHP
+       with the extensions <literal>imagick</literal>, <literal>opcache</literal> and
+       <literal>pdo_mysql</literal> loaded:
 
        <programlisting>
 environment.systemPackages = [
-(pkgs.phpbase.buildEnv { exts = pp: with pp; [
-    imagick
-    exts.opcache
-    exts.pdo_mysql
+(pkgs.php.buildEnv { exts = pp: with pp.exts; [
+    pp.imagick
+    opcache
+    pdo_mysql
   ]; })
 ];</programlisting>
 
-       All native PHP extensions are available under <package><![CDATA[phpPackages.exts.<name?>]]></package>.
+       The default <literal>php</literal> attribute hasn't lost any extensions -
+       the <literal>opcache</literal> extension was added there.
+
+       All upstream PHP extensions are available under <package><![CDATA[php.packages.exts.<name?>]]></package>.
      </para>
      <para>
-       Since we have a smaller base package that we base the main <literal>php</literal> on a
-       smaller base package we've decided to remove a big bunch of options to make the main
-       PHP derivation much easier to work with.
+       The updated <literal>php</literal> attribute is now easily customizable to your liking
+       by using extensions instead of writing config files or changing configure flags.
+
+       Therefore we have removed the following configure flags:
 
        <itemizedlist>
          <title>PHP <literal>config</literal> flags that we don't read anymore:</title>
