@@ -1,7 +1,7 @@
-{ stdenv, pkgs, bazel_1, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_0, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
-, buildPythonPackage, isPy3k, pythonOlder, pythonAtLeast, python
+, buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
 # Python libraries
 , numpy, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
@@ -94,7 +94,7 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_1;
+    bazel = bazel_0;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -121,7 +121,6 @@ let
         sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
       })
 
-      ./tf-1.15-bazel-1.0.patch
 
       (fetchpatch {
         # be compatible with gast >0.2 instead of only gast 0.2.2
@@ -283,7 +282,6 @@ let
     bazelFlags = [
       # temporary fixes to make the build work with bazel 0.27
       "--incompatible_no_support_tools_in_action_inputs=false"
-      "--incompatible_use_native_patch=false"
     ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
@@ -297,9 +295,9 @@ let
 
       # cudaSupport causes fetch of ncclArchive, resulting in different hashes
       sha256 = if cudaSupport then
-        "05fx3jwgdh1nlr1kfy6w3mlbl5m8165lggcqgk5mpxx4kzicvr1y"
+        "1qygfcvvn9vysap9nk6xccxi9mgmzyxiywz6k456f811l1v70p2c"
       else
-        "0q0rwsb2yginqm6vv11zmbs7z2rdk7blyg5fk2jjkmkjrwzpazzg";
+        "0kfjanw0mfbh30vi1ms2xlg8yp429cbyfriik6yxd5cla2pncg2j";
     };
 
     buildAttrs = {
@@ -350,6 +348,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
+  disabled = isPy27 || (pythonAtLeast "3.8");
 
   src = bazel-build.python;
 
@@ -420,6 +419,9 @@ in buildPythonPackage {
     x = np.random.uniform(size=(1,1))
     y = np.random.uniform(size=(1,))
     model.fit(x, y, epochs=1)
+
+    # regression test for #77626
+    from tensorflow.contrib import tensor_forest
     EOF
   '';
 
