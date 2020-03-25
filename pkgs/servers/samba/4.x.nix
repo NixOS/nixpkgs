@@ -17,34 +17,23 @@
 , gettext
 , krb5Full
 , zlib
-, openldap
-, cups
-, pam
-, avahi
-, acl
 , libaio
 , liburing
 , fam
-, libceph
-, glusterfs
 , gnutls
-, ncurses
 , libunwind
 , systemd
 , jansson
-, lmdb
-, gpgme
-, libuuid
 
-, enableLDAP ? false
-, enablePrinting ? false
-, enableMDNS ? false
-, enableDomainController ? false
-, enableRegedit ? true
-, enableCephFS ? false
-, enableGlusterFS ? false
-, enableAcl ? (!stdenv.isDarwin)
-, enablePam ? (!stdenv.isDarwin)
+, enableLDAP ? false, openldap
+, enablePrinting ? false, cups
+, enableMDNS ? false, avahi
+, enableDomainController ? false, gpgme, lmdb
+, enableRegedit ? true, ncurses
+, enableCephFS ? false, libceph
+, enableGlusterFS ? false, glusterfs, libuuid
+, enableAcl ? (!stdenv.isDarwin), acl
+, enablePam ? (!stdenv.isDarwin), pam
 }:
 
 with stdenv.lib;
