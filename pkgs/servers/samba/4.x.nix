@@ -27,6 +27,7 @@
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
+, enableProfiling ? true
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
 , enableKerberos ? true, krb5Full
@@ -123,7 +124,8 @@ stdenv.mkDerivation rec {
   ] ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
-  ] ++ optional (!enableAcl) "--without-acl-support"
+  ] ++ optional enableProfiling "--with-profiling-data"
+    ++ optional (!enableAcl) "--without-acl-support"
     ++ optional (!enablePam) "--without-pam";
 
   preBuild = ''
