@@ -1,10 +1,11 @@
 { stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , openblas
   # Check Inputs
-, python2
+, python
 }:
 
 stdenv.mkDerivation rec {
@@ -24,11 +25,22 @@ stdenv.mkDerivation rec {
     "-DENABLE_TEST=1"
     "-DQUICK_TEST=1"
     "-DCMAKE_INSTALL_PREFIX=" # ends up double-adding /nix/store/... prefix, this avoids issue
+    "-DWITH_F12=1"
+    "-DWITH_RANGE_COULOMB=1"
+    "-DWITH_COULOMB_ERF=1"
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "libcint-python3-test-syntax-patch";
+      url = "http://patch-diff.githubusercontent.com/raw/sunqm/libcint/pull/33.patch";
+      sha256 = "1pg9rz8vffijl3kkk6f4frsivd7m2gp2k44llzkaajav4m5q8q4a";
+    })
   ];
 
   doCheck = true;
-  # Test syntax (like print statements) is written in python2. Fixed when #33 merged: https://github.com/sunqm/libcint/pull/33
-  checkInputs = [ python2.pkgs.numpy ];
+
+  checkInputs = [ python.pkgs.numpy ];
 
   meta = with lib; {
     description = "General GTO integrals for quantum chemistry";
