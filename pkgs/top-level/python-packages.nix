@@ -2287,6 +2287,8 @@ in {
     pythonPackages = self;
   });
 
+  opensimplex = callPackage ../development/python-modules/opensimplex { };
+
   opentracing = callPackage ../development/python-modules/opentracing { };
 
   openidc-client = callPackage ../development/python-modules/openidc-client {};
