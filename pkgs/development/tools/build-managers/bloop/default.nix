@@ -67,6 +67,8 @@ stdenv.mkDerivation {
     chmod +x $out/bloop
     makeWrapper $out/bloop $out/bin/bloop \
       --prefix PATH : ${lib.makeBinPath [ python ]}
+
+    ln -s $out/bin/bloop $out/bin/blp
   '';
 
   meta = with stdenv.lib; {
