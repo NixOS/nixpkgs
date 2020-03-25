@@ -1,12 +1,13 @@
-{ stdenv, fetchgit, libXScrnSaver, libX11 }:
+{ stdenv, fetchurl, libXScrnSaver, libX11 }:
 
-stdenv.mkDerivation {
-  name = "x11idle-unstable-2017-07-01";
+stdenv.mkDerivation rec {
 
-  src = fetchgit {
-    url = "git://orgmode.org/org-mode.git";
-    rev = "fbd865941f3105f689f78bf053bb3b353b9b8a23";
-    sha256 = "0ma3m48f4s38xln0gl1ww9i5x28ij0ipxc94kx5h2931zy7lqzvz";
+  version = "9.2.4";
+  name = "x11idle-org-${version}";
+
+  src = fetchurl {
+    url = "https://code.orgmode.org/bzg/org-mode/raw/release_${version}/contrib/scripts/x11idle.c";
+    sha256 = "0fc5g57xd6bmghyl214gcff0ni3idv33i3gkr339kgn1mdjljv5g";
   };
 
   buildInputs = [ libXScrnSaver libX11 ];
@@ -15,7 +16,7 @@ stdenv.mkDerivation {
 
   installPhase = ''
     mkdir -p $out/bin
-    gcc -lXss -lX11 $src/contrib/scripts/x11idle.c -o $out/bin/x11idle
+    gcc -lXss -lX11 $src -o $out/bin/x11idle
   '';
 
   meta = with stdenv.lib; {
