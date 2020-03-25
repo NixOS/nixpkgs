@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "pyscf";
-  version = "1.6.6";
+  version = "1.7.1";
 
   # must download from GitHub to get the Cmake & C source files
   src = fetchFromGitHub {
     owner = "pyscf";
     repo = pname;
     rev = "v${version}";
-    sha256 = "097cm1823r1v3hv7nk3m2k2xg2z4knsczhahxdgipwgrpank8fab";
+    sha256 = "0fciw9id8fr9396sz52ap5gys0i9hmrmrwm0i1k1k7aciqab3kls";
   };
 
   disabled = isPy27;
@@ -93,8 +93,9 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    nosetests -vv \
+    nosetests -v \
       --where=pyscf \
+      --detailed-errors \
       --exclude-dir=geomopt \
       --exclude-dir=dmrgscf \
       --exclude-dir=fciqmcscf \
@@ -115,11 +116,11 @@ buildPythonPackage rec {
       --exclude=skip \
       --exclude=call_in_background \
       --exclude=libxc_cam_beta_bug \
-      --ignore-files=test_kuccsd_supercell_vs_kpts.py \
-      --ignore-files=test_kccsd_ghf.py \
-      --ignore-files=test_h_.*.py \
-      --ignore-files=test_P_uadc_ip.py \
-      --ignore-files=test_P_uadc_ea.py \
+      --ignore-files=test_kuccsd_supercell_vs_kpts\.py \
+      --ignore-files=test_kccsd_ghf\.py \
+      --ignore-files=test_h_.*\.py \
+      --ignore-files=test_P_uadc_ip\.py \
+      --ignore-files=test_P_uadc_ea\.py \
       --exclude-test=pbc/gw/test/test_kgw_slow_supercell.DiamondTestSupercell3 \
       --exclude-test=pbc/gw/test/test_kgw_slow_supercell.DiamondKSTestSupercell3 \
       --exclude-test=pbc/gw/test/test_kgw_slow.DiamondTestSupercell3 \
@@ -131,7 +132,7 @@ buildPythonPackage rec {
       --exclude-test=pbc/tdscf/test/test_kproxy_supercell_ks.DiamondTestSupercell3 \
       --ignore-files=.*_slow.*py \
       --ignore-files=.*_kproxy_.*py \
-      --ignore-files=test_proxy.py
+      --ignore-files=test_proxy\.py
 
       runHook postCheck
   '';
