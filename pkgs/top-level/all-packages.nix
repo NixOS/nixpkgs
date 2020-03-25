@@ -10449,6 +10449,8 @@ in
     guile = guile_1_8;
   };
 
+  gvls = callPackage ../development/tools/gvls { };
+
   gwrap = callPackage ../development/tools/guile/g-wrap {
     guile = guile_2_0;
   };
