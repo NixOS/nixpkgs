@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, gpgme, lvm2 }:
+{ stdenv, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, gpgme, lvm2, Security }:
 
 buildGoModule rec {
   pname = "dive";
@@ -15,7 +15,8 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ];
+  buildInputs = stdenv.lib.optionals stdenv.isLinux [ btrfs-progs gpgme lvm2 ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

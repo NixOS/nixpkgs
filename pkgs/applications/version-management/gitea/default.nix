@@ -29,8 +29,9 @@ buildGoPackage rec {
     substituteInPlace modules/setting/setting.go --subst-var data
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ optional pamSupport pam;
+  nativeBuildInputs = [ makeWrapper ];
+
+  buildInputs = optional pamSupport pam;
 
   preBuild = let
     tags = optional pamSupport "pam"

@@ -12270,6 +12270,23 @@ let
     };
   };
 
+  MojoPg = buildPerlPackage {
+    pname = "Mojo-Pg";
+    version = "4.18";
+    src = fetchurl {
+      url = "mirror://cpan/authors/id/S/SR/SRI/Mojo-Pg-4.18.tar.gz";
+      sha256 = "31baacc0d6693886b3580e4b3ec6f2d053be8578809c9c1750753576bd1bda3c";
+    };
+    buildInputs = [ TestDeep ];
+    propagatedBuildInputs = [ DBDPg Mojolicious SQLAbstract ];
+    meta = {
+      homepage = "https://github.com/mojolicious/mojo-pg";
+      description = "Mojolicious <3 PostgreSQL";
+      license = stdenv.lib.licenses.artistic2;
+      maintainers = [ maintainers.sgo ];
+    };
+  };
+
   MonitoringPlugin = buildPerlPackage {
     pname = "Monitoring-Plugin";
     version = "0.40";
@@ -14582,6 +14599,19 @@ let
     propagatedBuildInputs = [ FileSlurpTiny ];
     meta = {
       description = "build simple recursive-descent parsers";
+      license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
+    };
+  };
+
+  ParseYapp = buildPerlPackage {
+    pname = "Parser-Yapp";
+    version = "1.21";
+    src = fetchurl {
+      url = mirror://cpan/authors/id/W/WB/WBRASWELL/Parse-Yapp-1.21.tar.gz;
+      sha256 = "1r8kbyk0qd4ficmabj753kjpq0ib0csk01169w7jxflg62cfj41q";
+    };
+    meta = {
+      description = "Perl extension for generating and using LALR parsers";
       license = with stdenv.lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

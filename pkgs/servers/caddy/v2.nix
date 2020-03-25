@@ -1,4 +1,4 @@
-{ stdenv, callPackage, buildGoModule, fetchFromGitHub }:
+{ stdenv, callPackage, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "caddy";
@@ -15,6 +15,8 @@ buildGoModule rec {
     sha256 = "1vagcw6ibri4nbx1n60xp7rffcfr64a2202hjaijyjzc8wcl80na";
   };
   modSha256 = "1sb8w6n84cpya2rjm0zm798kzf5vjpkr5440j1gfnnnr07jl2aqn";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     homepage = "https://caddyserver.com";

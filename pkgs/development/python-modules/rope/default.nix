@@ -1,8 +1,10 @@
-{ stdenv, buildPythonPackage, fetchPypi, nose }:
+{ stdenv, buildPythonPackage, fetchPypi, pythonAtLeast, nose }:
 
 buildPythonPackage rec {
   pname = "rope";
   version = "0.14.0";
+
+  disabled = pythonAtLeast "3.8";  # 0.17 should support Python 3.8
 
   src = fetchPypi {
     inherit pname version;

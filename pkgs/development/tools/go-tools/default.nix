@@ -1,6 +1,7 @@
 { buildGoModule
-, lib
+, stdenv
 , fetchFromGitHub
+, Security
 }:
 
 buildGoModule rec {
@@ -16,9 +17,11 @@ buildGoModule rec {
     sha256 = "0pvi1mzhy6zgx4zfgdypbl4zhvgg11hl5qv7blf2qs0a96j2djhf";
   };
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   modSha256 = "03560xjr2531xj87paskfx2zs364fz6y4kpsid8x08s1syq9nq7p";
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "A collection of tools and libraries for working with Go code, including linters and static analysis";
     homepage = https://staticcheck.io;
     license = licenses.mit;

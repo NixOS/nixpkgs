@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 buildGoModule rec {
   pname = "minify";
@@ -13,9 +13,11 @@ buildGoModule rec {
 
   modSha256 = "09jk3mxf7n9wf1cgyiw9mhsr55fb12k399dmzhnib3vhd9xav15i";
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   buildFlagsArray = [ "-ldflags=-s -w -X main.Version=${version}" ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Minifiers for web formats";
     license = licenses.mit;
     homepage = "https://go.tacodewolff.nl/minify";

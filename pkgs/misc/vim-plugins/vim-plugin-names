@@ -540,6 +540,7 @@ vim-scripts/YankRing.vim
 vim-utils/vim-husk
 vimwiki/vimwiki
 vito-c/jq.vim
+vmchale/ats-vim
 vmchale/dhall-vim
 w0rp/ale
 wakatime/vim-wakatime

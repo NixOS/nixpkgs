@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, CoreServices }:
 
 buildGoModule rec {
   pname = "minio";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "0ikid628v673f7lvp3psk05s3liqlyc3arppg33lfi2cmbaf8hmr";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   subPackages = [ "." ];
 

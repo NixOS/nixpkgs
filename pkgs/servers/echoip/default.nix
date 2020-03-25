@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule {
   pname = "echoip";
@@ -13,6 +13,8 @@ buildGoModule {
 
   modSha256 = "025p891klwpid5fw4z39fimgfkwgkcwqpn5276hflzdp1hfv35ly";
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   outputs = [ "out" "index" ];
 
   postInstall = ''
@@ -20,7 +22,7 @@ buildGoModule {
     cp $src/index.html $index/index.html
   '';
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     homepage = https://github.com/mpolden/echoip;
     license = licenses.bsd3;
     maintainers = with maintainers; [ rvolosatovs ];

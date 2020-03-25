@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "k9s";
@@ -21,6 +21,8 @@ buildGoModule rec {
   '';
 
   modSha256 = "06m4xgl29zx6zpqx630m9cm52wmljms9cvly5f4pqdb4zicq7n86";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Kubernetes CLI To Manage Your Clusters In Style.";

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "kubeprompt";
@@ -20,6 +20,8 @@ buildGoModule rec {
 
   goPackagePath = "github.com/jlesquembre/kubeprompt";
   modSha256 = "0rbpdk2dixywn3wcdgz48f3xw3b7fk8xh7mrlx27wz7fq5wj9v8f";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Kubernetes prompt";

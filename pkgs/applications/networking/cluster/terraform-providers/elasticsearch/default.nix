@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoModule, Security }:
 buildGoModule rec {
   pname = "terraform-provider-elasticsearch";
   version = "0.7.0";
@@ -11,6 +11,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1xk21xswqwpv34j4ba4fj8lcbvfdd12x7rq1hrdyd21mdhmrhw0p";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [ "." ];
 

@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "qbec";
@@ -13,7 +13,9 @@ buildGoModule rec {
 
   modSha256 = "165zqmannlylkzaz9gkmcrlyx8rfhz70ahzhiks4ycgq1qxr0av9";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "Configure kubernetes objects on multiple clusters using jsonnet https://qbec.io";
     homepage = "https://github.com/splunk/qbec";
     license = licenses.asl20;

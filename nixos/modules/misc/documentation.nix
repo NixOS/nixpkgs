@@ -218,9 +218,7 @@ in
            ++ optionals config.services.xserver.enable [ desktopItem pkgs.nixos-icons ]);
 
       services.mingetty.helpLine = mkIf cfg.doc.enable (
-          "\nRun `nixos-help` "
-        + optionalString config.services.nixosManual.showManual "or press <Alt-F${toString config.services.nixosManual.ttyNumber}> "
-        + "for the NixOS manual."
+          "\nRun 'nixos-help' for the NixOS manual."
       );
     })
 

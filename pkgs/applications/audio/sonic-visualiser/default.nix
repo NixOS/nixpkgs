@@ -1,7 +1,7 @@
 # TODO add plugins having various licenses, see http://www.vamp-plugins.org/download.html
 
 { stdenv, fetchurl, alsaLib, bzip2, fftw, libjack2, libX11, liblo
-, libmad, libogg, librdf, librdf_raptor, librdf_rasqal, libsamplerate
+, libmad, libogg, lrdf, librdf_raptor, librdf_rasqal, libsamplerate
 , libsndfile, pkgconfig, libpulseaudio, qtbase, qtsvg, redland
 , rubberband, serd, sord, vampSDK, fftwFloat
 , capnproto, liboggz, libfishsound, libid3tag, opusfile
@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs =
-    [ libsndfile qtbase qtsvg fftw fftwFloat bzip2 librdf rubberband
+    [ libsndfile qtbase qtsvg fftw fftwFloat bzip2 lrdf rubberband
       libsamplerate vampSDK alsaLib librdf_raptor librdf_rasqal redland
       serd
       sord

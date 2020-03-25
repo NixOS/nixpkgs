@@ -216,7 +216,7 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = mkIf (config.networking.firewall.enable == false || config.networking.nftables.enable == false) [
+    warnings = mkIf (config.networking.firewall.enable == false && config.networking.nftables.enable == false) [
       "fail2ban can not be used without a firewall"
     ];
 

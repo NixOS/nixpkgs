@@ -1,6 +1,6 @@
 { stdenv, buildGoModule, fetchurl
 , go, ncurses, notmuch, scdoc
-, python3, perl, w3m, dante
+, python3, perl, w3m, dante, Security
 }:
 
 let
@@ -29,7 +29,8 @@ in buildGoModule rec {
     python3.pkgs.colorama
   ];
 
-  buildInputs = [ python3 notmuch ];
+  buildInputs = [ python3 notmuch ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   GOFLAGS="-tags=notmuch";
 

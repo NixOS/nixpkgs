@@ -52,13 +52,17 @@ in stdenv.mkDerivation rec {
     # rename this plugin so netdata will look for setuid wrapper
     mv $out/libexec/netdata/plugins.d/apps.plugin \
        $out/libexec/netdata/plugins.d/apps.plugin.org
+    mv $out/libexec/netdata/plugins.d/perf.plugin \
+       $out/libexec/netdata/plugins.d/perf.plugin.org
+    mv $out/libexec/netdata/plugins.d/slabinfo.plugin \
+       $out/libexec/netdata/plugins.d/slabinfo.plugin.org
     ${optionalString withIpmi ''
       mv $out/libexec/netdata/plugins.d/freeipmi.plugin \
          $out/libexec/netdata/plugins.d/freeipmi.plugin.org
     ''}
   '';
 
-  preConfigure =  optionalString (!stdenv.isDarwin) ''
+  preConfigure = optionalString (!stdenv.isDarwin) ''
     substituteInPlace collectors/python.d.plugin/python_modules/third_party/lm_sensors.py \
       --replace 'ctypes.util.find_library("sensors")' '"${lm_sensors.out}/lib/libsensors${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';

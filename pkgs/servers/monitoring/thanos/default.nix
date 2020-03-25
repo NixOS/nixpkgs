@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 buildGoModule rec {
   pname = "thanos";
   version = "0.11.0";
@@ -11,6 +11,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1pdypyyy352l6wy5lr94fv8j890lh863h8zg2hxchiymrs5pgq1c";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = "cmd/thanos";
 

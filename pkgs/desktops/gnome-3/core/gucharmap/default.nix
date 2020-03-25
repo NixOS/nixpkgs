@@ -10,7 +10,6 @@
 , glib
 , desktop-file-utils
 , gtk-doc
-, libtool
 , wrapGAppsHook
 , gnome3
 , itstool
@@ -66,7 +65,6 @@ in stdenv.mkDerivation rec {
     unzip
     intltool
     itstool
-    libtool
     gtk-doc
     docbook_xsl
     docbook_xml_dtd_412

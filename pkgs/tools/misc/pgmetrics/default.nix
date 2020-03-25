@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "pgmetrics";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "0h375zk0ik06g0b5vmi00b1wn5q2c0r137f7qf6l8k8p886x41h6";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 

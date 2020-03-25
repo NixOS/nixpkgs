@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{ buildGoModule, fetchFromGitHub, stdenv, Security }:
 
 buildGoModule rec {
   pname = "lnd";
@@ -13,10 +13,12 @@ buildGoModule rec {
 
   modSha256 = "1pvcvpiz6ck8xkgpypchrq9kgkik0jxd7f3jhihbgldsh4zaqiaq";
 
-  meta = with lib; {
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
+  meta = with stdenv.lib; {
     description = "Lightning Network Daemon";
     homepage = "https://github.com/lightningnetwork/lnd";
-    license = lib.licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ cypherpunk2140 ];
   };
 }

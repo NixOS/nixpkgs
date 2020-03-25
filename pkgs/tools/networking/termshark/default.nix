@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, makeWrapper, buildGoModule, wireshark-cli }:
+{ stdenv, fetchFromGitHub, makeWrapper, buildGoModule, wireshark-cli, Security }:
 
 buildGoModule rec {
   pname = "termshark";
@@ -12,7 +12,8 @@ buildGoModule rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ wireshark-cli ];
+  buildInputs = [ wireshark-cli ]
+    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   modSha256 = "0lp4gky76di7as78421p3lsirfr7mic3z204ildvj6gf6d15svpr";
 

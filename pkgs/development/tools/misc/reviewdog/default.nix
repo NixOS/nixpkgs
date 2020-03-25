@@ -1,4 +1,4 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "reviewdog";
@@ -13,11 +13,13 @@ buildGoModule rec {
 
   modSha256 = "1jf08g0xr4wknh9x15igq73y02cy2faqjdjs2v842ii4p3n4p9dw";
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   subPackages = [ "cmd/reviewdog" ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/reviewdog/reviewdog/commands.Version=${version}" ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     description = "Automated code review tool integrated with any code analysis tools regardless of programming language";
     homepage = "https://github.com/reviewdog/reviewdog";
     changelog = "https://github.com/reviewdog/reviewdog/releases/tag/v${version}";

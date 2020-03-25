@@ -1,4 +1,4 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{ stdenv, fetchFromGitHub, buildGoModule, Security }:
 
 buildGoModule rec {
   pname = "mtail";
@@ -14,6 +14,8 @@ buildGoModule rec {
   modSha256 = "0h3q1qd9a01wlfkk0yv74a4bk5nilpsppq522cv7kl8ysnrjh5yi";
   subPackages = [ "cmd/mtail" ];
 
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
+
   preBuild = ''
     go generate -x ./internal/vm/
   '';
@@ -22,7 +24,7 @@ buildGoModule rec {
     "-ldflags=-X main.Version=${version}"
   ];
 
-  meta = with lib; {
+  meta = with stdenv.lib; {
     license = licenses.asl20;
     homepage = "https://github.com/google/mtail";
     description = "Tool for extracting metrics from application logs";

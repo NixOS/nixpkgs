@@ -27,8 +27,8 @@ buildGoPackage rec {
   goPackagePath = "github.com/sylabs/singularity";
   goDeps = ./deps.nix;
 
-  buildInputs = [ openssl ];
-  nativeBuildInputs = [ removeReferencesTo utillinux which makeWrapper ];
+  buildInputs = [ openssl utillinux ];
+  nativeBuildInputs = [ removeReferencesTo which makeWrapper ];
   propagatedBuildInputs = [ coreutils squashfsTools ];
 
   prePatch = ''

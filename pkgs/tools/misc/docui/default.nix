@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub }:
+{ stdenv, buildGoModule, fetchFromGitHub, Security }:
 
 buildGoModule rec {
   pname = "docui";
@@ -12,6 +12,8 @@ buildGoModule rec {
   };
 
   modSha256 = "1wyx05kk4f41mgvwnvfc9xk7vd3x96cbn5xb5ph7p443f70ydnak";
+
+  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "TUI Client for Docker";

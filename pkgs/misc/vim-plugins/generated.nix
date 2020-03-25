@@ -125,6 +125,17 @@ let
     };
   };
 
+  ats-vim = buildVimPluginFrom2Nix {
+    pname = "ats-vim";
+    version = "2020-03-03";
+    src = fetchFromGitHub {
+      owner = "vmchale";
+      repo = "ats-vim";
+      rev = "045fa53f1e0699e980c5c7cd85ecf237ae527ff0";
+      sha256 = "1rpqy40kw0cn2h02ly71syvwz5j77xfmrs4mijkn7k0dxgamhy5s";
+    };
+  };
+
   auto-git-diff = buildVimPluginFrom2Nix {
     pname = "auto-git-diff";
     version = "2019-09-23";
