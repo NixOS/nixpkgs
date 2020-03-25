@@ -22,6 +22,7 @@ buildNix=1
 fast=
 rollback=
 upgrade=
+upgrade_all=
 repair=
 profile=/nix/var/nix/profiles/system
 buildHost=
@@ -53,6 +54,10 @@ while [ "$#" -gt 0 ]; do
         ;;
       --upgrade)
         upgrade=1
+        ;;
+      --upgrade-all)
+        upgrade=1
+        upgrade_all=1
         ;;
       --repair)
         repair=1
@@ -221,15 +226,22 @@ if [ "$action" = switch -o "$action" = boot -o "$action" = test ]; then
 fi
 
 
-# If ‘--upgrade’ is given, run ‘nix-channel --update nixos’.
+# If ‘--upgrade’ or `--upgrade-all` is given,
+# run ‘nix-channel --update nixos’.
 if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
-    nix-channel --update nixos
+    # If --upgrade-all is passed, or there are other channels that
+    # contain a file called ".update-on-nixos-rebuild", update them as
+    # well. Also upgrade the nixos channel.
 
-    # If there are other channels that contain a file called
-    # ".update-on-nixos-rebuild", update them as well.
     for channelpath in /nix/var/nix/profiles/per-user/root/channels/*; do
-        if [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
-            nix-channel --update "$(basename "$channelpath")"
+        channel_name=$(basename "$channelpath")
+
+        if [[ "$channel_name" == "nixos" ]]; then
+            nix-channel --update "$channel_name"
+        elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
+            nix-channel --update "$channel_name"
+        elif [[ -n $upgrade_all ]] ; then
+            nix-channel --update "$channel_name"
         fi
     done
 fi

@@ -52,10 +52,18 @@
     <option>build-vm-with-bootloader</option>
    </arg>
     </group>
-   <sbr />
-   <arg>
-    <option>--upgrade</option>
-   </arg>
+    <sbr />
+
+    <arg>
+      <group choice='req'>
+        <arg choice='plain'>
+          <option>--upgrade</option>
+        </arg>
+        <arg choice='plain'>
+          <option>--upgrade-all</option>
+        </arg>
+      </group>
+    </arg>
 
    <arg>
     <option>--install-bootloader</option>
@@ -334,9 +342,23 @@
     <term>
      <option>--upgrade</option>
     </term>
+    <term>
+     <option>--upgrade-all</option>
+    </term>
     <listitem>
-     <para>
-      Fetch the latest version of NixOS from the NixOS channel.
+      <para>
+        Update the root user's channel named <literal>nixos</literal>
+        before rebuilding the system.
+      </para>
+      <para>
+        In addition to the <literal>nixos</literal> channel, the root
+        user's channels which have a file named
+        <literal>.update-on-nixos-rebuild</literal> in their base
+        directory will also be updated.
+      </para>
+      <para>
+        Passing <option>--upgrade-all</option> updates all of the root
+        user's channels.
      </para>
     </listitem>
    </varlistentry>
