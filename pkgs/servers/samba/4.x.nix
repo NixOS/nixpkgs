@@ -10,14 +10,10 @@
 , docbook_xml_dtd_42
 , readline
 , popt
-, iniparser
 , libbsd
 , libarchive
-, libiconv
-, gettext
 , krb5Full
 , zlib
-, libaio
 , liburing
 , fam
 , gnutls
@@ -72,18 +68,15 @@ stdenv.mkDerivation rec {
     python
     readline
     popt
-    iniparser
     jansson
     libbsd
     libarchive
     zlib
     fam
-    libiconv
-    gettext
     libunwind
     krb5Full
     gnutls
-  ] ++ optionals stdenv.isLinux [ libaio liburing systemd ]
+  ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
