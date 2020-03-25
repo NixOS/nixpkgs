@@ -2,12 +2,14 @@
 , fetchurl
 , python
 , pkgconfig
+, bison
+, flex
 , perl
 , libxslt
 , docbook_xsl
 , rpcgen
 , fixDarwinDylibNames
-, docbook_xml_dtd_42
+, docbook_xml_dtd_45
 , readline
 , popt
 , libbsd
@@ -20,6 +22,9 @@
 , libunwind
 , systemd
 , jansson
+, libtasn1
+, tdb
+, cmocka
 
 , enableLDAP ? false, openldap
 , enablePrinting ? false, cups
@@ -54,11 +59,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     pkgconfig
+    bison
+    flex
     perl
     perl.pkgs.ParseYapp
     libxslt
     docbook_xsl
-    docbook_xml_dtd_42
+    docbook_xml_dtd_45
+    cmocka
   ] ++ optionals stdenv.isDarwin [
     rpcgen
     fixDarwinDylibNames
@@ -76,6 +84,8 @@ stdenv.mkDerivation rec {
     libunwind
     krb5Full
     gnutls
+    libtasn1
+    tdb
   ] ++ optionals stdenv.isLinux [ liburing systemd ]
     ++ optional enableLDAP openldap
     ++ optional (enablePrinting && stdenv.isLinux) cups
