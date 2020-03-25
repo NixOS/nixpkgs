@@ -99,14 +99,16 @@ in
       environment.systemPackages = [cfg.package];
 
       users.users.boinc = {
+        group = "boinc";
         createHome = false;
         description = "BOINC Client";
         home = cfg.dataDir;
         isSystemUser = true;
       };
+      users.groups.boinc = {};
 
       systemd.tmpfiles.rules = [
-        "d '${cfg.dataDir}' - boinc - - -"
+        "d '${cfg.dataDir}' - boinc boinc - -"
       ];
 
       systemd.services.boinc = {
