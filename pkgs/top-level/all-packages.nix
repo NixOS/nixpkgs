@@ -9464,20 +9464,20 @@ in
   phpPackages = php74Packages;
 
   php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php72;
+    php = php72base;
   });
 
   php73Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php73;
+    php = php73base;
   });
 
   php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php74;
+    php = php74base;
   });
 
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
-  }) php74 php73 php72;
+  }) php74 php73 php72 php74base php73base php72base;
 
   picoc = callPackage ../development/interpreters/picoc {};
 
