@@ -314,21 +314,44 @@ in
                 renewOpts = escapeShellArgs (globalOpts ++
                   [ "renew" "--days" (toString cfg.validMinDays) ] ++
                   certOpts ++ data.extraLegoRenewFlags);
+
+                acmeDnsDeps = optional (data.dnsProvider == "acme-dns")
+                  "acme-dns-${cert}.service";
+
+                commonServiceConfig = {
+                  Type = "oneshot";
+                  User = data.user;
+                  Group = data.group;
+                  PrivateTmp = true;
+                  StateDirectory = "acme/.lego/${cert} acme/.lego/accounts ${lpath}";
+                  StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
+                  WorkingDirectory = spath;
+                  # Only try loading the credentialsFile if the dns challenge is enabled
+                  EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
+                };
+
                 acmeService = {
                   description = "Renew ACME Certificate for ${cert}";
-                  after = [ "network.target" "network-online.target" ];
+
+                  after = [ "network.target" "network-online.target" ]
+                    ++ acmeDnsDeps;
                   wants = [ "network-online.target" ];
+                  # We use `requires` to avoid lego running and falling
+                  # back to its own acme-dns registration logic if ours
+                  # fails; see acmeDnsRegisterService for rationale.
+                  requires = acmeDnsDeps;
                   wantedBy = mkIf (!config.boot.isContainer) [ "multi-user.target" ];
-                  serviceConfig = {
-                    Type = "oneshot";
-                    User = data.user;
-                    Group = data.group;
-                    PrivateTmp = true;
-                    StateDirectory = "acme/.lego/${cert} acme/.lego/accounts ${lpath}";
-                    StateDirectoryMode = if data.allowKeysForGroup then "750" else "700";
-                    WorkingDirectory = spath;
-                    # Only try loading the credentialsFile if the dns challenge is enabled
-                    EnvironmentFile = if data.dnsProvider != null then data.credentialsFile else null;
+
+                  # acme-dns requires CNAME support for _acme-challenge
+                  # records. This setting only affects the behaviour of
+                  # DNS-01 challenge propagation checks when a CNAME
+                  # record is present; see:
+                  #
+                  # * https://go-acme.github.io/lego/dns/#experimental-features
+                  # * https://github.com/go-acme/lego/blob/v3.5.0/challenge/dns01/dns_challenge.go#L179-L185
+                  environment.LEGO_EXPERIMENTAL_CNAME_SUPPORT = "true";
+
+                  serviceConfig = commonServiceConfig // {
                     ExecStart = pkgs.writeScript "acme-start" ''
                       #!${pkgs.runtimeShell} -e
                       test -L ${spath}/accounts -o -d ${spath}/accounts || ln -s ../accounts ${spath}/accounts
@@ -364,8 +387,63 @@ in
                       in
                         "+${script}";
                   };
-
                 };
+
+                # For certificates using the acme-dns dnsProvider, we
+                # handle registration and CNAME checking ourselves
+                # rather than letting lego do it, as it only attempts
+                # registration upon renewal, leading to unpredictable
+                # timing of the manual interventions required to add
+                # the CNAME records.
+                acmeDnsService = {
+                  description = "Register acme-dns Credentials for ${cert}";
+
+                  wants = [ "network-online.target" ];
+                  after = [ "network-online.target" ];
+
+                  serviceConfig = commonServiceConfig;
+
+                  # TODO: is openssl needed here? (needs testing with HTTPS
+                  # acme-dns API)
+                  path = [ pkgs.curl pkgs.openssl pkgs.dnsutils pkgs.jq ];
+                  script = ''
+                    set -uo pipefail
+
+                    if ! [ -e "$ACME_DNS_STORAGE_PATH" ]; then
+                      # We use --retry because the acme-dns server might
+                      # not be up when the service starts (especially if
+                      # it's local).
+                      response=$(curl --fail --silent --show-error \
+                        --request POST "$ACME_DNS_API_BASE/register" \
+                        --max-time 30 --retry 5 --retry-connrefused \
+                        | jq ${escapeShellArg "{${builtins.toJSON cert}: .}"})
+                      # Write the response. We do this separately to the
+                      # request to ensure that $ACME_DNS_STORAGE_PATH
+                      # doesn't get written to if curl or jq fail.
+                      echo "$response" > "$ACME_DNS_STORAGE_PATH"
+                    fi
+
+                    src='_acme-challenge.${cert}.'
+                    if ! target=$(jq --exit-status --raw-output \
+                        '.${builtins.toJSON cert}.fulldomain' \
+                        "$ACME_DNS_STORAGE_PATH"); then
+                      echo "$ACME_DNS_STORAGE_PATH has invalid format."
+                      echo "Try removing it and then running:"
+                      echo '  systemctl restart acme-${cert}.service'
+                      exit 1
+                    fi
+
+                    if ! dig +short CNAME "$src" | grep -qF "$target"; then
+                      echo "Required CNAME record for $src not found."
+                      echo "Please add the following DNS record:"
+                      echo "  $src CNAME $target."
+                      echo "and then run:"
+                      echo '  systemctl restart acme-${cert}.service'
+                      exit 1
+                    fi
+                  '';
+                };
+
                 selfsignedService = {
                   description = "Create preliminary self-signed certificate for ${cert}";
                   path = [ pkgs.openssl ];
@@ -416,6 +494,8 @@ in
                 };
               in (
                 [ { name = "acme-${cert}"; value = acmeService; } ]
+                ++ optional (data.dnsProvider == "acme-dns")
+                  { name = "acme-dns-${cert}"; value = acmeDnsService; }
                 ++ optional cfg.preliminarySelfsigned { name = "acme-selfsigned-${cert}"; value = selfsignedService; }
               );
           servicesAttr = listToAttrs services;
