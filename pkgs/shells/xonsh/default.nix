@@ -1,23 +1,21 @@
 { stdenv
 , fetchFromGitHub
-, fetchpatch
 , python3Packages
 , glibcLocales
 , coreutils
 , git
-, python3
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "xonsh";
-  version = "0.9.14";
+  version = "0.9.15";
 
   # fetch from github because the pypi package ships incomplete tests
   src = fetchFromGitHub {
     owner  = "xonsh";
     repo   = "xonsh";
     rev    = version;
-    sha256 = "03g8ilg4dxin3v3rzccdxx9zf8rvyqpxakn1dlpqbgsnwdwa19p4";
+    sha256 = "1bc1cysh2jnqi9ihmpgpbh5l9bjq9q9zgpxmdhg8d7i2w4d3z421";
   };
 
   LC_ALL = "en_US.UTF-8";
@@ -46,7 +44,8 @@ python3Packages.buildPythonApplication rec {
 
   meta = with stdenv.lib; {
     description = "A Python-ish, BASHwards-compatible shell";
-    homepage = https://xon.sh/;
+    homepage = "https://xon.sh/";
+    changelog = "https://github.com/xonsh/xonsh/releases/tag/${version}";
     license = licenses.bsd3;
     maintainers = with maintainers; [ spwhitt vrthra ];
     platforms = platforms.all;
