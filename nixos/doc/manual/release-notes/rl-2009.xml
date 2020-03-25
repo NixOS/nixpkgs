@@ -118,12 +118,15 @@
 
        <programlisting>
 environment.systemPackages = [
-(pkgs.phpbase.buildEnv { exts = pp: with pp; [
+(pkgs.php.buildEnv { exts = pp: with pp; [
     imagick
     exts.opcache
     exts.pdo_mysql
   ]; })
 ];</programlisting>
+
+       The default <literal>php</literal> attribute haven't lost any extensions by default though. It
+       has added the <literal>opcache</literal> extension as an additional extension.
 
        All native PHP extensions are available under <package><![CDATA[phpPackages.exts.<name?>]]></package>.
      </para>
