@@ -8,8 +8,8 @@ in rec {
     installFiles = [ "UEFITool/UEFITool" "UEFIFind/UEFIFind" "UEFIExtract/UEFIExtract" ];
   };
   old-engine = common rec {
-    version = "0.27.0";
-    sha256 = "1i1p823qld927p4f1wcphqcnivb9mq7fi5xmzibxc3g9zzgnyc2h";
+    version = "0.28.0";
+    sha256 = "1n2hd2dysi5bv2iyq40phh1jxc48gdwzs414vfbxvcharcwapnja";
     installFiles = [ "UEFITool" "UEFIReplace/UEFIReplace" "UEFIPatch/UEFIPatch" ];
   };
 }
