@@ -13,8 +13,8 @@ stdenv.mkDerivation rec {
   version = "0.4.5";
 
   src = fetchurl {
-    url = "https://git.pwmt.org/pwmt/zathura/-/archive/${version}/zathura-${version}.tar.gz";
-    sha256 = "1khs1snwjclgl12ykagvbdpv7sw1lf7mmws8902hf899za7wfrwl";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "0b3nrcvykkpv2vm99kijnic2gpfzva520bsjlihaxandzfm9ff8c";
   };
 
   outputs = [ "bin" "man" "dev" "out" ];

@@ -1,10 +1,11 @@
 { stdenv, lib, fetchurl, meson, ninja, pkgconfig, zathura_core, girara, libspectre, gettext }:
 
 stdenv.mkDerivation rec {
-  name = "zathura-ps-0.2.6";
+  pname = "zathura-ps";
+  version = "0.2.6";
 
   src = fetchurl {
-    url = "https://pwmt.org/projects/zathura/plugins/download/${name}.tar.xz";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
     sha256 = "0wygq89nyjrjnsq7vbpidqdsirjm6iq4w2rijzwpk2f83ys8bc3y";
   };
 

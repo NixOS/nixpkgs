@@ -5,8 +5,8 @@ stdenv.mkDerivation rec {
   version = "0.3.0";
 
   src = fetchurl {
-    url = "https://git.pwmt.org/pwmt/zathura-pdf-poppler/-/archive/${version}/${pname}-${version}.tar.gz";
-    sha256 = "133xxh82x37v0ihwk5g2hih1xlzm76kkayifdjn15xqf14gp6axs";
+    url = "https://pwmt.org/projects/${pname}/download/${pname}-${version}.tar.xz";
+    sha256 = "1vfl4vkyy3rf39r1sqaa7y8113bgkh2bkfq3nn2inis9mrykmk6m";
   };
 
   nativeBuildInputs = [ meson ninja pkgconfig zathura_core ];
