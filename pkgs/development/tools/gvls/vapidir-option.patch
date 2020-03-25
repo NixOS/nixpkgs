@@ -1,0 +1,32 @@
+diff --git i/meson.build w/meson.build
+index a02b053..062ce7d 100644
+--- i/meson.build
++++ w/meson.build
+@@ -84,8 +84,15 @@ vala_dep_str = 'libvala-@0@'.format (vala_version)
+ vala_dep = dependency(vala_dep_str)
+ vapiprefix = vala_dep.get_pkgconfig_variable('prefix')
+ vapidatadir = vala_dep.get_pkgconfig_variable('datadir')
+-vapidir = join_paths (vapiprefix,vapidatadir,'vala','vapi')
+-VAPIDIR = vala_dep.get_pkgconfig_variable ('vapidir')
++vapidir_option = get_option('vapidir')
++if vapidir_option != ''
++  message('Using user provided vapidir location' + vapidir_option)
++  vapidir = vapidir_option
++  VAPIDIR = vapidir_option
++else
++  vapidir = join_paths (vapiprefix,vapidatadir,'vala','vapi')
++  VAPIDIR = vala_dep.get_pkgconfig_variable ('vapidir')
++endif
+ 
+ inc_rooth = include_directories ('.')
+ inc_rooth_dep = declare_dependency (include_directories : inc_rooth)
+diff --git i/meson_options.txt w/meson_options.txt
+index dc4aeb0..3bf0e11 100644
+--- i/meson_options.txt
++++ w/meson_options.txt
+@@ -1,4 +1,5 @@
+ option('vala-version', type: 'string', value : '', description : 'Use another version of Vala (only the latest is officially supported)')
++option('vapidir', type: 'string', value : '', description : 'Use a specific location for vapidir of vala')
+ option('ui', type: 'boolean', value : 'true', description : 'Build UI libraries')
+ option('gedit-plugin', type: 'boolean', value : 'false', description : 'Build GEdit plugin (ui is requed)')
+ option('interactive', type: 'boolean', value : 'false', description : 'Makes UI tests interactive, so auto-close is disable')
