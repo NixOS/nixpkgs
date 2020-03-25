@@ -44,7 +44,7 @@ mkDerivation {
 
   patches = [
     ./0001-startkde.patch
-    ./0002-absolute-wallpaper-install-dir.patch
+#    ./0002-absolute-wallpaper-install-dir.patch #TODO(bachp): check if this is needed https://github.com/KDE/plasma-workspace/blob/Plasma/5.18/sddm-theme/theme.conf.cmake
   ];
 
 

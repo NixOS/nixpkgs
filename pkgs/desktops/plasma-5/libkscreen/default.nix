@@ -1,7 +1,7 @@
 {
   mkDerivation, lib, copyPathsToStore, propagate,
   extra-cmake-modules,
-  kwayland, libXrandr, qtbase, qtx11extras
+  kwayland, libXrandr, qtbase, qtx11extras, qtsensors
 }:
 
 mkDerivation {
@@ -10,7 +10,7 @@ mkDerivation {
     broken = builtins.compareVersions qtbase.version "5.12.0" < 0;
   };
   nativeBuildInputs = [ extra-cmake-modules ];
-  buildInputs = [ kwayland libXrandr qtx11extras ];
+  buildInputs = [ kwayland libXrandr qtx11extras qtsensors ];
   outputs = [ "out" "dev" ];
   patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
   preConfigure = ''

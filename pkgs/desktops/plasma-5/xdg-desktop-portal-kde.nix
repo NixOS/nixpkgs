@@ -2,6 +2,7 @@
   mkDerivation,
   extra-cmake-modules, gettext, kdoctools, python,
   kcoreaddons, knotifications, kwayland, kwidgetsaddons, kwindowsystem,
+  kirigami2, kdeclarative, plasma-framework, 
   cups, pcre, pipewire, kio
 }:
 
@@ -11,5 +12,6 @@ mkDerivation {
   buildInputs = [
     cups pcre pipewire kio
     kcoreaddons knotifications kwayland kwidgetsaddons kwindowsystem
+    kirigami2 kdeclarative plasma-framework
   ];
 }
