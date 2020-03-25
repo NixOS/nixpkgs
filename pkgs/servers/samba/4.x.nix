@@ -14,7 +14,6 @@
 , popt
 , libbsd
 , libarchive
-, krb5Full
 , zlib
 , liburing
 , fam
@@ -30,6 +29,7 @@
 , enablePrinting ? false, cups
 , enableMDNS ? false, avahi
 , enableDomainController ? false, gpgme, lmdb
+, enableKerberos ? true, krb5Full
 , enableRegedit ? true, ncurses
 , enableCephFS ? false, libceph
 , enableGlusterFS ? false, glusterfs, libuuid
@@ -82,7 +82,6 @@ stdenv.mkDerivation rec {
     zlib
     fam
     libunwind
-    krb5Full
     gnutls
     libtasn1
     tdb
@@ -91,6 +90,7 @@ stdenv.mkDerivation rec {
     ++ optional (enablePrinting && stdenv.isLinux) cups
     ++ optional enableMDNS avahi
     ++ optionals enableDomainController [ gpgme lmdb ]
+    ++ optional enableKerberos krb5Full
     ++ optional enableRegedit ncurses
     ++ optional (enableCephFS && stdenv.isLinux) libceph
     ++ optionals (enableGlusterFS && stdenv.isLinux) [ glusterfs libuuid ]
@@ -110,8 +110,6 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-static-modules=NONE"
     "--with-shared-modules=ALL"
-    "--with-system-mitkrb5"
-    "--with-system-mitkdc=${krb5Full}"
     "--enable-fhs"
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -119,7 +117,10 @@ stdenv.mkDerivation rec {
   ] ++ singleton (if enableDomainController
          then "--with-experimental-mit-ad-dc"
          else "--without-ad-dc")
-    ++ optionals (!enableLDAP) [
+    ++ optionals enableKerberos [
+    "--with-system-mitkrb5"
+    "--with-system-mitkdc=${krb5Full}"
+  ] ++ optionals (!enableLDAP) [
     "--without-ldap"
     "--without-ads"
   ] ++ optional (!enableAcl) "--without-acl-support"
