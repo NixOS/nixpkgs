@@ -2,6 +2,7 @@
 , pythonOlder
 , buildPythonPackage
 , fetchFromGitHub
+, arrow
 , nest-asyncio
 , qiskit-terra
 , requests
@@ -15,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "qiskit-ibmq-provider";
-  version = "0.4.5";
+  version = "0.5.0";
 
   disabled = pythonOlder "3.6";
 
@@ -23,10 +24,11 @@ buildPythonPackage rec {
     owner = "Qiskit";
     repo = pname;
     rev = version;
-    sha256 = "148x3x1gk6l7nrqdllglq6ywh70k4747ybkx0bn25k3gmxd57y03";
+    sha256 = "1jhgsfspmry0qk7jkcryn4225j2azys3rm99agk6mh0jzwrvx4am";
   };
 
   propagatedBuildInputs = [
+    arrow
     nest-asyncio
     qiskit-terra
     requests
