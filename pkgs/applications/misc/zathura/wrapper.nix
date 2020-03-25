@@ -8,6 +8,8 @@ in symlinkJoin {
 
   paths = with zathura_core; [ man dev out ];
 
+  inherit plugins;
+
   buildInputs = [ makeWrapper ];
 
   postBuild = ''
