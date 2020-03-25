@@ -843,14 +843,28 @@ let
         configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
         doCheck = false; }
       { name = "mysqlnd";
-        buildInputs = [ zlib openssl ]
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ openssl.dev ];
-        internalDeps = [ "openssl" ];
-        postPhpize = ''
-          sed -i '/#include "php.h"/i\
-          #ifdef HAVE_CONFIG_H\
-          #include "config.h"\
-          #endif' php_mysqlnd.c
+        buildInputs = [ zlib openssl ];
+        # The configure script builds a config.h which is never
+        # included. Let's include it in the main file, php_mysqlnd.c.
+        patches = [
+          (pkgs.writeText "mysqlnd_config.patch" ''
+            --- a/php_mysqlnd.c
+            +++ b/php_mysqlnd.c
+            @@ -17,6 +17,9 @@
+               +----------------------------------------------------------------------+
+             */
+
+            +#ifdef HAVE_CONFIG_H
+            +#include "config.h"
+            +#endif
+             #include "php.h"
+             #include "mysqlnd.h"
+             #include "mysqlnd_priv.h"
+          '')
+        ];
+        postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
+          substituteInPlace configure --replace '$OPENSSL_LIBDIR' '${openssl}/lib' \
+                                      --replace '$OPENSSL_INCDIR' '${openssl.dev}/include'
         ''; }
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
