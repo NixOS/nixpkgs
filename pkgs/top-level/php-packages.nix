@@ -2,8 +2,7 @@
 , bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium, html-tidy
 , libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
 , pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
-, libffi, freetds, postgresql, sqlite, recode, net-snmp, unixODBC, libedit
-, readline
+, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit, readline
 }:
 
 let
@@ -804,6 +803,7 @@ let
           "--with-zlib-dir=${zlib.dev}"
           "--enable-gd-jis-conv"
         ];
+        doCheck = false;
         enable = lib.versionOlder php.version "7.4"; }
       { name = "gettext";
         buildInputs = [ gettext ];
@@ -842,18 +842,21 @@ let
         configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
         doCheck = false; }
       { name = "mysqlnd";
-        buildInputs = [ zlib openssl ];
+        buildInputs = [ zlib openssl ]
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ openssl.dev ];
+        internalDeps = [ "openssl" ];
         postPhpize = ''
-          sed '/#include "php.h"/i\
+          sed -i '/#include "php.h"/i\
           #ifdef HAVE_CONFIG_H\
           #include "config.h"\
-          #endif' php_mysqlnd.c > php_mysqlnd.c.tmp
-
-          mv php_mysqlnd.c.tmp php_mysqlnd.c
+          #endif' php_mysqlnd.c
         ''; }
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
-      { name = "opcache"; buildInputs = [ pcre' ]; zendExtension = true; }
+      { name = "opcache";
+        buildInputs = [ pcre' ];
+        zendExtension = true;
+        doCheck = !(lib.versionOlder php.version "7.4"); }
       { name = "openssl";
         buildInputs = [ openssl ];
         configureFlags = [ "--with-openssl" ];
@@ -895,13 +898,10 @@ let
         buildInputs = [ libedit readline ];
         configureFlags = [ "--with-readline=${readline.dev}" ];
         postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
-          substituteInPlace configure --replace 'as_fn_error $? "Please reinstall libedit - I cannot find readline.h" "$LINENO" 5' ':' 
+          substituteInPlace configure --replace 'as_fn_error $? "Please reinstall libedit - I cannot find readline.h" "$LINENO" 5' ':'
         '';
         doCheck = false; }
-      { name = "recode";
-        configureFlags = [ "--with-recode=${recode}" ];
-        # Removed in php 7.4.
-        enable = lib.versionOlder php.version "7.4"; }
+      # recode (7.3, 7.2)
       { name = "session"; }
       { name = "shmop"; }
       { name = "simplexml";
@@ -931,6 +931,7 @@ let
       { name = "tokenizer"; }
       { name = "wddx";
         buildInputs = [ libxml2 ];
+        internalDeps = [ "session" ];
         configureFlags = [ "--enable-wddx" "--with-libxml-dir=${libxml2.dev}" ];
         # Removed in php 7.4.
         enable = lib.versionOlder php.version "7.4"; }
@@ -955,7 +956,10 @@ let
         configureFlags = [ "--enable-xmlwriter" ]
           # Required to build on darwin.
           ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-libxml-dir=${libxml2.dev}" ]; }
-      { name = "xsl"; buildInputs = [ libxslt libxml2 ]; configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
+      { name = "xsl";
+        buildInputs = [ libxslt libxml2 ];
+        doCheck = !(lib.versionOlder php.version "7.4");
+        configureFlags = [ "--with-xsl=${libxslt.dev}" ]; }
       { name = "zend_test"; }
       { name = "zip";
         buildInputs = [ libzip pcre' ];
@@ -965,7 +969,8 @@ let
         doCheck = false; }
       { name = "zlib";
         buildInputs = [ zlib ];
-        configureFlags = [ "--with-zlib" ]; }
+        configureFlags = [ "--with-zlib" ]
+          ++ lib.optional (lib.versionOlder php.version "7.4") [ "--with-zlib-dir=${zlib.dev}" ]; }
     ];
 
     # Convert the list of attrs:
