@@ -21234,10 +21234,7 @@ in
 
   opentimestamps-client = python3Packages.callPackage ../tools/misc/opentimestamps-client {};
 
-  opentx = callPackage ../applications/misc/opentx {
-    gcc-arm-embedded = pkgsCross.arm-embedded.buildPackages.gcc;
-    binutils-arm-embedded = pkgsCross.arm-embedded.buildPackages.binutils;
-  };
+  opentx = libsForQt5.callPackage ../applications/misc/opentx { };
 
   opera = callPackage ../applications/networking/browsers/opera {};
 
