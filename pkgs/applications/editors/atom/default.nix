@@ -10,7 +10,7 @@ let
     atom-beta = {
       version = "1.46.0";
       beta = 0;
-      sha256 = "129s850njk1nia74r5i8hkp4jnqvdmv628zr5mm2x4mcrcx0bj2";
+      sha256 = "129s850njk1nia74r5i8hkp4jnqvdmv628zr5mm2x4mcrcx0bj27";
     };
   };
 
