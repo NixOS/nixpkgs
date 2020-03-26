@@ -31,9 +31,9 @@ buildPythonPackage rec {
   doCheck = false;  # otherwise runs OSX code on linux.
 
   meta = with lib; {
-    homepage = http://vispy.org/index.html;
+    homepage = "http://vispy.org/index.html";
     description = "Interactive scientific visualization in Python";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = with maintainers; [ goertzenator ];
   };
 }

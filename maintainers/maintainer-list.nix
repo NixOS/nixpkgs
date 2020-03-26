@@ -2910,6 +2910,12 @@
     githubId = 25820499;
     name = "Roman Kretschmer";
   };
+  goertzenator = {
+    email = "daniel.goertzen@gmail.com";
+    github = "goertzenator";
+    githubId = 605072;
+    name = "Daniel Goertzen";
+  };
   goibhniu = {
     email = "cillian.deroiste@gmail.com";
     github = "cillianderoiste";
