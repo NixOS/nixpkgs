@@ -843,12 +843,25 @@ let
         doCheck = false; }
       { name = "mysqlnd";
         buildInputs = [ zlib openssl ];
-        postPhpize = ''
-          sed -i '/#include "php.h"/i\
-          #ifdef HAVE_CONFIG_H\
-          #include "config.h"\
-          #endif' php_mysqlnd.c
-        '' + lib.optionalString (lib.versionOlder php.version "7.4") ''
+        # The configure script builds a config.h which is never
+        # included. Let's include it in the main file, php_mysqlnd.c.
+        patches = [
+          (pkgs.writeText "mysqlnd_config.patch" ''
+            --- a/php_mysqlnd.c
+            +++ b/php_mysqlnd.c
+            @@ -17,6 +17,9 @@
+               +----------------------------------------------------------------------+
+             */
+
+            +#ifdef HAVE_CONFIG_H
+            +#include "config.h"
+            +#endif
+             #include "php.h"
+             #include "mysqlnd.h"
+             #include "mysqlnd_priv.h"
+          '')
+        ];
+        postPhpize = lib.optionalString (lib.versionOlder php.version "7.4") ''
           substituteInPlace configure --replace '$OPENSSL_LIBDIR' '${openssl}/lib' \
                                       --replace '$OPENSSL_INCDIR' '${openssl.dev}/include'
         ''; }
