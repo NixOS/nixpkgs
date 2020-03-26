@@ -1,6 +1,6 @@
 # This test start mongodb, runs a query using mongo shell
 
-import ./make-test.nix ({ pkgs, ... }:
+import ./make-test-python.nix ({ pkgs, ... }:
   let
     testQuery = pkgs.writeScript "nixtest.js" ''
       db.greetings.insert({ "greeting": "hello" });
@@ -8,14 +8,20 @@ import ./make-test.nix ({ pkgs, ... }:
     '';
 
     runMongoDBTest = pkg: ''
-      $node->execute("(rm -rf data || true) && mkdir data");
-      $node->execute("${pkg}/bin/mongod --fork --logpath logs --dbpath data");
-      $node->waitForOpenPort(27017);
+      node.execute("(rm -rf data || true) && mkdir data")
+      node.execute(
+          "${pkg}/bin/mongod --fork --logpath logs --dbpath data"
+      )
+      node.wait_for_open_port(27017)
 
-      $node->succeed("mongo ${testQuery}") =~ /hello/ or die;
+      assert "hello" in node.succeed(
+          "mongo ${testQuery}"
+      )
 
-      $node->execute("${pkg}/bin/mongod --shutdown --dbpath data");
-      $node->waitForClosedPort(27017);
+      node.execute(
+          "${pkg}/bin/mongod --shutdown --dbpath data"
+      )
+      node.wait_for_closed_port(27017)
     '';
 
   in {
@@ -34,9 +40,13 @@ import ./make-test.nix ({ pkgs, ... }:
       };
     };
 
-    testScript = "$node->start;" 
+    testScript = ''
+      node.start()
+    ''
 #      + runMongoDBTest pkgs.mongodb-3_4
       + runMongoDBTest pkgs.mongodb-3_6 
       + runMongoDBTest pkgs.mongodb-4_0
-      + "$node->shutdown;";
+      + ''
+        node.shutdown()
+      '';
   })
