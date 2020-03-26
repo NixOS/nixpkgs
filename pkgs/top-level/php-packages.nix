@@ -870,6 +870,25 @@ let
       # odbc (7.4, 7.3, 7.2)
       { name = "opcache";
         buildInputs = [ pcre' ];
+        # HAVE_OPCACHE_FILE_CACHE is defined in config.h, which is
+        # included from ZendAccelerator.h, but ZendAccelerator.h is
+        # included after the ifdef...
+        patches = lib.optional (lib.versionOlder php.version "7.4") [
+          (pkgs.writeText "zend_file_cache_config.patch" ''
+            --- a/zend_file_cache.c
+            +++ b/zend_file_cache.c
+            @@ -27,9 +27,9 @@
+             #include "ext/standard/md5.h"
+             #endif
+
+            +#include "ZendAccelerator.h"
+             #ifdef HAVE_OPCACHE_FILE_CACHE
+
+            -#include "ZendAccelerator.h"
+             #include "zend_file_cache.h"
+             #include "zend_shared_alloc.h"
+             #include "zend_accelerator_util_funcs.h"
+          '') ];
         zendExtension = true;
         doCheck = !(lib.versionOlder php.version "7.4"); }
       { name = "openssl";
