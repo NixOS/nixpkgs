@@ -17963,7 +17963,10 @@ in
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
+
   inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix {};
+
+  inconsolata-nerdfont = callPackage ../data/fonts/inconsolata-nerdfont {};
 
   input-fonts = callPackage ../data/fonts/input-fonts { };
 
@@ -18366,6 +18369,8 @@ in
     { inherit (buildPackages.xorg) fonttosfnt mkfontscale; };
 
   terminus_font_ttf = callPackage ../data/fonts/terminus-font-ttf { };
+
+  terminus-nerdfont = callPackage ../data/fonts/terminus-nerdfont { };
 
   termtekst = callPackage ../misc/emulators/termtekst { };
 
