@@ -3,23 +3,25 @@
 
 { stdenv, fetchFromGitHub, pkgconfig, libsndfile }:
 
-stdenv.mkDerivation {
-  name = "vamp-sdk-2.7.1";
-  # version = "2.7.1";
+stdenv.mkDerivation rec {
+  pname = "vamp-plugin-sdk";
+  version = "2.9";
 
   src = fetchFromGitHub {
     owner = "c4dm";
     repo = "vamp-plugin-sdk";
-    rev = "vamp-plugin-sdk-v2.7.1";
-    sha256 = "1ifd6l6b89pg83ss4gld5i72fr0cczjnl2by44z5jnndsg3sklw4";
+    rev = "vamp-plugin-sdk-v${version}";
+    sha256 = "1ay12gjqp2wzysg9k2qha3gd8sj5rjlfy4hsl923csi4ssiapsh1";
   };
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ libsndfile ];
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
-    homepage = https://sourceforge.net/projects/vamp;
+    homepage = https://vamp-plugins.org/;
     license = licenses.bsd3;
     maintainers = [ maintainers.goibhniu maintainers.marcweber ];
     platforms = platforms.linux;
