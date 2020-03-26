@@ -1689,6 +1689,8 @@ in
 
   h = callPackage ../tools/misc/h { };
 
+  discourse = callPackage ../servers/web-apps/discourse { };
+
   discount = callPackage ../tools/text/discount { };
 
   diskscan = callPackage ../tools/misc/diskscan { };
