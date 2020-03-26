@@ -1,4 +1,5 @@
-{ appimageTools, symlinkJoin, lib, fetchurl, makeDesktopItem }:
+{ appimageTools, stdenvNoCC, lib, fetchurl, makeDesktopItem
+, wrapGAppsHook, gsettings-desktop-schemas, gtk3 }:
 
 let
   pname = "ssb-patchwork";
@@ -29,16 +30,20 @@ let
     categories = "Network;";
   };
 
-in
-  symlinkJoin {
-    inherit name;
-    paths = [ binary ];
+in stdenvNoCC.mkDerivation {
+  inherit pname version;
 
-    postBuild = ''
-      mkdir -p $out/share/pixmaps/ $out/share/applications
-      cp ${appimage-contents}/ssb-patchwork.png $out/share/pixmaps
-      cp ${desktopItem}/share/applications/* $out/share/applications/
-    '';
+  nativeBuildInputs = [ wrapGAppsHook ];
+
+  buildCommand = ''
+    makeWrapper "${binary}/bin/ssb-patchwork" "$out/bin/ssb-patchwork" \
+      --prefix XDG_DATA_DIRS : "${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}" \
+      --prefix XDG_DATA_DIRS : "${gtk3}/share/gsettings-schemas/${gtk3.name}" \
+
+    mkdir -p $out/share/pixmaps/ $out/share/applications
+    cp ${appimage-contents}/ssb-patchwork.png $out/share/pixmaps
+    cp ${desktopItem}/share/applications/* $out/share/applications/
+  '';
 
   meta = with lib; {
     description = "A decentralized messaging and sharing app built on top of Secure Scuttlebutt (SSB)";
@@ -47,7 +52,12 @@ in
     '';
     homepage = "https://www.scuttlebutt.nz/";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ asymmetric ninjatrappeur thedavidmeister ];
+    maintainers = with maintainers; [
+      asymmetric
+      ninjatrappeur
+      thedavidmeister
+      ehmry
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
