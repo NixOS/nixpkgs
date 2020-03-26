@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "openh264";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = pname;
     rev = "v${version}";
-    sha256 = "0sa4n4xshmiiv6h767jjq9qxapxxjwwwm3bpcignkxv5xn5sls5r";
+    sha256 = "1wba260n1932vafd5ni2jqv9kzc7lj6a1asm1cqk8jv690m6zvpi";
   };
 
   nativeBuildInputs = [ nasm ];
