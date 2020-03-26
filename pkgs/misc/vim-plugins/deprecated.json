@@ -1,0 +1,6 @@
+{
+    "gist-vim": "vim-gist",
+    "vim-jade": "vim-pug",
+    "vundle": "Vundle.vim",
+    "youcompleteme": "YouCompleteMe"
+}

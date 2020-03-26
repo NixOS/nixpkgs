@@ -34,6 +34,7 @@ ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 ROOT = Path(__file__).parent
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
+DEPRECATED = ROOT.joinpath("deprecated.json")
 
 import time
 from functools import wraps
@@ -129,9 +130,6 @@ class Repo:
             old_plugin = plugin_line.format(owner=self.owner, name=self.name)
             new_plugin = plugin_line.format(owner=new_owner, name=new_name)
             self.redirect[old_plugin] = new_plugin
-
-            if new_name != self.name:
-                print(f"Plugin Name Changed: {self.name} -> {new_name}")
 
     def prefetch_git(self, ref: str) -> str:
         data = subprocess.check_output(
@@ -421,6 +419,17 @@ def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
 
     if redirects:
         lines = [redirects.get(line, line) for line in lines]
+
+        with open(DEPRECATED, "r") as f:
+            deprecations = json.load(f)
+        for old, new in redirects.items():
+            old_name = old.split("/")[1].split(" ")[0].strip("\n")
+            new_name = new.split("/")[1].split(" ")[0].strip("\n")
+            if old_name != new_name:
+                deprecations[old_name] = new_name
+        with open(DEPRECATED, "w") as f:
+            json.dump(deprecations, f, indent=4, sort_keys=True)
+
         print(
             f"""\
 Redirects have been detected and {input_file} has been updated. Please take the
@@ -428,13 +437,11 @@ following steps:
     1. Go ahead and commit just the updated expressions as you intended to do:
             git add {output_file}
             git commit -m "vimPlugins: Update"
-    2. If any of the plugin names were changed, throw an error in aliases.nix:
-            <oldName> = deprecateName "<oldName>" "<newName>"; # backwards compat, added YYYY-MM-DD
-    3. Run this script again so these changes will be reflected in the
+    2. Run this script again so these changes will be reflected in the
     generated expressions:
             ./update.py
-    4. Commit {input_file} along with aliases and generated expressions:
-            git add {output_file} {input_file} aliases.nix
+    3. Commit {input_file} along with deprecations and generated expressions:
+            git add {output_file} {input_file} {DEPRECATED}
             git commit -m "vimPlugins: Update redirects"
         """
         )
