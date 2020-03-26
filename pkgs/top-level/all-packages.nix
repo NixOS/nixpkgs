@@ -7834,6 +7834,8 @@ in
 
   clipnotify = callPackage ../tools/misc/clipnotify { };
 
+  x3270 = callPackage ../applications/misc/x3270 { };
+
   xclip = callPackage ../tools/misc/xclip { };
 
   xcur2png = callPackage ../tools/graphics/xcur2png { };
