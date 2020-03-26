@@ -22309,6 +22309,8 @@ in
 
   tortoisehg = callPackage ../applications/version-management/tortoisehg { };
 
+  tony = libsForQt5.callPackage ../applications/audio/tony { };
+
   toot = callPackage ../applications/misc/toot { };
 
   tootle = callPackage ../applications/misc/tootle { };
