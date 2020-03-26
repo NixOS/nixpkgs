@@ -37,10 +37,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0krd80ga7qcms469l55jbm711a7ph2lmyn88l929nhbxc7sgm81g";
+      sha256 = "1b7wx2hnwnml3y10x6yxybl3hy973n2ifq3hbqh0jd72bqs615wp";
       type = "gem";
     };
-    version = "3.15.1";
+    version = "3.15.2";
   };
   mercenary = {
     groups = ["default"];
@@ -68,10 +68,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1yi8j8hwrlc3rg5v3w52gxndmwifyk7m732q9yfbal0qajqbh1h8";
+      sha256 = "12j76d0bp608932xkzmfi638c7aqah57l437q8494znzbj610qnm";
       type = "gem";
     };
-    version = "1.10.8";
+    version = "1.10.9";
   };
   nokogumbo = {
     dependencies = ["nokogiri"];
