@@ -75,7 +75,7 @@ let
       icon = "wire-desktop";
       name = "wire-desktop";
       extraEntries = ''
-        StartupWMClass="Wire"
+        StartupWMClass=Wire
       '';
     };
 
