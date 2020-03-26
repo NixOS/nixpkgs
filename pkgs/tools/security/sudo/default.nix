@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
   version = "1.8.31p1";
 
   src = fetchurl {
-    url = "ftp://ftp.sudo.ws/pub/sudo/${pname}-${version}.tar.gz";
+    url = "https://www.sudo.ws/dist/${pname}-${version}.tar.gz";
     sha256 = "1n0mdmgcs92af34xxsnsh1arrngymhdmwd9srjgjbk65q7xzsg67";
   };
 
