@@ -1,4 +1,4 @@
-{ fetchFromGitHub, stdenv, autoreconfHook }:
+{ fetchFromGitHub, stdenv, autoreconfHook, pkg-config }:
 
 stdenv.mkDerivation rec {
   pname = "libupnp";
