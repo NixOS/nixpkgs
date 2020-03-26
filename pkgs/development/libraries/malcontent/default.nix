@@ -21,7 +21,7 @@
 
 stdenv.mkDerivation rec {
   pname = "malcontent";
-  version = "0.6.0";
+  version = "0.7.0";
 
   outputs = [ "bin" "out" "dev" "man" "installedTests" ];
 
@@ -30,16 +30,12 @@ stdenv.mkDerivation rec {
     owner = "pwithnall";
     repo = pname;
     rev = version;
-    sha256 = "COh6N3CmLIcxx6tW4jcP0m6TZv0Z1YJUM/nlG0RzYHQ=";
+    sha256 = "cP2l6nl6cuBQYwkmBj8APu/vH3jTeScXf3ffcuSfqlM=";
   };
 
   patches = [
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
-
-    # This is unnecessary and breaks when submodules are not available.
-    # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/3
-    ./use-system-dependencies.patch
   ];
 
   nativeBuildInputs = [
