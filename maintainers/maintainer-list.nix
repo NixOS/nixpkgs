@@ -8332,7 +8332,7 @@
     github = "savannidgerinel";
     githubId = 8534888;
     name = "Savanni D'Gerinel";
-  }
+  };
 }
 
 
