@@ -9,10 +9,7 @@
 , coreutils
 , accountsservice
 , dbus
-, flatpak
-, gtk3
 , pam
-, desktop-file-utils
 , polkit
 , glib-testing
 , python3
@@ -36,6 +33,9 @@ stdenv.mkDerivation rec {
   patches = [
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
+
+    # Do not build things that are part of malcontent-ui package
+    ./better-separation.patch
   ];
 
   nativeBuildInputs = [
@@ -43,15 +43,12 @@ stdenv.mkDerivation rec {
     ninja
     pkgconfig
     gobject-introspection
-    desktop-file-utils
     wrapGAppsHook
   ];
 
   buildInputs = [
     accountsservice
     dbus
-    flatpak
-    gtk3
     pam
     polkit
     glib-testing
@@ -67,6 +64,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dinstalled_tests=true"
     "-Dinstalled_test_prefix=${placeholder "installedTests"}"
+    "-Dui=disabled"
   ];
 
   postPatch = ''

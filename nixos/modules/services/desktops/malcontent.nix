@@ -23,7 +23,10 @@ with lib;
 
   config = mkIf config.services.malcontent.enable {
 
-    environment.systemPackages = [ pkgs.malcontent ];
+    environment.systemPackages = with pkgs; [
+      malcontent
+      malcontent-ui
+    ];
 
     services.dbus.packages = [ pkgs.malcontent ];
 
