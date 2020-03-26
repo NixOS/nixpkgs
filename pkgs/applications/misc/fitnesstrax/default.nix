@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "luminescent-dreams";
     repo = "fitnesstrax";
-    rev = "0.1.0";
+    rev = "fitnesstrax-0.1.0";
     sha256 = "1k6zhnbs0ggx7q0ig2abcnzprsgrychlpvsh6d36dw6mr8zpfkp7";
   };
 
@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ wrapGAppsHook ];
 
-  cargoSha256 = "0p0d72njx5m2v6x94sxc2ldjipl4j3cw876shbdq7ghkjjkxv93m";
+  cargoSha256 = "1inzpsj2329svd955axr7ja3gqs7h2kikksdffppkf600mqh4xl4";
 
   postInstall = ''
     mkdir -p $out/share/glib-2.0/schemas
