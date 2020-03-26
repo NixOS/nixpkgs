@@ -29,7 +29,7 @@ let
       '') cfg.skins)}
 
       ${concatStringsSep "\n" (mapAttrsToList (k: v: ''
-        ln -s ${v} $out/share/mediawiki/extensions/${k}
+        ln -s ${if v != null then v else "$src/share/mediawiki/extensions/${k}"} $out/share/mediawiki/extensions/${k}
       '') cfg.extensions)}
     '';
   };
@@ -204,17 +204,28 @@ in
         default = {};
         type = types.attrsOf types.path;
         description = ''
-          List of paths whose content is copied to the 'skins'
-          subdirectory of the MediaWiki installation.
+          Attribute set of paths whose content is copied to the <filename>skins</filename>
+          subdirectory of the MediaWiki installation in addition to the default skins.
         '';
       };
 
       extensions = mkOption {
         default = {};
-        type = types.attrsOf types.path;
+        type = types.attrsOf (types.nullOr types.path);
         description = ''
-          List of paths whose content is copied to the 'extensions'
-          subdirectory of the MediaWiki installation.
+          Attribute set of paths whose content is copied to the <filename>extensions</filename>
+          subdirectory of the MediaWiki installation and enabled in configuration.
+
+          Use <literal>null</literal> instead of path to enable extensions that are part of MediaWiki.
+        '';
+        example = literalExample ''
+          {
+            Matomo = pkgs.fetchzip {
+              url = "https://github.com/DaSchTour/matomo-mediawiki-extension/archive/v4.0.1.tar.gz";
+              sha256 = "0g5rd3zp0avwlmqagc59cg9bbkn3r7wx7p6yr80s644mj6dlvs1b";
+            };
+            ParserFunctions = null;
+          }
         '';
       };
 
