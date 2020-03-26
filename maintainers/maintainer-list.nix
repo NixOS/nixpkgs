@@ -8327,6 +8327,12 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  savannidgerinel = {
+    email = "savanni@luminescent-dreams.com";
+    github = "savannidgerinel";
+    githubId = 8534888;
+    name = "Savanni D'Gerinel";
+  }
 }
 
 
