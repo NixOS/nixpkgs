@@ -26345,6 +26345,8 @@ in
 
   bcompare = libsForQt5.callPackage ../applications/version-management/bcompare {};
 
+  xp-pen-g430 = libsForQt5.callPackage ../misc/drivers/xp-pen-g430 {};
+
   qmk_firmware = callPackage ../development/misc/qmk_firmware {
     avrgcc = pkgsCross.avr.buildPackages.gcc;
     avrbinutils = pkgsCross.avr.buildPackages.binutils;
