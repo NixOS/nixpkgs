@@ -523,6 +523,9 @@ in
   #package writers
   writers = callPackage ../build-support/writers {};
 
+  # lib functions depending on pkgs
+  inherit (import ../pkgs-lib { inherit lib pkgs; });
+
   ### TOOLS
 
   _0x0 = callPackage ../tools/misc/0x0 { };
