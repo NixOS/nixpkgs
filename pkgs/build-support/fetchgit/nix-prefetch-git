@@ -1,5 +1,6 @@
-#!/usr/bin/env bash
-set -eo pipefail
+#! /usr/bin/env bash
+
+set -e -o pipefail
 
 url=
 rev=
@@ -37,17 +38,17 @@ usage(){
     echo  >&2 "syntax: nix-prefetch-git [options] [URL [REVISION [EXPECTED-HASH]]]
 
 Options:
-      --out path         Path where the output would be stored.
-      --url url          Any url understood by 'git clone'.
-      --rev ref          Any sha1 or references (such as refs/heads/master).
-      --hash h           Expected hash.
-      --branch-name      Branch name to check out into.
-      --deepClone        Clone the entire repository.
-      --no-deepClone     Make a shallow clone of just the required ref.
-      --leave-dotGit     Keep the .git directories.
+      --out path      Path where the output would be stored.
+      --url url       Any url understood by 'git clone'.
+      --rev ref       Any sha1 or references (such as refs/heads/master)
+      --hash h        Expected hash.
+      --branch-name   Branch name to check out into
+      --deepClone     Clone the entire repository.
+      --no-deepClone  Make a shallow clone of just the required ref.
+      --leave-dotGit  Keep the .git directories.
       --fetch-submodules Fetch submodules.
-      --builder          Clone as fetchgit does, but url, rev, and out option are mandatory.
-      --quiet            Only print the final json summary.
+      --builder       Clone as fetchgit does, but url, rev, and out option are mandatory.
+      --quiet         Only print the final json summary.
 "
     exit 1
 }
