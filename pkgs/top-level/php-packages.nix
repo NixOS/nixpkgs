@@ -842,14 +842,15 @@ let
         configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
         doCheck = false; }
       { name = "mysqlnd";
-        buildInputs = [ zlib openssl ]
-          ++ lib.optional (lib.versionOlder php.version "7.4") [ openssl.dev ];
-        internalDeps = [ "openssl" ];
+        buildInputs = [ zlib openssl ];
         postPhpize = ''
           sed -i '/#include "php.h"/i\
           #ifdef HAVE_CONFIG_H\
           #include "config.h"\
           #endif' php_mysqlnd.c
+        '' + lib.optionalString (lib.versionOlder php.version "7.4") ''
+          substituteInPlace configure --replace '$OPENSSL_LIBDIR' '${openssl}/lib' \
+                                      --replace '$OPENSSL_INCDIR' '${openssl.dev}/include'
         ''; }
       # oci8 (7.4, 7.3, 7.2)
       # odbc (7.4, 7.3, 7.2)
