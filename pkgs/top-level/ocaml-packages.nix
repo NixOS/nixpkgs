@@ -615,6 +615,8 @@ let
 
     pgocaml_ppx = callPackage ../development/ocaml-modules/pgocaml/ppx.nix {};
 
+    ocaml-r = callPackage ../development/ocaml-modules/ocaml-r { };
+
     ocaml-sat-solvers = callPackage ../development/ocaml-modules/ocaml-sat-solvers { };
 
     ocamlscript = callPackage ../development/tools/ocaml/ocamlscript { };
