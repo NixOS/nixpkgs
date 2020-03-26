@@ -3943,6 +3943,8 @@ in {
 
   colored = callPackage ../development/python-modules/colored { };
 
+  xdg = callPackage ../development/python-modules/xdg { };
+
   xdis = callPackage ../development/python-modules/xdis { };
 
   xnd = callPackage ../development/python-modules/xnd { };
