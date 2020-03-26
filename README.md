@@ -73,7 +73,8 @@ See code for all available configurations.
 | PC Engines APU                    | `<nixos-hardware/pcengines/apu>`                   |
 | [Raspberry Pi 2][]                | `<nixos-hardware/raspberry-pi/2>`                  |
 | [Samsung Series 9 NP900X3C][]     | `<nixos-hardware/samsung/np900x3c>`                |
-| [Purism Librem 13v3/15v3][]       | `<nixos-hardware/purism/librem/13v3>`              |
+| [Purism Librem 13v3][]            | `<nixos-hardware/purism/librem/13v3>`              |
+| [Purism Librem 15v3][]            | `<nixos-hardware/purism/librem/15v3>`              |
 | Supermicro A1SRi-2758F            | `<nixos-hardware/supermicro/a1sri-2758f>`          |
 | Supermicro X10SLL-F               | `<nixos-hardware/supermicro/x10sll-f>`             |
 | [Toshiba Chromebook 2 `swanky`][] | `<nixos-hardware/toshiba/swanky>`                  |
@@ -97,6 +98,7 @@ See code for all available configurations.
 [Raspberry Pi 2]: raspberry-pi/2
 [Samsung Series 9 NP900X3C]: samsung/np900x3c
 [Purism Librem 13v3]: purism/librem/13v3
+[Purism Librem 13v5]: purism/librem/13v5
 [Toshiba Chromebook 2 `swanky`]: toshiba/swanky
 
 ## How to contribute a new device profile
