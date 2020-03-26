@@ -712,8 +712,8 @@ let
       , buildInputs ? []
       , zendExtension ? false
       , ...
-    }: stdenv.mkDerivation {
-      pname = "php-ext-${name}";
+    }@args: stdenv.mkDerivation (args // {
+      pname = "php-${name}";
 
       inherit (php) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
@@ -728,7 +728,7 @@ let
         mkdir -p $out/lib/php/extensions
         cp modules/${name}.so $out/lib/php/extensions/ext-${name}.so
       '';
-    };
+    });
 
     # This list contains build instructions for different modules that one may
     # want to build.
