@@ -1690,6 +1690,7 @@ in
   h = callPackage ../tools/misc/h { };
 
   discourse = callPackage ../servers/web-apps/discourse { };
+  discourse-mail-receiver = callPackage ../servers/web-apps/discourse/mail-receiver.nix { };
 
   discount = callPackage ../tools/text/discount { };
 
