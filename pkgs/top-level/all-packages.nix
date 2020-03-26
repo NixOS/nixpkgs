@@ -11268,7 +11268,8 @@ in
   boost16x = boost169;
   boost170 = callPackage ../development/libraries/boost/1.70.nix { };
   boost171 = callPackage ../development/libraries/boost/1.71.nix { };
-  boost17x = boost171;
+  boost172 = callPackage ../development/libraries/boost/1.72.nix { };
+  boost17x = boost172;
   boost = boost16x;
 
   boost_process = callPackage ../development/libraries/boost-process { };
@@ -16126,9 +16127,8 @@ in
     libtool = darwin.cctools;
   };
 
-  rippled = callPackage ../servers/rippled {
-    boost = boost17x;
-  };
+  # Uses boost171 because the version 1.4.0 fails to compile with boost172.
+  rippled = callPackage ../servers/rippled { boost = boost171; };
 
   rippled-validator-keys-tool = callPackage ../servers/rippled/validator-keys-tool.nix {
     boost = boost167.override {
