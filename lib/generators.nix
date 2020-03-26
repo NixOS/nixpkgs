@@ -126,6 +126,59 @@ rec {
       # map input to ini sections
       mapAttrsToStringsSep "\n" mkSection attrsOfAttrs;
 
+  /* Generate a git-config file from an attrset.
+   *
+   * It has two major differences from the regular INI format:
+   *
+   * 1. values are indented with tabs
+   * 2. sections can have sub-sections
+   *
+   * generators.toGitINI {
+   *   url."ssh://git@github.com/".insteadOf = "https://github.com";
+   *   user.name = "edolstra";
+   * }
+   *
+   *> [url "ssh://git@github.com/"]
+   *>   insteadOf = https://github.com/
+   *>
+   *> [user]
+   *>   name = edolstra
+   */
+  toGitINI = attrs:
+    with builtins;
+    let
+      mkSectionName = name:
+        let
+          containsQuote = libStr.hasInfix ''"'' name;
+          sections = libStr.splitString "." name;
+          section = head sections;
+          subsections = tail sections;
+          subsection = concatStringsSep "." subsections;
+        in if containsQuote || subsections == [ ] then
+          name
+        else
+          ''${section} "${subsection}"'';
+
+      # generation for multiple ini values
+      mkKeyValue = k: v:
+        let mkKeyValue = mkKeyValueDefault { } " = " k;
+        in concatStringsSep "\n" (map (kv: "\t" + mkKeyValue kv) (lib.toList v));
+
+      # converts { a.b.c = 5; } to { "a.b".c = 5; } for toINI
+      gitFlattenAttrs = let
+        recurse = path: value:
+          if isAttrs value then
+            lib.mapAttrsToList (name: value: recurse ([ name ] ++ path) value) value
+          else if length path > 1 then {
+            ${concatStringsSep "." (lib.reverseList (tail path))}.${head path} = value;
+          } else {
+            ${head path} = value;
+          };
+      in attrs: lib.foldl lib.recursiveUpdate { } (lib.flatten (recurse [ ] attrs));
+
+      toINI_ = toINI { inherit mkKeyValue mkSectionName; };
+    in
+      toINI_ (gitFlattenAttrs attrs);
 
   /* Generates JSON from an arbitrary (non-function) value.
     * For more information see the documentation of the builtin.
