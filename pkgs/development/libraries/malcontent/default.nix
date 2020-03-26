@@ -1,5 +1,6 @@
 { stdenv
 , fetchFromGitLab
+, fetchpatch
 , meson
 , ninja
 , pkgconfig
@@ -36,6 +37,13 @@ stdenv.mkDerivation rec {
 
     # Do not build things that are part of malcontent-ui package
     ./better-separation.patch
+
+    # Fix pam installed test
+    # https://gitlab.freedesktop.org/pwithnall/malcontent/merge_requests/50
+    (fetchpatch {
+      url = "https://gitlab.freedesktop.org/pwithnall/malcontent/commit/5d102eeb0604e65fc977ca77d4b249e986e634cc.patch";
+      sha256 = "5PD/eJBw/8Uqcia7ena9mu45DgREBFj0zUJpcd0vQ+8=";
+    })
   ];
 
   nativeBuildInputs = [
