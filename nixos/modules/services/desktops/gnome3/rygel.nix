@@ -26,5 +26,7 @@ with lib;
     services.dbus.packages = [ pkgs.gnome3.rygel ];
 
     systemd.packages = [ pkgs.gnome3.rygel ];
+
+    environment.etc."rygel.conf" = "${pkgs.gnome3.rygel}/etc/rygel.conf";
   };
 }
