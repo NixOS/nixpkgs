@@ -825,6 +825,11 @@ auth required pam_succeed_if.so uid >= 1000 quiet
     not <command>systemd-networkd</command>.
    </para>
   </listitem>
+  <listitem>
+   <para>
+    <package>mongodb</package> has been updated to version <literal>3.4.24</literal>.
+   </para>
+  </listitem>
   </itemizedlist>
  </section>
 </section>
