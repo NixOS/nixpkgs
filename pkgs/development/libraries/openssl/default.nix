@@ -102,11 +102,7 @@ let
     '' +
     ''
       mkdir -p $bin
-    '' + stdenv.lib.optionalString (!stdenv.hostPlatform.isWindows)
-    ''
-      substituteInPlace $out/bin/c_rehash --replace ${buildPackages.perl} ${perl}
-    '' +
-    ''
+
       mv $out/bin $bin/
 
       mkdir $dev
