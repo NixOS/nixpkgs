@@ -89,6 +89,18 @@ stdenv.mkDerivation ({
         less linux-*?/arch/x86/kernel/syscall_table_32.S
        */
       ./allow-kernel-2.6.32.patch
+
+      /* Provide a fallback for missing prlimit64 syscall on RHEL 6 -like
+         kernels.
+
+         This patch is maintained by @veprbl. If it gives you trouble, feel
+         free to ping me, I'd be happy to help.
+       */
+      (fetchurl {
+        url = "https://git.savannah.gnu.org/cgit/guix.git/plain/gnu/packages/patches/glibc-reinstate-prlimit64-fallback.patch?id=eab07e78b691ae7866267fc04d31c7c3ad6b0eeb";
+        sha256 = "091bk3kyrx1gc380gryrxjzgcmh1ajcj8s2rjhp2d2yzd5mpd5ps";
+      })
+
       /* Provide utf-8 locales by default, so we can use it in stdenv without depending on our large locale-archive. */
       (fetchurl {
         url = "https://salsa.debian.org/glibc-team/glibc/raw/49767c9f7de4828220b691b29de0baf60d8a54ec/debian/patches/localedata/locale-C.diff";
