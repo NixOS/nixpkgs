@@ -5208,6 +5208,8 @@ in
 
   minijail = callPackage ../tools/system/minijail { };
 
+  minijail-tools = python3.pkgs.callPackage ../tools/system/minijail/tools.nix { };
+
   minixml = callPackage ../development/libraries/minixml { };
 
   mir-qualia = callPackage ../tools/text/mir-qualia {
@@ -15893,7 +15895,7 @@ in
   mysql = mariadb; # TODO: move to aliases.nix
 
   mongodb = hiPrio mongodb-3_4;
-  
+
   mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
     sasl = cyrus_sasl;
     boost = boost160;
