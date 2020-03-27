@@ -24013,7 +24013,26 @@ in
 
   xmoto = callPackage ../games/xmoto { };
 
-  xonotic = callPackage ../games/xonotic { };
+
+  inherit (callPackage ../games/xonotic { })
+    xonotic-data
+    xonotic;
+
+  xonotic-glx = (callPackage ../games/xonotic {
+    withSDL = false;
+    withGLX = true;
+  }).xonotic;
+
+  xonotic-dedicated = (callPackage ../games/xonotic {
+    withSDL = false;
+    withDedicated = true;
+  }).xonotic;
+
+  xonotic-sdl = xonotic;
+  xonotic-sdl-unwrapped = xonotic-sdl.xonotic-unwrapped;
+  xonotic-glx-unwrapped = xonotic-glx.xonotic-unwrapped;
+  xonotic-dedicated-unwrapped = xonotic-dedicated.xonotic-unwrapped;
+
 
   xpilot-ng = callPackage ../games/xpilot { };
   bloodspilot-server = callPackage ../games/xpilot/bloodspilot-server.nix {};
