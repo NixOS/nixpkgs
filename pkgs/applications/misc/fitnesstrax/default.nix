@@ -1,14 +1,15 @@
 { pkgs
-, fetchFromGitHub
-, stdenv
-, rustPlatform
 , atk
-, gnome2
 , cairo
-, glib
+, fetchFromGitHub
 , gdk-pixbuf
-, gtkd
+, glib
+, gnome2
 , gtk3
+, gtkd
+, lib
+, rustPlatform
+, stdenv
 , wrapGAppsHook
 }:
 rustPlatform.buildRustPackage rec {
@@ -46,6 +47,6 @@ rustPlatform.buildRustPackage rec {
     description = "Privacy-first fitness tracking";
     homepage = "https://github.com/luminescent-dreams/fitnesstrax";
     license = licenses.bsd3;
-    maintainers = [ mantainers.savannidgerinel ];
+    maintainers = with lib.maintainers; [ savannidgerinel ];
   };
 }
