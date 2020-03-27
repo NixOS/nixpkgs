@@ -518,6 +518,7 @@ vim-scripts/argtextobj.vim
 vim-scripts/autoload_cscope.vim
 vim-scripts/a.vim
 vim-scripts/bats.vim
+vim-scripts/BufOnly.vim
 vim-scripts/changeColorScheme.vim
 vim-scripts/Colour-Sampler-Pack
 vim-scripts/DoxygenToolkit.vim

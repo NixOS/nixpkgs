@@ -235,6 +235,17 @@ let
     };
   };
 
+  BufOnly-vim = buildVimPluginFrom2Nix {
+    pname = "BufOnly-vim";
+    version = "2010-10-18";
+    src = fetchFromGitHub {
+      owner = "vim-scripts";
+      repo = "BufOnly.vim";
+      rev = "43dd92303979bdb234a3cb2f5662847f7a3affe7";
+      sha256 = "1gvpaqvvxjma0dl1zai68bpv42608api4054appwkw9pgczkkcdl";
+    };
+  };
+
   calendar-vim = buildVimPluginFrom2Nix {
     pname = "calendar-vim";
     version = "2020-02-14";
