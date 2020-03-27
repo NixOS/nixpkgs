@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "ubridge";
-  version = "0.9.17";
+  version = "0.9.18";
 
   src = fetchFromGitHub {
     owner = "GNS3";
     repo = "ubridge";
     rev = "v${version}";
-    sha256 = "1rwhbagac7msd116qymvlfh9qkz9jf0m8nl9xckwv68f57bhhjwl";
+    sha256 = "0jg66jhhpv4c9340fsdp64hf9h253i8r81fknxa0gq241ripp3jn";
   };
 
   postPatch = ''
