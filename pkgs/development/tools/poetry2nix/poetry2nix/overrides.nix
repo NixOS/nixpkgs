@@ -195,39 +195,39 @@ self: super:
   );
 
   matplotlib = super.matplotlib.overrideAttrs (
-    old: let
-      enableGhostscript = old.passthru.enableGhostscript or false;
-      enableGtk3 = old.passthru.enableTk or false;
-      enableQt = old.passthru.enableQt or false;
-      enableTk = old.passthru.enableTk or false;
+    old:
+      let
+        enableGhostscript = old.passthru.enableGhostscript or false;
+        enableGtk3 = old.passthru.enableTk or false;
+        enableQt = old.passthru.enableQt or false;
+        enableTk = old.passthru.enableTk or false;
 
-      inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+        inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+      in
+        {
+          NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
 
-    in
-      {
-        NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
+          XDG_RUNTIME_DIR = "/tmp";
 
-        XDG_RUNTIME_DIR = "/tmp";
+          buildInputs = old.buildInputs
+          ++ lib.optional enableGhostscript pkgs.ghostscript
+          ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
-        buildInputs = old.buildInputs
-        ++ lib.optional enableGhostscript pkgs.ghostscript
-        ++ lib.optional stdenv.isDarwin [ Cocoa ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [
+            pkgs.pkgconfig
+          ];
 
-        nativeBuildInputs = old.nativeBuildInputs ++ [
-          pkgs.pkgconfig
-        ];
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [
+            pkgs.libpng
+            pkgs.freetype
+          ]
+          ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
+          ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
+          ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
+          ;
 
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [
-          pkgs.libpng
-          pkgs.freetype
-        ]
-        ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
-        ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
-        ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
-        ;
-
-        inherit (super.matplotlib) patches;
-      }
+          inherit (super.matplotlib) patches;
+        }
   );
 
   # Calls Cargo at build time for source builds and is really tricky to package
@@ -266,36 +266,37 @@ self: super:
   );
 
   numpy = super.numpy.overrideAttrs (
-    old: let
-      blas = old.passthru.args.blas or pkgs.openblasCompat;
-      blasImplementation = lib.nameFromURL blas.name "-";
-      cfg = pkgs.writeTextFile {
-        name = "site.cfg";
-        text = (
-          lib.generators.toINI {} {
-            ${blasImplementation} = {
-              include_dirs = "${blas}/include";
-              library_dirs = "${blas}/lib";
-            } // lib.optionalAttrs (blasImplementation == "mkl") {
-              mkl_libs = "mkl_rt";
-              lapack_libs = "";
-            };
-          }
-        );
-      };
-    in
-      {
-        nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
-        buildInputs = old.buildInputs ++ [ blas self.cython ];
-        enableParallelBuilding = true;
-        preBuild = ''
-          ln -s ${cfg} site.cfg
-        '';
-        passthru = old.passthru // {
-          blas = blas;
-          inherit blasImplementation cfg;
+    old:
+      let
+        blas = old.passthru.args.blas or pkgs.openblasCompat;
+        blasImplementation = lib.nameFromURL blas.name "-";
+        cfg = pkgs.writeTextFile {
+          name = "site.cfg";
+          text = (
+            lib.generators.toINI {} {
+              ${blasImplementation} = {
+                include_dirs = "${blas}/include";
+                library_dirs = "${blas}/lib";
+              } // lib.optionalAttrs (blasImplementation == "mkl") {
+                mkl_libs = "mkl_rt";
+                lapack_libs = "";
+              };
+            }
+          );
         };
-      }
+      in
+        {
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
+          buildInputs = old.buildInputs ++ [ blas self.cython ];
+          enableParallelBuilding = true;
+          preBuild = ''
+            ln -s ${cfg} site.cfg
+          '';
+          passthru = old.passthru // {
+            blas = blas;
+            inherit blasImplementation cfg;
+          };
+        }
   );
 
   openexr = super.openexr.overrideAttrs (
@@ -306,16 +307,17 @@ self: super:
   );
 
   peewee = super.peewee.overridePythonAttrs (
-    old: let
-      withPostgres = old.passthru.withPostgres or false;
-      withMysql = old.passthru.withMysql or false;
-    in
-      {
-        buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
-        propagatedBuildInputs = old.propagatedBuildInputs
-        ++ lib.optional withPostgres self.psycopg2
-        ++ lib.optional withMysql self.mysql-connector;
-      }
+    old:
+      let
+        withPostgres = old.passthru.withPostgres or false;
+        withMysql = old.passthru.withMysql or false;
+      in
+        {
+          buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
+          propagatedBuildInputs = old.propagatedBuildInputs
+          ++ lib.optional withPostgres self.psycopg2
+          ++ lib.optional withMysql self.mysql-connector;
+        }
   );
 
   pillow = super.pillow.overrideAttrs (
@@ -667,16 +669,24 @@ self: super:
   );
 
   zipp =
-    if lib.versionAtLeast super.zipp.version "2.0.0" then (
-      super.zipp.overridePythonAttrs (
-        old: {
-          prePatch = ''
-            substituteInPlace setup.py --replace \
-            'setuptools.setup()' \
-            'setuptools.setup(version="${super.zipp.version}")'
-          '';
-        }
-      )
-    ) else super.zipp;
+    (
+      if lib.versionAtLeast super.zipp.version "2.0.0" then (
+        super.zipp.overridePythonAttrs (
+          old: {
+            prePatch = ''
+              substituteInPlace setup.py --replace \
+              'setuptools.setup()' \
+              'setuptools.setup(version="${super.zipp.version}")'
+            '';
+          }
+        )
+      ) else super.zipp
+    ).overridePythonAttrs (
+      old: {
+        propagatedBuildInputs = old.propagatedBuildInputs ++ [
+          self.toml
+        ];
+      }
+    );
 
 }

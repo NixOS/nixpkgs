@@ -22,9 +22,7 @@ pythonPackages.callPackage (
   { preferWheel ? false
   , ...
   }@args:
-
     let
-
       inherit (poetryLib) isCompatible getManyLinuxDeps fetchFromPypi;
 
       inherit (import ./pep425.nix {
@@ -68,7 +66,6 @@ pythonPackages.callPackage (
         lockFileEntry = builtins.head entries;
 
         _isEgg = isEgg lockFileEntry;
-
       in
         rec {
           inherit (lockFileEntry) file hash;
@@ -92,7 +89,6 @@ pythonPackages.callPackage (
       baseBuildInputs = lib.optional (! lib.elem name skipSetupToolsSCM) pythonPackages.setuptools-scm;
 
       format = if isLocal then "pyproject" else if isGit then "setuptools" else fileInfo.format;
-
     in
 
       buildPythonPackage {
@@ -123,10 +119,11 @@ pythonPackages.callPackage (
           compat = isCompatible python.pythonVersion;
           deps = lib.filterAttrs (n: v: v) (
             lib.mapAttrs (
-              n: v: let
-                constraints = v.python or "";
-              in
-                compat constraints
+              n: v:
+                let
+                  constraints = v.python or "";
+                in
+                  compat constraints
             ) dependencies
           );
           depAttrs = lib.attrNames deps;

@@ -3,7 +3,6 @@
 , makeSetupHook
 , yj
 }:
-
 let
   pythonInterpreter = python.pythonForBuild.interpreter;
 in
