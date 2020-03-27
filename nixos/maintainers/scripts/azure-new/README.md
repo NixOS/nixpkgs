@@ -33,3 +33,10 @@ img="/subscriptions/.../..." # use output from last command
 ...
 => booted
 ```
+
+## Future Work
+
+1. If the user specifies a hard-coded user, then the agent could be removed.
+   Probably has security benefits; definitely has closure-size benefits.
+   (It's likely the VM will need to be booted with a special flag. See:
+   https://github.com/Azure/azure-cli/issues/12775 for details.)
