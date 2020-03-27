@@ -6,7 +6,7 @@
 , gnome2
 , cairo
 , glib
-, gdk_pixbuf
+, gdk-pixbuf
 , gtkd
 , gtk3
 , wrapGAppsHook
@@ -27,7 +27,7 @@ rustPlatform.buildRustPackage rec {
     gnome2.pango
     cairo
     glib
-    gdk_pixbuf
+    gdk-pixbuf
     gtkd
     gtk3
   ];
@@ -46,6 +46,6 @@ rustPlatform.buildRustPackage rec {
     description = "Privacy-first fitness tracking";
     homepage = "https://github.com/luminescent-dreams/fitnesstrax";
     license = licenses.bsd3;
-    maintainers = [ "savanni@luminescent-dreams.com" ];
+    maintainers = [ mantainers.savannidgerinel ];
   };
 }
