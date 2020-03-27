@@ -2,9 +2,9 @@
 set -euo pipefail
 set -x
 
-attr="${1:-"azbasic"}"
+image_nix="${1:-"./examples/basic/image.nix"}"
 
-nix-build ./examples/basic/image.nix --out-link "azure"
+nix-build "${image_nix}" --out-link "azure"
 
 group="nixos-images"
 location="westus2"
