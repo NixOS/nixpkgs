@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    scons pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
+    scons.py2 pkgconfig docbook_xml_dtd_412 docbook_xsl xmlto bc
     python2Packages.python
     python2Packages.wrapPython
   ];

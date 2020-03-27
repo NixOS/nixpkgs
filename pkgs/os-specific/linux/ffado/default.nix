@@ -23,7 +23,7 @@ in stdenv.mkDerivation rec {
 
   outputs = [ "out" "bin" "dev" ];
 
-  nativeBuildInputs = [ scons pkgconfig which makeWrapper python pyqt5 ];
+  nativeBuildInputs = [ scons.py2 pkgconfig which makeWrapper python pyqt5 ];
 
   prefixKey = "PREFIX=";
   sconsFlags = [

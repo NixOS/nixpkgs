@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
     chmod -R u+w $out/share/nsis
   '';
 
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs = [ zlib ];
 
   sconsFlags = [
