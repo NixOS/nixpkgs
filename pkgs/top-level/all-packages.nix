@@ -15897,7 +15897,7 @@ in
   mysql = mariadb; # TODO: move to aliases.nix
 
   mongodb = hiPrio mongodb-3_4;
-  
+
   mongodb-3_4 = callPackage ../servers/nosql/mongodb/v3_4.nix {
     sasl = cyrus_sasl;
     boost = boost160;
@@ -23157,6 +23157,8 @@ in
   };
 
   zim = callPackage ../applications/office/zim { };
+
+  zita-at1 = callPackage ../applications/audio/zita-at1 { };
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
 
