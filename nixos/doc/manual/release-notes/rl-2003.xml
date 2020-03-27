@@ -697,6 +697,66 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      </para>
     </warning>
    </listitem>
+   <listitem>
+    <para>
+     <package>Hydra</package> has gained a massive performance improvement due to
+     <link xlink:href="https://github.com/NixOS/hydra/pull/710">some database schema
+     changes</link> by adding several IDs and better indexing. However, it's necessary
+     to upgrade Hydra in multiple steps:
+     <itemizedlist>
+      <listitem>
+       <para>
+        At first, an older version of Hydra needs to be deployed which adds those
+        (nullable) columns. When having set <link linkend="opt-system.stateVersion">stateVersion
+        </link> to a value older than <literal>20.03</literal>, this package will be selected
+        by default from the module when upgrading. Otherwise, the package can be deployed using
+        the following config:
+<programlisting>{ pkgs, ... }: {
+  <link linkend="opt-services.hydra.package">services.hydra.package</link> = pkgs.hydra-migration;
+}</programlisting>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Automatically fill the newly added ID columns on the server by running the following
+        command:
+<screen>
+<prompt>$ </prompt>hydra-backfill-ids
+</screen>
+        <warning>
+         <para>Please note that this process can take a while depending on your database-size!</para>
+        </warning>
+       </para>
+      </listitem>
+      <listitem>
+       <para>
+        Deploy a newer version of Hydra to activate the DB optimizations. You can choose from
+        either <package>hydra-unstable</package> (latest <literal>master</literal> compiled
+        against <package>nixUnstable</package>) and <package>hydra-flakes</package> (latest
+        version with flake-support).
+        <warning>
+         <para>
+          If your <link linkend="opt-system.stateVersion">stateVersion</link> is set to
+          <literal>20.03</literal> or greater, <package>hydra-unstable</package> will be used
+          automatically! This will break your setup if you didn't run the migration.
+         </para>
+        </warning>
+        Please note that Hydra is currently not available with <package>nixStable</package>
+        as this doesn't compile anymore.
+       </para>
+      </listitem>
+     </itemizedlist>
+     <warning>
+      <para>
+       <package>pkgs.hydra</package> has been removed to ensure a graceful database-migration
+       using the dedicated package-attributes. If you still have <package>pkgs.hydra</package>
+       defined in e.g. an overlay, an assertion error will be thrown. To circumvent this,
+       you need to set <xref linkend="opt-services.hydra.package" /> to <package>pkgs.hydra</package>
+       explicitly and make sure you know what you're doing!
+      </para>
+     </warning>
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
