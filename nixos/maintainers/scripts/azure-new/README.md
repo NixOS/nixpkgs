@@ -6,6 +6,11 @@ Here's a demo of this being used: https://asciinema.org/a/euXb9dIeUybE3VkstLWLbv
 
 ## Usage
 
+This is meant to be an example image that you can copy into your own
+project and modify to your own needs. Notice that the example image
+includes a built-in test user account, which by default uses your
+`~/.ssh/id_ed25519.pub` as an `authorized_key`.
+
 Build and upload the image
 ```shell
 $ ./upload-image.sh ./examples/basic/image.nix
