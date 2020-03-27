@@ -15178,6 +15178,8 @@ in
 
   gulkan = callPackage ../development/libraries/gulkan { };
 
+  gxr = callPackage ../development/libraries/gxr { };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agda = callPackage ../build-support/agda {
