@@ -2519,6 +2519,7 @@ in {
 
   libfdt = toPythonModule (pkgs.dtc.override {
     inherit python;
+    pythonSupport = true;
   });
 
   libtmux = callPackage ../development/python-modules/libtmux { };
