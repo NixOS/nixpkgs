@@ -80,6 +80,9 @@ in buildPythonPackage rec {
 
   passthru = {
     inherit sip;
+    multimediaEnabled = withMultimedia;
+    webKitEnabled = withWebKit;
+    WebSocketsEnabled = withWebSockets;
   };
 
   configurePhase = ''
