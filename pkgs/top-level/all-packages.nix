@@ -13080,6 +13080,8 @@ in
     graphviz = graphviz-nox;
   };
 
+  libinputsynth = callPackage ../development/libraries/libinputsynth { };
+
   libinput-gestures = callPackage ../tools/inputmethods/libinput-gestures {};
 
   libinstpatch = callPackage ../development/libraries/audio/libinstpatch { };
