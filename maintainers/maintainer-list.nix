@@ -8285,6 +8285,12 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  zeratax = {
+    email = "mail@zera.tax";
+    github = "ZerataX";
+    githubId = 5024958;
+    name = "Jona Abdinghoff";
+  };
 }
 
   
