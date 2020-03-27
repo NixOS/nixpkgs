@@ -7121,6 +7121,7 @@ broken-packages:
   - llvm-base-types
   - llvm-base-util
   - llvm-data-interop
+  - llvm-dsl
   - llvm-extension
   - llvm-extra
   - llvm-ffi
@@ -10112,6 +10113,7 @@ broken-packages:
   - touched
   - Tournament
   - toxcore
+  - toxcore-c
   - toxiproxy-haskell
   - toysolver
   - tpar
