@@ -1,0 +1,1686 @@
+diff --git a/meson.build b/meson.build
+index 97de19758..7c097545a 100644
+--- a/meson.build
++++ b/meson.build
+@@ -104,6 +104,9 @@ bt_dep = dependency('gnome-bluetooth-1.0', version: bt_req, required: false)
+ gst_dep = dependency('gstreamer-1.0', version: gst_req, required: false)
+ gst_base_dep = dependency('gstreamer-base-1.0', required: false)
+ 
++xrdesktop_dep = dependency('xrdesktop-0.14', required: true)
++inputsynth_dep = dependency('libinputsynth-0.13', required: true)
++
+ recorder_deps = []
+ enable_recorder = gst_dep.found() and gst_base_dep.found()
+ if enable_recorder
+diff --git a/src/main.c b/src/main.c
+index 6faf9934f..2193b2905 100644
+--- a/src/main.c
++++ b/src/main.c
+@@ -19,6 +19,9 @@
+ #include <meta/prefs.h>
+ #include <atk-bridge.h>
+ 
++#include "shell-vr-mirror.h"
++#include "shell-vr-mirror-dbus.h"
++
+ #include "shell-global.h"
+ #include "shell-global-private.h"
+ #include "shell-perf-log.h"
+@@ -529,6 +532,8 @@ main (int argc, char **argv)
+   shell_introspection_init ();
+   shell_fonts_init ();
+ 
++  shell_vr_mirror_dbus_init ();
++
+   g_log_set_default_handler (default_log_handler, NULL);
+ 
+   /* Initialize the global object */
+diff --git a/src/meson.build b/src/meson.build
+index cbf5886ea..2d606f9b6 100644
+--- a/src/meson.build
++++ b/src/meson.build
+@@ -61,7 +61,9 @@ gnome_shell_deps = [
+   gi_dep,
+   polkit_dep,
+   gcr_dep,
+-  libsystemd_dep
++  libsystemd_dep,
++  xrdesktop_dep,
++  inputsynth_dep
+ ]
+ 
+ gnome_shell_deps += nm_deps
+@@ -121,7 +123,9 @@ libshell_private_headers = [
+   'shell-app-system-private.h',
+   'shell-global-private.h',
+   'shell-window-tracker-private.h',
+-  'shell-wm-private.h'
++  'shell-wm-private.h',
++  'shell-vr-mirror.h',
++  'shell-vr-mirror-dbus.h'
+ ]
+ 
+ libshell_sources = [
+@@ -149,7 +153,9 @@ libshell_sources = [
+   'shell-tray-manager.c',
+   'shell-util.c',
+   'shell-window-tracker.c',
+-  'shell-wm.c'
++  'shell-wm.c',
++  'shell-vr-mirror.c',
++  'shell-vr-mirror-dbus.c'
+ ]
+ 
+ if have_networkmanager
+diff --git a/src/shell-vr-mirror-dbus.c b/src/shell-vr-mirror-dbus.c
+new file mode 100644
+index 000000000..261bdbe90
+--- /dev/null
++++ b/src/shell-vr-mirror-dbus.c
+@@ -0,0 +1,121 @@
++#include "shell-vr-mirror-dbus.h"
++#include "shell-vr-mirror.h"
++
++#define BUS_NAME "org.gnome.Shell.XR"
++static const gchar introspection_xml[] =
++  "<node>"
++  "  <interface name='org.gnome.Shell.XR'>"
++  "    <property name='enabled' type='b' access='readwrite' />"
++  "  </interface>"
++  "</node>";
++
++static void
++_vrshell_set (gboolean enable)
++{
++  ShellVRMirror *vr_mirror = shell_vr_mirror_get_instance ();
++  if (enable)
++    {
++      if (vr_mirror)
++        {
++          g_print ("DBus: Enable XR (already enabled)\n");
++        }
++      else
++        {
++          g_print ("DBus: Enable XR\n");
++          shell_vr_mirror_create_instance ();
++        }
++    }
++  else
++    {
++      g_print ("DBus: Disable XR\n");
++      if (vr_mirror)
++        {
++          shell_vr_mirror_destroy_instance ();
++        }
++    }
++}
++
++static GVariant *
++_handle_dbus_property_get (GDBusConnection *connection,
++                           const gchar *sender,
++                           const gchar *object_path,
++                           const gchar *interface_name,
++                           const gchar *property_name,
++                           GError **error,
++                           gpointer user_data)
++{
++  if (g_strcmp0 (property_name, "enabled") == 0)
++    {
++      ShellVRMirror *instance = shell_vr_mirror_get_instance ();
++      gboolean vr_running = (instance != NULL);
++      GVariant *ret = g_variant_new_boolean (vr_running);
++      return ret;
++    }
++  else
++    {
++      g_print ("Error, only XR enabled property supported!\n");
++      return NULL;
++    }
++}
++
++static gboolean
++_handle_dbus_property_set (GDBusConnection *connection,
++                           const gchar *sender,
++                           const gchar *object_path,
++                           const gchar *interface_name,
++                           const gchar *property_name,
++                           GVariant *value,
++                           GError **error,
++                           gpointer user_data)
++{
++  if (g_strcmp0 (property_name, "enabled") == 0)
++    {
++      if (!g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN))
++        {
++          g_print ("Error, XR enabled property must be bool!\n");
++          return FALSE;
++        }
++      gboolean setTo = g_variant_get_boolean (value);
++      _vrshell_set (setTo);
++      return TRUE;
++    }
++  return FALSE;
++}
++
++static const GDBusInterfaceVTable interface_vtable =
++{
++  NULL,
++  _handle_dbus_property_get,
++  _handle_dbus_property_set
++};
++
++static void
++_on_dbus_bus_aquired (GDBusConnection *connection,
++                      const gchar     *name,
++                      gpointer         user_data)
++{
++  GDBusNodeInfo *introspection_data = g_dbus_node_info_new_for_xml (
++    introspection_xml, NULL);
++
++  g_dbus_connection_register_object (connection,
++                                     "/org/gnome/Shell/XR",
++                                     introspection_data->interfaces[0],
++                                     &interface_vtable,
++                                     NULL,  /* user_data */
++                                     NULL,  /* user_data_free_func */
++                                     NULL); /* GError** */
++}
++
++void
++shell_vr_mirror_dbus_init (void)
++{
++  g_bus_own_name (G_BUS_TYPE_SESSION,
++                  BUS_NAME,
++                  G_BUS_NAME_OWNER_FLAGS_ALLOW_REPLACEMENT |
++                  G_BUS_NAME_OWNER_FLAGS_REPLACE,
++                  _on_dbus_bus_aquired,
++                  NULL,
++                  NULL,
++                  NULL,
++                  NULL);
++}
+diff --git a/src/shell-vr-mirror-dbus.h b/src/shell-vr-mirror-dbus.h
+new file mode 100644
+index 000000000..1ee4da3c7
+--- /dev/null
++++ b/src/shell-vr-mirror-dbus.h
+@@ -0,0 +1,3 @@
++
++void
++shell_vr_mirror_dbus_init (void);
+diff --git a/src/shell-vr-mirror.c b/src/shell-vr-mirror.c
+new file mode 100644
+index 000000000..5954d08b8
+--- /dev/null
++++ b/src/shell-vr-mirror.c
+@@ -0,0 +1,1290 @@
++/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
++
++#include "config.h"
++
++#include <clutter/clutter.h>
++#include <glib/gprintf.h>
++
++#include <graphene.h>
++#include <glib.h>
++
++#include <inputsynth.h>
++
++#include <meta/meta-shaped-texture.h>
++#include <meta/display.h>
++
++#include "shell-vr-mirror.h"
++#include "shell-global.h"
++
++#include <meta/util.h>
++
++#include <GL/gl.h>
++
++#include <meta/meta-cursor-tracker.h>
++#include <meta/meta-workspace-manager.h>
++
++/* singleton variable for shell_vr_mirror_get_instance() */
++static ShellVRMirror *shell_vr_mirror_instance = NULL;
++
++/* 1 pixel/meter = 0.0254 dpi */
++#define SHELL_VR_PIXELS_PER_METER 720.0f
++#define SHELL_VR_DESKTOP_PLANE_DISTANCE 3.5f
++#define SHELL_VR_LAYER_DISTANCE 0.1f
++
++#define DEFAULT_LEVEL 0.5
++
++static GLenum (*_glGetError) (void);
++static void (*_glFinish) (void);
++static void (*_glGenTextures) (GLsizei, GLuint*);
++static void (*_glDeleteTextures) (GLsizei, const GLuint*);
++static void (*_glTexParameteri) (GLenum, GLenum, GLint);
++static void (*_glBindTexture) (GLenum, GLuint);
++static void (*_glGetTexLevelParameteriv) (GLenum, GLint, GLenum, GLint*);
++static void (*_glCreateMemoryObjectsEXT) (GLsizei, GLuint*);
++static void (*_glDeleteMemoryObjectsEXT) (GLsizei n, const GLuint *memoryObjects);
++
++static void (*_glMemoryObjectParameterivEXT) (GLuint, GLenum, const GLint*);
++static void (*_glGetMemoryObjectParameterivEXT) (GLuint, GLenum, GLint*);
++static void (*_glImportMemoryFdEXT) (GLuint, GLuint64, GLenum, GLint);
++static void (*_glTexStorageMem2DEXT) (GLenum, GLsizei, GLenum, GLsizei,
++                                      GLsizei, GLuint, GLuint64);
++static void (*_glCopyImageSubData) (GLuint, GLenum, GLint, GLint, GLint, GLint,
++                                    GLuint, GLenum, GLint, GLint, GLint, GLint,
++                                    GLsizei, GLsizei, GLsizei);
++static GLubyte *(*_glGetString) (GLenum);
++
++#define ENUM_TO_STR(r) case r: return #r
++
++static const gchar*
++gl_error_string (GLenum code)
++{
++  switch (code)
++    {
++      ENUM_TO_STR(GL_NO_ERROR);
++      ENUM_TO_STR(GL_INVALID_ENUM);
++      ENUM_TO_STR(GL_INVALID_VALUE);
++      ENUM_TO_STR(GL_INVALID_OPERATION);
++      ENUM_TO_STR(GL_INVALID_FRAMEBUFFER_OPERATION);
++      ENUM_TO_STR(GL_OUT_OF_MEMORY);
++      ENUM_TO_STR(GL_STACK_UNDERFLOW);
++      ENUM_TO_STR(GL_STACK_OVERFLOW);
++      default:
++        return "UNKNOWN GL Error";
++    }
++}
++
++static void
++gl_check_error (const char* prefix)
++{
++    GLenum err = 0 ;
++    while((err = _glGetError ()) != GL_NO_ERROR)
++    {
++        printf("GL ERROR: %s - %s\n", prefix, gl_error_string (err));
++    }
++}
++
++static const gchar *
++gl_get_vendor (void)
++{
++  static const gchar *vendor = NULL;
++  if (!vendor)
++    vendor = (const gchar *) _glGetString (GL_VENDOR);
++  return vendor;
++}
++
++static gboolean
++_load_gl_symbol (const char *name, void **func)
++{
++  *func = cogl_get_proc_address (name);
++  if (!*func)
++    {
++      g_printerr ("Error: Failed to resolve required GL symbol \"%s\"\n", name);
++      return FALSE;
++    }
++  return TRUE;
++}
++
++static gboolean
++_load_gl_functions (void)
++{
++  if (!_load_gl_symbol ("glCreateMemoryObjectsEXT",
++                        (void **) &_glCreateMemoryObjectsEXT))
++    return FALSE;
++  if (!_load_gl_symbol ("glDeleteMemoryObjectsEXT",
++                        (void **) &_glDeleteMemoryObjectsEXT))
++    return FALSE;
++  if (!_load_gl_symbol ("glMemoryObjectParameterivEXT",
++                        (void **) &_glMemoryObjectParameterivEXT))
++    return FALSE;
++  if (!_load_gl_symbol ("glGetMemoryObjectParameterivEXT",
++                        (void **) &_glGetMemoryObjectParameterivEXT))
++    return FALSE;
++  if (!_load_gl_symbol ("glImportMemoryFdEXT",
++                        (void **) &_glImportMemoryFdEXT))
++    return FALSE;
++  if (!_load_gl_symbol ("glTexStorageMem2DEXT",
++                        (void **) &_glTexStorageMem2DEXT))
++    return FALSE;
++  if (!_load_gl_symbol ("glCopyImageSubData",
++                        (void **) &_glCopyImageSubData))
++    return FALSE;
++  if (!_load_gl_symbol ("glGetTexLevelParameteriv",
++                        (void **) &_glGetTexLevelParameteriv))
++    return FALSE;
++  if (!_load_gl_symbol ("glGenTextures",
++                        (void **) &_glGenTextures))
++    return FALSE;
++  if (!_load_gl_symbol ("glDeleteTextures",
++                        (void **) &_glDeleteTextures))
++    return FALSE;
++  if (!_load_gl_symbol ("glTexParameteri",
++                        (void **) &_glTexParameteri))
++    return FALSE;
++  if (!_load_gl_symbol ("glBindTexture",
++                        (void **) &_glBindTexture))
++    return FALSE;
++  if (!_load_gl_symbol ("glFinish",
++                        (void **) &_glFinish))
++    return FALSE;
++  if (!_load_gl_symbol ("glGetError",
++                        (void **) &_glGetError))
++    return FALSE;
++  if (!_load_gl_symbol ("glGetString",
++                        (void **) &_glGetString))
++    return FALSE;
++  return TRUE;
++}
++
++struct _ShellVRMirror
++{
++  GObject parent;
++
++  InputSynth *vr_input;
++
++  /* either overlay or scene client */
++  XrdClient *client;
++
++  MetaCursorTracker *cursor_tracker;
++  GLuint cursor_gl_texture;
++
++  uint32_t top_layer;
++
++  gboolean nvidia;
++
++  GSList *grabbed_windows;
++
++  gboolean shutdown;
++};
++
++typedef struct
++{
++  MetaWindowActor *meta_window_actor;
++
++  bool keep_above_restore;
++  bool keep_below_restore;
++  guint keyboard_char_signal;
++  guint keyboard_close_signal;
++
++  /* The offscreen texture gnome shell renders into to avoid allocating a
++   * new offscreen texture every frame */
++  GLuint gl_texture;
++} ShellVRWindow;
++
++G_DEFINE_TYPE (ShellVRMirror, shell_vr_mirror, G_TYPE_OBJECT);
++
++static GulkanTexture*
++_allocate_external_memory (ShellVRMirror *self,
++                           GulkanClient  *client,
++                           GLuint         source_gl_handle,
++                           GLenum         gl_target,
++                           uint32_t       width,
++                           uint32_t       height,
++                           GLuint        *out_gl_handle)
++{
++  g_print ("Reallocating %dx%d vulkan texture\n", width, height);
++
++  /* Get meta texture format */
++  _glBindTexture (gl_target, source_gl_handle);
++  GLint internal_format;
++  _glGetTexLevelParameteriv (GL_TEXTURE_2D, 0,
++                             GL_TEXTURE_INTERNAL_FORMAT, &internal_format);
++
++  gsize size;
++  int fd;
++
++  VkExtent2D extent = { width, height };
++
++  VkImageLayout layout = xrd_client_get_upload_layout (self->client);
++  GulkanTexture *texture =
++    gulkan_texture_new_export_fd (client, extent, VK_FORMAT_R8G8B8A8_UNORM,
++                                  layout, &size, &fd);
++  if (texture == NULL)
++    {
++      g_printerr ("Error: Unable to initialize Vulkan texture.\n");
++      return NULL;
++    }
++
++  GLint gl_dedicated_mem = GL_TRUE;
++  GLuint gl_mem_object;
++  _glCreateMemoryObjectsEXT (1, &gl_mem_object);
++  gl_check_error ("_glCreateMemoryObjectsEXT");
++
++  _glMemoryObjectParameterivEXT (gl_mem_object,
++                                 GL_DEDICATED_MEMORY_OBJECT_EXT,
++                                &gl_dedicated_mem);
++  gl_check_error ("_glMemoryObjectParameterivEXT");
++
++  _glGetMemoryObjectParameterivEXT (gl_mem_object,
++                                    GL_DEDICATED_MEMORY_OBJECT_EXT,
++                                   &gl_dedicated_mem);
++  gl_check_error ("_glGetMemoryObjectParameterivEXT");
++
++  _glImportMemoryFdEXT (gl_mem_object, size,
++                        GL_HANDLE_TYPE_OPAQUE_FD_EXT, fd);
++  gl_check_error ("_glImportMemoryFdEXT");
++
++  _glGenTextures (1, out_gl_handle);
++  gl_check_error ("_glGenTextures");
++
++  _glBindTexture (GL_TEXTURE_2D, *out_gl_handle);
++  gl_check_error ("_glBindTexture");
++
++  _glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_TILING_EXT, GL_OPTIMAL_TILING_EXT);
++  gl_check_error ("glTexParameteri GL_TEXTURE_TILING_EXT");
++  _glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
++  gl_check_error ("glTexParameteri GL_TEXTURE_MIN_FILTER");
++  _glTexParameteri (GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
++  gl_check_error ("glTexParameteri GL_TEXTURE_MAG_FILTER");
++
++  if (self->nvidia)
++    internal_format = GL_RGBA8;
++
++  _glTexStorageMem2DEXT (GL_TEXTURE_2D, 1, internal_format,
++                         width, height, gl_mem_object, 0);
++  gl_check_error ("_glTexStorageMem2DEXT");
++
++  _glFinish ();
++
++  if (!gulkan_texture_transfer_layout (texture,
++                                       VK_IMAGE_LAYOUT_UNDEFINED,
++                                       VK_IMAGE_LAYOUT_TRANSFER_SRC_OPTIMAL))
++    {
++      g_printerr ("Unable to transfer layout.\n");
++    }
++
++  _glDeleteMemoryObjectsEXT (1, &gl_mem_object);
++  gl_check_error ("_glDeleteMemoryObjectsEXT");
++
++  return texture;
++}
++
++
++static void
++_cursor_changed_cb (MetaCursorTracker *cursor_tracker,
++                    gpointer          _self)
++{
++  ShellVRMirror *self = _self;
++  if (!self)
++    return;
++
++  CoglTexture *cogl_texture = meta_cursor_tracker_get_sprite (cursor_tracker);
++  int hotspot_x, hotspot_y;
++  meta_cursor_tracker_get_hot (cursor_tracker, &hotspot_x, &hotspot_y);
++
++
++  if (cogl_texture == NULL || !cogl_is_texture (cogl_texture))
++    {
++      g_printerr ("Cursor Error: Could not CoglTexture.\n");
++      return;
++    }
++
++  GLuint meta_tex;
++  GLenum meta_target;
++  if (!cogl_texture_get_gl_texture (cogl_texture, &meta_tex, &meta_target))
++    {
++      g_printerr ("Cursor Error: Could not get GL handle.\n");
++      return;
++    }
++
++  GulkanClient *gulkan_client = xrd_client_get_gulkan (self->client);
++
++  guint cursor_width = (guint) cogl_texture_get_width (cogl_texture);
++  guint cursor_height = (guint) cogl_texture_get_width (cogl_texture);
++
++  XrdDesktopCursor *cursor = xrd_client_get_desktop_cursor (self->client);
++  xrd_desktop_cursor_set_hotspot (cursor, hotspot_x, hotspot_y);
++
++  GulkanTexture *texture = xrd_desktop_cursor_get_texture (cursor);
++
++  gboolean extent_changed = TRUE;
++  if (texture)
++    {
++      VkExtent2D extent = gulkan_texture_get_extent (texture);
++      extent_changed = (cursor_width != extent.width ||
++                        cursor_height != extent.height);
++    }
++
++  if (extent_changed)
++    {
++      if (self->cursor_gl_texture != 0)
++        _glDeleteTextures (1, &self->cursor_gl_texture);
++
++      g_print ("Cursor: Reallocating %dx%d vulkan texture\n",
++               cursor_width, cursor_height);
++
++      texture =
++        _allocate_external_memory (self, gulkan_client, meta_tex, meta_target,
++                                   cursor_width, cursor_height,
++                                  &self->cursor_gl_texture);
++
++      _glCopyImageSubData (meta_tex, meta_target, 0, 0, 0, 0,
++                           self->cursor_gl_texture, GL_TEXTURE_2D, 0, 0, 0, 0,
++                           cursor_width, cursor_height, 1);
++      _glFinish ();
++
++
++      xrd_desktop_cursor_set_and_submit_texture (cursor, texture);
++    }
++  else
++    {
++      _glCopyImageSubData (meta_tex, meta_target, 0, 0, 0, 0,
++                     self->cursor_gl_texture, GL_TEXTURE_2D, 0, 0, 0, 0,
++                     cursor_width, cursor_height, 1);
++      xrd_desktop_cursor_submit_texture (cursor);
++    }
++}
++
++static void
++_grab_op_begin_cb (MetaDisplay *display1,
++                   MetaDisplay *display2,
++                   MetaWindow  *grab_window,
++                   MetaGrabOp   op,
++                   gpointer     _self)
++{
++  // yes, this does happen
++  if (!grab_window)
++    return;
++
++  ShellVRMirror *self = _self;
++  if (!g_slist_find (self->grabbed_windows, grab_window))
++    self->grabbed_windows = g_slist_append (self->grabbed_windows, grab_window);
++
++  g_debug ("Start grab window %s\n", meta_window_get_title (grab_window));
++}
++
++static void
++_grab_op_end_cb (MetaDisplay *display1,
++                 MetaDisplay *display2,
++                 MetaWindow  *grab_window,
++                 MetaGrabOp   op,
++                 gpointer     _self)
++{
++  if (!grab_window)
++    return;
++
++  ShellVRMirror *self = _self;
++  self->grabbed_windows = g_slist_remove (self->grabbed_windows, grab_window);
++
++  g_debug ("End Grab window %s\n", meta_window_get_title (grab_window));
++}
++
++static XrdWindow *
++_meta_win_to_xrd_window (ShellVRMirror *self, MetaWindow *meta_window)
++{
++  XrdWindow *window = xrd_client_lookup_window (self->client, meta_window);
++  return window;
++}
++
++static void
++shell_vr_mirror_init (ShellVRMirror *self)
++{
++  self->top_layer = 0;
++  self->vr_input = NULL;
++  self->client = NULL;
++  self->shutdown = FALSE;
++}
++
++ShellVRMirror *
++shell_vr_mirror_new (void)
++{
++  return g_object_new (SHELL_TYPE_VR_MIRROR, NULL);
++}
++
++ShellVRMirror *
++shell_vr_mirror_get_instance (void)
++{
++  return shell_vr_mirror_instance;
++}
++
++ShellVRMirror *
++shell_vr_mirror_create_instance (void)
++{
++  shell_vr_mirror_instance = shell_vr_mirror_new ();
++  shell_vr_mirror_initialize (shell_vr_mirror_instance);
++  return shell_vr_mirror_instance;
++}
++
++/* Coordinate space: 0 == x: left, y == 0: top */
++static graphene_point_t
++_window_to_desktop_coords (MetaWindow       *meta_win,
++                           graphene_point_t *window_pixels)
++ {
++  MetaRectangle window_rect;
++  meta_window_get_buffer_rect (meta_win, &window_rect);
++
++  graphene_point_t desktop_coords = {
++    .x = window_rect.x + window_pixels->x,
++    .y = window_rect.y + window_pixels->y
++  };
++  return desktop_coords;
++}
++
++static MetaWindow *
++_get_validated_window (MetaWindowActor *actor)
++{
++  if (actor == NULL || !META_IS_WINDOW_ACTOR (actor))
++    {
++      g_printerr ("Error: Actor for move cursor not available.\n");
++      return NULL;
++    }
++
++  MetaWindow *meta_win = meta_window_actor_get_meta_window (actor);
++  if (meta_win == NULL || !META_IS_WINDOW (meta_win))
++    {
++      g_printerr ("Error: No window to move\n");
++      return NULL;
++    }
++
++  if (meta_window_get_display (meta_win) == NULL)
++    {
++      g_printerr ("Error: window has no display?!\n");
++      return NULL;
++    }
++
++  return meta_win;
++}
++
++static void
++_ensure_focused (MetaWindow *meta_win)
++{
++  /* mutter asserts that we don't mess with override_redirect windows */
++  if (meta_window_is_override_redirect (meta_win))
++    return;
++
++  meta_window_raise (meta_win);
++  if (!meta_window_has_focus (meta_win))
++    meta_window_focus (meta_win, CurrentTime);
++}
++
++static void
++_ensure_on_workspace (MetaWindow *meta_win)
++{
++  if (meta_window_is_on_all_workspaces (meta_win))
++    return;
++
++  MetaDisplay *display = meta_window_get_display (meta_win);
++
++  MetaWorkspaceManager *manager = meta_display_get_workspace_manager (display);
++  MetaWorkspace *ws_current =
++    meta_workspace_manager_get_active_workspace (manager);
++
++  MetaWorkspace *ws_window = meta_window_get_workspace (meta_win);
++  if (!ws_window || !META_IS_WORKSPACE (ws_window))
++    return;
++
++  if (ws_current == ws_window)
++    return;
++
++  guint32 timestamp = meta_display_get_current_time_roundtrip (display);
++  meta_workspace_activate_with_focus (ws_window, meta_win, timestamp);
++}
++
++static void
++_click_cb (XrdClient     *client,
++           XrdClickEvent *event,
++           ShellVRMirror *self)
++{
++  ShellVRWindow *shell_win;
++  g_object_get (event->window, "native", &shell_win, NULL);
++  if (!shell_win)
++    return;
++
++  MetaWindowActor *actor = (MetaWindowActor*) shell_win->meta_window_actor;
++  MetaWindow *meta_win = _get_validated_window (actor);
++  if (!meta_win)
++    return;
++
++  _ensure_on_workspace (meta_win);
++  _ensure_focused (meta_win);
++
++  graphene_point_t desktop_coords =
++    _window_to_desktop_coords (meta_win, event->position);
++
++  input_synth_click (self->vr_input,
++                     desktop_coords.x, desktop_coords.y,
++                     event->button, event->state);
++}
++
++static void
++_move_cursor_cb (XrdClient          *client,
++                 XrdMoveCursorEvent *event,
++                 ShellVRMirror      *self)
++{
++  ShellVRWindow *shell_win;
++  g_object_get (event->window, "native", &shell_win, NULL);
++  if (!shell_win)
++    return;
++
++  MetaWindowActor *actor = (MetaWindowActor*) shell_win->meta_window_actor;
++  MetaWindow *meta_win = _get_validated_window (actor);
++  if (!meta_win)
++    return;
++
++  /* do not move mouse cursor while the window is grabbed (in "move" mode) */
++  if (g_slist_find (self->grabbed_windows, meta_win))
++    return;
++
++  _ensure_on_workspace (meta_win);
++  _ensure_focused (meta_win);
++
++  graphene_point_t desktop_coords =
++    _window_to_desktop_coords (meta_win, event->position);
++  input_synth_move_cursor (self->vr_input, desktop_coords.x, desktop_coords.y);
++}
++
++static void
++_keyboard_press_cb (XrdClient     *client,
++                    GdkEventKey   *event,
++                    ShellVRMirror *self)
++{
++  XrdWindow* keyboard_xrd_win = xrd_client_get_keyboard_window (client);
++  if (!keyboard_xrd_win)
++    {
++      g_print ("ERROR: No keyboard window!\n");
++      return;
++    }
++
++  ShellVRWindow *shell_win;
++  g_object_get (keyboard_xrd_win, "native", &shell_win, NULL);
++  if (!shell_win)
++    return;
++
++  MetaWindowActor *actor = (MetaWindowActor*) shell_win->meta_window_actor;
++  MetaWindow *meta_win = _get_validated_window (actor);
++  if (!meta_win)
++    return;
++
++  _ensure_on_workspace (meta_win);
++  _ensure_focused (meta_win);
++
++  for (int i = 0; i < event->length; i++)
++    input_synth_character (self->vr_input, event->string[i]);
++}
++
++static void
++_system_quit_cb (XrdClient    *xrd_client,
++                 GxrQuitEvent *event,
++                 gpointer     _self)
++{
++  g_print ("Handling VR quit event\n");
++
++  switch (event->reason)
++  {
++    case GXR_QUIT_SHUTDOWN:
++    {
++      g_print("Quit event: VR Shutdown\n");
++      shell_vr_mirror_destroy_instance ();
++    } break;
++    case GXR_QUIT_PROCESS_QUIT:
++    {
++      /* TODO: we can become scene app */
++      g_print("Quit event: Another scene VR app quit\n");
++    } break;
++    case GXR_QUIT_APPLICATION_TRANSITION:
++    {
++      /* TODO: if we are scene app, we must switch to overlay app */
++      g_print("Quit event: Application transition\n");
++    } break;
++  }
++}
++
++static void
++_init_input (ShellVRMirror *self)
++{
++  if (meta_is_wayland_compositor ())
++    self->vr_input = input_synth_new (INPUTSYNTH_BACKEND_WAYLAND_CLUTTER);
++  else
++    self->vr_input = input_synth_new (INPUTSYNTH_BACKEND_XDO);
++}
++
++static gboolean
++_upload_gl_external_memory (ShellVRMirror     *self,
++                            GulkanClient      *client,
++                            XrdWindow         *xrd_win,
++                            MetaShapedTexture *mst,
++                            MetaRectangle     *rect)
++{
++  CoglTexture *cogl_texture = meta_shaped_texture_get_texture (mst);
++
++  if (cogl_texture == NULL || !cogl_is_texture (cogl_texture))
++    {
++      g_printerr ("Error: Could not CoglTexture from MetaShapedTexture.\n");
++      return FALSE;
++    }
++
++  GLuint meta_tex;
++  GLenum meta_target;
++  if (!cogl_texture_get_gl_texture (cogl_texture, &meta_tex, &meta_target))
++    {
++      g_printerr ("Error: Could not get GL handle from CoglTexture.\n");
++      return FALSE;
++    }
++
++  ShellVRWindow *shell_win;
++  g_object_get (xrd_win, "native", &shell_win, NULL);
++  if (!shell_win)
++    return FALSE;
++
++  GulkanTexture *texture = xrd_window_get_texture (xrd_win);
++
++  gboolean extent_changed = TRUE;
++  if (texture)
++    {
++      VkExtent2D extent = gulkan_texture_get_extent (texture);
++      extent_changed = ((guint) rect->width != extent.width ||
++                        (guint) rect->height != extent.height);
++    }
++
++
++  xrd_render_lock ();
++  if (extent_changed)
++    {
++      if (shell_win->gl_texture != 0)
++        _glDeleteTextures (1, &shell_win->gl_texture);
++
++      texture = _allocate_external_memory (self, client, meta_tex, meta_target,
++                                           rect->width, rect->height,
++                                          &shell_win->gl_texture);
++     if (!GULKAN_IS_TEXTURE (texture))
++        {
++          g_printerr ("Error creating texture for window!\n");
++          xrd_render_unlock ();
++          return FALSE;
++        }
++
++      _glCopyImageSubData (meta_tex, meta_target, 0, 0, 0, 0,
++                           shell_win->gl_texture, GL_TEXTURE_2D, 0, 0, 0, 0,
++                           rect->width, rect->height, 1);
++      gl_check_error ("_glCopyImageSubData");
++      _glFinish ();
++      xrd_window_set_and_submit_texture (xrd_win, texture);
++    }
++  else
++    {
++      _glCopyImageSubData (meta_tex, meta_target, 0, 0, 0, 0,
++                           shell_win->gl_texture, GL_TEXTURE_2D, 0, 0, 0, 0,
++                           rect->width, rect->height, 1);
++      gl_check_error ("_glCopyImageSubData");
++      xrd_window_submit_texture (xrd_win);
++    }
++  xrd_render_unlock ();
++
++  return TRUE;
++}
++
++static gboolean
++_upload_raw_cairo (ShellVRMirror     *self,
++                   GulkanClient      *client,
++                   XrdWindow         *xrd_win,
++                   MetaShapedTexture *mst,
++                   MetaRectangle     *rect)
++{
++  cairo_rectangle_int_t cairo_rect = {
++    .x = 0,
++    .y = 0,
++    .width = rect->width,
++    .height = rect->height
++  };
++
++  cairo_surface_t *sf = meta_shaped_texture_get_image (mst, &cairo_rect);
++  if (sf == NULL)
++    {
++      g_printerr ("Error: Could not get Cairo surface"
++                  " from MetaShapedTexture.\n");
++      return FALSE;
++    }
++
++  ShellVRWindow *shell_win;
++  g_object_get (xrd_win, "native", &shell_win, NULL);
++  if (!shell_win)
++    return FALSE;
++
++  VkImageLayout upload_layout = xrd_client_get_upload_layout (self->client);
++
++  int texture_width;
++  int texture_height;
++  g_object_get (xrd_win, "texture-width", &texture_width, NULL);
++  g_object_get (xrd_win, "texture_height", &texture_height, NULL);
++
++  GulkanTexture *texture = xrd_window_get_texture (xrd_win);
++
++  xrd_render_lock ();
++  if (rect->width != texture_width ||
++      rect->height != texture_height ||
++      texture == NULL)
++    {
++      g_print ("Reallocating %dx%d vulkan texture\n",
++               rect->width, rect->height);
++      texture =
++        gulkan_texture_new_from_cairo_surface (client, sf,
++                                               VK_FORMAT_B8G8R8A8_UNORM,
++                                               upload_layout);
++
++     if (!GULKAN_IS_TEXTURE (texture))
++        {
++          g_printerr ("Error creating texture for window!\n");
++          xrd_render_unlock ();
++          return FALSE;
++        }
++      xrd_window_set_and_submit_texture (xrd_win, texture);
++    }
++  else
++    {
++      gulkan_texture_upload_cairo_surface (texture, sf, upload_layout);
++      xrd_window_submit_texture (xrd_win);
++    }
++  xrd_render_unlock ();
++
++  cairo_surface_destroy (sf);
++
++  return TRUE;
++}
++
++static gboolean
++_upload_window (ShellVRMirror *self, XrdWindow *xrd_win)
++{
++  ShellVRWindow *shell_win;
++  g_object_get (xrd_win, "native", &shell_win, NULL);
++  if (!shell_win)
++    return FALSE;
++
++  MetaWindowActor* actor = shell_win->meta_window_actor;
++
++  MetaWindow *meta_win = _get_validated_window (actor);
++  MetaRectangle rect;
++  meta_window_get_buffer_rect (meta_win, &rect);
++
++  /* skip upload of small buffers */
++  if (rect.width <= 10 && rect.height <= 10)
++    return FALSE;
++
++  MetaShapedTexture* mst =
++    (MetaShapedTexture*) meta_window_actor_get_texture (actor);
++
++  GulkanClient *gulkan_client = xrd_client_get_gulkan (self->client);
++
++  CoglTextureComponents components;
++  if (self->nvidia)
++    {
++      CoglTexture *cogl_texture = meta_shaped_texture_get_texture (mst);
++      if (cogl_texture == NULL || !cogl_is_texture (cogl_texture))
++        {
++          g_printerr ("Error: Could not CoglTexture from MetaShapedTexture.\n");
++          return FALSE;
++        }
++      components = cogl_texture_get_components (cogl_texture);
++    }
++
++  static GMutex upload_mutex;
++  g_mutex_lock (&upload_mutex);
++
++  gboolean ret;
++  /* Use cairo upload as fallback on NVIDIA for RGB buffers */
++  if (self->nvidia && components == COGL_TEXTURE_COMPONENTS_RGB)
++    ret = _upload_raw_cairo (self, gulkan_client, xrd_win, mst, &rect);
++  else
++    ret = _upload_gl_external_memory (self, gulkan_client, xrd_win, mst, &rect);
++
++  g_mutex_unlock (&upload_mutex);
++
++  return ret;
++}
++
++static gboolean
++_is_excluded_from_mirroring (MetaWindow *meta_win)
++{
++  MetaWindowType type = meta_window_get_window_type (meta_win);
++  return
++    type == META_WINDOW_DESKTOP ||
++    type == META_WINDOW_DOCK ||
++    type == META_WINDOW_DND;
++}
++
++static void
++_mirror_current_windows (ShellVRMirror *self)
++{
++  ShellGlobal *global = shell_global_get ();
++  GList *window = shell_global_get_window_actors (global);
++  while (window != NULL)
++    {
++      MetaWindowActor *actor = window->data;
++      shell_vr_mirror_map_actor (self, actor);
++      window = window->next;
++    }
++}
++
++static void
++_apply_desktop_position (MetaWindow *meta_win,
++                         XrdWindow  *xrd_win,
++                         uint32_t    layer)
++{
++  ShellGlobal *global = shell_global_get ();
++  MetaDisplay *display = shell_global_get_display (global);
++
++  int screen_w, screen_h;
++  meta_display_get_size (display, &screen_w, &screen_h);
++
++  MetaRectangle rect;
++  meta_window_get_buffer_rect (meta_win, &rect);
++
++  float x =            rect.x - screen_w / 2.0f + rect.width  / 2.0f;
++  float y = screen_h - rect.y - screen_h / 4.0f - rect.height / 2.0f;
++
++  graphene_point3d_t point = {
++    .x = x / SHELL_VR_PIXELS_PER_METER,
++    .y = y / SHELL_VR_PIXELS_PER_METER + DEFAULT_LEVEL,
++    .z = -SHELL_VR_DESKTOP_PLANE_DISTANCE + SHELL_VR_LAYER_DISTANCE * layer
++  };
++
++  graphene_matrix_t transform;
++  graphene_matrix_init_translate (&transform, &point);
++
++  xrd_window_set_transformation (xrd_win, &transform);
++  xrd_window_save_reset_transformation (xrd_win);
++}
++
++static void
++_arrange_windows_by_desktop_position (ShellVRMirror *self)
++{
++  GSList *xrd_win_list = xrd_client_get_windows (self->client);
++
++  GSList *meta_win_list = NULL;
++
++  for (; xrd_win_list; xrd_win_list = xrd_win_list->next)
++    {
++      XrdWindow *xrd_win = xrd_win_list->data;
++      ShellVRWindow *shell_win;
++      g_object_get (xrd_win, "native", &shell_win, NULL);
++      if (!shell_win)
++        continue;
++
++      MetaWindow *meta_win =
++        meta_window_actor_get_meta_window (shell_win->meta_window_actor);
++
++      if (!_is_excluded_from_mirroring (meta_win))
++        meta_win_list = g_slist_append (meta_win_list, meta_win);
++    }
++
++  ShellGlobal *global = shell_global_get ();
++  MetaDisplay *display = shell_global_get_display (global);
++
++  GSList *sorted_windows =
++    meta_display_sort_windows_by_stacking (display, meta_win_list);
++
++  for (self->top_layer = 0; sorted_windows;
++       sorted_windows = sorted_windows->next)
++    {
++      XrdWindow *xrd_window = _meta_win_to_xrd_window (self,
++                                                       sorted_windows->data);
++      if (!xrd_window)
++        continue;
++
++      _apply_desktop_position (sorted_windows->data,
++                               xrd_window, self->top_layer);
++      self->top_layer++;
++    }
++  g_slist_free (sorted_windows);
++}
++
++void
++shell_vr_mirror_initialize (ShellVRMirror *self)
++{
++  self->client = xrd_client_new ();
++  if (!self->client)
++    {
++      g_print ("Failed to initialize xrdesktop!\n");
++      g_print ("Usually this is caused by a problem with the VR runtime.\n");
++
++      g_clear_object (&shell_vr_mirror_instance);
++
++      return;
++    }
++
++  g_print ("== Started xrdesktop ==\n");
++
++  self->cursor_gl_texture = 0;
++
++  if (!_load_gl_functions ())
++    g_printerr ("Error: Could not load GL function pointers"
++                " for external memory upload method.\n");
++
++  self->nvidia = g_strcmp0 (gl_get_vendor (), "NVIDIA Corporation") == 0;
++
++  self->grabbed_windows = NULL;
++
++  _init_input (self);
++
++
++  g_signal_connect (self->client, "keyboard-press-event",
++                    (GCallback) _keyboard_press_cb, self);
++
++  g_signal_connect (self->client, "click-event",
++                    (GCallback) _click_cb, self);
++
++  g_signal_connect (self->client, "move-cursor-event",
++                    (GCallback) _move_cursor_cb, self);
++
++  g_signal_connect (self->client, "request-quit-event",
++                    (GCallback) _system_quit_cb, &self);
++
++  _mirror_current_windows (self);
++  _arrange_windows_by_desktop_position (self);
++
++  ShellGlobal *global = shell_global_get ();
++  MetaDisplay *display = shell_global_get_display (global);
++  self->cursor_tracker =
++      meta_cursor_tracker_get_for_display (display);
++  g_signal_connect (self->cursor_tracker, "cursor-changed",
++                    (GCallback) _cursor_changed_cb, self);
++
++  g_signal_connect (display, "grab-op-begin",
++                    (GCallback) _grab_op_begin_cb, self);
++
++  g_signal_connect (display, "grab-op-end",
++                    (GCallback) _grab_op_end_cb, self);
++}
++
++static void
++_actor_paint_cb (MetaWindowActor *actor,
++                 gpointer        _xrd_window)
++{
++  ShellVRMirror *self = shell_vr_mirror_get_instance ();
++  if (!self)
++    return;
++
++  XrdWindow *xrd_win = _xrd_window;
++
++  _upload_window (self, xrd_win);
++}
++
++/*
++ * Menus, ContextMenus, etc. that should be fixed to a parent window and may
++ * not be individually moved
++ */
++
++static void
++_get_offset (MetaWindow *parent, MetaWindow *child, graphene_point_t *offset)
++{
++  MetaRectangle parent_rect;
++  meta_window_get_buffer_rect (parent, &parent_rect);
++
++  MetaRectangle child_rect;
++  meta_window_get_buffer_rect (child, &child_rect);
++
++  int parent_center_x = parent_rect.x + parent_rect.width / 2;
++  int parent_center_y = parent_rect.y + parent_rect.height / 2;
++
++  int child_center_x = child_rect.x + child_rect.width / 2;
++  int child_center_y = child_rect.y + child_rect.height / 2;
++
++  int offset_x = child_center_x - parent_center_x;
++  int offset_y = child_center_y - parent_center_y;
++
++  offset->x = offset_x;
++  offset->y = - offset_y;
++
++  g_print ("child at %d,%d to parent at %d,%d, offset %d,%d\n",
++           child_center_x, child_center_y,
++           parent_center_x, parent_center_y,
++           offset_x, offset_y);
++}
++
++static gboolean
++_is_child_window (MetaWindow *meta_win)
++{
++  MetaWindowType t = meta_window_get_window_type (meta_win);
++  return
++    t == META_WINDOW_POPUP_MENU ||
++    t == META_WINDOW_DROPDOWN_MENU ||
++    t == META_WINDOW_TOOLTIP ||
++    t == META_WINDOW_MODAL_DIALOG ||
++    t == META_WINDOW_COMBO;
++}
++
++static XrdWindow*
++_get_valid_xrd_parent (ShellVRMirror *self,
++                       MetaWindow    *meta_parent)
++{
++  XrdWindow *xrd_parent = NULL;
++  if (meta_parent != NULL && !_is_excluded_from_mirroring (meta_parent))
++    xrd_parent = xrd_client_lookup_window (self->client, meta_parent);
++  return xrd_parent;
++}
++
++static bool
++_find_valid_parent (ShellVRMirror *self,
++                    MetaWindow    *child,
++                    MetaWindow   **meta_parent,
++                    XrdWindow    **xrd_parent)
++{
++  /* Try transient first */
++  *meta_parent = meta_window_get_transient_for (child);
++  *xrd_parent = _get_valid_xrd_parent (self, *meta_parent);
++  if (*xrd_parent != NULL)
++    return TRUE;
++
++  /* If this doesn't work out try the root ancestor */
++  *meta_parent = meta_window_find_root_ancestor (child);
++  *xrd_parent = _get_valid_xrd_parent (self, *meta_parent);
++  if (*xrd_parent != NULL)
++    return TRUE;
++
++  /* Last try, check if anything is focused and make that our parent */
++  ShellGlobal *global = shell_global_get ();
++  MetaDisplay *display = shell_global_get_display (global);
++  *meta_parent = meta_display_get_focus_window (display);
++  *xrd_parent = _get_valid_xrd_parent (self, *meta_parent);
++  if (*xrd_parent != NULL)
++    return TRUE;
++
++  /* Didn't find anything */
++  const gchar *title = meta_window_get_title (child);
++  g_warning ("Could not find a parent for `%s`", title);
++
++  return FALSE;
++
++}
++
++gboolean
++shell_vr_mirror_map_actor (ShellVRMirror   *self,
++                           MetaWindowActor *actor)
++{
++  if (!shell_vr_mirror_instance)
++    return FALSE;
++
++  MetaWindow *meta_win = _get_validated_window (actor);
++  if (_is_excluded_from_mirroring (meta_win))
++    return FALSE;
++
++  MetaRectangle rect;
++  meta_window_get_buffer_rect (meta_win, &rect);
++
++  gboolean is_child = _is_child_window (meta_win);
++  XrdWindow *xrd_parent = NULL;
++  MetaWindow *meta_parent = NULL;
++
++  if (is_child)
++    {
++      if (_find_valid_parent (self, meta_win, &meta_parent, &xrd_parent))
++        {
++          /*
++           * Each window only has one child window,
++           * chain this child window to the last
++           * existing child window of the parent window.
++           * TODO: Test this on Wayland
++           */
++          XrdWindowData *parent_data = xrd_window_get_data (xrd_parent);
++          while (parent_data->child_window != NULL)
++            {
++              xrd_parent = parent_data->child_window->xrd_window;
++              parent_data = xrd_window_get_data (xrd_parent);
++              ShellVRWindow *parent_shell_win;
++              g_object_get (xrd_parent, "native", &parent_shell_win, NULL);
++              if (parent_shell_win)
++                {
++                  MetaWindowActor *actor = parent_shell_win->meta_window_actor;
++                  meta_parent = meta_window_actor_get_meta_window (actor);
++                }
++            }
++        }
++    }
++
++  const gchar *title = meta_window_get_title (meta_win);
++  const gchar *description = meta_window_get_description (meta_win);
++  g_print ("Map window %p: %s (%s)\n", actor, title, description);
++
++  XrdWindow *xrd_win =
++    xrd_window_new_from_pixels (self->client, title, rect.width,
++                                rect.height, SHELL_VR_PIXELS_PER_METER);
++
++  gboolean draggable = !(is_child && meta_parent != NULL && xrd_parent != NULL);
++  xrd_client_add_window (self->client, xrd_win, draggable, meta_win);
++
++  if (is_child && !draggable)
++    {
++      graphene_point_t offset;
++      _get_offset (meta_parent, meta_win, &offset);
++
++      xrd_window_add_child (xrd_parent, xrd_win, &offset);
++    }
++  else if (is_child && xrd_parent == NULL)
++    g_warning ("Can't add window '%s' as child. No parent candidate!\n", title);
++
++  if (!is_child)
++    {
++      _apply_desktop_position (meta_win, xrd_win, self->top_layer);
++      self->top_layer++;
++    }
++
++  ShellVRWindow *shell_win = g_malloc (sizeof (ShellVRWindow));
++  shell_win->meta_window_actor = actor;
++  shell_win->gl_texture = 0;
++  shell_win->keyboard_char_signal = 0;
++  shell_win->keyboard_close_signal = 0;
++
++  g_object_set (xrd_win, "native", shell_win, NULL);
++
++  _upload_window (self, xrd_win);
++
++  g_signal_connect (actor, "paint", G_CALLBACK (_actor_paint_cb), xrd_win);
++
++  return TRUE;
++}
++
++static void
++_disconnect_actor (MetaWindowActor *actor, GCallback cb)
++{
++  g_signal_handlers_disconnect_matched (
++    actor, G_SIGNAL_MATCH_FUNC, 0, 0, NULL, cb, NULL);
++}
++
++gboolean
++shell_vr_mirror_destroy_actor (ShellVRMirror   *self,
++                               MetaWindowActor *actor)
++{
++  if (!shell_vr_mirror_instance)
++    return FALSE;
++
++  MetaWindow *meta_win = _get_validated_window (actor);
++  g_print ("WINDOW CLOSED: %s: %s\n",
++           meta_window_get_wm_class (meta_win),
++           meta_window_get_title (meta_win));
++
++
++  XrdWindow *xrd_win = _meta_win_to_xrd_window (self, meta_win);
++
++  if (xrd_win)
++    {
++      /* Disconnect VR paint callback from desktop window */
++      _disconnect_actor (actor, G_CALLBACK (_actor_paint_cb));
++
++      ShellVRWindow *shell_win;
++      g_object_get (xrd_win, "native", &shell_win, NULL);
++      if (!shell_win)
++        return FALSE;
++
++      if (shell_win->gl_texture != 0)
++        _glDeleteTextures (1, &shell_win->gl_texture);
++
++      xrd_client_remove_window (self->client, xrd_win);
++
++      xrd_window_close (xrd_win);
++
++      g_object_unref (xrd_win);
++      g_free (shell_win);
++    }
++  else
++    {
++      g_printerr ("Could not destroy null xrd win.\n");
++      return FALSE;
++    }
++
++  return TRUE;
++}
++
++gboolean
++shell_vr_mirror_actor_size_changed (ShellVRMirror   *self,
++                                    MetaWindowActor *actor)
++{
++  if (!shell_vr_mirror_instance)
++    return FALSE;
++
++  MetaWindow *meta_win = _get_validated_window (actor);
++
++  MetaRectangle rect;
++  meta_window_get_buffer_rect (meta_win, &rect);
++  g_print ("Window Size Changed: %s: [%d,%d] %dx%d\n",
++           meta_window_get_title (meta_win),
++           rect.x, rect.y, rect.width, rect.height);
++
++  XrdWindow *xrd_win = _meta_win_to_xrd_window (self, meta_win);
++  if (xrd_win == NULL || rect.width < 10 || rect.height < 10)
++    return FALSE;
++
++  // TODO?
++
++  return TRUE;
++}
++
++static void
++shell_vr_mirror_finalize (GObject *object)
++{
++  ShellVRMirror *self = SHELL_VR_MIRROR (object);
++
++  g_print ("== Disabling xrdesktop ==\n");
++  if (self->vr_input)
++    g_object_unref (self->vr_input);
++  if (self->client)
++    g_object_unref (self->client);
++
++  g_slist_free (self->grabbed_windows);
++
++  G_OBJECT_CLASS (shell_vr_mirror_parent_class)->finalize (object);
++}
++
++static void
++shell_vr_mirror_class_init (ShellVRMirrorClass *klass)
++{
++  GObjectClass *gobject_class = G_OBJECT_CLASS (klass);
++  gobject_class->finalize = shell_vr_mirror_finalize;
++}
++
++static void
++_destroy_vr_window (XrdWindow     *xrd_win,
++                    ShellVRMirror *self)
++{
++  ShellVRWindow *shell_win;
++  g_object_get (xrd_win, "native", &shell_win, NULL);
++  if (shell_win)
++    shell_vr_mirror_destroy_actor (self, shell_win->meta_window_actor);
++}
++
++void
++shell_vr_mirror_destroy_instance (void)
++{
++  ShellVRMirror *self = shell_vr_mirror_instance;
++  if (!self)
++    {
++      g_printerr ("No ShellVRMirror instance to destroy!\n");
++      return;
++    }
++
++  g_signal_handlers_disconnect_matched (
++    self->cursor_tracker, G_SIGNAL_MATCH_FUNC, 0, 0, NULL,
++    _cursor_changed_cb, NULL);
++
++  self->shutdown = TRUE;
++
++  /*
++   * We have to clean up windows first because it will only clean up as long
++   * as there is an active shell_vr_mirror_instance
++   */
++  GSList *windows = xrd_client_get_windows (self->client);
++  g_slist_foreach (windows, (GFunc) _destroy_vr_window, self);
++
++  /* Let the outside world know that the single instance is gone. */
++  shell_vr_mirror_instance = NULL;
++
++  g_object_unref (self);
++}
++
+diff --git a/src/shell-vr-mirror.h b/src/shell-vr-mirror.h
+new file mode 100644
+index 000000000..0ef233698
+--- /dev/null
++++ b/src/shell-vr-mirror.h
+@@ -0,0 +1,48 @@
++/* -*- mode: C; c-file-style: "gnu"; indent-tabs-mode: nil; -*- */
++
++#ifndef __SHELL_VR_MIRROR_H__
++#define __SHELL_VR_MIRROR_H__
++
++#include <clutter/clutter.h>
++#include "st.h"
++
++#include "shell-global.h"
++#include <xrd.h>
++
++/* TODO: generate enum header with gschemas */
++typedef enum {
++  UPLOAD_METHOD_VK_SHARED_GL_MEMORY = 1,
++  UPLOAD_METHOD_VK_UPLOAD_RAW
++} UploadMethod;
++
++G_BEGIN_DECLS
++
++#define SHELL_TYPE_VR_MIRROR (shell_vr_mirror_get_type ())
++G_DECLARE_FINAL_TYPE (ShellVRMirror, shell_vr_mirror,
++                      SHELL, VR_MIRROR, GObject)
++
++ShellVRMirror *shell_vr_mirror_new          (void);
++ShellVRMirror *shell_vr_mirror_get_instance (void);
++ShellVRMirror *shell_vr_mirror_create_instance (void);
++void shell_vr_mirror_destroy_instance (void);
++
++void shell_vr_mirror_initialize (ShellVRMirror *self);
++
++gboolean
++shell_vr_mirror_map_actor (ShellVRMirror   *self,
++                           MetaWindowActor *actor);
++
++gboolean
++shell_vr_mirror_destroy_actor (ShellVRMirror   *self,
++                               MetaWindowActor *actor);
++
++gboolean
++shell_vr_mirror_actor_size_changed (ShellVRMirror   *self,
++                                    MetaWindowActor *actor);
++
++void
++shell_dbus_xr_init (void);
++
++G_END_DECLS
++
++#endif /* __SHELL_VR_MIRROR_H__ */
+diff --git a/src/shell-wm.c b/src/shell-wm.c
+index a11e41904..e06b531b0 100644
+--- a/src/shell-wm.c
++++ b/src/shell-wm.c
+@@ -6,9 +6,11 @@
+ 
+ #include <meta/meta-enum-types.h>
+ #include <meta/keybindings.h>
++#include <meta/meta-shaped-texture.h>
+ 
+ #include "shell-wm-private.h"
+ #include "shell-global.h"
++#include "shell-vr-mirror.h"
+ 
+ struct _ShellWM {
+   GObject parent;
+@@ -273,6 +275,19 @@ void
+ shell_wm_completed_map (ShellWM         *wm,
+                         MetaWindowActor *actor)
+ {
++  ShellVRMirror *vr_mirror = shell_vr_mirror_get_instance ();
++  if (vr_mirror)
++    shell_vr_mirror_map_actor (vr_mirror, actor);
++
++  MetaWindow *window = meta_window_actor_get_meta_window (actor);
++  g_print ("shell_wm_completed_map: %s: %s\n",
++           meta_window_get_wm_class (window),
++           meta_window_get_title (window));
++
++  MetaRectangle rect;
++  meta_window_get_buffer_rect (window, &rect);
++  g_print ("[%d,%d] %dx%d\n", rect.x, rect.y, rect.width, rect.height);
++
+   meta_plugin_map_completed (wm->plugin, actor);
+ }
+ 
+@@ -287,6 +302,10 @@ void
+ shell_wm_completed_destroy (ShellWM         *wm,
+                             MetaWindowActor *actor)
+ {
++  g_print ("shell_wm_completed_destroy\n");
++  ShellVRMirror *vr_mirror = shell_vr_mirror_get_instance ();
++  if (vr_mirror)
++    shell_vr_mirror_destroy_actor (vr_mirror, actor);
+   meta_plugin_destroy_completed (wm->plugin, actor);
+ }
+ 
+@@ -376,6 +395,10 @@ void
+ _shell_wm_size_changed (ShellWM         *wm,
+                         MetaWindowActor *actor)
+ {
++  ShellVRMirror *vr_mirror = shell_vr_mirror_get_instance ();
++  if (vr_mirror)
++    shell_vr_mirror_actor_size_changed (vr_mirror, actor);
++
+   g_signal_emit (wm, shell_wm_signals[SIZE_CHANGED], 0, actor);
+ }
+ 
+diff --git a/tools/gnome-shell-set-vr.py b/tools/gnome-shell-set-vr.py
+new file mode 100755
+index 000000000..bfeffef8f
+--- /dev/null
++++ b/tools/gnome-shell-set-vr.py
+@@ -0,0 +1,47 @@
++#!/usr/bin/env python3
++
++available_methods = [ "enable", "disable" ]
++
++import sys
++if len(sys.argv) < 2 or (not sys.argv[1] in available_methods):
++    print("Usage: {} [enable|disable]".format(sys.argv[0]))
++    sys.exit()
++method = sys.argv[1]
++
++from gi.repository import Gio, GLib
++
++bus = Gio.bus_get_sync(Gio.BusType.SESSION, None)
++proxy = Gio.DBusProxy.new_sync(bus,
++                               Gio.DBusProxyFlags.DO_NOT_AUTO_START,
++                               None,
++                               'org.gnome.Shell.XR',
++                               '/org/gnome/Shell/XR',
++                               'org.gnome.Shell.XR',
++                               None)
++
++is_enabled = proxy.get_cached_property("enabled")
++
++# print("Is:", is_enabled)
++
++prop_proxy = Gio.DBusProxy.new_sync(bus,
++                                    Gio.DBusProxyFlags.DO_NOT_AUTO_START,
++                                    None,
++                                    'org.gnome.Shell.XR',
++                                    '/org/gnome/Shell/XR',
++                                    'org.freedesktop.DBus.Properties',
++                                    None)
++
++to_set = method == "enable"
++
++# print("Set to:", to_set)
++
++set_variant = GLib.Variant('(ssv)',("org.gnome.Shell.XR", "enabled",
++                           GLib.Variant.new_boolean(to_set)))
++
++prop_proxy.call_sync("Set", set_variant, Gio.DBusCallFlags.NONE, -1, None)
++
++get_variant = GLib.Variant('(ss)',("org.gnome.Shell.XR", "enabled"))
++
++res = prop_proxy.call_sync("Get", get_variant, Gio.DBusCallFlags.NONE, -1, None)
++
++# print ("Is:", res)
+diff --git a/tools/meson.build b/tools/meson.build
+index d8e217cc4..9230c5a19 100644
+--- a/tools/meson.build
++++ b/tools/meson.build
+@@ -2,3 +2,9 @@ install_data('gnome-shell-overrides-migration.sh',
+   install_dir: libexecdir,
+   install_mode: 'rwxr-xr-x'
+ )
++
++install_data('gnome-shell-set-vr.py',
++  rename : ['gnome-shell-set-vr'],
++  install_dir: 'bin',
++  install_mode: 'rwxr-xr-x'
++ )
+\ No newline at end of file
