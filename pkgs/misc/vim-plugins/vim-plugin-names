@@ -119,6 +119,7 @@ google/vim-maktaba
 gorkunov/smartpairs.vim
 gotcha/vimelette
 gregsexton/gitv
+gruvbox-community/gruvbox as gruvbox-community
 gu-fan/riv.vim
 guns/vim-clojure-highlight
 guns/vim-clojure-static

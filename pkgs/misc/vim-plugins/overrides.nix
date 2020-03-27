@@ -397,18 +397,6 @@ self: super: {
     dependencies = with super; [ webapi-vim ];
   });
 
-  gruvbox-community = buildVimPluginFrom2Nix {
-    pname = "gruvbox-community";
-    version = "2019-05-31";
-    src = fetchFromGitHub {
-      owner = "gruvbox-community";
-      repo = "gruvbox";
-      rev = "e122091dad968a5524f3e8136615a479c7b6f247";
-      sha256 = "1hncjyfi1gbw62b2pngy5qxyzibrhbyzgfmm9a58sdh1272l8ls8";
-    };
-    meta.maintainers = with stdenv.lib.maintainers; [ minijackson ];
-  };
-
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
     preInstall = "cd data/syntax-highlighting/vim";
