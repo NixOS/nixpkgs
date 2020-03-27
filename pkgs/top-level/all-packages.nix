@@ -15176,6 +15176,8 @@ in
     mail = callPackage ../development/libraries/gsignond/plugins/mail.nix { };
   };
 
+  gulkan = callPackage ../development/libraries/gulkan { };
+
   ### DEVELOPMENT / LIBRARIES / AGDA
 
   agda = callPackage ../build-support/agda {
