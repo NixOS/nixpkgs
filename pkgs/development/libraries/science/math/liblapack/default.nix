@@ -42,7 +42,4 @@ stdenv.mkDerivation {
     license = licenses.bsd3;
     platforms = platforms.all;
   };
-
-  passthru.libblasName = "libblas";
-  passthru.libcblasName = "libcblas";
 }

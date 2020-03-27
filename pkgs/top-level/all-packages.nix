@@ -11479,20 +11479,11 @@ in
 
   ffcast = callPackage ../tools/X11/ffcast { };
 
-  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack {
-    # We need to use blas instead of openblas on darwin,
-    # see https://github.com/NixOS/nixpkgs/pull/45013.
-    blas = if stdenv.isDarwin then blas else openblas;
-  };
+  fflas-ffpack = callPackage ../development/libraries/fflas-ffpack { };
 
   forge = callPackage ../development/libraries/forge { };
 
-  linbox = callPackage ../development/libraries/linbox {
-    # We need to use blas instead of openblas on darwin, see
-    # https://github.com/NixOS/nixpkgs/pull/45013 and
-    # https://github.com/NixOS/nixpkgs/pull/45015.
-    blas = if stdenv.isDarwin then blas else openblas;
-  };
+  linbox = callPackage ../development/libraries/linbox { };
 
   ffmpeg_2_8 = callPackage ../development/libraries/ffmpeg/2.8.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
@@ -24428,7 +24419,9 @@ in
 
   arpack = callPackage ../development/libraries/science/math/arpack { };
 
-  blas = callPackage ../development/libraries/science/math/blas { };
+  blas = callPackage ../build-support/alternatives/blas { };
+
+  blas-reference = callPackage ../development/libraries/science/math/blas { };
 
   brial = callPackage ../development/libraries/science/math/brial { };
 
@@ -24448,11 +24441,14 @@ in
 
   jags = callPackage ../applications/science/math/jags { };
 
+  lapack = callPackage ../build-support/alternatives/lapack { };
+
+  lapack-reference = callPackage ../development/libraries/science/math/liblapack { };
+  liblapack = lapack-reference;
+
   libbraiding = callPackage ../development/libraries/science/math/libbraiding { };
 
   libhomfly = callPackage ../development/libraries/science/math/libhomfly { };
-
-  liblapack = callPackage ../development/libraries/science/math/liblapack {};
 
   liblbfgs = callPackage ../development/libraries/science/math/liblbfgs { };
 
