@@ -682,6 +682,11 @@ lib.mapAttrs (n: v: v // { shortName = n; }) {
     # channel and NixOS images.
   };
 
+  unicode-tou = spdx {
+    spdxId = "Unicode-TOU";
+    fullName = "Unicode Terms of Use";
+  };
+
   unlicense = spdx {
     spdxId = "Unlicense";
     fullName = "The Unlicense";

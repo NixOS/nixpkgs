@@ -53,7 +53,7 @@ symlinkJoin rec {
   meta = with stdenv.lib; {
     description = "Unicode Emoji Data Files";
     homepage = "https://home.unicode.org/emoji/";
-    license = licenses.free; # https://www.unicode.org/license.html
+    license = licenses.unicode-tou;
     platforms = platforms.all;
   };
 }
