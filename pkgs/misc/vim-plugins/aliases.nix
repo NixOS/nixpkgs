@@ -36,6 +36,7 @@ mapAliases {
   airline             = vim-airline;
   alternative         = a-vim; # backwards compat, added 2014-10-21
   bats                = bats-vim;
+  BufOnly             = BufOnly-vim;
   calendar            = calendar-vim;
   coffee-script       = vim-coffee-script;
   coffeeScript        = vim-coffee-script; # backwards compat, added 2014-10-18
