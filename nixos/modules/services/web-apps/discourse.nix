@@ -36,7 +36,7 @@ let
     StateDirectory = "discourse";
     WorkingDirectory = dataDir;
     ProtectHome = true;
-    ProtectSystem = "full";
+    ProtectSystem = "strict";
     ProtectKernelTunables = true;
     ProtectKernelModules = true;
     ProtectControlGroups = true;
@@ -50,7 +50,8 @@ let
     installPhase = ''
       makeWrapper ${cfg.package.rubyEnv}/bin/bundler $out/bin/discourse-bundler \
         ${concatStrings (mapAttrsToList (name: value: "--set ${name} '${value}' ") dcEnv)} \
-        --set PATH '${lib.makeBinPath [ pkgs.coreutils pkgs.procps pkgs.gnugrep pkgs.nodePackages.uglify-js pkgs.which pkgs.brotli pkgs.gzip ]}:$PATH'
+        --set PATH '${lib.makeBinPath [ pkgs.coreutils pkgs.procps pkgs.gnugrep pkgs.nodePackages.uglify-js pkgs.which pkgs.brotli pkgs.gzip ]}:$PATH' \
+        --run 'cd ${dataDir}'
     '';
   };
 in
@@ -158,7 +159,7 @@ in
 
       domains = mkOption {
         type = listOf str;
-        default = [ cfg.hostName ];
+        default = [ ];
         example = literalExample ''
           [ "mail.example.org" ]
         '';
@@ -214,6 +215,7 @@ in
           short_site_description = "NixOS rocks";
           contact_email = "devnull@example.org";
           contact_url = "http://example.org/contact";
+          email_in = true;
         };
         description = ''
           Additional Discourse configuration attributes for web front-end.
@@ -225,7 +227,7 @@ in
       };
 
       workers = mkOption {
-        type = int;
+        type = ints.unsigned;
         default = 4;
         description = ''
           Number of Unicorn workers to spawn.
@@ -247,6 +249,8 @@ in
         message = "a password cannot be specified if services.discourse.database.createLocally is set to true";
       }
     ];
+
+    services.discourse.mail.domains = mkDefault (singleton cfg.hostName);
 
     services.discourse.settings = (mapAttrs (_: v: mkDefault v) {
       hostname = cfg.hostName;
@@ -292,7 +296,6 @@ in
         imagemagick
         coreutils # nice
         procps # ps
-        git # pointless
       ];
 
       serviceConfig = dcServiceConfig // {
@@ -300,8 +303,9 @@ in
         ExecStart = "${cfg.package}/share/discourse/bin/unicorn -E production -c ${dataDir}/config/unicorn.conf.rb";
         ExecStartPre =
           let
-            script = pkgs.writeScript "discourse-pre" ''
-              #!${pkgs.runtimeShell}
+            script = pkgs.writeShellScript "discourse-pre" ''
+              set -e
+
               cp -f ${mainConfig} ${dataDir}/config/discourse.conf
               chown ${user}:${group} ${dataDir}/config/discourse.conf
 
@@ -322,7 +326,11 @@ in
 
               ${pkgs.sudo}/bin/sudo -E -u ${user} \
                 ${discourse-bundler}/bin/discourse-bundler \
-                exec rake db:migrate &> log/db-migrate.log
+                exec rake db:migrate &> ${dataDir}/log/db-migrate.log \
+                || { echo "Migrate returned $?, last lines of migration log:"; tail ${dataDir}/log/db-migrate.log; }
+
+              # HAXXX command above creates this with wrong perms..
+              chmod +w ${dataDir}/tmp/ember-rails/*.js || true
 
               # sadly we need to compile assets in Pre
               # as it requires database connection
@@ -330,18 +338,14 @@ in
               ${pkgs.sudo}/bin/sudo -u ${user} \
                 ${discourse-bundler}/bin/discourse-bundler \
                 exec rake assets:precompile:css --trace \
-                 &> log/assets.log
-
-              # HAXXX
-              chmod +w ${dataDir}/tmp/ember-rails/*.js || true
-              # sed -i 's/config.autoloader = :zeitwerk/config.autoloader = :classic/g' ${dataDir}/config/application.rb
+                 &> ${dataDir}/log/assets.log || cat ${dataDir}/log/assets.log
             '';
           in
             "!${script}";
       };
     };
 
-   systemd.services.discourse-sidekiq = {
+    systemd.services.discourse-sidekiq = {
       description = "Discourse job queue";
 
       wantedBy = [ "multi-user.target" ];
@@ -441,8 +445,8 @@ in
       enable = true;
       upstreams.discourse.servers."127.0.0.1:3000" = {};
       virtualHosts.${cfg.hostName} = {
-        forceSSL = cfg.web.https;
-        enableACME = cfg.web.https;
+        forceSSL = mkDefault cfg.web.https;
+        enableACME = mkDefault cfg.web.https;
         locations = {
           "/" = {
             root = "${dataDir}/public";

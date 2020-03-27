@@ -7,9 +7,15 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     {
       virtualisation.memorySize = 1024;
       virtualisation.diskSize = 2 * 1024;
+
+      # discourse doesn't like when mail domain is localhost
+      networking.extraHosts = ''
+        127.0.0.1 discourse.xmpl
+      '';
+
       services.discourse = {
         enable = true;
-        hostName = "localhost";
+        hostName = "discourse.xmpl";
         database = {
           name = "discourse";
           createLocally = true;
@@ -26,9 +32,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
     start_all()
 
     machine.wait_for_unit("discourse.service")
-
-    machine.sleep(60)
-
-    assert "Discourse Setup" in machine.succeed("curl -v -L http://localhost/")
+    machine.wait_for_open_port("3000")
+    assert "Discourse Setup" in machine.succeed("curl -v -L http://discourse.xmpl/")
   '';
 })
