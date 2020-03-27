@@ -27,10 +27,11 @@ in pythonPackages.buildPythonApplication rec {
     substituteInPlace setup.cfg --replace "‘" "'"
   '';
 
-  installPhase = ''
-    python setup.py install --prefix="$out"
-    wrapQtApp $out/bin/picard
-  '';
+  # In order to spare double wrapping, we use:
+  preFixup = ''
+    makeWrapperArgs+=("''${qtWrapperArgs[@]}")
+  ''
+  ;
 
   meta = with stdenv.lib; {
     homepage = "https://picard.musicbrainz.org/";
