@@ -420,13 +420,17 @@ def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
     if redirects:
         lines = [redirects.get(line, line) for line in lines]
 
+        cur_date_iso = datetime.now().strftime("%Y-%m-%d")
         with open(DEPRECATED, "r") as f:
             deprecations = json.load(f)
         for old, new in redirects.items():
             old_name = old.split("/")[1].split(" ")[0].strip("\n")
             new_name = new.split("/")[1].split(" ")[0].strip("\n")
             if old_name != new_name:
-                deprecations[old_name] = new_name
+                deprecations[old_name] = {
+                    "new": new_name,
+                    "date": cur_date_iso,
+                }
         with open(DEPRECATED, "w") as f:
             json.dump(deprecations, f, indent=4, sort_keys=True)
 

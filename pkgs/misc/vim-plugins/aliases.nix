@@ -31,8 +31,8 @@ let
                               (checkInPkgs n alias)))
                      aliases;
 
-  deprecations = lib.mapAttrs (old: new:
-    throw "${old} was renamed to ${new}. Please update to ${new}."
+  deprecations = lib.mapAttrs (old: info:
+    throw "${old} was renamed to ${info.new} on ${info.date}. Please update to ${info.new}."
   ) (builtins.fromJSON (builtins.readFile ./deprecated.json));
 
 in
