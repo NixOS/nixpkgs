@@ -32,7 +32,6 @@
 , tzdata
 , yelp
 , libgnomekbd
-, malcontent
 }:
 
 stdenv.mkDerivation rec {
@@ -75,7 +74,6 @@ stdenv.mkDerivation rec {
     polkit
     webkitgtk
     libnma
-    malcontent
   ];
 
   patches = [
@@ -89,6 +87,7 @@ stdenv.mkDerivation rec {
   mesonFlags = [
     "-Dcheese=disabled"
     "-Dibus=disabled"
+    "-Dparental_controls=disabled"
     "-Dvendor-conf-file=${./vendor.conf}"
   ];
 

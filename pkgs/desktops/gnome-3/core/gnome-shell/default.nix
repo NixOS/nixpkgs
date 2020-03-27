@@ -43,6 +43,7 @@ in stdenv.mkDerivation rec {
 
     # recording
     gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
 
     # not declared at build time, but typelib is needed at runtime
@@ -84,6 +85,13 @@ in stdenv.mkDerivation rec {
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/72c4f148ef88b4bffb2106b99434da5c05c0bb64.patch";
       sha256 = "RBA+JHz4ZvmbJZMnGNieD6D5LONRgFU4iOFIMQQ2kHQ=";
+    })
+
+    # Fix Telepathy chat integration.
+    # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2449
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/766288eec1bd3bd50dfc4ddf410c2b507187e603.patch";
+      sha256 = "Cp6xLohCM0gmMxtyYjSukS2oV60Khmxf4iQd9EDAlIc=";
     })
   ];
 
