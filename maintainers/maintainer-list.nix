@@ -4878,6 +4878,12 @@
     githubId = 19479662;
     name = "Kajetan Champlewski";
   };
+  millerjason = {
+    email = "mailings-github@millerjason.com";
+    github = "millerjason";
+    githubId = 7610974;
+    name = "Jason Miller";
+  };
   miltador = {
     email = "miltador@yandex.ua";
     name = "Vasiliy Solovey";
