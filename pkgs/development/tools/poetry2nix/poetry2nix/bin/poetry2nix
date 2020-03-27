@@ -79,7 +79,7 @@ if __name__ == "__main__":
                 indent(
                     textwrap.dedent(
                         """
-              %s = super.%s.overrideAttrs (
+              %s = super.%s.overridePythonAttrs (
                 _: {
                   src = pkgs.fetchgit {
                     url = "%s";
