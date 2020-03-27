@@ -5,6 +5,7 @@
 , bundlerEnv
 , defaultGemConfig
 , v8
+, nixosTests
 }:
 
 let
@@ -49,11 +50,12 @@ in stdenv.mkDerivation rec {
     sha256 = "1nfvfrlbimfhi2dfsk4y6pbv1rbxxwkbnazm9br5cfiikc54zv3b";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   buildInputs = [
     rubyEnv
     rubyEnv.wrappedRuby
     rubyEnv.bundler
-    makeWrapper
   ];
 
   postPatch = ''
@@ -69,6 +71,7 @@ in stdenv.mkDerivation rec {
 
   passthru = {
     inherit rubyEnv;
+    inherit (nixosTests) discourse;
   };
 
   meta = with lib; {
