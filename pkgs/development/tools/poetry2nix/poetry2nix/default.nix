@@ -7,7 +7,7 @@ let
   inherit (poetryLib) isCompatible readTOML;
 
   # Poetry2nix version
-  version = "1.6.1";
+  version = "1.7.0";
 
   /* The default list of poetry2nix override overlays */
   defaultPoetryOverrides = (import ./overrides.nix { inherit pkgs lib; });
@@ -79,6 +79,7 @@ let
                       source = pkgMeta.source or null;
                       files = lockFiles.${name};
                       pythonPackages = self;
+                      sourceSpec = pyProject.tool.poetry.dependencies.${name} or pyProject.tool.poetry.dev-dependencies.${name};
                     }
                   );
                 }
