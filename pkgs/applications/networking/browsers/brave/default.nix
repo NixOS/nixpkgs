@@ -82,11 +82,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "brave";
-  version = "1.5.112";
+  version = "1.5.115";
 
   src = fetchurl {
     url = "https://github.com/brave/brave-browser/releases/download/v${version}/brave-browser_${version}_amd64.deb";
-    sha256 = "0am7qr09pvy6v720rngfxilh4yalxzp7vcq2yndcz6726wnhw9zx";
+    sha256 = "04zyv5amqxax1z0da4bcgxwsq596zfs416nshg6ffg4ci9nfbiab";
   };
 
   dontConfigure = true;
