@@ -104,6 +104,12 @@ self: super:
     }
   );
 
+  fastparquet = super.fastparquet.overrideAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+    }
+  );
+
   grandalf = super.grandalf.overrideAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
