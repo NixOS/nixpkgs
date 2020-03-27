@@ -22860,6 +22860,8 @@ in
 
   x32edit = callPackage ../applications/audio/midas/x32edit.nix {};
 
+  x42-avldrums = callPackage ../applications/audio/x42-avldrums { };
+
   x42-plugins = callPackage ../applications/audio/x42-plugins { };
 
   xannotate = callPackage ../tools/X11/xannotate {};
