@@ -30,7 +30,7 @@ in mkDerivation {
   };
 
   hardeningDisable = [ "fortify" ];
-  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" ];
+  NIX_CFLAGS_COMPILE = [ "-Wno-error=maybe-uninitialized" "-Wno-error=missing-braces" "-Wno-error=undef" ];
 
   makeFlags = [
     "TOOLS=1"
@@ -79,7 +79,7 @@ in mkDerivation {
     description = "Is a multi-purpose emulation framework";
     homepage = https://www.mamedev.org/;
     license = with licenses; [ bsd3 gpl2Plus ];
-    platforms = platforms.unix;
+    platforms = [ "aarch64-linux" ];
     maintainers = with maintainers; [ gnidorah ];
   };
 }
