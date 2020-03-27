@@ -7175,10 +7175,6 @@ in
 
   ua = callPackage ../tools/networking/ua { };
 
-  uberwriter = callPackage ../applications/editors/uberwriter {
-    pythonPackages = python3Packages;
-  };
-
   ubridge = callPackage ../tools/networking/ubridge { };
 
   ucl = callPackage ../development/libraries/ucl { };
@@ -18581,6 +18577,10 @@ in
   apngasm_2 = callPackage ../applications/graphics/apngasm/2.nix {};
 
   appeditor = callPackage ../applications/misc/appeditor { };
+
+  apostrophe = callPackage ../applications/editors/apostrophe {
+    pythonPackages = python3Packages;
+  };
 
   aqemu = libsForQt5.callPackage ../applications/virtualization/aqemu { };
 

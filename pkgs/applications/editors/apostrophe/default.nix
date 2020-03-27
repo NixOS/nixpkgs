@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, meson, ninja, cmake
+{ stdenv, fetchFromGitLab, meson, ninja, cmake
 , wrapGAppsHook, pkgconfig, desktop-file-utils
 , appstream-glib, pythonPackages, glib, gobject-introspection
 , gtk3, webkitgtk, glib-networking, gnome3, gspell, texlive
@@ -10,14 +10,15 @@ let
   texliveDist = texlive.combined.scheme-medium;
 
 in stdenv.mkDerivation rec {
-  pname = "uberwriter";
-  version = "unstable-2020-01-24";
+  pname = "apostrophe";
+  version = "unstable-2020-03-29";
 
-  src = fetchFromGitHub {
-    owner  = pname;
+  src = fetchFromGitLab {
+    owner  = "somas";
     repo   = pname;
-    rev    = "0647b413407eb8789a25c353602c4ac979dc342a";
-    sha256 = "19z52fpbf0p7dzx7q0r5pk3nn0c8z69g1hv6db0cqp61cqv5z95q";
+    domain = "gitlab.gnome.org";
+    rev    = "219fa8976e3b8a6f0cea15cfefe4e336423f2bdb";
+    sha256 = "192n5qs3x6rx62mqxd6wajwm453pns8kjyz5v3xc891an6bm1kqx";
   };
 
   nativeBuildInputs = [ meson ninja cmake pkgconfig desktop-file-utils
@@ -30,10 +31,10 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs --build build-aux/meson_post_install.py
 
-    substituteInPlace uberwriter/config.py --replace "/usr/share/uberwriter" "$out/share/uberwriter"
+    substituteInPlace ${pname}/config.py --replace "/usr/share/${pname}" "$out/share/${pname}"
 
     # get rid of unused distributed dependencies
-    rm -r uberwriter/{pylocales,pressagio}
+    rm -r ${pname}/pylocales
   '';
 
   preFixup = ''
@@ -46,7 +47,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://uberwriter.github.io/uberwriter/;
+    homepage = "https://gitlab.gnome.org/somas/apostrophe";
     description = "A distraction free Markdown editor for GNU/Linux";
     license = licenses.gpl3;
     platforms = platforms.linux;
