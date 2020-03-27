@@ -2,12 +2,12 @@
 
 stdenv.mkDerivation rec {
   pname = "minijail";
-  version = "android-10.0.0_r9";
+  version = "14";
 
   src = fetchFromGitiles {
     url = "https://android.googlesource.com/platform/external/minijail";
-    rev = version;
-    sha256 = "0gcfsyim1krrddcklydqfxl8mamaxgail2xl5qp9yclq60km8f22";
+    rev = "linux-v${version}";
+    sha256 = "00dq854n4zg3ca2b46f90k15n32zn2sgabi76mnq2w985k9v977n";
   };
 
   buildInputs = [ libcap ];
@@ -16,7 +16,6 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     substituteInPlace common.mk --replace /bin/echo echo
-    sed -i '/#include <asm\/siginfo.h>/ d' signal_handler.c
   '';
 
   postPatch = ''
