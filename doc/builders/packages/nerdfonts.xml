@@ -1,0 +1,16 @@
+<section xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xml:id="sec-nerdfonts">
+ <title>Nerd Fonts</title>
+
+ <para>
+  Nerd Fonts can be built to install the patched fonts from the repository:
+<programlisting>super.nerdfonts.override {
+  fonts = [ "FiraMono" "Hermit" ];
+};</programlisting>
+  or patch existing fonts given their derivation
+<programlisting>super.nerdfonts.override {
+  patchFontDrvs = [ hermit ibm-plex ];
+};</programlisting>
+ </para>
+</section>
