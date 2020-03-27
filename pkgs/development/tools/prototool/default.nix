@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, makeWrapper, protobuf, Security }:
+{ lib, buildGoModule, fetchFromGitHub, makeWrapper, protobuf }:
 
 buildGoModule rec {
   pname = "prototool";
@@ -13,8 +13,6 @@ buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   modSha256 = "1gc8kc9mbi3mlh48zx4lcgpsrf8z879f1qj9wfyr66s7wd1ljazg";
 
   postInstall = ''
@@ -25,7 +23,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/prototool" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://github.com/uber/prototool";
     description = "Your Swiss Army Knife for Protocol Buffers";
     maintainers = [ maintainers.marsam ];

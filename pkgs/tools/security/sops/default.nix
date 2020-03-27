@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, CoreServices }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "sops";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "0vhxd3dschj5i9sig6vpxzbl59cas1qa843akzmjnfjrrafb916y";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   meta = with stdenv.lib; {
     homepage = "https://github.com/mozilla/sops";

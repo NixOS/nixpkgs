@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "joker";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "0i16vf7n1xfz5kp9w3fvyc9y9wgz4h396glgpdaznpxjr12rb43j";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   preBuild = ''
     go generate ./...

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, pkg-config, vips, gobject-introspection, Security }:
+{ lib, buildGoModule, fetchFromGitHub, pkg-config, vips, gobject-introspection }:
 
 buildGoModule rec {
   pname = "imgproxy";
@@ -15,14 +15,13 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gobject-introspection vips ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = [ gobject-introspection vips ];
 
   preBuild = ''
     export CGO_LDFLAGS_ALLOW='-(s|w)'
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast and secure on-the-fly image processing server written in Go";
     homepage = "https://imgproxy.net";
     license = licenses.mit;

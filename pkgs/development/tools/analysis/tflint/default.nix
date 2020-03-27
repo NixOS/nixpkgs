@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "tflint";
@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "14vgy5lavyp4w16g7wpi9xbni3js541rc3w9qn5ab3khqw5rdhgn";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "." ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";
     homepage = "https://github.com/terraform-linters/tflint";
     changelog = "https://github.com/terraform-linters/tflint/releases/tag/v${version}";

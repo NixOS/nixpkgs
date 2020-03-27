@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "eksctl";
@@ -13,8 +13,6 @@ buildGoModule rec {
 
   modSha256 = "0f8dlcp3q84fa5dnnzx4347ngb1raw1mxkcqpz2s3zq6d1kv0nvf";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "cmd/eksctl" ];
 
   buildFlags = [ "-tags netgo" "-tags release" ];
@@ -27,7 +25,7 @@ buildGoModule rec {
     $out/bin/eksctl completion zsh > "$out/share/zsh/site-functions/_eksctl"
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A CLI for Amazon EKS";
     homepage = "https://github.com/weaveworks/eksctl";
     license = licenses.asl20;

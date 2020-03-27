@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ stdenv, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "clash";
@@ -13,8 +13,6 @@ buildGoModule rec {
 
   goPackagePath = "github.com/Dreamacro/clash";
   modSha256 = "02bki2iq99lc9iq1mjf9rbxwspalrj7hjlk1h384w3d4s4x4fyxy";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   buildFlagsArray = [
     "-ldflags="

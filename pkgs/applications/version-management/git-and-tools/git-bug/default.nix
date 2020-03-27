@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "git-bug";
@@ -14,8 +14,6 @@ buildGoModule rec {
   };
 
   modSha256 = "1cfn49cijiarzzczrpd28x1k7ib98xyzlvn3zghwk2ngfgiah3ld";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   buildFlagsArray = ''
     -ldflags= 

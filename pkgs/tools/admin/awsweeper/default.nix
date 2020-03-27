@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "awsweeper";
@@ -13,9 +13,7 @@ buildGoModule rec {
 
   modSha256 = "14yvf0svh7xqpc2y7xr94pc6r7d3iv2nsr8qs3f5q29hdc5hv3fs";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A tool to clean out your AWS account";
     homepage = "https://github.com/cloudetc/awsweeper/";
     license = licenses.mpl20;

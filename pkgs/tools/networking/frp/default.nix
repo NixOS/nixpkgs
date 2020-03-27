@@ -1,4 +1,4 @@
-{ buildGoModule, stdenv, fetchFromGitHub, Security }:
+{ buildGoModule, lib, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "frp";
@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "1v90w5grc0vjpcp0m56d73zi0qnbswgz1rcvcwrjfa3rwqhigbal";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "cmd/frpc" "cmd/frps" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Fast reverse proxy";
     longDescription = ''
       frp is a fast reverse proxy to help you expose a local server behind a

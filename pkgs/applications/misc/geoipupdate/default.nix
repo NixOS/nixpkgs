@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "geoipupdate";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "1bypanvrkcqp8rk84cv2569671irgaf3cy27lcrknyina4pdvir5";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "Automatic GeoIP database updater";
