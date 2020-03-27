@@ -13,8 +13,8 @@ let
 in
 stdenv.mkDerivation {
   inherit (s) name version;
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [scons SDL SDL_image boost libpng SDL_mixer libGLU libGL];
+  nativeBuildInputs = [ scons.py2 pkgconfig ];
+  buildInputs = [ SDL SDL_image boost libpng SDL_mixer libGLU libGL];
   src = fetchurl {
     inherit (s) url sha256;
   };

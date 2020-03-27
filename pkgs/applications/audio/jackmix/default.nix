@@ -9,9 +9,8 @@ stdenv.mkDerivation {
 
   patches = [ ./no_error.patch ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ scons.py2 pkgconfig ];
   buildInputs = [
-    scons
     qt4
     lash
     jack

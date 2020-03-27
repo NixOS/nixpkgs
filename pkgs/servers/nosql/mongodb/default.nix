@@ -29,7 +29,7 @@ in stdenv.mkDerivation {
     sha256 = "1wz2mhl9z0b1bdkg6m8v8mvw9k60mdv5ybq554xn3yjj9z500f24";
   };
 
-  nativeBuildInputs = [ scons ];
+  nativeBuildInputs = [ scons.py2 ];
   buildInputs = [
     sasl boost gperftools pcre-cpp snappy
     zlib libyamlcpp sasl openssl.dev openssl.out libpcap

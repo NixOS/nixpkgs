@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
 
   patches = [ ./qt-5.11.patch ./scons.patch ];
 
-  nativeBuildInputs = [ pkgconfig qttools scons ];
+  nativeBuildInputs = [ pkgconfig qttools scons.py2 ];
 
   buildInputs = [
     GConf avahi boost hunspell libXScrnSaver libedit libidn libnatpmp libxml2
