@@ -8,13 +8,16 @@ nix-build ./examples/basic/image.nix --out-link "azure"
 
 group="nixos-images"
 location="westus2"
-img_name="azure-image-todo-makethisbetter" # TODO: clean this up
-img_file="$(readlink -f ./azure/disk.vhd)" # TODO: this doesn't feel great either
+img_name="nixos-image"
+img_file="$(readlink -f ./azure/disk.vhd)"
 
 if ! az group show -n "${group}" &>/dev/null; then
   az group create --name "${group}" --location "${location}"
 fi
 
+# note: the disk access token song/dance is tedious
+# but allows us to upload direct to a disk image
+# thereby avoid storage accounts (and naming them) entirely!
 if ! az disk show -g "${group}" -n "${img_name}" &>/dev/null; then
   bytes="$(stat -c %s ${img_file})"
   size="30"
