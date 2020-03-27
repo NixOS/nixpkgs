@@ -15091,6 +15091,8 @@ in
 
   xml-tooling-c = callPackage ../development/libraries/xml-tooling-c { };
 
+  xrdesktop = callPackage ../development/libraries/xrdesktop { };
+
   xlslib = callPackage ../development/libraries/xlslib { };
 
   xvidcore = callPackage ../development/libraries/xvidcore { };
