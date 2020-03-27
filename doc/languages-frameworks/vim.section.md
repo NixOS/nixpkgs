@@ -263,7 +263,7 @@ Sometimes plugins require an override that must be changed when the plugin is up
 
 To add a new plugin:
 
-  1. run `./update.py` and create a commit named "vimPlugins: Update",
+  1. run `./update.py --commit`,
   2. add the new plugin to [vim-plugin-names](/pkgs/misc/vim-plugins/vim-plugin-names) and add overrides if required to [overrides.nix](/pkgs/misc/vim-plugins/overrides.nix),
   3. run `./update.py` again and create a commit named "vimPlugins.[name]: init at [version]" (where `name` and `version` can be found in [generated.nix](/pkgs/misc/vim-plugins/generated.nix)), and
   4. create a pull request.

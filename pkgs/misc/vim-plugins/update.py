@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -p nix-prefetch-git -p python3 nix -i python3
+#!nix-shell -p nix-prefetch-git -p python3 -p python3Packages.GitPython nix -i python3
 
 # format:
 # $ nix run nixpkgs.python3Packages.black -c black update.py
@@ -27,11 +27,14 @@ from typing import Dict, List, Optional, Tuple, Union, Any, Callable
 from urllib.parse import urljoin, urlparse
 from tempfile import NamedTemporaryFile
 
+import git
+
 ATOM_ENTRY = "{http://www.w3.org/2005/Atom}entry"  # " vim gets confused here
 ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 ROOT = Path(__file__).parent
+NIXPKGS_PATH = ROOT.cwd().parents[2]
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
 DEPRECATED = ROOT.joinpath("deprecated.json")
@@ -413,6 +416,11 @@ in lib.fix' (lib.extends overrides packages)
     print(f"updated {outfile}")
 
 
+def commit_changes(repo: git.Repo, *files: Path):
+    repo.index.add([str(f.resolve()) for f in files])
+    repo.index.commit("vimPlugins: Update")
+
+
 def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
     with open(input_file, "r") as f:
         lines = f.readlines()
@@ -438,13 +446,10 @@ def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
             f"""\
 Redirects have been detected and {input_file} has been updated. Please take the
 following steps:
-    1. Go ahead and commit just the updated expressions as you intended to do:
-            git add {output_file}
-            git commit -m "vimPlugins: Update"
-    2. Run this script again so these changes will be reflected in the
+    1. Run this script again so these changes will be reflected in the
     generated expressions:
             ./update.py
-    3. Commit {input_file} along with deprecations and generated expressions:
+    2. Commit {input_file} along with deprecations and generated expressions:
             git add {output_file} {input_file} {DEPRECATED}
             git commit -m "vimPlugins: Update redirects"
         """
@@ -485,13 +490,27 @@ def parse_args():
         default=30,
         help="Number of concurrent processes to spawn.",
     )
+    parser.add_argument(
+        "--commit",
+        dest="commit",
+        action="store_true",
+        help="Automatically commit updates",
+    )
 
     return parser.parse_args()
 
 
-def main() -> None:
+def get_nixpkgs_repo() -> git.Repo:
+    repo = git.Repo(NIXPKGS_PATH)
+    if repo.is_dirty():
+        raise Exception("Please stash your changes before updating.")
+    return repo
 
+
+def main() -> None:
     args = parse_args()
+    if args.commit:
+        nixpkgs_repo = get_nixpkgs_repo()
     plugin_names = load_plugin_spec(args.input_file)
     current_plugins = get_current_plugins()
     cache = Cache(current_plugins)
@@ -509,6 +528,9 @@ def main() -> None:
     generate_nix(plugins, args.outfile)
 
     rewrite_input(args.input_file, args.outfile, redirects)
+
+    if args.commit:
+        commit_changes(nixpkgs_repo, args.outfile)
 
 
 if __name__ == "__main__":
