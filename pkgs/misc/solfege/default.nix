@@ -1,12 +1,10 @@
 { stdenv, fetchurl, pkgconfig, pythonPackages, gettext, texinfo
 , ghostscript, librsvg, gdk-pixbuf, txt2man, timidity, mpg123
 , alsaUtils, vorbis-tools, csound, lilypond
-, makeWrapper
+, wrapGAppsHook
 }:
 
-let
-  inherit (pythonPackages) python pygtk;
-in stdenv.mkDerivation rec {
+pythonPackages.buildPythonApplication rec {
   name = "solfege-3.22.2";
 
   src = fetchurl {
@@ -14,10 +12,9 @@ in stdenv.mkDerivation rec {
     sha256 = "1r4g93ka7i8jh5glii5nza0zq0wy4sw0gfzpvkcrhj9yr1h0jsp4";
   };
 
-  nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ python pygtk gettext texinfo
-    ghostscript librsvg gdk-pixbuf txt2man makeWrapper
-  ];
+  nativeBuildInputs = [ gettext texinfo pkgconfig wrapGAppsHook ];
+  buildInputs = [ librsvg ];
+  propagatedBuildInputs = [ pythonPackages.pygtk ];
 
   preBuild = ''
     sed -i -e 's|wav_player=.*|wav_player=${alsaUtils}/bin/aplay|' \
@@ -29,12 +26,9 @@ in stdenv.mkDerivation rec {
            default.config
   '';
 
-  postInstall = ''
-      set -x
-      wrapProgram "$out/bin/solfege" \
-          --prefix PYTHONPATH ':' "$PYTHONPATH" \
-          --set GDK_PIXBUF_MODULE_FILE "$GDK_PIXBUF_MODULE_FILE"
-  '';
+  format = "other";
+
+  enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
     description = "Ear training program";
