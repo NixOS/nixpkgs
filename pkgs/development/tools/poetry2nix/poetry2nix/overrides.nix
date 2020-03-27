@@ -6,6 +6,13 @@
 self: super:
 
 {
+  astroid = super.astroid.overrideAttrs (
+    old: rec {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
+    }
+  );
+
   av = super.av.overrideAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -82,16 +89,35 @@ self: super:
 
   faker = super.faker.overrideAttrs (
     old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
+    }
+  );
+
+  fancycompleter = super.fancycompleter.overrideAttrs (
+    old: {
       postPatch = ''
-        substituteInPlace setup.py --replace 'setup_requires=["pytest-runner"],' 'setup_requires=[],' || true
+        substituteInPlace setup.py \
+          --replace 'setup_requires="setupmeta"' 'setup_requires=[]' \
+          --replace 'versioning="devcommit"' 'version="${old.version}"'
       '';
     }
   );
 
   grandalf = super.grandalf.overrideAttrs (
     old: {
-      postPatch = ''
-        substituteInPlace setup.py --replace "setup_requires=['pytest-runner',]," "setup_requires=[]," || true
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
+    }
+  );
+
+  h5py = super.h5py.overrideAttrs (
+    old: rec {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+      buildInputs = old.buildInputs ++ [ pkgs.hdf5 self.pkgconfig self.cython ];
+      configure_flags = "--hdf5=${pkgs.hdf5}";
+      postConfigure = ''
+        ${self.python.executable} setup.py configure ${configure_flags}
       '';
     }
   );
@@ -106,6 +132,15 @@ self: super:
   importlib-metadata = super.importlib-metadata.overrideAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional self.python.isPy2 self.pathlib2;
+    }
+  );
+
+  jupyter = super.jupyter.overrideAttrs (
+    old: rec {
+      # jupyter is a meta-package. Everything relevant comes from the
+      # dependencies. It does however have a jupyter.py file that conflicts
+      # with jupyter-core so this meta solves this conflict.
+      meta.priority = 100;
     }
   );
 
@@ -160,39 +195,39 @@ self: super:
   );
 
   matplotlib = super.matplotlib.overrideAttrs (
-    old: let
-      enableGhostscript = old.passthru.enableGhostscript or false;
-      enableGtk3 = old.passthru.enableTk or false;
-      enableQt = old.passthru.enableQt or false;
-      enableTk = old.passthru.enableTk or false;
+    old:
+      let
+        enableGhostscript = old.passthru.enableGhostscript or false;
+        enableGtk3 = old.passthru.enableTk or false;
+        enableQt = old.passthru.enableQt or false;
+        enableTk = old.passthru.enableTk or false;
 
-      inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+        inherit (pkgs.darwin.apple_sdk.frameworks) Cocoa;
+      in
+        {
+          NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
 
-    in
-      {
-        NIX_CFLAGS_COMPILE = stdenv.lib.optionalString stdenv.isDarwin "-I${pkgs.libcxx}/include/c++/v1";
+          XDG_RUNTIME_DIR = "/tmp";
 
-        XDG_RUNTIME_DIR = "/tmp";
+          buildInputs = old.buildInputs
+          ++ lib.optional enableGhostscript pkgs.ghostscript
+          ++ lib.optional stdenv.isDarwin [ Cocoa ];
 
-        buildInputs = old.buildInputs
-        ++ lib.optional enableGhostscript pkgs.ghostscript
-        ++ lib.optional stdenv.isDarwin [ Cocoa ];
+          nativeBuildInputs = old.nativeBuildInputs ++ [
+            pkgs.pkgconfig
+          ];
 
-        nativeBuildInputs = old.nativeBuildInputs ++ [
-          pkgs.pkgconfig
-        ];
+          propagatedBuildInputs = old.propagatedBuildInputs ++ [
+            pkgs.libpng
+            pkgs.freetype
+          ]
+          ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
+          ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
+          ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
+          ;
 
-        propagatedBuildInputs = old.propagatedBuildInputs ++ [
-          pkgs.libpng
-          pkgs.freetype
-        ]
-        ++ stdenv.lib.optionals enableGtk3 [ pkgs.cairo self.pycairo pkgs.gtk3 pkgs.gobject-introspection self.pygobject3 ]
-        ++ stdenv.lib.optionals enableTk [ pkgs.tcl pkgs.tk self.tkinter pkgs.libX11 ]
-        ++ stdenv.lib.optionals enableQt [ self.pyqt5 ]
-        ;
-
-        inherit (super.matplotlib) patches;
-      }
+          inherit (super.matplotlib) patches;
+        }
   );
 
   # Calls Cargo at build time for source builds and is really tricky to package
@@ -202,9 +237,8 @@ self: super:
 
   mccabe = super.mccabe.overrideAttrs (
     old: {
-      postPatch = ''
-        substituteInPlace setup.py --replace "setup_requires=['pytest-runner']," "setup_requires=[]," || true
-      '';
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
     }
   );
 
@@ -232,49 +266,58 @@ self: super:
   );
 
   numpy = super.numpy.overrideAttrs (
-    old: let
-      blas = old.passthru.args.blas or pkgs.openblasCompat;
-      blasImplementation = lib.nameFromURL blas.name "-";
-      cfg = pkgs.writeTextFile {
-        name = "site.cfg";
-        text = (
-          lib.generators.toINI {} {
-            ${blasImplementation} = {
-              include_dirs = "${blas}/include";
-              library_dirs = "${blas}/lib";
-            } // lib.optionalAttrs (blasImplementation == "mkl") {
-              mkl_libs = "mkl_rt";
-              lapack_libs = "";
-            };
-          }
-        );
-      };
-    in
-      {
-        nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
-        buildInputs = old.buildInputs ++ [ blas self.cython ];
-        enableParallelBuilding = true;
-        preBuild = ''
-          ln -s ${cfg} site.cfg
-        '';
-        passthru = old.passthru // {
-          blas = blas;
-          inherit blasImplementation cfg;
+    old:
+      let
+        blas = old.passthru.args.blas or pkgs.openblasCompat;
+        blasImplementation = lib.nameFromURL blas.name "-";
+        cfg = pkgs.writeTextFile {
+          name = "site.cfg";
+          text = (
+            lib.generators.toINI {} {
+              ${blasImplementation} = {
+                include_dirs = "${blas}/include";
+                library_dirs = "${blas}/lib";
+              } // lib.optionalAttrs (blasImplementation == "mkl") {
+                mkl_libs = "mkl_rt";
+                lapack_libs = "";
+              };
+            }
+          );
         };
-      }
+      in
+        {
+          nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
+          buildInputs = old.buildInputs ++ [ blas self.cython ];
+          enableParallelBuilding = true;
+          preBuild = ''
+            ln -s ${cfg} site.cfg
+          '';
+          passthru = old.passthru // {
+            blas = blas;
+            inherit blasImplementation cfg;
+          };
+        }
+  );
+
+  openexr = super.openexr.overrideAttrs (
+    old: rec {
+      buildInputs = old.buildInputs ++ [ pkgs.openexr pkgs.ilmbase ];
+      NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
+    }
   );
 
   peewee = super.peewee.overridePythonAttrs (
-    old: let
-      withPostgres = old.passthru.withPostgres or false;
-      withMysql = old.passthru.withMysql or false;
-    in
-      {
-        buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
-        propagatedBuildInputs = old.propagatedBuildInputs
-        ++ lib.optional withPostgres self.psycopg2
-        ++ lib.optional withMysql self.mysql-connector;
-      }
+    old:
+      let
+        withPostgres = old.passthru.withPostgres or false;
+        withMysql = old.passthru.withMysql or false;
+      in
+        {
+          buildInputs = old.buildInputs ++ [ self.cython pkgs.sqlite ];
+          propagatedBuildInputs = old.propagatedBuildInputs
+          ++ lib.optional withPostgres self.psycopg2
+          ++ lib.optional withMysql self.mysql-connector;
+        }
   );
 
   pillow = super.pillow.overrideAttrs (
@@ -343,6 +386,13 @@ self: super:
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       buildInputs = old.buildInputs ++ [ pkgs.glib pkgs.gobject-introspection ];
+    }
+  );
+
+  pylint = super.pylint.overrideAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+      doCheck = false;
     }
   );
 
@@ -461,6 +511,14 @@ self: super:
     }
   );
 
+  pytest = super.pytest.overridePythonAttrs (
+    old: {
+      doCheck = false;
+    }
+  );
+
+  pytest-runner = super.pytest-runner or super.pytestrunner;
+
   python-prctl = super.python-prctl.overrideAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
@@ -469,11 +527,32 @@ self: super:
     }
   );
 
+  pyzmq = super.pyzmq.overrideAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+      propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.zeromq ];
+    }
+  );
+
+  rockset = super.rockset.overrideAttrs (
+    old: rec {
+      postPatch = ''
+        cp ./setup_rockset.py ./setup.py
+      '';
+    }
+  );
+
   scaleapi = super.scaleapi.overrideAttrs (
     old: {
       postPatch = ''
         substituteInPlace setup.py --replace "install_requires = ['requests>=2.4.2', 'enum34']" "install_requires = ['requests>=2.4.2']" || true
       '';
+    }
+  );
+
+  pandas = super.pandas.overrideAttrs (
+    old: {
+      nativeBuildInputs = old.nativeBuildInputs ++ [ self.cython ];
     }
   );
 
@@ -529,6 +608,30 @@ self: super:
     }
   );
 
+  shellingham = if lib.versionAtLeast super.shellingham.version "1.3.2" then (
+    super.shellingham.overridePythonAttrs (
+      old: {
+        format = "pyproject";
+      }
+    )
+  ) else super.shellingham;
+
+  tables = super.tables.overrideAttrs (
+    old: {
+      HDF5_DIR = "${pkgs.hdf5}";
+      nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
+      propagatedBuildInputs = old.nativeBuildInputs ++ [ pkgs.hdf5 self.numpy self.numexpr ];
+    }
+  );
+
+  tensorpack = super.tensorpack.overrideAttrs (
+    old: {
+      postPatch = ''
+        substituteInPlace setup.cfg --replace "# will call find_packages()" ""
+      '';
+    }
+  );
+
   urwidtrees = super.urwidtrees.overrideAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
@@ -566,16 +669,24 @@ self: super:
   );
 
   zipp =
-    if lib.versionAtLeast super.zipp.version "2.0.0" then (
-      super.zipp.overridePythonAttrs (
-        old: {
-          prePatch = ''
-            substituteInPlace setup.py --replace \
-            'setuptools.setup()' \
-            'setuptools.setup(version="${super.zipp.version}")'
-          '';
-        }
-      )
-    ) else super.zipp;
+    (
+      if lib.versionAtLeast super.zipp.version "2.0.0" then (
+        super.zipp.overridePythonAttrs (
+          old: {
+            prePatch = ''
+              substituteInPlace setup.py --replace \
+              'setuptools.setup()' \
+              'setuptools.setup(version="${super.zipp.version}")'
+            '';
+          }
+        )
+      ) else super.zipp
+    ).overridePythonAttrs (
+      old: {
+        propagatedBuildInputs = old.propagatedBuildInputs ++ [
+          self.toml
+        ];
+      }
+    );
 
 }
