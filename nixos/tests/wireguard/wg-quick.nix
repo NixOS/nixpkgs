@@ -1,12 +1,12 @@
-import ../make-test-python.nix ({ pkgs, lib, ...} :
+import ../make-test-python.nix ({ pkgs, lib, ... }:
   let
     wg-snakeoil-keys = import ./snakeoil-keys.nix;
     peer = (import ./make-peer.nix) { inherit lib; };
   in
   {
-    name = "wireguard";
+    name = "wg-quick";
     meta = with pkgs.stdenv.lib.maintainers; {
-      maintainers = [ ma27 ];
+      maintainers = [ xwvvvvwx ];
     };
 
     nodes = {
@@ -15,8 +15,8 @@ import ../make-test-python.nix ({ pkgs, lib, ...} :
         ip6 = "fd00::1";
         extraConfig = {
           networking.firewall.allowedUDPPorts = [ 23542 ];
-          networking.wireguard.interfaces.wg0 = {
-            ips = [ "10.23.42.1/32" "fc00::1/128" ];
+          networking.wg-quick.interfaces.wg0 = {
+            address = [ "10.23.42.1/32" "fc00::1/128" ];
             listenPort = 23542;
 
             inherit (wg-snakeoil-keys.peer0) privateKey;
@@ -34,11 +34,8 @@ import ../make-test-python.nix ({ pkgs, lib, ...} :
         ip4 = "192.168.0.2";
         ip6 = "fd00::2";
         extraConfig = {
-          networking.wireguard.interfaces.wg0 = {
-            ips = [ "10.23.42.2/32" "fc00::2/128" ];
-            listenPort = 23542;
-            allowedIPsAsRoutes = false;
-
+          networking.wg-quick.interfaces.wg0 = {
+            address = [ "10.23.42.2/32" "fc00::2/128" ];
             inherit (wg-snakeoil-keys.peer1) privateKey;
 
             peers = lib.singleton {
@@ -48,11 +45,6 @@ import ../make-test-python.nix ({ pkgs, lib, ...} :
 
               inherit (wg-snakeoil-keys.peer0) publicKey;
             };
-
-            postSetup = let inherit (pkgs) iproute; in ''
-              ${iproute}/bin/ip route replace 10.23.42.1/32 dev wg0
-              ${iproute}/bin/ip route replace fc00::1/128 dev wg0
-            '';
           };
         };
       };
@@ -61,8 +53,8 @@ import ../make-test-python.nix ({ pkgs, lib, ...} :
     testScript = ''
       start_all()
 
-      peer0.wait_for_unit("wireguard-wg0.service")
-      peer1.wait_for_unit("wireguard-wg0.service")
+      peer0.wait_for_unit("wg-quick-wg0.service")
+      peer1.wait_for_unit("wg-quick-wg0.service")
 
       peer1.succeed("ping -c5 fc00::1")
       peer1.succeed("ping -c5 10.23.42.1")
