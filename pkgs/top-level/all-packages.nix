@@ -3818,6 +3818,8 @@ in
 
   wob = callPackage ../tools/misc/wob { };
 
+  wolf-spectrum = callPackage ../applications/audio/wolf-spectrum { };
+
   wtype = callPackage ../tools/wayland/wtype { };
 
   wrangler = callPackage ../development/tools/wrangler { };
