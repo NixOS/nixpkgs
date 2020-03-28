@@ -3313,11 +3313,6 @@ in
 
   fakechroot = callPackage ../tools/system/fakechroot { };
 
-  fast-neural-doodle = callPackage ../tools/graphics/fast-neural-doodle {
-    inherit (python27Packages) numpy scipy h5py scikitlearn python
-      pillow;
-  };
-
   fastpbkdf2 = callPackage ../development/libraries/fastpbkdf2 { };
 
   fanficfare = callPackage ../tools/text/fanficfare { };
@@ -5377,8 +5372,6 @@ in
   netcdfcxx4 = callPackage ../development/libraries/netcdf-cxx4 { };
 
   netcdffortran = callPackage ../development/libraries/netcdf-fortran { };
-
-  neural-style = callPackage ../tools/graphics/neural-style {};
 
   nco = callPackage ../development/libraries/nco { };
 
@@ -13583,8 +13576,6 @@ in
 
   live555 = callPackage ../development/libraries/live555 { };
 
-  loadcaffe = callPackage ../development/libraries/loadcaffe {};
-
   log4cpp = callPackage ../development/libraries/log4cpp { };
 
   log4cxx = callPackage ../development/libraries/log4cxx { };
@@ -14815,12 +14806,6 @@ in
   tokyocabinet = callPackage ../development/libraries/tokyo-cabinet { };
 
   tokyotyrant = callPackage ../development/libraries/tokyo-tyrant { };
-
-  torch = callPackage ../development/libraries/torch {
-    openblas = openblasCompat;
-  };
-
-  torch-hdf5 = callPackage ../development/libraries/torch-hdf5 {};
 
   totem-pl-parser = callPackage ../development/libraries/totem-pl-parser { };
 
@@ -23710,7 +23695,7 @@ in
   multimc = libsForQt5.callPackage ../games/multimc { };
 
   inherit (callPackages ../games/minetest {
-	inherit (darwin) libiconv;
+    inherit (darwin) libiconv;
     inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa;
   })
     minetestclient_4 minetestserver_4
