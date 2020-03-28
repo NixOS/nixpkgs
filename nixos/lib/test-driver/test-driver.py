@@ -6,6 +6,7 @@ from xml.sax.saxutils import XMLGenerator
 import _thread
 import atexit
 import base64
+import codecs
 import os
 import pathlib
 import ptpython.repl
@@ -115,6 +116,7 @@ def create_vlan(vlan_nr: str) -> Tuple[str, str, "subprocess.Popen[bytes]", Any]
     fd.write("version\n")
     # TODO: perl version checks if this can be read from
     # an if not, dies. we could hang here forever. Fix it.
+    assert vde_process.stdout is not None
     vde_process.stdout.readline()
     if not os.path.exists(os.path.join(vde_socket, "ctl")):
         raise Exception("cannot start vde_switch")
@@ -139,7 +141,7 @@ def retry(fn: Callable) -> None:
 class Logger:
     def __init__(self) -> None:
         self.logfile = os.environ.get("LOGFILE", "/dev/null")
-        self.logfile_handle = open(self.logfile, "wb")
+        self.logfile_handle = codecs.open(self.logfile, "wb")
         self.xml = XMLGenerator(self.logfile_handle, encoding="utf-8")
         self.queue: "Queue[Dict[str, str]]" = Queue(1000)
 
@@ -739,6 +741,7 @@ class Machine:
         self.shell, _ = self.shell_socket.accept()
 
         def process_serial_output() -> None:
+            assert self.process.stdout is not None
             for _line in self.process.stdout:
                 # Ignore undecodable bytes that may occur in boot menus
                 line = _line.decode(errors="ignore").replace("\r", "").rstrip()

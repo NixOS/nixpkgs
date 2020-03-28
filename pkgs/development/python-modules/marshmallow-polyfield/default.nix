@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "marshmallow-polyfield";
-  version = "5.7";
+  version = "5.9";
 
   src = fetchFromGitHub {
     owner = "Bachmann1234";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     marshmallow
   ];
-  
+
   # setuptools check can run, but won't find tests
   checkInputs = [ pytestCheckHook pytestcov ];
 

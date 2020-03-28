@@ -1,24 +1,35 @@
-{ stdenv, cmake, fetchFromGitHub, bctoolbox }:
+{ bctoolbox
+, cmake
+, fetchFromGitLab
+, stdenv
+}:
 
 stdenv.mkDerivation rec {
-  baseName = "belr";
-  version = "0.1.3";
-  name = "${baseName}-${version}";
+  pname = "belr";
+  # Using master branch for linphone-desktop caused a chain reaction that many
+  # of its dependencies needed to use master branch too.
+  version = "unstable-2020-03-09";
 
-  src = fetchFromGitHub {
-    owner = "BelledonneCommunications";
-    repo = baseName;
-    rev = version;
-    sha256 = "0mf8lsyq1z3b5p47c00lnwc8n7v9nzs1fd2g9c9hnz6fjd2ka44w";
+  src = fetchFromGitLab {
+    domain = "gitlab.linphone.org";
+    owner = "public";
+    group = "BC";
+    repo = pname;
+    rev = "326d030ca9db12525c2a6d2a65f386f36f3c2ed5";
+    sha256 = "1cdblb9smncq3al0crqp5651b02k1g6whlw1ib769p61gad0rs3v";
   };
 
   buildInputs = [ bctoolbox ];
   nativeBuildInputs = [ cmake ];
 
-  meta = with stdenv.lib;{
+  # Do not build static libraries
+  cmakeFlags = [ "-DENABLE_STATIC=NO" ];
+
+  meta = with stdenv.lib; {
     description = "Belr is Belledonne Communications' language recognition library";
-    homepage = https://github.com/BelledonneCommunications/belr;
-    license = licenses.lgpl21;
+    homepage = "https://gitlab.linphone.org/BC/public/belr";
+    license = licenses.gpl3;
     platforms = platforms.all;
+    maintainers = with maintainers; [ jluttine ];
   };
 }

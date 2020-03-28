@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, Security }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "flyctl";
@@ -11,8 +11,6 @@ buildGoModule rec {
     sha256 = "181j248i8j9g7kz5krg0bkbxkvmcwpz2vlknii5q3dy7yhgg19h3";
   };
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   preBuild = ''
     go generate ./...
   '';
@@ -24,7 +22,7 @@ buildGoModule rec {
 
   modSha256 = "1mqkc7hnavvpbqar9f1d2vnm47p4car9abnk2ikyf27jr5glwmsd";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Command line tools for fly.io services";
     homepage = "https://fly.io/";
     license = licenses.asl20;

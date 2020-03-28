@@ -14,6 +14,24 @@ stdenv.mkDerivation rec {
     ln -s ${src} "$out"/webapps/gerrit-${version}.war
   '';
 
+  passthru = {
+    # A list of plugins that are part of the gerrit.war file.
+    # Use `java -jar gerrit.war ls | grep plugins/` to generate that list.
+    plugins = [
+      "codemirror-editor"
+      "commit-message-length-validator"
+      "delete-project"
+      "download-commands"
+      "gitiles"
+      "hooks"
+      "plugin-manager"
+      "replication"
+      "reviewnotes"
+      "singleusergroup"
+      "webhooks"
+    ];
+  };
+
   meta = with stdenv.lib; {
     homepage = "https://www.gerritcodereview.com/index.md";
     license = licenses.asl20;

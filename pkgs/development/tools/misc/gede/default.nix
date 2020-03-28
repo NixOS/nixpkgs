@@ -2,11 +2,11 @@
 
 mkDerivation rec {
   pname = "gede";
-  version = "2.15.4";
+  version = "2.16.2";
 
   src = fetchurl {
     url = "http://gede.acidron.com/uploads/source/${pname}-${version}.tar.xz";
-    sha256 = "0bg7vyvznn1gn6w5yn14j59xph9psf2fyxr434pk62wmbzdpmkfg";
+    sha256 = "18a8n9yvhgkbc97p2995j7b5ncfdzy1fy13ahdafqmcpkl4r1hrj";
   };
 
   nativeBuildInputs = [ qmake makeWrapper python ];

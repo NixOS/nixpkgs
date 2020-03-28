@@ -4,14 +4,14 @@
 , tesseract, gts, libXtst
 }:
 stdenv.mkDerivation rec {
-  version = "0.39";
+  version = "0.42";
   pname = "fMBT";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "fMBT";
     rev = "v${version}";
-    sha256 = "15sxwdcsjybq50vkla4md2ay8m67ndc4vwcsl5vwsjkim5qlxslb";
+    sha256 = "1jb9nb2mipc5cg99a80dny4m06vz2zral0q30fv75rz2cb6ja4zp";
   };
 
   nativeBuildInputs = [ autoreconfHook pkgconfig flex makeWrapper

@@ -9,11 +9,12 @@ stdenv.mkDerivation rec {
   pname = "spring";
   version = "104.0.1";
 
+  # taken from https://github.com/spring/spring/commits/maintenance
   src = fetchFromGitHub {
     owner = "spring";
     repo = "spring";
-    rev = "9ee29da876f6d3d23e169185619b58df9c036703";
-    sha256 = "0m94i85k8k5ls1ff9z8djslzhkgr7b7vsbpic2axxjvki6sn2xjv";
+    rev = "69b06d03411fd97f0042a348d839e88d16bd6cb1";
+    sha256 = "16dfh0alb3zz5q8d00fy91banicrn69hf1scmq6vgjhzhzsvnlxj";
     fetchSubmodules = true;
   };
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
     patchShebangs .
     rm rts/build/cmake/FindGLEW.cmake
 
-    echo "104.0.1-1466-g9ee29da maintenance" > VERSION
+    echo "104.0.1-1474-g69b06d0 maintenance" > VERSION
   '';
 
   cmakeFlags = ["-DCMAKE_BUILD_WITH_INSTALL_RPATH:BOOL=ON"

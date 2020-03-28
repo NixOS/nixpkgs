@@ -1,4 +1,4 @@
-{ stdenv, buildPythonPackage, fetchPypi, python, numpy, matplotlib }:
+{ stdenv, buildPythonPackage, fetchPypi, python, numpy, matplotlib, nose }:
 
 buildPythonPackage rec {
   pname = "deap";
@@ -11,6 +11,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ numpy matplotlib ];
 
+  checkInputs = [ nose ];
   checkPhase = ''
     ${python.interpreter} setup.py nosetests --verbosity=3
   '';

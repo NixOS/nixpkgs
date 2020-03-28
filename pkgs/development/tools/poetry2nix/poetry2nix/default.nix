@@ -7,7 +7,7 @@ let
   inherit (poetryLib) isCompatible readTOML;
 
   # Poetry2nix version
-  version = "1.6.0";
+  version = "1.7.1";
 
   /* The default list of poetry2nix override overlays */
   defaultPoetryOverrides = (import ./overrides.nix { inherit pkgs lib; });
@@ -34,91 +34,95 @@ let
     , overrides ? [ defaultPoetryOverrides ]
     , python ? pkgs.python3
     , pwd ? projectDir
-    }@attrs: let
-      poetryPkg = poetry.override { inherit python; };
+    }@attrs:
+      let
+        poetryPkg = poetry.override { inherit python; };
 
-      pyProject = readTOML pyproject;
-      poetryLock = readTOML poetrylock;
-      lockFiles = lib.getAttrFromPath [ "metadata" "files" ] poetryLock;
+        pyProject = readTOML pyproject;
+        poetryLock = readTOML poetrylock;
+        lockFiles = lib.getAttrFromPath [ "metadata" "files" ] poetryLock;
 
-      specialAttrs = [
-        "overrides"
-        "poetrylock"
-        "pwd"
-      ];
-      passedAttrs = builtins.removeAttrs attrs specialAttrs;
+        specialAttrs = [
+          "overrides"
+          "poetrylock"
+          "projectDir"
+          "pwd"
+        ];
+        passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
-      evalPep508 = mkEvalPep508 python;
+        evalPep508 = mkEvalPep508 python;
 
-      # Filter packages by their PEP508 markers & pyproject interpreter version
-      partitions = let
-        supportsPythonVersion = pkgMeta: if pkgMeta ? marker then (evalPep508 pkgMeta.marker) else true;
-      in
-        lib.partition supportsPythonVersion poetryLock.package;
-
-      compatible = partitions.right;
-      incompatible = partitions.wrong;
-
-      # Create an overriden version of pythonPackages
-      #
-      # We need to avoid mixing multiple versions of pythonPackages in the same
-      # closure as python can only ever have one version of a dependency
-      baseOverlay = self: super:
-        let
-          getDep = depName: self.${depName};
-
-          lockPkgs = builtins.listToAttrs (
-            builtins.map (
-              pkgMeta: rec {
-                name = pkgMeta.name;
-                value = self.mkPoetryDep (
-                  pkgMeta // {
-                    inherit pwd;
-                    source = pkgMeta.source or null;
-                    files = lockFiles.${name};
-                    pythonPackages = self;
-                  }
-                );
-              }
-            ) compatible
-          );
+        # Filter packages by their PEP508 markers & pyproject interpreter version
+        partitions = let
+          supportsPythonVersion = pkgMeta: if pkgMeta ? marker then (evalPep508 pkgMeta.marker) else true;
         in
-          lockPkgs;
-      overlays = builtins.map getFunctorFn (
-        [
-          (
-            self: super: let
-              hooks = self.callPackage ./hooks {};
-            in
-              {
-                mkPoetryDep = self.callPackage ./mk-poetry-dep.nix {
-                  inherit pkgs lib python poetryLib;
-                };
-                poetry = poetryPkg;
-                # The canonical name is setuptools-scm
-                setuptools-scm = super.setuptools_scm;
+          lib.partition supportsPythonVersion poetryLock.package;
 
-                inherit (hooks) removePathDependenciesHook poetry2nixFixupHook;
-              }
-          )
-          # Null out any filtered packages, we don't want python.pkgs from nixpkgs
-          (self: super: builtins.listToAttrs (builtins.map (x: { name = x.name; value = null; }) incompatible))
-          # Create poetry2nix layer
-          baseOverlay
-        ] ++ # User provided overrides
-        overrides
-      );
+        compatible = partitions.right;
+        incompatible = partitions.wrong;
 
-      packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) overlays;
+        # Create an overriden version of pythonPackages
+        #
+        # We need to avoid mixing multiple versions of pythonPackages in the same
+        # closure as python can only ever have one version of a dependency
+        baseOverlay = self: super:
+          let
+            getDep = depName: self.${depName};
 
-      py = python.override { inherit packageOverrides; self = py; };
-    in
-      {
-        python = py;
-        poetryPackages = map (pkg: py.pkgs.${pkg.name}) compatible;
-        poetryLock = poetryLock;
-        inherit pyProject;
-      };
+            lockPkgs = builtins.listToAttrs (
+              builtins.map (
+                pkgMeta: rec {
+                  name = pkgMeta.name;
+                  value = self.mkPoetryDep (
+                    pkgMeta // {
+                      inherit pwd;
+                      source = pkgMeta.source or null;
+                      files = lockFiles.${name};
+                      pythonPackages = self;
+                      sourceSpec = pyProject.tool.poetry.dependencies.${name} or pyProject.tool.poetry.dev-dependencies.${name};
+                    }
+                  );
+                }
+              ) compatible
+            );
+          in
+            lockPkgs;
+        overlays = builtins.map getFunctorFn (
+          [
+            (
+              self: super:
+                let
+                  hooks = self.callPackage ./hooks {};
+                in
+                  {
+                    mkPoetryDep = self.callPackage ./mk-poetry-dep.nix {
+                      inherit pkgs lib python poetryLib;
+                    };
+                    poetry = poetryPkg;
+                    # The canonical name is setuptools-scm
+                    setuptools-scm = super.setuptools_scm;
+
+                    inherit (hooks) removePathDependenciesHook poetry2nixFixupHook;
+                  }
+            )
+            # Null out any filtered packages, we don't want python.pkgs from nixpkgs
+            (self: super: builtins.listToAttrs (builtins.map (x: { name = x.name; value = null; }) incompatible))
+            # Create poetry2nix layer
+            baseOverlay
+          ] ++ # User provided overrides
+          overrides
+        );
+
+        packageOverrides = lib.foldr lib.composeExtensions (self: super: {}) overlays;
+
+        py = python.override { inherit packageOverrides; self = py; };
+      in
+        {
+          python = py;
+          poetryPackages = map (pkg: py.pkgs.${pkg.name}) compatible;
+          poetryLock = poetryLock;
+          inherit pyProject;
+        };
 
   /* Returns a package with a python interpreter and all packages specified in the poetry.lock lock file.
 
@@ -153,76 +157,78 @@ let
     , python ? pkgs.python3
     , pwd ? projectDir
     , ...
-    }@attrs: let
-      poetryPython = mkPoetryPackages {
-        inherit pyproject poetrylock overrides python pwd;
-      };
-      py = poetryPython.python;
+    }@attrs:
+      let
+        poetryPython = mkPoetryPackages {
+          inherit pyproject poetrylock overrides python pwd;
+        };
+        py = poetryPython.python;
 
-      inherit (poetryPython) pyProject;
+        inherit (poetryPython) pyProject;
 
-      specialAttrs = [
-        "overrides"
-        "poetrylock"
-        "pwd"
-        "pyproject"
-      ];
-      passedAttrs = builtins.removeAttrs attrs specialAttrs;
+        specialAttrs = [
+          "overrides"
+          "poetrylock"
+          "projectDir"
+          "pwd"
+          "pyproject"
+        ];
+        passedAttrs = builtins.removeAttrs attrs specialAttrs;
 
-      # Get dependencies and filter out depending on interpreter version
-      getDeps = depAttr: let
-        compat = isCompatible py.pythonVersion;
-        deps = pyProject.tool.poetry.${depAttr} or {};
-        depAttrs = builtins.map (d: lib.toLower d) (builtins.attrNames deps);
-      in
-        builtins.map (
-          dep: let
-            pkg = py.pkgs."${dep}";
-            constraints = deps.${dep}.python or "";
-            isCompat = compat constraints;
+        # Get dependencies and filter out depending on interpreter version
+        getDeps = depAttr:
+          let
+            compat = isCompatible py.pythonVersion;
+            deps = pyProject.tool.poetry.${depAttr} or {};
+            depAttrs = builtins.map (d: lib.toLower d) (builtins.attrNames deps);
           in
-            if isCompat then pkg else null
-        ) depAttrs;
+            builtins.map (
+              dep:
+                let
+                  pkg = py.pkgs."${dep}";
+                  constraints = deps.${dep}.python or "";
+                  isCompat = compat constraints;
+                in
+                  if isCompat then pkg else null
+            ) depAttrs;
 
-      getInputs = attr: attrs.${attr} or [];
-      mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
+        getInputs = attr: attrs.${attr} or [];
+        mkInput = attr: extraInputs: getInputs attr ++ extraInputs;
 
-      buildSystemPkgs = poetryLib.getBuildSystemPkgs {
-        inherit pyProject;
-        pythonPackages = py.pkgs;
-      };
+        buildSystemPkgs = poetryLib.getBuildSystemPkgs {
+          inherit pyProject;
+          pythonPackages = py.pkgs;
+        };
+      in
+        py.pkgs.buildPythonApplication (
+          passedAttrs // {
+            pname = pyProject.tool.poetry.name;
+            version = pyProject.tool.poetry.version;
 
-    in
-      py.pkgs.buildPythonApplication (
-        passedAttrs // {
-          pname = pyProject.tool.poetry.name;
-          version = pyProject.tool.poetry.version;
+            inherit src;
 
-          inherit src;
+            format = "pyproject";
 
-          format = "pyproject";
+            buildInputs = mkInput "buildInputs" buildSystemPkgs;
+            propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
+            nativeBuildInputs = mkInput "nativeBuildInputs" [ pkgs.yj py.pkgs.removePathDependenciesHook ];
+            checkInputs = mkInput "checkInputs" (getDeps "dev-dependencies");
 
-          buildInputs = mkInput "buildInputs" buildSystemPkgs;
-          propagatedBuildInputs = mkInput "propagatedBuildInputs" (getDeps "dependencies") ++ ([ py.pkgs.setuptools ]);
-          nativeBuildInputs = mkInput "nativeBuildInputs" [ pkgs.yj py.pkgs.removePathDependenciesHook ];
-          checkInputs = mkInput "checkInputs" (getDeps "dev-dependencies");
+            passthru = {
+              python = py;
+            };
 
-          passthru = {
-            python = py;
-          };
+            meta = meta // {
+              inherit (pyProject.tool.poetry) description homepage;
+              inherit (py.meta) platforms;
+              license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
+            };
 
-          meta = meta // {
-            inherit (pyProject.tool.poetry) description homepage;
-            inherit (py.meta) platforms;
-            license = getLicenseBySpdxId (pyProject.tool.poetry.license or "unknown");
-          };
-
-        }
-      );
+          }
+        );
 
   /* Poetry2nix CLI used to supplement SHA-256 hashes for git dependencies  */
   cli = import ./cli.nix { inherit pkgs lib version; };
-
 in
 {
   inherit mkPoetryEnv mkPoetryApplication mkPoetryPackages cli version;
@@ -236,11 +242,12 @@ in
   */
   defaultPoetryOverrides = {
     __functor = defaultPoetryOverrides;
-    overrideOverlay = fn: self: super: let
-      defaultSet = defaultPoetryOverrides self super;
-      customSet = fn self super;
-    in
-      defaultSet // customSet;
+    overrideOverlay = fn: self: super:
+      let
+        defaultSet = defaultPoetryOverrides self super;
+        customSet = fn self super;
+      in
+        defaultSet // customSet;
   };
 
   /*

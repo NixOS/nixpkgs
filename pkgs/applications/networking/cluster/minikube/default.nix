@@ -6,10 +6,6 @@
 , go-bindata
 , libvirt
 , vmnet
-, xpc
-, libobjc
-, Foundation
-, IOKit
 }:
 
 buildGoModule rec {
@@ -31,7 +27,7 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkgconfig go-bindata makeWrapper ];
   buildInputs = stdenv.lib.optionals stdenv.isLinux [ libvirt ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet xpc libobjc IOKit Foundation ];
+    ++ stdenv.lib.optionals stdenv.isDarwin [ vmnet ];
 
   preBuild = ''
     go-bindata -nomemcopy -o pkg/minikube/assets/assets.go -pkg assets deploy/addons/...

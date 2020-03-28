@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, Security }:
+{ lib, fetchFromGitHub, buildGoModule }:
 
 buildGoModule rec {
   pname = "kepubify";
@@ -15,11 +15,9 @@ buildGoModule rec {
 
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version}" ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "." "covergen" "seriesmeta" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "EPUB to KEPUB converter";
     homepage = "https://pgaskin.net/kepubify";
     license = licenses.mit;

@@ -4,6 +4,7 @@
 , ipython
 , ipywidgets
 , pytest
+, nose
 , numpy
 , pandas
 , six
@@ -30,7 +31,7 @@ buildPythonPackage rec {
     statsmodels
   ];
 
-  checkInputs = [ pytest ];
+  checkInputs = [ pytest nose ];
 
   # ignore tests which are incompatible with pandas>=1.0
   # https://github.com/santosjorge/cufflinks/issues/236

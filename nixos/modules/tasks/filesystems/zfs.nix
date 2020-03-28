@@ -478,6 +478,7 @@ in
         createImportService = pool:
           nameValuePair "zfs-import-${pool}" {
             description = "Import ZFS pool \"${pool}\"";
+            # we need systemd-udev-settle until https://github.com/zfsonlinux/zfs/pull/4943 is merged
             requires = [ "systemd-udev-settle.service" ];
             after = [ "systemd-udev-settle.service" "systemd-modules-load.service" ];
             wantedBy = (getPoolMounts pool) ++ [ "local-fs.target" ];

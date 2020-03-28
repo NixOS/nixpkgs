@@ -113,6 +113,7 @@ mapAliases ({
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
+  fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   fetchFromGithub = throw "You meant fetchFromGitHub, with a capital H.";
   ffadoFull = ffado; # added 2018-05-01
   firefox-esr-wrapper = firefox-esr;  # 2016-01
@@ -247,6 +248,7 @@ mapAliases ({
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
+  loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
@@ -293,10 +295,11 @@ mapAliases ({
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
-  nix-review = nixpkgs-review; # added 2019-12-22
+  neutral-style = throw "neural-style has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   nfsUtils = nfs-utils;  # added 2014-12-06
   nginxUnstable = nginxMainline; # added 2018-04-25
   nilfs_utils = nilfs-utils; # added 2018-04-25
+  nix-review = nixpkgs-review; # added 2019-12-22
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
@@ -422,6 +425,7 @@ mapAliases ({
   skrooge2 = skrooge; # added 2017-02-18
   skype = skypeforlinux; # added 2017-07-27
   skydive = throw "skydive has been removed from nixpkgs (2019-09-10)";
+  slack-dark = slack; # added 2020-03-27
   slic3r-prusa3d = prusa-slicer; # added 2019-05-21
   slurm-llnl = slurm; # renamed July 2017
   slurm-llnl-full = slurm-full; # renamed July 2017
@@ -495,10 +499,14 @@ mapAliases ({
   tftp_hpa = tftp-hpa; # added 2015-04-03
   tomcat85 = tomcat8; # added 2020-03-11
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
-  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
+  torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torch-hdf5 = throw "torch-hdf5 has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
+  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
@@ -510,6 +518,7 @@ mapAliases ({
   v4l_utils = v4l-utils; # added 2019-08-07
   v8_3_16_14 = throw "removed 2019-11-01: no longer referenced by other packages";
   valadoc = throw "deprecated 2019-10-10: valadoc was merged into vala 0.38";
+  vamp = { vampSDK = vamp-plugin-sdk; }; # added 2020-03-26
   vimbWrapper = vimb; # added 2015-01
   vimprobable2 = throw "vimprobable2 has been removed from nixpkgs. It relied on webkitgtk24x that has been removed."; # added 2019-12-05
   vimprobable2-unwrapped = vimprobable2; # added 2019-12-05
