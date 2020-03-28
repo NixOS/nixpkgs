@@ -1632,6 +1632,8 @@ in {
 
   alabaster = callPackage ../development/python-modules/alabaster {};
 
+  alarmdecoder = callPackage ../development/python-modules/alarmdecoder {};
+
   alembic = callPackage ../development/python-modules/alembic {};
 
   allpairspy = callPackage ../development/python-modules/allpairspy { };
