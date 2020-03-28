@@ -99,8 +99,6 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   #### SERVICES
 
-  cerbere = callPackage ./services/cerbere { };
-
   contractor = callPackage ./services/contractor { };
 
   elementary-capnet-assist = callPackage ./services/elementary-capnet-assist { };
@@ -199,5 +197,7 @@ lib.makeScope pkgs.newScope (self: with self; {
   ### ALIASES
 
   inherit (pkgs) vala; # added 2019-10-10
+
+  cerbere = throw "Cerbere is now obsolete https://github.com/elementary/cerbere/releases/tag/2.5.1.";
 
 })

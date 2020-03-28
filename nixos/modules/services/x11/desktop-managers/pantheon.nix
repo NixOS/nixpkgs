@@ -206,7 +206,6 @@ in
         })
 
         # Services
-        cerbere
         elementary-capnet-assist
         elementary-dpms-helper
         elementary-settings-daemon
