@@ -48,11 +48,11 @@ in
 
 stdenv.mkDerivation rec {
   pname = "glib";
-  version = "2.62.5";
+  version = "2.64.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/glib/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0bj5hagvfiqcjd20w543pvbnrlqvs8nbxvqjflyvcn36ljpwvldq";
+    sha256 = "1ixvjmsrj45xq9bq3chhj98jhgcsqa08v627mjx6sjxlph1pd5hp";
   };
 
   patches = optionals stdenv.isDarwin [
@@ -62,8 +62,6 @@ stdenv.mkDerivation rec {
     ./gobject_init_on_demand.patch
   ] ++ [
     ./schema-override-variable.patch
-    # Require substituteInPlace in postPatch
-    ./fix-gio-launch-desktop-path.patch
 
     # GLib contains many binaries used for different purposes;
     # we will install them to different outputs:
@@ -126,9 +124,6 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    # substitute fix-gio-launch-desktop-path.patch
-    substituteInPlace gio/gdesktopappinfo.c --replace "@bindir@" "$out/bin"
-
     chmod +x gio/tests/gengiotypefuncs.py
     patchShebangs gio/tests/gengiotypefuncs.py
     chmod +x docs/reference/gio/concat-files-helper.py
@@ -148,11 +143,6 @@ stdenv.mkDerivation rec {
     # This file is *included* in gtk3 and would introduce runtime reference via __FILE__.
     sed '1i#line 1 "${pname}-${version}/include/glib-2.0/gobject/gobjectnotifyqueue.c"' \
       -i "$dev"/include/glib-2.0/gobject/gobjectnotifyqueue.c
-  '' + optionalString (!stdenv.isDarwin) ''
-    # Add gio-launch-desktop to $out so we can refer to it from $lib
-    mkdir $out/bin
-    mv "$bin/bin/gio-launch-desktop" "$out/bin/"
-    ln -s "$out/bin/gio-launch-desktop" "$bin/bin/"
   '' + optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     cp -r ${buildPackages.glib.devdoc} $devdoc
   '';

@@ -22,15 +22,16 @@
 , p11-kit
 , openssh
 , gsettings-desktop-schemas
+, libhandy
 }:
 
 stdenv.mkDerivation rec {
   pname = "seahorse";
-  version = "3.34.1";
+  version = "3.36";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "19c2zylwgycb5q9hal8rmflc2sywc5c2grpsfsq3rf37i9lfwynw";
+    sha256 = "1nqn4a6dr4l1fpzj3mv4swhpnvhjcqlwsyhwm59sdzqgdfx4hbwr";
   };
 
   doCheck = true;
@@ -60,6 +61,7 @@ stdenv.mkDerivation rec {
     openssh
     openldap
     libpwquality
+    libhandy
   ];
 
   postPatch = ''

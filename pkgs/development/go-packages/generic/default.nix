@@ -214,6 +214,8 @@ let
       find $bin/bin -type f -exec ${removeExpr removeReferences} '{}' + || true
     '';
 
+    strictDeps = true;
+
     shellHook = ''
       d=$(mktemp -d "--suffix=-$name")
     '' + toString (map (dep: ''

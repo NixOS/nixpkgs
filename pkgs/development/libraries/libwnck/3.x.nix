@@ -21,25 +21,15 @@
 
 stdenv.mkDerivation rec{
   pname = "libwnck";
-  version = "3.32.0";
+  version = "3.36.0";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1jp3p1lnwnwi6fxl2rz3166cmwzwy9vqz896anpwc3wdy9f875cm";
+    sha256 = "0pwjdhca9lz2n1gf9b60xf0m6ipf9snp8rqf9csj4pgdnd882l5w";
   };
-
-  patches = [
-    # https://gitlab.gnome.org/GNOME/libwnck/issues/139
-    (fetchpatch {
-      url = https://gitlab.gnome.org/GNOME/libwnck/commit/0d9ff7db63af568feef8e8c566e249058ccfcb4e.patch;
-      sha256 = "18f78aayq9jma54v2qz3rm2clmz1cfq5bngxw8p4zba7hplyqsl9";
-    })
-    # https://gitlab.gnome.org/GNOME/libwnck/merge_requests/12
-    ./fix-pc-file.patch
-  ];
 
   nativeBuildInputs = [
     meson

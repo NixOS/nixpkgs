@@ -51,6 +51,7 @@
 , xdg-dbus-proxy
 , substituteAll
 , gnome3
+, glib
 }:
 
 assert enableGeoLocation -> geoclue2 != null;
@@ -61,13 +62,13 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "webkitgtk";
-  version = "2.26.4";
+  version = "2.28.0";
 
   outputs = [ "out" "dev" ];
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/${pname}-${version}.tar.xz";
-    sha256 = "0gqi9f9njrdn8vad1zvr59b25arwc8r0n8bp25sgkbfz2c3r11j3";
+    sha256 = "12qfs9w93c5kiyi14ynm4rf4ad3c213dvzmdrc9c3ab2iwbks7rn";
   };
 
   patches = optionals stdenv.isLinux [
@@ -77,6 +78,14 @@ stdenv.mkDerivation rec {
     })
     ./libglvnd-headers.patch
   ];
+
+  preConfigure = stdenv.lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
+    # Ignore gettext in cmake_prefix_path so that find_program doesn't
+    # pick up the wrong gettext. TODO: Find a better solution for
+    # this, maybe make cmake not look up executables in
+    # CMAKE_PREFIX_PATH.
+    cmakeFlags+=" -DCMAKE_IGNORE_PATH=${getBin gettext}/bin"
+  '';
 
   nativeBuildInputs = [
     bison
@@ -89,6 +98,8 @@ stdenv.mkDerivation rec {
     pkgconfig
     python3
     ruby
+    glib # for gdbus-codegen
+    wayland # for wayland-scanner
   ];
 
   buildInputs = [
