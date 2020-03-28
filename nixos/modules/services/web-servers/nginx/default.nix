@@ -176,7 +176,7 @@ let
 
     ${optionalString (cfg.httpConfig != "") ''
     http {
-      ${common.httpConfig}
+      ${commonHttpConfig}
       ${cfg.httpConfig}
     }''}
 
