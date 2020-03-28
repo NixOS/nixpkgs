@@ -314,6 +314,7 @@ self: super: {
   hs2048 = dontCheck super.hs2048;
   hsbencher = dontCheck super.hsbencher;
   hsexif = dontCheck super.hsexif;
+  hspec-core = if pkgs.stdenv.isi686 then dontCheck super.hspec-core else super.hspec-core; # tests rely on `Int` being 64-bit; https://github.com/hspec/hspec/issues/431
   hspec-server = dontCheck super.hspec-server;
   HTF = dontCheck super.HTF;
   htsn = dontCheck super.htsn;
