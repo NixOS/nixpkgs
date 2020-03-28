@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     description = "A launcher/menu program for wlroots based wayland compositors such as sway";
     homepage = "https://hg.sr.ht/~scoopta/wofi";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ erictapen ];
+    maintainers = with maintainers; [ elyhaka ];
     platforms = with platforms; linux;
   };
 }
