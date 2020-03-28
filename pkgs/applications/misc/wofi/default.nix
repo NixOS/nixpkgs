@@ -19,7 +19,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchpatch {
       url = "https://paste.sr.ht/blob/1cbddafac3806afb203940c029e78ce8390d8f49";
-      sha256 = "18960y9ajilrwwl6mjnrh6wj0sm4ivczmacck36p2dj9xd0n8vkh";
+      sha256 = "1n4jpmh66p7asjhj0z2s94ny91lmaq4hhh2356nj406vlqr15vbb";
     })
   ];
 
