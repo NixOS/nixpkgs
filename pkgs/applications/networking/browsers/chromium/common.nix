@@ -240,7 +240,6 @@ let
       is_clang = stdenv.cc.isClang;
       clang_use_chrome_plugins = false;
       blink_symbol_level = 0;
-      enable_swiftshader = false;
       fieldtrial_testing_like_official_build = true;
 
       # Google API keys, see:
