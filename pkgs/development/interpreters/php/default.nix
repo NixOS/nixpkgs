@@ -192,10 +192,13 @@ let
             };
             paths = [ php ];
             postBuild = ''
-              wrapProgram $out/bin/php \
-                --add-flags "-c ${extraInit}"
-              wrapProgram $out/bin/php-fpm \
-                --add-flags "-c ${extraInit}"
+              cp ${extraInit} $out/lib/custom-php.ini
+
+              wrapProgram $out/bin/php --set PHP_INI_SCAN_DIR $out/lib
+
+              if test -e $out/bin/php-fpm; then
+                 wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
+              fi
             '';
           };
     in
