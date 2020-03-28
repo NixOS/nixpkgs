@@ -1,5 +1,5 @@
 { stdenv, fetchurl, makeWrapper, makeDesktopItem, zlib, glib, libpng, freetype, openssl
-, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtsvg, xkeyboard_config, alsaLib
+, xorg, fontconfig, qtbase, qtwebengine, qtwebchannel, qtwebsockets, qtsvg, xkeyboard_config, alsaLib
 , libpulseaudio ? null, libredirect, quazip, which, unzip, llvmPackages, writeShellScriptBin
 }:
 
@@ -12,7 +12,7 @@ let
   deps =
     [ zlib glib libpng freetype xorg.libSM xorg.libICE xorg.libXrender openssl
       xorg.libXrandr xorg.libXfixes xorg.libXcursor xorg.libXinerama
-      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtsvg
+      xorg.libxcb fontconfig xorg.libXext xorg.libX11 alsaLib qtbase qtwebengine qtwebchannel qtwebsockets qtsvg
       libpulseaudio quazip llvmPackages.libcxx llvmPackages.libcxxabi
     ];
 
@@ -33,13 +33,13 @@ in
 stdenv.mkDerivation rec {
   pname = "teamspeak-client";
 
-  version = "3.3.2";
+  version = "3.5.1";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/client/${version}/TeamSpeak3-Client-linux_${arch}-${version}.run";
     sha256 = if stdenv.is64bit
-                then "1n916ds67dxj5bfgc5zm9nz2xh2914k85pzzspzvfyr7njcw7hpi"
-                else "0csl5xklcb4v8bzwvby5m2n38zjrnaw8dcvha7qvfbjllxr75yn2";
+                then "0pxipdj4icyxygq0bk63q37isl04w2nlmik1dw79sib4mj2a3vg5"
+                else "0lrdcqmmlzk9dii2qjm2gs5l44zy877ldrybad3s73fbf390087s";
   };
 
   # grab the plugin sdk for the desktop icon
