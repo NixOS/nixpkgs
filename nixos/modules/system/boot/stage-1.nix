@@ -142,7 +142,10 @@ let
              let source' = if source == null then dest else source; in
                ''
                   mkdir -p $(dirname "$out/secrets/${dest}")
-                  cp -a ${source'} "$out/secrets/${dest}"
+                  # Some programs (e.g. ssh) doesn't like secrets to be
+                  # symlinks, so we use `cp -L` here to match the
+                  # behaviour when secrets are natively supported.
+                  cp -Lr ${source'} "$out/secrets/${dest}"
                 ''
           ) config.boot.initrd.secrets))
        }
