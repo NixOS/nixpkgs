@@ -393,21 +393,9 @@ self: super: {
     configurePhase = "cd plugins/nvim";
   });
 
-  gist-vim = super.gist-vim.overrideAttrs(old: {
+  vim-gist = super.vim-gist.overrideAttrs(old: {
     dependencies = with super; [ webapi-vim ];
   });
-
-  gruvbox-community = buildVimPluginFrom2Nix {
-    pname = "gruvbox-community";
-    version = "2019-05-31";
-    src = fetchFromGitHub {
-      owner = "gruvbox-community";
-      repo = "gruvbox";
-      rev = "e122091dad968a5524f3e8136615a479c7b6f247";
-      sha256 = "1hncjyfi1gbw62b2pngy5qxyzibrhbyzgfmm9a58sdh1272l8ls8";
-    };
-    meta.maintainers = with stdenv.lib.maintainers; [ minijackson ];
-  };
 
   meson = buildVimPluginFrom2Nix {
     inherit (meson) pname version src;
@@ -460,6 +448,21 @@ self: super: {
       };
     });
 
+  vimacs = super.vimacs.overrideAttrs(old: {
+    buildPhase = ''
+      substituteInPlace bin/vim \
+        --replace '/usr/bin/vim' 'vim' \
+        --replace '/usr/bin/gvim' 'gvim'
+      # remove unnecessary duplicated bin wrapper script
+      rm -r plugin/vimacs
+    '';
+    meta = with stdenv.lib; {
+      description = "Vim-Improved eMACS: Emacs emulation plugin for Vim";
+      homepage = "http://algorithm.com.au/code/vimacs";
+      license = licenses.gpl2Plus;
+      maintainers = with stdenv.lib.maintainers; [ millerjason ];
+    };
+  });
 
   vimshell-vim = super.vimshell-vim.overrideAttrs(old: {
     dependencies = with super; [ vimproc-vim ];
@@ -640,7 +643,7 @@ self: super: {
     sourceRoot = ".";
   });
 
-  youcompleteme = super.youcompleteme.overrideAttrs(old: {
+  YouCompleteMe = super.YouCompleteMe.overrideAttrs(old: {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
         --replace "'ycm_path_to_python_interpreter', '''" \

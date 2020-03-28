@@ -16,8 +16,6 @@ stdenv.mkDerivation rec {
     gtk-engine-murrine
   ];
 
-  dontBuild = true;
-
   installPhase = ''
     runHook preInstall
     mkdir -p $out/share/themes/${themeName}
@@ -25,10 +23,6 @@ stdenv.mkDerivation rec {
     rm -r $out/share/themes/${themeName}/{Art,LICENSE,README.md,gtk-2.0/render-assets.sh}
     runHook postInstall
   '';
-
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "07iv4jangqnzrvjr749vl3x31z7dxds51bq1bhz5acbjbwf25wjf";
 
   meta = with stdenv.lib; {
     description = "A flat and light theme with a modern look";

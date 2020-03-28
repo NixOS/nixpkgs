@@ -30,7 +30,7 @@ let
 
   occ = pkgs.writeScriptBin "nextcloud-occ" ''
     #! ${pkgs.stdenv.shell}
-    cd ${pkgs.nextcloud}
+    cd ${cfg.package}
     sudo=exec
     if [[ "$USER" != nextcloud ]]; then
       sudo='exec /run/wrappers/bin/sudo -u nextcloud --preserve-env=NEXTCLOUD_CONFIG_DIR'
@@ -41,6 +41,8 @@ let
       -c ${pkgs.writeText "php.ini" phpOptionsStr}\
       occ $*
   '';
+
+  inherit (config.system) stateVersion;
 
 in {
   options.services.nextcloud = {
@@ -63,6 +65,11 @@ in {
       type = types.bool;
       default = false;
       description = "Use https for generated links.";
+    };
+    package = mkOption {
+      type = types.package;
+      description = "Which package to use for the Nextcloud instance.";
+      relatedPackages = [ "nextcloud17" "nextcloud18" ];
     };
 
     maxUploadSize = mkOption {
@@ -309,10 +316,31 @@ in {
         }
       ];
 
-      warnings = optional (cfg.poolConfig != null) ''
-        Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
-        Please migrate your configuration to config.services.nextcloud.poolSettings.
-      '';
+      warnings = []
+        ++ (optional (cfg.poolConfig != null) ''
+          Using config.services.nextcloud.poolConfig is deprecated and will become unsupported in a future release.
+          Please migrate your configuration to config.services.nextcloud.poolSettings.
+        '')
+        ++ (optional (versionOlder cfg.package.version "18") ''
+          You're currently deploying an older version of Nextcloud. This may be needed
+          since Nextcloud doesn't allow major version upgrades across multiple versions (i.e. an
+          upgrade from 16 is possible to 17, but not to 18).
+
+          Please deploy this to your server and wait until the migration is finished. After
+          that you can deploy to the latest Nextcloud version available.
+        '');
+
+      services.nextcloud.package = with pkgs;
+        mkDefault (
+          if pkgs ? nextcloud
+            then throw ''
+              The `pkgs.nextcloud`-attribute has been removed. If it's supposed to be the default
+              nextcloud defined in an overlay, please set `services.nextcloud.package` to
+              `pkgs.nextcloud`.
+            ''
+          else if versionOlder stateVersion "20.03" then nextcloud17
+          else nextcloud18
+        );
     }
 
     { systemd.timers.nextcloud-cron = {
@@ -407,7 +435,7 @@ in {
           path = [ occ ];
           script = ''
             chmod og+x ${cfg.home}
-            ln -sf ${pkgs.nextcloud}/apps ${cfg.home}/
+            ln -sf ${cfg.package}/apps ${cfg.home}/
             mkdir -p ${cfg.home}/config ${cfg.home}/data ${cfg.home}/store-apps
             ln -sf ${overrideConfig} ${cfg.home}/config/override.config.php
 
@@ -429,7 +457,7 @@ in {
           environment.NEXTCLOUD_CONFIG_DIR = "${cfg.home}/config";
           serviceConfig.Type = "oneshot";
           serviceConfig.User = "nextcloud";
-          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${pkgs.nextcloud}/cron.php";
+          serviceConfig.ExecStart = "${phpPackage}/bin/php -f ${cfg.package}/cron.php";
         };
         nextcloud-update-plugins = mkIf cfg.autoUpdateApps.enable {
           serviceConfig.Type = "oneshot";
@@ -471,7 +499,7 @@ in {
         enable = true;
         virtualHosts = {
           ${cfg.hostName} = {
-            root = pkgs.nextcloud;
+            root = cfg.package;
             locations = {
               "= /robots.txt" = {
                 priority = 100;

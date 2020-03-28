@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit, CoreServices }:
+{ stdenv, buildGoModule, fetchFromGitHub, libobjc, IOKit }:
 
 buildGoModule rec {
   pname = "go-ethereum";
@@ -29,8 +29,6 @@ buildGoModule rec {
     "cmd/utils"
     "cmd/wnode"
   ];
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ CoreServices ];
 
   # Fix for usb-related segmentation faults on darwin
   propagatedBuildInputs =

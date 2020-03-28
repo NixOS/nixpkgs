@@ -1,0 +1,175 @@
+From 37c2b4d2940476555aeec20fe1e5e3fa0492a94e Mon Sep 17 00:00:00 2001
+From: Maximilian Bosch <maximilian@mbosch.me>
+Date: Sun, 15 Mar 2020 19:58:53 +0100
+Subject: [PATCH] Make it possible to run the tests offline
+
+Helpful when developing without network access, also makes sure that
+the test actually depend on the API's data like number of breaches
+(which will change in time).
+---
+ tests/commons.py         | 25 +++++++++++++++++++++++++
+ tests/test_audit.py      |  8 +++++---
+ tests/test_pass_audit.py | 10 +++++++++-
+ tests/test_pwned.py      |  8 +++++---
+ 4 files changed, 44 insertions(+), 7 deletions(-)
+
+diff --git a/tests/commons.py b/tests/commons.py
+index 13c4cb1..4f1ecd8 100644
+--- a/tests/commons.py
++++ b/tests/commons.py
+@@ -56,3 +56,28 @@ class TestPass(TestBase):
+         for path in self.store.list(root):
+             data[path] = self.store.show(path)
+         return data
++
++
++def mock_request(*args, **kwargs):
++    class MockResponse:
++        def __init__(self):
++            data = [
++                "D5EE0CB1A41071812CCED2F1930E6E1A5D2:2",
++                "2DC183F740EE76F27B78EB39C8AD972A757:52579",
++                "CF164D7A51A1FD864B1BF9E1CE8A3EC171B:4",
++                "D0B910E7A3028703C0B30039795E908CEB2:7",
++                "AD6438836DBE526AA231ABDE2D0EEF74D42:3",
++                "EBAB0A7CE978E0194608B572E4F9404AA21:3",
++                "17727EAB0E800E62A776C76381DEFBC4145:120",
++                "5370372AC65308F03F6ED75EC6068C8E1BE:1386",
++                "1E4C9B93F3F0682250B6CF8331B7EE68FD8:3730471",
++                "437FAA5A7FCE15D1DDCB9EAEAEA377667B8:123422",
++                "944C22589AC652B0F47918D58CA0CDCCB63:411"
++            ]
++
++            self.text = "\r\n".join(data)
++
++        def raise_for_status(self):
++            pass
++
++    return MockResponse()
+diff --git a/tests/test_audit.py b/tests/test_audit.py
+index d8c7a9a..5e0a9cf 100644
+--- a/tests/test_audit.py
++++ b/tests/test_audit.py
+@@ -17,12 +17,13 @@
+ #
+ 
+ from .. import pass_audit
+-from tests.commons import TestPass
+-
++from tests.commons import TestPass, mock_request
++from unittest import mock
+ 
+ class TestPassAudit(TestPass):
+     passwords_nb = 7
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_password_notpwned(self):
+         """Testing: pass audit for password not breached with K-anonymity method."""
+         data = self._getdata("Password/notpwned")
+@@ -30,9 +31,10 @@ class TestPassAudit(TestPass):
+         breached = audit.password()
+         self.assertTrue(len(breached) == 0)
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_password_pwned(self):
+         """Testing: pass audit for password breached with K-anonymity method."""
+-        ref_counts = [51259, 3, 114, 1352, 3645804, 78773, 396]
++        ref_counts = [52579, 3, 120, 1386, 3730471, 123422, 411]
+         data = self._getdata("Password/pwned")
+         audit = pass_audit.PassAudit(data)
+         breached = audit.password()
+diff --git a/tests/test_pass_audit.py b/tests/test_pass_audit.py
+index 4c10f87..2c949f7 100644
+--- a/tests/test_pass_audit.py
++++ b/tests/test_pass_audit.py
+@@ -19,7 +19,8 @@
+ import os
+ 
+ from .. import pass_audit
+-from tests.commons import TestPass
++from tests.commons import TestPass, mock_request
++from unittest import mock
+ 
+ 
+ class TestPassAuditCMD(TestPass):
+@@ -47,6 +48,7 @@ class TestPassAuditCMD(TestPass):
+         cmd = ['--not-an-option', '-q']
+         self._passaudit(cmd, 2)
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_StoreNotInitialized(self):
+         """Testing: store not initialized."""
+         cmd = ['Password/', '-v']
+@@ -56,6 +58,7 @@ class TestPassAuditCMD(TestPass):
+         os.rename(os.path.join(self.store.prefix, 'backup.gpg-id'),
+                   os.path.join(self.store.prefix, '.gpg-id'))
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_InvalidID(self):
+         """Testing: invalid user ID."""
+         os.rename(os.path.join(self.store.prefix, '.gpg-id'),
+@@ -66,26 +69,31 @@ class TestPassAuditCMD(TestPass):
+         os.rename(os.path.join(self.store.prefix, 'backup.gpg-id'),
+                   os.path.join(self.store.prefix, '.gpg-id'))
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_NotAFile(self):
+         """Testing: pass audit not_a_file."""
+         cmd = ['not_a_file']
+         self._passaudit(cmd, 1)
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_passwords_notpwned(self):
+         """Testing: pass audit Password/notpwned."""
+         cmd = ['Password/notpwned']
+         self._passaudit(cmd)
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_passwords_pwned(self):
+         """Testing: pass audit Password/pwned."""
+         cmd = ['Password/pwned']
+         self._passaudit(cmd)
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_passwords_good(self):
+         """Testing: pass audit Password/good."""
+         cmd = ['Password/good']
+         self._passaudit(cmd)
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_pass_audit_passwords_all(self):
+         """Testing: pass audit ."""
+         cmd = ['']
+diff --git a/tests/test_pwned.py b/tests/test_pwned.py
+index 5ce6bc6..c28939a 100644
+--- a/tests/test_pwned.py
++++ b/tests/test_pwned.py
+@@ -17,7 +17,8 @@
+ #
+ 
+ from .. import pass_audit
+-from tests.commons import TestPass
++from tests.commons import TestPass, mock_request
++from unittest import mock
+ 
+ 
+ class TestPwnedAPI(TestPass):
+@@ -25,12 +26,13 @@ class TestPwnedAPI(TestPass):
+     def setUp(self):
+         self.api = pass_audit.PwnedAPI()
+ 
++    @mock.patch('requests.get', mock_request)
+     def test_password_range(self):
+         """Testing: https://api.haveibeenpwned.com/range API."""
+         prefix = '21BD1'
+         Hash = '21BD12DC183F740EE76F27B78EB39C8AD972A757'
+         hashes, counts = self.api.password_range(prefix)
+         self.assertIn(Hash, hashes)
+-        self.assertTrue(counts[hashes.index(Hash)] == 51259)
++        self.assertTrue(counts[hashes.index(Hash)] == 52579)
+         self.assertTrue(len(hashes) == len(counts))
+-        self.assertTrue(len(hashes) == 527)
++        self.assertTrue(len(hashes) == 11)
+-- 
+2.25.0
+

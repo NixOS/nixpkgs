@@ -100,7 +100,7 @@ stdenv.mkDerivation (rec {
     );
 
     crateFeatures = lib.optionalString (crate ? features)
-      (lib.concatMapStringsSep " " (f: "--cfg feature=\\\"${f}\\\"") (crate.features ++ features));
+      (lib.concatMapStringsSep " " (f: ''--cfg feature=\"${f}\"'') (crate.features ++ features));
 
     libName = if crate ? libName then crate.libName else crate.crateName;
     libPath = if crate ? libPath then crate.libPath else "";

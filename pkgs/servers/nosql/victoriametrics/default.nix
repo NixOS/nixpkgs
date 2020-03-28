@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
@@ -12,10 +12,7 @@ buildGoModule rec {
   };
 
   modSha256 = "0qzh3jmj7ps6xmnnmfr8bnq97kdkn58p6dxppmlypanar3zsn7vk";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = "https://victoriametrics.com/";
     description = "fast, cost-effective and scalable time series database, long-term remote storage for Prometheus";
     license = licenses.asl20;
