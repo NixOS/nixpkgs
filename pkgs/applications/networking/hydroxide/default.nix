@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch, Security }:
+{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "hydroxide";
@@ -13,8 +13,6 @@ buildGoModule rec {
 
   modSha256 = "0b19rcif8yiyvhrsjd3q5nsvr580lklamlphx4dk47n456ckcqfp";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   # FIXME: remove with next release
   patches = [
     (fetchpatch {
@@ -25,7 +23,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/hydroxide" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "A third-party, open-source ProtonMail bridge";
     homepage = "https://github.com/emersion/hydroxide";
     license = licenses.mit;

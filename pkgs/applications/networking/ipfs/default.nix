@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ipfs";
@@ -17,8 +17,6 @@ buildGoModule rec {
   '';
 
   modSha256 = "12m4ind1s8zaa6kssblc28z2cafy20w2jp80kzif39hg5ar9bijm";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "A global, versioned, peer-to-peer filesystem";

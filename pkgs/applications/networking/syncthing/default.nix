@@ -1,4 +1,4 @@
-{ buildGoModule, stdenv, lib, procps, fetchFromGitHub, libobjc, CoreServices, Foundation }:
+{ buildGoModule, stdenv, lib, procps, fetchFromGitHub }:
 
 let
   common = { stname, target, postInstall ? "" }:
@@ -14,8 +14,6 @@ let
       };
 
       modSha256 = "1qq0979cm42wd3scy3blyi0hg67mkghis9r5rn2x1lqi2b982wfh";
-
-      buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libobjc CoreServices Foundation ];
 
       patches = [
         ./add-stcli-target.patch

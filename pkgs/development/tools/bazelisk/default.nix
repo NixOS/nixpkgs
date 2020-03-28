@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "bazelisk";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "1w8k659ifapcxbbim0nf7wd7w10bhlagc33q08izh84gcgsh0yyz";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "A user-friendly launcher for Bazel";

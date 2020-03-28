@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Foundation }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "yggdrasil";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "057yl3i29kwpd129aa2rb67s5rmz898fi2a7lxv3nfjp7018s9qw";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Foundation ];
 
   # Change the default location of the management socket on Linux
   # systems so that the yggdrasil system service unit does not have to
@@ -29,7 +27,7 @@ buildGoModule rec {
       -s -w
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description =
       "An experiment in scalable routing as an encrypted IPv6 overlay network";
     homepage = "https://yggdrasil-network.github.io/";

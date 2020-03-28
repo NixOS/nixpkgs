@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "terracognita";
@@ -13,13 +13,11 @@ buildGoModule rec {
 
   modSha256 = "0xlhp8pa5g6an10m56g237pixc4h6ay89hkp1ijdz45iyfn9fk91";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "." ];
 
   buildFlagsArray = [ "-ldflags=-s -w -X github.com/cycloidio/terracognita/cmd.Version=${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Reads from existing Cloud Providers (reverse Terraform) and generates your infrastructure as code on Terraform configuration";
     homepage = "https://github.com/cycloidio/terracognita";
     license = licenses.mit;

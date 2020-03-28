@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs, Security }:
+{ lib, buildGoModule, fetchFromGitHub, go-bindata, go-bindata-assetfs }:
 
 buildGoModule rec {
   pname = "documize-community";
@@ -15,8 +15,6 @@ buildGoModule rec {
 
   nativeBuildInputs = [ go-bindata go-bindata-assetfs ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "edition/community.go" ];
 
   postInstall = ''
@@ -25,7 +23,7 @@ buildGoModule rec {
     mv $out/bin/community $out/bin/documize
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Open source Confluence alternative for internal & external docs built with Golang + EmberJS";
     license = licenses.agpl3;
     maintainers = with maintainers; [ ma27 elseym ];

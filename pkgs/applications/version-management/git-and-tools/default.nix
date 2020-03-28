@@ -34,9 +34,7 @@ let
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  ghq = callPackage ./ghq {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  ghq = callPackage ./ghq { };
 
   git = appendToName "minimal" gitBase;
 
@@ -67,9 +65,7 @@ let
 
   git-appraise = callPackage ./git-appraise {};
 
-  git-bug = callPackage ./git-bug {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  git-bug = callPackage ./git-bug { };
 
   # support for bugzilla
   git-bz = callPackage ./git-bz { };
@@ -140,9 +136,7 @@ let
 
   git-subrepo = callPackage ./git-subrepo { };
 
-  git-subtrac = callPackage ./git-subtrac {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  git-subtrac = callPackage ./git-subtrac { };
 
   git-sync = callPackage ./git-sync { };
 
@@ -183,13 +177,9 @@ let
     inherit (darwin) Security;
   };
 
-  lab = callPackage ./lab {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  lab = callPackage ./lab { };
 
-  lefthook = callPackage ./lefthook {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  lefthook = callPackage ./lefthook { };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

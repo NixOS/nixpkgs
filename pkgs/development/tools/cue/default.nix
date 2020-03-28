@@ -1,4 +1,4 @@
-{ buildGoModule, fetchgit, stdenv, Security }:
+{ buildGoModule, fetchgit, stdenv }:
 
 buildGoModule rec {
   pname = "cue";
@@ -11,8 +11,6 @@ buildGoModule rec {
   };
 
   modSha256 = "04dapx75zwi8cv1pj3c6266znrhwihv3df4izm3gjk34r2i07q6s";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [ "cmd/cue" ];
 

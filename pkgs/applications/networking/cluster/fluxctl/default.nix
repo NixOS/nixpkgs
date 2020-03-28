@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "fluxctl";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "0ij5q31a0818nmqsdql1ii6rhq6nb0liplnw509qih8py7dk5xkg";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   subPackages = [ "cmd/fluxctl" ];
 

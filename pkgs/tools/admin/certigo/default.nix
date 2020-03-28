@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "certigo";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "1i5n5yh6nvv2i2nm60vqy1gngj8p5w6ma5fcwmp7bl4jxjrzbi83";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "A utility to examine and validate certificates in a variety of formats";
