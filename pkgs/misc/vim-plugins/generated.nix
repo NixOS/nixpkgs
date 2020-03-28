@@ -1474,6 +1474,17 @@ let
     };
   };
 
+  gruvbox-community = buildVimPluginFrom2Nix {
+    pname = "gruvbox-community";
+    version = "2020-02-24";
+    src = fetchFromGitHub {
+      owner = "gruvbox-community";
+      repo = "gruvbox";
+      rev = "f5711c15480b83378bde13306fa997057c0c81cd";
+      sha256 = "0vx289a7av31dxm58c6kmfdnsrwnq1rzj5rwci2pqjdac8ds2qm0";
+    };
+  };
+
   gundo-vim = buildVimPluginFrom2Nix {
     pname = "gundo-vim";
     version = "2020-01-15";
