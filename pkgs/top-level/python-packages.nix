@@ -904,6 +904,8 @@ in {
     mpi = pkgs.openmpi;
   };
 
+  python-baseconv = callPackage ../development/python-modules/python-baseconv { };
+
   pycognito = callPackage ../development/python-modules/pycognito { };
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
