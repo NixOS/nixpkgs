@@ -4560,6 +4560,8 @@ in
 
   libsmi = callPackage ../development/libraries/libsmi { };
 
+  libgen-cli = callPackage ../tools/misc/libgen-cli { };
+
   licensor = callPackage ../tools/misc/licensor { };
 
   lesspipe = callPackage ../tools/misc/lesspipe { };
