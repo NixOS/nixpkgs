@@ -9371,19 +9371,11 @@ in
   pachyderm = callPackage ../applications/networking/cluster/pachyderm { };
 
   php = php74;
+
   phpPackages = php74Packages;
-
-  php72Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php72base;
-  });
-
-  php73Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php73base;
-  });
-
-  php74Packages = recurseIntoAttrs (callPackage ./php-packages.nix {
-    php = php74base;
-  });
+  php72Packages = recurseIntoAttrs php72.packages;
+  php73Packages = recurseIntoAttrs php73.packages;
+  php74Packages = recurseIntoAttrs php74.packages;
 
   inherit (callPackages ../development/interpreters/php {
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;

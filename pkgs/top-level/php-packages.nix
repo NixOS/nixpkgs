@@ -1,25 +1,28 @@
-{ stdenv, lib, pkgs, fetchgit, php, autoconf, pkgconfig, re2c, gettext
-, bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium, html-tidy
-, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl, uwimap
-, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng, freetype
-, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit, readline
+{ stdenv, lib, pkgs, fetchgit, php, phpWithExtensions, autoconf, pkgconfig, re2c
+, gettext, bzip2, curl, libxml2, openssl, gmp, icu, oniguruma, libsodium
+, html-tidy, libzip, zlib, pcre, pcre2, libxslt, aspell, openldap, cyrus_sasl
+, uwimap, pam, libiconv, enchant1, libXpm, gd, libwebp, libjpeg, libpng
+, freetype, libffi, freetds, postgresql, sqlite, net-snmp, unixODBC, libedit
+, readline, rsync
 }:
 
 let
-  self = with self; {
-    buildPecl = import ../build-support/build-pecl.nix {
-      inherit php;
-      inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
-    };
+  buildPecl = import ../build-support/build-pecl.nix {
+    inherit php lib;
+    inherit (pkgs) stdenv autoreconfHook fetchurl re2c;
+  };
 
-    # Wrap mkDerivation to prepend pname with "php-" to make names consistent
-    # with how buildPecl does it and make the file easier to overview.
-    mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
-      pname = "php-${pname}";
-    });
+  # Wrap mkDerivation to prepend pname with "php-" to make names consistent
+  # with how buildPecl does it and make the file easier to overview.
+  mkDerivation = { pname, ... }@args: pkgs.stdenv.mkDerivation (args // {
+    pname = "php-${pname}";
+  });
 
   isPhp73 = pkgs.lib.versionAtLeast php.version "7.3";
   isPhp74 = pkgs.lib.versionAtLeast php.version "7.4";
+in
+{
+  inherit buildPecl;
 
   apcu = buildPecl {
     version = "5.1.18";
@@ -41,7 +44,10 @@ let
 
     sha256 = "0ma00syhk2ps9k9p02jz7rii6x3i2p986il23703zz5npd6y9n20";
 
-    buildInputs = [ apcu (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+    buildInputs = [
+      php.packages.apcu
+      (if isPhp73 then pkgs.pcre2 else pkgs.pcre)
+    ];
   };
 
   ast = buildPecl {
@@ -111,7 +117,12 @@ let
     version = "2.6.1";
     pname = "couchbase";
 
-    buildInputs = [ pkgs.libcouchbase pkgs.zlib igbinary pcs ];
+    buildInputs = [
+      pkgs.libcouchbase
+      pkgs.zlib
+      php.packages.igbinary
+      php.packages.pcs
+    ];
 
     src = pkgs.fetchFromGitHub {
       owner = "couchbase";
@@ -139,8 +150,8 @@ let
              igbinary_inc_path="$phpincludedir"
            elif test -f "$phpincludedir/ext/igbinary/igbinary.h"; then
              igbinary_inc_path="$phpincludedir"
-        +  elif test -f "${igbinary.dev}/include/ext/igbinary/igbinary.h"; then
-        +    igbinary_inc_path="${igbinary.dev}/include"
+        +  elif test -f "${php.packages.igbinary.dev}/include/ext/igbinary/igbinary.h"; then
+        +    igbinary_inc_path="${php.packages.igbinary.dev}/include"
            fi
            if test "$igbinary_inc_path" = ""; then
              AC_MSG_WARN([Cannot find igbinary.h])
@@ -353,7 +364,11 @@ let
       sha256 = "16nv8yyk2z3l213dg067l6di4pigg5rd8yswr5xgd18jwbys2vnw";
     };
 
-    buildInputs = [ pkgs.makeWrapper composer box ];
+    buildInputs = [
+      pkgs.makeWrapper
+      php.packages.composer
+      php.packages.box
+    ];
 
     buildPhase = ''
       composer dump-autoload
@@ -1024,4 +1039,4 @@ let
 
     # Produce the final attribute set of all extensions defined.
   in builtins.listToAttrs namedExtensions;
-}; in self
+}

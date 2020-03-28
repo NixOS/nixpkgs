@@ -144,13 +144,17 @@ let
     };
   };
 
-  generic' = { version, sha256, ... }@args:
+  generic' = { version, sha256, self, selfWithExtensions, ... }@args:
     let
-      php = generic args;
+      php = generic (builtins.removeAttrs args [ "self" "selfWithExtensions" ]);
+      packages = callPackage ../../../top-level/php-packages.nix {
+        php = self;
+        phpWithExtensions = selfWithExtensions;
+      };
       buildEnv = { exts ? (_: []), extraConfig ? "" }:
         let
           getExtName = ext: lib.removePrefix "php-" (builtins.parseDrvName ext.name).name;
-          extList = exts (callPackage ../../../top-level/php-packages.nix { inherit php; });
+          extList = exts packages;
 
           # Generate extension load configuration snippets from
           # exts. This is an attrset suitable for use with
@@ -182,7 +186,9 @@ let
             name = "php-with-extensions-${version}";
             inherit version;
             nativeBuildInputs = [ makeWrapper ];
-            passthru.buildEnv = buildEnv;
+            passthru = {
+              inherit buildEnv packages;
+            };
             paths = [ php ];
             postBuild = ''
               wrapProgram $out/bin/php \
@@ -193,12 +199,16 @@ let
           };
     in
       php.overrideAttrs (_: {
-        passthru.buildEnv = buildEnv;
+        passthru = {
+          inherit buildEnv packages;
+        };
       });
 
   php72base = generic' {
     version = "7.2.28";
     sha256 = "18sjvl67z5a2x5s2a36g6ls1r3m4hbrsw52hqr2qsgfvg5dkm5bw";
+    self = php72base;
+    selfWithExtensions = php72;
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php72-darwin-isfinite.patch;
@@ -207,6 +217,8 @@ let
   php73base = generic' {
     version = "7.3.15";
     sha256 = "0g84hws15s8gh8iq4h6q747dyfazx47vh3da3whz8d80x83ibgld";
+    self = php73base;
+    selfWithExtensions = php73;
 
     # https://bugs.php.net/bug.php?id=76826
     extraPatches = lib.optional stdenv.isDarwin ./php73-darwin-isfinite.patch;
@@ -215,6 +227,8 @@ let
   php74base = generic' {
     version = "7.4.3";
     sha256 = "wVF7pJV4+y3MZMc6Ptx21PxQfEp6xjmYFYTMfTtMbRQ=";
+    self = php74base;
+    selfWithExtensions = php74;
   };
 
   defaultPhpExtensions = {
@@ -226,10 +240,11 @@ let
       tokenizer xmlreader xmlwriter zip zlib
     ] ++ lib.optionals (!stdenv.isDarwin) [ imap ]);
   };
-in {
-  inherit php72base php73base php74base;
 
   php74 = php74base.buildEnv defaultPhpExtensions;
   php73 = php73base.buildEnv defaultPhpExtensions;
   php72 = php72base.buildEnv defaultPhpExtensions;
+
+in {
+  inherit php72base php73base php74base php72 php73 php74;
 }
