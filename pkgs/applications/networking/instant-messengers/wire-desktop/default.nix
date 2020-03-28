@@ -65,7 +65,7 @@ let
       genericName = "Secure messenger";
       categories = "Network;InstantMessaging;Chat;VideoConference";
       extraEntries = ''
-        StartupWMClass="Wire"
+        StartupWMClass=Wire
       '';
     };
 
