@@ -1,4 +1,13 @@
-{ lib, buildRustCrate, runCommand, runCommandCC, writeTextFile, symlinkJoin, callPackage, releaseTools }:
+{ lib
+, stdenv
+, buildRustCrate
+, runCommand
+, runCommandCC
+, writeTextFile
+, symlinkJoin
+, callPackage
+, releaseTools
+}:
 let
   mkCrate = args: let
     p = {
@@ -284,12 +293,18 @@ let
           ];
         };
         buildInputs = let
-          compile = name: text: runCommandCC name {} ''
-            mkdir -p $out/lib
-            $CC -shared -o $out/lib/${name}.so ${writeTextFile {
+          compile = name: text: let
+            src = writeTextFile {
               name = "${name}-src.c";
               inherit text;
-            }}
+            };
+          in runCommandCC name {} ''
+            mkdir -p $out/lib
+            # Note: On darwin (which defaults to clang) we have to add
+            # `-undefined dynamic_lookup` as otherwise the compilation fails.
+            cc -shared \
+              ${lib.optionalString stdenv.isDarwin "-undefined dynamic_lookup"} \
+              -o $out/lib/${name}${stdenv.hostPlatform.extensions.sharedLibrary} ${src}
           '';
           b = compile "libb" ''
             #include <stdio.h>
