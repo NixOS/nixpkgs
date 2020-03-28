@@ -564,7 +564,7 @@ in {
                 add_header Referrer-Policy no-referrer;
                 access_log off;
               '';
-              "~ \\.(?:png|html|ttf|ico|jpg|jpeg)$".extraConfig = ''
+              "~ \\.(?:png|html|ttf|ico|jpg|jpeg|bcmap|mp4|webm)$".extraConfig = ''
                 try_files $uri /index.php$request_uri;
                 access_log off;
               '';
