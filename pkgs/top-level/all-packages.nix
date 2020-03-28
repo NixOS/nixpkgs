@@ -21384,7 +21384,7 @@ in
 
   pianobar = callPackage ../applications/audio/pianobar { };
 
-  pianobooster = callPackage ../applications/audio/pianobooster { };
+  pianobooster = qt5.callPackage ../applications/audio/pianobooster { };
 
   picard = callPackage ../applications/audio/picard { };
 
