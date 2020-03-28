@@ -1,4 +1,5 @@
-{ stdenv, buildGoPackage, fetchFromGitHub, curl, libgit2, ncurses, pkgconfig, readline }:
+{ stdenv, buildGoPackage, fetchFromGitHub, curl, ncurses, pkgconfig, readline
+, cmake }:
 let
   version = "0.3.2";
 in
@@ -6,8 +7,8 @@ buildGoPackage {
   pname = "grv";
   inherit version;
 
-  buildInputs = [ ncurses readline curl libgit2 ];
-  nativeBuildInputs = [ pkgconfig ];
+  buildInputs = [ ncurses readline curl ];
+  nativeBuildInputs = [ pkgconfig cmake ];
 
   goPackagePath = "github.com/rgburke/grv";
 
@@ -23,7 +24,21 @@ buildGoPackage {
     rm util/update_latest_release.go
   '';
 
-  buildFlagsArray = [ "-ldflags=" "-X main.version=${version}" ];
+  postConfigure = ''
+    cd $NIX_BUILD_TOP/go/src/$goPackagePath
+  '';
+
+  buildPhase = ''
+    runHook preBuild
+    make build-only
+    runHook postBuild
+  '';
+
+  installPhase = ''
+    runHook preInstall
+    install -D grv $bin/bin/grv
+    runHook postInstall
+  '';
 
   meta = with stdenv.lib; {
     description = "GRV is a terminal interface for viewing Git repositories";
