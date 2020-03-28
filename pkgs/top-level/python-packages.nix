@@ -509,6 +509,8 @@ in {
 
   breezy = callPackage ../development/python-modules/breezy { };
 
+  ciso8601 = callPackage ../development/python-modules/ciso8601 { };
+
   deepdiff = callPackage ../development/python-modules/deepdiff { };
 
   django-sesame = callPackage ../development/python-modules/django-sesame { };
@@ -901,6 +903,8 @@ in {
   mpi4py = callPackage ../development/python-modules/mpi4py {
     mpi = pkgs.openmpi;
   };
+
+  pycognito = callPackage ../development/python-modules/pycognito { };
 
   python-mpv-jsonipc = callPackage ../development/python-modules/python-mpv-jsonipc { };
 
