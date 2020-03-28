@@ -222,16 +222,17 @@ def get_current_plugins() -> List[Plugin]:
 
 
 def prefetch_plugin(
-    user: str, repo_name: str, alias: str, cache: "Cache"
+    user: str, repo_name: str, alias: str, cache: "Cache" = None
 ) -> Tuple[Plugin, Dict[str, str]]:
     repo = Repo(user, repo_name, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
-    cached_plugin = cache[commit]
-    if cached_plugin is not None:
-        cached_plugin.name = alias or repo_name
-        cached_plugin.date = date
-        return cached_plugin, repo.redirect
+    if cache is not None:
+        cached_plugin = cache[commit]
+        if cached_plugin is not None:
+            cached_plugin.name = alias or repo_name
+            cached_plugin.date = date
+            return cached_plugin, repo.redirect
 
     print(f"prefetch {user}/{repo_name}")
     if has_submodules:
@@ -524,21 +525,30 @@ class NixpkgsRepo:
         return self.repo.is_dirty() and not self.allow_dirty
 
 
-def update_plugins(input_file: str, outfile: str, cache: Cache) -> Dict:
-    plugin_names = load_plugin_spec(input_file)
-    prefetch_with_cache = functools.partial(prefetch, cache=cache)
+class PluginUpdater:
+    def __init__(self, input_file: str, outfile: str, proc: int):
+        self.input_file: str = input_file
+        self.outfile: str = outfile
+        self.proc = proc
+        self.cache: Cache = Cache(get_current_plugins())
+        self.prefetch = functools.partial(prefetch, cache=self.cache)
 
-    try:
-        pool = Pool(processes=args.proc)
-        results = pool.map(prefetch_with_cache, plugin_names)
-    finally:
-        cache.store()
+    def __call__(self) -> Dict:
+        plugin_names = load_plugin_spec(self.input_file)
 
-    plugins, redirects = check_results(results)
+        try:
+            # synchronous variant for debugging
+            # results = list(map(self.prefetch, plugin_names))
+            pool = Pool(processes=self.proc)
+            results = pool.map(self.prefetch, plugin_names)
+        finally:
+            self.cache.store()
 
-    generate_nix(plugins, outfile)
+        plugins, redirects = check_results(results)
 
-    return redirects
+        generate_nix(plugins, self.outfile)
+
+        return redirects
 
 
 def main() -> None:
@@ -547,26 +557,24 @@ def main() -> None:
         raise Exception("The --add argument requires setting the --commit flag.")
     if args.commit:
         nixpkgs_repo = NixpkgsRepo(args.allow_dirty)
-    current_plugins = get_current_plugins()
-    cache = Cache(current_plugins)
-    redirects = {}
+    updater = PluginUpdater(args.input_file, args.outfile, args.proc)
 
-    redirects = update_plugins(args.input_file, args.outfile, cache)
+    redirects = updater()
     rewrite_input(args.input_file, redirects)
 
     if args.commit:
         nixpkgs_repo.commit("vimPlugins: Update", [args.outfile])
         if redirects:
-            update_plugins(args.input_file, args.outfile, cache)
+            updater()
             nixpkgs_repo.commit(
                 "vimPlugins: Update redirects",
                 [args.outfile, args.input_file, DEPRECATED],
             )
         for plugin_line in args.add_plugins:
             rewrite_input(args.input_file, append=(plugin_line + "\n",))
-            update_plugins(args.input_file, args.outfile, cache)
+            updater()
 
-            plugin, _ = prefetch_plugin(*parse_plugin_line(plugin_line), cache)
+            plugin, _ = prefetch_plugin(*parse_plugin_line(plugin_line))
             nixpkgs_repo.commit(
                 "vimPlugins.{name}: init at {version}".format(
                     name=plugin.normalized_name, version=plugin.version
