@@ -1,4 +1,4 @@
-{ lib, buildRustCrate, runCommand, writeTextFile, symlinkJoin, callPackage, releaseTools }:
+{ lib, buildRustCrate, runCommand, runCommandCC, writeTextFile, symlinkJoin, callPackage, releaseTools }:
 let
   mkCrate = args: let
     p = {
@@ -257,6 +257,58 @@ let
             '')
           ];
         };
+      };
+      # Regression test for https://github.com/NixOS/nixpkgs/pull/83379
+      # link flag order should be preserved
+      linkOrder = {
+        src = symlinkJoin {
+          name = "buildrs-out-dir-overlay";
+          paths = [
+            (mkFile "build.rs" ''
+              fn main() {
+                // in the other order, linkage will fail
+                println!("cargo:rustc-link-lib=b");
+                println!("cargo:rustc-link-lib=a");
+              }
+            '')
+            (mkFile "src/main.rs" ''
+              extern "C" {
+                fn hello_world();
+              }
+              fn main() {
+                unsafe {
+                  hello_world();
+                }
+              }
+            '')
+          ];
+        };
+        buildInputs = let
+          compile = name: text: runCommandCC name {} ''
+            mkdir -p $out/lib
+            $CC -shared -o $out/lib/${name}.so ${writeTextFile {
+              name = "${name}-src.c";
+              inherit text;
+            }}
+          '';
+          b = compile "libb" ''
+            #include <stdio.h>
+
+            void hello();
+
+            void hello_world() {
+              hello();
+              printf(" world!\n");
+            }
+          '';
+          a = compile "liba" ''
+            #include <stdio.h>
+
+            void hello() {
+              printf("hello");
+            }
+          '';
+        in [ a b ];
       };
       rustCargoTomlInSubDir = {
         # The "workspace_member" can be set to the sub directory with the crate to build.

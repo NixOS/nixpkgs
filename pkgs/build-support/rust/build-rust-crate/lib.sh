@@ -105,11 +105,6 @@ setup_link_paths() {
   done
 
   if [[ -e target/link ]]; then
-     sort -u target/link.final > target/link.final.sorted
-     mv target/link.final.sorted target/link.final
-     sort -u target/link > target/link.sorted
-     mv target/link.sorted target/link
-
      tr '\n' ' ' < target/link > target/link_
      LINK=$(cat target/link_)
   fi
