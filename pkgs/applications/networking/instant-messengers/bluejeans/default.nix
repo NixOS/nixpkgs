@@ -2,56 +2,65 @@
 , fetchurl
 , rpmextract
 , patchelf
+, patchelfUnstable
 , libnotify
-, libcap
+, libuuid
 , cairo
+, cups
 , pango
 , fontconfig
 , udev
 , dbus
-, gtk2
+, gtk3
 , atk
+, at-spi2-atk
 , expat
 , gdk-pixbuf
 , freetype
 , nspr
 , glib
 , nss
-, gconf
 , libX11
+, libXrandr
 , libXrender
 , libXtst
 , libXdamage
+, libxcb
+, libXcursor
 , libXi
 , libXext
 , libXfixes
+, libXft
 , libXcomposite
+, libXScrnSaver
 , alsaLib
-, bash
+, pulseaudio
+, makeWrapper
 }:
 
 stdenv.mkDerivation rec {
   pname = "bluejeans";
-  version = "1.36.9";
+  version = "2.1.0";
 
-  src =
-    fetchurl {
-      url = "https://swdl.bluejeans.com/desktop/linux/1.36/${version}/bluejeans-${version}.x86_64.rpm";
-      sha256 = "0sbv742pzqd2cxn3kq10lfi16jah486i9kyrmi8l1rpb9fhyw2m1";
-    };
+  src = fetchurl {
+    url = "https://swdl.bluejeans.com/desktop-app/linux/${version}/BlueJeans.rpm";
+    sha256 = "1zhh0pla5gk75p8x84va9flvnk456pbcm1n6x8l82c9682fwr7dd";
+  };
 
-  nativeBuildInputs = [ patchelf rpmextract ];
+  nativeBuildInputs = [ rpmextract makeWrapper ];
 
   libPath =
     stdenv.lib.makeLibraryPath
       [
         libnotify
-        libcap
+        libuuid
         cairo
+        cups
         pango
         fontconfig
-        gtk2
+        gtk3
         atk
+        at-spi2-atk
         expat
         gdk-pixbuf
         dbus
@@ -59,41 +68,53 @@ stdenv.mkDerivation rec {
         freetype
         nspr
         glib
-        stdenv.cc
         stdenv.cc.cc.lib
         nss
-        gconf
         libX11
+        libXrandr
         libXrender
         libXtst
         libXdamage
+        libxcb
+        libXcursor
         libXi
         libXext
         libXfixes
+        libXft
         libXcomposite
+        libXScrnSaver
         alsaLib
+        pulseaudio
       ];
+
+  localtime64_stub = ./localtime64_stub.c;
 
   buildCommand = ''
     mkdir -p $out/bin/
     cd $out
     rpmextract $src
-    patchelf \
+    mv usr/share share
+    rmdir usr
+
+    ${patchelf}/bin/patchelf \
       --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
-      opt/bluejeans/bluejeans-bin
-    patchelf \
-      --set-rpath ${libPath} \
-      opt/bluejeans/bluejeans-bin
-    patchelf \
       --replace-needed libudev.so.0 libudev.so.1 \
-      opt/bluejeans/bluejeans-bin
-    ln -s $out/opt/bluejeans/bluejeans $out/bin/bluejeans
-    chmod +x $out/bin/bluejeans
-    patchShebangs $out
+      opt/BlueJeans/bluejeans-v2
+    ${patchelfUnstable}/bin/patchelf \
+      --set-interpreter $(cat $NIX_CC/nix-support/dynamic-linker) \
+      opt/BlueJeans/resources/BluejeansHelper
+
+    cc $localtime64_stub -shared -o "$out"/opt/BlueJeans/liblocaltime64_stub.so
+
+    makeWrapper $out/opt/BlueJeans/bluejeans-v2 $out/bin/bluejeans \
+      --set LD_LIBRARY_PATH "${libPath}":"${placeholder "out"}"/opt/BlueJeans \
+      --set LD_PRELOAD "$out"/opt/BlueJeans/liblocaltime64_stub.so
+
+    patchShebangs "$out"
   '';
 
   meta = with stdenv.lib; {
-    description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day.";
+    description = "Video, audio, and web conferencing that works together with the collaboration tools you use every day";
     homepage = "https://www.bluejeans.com";
     license = licenses.unfree;
     maintainers = with maintainers; [ veprbl ];
