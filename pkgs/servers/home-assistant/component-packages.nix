@@ -86,7 +86,7 @@
     "bme680" = ps: with ps; [ ]; # missing inputs: bme680 smbus-cffi
     "bmw_connected_drive" = ps: with ps; [ ]; # missing inputs: bimmer_connected
     "bom" = ps: with ps; [ ]; # missing inputs: bomradarloop
-    "braviatv" = ps: with ps; [ getmac]; # missing inputs: bravia-tv
+    "braviatv" = ps: with ps; [ bravia-tv getmac];
     "broadlink" = ps: with ps; [ broadlink];
     "brother" = ps: with ps; [ ]; # missing inputs: brother
     "brottsplatskartan" = ps: with ps; [ ]; # missing inputs: brottsplatskartan
