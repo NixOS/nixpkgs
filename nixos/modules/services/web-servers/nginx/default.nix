@@ -79,7 +79,7 @@ let
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
-        types_hash_max_size 2048;
+        types_hash_max_size 4096;
       ''}
 
       ssl_protocols ${cfg.sslProtocols};
