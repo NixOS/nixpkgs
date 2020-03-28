@@ -96,6 +96,8 @@ in {
       assertion = !config.networking.useDHCP;
       message = "You can not use services.connman with networking.useDHCP";
     }{
+      # TODO: connman seemingly can be used along network manager and
+      # connmanFull supports this - so this should be worked out somehow
       assertion = !config.networking.networkmanager.enable;
       message = "You can not use services.connman with networking.networkmanager";
     }];

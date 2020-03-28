@@ -5,6 +5,8 @@
   connman = callPackage ./connman.nix { };
 
   connmanFull = callPackage ./connman.nix {
+    # TODO: Why is this in `connmanFull` and not the default build? See TODO in
+    # nixos/modules/services/networking/connman.nix (near the assertions)
     enableNetworkManager = true;
     enableHh2serialGps = true;
     enableL2tp = true;
