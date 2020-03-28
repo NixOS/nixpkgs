@@ -130,11 +130,12 @@ in {
 
   epgsearch = stdenv.mkDerivation rec {
     pname = "vdr-epgsearch";
-    version = "2.4.0";
+    version = "20191202";
 
-    src = fetchurl {
-      url = "https://projects.vdr-developer.org/git/vdr-plugin-epgsearch.git/snapshot/vdr-plugin-epgsearch-${version}.tar.bz2";
-      sha256 = "0xfgn17vicyjwdf0rbkrik4q16mnfi305d4wmi8f0qk825pa0z3y";
+    src = fetchgit {
+      url = "git://projects.vdr-developer.org/vdr-plugin-epgsearch.git";
+      sha256 = "18kskwnnscr4rb4yzfikw1la318zjgraf340cl7n9z77chi2gi8m";
+      rev = "602d66c55964998ce25c6c57b302949a9517f149";
     };
 
     postPatch = ''
