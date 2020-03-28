@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "0.107.0";
+  version = "0.107.7";
   components = {
     "abode" = ps: with ps; [ ]; # missing inputs: abodepy
     "acer_projector" = ps: with ps; [ pyserial];
@@ -456,7 +456,7 @@
     "melissa" = ps: with ps; [ ]; # missing inputs: py-melissa-climate
     "meraki" = ps: with ps; [ aiohttp-cors];
     "message_bird" = ps: with ps; [ ]; # missing inputs: messagebird
-    "met" = ps: with ps; [ ]; # missing inputs: pyMetno
+    "met" = ps: with ps; [ pymetno];
     "meteo_france" = ps: with ps; [ ]; # missing inputs: meteofrance vigilancemeteo
     "meteoalarm" = ps: with ps; [ ]; # missing inputs: meteoalertapi
     "metoffice" = ps: with ps; [ ]; # missing inputs: datapoint
@@ -521,7 +521,7 @@
     "nmbs" = ps: with ps; [ ]; # missing inputs: pyrail
     "no_ip" = ps: with ps; [ ];
     "noaa_tides" = ps: with ps; [ ]; # missing inputs: py_noaa
-    "norway_air" = ps: with ps; [ ]; # missing inputs: pyMetno
+    "norway_air" = ps: with ps; [ pymetno];
     "notify" = ps: with ps; [ ];
     "notion" = ps: with ps; [ ]; # missing inputs: aionotion
     "nsw_fuel_station" = ps: with ps; [ ]; # missing inputs: nsw-fuel-api-client
@@ -682,7 +682,7 @@
     "shopping_list" = ps: with ps; [ aiohttp-cors];
     "sht31" = ps: with ps; [ ]; # missing inputs: Adafruit-GPIO Adafruit-SHT31
     "sigfox" = ps: with ps; [ ];
-    "sighthound" = ps: with ps; [ ]; # missing inputs: simplehound
+    "sighthound" = ps: with ps; [ pillow]; # missing inputs: simplehound
     "signal_messenger" = ps: with ps; [ ]; # missing inputs: pysignalclirestapi
     "simplepush" = ps: with ps; [ ]; # missing inputs: simplepush
     "simplisafe" = ps: with ps; [ ]; # missing inputs: simplisafe-python
