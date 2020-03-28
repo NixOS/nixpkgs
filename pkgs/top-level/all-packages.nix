@@ -22930,6 +22930,8 @@ in
 
   zim = callPackage ../applications/office/zim { };
 
+  zita-ajbridge = callPackage ../applications/audio/zita-ajbridge { };
+
   zita-at1 = callPackage ../applications/audio/zita-at1 { };
 
   zita-njbridge = callPackage ../applications/audio/zita-njbridge { };
