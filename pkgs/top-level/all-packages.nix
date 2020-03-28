@@ -2001,6 +2001,8 @@ in
 
   metabase = callPackage ../servers/metabase { };
 
+  midicsv = callPackage ../tools/audio/midicsv { };
+
   mididings = callPackage ../tools/audio/mididings { };
 
   miniserve = callPackage ../tools/misc/miniserve { };
