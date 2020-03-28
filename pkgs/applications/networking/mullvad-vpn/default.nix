@@ -1,7 +1,7 @@
 { stdenv, makeWrapper, fetchurl, dpkg
 , alsaLib, atk, cairo, cups, dbus, expat, fontconfig, freetype
 , gdk-pixbuf, glib, gnome2, pango, nspr, nss, gtk3
-, xorg, autoPatchelfHook, systemd, libnotify
+, xorg, autoPatchelfHook, systemd, libnotify, libappindicator
 }:
 
 let deps = [
@@ -18,6 +18,7 @@ let deps = [
     gnome2.GConf
     pango
     gtk3
+    libappindicator
     libnotify
     xorg.libX11
     xorg.libXScrnSaver
@@ -59,7 +60,7 @@ stdenv.mkDerivation rec {
 
   unpackPhase = "dpkg-deb -x $src .";
 
-  runtimeDependencies = [ systemd.lib libnotify ];
+  runtimeDependencies = [ systemd.lib libnotify libappindicator ];
 
   installPhase = ''
     runHook preInstall
