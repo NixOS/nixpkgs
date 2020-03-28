@@ -56,9 +56,11 @@ stdenv.mkDerivation rec {
   # tagged releases don't have "unknown"
   # kicad nightlies use git describe --dirty
   # nix removes .git, so its approximated here
+  # "-1" appended to indicate we're adding a patch
   postPatch = ''
     substituteInPlace CMakeModules/KiCadVersion.cmake \
-      --replace "unknown" ${builtins.substring 0 10 src.rev}
+      --replace "unknown" "${builtins.substring 0 10 src.rev}-1" \
+      --replace "${version}" "${version}-1"
   '';
 
   makeFlags = optional (debug) [ "CFLAGS+=-Og" "CFLAGS+=-ggdb" ];
@@ -123,7 +125,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.kicad-pcb.org/";
     license = licenses.agpl3;
-    maintainers = with maintainers; [ evils kiwi berce ];
-    platforms = with platforms; linux;
+    platforms = platforms.all;
   };
 }

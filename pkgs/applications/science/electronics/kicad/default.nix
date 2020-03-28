@@ -4,6 +4,7 @@
 , librsvg, cups
 
 , pname ? "kicad"
+, stable ? true
 , oceSupport ? false, opencascade
 , withOCCT ? true, opencascade-occt
 , ngspiceSupport ? true, libngspice
@@ -18,7 +19,6 @@ assert ngspiceSupport -> libngspice != null;
 with lib;
 let
 
-  stable = pname != "kicad-unstable";
   baseName = if (stable) then "kicad" else "kicad-unstable";
 
   versions =  import ./versions.nix;
@@ -122,10 +122,11 @@ stdenv.mkDerivation rec {
   # and can't git commit if this could be running in parallel with other scripts
   passthru.updateScript = [ ./update.sh "all" ];
 
-  meta = {
-    description = if (stable)
-      then "Open Source Electronics Design Automation Suite"
-      else "Open Source EDA Suite, Development Build";
+  meta = rec {
+    description = (if (stable)
+      then "Open Source Electronics Design Automation suite"
+      else "Open Source EDA suite, development build")
+      + (if (!with3d) then ", without 3D models" else "");
     homepage = "https://www.kicad-pcb.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.
@@ -133,12 +134,20 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.agpl3;
     # berce seems inactive...
-    maintainers = with maintainers; [ evils kiwi berce ];
-    # kicad's cross-platform, not sure what to fill in here
-    platforms = with platforms; linux;
-  } // optionalAttrs with3d {
-    # We can't download the 3d models on Hydra - they are a ~1 GiB download and
-    # they occupy ~5 GiB in store.
-    hydraPlatforms = [];
+    maintainers = with stdenv.lib.maintainers; [ evils kiwi berce ];
+    # kicad is cross platform
+    platforms = stdenv.lib.platforms.all;
+    # despite that, nipkgs' wxGTK for darwin is "wxmac"
+    # and wxPython_4_0 does not account for this
+    # adjusting this package to downgrade to python2Packages.wxPython (wxPython 3),
+    # seems like more trouble than fixing wxPython_4_0 would be
+    # additionally, libngspice is marked as linux only, though it should support darwin
+
+    hydraPlatforms = if (with3d) then [ ] else platforms;
+    # We can't download the 3d models on Hydra,
+    # they are a ~1 GiB download and they occupy ~5 GiB in store.
+    # as long as the base and libraries (minus 3d) are build,
+    # this wrapper does not need to get built
+    # the kicad-*small "packages" cause this to happen
   };
 }
