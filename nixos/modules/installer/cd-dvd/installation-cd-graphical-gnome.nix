@@ -8,6 +8,8 @@ with lib;
 {
   imports = [ ./installation-cd-graphical-base.nix ];
 
+  isoImage.edition = "gnome";
+
   services.xserver.desktopManager.gnome3.enable = true;
 
   # Auto-login as root.

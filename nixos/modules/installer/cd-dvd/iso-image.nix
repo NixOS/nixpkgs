@@ -417,8 +417,17 @@ in
       '';
     };
 
+    isoImage.edition = mkOption {
+      default = "";
+      description = ''
+        Specifies which edition string to use in the volume ID of the generated
+        ISO image.
+      '';
+    };
+
     isoImage.volumeID = mkOption {
-      default = "NIXOS_BOOT_CD";
+      # nixos-$EDITION-$RELEASE-$ARCH
+      default = "nixos${optionalString (config.isoImage.edition != "") "-${config.isoImage.edition}"}-${config.system.nixos.release}-${pkgs.stdenv.hostPlatform.system}";
       description = ''
         Specifies the label or volume ID of the generated ISO image.
         Note that the label is used by stage 1 of the boot process to
