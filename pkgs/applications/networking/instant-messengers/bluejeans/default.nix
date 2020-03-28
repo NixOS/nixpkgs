@@ -1,6 +1,33 @@
-{ stdenv, fetchurl, rpmextract, patchelf, libnotify, libcap, cairo, pango, fontconfig, udev, dbus
-, gtk2, atk, expat, gdk-pixbuf, freetype, nspr, glib, nss, gconf, libX11, libXrender, libXtst, libXdamage
-, libXi, libXext, libXfixes, libXcomposite, alsaLib, bash
+{ stdenv
+, fetchurl
+, rpmextract
+, patchelf
+, libnotify
+, libcap
+, cairo
+, pango
+, fontconfig
+, udev
+, dbus
+, gtk2
+, atk
+, expat
+, gdk-pixbuf
+, freetype
+, nspr
+, glib
+, nss
+, gconf
+, libX11
+, libXrender
+, libXtst
+, libXdamage
+, libXi
+, libXext
+, libXfixes
+, libXcomposite
+, alsaLib
+, bash
 }:
 
 stdenv.mkDerivation rec {
@@ -17,10 +44,35 @@ stdenv.mkDerivation rec {
 
   libPath =
     stdenv.lib.makeLibraryPath
-       [ libnotify libcap cairo pango fontconfig gtk2 atk expat gdk-pixbuf dbus udev.lib
-         freetype nspr glib stdenv.cc stdenv.cc.cc.lib nss gconf libX11 libXrender libXtst libXdamage
-         libXi libXext libXfixes libXcomposite alsaLib
-       ];
+      [
+        libnotify
+        libcap
+        cairo
+        pango
+        fontconfig
+        gtk2
+        atk
+        expat
+        gdk-pixbuf
+        dbus
+        udev.lib
+        freetype
+        nspr
+        glib
+        stdenv.cc
+        stdenv.cc.cc.lib
+        nss
+        gconf
+        libX11
+        libXrender
+        libXtst
+        libXdamage
+        libXi
+        libXext
+        libXfixes
+        libXcomposite
+        alsaLib
+      ];
 
   buildCommand = ''
     mkdir -p $out/bin/
