@@ -1,0 +1,13 @@
+diff --git a/jupyter_core/command.py b/jupyter_core/command.py
+index b9c60d2..d30e2fd 100644
+--- a/jupyter_core/command.py
++++ b/jupyter_core/command.py
+@@ -166,7 +166,7 @@ def _path_with_self():
+     else:
+         path_list.append(bindir)
+ 
+-    scripts = [sys.argv[0]]
++    scripts = [sys.argv[0],sys.executable]
+     if os.path.islink(scripts[0]):
+         # include realpath, if `jupyter` is a symlink
+         scripts.append(os.path.realpath(scripts[0]))

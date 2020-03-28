@@ -21,7 +21,10 @@ buildPythonPackage rec {
   checkInputs = [ pytest mock glibcLocales nose ];
   propagatedBuildInputs = [ ipython traitlets ];
 
-  patches = [ ./tests_respect_pythonpath.patch ];
+  patches = [
+    ./fix-search-path.patch
+    ./tests_respect_pythonpath.patch
+  ];
 
   checkPhase = ''
     HOME=$TMPDIR LC_ALL=en_US.utf8 py.test
