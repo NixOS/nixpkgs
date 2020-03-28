@@ -733,6 +733,7 @@ in
       , ...
     }@args: stdenv.mkDerivation ((builtins.removeAttrs args [ "name" ]) // {
       pname = "php-${name}";
+      extensionName = name;
 
       inherit (php) version src;
       sourceRoot = "php-${php.version}/ext/${name}";
@@ -755,13 +756,20 @@ in
         phpize
         ${postPhpize}
         ${lib.concatMapStringsSep "\n"
-          (dep: "mkdir -p ext; ln -s ../../${dep} ext/")
+          (dep: "mkdir -p ext; ln -s ${dep.dev}/include ext/${dep.extensionName}")
           internalDeps}
       '';
       checkPhase = "echo n | make test";
+      outputs = [ "out" "dev" ];
       installPhase = ''
         mkdir -p $out/lib/php/extensions
         cp modules/${name}.so $out/lib/php/extensions/${name}.so
+        mkdir -p $dev/include
+        ${rsync}/bin/rsync -r --filter="+ */" \
+                              --filter="+ *.h" \
+                              --filter="- *" \
+                              --prune-empty-dirs \
+                              . $dev/include/
       '';
     });
 
@@ -853,7 +861,7 @@ in
         doCheck = false; }
       { name = "mbstring"; buildInputs = [ oniguruma ]; doCheck = false; }
       { name = "mysqli";
-        internalDeps = [ "mysqlnd" ];
+        internalDeps = [ php.packages.exts.mysqlnd ];
         configureFlags = [ "--with-mysqli=mysqlnd" "--with-mysql-sock=/run/mysqld/mysqld.sock" ];
         doCheck = false; }
       { name = "mysqlnd";
@@ -914,27 +922,27 @@ in
       { name = "pcntl"; }
       { name = "pdo"; doCheck = false; }
       { name = "pdo_dblib";
-        internalDeps = [ "pdo" ];
+        internalDeps = [ php.packages.exts.pdo ];
         configureFlags = [ "--with-pdo-dblib=${freetds}" ];
         # Doesn't seem to work on darwin.
         enable = (!stdenv.isDarwin);
         doCheck = false; }
       # pdo_firebird (7.4, 7.3, 7.2)
       { name = "pdo_mysql";
-        internalDeps = [ "mysqlnd" "pdo" ];
+        internalDeps = with php.packages.exts; [ pdo mysqlnd ];
         configureFlags = [ "--with-pdo-mysql=mysqlnd" ];
         doCheck = false; }
       # pdo_oci (7.4, 7.3, 7.2)
       { name = "pdo_odbc";
-        internalDeps = [ "pdo" ];
+        internalDeps = [ php.packages.exts.pdo ];
         configureFlags = [ "--with-pdo-odbc=unixODBC,${unixODBC}" ];
         doCheck = false; }
       { name = "pdo_pgsql";
-        internalDeps = [ "pdo" ];
+        internalDeps = [ php.packages.exts.pdo ];
         configureFlags = [ "--with-pdo-pgsql=${postgresql}" ];
         doCheck = false; }
       { name = "pdo_sqlite";
-        internalDeps = [ "pdo" ];
+        internalDeps = [ php.packages.exts.pdo ];
         buildInputs = [ sqlite ];
         configureFlags = [ "--with-pdo-sqlite=${sqlite.dev}" ];
         doCheck = false; }
@@ -982,7 +990,7 @@ in
       { name = "tokenizer"; }
       { name = "wddx";
         buildInputs = [ libxml2 ];
-        internalDeps = [ "session" ];
+        internalDeps = [ php.extensions.session ];
         configureFlags = [ "--enable-wddx" "--with-libxml-dir=${libxml2.dev}" ];
         # Removed in php 7.4.
         enable = lib.versionOlder php.version "7.4"; }

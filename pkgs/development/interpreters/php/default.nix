@@ -171,7 +171,8 @@ let
                 in
                   lib.nameValuePair extName {
                     text = "${type}=${ext}/lib/php/extensions/${extName}.so";
-                    deps = lib.optionals (ext ? internalDeps) ext.internalDeps;
+                    deps = lib.optionals (ext ? internalDeps)
+                      (map getExtName ext.internalDeps);
                   })
                 extList);
 
