@@ -184,10 +184,10 @@ let
             passthru.buildEnv = buildEnv;
             paths = [ php ];
             postBuild = ''
-              wrapProgram $out/bin/php \
-                --add-flags "-c ${extraInit}"
-              wrapProgram $out/bin/php-fpm \
-                --add-flags "-c ${extraInit}"
+              cp ${extraInit} $out/lib/custom-php.ini
+
+              wrapProgram $out/bin/php     --set PHP_INI_SCAN_DIR $out/lib
+              wrapProgram $out/bin/php-fpm --set PHP_INI_SCAN_DIR $out/lib
             '';
           };
     in
