@@ -77,6 +77,13 @@ in {
         '';
       };
 
+      package = mkOption {
+        type = types.path;
+        description = "The connman package / build flavor";
+        default = connman;
+        example = literalExample "pkgs.connmanFull";
+      };
+
     };
 
   };
@@ -93,7 +100,7 @@ in {
       message = "You can not use services.connman with networking.networkmanager";
     }];
 
-    environment.systemPackages = [ connman ];
+    environment.systemPackages = [ cfg.package ];
 
     systemd.services.connman = {
       description = "Connection service";
@@ -105,7 +112,7 @@ in {
         BusName = "net.connman";
         Restart = "on-failure";
         ExecStart = toString ([
-          "${pkgs.connman}/sbin/connmand"
+          "${cfg.package}/sbin/connmand"
           "--config=${configFile}"
           "--nodaemon"
         ] ++ optional enableIwd "--wifi=iwd_agent"
@@ -122,7 +129,7 @@ in {
       serviceConfig = {
         Type = "dbus";
         BusName = "net.connman.vpn";
-        ExecStart = "${pkgs.connman}/sbin/connman-vpnd -n";
+        ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         StandardOutput = "null";
       };
     };
@@ -132,7 +139,7 @@ in {
       serviceConfig = {
         Name = "net.connman.vpn";
         before = [ "connman" ];
-        ExecStart = "${pkgs.connman}/sbin/connman-vpnd -n";
+        ExecStart = "${cfg.package}/sbin/connman-vpnd -n";
         User = "root";
         SystemdService = "connman-vpn.service";
       };
