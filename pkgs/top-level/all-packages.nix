@@ -2499,7 +2499,11 @@ in
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
-  connman = callPackage ../tools/networking/connman { };
+  inherit (callPackage ../tools/networking/connman {})
+    connman
+    connmanFull
+    connmanMinimal
+  ;
 
   connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
 
