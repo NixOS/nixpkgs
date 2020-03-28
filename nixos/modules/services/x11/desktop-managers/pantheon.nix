@@ -181,7 +181,6 @@ in
         hicolor-icon-theme
         lightlocker
         onboard
-        plank
         qgnomeplatform
         shared-mime-info
         sound-theme-freedesktop
@@ -195,6 +194,7 @@ in
 
         # Desktop
         elementary-default-settings
+        elementary-dock
         elementary-session-settings
         elementary-shortcut-overlay
         gala
