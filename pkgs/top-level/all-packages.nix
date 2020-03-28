@@ -17613,6 +17613,8 @@ in
     python3Packages = python36Packages;
   };
 
+  dgedit = libsForQt5.callPackage ../applications/audio/dgedit { };
+
   dgraph = callPackage ../servers/dgraph { };
 
   dico = callPackage ../servers/dico { };
