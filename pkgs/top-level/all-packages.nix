@@ -19838,8 +19838,6 @@ in
     });
 
   slack = callPackage ../applications/networking/instant-messengers/slack { };
-  slack-theme-black = callPackage ../applications/networking/instant-messengers/slack/dark-theme.nix { };
-  slack-dark = pkgs.slack.override { theme = slack-theme-black; };
 
   slack-cli = callPackage ../tools/networking/slack-cli { };
 
