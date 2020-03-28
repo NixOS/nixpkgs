@@ -416,12 +416,7 @@ in lib.fix' (lib.extends overrides packages)
     print(f"updated {outfile}")
 
 
-def commit_changes(repo: git.Repo, *files: Path):
-    repo.index.add([str(f.resolve()) for f in files])
-    repo.index.commit("vimPlugins: Update")
-
-
-def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
+def rewrite_input(input_file: Path, redirects: dict):
     with open(input_file, "r") as f:
         lines = f.readlines()
 
@@ -441,19 +436,6 @@ def rewrite_input(input_file: Path, output_file: Path, redirects: dict):
                 }
         with open(DEPRECATED, "w") as f:
             json.dump(deprecations, f, indent=4, sort_keys=True)
-
-        print(
-            f"""\
-Redirects have been detected and {input_file} has been updated. Please take the
-following steps:
-    1. Run this script again so these changes will be reflected in the
-    generated expressions:
-            ./update.py
-    2. Commit {input_file} along with deprecations and generated expressions:
-            git add {output_file} {input_file} {DEPRECATED}
-            git commit -m "vimPlugins: Update redirects"
-        """
-        )
 
     lines = sorted(lines, key=str.casefold)
 
@@ -496,25 +478,49 @@ def parse_args():
         action="store_true",
         help="Automatically commit updates",
     )
+    parser.add_argument(
+        "--allow-dirty",
+        dest="allow_dirty",
+        action="store_true",
+        help=(
+            "Allow commit to continue even if state is unexpectedly dirty. "
+            "This is only helpful when developing vimPlugins infrastructure."
+        ),
+    )
 
     return parser.parse_args()
 
 
-def get_nixpkgs_repo() -> git.Repo:
-    repo = git.Repo(NIXPKGS_PATH)
-    if repo.is_dirty():
-        raise Exception("Please stash your changes before updating.")
-    return repo
+class NixpkgsRepo:
+    def __init__(self, allow_dirty: bool):
+        self.allow_dirty: bool = allow_dirty
+        self.repo: git.Repo = git.Repo(NIXPKGS_PATH)
+
+        if self.is_unexpectedly_dirty():
+            raise Exception("Please stash changes before updating.")
+
+    def commit(self, message: str, files: List[Path]) -> None:
+        file_paths = [str(f.resolve()) for f in files]
+        files_changed = False
+        for f in self.repo.index.diff(None):
+            if str(f) in file_paths:
+                files_changed = True
+                break
+
+        if files_changed:
+            print(f'committing to nixpkgs "vimPlugins: {message}"')
+            self.repo.index.add(file_paths)
+            self.repo.index.commit(f"vimPlugins: {message}")
+            assert self.is_unexpectedly_dirty() is False
+        else:
+            print("no changes in working tree to commit")
+
+    def is_unexpectedly_dirty(self) -> bool:
+        return self.repo.is_dirty() and not self.allow_dirty
 
 
-def main() -> None:
-    args = parse_args()
-    if args.commit:
-        nixpkgs_repo = get_nixpkgs_repo()
-    plugin_names = load_plugin_spec(args.input_file)
-    current_plugins = get_current_plugins()
-    cache = Cache(current_plugins)
-
+def update_plugins(input_file: str, outfile: str, cache: Cache) -> Dict:
+    plugin_names = load_plugin_spec(input_file)
     prefetch_with_cache = functools.partial(prefetch, cache=cache)
 
     try:
@@ -525,12 +531,30 @@ def main() -> None:
 
     plugins, redirects = check_results(results)
 
-    generate_nix(plugins, args.outfile)
+    generate_nix(plugins, outfile)
 
-    rewrite_input(args.input_file, args.outfile, redirects)
+    return redirects
+
+
+def main() -> None:
+    args = parse_args()
+    if args.commit:
+        nixpkgs_repo = NixpkgsRepo(args.allow_dirty)
+    current_plugins = get_current_plugins()
+    cache = Cache(current_plugins)
+    redirects = {}
+
+    redirects = update_plugins(args.input_file, args.outfile, cache)
+
+    rewrite_input(args.input_file, redirects)
 
     if args.commit:
-        commit_changes(nixpkgs_repo, args.outfile)
+        nixpkgs_repo.commit("Update", [args.outfile])
+        if redirects:
+            update_plugins(args.input_file, args.outfile, cache)
+            nixpkgs_repo.commit(
+                "Update redirects", [args.outfile, args.input_file, DEPRECATED]
+            )
 
 
 if __name__ == "__main__":
