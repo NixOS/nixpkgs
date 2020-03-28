@@ -38,6 +38,7 @@ NIXPKGS_PATH = ROOT.cwd().parents[2]
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
 DEPRECATED = ROOT.joinpath("deprecated.json")
+OVERRIDES = ROOT.joinpath("overrides.nix")
 
 import time
 from functools import wraps
@@ -127,7 +128,7 @@ class Repo:
             new_owner, new_name = (
                 urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
             )
-            end_line = "\n" if self.alias is None else f" as {self.alias}\n"
+            end_line = "\n" if self.alias == "" else f" as {self.alias}\n"
             plugin_line = "{owner}/{name}" + end_line
 
             old_plugin = plugin_line.format(owner=self.owner, name=self.name)
@@ -280,17 +281,17 @@ def check_results(
         sys.exit(1)
 
 
-def parse_plugin_line(line: str) -> Tuple[str, str, Optional[str]]:
+def parse_plugin_line(line: str) -> Tuple[str, str, str]:
     name, repo = line.split("/")
     try:
         repo, alias = repo.split(" as ")
         return (name, repo, alias.strip())
     except ValueError:
         # no alias defined
-        return (name, repo.strip(), None)
+        return (name, repo.strip(), "")
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, Optional[str]]]:
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, str]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -416,9 +417,11 @@ in lib.fix' (lib.extends overrides packages)
     print(f"updated {outfile}")
 
 
-def rewrite_input(input_file: Path, redirects: dict):
+def rewrite_input(input_file: Path, redirects: dict = None, append: Tuple = ()):
     with open(input_file, "r") as f:
         lines = f.readlines()
+
+    lines.extend(append)
 
     if redirects:
         lines = [redirects.get(line, line) for line in lines]
@@ -449,6 +452,14 @@ def parse_args():
             "Updates nix derivations for vim plugins"
             f"By default from {DEFAULT_IN} to {DEFAULT_OUT}"
         )
+    )
+    parser.add_argument(
+        "--add",
+        "-a",
+        dest="add_plugins",
+        default=[],
+        action="append",
+        help="Plugin to add to vimPlugins in the form owner/repo",
     )
     parser.add_argument(
         "--input-names",
@@ -500,17 +511,11 @@ class NixpkgsRepo:
             raise Exception("Please stash changes before updating.")
 
     def commit(self, message: str, files: List[Path]) -> None:
-        file_paths = [str(f.resolve()) for f in files]
-        files_changed = False
-        for f in self.repo.index.diff(None):
-            if str(f) in file_paths:
-                files_changed = True
-                break
+        files_staged = self.repo.index.add([str(f.resolve()) for f in files])
 
-        if files_changed:
-            print(f'committing to nixpkgs "vimPlugins: {message}"')
-            self.repo.index.add(file_paths)
-            self.repo.index.commit(f"vimPlugins: {message}")
+        if files_staged:
+            print(f'committing to nixpkgs "{message}"')
+            self.repo.index.commit(message)
             assert self.is_unexpectedly_dirty() is False
         else:
             print("no changes in working tree to commit")
@@ -538,6 +543,8 @@ def update_plugins(input_file: str, outfile: str, cache: Cache) -> Dict:
 
 def main() -> None:
     args = parse_args()
+    if args.add_plugins and not args.commit:
+        raise Exception("The --add argument requires setting the --commit flag.")
     if args.commit:
         nixpkgs_repo = NixpkgsRepo(args.allow_dirty)
     current_plugins = get_current_plugins()
@@ -545,15 +552,26 @@ def main() -> None:
     redirects = {}
 
     redirects = update_plugins(args.input_file, args.outfile, cache)
-
     rewrite_input(args.input_file, redirects)
 
     if args.commit:
-        nixpkgs_repo.commit("Update", [args.outfile])
+        nixpkgs_repo.commit("vimPlugins: Update", [args.outfile])
         if redirects:
             update_plugins(args.input_file, args.outfile, cache)
             nixpkgs_repo.commit(
-                "Update redirects", [args.outfile, args.input_file, DEPRECATED]
+                "vimPlugins: Update redirects",
+                [args.outfile, args.input_file, DEPRECATED],
+            )
+        for plugin_line in args.add_plugins:
+            rewrite_input(args.input_file, append=(plugin_line + "\n",))
+            update_plugins(args.input_file, args.outfile, cache)
+
+            plugin, _ = prefetch_plugin(*parse_plugin_line(plugin_line), cache)
+            nixpkgs_repo.commit(
+                "vimPlugins.{name}: init at {version}".format(
+                    name=plugin.normalized_name, version=plugin.version
+                ),
+                [args.outfile, args.input_file, OVERRIDES],
             )
 
 
