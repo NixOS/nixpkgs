@@ -119,4 +119,8 @@
  <para>
   Running <literal>nix-shell</literal> would then drop you into a shell with these libraries and binaries available. You can use this to run closed-source applications which expect FHS structure without hassles: simply change <literal>runScript</literal> to the application path, e.g. <filename>./bin/start.sh</filename> -- relative paths are supported.
  </para>
+
+ <para>
+  Additonally, the FHS builder links all relocated gsettings-schemas (the glib setup-hook moves them to share/gsettings-schemas/${name}/glib-2.0/schemas) to their standard FHS location. This means you don't need to wrap binaries with <literal>wrapGAppsHook</literal>.
+ </para>
 </section>
