@@ -25,9 +25,9 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # CVE-2019-20421
     # included in next release
     (fetchpatch {
+      name = "cve-2019-20421.patch";
       url = "https://github.com/Exiv2/exiv2/commit/a82098f4f90cd86297131b5663c3dec6a34470e8.patch";
       sha256 = "16r19qb9l5j43ixm5jqid9sdv5brlkk1wq0w79rm5agxq4kblfyc";
       excludes = [ "tests/bugfixes/github/test_issue_1011.py" "test/data/Jp2Image_readMetadata_loop.poc" ];
