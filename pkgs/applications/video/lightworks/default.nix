@@ -1,5 +1,5 @@
 { stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
-, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU
+, gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU, libGL
 , nvidia_cg_toolkit, zlib, openssl, portaudio
 }:
 let
@@ -11,6 +11,7 @@ let
     libjpeg_original
     glib
     pango
+    libGL
     libGLU
     nvidia_cg_toolkit
     zlib
