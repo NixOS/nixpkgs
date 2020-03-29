@@ -1,4 +1,4 @@
-{ stdenv, mkDerivation, fetchFromGitHub, chromaprint
+{ stdenv, mkDerivation, fetchurl, fetchFromGitHub, chromaprint
 , fftw, flac, faad2, glibcLocales, mp4v2
 , libid3tag, libmad, libopus, libshout, libsndfile, libusb1, libvorbis
 , libGLU, libxcb, lilv, lv2, opusfile
@@ -6,6 +6,17 @@
 , qtx11extras, rubberband, scons, sqlite, taglib, upower, vamp-plugin-sdk
 }:
 
+let
+  # Because libshout 2.4.2 and newer seem to break streaming in mixxx, build it
+  # with 2.4.1 instead.
+  libshout241 = libshout.overrideAttrs (o: rec {
+    name = "libshout-2.4.1";
+    src = fetchurl {
+      url = "http://downloads.xiph.org/releases/libshout/${name}.tar.gz";
+      sha256 = "0kgjpf8jkgyclw11nilxi8vyjk4s8878x23qyxnvybbgqbgbib7k";
+    };
+  });
+in
 mkDerivation rec {
   pname = "mixxx";
   version = "2.2.3";
@@ -18,7 +29,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
-    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout libsndfile
+    chromaprint fftw flac faad2 glibcLocales mp4v2 libid3tag libmad libopus libshout241 libsndfile
     libusb1 libvorbis libxcb libGLU lilv lv2 opusfile pkgconfig portaudio portmidi protobuf qtbase qtscript qtsvg
     qtx11extras rubberband scons sqlite taglib upower vamp-plugin-sdk
   ];
