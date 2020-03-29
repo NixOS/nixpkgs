@@ -8082,6 +8082,10 @@ in
 
   flyctl = callPackage ../development/web/flyctl { };
 
+  flutterPackages =
+    recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutter = flutterPackages.stable;
+
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
