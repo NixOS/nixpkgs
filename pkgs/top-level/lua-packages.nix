@@ -99,6 +99,63 @@ with self; {
 
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
+  # This package is very much like `lua.pkgs.luv`, but it's not defined as a
+  # module because it fails to install some files if we use
+  # `buildLuarocksPackage` instead of `mkDerivation`. However, if another
+  # package (e.g lua.pkgs.nvim-client) would require `luv =
+  # stdenv.mkDerivation`, it would not detect it and hence it would fail to
+  # build.
+
+  # The workaround implemented here is to create 2 versions of `libluv` while
+  # `luv` is still defined by lua's generated packages and still overriden as
+  # necessary in lua's overrides. This version is used in neovim and every
+  # other package that needs luv as a shared library (not as a mere lua
+  # module).
+  libluv = pkgs.stdenv.mkDerivation rec {
+    pname = "luv";
+    version = "1.34.2-0";
+
+    src = pkgs.fetchFromGitHub {
+      owner = "luvit";
+      repo = pname;
+      rev = version;
+      sha256 = "0iq272n7p0wkll4a7d880qyhdp65582cwc3b2zzrirpli93x3v87";
+    };
+    disabled = (luaOlder "5.1");
+
+    # So we can be sure no internal dependency is used from the repo and that
+    # everything is provided by us
+    postUnpack = ''
+     rm -rf deps
+    '';
+
+    cmakeFlags = [
+      "-DWITH_SHARED_LIBUV=ON"
+      "-DLUA_BUILD_TYPE=System"
+      "-DBUILD_MODULE=ON"
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DLUA_COMPAT53_DIR=${lua.pkgs.compat53}"
+    ];
+
+    buildInputs = [ pkgs.libuv ];
+
+    nativeBuildInputs = [
+      pkgs.cmake
+      lua.pkgs.compat53
+    ];
+    # Fixup linking libluv.dylib, for some reason it's not linked against lua correctly.
+    NIX_LDFLAGS = pkgs.lib.optionalString pkgs.stdenv.isDarwin
+      (if isLuaJIT then "-lluajit-${lua.luaversion}" else "-llua");
+    propagatedBuildInputs = [ lua ];
+
+    meta = with stdenv.lib; {
+      homepage = "https://github.com/luvit/luv";
+      description = "Bare libuv bindings for lua";
+      license = {
+        fullName = "Apache 2.0";
+      };
+    };
+  };
   luxio = buildLuaPackage rec {
     name = "luxio-${version}";
     version = "13";
