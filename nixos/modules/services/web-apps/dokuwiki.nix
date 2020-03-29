@@ -3,13 +3,15 @@
 let
 
   inherit (lib) mkEnableOption mkForce mkIf mkMerge mkOption optionalAttrs recursiveUpdate types;
+  inherit (lib) flatten mapAttrs mapAttrs' mapAttrsToList nameValuePair;
 
-  cfg = config.services.dokuwiki;
+  eachSite = config.services.dokuwiki;
+  stateDir = cfg: "/var/lib/dokuwiki/${cfg.hostName}";
 
   user = config.services.nginx.user;
   group = config.services.nginx.group;
 
-  dokuwikiAclAuthConfig = pkgs.writeText "acl.auth.php" ''
+  dokuwikiAclAuthConfig = cfg: pkgs.writeText "acl.auth.php" ''
     # acl.auth.php
     # <?php exit()?>
     #
@@ -18,23 +20,49 @@ let
     ${toString cfg.acl}
   '';
 
-  dokuwikiLocalConfig = pkgs.writeText "local.php" ''
+  dokuwikiLocalConfig = cfg: pkgs.writeText "local.php" ''
     <?php
-    $conf['savedir'] = '${cfg.stateDir}';
+    $conf['savedir'] = '${stateDir cfg}';
     $conf['superuser'] = '${toString cfg.superUser}';
     $conf['useacl'] = '${toString cfg.aclUse}';
     ${toString cfg.extraConfig}
   '';
 
-  dokuwikiPluginsLocalConfig = pkgs.writeText "plugins.local.php" ''
+  dokuwikiPluginsLocalConfig = cfg: pkgs.writeText "plugins.local.php" ''
     <?php
     ${cfg.pluginsConfig}
   '';
 
-in
-{
-  options.services.dokuwiki = {
+  pkg = hostName: cfg: pkgs.stdenv.mkDerivation rec {
+    pname = "dokuwiki-${hostName}";
+    version = src.version;
+    src = cfg.package;
+
+    installPhase = ''
+      mkdir -p $out
+      cp -r * $out/
+
+      # symlink the dokuwiki config
+      ln -s ${dokuwikiLocalConfig cfg} $out/share/dokuwiki/local.php
+
+      # symlink plugins config
+      ln -s ${dokuwikiPluginsLocalConfig cfg} $out/share/dokuwiki/plugins.local.php
+
+      # symlink acl
+      ln -s ${dokuwikiAclAuthConfig cfg} $out/share/dokuwiki/acl.auth.php
+    '';
+  };
+
+  siteOpts = {lib, name, ...}:
+  {
+  options = {
     enable = mkEnableOption "DokuWiki web application.";
+
+    package = mkOption {
+      type = types.package;
+      default = pkgs.dokuwiki;
+      description = "Which dokuwiki package to use.";
+    };
 
     hostName = mkOption {
       type = types.str;
@@ -44,7 +72,7 @@ in
 
     stateDir = mkOption {
       type = types.path;
-      default = "/var/lib/dokuwiki/data";
+      default = "/var/lib/dokuwiki/${name}/data";
       description = "Location of the dokuwiki state directory.";
     };
 
@@ -166,49 +194,59 @@ in
       '';
     };
   };
+  };
+in
+{
+  # interface
+  options = {
+    services.dokuwiki = mkOption {
+      type = types.attrsOf (types.submodule siteOpts);
+      default = {};
+      description = "Sepcification of one or more dokuwiki sites to service.";
+    };
+  };
 
   # implementation
 
-  config = mkIf cfg.enable {
+  config = mkIf (eachSite != {}) {
 
-    warnings = mkIf (cfg.superUser == null) ["Not setting services.dokuwiki.superUser will impair your ability to administer DokuWiki"];
+    warnings = mapAttrsToList (hostName: cfg: mkIf (cfg.superUser == null) "Not setting services.dokuwiki.${hostName} superUser will impair your ability to administer DokuWiki") eachSite;
 
-    assertions = [ 
-      {
-        assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
-        message = "Either services.dokuwiki.acl or services.dokuwiki.aclFile is mandatory when aclUse is true";
-      }
-      {
-        assertion = cfg.usersFile != null -> cfg.aclUse != false;
-        message = "services.dokuwiki.aclUse must be true when usersFile is not null";
-      }
-    ];
+    assertions = flatten (mapAttrsToList (hostName: cfg:
+    [{
+      assertion = cfg.aclUse -> (cfg.acl != null || cfg.aclFile != null);
+      message = "Either services.dokuwiki.${hostName}.acl or services.dokuwiki.${hostName}.aclFile is mandatory when aclUse is true";
+    }
+    {
+      assertion = cfg.usersFile != null -> cfg.aclUse != false;
+      message = "services.dokuwiki.${hostName}.aclUse must be true when usersFile is not null";
+    }]) eachSite);
 
-    services.phpfpm.pools.dokuwiki = {
-      inherit user;
-      inherit group;
-      phpEnv = {        
-        DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig}";
-        DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig}";
-      } //optionalAttrs (cfg.usersFile != null) {
-        DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
-      } //optionalAttrs (cfg.aclUse) {
-        DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig}" else "${toString cfg.aclFile}";
-      };
-      
-      settings = {
-        "listen.mode" = "0660";
-        "listen.owner" = user;
-        "listen.group" = group;
-      } // cfg.poolConfig;
-    };
+    services.phpfpm.pools = mapAttrs' (hostName: cfg: (
+      nameValuePair "dokuwiki-${hostName}" {
+        inherit user;
+        inherit group;
+        phpEnv = {
+          DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig cfg}";
+          DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig cfg}";
+        } //optionalAttrs (cfg.usersFile != null) {
+          DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
+        } //optionalAttrs (cfg.aclUse) {
+          DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig cfg}" else "${toString cfg.aclFile}";
+        };
+
+        settings = {
+          "listen.mode" = "0660";
+          "listen.owner" = user;
+          "listen.group" = group;
+        } // cfg.poolConfig;
+      })) eachSite;
 
     services.nginx = {
       enable = true;
       
-       virtualHosts = {
-        ${cfg.hostName} = mkMerge [ cfg.nginx {
-          root = mkForce "${pkgs.dokuwiki}/share/dokuwiki/";
+       virtualHosts = mapAttrs (hostName: cfg:  mkMerge [ cfg.nginx {
+          root = mkForce "${pkg hostName cfg}/share/dokuwiki/";
           extraConfig = "fastcgi_param HTTPS on;";
 
           locations."~ /(conf/|bin/|inc/|install.php)" = {
@@ -246,27 +284,25 @@ in
               include ${pkgs.nginx}/conf/fastcgi_params;
               fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
               fastcgi_param REDIRECT_STATUS 200;
-              fastcgi_pass unix:${config.services.phpfpm.pools.dokuwiki.socket};
+              fastcgi_pass unix:${config.services.phpfpm.pools."dokuwiki-${hostName}".socket};
               fastcgi_param HTTPS on;
             '';
           };
-        }];
+        }]) eachSite;
       };
 
-    };
-
-    systemd.tmpfiles.rules = [
-      "d ${cfg.stateDir}/attic 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/cache 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/index 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/locks 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media_attic 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/media_meta 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
-      "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
-    ];
+    systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
+      "d ${stateDir cfg}/attic 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/cache 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/index 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/locks 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/media 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/media_attic 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/media_meta 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/meta 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/pages 0750 ${user} ${group} - -"
+      "d ${stateDir cfg}/tmp 0750 ${user} ${group} - -"
+    ]) eachSite);
 
   };
 }
