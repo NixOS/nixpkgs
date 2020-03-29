@@ -15656,6 +15656,14 @@ in
   openafs = callPackage ../servers/openafs/1.6 { tsmbac = null; ncurses = null; };
   openafs_1_8 = callPackage ../servers/openafs/1.8 { tsmbac = null; ncurses = null; };
 
+  inherit (callPackages ../servers/openhab {})
+    openhab
+    openhab-v1-addons
+    openhab-v2-addons
+    openhab-milestone
+    openhab-milestone-v1-addons
+    openhab-milestone-v2-addons;
+
   openresty = callPackage ../servers/http/openresty { };
 
   opensmtpd = callPackage ../servers/mail/opensmtpd { };
