@@ -20,8 +20,8 @@ rustPlatform.buildRustPackage {
     [ "CARGO=${cargo}/bin/cargo" "PREFIX=$(out)" "PROFILE=release" "INSTALLDIR_MAN=$(out)/share/man/man1" ]
     ++ lib.optional (prefix != null) [ "PROG_PREFIX=${prefix}" ];
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ cargo sphinx ] ++ lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [ cmake cargo sphinx ];
+  buildInputs = lib.optional stdenv.isDarwin Security;
 
   # empty {build,install}Phase to use defaults of `stdenv.mkDerivation` rather than rust defaults
   buildPhase = "";
