@@ -39,6 +39,7 @@ in
   borgbackup = handleTest ./borgbackup.nix {};
   buildbot = handleTest ./buildbot.nix {};
   caddy = handleTest ./caddy.nix {};
+  caddy2-etag = handleTest ./caddy2-etag.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
   cage = handleTest ./cage.nix {};
   cassandra = handleTest ./cassandra.nix {};
