@@ -136,10 +136,12 @@ in with passthru; stdenv.mkDerivation {
 
   configureFlags = [
     "--enable-shared"
-    "--with-threads"
     "--without-ensurepip"
     "--with-system-expat"
     "--with-system-ffi"
+  ] ++ optionals (pythonOlder "3.7") [
+    # This is unconditionally true starting in CPython 3.7.
+    "--with-threads"
   ] ++ optionals (sqlite != null && isPy3k) [
     "--enable-loadable-sqlite-extensions"
   ] ++ optionals (openssl != null) [
