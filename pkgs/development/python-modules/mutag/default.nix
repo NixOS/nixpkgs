@@ -6,7 +6,8 @@
 }:
 
 buildPythonPackage {
-  name = "mutag-0.0.2-2ffa0258ca";
+  pname = "mutag";
+  version = "0.0.2-2ffa0258ca";
   disabled = ! isPy3k;
 
   src = fetchgit {

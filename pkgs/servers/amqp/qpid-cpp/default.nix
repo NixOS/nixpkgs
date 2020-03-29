@@ -1,7 +1,8 @@
 { stdenv, fetchurl, cmake, python2, boost, libuuid, ruby, buildEnv, buildPythonPackage, qpid-python }:
 
 let
-  name = "qpid-cpp-${version}";
+  pname = "qpid-cpp";
+  name = "${pname}-${version}";
   version = "1.39.0";
 
   src = fetchurl {
@@ -20,7 +21,7 @@ let
   };
 
   qpid-cpp = stdenv.mkDerivation {
-    inherit src meta name;
+    inherit src meta pname version;
 
     nativeBuildInputs = [ cmake ];
     buildInputs = [ boost libuuid ruby python2 ];
@@ -46,7 +47,7 @@ let
   };
 
   python-frontend = buildPythonPackage {
-    inherit name meta src;
+    inherit pname version meta src;
 
     sourceRoot = "${name}/management/python";
 

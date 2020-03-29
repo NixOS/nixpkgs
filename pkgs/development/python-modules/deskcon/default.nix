@@ -7,7 +7,8 @@
 }:
 
 buildPythonPackage {
-  name = "deskcon-0.3";
+  pname = "deskcon";
+  version = "0.3";
   disabled = isPy3k;
 
   src = pkgs.fetchFromGitHub {
