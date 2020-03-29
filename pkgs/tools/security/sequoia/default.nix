@@ -28,6 +28,7 @@ rustPlatform.buildRustPackage rec {
     llvmPackages.libclang
     llvmPackages.clang
     ensureNewerSourcesForZipFilesHook
+    capnproto
   ] ++
     lib.optionals pythonSupport [ pythonPackages.setuptools ]
   ;
@@ -41,9 +42,7 @@ rustPlatform.buildRustPackage rec {
     openssl
     sqlite
     nettle
-    capnproto
-  ]
-    ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
+  ] ++ lib.optionals pythonSupport [ pythonPackages.python pythonPackages.cffi ]
     ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ]
   ;
 

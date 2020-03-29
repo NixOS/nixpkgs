@@ -24,10 +24,10 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkgconfig
     asciidoctor
-  ]
-    ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
+    gettext
+  ] ++ stdenv.lib.optionals stdenv.isDarwin [ makeWrapper libiconv ];
 
-  buildInputs = [ stfl sqlite curl gettext libxml2 json_c ncurses ]
+  buildInputs = [ stfl sqlite curl libxml2 json_c ncurses ]
     ++ stdenv.lib.optional stdenv.isDarwin Security;
 
   postBuild = ''
