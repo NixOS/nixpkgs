@@ -2095,8 +2095,6 @@ in
 
   precice = callPackage ../development/libraries/precice { };
 
-  parallel-rust = callPackage ../tools/misc/parallel-rust { };
-
   pueue = callPackage ../applications/misc/pueue { };
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
