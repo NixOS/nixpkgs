@@ -35,6 +35,16 @@ stdenv.mkDerivation rec {
       name = "CVE-2018-10910-2.patch";
       sha256 = "0j7klbhym64yhn86dbsmybqmwx47bviyyhx931izl1p29z2mg8hn";
     })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=8cdbd3b09f29da29374e2f83369df24228da0ad1";
+      name = "CVE-2020-0556-1.patch";
+      sha256 = "1lqbarf0z8bi82fd6b7nviw1ifnfxc08z25bqxqf0i4i87yfiz8x";
+    })
+    (fetchpatch {
+      url = "https://git.kernel.org/pub/scm/bluetooth/bluez.git/patch/?id=3cccdbab2324086588df4ccf5f892fb3ce1f1787";
+      name = "CVE-2020-0556-2.patch";
+      sha256 = "1gm50dzrs2qmzdpsg5f71bygacai5dcvadia6wf9shmjjlxb7l4w";
+    })
   ];
 
   postConfigure = ''
