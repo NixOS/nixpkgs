@@ -650,6 +650,12 @@
     githubId = 10285250;
     name = "Artur E. Ruuge";
   };
+  asbachb = {
+    email = "asbachb-nixpkgs-5c2a@impl.it";
+    github = "asbachb";
+    githubId = 1482768;
+    name = "Benjamin Asbach";
+  };
   ashalkhakov = {
     email = "artyom.shalkhakov@gmail.com";
     github = "ashalkhakov";
@@ -8333,5 +8339,3 @@
     name = "Xavier Zwirtz";
   };
 }
-
-
