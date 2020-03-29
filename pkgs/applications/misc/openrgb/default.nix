@@ -12,15 +12,15 @@
 }:
 stdenv.mkDerivation rec {
   pname = "openrgb";
-  version = "unstable-${date}";
+  version = "0.1";
 
-  date = "2020-03-03";
+  date = "2020-03-28";
 
   src = fetchFromGitHub {
     owner = "CalcProgrammer1";
     repo = "OpenRGB";
-    rev = "d7298cafd02232a4da3843a5e6c810cb2ccd99f4";
-    sha256 = "0gjj8z3574dxx41d38khhq91c6g2z5jiws5k9hg0lryks97341ak";
+    rev = "release_${version}";
+    sha256 = "1jxyvf9ihb7kfvl1yp5d6w32hcbcxrjk11b1msyclkqwkd3r4b9m";
     fetchSubmodules = true;
   };
 
