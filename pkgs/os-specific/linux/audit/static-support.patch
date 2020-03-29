@@ -1,0 +1,706 @@
+diff -ur audit-2.8.5/auparse/auditd-config.c audit-2.8.5.patched/auparse/auditd-config.c
+--- audit-2.8.5/auparse/auditd-config.c	2019-03-01 20:19:13.000000000 +0000
++++ audit-2.8.5.patched/auparse/auditd-config.c	2020-03-29 16:36:22.770557605 +0000
+@@ -70,7 +70,7 @@
+ /*
+  * Set everything to its default value
+ */
+-void clear_config(struct daemon_conf *config)
++void aup_clear_config(struct daemon_conf *config)
+ {
+ 	config->local_events = 1;
+ 	config->qos = QOS_NON_BLOCKING;
+@@ -110,7 +110,7 @@
+ 	FILE *f;
+ 	char buf[160];
+ 
+-	clear_config(config);
++	aup_clear_config(config);
+ 	lt = lt;
+ 
+ 	/* open the file */
+@@ -324,7 +324,7 @@
+ 	return 0;
+ }
+ 
+-void free_config(struct daemon_conf *config)
++void aup_free_config(struct daemon_conf *config)
+ {
+ 	free((void*)config->log_file);
+ }
+diff -ur audit-2.8.5/auparse/auparse.c audit-2.8.5.patched/auparse/auparse.c
+--- audit-2.8.5/auparse/auparse.c	2019-03-01 20:19:13.000000000 +0000
++++ audit-2.8.5.patched/auparse/auparse.c	2020-03-29 16:37:06.589752612 +0000
+@@ -72,7 +72,7 @@
+ 	filename = malloc(len);
+ 	if (!filename) {
+ 		fprintf(stderr, "No memory\n");
+-		free_config(&config);
++		aup_free_config(&config);
+ 		return 1;
+ 	}
+ 	/* Find oldest log file */
+@@ -86,7 +86,7 @@
+ 
+ 	if (num == 0) {
+ 		fprintf(stderr, "No log file\n");
+-		free_config(&config);
++		aup_free_config(&config);
+ 		free(filename);
+ 		return 1;
+ 	}
+@@ -110,7 +110,7 @@
+ 		else
+ 			break;
+ 	} while (1);
+-	free_config(&config);
++	aup_free_config(&config);
+ 	free(filename);
+ 
+ 	// Terminate the list
+@@ -1819,7 +1819,7 @@
+ 
+ 	rnode *r = aup_list_get_cur(au->le);
+ 	if (r) {
+-		if (nvlist_next(&r->nv))
++		if (aup_nvlist_next(&r->nv))
+ 			return 1;
+ 		else
+ 			return 0;
+@@ -1835,7 +1835,7 @@
+ 
+ 	rnode *r = aup_list_get_cur(au->le);
+ 	if (r)
+-		return nvlist_get_cnt(&r->nv);
++		return aup_nvlist_get_cnt(&r->nv);
+ 	else
+ 		return 0;
+ }
+@@ -1882,9 +1882,9 @@
+ 		r = aup_list_get_cur(au->le);
+ 		if (r == NULL)
+ 			return NULL;
+-		cur_name = nvlist_get_cur_name(&r->nv);
++		cur_name = aup_nvlist_get_cur_name(&r->nv);
+ 		if (cur_name && strcmp(cur_name, name) == 0)
+-			return nvlist_get_cur_val(&r->nv);
++			return aup_nvlist_get_cur_val(&r->nv);
+ 
+ 		return auparse_find_field_next(au);
+ 	}
+@@ -1907,11 +1907,11 @@
+ 		rnode *r = aup_list_get_cur(au->le);
+ 		while (r) {	// For each record in the event...
+ 			if (!moved) {
+-				nvlist_next(&r->nv);
++				aup_nvlist_next(&r->nv);
+ 				moved=1;
+ 			}
+-			if (nvlist_find_name(&r->nv, au->find_field))
+-				return nvlist_get_cur_val(&r->nv);
++			if (aup_nvlist_find_name(&r->nv, au->find_field))
++				return aup_nvlist_get_cur_val(&r->nv);
+ 			r = aup_list_next(au->le);
+ 			if (r) {
+ 				aup_list_first_field(au->le);
+@@ -1931,7 +1931,7 @@
+ 
+ 	rnode *r = aup_list_get_cur(au->le);
+ 	if (r) {
+-		nvnode *n = nvlist_get_cur(&r->nv);
++		nvnode *n = aup_nvlist_get_cur(&r->nv);
+ 		if (n)
+ 			return n->item;
+ 	}
+@@ -1948,7 +1948,7 @@
+ 		if (num >= r->nv.cnt)
+ 			return 0;
+ 
+-		if ((nvlist_goto_rec(&r->nv, num)))
++		if ((aup_nvlist_goto_rec(&r->nv, num)))
+ 			return 1;
+ 	}
+ 	return 0;
+@@ -1962,7 +1962,7 @@
+ 	if (au->le->e.sec) {
+ 		rnode *r = aup_list_get_cur(au->le);
+ 		if (r) 
+-			return nvlist_get_cur_name(&r->nv);
++			return aup_nvlist_get_cur_name(&r->nv);
+ 	}
+ 	return NULL;
+ }
+@@ -1976,7 +1976,7 @@
+ 	if (au->le->e.sec) {
+ 		rnode *r = aup_list_get_cur(au->le);
+ 		if (r) 
+-			return nvlist_get_cur_val(&r->nv);
++			return aup_nvlist_get_cur_val(&r->nv);
+ 	}
+ 	return NULL;
+ }
+@@ -1989,7 +1989,7 @@
+         if (au->le->e.sec) {
+                 rnode *r = aup_list_get_cur(au->le);
+                 if (r)
+-                        return nvlist_get_cur_type(r);
++                        return aup_nvlist_get_cur_type(r);
+         }
+ 	return AUPARSE_TYPE_UNCLASSIFIED;
+ }
+@@ -2018,7 +2018,7 @@
+ 		rnode *r = aup_list_get_cur(au->le);
+ 		if (r) {
+ 			r->cwd = NULL;
+-			return nvlist_interp_cur_val(r, au->escape_mode);
++			return aup_nvlist_interp_cur_val(r, au->escape_mode);
+ 		}
+ 	}
+ 	return NULL;
+@@ -2033,12 +2033,12 @@
+         if (au->le->e.sec) {
+                 rnode *r = aup_list_get_cur(au->le);
+                 if (r) {
+-			if (nvlist_get_cur_type(r) != AUPARSE_TYPE_ESCAPED_FILE)
++			if (aup_nvlist_get_cur_type(r) != AUPARSE_TYPE_ESCAPED_FILE)
+ 				return NULL;
+ 
+ 			// Tell it to make a realpath
+ 			r->cwd = au->le->cwd;
+-                        return nvlist_interp_cur_val(r, au->escape_mode);
++                        return aup_nvlist_interp_cur_val(r, au->escape_mode);
+ 		}
+         }
+ 	return NULL;
+@@ -2055,10 +2055,10 @@
+ 		if (r == NULL)
+ 			return NULL;
+ 		// This is limited to socket address fields
+-		if (nvlist_get_cur_type(r) != AUPARSE_TYPE_SOCKADDR)
++		if (aup_nvlist_get_cur_type(r) != AUPARSE_TYPE_SOCKADDR)
+ 			return NULL;
+ 		// Get interpretation
+-		const char *val = nvlist_interp_cur_val(r, au->escape_mode);
++		const char *val = aup_nvlist_interp_cur_val(r, au->escape_mode);
+ 		if (val == NULL)
+ 			return NULL;
+ 		// make a copy since we modify it
+diff -ur audit-2.8.5/auparse/ellist.c audit-2.8.5.patched/auparse/ellist.c
+--- audit-2.8.5/auparse/ellist.c	2019-03-01 20:19:13.000000000 +0000
++++ audit-2.8.5.patched/auparse/ellist.c	2020-03-29 16:35:07.634223229 +0000
+@@ -172,14 +172,14 @@
+ 			// Make virtual keys or just store it
+ 			if (strcmp(n.name, "key") == 0 && *n.val != '(') {
+ 				if (*n.val == '"')
+-					nvlist_append(&r->nv, &n);
++					aup_nvlist_append(&r->nv, &n);
+ 				else {
+ 					char *key, *ptr, *saved2;
+ 
+ 					key = (char *)au_unescape(n.val);
+ 					if (key == NULL) {
+ 						// Malformed key - save as is
+-						nvlist_append(&r->nv, &n);
++						aup_nvlist_append(&r->nv, &n);
+ 						continue;
+ 					}
+ 					ptr = strtok_r(key, key_sep, &saved2);
+@@ -188,7 +188,7 @@
+ 					while (ptr) {
+ 						n.name = strdup("key");
+ 						n.val = escape(ptr);
+-						nvlist_append(&r->nv, &n);
++						aup_nvlist_append(&r->nv, &n);
+ 						ptr = strtok_r(NULL,
+ 							key_sep, &saved2);
+ 					}
+@@ -196,7 +196,7 @@
+ 				}
+ 				continue;
+ 			} else
+-				nvlist_append(&r->nv, &n);
++				aup_nvlist_append(&r->nv, &n);
+ 
+ 			// Do some info gathering for use later
+ 			if (r->nv.cnt == 1 && strcmp(n.name, "node") == 0)
+@@ -243,12 +243,12 @@
+ 			// We special case these 2 fields because selinux
+ 			// avc messages do not label these fields.
+ 			n.name = NULL;
+-			if (nvlist_get_cnt(&r->nv) == (1 + offset)) {
++			if (aup_nvlist_get_cnt(&r->nv) == (1 + offset)) {
+ 				// skip over 'avc:'
+ 				if (strncmp(ptr, "avc", 3) == 0)
+ 					continue;
+ 				n.name = strdup("seresult");
+-			} else if (nvlist_get_cnt(&r->nv) == (2 + offset)) {
++			} else if (aup_nvlist_get_cnt(&r->nv) == (2 + offset)) {
+ 				// skip over open brace
+ 				if (*ptr == '{') {
+ 					int total = 0, len;
+@@ -273,13 +273,13 @@
+ 					}
+ 					n.name = strdup("seperms");
+ 					n.val = strdup(tmpctx);
+-					nvlist_append(&r->nv, &n);
++					aup_nvlist_append(&r->nv, &n);
+ 					continue;
+ 				}
+ 			} else
+ 				continue;
+ 			n.val = strdup(ptr);
+-			nvlist_append(&r->nv, &n);
++			aup_nvlist_append(&r->nv, &n);
+ 		}
+ 	} while((ptr = audit_strsplit_r(NULL, &saved)));
+ 
+@@ -314,7 +314,7 @@
+ 	r->list_idx = list_idx;
+ 	r->line_number = line_number;
+ 	r->next = NULL;
+-	nvlist_create(&r->nv);
++	aup_nvlist_create(&r->nv);
+ 
+ 	// if we are at top, fix this up
+ 	if (l->head == NULL)
+@@ -349,7 +349,7 @@
+ 	current = l->head;
+ 	while (current) {
+ 		nextnode=current->next;
+-		nvlist_clear(&current->nv);
++		aup_nvlist_clear(&current->nv);
+ 		free(current->record);
+ 		free(current);
+ 		current=nextnode;
+@@ -444,7 +444,7 @@
+ int aup_list_first_field(event_list_t *l)
+ {
+ 	if (l && l->cur) {
+-		nvlist_first(&l->cur->nv);
++		aup_nvlist_first(&l->cur->nv);
+ 		return 1;
+ 	} else
+ 		return 0;
+diff -ur audit-2.8.5/auparse/expression.c audit-2.8.5.patched/auparse/expression.c
+--- audit-2.8.5/auparse/expression.c	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/auparse/expression.c	2020-03-29 16:35:07.634223229 +0000
+@@ -961,11 +961,11 @@
+ eval_raw_value(rnode *record, const struct expr *expr, int *free_it)
+ {
+ 	if (expr->virtual_field == 0) {
+-		nvlist_first(&record->nv);
+-		if (nvlist_find_name(&record->nv, expr->v.p.field.name) == 0)
++		aup_nvlist_first(&record->nv);
++		if (aup_nvlist_find_name(&record->nv, expr->v.p.field.name) == 0)
+ 			return NULL;
+ 		*free_it = 0;
+-		return (char *)nvlist_get_cur_val(&record->nv);
++		return (char *)aup_nvlist_get_cur_val(&record->nv);
+ 	}
+ 	switch (expr->v.p.field.id) {
+ 	case EF_TIMESTAMP:
+@@ -985,10 +985,10 @@
+ {
+ 	*valid = 0;
+ 	if (expr->virtual_field == 0) {
+-		nvlist_first(&record->nv);
+-		if (nvlist_find_name(&record->nv, expr->v.p.field.name) == 0)
++		aup_nvlist_first(&record->nv);
++		if (aup_nvlist_find_name(&record->nv, expr->v.p.field.name) == 0)
+ 			return 0;
+-		const char *val = nvlist_get_cur_val(&record->nv);
++		const char *val = aup_nvlist_get_cur_val(&record->nv);
+ 		if (val) {
+ 			uint32_t v = strtoul(val, NULL, 10);
+ 			*valid = 1;
+@@ -1009,13 +1009,13 @@
+ 	if (expr->virtual_field == 0) {
+ 		const char *res;
+ 
+-		nvlist_first(&record->nv);
+-		if (nvlist_find_name(&record->nv, expr->v.p.field.name) == 0)
++		aup_nvlist_first(&record->nv);
++		if (aup_nvlist_find_name(&record->nv, expr->v.p.field.name) == 0)
+ 			return NULL;
+ 		*free_it = 0;
+-		res = nvlist_interp_cur_val(record, au->escape_mode);
++		res = aup_nvlist_interp_cur_val(record, au->escape_mode);
+ 		if (res == NULL)
+-			res = nvlist_get_cur_val(&record->nv);
++			res = aup_nvlist_get_cur_val(&record->nv);
+ 		return (char *)res;
+ 	}
+ 	switch (expr->v.p.field.id) {
+@@ -1199,8 +1199,8 @@
+ 
+ 	case EO_FIELD_EXISTS:
+ 		assert(expr->virtual_field == 0);
+-		nvlist_first(&record->nv);
+-		res = nvlist_find_name(&record->nv, expr->v.p.field.name) != 0;
++		aup_nvlist_first(&record->nv);
++		res = aup_nvlist_find_name(&record->nv, expr->v.p.field.name) != 0;
+ 		break;
+ 
+ 	case EO_REGEXP_MATCHES:
+diff -ur audit-2.8.5/auparse/internal.h audit-2.8.5.patched/auparse/internal.h
+--- audit-2.8.5/auparse/internal.h	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/auparse/internal.h	2020-03-29 16:36:10.320502200 +0000
+@@ -189,9 +189,9 @@
+ AUDIT_HIDDEN_START
+ 
+ // auditd-config.c
+-void clear_config(struct daemon_conf *config);
++void aup_clear_config(struct daemon_conf *config);
+ int aup_load_config(auparse_state_t *au, struct daemon_conf *config, log_test_t lt);
+-void free_config(struct daemon_conf *config);
++void aup_free_config(struct daemon_conf *config);
+ 
+ // normalize.c
+ void init_normalizer(normalize_data *d);
+diff -ur audit-2.8.5/auparse/interpret.c audit-2.8.5.patched/auparse/interpret.c
+--- audit-2.8.5/auparse/interpret.c	2019-03-01 20:19:13.000000000 +0000
++++ audit-2.8.5.patched/auparse/interpret.c	2020-03-29 16:35:07.634223229 +0000
+@@ -380,7 +380,7 @@
+ /////////// Interpretation list functions ///////////////
+ void init_interpretation_list(void)
+ {
+-	nvlist_create(&il);
++	aup_nvlist_create(&il);
+ }
+ 
+ /*
+@@ -406,8 +406,8 @@
+ 			if (ptr) {
+ 				n.name = strdup("saddr");
+ 				n.val = strdup(val);
+-				nvlist_append(&il, &n);
+-				nvlist_interp_fixup(&il);
++				aup_nvlist_append(&il, &n);
++				aup_nvlist_interp_fixup(&il);
+ 				free(buf);
+ 				return 1;
+ 			}
+@@ -445,8 +445,8 @@
+ 				tmp = 0;
+ 
+ 			n.val = strdup(val);
+-			nvlist_append(&il, &n);
+-			nvlist_interp_fixup(&il);
++			aup_nvlist_append(&il, &n);
++			aup_nvlist_interp_fixup(&il);
+ 			if (ptr)
+ 				*ptr = tmp;
+ 		} while((ptr = audit_strsplit_r(NULL, &saved)));
+@@ -462,9 +462,9 @@
+ {
+ 	nvnode *n;
+ 
+-	nvlist_first(&il);
+-	if (nvlist_find_name(&il, name)) {
+-		n = nvlist_get_cur(&il);
++	aup_nvlist_first(&il);
++	if (aup_nvlist_find_name(&il, name)) {
++		n = aup_nvlist_get_cur(&il);
+ 		// This is only called from src/ausearch-lookup.c
+ 		// it only looks up auid and syscall. One needs
+ 		// escape, the other does not.
+@@ -478,7 +478,7 @@
+ 
+ void free_interpretation_list(void)
+ {
+-	nvlist_clear(&il);
++	aup_nvlist_clear(&il);
+ }
+ 
+ //////////// Start Field Value Interpretations /////////////
+@@ -2810,7 +2810,7 @@
+ 
+ /*
+  * This is the main entry point for the auparse library. Call chain is:
+- * auparse_interpret_field -> nvlist_interp_cur_val -> interpret
++ * auparse_interpret_field -> aup_nvlist_interp_cur_val -> interpret
+  */
+ const char *interpret(const rnode *r, auparse_esc_t escape_mode)
+ {
+@@ -2825,12 +2825,12 @@
+ 	id.a0 = r->a0;
+ 	id.a1 = r->a1;
+ 	id.cwd = r->cwd;
+-	id.name = nvlist_get_cur_name(nv);
+-	id.val = nvlist_get_cur_val(nv);
++	id.name = aup_nvlist_get_cur_name(nv);
++	id.val = aup_nvlist_get_cur_val(nv);
+ 	type = auparse_interp_adjust_type(r->type, id.name, id.val);
+ 
+ 	out = auparse_do_interpretation(type, &id, escape_mode);
+-	n = nvlist_get_cur(nv);
++	n = aup_nvlist_get_cur(nv);
+ 	n->interp_val = (char *)out;
+ 
+ 	return out;
+@@ -2892,8 +2892,8 @@
+ 
+ 	// Check the interpretations list first
+ 	if (il.head) {
+-		nvlist_first(&il);
+-		if (nvlist_find_name(&il, id->name)) {
++		aup_nvlist_first(&il);
++		if (aup_nvlist_find_name(&il, id->name)) {
+ 			const char *val = il.cur->interp_val;
+ 
+ 			if (val) {
+diff -ur audit-2.8.5/auparse/nvlist.c audit-2.8.5.patched/auparse/nvlist.c
+--- audit-2.8.5/auparse/nvlist.c	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/auparse/nvlist.c	2020-03-29 16:35:07.634223229 +0000
+@@ -29,14 +29,14 @@
+ #include "auparse-idata.h"
+ 
+ 
+-void nvlist_create(nvlist *l)
++void aup_nvlist_create(nvlist *l)
+ {
+ 	l->head = NULL;
+ 	l->cur = NULL;
+ 	l->cnt = 0;
+ }
+ 
+-static void nvlist_last(nvlist *l)
++static void aup_nvlist_last(nvlist *l)
+ {
+         register nvnode* node;
+ 
+@@ -49,14 +49,14 @@
+ 	l->cur = node;
+ }
+ 
+-nvnode *nvlist_next(nvlist *l)
++nvnode *aup_nvlist_next(nvlist *l)
+ {
+ 	if (l->cur)
+ 		l->cur = l->cur->next;
+ 	return l->cur;
+ }
+ 
+-void nvlist_append(nvlist *l, nvnode *node)
++void aup_nvlist_append(nvlist *l, nvnode *node)
+ {
+ 	nvnode* newnode = malloc(sizeof(nvnode));
+ 
+@@ -74,7 +74,7 @@
+ 			l->cur->next = newnode;
+ 		}
+ 		else {
+-			nvlist_last(l);
++			aup_nvlist_last(l);
+ 			l->cur->next = newnode;
+ 		}
+ 	}
+@@ -87,7 +87,7 @@
+ /*
+  * Its less code to make a fixup than a new append.
+  */
+-void nvlist_interp_fixup(nvlist *l)
++void aup_nvlist_interp_fixup(nvlist *l)
+ {
+ 	if (l->cur) {
+ 		l->cur->interp_val = l->cur->val;
+@@ -95,7 +95,7 @@
+ 	}
+ }
+ 
+-nvnode *nvlist_goto_rec(nvlist *l, unsigned int i)
++nvnode *aup_nvlist_goto_rec(nvlist *l, unsigned int i)
+ {
+ 	register nvnode* node;
+ 
+@@ -113,7 +113,7 @@
+ /*
+  * This function will start at current index and scan for a name
+  */
+-int nvlist_find_name(nvlist *l, const char *name)
++int aup_nvlist_find_name(nvlist *l, const char *name)
+ {
+         register nvnode* node = l->cur;
+ 
+@@ -129,13 +129,13 @@
+ }
+ 
+ extern int interp_adjust_type(int rtype, const char *name, const char *val);
+-int nvlist_get_cur_type(const rnode *r)
++int aup_nvlist_get_cur_type(const rnode *r)
+ {
+ 	const nvlist *l = &r->nv;
+ 	return auparse_interp_adjust_type(r->type, l->cur->name, l->cur->val);
+ }
+ 
+-const char *nvlist_interp_cur_val(const rnode *r, auparse_esc_t escape_mode)
++const char *aup_nvlist_interp_cur_val(const rnode *r, auparse_esc_t escape_mode)
+ {
+ 	const nvlist *l = &r->nv;
+ 	if (l->cur->interp_val)
+@@ -143,7 +143,7 @@
+ 	return interpret(r, escape_mode);
+ }
+ 
+-void nvlist_clear(nvlist* l)
++void aup_nvlist_clear(nvlist* l)
+ {
+ 	nvnode* nextnode;
+ 	register nvnode* current;
+diff -ur audit-2.8.5/auparse/nvlist.h audit-2.8.5.patched/auparse/nvlist.h
+--- audit-2.8.5/auparse/nvlist.h	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/auparse/nvlist.h	2020-03-29 16:34:11.015971267 +0000
+@@ -31,27 +31,27 @@
+ #include "ellist.h"
+ 
+ 
+-static inline unsigned int nvlist_get_cnt(nvlist *l) { return l->cnt; }
+-static inline void nvlist_first(nvlist *l) { l->cur = l->head; }
+-static inline nvnode *nvlist_get_cur(const nvlist *l) { return l->cur; }
+-static inline const char *nvlist_get_cur_name(const nvlist *l) {if (l->cur) return l->cur->name; else return NULL;}
+-static inline const char *nvlist_get_cur_val(const nvlist *l) {if (l->cur) return l->cur->val; else return NULL;}
+-static inline const char *nvlist_get_cur_val_interp(const nvlist *l) {if (l->cur) return l->cur->interp_val; else return NULL;}
++static inline unsigned int aup_nvlist_get_cnt(nvlist *l) { return l->cnt; }
++static inline void aup_nvlist_first(nvlist *l) { l->cur = l->head; }
++static inline nvnode *aup_nvlist_get_cur(const nvlist *l) { return l->cur; }
++static inline const char *aup_nvlist_get_cur_name(const nvlist *l) {if (l->cur) return l->cur->name; else return NULL;}
++static inline const char *aup_nvlist_get_cur_val(const nvlist *l) {if (l->cur) return l->cur->val; else return NULL;}
++static inline const char *aup_nvlist_get_cur_val_interp(const nvlist *l) {if (l->cur) return l->cur->interp_val; else return NULL;}
+ 
+ AUDIT_HIDDEN_START
+ 
+-void nvlist_create(nvlist *l);
+-void nvlist_clear(nvlist* l);
+-nvnode *nvlist_next(nvlist *l);
+-int nvlist_get_cur_type(const rnode *r);
+-const char *nvlist_interp_cur_val(const rnode *r, auparse_esc_t escape_mode);
+-void nvlist_append(nvlist *l, nvnode *node);
+-void nvlist_interp_fixup(nvlist *l);
++void aup_nvlist_create(nvlist *l);
++void aup_nvlist_clear(nvlist* l);
++nvnode *aup_nvlist_next(nvlist *l);
++int aup_nvlist_get_cur_type(const rnode *r);
++const char *aup_nvlist_interp_cur_val(const rnode *r, auparse_esc_t escape_mode);
++void aup_nvlist_append(nvlist *l, nvnode *node);
++void aup_nvlist_interp_fixup(nvlist *l);
+ 
+ /* Given a numeric index, find that record. */
+-nvnode *nvlist_goto_rec(nvlist *l, unsigned int i);
++nvnode *aup_nvlist_goto_rec(nvlist *l, unsigned int i);
+ /* Given a name, find that record */
+-int nvlist_find_name(nvlist *l, const char *name);
++int aup_nvlist_find_name(nvlist *l, const char *name);
+ 
+ AUDIT_HIDDEN_END
+ 
+diff -ur audit-2.8.5/src/auditctl.c audit-2.8.5.patched/src/auditctl.c
+--- audit-2.8.5/src/auditctl.c	2019-03-01 20:19:13.000000000 +0000
++++ audit-2.8.5.patched/src/auditctl.c	2020-03-29 16:28:26.867439758 +0000
+@@ -55,7 +55,7 @@
+ extern int delete_all_rules(int fd);
+ 
+ /* Global vars */
+-int list_requested = 0, interpret = 0;
++int list_requested = 0, ginterpret = 0;
+ char key[AUDIT_MAX_KEY_LEN+1];
+ const char key_sep[2] = { AUDIT_KEY_SEPARATOR, 0 };
+ static int keylen;
+@@ -571,7 +571,7 @@
+ 			break;
+ 		} else if (optind == 2 && count == 3) { 
+ 			if (strcmp(vars[optind], "-i") == 0) {
+-				interpret = 1;
++				ginterpret = 1;
+ 				count -= 1;
+ 			} else {
+ 				audit_msg(LOG_ERR,
+@@ -658,7 +658,7 @@
+ 		}
+ 		if (count == 3) { 
+ 			if (strcmp(vars[optind], "-i") == 0) {
+-				interpret = 1;
++				ginterpret = 1;
+ 				count -= 1;
+ 			} else {
+ 				audit_msg(LOG_ERR,
+diff -ur audit-2.8.5/src/auditctl-listing.c audit-2.8.5.patched/src/auditctl-listing.c
+--- audit-2.8.5/src/auditctl-listing.c	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/src/auditctl-listing.c	2020-03-29 16:28:45.547522883 +0000
+@@ -33,7 +33,7 @@
+ /* Global vars */
+ static llist l;
+ static int printed;
+-extern int list_requested, interpret;
++extern int list_requested, ginterpret;
+ extern char key[AUDIT_MAX_KEY_LEN+1];
+ extern const char key_sep[2];
+ 
+@@ -115,7 +115,7 @@
+ 		printf(" -F arch%s0x%X", audit_operator_to_symbol(op),
+ 				(unsigned)value);
+ 	else {
+-		if (interpret == 0) {
++		if (ginterpret == 0) {
+ 			if (__AUDIT_ARCH_64BIT & _audit_elf)
+ 				printf(" -F arch%sb64",
+ 						audit_operator_to_symbol(op));
+@@ -410,7 +410,7 @@
+ 					a1 = r->values[i];
+ 
+ 				// Show these as hex
+-				if (count > 1 || interpret == 0)
++				if (count > 1 || ginterpret == 0)
+ 					printf(" -F %s%s0x%X", name, 
+ 						audit_operator_to_symbol(op),
+ 						r->values[i]);
+@@ -547,7 +547,7 @@
+ 			printed = 1;
+ 			break;
+ 		case AUDIT_GET:
+-			if (interpret)
++			if (ginterpret)
+ 				printf("enabled %s\nfailure %s\n",
+ 					get_enable(rep->status->enabled),
+ 					get_failure(rep->status->failure));
+diff -ur audit-2.8.5/src/aureport.c audit-2.8.5.patched/src/aureport.c
+--- audit-2.8.5/src/aureport.c	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/src/aureport.c	2020-03-29 16:43:32.733471015 +0000
+@@ -125,12 +125,12 @@
+ 	if (!found && report_detail == D_DETAILED && report_type != RPT_TIME) {
+ 		printf("<no events of interest were found>\n\n");
+ 		destroy_counters();
+-		aulookup_destroy_uid_list();
++		aur_aulookup_destroy_uid_list();
+ 		return 1;
+ 	} else 
+ 		print_wrap_up();
+ 	destroy_counters();
+-	aulookup_destroy_uid_list();
++	aur_aulookup_destroy_uid_list();
+ 	free(user_file);
+ 	return 0;
+ }
+diff -ur audit-2.8.5/src/ausearch-lookup.c audit-2.8.5.patched/src/ausearch-lookup.c
+--- audit-2.8.5/src/ausearch-lookup.c	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/src/ausearch-lookup.c	2020-03-29 16:43:45.154526294 +0000
+@@ -242,7 +242,7 @@
+ 	return buf;
+ }
+ 
+-void aulookup_destroy_uid_list(void)
++void aur_aulookup_destroy_uid_list(void)
+ {
+ 	if (uid_list_created == 0)
+ 		return;
+diff -ur audit-2.8.5/src/ausearch-lookup.h audit-2.8.5.patched/src/ausearch-lookup.h
+--- audit-2.8.5/src/ausearch-lookup.h	2019-02-04 14:26:52.000000000 +0000
++++ audit-2.8.5.patched/src/ausearch-lookup.h	2020-03-29 16:43:19.148410564 +0000
+@@ -36,7 +36,7 @@
+ const char *aulookup_success(int s);
+ const char *aulookup_syscall(llist *l, char *buf, size_t size);
+ const char *aulookup_uid(uid_t uid, char *buf, size_t size);
+-void aulookup_destroy_uid_list(void);
++void aur_aulookup_destroy_uid_list(void);
+ char *unescape(const char *buf);
+ int is_hex_string(const char *str);
+ void print_tty_data(const char *val);

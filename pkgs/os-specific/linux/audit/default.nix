@@ -51,6 +51,7 @@ stdenv.mkDerivation rec {
               '-* Copyright (c) 2007-09,2011-16 Red Hat Inc., Durham, North Carolina.'
         ''
     )
+    ./static-support.patch
   ];
 
   prePatch = ''
