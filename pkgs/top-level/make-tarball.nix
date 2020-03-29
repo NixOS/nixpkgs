@@ -104,7 +104,7 @@ releaseTools.sourceTarball {
     nix-env -f . -I nixpkgs=${src} -qa --json --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
     echo -n '}' >> tmp
     packages=$out/packages.json.br
-    jq -c < tmp | brotli -9 > $packages
+    < tmp sed "s|$(pwd)/||g" | jq -c | brotli -9 > $packages
 
     echo "file json-br $packages" >> $out/nix-support/hydra-build-products
   '';
