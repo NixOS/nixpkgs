@@ -9,6 +9,7 @@
 , freetype
 , gcc
 , glib
+, libssh2
 , ncurses
 , opencv
 , openssl
@@ -44,9 +45,11 @@ stdenv.mkDerivation rec {
     gcc.cc
     gcc.libc
     glib
+    libssh2
     ncurses
     opencv
     openssl
+    stdenv.cc.cc.lib
     unixODBC
     xkeyboard_config
     libxml2
@@ -93,7 +96,7 @@ stdenv.mkDerivation rec {
     # Fix library paths
     cd $out/libexec/Mathematica/Executables
     for path in mathematica MathKernel Mathematica WolframKernel wolfram math; do
-      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:\''${LD_LIBRARY_PATH}\n" $path
+      sed -i -e "2iexport LD_LIBRARY_PATH=${zlib}/lib:${stdenv.cc.cc.lib}/lib:${libssh2}/lib:\''${LD_LIBRARY_PATH}\n" $path
     done
 
     # Fix xkeyboard config path for Qt
@@ -102,7 +105,7 @@ stdenv.mkDerivation rec {
     done
 
     # Remove some broken libraries
-    rm $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
+    rm -f $out/libexec/Mathematica/SystemFiles/Libraries/Linux-x86-64/libz.so*
   '';
 
   preFixup = ''

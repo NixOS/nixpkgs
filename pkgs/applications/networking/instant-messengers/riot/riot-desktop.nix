@@ -70,7 +70,7 @@ in mkYarnPackage rec {
     comment = meta.description;
     categories = "Network;InstantMessaging;Chat;";
     extraEntries = ''
-      StartupWMClass="riot"
+      StartupWMClass=riot
     '';
   };
 

@@ -718,8 +718,6 @@ in
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
-
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
   awscli = callPackage ../tools/admin/awscli { };
@@ -2095,8 +2093,6 @@ in
 
   precice = callPackage ../development/libraries/precice { };
 
-  parallel-rust = callPackage ../tools/misc/parallel-rust { };
-
   pueue = callPackage ../applications/misc/pueue { };
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
@@ -2499,7 +2495,11 @@ in
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
-  connman = callPackage ../tools/networking/connman { };
+  inherit (callPackage ../tools/networking/connman {})
+    connman
+    connmanFull
+    connmanMinimal
+  ;
 
   connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
 
@@ -3079,6 +3079,8 @@ in
   };
 
   volctl = callPackage ../tools/audio/volctl { };
+
+  vorta = python3Packages.callPackage ../applications/backup/vorta { };
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
@@ -12115,7 +12117,8 @@ in
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra = callPackage ../development/tools/misc/hydra { };
+  inherit (callPackage ../development/tools/misc/hydra { })
+    hydra-migration hydra-unstable hydra-flakes;
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -17799,6 +17802,8 @@ in
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
+  iconpack-jade = callPackage ../data/icons/iconpack-jade { };
+
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
@@ -18575,6 +18580,8 @@ in
   bitwig-studio = bitwig-studio3;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
+
+  bgpq3 = callPackage ../tools/networking/bgpq3 { };
 
   blackbox = callPackage ../applications/version-management/blackbox { };
 
@@ -20471,6 +20478,8 @@ in
       pygobject3 pytestrunner requests responses pytest python-olm
       canonicaljson;
   };
+
+  matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
 
   matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
 
@@ -22666,6 +22675,8 @@ in
 
   kodiPlainWayland = callPackage ../applications/video/kodi { useWayland = true; };
 
+  kodiGBM = callPackage ../applications/video/kodi { useGbm = true; };
+
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
 
   kodi = wrapKodi {
@@ -22674,6 +22685,10 @@ in
 
   kodi-wayland = wrapKodi {
     kodi = kodiPlainWayland;
+  };
+
+  kodi-gbm = wrapKodi {
+    kodi = kodiGBM;
   };
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
@@ -25301,7 +25316,9 @@ in
     icu = icu58;
   };
 
-  mame = libsForQt5.callPackage ../misc/emulators/mame { };
+  mame = libsForQt5.callPackage ../misc/emulators/mame {
+    inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
+  };
 
   martyr = callPackage ../development/libraries/martyr { };
 
@@ -26080,6 +26097,7 @@ in
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
   bullet = callPackage ../development/libraries/bullet {

@@ -412,10 +412,15 @@
     githubId = 20530052;
     name = "Andrew Miloradovsky";
   };
-  aminb = {
-    email = "amin@aminb.org";
-    github = "aminb";
+  notbandali = {
     name = "Amin Bandali";
+    email = "bandali@gnu.org";
+    github = "notbandali";
+    githubId = 1254858;
+    keys = [{
+      longkeyid = "rsa4096/0xA21A020248816103";
+      fingerprint = "BE62 7373 8E61 6D6D 1B3A  08E8 A21A 0202 4881 6103";
+    }];
   };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
@@ -644,6 +649,12 @@
     github = "artuuge";
     githubId = 10285250;
     name = "Artur E. Ruuge";
+  };
+  asbachb = {
+    email = "asbachb-nixpkgs-5c2a@impl.it";
+    github = "asbachb";
+    githubId = 1482768;
+    name = "Benjamin Asbach";
   };
   ashalkhakov = {
     email = "artyom.shalkhakov@gmail.com";
@@ -8328,5 +8339,3 @@
     name = "Xavier Zwirtz";
   };
 }
-
-

@@ -14,7 +14,6 @@ build_lib() {
     --crate-name $CRATE_NAME \
     $lib_src \
     --out-dir target/lib \
-    --emit=dep-info,link \
     -L dependency=target/deps \
     --cap-lints allow \
     $LIB_RUSTC_OPTS \
@@ -45,7 +44,6 @@ build_bin() {
     --crate-type bin \
     $BIN_RUSTC_OPTS \
     --out-dir target/bin \
-    --emit=dep-info,link \
     -L dependency=target/deps \
     $LINK \
     $EXTRA_LIB \
