@@ -246,6 +246,11 @@ def prefetch_plugin(
     )
 
 
+def fetch_plugin_from_pluginline(plugin_line: str) -> Plugin:
+    plugin, _ = prefetch_plugin(*parse_plugin_line(plugin_line))
+    return plugin
+
+
 def print_download_error(plugin: str, ex: Exception):
     print(f"{plugin}: {ex}", file=sys.stderr)
     ex_traceback = ex.__traceback__
@@ -418,7 +423,9 @@ in lib.fix' (lib.extends overrides packages)
     print(f"updated {outfile}")
 
 
-def rewrite_input(input_file: Path, redirects: dict = None, append: Tuple = ()):
+def rewrite_input(
+    input_file: Path, redirects: Dict[str, str] = None, append: Tuple = ()
+):
     with open(input_file, "r") as f:
         lines = f.readlines()
 
@@ -431,11 +438,11 @@ def rewrite_input(input_file: Path, redirects: dict = None, append: Tuple = ()):
         with open(DEPRECATED, "r") as f:
             deprecations = json.load(f)
         for old, new in redirects.items():
-            old_name = old.split("/")[1].split(" ")[0].strip("\n")
-            new_name = new.split("/")[1].split(" ")[0].strip("\n")
-            if old_name != new_name:
-                deprecations[old_name] = {
-                    "new": new_name,
+            old_plugin = fetch_plugin_from_pluginline(old)
+            new_plugin = fetch_plugin_from_pluginline(new)
+            if old_plugin.normalized_name != new_plugin.normalized_name:
+                deprecations[old_plugin.normalized_name] = {
+                    "new": new_plugin.normalized_name,
                     "date": cur_date_iso,
                 }
         with open(DEPRECATED, "w") as f:
@@ -574,7 +581,7 @@ def main() -> None:
             rewrite_input(args.input_file, append=(plugin_line + "\n",))
             updater()
 
-            plugin, _ = prefetch_plugin(*parse_plugin_line(plugin_line))
+            plugin = fetch_plugin_from_pluginline(plugin_line)
             nixpkgs_repo.commit(
                 "vimPlugins.{name}: init at {version}".format(
                     name=plugin.normalized_name, version=plugin.version
