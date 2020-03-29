@@ -103,7 +103,7 @@ releaseTools.sourceTarball {
 
     header "generating packages.json"
     mkdir -p $out/nix-support
-    echo -n '{"version":2,"commit":"${nixpkgs.rev}","packages":' > tmp
+    echo -n '{"version":2,"packages":' > tmp
     nix-env -f . -I nixpkgs=${src} -qa --json --arg config 'import ${./packages-config.nix}' "''${opts[@]}" >> tmp
     echo -n '}' >> tmp
     packages=$out/packages.json.br
