@@ -123,6 +123,7 @@ in
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
   gvisor = handleTest ./gvisor.nix {};
+  h2o-etag = handleTest ./h2o-etag.nix {};
   hadoop.hdfs = handleTestOn [ "x86_64-linux" ] ./hadoop/hdfs.nix {};
   hadoop.yarn = handleTestOn [ "x86_64-linux" ] ./hadoop/yarn.nix {};
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
