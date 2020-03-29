@@ -1,9 +1,10 @@
 { stdenv, fetchurl, dpkg, makeWrapper, buildFHSUserEnv
 , gtk3, gdk-pixbuf, cairo, libjpeg_original, glib, pango, libGLU, libGL
-, nvidia_cg_toolkit, zlib, openssl, portaudio
+, nvidia_cg_toolkit, zlib, openssl, portaudio, libuuid, alsaLib
 }:
 let
   fullPath = stdenv.lib.makeLibraryPath [
+    alsaLib
     stdenv.cc.cc
     gtk3
     gdk-pixbuf
@@ -13,6 +14,7 @@ let
     pango
     libGL
     libGLU
+    libuuid
     nvidia_cg_toolkit
     zlib
     openssl
@@ -55,8 +57,13 @@ let
       </fontconfig>" > $out/lib/lightworks/fonts.conf
 
       patchelf \
-        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         --replace-needed libjpeg.so.8 libjpeg.so \
+        $out/lib/lightworks/libOS.so
+      patchelf \
+        --replace-needed libcrypto.so.1.0.0 libcrypto.so \
+        $out/lib/lightworks/libOSPrivate.so
+      patchelf \
+        --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
         $out/lib/lightworks/ntcardvt
 
       wrapProgram $out/lib/lightworks/ntcardvt \
