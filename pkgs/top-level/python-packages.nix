@@ -90,7 +90,7 @@ let
         # Remove Python prefix from name so we have a "normal" name.
         # While the prefix shows up in the store path, it won't be
         # used by `nix-env`.
-        name = removePythonPrefix oldAttrs.name;
+        pname = removePythonPrefix oldAttrs.pname;
         pythonModule = false;
       };
     });
