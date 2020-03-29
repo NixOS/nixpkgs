@@ -6450,6 +6450,8 @@ in
 
   seexpr = callPackage ../development/compilers/seexpr { };
 
+  session-desktop = callPackage ../applications/networking/instant-messengers/session-desktop { };
+
   setroot = callPackage  ../tools/X11/setroot { };
 
   setserial = callPackage ../tools/system/setserial { };
