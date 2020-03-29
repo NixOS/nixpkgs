@@ -178,9 +178,9 @@ let
 
           extNames = map getExtName extList;
           extraInit = writeText "custom-php.ini" ''
-            ${extraConfig}
             ${lib.concatStringsSep "\n"
               (lib.textClosureList extensionTexts extNames)}
+            ${extraConfig}
           '';
         in
           symlinkJoin {
