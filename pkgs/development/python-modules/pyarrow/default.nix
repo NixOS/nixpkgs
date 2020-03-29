@@ -1,4 +1,4 @@
-{ lib, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytest, pytest-lazy-fixture, pkgconfig, setuptools_scm, six }:
+{ lib, fetchpatch, buildPythonPackage, python, isPy3k, arrow-cpp, cmake, cython, futures, hypothesis, numpy, pandas, pytest, pytest-lazy-fixture, pkgconfig, setuptools_scm, six }:
 
 let
   _arrow-cpp = arrow-cpp.override { inherit python; };
@@ -8,6 +8,16 @@ buildPythonPackage rec {
   pname = "pyarrow";
 
   inherit (_arrow-cpp) version src;
+
+  patches = [
+    # Remove when updating pkgs.arrow-cpp to 0.17
+    (fetchpatch {
+      name = "ARROW-8106-fix-conversion-test";
+      url = "https://github.com/apache/arrow/commit/af20bbff30adc560d7e57dd921345d00cc8b870c.patch";
+      sha256 = "0ihpw589vh35va31ajzy5zpx3bqd9gdn3342rghi03r245kch9zd";
+      stripLen = 1;
+    })
+  ];
 
   sourceRoot = "apache-arrow-${version}/python";
 
