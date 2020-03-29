@@ -85,6 +85,9 @@ let
       # backported in debian since 2013.
       # https://bugs.python.org/issue13146
       ./atomic_pyc.patch
+
+      # Backport from CPython 3.8 of a good list of tests to run for PGO.
+      ./profile-task.patch
     ] ++ optionals (x11Support && stdenv.isDarwin) [
       ./use-correct-tcl-tk-on-darwin.patch
     ] ++ optionals stdenv.isLinux [
@@ -135,6 +138,7 @@ let
     '';
 
   configureFlags = [
+    "--enable-optimizations"
     "--enable-shared"
     "--with-threads"
     "--enable-unicode=ucs${toString ucsEncoding}"

@@ -104,6 +104,14 @@ in with passthru; stdenv.mkDerivation {
   ] ++ optionals (isPy37 || isPy38) [
     # Fix darwin build https://bugs.python.org/issue34027
     ./3.7/darwin-libutil.patch
+  ] ++ optionals (pythonOlder "3.8") [
+    # Backport from CPython 3.8 of a good list of tests to run for PGO.
+    (
+      if isPy36 || isPy37 then
+        ./3.6/profile-task.patch
+      else
+        ./3.5/profile-task.patch
+    )
   ] ++ optionals (isPy3k && hasDistutilsCxxPatch) [
     # Fix for http://bugs.python.org/issue1222585
     # Upstream distutils is calling C compiler to compile C++ code, which
@@ -135,6 +143,7 @@ in with passthru; stdenv.mkDerivation {
   PYTHONHASHSEED=0;
 
   configureFlags = [
+    "--enable-optimizations"
     "--enable-shared"
     "--without-ensurepip"
     "--with-system-expat"
