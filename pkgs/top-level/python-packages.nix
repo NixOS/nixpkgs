@@ -637,6 +637,8 @@ in {
 
   exchangelib = callPackage ../development/python-modules/exchangelib { };
 
+  dcmstack = callPackage ../development/python-modules/dcmstack { };
+
   dbus-python = callPackage ../development/python-modules/dbus {
     inherit (pkgs) dbus pkgconfig;
   };
