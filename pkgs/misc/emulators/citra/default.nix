@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation {
   pname = "citra";
-  version = "2019-10-05";
+  version = "2020-03-28";
 
   # Submodules
   src = fetchgit {
     url = "https://github.com/citra-emu/citra";
-    rev = "35690e3ac7a340d941d3bf56080cf5aa6187c5c3";
-    sha256 = "11a4mdjabn3qrh0nn4pjl5fxs9nhf1k27wd486csfx88q2q9jvq8";
+    rev = "a6ee1bf913abca29b5794adba8108af285d38925";
+    sha256 = "1wibb1myj8fzkfbfvmwp1c75j3im32n0zyj2q8dk6j5xwynxiijd";
   };
 
   enableParallelBuilding = true;
