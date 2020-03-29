@@ -259,6 +259,12 @@ self: super: {
     src = "${nodePackages.coc-solargraph}/lib/node_modules/coc-solargraph";
   };
 
+  coc-spell-checker = buildVimPluginFrom2Nix {
+    pname = "coc-spell-checker";
+    version = nodePackages.coc-spell-checker.version;
+    src = "${nodePackages.coc-spell-checker}/lib/node_modules/coc-spell-checker";
+  };
+
   coc-stylelint = buildVimPluginFrom2Nix {
     pname = "coc-stylelint";
     version = nodePackages.coc-stylelint.version;

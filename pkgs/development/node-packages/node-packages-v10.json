@@ -38,6 +38,7 @@
 , "coc-smartf"
 , "coc-snippets"
 , "coc-solargraph"
+, "coc-spell-checker"
 , "coc-stylelint"
 , "coc-tabnine"
 , "coc-tslint"
