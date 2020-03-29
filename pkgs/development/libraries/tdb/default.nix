@@ -1,18 +1,23 @@
-{ stdenv, fetchurl, wafHook, pkgconfig, readline, libxslt
-, docbook_xsl, docbook_xml_dtd_42
+{ stdenv, fetchurl, pkgconfig
+, wafHook, python3, readline
+, libxslt, docbook_xsl, docbook_xml_dtd_45
 }:
 
 stdenv.mkDerivation rec {
-  name = "tdb-1.3.18";
+  name = "tdb-1.4.3";
 
   src = fetchurl {
     url = "mirror://samba/tdb/${name}.tar.gz";
-    sha256 = "1drnsdh1w0px35r0y7l7g59yvyr67mvcsdrli4wab0mwi07b8mn1";
+    sha256 = "06waz0k50c7v3chd08mzp2rv7w4k4q9isbxx3vhlfpx1vy9q61f8";
   };
 
-  nativeBuildInputs = [ pkgconfig wafHook ];
+  nativeBuildInputs = [
+    pkgconfig wafHook
+    libxslt docbook_xsl docbook_xml_dtd_45
+  ];
+
   buildInputs = [
-    readline libxslt docbook_xsl docbook_xml_dtd_42
+    python3 readline
   ];
 
   wafPath = "buildtools/bin/waf";
