@@ -4,7 +4,7 @@
 , substituteAll
 , xmlsec
 , cryptography, defusedxml, future, pyopenssl, dateutil, pytz, requests, six
-, mock, pyasn1, pymongo, pytest, responses
+, mock, pyasn1, pymongo, pytest, responses, fetchpatch
 }:
 
 buildPythonPackage rec {
@@ -23,6 +23,11 @@ buildPythonPackage rec {
     (substituteAll {
       src = ./hardcode-xmlsec1-path.patch;
       inherit xmlsec;
+    })
+    (fetchpatch {
+      name = "fix-test-dates.patch";
+      url = "https://github.com/IdentityPython/pysaml2/commit/1d97d2d26f63e42611558fdd0e439bb8a7496a27.patch";
+      sha256 = "0r6d6hkk6z9yw7aqnsnylii516ysmdsc8dghwmgnwvw6cm7l388p";
     })
   ];
 
