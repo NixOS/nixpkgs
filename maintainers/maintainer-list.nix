@@ -302,6 +302,12 @@
     githubId = 786394;
     name = "Alexander Krupenkin ";
   };
+  albakham = {
+    email = "dev@geber.ga";
+    github = "albakham";
+    githubId = 43479487;
+    name = "Titouan Biteau";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
@@ -4397,6 +4403,12 @@
     email = "laure.tavard@univ-grenoble-alpes.fr";
     github = "ltavard";
     name = "Laure Tavard";
+  };
+  luc65r = {
+    email = "lucas@ransan.tk";
+    github = "luc65r";
+    githubId = 59375051;
+    name = "Lucas Ransan";
   };
   lucus16 = {
     email = "lars.jellema@gmail.com";

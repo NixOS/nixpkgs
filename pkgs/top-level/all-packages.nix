@@ -20671,6 +20671,8 @@ in
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
 
+  rofi-calc = callPackage ../applications/science/math/rofi-calc { };
+
   ympd = callPackage ../applications/audio/ympd { };
 
   nload = callPackage ../applications/networking/nload { };
