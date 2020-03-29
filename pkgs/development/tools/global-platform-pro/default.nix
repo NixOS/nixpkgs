@@ -1,6 +1,5 @@
-{ stdenv, fetchFromGitHub, jdk, maven, makeWrapper, jre_headless, pcsclite }:
+{ stdenv, fetchFromGitHub, fetchMavenDeps, jdk, maven, makeWrapper, jre_headless, pcsclite }:
 
-# TODO: This is quite a bit of duplicated logic with gephi. Factor it out?
 stdenv.mkDerivation rec {
   pname = "global-platform-pro";
   version = "18.09.14";
@@ -13,25 +12,9 @@ stdenv.mkDerivation rec {
     sha256 = "1vws6cbgm3mrwc2xz9j1y262vw21x3hjc9m7rqc4hn3m7gjpwsvg";
   };
 
-  deps = stdenv.mkDerivation {
-    name = "${pname}-${version}-deps";
-    inherit src;
-    nativeBuildInputs = [ jdk maven ];
-    installPhase = ''
-      # Download the dependencies
-      while ! mvn package "-Dmaven.repo.local=$out/.m2" -Dmaven.wagon.rto=5000; do
-        echo "timeout, restart maven to continue downloading"
-      done
-
-      # And keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files
-      # with lastModified timestamps inside
-      find "$out/.m2" -type f \
-        -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' \
-        -delete
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "1qwgvz6l5wia8q5824c9f3iwyapfskljhqf1z09fw6jjj1jy3b15";
+  deps = fetchMavenDeps {
+    inherit pname version src;
+    sha256 = "1qwgvz6l5wia8q5824c9f3iwyapfskljhqf1z09fw6jjj1jy3b15";
   };
 
   nativeBuildInputs = [ jdk maven makeWrapper ];

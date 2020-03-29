@@ -1,6 +1,7 @@
-{ stdenv, fetchFromGitHub, jdk, maven, javaPackages }:
+{ stdenv, fetchFromGitHub, fetchMavenDeps, jdk, maven, javaPackages }:
 
 let
+  pname = "gephi";
   version = "0.9.2";
 
   src = fetchFromGitHub {
@@ -11,27 +12,13 @@ let
   };
 
   # perform fake build to make a fixed-output derivation out of the files downloaded from maven central (120MB)
-  deps = stdenv.mkDerivation {
-    name = "gephi-${version}-deps";
-    inherit src;
-    buildInputs = [ jdk maven ];
-    buildPhase = ''
-      while mvn package -Dmaven.repo.local=$out/.m2 -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
-        echo "timeout, restart maven to continue downloading"
-      done
-    '';
-    # keep only *.{pom,jar,sha1,nbm} and delete all ephemeral files with lastModified timestamps inside
-    installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "1p7yf97dn0nvr005cbs6vdk3i341s8fya4kfccj8qqad2qgxflif";
+  deps = fetchMavenDeps {
+    inherit pname version src;
+    sha256 = "1p7yf97dn0nvr005cbs6vdk3i341s8fya4kfccj8qqad2qgxflif";
   };
 in
 stdenv.mkDerivation {
-  pname = "gephi";
-  inherit version;
-
-  inherit src;
+  inherit pname version src;
 
   buildInputs = [ jdk maven ];
 

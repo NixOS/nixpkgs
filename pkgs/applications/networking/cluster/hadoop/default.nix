@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
+{ stdenv, fetchurl, fetchMavenDeps, makeWrapper, pkgconfig, which, maven, cmake, jre, bash
 , coreutils, glibc, protobuf2_5, fuse, snappy, zlib, bzip2, openssl, openssl_1_0_2
 }:
 
@@ -19,19 +19,10 @@ let
         '';
 
         # perform fake build to make a fixed-output derivation of dependencies downloaded from maven central (~100Mb in ~3000 files)
-        fetched-maven-deps = stdenv.mkDerivation {
-          name = "hadoop-${version}-maven-deps";
-          inherit src postUnpack nativeBuildInputs buildInputs;
-          buildPhase = ''
-            while mvn package -Dmaven.repo.local=$out/.m2 ${mavenFlags} -Dmaven.wagon.rto=5000; [ $? = 1 ]; do
-              echo "timeout, restart maven to continue downloading"
-            done
-          '';
-          # keep only *.{pom,jar,xml,sha1,so,dll,dylib} and delete all ephemeral files with lastModified timestamps inside
-          installPhase = ''find $out/.m2 -type f -regex '.+\(\.lastUpdated\|resolver-status\.properties\|_remote\.repositories\)' -delete'';
-          outputHashAlgo = "sha256";
-          outputHashMode = "recursive";
-          outputHash = dependencies-sha256;
+        fetched-maven-deps = fetchMavenDeps {
+          name = "hadoop-${version}";
+          sha256 = dependencies-sha256;
+          inherit src postUnpack nativeBuildInputs buildInputs mavenFlags;
         };
 
         nativeBuildInputs = [ maven cmake pkgconfig ];

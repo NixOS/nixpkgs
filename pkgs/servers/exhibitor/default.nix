@@ -1,4 +1,4 @@
-{ fetchFromGitHub, maven, jdk, makeWrapper, stdenv, ... }:
+{ fetchFromGitHub, fetchMavenDeps, maven, jdk, makeWrapper, stdenv, ... }:
 stdenv.mkDerivation rec {
   pname = "exhibitor";
   version = "1.5.6";
@@ -9,21 +9,11 @@ stdenv.mkDerivation rec {
     sha256 = "07vikhkldxy51jbpy3jgva6wz75jksch6bjd6dqkagfgqd6baw45";
     rev = "5fcdb411d06e8638c2380f7acb72a8a6909739cd";
   };
-  mavenDependenciesSha256 = "00r69n9hwvrn5cbhxklx7w00sjmqvcxs7gvhbm150ggy7bc865qv";
-  # This is adapted from https://github.com/volth/nixpkgs/blob/6aa470dfd57cae46758b62010a93c5ff115215d7/pkgs/applications/networking/cluster/hadoop/default.nix#L20-L32
-  fetchedMavenDeps = stdenv.mkDerivation {
-    name = "exhibitor-${version}-maven-deps";
-    inherit src nativeBuildInputs;
-    buildPhase = ''
-      cd ${pomFileDir};
-      while timeout --kill-after=21m 20m mvn package -Dmaven.repo.local=$out/.m2; [ $? = 124 ]; do
-        echo "maven hangs while downloading :("
-      done
-    '';
-    installPhase = ''find $out/.m2 -type f \! -regex '.+\(pom\|jar\|xml\|sha1\)' -delete''; # delete files with lastModified timestamps inside
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = mavenDependenciesSha256;
+
+  fetchedMavenDeps = fetchMavenDeps {
+    inherit pname version src nativeBuildInputs;
+    configurePhase = "cd ${pomFileDir}";
+    sha256 = "00r69n9hwvrn5cbhxklx7w00sjmqvcxs7gvhbm150ggy7bc865qv";
   };
 
   # The purpose of this is to fetch the jar file out of public Maven and use Maven

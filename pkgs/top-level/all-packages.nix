@@ -276,6 +276,8 @@ in
 
   fetchMavenArtifact = callPackage ../build-support/fetchmavenartifact { };
 
+  fetchMavenDeps = callPackage ../build-support/fetch-maven-deps.nix { };
+
   prefer-remote-fetch = import ../build-support/prefer-remote-fetch;
 
   global-platform-pro = callPackage ../development/tools/global-platform-pro/default.nix { };
