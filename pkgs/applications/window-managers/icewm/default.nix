@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "icewm";
-  version = "1.6.3";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner  = "bbidulock";
     repo   = "icewm";
     rev    = version;
-    sha256 = "0h3w718x28fd4sz36ka9wpgcb98scna6qpycxzls4cjji3rjgm0l";
+    sha256 = "1glzpkpl0vl5sjn1d9jlvwd9ch16dvxvsf2n310kb0ycpfkl84vs";
   };
 
   nativeBuildInputs = [ cmake pkgconfig perl asciidoc ];
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
       IceWM is a window manager for the X Window System. The goal of
       IceWM is speed, simplicity, and not getting in the user's way.
     '';
-    homepage = http://www.icewm.org/;
+    homepage = "http://www.icewm.org/";
     license = licenses.lgpl2;
     maintainers = [ maintainers.AndersonTorres ];
     platforms = platforms.linux;
