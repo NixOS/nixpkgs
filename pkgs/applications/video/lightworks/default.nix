@@ -20,14 +20,14 @@ let
   ];
 
   lightworks = stdenv.mkDerivation rec {
-    version = "14.0.0";
+    version = "14.5.0";
     pname = "lightworks";
 
     src =
       if stdenv.hostPlatform.system == "x86_64-linux" then
         fetchurl {
-          url = "http://downloads.lwks.com/v14/lwks-14.0.0-amd64.deb";
-          sha256 = "66eb9f9678d979db76199f1c99a71df0ddc017bb47dfda976b508849ab305033";
+          url = "https://cdn.lwks.com/lightworks-14.5.0-amd64.deb";
+          sha256 = "1djwijsrz6iksf81yjdz030s7cczmgh52w0dxsri3vp2ir911j47";
         }
       else throw "${pname}-${version} is not supported on ${stdenv.hostPlatform.system}";
 
