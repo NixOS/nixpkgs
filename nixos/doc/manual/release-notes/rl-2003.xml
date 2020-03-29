@@ -757,6 +757,16 @@ auth required pam_succeed_if.so uid >= 1000 quiet
      </warning>
     </para>
    </listitem>
+   <listitem>
+    <para>
+     The option <option>services.nixosManual.showManual</option> has been removed (and the module).
+	 You can use the <command>nixos-help</command> command instead, without security issues with the module's implementation.
+	 This applies in particular to the installation images.
+    </para>
+    <para>
+	 Similar module <option>services.rogue</option> was also removed (probably not used by anyone).
+    </para>
+   </listitem>
   </itemizedlist>
  </section>
 
