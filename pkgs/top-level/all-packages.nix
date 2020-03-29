@@ -947,7 +947,7 @@ in
 
   libfx2 = with python3Packages; toPythonApplication fx2;
 
-  fitnesstrax = callPackage ../applications/misc/fitnesstrax/default.nix { pkgs = pkgs; };
+  fitnesstrax = callPackage ../applications/misc/fitnesstrax/default.nix { };
 
   fxlinuxprintutil = callPackage ../tools/misc/fxlinuxprintutil { };
 

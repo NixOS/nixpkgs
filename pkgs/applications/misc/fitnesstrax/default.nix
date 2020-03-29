@@ -29,7 +29,6 @@ rustPlatform.buildRustPackage rec {
     cairo
     glib
     gdk-pixbuf
-    gtkd
     gtk3
   ];
 
