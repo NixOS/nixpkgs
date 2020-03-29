@@ -56,6 +56,7 @@ let
 
       patchelf \
         --interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --replace-needed libjpeg.so.8 libjpeg.so \
         $out/lib/lightworks/ntcardvt
 
       wrapProgram $out/lib/lightworks/ntcardvt \
