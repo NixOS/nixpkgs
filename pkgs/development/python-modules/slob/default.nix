@@ -7,8 +7,8 @@
 }:
 
 buildPythonPackage {
-  name = "slob";
-  verison = "unstable-2016-11-03";
+  pname = "slob";
+  version = "unstable-2016-11-03";
   disabled = !isPy3k;
 
   src = fetchFromGitHub {
