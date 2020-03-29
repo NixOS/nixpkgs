@@ -107,6 +107,8 @@ lib.makeScope pkgs.newScope (self: with self; {
 
   elementary-dpms-helper = callPackage ./services/elementary-dpms-helper { };
 
+  elementary-notifications = callPackage ./services/elementary-notifications { };
+
   # We're using ubuntu and elementary's patchset due to reasons
   # explained here -> https://github.com/elementary/greeter/issues/92#issuecomment-376215614
   # Take note of "I am holding off on "fixing" this bug for as long as possible."
