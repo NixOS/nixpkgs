@@ -1,9 +1,10 @@
 { stdenv, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
 , setuptools_scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy, python
+, atomicwrites, mock, pygments, writeText, pathlib2, wcwidth, packaging, isPyPy
+, python
 }:
 buildPythonPackage rec {
-  version = "5.3.5";
+  version = "5.4.1";
   pname = "pytest";
 
   disabled = !isPy3k;
@@ -15,10 +16,10 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "0d5fe9189a148acc3c3eb2ac8e1ac0742cb7618c084f3d228baaec0c254b318d";
+    sha256 = "0w7r0pl1rkzpvb7k3926zcc9brd071zc8b1r3wymz05qfmqf7pc4";
   };
 
-  checkInputs = [ hypothesis mock ];
+  checkInputs = [ hypothesis mock pygments ];
   nativeBuildInputs = [ setuptools_scm ];
   propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
     ++ stdenv.lib.optionals (pythonOlder "3.6") [ pathlib2 ];
@@ -28,7 +29,7 @@ buildPythonPackage rec {
   # Ignored file https://github.com/pytest-dev/pytest/pull/5605#issuecomment-522243929
   checkPhase = ''
     runHook preCheck
-    $out/bin/py.test -x testing/ -k "not test_collect_pyargs_with_testpaths" --ignore=testing/test_junitxml.py
+    $out/bin/py.test -x testing/ --ignore=testing/test_junitxml.py
     runHook postCheck
   '';
 
