@@ -258,5 +258,6 @@ in stdenv.mkDerivation rec {
     description = "A cluster manager that provides efficient resource isolation and sharing across distributed applications, or frameworks";
     maintainers = with maintainers; [ cstrahan offline ];
     platforms   = platforms.unix;
+    broken = true; # Broken since 2019-10-22 (https://hydra.nixos.org/build/115475123)
   };
 }

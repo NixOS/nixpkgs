@@ -33,5 +33,6 @@ stdenv.mkDerivation {
     platforms = stdenv.lib.platforms.linux;
     maintainers = [stdenv.lib.maintainers.raskin];
     license = stdenv.lib.licenses.gpl3;
+    broken = true; # Broken since 2019-11-20 (https://hydra.nixos.org/build/114721280)
   };
 }
