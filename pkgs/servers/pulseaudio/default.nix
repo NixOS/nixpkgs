@@ -17,7 +17,7 @@
 
 , airtunesSupport ? false
 
-, bluetoothSupport ? false
+, bluetoothSupport ? true
 
 , remoteControlSupport ? false
 
