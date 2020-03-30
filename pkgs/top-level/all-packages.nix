@@ -9593,6 +9593,8 @@ in
 
   solargraph = callPackage ../development/ruby-modules/solargraph { };
 
+  ruby-debug-ide = callPackage ../development/ruby-modules/ruby-debug-ide { };
+
   inherit (callPackage ../development/interpreters/ruby {
     inherit (darwin) libiconv libobjc libunwind;
     inherit (darwin.apple_sdk.frameworks) Foundation;
