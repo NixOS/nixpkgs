@@ -1,5 +1,5 @@
 { stdenv, fetchurl, lib, graalvm8 }:
-
+with stdenv.lib;
 stdenv.mkDerivation rec{
   pname = "babashka";
   version = "0.0.78";
