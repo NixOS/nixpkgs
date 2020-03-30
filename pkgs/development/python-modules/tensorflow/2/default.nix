@@ -333,9 +333,12 @@ let
       license = licenses.asl20;
       maintainers = with maintainers; [ jyp abbradar ];
       platforms = with platforms; linux ++ darwin;
-      # The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
-      # https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
-      broken = !(xlaSupport -> cudaSupport) || !isPy3k;
+      # It is complaining about not having protobuf 3.8, which is weird because
+      # it doesn't have that on master either.
+      broken = true;
+      ## The py2 build fails due to some issue importing protobuf. Possibly related to the fix in
+      ## https://github.com/akesandgren/easybuild-easyblocks/commit/1f2e517ddfd1b00a342c6abb55aef3fd93671a2b
+      #broken = !(xlaSupport -> cudaSupport) || !isPy3k;
     };
   };
 
