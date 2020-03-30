@@ -10669,6 +10669,7 @@ let
     pname = "gettext";
     version = "1.07";
     buildInputs = [ pkgs.gettext ];
+    doCheck = !stdenv.isDarwin;
     src = fetchurl {
       url = "mirror://cpan/authors/id/P/PV/PVANDRY/gettext-1.07.tar.gz";
       sha256 = "05cwqjxxary11di03gg3fm6j9lbvg1dr2wpr311c1rwp8salg7ch";
