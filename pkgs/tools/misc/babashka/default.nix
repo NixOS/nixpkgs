@@ -1,4 +1,4 @@
-{ stdenv, fetchcurl, lib, graalvm8 }:
+{ stdenv, fetchurl, lib, graalvm8 }:
 
 stdenv.mkDerivation rec{
   pname = "babashka";
