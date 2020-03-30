@@ -12981,6 +12981,8 @@ in
 
   libiptcdata = callPackage ../development/libraries/libiptcdata { };
 
+  libjcat = callPackage ../development/libraries/libjcat { };
+
   libjpeg_original = callPackage ../development/libraries/libjpeg { };
   libjpeg_turbo = callPackage ../development/libraries/libjpeg-turbo { };
   libjpeg_drop = callPackage ../development/libraries/libjpeg-drop { };
