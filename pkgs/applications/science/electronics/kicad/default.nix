@@ -35,16 +35,15 @@ let
   python = python3;
   wxPython = python3Packages.wxPython_4_0;
 
-  libraries = callPackages ./libraries.nix versionConfig.libVersion;
+in
+stdenv.mkDerivation rec {
+
+  passthru.libraries = callPackages ./libraries.nix versionConfig.libVersion;
   base = callPackage ./base.nix {
-    pname = baseName;
     inherit versions stable baseName;
     inherit wxGTK python wxPython;
     inherit debug withI18n withOCCT oceSupport ngspiceSupport scriptingSupport;
   };
-
-in
-stdenv.mkDerivation rec {
 
   inherit pname;
   version = versions.${baseName}.kicadVersion.version;
@@ -63,7 +62,7 @@ stdenv.mkDerivation rec {
 
   # wrapGAppsHook added the equivalent to ${base}/share
   # though i noticed no difference without it
-  makeWrapperArgs = [
+  makeWrapperArgs = with passthru.libraries; [
     "--prefix XDG_DATA_DIRS : ${base}/share"
     "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
     "--prefix XDG_DATA_DIRS : ${gnome3.defaultIconTheme}/share"
@@ -73,13 +72,13 @@ stdenv.mkDerivation rec {
     "--prefix XDG_DATA_DIRS : ${cups}/share"
     "--prefix GIO_EXTRA_MODULES : ${gnome3.dconf}/lib/gio/modules"
 
-    "--set KISYSMOD ${libraries.footprints}/share/kicad/modules"
-    "--set KICAD_SYMBOL_DIR ${libraries.symbols}/share/kicad/library"
-    "--set KICAD_TEMPLATE_DIR ${libraries.templates}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${libraries.symbols}/share/kicad/template"
-    "--prefix KICAD_TEMPLATE_DIR : ${libraries.footprints}/share/kicad/template"
+    "--set KISYSMOD ${footprints}/share/kicad/modules"
+    "--set KICAD_SYMBOL_DIR ${symbols}/share/kicad/library"
+    "--set KICAD_TEMPLATE_DIR ${templates}/share/kicad/template"
+    "--prefix KICAD_TEMPLATE_DIR : ${symbols}/share/kicad/template"
+    "--prefix KICAD_TEMPLATE_DIR : ${footprints}/share/kicad/template"
   ]
-  ++ optionals (with3d) [ "--set KISYS3DMOD ${libraries.packages3d}/share/kicad/modules/packages3d" ]
+  ++ optionals (with3d) [ "--set KISYS3DMOD ${packages3d}/share/kicad/modules/packages3d" ]
   ++ optionals (ngspiceSupport) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
   # infinisil's workaround for #39493

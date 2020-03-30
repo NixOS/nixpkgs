@@ -2,7 +2,6 @@
 , libX11, gettext, glew, glm, cairo, curl, openssl, boost, pkgconfig
 , doxygen, pcre, libpthreadstubs, libXdmcp, fetchpatch, lndir, callPackages
 
-, pname ? "kicad"
 , stable ? true
 , baseName ? "kicad"
 , versions ? { }
@@ -20,26 +19,26 @@ with lib;
 let
 
   versionConfig = versions.${baseName};
-  baseVersion = "${versions.${baseName}.kicadVersion.version}";
 
   # oce on aarch64 fails a test
   withOCE = oceSupport && !stdenv.isAarch64;
   withOCC = (withOCCT && !withOCE) || (oceSupport && stdenv.isAarch64);
 
-  kicad-libraries = callPackages ./libraries.nix versionConfig.libVersion;
+  libraries = callPackages ./libraries.nix versionConfig.libVersion;
 
 in
 stdenv.mkDerivation rec {
 
-  inherit pname;
-  version = "base-${baseVersion}";
+  i18n = libraries.i18n;
+
+  pname = "kicad-base";
+  version = "${versions.${baseName}.kicadVersion.version}";
 
   src = fetchFromGitLab (
     {
       group = "kicad";
       owner = "code";
       repo = "kicad";
-      rev = baseVersion;
     } // versionConfig.kicadVersion.src
   );
 
@@ -113,7 +112,7 @@ stdenv.mkDerivation rec {
 
   postInstall = optional (withI18n) ''
     mkdir -p $out/share
-    lndir ${kicad-libraries.i18n}/share $out/share
+    lndir ${i18n}/share $out/share
   '';
 
   meta = {
