@@ -34,7 +34,7 @@ buildPythonPackage rec {
     description = "Python bindings for the remote Jenkins API";
     homepage = https://pypi.python.org/pypi/python-jenkins;
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ma27 ];
+    maintainers = with maintainers; [ ];
   };
 
 }

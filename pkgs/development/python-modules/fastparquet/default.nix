@@ -3,13 +3,13 @@ thrift, pytest, python-snappy, lz4 }:
 
 buildPythonPackage rec {
   pname = "fastparquet";
-  version = "0.3.2";
+  version = "0.3.3";
 
   src = fetchFromGitHub {
     owner = "dask";
     repo = pname;
     rev = version;
-    sha256 = "142kmyddaq6mvmca23abwns1csn8f3lk9c8mbxwxrg4wa1dh0lb4";
+    sha256 = "1vnxr4r0bia2zi9csjw342l507nic6an4hr5xb3a36ggqlbaa0g5";
   };
 
   postPatch = ''

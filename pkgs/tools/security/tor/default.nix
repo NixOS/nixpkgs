@@ -28,6 +28,8 @@ stdenv.mkDerivation rec {
   buildInputs = [ libevent openssl zlib lzma zstd scrypt ] ++
     stdenv.lib.optionals stdenv.isLinux [ libseccomp systemd libcap ];
 
+  patches = [ ./disable-monotonic-timer-tests.patch ];
+
   NIX_CFLAGS_LINK = stdenv.lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
   postPatch = ''
@@ -39,7 +41,6 @@ stdenv.mkDerivation rec {
   '';
 
   enableParallelBuilding = true;
-  enableParallelChecking = false; # 4 tests fail randomly
 
   doCheck = true;
 

@@ -113,6 +113,7 @@ mapAliases ({
   etcdctl = etcd; # added 2018-04-25
   exfat-utils = exfat;                  # 2015-09-11
   facette = throw "facette has been removed."; # added 2020-01-06
+  fast-neural-doodle = throw "fast-neural-doodle has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   ffadoFull = ffado; # added 2018-05-01
   firefox-esr-wrapper = firefox-esr;  # 2016-01
   firefox-wrapper = firefox;          # 2016-01
@@ -241,6 +242,7 @@ mapAliases ({
   links = links2; # added 2016-01-31
   linux_rpi0 = linux_rpi1;
   linuxPackages_rpi0 = linuxPackages_rpi1;
+  loadcaffe = throw "loadcaffe has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   lttngTools = lttng-tools;  # added 2014-07-31
   lttngUst = lttng-ust;  # added 2014-07-31
   lua5_1_sockets = lua51Packages.luasocket; # added 2017-05-02
@@ -287,10 +289,11 @@ mapAliases ({
   networkmanager_openconnect = networkmanager-openconnect; # added 2018-02-25
   networkmanager_openvpn = networkmanager-openvpn; # added 2018-02-25
   networkmanager_vpnc = networkmanager-vpnc; # added 2018-02-25
-  nix-review = nixpkgs-review; # added 2019-12-22
+  neutral-style = throw "neural-style has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   nfsUtils = nfs-utils;  # added 2014-12-06
   nginxUnstable = nginxMainline; # added 2018-04-25
   nilfs_utils = nilfs-utils; # added 2018-04-25
+  nix-review = nixpkgs-review; # added 2019-12-22
   nmap_graphical = nmap-graphical;  # added 2017-01-19
   nologin = shadow; # added 2018-04-25
   nxproxy = nx-libs; # added 2019-02-15
@@ -347,6 +350,7 @@ mapAliases ({
   pinentry_gtk2 = pinentry-gtk2; # added 2019-10-14
   pinentry_qt = pinentry-qt; # added 2019-10-14
   pinentry_gnome = pinentry-gnome; # added 2019-10-14
+  pinentry_qt5 = pinentry-qt; # added 2020-02-11
   postgis = postgresqlPackages.postgis;
   # end
   ppl-address-book = throw "deprecated in 2019-05-02: abandoned by upstream.";
@@ -378,10 +382,12 @@ mapAliases ({
   ruby_2_2_9 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_3_6 = throw "deprecated 2018-0213: use a newer version of ruby";
   ruby_2_3 = throw "deprecated 2019-09-06: use a newer version of ruby";
-  ruby_2_4_3 = throw "deprecated 2018-0213: use ruby_2_4 instead";
-  ruby_2_5_0 = throw "deprecated 2018-0213: use ruby_2_5 instead";
+  ruby_2_4_3 = throw "deprecated 2018-0213: use a newer version of ruby";
+  ruby_2_4 = throw "deprecated 2019-12: use a newer version of ruby";
+  ruby_2_5_0 = throw "deprecated 2018-0213: use a newer version of ruby";
+  rubyPackages_2_4 = throw "deprecated 2019-12: use a newer version of rubyPackages instead";
   rubygems = throw "deprecated 2016-03-02: rubygems is now bundled with ruby";
-  rxvt_unicode_with-plugins = rxvt-unicode; # added 2020-02-02
+  rxvt_unicode-with-plugins = rxvt-unicode; # added 2020-02-02
   rxvt_unicode = rxvt-unicode-unwrapped; # added 2020-02-02
   urxvt_autocomplete_all_the_things = rxvt-unicode-plugins.autocomplete-all-the-things; # added 2020-02-02
   urxvt_perl = rxvt-unicode-plugins.perl; # added 2020-02-02
@@ -459,11 +465,16 @@ mapAliases ({
   tex-gyre-schola-math = tex-gyre-math.schola; # added 2018-04-03
   tex-gyre-termes-math = tex-gyre-math.termes; # added 2018-04-03
   tftp_hpa = tftp-hpa; # added 2015-04-03
+  tomcat85 = tomcat8; # added 2020-03-11
   torbrowser = tor-browser-bundle-bin; # added 2017-04-05
-  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
+  torch = throw "torch has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torch-hdf5 = throw "torch-hdf5 has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torch-repl = throw "torch-repl has been removed, as the upstream project has been abandoned"; # added 2020-03-28
+  torchPackages = throw "torchPackages has been removed, as the upstream project has been abandoned"; # added 2020-03-28
   trang = jing-trang; # added 2018-04-25
   transmission_gtk = transmission-gtk; # added 2018-01-06
   transmission_remote_gtk = transmission-remote-gtk; # added 2018-01-06
+  transporter = throw "transporter has been removed. It was archived upstream, so it's considered abandoned.";
   truecrypt = veracrypt; # added 2018-10-24
   tshark = wireshark-cli; # added 2018-04-25
   ubootBeagleboneBlack = ubootAmx335xEVM; # added 2020-01-21
@@ -493,7 +504,7 @@ mapAliases ({
   morituri = whipper; # added 2018-09-13
   xfceUnstable = xfce4-14; # added 2019-09-17
   xfce4-14 = xfce;
-  xfce4-12 = xfce;
+  xfce4-12 = throw "xfce4-12 has been replaced by xfce4-14"; # added 2020-03-14
   x11 = xlibsWrapper; # added 2015-09
   xbmc = kodi; # added 2018-04-25
   xbmcPlain = kodiPlain; # added 2018-04-25

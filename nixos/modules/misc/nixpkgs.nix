@@ -216,6 +216,14 @@ in
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
+
+    initialSystem = mkOption {
+      type = types.str;
+      internal = true;
+      description = ''
+        Preserved value of <literal>system</literal> passed to <literal>eval-config.nix</literal>.
+      '';
+    };
   };
 
   config = {

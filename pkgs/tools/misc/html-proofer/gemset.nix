@@ -26,10 +26,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0i2vxj3ryvih5y06mgsa19dwy8fpyx58byh5szp7m6i702p78rni";
+      sha256 = "10lfhahnnc91v63xpvk65apn61pib086zha3z5sp1xk9acfx12h4";
       type = "gem";
     };
-    version = "1.12.1";
+    version = "1.12.2";
   };
   html-proofer = {
     dependencies = ["addressable" "mercenary" "nokogumbo" "parallel" "rainbow" "typhoeus" "yell"];
@@ -68,10 +68,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0r0qpgf80h764k176yr63gqbs2z0xbsp8vlvs2a79d5r9vs83kln";
+      sha256 = "1yi8j8hwrlc3rg5v3w52gxndmwifyk7m732q9yfbal0qajqbh1h8";
       type = "gem";
     };
-    version = "1.10.7";
+    version = "1.10.8";
   };
   nokogumbo = {
     dependencies = ["nokogiri"];
@@ -130,9 +130,9 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1r2kygdh193qdbjjwhfghzl9czj4jr9xrw3gqyg5hmvmn7lygjwm";
+      sha256 = "1g16kcdhdfvczn7x81jiq6afg3bdxmb73skqjyjlkp5nqcy6y5hx";
       type = "gem";
     };
-    version = "2.2.1";
+    version = "2.2.2";
   };
 }

@@ -1,15 +1,18 @@
-{ stdenv, lib, fetchurl
+{ stdenv
+, lib
+, fetchurl
+, gawk
 , enableSSO ? false
 , crowdProperties ? null
 }:
 
 stdenv.mkDerivation rec {
   pname = "atlassian-jira";
-  version = "8.7.0";
+  version = "8.8.0";
 
   src = fetchurl {
     url = "https://product-downloads.atlassian.com/software/jira/downloads/atlassian-jira-software-${version}.tar.gz";
-    sha256 = "0k3z4j5pp0xx8qq5clr3069449w5k43gzag60jv3dzq35586yvdi";
+    sha256 = "1gn0iknli8pi3c3kxb8hdn19wzn2fx0193ppf0niw3cqf1h2c5cz";
   };
 
   buildPhase = ''
@@ -18,6 +21,8 @@ stdenv.mkDerivation rec {
     rm -r logs; ln -sf /run/atlassian-jira/logs/ .
     rm -r work; ln -sf /run/atlassian-jira/work/ .
     rm -r temp; ln -sf /run/atlassian-jira/temp/ .
+    substituteInPlace bin/check-java.sh \
+      --replace "awk" "${gawk}/bin/gawk"
   '' + lib.optionalString enableSSO ''
     substituteInPlace atlassian-jira/WEB-INF/classes/seraph-config.xml \
       --replace com.atlassian.jira.security.login.JiraSeraphAuthenticator \

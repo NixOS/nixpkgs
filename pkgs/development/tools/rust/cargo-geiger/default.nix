@@ -23,6 +23,12 @@ rustPlatform.buildRustPackage rec {
   # we might be able to run these with something like
   # `cargo insta review` in the `preCheck` phase.
   checkPhase = ''
+    cd cargo-geiger/tests/snapshots
+    for file in *
+    do
+      mv $file r#$file
+    done
+    cd -
     cargo test -- \
     --skip test_package::case_2 \
     --skip test_package::case_3 \

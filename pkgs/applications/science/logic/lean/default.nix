@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lean";
-  version = "3.4.2";
+  version = "3.5.1";
 
   src = fetchFromGitHub {
-    owner  = "leanprover";
+    owner  = "leanprover-community";
     repo   = "lean";
     rev    = "v${version}";
-    sha256 = "0zpnfg6kyg120rrdr336i1lymmzz4xgcqpn96iavhzhlaanmx55l";
+    sha256 = "0m7knf1hfbn2v6p6kmqxlx8c40p5nzv8d975w2xwljaccc42j1yp";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -27,3 +27,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ thoughtpolice gebner ];
   };
 }
+

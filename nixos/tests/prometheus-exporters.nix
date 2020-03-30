@@ -224,7 +224,7 @@ let
           after = [ "postfix.service" ];
           requires = [ "postfix.service" ];
           preStart = ''
-            mkdir -p 0600 mail-exporter/new
+            mkdir -p -m 0700 mail-exporter/new
           '';
           serviceConfig = {
             ProtectHome = true;
@@ -363,6 +363,7 @@ let
       };
       metricProvider = {
         services.rspamd.enable = true;
+        virtualisation.memorySize = 1024;
       };
       exporterTest = ''
         wait_for_unit("rspamd.service")

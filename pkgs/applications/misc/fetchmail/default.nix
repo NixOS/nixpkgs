@@ -1,15 +1,15 @@
 { stdenv, fetchurl, openssl }:
 
 let
-  version = "6.3.26";
+  version = "6.4.2";
 in
 stdenv.mkDerivation {
   pname = "fetchmail";
   inherit version;
 
   src = fetchurl {
-    url = "mirror://sourceforge/fetchmail.berlios/fetchmail-${version}.tar.bz2";
-    sha256 = "08rafrs1dlr11myr0p99kg4k80qyy0fa63gg3ac88zn49174lwhw";
+    url = "mirror://sourceforge/fetchmail/fetchmail-${version}.tar.xz";
+    sha256 = "0c563if3kribnj771l14aj06irmrlhm61dc68w6dp7zj4qrnn7z2";
   };
 
   buildInputs = [ openssl ];

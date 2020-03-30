@@ -42,8 +42,8 @@ in
 
     {
       name = "G4EMLOW";
-      version = "7.9";
-      sha256 = "1zrsvk2ahlwss6mgjrma6d2ii49vlzcd5r3ccw94c7m9rnk9mgsa";
+      version = "7.9.1";
+      sha256 = "1jrw0izw732bywq1k1srs3x2z0m3y2h377kcvwbwcr0wa1p10342";
       envvar = "LE";
     }
 

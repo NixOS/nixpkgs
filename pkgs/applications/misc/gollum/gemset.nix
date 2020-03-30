@@ -46,10 +46,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0xgs3l81ghlc5nm75n0pz7b2cj3hpscfq5iy27c483nnjn2v5mc4";
+      sha256 = "0xvcizc4856xlvara1zzwl6j61vxxshzcrdagp58xzfl68vbi63p";
       type = "gem";
     };
-    version = "2.8.2";
+    version = "2.8.3";
   };
   gollum = {
     dependencies = ["gemojione" "gollum-lib" "kramdown" "mustache" "sinatra" "useragent"];
@@ -105,25 +105,14 @@
     version = "1.9.0";
   };
   mime-types = {
-    dependencies = ["mime-types-data"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0g7l18igjb9z7q4b2ykvyxyvjxlx5pwsmx5z3ibdbr6372xgfglk";
+      sha256 = "03j98xr0qw2p2jkclpmk7pm29yvmmh0073d8d43ajmr0h3w7i5l9";
       type = "gem";
     };
-    version = "3.3";
-  };
-  mime-types-data = {
-    groups = ["default"];
-    platforms = [];
-    source = {
-      remotes = ["https://rubygems.org"];
-      sha256 = "18x61fc36951vw7f74gq8cyybdpxvyg5d0azvqhrs82ddw3v16xh";
-      type = "gem";
-    };
-    version = "3.2019.1009";
+    version = "2.99.3";
   };
   mini_portile2 = {
     groups = ["default"];
@@ -151,10 +140,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0r0qpgf80h764k176yr63gqbs2z0xbsp8vlvs2a79d5r9vs83kln";
+      sha256 = "1yi8j8hwrlc3rg5v3w52gxndmwifyk7m732q9yfbal0qajqbh1h8";
       type = "gem";
     };
-    version = "1.10.7";
+    version = "1.10.8";
   };
   posix-spawn = {
     groups = ["default"];
@@ -171,10 +160,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1riq0z408dwvqcqrpq05bp2w879l4sjxzb4cbrbx55kpi6h2g1cj";
+      sha256 = "0wr1f3g9rc9i8svfxa9cijajl1661d817s56b2w7rd572zwn0zi0";
       type = "gem";
     };
-    version = "1.6.12";
+    version = "1.6.13";
   };
   rack-protection = {
     dependencies = ["rack"];

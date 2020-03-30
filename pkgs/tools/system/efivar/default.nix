@@ -29,6 +29,8 @@ stdenv.mkDerivation rec {
       sha256 = "0lc38npydp069nlcga25wzzm204ww9l6mpjfn6wmhdfhn0pgjwky";
     })
   ];
+  # We have no LTO here since commit 22284b07.
+  postPatch = if stdenv.isi686 then "sed '/^OPTIMIZE /s/-flto//' -i Make.defaults" else null;
 
   nativeBuildInputs = [ pkgconfig ];
   buildInputs = [ popt ];

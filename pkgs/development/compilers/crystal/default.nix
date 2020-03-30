@@ -1,5 +1,5 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, makeWrapper
-, coreutils, git, gmp, nettools, openssl_1_0_2, readline, tzdata, libxml2, libyaml
+{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, makeWrapper
+, coreutils, git, gmp, nettools, openssl, readline, tzdata, libxml2, libyaml
 , boehmgc, libatomic_ops, pcre, libevent, libiconv, llvm, clang, which, zlib, pkgconfig
 , callPackage }:
 
@@ -20,7 +20,7 @@ let
 
   arch = archs.${stdenv.system} or (throw "system ${stdenv.system} not supported");
 
-  checkInputs = [ git gmp openssl_1_0_2 readline libxml2 libyaml ];
+  checkInputs = [ git gmp openssl readline libxml2 libyaml ];
 
   genericBinary = { version, sha256s, rel ? 1 }:
   stdenv.mkDerivation rec {
@@ -39,15 +39,15 @@ let
   };
 
   commonBuildInputs = extraBuildInputs: [
-    boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl_1_0_2
+    boehmgc libatomic_ops pcre libevent libyaml zlib libxml2 openssl
   ] ++ extraBuildInputs
     ++ stdenv.lib.optionals stdenv.isDarwin [ libiconv ];
 
 
-  generic = ({ version, sha256, binary, doCheck ? true, extraBuildInputs ? [] }:
+  generic = ({ version, sha256, binary, doCheck ? true, extraBuildInputs ? [], patches ? [] }:
   lib.fix (compiler: stdenv.mkDerivation {
     pname = "crystal";
-    inherit doCheck version;
+    inherit doCheck version patches;
 
     src = fetchFromGitHub {
       owner  = "crystal-lang";
@@ -178,15 +178,6 @@ let
   }));
 
 in rec {
-  binaryCrystal_0_26 = genericBinary {
-    version = "0.26.1";
-    sha256s = {
-      x86_64-linux  = "1xban102yiiwmlklxvn3xp3q546bp8hlxxpakayajkhhnpl6yv45";
-      i686-linux    = "1igspf1lrv7wpmz0pfrkbx8m1ykvnv4zhic53cav4nicppm2v0ic";
-      x86_64-darwin = "1mri8bfrcldl69gczxpihxpv1shn4bijx28m3qby8vnk0ii63n9s";
-    };
-  };
-
   binaryCrystal_0_27 = genericBinary {
     version = "0.27.2";
     sha256s = {
@@ -223,20 +214,6 @@ in rec {
     };
   };
 
-  crystal_0_25 = generic {
-    version = "0.25.1";
-    sha256  = "15xmbkalsdk9qpc6wfpkly3sifgw6a4ai5jzlv78dh3jp7glmgyl";
-    doCheck = false;
-    binary = binaryCrystal_0_26;
-  };
-
-  crystal_0_26 = generic {
-    version = "0.26.1";
-    sha256  = "0jwxrqm99zcjj82gyl6bzvnfj79nwzqf8sa1q3f66q9p50v44f84";
-    doCheck = false; # about 20 tests out of more than 14000 are failing
-    binary = binaryCrystal_0_26;
-  };
-
   crystal_0_27 = generic {
     version = "0.27.2";
     sha256  = "0vxqnpqi85yh0167nrkbksxsni476iwbh6y3znbvbjbbfhsi3nsj";
@@ -269,6 +246,13 @@ in rec {
     version = "0.32.1";
     sha256  = "120ndi3nhh2r52hjvhwfb49cdggr1bzdq6b8xg7irzavhjinfza6";
     binary = binaryCrystal_0_31;
+    patches = [
+      # https://github.com/crystal-lang/crystal/pull/8673, can be removed in 0.33.0
+      (fetchpatch {
+        url = "https://github.com/crystal-lang/crystal/commit/0ae289dd05aa372fa37a7c6fc6777810a2f42d26.patch";
+        sha256 = "0dsqppnbdxfqk7xb554mlklwc30jyhkyq8lc1diwz8ng9c1qlqfa";
+      })
+    ];
   };
 
   crystal = crystal_0_32;

@@ -12,7 +12,7 @@ let
 
   version = fileContents ../.version;
   versionSuffix =
-    (if stableBranch then "." else "pre") + "${toString nixpkgs.revCount}.${nixpkgs.shortRev}";
+    (if stableBranch then "." else "beta") + "${toString (nixpkgs.revCount - 212894)}.${nixpkgs.shortRev}";
 
   # Run the tests for each platform.  You can run a test by doing
   # e.g. ‘nix-build -A tests.login.x86_64-linux’, or equivalently,
@@ -177,11 +177,6 @@ in rec {
         aarch64-linux = ./modules/installer/cd-dvd/sd-image-aarch64-new-kernel.nix;
       }.${system};
     type = "minimal-new-kernel";
-    inherit system;
-  });
-
-  sd_image_raspberrypi4 = forMatchingSystems [ "aarch64-linux" ] (system: makeSdImage {
-    module = ./modules/installer/cd-dvd/sd-image-raspberrypi4.nix;
     inherit system;
   });
 

@@ -1454,8 +1454,11 @@ in {
 
   sniffio = callPackage ../development/python-modules/sniffio { };
 
-  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
   spyder = callPackage ../development/python-modules/spyder {};
+  spyder_3 = callPackage ../development/python-modules/spyder/3.nix { };
+
+  spyder-kernels = callPackage ../development/python-modules/spyder-kernels {};
+  spyder-kernels_0_5 = callPackage ../development/python-modules/spyder-kernels/0.x.nix {};
 
   tenacity = callPackage ../development/python-modules/tenacity { };
 
@@ -2329,8 +2332,6 @@ in {
   pytest-django = callPackage ../development/python-modules/pytest-django { };
 
   pytest-doctestplus = callPackage ../development/python-modules/pytest-doctestplus { };
-
-  pytest-faulthandler = callPackage ../development/python-modules/pytest-faulthandler { };
 
   pytest-fixture-config = callPackage ../development/python-modules/pytest-fixture-config { };
 
@@ -3801,7 +3802,10 @@ in {
 
   rebulk = callPackage ../development/python-modules/rebulk { };
 
-  gunicorn = callPackage ../development/python-modules/gunicorn { };
+  gunicorn = if isPy27 then
+          callPackage ../development/python-modules/gunicorn/19.nix { }
+        else
+          callPackage ../development/python-modules/gunicorn { };
 
   hawkauthlib = callPackage ../development/python-modules/hawkauthlib { };
 
@@ -5431,7 +5435,10 @@ in {
 
   scp = callPackage ../development/python-modules/scp {};
 
-  seaborn = callPackage ../development/python-modules/seaborn { };
+  seaborn = if isPy3k then
+    callPackage ../development/python-modules/seaborn { }
+  else
+    callPackage ../development/python-modules/seaborn/0.9.1.nix { };
 
   seabreeze = callPackage ../development/python-modules/seabreeze { };
 
@@ -6273,9 +6280,12 @@ in {
     inherit (pkgs) libversion pkgconfig;
   };
 
-  libvirt = callPackage ../development/python-modules/libvirt {
+  libvirt = if isPy3k then (callPackage ../development/python-modules/libvirt {
     inherit (pkgs) libvirt pkgconfig;
-  };
+  }) else (callPackage ../development/python-modules/libvirt/5.9.0.nix {
+    inherit (pkgs) pkgconfig;
+    libvirt = pkgs.libvirt_5_9_0;
+  });
 
   rpdb = callPackage ../development/python-modules/rpdb { };
 

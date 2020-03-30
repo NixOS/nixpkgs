@@ -4,14 +4,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "20191207";
+  version = "20200320";
   pname = "neomutt";
 
   src = fetchFromGitHub {
     owner  = "neomutt";
     repo   = "neomutt";
     rev    = version;
-    sha256 = "147yjpqnsbfy01fhsflxlixk0985r91a6bjmqq3cwmf7gka3sihm";
+    sha256 = "06xcl9pr8dna4kqjaqm7ss50gdy185425bwl31i0xs3l11cyjap4";
   };
 
   buildInputs = [
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
     description = "A small but very powerful text-based mail client";
     homepage    = http://www.neomutt.org;
     license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ];
+    maintainers = with maintainers; [ cstrahan erikryb jfrankenau vrthra ma27 ];
     platforms   = platforms.unix;
   };
 }

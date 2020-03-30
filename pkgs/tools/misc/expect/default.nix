@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   postPatch = ''
-    sed -i "s,/bin/stty,$(type -p stty),g" configure
+    sed -i "s,/bin/stty,$(type -p stty),g" configure.in
   '';
 
   configureFlags = [

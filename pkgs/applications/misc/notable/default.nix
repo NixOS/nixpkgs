@@ -23,7 +23,7 @@ appimageTools.wrapType2 rec {
   meta = with lib; {
     description = "The markdown-based note-taking app that doesn't suck";
     homepage = https://github.com/notable/notable;
-    license = licenses.agpl3;
+    license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ dtzWill ];
   };

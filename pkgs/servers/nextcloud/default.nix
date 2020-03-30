@@ -1,24 +1,37 @@
 { stdenv, fetchurl }:
 
-stdenv.mkDerivation rec {
-  pname = "nextcloud";
-  version = "18.0.0";
+let
+  generic = { version, sha256, insecure ? false }: stdenv.mkDerivation rec {
+    pname = "nextcloud";
+    inherit version;
 
-  src = fetchurl {
-    url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
-    sha256 = "0yr6sh9nf15dpnpcj4ypdmm9l3y8ls57pxsmqh5h913db2jrah0r";
+    src = fetchurl {
+      url = "https://download.nextcloud.com/server/releases/${pname}-${version}.tar.bz2";
+      inherit sha256;
+    };
+
+    installPhase = ''
+      mkdir -p $out/
+      cp -R . $out/
+    '';
+
+    meta = with stdenv.lib; {
+      description = "Sharing solution for files, calendars, contacts and more";
+      homepage = https://nextcloud.com;
+      maintainers = with maintainers; [ schneefux bachp globin fpletz ma27 ];
+      license = licenses.agpl3Plus;
+      platforms = with platforms; unix;
+      knownVulnerabilities = optional insecure "Nextcloud version ${version} is EOL";
+    };
+  };
+in {
+  nextcloud17 = generic {
+    version = "17.0.4";
+    sha256 = "0cj5mng0nmj3hz30pyz3g19kj3mkm5ca8si3sw3arv61dmw6c5g6";
   };
 
-  installPhase = ''
-    mkdir -p $out/
-    cp -R . $out/
-  '';
-
-  meta = {
-    description = "Sharing solution for files, calendars, contacts and more";
-    homepage = https://nextcloud.com;
-    maintainers = with stdenv.lib.maintainers; [ schneefux bachp globin fpletz ];
-    license = stdenv.lib.licenses.agpl3Plus;
-    platforms = with stdenv.lib.platforms; unix;
+  nextcloud18 = generic {
+    version = "18.0.2";
+    sha256 = "10fbdq0366iai2kpw6v6p78mnn9gz8x0xzsbqrp109yx4c4nccyh";
   };
 }

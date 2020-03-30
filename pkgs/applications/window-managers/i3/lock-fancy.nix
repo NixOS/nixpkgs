@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
     sha256 = "00lqsvz1knb8iqy8lnkn3sf4c2c4nzb0smky63qf48m8za5aw9b1";
   };
   patchPhase = ''
-    sed -i -e "s|(mktemp)|(${coreutils}/bin/mktemp)|" i3lock-fancy
+    sed -i -e "s|mktemp|${coreutils}/bin/mktemp|" i3lock-fancy
     sed -i -e "s|'rm -f |'${coreutils}/bin/rm -f |" i3lock-fancy
     sed -i -e "s|scrot -z |${scrot}/bin/scrot -z |" i3lock-fancy
     sed -i -e "s|convert |${imagemagick.out}/bin/convert |" i3lock-fancy

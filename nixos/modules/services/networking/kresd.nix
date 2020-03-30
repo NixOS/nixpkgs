@@ -32,9 +32,9 @@ let
     + cfg.extraConfig
   );
 
-  package = pkgs.knot-resolver.override {
-    extraFeatures = cfg.listenDoH != [];
-  };
+  package = if cfg.listenDoH == []
+    then pkgs.knot-resolver # never force `extraFeatures = false`
+    else pkgs.knot-resolver.override { extraFeatures = true; };
 in {
   meta.maintainers = [ maintainers.vcunat /* upstream developer */ ];
 

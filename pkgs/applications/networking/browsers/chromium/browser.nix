@@ -18,6 +18,16 @@ mkChromiumDerivation (base: rec {
     cp -vLR "$buildPath/locales" "$buildPath/resources" "$libExecPath/"
     cp -v "$buildPath/chrome" "$libExecPath/$packageName"
 
+    # Swiftshader
+    # See https://stackoverflow.com/a/4264351/263061 for the find invocation.
+    if [ -n "$(find "$buildPath/swiftshader/" -maxdepth 1 -name '*.so' -print -quit)" ]; then
+      echo "Swiftshader files found; installing"
+      mkdir -p "$libExecPath/swiftshader"
+      cp -v "$buildPath/swiftshader/"*.so "$libExecPath/swiftshader/"
+    else
+      echo "Swiftshader files not found"
+    fi
+
     mkdir -p "$sandbox/bin"
     cp -v "$buildPath/chrome_sandbox" "$sandbox/bin/${sandboxExecutableName}"
 

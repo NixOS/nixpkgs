@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "swagger-spec-validator";
-  version = "2.4.3";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "swagger_spec_validator";
     rev = "v" + version;
-    sha256 = "02f8amc6iq2clxxmrz8hirbb57sizaxijp0higqy16shk63ibalw";
+    sha256 = "0qlkiyncdh7cdyjvnwjpv9i7y75ghwnpyqkkpfaa8hg698na13pw";
   };
 
   checkInputs = [

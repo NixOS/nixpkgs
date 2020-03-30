@@ -1,13 +1,13 @@
-diff --git i/modules/setting/setting.go w/modules/setting/setting.go
-index aafe2d1b..1e4a8064 100644
---- i/modules/setting/setting.go
-+++ w/modules/setting/setting.go
-@@ -730,7 +730,7 @@ func NewContext() {
- 	LocalURL = sec.Key("LOCAL_ROOT_URL").MustString(defaultLocalURL)
+diff --git a/modules/setting/setting.go b/modules/setting/setting.go
+index 714015c47..a2f85337e 100644
+--- a/modules/setting/setting.go
++++ b/modules/setting/setting.go
+@@ -641,7 +641,7 @@ func NewContext() {
+ 	PortToRedirect = sec.Key("PORT_TO_REDIRECT").MustString("80")
  	OfflineMode = sec.Key("OFFLINE_MODE").MustBool()
  	DisableRouterLog = sec.Key("DISABLE_ROUTER_LOG").MustBool()
 -	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString(AppWorkPath)
 +	StaticRootPath = sec.Key("STATIC_ROOT_PATH").MustString("@data@")
-	AppDataPath = sec.Key("APP_DATA_PATH").MustString(path.Join(AppWorkPath, "data"))
+ 	StaticCacheTime = sec.Key("STATIC_CACHE_TIME").MustDuration(6 * time.Hour)
+ 	AppDataPath = sec.Key("APP_DATA_PATH").MustString(path.Join(AppWorkPath, "data"))
  	EnableGzip = sec.Key("ENABLE_GZIP").MustBool()
- 	EnablePprof = sec.Key("ENABLE_PPROF").MustBool(false)

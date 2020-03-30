@@ -1,6 +1,7 @@
 { lib
 , buildPythonPackage
 , fetchPypi
+, fetchpatch
 , numpy
 , astropy
 , astropy-healpix
@@ -23,6 +24,12 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ numpy astropy astropy-healpix astropy-helpers scipy ];
 
   nativeBuildInputs = [ astropy-helpers cython ];
+
+  # Fix tests
+  patches = [ (fetchpatch {
+    url = "https://github.com/astropy/reproject/pull/218/commits/4661e075137424813ed77f1ebcbc251fee1b8467.patch";
+    sha256 = "13g3h824pqn2lgypzg1b87vkd44y7m302lhw3kh4rfww1dkzhm9v";
+  }) ];
 
   # Disable automatic update of the astropy-helper module
   postPatch = ''

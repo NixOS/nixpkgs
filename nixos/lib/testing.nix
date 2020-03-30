@@ -250,9 +250,12 @@ in rec {
         { ... }:
         {
           inherit require;
+          imports = [
+            ../tests/common/auto.nix
+          ];
           virtualisation.memorySize = 1024;
           services.xserver.enable = true;
-          services.xserver.displayManager.auto.enable = true;
+          test-support.displayManager.auto.enable = true;
           services.xserver.displayManager.defaultSession = "none+icewm";
           services.xserver.windowManager.icewm.enable = true;
         };

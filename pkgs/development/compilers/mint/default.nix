@@ -1,5 +1,5 @@
-{ lib, fetchFromGitHub, crystal, zlib, openssl_1_0_2, duktape, which, libyaml }:
-crystal.buildCrystalPackage rec {
+{ lib, fetchFromGitHub, crystal_0_30, zlib, openssl_1_0_2, duktape, which, libyaml }:
+crystal_0_30.buildCrystalPackage rec {
   version = "0.5.0";
   pname = "mint";
   src = fetchFromGitHub {

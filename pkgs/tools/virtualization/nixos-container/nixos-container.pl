@@ -9,6 +9,7 @@ use Getopt::Long qw(:config gnu_getopt);
 use Cwd 'abs_path';
 use Time::HiRes;
 
+my $nsenter = "@utillinux@/bin/nsenter";
 my $su = "@su@";
 
 # Ensure a consistent umask.
@@ -43,6 +44,7 @@ Usage: nixos-container list
          [--config <string>]
          [--config-file <path>]
          [--flake <flakeref>]
+         [--nixos-path <path>]
        nixos-container login <container-name>
        nixos-container root-login <container-name>
        nixos-container run <container-name> -- args...
@@ -149,6 +151,16 @@ sub buildFlake {
     unlink("$systemPath.tmp");
 }
 
+sub clearContainerState {
+    my ($profileDir, $gcRootsDir, $root, $configFile) = @_;
+
+    safeRemoveTree($profileDir) if -e $profileDir;
+    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
+    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
+    safeRemoveTree($root) if -e $root;
+    unlink($configFile) or die;
+}
+
 if ($action eq "create") {
     # Acquire an exclusive lock to prevent races with other
     # invocations of ‘nixos-container create’.
@@ -226,7 +238,10 @@ if ($action eq "create") {
 
     if (defined $systemPath) {
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
-            or die "$0: failed to set initial container configuration\n";
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to set initial container configuration\n";
+            };
     } else {
         mkpath("$root/etc/nixos", 0, 0755);
 
@@ -237,7 +252,10 @@ if ($action eq "create") {
         system("nix-env", "-p", "$profileDir/system",
                "-I", "nixos-config=$nixosConfigFile", "-f", "$nixenvF",
                "--set", "-A", "system") == 0
-            or die "$0: failed to build initial container configuration\n";
+            or do {
+                clearContainerState($profileDir, "$profileDir/$containerName", $root, $confFile);
+                die "$0: failed to build initial container configuration\n"
+            };
     }
 
     print "$containerName\n" if $ensureUniqueName;
@@ -302,10 +320,9 @@ sub restartContainer {
 # Run a command in the container.
 sub runInContainer {
     my @args = @_;
-
-    exec("systemd-run", "--machine", $containerName, "--pty", "--quiet", "--", @args);
-
-    die "cannot run ‘systemd-run’: $!\n";
+    my $leader = getLeader;
+    exec($nsenter, "-t", $leader, "-m", "-u", "-i", "-n", "-p", "--", @args);
+    die "cannot run ‘nsenter’: $!\n";
 }
 
 # Remove a directory while recursively unmounting all mounted filesystems within
@@ -331,11 +348,7 @@ if ($action eq "destroy") {
 
     terminateContainer if (isContainerRunning);
 
-    safeRemoveTree($profileDir) if -e $profileDir;
-    safeRemoveTree($gcRootsDir) if -e $gcRootsDir;
-    system("chattr", "-i", "$root/var/empty") if -e "$root/var/empty";
-    safeRemoveTree($root) if -e $root;
-    unlink($confFile) or die;
+    clearContainerState($profileDir, $gcRootsDir, $root, $confFile);
 }
 
 elsif ($action eq "restart") {
@@ -374,6 +387,7 @@ elsif ($action eq "update") {
         system("nix-env", "-p", "$profileDir/system", "--set", $systemPath) == 0
             or die "$0: failed to set container configuration\n";
     } else {
+
         my $nixosConfigFile = "$root/etc/nixos/configuration.nix";
 
         # FIXME: may want to be more careful about clobbering the existing
@@ -383,8 +397,9 @@ elsif ($action eq "update") {
             writeNixOSConfig $nixosConfigFile;
         }
 
+        my $nixenvF = $nixosPath // "<nixpkgs/nixos>";
         system("nix-env", "-p", "$profileDir/system",
-               "-I", "nixos-config=$nixosConfigFile", "-f", "<nixpkgs/nixos>",
+               "-I", "nixos-config=$nixosConfigFile", "-f", $nixenvF,
                "--set", "-A", "system") == 0
             or die "$0: failed to build container configuration\n";
     }

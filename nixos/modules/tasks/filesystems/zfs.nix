@@ -623,7 +623,11 @@ in
         after = [ "zfs-import.target" ];
         path = [ packages.zfsUser ];
         startAt = cfgTrim.interval;
-        serviceConfig.ExecStart = "${pkgs.runtimeShell} -c 'zpool list -H -o name | xargs --no-run-if-empty -n1 zpool trim'";
+        # By default we ignore errors returned by the trim command, in case:
+        # - HDDs are mixed with SSDs
+        # - There is a SSDs in a pool that is currently trimmed.
+        # - There are only HDDs and we would set the system in a degraded state
+        serviceConfig.ExecStart = ''${pkgs.runtimeShell} -c 'for pool in $(zpool list -H -o name); do zpool trim $pool;  done || true' '';
       };
     })
   ];

@@ -1,4 +1,4 @@
-{ stdenv, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkgconfig
+{ mkDerivation, lib, fetchzip, buildEnv, makeDesktopItem, runCommand, writeText, pkgconfig
 , cmake, qmake, cacert, jsoncpp, libX11, libXScrnSaver, lua, openssl, poco
 , qtbase, qtwebengine, qtx11extras, sqlite }:
 
@@ -11,7 +11,7 @@ let
     sha256 = "01hqkx9dljnhwnyqi6mmzfp02hnbi2j50rsfiasniqrkbi99x9v1";
   };
 
-  bugsnag-qt = stdenv.mkDerivation rec {
+  bugsnag-qt = mkDerivation rec {
     pname = "bugsnag-qt";
     version = "20180522.005732";
 
@@ -24,7 +24,7 @@ let
     buildInputs = [ qtbase ];
   };
 
-  qxtglobalshortcut = stdenv.mkDerivation rec {
+  qxtglobalshortcut = mkDerivation rec {
     pname = "qxtglobalshortcut";
     version = "f584471dada2099ba06c574bdfdd8b078c2e3550";
 
@@ -37,7 +37,7 @@ let
     buildInputs = [ qtbase qtx11extras ];
   };
 
-  qt-oauth-lib = stdenv.mkDerivation rec {
+  qt-oauth-lib = mkDerivation rec {
     pname = "qt-oauth-lib";
     version = "20190125.190943";
 
@@ -62,7 +62,7 @@ let
     mkdir -p $out/lib/pkgconfig && ln -s ${poco-pc} $_/poco.pc
   '';
 
-  libtoggl = stdenv.mkDerivation {
+  libtoggl = mkDerivation {
     name = "libtoggl-${version}";
     inherit src version;
 
@@ -77,7 +77,7 @@ let
     '';
   };
 
-  toggldesktop = stdenv.mkDerivation {
+  toggldesktop = mkDerivation {
     name = "${name}-unwrapped";
     inherit src version;
 
@@ -108,7 +108,7 @@ let
     ];
   };
 
-  toggldesktop-icons = stdenv.mkDerivation {
+  toggldesktop-icons = mkDerivation {
     name = "${name}-icons";
     inherit (toggldesktop) src sourceRoot;
 
@@ -138,7 +138,7 @@ buildEnv {
   inherit name;
   paths = [ desktopItem toggldesktop-icons toggldesktop-wrapped ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Client for Toggl time tracking service";
     homepage = https://github.com/toggl/toggldesktop;
     license = licenses.bsd3;

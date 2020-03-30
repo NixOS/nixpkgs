@@ -3238,7 +3238,6 @@ broken-packages:
   - binary-protocol
   - binary-protocol-zmq
   - binary-streams
-  - binary-strict
   - binary-typed
   - bind-marshal
   - binding-gtk
@@ -4225,7 +4224,6 @@ broken-packages:
   - dhall-check
   - dhall-fly
   - dhall-lsp-server
-  - dhall-nix
   - dhall-to-cabal
   - dhall-yaml
   - dhcp-lease-parser
@@ -4563,7 +4561,6 @@ broken-packages:
   - ethereum-analyzer-webui
   - ethereum-client-haskell
   - ethereum-merkle-patricia-db
-  - eths-rlp
   - euler-tour-tree
   - euphoria
   - eurofxref
@@ -5354,7 +5351,6 @@ broken-packages:
   - hakyll-contrib
   - hakyll-contrib-csv
   - hakyll-contrib-elm
-  - hakyll-contrib-hyphenation
   - hakyll-contrib-links
   - hakyll-convert
   - hakyll-dhall
@@ -10107,7 +10103,6 @@ broken-packages:
   - vk-aws-route53
   - VKHS
   - voicebase
-  - vorbiscomment
   - vowpal-utils
   - voyeur
   - vpq
@@ -10210,7 +10205,6 @@ broken-packages:
   - webdriver-w3c
   - WeberLogic
   - webfinger-client
-  - webify
   - webkit-javascriptcore
   - Webrexp
   - webserver

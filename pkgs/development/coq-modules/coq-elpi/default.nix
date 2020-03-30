@@ -2,9 +2,14 @@
 
 let params = {
   "8.10" = rec {
-    version = "1.1.0";
+    version = "1.3.0";
     rev = "v${version}";
-    sha256 = "06jyw7n27ylg02jvlaa3hs13hg8qgx47yn4dxhg9as1xri9a2rvm";
+    sha256 = "1bbadh4qmsm0c5qw41apf4k8va6d44rpw294mc6pg556nmma87ra";
+  };
+  "8.11" = rec {
+    version = "1.3.1";
+    rev = "v${version}";
+    sha256 = "06dg0i1jay9anhx68jfki5qs2g481n3s4q3m124qniyadlx80bh3";
   };
 };
   param = params.${coq.coq-version};

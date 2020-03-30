@@ -3275,6 +3275,12 @@
     githubId = 1198065;
     name = "Jeffrey David Johnson";
   };
+  jefflabonte = {
+    email = "grimsleepless@protonmail.com";
+    github = "jefflabonte";
+    githubId = 9425955;
+    name = "Jean-François Labonté";
+  };
   jensbin = {
     email = "jensbin+git@pm.me";
     github = "jensbin";
@@ -4055,6 +4061,12 @@
     github = "leonardoce";
     name = "Leonardo Cecchi";
   };
+  leshainc = {
+    email = "leshainc@fomalhaut.me";
+    github = "LeshaInc";
+    githubId = 42153076;
+    name = "Alexey Nikashkin";
+  };
   lethalman = {
     email = "lucabru@src.gnome.org";
     github = "lethalman";
@@ -4493,6 +4505,12 @@
     github = "mbakke";
     githubId = 1269099;
     name = "Marius Bakke";
+  };
+  mbaillie = {
+    email = "martin@baillie.email";
+    github = "martinbaillie";
+    githubId = 613740;
+    name = "Martin Baillie";
   };
   mbbx6spp = {
     email = "me@susanpotter.net";
@@ -7686,7 +7704,7 @@
     email = "worldofpeace@protonmail.ch";
     github = "worldofpeace";
     githubId = 28888242;
-    name = "Worldofpeace";
+    name = "worldofpeace";
   };
   wscott = {
     email = "wsc9tt@gmail.com";

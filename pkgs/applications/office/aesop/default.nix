@@ -3,13 +3,13 @@
 
 stdenv.mkDerivation rec {
   pname = "aesop";
-  version = "1.2.3";
+  version = "1.2.4";
 
   src = fetchFromGitHub {
     owner = "lainsce";
     repo = pname;
     rev = version;
-    sha256 = "1aa1kp1rndi2dj1d9sf8zhssn5dw183yx1fm2xccdy9zjf9wi4jk";
+    sha256 = "1bqykr1mwanfm55w1v9ipqcqgzj8kbjvlm4d5b2swvhng77gnf3d";
   };
 
   nativeBuildInputs = [
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "The simplest PDF viewer around";
-    homepage = https://github.com/lainsce/aesop;
+    homepage = "https://github.com/lainsce/aesop";
     license = licenses.gpl2Plus;
     maintainers = pantheon.maintainers;
     platforms = platforms.linux;

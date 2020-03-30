@@ -37,6 +37,7 @@ buildPythonPackage rec {
     "tests.functional.test_httplib2.test_callback_response"
     "tests.functional.test_requests.test_streaming_responses"
     "tests.functional.test_httplib2.test_callback_response"
+    "tests.functional.test_requests.test_httpretty_should_allow_adding_and_overwritting_by_kwargs_u2"
   ];
 
   meta = with stdenv.lib; {

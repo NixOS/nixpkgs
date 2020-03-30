@@ -1,7 +1,7 @@
-{ stdenv, buildDunePackage, fetchFromGitHub, ppx_deriving
+{ stdenv, buildDune2Package, fetchFromGitHub, ppx_deriving
 , alcotest, biocaml, gnuplot, lacaml, menhir, owl }:
 
-buildDunePackage rec {
+buildDune2Package rec {
   pname = "phylogenetics";
   version = "unstable-2019-11-15";
 
@@ -20,7 +20,7 @@ buildDunePackage rec {
   doCheck = false;  # many tests require bppsuite
 
   meta = with stdenv.lib; {
-    inherit (std.meta) homepage;
+    inherit (src.meta) homepage;
     description = "Bioinformatics library for Ocaml";
     maintainers = [ maintainers.bcdarwin ];
     license = licenses.cecill-b;
