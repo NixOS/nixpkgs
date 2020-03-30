@@ -4039,6 +4039,8 @@ in
 
   hcxtools = callPackage ../tools/security/hcxtools { };
 
+  hcxdumptool = callPackage ../tools/security/hcxdumptool { };
+
   hdapsd = callPackage ../os-specific/linux/hdapsd { };
 
   hdaps-gl = callPackage ../tools/misc/hdaps-gl { };
