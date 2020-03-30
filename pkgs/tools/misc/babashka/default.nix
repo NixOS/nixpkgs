@@ -47,7 +47,7 @@ stdenv.mkDerivation rec{
     cp bb $out/bin/bb
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A Clojure babushka for the grey areas of Bash";
     homepage = https://github.com/borkdude/babashka;
     license = licenses.epl10;
