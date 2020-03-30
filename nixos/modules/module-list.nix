@@ -333,6 +333,7 @@
   ./services/games/minetest-server.nix
   ./services/games/openarena.nix
   ./services/games/terraria.nix
+  ./services/games/xonotic.nix
   ./services/hardware/acpid.nix
   ./services/hardware/actkbd.nix
   ./services/hardware/bluetooth.nix
