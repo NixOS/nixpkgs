@@ -788,6 +788,8 @@ in
 
   automirror = callPackage ../tools/misc/automirror { };
 
+  babashka = callPackage ../tools/misc/babashka { };
+
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
   bcachefs-tools = callPackage ../tools/filesystems/bcachefs-tools { };
