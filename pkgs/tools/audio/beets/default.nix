@@ -177,6 +177,7 @@ in pythonPackages.buildPythonApplication rec {
   patches = [
     ./replaygain-default-bs1770gain.patch
     ./keyfinder-default-bin.patch
+    ./mutagen-1.43.patch
   ];
 
   postPatch = ''

@@ -1,30 +1,56 @@
 { lib }:
-{
-  echo_build_heading = colors: ''
-    echo_build_heading() {
-     start=""
-     end=""
-     ${lib.optionalString (colors == "always") ''
-       start="$(printf '\033[0;1;32m')" #set bold, and set green.
-       end="$(printf '\033[0m')" #returns to "normal"
-     ''}
-     if (( $# == 1 )); then
-       echo "$start""Building $1""$end"
-     else
-       echo "$start""Building $1 ($2)""$end"
-     fi
+
+let echo_colored_body = start_escape:
+      # Body of a function that behaves like "echo" but 
+      # has the output colored by the given start_escape
+      # sequence. E.g.
+      #
+      # * echo_x "Building ..."
+      # * echo_x -n "Running "
+      #
+      # This is more complicated than apparent at first sight 
+      # because:
+      #   * The color markers and the text must be print
+      #     in the same echo statement. Otherise, other
+      #     intermingled text from concurrent builds will 
+      #     be colored as well.
+      #   * We need to preserve the trailing newline of the
+      #     echo if and only if it is present. Bash likes
+      #     to strip those if we capture the output of echo
+      #     in a variable.  
+      #   * Leading "-" will be interpreted by test as an
+      #     option for itself. Therefore, we prefix it with
+      #     an x in `[[ "x$1" =~ ^x- ]]`.
+      ''
+      local echo_args="";
+      while [[ "x$1" =~ ^x- ]]; do
+        echo_args+=" $1"
+        shift
+      done
+      
+      local start_escape="$(printf '${start_escape}')"
+      local reset="$(printf '\033[0m')"
+      echo $echo_args $start_escape"$@"$reset
+      '';
+  echo_conditional_colored_body = colors: start_escape:
+      if colors == "always" 
+      then (echo_colored_body start_escape)
+      else ''echo "$@"'';
+in {
+  echo_colored = colors: ''
+    echo_colored() {
+      ${echo_conditional_colored_body colors ''\033[0;1;32m''}
     }
-  '';
+
+    echo_error() {
+      ${echo_conditional_colored_body colors ''\033[0;1;31m''}
+    }
+   '';
+
   noisily = colors: verbose: ''
     noisily() {
-      start=""
-      end=""
-      ${lib.optionalString (colors == "always") ''
-        start="$(printf '\033[0;1;32m')" #set bold, and set green.
-        end="$(printf '\033[0m')" #returns to "normal"
-      ''}
   	  ${lib.optionalString verbose ''
-        echo -n "$start"Running "$end"
+        echo_colored -n "Running " 
         echo $@
   	  ''}
   	  $@

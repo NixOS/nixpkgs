@@ -75,6 +75,7 @@ in import ./make-test-python.nix {
       systemd.services."acme-a.example.com" = {
         wants = [ "acme-finished-a.example.com.target" ];
         before = [ "acme-finished-a.example.com.target" ];
+        after = [ "nginx.service" ];
       };
 
       services.nginx.enable = true;

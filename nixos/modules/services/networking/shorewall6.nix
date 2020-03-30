@@ -26,7 +26,7 @@ in {
         description = "The shorewall package to use.";
       };
       configs = lib.mkOption {
-        type        = types.attrsOf types.str;
+        type        = types.attrsOf types.lines;
         default     = {};
         description = ''
           This option defines the Shorewall configs.
@@ -63,12 +63,7 @@ in {
       '';
     };
     environment = {
-      etc = lib.mapAttrsToList
-              (name: file:
-                { source = file;
-                  target = "shorewall6/${name}";
-                })
-              cfg.configs;
+      etc = lib.mapAttrs' (name: conf: lib.nameValuePair "shorewall6/${name}" {source=conf;}) cfg.configs;
       systemPackages = [ cfg.package ];
     };
   };

@@ -94,6 +94,14 @@ in rec {
       name = "python-remove-bin-bytecode-hook";
     } ./python-remove-bin-bytecode-hook.sh) {};
 
+  pythonRemoveTestsDirHook = callPackage ({ }:
+    makeSetupHook {
+      name = "python-remove-tests-dir-hook";
+      substitutions = {
+        inherit pythonSitePackages;
+      };
+    } ./python-remove-tests-dir-hook.sh) {};
+
   setuptoolsBuildHook = callPackage ({ setuptools, wheel }:
     makeSetupHook {
       name = "setuptools-setup-hook";

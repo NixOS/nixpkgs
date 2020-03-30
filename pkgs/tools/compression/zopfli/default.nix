@@ -3,6 +3,7 @@
 stdenv.mkDerivation rec {
   pname = "zopfli";
   version = "1.0.3";
+  outputs = [ "out" "lib" "dev" ];
 
   src = fetchFromGitHub {
     owner = "google";
@@ -34,6 +35,6 @@ stdenv.mkDerivation rec {
     '';
     platforms = platforms.unix;
     license = licenses.asl20;
-    maintainers = with maintainers; [ bobvanderlinden ];
+    maintainers = with maintainers; [ bobvanderlinden edef ];
   };
 }

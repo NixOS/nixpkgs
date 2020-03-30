@@ -20,11 +20,14 @@ spago_derivation_file="${script_dir}/spago.nix"
 old_version="$(sed -En 's/.*\bversion = "(.*?)".*/\1/p' "$spago_derivation_file")"
 
 # This is the latest release version of spago on GitHub.
-new_version=$(curl --silent "https://api.github.com/repos/spacchetti/spago/releases" | jq '.[0].tag_name' --raw-output)
+new_version=$(curl --silent "https://api.github.com/repos/purescript/spago/releases" | jq '.[0].tag_name' --raw-output)
 
 echo "Updating spago from old version $old_version to new version $new_version."
 echo "Running cabal2nix and outputting to ${spago_derivation_file}..."
 
-cabal2nix --revision "$new_version" "https://github.com/spacchetti/spago.git" > "$spago_derivation_file"
+cabal2nix --revision "$new_version" "https://github.com/purescript/spago.git" > "$spago_derivation_file"
+
+# TODO: This should ideally also automatically update the docsSearchVersion
+# from pkgs/development/haskell/configuration-nix.nix.
 
 echo "Finished."

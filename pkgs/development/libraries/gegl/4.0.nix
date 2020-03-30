@@ -18,6 +18,7 @@
 , netsurf
 , pango
 , poly2tri-c
+, poppler
 , bzip2
 , json-glib
 , gettext
@@ -29,18 +30,19 @@
 , luajit
 , openexr
 , OpenCL
+, suitesparse
 }:
 
 stdenv.mkDerivation rec {
   pname = "gegl";
-  version = "0.4.20";
+  version = "0.4.22";
 
   outputs = [ "out" "dev" "devdoc" ];
   outputBin = "dev";
 
   src = fetchurl {
     url = "https://download.gimp.org/pub/gegl/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1zrxnxlhn0jmshg4n2m2xlgi886w059ynkiiihm7rpi05fs8pg93";
+    sha256 = "0q9cckf90fb82qc5d496fjz459f1xw4j4p3rff1f57yivx0yr20q";
   };
 
   patches = [
@@ -70,12 +72,14 @@ stdenv.mkDerivation rec {
     netsurf.libnsgif
     pango
     poly2tri-c
+    poppler
     bzip2
     libraw
     libwebp
     gexiv2
     luajit
     openexr
+    suitesparse
   ] ++ stdenv.lib.optional stdenv.isDarwin OpenCL;
 
   # for gegl-4.0.pc
@@ -93,7 +97,6 @@ stdenv.mkDerivation rec {
     "-Dlibav=disabled"
     "-Dlibv4l=disabled"
     "-Dlibv4l2=disabled"
-    "-Dumfpack=disabled"
     # Disabled due to multiple vulnerabilities, see
     # https://github.com/NixOS/nixpkgs/pull/73586
     "-Djasper=disabled"

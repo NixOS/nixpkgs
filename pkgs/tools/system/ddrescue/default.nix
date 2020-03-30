@@ -3,11 +3,11 @@
 }:
 
 stdenv.mkDerivation rec {
-  name = "ddrescue-1.24";
+  name = "ddrescue-1.25";
 
   src = fetchurl {
     url = "mirror://gnu/ddrescue/${name}.tar.lz";
-    sha256 = "11qh0bbzf00mfb4yq35gnv5m260k4d7q9ixklry6bqvhvvp3ypab";
+    sha256 = "0qqh38izl5ppap9a5izf3hijh94k65s3zbfkczd4b7x04syqwlyf";
   };
 
   nativeBuildInputs = [ lzip ];
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
          second and successive copies.
       '';
 
-    homepage = https://www.gnu.org/software/ddrescue/ddrescue.html;
+    homepage = "https://www.gnu.org/software/ddrescue/ddrescue.html";
 
     license = licenses.gpl3Plus;
 

@@ -15,7 +15,7 @@ buildRustPackage rec {
     sha256 = "07mgq5h6r1gf3jflbv2khcz32bdazw7z1s8xcsafdarnm13ps014";
   };
 
-  cargoSha256 = "16qjbvppc01yxk8x9jk7gs8jaag5nkfl30j3lyv3dc27vv9mckjv";
+  cargoSha256 = "0ijgx8fksg2najb336dhddxlqfzc338f9ylydkpw6b39k72mm00d";
 
   cargoPatches = [
     (fetchpatch {

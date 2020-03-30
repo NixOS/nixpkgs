@@ -1,29 +1,58 @@
-{ stdenv, buildPythonPackage, fetchFromGitHub, websocket_client, requests, six, pytest, codecov, coverage, mock, pytestcov, pytest-mock, responses, flake8 }:
+{ stdenv
+, buildPythonPackage
+, fetchFromGitHub
+, aiohttp
+, black
+, codecov
+, flake8
+, isPy3k
+, mock
+, pytest-mock
+, pytestCheckHook
+, pytestcov
+, pytestrunner
+, requests
+, responses
+, six
+, websocket_client
+}:
 
 buildPythonPackage rec {
   pname = "python-slackclient";
-  version = "1.2.1";
+  version = "2.5.0";
+
+  disabled = !isPy3k;
 
   src = fetchFromGitHub {
     owner  = "slackapi";
     repo   = pname;
     rev    = version;
-    sha256 = "073fwf6fm2sqdp5ms3vm1v3ljh0pldi69k048404rp6iy3cfwkp0";
+    sha256 = "1ngj1mivbln19546195k400w9yaw69g0w6is7c75rqwyxr8wgzsk";
   };
 
-  propagatedBuildInputs = [ websocket_client requests six ];
+  propagatedBuildInputs = [
+    aiohttp
+    websocket_client
+    requests
+    six
+  ];
 
-  checkInputs = [ pytest codecov coverage mock pytestcov pytest-mock responses flake8 ];
-  # test_server.py fails because it needs connection (I think);
-  checkPhase = ''
-    py.test --cov-report= --cov=slackclient tests --ignore=tests/test_server.py
-  '';
+  checkInputs = [
+    black
+    codecov
+    flake8
+    mock
+    pytest-mock
+    pytestCheckHook
+    pytestcov
+    pytestrunner
+    responses
+  ];
 
   meta = with stdenv.lib; {
     description = "A client for Slack, which supports the Slack Web API and Real Time Messaging (RTM) API";
-    homepage = https://github.com/slackapi/python-slackclient;
+    homepage = "https://github.com/slackapi/python-slackclient";
     license = licenses.mit;
-    maintainers = with maintainers; [ psyanticy ];
+    maintainers = with maintainers; [ flokli psyanticy ];
   };
 }
-

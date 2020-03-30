@@ -39,6 +39,7 @@ in
   buildbot = handleTest ./buildbot.nix {};
   caddy = handleTest ./caddy.nix {};
   cadvisor = handleTestOn ["x86_64-linux"] ./cadvisor.nix {};
+  cage = handleTest ./cage.nix {};
   cassandra = handleTest ./cassandra.nix {};
   ceph-single-node = handleTestOn ["x86_64-linux"] ./ceph-single-node.nix {};
   ceph-multi-node = handleTestOn ["x86_64-linux"] ./ceph-multi-node.nix {};
@@ -88,6 +89,7 @@ in
   fancontrol = handleTest ./fancontrol.nix {};
   ferm = handleTest ./ferm.nix {};
   firefox = handleTest ./firefox.nix {};
+  firefox-esr = handleTest ./firefox.nix { esr = true; };
   firewall = handleTest ./firewall.nix {};
   fish = handleTest ./fish.nix {};
   flannel = handleTestOn ["x86_64-linux"] ./flannel.nix {};
@@ -95,8 +97,10 @@ in
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
   freeswitch = handleTest ./freeswitch.nix {};
   fsck = handleTest ./fsck.nix {};
+  gerrit = handleTest ./gerrit.nix {};
   gotify-server = handleTest ./gotify-server.nix {};
   grocy = handleTest ./grocy.nix {};
+  gitdaemon = handleTest ./gitdaemon.nix {};
   gitea = handleTest ./gitea.nix {};
   gitlab = handleTest ./gitlab.nix {};
   gitolite = handleTest ./gitolite.nix {};
@@ -117,12 +121,16 @@ in
   handbrake = handleTestOn ["x86_64-linux"] ./handbrake.nix {};
   haproxy = handleTest ./haproxy.nix {};
   hardened = handleTest ./hardened.nix {};
-  hibernate = handleTest ./hibernate.nix {};
+  # 9pnet_virtio used to mount /nix partition doesn't support
+  # hibernation. This test happens to work on x86_64-linux but
+  # not on other platforms.
+  hibernate = handleTestOn ["x86_64-linux"] ./hibernate.nix {};
   hitch = handleTest ./hitch {};
   hocker-fetchdocker = handleTest ./hocker-fetchdocker {};
   home-assistant = handleTest ./home-assistant.nix {};
   hound = handleTest ./hound.nix {};
   hydra = handleTest ./hydra {};
+  hydra-db-migration = handleTest ./hydra/db-migration.nix {};
   i3wm = handleTest ./i3wm.nix {};
   icingaweb2 = handleTest ./icingaweb2.nix {};
   iftop = handleTest ./iftop.nix {};
@@ -132,10 +140,12 @@ in
   initrd-network-ssh = handleTest ./initrd-network-ssh {};
   initrdNetwork = handleTest ./initrd-network.nix {};
   installer = handleTest ./installer.nix {};
+  iodine = handleTest ./iodine.nix {};
   ipv6 = handleTest ./ipv6.nix {};
   jackett = handleTest ./jackett.nix {};
   jellyfin = handleTest ./jellyfin.nix {};
   jenkins = handleTest ./jenkins.nix {};
+  jirafeau = handleTest ./jirafeau.nix {};
   kafka = handleTest ./kafka.nix {};
   keepalived = handleTest ./keepalived.nix {};
   kerberos = handleTest ./kerberos/default.nix {};
@@ -144,6 +154,7 @@ in
   kernel-testing = handleTest ./kernel-testing.nix {};
   keymap = handleTest ./keymap.nix {};
   knot = handleTest ./knot.nix {};
+  krb5 = discoverTests (import ./krb5 {});
   kubernetes.dns = handleTestOn ["x86_64-linux"] ./kubernetes/dns.nix {};
   # kubernetes.e2e should eventually replace kubernetes.rbac when it works
   #kubernetes.e2e = handleTestOn ["x86_64-linux"] ./kubernetes/e2e.nix {};
@@ -204,6 +215,7 @@ in
   nghttpx = handleTest ./nghttpx.nix {};
   nginx = handleTest ./nginx.nix {};
   nginx-etag = handleTest ./nginx-etag.nix {};
+  nginx-pubhtml = handleTest ./nginx-pubhtml.nix {};
   nginx-sso = handleTest ./nginx-sso.nix {};
   nix-ssh-serve = handleTest ./nix-ssh-serve.nix {};
   nixos-generate-config = handleTest ./nixos-generate-config.nix {};
@@ -244,6 +256,7 @@ in
   prosodyMysql = handleTest ./xmpp/prosody-mysql.nix {};
   proxy = handleTest ./proxy.nix {};
   quagga = handleTest ./quagga.nix {};
+  quorum = handleTest ./quorum.nix {};
   rabbitmq = handleTest ./rabbitmq.nix {};
   radarr = handleTest ./radarr.nix {};
   radicale = handleTest ./radicale.nix {};
@@ -259,6 +272,7 @@ in
   samba = handleTest ./samba.nix {};
   sanoid = handleTest ./sanoid.nix {};
   sddm = handleTest ./sddm.nix {};
+  service-runner = handleTest ./service-runner.nix {};
   shiori = handleTest ./shiori.nix {};
   signal-desktop = handleTest ./signal-desktop.nix {};
   simple = handleTest ./simple.nix {};
@@ -279,7 +293,7 @@ in
   systemd-confinement = handleTest ./systemd-confinement.nix {};
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-networkd-vrf = handleTest ./systemd-networkd-vrf.nix {};
-  systemd-networkd-wireguard = handleTest ./systemd-networkd-wireguard.nix {};
+  systemd-networkd = handleTest ./systemd-networkd.nix {};
   systemd-nspawn = handleTest ./systemd-nspawn.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   taskserver = handleTest ./taskserver.nix {};
@@ -299,6 +313,7 @@ in
   vault = handleTest ./vault.nix {};
   victoriametrics = handleTest ./victoriametrics.nix {};
   virtualbox = handleTestOn ["x86_64-linux"] ./virtualbox.nix {};
+  wg-quick = handleTest ./wireguard/wg-quick.nix {};
   wireguard = handleTest ./wireguard {};
   wireguard-generated = handleTest ./wireguard/generated.nix {};
   wireguard-namespaces = handleTest ./wireguard/namespaces.nix {};

@@ -183,7 +183,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
             # active after the system has resumed, which probably
             # should not be the case.  Just ignore it.
             if ($unit ne "suspend.target" && $unit ne "hibernate.target" && $unit ne "hybrid-sleep.target") {
-                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no")) {
+                unless (boolIsTrue($unitInfo->{'RefuseManualStart'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
                     $unitsToStart{$unit} = 1;
                     recordUnit($startListFile, $unit);
                     # Don't spam the user with target units that always get started.
@@ -222,7 +222,7 @@ while (my ($unit, $state) = each %{$activePrev}) {
                     $unitsToReload{$unit} = 1;
                     recordUnit($reloadListFile, $unit);
                 }
-                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") ) {
+                elsif (!boolIsTrue($unitInfo->{'X-RestartIfChanged'} // "yes") || boolIsTrue($unitInfo->{'RefuseManualStop'} // "no") || boolIsTrue($unitInfo->{'X-OnlyManualStart'} // "no")) {
                     $unitsToSkip{$unit} = 1;
                 } else {
                     if (!boolIsTrue($unitInfo->{'X-StopIfChanged'} // "yes")) {

@@ -84,8 +84,17 @@ in stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with stdenv.lib; {
+    description = "Library that allows filesystems to be implemented in user space";
+    longDescription = ''
+      FUSE (Filesystem in Userspace) is an interface for userspace programs to
+      export a filesystem to the Linux kernel. The FUSE project consists of two
+      components: The fuse kernel module (maintained in the regular kernel
+      repositories) and the libfuse userspace library (this package). libfuse
+      provides the reference implementation for communicating with the FUSE
+      kernel module.
+    '';
     inherit (src.meta) homepage;
-    description = "Kernel module and library that allows filesystems to be implemented in user space";
+    changelog = "https://github.com/libfuse/libfuse/releases/tag/fuse-${version}";
     platforms = platforms.linux;
     license = with licenses; [ gpl2 lgpl21 ];
     maintainers = [ maintainers.primeos ];

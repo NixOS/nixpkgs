@@ -1,6 +1,6 @@
-{ stdenv, lib, fetchurl, pkgconfig, ffmpeg, glew, libass, openal, qtbase }:
+{ mkDerivation, lib, fetchurl, pkgconfig, ffmpeg, glew, libass, openal, qtbase }:
 
-stdenv.mkDerivation rec {
+mkDerivation rec {
   pname = "bino";
   version = "1.6.7";
 

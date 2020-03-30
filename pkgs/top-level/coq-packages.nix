@@ -31,13 +31,14 @@ let
       flocq = callPackage ../development/coq-modules/flocq {};
       gappalib = callPackage ../development/coq-modules/gappalib {};
       heq = callPackage ../development/coq-modules/heq {};
+      hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
       iris = callPackage ../development/coq-modules/iris {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
-      inherit (callPackage ../development/coq-modules/mathcomp { })
+      inherit (callPackage ../development/coq-modules/mathcomp {})
         mathcompGen mathcompGenSingle ssreflect
 
         mathcompCorePkgs mathcomp
@@ -54,7 +55,12 @@ let
 
         mathcompCorePkgs_1_9 mathcomp_1_9
         mathcomp-ssreflect_1_9 mathcomp-fingroup_1_9 mathcomp-algebra_1_9
-        mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9;
+        mathcomp-solvable_1_9 mathcomp-field_1_9 mathcomp-character_1_9
+
+        mathcompCorePkgs_1_10 mathcomp_1_10
+        mathcomp-ssreflect_1_10 mathcomp-fingroup_1_10 mathcomp-algebra_1_10
+        mathcomp-solvable_1_10 mathcomp-field_1_10 mathcomp-character_1_10
+        ;
       inherit (callPackage ../development/coq-modules/mathcomp/extra.nix { })
         mathcompExtraGen multinomials coqeal
 

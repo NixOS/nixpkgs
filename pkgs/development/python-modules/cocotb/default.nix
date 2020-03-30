@@ -2,13 +2,13 @@
 
 buildPythonPackage rec {
   pname = "cocotb";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    sha256 = "091q63jcm87xggqgqi44lw2vjxhl1v4yl0mv2c76hgavb29w4w5y";
+    sha256 = "0gwd79zm7196fhnbzbdpyvgzsfjfzl3pmc5hh27h7hckfpxzj9yw";
   };
 
   propagatedBuildInputs = [
@@ -24,10 +24,10 @@ buildPythonPackage rec {
       cocotb/share/makefiles/simulators/Makefile.*
     do
       substituteInPlace $f --replace 'shell which' 'shell command -v'
-      # replace hardcoded gcc. Remove once https://github.com/cocotb/cocotb/pull/1137 gets merged
-      substituteInPlace $f --replace 'gcc' '$(CC)'
-      substituteInPlace $f --replace 'g++' '$(CXX)'
     done
+
+    # This can probably be removed in the next update after 1.3.0
+    substituteInPlace cocotb/share/makefiles/Makefile.inc --replace "-Werror" ""
   '';
 
   checkInputs = [ swig verilog ];
@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   meta = with stdenv.lib; {
     description = "Coroutine based cosimulation library for writing VHDL and Verilog testbenches in Python";
-    homepage = https://github.com/cocotb/cocotb;
+    homepage = "https://github.com/cocotb/cocotb";
     license = licenses.bsd3;
     maintainers = with maintainers; [ matthuszagh ];
   };

@@ -14,7 +14,12 @@ mkDerivation {
   buildInputs = [
     kconfig kcrash ki18n kio kservice kwindowsystem
   ];
-  patches = copyPathsToStore (lib.readPathsFromFile ./. ./series);
+  patches = [
+    ./0001-kinit-libpath.patch
+    ./0002-start_kdeinit-path.patch
+    ./0003-kdeinit-extra-libs.patch
+    ./0004-start_kdeinit-environ-hard-limit.patch
+  ];
   CXXFLAGS = [
     ''-DNIXPKGS_KF5_KIOCORE=\"${getLib kio}/lib/libKF5KIOCore.so.5\"''
     ''-DNIXPKGS_KF5_PARTS=\"${getLib kparts}/lib/libKF5Parts.so.5\"''

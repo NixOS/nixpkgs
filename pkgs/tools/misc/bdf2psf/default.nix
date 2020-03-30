@@ -9,7 +9,7 @@ stdenv.mkDerivation rec {
     sha256 = "10c0rbhqscizfa063m6mms31i0knh25bxr35s008b6mp5pxr33mc";
   };
 
-  buildInputs = [ dpkg ];
+  nativeBuildInputs = [ dpkg ];
 
   dontConfigure = true;
   dontBuild = true;

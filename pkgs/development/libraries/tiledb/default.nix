@@ -20,13 +20,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tiledb";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "TileDB-Inc";
     repo = "TileDB";
     rev = version;
-    sha256 = "1fx0db4x0vcahzk5lk2p0ls644s48vfz7mf9qgsr72pplyn1kcnc";
+    sha256 = "0khxd1w5piqkxjiibnfvxcpk9lb8pi5x95zll5qs7vpbznn56b18";
   };
 
   nativeBuildInputs = [
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "TileDB allows you to manage the massive dense and sparse multi-dimensional array data";
-    homepage = https://github.com/TileDB-Inc/TileDB;
+    homepage = "https://github.com/TileDB-Inc/TileDB";
     license = licenses.mit;
     platforms = [ "x86_64-linux"];
     maintainers = with maintainers; [ rakesh4g ];

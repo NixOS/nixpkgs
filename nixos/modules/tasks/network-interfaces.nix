@@ -13,7 +13,7 @@ let
 
   slaves = concatMap (i: i.interfaces) (attrValues cfg.bonds)
     ++ concatMap (i: i.interfaces) (attrValues cfg.bridges)
-    ++ concatMap (i: i.interfaces) (attrValues cfg.vswitches);
+    ++ concatMap (i: attrNames (filterAttrs (name: config: ! (config.type == "internal" || hasAttr name cfg.interfaces)) i.interfaces)) (attrValues cfg.vswitches);
 
   slaveIfs = map (i: cfg.interfaces.${i}) (filter (i: cfg.interfaces ? ${i}) slaves);
 
@@ -336,6 +336,32 @@ let
 
   };
 
+  vswitchInterfaceOpts = {name, ...}: {
+
+    options = {
+
+      name = mkOption {
+        description = "Name of the interface";
+        example = "eth0";
+        type = types.str;
+      };
+
+      vlan = mkOption {
+        description = "Vlan tag to apply to interface";
+        example = 10;
+        type = types.nullOr types.int;
+        default = null;
+      };
+
+      type = mkOption {
+        description = "Openvswitch type to assign to interface";
+        example = "internal";
+        type = types.nullOr types.str;
+        default = null;
+      };
+    };
+  };
+
   hexChars = stringToCharacters "0123456789abcdef";
 
   isHexString = s: all (c: elem c hexChars) (stringToCharacters (toLower s));
@@ -486,8 +512,8 @@ in
     networking.vswitches = mkOption {
       default = { };
       example =
-        { vs0.interfaces = [ "eth0" "eth1" ];
-          vs1.interfaces = [ "eth2" "wlan0" ];
+        { vs0.interfaces = { eth0 = { }; lo1 = { type="internal"; }; };
+          vs1.interfaces = [ { name = "eth2"; } { name = "lo2"; type="internal"; } ];
         };
       description =
         ''
@@ -504,9 +530,8 @@ in
 
           interfaces = mkOption {
             example = [ "eth0" "eth1" ];
-            type = types.listOf types.str;
-            description =
-              "The physical network interfaces connected by the vSwitch.";
+            description = "The physical network interfaces connected by the vSwitch.";
+            type = with types; loaOf (submodule vswitchInterfaceOpts);
           };
 
           controllers = mkOption {
@@ -527,6 +552,25 @@ in
             description = ''
               OpenFlow rules to insert into the Open vSwitch. All <literal>openFlowRules</literal> are
               loaded with <literal>ovs-ofctl</literal> within one atomic operation.
+            '';
+          };
+
+          # TODO: custom "openflow version" type, with list from existing openflow protocols
+          supportedOpenFlowVersions = mkOption {
+            type = types.listOf types.str;
+            example = [ "OpenFlow10" "OpenFlow13" "OpenFlow14" ];
+            default = [ "OpenFlow13" ];
+            description = ''
+              Supported versions to enable on this switch.
+            '';
+          };
+
+          # TODO: use same type as elements from supportedOpenFlowVersions
+          openFlowVersion = mkOption {
+            type = types.str;
+            default = "OpenFlow13";
+            description = ''
+              Version of OpenFlow protocol to use when communicating with the switch internally (e.g. with <literal>openFlowRules</literal>).
             '';
           };
 
@@ -590,19 +634,23 @@ in
 
     networking.bonds =
       let
-        driverOptionsExample = {
-          miimon = "100";
-          mode = "active-backup";
-        };
+        driverOptionsExample =  ''
+          {
+            miimon = "100";
+            mode = "active-backup";
+          }
+        '';
       in mkOption {
         default = { };
-        example = literalExample {
-          bond0 = {
-            interfaces = [ "eth0" "wlan0" ];
-            driverOptions = driverOptionsExample;
-          };
-          anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
-        };
+        example = literalExample ''
+          {
+            bond0 = {
+              interfaces = [ "eth0" "wlan0" ];
+              driverOptions = ${driverOptionsExample};
+            };
+            anotherBond.interfaces = [ "enp4s0f0" "enp4s0f1" "enp5s0f0" "enp5s0f1" ];
+          }
+        '';
         description = ''
           This option allows you to define bond devices that aggregate multiple,
           underlying networking interfaces together. The value of this option is
@@ -687,12 +735,14 @@ in
 
     networking.macvlans = mkOption {
       default = { };
-      example = literalExample {
-        wan = {
-          interface = "enp2s0";
-          mode = "vepa";
-        };
-      };
+      example = literalExample ''
+        {
+          wan = {
+            interface = "enp2s0";
+            mode = "vepa";
+          };
+        }
+      '';
       description = ''
         This option allows you to define macvlan interfaces which should
         be automatically created.
@@ -720,18 +770,20 @@ in
 
     networking.sits = mkOption {
       default = { };
-      example = literalExample {
-        hurricane = {
-          remote = "10.0.0.1";
-          local = "10.0.0.22";
-          ttl = 255;
-        };
-        msipv6 = {
-          remote = "192.168.0.1";
-          dev = "enp3s0";
-          ttl = 127;
-        };
-      };
+      example = literalExample ''
+        {
+          hurricane = {
+            remote = "10.0.0.1";
+            local = "10.0.0.22";
+            ttl = 255;
+          };
+          msipv6 = {
+            remote = "192.168.0.1";
+            dev = "enp3s0";
+            ttl = 127;
+          };
+        }
+      '';
       description = ''
         This option allows you to define 6-to-4 interfaces which should be automatically created.
       '';
@@ -782,16 +834,18 @@ in
 
     networking.vlans = mkOption {
       default = { };
-      example = literalExample {
-        vlan0 = {
-          id = 3;
-          interface = "enp3s0";
-        };
-        vlan1 = {
-          id = 1;
-          interface = "wlan0";
-        };
-      };
+      example = literalExample ''
+        {
+          vlan0 = {
+            id = 3;
+            interface = "enp3s0";
+          };
+          vlan1 = {
+            id = 1;
+            interface = "wlan0";
+          };
+        }
+      '';
       description =
         ''
           This option allows you to define vlan devices that tag packets
@@ -824,24 +878,26 @@ in
 
     networking.wlanInterfaces = mkOption {
       default = { };
-      example = literalExample {
-        wlan-station0 = {
-            device = "wlp6s0";
-        };
-        wlan-adhoc0 = {
-            type = "ibss";
-            device = "wlp6s0";
-            mac = "02:00:00:00:00:01";
-        };
-        wlan-p2p0 = {
-            device = "wlp6s0";
-            mac = "02:00:00:00:00:02";
-        };
-        wlan-ap0 = {
-            device = "wlp6s0";
-            mac = "02:00:00:00:00:03";
-        };
-      };
+      example = literalExample ''
+        {
+          wlan-station0 = {
+              device = "wlp6s0";
+          };
+          wlan-adhoc0 = {
+              type = "ibss";
+              device = "wlp6s0";
+              mac = "02:00:00:00:00:01";
+          };
+          wlan-p2p0 = {
+              device = "wlp6s0";
+              mac = "02:00:00:00:00:02";
+          };
+          wlan-ap0 = {
+              device = "wlp6s0";
+              mac = "02:00:00:00:00:03";
+          };
+        }
+      '';
       description =
         ''
           Creating multiple WLAN interfaces on top of one physical WLAN device (NIC).

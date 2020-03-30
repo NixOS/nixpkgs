@@ -1,28 +1,19 @@
-{ stdenv, fetchurl, pkgconfig, intltool, glib, dbus-glib, libxklavier,
+{ stdenv, fetchurl, pkgconfig, gettext, glib, dbus-glib, libxklavier,
   libcanberra-gtk3, libnotify, nss, polkit, dconf, gtk3, mate,
   pulseaudioSupport ? stdenv.config.pulseaudio or true, libpulseaudio,
-  wrapGAppsHook, fetchpatch, autoreconfHook }:
+  wrapGAppsHook }:
 
 stdenv.mkDerivation rec {
   pname = "mate-settings-daemon";
-  version = "1.22.1";
+  version = "1.24.0";
 
   src = fetchurl {
     url = "https://pub.mate-desktop.org/releases/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0idw02z0iig0pfxvlhc4dq4sr7kl1w50xscvg0jzzswnxid2l4ip";
+    sha256 = "1hc5a36wqpjv9i2lgrn1h12s8y910xab3phx5vzbzq47kj6m3gw9";
   };
 
-  patches = [
-    # Don't use etc/dbus-1/system.d
-    (fetchpatch {
-      url = "https://patch-diff.githubusercontent.com/raw/mate-desktop/mate-settings-daemon/pull/296.patch";
-      sha256 = "00dfn8h47zw3wr7yya82vvp19wsw51whn8jwgayn4hkjd161s9nm";
-    })
-  ];
-
   nativeBuildInputs = [
-    autoreconfHook # drop with the above patch
-    intltool
+    gettext
     pkgconfig
     wrapGAppsHook
   ];
@@ -45,9 +36,11 @@ stdenv.mkDerivation rec {
 
   NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
+  enableParallelBuilding = true;
+
   meta = with stdenv.lib; {
     description = "MATE settings daemon";
-    homepage = https://github.com/mate-desktop/mate-settings-daemon;
+    homepage = "https://github.com/mate-desktop/mate-settings-daemon";
     license = with licenses; [ gpl2 lgpl21 ];
     platforms = platforms.unix;
     maintainers = [ maintainers.romildo ];

@@ -130,7 +130,7 @@ in
     systemdConfigs = listToAttrs (map mkSystemd enabledConfigs);
 
   in mkIf cfg.enable {
-    environment.etc = mkMerge etcFiles;
-    systemd.services = mkMerge systemdConfigs;
+    environment.etc = etcFiles;
+    systemd.services = systemdConfigs;
   };
 }

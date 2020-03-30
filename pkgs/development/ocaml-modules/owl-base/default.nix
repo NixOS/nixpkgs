@@ -2,13 +2,15 @@
 
 buildDunePackage rec {
   pname = "owl-base";
-  version = "0.7.2";
+  version = "0.8.0";
+
+  useDune2 = true;
 
   src = fetchFromGitHub {
     owner  = "owlbarn";
     repo   = "owl";
     rev    = version;
-    sha256 = "1a2lbhywrb3bmm4k48wwbp6iszpd3aj1f23v10i78cbqm5slk6dj";
+    sha256 = "1j3xmr4izfznmv8lbn8vkx9c77py2xr6fqyn6ypjlf5k9b8g4mmw";
   };
 
   propagatedBuildInputs = [ stdlib-shims ];

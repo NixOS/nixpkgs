@@ -5,13 +5,12 @@
 # this should contain the versions' revs and hashes
 # the stable revs are stored only for ease of skipping
 
-# if you get something like "tar: no space left on device"
-# you may need a bigger tmpfs, this can be set as such
-# services.logind.extraConfig = "RuntimeDirectorySize=8G";
-# this is most likely only needed for the packages3d
-# this can be checked without that config by manual TOFU
-# copy the generated items from ,versions.nix to versions.nix
-# then nix-build and see what it actually gets
+# by default nix-prefetch-url uses XDG_RUNTIME_DIR as tmp
+# which is /run/user/1000, which defaults to 10% of your RAM
+# unless you have over 64GB of ram that'll be insufficient
+# resulting in "tar: no space left on device" for packages3d
+# hence:
+export TMPDIR=/tmp
 
 # if something goes unrepairably wrong, run 'update.sh all clean'
 
@@ -19,7 +18,8 @@
 # support parallel instances for each pname
 #   currently risks reusing old data
 # no getting around manually checking if the build product works...
-# if there is, default to commiting
+# if there is, default to commiting?
+#   won't work when running in parallel?
 # remove items left in /nix/store?
 
 # get the latest tag that isn't an RC or *.99

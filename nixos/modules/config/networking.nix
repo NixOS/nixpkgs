@@ -35,12 +35,22 @@ in
       '';
     };
 
+    networking.hostFiles = lib.mkOption {
+      type = types.listOf types.path;
+      defaultText = lib.literalExample "Hosts from `networking.hosts` and `networking.extraHosts`";
+      example = lib.literalExample ''[ "''${pkgs.my-blocklist-package}/share/my-blocklist/hosts" ]'';
+      description = ''
+        Files that should be concatenated together to form <filename>/etc/hosts</filename>.
+      '';
+    };
+
     networking.extraHosts = lib.mkOption {
       type = types.lines;
       default = "";
       example = "192.168.0.1 lanlocalhost";
       description = ''
         Additional verbatim entries to be appended to <filename>/etc/hosts</filename>.
+        For adding hosts from derivation results, use <option>networking.hostFiles</option> instead.
       '';
     };
 
@@ -159,6 +169,15 @@ in
       "::1" = [ "localhost" ];
     };
 
+    networking.hostFiles = let
+      stringHosts =
+        let
+          oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip} + "\n";
+          allToString = set: concatMapStrings (oneToString set) (attrNames set);
+        in pkgs.writeText "string-hosts" (allToString (filterAttrs (_: v: v != []) cfg.hosts));
+      extraHosts = pkgs.writeText "extra-hosts" cfg.extraHosts;
+    in mkBefore [ stringHosts extraHosts ];
+
     environment.etc =
       { # /etc/services: TCP/UDP port assignments.
         services.source = pkgs.iana-etc + "/etc/services";
@@ -167,12 +186,8 @@ in
         protocols.source  = pkgs.iana-etc + "/etc/protocols";
 
         # /etc/hosts: Hostname-to-IP mappings.
-        hosts.text = let
-          oneToString = set: ip: ip + " " + concatStringsSep " " set.${ip};
-          allToString = set: concatMapStringsSep "\n" (oneToString set) (attrNames set);
-        in ''
-          ${allToString (filterAttrs (_: v: v != []) cfg.hosts)}
-          ${cfg.extraHosts}
+        hosts.source = pkgs.runCommandNoCC "hosts" {} ''
+          cat ${escapeShellArgs cfg.hostFiles} > $out
         '';
 
         # /etc/host.conf: resolver configuration file

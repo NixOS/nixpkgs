@@ -18,7 +18,7 @@
 
 let
   basename = "gdb-${version}";
-  version = "8.3.1";
+  version = "9.1";
 in
 
 assert pythonSupport -> python3 != null;
@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnu/gdb/${basename}.tar.xz";
-    sha256 = "1i2pjwaafrlz7wqm40b4znr77ai32rjsxkpl2az38yyarpbv8m8y";
+    sha256 = "0dqp1p7w836iwijg1zb4a784n0j4pyjiw5v6h8fg5lpx6b40x7k9";
   };
 
   postPatch = if stdenv.isDarwin then ''
@@ -64,6 +64,13 @@ stdenv.mkDerivation rec {
 
   # TODO(@Ericson2314): Always pass "--target" and always prefix.
   configurePlatforms = [ "build" "host" ] ++ stdenv.lib.optional (stdenv.targetPlatform != stdenv.hostPlatform) "target";
+
+  # GDB have to be built out of tree.
+  preConfigure = ''
+    mkdir _build
+    cd _build
+  '';
+  configureScript = "../configure";
 
   configureFlags = with stdenv.lib; [
     "--enable-targets=all" "--enable-64-bit-bfd"
@@ -100,6 +107,6 @@ stdenv.mkDerivation rec {
     license = stdenv.lib.licenses.gpl3Plus;
 
     platforms = with platforms; linux ++ cygwin ++ darwin;
-    maintainers = with maintainers; [ pierron globin ];
+    maintainers = with maintainers; [ pierron globin lsix ];
   };
 }

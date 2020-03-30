@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "terragrunt";
-  version = "0.17.4";
+  version = "0.23.2";
 
   goPackagePath = "github.com/gruntwork-io/terragrunt";
 
@@ -10,7 +10,7 @@ buildGoPackage rec {
     owner  = "gruntwork-io";
     repo   = "terragrunt";
     rev    = "v${version}";
-    sha256 = "13hlv0ydmv8gpzgg6bfr7rp89xfw1bkgd0j684armw8zq29cmv3a";
+    sha256 = "1r3q7faxys0h147cr9154pcix1qgj36v41ja9hhbggm4c7vig4s1";
   };
 
   goDeps = ./deps.nix;
@@ -18,6 +18,7 @@ buildGoPackage rec {
   buildInputs = [ makeWrapper ];
 
   preBuild = ''
+    find go/src -name vendor | xargs -I % sh -c 'echo Removing %; rm -rf %'
     buildFlagsArray+=("-ldflags" "-X main.VERSION=v${version}")
   '';
 

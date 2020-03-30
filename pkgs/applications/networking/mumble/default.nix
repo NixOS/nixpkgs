@@ -19,7 +19,8 @@ let
     pname = overrides.type;
     version = source.version;
 
-    patches = (source.patches or []) ++ optional jackSupport ./mumble-jack-support.patch;
+    patches = (source.patches or [])
+      ++ [ ./fix-rnnoise-argument.patch ];
 
     nativeBuildInputs = [ pkgconfig python qt5.qmake ]
       ++ (overrides.nativeBuildInputs or [ ]);

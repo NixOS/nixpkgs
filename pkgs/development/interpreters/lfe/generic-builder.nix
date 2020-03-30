@@ -6,10 +6,13 @@
 , sha256 ? null
 , rev ? version
 , src ? fetchFromGitHub { inherit rev sha256; owner = "rvirding"; repo = "lfe"; }
+, patches ? []
 }:
 
 let
-  inherit (stdenv.lib) getVersion versionAtLeast versions;
+  inherit (stdenv.lib)
+    assertMsg makeBinPath optionalString
+    getVersion versionAtLeast versionOlder versions;
 
   mainVersion = versions.major (getVersion erlang);
 
@@ -25,7 +28,9 @@ let
   };
 
 in
-assert versionAtLeast maximumOTPVersion mainVersion;
+assert (assertMsg (versionAtLeast maximumOTPVersion mainVersion)) ''
+  LFE ${version} is supported on OTP <=${maximumOTPVersion}, not ${mainVersion}.
+'';
 
 buildRebar3 {
   name = baseName;
@@ -34,13 +39,15 @@ buildRebar3 {
 
   buildInputs = [ erlang makeWrapper ];
   beamDeps    = [ proper ];
-  patches     = [ ./no-test-deps.patch ];
+  patches     = [ ./no-test-deps.patch ./dedup-ebins.patch ] ++ patches;
   doCheck     = true;
   checkTarget = "travis";
 
+  makeFlags = [ "-e" "MANDB=''" "PREFIX=$$out"];
+
   # These installPhase tricks are based on Elixir's Makefile.
   # TODO: Make, upload, and apply a patch.
-  installPhase = ''
+  installPhase = optionalString (versionOlder version "1.3") ''
     local libdir=$out/lib/lfe
     local ebindir=$libdir/ebin
     local bindir=$libdir/bin
@@ -63,7 +70,7 @@ buildRebar3 {
     # Add some stuff to PATH so the scripts can run without problems.
     for f in $out/bin/*; do
       wrapProgram $f \
-        --prefix PATH ":" "${stdenv.lib.makeBinPath [ erlang coreutils bash ]}:$out/bin"
+        --prefix PATH ":" "${makeBinPath [ erlang coreutils bash ]}:$out/bin"
       substituteInPlace $f --replace "/usr/bin/env" "${coreutils}/bin/env"
     done
   '';

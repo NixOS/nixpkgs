@@ -41,7 +41,7 @@ import ./make-test-python.nix {
       systemd.services.git-daemon = {
         description   = "Git daemon for the test";
         wantedBy      = [ "multi-user.target" ];
-        after         = [ "network.target" ];
+        after         = [ "network.target" "sshd.service" ];
 
         serviceConfig.Restart = "always";
         path = with pkgs; [ coreutils git openssh ];

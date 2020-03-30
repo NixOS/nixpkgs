@@ -4,10 +4,6 @@ with lib;
 
 let
   cfg = config.system.nixos;
-
-  gitRepo      = "${toString pkgs.path}/.git";
-  gitRepoValid = lib.pathIsGitRepo gitRepo;
-  gitCommitId  = lib.substring 0 7 (commitIdFromGitRepo gitRepo);
 in
 
 {
@@ -98,8 +94,6 @@ in
       # These defaults are set here rather than up there so that
       # changing them would not rebuild the manual
       version = mkDefault (cfg.release + cfg.versionSuffix);
-      revision      = mkIf gitRepoValid (mkDefault            gitCommitId);
-      versionSuffix = mkIf gitRepoValid (mkDefault (".git." + gitCommitId));
     };
 
     # Generate /etc/os-release.  See

@@ -6,13 +6,13 @@
 
 buildPythonApplication rec {
   pname = "protontricks";
-  version = "1.4";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "Matoking";
     repo = pname;
     rev = version;
-    sha256 = "1aarx6g8ykw1jvygfngmz8apdvfj26rcq10bwl228612kwigh7s2";
+    sha256 = "083ncg6yjd7s3dx91zd52w166x709mnxknwwr78ggka8d8vlyi0b";
   };
 
   # Fix interpreter in mock run.sh for tests

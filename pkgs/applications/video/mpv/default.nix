@@ -1,7 +1,8 @@
-{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper
+{ config, stdenv, fetchurl, fetchFromGitHub, makeWrapper, fetchpatch
 , addOpenGLRunpath, docutils, perl, pkgconfig, python3, wafHook, which
 , ffmpeg_4, freefont_ttf, freetype, libass, libpthreadstubs, mujs
-, nv-codec-headers, lua, libuchardet, libiconv ? null, darwin
+, nv-codec-headers, lua, libuchardet, libiconv ? null
+, CoreFoundation, Cocoa, CoreAudio, MediaPlayer
 
 , waylandSupport ? stdenv.isLinux
   , wayland           ? null
@@ -38,11 +39,12 @@
 , libpngSupport      ? true,           libpng        ? null
 , pulseSupport       ? config.pulseaudio or stdenv.isLinux, libpulseaudio ? null
 , rubberbandSupport  ? stdenv.isLinux, rubberband    ? null
-, screenSaverSupport ? true,           libXScrnSaver ? null
 , sambaSupport       ? stdenv.isLinux, samba         ? null
+, screenSaverSupport ? true,           libXScrnSaver ? null
 , sdl2Support        ? true,           SDL2          ? null
 , sndioSupport       ? true,           sndio         ? null
 , speexSupport       ? true,           speex         ? null
+, swiftSupport       ? false,          swift         ? null
 , theoraSupport      ? true,           libtheora     ? null
 , vaapiSupport       ? stdenv.isLinux, libva         ? null
 , vdpauSupport       ? true,           libvdpau      ? null
@@ -119,7 +121,6 @@ in stdenv.mkDerivation rec {
     "--disable-libmpv-static"
     "--disable-static-build"
     "--disable-build-date" # Purity
-    "--disable-macos-cocoa-cb" # Disable whilst Swift isn't supported
     (enableFeature archiveSupport  "libarchive")
     (enableFeature cddaSupport     "cdda")
     (enableFeature dvdnavSupport   "dvdnav")
@@ -130,11 +131,13 @@ in stdenv.mkDerivation rec {
     (enableFeature vaapiSupport    "vaapi")
     (enableFeature waylandSupport  "wayland")
     (enableFeature stdenv.isLinux  "dvbin")
-  ];
+  ] # Disable whilst Swift isn't supported
+    ++ stdenv.lib.optional (!swiftSupport) "--disable-macos-cocoa-cb";
 
   nativeBuildInputs = [
     addOpenGLRunpath docutils makeWrapper perl pkgconfig python3 wafHook which
-  ];
+  ]
+    ++ optional swiftSupport swift;
 
   buildInputs = [
     ffmpeg_4 freetype libass libpthreadstubs
@@ -171,9 +174,7 @@ in stdenv.mkDerivation rec {
     ++ optionals waylandSupport    [ wayland wayland-protocols libxkbcommon ]
     ++ optionals x11Support        [ libX11 libXext libGLU libGL libXxf86vm libXrandr ]
     ++ optionals vulkanSupport     [ libplacebo shaderc vulkan-headers vulkan-loader ]
-    ++ optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-      CoreFoundation Cocoa CoreAudio
-    ]);
+    ++ optionals stdenv.isDarwin   [ CoreFoundation Cocoa CoreAudio MediaPlayer ];
 
   enableParallelBuilding = true;
 
@@ -189,6 +190,14 @@ in stdenv.mkDerivation rec {
   '' + optionalString vapoursynthSupport ''
       --prefix PYTHONPATH : "${vapoursynth}/lib/${python3.libPrefix}/site-packages:$PYTHONPATH"
   '';
+
+  patches = stdenv.lib.optionals stdenv.isDarwin [
+    # Fix cocoa backend. Remove with the next release
+    (fetchpatch {
+      url = "https://github.com/mpv-player/mpv/commit/188169854313b99d01da8f69fe129f0a487eb7c4.patch";
+      sha256 = "062sz4666prb2wg1rn5q8brqkzlq6lxn8sxic78a8lb0125c01f7";
+    })
+  ];
 
   postInstall = ''
     # Use a standard font

@@ -1,8 +1,8 @@
 diff --git a/data/meson.build b/data/meson.build
-index d59bdc88..4a4cfc35 100644
+index 0667bd78..92d6c7b9 100644
 --- a/data/meson.build
 +++ b/data/meson.build
-@@ -16,7 +16,7 @@
+@@ -17,7 +17,7 @@ endif
  
  if build_standalone
    install_data(['daemon.conf'],
@@ -15,7 +15,7 @@ diff --git a/data/pki/meson.build b/data/pki/meson.build
 index eefcc914..dc801fa1 100644
 --- a/data/pki/meson.build
 +++ b/data/pki/meson.build
-@@ -4,14 +4,14 @@
+@@ -4,14 +4,14 @@ if get_option('gpg')
        'GPG-KEY-Linux-Foundation-Firmware',
        'GPG-KEY-Linux-Vendor-Firmware-Service',
      ],
@@ -32,7 +32,7 @@ index eefcc914..dc801fa1 100644
    )
  endif
  
-@@ -19,12 +19,12 @@
+@@ -19,12 +19,12 @@ if get_option('pkcs7')
    install_data([
        'LVFS-CA.pem',
      ],
@@ -51,7 +51,7 @@ diff --git a/data/remotes.d/meson.build b/data/remotes.d/meson.build
 index 826a3c1d..b78db663 100644
 --- a/data/remotes.d/meson.build
 +++ b/data/remotes.d/meson.build
-@@ -3,7 +3,7 @@
+@@ -3,7 +3,7 @@ if build_daemon and get_option('lvfs')
        'lvfs.conf',
        'lvfs-testing.conf',
      ],
@@ -60,7 +60,7 @@ index 826a3c1d..b78db663 100644
    )
    i18n.merge_file(
      input: 'lvfs.metainfo.xml',
-@@ -37,12 +37,12 @@
+@@ -37,12 +37,12 @@ configure_file(
    output : 'vendor.conf',
    configuration : con2,
    install: true,
@@ -79,7 +79,7 @@ diff --git a/meson.build b/meson.build
 index b1a523d2..aacb8e0a 100644
 --- a/meson.build
 +++ b/meson.build
-@@ -169,6 +169,12 @@
+@@ -169,6 +169,12 @@ endif
  mandir = join_paths(prefix, get_option('mandir'))
  localedir = join_paths(prefix, get_option('localedir'))
  
@@ -96,7 +96,7 @@ diff --git a/meson_options.txt b/meson_options.txt
 index be0adfef..73983333 100644
 --- a/meson_options.txt
 +++ b/meson_options.txt
-@@ -26,6 +26,7 @@
+@@ -26,6 +26,7 @@ option('plugin_coreboot', type : 'boolean', value : true, description : 'enable
  option('systemd', type : 'boolean', value : true, description : 'enable systemd support')
  option('systemdunitdir', type: 'string', value: '', description: 'Directory for systemd units')
  option('elogind', type : 'boolean', value : false, description : 'enable elogind support')
@@ -108,7 +108,7 @@ diff --git a/plugins/dell-esrt/meson.build b/plugins/dell-esrt/meson.build
 index ed4eee70..76dbdb1d 100644
 --- a/plugins/dell-esrt/meson.build
 +++ b/plugins/dell-esrt/meson.build
-@@ -37,5 +37,5 @@
+@@ -37,5 +37,5 @@ configure_file(
    output : 'dell-esrt.conf',
    configuration : con2,
    install: true,
@@ -119,7 +119,7 @@ diff --git a/plugins/redfish/meson.build b/plugins/redfish/meson.build
 index 25fc5c7d..77eb9a83 100644
 --- a/plugins/redfish/meson.build
 +++ b/plugins/redfish/meson.build
-@@ -27,7 +27,7 @@
+@@ -27,7 +27,7 @@ shared_module('fu_plugin_redfish',
  )
  
  install_data(['redfish.conf'],
@@ -132,7 +132,7 @@ diff --git a/plugins/thunderbolt/meson.build b/plugins/thunderbolt/meson.build
 index 06ab34ee..297a9182 100644
 --- a/plugins/thunderbolt/meson.build
 +++ b/plugins/thunderbolt/meson.build
-@@ -46,7 +46,7 @@
+@@ -46,7 +46,7 @@ executable('tbtfwucli',
  )
  
  install_data(['thunderbolt.conf'],
@@ -142,11 +142,11 @@ index 06ab34ee..297a9182 100644
  # we use functions from 2.52 in the tests
  if get_option('tests') and umockdev.found() and gio.version().version_compare('>= 2.52')
 diff --git a/plugins/uefi/meson.build b/plugins/uefi/meson.build
-index 39b5f566..0f904a22 100644
+index 7252580d..7188d1c5 100644
 --- a/plugins/uefi/meson.build
 +++ b/plugins/uefi/meson.build
-@@ -87,7 +87,7 @@
- )
+@@ -104,7 +104,7 @@ if get_option('man')
+ endif
  
  install_data(['uefi.conf'],
 -  install_dir:  join_paths(sysconfdir, 'fwupd')
@@ -154,3 +154,14 @@ index 39b5f566..0f904a22 100644
  )
  
  if get_option('tests')
+diff --git a/plugins/upower/meson.build b/plugins/upower/meson.build
+index 290a3eb6..9ab2f452 100644
+--- a/plugins/upower/meson.build
++++ b/plugins/upower/meson.build
+@@ -23,5 +23,5 @@ shared_module('fu_plugin_upower',
+ )
+ 
+ install_data(['upower.conf'],
+-  install_dir:  join_paths(sysconfdir, 'fwupd')
++  install_dir:  join_paths(sysconfdir_install, 'fwupd')
+ )

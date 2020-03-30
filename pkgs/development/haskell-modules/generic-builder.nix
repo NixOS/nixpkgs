@@ -384,7 +384,7 @@ stdenv.mkDerivation ({
     done
 
     for d in $(grep '^dynamic-library-dirs:' "$packageConfDir"/* | cut -d' ' -f2- | tr ' ' '\n' | sort -u); do
-      for lib in "$d/"*.dylib; do
+      for lib in "$d/"*.{dylib,so}; do
         ln -s "$lib" "$dynamicLinksDir"
       done
     done

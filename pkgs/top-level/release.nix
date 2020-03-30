@@ -57,7 +57,8 @@ let
               jobs.python3.x86_64-darwin
               jobs.ruby.x86_64-darwin
               jobs.rustc.x86_64-darwin
-              jobs.stack.x86_64-darwin
+              # blocking ofBorg CI 2020-02-28
+              # jobs.stack.x86_64-darwin
               jobs.stdenv.x86_64-darwin
               jobs.vim.x86_64-darwin
               jobs.cachix.x86_64-darwin

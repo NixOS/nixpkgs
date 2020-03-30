@@ -16,6 +16,8 @@ stdenv.mkDerivation ({
   nativeBuildInputs = [ gnum4 ];
   propagatedBuildInputs = [ gmp ];
 
+  configureFlags = [ "--enable-fat" ]; # runtime selection of HW-accelerated code
+
   doCheck = (stdenv.hostPlatform.system != "i686-cygwin" && !stdenv.isDarwin);
 
   enableParallelBuilding = true;

@@ -18,7 +18,7 @@ lib.makeScope pkgs.newScope (self: with self; {
     in
       lib.filter (x: !(builtins.elem (lib.getName x) namesToRemove)) packages;
 
-  maintainers = with pkgs.lib.maintainers; [ lethalman jtojnar hedning worldofpeace ];
+  maintainers = lib.teams.gnome.members;
 
   libsoup = pkgs.libsoup.override { gnomeSupport = true; };
   libchamplain = pkgs.libchamplain.override { libsoup = libsoup; };

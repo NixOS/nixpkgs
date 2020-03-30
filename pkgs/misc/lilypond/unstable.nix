@@ -18,10 +18,4 @@ lilypond.overrideAttrs (oldAttrs: {
   meta = oldAttrs.meta // {
     broken = stdenv.isDarwin;
   };
-
-  configureFlags = [
-    "--disable-documentation"
-    "--with-urwotf-dir=${ghostscript}/share/ghostscript/fonts"
-    "--with-texgyre-dir=${gyre-fonts}/share/fonts/truetype/"
-  ];
 })

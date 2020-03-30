@@ -37,11 +37,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoSha256 = "17ldqr3asrdcsh4l29m3b5r37r5d0b3npq1lrgjmxb6vlx6a36qh";
-  verifyCargoDeps = true;
 
   meta = with stdenv.lib; {
     description = "A fast line-oriented regex search tool, similar to ag and ack";
-    homepage = https://github.com/BurntSushi/ripgrep;
+    homepage = "https://github.com/BurntSushi/ripgrep";
     license = licenses.unlicense;
     maintainers = [ maintainers.tailhook ];
     platforms = platforms.all;
@@ -54,17 +53,16 @@ all crate sources of this package. Currently it is obtained by inserting a
 fake checksum into the expression and building the package once. The correct
 checksum can be then take from the failed build.
 
-When the `Cargo.lock`, provided by upstream, is not in sync with the
-`Cargo.toml`, it is possible to use `cargoPatches` to update it. All patches
-added in `cargoPatches` will also be prepended to the patches in `patches` at
-build-time.
+Per the instructions in the [Cargo Book](https://doc.rust-lang.org/cargo/guide/cargo-toml-vs-cargo-lock.html)
+best practices guide, Rust applications should always commit the `Cargo.lock`
+file in git to ensure a reproducible build. However, a few packages do not, and
+Nix depends on this file, so if it missing you can use `cargoPatches` to apply
+it in the `patchPhase`. Consider sending a PR upstream with a note to the
+maintainer describing why it's important to include in the application.
 
-When `verifyCargoDeps` is set to `true`, the build will also verify that the
-`cargoSha256` is not out of date by comparing the `Cargo.lock` file in both the
-`cargoDeps` and `src`. Note that this option changes the value of `cargoSha256`
-since it also copies the `Cargo.lock` in it. To avoid breaking
-backward-compatibility this option is not enabled by default but hopefully will
-be in the future.
+The fetcher will verify that the `Cargo.lock` file is in sync with the `src`
+attribute, and fail the build if not. It will also will compress the vendor
+directory into a tar.gz archive.
 
 ### Building a crate for a different target
 

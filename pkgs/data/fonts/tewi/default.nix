@@ -1,37 +1,52 @@
-{stdenv, fetchgit, bdftopcf, mkfontdir, mkfontscale}:
+{ stdenv, fetchFromGitHub, python3
+, bdftopcf, mkfontscale
+, libfaketime, fonttosfnt
+}:
 
 stdenv.mkDerivation rec {
-  date = "2015-06-07";
-  name = "tewi-font-${date}";
+  pname = "tewi-font";
+  version = "2.0.2";
 
-  src = fetchgit {
-    url = "https://github.com/lucy/tewi-font";
-    rev = "ff930e66ae471da4fdc226ffe65fd1ccd13d4a69";
-    sha256 = "0c7k847cp68w20frzsdknpss2cwv3lp970asyybv65jxyl2jz3iq";
+  src = fetchFromGitHub {
+    owner  = "lucy";
+    repo   = pname;
+    rev    = version;
+    sha256 = "1axv9bv10xlcmgfyjh3z5kn5fkg3m6n1kskcs5hvlmyb6m1zk91j";
   };
 
-  nativeBuildInputs = [ bdftopcf mkfontdir mkfontscale ];
-  buildPhase = ''
-    for i in *.bdf; do
-        bdftopcf -o ''${i/bdf/pcf} $i
-    done
+  nativeBuildInputs =
+    [ python3 bdftopcf mkfontscale
+      libfaketime fonttosfnt
+    ];
 
-    gzip -n *.pcf
+  postPatch = ''
+    # make gzip deterministic
+    sed 's/gzip -9/gzip -9 -n/g' -i Makefile
+
+    # fix python not found
+    patchShebangs scripts/merge
+  '';
+
+  postBuild = ''
+    # convert bdf fonts to otb
+    for i in *.bdf; do
+      name=$(basename "$i" .bdf)
+      faketime -f "1970-01-01 00:00:01" \
+      fonttosfnt -v -o "$name.otb" "$i"
+    done
   '';
 
   installPhase = ''
     fontDir="$out/share/fonts/misc"
-    mkdir -p "$fontDir"
-    mv *.pcf.gz "$fontDir"
+    install -m 644 -D out/* -t "$fontDir"
+    mkfontdir "$fontDir"
 
-    cd "$fontDir"
-    mkfontdir
-    mkfontscale
+    fontDir="$otb/share/fonts/misc"
+    install -m 644 -D *.otb -t "$fontDir"
+    mkfontdir "$fontDir"
   '';
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = "14dv3m1svahjyb9c1x1570qrmlnynzg0g36b10bqqs8xvhix34yq";
+  outputs = [ "out" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A nice bitmap font, readable even at small sizes";

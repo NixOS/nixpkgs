@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation rec {
   pname = "zotero";
-  version = "5.0.82";
+  version = "5.0.83";
 
   src = fetchurl {
     url = "https://download.zotero.org/client/release/${version}/Zotero-${version}_linux-x86_64.tar.bz2";
-    sha256 = "02a9dlsdd7dh56dwvsjskr899bqi8ijcvzc71xcjwaik6rp8xw88";
+    sha256 = "1abkwxdi154hnry8nsvxbklvbsnvd7cs2as0041h2kbiz824pv31";
   };
 
   buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme dconf ];
@@ -131,7 +131,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = https://www.zotero.org;
+    homepage = "https://www.zotero.org";
     description = "Collect, organize, cite, and share your research sources";
     license = licenses.agpl3;
     platforms = platforms.linux;

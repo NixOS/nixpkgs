@@ -1,5 +1,4 @@
 { flavor ? ""
-, ldflags ? ""
 , stdenv
 , btrfs-progs
 , buildGoPackage
@@ -21,7 +20,7 @@ let
   buildTags = "apparmor seccomp selinux containers_image_ostree_stub";
 in buildGoPackage rec {
   project = "cri-o";
-  version = "1.17.0";
+  version = "1.17.1";
   name = "${project}-${version}${flavor}";
 
   goPackagePath = "github.com/${project}/${project}";
@@ -30,7 +29,7 @@ in buildGoPackage rec {
     owner = "cri-o";
     repo = "cri-o";
     rev = "v${version}";
-    sha256 = "0xjmylf0ww23qqcg7kw008px6608r4qq6q57pfqis0661kp6f24j";
+    sha256 = "0zipigjcnhcnn0w69dkd8312qb6z98l65ir175wp3jfvj4cx3g28";
   };
 
   outputs = [ "bin" "out" ];

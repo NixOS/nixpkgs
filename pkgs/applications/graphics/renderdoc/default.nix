@@ -1,6 +1,6 @@
 { stdenv, fetchFromGitHub, cmake, pkgconfig, mkDerivation
 , qtbase, qtx11extras, qtsvg, makeWrapper
-, vulkan-loader, xorg, python3, python3Packages
+, vulkan-loader, libglvnd, xorg, python3, python3Packages
 , bison, pcre, automake, autoconf, addOpenGLRunpath
 }:
 let
@@ -13,14 +13,14 @@ let
   pythonPackages = python3Packages;
 in
 mkDerivation rec {
-  version = "1.6";
+  version = "1.7";
   pname = "renderdoc";
 
   src = fetchFromGitHub {
     owner = "baldurk";
     repo = "renderdoc";
     rev = "v${version}";
-    sha256 = "0b2f9m5azzvcjbmxkwcl1d7jvvp720b81zwn19rrskznfcc2r1i8";
+    sha256 = "0r0y0lx48hkyf39pgippsc9q8hdcf57bdva6gx7f35vlhicx5hlz";
   };
 
   buildInputs = [
@@ -52,8 +52,8 @@ mkDerivation rec {
 
   dontWrapQtApps = true;
   preFixup = ''
-    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib"
-    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib"
+    wrapQtApp $out/bin/qrenderdoc --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
+    wrapProgram $out/bin/renderdoccmd --suffix LD_LIBRARY_PATH : "$out/lib:${vulkan-loader}/lib:${libglvnd}/lib"
   '';
 
   # The only documentation for this so far is in pkgs/build-support/add-opengl-runpath/setup-hook.sh

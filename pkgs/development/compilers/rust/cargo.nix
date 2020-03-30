@@ -1,5 +1,5 @@
 { stdenv, file, curl, pkgconfig, python3, openssl, cmake, zlib
-, makeWrapper, libiconv, cacert, rustPlatform, rustc, libgit2
+, installShellFiles, makeWrapper, libiconv, cacert, rustPlatform, rustc
 , CoreFoundation, Security
 }:
 
@@ -17,11 +17,13 @@ rustPlatform.buildRustPackage {
   # changes hash of vendor directory otherwise
   dontUpdateAutotoolsGnuConfigScripts = true;
 
-  nativeBuildInputs = [ pkgconfig cmake makeWrapper ];
-  buildInputs = [ cacert file curl python3 openssl zlib libgit2 ]
+  nativeBuildInputs = [ pkgconfig cmake installShellFiles makeWrapper ];
+  buildInputs = [ cacert file curl python3 openssl zlib ]
     ++ stdenv.lib.optionals stdenv.isDarwin [ CoreFoundation Security libiconv ];
 
-  LIBGIT2_SYS_USE_PKG_CONFIG = 1;
+  # cargo uses git-rs which is made for a version of libgit2 from recent master that
+  # is not compatible with the current version in nixpkgs.
+  #LIBGIT2_SYS_USE_PKG_CONFIG = 1;
 
   # fixes: the cargo feature `edition` requires a nightly version of Cargo, but this is the `stable` channel
   RUSTC_BOOTSTRAP = 1;
@@ -35,6 +37,8 @@ rustPlatform.buildRustPackage {
       --suffix PATH : "${rustc}/bin" \
       --set CARGO_HTTP_CAINFO "${cacert}/etc/ssl/certs/ca-bundle.crt" \
       --set SSL_CERT_FILE "${cacert}/etc/ssl/certs/ca-bundle.crt"
+
+    installManPage src/tools/cargo/src/etc/man/*
   '';
 
   checkPhase = ''

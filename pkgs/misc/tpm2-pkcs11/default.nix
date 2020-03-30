@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation rec {
   pname = "tpm2-pkcs11";
-  version = "1.0.1";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "tpm2-software";
     repo = pname;
     rev = version;
-    sha256 = "sha256:06kpf730al50xv1q53ahycky3im23ysrqp40libls4k24zxs9ha2";
+    sha256 = "0gqbbxh1y2vcznxw96xn1wpcvg613zzzrbbfrqbw3p7spbn65yfq";
   };
 
   patches = lib.singleton (
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A PKCS#11 interface for TPM2 hardware";
-    homepage = https://github.com/tpm2-software/tpm2-pkcs11;
+    homepage = "https://github.com/tpm2-software/tpm2-pkcs11";
     license = licenses.bsd2;
     platforms = platforms.linux;
     maintainers = with maintainers; [ lschuermann ];

@@ -28,7 +28,7 @@
 , polkit
 , webkitgtk
 , systemd
-, networkmanagerapplet
+, libnma
 , tzdata
 , yelp
 , libgnomekbd
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
     pango
     polkit
     webkitgtk
-    networkmanagerapplet
+    libnma
   ];
 
   patches = [

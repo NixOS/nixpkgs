@@ -124,7 +124,7 @@ in {
       '';
     };
 
-    systemd.services.vswitchd = {
+    systemd.services.ovs-vswitchd = {
       description = "Open_vSwitch Daemon";
       wantedBy = [ "multi-user.target" ];
       bindsTo = [ "ovsdb.service" ];
@@ -139,6 +139,8 @@ in {
         PIDFile = "/run/openvswitch/ovs-vswitchd.pid";
         # Use service type 'forking' to correctly determine when vswitchd is ready.
         Type = "forking";
+        Restart = "always";
+        RestartSec = 3;
       };
     };
 
@@ -182,4 +184,7 @@ in {
       '';
     };
   })]));
+
+  meta.maintainers = with maintainers; [ netixx ];
+
 }

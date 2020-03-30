@@ -6,7 +6,6 @@
 , withPerl528 ? false, perl528
 , withPerl530 ? true, perl530
 , withPerldevel ? false, perldevel
-, withRuby_2_4 ? false, ruby_2_4
 , withRuby_2_5 ? false, ruby_2_5
 , withRuby_2_6 ? true, ruby_2_6
 , withRuby_2_7 ? true, ruby_2_7
@@ -18,14 +17,14 @@
 with stdenv.lib;
 
 stdenv.mkDerivation rec {
-  version = "1.14.0";
+  version = "1.16.0";
   pname = "unit";
 
   src = fetchFromGitHub {
     owner = "nginx";
     repo = "unit";
     rev = version;
-    sha256 = "01anczfcdwd22hb0y4zw647f86ivk5zq8lcd13xfxjvkmnsnbj9w";
+    sha256 = "19gclqhwccpi7y4386ap33ycwhylv4s4kwfc6ik8scmc4pw3sj9l";
   };
 
   patches = [
@@ -43,7 +42,6 @@ stdenv.mkDerivation rec {
     ++ optional withPerl528 perl528
     ++ optional withPerl530 perl530
     ++ optional withPerldevel perldevel
-    ++ optional withRuby_2_4 ruby_2_4
     ++ optional withRuby_2_5 ruby_2_5
     ++ optional withRuby_2_6 ruby_2_6
     ++ optional withRuby_2_7 ruby_2_7
@@ -66,7 +64,6 @@ stdenv.mkDerivation rec {
     ${optionalString withPerl528    "./configure perl   --module=perl528  --perl=${perl528}/bin/perl"}
     ${optionalString withPerl530    "./configure perl   --module=perl530  --perl=${perl530}/bin/perl"}
     ${optionalString withPerldevel  "./configure perl   --module=perldev  --perl=${perldevel}/bin/perl"}
-    ${optionalString withRuby_2_4   "./configure ruby   --module=ruby24   --ruby=${ruby_2_4}/bin/ruby"}
     ${optionalString withRuby_2_5   "./configure ruby   --module=ruby25   --ruby=${ruby_2_5}/bin/ruby"}
     ${optionalString withRuby_2_6   "./configure ruby   --module=ruby26   --ruby=${ruby_2_6}/bin/ruby"}
     ${optionalString withRuby_2_7   "./configure ruby   --module=ruby27   --ruby=${ruby_2_7}/bin/ruby"}

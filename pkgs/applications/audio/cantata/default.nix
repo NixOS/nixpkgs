@@ -28,7 +28,7 @@ assert withOnlineServices -> withTaglib;
 assert withReplaygain -> withTaglib;
 
 let
-  version = "2.3.3";
+  version = "2.4.1";
   pname = "cantata";
   fstat = x: fn: "-DENABLE_" + fn + "=" + (if x then "ON" else "OFF");
   fstats = x: map (fstat x);
@@ -42,7 +42,7 @@ in mkDerivation {
     owner  = "CDrummond";
     repo   = "cantata";
     rev    = "v${version}";
-    sha256 = "1m651fmdbnb50glym75kzma0bllvqbmrb2afp1g9g5cxm1898c0f";
+    sha256 = "0ix7xp352bziwz31mw79y7wxxmdn6060p8ry2px243ni1lz1qx1c";
   };
 
   buildInputs = [ vlc qtbase qtmultimedia qtsvg ]
@@ -77,7 +77,7 @@ in mkDerivation {
   ];
 
   meta = with lib; {
-    homepage    = https://github.com/cdrummond/cantata;
+    homepage    = "https://github.com/cdrummond/cantata";
     description = "A graphical client for MPD";
     license     = licenses.gpl3;
     maintainers = with maintainers; [ peterhoeg ];

@@ -2,23 +2,22 @@
 
 buildGoModule rec {
   pname = "croc";
-  version = "6.4.10";
-
-  goPackagePath = "github.com/schollz/croc";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "schollz";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1w16k0h9zk4q6icyf79jw4zc1jy2h9yzw0bcmywq0pz0pqk6z4nw";
+    sha256 = "0dc6h102jr5dkg6r3xxma51g702dnyd3d6s5rilwv1fivxn3bj43";
   };
 
-  modSha256 = "069n9593jfrlbrfnzr4mxvs1v1y4fvgnc9kawahh2a1rzh3cxrvq";
+  modSha256 = "0ng4x9zmwax2vskbcadra4pdkgy1p1prmgkg1bjmh3b8rwsrhr0q";
+
   subPackages = [ "." ];
 
   meta = with stdenv.lib; {
     description = "Easily and securely send things from one computer to another";
-    homepage = https://github.com/schollz/croc;
+    homepage = "https://github.com/schollz/croc";
     license = licenses.mit;
     maintainers = with maintainers; [ hugoreeves equirosa ];
 

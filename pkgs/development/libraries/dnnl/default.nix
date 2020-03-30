@@ -2,17 +2,17 @@
 
 stdenv.mkDerivation rec {
   pname = "dnnl";
-  version = "1.2";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "intel";
     repo = "mkl-dnn";
     rev = "v${version}";
-    sha256 = "17xpdwqjfb2bq586gnk3hq94r06jd8pk6qfs703qqd7155fkbil9";
+    sha256 = "0ydy7ibm6sh1awrikyj938n26cpg5magnxraz2d0pj76irv4vj5m";
   };
 
-  # Generic fix upstreamed in https://github.com/intel/mkl-dnn/pull/631
-  # Delete patch when 1.2.0 is released
+  # Generic fix merged upstream in https://github.com/intel/mkl-dnn/pull/631
+  # Delete after next release
   patches = [ (substituteAll {
     src = ./bash-to-sh.patch;
     inherit bash;
@@ -22,12 +22,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
+  doCheck = true;
+
   # The test driver doesn't add an RPath to the build libdir
   preCheck = ''
     export LD_LIBRARY_PATH=$PWD/src
   '';
 
-  doCheck = true;
+  # The cmake install gets tripped up and installs a nix tree into $out, in
+  # addition to the correct install; clean it up.
+  postInstall = ''
+    rm -r $out/nix
+  '';
 
   meta = with lib; {
     description = "Deep Neural Network Library (DNNL)";

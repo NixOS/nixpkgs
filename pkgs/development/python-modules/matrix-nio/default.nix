@@ -1,22 +1,33 @@
-{ lib, buildPythonPackage, fetchFromGitHub, git,
-  attrs, future, peewee, h11, h2, atomicwrites, pycryptodome, sphinx, Logbook, jsonschema,
-  python-olm, unpaddedbase64, aiohttp, cachetools }:
+{ lib
+, buildPythonPackage
+, fetchFromGitHub
+, git
+, attrs
+, future
+, aiohttp
+, aiofiles
+, h11
+, h2
+, Logbook
+, jsonschema
+, unpaddedbase64
+, pycryptodome
+, python-olm
+, peewee
+, cachetools
+, atomicwrites
+}:
 
 buildPythonPackage rec {
   pname = "nio";
-  version = "0.6";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "poljar";
     repo = "matrix-nio";
     rev = version;
-    sha256 = "0pq5i6ks3pck2kq9m4p3pw9hbvkzs27xkyv68mjnfc6chp2g2mg9";
+    sha256 = "0gqhk9d06w1in6dj7aqy45skzyg8018nmclqd5r0m5nnw8yns6gz";
   };
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace 'python-olm>=3.1.0' ""
-  '';
 
   nativeBuildInputs = [
     git
@@ -25,18 +36,18 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     attrs
     future
-    peewee
+    aiohttp
+    aiofiles
     h11
     h2
-    atomicwrites
-    pycryptodome
-    sphinx
     Logbook
     jsonschema
-    python-olm
     unpaddedbase64
-    aiohttp
+    pycryptodome
+    python-olm
+    peewee
     cachetools
+    atomicwrites
   ];
 
   doCheck = false;
@@ -45,6 +56,6 @@ buildPythonPackage rec {
     description = "A Python Matrix client library, designed according to sans I/O principles";
     homepage = "https://github.com/poljar/matrix-nio";
     license = licenses.isc;
-    maintainers = [ maintainers.tilpner ];
+    maintainers = with maintainers; [ tilpner emily ];
   };
 }

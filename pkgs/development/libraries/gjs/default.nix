@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gjs";
-  version = "1.58.4";
+  version = "1.58.5";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gjs/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0pxxgsb9gvymgr7qsglfdbaa7hy29y01prszjr27f7bpdik3y6i6";
+    sha256 = "0fm1szmhdawvgbf9fh6vvkv1fdvbn888fciyi2wkhx48kz09jvg7";
   };
 
   outputs = [ "out" "dev" "installedTests" ];

@@ -14,7 +14,7 @@
 assert !cudaSupport || cudatoolkit != null;
 
 let
-  version = "4.0.2";
+  version = "4.0.3";
 
   cudatoolkit_joined = symlinkJoin {
     name = "${cudatoolkit.name}-unsplit";
@@ -26,7 +26,7 @@ in stdenv.mkDerivation rec {
 
   src = with stdenv.lib.versions; fetchurl {
     url = "https://www.open-mpi.org/software/ompi/v${major version}.${minor version}/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "0ms0zvyxyy3pnx9qwib6zaljyp2b3ixny64xvq3czv3jpr8zf2wh";
+    sha256 = "00zxcw99gr5n693cmcmn4f6a47vx1ywna895p0x7p163v37gw0hl";
   };
 
   postPatch = ''
@@ -88,7 +88,7 @@ in stdenv.mkDerivation rec {
   };
 
   meta = with stdenv.lib; {
-    homepage = https://www.open-mpi.org/;
+    homepage = "https://www.open-mpi.org/";
     description = "Open source MPI-3 implementation";
     longDescription = "The Open MPI Project is an open source MPI-3 implementation that is developed and maintained by a consortium of academic, research, and industry partners. Open MPI is therefore able to combine the expertise, technologies, and resources from all across the High Performance Computing community in order to build the best MPI library available. Open MPI offers advantages for system and software vendors, application developers and computer science researchers.";
     maintainers = with maintainers; [ markuskowa ];

@@ -1,12 +1,12 @@
 { stdenv, fetchurl, makeWrapper, python3, alsaUtils, timidity }:
 
   stdenv.mkDerivation rec {
-  version = "19.08";
+  version = "20.02";
   pname = "mma";
 
   src = fetchurl {
     url = "https://www.mellowood.ca/mma/mma-bin-${version}.tar.gz";
-    sha256 = "02g2q9f1hbrj1v4mbf7zx2571vqpfla5803hcjpkdkvn8g0dwci0";
+    sha256 = "0i9c3f14j7wy2c86ky83f2vgmg5bihnnwsmpkq13fgqjsaf0qwnv";
   };
 
   buildInputs = [ makeWrapper python3 alsaUtils timidity ];
@@ -19,6 +19,7 @@
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' mma-splitrec
     sed -i 's@/usr/bin/timidity@/${timidity}/bin/timidity@g' util/mma-splitrec.py
     find . -type f | xargs sed -i 's@/usr/bin/env python@${python3.interpreter}@g'
+    find . -type f | xargs sed -i 's@/usr/bin/python@${python3.interpreter}@g'
   '';
 
   installPhase = ''

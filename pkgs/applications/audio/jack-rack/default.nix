@@ -1,4 +1,4 @@
-{ stdenv, fetchurl, pkgconfig, libjack2, ladspaH, gtk2, alsaLib, libxml2, librdf }:
+{ stdenv, fetchurl, pkgconfig, libjack2, ladspaH, gtk2, alsaLib, libxml2, lrdf }:
 stdenv.mkDerivation rec {
   name = "jack-rack-1.4.7";
   src = fetchurl {
@@ -6,7 +6,7 @@ stdenv.mkDerivation rec {
     sha256 = "1lmibx9gicagcpcisacj6qhq6i08lkl5x8szysjqvbgpxl9qg045";
   };
   nativeBuildInputs = [ pkgconfig ];
-  buildInputs = [ libjack2 ladspaH gtk2 alsaLib libxml2 librdf ];
+  buildInputs = [ libjack2 ladspaH gtk2 alsaLib libxml2 lrdf ];
   NIX_LDFLAGS = "-ldl -lm -lpthread";
 
   meta = {

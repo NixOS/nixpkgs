@@ -48,7 +48,7 @@ with stdenv.lib;
 
 stdenv.mkDerivation rec {
   pname = "gtk+3";
-  version = "3.24.13";
+  version = "3.24.14";
 
   outputs = [ "out" "dev" ] ++ optional withGtkDoc "devdoc";
   outputBin = "dev";
@@ -60,7 +60,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gtk+/${stdenv.lib.versions.majorMinor version}/gtk+-${version}.tar.xz";
-    sha256 = "1a9hi7k59q0kqx0n3xhsk1ly23w9g9ncllnay1756g0yrww5qxsc";
+    sha256 = "120yz5gxqbv7sgdbcy4i0b6ixm8jpjzialdrqs0gv15q7bwnjk8w";
   };
 
   patches = [
@@ -77,9 +77,6 @@ stdenv.mkDerivation rec {
     # let’s drop that dependency in similar way to how other parts of the library do it
     # e.g. https://gitlab.gnome.org/GNOME/gtk/blob/3.24.4/gtk/gtk-launch.c#L31-33
     ./patches/3.0-darwin-x11.patch
-    # 3.24.13 failed to ship a header file
-    # https://gitlab.gnome.org/GNOME/gtk/issues/2279
-    ./patches/missing-header.patch
   ];
 
   separateDebugInfo = stdenv.isLinux;

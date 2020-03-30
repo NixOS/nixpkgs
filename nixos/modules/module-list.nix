@@ -41,7 +41,6 @@
   ./hardware/acpilight.nix
   ./hardware/all-firmware.nix
   ./hardware/bladeRF.nix
-  ./hardware/brightnessctl.nix
   ./hardware/brillo.nix
   ./hardware/ckb-next.nix
   ./hardware/cpu/amd-microcode.nix
@@ -65,6 +64,7 @@
   ./hardware/tuxedo-keyboard.nix
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
+  ./hardware/wooting.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
@@ -201,6 +201,7 @@
   ./security/wrappers/default.nix
   ./security/sudo.nix
   ./security/systemd-confinement.nix
+  ./security/tpm2.nix
   ./services/admin/oxidized.nix
   ./services/admin/salt/master.nix
   ./services/admin/salt/minion.nix
@@ -248,9 +249,10 @@
   ./services/cluster/kubernetes/proxy.nix
   ./services/cluster/kubernetes/scheduler.nix
   ./services/computing/boinc/client.nix
-  ./services/computing/torque/server.nix
-  ./services/computing/torque/mom.nix
+  ./services/computing/foldingathome/client.nix
   ./services/computing/slurm/slurm.nix
+  ./services/computing/torque/mom.nix
+  ./services/computing/torque/server.nix
   ./services/continuous-integration/buildbot/master.nix
   ./services/continuous-integration/buildbot/worker.nix
   ./services/continuous-integration/buildkite-agents.nix
@@ -298,6 +300,7 @@
   ./services/desktops/geoclue2.nix
   ./services/desktops/gsignond.nix
   ./services/desktops/gvfs.nix
+  ./services/desktops/malcontent.nix
   ./services/desktops/pipewire.nix
   ./services/desktops/gnome3/at-spi2-core.nix
   ./services/desktops/gnome3/chrome-gnome-shell.nix
@@ -406,6 +409,7 @@
   ./services/mail/sympa.nix
   ./services/mail/nullmailer.nix
   ./services/misc/airsonic.nix
+  ./services/misc/ankisyncd.nix
   ./services/misc/apache-kafka.nix
   ./services/misc/autofs.nix
   ./services/misc/autorandr.nix
@@ -431,7 +435,6 @@
   ./services/misc/ethminer.nix
   ./services/misc/exhibitor.nix
   ./services/misc/felix.nix
-  ./services/misc/folding-at-home.nix
   ./services/misc/freeswitch.nix
   ./services/misc/fstrim.nix
   ./services/misc/gammu-smsd.nix
@@ -466,7 +469,6 @@
   ./services/misc/nix-daemon.nix
   ./services/misc/nix-gc.nix
   ./services/misc/nix-optimise.nix
-  ./services/misc/nixos-manual.nix
   ./services/misc/nix-ssh-serve.nix
   ./services/misc/novacomd.nix
   ./services/misc/nzbget.nix
@@ -482,7 +484,6 @@
   ./services/misc/redmine.nix
   ./services/misc/rippled.nix
   ./services/misc/ripple-data-api.nix
-  ./services/misc/rogue.nix
   ./services/misc/serviio.nix
   ./services/misc/safeeyes.nix
   ./services/misc/sickbeard.nix
@@ -661,6 +662,7 @@
   ./services/networking/ngircd.nix
   ./services/networking/nghttpx/default.nix
   ./services/networking/nix-serve.nix
+  ./services/networking/nix-store-gcs-proxy.nix
   ./services/networking/nixops-dns.nix
   ./services/networking/nntp-proxy.nix
   ./services/networking/nsd.nix
@@ -688,6 +690,7 @@
   ./services/networking/prosody.nix
   ./services/networking/quagga.nix
   ./services/networking/quassel.nix
+  ./services/networking/quorum.nix
   ./services/networking/quicktun.nix
   ./services/networking/racoon.nix
   ./services/networking/radicale.nix
@@ -707,6 +710,7 @@
   ./services/networking/shorewall6.nix
   ./services/networking/shout.nix
   ./services/networking/sniproxy.nix
+  ./services/networking/smartdns.nix
   ./services/networking/smokeping.nix
   ./services/networking/softether.nix
   ./services/networking/spacecookie.nix
@@ -724,6 +728,7 @@
   ./services/networking/syncthing.nix
   ./services/networking/syncthing-relay.nix
   ./services/networking/syncplay.nix
+  ./services/networking/tailscale.nix
   ./services/networking/tcpcrypt.nix
   ./services/networking/teamspeak3.nix
   ./services/networking/tedicross.nix
@@ -808,6 +813,7 @@
   ./services/ttys/agetty.nix
   ./services/ttys/gpm.nix
   ./services/ttys/kmscon.nix
+  ./services/wayland/cage.nix
   ./services/web-apps/atlassian/confluence.nix
   ./services/web-apps/atlassian/crowd.nix
   ./services/web-apps/atlassian/jira.nix
@@ -816,11 +822,13 @@
   ./services/web-apps/documize.nix
   ./services/web-apps/dokuwiki.nix
   ./services/web-apps/frab.nix
+  ./services/web-apps/gerrit.nix
   ./services/web-apps/gotify-server.nix
   ./services/web-apps/grocy.nix
   ./services/web-apps/icingaweb2/icingaweb2.nix
   ./services/web-apps/icingaweb2/module-monitoring.nix
   ./services/web-apps/ihatemoney
+  ./services/web-apps/jirafeau.nix
   ./services/web-apps/limesurvey.nix
   ./services/web-apps/mattermost.nix
   ./services/web-apps/mediawiki.nix

@@ -1,4 +1,5 @@
 { lib, rustPlatform, fetchFromGitHub }:
+
 rustPlatform.buildRustPackage rec {
   pname = "cargo-license";
   version = "0.3.0";
@@ -12,7 +13,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoPatches = [ ./add-Cargo.lock.patch ];
 
-  cargoSha256 = "0ksxvbrx8d8d09i167mdrhz5m46nbr6l0vyn7xpdanmha31xiaz9";
+  cargoSha256 = "0bkaj54avvib1kipk8ky7gyxfs00qm80jd415zp53hhvinphzb5v";
 
   meta = with lib; {
     description = "Cargo subcommand to see license of dependencies";

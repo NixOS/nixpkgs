@@ -315,11 +315,11 @@ def _update(path, target):
         return False
 
 
-def _commit(path, pname, old_version, new_version, **kwargs):
+def _commit(path, pname, old_version, new_version, pkgs_prefix="python: ", **kwargs):
     """Commit result.
     """
 
-    msg = f'python: {pname}: {old_version} -> {new_version}'
+    msg = f'{pkgs_prefix}{pname}: {old_version} -> {new_version}'
 
     try:
         subprocess.check_call([GIT, 'add', path])
@@ -337,6 +337,7 @@ def main():
     parser.add_argument('package', type=str, nargs='+')
     parser.add_argument('--target', type=str, choices=SEMVER.keys(), default='major')
     parser.add_argument('--commit', action='store_true', help='Create a commit for each package update')
+    parser.add_argument('--use-pkgs-prefix', action='store_true', help='Use python3Packages.${pname}: instead of python: ${pname}: when making commits')
 
     args = parser.parse_args()
     target = args.target
@@ -347,17 +348,23 @@ def main():
 
     # Use threads to update packages concurrently
     with Pool() as p:
-        results = list(p.map(lambda pkg: _update(pkg, target), packages))
+        results = list(filter(bool, p.map(lambda pkg: _update(pkg, target), packages)))
 
     logging.info("Finished updating packages.")
+
+    commit_options = {}
+    if args.use_pkgs_prefix:
+        logging.info("Using python3Packages. prefix for commits")
+        commit_options["pkgs_prefix"] = "python3Packages."
 
     # Commits are created sequentially.
     if args.commit:
         logging.info("Committing updates...")
-        list(map(lambda x: _commit(**x), filter(bool, results)))
+        # list forces evaluation
+        list(map(lambda x: _commit(**x, **commit_options), results))
         logging.info("Finished committing updates")
 
-    count = sum(map(bool, results))
+    count = len(results)
     logging.info("{} package(s) updated".format(count))
 
 

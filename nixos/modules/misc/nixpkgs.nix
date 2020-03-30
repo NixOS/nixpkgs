@@ -216,6 +216,14 @@ in
         Ignored when <code>nixpkgs.pkgs</code> is set.
       '';
     };
+
+    initialSystem = mkOption {
+      type = types.str;
+      internal = true;
+      description = ''
+        Preserved value of <literal>system</literal> passed to <literal>eval-config.nix</literal>.
+      '';
+    };
   };
 
   config = {
@@ -228,8 +236,8 @@ in
         let
           nixosExpectedSystem =
             if config.nixpkgs.crossSystem != null
-            then config.nixpkgs.crossSystem.system
-            else config.nixpkgs.localSystem.system;
+            then config.nixpkgs.crossSystem.system or (lib.systems.parse.doubleFromSystem (lib.systems.parse.mkSystemFromString config.nixpkgs.crossSystem.config))
+            else config.nixpkgs.localSystem.system or (lib.systems.parse.doubleFromSystem (lib.systems.parse.mkSystemFromString config.nixpkgs.localSystem.config));
           nixosOption =
             if config.nixpkgs.crossSystem != null
             then "nixpkgs.crossSystem"

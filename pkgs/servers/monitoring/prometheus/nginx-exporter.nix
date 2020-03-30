@@ -2,7 +2,7 @@
 
 buildGoPackage rec {
   pname = "nginx_exporter";
-  version = "0.5.0";
+  version = "0.6.0";
 
   goPackagePath = "github.com/nginxinc/nginx-prometheus-exporter";
 
@@ -14,7 +14,7 @@ buildGoPackage rec {
     rev = "v${version}";
     owner = "nginxinc";
     repo = "nginx-prometheus-exporter";
-    sha256 = "1fyn2bjq80dx4jv1rakrm0vg6i657a5rs7kkg0f9mbv1alir8kkx";
+    sha256 = "1rwafmm9x0sxj4z7x4axhrjgdy15z70a1y00hw6smq30fcpkazhq";
   };
 
   doCheck = true;

@@ -4,7 +4,7 @@ rustPlatform.buildRustPackage rec {
   pname = "eva";
   version = "0.2.7";
 
-  cargoSha256 = "0n3xvlmp4l925nbz8lx6dr9yrrfh6z7b9z8wd6sli3a1dq26d6bg";
+  cargoSha256 = "1lycjw5i169xx73qw8gknbakrxikdbr65fmqx7xq2mafc0hb1zyn";
 
   src = fetchFromGitHub {
     owner = "NerdyPepper";

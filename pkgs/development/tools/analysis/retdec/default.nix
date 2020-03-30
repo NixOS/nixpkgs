@@ -130,6 +130,7 @@ in stdenv.mkDerivation rec {
   # itself and trying to build it. The build should fail and tell you which dependencies you have to upgrade to which versions.
   # I've notified upstream about this problem here:
   # https://github.com/avast-tl/retdec/issues/412
+  # gcc is pinned to gcc8 in all-packages.nix. That should probably be re-evaluated on update.
   version = "3.2";
 
   src = fetchFromGitHub {

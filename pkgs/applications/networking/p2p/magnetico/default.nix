@@ -2,18 +2,18 @@
 
 buildGoModule rec {
   pname = "magnetico";
-  version = "0.9.0";
+  version = "0.11.0";
 
   src = fetchFromGitHub {
     owner  = "boramalper";
     repo   = "magnetico";
     rev    = "v${version}";
-    sha256 = "1flw7r8igc0hhm288p67lpy9aj1fnywva5b28yfknpw8g97c9r5x";
+    sha256 = "1622xcl5v67lrnkjwbg7g5b5ikrawx7p91jxbj3ixc1za2f3a3fn";
   };
 
-  modSha256 = "1h9fij8mxlxfw7kxix00n10fkhkvmf8529fxbk1n30cxc1bs2szf";
+  modSha256 = "193n323xaypm9xkpray68nqcgyf141x8qzpxzwjnrmsgfz8p6wgk";
 
-  buildInputs = [ go-bindata ];
+  nativeBuildInputs = [ go-bindata ];
   buildPhase = ''
     make magneticow magneticod
   '';

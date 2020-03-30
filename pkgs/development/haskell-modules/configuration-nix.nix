@@ -498,6 +498,9 @@ self: super: builtins.intersectAttrs super {
   # requires autotools to build
   secp256k1 = addBuildTools super.secp256k1 [ pkgs.buildPackages.autoconf pkgs.buildPackages.automake pkgs.buildPackages.libtool ];
 
+  # requires libsecp256k1 in pkgconfig-depends
+  secp256k1-haskell = addPkgconfigDepend super.secp256k1-haskell pkgs.secp256k1;
+
   # tests require git and zsh
   hapistrano = addBuildTools super.hapistrano [ pkgs.buildPackages.git pkgs.buildPackages.zsh ];
 
@@ -635,23 +638,35 @@ self: super: builtins.intersectAttrs super {
 
   spago =
     let
+      # Spago needs a patch for MonadFail changes.
+      # https://github.com/purescript/spago/pull/584
+      # This can probably be removed when a version after spago-0.14.0 is released.
+      spagoWithPatches = appendPatch super.spago (pkgs.fetchpatch {
+        url = "https://github.com/purescript/spago/pull/584/commits/898a8e48665e5a73ea03525ce2c973455ab9ac52.patch";
+        sha256 = "05gs1hjlcf60cr6728rhgwwgxp3ildly14v4l2lrh6ma2fljhyjy";
+      });
+
       # Spago basically compiles with LTS-14, but it requires a newer version
       # of directory.  This is to work around a bug only present on windows, so
       # we can safely jailbreak spago and use the older directory package from
       # LTS-14.
-      spagoWithOverrides = doJailbreak (super.spago.override {
-        # spago requires dhall_1_27_0.
-        dhall = self.dhall_1_27_0;
+      spagoWithOverrides = doJailbreak (spagoWithPatches.override {
+        # spago requires dhall-1.29.0.
+        dhall = self.dhall_1_29_0;
       });
 
+      # This defines the version of the purescript-docs-search release we are using.
+      # This is defined in the src/Spago/Prelude.hs file in the spago source.
+      docsSearchVersion = "v0.0.8";
+
       docsSearchAppJsFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/docs-search-app.js";
-        sha256 = "11721x455qzh40vzfmralaynn9v8b5wix86r107hhs08vhryjib2";
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/docs-search-app.js";
+        sha256 = "00pzi7pgjicpa0mg0al80gh2q1q2lqiyb3kjarpydlmn8dfjny7v";
       };
 
       purescriptDocsSearchFile = pkgs.fetchurl {
-        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/v0.0.5/purescript-docs-search";
-        sha256 = "16p1fmdvpwz1yswav8qjsd26c9airb22xncqw1rjnbd8lcpqx0p5";
+        url = "https://github.com/spacchetti/purescript-docs-search/releases/download/${docsSearchVersion}/purescript-docs-search";
+        sha256 = "1hsi1hc4p1z2xbw82w2jxmmczw6mravli1r89vrkivb72sqdjya7";
       };
 
       spagoFixHpack = overrideCabal spagoWithOverrides (drv: {
@@ -676,6 +691,11 @@ self: super: builtins.intersectAttrs super {
           # https://github.com/spacchetti/spago/issues/510
           cp ${docsSearchAppJsFile} "$sourceRoot/templates/docs-search-app.js"
           cp ${purescriptDocsSearchFile} "$sourceRoot/templates/purescript-docs-search"
+
+          # For some weird reason, on Darwin, the open(2) call to embed these files
+          # requires write permissions. The easiest resolution is just to permit that
+          # (doesn't cause any harm on other systems).
+          chmod u+w "$sourceRoot/templates/docs-search-app.js" "$sourceRoot/templates/purescript-docs-search"
         '';
       });
 
@@ -688,4 +708,21 @@ self: super: builtins.intersectAttrs super {
   # checks SQL statements at compile time, and so requires a running PostgreSQL
   # database to run it's test suite
   postgresql-typed = dontCheck super.postgresql-typed;
+
+  # mplayer-spot uses mplayer at runtime.
+  mplayer-spot =
+    let path = pkgs.stdenv.lib.makeBinPath [ pkgs.mplayer ];
+    in overrideCabal (addBuildTool super.mplayer-spot pkgs.makeWrapper) (oldAttrs: {
+      postInstall = ''
+        wrapProgram $out/bin/mplayer-spot --prefix PATH : "${path}"
+      '';
+    });
+
+  # break infinite recursion with base-orphans
+  primitive = dontCheck super.primitive;
+
+  # dhall-1.29.0 tests access the network.  This override can be removed when
+  # dhall_1_29_0 is no longer used, since more recent versions of dhall don't
+  # access the network in checks.
+  dhall_1_29_0 = dontCheck super.dhall_1_29_0;
 }

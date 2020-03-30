@@ -1,7 +1,7 @@
 { stdenv, fetchurl, gettext, intltool, pkgconfig, python2
 , avahi, bluez, boost, eigen, fftw, glib, glib-networking
 , glibmm, gsettings-desktop-schemas, gtkmm2, libjack2
-, ladspaH, libav, librdf, libsndfile, lilv, lv2, serd, sord, sratom
+, ladspaH, libav, libsndfile, lilv, lrdf, lv2, serd, sord, sratom
 , wrapGAppsHook, zita-convolver, zita-resampler, curl, wafHook
 , optimizationSupport ? false # Enable support for native CPU extensions
 }:
@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     avahi bluez boost eigen fftw glib glibmm glib-networking.out
-    gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav librdf
-    libsndfile lilv lv2 serd sord sratom zita-convolver
+    gsettings-desktop-schemas gtkmm2 libjack2 ladspaH libav
+    libsndfile lilv lrdf lv2 serd sord sratom zita-convolver
     zita-resampler curl
   ];
 

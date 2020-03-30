@@ -39,12 +39,15 @@ stdenv.mkDerivation rec {
     ++ optional withGtk2 gtk2
     ++ optional withGtk3 gtk3;
 
+  enableParallelBuilding = true;
+
   installFlags = [ "PREFIX=$(out)" ];
 
   dontWrapQtApps = true;
   postFixup = ''
     # Also sets program_PYTHONPATH and program_PATH variables
     wrapPythonPrograms
+    wrapPythonProgramsIn "$out/share/carla/resources" "$out $pythonPath"
 
     find "$out/share/carla" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
       patchPythonScript "$f"
@@ -53,6 +56,12 @@ stdenv.mkDerivation rec {
 
     for program in $out/bin/*; do
       wrapQtApp "$program" \
+        --prefix PATH : "$program_PATH:${which}/bin" \
+        --set PYTHONNOUSERSITE true
+    done
+
+    find "$out/share/carla/resources" -maxdepth 1 -type f -not -name "*.py" -print0 | while read -d "" f; do
+      wrapQtApp "$f" \
         --prefix PATH : "$program_PATH:${which}/bin" \
         --set PYTHONNOUSERSITE true
     done

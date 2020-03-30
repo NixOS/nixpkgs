@@ -1,5 +1,5 @@
 { stdenv, buildPythonPackage, fetchPypi, pythonOlder
-, pytest, glibcLocales
+, pytest, nose, glibcLocales
 , numpy, scipy, matplotlib, h5py }:
 
 buildPythonPackage rec {
@@ -15,7 +15,7 @@ buildPythonPackage rec {
     sha256 = "24e1327ce241a0113abf217fbaf41ac25e04f5a01f9ed606610f2f1f2d82d34f";
   };
 
-  checkInputs = [ pytest glibcLocales ];
+  checkInputs = [ pytest nose glibcLocales ];
   propagatedBuildInputs = [ numpy scipy matplotlib h5py ];
 
   checkPhase = ''

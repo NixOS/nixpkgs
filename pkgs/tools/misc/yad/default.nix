@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
     sed -i src/form.c -e '21i#include <stdlib.h>'
 
     # there is no point to bring in the whole netpbm package just for this file
-    install -Dm644 ${netpbm}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
+    install -Dm644 ${netpbm.out}/share/netpbm/misc/rgb.txt $out/share/yad/rgb.txt
   '';
 
   postAutoreconf = ''

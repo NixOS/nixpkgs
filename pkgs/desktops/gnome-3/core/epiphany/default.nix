@@ -34,11 +34,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epiphany";
-  version = "3.34.3.1";
+  version = "3.34.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/epiphany/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "0vga9bqcv792ivnlw6pbfz17zn0nh6wq01rp60c4px08l7xpkr00";
+    sha256 = "13ar3s40cds1rplwbzx0fzigf120w0rydiv05r3k6zpc0zy91qb0";
   };
 
   # Tests need an X display

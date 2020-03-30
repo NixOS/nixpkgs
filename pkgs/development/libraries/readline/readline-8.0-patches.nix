@@ -2,4 +2,7 @@
 
 patch: [
 (patch "001" "0sfh7wn0pr743xspnb1zndxndlv9rc0hcg14cbw5cmyg6f4ykrfq")
+(patch "002" "1xy8mv8xm8hsfixwp3ci9kfx3dii3y92cq27wwd0jq75y6zzxc1n")
+(patch "003" "1vza7sxjcsr2z295ij12nzgncdil1vb6as3mqy4m7svi1chv5pcl")
+(patch "004" "0k1rfx9w32lglxg564yvp0mw6jg6883p8ac2f2lxxqpf80m3vami")
 ]

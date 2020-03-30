@@ -1,4 +1,4 @@
-{ lib, stdenv, echo_build_heading, noisily, mkRustcDepArgs, rust }:
+{ lib, stdenv, mkRustcDepArgs, rust }:
 { crateName,
   dependencies,
   crateFeatures, crateRenames, libName, release, libPath,
@@ -11,6 +11,7 @@
     baseRustcOpts =
       [(if release then "-C opt-level=3" else "-C debuginfo=2")]
       ++ ["-C codegen-units=$NIX_BUILD_CORES"]
+      ++ ["--remap-path-prefix=$NIX_BUILD_TOP=/" ]
       ++ [(mkRustcDepArgs dependencies crateRenames)]
       ++ [crateFeatures]
       ++ extraRustcOpts
@@ -34,16 +35,13 @@
     build_bin = if buildTests then "build_bin_test" else "build_bin";
   in ''
     runHook preBuild
-    ${echo_build_heading colors}
-    ${noisily colors verbose}
-
+ 
     # configure & source common build functions
     LIB_RUSTC_OPTS="${libRustcOpts}"
     BIN_RUSTC_OPTS="${binRustcOpts}"
     LIB_EXT="${stdenv.hostPlatform.extensions.sharedLibrary}"
     LIB_PATH="${libPath}"
     LIB_NAME="${libName}"
-    source ${./lib.sh}
 
     CRATE_NAME='${lib.replaceStrings ["-"] ["_"] libName}'
 

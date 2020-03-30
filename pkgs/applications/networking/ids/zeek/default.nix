@@ -1,18 +1,23 @@
 {stdenv, fetchurl, cmake, flex, bison, openssl, libpcap, zlib, file, curl
 , libmaxminddb, gperftools, python, swig, rocksdb }:
-
+let
+  preConfigure = (import ./script.nix);
+in
 stdenv.mkDerivation rec {
   pname = "zeek";
-  version = "3.0.1";
+  version = "3.0.3";
 
   src = fetchurl {
-    url = "https://www.zeek.org/downloads/zeek-${version}.tar.gz";
-    sha256 = "1lhik212wrbi092qizc08f3i0b9pj318sxwm0abc5jc3v3pz7x3r";
+    url = "https://old.zeek.org/downloads/zeek-${version}.tar.gz";
+    sha256 = "0xlw5v83qbgy23wdcddmvan2pid28mw745g4fc1z5r18kp67i8a2";
   };
 
   nativeBuildInputs = [ cmake flex bison file ];
   buildInputs = [ openssl libpcap zlib curl libmaxminddb gperftools python swig rocksdb ];
 
+  #see issue https://github.com/zeek/zeek/issues/804 to modify hardlinking duplicate files.
+  inherit preConfigure;
+  
   enableParallelBuilding = true;
 
   cmakeFlags = [

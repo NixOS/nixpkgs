@@ -37,13 +37,13 @@ let
   ]));
 in stdenv.mkDerivation rec {
   pname = "ostree";
-  version = "2019.6";
+  version = "2020.3";
 
   outputs = [ "out" "dev" "man" "installedTests" ];
 
   src = fetchurl {
     url = "https://github.com/ostreedev/ostree/releases/download/v${version}/libostree-${version}.tar.xz";
-    sha256 = "1bhrfbjna3rnymijxagzkdq2zl74g71s2xmimihjhvcw2zybi0jl";
+    sha256 = "01cch4as23xspq6pck59al7x5jj60wl21g8p3iqbdxcjl1p3jxsq";
   };
 
   patches = [
@@ -51,12 +51,6 @@ in stdenv.mkDerivation rec {
     # https://github.com/ostreedev/ostree/issues/1593
     # Patch from https://github.com/ostreedev/ostree/pull/1633
     ./01-Drop-ostree-trivial-httpd-CLI-move-to-tests-director.patch
-
-    # Fix tests running in Catalan instead of C locale.
-    (fetchpatch {
-      url = "https://github.com/ostreedev/ostree/commit/5135a1e58ade2bfafc8c1fda359540eafd72531e.patch";
-      sha256 = "1crzaagw1zzx8v6rsnxb9jnc3ij9hlpvdl91w3skqdm28adx7yx8";
-    })
 
     # Workarounds for https://github.com/ostreedev/ostree/issues/1592
     ./fix-1592.patch
@@ -119,9 +113,14 @@ in stdenv.mkDerivation rec {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/libostree"
   ];
 
-  postFixup = ''
+  postFixup = let
+    typelibPath = stdenv.lib.makeSearchPath "/lib/girepository-1.0" [
+      (placeholder "out")
+      gobject-introspection
+    ];
+  in ''
     for test in $installedTests/libexec/installed-tests/libostree/*.js; do
-      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "$out/lib/girepository-1.0"
+      wrapProgram "$test" --prefix GI_TYPELIB_PATH : "${typelibPath}"
     done
   '';
 

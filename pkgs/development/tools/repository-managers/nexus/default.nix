@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     homepage = http://www.sonatype.org/nexus;
     license = licenses.epl10;
     platforms = platforms.all;
-    maintainers = with maintainers; [ aespinosa ironpinguin ma27 zaninime ];
+    maintainers = with maintainers; [ aespinosa ironpinguin zaninime ];
   };
 }

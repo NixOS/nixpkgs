@@ -1,26 +1,29 @@
 { stdenv
 , buildPythonPackage
 , fetchurl
-, nose
-, six
-, setuptools
 , isPy3k
+, setuptools
+, colorama
+, six
+, texttable
+, tqdm
 }:
 
-buildPythonPackage {
+buildPythonPackage rec {
   pname = "rbtools";
-  version = "0.7.2";
-  disabled = isPy3k;
+  version = "1.0.2";
+
+  disabled = !isPy3k;
 
   src = fetchurl {
-    url = "http://downloads.reviewboard.org/releases/RBTools/0.7/RBTools-0.7.2.tar.gz";
-    sha256 = "1ng8l8cx81cz23ls7fq9wz4ijs0zbbaqh4kj0mj6plzcqcf8na4i";
+    url = "https://downloads.reviewboard.org/releases/RBTools/${stdenv.lib.versions.majorMinor version}/RBTools-${version}.tar.gz";
+    sha256 = "577c2f8bbf88f77bda84ee95af0310b59111c156f48a5aab56ca481e2f77eaf4";
   };
 
-  checkInputs = [ nose ];
-  propagatedBuildInputs = [ six setuptools ];
+  propagatedBuildInputs = [ six texttable tqdm colorama setuptools ];
 
-  checkPhase = "LC_ALL=C nosetests";
+  # The kgb test dependency is not in nixpkgs
+  doCheck = false;
 
   meta = with stdenv.lib; {
     homepage = https://www.reviewboard.org/docs/rbtools/dev/;

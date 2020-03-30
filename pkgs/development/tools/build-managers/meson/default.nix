@@ -1,6 +1,5 @@
 { lib
 , python3Packages
-, fetchpatch
 , stdenv
 , writeTextDir
 , substituteAll
@@ -20,11 +19,11 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "meson";
-  version = "0.52.1";
+  version = "0.53.2";
 
   src = python3Packages.fetchPypi {
     inherit pname version;
-    sha256 = "02fnrk1fjf3yiix0ak0m9vgbpl4h97fafii5pmw7phmvnlv9fyan";
+    sha256 = "Po+DDzMYQ5fC6wtlHsUCrbY97LKJeL3ISzVY1xKEwh8=";
   };
 
   postFixup = ''
@@ -61,14 +60,6 @@ python3Packages.buildPythonApplication rec {
     (substituteAll {
       src = ./fix-rpath.patch;
       inherit (builtins) storeDir;
-    })
-
-    # Fix detecting incorrect compiler in the store path hash.
-    # https://github.com/NixOS/nixpkgs/issues/73417#issuecomment-554077964
-    # https://github.com/mesonbuild/meson/pull/6185
-    (fetchpatch {
-      url = "https://github.com/mesonbuild/meson/commit/972ede1d14fdf17fe5bb8fb99be220f9395c2392.patch";
-      sha256 = "19bfsylhpy0b2xv3ks8ac9x3q6vvvyj1wjcy971v9d5f1455xhbb";
     })
   ];
 
@@ -107,7 +98,7 @@ python3Packages.buildPythonApplication rec {
     homepage = https://mesonbuild.com;
     description = "SCons-like build system that use python as a front-end language and Ninja as a building backend";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mbe rasendubi ];
+    maintainers = with maintainers; [ jtojnar mbe rasendubi ];
     platforms = platforms.all;
   };
 }

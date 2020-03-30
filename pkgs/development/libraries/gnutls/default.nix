@@ -28,7 +28,9 @@ stdenv.mkDerivation {
   };
 
   outputs = [ "bin" "dev" "out" "man" "devdoc" ];
+  # Not normally useful docs.
   outputInfo = "devdoc";
+  outputDoc  = "devdoc";
 
   patches = [ ./nix-ssl-cert-file.patch ]
     # Disable native add_system_trust.

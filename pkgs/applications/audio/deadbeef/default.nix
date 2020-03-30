@@ -59,21 +59,14 @@ assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
   pname = "deadbeef";
-  version = "1.8.0";
+  version = "1.8.2";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     rev = version;
-    sha256 = "126i5qlkpv7pvi1mmc9y0jhqs6jjspsj7j615n2ddvsb2jsps81c";
+    sha256 = "016wwnh5jqdcfxn1ff6in5dz73c3gdhh3fva8inq7sc3vzdz5khj";
   };
-
-  patches = [
-    # Fix broken symbol name
-    # https://github.com/NixOS/nixpkgs/pull/59187#issuecomment-480977993
-    # will be fixed in deadbeef 1.8.1
-    ./fix-wildmidi.patch
-  ];
 
   buildInputs = with stdenv.lib; [ jansson ]
     ++ optional gtk2Support gtk2

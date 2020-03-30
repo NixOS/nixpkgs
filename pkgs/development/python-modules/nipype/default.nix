@@ -2,6 +2,7 @@
 , buildPythonPackage
 , fetchPypi
 , isPy3k
+, isPy38
 # python dependencies
 , click
 , configparser ? null
@@ -109,5 +110,7 @@ buildPythonPackage rec {
     description = "Neuroimaging in Python: Pipelines and Interfaces";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ashgillman ];
+    # tests hang, blocking reviews of other packages
+    broken = isPy38;
   };
 }

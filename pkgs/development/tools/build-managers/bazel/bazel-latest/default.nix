@@ -25,11 +25,11 @@
 }:
 
 let
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchurl {
     url = "https://github.com/bazelbuild/bazel/releases/download/${version}/bazel-${version}-dist.zip";
-    sha256 = "1fvc7lakdczim1i99hrwhwx2w75afd3q9fgbhrx7i3pnav3a6kbj";
+    sha256 = "0ijz9lxralyw18r5ra2h79jnafk5521ncr3knaip74cqa28csw9k";
   };
 
   # Update with `eval $(nix-build -A bazel.updater)`,
@@ -51,9 +51,9 @@ let
       (if stdenv.hostPlatform.isDarwin
        then srcs."java_tools_javac11_darwin-v7.0.zip"
        else srcs."java_tools_javac11_linux-v7.0.zip")
-      srcs."coverage_output_generator-v2.0.zip"
+      srcs."coverage_output_generator-v2.1.zip"
       srcs.build_bazel_rules_nodejs
-      srcs."android_tools_pkg-0.12.tar.gz"
+      srcs."android_tools_pkg-0.13.tar.gz"
       srcs."0.28.3.tar.gz"
       srcs.rules_pkg
       srcs.rules_cc
@@ -106,6 +106,7 @@ let
   # and libraries path.
   # We prefetch it, patch it, and override it in a global bazelrc.
   system = if stdenv.hostPlatform.isDarwin then "darwin" else "linux";
+  arch = stdenv.hostPlatform.parsed.cpu.name;
 
   remote_java_tools = stdenv.mkDerivation {
     name = "remote_java_tools_${system}";
@@ -326,6 +327,14 @@ stdenv.mkDerivation rec {
   postPatch = let
 
     darwinPatches = ''
+      bazelLinkFlags () {
+        eval set -- "$NIX_LDFLAGS"
+        local flag
+        for flag in "$@"; do
+          printf ' -Wl,%s' "$flag"
+        done
+      }
+
       # Disable Bazel's Xcode toolchain detection which would configure compilers
       # and linkers from Xcode instead of from PATH
       export BAZEL_USE_CPP_ONLY_TOOLCHAIN=1
@@ -335,14 +344,14 @@ stdenv.mkDerivation rec {
 
       # Framework search paths aren't added by bintools hook
       # https://github.com/NixOS/nixpkgs/pull/41914
-      export NIX_LDFLAGS="$NIX_LDFLAGS -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
+      export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
 
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${libcxx}/include/c++/v1"
 
       # don't use system installed Xcode to run clang, use Nix clang instead
-      sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $NIX_LDFLAGS -framework CoreFoundation;g" \
+      sed -i -E "s;/usr/bin/xcrun (--sdk macosx )?clang;${stdenv.cc}/bin/clang $NIX_CFLAGS_COMPILE $(bazelLinkFlags) -framework CoreFoundation;g" \
         scripts/bootstrap/compile.sh \
         src/tools/xcode/realpath/BUILD \
         src/tools/xcode/stdredirect/BUILD \
@@ -485,9 +494,11 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin
 
     # official wrapper scripts that searches for $WORKSPACE_ROOT/tools/bazel
-    # if it can’t find something in tools, it calls $out/bin/bazel-real
+    # if it can’t find something in tools, it calls $out/bin/bazel-{version}-{os_arch}
+    # The binary _must_ exist with this naming if your project contains a .bazelversion
+    # file.
     cp ./bazel_src/scripts/packages/bazel.sh $out/bin/bazel
-    mv ./bazel_src/output/bazel $out/bin/bazel-real
+    mv ./bazel_src/output/bazel $out/bin/bazel-${version}-${system}-${arch}
 
     # shell completion files
     mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
@@ -526,7 +537,7 @@ stdenv.mkDerivation rec {
     exec "$BAZEL_REAL" "$@"
     EOF
 
-    # second call succeeds because it defers to $out/bin/bazel-real
+    # second call succeeds because it defers to $out/bin/bazel-{version}-{os_arch}
     hello_test
   '';
 

@@ -158,6 +158,23 @@ busted = buildLuarocksPackage {
     };
   };
 };
+cassowary = buildLuarocksPackage {
+  pname = "cassowary";
+  version = "2.2-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cassowary-2.2-1.src.rock;
+    sha256 = "0laghzk5jbap5rfd8sasnrdrbda649sfciarba8rhygm0qni1azy";
+  };
+  propagatedBuildInputs = [ lua penlight ];
+
+  meta = with stdenv.lib; {
+    homepage = "https://github.com/simoncozens/cassowary.lua";
+    description = "The cassowary constraint solver.";
+    maintainers = with maintainers; [ marsam ];
+    license.fullName = "Apache 2";
+  };
+};
 cjson = buildLuarocksPackage {
   pname = "lua-cjson";
   version = "2.1.0.6-1";
@@ -195,6 +212,23 @@ compat53 = buildLuarocksPackage {
     license = {
       fullName = "MIT";
     };
+  };
+};
+cosmo = buildLuarocksPackage {
+  pname = "cosmo";
+  version = "16.06.04-1";
+
+  src = fetchurl {
+    url    = mirror://luarocks/cosmo-16.06.04-1.src.rock;
+    sha256 = "1adrk74j0x1yzhy0xz9k80hphxdjvm09kpwpbx00sk3kic6db0ww";
+  };
+  propagatedBuildInputs = [ lpeg ];
+
+  meta = with stdenv.lib; {
+    homepage = "http://cosmo.luaforge.net";
+    description = "Safe templates for Lua";
+    maintainers = with maintainers; [ marsam ];
+    license.fullName = "MIT/X11";
   };
 };
 coxpcall = buildLuarocksPackage {
@@ -1398,17 +1432,17 @@ moonscript = buildLuarocksPackage {
 };
 nvim-client = buildLuarocksPackage {
   pname = "nvim-client";
-  version = "0.2.0-1";
+  version = "0.2.2-1";
 
   src = fetchurl {
-    url    = https://luarocks.org/nvim-client-0.2.0-1.src.rock;
-    sha256 = "1ah9mjvz28hrbwnyb5n60znz3m0m41rn7jpnxwfx773cys3skidx";
+    url    = https://luarocks.org/nvim-client-0.2.2-1.src.rock;
+    sha256 = "0bgx94ziiq0004zw9lz2zb349xaqs5pminqd8bwdrfdnfjnbp8x0";
   };
   disabled = (luaOlder "5.1");
   propagatedBuildInputs = [ lua mpack luv coxpcall ];
 
   meta = with stdenv.lib; {
-    homepage = "https://github.com/neovim/lua-client/archive/0.2.0-1.tar.gz";
+    homepage = "https://github.com/neovim/lua-client/archive/0.2.2-1.tar.gz";
     description = "Lua client to Nvim";
     license = {
       fullName = "Apache";

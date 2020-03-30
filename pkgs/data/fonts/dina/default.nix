@@ -1,20 +1,55 @@
-{ stdenv, fetchzip }:
+{ stdenv, fetchurl, unzip
+, bdftopcf, mkfontscale, fontforge
+}:
 
-let
+stdenv.mkDerivation {
+  pname = "dina-font";
   version = "2.92";
-in fetchzip {
-  name = "dina-font-${version}";
 
-  # `meta.homepage` has no direct download link
-  url = "https://github.com/ProgrammingFonts/ProgrammingFonts/archive/b15ef365146be7eef4a46979cfe157c5aeefb7c0.zip";
+  src = fetchurl {
+    url = "http://www.donationcoder.com/Software/Jibz/Dina/downloads/Dina.zip";
+    sha256 = "1kq86lbxxgik82aywwhawmj80vsbz3hfhdyhicnlv9km7yjvnl8z";
+  };
 
-  postFetch = ''
-    mkdir -p $out/share/fonts
-    unzip -j $downloadedFile '*/Dina/*.bdf' -d $out/share/fonts
-    chmod u-x $out/share/fonts/*
+  nativeBuildInputs =
+    [ unzip bdftopcf mkfontscale fontforge ];
+
+  patchPhase = "sed -i 's/microsoft-cp1252/ISO8859-1/' *.bdf";
+
+  buildPhase = ''
+    newName() {
+      test "''${1:5:1}" = i && _it=Italic || _it=
+      case ''${1:6:3} in
+        400) test -z $it && _weight=Medium ;;
+        700) _weight=Bold ;;
+      esac
+      _pt=''${1%.bdf}
+      _pt=''${_pt#*-}
+      echo "Dina$_weight$_it$_pt"
+    }
+
+    # convert bdf fonts to pcf
+    for i in *.bdf; do
+      bdftopcf -t -o $(newName "$i").pcf "$i"
+    done
+    gzip -n -9 *.pcf
+
+    # convert bdf fonts to otb
+    for i in *.bdf; do
+      fontforge -lang=ff -c "Open(\"$i\"); Generate(\"$(newName $i).otb\")"
+    done
   '';
 
-  sha256 = "02a6hqbq18sw69npylfskriqhvj1nsk65hjjyd05nl913ycc6jl7";
+  installPhase = ''
+    install -D -m 644 -t "$out/share/fonts/misc" *.pcf.gz
+    install -D -m 644 -t "$bdf/share/fonts/misc" *.bdf
+    install -D -m 644 -t "$otb/share/fonts/misc" *.otb
+    mkfontdir "$out/share/fonts/misc"
+    mkfontdir "$bdf/share/fonts/misc"
+    mkfontdir "$otb/share/fonts/misc"
+  '';
+
+  outputs = [ "out" "bdf" "otb" ];
 
   meta = with stdenv.lib; {
     description = "A monospace bitmap font aimed at programmers";

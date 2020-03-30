@@ -8,7 +8,7 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-gtk-theme";
-  version = "5.4.1";
+  version = "5.4.2";
 
   repoName = "stylesheet";
 
@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
     owner = "elementary";
     repo = repoName;
     rev = version;
-    sha256 = "0fnh08wqlhvigkxp69xkdha19ny9j0hg4ycwhhwvyr0d0z47kilw";
+    sha256 = "0aqq0d21mqgrfiyhpfa8k51wxw2pia0qlsgp0sli79v7nwn3ykbq";
   };
 
   passthru = {

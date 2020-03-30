@@ -33,7 +33,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "gunicorn" ];
 
   meta = with stdenv.lib; {
-    homepage = https://pypi.python.org/pypi/gunicorn;
+    homepage = "https://github.com/benoitc/gunicorn";
     description = "WSGI HTTP Server for UNIX";
     license = licenses.mit;
   };

@@ -9,6 +9,7 @@ sourcePerArch:
 , fontconfig
 , zlib
 , xorg
+, libffi
 }:
 
 let
@@ -29,7 +30,7 @@ let result = stdenv.mkDerivation rec {
   buildInputs = [
     alsaLib freetype fontconfig zlib xorg.libX11 xorg.libXext xorg.libXtst
     xorg.libXi xorg.libXrender
-  ];
+  ] ++ lib.optional stdenv.isAarch32 libffi;
 
   nativeBuildInputs = [ autoPatchelfHook ];
 

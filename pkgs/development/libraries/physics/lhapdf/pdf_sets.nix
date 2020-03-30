@@ -6,7 +6,7 @@ let
       inherit name;
 
       src = fetchurl {
-        url = "https://www.hepforge.org/archive/lhapdf/pdfsets/6.2/${name}.tar.gz";
+        url = "http://lhapdfsets.web.cern.ch/lhapdfsets/current/${name}.tar.gz";
         inherit sha256;
       };
 

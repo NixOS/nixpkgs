@@ -4,6 +4,7 @@
 , bootstrapVersion
 , bootstrapHashes
 , selectRustPackage
+, rustcPatches ? []
 }:
 { stdenv, lib
 , buildPackages
@@ -26,12 +27,12 @@
       inherit rustc cargo;
     };
 
-    fetchcargo = buildPackages.callPackage ../../../build-support/rust/fetchcargo.nix {
+    fetchCargoTarball = buildPackages.callPackage ../../../build-support/rust/fetchCargoTarball.nix {
       inherit cargo;
     };
 
     buildRustPackage = callPackage ../../../build-support/rust {
-      inherit rustc cargo fetchcargo;
+      inherit rustc cargo fetchCargoTarball;
     };
 
     rustcSrc = callPackage ./rust-src.nix {
@@ -73,6 +74,8 @@
         version = rustcVersion;
         sha256 = rustcSha256;
         inherit enableRustcDev;
+
+        patches = rustcPatches;
 
         # Use boot package set to break cycle
         rustPlatform = bootRustPlatform;

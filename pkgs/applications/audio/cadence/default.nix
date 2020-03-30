@@ -1,15 +1,23 @@
 { stdenv
-, mkDerivation
+, a2jmidid
+, coreutils
 , lib
+, libjack2
 , fetchpatch
 , fetchzip
+, jack_capture
 , pkgconfig
+, pulseaudioFull
 , qtbase
 , makeWrapper
-, python3Packages
+, mkDerivation
+, python3
 }:
+#ladish missing, claudia can't work.
+#pulseaudio needs fixes (patchShebangs .pa ...)
+#desktop needs icons and exec fixing.
 
- mkDerivation rec {
+mkDerivation rec {
   version = "0.9.1";
   pname = "cadence";
 
@@ -26,21 +34,31 @@
     })
   ];
 
+  postPatch = ''
+      libjackso=$(realpath ${lib.makeLibraryPath [libjack2]}/libjack.so.0);
+      substituteInPlace ./src/jacklib.py --replace libjack.so.0 $libjackso
+      substituteInPlace ./src/cadence.py --replace "/usr/bin/pulseaudio" \
+        "${lib.makeBinPath[pulseaudioFull]}/pulseaudio"
+      substituteInPlace ./c++/jackbridge/JackBridge.cpp --replace libjack.so.0 $libjackso
+  '';
+
   nativeBuildInputs = [
     pkgconfig
   ];
 
   buildInputs = [
     qtbase
+    jack_capture
+    pulseaudioFull
+    ((python3.withPackages (ps: with ps; [
+          pyqt5
+          dbus-python
+        ])))
   ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
     "SYSCONFDIR=${placeholder "out"}/etc"
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
-    pyqt5_with_qtwebkit
   ];
 
   dontWrapQtApps = true;
@@ -65,10 +83,11 @@
     };
   in lib.mapAttrsToList (script: source: ''
     rm -f ${script}
-    makeWrapper ${python3Packages.python.interpreter} ${script} \
-      --set PYTHONPATH "$PYTHONPATH:${outRef}/share/cadence" \
-      ''${qtWrapperArgs[@]} \
-      --add-flags "-O ${source}"
+    makeQtWrapper ${source} ${script} \
+      --prefix PATH : "${lib.makeBinPath [
+        jack_capture # cadence-render
+        pulseaudioFull # cadence, cadence-session-start
+        ]}"
   '') scriptAndSource;
 
   meta = {
