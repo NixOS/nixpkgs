@@ -1,0 +1,63 @@
+From 001be3372c4244a16effc1e77e4005c0aaab705f Mon Sep 17 00:00:00 2001
+From: Burke Libbey <burke@libbey.me>
+Date: Mon, 30 Mar 2020 14:37:17 -0400
+Subject: [PATCH] Analyze original bundle rather than solargraph's
+
+---
+ lib/solargraph/documentor.rb | 33 +++++++++++++++++++++++++++++++--
+ 1 file changed, 31 insertions(+), 2 deletions(-)
+
+diff --git a/lib/solargraph/documentor.rb b/lib/solargraph/documentor.rb
+index 402ff7fd..bab04239 100644
+--- a/lib/solargraph/documentor.rb
++++ b/lib/solargraph/documentor.rb
+@@ -26,8 +26,8 @@ module Solargraph
+         yd = YARD::Registry.yardoc_file_for_gem(name, "= #{version}")
+         if !yd || @rebuild
+           @out.puts "Documenting #{name} #{version}"
+-          `yard gems #{name} #{version} #{@rebuild ? '--rebuild' : ''}`
+-          yd = YARD::Registry.yardoc_file_for_gem(name, "= #{version}")
++          `echo "ENV.replace(Bundler.original_env) ; Bundler.reset!" | yard gems --load /dev/stdin #{name} #{version} #{@rebuild ? '--rebuild' : ''}`
++          yd = with_original_bundle { YARD::Registry.yardoc_file_for_gem(name, "= #{version}") }
+           # HACK: Ignore errors documenting bundler
+           if !yd && name != 'bundler'
+             @out.puts "#{name} #{version} YARD documentation failed"
+@@ -53,6 +53,35 @@ module Solargraph
+       false
+     end
+ 
++    # wow, ok. so.
++    #
++    # bundler, yard, solargraph, rubygems... none of these are very happy to
++    # operate on a *different* bundle when running from a bundle, but this is
++    # precisely what we want to do when installing solargraph outside of a
++    # bundle.
++    #
++    # So, what we have to do is maintain two separate search spaces for
++    # Gem::Specification.stubs_for.
++    #
++    # We could have just been lazy and cleared it all the time to have it
++    # regenerate the cache constantly but this wasn't much harder.
++    def with_original_bundle
++      solargraph_stubs = Gem::Specification.class_variable_get(:@@stubs)
++      begin
++        Bundler.with_original_env do
++          Gem::Specification.class_variable_set(:@@stubs, nil)
++          @@bundled_stubs ||= begin
++            Gem::Specification.stubs_for('whatever')
++            Gem::Specification.class_variable_get(:@@stubs)
++          end
++          Gem::Specification.class_variable_set(:@@stubs, @@bundled_stubs)
++          yield
++        end
++      ensure
++        Gem::Specification.class_variable_set(:@@stubs, solargraph_stubs)
++      end
++    end
++
+     def self.specs_from_bundle directory
+       Solargraph.with_clean_env do
+         Dir.chdir directory do
+-- 
+2.25.1
+
