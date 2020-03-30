@@ -1,4 +1,4 @@
-{ stdenv, lib, graalvm8, fetchurl }:
+{ stdenv, fetchcurl, lib, graalvm8 }:
 
 stdenv.mkDerivation rec{
   pname = "babashka";
@@ -48,7 +48,7 @@ stdenv.mkDerivation rec{
   '';
 
   meta = with lib; {
-    description = "A Clojure babushka for the grey areas of Bash.";
+    description = "A Clojure babushka for the grey areas of Bash";
     homepage = https://github.com/borkdude/babashka;
     license = licenses.epl10;
     platforms = graalvm8.meta.platforms;
