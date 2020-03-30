@@ -5151,6 +5151,17 @@ let
     };
   };
 
+    vim-rainbow = buildVimPluginFrom2Nix {
+    pname = "vim-rainbow";
+    version = "2019-01-13";
+    src = fetchFromGitHub {
+      owner = "frazrepo";
+      repo = "vim-rainbow";
+      rev = "a6c7fd5a2b0193b5dbd03f62ad820b521dea3290";
+      sha256 = "1cwgmh7h3gy69ig5s39mwxipgv6p6bvz38acb022h9apsq2bf5nf";
+    };
+  };
+
   vim-repeat = buildVimPluginFrom2Nix {
     pname = "vim-repeat";
     version = "2019-11-13";
