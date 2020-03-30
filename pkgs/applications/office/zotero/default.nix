@@ -42,10 +42,11 @@ stdenv.mkDerivation rec {
     sha256 = "02a9dlsdd7dh56dwvsjskr899bqi8ijcvzc71xcjwaik6rp8xw88";
   };
 
-  buildInputs= [ wrapGAppsHook gsettings-desktop-schemas gtk3 gnome3.adwaita-icon-theme dconf ];
+  nativeBuildInputs = [ wrapGAppsHook ];
+  buildInputs= [ gsettings-desktop-schemas glib gtk3 gnome3.adwaita-icon-theme dconf ];
 
-  phases = [ "unpackPhase" "patchPhase" "installPhase" "fixupPhase" ];
-
+  dontConfigure = true;
+  dontBuild = true;
   dontStrip = true;
   dontPatchELF = true;
 
