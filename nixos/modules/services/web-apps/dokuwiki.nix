@@ -6,7 +6,6 @@ let
   inherit (lib) concatMapStringsSep flatten mapAttrs mapAttrs' mapAttrsToList nameValuePair concatMapStringSep;
 
   eachSite = config.services.dokuwiki;
-  stateDir = cfg: "/var/lib/dokuwiki/${cfg.hostName}";
 
   user = config.services.nginx.user;
   group = config.services.nginx.group;
@@ -22,7 +21,7 @@ let
 
   dokuwikiLocalConfig = cfg: pkgs.writeText "local.php" ''
     <?php
-    $conf['savedir'] = '${stateDir cfg}';
+    $conf['savedir'] = '${cfg.stateDir}';
     $conf['superuser'] = '${toString cfg.superUser}';
     $conf['useacl'] = '${toString cfg.aclUse}';
     ${toString cfg.extraConfig}
@@ -136,7 +135,7 @@ let
 
       usersFile = mkOption {
         type = types.nullOr types.path;
-        default = null;
+        default = "/var/lib/dokuwiki/${name}/users.php";
         description = ''
           Location of the dokuwiki users file. List of users. Format:
           login:passwordhash:Real Name:email:groups,comma,separated
@@ -279,10 +278,7 @@ in
       assertion = cfg.usersFile != null -> cfg.aclUse != false;
       message = "services.dokuwiki.${hostName}.aclUse must be true when usersFile is not null";
     }
-    {
-      assertion = cfg.aclUse -> cfg.usersFile != null;
-      message = "services.dokuwiki.${hostName}.usersFile must be set if aclUse is true";
-    }]) eachSite);
+    ]) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
       nameValuePair "dokuwiki-${hostName}" {
@@ -291,7 +287,6 @@ in
         phpEnv = {
           DOKUWIKI_LOCAL_CONFIG = "${dokuwikiLocalConfig cfg}";
           DOKUWIKI_PLUGINS_LOCAL_CONFIG = "${dokuwikiPluginsLocalConfig cfg}";
-        } //optionalAttrs (cfg.usersFile != null) {
           DOKUWIKI_USERS_AUTH_CONFIG = "${cfg.usersFile}";
         } //optionalAttrs (cfg.aclUse) {
           DOKUWIKI_ACL_AUTH_CONFIG = if (cfg.acl != null) then "${dokuwikiAclAuthConfig cfg}" else "${toString cfg.aclFile}";
@@ -353,16 +348,17 @@ in
     };
 
     systemd.tmpfiles.rules = flatten (mapAttrsToList (hostName: cfg: [
-      "d ${stateDir cfg}/attic 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/cache 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/index 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/locks 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/media 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/media_attic 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/media_meta 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/meta 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/pages 0750 ${user} ${group} - -"
-      "d ${stateDir cfg}/tmp 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/attic 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/cache 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/index 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/locks 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/media 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/media_attic 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/media_meta 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
+      "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
+      "f ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/conf/users.auth.php.dist"
     ]) eachSite);
   };
 }
