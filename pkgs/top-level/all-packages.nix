@@ -20713,6 +20713,8 @@ in
 
   radeontop = callPackage ../os-specific/linux/radeontop { };
 
+  rasdaemon = callPackage ../os-specific/linux/rasdaemon { };
+
   raspberrypifw = callPackage ../os-specific/linux/firmware/raspberrypi {};
   raspberrypiWirelessFirmware = callPackage ../os-specific/linux/firmware/raspberrypi-wireless { };
 
