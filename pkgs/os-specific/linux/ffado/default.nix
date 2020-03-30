@@ -91,7 +91,7 @@ mkDerivation rec {
   '';
 
   meta = with stdenv.lib; {
-    homepage = http://www.ffado.org;
+    homepage = "http://www.ffado.org";
     description = "FireWire audio drivers";
     license = licenses.gpl3;
     maintainers = with maintainers; [ goibhniu michojel ];
