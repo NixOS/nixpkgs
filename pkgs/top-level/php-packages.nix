@@ -30,7 +30,7 @@ in
 
     sha256 = "0ayykd4hfvdzk7qnr5k6yq5scwf6rb2i05xscfv76q5dmkkynvfl";
 
-    buildInputs = [ (if isPhp73 then pkgs.pcre2 else pkgs.pcre) ];
+    buildInputs = if isPhp73 then [ pkgs.pcre2 ] else [ pkgs.pcre ];
     doCheck = true;
     checkTarget = "test";
     checkFlagsArray = ["REPORT_EXIT_STATUS=1" "NO_INTERACTION=1"];
@@ -72,7 +72,7 @@ in
     installPhase = ''
       mkdir -p $out/bin
       install -D $src $out/libexec/box/box.phar
-      makeWrapper ${php}/bin/php $out/bin/box \
+      makeWrapper ${phpWithExtensions}/bin/php $out/bin/box \
         --add-flags "-d phar.readonly=0 $out/libexec/box/box.phar"
     '';
 
@@ -100,7 +100,7 @@ in
     installPhase = ''
       mkdir -p $out/bin
       install -D $src $out/libexec/composer/composer.phar
-      makeWrapper ${php}/bin/php $out/bin/composer \
+      makeWrapper ${phpWithExtensions}/bin/php $out/bin/composer \
         --add-flags "$out/libexec/composer/composer.phar" \
         --prefix PATH : ${pkgs.lib.makeBinPath [ pkgs.unzip ]}
     '';
@@ -132,7 +132,7 @@ in
     };
 
     configureFlags = [ "--with-couchbase" ];
-
+    internalDeps = [ php.packages.exts.json ];
     patches = [
       (pkgs.writeText "php-couchbase.patch" ''
         --- a/config.m4
@@ -173,8 +173,15 @@ in
       "--with-event-extra"
       "--with-event-pthreads"
     ];
+
+    postPhpize = ''
+      substituteInPlace configure --replace 'as_fn_error $? "Couldn'\'''t find $phpincludedir/sockets/php_sockets.h. Please check if sockets extension installed" "$LINENO" 5' \
+                                            ':'
+    '';
+
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = with pkgs; [ openssl libevent ];
+    internalDeps = [ php.packages.exts.sockets ];
 
     meta = with pkgs.lib; {
       description = ''
@@ -211,8 +218,12 @@ in
   mailparse = buildPecl {
     version = "3.0.3";
     pname = "mailparse";
-
     sha256 = "00nk14jbdbln93mx3ag691avc11ff94hkadrcv5pn51c6ihsxbmz";
+
+    internalDeps = [ php.packages.exts.mbstring ];
+    postConfigure = ''
+      echo "#define HAVE_MBSTRING 1" >> config.h
+    '';
   };
 
   maxminddb = buildPecl rec {
@@ -245,6 +256,11 @@ in
       rev = "v${version}";
       sha256 = "01mbh2m3kfbdvih3c8g3g9h4vdd80r0i9g2z8b3lx3mi8mmcj380";
     };
+
+    internalDeps = [
+      php.packages.exts.session
+    ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
+      php.packages.exts.hash ];
 
     configureFlags = [
       "--with-zlib-dir=${pkgs.zlib.dev}"
@@ -312,6 +328,8 @@ in
     buildInputs = [ pkgs.oracle-instantclient ];
     configureFlags = [ "--with-pdo-oci=instantclient,${pkgs.oracle-instantclient.lib}/lib" ];
 
+    internalDeps = [ php.packages.exts.pdo ];
+
     postPatch = ''
       sed -i -e 's|OCISDKMANINC=`.*$|OCISDKMANINC="${pkgs.oracle-instantclient.dev}/include"|' config.m4
     '';
@@ -322,6 +340,8 @@ in
     pname = "pdo_sqlsrv";
 
     sha256 = "0z4vbyd851b4jr6p69l2ylk91iihndsm2qjb429pxcv8g6dqzqll";
+
+    internalDeps = [ php.packages.exts.pdo ];
 
     buildInputs = [ pkgs.unixODBC ] ++ pkgs.lib.optionals pkgs.stdenv.isDarwin [ pkgs.libiconv ];
   };
@@ -403,7 +423,6 @@ in
     };
 
     configureFlags = [ "--with-excel" "--with-libxl-incdir=${pkgs.libxl}/include_c" "--with-libxl-libdir=${pkgs.libxl}/lib" ];
-    meta.broken = true;
   };
 
   phpcbf = mkDerivation rec {
@@ -494,50 +513,6 @@ in
     };
   };
 
-  pinba = if isPhp73 then pinba73 else pinba7;
-
-  pinba7 = assert !isPhp73; buildPecl {
-    version = "1.1.1";
-    pname = "pinba";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "tony2001";
-      repo = "pinba_extension";
-      rev = "RELEASE_1_1_1";
-      sha256 = "1kdp7vav0y315695vhm3xifgsh6h6y6pny70xw3iai461n58khj5";
-    };
-
-    meta = with pkgs.lib; {
-      description = "PHP extension for Pinba";
-      longDescription = ''
-        Pinba is a MySQL storage engine that acts as a realtime monitoring and
-        statistics server for PHP using MySQL as a read-only interface.
-      '';
-      homepage = "http://pinba.org/";
-    };
-  };
-
-  pinba73 = assert isPhp73; buildPecl {
-    version = "1.1.2-dev";
-    pname = "pinba";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "tony2001";
-      repo = "pinba_extension";
-      rev = "edbc313f1b4fb8407bf7d5acf63fbb0359c7fb2e";
-      sha256 = "02sljqm6griw8ccqavl23f7w1hp2zflcv24lpf00k6pyrn9cwx80";
-    };
-
-    meta = with pkgs.lib; {
-      description = "PHP extension for Pinba";
-      longDescription = ''
-        Pinba is a MySQL storage engine that acts as a realtime monitoring and
-        statistics server for PHP using MySQL as a read-only interface.
-      '';
-      homepage = "http://pinba.org/";
-    };
-  };
-
   protobuf = buildPecl {
     version = "3.11.2";
     pname = "protobuf";
@@ -608,41 +583,17 @@ in
     };
   };
 
-  pthreads = if isPhp73 then pthreads32-dev else pthreads32;
-
-  pthreads32 = assert (pkgs.config.php.zts or false); assert !isPhp73; buildPecl rec {
-    version = "3.2.0";
-    pname = "pthreads";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "krakjoe";
-      repo = "pthreads";
-      rev = "v${version}";
-      sha256 = "17hypm75d4w7lvz96jb7s0s87018yzmmap0l125d5fd7abnhzfvv";
-    };
-
-    buildInputs = with pkgs; [ pcre.dev ];
-  };
-
-  pthreads32-dev = assert (pkgs.config.php.zts or false); assert isPhp73; buildPecl {
-    version = "3.2.0-dev";
-    pname = "pthreads";
-
-    src = pkgs.fetchFromGitHub {
-      owner = "krakjoe";
-      repo = "pthreads";
-      rev = "4d1c2483ceb459ea4284db4eb06646d5715e7154";
-      sha256 = "07kdxypy0bgggrfav2h1ccbv67lllbvpa3s3zsaqci0gq4fyi830";
-    };
-
-    buildInputs = with pkgs; [ pcre2.dev ];
-  };
-
   redis = buildPecl {
     version = "5.1.1";
     pname = "redis";
 
     sha256 = "1041zv91fkda73w4c3pj6zdvwjgb3q7mxg6mwnq9gisl80mrs732";
+
+    internalDeps = with php.packages.exts; [
+      json
+      session
+    ] ++ lib.optionals (lib.versionOlder php.version "7.4") [
+      hash ];
   };
 
   sqlsrv = buildPecl {
@@ -665,7 +616,7 @@ in
     meta.broken = true;
   };
 
-  v8js = assert !isPhp73; buildPecl {
+  v8js = buildPecl {
     version = "2.1.0";
     pname = "v8js";
 
@@ -701,7 +652,7 @@ in
     nativeBuildInputs = [ pkgs.pkgconfig ];
   };
 
-  zmq = assert !isPhp73; buildPecl {
+  zmq = buildPecl {
     version = "1.1.3";
     pname = "zmq";
 
@@ -712,6 +663,8 @@ in
     ];
 
     nativeBuildInputs = [ pkgs.pkgconfig ];
+
+    meta.broken = isPhp73;
   };
 
   exts = let
