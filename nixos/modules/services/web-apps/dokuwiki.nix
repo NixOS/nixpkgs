@@ -278,6 +278,10 @@ in
     {
       assertion = cfg.usersFile != null -> cfg.aclUse != false;
       message = "services.dokuwiki.${hostName}.aclUse must be true when usersFile is not null";
+    }
+    {
+      assertion = cfg.aclUse -> cfg.usersFile != null;
+      message = "services.dokuwiki.${hostName}.usersFile must be set if aclUse is true";
     }]) eachSite);
 
     services.phpfpm.pools = mapAttrs' (hostName: cfg: (
