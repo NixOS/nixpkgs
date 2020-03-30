@@ -2724,6 +2724,8 @@ in {
 
   fb-re2 = callPackage ../development/python-modules/fb-re2 { };
 
+  fcmaes = callPackage ../development/python-modules/fcmaes { };
+
   ffmpeg-python = callPackage ../development/python-modules/ffmpeg-python { };
 
   fenics = callPackage ../development/libraries/science/math/fenics {
