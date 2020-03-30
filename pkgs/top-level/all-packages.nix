@@ -6270,6 +6270,8 @@ in
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  rosie = callPackage ../tools/text/rosie { };
+
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
 
   roundup = callPackage ../tools/misc/roundup { };
