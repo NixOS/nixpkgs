@@ -9,6 +9,7 @@ let
   mysql = cfg.package;
 
   isMariaDB = lib.getName mysql == lib.getName pkgs.mariadb;
+  isPercona56 = lib.getName mysql == lib.getName pkgs.percona-server56;
 
   mysqldOptions =
     "--user=${cfg.user} --datadir=${cfg.dataDir} --basedir=${mysql}";
@@ -358,7 +359,7 @@ in
           pkgs.nettools
         ];
 
-        preStart = if isMariaDB then ''
+        preStart = if (isMariaDB || isPercona56) then ''
           if ! test -e ${cfg.dataDir}/mysql; then
             ${mysql}/bin/mysql_install_db --defaults-file=/etc/my.cnf ${mysqldOptions}
             touch /tmp/mysql_init
