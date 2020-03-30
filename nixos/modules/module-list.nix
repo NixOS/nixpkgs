@@ -394,6 +394,7 @@
   ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
   ./services/mail/mailman.nix
+  ./services/mail/magic-wormhole-mailbox-server.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix
