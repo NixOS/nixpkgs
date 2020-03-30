@@ -2099,6 +2099,8 @@ in
 
   pyCA = python3Packages.callPackage ../applications/video/pyca {};
 
+  pyrit = callPackage ../tools/security/pyrit {};
+
   pyznap = python3Packages.callPackage ../tools/backup/pyznap {};
 
   procs = callPackage ../tools/admin/procs {
