@@ -24,6 +24,7 @@ let
     $conf['savedir'] = '${cfg.stateDir}';
     $conf['superuser'] = '${toString cfg.superUser}';
     $conf['useacl'] = '${toString cfg.aclUse}';
+    $conf['disableactions'] = '${cfg.disableActions}';
     ${toString cfg.extraConfig}
   '';
 
@@ -142,6 +143,17 @@ let
           Create passwordHash easily by using:$ mkpasswd -5 password `pwgen 8 1`
           Example: <link xlink:href="https://github.com/splitbrain/dokuwiki/blob/master/conf/users.auth.php.dist"/>
           '';
+      };
+
+      disableActions = mkOption {
+        type = types.nullOr types.str;
+        default = "";
+        example = "search,register";
+        description = ''
+          Disable individual action modes. Refer to
+          <link xlink:href="https://www.dokuwiki.org/config:action_modes"/>
+          for details on supported values.
+        '';
       };
 
       extraConfig = mkOption {
@@ -358,7 +370,7 @@ in
       "d ${cfg.stateDir}/meta 0750 ${user} ${group} - -"
       "d ${cfg.stateDir}/pages 0750 ${user} ${group} - -"
       "d ${cfg.stateDir}/tmp 0750 ${user} ${group} - -"
-      "f ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/conf/users.auth.php.dist"
+      "C ${cfg.usersFile} 0640 ${user} ${group} - ${pkg hostName cfg}/share/dokuwiki/conf/users.auth.php.dist"
     ]) eachSite);
   };
 }
