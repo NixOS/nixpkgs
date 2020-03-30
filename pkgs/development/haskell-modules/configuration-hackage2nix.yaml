@@ -8346,7 +8346,6 @@ broken-packages:
   - polydata
   - polydata-core
   - polynomial
-  - polysemy-plugin
   - polysemy-RandomFu
   - polysemy-zoo
   - polyseq
