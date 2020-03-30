@@ -485,7 +485,7 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    <listitem>
     <para>
       The <literal>buildRustCrate</literal> infrastructure now produces <literal>lib</literal> outputs in addition to the <literal>out</literal> output.
-      This has led to drastically reduced closed sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
+      This has led to drastically reduced closure sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
     </para>
     </listitem>
    <listitem>
