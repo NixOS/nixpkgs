@@ -1,10 +1,10 @@
 { stdenv, fetchurl, fetchgit
-, pkgconfig, makeWrapper, autoreconfHook, fetchpatch
-, coreutils, libxml2, gnutls, perl, python2, attr, glib, docutils
+, pkgconfig, makeWrapper, libtool, autoconf, automake, fetchpatch
+, coreutils, libxml2, gnutls, perl, python2, attr
 , iproute, iptables, readline, lvm2, utillinux, systemd, libpciaccess, gettext
 , libtasn1, ebtables, libgcrypt, yajl, pmutils, libcap_ng, libapparmor
 , dnsmasq, libnl, libpcap, libxslt, xhtml1, numad, numactl, perlPackages
-, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode
+, curl, libiconv, gmp, zfs, parted, bridge-utils, dmidecode, glib
 , enableXen ? false, xen ? null
 , enableIscsi ? false, openiscsi
 , enableCeph ? false, ceph
@@ -17,26 +17,28 @@ let
   buildFromTarball = stdenv.isDarwin;
 in stdenv.mkDerivation rec {
   pname = "libvirt";
-  version = "6.1.0";
+  version = "5.9.0";
 
   src =
     if buildFromTarball then
       fetchurl {
         url = "http://libvirt.org/sources/${pname}-${version}.tar.xz";
-        sha256 = "1h7bmd7zgl64mwnxx4ji8l0mqmcbfxsx6kp1scyyfq2mwidihz0n";
+        sha256 = "0fc9jxw3v6x5hc10bkd7bbcayn24hbld5adj2gh5s648v7hx55il";
       }
     else
       fetchgit {
         url = git://libvirt.org/libvirt.git;
         rev = "v${version}";
-        sha256 = "18sr3jvpxn45c4vrjzpa4qgnnfxxh95v6l6qk31zka3siv8rrwqx";
+        sha256 = "0smm77ag8bg24xkbhl4akqikjrsq2pd3wk31nj0hk1avqnl00gmk";
         fetchSubmodules = true;
       };
 
-  nativeBuildInputs = [ makeWrapper pkgconfig docutils ] ++ optionals (!buildFromTarball) [ autoreconfHook ];
+  nativeBuildInputs = [ makeWrapper pkgconfig ];
   buildInputs = [
     libxml2 gnutls perl python2 readline gettext libtasn1 libgcrypt yajl
     libxslt xhtml1 perlPackages.XMLXPath curl libpcap glib
+  ] ++ optionals (!buildFromTarball) [
+    libtool autoconf automake
   ] ++ optionals stdenv.isLinux [
     libpciaccess lvm2 utillinux systemd libnl numad zfs
     libapparmor libcap_ng numactl attr parted
@@ -51,18 +53,14 @@ in stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
+    ${ optionalString (!buildFromTarball) "./bootstrap --no-git --gnulib-srcdir=$(pwd)/.gnulib" }
     PATH=${stdenv.lib.makeBinPath ([ dnsmasq ] ++ optionals stdenv.isLinux [ iproute iptables ebtables lvm2 systemd numad ] ++ optionals enableIscsi [ openiscsi ])}:$PATH
     # the path to qemu-kvm will be stored in VM's .xml and .save files
     # do not use "''${qemu_kvm}/bin/qemu-kvm" to avoid bound VMs to particular qemu derivations
     substituteInPlace src/lxc/lxc_conf.c \
       --replace 'lxc_path,' '"/run/libvirt/nix-emulators/libvirt_lxc",'
     patchShebangs . # fixes /usr/bin/python references
-    mkdir -p build && cd build
   '';
-
-  configureScript = "../configure";
-
-  dontAddDisableDepTrack = true;
 
   configureFlags = [
     "--localstatedir=/var"
@@ -99,6 +97,7 @@ in stdenv.mkDerivation rec {
     "localstatedir=$(TMPDIR)/var"
     "sysconfdir=$(out)/var/lib"
   ];
+
 
   postInstall = let
     binPath = [ iptables iproute pmutils numad numactl bridge-utils dmidecode dnsmasq ebtables ] ++ optionals enableIscsi [ openiscsi ];
