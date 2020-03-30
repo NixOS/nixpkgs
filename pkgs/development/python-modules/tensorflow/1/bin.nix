@@ -15,7 +15,7 @@
 , grpcio
 , mock
 , backports_weakref
-, tensorflow-estimator
+, tensorflow-estimator_1
 , tensorflow-tensorboard
 , cudaSupport ? false
 , cudatoolkit ? null
@@ -72,7 +72,7 @@ in buildPythonPackage {
     gast
     google-pasta
     wrapt
-    tensorflow-estimator
+    tensorflow-estimator_1
     tensorflow-tensorboard
     keras-applications
     keras-preprocessing

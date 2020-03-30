@@ -1,13 +1,13 @@
-{ stdenv, pkgs, bazel_0, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_0_26, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
 # Python libraries
-, numpy, tensorflow-tensorboard, backports_weakref, mock, enum34, absl-py
+, numpy, tensorflow-tensorboard_1, backports_weakref, mock, enum34, absl-py
 , future, setuptools, wheel, keras-preprocessing, keras-applications, google-pasta
 , functools32
 , opt-einsum
-, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator
+, termcolor, grpcio, six, wrapt, protobuf, tensorflow-estimator_1
 # Common deps
 , git, swig, which, binutils, glibcLocales, cython
 # Common libraries
@@ -94,7 +94,7 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_0;
+    bazel = bazel_0_26;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
@@ -105,9 +105,9 @@ let
 
     patches = [
       # Work around https://github.com/tensorflow/tensorflow/issues/24752
-      ./no-saved-proto.patch
+      ../no-saved-proto.patch
       # Fixes for NixOS jsoncpp
-      ./system-jsoncpp.patch
+      ../system-jsoncpp.patch
 
       # https://github.com/tensorflow/tensorflow/pull/29673
       (fetchpatch {
@@ -121,7 +121,6 @@ let
         sha256 = "1n9ypbrx36fc1kc9cz5b3p9qhg15xxhq4nz6ap3hwqba535nakfz";
       })
 
-
       (fetchpatch {
         # be compatible with gast >0.2 instead of only gast 0.2.2
         name = "gast-update.patch";
@@ -132,7 +131,7 @@ let
 
       # cuda 10.2 does not have "-bin2c-path" option anymore
       # https://github.com/tensorflow/tensorflow/issues/34429
-      ./cuda-10.2-no-bin2c-path.patch
+      ../cuda-10.2-no-bin2c-path.patch
     ];
 
     # On update, it can be useful to steal the changes from gentoo
@@ -373,7 +372,7 @@ in buildPythonPackage {
     numpy
     six
     protobuf
-    tensorflow-estimator
+    tensorflow-estimator_1
     termcolor
     wrapt
     grpcio
@@ -385,7 +384,7 @@ in buildPythonPackage {
   ] ++ lib.optionals (pythonOlder "3.4") [
     backports_weakref enum34
   ] ++ lib.optionals withTensorboard [
-    tensorflow-tensorboard
+    tensorflow-tensorboard_1
   ];
 
   nativeBuildInputs = lib.optional cudaSupport addOpenGLRunpath;
