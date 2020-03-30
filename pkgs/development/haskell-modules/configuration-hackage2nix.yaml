@@ -3994,7 +3994,6 @@ broken-packages:
   - dash-haskell
   - data-accessor-monads-fd
   - data-accessor-monads-tf
-  - data-accessor-template
   - data-aviary
   - data-base
   - data-basic
@@ -8042,7 +8041,6 @@ broken-packages:
   - pam
   - pan-os-syslog
   - panda
-  - pandoc-crossref
   - pandoc-emphasize-code
   - pandoc-filter-graphviz
   - pandoc-include
