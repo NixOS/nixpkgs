@@ -1,4 +1,5 @@
-{ lib, runCommandLocal }:
+{ lib, runCommandLocal, desktop-file-utils }:
+
 { name
 , type ? "Application"
 , exec
@@ -11,6 +12,7 @@
 , categories ? "Application;Other;"
 , startupNotify ? null
 , extraEntries ? null
+, fileValidation ? true # whether to validate resulting desktop file.
 }:
 
 let
@@ -28,8 +30,8 @@ let
 in
 runCommandLocal "${name}.desktop" {}
   ''
-    mkdir -p $out/share/applications
-    cat > $out/share/applications/${name}.desktop <<EOF
+    mkdir -p "$out/share/applications"
+    cat > "$out/share/applications/${name}.desktop" <<EOF
     [Desktop Entry]
     Type=${type}
     Exec=${exec}
@@ -40,4 +42,9 @@ runCommandLocal "${name}.desktop" {}
     ${if extraEntries == null then ''EOF'' else ''
     ${extraEntries}
     EOF''}
+
+    ${lib.optionalString fileValidation ''
+      echo "Running desktop-file validation"
+      ${desktop-file-utils}/bin/desktop-file-validate "$out/share/applications/${name}.desktop"
+    ''}
   ''
