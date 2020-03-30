@@ -4366,6 +4366,8 @@ in
 
   jade = callPackage ../tools/text/sgml/jade { };
 
+  jadx = callPackage ../tools/security/jadx { };
+
   jazzy = callPackage ../development/tools/jazzy { };
 
   jc = with python3Packages; toPythonApplication jc;
