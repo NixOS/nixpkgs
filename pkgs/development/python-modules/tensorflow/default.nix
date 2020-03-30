@@ -1,4 +1,4 @@
-{ stdenv, pkgs, bazel_0, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
+{ stdenv, pkgs, bazel_0_26, buildBazelPackage, lib, fetchFromGitHub, fetchpatch, symlinkJoin
 , addOpenGLRunpath
 # Python deps
 , buildPythonPackage, isPy3k, isPy27, pythonOlder, pythonAtLeast, python
@@ -94,7 +94,7 @@ let
 
   bazel-build = buildBazelPackage {
     name = "${pname}-${version}";
-    bazel = bazel_0;
+    bazel = bazel_0_26;
 
     src = fetchFromGitHub {
       owner = "tensorflow";
