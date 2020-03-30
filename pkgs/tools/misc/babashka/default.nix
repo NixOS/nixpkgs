@@ -6,7 +6,7 @@ stdenv.mkDerivation rec{
 
   reflectionJson = fetchurl {
     name = "reflection.json";
-    url = "https://github.com/borkdude/${pname}/v${version}/${pname}-${version}-reflection.json";
+    url = "https://github.com/borkdude/${pname}/releases/download/v${version}/${pname}-${version}-reflection.json";
     sha256 = "1m1nwdxjsc6bkdzkbsll316ly0c3qxaimjzyfph1220irjxnm7xf";
   };
 

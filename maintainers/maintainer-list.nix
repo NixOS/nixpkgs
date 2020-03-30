@@ -964,6 +964,12 @@
     githubId = 2071583;
     name = "Benjamin Hipple";
   };
+  bhougland = {
+    email = "benjamin.hougland@gmail.com";
+    github = "bhougland18";
+    githubId = 28444296;
+    name = "Benjamin Hougland";
+  };
   binarin = {
     email = "binarin@binarin.ru";
     github = "binarin";
