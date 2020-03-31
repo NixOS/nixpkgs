@@ -34,11 +34,9 @@ ATOM_LINK = "{http://www.w3.org/2005/Atom}link"  # "
 ATOM_UPDATED = "{http://www.w3.org/2005/Atom}updated"  # "
 
 ROOT = Path(__file__).parent
-NIXPKGS_PATH = ROOT.cwd().parents[2]
 DEFAULT_IN = ROOT.joinpath("vim-plugin-names")
 DEFAULT_OUT = ROOT.joinpath("generated.nix")
 DEPRECATED = ROOT.joinpath("deprecated.json")
-OVERRIDES = ROOT.joinpath("overrides.nix")
 
 import time
 from functools import wraps
@@ -78,7 +76,7 @@ def retry(ExceptionToCheck: Any, tries: int = 4, delay: float = 3, backoff: floa
 
 
 class Repo:
-    def __init__(self, owner: str, name: str, alias: str) -> None:
+    def __init__(self, owner: str, name: str, alias: Optional[str]) -> None:
         self.owner = owner
         self.name = name
         self.alias = alias
@@ -128,7 +126,7 @@ class Repo:
             new_owner, new_name = (
                 urllib.parse.urlsplit(response_url).path.strip("/").split("/")[:2]
             )
-            end_line = "\n" if self.alias == "" else f" as {self.alias}\n"
+            end_line = "\n" if self.alias is None else f" as {self.alias}\n"
             plugin_line = "{owner}/{name}" + end_line
 
             old_plugin = plugin_line.format(owner=self.owner, name=self.name)
@@ -222,17 +220,16 @@ def get_current_plugins() -> List[Plugin]:
 
 
 def prefetch_plugin(
-    user: str, repo_name: str, alias: str, cache: "Cache" = None
+    user: str, repo_name: str, alias: Optional[str], cache: "Optional[Cache]" = None
 ) -> Tuple[Plugin, Dict[str, str]]:
     repo = Repo(user, repo_name, alias)
     commit, date = repo.latest_commit()
     has_submodules = repo.has_submodules()
-    if cache is not None:
-        cached_plugin = cache[commit]
-        if cached_plugin is not None:
-            cached_plugin.name = alias or repo_name
-            cached_plugin.date = date
-            return cached_plugin, repo.redirect
+    cached_plugin = cache[commit] if cache else None
+    if cached_plugin is not None:
+        cached_plugin.name = alias or repo_name
+        cached_plugin.date = date
+        return cached_plugin, repo.redirect
 
     print(f"prefetch {user}/{repo_name}")
     if has_submodules:
@@ -287,17 +284,17 @@ def check_results(
         sys.exit(1)
 
 
-def parse_plugin_line(line: str) -> Tuple[str, str, str]:
+def parse_plugin_line(line: str) -> Tuple[str, str, Optional[str]]:
     name, repo = line.split("/")
     try:
         repo, alias = repo.split(" as ")
         return (name, repo, alias.strip())
     except ValueError:
         # no alias defined
-        return (name, repo.strip(), "")
+        return (name, repo.strip(), None)
 
 
-def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, str]]:
+def load_plugin_spec(plugin_file: str) -> List[Tuple[str, str, Optional[str]]]:
     plugins = []
     with open(plugin_file) as f:
         for line in f:
@@ -463,11 +460,10 @@ def parse_args():
     )
     parser.add_argument(
         "--add",
-        "-a",
         dest="add_plugins",
         default=[],
         action="append",
-        help="Plugin to add to vimPlugins in the form owner/repo",
+        help="Plugin to add to vimPlugins from Github in the form owner/repo",
     )
     parser.add_argument(
         "--input-names",
@@ -491,103 +487,69 @@ def parse_args():
         default=30,
         help="Number of concurrent processes to spawn.",
     )
-    parser.add_argument(
-        "--commit",
-        dest="commit",
-        action="store_true",
-        help="Automatically commit updates",
-    )
-    parser.add_argument(
-        "--allow-dirty",
-        dest="allow_dirty",
-        action="store_true",
-        help=(
-            "Allow commit to continue even if state is unexpectedly dirty. "
-            "This is only helpful when developing vimPlugins infrastructure."
-        ),
-    )
-
     return parser.parse_args()
 
 
-class NixpkgsRepo:
-    def __init__(self, allow_dirty: bool):
-        self.allow_dirty: bool = allow_dirty
-        self.repo: git.Repo = git.Repo(NIXPKGS_PATH)
+def commit(repo: git.Repo, message: str, files: List[Path]) -> None:
+    files_staged = repo.index.add([str(f.resolve()) for f in files])
 
-        if self.is_unexpectedly_dirty():
-            raise Exception("Please stash changes before updating.")
-
-    def commit(self, message: str, files: List[Path]) -> None:
-        files_staged = self.repo.index.add([str(f.resolve()) for f in files])
-
-        if files_staged:
-            print(f'committing to nixpkgs "{message}"')
-            self.repo.index.commit(message)
-            assert self.is_unexpectedly_dirty() is False
-        else:
-            print("no changes in working tree to commit")
-
-    def is_unexpectedly_dirty(self) -> bool:
-        return self.repo.is_dirty() and not self.allow_dirty
+    if files_staged:
+        print(f'committing to nixpkgs "{message}"')
+        repo.index.commit(message)
+    else:
+        print("no changes in working tree to commit")
 
 
-class PluginUpdater:
-    def __init__(self, input_file: str, outfile: str, proc: int):
-        self.input_file: str = input_file
-        self.outfile: str = outfile
-        self.proc = proc
-        self.cache: Cache = Cache(get_current_plugins())
-        self.prefetch = functools.partial(prefetch, cache=self.cache)
+def get_update(input_file: str, outfile: str, proc: int):
+    cache: Cache = Cache(get_current_plugins())
+    _prefetch = functools.partial(prefetch, cache=cache)
 
-    def __call__(self) -> Dict:
-        plugin_names = load_plugin_spec(self.input_file)
+    def update() -> dict:
+        plugin_names = load_plugin_spec(input_file)
 
         try:
-            # synchronous variant for debugging
-            # results = list(map(self.prefetch, plugin_names))
-            pool = Pool(processes=self.proc)
-            results = pool.map(self.prefetch, plugin_names)
+            pool = Pool(processes=proc)
+            results = pool.map(_prefetch, plugin_names)
         finally:
-            self.cache.store()
+            cache.store()
 
         plugins, redirects = check_results(results)
 
-        generate_nix(plugins, self.outfile)
+        generate_nix(plugins, outfile)
 
         return redirects
 
+    return update
 
-def main() -> None:
+
+def main():
     args = parse_args()
-    if args.add_plugins and not args.commit:
-        raise Exception("The --add argument requires setting the --commit flag.")
-    if args.commit:
-        nixpkgs_repo = NixpkgsRepo(args.allow_dirty)
-    updater = PluginUpdater(args.input_file, args.outfile, args.proc)
+    nixpkgs_repo = git.Repo(ROOT, search_parent_directories=True)
+    update = get_update(args.input_file, args.outfile, args.proc)
 
-    redirects = updater()
+    redirects = update()
     rewrite_input(args.input_file, redirects)
+    commit(nixpkgs_repo, "vimPlugins: update", [args.outfile])
 
-    if args.commit:
-        nixpkgs_repo.commit("vimPlugins: Update", [args.outfile])
-        if redirects:
-            updater()
-            nixpkgs_repo.commit(
-                "vimPlugins: Update redirects",
-                [args.outfile, args.input_file, DEPRECATED],
-            )
-        for plugin_line in args.add_plugins:
-            rewrite_input(args.input_file, append=(plugin_line + "\n",))
-            updater()
+    if redirects:
+        update()
+        commit(
+            nixpkgs_repo,
+            "vimPlugins: resolve github repository redirects",
+            [args.outfile, args.input_file, DEPRECATED],
+        )
 
-            plugin = fetch_plugin_from_pluginline(plugin_line)
-            nixpkgs_repo.commit(
-                "vimPlugins.{name}: init at {version}".format(
-                    name=plugin.normalized_name, version=plugin.version
-                ),
-                [args.outfile, args.input_file, OVERRIDES],
-            )
+    for plugin_line in args.add_plugins:
+        rewrite_input(args.input_file, append=(plugin_line + "\n",))
+        update()
+        plugin = fetch_plugin_from_pluginline(plugin_line)
+        commit(
+            nixpkgs_repo,
+            "vimPlugins.{name}: init at {version}".format(
+                name=plugin.normalized_name, version=plugin.version
+            ),
+            [args.outfile, args.input_file],
+        )
 
 
 if __name__ == "__main__":

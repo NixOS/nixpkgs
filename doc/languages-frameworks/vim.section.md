@@ -261,7 +261,7 @@ deoplete-fish = super.deoplete-fish.overrideAttrs(old: {
 
 Sometimes plugins require an override that must be changed when the plugin is updated. This can cause issues when Vim plugins are auto-updated but the associated override isn't updated. For these plugins, the override should be written so that it specifies all information required to install the plugin, and running `./update.py` doesn't change the derivation for the plugin. Manually updating the override is required to update these types of plugins. An example of such a plugin is `LanguageClient-neovim`.
 
-To add a new plugin, run `./update.py --commit --add "[owner]/[name]"`.
+To add a new plugin, run `./update.py --add "[owner]/[name]"`. **NOTE**: This script automatically commits to your git repository. Be sure to check out a fresh branch before running.
 
 ## Important repositories
 
