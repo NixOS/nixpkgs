@@ -27,10 +27,9 @@
 , eggInstallHook
 }:
 
-{ name ? "${attrs.pname}-${attrs.version}"
-
+{
 # Build-time dependencies for the package
-, nativeBuildInputs ? []
+  nativeBuildInputs ? []
 
 # Run-time dependencies for the package
 , buildInputs ? []
@@ -94,17 +93,17 @@
 
 # Keep extra attributes from `attrs`, e.g., `patchPhase', etc.
 if disabled
-then throw "${name} not supported for interpreter ${python.executable}"
+then throw "${attrs.pname} of version ${attrs.version} not supported for interpreter ${python.executable}"
 else
 
 let
   inherit (python) stdenv;
 
   self = toPythonModule (stdenv.mkDerivation ((builtins.removeAttrs attrs [
-    "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
+    "pname" "disabled" "checkPhase" "checkInputs" "doCheck" "doInstallCheck" "dontWrapPythonPrograms" "catchConflicts" "format"
   ]) // {
 
-  name = namePrefix + name;
+  pname = namePrefix + attrs.pname;
 
   nativeBuildInputs = [
     python
