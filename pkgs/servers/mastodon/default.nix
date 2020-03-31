@@ -60,7 +60,7 @@ in stdenv.mkDerivation rec {
           cp -r ${mastodon-js-modules}/libexec/*/*/node_modules node_modules
       fi
       chmod -R u+w node_modules
-      rake assets:precompile
+      rake webpacker:compile
     '';
 
     installPhase = ''

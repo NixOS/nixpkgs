@@ -66,7 +66,7 @@ import ../make-test-python.nix ({ pkgs, ...} :
         )
     )
 
-    machine.succeed(su("cd mastodon; rails assets:precompile"))
+    machine.succeed(su("cd mastodon; env NODE_ENV=tests rails webpacker:compile"))
     machine.succeed(su("cd mastodon; rails db:environment:set"))
     machine.succeed(su("cd mastodon; rails db:schema:load"))
     machine.log(
