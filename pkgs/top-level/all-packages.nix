@@ -7161,6 +7161,8 @@ in
 
   urlview = callPackage ../applications/misc/urlview {};
 
+  ursadb = callPackage ../servers/ursadb {};
+
   usbmuxd = callPackage ../tools/misc/usbmuxd {};
 
   usync = callPackage ../applications/misc/usync { };
