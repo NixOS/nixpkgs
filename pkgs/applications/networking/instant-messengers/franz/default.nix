@@ -3,13 +3,13 @@
 , gnome2, dbus, nss, nspr, alsaLib, cups, expat, udev, libnotify, xdg_utils }:
 
 let
-  version = "5.4.1";
+  version = "5.5.0-beta.1";
 in stdenv.mkDerivation {
   pname = "franz";
   inherit version;
   src = fetchurl {
     url = "https://github.com/meetfranz/franz/releases/download/v${version}/franz_${version}_amd64.deb";
-    sha256 = "1g1z5zjm9l081hpqslfc4h7pqh4k76ccmlz71r21204wy630mw6h";
+    sha256 = "03jh1y2hp98fkdm35qafpi92b8afb0jsrsmj2wwym6hvjckhmma9";
   };
 
   # don't remove runtime deps
