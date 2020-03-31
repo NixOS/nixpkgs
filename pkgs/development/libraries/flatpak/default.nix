@@ -1,8 +1,6 @@
 { stdenv
 , fetchurl
-, autoconf
-, automake
-, libtool
+, autoreconfHook
 , docbook_xml_dtd_412
 , docbook_xml_dtd_42
 , docbook_xml_dtd_43
@@ -106,9 +104,7 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoconf
-    automake
-    libtool
+    autoreconfHook
     libxml2
     docbook_xml_dtd_412
     docbook_xml_dtd_42
@@ -181,10 +177,6 @@ stdenv.mkDerivation rec {
   postPatch = ''
     patchShebangs buildutil
     patchShebangs tests
-  '';
-
-  preConfigure = ''
-    NOCONFIGURE=1 ./autogen.sh
   '';
 
   passthru = {
