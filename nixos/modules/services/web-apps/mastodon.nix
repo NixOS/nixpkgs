@@ -476,6 +476,7 @@ in {
         LogsDirectory = "mastodon";
         StateDirectory = "mastodon";
       };
+      path = with pkgs; [ file imagemagick ffmpeg ];
     };
 
     services.nginx = lib.mkIf cfg.configureNginx {
