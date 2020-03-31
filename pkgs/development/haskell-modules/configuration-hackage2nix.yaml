@@ -2458,7 +2458,7 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
-    # - glirc
+    - glirc
     - matterhorn
     - mattermost-api
     - mattermost-api-qc
