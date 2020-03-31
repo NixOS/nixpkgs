@@ -252,7 +252,7 @@ let
     data_table = [pkgs.zlib.dev] ++ lib.optional stdenv.isDarwin pkgs.llvmPackages.openmp;
     devEMF = [ pkgs.xorg.libXft.dev pkgs.x11 ];
     diversitree = [ pkgs.gsl_1 pkgs.fftw ];
-    EMCluster = [ pkgs.liblapack ];
+    EMCluster = [ pkgs.lapack ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = [ pkgs.fftw.dev ];
     Formula = [ pkgs.gmp ];
@@ -808,11 +808,11 @@ let
     });
 
     slfm = old.slfm.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+      PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
     SamplerCompare = old.SamplerCompare.overrideDerivation (attrs: {
-      PKG_LIBS = "-L${pkgs.openblasCompat}/lib -lopenblas";
+      PKG_LIBS = "-L${pkgs.blas}/lib -lblas -L${pkgs.lapack}/lib -llapack";
     });
 
     EMCluster = old.EMCluster.overrideDerivation (attrs: {

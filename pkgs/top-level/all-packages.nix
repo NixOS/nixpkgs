@@ -8702,25 +8702,21 @@ in
 
   julia_07 = callPackage ../development/compilers/julia/0.7.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_10 = callPackage ../development/compilers/julia/1.0.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_11 = callPackage ../development/compilers/julia/1.1.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
   julia_13 = callPackage ../development/compilers/julia/1.3.nix {
     gmp = gmp6;
-    openblas = openblasCompat;
     inherit (darwin.apple_sdk.frameworks) CoreServices ApplicationServices;
   };
 
@@ -9404,16 +9400,13 @@ in
 
   octave = callPackage ../development/interpreters/octave {
     python = python3;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
   };
   octave-jit = callPackage ../development/interpreters/octave {
     python = python3;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableJIT = true;
   };
   octaveFull = (lowPrio (libsForQt512.callPackage ../development/interpreters/octave {
     python = python3;
-    openblas = if stdenv.isDarwin then openblasCompat else openblas;
     enableQt = true;
     overridePlatforms = ["x86_64-linux" "x86_64-darwin"];
   }));
@@ -15252,7 +15245,6 @@ in
     texLive = texlive.combine {
       inherit (texlive) scheme-small inconsolata helvetic texinfo fancyvrb cm-super;
     };
-    openblas = openblasCompat;
     withRecommendedPackages = false;
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
     inherit (darwin) libobjc;
@@ -24191,7 +24183,7 @@ in
 
   molden = callPackage ../applications/science/chemistry/molden { };
 
-  octopus = callPackage ../applications/science/chemistry/octopus { openblas=openblasCompat; };
+  octopus = callPackage ../applications/science/chemistry/octopus { };
 
   openmolcas = callPackage ../applications/science/chemistry/openmolcas { };
 
@@ -24532,7 +24524,7 @@ in
 
   sympow = callPackage ../development/libraries/science/math/sympow { };
 
-  ipopt = callPackage ../development/libraries/science/math/ipopt { openblas = openblasCompat; };
+  ipopt = callPackage ../development/libraries/science/math/ipopt { };
 
   gmsh = callPackage ../applications/science/math/gmsh { };
 

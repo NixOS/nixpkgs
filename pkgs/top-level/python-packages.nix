@@ -4667,9 +4667,7 @@ in {
   Nuitka = callPackage ../development/python-modules/nuitka { };
 
   numpy = let
-    numpy_ = callPackage ../development/python-modules/numpy {
-      blas = pkgs.openblasCompat;
-    };
+    numpy_ = callPackage ../development/python-modules/numpy { };
     numpy_2 = numpy_.overridePythonAttrs(oldAttrs: rec {
       version = "1.16.5";
       src = oldAttrs.src.override {
@@ -4952,11 +4950,7 @@ in {
 
   promise = callPackage ../development/python-modules/promise { };
 
-  prox-tv = callPackage ../development/python-modules/prox-tv {
-    # We need to use blas instead of openblas on darwin,
-    # see https://github.com/NixOS/nixpkgs/pull/45013.
-    useOpenblas = ! stdenv.isDarwin;
-  };
+  prox-tv = callPackage ../development/python-modules/prox-tv { };
 
   pvlib = callPackage ../development/python-modules/pvlib { };
 

@@ -5,21 +5,23 @@
 , gfortran
 , pytest
 , blas
+, lapack
 , writeTextFile
 , isPyPy
 , cython
 , setuptoolsBuildHook
  }:
 
+assert (!blas.is64bit) && (!lapack.is64bit);
+
 let
-  blasImplementation = lib.nameFromURL blas.name "-";
   cfg = writeTextFile {
     name = "site.cfg";
     text = (lib.generators.toINI {} {
-      ${blasImplementation} = {
-        include_dirs = "${blas}/include";
-        library_dirs = "${blas}/lib";
-      } // lib.optionalAttrs (blasImplementation == "mkl") {
+      ${blas.implementation} = {
+        include_dirs = "${blas}/include:${lapack}/include";
+        library_dirs = "${blas}/lib:${lapack}/lib";
+      } // lib.optionalAttrs (blas.implementation == "mkl") {
         mkl_libs = "mkl_rt";
         lapack_libs = "";
       };
@@ -37,7 +39,7 @@ in buildPythonPackage rec {
   };
 
   nativeBuildInputs = [ gfortran pytest cython setuptoolsBuildHook ];
-  buildInputs = [ blas ];
+  buildInputs = [ blas lapack ];
 
   patches = lib.optionals python.hasDistutilsCxxPatch [
     # We patch cpython/distutils to fix https://bugs.python.org/issue1222585
@@ -68,8 +70,10 @@ in buildPythonPackage rec {
   '';
 
   passthru = {
-    blas = blas;
-    inherit blasImplementation cfg;
+    # just for backwards compatibility
+    blas = blas.provider;
+    blasImplementation = blas.implementation;
+    inherit cfg;
   };
 
   # Disable test
