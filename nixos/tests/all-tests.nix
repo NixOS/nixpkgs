@@ -170,6 +170,7 @@ in
   #logstash = handleTest ./logstash.nix {};
   lorri = handleTest ./lorri/default.nix {};
   magnetico = handleTest ./magnetico.nix {};
+  magic-wormhole-mailbox-server = handleTest ./magic-wormhole-mailbox-server.nix {};
   mailcatcher = handleTest ./mailcatcher.nix {};
   mathics = handleTest ./mathics.nix {};
   matomo = handleTest ./matomo.nix {};

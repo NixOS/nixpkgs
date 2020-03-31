@@ -120,10 +120,16 @@ in
         ++ optional hasDocker "docker.service";
       requires = optional hasDocker "docker.service";
       wantedBy = [ "multi-user.target" ];
+      reloadIfChanged = true;
+      restartTriggers = [
+         config.environment.etc."gitlab-runner/config.toml".source
+      ];
       serviceConfig = {
+        StateDirectory = "gitlab-runner";
+        ExecReload= "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
         ExecStart = ''${cfg.package.bin}/bin/gitlab-runner run \
           --working-directory ${cfg.workDir} \
-          --config ${configFile} \
+          --config /etc/gitlab-runner/config.toml \
           --service gitlab-runner \
           --user gitlab-runner \
         '';
@@ -137,6 +143,9 @@ in
 
     # Make the gitlab-runner command availabe so users can query the runner
     environment.systemPackages = [ cfg.package ];
+
+    # Make sure the config can be reloaded on change
+    environment.etc."gitlab-runner/config.toml".source = configFile;
 
     users.users.gitlab-runner = {
       group = "gitlab-runner";

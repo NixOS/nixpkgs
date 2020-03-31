@@ -65,6 +65,7 @@
   ./hardware/usb-wwan.nix
   ./hardware/onlykey.nix
   ./hardware/wooting.nix
+  ./hardware/uinput.nix
   ./hardware/video/amdgpu.nix
   ./hardware/video/amdgpu-pro.nix
   ./hardware/video/ati.nix
@@ -368,6 +369,7 @@
   ./services/hardware/thermald.nix
   ./services/hardware/undervolt.nix
   ./services/hardware/vdr.nix
+  ./services/hardware/xow.nix
   ./services/logging/SystemdJournal2Gelf.nix
   ./services/logging/awstats.nix
   ./services/logging/fluentd.nix
@@ -394,6 +396,7 @@
   ./services/mail/mailcatcher.nix
   ./services/mail/mailhog.nix
   ./services/mail/mailman.nix
+  ./services/mail/magic-wormhole-mailbox-server.nix
   ./services/mail/mlmmj.nix
   ./services/mail/offlineimap.nix
   ./services/mail/opendkim.nix

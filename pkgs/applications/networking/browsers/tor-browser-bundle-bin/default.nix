@@ -28,7 +28,7 @@
 , apulse
 
 # Media support (implies audio support)
-, mediaSupport ? false
+, mediaSupport ? true
 , ffmpeg
 
 , gmp

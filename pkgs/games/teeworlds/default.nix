@@ -1,5 +1,5 @@
-{ fetchFromGitHub, stdenv, cmake, pkgconfig, python, alsaLib
-, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack
+{ fetchFromGitHub, stdenv, cmake, pkgconfig, python3, alsaLib
+, libX11, libGLU, SDL2, lua5_3, zlib, freetype, wavpack, icoutils
 }:
 
 stdenv.mkDerivation rec {
@@ -21,11 +21,20 @@ stdenv.mkDerivation rec {
                 '#define DATA_DIR "${placeholder "out"}/share/teeworlds/data"'
   '';
 
-  nativeBuildInputs = [ cmake pkgconfig ];
+  nativeBuildInputs = [ cmake pkgconfig icoutils ];
 
   buildInputs = [
-    python alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
+    python3 alsaLib libX11 libGLU SDL2 lua5_3 zlib freetype wavpack
   ];
+
+  postInstall = ''
+    # Convert and install desktop icon
+    mkdir -p $out/share/pixmaps
+    icotool --extract --index 1 --output $out/share/pixmaps/teeworlds.png $src/other/icons/teeworlds.ico
+
+    # Install menu item
+    install -D $src/other/teeworlds.desktop $out/share/applications/teeworlds.desktop
+  '';
 
   meta = {
     description = "Retro multiplayer shooter game";
