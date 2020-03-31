@@ -9,7 +9,7 @@
 , desktopName
 , genericName ? null
 , mimeType ? null
-, categories ? "Application;Other;"
+, categories ? null
 , startupNotify ? null
 , extraEntries ? null
 , fileValidation ? true # whether to validate resulting desktop file.
@@ -20,6 +20,7 @@ let
                          {k="Comment";       v=comment;}
                          {k="GenericName";   v=genericName;}
                          {k="MimeType";      v=mimeType;}
+                         {k="Categories";    v=categories;}
                          {k="StartupNotify"; v=startupNotify;}];
 
   valueNotNull = {k, v}: v != null;
@@ -37,7 +38,6 @@ runCommandLocal "${name}.desktop" {}
     Exec=${exec}
     Terminal=${terminal}
     Name=${desktopName}
-    Categories=${categories}
     ${optionalEntriesString}
     ${if extraEntries == null then ''EOF'' else ''
     ${extraEntries}
