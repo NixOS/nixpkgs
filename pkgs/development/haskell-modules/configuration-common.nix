@@ -1488,4 +1488,12 @@ self: super: {
   # Needs a version that's newer than LTS-15.x provides.
   weeder = super.weeder.override { generic-lens = self.generic-lens_2_0_0_0;  };
 
+  polysemy-plugin = super.polysemy-plugin.override {
+    # polysemy-plugin 0.2.5.0 has constraint ghc-tcplugins-extra (==0.3.*)
+    # This upstream issue is relevant:
+    # https://github.com/polysemy-research/polysemy/issues/322
+    ghc-tcplugins-extra = self.ghc-tcplugins-extra_0_3_2;
+    # version of Polysemy the plugin goes with
+    polysemy = self.polysemy_1_3_0_0;
+  };
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
