@@ -23624,6 +23624,8 @@ in
 
   quorum = callPackage ../applications/blockchains/quorum.nix { };
 
+  whirlpool-gui = callPackage ../applications/blockchains/whirlpool-gui { };
+
   ### GAMES
 
   _2048-in-terminal = callPackage ../games/2048-in-terminal { };
