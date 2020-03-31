@@ -1,0 +1,137 @@
+From f08b066f2bfb6f93e8657366d65f29aa7d7cba53 Mon Sep 17 00:00:00 2001
+From: Emily <vcs@emily.moe>
+Date: Tue, 31 Mar 2020 19:22:06 +0100
+Subject: [PATCH] use hash of path as etag in Nix store
+
+---
+ include/h2o/filecache.h |  6 ++++-
+ lib/common/filecache.c  | 54 ++++++++++++++++++++++++++++++++++++++++-
+ lib/handler/file.c      |  8 +++---
+ 3 files changed, 63 insertions(+), 5 deletions(-)
+
+diff --git a/include/h2o/filecache.h b/include/h2o/filecache.h
+index 064e20e9..a845c83a 100644
+--- a/include/h2o/filecache.h
++++ b/include/h2o/filecache.h
+@@ -29,7 +29,10 @@
+ #include "h2o/memory.h"
+ #include "h2o/time_.h"
+ 
+-#define H2O_FILECACHE_ETAG_MAXLEN (sizeof("\"deadbeef-deadbeefdeadbeef\"") - 1)
++/*   28 bytes of truncated hash
++ * ×  2 for hex encoding
++ * +  2 bytes of double quotes */
++#define H2O_FILECACHE_ETAG_MAXLEN ((28 * 2) + 2)
+ 
+ typedef struct st_h2o_filecache_ref_t {
+     int fd;
+@@ -65,5 +68,6 @@ void h2o_filecache_close_file(h2o_filecache_ref_t *ref);
+ struct tm *h2o_filecache_get_last_modified(h2o_filecache_ref_t *ref, char *outbuf);
+ size_t h2o_filecache_get_etag(h2o_filecache_ref_t *ref, char *outbuf);
+ int h2o_filecache_compare_etag_strong(const char *tag1, size_t tag1_len, const char *tag2, size_t tag2_len);
++int h2o_filecache_in_nix_store(h2o_filecache_ref_t *ref);
+ 
+ #endif
+diff --git a/lib/common/filecache.c b/lib/common/filecache.c
+index 2ba4679d..452853ca 100644
+--- a/lib/common/filecache.c
++++ b/lib/common/filecache.c
+@@ -24,9 +24,13 @@
+ #include <fcntl.h>
+ #include <stddef.h>
+ #include <unistd.h>
++#include <limits.h>
++#include <stdlib.h>
++#include <openssl/sha.h>
+ #include "khash.h"
+ #include "h2o/memory.h"
+ #include "h2o/filecache.h"
++#include "h2o/string_.h"
+ 
+ KHASH_SET_INIT_STR(opencache_set)
+ 
+@@ -163,9 +167,48 @@ struct tm *h2o_filecache_get_last_modified(h2o_filecache_ref_t *ref, char *outbu
+ size_t h2o_filecache_get_etag(h2o_filecache_ref_t *ref, char *outbuf)
+ {
+     assert(ref->fd != -1);
++
++    /* Nix store files have mtime = 1 */
++    if (ref->_etag.len == 0 && ref->st.st_mtime == 1) {
++        static const char nix_store_prefix[] = "@storeDir@/";
++        static const size_t nix_store_prefix_len = sizeof(nix_store_prefix) - 1;
++
++        /* Even if the path doesn't start with the Nix store path,
++         * mtime = 1 means it's most likely a link into the store, e.g.:
++         *
++         *     /var/www/riot.example.com
++         *       -> /nix/store/00000000000000000000000000000000-riot-web
++         *
++         * We check ref->_path for the prefix before calling realpath to
++         * avoid the overhead of the multiple syscalls involved (yes,
++         * it's measurable!) */
++        char *respath = NULL;
++        if (strncmp(ref->_path, nix_store_prefix, nix_store_prefix_len) == 0 ||
++            ((respath = realpath(respath, NULL)) != NULL &&
++             strncmp(respath, nix_store_prefix, nix_store_prefix_len) == 0)) {
++            const char *path = respath != NULL ? respath : ref->_path;
++
++            /* Hash the entire path so that ETag changes when switching /foo from:
++             *     /nix/store/00000000000000000000000000000000-www/a/foo
++             * to:
++             *     /nix/store/00000000000000000000000000000000-www/b/foo */
++            unsigned char path_digest[SHA512_DIGEST_LENGTH] = {0};
++            SHA512((const unsigned char *)path, strlen(path), path_digest);
++            ref->_etag.buf[0] = '"';
++            h2o_hex_encode(ref->_etag.buf + 1, path_digest, (H2O_FILECACHE_ETAG_MAXLEN - 2) / 2);
++            ref->_etag.buf[H2O_FILECACHE_ETAG_MAXLEN - 1] = '"';
++            ref->_etag.buf[H2O_FILECACHE_ETAG_MAXLEN] = '\0';
++            ref->_etag.len = H2O_FILECACHE_ETAG_MAXLEN;
++        }
++        free(respath);
++    }
++
+     if (ref->_etag.len == 0)
+         ref->_etag.len = sprintf(ref->_etag.buf, "\"%08x-%zx\"", (unsigned)ref->st.st_mtime, (size_t)ref->st.st_size);
+-    memcpy(outbuf, ref->_etag.buf, ref->_etag.len + 1);
++
++    if (outbuf != NULL)
++        memcpy(outbuf, ref->_etag.buf, ref->_etag.len + 1);
++
+     return ref->_etag.len;
+ }
+ 
+@@ -184,3 +227,12 @@ int h2o_filecache_compare_etag_strong(const char *tag1, size_t tag1_len, const c
+     }
+     return h2o_memis(tag1, tag1_len, tag2, tag2_len);
+ }
++
++int h2o_filecache_in_nix_store(h2o_filecache_ref_t *ref)
++{
++    /* initialize ref->_etag */
++    size_t etag_len = h2o_filecache_get_etag(ref, NULL);
++
++    /* only Nix store etags use up the entire ref->_etag.buf */
++    return etag_len == H2O_FILECACHE_ETAG_MAXLEN;
++}
+diff --git a/lib/handler/file.c b/lib/handler/file.c
+index 0bc6ea74..56f6ea08 100644
+--- a/lib/handler/file.c
++++ b/lib/handler/file.c
+@@ -344,9 +344,11 @@ static void do_send_file(struct st_h2o_sendfile_generator_t *self, h2o_req_t *re
+         mime_type.len = sprintf(mime_type.base, "multipart/byteranges; boundary=%s", self->ranged.boundary.base);
+     }
+     h2o_add_header(&req->pool, &req->res.headers, H2O_TOKEN_CONTENT_TYPE, NULL, mime_type.base, mime_type.len);
+-    h2o_filecache_get_last_modified(self->file.ref, self->header_bufs.last_modified);
+-    h2o_add_header(&req->pool, &req->res.headers, H2O_TOKEN_LAST_MODIFIED, NULL, self->header_bufs.last_modified,
+-                   H2O_TIMESTR_RFC1123_LEN);
++    if (!h2o_filecache_in_nix_store(self->file.ref)) {
++        h2o_filecache_get_last_modified(self->file.ref, self->header_bufs.last_modified);
++        h2o_add_header(&req->pool, &req->res.headers, H2O_TOKEN_LAST_MODIFIED, NULL, self->header_bufs.last_modified,
++                       H2O_TIMESTR_RFC1123_LEN);
++    }
+     add_headers_unconditional(self, req);
+     if (self->content_encoding.base != NULL)
+         h2o_add_header(&req->pool, &req->res.headers, H2O_TOKEN_CONTENT_ENCODING, NULL, self->content_encoding.base,
+-- 
+2.26.2
+
