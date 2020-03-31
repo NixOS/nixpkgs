@@ -104,6 +104,10 @@ in
 
   ### BUILD SUPPORT
 
+  auditBlasHook = makeSetupHook
+    { name = "auto-blas-hook"; deps = [ blas lapack ]; }
+    ../build-support/setup-hooks/audit-blas.sh;
+
   autoreconfHook = makeSetupHook
     { deps = [ autoconf automake gettext libtool ]; }
     ../build-support/setup-hooks/autoreconf.sh;
