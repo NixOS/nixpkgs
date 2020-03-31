@@ -888,6 +888,15 @@ auth required pam_succeed_if.so uid >= 1000 quiet
   <listitem>
    <para>
     <package>mongodb</package> has been updated to version <literal>3.4.24</literal>.
+    <warning>
+     <para>
+      Please note that <package>mongodb</package> has been relicensed under their own
+      <link xlink:href="https://www.mongodb.com/licensing/server-side-public-license/faq"><literal>
+      sspl</literal></link>-license. Since it's not entirely free and not OSI-approved,
+      it's listed as non-free. This means that Hydra doesn't provide prebuilt
+      <package>mongodb</package>-packages and needs to be built locally.
+     </para>
+    </warning>
    </para>
   </listitem>
   </itemizedlist>
