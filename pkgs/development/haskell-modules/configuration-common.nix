@@ -1192,14 +1192,6 @@ self: super: {
   });
 
   # Remove unecessary constraint:
-  # https://github.com/agrafix/superbuffer/pull/2
-  superbuffer = overrideCabal super.superbuffer (drv: {
-    postPatch = ''
-      sed -i 's#QuickCheck < 2.10#QuickCheck < 2.13#' superbuffer.cabal
-    '';
-  });
-
-  # Remove unecessary constraint:
   # https://github.com/haskell-infra/hackage-trustees/issues/258
   data-accessor-template = overrideCabal super.data-accessor-template (drv: {
     postPatch = ''
