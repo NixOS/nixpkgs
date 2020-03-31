@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, Security, enableStatic ? false }:
+{ buildGoModule, fetchFromGitHub, lib, enableStatic ? false }:
 
 buildGoModule rec {
   pname = "gobetween";
@@ -14,10 +14,8 @@ buildGoModule rec {
   modSha256 =
     "dd91838d20c99c73447590e43edd13c87755276f17ef3e53f24c5df3d0908f78";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   buildPhase = ''
-    make build${stdenv.lib.optionalString enableStatic "-static"}
+    make build${lib.optionalString enableStatic "-static"}
   '';
 
   installPhase = ''
@@ -27,7 +25,7 @@ buildGoModule rec {
     cp -r config $out/share
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Modern & minimalistic load balancer for the Сloud era";
     homepage = "http://gobetween.io";
     license = licenses.mit;

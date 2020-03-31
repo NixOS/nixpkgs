@@ -43,8 +43,7 @@ stdenv.mkDerivation rec {
     ++ optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-
-  propagatedBuildInputs = optionals stdenv.isDarwin [ Security Foundation ];
+  depsTargetTargetPropagated = optionals stdenv.isDarwin [ Security Foundation ];
 
   hardeningDisable = [ "all" ];
 

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub, fetchpatch }:
 
 buildGoModule rec {
   pname = "mynewt-newt";
@@ -23,8 +23,6 @@ buildGoModule rec {
   ];
 
   modSha256 = "068r8wa2pgd68jv50x0l1w8n96f97b3mgv7z6f85280ahgywaasq";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     homepage = https://mynewt.apache.org/;

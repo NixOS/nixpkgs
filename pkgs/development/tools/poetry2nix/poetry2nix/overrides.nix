@@ -6,14 +6,14 @@
 self: super:
 
 {
-  astroid = super.astroid.overrideAttrs (
+  astroid = super.astroid.overridePythonAttrs (
     old: rec {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
       doCheck = false;
     }
   );
 
-  av = super.av.overrideAttrs (
+  av = super.av.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [
         pkgs.pkgconfig
@@ -22,7 +22,7 @@ self: super:
     }
   );
 
-  bcrypt = super.bcrypt.overrideAttrs (
+  bcrypt = super.bcrypt.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.libffi ];
     }
@@ -31,14 +31,14 @@ self: super:
   cffi =
     # cffi is bundled with pypy
     if self.python.implementation == "pypy" then null else (
-      super.cffi.overrideAttrs (
+      super.cffi.overridePythonAttrs (
         old: {
           buildInputs = old.buildInputs ++ [ pkgs.libffi ];
         }
       )
     );
 
-  cftime = super.cftime.overrideAttrs (
+  cftime = super.cftime.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
         self.cython
@@ -46,14 +46,14 @@ self: super:
     }
   );
 
-  cryptography = super.cryptography.overrideAttrs (
+  cryptography = super.cryptography.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
     }
   );
 
   django = (
-    super.django.overrideAttrs (
+    super.django.overridePythonAttrs (
       old: {
         propagatedNativeBuildInputs = (old.propagatedNativeBuildInputs or [])
         ++ [ pkgs.gettext ];
@@ -61,7 +61,7 @@ self: super:
     )
   );
 
-  django-bakery = super.django-bakery.overrideAttrs (
+  django-bakery = super.django-bakery.overridePythonAttrs (
     old: {
       configurePhase = ''
         if ! test -e LICENSE; then
@@ -71,7 +71,7 @@ self: super:
     }
   );
 
-  dlib = super.dlib.overrideAttrs (
+  dlib = super.dlib.overridePythonAttrs (
     old: {
       # Parallel building enabled
       inherit (pkgs.python.pkgs.dlib) patches;
@@ -87,14 +87,14 @@ self: super:
   # Environment markers are not always included (depending on how a dep was defined)
   enum34 = if self.pythonAtLeast "3.4" then null else super.enum34;
 
-  faker = super.faker.overrideAttrs (
+  faker = super.faker.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
       doCheck = false;
     }
   );
 
-  fancycompleter = super.fancycompleter.overrideAttrs (
+  fancycompleter = super.fancycompleter.overridePythonAttrs (
     old: {
       postPatch = ''
         substituteInPlace setup.py \
@@ -104,14 +104,20 @@ self: super:
     }
   );
 
-  grandalf = super.grandalf.overrideAttrs (
+  fastparquet = super.fastparquet.overridePythonAttrs (
+    old: {
+      buildInputs = old.buildInputs ++ [ self.pytest-runner ];
+    }
+  );
+
+  grandalf = super.grandalf.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
       doCheck = false;
     }
   );
 
-  h5py = super.h5py.overrideAttrs (
+  h5py = super.h5py.overridePythonAttrs (
     old: rec {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       buildInputs = old.buildInputs ++ [ pkgs.hdf5 self.pkgconfig self.cython ];
@@ -122,20 +128,20 @@ self: super:
     }
   );
 
-  horovod = super.horovod.overrideAttrs (
+  horovod = super.horovod.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.openmpi ];
     }
   );
 
   # importlib-metadata has an incomplete dependency specification
-  importlib-metadata = super.importlib-metadata.overrideAttrs (
+  importlib-metadata = super.importlib-metadata.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ lib.optional self.python.isPy2 self.pathlib2;
     }
   );
 
-  jupyter = super.jupyter.overrideAttrs (
+  jupyter = super.jupyter.overridePythonAttrs (
     old: rec {
       # jupyter is a meta-package. Everything relevant comes from the
       # dependencies. It does however have a jupyter.py file that conflicts
@@ -144,7 +150,7 @@ self: super:
     }
   );
 
-  lap = super.lap.overrideAttrs (
+  lap = super.lap.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
         self.numpy
@@ -152,7 +158,7 @@ self: super:
     }
   );
 
-  llvmlite = super.llvmlite.overrideAttrs (
+  llvmlite = super.llvmlite.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.llvm ];
 
@@ -175,26 +181,26 @@ self: super:
     }
   );
 
-  lockfile = super.lockfile.overrideAttrs (
+  lockfile = super.lockfile.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.pbr ];
     }
   );
 
-  lxml = super.lxml.overrideAttrs (
+  lxml = super.lxml.overridePythonAttrs (
     old: {
       nativeBuildInputs = with pkgs; old.nativeBuildInputs ++ [ pkgconfig libxml2.dev libxslt.dev ];
       buildInputs = with pkgs; old.buildInputs ++ [ libxml2 libxslt ];
     }
   );
 
-  markupsafe = super.markupsafe.overrideAttrs (
+  markupsafe = super.markupsafe.overridePythonAttrs (
     old: {
       src = old.src.override { pname = builtins.replaceStrings [ "markupsafe" ] [ "MarkupSafe" ] old.pname; };
     }
   );
 
-  matplotlib = super.matplotlib.overrideAttrs (
+  matplotlib = super.matplotlib.overridePythonAttrs (
     old:
       let
         enableGhostscript = old.passthru.enableGhostscript or false;
@@ -235,14 +241,14 @@ self: super:
     preferWheel = true;
   };
 
-  mccabe = super.mccabe.overrideAttrs (
+  mccabe = super.mccabe.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
       doCheck = false;
     }
   );
 
-  netcdf4 = super.netcdf4.overrideAttrs (
+  netcdf4 = super.netcdf4.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
         self.cython
@@ -265,7 +271,7 @@ self: super:
     }
   );
 
-  numpy = super.numpy.overrideAttrs (
+  numpy = super.numpy.overridePythonAttrs (
     old:
       let
         blas = old.passthru.args.blas or pkgs.openblasCompat;
@@ -299,7 +305,7 @@ self: super:
         }
   );
 
-  openexr = super.openexr.overrideAttrs (
+  openexr = super.openexr.overridePythonAttrs (
     old: rec {
       buildInputs = old.buildInputs ++ [ pkgs.openexr pkgs.ilmbase ];
       NIX_CFLAGS_COMPILE = [ "-I${pkgs.openexr.dev}/include/OpenEXR" "-I${pkgs.ilmbase.dev}/include/OpenEXR" ];
@@ -320,26 +326,26 @@ self: super:
         }
   );
 
-  pillow = super.pillow.overrideAttrs (
+  pillow = super.pillow.overridePythonAttrs (
     old: {
       nativeBuildInputs = [ pkgs.pkgconfig ] ++ old.nativeBuildInputs;
       buildInputs = with pkgs; [ freetype libjpeg zlib libtiff libwebp tcl lcms2 ] ++ old.buildInputs;
     }
   );
 
-  psycopg2 = super.psycopg2.overrideAttrs (
+  psycopg2 = super.psycopg2.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
     }
   );
 
-  psycopg2-binary = super.psycopg2-binary.overrideAttrs (
+  psycopg2-binary = super.psycopg2-binary.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.postgresql ];
     }
   );
 
-  pyarrow = super.pyarrow.overrideAttrs (
+  pyarrow = super.pyarrow.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
         self.cython
@@ -354,7 +360,7 @@ self: super:
           format = "other";
         }
       )
-    ).overrideAttrs (
+    ).overridePythonAttrs (
       old: {
 
         nativeBuildInputs = old.nativeBuildInputs ++ [
@@ -373,7 +379,7 @@ self: super:
     )
   ) super.pycairo;
 
-  pycocotools = super.pycocotools.overrideAttrs (
+  pycocotools = super.pycocotools.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
         self.cython
@@ -382,21 +388,21 @@ self: super:
     }
   );
 
-  pygobject = super.pygobject.overrideAttrs (
+  pygobject = super.pygobject.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       buildInputs = old.buildInputs ++ [ pkgs.glib pkgs.gobject-introspection ];
     }
   );
 
-  pylint = super.pylint.overrideAttrs (
+  pylint = super.pylint.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ self.pytest-runner ];
       doCheck = false;
     }
   );
 
-  pyopenssl = super.pyopenssl.overrideAttrs (
+  pyopenssl = super.pyopenssl.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.openssl ];
     }
@@ -503,7 +509,7 @@ self: super:
       }
     );
 
-  pytest-datadir = super.pytest-datadir.overrideAttrs (
+  pytest-datadir = super.pytest-datadir.overridePythonAttrs (
     old: {
       postInstall = ''
         rm -f $out/LICENSE
@@ -519,7 +525,7 @@ self: super:
 
   pytest-runner = super.pytest-runner or super.pytestrunner;
 
-  python-prctl = super.python-prctl.overrideAttrs (
+  python-prctl = super.python-prctl.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [
         pkgs.libcap
@@ -527,14 +533,14 @@ self: super:
     }
   );
 
-  pyzmq = super.pyzmq.overrideAttrs (
+  pyzmq = super.pyzmq.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ pkgs.zeromq ];
     }
   );
 
-  rockset = super.rockset.overrideAttrs (
+  rockset = super.rockset.overridePythonAttrs (
     old: rec {
       postPatch = ''
         cp ./setup_rockset.py ./setup.py
@@ -542,7 +548,7 @@ self: super:
     }
   );
 
-  scaleapi = super.scaleapi.overrideAttrs (
+  scaleapi = super.scaleapi.overridePythonAttrs (
     old: {
       postPatch = ''
         substituteInPlace setup.py --replace "install_requires = ['requests>=2.4.2', 'enum34']" "install_requires = ['requests>=2.4.2']" || true
@@ -550,7 +556,7 @@ self: super:
     }
   );
 
-  pandas = super.pandas.overrideAttrs (
+  pandas = super.pandas.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ self.cython ];
     }
@@ -567,7 +573,7 @@ self: super:
     }
   );
 
-  scipy = super.scipy.overrideAttrs (
+  scipy = super.scipy.overridePythonAttrs (
     old: {
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.gfortran ];
       propagatedBuildInputs = old.propagatedBuildInputs ++ [ self.pybind11 ];
@@ -601,7 +607,7 @@ self: super:
     }
   );
 
-  shapely = super.shapely.overrideAttrs (
+  shapely = super.shapely.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ [ pkgs.geos self.cython ];
       inherit (pkgs.python3.pkgs.shapely) patches GEOS_LIBRARY_PATH;
@@ -616,7 +622,7 @@ self: super:
     )
   ) else super.shellingham;
 
-  tables = super.tables.overrideAttrs (
+  tables = super.tables.overridePythonAttrs (
     old: {
       HDF5_DIR = "${pkgs.hdf5}";
       nativeBuildInputs = old.nativeBuildInputs ++ [ pkgs.pkgconfig ];
@@ -624,7 +630,7 @@ self: super:
     }
   );
 
-  tensorpack = super.tensorpack.overrideAttrs (
+  tensorpack = super.tensorpack.overridePythonAttrs (
     old: {
       postPatch = ''
         substituteInPlace setup.cfg --replace "# will call find_packages()" ""
@@ -632,7 +638,7 @@ self: super:
     }
   );
 
-  urwidtrees = super.urwidtrees.overrideAttrs (
+  urwidtrees = super.urwidtrees.overridePythonAttrs (
     old: {
       propagatedBuildInputs = old.propagatedBuildInputs ++ [
         self.urwid
@@ -640,7 +646,7 @@ self: super:
     }
   );
 
-  vose-alias-method = super.vose-alias-method.overrideAttrs (
+  vose-alias-method = super.vose-alias-method.overridePythonAttrs (
     old: {
       postInstall = ''
         rm -f $out/LICENSE
@@ -648,7 +654,7 @@ self: super:
     }
   );
 
-  uvloop = super.uvloop.overrideAttrs (
+  uvloop = super.uvloop.overridePythonAttrs (
     old: {
       buildInputs = old.buildInputs ++ lib.optionals stdenv.isDarwin [
         pkgs.darwin.apple_sdk.frameworks.ApplicationServices

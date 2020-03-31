@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "ctop";
@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "0wxv6yzlgki7047qszx9p9xpph95bg097jkgaa0b3wbpx8vg7qml";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   buildFlagsArray = [ "-ldflags=-s -w -X main.version=${version} -X main.build=v${version}" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Top-like interface for container metrics";
     homepage = "https://ctop.sh/";
     license = licenses.mit;

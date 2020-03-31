@@ -1,4 +1,4 @@
-{ stdenv, fetchFromGitHub, buildGoModule, installShellFiles, Security }:
+{ lib, fetchFromGitHub, buildGoModule, installShellFiles }:
 
 buildGoModule rec {
   pname = "gh";
@@ -20,7 +20,6 @@ buildGoModule rec {
   subPackages = [ "cmd/gh" ];
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
   postInstall = ''
     for shell in bash fish zsh; do
       $out/bin/gh completion -s $shell > gh.$shell
@@ -28,7 +27,7 @@ buildGoModule rec {
     done
   '';
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "GitHub CLI tool";
     homepage = "https://cli.github.com/";
     license = licenses.mit;

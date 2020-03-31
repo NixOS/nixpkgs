@@ -16,9 +16,9 @@ buildRustPackage rec {
 
   cargoBuildFlags = [ "-p ripasso-cursive -p ripasso-man" ];
 
-  nativeBuildInputs = [ pkgconfig ];
+  nativeBuildInputs = [ pkgconfig gpgme python3 ];
   buildInputs = [
-    ncurses python3 openssl libgpgerror gpgme xorg.libxcb
+    ncurses openssl libgpgerror gpgme xorg.libxcb
   ] ++ stdenv.lib.optionals stdenv.isDarwin [ AppKit Security ];
 
   preFixup = ''

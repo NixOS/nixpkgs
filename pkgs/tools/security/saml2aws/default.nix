@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, libobjc, Foundation, IOKit }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "saml2aws";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "0qxf2i06spjig3ynixh3xmbxpghh222jhfqcg71i4i79x4ycp5wx";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ libobjc Foundation IOKit ];
 
   subPackages = [ "." "cmd/saml2aws" ];
 

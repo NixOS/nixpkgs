@@ -129,6 +129,7 @@ in
 
     services.xserver.desktopManager.session = [{
       name = "xfce";
+      desktopNames = [ "XFCE" ];
       bgSupport = true;
       start = ''
         ${pkgs.runtimeShell} ${pkgs.xfce.xfce4-session.xinitrc} &

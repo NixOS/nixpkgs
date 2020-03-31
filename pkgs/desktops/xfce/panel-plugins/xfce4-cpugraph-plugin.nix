@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool glib exo libXtst xorgproto libxfce4util libxfce4ui xfce4-panel xfconf gtk2 hicolor-icon-theme ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "CPU graph show for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];

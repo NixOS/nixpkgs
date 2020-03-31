@@ -1,7 +1,6 @@
 { buildGoModule
 , fetchFromGitHub
-, stdenv
-, Security
+, lib
 }:
 
 buildGoModule rec {
@@ -17,11 +16,9 @@ buildGoModule rec {
 
   subPackages = [ "packr" "v2/packr2" ];
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   modSha256 = "0afhkvivma16bi8rz3kwcsz9mhmcn4zm6rrymxkvazx6b844hcdv";
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "The simple and easy way to embed static files into Go binaries";
     homepage = "https://github.com/gobuffalo/packr";
     license = licenses.mit;

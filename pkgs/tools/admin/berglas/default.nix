@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "berglas";
@@ -12,8 +12,6 @@ buildGoModule rec {
   };
 
   modSha256 = "0m2bqx102lf6nihdjbl8a08xcwi80rawvh91j1cav0njm9w5vmmm";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     description = "A tool for managing secrets on Google Cloud";

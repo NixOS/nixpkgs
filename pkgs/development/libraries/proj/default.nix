@@ -1,7 +1,7 @@
 { stdenv, fetchFromGitHub, pkg-config, sqlite, autoreconfHook }:
 
 stdenv.mkDerivation rec {
-  name = "proj";
+  pname = "proj";
   version = "6.3.1";
 
   src = fetchFromGitHub {

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule {
   pname = "mautrix-whatsapp-unstable";
@@ -12,8 +12,6 @@ buildGoModule {
   };
 
   modSha256 = "01xwq0h3i8ai0294v8jdagksas48866lxcnkn4slwp3rnzv6cmbp";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     homepage = https://github.com/tulir/mautrix-whatsapp;

@@ -1,4 +1,4 @@
-{ buildGoModule, fetchFromGitHub, stdenv, Security }:
+{ buildGoModule, fetchFromGitHub, lib }:
 
 buildGoModule rec {
   pname = "mod";
@@ -13,11 +13,9 @@ buildGoModule rec {
 
   modSha256 = "0x7bdhvam9l23cbdqpna8kwg0v6yhgmw0hlbm48bbhjl27lg7svc";
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
   subPackages = [ "cmd/mod" ];
 
-  meta = with stdenv.lib; {
+  meta = with lib; {
     description = "Automated Semantic Import Versioning Upgrades for Go";
     longDescription = ''
       Command line tool to upgrade/downgrade Semantic Import Versioning in Go

@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ stdenv, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "gomuks";
@@ -14,8 +14,6 @@ buildGoModule rec {
   };
 
   modSha256 = "03vbrh50pvx71rp6c23qc2sh0ir4jm1wl0gvi3z1c14ndzhsqky4";
-
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
 
   meta = with stdenv.lib; {
     homepage = "https://maunium.net/go/gomuks/";

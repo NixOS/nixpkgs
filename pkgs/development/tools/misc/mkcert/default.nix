@@ -1,4 +1,4 @@
-{ stdenv, buildGoModule, fetchFromGitHub, Security }:
+{ lib, buildGoModule, fetchFromGitHub }:
 
 buildGoModule rec {
   pname = "mkcert";
@@ -19,9 +19,7 @@ buildGoModule rec {
       -X ${goPackagePath}/main.Version=${version}
   '';
 
-  buildInputs = stdenv.lib.optionals stdenv.isDarwin [ Security ];
-
-  meta = with stdenv.lib; {
+  meta = with lib; {
     homepage = https://github.com/FiloSottile/mkcert;
     description = "A simple tool for making locally-trusted development certificates";
     license = licenses.bsd3;
