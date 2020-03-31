@@ -43,6 +43,7 @@ rustPlatform.buildRustPackage rec {
     rustc
     python3
     wrapGAppsHook
+    glib
   ];
 
   buildInputs = [

@@ -59,13 +59,13 @@ assert remoteSupport -> curl != null;
 
 stdenv.mkDerivation rec {
   pname = "deadbeef";
-  version = "1.8.2";
+  version = "1.8.3";
 
   src = fetchFromGitHub {
     owner = "DeaDBeeF-Player";
     repo = "deadbeef";
     rev = version;
-    sha256 = "016wwnh5jqdcfxn1ff6in5dz73c3gdhh3fva8inq7sc3vzdz5khj";
+    sha256 = "0n0q7zfl56gnadcqqp5rg7sbh1xvfcmp7cvmh2ax07037b346qig";
   };
 
   buildInputs = with stdenv.lib; [ jansson ]
@@ -108,7 +108,7 @@ stdenv.mkDerivation rec {
 
   meta = with stdenv.lib; {
     description = "Ultimate Music Player for GNU/Linux";
-    homepage = http://deadbeef.sourceforge.net/;
+    homepage = "http://deadbeef.sourceforge.net/";
     license = licenses.gpl2;
     platforms = [ "x86_64-linux" "i686-linux" ];
     maintainers = [ maintainers.abbradar ];

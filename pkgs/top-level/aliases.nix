@@ -46,6 +46,7 @@ mapAliases ({
   asciidocFull = asciidoc-full;  # added 2014-06-22
   at_spi2_atk = at-spi2-atk; # added 2018-02-25
   at_spi2_core = at-spi2-core; # added 2018-02-25
+  avldrums-lv2 = x42-avldrums; # added 2020-03-29
   bar-xft = lemonbar-xft;  # added 2015-01-16
   bashCompletion = bash-completion; # Added 2016-09-28
   batti = throw "batti has been removed from nixpkgs, as it was unmaintained"; # added 2019-12-10

@@ -2,16 +2,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "spotify-tui";
-  version = "0.17.0";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "Rigellute";
     repo = "spotify-tui";
     rev = "v${version}";
-    sha256 = "1jx2qyshqg84l3fm682h8262da0hy68qjjg3dm2i53dxqxrm5ji9";
+    sha256 = "1gsddjinxmglm05hhphclax08d9pig1f0wjjs3bbcq096fydxgfs";
   };
 
-  cargoSha256 = "12qwp59gshc9d6nz0s3w03zc8sxqri12vrav94vi54fqagiikinm";
+  cargoSha256 = "1y398ypckk3gw1sfzf97xzwf5d5z3kxlcpn3bccmsfr59kvkf661";
 
   nativeBuildInputs = [ pkgconfig ] ++ stdenv.lib.optionals stdenv.isLinux [ python3 ];
   buildInputs = [ openssl ]

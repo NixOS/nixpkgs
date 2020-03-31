@@ -17358,11 +17358,11 @@ let
 
   SysVirt = buildPerlModule rec {
     pname = "Sys-Virt";
-    version = "5.4.0";
+    version = "6.1.0";
     src = assert version == pkgs.libvirt.version; pkgs.fetchgit {
       url = git://libvirt.org/libvirt-perl.git;
       rev = "v${version}";
-      sha256 = "0csg10mydcif2l0qf16nlphq6ih5378nk6dk1vznf5bspws2ch7a";
+      sha256 = "00w4fmki7ff7i9bi39w2w15mvv38b5ifwk3zib90ny536r3n63sb";
     };
     nativeBuildInputs = [ pkgs.pkgconfig ];
     buildInputs = [ pkgs.libvirt CPANChanges TestPod TestPodCoverage XMLXPath ];

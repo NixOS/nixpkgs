@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "findomain";
-  version = "1.4.2";
+  version = "1.4.5";
 
   src = fetchFromGitHub {
     owner = "Edu4rdSHL";
     repo = pname;
     rev = version;
-    sha256 = "0c6jjr1343lqwggvpxdhbjyi1far4f7f3yzq1y0nj1j952j7a36x";
+    sha256 = "1p4ddyqg1v27hf19n1ksmfvj5s6z2c8i13syb0anhlyzqy576hwb";
   };
 
-  cargoSha256 = "1cyfxfhbc2xhavnkhva1xdcw8vy9i5pqhfbiwn6idpfy6hm1w0bx";
+  cargoSha256 = "0mdcj4almwziq1ph3imfdx41a96xq19sbjm7wsm9lxlzhvv256br";
 
   nativeBuildInputs = [ installShellFiles perl ];
   buildInputs = lib.optional stdenv.isDarwin Security;

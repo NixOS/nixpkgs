@@ -51,12 +51,15 @@ let
   buildVscodeMarketplaceExtension = a@{
     name ? "",
     src ? null,
+    vsix ? null,
     mktplcRef,
     ...
   }: assert "" == name; assert null == src;
-  buildVscodeExtension ((removeAttrs a [ "mktplcRef" ]) // {
+  buildVscodeExtension ((removeAttrs a [ "mktplcRef" "vsix" ]) // {
     name = "${mktplcRef.publisher}-${mktplcRef.name}-${mktplcRef.version}";
-    src = fetchVsixFromVscodeMarketplace mktplcRef;
+    src = if (vsix != null)
+      then vsix
+      else fetchVsixFromVscodeMarketplace mktplcRef;
     vscodeExtUniqueId = "${mktplcRef.publisher}.${mktplcRef.name}";
   });
 

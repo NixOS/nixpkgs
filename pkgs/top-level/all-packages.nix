@@ -720,8 +720,6 @@ in
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
-
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
   awscli = callPackage ../tools/admin/awscli { };
@@ -791,6 +789,8 @@ in
   autorevision = callPackage ../tools/misc/autorevision { };
 
   automirror = callPackage ../tools/misc/automirror { };
+
+  babashka = callPackage ../tools/misc/babashka { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
@@ -2097,8 +2097,6 @@ in
 
   precice = callPackage ../development/libraries/precice { };
 
-  parallel-rust = callPackage ../tools/misc/parallel-rust { };
-
   pueue = callPackage ../applications/misc/pueue { };
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
@@ -2501,7 +2499,11 @@ in
 
   conspy = callPackage ../os-specific/linux/conspy {};
 
-  connman = callPackage ../tools/networking/connman { };
+  inherit (callPackage ../tools/networking/connman {})
+    connman
+    connmanFull
+    connmanMinimal
+  ;
 
   connman-gtk = callPackage ../tools/networking/connman/connman-gtk { };
 
@@ -2841,6 +2843,8 @@ in
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
 
+  dnscontrol = callPackage ../applications/networking/dnscontrol { };
+
   dnsenum = callPackage ../tools/security/dnsenum { };
 
   dnsmasq = callPackage ../tools/networking/dnsmasq { };
@@ -3081,6 +3085,8 @@ in
   };
 
   volctl = callPackage ../tools/audio/volctl { };
+
+  vorta = python3Packages.callPackage ../applications/backup/vorta { };
 
   wallutils = callPackage ../tools/graphics/wallutils { };
 
@@ -6270,6 +6276,8 @@ in
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  rosie = callPackage ../tools/text/rosie { };
+
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
 
   roundup = callPackage ../tools/misc/roundup { };
@@ -8082,6 +8090,10 @@ in
 
   flyctl = callPackage ../development/web/flyctl { };
 
+  flutterPackages =
+    recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutter = flutterPackages.stable;
+
   fpc = callPackage ../development/compilers/fpc { };
 
   gambit = callPackage ../development/compilers/gambit { stdenv = gccStdenv; };
@@ -9870,7 +9882,18 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
-  bazel_0 = callPackage ../development/tools/build-managers/bazel/bazel_0 {
+  bazel_0 = bazel_0_26;
+
+  bazel_0_26 = callPackage ../development/tools/build-managers/bazel/bazel_0_26 {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    buildJdk = jdk8;
+    buildJdkName = "jdk8";
+    runJdk = jdk11_headless;
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
+
+  bazel_0_29 = callPackage ../development/tools/build-managers/bazel/bazel_0_29 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk8;
@@ -12116,7 +12139,8 @@ in
 
   hwloc = callPackage ../development/libraries/hwloc {};
 
-  hydra = callPackage ../development/tools/misc/hydra { };
+  inherit (callPackage ../development/tools/misc/hydra { })
+    hydra-migration hydra-unstable hydra-flakes;
 
   hydra-cli = callPackage ../development/tools/misc/hydra-cli { };
 
@@ -13319,6 +13343,7 @@ in
   libversion = callPackage ../development/libraries/libversion { };
 
   libvirt = callPackage ../development/libraries/libvirt { };
+  libvirt_5_9_0 = callPackage ../development/libraries/libvirt/5.9.0.nix { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
 
@@ -13689,10 +13714,7 @@ in
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
   };
 
-  ocl-icd-oclhGen = oclh: callPackage ../development/libraries/ocl-icd { opencl-headers = oclh; };
-  ocl-icd-oclh_1_2 = ocl-icd-oclhGen opencl-headers_1_2;
-  ocl-icd-oclh_2_2 = ocl-icd-oclhGen opencl-headers_2_2;
-  ocl-icd = ocl-icd-oclh_2_2;
+  ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
   ode = callPackage ../development/libraries/ode { };
 
@@ -13724,10 +13746,7 @@ in
   opencascade = callPackage ../development/libraries/opencascade { };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
-  opencl-headersGen = v: callPackage ../development/libraries/opencl-headers { version = v; };
-  opencl-headers_1_2 = opencl-headersGen "12";
-  opencl-headers_2_2 = opencl-headersGen "22";
-  opencl-headers = opencl-headers_2_2;
+  opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
   opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
 
@@ -16408,7 +16427,9 @@ in
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = callPackage ../os-specific/linux/ffado { };
+  ffado = libsForQt5.callPackage ../os-specific/linux/ffado {
+    inherit (pkgs.linuxPackages) kernel;
+  };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -17800,6 +17821,8 @@ in
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
+  iconpack-jade = callPackage ../data/icons/iconpack-jade { };
+
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
@@ -18576,6 +18599,8 @@ in
   bitwig-studio = bitwig-studio3;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
+
+  bgpq3 = callPackage ../tools/networking/bgpq3 { };
 
   blackbox = callPackage ../applications/version-management/blackbox { };
 
@@ -20184,6 +20209,8 @@ in
 
   kiwix = callPackage ../applications/misc/kiwix { };
 
+  klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
@@ -20473,6 +20500,8 @@ in
       canonicaljson;
   };
 
+  matrix-dl = callPackage ../applications/networking/instant-messengers/matrix-dl { };
+
   matrix-recorder = callPackage ../applications/networking/instant-messengers/matrix-recorder {};
 
   mblaze = callPackage ../applications/networking/mailreaders/mblaze { };
@@ -20659,6 +20688,8 @@ in
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
+
+  rofi-calc = callPackage ../applications/science/math/rofi-calc { };
 
   ympd = callPackage ../applications/audio/ympd { };
 
@@ -21239,6 +21270,8 @@ in
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtk-sharp-2_0;
   };
+
+  pistol = callPackage ../tools/misc/pistol { };
 
   plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
 
@@ -22667,6 +22700,8 @@ in
 
   kodiPlainWayland = callPackage ../applications/video/kodi { useWayland = true; };
 
+  kodiGBM = callPackage ../applications/video/kodi { useGbm = true; };
+
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
 
   kodi = wrapKodi {
@@ -22675,6 +22710,10 @@ in
 
   kodi-wayland = wrapKodi {
     kodi = kodiPlainWayland;
+  };
+
+  kodi-gbm = wrapKodi {
+    kodi = kodiGBM;
   };
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
@@ -23438,6 +23477,14 @@ in
   ivan = callPackage ../games/ivan { };
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
+
+  katago = callPackage ../games/katago { };
+
+  katagoWithCuda = katago.override {
+    cudaSupport = true;
+    cudnn = cudnn_cudatoolkit_10_1;
+    cudatoolkit = cudatoolkit_10_1;
+  };
 
   klavaro = callPackage ../games/klavaro {};
 
@@ -25302,7 +25349,9 @@ in
     icu = icu58;
   };
 
-  mame = libsForQt5.callPackage ../misc/emulators/mame { };
+  mame = libsForQt5.callPackage ../misc/emulators/mame {
+    inherit (darwin.apple_sdk.frameworks) CoreAudioKit ForceFeedback;
+  };
 
   martyr = callPackage ../development/libraries/martyr { };
 
@@ -26081,6 +26130,7 @@ in
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
   bullet = callPackage ../development/libraries/bullet {
