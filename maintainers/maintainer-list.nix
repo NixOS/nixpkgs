@@ -5186,6 +5186,12 @@
     githubId = 133448;
     name = "Mikołaj Siedlarek";
   };
+  msm = {
+    email = "msm@tailcall.net";
+    github = "msm-code";
+    githubId = 7026881;
+    name = "Jarosław Jedynak";
+  };
   mstarzyk = {
     email = "mstarzyk@gmail.com";
     github = "mstarzyk";
