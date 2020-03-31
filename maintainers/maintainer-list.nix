@@ -8344,6 +8344,12 @@
     email = "ngerstle@gmail.com";
     github = "ngerstle";
   };
+  svantepolk = {
+    name = "svantepolk";
+    email = "svantepolk@protonmail.com";
+    github = "svantepolk";
+    githubId = 25386350;
+  };
   xavierzwirtz = {
     email = "me@xavierzwirtz.com";
     github = "xavierzwirtz";
