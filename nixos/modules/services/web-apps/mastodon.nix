@@ -134,7 +134,7 @@ in {
 
       localDomain = lib.mkOption {
         description = "The domain serving your Mastodon instance.";
-        default = "social.example.org";
+        example = "social.example.org";
         type = lib.types.str;
       };
 
