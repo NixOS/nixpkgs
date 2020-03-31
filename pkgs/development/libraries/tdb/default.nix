@@ -2,7 +2,7 @@
 , fetchurl
 , pkg-config
 , wafHook
-, python
+, python3
 , readline
 , libxslt
 , docbook-xsl-nons
@@ -27,7 +27,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    python
+    python3
     readline # required to build python
   ];
 
