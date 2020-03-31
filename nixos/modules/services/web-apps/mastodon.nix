@@ -357,10 +357,10 @@ in {
         fi
 
         cat > /var/lib/mastodon/.secrets_env <<EOF
-        SECRET_KEY_BASE=$(cat ${cfg.secretKeyBaseFile})
-        OTP_SECRET=$(cat ${cfg.otpSecretFile})
-        VAPID_PRIVATE_KEY=$(cat ${cfg.vapidPrivateKeyFile})
-        VAPID_PUBLIC_KEY=$(cat ${cfg.vapidPublicKeyFile})
+        SECRET_KEY_BASE="$(cat ${cfg.secretKeyBaseFile})"
+        OTP_SECRET="$(cat ${cfg.otpSecretFile})"
+        VAPID_PRIVATE_KEY="$(cat ${cfg.vapidPrivateKeyFile})"
+        VAPID_PUBLIC_KEY="$(cat ${cfg.vapidPublicKeyFile})"
         DB_PASS="$(cat ${cfg.database.passwordFile})"
       '' + (if cfg.smtp.authenticate then ''
         SMTP_PASSWORD="$(cat ${cfg.smtp.passwordFile})"
