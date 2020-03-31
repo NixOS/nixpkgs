@@ -70,7 +70,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         }];
         services.mysql.settings = {
           mysqld = {
-            plugin-load-add = [ "ha_tokudb.so" ];
+            plugin-load-add = [ "ha_tokudb.so" "ha_rocksdb.so" ];
           };
         };
         services.mysql.package = pkgs.mariadb;
@@ -124,6 +124,20 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     )
     mariadb.succeed(
         "echo 'use testdb; drop table tokudb;' | sudo -u testuser mysql -u testuser"
+    )
+
+    # Check if RocksDB plugin works
+    mariadb.succeed(
+        "echo 'use testdb; create table rocksdb (test_id INT, PRIMARY KEY (test_id)) ENGINE = RocksDB;' | sudo -u testuser mysql -u testuser"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; insert into rocksdb values (28);' | sudo -u testuser mysql -u testuser"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; select test_id from rocksdb;' | sudo -u testuser mysql -u testuser -N | grep 28"
+    )
+    mariadb.succeed(
+        "echo 'use testdb; drop table rocksdb;' | sudo -u testuser mysql -u testuser"
     )
   '';
 })
