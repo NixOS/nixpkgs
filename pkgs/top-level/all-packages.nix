@@ -23482,6 +23482,14 @@ in
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
 
+  katago = callPackage ../games/katago { };
+
+  katagoWithCuda = katago.override {
+    cudaSupport = true;
+    cudnn = cudnn_cudatoolkit_10_1;
+    cudatoolkit = cudatoolkit_10_1;
+  };
+
   klavaro = callPackage ../games/klavaro {};
 
   kobodeluxe = callPackage ../games/kobodeluxe { };
