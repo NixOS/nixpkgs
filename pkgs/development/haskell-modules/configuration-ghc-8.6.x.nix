@@ -78,7 +78,6 @@ self: super: {
   # hackage-db uses must match, so take the latest
   cabal2nix = super.cabal2nix.overrideScope (self: super: {
     Cabal = self.Cabal_3_0_0_0;
-    hackage-db = self.hackage-db_2_1_0;
   });
 
   # cabal2spec needs a recent version of Cabal
