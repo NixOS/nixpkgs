@@ -227,13 +227,6 @@ services.xserver.displayManager.defaultSession = "xfce+icewm";
    </listitem>
    <listitem>
     <para>
-      Going forward, <literal>~/bin</literal> in the users home directory will no longer be in <literal>PATH</literal> by default.
-      If you depend on this you should set the option <literal>environment.homeBinInPath</literal> to <literal>true</literal>.
-      The aforementioned option was added this release.
-    </para>
-   </listitem>
-   <listitem>
-    <para>
       The <literal>buildRustCrate</literal> infrastructure now produces <literal>lib</literal> outputs in addition to the <literal>out</literal> output.
       This has led to drastically reduced closure sizes for some rust crates since development dependencies are now in the <literal>lib</literal> output.
     </para>
