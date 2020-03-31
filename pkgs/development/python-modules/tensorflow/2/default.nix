@@ -18,6 +18,7 @@
 # it would also make the default tensorflow package unfree. See
 # https://groups.google.com/a/tensorflow.org/forum/#!topic/developers/iRCt5m4qUz0
 , cudaSupport ? false, nvidia_x11 ? null, cudatoolkit ? null, cudnn ? null, nccl ? null
+, mklSupport ? false, mkl ? null
 # XLA without CUDA is broken
 , xlaSupport ? cudaSupport
 # Default from ./configure script
@@ -35,6 +36,8 @@ assert cudaSupport -> nvidia_x11 != null
 
 # unsupported combination
 assert ! (stdenv.isDarwin && cudaSupport);
+
+assert mklSupport -> mkl != null;
 
 let
   withTensorboard = pythonOlder "3.6";
@@ -163,6 +166,8 @@ let
       cudatoolkit
       cudnn
       nvidia_x11
+    ] ++ lib.optionals mklSupport [
+      mkl
     ] ++ lib.optionals stdenv.isDarwin [
       Foundation
       Security
@@ -278,7 +283,8 @@ let
     ];
     bazelBuildFlags = [
       "--config=opt" # optimize using the flags set in the configure phase
-    ];
+    ]
+    ++ lib.optionals (mklSupport) [ "--config=mkl" ];
 
     bazelTarget = "//tensorflow/tools/pip_package:build_pip_package //tensorflow/tools/lib_package:libtensorflow";
 
