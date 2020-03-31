@@ -18349,7 +18349,7 @@ in
   aacgain = callPackage ../applications/audio/aacgain { };
 
   abcde = callPackage ../applications/audio/abcde {
-    inherit (pythonPackages) eyeD3;
+    inherit (python3Packages) eyeD3;
   };
 
   abiword = callPackage ../applications/office/abiword { };
