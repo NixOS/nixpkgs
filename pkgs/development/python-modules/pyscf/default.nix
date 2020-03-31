@@ -2,11 +2,13 @@
 , buildPythonPackage
 , isPy27
 , fetchFromGitHub
+# C/build dependencies
 , cmake
 , openblas
 , libcint
 , libxc
 , xcfun
+# Python dependencies
 , h5py
 , numpy
 , scipy
@@ -40,8 +42,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     mkdir -p ./pyscf/lib/deps/include ./pyscf/lib/deps/lib
-    ln -s ${lib.strings.makeSearchPath "include" [xcfun] }/xc.h ./pyscf/lib/deps/include/xcfun.h
-    ln -s ${lib.strings.makeLibraryPath [ xcfun ] }/libxc.so ./pyscf/lib/deps/lib/libxcfun.so
+    ln -s ${lib.getDev xcfun}/include/xc.h ./pyscf/lib/deps/include/xcfun.h
+    ln -s ${lib.getLib xcfun}/lib/libxc.so ./pyscf/lib/deps/lib/libxcfun.so
     substituteInPlace pyscf/rt/__init__.py --replace "from tdscf import *" "from pyscf.tdscf import *"
   '';
 
@@ -53,7 +55,7 @@ buildPythonPackage rec {
     "-DBUILD_XCFUN=0"
     "-DENABLE_XCFUN=1"
   ];
-  # Configure CMake to build C files in pyscf/lib
+  # Configure CMake to build C files in pyscf/lib. Python build expects files in ./pyscf/lib/build
   preConfigure = ''
     pushd pyscf/lib
   '';
@@ -61,10 +63,9 @@ buildPythonPackage rec {
     popd
   '';
 
-  # Build C dependencies
+  # Build C dependencies, then build python package.
   preBuild = ''
     pushd pyscf/lib/build
-    export LD_LIBRARY_PATH=$(pwd)/lib/deps/include:$LD_LIBRARY_PATH
     make
     popd
   '';
@@ -75,7 +76,12 @@ buildPythonPackage rec {
     scipy
   ];
 
-  PYSCF_INC_DIR = lib.strings.makeLibraryPath [ libcint libxc ] + ":" + lib.strings.makeSearchPath "include" [ xcfun ];
+  # add libcint, libxc, xcfun headers to include path.
+  PYSCF_INC_DIR = lib.makeSearchPath "include" (map lib.getDev [
+    libcint
+    libxc
+    xcfun
+  ]);
 
   pythonImportsCheck = [ "pyscf" ];
 
@@ -142,8 +148,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
-  # failed tests: test_rsh_df4c_get_jk
 
   meta = with lib; {
     description = "Python-based Simulations of Chemistry Framework";
