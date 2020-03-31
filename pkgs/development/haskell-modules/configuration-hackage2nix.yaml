@@ -2459,6 +2459,9 @@ package-maintainers:
     - streaming-wai
   kiwi:
     # - glirc
+    - matterhorn
+    - mattermost-api
+    - mattermost-api-qc
     - Unique
   psibi:
     - path-pieces
@@ -7329,9 +7332,6 @@ broken-packages:
   - matrix-as-xyz
   - matrix-market
   - matsuri
-  - matterhorn
-  - mattermost-api
-  - mattermost-api-qc
   - maude
   - maxent
   - maxent-learner-hw
