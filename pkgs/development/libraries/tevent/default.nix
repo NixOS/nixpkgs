@@ -1,41 +1,44 @@
 { stdenv
 , fetchurl
-, python
+, python3
 , pkg-config
 , readline
 , talloc
 , libxslt
 , docbook-xsl-nons
 , docbook_xml_dtd_42
+, which
+, wafHook
 }:
 
 stdenv.mkDerivation rec {
   pname = "tevent";
-  version = "0.9.37";
+  version = "0.10.2";
 
   src = fetchurl {
     url = "mirror://samba/tevent/${pname}-${version}.tar.gz";
-    sha256 = "1q77vbjic2bb79li2a54ffscnrnwwww55fbpry2kgh7acpnlb0qn";
+    sha256 = "+EJ4IuWyh4+4so1vUNloSHNPPzEwYS+1dP3S0hSKZpY=";
   };
 
   nativeBuildInputs = [
     pkg-config
-  ];
-
-  buildInputs = [
-    python
-    readline
-    talloc
+    which
+    python3
     libxslt
     docbook-xsl-nons
     docbook_xml_dtd_42
+    wafHook
   ];
 
-  preConfigure = ''
-    sed -i 's,#!/usr/bin/env python,#!${python}/bin/python,g' buildtools/bin/waf
-  '';
+  buildInputs = [
+    python3
+    readline # required to build python
+    talloc
+  ];
 
-  configureFlags = [
+  wafPath = "buildtools/bin/waf";
+
+  wafConfigureFlags = [
     "--bundled-libraries=NONE"
     "--builtin-libraries=replace"
   ];
