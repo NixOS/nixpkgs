@@ -1,4 +1,6 @@
-# pcre functionality is tested in nixos/tests/php-pcre.nix
+# We have tests for PCRE and PHP-FPM in nixos/tests/php/ or
+# both in the same attribute named nixosTests.php
+
 { callPackage, config, fetchurl, lib, makeWrapper, stdenv, symlinkJoin
 , writeText , autoconf, automake, bison, flex, libtool, pkgconfig, re2c
 , apacheHttpd, libargon2, libxml2, pcre, pcre2 , systemd, valgrind
