@@ -6,7 +6,9 @@
 , accountsservice, gdk-pixbuf, gdm, upower, ibus, libnma, libgnomekbd, gnome-desktop
 , gsettings-desktop-schemas, gnome-keyring, glib, gjs, mutter, evolution-data-server, gtk3
 , sassc, systemd, gst_all_1, adwaita-icon-theme, gnome-bluetooth, gnome-clocks, gnome-settings-daemon
-, gnome-autoar, asciidoc-full }:
+, gnome-autoar, asciidoc-full
+, bash-completion
+}:
 
 # http://sources.gentoo.org/cgi-bin/viewvc.cgi/gentoo-x86/gnome-base/gnome-shell/gnome-shell-3.10.2.1.ebuild?revision=1.3&view=markup
 
@@ -15,11 +17,11 @@ let
 
 in stdenv.mkDerivation rec {
   pname = "gnome-shell";
-  version = "3.36.0";
+  version = "3.36.1";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-shell/${stdenv.lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    sha256 = "1phkkkwrrigchz58xs324vf6snd1fm7mxa2iaqwwj526vh5c1s2q";
+    sha256 = "0696qw6bmbga30qlvh1k6bkiajl7877j8yis4bwmi1wxkcmkh854";
   };
 
   LANG = "en_US.UTF-8";
@@ -48,17 +50,12 @@ in stdenv.mkDerivation rec {
 
     # not declared at build time, but typelib is needed at runtime
     libgweather libnma
+
+    # for gnome-extension tool
+    bash-completion
   ];
 
   patches = [
-    # Fix dependencies.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1114
-    (fetchpatch {
-      name = "0001-build-Add-missing-dependency-to-run-js-test.patch";
-      url = "https://bug787864.bugzilla-attachments.gnome.org/attachment.cgi?id=360016";
-      sha256 = "1dmahd8ysbzh33rxglba0fbq127aw9h14cl2a2bw9913vjxhxijm";
-    })
-
     # Hardcode paths to various dependencies so that they can be found at runtime.
     (substituteAll {
       src = ./fix-paths.patch;
@@ -66,32 +63,23 @@ in stdenv.mkDerivation rec {
       gsettings = "${glib.bin}/bin/gsettings";
     })
 
-    # Fix ibus launching regression.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1080
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/94f6976ddd6337593203fdcdd2e3644774408dfa.patch";
-      sha256 = "PGmFQhqqd3gK+3kp0dlmlYd2G5ZTIQpfE++Q03Ghkx0=";
-    })
+    # Install bash-completions to correct prefix.
+    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1194
+    ./fix-bash-completion.patch
 
-    # Fix typing regression with ibus.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/merge_requests/1084
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/b18469427e5c19402111de5fe9888bceec0eaacd.patch";
-      sha256 = "1M+3kjt7K61BFgk1Zf9XfK1ziilQGa60PD8xtVjnQec=";
-    })
+    # Use absolute path for libshew installation to make our patched gobject-introspection
+    # aware of the location to hardcode in the generated GIR file.
+    ./shew-gir-path.patch
 
-    # Fix theming breakage after Shell restart on X11.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2329
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/72c4f148ef88b4bffb2106b99434da5c05c0bb64.patch";
-      sha256 = "RBA+JHz4ZvmbJZMnGNieD6D5LONRgFU4iOFIMQQ2kHQ=";
-    })
+    # Make D-Bus services wrappable.
+    ./wrap-services.patch
 
-    # Fix Telepathy chat integration.
-    # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2449
+    # Fix greeter logo being too big.
+    # https://gitlab.gnome.org/GNOME/gnome-shell/issues/2591
     (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/766288eec1bd3bd50dfc4ddf410c2b507187e603.patch";
-      sha256 = "Cp6xLohCM0gmMxtyYjSukS2oV60Khmxf4iQd9EDAlIc=";
+      url = "https://gitlab.gnome.org/GNOME/gnome-shell/commit/ffb8bd5fa7704ce70ce7d053e03549dd15dce5ae.patch";
+      revert = true;
+      sha256 = "9DdzjEnDiBL+JmdfgKwjYPn1O2wJ/6n1sMDT1ylUB5I=";
     })
   ];
 
@@ -110,6 +98,13 @@ in stdenv.mkDerivation rec {
       # Fixes “Failed to load resource:///org/gnome/shell/theme/noise-texture.png: Unrecognized image file format”
       --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
     )
+  '';
+
+  postFixup = ''
+    # The services need typelibs.
+    for svc in org.gnome.Shell.Extensions org.gnome.Shell.Notifications; do
+      wrapGApp $out/share/gnome-shell/$svc
+    done
   '';
 
   passthru = {
