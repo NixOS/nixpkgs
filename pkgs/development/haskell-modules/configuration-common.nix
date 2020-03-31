@@ -1463,6 +1463,18 @@ self: super: {
   # haskell-ci-0.8 needs cabal-install-parsers ==0.1, but we have 0.2.
   haskell-ci = doJailbreak super.haskell-ci;
 
+  # 2020-01-19 - there were conflicting versions of brick, vty, and brick-skylighting;
+  # multiple versions of them were being pulled in by the others which is not allowed.
+  # There are more complicated ways of doing this but I was able to make it fairly simple -- kiwi
+  # 2020-03-31 - "..." it broke again. so here's a more complicated way -- kiwi
+  matterhorn = super.matterhorn.override {
+    brick-skylighting = self.brick-skylighting.override {
+      brick = self.brick_0_52_1.override {
+        vty = self.vty_5_28_2;
+      };
+    };
+  };
+
   persistent-mysql = dontCheck super.persistent-mysql;
 
   # Fix EdisonAPI and EdisonCore for GHC 8.8:
