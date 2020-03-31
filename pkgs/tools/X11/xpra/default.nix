@@ -19,6 +19,15 @@ let
     ];
   });
 
+  xorgModulePaths = writeText "module-paths" ''
+    Section "Files"
+      ModulePath "${xorgserver}/lib/xorg/modules"
+      ModulePath "${xorgserver}/lib/xorg/modules/extensions"
+      ModulePath "${xorgserver}/lib/xorg/modules/drivers"
+      ModulePath "${xf86videodummy}/lib/xorg/modules/drivers"
+    EndSection
+  '';
+
 in buildPythonApplication rec {
   pname = "xpra";
   version = "3.0.7";
@@ -86,6 +95,11 @@ in buildPythonApplication rec {
       --prefix LD_LIBRARY_PATH : ${libfakeXinerama}/lib
       --prefix PATH : ${stdenv.lib.makeBinPath [ getopt xorgserver xauth which utillinux pulseaudio ]}
     )
+  '';
+
+  # append module paths to xorg.conf
+  postInstall = ''
+    cat ${xorgModulePaths} >> $out/etc/xpra/xorg.conf
   '';
 
   doCheck = false;
