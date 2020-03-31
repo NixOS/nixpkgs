@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "Download backlogs from Matrix as raw text";
     homepage = src.meta.homepage;
-    license = licenses.unfree;
+    license = licenses.gpl1Plus;
     maintainers = with maintainers; [ aw ];
     platforms = platforms.unix;
   };

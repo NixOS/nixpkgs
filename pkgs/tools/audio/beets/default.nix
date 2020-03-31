@@ -172,6 +172,13 @@ in pythonPackages.buildPythonApplication rec {
     nose
     rarfile
     responses
+    # Although considered as plugin dependencies, they are needed for the
+    # tests, for disabling them via an override makes the build fail. see:
+    # https://github.com/beetbox/beets/blob/v1.4.9/setup.py
+    pylast
+    mpd2
+    discogs_client
+    pyxdg
   ];
 
   patches = [
@@ -257,7 +264,7 @@ in pythonPackages.buildPythonApplication rec {
 
   meta = {
     description = "Music tagger and library organizer";
-    homepage = http://beets.io;
+    homepage = "http://beets.io";
     license = licenses.mit;
     maintainers = with maintainers; [ aszlig domenkozar pjones ];
     platforms = platforms.linux;

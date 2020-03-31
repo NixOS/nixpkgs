@@ -30,9 +30,7 @@ let
 
   diff-so-fancy = callPackage ./diff-so-fancy { };
 
-  gh = callPackage ./gh {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  gh = callPackage ./gh { };
 
   ghq = callPackage ./ghq { };
 
@@ -180,6 +178,8 @@ let
   lab = callPackage ./lab { };
 
   lefthook = callPackage ./lefthook { };
+
+  legit = callPackage ./legit { };
 
   pass-git-helper = python3Packages.callPackage ./pass-git-helper { };
 

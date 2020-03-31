@@ -477,6 +477,14 @@ def parse_args():
         default=DEFAULT_OUT,
         help="Filename to save generated nix code",
     )
+    parser.add_argument(
+        "--proc",
+        "-p",
+        dest="proc",
+        type=int,
+        default=30,
+        help="Number of concurrent processes to spawn.",
+    )
 
     return parser.parse_args()
 
@@ -491,9 +499,7 @@ def main() -> None:
     prefetch_with_cache = functools.partial(prefetch, cache=cache)
 
     try:
-        # synchronous variant for debugging
-        # results = list(map(prefetch_with_cache, plugin_names))
-        pool = Pool(processes=30)
+        pool = Pool(processes=args.proc)
         results = pool.map(prefetch_with_cache, plugin_names)
     finally:
         cache.store()

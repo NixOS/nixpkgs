@@ -11,6 +11,7 @@ alx741/vim-stylishask
 amiorin/ctrlp-z
 andrep/vimacs
 andreshazard/vim-logreview
+AndrewRadev/splitjoin.vim
 andsild/peskcolor.vim
 andviro/flake8-vim
 andys8/vim-elm-syntax
@@ -137,6 +138,7 @@ honza/vim-snippets
 hotwatermorning/auto-git-diff
 hsanson/vim-android
 hsitz/VimOrganizer
+hynek/vim-python-pep8-indent
 iamcco/coc-spell-checker
 ianks/vim-tsx
 icymind/NeoSolarized
@@ -272,6 +274,7 @@ MaxMEllon/vim-jsx-pretty
 mbbill/undotree
 megaannum/forms
 megaannum/self
+mengelbrecht/lightline-bufferline
 mfukar/robotframework-vim
 mg979/vim-visual-multi
 mhinz/vim-grepper
@@ -447,6 +450,7 @@ ternjs/tern_for_vim
 terryma/vim-expand-region
 terryma/vim-multiple-cursors
 tex/vimpreviewpandoc
+tmhedberg/SimpylFold
 thinca/vim-ft-diff_fold
 thinca/vim-prettyprint
 thinca/vim-quickrun

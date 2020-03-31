@@ -24,7 +24,6 @@ in {
           enable = true;
           serverId = "aa76c84b-50b0-4711-a0a0-1ee30e45bbd0";
           listenAddress = "[::]:80";
-          jvmPackage = pkgs.jdk12_headless;
           jvmHeapLimit = "1g";
 
           plugins = [ lfs ];

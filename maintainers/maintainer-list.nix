@@ -302,6 +302,12 @@
     githubId = 786394;
     name = "Alexander Krupenkin ";
   };
+  albakham = {
+    email = "dev@geber.ga";
+    github = "albakham";
+    githubId = 43479487;
+    name = "Titouan Biteau";
+  };
   alexarice = {
     email = "alexrice999@hotmail.co.uk";
     github = "alexarice";
@@ -412,10 +418,15 @@
     githubId = 20530052;
     name = "Andrew Miloradovsky";
   };
-  aminb = {
-    email = "amin@aminb.org";
-    github = "aminb";
+  notbandali = {
     name = "Amin Bandali";
+    email = "bandali@gnu.org";
+    github = "notbandali";
+    githubId = 1254858;
+    keys = [{
+      longkeyid = "rsa4096/0xA21A020248816103";
+      fingerprint = "BE62 7373 8E61 6D6D 1B3A  08E8 A21A 0202 4881 6103";
+    }];
   };
   aminechikhaoui = {
     email = "amine.chikhaoui91@gmail.com";
@@ -644,6 +655,12 @@
     github = "artuuge";
     githubId = 10285250;
     name = "Artur E. Ruuge";
+  };
+  asbachb = {
+    email = "asbachb-nixpkgs-5c2a@impl.it";
+    github = "asbachb";
+    githubId = 1482768;
+    name = "Benjamin Asbach";
   };
   ashalkhakov = {
     email = "artyom.shalkhakov@gmail.com";
@@ -4386,6 +4403,12 @@
     email = "laure.tavard@univ-grenoble-alpes.fr";
     github = "ltavard";
     name = "Laure Tavard";
+  };
+  luc65r = {
+    email = "lucas@ransan.tk";
+    github = "luc65r";
+    githubId = 59375051;
+    name = "Lucas Ransan";
   };
   lucus16 = {
     email = "lars.jellema@gmail.com";
@@ -8327,6 +8350,10 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  ymeister = {
+    name = "Yuri Meister";
+    email = "47071325+ymeister@users.noreply.github.com";
+    github = "ymeister";
+    githubId = 47071325;
+  };
 }
-
-

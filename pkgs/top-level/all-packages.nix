@@ -525,6 +525,8 @@ in
   acoustidFingerprinter = callPackage ../tools/audio/acoustid-fingerprinter {
     ffmpeg = ffmpeg_2;
   };
+  
+  alsaequal = callPackage ../tools/audio/alsaequal { };
 
   acpica-tools = callPackage ../tools/system/acpica-tools { };
 
@@ -718,8 +720,6 @@ in
 
   avfs = callPackage ../tools/filesystems/avfs { };
 
-  avldrums-lv2 = callPackage ../applications/audio/avldrums-lv2 { };
-
   aws-iam-authenticator = callPackage ../tools/security/aws-iam-authenticator {};
 
   awscli = callPackage ../tools/admin/awscli { };
@@ -789,6 +789,8 @@ in
   autorevision = callPackage ../tools/misc/autorevision { };
 
   automirror = callPackage ../tools/misc/automirror { };
+
+  babashka = callPackage ../tools/misc/babashka { };
 
   bash-my-aws = callPackage ../tools/admin/bash-my-aws { };
 
@@ -2095,8 +2097,6 @@ in
 
   precice = callPackage ../development/libraries/precice { };
 
-  parallel-rust = callPackage ../tools/misc/parallel-rust { };
-
   pueue = callPackage ../applications/misc/pueue { };
 
   pixiecore = callPackage ../tools/networking/pixiecore {};
@@ -2396,6 +2396,8 @@ in
   cdrtools = callPackage ../tools/cd-dvd/cdrtools {
     inherit (darwin.apple_sdk.frameworks) Carbon IOKit;
   };
+
+  cemu = qt5.callPackage ../applications/science/math/cemu { };
 
   isomd5sum = callPackage ../tools/cd-dvd/isomd5sum { };
 
@@ -2842,6 +2844,8 @@ in
   dnscrypt-proxy2 = callPackage ../tools/networking/dnscrypt-proxy2 { };
 
   dnscrypt-wrapper = callPackage ../tools/networking/dnscrypt-wrapper { };
+
+  dnscontrol = callPackage ../applications/networking/dnscontrol { };
 
   dnsenum = callPackage ../tools/security/dnsenum { };
 
@@ -4832,6 +4836,8 @@ in
 
   libevdev = callPackage ../development/libraries/libevdev { };
 
+  liberio = callPackage ../development/libraries/liberio { };
+
   libevdevplus = callPackage ../development/libraries/libevdevplus { };
 
   libfann = callPackage ../development/libraries/libfann { };
@@ -6272,6 +6278,8 @@ in
 
   rnv = callPackage ../tools/text/xml/rnv { };
 
+  rosie = callPackage ../tools/text/rosie { };
+
   rounded-mgenplus = callPackage ../data/fonts/rounded-mgenplus { };
 
   roundup = callPackage ../tools/misc/roundup { };
@@ -6888,6 +6896,8 @@ in
 
   thin-provisioning-tools = callPackage ../tools/misc/thin-provisioning-tools {  };
 
+  thinkpad-scripts = python3.pkgs.callPackage ../tools/misc/thinkpad-scripts { };
+
   tiled = libsForQt5.callPackage ../applications/editors/tiled { };
 
   tiledb = callPackage ../development/libraries/tiledb { };
@@ -7061,6 +7071,8 @@ in
   ttygif = callPackage ../tools/misc/ttygif { };
 
   ttylog = callPackage ../tools/misc/ttylog { };
+
+  ipbt = callPackage ../tools/misc/ipbt { };
 
   tuir = callPackage ../applications/misc/tuir { };
 
@@ -8083,6 +8095,10 @@ in
   fasm-bin = callPackage ../development/compilers/fasm/bin.nix { };
 
   flyctl = callPackage ../development/web/flyctl { };
+
+  flutterPackages =
+    recurseIntoAttrs (callPackage ../development/compilers/flutter { });
+  flutter = flutterPackages.stable;
 
   fpc = callPackage ../development/compilers/fpc { };
 
@@ -9875,7 +9891,18 @@ in
     stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
   };
 
-  bazel_0 = callPackage ../development/tools/build-managers/bazel/bazel_0 {
+  bazel_0 = bazel_0_26;
+
+  bazel_0_26 = callPackage ../development/tools/build-managers/bazel/bazel_0_26 {
+    inherit (darwin) cctools;
+    inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
+    buildJdk = jdk8;
+    buildJdkName = "jdk8";
+    runJdk = jdk11_headless;
+    stdenv = if stdenv.cc.isClang then llvmPackages_6.stdenv else stdenv;
+  };
+
+  bazel_0_29 = callPackage ../development/tools/build-managers/bazel/bazel_0_29 {
     inherit (darwin) cctools;
     inherit (darwin.apple_sdk.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk8;
@@ -12325,9 +12352,7 @@ in
 
   ldacbt = callPackage ../development/libraries/ldacbt { };
 
-  ldb = callPackage ../development/libraries/ldb {
-    python = python2;
-  };
+  ldb = callPackage ../development/libraries/ldb { };
 
   lensfun = callPackage ../development/libraries/lensfun {};
 
@@ -13325,6 +13350,7 @@ in
   libversion = callPackage ../development/libraries/libversion { };
 
   libvirt = callPackage ../development/libraries/libvirt { };
+  libvirt_5_9_0 = callPackage ../development/libraries/libvirt/5.9.0.nix { };
 
   libvirt-glib = callPackage ../development/libraries/libvirt-glib { };
 
@@ -13695,10 +13721,7 @@ in
     nvidia_x11 = linuxPackages.nvidia_x11.override { libsOnly = true; };
   };
 
-  ocl-icd-oclhGen = oclh: callPackage ../development/libraries/ocl-icd { opencl-headers = oclh; };
-  ocl-icd-oclh_1_2 = ocl-icd-oclhGen opencl-headers_1_2;
-  ocl-icd-oclh_2_2 = ocl-icd-oclhGen opencl-headers_2_2;
-  ocl-icd = ocl-icd-oclh_2_2;
+  ocl-icd = callPackage ../development/libraries/ocl-icd { };
 
   ode = callPackage ../development/libraries/ode { };
 
@@ -13730,10 +13753,7 @@ in
   opencascade = callPackage ../development/libraries/opencascade { };
   opencascade-occt = callPackage ../development/libraries/opencascade-occt { };
 
-  opencl-headersGen = v: callPackage ../development/libraries/opencl-headers { version = v; };
-  opencl-headers_1_2 = opencl-headersGen "12";
-  opencl-headers_2_2 = opencl-headersGen "22";
-  opencl-headers = opencl-headers_2_2;
+  opencl-headers = callPackage ../development/libraries/opencl-headers { };
 
   opencl-clhpp = callPackage ../development/libraries/opencl-clhpp { };
 
@@ -14612,9 +14632,7 @@ in
 
   tclx = callPackage ../development/libraries/tclx { };
 
-  ntdb = callPackage ../development/libraries/ntdb {
-    python = python2;
-  };
+  ntdb = callPackage ../development/libraries/ntdb { };
 
   tdb = callPackage ../development/libraries/tdb {};
 
@@ -14636,9 +14654,7 @@ in
 
   termbox = callPackage ../development/libraries/termbox { };
 
-  tevent = callPackage ../development/libraries/tevent {
-    python = python2;
-  };
+  tevent = callPackage ../development/libraries/tevent { };
 
   tet = callPackage ../development/tools/misc/tet { };
 
@@ -16414,7 +16430,9 @@ in
 
   fatrace = callPackage ../os-specific/linux/fatrace { };
 
-  ffado = callPackage ../os-specific/linux/ffado { };
+  ffado = libsForQt5.callPackage ../os-specific/linux/ffado {
+    inherit (pkgs.linuxPackages) kernel;
+  };
   libffado = ffado;
 
   fbterm = callPackage ../os-specific/linux/fbterm { };
@@ -17806,6 +17824,8 @@ in
 
   ibm-plex = callPackage ../data/fonts/ibm-plex { };
 
+  iconpack-jade = callPackage ../data/icons/iconpack-jade { };
+
   iconpack-obsidian = callPackage ../data/icons/iconpack-obsidian { };
 
   inconsolata = callPackage ../data/fonts/inconsolata {};
@@ -18330,7 +18350,7 @@ in
   aacgain = callPackage ../applications/audio/aacgain { };
 
   abcde = callPackage ../applications/audio/abcde {
-    inherit (pythonPackages) eyeD3;
+    inherit (python3Packages) eyeD3;
   };
 
   abiword = callPackage ../applications/office/abiword { };
@@ -18582,6 +18602,8 @@ in
   bitwig-studio = bitwig-studio3;
 
   bgpdump = callPackage ../tools/networking/bgpdump { };
+
+  bgpq3 = callPackage ../tools/networking/bgpq3 { };
 
   blackbox = callPackage ../applications/version-management/blackbox { };
 
@@ -20190,6 +20212,8 @@ in
 
   kiwix = callPackage ../applications/misc/kiwix { };
 
+  klayout = libsForQt5.callPackage ../applications/misc/klayout { };
+
   kmplayer = libsForQt5.callPackage ../applications/video/kmplayer { };
 
   kmymoney = libsForQt5.callPackage ../applications/office/kmymoney {
@@ -20276,6 +20300,8 @@ in
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
   lemonbar-xft = callPackage ../applications/window-managers/lemonbar/xft.nix { };
+
+  legit = gitAndTools.legit;
 
   leo-editor = callPackage ../applications/editors/leo-editor { };
 
@@ -20667,6 +20693,8 @@ in
   ncmpcpp = callPackage ../applications/audio/ncmpcpp { };
 
   rofi-mpd = callPackage ../applications/audio/rofi-mpd { };
+
+  rofi-calc = callPackage ../applications/science/math/rofi-calc { };
 
   ympd = callPackage ../applications/audio/ympd { };
 
@@ -21247,6 +21275,8 @@ in
   pinta = callPackage ../applications/graphics/pinta {
     gtksharp = gtk-sharp-2_0;
   };
+
+  pistol = callPackage ../tools/misc/pistol { };
 
   plex-media-player = libsForQt512.callPackage ../applications/video/plex-media-player { };
 
@@ -22675,6 +22705,8 @@ in
 
   kodiPlainWayland = callPackage ../applications/video/kodi { useWayland = true; };
 
+  kodiGBM = callPackage ../applications/video/kodi { useGbm = true; };
+
   kodiPlugins = recurseIntoAttrs (callPackage ../applications/video/kodi/plugins.nix {});
 
   kodi = wrapKodi {
@@ -22683,6 +22715,10 @@ in
 
   kodi-wayland = wrapKodi {
     kodi = kodiPlainWayland;
+  };
+
+  kodi-gbm = wrapKodi {
+    kodi = kodiGBM;
   };
 
   kodi-cli = callPackage ../tools/misc/kodi-cli { };
@@ -23446,6 +23482,14 @@ in
   ivan = callPackage ../games/ivan { };
 
   ja2-stracciatella = callPackage ../games/ja2-stracciatella { };
+
+  katago = callPackage ../games/katago { };
+
+  katagoWithCuda = katago.override {
+    cudaSupport = true;
+    cudnn = cudnn_cudatoolkit_10_1;
+    cudatoolkit = cudatoolkit_10_1;
+  };
 
   klavaro = callPackage ../games/klavaro {};
 
@@ -26002,6 +26046,8 @@ in
 
   xboxdrv = callPackage ../misc/drivers/xboxdrv { };
 
+  xow = callPackage ../misc/drivers/xow { };
+
   xbps = callPackage ../tools/package-management/xbps { };
 
   xcftools = callPackage ../tools/graphics/xcftools { };
@@ -26091,6 +26137,7 @@ in
 
   higan = callPackage ../misc/emulators/higan {
     inherit (gnome2) gtksourceview;
+    inherit (darwin.apple_sdk.frameworks) Carbon Cocoa OpenGL OpenAL;
   };
 
   bullet = callPackage ../development/libraries/bullet {

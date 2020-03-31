@@ -640,7 +640,7 @@
     "ripple" = ps: with ps; [ ]; # missing inputs: python-ripple-api
     "rmvtransport" = ps: with ps; [ ]; # missing inputs: PyRMVtransport
     "rocketchat" = ps: with ps; [ ]; # missing inputs: rocketchat-API
-    "roku" = ps: with ps; [ ]; # missing inputs: roku
+    "roku" = ps: with ps; [ roku];
     "roomba" = ps: with ps; [ ]; # missing inputs: roombapy
     "route53" = ps: with ps; [ boto3]; # missing inputs: ipify
     "rova" = ps: with ps; [ ]; # missing inputs: rova

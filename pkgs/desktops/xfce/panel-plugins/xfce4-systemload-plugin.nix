@@ -16,7 +16,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ intltool libxfce4util libxfce4ui xfce4-panel gtk2 ];
 
   meta = {
-    homepage = "http://goodies.xfce.org/projects/panel-plugins/${p_name}";
+    homepage = "https://goodies.xfce.org/projects/panel-plugins/${p_name}";
     description = "System load plugin for Xfce panel";
     platforms = platforms.linux;
     maintainers = [ maintainers.AndersonTorres ];
