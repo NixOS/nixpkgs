@@ -12341,9 +12341,7 @@ in
 
   ldacbt = callPackage ../development/libraries/ldacbt { };
 
-  ldb = callPackage ../development/libraries/ldb {
-    python = python2;
-  };
+  ldb = callPackage ../development/libraries/ldb { };
 
   lensfun = callPackage ../development/libraries/lensfun {};
 
