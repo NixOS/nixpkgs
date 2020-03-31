@@ -12,7 +12,7 @@ buildPythonApplication rec {
     sha256 = "1mq8lmb1wh55cqdj7javq7qia4217h6vf5ljc99gsjyibi7g7d3k";
   };
 
-  propagatedBuildInputs = [ pyyaml ];
+  propagatedBuildInputs = [ pyyaml setuptools ];
 
   makeWrapperArgs = ["--prefix" "PATH" ":" (stdenv.lib.makeBinPath [ git bazaar subversion ])];
 
