@@ -2458,7 +2458,7 @@ package-maintainers:
     # - pipes-mongodb
     - streaming-wai
   kiwi:
-    # - glirc
+    - glirc
     - matterhorn
     - mattermost-api
     - mattermost-api-qc
@@ -5145,7 +5145,6 @@ broken-packages:
   - gli
   - glicko
   - glider-nlp
-  - glirc
   - GLMatrix
   - glob-posix
   - global
@@ -6046,7 +6045,6 @@ broken-packages:
   - hoodle-types
   - hoogle-index
   - hooks-dir
-  - hookup
   - hoopl
   - hoovie
   - hopencc
