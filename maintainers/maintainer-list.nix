@@ -8350,4 +8350,10 @@
     githubId = 474343;
     name = "Xavier Zwirtz";
   };
+  ymeister = {
+    name = "Yuri Meister";
+    email = "47071325+ymeister@users.noreply.github.com";
+    github = "ymeister";
+    githubId = 47071325;
+  };
 }
