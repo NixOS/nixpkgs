@@ -1554,6 +1554,8 @@ in {
 
   wordcloud = callPackage ../development/python-modules/wordcloud { };
 
+  wolframclient = disabledIf (!isPy3k) (callPackage ../development/python-modules/wolframclient { });
+
   wrf-python = callPackage ../development/python-modules/wrf-python { };
 
   pyunbound = callPackage ../tools/networking/unbound/python.nix { };
