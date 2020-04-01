@@ -6,12 +6,12 @@
 
 let
   executableName = "riot-desktop";
-  version = "1.5.14";
+  version = "1.5.15";
   riot-web-src = fetchFromGitHub {
     owner = "vector-im";
     repo = "riot-web";
     rev = "v${version}";
-    sha256 = "0dkji5rgiakdzcba2v104hhvbw9j98ik95vzwcckksja79zfjmww";
+    sha256 = "08yk5is6n9ci1jml0b94a3swdybx01k5klbl30i1b76biyn75m77";
   };
   electron = electron_7;
 
