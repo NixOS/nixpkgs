@@ -22,7 +22,7 @@ let
     makeFlags = [
       "platform=${{
         linux = "unix";
-        darwin = "unix";
+        darwin = "osx";
         windows = "win";
       }.${stdenv.hostPlatform.parsed.kernel.name} or stdenv.hostPlatform.parsed.kernel.name}"
       "ARCH=${{
