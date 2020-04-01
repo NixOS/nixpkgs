@@ -12,7 +12,7 @@
   zlibSupport ? true, zlib ? null,
   libuniqueSupport ? true, libunique ? null,
   libpngSupport ? true, libpng ? null,
-  openglSupport ? true
+  openglSupport ? !stdenv.isDarwin
 }:
 
 assert openexrSupport -> openexr != null;
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
   
   buildInputs = with stdenv.lib;
     [ gtk2 fftw ] ++
-    optionals openglSupport [gnome2.gtkglext] ++
+    optional openglSupport gnome2.gtkglext ++
     optional openexrSupport openexr ++
     optional libXmuSupport xorg.libXmu ++
     optional fitsSupport cfitsio ++
@@ -80,7 +80,7 @@ stdenv.mkDerivation rec {
       spectrophotometry.
     '';
     license = stdenv.lib.licenses.gpl2;
-    platforms = stdenv.lib.platforms.linux;
+    platforms = with stdenv.lib.platforms; linux ++ darwin;
     maintainers = [ stdenv.lib.maintainers.cge ];
   };
 }
