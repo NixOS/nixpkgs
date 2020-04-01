@@ -12,7 +12,8 @@ with lib;
           Enable this option to support IIO sensors.
 
           IIO sensors are used for orientation and ambient light
-          sensors on some mobile devices.'';
+          sensors on some mobile devices.
+        '';
         type = types.bool;
         default = false;
       };
