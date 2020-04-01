@@ -11,6 +11,8 @@ from urllib.parse import urlparse, parse_qs
 from typing import Dict
 
 SNAKEOIL_PUBLIC_KEY = os.environ['SNAKEOIL_PUBLIC_KEY']
+MOCKUSER="mockuser_nixos_org"
+MOCKADMIN="mockadmin_nixos_org"
 
 
 def w(msg: bytes):
@@ -88,11 +90,11 @@ class ReqHandler(BaseHTTPRequestHandler):
         # users endpoint
         if pu.path == "/computeMetadata/v1/oslogin/users":
             # mockuser and mockadmin are allowed to login, both use the same snakeoil public key
-            if params.get('username') == ['mockuser'] or params.get('uid') == ["1009719690"]:
-                username = "mockuser"
+            if params.get('username') == [MOCKUSER] or params.get('uid') == ["1009719690"]:
+                username = MOCKUSER
                 uid = "1009719690"
-            elif params.get('username') == ['mockadmin'] or params.get('uid') == ["1009719691"]:
-                username = "mockadmin"
+            elif params.get('username') == [MOCKADMIN] or params.get('uid') == ["1009719691"]:
+                username = MOCKADMIN
                 uid = "1009719691"
             else:
                 self._send_404()
@@ -106,7 +108,7 @@ class ReqHandler(BaseHTTPRequestHandler):
             # is user allowed to login?
             if params.get("policy") == ["login"]:
                 # mockuser and mockadmin are allowed to login
-                if params.get('email') == [gen_email("mockuser")] or params.get('email') == [gen_email("mockadmin")]:
+                if params.get('email') == [gen_email(MOCKUSER)] or params.get('email') == [gen_email(MOCKADMIN)]:
                     self._send_json_success()
                     return
                 self._send_json_success(False)
@@ -114,7 +116,7 @@ class ReqHandler(BaseHTTPRequestHandler):
             # is user allowed to become root?
             elif params.get("policy") == ["adminLogin"]:
                 # only mockadmin is allowed to become admin
-                self._send_json_success((params['email'] == [gen_email("mockadmin")]))
+                self._send_json_success((params['email'] == [gen_email(MOCKADMIN)]))
                 return
             # send 404 for other policies
             else:
